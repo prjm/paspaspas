@@ -199,7 +199,25 @@ namespace PasPasPas.Internal.Parser {
             return result;
         }
 
+        [Rule("ExportedProcedureHeading", "")]
         private ExportedProcedureHeading ParseExportedProcedureHeading() {
+            var result = new ExportedProcedureHeading(this);
+            result.Kind = Require(PascalToken.Function, PascalToken.Procedure).Kind;
+            result.Name = RequireIdentifier();
+            if (Optional(PascalToken.OpenParen)) {
+                result.Parameters = ParseFormalParameterSection();
+            }
+            if (Optional(PascalToken.Colon)) {
+                result.ResultAttributes = ParseAttributes();
+                result.ResultType = ParseTypeSpecification();
+            }
+            Require(PascalToken.Semicolon);
+            result.Directives = ParseFunctionDirectives();
+            return result;
+        }
+
+        [Rule("FunctionDirectives", "{ FunctionDirective } ")]
+        private FunctionDirectives ParseFunctionDirectives() {
             throw new NotImplementedException();
         }
 
@@ -411,7 +429,7 @@ namespace PasPasPas.Internal.Parser {
             throw new NotImplementedException();
         }
 
-        [Rule("DeclarationSection", "{ LabelDeclarationSection | ConstSection | TypeSection | VarSection | ExportsSection | AssemblyAttribute | MethodDeclaration | ProcedureDeclaration }", true)]
+        [Rule("DeclarationSection", "{ LabelDeclarationSection | ConstSection | TypeSection | VarSection | ExportsSection | AssemblyAttribute | MethodDecl | ProcedureDeclaration }", true)]
         private Declarations ParseDeclarationSections() {
             var result = new Declarations(this);
             bool stop = false;
@@ -463,7 +481,7 @@ namespace PasPasPas.Internal.Parser {
                         (LookAhead(1, PascalToken.Identifier) && (LookAhead(2, PascalToken.Dot)));
 
                     if (useMethodDeclaration) {
-                        result.Add(ParseMethodDeclaration());
+                        result.Add(ParseMethodDecl());
                         continue;
                     }
 
@@ -476,6 +494,24 @@ namespace PasPasPas.Internal.Parser {
             }
 
             return result;
+        }
+
+        [Rule("MethodDecl", "MethodDeclHeading ';' MethodDirectives [ MethodBody ]")]
+        private MethodDecl ParseMethodDecl() {
+            var result = new MethodDecl(this);
+            result.Heading = ParseMethodDeclHeading();
+            Require(PascalToken.Semicolon);
+            result.Directives = ParseMethodDirectives();
+            result.MethodBody = ParseBlock();
+            return result;
+        }
+
+        private MethodDirectives ParseMethodDirectives() {
+            throw new NotImplementedException();
+        }
+
+        private MethodDeclHeading ParseMethodDeclHeading() {
+            throw new NotImplementedException();
         }
 
         private ProcedureDeclaration ParseProcedureDeclaration(UserAttributes attributes) {
@@ -1044,8 +1080,40 @@ namespace PasPasPas.Internal.Parser {
             return result;
         }
 
+        [Rule("RecordHelperItems", " { RecordHelperItem }")]
         private RecordHelperItems ParseRecordHelperItems() {
             var result = new RecordHelperItems(this);
+            var unexpected = false;
+
+            while ((!Match(PascalToken.End)) && (!unexpected)) {
+                var item = ParseRecordHelperItem(out unexpected);
+                if (!unexpected)
+                    result.Add(item);
+                else {
+                    Unexpected();
+                    return result;
+                }
+            }
+
+            return result;
+        }
+
+        [Rule("RecordHelperItem", "")]
+        private RecordHelperItem ParseRecordHelperItem(out bool unexpected) {
+            var result = new RecordHelperItem(this);
+            unexpected = false;
+
+            if (Match(PascalToken.Procedure, PascalToken.Function, PascalToken.Constructor, PascalToken.Destructor)) {
+                result.MethodDeclaration = ParseMethodDeclaration();
+                return result;
+            }
+
+            if (Match(PascalToken.Property)) {
+                result.PropertyDeclaration = ParsePropertyDeclaration();
+                return result;
+            }
+
+            unexpected = true;
             return result;
         }
 
@@ -1307,11 +1375,18 @@ namespace PasPasPas.Internal.Parser {
             return result;
         }
 
+        [Rule("FieldDeclaration", "IdentList ':' TypeSpecification Hints ';'")]
         private ClassField ParseClassFieldDeclararation() {
-            throw new NotImplementedException();
+            var result = new ClassField(this);
+            result.Names = ParseIdentList();
+            Require(PascalToken.Colon);
+            result.TypeDecl = ParseTypeSpecification();
+            result.Hint = ParseHint();
+            Require(PascalToken.Semicolon);
+            return result;
         }
 
-        [Rule("PropertyDeclaration", "'property' Ident [ '[' FormalParameters  ']' ] [ ':' NamespaceName ] [ 'index' Expression ]  { ClassPropertySpecifier } ';' ")]
+        [Rule("PropertyDeclaration", "'property' Identifier [ '[' FormalParameters  ']' ] [ ':' NamespaceName ] [ 'index' Expression ]  { ClassPropertySpecifier } ';' ")]
         private ClassProperty ParsePropertyDeclaration() {
             var result = new ClassProperty(this);
             Require(PascalToken.Property);
@@ -1338,11 +1413,11 @@ namespace PasPasPas.Internal.Parser {
             return result;
         }
 
-        [Rule("ClassPropertySpecifier", "ClassPropertyReadWrite | ClassPropertyDispInterface | ('stored' Expression ';') | ('default' [ Expression ] ';' ) | ('nodefault' ';') | ('implements' NamespaceNae) ")]
+        [Rule("ClassPropertySpecifier", "ClassPropertyReadWrite | ClassPropertyDispInterface | ('stored' Expression ';') | ('default' [ Expression ] ';' ) | ('nodefault' ';') | ('implements' NamespaceName) ")]
         private ClassPropertySpecifier ParseClassPropertyAccessSpecifier() {
             var result = new ClassPropertySpecifier(this);
 
-            if (Match(PascalToken.Read, PascalToken.Write, PascalToken.Add, PascalToken.Read)) {
+            if (Match(PascalToken.Read, PascalToken.Write, PascalToken.Add, PascalToken.Remove)) {
                 result.PropertyReadWrite = ParseClassPropertyReadWrite();
                 return result;
             }

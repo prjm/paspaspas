@@ -171,6 +171,7 @@ namespace PasPasPasTests {
             ParseString("program test; const x : class [x] class property x [ a : Pointer ] : x.y ; end = 5; .");
             ParseString("program test; const x : class [x] class property x [ a : Pointer ] : x.y index 5 ; end = 5; .");
             ParseString("program test; const x : class [x] class property x [ a : Pointer ] : x.y index 5 read a; end = 5; .");
+            ParseString("program test; type x = class procedure a.b.c.d = x; end; .");
             ParseString("program test; type x = class helper for x end; .");
             ParseString("program test; type x = class helper for x procedure x; end; .");
             ParseString("program test; type x = class helper for x [x] class procedure x; end; .");
@@ -189,6 +190,9 @@ namespace PasPasPasTests {
             ParseString("program test; type x = record end; .");
             ParseString("program test; type x = record x, x: x ; end; .");
             ParseString("program test; type x = record x, x: x ; case Pointer of 5 : ( x: x ; )  end; .");
+            ParseString("program test; type x = record helper for x end ; .");
+            ParseString("program test; type x = record helper for x function x: x; end ; .");
+            ParseString("program test; type x = record helper for x property x : x read x; end ; .");
         }
 
 

@@ -15,7 +15,7 @@ namespace PasPasPas.Internal.Parser.Syntax {
         public ClassMethod(IParserInformationProvider informationProvider) : base(informationProvider) { }
 
         /// <summary>
-        /// additional directives
+        ///     additional directives
         /// </summary>
         public IList<int> Directives { get; }
             = new List<int>();

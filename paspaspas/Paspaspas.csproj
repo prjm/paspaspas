@@ -104,6 +104,7 @@
     <Compile Include="Internal\Parser\Syntax\FormalParameter.cs" />
     <Compile Include="Internal\Parser\Syntax\FormalParameters.cs" />
     <Compile Include="Internal\Parser\Syntax\FormalParameterSection.cs" />
+    <Compile Include="Internal\Parser\Syntax\FunctionDirectives.cs" />
     <Compile Include="Internal\Parser\Syntax\GenericDefinition.cs" />
     <Compile Include="Internal\Parser\Syntax\GenericDefinitionPart.cs" />
     <Compile Include="Internal\Parser\Syntax\GenericTypeIdent.cs" />
@@ -119,6 +120,9 @@
     <Compile Include="Internal\Parser\Syntax\LabelDeclarationSection.cs" />
     <Compile Include="Internal\Parser\Syntax\Library.cs" />
     <Compile Include="Internal\Parser\Syntax\LibraryHead.cs" />
+    <Compile Include="Internal\Parser\Syntax\MethodDecl.cs" />
+    <Compile Include="Internal\Parser\Syntax\MethodDeclHeading.cs" />
+    <Compile Include="Internal\Parser\Syntax\MethodDirectives.cs" />
     <Compile Include="Internal\Parser\Syntax\MethodResolution.cs" />
     <Compile Include="Internal\Parser\Syntax\NamespaceFileName.cs" />
     <Compile Include="Internal\Parser\Syntax\NamespaceFileNameList.cs" />

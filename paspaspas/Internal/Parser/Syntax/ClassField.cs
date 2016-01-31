@@ -1,5 +1,4 @@
-﻿using System;
-using PasPasPas.Api;
+﻿using PasPasPas.Api;
 
 namespace PasPasPas.Internal.Parser.Syntax {
 
@@ -15,11 +14,30 @@ namespace PasPasPas.Internal.Parser.Syntax {
         public ClassField(IParserInformationProvider informationProvider) : base(informationProvider) { }
 
         /// <summary>
+        ///     hints
+        /// </summary>
+        public HintingInformation Hint { get; internal set; }
+
+        /// <summary>
+        ///     names
+        /// </summary>
+        public IdentList Names { get; internal set; }
+
+        /// <summary>
+        ///     type declaration
+        /// </summary>
+        public TypeSpecification TypeDecl { get; internal set; }
+
+        /// <summary>
         ///     format field declaration
         /// </summary>
         /// <param name="result"></param>
         public override void ToFormatter(PascalFormatter result) {
-            throw new NotImplementedException();
+            result.Part(Names);
+            result.Punct(":").Space();
+            result.Part(TypeDecl).Space();
+            result.Part(Hint).Space();
+            result.Punct(";").NewLine();
         }
     }
 }
