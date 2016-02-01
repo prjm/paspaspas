@@ -3,19 +3,19 @@
 namespace PasPasPas.Internal.Parser.Syntax {
 
     /// <summary>
-    ///     method directrives
+    ///     hint list
     /// </summary>
-    public class MethodDirectives : ComposedPart<SyntaxPartBase> {
-
+    public class HintingInformationList : ComposedPart<HintingInformation> {
 
         /// <summary>
-        ///     create a new syntax tree element
+        ///     create new hint list
         /// </summary>
-        /// <param name="informationProvider">current parser state</param>
-        public MethodDirectives(IParserInformationProvider informationProvider) : base(informationProvider) { }
+        /// <param name="informationProvider"></param>
+        public HintingInformationList(IParserInformationProvider informationProvider) : base(informationProvider) {
+        }
 
         /// <summary>
-        ///     format directives
+        ///     format hint list
         /// </summary>
         /// <param name="result"></param>
         public override void ToFormatter(PascalFormatter result) {

@@ -79,6 +79,11 @@ namespace PasPasPasTests {
         }
 
         [TestMethod]
+        public void TestClassTypeDefinitions() {
+            ParseString("unit test; interface implementation procedure x.x; begin end; end.");
+        }
+
+        [TestMethod]
         public void TestClassTypeDeclarations() {
             ParseString("program test; const x : procedure = 5; .");
             ParseString("program test; const x : procedure () = 5; .");
@@ -155,11 +160,6 @@ namespace PasPasPasTests {
             ParseString("program test; const x : class procedure x; safecall; end = 5; .");
             ParseString("program test; const x : class procedure x; stdcall; end = 5; .");
             ParseString("program test; const x : class procedure x; export; end = 5; .");
-            ParseString("program test; const x : class procedure x; local; end = 5; .");
-            ParseString("program test; const x : class procedure x; far; end = 5; .");
-            ParseString("program test; const x : class procedure x; near; end = 5; .");
-            ParseString("program test; const x : class procedure x; far; far; far; overload; end = 5; .");
-            ParseString("program test; const x : class function x: [x] Pointer; near; end = 5; .");
             ParseString("program test; const x : class procedure x = t; end = 5; .");
             ParseString("program test; const x : class procedure x.x = t; end = 5; .");
             ParseString("program test; const x : class const q = 5; z = 3; end = 5; .");

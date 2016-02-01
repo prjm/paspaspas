@@ -14,6 +14,11 @@ namespace PasPasPas.Internal.Parser.Syntax {
         public UnitImplementation(IParserInformationProvider informationProvider) : base(informationProvider) { }
 
         /// <summary>
+        ///     declaration section
+        /// </summary>
+        public Declarations DeclarationSections { get; internal set; }
+
+        /// <summary>
         ///     uses clause
         /// </summary>
         public UsesClause UsesClause { get; internal set; }
@@ -24,7 +29,8 @@ namespace PasPasPas.Internal.Parser.Syntax {
         /// <param name="result"></param>
         public override void ToFormatter(PascalFormatter result) {
             result.Keyword("implementation").NewLine();
-            result.Part(UsesClause);
+            result.Part(UsesClause).NewLine();
+            result.Part(DeclarationSections);
         }
     }
 }

@@ -21,7 +21,7 @@ namespace PasPasPas.Internal.Parser.Syntax {
         /// <summary>
         ///     hinting directive
         /// </summary>
-        public HintingInformation Hint { get; internal set; }
+        public HintingInformationList Hint { get; internal set; }
 
 
         /// <summary>

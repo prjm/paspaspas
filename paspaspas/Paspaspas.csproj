@@ -65,11 +65,14 @@
     <Compile Include="Internal\Parser\ParserBase.cs" />
     <Compile Include="Internal\Parser\RuleAttribute.cs" />
     <Compile Include="Internal\Parser\StandardParser.cs" />
+    <Compile Include="Internal\Parser\Syntax\AbstractDirective.cs" />
     <Compile Include="Internal\Parser\Syntax\ArrayIndex.cs" />
     <Compile Include="Internal\Parser\Syntax\ArrayType.cs" />
     <Compile Include="Internal\Parser\Syntax\AssemblerBlock.cs" />
+    <Compile Include="Internal\Parser\Syntax\BindingDirective.cs" />
     <Compile Include="Internal\Parser\Syntax\Block.cs" />
     <Compile Include="Internal\Parser\Syntax\BlockBody.cs" />
+    <Compile Include="Internal\Parser\Syntax\CallConvention.cs" />
     <Compile Include="Internal\Parser\Syntax\ClassDeclaration.cs" />
     <Compile Include="Internal\Parser\Syntax\ClassDeclarationItem.cs" />
     <Compile Include="Internal\Parser\Syntax\ClassDeclarationItems.cs" />
@@ -110,7 +113,9 @@
     <Compile Include="Internal\Parser\Syntax\GenericTypeIdent.cs" />
     <Compile Include="Internal\Parser\Syntax\GenericTypesuffix.cs" />
     <Compile Include="Internal\Parser\Syntax\HintingInformation.cs" />
+    <Compile Include="Internal\Parser\Syntax\HintingInformationList.cs" />
     <Compile Include="Internal\Parser\Syntax\IdentList.cs" />
+    <Compile Include="Internal\Parser\Syntax\InlineDirective.cs" />
     <Compile Include="Internal\Parser\Syntax\InterfaceDeclaration.cs" />
     <Compile Include="Internal\Parser\Syntax\InterfaceDefinition.cs" />
     <Compile Include="Internal\Parser\Syntax\InterfaceGuid.cs" />
@@ -131,6 +136,7 @@
     <Compile Include="Internal\Parser\Syntax\ObjectDeclaration.cs" />
     <Compile Include="Internal\Parser\Syntax\ObjectItem.cs" />
     <Compile Include="Internal\Parser\Syntax\ObjectItems.cs" />
+    <Compile Include="Internal\Parser\Syntax\OverloadDirective.cs" />
     <Compile Include="Internal\Parser\Syntax\Package.cs" />
     <Compile Include="Internal\Parser\Syntax\PackageContains.cs" />
     <Compile Include="Internal\Parser\Syntax\PackageHead.cs" />
@@ -158,6 +164,7 @@
     <Compile Include="Internal\Parser\Syntax\RecordItems.cs" />
     <Compile Include="Internal\Parser\Syntax\RecordVariant.cs" />
     <Compile Include="Internal\Parser\Syntax\RecordVariantSection.cs" />
+    <Compile Include="Internal\Parser\Syntax\ReintroduceDirective.cs" />
     <Compile Include="Internal\Parser\Syntax\SetDef.cs" />
     <Compile Include="Internal\Parser\Syntax\SimpleType.cs" />
     <Compile Include="Internal\Parser\Syntax\StringType.cs" />

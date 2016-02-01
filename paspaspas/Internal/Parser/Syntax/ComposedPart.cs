@@ -25,7 +25,8 @@ namespace PasPasPas.Internal.Parser.Syntax {
         /// </summary>
         /// <param name="detail">detail to add</param>
         public void Add(TDetail detail) {
-            details.Value.Add(detail);
+            if (detail != null)
+                details.Value.Add(detail);
         }
 
         /// <summary>

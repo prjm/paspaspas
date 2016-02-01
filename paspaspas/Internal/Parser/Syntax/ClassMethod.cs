@@ -1,5 +1,4 @@
 ﻿using PasPasPas.Api;
-using System.Collections.Generic;
 
 namespace PasPasPas.Internal.Parser.Syntax {
 
@@ -15,10 +14,9 @@ namespace PasPasPas.Internal.Parser.Syntax {
         public ClassMethod(IParserInformationProvider informationProvider) : base(informationProvider) { }
 
         /// <summary>
-        ///     additional directives
+        ///     directviea
         /// </summary>
-        public IList<int> Directives { get; }
-            = new List<int>();
+        public MethodDirectives Directives { get; internal set; }
 
         /// <summary>
         ///     generic definition
@@ -106,98 +104,8 @@ namespace PasPasPas.Internal.Parser.Syntax {
                 ResultType.ToFormatter(result);
             }
 
-            result.Punct(";");
-
-            foreach (var directive in Directives) {
-                result.Space();
-                switch (directive) {
-                    case PascalToken.Reintroduce:
-                        result.Keyword("reintroduce");
-                        break;
-
-                    case PascalToken.Overload:
-                        result.Keyword("overload");
-                        break;
-
-                    case PascalToken.Message:
-                        result.Keyword("message");
-                        result.Space();
-                        MessageExpression.ToFormatter(result);
-                        break;
-
-                    case PascalToken.Static:
-                        result.Keyword("static");
-                        break;
-
-                    case PascalToken.Dynamic:
-                        result.Keyword("dynamic");
-                        break;
-
-                    case PascalToken.Override:
-                        result.Keyword("override");
-                        break;
-
-                    case PascalToken.Virtual:
-                        result.Keyword("virtual");
-                        break;
-
-                    case PascalToken.Final:
-                        result.Keyword("final");
-                        break;
-
-                    case PascalToken.Inline:
-                        result.Keyword("inline");
-                        break;
-
-                    case PascalToken.Assembler:
-                        result.Keyword("assembler");
-                        break;
-
-                    case PascalToken.Cdecl:
-                        result.Keyword("cdecl");
-                        break;
-
-                    case PascalToken.Pascal:
-                        result.Keyword("pascal");
-                        break;
-
-                    case PascalToken.Register:
-                        result.Keyword("register");
-                        break;
-
-                    case PascalToken.Stdcall:
-                        result.Keyword("stdcall");
-                        break;
-
-                    case PascalToken.Safecall:
-                        result.Keyword("safecall");
-                        break;
-
-                    case PascalToken.Export:
-                        result.Keyword("export");
-                        break;
-
-
-                    case PascalToken.Far:
-                        result.Keyword("far");
-                        break;
-
-
-                    case PascalToken.Local:
-                        result.Keyword("local");
-                        break;
-
-
-                    case PascalToken.Near:
-                        result.Keyword("near");
-                        break;
-
-
-
-
-                };
-                result.Punct(";");
-            }
+            result.Punct(";").Space();
+            result.Part(Directives);
         }
     }
 }
