@@ -72,6 +72,8 @@
     <Compile Include="Internal\Parser\Syntax\BindingDirective.cs" />
     <Compile Include="Internal\Parser\Syntax\Block.cs" />
     <Compile Include="Internal\Parser\Syntax\BlockBody.cs" />
+    <Compile Include="Internal\Parser\Syntax\ExternalDirective.cs" />
+    <Compile Include="Internal\Parser\Syntax\OldCallConvention.cs" />
     <Compile Include="Internal\Parser\Syntax\CallConvention.cs" />
     <Compile Include="Internal\Parser\Syntax\ClassDeclaration.cs" />
     <Compile Include="Internal\Parser\Syntax\ClassDeclarationItem.cs" />
@@ -145,7 +147,9 @@
     <Compile Include="Internal\Parser\Syntax\PascalIdentifier.cs" />
     <Compile Include="Internal\Parser\Syntax\PascalInteger.cs" />
     <Compile Include="Internal\Parser\Syntax\PointerType.cs" />
+    <Compile Include="Internal\Parser\Syntax\ProcBody.cs" />
     <Compile Include="Internal\Parser\Syntax\ProcedureDeclaration.cs" />
+    <Compile Include="Internal\Parser\Syntax\ProcedureDeclarationHeading.cs" />
     <Compile Include="Internal\Parser\Syntax\ProcedureReference.cs" />
     <Compile Include="Internal\Parser\Syntax\ProcedureType.cs" />
     <Compile Include="Internal\Parser\Syntax\ProcedureTypeDefinition.cs" />

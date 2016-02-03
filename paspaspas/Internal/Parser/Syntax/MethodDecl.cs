@@ -37,7 +37,10 @@ namespace PasPasPas.Internal.Parser.Syntax {
             result.Part(Heading);
             result.Punct(";").NewLine();
             result.Part(Directives).NewLine();
-            result.Part(MethodBody);
+            if ((MethodBody != null) && (MethodBody.Body != null)) {
+                result.Part(MethodBody);
+                result.Punct(";").NewLine();
+            }
         }
     }
 }

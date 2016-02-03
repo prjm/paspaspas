@@ -176,7 +176,9 @@ namespace PasPasPas.Internal.Tokenizer {
                 ["var"] = PascalToken.Var,
                 ["while"] = PascalToken.While,
                 ["with"] = PascalToken.With,
-                ["xor"] = PascalToken.Xor
+                ["xor"] = PascalToken.Xor,
+                ["varargs"] = PascalToken.VarArgs,
+                ["external"] = PascalToken.External
             };
 
         internal static bool IsKeyword(string value)

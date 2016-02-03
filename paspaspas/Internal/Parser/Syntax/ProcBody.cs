@@ -1,27 +1,25 @@
-﻿using PasPasPas.Api;
+﻿using System;
+using PasPasPas.Api;
 
 namespace PasPasPas.Internal.Parser.Syntax {
 
     /// <summary>
-    ///     compound statement
+    ///     procedure body
     /// </summary>
-    public class CompoundStatement : SyntaxPartBase {
+    public class ProcBody : SyntaxPartBase {
 
         /// <summary>
         ///     create a new syntax tree element
         /// </summary>
         /// <param name="informationProvider">current parser state</param>
-        public CompoundStatement(IParserInformationProvider informationProvider) : base(informationProvider) { }
+        public ProcBody(IParserInformationProvider informationProvider) : base(informationProvider) { }
 
         /// <summary>
-        /// format compound statement
+        ///     format procedure body
         /// </summary>
         /// <param name="result"></param>
         public override void ToFormatter(PascalFormatter result) {
-            result.Keyword("begin").StartIndent();
-            result.NewLine();
-            result.Keyword("end").EndIndent();
-            result.NewLine();
+            throw new NotImplementedException();
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using PasPasPas.Api;
+﻿using PasPasPas.Api;
 
 namespace PasPasPas.Internal.Parser.Syntax {
 
@@ -15,11 +14,29 @@ namespace PasPasPas.Internal.Parser.Syntax {
         public ProcedureDeclaration(IParserInformationProvider informationProvider) : base(informationProvider) { }
 
         /// <summary>
+        ///     function directives
+        /// </summary>
+        public FunctionDirectives Directives { get; internal set; }
+
+        /// <summary>
+        ///     procedure declaration heading
+        /// </summary>
+        public ProcedureDeclarationHeading Heading { get; internal set; }
+
+        /// <summary>
+        ///     procedure body
+        /// </summary>
+        public ProcBody ProcBody { get; internal set; }
+
+        /// <summary>
         ///     format procedure declaration
         /// </summary>
         /// <param name="result"></param>
         public override void ToFormatter(PascalFormatter result) {
-            throw new NotImplementedException();
+            result.Part(Heading);
+            result.Punct(";").NewLine();
+            result.Part(Directives).NewLine();
+            result.Part(ProcBody);
         }
     }
 }

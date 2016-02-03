@@ -80,7 +80,15 @@ namespace PasPasPasTests {
 
         [TestMethod]
         public void TestClassTypeDefinitions() {
-            ParseString("unit test; interface implementation procedure x.x; begin end; end.");
+            ParseString("unit test; interface implementation procedure x.x ; begin end ; end .");
+            ParseString("unit test; interface implementation function x.x : x ; begin end ; end .");
+            ParseString("unit test; interface implementation class function x.x : x ; begin end ; end .");
+            ParseString("unit test; interface implementation class procedure x.x ; begin end ; end .");
+            ParseString("unit test; interface implementation constructor x.x ; begin end ; end .");
+            ParseString("unit test; interface implementation destructor x.x ; begin end ; end .");
+            ParseString("unit test; interface implementation class constructor x.x ; begin end ; end .");
+            ParseString("unit test; interface implementation class destructor x.x ; begin end ; end .");
+            ParseString("unit test; interface implementation [x] procedure x.x ; begin end ; end .");
         }
 
         [TestMethod]

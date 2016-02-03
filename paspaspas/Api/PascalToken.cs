@@ -722,6 +722,16 @@ namespace PasPasPas.Api {
         public const int Xor = 321;
 
         /// <summary>
+        ///     token for <c>varargs</c>
+        /// </summary>
+        public const int VarArgs = 322;
+
+        /// <summary>
+        ///     token for <c>external</c>
+        /// </summary>
+        public const int External = 323;
+
+        /// <summary>
         ///     token for any identifier
         /// </summary>
         public const int Identifier = 500;
