@@ -89,6 +89,13 @@ namespace PasPasPasTests {
             ParseString("unit test; interface implementation class constructor x.x ; begin end ; end .");
             ParseString("unit test; interface implementation class destructor x.x ; begin end ; end .");
             ParseString("unit test; interface implementation [x] procedure x.x ; begin end ; end .");
+            ParseString("unit test; interface implementation procedure x ; overload; begin end ; end .");
+            ParseString("unit test; interface implementation procedure x ; inline; begin end ; end .");
+            ParseString("unit test; interface implementation procedure x ; cdecl; pascal; register; safecall; stdcall; export; begin end ; end .");
+            ParseString("unit test; interface implementation procedure x ; local near far; export, begin end ; end .");
+            ParseString("unit test; interface implementation procedure x ; varargs; begin end ; end .");
+            ParseString("unit test; interface implementation procedure x ; external; begin end ; end .");
+            ParseString("unit test; interface implementation procedure x ; external 5 name 5 index 5; begin end ; end .");
         }
 
         [TestMethod]

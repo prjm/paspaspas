@@ -732,6 +732,11 @@ namespace PasPasPas.Api {
         public const int External = 323;
 
         /// <summary>
+        ///     token for <c>unsafe</c>
+        /// </summary>
+        public const int Unsafe = 324;
+
+        /// <summary>
         ///     token for any identifier
         /// </summary>
         public const int Identifier = 500;

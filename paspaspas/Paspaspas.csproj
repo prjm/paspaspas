@@ -73,6 +73,7 @@
     <Compile Include="Internal\Parser\Syntax\Block.cs" />
     <Compile Include="Internal\Parser\Syntax\BlockBody.cs" />
     <Compile Include="Internal\Parser\Syntax\ExternalDirective.cs" />
+    <Compile Include="Internal\Parser\Syntax\ExternalSpecifier.cs" />
     <Compile Include="Internal\Parser\Syntax\OldCallConvention.cs" />
     <Compile Include="Internal\Parser\Syntax\CallConvention.cs" />
     <Compile Include="Internal\Parser\Syntax\ClassDeclaration.cs" />
@@ -186,6 +187,7 @@
     <Compile Include="Internal\Parser\Syntax\UnitImplementation.cs" />
     <Compile Include="Internal\Parser\Syntax\UnitInitialization.cs" />
     <Compile Include="Internal\Parser\Syntax\UnitInterface.cs" />
+    <Compile Include="Internal\Parser\Syntax\UnsafeDirective.cs" />
     <Compile Include="Internal\Parser\Syntax\UserAttribute.cs" />
     <Compile Include="Internal\Parser\Syntax\UserAttributes.cs" />
     <Compile Include="Internal\Parser\Syntax\UsesFileClause.cs" />

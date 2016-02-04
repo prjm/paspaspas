@@ -227,7 +227,7 @@ namespace PasPasPas.Internal.Parser {
             return result;
         }
 
-        [Rule("FunctionDirective", "OverloadDirective | InlineDirective")]
+        [Rule("FunctionDirective", "OverloadDirective | InlineDirective | CallConvention | OldCallConvention | Hint | ExternalDirective | UnsafeDirective")]
         private SyntaxPartBase ParseFunctionDirective() {
             if (Match(PascalToken.Overload)) {
                 return ParseOverloadDirective();
@@ -253,11 +253,47 @@ namespace PasPasPas.Internal.Parser {
                 return ParseExternalDirective();
             }
 
+            if (Match(PascalToken.Unsafe)) {
+                return ParseUnsafeDirective();
+            }
+
             return null;
         }
 
-        private ExternalDirective ParseExternalDirective() {
+        [Rule("UnsafeDirective", "'unsafe' ';' ")]
+        private UnsafeDirective ParseUnsafeDirective() {
+            var result = new UnsafeDirective(this);
+            Require(PascalToken.Unsafe);
+            Require(PascalToken.Semicolon);
+            return result;
+        }
 
+        [Rule("ExternalDirective", "(varargs | external [ ConstExpression { ExternalSpecifier } ]) ';' ")]
+        private ExternalDirective ParseExternalDirective() {
+            var result = new ExternalDirective(this);
+            result.Kind = Require(PascalToken.VarArgs, PascalToken.External).Kind;
+
+            if ((result.Kind == PascalToken.External) && (!Match(PascalToken.Semicolon))) {
+                result.ExternalExpression = ParseConstantExpression();
+                ExternalSpecifier specifier;
+                do {
+                    specifier = ParseExternalSpecifier();
+                    result.Add(specifier);
+                } while (specifier != null);
+            }
+            Require(PascalToken.Semicolon);
+            return result;
+        }
+
+        [Rule("ExternalSpecifier", "('Name' | 'Index' ) ConstExpression")]
+        private ExternalSpecifier ParseExternalSpecifier() {
+            if (!Match(PascalToken.Name, PascalToken.Index))
+                return null;
+
+            var result = new ExternalSpecifier(this);
+            result.Kind = Require(PascalToken.Name, PascalToken.Index).Kind;
+            result.Expression = ParseConstantExpression();
+            return result;
         }
 
         private SyntaxPartBase ParseOldCallConvention() {
