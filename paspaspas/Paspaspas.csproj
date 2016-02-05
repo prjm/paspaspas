@@ -69,9 +69,12 @@
     <Compile Include="Internal\Parser\Syntax\ArrayIndex.cs" />
     <Compile Include="Internal\Parser\Syntax\ArrayType.cs" />
     <Compile Include="Internal\Parser\Syntax\AssemblerBlock.cs" />
+    <Compile Include="Internal\Parser\Syntax\AssemblyAttribute.cs" />
     <Compile Include="Internal\Parser\Syntax\BindingDirective.cs" />
     <Compile Include="Internal\Parser\Syntax\Block.cs" />
     <Compile Include="Internal\Parser\Syntax\BlockBody.cs" />
+    <Compile Include="Internal\Parser\Syntax\ClosureExpr.cs" />
+    <Compile Include="Internal\Parser\Syntax\Expression.cs" />
     <Compile Include="Internal\Parser\Syntax\ExternalDirective.cs" />
     <Compile Include="Internal\Parser\Syntax\ExternalSpecifier.cs" />
     <Compile Include="Internal\Parser\Syntax\OldCallConvention.cs" />
@@ -104,7 +107,7 @@
     <Compile Include="Internal\Parser\Syntax\ExportedProcedureHeading.cs" />
     <Compile Include="Internal\Parser\Syntax\ExportItem.cs" />
     <Compile Include="Internal\Parser\Syntax\ExportsSection.cs" />
-    <Compile Include="Internal\Parser\Syntax\Expression.cs" />
+    <Compile Include="Internal\Parser\Syntax\ExpressionBase.cs" />
     <Compile Include="Internal\Parser\Syntax\ExpressionList.cs" />
     <Compile Include="Internal\Parser\Syntax\FileType.cs" />
     <Compile Include="Internal\Parser\Syntax\FormalParameter.cs" />
@@ -148,7 +151,6 @@
     <Compile Include="Internal\Parser\Syntax\PascalIdentifier.cs" />
     <Compile Include="Internal\Parser\Syntax\PascalInteger.cs" />
     <Compile Include="Internal\Parser\Syntax\PointerType.cs" />
-    <Compile Include="Internal\Parser\Syntax\ProcBody.cs" />
     <Compile Include="Internal\Parser\Syntax\ProcedureDeclaration.cs" />
     <Compile Include="Internal\Parser\Syntax\ProcedureDeclarationHeading.cs" />
     <Compile Include="Internal\Parser\Syntax\ProcedureReference.cs" />
@@ -172,6 +174,7 @@
     <Compile Include="Internal\Parser\Syntax\ReintroduceDirective.cs" />
     <Compile Include="Internal\Parser\Syntax\SetDef.cs" />
     <Compile Include="Internal\Parser\Syntax\SimpleType.cs" />
+    <Compile Include="Internal\Parser\Syntax\SimplExpr.cs" />
     <Compile Include="Internal\Parser\Syntax\StringType.cs" />
     <Compile Include="Internal\Parser\Syntax\StructType.cs" />
     <Compile Include="Internal\Parser\Syntax\StructTypePart.cs" />
@@ -187,6 +190,7 @@
     <Compile Include="Internal\Parser\Syntax\UnitImplementation.cs" />
     <Compile Include="Internal\Parser\Syntax\UnitInitialization.cs" />
     <Compile Include="Internal\Parser\Syntax\UnitInterface.cs" />
+    <Compile Include="Internal\Parser\Syntax\ForwardDirective.cs" />
     <Compile Include="Internal\Parser\Syntax\UnsafeDirective.cs" />
     <Compile Include="Internal\Parser\Syntax\UserAttribute.cs" />
     <Compile Include="Internal\Parser\Syntax\UserAttributes.cs" />

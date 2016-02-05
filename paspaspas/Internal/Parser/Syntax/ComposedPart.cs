@@ -55,6 +55,18 @@ namespace PasPasPas.Internal.Parser.Syntax {
         /// <param name="formatter">formatter</param>
         /// <returns></returns>
         protected void FlattenToPascal(PascalFormatter formatter, Action<PascalFormatter> delimiter) {
+            FlattenToPascal(formatter, delimiter, null, null);
+        }
+
+        /// <summary>
+        ///     flatten details
+        /// </summary>
+        /// <param name="delimiter">delimiting function</param>
+        /// <param name="formatter">formatter</param>
+        /// <param name="prefix">prefix</param>
+        /// <param name="suffix">suffix</param>
+        /// <returns></returns>
+        protected void FlattenToPascal(PascalFormatter formatter, Action<PascalFormatter> delimiter, Action<PascalFormatter> prefix, Action<PascalFormatter> suffix) {
             int count = 0;
 
             if (!details.IsValueCreated)
@@ -63,7 +75,15 @@ namespace PasPasPas.Internal.Parser.Syntax {
             foreach (var detail in details.Value) {
                 if (count > 0)
                     delimiter(formatter);
+
+                if (prefix != null)
+                    prefix(formatter);
+
                 detail.ToFormatter(formatter);
+
+                if (suffix != null)
+                    suffix(formatter);
+
                 count++;
             }
         }

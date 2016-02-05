@@ -16,12 +16,12 @@ namespace PasPasPas.Internal.Parser.Syntax {
         /// <summary>
         ///     index parameter
         /// </summary>
-        public ExpressionBase IndexParameter { get; internal set; }
+        public Expression IndexParameter { get; internal set; }
 
         /// <summary>
         ///     name parameter
         /// </summary>
-        public ExpressionBase NameParameter { get; internal set; }
+        public Expression NameParameter { get; internal set; }
 
         /// <summary>
         ///     parameter list

@@ -257,7 +257,19 @@ namespace PasPasPas.Internal.Parser {
                 return ParseUnsafeDirective();
             }
 
+            if (Match(PascalToken.Forward)) {
+                return ParseForwardDirective();
+            }
+
             return null;
+        }
+
+        [Rule("ForwardDirective", "'forward' ';' ")]
+        private ForwardDirective ParseForwardDirective() {
+            var result = new ForwardDirective(this);
+            Require(PascalToken.Forward);
+            Require(PascalToken.Semicolon);
+            return result;
         }
 
         [Rule("UnsafeDirective", "'unsafe' ';' ")]
@@ -565,7 +577,10 @@ namespace PasPasPas.Internal.Parser {
                         (LookAhead(1, PascalToken.Identifier) && (LookAhead(2, PascalToken.Dot)));
 
                     if (useMethodDeclaration) {
-                        result.Add(ParseMethodDecl());
+                        var methodDecl = ParseMethodDecl();
+                        methodDecl.Class = useClass;
+                        methodDecl.Attributes = attrs;
+                        result.Add(methodDecl);
                         continue;
                     }
 
@@ -713,15 +728,14 @@ namespace PasPasPas.Internal.Parser {
         [Rule("ProcedureDeclaration", "ProcedureDeclarationHeading ';' FunctionDirectives [ ProcBody ]")]
         private ProcedureDeclaration ParseProcedureDeclaration(UserAttributes attributes) {
             var result = new ProcedureDeclaration(this);
+            result.Attributes = attributes;
             result.Heading = ParseProcedureDeclarationHeading();
             Require(PascalToken.Semicolon);
             result.Directives = ParseFunctionDirectives();
-            result.ProcBody = ParseProcBody();
+            result.ProcBody = ParseBlock();
+            if ((result.ProcBody != null) && (result.ProcBody.Body != null))
+                Require(PascalToken.Semicolon);
             return result;
-        }
-
-        private ProcBody ParseProcBody() {
-            throw new NotImplementedException();
         }
 
         [Rule("ProcedureDeclarationHeading", "('procedure' | 'function') Identifier [FormalParameterSection][':' TypeSpecification]")]
@@ -739,8 +753,15 @@ namespace PasPasPas.Internal.Parser {
             return result;
         }
 
-        private UserAttributes ParseAssemblyAttribute() {
-            throw new NotImplementedException();
+        [Rule("AssemblyAttribute", "'[' 'assembly' ':' ']'")]
+        private AssemblyAttribute ParseAssemblyAttribute() {
+            var result = new AssemblyAttribute(this);
+            Require(PascalToken.OpenBraces);
+            Require(PascalToken.Assembly);
+            Require(PascalToken.Colon);
+            result.Attribute = ParseAttribute();
+            Require(PascalToken.CloseBraces);
+            return result;
         }
 
         [Rule("ExportsSection", "'exports' Identifier ExportItem { ',' ExportItem } ';' ")]
@@ -1098,12 +1119,12 @@ namespace PasPasPas.Internal.Parser {
         private StructType ParseStructType() {
             var result = new StructType(this);
             result.Packed = Optional(PascalToken.Packed);
-            result.Part = ParseStructTypePart(this);
+            result.Part = ParseStructTypePart();
             return result;
         }
 
         [Rule("StructTypePart", "ArrayType | SetType | FileType | ClassDecl")]
-        private StructTypePart ParseStructTypePart(StandardParser standardParser) {
+        private StructTypePart ParseStructTypePart() {
             var result = new StructTypePart(this);
 
             if (Match(PascalToken.Array)) {
@@ -2025,14 +2046,20 @@ namespace PasPasPas.Internal.Parser {
             return result;
         }
 
-        [Rule("Attributes", "{ '[' Attribute ']' }")]
+        [Rule("Attributes", "{ '[' Attribute | AssemblyAttribue ']' }")]
         private UserAttributes ParseAttributes() {
             var userAttributes = new UserAttributes(this);
-            while (Optional(PascalToken.OpenBraces)) {
-                do {
-                    userAttributes.Add(ParseAttribute());
-                } while (Optional(PascalToken.Comma));
-                Require(PascalToken.CloseBraces);
+            while (Match(PascalToken.OpenBraces)) {
+                if (LookAhead(1, PascalToken.Assembly)) {
+                    userAttributes.Add(ParseAssemblyAttribute());
+                }
+                else {
+                    Require(PascalToken.OpenBraces);
+                    do {
+                        userAttributes.Add(ParseAttribute());
+                    } while (Optional(PascalToken.Comma));
+                    Require(PascalToken.CloseBraces);
+                }
             }
             return userAttributes;
         }
@@ -2086,7 +2113,38 @@ namespace PasPasPas.Internal.Parser {
             return result;
         }
 
-        private ExpressionBase ParseExpression() => RequireInteger();
+        [Rule("Expression", "SimpleExpression | CloseExpression")]
+        private Expression ParseExpression() {
+            var result = new Expression(this);
+
+            if (Match(PascalToken.Function, PascalToken.Procedure)) {
+                result.ClosureExpression = ParseClosureExpression();
+            }
+            else {
+                result.SimpleExpression = ParseSimpleExpression();
+            }
+
+            return result;
+        }
+
+        private SimplExpr ParseSimpleExpression() {
+            throw new NotImplementedException();
+        }
+
+        [Rule("ClosureExpr", "('function'|'procedure') ")]
+        private ClosureExpr ParseClosureExpression() {
+            var result = new ClosureExpr(this);
+            result.Kind = Require(PascalToken.Function, PascalToken.Procedure).Kind;
+            if (Match(PascalToken.OpenParen)) {
+                result.Parameters = ParseFormalParameterSection();
+            }
+            if (result.Kind == PascalToken.Function) {
+                Require(PascalToken.Colon);
+                result.ReturnType = ParseTypeSpecification();
+            }
+            result.Block = ParseBlock();
+            return result;
+        }
 
         private PascalInteger RequireInteger()
             => new PascalInteger(Require(PascalToken.Integer), this);

@@ -26,7 +26,7 @@ namespace PasPasPas.Internal.Parser.Syntax {
         /// <summary>
         ///     string length
         /// </summary>
-        public ExpressionBase StringLength { get; internal set; }
+        public Expression StringLength { get; internal set; }
 
         /// <summary>
         ///     format type

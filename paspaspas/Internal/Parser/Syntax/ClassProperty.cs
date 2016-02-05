@@ -21,7 +21,7 @@ namespace PasPasPas.Internal.Parser.Syntax {
         /// <summary>
         ///     index of the property
         /// </summary>
-        public ExpressionBase PropertyIndex { get; internal set; }
+        public Expression PropertyIndex { get; internal set; }
 
         /// <summary>
         ///     property name

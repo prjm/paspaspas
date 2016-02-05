@@ -14,6 +14,11 @@ namespace PasPasPas.Internal.Parser.Syntax {
         public ProcedureDeclaration(IParserInformationProvider informationProvider) : base(informationProvider) { }
 
         /// <summary>
+        ///     attributes
+        /// </summary>
+        public UserAttributes Attributes { get; internal set; }
+
+        /// <summary>
         ///     function directives
         /// </summary>
         public FunctionDirectives Directives { get; internal set; }
@@ -26,7 +31,7 @@ namespace PasPasPas.Internal.Parser.Syntax {
         /// <summary>
         ///     procedure body
         /// </summary>
-        public ProcBody ProcBody { get; internal set; }
+        public Block ProcBody { get; internal set; }
 
         /// <summary>
         ///     format procedure declaration
@@ -36,7 +41,10 @@ namespace PasPasPas.Internal.Parser.Syntax {
             result.Part(Heading);
             result.Punct(";").NewLine();
             result.Part(Directives).NewLine();
-            result.Part(ProcBody);
+            if ((ProcBody != null) && (ProcBody.Body != null)) {
+                result.Part(ProcBody);
+                result.Punct(";").NewLine();
+            }
         }
     }
 }

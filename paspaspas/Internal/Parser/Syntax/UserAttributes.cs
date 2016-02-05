@@ -5,7 +5,7 @@ namespace PasPasPas.Internal.Parser.Syntax {
     /// <summary>
     ///     a list of user attributes
     /// </summary>
-    public class UserAttributes : ComposedPart<UserAttribute> {
+    public class UserAttributes : ComposedPart<SyntaxPartBase> {
 
         /// <summary>
         ///     create a new syntax tree element
@@ -18,7 +18,7 @@ namespace PasPasPas.Internal.Parser.Syntax {
         /// </summary>
         /// <param name="result"></param>
         public override void ToFormatter(PascalFormatter result) {
-            FlattenToPascal(result, x => x.NewLine());
+            FlattenToPascal(result, x => result.NewLine(), x => x.Punct("["), x => x.Punct("]"));
             if (Count > 0)
                 result.NewLine();
         }

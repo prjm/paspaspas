@@ -92,7 +92,7 @@ namespace PasPasPasTests {
             ParseString("unit test; interface implementation procedure x ; overload; begin end ; end .");
             ParseString("unit test; interface implementation procedure x ; inline; begin end ; end .");
             ParseString("unit test; interface implementation procedure x ; cdecl; pascal; register; safecall; stdcall; export; begin end ; end .");
-            ParseString("unit test; interface implementation procedure x ; local near far; export, begin end ; end .");
+            ParseString("unit test; interface implementation procedure x ; local; near; far; export; begin end ; end .");
             ParseString("unit test; interface implementation procedure x ; varargs; begin end ; end .");
             ParseString("unit test; interface implementation procedure x ; external; begin end ; end .");
             ParseString("unit test; interface implementation procedure x ; external 5 name 5 index 5; begin end ; end .");
@@ -208,6 +208,7 @@ namespace PasPasPasTests {
             ParseString("program test; type x = record helper for x end ; .");
             ParseString("program test; type x = record helper for x function x: x; end ; .");
             ParseString("program test; type x = record helper for x property x : x read x; end ; .");
+            ParseString("program test; [assembly:x.y.z(5)] .");
         }
 
 

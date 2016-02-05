@@ -14,6 +14,16 @@ namespace PasPasPas.Internal.Parser.Syntax {
         public MethodDecl(IParserInformationProvider informationProvider) : base(informationProvider) { }
 
         /// <summary>
+        ///     user attributes
+        /// </summary>
+        public UserAttributes Attributes { get; internal set; }
+
+        /// <summary>
+        ///     <c>true</c> if class method
+        /// </summary>
+        public bool Class { get; internal set; }
+
+        /// <summary>
         ///     method directives
         /// </summary>
         public MethodDirectives Directives { get; internal set; }
@@ -34,7 +44,10 @@ namespace PasPasPas.Internal.Parser.Syntax {
         /// </summary>
         /// <param name="result"></param>
         public override void ToFormatter(PascalFormatter result) {
-            result.Part(Heading);
+            result.Part(Attributes);
+            if (Class)
+                result.Keyword("class").Space();
+            result.Part(Heading).Space();
             result.Punct(";").NewLine();
             result.Part(Directives).NewLine();
             if ((MethodBody != null) && (MethodBody.Body != null)) {

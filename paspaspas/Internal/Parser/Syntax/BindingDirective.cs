@@ -22,7 +22,7 @@ namespace PasPasPas.Internal.Parser.Syntax {
         /// <summary>
         ///     message expression
         /// </summary>
-        public ExpressionBase MessageExpression { get; internal set; }
+        public Expression MessageExpression { get; internal set; }
 
         /// <summary>
         ///     format directive

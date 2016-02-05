@@ -21,7 +21,7 @@ namespace PasPasPas.Internal.Parser.Syntax {
         /// <summary>
         ///     default property expression
         /// </summary>
-        public ExpressionBase DefaultProperty { get; internal set; }
+        public Expression DefaultProperty { get; internal set; }
 
         /// <summary>
         ///     dispinterface
@@ -41,7 +41,7 @@ namespace PasPasPas.Internal.Parser.Syntax {
         /// <summary>
         ///     stored property expression
         /// </summary>
-        public ExpressionBase StoredProperty { get; internal set; }
+        public Expression StoredProperty { get; internal set; }
 
         /// <summary>
         ///     no default

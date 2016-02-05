@@ -28,7 +28,6 @@ namespace PasPasPas.Internal.Parser.Syntax {
         /// </summary>
         /// <param name="result">formatter</param>
         public override void ToFormatter(PascalFormatter result) {
-            result.Punct("[");
             Name.ToFormatter(result);
 
             if ((Expressions != null) && (Expressions.Count > 0)) {
@@ -37,7 +36,6 @@ namespace PasPasPas.Internal.Parser.Syntax {
                 result.Punct(")");
             }
 
-            result.Punct("]");
         }
     }
 }

@@ -16,7 +16,7 @@ namespace PasPasPas.Internal.Parser.Syntax {
         /// <summary>
         ///     disp id expression
         /// </summary>
-        public ExpressionBase DispExpression { get; internal set; }
+        public Expression DispExpression { get; internal set; }
 
         /// <summary>
         ///     format disp id

@@ -21,7 +21,7 @@ namespace PasPasPas.Internal.Parser.Syntax {
         /// <summary>
         ///     default value
         /// </summary>
-        public ExpressionBase DefaultValue { get; internal set; }
+        public Expression DefaultValue { get; internal set; }
 
         /// <summary>
         ///     parse a list of identifiers

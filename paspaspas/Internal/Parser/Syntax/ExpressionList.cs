@@ -6,7 +6,7 @@ namespace PasPasPas.Internal.Parser.Syntax {
     /// <summary>
     ///     a list of expressions
     /// </summary>
-    public class ExpressionList : ComposedPart<ExpressionBase> {
+    public class ExpressionList : ComposedPart<SyntaxPartBase> {
 
         /// <summary>
         ///     create a new syntax tree element

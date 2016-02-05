@@ -21,7 +21,7 @@ namespace PasPasPas.Internal.Parser.Syntax {
         /// <summary>
         ///     value of the expression
         /// </summary>
-        public ExpressionBase Value { get; internal set; }
+        public Expression Value { get; internal set; }
 
         /// <summary>
         ///     format expression

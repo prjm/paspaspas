@@ -737,6 +737,11 @@ namespace PasPasPas.Api {
         public const int Unsafe = 324;
 
         /// <summary>
+        ///     token for <c>forward</c>
+        /// </summary>
+        public const int Forward = 325;
+
+        /// <summary>
         ///     token for any identifier
         /// </summary>
         public const int Identifier = 500;
