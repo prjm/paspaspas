@@ -53,9 +53,10 @@
   <ItemGroup>
     <Compile Include="Assert.cs" />
     <Compile Include="ParserTestBase.cs" />
-    <Compile Include="ProgramTest.cs" />
-    <Compile Include="TestDeclarations.cs" />
-    <Compile Include="TokenizerTest.cs" />
+    <Compile Include="Parser\ExpressionTest.cs" />
+    <Compile Include="Parser\ProgramTest.cs" />
+    <Compile Include="Parser\TestDeclarations.cs" />
+    <Compile Include="Tokenizer\TokenizerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

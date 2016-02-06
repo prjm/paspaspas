@@ -117,6 +117,31 @@ namespace PasPasPas.Api {
         public const int DotDot = 22;
 
         /// <summary>
+        ///     token for <c>+</c>
+        /// </summary>
+        public const int Plus = 23;
+
+        /// <summary>
+        ///     token for <c>-</c>
+        /// </summary>
+        public const int Minus = 24;
+
+        /// <summary>
+        ///     token for <c>*</c>
+        /// </summary>
+        public const int Times = 25;
+
+        /// <summary>
+        ///     token for <c>/</c>
+        /// </summary>
+        public const int Slash = 26;
+
+        /// <summary>
+        ///     token for <c>@</c>
+        /// </summary>
+        public const int At = 27;
+
+        /// <summary>
         ///     token for <c>program</c>
         /// </summary>
         public const int Program = 200;
@@ -740,6 +765,7 @@ namespace PasPasPas.Api {
         ///     token for <c>forward</c>
         /// </summary>
         public const int Forward = 325;
+
 
         /// <summary>
         ///     token for any identifier

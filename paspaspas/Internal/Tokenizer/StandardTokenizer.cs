@@ -205,6 +205,11 @@ namespace PasPasPas.Internal.Tokenizer {
             AddPunctuator('^', PascalToken.Circumflex);
             AddPunctuator('<', PascalToken.AngleBracketsOpen);
             AddPunctuator('>', PascalToken.AngleBracketsClose);
+            AddPunctuator('+', PascalToken.Plus);
+            AddPunctuator('-', PascalToken.Minus);
+            AddPunctuator('*', PascalToken.Times);
+            AddPunctuator('/', PascalToken.Slash);
+            AddPunctuator('@', PascalToken.At);
         }
 
         private PunctuatorGroup AddPunctuator(char prefix, int tokenValue) {

@@ -1,7 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PasPasPas.Internal;
 
-namespace PasPasPasTests {
+namespace PasPasPasTests.Tokenizer {
 
     [TestClass]
     public class TokenizerTest {

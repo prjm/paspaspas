@@ -2127,11 +2127,60 @@ namespace PasPasPas.Internal.Parser {
             return result;
         }
 
+        [Rule("SimpleExpression", "Term { ('+'|'-'|'or'|'xor') SimpleExpression }")]
         private SimplExpr ParseSimpleExpression() {
-            throw new NotImplementedException();
+            var result = new SimplExpr(this);
+            result.LeftOperand = ParseTerm();
+            if (Match(PascalToken.Plus, PascalToken.Minus, PascalToken.Or, PascalToken.Xor)) {
+                result.Kind = Require(PascalToken.Plus, PascalToken.Minus, PascalToken.Or, PascalToken.Xor).Kind;
+                result.RightOperand = ParseSimpleExpression();
+            }
+            return result;
         }
 
-        [Rule("ClosureExpr", "('function'|'procedure') ")]
+        [Rule("Termin", "Factor [ ('*'|'/'|'div'|'mod'|'and'|'shl'|'shr'|'as') Term ]")]
+        private Term ParseTerm() {
+            var result = new Term(this);
+            result.LeftOperand = ParseFactor();
+            if (Match(PascalToken.Times, PascalToken.Slash, PascalToken.Div, PascalToken.Mod, PascalToken.And, PascalToken.Shl, PascalToken.Shr, PascalToken.As)) {
+                result.Kind = Require(PascalToken.Times, PascalToken.Slash, PascalToken.Div, PascalToken.Mod, PascalToken.And, PascalToken.Shl, PascalToken.Shr, PascalToken.As).Kind;
+                result.RightOperand = ParseTerm();
+            }
+            return result;
+        }
+
+        [Rule("Factor", "('@' Factor) | ('not' Factor) |  ('-' Factor) | ('+' Factor) ")]
+        private Factor ParseFactor() {
+            var result = new Factor(this);
+            if (Optional(PascalToken.At)) {
+                result.AddressOf = ParseFactor();
+                return result;
+            }
+            if (Optional(PascalToken.Not)) {
+                result.Not = ParseFactor();
+                return result;
+            }
+            if (Optional(PascalToken.Plus)) {
+                result.Plus = ParseFactor();
+                return result;
+            }
+            if (Optional(PascalToken.Minus)) {
+                result.Minus = ParseFactor();
+                return result;
+            }
+            if (Optional(PascalToken.Circumflex)) {
+                result.PointerTo = RequireIdentifier();
+                return result;
+            }
+            if (Matches(PascalToken.Integer)) {
+                result.IntValue = RequireInteger();
+            }
+            if (Op)
+
+                return result;
+        }
+
+        [Rule("ClosureExpr", "('function'|'procedure') [ FormalParameterSection ] [ ':' TypeSpecification ] Block ")]
         private ClosureExpr ParseClosureExpression() {
             var result = new ClosureExpr(this);
             result.Kind = Require(PascalToken.Function, PascalToken.Procedure).Kind;

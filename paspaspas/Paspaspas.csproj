@@ -77,6 +77,7 @@
     <Compile Include="Internal\Parser\Syntax\Expression.cs" />
     <Compile Include="Internal\Parser\Syntax\ExternalDirective.cs" />
     <Compile Include="Internal\Parser\Syntax\ExternalSpecifier.cs" />
+    <Compile Include="Internal\Parser\Syntax\Factor.cs" />
     <Compile Include="Internal\Parser\Syntax\OldCallConvention.cs" />
     <Compile Include="Internal\Parser\Syntax\CallConvention.cs" />
     <Compile Include="Internal\Parser\Syntax\ClassDeclaration.cs" />
@@ -179,6 +180,7 @@
     <Compile Include="Internal\Parser\Syntax\StructType.cs" />
     <Compile Include="Internal\Parser\Syntax\StructTypePart.cs" />
     <Compile Include="Internal\Parser\Syntax\SyntaxPartBase.cs" />
+    <Compile Include="Internal\Parser\Syntax\Term.cs" />
     <Compile Include="Internal\Parser\Syntax\TypeAliasDefinition.cs" />
     <Compile Include="Internal\Parser\Syntax\TypeDeclaration.cs" />
     <Compile Include="Internal\Parser\Syntax\TypeSection.cs" />

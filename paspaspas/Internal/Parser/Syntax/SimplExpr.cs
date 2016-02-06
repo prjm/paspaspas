@@ -1,5 +1,4 @@
-﻿using System;
-using PasPasPas.Api;
+﻿using PasPasPas.Api;
 
 namespace PasPasPas.Internal.Parser.Syntax {
 
@@ -15,11 +14,49 @@ namespace PasPasPas.Internal.Parser.Syntax {
         public SimplExpr(IParserInformationProvider informationProvider) : base(informationProvider) { }
 
         /// <summary>
+        ///     expression kind
+        /// </summary>
+        public int Kind { get; internal set; }
+
+        /// <summary>
+        ///     left operand
+        /// </summary>
+        public Term LeftOperand { get; internal set; }
+
+        /// <summary>
+        ///     right operand
+        /// </summary>
+        public SimplExpr RightOperand { get; internal set; }
+
+        /// <summary>
         ///     format expression
         /// </summary>
         /// <param name="result"></param>
         public override void ToFormatter(PascalFormatter result) {
-            throw new NotImplementedException();
+            result.Part(LeftOperand);
+            if (RightOperand != null) {
+                result.Space();
+                switch (Kind) {
+                    case PascalToken.Plus:
+                        result.Punct("+");
+                        break;
+
+                    case PascalToken.Minus:
+                        result.Punct("-");
+                        break;
+
+                    case PascalToken.Or:
+                        result.Keyword("or");
+                        break;
+
+                    case PascalToken.Xor:
+                        result.Keyword("xor");
+                        break;
+
+                }
+                result.Space();
+                result.Part(RightOperand);
+            }
         }
     }
 }
