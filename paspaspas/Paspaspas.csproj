@@ -73,7 +73,9 @@
     <Compile Include="Internal\Parser\Syntax\BindingDirective.cs" />
     <Compile Include="Internal\Parser\Syntax\Block.cs" />
     <Compile Include="Internal\Parser\Syntax\BlockBody.cs" />
+    <Compile Include="Internal\Parser\Syntax\Cast.cs" />
     <Compile Include="Internal\Parser\Syntax\ClosureExpr.cs" />
+    <Compile Include="Internal\Parser\Syntax\DesignatorStatement.cs" />
     <Compile Include="Internal\Parser\Syntax\Expression.cs" />
     <Compile Include="Internal\Parser\Syntax\ExternalDirective.cs" />
     <Compile Include="Internal\Parser\Syntax\ExternalSpecifier.cs" />
@@ -108,7 +110,6 @@
     <Compile Include="Internal\Parser\Syntax\ExportedProcedureHeading.cs" />
     <Compile Include="Internal\Parser\Syntax\ExportItem.cs" />
     <Compile Include="Internal\Parser\Syntax\ExportsSection.cs" />
-    <Compile Include="Internal\Parser\Syntax\ExpressionBase.cs" />
     <Compile Include="Internal\Parser\Syntax\ExpressionList.cs" />
     <Compile Include="Internal\Parser\Syntax\FileType.cs" />
     <Compile Include="Internal\Parser\Syntax\FormalParameter.cs" />
@@ -149,7 +150,9 @@
     <Compile Include="Internal\Parser\Syntax\PackageHead.cs" />
     <Compile Include="Internal\Parser\Syntax\PackageRequires.cs" />
     <Compile Include="Internal\Parser\Syntax\ParentClass.cs" />
+    <Compile Include="Internal\Parser\Syntax\PascalHexNumber.cs" />
     <Compile Include="Internal\Parser\Syntax\PascalIdentifier.cs" />
+    <Compile Include="Internal\Parser\Syntax\PascalRealNumber.cs" />
     <Compile Include="Internal\Parser\Syntax\PascalInteger.cs" />
     <Compile Include="Internal\Parser\Syntax\PointerType.cs" />
     <Compile Include="Internal\Parser\Syntax\ProcedureDeclaration.cs" />
@@ -174,6 +177,7 @@
     <Compile Include="Internal\Parser\Syntax\RecordVariantSection.cs" />
     <Compile Include="Internal\Parser\Syntax\ReintroduceDirective.cs" />
     <Compile Include="Internal\Parser\Syntax\SetDef.cs" />
+    <Compile Include="Internal\Parser\Syntax\SetSectn.cs" />
     <Compile Include="Internal\Parser\Syntax\SimpleType.cs" />
     <Compile Include="Internal\Parser\Syntax\SimplExpr.cs" />
     <Compile Include="Internal\Parser\Syntax\StringType.cs" />

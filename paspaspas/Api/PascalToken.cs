@@ -766,6 +766,16 @@ namespace PasPasPas.Api {
         /// </summary>
         public const int Forward = 325;
 
+        /// <summary>
+        ///     token for <c>true</c>
+        /// </summary>
+        public const int True = 326;
+
+        /// <summary>
+        ///     token for <c>false</c>
+        /// </summary>
+        public const int False = 327;
+
 
         /// <summary>
         ///     token for any identifier

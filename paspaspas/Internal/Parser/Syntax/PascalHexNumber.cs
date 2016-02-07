@@ -3,28 +3,28 @@
 namespace PasPasPas.Internal.Parser.Syntax {
 
     /// <summary>
-    ///     constant integer
+    ///     hex numer literal
     /// </summary>
-    public class PascalInteger : SyntaxPartBase {
+    public class PascalHexNumber : SyntaxPartBase {
 
         /// <summary>
-        ///     create a new integer constant
+        ///     create a new integer hex number literal
         /// </summary>
         /// <param name="token"></param>
         /// <param name="informationProvider"></param>
-        public PascalInteger(PascalToken token, IParserInformationProvider informationProvider) : base(informationProvider) {
+        public PascalHexNumber(PascalToken token, IParserInformationProvider informationProvider) : base(informationProvider) {
             Value = token.Value;
         }
 
         /// <summary>
-        ///     integer value
+        ///     number value
         /// </summary>
         public string Value { get; }
 
         /// <summary>
-        ///     format integer
+        ///     format value
         /// </summary>
-        /// <param name="result">formatter</param>
+        /// <param name="result"></param>
         public override void ToFormatter(PascalFormatter result) {
             result.Number(Value);
         }

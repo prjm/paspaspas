@@ -3,17 +3,17 @@
 namespace PasPasPas.Internal.Parser.Syntax {
 
     /// <summary>
-    ///     constant integer
+    ///     real literal
     /// </summary>
-    public class PascalInteger : SyntaxPartBase {
+    public class PascalRealNumber : SyntaxPartBase {
 
         /// <summary>
-        ///     create a new integer constant
+        ///     real literal
         /// </summary>
-        /// <param name="token"></param>
+        /// <param name="pascalToken"></param>
         /// <param name="informationProvider"></param>
-        public PascalInteger(PascalToken token, IParserInformationProvider informationProvider) : base(informationProvider) {
-            Value = token.Value;
+        public PascalRealNumber(PascalToken pascalToken, IParserInformationProvider informationProvider) : base(informationProvider) {
+            Value = pascalToken.Value;
         }
 
         /// <summary>

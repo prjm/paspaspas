@@ -38,5 +38,21 @@ namespace PasPasPasTests.Parser {
             ParseString("program test; const x = 5 + 3 as 4; .");
         }
 
+        [TestMethod]
+        public void TestSimpleFactors() {
+            ParseString("program test; const x = 5 + 3 * @4; .");
+            ParseString("program test; const x = 5 + 3 * not 4; .");
+            ParseString("program test; const x = 5 + 3 * +4; .");
+            ParseString("program test; const x = 5 + 3 * -4; .");
+            ParseString("program test; const x = 5 + 3 * ^x; .");
+            ParseString("program test; const x = 5 + 3 * $4; .");
+            ParseString("program test; const x = 5 + 3 * 4.44; .");
+            ParseString("program test; const x = 5 + 3 * true; .");
+            ParseString("program test; const x = 5 + 3 * false; .");
+            ParseString("program test; const x = 5 + 3 * nil; .");
+            ParseString("program test; const x = 5 + 3 * (4); .");
+            ParseString("program test; const x = 5 + 3 * 'x'; .");
+        }
+
     }
 }

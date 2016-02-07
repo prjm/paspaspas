@@ -31,7 +31,7 @@ namespace PasPasPas.Internal.Parser.Syntax {
         /// <summary>
         ///     expression for a message method
         /// </summary>
-        public ExpressionBase MessageExpression { get; internal set; }
+        public SyntaxPartBase MessageExpression { get; internal set; }
 
         /// <summary>
         ///     method kind

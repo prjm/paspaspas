@@ -1485,7 +1485,7 @@ namespace PasPasPas.Internal.Parser {
         private InterfaceGuid ParseInterfaceGuid() {
             var result = new InterfaceGuid(this);
             Require(PascalToken.OpenBraces);
-            result.Id = ParseQuotedString();
+            result.Id = RequireString();
             Require(PascalToken.CloseBraces);
             return result;
         }
@@ -2149,35 +2149,105 @@ namespace PasPasPas.Internal.Parser {
             return result;
         }
 
-        [Rule("Factor", "('@' Factor) | ('not' Factor) |  ('-' Factor) | ('+' Factor) ")]
+        [Rule("Factor", "'@' Factor  | 'not' Factor | '+' Factor | '-' Factor | '^' Identifier | Integer | HexNumber | Real | 'true' | 'false' | 'nil' | '(' Expression ')' | String | SetSection | Designator | TypeCast")]
         private Factor ParseFactor() {
             var result = new Factor(this);
+
             if (Optional(PascalToken.At)) {
                 result.AddressOf = ParseFactor();
                 return result;
             }
+
             if (Optional(PascalToken.Not)) {
                 result.Not = ParseFactor();
                 return result;
             }
+
             if (Optional(PascalToken.Plus)) {
                 result.Plus = ParseFactor();
                 return result;
             }
+
             if (Optional(PascalToken.Minus)) {
                 result.Minus = ParseFactor();
                 return result;
             }
+
             if (Optional(PascalToken.Circumflex)) {
                 result.PointerTo = RequireIdentifier();
                 return result;
             }
-            if (Matches(PascalToken.Integer)) {
-                result.IntValue = RequireInteger();
-            }
-            if (Op)
 
+            if (Match(PascalToken.Integer)) {
+                result.IntValue = RequireInteger();
                 return result;
+            }
+
+            if (Match(PascalToken.HexNumber)) {
+                result.HexValue = RequireHexValue();
+                return result;
+            }
+
+            if (Match(PascalToken.Real)) {
+                result.RealValue = RequireRealValue();
+                return result;
+            }
+
+            if (Match(PascalToken.QuotedString)) {
+                result.StringValue = RequireString();
+                return result;
+            }
+
+            if (Optional(PascalToken.True)) {
+                result.IsTrue = true;
+                return result;
+            }
+
+            if (Optional(PascalToken.False)) {
+                result.IsFalse = true;
+                return result;
+            }
+
+            if (Optional(PascalToken.Nil)) {
+                result.IsNil = true;
+                return result;
+            }
+
+            if (Optional(PascalToken.OpenParen)) {
+                result.ParenExpression = ParseExpression();
+                Require(PascalToken.CloseParen);
+                return result;
+            }
+
+            if (Match(PascalToken.OpenBraces)) {
+                result.SetSection = ParseSetSection();
+                return result;
+            }
+
+            if (Match(PascalToken.Inherited)) {
+                result.Designator = ParseDesignator();
+                return result;
+            }
+
+            if (MatchIdentifier()) {
+                result.TypeCast = ParseTypeCast();
+                return result;
+            }
+
+            Unexpected();
+            return null;
+        }
+
+        private Cast ParseTypeCast() {
+            throw new NotImplementedException();
+        }
+
+        private DesignatorStatement ParseDesignator() {
+            throw new NotImplementedException();
+        }
+
+        private SetSectn ParseSetSection() {
+            throw new NotImplementedException();
         }
 
         [Rule("ClosureExpr", "('function'|'procedure') [ FormalParameterSection ] [ ':' TypeSpecification ] Block ")]
@@ -2197,6 +2267,12 @@ namespace PasPasPas.Internal.Parser {
 
         private PascalInteger RequireInteger()
             => new PascalInteger(Require(PascalToken.Integer), this);
+
+        private PascalHexNumber RequireHexValue()
+            => new PascalHexNumber(Require(PascalToken.HexNumber), this);
+
+        private PascalRealNumber RequireRealValue()
+            => new PascalRealNumber(Require(PascalToken.Real), this);
 
         private PascalIdentifier RequireIdentifier() {
             if (Match(PascalToken.Identifier)) {
@@ -2224,11 +2300,11 @@ namespace PasPasPas.Internal.Parser {
             var result = new NamespaceFileName(this);
             result.NamespaceName = ParseNamespaceName();
             if (Optional(PascalToken.In))
-                result.QuotedFileName = ParseQuotedString();
+                result.QuotedFileName = RequireString();
             return result;
         }
 
-        private QuotedString ParseQuotedString() {
+        private QuotedString RequireString() {
             var result = new QuotedString(this);
             result.UnquotedValue = Require(PascalToken.QuotedString).Value;
             return result;
