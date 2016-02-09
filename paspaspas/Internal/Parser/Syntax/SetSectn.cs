@@ -1,12 +1,11 @@
-﻿using System;
-using PasPasPas.Api;
+﻿using PasPasPas.Api;
 
 namespace PasPasPas.Internal.Parser.Syntax {
 
     /// <summary>
     ///     set expression
     /// </summary>
-    public class SetSectn : SyntaxPartBase {
+    public class SetSectn : ComposedPart<SetSectnPart> {
 
         /// <summary>
         ///     create a new syntax element
@@ -20,7 +19,9 @@ namespace PasPasPas.Internal.Parser.Syntax {
         /// </summary>
         /// <param name="result"></param>
         public override void ToFormatter(PascalFormatter result) {
-            throw new NotImplementedException();
+            result.Punct("[");
+            FlattenToPascal(result, null);
+            result.Punct("]");
         }
     }
 }

@@ -205,13 +205,15 @@ namespace PasPasPas.Internal.Tokenizer {
             AddPunctuator(']', PascalToken.CloseBraces);
             AddPunctuator(':', PascalToken.Colon);
             AddPunctuator('^', PascalToken.Circumflex);
-            AddPunctuator('<', PascalToken.AngleBracketsOpen);
-            AddPunctuator('>', PascalToken.AngleBracketsClose);
             AddPunctuator('+', PascalToken.Plus);
             AddPunctuator('-', PascalToken.Minus);
             AddPunctuator('*', PascalToken.Times);
             AddPunctuator('/', PascalToken.Slash);
             AddPunctuator('@', PascalToken.At);
+            AddPunctuator('>', PascalToken.GreaterThen).Add('=', PascalToken.GreaterThenEquals);
+            var lt = AddPunctuator('<', PascalToken.LessThen);
+            lt.Add('=', PascalToken.LessThenEquals);
+            lt.Add('>', PascalToken.NotEquals);
         }
 
         private PunctuatorGroup AddPunctuator(char prefix, int tokenValue) {

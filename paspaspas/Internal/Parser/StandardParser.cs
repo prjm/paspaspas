@@ -350,12 +350,18 @@ namespace PasPasPas.Internal.Parser {
             return result;
         }
 
-        [Rule("CompoundStatement", "", true)]
+        [Rule("CompoundStatement", "'begin' [ StatementList ] 'end'")]
         private CompoundStatement ParseCompoundStatement() {
             var result = new CompoundStatement(this);
             Require(PascalToken.Begin);
+            if (!Match(PascalToken.End))
+                result.Statements = ParseStatementList();
             Require(PascalToken.End);
             return result;
+        }
+
+        private StatementList ParseStatementList() {
+            throw new NotImplementedException();
         }
 
         [Rule("UnitHead", "'unit' NamespaceName { Hint } ';' ")]
@@ -2113,7 +2119,7 @@ namespace PasPasPas.Internal.Parser {
             return result;
         }
 
-        [Rule("Expression", "SimpleExpression | CloseExpression")]
+        [Rule("Expression", "SimpleExpression [ ('<'|'<='|'>'|'>='|'<>'|'='|'in'|'as') SimpleExpression ] | ClosureExpression")]
         private Expression ParseExpression() {
             var result = new Expression(this);
 
@@ -2121,7 +2127,11 @@ namespace PasPasPas.Internal.Parser {
                 result.ClosureExpression = ParseClosureExpression();
             }
             else {
-                result.SimpleExpression = ParseSimpleExpression();
+                result.LeftOperand = ParseSimpleExpression();
+                if (Match(PascalToken.LessThen, PascalToken.LessThenEquals, PascalToken.GreaterThen, PascalToken.GreaterThenEquals, PascalToken.NotEquals, PascalToken.EqualsSign, PascalToken.In, PascalToken.Is)) {
+                    result.Kind = Require(PascalToken.LessThen, PascalToken.LessThenEquals, PascalToken.GreaterThen, PascalToken.GreaterThenEquals, PascalToken.NotEquals, PascalToken.EqualsSign, PascalToken.In, PascalToken.Is).Kind;
+                    result.RightOperand = ParseSimpleExpression();
+                }
             }
 
             return result;
@@ -2224,13 +2234,8 @@ namespace PasPasPas.Internal.Parser {
                 return result;
             }
 
-            if (Match(PascalToken.Inherited)) {
+            if (MatchIdentifier(PascalToken.Inherited)) {
                 result.Designator = ParseDesignator();
-                return result;
-            }
-
-            if (MatchIdentifier()) {
-                result.TypeCast = ParseTypeCast();
                 return result;
             }
 
@@ -2238,16 +2243,89 @@ namespace PasPasPas.Internal.Parser {
             return null;
         }
 
-        private Cast ParseTypeCast() {
-            throw new NotImplementedException();
-        }
-
+        [Rule("Designator", "[ 'inherited' ] [ NamespaceName ] { DesignatorItem }")]
         private DesignatorStatement ParseDesignator() {
-            throw new NotImplementedException();
+            var result = new DesignatorStatement(this);
+            result.Inherited = Optional(PascalToken.Inherited);
+            if (MatchIdentifier()) {
+                result.Name = ParseNamespaceName();
+            }
+
+            DesignatorItem item;
+            do {
+                item = ParseDesignatorItem();
+                result.Add(item);
+            } while (item != null);
+
+            return result;
         }
 
+        [Rule("DesignatorItem", "'^' | '.' Ident | '[' ExpressionList ']' | '(' [ FormattedExpression  { ',' FormattedExpression } ] ')'")]
+        private DesignatorItem ParseDesignatorItem() {
+            if (Optional(PascalToken.Circumflex)) {
+                var result = new DesignatorItem(this);
+                result.Dereference = true;
+                return result;
+            }
+
+            if (Optional(PascalToken.Dot)) {
+                var result = new DesignatorItem(this);
+                result.Subitem = RequireIdentifier();
+                return result;
+            }
+
+            if (Optional(PascalToken.OpenBraces)) {
+                var result = new DesignatorItem(this);
+                result.IndexExpression = ParseExpressions();
+                Require(PascalToken.CloseBraces);
+                return result;
+            }
+
+            if (Optional(PascalToken.OpenParen)) {
+                var result = new DesignatorItem(this);
+                if (!Match(PascalToken.CloseParen)) {
+                    do {
+                        result.Add(ParseFormattedExpression());
+                    } while (Optional(PascalToken.Comma));
+                }
+                Require(PascalToken.CloseParen);
+                return result;
+            }
+
+            return null;
+        }
+
+        [Rule("FormattedExpression", "Expression [ ':' Expression [ ':' Expression ] ]")]
+        private FormattedExpression ParseFormattedExpression() {
+            var result = new FormattedExpression(this);
+            result.Expression = ParseExpression();
+            if (Optional(PascalToken.Colon)) {
+                result.Width = ParseExpression();
+                if (Optional(PascalToken.Colon)) {
+                    result.Decimals = ParseExpression();
+                }
+            }
+            return result;
+        }
+
+        [Rule("SetSection", "'[' [ Expression ] { (',' | '..') Expression } ']'")]
         private SetSectn ParseSetSection() {
-            throw new NotImplementedException();
+            var result = new SetSectn(this);
+            Require(PascalToken.OpenBraces);
+            if (!Match(PascalToken.CloseBraces)) {
+                SetSectnPart part;
+                do {
+                    part = new SetSectnPart(this);
+                    if (Match(PascalToken.Comma, PascalToken.DotDot))
+                        part.Continuation = Require(PascalToken.Comma, PascalToken.DotDot).Kind;
+                    else
+                        part.Continuation = PascalToken.Undefined;
+                    part.SetExpression = ParseExpression();
+                    result.Add(part);
+                } while (Match(PascalToken.Comma, PascalToken.DotDot));
+            }
+            Require(PascalToken.CloseBraces);
+            return result;
         }
 
         [Rule("ClosureExpr", "('function'|'procedure') [ FormalParameterSection ] [ ':' TypeSpecification ] Block ")]

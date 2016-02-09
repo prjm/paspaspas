@@ -73,7 +73,7 @@ namespace PasPasPas.Internal.Parser.Syntax {
                 return;
 
             foreach (var detail in details.Value) {
-                if (count > 0)
+                if (count > 0 && delimiter != null)
                     delimiter(formatter);
 
                 if (prefix != null)

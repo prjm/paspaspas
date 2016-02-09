@@ -75,11 +75,13 @@
     <Compile Include="Internal\Parser\Syntax\BlockBody.cs" />
     <Compile Include="Internal\Parser\Syntax\Cast.cs" />
     <Compile Include="Internal\Parser\Syntax\ClosureExpr.cs" />
+    <Compile Include="Internal\Parser\Syntax\DesignatorItem.cs" />
     <Compile Include="Internal\Parser\Syntax\DesignatorStatement.cs" />
     <Compile Include="Internal\Parser\Syntax\Expression.cs" />
     <Compile Include="Internal\Parser\Syntax\ExternalDirective.cs" />
     <Compile Include="Internal\Parser\Syntax\ExternalSpecifier.cs" />
     <Compile Include="Internal\Parser\Syntax\Factor.cs" />
+    <Compile Include="Internal\Parser\Syntax\FormattedExpression.cs" />
     <Compile Include="Internal\Parser\Syntax\OldCallConvention.cs" />
     <Compile Include="Internal\Parser\Syntax\CallConvention.cs" />
     <Compile Include="Internal\Parser\Syntax\ClassDeclaration.cs" />
@@ -178,8 +180,11 @@
     <Compile Include="Internal\Parser\Syntax\ReintroduceDirective.cs" />
     <Compile Include="Internal\Parser\Syntax\SetDef.cs" />
     <Compile Include="Internal\Parser\Syntax\SetSectn.cs" />
+    <Compile Include="Internal\Parser\Syntax\SetSectnPart.cs" />
     <Compile Include="Internal\Parser\Syntax\SimpleType.cs" />
     <Compile Include="Internal\Parser\Syntax\SimplExpr.cs" />
+    <Compile Include="Internal\Parser\Syntax\Statement.cs" />
+    <Compile Include="Internal\Parser\Syntax\StatementList.cs" />
     <Compile Include="Internal\Parser\Syntax\StringType.cs" />
     <Compile Include="Internal\Parser\Syntax\StructType.cs" />
     <Compile Include="Internal\Parser\Syntax\StructTypePart.cs" />

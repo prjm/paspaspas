@@ -24,6 +24,23 @@ namespace PasPasPasTests.Parser {
             ParseString("program test; const x = 5 - 5; .");
             ParseString("program test; const x = 5 xor 5; .");
             ParseString("program test; const x = 5 or 5; .");
+            ParseString("program test; const x = []; .");
+            ParseString("program test; const x = [5]; .");
+            ParseString("program test; const x = [5, 6]; .");
+            ParseString("program test; const x = [5, 6..8, 9..224]; .");
+            ParseString("program test; const x = a.b.c; .");
+            ParseString("program test; const x = a.b.c^; .");
+            ParseString("program test; const x = a.b.c^.d[q]; .");
+            ParseString("program test; const x = a.b.c^.d[q].d(asd, asd, ad); .");
+            ParseString("program test; const x = a.b.c^.d[q].d(asd:d, asd:d:d, ad:d); .");
+            ParseString("program test; const x = 5 < 5; .");
+            ParseString("program test; const x = 5 > 5; .");
+            ParseString("program test; const x = 5 <= 5; .");
+            ParseString("program test; const x = 5 >= 5; .");
+            ParseString("program test; const x = 5 <> 5; .");
+            ParseString("program test; const x = 5 = 5; .");
+            ParseString("program test; const x = 5 in 5; .");
+            ParseString("program test; const x = 5 as 5; .");
         }
 
         [TestMethod]

@@ -1,12 +1,11 @@
-﻿using System;
-using PasPasPas.Api;
+﻿using PasPasPas.Api;
 
 namespace PasPasPas.Internal.Parser.Syntax {
 
     /// <summary>
     ///     designator
     /// </summary>
-    public class DesignatorStatement : SyntaxPartBase {
+    public class DesignatorStatement : ComposedPart<DesignatorItem> {
 
         /// <summary>
         ///     create a new syntax element
@@ -16,11 +15,25 @@ namespace PasPasPas.Internal.Parser.Syntax {
         }
 
         /// <summary>
+        ///     inherited
+        /// </summary>
+        public bool Inherited { get; internal set; }
+
+        /// <summary>
+        ///     name
+        /// </summary>
+        public NamespaceName Name { get; internal set; }
+
+        /// <summary>
         ///     format designator statemet
         /// </summary>
         /// <param name="result"></param>
         public override void ToFormatter(PascalFormatter result) {
-            throw new NotImplementedException();
+            if (Inherited) {
+                result.Keyword("inherited").Space();
+            }
+            result.Part(Name);
+            FlattenToPascal(result, null);
         }
     }
 }

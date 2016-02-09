@@ -104,12 +104,12 @@ namespace PasPasPas.Api {
         /// <summary>
         ///     token for <c>&lt;</c>
         /// </summary>
-        public const int AngleBracketsOpen = 20;
+        public const int AngleBracketsOpen = LessThen;
 
         /// <summary>
         ///     token for <c>&gt;</c>
         /// </summary>
-        public const int AngleBracketsClose = 21;
+        public const int AngleBracketsClose = GreaterThen;
 
         /// <summary>
         ///     toke for <c>..</c>
@@ -775,6 +775,31 @@ namespace PasPasPas.Api {
         ///     token for <c>false</c>
         /// </summary>
         public const int False = 327;
+
+        /// <summary>
+        ///     token for <c>&lt;</c>
+        /// </summary>
+        public const int LessThen = 328;
+
+        /// <summary>
+        ///     token for <c>&lt;=</c>
+        /// </summary>
+        public const int LessThenEquals = 329;
+
+        /// <summary>
+        ///     token for <c>&gt;</c>
+        /// </summary>
+        public const int GreaterThen = 330;
+
+        /// <summary>
+        ///     token for <c>&gt;=</c>
+        /// </summary>
+        public const int GreaterThenEquals = 331;
+
+        /// <summary>
+        ///     token for <c>&lt;&gt;</c>
+        /// </summary>
+        public const int NotEquals = 332;
 
 
         /// <summary>
