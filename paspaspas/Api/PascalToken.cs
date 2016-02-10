@@ -801,6 +801,23 @@ namespace PasPasPas.Api {
         /// </summary>
         public const int NotEquals = 332;
 
+        /// <summary>
+        ///     token for <c>exit</c>
+        /// </summary>
+        public const int Exit = 333;
+
+        /// <summary>
+        ///     token for <c>continue</c>
+        /// </summary>
+        public const int Continue = 334;
+
+        /// <summary>
+        ///     toke for <c>break</c>
+        /// </summary>
+        public const int Break = 335;
+
+
+
 
         /// <summary>
         ///     token for any identifier

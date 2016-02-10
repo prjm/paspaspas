@@ -68,11 +68,13 @@
     <Compile Include="Internal\Parser\Syntax\AbstractDirective.cs" />
     <Compile Include="Internal\Parser\Syntax\ArrayIndex.cs" />
     <Compile Include="Internal\Parser\Syntax\ArrayType.cs" />
+    <Compile Include="Internal\Parser\Syntax\AsmStatement.cs" />
     <Compile Include="Internal\Parser\Syntax\AssemblerBlock.cs" />
     <Compile Include="Internal\Parser\Syntax\AssemblyAttribute.cs" />
     <Compile Include="Internal\Parser\Syntax\BindingDirective.cs" />
     <Compile Include="Internal\Parser\Syntax\Block.cs" />
     <Compile Include="Internal\Parser\Syntax\BlockBody.cs" />
+    <Compile Include="Internal\Parser\Syntax\CaseStatement.cs" />
     <Compile Include="Internal\Parser\Syntax\Cast.cs" />
     <Compile Include="Internal\Parser\Syntax\ClosureExpr.cs" />
     <Compile Include="Internal\Parser\Syntax\DesignatorItem.cs" />
@@ -82,6 +84,9 @@
     <Compile Include="Internal\Parser\Syntax\ExternalSpecifier.cs" />
     <Compile Include="Internal\Parser\Syntax\Factor.cs" />
     <Compile Include="Internal\Parser\Syntax\FormattedExpression.cs" />
+    <Compile Include="Internal\Parser\Syntax\ForStatement.cs" />
+    <Compile Include="Internal\Parser\Syntax\GoToStatement.cs" />
+    <Compile Include="Internal\Parser\Syntax\IfStatement.cs" />
     <Compile Include="Internal\Parser\Syntax\OldCallConvention.cs" />
     <Compile Include="Internal\Parser\Syntax\CallConvention.cs" />
     <Compile Include="Internal\Parser\Syntax\ClassDeclaration.cs" />
@@ -166,6 +171,7 @@
     <Compile Include="Internal\Parser\Syntax\ProgramHead.cs" />
     <Compile Include="Internal\Parser\Syntax\ProgramParameterList.cs" />
     <Compile Include="Internal\Parser\Syntax\QuotedString.cs" />
+    <Compile Include="Internal\Parser\Syntax\RaiseStatement.cs" />
     <Compile Include="Internal\Parser\Syntax\RecordConstantExpression.cs" />
     <Compile Include="Internal\Parser\Syntax\RecordDeclaration.cs" />
     <Compile Include="Internal\Parser\Syntax\RecordField.cs" />
@@ -178,6 +184,7 @@
     <Compile Include="Internal\Parser\Syntax\RecordVariant.cs" />
     <Compile Include="Internal\Parser\Syntax\RecordVariantSection.cs" />
     <Compile Include="Internal\Parser\Syntax\ReintroduceDirective.cs" />
+    <Compile Include="Internal\Parser\Syntax\RepeatStatement.cs" />
     <Compile Include="Internal\Parser\Syntax\SetDef.cs" />
     <Compile Include="Internal\Parser\Syntax\SetSectn.cs" />
     <Compile Include="Internal\Parser\Syntax\SetSectnPart.cs" />
@@ -185,11 +192,13 @@
     <Compile Include="Internal\Parser\Syntax\SimplExpr.cs" />
     <Compile Include="Internal\Parser\Syntax\Statement.cs" />
     <Compile Include="Internal\Parser\Syntax\StatementList.cs" />
+    <Compile Include="Internal\Parser\Syntax\StatementPart.cs" />
     <Compile Include="Internal\Parser\Syntax\StringType.cs" />
     <Compile Include="Internal\Parser\Syntax\StructType.cs" />
     <Compile Include="Internal\Parser\Syntax\StructTypePart.cs" />
     <Compile Include="Internal\Parser\Syntax\SyntaxPartBase.cs" />
     <Compile Include="Internal\Parser\Syntax\Term.cs" />
+    <Compile Include="Internal\Parser\Syntax\TryStatement.cs" />
     <Compile Include="Internal\Parser\Syntax\TypeAliasDefinition.cs" />
     <Compile Include="Internal\Parser\Syntax\TypeDeclaration.cs" />
     <Compile Include="Internal\Parser\Syntax\TypeSection.cs" />
@@ -210,6 +219,8 @@
     <Compile Include="Internal\Parser\Syntax\VarDeclaration.cs" />
     <Compile Include="Internal\Parser\Syntax\VarSection.cs" />
     <Compile Include="Internal\Parser\Syntax\VarValueSpecification.cs" />
+    <Compile Include="Internal\Parser\Syntax\WhileStatement.cs" />
+    <Compile Include="Internal\Parser\Syntax\WithStatement.cs" />
     <Compile Include="Internal\Tokenizer\PunctuatorGroup.cs" />
     <Compile Include="Internal\Tokenizer\StandardTokenizer.cs" />
     <Compile Include="Internal\Tokenizer\TokenizerWithLookahead.cs" />

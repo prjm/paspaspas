@@ -54,6 +54,7 @@
     <Compile Include="Assert.cs" />
     <Compile Include="ParserTestBase.cs" />
     <Compile Include="Parser\ExpressionTest.cs" />
+    <Compile Include="Parser\StatementTest.cs" />
     <Compile Include="Parser\ProgramTest.cs" />
     <Compile Include="Parser\TestDeclarations.cs" />
     <Compile Include="Tokenizer\TokenizerTest.cs" />

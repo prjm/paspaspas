@@ -360,7 +360,146 @@ namespace PasPasPas.Internal.Parser {
             return result;
         }
 
+        [Rule("StatementList", "[Statement], { ';' [Statement]}")]
         private StatementList ParseStatementList() {
+            var result = new StatementList(this);
+            do {
+                result.Add(ParseStatement());
+            } while (Optional(PascalToken.Semicolon));
+            return result;
+        }
+
+        [Rule("Statement", "[ Label ':' ] StatementPart")]
+        private Statement ParseStatement() {
+            Label label = null;
+            if (MatchIdentifier(PascalToken.Integer) && LookAhead(1, PascalToken.Colon)) {
+                label = ParseLabel();
+            }
+
+            StatementPart part = ParseStatementPart();
+
+            if (label != null && part == null) {
+                Unexpected();
+                return null;
+            }
+
+            var result = new Statement(this);
+            result.Label = label;
+            result.Part = part;
+            return result;
+        }
+
+        [Rule("StatementPart", "IfStatement | CaseStatement | ReapeatStatement | WhileStatment | ForStatement | WithStatement | TryStatement | RaiseStatement | AsmStatement | CompoundStatement | SimpleStatement ")]
+        private StatementPart ParseStatementPart() {
+            var result = new StatementPart(this);
+            if (Match(PascalToken.If)) {
+                result.If = ParseIfStatement();
+                return result;
+            }
+            if (Match(PascalToken.Case)) {
+                result.Case = ParseCaseStatement();
+                return result;
+            }
+            if (Match(PascalToken.Repeat)) {
+                result.Reapeat = ParseRepeatStatement();
+                return result;
+            }
+            if (Match(PascalToken.While)) {
+                result.While = ParseWhileStatement();
+                return result;
+            }
+            if (Match(PascalToken.For)) {
+                result.For = ParseForStatement();
+                return result;
+            }
+            if (Match(PascalToken.With)) {
+                result.With = ParseWithStatement();
+                return result;
+            }
+            if (Match(PascalToken.Try)) {
+                result.Try = ParseTryStatement();
+                return result;
+            }
+            if (Match(PascalToken.Raise)) {
+                result.Raise = ParseRaiseStatement();
+                return result;
+            }
+            if (Match(PascalToken.Asm)) {
+                result.Asm = ParseAsmStatement();
+                return result;
+            }
+
+            if (Match(PascalToken.Begin)) {
+                result.CompundStatement = ParseCompoundStatement();
+                return result;
+            }
+
+            return ParseSimpleStatement();
+        }
+
+        private RaiseStatement ParseRaiseStatement() {
+            throw new NotImplementedException();
+        }
+
+        private AsmStatement ParseAsmStatement() {
+            throw new NotImplementedException();
+        }
+
+        private TryStatement ParseTryStatement() {
+            throw new NotImplementedException();
+        }
+
+        private WithStatement ParseWithStatement() {
+            throw new NotImplementedException();
+        }
+
+        private ForStatement ParseForStatement() {
+            throw new NotImplementedException();
+        }
+
+        private WhileStatement ParseWhileStatement() {
+            throw new NotImplementedException();
+        }
+
+        private RepeatStatement ParseRepeatStatement() {
+            throw new NotImplementedException();
+        }
+
+        private CaseStatement ParseCaseStatement() {
+            throw new NotImplementedException();
+        }
+
+        [Rule("IfStatement", "'if' Expression 'then' Statement [ 'else' Statement ]")]
+        private IfStatement ParseIfStatement() {
+            var result = new IfStatement(this);
+            Require(PascalToken.If);
+            result.Condition = ParseExpression();
+            Require(PascalToken.Then);
+            result.ThenPart = ParseStatement();
+            if (Optional(PascalToken.Else)) {
+                result.ElsePart = ParseStatement();
+            }
+            return result;
+        }
+
+        [Rule("SimpleStatement", "", true)]
+        private StatementPart ParseSimpleStatement() {
+            if (Match(PascalToken.GoToKeyword, PascalToken.Exit, PascalToken.Break, PascalToken.Continue)) {
+                var result = new StatementPart(this);
+                result.GoTo = ParseGoToStatement();
+                return result;
+            }
+
+            if (MatchIdentifier(PascalToken.Inherited)) {
+                var result = new StatementPart(this);
+                result.DesignatorPart = ParseDesignator();
+                return result;
+            }
+
+            return null;
+        }
+
+        private GoToStatement ParseGoToStatement() {
             throw new NotImplementedException();
         }
 
@@ -856,7 +995,7 @@ namespace PasPasPas.Internal.Parser {
             return result;
         }
 
-
+        [Rule("Label", "Identifier | Integer")]
         private Label ParseLabel() {
             var result = new Label(this);
 

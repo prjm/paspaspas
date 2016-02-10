@@ -182,6 +182,9 @@ namespace PasPasPas.Internal.Tokenizer {
                 ["forward"] = PascalToken.Forward,
                 ["true"] = PascalToken.True,
                 ["false"] = PascalToken.False,
+                ["exit"] = PascalToken.Exit,
+                ["break"] = PascalToken.Break,
+                ["continue"] = PascalToken.Continue,
             };
 
         internal static bool IsKeyword(string value)

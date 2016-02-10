@@ -1,24 +1,25 @@
-﻿using PasPasPas.Api;
+﻿using System;
+using PasPasPas.Api;
 
 namespace PasPasPas.Internal.Parser.Syntax {
 
     /// <summary>
-    ///     statement list
+    ///     repeat statement
     /// </summary>
-    public class StatementList : ComposedPart<Statement> {
+    public class RepeatStatement : SyntaxPartBase {
 
         /// <summary>
-        ///     create a new syntax element
+        ///     create a new repeat statement
         /// </summary>
         /// <param name="parser"></param>
-        public StatementList(IParserInformationProvider parser) : base(parser) { }
+        public RepeatStatement(IParserInformationProvider parser) : base(parser) { }
 
         /// <summary>
-        ///     format statements
+        ///     format repeat statement
         /// </summary>
         /// <param name="result"></param>
         public override void ToFormatter(PascalFormatter result) {
-            FlattenToPascal(result, x => x.Punct(";").NewLine());
+            throw new NotImplementedException();
         }
     }
 }
