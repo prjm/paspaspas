@@ -457,16 +457,70 @@ namespace PasPasPas.Internal.Parser {
             throw new NotImplementedException();
         }
 
+        [Rule("WhileStatement", "'while' Expression 'do' Statement")]
         private WhileStatement ParseWhileStatement() {
-            throw new NotImplementedException();
+            var result = new WhileStatement(this);
+            Require(PascalToken.While);
+            result.Condition = ParseExpression();
+            Require(PascalToken.Do);
+            result.Statement = ParseStatement();
+            return result;
         }
 
+        [Rule("RepeatStatement", "'repeat' [ StatementList ] 'until' Expression")]
         private RepeatStatement ParseRepeatStatement() {
-            throw new NotImplementedException();
+            var result = new RepeatStatement(this);
+            Require(PascalToken.Repeat);
+            if (!Match(PascalToken.Until)) {
+                result.Statements = ParseStatementList();
+            }
+            Require(PascalToken.Until);
+            result.Condition = ParseExpression();
+            return result;
         }
 
+        [Rule("CaseStatement", "'case' Expression 'of' { CaseItem } ['else' StatementList[';']] 'end' ")]
         private CaseStatement ParseCaseStatement() {
-            throw new NotImplementedException();
+            var result = new CaseStatement(this);
+            Require(PascalToken.Case);
+            result.CaseExpression = ParseExpression();
+            Require(PascalToken.Of);
+            CaseItem item;
+            do {
+                item = ParseCaseItem();
+                result.Add(item);
+            } while (item != null);
+
+            if (Optional(PascalToken.Else)) {
+                result.Else = ParseStatementList();
+                Optional(PascalToken.Semicolon);
+            }
+            Require(PascalToken.End);
+            return result;
+        }
+
+        [Rule("CaseItem", "CaseLabel { ',' CaseLabel } ':' Statement [';']")]
+        private CaseItem ParseCaseItem() {
+            if (Match(PascalToken.Else, PascalToken.End))
+                return null;
+
+            var result = new CaseItem(this);
+            do {
+                result.Add(ParseCaseLabel());
+            } while (Optional(PascalToken.Comma));
+            Require(PascalToken.Colon);
+            result.CaseStatement = ParseStatement();
+            Optional(PascalToken.Semicolon);
+            return result;
+        }
+
+        [Rule("CaseLabel", "Expression [ '..' Expression ]")]
+        private CaseLabel ParseCaseLabel() {
+            var result = new CaseLabel(this);
+            result.StartExpression = ParseExpression();
+            if (Optional(PascalToken.DotDot))
+                result.EndExpression = ParseExpression();
+            return result;
         }
 
         [Rule("IfStatement", "'if' Expression 'then' Statement [ 'else' Statement ]")]

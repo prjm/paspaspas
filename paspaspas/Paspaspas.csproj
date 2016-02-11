@@ -74,6 +74,8 @@
     <Compile Include="Internal\Parser\Syntax\BindingDirective.cs" />
     <Compile Include="Internal\Parser\Syntax\Block.cs" />
     <Compile Include="Internal\Parser\Syntax\BlockBody.cs" />
+    <Compile Include="Internal\Parser\Syntax\CaseItem.cs" />
+    <Compile Include="Internal\Parser\Syntax\CaseLabel.cs" />
     <Compile Include="Internal\Parser\Syntax\CaseStatement.cs" />
     <Compile Include="Internal\Parser\Syntax\Cast.cs" />
     <Compile Include="Internal\Parser\Syntax\ClosureExpr.cs" />

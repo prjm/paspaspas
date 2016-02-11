@@ -42,7 +42,7 @@ namespace PasPasPas.Internal.Parser.Syntax {
             result.NewLine();
             if (ElsePart != null) {
                 result.Keyword("else").StartIndent();
-                result.NewLine().Part(ThenPart);
+                result.NewLine().Part(ElsePart);
                 result.EndIndent();
                 result.NewLine();
             }

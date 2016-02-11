@@ -1,5 +1,4 @@
-﻿using System;
-using PasPasPas.Api;
+﻿using PasPasPas.Api;
 
 namespace PasPasPas.Internal.Parser.Syntax {
 
@@ -15,11 +14,29 @@ namespace PasPasPas.Internal.Parser.Syntax {
         public RepeatStatement(IParserInformationProvider parser) : base(parser) { }
 
         /// <summary>
+        ///     condition
+        /// </summary>
+        public Expression Condition { get; internal set; }
+
+        /// <summary>
+        ///     statement list
+        /// </summary>
+        public StatementList Statements { get; internal set; }
+
+        /// <summary>
         ///     format repeat statement
         /// </summary>
         /// <param name="result"></param>
         public override void ToFormatter(PascalFormatter result) {
-            throw new NotImplementedException();
+            result.Keyword("repeat");
+            result.StartIndent();
+            result.NewLine();
+            result.Part(Statements);
+            result.EndIndent();
+            result.NewLine();
+            result.Keyword("until").Space();
+            result.Part(Condition);
+            result.NewLine();
         }
     }
 }
