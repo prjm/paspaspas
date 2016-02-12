@@ -816,8 +816,10 @@ namespace PasPasPas.Api {
         /// </summary>
         public const int Break = 335;
 
-
-
+        /// <summary>
+        ///     token for <c>:=</c>
+        /// </summary>
+        public const int Assignment = 336;
 
         /// <summary>
         ///     token for any identifier

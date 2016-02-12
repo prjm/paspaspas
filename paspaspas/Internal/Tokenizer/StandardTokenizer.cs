@@ -206,7 +206,7 @@ namespace PasPasPas.Internal.Tokenizer {
             AddPunctuator('=', PascalToken.EqualsSign);
             AddPunctuator('[', PascalToken.OpenBraces);
             AddPunctuator(']', PascalToken.CloseBraces);
-            AddPunctuator(':', PascalToken.Colon);
+            AddPunctuator(':', PascalToken.Colon).Add('=', PascalToken.Assignment);
             AddPunctuator('^', PascalToken.Circumflex);
             AddPunctuator('+', PascalToken.Plus);
             AddPunctuator('-', PascalToken.Minus);

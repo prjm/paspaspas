@@ -38,5 +38,18 @@ namespace PasPasPasTests.Parser {
             ParseString("program test; begin while a() do begin b(); end end .");
         }
 
+        [TestMethod]
+        public void TestForStatement() {
+            ParseString("program test; begin for a := 0 to 10 do a() ; end .");
+            ParseString("program test; begin for a := 10 downto 0 do a() ; end .");
+            ParseString("program test; begin for a in b() do a() ; end .");
+        }
+
+        [TestMethod]
+        public void TestWithStatement() {
+            ParseString("program test; begin with a do a() ; end .");
+            ParseString("program test; begin with a do begin a(); end end .");
+        }
+
     }
 }

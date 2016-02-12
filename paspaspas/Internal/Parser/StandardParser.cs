@@ -449,12 +449,35 @@ namespace PasPasPas.Internal.Parser {
             throw new NotImplementedException();
         }
 
+        [Rule("WithStatement", "'with' Designator { ',' Designator }  'do' Statement")]
         private WithStatement ParseWithStatement() {
-            throw new NotImplementedException();
+            var result = new WithStatement(this);
+            Require(PascalToken.With);
+            do {
+                result.Add(ParseDesignator());
+            } while (Optional(PascalToken.Comma));
+            Require(PascalToken.Do);
+            result.Statement = ParseStatement();
+            return result;
         }
 
+        [Rule("ForStatement", "('for' Designator ':=' Expression ('to' | 'downto' )  Expression 'do' Statement) | ('for' Deisgnator 'in' Expression  'do' Statement)")]
         private ForStatement ParseForStatement() {
-            throw new NotImplementedException();
+            var result = new ForStatement(this);
+            Require(PascalToken.For);
+            result.Variable = ParseDesignator();
+            if (Optional(PascalToken.Assignment)) {
+                result.StartExpression = ParseExpression();
+                result.Kind = Require(PascalToken.To, PascalToken.DownTo).Kind;
+                result.EndExpression = ParseExpression();
+            }
+            else {
+                result.Kind = Require(PascalToken.In).Kind;
+                result.StartExpression = ParseExpression();
+            }
+            Require(PascalToken.Do);
+            result.Statement = ParseStatement();
+            return result;
         }
 
         [Rule("WhileStatement", "'while' Expression 'do' Statement")]
