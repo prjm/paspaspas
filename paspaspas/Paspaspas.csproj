@@ -81,6 +81,8 @@
     <Compile Include="Internal\Parser\Syntax\ClosureExpr.cs" />
     <Compile Include="Internal\Parser\Syntax\DesignatorItem.cs" />
     <Compile Include="Internal\Parser\Syntax\DesignatorStatement.cs" />
+    <Compile Include="Internal\Parser\Syntax\ExceptHandler.cs" />
+    <Compile Include="Internal\Parser\Syntax\ExceptHandlers.cs" />
     <Compile Include="Internal\Parser\Syntax\Expression.cs" />
     <Compile Include="Internal\Parser\Syntax\ExternalDirective.cs" />
     <Compile Include="Internal\Parser\Syntax\ExternalSpecifier.cs" />

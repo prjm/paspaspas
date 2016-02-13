@@ -437,16 +437,77 @@ namespace PasPasPas.Internal.Parser {
             return ParseSimpleStatement();
         }
 
+        [Rule("RaiseStatement", "'raise' [ Designator ] [ 'at' Designator ]")]
         private RaiseStatement ParseRaiseStatement() {
-            throw new NotImplementedException();
+            var result = new RaiseStatement(this);
+            Require(PascalToken.Raise);
+
+            if ((!Match(PascalToken.At)) && MatchIdentifier(PascalToken.Inherited)) {
+                result.Raise = ParseDesignator();
+            }
+
+            if (Optional(PascalToken.At)) {
+                result.At = ParseDesignator();
+            }
+
+            return result;
         }
 
         private AsmStatement ParseAsmStatement() {
             throw new NotImplementedException();
         }
 
+        [Rule("TryStatement", "'try' StatementList  ('except' HandlerList | 'finally' StatementList) 'end'")]
         private TryStatement ParseTryStatement() {
-            throw new NotImplementedException();
+            var result = new TryStatement(this);
+            Require(PascalToken.Try);
+            result.Try = ParseStatementList();
+
+            if (Optional(PascalToken.Except)) {
+                result.Handlers = ParseExceptHandlers();
+                Require(PascalToken.End);
+            }
+            else if (Optional(PascalToken.Finally)) {
+                result.Finally = ParseStatementList();
+                Require(PascalToken.End);
+            }
+            else {
+                Unexpected();
+            }
+
+            return result;
+        }
+
+        [Rule("ExceptHandlers", "({ Handler } [ 'else' StatementList ]) | StatementList")]
+        private ExceptHandlers ParseExceptHandlers() {
+            var result = new ExceptHandlers(this);
+
+            if (Match(PascalToken.On, PascalToken.Else)) {
+                while (Match(PascalToken.On)) {
+                    result.Add(ParseExceptHandler());
+                }
+                if (Optional(PascalToken.Else)) {
+                    result.ElseStatements = ParseStatementList();
+                }
+            }
+            else {
+                result.Statements = ParseStatementList();
+            }
+
+            return result;
+        }
+
+        [Rule("ExceptHandler", "'on' Identifier ':' NamespaceName 'do' Statement ';'")]
+        private ExceptHandler ParseExceptHandler() {
+            var result = new ExceptHandler(this);
+            Require(PascalToken.On);
+            result.Name = RequireIdentifier();
+            Require(PascalToken.Colon);
+            result.HandlerType = ParseNamespaceName();
+            Require(PascalToken.Do);
+            result.Statement = ParseStatement();
+            Require(PascalToken.Semicolon);
+            return result;
         }
 
         [Rule("WithStatement", "'with' Designator { ',' Designator }  'do' Statement")]

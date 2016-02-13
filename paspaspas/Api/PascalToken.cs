@@ -822,6 +822,11 @@ namespace PasPasPas.Api {
         public const int Assignment = 336;
 
         /// <summary>
+        ///     token for <c>on</c>
+        /// </summary>
+        public const int On = 337;
+
+        /// <summary>
         ///     token for any identifier
         /// </summary>
         public const int Identifier = 500;

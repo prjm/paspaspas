@@ -51,5 +51,22 @@ namespace PasPasPasTests.Parser {
             ParseString("program test; begin with a do begin a(); end end .");
         }
 
+        [TestMethod]
+        public void TestRaiseStatement() {
+            ParseString("program test; begin raise; end .");
+            ParseString("program test; begin raise a(); end .");
+            ParseString("program test; begin raise a() at b(); end .");
+            ParseString("program test; begin raise at b(); end .");
+        }
+
+        [TestMethod]
+        public void TestTryStatement() {
+            ParseString("program test; begin try a(); finally b(); end end .");
+            ParseString("program test; begin try a(); finally b(); b(); end end .");
+            ParseString("program test; begin try a(); except b(); end end .");
+            ParseString("program test; begin try a(); except on x : x.x do b(); end end .");
+            ParseString("program test; begin try a(); except on x : x.x do b(); else b(); end end .");
+        }
+
     }
 }
