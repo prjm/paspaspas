@@ -186,7 +186,7 @@ namespace PasPasPas.Internal.Tokenizer {
                 ["break"] = PascalToken.Break,
                 ["continue"] = PascalToken.Continue,
                 ["at"] = PascalToken.At,
-                ["on"] = PascalToken.On,
+                ["on"] = PascalToken.On
             };
 
         internal static bool IsKeyword(string value)

@@ -620,7 +620,7 @@ namespace PasPasPas.Internal.Parser {
             return result;
         }
 
-        [Rule("SimpleStatement", "", true)]
+        [Rule("SimpleStatement", "GoToStatement | Designator [ ':=' (Expression  | NewStatement) ] ")]
         private StatementPart ParseSimpleStatement() {
             if (Match(PascalToken.GoToKeyword, PascalToken.Exit, PascalToken.Break, PascalToken.Continue)) {
                 var result = new StatementPart(this);
@@ -631,14 +631,43 @@ namespace PasPasPas.Internal.Parser {
             if (MatchIdentifier(PascalToken.Inherited)) {
                 var result = new StatementPart(this);
                 result.DesignatorPart = ParseDesignator();
+
+                if (Optional(PascalToken.Assignment)) {
+                    result.Assignment = ParseExpression();
+                }
+
                 return result;
             }
 
             return null;
         }
 
+        [Rule("GoToStatement", "('goto' Label) | 'break' | 'continue' | 'exit' '(' Expression ')' ")]
         private GoToStatement ParseGoToStatement() {
-            throw new NotImplementedException();
+            var result = new GoToStatement(this);
+            if (Optional(PascalToken.GoToKeyword)) {
+                result.GoToLabel = ParseLabel();
+                return result;
+            }
+            if (Optional(PascalToken.Break)) {
+                result.Break = true;
+                return result;
+            }
+            if (Optional(PascalToken.Continue)) {
+                result.Continue = true;
+                return result;
+            }
+            if (Optional(PascalToken.Exit)) {
+                result.Exit = true;
+                if (Optional(PascalToken.OpenParen)) {
+                    result.ExitExpression = ParseExpression();
+                    Require(PascalToken.CloseParen);
+                }
+                return result;
+            }
+
+            Unexpected();
+            return null;
         }
 
         [Rule("UnitHead", "'unit' NamespaceName { Hint } ';' ")]
@@ -794,7 +823,7 @@ namespace PasPasPas.Internal.Parser {
             var result = new BlockBody(this);
 
             if (Match(PascalToken.Asm)) {
-                result.AssemblerBlock = ParseAssemblerBlock();
+                result.AssemblerBlock = ParseAsmStatement();
             }
 
             if (Match(PascalToken.Begin)) {
@@ -802,10 +831,6 @@ namespace PasPasPas.Internal.Parser {
             }
 
             return result;
-        }
-
-        private AssemblerBlock ParseAssemblerBlock() {
-            throw new NotImplementedException();
         }
 
         [Rule("DeclarationSection", "{ LabelDeclarationSection | ConstSection | TypeSection | VarSection | ExportsSection | AssemblyAttribute | MethodDecl | ProcedureDeclaration }", true)]
@@ -2388,6 +2413,7 @@ namespace PasPasPas.Internal.Parser {
             return result;
         }
 
+        [Rule("RecordConstantExpression", "Identifier ':' ConstantExpression")]
         private RecordConstantExpression ParseRecordConstant() {
             var result = new RecordConstantExpression(this);
             result.Name = RequireIdentifier();

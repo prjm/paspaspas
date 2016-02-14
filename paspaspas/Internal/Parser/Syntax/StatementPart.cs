@@ -19,6 +19,11 @@ namespace PasPasPas.Internal.Parser.Syntax {
         public AsmStatement Asm { get; internal set; }
 
         /// <summary>
+        ///     assignment
+        /// </summary>
+        public Expression Assignment { get; internal set; }
+
+        /// <summary>
         ///     case statement
         /// </summary>
         public CaseStatement Case { get; internal set; }
@@ -90,6 +95,11 @@ namespace PasPasPas.Internal.Parser.Syntax {
             result.Part(CompundStatement);
             result.Part(GoTo);
             result.Part(DesignatorPart);
+            if (Assignment != null) {
+                result.Space();
+                result.Operator(":=");
+                result.Space().Part(Assignment);
+            }
         }
     }
 }

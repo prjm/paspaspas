@@ -16,7 +16,7 @@ namespace PasPasPas.Internal.Parser.Syntax {
         /// <summary>
         ///    assembler block
         /// </summary>
-        public AssemblerBlock AssemblerBlock { get; internal set; }
+        public AsmStatement AssemblerBlock { get; internal set; }
 
         /// <summary>
         ///     block bode

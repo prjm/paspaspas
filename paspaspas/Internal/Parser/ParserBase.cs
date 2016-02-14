@@ -57,7 +57,7 @@ namespace PasPasPas.Internal.Parser {
                 Unexpected();
 
             var result = CurrentToken();
-            tokenizer.FetchNextToken();
+            FetchNextToken();
             return result;
         }
 
@@ -86,8 +86,15 @@ namespace PasPasPas.Internal.Parser {
             if (!Match(tokenKind))
                 return false;
 
-            tokenizer.FetchNextToken();
+            FetchNextToken();
             return true;
+        }
+
+        /// <summary>
+        ///     fetch the next token
+        /// </summary>
+        protected virtual void FetchNextToken() {
+            tokenizer.FetchNextToken();
         }
 
         /// <summary>
@@ -103,11 +110,9 @@ namespace PasPasPas.Internal.Parser {
             }
 
             matchingType = CurrentToken().Kind;
-            tokenizer.FetchNextToken();
+            FetchNextToken();
             return true;
         }
-
-
 
         /// <summary>
         ///     look ahead a few tokens
@@ -115,7 +120,7 @@ namespace PasPasPas.Internal.Parser {
         /// <param name="num">number of tokens to look ahead</param>
         /// <param name="tokenKind">token kind to test for</param>
         /// <returns><c>true</c> if the token kind matches</returns>
-        protected bool LookAhead(int num, params int[] tokenKind) {
+        protected virtual bool LookAhead(int num, params int[] tokenKind) {
             var token = tokenizer.LookAhead(num);
             return tokenKind.Any(t => t == token.Kind);
         }

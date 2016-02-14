@@ -63,13 +63,13 @@
     <Compile Include="Internal\MessageData.cs" />
     <Compile Include="Internal\MessageGenerator.cs" />
     <Compile Include="Internal\Parser\ParserBase.cs" />
+    <Compile Include="Internal\Parser\Preprocessor.cs" />
     <Compile Include="Internal\Parser\RuleAttribute.cs" />
     <Compile Include="Internal\Parser\StandardParser.cs" />
     <Compile Include="Internal\Parser\Syntax\AbstractDirective.cs" />
     <Compile Include="Internal\Parser\Syntax\ArrayIndex.cs" />
     <Compile Include="Internal\Parser\Syntax\ArrayType.cs" />
     <Compile Include="Internal\Parser\Syntax\AsmStatement.cs" />
-    <Compile Include="Internal\Parser\Syntax\AssemblerBlock.cs" />
     <Compile Include="Internal\Parser\Syntax\AssemblyAttribute.cs" />
     <Compile Include="Internal\Parser\Syntax\BindingDirective.cs" />
     <Compile Include="Internal\Parser\Syntax\Block.cs" />

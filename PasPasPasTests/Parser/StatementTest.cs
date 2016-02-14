@@ -68,5 +68,14 @@ namespace PasPasPasTests.Parser {
             ParseString("program test; begin try a(); except on x : x.x do b(); else b(); end end .");
         }
 
+        [TestMethod]
+        public void TestGoToStatements() {
+            ParseString("program test; begin goto x; end .");
+            ParseString("program test; begin exit; end .");
+            ParseString("program test; begin exit(5); end .");
+            ParseString("program test; begin break; end .");
+            ParseString("program test; begin continue; end .");
+        }
+
     }
 }
