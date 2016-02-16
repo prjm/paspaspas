@@ -1,4 +1,6 @@
-﻿namespace PasPasPas.Api {
+﻿using System.Text;
+
+namespace PasPasPas.Api.Input {
 
     /// <summary>
     ///     interface for parser input
@@ -9,7 +11,7 @@
         ///     tests if any input is left
         /// </summary>
         /// <returns><c>true</c> if some input is left</returns>
-        bool AtEof();
+        bool AtEof { get; }
 
         /// <summary>
         ///     get the next char from the input
@@ -22,5 +24,17 @@
         /// </summary>
         /// <param name="valueToPutback">character to put back</param>
         void Putback(char valueToPutback);
+
+        /// <summary>
+        ///     put back a string
+        /// </summary>
+        /// <param name="stringToPutback"></param>
+        void Putback(string stringToPutback);
+
+        /// <summary>
+        ///     putback a buffer structur
+        /// </summary>
+        /// <param name="buffer"></param>
+        void Putback(StringBuilder buffer);
     }
 }

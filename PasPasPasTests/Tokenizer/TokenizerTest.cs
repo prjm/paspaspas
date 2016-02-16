@@ -7,7 +7,6 @@ namespace PasPasPasTests.Tokenizer {
     public class TokenizerTest {
 
         [TestMethod]
-        [TestCategory("Tokenizer")]
         public void TestIdentifiers() {
             Assert.IsIdentifier("abcd");
             Assert.IsIdentifier("ABCD");
@@ -20,7 +19,6 @@ namespace PasPasPasTests.Tokenizer {
         }
 
         [TestMethod]
-        [TestCategory("Tokenizer")]
         public void TestIntegers() {
             Assert.IsInteger("123");
             Assert.IsInteger("0000");
@@ -28,7 +26,6 @@ namespace PasPasPasTests.Tokenizer {
         }
 
         [TestMethod]
-        [TestCategory("Tokenizer")]
         public void TestRealNumbers() {
             Assert.IsReal("123.123");
             Assert.IsReal("123E+10");
@@ -37,23 +34,25 @@ namespace PasPasPasTests.Tokenizer {
             Assert.IsReal("123.123E+10");
         }
 
+        [TestMethod]
+        public void TestIsPreprocessorCommand() {
+            Assert.IsPreprocessor("{$A}");
+        }
+
 
         [TestMethod]
-        [TestCategory("Tokenizer")]
         public void TestHexNumbers() {
             Assert.IsHexNumber("$333F");
             Assert.IsHexNumber("$000000");
         }
 
         [TestMethod]
-        [TestCategory("Tokenizer")]
         public void TestQuotedString() {
             Assert.IsQuotedString("''");
             Assert.IsQuotedString("'sdfddfsd'");
         }
 
         [TestMethod]
-        [TestCategory("Tokenizer")]
         public void TestMessages() {
             Assert.TokenizerMessageIsGenerated(MessageData.IncompleteHexNumber, "$");
             Assert.TokenizerMessageIsGenerated(MessageData.IncompleteIdentifier, "&");

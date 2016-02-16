@@ -44,6 +44,11 @@ namespace PasPasPas.Api {
         public const int Eof = 2;
 
         /// <summary>
+        ///     preprocessor token
+        /// </summary>
+        public const int Preprocessor = 5;
+
+        /// <summary>
         ///     token for <c>,</c>
         /// </summary>
         public const int Comma = 10;

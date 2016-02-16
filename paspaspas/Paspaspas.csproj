@@ -39,31 +39,38 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Api\FileInput.cs" />
+    <Compile Include="Api\Options\CompilerOptions.cs" />
+    <Compile Include="Internal\Input\FileInput.cs" />
     <Compile Include="Api\IParserInformationProvider.cs" />
-    <Compile Include="Api\IParserInput.cs" />
+    <Compile Include="Api\Input\IParserInput.cs" />
     <Compile Include="Api\IPascalParser.cs" />
     <Compile Include="Api\IPascalTokenizer.cs" />
     <Compile Include="Api\ISyntaxPart.cs" />
-    <Compile Include="Api\LogMessage.cs" />
+    <Compile Include="Internal\Input\InputBase.cs" />
+    <Compile Include="Internal\Log\LogMessage.cs" />
+    <Compile Include="Api\Options\DerivedOptionBase.cs" />
+    <Compile Include="Api\Options\DerivedValueOption.cs" />
+    <Compile Include="Api\Options\IDerivedOption.cs" />
+    <Compile Include="Api\Options\OptionSet.cs" />
+    <Compile Include="Api\Options\Platform.cs" />
+    <Compile Include="Api\Options\PlatformKey.cs" />
+    <Compile Include="Api\PascalCompiler.cs" />
     <Compile Include="Api\PascalFormatter.cs" />
     <Compile Include="Api\PascalParser.cs" />
     <Compile Include="Api\PascalToken.cs" />
     <Compile Include="Api\PasPasPasException.cs" />
-    <Compile Include="Api\StringInput.cs" />
+    <Compile Include="Internal\Input\StringInput.cs" />
     <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Internal\Log\ILogTarget.cs" />
+    <Compile Include="Internal\Log\ObjectWithLog.cs" />
     <Compile Include="Internal\MessageData.cs" />
     <Compile Include="Internal\MessageGenerator.cs" />
+    <Compile Include="Internal\Options\AnyCpuPlatform.cs" />
+    <Compile Include="Internal\Options\DefaultPlatform.cs" />
     <Compile Include="Internal\Parser\ParserBase.cs" />
-    <Compile Include="Internal\Parser\Preprocessor.cs" />
     <Compile Include="Internal\Parser\RuleAttribute.cs" />
     <Compile Include="Internal\Parser\StandardParser.cs" />
     <Compile Include="Internal\Parser\Syntax\AbstractDirective.cs" />
@@ -225,6 +232,8 @@
     <Compile Include="Internal\Parser\Syntax\VarValueSpecification.cs" />
     <Compile Include="Internal\Parser\Syntax\WhileStatement.cs" />
     <Compile Include="Internal\Parser\Syntax\WithStatement.cs" />
+    <Compile Include="Internal\Tokenizer\CharacterReader.cs" />
+    <Compile Include="Internal\Tokenizer\FileScanner.cs" />
     <Compile Include="Internal\Tokenizer\PunctuatorGroup.cs" />
     <Compile Include="Internal\Tokenizer\StandardTokenizer.cs" />
     <Compile Include="Internal\Tokenizer\TokenizerWithLookahead.cs" />

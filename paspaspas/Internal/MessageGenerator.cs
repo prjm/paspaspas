@@ -1,4 +1,4 @@
-﻿using PasPasPas.Api;
+﻿using PasPasPas.Internal.Log;
 using System;
 
 namespace PasPasPas.Internal {

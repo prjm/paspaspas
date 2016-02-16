@@ -1,4 +1,5 @@
 ﻿using PasPasPas.Api;
+using PasPasPas.Api.Input;
 using System;
 using System.Collections.Generic;
 
@@ -14,8 +15,15 @@ namespace PasPasPas.Internal.Tokenizer {
         /// <summary>
         ///     punctuators
         /// </summary>
-        private Dictionary<char, PunctuatorGroup> punctuators =
+        private static Dictionary<char, PunctuatorGroup> punctuators =
             new Dictionary<char, PunctuatorGroup>();
+
+        /// <summary>
+        ///     initializer punctuators
+        /// </summary>
+        static StandardTokenizer() {
+            RegisterPuncutators();
+        }
 
         /// <summary>
         ///     keywords
@@ -192,14 +200,10 @@ namespace PasPasPas.Internal.Tokenizer {
         internal static bool IsKeyword(string value)
             => keywords.ContainsKey(value);
 
-        /// <summary>
-        ///     create a new tokenizer
-        /// </summary>
-        public StandardTokenizer() {
-            RegisterPuncutators();
-        }
+        private PreprocessorTokenizer preprocessorTokenizer
+            = new PreprocessorTokenizer();
 
-        private void RegisterPuncutators() {
+        private static void RegisterPuncutators() {
             AddPunctuator('.', PascalToken.Dot).Add('.', PascalToken.DotDot);
             AddPunctuator(',', PascalToken.Comma);
             AddPunctuator('(', PascalToken.OpenParen);
@@ -221,23 +225,38 @@ namespace PasPasPas.Internal.Tokenizer {
             lt.Add('>', PascalToken.NotEquals);
         }
 
-        private PunctuatorGroup AddPunctuator(char prefix, int tokenValue) {
+        private static PunctuatorGroup AddPunctuator(char prefix, int tokenValue) {
             var result = new PunctuatorGroup(prefix, tokenValue);
             punctuators.Add(prefix, result);
             return result;
         }
 
+        private IParserInput input;
+        private FileScanner scanner
+            = new FileScanner();
+
         /// <summary>
         ///     parser parser input
         /// </summary>
-        public IParserInput Input { get; set; }
+        public IParserInput Input
+        {
+            get
+            {
+                return input;
+            }
+            set
+            {
+                input = value;
+                scanner.Input = value;
+            }
+        }
 
         /// <summary>
         ///     fetch the next token
         /// </summary>
         /// <returns>next token</returns>
         public PascalToken FetchNextToken() {
-            if (Input.AtEof()) {
+            if (Input.AtEof) {
                 return GenerateEofToken();
             }
 
@@ -267,12 +286,17 @@ namespace PasPasPas.Internal.Tokenizer {
             if (c == '\'') {
                 return ParseQuotedString(c);
             }
+
+            input.Putback(c);
+            if (preprocessorTokenizer.Matches(scanner))
+                return preprocessorTokenizer.Parse(scanner);
+
             return GenerateUndefinedToken(c);
         }
 
         private PascalToken FetchTokenByGroup(PunctuatorGroup tokenGroup) {
             string input = new string(tokenGroup.Prefix, 1);
-            while (input.Length < tokenGroup.Length && (!Input.AtEof())) {
+            while (input.Length < tokenGroup.Length && (!Input.AtEof)) {
                 input = input + Input.NextChar();
             }
 
@@ -306,7 +330,7 @@ namespace PasPasPas.Internal.Tokenizer {
         private PascalToken ParseQuotedString(char currentChar) {
             string value = string.Empty;
             currentChar = Input.NextChar();
-            while (currentChar != '\'' && (!Input.AtEof())) {
+            while (currentChar != '\'' && (!Input.AtEof)) {
                 value = value + currentChar;
                 currentChar = Input.NextChar();
             }
@@ -316,7 +340,7 @@ namespace PasPasPas.Internal.Tokenizer {
 
         private PascalToken ParseWhitespace(char currentChar) {
             string value = new string(currentChar, 1);
-            while (char.IsWhiteSpace(currentChar) && (!Input.AtEof())) {
+            while (char.IsWhiteSpace(currentChar) && (!Input.AtEof)) {
                 currentChar = Input.NextChar();
                 if (char.IsWhiteSpace(currentChar))
                     value = value + currentChar;
@@ -331,7 +355,7 @@ namespace PasPasPas.Internal.Tokenizer {
             string value = new string(currentChar, 1);
             bool stop = false;
 
-            if (Input.AtEof()) {
+            if (Input.AtEof) {
                 LogError(MessageData.IncompleteHexNumber);
                 return new PascalToken() { Kind = PascalToken.Eof, Value = string.Empty };
             }
@@ -345,7 +369,7 @@ namespace PasPasPas.Internal.Tokenizer {
                     Input.Putback(currentChar);
                     stop = true;
                 }
-            } while (IsHexDigit(currentChar) && (!Input.AtEof()) && (!stop));
+            } while (IsHexDigit(currentChar) && (!Input.AtEof) && (!stop));
 
             return new PascalToken() { Value = value, Kind = PascalToken.HexNumber };
         }
@@ -356,13 +380,13 @@ namespace PasPasPas.Internal.Tokenizer {
             bool stop = false;
             string value = new string(currentChar, 1);
 
-            while ((char.IsDigit(currentChar) || currentChar == 'E' || currentChar == 'e' || currentChar == '.' || currentChar == '+' || currentChar == '-') && (!Input.AtEof()) && (!stop)) {
+            while ((char.IsDigit(currentChar) || currentChar == 'E' || currentChar == 'e' || currentChar == '.' || currentChar == '+' || currentChar == '-') && (!Input.AtEof) && (!stop)) {
                 currentChar = Input.NextChar();
                 if (char.IsDigit(currentChar)) {
                     value = value + currentChar;
                 }
                 else if ((currentChar == '.') && (!hasDot)) {
-                    if (Input.AtEof()) {
+                    if (Input.AtEof) {
                         stop = true;
                         Input.Putback('.');
                     }
@@ -381,7 +405,7 @@ namespace PasPasPas.Internal.Tokenizer {
                     }
                 }
                 else if (((currentChar == 'E') || (currentChar == 'e')) && (!hasE)) {
-                    if (Input.AtEof()) {
+                    if (Input.AtEof) {
                         Input.Putback(currentChar);
                         stop = true;
                     }
@@ -417,7 +441,7 @@ namespace PasPasPas.Internal.Tokenizer {
 
             if (currentChar == '&') {
                 ignoreKeywords = true;
-                if (Input.AtEof()) {
+                if (Input.AtEof) {
                     LogError(MessageData.IncompleteIdentifier);
                     return new PascalToken() { Value = string.Empty, Kind = PascalToken.Eof };
                 }
@@ -431,7 +455,7 @@ namespace PasPasPas.Internal.Tokenizer {
 
             value = new string(currentChar, 1);
 
-            while ((char.IsLetter(currentChar) || char.IsDigit(currentChar) || currentChar == '_') && (!Input.AtEof())) {
+            while ((char.IsLetter(currentChar) || char.IsDigit(currentChar) || currentChar == '_') && (!Input.AtEof)) {
                 currentChar = Input.NextChar();
                 if (char.IsLetter(currentChar) || char.IsDigit(currentChar) || currentChar == '_')
                     value = value + currentChar;
@@ -450,7 +474,7 @@ namespace PasPasPas.Internal.Tokenizer {
         /// </summary>
         /// <returns><c>true</c> if tokens are avaliable</returns>
         public bool HasNextToken()
-            => !Input.AtEof();
+            => !Input.AtEof;
 
 
         private static bool IsDigit(char c)

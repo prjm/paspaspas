@@ -1,5 +1,7 @@
 ﻿using PasPasPas.Api;
 using PasPasPas.Internal;
+using PasPasPas.Internal.Input;
+using PasPasPas.Internal.Log;
 using PasPasPas.Internal.Tokenizer;
 using System;
 using System.Collections.Generic;
@@ -94,6 +96,9 @@ namespace PasPasPasTests {
             IsToken(PascalToken.HexNumber, input, input);
         }
 
+        public static void IsPreprocessor(string input) {
+            IsToken(PascalToken.Preprocessor, input, input);
+        }
 
     }
 }

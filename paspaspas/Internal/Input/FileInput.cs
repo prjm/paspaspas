@@ -1,15 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 
-namespace PasPasPas.Api {
+namespace PasPasPas.Internal.Input {
 
     /// <summary>
     ///     file based input for the parser
     /// </summary>
-    public class FileInput : IParserInput, IDisposable {
+    public class FileInput : InputBase, IDisposable {
 
-        private Stack<char> putbackChars = new Stack<char>();
         private StreamReader reader = null;
 
         /// <summary>
@@ -30,23 +28,17 @@ namespace PasPasPas.Api {
         }
 
         /// <summary>
-        ///     check if the reader is at the end of file
+        ///     test if end of file is reached
         /// </summary>
-        /// <returns><c>true</c> if the end of file is reached</returns>
-        public bool AtEof()
-            => (Reader.EndOfStream) && (putbackChars.Count < 1);
+        protected override bool IsSourceAtEof
+            => Reader.EndOfStream;
 
         /// <summary>
-        ///     read the next char
+        ///     get the next input characterfrom trhefile
         /// </summary>
         /// <returns></returns>
-        public char NextChar() {
-            if (putbackChars.Count > 0)
-                return putbackChars.Pop();
-            else
-                return (char)Reader.Read();
-        }
-
+        protected override char NextCharFromSource()
+            => (char)Reader.Read();
 
         #region IDisposable Support
         private bool disposedValue = false;
@@ -72,14 +64,6 @@ namespace PasPasPas.Api {
         /// </summary>
         public void Dispose() {
             Dispose(true);
-        }
-
-        /// <summary>
-        ///     putback a given character
-        /// </summary>
-        /// <param name="valueToPutback"></param>
-        public void Putback(char valueToPutback) {
-            putbackChars.Push(valueToPutback);
         }
 
         #endregion

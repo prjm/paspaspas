@@ -1,4 +1,6 @@
 ﻿using PasPasPas.Api;
+using PasPasPas.Internal.Input;
+using PasPasPas.Internal.Log;
 using PasPasPas.Internal.Parser;
 using PasPasPas.Internal.Tokenizer;
 using System;
