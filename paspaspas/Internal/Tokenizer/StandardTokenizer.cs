@@ -10,20 +10,11 @@ namespace PasPasPas.Internal.Tokenizer {
     /// </summary>
     public class StandardTokenizer : MessageGenerator, IPascalTokenizer {
 
-        private bool hasEofMessage = false;
+        private bool hasEofMessage
+            = false;
 
-        /// <summary>
-        ///     punctuators
-        /// </summary>
-        private static Dictionary<char, PunctuatorGroup> punctuators =
-            new Dictionary<char, PunctuatorGroup>();
-
-        /// <summary>
-        ///     initializer punctuators
-        /// </summary>
-        static StandardTokenizer() {
-            RegisterPuncutators();
-        }
+        private StandardPunctuators punctuators
+            = new StandardPunctuators();
 
         /// <summary>
         ///     keywords
@@ -200,35 +191,8 @@ namespace PasPasPas.Internal.Tokenizer {
         internal static bool IsKeyword(string value)
             => keywords.ContainsKey(value);
 
-        private PreprocessorTokenizer preprocessorTokenizer
-            = new PreprocessorTokenizer();
-
         private static void RegisterPuncutators() {
-            AddPunctuator('.', PascalToken.Dot).Add('.', PascalToken.DotDot);
-            AddPunctuator(',', PascalToken.Comma);
-            AddPunctuator('(', PascalToken.OpenParen);
-            AddPunctuator(')', PascalToken.CloseParen);
-            AddPunctuator(';', PascalToken.Semicolon);
-            AddPunctuator('=', PascalToken.EqualsSign);
-            AddPunctuator('[', PascalToken.OpenBraces);
-            AddPunctuator(']', PascalToken.CloseBraces);
-            AddPunctuator(':', PascalToken.Colon).Add('=', PascalToken.Assignment);
-            AddPunctuator('^', PascalToken.Circumflex);
-            AddPunctuator('+', PascalToken.Plus);
-            AddPunctuator('-', PascalToken.Minus);
-            AddPunctuator('*', PascalToken.Times);
-            AddPunctuator('/', PascalToken.Slash);
-            AddPunctuator('@', PascalToken.At);
-            AddPunctuator('>', PascalToken.GreaterThen).Add('=', PascalToken.GreaterThenEquals);
-            var lt = AddPunctuator('<', PascalToken.LessThen);
-            lt.Add('=', PascalToken.LessThenEquals);
-            lt.Add('>', PascalToken.NotEquals);
-        }
 
-        private static PunctuatorGroup AddPunctuator(char prefix, int tokenValue) {
-            var result = new PunctuatorGroup(prefix, tokenValue);
-            punctuators.Add(prefix, result);
-            return result;
         }
 
         private IParserInput input;
@@ -267,8 +231,9 @@ namespace PasPasPas.Internal.Tokenizer {
                 return ParseWhitespace(c);
             }
 
-            if (punctuators.TryGetValue(c, out tokenGroup)) {
-                return FetchTokenByGroup(tokenGroup);
+
+            if (punctuators.Match(c, out tokenGroup)) {
+                return punctuators.FetchTokenByGroup(Input, c, tokenGroup);
             }
 
             if (IsDigit(c)) {
@@ -287,27 +252,7 @@ namespace PasPasPas.Internal.Tokenizer {
                 return ParseQuotedString(c);
             }
 
-            input.Putback(c);
-            if (preprocessorTokenizer.Matches(scanner))
-                return preprocessorTokenizer.Parse(scanner);
-
             return GenerateUndefinedToken(c);
-        }
-
-        private PascalToken FetchTokenByGroup(PunctuatorGroup tokenGroup) {
-            string input = new string(tokenGroup.Prefix, 1);
-            while (input.Length < tokenGroup.Length && (!Input.AtEof)) {
-                input = input + Input.NextChar();
-            }
-
-            string tokenValue;
-            var tokenKind = tokenGroup.Match(input, out tokenValue);
-
-            for (int inputIndex = input.Length - 1; inputIndex >= tokenValue.Length; inputIndex--) {
-                Input.Putback(input[inputIndex]); ;
-            }
-
-            return new PascalToken() { Kind = tokenKind, Value = tokenValue };
         }
 
         private PascalToken GenerateUndefinedToken(char c) {

@@ -90,11 +90,6 @@ namespace PasPasPas.Internal.Parser.Syntax {
         public QuotedString StringValue { get; internal set; }
 
         /// <summary>
-        ///     type cast
-        /// </summary>
-        public Cast TypeCast { get; internal set; }
-
-        /// <summary>
         ///     format factor
         /// </summary>
         /// <param name="result"></param>
@@ -154,7 +149,6 @@ namespace PasPasPas.Internal.Parser.Syntax {
             result.Part(HexValue);
             result.Part(RealValue);
             result.Part(SetSection);
-            result.Part(TypeCast);
             result.Part(Designator);
         }
     }

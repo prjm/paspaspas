@@ -84,7 +84,6 @@
     <Compile Include="Internal\Parser\Syntax\CaseItem.cs" />
     <Compile Include="Internal\Parser\Syntax\CaseLabel.cs" />
     <Compile Include="Internal\Parser\Syntax\CaseStatement.cs" />
-    <Compile Include="Internal\Parser\Syntax\Cast.cs" />
     <Compile Include="Internal\Parser\Syntax\ClosureExpr.cs" />
     <Compile Include="Internal\Parser\Syntax\DesignatorItem.cs" />
     <Compile Include="Internal\Parser\Syntax\DesignatorStatement.cs" />
@@ -232,10 +231,13 @@
     <Compile Include="Internal\Parser\Syntax\VarValueSpecification.cs" />
     <Compile Include="Internal\Parser\Syntax\WhileStatement.cs" />
     <Compile Include="Internal\Parser\Syntax\WithStatement.cs" />
-    <Compile Include="Internal\Tokenizer\CharacterReader.cs" />
+    <Compile Include="Internal\Tokenizer\CharacterClass.cs" />
     <Compile Include="Internal\Tokenizer\FileScanner.cs" />
     <Compile Include="Internal\Tokenizer\PunctuatorGroup.cs" />
+    <Compile Include="Internal\Tokenizer\Punctuators.cs" />
+    <Compile Include="Internal\Tokenizer\StandardPunctuators.cs" />
     <Compile Include="Internal\Tokenizer\StandardTokenizer.cs" />
+    <Compile Include="Internal\Tokenizer\TokenGroupValue.cs" />
     <Compile Include="Internal\Tokenizer\TokenizerWithLookahead.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

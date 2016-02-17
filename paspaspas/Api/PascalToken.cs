@@ -49,6 +49,11 @@ namespace PasPasPas.Api {
         public const int Preprocessor = 5;
 
         /// <summary>
+        ///     comment
+        /// </summary>
+        public const int Comment = 6;
+
+        /// <summary>
         ///     token for <c>,</c>
         /// </summary>
         public const int Comma = 10;
