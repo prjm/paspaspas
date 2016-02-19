@@ -9,6 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Paspaspas", "paspaspas\Pasp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PasPasPasTests", "PasPasPasTests\PasPasPasTests.csproj", "{236CF02D-769C-4BA8-89C3-4FE4D265FE3F}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Demo", "Demo", "{CA973B15-584B-4A39-8C76-37F545DB7558}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TokenizerDemo", "TokenizerDemo\TokenizerDemo.csproj", "{314D0E0C-5E33-4B0C-B00A-A26686C43A69}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,8 +31,15 @@ Global
 		{236CF02D-769C-4BA8-89C3-4FE4D265FE3F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{236CF02D-769C-4BA8-89C3-4FE4D265FE3F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{236CF02D-769C-4BA8-89C3-4FE4D265FE3F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{314D0E0C-5E33-4B0C-B00A-A26686C43A69}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{314D0E0C-5E33-4B0C-B00A-A26686C43A69}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{314D0E0C-5E33-4B0C-B00A-A26686C43A69}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{314D0E0C-5E33-4B0C-B00A-A26686C43A69}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{314D0E0C-5E33-4B0C-B00A-A26686C43A69} = {CA973B15-584B-4A39-8C76-37F545DB7558}
 	EndGlobalSection
 EndGlobal

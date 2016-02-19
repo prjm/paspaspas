@@ -109,6 +109,7 @@ namespace PasPasPas.Internal.Tokenizer {
                     index++;
                 else {
                     subgroup = oldSubgroup;
+
                     break;
                 }
             }

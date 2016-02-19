@@ -88,6 +88,10 @@ namespace PasPasPasTests {
             IsToken(PascalToken.Integer, input, input);
         }
 
+        public static void IsWhitespace(string input) {
+            IsToken(PascalToken.WhiteSpace, input, input);
+        }
+
         public static void IsReal(string input) {
             IsToken(PascalToken.Real, input, input);
         }

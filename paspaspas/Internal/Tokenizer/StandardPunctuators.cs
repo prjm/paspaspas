@@ -11,7 +11,6 @@ namespace PasPasPas.Internal.Tokenizer {
         ///     register punctuators
         /// </summary>
         public StandardPunctuators() {
-            AddPunctuator('{', new CurlyBracedTokenValue(PascalToken.Comment)).Add('$', new CurlyBracedTokenValue(PascalToken.Preprocessor));
             AddPunctuator('.', PascalToken.Dot).Add('.', PascalToken.DotDot);
             AddPunctuator(',', PascalToken.Comma);
             AddPunctuator('(', PascalToken.OpenParen);
@@ -32,7 +31,10 @@ namespace PasPasPas.Internal.Tokenizer {
             lt.Add('=', PascalToken.LessThenEquals);
             lt.Add('>', PascalToken.NotEquals);
 
+            AddPunctuator('{', new CurlyBraceCommenTokenValue()).Add('$', new PreprocessorTokenValue());
+            AddPunctuator('$', new HexNumberTokenValue());
             AddPunctuator(new WhitspaceCharacterClass(), new WhitespaceTokenGroupValue());
+            AddPunctuator(new NumberCharacterClass(), new NumberTokenGroupValue());
         }
 
 

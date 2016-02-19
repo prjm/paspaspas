@@ -11,3 +11,5 @@
 /pppas/*.user
 /.vs/paspaspas/v14/.suo
 /Testfiles
+/TokenizerDemo/bin
+/TokenizerDemo/obj

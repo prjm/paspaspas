@@ -1,4 +1,6 @@
-﻿namespace PasPasPas.Internal.Tokenizer {
+﻿using System;
+
+namespace PasPasPas.Internal.Tokenizer {
 
     /// <summary>
     ///     base class for a character class
@@ -67,6 +69,61 @@
         /// <returns></returns>
         public override bool Matches(char c)
             => char.IsWhiteSpace(c);
+    }
+
+    /// <summary>
+    ///     character class for numbers
+    /// </summary>
+    public class NumberCharacterClass : CharacterClass {
+
+        /// <summary>
+        ///     undefined prefix
+        /// </summary>
+        public override char Prefix => '\0';
+
+        /// <summary>
+        ///     test if the char is whitespace
+        /// </summary>
+        /// <param name="c"></param>
+        /// <returns></returns>
+        public override bool Matches(char c)
+            => ('0' <= c) && (c <= '9');
+
+    }
+
+    public class ExponentCharacterClass : CharacterClass {
+
+        /// <summary>
+        ///     undefined prefix
+        /// </summary>
+        public override char Prefix => '\0';
+
+        /// <summary>
+        ///     test if a charactrer class matches
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public override bool Matches(char input)
+            => input == 'E' || input == 'e';
+    }
+
+    /// <summary>
+    ///     character class to match +/
+    /// </summary>
+    public class PlusMinusCharacterClass : CharacterClass {
+
+        /// <summary>
+        ///     undefined prefix
+        /// </summary>
+        public override char Prefix => '\0';
+
+        /// <summary>
+        ///     test if a charactrer class matches
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public override bool Matches(char input)
+            => input == '+' || input == '-';
     }
 
 }

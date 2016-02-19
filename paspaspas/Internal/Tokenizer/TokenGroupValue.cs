@@ -28,25 +28,12 @@ namespace PasPasPas.Internal.Tokenizer {
     public abstract class TokenGroupValue {
 
         /// <summary>
-        ///     creates a new token value 
-        /// </summary>
-        /// <param name="tokenValue">token id to use</param>
-        protected TokenGroupValue(int tokenValue) {
-            Token = tokenValue;
-        }
-
-        /// <summary>
-        ///     token id
-        /// </summary>
-        public int Token { get; }
-
-        /// <summary>
         ///     complete the parsing
         /// </summary>
         /// <param name="input">input</param>
         /// <param name="prefix">prefix</param>
-        /// <returns></returns>
-        public abstract string WithPrefix(IParserInput input, StringBuilder prefix);
+        /// <returns>completed token</returns>
+        public abstract PascalToken WithPrefix(IParserInput input, StringBuilder prefix);
     }
 
     /// <summary>
@@ -59,7 +46,14 @@ namespace PasPasPas.Internal.Tokenizer {
         ///     creates a new simple token without suffix
         /// </summary>
         /// <param name="tokenValue"></param>
-        public SimpleTokenGroupValue(int tokenValue) : base(tokenValue) { }
+        public SimpleTokenGroupValue(int tokenValue) {
+            TokenId = tokenValue;
+        }
+
+        /// <summary>
+        ///     token kind
+        /// </summary>
+        public int TokenId { get; }
 
         /// <summary>
         ///     parse the complete token
@@ -67,8 +61,8 @@ namespace PasPasPas.Internal.Tokenizer {
         /// <param name="input">input</param>
         /// <param name="prefix">prefix</param>
         /// <returns></returns>
-        public override string WithPrefix(IParserInput input, StringBuilder prefix)
-            => prefix.ToString();
+        public override PascalToken WithPrefix(IParserInput input, StringBuilder prefix)
+            => new PascalToken(TokenId, prefix.ToString());
     }
 
     /// <summary>
@@ -77,10 +71,9 @@ namespace PasPasPas.Internal.Tokenizer {
     public abstract class SequenceGroupTokenValue : TokenGroupValue {
 
         /// <summary>
-        ///     creates a new token value based on a sequence
+        ///     token id
         /// </summary>
-        /// <param name="tokenValue"></param>
-        protected SequenceGroupTokenValue(int tokenValue) : base(tokenValue) { }
+        protected abstract int TokenId { get; }
 
         /// <summary>
         ///     parse the complete token
@@ -88,16 +81,16 @@ namespace PasPasPas.Internal.Tokenizer {
         /// <param name="input">input</param>
         /// <param name="prefix">prefix</param>
         /// <returns></returns>
-        public override string WithPrefix(IParserInput input, StringBuilder prefix) {
+        public override PascalToken WithPrefix(IParserInput input, StringBuilder prefix) {
             var endSeq = EndSequence;
 
             while (!input.AtEof) {
                 if (prefix.EndsWith(endSeq))
-                    return prefix.ToString();
+                    return new PascalToken(TokenId, prefix.ToString());
                 prefix = prefix.Append(input.NextChar());
             }
 
-            return prefix.ToString();
+            return new PascalToken(TokenId, prefix.ToString());
         }
 
         /// <summary>
@@ -109,13 +102,7 @@ namespace PasPasPas.Internal.Tokenizer {
     /// <summary>
     ///     token group value in curly braces
     /// </summary>
-    public class CurlyBracedTokenValue : SequenceGroupTokenValue {
-
-        /// <summary>
-        ///     creates a new token group for tokensin curly braces
-        /// </summary>
-        /// <param name="tokenValue"></param>
-        public CurlyBracedTokenValue(int tokenValue) : base(tokenValue) { }
+    public abstract class CurlyBracedTokenValue : SequenceGroupTokenValue {
 
         /// <summary>
         ///     get the end of the sequence
@@ -125,14 +112,46 @@ namespace PasPasPas.Internal.Tokenizer {
     }
 
     /// <summary>
-    ///     token group for whitespace
+    ///     token group for curly brace comments
     /// </summary>
-    public class WhitespaceTokenGroupValue : TokenGroupValue {
+    public class CurlyBraceCommenTokenValue : CurlyBracedTokenValue {
 
         /// <summary>
-        ///     create a new tokengroup for whitespace
+        ///     get the token id
         /// </summary>
-        public WhitespaceTokenGroupValue() : base(PascalToken.WhiteSpace) { }
+        protected override int TokenId
+            => PascalToken.Comment;
+    }
+
+    /// <summary>
+    ///     token group for preprocessor commands
+    /// </summary>
+    public class PreprocessorTokenValue : CurlyBracedTokenValue {
+
+        /// <summary>
+        ///     token kind
+        /// </summary>
+        protected override int TokenId
+            => PascalToken.Preprocessor;
+    }
+
+    /// <summary>
+    ///     tokenizer based on a character class
+    /// </summary>
+    public abstract class CharacterClassTokenGroupValue : TokenGroupValue {
+
+
+        /// <summary>
+        ///     token kind
+        /// </summary>
+        protected abstract int TokenId { get; }
+
+        /// <summary>
+        ///     test if a character macthes the given class
+        /// </summary>
+        /// <param name="c">char to test</param>
+        /// <returns></returns>
+        protected abstract bool MatchesClass(char c);
 
         /// <summary>
         ///     read whitespace
@@ -140,17 +159,154 @@ namespace PasPasPas.Internal.Tokenizer {
         /// <param name="input"></param>
         /// <param name="prefix"></param>
         /// <returns></returns>
-        public override string WithPrefix(IParserInput input, StringBuilder prefix) {
-            var currentChar = input.NextChar();
-            while (!input.AtEof && char.IsWhiteSpace(currentChar)) {
-                prefix.Append(input);
-                currentChar = input.NextChar();
+        public override PascalToken WithPrefix(IParserInput input, StringBuilder prefix) {
+            if (!input.AtEof) {
+                var currentChar = input.NextChar();
+
+                while (!input.AtEof && MatchesClass(currentChar)) {
+                    prefix.Append(currentChar);
+                    currentChar = input.NextChar();
+                }
+
+                if (!MatchesClass(currentChar))
+                    input.Putback(currentChar);
+                else
+                    prefix.Append(currentChar);
             }
 
-            if (!input.AtEof)
-                input.Putback(currentChar);
+            return new PascalToken(TokenId, prefix.ToString());
+        }
 
-            return prefix.ToString();
+    }
+
+    /// <summary>
+    ///     token group for whitespace
+    /// </summary>
+    public class WhitespaceTokenGroupValue : CharacterClassTokenGroupValue {
+
+        /// <summary>
+        ///     get the token id
+        /// </summary>
+        protected override int TokenId
+            => PascalToken.WhiteSpace;
+
+        /// <summary>
+        ///     test if the character is whitespace
+        /// </summary>
+        /// <param name="c"></param>
+        /// <returns></returns>
+        protected override bool MatchesClass(char c)
+            => char.IsWhiteSpace(c);
+    }
+
+    /// <summary>
+    ///     tokenizer for hex numbers
+    /// </summary>
+    public class HexNumberTokenValue : CharacterClassTokenGroupValue {
+
+        /// <summary>
+        ///     token kind: hex number
+        /// </summary>
+        protected override int TokenId
+            => PascalToken.HexNumber;
+
+        /// <summary>
+        ///     test if a char matches a hex number
+        /// </summary>
+        /// <param name="c"></param>
+        /// <returns></returns>
+        protected override bool MatchesClass(char c)
+            => ('0' <= c) && (c <= '9') ||
+               ('a' <= c) && (c <= 'f') ||
+               ('A' <= c) && (c <= 'F');
+    }
+
+    /// <summary>
+    ///     token group value for digits
+    /// </summary>
+    public class DigitTokenGroupValue : CharacterClassTokenGroupValue {
+
+        /// <summary>
+        ///     token id
+        /// </summary>
+        protected override int TokenId
+            => PascalToken.Integer;
+
+        /// <summary>
+        ///     matches a digit
+        /// </summary>
+        /// <param name="c"></param>
+        /// <returns></returns>
+        protected override bool MatchesClass(char c)
+            => ('0' <= c) && (c <= '9');
+    }
+
+    /// <summary>
+    ///     token group for numbers
+    /// </summary>
+    public class NumberTokenGroupValue : TokenGroupValue {
+
+        private DigitTokenGroupValue digitTokenizer
+            = new DigitTokenGroupValue();
+
+        private NumberCharacterClass numbers
+            = new NumberCharacterClass();
+
+        private SingleCharClass dot
+            = new SingleCharClass('.');
+
+        private ExponentCharacterClass exponent
+            = new ExponentCharacterClass();
+
+        private PlusMinusCharacterClass plusminus
+            = new PlusMinusCharacterClass();
+
+        private bool NextCharMatches(IParserInput input, StringBuilder builder, CharacterClass c) {
+            if (input.AtEof)
+                return false;
+
+            char n = input.NextChar();
+            if (c.Matches(n)) {
+                builder.Append(n);
+                return true;
+            }
+            else {
+                input.Putback(n);
+                return false;
+            }
+        }
+
+        public override PascalToken WithPrefix(IParserInput input, StringBuilder prefix) {
+            var token = digitTokenizer.WithPrefix(input, prefix);
+            var withDot = false;
+            var withExponent = false;
+            if (input.AtEof)
+                return token;
+
+            if (NextCharMatches(input, prefix, dot)) {
+                if (NextCharMatches(input, prefix, numbers)) {
+                    digitTokenizer.WithPrefix(input, prefix);
+                    withDot = true;
+                }
+                else if (prefix.EndsWith(".")) {
+                    input.Putback(".");
+                    prefix.Length -= 1;
+                }
+            }
+
+            if (NextCharMatches(input, prefix, exponent)) {
+                NextCharMatches(input, prefix, plusminus);
+                digitTokenizer.WithPrefix(input, prefix);
+                withExponent = true;
+            }
+
+            if (withDot || withExponent) {
+                return new PascalToken(PascalToken.Real, prefix.ToString());
+            }
+            else {
+                return new PascalToken(PascalToken.Integer, prefix.ToString());
+            }
+
         }
     }
 

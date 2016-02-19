@@ -227,25 +227,12 @@ namespace PasPasPas.Internal.Tokenizer {
             char c = Input.NextChar();
             PunctuatorGroup tokenGroup;
 
-            if (char.IsWhiteSpace(c)) {
-                return ParseWhitespace(c);
-            }
-
-
             if (punctuators.Match(c, out tokenGroup)) {
                 return punctuators.FetchTokenByGroup(Input, c, tokenGroup);
             }
 
-            if (IsDigit(c)) {
-                return ParseNumber(c);
-            }
-
             if (char.IsLetter(c) || c == '_' || c == '&') {
                 return ParseIdentifier(c);
-            }
-
-            if (c == '$') {
-                return ParseHexNumber(c);
             }
 
             if (c == '\'') {
@@ -281,102 +268,6 @@ namespace PasPasPas.Internal.Tokenizer {
             }
 
             return new PascalToken() { Value = value, Kind = PascalToken.QuotedString };
-        }
-
-        private PascalToken ParseWhitespace(char currentChar) {
-            string value = new string(currentChar, 1);
-            while (char.IsWhiteSpace(currentChar) && (!Input.AtEof)) {
-                currentChar = Input.NextChar();
-                if (char.IsWhiteSpace(currentChar))
-                    value = value + currentChar;
-                else
-                    Input.Putback(currentChar);
-            }
-
-            return new PascalToken() { Value = value, Kind = PascalToken.WhiteSpace };
-        }
-
-        private PascalToken ParseHexNumber(char currentChar) {
-            string value = new string(currentChar, 1);
-            bool stop = false;
-
-            if (Input.AtEof) {
-                LogError(MessageData.IncompleteHexNumber);
-                return new PascalToken() { Kind = PascalToken.Eof, Value = string.Empty };
-            }
-
-            do {
-                currentChar = Input.NextChar();
-                if (IsHexDigit(currentChar)) {
-                    value = value + currentChar;
-                }
-                else {
-                    Input.Putback(currentChar);
-                    stop = true;
-                }
-            } while (IsHexDigit(currentChar) && (!Input.AtEof) && (!stop));
-
-            return new PascalToken() { Value = value, Kind = PascalToken.HexNumber };
-        }
-
-        private PascalToken ParseNumber(char currentChar) {
-            bool hasDot = false;
-            bool hasE = false;
-            bool stop = false;
-            string value = new string(currentChar, 1);
-
-            while ((char.IsDigit(currentChar) || currentChar == 'E' || currentChar == 'e' || currentChar == '.' || currentChar == '+' || currentChar == '-') && (!Input.AtEof) && (!stop)) {
-                currentChar = Input.NextChar();
-                if (char.IsDigit(currentChar)) {
-                    value = value + currentChar;
-                }
-                else if ((currentChar == '.') && (!hasDot)) {
-                    if (Input.AtEof) {
-                        stop = true;
-                        Input.Putback('.');
-                    }
-                    else {
-                        var nextChar = Input.NextChar();
-                        if (!IsDigit(nextChar)) {
-                            stop = true;
-                            Input.Putback(nextChar);
-                            Input.Putback('.');
-                        }
-                        else {
-                            Input.Putback(nextChar);
-                            hasDot = true;
-                            value = value + currentChar;
-                        }
-                    }
-                }
-                else if (((currentChar == 'E') || (currentChar == 'e')) && (!hasE)) {
-                    if (Input.AtEof) {
-                        Input.Putback(currentChar);
-                        stop = true;
-                    }
-                    else {
-                        hasE = true;
-                        value = value + currentChar;
-                        currentChar = Input.NextChar();
-                        if (currentChar == '+' || currentChar == '-')
-                            value = value + currentChar;
-                        else {
-                            Input.Putback(currentChar);
-                            stop = true;
-                        }
-
-                    }
-                }
-                else {
-                    Input.Putback(currentChar);
-                    stop = true;
-                }
-            }
-
-            if (hasDot || hasE)
-                return new PascalToken() { Value = value, Kind = PascalToken.Real };
-            else
-                return new PascalToken() { Value = value, Kind = PascalToken.Integer };
         }
 
         private PascalToken ParseIdentifier(char currentChar) {
@@ -424,10 +315,5 @@ namespace PasPasPas.Internal.Tokenizer {
 
         private static bool IsDigit(char c)
             => ('0' <= c) && (c <= '9');
-
-        private static bool IsHexDigit(char c)
-            => ('0' <= c) && (c <= '9') ||
-               ('a' <= c) && (c <= 'f') ||
-               ('A' <= c) && (c <= 'F');
     }
 }

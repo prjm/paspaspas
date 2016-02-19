@@ -866,6 +866,15 @@ namespace PasPasPas.Api {
         /// </summary>
         public const int WhiteSpace = 600;
 
+        /// <summary>
+        ///     create a new token
+        /// </summary>
+        /// <param name="tokenId">tokenid</param>
+        /// <param name="tokenValue">token value</param>
+        public PascalToken(int tokenId, string tokenValue) : this() {
+            Kind = tokenId;
+            Value = tokenValue;
+        }
 
         /// <summary>
         ///     Token value

@@ -6,16 +6,29 @@ using System.Text;
 namespace PasPasPas.Internal.Tokenizer {
 
     /// <summary>
-    ///     manually group token group values andtheircharacter cxlasses
+    ///     manually group token group values andvtheircharacter cxlasses
     /// </summary>
     public class PuntcuatorAndClass {
-        public PuntcuatorAndClass(CharacterClass chrClass, TokenGroupValue value) {
-            ChrClass = chrClass;
+
+        /// <summary>
+        ///     combination of punctuator and character class
+        /// </summary>
+        /// <param name="chrClass">character class</param>
+        /// <param name="value">group value (tokenizer)</param>
+        public PuntcuatorAndClass(CharacterClass chrClass, PunctuatorGroup value) {
+            CharClass = chrClass;
             GroupValue = value;
         }
 
-        public CharacterClass ChrClass { get; private set; }
-        public TokenGroupValue GroupValue { get; private set; }
+        /// <summary>
+        ///     character class
+        /// </summary>
+        public CharacterClass CharClass { get; }
+
+        /// <summary>
+        ///     tokenizer group        
+        /// </summary>
+        public PunctuatorGroup GroupValue { get; }
     }
 
     /// <summary>
@@ -26,14 +39,14 @@ namespace PasPasPas.Internal.Tokenizer {
         /// <summary>
         ///     punctuators
         /// </summary>
-        private IDictionary<char, PunctuatorGroup> punctuators =
+        private readonly IDictionary<char, PunctuatorGroup> punctuators =
             new Dictionary<char, PunctuatorGroup>();
 
         /// <summary>
         ///     list of class punctuators
         /// </summary>
-        private IList<PunctuatorGroup> classPunctuators =
-            new List<PunctuatorGroup>();
+        private readonly IList<PuntcuatorAndClass> classPunctuators =
+            new List<PuntcuatorAndClass>();
 
         /// <summary>
         ///     add a punctuator
@@ -57,7 +70,7 @@ namespace PasPasPas.Internal.Tokenizer {
             var result = new PunctuatorGroup(prefix, tokenValue);
 
             if (prefix.Prefix == '\0')
-                classPunctuators.Add(result);
+                classPunctuators.Add(new PuntcuatorAndClass(prefix, result));
             else
                 punctuators.Add(prefix.Prefix, result);
 
@@ -88,7 +101,10 @@ namespace PasPasPas.Internal.Tokenizer {
                 return true;
 
             foreach (var punctuator in classPunctuators) {
-                if (punctuator.)
+                if (punctuator.CharClass.Matches(charToMatch)) {
+                    tokenGroup = punctuator.GroupValue;
+                    return true;
+                }
             }
 
             return false;
@@ -116,7 +132,7 @@ namespace PasPasPas.Internal.Tokenizer {
             }
             input.Length = tokenLength;
 
-            return new PascalToken() { Kind = tokenKind.Token, Value = tokenKind.WithPrefix(inputStream, input) };
+            return tokenKind.WithPrefix(inputStream, input);
         }
     }
 }

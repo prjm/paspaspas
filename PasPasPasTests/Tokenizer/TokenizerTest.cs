@@ -26,6 +26,13 @@ namespace PasPasPasTests.Tokenizer {
         }
 
         [TestMethod]
+        public void TestWhitespace() {
+            Assert.IsWhitespace(" ");
+            Assert.IsWhitespace(" " + System.Environment.NewLine);
+            Assert.IsWhitespace("  ");
+        }
+
+        [TestMethod]
         public void TestRealNumbers() {
             Assert.IsReal("123.123");
             Assert.IsReal("123E+10");
