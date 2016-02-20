@@ -100,6 +100,85 @@ namespace PasPasPas.Internal.Tokenizer {
     }
 
     /// <summary>
+    ///     token group for quoted strings
+    /// </summary>
+    public class QuotedStringTokenValue : TokenGroupValue {
+
+        public override PascalToken WithPrefix(IParserInput input, StringBuilder prefix) {
+            while (!input.AtEof) {
+                char currentChar = input.NextChar();
+
+                if (!input.AtEof && currentChar == '\'') {
+                    char nextChar = input.NextChar();
+                    if (nextChar == '\'') {
+                        prefix.Append("'");
+                    }
+                    else {
+                        prefix.Append("'");
+                        input.Putback(nextChar);
+                        return new PascalToken(PascalToken.QuotedString, prefix.ToString());
+                    }
+                }
+
+                prefix.Append(currentChar);
+            }
+
+            return new PascalToken(PascalToken.QuotedString, prefix.ToString());
+        }
+    }
+
+    /// <summary>
+    ///     token group for strings
+    /// </summary>
+    public class StringGroupTokenValue : TokenGroupValue {
+
+        private QuotedStringTokenValue quotedString
+            = new QuotedStringTokenValue();
+
+        private DigitTokenGroupValue digits
+            = new DigitTokenGroupValue();
+
+        private HexNumberTokenValue hexDigits
+            = new HexNumberTokenValue();
+
+        /// <summary>
+        ///     parse a string literal
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="prefix"></param>
+        /// <returns></returns>
+        public override PascalToken WithPrefix(IParserInput input, StringBuilder prefix) {
+            input.Putback(prefix[0]);
+            prefix.Length = 0;
+
+            while (!input.AtEof) {
+                char currentChar = input.NextChar();
+                if (currentChar == '#') {
+                    char nextChar = input.NextChar();
+                    prefix.Append(currentChar);
+                    if (nextChar == '$') {
+                        prefix.Append(nextChar);
+                        hexDigits.WithPrefix(input, prefix);
+                    }
+                    else {
+                        input.Putback(nextChar);
+                        digits.WithPrefix(input, prefix);
+                    }
+                }
+                else if (currentChar == '\'') {
+                    prefix.Append(currentChar);
+                    quotedString.WithPrefix(input, prefix);
+                }
+                else {
+                    input.Putback(currentChar);
+                    break;
+                }
+            }
+            return new PascalToken(PascalToken.QuotedString, prefix.ToString());
+        }
+    }
+
+    /// <summary>
     ///     token group value in curly braces
     /// </summary>
     public abstract class CurlyBracedTokenValue : SequenceGroupTokenValue {

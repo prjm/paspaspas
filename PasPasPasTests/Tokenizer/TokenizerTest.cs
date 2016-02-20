@@ -57,6 +57,12 @@ namespace PasPasPasTests.Tokenizer {
         public void TestQuotedString() {
             Assert.IsQuotedString("''");
             Assert.IsQuotedString("'sdfddfsd'");
+            Assert.IsQuotedString("'sdf''ddfsd'");
+            Assert.IsQuotedString("#45");
+            Assert.IsQuotedString("#45'xxx'#55");
+            Assert.IsQuotedString("'ddd'#45'xxx'");
+            Assert.IsQuotedString("'ddd'#$1245'xxx'");
+            Assert.IsQuotedString("#$F45");
         }
 
         [TestMethod]

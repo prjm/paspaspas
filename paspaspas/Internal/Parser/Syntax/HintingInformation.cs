@@ -21,7 +21,7 @@ namespace PasPasPas.Internal.Parser.Syntax {
         /// <summary>
         ///     comment for deprecation
         /// </summary>
-        public string DeprecatedComment { get; internal set; }
+        public QuotedString DeprecatedComment { get; internal set; }
 
         /// <summary>
         ///     hint for experimental
@@ -47,9 +47,9 @@ namespace PasPasPas.Internal.Parser.Syntax {
                 result.Space();
                 result.Keyword("deprecated");
 
-                if (!string.IsNullOrEmpty(DeprecatedComment)) {
+                if (DeprecatedComment != null) {
                     result.Space();
-                    result.Literal(PascalToken.ToQuotedString(DeprecatedComment));
+                    result.Part(DeprecatedComment);
                 }
             }
 

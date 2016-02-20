@@ -235,10 +235,6 @@ namespace PasPasPas.Internal.Tokenizer {
                 return ParseIdentifier(c);
             }
 
-            if (c == '\'') {
-                return ParseQuotedString(c);
-            }
-
             return GenerateUndefinedToken(c);
         }
 
@@ -257,17 +253,6 @@ namespace PasPasPas.Internal.Tokenizer {
                 hasEofMessage = true;
             }
             return new PascalToken() { Kind = PascalToken.Eof, Value = string.Empty };
-        }
-
-        private PascalToken ParseQuotedString(char currentChar) {
-            string value = string.Empty;
-            currentChar = Input.NextChar();
-            while (currentChar != '\'' && (!Input.AtEof)) {
-                value = value + currentChar;
-                currentChar = Input.NextChar();
-            }
-
-            return new PascalToken() { Value = value, Kind = PascalToken.QuotedString };
         }
 
         private PascalToken ParseIdentifier(char currentChar) {

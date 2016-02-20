@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace PasPasPas.Internal.Tokenizer {
+﻿namespace PasPasPas.Internal.Tokenizer {
 
     /// <summary>
     ///     base class for a character class

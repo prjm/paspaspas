@@ -1220,7 +1220,7 @@ namespace PasPasPas.Internal.Parser {
             if (Optional(PascalToken.Deprecated)) {
                 result.Deprecated = true;
                 if (Match(PascalToken.QuotedString))
-                    result.DeprecatedComment = Require(PascalToken.QuotedString).Value;
+                    result.DeprecatedComment = RequireString();
 
                 return result;
             }

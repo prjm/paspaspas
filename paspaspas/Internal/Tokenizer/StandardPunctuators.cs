@@ -35,6 +35,8 @@ namespace PasPasPas.Internal.Tokenizer {
             AddPunctuator('$', new HexNumberTokenValue());
             AddPunctuator(new WhitspaceCharacterClass(), new WhitespaceTokenGroupValue());
             AddPunctuator(new NumberCharacterClass(), new NumberTokenGroupValue());
+            AddPunctuator('\'', new StringGroupTokenValue());
+            AddPunctuator('#', new StringGroupTokenValue());
         }
 
 

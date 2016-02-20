@@ -17,7 +17,7 @@ namespace PasPasPas.Internal.Parser.Syntax {
         ///     quoted value
         /// </summary>
         public string QuotedValue
-            => UnquotedValue?.Replace("'", "''");
+            => UnquotedValue;
 
         /// <summary>
         ///     unquoted value
@@ -30,9 +30,7 @@ namespace PasPasPas.Internal.Parser.Syntax {
         /// </summary>
         /// <param name="result">formatter</param>
         public override void ToFormatter(PascalFormatter result) {
-            result.Punct("'");
             result.Literal(QuotedValue);
-            result.Punct("'");
         }
     }
 }

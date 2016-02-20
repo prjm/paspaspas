@@ -81,7 +81,7 @@ namespace PasPasPasTests {
         }
 
         public static void IsQuotedString(string input) {
-            IsToken(PascalToken.QuotedString, input.Substring(1, input.Length - 2), input);
+            IsToken(PascalToken.QuotedString, input, input);
         }
 
         public static void IsInteger(string input) {
