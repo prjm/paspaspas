@@ -27,7 +27,7 @@ namespace PasPasPas.Api.Options {
             var platforms = new Dictionary<PlatformKey, Platform>();
             var optionRoot = new DefaultPlatform();
             platforms.Add(PlatformKey.Default, optionRoot);
-            platforms.Add(PlatformKey.AnyCPU, new AnyCpuPlatform(optionRoot.DefaultOptions));
+            platforms.Add(PlatformKey.AnyCpu, new AnyCpuPlatform(optionRoot.DefaultOptions));
             Platforms = new ReadOnlyDictionary<PlatformKey, Platform>(platforms);
         }
 

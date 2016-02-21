@@ -104,5 +104,9 @@ namespace PasPasPasTests {
             IsToken(PascalToken.Preprocessor, input, input);
         }
 
+        public static void IsComment(string input) {
+            IsToken(PascalToken.Comment, input, input);
+        }
+
     }
 }

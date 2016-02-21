@@ -44,10 +44,10 @@
         /// <summary>
         ///     test if the char matches
         /// </summary>
-        /// <param name="c">char to test</param>
+        /// <param name="input">char to test</param>
         /// <returns></returns>
-        public override bool Matches(char c) =>
-            c == match;
+        public override bool Matches(char input) =>
+            input == match;
     }
 
     /// <summary>
@@ -63,10 +63,10 @@
         /// <summary>
         ///     test if the char is whitespace
         /// </summary>
-        /// <param name="c"></param>
+        /// <param name="input"></param>
         /// <returns></returns>
-        public override bool Matches(char c)
-            => char.IsWhiteSpace(c);
+        public override bool Matches(char input)
+            => char.IsWhiteSpace(input);
     }
 
     /// <summary>
@@ -82,13 +82,16 @@
         /// <summary>
         ///     test if the char is whitespace
         /// </summary>
-        /// <param name="c"></param>
+        /// <param name="input"></param>
         /// <returns></returns>
-        public override bool Matches(char c)
-            => ('0' <= c) && (c <= '9');
+        public override bool Matches(char input)
+            => ('0' <= input) && (input <= '9');
 
     }
 
+    /// <summary>
+    ///     character class for exponents
+    /// </summary>
     public class ExponentCharacterClass : CharacterClass {
 
         /// <summary>
@@ -113,7 +116,8 @@
         /// <summary>
         ///     undefined prefix
         /// </summary>
-        public override char Prefix => '\0';
+        public override char Prefix
+            => '\0';
 
         /// <summary>
         ///     test if a charactrer class matches
@@ -122,6 +126,38 @@
         /// <returns></returns>
         public override bool Matches(char input)
             => input == '+' || input == '-';
+    }
+
+    /// <summary>
+    ///     character class to match identifiers
+    /// </summary>
+    public class IdentifierCharacterClass : CharacterClass {
+
+        /// <summary>
+        ///     allow &amp;   
+        /// </summary>
+        public bool AllowAmpersand { get; internal set; }
+            = true;
+
+        /// <summary>
+        ///     allow digits
+        /// </summary>
+        public bool AllowDigits { get; internal set; }
+            = false;
+
+        /// <summary>
+        ///     undefined prefix
+        /// </summary>
+        public override char Prefix
+            => '\0';
+
+        /// <summary>
+        ///     test if a char is accecpable for an identifier
+        /// </summary>
+        /// <param name="input">input</param>
+        /// <returns><c>true</c> if the char can be part of an identifier</returns>
+        public override bool Matches(char input)
+            => char.IsLetter(input) || input == '_' || (AllowAmpersand && input == '&') || (AllowDigits && char.IsDigit(input));
     }
 
 }

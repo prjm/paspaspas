@@ -64,14 +64,6 @@ namespace PasPasPas.Api {
         public const int Dot = 11;
 
         /// <summary>
-        ///     format a string as quoted string
-        /// </summary>
-        /// <param name="deprecated"></param>
-        /// <returns></returns>
-        internal static string ToQuotedString(string deprecated)
-            => "'" + deprecated + "'";
-
-        /// <summary>
         ///     token for <c>(</c>
         /// </summary>
         public const int OpenParen = 12;

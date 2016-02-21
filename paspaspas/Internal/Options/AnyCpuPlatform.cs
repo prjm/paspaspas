@@ -11,7 +11,7 @@ namespace PasPasPas.Internal.Options {
         ///     creates a new platform for any cpu
         /// </summary>                                            
         /// <param name="optionRoot">default options</param>
-        public AnyCpuPlatform(OptionSet optionRoot) : base(PlatformKey.AnyCPU) {
+        public AnyCpuPlatform(OptionSet optionRoot) : base(PlatformKey.AnyCpu) {
             Configurations.Add(OptionSet.DebugConfigurationName, new OptionSet(optionRoot));
             Configurations.Add(OptionSet.ReleaseConfigurationName, new OptionSet(optionRoot));
 

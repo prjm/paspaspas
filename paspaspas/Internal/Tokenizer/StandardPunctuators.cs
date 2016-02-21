@@ -24,7 +24,7 @@ namespace PasPasPas.Internal.Tokenizer {
             AddPunctuator('+', PascalToken.Plus);
             AddPunctuator('-', PascalToken.Minus);
             AddPunctuator('*', PascalToken.Times);
-            AddPunctuator('/', PascalToken.Slash);
+            AddPunctuator('/', PascalToken.Slash).Add('/', new EondOfLineCommentTokenGroupValue());
             AddPunctuator('@', PascalToken.At);
             AddPunctuator('>', PascalToken.GreaterThen).Add('=', PascalToken.GreaterThenEquals);
             var lt = AddPunctuator('<', PascalToken.LessThen);
@@ -37,6 +37,7 @@ namespace PasPasPas.Internal.Tokenizer {
             AddPunctuator(new NumberCharacterClass(), new NumberTokenGroupValue());
             AddPunctuator('\'', new StringGroupTokenValue());
             AddPunctuator('#', new StringGroupTokenValue());
+            AddPunctuator(new IdentifierCharacterClass(), new IdentifierTokenGroupValue());
         }
 
 

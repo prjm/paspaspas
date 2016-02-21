@@ -232,7 +232,6 @@
     <Compile Include="Internal\Parser\Syntax\WhileStatement.cs" />
     <Compile Include="Internal\Parser\Syntax\WithStatement.cs" />
     <Compile Include="Internal\Tokenizer\CharacterClass.cs" />
-    <Compile Include="Internal\Tokenizer\FileScanner.cs" />
     <Compile Include="Internal\Tokenizer\PunctuatorGroup.cs" />
     <Compile Include="Internal\Tokenizer\Punctuators.cs" />
     <Compile Include="Internal\Tokenizer\StandardPunctuators.cs" />

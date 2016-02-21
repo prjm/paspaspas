@@ -10,9 +10,6 @@ namespace PasPasPas.Internal.Tokenizer {
     /// </summary>
     public class StandardTokenizer : MessageGenerator, IPascalTokenizer {
 
-        private bool hasEofMessage
-            = false;
-
         private StandardPunctuators punctuators
             = new StandardPunctuators();
 
@@ -191,13 +188,7 @@ namespace PasPasPas.Internal.Tokenizer {
         internal static bool IsKeyword(string value)
             => keywords.ContainsKey(value);
 
-        private static void RegisterPuncutators() {
-
-        }
-
         private IParserInput input;
-        private FileScanner scanner
-            = new FileScanner();
 
         /// <summary>
         ///     parser parser input
@@ -211,7 +202,6 @@ namespace PasPasPas.Internal.Tokenizer {
             set
             {
                 input = value;
-                scanner.Input = value;
             }
         }
 
@@ -231,10 +221,6 @@ namespace PasPasPas.Internal.Tokenizer {
                 return punctuators.FetchTokenByGroup(Input, c, tokenGroup);
             }
 
-            if (char.IsLetter(c) || c == '_' || c == '&') {
-                return ParseIdentifier(c);
-            }
-
             return GenerateUndefinedToken(c);
         }
 
@@ -247,48 +233,17 @@ namespace PasPasPas.Internal.Tokenizer {
             };
         }
 
-        private PascalToken GenerateEofToken() {
-            if (!hasEofMessage) {
-                LogError(MessageData.UnexpectedEndOfFile);
-                hasEofMessage = true;
-            }
-            return new PascalToken() { Kind = PascalToken.Eof, Value = string.Empty };
-        }
+        private PascalToken GenerateEofToken()
+            => new PascalToken() { Kind = PascalToken.Eof, Value = string.Empty };
 
-        private PascalToken ParseIdentifier(char currentChar) {
-            string value;
-            int tokenKind;
-            bool ignoreKeywords;
-
-            if (currentChar == '&') {
-                ignoreKeywords = true;
-                if (Input.AtEof) {
-                    LogError(MessageData.IncompleteIdentifier);
-                    return new PascalToken() { Value = string.Empty, Kind = PascalToken.Eof };
-                }
-                else {
-                    currentChar = Input.NextChar();
-                }
-            }
-            else {
-                ignoreKeywords = false;
-            }
-
-            value = new string(currentChar, 1);
-
-            while ((char.IsLetter(currentChar) || char.IsDigit(currentChar) || currentChar == '_') && (!Input.AtEof)) {
-                currentChar = Input.NextChar();
-                if (char.IsLetter(currentChar) || char.IsDigit(currentChar) || currentChar == '_')
-                    value = value + currentChar;
-                else
-                    Input.Putback(currentChar);
-            }
-
-            if ((!ignoreKeywords) && (keywords.TryGetValue(value, out tokenKind)))
-                return new PascalToken() { Value = value, Kind = tokenKind };
-            else
-                return new PascalToken() { Value = value, Kind = PascalToken.Identifier };
-        }
+        /// <summary>
+        ///     get the keyowrd token id for a given value
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="tokenKind"></param>
+        /// <returns></returns>
+        public static bool TryGetKeyword(string value, out int tokenKind)
+            => keywords.TryGetValue(value, out tokenKind);
 
         /// <summary>
         ///     check if tokens are availiable

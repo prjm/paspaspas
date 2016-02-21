@@ -18,7 +18,7 @@
         /// <summary>
         ///     any platform
         /// </summary>
-        AnyCPU
+        AnyCpu
 
     }
 }

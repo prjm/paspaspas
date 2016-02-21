@@ -104,6 +104,12 @@ namespace PasPasPas.Internal.Tokenizer {
     /// </summary>
     public class QuotedStringTokenValue : TokenGroupValue {
 
+        /// <summary>
+        ///     tokenize a quoted string
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="prefix"></param>
+        /// <returns></returns>
         public override PascalToken WithPrefix(IParserInput input, StringBuilder prefix) {
             while (!input.AtEof) {
                 char currentChar = input.NextChar();
@@ -228,9 +234,9 @@ namespace PasPasPas.Internal.Tokenizer {
         /// <summary>
         ///     test if a character macthes the given class
         /// </summary>
-        /// <param name="c">char to test</param>
+        /// <param name="input">char to test</param>
         /// <returns></returns>
-        protected abstract bool MatchesClass(char c);
+        protected abstract bool MatchesClass(char input);
 
         /// <summary>
         ///     read whitespace
@@ -321,6 +327,83 @@ namespace PasPasPas.Internal.Tokenizer {
     }
 
     /// <summary>
+    ///     token group for identifiers
+    /// </summary>
+    public class IdentifierTokenGroupValue : TokenGroupValue {
+
+        private IdentifierCharacterClass identifierCharClass
+            = new IdentifierCharacterClass() { AllowAmpersand = false, AllowDigits = true };
+
+        /// <summary>
+        ///     tokenize an identifier
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="prefix"></param>
+        /// <returns></returns>
+        public override PascalToken WithPrefix(IParserInput input, StringBuilder prefix) {
+            bool ignoreKeywords = prefix[0] == '&';
+            if (ignoreKeywords)
+                prefix.Clear();
+
+            while (!input.AtEof) {
+                var currentChar = input.NextChar();
+                if (!identifierCharClass.Matches(currentChar)) {
+                    input.Putback(currentChar);
+                    break;
+                }
+                prefix.Append(currentChar);
+            }
+
+            string value = prefix.ToString();
+            int tokenKind;
+
+            if ((!ignoreKeywords) && (StandardTokenizer.TryGetKeyword(value, out tokenKind)))
+                return new PascalToken() { Value = value, Kind = tokenKind };
+            else
+                return new PascalToken() { Value = value, Kind = PascalToken.Identifier };
+
+        }
+    }
+
+    /// <summary>
+    ///     token group for end of line comments
+    /// </summary>
+    public class EondOfLineCommentTokenGroupValue : TokenGroupValue {
+
+        /// <summary>
+        ///     tokenize end-of-line comments
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="prefix"></param>
+        /// <returns></returns>
+        public override PascalToken WithPrefix(IParserInput input, StringBuilder prefix) {
+
+            while (!input.AtEof) {
+                char currentChar = input.NextChar();
+                prefix.Append(currentChar);
+
+                if (currentChar == 0x0D) {
+                    if (!input.AtEof) {
+                        char nextChar = input.NextChar();
+                        if (nextChar == 0x0A) {
+                            prefix.Append(nextChar);
+                        }
+                        else {
+                            input.Putback(nextChar);
+                        }
+                    }
+                    break;
+                }
+
+                if (currentChar == 0x0A) {
+                    break;
+                }
+            }
+            return new PascalToken(PascalToken.Comment, prefix.ToString());
+        }
+    }
+
+    /// <summary>
     ///     token group for numbers
     /// </summary>
     public class NumberTokenGroupValue : TokenGroupValue {
@@ -355,6 +438,12 @@ namespace PasPasPas.Internal.Tokenizer {
             }
         }
 
+        /// <summary>
+        ///     tokenizer a number
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="prefix"></param>
+        /// <returns></returns>
         public override PascalToken WithPrefix(IParserInput input, StringBuilder prefix) {
             var token = digitTokenizer.WithPrefix(input, prefix);
             var withDot = false;
@@ -387,6 +476,9 @@ namespace PasPasPas.Internal.Tokenizer {
             }
 
         }
+
+
+
     }
 
 }

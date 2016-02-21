@@ -46,6 +46,12 @@ namespace PasPasPasTests.Tokenizer {
             Assert.IsPreprocessor("{$A}");
         }
 
+        [TestMethod]
+        public void TestComment() {
+            Assert.IsComment("// dsfssdf ");
+            Assert.IsComment("{ dsfssdf }");
+        }
+
 
         [TestMethod]
         public void TestHexNumbers() {
