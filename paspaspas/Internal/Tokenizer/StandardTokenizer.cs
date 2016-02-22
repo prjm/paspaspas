@@ -252,8 +252,5 @@ namespace PasPasPas.Internal.Tokenizer {
         public bool HasNextToken()
             => !Input.AtEof;
 
-
-        private static bool IsDigit(char c)
-            => ('0' <= c) && (c <= '9');
     }
 }

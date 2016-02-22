@@ -11,9 +11,15 @@ namespace PasPasPas.Internal.Tokenizer {
         ///     register punctuators
         /// </summary>
         public StandardPunctuators() {
-            AddPunctuator('.', PascalToken.Dot).Add('.', PascalToken.DotDot);
+            var dot = AddPunctuator('.', PascalToken.Dot);
+            dot.Add('.', PascalToken.DotDot);
+            dot.Add(')', PascalToken.CloseBraces);
+
+            var lparen = AddPunctuator('(', PascalToken.OpenParen);
+            lparen.Add('.', PascalToken.OpenBraces);
+            lparen.Add('*', new AlternativeCurlyBraceCommenTokenValue()).Add('$', new AlternativePreprocessorTokenValue());
+
             AddPunctuator(',', PascalToken.Comma);
-            AddPunctuator('(', PascalToken.OpenParen);
             AddPunctuator(')', PascalToken.CloseParen);
             AddPunctuator(';', PascalToken.Semicolon);
             AddPunctuator('=', PascalToken.EqualsSign);

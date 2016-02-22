@@ -195,6 +195,17 @@ namespace PasPasPas.Internal.Tokenizer {
         protected override string EndSequence
             => "}";
     }
+    /// <summary>
+    ///     token group value in curly braces
+    /// </summary>
+    public abstract class AlternativeCurlyBracedTokenValue : SequenceGroupTokenValue {
+
+        /// <summary>
+        ///     get the end of the sequence
+        /// </summary>
+        protected override string EndSequence
+            => "*)";
+    }
 
     /// <summary>
     ///     token group for curly brace comments
@@ -209,9 +220,33 @@ namespace PasPasPas.Internal.Tokenizer {
     }
 
     /// <summary>
+    ///     token group for curly brace comments
+    /// </summary>
+    public class AlternativeCurlyBraceCommenTokenValue : AlternativeCurlyBracedTokenValue {
+
+        /// <summary>
+        ///     get the token id
+        /// </summary>
+        protected override int TokenId
+            => PascalToken.Comment;
+    }
+
+    /// <summary>
     ///     token group for preprocessor commands
     /// </summary>
     public class PreprocessorTokenValue : CurlyBracedTokenValue {
+
+        /// <summary>
+        ///     token kind
+        /// </summary>
+        protected override int TokenId
+            => PascalToken.Preprocessor;
+    }
+
+    /// <summary>
+    ///     token group for preprocessor commands
+    /// </summary>
+    public class AlternativePreprocessorTokenValue : CurlyBracedTokenValue {
 
         /// <summary>
         ///     token kind
