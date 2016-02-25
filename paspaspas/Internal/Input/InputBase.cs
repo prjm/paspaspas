@@ -42,10 +42,10 @@ namespace PasPasPas.Internal.Input {
         /// <summary>
         ///     put back an entire string
         /// </summary>
-        /// <param name="stringToPutback"></param>
-        public void Putback(string stringToPutback) {
-            for (int charIndex = stringToPutback.Length - 1; charIndex >= 0; charIndex--) {
-                putbackBuffer.Push(stringToPutback[charIndex]);
+        /// <param name="valueToPutback"></param>
+        public void Putback(string valueToPutback) {
+            for (int charIndex = valueToPutback.Length - 1; charIndex >= 0; charIndex--) {
+                putbackBuffer.Push(valueToPutback[charIndex]);
             }
         }
 

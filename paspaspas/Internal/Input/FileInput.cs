@@ -12,6 +12,13 @@ namespace PasPasPas.Internal.Input {
         private StreamReader reader = null;
 
         /// <summary>
+        ///     dispose the input stream
+        /// </summary>
+        ~FileInput() {
+            Dispose(false);
+        }
+
+        /// <summary>
         ///     input file
         /// </summary>
         public string FileName { get; set; }
@@ -39,9 +46,10 @@ namespace PasPasPas.Internal.Input {
 
             // *** Detect byte order mark if any - otherwise assume default
             byte[] buffer = new byte[5];
-            FileStream file = new FileStream(srcFile, FileMode.Open);
-            file.Read(buffer, 0, 5);
-            file.Close();
+            using (FileStream file = new FileStream(srcFile, FileMode.Open)) {
+                file.Read(buffer, 0, 5);
+                file.Close();
+            }
 
             if (buffer[0] == 0xef && buffer[1] == 0xbb && buffer[2] == 0xbf)
                 enc = Encoding.UTF8;
@@ -101,6 +109,7 @@ namespace PasPasPas.Internal.Input {
         /// </summary>
         public void Dispose() {
             Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
         #endregion

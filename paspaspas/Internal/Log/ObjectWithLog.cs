@@ -8,7 +8,7 @@
         /// <summary>
         ///     log target (aggregator)
         /// </summary>
-        public ILogTarget LogTarget { get; set; }
+        public ILogService LogTarget { get; set; }
 
     }
 }

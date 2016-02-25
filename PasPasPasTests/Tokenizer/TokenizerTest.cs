@@ -44,12 +44,14 @@ namespace PasPasPasTests.Tokenizer {
         [TestMethod]
         public void TestIsPreprocessorCommand() {
             Assert.IsPreprocessor("{$A}");
+            Assert.IsComment("(*$HPPEMIT '}'*)");
         }
 
         [TestMethod]
         public void TestComment() {
             Assert.IsComment("// dsfssdf ");
             Assert.IsComment("{ dsfssdf }");
+            Assert.IsComment("(* HPPEMIT '}'*)");
         }
 
 
@@ -67,8 +69,8 @@ namespace PasPasPasTests.Tokenizer {
             Assert.IsQuotedString("#45");
             Assert.IsQuotedString("#45'xxx'#55");
             Assert.IsQuotedString("'ddd'#45'xxx'");
-            Assert.IsQuotedString("'ddd'#$1245'xxx'");
             Assert.IsQuotedString("#$F45");
+            Assert.IsQuotedString("'ddd'#$1245'xxx'");
         }
 
         [TestMethod]

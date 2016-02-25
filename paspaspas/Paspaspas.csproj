@@ -42,6 +42,7 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Api\CompilerTask.cs" />
     <Compile Include="Api\Options\CompilerOptions.cs" />
     <Compile Include="Internal\Input\FileInput.cs" />
     <Compile Include="Api\IParserInformationProvider.cs" />
@@ -64,7 +65,8 @@
     <Compile Include="Api\PasPasPasException.cs" />
     <Compile Include="Internal\Input\StringInput.cs" />
     <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="Internal\Log\ILogTarget.cs" />
+    <Compile Include="Internal\Log\ILogService.cs" />
+    <Compile Include="Internal\Log\LogService.cs" />
     <Compile Include="Internal\Log\ObjectWithLog.cs" />
     <Compile Include="Internal\MessageData.cs" />
     <Compile Include="Internal\MessageGenerator.cs" />

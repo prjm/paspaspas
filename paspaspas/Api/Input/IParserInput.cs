@@ -28,8 +28,8 @@ namespace PasPasPas.Api.Input {
         /// <summary>
         ///     put back a string
         /// </summary>
-        /// <param name="stringToPutback"></param>
-        void Putback(string stringToPutback);
+        /// <param name="valueToPutback"></param>
+        void Putback(string valueToPutback);
 
         /// <summary>
         ///     putback a buffer structur

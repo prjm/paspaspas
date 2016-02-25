@@ -22,7 +22,8 @@ namespace TokenizerDemo {
             var before = new List<string>();
 
             foreach (var file in files) {
-                Console.WriteLine(file);
+
+                var hasHeader = false;
 
                 using (FileInput input = new FileInput()) {
                     input.FileName = file;
@@ -39,6 +40,9 @@ namespace TokenizerDemo {
 
                         if (token.Kind != PascalToken.Undefined)
                             continue;
+
+                        if (!hasHeader)
+                            Console.WriteLine(file);
 
                         for (var x = 0; x < before.Count; x++) {
                             Console.Write(before[x]);

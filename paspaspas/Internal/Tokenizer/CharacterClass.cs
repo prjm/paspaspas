@@ -30,9 +30,9 @@
         /// <summary>
         ///     char to match
         /// </summary>
-        /// <param name="forChar">char to match</param>
-        public SingleCharClass(char forChar) {
-            match = forChar;
+        /// <param name="forValue">char to match</param>
+        public SingleCharClass(char forValue) {
+            match = forValue;
         }
 
         /// <summary>
@@ -48,6 +48,26 @@
         /// <returns></returns>
         public override bool Matches(char input) =>
             input == match;
+    }
+
+    /// <summary>
+    ///     matches old control characters
+    /// </summary>
+    public class ControlCharacterClass : CharacterClass {
+
+        /// <summary>
+        ///     undefined prefix
+        /// </summary>
+        public override char Prefix => '\0';
+
+        /// <summary>
+        ///     test if the char is whitespace
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public override bool Matches(char input)
+            => (!char.IsWhiteSpace(input)) && (char.IsControl(input));
+
     }
 
     /// <summary>

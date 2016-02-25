@@ -93,15 +93,15 @@ namespace PasPasPas.Internal.Tokenizer {
         /// <summary>
         ///     test if a punctuator group matches
         /// </summary>
-        /// <param name="charToMatch">char to match</param>
+        /// <param name="valueToMatch">char to match</param>
         /// <param name="tokenGroup">token group</param>
         /// <returns></returns>
-        public bool Match(char charToMatch, out PunctuatorGroup tokenGroup) {
-            if (punctuators.TryGetValue(charToMatch, out tokenGroup))
+        public bool Match(char valueToMatch, out PunctuatorGroup tokenGroup) {
+            if (punctuators.TryGetValue(valueToMatch, out tokenGroup))
                 return true;
 
             foreach (var punctuator in classPunctuators) {
-                if (punctuator.CharClass.Matches(charToMatch)) {
+                if (punctuator.CharClass.Matches(valueToMatch)) {
                     tokenGroup = punctuator.GroupValue;
                     return true;
                 }
@@ -117,7 +117,7 @@ namespace PasPasPas.Internal.Tokenizer {
         /// <param name="prefix"></param>
         /// <param name="tokenGroup"></param>
         /// <returns></returns>
-        public PascalToken FetchTokenByGroup(IParserInput inputStream, char prefix, PunctuatorGroup tokenGroup) {
+        public static PascalToken FetchTokenByGroup(IParserInput inputStream, char prefix, PunctuatorGroup tokenGroup) {
             StringBuilder input = new StringBuilder(100);
             input.Append(prefix);
             while (input.Length < tokenGroup.Length && (!inputStream.AtEof)) {

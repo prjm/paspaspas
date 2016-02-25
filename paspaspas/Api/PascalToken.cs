@@ -854,9 +854,19 @@ namespace PasPasPas.Api {
         public const int QuotedString = 504;
 
         /// <summary>
+        ///     token for strings in double quotes
+        /// </summary>
+        public const int DoubleQuotedString = 505;
+
+        /// <summary>
         ///     white space
         /// </summary>
         public const int WhiteSpace = 600;
+
+        /// <summary>
+        ///     control chars
+        /// </summary>
+        public const int ControlChar = 601;
 
         /// <summary>
         ///     create a new token

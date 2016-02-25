@@ -218,7 +218,7 @@ namespace PasPasPas.Internal.Tokenizer {
             PunctuatorGroup tokenGroup;
 
             if (punctuators.Match(c, out tokenGroup)) {
-                return punctuators.FetchTokenByGroup(Input, c, tokenGroup);
+                return Punctuators.FetchTokenByGroup(Input, c, tokenGroup);
             }
 
             return GenerateUndefinedToken(c);
@@ -233,7 +233,7 @@ namespace PasPasPas.Internal.Tokenizer {
             };
         }
 
-        private PascalToken GenerateEofToken()
+        private static PascalToken GenerateEofToken()
             => new PascalToken() { Kind = PascalToken.Eof, Value = string.Empty };
 
         /// <summary>

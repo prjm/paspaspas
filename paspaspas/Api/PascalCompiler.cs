@@ -13,6 +13,12 @@ namespace PasPasPas.Api {
         public CompilerOptions Options { get; }
             = new CompilerOptions();
 
+        /// <summary>
+        ///     description what the compiler should do
+        /// </summary>
+        public CompilerTask Task { get; }
+            = new CompilerTask();
+
 
     }
 }

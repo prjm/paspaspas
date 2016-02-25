@@ -39,10 +39,13 @@ namespace PasPasPas.Internal.Tokenizer {
 
             AddPunctuator('{', new CurlyBraceCommenTokenValue()).Add('$', new PreprocessorTokenValue());
             AddPunctuator('$', new HexNumberTokenValue());
-            AddPunctuator(new WhitspaceCharacterClass(), new WhitespaceTokenGroupValue());
+            AddPunctuator(new WhitspaceCharacterClass(), new WhiteSpaceTokenGroupValue());
+            AddPunctuator(new ControlCharacterClass(), new ControlTokenGroupValue());
             AddPunctuator(new NumberCharacterClass(), new NumberTokenGroupValue());
             AddPunctuator('\'', new StringGroupTokenValue());
+            AddPunctuator('"', new DoubleQuoteStringGroupTokenValue());
             AddPunctuator('#', new StringGroupTokenValue());
+            AddPunctuator('\x001A', new SoftEofTokenValue());
             AddPunctuator(new IdentifierCharacterClass(), new IdentifierTokenGroupValue());
         }
 

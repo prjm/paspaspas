@@ -134,6 +134,58 @@ namespace PasPasPas.Internal.Tokenizer {
     }
 
     /// <summary>
+    ///     token group which moves the input to eof
+    /// </summary>
+    public class SoftEofTokenValue : TokenGroupValue {
+
+        /// <summary>
+        ///     read until eof, discard token value
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="prefix"></param>
+        /// <returns></returns>
+        public override PascalToken WithPrefix(IParserInput input, StringBuilder prefix) {
+            while (!input.AtEof)
+                input.NextChar();
+            return new PascalToken(PascalToken.Eof, string.Empty);
+        }
+    }
+
+    /// <summary>
+    ///     double-quoted string
+    /// </summary>
+    public class DoubleQuoteStringGroupTokenValue : TokenGroupValue {
+
+        /// <summary>
+        ///     tokenize a quoted string
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="prefix"></param>
+        /// <returns></returns>
+        public override PascalToken WithPrefix(IParserInput input, StringBuilder prefix) {
+            while (!input.AtEof) {
+                char currentChar = input.NextChar();
+
+                if (!input.AtEof && currentChar == '"') {
+                    char nextChar = input.NextChar();
+                    if (nextChar == '"') {
+                        prefix.Append("\"");
+                    }
+                    else {
+                        prefix.Append("\"");
+                        input.Putback(nextChar);
+                        return new PascalToken(PascalToken.DoubleQuotedString, prefix.ToString());
+                    }
+                }
+
+                prefix.Append(currentChar);
+            }
+
+            return new PascalToken(PascalToken.DoubleQuotedString, prefix.ToString());
+        }
+    }
+
+    /// <summary>
     ///     token group for strings
     /// </summary>
     public class StringGroupTokenValue : TokenGroupValue {
@@ -246,7 +298,7 @@ namespace PasPasPas.Internal.Tokenizer {
     /// <summary>
     ///     token group for preprocessor commands
     /// </summary>
-    public class AlternativePreprocessorTokenValue : CurlyBracedTokenValue {
+    public class AlternativePreprocessorTokenValue : AlternativeCurlyBracedTokenValue {
 
         /// <summary>
         ///     token kind
@@ -300,9 +352,31 @@ namespace PasPasPas.Internal.Tokenizer {
     }
 
     /// <summary>
+    ///     token group value for control characters
+    /// </summary>
+    public class ControlTokenGroupValue : CharacterClassTokenGroupValue {
+
+        /// <summary>
+        ///     token id: ControlChar
+        /// </summary>
+        protected override int TokenId
+            => PascalToken.ControlChar;
+
+
+        /// <summary>
+        ///     test if the charcater is a control char
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        protected override bool MatchesClass(char input)
+            => (!char.IsWhiteSpace(input)) && (char.IsControl(input));
+
+    }
+
+    /// <summary>
     ///     token group for whitespace
     /// </summary>
-    public class WhitespaceTokenGroupValue : CharacterClassTokenGroupValue {
+    public class WhiteSpaceTokenGroupValue : CharacterClassTokenGroupValue {
 
         /// <summary>
         ///     get the token id
@@ -313,10 +387,10 @@ namespace PasPasPas.Internal.Tokenizer {
         /// <summary>
         ///     test if the character is whitespace
         /// </summary>
-        /// <param name="c"></param>
+        /// <param name="input"></param>
         /// <returns></returns>
-        protected override bool MatchesClass(char c)
-            => char.IsWhiteSpace(c);
+        protected override bool MatchesClass(char input)
+            => char.IsWhiteSpace(input);
     }
 
     /// <summary>
@@ -333,12 +407,12 @@ namespace PasPasPas.Internal.Tokenizer {
         /// <summary>
         ///     test if a char matches a hex number
         /// </summary>
-        /// <param name="c"></param>
+        /// <param name="input"></param>
         /// <returns></returns>
-        protected override bool MatchesClass(char c)
-            => ('0' <= c) && (c <= '9') ||
-               ('a' <= c) && (c <= 'f') ||
-               ('A' <= c) && (c <= 'F');
+        protected override bool MatchesClass(char input)
+            => ('0' <= input) && (input <= '9') ||
+               ('a' <= input) && (input <= 'f') ||
+               ('A' <= input) && (input <= 'F');
     }
 
     /// <summary>
@@ -355,10 +429,10 @@ namespace PasPasPas.Internal.Tokenizer {
         /// <summary>
         ///     matches a digit
         /// </summary>
-        /// <param name="c"></param>
+        /// <param name="input"></param>
         /// <returns></returns>
-        protected override bool MatchesClass(char c)
-            => ('0' <= c) && (c <= '9');
+        protected override bool MatchesClass(char input)
+            => ('0' <= input) && (input <= '9');
     }
 
     /// <summary>

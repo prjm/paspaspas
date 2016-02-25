@@ -40,7 +40,9 @@ namespace PasPasPas.Internal.Tokenizer {
         }
 
         private static bool IsValidToken(PascalToken nextToken)
-            => nextToken.Kind != PascalToken.WhiteSpace;
+            => nextToken.Kind != PascalToken.WhiteSpace &&
+            nextToken.Kind != PascalToken.ControlChar &&
+            nextToken.Kind != PascalToken.Comment;
 
         /// <summary>
         ///     gets the current token

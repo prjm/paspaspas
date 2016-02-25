@@ -3,13 +3,13 @@
     /// <summary>
     ///     log message targer
     /// </summary>
-    public interface ILogTarget {
+    public interface ILogService {
 
         /// <summary>
         ///     process a log message
         /// </summary>
         /// <param name="message">message to process</param>
-        void ProcessMessage(LogMessage message);
+        void Log(LogMessage message);
 
     }
 }
