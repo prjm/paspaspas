@@ -18,12 +18,9 @@ namespace TokenizerDemo {
         static void Main(string[] args) {
             var path = "C:\\Users\\Bastian\\Documents\\Visual Studio 2015\\Projects\\paspaspas\\Testfiles";
             var files = FindFiles(path);
-            var result = new Dictionary<string, int>();
-            var before = new List<string>();
+            var result = new Dictionary<long, long>();
 
             foreach (var file in files) {
-
-                var hasHeader = false;
 
                 using (FileInput input = new FileInput()) {
                     input.FileName = file;
@@ -32,26 +29,8 @@ namespace TokenizerDemo {
 
                     while (tokenizer.HasNextToken()) {
                         var token = tokenizer.FetchNextToken();
-
-                        if (before.Count >= 10)
-                            before.RemoveAt(0);
-
-                        before.Add(token.Value);
-
-                        if (token.Kind != PascalToken.Undefined)
-                            continue;
-
-                        if (!hasHeader)
-                            Console.WriteLine(file);
-
-                        for (var x = 0; x < before.Count; x++) {
-                            Console.Write(before[x]);
-                            Console.Write(" ");
-                        }
-                        Console.WriteLine();
-
-                        var key = token.Kind.ToString() + ": " + token.Value;
-                        int count;
+                        long key = token.Kind; // + ": " + token.Value;
+                        long count;
                         if (!result.TryGetValue(key, out count))
                             count = 0;
 
@@ -64,11 +43,11 @@ namespace TokenizerDemo {
             }
 
 
-            var list = new List<KeyValuePair<string, int>>(result.Count);
+            var list = new List<KeyValuePair<long, long>>(result.Count);
             list.AddRange(result);
-            list.Sort((l, r) => l.Value - r.Value);
+            list.Sort((l, r) => Math.Sign(l.Value - r.Value));
 
-            foreach (var entry in result) {
+            foreach (var entry in list) {
                 Console.WriteLine(entry.Value + ": " + entry.Key);
             }
         }
