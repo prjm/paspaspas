@@ -1,5 +1,6 @@
 ﻿using PasPasPas.Api;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace PasPasPas.Internal.Tokenizer {
 
@@ -16,7 +17,12 @@ namespace PasPasPas.Internal.Tokenizer {
         /// <summary>
         ///     list of tokens
         /// </summary>
-        private List<PascalToken> tokenList = new List<PascalToken>();
+        private Queue<PascalToken> tokenList = new Queue<PascalToken>();
+
+        /// <summary>
+        ///     helper for preprocessing
+        /// </summary>
+        private MacroProcessor processor = new MacroProcessor();
 
         /// <summary>
         ///     check if other tokens are availiable
@@ -26,23 +32,38 @@ namespace PasPasPas.Internal.Tokenizer {
             => (tokenList.Count > 0) || BaseTokenizer.HasNextToken();
 
         private void InternalFetchNextToken() {
-            if (!HasNextToken()) {
-                tokenList.Add(new PascalToken() { Kind = PascalToken.Eof, Value = string.Empty });
-                return;
-            }
-
             int currentTokenCount = tokenList.Count;
             while (tokenList.Count == currentTokenCount) {
+
+                if (!HasNextToken()) {
+                    tokenList.Enqueue(new PascalToken() { Kind = PascalToken.Eof, Value = string.Empty });
+                    return;
+                }
+
                 var nextToken = BaseTokenizer.FetchNextToken();
                 if (IsValidToken(nextToken))
-                    tokenList.Add(nextToken);
+                    tokenList.Enqueue(nextToken);
+                else if (IsMacroToken(nextToken))
+                    ProcssMacroToken(nextToken);
             }
         }
+
+        /// <summary>
+        ///     process preprocessor token
+        /// </summary>
+        /// <param name="nextToken"></param>
+        private void ProcssMacroToken(PascalToken nextToken) {
+            processor.ProcessValue(nextToken.Value);
+        }
+
+        private bool IsMacroToken(PascalToken nextToken)
+            => nextToken.Kind == PascalToken.Preprocessor;
 
         private static bool IsValidToken(PascalToken nextToken)
             => nextToken.Kind != PascalToken.WhiteSpace &&
             nextToken.Kind != PascalToken.ControlChar &&
-            nextToken.Kind != PascalToken.Comment;
+            nextToken.Kind != PascalToken.Comment &&
+            nextToken.Kind != PascalToken.Preprocessor;
 
         /// <summary>
         ///     gets the current token
@@ -66,7 +87,7 @@ namespace PasPasPas.Internal.Tokenizer {
                 return new PascalToken() { Kind = PascalToken.Eof, Value = string.Empty };
             }
             else {
-                return tokenList[num];
+                return tokenList.ElementAt(num);
             }
         }
 
@@ -75,13 +96,9 @@ namespace PasPasPas.Internal.Tokenizer {
         /// </summary>
         /// <returns></returns>
         public PascalToken FetchNextToken() {
-            PascalToken result;
+            PascalToken result = LookAhead(0);
             if (tokenList.Count > 0) {
-                result = tokenList[0];
-                tokenList.RemoveAt(0);
-            }
-            else {
-                result = BaseTokenizer.FetchNextToken();
+                tokenList.Dequeue();
             }
             return result;
         }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PasPasPas.Api;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,6 +15,35 @@ namespace PasPasPas.Internal.Tokenizer {
         ///     length (cache)
         /// </summary>
         private int length;
+
+        /// <summary>
+        ///     add a string as single prefixes
+        /// </summary>
+        /// <param name="template"></param>
+        /// <param name="tokenKind"></param>
+        public void Add(string template, int tokenKind) {
+            var group = this;
+
+            for (int index = 0; index < template.Length; index++) {
+                var match = template[index];
+                var lastChar = index + 1 == template.Length;
+                if (!group.Tokens.Value.TryGetValue(match, out group)) {
+                    if (lastChar) {
+                        group = Add(match, tokenKind);
+                    }
+                    else {
+                        group = Add(match, PascalToken.Undefined);
+                    }
+                }
+                else if (lastChar) {
+                    var tokenValue = group.TokenValue as SimpleTokenGroupValue;
+                    if (tokenValue == null || tokenValue.TokenId != PascalToken.Undefined)
+                        throw new InvalidOperationException();
+                    else
+                        tokenValue.TokenId = tokenKind;
+                }
+            }
+        }
 
         /// <summary>
         ///     prefix

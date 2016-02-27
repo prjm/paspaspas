@@ -24,8 +24,10 @@ namespace TokenizerDemo {
 
                 using (FileInput input = new FileInput()) {
                     input.FileName = file;
-                    var tokenizer = new StandardTokenizer();
-                    tokenizer.Input = input;
+                    var baseTokenizer = new StandardTokenizer();
+                    var tokenizer = new TokenizerWithLookahead();
+                    baseTokenizer.Input = input;
+                    tokenizer.BaseTokenizer = baseTokenizer;
 
                     while (tokenizer.HasNextToken()) {
                         var token = tokenizer.FetchNextToken();
@@ -50,6 +52,9 @@ namespace TokenizerDemo {
             foreach (var entry in list) {
                 Console.WriteLine(entry.Value + ": " + entry.Key);
             }
+
+
+            MacroProcessor.Info();
         }
     }
 }

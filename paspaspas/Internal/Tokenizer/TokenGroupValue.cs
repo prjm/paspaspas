@@ -53,7 +53,7 @@ namespace PasPasPas.Internal.Tokenizer {
         /// <summary>
         ///     token kind
         /// </summary>
-        public int TokenId { get; }
+        public int TokenId { get; set; }
 
         /// <summary>
         ///     parse the complete token

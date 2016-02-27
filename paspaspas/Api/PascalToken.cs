@@ -868,6 +868,23 @@ namespace PasPasPas.Api {
         /// </summary>
         public const int ControlChar = 601;
 
+        public const int AlignSwitch = 701;
+        public const int AlignSwitchLong = 702;
+        public const int Apptype = 703;
+        public const int Assert = 704;
+        public const int AssertLong = 705;
+        public const int BoolEval = 706;
+        public const int BoolEvalLong = 707;
+        public const int CodeAlign = 708;
+        public const int DebugInfo = 709;
+        public const int DebugInfoLong = 710;
+        public const int Define = 711;
+        public const int DenyPackageUnit = 712;
+        public const int Description = 713;
+        public const int DesignOnly = 714;
+        public const int DescriptionLong = 714;
+
+
         /// <summary>
         ///     create a new token
         /// </summary>
