@@ -40,7 +40,7 @@ namespace PasPasPas.Internal.Tokenizer {
             AddPunctuator('{', new CurlyBraceCommenTokenValue()).Add('$', new PreprocessorTokenValue());
             AddPunctuator('$', new HexNumberTokenValue());
             AddPunctuator(new WhitspaceCharacterClass(), new WhiteSpaceTokenGroupValue());
-            AddPunctuator(new IdentifierCharacterClass(), new IdentifierTokenGroupValue());
+            AddPunctuator(new IdentifierCharacterClass(), new IdentifierTokenGroupValue(StandardTokenizer.Keywords));
             AddPunctuator(new NumberCharacterClass(), new NumberTokenGroupValue());
             AddPunctuator(new ControlCharacterClass(), new ControlTokenGroupValue());
             AddPunctuator('\'', new StringGroupTokenValue());

@@ -2,6 +2,7 @@
 using System.Text;
 using PasPasPas.Api.Input;
 using PasPasPas.Api;
+using System.Collections.Generic;
 
 namespace PasPasPas.Internal.Tokenizer {
 
@@ -443,6 +444,16 @@ namespace PasPasPas.Internal.Tokenizer {
         private IdentifierCharacterClass identifierCharClass
             = new IdentifierCharacterClass() { AllowAmpersand = false, AllowDigits = true };
 
+        private readonly IDictionary<string, int> knownKeywords;
+
+        /// <summary>
+        ///     create a new token group for ids and keywords
+        /// </summary>
+        /// <param name="keywords"></param>
+        public IdentifierTokenGroupValue(IDictionary<string, int> keywords) {
+            knownKeywords = keywords;
+        }
+
         /// <summary>
         ///     tokenize an identifier
         /// </summary>
@@ -466,7 +477,7 @@ namespace PasPasPas.Internal.Tokenizer {
             string value = prefix.ToString();
             int tokenKind;
 
-            if ((!ignoreKeywords) && (StandardTokenizer.TryGetKeyword(value, out tokenKind)))
+            if ((!ignoreKeywords) && (knownKeywords.TryGetValue(value, out tokenKind)))
                 return new PascalToken() { Value = value, Kind = tokenKind };
             else
                 return new PascalToken() { Value = value, Kind = PascalToken.Identifier };

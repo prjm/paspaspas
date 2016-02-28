@@ -52,9 +52,6 @@ namespace TokenizerDemo {
             foreach (var entry in list) {
                 Console.WriteLine(entry.Value + ": " + entry.Key);
             }
-
-
-            MacroProcessor.Info();
         }
     }
 }

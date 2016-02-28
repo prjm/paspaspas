@@ -92,7 +92,7 @@ namespace PasPasPas.Internal.Parser {
             if (reservedWords.Contains(token.Kind))
                 return false;
 
-            return StandardTokenizer.IsKeyword(token.Value);
+            return StandardTokenizer.Keywords.ContainsKey(token.Value);
         }
 
 

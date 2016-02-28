@@ -1,5 +1,4 @@
 ﻿using PasPasPas.Api;
-using PasPasPas.Api.Input;
 using System;
 using System.Collections.Generic;
 
@@ -8,16 +7,22 @@ namespace PasPasPas.Internal.Tokenizer {
     /// <summary>
     ///     Standard tokenizer
     /// </summary>
-    public class StandardTokenizer : MessageGenerator, IPascalTokenizer {
+    public class StandardTokenizer : TokenizerBase, IPascalTokenizer {
 
         private StandardPunctuators punctuators
             = new StandardPunctuators();
 
         /// <summary>
+        ///     get punctuators
+        /// </summary>
+        protected override Punctuators CharacterClasses
+            => punctuators;
+
+        /// <summary>
         ///     keywords
         /// </summary>
-        private static Dictionary<string, int> keywords =
-            new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase) {
+        public static IDictionary<string, int> Keywords { get; }
+            = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase) {
                 ["program"] = PascalToken.Program,
                 ["uses"] = PascalToken.Uses,
                 ["in"] = PascalToken.In,
@@ -185,72 +190,6 @@ namespace PasPasPas.Internal.Tokenizer {
                 ["on"] = PascalToken.On
             };
 
-        internal static bool IsKeyword(string value)
-            => keywords.ContainsKey(value);
-
-        private IParserInput input;
-
-        /// <summary>
-        ///     parser parser input
-        /// </summary>
-        public IParserInput Input
-        {
-            get
-            {
-                return input;
-            }
-            set
-            {
-                input = value;
-            }
-        }
-
-        /// <summary>
-        ///     fetch the next token
-        /// </summary>
-        /// <returns>next token</returns>
-        public PascalToken FetchNextToken() {
-            if (Input.AtEof) {
-                return GenerateEofToken();
-            }
-
-            char c = Input.NextChar();
-            PunctuatorGroup tokenGroup;
-
-            if (punctuators.Match(c, out tokenGroup)) {
-                return Punctuators.FetchTokenByGroup(Input, c, tokenGroup);
-            }
-
-            return GenerateUndefinedToken(c);
-        }
-
-        private PascalToken GenerateUndefinedToken(char c) {
-            var value = new string(c, 1);
-            LogError(MessageData.UndefinedInputToken, value);
-            return new PascalToken() {
-                Value = value,
-                Kind = PascalToken.Undefined
-            };
-        }
-
-        private static PascalToken GenerateEofToken()
-            => new PascalToken() { Kind = PascalToken.Eof, Value = string.Empty };
-
-        /// <summary>
-        ///     get the keyowrd token id for a given value
-        /// </summary>
-        /// <param name="value"></param>
-        /// <param name="tokenKind"></param>
-        /// <returns></returns>
-        public static bool TryGetKeyword(string value, out int tokenKind)
-            => keywords.TryGetValue(value, out tokenKind);
-
-        /// <summary>
-        ///     check if tokens are availiable
-        /// </summary>
-        /// <returns><c>true</c> if tokens are avaliable</returns>
-        public bool HasNextToken()
-            => !Input.AtEof;
 
     }
 }

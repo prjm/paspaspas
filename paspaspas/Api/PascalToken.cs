@@ -868,22 +868,294 @@ namespace PasPasPas.Api {
         /// </summary>
         public const int ControlChar = 601;
 
+        /// <summary>
+        ///     token for <c>$A</c>
+        /// </summary>
         public const int AlignSwitch = 701;
-        public const int AlignSwitchLong = 702;
-        public const int Apptype = 703;
-        public const int Assert = 704;
-        public const int AssertLong = 705;
-        public const int BoolEval = 706;
-        public const int BoolEvalLong = 707;
-        public const int CodeAlign = 708;
-        public const int DebugInfo = 709;
-        public const int DebugInfoLong = 710;
-        public const int Define = 711;
-        public const int DenyPackageUnit = 712;
-        public const int Description = 713;
-        public const int DesignOnly = 714;
-        public const int DescriptionLong = 714;
 
+        /// <summary>
+        ///     token for <c>$ALIGN</c>
+        /// </summary>
+        public const int AlignSwitchLong = 702;
+
+        /// <summary>
+        ///     token for <c>$APPTYPE</c>
+        /// </summary>
+        public const int Apptype = 703;
+
+        /// <summary>
+        ///     token for <c>$C</c>
+        /// </summary>
+        public const int AssertSwitch = 704;
+
+        /// <summary>
+        ///     token for <c>$ASSERTIONS</c>
+        /// </summary>
+        public const int AssertSwitchLong = 705;
+
+        /// <summary>
+        ///     token for <c>$B</c>
+        /// </summary>
+        public const int BoolEvalSwitch = 706;
+
+        /// <summary>
+        ///     token for <c>$BOOLEVAL</c>
+        /// </summary>
+        public const int BoolEvalSwitchLong = 707;
+
+        /// <summary>
+        ///     token for <c>$CODEALIGN</c>
+        /// </summary>
+        public const int CodeAlign = 708;
+
+        /// <summary>
+        ///     token for <c>$IFDEF</c>
+        /// </summary>
+        public const int IfDef = 709;
+
+        /// <summary>
+        ///     token for <c>$IFNDEF</c>
+        /// </summary>
+        public const int IfNDef = 710;
+
+        /// <summary>
+        ///     token for <c>$IF</c>
+        /// </summary>
+        public const int IfCd = 711;
+
+        /// <summary>
+        ///     token for <c>$ELSEIF</c>
+        /// </summary>
+        public const int ElseIf = 712;
+
+        /// <summary>
+        ///     token for <c>$ELSE</c>
+        /// </summary>
+        public const int ElseCd = 713;
+
+        /// <summary>
+        ///     token for <c>$ENDIF</c>
+        /// </summary>
+        public const int EndIf = 714;
+
+        /// <summary>
+        ///     token for <c>$IFEND</c>
+        /// </summary>
+        public const int IfEnd = 715;
+
+        /// <summary>
+        ///     token for <c>$D</c>
+        /// </summary>
+        public const int DebugInfoOrDescriptionSwitch = 716;
+
+        /// <summary>
+        ///     token for <c>$DEBUGINFO</c>
+        /// </summary>
+        public const int DebugInfoSwitchLong = 717;
+
+        /// <summary>
+        ///     token for <c>$DEFINE</c>
+        /// </summary>
+        public const int Define = 718;
+
+        /// <summary>
+        ///     token for <c>$DENYPACKAGEUNIT</c>
+        /// </summary>
+        public const int DenyPackageUnit = 719;
+
+        /// <summary>
+        ///     token for <c>$DESIGNONLY</c>
+        /// </summary>
+        public const int DesignOnly = 720;
+
+        /// <summary>
+        ///     token for <c>$DESCRIPTION</c>
+        /// </summary>
+        public const int DescriptionSwitchLong = 721;
+
+        /// <summary>
+        ///     token for <c>$E</c>
+        /// </summary>
+        public const int ExtensionSwitch = 722;
+
+        /// <summary>
+        ///     token for <c>$EXTENSION</c>
+        /// </summary>
+        public const int ExtensionSwitchLong = 723;
+
+        /// <summary>
+        ///     token for <c>$OBJEXPORTALL</c>
+        /// </summary>
+        public const int ObjExportAll = 724;
+
+        /// <summary>
+        ///     token for <c>$X</c>
+        /// </summary>
+        public const int ExtendedSyntaxSwitch = 725;
+
+        /// <summary>
+        ///     token for <c>$EXTENDEDSYNTAX</c>
+        /// </summary>
+        public const int ExtendedSyntaxSwitchLong = 726;
+
+        /// <summary>
+        ///     token for <c>$EXTENDEDCOMPATIBLITY</c>
+        /// </summary>
+        public const int ExtendedCompatibility = 728;
+
+        /// <summary>
+        ///     token for <c>$EXCESSPRECISION</c>
+        /// </summary>
+        public const int ExcessPrecision = 729;
+
+        /// <summary>
+        ///     token for <c>$HIGHCHARUNICODE</c>
+        /// </summary>
+        public const int HighCharUnicode = 730;
+
+        /// <summary>
+        ///     token for <c>$HINTS</c>
+        /// </summary>
+        public const int Hints = 731;
+
+        /// <summary>
+        ///     token for <c>$IFOPT</c>
+        /// </summary>
+        public const int IfOpt = 732;
+
+        /// <summary>
+        ///     token for <c>$IMAGEBASE</c>
+        /// </summary>
+        public const int ImageBase = 733;
+
+        /// <summary>
+        ///     token for <c>$IMPLICBUILD</c>
+        /// </summary>
+        public const int ImplicitBuild = 734;
+
+        /// <summary>
+        ///     token for <c>$G</c>
+        /// </summary>
+        public const int ImportedDataSwitch = 735;
+
+        /// <summary>
+        ///     token for <c>$IMPORTEDATA</c>
+        /// </summary>
+        public const int ImportedDataSwitchLong = 736;
+
+        /// <summary>
+        ///     token for <c>$I</c>
+        /// </summary>
+        public const int IncludeSwitch = 737;
+
+        /// <summary>
+        ///     token for<c>$INCLUDE</c>
+        /// </summary>
+        public const int IncludeSwitchLong = 738;
+
+        /// <summary>
+        ///     token for<c>$IOCHEKS</c>
+        /// </summary>
+        public const int IoChecks = 739;
+
+        /// <summary>
+        ///     token for <c>$LIBPREFIX</c>
+        /// </summary>
+        public const int LibPrefix = 740;
+
+        /// <summary>
+        ///     token for <c>$LIBSUFFIX</c>
+        /// </summary>
+        public const int LibSuffix = 741;
+
+        /// <summary>
+        ///     token for $LEGACYIFEND
+        /// </summary>
+        public const int LegacyIfEnd = 742;
+
+        /// <summary>
+        ///     token for <c>$L</c>
+        /// </summary>
+        public const int LinkOrLocalSymbolSwitch = 743;
+
+        /// <summary>
+        ///     token for <c>$LINK</c>
+        /// </summary>
+        public const int LinkSwitchLong = 744;
+
+        /// <summary>
+        ///     token for <c>$LIBVERSION</c>
+        /// </summary>
+        public const int LibVersion = 745;
+
+        /// <summary>
+        ///     token for <c>$LOCALSYMBOLS</c>
+        /// </summary>
+        public const int LocalSymbolSwithLong = 746;
+
+        /// <summary>
+        ///     token for <c>$H</c>
+        /// </summary>
+        public const int LongStringSwitch = 747;
+
+        /// <summary>
+        ///     token for <c>$LONGSTRINGS</c>
+        /// </summary>
+        public const int LongStringSwitchLong = 748;
+        public const int MemStackSizeSwitch = 749;
+        public const int MinMemStackSizeSwitchLong = 750;
+        public const int MaxMemStackSizeSwitchLong = 751;
+        public const int MessageCd = 752;
+        public const int MethodInfo = 753;
+        public const int EnumSizeSwitch = 754;
+        public const int EnumSizeSwitchLong = 755;
+        public const int NoDefine = 756;
+        public const int NoInclude = 757;
+        public const int ObjTypeName = 758;
+        public const int OldTypeLayout = 759;
+        public const int OpenStringSwitch = 760;
+        public const int OpenStringSwitchLong = 761;
+        public const int OptimizationSwitch = 762;
+        public const int OptimizationSwitchLong = 763;
+        public const int OverflowSwitch = 763;
+        public const int OverflowSwitchLong = 764;
+        public const int SetPeFlags = 765;
+        public const int SetPeOptFlags = 766;
+        public const int SetOsVersion = 767;
+        public const int SetPeSubsystemVerison = 768;
+        public const int SetPeUserVersion = 769;
+        public const int SaveDivideSwitch = 770;
+        public const int SaveDivideSwitchLong = 771;
+        public const int Pointermath = 772;
+        public const int IncludeRessource = 773;
+        public const int RangeChecks = 774;
+        public const int RealCompatibility = 775;
+        public const int Region = 776;
+        public const int EndRegion = 778;
+        public const int IncludeRessourceLong = 779;
+        public const int Rtti = 780;
+        public const int RunOnly = 781;
+        public const int TypeInfoSwitch = 782;
+        public const int TypeInfoSwitchLong = 783;
+        public const int StackFramesSwitch = 784;
+        public const int StackFramesSwitchLong = 785;
+        public const int ScopedEnums = 786;
+        public const int StrongLinkTypes = 787;
+        public const int SymbolDeclarationSwitch = 788;
+        public const int ReferenceInfo = 789;
+        public const int DefinitionInfo = 790;
+        public const int TypedPointersSwitch = 791;
+        public const int TypedPointersSwitchLong = 792;
+        public const int Undef = 793;
+        public const int VarStringCheckSwitch = 794;
+        public const int VarStringCheckSwitchLong = 795;
+        public const int Warn = 796;
+        public const int Warnings = 797;
+        public const int WeakPackageUnit = 798;
+        public const int WeakLinkRtti = 799;
+        public const int WriteableConstSwitch = 800;
+        public const int WriteableConstSwitchLong = 801;
+        public const int ZeroBaseStrings = 802;
 
         /// <summary>
         ///     create a new token
@@ -904,6 +1176,8 @@ namespace PasPasPas.Api {
         ///     Token kind
         /// </summary>
         public int Kind { get; set; }
+        public static int ExternalSym { get; internal set; }
+        public static int HppEmit { get; internal set; }
 
         /// <summary>
         ///     check for equality

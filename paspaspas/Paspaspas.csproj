@@ -236,11 +236,13 @@
     <Compile Include="Internal\Tokenizer\CharacterClass.cs" />
     <Compile Include="Internal\Tokenizer\MacroProcessor.cs" />
     <Compile Include="Internal\Tokenizer\PreprocessorPunctuators.cs" />
+    <Compile Include="Internal\Tokenizer\PreprocessorTokenizer.cs" />
     <Compile Include="Internal\Tokenizer\PunctuatorGroup.cs" />
     <Compile Include="Internal\Tokenizer\Punctuators.cs" />
     <Compile Include="Internal\Tokenizer\StandardPunctuators.cs" />
     <Compile Include="Internal\Tokenizer\StandardTokenizer.cs" />
     <Compile Include="Internal\Tokenizer\TokenGroupValue.cs" />
+    <Compile Include="Internal\Tokenizer\TokenizerBase.cs" />
     <Compile Include="Internal\Tokenizer\TokenizerWithLookahead.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
