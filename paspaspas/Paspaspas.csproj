@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Api\CompilerTask.cs" />
+    <Compile Include="Api\Options\Alignment.cs" />
     <Compile Include="Api\Options\CompilerOptions.cs" />
     <Compile Include="Internal\Input\FileInput.cs" />
     <Compile Include="Api\IParserInformationProvider.cs" />
@@ -234,9 +235,11 @@
     <Compile Include="Internal\Parser\Syntax\WhileStatement.cs" />
     <Compile Include="Internal\Parser\Syntax\WithStatement.cs" />
     <Compile Include="Internal\Tokenizer\CharacterClass.cs" />
-    <Compile Include="Internal\Tokenizer\MacroProcessor.cs" />
+    <Compile Include="Internal\Tokenizer\CompilerDirectiveParser.cs" />
+    <Compile Include="Internal\Tokenizer\CompilerDirectiveTokenizer.cs" />
+    <Compile Include="Internal\Tokenizer\CompilerDirectiveTokenizerWithLookahead.cs" />
+    <Compile Include="Internal\Tokenizer\PascalTokenizerWithLookahead.cs" />
     <Compile Include="Internal\Tokenizer\PreprocessorPunctuators.cs" />
-    <Compile Include="Internal\Tokenizer\PreprocessorTokenizer.cs" />
     <Compile Include="Internal\Tokenizer\PunctuatorGroup.cs" />
     <Compile Include="Internal\Tokenizer\Punctuators.cs" />
     <Compile Include="Internal\Tokenizer\StandardPunctuators.cs" />

@@ -1158,6 +1158,36 @@ namespace PasPasPas.Api {
         public const int ZeroBaseStrings = 802;
 
         /// <summary>
+        ///     token for <c>$A1</c>
+        /// </summary>
+        public const int AlignSwitch1 = 803;
+
+        /// <summary>
+        ///     token for <c>$A2</c>
+        /// </summary>
+        public const int AlignSwitch2 = 804;
+
+        /// <summary>
+        ///     token for <c>$A4</c>
+        /// </summary>
+        public const int AlignSwitch4 = 805;
+
+        /// <summary>
+        ///     token for <c>$A8</c>
+        /// </summary>
+        public const int AlignSwitch8 = 806;
+
+        /// <summary>
+        ///     token for <c>$A16</c>
+        /// </summary>
+        public const int AlignSwitch16 = 807;
+
+        /// <summary>
+        ///     token for <c>off</c>
+        /// </summary>
+        public const int Off = 808;
+
+        /// <summary>
         ///     create a new token
         /// </summary>
         /// <param name="tokenId">tokenid</param>

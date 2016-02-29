@@ -25,7 +25,19 @@
         /// </summary>
         /// <param name="baseOptions"></param>
         public OptionSet(OptionSet baseOptions) {
+            Align = new DerivedValueOption<Alignment>(baseOptions?.Align);
+        }
 
+        /// <summary>
+        ///     value alignment
+        /// </summary>
+        public DerivedValueOption<Alignment> Align { get; }
+
+        /// <summary>
+        ///     clear all option values
+        /// </summary>
+        public void Clear() {
+            Align.ResetToDefault();
         }
     }
 }

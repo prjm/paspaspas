@@ -1,5 +1,4 @@
 ﻿using PasPasPas.Api;
-using PasPasPas.Internal.Input;
 using System;
 using System.Collections.Generic;
 
@@ -8,7 +7,7 @@ namespace PasPasPas.Internal.Tokenizer {
     /// <summary>
     ///     helper for compiler directives
     /// </summary>
-    public class MacroProcessor : TokenizerBase {
+    public class CompilerDirectiveTokenizer : TokenizerBase, IPascalTokenizer {
 
         private PreprocessorPunctuators punctuators
             = new PreprocessorPunctuators();
@@ -19,6 +18,11 @@ namespace PasPasPas.Internal.Tokenizer {
         public static IDictionary<string, int> Keywords { get; }
             = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase) {
                 ["A"] = PascalToken.AlignSwitch,
+                ["A1"] = PascalToken.AlignSwitch1,
+                ["A2"] = PascalToken.AlignSwitch2,
+                ["A4"] = PascalToken.AlignSwitch4,
+                ["A8"] = PascalToken.AlignSwitch8,
+                ["A16"] = PascalToken.AlignSwitch16,
                 ["ALIGN"] = PascalToken.AlignSwitchLong,
                 ["APPTYPE"] = PascalToken.Apptype,
                 ["C"] = PascalToken.AssertSwitch,
@@ -127,39 +131,27 @@ namespace PasPasPas.Internal.Tokenizer {
         protected override Punctuators CharacterClasses
             => punctuators;
 
-        private static string Unwrap(string value) {
+        /// <summary>
+        ///     unwrap a preprocessor command
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static string Unwrap(string value) {
             int startOffset = 0;
             var endOffset = 0;
 
-            if (value.StartsWith("{$"))
+            if (value.StartsWith("{$", StringComparison.Ordinal))
                 startOffset = 2;
-            else if (value.StartsWith("(*$"))
+            else if (value.StartsWith("(*$", StringComparison.Ordinal))
                 startOffset = 3;
 
-            if (value.EndsWith("}"))
+            if (value.EndsWith("}", StringComparison.Ordinal))
                 endOffset = 1;
-            else if (value.EndsWith("*)"))
+            else if (value.EndsWith("*)", StringComparison.Ordinal))
                 endOffset = 2;
 
             return value.Substring(startOffset, value.Length - startOffset - endOffset);
         }
 
-        /// <summary>
-        ///     process directive
-        /// </summary>
-        /// <param name="value"></param>
-        public void ProcessValue(string value) {
-            Input = new StringInput(Unwrap(value));
-            ProcessValue();
-        }
-
-        /// <summary>
-        ///     parsecompiler directive
-        /// </summary>
-        private void ProcessValue() {
-            while (!Input.AtEof) {
-                var token = FetchNextToken();
-            }
-        }
     }
 }

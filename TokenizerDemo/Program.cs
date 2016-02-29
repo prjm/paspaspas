@@ -25,7 +25,7 @@ namespace TokenizerDemo {
                 using (FileInput input = new FileInput()) {
                     input.FileName = file;
                     var baseTokenizer = new StandardTokenizer();
-                    var tokenizer = new TokenizerWithLookahead();
+                    var tokenizer = new PascalTokenizerWithLookahead();
                     baseTokenizer.Input = input;
                     tokenizer.BaseTokenizer = baseTokenizer;
 

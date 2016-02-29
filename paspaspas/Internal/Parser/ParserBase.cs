@@ -11,10 +11,17 @@ namespace PasPasPas.Internal.Parser {
     /// <summary>
     ///     base class for parsers
     /// </summary>
-    public class ParserBase : MessageGenerator, IParserInformationProvider {
+    public abstract class ParserBase : MessageGenerator, IParserInformationProvider {
 
-        private TokenizerWithLookahead tokenizer
-            = new TokenizerWithLookahead();
+        private readonly TokenizerWithLookahead tokenizer;
+
+        /// <summary>
+        ///     creates a new parser
+        /// </summary>
+        /// <param name="aTokenizer"></param>
+        protected ParserBase(TokenizerWithLookahead aTokenizer) {
+            tokenizer = aTokenizer;
+        }
 
         /// <summary>
         ///     tokenizer to use
@@ -82,7 +89,7 @@ namespace PasPasPas.Internal.Parser {
         /// </summary>
         /// <param name="tokenKind">token kind</param>
         /// <returns>optional token kind</returns>
-        protected bool Optional(int tokenKind) {
+        protected bool Optional(params int[] tokenKind) {
             if (!Match(tokenKind))
                 return false;
 
@@ -137,11 +144,8 @@ namespace PasPasPas.Internal.Parser {
         ///     get the current token
         /// </summary>
         /// <returns></returns>
-        protected PascalToken CurrentToken() {
-            if (!tokenizer.HasNextToken())
-                return new PascalToken() { Kind = PascalToken.Eof, Value = string.Empty };
-            return tokenizer.CurrentToken();
-        }
+        protected PascalToken CurrentToken()
+            => tokenizer.CurrentToken();
 
         /// <summary>
         ///     mach any token

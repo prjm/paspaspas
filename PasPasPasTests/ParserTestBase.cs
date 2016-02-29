@@ -1,4 +1,5 @@
 ﻿using PasPasPas.Api;
+using PasPasPas.Api.Options;
 using PasPasPas.Internal.Input;
 using PasPasPas.Internal.Log;
 using PasPasPas.Internal.Parser;
@@ -11,6 +12,9 @@ using System.Threading.Tasks;
 
 namespace PasPasPasTests {
     public class ParserTestBase {
+
+        protected OptionSet TestOptions
+            = new OptionSet();
 
         protected string CompactWhitespace(string input) {
             StringBuilder result = new StringBuilder();
@@ -54,6 +58,19 @@ namespace PasPasPasTests {
             Assert.AreEqual(CompactWhitespace(output), CompactWhitespace(formatter.Result));
             Assert.AreEqual(string.Empty, errorText);
             Assert.IsFalse(hasError);
+        }
+
+        protected void RunCompilerDirective(string directive, object expected, Func<object> actual) {
+            TestOptions.Clear();
+
+            var parser = new CompilerDirectiveParser();
+            var tokenizer = new CompilerDirectiveTokenizer();
+            var input = new StringInput(directive);
+            tokenizer.Input = input;
+            parser.BaseTokenizer = tokenizer;
+            parser.Options = TestOptions;
+            parser.ParseCompilerDirective();
+            Assert.AreEqual(expected, actual());
         }
     }
 }

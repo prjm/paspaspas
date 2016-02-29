@@ -12,6 +12,11 @@ namespace PasPasPas.Internal.Parser {
     /// </summary>
     public class StandardParser : ParserBase, IPascalParser, IParserInformationProvider {
 
+        /// <summary>
+        ///     creates a new standard parser
+        /// </summary>
+        public StandardParser() : base(new PascalTokenizerWithLookahead()) { }
+
         private static readonly HashSet<int> reservedWords
             = new HashSet<int>() {
             PascalToken.And,
@@ -24,7 +29,7 @@ namespace PasPasPas.Internal.Parser {
             PascalToken.Const,
             PascalToken.Constructor,
             PascalToken.Destructor,
-            PascalToken.DispInterface     ,
+            PascalToken.DispInterface,
             PascalToken.Div,
             PascalToken.Do,
             PascalToken.DownTo,

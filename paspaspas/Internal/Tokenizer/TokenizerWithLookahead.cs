@@ -7,7 +7,12 @@ namespace PasPasPas.Internal.Tokenizer {
     /// <summary>
     ///     tokenizer with lookahear
     /// </summary>
-    public class TokenizerWithLookahead : IPascalTokenizer {
+    public abstract class TokenizerWithLookahead : IPascalTokenizer {
+
+        /// <summary>
+        ///     protected constructo
+        /// </summary>
+        protected TokenizerWithLookahead() { }
 
         /// <summary>
         ///     base tokenizer
@@ -19,10 +24,6 @@ namespace PasPasPas.Internal.Tokenizer {
         /// </summary>
         private Queue<PascalToken> tokenList = new Queue<PascalToken>();
 
-        /// <summary>
-        ///     helper for preprocessing
-        /// </summary>
-        private MacroProcessor processor = new MacroProcessor();
 
         /// <summary>
         ///     check if other tokens are availiable
@@ -52,18 +53,21 @@ namespace PasPasPas.Internal.Tokenizer {
         ///     process preprocessor token
         /// </summary>
         /// <param name="nextToken"></param>
-        private void ProcssMacroToken(PascalToken nextToken) {
-            processor.ProcessValue(nextToken.Value);
-        }
+        protected abstract void ProcssMacroToken(PascalToken nextToken);
 
-        private bool IsMacroToken(PascalToken nextToken)
-            => nextToken.Kind == PascalToken.Preprocessor;
+        /// <summary>
+        ///     test if a token is a macro token
+        /// </summary>
+        /// <param name="nextToken"></param>
+        /// <returns></returns>
+        protected abstract bool IsMacroToken(PascalToken nextToken);
 
-        private static bool IsValidToken(PascalToken nextToken)
-            => nextToken.Kind != PascalToken.WhiteSpace &&
-            nextToken.Kind != PascalToken.ControlChar &&
-            nextToken.Kind != PascalToken.Comment &&
-            nextToken.Kind != PascalToken.Preprocessor;
+        /// <summary>
+        ///     test if a token is relevant and valid
+        /// </summary>
+        /// <param name="nextToken"></param>
+        /// <returns></returns>
+        protected abstract bool IsValidToken(PascalToken nextToken);
 
         /// <summary>
         ///     gets the current token
