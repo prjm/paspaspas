@@ -26,12 +26,24 @@
         /// <param name="baseOptions"></param>
         public OptionSet(OptionSet baseOptions) {
             Align = new DerivedValueOption<Alignment>(baseOptions?.Align);
+            ApplicationType = new DerivedValueOption<AppType>(baseOptions?.ApplicationType);
+            BoolEval = new DerivedValueOption<BooleanEvaluation>(baseOptions?.BoolEval);
         }
 
         /// <summary>
         ///     value alignment
         /// </summary>
         public DerivedValueOption<Alignment> Align { get; }
+
+        /// <summary>
+        ///     Application type
+        /// </summary>
+        public DerivedValueOption<AppType> ApplicationType { get; }
+
+        /// <summary>
+        ///     boolean evaluation style
+        /// </summary>
+        public DerivedValueOption<BooleanEvaluation> BoolEval { get; }
 
         /// <summary>
         ///     clear all option values

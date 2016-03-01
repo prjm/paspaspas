@@ -10,7 +10,7 @@ namespace PasPasPas.Api.Options {
         /// <summary>
         ///     undefined alignment
         /// </summary>
-        Undefined,
+        Undefined = 0,
 
         /// <summary>
         ///     unaligned

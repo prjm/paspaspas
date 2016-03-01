@@ -23,12 +23,19 @@ namespace PasPasPas.Internal.Tokenizer {
 
         private static HashSet<int> switches
             = new HashSet<int>() {
-                PascalToken.AlignSwitch, PascalToken.AlignSwitch1,PascalToken.AlignSwitch2,PascalToken.AlignSwitch4,PascalToken.AlignSwitch8,PascalToken.AlignSwitch16
+                PascalToken.AlignSwitch, PascalToken.AlignSwitch1,PascalToken.AlignSwitch2,PascalToken.AlignSwitch4,PascalToken.AlignSwitch8,PascalToken.AlignSwitch16,
+                PascalToken.BoolEvalSwitch,
             };
 
         private static HashSet<int> longSwitches
             = new HashSet<int>() {
-                PascalToken.AlignSwitchLong
+                PascalToken.AlignSwitchLong,
+                PascalToken.BoolEvalSwitchLong
+            };
+
+        private static HashSet<int> parameters
+            = new HashSet<int>() {
+                PascalToken.Apptype
             };
 
         /// <summary>
@@ -45,6 +52,30 @@ namespace PasPasPas.Internal.Tokenizer {
                 ParseLongSwitch();
                 return;
             }
+
+            if (parameters.Contains(kind)) {
+                ParseParameter();
+                return;
+            }
+        }
+
+        private void ParseParameter() {
+            if (Match(PascalToken.Apptype)) {
+                ParseApptypeSwitch();
+                return;
+            }
+        }
+
+        private void ParseApptypeSwitch() {
+            Require(PascalToken.Apptype);
+            var value = Require(PascalToken.Identifier).Value;
+
+            if (string.Equals(value, "CONSOLE", StringComparison.OrdinalIgnoreCase)) {
+                Options.ApplicationType.Value = AppType.Console;
+            }
+            else if (string.Equals(value, "GUI", StringComparison.OrdinalIgnoreCase)) {
+                Options.ApplicationType.Value = AppType.Gui;
+            }
         }
 
         /// <summary>
@@ -53,6 +84,24 @@ namespace PasPasPas.Internal.Tokenizer {
         private void ParseLongSwitch() {
             if (Optional(PascalToken.AlignSwitchLong)) {
                 ParseAlignLongSwitch();
+                return;
+            }
+
+            if (Optional(PascalToken.BoolEvalSwitchLong)) {
+                ParseLongBoolEvalSwitch();
+                return;
+            }
+        }
+
+        private void ParseLongBoolEvalSwitch() {
+            if (Optional(PascalToken.On)) {
+                Options.BoolEval.Value = BooleanEvaluation.CompleteEvaluation;
+                return;
+            }
+
+            if (Optional(PascalToken.Off)) {
+                Options.BoolEval.Value = BooleanEvaluation.ShortEvaluation;
+                return;
             }
         }
 
@@ -100,7 +149,29 @@ namespace PasPasPas.Internal.Tokenizer {
         private void ParseSwitch() {
             if (Match(PascalToken.AlignSwitch, PascalToken.AlignSwitch1, PascalToken.AlignSwitch2, PascalToken.AlignSwitch4, PascalToken.AlignSwitch8, PascalToken.AlignSwitch16)) {
                 ParseAlignSwitch();
+                return;
             }
+
+            if (Match(PascalToken.BoolEvalSwitch)) {
+                ParseBoolEvalSwitch();
+                return;
+            }
+        }
+
+        private void ParseBoolEvalSwitch() {
+            FetchNextToken();
+
+            if (Optional(PascalToken.Plus)) {
+                Options.BoolEval.Value = BooleanEvaluation.CompleteEvaluation;
+                return;
+            }
+
+            if (Optional(PascalToken.Minus)) {
+                Options.BoolEval.Value = BooleanEvaluation.ShortEvaluation;
+                return;
+            }
+
+            Unexpected();
         }
 
         private void ParseAlignSwitch() {

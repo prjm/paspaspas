@@ -25,5 +25,21 @@ namespace PasPasPasTests.Tokenizer {
             RunCompilerDirective("ALIGN 16", Alignment.DoubleQuadWord, () => TestOptions.Align.Value);
         }
 
+        [TestMethod]
+        public void TestApptype() {
+            RunCompilerDirective("", AppType.Undefined, () => TestOptions.ApplicationType.Value);
+            RunCompilerDirective("APPTYPE GUI", AppType.Gui, () => TestOptions.ApplicationType.Value);
+            RunCompilerDirective("APPTYPE CONSOLE", AppType.Console, () => TestOptions.ApplicationType.Value);
+        }
+
+        [TestMethod]
+        public void TestBoolEvalSwitch() {
+            RunCompilerDirective("", BooleanEvaluation.Undefined, () => TestOptions.BoolEval.Value);
+            RunCompilerDirective("B+", BooleanEvaluation.CompleteEvaluation, () => TestOptions.BoolEval.Value);
+            RunCompilerDirective("B-", BooleanEvaluation.ShortEvaluation, () => TestOptions.BoolEval.Value);
+            RunCompilerDirective("BOOLEVAL ON", BooleanEvaluation.CompleteEvaluation, () => TestOptions.BoolEval.Value);
+            RunCompilerDirective("BOOLEVAL OFF", BooleanEvaluation.ShortEvaluation, () => TestOptions.BoolEval.Value);
+        }
+
     }
 }

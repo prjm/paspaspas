@@ -1,0 +1,25 @@
+﻿namespace PasPasPas.Api.Options {
+
+    /// <summary>
+    ///     application type
+    /// </summary>
+    public enum AppType {
+
+        /// <summary>
+        ///     undefined
+        /// </summary>
+        Undefined = 0,
+
+
+        /// <summary>
+        ///     console application
+        /// </summary>
+        Console,
+
+        /// <summary>
+        ///     gui application
+        /// </summary>
+        Gui
+
+    }
+}

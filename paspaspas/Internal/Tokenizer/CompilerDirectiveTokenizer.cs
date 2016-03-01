@@ -122,7 +122,9 @@ namespace PasPasPas.Internal.Tokenizer {
                 ["$WEAKLINKRTTI"] = PascalToken.WeakLinkRtti,
                 ["$J"] = PascalToken.WriteableConstSwitch,
                 ["$WRITEABLECONST"] = PascalToken.WriteableConstSwitchLong,
-                ["$ZEROBASEDSTRINGS"] = PascalToken.ZeroBaseStrings
+                ["$ZEROBASEDSTRINGS"] = PascalToken.ZeroBaseStrings,
+                ["ON"] = PascalToken.On,
+                ["OFF"] = PascalToken.Off,
             };
 
         /// <summary>
