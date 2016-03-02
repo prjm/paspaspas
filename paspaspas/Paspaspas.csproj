@@ -46,6 +46,8 @@
     <Compile Include="Api\Options\Alignment.cs" />
     <Compile Include="Api\Options\AppType.cs" />
     <Compile Include="Api\Options\BooleanEvaluation.cs" />
+    <Compile Include="Api\Options\CodeAlignment.cs" />
+    <Compile Include="Api\Options\CompileOptions.cs" />
     <Compile Include="Api\Options\CompilerOptions.cs" />
     <Compile Include="Internal\Input\FileInput.cs" />
     <Compile Include="Api\IParserInformationProvider.cs" />

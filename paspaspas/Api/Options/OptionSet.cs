@@ -25,31 +25,20 @@
         /// </summary>
         /// <param name="baseOptions"></param>
         public OptionSet(OptionSet baseOptions) {
-            Align = new DerivedValueOption<Alignment>(baseOptions?.Align);
-            ApplicationType = new DerivedValueOption<AppType>(baseOptions?.ApplicationType);
-            BoolEval = new DerivedValueOption<BooleanEvaluation>(baseOptions?.BoolEval);
+            CompilerOptions = new CompileOptions(baseOptions?.CompilerOptions);
         }
 
         /// <summary>
-        ///     value alignment
+        ///     compiler-related optiosn
         /// </summary>
-        public DerivedValueOption<Alignment> Align { get; }
+        public CompileOptions CompilerOptions { get; }
 
-        /// <summary>
-        ///     Application type
-        /// </summary>
-        public DerivedValueOption<AppType> ApplicationType { get; }
-
-        /// <summary>
-        ///     boolean evaluation style
-        /// </summary>
-        public DerivedValueOption<BooleanEvaluation> BoolEval { get; }
 
         /// <summary>
         ///     clear all option values
         /// </summary>
         public void Clear() {
-            Align.ResetToDefault();
+            CompilerOptions.Clear();
         }
     }
 }

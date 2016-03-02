@@ -16,6 +16,9 @@ namespace PasPasPasTests {
         protected OptionSet TestOptions
             = new OptionSet();
 
+        protected CompileOptions CompilerOptions
+            => TestOptions.CompilerOptions;
+
         protected string CompactWhitespace(string input) {
             StringBuilder result = new StringBuilder();
             bool wasWhitespace = false;

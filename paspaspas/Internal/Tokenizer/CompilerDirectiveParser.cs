@@ -21,6 +21,12 @@ namespace PasPasPas.Internal.Tokenizer {
         /// </summary>
         public OptionSet Options { get; set; }
 
+        /// <summary>
+        ///     compiler options
+        /// </summary>
+        protected CompileOptions CompilerOptions
+             => Options.CompilerOptions;
+
         private static HashSet<int> switches
             = new HashSet<int>() {
                 PascalToken.AlignSwitch, PascalToken.AlignSwitch1,PascalToken.AlignSwitch2,PascalToken.AlignSwitch4,PascalToken.AlignSwitch8,PascalToken.AlignSwitch16,
@@ -35,7 +41,8 @@ namespace PasPasPas.Internal.Tokenizer {
 
         private static HashSet<int> parameters
             = new HashSet<int>() {
-                PascalToken.Apptype
+                PascalToken.Apptype,
+                PascalToken.CodeAlign
             };
 
         /// <summary>
@@ -61,20 +68,57 @@ namespace PasPasPas.Internal.Tokenizer {
 
         private void ParseParameter() {
             if (Match(PascalToken.Apptype)) {
-                ParseApptypeSwitch();
+                ParseApptypeParameter();
+                return;
+            }
+
+            if (Match(PascalToken.CodeAlign)) {
+                ParseCodeAlignParameter();
                 return;
             }
         }
 
-        private void ParseApptypeSwitch() {
+        private void ParseCodeAlignParameter() {
+            Require(PascalToken.CodeAlign);
+            var value = Require(PascalToken.Integer).Value;
+            int align;
+
+            if (!int.TryParse(value, out align)) {
+                Unexpected();
+                return;
+            }
+
+
+            switch (align) {
+                case 1:
+                    CompilerOptions.CodeAlign.Value = CodeAlignment.OneByte;
+                    return;
+                case 2:
+                    CompilerOptions.CodeAlign.Value = CodeAlignment.TwoByte;
+                    return;
+                case 4:
+                    CompilerOptions.CodeAlign.Value = CodeAlignment.FourByte;
+                    return;
+                case 8:
+                    CompilerOptions.CodeAlign.Value = CodeAlignment.EightByte;
+                    return;
+                case 16:
+                    CompilerOptions.CodeAlign.Value = CodeAlignment.SixteenByte;
+                    return;
+            }
+
+            Unexpected();
+        }
+
+        private void ParseApptypeParameter() {
             Require(PascalToken.Apptype);
             var value = Require(PascalToken.Identifier).Value;
 
             if (string.Equals(value, "CONSOLE", StringComparison.OrdinalIgnoreCase)) {
-                Options.ApplicationType.Value = AppType.Console;
+                CompilerOptions.ApplicationType.Value = AppType.Console;
             }
             else if (string.Equals(value, "GUI", StringComparison.OrdinalIgnoreCase)) {
-                Options.ApplicationType.Value = AppType.Gui;
+                CompilerOptions.ApplicationType.Value = AppType.Gui;
             }
         }
 
@@ -95,12 +139,12 @@ namespace PasPasPas.Internal.Tokenizer {
 
         private void ParseLongBoolEvalSwitch() {
             if (Optional(PascalToken.On)) {
-                Options.BoolEval.Value = BooleanEvaluation.CompleteEvaluation;
+                CompilerOptions.BoolEval.Value = BooleanEvaluation.CompleteEvaluation;
                 return;
             }
 
             if (Optional(PascalToken.Off)) {
-                Options.BoolEval.Value = BooleanEvaluation.ShortEvaluation;
+                CompilerOptions.BoolEval.Value = BooleanEvaluation.ShortEvaluation;
                 return;
             }
         }
@@ -110,12 +154,12 @@ namespace PasPasPas.Internal.Tokenizer {
         /// </summary>
         private void ParseAlignLongSwitch() {
             if (Optional(PascalToken.On)) {
-                Options.Align.Value = Alignment.QuadWord;
+                CompilerOptions.Align.Value = Alignment.QuadWord;
                 return;
             }
 
             if (Optional(PascalToken.Off)) {
-                Options.Align.Value = Alignment.Unaligned;
+                CompilerOptions.Align.Value = Alignment.Unaligned;
                 return;
             }
 
@@ -123,19 +167,19 @@ namespace PasPasPas.Internal.Tokenizer {
             if (Match(PascalToken.Integer) && int.TryParse(CurrentToken().Value, out value)) {
                 switch (value) {
                     case 1:
-                        Options.Align.Value = Alignment.Unaligned;
+                        CompilerOptions.Align.Value = Alignment.Unaligned;
                         return;
                     case 2:
-                        Options.Align.Value = Alignment.Word;
+                        CompilerOptions.Align.Value = Alignment.Word;
                         return;
                     case 4:
-                        Options.Align.Value = Alignment.DoubleWord;
+                        CompilerOptions.Align.Value = Alignment.DoubleWord;
                         return;
                     case 8:
-                        Options.Align.Value = Alignment.QuadWord;
+                        CompilerOptions.Align.Value = Alignment.QuadWord;
                         return;
                     case 16:
-                        Options.Align.Value = Alignment.DoubleQuadWord;
+                        CompilerOptions.Align.Value = Alignment.DoubleQuadWord;
                         return;
                 }
             }
@@ -162,12 +206,12 @@ namespace PasPasPas.Internal.Tokenizer {
             FetchNextToken();
 
             if (Optional(PascalToken.Plus)) {
-                Options.BoolEval.Value = BooleanEvaluation.CompleteEvaluation;
+                CompilerOptions.BoolEval.Value = BooleanEvaluation.CompleteEvaluation;
                 return;
             }
 
             if (Optional(PascalToken.Minus)) {
-                Options.BoolEval.Value = BooleanEvaluation.ShortEvaluation;
+                CompilerOptions.BoolEval.Value = BooleanEvaluation.ShortEvaluation;
                 return;
             }
 
@@ -178,35 +222,35 @@ namespace PasPasPas.Internal.Tokenizer {
             switch (CurrentToken().Kind) {
 
                 case PascalToken.AlignSwitch1:
-                    Options.Align.Value = Alignment.Unaligned;
+                    CompilerOptions.Align.Value = Alignment.Unaligned;
                     return;
 
                 case PascalToken.AlignSwitch2:
-                    Options.Align.Value = Alignment.Word;
+                    CompilerOptions.Align.Value = Alignment.Word;
                     return;
 
                 case PascalToken.AlignSwitch4:
-                    Options.Align.Value = Alignment.DoubleWord;
+                    CompilerOptions.Align.Value = Alignment.DoubleWord;
                     return;
 
                 case PascalToken.AlignSwitch8:
-                    Options.Align.Value = Alignment.QuadWord;
+                    CompilerOptions.Align.Value = Alignment.QuadWord;
                     return;
 
                 case PascalToken.AlignSwitch16:
-                    Options.Align.Value = Alignment.DoubleQuadWord;
+                    CompilerOptions.Align.Value = Alignment.DoubleQuadWord;
                     return;
             }
 
             FetchNextToken();
 
             if (Optional(PascalToken.Plus)) {
-                Options.Align.Value = Alignment.QuadWord;
+                CompilerOptions.Align.Value = Alignment.QuadWord;
                 return;
             }
 
             if (Optional(PascalToken.Minus)) {
-                Options.Align.Value = Alignment.Unaligned;
+                CompilerOptions.Align.Value = Alignment.Unaligned;
                 return;
             }
 
