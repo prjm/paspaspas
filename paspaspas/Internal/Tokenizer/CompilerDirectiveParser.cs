@@ -27,6 +27,12 @@ namespace PasPasPas.Internal.Tokenizer {
         protected CompileOptions CompilerOptions
              => Options.CompilerOptions;
 
+        /// <summary>
+        ///     conditional compilation options
+        /// </summary>
+        protected ConditionalCompilationOptions ConditionalCompilation
+            => Options.ConditionalCompilation;
+
         private static HashSet<int> switches
             = new HashSet<int>() {
                 PascalToken.AlignSwitch, PascalToken.AlignSwitch1,PascalToken.AlignSwitch2,PascalToken.AlignSwitch4,PascalToken.AlignSwitch8,PascalToken.AlignSwitch16,
@@ -42,7 +48,9 @@ namespace PasPasPas.Internal.Tokenizer {
         private static HashSet<int> parameters
             = new HashSet<int>() {
                 PascalToken.Apptype,
-                PascalToken.CodeAlign
+                PascalToken.CodeAlign,
+                PascalToken.Define,
+                PascalToken.Undef,
             };
 
         /// <summary>
@@ -75,6 +83,32 @@ namespace PasPasPas.Internal.Tokenizer {
             if (Match(PascalToken.CodeAlign)) {
                 ParseCodeAlignParameter();
                 return;
+            }
+
+            if (Match(PascalToken.Define)) {
+                ParseDefine();
+                return;
+            }
+
+            if (Match(PascalToken.Undef)) {
+                ParseUndef();
+                return;
+            }
+        }
+
+        private void ParseUndef() {
+            Require(PascalToken.Undef);
+            var value = Require(CurrentToken().Kind).Value;
+            if (!string.IsNullOrEmpty(value)) {
+                ConditionalCompilation.UndefineSymbol(value);
+            }
+        }
+
+        private void ParseDefine() {
+            Require(PascalToken.Define);
+            var value = Require(CurrentToken().Kind).Value;
+            if (!string.IsNullOrEmpty(value)) {
+                ConditionalCompilation.DefineSymbol(value);
             }
         }
 

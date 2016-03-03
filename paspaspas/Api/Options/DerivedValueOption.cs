@@ -11,7 +11,7 @@
         /// <summary>
         ///     parent option
         /// </summary>
-        public DerivedValueOption<T> Parent;
+        public DerivedValueOption<T> Parent { get; }
 
         /// <summary>
         ///     creates a root option without parent

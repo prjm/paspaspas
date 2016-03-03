@@ -19,6 +19,9 @@ namespace PasPasPasTests {
         protected CompileOptions CompilerOptions
             => TestOptions.CompilerOptions;
 
+        protected ConditionalCompilationOptions ConditionalCompilation
+            => TestOptions.ConditionalCompilation;
+
         protected string CompactWhitespace(string input) {
             StringBuilder result = new StringBuilder();
             bool wasWhitespace = false;
@@ -65,15 +68,27 @@ namespace PasPasPasTests {
 
         protected void RunCompilerDirective(string directive, object expected, Func<object> actual) {
             TestOptions.Clear();
+            TestOptions.ConditionalCompilation.Conditionals.OwnValues.Add(new ConditionalSymbol() {
+                Name = "PASPASPAS_TEST"
+            });
 
-            var parser = new CompilerDirectiveParser();
-            var tokenizer = new CompilerDirectiveTokenizer();
-            var input = new StringInput(directive);
-            tokenizer.Input = input;
-            parser.BaseTokenizer = tokenizer;
-            parser.Options = TestOptions;
-            parser.ParseCompilerDirective();
+            var directives = directive.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (var directivePart in directives) {
+                TestOptions.ResetOnNewUnit();
+                var subParts = directivePart.Split(new[] { '§' }, StringSplitOptions.RemoveEmptyEntries);
+                foreach (var subPart in subParts) {
+                    var parser = new CompilerDirectiveParser();
+                    var tokenizer = new CompilerDirectiveTokenizer();
+                    var input = new StringInput(subPart);
+                    tokenizer.Input = input;
+                    parser.BaseTokenizer = tokenizer;
+                    parser.Options = TestOptions;
+                    parser.ParseCompilerDirective();
+                }
+            }
+
             Assert.AreEqual(expected, actual());
         }
+
     }
 }

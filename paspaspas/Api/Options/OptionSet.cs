@@ -1,4 +1,6 @@
-﻿namespace PasPasPas.Api.Options {
+﻿using System;
+
+namespace PasPasPas.Api.Options {
 
     /// <summary>
     ///     set of compiler options
@@ -26,19 +28,32 @@
         /// <param name="baseOptions"></param>
         public OptionSet(OptionSet baseOptions) {
             CompilerOptions = new CompileOptions(baseOptions?.CompilerOptions);
+            ConditionalCompilation = new ConditionalCompilationOptions(baseOptions?.ConditionalCompilation);
         }
 
         /// <summary>
-        ///     compiler-related optiosn
+        ///     compiler-related options
         /// </summary>
         public CompileOptions CompilerOptions { get; }
 
+        /// <summary>
+        ///     conditional compilation options
+        /// </summary>
+        public ConditionalCompilationOptions ConditionalCompilation { get; }
 
         /// <summary>
         ///     clear all option values
         /// </summary>
         public void Clear() {
             CompilerOptions.Clear();
+            ConditionalCompilation.Clear();
+        }
+
+        /// <summary>
+        ///     reset definitions for a new unit
+        /// </summary>
+        public void ResetOnNewUnit() {
+            ConditionalCompilation.ResetOnNewUnit();
         }
     }
 }
