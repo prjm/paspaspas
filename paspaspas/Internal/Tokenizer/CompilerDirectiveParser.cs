@@ -37,12 +37,16 @@ namespace PasPasPas.Internal.Tokenizer {
             = new HashSet<int>() {
                 PascalToken.AlignSwitch, PascalToken.AlignSwitch1,PascalToken.AlignSwitch2,PascalToken.AlignSwitch4,PascalToken.AlignSwitch8,PascalToken.AlignSwitch16,
                 PascalToken.BoolEvalSwitch,
+                PascalToken.AssertSwitch,
+                PascalToken.DebugInfoOrDescriptionSwitch,
             };
 
         private static HashSet<int> longSwitches
             = new HashSet<int>() {
                 PascalToken.AlignSwitchLong,
-                PascalToken.BoolEvalSwitchLong
+                PascalToken.BoolEvalSwitchLong,
+                PascalToken.AssertSwitchLong,
+                PascalToken.DebugInfoSwitchLong,
             };
 
         private static HashSet<int> parameters
@@ -51,48 +55,79 @@ namespace PasPasPas.Internal.Tokenizer {
                 PascalToken.CodeAlign,
                 PascalToken.Define,
                 PascalToken.Undef,
+                PascalToken.IfDef,
+                PascalToken.EndIf
             };
 
         /// <summary>
         ///     parse a compiler directive
         /// </summary>
-        public void ParseCompilerDirective() {
+        public bool ParseCompilerDirective() {
             var kind = CurrentToken().Kind;
+            var result = false;
+
             if (switches.Contains(kind)) {
-                ParseSwitch();
-                return;
+                result = ParseSwitch();
+            }
+            else if (longSwitches.Contains(kind)) {
+                result = ParseLongSwitch();
+            }
+            else if (parameters.Contains(kind)) {
+                result = ParseParameter();
             }
 
-            if (longSwitches.Contains(kind)) {
-                ParseLongSwitch();
-                return;
-            }
-
-            if (parameters.Contains(kind)) {
-                ParseParameter();
-                return;
-            }
+            return result;
         }
 
-        private void ParseParameter() {
+        private bool ParseParameter() {
+
+            if (Match(PascalToken.IfDef)) {
+                ParseIfDef();
+                return true;
+            }
+
+
+            if (Match(PascalToken.EndIf)) {
+                ParseEndIf();
+                return true;
+            }
+
+            if (ConditionalCompilation.Skip)
+                return false;
+
             if (Match(PascalToken.Apptype)) {
                 ParseApptypeParameter();
-                return;
+                return true;
             }
 
             if (Match(PascalToken.CodeAlign)) {
                 ParseCodeAlignParameter();
-                return;
+                return true;
             }
 
             if (Match(PascalToken.Define)) {
                 ParseDefine();
-                return;
+                return true;
             }
 
             if (Match(PascalToken.Undef)) {
                 ParseUndef();
-                return;
+                return true;
+            }
+
+            return false;
+        }
+
+        private void ParseEndIf() {
+            Require(PascalToken.EndIf);
+            ConditionalCompilation.RemoveIfDefCondition();
+        }
+
+        private void ParseIfDef() {
+            Require(PascalToken.IfDef);
+            var value = Require(CurrentToken().Kind).Value;
+            if (!string.IsNullOrEmpty(value)) {
+                ConditionalCompilation.AddIfDefCondition(value);
             }
         }
 
@@ -159,16 +194,60 @@ namespace PasPasPas.Internal.Tokenizer {
         /// <summary>
         ///     parse a long switch
         /// </summary>
-        private void ParseLongSwitch() {
+        private bool ParseLongSwitch() {
+
+            if (ConditionalCompilation.Skip)
+                return false;
+
             if (Optional(PascalToken.AlignSwitchLong)) {
                 ParseAlignLongSwitch();
-                return;
+                return true;
             }
 
             if (Optional(PascalToken.BoolEvalSwitchLong)) {
                 ParseLongBoolEvalSwitch();
+                return true;
+            }
+
+            if (Optional(PascalToken.AssertSwitchLong)) {
+                ParseLongAssertSwitch();
+                return true;
+            }
+
+            if (Optional(PascalToken.DebugInfoSwitchLong)) {
+                ParseLongDebugInfoSwitch();
+                return true;
+            }
+
+            return false;
+        }
+
+        private void ParseLongDebugInfoSwitch() {
+            if (Optional(PascalToken.On)) {
+                CompilerOptions.DebugInfo.Value = DebugInformation.IncludeDebugInformation;
                 return;
             }
+
+            if (Optional(PascalToken.Off)) {
+                CompilerOptions.DebugInfo.Value = DebugInformation.NoDebugInfo;
+                return;
+            }
+
+            Unexpected();
+        }
+
+        private void ParseLongAssertSwitch() {
+            if (Optional(PascalToken.On)) {
+                CompilerOptions.Assertions.Value = AssertionMode.EnableAssertions;
+                return;
+            }
+
+            if (Optional(PascalToken.Off)) {
+                CompilerOptions.Assertions.Value = AssertionMode.DisableAssertions;
+                return;
+            }
+
+            Unexpected();
         }
 
         private void ParseLongBoolEvalSwitch() {
@@ -181,6 +260,8 @@ namespace PasPasPas.Internal.Tokenizer {
                 CompilerOptions.BoolEval.Value = BooleanEvaluation.ShortEvaluation;
                 return;
             }
+
+            Unexpected();
         }
 
         /// <summary>
@@ -224,16 +305,65 @@ namespace PasPasPas.Internal.Tokenizer {
         /// <summary>
         ///     parse a switch
         /// </summary>
-        private void ParseSwitch() {
+        private bool ParseSwitch() {
+
+            if (ConditionalCompilation.Skip)
+                return false;
+
             if (Match(PascalToken.AlignSwitch, PascalToken.AlignSwitch1, PascalToken.AlignSwitch2, PascalToken.AlignSwitch4, PascalToken.AlignSwitch8, PascalToken.AlignSwitch16)) {
                 ParseAlignSwitch();
-                return;
+                return true;
             }
 
             if (Match(PascalToken.BoolEvalSwitch)) {
                 ParseBoolEvalSwitch();
+                return true;
+            }
+
+            if (Match(PascalToken.AssertSwitch)) {
+                ParseAssertSwitch();
+                return true;
+            }
+
+            if (Match(PascalToken.DebugInfoOrDescriptionSwitch)) {
+                return ParseDebugInfoOrDescriptionSwitch();
+            }
+
+            return false;
+        }
+
+
+        private bool ParseDebugInfoOrDescriptionSwitch() {
+            FetchNextToken();
+
+            if (Optional(PascalToken.Plus)) {
+                CompilerOptions.DebugInfo.Value = DebugInformation.IncludeDebugInformation;
+                return true;
+            }
+
+            if (Optional(PascalToken.Minus)) {
+                CompilerOptions.DebugInfo.Value = DebugInformation.NoDebugInfo;
+                return true;
+            }
+
+            Unexpected();
+            return false;
+        }
+
+        private void ParseAssertSwitch() {
+            FetchNextToken();
+
+            if (Optional(PascalToken.Plus)) {
+                CompilerOptions.Assertions.Value = AssertionMode.EnableAssertions;
                 return;
             }
+
+            if (Optional(PascalToken.Minus)) {
+                CompilerOptions.Assertions.Value = AssertionMode.DisableAssertions;
+                return;
+            }
+
+            Unexpected();
         }
 
         private void ParseBoolEvalSwitch() {

@@ -1102,60 +1102,288 @@ namespace PasPasPas.Api {
         ///     token for <c>$LONGSTRINGS</c>
         /// </summary>
         public const int LongStringSwitchLong = 748;
+
+        /// <summary>
+        ///     token for <c>$M</c>
+        /// </summary>
         public const int MemStackSizeSwitch = 749;
+
+        /// <summary>
+        ///     token for <c>$MINSTACKSIZE</c>
+        /// </summary>
         public const int MinMemStackSizeSwitchLong = 750;
+
+        /// <summary>
+        ///     token for <c>$MAXSTACKSIZE</c>
+        /// </summary>
         public const int MaxMemStackSizeSwitchLong = 751;
+
+        /// <summary>
+        ///     token for <c>$MESSAGE</c>
+        /// </summary>
         public const int MessageCd = 752;
+
+        /// <summary>
+        ///     token for <c>$METHODINFO</c>
+        /// </summary>
         public const int MethodInfo = 753;
+
+        /// <summary>
+        ///     token for <c>$Z</c>
+        /// </summary>
         public const int EnumSizeSwitch = 754;
+
+        /// <summary>
+        ///     token for <c>$MINENUMSIZE</c>
+        /// </summary>
         public const int EnumSizeSwitchLong = 755;
+
+        /// <summary>
+        ///     token for <c>$NODEFINE</c>
+        /// </summary>
         public const int NoDefine = 756;
+
+        /// <summary>
+        ///     token for <c>$NOINCLUDE</c>
+        /// </summary>
         public const int NoInclude = 757;
+
+        /// <summary>
+        ///     token for <c></c>
+        /// </summary>
         public const int ObjTypeName = 758;
+
+        /// <summary>
+        ///     token for <c>$OLDTYPELAYOUT</c>
+        /// </summary>
         public const int OldTypeLayout = 759;
+
+        /// <summary>
+        ///     token for <c>$P</c>
+        /// </summary>
         public const int OpenStringSwitch = 760;
+
+        /// <summary>
+        ///     token for <c>$OPENSTRINGS</c>
+        /// </summary>
         public const int OpenStringSwitchLong = 761;
+
+        /// <summary>
+        ///     token for <c>$O</c>
+        /// </summary>
         public const int OptimizationSwitch = 762;
+
+        /// <summary>
+        ///     token for <c>$OPTIMIZATION</c>
+        /// </summary>
         public const int OptimizationSwitchLong = 763;
+
+        /// <summary>
+        ///     token for <c>$Q</c>
+        /// </summary>
         public const int OverflowSwitch = 763;
+
+        /// <summary>
+        ///     token for <c>$OVERFLOWCHECKS</c>
+        /// </summary>
         public const int OverflowSwitchLong = 764;
+
+        /// <summary>
+        ///     token for <c>$SETPEFLAGS</c>
+        /// </summary>
         public const int SetPeFlags = 765;
+
+        /// <summary>
+        ///     token for <c>$SETPEPOPTFLAGS</c>
+        /// </summary>
         public const int SetPeOptFlags = 766;
-        public const int SetOsVersion = 767;
+
+        /// <summary>
+        ///     token for <c>$SETPEOSVERSION</c>
+        /// </summary>
+        public const int SetPeOsVersion = 767;
+
+        /// <summary>
+        ///     tkoen for <c>$SETPESUBSYSTEMVERSION</c>
+        /// </summary>
         public const int SetPeSubsystemVerison = 768;
+
+        /// <summary>
+        ///     token for <c>$SETPEUSERVERIONS</c>
+        /// </summary>
         public const int SetPeUserVersion = 769;
+
+        /// <summary>
+        ///     token for <c>$U</c>
+        /// </summary>
         public const int SaveDivideSwitch = 770;
+
+        /// <summary>
+        ///     token for <c>$SAVEDIVIDE</c>
+        /// </summary>
         public const int SaveDivideSwitchLong = 771;
+
+        /// <summary>
+        ///     token for <c>$POINTERMATH</c>
+        /// </summary>
         public const int Pointermath = 772;
+
+        /// <summary>
+        ///     token for <c>$R</c>
+        /// </summary>
         public const int IncludeRessource = 773;
+
+        /// <summary>
+        ///     token for <c>$RANGECHECKS</c>
+        /// </summary>
         public const int RangeChecks = 774;
+
+        /// <summary>
+        ///     token for <c>$REALCOMPATIBILITY</c>
+        /// </summary>
         public const int RealCompatibility = 775;
+
+        /// <summary>
+        ///     token for <c>$REGION</c>
+        /// </summary>
         public const int Region = 776;
+
+        /// <summary>
+        ///     token for <c>%ENDREGION</c>
+        /// </summary>
         public const int EndRegion = 778;
+
+        /// <summary>
+        ///     token for <c>$RESSOURCE</c>
+        /// </summary>
         public const int IncludeRessourceLong = 779;
+
+        /// <summary>
+        ///     token for <c>$RTTI</c>
+        /// </summary>
         public const int Rtti = 780;
+
+        /// <summary>
+        ///     token for <c>$RUNONLY</c>
+        /// </summary>
         public const int RunOnly = 781;
+
+        /// <summary>
+        ///     token for <c>$M</c>
+        /// </summary>
         public const int TypeInfoSwitch = 782;
+
+        /// <summary>
+        ///     token for <c>$TYPEINFO</c>
+        /// </summary>
         public const int TypeInfoSwitchLong = 783;
+
+        /// <summary>
+        ///     token for <c>$W</c>
+        /// </summary>
         public const int StackFramesSwitch = 784;
+
+        /// <summary>
+        ///     token for <c>$STACKFRAMES</c>
+        /// </summary>
         public const int StackFramesSwitchLong = 785;
+
+        /// <summary>
+        ///     token for <c>$SCOPEDENUMS</c>
+        /// </summary>
         public const int ScopedEnums = 786;
+
+        /// <summary>
+        ///     token for <c>$STRONGLINKTYPES</c>
+        /// </summary>
         public const int StrongLinkTypes = 787;
+
+        /// <summary>
+        ///     token for <c>$Y</c>
+        /// </summary>
         public const int SymbolDeclarationSwitch = 788;
+
+        /// <summary>
+        ///     token for <c>$REFERENCINFO</c>
+        /// </summary>
         public const int ReferenceInfo = 789;
+
+        /// <summary>
+        ///     token for <c>$DEFINTIONINFO</c>
+        /// </summary>
         public const int DefinitionInfo = 790;
+
+        /// <summary>
+        ///     token for <c>$T</c>
+        /// </summary>
         public const int TypedPointersSwitch = 791;
+
+        /// <summary>
+        ///     token for <c>$TYPEDADDRESS</c>
+        /// </summary>
         public const int TypedPointersSwitchLong = 792;
+
+        /// <summary>
+        ///     tkoen for <c>$UNDEF</c>
+        /// </summary>
         public const int Undef = 793;
+
+        /// <summary>
+        ///     token for <c>$V</c>
+        /// </summary>
         public const int VarStringCheckSwitch = 794;
+
+        /// <summary>
+        ///     token for <c>$VARCHECKSTRINGS</c>
+        /// </summary>
         public const int VarStringCheckSwitchLong = 795;
+
+        /// <summary>
+        ///     token for <c>$WARN</c>
+        /// </summary>
         public const int Warn = 796;
+
+        /// <summary>
+        ///     token for <c>$WARNINGS</c>
+        /// </summary>
         public const int Warnings = 797;
+
+        /// <summary>
+        ///     token for <c>$WEAKPACKAGFEUNIT</c>
+        /// </summary>
         public const int WeakPackageUnit = 798;
+
+        /// <summary>
+        ///     token for <c>$WEAKLINKRTTI</c>
+        /// </summary>
         public const int WeakLinkRtti = 799;
+
+        /// <summary>
+        ///     token for <c>$J</c>
+        /// </summary>
         public const int WriteableConstSwitch = 800;
+
+        /// <summary>
+        ///     token for <c>$WRITEABLECONST</c>
+        /// </summary>
         public const int WriteableConstSwitchLong = 801;
+
+        /// <summary>
+        ///     token for <c>$ZEROBASEDSTRINGS</c>
+        /// </summary>
         public const int ZeroBaseStrings = 802;
+
+        /// <summary>
+        ///     token for <c>$EXTERNALSYM</c>
+        /// </summary>
+        public const int ExternalSym = 803;
+
+        /// <summary>
+        ///     token for <c>$HPPEMIT</c>
+        /// </summary>
+        public const int HppEmit = 804;
+
+
 
         /// <summary>
         ///     token for <c>$A1</c>
@@ -1206,8 +1434,6 @@ namespace PasPasPas.Api {
         ///     Token kind
         /// </summary>
         public int Kind { get; set; }
-        public static int ExternalSym { get; internal set; }
-        public static int HppEmit { get; internal set; }
 
         /// <summary>
         ///     check for equality

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace PasPasPas.Api.Options {
+﻿namespace PasPasPas.Api.Options {
 
     /// <summary>
     ///     set of compiler options
@@ -53,6 +51,7 @@ namespace PasPasPas.Api.Options {
         ///     reset definitions for a new unit
         /// </summary>
         public void ResetOnNewUnit() {
+            CompilerOptions.ResetOnNewUnit();
             ConditionalCompilation.ResetOnNewUnit();
         }
     }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace PasPasPas.Api.Options {
 
@@ -11,6 +12,18 @@ namespace PasPasPas.Api.Options {
         ///     list of conditional defines
         /// </summary>
         public DerivedListOption<ConditionalSymbol> Conditionals { get; }
+
+
+        /// <summary>
+        ///     active conditional
+        /// </summary>
+        public Stack<ICondition> Conditions { get; }
+            = new Stack<ICondition>();
+
+        /// <summary>
+        ///     skip tokens
+        /// </summary>
+        public bool Skip { get; private set; }
 
         /// <summary>
         ///     create new option set for conditional compilation
@@ -92,6 +105,39 @@ namespace PasPasPas.Api.Options {
         /// <param name="symbolName">symbol name</param>
         public void UndefineSymbol(string symbolName) {
             ToggleSymbol(symbolName, false);
+        }
+
+        /// <summary>
+        ///     remove an ifdef condition
+        /// </summary>
+        public void RemoveIfDefCondition() {
+            Conditions.Pop();
+            UpdateSkipState();
+        }
+
+        /// <summary>
+        ///     add a ifdef condition
+        /// </summary>
+        /// <param name="value">symbol to look for</param>
+        public void AddIfDefCondition(string value) {
+            Conditions.Push(new IfDefCondition() { Matches = IsSymbolDefined(value), SymbolName = value });
+            UpdateSkipState();
+        }
+
+        /// <summary>
+        ///     updates skipping flag
+        /// </summary>
+        private void UpdateSkipState() {
+            var doSkip = false;
+
+            foreach (var condition in Conditions) {
+                if (!condition.Matches) {
+                    doSkip = true;
+                    break;
+                }
+            }
+
+            Skip = doSkip;
         }
     }
 }

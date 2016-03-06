@@ -45,13 +45,17 @@
     <Compile Include="Api\CompilerTask.cs" />
     <Compile Include="Api\Options\Alignment.cs" />
     <Compile Include="Api\Options\AppType.cs" />
+    <Compile Include="Api\Options\AssertionMode.cs" />
     <Compile Include="Api\Options\BooleanEvaluation.cs" />
     <Compile Include="Api\Options\CodeAlignment.cs" />
     <Compile Include="Api\Options\CompileOptions.cs" />
     <Compile Include="Api\Options\CompilerOptions.cs" />
     <Compile Include="Api\Options\ConditionalCompilationOptions.cs" />
     <Compile Include="Api\Options\ConditonalDefine.cs" />
+    <Compile Include="Api\Options\DebugInformation.cs" />
     <Compile Include="Api\Options\DerivedListOption.cs" />
+    <Compile Include="Api\Options\ICondition.cs" />
+    <Compile Include="Api\Options\IfDefCondition.cs" />
     <Compile Include="Internal\Input\FileInput.cs" />
     <Compile Include="Api\IParserInformationProvider.cs" />
     <Compile Include="Api\Input\IParserInput.cs" />

@@ -11,7 +11,8 @@ namespace PasPasPas.Internal.Log {
         /// <summary>
         ///     list of messages
         /// </summary>
-        private List<LogMessage> messages;
+        private List<LogMessage> messages
+            = new List<LogMessage>();
 
         /// <summary>
         ///     logs a  message

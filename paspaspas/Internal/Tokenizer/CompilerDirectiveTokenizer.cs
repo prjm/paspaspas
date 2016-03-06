@@ -89,7 +89,7 @@ namespace PasPasPas.Internal.Tokenizer {
                 ["OVERFLOWCHECKS"] = PascalToken.OverflowSwitchLong,
                 ["SETPEFLAGS"] = PascalToken.SetPeFlags,
                 ["SETPEOPTFLAGS"] = PascalToken.SetPeOptFlags,
-                ["SETPEOSVERSION"] = PascalToken.SetOsVersion,
+                ["SETPEOSVERSION"] = PascalToken.SetPeOsVersion,
                 ["SETPESUBSYSVERSION"] = PascalToken.SetPeSubsystemVerison,
                 ["SETPEUSERVERSION"] = PascalToken.SetPeUserVersion,
                 ["U"] = PascalToken.SaveDivideSwitch,
