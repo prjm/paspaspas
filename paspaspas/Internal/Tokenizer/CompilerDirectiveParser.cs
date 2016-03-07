@@ -33,6 +33,12 @@ namespace PasPasPas.Internal.Tokenizer {
         protected ConditionalCompilationOptions ConditionalCompilation
             => Options.ConditionalCompilation;
 
+        /// <summary>
+        ///     metainformation
+        /// </summary>
+        protected MetaInformation Meta
+            => Options.Meta;
+
         private static HashSet<int> switches
             = new HashSet<int>() {
                 PascalToken.AlignSwitch, PascalToken.AlignSwitch1,PascalToken.AlignSwitch2,PascalToken.AlignSwitch4,PascalToken.AlignSwitch8,PascalToken.AlignSwitch16,
@@ -47,6 +53,8 @@ namespace PasPasPas.Internal.Tokenizer {
                 PascalToken.BoolEvalSwitchLong,
                 PascalToken.AssertSwitchLong,
                 PascalToken.DebugInfoSwitchLong,
+                PascalToken.DenyPackageUnit,
+                PascalToken.DescriptionSwitchLong,
             };
 
         private static HashSet<int> parameters
@@ -219,7 +227,36 @@ namespace PasPasPas.Internal.Tokenizer {
                 return true;
             }
 
+            if (Optional(PascalToken.DenyPackageUnit)) {
+                ParseDenyPackageUnitSwitch();
+                return true;
+            }
+
+            if (Optional(PascalToken.DescriptionSwitchLong)) {
+                ParseLongDescriptionSwitch();
+                return true;
+            }
+
             return false;
+        }
+
+        private void ParseLongDescriptionSwitch() {
+            var description = Require(PascalToken.QuotedString).Value;
+            Meta.Description.Value = QuotedStringTokenValue.Unwrap(description);
+        }
+
+        private void ParseDenyPackageUnitSwitch() {
+            if (Optional(PascalToken.On)) {
+                ConditionalCompilation.DenyInPackages.Value = DenyUnitInPackages.DenyUnit;
+                return;
+            }
+
+            if (Optional(PascalToken.Off)) {
+                ConditionalCompilation.DenyInPackages.Value = DenyUnitInPackages.AllowUnit;
+                return;
+            }
+
+            Unexpected();
         }
 
         private void ParseLongDebugInfoSwitch() {
@@ -344,6 +381,10 @@ namespace PasPasPas.Internal.Tokenizer {
             if (Optional(PascalToken.Minus)) {
                 CompilerOptions.DebugInfo.Value = DebugInformation.NoDebugInfo;
                 return true;
+            }
+
+            if (Match(PascalToken.QuotedString)) {
+                Meta.Description.Value = QuotedStringTokenValue.Unwrap(CurrentToken().Value);
             }
 
             Unexpected();

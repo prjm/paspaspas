@@ -89,5 +89,19 @@ namespace PasPasPasTests.Tokenizer {
             RunCompilerDirective("DEBUGINFO OFF", DebugInformation.NoDebugInfo, () => CompilerOptions.DebugInfo.Value);
         }
 
+        [TestMethod]
+        public void TestDenyPackageUnit() {
+            RunCompilerDirective("", DenyUnitInPackages.Undefined, () => ConditionalCompilation.DenyInPackages.Value);
+            RunCompilerDirective("DENYPACKAGEUNIT ON", DenyUnitInPackages.DenyUnit, () => ConditionalCompilation.DenyInPackages.Value);
+            RunCompilerDirective("DENYPACKAGEUNIT OFF", DenyUnitInPackages.AllowUnit, () => ConditionalCompilation.DenyInPackages.Value);
+        }
+
+        [TestMethod]
+        public void TestDescription() {
+            RunCompilerDirective("", null, () => Meta.Description.Value);
+            RunCompilerDirective("DESCRIPTION 'dummy'", "dummy", () => Meta.Description.Value);
+            RunCompilerDirective("D 'dummy1'", "dummy1", () => Meta.Description.Value);
+        }
+
     }
 }

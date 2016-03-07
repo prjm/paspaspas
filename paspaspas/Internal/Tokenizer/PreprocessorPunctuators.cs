@@ -17,6 +17,7 @@ namespace PasPasPas.Internal.Tokenizer {
             AddPunctuator(new IdentifierCharacterClass(), new IdentifierTokenGroupValue(CompilerDirectiveTokenizer.Keywords));
             AddPunctuator(new NumberCharacterClass(), new NumberTokenGroupValue());
             AddPunctuator(new ControlCharacterClass(), new ControlTokenGroupValue());
+            AddPunctuator('\'', new QuotedStringTokenValue());
         }
     }
 }

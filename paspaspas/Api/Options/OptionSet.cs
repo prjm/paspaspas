@@ -27,6 +27,7 @@
         public OptionSet(OptionSet baseOptions) {
             CompilerOptions = new CompileOptions(baseOptions?.CompilerOptions);
             ConditionalCompilation = new ConditionalCompilationOptions(baseOptions?.ConditionalCompilation);
+            Meta = new MetaInformation(baseOptions?.Meta);
         }
 
         /// <summary>
@@ -40,11 +41,17 @@
         public ConditionalCompilationOptions ConditionalCompilation { get; }
 
         /// <summary>
+        ///     meta information
+        /// </summary>
+        public MetaInformation Meta { get; }
+
+        /// <summary>
         ///     clear all option values
         /// </summary>
         public void Clear() {
             CompilerOptions.Clear();
             ConditionalCompilation.Clear();
+            Meta.Clear();
         }
 
         /// <summary>
@@ -53,6 +60,7 @@
         public void ResetOnNewUnit() {
             CompilerOptions.ResetOnNewUnit();
             ConditionalCompilation.ResetOnNewUnit();
+            Meta.ResetOnNewUnit();
         }
     }
 }

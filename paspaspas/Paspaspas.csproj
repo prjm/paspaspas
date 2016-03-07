@@ -53,9 +53,11 @@
     <Compile Include="Api\Options\ConditionalCompilationOptions.cs" />
     <Compile Include="Api\Options\ConditonalDefine.cs" />
     <Compile Include="Api\Options\DebugInformation.cs" />
+    <Compile Include="Api\Options\DenyUnitInPackages.cs" />
     <Compile Include="Api\Options\DerivedListOption.cs" />
     <Compile Include="Api\Options\ICondition.cs" />
     <Compile Include="Api\Options\IfDefCondition.cs" />
+    <Compile Include="Api\Options\MetaInformation.cs" />
     <Compile Include="Internal\Input\FileInput.cs" />
     <Compile Include="Api\IParserInformationProvider.cs" />
     <Compile Include="Api\Input\IParserInput.cs" />

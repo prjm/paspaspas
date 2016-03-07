@@ -1191,12 +1191,12 @@ namespace PasPasPas.Api {
         /// <summary>
         ///     token for <c>$SETPEFLAGS</c>
         /// </summary>
-        public const int SetPeFlags = 765;
+        public const int SetPEFlags = 765;
 
         /// <summary>
         ///     token for <c>$SETPEPOPTFLAGS</c>
         /// </summary>
-        public const int SetPeOptFlags = 766;
+        public const int SetPEOptFlags = 766;
 
         /// <summary>
         ///     token for <c>$SETPEOSVERSION</c>
@@ -1206,12 +1206,12 @@ namespace PasPasPas.Api {
         /// <summary>
         ///     tkoen for <c>$SETPESUBSYSTEMVERSION</c>
         /// </summary>
-        public const int SetPeSubsystemVerison = 768;
+        public const int SetPESubsystemVerison = 768;
 
         /// <summary>
         ///     token for <c>$SETPEUSERVERIONS</c>
         /// </summary>
-        public const int SetPeUserVersion = 769;
+        public const int SetPEUserVersion = 769;
 
         /// <summary>
         ///     token for <c>$U</c>

@@ -26,11 +26,17 @@ namespace PasPasPas.Api.Options {
         public bool Skip { get; private set; }
 
         /// <summary>
+        ///     deny unit in packages
+        /// </summary>
+        public DerivedValueOption<DenyUnitInPackages> DenyInPackages { get; }
+
+        /// <summary>
         ///     create new option set for conditional compilation
         /// </summary>
         /// <param name="baseOptions"></param>
         public ConditionalCompilationOptions(ConditionalCompilationOptions baseOptions) {
             Conditionals = new DerivedListOption<ConditionalSymbol>(baseOptions?.Conditionals);
+            DenyInPackages = new DerivedValueOption<DenyUnitInPackages>(baseOptions?.DenyInPackages);
         }
 
         /// <summary>
@@ -51,6 +57,7 @@ namespace PasPasPas.Api.Options {
         /// </summary>
         public void Clear() {
             Conditionals.OwnValues.Clear();
+            DenyInPackages.ResetToDefault();
         }
 
 
@@ -66,6 +73,8 @@ namespace PasPasPas.Api.Options {
         ///     reset local conditionals
         /// </summary>
         public void ResetOnNewUnit() {
+            DenyInPackages.ResetToDefault();
+
             for (int i = Conditionals.OwnValues.Count - 1; i >= 0; i--) {
                 var symbol = Conditionals.OwnValues[i];
                 if (symbol.IsLocal)
@@ -73,6 +82,8 @@ namespace PasPasPas.Api.Options {
                 else
                     Conditionals.OwnValues[i].IsActive = true;
             }
+
+            UpdateSkipState();
         }
 
         /// <summary>

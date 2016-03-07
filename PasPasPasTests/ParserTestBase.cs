@@ -22,6 +22,9 @@ namespace PasPasPasTests {
         protected ConditionalCompilationOptions ConditionalCompilation
             => TestOptions.ConditionalCompilation;
 
+        protected MetaInformation Meta
+            => TestOptions.Meta;
+
         protected string CompactWhitespace(string input) {
             StringBuilder result = new StringBuilder();
             bool wasWhitespace = false;

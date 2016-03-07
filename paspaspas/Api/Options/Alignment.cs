@@ -15,27 +15,27 @@ namespace PasPasPas.Api.Options {
         /// <summary>
         ///     unaligned
         /// </summary>
-        Unaligned,
+        Unaligned = 1,
 
         /// <summary>
         ///     word alignment
         /// </summary>
-        Word,
+        Word = 2,
 
         /// <summary>
         ///     double word alignment
         /// </summary>
-        DoubleWord,
+        DoubleWord = 3,
 
         /// <summary>
         ///     quad word aligmnet
         /// </summary>
-        QuadWord,
+        QuadWord = 4,
 
         /// <summary>
         ///     double quad word aligment
         /// </summary>
-        DoubleQuadWord,
+        DoubleQuadWord = 5,
 
     }
 

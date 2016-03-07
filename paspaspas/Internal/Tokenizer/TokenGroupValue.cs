@@ -132,6 +132,25 @@ namespace PasPasPas.Internal.Tokenizer {
 
             return new PascalToken(PascalToken.QuotedString, prefix.ToString());
         }
+
+        /// <summary>
+        ///     removes quotes from the text
+        /// </summary>
+        /// <param name="quotedText"></param>
+        /// <returns></returns>
+        public static string Unwrap(string quotedText) {
+            var result = quotedText ?? string.Empty;
+
+            if (result.StartsWith("'", StringComparison.Ordinal)) {
+                result = result.Substring(1, result.Length - 1);
+            }
+
+            if (result.EndsWith("'", StringComparison.Ordinal)) {
+                result = result.Substring(0, result.Length - 1);
+            }
+
+            return result;
+        }
     }
 
     /// <summary>
