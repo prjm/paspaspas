@@ -45,6 +45,8 @@ namespace PasPasPas.Internal.Tokenizer {
                 PascalToken.BoolEvalSwitch,
                 PascalToken.AssertSwitch,
                 PascalToken.DebugInfoOrDescriptionSwitch,
+                PascalToken.ExtensionSwitch,
+                PascalToken.ExtendedSyntaxSwitch
             };
 
         private static HashSet<int> longSwitches
@@ -55,6 +57,11 @@ namespace PasPasPas.Internal.Tokenizer {
                 PascalToken.DebugInfoSwitchLong,
                 PascalToken.DenyPackageUnit,
                 PascalToken.DescriptionSwitchLong,
+                PascalToken.DesignOnly,
+                PascalToken.ExtensionSwitchLong,
+                PascalToken.ObjExportAll,
+                PascalToken.ExtendedCompatibility,
+                PascalToken.ExtendedSyntaxSwitchLong,
             };
 
         private static HashSet<int> parameters
@@ -64,7 +71,9 @@ namespace PasPasPas.Internal.Tokenizer {
                 PascalToken.Define,
                 PascalToken.Undef,
                 PascalToken.IfDef,
-                PascalToken.EndIf
+                PascalToken.EndIf,
+                PascalToken.ElseCd,
+                PascalToken.ExternalSym,
             };
 
         /// <summary>
@@ -100,6 +109,11 @@ namespace PasPasPas.Internal.Tokenizer {
                 return true;
             }
 
+            if (Match(PascalToken.ElseCd)) {
+                ParseElse();
+                return true;
+            }
+
             if (ConditionalCompilation.Skip)
                 return false;
 
@@ -123,7 +137,21 @@ namespace PasPasPas.Internal.Tokenizer {
                 return true;
             }
 
+            if (Match(PascalToken.ExternalSym)) {
+                ParseExternalSym();
+                return true;
+            }
+
             return false;
+        }
+
+        private void ParseExternalSym() {
+            throw new NotImplementedException();
+        }
+
+        private void ParseElse() {
+            Require(PascalToken.ElseCd);
+            ConditionalCompilation.AddElseCondition();
         }
 
         private void ParseEndIf() {
@@ -237,7 +265,91 @@ namespace PasPasPas.Internal.Tokenizer {
                 return true;
             }
 
+            if (Optional(PascalToken.DesignOnly)) {
+                ParseLongDesignOnlySwitch();
+                return true;
+            }
+
+            if (Optional(PascalToken.ExtensionSwitchLong)) {
+                ParseLongExtensionSwitch();
+                return true;
+            }
+
+            if (Optional(PascalToken.ObjExportAll)) {
+                ParseObjExportAllSwitch();
+                return true;
+            }
+
+            if (Optional(PascalToken.ExtendedCompatibility)) {
+                ParseExtendedCompatibilitySwitch();
+                return true;
+            }
+
+            if (Optional(PascalToken.ExtendedSyntaxSwitchLong)) {
+                ParseLongExtendedSyntaxSwitch();
+                return true;
+            }
+
             return false;
+        }
+
+        private void ParseLongExtendedSyntaxSwitch() {
+            if (Optional(PascalToken.On)) {
+                CompilerOptions.UseExtendedSyntax.Value = ExtendedSyntax.UseExtendedSyntax;
+                return;
+            }
+
+            if (Optional(PascalToken.Off)) {
+                CompilerOptions.UseExtendedSyntax.Value = ExtendedSyntax.NoExtendedSyntax;
+                return;
+            }
+        }
+
+        private void ParseExtendedCompatibilitySwitch() {
+            if (Optional(PascalToken.On)) {
+                CompilerOptions.ExtendedCompatibility.Value = ExtendedCompatiblityMode.Enabled;
+                return;
+            }
+
+            if (Optional(PascalToken.Off)) {
+                CompilerOptions.ExtendedCompatibility.Value = ExtendedCompatiblityMode.Disabled;
+                return;
+            }
+        }
+
+        private void ParseObjExportAllSwitch() {
+            if (Optional(PascalToken.On)) {
+                CompilerOptions.ExportCppObjects.Value = ExportCppObjects.ExportAll;
+                return;
+            }
+
+            if (Optional(PascalToken.Off)) {
+                CompilerOptions.ExportCppObjects.Value = ExportCppObjects.DoNotExportAll;
+                return;
+            }
+
+            Unexpected();
+        }
+
+        private void ParseLongExtensionSwitch() {
+            var value = Require(CurrentToken().Kind).Value;
+            if (!string.IsNullOrEmpty(value)) {
+                Meta.FileExtension.Value = value;
+            }
+        }
+
+        private void ParseLongDesignOnlySwitch() {
+            if (Optional(PascalToken.On)) {
+                ConditionalCompilation.DesignOnly.Value = DesignOnlyUnit.InDesignTimeOnly;
+                return;
+            }
+
+            if (Optional(PascalToken.Off)) {
+                ConditionalCompilation.DesignOnly.Value = DesignOnlyUnit.Alltimes;
+                return;
+            }
+
+            Unexpected();
         }
 
         private void ParseLongDescriptionSwitch() {
@@ -366,9 +478,42 @@ namespace PasPasPas.Internal.Tokenizer {
                 return ParseDebugInfoOrDescriptionSwitch();
             }
 
+            if (Match(PascalToken.ExtensionSwitch)) {
+                return ParseExtensionSwitch();
+            }
+
+            if (Match(PascalToken.ExtendedSyntaxSwitch)) {
+                return ParseExtendedSyntaxSwitch();
+            }
+
             return false;
         }
 
+        private bool ParseExtendedSyntaxSwitch() {
+            FetchNextToken();
+
+            if (Optional(PascalToken.Plus)) {
+                CompilerOptions.UseExtendedSyntax.Value = ExtendedSyntax.UseExtendedSyntax;
+                return true;
+            }
+
+            if (Optional(PascalToken.Minus)) {
+                CompilerOptions.UseExtendedSyntax.Value = ExtendedSyntax.NoExtendedSyntax;
+                return true;
+            }
+
+            Unexpected();
+            return false;
+        }
+
+        private bool ParseExtensionSwitch() {
+            Require(PascalToken.ExtensionSwitch);
+            var value = Require(CurrentToken().Kind).Value;
+            if (!string.IsNullOrEmpty(value)) {
+                Meta.FileExtension.Value = value;
+            }
+            return true;
+        }
 
         private bool ParseDebugInfoOrDescriptionSwitch() {
             FetchNextToken();
@@ -385,6 +530,7 @@ namespace PasPasPas.Internal.Tokenizer {
 
             if (Match(PascalToken.QuotedString)) {
                 Meta.Description.Value = QuotedStringTokenValue.Unwrap(CurrentToken().Value);
+                return true;
             }
 
             Unexpected();

@@ -16,6 +16,9 @@
             CodeAlign = new DerivedValueOption<CodeAlignment>(baseOptions?.CodeAlign);
             Assertions = new DerivedValueOption<AssertionMode>(baseOptions?.Assertions);
             DebugInfo = new DerivedValueOption<DebugInformation>(baseOptions?.DebugInfo);
+            ExportCppObjects = new DerivedValueOption<ExportCppObjects>(baseOptions?.ExportCppObjects);
+            ExtendedCompatibility = new DerivedValueOption<ExtendedCompatiblityMode>(baseOptions?.ExtendedCompatibility);
+            UseExtendedSyntax = new DerivedValueOption<ExtendedSyntax>(baseOptions?.UseExtendedSyntax);
         }
 
         /// <summary>
@@ -49,6 +52,21 @@
         public DerivedValueOption<DebugInformation> DebugInfo { get; }
 
         /// <summary>
+        ///     export all cpp objects
+        /// </summary>
+        public DerivedValueOption<ExportCppObjects> ExportCppObjects { get; }
+
+        /// <summary>
+        ///     exteded compatibility mode
+        /// </summary>
+        public DerivedValueOption<ExtendedCompatiblityMode> ExtendedCompatibility { get; }
+
+        /// <summary>
+        ///     switch to enable extended syntax
+        /// </summary>
+        public DerivedValueOption<ExtendedSyntax> UseExtendedSyntax { get; }
+
+        /// <summary>
         ///     clear options
         /// </summary>
         public void Clear() {
@@ -58,6 +76,9 @@
             CodeAlign.ResetToDefault();
             Assertions.ResetToDefault();
             DebugInfo.ResetToDefault();
+            ExportCppObjects.ResetToDefault();
+            ExtendedCompatibility.ResetToDefault();
+            UseExtendedSyntax.ResetToDefault();
         }
 
         /// <summary>
@@ -68,6 +89,7 @@
             BoolEval.ResetToDefault();
             CodeAlign.ResetToDefault();
             Assertions.ResetToDefault();
+            ExtendedCompatibility.ResetToDefault();
         }
     }
 }

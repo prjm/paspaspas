@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace PasPasPas.Api.Options {
 
@@ -17,8 +18,8 @@ namespace PasPasPas.Api.Options {
         /// <summary>
         ///     active conditional
         /// </summary>
-        public Stack<ICondition> Conditions { get; }
-            = new Stack<ICondition>();
+        public Stack<List<ICondition>> Conditions { get; }
+            = new Stack<List<ICondition>>();
 
         /// <summary>
         ///     skip tokens
@@ -31,12 +32,18 @@ namespace PasPasPas.Api.Options {
         public DerivedValueOption<DenyUnitInPackages> DenyInPackages { get; }
 
         /// <summary>
+        ///     design-time only package
+        /// </summary>
+        public DerivedValueOption<DesignOnlyUnit> DesignOnly { get; }
+
+        /// <summary>
         ///     create new option set for conditional compilation
         /// </summary>
         /// <param name="baseOptions"></param>
         public ConditionalCompilationOptions(ConditionalCompilationOptions baseOptions) {
             Conditionals = new DerivedListOption<ConditionalSymbol>(baseOptions?.Conditionals);
             DenyInPackages = new DerivedValueOption<DenyUnitInPackages>(baseOptions?.DenyInPackages);
+            DesignOnly = new DerivedValueOption<DesignOnlyUnit>(baseOptions?.DesignOnly);
         }
 
         /// <summary>
@@ -58,6 +65,7 @@ namespace PasPasPas.Api.Options {
         public void Clear() {
             Conditionals.OwnValues.Clear();
             DenyInPackages.ResetToDefault();
+            DesignOnly.ResetToDefault();
         }
 
 
@@ -74,6 +82,7 @@ namespace PasPasPas.Api.Options {
         /// </summary>
         public void ResetOnNewUnit() {
             DenyInPackages.ResetToDefault();
+            DesignOnly.ResetToDefault();
 
             for (int i = Conditionals.OwnValues.Count - 1; i >= 0; i--) {
                 var symbol = Conditionals.OwnValues[i];
@@ -110,6 +119,36 @@ namespace PasPasPas.Api.Options {
             });
         }
 
+
+        /// <summary>
+        ///     add a else condition
+        /// </summary>
+        public void AddElseCondition() {
+            bool anotherConditionMatches = false;
+            if (Conditions.Count > 0) {
+                var lastConditions = Conditions.Peek();
+                foreach (var condition in lastConditions) {
+                    if (condition.Matches) {
+                        anotherConditionMatches = true;
+                        break;
+                    }
+                }
+            }
+
+            AddConditionBranch(new ElseCondition() { Matches = !anotherConditionMatches });
+            UpdateSkipState();
+        }
+
+        private void AddConditionBranch(ICondition condition) {
+            if (Conditions.Count < 1) {
+                AddNewCondition(condition);
+                return;
+            }
+
+            var lastConditions = Conditions.Peek();
+            lastConditions.Add(condition);
+        }
+
         /// <summary>
         ///     undefine a symbol at compile time
         /// </summary>
@@ -131,8 +170,14 @@ namespace PasPasPas.Api.Options {
         /// </summary>
         /// <param name="value">symbol to look for</param>
         public void AddIfDefCondition(string value) {
-            Conditions.Push(new IfDefCondition() { Matches = IsSymbolDefined(value), SymbolName = value });
+            AddNewCondition(new IfDefCondition() { Matches = IsSymbolDefined(value), SymbolName = value });
             UpdateSkipState();
+        }
+
+        private void AddNewCondition(ICondition ifDefCondition) {
+            var conditions = new List<ICondition>();
+            conditions.Add(ifDefCondition);
+            Conditions.Push(conditions);
         }
 
         /// <summary>
@@ -141,7 +186,11 @@ namespace PasPasPas.Api.Options {
         private void UpdateSkipState() {
             var doSkip = false;
 
-            foreach (var condition in Conditions) {
+            foreach (var conditions in Conditions) {
+                if (conditions.Count < 1)
+                    continue;
+
+                var condition = conditions.Last();
                 if (!condition.Matches) {
                     doSkip = true;
                     break;

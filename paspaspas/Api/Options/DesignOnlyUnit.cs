@@ -1,23 +1,23 @@
 ﻿namespace PasPasPas.Api.Options {
 
     /// <summary>
-    ///     assertion mode
+    ///     switch for design-time only units
     /// </summary>
-    public enum AssertionMode {
+    public enum DesignOnlyUnit {
 
         /// <summary>
-        ///     undefined assertion mode
+        ///     undefined status
         /// </summary>
         Undefined = 0,
 
         /// <summary>
-        ///     disable assertions
+        ///     unit design time only
         /// </summary>
-        DisableAssertions = 1,
+        InDesignTimeOnly = 1,
 
         /// <summary>
-        ///     enable assertions
+        ///     allow unit always
         /// </summary>
-        EnableAssertions = 2
+        Alltimes = 2,
     }
 }

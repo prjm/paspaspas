@@ -1,23 +1,23 @@
 ﻿namespace PasPasPas.Api.Options {
 
     /// <summary>
-    ///     assertion mode
+    ///     export all cpp objects
     /// </summary>
-    public enum AssertionMode {
+    public enum ExportCppObjects {
 
         /// <summary>
-        ///     undefined assertion mode
+        ///     undefined export status
         /// </summary>
         Undefined = 0,
 
         /// <summary>
-        ///     disable assertions
+        ///     do notr export all
         /// </summary>
-        DisableAssertions = 1,
+        DoNotExportAll = 1,
 
         /// <summary>
-        ///     enable assertions
+        ///     export all
         /// </summary>
-        EnableAssertions = 2
+        ExportAll = 2,
     }
 }

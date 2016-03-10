@@ -55,6 +55,11 @@
     <Compile Include="Api\Options\DebugInformation.cs" />
     <Compile Include="Api\Options\DenyUnitInPackages.cs" />
     <Compile Include="Api\Options\DerivedListOption.cs" />
+    <Compile Include="Api\Options\DesignOnlyUnit.cs" />
+    <Compile Include="Api\Options\ElseCondition.cs" />
+    <Compile Include="Api\Options\ExportCppObjects.cs" />
+    <Compile Include="Api\Options\ExtendedCompatiblityMode.cs" />
+    <Compile Include="Api\Options\ExtendedSyntax.cs" />
     <Compile Include="Api\Options\ICondition.cs" />
     <Compile Include="Api\Options\IfDefCondition.cs" />
     <Compile Include="Api\Options\MetaInformation.cs" />

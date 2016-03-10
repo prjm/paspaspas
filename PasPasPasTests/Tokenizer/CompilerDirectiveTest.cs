@@ -68,6 +68,11 @@ namespace PasPasPasTests.Tokenizer {
             RunCompilerDirective("IFDEF TESTSYM § ENDIF § DEFINE A ", true, () => ConditionalCompilation.IsSymbolDefined("A"));
             RunCompilerDirective("IFDEF TESTSYM § IFDEF Q § DEFINE A § ENDIF § ENDIF", false, () => ConditionalCompilation.IsSymbolDefined("A"));
             RunCompilerDirective("IFDEF PASPASPAS_TEST § DEFINE A § ENDIF", true, () => ConditionalCompilation.IsSymbolDefined("A"));
+
+            RunCompilerDirective("IFDEF TESTSYM $ DEFINE B § ELSE § DEFINE A § ENDIF", true, () => ConditionalCompilation.IsSymbolDefined("A"));
+            RunCompilerDirective("IFDEF TESTSYM $ DEFINE A § ELSE § DEFINE B § ENDIF", false, () => ConditionalCompilation.IsSymbolDefined("A"));
+            RunCompilerDirective("IFDEF TESTSYM $ DEFINE B § ELSE § DEFINE A § ENDIF", false, () => ConditionalCompilation.IsSymbolDefined("B"));
+            RunCompilerDirective("IFDEF TESTSYM $ DEFINE A § ELSE § DEFINE B § ENDIF", true, () => ConditionalCompilation.IsSymbolDefined("B"));
         }
 
         [TestMethod]
@@ -101,6 +106,43 @@ namespace PasPasPasTests.Tokenizer {
             RunCompilerDirective("", null, () => Meta.Description.Value);
             RunCompilerDirective("DESCRIPTION 'dummy'", "dummy", () => Meta.Description.Value);
             RunCompilerDirective("D 'dummy1'", "dummy1", () => Meta.Description.Value);
+        }
+
+        [TestMethod]
+        public void TestDesigntimeOnly() {
+            RunCompilerDirective("", DesignOnlyUnit.Undefined, () => ConditionalCompilation.DesignOnly.Value);
+            RunCompilerDirective("DESIGNONLY ON", DesignOnlyUnit.InDesignTimeOnly, () => ConditionalCompilation.DesignOnly.Value);
+            RunCompilerDirective("DESIGNONLY OFF", DesignOnlyUnit.Alltimes, () => ConditionalCompilation.DesignOnly.Value);
+        }
+
+        [TestMethod]
+        public void TestExtensionsSwitch() {
+            RunCompilerDirective("", null, () => Meta.FileExtension.Value);
+            RunCompilerDirective("EXTENSION ddd", "ddd", () => Meta.FileExtension.Value);
+            RunCompilerDirective("E ddd'", "ddd", () => Meta.FileExtension.Value);
+        }
+
+        [TestMethod]
+        public void TestObjExportAll() {
+            RunCompilerDirective("", ExportCppObjects.Undefined, () => CompilerOptions.ExportCppObjects.Value);
+            RunCompilerDirective("OBJEXPORTALL ON", ExportCppObjects.ExportAll, () => CompilerOptions.ExportCppObjects.Value);
+            RunCompilerDirective("OBJEXPORTALL OFF", ExportCppObjects.DoNotExportAll, () => CompilerOptions.ExportCppObjects.Value);
+        }
+
+        [TestMethod]
+        public void TestExtendedCompatibility() {
+            RunCompilerDirective("", ExtendedCompatiblityMode.Undefined, () => CompilerOptions.ExtendedCompatibility.Value);
+            RunCompilerDirective("EXTENDEDCOMPATIBILITY ON", ExtendedCompatiblityMode.Enabled, () => CompilerOptions.ExtendedCompatibility.Value);
+            RunCompilerDirective("EXTENDEDCOMPATIBILITY OFF", ExtendedCompatiblityMode.Disabled, () => CompilerOptions.ExtendedCompatibility.Value);
+        }
+
+        [TestMethod]
+        public void TestExtendedSyntax() {
+            RunCompilerDirective("", ExtendedSyntax.Undefined, () => CompilerOptions.UseExtendedSyntax.Value);
+            RunCompilerDirective("X+", ExtendedSyntax.UseExtendedSyntax, () => CompilerOptions.UseExtendedSyntax.Value);
+            RunCompilerDirective("X-", ExtendedSyntax.NoExtendedSyntax, () => CompilerOptions.UseExtendedSyntax.Value);
+            RunCompilerDirective("EXTENDEDSYNTAX ON", ExtendedSyntax.UseExtendedSyntax, () => CompilerOptions.UseExtendedSyntax.Value);
+            RunCompilerDirective("EXTENDEDSYNTAX OFF", ExtendedSyntax.NoExtendedSyntax, () => CompilerOptions.UseExtendedSyntax.Value);
         }
 
     }

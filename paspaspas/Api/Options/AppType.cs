@@ -14,12 +14,12 @@
         /// <summary>
         ///     console application
         /// </summary>
-        Console,
+        Console = 1,
 
         /// <summary>
         ///     gui application
         /// </summary>
-        Gui
+        Gui = 2
 
     }
 }

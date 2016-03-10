@@ -9,7 +9,7 @@
         /// <summary>
         ///      test if the condition matches
         /// </summary>
-        bool Matches { get; set; }
+        bool Matches { get; }
 
     }
 }

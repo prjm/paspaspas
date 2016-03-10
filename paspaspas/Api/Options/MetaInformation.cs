@@ -11,12 +11,18 @@
         /// <param name="baseOption"></param>
         public MetaInformation(MetaInformation baseOption) {
             Description = new DerivedValueOption<string>(baseOption?.Description);
+            FileExtension = new DerivedValueOption<string>(baseOption?.FileExtension);
         }
 
         /// <summary>
         /// 
         /// </summary>
         public DerivedValueOption<string> Description { get; }
+
+        /// <summary>
+        ///     compiled outpout bilfe extension
+        /// </summary>
+        public DerivedValueOption<string> FileExtension { get; }
 
 
         /// <summary>
@@ -31,6 +37,7 @@
         /// </summary>
         internal void Clear() {
             Description.ResetToDefault();
+            FileExtension.ResetToDefault();
         }
     }
 }
