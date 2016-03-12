@@ -2,17 +2,20 @@
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
+    <MinimumVisualStudioVersion>14.0</MinimumVisualStudioVersion>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{EE241A25-4CFC-4B2F-8421-F8686D617150}</ProjectGuid>
+    <ProjectGuid>{EFA1DA73-0C34-4BFB-9006-DCFFA12218ED}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PasPasPas</RootNamespace>
-    <AssemblyName>Paspaspas</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <RootNamespace>PasPasPas.Parsing</RootNamespace>
+    <AssemblyName>PasPasPas.Parsing</AssemblyName>
+    <DefaultLanguage>de-DE</DefaultLanguage>
     <FileAlignment>512</FileAlignment>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
+    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -22,10 +25,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <RunCodeAnalysis>true</RunCodeAnalysis>
-    <CodeAnalysisRuleSet>paspaspas.ruleset</CodeAnalysisRuleSet>
-    <DocumentationFile>bin\Debug\Paspaspas.XML</DocumentationFile>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <CodeAnalysisRuleSet>..\paspaspas\paspaspas.ruleset</CodeAnalysisRuleSet>
+    <DocumentationFile>bin\Debug\PasPasPas.Parsing.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -34,63 +35,22 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>paspaspas.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="Microsoft.CSharp" />
+    <None Include="project.json" />
+    <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Api\CompilerTask.cs" />
-    <Compile Include="Api\Options\Alignment.cs" />
-    <Compile Include="Api\Options\AppType.cs" />
-    <Compile Include="Api\Options\AssertionMode.cs" />
-    <Compile Include="Api\Options\BooleanEvaluation.cs" />
-    <Compile Include="Api\Options\CodeAlignment.cs" />
-    <Compile Include="Api\Options\CompileOptions.cs" />
-    <Compile Include="Api\Options\CompilerOptions.cs" />
-    <Compile Include="Api\Options\ConditionalCompilationOptions.cs" />
-    <Compile Include="Api\Options\ConditonalDefine.cs" />
-    <Compile Include="Api\Options\DebugInformation.cs" />
-    <Compile Include="Api\Options\DenyUnitInPackages.cs" />
-    <Compile Include="Api\Options\DerivedListOption.cs" />
-    <Compile Include="Api\Options\DesignOnlyUnit.cs" />
-    <Compile Include="Api\Options\ElseCondition.cs" />
-    <Compile Include="Api\Options\ExportCppObjects.cs" />
-    <Compile Include="Api\Options\ExtendedCompatiblityMode.cs" />
-    <Compile Include="Api\Options\ExtendedSyntax.cs" />
-    <Compile Include="Api\Options\ICondition.cs" />
-    <Compile Include="Api\Options\IfDefCondition.cs" />
-    <Compile Include="Api\Options\MetaInformation.cs" />
-    <Compile Include="Internal\Input\FileInput.cs" />
     <Compile Include="Api\IParserInformationProvider.cs" />
-    <Compile Include="Api\Input\IParserInput.cs" />
     <Compile Include="Api\IPascalParser.cs" />
     <Compile Include="Api\IPascalTokenizer.cs" />
     <Compile Include="Api\ISyntaxPart.cs" />
-    <Compile Include="Internal\Input\InputBase.cs" />
-    <Compile Include="Internal\Log\LogMessage.cs" />
-    <Compile Include="Api\Options\DerivedOptionBase.cs" />
-    <Compile Include="Api\Options\DerivedValueOption.cs" />
-    <Compile Include="Api\Options\IDerivedOption.cs" />
-    <Compile Include="Api\Options\OptionSet.cs" />
-    <Compile Include="Api\Options\Platform.cs" />
-    <Compile Include="Api\Options\PlatformKey.cs" />
     <Compile Include="Api\PascalCompiler.cs" />
     <Compile Include="Api\PascalFormatter.cs" />
     <Compile Include="Api\PascalParser.cs" />
     <Compile Include="Api\PascalToken.cs" />
     <Compile Include="Api\PasPasPasException.cs" />
-    <Compile Include="Internal\Input\StringInput.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="Internal\Log\ILogService.cs" />
-    <Compile Include="Internal\Log\LogService.cs" />
-    <Compile Include="Internal\Log\ObjectWithLog.cs" />
-    <Compile Include="Internal\MessageData.cs" />
-    <Compile Include="Internal\MessageGenerator.cs" />
-    <Compile Include="Internal\Options\AnyCpuPlatform.cs" />
-    <Compile Include="Internal\Options\DefaultPlatform.cs" />
     <Compile Include="Internal\Parser\ParserBase.cs" />
     <Compile Include="Internal\Parser\RuleAttribute.cs" />
     <Compile Include="Internal\Parser\StandardParser.cs" />
@@ -102,24 +62,10 @@
     <Compile Include="Internal\Parser\Syntax\BindingDirective.cs" />
     <Compile Include="Internal\Parser\Syntax\Block.cs" />
     <Compile Include="Internal\Parser\Syntax\BlockBody.cs" />
+    <Compile Include="Internal\Parser\Syntax\CallConvention.cs" />
     <Compile Include="Internal\Parser\Syntax\CaseItem.cs" />
     <Compile Include="Internal\Parser\Syntax\CaseLabel.cs" />
     <Compile Include="Internal\Parser\Syntax\CaseStatement.cs" />
-    <Compile Include="Internal\Parser\Syntax\ClosureExpr.cs" />
-    <Compile Include="Internal\Parser\Syntax\DesignatorItem.cs" />
-    <Compile Include="Internal\Parser\Syntax\DesignatorStatement.cs" />
-    <Compile Include="Internal\Parser\Syntax\ExceptHandler.cs" />
-    <Compile Include="Internal\Parser\Syntax\ExceptHandlers.cs" />
-    <Compile Include="Internal\Parser\Syntax\Expression.cs" />
-    <Compile Include="Internal\Parser\Syntax\ExternalDirective.cs" />
-    <Compile Include="Internal\Parser\Syntax\ExternalSpecifier.cs" />
-    <Compile Include="Internal\Parser\Syntax\Factor.cs" />
-    <Compile Include="Internal\Parser\Syntax\FormattedExpression.cs" />
-    <Compile Include="Internal\Parser\Syntax\ForStatement.cs" />
-    <Compile Include="Internal\Parser\Syntax\GoToStatement.cs" />
-    <Compile Include="Internal\Parser\Syntax\IfStatement.cs" />
-    <Compile Include="Internal\Parser\Syntax\OldCallConvention.cs" />
-    <Compile Include="Internal\Parser\Syntax\CallConvention.cs" />
     <Compile Include="Internal\Parser\Syntax\ClassDeclaration.cs" />
     <Compile Include="Internal\Parser\Syntax\ClassDeclarationItem.cs" />
     <Compile Include="Internal\Parser\Syntax\ClassDeclarationItems.cs" />
@@ -134,6 +80,7 @@
     <Compile Include="Internal\Parser\Syntax\ClassPropertyReadWrite.cs" />
     <Compile Include="Internal\Parser\Syntax\ClassPropertySpecifier.cs" />
     <Compile Include="Internal\Parser\Syntax\ClassTypeDeclaration.cs" />
+    <Compile Include="Internal\Parser\Syntax\ClosureExpr.cs" />
     <Compile Include="Internal\Parser\Syntax\ComposedPart.cs" />
     <Compile Include="Internal\Parser\Syntax\CompoundStatement.cs" />
     <Compile Include="Internal\Parser\Syntax\ConstantExpression.cs" />
@@ -142,25 +89,38 @@
     <Compile Include="Internal\Parser\Syntax\ConstSection.cs" />
     <Compile Include="Internal\Parser\Syntax\DeclarationBase.cs" />
     <Compile Include="Internal\Parser\Syntax\Declarations.cs" />
+    <Compile Include="Internal\Parser\Syntax\DesignatorItem.cs" />
+    <Compile Include="Internal\Parser\Syntax\DesignatorStatement.cs" />
     <Compile Include="Internal\Parser\Syntax\DispIdDirective.cs" />
     <Compile Include="Internal\Parser\Syntax\EnumTypeDefinition.cs" />
     <Compile Include="Internal\Parser\Syntax\EnumValue.cs" />
+    <Compile Include="Internal\Parser\Syntax\ExceptHandler.cs" />
+    <Compile Include="Internal\Parser\Syntax\ExceptHandlers.cs" />
     <Compile Include="Internal\Parser\Syntax\ExportedProcedureHeading.cs" />
     <Compile Include="Internal\Parser\Syntax\ExportItem.cs" />
     <Compile Include="Internal\Parser\Syntax\ExportsSection.cs" />
+    <Compile Include="Internal\Parser\Syntax\Expression.cs" />
     <Compile Include="Internal\Parser\Syntax\ExpressionList.cs" />
+    <Compile Include="Internal\Parser\Syntax\ExternalDirective.cs" />
+    <Compile Include="Internal\Parser\Syntax\ExternalSpecifier.cs" />
+    <Compile Include="Internal\Parser\Syntax\Factor.cs" />
     <Compile Include="Internal\Parser\Syntax\FileType.cs" />
     <Compile Include="Internal\Parser\Syntax\FormalParameter.cs" />
     <Compile Include="Internal\Parser\Syntax\FormalParameters.cs" />
     <Compile Include="Internal\Parser\Syntax\FormalParameterSection.cs" />
+    <Compile Include="Internal\Parser\Syntax\FormattedExpression.cs" />
+    <Compile Include="Internal\Parser\Syntax\ForStatement.cs" />
+    <Compile Include="Internal\Parser\Syntax\ForwardDirective.cs" />
     <Compile Include="Internal\Parser\Syntax\FunctionDirectives.cs" />
     <Compile Include="Internal\Parser\Syntax\GenericDefinition.cs" />
     <Compile Include="Internal\Parser\Syntax\GenericDefinitionPart.cs" />
     <Compile Include="Internal\Parser\Syntax\GenericTypeIdent.cs" />
     <Compile Include="Internal\Parser\Syntax\GenericTypesuffix.cs" />
+    <Compile Include="Internal\Parser\Syntax\GoToStatement.cs" />
     <Compile Include="Internal\Parser\Syntax\HintingInformation.cs" />
     <Compile Include="Internal\Parser\Syntax\HintingInformationList.cs" />
     <Compile Include="Internal\Parser\Syntax\IdentList.cs" />
+    <Compile Include="Internal\Parser\Syntax\IfStatement.cs" />
     <Compile Include="Internal\Parser\Syntax\InlineDirective.cs" />
     <Compile Include="Internal\Parser\Syntax\InterfaceDeclaration.cs" />
     <Compile Include="Internal\Parser\Syntax\InterfaceDefinition.cs" />
@@ -182,6 +142,7 @@
     <Compile Include="Internal\Parser\Syntax\ObjectDeclaration.cs" />
     <Compile Include="Internal\Parser\Syntax\ObjectItem.cs" />
     <Compile Include="Internal\Parser\Syntax\ObjectItems.cs" />
+    <Compile Include="Internal\Parser\Syntax\OldCallConvention.cs" />
     <Compile Include="Internal\Parser\Syntax\OverloadDirective.cs" />
     <Compile Include="Internal\Parser\Syntax\Package.cs" />
     <Compile Include="Internal\Parser\Syntax\PackageContains.cs" />
@@ -190,8 +151,8 @@
     <Compile Include="Internal\Parser\Syntax\ParentClass.cs" />
     <Compile Include="Internal\Parser\Syntax\PascalHexNumber.cs" />
     <Compile Include="Internal\Parser\Syntax\PascalIdentifier.cs" />
-    <Compile Include="Internal\Parser\Syntax\PascalRealNumber.cs" />
     <Compile Include="Internal\Parser\Syntax\PascalInteger.cs" />
+    <Compile Include="Internal\Parser\Syntax\PascalRealNumber.cs" />
     <Compile Include="Internal\Parser\Syntax\PointerType.cs" />
     <Compile Include="Internal\Parser\Syntax\ProcedureDeclaration.cs" />
     <Compile Include="Internal\Parser\Syntax\ProcedureDeclarationHeading.cs" />
@@ -241,12 +202,11 @@
     <Compile Include="Internal\Parser\Syntax\UnitImplementation.cs" />
     <Compile Include="Internal\Parser\Syntax\UnitInitialization.cs" />
     <Compile Include="Internal\Parser\Syntax\UnitInterface.cs" />
-    <Compile Include="Internal\Parser\Syntax\ForwardDirective.cs" />
     <Compile Include="Internal\Parser\Syntax\UnsafeDirective.cs" />
     <Compile Include="Internal\Parser\Syntax\UserAttribute.cs" />
     <Compile Include="Internal\Parser\Syntax\UserAttributes.cs" />
-    <Compile Include="Internal\Parser\Syntax\UsesFileClause.cs" />
     <Compile Include="Internal\Parser\Syntax\UsesClause.cs" />
+    <Compile Include="Internal\Parser\Syntax\UsesFileClause.cs" />
     <Compile Include="Internal\Parser\Syntax\VarDeclaration.cs" />
     <Compile Include="Internal\Parser\Syntax\VarSection.cs" />
     <Compile Include="Internal\Parser\Syntax\VarValueSpecification.cs" />
@@ -268,23 +228,17 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-    <None Include="paspaspas.ruleset" />
+    <ProjectReference Include="..\PasPasPas.Infrastructure\PasPasPas.Infrastructure.csproj">
+      <Project>{4cef569a-4ece-42ee-847b-5029958f757c}</Project>
+      <Name>PasPasPas.Infrastructure</Name>
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Paspaspas.Options\PasPasPas.Options.csproj">
+      <Project>{677a19c0-b2d4-4153-8dc9-0713c7193ece}</Project>
+      <Name>PasPasPas.Options</Name>
+    </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Analyzer Include="..\packages\Desktop.Analyzers.1.1.0\analyzers\dotnet\cs\Desktop.Analyzers.dll" />
-    <Analyzer Include="..\packages\Desktop.Analyzers.1.1.0\analyzers\dotnet\cs\Desktop.CSharp.Analyzers.dll" />
-    <Analyzer Include="..\packages\Microsoft.AnalyzerPowerPack.1.1.0\analyzers\dotnet\cs\Microsoft.AnalyzerPowerPack.Common.dll" />
-    <Analyzer Include="..\packages\Microsoft.AnalyzerPowerPack.1.1.0\analyzers\dotnet\cs\Microsoft.AnalyzerPowerPack.CSharp.dll" />
-    <Analyzer Include="..\packages\System.Runtime.Analyzers.1.1.0\analyzers\dotnet\cs\System.Runtime.Analyzers.dll" />
-    <Analyzer Include="..\packages\System.Runtime.Analyzers.1.1.0\analyzers\dotnet\cs\System.Runtime.CSharp.Analyzers.dll" />
-    <Analyzer Include="..\packages\System.Runtime.InteropServices.Analyzers.1.1.0\analyzers\dotnet\cs\System.Runtime.InteropServices.Analyzers.dll" />
-    <Analyzer Include="..\packages\System.Runtime.InteropServices.Analyzers.1.1.0\analyzers\dotnet\cs\System.Runtime.InteropServices.CSharp.Analyzers.dll" />
-    <Analyzer Include="..\packages\System.Security.Cryptography.Hashing.Algorithms.Analyzers.1.1.0\analyzers\dotnet\cs\System.Security.Cryptography.Hashing.Algorithms.Analyzers.dll" />
-    <Analyzer Include="..\packages\System.Security.Cryptography.Hashing.Algorithms.Analyzers.1.1.0\analyzers\dotnet\cs\System.Security.Cryptography.Hashing.Algorithms.CSharp.Analyzers.dll" />
-  </ItemGroup>
-  <ItemGroup />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace PasPasPas.Internal.Input {
+namespace PasPasPas.Infrastructure.Internal.Input {
 
     /// <summary>
     ///     base class for file input

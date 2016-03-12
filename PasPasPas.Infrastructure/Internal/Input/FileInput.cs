@@ -1,13 +1,25 @@
-﻿using System;
+﻿using PasPasPas.Infrastructure.Internal.Configuration;
+using System;
 using System.IO;
 using System.Text;
 
-namespace PasPasPas.Internal.Input {
+namespace PasPasPas.Infrastructure.Internal.Input {
 
     /// <summary>
     ///     file based input for the parser
     /// </summary>
     public class FileInput : InputBase, IDisposable {
+
+        /// <summary>
+        ///     name of thedefaul encoding
+        /// </summary>
+        public const string DefaultEncodingSettingName
+            = "FileInput.DefaultEncoding";
+
+        /// <summary>
+        ///     value of the encoding
+        /// </summary>
+        public const string DefaultEncodingValue = "utf-8";
 
         private StreamReader reader = null;
 
@@ -22,6 +34,11 @@ namespace PasPasPas.Internal.Input {
         ///     input file
         /// </summary>
         public string FileName { get; set; }
+
+        /// <summary>
+        ///     config settings
+        /// </summary>
+        public IConfigurationSettings Settings { get; set; }
 
         private StreamReader Reader
         {
@@ -41,14 +58,13 @@ namespace PasPasPas.Internal.Input {
         /// </summary>
         /// <param name="srcFile"></param>
         /// <returns></returns>
-        public static Encoding GetFileEncoding(string srcFile) {
-            Encoding enc = Encoding.Default;
+        public Encoding GetFileEncoding(string srcFile) {
+            Encoding enc = Encoding.GetEncoding(Settings.GetValue(DefaultEncodingSettingName, DefaultEncodingValue));
 
             // *** Detect byte order mark if any - otherwise assume default
             byte[] buffer = new byte[5];
             using (FileStream file = new FileStream(srcFile, FileMode.Open)) {
                 file.Read(buffer, 0, 5);
-                file.Close();
             }
 
             if (buffer[0] == 0xef && buffer[1] == 0xbb && buffer[2] == 0xbf)
@@ -67,7 +83,8 @@ namespace PasPasPas.Internal.Input {
 
 
         private StreamReader CreateAndInitializeReader() {
-            var result = new StreamReader(FileName, GetFileEncoding(FileName));
+            var factory = FileReaderFactories.Default;
+            var result = factory.CreateReader(FileName, GetFileEncoding(FileName));
             return result;
         }
 

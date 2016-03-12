@@ -1,13 +1,8 @@
-﻿using PasPasPas.Api;
-using PasPasPas.Api.Input;
-using PasPasPas.Internal.Input;
+﻿using PasPasPas.Infrastructure.Internal.Input;
 using PasPasPas.Internal.Tokenizer;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TokenizerDemo {
     class Program {

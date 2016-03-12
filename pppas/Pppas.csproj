@@ -68,9 +68,17 @@
     <Analyzer Include="..\packages\System.Security.Cryptography.Hashing.Algorithms.Analyzers.1.1.0\analyzers\dotnet\cs\System.Security.Cryptography.Hashing.Algorithms.CSharp.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\paspaspas\Paspaspas.csproj">
-      <Project>{ee241a25-4cfc-4b2f-8421-f8686d617150}</Project>
-      <Name>Paspaspas</Name>
+    <ProjectReference Include="..\PasPasPas.Infrastructure\PasPasPas.Infrastructure.csproj">
+      <Project>{4cef569a-4ece-42ee-847b-5029958f757c}</Project>
+      <Name>PasPasPas.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Paspaspas.Options\PasPasPas.Options.csproj">
+      <Project>{677a19c0-b2d4-4153-8dc9-0713c7193ece}</Project>
+      <Name>PasPasPas.Options</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PasPasPas.Parsing\PasPasPas.Parsing.csproj">
+      <Project>{efa1da73-0c34-4bfb-9006-dcffa12218ed}</Project>
+      <Name>PasPasPas.Parsing</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

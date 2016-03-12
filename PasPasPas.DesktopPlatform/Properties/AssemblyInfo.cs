@@ -1,18 +1,15 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Runtime.InteropServices;
-
-[assembly: CLSCompliant(true)]
 
 // Allgemeine Informationen über eine Assembly werden über die folgenden 
 // Attribute gesteuert. Ändern Sie diese Attributwerte, um die Informationen zu ändern,
 // die einer Assembly zugeordnet sind.
-[assembly: AssemblyTitle("Paspaspas")]
+[assembly: AssemblyTitle("DesktopPlatform.cs")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("paspaspas")]
-[assembly: AssemblyCopyright("Copyright ©  2015")]
+[assembly: AssemblyProduct("DesktopPlatform.cs")]
+[assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -22,7 +19,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // Die folgende GUID bestimmt die ID der Typbibliothek, wenn dieses Projekt für COM verfügbar gemacht wird
-[assembly: Guid("ee241a25-4cfc-4b2f-8421-f8686d617150")]
+[assembly: Guid("8adb6566-773f-4487-8611-2d8ad5337163")]
 
 // Versionsinformationen für eine Assembly bestehen aus den folgenden vier Werten:
 //

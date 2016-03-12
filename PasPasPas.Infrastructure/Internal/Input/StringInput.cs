@@ -1,4 +1,4 @@
-﻿namespace PasPasPas.Internal.Input {
+﻿namespace PasPasPas.Infrastructure.Internal.Input {
 
     /// <summary>
     ///     parser input for <c>strings</c>

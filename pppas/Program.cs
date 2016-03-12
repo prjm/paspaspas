@@ -1,5 +1,5 @@
 ﻿using PasPasPas.Api;
-using PasPasPas.Internal.Input;
+using PasPasPas.Infrastructure.Internal.Input;
 using System;
 using System.Text;
 

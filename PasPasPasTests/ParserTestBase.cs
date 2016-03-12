@@ -1,16 +1,15 @@
 ﻿using PasPasPas.Api;
 using PasPasPas.Api.Options;
-using PasPasPas.Internal.Input;
+using PasPasPas.DesktopPlatform;
+using PasPasPas.Infrastructure.Internal.Input;
 using PasPasPas.Internal.Log;
 using PasPasPas.Internal.Parser;
 using PasPasPas.Internal.Tokenizer;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace PasPasPasTests {
+
     public class ParserTestBase {
 
         protected OptionSet TestOptions
@@ -48,6 +47,8 @@ namespace PasPasPasTests {
         }
 
         protected void ParseString(string input, string output = null) {
+            FileReaderFactory.Register();
+
             if (string.IsNullOrEmpty(output))
                 output = input;
 
@@ -70,6 +71,7 @@ namespace PasPasPasTests {
         }
 
         protected void RunCompilerDirective(string directive, object expected, Func<object> actual) {
+            FileReaderFactory.Register();
             TestOptions.Clear();
             TestOptions.ConditionalCompilation.Conditionals.OwnValues.Add(new ConditionalSymbol() {
                 Name = "PASPASPAS_TEST"
