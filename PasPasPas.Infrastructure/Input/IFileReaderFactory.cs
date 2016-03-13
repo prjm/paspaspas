@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Text;
 
-namespace PasPasPas.Infrastructure.Internal.Input {
+namespace PasPasPas.Infrastructure.Input {
 
     /// <summary>
     ///     interface for file reader creation

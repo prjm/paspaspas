@@ -1,5 +1,5 @@
 ﻿using PasPasPas.Api;
-using PasPasPas.Api.Input;
+using PasPasPas.Infrastructure.Input;
 using System.Collections.Generic;
 using System.Text;
 
@@ -128,7 +128,7 @@ namespace PasPasPas.Internal.Tokenizer {
             var tokenKind = tokenGroup.Match(input, out tokenLength);
 
             for (int inputIndex = input.Length - 1; inputIndex >= tokenLength; inputIndex--) {
-                inputStream.Putback(input[inputIndex]); ;
+                inputStream.PutbackChar(input[inputIndex]); ;
             }
             input.Length = tokenLength;
 

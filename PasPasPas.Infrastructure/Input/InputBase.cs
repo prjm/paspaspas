@@ -1,8 +1,7 @@
-﻿using PasPasPas.Api.Input;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text;
 
-namespace PasPasPas.Infrastructure.Internal.Input {
+namespace PasPasPas.Infrastructure.Input {
 
     /// <summary>
     ///     base class for file input
@@ -43,7 +42,7 @@ namespace PasPasPas.Infrastructure.Internal.Input {
         ///     put back an entire string
         /// </summary>
         /// <param name="valueToPutback"></param>
-        public void Putback(string valueToPutback) {
+        public void PutbackString(string valueToPutback) {
             for (int charIndex = valueToPutback.Length - 1; charIndex >= 0; charIndex--) {
                 putbackBuffer.Push(valueToPutback[charIndex]);
             }
@@ -53,7 +52,7 @@ namespace PasPasPas.Infrastructure.Internal.Input {
         ///     put back an entire stringbuffer
         /// </summary>
         /// <param name="buffer"></param>
-        public void Putback(StringBuilder buffer) {
+        public void PutbackStringBuffer(StringBuilder buffer) {
             for (int charIndex = buffer.Length - 1; charIndex >= 0; charIndex--) {
                 putbackBuffer.Push(buffer[charIndex]);
             }
@@ -66,7 +65,7 @@ namespace PasPasPas.Infrastructure.Internal.Input {
         ///     putback a single char
         /// </summary>
         /// <param name="valueToPutback"></param>
-        public void Putback(char valueToPutback) {
+        public void PutbackChar(char valueToPutback) {
             putbackBuffer.Push(valueToPutback);
         }
     }

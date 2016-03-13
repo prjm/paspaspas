@@ -4,6 +4,8 @@
     "dnxcore50.app": {}
   },
   "dependencies": {
+    "Microsoft.AnalyzerPowerPack": "1.1.0",
+    "Microsoft.CodeAnalysis.FxCopAnalyzers": "1.1.0",
     "Microsoft.NETCore": "5.0.0",
     "Microsoft.NETCore.Portable.Compatibility": "1.0.0"
   },

@@ -1,4 +1,4 @@
-﻿namespace PasPasPas.Infrastructure.Internal.Input {
+﻿namespace PasPasPas.Infrastructure.Input {
 
     /// <summary>
     ///     input file reader factories

@@ -1,7 +1,8 @@
-﻿using PasPasPas.Internal.Log;
-using System;
+﻿
+namespace PasPasPas.Infrastructure.Log {
 
-namespace PasPasPas.Internal {
+    using System;
+
 
     /// <summary>
     ///     event arguments to log messages

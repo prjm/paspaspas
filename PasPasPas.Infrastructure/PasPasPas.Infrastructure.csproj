@@ -27,7 +27,7 @@
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Debug\PasPasPas.Infrastructure.XML</DocumentationFile>
     <RunCodeAnalysis>true</RunCodeAnalysis>
-    <CodeAnalysisRuleSet>..\paspaspas\paspaspas.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>..\PasPasPas.Ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -42,20 +42,20 @@
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Api\Input\IParserInput.cs" />
-    <Compile Include="Internal\Configuration\IConfigurationSettings.cs" />
-    <Compile Include="Internal\Configuration\TypedConfigurationSettings.cs" />
-    <Compile Include="Internal\Input\FileInput.cs" />
-    <Compile Include="Internal\Input\FileReaderFactories.cs" />
-    <Compile Include="Internal\Input\IFileReaderFactory.cs" />
-    <Compile Include="Internal\Input\InputBase.cs" />
-    <Compile Include="Internal\Input\StringInput.cs" />
-    <Compile Include="Internal\Log\ILogService.cs" />
-    <Compile Include="Internal\Log\LogMessage.cs" />
-    <Compile Include="Internal\Log\LogService.cs" />
-    <Compile Include="Internal\Log\MessageData.cs" />
-    <Compile Include="Internal\Log\MessageGenerator.cs" />
-    <Compile Include="Internal\Log\ObjectWithLog.cs" />
+    <Compile Include="Input\IParserInput.cs" />
+    <Compile Include="Configuration\IConfigurationSettings.cs" />
+    <Compile Include="Configuration\TypedConfigurationSettings.cs" />
+    <Compile Include="Input\FileInput.cs" />
+    <Compile Include="Input\FileReaderFactories.cs" />
+    <Compile Include="Input\IFileReaderFactory.cs" />
+    <Compile Include="Input\InputBase.cs" />
+    <Compile Include="Input\StringInput.cs" />
+    <Compile Include="Log\ILogService.cs" />
+    <Compile Include="Log\LogMessage.cs" />
+    <Compile Include="Log\LogService.cs" />
+    <Compile Include="Log\MessageData.cs" />
+    <Compile Include="Log\MessageGenerator.cs" />
+    <Compile Include="Log\ObjectWithLog.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />

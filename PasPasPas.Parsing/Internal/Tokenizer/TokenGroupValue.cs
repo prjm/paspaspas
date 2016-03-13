@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Text;
-using PasPasPas.Api.Input;
 using PasPasPas.Api;
 using System.Collections.Generic;
+using PasPasPas.Infrastructure.Input;
 
 namespace PasPasPas.Internal.Tokenizer {
 
@@ -122,7 +122,7 @@ namespace PasPasPas.Internal.Tokenizer {
                     }
                     else {
                         prefix.Append("'");
-                        input.Putback(nextChar);
+                        input.PutbackChar(nextChar);
                         return new PascalToken(PascalToken.QuotedString, prefix.ToString());
                     }
                 }
@@ -193,7 +193,7 @@ namespace PasPasPas.Internal.Tokenizer {
                     }
                     else {
                         prefix.Append("\"");
-                        input.Putback(nextChar);
+                        input.PutbackChar(nextChar);
                         return new PascalToken(PascalToken.DoubleQuotedString, prefix.ToString());
                     }
                 }
@@ -226,7 +226,7 @@ namespace PasPasPas.Internal.Tokenizer {
         /// <param name="prefix"></param>
         /// <returns></returns>
         public override PascalToken WithPrefix(IParserInput input, StringBuilder prefix) {
-            input.Putback(prefix[0]);
+            input.PutbackChar(prefix[0]);
             prefix.Length = 0;
 
             while (!input.AtEof) {
@@ -239,7 +239,7 @@ namespace PasPasPas.Internal.Tokenizer {
                         hexDigits.WithPrefix(input, prefix);
                     }
                     else {
-                        input.Putback(nextChar);
+                        input.PutbackChar(nextChar);
                         digits.WithPrefix(input, prefix);
                     }
                 }
@@ -248,7 +248,7 @@ namespace PasPasPas.Internal.Tokenizer {
                     quotedString.WithPrefix(input, prefix);
                 }
                 else {
-                    input.Putback(currentChar);
+                    input.PutbackChar(currentChar);
                     break;
                 }
             }
@@ -361,7 +361,7 @@ namespace PasPasPas.Internal.Tokenizer {
                 }
 
                 if (!MatchesClass(currentChar))
-                    input.Putback(currentChar);
+                    input.PutbackChar(currentChar);
                 else
                     prefix.Append(currentChar);
             }
@@ -487,7 +487,7 @@ namespace PasPasPas.Internal.Tokenizer {
             while (!input.AtEof) {
                 var currentChar = input.NextChar();
                 if (!identifierCharClass.Matches(currentChar)) {
-                    input.Putback(currentChar);
+                    input.PutbackChar(currentChar);
                     break;
                 }
                 prefix.Append(currentChar);
@@ -528,7 +528,7 @@ namespace PasPasPas.Internal.Tokenizer {
                             prefix.Append(nextChar);
                         }
                         else {
-                            input.Putback(nextChar);
+                            input.PutbackChar(nextChar);
                         }
                     }
                     break;
@@ -572,7 +572,7 @@ namespace PasPasPas.Internal.Tokenizer {
                 return true;
             }
             else {
-                input.Putback(n);
+                input.PutbackChar(n);
                 return false;
             }
         }
@@ -596,7 +596,7 @@ namespace PasPasPas.Internal.Tokenizer {
                     withDot = true;
                 }
                 else if (prefix.EndsWith(".")) {
-                    input.Putback(".");
+                    input.PutbackString(".");
                     prefix.Length -= 1;
                 }
             }

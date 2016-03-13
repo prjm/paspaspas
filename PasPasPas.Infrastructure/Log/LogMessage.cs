@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Globalization;
+﻿namespace PasPasPas.Infrastructure.Log {
 
-namespace PasPasPas.Internal.Log {
+    using System.Collections.Generic;
+    using System.Globalization;
 
     /// <summary>
     ///     log level

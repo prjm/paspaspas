@@ -1,6 +1,6 @@
 ﻿using PasPasPas.Api;
 using PasPasPas.Api.Options;
-using PasPasPas.Infrastructure.Internal.Input;
+using PasPasPas.Infrastructure.Input;
 
 namespace PasPasPas.Internal.Tokenizer {
 

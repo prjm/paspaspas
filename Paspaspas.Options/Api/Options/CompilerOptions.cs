@@ -17,7 +17,7 @@ namespace PasPasPas.Api.Options {
         /// <summary>
         ///     active platform
         /// </summary>
-        public Platform ActivePlatform
+        public Platform ActivePlatform { get; set; }
             = null;
 
         /// <summary>

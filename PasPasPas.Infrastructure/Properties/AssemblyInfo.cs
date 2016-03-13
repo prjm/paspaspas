@@ -1,16 +1,19 @@
 ﻿using System.Resources;
 using System.Reflection;
+using System;
+
+[assembly: CLSCompliant(true)]
 
 // Allgemeine Informationen über eine Assembly werden über folgende 
 // Attribute gesteuert. Ändern Sie diese Attributwerte, um die Informationen zu ändern,
 // die einer Assembly zugeordnet sind.
 [assembly: AssemblyTitle("PasPasPas.Infrastructure")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Basic services for PasPasPas projects")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("The PasPasPas Project")]
 [assembly: AssemblyProduct("PasPasPas.Infrastructure")]
-[assembly: AssemblyCopyright("Copyright ©  2016")]
-[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCopyright("Copyright ©  2016 Bastian Turcs")]
+[assembly: AssemblyTrademark("PasPasPas")]
 [assembly: AssemblyCulture("")]
 [assembly: NeutralResourcesLanguage("de")]
 

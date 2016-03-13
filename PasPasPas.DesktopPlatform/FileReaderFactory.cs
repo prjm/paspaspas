@@ -1,6 +1,6 @@
 ﻿using System.IO;
 using System.Text;
-using PasPasPas.Infrastructure.Internal.Input;
+using PasPasPas.Infrastructure.Input;
 
 namespace PasPasPas.DesktopPlatform {
 

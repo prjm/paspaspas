@@ -1,9 +1,9 @@
-﻿using PasPasPas.Infrastructure.Internal.Configuration;
+﻿using PasPasPas.Infrastructure.Configuration;
 using System;
 using System.IO;
 using System.Text;
 
-namespace PasPasPas.Infrastructure.Internal.Input {
+namespace PasPasPas.Infrastructure.Input {
 
     /// <summary>
     ///     file based input for the parser

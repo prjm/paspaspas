@@ -1,7 +1,6 @@
-﻿
-using System.Collections.Generic;
+﻿namespace PasPasPas.Infrastructure.Log {
 
-namespace PasPasPas.Internal.Log {
+    using System.Collections.Generic;
 
     /// <summary>
     ///     general log provider

@@ -1,4 +1,4 @@
-﻿namespace PasPasPas.Internal.Log {
+﻿namespace PasPasPas.Infrastructure.Log {
 
     /// <summary>
     ///     base class for object with logging facilitiers

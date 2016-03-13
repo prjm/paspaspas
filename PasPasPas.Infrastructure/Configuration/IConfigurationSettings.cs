@@ -1,4 +1,4 @@
-﻿namespace PasPasPas.Infrastructure.Internal.Configuration {
+﻿namespace PasPasPas.Infrastructure.Configuration {
 
     /// <summary>
     ///     configuration settings
@@ -16,10 +16,10 @@
         /// <summary>
         ///     set a string value
         /// </summary>
-        /// <param name="settigName">setting name</param>
+        /// <param name="settingName">setting name</param>
         /// <param name="settingValue">setting value</param>
         /// <returns>old value, if extisting</returns>
-        string SetValue(string settigName, string settingValue);
+        string SetValue(string settingName, string settingValue);
 
     }
 }

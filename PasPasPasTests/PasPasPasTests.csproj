@@ -62,7 +62,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DesktopPlatform.cs\PasPasPas.DesktopPlatform.csproj">
+    <ProjectReference Include="..\PasPasPas.DesktopPlatform\PasPasPas.DesktopPlatform.csproj">
       <Project>{8adb6566-773f-4487-8611-2d8ad5337163}</Project>
       <Name>PasPasPas.DesktopPlatform</Name>
     </ProjectReference>

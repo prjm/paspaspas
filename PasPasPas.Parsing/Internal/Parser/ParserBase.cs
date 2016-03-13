@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 using System.Linq;
+using PasPasPas.Infrastructure.Log;
 
 namespace PasPasPas.Internal.Parser {
 

@@ -1,6 +1,5 @@
-﻿using PasPasPas.Internal.Log;
+﻿namespace PasPasPas.Infrastructure.Log {
 
-namespace PasPasPas.Internal {
 
     /// <summary>
     ///     helper class for message data

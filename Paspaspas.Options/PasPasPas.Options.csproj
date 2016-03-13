@@ -8,8 +8,8 @@
     <ProjectGuid>{677A19C0-B2D4-4153-8DC9-0713C7193ECE}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Paspaspas.Options</RootNamespace>
-    <AssemblyName>Paspaspas.Options</AssemblyName>
+    <RootNamespace>PasPasPas.Options</RootNamespace>
+    <AssemblyName>PasPasPas.Options</AssemblyName>
     <DefaultLanguage>de-DE</DefaultLanguage>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -25,8 +25,9 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\Paspaspas.Options.XML</DocumentationFile>
-    <CodeAnalysisRuleSet>..\paspaspas\paspaspas.ruleset</CodeAnalysisRuleSet>
+    <DocumentationFile>bin\Debug\PasPasPas.Options.xml</DocumentationFile>
+    <CodeAnalysisRuleSet>..\PasPasPas.Ruleset</CodeAnalysisRuleSet>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -67,6 +68,7 @@
     <Compile Include="Api\Options\OptionSet.cs" />
     <Compile Include="Api\Options\Platform.cs" />
     <Compile Include="Api\Options\PlatformKey.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Internal\Options\AnyCpuPlatform.cs" />
     <Compile Include="Internal\Options\DefaultPlatform.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace PasPasPas.Infrastructure.Internal.Configuration {
+namespace PasPasPas.Infrastructure.Configuration {
 
     /// <summary>
     ///     configurationn entries

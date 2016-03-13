@@ -3,6 +3,28 @@
   "version": 1,
   "targets": {
     ".NETFramework,Version=v4.6": {
+      "Desktop.Analyzers/1.1.0": {
+        "frameworkAssemblies": [
+          "System"
+        ]
+      },
+      "Microsoft.AnalyzerPowerPack/1.1.0": {
+        "frameworkAssemblies": [
+          "System"
+        ]
+      },
+      "Microsoft.CodeAnalysis.FxCopAnalyzers/1.1.0": {
+        "dependencies": {
+          "Desktop.Analyzers": "[1.0.0, 1.2.0)",
+          "Microsoft.AnalyzerPowerPack": "[1.0.0, 1.2.0)",
+          "System.Runtime.Analyzers": "[1.0.0, 1.2.0)",
+          "System.Runtime.InteropServices.Analyzers": "[1.0.0, 1.2.0)",
+          "System.Security.Cryptography.Hashing.Algorithms.Analyzers": "[1.0.0, 1.2.0)"
+        },
+        "frameworkAssemblies": [
+          "System"
+        ]
+      },
       "Microsoft.NETCore/5.0.0": {
         "dependencies": {
           "Microsoft.CSharp": "[4.0.0, )",
@@ -502,6 +524,11 @@
           "lib/net46/_._": {}
         }
       },
+      "System.Runtime.Analyzers/1.0.0": {
+        "frameworkAssemblies": [
+          "System"
+        ]
+      },
       "System.Runtime.Extensions/4.0.10": {
         "compile": {
           "ref/net46/_._": {}
@@ -525,6 +552,11 @@
         "runtime": {
           "lib/net46/_._": {}
         }
+      },
+      "System.Runtime.InteropServices.Analyzers/1.0.0": {
+        "frameworkAssemblies": [
+          "System"
+        ]
       },
       "System.Runtime.Numerics/4.0.0": {
         "compile": {
@@ -554,6 +586,11 @@
         "runtime": {
           "lib/net46/System.Security.Claims.dll": {}
         }
+      },
+      "System.Security.Cryptography.Hashing.Algorithms.Analyzers/1.1.0": {
+        "frameworkAssemblies": [
+          "System"
+        ]
       },
       "System.Security.Principal/4.0.0": {
         "compile": {
@@ -658,6 +695,28 @@
       }
     },
     ".NETFramework,Version=v4.6/win-x64": {
+      "Desktop.Analyzers/1.1.0": {
+        "frameworkAssemblies": [
+          "System"
+        ]
+      },
+      "Microsoft.AnalyzerPowerPack/1.1.0": {
+        "frameworkAssemblies": [
+          "System"
+        ]
+      },
+      "Microsoft.CodeAnalysis.FxCopAnalyzers/1.1.0": {
+        "dependencies": {
+          "Desktop.Analyzers": "[1.0.0, 1.2.0)",
+          "Microsoft.AnalyzerPowerPack": "[1.0.0, 1.2.0)",
+          "System.Runtime.Analyzers": "[1.0.0, 1.2.0)",
+          "System.Runtime.InteropServices.Analyzers": "[1.0.0, 1.2.0)",
+          "System.Security.Cryptography.Hashing.Algorithms.Analyzers": "[1.0.0, 1.2.0)"
+        },
+        "frameworkAssemblies": [
+          "System"
+        ]
+      },
       "Microsoft.NETCore/5.0.0": {
         "dependencies": {
           "Microsoft.CSharp": "[4.0.0, )",
@@ -1181,6 +1240,11 @@
           "lib/net46/_._": {}
         }
       },
+      "System.Runtime.Analyzers/1.0.0": {
+        "frameworkAssemblies": [
+          "System"
+        ]
+      },
       "System.Runtime.Extensions/4.0.10": {
         "compile": {
           "ref/net46/_._": {}
@@ -1204,6 +1268,11 @@
         "runtime": {
           "lib/net46/_._": {}
         }
+      },
+      "System.Runtime.InteropServices.Analyzers/1.0.0": {
+        "frameworkAssemblies": [
+          "System"
+        ]
       },
       "System.Runtime.Numerics/4.0.0": {
         "compile": {
@@ -1233,6 +1302,11 @@
         "runtime": {
           "lib/net46/System.Security.Claims.dll": {}
         }
+      },
+      "System.Security.Cryptography.Hashing.Algorithms.Analyzers/1.1.0": {
+        "frameworkAssemblies": [
+          "System"
+        ]
       },
       "System.Security.Principal/4.0.0": {
         "compile": {
@@ -1337,6 +1411,28 @@
       }
     },
     ".NETFramework,Version=v4.6/win-x86": {
+      "Desktop.Analyzers/1.1.0": {
+        "frameworkAssemblies": [
+          "System"
+        ]
+      },
+      "Microsoft.AnalyzerPowerPack/1.1.0": {
+        "frameworkAssemblies": [
+          "System"
+        ]
+      },
+      "Microsoft.CodeAnalysis.FxCopAnalyzers/1.1.0": {
+        "dependencies": {
+          "Desktop.Analyzers": "[1.0.0, 1.2.0)",
+          "Microsoft.AnalyzerPowerPack": "[1.0.0, 1.2.0)",
+          "System.Runtime.Analyzers": "[1.0.0, 1.2.0)",
+          "System.Runtime.InteropServices.Analyzers": "[1.0.0, 1.2.0)",
+          "System.Security.Cryptography.Hashing.Algorithms.Analyzers": "[1.0.0, 1.2.0)"
+        },
+        "frameworkAssemblies": [
+          "System"
+        ]
+      },
       "Microsoft.NETCore/5.0.0": {
         "dependencies": {
           "Microsoft.CSharp": "[4.0.0, )",
@@ -1860,6 +1956,11 @@
           "lib/net46/_._": {}
         }
       },
+      "System.Runtime.Analyzers/1.0.0": {
+        "frameworkAssemblies": [
+          "System"
+        ]
+      },
       "System.Runtime.Extensions/4.0.10": {
         "compile": {
           "ref/net46/_._": {}
@@ -1883,6 +1984,11 @@
         "runtime": {
           "lib/net46/_._": {}
         }
+      },
+      "System.Runtime.InteropServices.Analyzers/1.0.0": {
+        "frameworkAssemblies": [
+          "System"
+        ]
       },
       "System.Runtime.Numerics/4.0.0": {
         "compile": {
@@ -1912,6 +2018,11 @@
         "runtime": {
           "lib/net46/System.Security.Claims.dll": {}
         }
+      },
+      "System.Security.Cryptography.Hashing.Algorithms.Analyzers/1.1.0": {
+        "frameworkAssemblies": [
+          "System"
+        ]
       },
       "System.Security.Principal/4.0.0": {
         "compile": {
@@ -2016,6 +2127,28 @@
       }
     },
     ".NETPlatform,Version=v5.0": {
+      "Desktop.Analyzers/1.1.0": {
+        "frameworkAssemblies": [
+          "System"
+        ]
+      },
+      "Microsoft.AnalyzerPowerPack/1.1.0": {
+        "frameworkAssemblies": [
+          "System"
+        ]
+      },
+      "Microsoft.CodeAnalysis.FxCopAnalyzers/1.1.0": {
+        "dependencies": {
+          "Desktop.Analyzers": "[1.0.0, 1.2.0)",
+          "Microsoft.AnalyzerPowerPack": "[1.0.0, 1.2.0)",
+          "System.Runtime.Analyzers": "[1.0.0, 1.2.0)",
+          "System.Runtime.InteropServices.Analyzers": "[1.0.0, 1.2.0)",
+          "System.Security.Cryptography.Hashing.Algorithms.Analyzers": "[1.0.0, 1.2.0)"
+        },
+        "frameworkAssemblies": [
+          "System"
+        ]
+      },
       "Microsoft.CSharp/4.0.0": {
         "dependencies": {
           "System.Collections": "[4.0.10, )",
@@ -2593,6 +2726,11 @@
           "ref/dotnet/System.Runtime.dll": {}
         }
       },
+      "System.Runtime.Analyzers/1.0.0": {
+        "frameworkAssemblies": [
+          "System"
+        ]
+      },
       "System.Runtime.Extensions/4.0.10": {
         "dependencies": {
           "System.Runtime": "[4.0.20, )"
@@ -2619,6 +2757,11 @@
         "compile": {
           "ref/dotnet/System.Runtime.InteropServices.dll": {}
         }
+      },
+      "System.Runtime.InteropServices.Analyzers/1.0.0": {
+        "frameworkAssemblies": [
+          "System"
+        ]
       },
       "System.Runtime.Numerics/4.0.0": {
         "dependencies": {
@@ -2651,6 +2794,11 @@
         "runtime": {
           "lib/dotnet/System.Security.Claims.dll": {}
         }
+      },
+      "System.Security.Cryptography.Hashing.Algorithms.Analyzers/1.1.0": {
+        "frameworkAssemblies": [
+          "System"
+        ]
       },
       "System.Security.Principal/4.0.0": {
         "dependencies": {
@@ -2807,6 +2955,17 @@
       }
     },
     "DNXCore,Version=v5.0": {
+      "Desktop.Analyzers/1.1.0": {},
+      "Microsoft.AnalyzerPowerPack/1.1.0": {},
+      "Microsoft.CodeAnalysis.FxCopAnalyzers/1.1.0": {
+        "dependencies": {
+          "Desktop.Analyzers": "[1.0.0, 1.2.0)",
+          "Microsoft.AnalyzerPowerPack": "[1.0.0, 1.2.0)",
+          "System.Runtime.Analyzers": "[1.0.0, 1.2.0)",
+          "System.Runtime.InteropServices.Analyzers": "[1.0.0, 1.2.0)",
+          "System.Security.Cryptography.Hashing.Algorithms.Analyzers": "[1.0.0, 1.2.0)"
+        }
+      },
       "Microsoft.CSharp/4.0.0": {
         "dependencies": {
           "System.Collections": "[4.0.10, )",
@@ -3619,6 +3778,7 @@
           "lib/DNXCore50/System.Runtime.dll": {}
         }
       },
+      "System.Runtime.Analyzers/1.0.0": {},
       "System.Runtime.Extensions/4.0.10": {
         "dependencies": {
           "System.Runtime": "[4.0.20, )"
@@ -3655,6 +3815,7 @@
           "lib/DNXCore50/System.Runtime.InteropServices.dll": {}
         }
       },
+      "System.Runtime.InteropServices.Analyzers/1.0.0": {},
       "System.Runtime.Numerics/4.0.0": {
         "dependencies": {
           "System.Globalization": "[4.0.10, )",
@@ -3687,6 +3848,7 @@
           "lib/dotnet/System.Security.Claims.dll": {}
         }
       },
+      "System.Security.Cryptography.Hashing.Algorithms.Analyzers/1.1.0": {},
       "System.Security.Principal/4.0.0": {
         "dependencies": {
           "System.Runtime": "[4.0.0, )"
@@ -3869,6 +4031,17 @@
       }
     },
     "DNXCore,Version=v5.0/win7-x64": {
+      "Desktop.Analyzers/1.1.0": {},
+      "Microsoft.AnalyzerPowerPack/1.1.0": {},
+      "Microsoft.CodeAnalysis.FxCopAnalyzers/1.1.0": {
+        "dependencies": {
+          "Desktop.Analyzers": "[1.0.0, 1.2.0)",
+          "Microsoft.AnalyzerPowerPack": "[1.0.0, 1.2.0)",
+          "System.Runtime.Analyzers": "[1.0.0, 1.2.0)",
+          "System.Runtime.InteropServices.Analyzers": "[1.0.0, 1.2.0)",
+          "System.Security.Cryptography.Hashing.Algorithms.Analyzers": "[1.0.0, 1.2.0)"
+        }
+      },
       "Microsoft.CSharp/4.0.0": {
         "dependencies": {
           "System.Collections": "[4.0.10, )",
@@ -4895,6 +5068,7 @@
           "lib/DNXCore50/System.Runtime.dll": {}
         }
       },
+      "System.Runtime.Analyzers/1.0.0": {},
       "System.Runtime.Extensions/4.0.10": {
         "dependencies": {
           "System.Runtime": "[4.0.20, )"
@@ -4931,6 +5105,7 @@
           "lib/DNXCore50/System.Runtime.InteropServices.dll": {}
         }
       },
+      "System.Runtime.InteropServices.Analyzers/1.0.0": {},
       "System.Runtime.Numerics/4.0.0": {
         "dependencies": {
           "System.Globalization": "[4.0.10, )",
@@ -4963,6 +5138,7 @@
           "lib/dotnet/System.Security.Claims.dll": {}
         }
       },
+      "System.Security.Cryptography.Hashing.Algorithms.Analyzers/1.1.0": {},
       "System.Security.Principal/4.0.0": {
         "dependencies": {
           "System.Runtime": "[4.0.0, )"
@@ -5145,6 +5321,17 @@
       }
     },
     "DNXCore,Version=v5.0/win7-x86": {
+      "Desktop.Analyzers/1.1.0": {},
+      "Microsoft.AnalyzerPowerPack/1.1.0": {},
+      "Microsoft.CodeAnalysis.FxCopAnalyzers/1.1.0": {
+        "dependencies": {
+          "Desktop.Analyzers": "[1.0.0, 1.2.0)",
+          "Microsoft.AnalyzerPowerPack": "[1.0.0, 1.2.0)",
+          "System.Runtime.Analyzers": "[1.0.0, 1.2.0)",
+          "System.Runtime.InteropServices.Analyzers": "[1.0.0, 1.2.0)",
+          "System.Security.Cryptography.Hashing.Algorithms.Analyzers": "[1.0.0, 1.2.0)"
+        }
+      },
       "Microsoft.CSharp/4.0.0": {
         "dependencies": {
           "System.Collections": "[4.0.10, )",
@@ -6171,6 +6358,7 @@
           "lib/DNXCore50/System.Runtime.dll": {}
         }
       },
+      "System.Runtime.Analyzers/1.0.0": {},
       "System.Runtime.Extensions/4.0.10": {
         "dependencies": {
           "System.Runtime": "[4.0.20, )"
@@ -6207,6 +6395,7 @@
           "lib/DNXCore50/System.Runtime.InteropServices.dll": {}
         }
       },
+      "System.Runtime.InteropServices.Analyzers/1.0.0": {},
       "System.Runtime.Numerics/4.0.0": {
         "dependencies": {
           "System.Globalization": "[4.0.10, )",
@@ -6239,6 +6428,7 @@
           "lib/dotnet/System.Security.Claims.dll": {}
         }
       },
+      "System.Security.Cryptography.Hashing.Algorithms.Analyzers/1.1.0": {},
       "System.Security.Principal/4.0.0": {
         "dependencies": {
           "System.Runtime": "[4.0.0, )"
@@ -6422,6 +6612,56 @@
     }
   },
   "libraries": {
+    "Desktop.Analyzers/1.1.0": {
+      "sha512": "YNx8+pW75pz/VF52vren5Yfu16sPYX02M537sHc1W4jtdY4sEGPs/p8reaLjF5PFX/9ml97DBHg056kR9K6tsQ==",
+      "type": "Package",
+      "files": [
+        "[Content_Types].xml",
+        "_rels/.rels",
+        "analyzers/dotnet/cs/Desktop.Analyzers.dll",
+        "analyzers/dotnet/cs/Desktop.CSharp.Analyzers.dll",
+        "analyzers/dotnet/vb/Desktop.Analyzers.dll",
+        "analyzers/dotnet/vb/Desktop.VisualBasic.Analyzers.dll",
+        "build/Desktop.Analyzers.Common.props",
+        "Desktop.Analyzers.nuspec",
+        "package/services/metadata/core-properties/2436b1e41b4449d594166837b3315577.psmdcp",
+        "ThirdPartyNotices.rtf",
+        "tools/install.ps1",
+        "tools/uninstall.ps1"
+      ]
+    },
+    "Microsoft.AnalyzerPowerPack/1.1.0": {
+      "sha512": "0ER7rYBQOFsuaHJY8LyYjxscYBCop0B9Vam8jdRAlkbTRtU7NFxt72vnX6Bpk8sIn4JxPi/Oxy5ySr06kTuSqw==",
+      "type": "Package",
+      "files": [
+        "[Content_Types].xml",
+        "_rels/.rels",
+        "analyzers/dotnet/cs/Microsoft.AnalyzerPowerPack.Common.dll",
+        "analyzers/dotnet/cs/Microsoft.AnalyzerPowerPack.CSharp.dll",
+        "analyzers/dotnet/vb/Microsoft.AnalyzerPowerPack.Common.dll",
+        "analyzers/dotnet/vb/Microsoft.AnalyzerPowerPack.VisualBasic.dll",
+        "build/AnalyzerPowerPack.Common.props",
+        "build/AnalyzerPowerPack.CSharp.props",
+        "build/AnalyzerPowerPack.props",
+        "build/AnalyzerPowerPack.VisualBasic.props",
+        "Microsoft.AnalyzerPowerPack.nuspec",
+        "package/services/metadata/core-properties/c19f4cdca0324515b2dfc51cb5d64bc2.psmdcp",
+        "ThirdPartyNotices.rtf",
+        "tools/install.ps1",
+        "tools/uninstall.ps1"
+      ]
+    },
+    "Microsoft.CodeAnalysis.FxCopAnalyzers/1.1.0": {
+      "sha512": "5g8tJmtLKhwsPYaHmNb4y7CCnCskSIqfYjYHsm8HQyoFtu1iWM1Hno3dviMF7ySHYRuAF/op3kxpVpwLhATErA==",
+      "type": "Package",
+      "files": [
+        "[Content_Types].xml",
+        "_rels/.rels",
+        "Microsoft.CodeAnalysis.FxCopAnalyzers.nuspec",
+        "package/services/metadata/core-properties/1683016dc1b144aa8e1a9695b4f62c83.psmdcp",
+        "ThirdPartyNotices.rtf"
+      ]
+    },
     "Microsoft.CSharp/4.0.0": {
       "sha512": "oWqeKUxHXdK6dL2CFjgMcaBISbkk+AqEg+yvJHE4DElNzS4QaTsCflgkkqZwVlWby1Dg9zo9n+iCAMFefFdJ/A==",
       "type": "Package",
@@ -8505,6 +8745,27 @@
         "System.Runtime.nuspec"
       ]
     },
+    "System.Runtime.Analyzers/1.0.0": {
+      "sha512": "7wMU959BN5x960d4/yqXPdY4qd1MvABA9abHO+iRKSxoeqeEgfTyw9BIeceP1OhSOpBY2S4lnFQh7bMy17ojnQ==",
+      "type": "Package",
+      "files": [
+        "[Content_Types].xml",
+        "_rels/.rels",
+        "analyzers/dotnet/cs/System.Runtime.Analyzers.dll",
+        "analyzers/dotnet/cs/System.Runtime.CSharp.Analyzers.dll",
+        "analyzers/dotnet/vb/System.Runtime.Analyzers.dll",
+        "analyzers/dotnet/vb/System.Runtime.VisualBasic.Analyzers.dll",
+        "build/System.Runtime.Analyzers.Common.props",
+        "build/System.Runtime.Analyzers.props",
+        "build/System.Runtime.CSharp.Analyzers.props",
+        "build/System.Runtime.VisualBasic.Analyzers.props",
+        "package/services/metadata/core-properties/ca89e149b9824892a4777d18fb45363f.psmdcp",
+        "System.Runtime.Analyzers.nuspec",
+        "ThirdPartyNotices.rtf",
+        "tools/install.ps1",
+        "tools/uninstall.ps1"
+      ]
+    },
     "System.Runtime.Extensions/4.0.10": {
       "sha512": "5dsEwf3Iml7d5OZeT20iyOjT+r+okWpN7xI2v+R4cgd3WSj4DeRPTvPFjDpacbVW4skCAZ8B9hxXJYgkCFKJ1A==",
       "type": "Package",
@@ -8607,6 +8868,25 @@
         "System.Runtime.InteropServices.nuspec"
       ]
     },
+    "System.Runtime.InteropServices.Analyzers/1.0.0": {
+      "sha512": "QC8pee7WKCAV72G0hY67EOJCWRDuRrQNbLKk3sUj8ywpFbbSR7qw2D6MkQXypS8fIserT7if7l56gZdcBnvNeA==",
+      "type": "Package",
+      "files": [
+        "[Content_Types].xml",
+        "_rels/.rels",
+        "analyzers/dotnet/cs/System.Runtime.InteropServices.Analyzers.dll",
+        "analyzers/dotnet/cs/System.Runtime.InteropServices.CSharp.Analyzers.dll",
+        "analyzers/dotnet/vb/System.Runtime.InteropServices.Analyzers.dll",
+        "analyzers/dotnet/vb/System.Runtime.InteropServices.VisualBasic.Analyzers.dll",
+        "build/System.Runtime.InteropServices.Analyzers.Common.props",
+        "build/System.Runtime.InteropServices.Analyzers.props",
+        "package/services/metadata/core-properties/41e3df837c2f4329834d022fa4eefef0.psmdcp",
+        "System.Runtime.InteropServices.Analyzers.nuspec",
+        "ThirdPartyNotices.rtf",
+        "tools/install.ps1",
+        "tools/uninstall.ps1"
+      ]
+    },
     "System.Runtime.Numerics/4.0.0": {
       "sha512": "aAYGEOE01nabQLufQ4YO8WuSyZzOqGcksi8m1BRW8ppkmssR7en8TqiXcBkB2gTkCnKG/Ai2NQY8CgdmgZw/fw==",
       "type": "Package",
@@ -8668,6 +8948,24 @@
         "ref/xamarinios10/_._",
         "ref/xamarinmac20/_._",
         "System.Security.Claims.nuspec"
+      ]
+    },
+    "System.Security.Cryptography.Hashing.Algorithms.Analyzers/1.1.0": {
+      "sha512": "c2lyFrbsjBTqJs9nrMYri4pFzADgk8BhQmuP6MTU3jW2R0JL5dtY8YJr5U2ORTSdluQCOfDcDwNYineNpTw33Q==",
+      "type": "Package",
+      "files": [
+        "[Content_Types].xml",
+        "_rels/.rels",
+        "analyzers/dotnet/cs/System.Security.Cryptography.Hashing.Algorithms.Analyzers.dll",
+        "analyzers/dotnet/cs/System.Security.Cryptography.Hashing.Algorithms.CSharp.Analyzers.dll",
+        "analyzers/dotnet/vb/System.Security.Cryptography.Hashing.Algorithms.Analyzers.dll",
+        "analyzers/dotnet/vb/System.Security.Cryptography.Hashing.Algorithms.VisualBasic.Analyzers.dll",
+        "build/System.Security.Cryptography.Hashing.Algorithms.Analyzers.Common.props",
+        "package/services/metadata/core-properties/9ef8e368ff054f6dad8f2997088b13cd.psmdcp",
+        "System.Security.Cryptography.Hashing.Algorithms.Analyzers.nuspec",
+        "ThirdPartyNotices.rtf",
+        "tools/install.ps1",
+        "tools/uninstall.ps1"
       ]
     },
     "System.Security.Principal/4.0.0": {
@@ -9042,6 +9340,8 @@
   },
   "projectFileDependencyGroups": {
     "": [
+      "Microsoft.AnalyzerPowerPack >= 1.1.0",
+      "Microsoft.CodeAnalysis.FxCopAnalyzers >= 1.1.0",
       "Microsoft.NETCore >= 5.0.0",
       "Microsoft.NETCore.Portable.Compatibility >= 1.0.0"
     ],

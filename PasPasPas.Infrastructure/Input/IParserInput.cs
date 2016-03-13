@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace PasPasPas.Api.Input {
+namespace PasPasPas.Infrastructure.Input {
 
     /// <summary>
     ///     interface for parser input
@@ -23,18 +23,18 @@ namespace PasPasPas.Api.Input {
         ///     put back a character
         /// </summary>
         /// <param name="valueToPutback">character to put back</param>
-        void Putback(char valueToPutback);
+        void PutbackChar(char valueToPutback);
 
         /// <summary>
         ///     put back a string
         /// </summary>
         /// <param name="valueToPutback"></param>
-        void Putback(string valueToPutback);
+        void PutbackString(string valueToPutback);
 
         /// <summary>
         ///     putback a buffer structur
         /// </summary>
         /// <param name="buffer"></param>
-        void Putback(StringBuilder buffer);
+        void PutbackStringBuffer(StringBuilder buffer);
     }
 }

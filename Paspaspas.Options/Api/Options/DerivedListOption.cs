@@ -22,7 +22,7 @@ namespace PasPasPas.Api.Options {
         /// <summary>
         ///     list of own values
         /// </summary>
-        public IList<T> OwnValues
+        public IList<T> OwnValues { get; }
             = new List<T>();
 
         /// <summary>

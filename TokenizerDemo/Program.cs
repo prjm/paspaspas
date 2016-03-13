@@ -1,4 +1,4 @@
-﻿using PasPasPas.Infrastructure.Internal.Input;
+﻿using PasPasPas.Infrastructure.Input;
 using PasPasPas.Internal.Tokenizer;
 using System;
 using System.Collections.Generic;

@@ -13,7 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TokenizerDemo", "TokenizerD
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{AC53D98C-87A1-42D9-859E-4182316C25AB}"
 	ProjectSection(SolutionItems) = preProject
-		paspaspas\paspaspas.ruleset = paspaspas\paspaspas.ruleset
+		PasPasPas.Ruleset = PasPasPas.Ruleset
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PasPasPas.Infrastructure", "PasPasPas.Infrastructure\PasPasPas.Infrastructure.csproj", "{4CEF569A-4ECE-42EE-847B-5029958F757C}"
@@ -26,7 +26,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{F28AC463
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Platform", "Platform", "{9EF2045A-8E0D-4315-8754-8385F5776216}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PasPasPas.DesktopPlatform", "DesktopPlatform.cs\PasPasPas.DesktopPlatform.csproj", "{8ADB6566-773F-4487-8611-2D8AD5337163}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PasPasPas.DesktopPlatform", "PasPasPas.DesktopPlatform\PasPasPas.DesktopPlatform.csproj", "{8ADB6566-773F-4487-8611-2D8AD5337163}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
