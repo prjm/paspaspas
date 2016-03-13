@@ -48,6 +48,7 @@
     <Compile Include="Api\Options\BooleanEvaluation.cs" />
     <Compile Include="Api\Options\CodeAlignment.cs" />
     <Compile Include="Api\Options\CompileOptions.cs" />
+    <Compile Include="Api\Options\CompilerHints.cs" />
     <Compile Include="Api\Options\CompilerOptions.cs" />
     <Compile Include="Api\Options\ConditionalCompilationOptions.cs" />
     <Compile Include="Api\Options\ConditonalDefine.cs" />
@@ -58,9 +59,12 @@
     <Compile Include="Api\Options\DerivedValueOption.cs" />
     <Compile Include="Api\Options\DesignOnlyUnit.cs" />
     <Compile Include="Api\Options\ElseCondition.cs" />
+    <Compile Include="Api\Options\ExcessPrecisionForResults.cs" />
     <Compile Include="Api\Options\ExportCppObjects.cs" />
     <Compile Include="Api\Options\ExtendedCompatiblityMode.cs" />
     <Compile Include="Api\Options\ExtendedSyntax.cs" />
+    <Compile Include="Api\Options\ExternalSymbol.cs" />
+    <Compile Include="Api\Options\HighCharsUnicode.cs" />
     <Compile Include="Api\Options\ICondition.cs" />
     <Compile Include="Api\Options\IDerivedOption.cs" />
     <Compile Include="Api\Options\IfDefCondition.cs" />

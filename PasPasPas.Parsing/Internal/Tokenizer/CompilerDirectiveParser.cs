@@ -62,6 +62,9 @@ namespace PasPasPas.Internal.Tokenizer {
                 PascalToken.ObjExportAll,
                 PascalToken.ExtendedCompatibility,
                 PascalToken.ExtendedSyntaxSwitchLong,
+                PascalToken.ExcessPrecision,
+                PascalToken.HighCharUnicode,
+                PascalToken.Hints,
             };
 
         private static HashSet<int> parameters
@@ -146,7 +149,19 @@ namespace PasPasPas.Internal.Tokenizer {
         }
 
         private void ParseExternalSym() {
-            throw new NotImplementedException();
+            Require(PascalToken.ExternalSym);
+            var identiferName = Require(PascalToken.Identifier).Value;
+            string symbolName = null, unionName = null;
+
+            if (Optional(PascalToken.QuotedString)) {
+                symbolName = Require(PascalToken.QuotedString).Value;
+            }
+
+            if (Optional(PascalToken.QuotedString)) {
+                unionName = Require(PascalToken.QuotedString).Value;
+            }
+
+            Meta.RegisterExternalSymbol(identiferName, symbolName, unionName);
         }
 
         private void ParseElse() {
@@ -225,6 +240,9 @@ namespace PasPasPas.Internal.Tokenizer {
             else if (string.Equals(value, "GUI", StringComparison.OrdinalIgnoreCase)) {
                 CompilerOptions.ApplicationType.Value = AppType.Gui;
             }
+            else {
+                Unexpected();
+            }
         }
 
         /// <summary>
@@ -290,7 +308,61 @@ namespace PasPasPas.Internal.Tokenizer {
                 return true;
             }
 
+            if (Optional(PascalToken.ExcessPrecision)) {
+                ParseLongExcessPrecisionSwitch();
+                return true;
+            }
+
+            if (Optional(PascalToken.HighCharUnicode)) {
+                ParseLongHighCharUnicodeSwitch();
+                return true;
+            }
+
+            if (Optional(PascalToken.Hints)) {
+                ParseLongHintsSwitch();
+                return true;
+            }
+
             return false;
+        }
+
+        private void ParseLongHintsSwitch() {
+            if (Optional(PascalToken.On)) {
+                CompilerOptions.Hints.Value = CompilerHints.EnableHints;
+                return;
+            }
+
+            if (Optional(PascalToken.Off)) {
+                CompilerOptions.Hints.Value = CompilerHints.DisableHints;
+                return;
+            }
+            Unexpected();
+        }
+
+        private void ParseLongHighCharUnicodeSwitch() {
+            if (Optional(PascalToken.On)) {
+                CompilerOptions.HighCharUnicode.Value = HighCharsUnicode.EnableHighChars;
+                return;
+            }
+
+            if (Optional(PascalToken.Off)) {
+                CompilerOptions.HighCharUnicode.Value = HighCharsUnicode.DisableHighChars;
+                return;
+            }
+            Unexpected();
+        }
+
+        private void ParseLongExcessPrecisionSwitch() {
+            if (Optional(PascalToken.On)) {
+                CompilerOptions.ExcessPrecision.Value = ExcessPrecisionForResults.EnableExcess;
+                return;
+            }
+
+            if (Optional(PascalToken.Off)) {
+                CompilerOptions.ExcessPrecision.Value = ExcessPrecisionForResults.DisableExcess;
+                return;
+            }
+            Unexpected();
         }
 
         private void ParseLongExtendedSyntaxSwitch() {
@@ -303,6 +375,7 @@ namespace PasPasPas.Internal.Tokenizer {
                 CompilerOptions.UseExtendedSyntax.Value = ExtendedSyntax.NoExtendedSyntax;
                 return;
             }
+            Unexpected();
         }
 
         private void ParseExtendedCompatibilitySwitch() {
@@ -315,6 +388,7 @@ namespace PasPasPas.Internal.Tokenizer {
                 CompilerOptions.ExtendedCompatibility.Value = ExtendedCompatiblityMode.Disabled;
                 return;
             }
+            Unexpected();
         }
 
         private void ParseObjExportAllSwitch() {

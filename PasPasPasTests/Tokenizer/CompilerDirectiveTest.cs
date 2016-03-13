@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PasPasPas.Api.Options;
+using System.Linq;
 
 namespace PasPasPasTests.Tokenizer {
 
@@ -143,6 +144,35 @@ namespace PasPasPasTests.Tokenizer {
             RunCompilerDirective("X-", ExtendedSyntax.NoExtendedSyntax, () => CompilerOptions.UseExtendedSyntax.Value);
             RunCompilerDirective("EXTENDEDSYNTAX ON", ExtendedSyntax.UseExtendedSyntax, () => CompilerOptions.UseExtendedSyntax.Value);
             RunCompilerDirective("EXTENDEDSYNTAX OFF", ExtendedSyntax.NoExtendedSyntax, () => CompilerOptions.UseExtendedSyntax.Value);
+        }
+
+        [TestMethod]
+        public void TestExternalSymbol() {
+            //RunCompilerDirective("", 0, () => Meta.ExternalSymbols.Count);
+            RunCompilerDirective("EXTERNALSYM dummy", true, () => Meta.ExternalSymbols.Any(t => string.Equals(t.IdentifierName, "dummy")));
+            RunCompilerDirective("EXTERNALSYM dummy 'a'", true, () => Meta.ExternalSymbols.Any(t => string.Equals(t.IdentifierName, "dummy")));
+            RunCompilerDirective("EXTERNALSYM dummy 'a' 'q'", true, () => Meta.ExternalSymbols.Any(t => string.Equals(t.IdentifierName, "dummy")));
+        }
+
+        [TestMethod]
+        public void TestExcessPrecision() {
+            RunCompilerDirective("", ExcessPrecisionForResults.Undefined, () => CompilerOptions.ExcessPrecision.Value);
+            RunCompilerDirective("EXCESSPRECISION  ON", ExcessPrecisionForResults.EnableExcess, () => CompilerOptions.ExcessPrecision.Value);
+            RunCompilerDirective("EXCESSPRECISION  OFF", ExcessPrecisionForResults.DisableExcess, () => CompilerOptions.ExcessPrecision.Value);
+        }
+
+        [TestMethod]
+        public void TestHighCharUnicode() {
+            RunCompilerDirective("", HighCharsUnicode.Undefined, () => CompilerOptions.HighCharUnicode.Value);
+            RunCompilerDirective("HIGHCHARUNICODE OFF", HighCharsUnicode.DisableHighChars, () => CompilerOptions.HighCharUnicode.Value);
+            RunCompilerDirective("HIGHCHARUNICODE ON", HighCharsUnicode.EnableHighChars, () => CompilerOptions.HighCharUnicode.Value);
+        }
+
+        [TestMethod]
+        public void TestHints() {
+            RunCompilerDirective("", CompilerHints.Undefined, () => CompilerOptions.Hints.Value);
+            RunCompilerDirective("HINTS ON", CompilerHints.EnableHints, () => CompilerOptions.Hints.Value);
+            RunCompilerDirective("HINTS OFF", CompilerHints.DisableHints, () => CompilerOptions.Hints.Value);
         }
 
     }

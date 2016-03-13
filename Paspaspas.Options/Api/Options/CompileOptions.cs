@@ -19,6 +19,9 @@
             ExportCppObjects = new DerivedValueOption<ExportCppObjects>(baseOptions?.ExportCppObjects);
             ExtendedCompatibility = new DerivedValueOption<ExtendedCompatiblityMode>(baseOptions?.ExtendedCompatibility);
             UseExtendedSyntax = new DerivedValueOption<ExtendedSyntax>(baseOptions?.UseExtendedSyntax);
+            ExcessPrecision = new DerivedValueOption<ExcessPrecisionForResults>(baseOptions?.ExcessPrecision);
+            HighCharUnicode = new DerivedValueOption<HighCharsUnicode>(baseOptions?.HighCharUnicode);
+            Hints = new DerivedValueOption<CompilerHints>(baseOptions?.Hints);
         }
 
         /// <summary>
@@ -52,6 +55,11 @@
         public DerivedValueOption<DebugInformation> DebugInfo { get; }
 
         /// <summary>
+        ///     excess precision on x64
+        /// </summary>
+        public DerivedValueOption<ExcessPrecisionForResults> ExcessPrecision { get; }
+
+        /// <summary>
         ///     export all cpp objects
         /// </summary>
         public DerivedValueOption<ExportCppObjects> ExportCppObjects { get; }
@@ -60,6 +68,16 @@
         ///     exteded compatibility mode
         /// </summary>
         public DerivedValueOption<ExtendedCompatiblityMode> ExtendedCompatibility { get; }
+
+        /// <summary>
+        ///     high chars for unicode
+        /// </summary>
+        public DerivedValueOption<HighCharsUnicode> HighCharUnicode { get; }
+
+        /// <summary>
+        ///     enable or disable hints
+        /// </summary>
+        public DerivedValueOption<CompilerHints> Hints { get; }
 
         /// <summary>
         ///     switch to enable extended syntax
@@ -79,6 +97,9 @@
             ExportCppObjects.ResetToDefault();
             ExtendedCompatibility.ResetToDefault();
             UseExtendedSyntax.ResetToDefault();
+            ExcessPrecision.ResetToDefault();
+            HighCharUnicode.ResetToDefault();
+            Hints.ResetToDefault();
         }
 
         /// <summary>
@@ -90,6 +111,9 @@
             CodeAlign.ResetToDefault();
             Assertions.ResetToDefault();
             ExtendedCompatibility.ResetToDefault();
+            ExcessPrecision.ResetToDefault();
+            HighCharUnicode.ResetToDefault();
+            Hints.ResetToDefault();
         }
     }
 }

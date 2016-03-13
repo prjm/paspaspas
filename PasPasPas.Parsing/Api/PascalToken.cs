@@ -1374,18 +1374,6 @@ namespace PasPasPas.Api {
         public const int ZeroBaseStrings = 802;
 
         /// <summary>
-        ///     token for <c>$EXTERNALSYM</c>
-        /// </summary>
-        public const int ExternalSym = 803;
-
-        /// <summary>
-        ///     token for <c>$HPPEMIT</c>
-        /// </summary>
-        public const int HppEmit = 804;
-
-
-
-        /// <summary>
         ///     token for <c>$A1</c>
         /// </summary>
         public const int AlignSwitch1 = 803;
@@ -1414,6 +1402,16 @@ namespace PasPasPas.Api {
         ///     token for <c>off</c>
         /// </summary>
         public const int Off = 808;
+
+        /// <summary>
+        ///     token for <c>$EXTERNALSYM</c>
+        /// </summary>
+        public const int ExternalSym = 809;
+
+        /// <summary>
+        ///     token for <c>$HPPEMIT</c>
+        /// </summary>
+        public const int HppEmit = 810;
 
         /// <summary>
         ///     create a new token
