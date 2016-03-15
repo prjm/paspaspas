@@ -9,7 +9,15 @@
         ///     setting undefined
         /// </summary>
         Undefined = 0,
+
+        /// <summary>
+        ///     disable chars
+        /// </summary>
         DisableHighChars = 1,
+
+        /// <summary>
+        ///     enable chars
+        /// </summary>
         EnableHighChars = 2,
     }
 }

@@ -64,6 +64,7 @@
     <Compile Include="Api\Options\ExtendedCompatiblityMode.cs" />
     <Compile Include="Api\Options\ExtendedSyntax.cs" />
     <Compile Include="Api\Options\ExternalSymbol.cs" />
+    <Compile Include="DataTypes\HeaderString.cs" />
     <Compile Include="Api\Options\HighCharsUnicode.cs" />
     <Compile Include="Api\Options\ICondition.cs" />
     <Compile Include="Api\Options\IDerivedOption.cs" />
@@ -72,6 +73,7 @@
     <Compile Include="Api\Options\OptionSet.cs" />
     <Compile Include="Api\Options\Platform.cs" />
     <Compile Include="Api\Options\PlatformKey.cs" />
+    <Compile Include="DataTypes\HppEmitMode.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Internal\Options\AnyCpuPlatform.cs" />
     <Compile Include="Internal\Options\DefaultPlatform.cs" />

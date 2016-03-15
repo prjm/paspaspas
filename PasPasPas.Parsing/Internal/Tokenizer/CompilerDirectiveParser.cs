@@ -3,6 +3,8 @@ using PasPasPas.Api.Options;
 using PasPasPas.Internal.Parser;
 using System.Collections.Generic;
 using System;
+using PasPasPas.Options.DataTypes;
+using System.Globalization;
 
 namespace PasPasPas.Internal.Tokenizer {
 
@@ -77,6 +79,9 @@ namespace PasPasPas.Internal.Tokenizer {
                 PascalToken.EndIf,
                 PascalToken.ElseCd,
                 PascalToken.ExternalSym,
+                PascalToken.HppEmit,
+                PascalToken.IfNDef,
+                PascalToken.ImageBase,
             };
 
         /// <summary>
@@ -117,6 +122,11 @@ namespace PasPasPas.Internal.Tokenizer {
                 return true;
             }
 
+            if (Match(PascalToken.IfNDef)) {
+                ParseIfNDef();
+                return true;
+            }
+
             if (ConditionalCompilation.Skip)
                 return false;
 
@@ -145,7 +155,58 @@ namespace PasPasPas.Internal.Tokenizer {
                 return true;
             }
 
+            if (Match(PascalToken.HppEmit)) {
+                ParseHppEmit();
+                return true;
+            }
+
+            if (Match(PascalToken.ImageBase)) {
+                ParseImageBase();
+                return true;
+            }
+
             return false;
+        }
+
+        private void ParseImageBase() {
+            Require(PascalToken.ImageBase);
+            var number = Require(PascalToken.Integer, PascalToken.HexNumber);
+            int value;
+
+            if ((number.Kind == PascalToken.Integer && int.TryParse(number.Value, out value)) ||
+                (number.Kind == PascalToken.HexNumber && int.TryParse(number.Value.Substring(1), NumberStyles.HexNumber, CultureInfo.CurrentCulture, out value))) {
+                CompilerOptions.ImageBase.Value = value;
+            }
+        }
+
+        private void ParseIfNDef() {
+            Require(PascalToken.IfNDef);
+            var value = Require(CurrentToken().Kind).Value;
+            if (!string.IsNullOrEmpty(value)) {
+                ConditionalCompilation.AddIfNDefCondition(value);
+            }
+        }
+
+        private void ParseHppEmit() {
+            Require(PascalToken.HppEmit);
+            HppEmitMode mode = HppEmitMode.Standard;
+            if (Optional(PascalToken.End))
+                mode = HppEmitMode.AtEnd;
+            else if (Optional(PascalToken.LinkUnit))
+                mode = HppEmitMode.LinkUnit;
+            else if (Optional(PascalToken.OpenNamespace))
+                mode = HppEmitMode.OpenNamespace;
+            else if (Optional(PascalToken.CloseNamepsace))
+                mode = HppEmitMode.CloseNamespace;
+            else if (Optional(PascalToken.NoUsingNamespace))
+                mode = HppEmitMode.NoUsingNamespace;
+
+            string emitValue = null;
+            if (mode == HppEmitMode.AtEnd || mode == HppEmitMode.Standard) {
+                emitValue = Require(PascalToken.QuotedString).Value;
+            }
+
+            Meta.HeaderEmit(mode, emitValue);
         }
 
         private void ParseExternalSym() {

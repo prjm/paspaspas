@@ -22,7 +22,13 @@
             ExcessPrecision = new DerivedValueOption<ExcessPrecisionForResults>(baseOptions?.ExcessPrecision);
             HighCharUnicode = new DerivedValueOption<HighCharsUnicode>(baseOptions?.HighCharUnicode);
             Hints = new DerivedValueOption<CompilerHints>(baseOptions?.Hints);
+            ImageBase = new DerivedValueOption<int>(baseOptions?.ImageBase);
         }
+
+        /// <summary>
+        ///     image base address
+        /// </summary>
+        public DerivedValueOption<int> ImageBase { get; set; }
 
         /// <summary>
         ///     value alignment
@@ -100,6 +106,7 @@
             ExcessPrecision.ResetToDefault();
             HighCharUnicode.ResetToDefault();
             Hints.ResetToDefault();
+            ImageBase.ResetToDefault();
         }
 
         /// <summary>

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using PasPasPas.Options.DataTypes;
+using System.Collections.Generic;
 
 namespace PasPasPas.Api.Options {
 
@@ -11,7 +12,13 @@ namespace PasPasPas.Api.Options {
         ///     list of external symblos
         /// </summary>
         public IList<ExternalSymbol> ExternalSymbols { get; }
-        = new List<ExternalSymbol>();
+            = new List<ExternalSymbol>();
+
+        /// <summary>
+        ///     list of header strings for c++
+        /// </summary>
+        public IList<HeaderString> HeaderStrings { get; }
+            = new List<HeaderString>();
 
         /// <summary>
         ///     creates a new meta information option object
@@ -37,7 +44,7 @@ namespace PasPasPas.Api.Options {
         ///     reset on new unit
         /// </summary>
         public void ResetOnNewUnit() {
-            //..
+            HeaderStrings.Clear();
         }
 
         /// <summary>
@@ -47,6 +54,7 @@ namespace PasPasPas.Api.Options {
             Description.ResetToDefault();
             FileExtension.ResetToDefault();
             ExternalSymbols.Clear();
+            HeaderStrings.Clear();
         }
 
         /// <summary>
@@ -60,6 +68,18 @@ namespace PasPasPas.Api.Options {
                 IdentifierName = identiferName,
                 SymbolName = symbolName,
                 UnionName = unionName
+            });
+        }
+
+        /// <summary>
+        ///     emit c++ header strings
+        /// </summary>
+        /// <param name="mode">emit mode</param>
+        /// <param name="emitValue">emit value</param>
+        public void HeaderEmit(HppEmitMode mode, string emitValue) {
+            HeaderStrings.Add(new HeaderString() {
+                Mode = mode,
+                Value = emitValue
             });
         }
     }

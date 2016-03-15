@@ -1414,6 +1414,26 @@ namespace PasPasPas.Api {
         public const int HppEmit = 810;
 
         /// <summary>
+        ///     token for <c>LINKUNIT</c>
+        /// </summary>
+        public const int LinkUnit = 811;
+
+        /// <summary>
+        ///     token for <c>OPENNAMESPACe</c>
+        /// </summary>
+        public const int OpenNamespace = 812;
+
+        /// <summary>
+        ///     token for <c>CLOSENAMESPACE</c>
+        /// </summary>
+        public const int CloseNamepsace = 813;
+
+        /// <summary>
+        ///     token for <c>NOUSINGNAMESPACE</c>
+        /// </summary>
+        public const int NoUsingNamespace = 814;
+
+        /// <summary>
         ///     create a new token
         /// </summary>
         /// <param name="tokenId">tokenid</param>

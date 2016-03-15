@@ -158,6 +158,15 @@ namespace PasPasPas.Api.Options {
         }
 
         /// <summary>
+        ///     add a <c>ifndef</c> condition
+        /// </summary>
+        /// <param name="value"></param>
+        public void AddIfNDefCondition(string value) {
+            AddNewCondition(new IfDefCondition() { Matches = !IsSymbolDefined(value), SymbolName = value });
+            UpdateSkipState();
+        }
+
+        /// <summary>
         ///     remove an ifdef condition
         /// </summary>
         public void RemoveIfDefCondition() {

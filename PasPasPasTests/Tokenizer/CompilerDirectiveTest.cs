@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PasPasPas.Api.Options;
+using PasPasPas.Options.DataTypes;
 using System.Linq;
 
 namespace PasPasPasTests.Tokenizer {
@@ -74,6 +75,11 @@ namespace PasPasPasTests.Tokenizer {
             RunCompilerDirective("IFDEF TESTSYM $ DEFINE A § ELSE § DEFINE B § ENDIF", false, () => ConditionalCompilation.IsSymbolDefined("A"));
             RunCompilerDirective("IFDEF TESTSYM $ DEFINE B § ELSE § DEFINE A § ENDIF", false, () => ConditionalCompilation.IsSymbolDefined("B"));
             RunCompilerDirective("IFDEF TESTSYM $ DEFINE A § ELSE § DEFINE B § ENDIF", true, () => ConditionalCompilation.IsSymbolDefined("B"));
+
+            RunCompilerDirective("IFNDEF TESTSYM § DEFINE A § ENDIF", true, () => ConditionalCompilation.IsSymbolDefined("A"));
+            RunCompilerDirective("IFNDEF TESTSYM § IFNDEF Q § DEFINE A § ENDIF § ENDIF", true, () => ConditionalCompilation.IsSymbolDefined("A"));
+            RunCompilerDirective("IFNDEF PASPASPAS_TEST § DEFINE A § ENDIF", false, () => ConditionalCompilation.IsSymbolDefined("A"));
+
         }
 
         [TestMethod]
@@ -148,7 +154,7 @@ namespace PasPasPasTests.Tokenizer {
 
         [TestMethod]
         public void TestExternalSymbol() {
-            //RunCompilerDirective("", 0, () => Meta.ExternalSymbols.Count);
+            RunCompilerDirective("", 0, () => Meta.ExternalSymbols.Count);
             RunCompilerDirective("EXTERNALSYM dummy", true, () => Meta.ExternalSymbols.Any(t => string.Equals(t.IdentifierName, "dummy")));
             RunCompilerDirective("EXTERNALSYM dummy 'a'", true, () => Meta.ExternalSymbols.Any(t => string.Equals(t.IdentifierName, "dummy")));
             RunCompilerDirective("EXTERNALSYM dummy 'a' 'q'", true, () => Meta.ExternalSymbols.Any(t => string.Equals(t.IdentifierName, "dummy")));
@@ -173,6 +179,23 @@ namespace PasPasPasTests.Tokenizer {
             RunCompilerDirective("", CompilerHints.Undefined, () => CompilerOptions.Hints.Value);
             RunCompilerDirective("HINTS ON", CompilerHints.EnableHints, () => CompilerOptions.Hints.Value);
             RunCompilerDirective("HINTS OFF", CompilerHints.DisableHints, () => CompilerOptions.Hints.Value);
+        }
+
+        [TestMethod]
+        public void TestHppEmit() {
+            RunCompilerDirective("", 0, () => Meta.HeaderStrings.Count);
+            RunCompilerDirective("HPPEMIT 'dummy'", true, () => Meta.HeaderStrings.Any(t => string.Equals(t.Value, "'dummy'")));
+            RunCompilerDirective("HPPEMIT END 'dummy'", true, () => Meta.HeaderStrings.Any(t => string.Equals(t.Value, "'dummy'")));
+            RunCompilerDirective("HPPEMIT LINKUNIT", true, () => Meta.HeaderStrings.Any(t => t.Mode == HppEmitMode.LinkUnit));
+            RunCompilerDirective("HPPEMIT OPENNAMESPACE", true, () => Meta.HeaderStrings.Any(t => t.Mode == HppEmitMode.OpenNamespace));
+            RunCompilerDirective("HPPEMIT CLOSENAMESPACE", true, () => Meta.HeaderStrings.Any(t => t.Mode == HppEmitMode.CloseNamespace));
+            RunCompilerDirective("HPPEMIT NOUSINGNAMESPACE", true, () => Meta.HeaderStrings.Any(t => t.Mode == HppEmitMode.NoUsingNamespace));
+        }
+
+        [TestMethod]
+        public void TestImageBase() {
+            RunCompilerDirective("IMAGEBASE $40000000 ", 0x40000000, () => CompilerOptions.ImageBase.Value);
+            RunCompilerDirective("IMAGEBASE 40000000 ", 40000000, () => CompilerOptions.ImageBase.Value);
         }
 
     }

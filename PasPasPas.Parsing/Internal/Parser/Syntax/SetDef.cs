@@ -14,11 +14,6 @@ namespace PasPasPas.Internal.Parser.Syntax {
         public SetDef(IParserInformationProvider informationProvider) : base(informationProvider) { }
 
         /// <summary>
-        ///     packed set
-        /// </summary>
-        public bool Packed { get; internal set; }
-
-        /// <summary>
         ///     inner type reference
         /// </summary>
         public TypeSpecification TypeDefinition { get; internal set; }
@@ -28,10 +23,6 @@ namespace PasPasPas.Internal.Parser.Syntax {
         /// </summary>
         /// <param name="result"></param>
         public override void ToFormatter(PascalFormatter result) {
-            if (Packed) {
-                result.Keyword("packed");
-                result.Space();
-            }
             result.Keyword("set");
             result.Space();
             result.Keyword("of");

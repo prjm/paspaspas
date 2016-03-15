@@ -127,6 +127,11 @@ namespace PasPasPas.Internal.Tokenizer {
                 ["ZEROBASEDSTRINGS"] = PascalToken.ZeroBaseStrings,
                 ["ON"] = PascalToken.On,
                 ["OFF"] = PascalToken.Off,
+                ["LINKUNIT"] = PascalToken.LinkUnit,
+                ["OPENNAMESPACE"] = PascalToken.OpenNamespace,
+                ["CLOSENAMESPACE"] = PascalToken.CloseNamepsace,
+                ["NOUSINGNAMESPACE"] = PascalToken.NoUsingNamespace,
+                ["END"] = PascalToken.End,
             };
 
         /// <summary>

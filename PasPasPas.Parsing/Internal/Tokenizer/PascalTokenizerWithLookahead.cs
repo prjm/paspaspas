@@ -1,8 +1,9 @@
 ﻿using PasPasPas.Api;
 using PasPasPas.Api.Options;
 using PasPasPas.Infrastructure.Input;
+using PasPasPas.Internal.Tokenizer;
 
-namespace PasPasPas.Internal.Tokenizer {
+namespace PasPasPas.Optios {
 
     /// <summary>
     ///     pascal tokenizer with lookahead

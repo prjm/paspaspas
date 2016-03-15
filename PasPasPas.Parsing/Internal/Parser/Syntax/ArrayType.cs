@@ -19,11 +19,6 @@ namespace PasPasPas.Internal.Parser.Syntax {
         public bool ArrayOfConst { get; internal set; }
 
         /// <summary>
-        ///     packed array
-        /// </summary>
-        public bool Packed { get; internal set; }
-
-        /// <summary>
         ///     array type specification
         /// </summary>
         public TypeSpecification TypeSpecification { get; internal set; }
@@ -33,12 +28,6 @@ namespace PasPasPas.Internal.Parser.Syntax {
         /// </summary>
         /// <param name="result"></param>
         public override void ToFormatter(PascalFormatter result) {
-
-            if (Packed) {
-                result.Keyword("packed");
-                result.Space();
-            }
-
             result.Keyword("array");
             result.Space();
 

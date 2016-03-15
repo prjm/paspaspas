@@ -562,7 +562,7 @@ namespace PasPasPas.Internal.Tokenizer {
         private PlusMinusCharacterClass plusminus
             = new PlusMinusCharacterClass();
 
-        private bool NextCharMatches(IParserInput input, StringBuilder builder, CharacterClass c) {
+        private static bool NextCharMatches(IParserInput input, StringBuilder builder, CharacterClass c) {
             if (input.AtEof)
                 return false;
 
