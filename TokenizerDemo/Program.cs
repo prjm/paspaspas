@@ -1,6 +1,5 @@
 ﻿using PasPasPas.Infrastructure.Input;
 using PasPasPas.Internal.Tokenizer;
-using PasPasPas.Optios;
 using System;
 using System.Collections.Generic;
 using System.IO;

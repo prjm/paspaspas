@@ -1,10 +1,11 @@
 ﻿using PasPasPas.Api;
-using PasPasPas.Api.Options;
 using PasPasPas.DesktopPlatform;
 using PasPasPas.Infrastructure.Input;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Internal.Parser;
 using PasPasPas.Internal.Tokenizer;
+using PasPasPas.Options.Bundles;
+using PasPasPas.Options.DataTypes;
 using System;
 using System.Text;
 
