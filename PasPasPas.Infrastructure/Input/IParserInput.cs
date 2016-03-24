@@ -1,11 +1,11 @@
-﻿using System.Text;
+﻿using System;
 
 namespace PasPasPas.Infrastructure.Input {
 
     /// <summary>
     ///     interface for parser input
     /// </summary>
-    public interface IParserInput {
+    public interface IParserInput : IDisposable {
 
         /// <summary>
         ///     tests if any input is left
@@ -14,27 +14,24 @@ namespace PasPasPas.Infrastructure.Input {
         bool AtEof { get; }
 
         /// <summary>
+        ///     current file position offset
+        /// </summary>
+        long Position { get; set; }
+
+        /// <summary>
         ///     get the next char from the input
         /// </summary>
         /// <returns>next char</returns>
         char NextChar();
 
         /// <summary>
-        ///     put back a character
+        ///     close the file
         /// </summary>
-        /// <param name="valueToPutback">character to put back</param>
-        void PutbackChar(char valueToPutback);
+        void Close();
 
         /// <summary>
-        ///     put back a string
+        ///     open this file
         /// </summary>
-        /// <param name="valueToPutback"></param>
-        void PutbackString(string valueToPutback);
-
-        /// <summary>
-        ///     putback a buffer structur
-        /// </summary>
-        /// <param name="buffer"></param>
-        void PutbackStringBuffer(StringBuilder buffer);
+        void Open();
     }
 }

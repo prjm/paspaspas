@@ -34,7 +34,7 @@ namespace PasPasPas.Internal.Tokenizer {
         /// <param name="input">input</param>
         /// <param name="prefix">prefix</param>
         /// <returns>completed token</returns>
-        public abstract PascalToken WithPrefix(IParserInput input, StringBuilder prefix);
+        public abstract PascalToken WithPrefix(StackedFileReader input, StringBuilder prefix);
     }
 
     /// <summary>
@@ -62,7 +62,7 @@ namespace PasPasPas.Internal.Tokenizer {
         /// <param name="input">input</param>
         /// <param name="prefix">prefix</param>
         /// <returns></returns>
-        public override PascalToken WithPrefix(IParserInput input, StringBuilder prefix)
+        public override PascalToken WithPrefix(StackedFileReader input, StringBuilder prefix)
             => new PascalToken(TokenId, prefix.ToString());
     }
 
@@ -82,13 +82,13 @@ namespace PasPasPas.Internal.Tokenizer {
         /// <param name="input">input</param>
         /// <param name="prefix">prefix</param>
         /// <returns></returns>
-        public override PascalToken WithPrefix(IParserInput input, StringBuilder prefix) {
+        public override PascalToken WithPrefix(StackedFileReader input, StringBuilder prefix) {
             var endSeq = EndSequence;
 
             while (!input.AtEof) {
                 if (prefix.EndsWith(endSeq))
                     return new PascalToken(TokenId, prefix.ToString());
-                prefix = prefix.Append(input.NextChar());
+                prefix = prefix.Append(input.FetchChar());
             }
 
             return new PascalToken(TokenId, prefix.ToString());
@@ -111,12 +111,12 @@ namespace PasPasPas.Internal.Tokenizer {
         /// <param name="input"></param>
         /// <param name="prefix"></param>
         /// <returns></returns>
-        public override PascalToken WithPrefix(IParserInput input, StringBuilder prefix) {
+        public override PascalToken WithPrefix(StackedFileReader input, StringBuilder prefix) {
             while (!input.AtEof) {
-                char currentChar = input.NextChar();
+                char currentChar = input.FetchChar();
 
                 if (!input.AtEof && currentChar == '\'') {
-                    char nextChar = input.NextChar();
+                    char nextChar = input.FetchChar();
                     if (nextChar == '\'') {
                         prefix.Append("'");
                     }
@@ -164,9 +164,9 @@ namespace PasPasPas.Internal.Tokenizer {
         /// <param name="input"></param>
         /// <param name="prefix"></param>
         /// <returns></returns>
-        public override PascalToken WithPrefix(IParserInput input, StringBuilder prefix) {
+        public override PascalToken WithPrefix(StackedFileReader input, StringBuilder prefix) {
             while (!input.AtEof)
-                input.NextChar();
+                input.FetchChar();
             return new PascalToken(PascalToken.Eof, string.Empty);
         }
     }
@@ -182,12 +182,12 @@ namespace PasPasPas.Internal.Tokenizer {
         /// <param name="input"></param>
         /// <param name="prefix"></param>
         /// <returns></returns>
-        public override PascalToken WithPrefix(IParserInput input, StringBuilder prefix) {
+        public override PascalToken WithPrefix(StackedFileReader input, StringBuilder prefix) {
             while (!input.AtEof) {
-                char currentChar = input.NextChar();
+                char currentChar = input.FetchChar();
 
                 if (!input.AtEof && currentChar == '"') {
-                    char nextChar = input.NextChar();
+                    char nextChar = input.FetchChar();
                     if (nextChar == '"') {
                         prefix.Append("\"");
                     }
@@ -225,14 +225,14 @@ namespace PasPasPas.Internal.Tokenizer {
         /// <param name="input"></param>
         /// <param name="prefix"></param>
         /// <returns></returns>
-        public override PascalToken WithPrefix(IParserInput input, StringBuilder prefix) {
+        public override PascalToken WithPrefix(StackedFileReader input, StringBuilder prefix) {
             input.PutbackChar(prefix[0]);
             prefix.Length = 0;
 
             while (!input.AtEof) {
-                char currentChar = input.NextChar();
+                char currentChar = input.FetchChar();
                 if (currentChar == '#') {
-                    char nextChar = input.NextChar();
+                    char nextChar = input.FetchChar();
                     prefix.Append(currentChar);
                     if (nextChar == '$') {
                         prefix.Append(nextChar);
@@ -351,13 +351,13 @@ namespace PasPasPas.Internal.Tokenizer {
         /// <param name="input"></param>
         /// <param name="prefix"></param>
         /// <returns></returns>
-        public override PascalToken WithPrefix(IParserInput input, StringBuilder prefix) {
+        public override PascalToken WithPrefix(StackedFileReader input, StringBuilder prefix) {
             if (!input.AtEof) {
-                var currentChar = input.NextChar();
+                var currentChar = input.FetchChar();
 
                 while (!input.AtEof && MatchesClass(currentChar)) {
                     prefix.Append(currentChar);
-                    currentChar = input.NextChar();
+                    currentChar = input.FetchChar();
                 }
 
                 if (!MatchesClass(currentChar))
@@ -479,13 +479,13 @@ namespace PasPasPas.Internal.Tokenizer {
         /// <param name="input"></param>
         /// <param name="prefix"></param>
         /// <returns></returns>
-        public override PascalToken WithPrefix(IParserInput input, StringBuilder prefix) {
+        public override PascalToken WithPrefix(StackedFileReader input, StringBuilder prefix) {
             bool ignoreKeywords = prefix[0] == '&';
             if (ignoreKeywords)
                 prefix.Clear();
 
             while (!input.AtEof) {
-                var currentChar = input.NextChar();
+                var currentChar = input.FetchChar();
                 if (!identifierCharClass.Matches(currentChar)) {
                     input.PutbackChar(currentChar);
                     break;
@@ -515,15 +515,15 @@ namespace PasPasPas.Internal.Tokenizer {
         /// <param name="input"></param>
         /// <param name="prefix"></param>
         /// <returns></returns>
-        public override PascalToken WithPrefix(IParserInput input, StringBuilder prefix) {
+        public override PascalToken WithPrefix(StackedFileReader input, StringBuilder prefix) {
 
             while (!input.AtEof) {
-                char currentChar = input.NextChar();
+                char currentChar = input.FetchChar();
                 prefix.Append(currentChar);
 
                 if (currentChar == 0x0D) {
                     if (!input.AtEof) {
-                        char nextChar = input.NextChar();
+                        char nextChar = input.FetchChar();
                         if (nextChar == 0x0A) {
                             prefix.Append(nextChar);
                         }
@@ -562,11 +562,11 @@ namespace PasPasPas.Internal.Tokenizer {
         private PlusMinusCharacterClass plusminus
             = new PlusMinusCharacterClass();
 
-        private static bool NextCharMatches(IParserInput input, StringBuilder builder, CharacterClass c) {
+        private static bool NextCharMatches(StackedFileReader input, StringBuilder builder, CharacterClass c) {
             if (input.AtEof)
                 return false;
 
-            char n = input.NextChar();
+            char n = input.FetchChar();
             if (c.Matches(n)) {
                 builder.Append(n);
                 return true;
@@ -583,7 +583,7 @@ namespace PasPasPas.Internal.Tokenizer {
         /// <param name="input"></param>
         /// <param name="prefix"></param>
         /// <returns></returns>
-        public override PascalToken WithPrefix(IParserInput input, StringBuilder prefix) {
+        public override PascalToken WithPrefix(StackedFileReader input, StringBuilder prefix) {
             var token = digitTokenizer.WithPrefix(input, prefix);
             var withDot = false;
             var withExponent = false;

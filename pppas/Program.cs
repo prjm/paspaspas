@@ -1,4 +1,5 @@
 ﻿using PasPasPas.Api;
+using PasPasPas.DesktopPlatform;
 using PasPasPas.Infrastructure.Input;
 using System;
 using System.Text;
@@ -21,23 +22,24 @@ namespace Pppas {
 
             PascalParser parser = new PascalParser();
             PascalFormatter formatter = new PascalFormatter();
-            using (var input = new FileInput()) {
-                input.FileName = "C:\\temp\\Unit2.pas";
-                parser.Input = input;
-                var result = parser.Run();
+            using (var input = new FileInput("C:\\temp\\Unit2.pas")) {
+                using (var reader = new StackedFileReader()) {
+                    reader.AddFile(input);
+                    parser.Input = reader;
+                    var result = parser.Run();
 
-                foreach (var message in parser.Messages) {
-                    Console.Out.WriteLine(message.ToSimpleString());
+                    foreach (var message in parser.Messages) {
+                        Console.Out.WriteLine(message.ToSimpleString());
+                    }
+
+                    if (!parser.HasErrors()) {
+                        result.ToFormatter(formatter);
+                        Console.Out.WriteLine(formatter.Result);
+                    }
+
+                    Console.In.ReadLine();
                 }
-
-                if (!parser.HasErrors()) {
-                    result.ToFormatter(formatter);
-                    Console.Out.WriteLine(formatter.Result);
-                }
-
-                Console.In.ReadLine();
             }
-
         }
     }
 }

@@ -1,11 +1,20 @@
-﻿namespace PasPasPas.Infrastructure.Input {
+﻿using System;
+
+namespace PasPasPas.Infrastructure.Input {
 
     /// <summary>
     ///     parser input for <c>strings</c>
     /// </summary>
-    public class StringInput : InputBase {
+    public class StringInput : IParserInput {
 
-        private readonly string input;
+        /// <summary>
+        ///     input data
+        /// </summary>
+        private string input;
+
+        /// <summary>
+        ///     input position
+        /// </summary>
         private int position = 0;
 
         /// <summary>
@@ -17,20 +26,74 @@
         }
 
         /// <summary>
-        ///     checks if eof is reached
+        ///     check for eof
         /// </summary>
-        /// <returns><c>true</c> if the end of string is reached</returns>
-        protected override bool IsSourceAtEof
-                => (position >= input.Length);
+        public bool AtEof
+            => position >= input.Length;
 
         /// <summary>
-        ///     get the next char
+        ///     retrieve current position
+        /// </summary>
+        public long Position
+        {
+            get
+            {
+                return position;
+            }
+
+            set
+            {
+                position = (int)value;
+            }
+        }
+
+        /// <summary>
+        ///     do nothing
+        /// </summary>
+        public void Close() {
+            // do nothing
+        }
+
+        /// <summary>
+        ///     next char
         /// </summary>
         /// <returns></returns>
-        protected override char NextCharFromSource() {
+        public char NextChar() {
             char result = input[position];
             position++;
             return result;
         }
+
+        /// <summary>
+        ///     open the file
+        /// </summary>
+        public void Open() {
+            // do nothing
+        }
+
+        #region IDisposable Support
+        private bool disposedValue = false; // Dient zur Erkennung redundanter Aufrufe.
+
+        /// <summary>
+        ///     dispose data
+        /// </summary>
+        /// <param name="disposing"></param>
+        protected virtual void Dispose(bool disposing) {
+            if (!disposedValue) {
+                input = null;
+                disposedValue = true;
+            }
+        }
+
+        /// <summary>
+        ///     disposte input
+        /// </summary>
+        public void Dispose() {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        #endregion
+
     }
 }

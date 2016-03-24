@@ -48,13 +48,14 @@ namespace PasPasPasTests {
         }
 
         protected void ParseString(string input, string output = null) {
-            FileReaderFactory.Register();
-
             if (string.IsNullOrEmpty(output))
                 output = input;
 
             StandardParser parser = new StandardParser();
-            parser.BaseTokenizer = new StandardTokenizer() { Input = new StringInput(input) };
+            var inputFile = new StringInput(input);
+            var reader = new StackedFileReader();
+            reader.AddFile(inputFile);
+            parser.BaseTokenizer = new StandardTokenizer() { Input = reader };
             var hasError = false;
             string errorText = string.Empty;
 
@@ -72,7 +73,6 @@ namespace PasPasPasTests {
         }
 
         protected void RunCompilerDirective(string directive, object expected, Func<object> actual) {
-            FileReaderFactory.Register();
             TestOptions.Clear();
             TestOptions.ConditionalCompilation.Conditionals.OwnValues.Add(new ConditionalSymbol() {
                 Name = "PASPASPAS_TEST"
@@ -86,7 +86,9 @@ namespace PasPasPasTests {
                     var parser = new CompilerDirectiveParser();
                     var tokenizer = new CompilerDirectiveTokenizer();
                     var input = new StringInput(subPart);
-                    tokenizer.Input = input;
+                    var reader = new StackedFileReader();
+                    reader.AddFile(input);
+                    tokenizer.Input = reader;
                     parser.BaseTokenizer = tokenizer;
                     parser.Options = TestOptions;
                     parser.ParseCompilerDirective();

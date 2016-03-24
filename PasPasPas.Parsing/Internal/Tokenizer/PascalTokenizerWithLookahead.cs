@@ -42,7 +42,8 @@ namespace PasPasPas.Internal.Tokenizer {
             var parser = new CompilerDirectiveParser();
             var tokenizer = new CompilerDirectiveTokenizer();
             var input = new StringInput(CompilerDirectiveTokenizer.Unwrap(nextToken.Value));
-            tokenizer.Input = input;
+            var reader = new StackedFileReader();
+            reader.AddFile(input);
             parser.BaseTokenizer = tokenizer;
             parser.Options = Options;
             parser.ParseCompilerDirective();

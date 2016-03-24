@@ -197,5 +197,21 @@ namespace PasPasPasTests.Tokenizer {
             RunCompilerDirective("IMAGEBASE 40000000 ", 40000000, () => CompilerOptions.ImageBase.Value);
         }
 
+        [TestMethod]
+        public void TestImplicitBuild() {
+            RunCompilerDirective("", ImplicitBuildUnit.Undefined, () => CompilerOptions.ImplicitBuild.Value);
+            RunCompilerDirective("IMPLICITBUILD ON", ImplicitBuildUnit.EnableImplicitBuild, () => CompilerOptions.ImplicitBuild.Value);
+            RunCompilerDirective("IMPLICITBUILD OFF", ImplicitBuildUnit.DisableImplicitBuild, () => CompilerOptions.ImplicitBuild.Value);
+        }
+
+        [TestMethod]
+        public void TestImportUnitData() {
+            RunCompilerDirective("", ImportGlobalUnitData.Undefined, () => CompilerOptions.ImportedData.Value);
+            RunCompilerDirective("G+", ImportGlobalUnitData.DoImport, () => CompilerOptions.ImportedData.Value);
+            RunCompilerDirective("G-", ImportGlobalUnitData.NoImport, () => CompilerOptions.ImportedData.Value);
+            RunCompilerDirective("IMPORTEDDATA  ON", ImportGlobalUnitData.DoImport, () => CompilerOptions.ImportedData.Value);
+            RunCompilerDirective("IMPORTEDDATA OFF", ImportGlobalUnitData.NoImport, () => CompilerOptions.ImportedData.Value);
+        }
+
     }
 }

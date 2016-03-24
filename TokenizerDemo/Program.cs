@@ -1,4 +1,5 @@
-﻿using PasPasPas.Infrastructure.Input;
+﻿using PasPasPas.DesktopPlatform;
+using PasPasPas.Infrastructure.Input;
 using PasPasPas.Internal.Tokenizer;
 using System;
 using System.Collections.Generic;
@@ -17,11 +18,12 @@ namespace TokenizerDemo {
 
             foreach (var file in files) {
 
-                using (FileInput input = new FileInput()) {
-                    input.FileName = file;
+                using (FileInput input = new FileInput(file)) {
                     var baseTokenizer = new StandardTokenizer();
                     var tokenizer = new PascalTokenizerWithLookahead();
-                    baseTokenizer.Input = input;
+                    var reader = new StackedFileReader();
+                    reader.AddFile(input);
+                    baseTokenizer.Input = reader;
                     tokenizer.BaseTokenizer = baseTokenizer;
 
                     while (tokenizer.HasNextToken()) {

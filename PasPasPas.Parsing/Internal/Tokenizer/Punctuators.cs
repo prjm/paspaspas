@@ -117,11 +117,11 @@ namespace PasPasPas.Internal.Tokenizer {
         /// <param name="prefix"></param>
         /// <param name="tokenGroup"></param>
         /// <returns></returns>
-        public static PascalToken FetchTokenByGroup(IParserInput inputStream, char prefix, PunctuatorGroup tokenGroup) {
+        public static PascalToken FetchTokenByGroup(StackedFileReader inputStream, char prefix, PunctuatorGroup tokenGroup) {
             StringBuilder input = new StringBuilder(100);
             input.Append(prefix);
             while (input.Length < tokenGroup.Length && (!inputStream.AtEof)) {
-                input.Append(inputStream.NextChar());
+                input.Append(inputStream.FetchChar());
             }
 
             int tokenLength;

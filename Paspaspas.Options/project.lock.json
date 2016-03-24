@@ -524,7 +524,7 @@
           "lib/net46/_._": {}
         }
       },
-      "System.Runtime.Analyzers/1.0.0": {
+      "System.Runtime.Analyzers/1.1.0": {
         "frameworkAssemblies": [
           "System"
         ]
@@ -553,7 +553,7 @@
           "lib/net46/_._": {}
         }
       },
-      "System.Runtime.InteropServices.Analyzers/1.0.0": {
+      "System.Runtime.InteropServices.Analyzers/1.1.0": {
         "frameworkAssemblies": [
           "System"
         ]
@@ -1240,7 +1240,7 @@
           "lib/net46/_._": {}
         }
       },
-      "System.Runtime.Analyzers/1.0.0": {
+      "System.Runtime.Analyzers/1.1.0": {
         "frameworkAssemblies": [
           "System"
         ]
@@ -1269,7 +1269,7 @@
           "lib/net46/_._": {}
         }
       },
-      "System.Runtime.InteropServices.Analyzers/1.0.0": {
+      "System.Runtime.InteropServices.Analyzers/1.1.0": {
         "frameworkAssemblies": [
           "System"
         ]
@@ -1956,7 +1956,7 @@
           "lib/net46/_._": {}
         }
       },
-      "System.Runtime.Analyzers/1.0.0": {
+      "System.Runtime.Analyzers/1.1.0": {
         "frameworkAssemblies": [
           "System"
         ]
@@ -1985,7 +1985,7 @@
           "lib/net46/_._": {}
         }
       },
-      "System.Runtime.InteropServices.Analyzers/1.0.0": {
+      "System.Runtime.InteropServices.Analyzers/1.1.0": {
         "frameworkAssemblies": [
           "System"
         ]
@@ -2726,7 +2726,7 @@
           "ref/dotnet/System.Runtime.dll": {}
         }
       },
-      "System.Runtime.Analyzers/1.0.0": {
+      "System.Runtime.Analyzers/1.1.0": {
         "frameworkAssemblies": [
           "System"
         ]
@@ -2758,7 +2758,7 @@
           "ref/dotnet/System.Runtime.InteropServices.dll": {}
         }
       },
-      "System.Runtime.InteropServices.Analyzers/1.0.0": {
+      "System.Runtime.InteropServices.Analyzers/1.1.0": {
         "frameworkAssemblies": [
           "System"
         ]
@@ -3778,7 +3778,7 @@
           "lib/DNXCore50/System.Runtime.dll": {}
         }
       },
-      "System.Runtime.Analyzers/1.0.0": {},
+      "System.Runtime.Analyzers/1.1.0": {},
       "System.Runtime.Extensions/4.0.10": {
         "dependencies": {
           "System.Runtime": "[4.0.20, )"
@@ -3815,7 +3815,7 @@
           "lib/DNXCore50/System.Runtime.InteropServices.dll": {}
         }
       },
-      "System.Runtime.InteropServices.Analyzers/1.0.0": {},
+      "System.Runtime.InteropServices.Analyzers/1.1.0": {},
       "System.Runtime.Numerics/4.0.0": {
         "dependencies": {
           "System.Globalization": "[4.0.10, )",
@@ -5068,7 +5068,7 @@
           "lib/DNXCore50/System.Runtime.dll": {}
         }
       },
-      "System.Runtime.Analyzers/1.0.0": {},
+      "System.Runtime.Analyzers/1.1.0": {},
       "System.Runtime.Extensions/4.0.10": {
         "dependencies": {
           "System.Runtime": "[4.0.20, )"
@@ -5105,7 +5105,7 @@
           "lib/DNXCore50/System.Runtime.InteropServices.dll": {}
         }
       },
-      "System.Runtime.InteropServices.Analyzers/1.0.0": {},
+      "System.Runtime.InteropServices.Analyzers/1.1.0": {},
       "System.Runtime.Numerics/4.0.0": {
         "dependencies": {
           "System.Globalization": "[4.0.10, )",
@@ -6358,7 +6358,7 @@
           "lib/DNXCore50/System.Runtime.dll": {}
         }
       },
-      "System.Runtime.Analyzers/1.0.0": {},
+      "System.Runtime.Analyzers/1.1.0": {},
       "System.Runtime.Extensions/4.0.10": {
         "dependencies": {
           "System.Runtime": "[4.0.20, )"
@@ -6395,7 +6395,7 @@
           "lib/DNXCore50/System.Runtime.InteropServices.dll": {}
         }
       },
-      "System.Runtime.InteropServices.Analyzers/1.0.0": {},
+      "System.Runtime.InteropServices.Analyzers/1.1.0": {},
       "System.Runtime.Numerics/4.0.0": {
         "dependencies": {
           "System.Globalization": "[4.0.10, )",
@@ -8745,8 +8745,8 @@
         "System.Runtime.nuspec"
       ]
     },
-    "System.Runtime.Analyzers/1.0.0": {
-      "sha512": "7wMU959BN5x960d4/yqXPdY4qd1MvABA9abHO+iRKSxoeqeEgfTyw9BIeceP1OhSOpBY2S4lnFQh7bMy17ojnQ==",
+    "System.Runtime.Analyzers/1.1.0": {
+      "sha512": "7XAHfxh0/c2WFS7s8zB2U9Imlhhbe9slaY/0Fo8b+tymQHWkE2oIEEn9E9Cf1HjwRs7NlsYlo4vFd+88lDVOPw==",
       "type": "Package",
       "files": [
         "[Content_Types].xml",
@@ -8756,10 +8756,9 @@
         "analyzers/dotnet/vb/System.Runtime.Analyzers.dll",
         "analyzers/dotnet/vb/System.Runtime.VisualBasic.Analyzers.dll",
         "build/System.Runtime.Analyzers.Common.props",
-        "build/System.Runtime.Analyzers.props",
         "build/System.Runtime.CSharp.Analyzers.props",
         "build/System.Runtime.VisualBasic.Analyzers.props",
-        "package/services/metadata/core-properties/ca89e149b9824892a4777d18fb45363f.psmdcp",
+        "package/services/metadata/core-properties/c899e73c9ee744a789a586b0c8ecfc5f.psmdcp",
         "System.Runtime.Analyzers.nuspec",
         "ThirdPartyNotices.rtf",
         "tools/install.ps1",
@@ -8868,8 +8867,8 @@
         "System.Runtime.InteropServices.nuspec"
       ]
     },
-    "System.Runtime.InteropServices.Analyzers/1.0.0": {
-      "sha512": "QC8pee7WKCAV72G0hY67EOJCWRDuRrQNbLKk3sUj8ywpFbbSR7qw2D6MkQXypS8fIserT7if7l56gZdcBnvNeA==",
+    "System.Runtime.InteropServices.Analyzers/1.1.0": {
+      "sha512": "tWtcHEy5pflCJRJJ6qvxUNy2eCMfqrBxmYDw29SBjQtjZ1UEE+qzLzvURCDScIs3JS+/JQ3CG7R/oBFg/zt9JA==",
       "type": "Package",
       "files": [
         "[Content_Types].xml",
@@ -8879,8 +8878,7 @@
         "analyzers/dotnet/vb/System.Runtime.InteropServices.Analyzers.dll",
         "analyzers/dotnet/vb/System.Runtime.InteropServices.VisualBasic.Analyzers.dll",
         "build/System.Runtime.InteropServices.Analyzers.Common.props",
-        "build/System.Runtime.InteropServices.Analyzers.props",
-        "package/services/metadata/core-properties/41e3df837c2f4329834d022fa4eefef0.psmdcp",
+        "package/services/metadata/core-properties/442073c88d274b20a71ee2ede444dabf.psmdcp",
         "System.Runtime.InteropServices.Analyzers.nuspec",
         "ThirdPartyNotices.rtf",
         "tools/install.ps1",
@@ -9343,7 +9341,9 @@
       "Microsoft.AnalyzerPowerPack >= 1.1.0",
       "Microsoft.CodeAnalysis.FxCopAnalyzers >= 1.1.0",
       "Microsoft.NETCore >= 5.0.0",
-      "Microsoft.NETCore.Portable.Compatibility >= 1.0.0"
+      "Microsoft.NETCore.Portable.Compatibility >= 1.0.0",
+      "System.Runtime.Analyzers >= 1.1.0",
+      "System.Runtime.InteropServices.Analyzers >= 1.1.0"
     ],
     ".NETPlatform,Version=v5.0": []
   }

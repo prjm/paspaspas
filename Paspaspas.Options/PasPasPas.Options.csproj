@@ -69,6 +69,8 @@
     <Compile Include="DataTypes\ICondition.cs" />
     <Compile Include="DataTypes\IDerivedOption.cs" />
     <Compile Include="DataTypes\IfDefCondition.cs" />
+    <Compile Include="DataTypes\ImplicitBuildUnit.cs" />
+    <Compile Include="DataTypes\ImportGlobalUnitData.cs" />
     <Compile Include="DataTypes\MetaInformation.cs" />
     <Compile Include="Bundles\OptionSet.cs" />
     <Compile Include="Bundles\Platform.cs" />

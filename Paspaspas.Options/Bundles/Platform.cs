@@ -13,6 +13,12 @@ namespace PasPasPas.Options.Bundles {
         private readonly PlatformKey key;
 
         /// <summary>
+        ///     Platform key
+        /// </summary>
+        public PlatformKey Key
+            => key;
+
+        /// <summary>
         ///     supported configurations
         /// </summary>
         public IDictionary<string, OptionSet> Configurations { get; }

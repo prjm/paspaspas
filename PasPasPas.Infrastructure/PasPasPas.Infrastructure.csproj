@@ -42,13 +42,13 @@
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Input\IFile.cs" />
     <Compile Include="Input\IParserInput.cs" />
     <Compile Include="Configuration\IConfigurationSettings.cs" />
     <Compile Include="Configuration\TypedConfigurationSettings.cs" />
-    <Compile Include="Input\FileInput.cs" />
-    <Compile Include="Input\FileReaderFactories.cs" />
-    <Compile Include="Input\IFileReaderFactory.cs" />
-    <Compile Include="Input\InputBase.cs" />
+    <Compile Include="Input\PathResolver.cs" />
+    <Compile Include="Input\StackedFileReader.cs" />
     <Compile Include="Input\StringInput.cs" />
     <Compile Include="Log\ILogService.cs" />
     <Compile Include="Log\LogMessage.cs" />

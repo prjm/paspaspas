@@ -23,6 +23,8 @@
             HighCharUnicode = new DerivedValueOption<HighCharsUnicode>(baseOptions?.HighCharUnicode);
             Hints = new DerivedValueOption<CompilerHints>(baseOptions?.Hints);
             ImageBase = new DerivedValueOption<int>(baseOptions?.ImageBase);
+            ImplicitBuild = new DerivedValueOption<ImplicitBuildUnit>(baseOptions?.ImplicitBuild);
+            ImportedData = new DerivedValueOption<ImportGlobalUnitData>(baseOptions?.ImportedData);
         }
 
         /// <summary>
@@ -91,6 +93,16 @@
         public DerivedValueOption<ExtendedSyntax> UseExtendedSyntax { get; }
 
         /// <summary>
+        ///     implicit build setting
+        /// </summary>
+        public DerivedValueOption<ImplicitBuildUnit> ImplicitBuild { get; }
+
+        /// <summary>
+        ///     option for global unit access
+        /// </summary>
+        public DerivedValueOption<ImportGlobalUnitData> ImportedData { get; }
+
+        /// <summary>
         ///     clear options
         /// </summary>
         public void Clear() {
@@ -107,6 +119,8 @@
             HighCharUnicode.ResetToDefault();
             Hints.ResetToDefault();
             ImageBase.ResetToDefault();
+            ImplicitBuild.ResetToDefault();
+            ImportedData.ResetToDefault();
         }
 
         /// <summary>
@@ -121,6 +135,7 @@
             ExcessPrecision.ResetToDefault();
             HighCharUnicode.ResetToDefault();
             Hints.ResetToDefault();
+            ImportedData.ResetToDefault();
         }
     }
 }

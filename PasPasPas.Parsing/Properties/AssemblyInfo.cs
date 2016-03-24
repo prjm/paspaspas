@@ -1,5 +1,6 @@
 ﻿using System.Resources;
 using System.Reflection;
+using System.Runtime.InteropServices;
 
 // Allgemeine Informationen über eine Assembly werden über folgende 
 // Attribute gesteuert. Ändern Sie diese Attributwerte, um die Informationen zu ändern,
@@ -28,3 +29,4 @@ using System.Reflection;
 [assembly: AssemblyFileVersion("1.0.0.0")]
 
 [assembly: System.CLSCompliant(true)]
+[assembly: ComVisible(false)]

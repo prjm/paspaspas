@@ -1361,12 +1361,12 @@ namespace PasPasPas.Api {
         /// <summary>
         ///     token for <c>$J</c>
         /// </summary>
-        public const int WriteableConstSwitch = 800;
+        public const int WritableConstSwitch = 800;
 
         /// <summary>
         ///     token for <c>$WRITEABLECONST</c>
         /// </summary>
-        public const int WriteableConstSwitchLong = 801;
+        public const int WritableConstSwitchLong = 801;
 
         /// <summary>
         ///     token for <c>$ZEROBASEDSTRINGS</c>

@@ -19,7 +19,7 @@ namespace PasPasPas.Api {
         /// <summary>
         ///     parser input
         /// </summary>
-        public IParserInput Input { get; set; }
+        public StackedFileReader Input { get; set; }
 
         /// <summary>
         ///     log messages

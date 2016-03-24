@@ -48,7 +48,8 @@ namespace PasPasPas.Internal.Tokenizer {
                 PascalToken.AssertSwitch,
                 PascalToken.DebugInfoOrDescriptionSwitch,
                 PascalToken.ExtensionSwitch,
-                PascalToken.ExtendedSyntaxSwitch
+                PascalToken.ExtendedSyntaxSwitch,
+                PascalToken.ImportedDataSwitch,
             };
 
         private static HashSet<int> longSwitches
@@ -67,6 +68,9 @@ namespace PasPasPas.Internal.Tokenizer {
                 PascalToken.ExcessPrecision,
                 PascalToken.HighCharUnicode,
                 PascalToken.Hints,
+                PascalToken.ImplicitBuild,
+                PascalToken.ImportedDataSwitchLong,
+                PascalToken.IncludeSwitchLong,
             };
 
         private static HashSet<int> parameters
@@ -384,7 +388,57 @@ namespace PasPasPas.Internal.Tokenizer {
                 return true;
             }
 
+            if (Optional(PascalToken.ImplicitBuild)) {
+                ParseLongImplicitBuildSwitch();
+                return true;
+            }
+
+            if (Optional(PascalToken.ImportedDataSwitchLong)) {
+                ParseLongImportedDataSwitch();
+                return true;
+            }
+
+            if (Optional(PascalToken.IncludeSwitchLong)) {
+                ParseLongIncludeSwitch();
+                return true;
+            }
+
             return false;
+        }
+
+        private void ParseLongIncludeSwitch() {
+            var includeToken = Require(PascalToken.Identifier, PascalToken.QuotedString);
+            string filename = includeToken.Value;
+
+            if (includeToken.Kind == PascalToken.QuotedString) {
+                filename = QuotedStringTokenValue.Unwrap(includeToken.Value);
+            }
+        }
+
+        private void ParseLongImportedDataSwitch() {
+            if (Optional(PascalToken.On)) {
+                CompilerOptions.ImportedData.Value = ImportGlobalUnitData.DoImport;
+                return;
+            }
+
+            if (Optional(PascalToken.Off)) {
+                CompilerOptions.ImportedData.Value = ImportGlobalUnitData.NoImport;
+                return;
+            }
+            Unexpected();
+        }
+
+        private void ParseLongImplicitBuildSwitch() {
+            if (Optional(PascalToken.On)) {
+                CompilerOptions.ImplicitBuild.Value = ImplicitBuildUnit.EnableImplicitBuild;
+                return;
+            }
+
+            if (Optional(PascalToken.Off)) {
+                CompilerOptions.ImplicitBuild.Value = ImplicitBuildUnit.DisableImplicitBuild;
+                return;
+            }
+            Unexpected();
         }
 
         private void ParseLongHintsSwitch() {
@@ -621,6 +675,27 @@ namespace PasPasPas.Internal.Tokenizer {
                 return ParseExtendedSyntaxSwitch();
             }
 
+            if (Match(PascalToken.ImportedDataSwitch)) {
+                return ParseImportedDataSwitch();
+            }
+
+            return false;
+        }
+
+        private bool ParseImportedDataSwitch() {
+            FetchNextToken();
+
+            if (Optional(PascalToken.Plus)) {
+                CompilerOptions.ImportedData.Value = ImportGlobalUnitData.DoImport;
+                return true;
+            }
+
+            if (Optional(PascalToken.Minus)) {
+                CompilerOptions.ImportedData.Value = ImportGlobalUnitData.NoImport;
+                return true;
+            }
+
+            Unexpected();
             return false;
         }
 

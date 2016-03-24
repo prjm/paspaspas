@@ -12,7 +12,6 @@
         public AnyCpuPlatform(OptionSet optionRoot) : base(PlatformKey.AnyCpu) {
             Configurations.Add(OptionSet.DebugConfigurationName, new OptionSet(optionRoot));
             Configurations.Add(OptionSet.ReleaseConfigurationName, new OptionSet(optionRoot));
-
         }
 
     }

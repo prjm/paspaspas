@@ -15,8 +15,10 @@ namespace PasPasPasTests {
         public static List<PascalToken> RunTokenizer(string input, IList<LogMessage> messages = null) {
             var tokenizer = new StandardTokenizer();
             var result = new List<PascalToken>();
+            var reader = new StackedFileReader();
             EventHandler<LogMessageEventArgs> handler = (_, x) => messages.Add(x.Message);
-            tokenizer.Input = new StringInput(input);
+            reader.AddFile(new StringInput(input));
+            tokenizer.Input = reader;
 
             if (messages != null)
                 tokenizer.LogMessage += handler;

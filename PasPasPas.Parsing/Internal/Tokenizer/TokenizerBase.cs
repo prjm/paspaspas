@@ -7,7 +7,7 @@ namespace PasPasPas.Internal.Tokenizer {
     /// <summary>
     ///     base class for tokenizers
     /// </summary>
-    public abstract class TokenizerBase : MessageGenerator {
+    public abstract class TokenizerBase : MessageGenerator, System.IDisposable {
 
         /// <summary>
         ///     dummy constructor
@@ -15,12 +15,12 @@ namespace PasPasPas.Internal.Tokenizer {
         protected TokenizerBase() { }
 
 
-        private IParserInput input;
+        private StackedFileReader input;
 
         /// <summary>
         ///     parser parser input
         /// </summary>
-        public IParserInput Input
+        public StackedFileReader Input
         {
             get
             {
@@ -76,7 +76,7 @@ namespace PasPasPas.Internal.Tokenizer {
                 return GenerateEofToken();
             }
 
-            char c = Input.NextChar();
+            char c = Input.FetchChar();
             PunctuatorGroup tokenGroup;
 
             if (CharacterClasses.Match(c, out tokenGroup)) {
@@ -85,5 +85,31 @@ namespace PasPasPas.Internal.Tokenizer {
 
             return GenerateUndefinedToken(c);
         }
+
+        #region IDisposable Support
+        private bool disposedValue = false; // Dient zur Erkennung redundanter Aufrufe.
+
+        /// <summary>
+        /// dispose input
+        /// </summary>
+        /// <param name="disposing"></param>
+        protected virtual void Dispose(bool disposing) {
+            if (!disposedValue) {
+                if (disposing) {
+                    if (input != null)
+                        input.Dispose();
+                }
+                disposedValue = true;
+            }
+        }
+
+        /// <summary>
+        ///     dispose input
+        /// </summary>
+        public void Dispose() {
+            Dispose(true);
+            System.GC.SuppressFinalize(this);
+        }
+        #endregion
     }
 }

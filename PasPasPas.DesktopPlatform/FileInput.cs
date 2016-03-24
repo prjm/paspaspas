@@ -1,14 +1,15 @@
 ﻿using PasPasPas.Infrastructure.Configuration;
+using PasPasPas.Infrastructure.Input;
 using System;
 using System.IO;
 using System.Text;
 
-namespace PasPasPas.Infrastructure.Input {
+namespace PasPasPas.DesktopPlatform {
 
     /// <summary>
     ///     file based input for the parser
     /// </summary>
-    public class FileInput : InputBase, IDisposable {
+    public class FileInput : IParserInput {
 
         /// <summary>
         ///     name of thedefaul encoding
@@ -33,7 +34,7 @@ namespace PasPasPas.Infrastructure.Input {
         /// <summary>
         ///     input file
         /// </summary>
-        public string FileName { get; set; }
+        public string Path => filePath;
 
         /// <summary>
         ///     config settings
@@ -44,10 +45,7 @@ namespace PasPasPas.Infrastructure.Input {
         {
             get
             {
-                if (reader != null)
-                    return reader;
-
-                reader = CreateAndInitializeReader();
+                Open();
                 return reader;
             }
         }
@@ -82,28 +80,44 @@ namespace PasPasPas.Infrastructure.Input {
         }
 
 
-        private StreamReader CreateAndInitializeReader() {
-            var factory = FileReaderFactories.Default;
-            var result = factory.CreateReader(FileName, GetFileEncoding(FileName));
-            return result;
+        private StreamReader CreateAndInitializeReader()
+            => new StreamReader(Path, GetFileEncoding(Path));
+
+
+        /// <summary>
+        ///     stream position
+        /// </summary>
+        public long Position
+        {
+            get
+            {
+                return reader.BaseStream.Position;
+            }
+
+            set
+            {
+                reader.BaseStream.Seek(Position, SeekOrigin.Begin);
+            }
         }
 
-
         /// <summary>
-        ///     test if end of file is reached
+        ///     test if at eof
         /// </summary>
-        protected override bool IsSourceAtEof
+        public bool AtEof
             => Reader.EndOfStream;
-
-        /// <summary>
-        ///     get the next input characterfrom trhefile
-        /// </summary>
-        /// <returns></returns>
-        protected override char NextCharFromSource()
-            => (char)Reader.Read();
 
         #region IDisposable Support
         private bool disposedValue = false;
+
+        private string filePath;
+
+        /// <summary>
+        ///     creates a new input file
+        /// </summary>
+        /// <param name="path"></param>
+        public FileInput(string path) {
+            filePath = path;
+        }
 
         /// <summary>
         ///     dispose input read
@@ -129,7 +143,31 @@ namespace PasPasPas.Infrastructure.Input {
             GC.SuppressFinalize(this);
         }
 
-        #endregion
+        /// <summary>
+        ///     close reader
+        /// </summary>
+        public void Close() {
+            reader.Close();
+            reader = null;
+        }
 
+        /// <summary>
+        ///     open redaer
+        /// </summary>
+        public void Open() {
+            if (reader == null)
+                reader = CreateAndInitializeReader();
+        }
+
+        /// <summary>
+        /// read a single char
+        /// </summary>
+        /// <returns></returns>
+        public char NextChar()
+            => (char)reader.Read();
     }
+
+    #endregion
+
 }
+
