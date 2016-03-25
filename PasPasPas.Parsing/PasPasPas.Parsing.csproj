@@ -214,7 +214,7 @@
     <Compile Include="Internal\Parser\Syntax\VarValueSpecification.cs" />
     <Compile Include="Internal\Parser\Syntax\WhileStatement.cs" />
     <Compile Include="Internal\Parser\Syntax\WithStatement.cs" />
-    <Compile Include="Internal\Tokenizer\CharacterClass.cs" />
+    <Compile Include="Tokenizer\CharacterClass.cs" />
     <Compile Include="Internal\Tokenizer\CompilerDirectiveParser.cs" />
     <Compile Include="Internal\Tokenizer\CompilerDirectiveTokenizer.cs" />
     <Compile Include="Internal\Tokenizer\CompilerDirectiveTokenizerWithLookahead.cs" />

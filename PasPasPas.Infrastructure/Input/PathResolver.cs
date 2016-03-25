@@ -57,6 +57,7 @@ namespace PasPasPas.Infrastructure.Input {
         /// <param name="pathToResolve">path to resolve</param>
         /// <returns>resolved path</returns>
         public string ResolvePath(string basePath, string pathToResolve) {
+
             var key = new ResolvedPathKey() {
                 BasePath = basePath,
                 PathToResolve = pathToResolve

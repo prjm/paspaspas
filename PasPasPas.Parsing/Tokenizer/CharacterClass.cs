@@ -1,4 +1,4 @@
-﻿namespace PasPasPas.Internal.Tokenizer {
+﻿namespace PasPasPas.Parsing.Tokenizer {
 
     /// <summary>
     ///     base class for a character class

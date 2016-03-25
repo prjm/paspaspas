@@ -58,6 +58,7 @@
     <Compile Include="Parser\ProgramTest.cs" />
     <Compile Include="Parser\TestDeclarations.cs" />
     <Compile Include="StackedReaderTest.cs" />
+    <Compile Include="testm.cs" />
     <Compile Include="Tokenizer\CompilerDirectiveTest.cs" />
     <Compile Include="Tokenizer\TokenizerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

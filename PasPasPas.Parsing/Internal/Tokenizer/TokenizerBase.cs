@@ -7,7 +7,7 @@ namespace PasPasPas.Internal.Tokenizer {
     /// <summary>
     ///     base class for tokenizers
     /// </summary>
-    public abstract class TokenizerBase : MessageGenerator, System.IDisposable {
+    public abstract class TokenizerBase : MessageGenerator {
 
         /// <summary>
         ///     dummy constructor
@@ -42,10 +42,10 @@ namespace PasPasPas.Internal.Tokenizer {
         /// <summary>
         ///     generates an undefined token
         /// </summary>
-        /// <param name="c"></param>
+        /// <param name="currentChar"></param>
         /// <returns></returns>
-        protected PascalToken GenerateUndefinedToken(char c) {
-            var value = new string(c, 1);
+        protected PascalToken GenerateUndefinedToken(char currentChar) {
+            var value = new string(currentChar, 1);
             LogError(MessageData.UndefinedInputToken, value);
             return new PascalToken() {
                 Value = value,
@@ -85,31 +85,5 @@ namespace PasPasPas.Internal.Tokenizer {
 
             return GenerateUndefinedToken(c);
         }
-
-        #region IDisposable Support
-        private bool disposedValue = false; // Dient zur Erkennung redundanter Aufrufe.
-
-        /// <summary>
-        /// dispose input
-        /// </summary>
-        /// <param name="disposing"></param>
-        protected virtual void Dispose(bool disposing) {
-            if (!disposedValue) {
-                if (disposing) {
-                    if (input != null)
-                        input.Dispose();
-                }
-                disposedValue = true;
-            }
-        }
-
-        /// <summary>
-        ///     dispose input
-        /// </summary>
-        public void Dispose() {
-            Dispose(true);
-            System.GC.SuppressFinalize(this);
-        }
-        #endregion
     }
 }

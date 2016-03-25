@@ -42,6 +42,7 @@
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Bundles\IOptionSet.cs" />
     <Compile Include="DataTypes\Alignment.cs" />
     <Compile Include="DataTypes\AppType.cs" />
     <Compile Include="DataTypes\AssertionMode.cs" />
@@ -80,6 +81,12 @@
     <Compile Include="Bundles\AnyCpuPlatform.cs" />
     <Compile Include="Bundles\DefaultPlatform.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PasPasPas.Infrastructure\PasPasPas.Infrastructure.csproj">
+      <Project>{4cef569a-4ece-42ee-847b-5029958f757c}</Project>
+      <Name>PasPasPas.Infrastructure</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

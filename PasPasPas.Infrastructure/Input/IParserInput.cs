@@ -14,11 +14,6 @@ namespace PasPasPas.Infrastructure.Input {
         bool AtEof { get; }
 
         /// <summary>
-        ///     current file position offset
-        /// </summary>
-        long Position { get; set; }
-
-        /// <summary>
         ///     get the next char from the input
         /// </summary>
         /// <returns>next char</returns>

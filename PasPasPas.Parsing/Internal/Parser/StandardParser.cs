@@ -4,6 +4,7 @@ using System.Text;
 using System;
 using System.Collections.Generic;
 using PasPasPas.Internal.Tokenizer;
+using PasPasPas.Infrastructure.Service;
 
 namespace PasPasPas.Internal.Parser {
 
@@ -15,7 +16,8 @@ namespace PasPasPas.Internal.Parser {
         /// <summary>
         ///     creates a new standard parser
         /// </summary>
-        public StandardParser() : base(new PascalTokenizerWithLookahead()) { }
+        public StandardParser(ServiceProvider services) :
+            base(new PascalTokenizerWithLookahead(services)) { }
 
         private static readonly HashSet<int> reservedWords
             = new HashSet<int>() {

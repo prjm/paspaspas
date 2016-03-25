@@ -1,4 +1,5 @@
 ﻿using PasPasPas.Api;
+using PasPasPas.Parsing.Tokenizer;
 
 namespace PasPasPas.Internal.Tokenizer {
 

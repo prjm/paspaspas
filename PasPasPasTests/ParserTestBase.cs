@@ -1,7 +1,9 @@
 ﻿using PasPasPas.Api;
 using PasPasPas.DesktopPlatform;
+using PasPasPas.Infrastructure.Configuration;
 using PasPasPas.Infrastructure.Input;
 using PasPasPas.Infrastructure.Log;
+using PasPasPas.Infrastructure.Service;
 using PasPasPas.Internal.Parser;
 using PasPasPas.Internal.Tokenizer;
 using PasPasPas.Options.Bundles;
@@ -51,52 +53,66 @@ namespace PasPasPasTests {
             if (string.IsNullOrEmpty(output))
                 output = input;
 
-            StandardParser parser = new StandardParser();
-            var inputFile = new StringInput(input);
-            var reader = new StackedFileReader();
-            reader.AddFile(inputFile);
-            parser.BaseTokenizer = new StandardTokenizer() { Input = reader };
-            var hasError = false;
-            string errorText = string.Empty;
+            ClearOptions();
 
-            parser.LogMessage += (x, y) => {
-                errorText += y.Message.ToSimpleString() + Environment.NewLine;
-                hasError = hasError || y.Message.Level == LogLevel.Error;
-            };
+            var environment = new ServiceProvider();
+            environment.Register(new CommonConfiguration());
+            environment.Register(TestOptions);
 
-            var result = parser.Parse();
-            var formatter = new PascalFormatter();
-            result.ToFormatter(formatter);
-            Assert.AreEqual(CompactWhitespace(output), CompactWhitespace(formatter.Result));
-            Assert.AreEqual(string.Empty, errorText);
-            Assert.IsFalse(hasError);
+            StandardParser parser = new StandardParser(environment);
+            using (var inputFile = new StringInput(input))
+            using (var reader = new StackedFileReader()) {
+                reader.AddFile(inputFile);
+                parser.BaseTokenizer = new StandardTokenizer() { Input = reader };
+                var hasError = false;
+                string errorText = string.Empty;
+
+                parser.LogMessage += (x, y) => {
+                    errorText += y.Message.ToSimpleString() + Environment.NewLine;
+                    hasError = hasError || y.Message.Level == LogLevel.Error;
+                };
+
+                var result = parser.Parse();
+                var formatter = new PascalFormatter();
+                result.ToFormatter(formatter);
+                Assert.AreEqual(CompactWhitespace(output), CompactWhitespace(formatter.Result));
+                Assert.AreEqual(string.Empty, errorText);
+                Assert.IsFalse(hasError);
+            }
         }
 
         protected void RunCompilerDirective(string directive, object expected, Func<object> actual) {
-            TestOptions.Clear();
-            TestOptions.ConditionalCompilation.Conditionals.OwnValues.Add(new ConditionalSymbol() {
-                Name = "PASPASPAS_TEST"
-            });
+
+            var environment = new ServiceProvider();
+            environment.Register(new CommonConfiguration());
+            environment.Register(TestOptions);
+
+            ClearOptions();
 
             var directives = directive.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
             foreach (var directivePart in directives) {
                 TestOptions.ResetOnNewUnit();
                 var subParts = directivePart.Split(new[] { '§' }, StringSplitOptions.RemoveEmptyEntries);
                 foreach (var subPart in subParts) {
-                    var parser = new CompilerDirectiveParser();
-                    var tokenizer = new CompilerDirectiveTokenizer();
-                    var input = new StringInput(subPart);
-                    var reader = new StackedFileReader();
-                    reader.AddFile(input);
-                    tokenizer.Input = reader;
-                    parser.BaseTokenizer = tokenizer;
-                    parser.Options = TestOptions;
-                    parser.ParseCompilerDirective();
+                    var parser = new CompilerDirectiveParser(environment);
+                    using (var input = new StringInput(subPart))
+                    using (var reader = new StackedFileReader()) {
+                        reader.AddFile(input);
+                        tokenizer.Input = reader;
+                        parser.Tokenizer.BaseTokenizer.in
+                        parser.ParseCompilerDirective();
+                    }
                 }
             }
 
             Assert.AreEqual(expected, actual());
         }
 
+        private void ClearOptions() {
+            TestOptions.Clear();
+            TestOptions.ConditionalCompilation.Conditionals.OwnValues.Add(new ConditionalSymbol() {
+                Name = "PASPASPAS_TEST"
+            });
+        }
     }
 }

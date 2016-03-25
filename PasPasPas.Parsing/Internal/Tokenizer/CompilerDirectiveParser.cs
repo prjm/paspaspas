@@ -5,6 +5,7 @@ using System;
 using PasPasPas.Options.DataTypes;
 using System.Globalization;
 using PasPasPas.Options.Bundles;
+using PasPasPas.Infrastructure.Service;
 
 namespace PasPasPas.Internal.Tokenizer {
 
@@ -14,14 +15,19 @@ namespace PasPasPas.Internal.Tokenizer {
     public class CompilerDirectiveParser : ParserBase {
 
         /// <summary>
-        ///     create a new compilre directive parser
+        ///     create a new compiler directive parser
         /// </summary>
-        public CompilerDirectiveParser() : base(new CompilerDirectiveTokenizerWithLookahead()) { }
+        public CompilerDirectiveParser(ServiceProvider environment)
+            : base(new CompilerDirectiveTokenizerWithLookahead()) {
+            this.environment = environment;
+            BaseTokenizer = new CompilerDirectiveTokenizer();
+        }
 
         /// <summary>
         ///     compiler opions
         /// </summary>
-        public OptionSet Options { get; set; }
+        public IOptionSet Options
+            => environment.Resolve(StandardServices.CompilerConfigurationServiceClass) as IOptionSet;
 
         /// <summary>
         ///     compiler options
@@ -87,6 +93,7 @@ namespace PasPasPas.Internal.Tokenizer {
                 PascalToken.IfNDef,
                 PascalToken.ImageBase,
             };
+        private ServiceProvider environment;
 
         /// <summary>
         ///     parse a compiler directive
@@ -413,6 +420,9 @@ namespace PasPasPas.Internal.Tokenizer {
             if (includeToken.Kind == PascalToken.QuotedString) {
                 filename = QuotedStringTokenValue.Unwrap(includeToken.Value);
             }
+
+            // resolve path to import file
+            // append file in impotfilereader
         }
 
         private void ParseLongImportedDataSwitch() {

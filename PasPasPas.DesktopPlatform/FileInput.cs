@@ -23,6 +23,7 @@ namespace PasPasPas.DesktopPlatform {
         public const string DefaultEncodingValue = "utf-8";
 
         private StreamReader reader = null;
+        private FileStream file = null;
 
         /// <summary>
         ///     dispose the input stream
@@ -34,13 +35,17 @@ namespace PasPasPas.DesktopPlatform {
         /// <summary>
         ///     input file
         /// </summary>
-        public string Path => filePath;
+        public string Path
+            => filePath;
 
         /// <summary>
         ///     config settings
         /// </summary>
         public IConfigurationSettings Settings { get; set; }
 
+        /// <summary>
+        ///     stream reader
+        /// </summary>
         private StreamReader Reader
         {
             get
@@ -57,12 +62,19 @@ namespace PasPasPas.DesktopPlatform {
         /// <param name="srcFile"></param>
         /// <returns></returns>
         public Encoding GetFileEncoding(string srcFile) {
-            Encoding enc = Encoding.GetEncoding(Settings.GetValue(DefaultEncodingSettingName, DefaultEncodingValue));
+
+            Encoding enc;
+
+            if (Settings != null)
+                enc = Encoding.GetEncoding(Settings.GetValue(DefaultEncodingSettingName, DefaultEncodingValue));
+            else
+                enc = Encoding.Default;
+
 
             // *** Detect byte order mark if any - otherwise assume default
             byte[] buffer = new byte[5];
-            using (FileStream file = new FileStream(srcFile, FileMode.Open)) {
-                file.Read(buffer, 0, 5);
+            using (FileStream inputFile = new FileStream(srcFile, FileMode.Open, FileAccess.Read, FileShare.Read)) {
+                inputFile.Read(buffer, 0, 5);
             }
 
             if (buffer[0] == 0xef && buffer[1] == 0xbb && buffer[2] == 0xbf)
@@ -80,36 +92,16 @@ namespace PasPasPas.DesktopPlatform {
         }
 
 
-        private StreamReader CreateAndInitializeReader()
-            => new StreamReader(Path, GetFileEncoding(Path));
-
-
-        /// <summary>
-        ///     stream position
-        /// </summary>
-        public long Position
-        {
-            get
-            {
-                return reader.BaseStream.Position;
-            }
-
-            set
-            {
-                reader.BaseStream.Seek(Position, SeekOrigin.Begin);
-            }
-        }
-
         /// <summary>
         ///     test if at eof
         /// </summary>
         public bool AtEof
             => Reader.EndOfStream;
 
+        private string filePath;
+
         #region IDisposable Support
         private bool disposedValue = false;
-
-        private string filePath;
 
         /// <summary>
         ///     creates a new input file
@@ -126,11 +118,9 @@ namespace PasPasPas.DesktopPlatform {
         protected virtual void Dispose(bool disposing) {
             if (!disposedValue) {
                 if (disposing) {
-                    if (reader != null)
-                        reader.Dispose();
+                    CloseReader();
+                    CloseFileStream();
                 }
-
-                reader = null;
                 disposedValue = true;
             }
         }
@@ -147,6 +137,21 @@ namespace PasPasPas.DesktopPlatform {
         ///     close reader
         /// </summary>
         public void Close() {
+            //..
+        }
+
+        private void CloseFileStream() {
+            if (file == null)
+                return;
+
+            file.Close();
+            file = null;
+        }
+
+        private void CloseReader() {
+            if (reader == null)
+                return;
+
             reader.Close();
             reader = null;
         }
@@ -155,8 +160,14 @@ namespace PasPasPas.DesktopPlatform {
         ///     open redaer
         /// </summary>
         public void Open() {
-            if (reader == null)
-                reader = CreateAndInitializeReader();
+
+            if (file == null) {
+                file = new FileStream(Path, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, FileOptions.SequentialScan);
+            }
+
+            if (reader == null) {
+                reader = new StreamReader(file, GetFileEncoding(Path));
+            }
         }
 
         /// <summary>
@@ -164,7 +175,7 @@ namespace PasPasPas.DesktopPlatform {
         /// </summary>
         /// <returns></returns>
         public char NextChar()
-            => (char)reader.Read();
+            => (char)Reader.Read();
     }
 
     #endregion

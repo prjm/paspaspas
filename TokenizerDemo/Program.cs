@@ -1,6 +1,9 @@
 ﻿using PasPasPas.DesktopPlatform;
+using PasPasPas.Infrastructure.Configuration;
 using PasPasPas.Infrastructure.Input;
+using PasPasPas.Infrastructure.Service;
 using PasPasPas.Internal.Tokenizer;
+using PasPasPas.Options.Bundles;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -15,13 +18,17 @@ namespace TokenizerDemo {
             var path = "C:\\Users\\Bastian\\Documents\\Visual Studio 2015\\Projects\\paspaspas\\Testfiles";
             var files = FindFiles(path);
             var result = new Dictionary<long, long>();
+            var environment = new ServiceProvider();
+            environment.Register(new CommonConfiguration());
+            environment.Register(new OptionSet());
+
 
             foreach (var file in files) {
 
+                using (var reader = new StackedFileReader())
                 using (FileInput input = new FileInput(file)) {
                     var baseTokenizer = new StandardTokenizer();
-                    var tokenizer = new PascalTokenizerWithLookahead();
-                    var reader = new StackedFileReader();
+                    var tokenizer = new PascalTokenizerWithLookahead(environment);
                     reader.AddFile(input);
                     baseTokenizer.Input = reader;
                     tokenizer.BaseTokenizer = baseTokenizer;

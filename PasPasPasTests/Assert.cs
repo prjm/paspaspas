@@ -15,22 +15,23 @@ namespace PasPasPasTests {
         public static List<PascalToken> RunTokenizer(string input, IList<LogMessage> messages = null) {
             var tokenizer = new StandardTokenizer();
             var result = new List<PascalToken>();
-            var reader = new StackedFileReader();
-            EventHandler<LogMessageEventArgs> handler = (_, x) => messages.Add(x.Message);
-            reader.AddFile(new StringInput(input));
-            tokenizer.Input = reader;
+            using (var inputString = new StringInput(input))
+            using (var reader = new StackedFileReader()) {
+                EventHandler<LogMessageEventArgs> handler = (_, x) => messages.Add(x.Message);
+                reader.AddFile(inputString);
+                tokenizer.Input = reader;
 
-            if (messages != null)
-                tokenizer.LogMessage += handler;
+                if (messages != null)
+                    tokenizer.LogMessage += handler;
 
-            while (tokenizer.HasNextToken())
-                result.Add(tokenizer.FetchNextToken());
+                while (tokenizer.HasNextToken())
+                    result.Add(tokenizer.FetchNextToken());
 
-            tokenizer.LogMessage -= handler;
+                tokenizer.LogMessage -= handler;
 
-            return result;
+                return result;
+            }
         }
-
     }
 
     public static class Assert {

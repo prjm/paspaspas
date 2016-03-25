@@ -20,17 +20,11 @@ namespace PasPasPas.Infrastructure.Input {
         public IParserInput InputFile { get; set; }
 
         /// <summary>
-        ///     last position
-        /// </summary>
-        public long LastPosition { get; internal set; }
-
-        /// <summary>
         ///     close file
         /// </summary>
         /// <param name="dispose">dispose</param>
         public void Close(bool dispose) {
             if (!Active) return;
-            LastPosition = InputFile.Position;
             InputFile.Close();
             if (dispose)
                 InputFile.Dispose();
@@ -43,7 +37,6 @@ namespace PasPasPas.Infrastructure.Input {
         public void Open() {
             if (Active) return;
             InputFile.Open();
-            InputFile.Position = LastPosition;
             Active = true;
         }
     }
@@ -142,7 +135,6 @@ namespace PasPasPas.Infrastructure.Input {
             files.Push(new PartlyReadFile() {
                 InputFile = input,
                 Active = true,
-                LastPosition = -1
             });
         }
 

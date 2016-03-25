@@ -1,5 +1,6 @@
 ﻿using PasPasPas.Api;
 using PasPasPas.Infrastructure.Input;
+using PasPasPas.Infrastructure.Service;
 using PasPasPas.Options.Bundles;
 
 namespace PasPasPas.Internal.Tokenizer {
@@ -9,11 +10,22 @@ namespace PasPasPas.Internal.Tokenizer {
     /// </summary>
     public class PascalTokenizerWithLookahead : TokenizerWithLookahead {
 
+
+        private readonly ServiceProvider environment;
+
+        /// <summary>
+        ///     create a new pascal tokenizer
+        /// </summary>
+        /// <param name="environment"></param>
+        public PascalTokenizerWithLookahead(ServiceProvider environment) {
+            this.environment = environment;
+        }
+
         /// <summary>
         ///     compiler options
         /// </summary>
-        public OptionSet Options { get; set; }
-            = new OptionSet();
+        public IOptionSet Options
+            => environment.Resolve(StandardServices.CompilerConfigurationServiceClass) as IOptionSet;
 
         /// <summary>
         ///     test if a token is a macro token
@@ -39,14 +51,14 @@ namespace PasPasPas.Internal.Tokenizer {
         /// </summary>
         /// <param name="nextToken"></param>
         protected override void ProcssMacroToken(PascalToken nextToken) {
-            var parser = new CompilerDirectiveParser();
+            var parser = new CompilerDirectiveParser(environment);
             var tokenizer = new CompilerDirectiveTokenizer();
-            var input = new StringInput(CompilerDirectiveTokenizer.Unwrap(nextToken.Value));
-            var reader = new StackedFileReader();
-            reader.AddFile(input);
-            parser.BaseTokenizer = tokenizer;
-            parser.Options = Options;
-            parser.ParseCompilerDirective();
+            using (var input = new StringInput(CompilerDirectiveTokenizer.Unwrap(nextToken.Value)))
+            using (var reader = new StackedFileReader()) {
+                reader.AddFile(input);
+                parser.BaseTokenizer = tokenizer;
+                parser.ParseCompilerDirective();
+            }
         }
 
 

@@ -1,11 +1,13 @@
-﻿using PasPasPas.Options.DataTypes;
+﻿using System;
+using PasPasPas.Infrastructure.Service;
+using PasPasPas.Options.DataTypes;
 
 namespace PasPasPas.Options.Bundles {
 
     /// <summary>
     ///     set of compiler options
     /// </summary>
-    public class OptionSet {
+    public class OptionSet : IService, IOptionSet {
 
         /// <summary>
         ///     debug configuration
@@ -46,6 +48,27 @@ namespace PasPasPas.Options.Bundles {
         ///     meta information
         /// </summary>
         public MetaInformation Meta { get; }
+
+        /// <summary>
+        ///     return service class id
+        /// </summary>
+        public Guid ServiceClassId => StandardServices.CompilerConfigurationServiceClass;
+
+        /// <summary>
+        ///     option service id
+        /// </summary>
+        public static readonly Guid OptionSetServiceId
+            = new Guid("E177A4B4-012F-4929-A084-B341D23BCC12");
+
+        /// <summary>
+        ///     service id
+        /// </summary>
+        public Guid ServiceId => OptionSetServiceId;
+
+        /// <summary>
+        ///     service name
+        /// </summary>
+        public string ServiceName => "CompilerOptions";
 
         /// <summary>
         ///     clear all option values
