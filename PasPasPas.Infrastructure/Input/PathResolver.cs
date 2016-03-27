@@ -1,5 +1,7 @@
-﻿using System;
+﻿using PasPasPas.Infrastructure.Service;
+using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace PasPasPas.Infrastructure.Input {
 
@@ -45,10 +47,29 @@ namespace PasPasPas.Infrastructure.Input {
     /// <summary>
     ///     resolves paths for common scenarios
     /// </summary>
-    public abstract class PathResolver {
+    public abstract class PathResolver : IObjectBase {
 
         private Dictionary<ResolvedPathKey, string> resolvedPaths
             = new Dictionary<ResolvedPathKey, string>();
+
+        /// <summary>
+        ///     create a new path resolver
+        /// </summary>
+        /// <param name="services"></param>
+        protected PathResolver(IObjectBase services) {
+            ObjectBase = services;
+        }
+
+        /// <summary>
+        ///     get services
+        /// </summary>
+        public ServiceProvider Services
+            => ObjectBase.Services;
+
+        /// <summary>
+        ///     provided services
+        /// </summary>
+        protected IObjectBase ObjectBase { get; }
 
         /// <summary>
         ///     resolves a path and caches the result
@@ -71,6 +92,23 @@ namespace PasPasPas.Infrastructure.Input {
             }
 
             return result;
+        }
+
+        /// <summary>
+        ///     check if a given path exists in a directory
+        /// </summary>
+        /// <param name="currentDirectory">current directoy</param>
+        /// <param name="pathToResolve">path to resolve</param>
+        /// <param name="targetPath">target path</param>
+        /// <returns></returns>
+        protected bool ResolveInDirectory(string currentDirectory, string pathToResolve, out string targetPath) {
+            var combinedPath = Path.Combine(currentDirectory, pathToResolve);
+            if (File.Exists(combinedPath))
+                targetPath = combinedPath;
+            else
+                targetPath = null;
+
+            return !string.IsNullOrEmpty(targetPath);
         }
 
         /// <summary>

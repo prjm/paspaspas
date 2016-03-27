@@ -1,6 +1,7 @@
 ﻿using PasPasPas.Api;
 using System.Collections.Generic;
 using System.Linq;
+using PasPasPas.Infrastructure.Input;
 
 namespace PasPasPas.Internal.Tokenizer {
 
@@ -18,6 +19,12 @@ namespace PasPasPas.Internal.Tokenizer {
         ///     base tokenizer
         /// </summary>
         public IPascalTokenizer BaseTokenizer { get; set; }
+
+        /// <summary>
+        ///     get the currently read file
+        /// </summary>
+        public IFile CurrentFile
+            => BaseTokenizer.CurrentFile;
 
         /// <summary>
         ///     list of tokens

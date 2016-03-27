@@ -85,5 +85,11 @@ namespace PasPasPas.Internal.Tokenizer {
 
             return GenerateUndefinedToken(c);
         }
+
+        /// <summary>
+        ///     get the currently read file
+        /// </summary>
+        public IFile CurrentFile
+            => Input.CurrentFile;
     }
 }

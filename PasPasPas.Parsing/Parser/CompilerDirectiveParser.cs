@@ -1,13 +1,15 @@
 ﻿using PasPasPas.Api;
-using PasPasPas.Internal.Parser;
 using System.Collections.Generic;
 using System;
 using PasPasPas.Options.DataTypes;
 using System.Globalization;
 using PasPasPas.Options.Bundles;
 using PasPasPas.Infrastructure.Service;
+using PasPasPas.Infrastructure.Input;
+using PasPasPas.Parsing.Tokenizer;
+using PasPasPas.Internal.Tokenizer;
 
-namespace PasPasPas.Internal.Tokenizer {
+namespace PasPasPas.Parsing.Parser {
 
     /// <summary>
     ///     helper parser for compiler directives
@@ -46,6 +48,21 @@ namespace PasPasPas.Internal.Tokenizer {
         /// </summary>
         protected MetaInformation Meta
             => Options.Meta;
+
+        /// <summary>
+        ///     parser input
+        /// </summary>
+        public StackedFileReader Input
+        {
+            get
+            {
+                return ((StandardTokenizer)BaseTokenizer).Input = Input;
+            }
+            set
+            {
+                ((StandardTokenizer)BaseTokenizer).Input = value;
+            }
+        }
 
         private static HashSet<int> switches
             = new HashSet<int>() {
@@ -420,6 +437,9 @@ namespace PasPasPas.Internal.Tokenizer {
             if (includeToken.Kind == PascalToken.QuotedString) {
                 filename = QuotedStringTokenValue.Unwrap(includeToken.Value);
             }
+
+            string sourcePath = Input.CurrentFile.Path ?? string.Empty;
+            string targetPath = Meta.IncludePathResolver.ResolvePath(sourcePath, filename);
 
             // resolve path to import file
             // append file in impotfilereader

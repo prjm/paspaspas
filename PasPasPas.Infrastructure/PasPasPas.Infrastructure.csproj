@@ -59,8 +59,10 @@
     <Compile Include="Log\MessageGenerator.cs" />
     <Compile Include="Log\ObjectWithLog.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Service\IServiceProvider.cs" />
+    <Compile Include="Service\IObjectBase.cs" />
+    <Compile Include="Service\IService.cs" />
     <Compile Include="Service\IServiceResolutionPolicy.cs" />
+    <Compile Include="Service\ServiceBase.cs" />
     <Compile Include="Service\ServiceProvider.cs" />
     <Compile Include="Service\StandardServiceResolutionPolicy.cs" />
     <Compile Include="Service\StandardServices.cs" />

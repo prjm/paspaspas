@@ -38,6 +38,11 @@ namespace PasPasPas.Options.DataTypes {
         /// </summary>
         public DerivedValueOption<string> FileExtension { get; }
 
+        /// <summary>
+        ///     path resolver for includes
+        /// </summary>
+        public IncludeFilePathResolver IncludePathResolver { get; }
+
 
         /// <summary>
         ///     reset on new unit

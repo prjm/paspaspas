@@ -5,7 +5,7 @@ namespace PasPasPas.Infrastructure.Input {
     /// <summary>
     ///     interface for parser input
     /// </summary>
-    public interface IParserInput : IDisposable {
+    public interface IParserInput : IFile, IDisposable {
 
         /// <summary>
         ///     tests if any input is left

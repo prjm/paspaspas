@@ -65,6 +65,20 @@ namespace PasPasPas.Infrastructure.Input {
             => (putbackBuffer.Count < 1) && (files.Count < 1);
 
         /// <summary>
+        ///     currently read file
+        /// </summary>
+        public IFile CurrentFile
+        {
+            get
+            {
+                if (files.Count > 0)
+                    return files.Peek().InputFile;
+                else
+                    return null;
+            }
+        }
+
+        /// <summary>
         ///     fetch the next char
         /// </summary>
         /// <returns></returns>

@@ -48,6 +48,12 @@ namespace PasPasPas.Infrastructure.Input {
         }
 
         /// <summary>
+        ///     path of this input
+        /// </summary>
+        public string Path
+            => string.Empty;
+
+        /// <summary>
         ///     do nothing
         /// </summary>
         public void Close() {

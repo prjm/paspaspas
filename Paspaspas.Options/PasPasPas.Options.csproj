@@ -72,11 +72,13 @@
     <Compile Include="DataTypes\IfDefCondition.cs" />
     <Compile Include="DataTypes\ImplicitBuildUnit.cs" />
     <Compile Include="DataTypes\ImportGlobalUnitData.cs" />
+    <Compile Include="DataTypes\IncludeFilePathResolver.cs" />
     <Compile Include="DataTypes\MetaInformation.cs" />
     <Compile Include="Bundles\OptionSet.cs" />
     <Compile Include="Bundles\Platform.cs" />
     <Compile Include="Bundles\PlatformKey.cs" />
     <Compile Include="DataTypes\HppEmitMode.cs" />
+    <Compile Include="DataTypes\PathOptionSet.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Bundles\AnyCpuPlatform.cs" />
     <Compile Include="Bundles\DefaultPlatform.cs" />

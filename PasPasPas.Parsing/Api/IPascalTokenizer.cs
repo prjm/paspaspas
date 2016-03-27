@@ -1,4 +1,6 @@
-﻿namespace PasPasPas.Api {
+﻿using PasPasPas.Infrastructure.Input;
+
+namespace PasPasPas.Api {
 
     /// <summary>
     ///     interface for classes which tokenize source code
@@ -16,6 +18,11 @@
         /// </summary>
         /// <returns>next pascal token</returns>
         PascalToken FetchNextToken();
+
+        /// <summary>
+        ///     get the current file
+        /// </summary>
+        IFile CurrentFile { get; }
 
     }
 }

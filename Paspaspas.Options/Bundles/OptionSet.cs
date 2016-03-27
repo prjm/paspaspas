@@ -7,7 +7,7 @@ namespace PasPasPas.Options.Bundles {
     /// <summary>
     ///     set of compiler options
     /// </summary>
-    public class OptionSet : IService, IOptionSet {
+    public class OptionSet : ServiceBase, IService, IOptionSet {
 
         /// <summary>
         ///     debug configuration
@@ -32,6 +32,7 @@ namespace PasPasPas.Options.Bundles {
             CompilerOptions = new CompileOptions(baseOptions?.CompilerOptions);
             ConditionalCompilation = new ConditionalCompilationOptions(baseOptions?.ConditionalCompilation);
             Meta = new MetaInformation(baseOptions?.Meta);
+            PathOptions = new PathOptionSet(baseOptions?.PathOptions);
         }
 
         /// <summary>
@@ -71,12 +72,18 @@ namespace PasPasPas.Options.Bundles {
         public string ServiceName => "CompilerOptions";
 
         /// <summary>
+        ///     path options
+        /// </summary>
+        public PathOptionSet PathOptions { get; internal set; }
+
+        /// <summary>
         ///     clear all option values
         /// </summary>
         public void Clear() {
             CompilerOptions.Clear();
             ConditionalCompilation.Clear();
             Meta.Clear();
+            PathOptions.Clear();
         }
 
         /// <summary>
@@ -86,6 +93,7 @@ namespace PasPasPas.Options.Bundles {
             CompilerOptions.ResetOnNewUnit();
             ConditionalCompilation.ResetOnNewUnit();
             Meta.ResetOnNewUnit();
+            PathOptions.ResetOnNewUnit();
         }
     }
 }

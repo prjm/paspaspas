@@ -8,6 +8,7 @@ using PasPasPas.Internal.Parser;
 using PasPasPas.Internal.Tokenizer;
 using PasPasPas.Options.Bundles;
 using PasPasPas.Options.DataTypes;
+using PasPasPas.Parsing.Parser;
 using System;
 using System.Text;
 
@@ -98,8 +99,7 @@ namespace PasPasPasTests {
                     using (var input = new StringInput(subPart))
                     using (var reader = new StackedFileReader()) {
                         reader.AddFile(input);
-                        tokenizer.Input = reader;
-                        parser.Tokenizer.BaseTokenizer.in
+                        parser.Input = reader;
                         parser.ParseCompilerDirective();
                     }
                 }

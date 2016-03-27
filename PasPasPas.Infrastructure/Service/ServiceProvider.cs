@@ -37,6 +37,11 @@ namespace PasPasPas.Infrastructure.Service {
 
             if (servicesForClass.ContainsKey(provider.ServiceId))
                 throw new ArgumentException("Service " + provider.ServiceName + " already registered.");
+
+            var serviceBase = provider as ServiceBase;
+
+            if (serviceBase != null)
+                serviceBase.RegisterServiceProvider(this);
         }
 
         /// <summary>

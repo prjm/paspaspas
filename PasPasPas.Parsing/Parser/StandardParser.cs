@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using PasPasPas.Internal.Tokenizer;
 using PasPasPas.Infrastructure.Service;
 
-namespace PasPasPas.Internal.Parser {
+namespace PasPasPas.Parsing.Parser {
 
     /// <summary>
     ///     standard, recursive descend pascal paser

@@ -1,7 +1,7 @@
 ﻿using PasPasPas.Infrastructure.Input;
 using PasPasPas.Infrastructure.Log;
-using PasPasPas.Internal.Parser;
 using PasPasPas.Internal.Tokenizer;
+using PasPasPas.Parsing.Parser;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;

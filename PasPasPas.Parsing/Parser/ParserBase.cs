@@ -7,7 +7,7 @@ using System.Text;
 using System.Linq;
 using PasPasPas.Infrastructure.Log;
 
-namespace PasPasPas.Internal.Parser {
+namespace PasPasPas.Parsing.Parser {
 
     /// <summary>
     ///     base class for parsers

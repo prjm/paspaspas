@@ -53,9 +53,9 @@
     <Compile Include="Api\PascalToken.cs" />
     <Compile Include="Api\PasPasPasException.cs" />
     <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="Internal\Parser\ParserBase.cs" />
-    <Compile Include="Internal\Parser\RuleAttribute.cs" />
-    <Compile Include="Internal\Parser\StandardParser.cs" />
+    <Compile Include="Parser\ParserBase.cs" />
+    <Compile Include="Parser\RuleAttribute.cs" />
+    <Compile Include="Parser\StandardParser.cs" />
     <Compile Include="Internal\Parser\Syntax\AbstractDirective.cs" />
     <Compile Include="Internal\Parser\Syntax\ArrayIndex.cs" />
     <Compile Include="Internal\Parser\Syntax\ArrayType.cs" />
@@ -215,9 +215,9 @@
     <Compile Include="Internal\Parser\Syntax\WhileStatement.cs" />
     <Compile Include="Internal\Parser\Syntax\WithStatement.cs" />
     <Compile Include="Tokenizer\CharacterClass.cs" />
-    <Compile Include="Internal\Tokenizer\CompilerDirectiveParser.cs" />
-    <Compile Include="Internal\Tokenizer\CompilerDirectiveTokenizer.cs" />
-    <Compile Include="Internal\Tokenizer\CompilerDirectiveTokenizerWithLookahead.cs" />
+    <Compile Include="Parser\CompilerDirectiveParser.cs" />
+    <Compile Include="Tokenizer\CompilerDirectiveTokenizer.cs" />
+    <Compile Include="Tokenizer\CompilerDirectiveTokenizerWithLookahead.cs" />
     <Compile Include="Internal\Tokenizer\PascalTokenizerWithLookahead.cs" />
     <Compile Include="Internal\Tokenizer\PreprocessorPunctuators.cs" />
     <Compile Include="Internal\Tokenizer\PunctuatorGroup.cs" />

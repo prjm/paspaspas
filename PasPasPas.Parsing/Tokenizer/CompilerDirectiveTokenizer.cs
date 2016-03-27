@@ -1,8 +1,9 @@
 ﻿using PasPasPas.Api;
+using PasPasPas.Internal.Tokenizer;
 using System;
 using System.Collections.Generic;
 
-namespace PasPasPas.Internal.Tokenizer {
+namespace PasPasPas.Parsing.Tokenizer {
 
     /// <summary>
     ///     helper for compiler directives

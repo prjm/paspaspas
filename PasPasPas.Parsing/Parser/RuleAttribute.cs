@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace PasPasPas.Internal.Parser {
+namespace PasPasPas.Parsing.Parser {
 
     /// <summary>
     ///     rule attribute for classes

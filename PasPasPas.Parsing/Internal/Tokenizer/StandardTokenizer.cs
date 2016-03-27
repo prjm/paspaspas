@@ -190,6 +190,5 @@ namespace PasPasPas.Internal.Tokenizer {
                 ["on"] = PascalToken.On
             };
 
-
     }
 }

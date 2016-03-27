@@ -1,6 +1,7 @@
 ﻿using PasPasPas.Api;
+using PasPasPas.Internal.Tokenizer;
 
-namespace PasPasPas.Internal.Tokenizer {
+namespace PasPasPas.Parsing.Tokenizer {
 
     /// <summary>
     ///     tokenizer for compiler directives
@@ -12,7 +13,8 @@ namespace PasPasPas.Internal.Tokenizer {
         /// </summary>
         /// <param name="nextToken"></param>
         /// <returns></returns>
-        protected override bool IsMacroToken(PascalToken nextToken) => false;
+        protected override bool IsMacroToken(PascalToken nextToken)
+            => false;
 
         /// <summary>
         ///     test if a token is valid and relevant
