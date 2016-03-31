@@ -3,8 +3,8 @@ using PasPasPas.Internal.Parser.Syntax;
 using System.Text;
 using System;
 using System.Collections.Generic;
-using PasPasPas.Internal.Tokenizer;
 using PasPasPas.Infrastructure.Service;
+using PasPasPas.Parsing.Tokenizer;
 
 namespace PasPasPas.Parsing.Parser {
 

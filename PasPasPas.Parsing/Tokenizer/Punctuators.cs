@@ -1,10 +1,9 @@
 ﻿using PasPasPas.Api;
 using PasPasPas.Infrastructure.Input;
-using PasPasPas.Parsing.Tokenizer;
 using System.Collections.Generic;
 using System.Text;
 
-namespace PasPasPas.Internal.Tokenizer {
+namespace PasPasPas.Parsing.Tokenizer {
 
     /// <summary>
     ///     manually group token group values andvtheircharacter cxlasses

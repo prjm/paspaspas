@@ -4,31 +4,6 @@ using System.Globalization;
 namespace PasPasPas.Api {
 
     /// <summary>
-    ///     exception class for unknown token kinds
-    /// </summary>
-    public class UnknownTokenKindException : PasPasPasException {
-
-        /// <summary>
-        ///     unkown toke kind
-        /// </summary>
-        private int kind;
-
-        /// <summary>
-        ///     creates a new unknown 
-        /// </summary>
-        /// <param name="kind"></param>
-        public UnknownTokenKindException(int kind) {
-            this.kind = kind;
-        }
-
-        /// <summary>
-        ///     Unkown exception kind
-        /// </summary>
-        public int Kind
-            => kind;
-    }
-
-    /// <summary>
     ///     generic structur for tokens
     /// </summary>
     public struct PascalToken {

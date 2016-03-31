@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace PasPasPas.Internal.Tokenizer {
+namespace PasPasPas.Parsing.Tokenizer {
 
     /// <summary>
     ///     Standard tokenizer

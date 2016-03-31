@@ -7,7 +7,6 @@ using PasPasPas.Options.Bundles;
 using PasPasPas.Infrastructure.Service;
 using PasPasPas.Infrastructure.Input;
 using PasPasPas.Parsing.Tokenizer;
-using PasPasPas.Internal.Tokenizer;
 
 namespace PasPasPas.Parsing.Parser {
 
@@ -50,19 +49,9 @@ namespace PasPasPas.Parsing.Parser {
             => Options.Meta;
 
         /// <summary>
-        ///     parser input
+        ///     reader to include files into
         /// </summary>
-        public StackedFileReader Input
-        {
-            get
-            {
-                return ((StandardTokenizer)BaseTokenizer).Input = Input;
-            }
-            set
-            {
-                ((StandardTokenizer)BaseTokenizer).Input = value;
-            }
-        }
+        public StackedFileReader IncludeInput { get; set; }
 
         private static HashSet<int> switches
             = new HashSet<int>() {
@@ -438,11 +427,11 @@ namespace PasPasPas.Parsing.Parser {
                 filename = QuotedStringTokenValue.Unwrap(includeToken.Value);
             }
 
-            string sourcePath = Input.CurrentFile.Path ?? string.Empty;
+            string sourcePath = IncludeInput.CurrentFile?.Path ?? string.Empty;
             string targetPath = Meta.IncludePathResolver.ResolvePath(sourcePath, filename);
 
-            // resolve path to import file
-            // append file in impotfilereader
+            IFileAccess fileAccess = (IFileAccess)environment.Resolve(StandardServices.FileAccessServiceClass, this);
+            IncludeInput.AddFile(fileAccess.OpenFileForReading(targetPath));
         }
 
         private void ParseLongImportedDataSwitch() {

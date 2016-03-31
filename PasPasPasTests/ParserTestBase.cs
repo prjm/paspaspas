@@ -4,11 +4,10 @@ using PasPasPas.Infrastructure.Configuration;
 using PasPasPas.Infrastructure.Input;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Infrastructure.Service;
-using PasPasPas.Internal.Parser;
-using PasPasPas.Internal.Tokenizer;
 using PasPasPas.Options.Bundles;
 using PasPasPas.Options.DataTypes;
 using PasPasPas.Parsing.Parser;
+using PasPasPas.Parsing.Tokenizer;
 using System;
 using System.Text;
 
@@ -83,10 +82,15 @@ namespace PasPasPasTests {
         }
 
         protected void RunCompilerDirective(string directive, object expected, Func<object> actual) {
+            var fileAccess = new StandardFileAccess();
+
+
+            fileAccess.AddOneTimeMockup("dummy.inc", new StringInput("DEFINE DUMMY_INC"));
 
             var environment = new ServiceProvider();
             environment.Register(new CommonConfiguration());
             environment.Register(TestOptions);
+            environment.Register(fileAccess);
 
             ClearOptions();
 
@@ -99,8 +103,11 @@ namespace PasPasPasTests {
                     using (var input = new StringInput(subPart))
                     using (var reader = new StackedFileReader()) {
                         reader.AddFile(input);
-                        parser.Input = reader;
-                        parser.ParseCompilerDirective();
+                        parser.BaseTokenizer.Input = reader;
+                        parser.IncludeInput = reader;
+                        while (!reader.AtEof) {
+                            parser.ParseCompilerDirective();
+                        }
                     }
                 }
             }

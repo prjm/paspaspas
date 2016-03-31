@@ -31,7 +31,7 @@ namespace PasPasPas.Options.Bundles {
         public OptionSet(OptionSet baseOptions) {
             CompilerOptions = new CompileOptions(baseOptions?.CompilerOptions);
             ConditionalCompilation = new ConditionalCompilationOptions(baseOptions?.ConditionalCompilation);
-            Meta = new MetaInformation(baseOptions?.Meta);
+            Meta = new MetaInformation(this, baseOptions?.Meta);
             PathOptions = new PathOptionSet(baseOptions?.PathOptions);
         }
 

@@ -2,7 +2,7 @@
 using PasPasPas.Infrastructure.Input;
 using PasPasPas.Infrastructure.Log;
 
-namespace PasPasPas.Internal.Tokenizer {
+namespace PasPasPas.Parsing.Tokenizer {
 
     /// <summary>
     ///     base class for tokenizers
@@ -14,23 +14,10 @@ namespace PasPasPas.Internal.Tokenizer {
         /// </summary>
         protected TokenizerBase() { }
 
-
-        private StackedFileReader input;
-
         /// <summary>
         ///     parser parser input
         /// </summary>
-        public StackedFileReader Input
-        {
-            get
-            {
-                return input;
-            }
-            set
-            {
-                input = value;
-            }
-        }
+        public StackedFileReader Input { get; set; }
 
         /// <summary>
         ///     check if tokens are availiable

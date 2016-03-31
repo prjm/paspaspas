@@ -1,7 +1,6 @@
 ﻿using PasPasPas.Api;
-using PasPasPas.Parsing.Tokenizer;
 
-namespace PasPasPas.Internal.Tokenizer {
+namespace PasPasPas.Parsing.Tokenizer {
 
     /// <summary>
     ///     provides tokenizer helpers delphi compiler directives

@@ -25,5 +25,11 @@ namespace PasPasPas.Infrastructure.Service {
         public static readonly Guid CompilerConfigurationServiceClass
             = new Guid("4ED72AC0-5137-4907-B9D6-A497D484C8FB");
 
+        /// <summary>
+        ///     service class for file access
+        /// </summary>
+        public static readonly Guid FileAccessServiceClass
+            = new Guid("0241B6D7-BFEF-46DE-9588-2FFE83F640A7");
+
     }
 }

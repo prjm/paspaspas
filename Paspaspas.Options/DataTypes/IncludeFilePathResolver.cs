@@ -30,9 +30,15 @@ namespace PasPasPas.Options.DataTypes {
         /// <param name="pathToResolve"></param>
         /// <returns></returns>
         protected override string DoResolvePath(string basePath, string pathToResolve) {
-            string fullPath = Path.GetFullPath(basePath);
-            string currentDirectory = Path.GetDirectoryName(basePath);
             string targetPath;
+            string currentDirectory;
+
+            if (!string.IsNullOrEmpty(basePath)) {
+                currentDirectory = Path.GetDirectoryName(Path.GetFullPath(basePath));
+            }
+            else {
+                currentDirectory = null;
+            }
 
             if (ResolveInDirectory(currentDirectory, pathToResolve, out targetPath)) {
                 return targetPath;

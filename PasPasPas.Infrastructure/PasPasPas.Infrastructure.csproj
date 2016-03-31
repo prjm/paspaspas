@@ -45,7 +45,9 @@
     <Compile Include="Configuration\CommonConfiguration.cs" />
     <Compile Include="Configuration\ISettingsService.cs" />
     <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Input\FileAccessBase.cs" />
     <Compile Include="Input\IFile.cs" />
+    <Compile Include="Input\IFileAccess.cs" />
     <Compile Include="Input\IParserInput.cs" />
     <Compile Include="Configuration\IConfigurationSettings.cs" />
     <Compile Include="Configuration\TypedConfigurationSettings.cs" />

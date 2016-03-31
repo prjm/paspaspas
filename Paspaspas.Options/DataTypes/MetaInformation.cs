@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using PasPasPas.Options.Bundles;
+using System.Collections.Generic;
 
 namespace PasPasPas.Options.DataTypes {
 
@@ -23,9 +24,12 @@ namespace PasPasPas.Options.DataTypes {
         ///     creates a new meta information option object
         /// </summary>
         /// <param name="baseOption"></param>
-        public MetaInformation(MetaInformation baseOption) {
+        /// <param name="parentOptions">parent options</param>
+        public MetaInformation(OptionSet parentOptions, MetaInformation baseOption) {
+            ParentOptions = parentOptions;
             Description = new DerivedValueOption<string>(baseOption?.Description);
             FileExtension = new DerivedValueOption<string>(baseOption?.FileExtension);
+            IncludePathResolver = new IncludeFilePathResolver(parentOptions);
         }
 
         /// <summary>
@@ -43,6 +47,10 @@ namespace PasPasPas.Options.DataTypes {
         /// </summary>
         public IncludeFilePathResolver IncludePathResolver { get; }
 
+        /// <summary>
+        ///     parent options
+        /// </summary>
+        public OptionSet ParentOptions { get; }
 
         /// <summary>
         ///     reset on new unit

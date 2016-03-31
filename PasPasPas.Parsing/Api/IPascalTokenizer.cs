@@ -20,9 +20,8 @@ namespace PasPasPas.Api {
         PascalToken FetchNextToken();
 
         /// <summary>
-        ///     get the current file
+        ///     parser input
         /// </summary>
-        IFile CurrentFile { get; }
-
+        StackedFileReader Input { get; set; }
     }
 }

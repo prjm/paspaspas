@@ -213,5 +213,11 @@ namespace PasPasPasTests.Tokenizer {
             RunCompilerDirective("IMPORTEDDATA OFF", ImportGlobalUnitData.NoImport, () => CompilerOptions.ImportedData.Value);
         }
 
+        [TestMethod]
+        public void TestInclude() {
+            RunCompilerDirective("", false, () => ConditionalCompilation.IsSymbolDefined("DUMMY_INC"));
+            RunCompilerDirective("INCLUDE 'DUMMY.INC'", true, () => ConditionalCompilation.IsSymbolDefined("DUMMY_INC"));
+        }
+
     }
 }

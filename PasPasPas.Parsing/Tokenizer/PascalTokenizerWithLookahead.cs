@@ -3,9 +3,8 @@ using PasPasPas.Infrastructure.Input;
 using PasPasPas.Infrastructure.Service;
 using PasPasPas.Options.Bundles;
 using PasPasPas.Parsing.Parser;
-using PasPasPas.Parsing.Tokenizer;
 
-namespace PasPasPas.Internal.Tokenizer {
+namespace PasPasPas.Parsing.Tokenizer {
 
     /// <summary>
     ///     pascal tokenizer with lookahead

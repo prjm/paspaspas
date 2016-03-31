@@ -1,11 +1,11 @@
 ﻿using PasPasPas.Api;
-using PasPasPas.Internal.Tokenizer;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 using System.Linq;
 using PasPasPas.Infrastructure.Log;
+using PasPasPas.Parsing.Tokenizer;
 
 namespace PasPasPas.Parsing.Parser {
 

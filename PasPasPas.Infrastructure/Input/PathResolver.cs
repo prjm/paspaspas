@@ -102,8 +102,15 @@ namespace PasPasPas.Infrastructure.Input {
         /// <param name="targetPath">target path</param>
         /// <returns></returns>
         protected bool ResolveInDirectory(string currentDirectory, string pathToResolve, out string targetPath) {
-            var combinedPath = Path.Combine(currentDirectory, pathToResolve);
-            if (File.Exists(combinedPath))
+            var fileAccess = (IFileAccess)ObjectBase.Services.Resolve(StandardServices.FileAccessServiceClass, this);
+            string combinedPath;
+
+            if (!string.IsNullOrEmpty(currentDirectory))
+                combinedPath = Path.Combine(currentDirectory, pathToResolve);
+            else
+                combinedPath = pathToResolve;
+
+            if (fileAccess.FileExists(combinedPath))
                 targetPath = combinedPath;
             else
                 targetPath = null;

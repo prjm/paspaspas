@@ -37,6 +37,14 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.IO.FileSystem, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.FileSystem.4.0.0\lib\net46\System.IO.FileSystem.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.IO.FileSystem.Primitives, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.FileSystem.Primitives.4.0.0\lib\net46\System.IO.FileSystem.Primitives.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -58,7 +66,6 @@
     <Compile Include="Parser\ProgramTest.cs" />
     <Compile Include="Parser\TestDeclarations.cs" />
     <Compile Include="StackedReaderTest.cs" />
-    <Compile Include="testm.cs" />
     <Compile Include="Tokenizer\CompilerDirectiveTest.cs" />
     <Compile Include="Tokenizer\TokenizerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -80,6 +87,9 @@
       <Project>{efa1da73-0c34-4bfb-9006-dcffa12218ed}</Project>
       <Name>PasPasPas.Parsing</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

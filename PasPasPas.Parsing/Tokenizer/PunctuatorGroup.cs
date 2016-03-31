@@ -1,11 +1,10 @@
 ﻿using PasPasPas.Api;
-using PasPasPas.Parsing.Tokenizer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace PasPasPas.Internal.Tokenizer {
+namespace PasPasPas.Parsing.Tokenizer {
 
     /// <summary>
     ///     group punctuators with the same prefix

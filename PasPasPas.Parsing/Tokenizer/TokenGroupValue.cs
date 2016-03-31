@@ -3,9 +3,8 @@ using System.Text;
 using PasPasPas.Api;
 using System.Collections.Generic;
 using PasPasPas.Infrastructure.Input;
-using PasPasPas.Parsing.Tokenizer;
 
-namespace PasPasPas.Internal.Tokenizer {
+namespace PasPasPas.Parsing.Tokenizer {
 
     static class StringBuilderHelper {
 

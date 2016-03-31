@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using PasPasPas.Infrastructure.Input;
 
-namespace PasPasPas.Internal.Tokenizer {
+namespace PasPasPas.Parsing.Tokenizer {
 
     /// <summary>
     ///     tokenizer with lookahear
@@ -21,10 +21,20 @@ namespace PasPasPas.Internal.Tokenizer {
         public IPascalTokenizer BaseTokenizer { get; set; }
 
         /// <summary>
-        ///     get the currently read file
+        ///     parser input
         /// </summary>
-        public IFile CurrentFile
-            => BaseTokenizer.CurrentFile;
+        public StackedFileReader Input
+        {
+            get
+            {
+                return BaseTokenizer.Input;
+            }
+
+            set
+            {
+                BaseTokenizer.Input = value;
+            }
+        }
 
         /// <summary>
         ///     list of tokens
