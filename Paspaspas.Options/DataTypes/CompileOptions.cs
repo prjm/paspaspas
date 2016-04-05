@@ -25,12 +25,13 @@
             ImageBase = new DerivedValueOption<int>(baseOptions?.ImageBase);
             ImplicitBuild = new DerivedValueOption<ImplicitBuildUnit>(baseOptions?.ImplicitBuild);
             ImportedData = new DerivedValueOption<ImportGlobalUnitData>(baseOptions?.ImportedData);
+            IoChecks = new DerivedValueOption<IoCallChecks>(baseOptions?.IoChecks);
         }
 
         /// <summary>
         ///     image base address
         /// </summary>
-        public DerivedValueOption<int> ImageBase { get; set; }
+        public DerivedValueOption<int> ImageBase { get; }
 
         /// <summary>
         ///     value alignment
@@ -103,6 +104,11 @@
         public DerivedValueOption<ImportGlobalUnitData> ImportedData { get; }
 
         /// <summary>
+        ///     io checks flag
+        /// </summary>
+        public DerivedValueOption<IoCallChecks> IoChecks { get; }
+
+        /// <summary>
         ///     clear options
         /// </summary>
         public void Clear() {
@@ -121,6 +127,7 @@
             ImageBase.ResetToDefault();
             ImplicitBuild.ResetToDefault();
             ImportedData.ResetToDefault();
+            IoChecks.ResetToDefault();
         }
 
         /// <summary>
@@ -136,6 +143,7 @@
             HighCharUnicode.ResetToDefault();
             Hints.ResetToDefault();
             ImportedData.ResetToDefault();
+            IoChecks.ResetToDefault();
         }
     }
 }

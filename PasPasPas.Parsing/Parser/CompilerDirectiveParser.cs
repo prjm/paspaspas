@@ -62,6 +62,7 @@ namespace PasPasPas.Parsing.Parser {
                 PascalToken.ExtensionSwitch,
                 PascalToken.ExtendedSyntaxSwitch,
                 PascalToken.ImportedDataSwitch,
+                PascalToken.IncludeSwitch,
             };
 
         private static HashSet<int> longSwitches
@@ -83,6 +84,7 @@ namespace PasPasPas.Parsing.Parser {
                 PascalToken.ImplicitBuild,
                 PascalToken.ImportedDataSwitchLong,
                 PascalToken.IncludeSwitchLong,
+                PascalToken.IoChecks
             };
 
         private static HashSet<int> parameters
@@ -98,6 +100,9 @@ namespace PasPasPas.Parsing.Parser {
                 PascalToken.HppEmit,
                 PascalToken.IfNDef,
                 PascalToken.ImageBase,
+                PascalToken.LibPrefix,
+                PascalToken.LibSuffix,
+                PascalToken.LibVersion
             };
         private ServiceProvider environment;
 
@@ -116,6 +121,13 @@ namespace PasPasPas.Parsing.Parser {
             }
             else if (parameters.Contains(kind)) {
                 result = ParseParameter();
+            }
+
+            if (!result) {
+                // TODO
+                // if (!ConditionalCompilation.Skip)
+                // log error
+                FetchNextToken();
             }
 
             return result;
@@ -182,7 +194,31 @@ namespace PasPasPas.Parsing.Parser {
                 return true;
             }
 
+            if (Match(PascalToken.LibPrefix, PascalToken.LibSuffix, PascalToken.LibVersion)) {
+                ParseLibParameter();
+                return true;
+            }
+
             return false;
+        }
+
+        private void ParseLibParameter() {
+            int kind = Require(PascalToken.LibPrefix, PascalToken.LibSuffix, PascalToken.LibVersion).Kind;
+            var libInfo = QuotedStringTokenValue.Unwrap(Require(PascalToken.QuotedString).Value);
+
+            switch (kind) {
+                case PascalToken.LibPrefix:
+                    Meta.LibPrefix.Value = libInfo;
+                    break;
+
+                case PascalToken.LibSuffix:
+                    Meta.LibSuffix.Value = libInfo;
+                    break;
+
+                case PascalToken.LibVersion:
+                    Meta.LibVersion.Value = libInfo;
+                    break;
+            }
         }
 
         private void ParseImageBase() {
@@ -416,7 +452,25 @@ namespace PasPasPas.Parsing.Parser {
                 return true;
             }
 
+            if (Optional(PascalToken.IoChecks)) {
+                ParseLongIoChecksSwitch();
+                return true;
+            }
+
             return false;
+        }
+
+        private void ParseLongIoChecksSwitch() {
+            if (Optional(PascalToken.On)) {
+                CompilerOptions.IoChecks.Value = IoCallChecks.EnableIoChecks;
+                return;
+            }
+
+            if (Optional(PascalToken.Off)) {
+                CompilerOptions.IoChecks.Value = IoCallChecks.DisableIoChecks;
+                return;
+            }
+            Unexpected();
         }
 
         private void ParseLongIncludeSwitch() {
@@ -698,7 +752,39 @@ namespace PasPasPas.Parsing.Parser {
                 return ParseImportedDataSwitch();
             }
 
+            if (Match(PascalToken.IncludeSwitch)) {
+                return ParseIncludeSwitch();
+            }
+
             return false;
+        }
+
+        private bool ParseIncludeSwitch() {
+            FetchNextToken();
+
+            if (Optional(PascalToken.Plus)) {
+                CompilerOptions.IoChecks.Value = IoCallChecks.EnableIoChecks;
+                return true;
+            }
+
+            if (Optional(PascalToken.Minus)) {
+                CompilerOptions.IoChecks.Value = IoCallChecks.DisableIoChecks;
+                return true;
+            }
+
+            var includeToken = Require(PascalToken.Identifier, PascalToken.QuotedString);
+            string filename = includeToken.Value;
+
+            if (includeToken.Kind == PascalToken.QuotedString) {
+                filename = QuotedStringTokenValue.Unwrap(includeToken.Value);
+            }
+
+            string sourcePath = IncludeInput.CurrentFile?.Path ?? string.Empty;
+            string targetPath = Meta.IncludePathResolver.ResolvePath(sourcePath, filename);
+
+            IFileAccess fileAccess = (IFileAccess)environment.Resolve(StandardServices.FileAccessServiceClass, this);
+            IncludeInput.AddFile(fileAccess.OpenFileForReading(targetPath));
+            return true;
         }
 
         private bool ParseImportedDataSwitch() {

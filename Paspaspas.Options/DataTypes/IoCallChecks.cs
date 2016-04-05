@@ -1,24 +1,24 @@
 ﻿namespace PasPasPas.Options.DataTypes {
 
     /// <summary>
-    ///     Type of boolean evaluation
+    ///     option for io call checks
     /// </summary>
-    public enum BooleanEvaluation {
+    public enum IoCallChecks {
 
         /// <summary>
-        ///     undefined
+        ///     undefined setting
         /// </summary>
         Undefined = 0,
 
         /// <summary>
-        ///     complete evaluation
+        ///     disable io call checks
         /// </summary>
-        CompleteEvaluation = 1,
+        DisableIoChecks = 1,
 
         /// <summary>
-        ///     short evaluation
+        ///     enable io checks
         /// </summary>
-        ShortEvaluation = 2
+        EnableIoChecks = 2
 
     }
 }

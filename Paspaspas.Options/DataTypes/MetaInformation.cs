@@ -30,10 +30,13 @@ namespace PasPasPas.Options.DataTypes {
             Description = new DerivedValueOption<string>(baseOption?.Description);
             FileExtension = new DerivedValueOption<string>(baseOption?.FileExtension);
             IncludePathResolver = new IncludeFilePathResolver(parentOptions);
+            LibPrefix = new DerivedValueOption<string>(baseOption?.LibPrefix);
+            LibSuffix = new DerivedValueOption<string>(baseOption?.LibSuffix);
+            LibVersion = new DerivedValueOption<string>(baseOption?.LibVersion);
         }
 
         /// <summary>
-        /// 
+        ///     project description
         /// </summary>
         public DerivedValueOption<string> Description { get; }
 
@@ -53,6 +56,21 @@ namespace PasPasPas.Options.DataTypes {
         public OptionSet ParentOptions { get; }
 
         /// <summary>
+        ///     lib prefix
+        /// </summary>
+        public DerivedValueOption<string> LibPrefix { get; }
+
+        /// <summary>
+        ///     lib suffix
+        /// </summary>
+        public DerivedValueOption<string> LibSuffix { get; }
+
+        /// <summary>
+        ///     lib version
+        /// </summary>
+        public DerivedValueOption<string> LibVersion { get; }
+
+        /// <summary>
         ///     reset on new unit
         /// </summary>
         public void ResetOnNewUnit() {
@@ -67,6 +85,9 @@ namespace PasPasPas.Options.DataTypes {
             FileExtension.ResetToDefault();
             ExternalSymbols.Clear();
             HeaderStrings.Clear();
+            LibPrefix.ResetToDefault();
+            LibSuffix.ResetToDefault();
+            LibVersion.ResetToDefault();
         }
 
         /// <summary>

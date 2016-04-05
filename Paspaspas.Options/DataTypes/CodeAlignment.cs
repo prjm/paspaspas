@@ -13,30 +13,30 @@
         /// <summary>
         ///     $CODEALIGN 1
         /// </summary>
-        OneByte,
+        OneByte = 1,
 
         /// <summary>
         ///     $CODEALIGN 2
         /// </summary>
-        TwoByte,
+        TwoByte = 2,
 
 
         /// <summary>
         ///     $CODEALIGN 4
         /// </summary>
-        FourByte,
+        FourByte = 4,
 
 
         /// <summary>
         ///     $CODEALIGN 8
         /// </summary>
-        EightByte,
+        EightByte = 8,
 
 
         /// <summary>
         ///     $CODEALIGN 16
         /// </summary>
-        SixteenByte
+        SixteenByte = 16
 
     }
 }

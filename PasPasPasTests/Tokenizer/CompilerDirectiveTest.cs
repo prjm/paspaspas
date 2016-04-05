@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PasPasPas.Options.DataTypes;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace PasPasPasTests.Tokenizer {
@@ -217,6 +218,27 @@ namespace PasPasPasTests.Tokenizer {
         public void TestInclude() {
             RunCompilerDirective("", false, () => ConditionalCompilation.IsSymbolDefined("DUMMY_INC"));
             RunCompilerDirective("INCLUDE 'DUMMY.INC'", true, () => ConditionalCompilation.IsSymbolDefined("DUMMY_INC"));
+            RunCompilerDirective("", false, () => ConditionalCompilation.IsSymbolDefined("DUMMY_INC"));
+            RunCompilerDirective("I 'DUMMY.INC'", true, () => ConditionalCompilation.IsSymbolDefined("DUMMY_INC"));
+        }
+
+        [TestMethod]
+        public void TestIoChecks() {
+            RunCompilerDirective("", IoCallChecks.Undefined, () => CompilerOptions.IoChecks.Value);
+            RunCompilerDirective("I+", IoCallChecks.EnableIoChecks, () => CompilerOptions.IoChecks.Value);
+            RunCompilerDirective("I-", IoCallChecks.DisableIoChecks, () => CompilerOptions.IoChecks.Value);
+            RunCompilerDirective("IOCHECKS  ON", IoCallChecks.EnableIoChecks, () => CompilerOptions.IoChecks.Value);
+            RunCompilerDirective("IOCHECKS OFF", IoCallChecks.DisableIoChecks, () => CompilerOptions.IoChecks.Value);
+        }
+
+        [TestMethod]
+        public void TestLibMeta() {
+            RunCompilerDirective("", null, () => Meta.LibPrefix.Value);
+            RunCompilerDirective("", null, () => Meta.LibSuffix.Value);
+            RunCompilerDirective("", null, () => Meta.LibVersion.Value);
+            RunCompilerDirective("LIBPREFIX 'P'", "P", () => Meta.LibPrefix.Value);
+            RunCompilerDirective("LIBSUFFIX 'M'", "M", () => Meta.LibSuffix.Value);
+            RunCompilerDirective("LIBVERSION 'V'", "V", () => Meta.LibVersion.Value);
         }
 
     }
