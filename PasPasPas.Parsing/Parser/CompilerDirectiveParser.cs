@@ -63,6 +63,8 @@ namespace PasPasPas.Parsing.Parser {
                 PascalToken.ExtendedSyntaxSwitch,
                 PascalToken.ImportedDataSwitch,
                 PascalToken.IncludeSwitch,
+                PascalToken.LinkOrLocalSymbolSwitch,
+                PascalToken.LongStringSwitch,
             };
 
         private static HashSet<int> longSwitches
@@ -84,7 +86,9 @@ namespace PasPasPas.Parsing.Parser {
                 PascalToken.ImplicitBuild,
                 PascalToken.ImportedDataSwitchLong,
                 PascalToken.IncludeSwitchLong,
-                PascalToken.IoChecks
+                PascalToken.IoChecks,
+                PascalToken.LocalSymbolSwithLong,
+                PascalToken.LongStringSwitchLong,
             };
 
         private static HashSet<int> parameters
@@ -457,7 +461,43 @@ namespace PasPasPas.Parsing.Parser {
                 return true;
             }
 
+            if (Optional(PascalToken.LocalSymbolSwithLong)) {
+                ParseLongLocalSymbolSwitch();
+                return true;
+            }
+
+            if (Optional(PascalToken.LongStringSwitchLong)) {
+                ParseLongLongStringSwitch();
+                return true;
+            }
+
             return false;
+        }
+
+        private void ParseLongLongStringSwitch() {
+            if (Optional(PascalToken.On)) {
+                CompilerOptions.LongStrings.Value = LongDelphiStrings.EnableLongStrings;
+                return;
+            }
+
+            if (Optional(PascalToken.Off)) {
+                CompilerOptions.LongStrings.Value = LongDelphiStrings.DisableLongStrings;
+                return;
+            }
+            Unexpected();
+        }
+
+        private void ParseLongLocalSymbolSwitch() {
+            if (Optional(PascalToken.On)) {
+                CompilerOptions.LocalSymbols.Value = LocalDebugSymbols.EnableLocalSymbols;
+                return;
+            }
+
+            if (Optional(PascalToken.Off)) {
+                CompilerOptions.LocalSymbols.Value = LocalDebugSymbols.DisableLocalSymbols;
+                return;
+            }
+            Unexpected();
         }
 
         private void ParseLongIoChecksSwitch() {
@@ -754,6 +794,46 @@ namespace PasPasPas.Parsing.Parser {
 
             if (Match(PascalToken.IncludeSwitch)) {
                 return ParseIncludeSwitch();
+            }
+
+            if (Match(PascalToken.LinkOrLocalSymbolSwitch)) {
+                return ParseLocalSymbolSwitch();
+            }
+
+            if (Match(PascalToken.LongStringSwitch)) {
+                return ParseLongStringSwitch();
+            }
+
+            return false;
+        }
+
+        private bool ParseLongStringSwitch() {
+            FetchNextToken();
+
+            if (Optional(PascalToken.Plus)) {
+                CompilerOptions.LongStrings.Value = LongDelphiStrings.EnableLongStrings;
+                return true;
+            }
+
+            if (Optional(PascalToken.Minus)) {
+                CompilerOptions.LongStrings.Value = LongDelphiStrings.DisableLongStrings;
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool ParseLocalSymbolSwitch() {
+            FetchNextToken();
+
+            if (Optional(PascalToken.Plus)) {
+                CompilerOptions.LocalSymbols.Value = LocalDebugSymbols.EnableLocalSymbols;
+                return true;
+            }
+
+            if (Optional(PascalToken.Minus)) {
+                CompilerOptions.LocalSymbols.Value = LocalDebugSymbols.DisableLocalSymbols;
+                return true;
             }
 
             return false;

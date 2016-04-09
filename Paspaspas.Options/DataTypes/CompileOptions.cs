@@ -26,6 +26,8 @@
             ImplicitBuild = new DerivedValueOption<ImplicitBuildUnit>(baseOptions?.ImplicitBuild);
             ImportedData = new DerivedValueOption<ImportGlobalUnitData>(baseOptions?.ImportedData);
             IoChecks = new DerivedValueOption<IoCallChecks>(baseOptions?.IoChecks);
+            LocalSymbols = new DerivedValueOption<LocalDebugSymbols>(baseOptions?.LocalSymbols);
+            LongStrings = new DerivedValueOption<LongDelphiStrings>(baseOptions?.LongStrings);
         }
 
         /// <summary>
@@ -109,6 +111,16 @@
         public DerivedValueOption<IoCallChecks> IoChecks { get; }
 
         /// <summary>
+        ///     local symbols flag
+        /// </summary>
+        public DerivedValueOption<LocalDebugSymbols> LocalSymbols { get; }
+
+        /// <summary>
+        ///     flag for long strings
+        /// </summary>
+        public DerivedValueOption<LongDelphiStrings> LongStrings { get; }
+
+        /// <summary>
         ///     clear options
         /// </summary>
         public void Clear() {
@@ -128,6 +140,8 @@
             ImplicitBuild.ResetToDefault();
             ImportedData.ResetToDefault();
             IoChecks.ResetToDefault();
+            LocalSymbols.ResetToDefault();
+            LongStrings.ResetToDefault();
         }
 
         /// <summary>
@@ -144,6 +158,7 @@
             Hints.ResetToDefault();
             ImportedData.ResetToDefault();
             IoChecks.ResetToDefault();
+            LongStrings.ResetToDefault();
         }
     }
 }

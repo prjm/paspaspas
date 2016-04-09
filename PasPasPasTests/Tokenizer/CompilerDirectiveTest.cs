@@ -232,6 +232,24 @@ namespace PasPasPasTests.Tokenizer {
         }
 
         [TestMethod]
+        public void TestLocalSymbols() {
+            RunCompilerDirective("", LocalDebugSymbols.Undefined, () => CompilerOptions.LocalSymbols.Value);
+            RunCompilerDirective("L+", LocalDebugSymbols.EnableLocalSymbols, () => CompilerOptions.LocalSymbols.Value);
+            RunCompilerDirective("L-", LocalDebugSymbols.DisableLocalSymbols, () => CompilerOptions.LocalSymbols.Value);
+            RunCompilerDirective("LOCALSYMBOLS  ON", LocalDebugSymbols.EnableLocalSymbols, () => CompilerOptions.LocalSymbols.Value);
+            RunCompilerDirective("LOCALSYMBOLS OFF", LocalDebugSymbols.DisableLocalSymbols, () => CompilerOptions.LocalSymbols.Value);
+        }
+
+        [TestMethod]
+        public void TestLongStrings() {
+            RunCompilerDirective("", LongDelphiStrings.Undefined, () => CompilerOptions.LongStrings.Value);
+            RunCompilerDirective("H+", LongDelphiStrings.EnableLongStrings, () => CompilerOptions.LongStrings.Value);
+            RunCompilerDirective("H-", LongDelphiStrings.DisableLongStrings, () => CompilerOptions.LongStrings.Value);
+            RunCompilerDirective("LONGSTRINGS  ON", LongDelphiStrings.EnableLongStrings, () => CompilerOptions.LongStrings.Value);
+            RunCompilerDirective("LONGSTRINGS  OFF", LongDelphiStrings.DisableLongStrings, () => CompilerOptions.LongStrings.Value);
+        }
+
+        [TestMethod]
         public void TestLibMeta() {
             RunCompilerDirective("", null, () => Meta.LibPrefix.Value);
             RunCompilerDirective("", null, () => Meta.LibSuffix.Value);
