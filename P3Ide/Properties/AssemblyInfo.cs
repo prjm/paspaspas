@@ -1,6 +1,5 @@
-﻿using System.Reflection;
-using System.Resources;
-using System.Runtime.CompilerServices;
+﻿using System;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows;
 
@@ -30,6 +29,7 @@ using System.Windows;
 
 //[assembly: NeutralResourcesLanguage("en-US", UltimateResourceFallbackLocation.Satellite)]
 
+[assembly: CLSCompliant(true)]
 
 [assembly: ThemeInfo(
     ResourceDictionaryLocation.None, //Speicherort der designspezifischen Ressourcenwörterbücher

@@ -4,8 +4,12 @@ namespace P3Ide {
     /// <summary>
     /// Interaktionslogik für MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window {
-        public MainWindow() {
+    public partial class MainIdeWindow : Window {
+
+        /// <summary>
+        ///     create a new main ide window
+        /// </summary>
+        public MainIdeWindow() {
             InitializeComponent();
         }
     }

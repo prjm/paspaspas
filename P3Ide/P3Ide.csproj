@@ -24,7 +24,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <RunCodeAnalysis>true</RunCodeAnalysis>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
     <CodeAnalysisRuleSet>P3Ide.Ruleset</CodeAnalysisRuleSet>
     <DocumentationFile>bin\Debug\P3Ide.XML</DocumentationFile>
   </PropertyGroup>
@@ -69,17 +69,28 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="ViewModel\Base\IMenuViewModel.cs" />
+    <Compile Include="ViewModel\Base\MenuViewModel.cs" />
     <Compile Include="ViewModel\DockWindowViewModel.cs" />
     <Compile Include="ViewModel\DockManagerViewModel.cs" />
-    <Compile Include="ViewModel\MainViewModel.cs" />
-    <Compile Include="ViewModel\MenuViewModel.cs" />
+    <Compile Include="ViewModel\MainWindow\FileOpenCommand.cs" />
+    <Compile Include="ViewModel\MainWindow\IEditorCapabilites.cs" />
+    <Compile Include="ViewModel\MainWindow\IMainMenuViewModel.cs" />
+    <Compile Include="ViewModel\MainWindow\StandardEditorCapabilities.cs" />
+    <Compile Include="ViewModel\PascalProject\SupportedPascalProject.cs" />
+    <Compile Include="ViewModel\Projects\IProject.cs" />
+    <Compile Include="ViewModel\Projects\ISupportedProjectType.cs" />
+    <Compile Include="ViewModel\MainWindow\MainMenuViewModel.cs" />
+    <Compile Include="ViewModel\MainWindow\MainViewModel.cs" />
+    <Compile Include="ViewModel\MainWindow\IMainViewModel.cs" />
     <Compile Include="View\ProjectExplorer.xaml.cs">
       <DependentUpon>ProjectExplorer.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\SampleView.xaml.cs">
       <DependentUpon>SampleView.xaml</DependentUpon>
     </Compile>
-    <Page Include="MainWindow.xaml">
+    <Page Include="MainIdeWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -87,8 +98,8 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
+    <Compile Include="MainIdeWindow.xaml.cs">
+      <DependentUpon>MainIdeWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Page Include="View\ProjectExplorer.xaml">
@@ -129,6 +140,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
