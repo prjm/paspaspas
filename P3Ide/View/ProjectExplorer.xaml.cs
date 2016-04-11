@@ -18,6 +18,10 @@ namespace P3Ide.View {
     /// Interaktionslogik für ProjectExplorer.xaml
     /// </summary>
     public partial class ProjectExplorer : UserControl {
+
+        /// <summary>
+        ///     project explorer
+        /// </summary>
         public ProjectExplorer() {
             InitializeComponent();
         }

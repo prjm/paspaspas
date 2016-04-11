@@ -11,12 +11,12 @@ namespace P3Ide.ViewModel.Base {
         /// <summary>
         ///     menu item text
         /// </summary>
-        string Text { get; set; }
+        string Text { get; }
 
         /// <summary>
         ///     menu command
         /// </summary>
-        ICommand Command { get; set; }
+        ICommand Command { get; }
 
         /// <summary>
         ///     menu items

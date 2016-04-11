@@ -1,4 +1,6 @@
 ﻿using P3Ide.ViewModel.Base;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace P3Ide.ViewModel.MainWindow {
 
@@ -10,18 +12,17 @@ namespace P3Ide.ViewModel.MainWindow {
         /// <summary>
         ///     create a new main menu
         /// </summary>
-        public MainMenuViewModel(IEditorCapabilites capabilities) {
-            var fileMenu = new MenuViewModel() { Text = "File" };
-            fileMenu.AddMenuItems(new[] {
-                new MenuViewModel() { Text = "New" },
-                new MenuViewModel() { Text = "Open", Command = new FileOpenCommand(capabilities) },
-                new MenuViewModel() { Text = "Add" },
-                new MenuViewModel() { Text = "Close" },
-            });
+        public MainMenuViewModel(IEnumerable<IMainMenuItem> menuItems) {
 
-            AddMenuItems(new[] {
-                fileMenu
-            });
+            foreach (var mainMenu in menuItems.GroupBy(t => t.TopLevelMenu)) {
+                var topLevelMenu = new MenuViewModel() { Text = mainMenu.Key };
+
+                foreach (var menuEntry in mainMenu.OrderBy(t => t.Priority)) {
+                    topLevelMenu.MenuItems.Add(menuEntry);
+                }
+
+                MenuItems.Add(topLevelMenu);
+            }
         }
 
     }

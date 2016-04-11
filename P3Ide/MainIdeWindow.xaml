@@ -20,21 +20,14 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-
-        <Menu Grid.Row="0" Grid.Column="0" DataContext="{Binding Path=MainMenu}" ItemsSource="{Binding Path=MenuItems}">
-            <!--
-            <Style TargetType="MenuItem">
-                <Setter Property="Command" Value="{Binding Commmand}"/>
-            </Style>
-            -->
-            <Menu.ItemTemplate>
-                <HierarchicalDataTemplate DataType="{x:Type vmb:IMenuViewModel}" ItemsSource="{Binding MenuItems}">
-                    <MenuItem Command="{Binding Command}">
-                        <ttexzb
-                    </MenuItem>
-                </HierarchicalDataTemplate>
-
-            </Menu.ItemTemplate>
+        <Menu Grid.Row="0" Grid.Column="0" DataContext="{Binding MainMenu}" ItemsSource="{Binding MenuItems}">
+            <Menu.Resources>
+                <Style TargetType="{x:Type MenuItem}">
+                    <Setter Property="Header" Value="{Binding Text}"/>
+                    <Setter Property="ItemsSource" Value="{Binding MenuItems}"/>
+                    <Setter Property="Command" Value="{Binding Command}"/>
+                </Style>
+            </Menu.Resources>
         </Menu>
 
         <!--

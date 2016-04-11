@@ -72,11 +72,14 @@
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="ViewModel\Base\IMenuViewModel.cs" />
     <Compile Include="ViewModel\Base\MenuViewModel.cs" />
+    <Compile Include="ViewModel\Base\RelayCommand.cs" />
     <Compile Include="ViewModel\DockWindowViewModel.cs" />
     <Compile Include="ViewModel\DockManagerViewModel.cs" />
-    <Compile Include="ViewModel\MainWindow\FileOpenCommand.cs" />
+    <Compile Include="ViewModel\MainWindow\FileMenuItem.cs" />
     <Compile Include="ViewModel\MainWindow\IEditorCapabilites.cs" />
+    <Compile Include="ViewModel\MainWindow\IMainMenuItem.cs" />
     <Compile Include="ViewModel\MainWindow\IMainMenuViewModel.cs" />
+    <Compile Include="ViewModel\StandardFiles\ISupportedFileType.cs" />
     <Compile Include="ViewModel\MainWindow\StandardEditorCapabilities.cs" />
     <Compile Include="ViewModel\PascalProject\SupportedPascalProject.cs" />
     <Compile Include="ViewModel\Projects\IProject.cs" />
@@ -84,6 +87,7 @@
     <Compile Include="ViewModel\MainWindow\MainMenuViewModel.cs" />
     <Compile Include="ViewModel\MainWindow\MainViewModel.cs" />
     <Compile Include="ViewModel\MainWindow\IMainViewModel.cs" />
+    <Compile Include="ViewModel\StandardFiles\TextFileType.cs" />
     <Compile Include="View\ProjectExplorer.xaml.cs">
       <DependentUpon>ProjectExplorer.xaml</DependentUpon>
     </Compile>

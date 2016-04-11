@@ -18,6 +18,10 @@ namespace P3Ide.View {
     /// Interaktionslogik für SampleView.xaml
     /// </summary>
     public partial class SampleView : UserControl {
+
+        /// <summary>
+        ///     sample view
+        /// </summary>
         public SampleView() {
             InitializeComponent();
         }
