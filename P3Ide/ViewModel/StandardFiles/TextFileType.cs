@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using P3Ide.ViewModel.MainWindow;
 
 namespace P3Ide.ViewModel.StandardFiles {
 
@@ -23,5 +24,15 @@ namespace P3Ide.ViewModel.StandardFiles {
         public string FileExtension
             => ".txt";
 
+        /// <summary>
+        ///     register an editor
+        /// </summary>
+        /// <param name="registry"></param>
+        public void RegisterEditor(IEditorRegistry registry) {
+            Func<EditorViewModel> editor = () => {
+                return new TextEditorViewModel();
+            };
+            registry.RegisterFileType(FileExtension, editor);
+        }
     }
 }

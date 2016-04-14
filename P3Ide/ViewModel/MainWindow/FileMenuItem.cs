@@ -50,12 +50,14 @@ namespace P3Ide.ViewModel.MainWindow {
         ///     create a new file open menu item
         /// </summary>
         /// <param name="capabilities"></param>
-        public FileOpenMenuItem(IEditorCapabilites capabilities) {
+        /// <param name="workspace"></param>
+        public FileOpenMenuItem(IEditorCapabilites capabilities, IEditorWorkspace workspace) {
             Capabilities = capabilities;
+            Workspace = workspace;
         }
 
         /// <summary>
-        /// 
+        ///     open command
         /// </summary>
         public override ICommand Command
             => new RelayCommand<object>(OpenFile);
@@ -82,9 +84,13 @@ namespace P3Ide.ViewModel.MainWindow {
             openFileDialog.Filter = filterString;
 
             if (openFileDialog.ShowDialog() == true) {
-
+                foreach (var file in openFileDialog.SafeFileNames) {
+                    var editor = Capabilities.Registry.TryToCreateEditorForFile(file);
+                    if (editor != null) {
+                        Workspace.Documents.Add(editor);
+                    }
+                }
             }
-
         }
 
         private string AppendFilter(string filterString, string description, string extension) {
@@ -105,6 +111,12 @@ namespace P3Ide.ViewModel.MainWindow {
         ///     capabilities
         /// </summary>
         public IEditorCapabilites Capabilities { get; }
+
+        /// <summary>
+        ///     workspace
+        /// </summary>
+        public IEditorWorkspace Workspace { get; }
+
     }
 
     /// <summary>

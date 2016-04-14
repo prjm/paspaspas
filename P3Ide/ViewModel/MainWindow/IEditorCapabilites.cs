@@ -19,5 +19,10 @@ namespace P3Ide.ViewModel.MainWindow {
         /// </summary>
         IList<ISupportedFileType> SupportedFileTypes { get; }
 
+        /// <summary>
+        ///     editor registry
+        /// </summary>
+        IEditorRegistry Registry { get; }
+
     }
 }

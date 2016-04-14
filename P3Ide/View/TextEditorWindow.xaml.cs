@@ -15,14 +15,14 @@ using System.Windows.Shapes;
 
 namespace P3Ide.View {
     /// <summary>
-    /// Interaktionslogik für SampleView.xaml
+    /// Interaktionslogik für DockedEdtorWindow.xaml
     /// </summary>
-    public partial class SampleView : UserControl {
+    public partial class TextEditorWindow : UserControl {
 
         /// <summary>
-        ///     sample view
+        ///     create a new docked editor window
         /// </summary>
-        public SampleView() {
+        public TextEditorWindow() {
             InitializeComponent();
         }
     }

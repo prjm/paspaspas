@@ -12,9 +12,11 @@ namespace P3Ide.ViewModel.MainWindow {
         /// </summary>
         /// <param name="mainMenu"></param>
         /// <param name="capabilities">capabilities</param>
-        public MainViewModel(IMainMenuViewModel mainMenu, IEditorCapabilites capabilities) {
+        /// <param name="workspace">editot workspace</param>
+        public MainViewModel(IMainMenuViewModel mainMenu, IEditorCapabilites capabilities, IEditorWorkspace workspace) {
             MainMenu = mainMenu;
             EditorCapabilities = capabilities;
+            Workspace = workspace;
         }
 
         /// <summary>
@@ -26,6 +28,11 @@ namespace P3Ide.ViewModel.MainWindow {
         ///     main menu
         /// </summary>
         public IMainMenuViewModel MainMenu { get; }
+
+        /// <summary>
+        ///     workspace
+        /// </summary>
+        public IEditorWorkspace Workspace { get; }
     }
 
 }

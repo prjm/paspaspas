@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using P3Ide.ViewModel.Projects;
 using P3Ide.ViewModel.StandardFiles;
 
@@ -14,9 +15,15 @@ namespace P3Ide.ViewModel.MainWindow {
         /// </summary>
         /// <param name="supportedProjectTypes">supported project types</param>
         /// <param name="supportedFileTypes">supported file types</param>
-        public StandardEditorCapabilities(IEnumerable<ISupportedProjectType> supportedProjectTypes, IEnumerable<ISupportedFileType> supportedFileTypes) {
+        /// <param name="editorRegistry">editor registry</param>
+        public StandardEditorCapabilities(IEnumerable<ISupportedProjectType> supportedProjectTypes, IEnumerable<ISupportedFileType> supportedFileTypes, IEditorRegistry editorRegistry) {
             SupportedProjectTypes = new List<ISupportedProjectType>(supportedProjectTypes);
             SupportedFileTypes = new List<ISupportedFileType>(supportedFileTypes);
+            Registry = editorRegistry;
+
+            foreach (var fileType in SupportedFileTypes) {
+                fileType.RegisterEditor(editorRegistry);
+            }
         }
 
         /// <summary>
@@ -29,5 +36,9 @@ namespace P3Ide.ViewModel.MainWindow {
         /// </summary>
         public IList<ISupportedFileType> SupportedFileTypes { get; }
 
+        /// <summary>
+        ///     editor registry
+        /// </summary>
+        public IEditorRegistry Registry { get; }
     }
 }

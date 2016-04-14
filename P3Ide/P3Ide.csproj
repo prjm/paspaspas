@@ -73,10 +73,14 @@
     <Compile Include="ViewModel\Base\IMenuViewModel.cs" />
     <Compile Include="ViewModel\Base\MenuViewModel.cs" />
     <Compile Include="ViewModel\Base\RelayCommand.cs" />
-    <Compile Include="ViewModel\DockWindowViewModel.cs" />
-    <Compile Include="ViewModel\DockManagerViewModel.cs" />
+    <Compile Include="ViewModel\MainWindow\DockWindowViewModel.cs" />
+    <Compile Include="ViewModel\MainWindow\EditorRegistry.cs" />
+    <Compile Include="ViewModel\MainWindow\EditorViewModel.cs" />
+    <Compile Include="ViewModel\MainWindow\EditorWorkspace.cs" />
     <Compile Include="ViewModel\MainWindow\FileMenuItem.cs" />
     <Compile Include="ViewModel\MainWindow\IEditorCapabilites.cs" />
+    <Compile Include="ViewModel\MainWindow\IEditorRegistry.cs" />
+    <Compile Include="ViewModel\MainWindow\IEditorWorkspace.cs" />
     <Compile Include="ViewModel\MainWindow\IMainMenuItem.cs" />
     <Compile Include="ViewModel\MainWindow\IMainMenuViewModel.cs" />
     <Compile Include="ViewModel\StandardFiles\ISupportedFileType.cs" />
@@ -88,11 +92,11 @@
     <Compile Include="ViewModel\MainWindow\MainViewModel.cs" />
     <Compile Include="ViewModel\MainWindow\IMainViewModel.cs" />
     <Compile Include="ViewModel\StandardFiles\TextFileType.cs" />
+    <Compile Include="View\TextEditorWindow.xaml.cs">
+      <DependentUpon>TextEditorWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\ProjectExplorer.xaml.cs">
       <DependentUpon>ProjectExplorer.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\SampleView.xaml.cs">
-      <DependentUpon>SampleView.xaml</DependentUpon>
     </Compile>
     <Page Include="MainIdeWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -106,11 +110,11 @@
       <DependentUpon>MainIdeWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="View\ProjectExplorer.xaml">
+    <Page Include="View\TextEditorWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\SampleView.xaml">
+    <Page Include="View\ProjectExplorer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
