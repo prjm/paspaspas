@@ -31,6 +31,9 @@
             OpenStrings = new DerivedValueOption<OpenStringTypes>(baseOptions?.OpenStrings);
             Optimization = new DerivedValueOption<CompilerOptmization>(baseOptions?.Optimization);
             CheckOverflows = new DerivedValueOption<RuntimeOverflowChecks>(baseOptions?.CheckOverflows);
+            SafeDivide = new DerivedValueOption<FDivSafeDivide>(baseOptions?.SafeDivide);
+            RangeChecks = new DerivedValueOption<RuntimeRangeChecks>(baseOptions?.RangeChecks);
+            StackFrames = new DerivedValueOption<StackFrameGeneration>(baseOptions?.StackFrames);
         }
 
         /// <summary>
@@ -139,6 +142,21 @@
         public DerivedValueOption<RuntimeOverflowChecks> CheckOverflows { get; set; }
 
         /// <summary>
+        ///     save divide option
+        /// </summary>
+        public DerivedValueOption<FDivSafeDivide> SafeDivide { get; set; }
+
+        /// <summary>
+        ///     generate runtime range checks
+        /// </summary>
+        public DerivedValueOption<RuntimeRangeChecks> RangeChecks { get; set; }
+
+        /// <summary>
+        ///     generate all stack frames
+        /// </summary>
+        public DerivedValueOption<StackFrameGeneration> StackFrames { get; set; }
+
+        /// <summary>
         ///     clear options
         /// </summary>
         public void Clear() {
@@ -163,6 +181,9 @@
             OpenStrings.ResetToDefault();
             Optimization.ResetToDefault();
             CheckOverflows.ResetToDefault();
+            SafeDivide.ResetToDefault();
+            RangeChecks.ResetToDefault();
+            StackFrames.ResetToDefault();
         }
 
         /// <summary>
@@ -183,6 +204,9 @@
             OpenStrings.ResetToDefault();
             Optimization.ResetToDefault();
             CheckOverflows.ResetToDefault();
+            SafeDivide.ResetToDefault();
+            RangeChecks.ResetToDefault();
+            StackFrames.ResetToDefault();
         }
     }
 }

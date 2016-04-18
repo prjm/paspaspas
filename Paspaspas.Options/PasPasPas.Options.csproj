@@ -66,6 +66,7 @@
     <Compile Include="DataTypes\ExtendedCompatiblityMode.cs" />
     <Compile Include="DataTypes\ExtendedSyntax.cs" />
     <Compile Include="DataTypes\ExternalSymbol.cs" />
+    <Compile Include="DataTypes\FDivSaveDivide.cs" />
     <Compile Include="DataTypes\HeaderString.cs" />
     <Compile Include="DataTypes\HighCharsUnicode.cs" />
     <Compile Include="DataTypes\ICondition.cs" />
@@ -85,6 +86,8 @@
     <Compile Include="DataTypes\OpenDelphiStrings.cs" />
     <Compile Include="DataTypes\PathOptionSet.cs" />
     <Compile Include="DataTypes\RuntimeOverflowChecks.cs" />
+    <Compile Include="DataTypes\RuntimeRangeChecks.cs" />
+    <Compile Include="DataTypes\StackFramesGeneration.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Bundles\AnyCpuPlatform.cs" />
     <Compile Include="Bundles\DefaultPlatform.cs" />

@@ -277,6 +277,33 @@ namespace PasPasPasTests.Tokenizer {
         }
 
         [TestMethod]
+        public void TestSaveDivide() {
+            RunCompilerDirective("", FDivSafeDivide.Undefined, () => CompilerOptions.SafeDivide.Value);
+            RunCompilerDirective("U+", FDivSafeDivide.EnableSafeDivide, () => CompilerOptions.SafeDivide.Value);
+            RunCompilerDirective("U-", FDivSafeDivide.DisableSafeDivide, () => CompilerOptions.SafeDivide.Value);
+            RunCompilerDirective("SAFEDIVIDE  ON", FDivSafeDivide.EnableSafeDivide, () => CompilerOptions.SafeDivide.Value);
+            RunCompilerDirective("SAFEDIVIDE  OFF", FDivSafeDivide.DisableSafeDivide, () => CompilerOptions.SafeDivide.Value);
+        }
+
+        [TestMethod]
+        public void TestRangeChecks() {
+            RunCompilerDirective("", RuntimeRangeChecks.Undefined, () => CompilerOptions.RangeChecks.Value);
+            RunCompilerDirective("R+", RuntimeRangeChecks.EnableRangeChecks, () => CompilerOptions.RangeChecks.Value);
+            RunCompilerDirective("R-", RuntimeRangeChecks.DisableRangeChecks, () => CompilerOptions.RangeChecks.Value);
+            RunCompilerDirective("RANGECHECKS ON", RuntimeRangeChecks.EnableRangeChecks, () => CompilerOptions.RangeChecks.Value);
+            RunCompilerDirective("RANGECHECKS OFF", RuntimeRangeChecks.DisableRangeChecks, () => CompilerOptions.RangeChecks.Value);
+        }
+
+        [TestMethod]
+        public void TestStackFrames() {
+            RunCompilerDirective("", StackFrameGeneration.Undefined, () => CompilerOptions.StackFrames.Value);
+            RunCompilerDirective("W+", StackFrameGeneration.EnableFrames, () => CompilerOptions.StackFrames.Value);
+            RunCompilerDirective("W-", StackFrameGeneration.DisableFrames, () => CompilerOptions.StackFrames.Value);
+            RunCompilerDirective("STACKFRAMES  ON", StackFrameGeneration.EnableFrames, () => CompilerOptions.StackFrames.Value);
+            RunCompilerDirective("STACKFRAMES  OFF", StackFrameGeneration.DisableFrames, () => CompilerOptions.StackFrames.Value);
+        }
+
+        [TestMethod]
         public void TestLibMeta() {
             RunCompilerDirective("", null, () => Meta.LibPrefix.Value);
             RunCompilerDirective("", null, () => Meta.LibSuffix.Value);

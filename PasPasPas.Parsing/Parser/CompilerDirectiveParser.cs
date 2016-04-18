@@ -68,6 +68,9 @@ namespace PasPasPas.Parsing.Parser {
                 PascalToken.OpenStringSwitch,
                 PascalToken.OptimizationSwitch,
                 PascalToken.OverflowSwitch,
+                PascalToken.SaveDivideSwitch,
+                PascalToken.IncludeRessource,
+                PascalToken.StackFramesSwitch,
             };
 
         private static HashSet<int> longSwitches
@@ -95,6 +98,9 @@ namespace PasPasPas.Parsing.Parser {
                 PascalToken.OpenStringSwitchLong,
                 PascalToken.OptimizationSwitchLong,
                 PascalToken.OverflowSwitchLong,
+                PascalToken.SaveDivideSwitchLong,
+                PascalToken.RangeChecks,
+                PascalToken.StackFramesSwitchLong,
             };
 
         private static HashSet<int> parameters
@@ -492,7 +498,61 @@ namespace PasPasPas.Parsing.Parser {
                 return true;
             }
 
+            if (Optional(PascalToken.SaveDivideSwitchLong)) {
+                ParseLongSaveDivideSwitch();
+                return true;
+            }
+
+            if (Optional(PascalToken.RangeChecks)) {
+                ParseLongRangeChecksSwitch();
+                return true;
+            }
+
+            if (Optional(PascalToken.StackFramesSwitchLong)) {
+                ParseLongStackFramesSwitch();
+                return true;
+            }
+
             return false;
+        }
+
+        private void ParseLongStackFramesSwitch() {
+            if (Optional(PascalToken.On)) {
+                CompilerOptions.StackFrames.Value = StackFrameGeneration.EnableFrames;
+                return;
+            }
+
+            if (Optional(PascalToken.Off)) {
+                CompilerOptions.StackFrames.Value = StackFrameGeneration.DisableFrames;
+                return;
+            }
+            Unexpected();
+        }
+
+        private void ParseLongRangeChecksSwitch() {
+            if (Optional(PascalToken.On)) {
+                CompilerOptions.RangeChecks.Value = RuntimeRangeChecks.EnableRangeChecks;
+                return;
+            }
+
+            if (Optional(PascalToken.Off)) {
+                CompilerOptions.RangeChecks.Value = RuntimeRangeChecks.DisableRangeChecks;
+                return;
+            }
+            Unexpected();
+        }
+
+        private void ParseLongSaveDivideSwitch() {
+            if (Optional(PascalToken.On)) {
+                CompilerOptions.SafeDivide.Value = FDivSafeDivide.EnableSafeDivide;
+                return;
+            }
+
+            if (Optional(PascalToken.Off)) {
+                CompilerOptions.SafeDivide.Value = FDivSafeDivide.DisableSafeDivide;
+                return;
+            }
+            Unexpected();
         }
 
         private void ParseLongOverflowSwitch() {
@@ -874,6 +934,66 @@ namespace PasPasPas.Parsing.Parser {
 
             if (Match(PascalToken.OverflowSwitch)) {
                 return ParseOverflowSwitch();
+            }
+
+            if (Match(PascalToken.SaveDivideSwitch)) {
+                return ParseSaveDivideSwitch();
+            }
+
+            if (Match(PascalToken.IncludeRessource)) {
+                return ParseIncludeRessource();
+            }
+
+            if (Match(PascalToken.StackFramesSwitch)) {
+                return ParseStackFramesSwitch();
+            }
+
+            return false;
+        }
+
+        private bool ParseStackFramesSwitch() {
+            FetchNextToken();
+
+            if (Optional(PascalToken.Plus)) {
+                CompilerOptions.StackFrames.Value = StackFrameGeneration.EnableFrames;
+                return true;
+            }
+
+            if (Optional(PascalToken.Minus)) {
+                CompilerOptions.StackFrames.Value = StackFrameGeneration.DisableFrames;
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool ParseIncludeRessource() {
+            FetchNextToken();
+
+            if (Optional(PascalToken.Plus)) {
+                CompilerOptions.RangeChecks.Value = RuntimeRangeChecks.EnableRangeChecks;
+                return true;
+            }
+
+            if (Optional(PascalToken.Minus)) {
+                CompilerOptions.RangeChecks.Value = RuntimeRangeChecks.DisableRangeChecks;
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool ParseSaveDivideSwitch() {
+            FetchNextToken();
+
+            if (Optional(PascalToken.Plus)) {
+                CompilerOptions.SafeDivide.Value = FDivSafeDivide.EnableSafeDivide;
+                return true;
+            }
+
+            if (Optional(PascalToken.Minus)) {
+                CompilerOptions.SafeDivide.Value = FDivSafeDivide.DisableSafeDivide;
+                return true;
             }
 
             return false;
