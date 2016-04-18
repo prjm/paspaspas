@@ -3,7 +3,7 @@
     /// <summary>
     ///     flag to enable long delphi strings
     /// </summary>
-    public enum LongDelphiStrings {
+    public enum LongStringTypes {
 
         /// <summary>
         ///     undefined string status

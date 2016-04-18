@@ -242,11 +242,38 @@ namespace PasPasPasTests.Tokenizer {
 
         [TestMethod]
         public void TestLongStrings() {
-            RunCompilerDirective("", LongDelphiStrings.Undefined, () => CompilerOptions.LongStrings.Value);
-            RunCompilerDirective("H+", LongDelphiStrings.EnableLongStrings, () => CompilerOptions.LongStrings.Value);
-            RunCompilerDirective("H-", LongDelphiStrings.DisableLongStrings, () => CompilerOptions.LongStrings.Value);
-            RunCompilerDirective("LONGSTRINGS  ON", LongDelphiStrings.EnableLongStrings, () => CompilerOptions.LongStrings.Value);
-            RunCompilerDirective("LONGSTRINGS  OFF", LongDelphiStrings.DisableLongStrings, () => CompilerOptions.LongStrings.Value);
+            RunCompilerDirective("", LongStringTypes.Undefined, () => CompilerOptions.LongStrings.Value);
+            RunCompilerDirective("H+", LongStringTypes.EnableLongStrings, () => CompilerOptions.LongStrings.Value);
+            RunCompilerDirective("H-", LongStringTypes.DisableLongStrings, () => CompilerOptions.LongStrings.Value);
+            RunCompilerDirective("LONGSTRINGS  ON", LongStringTypes.EnableLongStrings, () => CompilerOptions.LongStrings.Value);
+            RunCompilerDirective("LONGSTRINGS  OFF", LongStringTypes.DisableLongStrings, () => CompilerOptions.LongStrings.Value);
+        }
+
+        [TestMethod]
+        public void TestOpenStrings() {
+            RunCompilerDirective("", OpenStringTypes.Undefined, () => CompilerOptions.OpenStrings.Value);
+            RunCompilerDirective("P+", OpenStringTypes.EnableOpenStrings, () => CompilerOptions.OpenStrings.Value);
+            RunCompilerDirective("P-", OpenStringTypes.DisableOpenStrings, () => CompilerOptions.OpenStrings.Value);
+            RunCompilerDirective("OPENSTRINGS  ON", OpenStringTypes.EnableOpenStrings, () => CompilerOptions.OpenStrings.Value);
+            RunCompilerDirective("OPENSTRINGS  OFF", OpenStringTypes.DisableOpenStrings, () => CompilerOptions.OpenStrings.Value);
+        }
+
+        [TestMethod]
+        public void TestOptimization() {
+            RunCompilerDirective("", CompilerOptmization.Undefined, () => CompilerOptions.Optimization.Value);
+            RunCompilerDirective("O+", CompilerOptmization.EnableOptimization, () => CompilerOptions.Optimization.Value);
+            RunCompilerDirective("O-", CompilerOptmization.DisableOptimization, () => CompilerOptions.Optimization.Value);
+            RunCompilerDirective("OPTIMIZATION  ON", CompilerOptmization.EnableOptimization, () => CompilerOptions.Optimization.Value);
+            RunCompilerDirective("OPTIMIZATION  OFF", CompilerOptmization.DisableOptimization, () => CompilerOptions.Optimization.Value);
+        }
+
+        [TestMethod]
+        public void TestOverflow() {
+            RunCompilerDirective("", RuntimeOverflowChecks.Undefined, () => CompilerOptions.CheckOverflows.Value);
+            RunCompilerDirective("Q+", RuntimeOverflowChecks.EnableChecks, () => CompilerOptions.CheckOverflows.Value);
+            RunCompilerDirective("Q-", RuntimeOverflowChecks.DisableChecks, () => CompilerOptions.CheckOverflows.Value);
+            RunCompilerDirective("OVERFLOWCHECKS ON", RuntimeOverflowChecks.EnableChecks, () => CompilerOptions.CheckOverflows.Value);
+            RunCompilerDirective("OVERFLOWCHECKS OFF", RuntimeOverflowChecks.DisableChecks, () => CompilerOptions.CheckOverflows.Value);
         }
 
         [TestMethod]

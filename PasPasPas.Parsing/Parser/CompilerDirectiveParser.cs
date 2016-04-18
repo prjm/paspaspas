@@ -65,6 +65,9 @@ namespace PasPasPas.Parsing.Parser {
                 PascalToken.IncludeSwitch,
                 PascalToken.LinkOrLocalSymbolSwitch,
                 PascalToken.LongStringSwitch,
+                PascalToken.OpenStringSwitch,
+                PascalToken.OptimizationSwitch,
+                PascalToken.OverflowSwitch,
             };
 
         private static HashSet<int> longSwitches
@@ -89,6 +92,9 @@ namespace PasPasPas.Parsing.Parser {
                 PascalToken.IoChecks,
                 PascalToken.LocalSymbolSwithLong,
                 PascalToken.LongStringSwitchLong,
+                PascalToken.OpenStringSwitchLong,
+                PascalToken.OptimizationSwitchLong,
+                PascalToken.OverflowSwitchLong,
             };
 
         private static HashSet<int> parameters
@@ -471,17 +477,71 @@ namespace PasPasPas.Parsing.Parser {
                 return true;
             }
 
+            if (Optional(PascalToken.OpenStringSwitchLong)) {
+                ParseLongOpenStringSwitch();
+                return true;
+            }
+
+            if (Optional(PascalToken.OptimizationSwitchLong)) {
+                ParseLongOptimizationSwitch();
+                return true;
+            }
+
+            if (Optional(PascalToken.OverflowSwitchLong)) {
+                ParseLongOverflowSwitch();
+                return true;
+            }
+
             return false;
         }
 
-        private void ParseLongLongStringSwitch() {
+        private void ParseLongOverflowSwitch() {
             if (Optional(PascalToken.On)) {
-                CompilerOptions.LongStrings.Value = LongDelphiStrings.EnableLongStrings;
+                CompilerOptions.CheckOverflows.Value = RuntimeOverflowChecks.EnableChecks;
                 return;
             }
 
             if (Optional(PascalToken.Off)) {
-                CompilerOptions.LongStrings.Value = LongDelphiStrings.DisableLongStrings;
+                CompilerOptions.CheckOverflows.Value = RuntimeOverflowChecks.DisableChecks;
+                return;
+            }
+            Unexpected();
+        }
+
+        private void ParseLongOptimizationSwitch() {
+            if (Optional(PascalToken.On)) {
+                CompilerOptions.Optimization.Value = CompilerOptmization.EnableOptimization;
+                return;
+            }
+
+            if (Optional(PascalToken.Off)) {
+                CompilerOptions.Optimization.Value = CompilerOptmization.DisableOptimization;
+                return;
+            }
+            Unexpected();
+        }
+
+        private void ParseLongOpenStringSwitch() {
+            if (Optional(PascalToken.On)) {
+                CompilerOptions.OpenStrings.Value = OpenStringTypes.EnableOpenStrings;
+                return;
+            }
+
+            if (Optional(PascalToken.Off)) {
+                CompilerOptions.OpenStrings.Value = OpenStringTypes.DisableOpenStrings;
+                return;
+            }
+            Unexpected();
+        }
+
+        private void ParseLongLongStringSwitch() {
+            if (Optional(PascalToken.On)) {
+                CompilerOptions.LongStrings.Value = LongStringTypes.EnableLongStrings;
+                return;
+            }
+
+            if (Optional(PascalToken.Off)) {
+                CompilerOptions.LongStrings.Value = LongStringTypes.DisableLongStrings;
                 return;
             }
             Unexpected();
@@ -804,6 +864,66 @@ namespace PasPasPas.Parsing.Parser {
                 return ParseLongStringSwitch();
             }
 
+            if (Match(PascalToken.OpenStringSwitch)) {
+                return ParseOpenStringSwitch();
+            }
+
+            if (Match(PascalToken.OptimizationSwitch)) {
+                return ParseOptimizationSwitch();
+            }
+
+            if (Match(PascalToken.OverflowSwitch)) {
+                return ParseOverflowSwitch();
+            }
+
+            return false;
+        }
+
+        private bool ParseOverflowSwitch() {
+            FetchNextToken();
+
+            if (Optional(PascalToken.Plus)) {
+                CompilerOptions.CheckOverflows.Value = RuntimeOverflowChecks.EnableChecks;
+                return true;
+            }
+
+            if (Optional(PascalToken.Minus)) {
+                CompilerOptions.CheckOverflows.Value = RuntimeOverflowChecks.DisableChecks;
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool ParseOptimizationSwitch() {
+            FetchNextToken();
+
+            if (Optional(PascalToken.Plus)) {
+                CompilerOptions.Optimization.Value = CompilerOptmization.EnableOptimization;
+                return true;
+            }
+
+            if (Optional(PascalToken.Minus)) {
+                CompilerOptions.Optimization.Value = CompilerOptmization.DisableOptimization;
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool ParseOpenStringSwitch() {
+            FetchNextToken();
+
+            if (Optional(PascalToken.Plus)) {
+                CompilerOptions.OpenStrings.Value = OpenStringTypes.EnableOpenStrings;
+                return true;
+            }
+
+            if (Optional(PascalToken.Minus)) {
+                CompilerOptions.OpenStrings.Value = OpenStringTypes.DisableOpenStrings;
+                return true;
+            }
+
             return false;
         }
 
@@ -811,12 +931,12 @@ namespace PasPasPas.Parsing.Parser {
             FetchNextToken();
 
             if (Optional(PascalToken.Plus)) {
-                CompilerOptions.LongStrings.Value = LongDelphiStrings.EnableLongStrings;
+                CompilerOptions.LongStrings.Value = LongStringTypes.EnableLongStrings;
                 return true;
             }
 
             if (Optional(PascalToken.Minus)) {
-                CompilerOptions.LongStrings.Value = LongDelphiStrings.DisableLongStrings;
+                CompilerOptions.LongStrings.Value = LongStringTypes.DisableLongStrings;
                 return true;
             }
 

@@ -27,7 +27,10 @@
             ImportedData = new DerivedValueOption<ImportGlobalUnitData>(baseOptions?.ImportedData);
             IoChecks = new DerivedValueOption<IoCallChecks>(baseOptions?.IoChecks);
             LocalSymbols = new DerivedValueOption<LocalDebugSymbols>(baseOptions?.LocalSymbols);
-            LongStrings = new DerivedValueOption<LongDelphiStrings>(baseOptions?.LongStrings);
+            LongStrings = new DerivedValueOption<LongStringTypes>(baseOptions?.LongStrings);
+            OpenStrings = new DerivedValueOption<OpenStringTypes>(baseOptions?.OpenStrings);
+            Optimization = new DerivedValueOption<CompilerOptmization>(baseOptions?.Optimization);
+            CheckOverflows = new DerivedValueOption<RuntimeOverflowChecks>(baseOptions?.CheckOverflows);
         }
 
         /// <summary>
@@ -118,7 +121,22 @@
         /// <summary>
         ///     flag for long strings
         /// </summary>
-        public DerivedValueOption<LongDelphiStrings> LongStrings { get; }
+        public DerivedValueOption<LongStringTypes> LongStrings { get; }
+
+        /// <summary>
+        ///     flag for open strings
+        /// </summary>
+        public DerivedValueOption<OpenStringTypes> OpenStrings { get; set; }
+
+        /// <summary>
+        ///     flag to enable optimization
+        /// </summary>
+        public DerivedValueOption<CompilerOptmization> Optimization { get; set; }
+
+        /// <summary>
+        ///     flag to enable overflow checks
+        /// </summary>
+        public DerivedValueOption<RuntimeOverflowChecks> CheckOverflows { get; set; }
 
         /// <summary>
         ///     clear options
@@ -142,6 +160,9 @@
             IoChecks.ResetToDefault();
             LocalSymbols.ResetToDefault();
             LongStrings.ResetToDefault();
+            OpenStrings.ResetToDefault();
+            Optimization.ResetToDefault();
+            CheckOverflows.ResetToDefault();
         }
 
         /// <summary>
@@ -159,6 +180,9 @@
             ImportedData.ResetToDefault();
             IoChecks.ResetToDefault();
             LongStrings.ResetToDefault();
+            OpenStrings.ResetToDefault();
+            Optimization.ResetToDefault();
+            CheckOverflows.ResetToDefault();
         }
     }
 }
