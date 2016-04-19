@@ -304,6 +304,22 @@ namespace PasPasPasTests.Tokenizer {
         }
 
         [TestMethod]
+        public void TestZeroBasedStrings() {
+            RunCompilerDirective("", FirstCharIndex.Undefined, () => CompilerOptions.IndexOfFirstCharInString.Value);
+            RunCompilerDirective("ZEROBASEDSTRINGS  ON", FirstCharIndex.IsZero, () => CompilerOptions.IndexOfFirstCharInString.Value);
+            RunCompilerDirective("ZEROBASEDSTRINGS  OFF", FirstCharIndex.IsOne, () => CompilerOptions.IndexOfFirstCharInString.Value);
+        }
+
+        [TestMethod]
+        public void TestWritableConst() {
+            RunCompilerDirective("", ConstantValues.Undefined, () => CompilerOptions.WriteableConstants.Value);
+            RunCompilerDirective("J-", ConstantValues.Constant, () => CompilerOptions.WriteableConstants.Value);
+            RunCompilerDirective("J+", ConstantValues.Writeable, () => CompilerOptions.WriteableConstants.Value);
+            RunCompilerDirective("WRITEABLECONST  OFF", ConstantValues.Constant, () => CompilerOptions.WriteableConstants.Value);
+            RunCompilerDirective("WRITEABLECONST  ON", ConstantValues.Writeable, () => CompilerOptions.WriteableConstants.Value);
+        }
+
+        [TestMethod]
         public void TestLibMeta() {
             RunCompilerDirective("", null, () => Meta.LibPrefix.Value);
             RunCompilerDirective("", null, () => Meta.LibSuffix.Value);

@@ -55,22 +55,23 @@ namespace PasPasPas.Parsing.Parser {
 
         private static HashSet<int> switches
             = new HashSet<int>() {
-                PascalToken.AlignSwitch, PascalToken.AlignSwitch1,PascalToken.AlignSwitch2,PascalToken.AlignSwitch4,PascalToken.AlignSwitch8,PascalToken.AlignSwitch16,
-                PascalToken.BoolEvalSwitch,
-                PascalToken.AssertSwitch,
-                PascalToken.DebugInfoOrDescriptionSwitch,
-                PascalToken.ExtensionSwitch,
-                PascalToken.ExtendedSyntaxSwitch,
-                PascalToken.ImportedDataSwitch,
-                PascalToken.IncludeSwitch,
-                PascalToken.LinkOrLocalSymbolSwitch,
-                PascalToken.LongStringSwitch,
-                PascalToken.OpenStringSwitch,
-                PascalToken.OptimizationSwitch,
-                PascalToken.OverflowSwitch,
-                PascalToken.SaveDivideSwitch,
-                PascalToken.IncludeRessource,
-                PascalToken.StackFramesSwitch,
+                PascalToken.AlignSwitch, PascalToken.AlignSwitch1,PascalToken.AlignSwitch2,PascalToken.AlignSwitch4,PascalToken.AlignSwitch8,PascalToken.AlignSwitch16, /* A */
+                PascalToken.BoolEvalSwitch, /* B */
+                PascalToken.AssertSwitch, /* C */
+                PascalToken.DebugInfoOrDescriptionSwitch, /* D */
+                PascalToken.ExtensionSwitch, /* E */
+                PascalToken.ExtendedSyntaxSwitch, /* X */
+                PascalToken.ImportedDataSwitch,  /* G */
+                PascalToken.IncludeSwitch, /* I */ /* IOCHECKS */
+                PascalToken.LinkOrLocalSymbolSwitch,  /* L */
+                PascalToken.LongStringSwitch, /* H */
+                PascalToken.OpenStringSwitch, /* P */
+                PascalToken.OptimizationSwitch, /* O */
+                PascalToken.OverflowSwitch, /* Q */
+                PascalToken.SaveDivideSwitch, /* U */
+                PascalToken.IncludeRessource, /* R */ /* RANGECHECKS */
+                PascalToken.StackFramesSwitch, /* W */
+                PascalToken.WritableConstSwitch, /* J */
             };
 
         private static HashSet<int> longSwitches
@@ -101,6 +102,8 @@ namespace PasPasPas.Parsing.Parser {
                 PascalToken.SaveDivideSwitchLong,
                 PascalToken.RangeChecks,
                 PascalToken.StackFramesSwitchLong,
+                PascalToken.ZeroBaseStrings,
+                PascalToken.WritableConstSwitchLong,
             };
 
         private static HashSet<int> parameters
@@ -513,7 +516,43 @@ namespace PasPasPas.Parsing.Parser {
                 return true;
             }
 
+            if (Optional(PascalToken.ZeroBaseStrings)) {
+                ParseZeroBasedStringSwitch();
+                return true;
+            }
+
+            if (Optional(PascalToken.WritableConstSwitchLong)) {
+                ParseLongWritableConstSwitch();
+                return true;
+            }
+
             return false;
+        }
+
+        private void ParseLongWritableConstSwitch() {
+            if (Optional(PascalToken.On)) {
+                CompilerOptions.WriteableConstants.Value = ConstantValues.Writeable;
+                return;
+            }
+
+            if (Optional(PascalToken.Off)) {
+                CompilerOptions.WriteableConstants.Value = ConstantValues.Constant;
+                return;
+            }
+            Unexpected();
+        }
+
+        private void ParseZeroBasedStringSwitch() {
+            if (Optional(PascalToken.On)) {
+                CompilerOptions.IndexOfFirstCharInString.Value = FirstCharIndex.IsZero;
+                return;
+            }
+
+            if (Optional(PascalToken.Off)) {
+                CompilerOptions.IndexOfFirstCharInString.Value = FirstCharIndex.IsOne;
+                return;
+            }
+            Unexpected();
         }
 
         private void ParseLongStackFramesSwitch() {
@@ -946,6 +985,26 @@ namespace PasPasPas.Parsing.Parser {
 
             if (Match(PascalToken.StackFramesSwitch)) {
                 return ParseStackFramesSwitch();
+            }
+
+            if (Match(PascalToken.WritableConstSwitch)) {
+                return ParseWritableConstSwitch();
+            }
+
+            return false;
+        }
+
+        private bool ParseWritableConstSwitch() {
+            FetchNextToken();
+
+            if (Optional(PascalToken.Plus)) {
+                CompilerOptions.WriteableConstants.Value = ConstantValues.Writeable;
+                return true;
+            }
+
+            if (Optional(PascalToken.Minus)) {
+                CompilerOptions.WriteableConstants.Value = ConstantValues.Constant;
+                return true;
             }
 
             return false;

@@ -54,6 +54,7 @@
     <Compile Include="DataTypes\CompilerOptmization.cs" />
     <Compile Include="DataTypes\ConditionalCompilationOptions.cs" />
     <Compile Include="DataTypes\ConditonalDefine.cs" />
+    <Compile Include="DataTypes\ConstantValues.cs" />
     <Compile Include="DataTypes\DebugInformation.cs" />
     <Compile Include="DataTypes\DenyUnitInPackages.cs" />
     <Compile Include="DataTypes\DerivedListOption.cs" />
@@ -67,6 +68,7 @@
     <Compile Include="DataTypes\ExtendedSyntax.cs" />
     <Compile Include="DataTypes\ExternalSymbol.cs" />
     <Compile Include="DataTypes\FDivSaveDivide.cs" />
+    <Compile Include="DataTypes\FirstCharIndex.cs" />
     <Compile Include="DataTypes\HeaderString.cs" />
     <Compile Include="DataTypes\HighCharsUnicode.cs" />
     <Compile Include="DataTypes\ICondition.cs" />

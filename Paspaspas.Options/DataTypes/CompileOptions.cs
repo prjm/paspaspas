@@ -34,6 +34,8 @@
             SafeDivide = new DerivedValueOption<FDivSafeDivide>(baseOptions?.SafeDivide);
             RangeChecks = new DerivedValueOption<RuntimeRangeChecks>(baseOptions?.RangeChecks);
             StackFrames = new DerivedValueOption<StackFrameGeneration>(baseOptions?.StackFrames);
+            IndexOfFirstCharInString = new DerivedValueOption<FirstCharIndex>(baseOptions?.IndexOfFirstCharInString);
+            WriteableConstants = new DerivedValueOption<ConstantValues>(baseOptions?.WriteableConstants);
         }
 
         /// <summary>
@@ -129,32 +131,42 @@
         /// <summary>
         ///     flag for open strings
         /// </summary>
-        public DerivedValueOption<OpenStringTypes> OpenStrings { get; set; }
+        public DerivedValueOption<OpenStringTypes> OpenStrings { get; }
 
         /// <summary>
         ///     flag to enable optimization
         /// </summary>
-        public DerivedValueOption<CompilerOptmization> Optimization { get; set; }
+        public DerivedValueOption<CompilerOptmization> Optimization { get; }
 
         /// <summary>
         ///     flag to enable overflow checks
         /// </summary>
-        public DerivedValueOption<RuntimeOverflowChecks> CheckOverflows { get; set; }
+        public DerivedValueOption<RuntimeOverflowChecks> CheckOverflows { get; }
 
         /// <summary>
         ///     save divide option
         /// </summary>
-        public DerivedValueOption<FDivSafeDivide> SafeDivide { get; set; }
+        public DerivedValueOption<FDivSafeDivide> SafeDivide { get; }
 
         /// <summary>
         ///     generate runtime range checks
         /// </summary>
-        public DerivedValueOption<RuntimeRangeChecks> RangeChecks { get; set; }
+        public DerivedValueOption<RuntimeRangeChecks> RangeChecks { get; }
 
         /// <summary>
         ///     generate all stack frames
         /// </summary>
         public DerivedValueOption<StackFrameGeneration> StackFrames { get; set; }
+
+        /// <summary>
+        ///     index of first char in a string
+        /// </summary>
+        public DerivedValueOption<FirstCharIndex> IndexOfFirstCharInString { get; }
+
+        /// <summary>
+        ///     writeable constants
+        /// </summary>
+        public DerivedValueOption<ConstantValues> WriteableConstants { get; }
 
         /// <summary>
         ///     clear options
@@ -184,6 +196,8 @@
             SafeDivide.ResetToDefault();
             RangeChecks.ResetToDefault();
             StackFrames.ResetToDefault();
+            IndexOfFirstCharInString.ResetToDefault();
+            WriteableConstants.ResetToDefault();
         }
 
         /// <summary>
@@ -207,6 +221,8 @@
             SafeDivide.ResetToDefault();
             RangeChecks.ResetToDefault();
             StackFrames.ResetToDefault();
+            IndexOfFirstCharInString.ResetToDefault();
+            WriteableConstants.ResetToDefault();
         }
     }
 }
