@@ -36,6 +36,9 @@
             StackFrames = new DerivedValueOption<StackFrameGeneration>(baseOptions?.StackFrames);
             IndexOfFirstCharInString = new DerivedValueOption<FirstCharIndex>(baseOptions?.IndexOfFirstCharInString);
             WriteableConstants = new DerivedValueOption<ConstantValues>(baseOptions?.WriteableConstants);
+            WeakLinkRtti = new DerivedValueOption<RttiLinkMode>(baseOptions?.WeakLinkRtti);
+            WeakPackageUnit = new DerivedValueOption<WeakPackaging>(baseOptions?.WeakPackageUnit);
+            Warnings = new DerivedValueOption<CompilerWarnings>(baseOptions?.Warnings);
         }
 
         /// <summary>
@@ -169,6 +172,21 @@
         public DerivedValueOption<ConstantValues> WriteableConstants { get; }
 
         /// <summary>
+        ///     weak rtti linking
+        /// </summary>
+        public DerivedValueOption<RttiLinkMode> WeakLinkRtti { get; }
+
+        /// <summary>
+        ///     weak unit packaging
+        /// </summary>
+        public DerivedValueOption<WeakPackaging> WeakPackageUnit { get; }
+
+        /// <summary>
+        ///     compiler warnings
+        /// </summary>
+        public DerivedValueOption<CompilerWarnings> Warnings { get; }
+
+        /// <summary>
         ///     clear options
         /// </summary>
         public void Clear() {
@@ -198,6 +216,9 @@
             StackFrames.ResetToDefault();
             IndexOfFirstCharInString.ResetToDefault();
             WriteableConstants.ResetToDefault();
+            WeakLinkRtti.ResetToDefault();
+            WeakPackageUnit.ResetToDefault();
+            Warnings.ResetToDefault();
         }
 
         /// <summary>
@@ -223,6 +244,9 @@
             StackFrames.ResetToDefault();
             IndexOfFirstCharInString.ResetToDefault();
             WriteableConstants.ResetToDefault();
+            WeakLinkRtti.ResetToDefault();
+            WeakPackageUnit.ResetToDefault();
+            Warnings.ResetToDefault();
         }
     }
 }

@@ -320,6 +320,27 @@ namespace PasPasPasTests.Tokenizer {
         }
 
         [TestMethod]
+        public void TestWeakLinkRtti() {
+            RunCompilerDirective("", RttiLinkMode.Undefined, () => CompilerOptions.WeakLinkRtti.Value);
+            RunCompilerDirective("WEAKLINKRTTI  ON", RttiLinkMode.LinkWeakRtti, () => CompilerOptions.WeakLinkRtti.Value);
+            RunCompilerDirective("WEAKLINKRTTI  OFF", RttiLinkMode.LinkFullRtti, () => CompilerOptions.WeakLinkRtti.Value);
+        }
+
+        [TestMethod]
+        public void TestWeakPackageUnit() {
+            RunCompilerDirective("", WeakPackaging.Undefined, () => CompilerOptions.WeakPackageUnit.Value);
+            RunCompilerDirective("WEAKPACKAGEUNIT ON", WeakPackaging.Enable, () => CompilerOptions.WeakPackageUnit.Value);
+            RunCompilerDirective("WEAKPACKAGEUNIT OFF", WeakPackaging.Disable, () => CompilerOptions.WeakPackageUnit.Value);
+        }
+
+        [TestMethod]
+        public void TestWarnings() {
+            RunCompilerDirective("", CompilerWarnings.Undefined, () => CompilerOptions.Warnings.Value);
+            RunCompilerDirective("WARNINGS  ON", CompilerWarnings.Enable, () => CompilerOptions.Warnings.Value);
+            RunCompilerDirective("WARNINGS  OFF", CompilerWarnings.Disable, () => CompilerOptions.Warnings.Value);
+        }
+
+        [TestMethod]
         public void TestLibMeta() {
             RunCompilerDirective("", null, () => Meta.LibPrefix.Value);
             RunCompilerDirective("", null, () => Meta.LibSuffix.Value);

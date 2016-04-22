@@ -104,6 +104,9 @@ namespace PasPasPas.Parsing.Parser {
                 PascalToken.StackFramesSwitchLong,
                 PascalToken.ZeroBaseStrings,
                 PascalToken.WritableConstSwitchLong,
+                PascalToken.WeakLinkRtti,
+                PascalToken.WeakPackageUnit,
+                PascalToken.Warnings,
             };
 
         private static HashSet<int> parameters
@@ -526,7 +529,61 @@ namespace PasPasPas.Parsing.Parser {
                 return true;
             }
 
+            if (Optional(PascalToken.WeakLinkRtti)) {
+                ParseWeakLinkRttiSwitch();
+                return true;
+            }
+
+            if (Optional(PascalToken.WeakPackageUnit)) {
+                ParseWeakPackageUnitSwitch();
+                return true;
+            }
+
+            if (Optional(PascalToken.Warnings)) {
+                ParseWarningsSwitch();
+                return true;
+            }
+
             return false;
+        }
+
+        private void ParseWarningsSwitch() {
+            if (Optional(PascalToken.On)) {
+                CompilerOptions.Warnings.Value = CompilerWarnings.Enable;
+                return;
+            }
+
+            if (Optional(PascalToken.Off)) {
+                CompilerOptions.Warnings.Value = CompilerWarnings.Disable;
+                return;
+            }
+            Unexpected();
+        }
+
+        private void ParseWeakPackageUnitSwitch() {
+            if (Optional(PascalToken.On)) {
+                CompilerOptions.WeakPackageUnit.Value = WeakPackaging.Enable;
+                return;
+            }
+
+            if (Optional(PascalToken.Off)) {
+                CompilerOptions.WeakPackageUnit.Value = WeakPackaging.Disable;
+                return;
+            }
+            Unexpected();
+        }
+
+        private void ParseWeakLinkRttiSwitch() {
+            if (Optional(PascalToken.On)) {
+                CompilerOptions.WeakLinkRtti.Value = RttiLinkMode.LinkWeakRtti;
+                return;
+            }
+
+            if (Optional(PascalToken.Off)) {
+                CompilerOptions.WeakLinkRtti.Value = RttiLinkMode.LinkFullRtti;
+                return;
+            }
+            Unexpected();
         }
 
         private void ParseLongWritableConstSwitch() {
