@@ -341,6 +341,15 @@ namespace PasPasPasTests.Tokenizer {
         }
 
         [TestMethod]
+        public void TestWarn() {
+            RunCompilerDirective("", WarningMode.Undefined, () => Warnings.GetModeByIdentifier("SYMBOL_DEPRECATED"));
+            RunCompilerDirective("WARN SYMBOL_DEPRECATED ON", WarningMode.On, () => Warnings.GetModeByIdentifier("SYMBOL_DEPRECATED"));
+            RunCompilerDirective("WARN SYMBOL_DEPRECATED OFF", WarningMode.Off, () => Warnings.GetModeByIdentifier("SYMBOL_DEPRECATED"));
+            RunCompilerDirective("WARN SYMBOL_DEPRECATED ERROR", WarningMode.Error, () => Warnings.GetModeByIdentifier("SYMBOL_DEPRECATED"));
+            RunCompilerDirective("WARN SYMBOL_DEPRECATED DEFAULT", WarningMode.Undefined, () => Warnings.GetModeByIdentifier("SYMBOL_DEPRECATED"));
+        }
+
+        [TestMethod]
         public void TestLibMeta() {
             RunCompilerDirective("", null, () => Meta.LibPrefix.Value);
             RunCompilerDirective("", null, () => Meta.LibSuffix.Value);

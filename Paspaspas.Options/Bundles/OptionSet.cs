@@ -33,6 +33,7 @@ namespace PasPasPas.Options.Bundles {
             ConditionalCompilation = new ConditionalCompilationOptions(baseOptions?.ConditionalCompilation);
             Meta = new MetaInformation(this, baseOptions?.Meta);
             PathOptions = new PathOptionSet(baseOptions?.PathOptions);
+            Warnings = new WarningOptions(baseOptions?.Warnings);
         }
 
         /// <summary>
@@ -74,7 +75,12 @@ namespace PasPasPas.Options.Bundles {
         /// <summary>
         ///     path options
         /// </summary>
-        public PathOptionSet PathOptions { get; internal set; }
+        public PathOptionSet PathOptions { get; }
+
+        /// <summary>
+        ///     warning optiosn
+        /// </summary>
+        public WarningOptions Warnings { get; }
 
         /// <summary>
         ///     clear all option values
@@ -84,6 +90,7 @@ namespace PasPasPas.Options.Bundles {
             ConditionalCompilation.Clear();
             Meta.Clear();
             PathOptions.Clear();
+            Warnings.Clear();
         }
 
         /// <summary>
@@ -94,6 +101,7 @@ namespace PasPasPas.Options.Bundles {
             ConditionalCompilation.ResetOnNewUnit();
             Meta.ResetOnNewUnit();
             PathOptions.ResetOnNewUnit();
+            Warnings.ResetOnNewUnit();
         }
     }
 }

@@ -25,7 +25,7 @@ namespace PasPasPas.Infrastructure.Configuration {
         /// <returns><c>true</c> if the entries have the same name</returns>
         public override bool Equals(object obj) {
             var other = obj as ConfigurationEntry;
-            if (other != null) {
+            if (!ReferenceEquals(other, null)) {
                 return string.Equals(Name, other.Name, StringComparison.OrdinalIgnoreCase);
             }
             else {

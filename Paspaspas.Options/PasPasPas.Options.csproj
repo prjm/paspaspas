@@ -92,6 +92,10 @@
     <Compile Include="DataTypes\RuntimeOverflowChecks.cs" />
     <Compile Include="DataTypes\RuntimeRangeChecks.cs" />
     <Compile Include="DataTypes\StackFramesGeneration.cs" />
+    <Compile Include="DataTypes\WarningKey.cs" />
+    <Compile Include="DataTypes\WarningMode.cs" />
+    <Compile Include="DataTypes\WarningOption.cs" />
+    <Compile Include="DataTypes\WarningOptions.cs" />
     <Compile Include="DataTypes\WeakPackaging.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Bundles\AnyCpuPlatform.cs" />

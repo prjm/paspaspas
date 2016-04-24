@@ -25,7 +25,7 @@ namespace PasPasPas.Infrastructure.Input {
         public override bool Equals(object obj) {
             var otherKey = obj as ResolvedPathKey;
 
-            if (otherKey == null) return false;
+            if (ReferenceEquals(otherKey, null)) return false;
 
             return string.Equals(BasePath, otherKey.BasePath, StringComparison.OrdinalIgnoreCase) &&
                 string.Equals(PathToResolve, otherKey.PathToResolve, StringComparison.OrdinalIgnoreCase);

@@ -23,6 +23,11 @@ namespace PasPasPas.Options.Bundles {
         MetaInformation Meta { get; }
 
         /// <summary>
+        ///     warning options
+        /// </summary>
+        WarningOptions Warnings { get; }
+
+        /// <summary>
         ///     clear options
         /// </summary>
         void Clear();

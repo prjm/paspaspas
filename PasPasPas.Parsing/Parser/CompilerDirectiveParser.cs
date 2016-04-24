@@ -124,7 +124,8 @@ namespace PasPasPas.Parsing.Parser {
                 PascalToken.ImageBase,
                 PascalToken.LibPrefix,
                 PascalToken.LibSuffix,
-                PascalToken.LibVersion
+                PascalToken.LibVersion,
+                PascalToken.Warn,
             };
         private ServiceProvider environment;
 
@@ -221,7 +222,43 @@ namespace PasPasPas.Parsing.Parser {
                 return true;
             }
 
+            if (Match(PascalToken.Warn)) {
+                ParseWarnParameter();
+                return true;
+            }
+
             return false;
+        }
+
+
+        private void ParseWarnParameter() {
+            Require(PascalToken.Warn);
+            var warningType = Require(PascalToken.Identifier).Value;
+            var warningMode = Require(PascalToken.On, PascalToken.Off, PascalToken.Error, PascalToken.Default).Kind;
+            var parsedMode = WarningMode.Undefined;
+
+            switch (warningMode) {
+                case PascalToken.On:
+                    parsedMode = WarningMode.On;
+                    break;
+
+                case PascalToken.Off:
+                    parsedMode = WarningMode.Off;
+                    break;
+
+                case PascalToken.Default:
+                    parsedMode = WarningMode.Default;
+                    break;
+
+                case PascalToken.Error:
+                    parsedMode = WarningMode.Error;
+                    break;
+            }
+
+            if (parsedMode != WarningMode.Undefined && Options.Warnings.HasWarningIdent(warningType))
+                Options.Warnings.SetModeByIdentifier(warningType, parsedMode);
+            else
+                Unexpected();
         }
 
         private void ParseLibParameter() {

@@ -21,6 +21,9 @@ namespace PasPasPasTests {
         protected CompileOptions CompilerOptions
             => TestOptions.CompilerOptions;
 
+        protected WarningOptions Warnings
+            => TestOptions.Warnings;
+
         protected ConditionalCompilationOptions ConditionalCompilation
             => TestOptions.ConditionalCompilation;
 
