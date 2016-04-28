@@ -350,6 +350,74 @@ namespace PasPasPasTests.Tokenizer {
         }
 
         [TestMethod]
+        public void TestVarStringChecks() {
+            RunCompilerDirective("", ShortVarStringChecks.Undefined, () => CompilerOptions.VarStringChecks.Value);
+            RunCompilerDirective("V+", ShortVarStringChecks.EnableChecks, () => CompilerOptions.VarStringChecks.Value);
+            RunCompilerDirective("V-", ShortVarStringChecks.DisableChecks, () => CompilerOptions.VarStringChecks.Value);
+            RunCompilerDirective("VARSTRINGCHECKS ON", ShortVarStringChecks.EnableChecks, () => CompilerOptions.VarStringChecks.Value);
+            RunCompilerDirective("VARSTRINGCHECKS  OFF", ShortVarStringChecks.DisableChecks, () => CompilerOptions.VarStringChecks.Value);
+        }
+
+        [TestMethod]
+        public void TestTypeCheckedPointers() {
+            RunCompilerDirective("", TypeCheckedPointers.Undefined, () => CompilerOptions.TypedPointers.Value);
+            RunCompilerDirective("T+", TypeCheckedPointers.Enable, () => CompilerOptions.TypedPointers.Value);
+            RunCompilerDirective("T-", TypeCheckedPointers.Disable, () => CompilerOptions.TypedPointers.Value);
+            RunCompilerDirective("TYPEDADDRESS ON", TypeCheckedPointers.Enable, () => CompilerOptions.TypedPointers.Value);
+            RunCompilerDirective("TYPEDADDRESS OFF", TypeCheckedPointers.Disable, () => CompilerOptions.TypedPointers.Value);
+        }
+
+        [TestMethod]
+        public void TestSymbolDefinitionInfo() {
+            RunCompilerDirective("", SymbolDefinitionInfo.Undefined, () => CompilerOptions.SymbolDefinitions.Value);
+            RunCompilerDirective("Y+", SymbolDefinitionInfo.Enable, () => CompilerOptions.SymbolDefinitions.Value);
+            RunCompilerDirective("Y-", SymbolDefinitionInfo.Disable, () => CompilerOptions.SymbolDefinitions.Value);
+            RunCompilerDirective("YD", SymbolDefinitionInfo.Enable, () => CompilerOptions.SymbolDefinitions.Value);
+            RunCompilerDirective("DEFINITIONINFO OFF", SymbolDefinitionInfo.Disable, () => CompilerOptions.SymbolDefinitions.Value);
+            RunCompilerDirective("DEFINITIONINFO ON", SymbolDefinitionInfo.Enable, () => CompilerOptions.SymbolDefinitions.Value);
+        }
+
+        [TestMethod]
+        public void TestSymbolReferenceInfo() {
+            RunCompilerDirective("", SymbolReferenceInfo.Undefined, () => CompilerOptions.SymbolReferences.Value);
+            RunCompilerDirective("Y-", SymbolReferenceInfo.Disable, () => CompilerOptions.SymbolReferences.Value);
+            RunCompilerDirective("Y+", SymbolReferenceInfo.Enable, () => CompilerOptions.SymbolReferences.Value);
+            RunCompilerDirective("YD", SymbolReferenceInfo.Disable, () => CompilerOptions.SymbolReferences.Value);
+            RunCompilerDirective("REFERENCEINFO ON", SymbolReferenceInfo.Enable, () => CompilerOptions.SymbolReferences.Value);
+            RunCompilerDirective("REFERENCEINFO OFF", SymbolReferenceInfo.Disable, () => CompilerOptions.SymbolReferences.Value);
+        }
+
+        [TestMethod]
+        public void TestStrongLinking() {
+            RunCompilerDirective("", StrongTypeLinking.Undefined, () => CompilerOptions.LinkAllTypes.Value);
+            RunCompilerDirective("STRONGLINKTYPES ON", StrongTypeLinking.Enable, () => CompilerOptions.LinkAllTypes.Value);
+            RunCompilerDirective("STRONGLINKTYPES OFF", StrongTypeLinking.Disable, () => CompilerOptions.LinkAllTypes.Value);
+        }
+
+        [TestMethod]
+        public void TestScopedEnums() {
+            RunCompilerDirective("", RequireScopedEnums.Undefined, () => CompilerOptions.ScopedEnums.Value);
+            RunCompilerDirective("SCOPEDENUMS ON", RequireScopedEnums.Enable, () => CompilerOptions.ScopedEnums.Value);
+            RunCompilerDirective("SCOPEDENUMS OFF", RequireScopedEnums.Disable, () => CompilerOptions.ScopedEnums.Value);
+        }
+
+        [TestMethod]
+        public void TestTypeInfo() {
+            RunCompilerDirective("", RttiForPublishedProperties.Undefined, () => CompilerOptions.PublishedRtti.Value);
+            RunCompilerDirective("M+", RttiForPublishedProperties.Enable, () => CompilerOptions.PublishedRtti.Value);
+            RunCompilerDirective("M-", RttiForPublishedProperties.Disable, () => CompilerOptions.PublishedRtti.Value);
+            RunCompilerDirective("TYPEINFO ON", RttiForPublishedProperties.Enable, () => CompilerOptions.PublishedRtti.Value);
+            RunCompilerDirective("TYPEINFO OFF", RttiForPublishedProperties.Disable, () => CompilerOptions.PublishedRtti.Value);
+        }
+
+        [TestMethod]
+        public void TestRunOnly() {
+            RunCompilerDirective("", RuntimePackageMode.Undefined, () => CompilerOptions.RuntimeOnlyPackage.Value);
+            RunCompilerDirective("RUNONLY OFF", RuntimePackageMode.Standard, () => CompilerOptions.RuntimeOnlyPackage.Value);
+            RunCompilerDirective("RUNONLY ON", RuntimePackageMode.RuntimeOnly, () => CompilerOptions.RuntimeOnlyPackage.Value);
+        }
+
+        [TestMethod]
         public void TestLibMeta() {
             RunCompilerDirective("", null, () => Meta.LibPrefix.Value);
             RunCompilerDirective("", null, () => Meta.LibSuffix.Value);

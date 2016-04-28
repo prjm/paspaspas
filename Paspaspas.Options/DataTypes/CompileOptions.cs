@@ -39,6 +39,14 @@
             WeakLinkRtti = new DerivedValueOption<RttiLinkMode>(baseOptions?.WeakLinkRtti);
             WeakPackageUnit = new DerivedValueOption<WeakPackaging>(baseOptions?.WeakPackageUnit);
             Warnings = new DerivedValueOption<CompilerWarnings>(baseOptions?.Warnings);
+            VarStringChecks = new DerivedValueOption<ShortVarStringChecks>(baseOptions?.VarStringChecks);
+            TypedPointers = new DerivedValueOption<TypeCheckedPointers>(baseOptions?.TypedPointers);
+            SymbolDefinitions = new DerivedValueOption<SymbolDefinitionInfo>(baseOptions?.SymbolDefinitions);
+            SymbolReferences = new DerivedValueOption<SymbolReferenceInfo>(baseOptions?.SymbolReferences);
+            LinkAllTypes = new DerivedValueOption<StrongTypeLinking>(baseOptions?.LinkAllTypes);
+            ScopedEnums = new DerivedValueOption<RequireScopedEnums>(baseOptions?.ScopedEnums);
+            PublishedRtti = new DerivedValueOption<RttiForPublishedProperties>(baseOptions?.PublishedRtti);
+            RuntimeOnlyPackage = new DerivedValueOption<RuntimePackageMode>(baseOptions?.RuntimeOnlyPackage);
         }
 
         /// <summary>
@@ -159,7 +167,7 @@
         /// <summary>
         ///     generate all stack frames
         /// </summary>
-        public DerivedValueOption<StackFrameGeneration> StackFrames { get; set; }
+        public DerivedValueOption<StackFrameGeneration> StackFrames { get; }
 
         /// <summary>
         ///     index of first char in a string
@@ -185,6 +193,46 @@
         ///     compiler warnings
         /// </summary>
         public DerivedValueOption<CompilerWarnings> Warnings { get; }
+
+        /// <summary>
+        ///     var string checks
+        /// </summary>
+        public DerivedValueOption<ShortVarStringChecks> VarStringChecks { get; }
+
+        /// <summary>
+        ///     pointers with types
+        /// </summary>
+        public DerivedValueOption<TypeCheckedPointers> TypedPointers { get; }
+
+        /// <summary>
+        ///     flag go generate symbol reference information
+        /// </summary>
+        public DerivedValueOption<SymbolReferenceInfo> SymbolReferences { get; }
+
+        /// <summary>
+        ///     flag to generate symbol definition information
+        /// </summary>
+        public DerivedValueOption<SymbolDefinitionInfo> SymbolDefinitions { get; }
+
+        /// <summary>
+        ///     flag to link all types
+        /// </summary>
+        public DerivedValueOption<StrongTypeLinking> LinkAllTypes { get; }
+
+        /// <summary>
+        ///     flag to scoped enums
+        /// </summary>
+        public DerivedValueOption<RequireScopedEnums> ScopedEnums { get; }
+
+        /// <summary>
+        ///     flag to generate rtti for published fields
+        /// </summary>
+        public DerivedValueOption<RttiForPublishedProperties> PublishedRtti { get; }
+
+        /// <summary>
+        ///     swithc to prohibit this package at desing time
+        /// </summary>
+        public DerivedValueOption<RuntimePackageMode> RuntimeOnlyPackage { get; }
 
         /// <summary>
         ///     clear options
@@ -219,6 +267,14 @@
             WeakLinkRtti.ResetToDefault();
             WeakPackageUnit.ResetToDefault();
             Warnings.ResetToDefault();
+            VarStringChecks.ResetToDefault();
+            TypedPointers.ResetToDefault();
+            SymbolReferences.ResetToDefault();
+            SymbolDefinitions.ResetToDefault();
+            LinkAllTypes.ResetToDefault();
+            ScopedEnums.ResetToDefault();
+            PublishedRtti.ResetToDefault();
+            RuntimeOnlyPackage.ResetToDefault();
         }
 
         /// <summary>
@@ -247,6 +303,10 @@
             WeakLinkRtti.ResetToDefault();
             WeakPackageUnit.ResetToDefault();
             Warnings.ResetToDefault();
+            VarStringChecks.ResetToDefault();
+            ScopedEnums.ResetToDefault();
+            PublishedRtti.ResetToDefault();
+            RuntimeOnlyPackage.ResetToDefault();
         }
     }
 }

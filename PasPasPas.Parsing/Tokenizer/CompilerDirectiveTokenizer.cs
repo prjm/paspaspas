@@ -132,7 +132,8 @@ namespace PasPasPas.Parsing.Tokenizer {
                 ["CLOSENAMESPACE"] = PascalToken.CloseNamepsace,
                 ["NOUSINGNAMESPACE"] = PascalToken.NoUsingNamespace,
                 ["END"] = PascalToken.End,
-                ["ERROR"] = PascalToken.Error
+                ["ERROR"] = PascalToken.Error,
+                ["YD"] = PascalToken.SymbolDefinitionsOnlySwitch
             };
 
         /// <summary>

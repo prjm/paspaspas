@@ -72,6 +72,11 @@ namespace PasPasPas.Parsing.Parser {
                 PascalToken.IncludeRessource, /* R */ /* RANGECHECKS */
                 PascalToken.StackFramesSwitch, /* W */
                 PascalToken.WritableConstSwitch, /* J */
+                PascalToken.VarStringCheckSwitch, /* V */
+                PascalToken.TypedPointersSwitch, /* T */
+                PascalToken.SymbolDeclarationSwitch, /* Y */
+                PascalToken.SymbolDefinitionsOnlySwitch, /* YD */
+                PascalToken.TypeInfoSwitch /* M */
             };
 
         private static HashSet<int> longSwitches
@@ -107,6 +112,14 @@ namespace PasPasPas.Parsing.Parser {
                 PascalToken.WeakLinkRtti,
                 PascalToken.WeakPackageUnit,
                 PascalToken.Warnings,
+                PascalToken.VarStringCheckSwitchLong,
+                PascalToken.TypedPointersSwitchLong,
+                PascalToken.ReferenceInfo,
+                PascalToken.DefinitionInfo,
+                PascalToken.StrongLinkTypes,
+                PascalToken.ScopedEnums,
+                PascalToken.TypeInfoSwitchLong,
+                PascalToken.RunOnly,
             };
 
         private static HashSet<int> parameters
@@ -229,7 +242,6 @@ namespace PasPasPas.Parsing.Parser {
 
             return false;
         }
-
 
         private void ParseWarnParameter() {
             Require(PascalToken.Warn);
@@ -581,7 +593,149 @@ namespace PasPasPas.Parsing.Parser {
                 return true;
             }
 
+            if (Optional(PascalToken.VarStringCheckSwitchLong)) {
+                ParseLongVarStringCheckSwitch();
+                return true;
+            }
+
+            if (Optional(PascalToken.TypedPointersSwitchLong)) {
+                ParseLongTypedPointersSwitch();
+                return true;
+            }
+
+            if (Optional(PascalToken.DefinitionInfo)) {
+                ParseDefinitionInfoSwitch();
+                return true;
+            }
+
+            if (Optional(PascalToken.ReferenceInfo)) {
+                ParseReferenceInfoSwitch();
+                return true;
+            }
+
+            if (Optional(PascalToken.StrongLinkTypes)) {
+                ParseStrongLinkTypes();
+                return true;
+            }
+
+            if (Optional(PascalToken.ScopedEnums)) {
+                ParseScopedEnums();
+                return true;
+            }
+
+            if (Optional(PascalToken.TypeInfoSwitchLong)) {
+                ParseLongTypeInfoSwitch();
+                return true;
+            }
+
             return false;
+        }
+
+        private void ParseRunOnlyParameter() {
+            if (Optional(PascalToken.On)) {
+                CompilerOptions.RuntimeOnlyPackage.Value = RuntimePackageMode.RuntimeOnly;
+                return;
+            }
+
+            if (Optional(PascalToken.Off)) {
+                CompilerOptions.RuntimeOnlyPackage.Value = RuntimePackageMode.Standard;
+                return;
+            }
+            Unexpected();
+
+        }
+
+
+
+        private void ParseLongTypeInfoSwitch() {
+            if (Optional(PascalToken.On)) {
+                CompilerOptions.PublishedRtti.Value = RttiForPublishedProperties.Enable;
+                return;
+            }
+
+            if (Optional(PascalToken.Off)) {
+                CompilerOptions.PublishedRtti.Value = RttiForPublishedProperties.Disable;
+                return;
+            }
+            Unexpected();
+        }
+
+        private void ParseScopedEnums() {
+            if (Optional(PascalToken.On)) {
+                CompilerOptions.ScopedEnums.Value = RequireScopedEnums.Enable;
+                return;
+            }
+
+            if (Optional(PascalToken.Off)) {
+                CompilerOptions.ScopedEnums.Value = RequireScopedEnums.Disable;
+                return;
+            }
+            Unexpected();
+        }
+
+        private void ParseStrongLinkTypes() {
+            if (Optional(PascalToken.On)) {
+                CompilerOptions.LinkAllTypes.Value = StrongTypeLinking.Enable;
+                return;
+            }
+
+            if (Optional(PascalToken.Off)) {
+                CompilerOptions.LinkAllTypes.Value = StrongTypeLinking.Disable;
+                return;
+            }
+            Unexpected();
+        }
+
+        private void ParseReferenceInfoSwitch() {
+            if (Optional(PascalToken.On)) {
+                CompilerOptions.SymbolReferences.Value = SymbolReferenceInfo.Enable;
+                return;
+            }
+
+            if (Optional(PascalToken.Off)) {
+                CompilerOptions.SymbolReferences.Value = SymbolReferenceInfo.Disable;
+                return;
+            }
+            Unexpected();
+        }
+
+        private void ParseDefinitionInfoSwitch() {
+            if (Optional(PascalToken.On)) {
+                CompilerOptions.SymbolDefinitions.Value = SymbolDefinitionInfo.Enable;
+                return;
+            }
+
+            if (Optional(PascalToken.Off)) {
+                CompilerOptions.SymbolDefinitions.Value = SymbolDefinitionInfo.Disable;
+                return;
+            }
+            Unexpected();
+        }
+
+        private void ParseLongTypedPointersSwitch() {
+            if (Optional(PascalToken.On)) {
+                CompilerOptions.TypedPointers.Value = TypeCheckedPointers.Enable;
+                return;
+            }
+
+            if (Optional(PascalToken.Off)) {
+                CompilerOptions.TypedPointers.Value = TypeCheckedPointers.Disable;
+                return;
+            }
+            Unexpected();
+        }
+
+        private void ParseLongVarStringCheckSwitch() {
+            if (Optional(PascalToken.On)) {
+                CompilerOptions.VarStringChecks.Value = ShortVarStringChecks.EnableChecks;
+                return;
+            }
+
+            if (Optional(PascalToken.Off)) {
+                CompilerOptions.VarStringChecks.Value = ShortVarStringChecks.DisableChecks;
+                return;
+            }
+            Unexpected();
         }
 
         private void ParseWarningsSwitch() {
@@ -1083,6 +1237,103 @@ namespace PasPasPas.Parsing.Parser {
 
             if (Match(PascalToken.WritableConstSwitch)) {
                 return ParseWritableConstSwitch();
+            }
+
+            if (Match(PascalToken.VarStringCheckSwitch)) {
+                return ParseVarStringCheckSwitch();
+            }
+
+            if (Match(PascalToken.TypedPointersSwitch)) {
+                return ParseTypedPointersSwitch();
+            }
+
+            if (Match(PascalToken.SymbolDeclarationSwitch)) {
+                return ParseSymbolDeclarationSwitch();
+            }
+
+            if (Match(PascalToken.SymbolDefinitionsOnlySwitch)) {
+                return ParseSymbolDefinitionsOnlySwitch();
+            }
+
+            if (Match(PascalToken.TypeInfoSwitch)) {
+                return ParseTypeInfoSwith();
+            }
+
+            if (Match(PascalToken.RunOnly)) {
+                ParseRunOnlyParameter();
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool ParseTypeInfoSwith() {
+            FetchNextToken();
+
+            if (Optional(PascalToken.Plus)) {
+                CompilerOptions.PublishedRtti.Value = RttiForPublishedProperties.Enable;
+                return true;
+            }
+
+            if (Optional(PascalToken.Minus)) {
+                CompilerOptions.PublishedRtti.Value = RttiForPublishedProperties.Disable;
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool ParseSymbolDefinitionsOnlySwitch() {
+            CompilerOptions.SymbolReferences.Value = SymbolReferenceInfo.Disable;
+            CompilerOptions.SymbolDefinitions.Value = SymbolDefinitionInfo.Enable;
+            return true;
+        }
+
+        private bool ParseSymbolDeclarationSwitch() {
+            FetchNextToken();
+
+            if (Optional(PascalToken.Plus)) {
+                CompilerOptions.SymbolReferences.Value = SymbolReferenceInfo.Enable;
+                CompilerOptions.SymbolDefinitions.Value = SymbolDefinitionInfo.Enable;
+                return true;
+            }
+
+            if (Optional(PascalToken.Minus)) {
+                CompilerOptions.SymbolReferences.Value = SymbolReferenceInfo.Disable;
+                CompilerOptions.SymbolDefinitions.Value = SymbolDefinitionInfo.Disable;
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool ParseTypedPointersSwitch() {
+            FetchNextToken();
+
+            if (Optional(PascalToken.Plus)) {
+                CompilerOptions.TypedPointers.Value = TypeCheckedPointers.Enable;
+                return true;
+            }
+
+            if (Optional(PascalToken.Minus)) {
+                CompilerOptions.TypedPointers.Value = TypeCheckedPointers.Disable;
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool ParseVarStringCheckSwitch() {
+            FetchNextToken();
+
+            if (Optional(PascalToken.Plus)) {
+                CompilerOptions.VarStringChecks.Value = ShortVarStringChecks.EnableChecks;
+                return true;
+            }
+
+            if (Optional(PascalToken.Minus)) {
+                CompilerOptions.VarStringChecks.Value = ShortVarStringChecks.DisableChecks;
+                return true;
             }
 
             return false;

@@ -1409,6 +1409,11 @@ namespace PasPasPas.Api {
         public const int NoUsingNamespace = 814;
 
         /// <summary>
+        ///     token for <c>$YD</c>
+        /// </summary>
+        public const int SymbolDefinitionsOnlySwitch = 815;
+
+        /// <summary>
         ///     token for <c>ERROR</c>
         /// </summary>
         public const int Error = 815;
