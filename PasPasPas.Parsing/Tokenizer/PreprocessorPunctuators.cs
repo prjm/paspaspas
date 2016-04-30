@@ -13,6 +13,11 @@ namespace PasPasPas.Parsing.Tokenizer {
         public PreprocessorPunctuators() {
             AddPunctuator('+', PascalToken.Plus);
             AddPunctuator('-', PascalToken.Minus);
+            AddPunctuator('(', PascalToken.OpenParen);
+            AddPunctuator(')', PascalToken.CloseParen);
+            AddPunctuator('[', PascalToken.OpenBraces);
+            AddPunctuator(']', PascalToken.CloseBraces);
+            AddPunctuator(',', PascalToken.Comma);
             AddPunctuator(new WhitspaceCharacterClass(), new WhiteSpaceTokenGroupValue());
             AddPunctuator(new IdentifierCharacterClass(), new IdentifierTokenGroupValue(CompilerDirectiveTokenizer.Keywords));
             AddPunctuator(new NumberCharacterClass(), new NumberTokenGroupValue());

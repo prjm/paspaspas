@@ -90,7 +90,10 @@
     <Compile Include="DataTypes\PathOptionSet.cs" />
     <Compile Include="DataTypes\RequireScopedEnums.cs" />
     <Compile Include="DataTypes\RttiForPublishSection.cs" />
+    <Compile Include="DataTypes\RttiForVisibility.cs" />
+    <Compile Include="DataTypes\RttiGenerationMode.cs" />
     <Compile Include="DataTypes\RttiLinkMode.cs" />
+    <Compile Include="DataTypes\RttiOptions.cs" />
     <Compile Include="DataTypes\RuntimeOverflowChecks.cs" />
     <Compile Include="DataTypes\RuntimePackageMode.cs" />
     <Compile Include="DataTypes\RuntimeRangeChecks.cs" />

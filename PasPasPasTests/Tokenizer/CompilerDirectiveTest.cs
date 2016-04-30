@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PasPasPas.Options.DataTypes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -415,6 +416,12 @@ namespace PasPasPasTests.Tokenizer {
             RunCompilerDirective("", RuntimePackageMode.Undefined, () => CompilerOptions.RuntimeOnlyPackage.Value);
             RunCompilerDirective("RUNONLY OFF", RuntimePackageMode.Standard, () => CompilerOptions.RuntimeOnlyPackage.Value);
             RunCompilerDirective("RUNONLY ON", RuntimePackageMode.RuntimeOnly, () => CompilerOptions.RuntimeOnlyPackage.Value);
+        }
+
+        [TestMethod]
+        public void TestRtti() {
+            RunCompilerDirective("", RttiGenerationMode.Undefined, () => CompilerOptions.Rtti.Mode);
+            RunCompilerDirective("RTTI INHERIT METHODS([vcPrivate])", Tuple.Create(RttiGenerationMode.Inherit, new RttiForVisibility() { ForPrivate = true }), () => Tuple.Create(CompilerOptions.Rtti.Mode, CompilerOptions.Rtti.Methods));
         }
 
         [TestMethod]

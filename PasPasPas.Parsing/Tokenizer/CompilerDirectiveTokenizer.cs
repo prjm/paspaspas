@@ -133,7 +133,16 @@ namespace PasPasPas.Parsing.Tokenizer {
                 ["NOUSINGNAMESPACE"] = PascalToken.NoUsingNamespace,
                 ["END"] = PascalToken.End,
                 ["ERROR"] = PascalToken.Error,
-                ["YD"] = PascalToken.SymbolDefinitionsOnlySwitch
+                ["YD"] = PascalToken.SymbolDefinitionsOnlySwitch,
+                ["INHERIT"] = PascalToken.Inherit,
+                ["EXPLICIT"] = PascalToken.Explicit,
+                ["PROPERTIES"] = PascalToken.Properties,
+                ["METHODS"] = PascalToken.Methods,
+                ["FIELDS"] = PascalToken.Fields,
+                ["VCPRIVATE"] = PascalToken.VcPrivate,
+                ["VCPROTECTED"] = PascalToken.VcProtected,
+                ["VCPUBLIC"] = PascalToken.VcPublic,
+                ["VCPUBLISHED"] = PascalToken.VcPublished,
             };
 
         /// <summary>

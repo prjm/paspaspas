@@ -139,6 +139,7 @@ namespace PasPasPas.Parsing.Parser {
                 PascalToken.LibSuffix,
                 PascalToken.LibVersion,
                 PascalToken.Warn,
+                PascalToken.Rtti,
             };
         private ServiceProvider environment;
 
@@ -240,7 +241,106 @@ namespace PasPasPas.Parsing.Parser {
                 return true;
             }
 
+            if (Match(PascalToken.Rtti)) {
+                ParseRttiParameter();
+                return true;
+            }
+
             return false;
+        }
+
+        /// <summary>
+        ///     parse the rtti parameter
+        /// </summary>
+        private void ParseRttiParameter() {
+            Require(PascalToken.Rtti);
+            RttiGenerationMode mode;
+
+            if (Optional(PascalToken.Inherit)) {
+                mode = RttiGenerationMode.Inherit;
+            }
+            else if (Optional(PascalToken.Explicit)) {
+                mode = RttiGenerationMode.Explicit;
+            }
+            else {
+                Unexpected();
+                return;
+            }
+
+            RttiForVisibility methods = null;
+            RttiForVisibility properties = null;
+            RttiForVisibility fields = null;
+            bool canContinue;
+
+            do {
+                canContinue = false;
+                if (Optional(PascalToken.Methods)) {
+                    if (methods != null) {
+                        Unexpected();
+                        return;
+                    }
+                    methods = ParseRttiVisibility();
+                    canContinue = methods != null;
+                }
+                else if (Optional(PascalToken.Properties)) {
+                    if (properties != null) {
+                        Unexpected();
+                        return;
+                    }
+                    properties = ParseRttiVisibility();
+                    canContinue = properties != null;
+                }
+                else if (Optional(PascalToken.Fields)) {
+                    if (fields != null) {
+                        Unexpected();
+                        return;
+                    }
+                    fields = ParseRttiVisibility();
+                    canContinue = fields != null;
+                }
+            } while (canContinue);
+
+            CompilerOptions.Rtti.Mode = mode;
+            CompilerOptions.Rtti.AssignVisibility(properties, methods, fields);
+        }
+
+        private RttiForVisibility ParseRttiVisibility() {
+            if (!RequireTokenKind(PascalToken.OpenParen))
+                return null;
+
+            if (!RequireTokenKind(PascalToken.OpenBraces))
+                return null;
+
+            var result = new RttiForVisibility();
+
+            do {
+                var kind = Require(PascalToken.VcPrivate, PascalToken.VcProtected, PascalToken.VcPublic, PascalToken.VcPublished).Kind;
+
+                switch (kind) {
+                    case PascalToken.VcPrivate:
+                        result.ForPrivate = true;
+                        break;
+                    case PascalToken.VcProtected:
+                        result.ForProtected = true;
+                        break;
+                    case PascalToken.VcPublic:
+                        result.ForPublic = true;
+                        break;
+                    case PascalToken.VcPublished:
+                        result.ForPublished = true;
+                        break;
+                    default:
+                        return null;
+                }
+            } while (Optional(PascalToken.Comma));
+
+            if (!RequireTokenKind(PascalToken.CloseBraces))
+                return null;
+
+            if (!RequireTokenKind(PascalToken.CloseParen))
+                return null;
+
+            return result;
         }
 
         private void ParseWarnParameter() {
@@ -625,6 +725,11 @@ namespace PasPasPas.Parsing.Parser {
 
             if (Optional(PascalToken.TypeInfoSwitchLong)) {
                 ParseLongTypeInfoSwitch();
+                return true;
+            }
+
+            if (Optional(PascalToken.RunOnly)) {
+                ParseRunOnlyParameter();
                 return true;
             }
 
@@ -1257,11 +1362,6 @@ namespace PasPasPas.Parsing.Parser {
 
             if (Match(PascalToken.TypeInfoSwitch)) {
                 return ParseTypeInfoSwith();
-            }
-
-            if (Match(PascalToken.RunOnly)) {
-                ParseRunOnlyParameter();
-                return true;
             }
 
             return false;

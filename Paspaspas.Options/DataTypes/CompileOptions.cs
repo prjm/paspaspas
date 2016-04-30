@@ -47,6 +47,7 @@
             ScopedEnums = new DerivedValueOption<RequireScopedEnums>(baseOptions?.ScopedEnums);
             PublishedRtti = new DerivedValueOption<RttiForPublishedProperties>(baseOptions?.PublishedRtti);
             RuntimeOnlyPackage = new DerivedValueOption<RuntimePackageMode>(baseOptions?.RuntimeOnlyPackage);
+            Rtti = new RttiOptions(baseOptions?.Rtti);
         }
 
         /// <summary>
@@ -235,6 +236,11 @@
         public DerivedValueOption<RuntimePackageMode> RuntimeOnlyPackage { get; }
 
         /// <summary>
+        ///     rtti options
+        /// </summary>
+        public RttiOptions Rtti { get; }
+
+        /// <summary>
         ///     clear options
         /// </summary>
         public void Clear() {
@@ -275,6 +281,7 @@
             ScopedEnums.ResetToDefault();
             PublishedRtti.ResetToDefault();
             RuntimeOnlyPackage.ResetToDefault();
+            Rtti.ResetToDefault();
         }
 
         /// <summary>
@@ -307,6 +314,7 @@
             ScopedEnums.ResetToDefault();
             PublishedRtti.ResetToDefault();
             RuntimeOnlyPackage.ResetToDefault();
+            Rtti.ResetToDefault();
         }
     }
 }

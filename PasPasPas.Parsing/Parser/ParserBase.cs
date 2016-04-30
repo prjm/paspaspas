@@ -70,6 +70,14 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         /// <summary>
+        ///     require a specific token kind
+        /// </summary>
+        /// <param name="tokenKind"></param>
+        /// <returns></returns>
+        protected bool RequireTokenKind(int tokenKind)
+            => Require(tokenKind).Kind == tokenKind;
+
+        /// <summary>
         ///     require one token of the token list
         /// </summary>
         /// <param name="tokenKind"></param>

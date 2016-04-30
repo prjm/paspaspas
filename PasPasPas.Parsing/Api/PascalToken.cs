@@ -1419,6 +1419,51 @@ namespace PasPasPas.Api {
         public const int Error = 815;
 
         /// <summary>
+        ///     token for <c>INHERIT</c>
+        /// </summary>
+        public const int Inherit = 816;
+
+        /// <summary>
+        ///     token for <c>EXPLICIT</c>
+        /// </summary>
+        public const int Explicit = 817;
+
+        /// <summary>
+        ///     token for <c>METHODS</c>
+        /// </summary>
+        public const int Methods = 818;
+
+        /// <summary>
+        ///     token for <c>PROPERTIES</c>
+        /// </summary>
+        public const int Properties = 819;
+
+        /// <summary>
+        ///     token for <c>FIELDS</c>
+        /// </summary>
+        public const int Fields = 820;
+
+        /// <summary>
+        ///     token for <c>vcPrivate</c>
+        /// </summary>
+        public const int VcPrivate = 821;
+
+        /// <summary>
+        ///     toke for <c>vcProtected</c>
+        /// </summary>
+        public const int VcProtected = 822;
+
+        /// <summary>
+        ///     token for <c>vcPublic</c>
+        /// </summary>
+        public const int VcPublic = 823;
+
+        /// <summary>
+        ///     token for <c>vcPublished</c>
+        /// </summary>
+        public const int VcPublished = 824;
+
+        /// <summary>
         ///     create a new token
         /// </summary>
         /// <param name="tokenId">tokenid</param>
