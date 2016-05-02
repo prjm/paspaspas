@@ -40,6 +40,9 @@
         /// </summary>
         public override void ResetToDefault() {
             Mode = RttiGenerationMode.Undefined;
+            Properties.ResetToDefault();
+            Methods.ResetToDefault();
+            Fields.ResetToDefault();
         }
 
         /// <summary>

@@ -10,7 +10,12 @@ namespace PasPasPas.Infrastructure.Input {
         /// <summary>
         ///     input data
         /// </summary>
-        private string input;
+        private readonly string input;
+
+        /// <summary>
+        ///     virtual path
+        /// </summary>
+        private readonly string path;
 
         /// <summary>
         ///     input position
@@ -20,9 +25,11 @@ namespace PasPasPas.Infrastructure.Input {
         /// <summary>
         ///     creates a new string input
         /// </summary>
-        /// <param name="input">string input</param>
-        public StringInput(string input) {
-            this.input = input;
+        /// <param name="inputText">string input</param>
+        /// <param name="virtualPath">virtual path</param>
+        public StringInput(string inputText, string virtualPath) {
+            input = inputText;
+            path = virtualPath;
         }
 
         /// <summary>
@@ -51,7 +58,7 @@ namespace PasPasPas.Infrastructure.Input {
         ///     path of this input
         /// </summary>
         public string Path
-            => string.Empty;
+            => path;
 
         /// <summary>
         ///     do nothing
@@ -86,7 +93,6 @@ namespace PasPasPas.Infrastructure.Input {
         /// <param name="disposing"></param>
         protected virtual void Dispose(bool disposing) {
             if (!disposedValue) {
-                input = null;
                 disposedValue = true;
             }
         }

@@ -125,10 +125,11 @@ namespace PasPasPas.Parsing.Tokenizer {
             }
 
             int tokenLength;
+            var file = inputStream.CurrentFile;
             var tokenKind = tokenGroup.Match(input, out tokenLength);
 
             for (int inputIndex = input.Length - 1; inputIndex >= tokenLength; inputIndex--) {
-                inputStream.PutbackChar(input[inputIndex]); ;
+                inputStream.PutbackChar(file, input[inputIndex]); ;
             }
             input.Length = tokenLength;
 

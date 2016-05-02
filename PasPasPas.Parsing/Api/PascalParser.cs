@@ -53,13 +53,7 @@ namespace PasPasPas.Api {
         /// <summary>
         ///     run the parser
         /// </summary>
-        public ISyntaxPart Run() {
-            IPascalTokenizer tokenizer = CreateTokenizer();
-            //IPascalParser parser = new StandardParser();
-            //parser.BaseTokenizer = tokenizer;
-            //return parser.Parse();
-            return null;
-        }
+        public ISyntaxPart Run() => null;
 
         private IPascalTokenizer CreateTokenizer() {
             var result = new StandardTokenizer();

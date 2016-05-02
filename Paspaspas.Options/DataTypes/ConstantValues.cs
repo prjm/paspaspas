@@ -18,7 +18,7 @@
         /// <summary>
         ///     writable constants
         /// </summary>
-        Writeable = 2,
+        Writable = 2,
     }
 
 }

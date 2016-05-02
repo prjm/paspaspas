@@ -41,8 +41,47 @@ namespace PasPasPas.Infrastructure.Input {
         }
     }
 
+    internal class PutbackFragment : IFile {
+
+        private readonly string path;
+
+        internal PutbackFragment(string originalPath) {
+            path = originalPath;
+        }
+
+        /// <summary>
+        ///     putback chars
+        /// </summary>
+        private Stack<char> putbackBuffer
+            = new Stack<char>(16);
+
+        public string Path
+            => path;
+
+        internal char Pop() => putbackBuffer.Pop();
+
+        internal bool AtEof() => putbackBuffer.Count == 0;
+
+        internal void Putback(string valueToPutback) {
+            for (int charIndex = valueToPutback.Length - 1; charIndex >= 0; charIndex--) {
+                putbackBuffer.Push(valueToPutback[charIndex]);
+            }
+        }
+
+        internal void Putback(StringBuilder buffer) {
+            for (int charIndex = buffer.Length - 1; charIndex >= 0; charIndex--) {
+                putbackBuffer.Push(buffer[charIndex]);
+            }
+            buffer.Clear();
+        }
+
+        internal void Putback(char valueToPutback) {
+            putbackBuffer.Push(valueToPutback);
+        }
+    }
+
     /// <summary>
-    ///     
+    ///     read from a combiniation of textfiles
     /// </summary>
     public class StackedFileReader : IDisposable {
 
@@ -53,16 +92,16 @@ namespace PasPasPas.Infrastructure.Input {
             = new Stack<PartlyReadFile>();
 
         /// <summary>
-        ///     putback chars
+        ///     putback fragments
         /// </summary>
-        private Stack<char> putbackBuffer
-    = new Stack<char>(256);
+        private Stack<PutbackFragment> putbackFragments
+            = new Stack<PutbackFragment>();
 
         /// <summary>
         ///     test if end of input has reached
         /// </summary>
         public bool AtEof
-            => (putbackBuffer.Count < 1) && (files.Count < 1);
+            => (putbackFragments.Count < 1) && (files.Count < 1);
 
         /// <summary>
         ///     currently read file
@@ -71,7 +110,9 @@ namespace PasPasPas.Infrastructure.Input {
         {
             get
             {
-                if (files.Count > 0)
+                if (putbackFragments.Count > 0)
+                    return putbackFragments.Peek();
+                else if (files.Count > 0)
                     return files.Peek().InputFile;
                 else
                     return null;
@@ -86,8 +127,13 @@ namespace PasPasPas.Infrastructure.Input {
             if (AtEof)
                 return '\0';
 
-            if (putbackBuffer.Count > 0)
-                return putbackBuffer.Pop();
+            if (putbackFragments.Count > 0) {
+                var fragment = putbackFragments.Peek();
+                char result = fragment.Pop();
+                if (fragment.AtEof())
+                    putbackFragments.Pop();
+                return result;
+            }
 
             var file = files.Peek();
             var readChar = file.InputFile.NextChar();
@@ -109,31 +155,42 @@ namespace PasPasPas.Infrastructure.Input {
         ///     put back an entire string
         /// </summary>
         /// <param name="valueToPutback"></param>
-        public void PutbackString(string valueToPutback) {
-            for (int charIndex = valueToPutback.Length - 1; charIndex >= 0; charIndex--) {
-                putbackBuffer.Push(valueToPutback[charIndex]);
+        /// <param name="file">source file</param>
+        public void PutbackString(IFile file, string valueToPutback) {
+            PutbackFragment fragment = GetOrCreateFragment(file);
+            fragment.Putback(valueToPutback);
+        }
+
+        private PutbackFragment GetOrCreateFragment(IFile file) {
+            PutbackFragment fragment;
+            if (putbackFragments.Count > 0 && string.Equals(file.Path, putbackFragments.Peek().Path, StringComparison.Ordinal)) {
+                fragment = putbackFragments.Peek();
             }
+            else {
+                fragment = new PutbackFragment(file.Path);
+            }
+
+            return fragment;
+        }
+
+        /// <summary>
+        ///     put back a single char
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="valueToPutback"></param>
+        public void PutbackChar(IFile file, char valueToPutback) {
+            PutbackFragment fragment = GetOrCreateFragment(file);
+            fragment.Putback(valueToPutback);
         }
 
         /// <summary>
         ///     put back an entire stringbuffer
         /// </summary>
-        /// <param name="buffer"></param>
-        public void PutbackStringBuffer(StringBuilder buffer) {
-            for (int charIndex = buffer.Length - 1; charIndex >= 0; charIndex--) {
-                putbackBuffer.Push(buffer[charIndex]);
-            }
-            buffer.Clear();
-        }
-
-
-
-        /// <summary>
-        ///     putback a single char
-        /// </summary>
-        /// <param name="valueToPutback"></param>
-        public void PutbackChar(char valueToPutback) {
-            putbackBuffer.Push(valueToPutback);
+        /// <param name="buffer">buffer to put back</param>
+        /// <param name="file">name of the file</param>
+        public void PutbackStringBuffer(IFile file, StringBuilder buffer) {
+            PutbackFragment fragment = GetOrCreateFragment(file);
+            fragment.Putback(buffer);
         }
 
         /// <summary>

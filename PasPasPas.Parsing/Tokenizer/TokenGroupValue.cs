@@ -113,6 +113,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <returns></returns>
         public override PascalToken WithPrefix(StackedFileReader input, StringBuilder prefix) {
             while (!input.AtEof) {
+                var file = input.CurrentFile;
                 char currentChar = input.FetchChar();
 
                 if (!input.AtEof && currentChar == '\'') {
@@ -122,7 +123,7 @@ namespace PasPasPas.Parsing.Tokenizer {
                     }
                     else {
                         prefix.Append("'");
-                        input.PutbackChar(nextChar);
+                        input.PutbackChar(file, nextChar);
                         return new PascalToken(PascalToken.QuotedString, prefix.ToString());
                     }
                 }
@@ -140,6 +141,8 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <returns></returns>
         public static string Unwrap(string quotedText) {
             var result = quotedText ?? string.Empty;
+
+            // TODO: be more strict here..
 
             if (result.StartsWith("'", StringComparison.Ordinal)) {
                 result = result.Substring(1, result.Length - 1);
@@ -187,13 +190,14 @@ namespace PasPasPas.Parsing.Tokenizer {
                 char currentChar = input.FetchChar();
 
                 if (!input.AtEof && currentChar == '"') {
+                    var file = input.CurrentFile;
                     char nextChar = input.FetchChar();
                     if (nextChar == '"') {
                         prefix.Append("\"");
                     }
                     else {
                         prefix.Append("\"");
-                        input.PutbackChar(nextChar);
+                        input.PutbackChar(file, nextChar);
                         return new PascalToken(PascalToken.DoubleQuotedString, prefix.ToString());
                     }
                 }
@@ -226,12 +230,14 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="prefix"></param>
         /// <returns></returns>
         public override PascalToken WithPrefix(StackedFileReader input, StringBuilder prefix) {
-            input.PutbackChar(prefix[0]);
+            input.PutbackChar(input.CurrentFile, prefix[0]);
             prefix.Length = 0;
 
             while (!input.AtEof) {
+                var file = input.CurrentFile;
                 char currentChar = input.FetchChar();
                 if (currentChar == '#') {
+                    file = input.CurrentFile;
                     char nextChar = input.FetchChar();
                     prefix.Append(currentChar);
                     if (nextChar == '$') {
@@ -239,7 +245,7 @@ namespace PasPasPas.Parsing.Tokenizer {
                         hexDigits.WithPrefix(input, prefix);
                     }
                     else {
-                        input.PutbackChar(nextChar);
+                        input.PutbackChar(file, nextChar);
                         digits.WithPrefix(input, prefix);
                     }
                 }
@@ -248,7 +254,7 @@ namespace PasPasPas.Parsing.Tokenizer {
                     quotedString.WithPrefix(input, prefix);
                 }
                 else {
-                    input.PutbackChar(currentChar);
+                    input.PutbackChar(file, currentChar);
                     break;
                 }
             }
@@ -353,6 +359,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <returns></returns>
         public override PascalToken WithPrefix(StackedFileReader input, StringBuilder prefix) {
             if (!input.AtEof) {
+                var file = input.CurrentFile;
                 var currentChar = input.FetchChar();
 
                 while (!input.AtEof && MatchesClass(currentChar)) {
@@ -361,7 +368,7 @@ namespace PasPasPas.Parsing.Tokenizer {
                 }
 
                 if (!MatchesClass(currentChar))
-                    input.PutbackChar(currentChar);
+                    input.PutbackChar(file, currentChar);
                 else
                     prefix.Append(currentChar);
             }
@@ -463,6 +470,11 @@ namespace PasPasPas.Parsing.Tokenizer {
         private IdentifierCharacterClass identifierCharClass
             = new IdentifierCharacterClass() { AllowAmpersand = false, AllowDigits = true };
 
+        /// <summary>
+        ///     allow dots in identifiers
+        /// </summary>
+        public bool AllowDots { get { return identifierCharClass.AllowDots; } set { identifierCharClass.AllowDots = value; } }
+
         private readonly IDictionary<string, int> knownKeywords;
 
         /// <summary>
@@ -485,9 +497,10 @@ namespace PasPasPas.Parsing.Tokenizer {
                 prefix.Clear();
 
             while (!input.AtEof) {
+                var file = input.CurrentFile;
                 var currentChar = input.FetchChar();
                 if (!identifierCharClass.Matches(currentChar)) {
-                    input.PutbackChar(currentChar);
+                    input.PutbackChar(file, currentChar);
                     break;
                 }
                 prefix.Append(currentChar);
@@ -523,12 +536,13 @@ namespace PasPasPas.Parsing.Tokenizer {
 
                 if (currentChar == 0x0D) {
                     if (!input.AtEof) {
+                        var file = input.CurrentFile;
                         char nextChar = input.FetchChar();
                         if (nextChar == 0x0A) {
                             prefix.Append(nextChar);
                         }
                         else {
-                            input.PutbackChar(nextChar);
+                            input.PutbackChar(file, nextChar);
                         }
                     }
                     break;
@@ -566,13 +580,14 @@ namespace PasPasPas.Parsing.Tokenizer {
             if (input.AtEof)
                 return false;
 
+            var file = input.CurrentFile;
             char n = input.FetchChar();
             if (c.Matches(n)) {
                 builder.Append(n);
                 return true;
             }
             else {
-                input.PutbackChar(n);
+                input.PutbackChar(file, n);
                 return false;
             }
         }
@@ -590,13 +605,15 @@ namespace PasPasPas.Parsing.Tokenizer {
             if (input.AtEof)
                 return token;
 
+            var file = input.CurrentFile;
+
             if (NextCharMatches(input, prefix, dot)) {
                 if (NextCharMatches(input, prefix, numbers)) {
                     digitTokenizer.WithPrefix(input, prefix);
                     withDot = true;
                 }
                 else if (prefix.EndsWith(".")) {
-                    input.PutbackString(".");
+                    input.PutbackString(file, ".");
                     prefix.Length -= 1;
                 }
             }

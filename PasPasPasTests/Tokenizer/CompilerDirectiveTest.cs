@@ -221,6 +221,7 @@ namespace PasPasPasTests.Tokenizer {
             RunCompilerDirective("INCLUDE 'DUMMY.INC'", true, () => ConditionalCompilation.IsSymbolDefined("DUMMY_INC"));
             RunCompilerDirective("", false, () => ConditionalCompilation.IsSymbolDefined("DUMMY_INC"));
             RunCompilerDirective("I 'DUMMY.INC'", true, () => ConditionalCompilation.IsSymbolDefined("DUMMY_INC"));
+            RunCompilerDirective("I DUMMY.INC", true, () => ConditionalCompilation.IsSymbolDefined("DUMMY_INC"));
         }
 
         [TestMethod]
@@ -313,11 +314,11 @@ namespace PasPasPasTests.Tokenizer {
 
         [TestMethod]
         public void TestWritableConst() {
-            RunCompilerDirective("", ConstantValues.Undefined, () => CompilerOptions.WriteableConstants.Value);
-            RunCompilerDirective("J-", ConstantValues.Constant, () => CompilerOptions.WriteableConstants.Value);
-            RunCompilerDirective("J+", ConstantValues.Writeable, () => CompilerOptions.WriteableConstants.Value);
-            RunCompilerDirective("WRITEABLECONST  OFF", ConstantValues.Constant, () => CompilerOptions.WriteableConstants.Value);
-            RunCompilerDirective("WRITEABLECONST  ON", ConstantValues.Writeable, () => CompilerOptions.WriteableConstants.Value);
+            RunCompilerDirective("", ConstantValues.Undefined, () => CompilerOptions.WritableConstants.Value);
+            RunCompilerDirective("J-", ConstantValues.Constant, () => CompilerOptions.WritableConstants.Value);
+            RunCompilerDirective("J+", ConstantValues.Writable, () => CompilerOptions.WritableConstants.Value);
+            RunCompilerDirective("WRITEABLECONST  OFF", ConstantValues.Constant, () => CompilerOptions.WritableConstants.Value);
+            RunCompilerDirective("WRITEABLECONST  ON", ConstantValues.Writable, () => CompilerOptions.WritableConstants.Value);
         }
 
         [TestMethod]
@@ -421,7 +422,49 @@ namespace PasPasPasTests.Tokenizer {
         [TestMethod]
         public void TestRtti() {
             RunCompilerDirective("", RttiGenerationMode.Undefined, () => CompilerOptions.Rtti.Mode);
-            RunCompilerDirective("RTTI INHERIT METHODS([vcPrivate])", Tuple.Create(RttiGenerationMode.Inherit, new RttiForVisibility() { ForPrivate = true }), () => Tuple.Create(CompilerOptions.Rtti.Mode, CompilerOptions.Rtti.Methods));
+
+            RunCompilerDirective("RTTI INHERIT", //
+                Tuple.Create(RttiGenerationMode.Inherit, new RttiForVisibility()), //
+                () => Tuple.Create(CompilerOptions.Rtti.Mode, CompilerOptions.Rtti.Methods));
+
+            RunCompilerDirective("RTTI INHERIT METHODS([])", //
+                Tuple.Create(RttiGenerationMode.Inherit, new RttiForVisibility()), //
+                () => Tuple.Create(CompilerOptions.Rtti.Mode, CompilerOptions.Rtti.Methods));
+
+            RunCompilerDirective("RTTI INHERIT METHODS([vcPrivate])", //
+                Tuple.Create(RttiGenerationMode.Inherit, new RttiForVisibility() { ForPrivate = true }), //
+                () => Tuple.Create(CompilerOptions.Rtti.Mode, CompilerOptions.Rtti.Methods));
+
+            RunCompilerDirective("RTTI INHERIT METHODS([vcPrivate, vcProtected])", //
+                Tuple.Create(RttiGenerationMode.Inherit, new RttiForVisibility() { ForPrivate = true, ForProtected = true }), //
+                () => Tuple.Create(CompilerOptions.Rtti.Mode, CompilerOptions.Rtti.Methods));
+
+            RunCompilerDirective("RTTI INHERIT METHODS([vcPrivate, vcProtected, vcPublic])", //
+                Tuple.Create(RttiGenerationMode.Inherit, new RttiForVisibility() { ForPrivate = true, ForProtected = true, ForPublic = true }), //
+                () => Tuple.Create(CompilerOptions.Rtti.Mode, CompilerOptions.Rtti.Methods));
+
+            RunCompilerDirective("RTTI INHERIT METHODS([vcPrivate, vcProtected, vcPublic, vcPublished])", //
+                Tuple.Create(RttiGenerationMode.Inherit, new RttiForVisibility() { ForPrivate = true, ForProtected = true, ForPublic = true, ForPublished = true }), //
+                () => Tuple.Create(CompilerOptions.Rtti.Mode, CompilerOptions.Rtti.Methods));
+
+            RunCompilerDirective("RTTI EXPLICIT METHODS([vcPrivate]) PROPERTIES([vcPrivate])", //
+                Tuple.Create(RttiGenerationMode.Explicit, new RttiForVisibility() { ForPrivate = true }, new RttiForVisibility() { ForPrivate = true }), //
+                () => Tuple.Create(CompilerOptions.Rtti.Mode, CompilerOptions.Rtti.Methods, CompilerOptions.Rtti.Properties));
+
+            RunCompilerDirective("RTTI EXPLICIT METHODS([vcPrivate]) PROPERTIES([vcPrivate]) FIELDS([vcPublic])", //
+                Tuple.Create(RttiGenerationMode.Explicit, new RttiForVisibility() { ForPrivate = true }, new RttiForVisibility() { ForPrivate = true }, new RttiForVisibility() { ForPublic = true }), //
+                () => Tuple.Create(CompilerOptions.Rtti.Mode, CompilerOptions.Rtti.Methods, CompilerOptions.Rtti.Properties, CompilerOptions.Rtti.Fields));
+
+            RunCompilerDirective("RTTI EXPLICIT METHODS([]) PROPERTIES([]) FIELDS([])", //
+                Tuple.Create(RttiGenerationMode.Explicit, new RttiForVisibility(), new RttiForVisibility(), new RttiForVisibility()), //
+                () => Tuple.Create(CompilerOptions.Rtti.Mode, CompilerOptions.Rtti.Methods, CompilerOptions.Rtti.Properties, CompilerOptions.Rtti.Fields));
+        }
+
+        [TestMethod]
+        public void TestResourceReference() {
+            RunCompilerDirective("R Res ", true, () => Meta.ResourceReferences.Any(t => t.TargetPath.EndsWith("res.res", StringComparison.OrdinalIgnoreCase)));
+            RunCompilerDirective("R Res.Res ", true, () => Meta.ResourceReferences.Any(t => t.TargetPath.EndsWith("res.res", StringComparison.OrdinalIgnoreCase)));
+            RunCompilerDirective("R *.Res ", true, () => Meta.ResourceReferences.Any(t => t.TargetPath.EndsWith("test_0.res", StringComparison.OrdinalIgnoreCase)));
         }
 
         [TestMethod]

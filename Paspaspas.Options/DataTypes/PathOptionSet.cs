@@ -29,6 +29,7 @@
         ///     clear path options
         /// </summary>
         public void Clear() {
+            SearchPaths.ResetToDefault();
         }
     }
 }

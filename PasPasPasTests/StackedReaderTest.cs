@@ -22,7 +22,7 @@ namespace PasPasPasTests {
 
         [TestMethod]
         public void TestSimpleRead() {
-            using (var input = new StringInput(Content1))
+            using (var input = new StringInput(Content1, "test.pas"))
             using (var reader = new StackedFileReader()) {
                 reader.AddFile(input);
                 StringBuilder result = new StringBuilder();
@@ -90,8 +90,8 @@ namespace PasPasPasTests {
 
         [TestMethod]
         public void TestNestedRead() {
-            using (var input1 = new StringInput(Content1))
-            using (var input2 = new StringInput(Content2))
+            using (var input1 = new StringInput(Content1, "c1"))
+            using (var input2 = new StringInput(Content2, "c2"))
             using (var reader = new StackedFileReader()) {
                 reader.AddFile(input1);
                 StringBuilder result = new StringBuilder();

@@ -884,12 +884,12 @@ namespace PasPasPas.Parsing.Parser {
 
         private void ParseLongWritableConstSwitch() {
             if (Optional(PascalToken.On)) {
-                CompilerOptions.WriteableConstants.Value = ConstantValues.Writeable;
+                CompilerOptions.WritableConstants.Value = ConstantValues.Writable;
                 return;
             }
 
             if (Optional(PascalToken.Off)) {
-                CompilerOptions.WriteableConstants.Value = ConstantValues.Constant;
+                CompilerOptions.WritableConstants.Value = ConstantValues.Constant;
                 return;
             }
             Unexpected();
@@ -1443,12 +1443,12 @@ namespace PasPasPas.Parsing.Parser {
             FetchNextToken();
 
             if (Optional(PascalToken.Plus)) {
-                CompilerOptions.WriteableConstants.Value = ConstantValues.Writeable;
+                CompilerOptions.WritableConstants.Value = ConstantValues.Writable;
                 return true;
             }
 
             if (Optional(PascalToken.Minus)) {
-                CompilerOptions.WriteableConstants.Value = ConstantValues.Constant;
+                CompilerOptions.WritableConstants.Value = ConstantValues.Constant;
                 return true;
             }
 
@@ -1472,6 +1472,7 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private bool ParseIncludeRessource() {
+            var sourcePath = IncludeInput.CurrentFile?.Path ?? string.Empty;
             FetchNextToken();
 
             if (Optional(PascalToken.Plus)) {
@@ -1484,7 +1485,42 @@ namespace PasPasPas.Parsing.Parser {
                 return true;
             }
 
-            return false;
+
+            if (!ParseResourceFileName(sourcePath))
+                return false;
+
+            return true;
+        }
+
+        private bool ParseResourceFileName(string sourcePath) {
+            var kind = CurrentToken().Kind;
+            string filename;
+
+            switch (kind) {
+                case PascalToken.QuotedString:
+                    filename = QuotedStringTokenValue.Unwrap(CurrentToken().Value);
+                    break;
+
+                case PascalToken.Identifier:
+                    filename = CurrentToken().Value;
+                    break;
+
+                case PascalToken.Times:
+                    filename = Require(PascalToken.Identifier).Value;
+                    break;
+
+
+                default:
+                    Unexpected();
+                    return false;
+
+            }
+
+            var resourceReference = new ResourceReference();
+            resourceReference.OriginalFilename = filename;
+            resourceReference.TargetPath = Meta.ResourceFilePathResolver.ResolvePath(sourcePath, filename);
+            Meta.AddResourceReference(resourceReference);
+            return true;
         }
 
         private bool ParseSaveDivideSwitch() {

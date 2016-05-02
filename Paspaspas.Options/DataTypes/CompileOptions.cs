@@ -35,7 +35,7 @@
             RangeChecks = new DerivedValueOption<RuntimeRangeChecks>(baseOptions?.RangeChecks);
             StackFrames = new DerivedValueOption<StackFrameGeneration>(baseOptions?.StackFrames);
             IndexOfFirstCharInString = new DerivedValueOption<FirstCharIndex>(baseOptions?.IndexOfFirstCharInString);
-            WriteableConstants = new DerivedValueOption<ConstantValues>(baseOptions?.WriteableConstants);
+            WritableConstants = new DerivedValueOption<ConstantValues>(baseOptions?.WritableConstants);
             WeakLinkRtti = new DerivedValueOption<RttiLinkMode>(baseOptions?.WeakLinkRtti);
             WeakPackageUnit = new DerivedValueOption<WeakPackaging>(baseOptions?.WeakPackageUnit);
             Warnings = new DerivedValueOption<CompilerWarnings>(baseOptions?.Warnings);
@@ -178,7 +178,7 @@
         /// <summary>
         ///     writeable constants
         /// </summary>
-        public DerivedValueOption<ConstantValues> WriteableConstants { get; }
+        public DerivedValueOption<ConstantValues> WritableConstants { get; }
 
         /// <summary>
         ///     weak rtti linking
@@ -269,7 +269,7 @@
             RangeChecks.ResetToDefault();
             StackFrames.ResetToDefault();
             IndexOfFirstCharInString.ResetToDefault();
-            WriteableConstants.ResetToDefault();
+            WritableConstants.ResetToDefault();
             WeakLinkRtti.ResetToDefault();
             WeakPackageUnit.ResetToDefault();
             Warnings.ResetToDefault();
@@ -306,7 +306,7 @@
             RangeChecks.ResetToDefault();
             StackFrames.ResetToDefault();
             IndexOfFirstCharInString.ResetToDefault();
-            WriteableConstants.ResetToDefault();
+            WritableConstants.ResetToDefault();
             WeakLinkRtti.ResetToDefault();
             WeakPackageUnit.ResetToDefault();
             Warnings.ResetToDefault();

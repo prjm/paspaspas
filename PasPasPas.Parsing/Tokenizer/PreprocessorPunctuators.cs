@@ -18,8 +18,9 @@ namespace PasPasPas.Parsing.Tokenizer {
             AddPunctuator('[', PascalToken.OpenBraces);
             AddPunctuator(']', PascalToken.CloseBraces);
             AddPunctuator(',', PascalToken.Comma);
+            AddPunctuator('*', PascalToken.Times);
             AddPunctuator(new WhitspaceCharacterClass(), new WhiteSpaceTokenGroupValue());
-            AddPunctuator(new IdentifierCharacterClass(), new IdentifierTokenGroupValue(CompilerDirectiveTokenizer.Keywords));
+            AddPunctuator(new IdentifierCharacterClass() { AllowDots = true }, new IdentifierTokenGroupValue(CompilerDirectiveTokenizer.Keywords) { AllowDots = true });
             AddPunctuator(new NumberCharacterClass(), new NumberTokenGroupValue());
             AddPunctuator('$', new HexNumberTokenValue());
             AddPunctuator(new ControlCharacterClass(), new ControlTokenGroupValue());

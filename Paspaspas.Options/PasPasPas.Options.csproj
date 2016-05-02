@@ -89,6 +89,8 @@
     <Compile Include="DataTypes\OpenDelphiStrings.cs" />
     <Compile Include="DataTypes\PathOptionSet.cs" />
     <Compile Include="DataTypes\RequireScopedEnums.cs" />
+    <Compile Include="DataTypes\ResourceFilePathResolver.cs" />
+    <Compile Include="DataTypes\ResourceReference.cs" />
     <Compile Include="DataTypes\RttiForPublishSection.cs" />
     <Compile Include="DataTypes\RttiForVisibility.cs" />
     <Compile Include="DataTypes\RttiGenerationMode.cs" />
@@ -97,6 +99,7 @@
     <Compile Include="DataTypes\RuntimeOverflowChecks.cs" />
     <Compile Include="DataTypes\RuntimePackageMode.cs" />
     <Compile Include="DataTypes\RuntimeRangeChecks.cs" />
+    <Compile Include="DataTypes\SearchPathResolver.cs" />
     <Compile Include="DataTypes\ShortVarStringChecks.cs" />
     <Compile Include="DataTypes\StackFramesGeneration.cs" />
     <Compile Include="DataTypes\StrongTypeLinking.cs" />

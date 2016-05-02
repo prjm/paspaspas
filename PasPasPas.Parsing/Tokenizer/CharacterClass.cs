@@ -166,6 +166,12 @@
             = false;
 
         /// <summary>
+        ///     allow dots
+        /// </summary>
+        public bool AllowDots { get; internal set; }
+            = false;
+
+        /// <summary>
         ///     undefined prefix
         /// </summary>
         public override char Prefix
@@ -177,7 +183,7 @@
         /// <param name="input">input</param>
         /// <returns><c>true</c> if the char can be part of an identifier</returns>
         public override bool Matches(char input)
-            => char.IsLetter(input) || input == '_' || (AllowAmpersand && input == '&') || (AllowDigits && char.IsDigit(input));
+            => char.IsLetter(input) || input == '_' || (AllowAmpersand && input == '&') || (AllowDigits && char.IsDigit(input)) || (AllowDots && input == '.');
     }
 
 }

@@ -1,18 +1,11 @@
-﻿using PasPasPas.Infrastructure.Input;
-using System.IO;
-using PasPasPas.Options.Bundles;
+﻿using PasPasPas.Options.Bundles;
 
 namespace PasPasPas.Options.DataTypes {
 
     /// <summary>
     ///     path resolver for file includes
     /// </summary>
-    public class IncludeFilePathResolver : PathResolver {
-
-        /// <summary>
-        ///  parent option set
-        /// </summary>
-        private OptionSet optionSet;
+    public class IncludeFilePathResolver : SearchPathResolver {
 
         /// <summary>
         ///     create a new include file pat resolve
@@ -20,7 +13,6 @@ namespace PasPasPas.Options.DataTypes {
         /// <param name="options"></param>
         public IncludeFilePathResolver(OptionSet options)
             : base(options) {
-            optionSet = options;
         }
 
         /// <summary>
@@ -29,28 +21,8 @@ namespace PasPasPas.Options.DataTypes {
         /// <param name="basePath"></param>
         /// <param name="pathToResolve"></param>
         /// <returns></returns>
-        protected override string DoResolvePath(string basePath, string pathToResolve) {
-            string targetPath;
-            string currentDirectory;
+        protected override string DoResolvePath(string basePath, string pathToResolve)
+            => ResolveFromSearchPath(basePath, pathToResolve);
 
-            if (!string.IsNullOrEmpty(basePath)) {
-                currentDirectory = Path.GetDirectoryName(Path.GetFullPath(basePath));
-            }
-            else {
-                currentDirectory = null;
-            }
-
-            if (ResolveInDirectory(currentDirectory, pathToResolve, out targetPath)) {
-                return targetPath;
-            }
-
-            foreach (var path in optionSet.PathOptions.SearchPaths) {
-                if (ResolveInDirectory(currentDirectory, pathToResolve, out targetPath)) {
-                    return targetPath;
-                }
-            }
-
-            return null;
-        }
     }
 }

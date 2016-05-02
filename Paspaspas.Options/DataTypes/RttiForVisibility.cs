@@ -57,6 +57,16 @@
         }
 
         /// <summary>
+        ///     reset to default
+        /// </summary>
+        public void ResetToDefault() {
+            ForPrivate = false;
+            ForProtected = false;
+            ForPublic = false;
+            ForPublished = false;
+        }
+
+        /// <summary>
         ///     compute hash code
         /// </summary>
         /// <returns></returns>

@@ -63,7 +63,7 @@ namespace PasPasPasTests {
             environment.Register(TestOptions);
 
             StandardParser parser = new StandardParser(environment);
-            using (var inputFile = new StringInput(input))
+            using (var inputFile = new StringInput(input, "test.pas"))
             using (var reader = new StackedFileReader()) {
                 reader.AddFile(inputFile);
                 parser.BaseTokenizer = new StandardTokenizer() { Input = reader };
@@ -86,9 +86,9 @@ namespace PasPasPasTests {
 
         protected void RunCompilerDirective(string directive, object expected, Func<object> actual) {
             var fileAccess = new StandardFileAccess();
+            var fileCounter = 0;
 
-
-            fileAccess.AddOneTimeMockup("dummy.inc", new StringInput("DEFINE DUMMY_INC"));
+            fileAccess.AddOneTimeMockup("dummy.inc", new StringInput("DEFINE DUMMY_INC", "dummy.inc"));
 
             var environment = new ServiceProvider();
             environment.Register(new CommonConfiguration());
@@ -103,7 +103,7 @@ namespace PasPasPasTests {
                 var subParts = directivePart.Split(new[] { '§' }, StringSplitOptions.RemoveEmptyEntries);
                 foreach (var subPart in subParts) {
                     var parser = new CompilerDirectiveParser(environment);
-                    using (var input = new StringInput(subPart))
+                    using (var input = new StringInput(subPart, "test_" + fileCounter.ToString() + ".pas"))
                     using (var reader = new StackedFileReader()) {
                         reader.AddFile(input);
                         parser.BaseTokenizer.Input = reader;
@@ -111,6 +111,7 @@ namespace PasPasPasTests {
                         while (!reader.AtEof) {
                             parser.ParseCompilerDirective();
                         }
+                        fileCounter++;
                     }
                 }
             }

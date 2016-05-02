@@ -9,7 +9,7 @@ namespace PasPasPas.Options.DataTypes {
     public class MetaInformation {
 
         /// <summary>
-        ///     list of external symblos
+        ///     list of external symbols
         /// </summary>
         public IList<ExternalSymbol> ExternalSymbols { get; }
             = new List<ExternalSymbol>();
@@ -21,6 +21,12 @@ namespace PasPasPas.Options.DataTypes {
             = new List<HeaderString>();
 
         /// <summary>
+        ///     list of resource references
+        /// </summary>
+        public IList<ResourceReference> ResourceReferences { get; }
+            = new List<ResourceReference>();
+
+        /// <summary>
         ///     creates a new meta information option object
         /// </summary>
         /// <param name="baseOption"></param>
@@ -30,6 +36,7 @@ namespace PasPasPas.Options.DataTypes {
             Description = new DerivedValueOption<string>(baseOption?.Description);
             FileExtension = new DerivedValueOption<string>(baseOption?.FileExtension);
             IncludePathResolver = new IncludeFilePathResolver(parentOptions);
+            ResourceFilePathResolver = new ResourceFilePathResolver(parentOptions);
             LibPrefix = new DerivedValueOption<string>(baseOption?.LibPrefix);
             LibSuffix = new DerivedValueOption<string>(baseOption?.LibSuffix);
             LibVersion = new DerivedValueOption<string>(baseOption?.LibVersion);
@@ -49,6 +56,11 @@ namespace PasPasPas.Options.DataTypes {
         ///     path resolver for includes
         /// </summary>
         public IncludeFilePathResolver IncludePathResolver { get; }
+
+        /// <summary>
+        ///     path resolve for resouce files
+        /// </summary>
+        public ResourceFilePathResolver ResourceFilePathResolver { get; set; }
 
         /// <summary>
         ///     parent options
@@ -88,6 +100,7 @@ namespace PasPasPas.Options.DataTypes {
             LibPrefix.ResetToDefault();
             LibSuffix.ResetToDefault();
             LibVersion.ResetToDefault();
+            ResourceReferences.Clear();
         }
 
         /// <summary>
@@ -114,6 +127,14 @@ namespace PasPasPas.Options.DataTypes {
                 Mode = mode,
                 Value = emitValue
             });
+        }
+
+        /// <summary>
+        ///     add a resoure reference
+        /// </summary>
+        /// <param name="resourceReference"></param>
+        public void AddResourceReference(ResourceReference resourceReference) {
+            ResourceReferences.Add(resourceReference);
         }
     }
 }
