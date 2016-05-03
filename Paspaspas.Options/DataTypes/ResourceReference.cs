@@ -8,7 +8,7 @@
         /// <summary>
         ///     original filename
         /// </summary>
-        public string OriginalFilename { get; set; }
+        public string OriginalFileName { get; set; }
 
         /// <summary>
         ///     target path

@@ -1,6 +1,7 @@
 ﻿using PasPasPas.Infrastructure.Service;
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace PasPasPas.Infrastructure.Input {
 
@@ -67,10 +68,11 @@ namespace PasPasPas.Infrastructure.Input {
         /// <param name="filePath">file path</param>
         /// <returns><c>true</c> if the file exists</returns>
         public bool FileExists(string filePath) {
-            if (mockupFiles.IsValueCreated && mockupFiles.Value.ContainsKey(filePath))
+            var fileNameWithoutPath = Path.GetFileName(filePath);
+            if (mockupFiles.IsValueCreated && mockupFiles.Value.ContainsKey(fileNameWithoutPath))
                 return true;
 
-            return System.IO.File.Exists(filePath);
+            return File.Exists(filePath);
         }
     }
 }

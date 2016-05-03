@@ -1,4 +1,5 @@
-﻿using PasPasPas.Options.Bundles;
+﻿using PasPasPas.Infrastructure.Input;
+using PasPasPas.Options.Bundles;
 using System;
 using System.IO;
 
@@ -21,7 +22,7 @@ namespace PasPasPas.Options.DataTypes {
         /// <param name="basePath"></param>
         /// <param name="pathToResolve"></param>
         /// <returns></returns>
-        protected override string DoResolvePath(string basePath, string pathToResolve) {
+        protected override ResolvedFile DoResolvePath(string basePath, string pathToResolve) {
 
             if (pathToResolve.StartsWith("*", StringComparison.Ordinal)) {
                 pathToResolve = pathToResolve.Replace("*", Path.GetFileNameWithoutExtension(basePath));

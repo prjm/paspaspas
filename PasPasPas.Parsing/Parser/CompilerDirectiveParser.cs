@@ -1034,7 +1034,7 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             string sourcePath = IncludeInput.CurrentFile?.Path ?? string.Empty;
-            string targetPath = Meta.IncludePathResolver.ResolvePath(sourcePath, filename);
+            string targetPath = Meta.IncludePathResolver.ResolvePath(sourcePath, filename).TargetPath;
 
             IFileAccess fileAccess = (IFileAccess)environment.Resolve(StandardServices.FileAccessServiceClass, this);
             IncludeInput.AddFile(fileAccess.OpenFileForReading(targetPath));
@@ -1516,10 +1516,14 @@ namespace PasPasPas.Parsing.Parser {
 
             }
 
-            var resourceReference = new ResourceReference();
-            resourceReference.OriginalFilename = filename;
-            resourceReference.TargetPath = Meta.ResourceFilePathResolver.ResolvePath(sourcePath, filename);
-            Meta.AddResourceReference(resourceReference);
+            var resolvedFile = Meta.ResourceFilePathResolver.ResolvePath(sourcePath, filename);
+
+            if (resolvedFile.IsResolved) {
+                var resourceReference = new ResourceReference();
+                resourceReference.OriginalFileName = filename;
+                resourceReference.TargetPath = resolvedFile.TargetPath;
+                Meta.AddResourceReference(resourceReference);
+            }
             return true;
         }
 
@@ -1640,7 +1644,7 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             string sourcePath = IncludeInput.CurrentFile?.Path ?? string.Empty;
-            string targetPath = Meta.IncludePathResolver.ResolvePath(sourcePath, filename);
+            string targetPath = Meta.IncludePathResolver.ResolvePath(sourcePath, filename).TargetPath;
 
             IFileAccess fileAccess = (IFileAccess)environment.Resolve(StandardServices.FileAccessServiceClass, this);
             IncludeInput.AddFile(fileAccess.OpenFileForReading(targetPath));

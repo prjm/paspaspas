@@ -49,8 +49,8 @@ namespace PasPasPas.Infrastructure.Input {
     /// </summary>
     public abstract class PathResolver : IObjectBase {
 
-        private Dictionary<ResolvedPathKey, string> resolvedPaths
-            = new Dictionary<ResolvedPathKey, string>();
+        private IDictionary<ResolvedPathKey, ResolvedFile> resolvedPaths
+            = new Dictionary<ResolvedPathKey, ResolvedFile>();
 
         /// <summary>
         ///     create a new path resolver
@@ -77,14 +77,14 @@ namespace PasPasPas.Infrastructure.Input {
         /// <param name="basePath">base path</param>
         /// <param name="pathToResolve">path to resolve</param>
         /// <returns>resolved path</returns>
-        public string ResolvePath(string basePath, string pathToResolve) {
+        public ResolvedFile ResolvePath(string basePath, string pathToResolve) {
 
             var key = new ResolvedPathKey() {
                 BasePath = basePath,
                 PathToResolve = pathToResolve
             };
 
-            string result;
+            ResolvedFile result;
 
             if (!resolvedPaths.TryGetValue(key, out result)) {
                 result = DoResolvePath(basePath, pathToResolve);
@@ -99,11 +99,11 @@ namespace PasPasPas.Infrastructure.Input {
         /// </summary>
         /// <param name="currentDirectory">current directoy</param>
         /// <param name="pathToResolve">path to resolve</param>
-        /// <param name="targetPath">target path</param>
         /// <returns></returns>
-        protected ResolvedFile ResolveInDirectory(string currentDirectory, string pathToResolve, out string targetPath) {
+        protected ResolvedFile ResolveInDirectory(string currentDirectory, string pathToResolve) {
             var fileAccess = (IFileAccess)ObjectBase.Services.Resolve(StandardServices.FileAccessServiceClass, this);
             string combinedPath;
+            string targetPath;
 
             if (!string.IsNullOrEmpty(currentDirectory))
                 combinedPath = Path.Combine(currentDirectory, pathToResolve);
@@ -116,11 +116,11 @@ namespace PasPasPas.Infrastructure.Input {
                 targetPath = null;
 
             return new ResolvedFile() {
-                IsResolved = !string.IsNullOrEmpty(targetPath),
+                IsResolved = !string.IsNullOrWhiteSpace(targetPath),
                 CurrentDirectory = currentDirectory,
                 PathToResolve = pathToResolve,
                 TargetPath = targetPath
-            }
+            };
         }
 
         /// <summary>
@@ -129,6 +129,6 @@ namespace PasPasPas.Infrastructure.Input {
         /// <param name="basePath"></param>
         /// <param name="pathToResolve"></param>
         /// <returns></returns>
-        protected abstract string DoResolvePath(string basePath, string pathToResolve);
+        protected abstract ResolvedFile DoResolvePath(string basePath, string pathToResolve);
     }
 }

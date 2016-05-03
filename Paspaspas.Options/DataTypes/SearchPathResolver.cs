@@ -29,7 +29,6 @@ namespace PasPasPas.Options.DataTypes {
         /// <param name="pathToResolve">path to resolve</param>
         /// <returns>resolved file</returns>
         protected ResolvedFile ResolveFromSearchPath(string basePath, string pathToResolve) {
-            string targetPath;
             string currentDirectory;
 
             if (!string.IsNullOrEmpty(basePath)) {
@@ -39,17 +38,19 @@ namespace PasPasPas.Options.DataTypes {
                 currentDirectory = null;
             }
 
-            if (ResolveInDirectory(currentDirectory, pathToResolve, out targetPath)) {
-                return targetPath;
+            var result = ResolveInDirectory(currentDirectory, pathToResolve);
+            if (result.IsResolved) {
+                return result;
             }
 
             foreach (var path in optionSet.PathOptions.SearchPaths) {
-                if (ResolveInDirectory(path, pathToResolve, out targetPath)) {
-                    return targetPath;
+                result = ResolveInDirectory(path, pathToResolve);
+                if (result.IsResolved) {
+                    return result;
                 }
             }
 
-            return null;
+            return result;
         }
 
     }
