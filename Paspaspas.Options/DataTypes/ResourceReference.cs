@@ -11,6 +11,11 @@
         public string OriginalFileName { get; set; }
 
         /// <summary>
+        ///     associated rc file
+        /// </summary>
+        public string RcFile { get; set; }
+
+        /// <summary>
         ///     target path
         /// </summary>
         public string TargetPath { get; set; }

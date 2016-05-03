@@ -120,6 +120,7 @@ namespace PasPasPas.Parsing.Parser {
                 PascalToken.ScopedEnums,
                 PascalToken.TypeInfoSwitchLong,
                 PascalToken.RunOnly,
+                PascalToken.IncludeRessourceLong,
             };
 
         private static HashSet<int> parameters
@@ -733,7 +734,18 @@ namespace PasPasPas.Parsing.Parser {
                 return true;
             }
 
+            if (Match(PascalToken.IncludeRessourceLong)) {
+                ParseLongIncludeRessourceSwitch();
+                return true;
+            }
+
             return false;
+        }
+
+        private void ParseLongIncludeRessourceSwitch() {
+            var sourcePath = IncludeInput.CurrentFile?.Path ?? string.Empty;
+            FetchNextToken();
+            ParseResourceFileName(sourcePath);
         }
 
         private void ParseRunOnlyParameter() {
@@ -747,7 +759,6 @@ namespace PasPasPas.Parsing.Parser {
                 return;
             }
             Unexpected();
-
         }
 
 
@@ -1516,12 +1527,22 @@ namespace PasPasPas.Parsing.Parser {
 
             }
 
+
+            string rcFile = string.Empty;
+            if (Optional(PascalToken.Identifier, PascalToken.QuotedString)) {
+                rcFile = CurrentToken().Value;
+                if (CurrentToken().Kind == PascalToken.QuotedString) {
+                    rcFile = QuotedStringTokenValue.Unwrap(rcFile);
+                }
+            }
+
             var resolvedFile = Meta.ResourceFilePathResolver.ResolvePath(sourcePath, filename);
 
             if (resolvedFile.IsResolved) {
                 var resourceReference = new ResourceReference();
                 resourceReference.OriginalFileName = filename;
                 resourceReference.TargetPath = resolvedFile.TargetPath;
+                resourceReference.RcFile = rcFile;
                 Meta.AddResourceReference(resourceReference);
             }
             return true;

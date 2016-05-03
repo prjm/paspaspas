@@ -464,7 +464,12 @@ namespace PasPasPasTests.Tokenizer {
         public void TestResourceReference() {
             RunCompilerDirective("R Res ", true, () => Meta.ResourceReferences.Any(t => t.TargetPath.EndsWith("res.res", StringComparison.OrdinalIgnoreCase)));
             RunCompilerDirective("R Res.Res ", true, () => Meta.ResourceReferences.Any(t => t.TargetPath.EndsWith("res.res", StringComparison.OrdinalIgnoreCase)));
+            RunCompilerDirective("R Res.Res Res.rc", true, () => Meta.ResourceReferences.Any(t => t.RcFile.EndsWith("res.rc", StringComparison.OrdinalIgnoreCase)));
             RunCompilerDirective("R *.Res ", true, () => Meta.ResourceReferences.Any(t => t.TargetPath.EndsWith("test_0.res", StringComparison.OrdinalIgnoreCase)));
+            RunCompilerDirective("RESOURCE Res ", true, () => Meta.ResourceReferences.Any(t => t.TargetPath.EndsWith("res.res", StringComparison.OrdinalIgnoreCase)));
+            RunCompilerDirective("RESOURCE Res.Res ", true, () => Meta.ResourceReferences.Any(t => t.TargetPath.EndsWith("res.res", StringComparison.OrdinalIgnoreCase)));
+            RunCompilerDirective("RESOURCE *.Res ", true, () => Meta.ResourceReferences.Any(t => t.TargetPath.EndsWith("test_0.res", StringComparison.OrdinalIgnoreCase)));
+            RunCompilerDirective("RESOURCE Res.Res Res.rc", true, () => Meta.ResourceReferences.Any(t => t.RcFile.EndsWith("res.rc", StringComparison.OrdinalIgnoreCase)));
         }
 
         [TestMethod]
