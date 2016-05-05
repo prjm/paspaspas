@@ -121,6 +121,8 @@ namespace PasPasPas.Parsing.Parser {
                 PascalToken.TypeInfoSwitchLong,
                 PascalToken.RunOnly,
                 PascalToken.IncludeRessourceLong,
+                PascalToken.RealCompatibility,
+                PascalToken.Pointermath,
             };
 
         private static HashSet<int> parameters
@@ -768,7 +770,43 @@ namespace PasPasPas.Parsing.Parser {
                 return true;
             }
 
+            if (Optional(PascalToken.RealCompatibility)) {
+                ParseRealCompatibilitySwitch();
+                return true;
+            }
+
+            if (Optional(PascalToken.Pointermath)) {
+                ParsePointermathSwitch();
+                return true;
+            }
+
             return false;
+        }
+
+        private void ParsePointermathSwitch() {
+            if (Optional(PascalToken.On)) {
+                CompilerOptions.PointerMath.Value = PointerManipulation.EnablePointerMath;
+                return;
+            }
+
+            if (Optional(PascalToken.Off)) {
+                CompilerOptions.PointerMath.Value = PointerManipulation.DisablePointerMath;
+                return;
+            }
+            Unexpected();
+        }
+
+        private void ParseRealCompatibilitySwitch() {
+            if (Optional(PascalToken.On)) {
+                CompilerOptions.RealCompatiblity.Value = Real48.EnableCompatibility;
+                return;
+            }
+
+            if (Optional(PascalToken.Off)) {
+                CompilerOptions.RealCompatiblity.Value = Real48.DisableCompatibility;
+                return;
+            }
+            Unexpected();
         }
 
         private void ParseLongIncludeRessourceSwitch() {

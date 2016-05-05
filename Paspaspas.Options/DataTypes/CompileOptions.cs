@@ -48,6 +48,8 @@
             PublishedRtti = new DerivedValueOption<RttiForPublishedProperties>(baseOptions?.PublishedRtti);
             RuntimeOnlyPackage = new DerivedValueOption<RuntimePackageMode>(baseOptions?.RuntimeOnlyPackage);
             Rtti = new RttiOptions(baseOptions?.Rtti);
+            RealCompatiblity = new DerivedValueOption<Real48>(baseOptions?.RealCompatiblity);
+            PointerMath = new DerivedValueOption<PointerManipulation>(baseOptions?.PointerMath);
         }
 
         /// <summary>
@@ -241,6 +243,16 @@
         public RttiOptions Rtti { get; }
 
         /// <summary>
+        ///     switch for 48-bit doubles
+        /// </summary>
+        public DerivedValueOption<Real48> RealCompatiblity { get; }
+
+        /// <summary>
+        ///     swithc for pointer math
+        /// </summary>
+        public DerivedValueOption<PointerManipulation> PointerMath { get; }
+
+        /// <summary>
         ///     clear options
         /// </summary>
         public void Clear() {
@@ -282,6 +294,8 @@
             PublishedRtti.ResetToDefault();
             RuntimeOnlyPackage.ResetToDefault();
             Rtti.ResetToDefault();
+            RealCompatiblity.ResetToDefault();
+            PointerMath.ResetToDefault();
         }
 
         /// <summary>
@@ -315,6 +329,8 @@
             PublishedRtti.ResetToDefault();
             RuntimeOnlyPackage.ResetToDefault();
             Rtti.ResetToDefault();
+            RealCompatiblity.ResetToDefault();
+            PointerMath.ResetToDefault();
         }
     }
 }

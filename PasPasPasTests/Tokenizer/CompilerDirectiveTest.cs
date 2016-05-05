@@ -481,6 +481,20 @@ namespace PasPasPasTests.Tokenizer {
         }
 
         [TestMethod]
+        public void TestRealCompatibility() {
+            RunCompilerDirective("", Real48.Undefined, () => CompilerOptions.RealCompatiblity.Value);
+            RunCompilerDirective("REALCOMPATIBILITY ON", Real48.EnableCompatibility, () => CompilerOptions.RealCompatiblity.Value);
+            RunCompilerDirective("REALCOMPATIBILITY OFF", Real48.DisableCompatibility, () => CompilerOptions.RealCompatiblity.Value);
+        }
+
+        [TestMethod]
+        public void TestPointerMath() {
+            RunCompilerDirective("", PointerManipulation.Undefined, () => CompilerOptions.PointerMath.Value);
+            RunCompilerDirective("POINTERMATH ON", PointerManipulation.EnablePointerMath, () => CompilerOptions.PointerMath.Value);
+            RunCompilerDirective("POINTERMATH OFF", PointerManipulation.DisablePointerMath, () => CompilerOptions.PointerMath.Value);
+        }
+
+        [TestMethod]
         public void TestLibMeta() {
             RunCompilerDirective("", null, () => Meta.LibPrefix.Value);
             RunCompilerDirective("", null, () => Meta.LibSuffix.Value);

@@ -88,6 +88,8 @@
     <Compile Include="DataTypes\HppEmitMode.cs" />
     <Compile Include="DataTypes\OpenDelphiStrings.cs" />
     <Compile Include="DataTypes\PathOptionSet.cs" />
+    <Compile Include="DataTypes\PointerManipulation.cs" />
+    <Compile Include="DataTypes\Real48.cs" />
     <Compile Include="DataTypes\RequireScopedEnums.cs" />
     <Compile Include="DataTypes\ResourceFilePathResolver.cs" />
     <Compile Include="DataTypes\ResourceReference.cs" />
