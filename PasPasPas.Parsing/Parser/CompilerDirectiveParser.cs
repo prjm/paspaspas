@@ -141,7 +141,10 @@ namespace PasPasPas.Parsing.Parser {
                 PascalToken.LibVersion,
                 PascalToken.Warn,
                 PascalToken.Rtti,
+                PascalToken.Region,
+                PascalToken.EndRegion
             };
+
         private ServiceProvider environment;
 
         /// <summary>
@@ -247,7 +250,33 @@ namespace PasPasPas.Parsing.Parser {
                 return true;
             }
 
+            if (Match(PascalToken.Region)) {
+                ParseRegion();
+                return true;
+            }
+
+            if (Match(PascalToken.EndRegion)) {
+                ParseEndRegion();
+                return true;
+            }
+
             return false;
+        }
+
+        private void ParseEndRegion() {
+            Require(PascalToken.EndRegion);
+            Meta.StopRegion();
+        }
+
+        private void ParseRegion() {
+            var regionName = "";
+            Require(PascalToken.Region);
+
+            if (Match(PascalToken.QuotedString)) {
+                regionName = QuotedStringTokenValue.Unwrap(CurrentToken().Value);
+            }
+
+            Meta.StartRegion(regionName);
         }
 
         /// <summary>

@@ -27,6 +27,12 @@ namespace PasPasPas.Options.DataTypes {
             = new List<ResourceReference>();
 
         /// <summary>
+        ///     current regions
+        /// </summary>
+        public Stack<string> Regions { get; }
+            = new Stack<string>();
+
+        /// <summary>
         ///     creates a new meta information option object
         /// </summary>
         /// <param name="baseOption"></param>
@@ -87,6 +93,7 @@ namespace PasPasPas.Options.DataTypes {
         /// </summary>
         public void ResetOnNewUnit() {
             HeaderStrings.Clear();
+            Regions.Clear();
         }
 
         /// <summary>
@@ -101,6 +108,7 @@ namespace PasPasPas.Options.DataTypes {
             LibSuffix.ResetToDefault();
             LibVersion.ResetToDefault();
             ResourceReferences.Clear();
+            Regions.Clear();
         }
 
         /// <summary>
@@ -135,6 +143,21 @@ namespace PasPasPas.Options.DataTypes {
         /// <param name="resourceReference"></param>
         public void AddResourceReference(ResourceReference resourceReference) {
             ResourceReferences.Add(resourceReference);
+        }
+
+        /// <summary>
+        ///     start of region
+        /// </summary>
+        /// <param name="regionName">optional region AME</param>
+        public void StartRegion(string regionName) {
+            Regions.Push(regionName ?? string.Empty);
+        }
+
+        /// <summary>
+        ///     end of region
+        /// </summary>
+        public void StopRegion() {
+            Regions.Pop();
         }
     }
 }

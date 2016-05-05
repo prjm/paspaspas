@@ -473,6 +473,14 @@ namespace PasPasPasTests.Tokenizer {
         }
 
         [TestMethod]
+        public void TestRegion() {
+            RunCompilerDirective("", 0, () => Meta.Regions.Count);
+            RunCompilerDirective("REGION", 1, () => Meta.Regions.Count);
+            RunCompilerDirective("REGION 'XXX' ", "XXX", () => Meta.Regions.Peek());
+            RunCompilerDirective("REGION § ENDREGION", 0, () => Meta.Regions.Count);
+        }
+
+        [TestMethod]
         public void TestLibMeta() {
             RunCompilerDirective("", null, () => Meta.LibPrefix.Value);
             RunCompilerDirective("", null, () => Meta.LibSuffix.Value);

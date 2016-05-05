@@ -168,6 +168,7 @@ namespace PasPasPas.Infrastructure.Input {
             }
             else {
                 fragment = new PutbackFragment(file.Path);
+                putbackFragments.Push(fragment);
             }
 
             return fragment;
