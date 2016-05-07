@@ -86,8 +86,10 @@
     <Compile Include="Bundles\Platform.cs" />
     <Compile Include="Bundles\PlatformKey.cs" />
     <Compile Include="DataTypes\HppEmitMode.cs" />
+    <Compile Include="DataTypes\OldRecordTypes.cs" />
     <Compile Include="DataTypes\OpenDelphiStrings.cs" />
     <Compile Include="DataTypes\PathOptionSet.cs" />
+    <Compile Include="DataTypes\PEVersion.cs" />
     <Compile Include="DataTypes\PointerManipulation.cs" />
     <Compile Include="DataTypes\Real48.cs" />
     <Compile Include="DataTypes\RequireScopedEnums.cs" />

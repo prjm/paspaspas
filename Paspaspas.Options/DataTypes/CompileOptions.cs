@@ -50,6 +50,7 @@
             Rtti = new RttiOptions(baseOptions?.Rtti);
             RealCompatiblity = new DerivedValueOption<Real48>(baseOptions?.RealCompatiblity);
             PointerMath = new DerivedValueOption<PointerManipulation>(baseOptions?.PointerMath);
+            OldTypeLayout = new DerivedValueOption<OldRecordTypes>(baseOptions?.OldTypeLayout);
         }
 
         /// <summary>
@@ -248,9 +249,14 @@
         public DerivedValueOption<Real48> RealCompatiblity { get; }
 
         /// <summary>
-        ///     swithc for pointer math
+        ///     switch for pointer math
         /// </summary>
         public DerivedValueOption<PointerManipulation> PointerMath { get; }
+
+        /// <summary>
+        ///     switch for old record types
+        /// </summary>
+        public DerivedValueOption<OldRecordTypes> OldTypeLayout { get; }
 
         /// <summary>
         ///     clear options
@@ -296,6 +302,7 @@
             Rtti.ResetToDefault();
             RealCompatiblity.ResetToDefault();
             PointerMath.ResetToDefault();
+            OldTypeLayout.ResetToDefault();
         }
 
         /// <summary>
@@ -331,6 +338,7 @@
             Rtti.ResetToDefault();
             RealCompatiblity.ResetToDefault();
             PointerMath.ResetToDefault();
+            OldTypeLayout.ResetToDefault();
         }
     }
 }

@@ -1176,12 +1176,12 @@ namespace PasPasPas.Api {
         /// <summary>
         ///     token for <c>$SETPEOSVERSION</c>
         /// </summary>
-        public const int SetPeOsVersion = 767;
+        public const int SetPEOsVersion = 767;
 
         /// <summary>
         ///     tkoen for <c>$SETPESUBSYSTEMVERSION</c>
         /// </summary>
-        public const int SetPESubsystemVerison = 768;
+        public const int SetPESubsystemVersion = 768;
 
         /// <summary>
         ///     token for <c>$SETPEUSERVERIONS</c>

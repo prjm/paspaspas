@@ -495,6 +495,13 @@ namespace PasPasPasTests.Tokenizer {
         }
 
         [TestMethod]
+        public void TestOldTypeLayout() {
+            RunCompilerDirective("", OldRecordTypes.Undefined, () => CompilerOptions.OldTypeLayout.Value);
+            RunCompilerDirective("OLDTYPELAYOUT  ON", OldRecordTypes.EnableOldRecordPacking, () => CompilerOptions.OldTypeLayout.Value);
+            RunCompilerDirective("OLDTYPELAYOUT  OFF", OldRecordTypes.DisableOldRecordPacking, () => CompilerOptions.OldTypeLayout.Value);
+        }
+
+        [TestMethod]
         public void TestLibMeta() {
             RunCompilerDirective("", null, () => Meta.LibPrefix.Value);
             RunCompilerDirective("", null, () => Meta.LibSuffix.Value);
@@ -502,6 +509,20 @@ namespace PasPasPasTests.Tokenizer {
             RunCompilerDirective("LIBPREFIX 'P'", "P", () => Meta.LibPrefix.Value);
             RunCompilerDirective("LIBSUFFIX 'M'", "M", () => Meta.LibSuffix.Value);
             RunCompilerDirective("LIBVERSION 'V'", "V", () => Meta.LibVersion.Value);
+        }
+
+        [TestMethod]
+        public void TestPeVersions() {
+            RunCompilerDirective("", 0, () => Meta.PEOsVersion.MajorVersion.Value);
+            RunCompilerDirective("SETPEOSVERSION 1.43", 1, () => Meta.PEOsVersion.MajorVersion.Value);
+            RunCompilerDirective("SETPEOSVERSION 1.44", 44, () => Meta.PEOsVersion.MinorVersion.Value);
+            RunCompilerDirective("", 0, () => Meta.PESubsystemVersion.MajorVersion.Value);
+            RunCompilerDirective("SETPESUBSYSVERSION 2.43", 2, () => Meta.PESubsystemVersion.MajorVersion.Value);
+            RunCompilerDirective("SETPESUBSYSVERSION 2.44", 44, () => Meta.PESubsystemVersion.MinorVersion.Value);
+            RunCompilerDirective("", 0, () => Meta.PEUserVersion.MajorVersion.Value);
+            RunCompilerDirective("SETPEUSERVERSION 4.43", 4, () => Meta.PEUserVersion.MajorVersion.Value);
+            RunCompilerDirective("SETPEUSERVERSION 4.44", 44, () => Meta.PEUserVersion.MinorVersion.Value);
+
         }
 
     }

@@ -46,6 +46,9 @@ namespace PasPasPas.Options.DataTypes {
             LibPrefix = new DerivedValueOption<string>(baseOption?.LibPrefix);
             LibSuffix = new DerivedValueOption<string>(baseOption?.LibSuffix);
             LibVersion = new DerivedValueOption<string>(baseOption?.LibVersion);
+            PEOsVersion = new PEVersion(baseOption?.PEOsVersion);
+            PESubsystemVersion = new PEVersion(baseOption?.PESubsystemVersion);
+            PEUserVersion = new PEVersion(baseOption?.PEUserVersion);
         }
 
         /// <summary>
@@ -89,6 +92,21 @@ namespace PasPasPas.Options.DataTypes {
         public DerivedValueOption<string> LibVersion { get; }
 
         /// <summary>
+        ///     required os version
+        /// </summary>
+        public PEVersion PEOsVersion { get; set; }
+
+        /// <summary>
+        ///     required subsystem version
+        /// </summary>
+        public PEVersion PESubsystemVersion { get; }
+
+        /// <summary>
+        ///     user version
+        /// </summary>
+        public PEVersion PEUserVersion { get; }
+
+        /// <summary>
         ///     reset on new unit
         /// </summary>
         public void ResetOnNewUnit() {
@@ -109,6 +127,9 @@ namespace PasPasPas.Options.DataTypes {
             LibVersion.ResetToDefault();
             ResourceReferences.Clear();
             Regions.Clear();
+            PEOsVersion.Clear();
+            PESubsystemVersion.Clear();
+            PEUserVersion.Clear();
         }
 
         /// <summary>

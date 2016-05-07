@@ -123,6 +123,7 @@ namespace PasPasPas.Parsing.Parser {
                 PascalToken.IncludeRessourceLong,
                 PascalToken.RealCompatibility,
                 PascalToken.Pointermath,
+                PascalToken.OldTypeLayout,
             };
 
         private static HashSet<int> parameters
@@ -144,7 +145,10 @@ namespace PasPasPas.Parsing.Parser {
                 PascalToken.Warn,
                 PascalToken.Rtti,
                 PascalToken.Region,
-                PascalToken.EndRegion
+                PascalToken.EndRegion,
+                PascalToken.SetPEOsVersion,
+                PascalToken.SetPESubsystemVersion,
+                PascalToken.SetPEUserVersion
             };
 
         private ServiceProvider environment;
@@ -262,7 +266,66 @@ namespace PasPasPas.Parsing.Parser {
                 return true;
             }
 
+            if (Match(PascalToken.SetPEOsVersion)) {
+                ParsePEOsVersion();
+                return true;
+            }
+
+            if (Match(PascalToken.SetPESubsystemVersion)) {
+                ParsePESubsystemVersion();
+                return true;
+            }
+
+
+            if (Match(PascalToken.SetPEUserVersion)) {
+                ParsePEUserVersion();
+                return true;
+            }
+
             return false;
+        }
+
+        private void ParsePEUserVersion() {
+            Require(PascalToken.SetPEUserVersion);
+            var version = ParsePEVersion();
+            if (version != null) {
+                Meta.PEUserVersion.MajorVersion.Value = version.Item1;
+                Meta.PEUserVersion.MinorVersion.Value = version.Item2;
+            }
+        }
+
+        private void ParsePESubsystemVersion() {
+            Require(PascalToken.SetPESubsystemVersion);
+            var version = ParsePEVersion();
+            if (version != null) {
+                Meta.PESubsystemVersion.MajorVersion.Value = version.Item1;
+                Meta.PESubsystemVersion.MinorVersion.Value = version.Item2;
+            }
+        }
+
+        private void ParsePEOsVersion() {
+            Require(PascalToken.SetPEOsVersion);
+            var version = ParsePEVersion();
+            if (version != null) {
+                Meta.PEOsVersion.MajorVersion.Value = version.Item1;
+                Meta.PEOsVersion.MinorVersion.Value = version.Item2;
+            }
+        }
+
+        private Tuple<int, int> ParsePEVersion() {
+            var text = (Require(PascalToken.Identifier).Value ?? string.Empty).Split(new[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
+            var major = text.Length > 0 ? text[0] : string.Empty;
+            var minor = text.Length > 1 ? text[1] : string.Empty;
+
+            int majorVersion;
+            int minorVersion;
+
+            if (int.TryParse(major, out majorVersion) && int.TryParse(minor, out minorVersion)) {
+                return Tuple.Create(majorVersion, minorVersion);
+            }
+            else {
+                return null;
+            }
         }
 
         private void ParseEndRegion() {
@@ -780,7 +843,25 @@ namespace PasPasPas.Parsing.Parser {
                 return true;
             }
 
+            if (Optional(PascalToken.OldTypeLayout)) {
+                ParseOldTypeLayoutSwitch();
+                return true;
+            }
+
             return false;
+        }
+
+        private void ParseOldTypeLayoutSwitch() {
+            if (Optional(PascalToken.On)) {
+                CompilerOptions.OldTypeLayout.Value = OldRecordTypes.EnableOldRecordPacking;
+                return;
+            }
+
+            if (Optional(PascalToken.Off)) {
+                CompilerOptions.OldTypeLayout.Value = OldRecordTypes.DisableOldRecordPacking;
+                return;
+            }
+            Unexpected();
         }
 
         private void ParsePointermathSwitch() {
