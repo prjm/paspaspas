@@ -76,7 +76,11 @@ namespace PasPasPas.Parsing.Parser {
                 PascalToken.TypedPointersSwitch, /* T */
                 PascalToken.SymbolDeclarationSwitch, /* Y */
                 PascalToken.SymbolDefinitionsOnlySwitch, /* YD */
-                PascalToken.TypeInfoSwitch /* M */
+                PascalToken.TypeInfoSwitch, /* M */
+                PascalToken.EnumSize1, /* Z1 */
+                PascalToken.EnumSize2, /* Z2 */
+                PascalToken.EnumSize4, /* Z4 */
+                PascalToken.EnumSizeSwitch, /* Z */
             };
 
         private static HashSet<int> longSwitches
@@ -124,6 +128,8 @@ namespace PasPasPas.Parsing.Parser {
                 PascalToken.RealCompatibility,
                 PascalToken.Pointermath,
                 PascalToken.OldTypeLayout,
+                PascalToken.EnumSizeSwitchLong,
+                PascalToken.MethodInfo,
             };
 
         private static HashSet<int> parameters
@@ -148,7 +154,11 @@ namespace PasPasPas.Parsing.Parser {
                 PascalToken.EndRegion,
                 PascalToken.SetPEOsVersion,
                 PascalToken.SetPESubsystemVersion,
-                PascalToken.SetPEUserVersion
+                PascalToken.SetPEUserVersion,
+                PascalToken.ObjTypeName,
+                PascalToken.NoInclude,
+                PascalToken.NoDefine,
+                PascalToken.MessageCd,
             };
 
         private ServiceProvider environment;
@@ -282,7 +292,56 @@ namespace PasPasPas.Parsing.Parser {
                 return true;
             }
 
+            if (Match(PascalToken.ObjTypeName)) {
+                return ParseObjTypeNameSwitch();
+            }
+
+            if (Match(PascalToken.NoInclude)) {
+                return ParseNoInclude();
+            }
+
+            if (Match(PascalToken.NoDefine)) {
+                return ParseNoDefine();
+            }
+
+            if (Match(PascalToken.MessageCd)) {
+                return ParseMessage();
+            }
+
             return false;
+        }
+
+        private bool ParseMessage() {
+            Require(PascalToken.MessageCd);
+            string messageText = string.Empty;
+            string messageType = string.Empty;
+
+            if (Optional(PascalToken.Identifier)) {
+                messageType = CurrentToken().Value;
+            }
+
+            Require(PascalToken.QuotedString);
+            messageText = QuotedStringTokenValue.Unwrap(CurrentToken().Value);
+            return true;
+        }
+
+        private bool ParseNoDefine() {
+            Require(PascalToken.NoDefine);
+            var typeName = Require(PascalToken.NoInclude).Value;
+            var typeNameInUnion = string.Empty;
+            if (Optional(PascalToken.Identifier)) {
+                typeNameInUnion = CurrentToken().Value;
+            }
+
+            Meta.AddNoDefine(typeName, typeNameInUnion);
+            return true;
+        }
+
+        private bool ParseNoInclude() {
+            Require(PascalToken.NoInclude);
+            var unitName = Require(PascalToken.NoInclude).Value;
+            Meta.AddNoInclude(unitName);
+            return true;
         }
 
         private void ParsePEUserVersion() {
@@ -848,7 +907,52 @@ namespace PasPasPas.Parsing.Parser {
                 return true;
             }
 
+            if (Optional(PascalToken.EnumSizeSwitchLong)) {
+                ParseLongEnumSizeSwitch();
+                return true;
+            }
+
+            if (Optional(PascalToken.MethodInfo)) {
+                ParseMethodInfoSwitch();
+                return true;
+            }
+
             return false;
+        }
+
+        private void ParseMethodInfoSwitch() {
+            if (Optional(PascalToken.On)) {
+                CompilerOptions.MethodInfo.Value = MethodInfoRtti.EnableMethodInfo;
+                return;
+            }
+
+            if (Optional(PascalToken.Off)) {
+                CompilerOptions.MethodInfo.Value = MethodInfoRtti.DisableMethodInfo;
+                return;
+            }
+            Unexpected();
+        }
+
+        private void ParseLongEnumSizeSwitch() {
+            var size = Require(PascalToken.Integer);
+            int intSize;
+
+            if (int.TryParse(size.Value, out intSize)) {
+                switch (intSize) {
+                    case 1:
+                        CompilerOptions.MinumEnumSize.Value = EnumSize.OneByte;
+                        break;
+                    case 2:
+                        CompilerOptions.MinumEnumSize.Value = EnumSize.TwoByte;
+                        break;
+                    case 4:
+                        CompilerOptions.MinumEnumSize.Value = EnumSize.FourByte;
+                        break;
+                    default:
+                        Unexpected();
+                        break;
+                }
+            }
         }
 
         private void ParseOldTypeLayoutSwitch() {
@@ -1520,13 +1624,62 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             if (Match(PascalToken.TypeInfoSwitch)) {
-                return ParseTypeInfoSwith();
+                return ParseTypeInfoSwitch();
+            }
+
+            if (Match(PascalToken.EnumSizeSwitch, PascalToken.EnumSize1, PascalToken.EnumSize2, PascalToken.EnumSize4)) {
+                return ParseEnumSizeSwitch();
             }
 
             return false;
         }
 
-        private bool ParseTypeInfoSwith() {
+        private bool ParseEnumSizeSwitch() {
+            var kind = CurrentToken().Kind;
+
+            if (kind == PascalToken.EnumSize1) {
+                CompilerOptions.MinumEnumSize.Value = EnumSize.OneByte;
+                return true;
+            }
+
+            if (kind == PascalToken.EnumSize2) {
+                CompilerOptions.MinumEnumSize.Value = EnumSize.TwoByte;
+                return true;
+            }
+
+            if (kind == PascalToken.EnumSize4) {
+                CompilerOptions.MinumEnumSize.Value = EnumSize.FourByte;
+                return true;
+            }
+
+            FetchNextToken();
+
+            if (Optional(PascalToken.Plus)) {
+                CompilerOptions.MinumEnumSize.Value = EnumSize.FourByte;
+                return true;
+            }
+
+            if (Optional(PascalToken.Minus)) {
+                CompilerOptions.MinumEnumSize.Value = EnumSize.OneByte;
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool ParseObjTypeNameSwitch() {
+            FetchNextToken();
+            var typeName = Require(PascalToken.Identifier).Value;
+            var aliasName = string.Empty;
+            if (Optional(PascalToken.QuotedString)) {
+                aliasName = QuotedStringTokenValue.Unwrap(CurrentToken().Value);
+            }
+
+            Meta.AddObjectFileTypeName(typeName, aliasName);
+            return true;
+        }
+
+        private bool ParseTypeInfoSwitch() {
             FetchNextToken();
 
             if (Optional(PascalToken.Plus)) {

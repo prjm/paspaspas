@@ -1464,6 +1464,21 @@ namespace PasPasPas.Api {
         public const int VcPublished = 824;
 
         /// <summary>
+        ///     token for <c>Z1</c>
+        /// </summary>
+        public const int EnumSize1 = 825;
+
+        /// <summary>
+        ///     token for <c>Z2</c>
+        /// </summary>
+        public const int EnumSize2 = 826;
+
+        /// <summary>
+        ///     token for <c>Z4</c>
+        /// </summary>
+        public const int EnumSize4 = 827;
+
+        /// <summary>
         ///     create a new token
         /// </summary>
         /// <param name="tokenId">tokenid</param>

@@ -36,6 +36,16 @@ namespace PasPasPasTests.Tokenizer {
         }
 
         [TestMethod]
+        public void TestMessage() {
+            RunCompilerDirective("", true, () => true);
+            RunCompilerDirective("MESSAGE 'X'", true, () => true);
+            RunCompilerDirective("MESSAGE Hint 'X' ", true, () => true);
+            RunCompilerDirective("MESSAGE Warn 'X' ", true, () => true);
+            RunCompilerDirective("MESSAGE Error 'X'", true, () => true);
+            RunCompilerDirective("MESSAGE Fatal 'x'", true, () => true);
+        }
+
+        [TestMethod]
         public void TestBoolEvalSwitch() {
             RunCompilerDirective("", BooleanEvaluation.Undefined, () => CompilerOptions.BoolEval.Value);
             RunCompilerDirective("B+", BooleanEvaluation.CompleteEvaluation, () => CompilerOptions.BoolEval.Value);
@@ -499,6 +509,49 @@ namespace PasPasPasTests.Tokenizer {
             RunCompilerDirective("", OldRecordTypes.Undefined, () => CompilerOptions.OldTypeLayout.Value);
             RunCompilerDirective("OLDTYPELAYOUT  ON", OldRecordTypes.EnableOldRecordPacking, () => CompilerOptions.OldTypeLayout.Value);
             RunCompilerDirective("OLDTYPELAYOUT  OFF", OldRecordTypes.DisableOldRecordPacking, () => CompilerOptions.OldTypeLayout.Value);
+        }
+
+        [TestMethod]
+        public void TestNoDefine() {
+            RunCompilerDirective("", false, () => Meta.NoDefines.Any());
+            RunCompilerDirective("NODEFINE TDEMO", 1, () => Meta.NoDefines.Any(t => t.TypeName.StartsWith("TDemo", StringComparison.OrdinalIgnoreCase)));
+            RunCompilerDirective("NODEFINE TMIMOA", false, () => Meta.NoDefines.Any(t => t.TypeName.StartsWith("TDemo", StringComparison.OrdinalIgnoreCase)));
+            RunCompilerDirective("NODEFINE TMIMOA FUZZ", false, () => Meta.NoDefines.Any(t => t.UnionTypeName.StartsWith("fuz", StringComparison.OrdinalIgnoreCase)));
+        }
+
+        [TestMethod]
+        public void TestObjTypeName() {
+            RunCompilerDirective("", false, () => Meta.ObjectFileTypeNames.Any(t => t.TypeName.StartsWith("TDemo", StringComparison.OrdinalIgnoreCase)));
+            RunCompilerDirective("OBJTYPENAME tdemo", true, () => Meta.ObjectFileTypeNames.Any(t => t.TypeName.StartsWith("TDemo", StringComparison.OrdinalIgnoreCase)));
+            RunCompilerDirective("OBJTYPENAME tmemo", false, () => Meta.ObjectFileTypeNames.Any(t => t.TypeName.StartsWith("TDemo", StringComparison.OrdinalIgnoreCase)));
+            RunCompilerDirective("OBJTYPENAME tdemo 'Bul'", true, () => Meta.ObjectFileTypeNames.Any(t => t.TypeName.StartsWith("TDemo", StringComparison.OrdinalIgnoreCase)));
+            RunCompilerDirective("OBJTYPENAME tdemo 'Ntdemo'", true, () => Meta.ObjectFileTypeNames.Any(t => t.TypeName.StartsWith("TDemo", StringComparison.OrdinalIgnoreCase)));
+        }
+
+        [TestMethod]
+        public void TestNoInclude() {
+            RunCompilerDirective("", false, () => Meta.NoIncludes.Any(t => t.StartsWith("Winapi", StringComparison.OrdinalIgnoreCase)));
+            RunCompilerDirective("NOINCLUDE WinApi.Messages", true, () => Meta.NoIncludes.Any(t => t.StartsWith("Winapi", StringComparison.OrdinalIgnoreCase)));
+        }
+
+        [TestMethod]
+        public void TestMinEnumSize() {
+            RunCompilerDirective("", EnumSize.Undefined, () => CompilerOptions.MinumEnumSize.Value);
+            RunCompilerDirective("Z+", EnumSize.FourByte, () => CompilerOptions.MinumEnumSize.Value);
+            RunCompilerDirective("Z-", EnumSize.OneByte, () => CompilerOptions.MinumEnumSize.Value);
+            RunCompilerDirective("Z1", EnumSize.OneByte, () => CompilerOptions.MinumEnumSize.Value);
+            RunCompilerDirective("Z2", EnumSize.TwoByte, () => CompilerOptions.MinumEnumSize.Value);
+            RunCompilerDirective("Z4", EnumSize.FourByte, () => CompilerOptions.MinumEnumSize.Value);
+            RunCompilerDirective("MINENUMSIZE 1", EnumSize.OneByte, () => CompilerOptions.MinumEnumSize.Value);
+            RunCompilerDirective("MINENUMSIZE 2", EnumSize.TwoByte, () => CompilerOptions.MinumEnumSize.Value);
+            RunCompilerDirective("MINENUMSIZE 4", EnumSize.FourByte, () => CompilerOptions.MinumEnumSize.Value);
+        }
+
+        [TestMethod]
+        public void TestMethodInfo() {
+            RunCompilerDirective("", MethodInfoRtti.Undefined, () => CompilerOptions.MethodInfo.Value);
+            RunCompilerDirective("METHODINFO ON", MethodInfoRtti.EnableMethodInfo, () => CompilerOptions.MethodInfo.Value);
+            RunCompilerDirective("METHODINFO OFF", MethodInfoRtti.DisableMethodInfo, () => CompilerOptions.MethodInfo.Value);
         }
 
         [TestMethod]

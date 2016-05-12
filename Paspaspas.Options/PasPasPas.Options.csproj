@@ -62,7 +62,9 @@
     <Compile Include="DataTypes\DerivedOptionBase.cs" />
     <Compile Include="DataTypes\DerivedValueOption.cs" />
     <Compile Include="DataTypes\DesignOnlyUnit.cs" />
+    <Compile Include="DataTypes\DoNotDefineInHeader.cs" />
     <Compile Include="DataTypes\ElseCondition.cs" />
+    <Compile Include="DataTypes\EnumSize.cs" />
     <Compile Include="DataTypes\ExcessPrecisionForResults.cs" />
     <Compile Include="DataTypes\ExportCppObjects.cs" />
     <Compile Include="DataTypes\ExtendedCompatiblityMode.cs" />
@@ -86,6 +88,8 @@
     <Compile Include="Bundles\Platform.cs" />
     <Compile Include="Bundles\PlatformKey.cs" />
     <Compile Include="DataTypes\HppEmitMode.cs" />
+    <Compile Include="DataTypes\MethodInfoRtti.cs" />
+    <Compile Include="DataTypes\ObjectFileTypeName.cs" />
     <Compile Include="DataTypes\OldRecordTypes.cs" />
     <Compile Include="DataTypes\OpenDelphiStrings.cs" />
     <Compile Include="DataTypes\PathOptionSet.cs" />

@@ -27,6 +27,24 @@ namespace PasPasPas.Options.DataTypes {
             = new List<ResourceReference>();
 
         /// <summary>
+        ///     object file type name information
+        /// </summary>
+        public IList<ObjectFileTypeName> ObjectFileTypeNames { get; }
+            = new List<ObjectFileTypeName>();
+
+        /// <summary>
+        ///     list of skipped inludes
+        /// </summary>
+        public IList<string> NoIncludes { get; }
+            = new List<string>();
+
+        /// <summary>
+        ///     list of skipped header definition
+        /// </summary>
+        public IList<DoNotDefineInHeader> NoDefines { get; }
+            = new List<DoNotDefineInHeader>();
+
+        /// <summary>
         ///     current regions
         /// </summary>
         public Stack<string> Regions { get; }
@@ -112,12 +130,15 @@ namespace PasPasPas.Options.DataTypes {
         public void ResetOnNewUnit() {
             HeaderStrings.Clear();
             Regions.Clear();
+            NoIncludes.Clear();
+            NoDefines.Clear();
+            NoIncludes.Clear();
         }
 
         /// <summary>
         ///     reset on new file
         /// </summary>
-        internal void Clear() {
+        public void Clear() {
             Description.ResetToDefault();
             FileExtension.ResetToDefault();
             ExternalSymbols.Clear();
@@ -130,6 +151,10 @@ namespace PasPasPas.Options.DataTypes {
             PEOsVersion.Clear();
             PESubsystemVersion.Clear();
             PEUserVersion.Clear();
+            ObjectFileTypeNames.Clear();
+            NoIncludes.Clear();
+            NoDefines.Clear();
+
         }
 
         /// <summary>
@@ -179,6 +204,32 @@ namespace PasPasPas.Options.DataTypes {
         /// </summary>
         public void StopRegion() {
             Regions.Pop();
+        }
+
+        /// <summary>
+        ///     add object file type name
+        /// </summary>
+        /// <param name="typeName">type name</param>
+        /// <param name="aliasName">name wranglin alias</param>
+        public void AddObjectFileTypeName(string typeName, string aliasName) {
+            ObjectFileTypeNames.Add(new ObjectFileTypeName(typeName, aliasName));
+        }
+
+        /// <summary>
+        ///     ignore a unit in header files in cpp
+        /// </summary>
+        /// <param name="unitName">unit name</param>
+        public void AddNoInclude(string unitName) {
+            NoIncludes.Add(unitName);
+        }
+
+        /// <summary>
+        ///     add a type name which is excluded from the generated header file
+        /// </summary>
+        /// <param name="typeName">type name</param>
+        /// <param name="typeNameInUnion">type name used in unions</param>
+        public void AddNoDefine(string typeName, string typeNameInUnion) {
+            NoDefines.Add(new DoNotDefineInHeader(typeName, typeNameInUnion));
         }
     }
 }

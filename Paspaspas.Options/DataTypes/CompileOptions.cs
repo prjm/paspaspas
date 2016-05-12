@@ -51,6 +51,8 @@
             RealCompatiblity = new DerivedValueOption<Real48>(baseOptions?.RealCompatiblity);
             PointerMath = new DerivedValueOption<PointerManipulation>(baseOptions?.PointerMath);
             OldTypeLayout = new DerivedValueOption<OldRecordTypes>(baseOptions?.OldTypeLayout);
+            MinumEnumSize = new DerivedValueOption<EnumSize>(baseOptions?.MinumEnumSize);
+            MethodInfo = new DerivedValueOption<MethodInfoRtti>(baseOptions?.MethodInfo);
         }
 
         /// <summary>
@@ -259,6 +261,16 @@
         public DerivedValueOption<OldRecordTypes> OldTypeLayout { get; }
 
         /// <summary>
+        ///     minimum enum size
+        /// </summary>
+        public DerivedValueOption<EnumSize> MinumEnumSize { get; }
+
+        /// <summary>
+        ///     enable or disable method info generation
+        /// </summary>
+        public DerivedValueOption<MethodInfoRtti> MethodInfo { get; }
+
+        /// <summary>
         ///     clear options
         /// </summary>
         public void Clear() {
@@ -303,6 +315,8 @@
             RealCompatiblity.ResetToDefault();
             PointerMath.ResetToDefault();
             OldTypeLayout.ResetToDefault();
+            MinumEnumSize.ResetToDefault();
+            MethodInfo.ResetToDefault();
         }
 
         /// <summary>
@@ -339,6 +353,8 @@
             RealCompatiblity.ResetToDefault();
             PointerMath.ResetToDefault();
             OldTypeLayout.ResetToDefault();
+            MinumEnumSize.ResetToDefault();
+            MethodInfo.ResetToDefault();
         }
     }
 }
