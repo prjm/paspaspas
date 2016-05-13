@@ -81,6 +81,8 @@
     <Compile Include="DataTypes\ImportGlobalUnitData.cs" />
     <Compile Include="DataTypes\IncludeFilePathResolver.cs" />
     <Compile Include="DataTypes\IoCallChecks.cs" />
+    <Compile Include="DataTypes\LinkedFile.cs" />
+    <Compile Include="DataTypes\LinkedInputFileResolver.cs" />
     <Compile Include="DataTypes\LocalDebugSymbols.cs" />
     <Compile Include="DataTypes\LongDelphiStrings.cs" />
     <Compile Include="DataTypes\MetaInformation.cs" />

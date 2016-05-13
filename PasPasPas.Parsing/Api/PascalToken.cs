@@ -1079,11 +1079,6 @@ namespace PasPasPas.Api {
         public const int LongStringSwitchLong = 748;
 
         /// <summary>
-        ///     token for <c>$M</c>
-        /// </summary>
-        public const int MemStackSizeSwitch = 749;
-
-        /// <summary>
         ///     token for <c>$MINSTACKSIZE</c>
         /// </summary>
         public const int MinMemStackSizeSwitchLong = 750;

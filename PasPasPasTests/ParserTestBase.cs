@@ -91,6 +91,7 @@ namespace PasPasPasTests {
             fileAccess.AddOneTimeMockup("dummy.inc", new StringInput("DEFINE DUMMY_INC", "dummy.inc"));
             fileAccess.AddOneTimeMockup("res.res", new StringInput("RES RES RES", "res.res"));
             fileAccess.AddOneTimeMockup("test_0.res", new StringInput("RES RES RES", "test_0.res"));
+            fileAccess.AddOneTimeMockup("link.dll", new StringInput("MZE!", "link.dll"));
 
             var environment = new ServiceProvider();
             environment.Register(new CommonConfiguration());

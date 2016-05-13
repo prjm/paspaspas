@@ -46,6 +46,16 @@ namespace PasPasPasTests.Tokenizer {
         }
 
         [TestMethod]
+        public void TestMemStackSize() {
+            RunCompilerDirective("", 0L, () => CompilerOptions.MinimumStackMemSize.Value);
+            RunCompilerDirective("", 0L, () => CompilerOptions.MaximumStackMemSize.Value);
+            RunCompilerDirective("M 100, 200", 200L, () => CompilerOptions.MaximumStackMemSize.Value);
+            RunCompilerDirective("M 100, 200", 100L, () => CompilerOptions.MinimumStackMemSize.Value);
+            RunCompilerDirective("MINSTACKSIZE 300", 300L, () => CompilerOptions.MinimumStackMemSize.Value);
+            RunCompilerDirective("MAXSTACKSIZE 400", 400L, () => CompilerOptions.MaximumStackMemSize.Value);
+        }
+
+        [TestMethod]
         public void TestBoolEvalSwitch() {
             RunCompilerDirective("", BooleanEvaluation.Undefined, () => CompilerOptions.BoolEval.Value);
             RunCompilerDirective("B+", BooleanEvaluation.CompleteEvaluation, () => CompilerOptions.BoolEval.Value);
@@ -427,6 +437,13 @@ namespace PasPasPasTests.Tokenizer {
             RunCompilerDirective("", RuntimePackageMode.Undefined, () => CompilerOptions.RuntimeOnlyPackage.Value);
             RunCompilerDirective("RUNONLY OFF", RuntimePackageMode.Standard, () => CompilerOptions.RuntimeOnlyPackage.Value);
             RunCompilerDirective("RUNONLY ON", RuntimePackageMode.RuntimeOnly, () => CompilerOptions.RuntimeOnlyPackage.Value);
+        }
+
+        [TestMethod]
+        public void TestLinkedFiles() {
+            RunCompilerDirective("", false, () => Meta.LinkedFiles.Any(t => string.Equals(t.TargetPath, "link.dll", StringComparison.OrdinalIgnoreCase)));
+            RunCompilerDirective("L link.dll", true, () => Meta.LinkedFiles.Any(t => string.Equals(t.TargetPath, "link.dll", StringComparison.OrdinalIgnoreCase)));
+            RunCompilerDirective("LINK 'link.dll'", true, () => Meta.LinkedFiles.Any(t => string.Equals(t.TargetPath, "link.dll", StringComparison.OrdinalIgnoreCase)));
         }
 
         [TestMethod]

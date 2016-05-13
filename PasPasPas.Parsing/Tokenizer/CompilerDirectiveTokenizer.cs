@@ -71,7 +71,6 @@ namespace PasPasPas.Parsing.Tokenizer {
                 ["LOCALSYMBOLS"] = PascalToken.LocalSymbolSwithLong,
                 ["H"] = PascalToken.LongStringSwitch,
                 ["LONGSTRINGS"] = PascalToken.LongStringSwitchLong,
-                ["M"] = PascalToken.MemStackSizeSwitch,
                 ["MINSTACKSIZE"] = PascalToken.MinMemStackSizeSwitchLong,
                 ["MAXSTACKSIZE"] = PascalToken.MaxMemStackSizeSwitchLong,
                 ["MESSAGE"] = PascalToken.MessageCd,

@@ -51,6 +51,12 @@ namespace PasPasPas.Options.DataTypes {
             = new Stack<string>();
 
         /// <summary>
+        ///     list of directly linked files
+        /// </summary>
+        public IList<LinkedFile> LinkedFiles { get; }
+        = new List<LinkedFile>();
+
+        /// <summary>
         ///     creates a new meta information option object
         /// </summary>
         /// <param name="baseOption"></param>
@@ -67,6 +73,7 @@ namespace PasPasPas.Options.DataTypes {
             PEOsVersion = new PEVersion(baseOption?.PEOsVersion);
             PESubsystemVersion = new PEVersion(baseOption?.PESubsystemVersion);
             PEUserVersion = new PEVersion(baseOption?.PEUserVersion);
+            LinkedFileResolver = new LinkedInputFileResolver(parentOptions);
         }
 
         /// <summary>
@@ -123,6 +130,11 @@ namespace PasPasPas.Options.DataTypes {
         ///     user version
         /// </summary>
         public PEVersion PEUserVersion { get; }
+
+        /// <summary>
+        ///     resolver for directly linked input files
+        /// </summary>
+        public LinkedInputFileResolver LinkedFileResolver { get; }
 
         /// <summary>
         ///     reset on new unit
@@ -230,6 +242,14 @@ namespace PasPasPas.Options.DataTypes {
         /// <param name="typeNameInUnion">type name used in unions</param>
         public void AddNoDefine(string typeName, string typeNameInUnion) {
             NoDefines.Add(new DoNotDefineInHeader(typeName, typeNameInUnion));
+        }
+
+        /// <summary>
+        ///     a a linked file
+        /// </summary>
+        /// <param name="linkedFile"></param>
+        public void AddLinkedFile(LinkedFile linkedFile) {
+            LinkedFiles.Add(linkedFile);
         }
     }
 }

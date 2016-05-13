@@ -53,6 +53,8 @@
             OldTypeLayout = new DerivedValueOption<OldRecordTypes>(baseOptions?.OldTypeLayout);
             MinumEnumSize = new DerivedValueOption<EnumSize>(baseOptions?.MinumEnumSize);
             MethodInfo = new DerivedValueOption<MethodInfoRtti>(baseOptions?.MethodInfo);
+            MinimumStackMemSize = new DerivedValueOption<long>(baseOptions?.MinimumStackMemSize);
+            MaximumStackMemSize = new DerivedValueOption<long>(baseOptions?.MaximumStackMemSize);
         }
 
         /// <summary>
@@ -271,6 +273,16 @@
         public DerivedValueOption<MethodInfoRtti> MethodInfo { get; }
 
         /// <summary>
+        ///     maximum stack memory size
+        /// </summary>
+        public DerivedValueOption<long> MaximumStackMemSize { get; }
+
+        /// <summary>
+        ///     mininun stack memory size
+        /// </summary>
+        public DerivedValueOption<long> MinimumStackMemSize { get; }
+
+        /// <summary>
         ///     clear options
         /// </summary>
         public void Clear() {
@@ -317,6 +329,8 @@
             OldTypeLayout.ResetToDefault();
             MinumEnumSize.ResetToDefault();
             MethodInfo.ResetToDefault();
+            MinimumStackMemSize.ResetToDefault();
+            MaximumStackMemSize.ResetToDefault();
         }
 
         /// <summary>

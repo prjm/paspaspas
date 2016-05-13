@@ -159,6 +159,8 @@ namespace PasPasPas.Parsing.Parser {
                 PascalToken.NoInclude,
                 PascalToken.NoDefine,
                 PascalToken.MessageCd,
+                PascalToken.MinMemStackSizeSwitchLong,
+                PascalToken.MaxMemStackSizeSwitchLong
             };
 
         private ServiceProvider environment;
@@ -308,7 +310,43 @@ namespace PasPasPas.Parsing.Parser {
                 return ParseMessage();
             }
 
+            if (Match(PascalToken.MinMemStackSizeSwitchLong, PascalToken.MaxMemStackSizeSwitchLong)) {
+                return ParseStackSizeSwitch(false);
+            }
+
             return false;
+        }
+
+        private bool ParseStackSizeSwitch(bool mSwitch) {
+            int sizeValue;
+            string size;
+
+            if (mSwitch || Optional(PascalToken.MinMemStackSizeSwitchLong)) {
+                size = Require(PascalToken.Integer).Value;
+                if (int.TryParse(size, out sizeValue)) {
+                    CompilerOptions.MinimumStackMemSize.Value = sizeValue;
+                    if (!mSwitch)
+                        return true;
+                }
+                if (!mSwitch)
+                    return false;
+            }
+
+            if (mSwitch)
+                Require(PascalToken.Comma);
+
+            if (mSwitch || Optional(PascalToken.MaxMemStackSizeSwitchLong)) {
+                size = Require(PascalToken.Integer).Value;
+                if (int.TryParse(size, out sizeValue)) {
+                    CompilerOptions.MaximumStackMemSize.Value = sizeValue;
+                    if (!mSwitch)
+                        return true;
+                }
+                if (!mSwitch)
+                    return false;
+            }
+
+            return mSwitch;
         }
 
         private bool ParseMessage() {
@@ -1682,6 +1720,10 @@ namespace PasPasPas.Parsing.Parser {
         private bool ParseTypeInfoSwitch() {
             FetchNextToken();
 
+            if (CurrentToken().Kind == PascalToken.Integer) {
+                return ParseStackSizeSwitch(true);
+            }
+
             if (Optional(PascalToken.Plus)) {
                 CompilerOptions.PublishedRtti.Value = RttiForPublishedProperties.Enable;
                 return true;
@@ -1804,11 +1846,10 @@ namespace PasPasPas.Parsing.Parser {
             return true;
         }
 
-        private bool ParseResourceFileName(string sourcePath) {
-            var kind = CurrentToken().Kind;
-            string filename;
+        private string ParseFileName() {
+            string filename = string.Empty;
 
-            switch (kind) {
+            switch (CurrentToken().Kind) {
                 case PascalToken.QuotedString:
                     filename = QuotedStringTokenValue.Unwrap(CurrentToken().Value);
                     break;
@@ -1824,9 +1865,16 @@ namespace PasPasPas.Parsing.Parser {
 
                 default:
                     Unexpected();
-                    return false;
+                    return string.Empty;
 
             }
+
+            return filename;
+        }
+
+        private bool ParseResourceFileName(string sourcePath) {
+            var kind = CurrentToken().Kind;
+
 
 
             string rcFile = string.Empty;
@@ -1837,6 +1885,7 @@ namespace PasPasPas.Parsing.Parser {
                 }
             }
 
+            var filename = ParseFileName();
             var resolvedFile = Meta.ResourceFilePathResolver.ResolvePath(sourcePath, filename);
 
             if (resolvedFile.IsResolved) {
@@ -1939,6 +1988,25 @@ namespace PasPasPas.Parsing.Parser {
 
             if (Optional(PascalToken.Minus)) {
                 CompilerOptions.LocalSymbols.Value = LocalDebugSymbols.DisableLocalSymbols;
+                return true;
+            }
+
+            return ParseLinkParameter();
+        }
+
+        /// <summary>
+        ///     parse a linked file parameter
+        /// </summary>
+        /// <returns></returns>
+        private bool ParseLinkParameter() {
+            var filename = ParseFileName();
+            var resolvedFile = Meta.LinkedFileResolver.ResolvePath(string.Empty, filename);
+
+            if (resolvedFile.IsResolved) {
+                var linkedFile = new LinkedFile();
+                linkedFile.OriginalFileName = filename;
+                linkedFile.TargetPath = resolvedFile.TargetPath;
+                Meta.AddLinkedFile(linkedFile);
                 return true;
             }
 
