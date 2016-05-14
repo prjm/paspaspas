@@ -130,6 +130,7 @@ namespace PasPasPas.Parsing.Parser {
                 PascalToken.OldTypeLayout,
                 PascalToken.EnumSizeSwitchLong,
                 PascalToken.MethodInfo,
+                PascalToken.LegacyIfEnd,
             };
 
         private static HashSet<int> parameters
@@ -160,7 +161,8 @@ namespace PasPasPas.Parsing.Parser {
                 PascalToken.NoDefine,
                 PascalToken.MessageCd,
                 PascalToken.MinMemStackSizeSwitchLong,
-                PascalToken.MaxMemStackSizeSwitchLong
+                PascalToken.MaxMemStackSizeSwitchLong,
+                PascalToken.IfOpt,
             };
 
         private ServiceProvider environment;
@@ -196,6 +198,11 @@ namespace PasPasPas.Parsing.Parser {
 
             if (Match(PascalToken.IfDef)) {
                 ParseIfDef();
+                return true;
+            }
+
+            if (Match(PascalToken.IfOpt)) {
+                ParseIfOpt();
                 return true;
             }
 
@@ -315,6 +322,23 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             return false;
+        }
+
+        private void ParseIfOpt() {
+            Require(PascalToken.IfOpt);
+            var switchKind = Require(PascalToken.Identifier).Value;
+            var switchState = Require(PascalToken.Plus, PascalToken.Minus).Kind;
+            var requiredInfo = GetSwitchInfo(switchState);
+            var switchInfo = Options.GetSwitchInfo(switchKind);
+            ConditionalCompilation.AddIfOptCondition(switchKind, requiredInfo, switchInfo);
+        }
+
+        private SwitchInfo GetSwitchInfo(int switchState) {
+            if (switchState == PascalToken.Plus)
+                return SwitchInfo.Enabled;
+            if (switchState == PascalToken.Minus)
+                return SwitchInfo.Disabled;
+            return SwitchInfo.Undefined;
         }
 
         private bool ParseStackSizeSwitch(bool mSwitch) {
@@ -955,7 +979,25 @@ namespace PasPasPas.Parsing.Parser {
                 return true;
             }
 
+            if (Optional(PascalToken.LegacyIfEnd)) {
+                ParseLegacyIfEndSwitch();
+                return true;
+            }
+
             return false;
+        }
+
+        private void ParseLegacyIfEndSwitch() {
+            if (Optional(PascalToken.On)) {
+                CompilerOptions.LegacyIfEnd.Value = EndIfMode.LegacyIfEnd;
+                return;
+            }
+
+            if (Optional(PascalToken.Off)) {
+                CompilerOptions.LegacyIfEnd.Value = EndIfMode.Standard;
+                return;
+            }
+            Unexpected();
         }
 
         private void ParseMethodInfoSwitch() {

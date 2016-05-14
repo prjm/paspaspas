@@ -36,5 +36,12 @@ namespace PasPasPas.Options.Bundles {
         ///     clear intermediate options
         /// </summary>
         void ResetOnNewUnit();
+
+        /// <summary>
+        ///     get information for a switch
+        /// </summary>
+        /// <param name="switchKind">switch kind</param>
+        /// <returns>switch infi</returns>
+        SwitchInfo GetSwitchInfo(string switchKind);
     }
 }

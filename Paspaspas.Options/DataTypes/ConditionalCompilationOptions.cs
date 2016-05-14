@@ -208,5 +208,22 @@ namespace PasPasPas.Options.DataTypes {
 
             Skip = doSkip;
         }
+
+        /// <summary>
+        ///     add a new condition
+        /// </summary>
+        /// <param name="switchKind"></param>
+        /// <param name="requiredInfo"></param>
+        /// <param name="switchInfo"></param>
+        public void AddIfOptCondition(string switchKind, SwitchInfo requiredInfo, SwitchInfo switchInfo) {
+            AddNewCondition(new IfOptCondition() {
+                Matches = (requiredInfo != SwitchInfo.Undefined) && (requiredInfo == switchInfo),
+                SwitchName = switchKind,
+                RequiredCondition = requiredInfo
+            });
+            UpdateSkipState();
+        }
     }
+
+
 }

@@ -103,5 +103,34 @@ namespace PasPasPas.Options.Bundles {
             PathOptions.ResetOnNewUnit();
             Warnings.ResetOnNewUnit();
         }
+
+        private static SwitchInfo GetSwitchInfo<T>(T value, T enabled, T disabled)
+            where T : struct {
+            if (value.Equals(enabled))
+                return SwitchInfo.Enabled;
+            if (value.Equals(disabled))
+                return SwitchInfo.Disabled;
+            return SwitchInfo.Undefined;
+        }
+
+
+        /// <summary>
+        ///     get switch information
+        /// </summary>
+        /// <param name="switchKind"></param>
+        /// <returns></returns>
+        public SwitchInfo GetSwitchInfo(string switchKind) {
+            if (string.IsNullOrEmpty(switchKind) || switchKind.Length != 1)
+                return SwitchInfo.Undefined;
+
+            var toggle = switchKind.ToUpperInvariant()[0];
+
+            switch (toggle) {
+                case 'A':
+                    return GetSwitchInfo(CompilerOptions.Align.Value, Alignment.QuadWord, Alignment.Unaligned);
+                default:
+                    return SwitchInfo.Undefined;
+            }
+        }
     }
 }

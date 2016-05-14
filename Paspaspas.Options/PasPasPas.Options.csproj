@@ -64,6 +64,7 @@
     <Compile Include="DataTypes\DesignOnlyUnit.cs" />
     <Compile Include="DataTypes\DoNotDefineInHeader.cs" />
     <Compile Include="DataTypes\ElseCondition.cs" />
+    <Compile Include="DataTypes\EndIfMode.cs" />
     <Compile Include="DataTypes\EnumSize.cs" />
     <Compile Include="DataTypes\ExcessPrecisionForResults.cs" />
     <Compile Include="DataTypes\ExportCppObjects.cs" />
@@ -77,6 +78,7 @@
     <Compile Include="DataTypes\ICondition.cs" />
     <Compile Include="DataTypes\IDerivedOption.cs" />
     <Compile Include="DataTypes\IfDefCondition.cs" />
+    <Compile Include="DataTypes\IfOptCondition.cs" />
     <Compile Include="DataTypes\ImplicitBuildUnit.cs" />
     <Compile Include="DataTypes\ImportGlobalUnitData.cs" />
     <Compile Include="DataTypes\IncludeFilePathResolver.cs" />
@@ -113,6 +115,7 @@
     <Compile Include="DataTypes\ShortVarStringChecks.cs" />
     <Compile Include="DataTypes\StackFramesGeneration.cs" />
     <Compile Include="DataTypes\StrongTypeLinking.cs" />
+    <Compile Include="DataTypes\SwitchInfo.cs" />
     <Compile Include="DataTypes\SymbolDefinitionInfo.cs" />
     <Compile Include="DataTypes\SymbolReferenceInfo.cs" />
     <Compile Include="DataTypes\TypeCheckedPointers.cs" />

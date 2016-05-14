@@ -55,6 +55,7 @@
             MethodInfo = new DerivedValueOption<MethodInfoRtti>(baseOptions?.MethodInfo);
             MinimumStackMemSize = new DerivedValueOption<long>(baseOptions?.MinimumStackMemSize);
             MaximumStackMemSize = new DerivedValueOption<long>(baseOptions?.MaximumStackMemSize);
+            LegacyIfEnd = new DerivedValueOption<EndIfMode>(baseOptions?.LegacyIfEnd);
         }
 
         /// <summary>
@@ -283,6 +284,11 @@
         public DerivedValueOption<long> MinimumStackMemSize { get; }
 
         /// <summary>
+        ///     legacy if / endif mode
+        /// </summary>
+        public DerivedValueOption<EndIfMode> LegacyIfEnd { get; }
+
+        /// <summary>
         ///     clear options
         /// </summary>
         public void Clear() {
@@ -331,6 +337,7 @@
             MethodInfo.ResetToDefault();
             MinimumStackMemSize.ResetToDefault();
             MaximumStackMemSize.ResetToDefault();
+            LegacyIfEnd.ResetToDefault();
         }
 
         /// <summary>
@@ -369,6 +376,7 @@
             OldTypeLayout.ResetToDefault();
             MinumEnumSize.ResetToDefault();
             MethodInfo.ResetToDefault();
+            LegacyIfEnd.ResetToDefault();
         }
     }
 }
