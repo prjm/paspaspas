@@ -104,11 +104,11 @@ namespace PasPasPas.Options.Bundles {
             Warnings.ResetOnNewUnit();
         }
 
-        private static SwitchInfo GetSwitchInfo<T>(T value, T enabled, T disabled)
+        private static SwitchInfo GetSwitchInfo<T>(DerivedValueOption<T> value, T enabled, T disabled)
             where T : struct {
-            if (value.Equals(enabled))
+            if (value.Value.Equals(enabled))
                 return SwitchInfo.Enabled;
-            if (value.Equals(disabled))
+            if (value.Value.Equals(disabled))
                 return SwitchInfo.Disabled;
             return SwitchInfo.Undefined;
         }
@@ -127,7 +127,48 @@ namespace PasPasPas.Options.Bundles {
 
             switch (toggle) {
                 case 'A':
-                    return GetSwitchInfo(CompilerOptions.Align.Value, Alignment.QuadWord, Alignment.Unaligned);
+                    return GetSwitchInfo(CompilerOptions.Align, Alignment.QuadWord, Alignment.Unaligned);
+                case 'B':
+                    return GetSwitchInfo(CompilerOptions.BoolEval, BooleanEvaluation.CompleteEvaluation, BooleanEvaluation.ShortEvaluation);
+                case 'C':
+                    return GetSwitchInfo(CompilerOptions.Assertions, AssertionMode.EnableAssertions, AssertionMode.DisableAssertions);
+                case 'D':
+                    return GetSwitchInfo(CompilerOptions.DebugInfo, DebugInformation.IncludeDebugInformation, DebugInformation.NoDebugInfo);
+                case 'G':
+                    return GetSwitchInfo(CompilerOptions.ImportedData, ImportGlobalUnitData.DoImport, ImportGlobalUnitData.NoImport);
+                case 'I':
+                    return GetSwitchInfo(CompilerOptions.IoChecks, IoCallChecks.EnableIoChecks, IoCallChecks.DisableIoChecks);
+                case 'J':
+                    return GetSwitchInfo(CompilerOptions.WritableConstants, ConstantValues.Writable, ConstantValues.Constant);
+                case 'H':
+                    return GetSwitchInfo(CompilerOptions.LongStrings, LongStringTypes.EnableLongStrings, LongStringTypes.DisableLongStrings);
+                case 'L':
+                    return GetSwitchInfo(CompilerOptions.LocalSymbols, LocalDebugSymbols.EnableLocalSymbols, LocalDebugSymbols.DisableLocalSymbols);
+                case 'M':
+                    return GetSwitchInfo(CompilerOptions.PublishedRtti, RttiForPublishedProperties.Enable, RttiForPublishedProperties.Disable);
+                case 'O':
+                    return GetSwitchInfo(CompilerOptions.Optimization, CompilerOptmization.EnableOptimization, CompilerOptmization.DisableOptimization);
+                case 'P':
+                    return GetSwitchInfo(CompilerOptions.OpenStrings, OpenStringTypes.EnableOpenStrings, OpenStringTypes.DisableOpenStrings);
+                case 'Q':
+                    return GetSwitchInfo(CompilerOptions.CheckOverflows, RuntimeOverflowChecks.EnableChecks, RuntimeOverflowChecks.DisableChecks);
+                case 'R':
+                    return GetSwitchInfo(CompilerOptions.RangeChecks, RuntimeRangeChecks.EnableRangeChecks, RuntimeRangeChecks.DisableRangeChecks);
+                case 'T':
+                    return GetSwitchInfo(CompilerOptions.TypedPointers, TypeCheckedPointers.Enable, TypeCheckedPointers.Disable);
+                case 'U':
+                    return GetSwitchInfo(CompilerOptions.SafeDivide, FDivSafeDivide.EnableSafeDivide, FDivSafeDivide.DisableSafeDivide);
+                case 'V':
+                    return GetSwitchInfo(CompilerOptions.VarStringChecks, ShortVarStringChecks.EnableChecks, ShortVarStringChecks.DisableChecks);
+                case 'W':
+                    return GetSwitchInfo(CompilerOptions.StackFrames, StackFrameGeneration.EnableFrames, StackFrameGeneration.DisableFrames);
+                case 'X':
+                    return GetSwitchInfo(CompilerOptions.UseExtendedSyntax, ExtendedSyntax.UseExtendedSyntax, ExtendedSyntax.NoExtendedSyntax);
+                case 'Y':
+                    return GetSwitchInfo(CompilerOptions.SymbolReferences, SymbolReferenceInfo.Enable, SymbolReferenceInfo.Disable);
+                case 'Z':
+                    return GetSwitchInfo(CompilerOptions.MinumEnumSize, EnumSize.FourByte, EnumSize.OneByte);
+
                 default:
                     return SwitchInfo.Undefined;
             }

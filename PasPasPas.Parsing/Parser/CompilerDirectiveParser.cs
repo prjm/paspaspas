@@ -1917,8 +1917,6 @@ namespace PasPasPas.Parsing.Parser {
         private bool ParseResourceFileName(string sourcePath) {
             var kind = CurrentToken().Kind;
 
-
-
             string rcFile = string.Empty;
             if (Optional(PascalToken.Identifier, PascalToken.QuotedString)) {
                 rcFile = CurrentToken().Value;

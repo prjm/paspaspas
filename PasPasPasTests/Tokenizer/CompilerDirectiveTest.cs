@@ -464,6 +464,26 @@ namespace PasPasPasTests.Tokenizer {
         [TestMethod]
         public void TestIfOpt() {
             TestIfOpt('A');
+            TestIfOpt('B');
+            TestIfOpt('C');
+            TestIfOpt('D');
+            TestIfOpt('G');
+            TestIfOpt('I');
+            TestIfOpt('J');
+            TestIfOpt('H');
+            TestIfOpt('L');
+            TestIfOpt('M');
+            TestIfOpt('O');
+            TestIfOpt('P');
+            TestIfOpt('Q');
+            TestIfOpt('R');
+            TestIfOpt('T');
+            TestIfOpt('U');
+            TestIfOpt('V');
+            TestIfOpt('W');
+            TestIfOpt('X');
+            TestIfOpt('Y');
+            TestIfOpt('Z');
         }
 
         [TestMethod]
