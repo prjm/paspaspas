@@ -18,7 +18,7 @@ namespace PasPasPas.Options.DataTypes {
         ///     Create a new search path resolve
         /// </summary>
         /// <param name="options"></param>
-        protected SearchPathResolver(OptionSet options) : base(options) {
+        protected SearchPathResolver(OptionSet options) : base(options.Files) {
             optionSet = options;
         }
 

@@ -4,7 +4,6 @@ using System;
 using PasPasPas.Options.DataTypes;
 using System.Globalization;
 using PasPasPas.Options.Bundles;
-using PasPasPas.Infrastructure.Service;
 using PasPasPas.Infrastructure.Input;
 using PasPasPas.Parsing.Tokenizer;
 
@@ -18,17 +17,17 @@ namespace PasPasPas.Parsing.Parser {
         /// <summary>
         ///     create a new compiler directive parser
         /// </summary>
-        public CompilerDirectiveParser(ServiceProvider environment)
-            : base(new CompilerDirectiveTokenizerWithLookahead()) {
-            this.environment = environment;
-            BaseTokenizer = new CompilerDirectiveTokenizer();
+        /// <param name="environment">services</param>
+        public CompilerDirectiveParser(ParserServices environment)
+            : base(environment, new CompilerDirectiveTokenizerWithLookahead()) {
+            BaseTokenizer = new CompilerDirectiveTokenizer(environment);
         }
 
         /// <summary>
         ///     compiler opions
         /// </summary>
         public IOptionSet Options
-            => environment.Resolve(StandardServices.CompilerConfigurationServiceClass) as IOptionSet;
+            => Environment.Options;
 
         /// <summary>
         ///     compiler options
@@ -164,8 +163,6 @@ namespace PasPasPas.Parsing.Parser {
                 PascalToken.MaxMemStackSizeSwitchLong,
                 PascalToken.IfOpt,
             };
-
-        private ServiceProvider environment;
 
         /// <summary>
         ///     parse a compiler directive
@@ -1379,7 +1376,7 @@ namespace PasPasPas.Parsing.Parser {
             string sourcePath = IncludeInput.CurrentFile?.Path ?? string.Empty;
             string targetPath = Meta.IncludePathResolver.ResolvePath(sourcePath, filename).TargetPath;
 
-            IFileAccess fileAccess = (IFileAccess)environment.Resolve(StandardServices.FileAccessServiceClass, this);
+            var fileAccess = Environment.Environment.FileAccess;
             IncludeInput.AddFile(fileAccess.OpenFileForReading(targetPath));
         }
 
@@ -2076,7 +2073,7 @@ namespace PasPasPas.Parsing.Parser {
             string sourcePath = IncludeInput.CurrentFile?.Path ?? string.Empty;
             string targetPath = Meta.IncludePathResolver.ResolvePath(sourcePath, filename).TargetPath;
 
-            IFileAccess fileAccess = (IFileAccess)environment.Resolve(StandardServices.FileAccessServiceClass, this);
+            IFileAccess fileAccess = Environment.Environment.FileAccess;
             IncludeInput.AddFile(fileAccess.OpenFileForReading(targetPath));
             return true;
         }

@@ -1,6 +1,4 @@
 ﻿using PasPasPas.Api;
-using PasPasPas.DesktopPlatform;
-using PasPasPas.Infrastructure.Input;
 using System;
 using System.Text;
 
@@ -19,6 +17,7 @@ namespace Pppas {
                 return;
             }
 
+            /*
 
             PascalParser parser = new PascalParser();
             PascalFormatter formatter = new PascalFormatter();
@@ -40,6 +39,9 @@ namespace Pppas {
                     Console.In.ReadLine();
                 }
             }
+
+    */
+
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using PasPasPas.Infrastructure.Service;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -8,27 +7,10 @@ namespace PasPasPas.Infrastructure.Input {
     /// <summary>
     ///    base class for file access
     /// </summary>
-    public abstract class FileAccessBase : IFileAccess, IService {
+    public abstract class FileAccessBase : IFileAccess {
 
         private Lazy<IDictionary<string, IParserInput>> mockupFiles
             = new Lazy<IDictionary<string, IParserInput>>(() => new Dictionary<string, IParserInput>(StringComparer.OrdinalIgnoreCase));
-
-        /// <summary>
-        ///     get service id
-        /// </summary>
-        public abstract Guid ServiceId { get; }
-
-        /// <summary>
-        ///     get service class id
-        /// </summary>
-        public Guid ServiceClassId
-            => StandardServices.FileAccessServiceClass;
-
-        /// <summary>
-        ///     resolve the service name
-        /// </summary>
-        public abstract string ServiceName { get; }
-
 
         /// <summary>
         ///     open a file for reading
@@ -73,6 +55,13 @@ namespace PasPasPas.Infrastructure.Input {
                 return true;
 
             return File.Exists(filePath);
+        }
+
+        /// <summary>
+        ///     clear mockups
+        /// </summary>
+        public void ClearMockups() {
+            mockupFiles.Value.Clear();
         }
     }
 }

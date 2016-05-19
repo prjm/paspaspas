@@ -1,70 +1,54 @@
-﻿namespace PasPasPas.Infrastructure.Log {
+﻿using System;
+using System.Globalization;
 
-    using System.Collections.Generic;
-    using System.Globalization;
-
-    /// <summary>
-    ///     log level
-    /// </summary>
-    public enum LogLevel {
-
-        /// <summary>
-        ///     undefined level
-        /// </summary>
-        Undefined,
-
-        /// <summary>
-        ///     informational message
-        /// </summary>
-        Information,
-
-        /// <summary>
-        ///     warning
-        /// </summary>
-        Warning,
-
-        /// <summary>
-        ///     error
-        /// </summary>
-        Error
-    }
+namespace PasPasPas.Infrastructure.Log {
 
     /// <summary>
-    ///     messages
+    ///     immutable, standard log message
     /// </summary>
-    public class LogMessage {
+    public class LogMessage : ILogMessage {
+
+        private readonly object[] data;
+        private readonly Guid group;
+        private readonly Guid id;
+        private readonly MessageSeverity severity;
+        private readonly string text;
 
         /// <summary>
         ///     create a new log message
         /// </summary>
         /// <param name="messageId">message id</param>
-        /// <param name="data">message data</param>
-        public LogMessage(int messageId, object[] data) {
-            Id = messageId;
-            Data = new List<object>(data);
+        /// <param name="messageData">message data</param>
+        /// <param name="groupId">group id</param>
+        /// <param name="messageServerity">severity</param>
+        /// <param name="messageText">message text</param>
+        public LogMessage(MessageSeverity messageServerity, Guid groupId, Guid messageId, string messageText, object[] messageData) {
+            group = groupId;
+            id = messageId;
+            text = messageText;
+            severity = messageServerity;
+            data = messageData;
         }
 
         /// <summary>
-        ///     message data
+        ///     format log message
         /// </summary>
-        public IList<object> Data { get; }
+        public string FormattedMessage => string.Format(CultureInfo.CurrentCulture, text, data);
 
+        /// <summary>
+        ///     groud id
+        /// </summary>
+        public Guid GroupID => group;
 
         /// <summary>
         ///     message id
         /// </summary>
-        public int Id { get; }
+        public Guid MessageID => id;
 
         /// <summary>
-        ///     log level
+        ///     severity
         /// </summary>
-        public LogLevel Level { get; internal set; }
+        public MessageSeverity Severity => severity;
 
-        /// <summary>
-        ///     format message as simple string
-        /// </summary>
-        /// <returns></returns>
-        public string ToSimpleString() =>
-            string.Format(CultureInfo.CurrentCulture, "{0} {1}:", MessageData.FormatMessageLevel(Level), Id);
     }
 }

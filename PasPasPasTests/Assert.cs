@@ -1,6 +1,8 @@
 ﻿using PasPasPas.Api;
 using PasPasPas.Infrastructure.Input;
 using PasPasPas.Infrastructure.Log;
+using PasPasPas.Infrastructure.Service;
+using PasPasPas.Parsing.Parser;
 using PasPasPas.Parsing.Tokenizer;
 using System;
 using System.Collections.Generic;
@@ -12,22 +14,24 @@ namespace PasPasPasTests {
 
     public static class TestHelper {
 
-        public static List<PascalToken> RunTokenizer(string input, IList<LogMessage> messages = null) {
-            var tokenizer = new StandardTokenizer();
+        public static List<PascalToken> RunTokenizer(string input, IList<ILogMessage> messages = null) {
+            var environment = new StandardServices();
+            var services = new ParserServices(environment);
+            var messageHandler = new LogTarget();
+            var tokenizer = new StandardTokenizer(services);
             var result = new List<PascalToken>();
+            environment.LogManager.RegisterTarget(messageHandler);
             using (var inputString = new StringInput(input, "test.pas"))
             using (var reader = new StackedFileReader()) {
-                EventHandler<LogMessageEventArgs> handler = (_, x) => messages.Add(x.Message);
+                EventHandler<LogMessageEvent> handler = (_, x) => messages.Add(x.Message);
                 reader.AddFile(inputString);
                 tokenizer.Input = reader;
 
                 if (messages != null)
-                    tokenizer.LogMessage += handler;
+                    messageHandler.ProcessMessage += handler;
 
                 while (tokenizer.HasNextToken())
                     result.Add(tokenizer.FetchNextToken());
-
-                tokenizer.LogMessage -= handler;
 
                 return result;
             }
@@ -75,10 +79,10 @@ namespace PasPasPasTests {
             IsToken(PascalToken.Identifier, output, input);
         }
 
-        internal static void TokenizerMessageIsGenerated(int messageNumber, string input) {
-            var messages = new List<LogMessage>();
+        internal static void TokenizerMessageIsGenerated(Guid messageNumber, string input) {
+            var messages = new List<ILogMessage>();
             var result = TestHelper.RunTokenizer(input, messages);
-            bool hasMessage = messages.Any(t => t.Id == messageNumber);
+            bool hasMessage = messages.Any(t => t.MessageID == messageNumber);
             IsTrue(hasMessage);
         }
 

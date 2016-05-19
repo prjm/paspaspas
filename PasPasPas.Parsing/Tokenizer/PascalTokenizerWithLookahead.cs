@@ -1,6 +1,5 @@
 ﻿using PasPasPas.Api;
 using PasPasPas.Infrastructure.Input;
-using PasPasPas.Infrastructure.Service;
 using PasPasPas.Options.Bundles;
 using PasPasPas.Parsing.Parser;
 
@@ -12,13 +11,13 @@ namespace PasPasPas.Parsing.Tokenizer {
     public class PascalTokenizerWithLookahead : TokenizerWithLookahead {
 
 
-        private readonly ServiceProvider environment;
+        private readonly ParserServices environment;
 
         /// <summary>
         ///     create a new pascal tokenizer
         /// </summary>
         /// <param name="environment"></param>
-        public PascalTokenizerWithLookahead(ServiceProvider environment) {
+        public PascalTokenizerWithLookahead(ParserServices environment) {
             this.environment = environment;
         }
 
@@ -26,7 +25,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         ///     compiler options
         /// </summary>
         public IOptionSet Options
-            => environment.Resolve(StandardServices.CompilerConfigurationServiceClass) as IOptionSet;
+            => environment.Options;
 
         /// <summary>
         ///     test if a token is a macro token
@@ -53,7 +52,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="nextToken"></param>
         protected override void ProcssMacroToken(PascalToken nextToken) {
             var parser = new CompilerDirectiveParser(environment);
-            var tokenizer = new CompilerDirectiveTokenizer();
+            var tokenizer = new CompilerDirectiveTokenizer(environment);
             using (var input = new StringInput(CompilerDirectiveTokenizer.Unwrap(nextToken.Value), BaseTokenizer.Input.CurrentFile.Path))
             using (var reader = new StackedFileReader()) {
                 reader.AddFile(input);

@@ -16,7 +16,7 @@ namespace PasPasPasTests {
     public class ParserTestBase {
 
         protected OptionSet TestOptions
-            = new OptionSet();
+            = new OptionSet(new StandardFileAccess());
 
         protected CompileOptions CompilerOptions
             => TestOptions.CompilerOptions;
@@ -58,21 +58,24 @@ namespace PasPasPasTests {
 
             ClearOptions();
 
-            var environment = new ServiceProvider();
-            environment.Register(new CommonConfiguration());
-            environment.Register(TestOptions);
+            var services = new StandardServices();
+            var environment = new ParserServices(services);
+            var log = new LogTarget();
+            environment.Options = TestOptions;
 
             StandardParser parser = new StandardParser(environment);
             using (var inputFile = new StringInput(input, "test.pas"))
             using (var reader = new StackedFileReader()) {
                 reader.AddFile(inputFile);
-                parser.BaseTokenizer = new StandardTokenizer() { Input = reader };
+                parser.BaseTokenizer = new StandardTokenizer(environment) { Input = reader };
                 var hasError = false;
                 string errorText = string.Empty;
 
-                parser.LogMessage += (x, y) => {
-                    errorText += y.Message.ToSimpleString() + Environment.NewLine;
-                    hasError = hasError || y.Message.Level == LogLevel.Error;
+                log.ProcessMessage += (x, y) => {
+                    errorText += y.Message.FormattedMessage + Environment.NewLine;
+                    hasError = hasError ||
+                    y.Message.Severity == MessageSeverity.Error ||
+                    y.Message.Severity == MessageSeverity.FatalError;
                 };
 
                 var result = parser.Parse();
@@ -85,18 +88,21 @@ namespace PasPasPasTests {
         }
 
         protected void RunCompilerDirective(string directive, object expected, Func<object> actual) {
-            var fileAccess = new StandardFileAccess();
+            var fileAccess = (StandardFileAccess)TestOptions.Files;
             var fileCounter = 0;
 
+            fileAccess.ClearMockups();
             fileAccess.AddOneTimeMockup("dummy.inc", new StringInput("DEFINE DUMMY_INC", "dummy.inc"));
             fileAccess.AddOneTimeMockup("res.res", new StringInput("RES RES RES", "res.res"));
             fileAccess.AddOneTimeMockup("test_0.res", new StringInput("RES RES RES", "test_0.res"));
             fileAccess.AddOneTimeMockup("link.dll", new StringInput("MZE!", "link.dll"));
 
-            var environment = new ServiceProvider();
-            environment.Register(new CommonConfiguration());
-            environment.Register(TestOptions);
-            environment.Register(fileAccess);
+            var services = new StandardServices();
+            var environment = new ParserServices(services);
+            environment.Options = TestOptions;
+            //environment.Register(new CommonConfiguration());
+            //environment.Register(TestOptions);
+            //environment.Register(fileAccess);
 
             ClearOptions();
 

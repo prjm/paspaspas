@@ -15,6 +15,9 @@ namespace TokenizerDemo {
             => new List<string>(Directory.EnumerateFiles(path, "*.pas"));
 
         static void Main(string[] args) {
+
+            /*
+
             var path = "C:\\Users\\Bastian\\Documents\\Visual Studio 2015\\Projects\\paspaspas\\Testfiles";
             var files = FindFiles(path);
             var result = new Dictionary<long, long>();
@@ -56,6 +59,9 @@ namespace TokenizerDemo {
             foreach (var entry in list) {
                 Console.WriteLine(entry.Value + ": " + entry.Key);
             }
+
+            */
+
         }
     }
 }

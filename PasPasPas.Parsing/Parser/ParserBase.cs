@@ -4,24 +4,40 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 using System.Linq;
-using PasPasPas.Infrastructure.Log;
 using PasPasPas.Parsing.Tokenizer;
+using PasPasPas.Infrastructure.Log;
 
 namespace PasPasPas.Parsing.Parser {
 
     /// <summary>
     ///     base class for parsers
     /// </summary>
-    public abstract class ParserBase : MessageGenerator, IParserInformationProvider {
+    public abstract class ParserBase : IParserInformationProvider {
+
+        /// <summary>
+        ///     message group for parser logs
+        /// </summary>
+        public static readonly Guid ParserLogMessage
+            = new Guid("{5EFB031C-8B43-4749-9C2E-6670F91D6B4C}");
+
+        /// <summary>
+        ///     message: unexpected token
+        /// </summary>    
+        public static readonly Guid UnexpectedToken
+            = new Guid("{62E2B740-13A1-46B6-A3CA-298318753C39}");
 
         private readonly TokenizerWithLookahead tokenizer;
+        private readonly LogSource logSource;
 
         /// <summary>
         ///     creates a new parser
         /// </summary>
         /// <param name="aTokenizer"></param>
-        protected ParserBase(TokenizerWithLookahead aTokenizer) {
+        /// <param name="environment">environment</param>
+        protected ParserBase(ParserServices environment, TokenizerWithLookahead aTokenizer) {
+            Environment = environment;
             tokenizer = aTokenizer;
+            logSource = new LogSource(environment.Environment.LogManager, ParserLogMessage, Messages.ResourceManager);
         }
 
         /// <summary>
@@ -46,12 +62,18 @@ namespace PasPasPas.Parsing.Parser {
         public TokenizerWithLookahead Tokenizer
             => tokenizer;
 
+
+        /// <summary>
+        ///     basic working environment
+        /// </summary>
+        public ParserServices Environment { get; }
+
         /// <summary>
         ///     unexpected input token
         /// </summary>
         /// <returns></returns>
         protected ISyntaxPart Unexpected() {
-            LogError(MessageData.UnexpectedToken, CurrentToken().Kind, CurrentToken().Value);
+            logSource.Error(UnexpectedToken, CurrentToken().Kind, CurrentToken().Value);
             return null;
         }
 

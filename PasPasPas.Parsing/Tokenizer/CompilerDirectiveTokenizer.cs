@@ -1,4 +1,5 @@
 ﻿using PasPasPas.Api;
+using PasPasPas.Parsing.Parser;
 using System;
 using System.Collections.Generic;
 
@@ -8,6 +9,12 @@ namespace PasPasPas.Parsing.Tokenizer {
     ///     helper for compiler directives
     /// </summary>
     public class CompilerDirectiveTokenizer : TokenizerBase, IPascalTokenizer {
+
+        /// <summary>
+        ///     create a new compiler directive tokenizer
+        /// </summary>
+        /// <param name="services"></param>
+        public CompilerDirectiveTokenizer(ParserServices services) : base(services) { }
 
         private PreprocessorPunctuators punctuators
             = new PreprocessorPunctuators();

@@ -1,4 +1,5 @@
 ﻿using PasPasPas.Api;
+using PasPasPas.Parsing.Parser;
 using System;
 using System.Collections.Generic;
 
@@ -9,8 +10,26 @@ namespace PasPasPas.Parsing.Tokenizer {
     /// </summary>
     public class StandardTokenizer : TokenizerBase, IPascalTokenizer {
 
+        /// <summary>
+        ///     create a new tokenizer
+        /// </summary>
+        /// <param name="services"></param>
+        public StandardTokenizer(ParserServices services) : base(services) { }
+
         private StandardPunctuators punctuators
             = new StandardPunctuators();
+
+        /// <summary>
+        ///     message id: incomplete hex number
+        /// </summary>
+        public static readonly Guid IncompleteHexNumber
+            = new Guid("{489C8577-E50F-43AE-83F8-F418343C5271}");
+
+        /// <summary>
+        ///     message id: incomplete identifier
+        /// </summary>
+        public static readonly Guid IncompleteIdentifier
+            = new Guid("{988D22EB-E405-4391-BD7E-7DF3D4E553D3}");
 
         /// <summary>
         ///     get punctuators

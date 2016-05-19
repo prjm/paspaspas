@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using PasPasPas.Infrastructure.Input;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace PasPasPas.Options.Bundles {
@@ -23,9 +24,10 @@ namespace PasPasPas.Options.Bundles {
         /// <summary>
         ///     creates a new set of options
         /// </summary>
-        public CompilerOptions() {
+        /// <param name="fileAccess">file access</param>
+        public CompilerOptions(IFileAccess fileAccess) {
             var platforms = new Dictionary<PlatformKey, Platform>();
-            var optionRoot = new DefaultPlatform();
+            var optionRoot = new DefaultPlatform(fileAccess);
             platforms.Add(PlatformKey.Default, optionRoot);
             platforms.Add(PlatformKey.AnyCpu, new AnyCpuPlatform(optionRoot.DefaultOptions));
             Platforms = new ReadOnlyDictionary<PlatformKey, Platform>(platforms);

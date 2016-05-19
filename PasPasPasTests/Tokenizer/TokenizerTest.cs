@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Internal;
+using PasPasPas.Parsing.Tokenizer;
 
 namespace PasPasPasTests.Tokenizer {
 
@@ -76,9 +77,9 @@ namespace PasPasPasTests.Tokenizer {
 
         [TestMethod]
         public void TestMessages() {
-            Assert.TokenizerMessageIsGenerated(MessageData.IncompleteHexNumber, "$");
-            Assert.TokenizerMessageIsGenerated(MessageData.IncompleteIdentifier, "&");
-            Assert.TokenizerMessageIsGenerated(MessageData.UndefinedInputToken, "´");
+            Assert.TokenizerMessageIsGenerated(StandardTokenizer.IncompleteHexNumber, "$");
+            Assert.TokenizerMessageIsGenerated(StandardTokenizer.IncompleteIdentifier, "&");
+            Assert.TokenizerMessageIsGenerated(TokenizerBase.UnexpectedCharacter, "´");
         }
     }
 }

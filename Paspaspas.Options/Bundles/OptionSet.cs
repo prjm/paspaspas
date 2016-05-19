@@ -1,13 +1,13 @@
 ﻿using System;
-using PasPasPas.Infrastructure.Service;
 using PasPasPas.Options.DataTypes;
+using PasPasPas.Infrastructure.Input;
 
 namespace PasPasPas.Options.Bundles {
 
     /// <summary>
     ///     set of compiler options
     /// </summary>
-    public class OptionSet : ServiceBase, IService, IOptionSet {
+    public class OptionSet : IOptionSet {
 
         /// <summary>
         ///     debug configuration
@@ -22,13 +22,16 @@ namespace PasPasPas.Options.Bundles {
         /// <summary>
         ///     creates a new option set
         /// </summary>
-        public OptionSet() : this(null) { }
+        /// <param name="fileAccess">file access</param>
+        public OptionSet(IFileAccess fileAccess) : this(null, fileAccess) { }
 
         /// <summary>
         ///     create a new option set
         /// </summary>
         /// <param name="baseOptions"></param>
-        public OptionSet(OptionSet baseOptions) {
+        /// <param name="fileAccess">file access</param>
+        public OptionSet(OptionSet baseOptions, IFileAccess fileAccess) {
+            Files = fileAccess;
             CompilerOptions = new CompileOptions(baseOptions?.CompilerOptions);
             ConditionalCompilation = new ConditionalCompilationOptions(baseOptions?.ConditionalCompilation);
             Meta = new MetaInformation(this, baseOptions?.Meta);
@@ -50,11 +53,6 @@ namespace PasPasPas.Options.Bundles {
         ///     meta information
         /// </summary>
         public MetaInformation Meta { get; }
-
-        /// <summary>
-        ///     return service class id
-        /// </summary>
-        public Guid ServiceClassId => StandardServices.CompilerConfigurationServiceClass;
 
         /// <summary>
         ///     option service id
@@ -81,6 +79,11 @@ namespace PasPasPas.Options.Bundles {
         ///     warning optiosn
         /// </summary>
         public WarningOptions Warnings { get; }
+
+        /// <summary>
+        ///     file access
+        /// </summary>
+        public IFileAccess Files { get; }
 
         /// <summary>
         ///     clear all option values

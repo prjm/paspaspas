@@ -1,5 +1,4 @@
-﻿using PasPasPas.Infrastructure.Service;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -47,29 +46,24 @@ namespace PasPasPas.Infrastructure.Input {
     /// <summary>
     ///     resolves paths for common scenarios
     /// </summary>
-    public abstract class PathResolver : IObjectBase {
+    public abstract class PathResolver {
 
         private IDictionary<ResolvedPathKey, ResolvedFile> resolvedPaths
             = new Dictionary<ResolvedPathKey, ResolvedFile>();
 
         /// <summary>
+        ///     access to files
+        /// </summary>
+        public IFileAccess Files { get; }
+
+
+        /// <summary>
         ///     create a new path resolver
         /// </summary>
-        /// <param name="services"></param>
-        protected PathResolver(IObjectBase services) {
-            ObjectBase = services;
+        /// <param name="fileAccess">file access</param>
+        protected PathResolver(IFileAccess fileAccess) {
+            Files = fileAccess;
         }
-
-        /// <summary>
-        ///     get services
-        /// </summary>
-        public ServiceProvider Services
-            => ObjectBase.Services;
-
-        /// <summary>
-        ///     provided services
-        /// </summary>
-        protected IObjectBase ObjectBase { get; }
 
         /// <summary>
         ///     resolves a path and caches the result
@@ -101,7 +95,7 @@ namespace PasPasPas.Infrastructure.Input {
         /// <param name="pathToResolve">path to resolve</param>
         /// <returns></returns>
         protected ResolvedFile ResolveInDirectory(string currentDirectory, string pathToResolve) {
-            var fileAccess = (IFileAccess)ObjectBase.Services.Resolve(StandardServices.FileAccessServiceClass, this);
+            var fileAccess = Files;
             string combinedPath;
             string targetPath;
 

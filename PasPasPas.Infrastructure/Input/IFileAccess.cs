@@ -19,5 +19,6 @@
         /// <param name="filePath">file path</param>
         /// <returns><c>true</c> if the file exists</returns>
         bool FileExists(string filePath);
+
     }
 }
