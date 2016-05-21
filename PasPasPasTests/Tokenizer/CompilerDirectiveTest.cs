@@ -571,9 +571,9 @@ namespace PasPasPasTests.Tokenizer {
         [TestMethod]
         public void TestNoDefine() {
             RunCompilerDirective("", false, () => Meta.NoDefines.Any());
-            RunCompilerDirective("NODEFINE TDEMO", 1, () => Meta.NoDefines.Any(t => t.TypeName.StartsWith("TDemo", StringComparison.OrdinalIgnoreCase)));
+            RunCompilerDirective("NODEFINE TDEMO", true, () => Meta.NoDefines.Any(t => t.TypeName.StartsWith("TDemo", StringComparison.OrdinalIgnoreCase)));
             RunCompilerDirective("NODEFINE TMIMOA", false, () => Meta.NoDefines.Any(t => t.TypeName.StartsWith("TDemo", StringComparison.OrdinalIgnoreCase)));
-            RunCompilerDirective("NODEFINE TMIMOA FUZZ", false, () => Meta.NoDefines.Any(t => t.UnionTypeName.StartsWith("fuz", StringComparison.OrdinalIgnoreCase)));
+            RunCompilerDirective("NODEFINE TMIMOA FUZZ", true, () => Meta.NoDefines.Any(t => t.UnionTypeName.StartsWith("fuz", StringComparison.OrdinalIgnoreCase)));
         }
 
         [TestMethod]

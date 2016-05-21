@@ -388,7 +388,7 @@ namespace PasPasPas.Parsing.Parser {
             Require(PascalToken.NoDefine);
             var typeName = Require(PascalToken.NoInclude).Value;
             var typeNameInUnion = string.Empty;
-            if (Optional(PascalToken.Identifier)) {
+            if (Match(PascalToken.Identifier)) {
                 typeNameInUnion = CurrentToken().Value;
             }
 

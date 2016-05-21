@@ -1144,11 +1144,6 @@ namespace PasPasPas.Api {
         public const int OptimizationSwitch = 762;
 
         /// <summary>
-        ///     token for <c>$OPTIMIZATION</c>
-        /// </summary>
-        public const int OptimizationSwitchLong = 763;
-
-        /// <summary>
         ///     token for <c>$Q</c>
         /// </summary>
         public const int OverflowSwitch = 763;
@@ -1217,6 +1212,12 @@ namespace PasPasPas.Api {
         ///     token for <c>$REGION</c>
         /// </summary>
         public const int Region = 776;
+
+
+        /// <summary>
+        ///     token for <c>$OPTIMIZATION</c>
+        /// </summary>
+        public const int OptimizationSwitchLong = 777;
 
         /// <summary>
         ///     token for <c>%ENDREGION</c>
