@@ -1,7 +1,6 @@
 ﻿using PasPasPas.Api;
 using PasPasPas.Infrastructure.Input;
 using PasPasPas.Infrastructure.Log;
-using PasPasPas.Infrastructure.Service;
 using PasPasPas.Parsing.Parser;
 using PasPasPas.Parsing.Tokenizer;
 using System;
@@ -15,12 +14,12 @@ namespace PasPasPasTests {
     public static class TestHelper {
 
         public static List<PascalToken> RunTokenizer(string input, IList<ILogMessage> messages = null) {
-            var environment = new StandardServices();
-            var services = new ParserServices(environment);
+            var logManager = new LogManager();
+            var services = new ParserServices(logManager);
             var messageHandler = new LogTarget();
             var tokenizer = new StandardTokenizer(services);
             var result = new List<PascalToken>();
-            environment.LogManager.RegisterTarget(messageHandler);
+            logManager.RegisterTarget(messageHandler);
             using (var inputString = new StringInput(input, "test.pas"))
             using (var reader = new StackedFileReader()) {
                 EventHandler<LogMessageEvent> handler = (_, x) => messages.Add(x.Message);

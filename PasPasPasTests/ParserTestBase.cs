@@ -1,9 +1,7 @@
 ﻿using PasPasPas.Api;
 using PasPasPas.DesktopPlatform;
-using PasPasPas.Infrastructure.Configuration;
 using PasPasPas.Infrastructure.Input;
 using PasPasPas.Infrastructure.Log;
-using PasPasPas.Infrastructure.Service;
 using PasPasPas.Options.Bundles;
 using PasPasPas.Options.DataTypes;
 using PasPasPas.Parsing.Parser;
@@ -58,8 +56,8 @@ namespace PasPasPasTests {
 
             ClearOptions();
 
-            var services = new StandardServices();
-            var environment = new ParserServices(services);
+            var logManager = new LogManager();
+            var environment = new ParserServices(logManager);
             var log = new LogTarget();
             environment.Options = TestOptions;
 
@@ -97,8 +95,8 @@ namespace PasPasPasTests {
             fileAccess.AddOneTimeMockup("test_0.res", new StringInput("RES RES RES", "test_0.res"));
             fileAccess.AddOneTimeMockup("link.dll", new StringInput("MZE!", "link.dll"));
 
-            var services = new StandardServices();
-            var environment = new ParserServices(services);
+            var log = new LogManager();
+            var environment = new ParserServices(log);
             environment.Options = TestOptions;
             //environment.Register(new CommonConfiguration());
             //environment.Register(TestOptions);

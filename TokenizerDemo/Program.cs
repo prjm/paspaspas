@@ -1,11 +1,4 @@
-﻿using PasPasPas.DesktopPlatform;
-using PasPasPas.Infrastructure.Configuration;
-using PasPasPas.Infrastructure.Input;
-using PasPasPas.Infrastructure.Service;
-using PasPasPas.Options.Bundles;
-using PasPasPas.Parsing.Tokenizer;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 
 namespace TokenizerDemo {

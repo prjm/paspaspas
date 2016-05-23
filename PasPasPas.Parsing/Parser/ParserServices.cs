@@ -1,4 +1,4 @@
-﻿using PasPasPas.Infrastructure.Service;
+﻿using PasPasPas.Infrastructure.Log;
 using PasPasPas.Options.Bundles;
 
 namespace PasPasPas.Parsing.Parser {
@@ -9,9 +9,9 @@ namespace PasPasPas.Parsing.Parser {
     public class ParserServices {
 
         /// <summary>
-        ///     standard environment
+        ///     logging
         /// </summary>
-        public StandardServices Environment { get; }
+        public ILogManager Log { get; }
 
         /// <summary>
         ///     parser options
@@ -21,9 +21,9 @@ namespace PasPasPas.Parsing.Parser {
         /// <summary>
         ///     create a new service class for a parser
         /// </summary>
-        /// <param name="environment">standard services</param>
-        public ParserServices(StandardServices environment) {
-            Environment = environment;
+        /// <param name="log">logging manager</param>
+        public ParserServices(ILogManager log) {
+            Log = log;
         }
 
     }

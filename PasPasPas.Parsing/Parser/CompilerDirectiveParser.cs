@@ -1376,7 +1376,7 @@ namespace PasPasPas.Parsing.Parser {
             string sourcePath = IncludeInput.CurrentFile?.Path ?? string.Empty;
             string targetPath = Meta.IncludePathResolver.ResolvePath(sourcePath, filename).TargetPath;
 
-            var fileAccess = Environment.Environment.FileAccess;
+            var fileAccess = Options.Files;
             IncludeInput.AddFile(fileAccess.OpenFileForReading(targetPath));
         }
 
@@ -1913,8 +1913,9 @@ namespace PasPasPas.Parsing.Parser {
 
         private bool ParseResourceFileName(string sourcePath) {
             var kind = CurrentToken().Kind;
-
             string rcFile = string.Empty;
+            string filename = ParseFileName();
+
             if (Optional(PascalToken.Identifier, PascalToken.QuotedString)) {
                 rcFile = CurrentToken().Value;
                 if (CurrentToken().Kind == PascalToken.QuotedString) {
@@ -1922,7 +1923,6 @@ namespace PasPasPas.Parsing.Parser {
                 }
             }
 
-            var filename = ParseFileName();
             var resolvedFile = Meta.ResourceFilePathResolver.ResolvePath(sourcePath, filename);
 
             if (resolvedFile.IsResolved) {
@@ -2073,7 +2073,7 @@ namespace PasPasPas.Parsing.Parser {
             string sourcePath = IncludeInput.CurrentFile?.Path ?? string.Empty;
             string targetPath = Meta.IncludePathResolver.ResolvePath(sourcePath, filename).TargetPath;
 
-            IFileAccess fileAccess = Environment.Environment.FileAccess;
+            IFileAccess fileAccess = Options.Files;
             IncludeInput.AddFile(fileAccess.OpenFileForReading(targetPath));
             return true;
         }

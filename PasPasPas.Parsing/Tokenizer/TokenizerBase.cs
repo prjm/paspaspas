@@ -28,7 +28,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         protected TokenizerBase(ParserServices environment) {
             Environment = environment;
-            LogSource = new LogSource(environment.Environment.LogManager, TokenizerLogMessage, Messages.ResourceManager);
+            LogSource = new LogSource(environment.Log, TokenizerLogMessage, Messages.ResourceManager);
         }
 
         /// <summary>
