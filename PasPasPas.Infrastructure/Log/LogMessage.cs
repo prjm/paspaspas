@@ -22,7 +22,7 @@ namespace PasPasPas.Infrastructure.Log {
         /// <param name="groupId">group id</param>
         /// <param name="messageServerity">severity</param>
         /// <param name="messageText">message text</param>
-        public LogMessage(MessageSeverity messageServerity, Guid groupId, Guid messageId, string messageText, object[] messageData) {
+        public LogMessage(MessageSeverity messageServerity, Guid groupId, Guid messageId, string messageText, params object[] messageData) {
             group = groupId;
             id = messageId;
             text = messageText;

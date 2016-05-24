@@ -17,5 +17,11 @@ namespace P3Ide.ViewModel.MainWindow {
         /// </summary>
         public ObservableCollection<EditorViewModel> Documents { get; } =
             new ObservableCollection<EditorViewModel>();
+
+        /// <summary>
+        ///     tool windows
+        /// </summary>
+        public ObservableCollection<ToolWindowViewModel> ToolWindows { get; } =
+            new ObservableCollection<ToolWindowViewModel>();
     }
 }

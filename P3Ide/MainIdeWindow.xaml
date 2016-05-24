@@ -10,7 +10,7 @@
         xmlns:vmm="clr-namespace:P3Ide.ViewModel.MainWindow"
         xmlns:v="clr-namespace:P3Ide.View"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="P3Ide" Height="700" Width="805" WindowStartupLocation="CenterScreen">
 
     <Grid>
         <Grid.RowDefinitions>
@@ -20,6 +20,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
+
         <Menu Grid.Row="0" Grid.Column="0" DataContext="{Binding MainMenu}" ItemsSource="{Binding MenuItems}">
             <Menu.Resources>
                 <Style TargetType="{x:Type MenuItem}">
@@ -32,7 +33,8 @@
 
         <dock:DockingManager Grid.Row="1" Grid.Column="0"
                              DataContext="{Binding Workspace}"
-                             DocumentsSource="{Binding Documents}">
+                             DocumentsSource="{Binding Documents}"
+                             AnchorablesSource="{Binding ToolWindows}">
 
             <!--                 AnchorablesSource="{Binding Anchorables}"-->
 
@@ -40,18 +42,19 @@
                 <DataTemplate DataType="{x:Type vmm:TextEditorViewModel}">
                     <v:TextEditorWindow/>
                 </DataTemplate>
+                <DataTemplate DataType="{x:Type vmm:PascalEditorViewModel}">
+                    <v:PascalEditorWindow/>
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type vmm:MessagesViewModel}">
+                    <v:MessageList/>
+                </DataTemplate>
             </dock:DockingManager.Resources>
 
             <dock:LayoutRoot>
-                <dock:LayoutPanel Orientation="Horizontal">
+                <dock:LayoutPanel Orientation="Vertical">
                     <dock:LayoutDocumentPane/>
-                    <dock:LayoutAnchorablePane DockWidth="150"/>
+                    <dock:LayoutAnchorablePane DockHeight="250"/>
                 </dock:LayoutPanel>
-                <dock:LayoutRoot.LeftSide>
-                    <dock:LayoutAnchorSide>
-                        <dock:LayoutAnchorGroup/>
-                    </dock:LayoutAnchorSide>
-                </dock:LayoutRoot.LeftSide>
             </dock:LayoutRoot>
         </dock:DockingManager>
 

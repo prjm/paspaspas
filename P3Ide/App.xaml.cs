@@ -20,6 +20,7 @@ namespace P3Ide {
 
             var containerBuilder = new ContainerBuilder();
 
+            containerBuilder.RegisterType<FileNewMenuItem>().As<IMainMenuItem>();
             containerBuilder.RegisterType<FileOpenMenuItem>().As<IMainMenuItem>();
             containerBuilder.RegisterType<FileExitMenuItem>().As<IMainMenuItem>();
 
@@ -31,6 +32,7 @@ namespace P3Ide {
 
             containerBuilder.RegisterType<SupportedPascalProject>().As<ISupportedProjectType>().SingleInstance();
             containerBuilder.RegisterType<TextFileType>().As<ISupportedFileType>().SingleInstance();
+            containerBuilder.RegisterType<PascalFileType>().As<ISupportedFileType>().SingleInstance();
 
             var container = containerBuilder.Build();
 

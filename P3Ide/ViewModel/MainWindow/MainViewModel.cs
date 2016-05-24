@@ -17,6 +17,7 @@ namespace P3Ide.ViewModel.MainWindow {
             MainMenu = mainMenu;
             EditorCapabilities = capabilities;
             Workspace = workspace;
+            Workspace.ToolWindows.Add(new MessagesViewModel());
         }
 
         /// <summary>

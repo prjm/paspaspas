@@ -73,7 +73,8 @@
     <Compile Include="ViewModel\Base\IMenuViewModel.cs" />
     <Compile Include="ViewModel\Base\MenuViewModel.cs" />
     <Compile Include="ViewModel\Base\RelayCommand.cs" />
-    <Compile Include="ViewModel\MainWindow\DockWindowViewModel.cs" />
+    <Compile Include="ViewModel\MainWindow\MessagesViewModel.cs" />
+    <Compile Include="ViewModel\MainWindow\TextEditorViewModel.cs" />
     <Compile Include="ViewModel\MainWindow\EditorRegistry.cs" />
     <Compile Include="ViewModel\MainWindow\EditorViewModel.cs" />
     <Compile Include="ViewModel\MainWindow\EditorWorkspace.cs" />
@@ -83,6 +84,9 @@
     <Compile Include="ViewModel\MainWindow\IEditorWorkspace.cs" />
     <Compile Include="ViewModel\MainWindow\IMainMenuItem.cs" />
     <Compile Include="ViewModel\MainWindow\IMainMenuViewModel.cs" />
+    <Compile Include="ViewModel\MainWindow\ToolWindowViewModel.cs" />
+    <Compile Include="ViewModel\PascalProject\PascalFile.cs" />
+    <Compile Include="ViewModel\PascalProject\PascalEditorViewModel.cs" />
     <Compile Include="ViewModel\StandardFiles\ISupportedFileType.cs" />
     <Compile Include="ViewModel\MainWindow\StandardEditorCapabilities.cs" />
     <Compile Include="ViewModel\PascalProject\SupportedPascalProject.cs" />
@@ -92,6 +96,12 @@
     <Compile Include="ViewModel\MainWindow\MainViewModel.cs" />
     <Compile Include="ViewModel\MainWindow\IMainViewModel.cs" />
     <Compile Include="ViewModel\StandardFiles\TextFileType.cs" />
+    <Compile Include="View\MessageList.xaml.cs">
+      <DependentUpon>MessageList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\PascalEditorWindow.xaml.cs">
+      <DependentUpon>PascalEditorWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\TextEditorWindow.xaml.cs">
       <DependentUpon>TextEditorWindow.xaml</DependentUpon>
     </Compile>
@@ -110,6 +120,14 @@
       <DependentUpon>MainIdeWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="View\MessageList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\PascalEditorWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="View\TextEditorWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -148,7 +166,12 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\PasPasPas.Infrastructure\PasPasPas.Infrastructure.csproj">
+      <Project>{4CEF569A-4ECE-42EE-847B-5029958F757C}</Project>
+      <Name>PasPasPas.Infrastructure</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

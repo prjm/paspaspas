@@ -42,6 +42,52 @@ namespace P3Ide.ViewModel.MainWindow {
     }
 
     /// <summary>
+    ///     menu item to create a new file
+    /// </summary>
+    public class FileNewMenuItem : FileMenuItem {
+
+
+        /// <summary>
+        ///     create a new file new menu item
+        /// </summary>
+        /// <param name="capabilities"></param>
+        /// <param name="workspace"></param>
+        public FileNewMenuItem(IEditorCapabilites capabilities, IEditorWorkspace workspace) {
+            Priority = 1;
+            Capabilities = capabilities;
+            Workspace = workspace;
+        }
+
+        /// <summary>
+        ///     editor capabilities
+        /// </summary>
+        public IEditorCapabilites Capabilities { get; }
+
+        /// <summary>
+        ///     file new command
+        /// </summary>
+        public override ICommand Command
+            => new RelayCommand<object>(CreateNewFile);
+
+        private void CreateNewFile(object parameter) {
+            var dummy = "c:\\temp\\dummy.pas";
+            var editor = Capabilities.Registry.TryToCreateEditorForFile(dummy);
+            Workspace.Documents.Add(editor);
+        }
+
+        /// <summary>
+        ///     file menu item texxt
+        /// </summary>
+        public override string Text
+            => "New";
+
+        /// <summary>
+        ///     editor workspace
+        /// </summary>
+        public IEditorWorkspace Workspace { get; }
+    }
+
+    /// <summary>
     ///     menu item to open a file
     /// </summary>
     public class FileOpenMenuItem : FileMenuItem {
@@ -52,6 +98,7 @@ namespace P3Ide.ViewModel.MainWindow {
         /// <param name="capabilities"></param>
         /// <param name="workspace"></param>
         public FileOpenMenuItem(IEditorCapabilites capabilities, IEditorWorkspace workspace) {
+            Priority = 2;
             Capabilities = capabilities;
             Workspace = workspace;
         }
