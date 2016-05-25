@@ -39,7 +39,7 @@ namespace PasPasPas.Infrastructure.Log {
         /// <param name="id">message id</param>
         /// <param name="data">message parameters</param>
         public void Error(Guid id, params object[] data) {
-            string text = resourceManager.GetString(string.Format(CultureInfo.InvariantCulture, "R_{0:N}", id));
+            string text = resourceManager.GetString(string.Format(CultureInfo.InvariantCulture, "R_{0}", id.ToString("N").ToUpperInvariant()));
             ProcessMessage(new LogMessage(MessageSeverity.Error, group, id, text, data));
         }
 
