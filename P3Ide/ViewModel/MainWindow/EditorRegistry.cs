@@ -12,15 +12,35 @@ namespace P3Ide.ViewModel.MainWindow {
     /// </summary>
     public class EditorRegistry : IEditorRegistry {
 
-        private IDictionary<string, Func<EditorViewModel>> registeredEditors
-            = new Dictionary<string, Func<EditorViewModel>>(StringComparer.OrdinalIgnoreCase);
+        private IDictionary<string, EditorCreator> registeredEditors
+            = new Dictionary<string, EditorCreator>(StringComparer.OrdinalIgnoreCase);
+
+        /// <summary>
+        ///     create a new registry
+        /// </summary>
+        /// <param name="capabilities"></param>
+        /// <param name="workspace">workspace</param>
+        public EditorRegistry(IEditorCapabilites capabilities, IEditorWorkspace workspace) {
+            Capabilities = capabilities;
+            Workspace = workspace;
+        }
+
+        /// <summary>
+        ///     capabilties
+        /// </summary>
+        public IEditorCapabilites Capabilities { get; }
+
+        /// <summary>
+        ///     editor workspace
+        /// </summary>
+        public IEditorWorkspace Workspace { get; }
 
         /// <summary>
         ///     register a file type
         /// </summary>
         /// <param name="extension"></param>
         /// <param name="viewModel"></param>
-        public void RegisterFileType(string extension, Func<EditorViewModel> viewModel) {
+        public void RegisterFileType(string extension, EditorCreator viewModel) {
             registeredEditors.Add(extension, viewModel);
         }
 
@@ -31,9 +51,9 @@ namespace P3Ide.ViewModel.MainWindow {
         /// <returns></returns>
         public EditorViewModel TryToCreateEditorForFile(string path) {
             string extension = Path.GetExtension(path);
-            Func<EditorViewModel> editorCreator;
+            EditorCreator editorCreator;
             if (registeredEditors.TryGetValue(extension, out editorCreator)) {
-                EditorViewModel model = editorCreator();
+                EditorViewModel model = editorCreator(Capabilities, Workspace);
                 return model;
             }
             return null;

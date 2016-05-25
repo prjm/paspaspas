@@ -167,9 +167,21 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\PasPasPas.DesktopPlatform\PasPasPas.DesktopPlatform.csproj">
+      <Project>{8ADB6566-773F-4487-8611-2D8AD5337163}</Project>
+      <Name>PasPasPas.DesktopPlatform</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PasPasPas.Infrastructure\PasPasPas.Infrastructure.csproj">
       <Project>{4CEF569A-4ECE-42EE-847B-5029958F757C}</Project>
       <Name>PasPasPas.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Paspaspas.Options\PasPasPas.Options.csproj">
+      <Project>{677A19C0-B2D4-4153-8DC9-0713C7193ECE}</Project>
+      <Name>PasPasPas.Options</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PasPasPas.Parsing\PasPasPas.Parsing.csproj">
+      <Project>{EFA1DA73-0C34-4BFB-9006-DCFFA12218ED}</Project>
+      <Name>PasPasPas.Parsing</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

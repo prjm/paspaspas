@@ -15,14 +15,14 @@ namespace P3Ide.ViewModel.MainWindow {
         /// </summary>
         /// <param name="supportedProjectTypes">supported project types</param>
         /// <param name="supportedFileTypes">supported file types</param>
-        /// <param name="editorRegistry">editor registry</param>
-        public StandardEditorCapabilities(IEnumerable<ISupportedProjectType> supportedProjectTypes, IEnumerable<ISupportedFileType> supportedFileTypes, IEditorRegistry editorRegistry) {
+        /// <param name="workspace">workspace</param>
+        public StandardEditorCapabilities(IEnumerable<ISupportedProjectType> supportedProjectTypes, IEnumerable<ISupportedFileType> supportedFileTypes, IEditorWorkspace workspace) {
             SupportedProjectTypes = new List<ISupportedProjectType>(supportedProjectTypes);
             SupportedFileTypes = new List<ISupportedFileType>(supportedFileTypes);
-            Registry = editorRegistry;
+            Registry = new EditorRegistry(this, workspace);
 
             foreach (var fileType in SupportedFileTypes) {
-                fileType.RegisterEditor(editorRegistry);
+                fileType.RegisterEditor(Registry);
             }
         }
 

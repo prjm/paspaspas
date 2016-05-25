@@ -19,8 +19,11 @@ namespace P3Ide.ViewModel.MainWindow {
         public ObservableCollection<ILogMessage> Messages { get; } =
             new ObservableCollection<ILogMessage>();
 
+        /// <summary>
+        ///     create a message view model
+        /// </summary>
         public MessagesViewModel() {
-            HandleMessage(new LogMessage(MessageSeverity.Information, new Guid(), new Guid(), "xxx", "d"));
+            //..
         }
 
         /// <summary>

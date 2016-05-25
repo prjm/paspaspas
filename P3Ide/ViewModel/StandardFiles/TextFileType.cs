@@ -29,7 +29,7 @@ namespace P3Ide.ViewModel.StandardFiles {
         /// </summary>
         /// <param name="registry"></param>
         public void RegisterEditor(IEditorRegistry registry) {
-            Func<EditorViewModel> editor = () => {
+            EditorCreator editor = (_1, _2) => {
                 return new TextEditorViewModel();
             };
             registry.RegisterFileType(FileExtension, editor);

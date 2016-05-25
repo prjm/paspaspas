@@ -10,5 +10,6 @@ namespace P3Ide.ViewModel.MainWindow {
     ///     base class for tool windows view models
     /// </summary>
     public class ToolWindowViewModel {
+
     }
 }

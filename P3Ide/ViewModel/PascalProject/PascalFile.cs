@@ -5,6 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using P3Ide.ViewModel.MainWindow;
+using PasPasPas.Infrastructure.Input;
+using PasPasPas.Infrastructure.Log;
+using PasPasPas.Parsing.Parser;
+using PasPasPas.Options.Bundles;
+using PasPasPas.DesktopPlatform;
 
 namespace P3Ide.ViewModel.PascalProject {
 
@@ -30,10 +35,25 @@ namespace P3Ide.ViewModel.PascalProject {
         /// </summary>
         /// <param name="registry"></param>
         public void RegisterEditor(IEditorRegistry registry) {
-            Func<EditorViewModel> editor = () => {
-                return new PascalEditorViewModel();
+            EditorCreator editor = (viewModel, workspace) => {
+                return new PascalEditorViewModel(viewModel, workspace);
             };
             registry.RegisterFileType(FileExtension, editor);
+        }
+
+        internal void ParseSingleFile(StringInput singleFile, LogManager log) {
+            var env = new ParserServices(log);
+            var parser = new CompilerDirectiveParser(env);
+            env.Options = new OptionSet(new StandardFileAccess());
+
+            using (var reader = new StackedFileReader()) {
+                reader.AddFile(singleFile);
+                parser.BaseTokenizer.Input = reader;
+                parser.IncludeInput = reader;
+                while (!reader.AtEof) {
+                    parser.ParseCompilerDirective();
+                }
+            }
         }
     }
 }

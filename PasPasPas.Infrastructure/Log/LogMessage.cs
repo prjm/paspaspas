@@ -25,7 +25,7 @@ namespace PasPasPas.Infrastructure.Log {
         public LogMessage(MessageSeverity messageServerity, Guid groupId, Guid messageId, string messageText, params object[] messageData) {
             group = groupId;
             id = messageId;
-            text = messageText;
+            text = messageText ?? string.Empty;
             severity = messageServerity;
             data = messageData;
         }

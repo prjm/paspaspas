@@ -28,7 +28,6 @@ namespace P3Ide {
             containerBuilder.RegisterType<MainMenuViewModel>().As<IMainMenuViewModel>();
             containerBuilder.RegisterType<StandardEditorCapabilities>().As<IEditorCapabilites>().SingleInstance();
             containerBuilder.RegisterType<EditorWorkspace>().As<IEditorWorkspace>().SingleInstance();
-            containerBuilder.RegisterType<EditorRegistry>().As<IEditorRegistry>().SingleInstance();
 
             containerBuilder.RegisterType<SupportedPascalProject>().As<ISupportedProjectType>().SingleInstance();
             containerBuilder.RegisterType<TextFileType>().As<ISupportedFileType>().SingleInstance();
