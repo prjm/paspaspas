@@ -1,4 +1,6 @@
-﻿namespace PasPasPas.Options.DataTypes {
+﻿using PasPasPas.Infrastructure.Input;
+
+namespace PasPasPas.Options.DataTypes {
 
     /// <summary>
     ///     reference to a windows resource file
@@ -18,6 +20,6 @@
         /// <summary>
         ///     target path
         /// </summary>
-        public string TargetPath { get; set; }
+        public IFileReference TargetPath { get; set; }
     }
 }

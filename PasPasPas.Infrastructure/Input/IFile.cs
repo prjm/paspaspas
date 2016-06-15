@@ -5,10 +5,11 @@
     /// </summary>
     public interface IFile {
 
+
         /// <summary>
-        ///     get file path
+        ///     file path
         /// </summary>
-        string Path { get; }
+        IFileReference FilePath { get; }
 
     }
 }

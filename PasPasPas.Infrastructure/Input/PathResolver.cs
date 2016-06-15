@@ -9,12 +9,12 @@ namespace PasPasPas.Infrastructure.Input {
         /// <summary>
         ///     base path
         /// </summary>
-        public string BasePath { get; set; }
+        public IFileReference BasePath { get; set; }
 
         /// <summary>
         ///     path to resolve
         /// </summary>
-        public string PathToResolve { get; set; }
+        public IFileReference PathToResolve { get; set; }
 
         /// <summary>
         ///     compare to keys for equality
@@ -26,8 +26,10 @@ namespace PasPasPas.Infrastructure.Input {
 
             if (ReferenceEquals(otherKey, null)) return false;
 
-            return string.Equals(BasePath, otherKey.BasePath, StringComparison.OrdinalIgnoreCase) &&
-                string.Equals(PathToResolve, otherKey.PathToResolve, StringComparison.OrdinalIgnoreCase);
+            var basePathEquals = BasePath.Equals(otherKey.BasePath);
+            var resolvePathEquals = PathToResolve.Equals(otherKey.PathToResolve);
+
+            return basePathEquals && resolvePathEquals;
         }
 
         /// <summary>
@@ -36,8 +38,8 @@ namespace PasPasPas.Infrastructure.Input {
         /// <returns></returns>
         public override int GetHashCode() {
             int result = 17;
-            result = result * 31 + StringComparer.OrdinalIgnoreCase.GetHashCode(BasePath);
-            result = result * 31 + StringComparer.OrdinalIgnoreCase.GetHashCode(PathToResolve);
+            result = result * 31 + BasePath.GetHashCode();
+            result = result * 31 + PathToResolve.GetHashCode();
             return result;
         }
 
@@ -71,7 +73,7 @@ namespace PasPasPas.Infrastructure.Input {
         /// <param name="basePath">base path</param>
         /// <param name="pathToResolve">path to resolve</param>
         /// <returns>resolved path</returns>
-        public ResolvedFile ResolvePath(string basePath, string pathToResolve) {
+        public ResolvedFile ResolvePath(IFileReference basePath, IFileReference pathToResolve) {
 
             var key = new ResolvedPathKey() {
                 BasePath = basePath,
@@ -94,15 +96,10 @@ namespace PasPasPas.Infrastructure.Input {
         /// <param name="currentDirectory">current directoy</param>
         /// <param name="pathToResolve">path to resolve</param>
         /// <returns></returns>
-        protected ResolvedFile ResolveInDirectory(string currentDirectory, string pathToResolve) {
+        protected ResolvedFile ResolveInDirectory(IFileReference currentDirectory, IFileReference pathToResolve) {
             var fileAccess = Files;
-            string combinedPath;
-            string targetPath;
-
-            if (!string.IsNullOrEmpty(currentDirectory))
-                combinedPath = Path.Combine(currentDirectory, pathToResolve);
-            else
-                combinedPath = pathToResolve;
+            IFileReference targetPath;
+            IFileReference combinedPath = currentDirectory.Append(pathToResolve);
 
             if (fileAccess.FileExists(combinedPath))
                 targetPath = combinedPath;
@@ -110,7 +107,7 @@ namespace PasPasPas.Infrastructure.Input {
                 targetPath = null;
 
             return new ResolvedFile() {
-                IsResolved = !string.IsNullOrWhiteSpace(targetPath),
+                IsResolved = targetPath != null,
                 CurrentDirectory = currentDirectory,
                 PathToResolve = pathToResolve,
                 TargetPath = targetPath
@@ -123,6 +120,6 @@ namespace PasPasPas.Infrastructure.Input {
         /// <param name="basePath"></param>
         /// <param name="pathToResolve"></param>
         /// <returns></returns>
-        protected abstract ResolvedFile DoResolvePath(string basePath, string pathToResolve);
+        protected abstract ResolvedFile DoResolvePath(IFileReference basePath, IFileReference pathToResolve);
     }
 }

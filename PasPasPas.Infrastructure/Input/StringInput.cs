@@ -15,7 +15,7 @@ namespace PasPasPas.Infrastructure.Input {
         /// <summary>
         ///     virtual path
         /// </summary>
-        private readonly string path;
+        private readonly IFileReference path;
 
         /// <summary>
         ///     input position
@@ -27,7 +27,7 @@ namespace PasPasPas.Infrastructure.Input {
         /// </summary>
         /// <param name="inputText">string input</param>
         /// <param name="virtualPath">virtual path</param>
-        public StringInput(string inputText, string virtualPath) {
+        public StringInput(string inputText, IFileReference virtualPath) {
             input = inputText;
             path = virtualPath;
         }
@@ -57,7 +57,7 @@ namespace PasPasPas.Infrastructure.Input {
         /// <summary>
         ///     path of this input
         /// </summary>
-        public string Path
+        public IFileReference FilePath
             => path;
 
         /// <summary>

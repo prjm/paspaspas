@@ -8,7 +8,7 @@
         /// <summary>
         ///     current directory
         /// </summary>
-        public string CurrentDirectory { get; set; }
+        public IFileReference CurrentDirectory { get; set; }
 
         /// <summary>
         ///     flag, <c>true</c> if the file exists
@@ -18,11 +18,11 @@
         /// <summary>
         ///     path to resolve
         /// </summary>
-        public string PathToResolve { get; set; }
+        public IFileReference PathToResolve { get; set; }
 
         /// <summary>
         ///     target path
         /// </summary>
-        public string TargetPath { get; set; }
+        public IFileReference TargetPath { get; set; }
     }
 }

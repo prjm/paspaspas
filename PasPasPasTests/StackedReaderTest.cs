@@ -22,7 +22,7 @@ namespace PasPasPasTests {
 
         [TestMethod]
         public void TestSimpleRead() {
-            using (var input = new StringInput(Content1, "test.pas"))
+            using (var input = new StringInput(Content1, new FileReference("test.pas")))
             using (var reader = new StackedFileReader()) {
                 reader.AddFile(input);
                 StringBuilder result = new StringBuilder();
@@ -38,7 +38,7 @@ namespace PasPasPasTests {
             var path = GenerateTempFile(Content1);
             try {
                 using (var reader = new StackedFileReader()) {
-                    reader.AddFile(new FileInput(path));
+                    reader.AddFile(new FileInput(new FileReference(path)));
                     StringBuilder result = new StringBuilder();
                     while (!reader.AtEof) {
                         result.Append(reader.FetchChar());
@@ -57,8 +57,8 @@ namespace PasPasPasTests {
             var path2 = GenerateTempFile(Content2);
             try {
                 using (var reader = new StackedFileReader())
-                using (var file1 = new FileInput(path1))
-                using (var file2 = new FileInput(path2)) {
+                using (var file1 = new FileInput(new FileReference(path1)))
+                using (var file2 = new FileInput(new FileReference(path2))) {
                     reader.AddFile(file1);
                     StringBuilder result = new StringBuilder();
                     while (!reader.AtEof && result.Length < 5) {
@@ -90,8 +90,8 @@ namespace PasPasPasTests {
 
         [TestMethod]
         public void TestNestedRead() {
-            using (var input1 = new StringInput(Content1, "c1"))
-            using (var input2 = new StringInput(Content2, "c2"))
+            using (var input1 = new StringInput(Content1, new FileReference("c1")))
+            using (var input2 = new StringInput(Content2, new FileReference("c2")))
             using (var reader = new StackedFileReader()) {
                 reader.AddFile(input1);
                 StringBuilder result = new StringBuilder();

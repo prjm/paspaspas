@@ -17,10 +17,12 @@ namespace PasPasPas.Infrastructure.Input {
         /// </summary>
         /// <param name="path">file path</param>
         /// <returns>opened file</returns>
-        public IParserInput OpenFileForReading(string path) {
+        public IParserInput OpenFileForReading(IFileReference path) {
             IParserInput result;
+            var filePath = path.Path;
+            var fileNameWithoutPath = Path.GetFileName(filePath);
 
-            if (mockupFiles.IsValueCreated && mockupFiles.Value.TryGetValue(path, out result))
+            if (mockupFiles.IsValueCreated && mockupFiles.Value.TryGetValue(fileNameWithoutPath, out result))
                 return result;
 
             result = DoOpenFileForReading(path);
@@ -33,7 +35,7 @@ namespace PasPasPas.Infrastructure.Input {
         /// </summary>
         /// <param name="path">path to the file</param>
         /// <returns>input file</returns>
-        protected abstract IParserInput DoOpenFileForReading(string path);
+        protected abstract IParserInput DoOpenFileForReading(IFileReference path);
 
         /// <summary>
         ///     add a one-time mockup-file
@@ -47,9 +49,10 @@ namespace PasPasPas.Infrastructure.Input {
         /// <summary>
         ///     test if a given files exists
         /// </summary>
-        /// <param name="filePath">file path</param>
+        /// <param name="file">file path</param>
         /// <returns><c>true</c> if the file exists</returns>
-        public bool FileExists(string filePath) {
+        public bool FileExists(IFileReference file) {
+            var filePath = file.Path;
             var fileNameWithoutPath = Path.GetFileName(filePath);
             if (mockupFiles.IsValueCreated && mockupFiles.Value.ContainsKey(fileNameWithoutPath))
                 return true;

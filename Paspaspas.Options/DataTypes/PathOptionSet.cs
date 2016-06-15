@@ -1,4 +1,6 @@
-﻿namespace PasPasPas.Options.DataTypes {
+﻿using PasPasPas.Infrastructure.Input;
+
+namespace PasPasPas.Options.DataTypes {
 
     /// <summary>
     ///     path specific option
@@ -10,13 +12,13 @@
         /// </summary>
         /// <param name="baseOptions">base options</param>
         public PathOptionSet(PathOptionSet baseOptions) {
-            SearchPaths = new DerivedListOption<string>(baseOptions?.SearchPaths);
+            SearchPaths = new DerivedListOption<IFileReference>(baseOptions?.SearchPaths);
         }
 
         /// <summary>
         ///     search paths
         /// </summary>
-        public DerivedListOption<string> SearchPaths { get; internal set; }
+        public DerivedListOption<IFileReference> SearchPaths { get; internal set; }
 
 
         /// <summary>

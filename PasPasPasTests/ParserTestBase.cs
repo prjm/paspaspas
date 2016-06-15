@@ -62,7 +62,7 @@ namespace PasPasPasTests {
             environment.Options = TestOptions;
 
             StandardParser parser = new StandardParser(environment);
-            using (var inputFile = new StringInput(input, "test.pas"))
+            using (var inputFile = new StringInput(input, new FileReference("test.pas")))
             using (var reader = new StackedFileReader()) {
                 reader.AddFile(inputFile);
                 parser.BaseTokenizer = new StandardTokenizer(environment) { Input = reader };
@@ -90,10 +90,10 @@ namespace PasPasPasTests {
             var fileCounter = 0;
 
             fileAccess.ClearMockups();
-            fileAccess.AddOneTimeMockup("dummy.inc", new StringInput("DEFINE DUMMY_INC", "dummy.inc"));
-            fileAccess.AddOneTimeMockup("res.res", new StringInput("RES RES RES", "res.res"));
-            fileAccess.AddOneTimeMockup("test_0.res", new StringInput("RES RES RES", "test_0.res"));
-            fileAccess.AddOneTimeMockup("link.dll", new StringInput("MZE!", "link.dll"));
+            fileAccess.AddOneTimeMockup("dummy.inc", new StringInput("DEFINE DUMMY_INC", new FileReference("dummy.inc")));
+            fileAccess.AddOneTimeMockup("res.res", new StringInput("RES RES RES", new FileReference("res.res")));
+            fileAccess.AddOneTimeMockup("test_0.res", new StringInput("RES RES RES", new FileReference("test_0.res")));
+            fileAccess.AddOneTimeMockup("link.dll", new StringInput("MZE!", new FileReference("link.dll")));
 
             var log = new LogManager();
             var environment = new ParserServices(log);
@@ -110,7 +110,7 @@ namespace PasPasPasTests {
                 var subParts = directivePart.Split(new[] { '§' }, StringSplitOptions.RemoveEmptyEntries);
                 foreach (var subPart in subParts) {
                     var parser = new CompilerDirectiveParser(environment);
-                    using (var input = new StringInput(subPart, "test_" + fileCounter.ToString() + ".pas"))
+                    using (var input = new StringInput(subPart, new FileReference("test_" + fileCounter.ToString() + ".pas")))
                     using (var reader = new StackedFileReader()) {
                         reader.AddFile(input);
                         parser.BaseTokenizer.Input = reader;

@@ -55,7 +55,7 @@ namespace P3Ide.ViewModel.MainWindow {
                         logManager.RegisterTarget(logTarget);
                 }
 
-                using (var singleFile = new StringInput(value, "C:\\temp\\dummy_1.pas")) {
+                using (var singleFile = new StringInput(value, new FileReference("C:\\temp\\dummy_1.pas"))) {
                     workaround.ParseSingleFile(singleFile, logManager);
                 }
 

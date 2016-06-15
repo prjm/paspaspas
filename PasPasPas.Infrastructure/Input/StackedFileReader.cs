@@ -43,9 +43,9 @@ namespace PasPasPas.Infrastructure.Input {
 
     internal class PutbackFragment : IFile {
 
-        private readonly string path;
+        private readonly IFileReference path;
 
-        internal PutbackFragment(string originalPath) {
+        internal PutbackFragment(IFileReference originalPath) {
             path = originalPath;
         }
 
@@ -55,7 +55,7 @@ namespace PasPasPas.Infrastructure.Input {
         private Stack<char> putbackBuffer
             = new Stack<char>(16);
 
-        public string Path
+        public IFileReference FilePath
             => path;
 
         internal char Pop() => putbackBuffer.Pop();
@@ -163,11 +163,18 @@ namespace PasPasPas.Infrastructure.Input {
 
         private PutbackFragment GetOrCreateFragment(IFile file) {
             PutbackFragment fragment;
-            if (putbackFragments.Count > 0 && string.Equals(file.Path, putbackFragments.Peek().Path, StringComparison.Ordinal)) {
+            IFileReference newFile = file.FilePath;
+            IFileReference currentFile = null;
+
+            if (putbackFragments.Count > 0) {
+                currentFile = putbackFragments.Peek().FilePath;
+            }
+
+            if (currentFile != null && newFile.Equals(currentFile.Path)) {
                 fragment = putbackFragments.Peek();
             }
             else {
-                fragment = new PutbackFragment(file.Path);
+                fragment = new PutbackFragment(file.FilePath);
                 putbackFragments.Push(fragment);
             }
 

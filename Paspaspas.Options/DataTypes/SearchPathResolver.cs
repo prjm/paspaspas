@@ -28,17 +28,17 @@ namespace PasPasPas.Options.DataTypes {
         /// <param name="basePath">base path</param>
         /// <param name="pathToResolve">path to resolve</param>
         /// <returns>resolved file</returns>
-        protected ResolvedFile ResolveFromSearchPath(string basePath, string pathToResolve) {
+        protected ResolvedFile ResolveFromSearchPath(IFileReference basePath, IFileReference pathToResolve) {
             string currentDirectory;
 
-            if (!string.IsNullOrEmpty(basePath)) {
-                currentDirectory = Path.GetDirectoryName(Path.GetFullPath(basePath));
+            if (basePath != null && !string.IsNullOrEmpty(basePath.Path)) {
+                currentDirectory = Path.GetDirectoryName(Path.GetFullPath(basePath.Path));
             }
             else {
                 currentDirectory = null;
             }
 
-            var result = ResolveInDirectory(currentDirectory, pathToResolve);
+            var result = ResolveInDirectory(new FileReference(currentDirectory), pathToResolve);
             if (result.IsResolved) {
                 return result;
             }

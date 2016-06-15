@@ -1,4 +1,6 @@
-﻿namespace PasPasPas.Options.DataTypes {
+﻿using PasPasPas.Infrastructure.Input;
+
+namespace PasPasPas.Options.DataTypes {
 
     /// <summary>
     ///     directly linked file
@@ -13,6 +15,6 @@
         /// <summary>
         ///     file to link
         /// </summary>
-        public string TargetPath { get; set; }
+        public IFileReference TargetPath { get; set; }
     }
 }

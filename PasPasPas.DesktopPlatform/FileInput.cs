@@ -35,7 +35,7 @@ namespace PasPasPas.DesktopPlatform {
         /// <summary>
         ///     input file
         /// </summary>
-        public string Path
+        public IFileReference FilePath
             => filePath;
 
         /// <summary>
@@ -98,7 +98,7 @@ namespace PasPasPas.DesktopPlatform {
         public bool AtEof
             => Reader.EndOfStream;
 
-        private string filePath;
+        private IFileReference filePath;
 
         #region IDisposable Support
         private bool disposedValue = false;
@@ -107,7 +107,7 @@ namespace PasPasPas.DesktopPlatform {
         ///     creates a new input file
         /// </summary>
         /// <param name="path"></param>
-        public FileInput(string path) {
+        public FileInput(IFileReference path) {
             filePath = path;
         }
 
@@ -160,13 +160,14 @@ namespace PasPasPas.DesktopPlatform {
         ///     open redaer
         /// </summary>
         public void Open() {
+            string path = FilePath.Path;
 
             if (file == null) {
-                file = new FileStream(Path, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, FileOptions.SequentialScan);
+                file = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, FileOptions.SequentialScan);
             }
 
             if (reader == null) {
-                reader = new StreamReader(file, GetFileEncoding(Path));
+                reader = new StreamReader(file, GetFileEncoding(path));
             }
         }
 

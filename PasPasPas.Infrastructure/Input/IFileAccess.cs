@@ -11,14 +11,14 @@
         /// </summary>
         /// <param name="path">file path</param>
         /// <returns>input file</returns>
-        IParserInput OpenFileForReading(string path);
+        IParserInput OpenFileForReading(IFileReference path);
 
         /// <summary>
         ///     test if a files exists
         /// </summary>
         /// <param name="filePath">file path</param>
         /// <returns><c>true</c> if the file exists</returns>
-        bool FileExists(string filePath);
+        bool FileExists(IFileReference filePath);
 
     }
 }
