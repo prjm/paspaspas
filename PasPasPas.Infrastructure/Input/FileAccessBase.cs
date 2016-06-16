@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 
 namespace PasPasPas.Infrastructure.Input {
 
@@ -10,7 +9,8 @@ namespace PasPasPas.Infrastructure.Input {
     public abstract class FileAccessBase : IFileAccess {
 
         private Lazy<IDictionary<string, IParserInput>> mockupFiles
-            = new Lazy<IDictionary<string, IParserInput>>(() => new Dictionary<string, IParserInput>(StringComparer.OrdinalIgnoreCase));
+            = new Lazy<IDictionary<string, IParserInput>>(()
+                => new Dictionary<string, IParserInput>(StringComparer.OrdinalIgnoreCase));
 
         /// <summary>
         ///     open a file for reading
@@ -18,11 +18,13 @@ namespace PasPasPas.Infrastructure.Input {
         /// <param name="path">file path</param>
         /// <returns>opened file</returns>
         public IParserInput OpenFileForReading(IFileReference path) {
-            IParserInput result;
-            var filePath = path.Path;
-            var fileNameWithoutPath = Path.GetFileName(filePath);
 
-            if (mockupFiles.IsValueCreated && mockupFiles.Value.TryGetValue(fileNameWithoutPath, out result))
+            if (path == null)
+                throw new ArgumentNullException(nameof(path));
+
+            IParserInput result;
+
+            if (mockupFiles.IsValueCreated && mockupFiles.Value.TryGetValue(path.FileName, out result))
                 return result;
 
             result = DoOpenFileForReading(path);
@@ -40,10 +42,23 @@ namespace PasPasPas.Infrastructure.Input {
         /// <summary>
         ///     add a one-time mockup-file
         /// </summary>
-        /// <param name="path">pseud-path</param>
         /// <param name="input">file to add</param>
-        public void AddOneTimeMockup(string path, IParserInput input) {
-            mockupFiles.Value.Add(path, input);
+        public void AddOneTimeMockup(IParserInput input) {
+
+            if (input == null)
+                throw new ArgumentNullException(nameof(input));
+
+
+            IFileReference path = input.FilePath;
+            string fileName = path.FileName;
+
+            if (string.IsNullOrEmpty(fileName))
+                throw new ArgumentException("Undefined filename", nameof(path));
+
+            if (mockupFiles.Value.ContainsKey(fileName))
+                throw new ArgumentException($"Duplicate mockup file {path}");
+
+            mockupFiles.Value.Add(fileName, input);
         }
 
         /// <summary>
@@ -52,13 +67,23 @@ namespace PasPasPas.Infrastructure.Input {
         /// <param name="file">file path</param>
         /// <returns><c>true</c> if the file exists</returns>
         public bool FileExists(IFileReference file) {
-            var filePath = file.Path;
-            var fileNameWithoutPath = Path.GetFileName(filePath);
+
+            if (file == null)
+                throw new ArgumentNullException(nameof(file));
+
+            var fileNameWithoutPath = file.FileName;
             if (mockupFiles.IsValueCreated && mockupFiles.Value.ContainsKey(fileNameWithoutPath))
                 return true;
 
-            return File.Exists(filePath);
+            return DoCheckIfFileExists(file);
         }
+
+        /// <summary>
+        ///     checks if a file exists
+        /// </summary>
+        /// <param name="file">file to check</param>
+        /// <returns><c>true</c> if the file exists</returns>
+        protected abstract bool DoCheckIfFileExists(IFileReference file);
 
         /// <summary>
         ///     clear mockups

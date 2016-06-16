@@ -23,32 +23,46 @@ namespace PasPasPas.Infrastructure.Log {
         /// <param name="messageServerity">severity</param>
         /// <param name="messageText">message text</param>
         public LogMessage(MessageSeverity messageServerity, Guid groupId, Guid messageId, string messageText, params object[] messageData) {
+
+            if (messageServerity == MessageSeverity.Undefined)
+                throw new ArgumentOutOfRangeException(nameof(messageServerity));
+
+            if (groupId == default(Guid))
+                throw new ArgumentOutOfRangeException(nameof(groupId));
+
+            if (messageId == default(Guid))
+                throw new ArgumentOutOfRangeException(nameof(messageId));
+
             group = groupId;
             id = messageId;
             text = messageText ?? "R_" + id.ToString("N").ToUpperInvariant();
             severity = messageServerity;
-            data = messageData;
+            data = messageData ?? new object[0];
         }
 
         /// <summary>
         ///     format log message
         /// </summary>
-        public string FormattedMessage => string.Format(CultureInfo.CurrentCulture, text, data);
+        public string FormattedMessage
+            => string.Format(CultureInfo.CurrentCulture, text, data);
 
         /// <summary>
         ///     groud id
         /// </summary>
-        public Guid GroupID => group;
+        public Guid GroupID
+            => group;
 
         /// <summary>
         ///     message id
         /// </summary>
-        public Guid MessageID => id;
+        public Guid MessageID
+            => id;
 
         /// <summary>
         ///     severity
         /// </summary>
-        public MessageSeverity Severity => severity;
+        public MessageSeverity Severity
+            => severity;
 
     }
 }

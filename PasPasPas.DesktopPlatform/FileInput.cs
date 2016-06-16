@@ -1,5 +1,4 @@
-﻿using PasPasPas.Infrastructure.Configuration;
-using PasPasPas.Infrastructure.Input;
+﻿using PasPasPas.Infrastructure.Input;
 using System;
 using System.IO;
 using System.Text;
@@ -39,11 +38,6 @@ namespace PasPasPas.DesktopPlatform {
             => filePath;
 
         /// <summary>
-        ///     config settings
-        /// </summary>
-        public IConfigurationSettings Settings { get; set; }
-
-        /// <summary>
         ///     stream reader
         /// </summary>
         private StreamReader Reader
@@ -63,13 +57,7 @@ namespace PasPasPas.DesktopPlatform {
         /// <returns></returns>
         public Encoding GetFileEncoding(string srcFile) {
 
-            Encoding enc;
-
-            if (Settings != null)
-                enc = Encoding.GetEncoding(Settings.GetValue(DefaultEncodingSettingName, DefaultEncodingValue));
-            else
-                enc = Encoding.Default;
-
+            Encoding enc = Encoding.Default;
 
             // *** Detect byte order mark if any - otherwise assume default
             byte[] buffer = new byte[5];

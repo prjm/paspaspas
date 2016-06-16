@@ -88,12 +88,16 @@ namespace PasPasPasTests {
         protected void RunCompilerDirective(string directive, object expected, Func<object> actual) {
             var fileAccess = (StandardFileAccess)TestOptions.Files;
             var fileCounter = 0;
+            var incFile = new FileReference("dummy.inc");
+            var resFile1 = new FileReference("res.res");
+            var resFile2 = new FileReference("test_0.res");
+            var linkDll = new FileReference("link.dll");
 
             fileAccess.ClearMockups();
-            fileAccess.AddOneTimeMockup("dummy.inc", new StringInput("DEFINE DUMMY_INC", new FileReference("dummy.inc")));
-            fileAccess.AddOneTimeMockup("res.res", new StringInput("RES RES RES", new FileReference("res.res")));
-            fileAccess.AddOneTimeMockup("test_0.res", new StringInput("RES RES RES", new FileReference("test_0.res")));
-            fileAccess.AddOneTimeMockup("link.dll", new StringInput("MZE!", new FileReference("link.dll")));
+            fileAccess.AddOneTimeMockup(new StringInput("DEFINE DUMMY_INC", incFile));
+            fileAccess.AddOneTimeMockup(new StringInput("RES RES RES", resFile1));
+            fileAccess.AddOneTimeMockup(new StringInput("RES RES RES", resFile2));
+            fileAccess.AddOneTimeMockup(new StringInput("MZE!", linkDll));
 
             var log = new LogManager();
             var environment = new ParserServices(log);

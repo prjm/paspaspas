@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace PasPasPas.Infrastructure.Log {
 
@@ -19,6 +20,10 @@ namespace PasPasPas.Infrastructure.Log {
         /// </summary>
         /// <param name="target"></param>
         public void RegisterTarget(ILogTarget target) {
+
+            if (target == null)
+                throw new ArgumentNullException(nameof(target));
+
             targets.Add(target);
             target.RegisteredAt(this);
         }
@@ -29,6 +34,13 @@ namespace PasPasPas.Infrastructure.Log {
         /// <param name="source">source</param>
         /// <param name="message">message to rouce</param>
         public void RouteMessage(ILogSource source, ILogMessage message) {
+
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+
+            if (message == null)
+                throw new ArgumentNullException(nameof(message));
+
             foreach (var target in targets)
                 target.HandleMessage(message);
         }
@@ -39,15 +51,22 @@ namespace PasPasPas.Infrastructure.Log {
         /// <param name="target"></param>
         /// <returns></returns>
         public bool UnregisterTarget(ILogTarget target) {
+
+            if (target == null)
+                throw new ArgumentNullException(nameof(target));
+
+            bool found = false;
+
             for (int i = targets.Count - 1; i >= 0; i--) {
                 var currentTarget = targets[i];
                 if (currentTarget == target) {
                     target.UnregisteredAt(this);
                     targets.RemoveAt(i);
-                    return true;
+                    found = true;
                 };
             }
-            return false;
+
+            return found;
         }
     }
 }

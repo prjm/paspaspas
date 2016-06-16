@@ -28,11 +28,24 @@ namespace PasPasPas.Infrastructure.Input {
             => path;
 
         /// <summary>
+        ///     file name of the file
+        /// </summary>
+        public string FileName
+            => System.IO.Path.GetFileName(path);
+
+        /// <summary>
         ///     add a subpath
         /// </summary>
         /// <param name="path">path to add</param>
         /// <returns>combined path</returns>
         public IFileReference Append(IFileReference path)
             => new FileReference(System.IO.Path.Combine(this.path ?? string.Empty, path.Path));
+
+        /// <summary>
+        ///     string representation of this file reference
+        /// </summary>
+        /// <returns>path</returns>
+        public override string ToString()
+            => path;
     }
 }

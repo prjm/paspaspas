@@ -24,5 +24,6 @@
         /// <param name="target">log target</param>
         /// <returns><b>true</b> if a target was unregistered</returns>
         bool UnregisterTarget(ILogTarget target);
+
     }
 }

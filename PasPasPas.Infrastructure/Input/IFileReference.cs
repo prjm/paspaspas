@@ -6,6 +6,11 @@
     public interface IFileReference {
 
         /// <summary>
+        ///     get only the file name
+        /// </summary>
+        string FileName { get; }
+
+        /// <summary>
         ///     get file path
         /// </summary>
         string Path { get; }

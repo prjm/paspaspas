@@ -1,7 +1,7 @@
 ﻿namespace PasPasPas.Infrastructure.Log {
 
     /// <summary>
-    ///     a common log message
+    ///     a common log message (immutable)
     /// </summary>
     public interface ILogMessage {
 

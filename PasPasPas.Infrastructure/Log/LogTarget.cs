@@ -17,13 +17,18 @@ namespace PasPasPas.Infrastructure.Log {
         /// </summary>
         /// <param name="message"></param>
         public LogMessageEvent(ILogMessage message) {
+
+            if (message == null)
+                throw new ArgumentNullException(nameof(message));
+
             this.message = message;
         }
 
         /// <summary>
         ///     log message
         /// </summary>
-        public ILogMessage Message => message;
+        public ILogMessage Message
+            => message;
     }
 
     /// <summary>
@@ -41,8 +46,7 @@ namespace PasPasPas.Infrastructure.Log {
         /// </summary>
         /// <param name="message">message to process</param>
         public void HandleMessage(ILogMessage message) {
-            if (ProcessMessage != null)
-                ProcessMessage(this, new LogMessageEvent(message));
+            ProcessMessage?.Invoke(this, new LogMessageEvent(message));
         }
 
         /// <summary>
