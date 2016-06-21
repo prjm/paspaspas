@@ -21,7 +21,7 @@ namespace PasPasPas.Infrastructure.Log {
         /// <param name="resources">resizrces</param>
         public LogSource(ILogManager logManager, Guid groupId, ResourceManager resources) {
 
-            if (manager == null)
+            if (logManager == null)
                 throw new ArgumentNullException(nameof(manager));
 
             if (groupId == default(Guid))

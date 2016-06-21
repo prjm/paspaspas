@@ -1,12 +1,12 @@
-﻿using System;
+﻿using PasPasPas.Infrastructure.Input;
 using System.Globalization;
 
 namespace PasPasPas.Api {
 
     /// <summary>
-    ///     generic structur for tokens
+    ///     token definition
     /// </summary>
-    public struct PascalToken {
+    public class PascalToken {
 
         /// <summary>
         ///     undefined tokenS
@@ -1479,39 +1479,27 @@ namespace PasPasPas.Api {
         /// </summary>
         /// <param name="tokenId">tokenid</param>
         /// <param name="tokenValue">token value</param>
-        public PascalToken(int tokenId, string tokenValue) : this() {
+        /// <param name="file">source file</param>
+        public PascalToken(int tokenId, string tokenValue, IFileReference file) {
             Kind = tokenId;
             Value = tokenValue;
+            FilePath = file;
         }
 
         /// <summary>
         ///     Token value
         /// </summary>
-        public string Value { get; set; }
+        public string Value { get; }
 
         /// <summary>
         ///     Token kind
         /// </summary>
-        public int Kind { get; set; }
+        public int Kind { get; }
 
         /// <summary>
-        ///     check for equality
+        ///     file path
         /// </summary>
-        /// <param name="left">left</param>
-        /// <param name="right">right</param>
-        /// <returns><c>bool</c> if the tokens are equal</returns>
-        public static bool operator ==(PascalToken left, PascalToken right)
-            => (left.Kind == right.Kind) && (string.Equals(left.Value, right.Value, StringComparison.OrdinalIgnoreCase));
-
-
-        /// <summary>
-        ///     check for inequality
-        /// </summary>
-        /// <param name="left">left</param>
-        /// <param name="right">right</param>
-        /// <returns><c>bool</c> if the tokens are not equal</returns>
-        public static bool operator !=(PascalToken left, PascalToken right)
-            => !(left == right);
+        public IFileReference FilePath { get; }
 
         /// <summary>
         ///     format token as string
@@ -1521,31 +1509,6 @@ namespace PasPasPas.Api {
             => Kind.ToString(CultureInfo.InvariantCulture) + ": " + Value?.Trim();
 
 
-        /// <summary>
-        ///     compare to another token
-        /// </summary>
-        /// <param name="obj">object to compare to</param>
-        /// <returns><c>true</c> if the objects are equal</returns>
-        public override bool Equals(object obj) {
-            if (!(obj is PascalToken))
-                return false;
-
-            var otherToken = (PascalToken)obj;
-            return  //
-                (otherToken.Kind == Kind) && //
-                (string.Equals(otherToken.Value, Value, StringComparison.OrdinalIgnoreCase));
-        }
-
-        /// <summary>
-        ///     compute the hash chode
-        /// </summary>
-        /// <returns></returns>
-        public override int GetHashCode() {
-            int hash = 17;
-            hash = hash * 23 + Kind;
-            hash = hash * 23 + ((Value?.GetHashCode()) ?? 0);
-            return hash;
-        }
     }
 }
 

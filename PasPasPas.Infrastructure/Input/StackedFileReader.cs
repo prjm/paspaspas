@@ -10,24 +10,41 @@ namespace PasPasPas.Infrastructure.Input {
     internal class PartlyReadFile {
 
         /// <summary>
+        ///     crete a new partly read file
+        /// </summary>
+        /// <param name="input"></param>
+        internal PartlyReadFile(IParserInput input) {
+
+            if (input == null)
+                throw new ArgumentNullException(nameof(input));
+
+            InputFile = input;
+            Active = true;
+        }
+
+        /// <summary>
         ///     flag, <c>true</c> if the file is active
         /// </summary>
-        public bool Active { get; internal set; }
+        public bool Active { get; private set; }
 
         /// <summary>
         ///     file to read
         /// </summary>
-        public IParserInput InputFile { get; set; }
+        public IParserInput InputFile { get; }
 
         /// <summary>
         ///     close file
         /// </summary>
         /// <param name="dispose">dispose</param>
         public void Close(bool dispose) {
-            if (!Active) return;
+            if (!Active)
+                return;
+
             InputFile.Close();
+
             if (dispose)
                 InputFile.Dispose();
+
             Active = false;
         }
 
@@ -35,17 +52,30 @@ namespace PasPasPas.Infrastructure.Input {
         ///     reopen file
         /// </summary>
         public void Open() {
-            if (Active) return;
+            if (Active)
+                return;
+
             InputFile.Open();
             Active = true;
         }
     }
 
+    /// <summary>
+    ///     helper class for putback fragments
+    /// </summary>
     internal class PutbackFragment : IFile {
 
         private readonly IFileReference path;
 
+        /// <summary>
+        ///     create a new putback fragment
+        /// </summary>
+        /// <param name="originalPath"></param>
         internal PutbackFragment(IFileReference originalPath) {
+
+            if (originalPath == null)
+                throw new ArgumentNullException(nameof(originalPath));
+
             path = originalPath;
         }
 
@@ -55,19 +85,43 @@ namespace PasPasPas.Infrastructure.Input {
         private Stack<char> putbackBuffer
             = new Stack<char>(16);
 
+        /// <summary>
+        ///     current file
+        /// </summary>
         public IFileReference FilePath
             => path;
 
-        internal char Pop() => putbackBuffer.Pop();
+        /// <summary>
+        ///     get another character
+        /// </summary>
+        /// <returns></returns>
+        internal char Pop()
+            => putbackBuffer.Pop();
 
-        internal bool AtEof() => putbackBuffer.Count == 0;
+        /// <summary>
+        ///     check if the buffer is at eof
+        /// </summary>
+        /// <returns></returns>
+        internal bool AtEof()
+            => putbackBuffer.Count == 0;
 
+        /// <summary>
+        ///     putback a string
+        /// </summary>
+        /// <param name="valueToPutback"></param>
         internal void Putback(string valueToPutback) {
+            if (string.IsNullOrEmpty(valueToPutback))
+                throw new ArgumentNullException(nameof(valueToPutback));
+
             for (int charIndex = valueToPutback.Length - 1; charIndex >= 0; charIndex--) {
                 putbackBuffer.Push(valueToPutback[charIndex]);
             }
         }
 
+        /// <summary>
+        ///     putback a string buffer
+        /// </summary>
+        /// <param name="buffer"></param>
         internal void Putback(StringBuilder buffer) {
             for (int charIndex = buffer.Length - 1; charIndex >= 0; charIndex--) {
                 putbackBuffer.Push(buffer[charIndex]);
@@ -75,6 +129,10 @@ namespace PasPasPas.Infrastructure.Input {
             buffer.Clear();
         }
 
+        /// <summary>
+        ///     putback a single character
+        /// </summary>
+        /// <param name="valueToPutback"></param>
         internal void Putback(char valueToPutback) {
             putbackBuffer.Push(valueToPutback);
         }
@@ -106,7 +164,7 @@ namespace PasPasPas.Infrastructure.Input {
         /// <summary>
         ///     currently read file
         /// </summary>
-        public IFile CurrentFile
+        public IFile CurrentInputFile
         {
             get
             {
@@ -156,25 +214,31 @@ namespace PasPasPas.Infrastructure.Input {
         /// </summary>
         /// <param name="valueToPutback"></param>
         /// <param name="file">source file</param>
-        public void PutbackString(IFile file, string valueToPutback) {
+        public void PutbackString(IFileReference file, string valueToPutback) {
+
+            if (file == null)
+                throw new ArgumentNullException(nameof(file));
+
+            if (string.IsNullOrEmpty(valueToPutback))
+                throw new ArgumentNullException(nameof(valueToPutback));
+
             PutbackFragment fragment = GetOrCreateFragment(file);
             fragment.Putback(valueToPutback);
         }
 
-        private PutbackFragment GetOrCreateFragment(IFile file) {
+        private PutbackFragment GetOrCreateFragment(IFileReference file) {
             PutbackFragment fragment;
-            IFileReference newFile = file.FilePath;
             IFileReference currentFile = null;
 
             if (putbackFragments.Count > 0) {
                 currentFile = putbackFragments.Peek().FilePath;
             }
 
-            if (currentFile != null && newFile.Equals(currentFile.Path)) {
+            if (currentFile != null && file.Equals(currentFile.Path)) {
                 fragment = putbackFragments.Peek();
             }
             else {
-                fragment = new PutbackFragment(file.FilePath);
+                fragment = new PutbackFragment(file);
                 putbackFragments.Push(fragment);
             }
 
@@ -186,7 +250,11 @@ namespace PasPasPas.Infrastructure.Input {
         /// </summary>
         /// <param name="file"></param>
         /// <param name="valueToPutback"></param>
-        public void PutbackChar(IFile file, char valueToPutback) {
+        public void PutbackChar(IFileReference file, char valueToPutback) {
+
+            if (file == null)
+                throw new ArgumentNullException(nameof(file));
+
             PutbackFragment fragment = GetOrCreateFragment(file);
             fragment.Putback(valueToPutback);
         }
@@ -196,7 +264,11 @@ namespace PasPasPas.Infrastructure.Input {
         /// </summary>
         /// <param name="buffer">buffer to put back</param>
         /// <param name="file">name of the file</param>
-        public void PutbackStringBuffer(IFile file, StringBuilder buffer) {
+        public void PutbackStringBuffer(IFileReference file, StringBuilder buffer) {
+
+            if (file == null)
+                throw new ArgumentNullException(nameof(file));
+
             PutbackFragment fragment = GetOrCreateFragment(file);
             fragment.Putback(buffer);
         }
@@ -206,15 +278,12 @@ namespace PasPasPas.Infrastructure.Input {
         /// </summary>
         /// <param name="input">input to add</param>
         public void AddFile(IParserInput input) {
-            SuspendCurrentFile();
-            AppendFile(input);
-        }
 
-        private void AppendFile(IParserInput input) {
-            files.Push(new PartlyReadFile() {
-                InputFile = input,
-                Active = true,
-            });
+            if (input == null)
+                throw new ArgumentNullException(nameof(input));
+
+            SuspendCurrentFile();
+            files.Push(new PartlyReadFile(input));
         }
 
         private void SuspendCurrentFile() {

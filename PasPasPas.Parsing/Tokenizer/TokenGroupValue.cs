@@ -29,12 +29,23 @@ namespace PasPasPas.Parsing.Tokenizer {
     public abstract class TokenGroupValue {
 
         /// <summary>
+        ///     generate a token
+        /// </summary>
+        /// <param name="input">input</param>
+        /// <param name="prefix">prefix</param>
+        /// <returns>tokent</returns>
+        public PascalToken Tokenize(StackedFileReader input, StringBuilder prefix) {
+            var currentFile = input.CurrentInputFile.FilePath;
+            return WithPrefix(input, prefix, currentFile);
+        }
+
+        /// <summary>
         ///     complete the parsing
         /// </summary>
         /// <param name="input">input</param>
         /// <param name="prefix">prefix</param>
         /// <returns>completed token</returns>
-        public abstract PascalToken WithPrefix(StackedFileReader input, StringBuilder prefix);
+        protected abstract PascalToken WithPrefix(StackedFileReader input, StringBuilder prefix, IFileReference currentFile);
     }
 
     /// <summary>
@@ -61,9 +72,10 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         /// <param name="input">input</param>
         /// <param name="prefix">prefix</param>
+        /// <param name="file">file references</param>
         /// <returns></returns>
-        public override PascalToken WithPrefix(StackedFileReader input, StringBuilder prefix)
-            => new PascalToken(TokenId, prefix.ToString());
+        protected override PascalToken WithPrefix(StackedFileReader input, StringBuilder prefix, IFileReference file)
+            => new PascalToken(TokenId, prefix.ToString(), file);
     }
 
     /// <summary>
@@ -81,17 +93,18 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         /// <param name="input">input</param>
         /// <param name="prefix">prefix</param>
+        /// <param name="file">input file</param>
         /// <returns></returns>
-        public override PascalToken WithPrefix(StackedFileReader input, StringBuilder prefix) {
+        protected override PascalToken WithPrefix(StackedFileReader input, StringBuilder prefix, IFileReference file) {
             var endSeq = EndSequence;
 
             while (!input.AtEof) {
                 if (prefix.EndsWith(endSeq))
-                    return new PascalToken(TokenId, prefix.ToString());
+                    return new PascalToken(TokenId, prefix.ToString(), file);
                 prefix = prefix.Append(input.FetchChar());
             }
 
-            return new PascalToken(TokenId, prefix.ToString());
+            return new PascalToken(TokenId, prefix.ToString(), file);
         }
 
         /// <summary>
@@ -111,9 +124,8 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="input"></param>
         /// <param name="prefix"></param>
         /// <returns></returns>
-        public override PascalToken WithPrefix(StackedFileReader input, StringBuilder prefix) {
+        protected override PascalToken WithPrefix(StackedFileReader input, StringBuilder prefix, IFileReference file) {
             while (!input.AtEof) {
-                var file = input.CurrentFile;
                 char currentChar = input.FetchChar();
 
                 if (!input.AtEof && currentChar == '\'') {
@@ -124,14 +136,14 @@ namespace PasPasPas.Parsing.Tokenizer {
                     else {
                         prefix.Append("'");
                         input.PutbackChar(file, nextChar);
-                        return new PascalToken(PascalToken.QuotedString, prefix.ToString());
+                        return new PascalToken(PascalToken.QuotedString, prefix.ToString(), file);
                     }
                 }
 
                 prefix.Append(currentChar);
             }
 
-            return new PascalToken(PascalToken.QuotedString, prefix.ToString());
+            return new PascalToken(PascalToken.QuotedString, prefix.ToString(), file);
         }
 
         /// <summary>
@@ -166,11 +178,12 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         /// <param name="input"></param>
         /// <param name="prefix"></param>
+        /// <param name="file">input file</param>
         /// <returns></returns>
-        public override PascalToken WithPrefix(StackedFileReader input, StringBuilder prefix) {
+        protected override PascalToken WithPrefix(StackedFileReader input, StringBuilder prefix, IFileReference file) {
             while (!input.AtEof)
                 input.FetchChar();
-            return new PascalToken(PascalToken.Eof, string.Empty);
+            return new PascalToken(PascalToken.Eof, string.Empty, file);
         }
     }
 
@@ -184,13 +197,13 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         /// <param name="input"></param>
         /// <param name="prefix"></param>
+        /// <param name="file">file reference</param>
         /// <returns></returns>
-        public override PascalToken WithPrefix(StackedFileReader input, StringBuilder prefix) {
+        protected override PascalToken WithPrefix(StackedFileReader input, StringBuilder prefix, IFileReference file) {
             while (!input.AtEof) {
                 char currentChar = input.FetchChar();
 
                 if (!input.AtEof && currentChar == '"') {
-                    var file = input.CurrentFile;
                     char nextChar = input.FetchChar();
                     if (nextChar == '"') {
                         prefix.Append("\"");
@@ -198,14 +211,14 @@ namespace PasPasPas.Parsing.Tokenizer {
                     else {
                         prefix.Append("\"");
                         input.PutbackChar(file, nextChar);
-                        return new PascalToken(PascalToken.DoubleQuotedString, prefix.ToString());
+                        return new PascalToken(PascalToken.DoubleQuotedString, prefix.ToString(), file);
                     }
                 }
 
                 prefix.Append(currentChar);
             }
 
-            return new PascalToken(PascalToken.DoubleQuotedString, prefix.ToString());
+            return new PascalToken(PascalToken.DoubleQuotedString, prefix.ToString(), file);
         }
     }
 
@@ -228,37 +241,36 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         /// <param name="input"></param>
         /// <param name="prefix"></param>
+        /// <param name="file">file reference</param>
         /// <returns></returns>
-        public override PascalToken WithPrefix(StackedFileReader input, StringBuilder prefix) {
-            input.PutbackChar(input.CurrentFile, prefix[0]);
+        protected override PascalToken WithPrefix(StackedFileReader input, StringBuilder prefix, IFileReference file) {
+            input.PutbackChar(file, prefix[0]);
             prefix.Length = 0;
 
             while (!input.AtEof) {
-                var file = input.CurrentFile;
                 char currentChar = input.FetchChar();
                 if (currentChar == '#') {
-                    file = input.CurrentFile;
                     char nextChar = input.FetchChar();
                     prefix.Append(currentChar);
                     if (nextChar == '$') {
                         prefix.Append(nextChar);
-                        hexDigits.WithPrefix(input, prefix);
+                        hexDigits.Tokenize(input, prefix);
                     }
                     else {
                         input.PutbackChar(file, nextChar);
-                        digits.WithPrefix(input, prefix);
+                        digits.Tokenize(input, prefix);
                     }
                 }
                 else if (currentChar == '\'') {
                     prefix.Append(currentChar);
-                    quotedString.WithPrefix(input, prefix);
+                    quotedString.Tokenize(input, prefix);
                 }
                 else {
                     input.PutbackChar(file, currentChar);
                     break;
                 }
             }
-            return new PascalToken(PascalToken.QuotedString, prefix.ToString());
+            return new PascalToken(PascalToken.QuotedString, prefix.ToString(), file);
         }
     }
 
@@ -356,10 +368,10 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         /// <param name="input"></param>
         /// <param name="prefix"></param>
+        /// <param name="file">input file</param>
         /// <returns></returns>
-        public override PascalToken WithPrefix(StackedFileReader input, StringBuilder prefix) {
+        protected override PascalToken WithPrefix(StackedFileReader input, StringBuilder prefix, IFileReference file) {
             if (!input.AtEof) {
-                var file = input.CurrentFile;
                 var currentChar = input.FetchChar();
 
                 while (!input.AtEof && MatchesClass(currentChar)) {
@@ -373,7 +385,7 @@ namespace PasPasPas.Parsing.Tokenizer {
                     prefix.Append(currentChar);
             }
 
-            return new PascalToken(TokenId, prefix.ToString());
+            return new PascalToken(TokenId, prefix.ToString(), file);
         }
 
     }
@@ -491,13 +503,12 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="input"></param>
         /// <param name="prefix"></param>
         /// <returns></returns>
-        public override PascalToken WithPrefix(StackedFileReader input, StringBuilder prefix) {
+        protected override PascalToken WithPrefix(StackedFileReader input, StringBuilder prefix, IFileReference file) {
             bool ignoreKeywords = prefix[0] == '&';
             if (ignoreKeywords)
                 prefix.Clear();
 
             while (!input.AtEof) {
-                var file = input.CurrentFile;
                 var currentChar = input.FetchChar();
                 if (!identifierCharClass.Matches(currentChar)) {
                     input.PutbackChar(file, currentChar);
@@ -510,9 +521,9 @@ namespace PasPasPas.Parsing.Tokenizer {
             int tokenKind;
 
             if ((!ignoreKeywords) && (knownKeywords.TryGetValue(value, out tokenKind)))
-                return new PascalToken() { Value = value, Kind = tokenKind };
+                return new PascalToken(tokenKind, value, file);
             else
-                return new PascalToken() { Value = value, Kind = PascalToken.Identifier };
+                return new PascalToken(PascalToken.Identifier, value, file);
 
         }
     }
@@ -527,8 +538,9 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         /// <param name="input"></param>
         /// <param name="prefix"></param>
+        /// <param name="file">file</param>
         /// <returns></returns>
-        public override PascalToken WithPrefix(StackedFileReader input, StringBuilder prefix) {
+        protected override PascalToken WithPrefix(StackedFileReader input, StringBuilder prefix, IFileReference file) {
 
             while (!input.AtEof) {
                 char currentChar = input.FetchChar();
@@ -536,7 +548,6 @@ namespace PasPasPas.Parsing.Tokenizer {
 
                 if (currentChar == 0x0D) {
                     if (!input.AtEof) {
-                        var file = input.CurrentFile;
                         char nextChar = input.FetchChar();
                         if (nextChar == 0x0A) {
                             prefix.Append(nextChar);
@@ -552,7 +563,7 @@ namespace PasPasPas.Parsing.Tokenizer {
                     break;
                 }
             }
-            return new PascalToken(PascalToken.Comment, prefix.ToString());
+            return new PascalToken(PascalToken.Comment, prefix.ToString(), file);
         }
     }
 
@@ -580,7 +591,7 @@ namespace PasPasPas.Parsing.Tokenizer {
             if (input.AtEof)
                 return false;
 
-            var file = input.CurrentFile;
+            var file = input.CurrentInputFile.FilePath;
             char n = input.FetchChar();
             if (c.Matches(n)) {
                 builder.Append(n);
@@ -598,18 +609,16 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="input"></param>
         /// <param name="prefix"></param>
         /// <returns></returns>
-        public override PascalToken WithPrefix(StackedFileReader input, StringBuilder prefix) {
-            var token = digitTokenizer.WithPrefix(input, prefix);
+        protected override PascalToken WithPrefix(StackedFileReader input, StringBuilder prefix, IFileReference file) {
+            var token = digitTokenizer.Tokenize(input, prefix);
             var withDot = false;
             var withExponent = false;
             if (input.AtEof)
                 return token;
 
-            var file = input.CurrentFile;
-
             if (NextCharMatches(input, prefix, dot)) {
                 if (NextCharMatches(input, prefix, numbers)) {
-                    digitTokenizer.WithPrefix(input, prefix);
+                    digitTokenizer.Tokenize(input, prefix);
                     withDot = true;
                 }
                 else if (prefix.EndsWith(".")) {
@@ -620,15 +629,15 @@ namespace PasPasPas.Parsing.Tokenizer {
 
             if (NextCharMatches(input, prefix, exponent)) {
                 NextCharMatches(input, prefix, plusminus);
-                digitTokenizer.WithPrefix(input, prefix);
+                digitTokenizer.Tokenize(input, prefix);
                 withExponent = true;
             }
 
             if (withDot || withExponent) {
-                return new PascalToken(PascalToken.Real, prefix.ToString());
+                return new PascalToken(PascalToken.Real, prefix.ToString(), file);
             }
             else {
-                return new PascalToken(PascalToken.Integer, prefix.ToString());
+                return new PascalToken(PascalToken.Integer, prefix.ToString(), file);
             }
 
         }

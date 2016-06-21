@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PasPasPas.Infrastructure.Input {
 
@@ -18,6 +14,10 @@ namespace PasPasPas.Infrastructure.Input {
         /// </summary>
         /// <param name="path">file path</param>
         public FileReference(string path) {
+
+            if (string.IsNullOrWhiteSpace(path))
+                throw new ArgumentException($"Invalid path {path}", nameof(path));
+
             this.path = path;
         }
 
@@ -39,7 +39,7 @@ namespace PasPasPas.Infrastructure.Input {
         /// <param name="path">path to add</param>
         /// <returns>combined path</returns>
         public IFileReference Append(IFileReference path)
-            => new FileReference(System.IO.Path.Combine(this.path ?? string.Empty, path.Path));
+            => new FileReference(System.IO.Path.Combine(this.path, path.Path));
 
         /// <summary>
         ///     string representation of this file reference

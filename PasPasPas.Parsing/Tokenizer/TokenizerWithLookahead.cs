@@ -54,7 +54,7 @@ namespace PasPasPas.Parsing.Tokenizer {
             while (tokenList.Count == currentTokenCount) {
 
                 if (!HasNextToken()) {
-                    tokenList.Enqueue(new PascalToken() { Kind = PascalToken.Eof, Value = string.Empty });
+                    tokenList.Enqueue(new PascalToken(PascalToken.Eof, string.Empty, new FileReference(string.Empty)));
                     return;
                 }
 
@@ -105,7 +105,7 @@ namespace PasPasPas.Parsing.Tokenizer {
             }
 
             if (tokenList.Count <= num) {
-                return new PascalToken() { Kind = PascalToken.Eof, Value = string.Empty };
+                return new PascalToken(PascalToken.Eof, string.Empty, new FileReference(string.Empty));
             }
             else {
                 return tokenList.ElementAt(num);

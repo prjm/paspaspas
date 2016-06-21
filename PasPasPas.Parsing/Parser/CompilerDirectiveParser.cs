@@ -1072,7 +1072,7 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseLongIncludeRessourceSwitch() {
-            var sourcePath = IncludeInput.CurrentFile?.FilePath;
+            var sourcePath = CurrentToken().FilePath;
             FetchNextToken();
             ParseResourceFileName(sourcePath);
         }
@@ -1366,8 +1366,8 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseLongIncludeSwitch() {
-            var sourcePath = IncludeInput.CurrentFile.FilePath;
             var includeToken = Require(PascalToken.Identifier, PascalToken.QuotedString);
+            var sourcePath = includeToken.FilePath;
             string filename = includeToken.Value;
 
             if (includeToken.Kind == PascalToken.QuotedString) {
@@ -1865,7 +1865,6 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private bool ParseIncludeRessource() {
-            var sourcePath = IncludeInput.CurrentFile?.FilePath;
             FetchNextToken();
 
             if (Optional(PascalToken.Plus)) {
@@ -1878,7 +1877,7 @@ namespace PasPasPas.Parsing.Parser {
                 return true;
             }
 
-
+            var sourcePath = CurrentToken().FilePath;
             if (!ParseResourceFileName(sourcePath))
                 return false;
 
@@ -2063,8 +2062,8 @@ namespace PasPasPas.Parsing.Parser {
                 return true;
             }
 
-            var sourcePath = Tokenizer.Input.CurrentFile.FilePath;
             var includeToken = Require(PascalToken.Identifier, PascalToken.QuotedString);
+            var sourcePath = includeToken.FilePath;
             string filename = includeToken.Value;
 
             if (includeToken.Kind == PascalToken.QuotedString) {

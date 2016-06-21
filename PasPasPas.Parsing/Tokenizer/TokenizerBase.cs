@@ -47,22 +47,21 @@ namespace PasPasPas.Parsing.Tokenizer {
         ///     generates an undefined token
         /// </summary>
         /// <param name="currentChar"></param>
+        /// <param name="file">file</param>
         /// <returns></returns>
-        protected PascalToken GenerateUndefinedToken(char currentChar) {
+        protected PascalToken GenerateUndefinedToken(char currentChar, IFileReference file) {
             var value = new string(currentChar, 1);
             LogSource.Error(UnexpectedCharacter, value);
-            return new PascalToken() {
-                Value = value,
-                Kind = PascalToken.Undefined
-            };
+            return new PascalToken(PascalToken.Undefined, value, file);
         }
 
         /// <summary>
         ///     generates an eof token
         /// </summary>
+        /// <param name="file">file reference</param>
         /// <returns></returns>
-        protected static PascalToken GenerateEofToken()
-            => new PascalToken() { Kind = PascalToken.Eof, Value = string.Empty };
+        protected static PascalToken GenerateEofToken(IFileReference file)
+            => new PascalToken(PascalToken.Eof, string.Empty, file);
 
 
         /// <summary>
@@ -77,9 +76,10 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <returns>next token</returns>
         public PascalToken FetchNextToken() {
             if (Input.AtEof) {
-                return GenerateEofToken();
+                return GenerateEofToken(new FileReference(string.Empty));
             }
 
+            var file = Input.CurrentInputFile.FilePath;
             char c = Input.FetchChar();
             PunctuatorGroup tokenGroup;
 
@@ -87,14 +87,8 @@ namespace PasPasPas.Parsing.Tokenizer {
                 return Punctuators.FetchTokenByGroup(Input, c, tokenGroup);
             }
 
-            return GenerateUndefinedToken(c);
+            return GenerateUndefinedToken(c, file);
         }
-
-        /// <summary>
-        ///     get the currently read file
-        /// </summary>
-        public IFile CurrentFile
-            => Input.CurrentFile;
 
         /// <summary>
         ///     environment

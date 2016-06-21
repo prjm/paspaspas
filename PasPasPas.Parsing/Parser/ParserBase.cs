@@ -112,7 +112,7 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             Unexpected();
-            return new PascalToken() { Kind = PascalToken.Undefined, Value = string.Empty };
+            return new PascalToken(PascalToken.Undefined, string.Empty, Tokenizer.Input.CurrentInputFile.FilePath);
         }
 
         /// <summary>
@@ -131,7 +131,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <summary>
         ///     fetch the next token
         /// </summary>
-        protected virtual void FetchNextToken() {
+        protected void FetchNextToken() {
             tokenizer.FetchNextToken();
         }
 

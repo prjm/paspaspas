@@ -28,6 +28,13 @@ namespace PasPasPas.Infrastructure.Input {
         /// <param name="inputText">string input</param>
         /// <param name="virtualPath">virtual path</param>
         public StringInput(string inputText, IFileReference virtualPath) {
+
+            if (virtualPath == null)
+                throw new ArgumentNullException(nameof(virtualPath));
+
+            if (inputText == null)
+                throw new ArgumentNullException(nameof(inputText));
+
             input = inputText;
             path = virtualPath;
         }
@@ -81,7 +88,7 @@ namespace PasPasPas.Infrastructure.Input {
         ///     open the file
         /// </summary>
         public void Open() {
-            // do nothing
+            /// ,,,
         }
 
         #region IDisposable Support
@@ -98,7 +105,7 @@ namespace PasPasPas.Infrastructure.Input {
         }
 
         /// <summary>
-        ///     disposte input
+        ///     dispose input
         /// </summary>
         public void Dispose() {
             Dispose(true);
