@@ -97,11 +97,12 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <returns></returns>
         protected override PascalToken WithPrefix(StackedFileReader input, StringBuilder prefix, IFileReference file) {
             var endSeq = EndSequence;
+            bool switchedInput = false;
 
-            while (!input.AtEof) {
+            while ((!input.AtEof) && (!switchedInput)) {
                 if (prefix.EndsWith(endSeq))
                     return new PascalToken(TokenId, prefix.ToString(), file);
-                prefix = prefix.Append(input.FetchChar());
+                prefix = prefix.Append(input.FetchChar(out switchedInput));
             }
 
             return new PascalToken(TokenId, prefix.ToString(), file);
@@ -123,13 +124,15 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         /// <param name="input"></param>
         /// <param name="prefix"></param>
+        /// <param name="file">input file</param>
         /// <returns></returns>
         protected override PascalToken WithPrefix(StackedFileReader input, StringBuilder prefix, IFileReference file) {
+            bool switchedInput = false;
             while (!input.AtEof) {
-                char currentChar = input.FetchChar();
+                char currentChar = input.FetchChar(out switchedInput);
 
-                if (!input.AtEof && currentChar == '\'') {
-                    char nextChar = input.FetchChar();
+                if (!input.AtEof && currentChar == '\'' && !switchedInput) {
+                    char nextChar = input.FetchChar(out switchedInput);
                     if (nextChar == '\'') {
                         prefix.Append("'");
                     }
@@ -181,8 +184,9 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="file">input file</param>
         /// <returns></returns>
         protected override PascalToken WithPrefix(StackedFileReader input, StringBuilder prefix, IFileReference file) {
-            while (!input.AtEof)
-                input.FetchChar();
+            bool switchedInput = false;
+            while (!input.AtEof && !switchedInput)
+                input.FetchChar(out switchedInput);
             return new PascalToken(PascalToken.Eof, string.Empty, file);
         }
     }
@@ -200,11 +204,12 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="file">file reference</param>
         /// <returns></returns>
         protected override PascalToken WithPrefix(StackedFileReader input, StringBuilder prefix, IFileReference file) {
-            while (!input.AtEof) {
-                char currentChar = input.FetchChar();
+            bool switchedInput = false;
+            while (!input.AtEof && !switchedInput) {
+                char currentChar = input.FetchChar(out switchedInput);
 
-                if (!input.AtEof && currentChar == '"') {
-                    char nextChar = input.FetchChar();
+                if (!input.AtEof && currentChar == '"' && !switchedInput) {
+                    char nextChar = input.FetchChar(out switchedInput);
                     if (nextChar == '"') {
                         prefix.Append("\"");
                     }
@@ -246,11 +251,12 @@ namespace PasPasPas.Parsing.Tokenizer {
         protected override PascalToken WithPrefix(StackedFileReader input, StringBuilder prefix, IFileReference file) {
             input.PutbackChar(file, prefix[0]);
             prefix.Length = 0;
+            bool switchedInput = false;
 
             while (!input.AtEof) {
-                char currentChar = input.FetchChar();
+                char currentChar = input.FetchChar(out switchedInput);
                 if (currentChar == '#') {
-                    char nextChar = input.FetchChar();
+                    char nextChar = input.FetchChar(out switchedInput);
                     prefix.Append(currentChar);
                     if (nextChar == '$') {
                         prefix.Append(nextChar);
@@ -371,12 +377,13 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="file">input file</param>
         /// <returns></returns>
         protected override PascalToken WithPrefix(StackedFileReader input, StringBuilder prefix, IFileReference file) {
-            if (!input.AtEof) {
-                var currentChar = input.FetchChar();
+            bool switchedInput = false;
+            if (!input.AtEof && !switchedInput) {
+                var currentChar = input.FetchChar(out switchedInput);
 
-                while (!input.AtEof && MatchesClass(currentChar)) {
+                while (!input.AtEof && MatchesClass(currentChar) && !switchedInput) {
                     prefix.Append(currentChar);
-                    currentChar = input.FetchChar();
+                    currentChar = input.FetchChar(out switchedInput);
                 }
 
                 if (!MatchesClass(currentChar))
@@ -505,11 +512,13 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <returns></returns>
         protected override PascalToken WithPrefix(StackedFileReader input, StringBuilder prefix, IFileReference file) {
             bool ignoreKeywords = prefix[0] == '&';
+            bool switchedInput = false;
+
             if (ignoreKeywords)
                 prefix.Clear();
 
-            while (!input.AtEof) {
-                var currentChar = input.FetchChar();
+            while (!input.AtEof && !switchedInput) {
+                var currentChar = input.FetchChar(out switchedInput);
                 if (!identifierCharClass.Matches(currentChar)) {
                     input.PutbackChar(file, currentChar);
                     break;
@@ -541,14 +550,15 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="file">file</param>
         /// <returns></returns>
         protected override PascalToken WithPrefix(StackedFileReader input, StringBuilder prefix, IFileReference file) {
+            bool switchedInput = false;
 
-            while (!input.AtEof) {
-                char currentChar = input.FetchChar();
+            while (!input.AtEof && !switchedInput) {
+                char currentChar = input.FetchChar(out switchedInput);
                 prefix.Append(currentChar);
 
                 if (currentChar == 0x0D) {
-                    if (!input.AtEof) {
-                        char nextChar = input.FetchChar();
+                    if (!input.AtEof && !switchedInput) {
+                        char nextChar = input.FetchChar(out switchedInput);
                         if (nextChar == 0x0A) {
                             prefix.Append(nextChar);
                         }
@@ -592,7 +602,8 @@ namespace PasPasPas.Parsing.Tokenizer {
                 return false;
 
             var file = input.CurrentInputFile.FilePath;
-            char n = input.FetchChar();
+            bool switchedInput = false;
+            char n = input.FetchChar(out switchedInput);
             if (c.Matches(n)) {
                 builder.Append(n);
                 return true;

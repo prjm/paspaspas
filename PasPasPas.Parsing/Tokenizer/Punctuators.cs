@@ -119,9 +119,10 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <returns></returns>
         public static PascalToken FetchTokenByGroup(StackedFileReader inputStream, char prefix, PunctuatorGroup tokenGroup) {
             StringBuilder input = new StringBuilder(100);
+            bool switchedInput = false;
             input.Append(prefix);
-            while (input.Length < tokenGroup.Length && (!inputStream.AtEof)) {
-                input.Append(inputStream.FetchChar());
+            while (input.Length < tokenGroup.Length && (!inputStream.AtEof) && (!switchedInput)) {
+                input.Append(inputStream.FetchChar(out switchedInput));
             }
 
             int tokenLength;

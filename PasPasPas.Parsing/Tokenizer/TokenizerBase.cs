@@ -80,7 +80,8 @@ namespace PasPasPas.Parsing.Tokenizer {
             }
 
             var file = Input.CurrentInputFile.FilePath;
-            char c = Input.FetchChar();
+            bool switchedInput = false;
+            char c = Input.FetchChar(out switchedInput);
             PunctuatorGroup tokenGroup;
 
             if (CharacterClasses.Match(c, out tokenGroup)) {

@@ -180,33 +180,47 @@ namespace PasPasPas.Infrastructure.Input {
         /// <summary>
         ///     fetch the next char
         /// </summary>
-        /// <returns></returns>
-        public char FetchChar() {
-            if (AtEof)
+        /// <param name="switchedInput"><c>true</c> if the input file switched</param>
+        /// <returns>next input character or <c>\o</c> if at <c>eof</c></returns>
+        public char FetchChar(out bool switchedInput) {
+            char result;
+
+            if (AtEof) {
+                switchedInput = false;
                 return '\0';
+            }
 
             if (putbackFragments.Count > 0) {
                 var fragment = putbackFragments.Peek();
-                char result = fragment.Pop();
-                if (fragment.AtEof())
+                result = fragment.Pop();
+                if (fragment.AtEof()) {
+                    switchedInput = true;
                     putbackFragments.Pop();
+                    return result;
+                }
+
+                switchedInput = false;
                 return result;
             }
 
             var file = files.Peek();
-            var readChar = file.InputFile.NextChar();
+            result = file.InputFile.NextChar();
 
             if (file.InputFile.AtEof) {
                 file.Close(true);
                 files.Pop();
+                switchedInput = true;
 
                 if (!AtEof) {
                     file = files.Peek();
                     file.Open();
                 }
+
+                return result;
             }
 
-            return readChar;
+            switchedInput = false;
+            return result;
         }
 
         /// <summary>
