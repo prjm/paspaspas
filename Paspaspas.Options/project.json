@@ -1,8 +1,7 @@
 ﻿{
   "supports": {
     "net46.app": {},
-    "uwp.10.0.app": {},
-    "dnxcore50.app": {}
+    "uwp.10.0.app": {}
   },
   "dependencies": {
     "Microsoft.AnalyzerPowerPack": "1.1.0",

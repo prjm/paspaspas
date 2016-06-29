@@ -65,7 +65,7 @@ namespace PasPasPasTests {
             using (var inputFile = new StringInput(input, new FileReference("test.pas")))
             using (var reader = new StackedFileReader()) {
                 reader.AddFile(inputFile);
-                parser.BaseTokenizer = new StandardTokenizer(environment) { Input = reader };
+                parser.BaseTokenizer = new StandardTokenizer(environment, reader);
                 var hasError = false;
                 string errorText = string.Empty;
 
@@ -113,11 +113,10 @@ namespace PasPasPasTests {
                 TestOptions.ResetOnNewUnit();
                 var subParts = directivePart.Split(new[] { '§' }, StringSplitOptions.RemoveEmptyEntries);
                 foreach (var subPart in subParts) {
-                    var parser = new CompilerDirectiveParser(environment);
                     using (var input = new StringInput(subPart, new FileReference("test_" + fileCounter.ToString() + ".pas")))
                     using (var reader = new StackedFileReader()) {
                         reader.AddFile(input);
-                        parser.BaseTokenizer.Input = reader;
+                        var parser = new CompilerDirectiveParser(environment, reader);
                         parser.IncludeInput = reader;
                         while (!reader.AtEof) {
                             parser.ParseCompilerDirective();

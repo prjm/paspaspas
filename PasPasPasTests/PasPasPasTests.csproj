@@ -67,6 +67,7 @@
     <Compile Include="Parser\TestDeclarations.cs" />
     <Compile Include="StackedReaderTest.cs" />
     <Compile Include="Parser\CompilerDirectiveTest.cs" />
+    <Compile Include="Tokenizer\LineCounterTest.cs" />
     <Compile Include="Tokenizer\TokenizerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

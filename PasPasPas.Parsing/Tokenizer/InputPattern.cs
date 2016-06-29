@@ -9,7 +9,7 @@ namespace PasPasPas.Parsing.Tokenizer {
     /// <summary>
     ///     group punctuators with the same prefix
     /// </summary>
-    public class PunctuatorGroup {
+    public class InputPattern {
 
         /// <summary>
         ///     length (cache)
@@ -50,7 +50,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         /// <param name="prefix">prefix</param>
         /// <param name="tokenValue">token value</param>
-        public PunctuatorGroup(CharacterClass prefix, TokenGroupValue tokenValue) {
+        public InputPattern(CharacterClass prefix, PatternContinuation tokenValue) {
             Prefix = prefix;
             TokenValue = tokenValue;
         }
@@ -60,7 +60,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         /// <param name="prefix">prefix</param>
         /// <param name="tokenValue">token value</param>
-        public PunctuatorGroup(char prefix, int tokenValue) : this(new SingleCharClass(prefix), new SimpleTokenGroupValue(tokenValue)) {
+        public InputPattern(char prefix, int tokenValue) : this(new SingleCharClass(prefix), new SimpleTokenGroupValue(tokenValue)) {
             //..
         }
 
@@ -90,13 +90,13 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <summary>
         ///     token value
         /// </summary>
-        public TokenGroupValue TokenValue { get; }
+        public PatternContinuation TokenValue { get; }
 
         /// <summary>
         ///     tokens
         /// </summary>
-        private Lazy<IDictionary<char, PunctuatorGroup>> Tokens { get; }
-            = new Lazy<IDictionary<char, PunctuatorGroup>>(() => new Dictionary<char, PunctuatorGroup>());
+        private Lazy<IDictionary<char, InputPattern>> Tokens { get; }
+            = new Lazy<IDictionary<char, InputPattern>>(() => new Dictionary<char, InputPattern>());
 
         /// <summary>
         ///     add a token to this token group
@@ -104,8 +104,8 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="nextPunct">next punctuator part</param>
         /// <param name="token"></param>
         /// <returns>new token</returns>
-        public PunctuatorGroup Add(char nextPunct, int token) {
-            var result = new PunctuatorGroup(nextPunct, token);
+        public InputPattern Add(char nextPunct, int token) {
+            var result = new InputPattern(nextPunct, token);
             Tokens.Value.Add(nextPunct, result);
             length = -1;
             return result;
@@ -117,8 +117,8 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="nextPunct">next punctuator part</param>
         /// <param name="token"></param>
         /// <returns>new token</returns>
-        public PunctuatorGroup Add(char nextPunct, TokenGroupValue token) {
-            var result = new PunctuatorGroup(new SingleCharClass(nextPunct), token);
+        public InputPattern Add(char nextPunct, PatternContinuation token) {
+            var result = new InputPattern(new SingleCharClass(nextPunct), token);
             Tokens.Value.Add(nextPunct, result);
             length = -1;
             return result;
@@ -130,7 +130,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="input">input</param>
         /// <param name="tokenLength">token length</param>
         /// <returns>matched token value</returns>
-        public TokenGroupValue Match(StringBuilder input, out int tokenLength) {
+        public PatternContinuation Match(StringBuilder input, out int tokenLength) {
             var subgroup = this;
             int index = 1;
             while (index < Length && index < input.Length) {

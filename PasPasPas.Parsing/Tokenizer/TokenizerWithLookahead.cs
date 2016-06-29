@@ -24,17 +24,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         ///     parser input
         /// </summary>
         public StackedFileReader Input
-        {
-            get
-            {
-                return BaseTokenizer.Input;
-            }
-
-            set
-            {
-                BaseTokenizer.Input = value;
-            }
-        }
+            => BaseTokenizer.Input;
 
         /// <summary>
         ///     list of tokens
@@ -54,7 +44,7 @@ namespace PasPasPas.Parsing.Tokenizer {
             while (tokenList.Count == currentTokenCount) {
 
                 if (!HasNextToken()) {
-                    tokenList.Enqueue(new PascalToken(PascalToken.Eof, string.Empty, new FileReference(string.Empty)));
+                    //tokenList.Enqueue(new PascalToken(PascalToken.Eof, string.Empty, new FileReference(string.Empty)));
                     return;
                 }
 
@@ -105,7 +95,7 @@ namespace PasPasPas.Parsing.Tokenizer {
             }
 
             if (tokenList.Count <= num) {
-                return new PascalToken(PascalToken.Eof, string.Empty, new FileReference(string.Empty));
+                return null; //  new PascalToken(PascalToken.Eof, string.Empty, new FileReference(string.Empty));
             }
             else {
                 return tokenList.ElementAt(num);

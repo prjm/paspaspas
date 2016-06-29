@@ -6,11 +6,6 @@
     public abstract class CharacterClass {
 
         /// <summary>
-        ///     prefix
-        /// </summary>
-        public abstract char Prefix { get; }
-
-        /// <summary>
         ///     test if the character class matches
         /// </summary>
         /// <param name="input">character to match</param>
@@ -19,11 +14,22 @@
 
     }
 
+    /// <summary>
+    ///     character class with prefix
+    /// </summary>
+    public abstract class PrefixedCharacterClass : CharacterClass {
+
+        /// <summary>
+        ///     prefix
+        /// </summary>
+        public abstract char Prefix { get; }
+
+    }
 
     /// <summary>
     ///     character class for a single char
     /// </summary>
-    public class SingleCharClass : CharacterClass {
+    public class SingleCharClass : PrefixedCharacterClass {
 
         private readonly char match;
 
@@ -56,11 +62,6 @@
     public class ControlCharacterClass : CharacterClass {
 
         /// <summary>
-        ///     undefined prefix
-        /// </summary>
-        public override char Prefix => '\0';
-
-        /// <summary>
         ///     test if the char is whitespace
         /// </summary>
         /// <param name="input"></param>
@@ -74,11 +75,6 @@
     ///     matches whitespace
     /// </summary>
     public class WhitspaceCharacterClass : CharacterClass {
-
-        /// <summary>
-        ///     undefined prefix
-        /// </summary>
-        public override char Prefix => '\0';
 
         /// <summary>
         ///     test if the char is whitespace
@@ -95,17 +91,12 @@
     public class NumberCharacterClass : CharacterClass {
 
         /// <summary>
-        ///     undefined prefix
-        /// </summary>
-        public override char Prefix => '\0';
-
-        /// <summary>
-        ///     test if the char is whitespace
+        ///     test if the char is a number
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
         public override bool Matches(char input)
-            => ('0' <= input) && (input <= '9');
+            => char.IsNumber(input);
 
     }
 
@@ -115,17 +106,13 @@
     public class ExponentCharacterClass : CharacterClass {
 
         /// <summary>
-        ///     undefined prefix
-        /// </summary>
-        public override char Prefix => '\0';
-
-        /// <summary>
         ///     test if a charactrer class matches
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public override bool Matches(char input)
-            => input == 'E' || input == 'e';
+        public override bool Matches(char input) =>
+            input == 'E' ||
+            input == 'e';
     }
 
     /// <summary>
@@ -134,18 +121,13 @@
     public class PlusMinusCharacterClass : CharacterClass {
 
         /// <summary>
-        ///     undefined prefix
-        /// </summary>
-        public override char Prefix
-            => '\0';
-
-        /// <summary>
         ///     test if a charactrer class matches
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public override bool Matches(char input)
-            => input == '+' || input == '-';
+        public override bool Matches(char input) =>
+            input == '+' ||
+            input == '-';
     }
 
     /// <summary>
@@ -172,18 +154,16 @@
             = false;
 
         /// <summary>
-        ///     undefined prefix
-        /// </summary>
-        public override char Prefix
-            => '\0';
-
-        /// <summary>
         ///     test if a char is accecpable for an identifier
         /// </summary>
         /// <param name="input">input</param>
         /// <returns><c>true</c> if the char can be part of an identifier</returns>
-        public override bool Matches(char input)
-            => char.IsLetter(input) || input == '_' || (AllowAmpersand && input == '&') || (AllowDigits && char.IsDigit(input)) || (AllowDots && input == '.');
+        public override bool Matches(char input) =>
+            char.IsLetter(input) ||
+            input == '_' ||
+            (AllowAmpersand && input == '&') ||
+            (AllowDigits && char.IsDigit(input)) ||
+            (AllowDots && input == '.');
     }
 
 }

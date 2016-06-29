@@ -53,6 +53,7 @@
     <Compile Include="Input\ResolvedFile.cs" />
     <Compile Include="Input\StackedFileReader.cs" />
     <Compile Include="Input\StringInput.cs" />
+    <Compile Include="Input\TextFilePosition.cs" />
     <Compile Include="Log\ILogManager.cs" />
     <Compile Include="Log\ILogMessage.cs" />
     <Compile Include="Log\ILogSource.cs" />

@@ -6,6 +6,9 @@ using PasPasPas.Infrastructure.Input;
 
 namespace PasPasPas.Parsing.Tokenizer {
 
+    /// <summary>
+    ///     helper class for a string builder
+    /// </summary>
     static class StringBuilderHelper {
 
         /// <summary>
@@ -26,7 +29,7 @@ namespace PasPasPas.Parsing.Tokenizer {
     /// <summary>
     ///     token group value
     /// </summary>
-    public abstract class TokenGroupValue {
+    public abstract class PatternContinuation {
 
         /// <summary>
         ///     generate a token
@@ -35,9 +38,15 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="prefix">prefix</param>
         /// <returns>tokent</returns>
         public PascalToken Tokenize(StackedFileReader input, StringBuilder prefix) {
-            var currentFile = input.CurrentInputFile.FilePath;
-            return WithPrefix(input, prefix, currentFile);
+            var result = new PascalToken();
+            result.FilePath = input.CurrentInputFile.FilePath;
+            result.StartPosition = input.GetCurrentPosition();
+            //return WithPrefix(input, prefix, currentFile);
+            result.EndPosition = input.GetCurrentPosition();
+            return result;
         }
+
+
 
         /// <summary>
         ///     complete the parsing
@@ -51,7 +60,7 @@ namespace PasPasPas.Parsing.Tokenizer {
     /// <summary>
     ///     simple token group value: no more characters
     /// </summary>
-    public class SimpleTokenGroupValue : TokenGroupValue {
+    public class SimpleTokenGroupValue : PatternContinuation {
 
 
         /// <summary>
@@ -75,13 +84,13 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="file">file references</param>
         /// <returns></returns>
         protected override PascalToken WithPrefix(StackedFileReader input, StringBuilder prefix, IFileReference file)
-            => new PascalToken(TokenId, prefix.ToString(), file);
+            => null; // new PascalToken(TokenId, prefix.ToString(), file);
     }
 
     /// <summary>
     ///     token group value based on a sequence
     /// </summary>
-    public abstract class SequenceGroupTokenValue : TokenGroupValue {
+    public abstract class SequenceGroupTokenValue : PatternContinuation {
 
         /// <summary>
         ///     token id
@@ -101,11 +110,11 @@ namespace PasPasPas.Parsing.Tokenizer {
 
             while ((!input.AtEof) && (!switchedInput)) {
                 if (prefix.EndsWith(endSeq))
-                    return new PascalToken(TokenId, prefix.ToString(), file);
+                    return null; // new PascalToken(TokenId, prefix.ToString(), file);
                 prefix = prefix.Append(input.FetchChar(out switchedInput));
             }
 
-            return new PascalToken(TokenId, prefix.ToString(), file);
+            return null; // PascalToken(TokenId, prefix.ToString(), file);
         }
 
         /// <summary>
@@ -117,7 +126,7 @@ namespace PasPasPas.Parsing.Tokenizer {
     /// <summary>
     ///     token group for quoted strings
     /// </summary>
-    public class QuotedStringTokenValue : TokenGroupValue {
+    public class QuotedStringTokenValue : PatternContinuation {
 
         /// <summary>
         ///     tokenize a quoted string
@@ -139,14 +148,14 @@ namespace PasPasPas.Parsing.Tokenizer {
                     else {
                         prefix.Append("'");
                         input.PutbackChar(file, nextChar);
-                        return new PascalToken(PascalToken.QuotedString, prefix.ToString(), file);
+                        return null; // new PascalToken(PascalToken.QuotedString, prefix.ToString(), file);
                     }
                 }
 
                 prefix.Append(currentChar);
             }
 
-            return new PascalToken(PascalToken.QuotedString, prefix.ToString(), file);
+            return null; // new PascalToken(PascalToken.QuotedString, prefix.ToString(), file);
         }
 
         /// <summary>
@@ -174,7 +183,7 @@ namespace PasPasPas.Parsing.Tokenizer {
     /// <summary>
     ///     token group which moves the input to eof
     /// </summary>
-    public class SoftEofTokenValue : TokenGroupValue {
+    public class SoftEofTokenValue : PatternContinuation {
 
         /// <summary>
         ///     read until eof, discard token value
@@ -187,14 +196,14 @@ namespace PasPasPas.Parsing.Tokenizer {
             bool switchedInput = false;
             while (!input.AtEof && !switchedInput)
                 input.FetchChar(out switchedInput);
-            return new PascalToken(PascalToken.Eof, string.Empty, file);
+            return null; // new PascalToken(PascalToken.Eof, string.Empty, file);
         }
     }
 
     /// <summary>
     ///     double-quoted string
     /// </summary>
-    public class DoubleQuoteStringGroupTokenValue : TokenGroupValue {
+    public class DoubleQuoteStringGroupTokenValue : PatternContinuation {
 
         /// <summary>
         ///     tokenize a quoted string
@@ -216,21 +225,21 @@ namespace PasPasPas.Parsing.Tokenizer {
                     else {
                         prefix.Append("\"");
                         input.PutbackChar(file, nextChar);
-                        return new PascalToken(PascalToken.DoubleQuotedString, prefix.ToString(), file);
+                        return null; //  new PascalToken(PascalToken.DoubleQuotedString, prefix.ToString(), file);
                     }
                 }
 
                 prefix.Append(currentChar);
             }
 
-            return new PascalToken(PascalToken.DoubleQuotedString, prefix.ToString(), file);
+            return null; // new PascalToken(PascalToken.DoubleQuotedString, prefix.ToString(), file);
         }
     }
 
     /// <summary>
     ///     token group for strings
     /// </summary>
-    public class StringGroupTokenValue : TokenGroupValue {
+    public class StringGroupTokenValue : PatternContinuation {
 
         private QuotedStringTokenValue quotedString
             = new QuotedStringTokenValue();
@@ -276,7 +285,7 @@ namespace PasPasPas.Parsing.Tokenizer {
                     break;
                 }
             }
-            return new PascalToken(PascalToken.QuotedString, prefix.ToString(), file);
+            return null; // new PascalToken(PascalToken.QuotedString, prefix.ToString(), file);
         }
     }
 
@@ -354,7 +363,7 @@ namespace PasPasPas.Parsing.Tokenizer {
     /// <summary>
     ///     tokenizer based on a character class
     /// </summary>
-    public abstract class CharacterClassTokenGroupValue : TokenGroupValue {
+    public abstract class CharacterClassTokenGroupValue : PatternContinuation {
 
 
         /// <summary>
@@ -392,7 +401,7 @@ namespace PasPasPas.Parsing.Tokenizer {
                     prefix.Append(currentChar);
             }
 
-            return new PascalToken(TokenId, prefix.ToString(), file);
+            return null; // new PascalToken(TokenId, prefix.ToString(), file);
         }
 
     }
@@ -484,7 +493,7 @@ namespace PasPasPas.Parsing.Tokenizer {
     /// <summary>
     ///     token group for identifiers
     /// </summary>
-    public class IdentifierTokenGroupValue : TokenGroupValue {
+    public class IdentifierTokenGroupValue : PatternContinuation {
 
         private IdentifierCharacterClass identifierCharClass
             = new IdentifierCharacterClass() { AllowAmpersand = false, AllowDigits = true };
@@ -530,9 +539,9 @@ namespace PasPasPas.Parsing.Tokenizer {
             int tokenKind;
 
             if ((!ignoreKeywords) && (knownKeywords.TryGetValue(value, out tokenKind)))
-                return new PascalToken(tokenKind, value, file);
+                return null; // new PascalToken(tokenKind, value, file);
             else
-                return new PascalToken(PascalToken.Identifier, value, file);
+                return null; // new PascalToken(PascalToken.Identifier, value, file);
 
         }
     }
@@ -540,7 +549,7 @@ namespace PasPasPas.Parsing.Tokenizer {
     /// <summary>
     ///     token group for end of line comments
     /// </summary>
-    public class EondOfLineCommentTokenGroupValue : TokenGroupValue {
+    public class EondOfLineCommentTokenGroupValue : PatternContinuation {
 
         /// <summary>
         ///     tokenize end-of-line comments
@@ -573,14 +582,14 @@ namespace PasPasPas.Parsing.Tokenizer {
                     break;
                 }
             }
-            return new PascalToken(PascalToken.Comment, prefix.ToString(), file);
+            return null; // PascalToken(PascalToken.Comment, prefix.ToString(), file);
         }
     }
 
     /// <summary>
     ///     token group for numbers
     /// </summary>
-    public class NumberTokenGroupValue : TokenGroupValue {
+    public class NumberTokenGroupValue : PatternContinuation {
 
         private DigitTokenGroupValue digitTokenizer
             = new DigitTokenGroupValue();
@@ -645,10 +654,10 @@ namespace PasPasPas.Parsing.Tokenizer {
             }
 
             if (withDot || withExponent) {
-                return new PascalToken(PascalToken.Real, prefix.ToString(), file);
+                return null; // new PascalToken(PascalToken.Real, prefix.ToString(), file);
             }
             else {
-                return new PascalToken(PascalToken.Integer, prefix.ToString(), file);
+                return null; // new PascalToken(PascalToken.Integer, prefix.ToString(), file);
             }
 
         }

@@ -1477,29 +1477,36 @@ namespace PasPasPas.Api {
         /// <summary>
         ///     create a new token
         /// </summary>
-        /// <param name="tokenId">tokenid</param>
-        /// <param name="tokenValue">token value</param>
-        /// <param name="file">source file</param>
-        public PascalToken(int tokenId, string tokenValue, IFileReference file) {
-            Kind = tokenId;
-            Value = tokenValue;
-            FilePath = file;
+        public PascalToken() {
+            Kind = Undef;
+            Value = string.Empty;
+            FilePath = null;
         }
 
         /// <summary>
         ///     Token value
         /// </summary>
-        public string Value { get; }
+        public string Value { get; set; }
 
         /// <summary>
         ///     Token kind
         /// </summary>
-        public int Kind { get; }
+        public int Kind { get; set; }
 
         /// <summary>
         ///     file path
         /// </summary>
-        public IFileReference FilePath { get; }
+        public IFileReference FilePath { get; set; }
+
+        /// <summary>
+        ///     token start position
+        /// </summary>
+        public TextFilePosition StartPosition { get; internal set; }
+
+        /// <summary>
+        ///     token end position
+        /// </summary>
+        public TextFilePosition EndPosition { get; internal set; }
 
         /// <summary>
         ///     format token as string
@@ -1507,7 +1514,6 @@ namespace PasPasPas.Api {
         /// <returns></returns>
         public override string ToString()
             => Kind.ToString(CultureInfo.InvariantCulture) + ": " + Value?.Trim();
-
 
     }
 }

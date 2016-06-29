@@ -7,9 +7,32 @@ using System;
 namespace PasPasPas.Parsing.Tokenizer {
 
     /// <summary>
+    ///     helper methods for tokenizers
+    /// </summary>
+    public static class TokenizerHelper {
+
+
+        /// <summary>
+        ///     create a pseudo-token for the current input file
+        /// </summary>
+        /// <param name="tokenKind">token kind</param>
+        /// <param name="tokenizer">tokenizer</param>
+        /// <returns>pseudotoken (empty)</returns>
+        public static PascalToken CreatePseudoToken(this IPascalTokenizer tokenizer, int tokenKind) {
+            var result = new PascalToken();
+            result.FilePath = tokenizer.Input.CurrentInputFile?.FilePath;
+            result.StartPosition = tokenizer.Input.GetCurrentPosition();
+            result.EndPosition = tokenizer.Input.GetCurrentPosition();
+            result.Kind = tokenKind;
+            result.Value = string.Empty;
+            return result;
+        }
+    }
+
+    /// <summary>
     ///     base class for tokenizers
     /// </summary>
-    public abstract class TokenizerBase {
+    public abstract class TokenizerBase : IPascalTokenizer {
 
         /// <summary>
         ///     message group for tokenizer logs
@@ -24,9 +47,16 @@ namespace PasPasPas.Parsing.Tokenizer {
             = new Guid("{FA4EBD35-325B-4869-A2CD-B21EE430BAC4}");
 
         /// <summary>
-        ///     dummy constructor
+        ///     create a new tokinzer
         /// </summary>
-        protected TokenizerBase(ParserServices environment) {
+        protected TokenizerBase(ParserServices environment, StackedFileReader input) {
+
+            if (environment == null)
+                throw new ArgumentNullException(nameof(environment));
+
+            if (input == null)
+                throw new ArgumentNullException(nameof(input));
+
             Environment = environment;
             LogSource = new LogSource(environment.Log, TokenizerLogMessage, Messages.ResourceManager);
         }
@@ -34,7 +64,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <summary>
         ///     parser parser input
         /// </summary>
-        public StackedFileReader Input { get; set; }
+        public StackedFileReader Input { get; }
 
         /// <summary>
         ///     check if tokens are availiable
@@ -52,23 +82,13 @@ namespace PasPasPas.Parsing.Tokenizer {
         protected PascalToken GenerateUndefinedToken(char currentChar, IFileReference file) {
             var value = new string(currentChar, 1);
             LogSource.Error(UnexpectedCharacter, value);
-            return new PascalToken(PascalToken.Undefined, value, file);
+            return null; // new PascalToken(PascalToken.Undefined, value, file);
         }
-
-        /// <summary>
-        ///     generates an eof token
-        /// </summary>
-        /// <param name="file">file reference</param>
-        /// <returns></returns>
-        protected static PascalToken GenerateEofToken(IFileReference file)
-            => new PascalToken(PascalToken.Eof, string.Empty, file);
-
 
         /// <summary>
         ///     used char classes
         /// </summary>
         protected abstract Punctuators CharacterClasses { get; }
-
 
         /// <summary>
         ///     fetch the next token
@@ -76,13 +96,13 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <returns>next token</returns>
         public PascalToken FetchNextToken() {
             if (Input.AtEof) {
-                return GenerateEofToken(new FileReference(string.Empty));
+                return null; // CreatePseudoToken(PascalToken.Eof);
             }
 
             var file = Input.CurrentInputFile.FilePath;
             bool switchedInput = false;
             char c = Input.FetchChar(out switchedInput);
-            PunctuatorGroup tokenGroup;
+            InputPattern tokenGroup;
 
             if (CharacterClasses.Match(c, out tokenGroup)) {
                 return Punctuators.FetchTokenByGroup(Input, c, tokenGroup);

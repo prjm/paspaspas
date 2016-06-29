@@ -51,11 +51,6 @@
     <Compile Include="Api\PascalParser.cs" />
     <Compile Include="Api\PascalToken.cs" />
     <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="Messages.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Messages.resx</DependentUpon>
-    </Compile>
     <Compile Include="Parser\ParserBase.cs" />
     <Compile Include="Parser\ParserServices.cs" />
     <Compile Include="Parser\RuleAttribute.cs" />
@@ -222,13 +217,14 @@
     <Compile Include="Parser\CompilerDirectiveParser.cs" />
     <Compile Include="Tokenizer\CompilerDirectiveTokenizer.cs" />
     <Compile Include="Tokenizer\CompilerDirectiveTokenizerWithLookahead.cs" />
+    <Compile Include="Tokenizer\LineCounter.cs" />
     <Compile Include="Tokenizer\PascalTokenizerWithLookahead.cs" />
     <Compile Include="Tokenizer\PreprocessorPunctuators.cs" />
-    <Compile Include="Tokenizer\PunctuatorGroup.cs" />
+    <Compile Include="Tokenizer\InputPattern.cs" />
     <Compile Include="Tokenizer\Punctuators.cs" />
     <Compile Include="Tokenizer\StandardPunctuators.cs" />
     <Compile Include="Tokenizer\StandardTokenizer.cs" />
-    <Compile Include="Tokenizer\TokenGroupValue.cs" />
+    <Compile Include="Tokenizer\PatternContinuation.cs" />
     <Compile Include="Tokenizer\TokenizerBase.cs" />
     <Compile Include="Tokenizer\TokenizerWithLookahead.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -247,7 +243,6 @@
   <ItemGroup>
     <EmbeddedResource Include="Messages.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Messages.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />

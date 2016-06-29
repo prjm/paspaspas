@@ -17,14 +17,13 @@ namespace PasPasPasTests {
             var logManager = new LogManager();
             var services = new ParserServices(logManager);
             var messageHandler = new LogTarget();
-            var tokenizer = new StandardTokenizer(services);
             var result = new List<PascalToken>();
             logManager.RegisterTarget(messageHandler);
             using (var inputString = new StringInput(input, new FileReference("test.pas")))
             using (var reader = new StackedFileReader()) {
                 EventHandler<LogMessageEvent> handler = (_, x) => messages.Add(x.Message);
                 reader.AddFile(inputString);
-                tokenizer.Input = reader;
+                var tokenizer = new StandardTokenizer(services, reader);
 
                 if (messages != null)
                     messageHandler.ProcessMessage += handler;

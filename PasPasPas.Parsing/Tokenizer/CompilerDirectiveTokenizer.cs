@@ -1,4 +1,5 @@
 ﻿using PasPasPas.Api;
+using PasPasPas.Infrastructure.Input;
 using PasPasPas.Parsing.Parser;
 using System;
 using System.Collections.Generic;
@@ -13,8 +14,9 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <summary>
         ///     create a new compiler directive tokenizer
         /// </summary>
-        /// <param name="services"></param>
-        public CompilerDirectiveTokenizer(ParserServices services) : base(services) { }
+        /// <param name="services">environment</param>
+        /// <param name="input">file to parse</param>
+        public CompilerDirectiveTokenizer(ParserServices services, StackedFileReader input) : base(services, input) { }
 
         private PreprocessorPunctuators punctuators
             = new PreprocessorPunctuators();

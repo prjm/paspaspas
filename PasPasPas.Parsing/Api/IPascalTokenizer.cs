@@ -22,6 +22,6 @@ namespace PasPasPas.Api {
         /// <summary>
         ///     parser input
         /// </summary>
-        StackedFileReader Input { get; set; }
+        StackedFileReader Input { get; }
     }
 }

@@ -43,12 +43,11 @@ namespace P3Ide.ViewModel.PascalProject {
 
         internal void ParseSingleFile(StringInput singleFile, LogManager log) {
             var env = new ParserServices(log);
-            var parser = new CompilerDirectiveParser(env);
             env.Options = new OptionSet(new StandardFileAccess());
 
             using (var reader = new StackedFileReader()) {
                 reader.AddFile(singleFile);
-                parser.BaseTokenizer.Input = reader;
+                var parser = new CompilerDirectiveParser(env, reader);
                 parser.IncludeInput = reader;
                 while (!reader.AtEof) {
                     parser.ParseCompilerDirective();

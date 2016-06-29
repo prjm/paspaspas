@@ -70,20 +70,30 @@ namespace PasPasPas.Infrastructure.Input {
         /// <summary>
         ///     create a new putback fragment
         /// </summary>
-        /// <param name="originalPath"></param>
-        internal PutbackFragment(IFileReference originalPath) {
+        /// <param name="originalPath">original file path</param>
+        /// <param name="putbackBuffer">character buffer</param>
+        internal PutbackFragment(IFileReference originalPath, Stack<char> putbackBuffer) {
 
             if (originalPath == null)
                 throw new ArgumentNullException(nameof(originalPath));
 
+            if (putbackBuffer == null)
+                throw new ArgumentNullException(nameof(putbackBuffer));
+
             path = originalPath;
+            buffer = putbackBuffer;
+            startPosition = putbackBuffer.Count;
         }
+
+        /// <summary>
+        ///     start position
+        /// </summary>
+        private readonly int startPosition;
 
         /// <summary>
         ///     putback chars
         /// </summary>
-        private Stack<char> putbackBuffer
-            = new Stack<char>(16);
+        private readonly Stack<char> buffer;
 
         /// <summary>
         ///     current file
@@ -96,14 +106,14 @@ namespace PasPasPas.Infrastructure.Input {
         /// </summary>
         /// <returns></returns>
         internal char Pop()
-            => putbackBuffer.Pop();
+            => buffer.Pop();
 
         /// <summary>
         ///     check if the buffer is at eof
         /// </summary>
         /// <returns></returns>
         internal bool AtEof()
-            => putbackBuffer.Count == 0;
+            => buffer.Count == startPosition;
 
         /// <summary>
         ///     putback a string
@@ -114,7 +124,7 @@ namespace PasPasPas.Infrastructure.Input {
                 throw new ArgumentNullException(nameof(valueToPutback));
 
             for (int charIndex = valueToPutback.Length - 1; charIndex >= 0; charIndex--) {
-                putbackBuffer.Push(valueToPutback[charIndex]);
+                buffer.Push(valueToPutback[charIndex]);
             }
         }
 
@@ -123,8 +133,9 @@ namespace PasPasPas.Infrastructure.Input {
         /// </summary>
         /// <param name="buffer"></param>
         internal void Putback(StringBuilder buffer) {
+            // REMOVE REMOVE
             for (int charIndex = buffer.Length - 1; charIndex >= 0; charIndex--) {
-                putbackBuffer.Push(buffer[charIndex]);
+                this.buffer.Push(buffer[charIndex]);
             }
             buffer.Clear();
         }
@@ -134,7 +145,7 @@ namespace PasPasPas.Infrastructure.Input {
         /// </summary>
         /// <param name="valueToPutback"></param>
         internal void Putback(char valueToPutback) {
-            putbackBuffer.Push(valueToPutback);
+            buffer.Push(valueToPutback);
         }
     }
 
@@ -146,14 +157,20 @@ namespace PasPasPas.Infrastructure.Input {
         /// <summary>
         ///     files to read
         /// </summary>
-        private Stack<PartlyReadFile> files
+        private readonly Stack<PartlyReadFile> files
             = new Stack<PartlyReadFile>();
 
         /// <summary>
         ///     putback fragments
         /// </summary>
-        private Stack<PutbackFragment> putbackFragments
+        private readonly Stack<PutbackFragment> putbackFragments
             = new Stack<PutbackFragment>();
+
+        /// <summary>
+        ///     putback chars
+        /// </summary>
+        private readonly Stack<char> putbackChars
+            = new Stack<char>();
 
         /// <summary>
         ///     test if end of input has reached
@@ -252,7 +269,7 @@ namespace PasPasPas.Infrastructure.Input {
                 fragment = putbackFragments.Peek();
             }
             else {
-                fragment = new PutbackFragment(file);
+                fragment = new PutbackFragment(file, putbackChars);
                 putbackFragments.Push(fragment);
             }
 
@@ -333,6 +350,14 @@ namespace PasPasPas.Infrastructure.Input {
         public void Dispose() {
             Dispose(true);
             GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        ///     current position
+        /// </summary>
+        /// <returns></returns>
+        public TextFilePosition GetCurrentPosition() {
+            return new TextFilePosition();
         }
 
         #endregion

@@ -15,7 +15,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         /// <param name="chrClass">character class</param>
         /// <param name="value">group value (tokenizer)</param>
-        public PuntcuatorAndClass(CharacterClass chrClass, PunctuatorGroup value) {
+        public PuntcuatorAndClass(CharacterClass chrClass, InputPattern value) {
             CharClass = chrClass;
             GroupValue = value;
         }
@@ -28,7 +28,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <summary>
         ///     tokenizer group        
         /// </summary>
-        public PunctuatorGroup GroupValue { get; }
+        public InputPattern GroupValue { get; }
     }
 
     /// <summary>
@@ -39,8 +39,8 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <summary>
         ///     punctuators
         /// </summary>
-        private readonly IDictionary<char, PunctuatorGroup> punctuators =
-            new Dictionary<char, PunctuatorGroup>();
+        private readonly IDictionary<char, InputPattern> punctuators =
+            new Dictionary<char, InputPattern>();
 
         /// <summary>
         ///     list of class punctuators
@@ -54,8 +54,8 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="prefix"></param>
         /// <param name="tokenValue"></param>
         /// <returns></returns>
-        protected PunctuatorGroup AddPunctuator(char prefix, int tokenValue) {
-            var result = new PunctuatorGroup(prefix, tokenValue);
+        protected InputPattern AddPunctuator(char prefix, int tokenValue) {
+            var result = new InputPattern(prefix, tokenValue);
             punctuators.Add(prefix, result);
             return result;
         }
@@ -66,13 +66,14 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="prefix"></param>
         /// <param name="tokenValue"></param>
         /// <returns></returns>
-        protected PunctuatorGroup AddPunctuator(CharacterClass prefix, TokenGroupValue tokenValue) {
-            var result = new PunctuatorGroup(prefix, tokenValue);
+        protected InputPattern AddPunctuator(CharacterClass prefix, PatternContinuation tokenValue) {
+            var result = new InputPattern(prefix, tokenValue);
+            var prefixedCharecterClass = prefix as PrefixedCharacterClass;
 
-            if (prefix.Prefix == '\0')
+            if (prefixedCharecterClass == null)
                 classPunctuators.Add(new PuntcuatorAndClass(prefix, result));
             else
-                punctuators.Add(prefix.Prefix, result);
+                punctuators.Add(prefixedCharecterClass.Prefix, result);
 
             return result;
         }
@@ -83,8 +84,8 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="prefix"></param>
         /// <param name="tokenValue"></param>
         /// <returns></returns>
-        protected PunctuatorGroup AddPunctuator(char prefix, TokenGroupValue tokenValue) {
-            var result = new PunctuatorGroup(new SingleCharClass(prefix), tokenValue);
+        protected InputPattern AddPunctuator(char prefix, PatternContinuation tokenValue) {
+            var result = new InputPattern(new SingleCharClass(prefix), tokenValue);
             punctuators.Add(prefix, result);
             return result;
         }
@@ -96,7 +97,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="valueToMatch">char to match</param>
         /// <param name="tokenGroup">token group</param>
         /// <returns></returns>
-        public bool Match(char valueToMatch, out PunctuatorGroup tokenGroup) {
+        public bool Match(char valueToMatch, out InputPattern tokenGroup) {
             if (punctuators.TryGetValue(valueToMatch, out tokenGroup))
                 return true;
 
@@ -117,7 +118,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="prefix"></param>
         /// <param name="tokenGroup"></param>
         /// <returns></returns>
-        public static PascalToken FetchTokenByGroup(StackedFileReader inputStream, char prefix, PunctuatorGroup tokenGroup) {
+        public static PascalToken FetchTokenByGroup(StackedFileReader inputStream, char prefix, InputPattern tokenGroup) {
             StringBuilder input = new StringBuilder(100);
             bool switchedInput = false;
             input.Append(prefix);

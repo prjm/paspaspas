@@ -2671,7 +2671,7 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             Unexpected();
-            return new PascalIdentifier(new PascalToken(PascalToken.Undefined, string.Empty, Tokenizer.Input.CurrentInputFile.FilePath), this);
+            return new PascalIdentifier(Tokenizer.CreatePseudoToken(PascalToken.Undefined), this);
         }
 
         [Rule("UsesFileClause", "'uses' NamespaceFileNameList")]

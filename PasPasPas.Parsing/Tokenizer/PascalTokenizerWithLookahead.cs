@@ -51,10 +51,10 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         /// <param name="nextToken"></param>
         protected override void ProcssMacroToken(PascalToken nextToken) {
-            var parser = new CompilerDirectiveParser(environment);
-            var tokenizer = new CompilerDirectiveTokenizer(environment);
             using (var input = new StringInput(CompilerDirectiveTokenizer.Unwrap(nextToken.Value), nextToken.FilePath))
             using (var reader = new StackedFileReader()) {
+                var parser = new CompilerDirectiveParser(environment, reader);
+                var tokenizer = new CompilerDirectiveTokenizer(environment, reader);
                 reader.AddFile(input);
                 parser.BaseTokenizer = tokenizer;
                 parser.ParseCompilerDirective();

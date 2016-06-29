@@ -4,7 +4,6 @@ using System;
 using PasPasPas.Options.DataTypes;
 using System.Globalization;
 using PasPasPas.Options.Bundles;
-using PasPasPas.Infrastructure.Input;
 using PasPasPas.Parsing.Tokenizer;
 
 namespace PasPasPas.Parsing.Parser {
@@ -18,9 +17,10 @@ namespace PasPasPas.Parsing.Parser {
         ///     create a new compiler directive parser
         /// </summary>
         /// <param name="environment">services</param>
-        public CompilerDirectiveParser(ParserServices environment)
+        /// <param name="input">input file</param>
+        public CompilerDirectiveParser(ParserServices environment, StackedFileReader input)
             : base(environment, new CompilerDirectiveTokenizerWithLookahead()) {
-            BaseTokenizer = new CompilerDirectiveTokenizer(environment);
+            BaseTokenizer = new CompilerDirectiveTokenizer(environment, input);
         }
 
         /// <summary>
