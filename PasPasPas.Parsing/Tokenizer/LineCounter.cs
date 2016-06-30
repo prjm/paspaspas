@@ -79,7 +79,7 @@
                 count = SetStyle(NewlineStyle.Cr);
                 isFollowing = true;
             }
-            else if (input == '\a') {
+            else if (input == '\n') {
                 count = SetStyle(NewlineStyle.Lf);
                 isFollowing = true;
             }
@@ -102,7 +102,10 @@
             if (style == followingStyle && (style == NewlineStyle.Cr || style == NewlineStyle.Lf))
                 return true;
 
-            if (style == NewlineStyle.Cr) {
+            if (!isFollowing && (style == NewlineStyle.CrLf || style == NewlineStyle.LfCr))
+                return true;
+
+            if (style == NewlineStyle.Cr || style == NewlineStyle.CrLf) {
                 if (followingStyle == NewlineStyle.Lf) {
                     if (isFollowing) {
                         style = NewlineStyle.CrLf;
@@ -114,7 +117,7 @@
                 }
             }
 
-            if (style == NewlineStyle.Lf) {
+            if (style == NewlineStyle.Lf || style == NewlineStyle.LfCr) {
                 if (followingStyle == NewlineStyle.Cr) {
                     if (isFollowing) {
                         style = NewlineStyle.LfCr;
@@ -125,6 +128,9 @@
                     return true;
                 }
             }
+
+            if (style != followingStyle)
+                style = NewlineStyle.Mixed;
 
             return true;
         }

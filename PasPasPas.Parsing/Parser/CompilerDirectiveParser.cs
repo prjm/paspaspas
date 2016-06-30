@@ -5,6 +5,7 @@ using PasPasPas.Options.DataTypes;
 using System.Globalization;
 using PasPasPas.Options.Bundles;
 using PasPasPas.Parsing.Tokenizer;
+using PasPasPas.Infrastructure.Input;
 
 namespace PasPasPas.Parsing.Parser {
 

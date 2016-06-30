@@ -13,6 +13,11 @@ namespace PasPasPasTests.Tokenizer {
             Assert.AreEqual(NewlineStyle.Undefined, TestLineCounterMode(""));
             Assert.AreEqual(NewlineStyle.Undefined, TestLineCounterMode("asdasddsaddas\tsdsdsaas\tasdas"));
             Assert.AreEqual(NewlineStyle.CrLf, TestLineCounterMode("sdadsdnm\r\nsdfdsfsf\r\n"));
+            Assert.AreEqual(NewlineStyle.Lf, TestLineCounterMode("sdadsdnm\nsdfdsfsf\n"));
+            Assert.AreEqual(NewlineStyle.Cr, TestLineCounterMode("sdadsdnm\rsdfdsfsf\r"));
+            Assert.AreEqual(NewlineStyle.LfCr, TestLineCounterMode("sdadsdnm\n\rsdfdsfsf\n\r"));
+            Assert.AreEqual(NewlineStyle.Mixed, TestLineCounterMode("sdadsdnm\rsdfdsfsf\n\r"));
+            Assert.AreEqual(NewlineStyle.Mixed, TestLineCounterMode("sdadsdnm\r\nsdfdsfsf\n\r"));
         }
 
         private object TestLineCounterMode(string input)
@@ -22,7 +27,7 @@ namespace PasPasPasTests.Tokenizer {
         private Tuple<NewlineStyle, int> TestLineCounter(string input) {
             var counter = new LineCounter();
 
-            for (int i = 0; i <= input.Length; i++) {
+            for (int i = 0; i < input.Length; i++) {
                 counter.ProcessChar(input[i]);
             }
 

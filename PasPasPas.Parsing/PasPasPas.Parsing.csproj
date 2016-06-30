@@ -51,6 +51,11 @@
     <Compile Include="Api\PascalParser.cs" />
     <Compile Include="Api\PascalToken.cs" />
     <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Messages.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Messages.resx</DependentUpon>
+    </Compile>
     <Compile Include="Parser\ParserBase.cs" />
     <Compile Include="Parser\ParserServices.cs" />
     <Compile Include="Parser\RuleAttribute.cs" />
@@ -243,6 +248,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Messages.resx">
       <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Messages.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />

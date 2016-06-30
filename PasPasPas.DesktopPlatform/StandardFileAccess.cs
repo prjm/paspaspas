@@ -1,5 +1,4 @@
-﻿using System;
-using PasPasPas.Infrastructure.Input;
+﻿using PasPasPas.Infrastructure.Input;
 
 namespace PasPasPas.DesktopPlatform {
 
