@@ -40,9 +40,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         public PascalToken Tokenize(StackedFileReader input, StringBuilder prefix) {
             var result = new PascalToken();
             result.FilePath = input.CurrentInputFile.FilePath;
-            result.StartPosition = input.GetCurrentPosition();
             //return WithPrefix(input, prefix, currentFile);
-            result.EndPosition = input.GetCurrentPosition();
             return result;
         }
 

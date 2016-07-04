@@ -53,6 +53,9 @@ namespace PasPasPas.Parsing.Parser {
         /// </summary>
         public StackedFileReader IncludeInput { get; set; }
 
+        /// <summary>
+        ///     supported switches
+        /// </summary>
         private static HashSet<int> switches
             = new HashSet<int>() {
                 PascalToken.AlignSwitch, PascalToken.AlignSwitch1,PascalToken.AlignSwitch2,PascalToken.AlignSwitch4,PascalToken.AlignSwitch8,PascalToken.AlignSwitch16, /* A */
@@ -83,6 +86,9 @@ namespace PasPasPas.Parsing.Parser {
                 PascalToken.EnumSizeSwitch, /* Z */
             };
 
+        /// <summary>
+        ///     supported long switches
+        /// </summary>
         private static HashSet<int> longSwitches
             = new HashSet<int>() {
                 PascalToken.AlignSwitchLong,
@@ -133,6 +139,9 @@ namespace PasPasPas.Parsing.Parser {
                 PascalToken.LegacyIfEnd,
             };
 
+        /// <summary>
+        ///     supported parameters and directives
+        /// </summary>
         private static HashSet<int> parameters
             = new HashSet<int>() {
                 PascalToken.Apptype,
@@ -2212,6 +2221,10 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             Unexpected();
+        }
+
+        public override ISyntaxPart Parse() {
+            throw new NotImplementedException();
         }
     }
 }

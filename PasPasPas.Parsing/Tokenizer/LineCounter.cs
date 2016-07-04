@@ -48,9 +48,19 @@
         private int currentLine = 1;
 
         /// <summary>
-        ///     current lline number
+        ///     current column
+        /// </summary>
+        private int currentColumn = 1;
+
+        /// <summary>
+        ///     current line number
         /// </summary>
         public int Line => currentLine;
+
+        /// <summary>
+        ///     current column number
+        /// </summary>
+        public int Column => currentColumn;
 
         /// <summary>
         ///     newline style
@@ -73,22 +83,27 @@
         /// <param name="input"></param>
         /// <returns></returns>
         public bool ProcessChar(char input) {
-            bool count = false;
+            bool countLine = false;
 
             if (input == '\r') {
-                count = SetStyle(NewlineStyle.Cr);
+                countLine = SetStyle(NewlineStyle.Cr);
                 isFollowing = true;
             }
             else if (input == '\n') {
-                count = SetStyle(NewlineStyle.Lf);
+                countLine = SetStyle(NewlineStyle.Lf);
                 isFollowing = true;
             }
             else {
                 isFollowing = false;
             }
 
-            if (count)
+            if (countLine) {
                 currentLine++;
+                currentColumn = 1;
+            }
+            else {
+                currentColumn++;
+            }
 
             return false;
         }

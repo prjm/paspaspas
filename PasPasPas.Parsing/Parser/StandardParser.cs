@@ -105,7 +105,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <summary>
         ///     parse input
         /// </summary>
-        public ISyntaxPart Parse()
+        public override ISyntaxPart Parse()
             => ParseFile();
 
         [Rule("File", "Program | Library | Unit | Package")]

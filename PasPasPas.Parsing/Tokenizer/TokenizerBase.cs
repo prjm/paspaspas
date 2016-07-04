@@ -21,8 +21,8 @@ namespace PasPasPas.Parsing.Tokenizer {
         public static PascalToken CreatePseudoToken(this IPascalTokenizer tokenizer, int tokenKind) {
             var result = new PascalToken();
             result.FilePath = tokenizer.Input.CurrentInputFile?.FilePath;
-            result.StartPosition = tokenizer.Input.GetCurrentPosition();
-            result.EndPosition = tokenizer.Input.GetCurrentPosition();
+            //result.StartPosition = tokenizer.Input.GetCurrentPosition();
+            //result.EndPosition = tokenizer.Input.GetCurrentPosition();
             result.Kind = tokenKind;
             result.Value = string.Empty;
             return result;
@@ -47,7 +47,7 @@ namespace PasPasPas.Parsing.Tokenizer {
             = new Guid("{FA4EBD35-325B-4869-A2CD-B21EE430BAC4}");
 
         /// <summary>
-        ///     create a new tokinzer
+        ///     create a new tokenizer
         /// </summary>
         protected TokenizerBase(ParserServices environment, StackedFileReader input) {
 
@@ -58,11 +58,13 @@ namespace PasPasPas.Parsing.Tokenizer {
                 throw new ArgumentNullException(nameof(input));
 
             Environment = environment;
+            Input = input;
             LogSource = new LogSource(environment.Log, TokenizerLogMessage, Messages.ResourceManager);
+            Lines = new LineCounters();
         }
 
         /// <summary>
-        ///     parser parser input
+        ///     parser input
         /// </summary>
         public StackedFileReader Input { get; }
 
@@ -95,20 +97,9 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         /// <returns>next token</returns>
         public PascalToken FetchNextToken() {
-            if (Input.AtEof) {
-                return null; // CreatePseudoToken(PascalToken.Eof);
-            }
-
-            var file = Input.CurrentInputFile.FilePath;
-            bool switchedInput = false;
-            char c = Input.FetchChar(out switchedInput);
-            InputPattern tokenGroup;
-
-            if (CharacterClasses.Match(c, out tokenGroup)) {
-                return Punctuators.FetchTokenByGroup(Input, c, tokenGroup);
-            }
-
-            return GenerateUndefinedToken(c, file);
+            PascalToken result = CharacterClasses.FetchNextToken(Input);
+            Lines.ProcessToken(result);
+            return result;
         }
 
         /// <summary>
@@ -120,5 +111,10 @@ namespace PasPasPas.Parsing.Tokenizer {
         ///     log source
         /// </summary>
         public LogSource LogSource { get; }
+
+        /// <summary>
+        ///     line counters
+        /// </summary>
+        public LineCounters Lines { get; }
     }
 }

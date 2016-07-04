@@ -176,7 +176,13 @@ namespace PasPasPas.Infrastructure.Input {
         ///     test if end of input has reached
         /// </summary>
         public bool AtEof
-            => (putbackFragments.Count < 1) && (files.Count < 1);
+        {
+            get
+            {
+                RemoveEmptyFiles();
+                return (putbackFragments.Count < 1) && (files.Count < 1);
+            }
+        }
 
         /// <summary>
         ///     currently read file
@@ -202,22 +208,14 @@ namespace PasPasPas.Infrastructure.Input {
         public char FetchChar(out bool switchedInput) {
             char result;
 
+            RemoveEmptyFiles();
+
             if (AtEof) {
-                switchedInput = false;
-                return '\0';
+                throw new InvalidOperationException();
             }
 
             if (putbackFragments.Count > 0) {
-                var fragment = putbackFragments.Peek();
-                result = fragment.Pop();
-                if (fragment.AtEof()) {
-                    switchedInput = true;
-                    putbackFragments.Pop();
-                    return result;
-                }
-
-                switchedInput = false;
-                return result;
+                return FetchCharFromFragment(out switchedInput);
             }
 
             var file = files.Peek();
@@ -233,6 +231,25 @@ namespace PasPasPas.Infrastructure.Input {
                     file.Open();
                 }
 
+                return result;
+            }
+
+            switchedInput = false;
+            return result;
+        }
+
+        private void RemoveEmptyFiles() {
+            while (files.Count > 0 && files.Peek().InputFile.AtEof)
+                files.Pop();
+        }
+
+        private char FetchCharFromFragment(out bool switchedInput) {
+            var fragment = putbackFragments.Peek();
+            char result;
+            result = fragment.Pop();
+            if (fragment.AtEof()) {
+                switchedInput = true;
+                putbackFragments.Pop();
                 return result;
             }
 
@@ -350,14 +367,6 @@ namespace PasPasPas.Infrastructure.Input {
         public void Dispose() {
             Dispose(true);
             GC.SuppressFinalize(this);
-        }
-
-        /// <summary>
-        ///     current position
-        /// </summary>
-        /// <returns></returns>
-        public TextFilePosition GetCurrentPosition() {
-            return new TextFilePosition();
         }
 
         #endregion

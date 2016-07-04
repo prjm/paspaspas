@@ -12,7 +12,7 @@ namespace PasPasPas.Parsing.Parser {
     /// <summary>
     ///     base class for parsers
     /// </summary>
-    public abstract class ParserBase : IParserInformationProvider {
+    public abstract class ParserBase : IPascalParser {
 
         /// <summary>
         ///     message group for parser logs
@@ -253,5 +253,11 @@ namespace PasPasPas.Parsing.Parser {
 
             return false;
         }
+
+        /// <summary>
+        ///     parse input
+        /// </summary>
+        /// <returns>parsed input</returns>
+        public abstract ISyntaxPart Parse();
     }
 }

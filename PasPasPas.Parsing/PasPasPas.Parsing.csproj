@@ -42,9 +42,8 @@
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Api\CompilerTask.cs" />
     <Compile Include="Api\IParserInformationProvider.cs" />
-    <Compile Include="Api\IPascalParser.cs" />
+    <Compile Include="Parser\IPascalParser.cs" />
     <Compile Include="Api\IPascalTokenizer.cs" />
     <Compile Include="Api\ISyntaxPart.cs" />
     <Compile Include="Api\PascalFormatter.cs" />
@@ -223,6 +222,7 @@
     <Compile Include="Tokenizer\CompilerDirectiveTokenizer.cs" />
     <Compile Include="Tokenizer\CompilerDirectiveTokenizerWithLookahead.cs" />
     <Compile Include="Tokenizer\LineCounter.cs" />
+    <Compile Include="Tokenizer\LineCounters.cs" />
     <Compile Include="Tokenizer\PascalTokenizerWithLookahead.cs" />
     <Compile Include="Tokenizer\PreprocessorPunctuators.cs" />
     <Compile Include="Tokenizer\InputPattern.cs" />

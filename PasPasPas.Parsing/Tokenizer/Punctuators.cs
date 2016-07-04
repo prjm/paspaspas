@@ -2,6 +2,7 @@
 using PasPasPas.Infrastructure.Input;
 using System.Collections.Generic;
 using System.Text;
+using System;
 
 namespace PasPasPas.Parsing.Tokenizer {
 
@@ -109,6 +110,28 @@ namespace PasPasPas.Parsing.Tokenizer {
             }
 
             return false;
+        }
+
+        /// <summary>
+        ///     fetch the next token from the input
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public PascalToken FetchNextToken(StackedFileReader input) {
+
+            if (input.AtEof)
+                throw new InvalidOperationException();
+
+            var file = input.CurrentInputFile.FilePath;
+            bool switchedInput = false;
+            char c = input.FetchChar(out switchedInput);
+            InputPattern tokenGroup;
+
+            if (Match(c, out tokenGroup)) {
+                return FetchTokenByGroup(input, c, tokenGroup);
+            }
+
+            return null; // GenerateUndefinedToken(c, file);
         }
 
         /// <summary>

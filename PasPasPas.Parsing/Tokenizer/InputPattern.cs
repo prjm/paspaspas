@@ -7,7 +7,7 @@ using System.Text;
 namespace PasPasPas.Parsing.Tokenizer {
 
     /// <summary>
-    ///     group punctuators with the same prefix
+    ///     group input patterns with the same prefix
     /// </summary>
     public class InputPattern {
 

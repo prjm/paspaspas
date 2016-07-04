@@ -14,6 +14,16 @@
         }
 
         /// <summary>
+        ///     create a new textfile position
+        /// </summary>
+        /// <param name="line">line</param>
+        /// <param name="column">column</param>
+        public TextFilePosition(int line, int column) {
+            Line = line;
+            Column = column;
+        }
+
+        /// <summary>
         ///     line
         /// </summary>
         public int Column { get; set; }

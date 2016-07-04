@@ -1,9 +1,16 @@
+On the roadmap:
+- line numbers
+- refactoring
+
 Missing implementation details:
 
 - IF (+ boolean const expression)
 - SETPEFLAGS / SETPEOPTFLAGS (+ integer const expression)
 - assembler (ASM parsing)
-- remove services
 - add guards / contracts with a conditional function
 - remove api / internal namespaces
 - {$MESSAGE} does not emit mesages
+
+Complete implementation details:
+
+- remove services

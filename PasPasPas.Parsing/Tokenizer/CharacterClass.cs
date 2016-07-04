@@ -106,7 +106,7 @@
     public class ExponentCharacterClass : CharacterClass {
 
         /// <summary>
-        ///     test if a charactrer class matches
+        ///     test if a character class matches
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
