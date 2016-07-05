@@ -20,6 +20,7 @@ namespace PasPasPasTests.Tokenizer {
         public TestTokenizer(ParserServices environment, StackedFileReader input)
             : base(environment, input) {
             puncts = new Punctuators();
+            puncts.AddPunctuator(new WhitspaceCharacterClass(), new WhiteSpaceTokenGroupValue());
         }
 
         protected override Punctuators CharacterClasses
@@ -56,8 +57,8 @@ namespace PasPasPasTests.Tokenizer {
         [TestMethod]
         public void SimpleTests() {
             Assert.AreEqual(0, RunTestTokenizer(string.Empty).Count);
-            Assert.AreEqual(1, RunTestTokenizer("a\n\n31").Count);
-            Assert.AreEqual(3, RunTestTokenizer("a\n\n31")[0].EndPosition.Line);
+            Assert.AreEqual(1, RunTestTokenizer(" \n\n  ").Count);
+            Assert.AreEqual(3, RunTestTokenizer(" \n\n  ")[0].EndPosition.Line);
         }
 
     }

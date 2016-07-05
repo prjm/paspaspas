@@ -24,6 +24,9 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         /// <param name="token">token to process</param>
         public void ProcessToken(PascalToken token) {
+            if (token == null)
+                return;
+
             var path = token.FilePath;
             LineCounter counter = null;
 

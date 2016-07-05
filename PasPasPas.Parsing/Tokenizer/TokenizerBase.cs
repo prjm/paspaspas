@@ -20,7 +20,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <returns>pseudotoken (empty)</returns>
         public static PascalToken CreatePseudoToken(this IPascalTokenizer tokenizer, int tokenKind) {
             var result = new PascalToken();
-            result.FilePath = tokenizer.Input.CurrentInputFile?.FilePath;
+            result.FilePath = tokenizer.Input.CurrentInputFile;
             //result.StartPosition = tokenizer.Input.GetCurrentPosition();
             //result.EndPosition = tokenizer.Input.GetCurrentPosition();
             result.Kind = tokenKind;

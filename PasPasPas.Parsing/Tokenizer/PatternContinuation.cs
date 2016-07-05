@@ -39,7 +39,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <returns>tokent</returns>
         public PascalToken Tokenize(StackedFileReader input, StringBuilder prefix) {
             var result = new PascalToken();
-            result.FilePath = input.CurrentInputFile.FilePath;
+            result.FilePath = input.CurrentInputFile;
             //return WithPrefix(input, prefix, currentFile);
             return result;
         }
@@ -608,7 +608,7 @@ namespace PasPasPas.Parsing.Tokenizer {
             if (input.AtEof)
                 return false;
 
-            var file = input.CurrentInputFile.FilePath;
+            var file = input.CurrentInputFile;
             bool switchedInput = false;
             char n = input.FetchChar(out switchedInput);
             if (c.Matches(n)) {

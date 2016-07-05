@@ -185,9 +185,25 @@ namespace PasPasPas.Infrastructure.Input {
         }
 
         /// <summary>
+        ///     currently read file path
+        /// </summary>
+        public IFileReference CurrentInputFile
+        {
+            get
+            {
+                if (putbackFragments.Count > 0)
+                    return putbackFragments.Peek().FilePath;
+                else if (files.Count > 0)
+                    return files.Peek().InputFile.FilePath;
+                else
+                    return lastFilePath;
+            }
+        }
+
+        /// <summary>
         ///     currently read file
         /// </summary>
-        public IFile CurrentInputFile
+        public IFile CurrentInput
         {
             get
             {
@@ -222,6 +238,7 @@ namespace PasPasPas.Infrastructure.Input {
             result = file.InputFile.NextChar();
 
             if (file.InputFile.AtEof) {
+                lastFilePath = file.InputFile.FilePath;
                 file.Close(true);
                 files.Pop();
                 switchedInput = true;
@@ -239,8 +256,10 @@ namespace PasPasPas.Infrastructure.Input {
         }
 
         private void RemoveEmptyFiles() {
-            while (files.Count > 0 && files.Peek().InputFile.AtEof)
+            while (files.Count > 0 && files.Peek().InputFile.AtEof) {
+                lastFilePath = files.Peek().InputFile.FilePath;
                 files.Pop();
+            }
         }
 
         private char FetchCharFromFragment(out bool switchedInput) {
@@ -249,6 +268,7 @@ namespace PasPasPas.Infrastructure.Input {
             result = fragment.Pop();
             if (fragment.AtEof()) {
                 switchedInput = true;
+                lastFilePath = fragment.FilePath;
                 putbackFragments.Pop();
                 return result;
             }
@@ -346,6 +366,11 @@ namespace PasPasPas.Infrastructure.Input {
         private bool disposedValue = false; // Dient zur Erkennung redundanter Aufrufe.
 
         /// <summary>
+        ///     last file path
+        /// </summary>
+        private IFileReference lastFilePath;
+
+        /// <summary>
         ///     dispose redaers
         /// </summary>
         /// <param name="disposing"></param>
@@ -354,6 +379,7 @@ namespace PasPasPas.Infrastructure.Input {
                 if (disposing) {
                     while (files != null && files.Count > 0) {
                         var file = files.Pop();
+                        lastFilePath = file.InputFile.FilePath;
                         file.Close(true);
                     }
                 }

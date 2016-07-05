@@ -55,7 +55,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="prefix"></param>
         /// <param name="tokenValue"></param>
         /// <returns></returns>
-        protected InputPattern AddPunctuator(char prefix, int tokenValue) {
+        public InputPattern AddPunctuator(char prefix, int tokenValue) {
             var result = new InputPattern(prefix, tokenValue);
             punctuators.Add(prefix, result);
             return result;
@@ -67,7 +67,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="prefix"></param>
         /// <param name="tokenValue"></param>
         /// <returns></returns>
-        protected InputPattern AddPunctuator(CharacterClass prefix, PatternContinuation tokenValue) {
+        public InputPattern AddPunctuator(CharacterClass prefix, PatternContinuation tokenValue) {
             var result = new InputPattern(prefix, tokenValue);
             var prefixedCharecterClass = prefix as PrefixedCharacterClass;
 
@@ -85,7 +85,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="prefix"></param>
         /// <param name="tokenValue"></param>
         /// <returns></returns>
-        protected InputPattern AddPunctuator(char prefix, PatternContinuation tokenValue) {
+        public InputPattern AddPunctuator(char prefix, PatternContinuation tokenValue) {
             var result = new InputPattern(new SingleCharClass(prefix), tokenValue);
             punctuators.Add(prefix, result);
             return result;
@@ -122,7 +122,7 @@ namespace PasPasPas.Parsing.Tokenizer {
             if (input.AtEof)
                 throw new InvalidOperationException();
 
-            var file = input.CurrentInputFile.FilePath;
+            var file = input.CurrentInputFile;
             bool switchedInput = false;
             char c = input.FetchChar(out switchedInput);
             InputPattern tokenGroup;
@@ -154,7 +154,7 @@ namespace PasPasPas.Parsing.Tokenizer {
             var tokenKind = tokenGroup.Match(input, out tokenLength);
 
             for (int inputIndex = input.Length - 1; inputIndex >= tokenLength; inputIndex--) {
-                inputStream.PutbackChar(file.FilePath, input[inputIndex]); ;
+                inputStream.PutbackChar(file, input[inputIndex]); ;
             }
             input.Length = tokenLength;
 
