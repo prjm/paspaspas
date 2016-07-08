@@ -61,5 +61,79 @@ namespace PasPasPasTests.Tokenizer {
             Assert.AreEqual(3, RunTestTokenizer(" \n\n  ")[0].EndPosition.Line);
         }
 
+        [TestMethod]
+        public void TestSimpleCharClass() {
+            SingleCharClass cc = new SingleCharClass('x');
+            Assert.IsTrue(cc.Matches('x'));
+            Assert.IsFalse(cc.Matches('y'));
+            Assert.IsFalse(cc.Matches('\0'));
+        }
+
+        [TestMethod]
+        public void TestControlCharClass() {
+            ControlCharacterClass cc = new ControlCharacterClass();
+            Assert.IsTrue(cc.Matches('\a'));
+            Assert.IsFalse(cc.Matches('\r'));
+            Assert.IsFalse(cc.Matches('\n'));
+        }
+
+        [TestMethod]
+        public void TestNumberCharClass() {
+            NumberCharacterClass cc = new NumberCharacterClass();
+            Assert.IsTrue(cc.Matches('0'));
+            Assert.IsTrue(cc.Matches('1'));
+            Assert.IsTrue(cc.Matches('2'));
+            Assert.IsTrue(cc.Matches('3'));
+            Assert.IsTrue(cc.Matches('4'));
+            Assert.IsTrue(cc.Matches('5'));
+            Assert.IsTrue(cc.Matches('7'));
+            Assert.IsTrue(cc.Matches('8'));
+            Assert.IsTrue(cc.Matches('9'));
+            Assert.IsFalse(cc.Matches('A'));
+            Assert.IsFalse(cc.Matches(' '));
+        }
+
+        [TestMethod]
+        public void TestExponentCharClass() {
+            var cc = new ExponentCharacterClass();
+            Assert.IsTrue(cc.Matches('E'));
+            Assert.IsTrue(cc.Matches('e'));
+            Assert.IsFalse(cc.Matches('A'));
+            Assert.IsFalse(cc.Matches(' '));
+        }
+
+        [TestMethod]
+        public void TestPlusMinusCharClass() {
+            var cc = new PlusMinusCharacterClass();
+            Assert.IsTrue(cc.Matches('+'));
+            Assert.IsTrue(cc.Matches('-'));
+            Assert.IsFalse(cc.Matches('A'));
+            Assert.IsFalse(cc.Matches(' '));
+        }
+
+        [TestMethod]
+        public void TestIdentifierCharClass() {
+            var cc = new IdentifierCharacterClass();
+            Assert.IsTrue(cc.Matches('x'));
+            Assert.IsTrue(cc.Matches('X'));
+            Assert.IsTrue(cc.Matches('&'));
+            cc.AllowAmpersand = false;
+            Assert.IsTrue(cc.Matches('x'));
+            Assert.IsTrue(cc.Matches('X'));
+            Assert.IsFalse(cc.Matches('&'));
+            Assert.IsFalse(cc.Matches('1'));
+            Assert.IsFalse(cc.Matches('.'));
+            cc.AllowDots = true;
+            Assert.IsTrue(cc.Matches('X'));
+            Assert.IsFalse(cc.Matches('&'));
+            Assert.IsTrue(cc.Matches('.'));
+            cc.AllowDigits = true;
+            Assert.IsTrue(cc.Matches('0'));
+            Assert.IsTrue(cc.Matches('9'));
+            Assert.IsTrue(cc.Matches('A'));
+            Assert.IsFalse(cc.Matches(' '));
+
+        }
+
     }
 }

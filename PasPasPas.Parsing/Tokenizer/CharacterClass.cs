@@ -96,7 +96,7 @@
         /// <param name="input"></param>
         /// <returns></returns>
         public override bool Matches(char input)
-            => char.IsNumber(input);
+            => char.IsDigit(input);
 
     }
 
@@ -138,19 +138,19 @@
         /// <summary>
         ///     allow &amp;   
         /// </summary>
-        public bool AllowAmpersand { get; internal set; }
+        public bool AllowAmpersand { get; set; }
             = true;
 
         /// <summary>
         ///     allow digits
         /// </summary>
-        public bool AllowDigits { get; internal set; }
+        public bool AllowDigits { get; set; }
             = false;
 
         /// <summary>
         ///     allow dots
         /// </summary>
-        public bool AllowDots { get; internal set; }
+        public bool AllowDots { get; set; }
             = false;
 
         /// <summary>

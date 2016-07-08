@@ -201,22 +201,6 @@ namespace PasPasPas.Infrastructure.Input {
         }
 
         /// <summary>
-        ///     currently read file
-        /// </summary>
-        public IFile CurrentInput
-        {
-            get
-            {
-                if (putbackFragments.Count > 0)
-                    return putbackFragments.Peek();
-                else if (files.Count > 0)
-                    return files.Peek().InputFile;
-                else
-                    return null;
-            }
-        }
-
-        /// <summary>
         ///     fetch the next char
         /// </summary>
         /// <param name="switchedInput"><c>true</c> if the input file switched</param>
