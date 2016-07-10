@@ -36,7 +36,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <summary>
         ///     get punctuators
         /// </summary>
-        protected override Punctuators CharacterClasses
+        protected override InputPatterns CharacterClasses
             => punctuators;
 
         /// <summary>

@@ -159,7 +159,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <summary>
         ///     register token types
         /// </summary>
-        protected override Punctuators CharacterClasses
+        protected override InputPatterns CharacterClasses
             => punctuators;
 
         /// <summary>

@@ -90,7 +90,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <summary>
         ///     used char classes
         /// </summary>
-        protected abstract Punctuators CharacterClasses { get; }
+        protected abstract InputPatterns CharacterClasses { get; }
 
         /// <summary>
         ///     fetch the next token

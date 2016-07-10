@@ -40,19 +40,20 @@ namespace PasPasPas.Parsing.Tokenizer {
         public PascalToken Tokenize(StackedFileReader input, StringBuilder prefix) {
             var result = new PascalToken();
             result.FilePath = input.CurrentInputFile;
-            //return WithPrefix(input, prefix, currentFile);
+            ParseByPrefix(input, prefix, result);
             return result;
         }
 
 
 
         /// <summary>
-        ///     complete the parsing
+        ///     complete the parsing of an input pattern with a given prefix
         /// </summary>
         /// <param name="input">input</param>
         /// <param name="prefix">prefix</param>
-        /// <returns>completed token</returns>
-        protected abstract PascalToken WithPrefix(StackedFileReader input, StringBuilder prefix, IFileReference currentFile);
+        /// <param name="resultToken">result token</param>
+        protected abstract void ParseByPrefix(StackedFileReader input, StringBuilder prefix, PascalToken resultToken);
+
     }
 
     /// <summary>
@@ -79,10 +80,11 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         /// <param name="input">input</param>
         /// <param name="prefix">prefix</param>
-        /// <param name="file">file references</param>
         /// <returns></returns>
-        protected override PascalToken WithPrefix(StackedFileReader input, StringBuilder prefix, IFileReference file)
-            => null; // new PascalToken(TokenId, prefix.ToString(), file);
+        protected override void ParseByPrefix(StackedFileReader input, StringBuilder prefix, PascalToken resultToken) {
+            resultToken.Kind = TokenId;
+            resultToken.Value = prefix.ToString();
+        }
     }
 
     /// <summary>

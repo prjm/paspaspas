@@ -226,7 +226,7 @@
     <Compile Include="Tokenizer\PascalTokenizerWithLookahead.cs" />
     <Compile Include="Tokenizer\PreprocessorPunctuators.cs" />
     <Compile Include="Tokenizer\InputPattern.cs" />
-    <Compile Include="Tokenizer\Punctuators.cs" />
+    <Compile Include="Tokenizer\InputPatterns.cs" />
     <Compile Include="Tokenizer\StandardPunctuators.cs" />
     <Compile Include="Tokenizer\StandardTokenizer.cs" />
     <Compile Include="Tokenizer\PatternContinuation.cs" />

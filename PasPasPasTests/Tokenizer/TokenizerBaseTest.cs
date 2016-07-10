@@ -15,15 +15,15 @@ namespace PasPasPasTests.Tokenizer {
 
     internal class TestTokenizer : TokenizerBase {
 
-        private readonly Punctuators puncts;
+        private readonly InputPatterns puncts;
 
         public TestTokenizer(ParserServices environment, StackedFileReader input)
             : base(environment, input) {
-            puncts = new Punctuators();
-            puncts.AddPunctuator(new WhitspaceCharacterClass(), new WhiteSpaceTokenGroupValue());
+            puncts = new InputPatterns();
+            puncts.AddPattern(new WhitspaceCharacterClass(), new WhiteSpaceTokenGroupValue());
         }
 
-        protected override Punctuators CharacterClasses
+        protected override InputPatterns CharacterClasses
             => puncts;
     }
 
@@ -132,7 +132,41 @@ namespace PasPasPasTests.Tokenizer {
             Assert.IsTrue(cc.Matches('9'));
             Assert.IsTrue(cc.Matches('A'));
             Assert.IsFalse(cc.Matches(' '));
+        }
 
+        private const int PatternA = 1;
+        private const int PatternAA = 2;
+        private const int PatternB = 3;
+
+        private IList<PascalToken> RunTestPattern(InputPatterns patterns, string input) {
+            var result = new List<PascalToken>();
+            using (StringInput inputFile = new StringInput(input, new FileReference(TestFileName)))
+            using (StackedFileReader reader = new StackedFileReader()) {
+                reader.AddFile(inputFile);
+                while (!reader.AtEof) {
+                    result.Add(patterns.FetchNextToken(reader));
+                }
+                return result;
+            };
+        }
+
+        public void TestPattern(InputPatterns patterns, string input, params int[] tokenValues) {
+            IList<PascalToken> result = RunTestPattern(patterns, input);
+            Assert.AreEqual(tokenValues.Length, result.Count);
+            for (int i = 0; i < result.Count; i++)
+                Assert.AreEqual(tokenValues[i], result[i].Kind);
+        }
+
+        [TestMethod]
+        public void TestSimpleInputPatterns() {
+            var patterns = new InputPatterns();
+            TestPattern(patterns, "");
+            TestPattern(patterns, "xx", PascalToken.Undefined);
+            patterns.AddPattern('a', PatternA);
+            patterns.AddPattern('b', PatternB);
+            TestPattern(patterns, "a", PatternA);
+            TestPattern(patterns, "aa", PatternA, PatternA);
+            TestPattern(patterns, "b", PatternB);
         }
 
     }

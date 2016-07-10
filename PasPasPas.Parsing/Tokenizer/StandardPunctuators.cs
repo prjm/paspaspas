@@ -5,48 +5,48 @@ namespace PasPasPas.Parsing.Tokenizer {
     /// <summary>
     ///     standard pascal punctuators
     /// </summary>
-    public class StandardPunctuators : Punctuators {
+    public class StandardPunctuators : InputPatterns {
 
         /// <summary>
         ///     register punctuators
         /// </summary>
         public StandardPunctuators() {
-            var dot = AddPunctuator('.', PascalToken.Dot);
+            var dot = AddPattern('.', PascalToken.Dot);
             dot.Add('.', PascalToken.DotDot);
             dot.Add(')', PascalToken.CloseBraces);
 
-            var lparen = AddPunctuator('(', PascalToken.OpenParen);
+            var lparen = AddPattern('(', PascalToken.OpenParen);
             lparen.Add('.', PascalToken.OpenBraces);
             lparen.Add('*', new AlternativeCurlyBraceCommenTokenValue()).Add('$', new AlternativePreprocessorTokenValue());
 
-            AddPunctuator(',', PascalToken.Comma);
-            AddPunctuator(')', PascalToken.CloseParen);
-            AddPunctuator(';', PascalToken.Semicolon);
-            AddPunctuator('=', PascalToken.EqualsSign);
-            AddPunctuator('[', PascalToken.OpenBraces);
-            AddPunctuator(']', PascalToken.CloseBraces);
-            AddPunctuator(':', PascalToken.Colon).Add('=', PascalToken.Assignment);
-            AddPunctuator('^', PascalToken.Circumflex);
-            AddPunctuator('+', PascalToken.Plus);
-            AddPunctuator('-', PascalToken.Minus);
-            AddPunctuator('*', PascalToken.Times);
-            AddPunctuator('/', PascalToken.Slash).Add('/', new EondOfLineCommentTokenGroupValue());
-            AddPunctuator('@', PascalToken.At);
-            AddPunctuator('>', PascalToken.GreaterThen).Add('=', PascalToken.GreaterThenEquals);
-            var lt = AddPunctuator('<', PascalToken.LessThen);
+            AddPattern(',', PascalToken.Comma);
+            AddPattern(')', PascalToken.CloseParen);
+            AddPattern(';', PascalToken.Semicolon);
+            AddPattern('=', PascalToken.EqualsSign);
+            AddPattern('[', PascalToken.OpenBraces);
+            AddPattern(']', PascalToken.CloseBraces);
+            AddPattern(':', PascalToken.Colon).Add('=', PascalToken.Assignment);
+            AddPattern('^', PascalToken.Circumflex);
+            AddPattern('+', PascalToken.Plus);
+            AddPattern('-', PascalToken.Minus);
+            AddPattern('*', PascalToken.Times);
+            AddPattern('/', PascalToken.Slash).Add('/', new EondOfLineCommentTokenGroupValue());
+            AddPattern('@', PascalToken.At);
+            AddPattern('>', PascalToken.GreaterThen).Add('=', PascalToken.GreaterThenEquals);
+            var lt = AddPattern('<', PascalToken.LessThen);
             lt.Add('=', PascalToken.LessThenEquals);
             lt.Add('>', PascalToken.NotEquals);
 
-            AddPunctuator('{', new CurlyBraceCommenTokenValue()).Add('$', new PreprocessorTokenValue());
-            AddPunctuator('$', new HexNumberTokenValue());
-            AddPunctuator(new WhitspaceCharacterClass(), new WhiteSpaceTokenGroupValue());
-            AddPunctuator(new IdentifierCharacterClass(), new IdentifierTokenGroupValue(StandardTokenizer.Keywords));
-            AddPunctuator(new NumberCharacterClass(), new NumberTokenGroupValue());
-            AddPunctuator(new ControlCharacterClass(), new ControlTokenGroupValue());
-            AddPunctuator('\'', new StringGroupTokenValue());
-            AddPunctuator('"', new DoubleQuoteStringGroupTokenValue());
-            AddPunctuator('#', new StringGroupTokenValue());
-            AddPunctuator('\x001A', new SoftEofTokenValue());
+            AddPattern('{', new CurlyBraceCommenTokenValue()).Add('$', new PreprocessorTokenValue());
+            AddPattern('$', new HexNumberTokenValue());
+            AddPattern(new WhitspaceCharacterClass(), new WhiteSpaceTokenGroupValue());
+            AddPattern(new IdentifierCharacterClass(), new IdentifierTokenGroupValue(StandardTokenizer.Keywords));
+            AddPattern(new NumberCharacterClass(), new NumberTokenGroupValue());
+            AddPattern(new ControlCharacterClass(), new ControlTokenGroupValue());
+            AddPattern('\'', new StringGroupTokenValue());
+            AddPattern('"', new DoubleQuoteStringGroupTokenValue());
+            AddPattern('#', new StringGroupTokenValue());
+            AddPattern('\x001A', new SoftEofTokenValue());
         }
 
 

@@ -7,16 +7,23 @@ using System;
 namespace PasPasPas.Parsing.Tokenizer {
 
     /// <summary>
-    ///     manually group token group values andvtheircharacter cxlasses
+    ///     manually group token group values and their character classes
     /// </summary>
-    public class PuntcuatorAndClass {
+    public class InputPatternAndClass {
 
         /// <summary>
-        ///     combination of punctuator and character class
+        ///     combination of input pattern and character class
         /// </summary>
         /// <param name="chrClass">character class</param>
         /// <param name="value">group value (tokenizer)</param>
-        public PuntcuatorAndClass(CharacterClass chrClass, InputPattern value) {
+        public InputPatternAndClass(CharacterClass chrClass, InputPattern value) {
+
+            if (chrClass == null)
+                throw new ArgumentNullException(nameof(chrClass));
+
+            if (value == null)
+                throw new ArgumentNullException(nameof(value));
+
             CharClass = chrClass;
             GroupValue = value;
         }
@@ -33,78 +40,85 @@ namespace PasPasPas.Parsing.Tokenizer {
     }
 
     /// <summary>
-    ///     storage for punctuator groups
+    ///     storage for input patterns, used by the tokenizer
     /// </summary>
-    public class Punctuators {
+    public class InputPatterns {
 
         /// <summary>
-        ///     punctuators
+        ///     simple input patterns
         /// </summary>
-        private readonly IDictionary<char, InputPattern> punctuators =
+        private readonly IDictionary<char, InputPattern> simplePatterns =
             new Dictionary<char, InputPattern>();
 
         /// <summary>
-        ///     list of class punctuators
+        ///     list of complex input patterns
         /// </summary>
-        private readonly IList<PuntcuatorAndClass> classPunctuators =
-            new List<PuntcuatorAndClass>();
+        private readonly IList<InputPatternAndClass> complexPatterns =
+            new List<InputPatternAndClass>();
 
         /// <summary>
-        ///     add a punctuator
+        ///     add a simple pattern based upon one character
         /// </summary>
-        /// <param name="prefix"></param>
-        /// <param name="tokenValue"></param>
+        /// <param name="prefix">prefix</param>
+        /// <param name="tokenValue">resulting token value</param>
         /// <returns></returns>
-        public InputPattern AddPunctuator(char prefix, int tokenValue) {
+        public InputPattern AddPattern(char prefix, int tokenValue) {
             var result = new InputPattern(prefix, tokenValue);
-            punctuators.Add(prefix, result);
+            simplePatterns.Add(prefix, result);
             return result;
         }
 
         /// <summary>
-        ///     add a punctuator
+        ///     add a complex pattern
         /// </summary>
-        /// <param name="prefix"></param>
-        /// <param name="tokenValue"></param>
+        /// <param name="prefix">character prefix</param>
+        /// <param name="tokenValue">tokenizer</param>
         /// <returns></returns>
-        public InputPattern AddPunctuator(CharacterClass prefix, PatternContinuation tokenValue) {
+        public InputPattern AddPattern(CharacterClass prefix, PatternContinuation tokenValue) {
+
+            if (prefix == null)
+                throw new ArgumentNullException(nameof(prefix));
+
+            if (tokenValue == null)
+                throw new ArgumentNullException(nameof(tokenValue));
+
             var result = new InputPattern(prefix, tokenValue);
             var prefixedCharecterClass = prefix as PrefixedCharacterClass;
 
             if (prefixedCharecterClass == null)
-                classPunctuators.Add(new PuntcuatorAndClass(prefix, result));
+                complexPatterns.Add(new InputPatternAndClass(prefix, result));
             else
-                punctuators.Add(prefixedCharecterClass.Prefix, result);
+                simplePatterns.Add(prefixedCharecterClass.Prefix, result);
 
             return result;
         }
 
         /// <summary>
-        ///     add a punctuator
+        ///     add a simple pattern
         /// </summary>
-        /// <param name="prefix"></param>
-        /// <param name="tokenValue"></param>
-        /// <returns></returns>
-        public InputPattern AddPunctuator(char prefix, PatternContinuation tokenValue) {
+        /// <param name="prefix">pattern prefix</param>
+        /// <param name="tokenValue">pattern continuation</param>
+        /// <returns>created pattern</returns>
+        public InputPattern AddPattern(char prefix, PatternContinuation tokenValue) {
             var result = new InputPattern(new SingleCharClass(prefix), tokenValue);
-            punctuators.Add(prefix, result);
+            simplePatterns.Add(prefix, result);
             return result;
         }
 
 
         /// <summary>
-        ///     test if a punctuator group matches
+        ///     test if a input pattern matches
         /// </summary>
         /// <param name="valueToMatch">char to match</param>
-        /// <param name="tokenGroup">token group</param>
+        /// <param name="tokenGroup">pattern</param>
         /// <returns></returns>
         public bool Match(char valueToMatch, out InputPattern tokenGroup) {
-            if (punctuators.TryGetValue(valueToMatch, out tokenGroup))
+            if (simplePatterns.TryGetValue(valueToMatch, out tokenGroup))
                 return true;
 
-            foreach (var punctuator in classPunctuators) {
-                if (punctuator.CharClass.Matches(valueToMatch)) {
-                    tokenGroup = punctuator.GroupValue;
+            foreach (var pattern in complexPatterns) {
+                if (pattern.CharClass.Matches(valueToMatch)) {
+                    tokenGroup = pattern.GroupValue;
                     return true;
                 }
             }
