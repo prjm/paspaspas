@@ -145,8 +145,16 @@ namespace PasPasPas.Parsing.Tokenizer {
                 return FetchTokenByGroup(input, c, tokenGroup);
             }
 
-            return null; // GenerateUndefinedToken(c, file);
+            return new PascalToken() {
+                Value = c.ToString(),
+                Kind = PascalToken.Undefined,
+                FilePath = file
+            };
+
         }
+
+        private StringBuilder inputBuffer
+            = new StringBuilder(100);
 
         /// <summary>
         ///     fetch a token for this group
@@ -155,24 +163,24 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="prefix"></param>
         /// <param name="tokenGroup"></param>
         /// <returns></returns>
-        public static PascalToken FetchTokenByGroup(StackedFileReader inputStream, char prefix, InputPattern tokenGroup) {
-            StringBuilder input = new StringBuilder(100);
+        public PascalToken FetchTokenByGroup(StackedFileReader inputStream, char prefix, InputPattern tokenGroup) {
             bool switchedInput = false;
-            input.Append(prefix);
-            while (input.Length < tokenGroup.Length && (!inputStream.AtEof) && (!switchedInput)) {
-                input.Append(inputStream.FetchChar(out switchedInput));
+            inputBuffer.Clear();
+            inputBuffer.Append(prefix);
+            while (inputBuffer.Length < tokenGroup.Length && (!inputStream.AtEof) && (!switchedInput)) {
+                inputBuffer.Append(inputStream.FetchChar(out switchedInput));
             }
 
             int tokenLength;
             var file = inputStream.CurrentInputFile;
-            var tokenKind = tokenGroup.Match(input, out tokenLength);
+            var tokenKind = tokenGroup.Match(inputBuffer, out tokenLength);
 
-            for (int inputIndex = input.Length - 1; inputIndex >= tokenLength; inputIndex--) {
-                inputStream.PutbackChar(file, input[inputIndex]); ;
+            for (int inputIndex = inputBuffer.Length - 1; inputIndex >= tokenLength; inputIndex--) {
+                inputStream.PutbackChar(file, inputBuffer[inputIndex]); ;
             }
-            input.Length = tokenLength;
+            inputBuffer.Length = tokenLength;
 
-            return tokenKind.Tokenize(inputStream, input);
+            return tokenKind.Tokenize(inputStream, inputBuffer);
         }
     }
 }

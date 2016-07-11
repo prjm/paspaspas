@@ -161,7 +161,7 @@ namespace PasPasPasTests.Tokenizer {
         public void TestSimpleInputPatterns() {
             var patterns = new InputPatterns();
             TestPattern(patterns, "");
-            TestPattern(patterns, "xx", PascalToken.Undefined);
+            TestPattern(patterns, "xx", PascalToken.Undefined, PascalToken.Undefined);
             patterns.AddPattern('a', PatternA);
             patterns.AddPattern('b', PatternB);
             TestPattern(patterns, "a", PatternA);

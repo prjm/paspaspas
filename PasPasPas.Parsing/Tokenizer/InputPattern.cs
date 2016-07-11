@@ -22,6 +22,10 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="template"></param>
         /// <param name="tokenKind"></param>
         public void Add(string template, int tokenKind) {
+
+            if (string.IsNullOrEmpty(template))
+                throw new ArgumentNullException(nameof(template));
+
             var group = this;
 
             for (int index = 0; index < template.Length; index++) {
@@ -51,6 +55,13 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="prefix">prefix</param>
         /// <param name="tokenValue">token value</param>
         public InputPattern(CharacterClass prefix, PatternContinuation tokenValue) {
+
+            if (prefix == null)
+                throw new ArgumentNullException(nameof(prefix));
+
+            if (tokenValue == null)
+                throw new ArgumentNullException(nameof(tokenValue));
+
             Prefix = prefix;
             TokenValue = tokenValue;
         }
