@@ -5,12 +5,12 @@ namespace PasPasPas.Parsing.Tokenizer {
     /// <summary>
     ///     provides tokenizer helpers delphi compiler directives
     /// </summary>
-    public class PreprocessorPunctuators : InputPatterns {
+    public class CompilerDirectivePatterns : InputPatterns {
 
         /// <summary>
         ///     create the preprocessor punctuators
         /// </summary>
-        public PreprocessorPunctuators() {
+        public CompilerDirectivePatterns() {
             AddPattern('+', PascalToken.Plus);
             AddPattern('-', PascalToken.Minus);
             AddPattern('(', PascalToken.OpenParen);

@@ -18,8 +18,8 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="input">input files</param>
         public StandardTokenizer(ParserServices services, StackedFileReader input) : base(services, input) { }
 
-        private StandardPunctuators punctuators
-            = new StandardPunctuators();
+        private StandardPatterns punctuators
+            = new StandardPatterns();
 
         /// <summary>
         ///     message id: incomplete hex number

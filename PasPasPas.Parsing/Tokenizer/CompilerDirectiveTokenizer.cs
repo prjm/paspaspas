@@ -18,8 +18,8 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="input">file to parse</param>
         public CompilerDirectiveTokenizer(ParserServices services, StackedFileReader input) : base(services, input) { }
 
-        private PreprocessorPunctuators punctuators
-            = new PreprocessorPunctuators();
+        private CompilerDirectivePatterns punctuators
+            = new CompilerDirectivePatterns();
 
         /// <summary>
         ///     known keywords

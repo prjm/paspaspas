@@ -5,12 +5,12 @@ namespace PasPasPas.Parsing.Tokenizer {
     /// <summary>
     ///     standard pascal punctuators
     /// </summary>
-    public class StandardPunctuators : InputPatterns {
+    public class StandardPatterns : InputPatterns {
 
         /// <summary>
         ///     register punctuators
         /// </summary>
-        public StandardPunctuators() {
+        public StandardPatterns() {
             var dot = AddPattern('.', PascalToken.Dot);
             dot.Add('.', PascalToken.DotDot);
             dot.Add(')', PascalToken.CloseBraces);
