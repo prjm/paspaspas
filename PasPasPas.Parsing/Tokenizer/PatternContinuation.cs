@@ -27,6 +27,94 @@ namespace PasPasPas.Parsing.Tokenizer {
     }
 
     /// <summary>
+    ///     encapsulation of current continuation state
+    /// </summary>
+    public class ContinuationState {
+
+        private bool switchedFile = false;
+
+        /// <summary>
+        ///     input
+        /// </summary>
+        public StackedFileReader Input { get; set; }
+
+        /// <summary>
+        ///     parsed token
+        /// </summary>
+        public PascalToken Result { get; set; }
+
+        /// <summary>
+        ///     input buffer
+        /// </summary>
+        public StringBuilder Buffer { get; set; }
+
+        /// <summary>
+        ///     test if reading from the buffer is invalid
+        /// </summary>
+        public bool IsValid
+            => (!Input.AtEof) && (!switchedFile);
+
+        /// <summary>
+        ///     tests if the buffer ends with a given string value
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public bool EndsWith(string value)
+            => Buffer.EndsWith(value);
+
+        /// <summary>
+        ///     finish tokenizing
+        /// </summary>
+        /// <param name="tokenId">generated token id</param>
+        public void Finish(int tokenId) {
+            Result.Kind = tokenId;
+            Result.Value = Buffer.ToString();
+        }
+
+        /// <summary>
+        ///     append a character
+        /// </summary>
+        public char FetchAndAppendChar() {
+            char result = Input.FetchChar(out switchedFile);
+            Buffer.Append(result);
+            return result;
+        }
+
+        /// <summary>
+        ///     fetch a single character without appending it
+        /// </summary>
+        /// <returns></returns>
+        public char FetchChar()
+            => Input.FetchChar(out switchedFile);
+
+        /// <summary>
+        ///     putback a character
+        /// </summary>
+        /// <param name="nextChar">character to putback</param>
+        public void Putback(char nextChar) {
+            Input.PutbackChar(Result.FilePath, nextChar);
+        }
+
+        /// <summary>
+        ///     append a character
+        /// </summary>
+        /// <param name="currentChar"></param>
+        internal void AppendChar(char currentChar) {
+            Buffer.Append(currentChar);
+        }
+
+        internal void PutbackBuffer() {
+            Input.PutbackStringBuffer(Result.FilePath, Buffer);
+            Buffer.Clear();
+        }
+
+        internal void Finish(int tokenKind, string value) {
+            Result.Kind = tokenKind;
+            Result.Value = value;
+        }
+    }
+
+    /// <summary>
     ///     token group value
     /// </summary>
     public abstract class PatternContinuation {
@@ -38,21 +126,22 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="prefix">prefix</param>
         /// <returns>tokent</returns>
         public PascalToken Tokenize(StackedFileReader input, StringBuilder prefix) {
-            var result = new PascalToken();
-            result.FilePath = input.CurrentInputFile;
-            ParseByPrefix(input, prefix, result);
-            return result;
-        }
+            var state = new ContinuationState() {
+                Result = new PascalToken() { FilePath = input.CurrentInputFile },
+                Input = input,
+                Buffer = prefix
+            };
 
+            ParseByPrefix(state);
+            return state.Result;
+        }
 
 
         /// <summary>
         ///     complete the parsing of an input pattern with a given prefix
         /// </summary>
-        /// <param name="input">input</param>
-        /// <param name="prefix">prefix</param>
-        /// <param name="resultToken">result token</param>
-        protected abstract void ParseByPrefix(StackedFileReader input, StringBuilder prefix, PascalToken resultToken);
+        /// <param name="state">current tokenizer state</param>
+        protected abstract void ParseByPrefix(ContinuationState state);
 
     }
 
@@ -78,12 +167,9 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <summary>
         ///     parse the complete token
         /// </summary>
-        /// <param name="input">input</param>
-        /// <param name="prefix">prefix</param>
-        /// <param name="resultToken">parsed token</param>
-        protected override void ParseByPrefix(StackedFileReader input, StringBuilder prefix, PascalToken resultToken) {
-            resultToken.Kind = TokenId;
-            resultToken.Value = prefix.ToString();
+        /// <param name="state">current tokenizer state</param>
+        protected override void ParseByPrefix(ContinuationState state) {
+            state.Finish(TokenId);
         }
     }
 
@@ -100,22 +186,23 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <summary>
         ///     parse the complete token
         /// </summary>
-        /// <param name="input">input</param>
-        /// <param name="prefix">prefix</param>
-        /// <param name="resultToken">parsed token</param>
-        protected override void ParseByPrefix(StackedFileReader input, StringBuilder prefix, PascalToken resultToken) {
-            var endSeq = EndSequence;
-            var switchedInput = false;
+        /// <param name="state">current tokenizer state</param>
+        protected override void ParseByPrefix(ContinuationState state) {
+            var found = false;
 
-            resultToken.Kind = TokenId;
+            while (state.IsValid && (!found)) {
+                found = state.EndsWith(EndSequence);
 
-            while ((!input.AtEof) && (!switchedInput)) {
-                if (prefix.EndsWith(endSeq))
-                    break;
-                prefix = prefix.Append(input.FetchChar(out switchedInput));
+                if (!found)
+                    state.FetchAndAppendChar();
             }
 
-            resultToken.Value = prefix.ToString();
+            /*
+            if (!found)
+                error;
+                */
+
+            state.Finish(TokenId);
         }
 
         /// <summary>
@@ -130,35 +217,26 @@ namespace PasPasPas.Parsing.Tokenizer {
     public class QuotedStringTokenValue : PatternContinuation {
 
         /// <summary>
-        ///     parse the complete token
+        ///     parse a quoted string
         /// </summary>
-        /// <param name="input">input</param>
-        /// <param name="prefix">prefix</param>
-        /// <param name="resultToken">parsed token</param>
-        protected override void ParseByPrefix(StackedFileReader input, StringBuilder prefix, PascalToken resultToken) {
-            var switchedInput = false;
+        /// <param name="state">current tokenizer state</param>
+        protected override void ParseByPrefix(ContinuationState state) {
+            var found = false;
 
-            resultToken.Kind = PascalToken.QuotedString;
+            while (state.IsValid && (!found)) {
+                var currentChar = state.FetchChar();
 
-            while (!input.AtEof) {
-                char currentChar = input.FetchChar(out switchedInput);
-
-                if (!input.AtEof && currentChar == '\'' && !switchedInput) {
-                    char nextChar = input.FetchChar(out switchedInput);
-                    if (nextChar == '\'') {
-                        prefix.Append("'");
-                    }
-                    else {
-                        prefix.Append("'");
-                        input.PutbackChar(resultToken.FilePath, nextChar);
-                        break;
-                    }
+                if (state.IsValid && currentChar == '\'') {
+                    var nextChar = state.FetchChar();
+                    found = nextChar != '\'';
+                    if (found)
+                        state.Putback(nextChar);
                 }
 
-                prefix.Append(currentChar);
+                state.AppendChar(currentChar);
             }
 
-            resultToken.Value = prefix.ToString();
+            state.Finish(PascalToken.QuotedString);
         }
 
         /// <summary>
@@ -188,19 +266,16 @@ namespace PasPasPas.Parsing.Tokenizer {
     /// </summary>
     public class SoftEofTokenValue : PatternContinuation {
 
-        /// <summary>
-        ///     parse the complete token
+        /// <summary>    
+        ///     read the file until eof in one token
         /// </summary>
-        /// <param name="input">input</param>
-        /// <param name="prefix">prefix</param>
-        /// <param name="resultToken">parsed token</param>
-        protected override void ParseByPrefix(StackedFileReader input, StringBuilder prefix, PascalToken resultToken) {
-            bool switchedInput = false;
-            while (!input.AtEof && !switchedInput)
-                input.FetchChar(out switchedInput);
+        /// <param name="state">current tokenizer state</param>
+        protected override void ParseByPrefix(ContinuationState state) {
 
-            resultToken.Kind = PascalToken.Eof;
-            resultToken.Value = string.Empty;
+            while (state.IsValid)
+                state.FetchChar();
+
+            state.Finish(PascalToken.Eof);
         }
     }
 
@@ -212,32 +287,25 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <summary>
         ///     parse the complete token
         /// </summary>
-        /// <param name="input">input</param>
-        /// <param name="prefix">prefix</param>
-        /// <param name="resultToken">parsed token</param>
-        protected override void ParseByPrefix(StackedFileReader input, StringBuilder prefix, PascalToken resultToken) {
-            var switchedInput = false;
-            resultToken.Kind = PascalToken.DoubleQuotedString;
+        /// <param name="state">current tokenizer state</param>
+        protected override void ParseByPrefix(ContinuationState state) {
+            var found = false;
 
-            while (!input.AtEof && !switchedInput) {
-                char currentChar = input.FetchChar(out switchedInput);
+            while (state.IsValid && (!found)) {
+                char currentChar = state.FetchChar();
 
-                if (!input.AtEof && currentChar == '"' && !switchedInput) {
-                    char nextChar = input.FetchChar(out switchedInput);
-                    if (nextChar == '"') {
-                        prefix.Append("\"");
-                    }
-                    else {
-                        prefix.Append("\"");
-                        input.PutbackChar(resultToken.FilePath, nextChar);
-                        break;
-                    }
+                if (currentChar == '"' && state.IsValid) {
+                    char nextChar = state.FetchChar();
+                    found = nextChar != '"';
+
+                    if (found)
+                        state.Putback(nextChar);
                 }
 
-                prefix.Append(currentChar);
+                state.AppendChar(currentChar);
             }
 
-            resultToken.Value = prefix.ToString();
+            state.Finish(PascalToken.DoubleQuotedString);
         }
     }
 
@@ -256,41 +324,36 @@ namespace PasPasPas.Parsing.Tokenizer {
             = new HexNumberTokenValue();
 
         /// <summary>
-        ///     parse the complete token
+        ///     parse a string literal
         /// </summary>
-        /// <param name="input">input</param>
-        /// <param name="prefix">prefix</param>
-        /// <param name="resultToken">parsed token</param>
-        protected override void ParseByPrefix(StackedFileReader input, StringBuilder prefix, PascalToken resultToken) {
-            input.PutbackChar(resultToken.FilePath, prefix[0]);
-            prefix.Length = 0;
-            bool switchedInput = false;
-            resultToken.Kind = PascalToken.QuotedString;
+        /// <param name="state">current tokenizer state</param>
+        protected override void ParseByPrefix(ContinuationState state) {
+            state.PutbackBuffer();
 
-            while (!input.AtEof) {
-                char currentChar = input.FetchChar(out switchedInput);
+            while (state.IsValid) {
+                char currentChar = state.FetchChar();
                 if (currentChar == '#') {
-                    char nextChar = input.FetchChar(out switchedInput);
-                    prefix.Append(currentChar);
+                    char nextChar = state.FetchChar();
+                    state.AppendChar(currentChar);
                     if (nextChar == '$') {
-                        prefix.Append(nextChar);
-                        hexDigits.Tokenize(input, prefix);
+                        state.AppendChar(nextChar);
+                        hexDigits.Tokenize(state.Input, state.Buffer);
                     }
                     else {
-                        input.PutbackChar(resultToken.FilePath, nextChar);
-                        digits.Tokenize(input, prefix);
+                        state.Putback(nextChar);
+                        digits.Tokenize(state.Input, state.Buffer);
                     }
                 }
                 else if (currentChar == '\'') {
-                    prefix.Append(currentChar);
-                    quotedString.Tokenize(input, prefix);
+                    state.AppendChar(currentChar);
+                    quotedString.Tokenize(state.Input, state.Buffer);
                 }
                 else {
-                    input.PutbackChar(resultToken.FilePath, currentChar);
+                    state.Putback(currentChar);
                     break;
                 }
             }
-            resultToken.Value = prefix.ToString();
+            state.Finish(PascalToken.QuotedString);
         }
     }
 
@@ -386,28 +449,25 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <summary>
         ///     parse the complete token
         /// </summary>
-        /// <param name="input">input</param>
-        /// <param name="prefix">prefix</param>
-        /// <param name="resultToken">parsed token</param>
-        protected override void ParseByPrefix(StackedFileReader input, StringBuilder prefix, PascalToken resultToken) {
-            bool switchedInput = false;
-            resultToken.Kind = TokenId;
+        /// <param name="state">current tokenizer state</param>
+        protected override void ParseByPrefix(ContinuationState state) {
 
-            if (!input.AtEof && !switchedInput) {
-                var currentChar = input.FetchChar(out switchedInput);
+            if (state.IsValid) {
 
-                while (!input.AtEof && MatchesClass(currentChar) && !switchedInput) {
-                    prefix.Append(currentChar);
-                    currentChar = input.FetchChar(out switchedInput);
+                var currentChar = state.FetchChar();
+
+                while (state.IsValid && MatchesClass(currentChar)) {
+                    state.AppendChar(currentChar);
+                    currentChar = state.FetchChar();
                 }
 
                 if (!MatchesClass(currentChar))
-                    input.PutbackChar(resultToken.FilePath, currentChar);
+                    state.Putback(currentChar);
                 else
-                    prefix.Append(currentChar);
+                    state.AppendChar(currentChar);
             }
 
-            resultToken.Value = prefix.ToString();
+            state.Finish(TokenId);
         }
 
     }
@@ -522,33 +582,31 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <summary>
         ///     parse the complete token
         /// </summary>
-        /// <param name="input">input</param>
-        /// <param name="prefix">prefix</param>
-        /// <param name="resultToken">parsed token</param>
-        protected override void ParseByPrefix(StackedFileReader input, StringBuilder prefix, PascalToken resultToken) {
-            bool ignoreKeywords = prefix[0] == '&';
-            bool switchedInput = false;
+        /// <summary>
+        ///     parse the complete token
+        /// </summary>
+        /// <param name="state">current tokenizer state</param>
+        protected override void ParseByPrefix(ContinuationState state) {
+            bool ignoreKeywords = state.Buffer[0] == '&';
 
             if (ignoreKeywords)
-                prefix.Clear();
+                state.PutbackBuffer();
 
-            while (!input.AtEof && !switchedInput) {
-                var currentChar = input.FetchChar(out switchedInput);
+            while (state.IsValid) {
+                var currentChar = state.FetchChar();
                 if (!identifierCharClass.Matches(currentChar)) {
-                    input.PutbackChar(resultToken.FilePath, currentChar);
+                    state.Putback(currentChar);
                     break;
                 }
-                prefix.Append(currentChar);
+                state.AppendChar(currentChar);
             }
 
-            string value = prefix.ToString();
             int tokenKind;
-            resultToken.Value = value;
-
+            string value = state.Buffer.ToString();
             if ((!ignoreKeywords) && (knownKeywords.TryGetValue(value, out tokenKind)))
-                resultToken.Kind = tokenKind;
+                state.Finish(tokenKind, value);
             else
-                resultToken.Kind = PascalToken.Identifier;
+                state.Finish(PascalToken.Identifier, value);
 
         }
     }
@@ -561,24 +619,20 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <summary>
         ///     parse the complete token
         /// </summary>
-        /// <param name="input">input</param>
-        /// <param name="prefix">prefix</param>
-        /// <param name="resultToken">parsed token</param>
-        protected override void ParseByPrefix(StackedFileReader input, StringBuilder prefix, PascalToken resultToken) {
-            bool switchedInput = false;
+        /// <param name="state">current tokenizer state</param>
+        protected override void ParseByPrefix(ContinuationState state) {
 
-            while (!input.AtEof && !switchedInput) {
-                char currentChar = input.FetchChar(out switchedInput);
-                prefix.Append(currentChar);
+            while (state.IsValid) {
+                char currentChar = state.FetchAndAppendChar();
 
                 if (currentChar == 0x0D) {
-                    if (!input.AtEof && !switchedInput) {
-                        char nextChar = input.FetchChar(out switchedInput);
+                    if (state.IsValid) {
+                        char nextChar = state.FetchChar();
                         if (nextChar == 0x0A) {
-                            prefix.Append(nextChar);
+                            state.AppendChar(nextChar);
                         }
                         else {
-                            input.PutbackChar(resultToken.FilePath, nextChar);
+                            state.Putback(nextChar);
                         }
                     }
                     break;
@@ -588,8 +642,8 @@ namespace PasPasPas.Parsing.Tokenizer {
                     break;
                 }
             }
-            resultToken.Kind = PascalToken.Comma;
-            resultToken.Value = prefix.ToString();
+
+            state.Finish(PascalToken.Comment);
         }
     }
 
@@ -633,41 +687,37 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <summary>
         ///     parse the complete token
         /// </summary>
-        /// <param name="input">input</param>
-        /// <param name="prefix">prefix</param>
-        /// <param name="resultToken">parsed token</param>
-        protected override void ParseByPrefix(StackedFileReader input, StringBuilder prefix, PascalToken resultToken) {
-            var token = digitTokenizer.Tokenize(input, prefix);
+        /// <param name="state">current tokenizer state</param>
+        protected override void ParseByPrefix(ContinuationState state) {
+            var token = digitTokenizer.Tokenize(state.Input, state.Buffer);
             var withDot = false;
             var withExponent = false;
-            if (input.AtEof)
+            if (!state.IsValid)
                 return;
 
-            if (NextCharMatches(input, prefix, dot)) {
-                if (NextCharMatches(input, prefix, numbers)) {
-                    digitTokenizer.Tokenize(input, prefix);
+            if (NextCharMatches(state.Input, state.Buffer, dot)) {
+                if (NextCharMatches(state.Input, state.Buffer, numbers)) {
+                    digitTokenizer.Tokenize(state.Input, state.Buffer);
                     withDot = true;
                 }
-                else if (prefix.EndsWith(".")) {
-                    input.PutbackString(resultToken.FilePath, ".");
-                    prefix.Length -= 1;
+                else if (state.EndsWith(".")) {
+                    state.Putback('.');
+                    state.Buffer.Length -= 1;
                 }
             }
 
-            if (NextCharMatches(input, prefix, exponent)) {
-                NextCharMatches(input, prefix, plusminus);
-                digitTokenizer.Tokenize(input, prefix);
+            if (NextCharMatches(state.Input, state.Buffer, exponent)) {
+                NextCharMatches(state.Input, state.Buffer, plusminus);
+                digitTokenizer.Tokenize(state.Input, state.Buffer);
                 withExponent = true;
             }
 
             if (withDot || withExponent) {
-                resultToken.Kind = PascalToken.Real;
+                state.Finish(PascalToken.Real);
             }
             else {
-                resultToken.Kind = PascalToken.Integer;
+                state.Finish(PascalToken.Integer);
             }
-
-            resultToken.Value = prefix.ToString();
 
         }
 
