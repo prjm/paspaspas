@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace PasPasPas.Infrastructure.Log {
 
@@ -45,7 +46,7 @@ namespace PasPasPas.Infrastructure.Log {
         ///     process a message
         /// </summary>
         /// <param name="message">message to process</param>
-        public void HandleMessage(ILogMessage message) {
+        public virtual void HandleMessage(ILogMessage message) {
             ProcessMessage?.Invoke(this, new LogMessageEvent(message));
         }
 
@@ -65,4 +66,20 @@ namespace PasPasPas.Infrastructure.Log {
             //..
         }
     }
+
+    /// <summary>
+    ///     log target which save messages in a list
+    /// </summary>
+    public class ListLogTarget : LogTarget {
+
+        public IList<ILogMessage> Messages { get; }
+            = new List<ILogMessage>();
+
+        public override void HandleMessage(ILogMessage message) {
+            base.HandleMessage(message);
+            Messages.Add(message);
+        }
+
+    }
+
 }

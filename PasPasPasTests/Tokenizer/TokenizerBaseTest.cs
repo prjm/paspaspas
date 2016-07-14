@@ -137,21 +137,39 @@ namespace PasPasPasTests.Tokenizer {
         private const int PatternA = 1;
         private const int PatternAA = 2;
         private const int PatternB = 3;
+        private readonly Guid LogGuid = new Guid("{7FD95F57-A165-4736-A2BF-BC3EE2C30F5F}");
 
-        private IList<PascalToken> RunTestPattern(InputPatterns patterns, string input) {
+        private IList<PascalToken> RunTestPattern(InputPatterns patterns, Guid expectedMessage, string input) {
             var result = new List<PascalToken>();
+            var manager = new LogManager();
+            var log = new LogSource(manager, LogGuid);
+            var logTarget = new ListLogTarget();
+            manager.RegisterTarget(logTarget);
             using (StringInput inputFile = new StringInput(input, new FileReference(TestFileName)))
             using (StackedFileReader reader = new StackedFileReader()) {
                 reader.AddFile(inputFile);
                 while (!reader.AtEof) {
-                    result.Add(patterns.FetchNextToken(reader));
+                    result.Add(patterns.FetchNextToken(reader, log));
                 }
+
+                if (expectedMessage != Guid.Empty) {
+                    Assert.AreEqual(1, logTarget.Messages.Count);
+                    Assert.AreEqual(expectedMessage, logTarget.Messages[0].MessageID);
+                }
+                else {
+                    Assert.AreEqual(0, logTarget.Messages.Count);
+                }
+
                 return result;
             };
         }
 
         public void TestPattern(InputPatterns patterns, string input, params int[] tokenValues) {
-            IList<PascalToken> result = RunTestPattern(patterns, input);
+            TestPattern(patterns, Guid.Empty, input, tokenValues);
+        }
+
+        public void TestPattern(InputPatterns patterns, Guid expectedMessage, string input, params int[] tokenValues) {
+            IList<PascalToken> result = RunTestPattern(patterns, expectedMessage, input);
             Assert.AreEqual(tokenValues.Length, result.Count);
             for (int i = 0; i < result.Count; i++)
                 Assert.AreEqual(tokenValues[i], result[i].Kind);
@@ -167,6 +185,19 @@ namespace PasPasPasTests.Tokenizer {
             TestPattern(patterns, "a", PatternA);
             TestPattern(patterns, "aa", PatternA, PatternA);
             TestPattern(patterns, "b", PatternB);
+        }
+
+        [TestMethod]
+        public void TestCurlyBraceCommentTokenValue() {
+            var patterns = new InputPatterns();
+            patterns.AddPattern('a', PatternA);
+            patterns.AddPattern('{', new CurlyBraceCommentTokenValue());
+            TestPattern(patterns, "a{}", PatternA, PascalToken.Comment);
+            TestPattern(patterns, "a{}a", PatternA, PascalToken.Comment, PatternA);
+            TestPattern(patterns, "a{//}a", PatternA, PascalToken.Comment, PatternA);
+            TestPattern(patterns, "a{(**)}a", PatternA, PascalToken.Comment, PatternA);
+            TestPattern(patterns, "a{{}a", PatternA, PascalToken.Comment, PatternA);
+            TestPattern(patterns, TokenizerBase.UnexpectedEndOfToken, "a{", PatternA, PascalToken.Comment);
         }
 
     }

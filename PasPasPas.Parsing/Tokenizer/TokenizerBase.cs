@@ -47,6 +47,15 @@ namespace PasPasPas.Parsing.Tokenizer {
             = new Guid("{FA4EBD35-325B-4869-A2CD-B21EE430BAC4}");
 
         /// <summary>
+        ///     message: unexptected end of token
+        /// </summary>
+        /// <remarks>
+        ///     data: expected-token-end sequence
+        /// </remarks>
+        public static readonly Guid UnexpectedEndOfToken
+            = new Guid("{9FADE757-DA74-4DE8-8346-EBCC04E173DD}");
+
+        /// <summary>
         ///     create a new tokenizer
         /// </summary>
         protected TokenizerBase(ParserServices environment, StackedFileReader input) {
@@ -59,7 +68,7 @@ namespace PasPasPas.Parsing.Tokenizer {
 
             Environment = environment;
             Input = input;
-            LogSource = new LogSource(environment.Log, TokenizerLogMessage, Messages.ResourceManager);
+            LogSource = new LogSource(environment.Log, TokenizerLogMessage);
             Lines = new LineCounters();
         }
 
@@ -97,7 +106,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         /// <returns>next token</returns>
         public PascalToken FetchNextToken() {
-            PascalToken result = CharacterClasses.FetchNextToken(Input);
+            PascalToken result = CharacterClasses.FetchNextToken(Input, LogSource);
             Lines.ProcessToken(result);
             return result;
         }

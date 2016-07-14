@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Globalization;
-using System.Resources;
 
 namespace PasPasPas.Infrastructure.Log {
 
@@ -11,15 +10,13 @@ namespace PasPasPas.Infrastructure.Log {
 
         private readonly ILogManager manager;
         private readonly Guid group;
-        private ResourceManager resourceManager;
 
         /// <summary>
         ///     create a new log source
         /// </summary>
         /// <param name="logManager">used log manager</param>
         /// <param name="groupId">message group id</param>
-        /// <param name="resources">resizrces</param>
-        public LogSource(ILogManager logManager, Guid groupId, ResourceManager resources) {
+        public LogSource(ILogManager logManager, Guid groupId) {
 
             if (logManager == null)
                 throw new ArgumentNullException(nameof(manager));
@@ -27,12 +24,8 @@ namespace PasPasPas.Infrastructure.Log {
             if (groupId == default(Guid))
                 throw new ArgumentOutOfRangeException(nameof(groupId));
 
-            if (resources == null)
-                throw new ArgumentNullException(nameof(resources));
-
             manager = logManager;
             group = groupId;
-            resourceManager = resources;
         }
 
         /// <summary>
@@ -75,8 +68,7 @@ namespace PasPasPas.Infrastructure.Log {
         }
 
         private void MessageForGuid(MessageSeverity severity, Guid id, object[] data) {
-            string text = resourceManager.GetString(string.Format(CultureInfo.InvariantCulture, "R_{0}", id.ToString("N").ToUpperInvariant()));
-            ProcessMessage(new LogMessage(severity, group, id, text, data));
+            ProcessMessage(new LogMessage(severity, group, id, data));
         }
 
     }

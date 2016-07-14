@@ -37,7 +37,7 @@ namespace PasPasPas.Parsing.Tokenizer {
             lt.Add('=', PascalToken.LessThenEquals);
             lt.Add('>', PascalToken.NotEquals);
 
-            AddPattern('{', new CurlyBraceCommenTokenValue()).Add('$', new PreprocessorTokenValue());
+            AddPattern('{', new CurlyBraceCommentTokenValue()).Add('$', new PreprocessorTokenValue());
             AddPattern('$', new HexNumberTokenValue());
             AddPattern(new WhitspaceCharacterClass(), new WhiteSpaceTokenGroupValue());
             AddPattern(new IdentifierCharacterClass(), new IdentifierTokenGroupValue(StandardTokenizer.Keywords));

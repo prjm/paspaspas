@@ -21,8 +21,7 @@ namespace PasPasPas.Infrastructure.Log {
         /// <param name="messageData">message data</param>
         /// <param name="groupId">group id</param>
         /// <param name="messageServerity">severity</param>
-        /// <param name="messageText">message text</param>
-        public LogMessage(MessageSeverity messageServerity, Guid groupId, Guid messageId, string messageText, params object[] messageData) {
+        public LogMessage(MessageSeverity messageServerity, Guid groupId, Guid messageId, params object[] messageData) {
 
             if (messageServerity == MessageSeverity.Undefined)
                 throw new ArgumentOutOfRangeException(nameof(messageServerity));
@@ -35,7 +34,6 @@ namespace PasPasPas.Infrastructure.Log {
 
             group = groupId;
             id = messageId;
-            text = messageText ?? "R_" + id.ToString("N").ToUpperInvariant();
             severity = messageServerity;
             data = messageData ?? new object[0];
         }

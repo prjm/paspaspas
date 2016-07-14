@@ -3,6 +3,7 @@ using System.Text;
 using PasPasPas.Api;
 using System.Collections.Generic;
 using PasPasPas.Infrastructure.Input;
+using PasPasPas.Infrastructure.Log;
 
 namespace PasPasPas.Parsing.Tokenizer {
 
@@ -53,6 +54,11 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         public bool IsValid
             => (!Input.AtEof) && (!switchedFile);
+
+        /// <summary>
+        ///     log source
+        /// </summary>
+        public ILogSource Log { get; set; }
 
         /// <summary>
         ///     tests if the buffer ends with a given string value
@@ -112,6 +118,10 @@ namespace PasPasPas.Parsing.Tokenizer {
             Result.Kind = tokenKind;
             Result.Value = value;
         }
+
+        internal void Error(Guid messageId, params object[] messageData) {
+            Log.ProcessMessage(new LogMessage(MessageSeverity.Error, TokenizerBase.TokenizerLogMessage, messageId, messageData));
+        }
     }
 
     /// <summary>
@@ -124,12 +134,14 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         /// <param name="input">input</param>
         /// <param name="prefix">prefix</param>
+        /// <param name="log">log source</param>
         /// <returns>tokent</returns>
-        public PascalToken Tokenize(StackedFileReader input, StringBuilder prefix) {
+        public PascalToken Tokenize(StackedFileReader input, StringBuilder prefix, ILogSource log) {
             var state = new ContinuationState() {
                 Result = new PascalToken() { FilePath = input.CurrentInputFile },
                 Input = input,
-                Buffer = prefix
+                Buffer = prefix,
+                Log = log
             };
 
             ParseByPrefix(state);
@@ -197,10 +209,10 @@ namespace PasPasPas.Parsing.Tokenizer {
                     state.FetchAndAppendChar();
             }
 
-            /*
+            found = state.EndsWith(EndSequence);
+
             if (!found)
-                error;
-                */
+                state.Error(TokenizerBase.UnexpectedEndOfToken, EndSequence);
 
             state.Finish(TokenId);
         }
@@ -337,16 +349,16 @@ namespace PasPasPas.Parsing.Tokenizer {
                     state.AppendChar(currentChar);
                     if (nextChar == '$') {
                         state.AppendChar(nextChar);
-                        hexDigits.Tokenize(state.Input, state.Buffer);
+                        hexDigits.Tokenize(state.Input, state.Buffer, state.Log);
                     }
                     else {
                         state.Putback(nextChar);
-                        digits.Tokenize(state.Input, state.Buffer);
+                        digits.Tokenize(state.Input, state.Buffer, state.Log);
                     }
                 }
                 else if (currentChar == '\'') {
                     state.AppendChar(currentChar);
-                    quotedString.Tokenize(state.Input, state.Buffer);
+                    quotedString.Tokenize(state.Input, state.Buffer, state.Log);
                 }
                 else {
                     state.Putback(currentChar);
@@ -383,7 +395,7 @@ namespace PasPasPas.Parsing.Tokenizer {
     /// <summary>
     ///     token group for curly brace comments
     /// </summary>
-    public class CurlyBraceCommenTokenValue : CurlyBracedTokenValue {
+    public class CurlyBraceCommentTokenValue : CurlyBracedTokenValue {
 
         /// <summary>
         ///     get the token id
@@ -689,7 +701,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         /// <param name="state">current tokenizer state</param>
         protected override void ParseByPrefix(ContinuationState state) {
-            var token = digitTokenizer.Tokenize(state.Input, state.Buffer);
+            var token = digitTokenizer.Tokenize(state.Input, state.Buffer, state.Log);
             var withDot = false;
             var withExponent = false;
             if (!state.IsValid)
@@ -697,7 +709,7 @@ namespace PasPasPas.Parsing.Tokenizer {
 
             if (NextCharMatches(state.Input, state.Buffer, dot)) {
                 if (NextCharMatches(state.Input, state.Buffer, numbers)) {
-                    digitTokenizer.Tokenize(state.Input, state.Buffer);
+                    digitTokenizer.Tokenize(state.Input, state.Buffer, state.Log);
                     withDot = true;
                 }
                 else if (state.EndsWith(".")) {
@@ -708,7 +720,7 @@ namespace PasPasPas.Parsing.Tokenizer {
 
             if (NextCharMatches(state.Input, state.Buffer, exponent)) {
                 NextCharMatches(state.Input, state.Buffer, plusminus);
-                digitTokenizer.Tokenize(state.Input, state.Buffer);
+                digitTokenizer.Tokenize(state.Input, state.Buffer, state.Log);
                 withExponent = true;
             }
 
