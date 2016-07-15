@@ -193,11 +193,44 @@ namespace PasPasPasTests.Tokenizer {
             patterns.AddPattern('a', PatternA);
             patterns.AddPattern('{', new CurlyBraceCommentTokenValue());
             TestPattern(patterns, "a{}", PatternA, PascalToken.Comment);
+            TestPattern(patterns, "{}", PascalToken.Comment);
+            TestPattern(patterns, "{}a", PascalToken.Comment, PatternA);
             TestPattern(patterns, "a{}a", PatternA, PascalToken.Comment, PatternA);
             TestPattern(patterns, "a{//}a", PatternA, PascalToken.Comment, PatternA);
             TestPattern(patterns, "a{(**)}a", PatternA, PascalToken.Comment, PatternA);
             TestPattern(patterns, "a{{}a", PatternA, PascalToken.Comment, PatternA);
             TestPattern(patterns, TokenizerBase.UnexpectedEndOfToken, "a{", PatternA, PascalToken.Comment);
+        }
+
+
+        [TestMethod]
+        public void TestAlternativeCurlyBraceCommentTokenValue() {
+            var patterns = new InputPatterns();
+            patterns.AddPattern('a', PatternA);
+            patterns.AddPattern('(', PascalToken.OpenParen).Add('*', new AlternativeCurlyBraceCommenTokenValue());
+            TestPattern(patterns, "a(", PatternA, PascalToken.OpenParen);
+            TestPattern(patterns, "(**)", PascalToken.Comment);
+            TestPattern(patterns, "(*a*)", PascalToken.Comment);
+            TestPattern(patterns, "(*(*(*(*a*)", PascalToken.Comment);
+            TestPattern(patterns, "a(*a*)a", PatternA, PascalToken.Comment, PatternA);
+            TestPattern(patterns, "(**)a", PascalToken.Comment, PatternA);
+            TestPattern(patterns, "a(**)a", PatternA, PascalToken.Comment, PatternA);
+            TestPattern(patterns, "a(*\n\n*)a", PatternA, PascalToken.Comment, PatternA);
+            TestPattern(patterns, "a(*\n***())()()\n*)a", PatternA, PascalToken.Comment, PatternA);
+            TestPattern(patterns, "a(*{//}*)a", PatternA, PascalToken.Comment, PatternA);
+            TestPattern(patterns, "a(*(**)a", PatternA, PascalToken.Comment, PatternA);
+            TestPattern(patterns, TokenizerBase.UnexpectedEndOfToken, "a(*", PatternA, PascalToken.Comment);
+        }
+
+        [TestMethod]
+        public void TestPreprocessorTokenVaue() {
+            var patterns = new InputPatterns();
+            patterns.AddPattern('a', PatternA);
+            patterns.AddPattern('{', PascalToken.Comma).Add('$', new PreprocessorTokenValue());
+            TestPattern(patterns, "a{${//}a", PatternA, PascalToken.Preprocessor, PatternA);
+            TestPattern(patterns, "a{${}a", PatternA, PascalToken.Preprocessor, PatternA);
+            TestPattern(patterns, "{${}a", PascalToken.Preprocessor, PatternA);
+            TestPattern(patterns, TokenizerBase.UnexpectedEndOfToken, "a{$", PatternA, PascalToken.Preprocessor);
         }
 
     }
