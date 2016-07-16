@@ -233,5 +233,55 @@ namespace PasPasPasTests.Tokenizer {
             TestPattern(patterns, TokenizerBase.UnexpectedEndOfToken, "a{$", PatternA, PascalToken.Preprocessor);
         }
 
+
+        [TestMethod]
+        public void TestControlCharTokenValue() {
+            var patterns = new InputPatterns();
+            patterns.AddPattern('a', PatternA);
+            patterns.AddPattern(new ControlCharacterClass(), new ControlTokenGroupValue());
+            TestPattern(patterns, "");
+            TestPattern(patterns, "a\u0000\u0001\u0002\u0003\u0004", PatternA, PascalToken.ControlChar);
+            TestPattern(patterns, TokenizerBase.UnexpectedCharacter, "\r", PascalToken.Undefined);
+            TestPattern(patterns, TokenizerBase.UnexpectedCharacter, "\n", PascalToken.Undefined);
+        }
+
+        [TestMethod]
+        public void TestWhitespaceCharTokenValue() {
+            var patterns = new InputPatterns();
+            patterns.AddPattern('a', PatternA);
+            patterns.AddPattern(new WhitspaceCharacterClass(), new WhiteSpaceTokenGroupValue());
+            TestPattern(patterns, "");
+            TestPattern(patterns, "a    a", PatternA, PascalToken.WhiteSpace, PatternA);
+            TestPattern(patterns, "   ", PascalToken.WhiteSpace);
+            TestPattern(patterns, "\t\r\n\r\f", PascalToken.WhiteSpace);
+            TestPattern(patterns, "aa\na", PatternA, PatternA, PascalToken.WhiteSpace, PatternA);
+        }
+
+        [TestMethod]
+        public void TestDigitTokenValue() {
+            var patterns = new InputPatterns();
+            patterns.AddPattern('a', PatternA);
+            patterns.AddPattern(new NumberCharacterClass(), new DigitTokenGroupValue());
+            TestPattern(patterns, "1", PascalToken.Integer);
+            TestPattern(patterns, "1234567890", PascalToken.Integer);
+            TestPattern(patterns, "000", PascalToken.Integer);
+            TestPattern(patterns, TokenizerBase.UnexpectedCharacter, "３", PascalToken.Undefined);
+            TestPattern(patterns, TokenizerBase.UnexpectedCharacter, "1３", PascalToken.Integer, PascalToken.Undefined);
+        }
+
+        [TestMethod]
+        public void TestHexNumberTokenValue() {
+            var patterns = new InputPatterns();
+            patterns.AddPattern('a', PatternA);
+            patterns.AddPattern('$', new HexNumberTokenValue());
+            TestPattern(patterns, TokenizerBase.UnexpectedEndOfToken, "$", PascalToken.HexNumber);
+            TestPattern(patterns, "$1234567890", PascalToken.HexNumber);
+            TestPattern(patterns, "$ABCDEF", PascalToken.HexNumber);
+            TestPattern(patterns, "$abcdef", PascalToken.HexNumber);
+            TestPattern(patterns, "$000000", PascalToken.HexNumber);
+            TestPattern(patterns, "$1234FFFF", PascalToken.HexNumber);
+            TestPattern(patterns, TokenizerBase.UnexpectedCharacter, "$CEFO", PascalToken.HexNumber, PascalToken.Undefined);
+        }
+
     }
 }

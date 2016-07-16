@@ -147,6 +147,8 @@ namespace PasPasPas.Parsing.Tokenizer {
                 return FetchTokenByGroup(input, c, tokenGroup, log);
             }
 
+            log.ProcessMessage(new LogMessage(MessageSeverity.Error, TokenizerBase.TokenizerLogMessage, TokenizerBase.UnexpectedCharacter, c.ToString()));
+
             return new PascalToken() {
                 Value = c.ToString(),
                 Kind = PascalToken.Undefined,

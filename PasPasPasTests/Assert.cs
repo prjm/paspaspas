@@ -38,7 +38,7 @@ namespace PasPasPasTests {
 
     public static class Assert {
 
-        public static void AreEqual(object expected, object actual) {
+        public static void AreEqual(object expected, object actual, string message = "") {
             A.AreEqual(expected, actual);
         }
 

@@ -96,7 +96,7 @@
         /// <param name="input"></param>
         /// <returns></returns>
         public override bool Matches(char input)
-            => char.IsDigit(input);
+            => ('0' <= input) && (input <= '9');
 
     }
 

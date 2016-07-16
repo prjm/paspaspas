@@ -61,6 +61,12 @@ namespace PasPasPas.Parsing.Tokenizer {
         public ILogSource Log { get; set; }
 
         /// <summary>
+        ///     current input length
+        /// </summary>
+        public int Length
+             => Buffer.Length;
+
+        /// <summary>
         ///     tests if the buffer ends with a given string value
         /// </summary>
         /// <param name="value"></param>
@@ -451,8 +457,14 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         protected abstract int TokenId { get; }
 
+
         /// <summary>
-        ///     test if a character macthes the given class
+        ///     minimal length
+        /// </summary>
+        protected virtual int MinLength { get; } = 0;
+
+        /// <summary>
+        ///     test if a character matches the given class
         /// </summary>
         /// <param name="input">char to test</param>
         /// <returns></returns>
@@ -478,6 +490,9 @@ namespace PasPasPas.Parsing.Tokenizer {
                 else
                     state.AppendChar(currentChar);
             }
+
+            if (MinLength > 0 && state.Length < MinLength)
+                state.Error(TokenizerBase.UnexpectedEndOfToken, state.Buffer.ToString());
 
             state.Finish(TokenId);
         }
@@ -536,6 +551,12 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         protected override int TokenId
             => PascalToken.HexNumber;
+
+        /// <summary>
+        ///     minimal length: "$" + hexdigit
+        /// </summary>
+        protected override int MinLength
+            => 2;
 
         /// <summary>
         ///     test if a char matches a hex number
