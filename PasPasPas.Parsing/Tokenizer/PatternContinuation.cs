@@ -600,7 +600,29 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <summary>
         ///     allow dots in identifiers
         /// </summary>
-        public bool AllowDots { get { return identifierCharClass.AllowDots; } set { identifierCharClass.AllowDots = value; } }
+        public bool AllowDots
+        {
+            get { return identifierCharClass.AllowDots; }
+            set { identifierCharClass.AllowDots = value; }
+        }
+
+        /// <summary>
+        ///     allow digits in identifiers
+        /// </summary>
+        public bool AllowDigits
+        {
+            get { return identifierCharClass.AllowDigits; }
+            set { identifierCharClass.AllowDigits = value; }
+        }
+
+        /// <summary>
+        ///     allow ampersand in identifiers
+        /// </summary>
+        public bool AllowAmpersand
+        {
+            get { return identifierCharClass.AllowAmpersand; }
+            set { identifierCharClass.AllowAmpersand = value; }
+        }
 
         private readonly IDictionary<string, int> knownKeywords;
 
@@ -609,21 +631,28 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         /// <param name="keywords"></param>
         public IdentifierTokenGroupValue(IDictionary<string, int> keywords) {
+
+            if (keywords == null)
+                throw new ArgumentNullException(nameof(keywords));
+
             knownKeywords = keywords;
         }
 
         /// <summary>
         ///     parse the complete token
         /// </summary>
-        /// <summary>
-        ///     parse the complete token
-        /// </summary>
         /// <param name="state">current tokenizer state</param>
         protected override void ParseByPrefix(ContinuationState state) {
-            bool ignoreKeywords = state.Buffer[0] == '&';
+            bool hasAmpersand = state.Buffer[0] == '&';
+            bool ignoreKeywords = AllowAmpersand && hasAmpersand;
 
             if (ignoreKeywords)
                 state.PutbackBuffer();
+            else if (hasAmpersand) {
+                state.Finish(PascalToken.Undefined);
+                state.Error(TokenizerBase.UnexpectedCharacter, "&");
+                return;
+            }
 
             while (state.IsValid) {
                 var currentChar = state.FetchChar();

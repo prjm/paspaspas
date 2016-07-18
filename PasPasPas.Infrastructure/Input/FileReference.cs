@@ -47,5 +47,29 @@ namespace PasPasPas.Infrastructure.Input {
         /// <returns>path</returns>
         public override string ToString()
             => path;
+
+        /// <summary>
+        ///     get the hashcode
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+            => path.ToLowerInvariant().GetHashCode();
+
+        /// <summary>
+        ///     test for equality
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(object obj) {
+            var other = obj as IFileReference;
+
+            if (ReferenceEquals(obj, null))
+                return false;
+
+            return string.Equals(
+                System.IO.Path.GetFullPath(path),
+                System.IO.Path.GetFullPath(other.Path),
+                StringComparison.OrdinalIgnoreCase);
+        }
     }
 }

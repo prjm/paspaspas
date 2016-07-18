@@ -251,9 +251,16 @@ namespace PasPasPas.Infrastructure.Input {
             char result;
             result = fragment.Pop();
             if (fragment.AtEof()) {
-                switchedInput = true;
                 lastFilePath = fragment.FilePath;
                 putbackFragments.Pop();
+                RemoveEmptyFiles();
+
+                if (putbackFragments.Count > 0)
+                    switchedInput = !putbackFragments.Peek().FilePath.Equals(lastFilePath);
+                else
+                    switchedInput = files.Count < 1 || !files.Peek().InputFile.FilePath.Equals(lastFilePath);
+
+
                 return result;
             }
 

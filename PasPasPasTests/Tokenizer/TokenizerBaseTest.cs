@@ -283,5 +283,30 @@ namespace PasPasPasTests.Tokenizer {
             TestPattern(patterns, TokenizerBase.UnexpectedCharacter, "$CEFO", PascalToken.HexNumber, PascalToken.Undefined);
         }
 
+        [TestMethod]
+        public void TestIdentifierTokenValue() {
+            var patterns = new InputPatterns();
+            var tokens = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase) {
+                ["a"] = PatternA
+            };
+            var tgv = new IdentifierTokenGroupValue(tokens);
+            patterns.AddPattern('b', PatternB);
+            patterns.AddPattern(new IdentifierCharacterClass(), tgv);
+            patterns.AddPattern(new WhitspaceCharacterClass(), new WhiteSpaceTokenGroupValue());
+            tgv.AllowAmpersand = true;
+            tgv.AllowDigits = false;
+            TestPattern(patterns, "a", PatternA);
+            TestPattern(patterns, "&a", PascalToken.Identifier);
+            TestPattern(patterns, "a b caaa", PatternA, PascalToken.WhiteSpace, PatternB, PascalToken.WhiteSpace, PascalToken.Identifier);
+            tgv.AllowAmpersand = false;
+            TestPattern(patterns, TokenizerBase.UnexpectedCharacter, "&a", PascalToken.Undefined, PatternA);
+            TestPattern(patterns, TokenizerBase.UnexpectedCharacter, "a9", PatternA, PascalToken.Undefined);
+            TestPattern(patterns, TokenizerBase.UnexpectedCharacter, "a.9", PatternA, PascalToken.Undefined);
+            tgv.AllowDigits = true;
+            TestPattern(patterns, "a9", PascalToken.Identifier);
+            tgv.AllowDots = true;
+            TestPattern(patterns, "a.9", PascalToken.Identifier);
+        }
+
     }
 }
