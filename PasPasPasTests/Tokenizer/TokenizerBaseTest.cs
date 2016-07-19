@@ -308,5 +308,18 @@ namespace PasPasPasTests.Tokenizer {
             TestPattern(patterns, "a.9", PascalToken.Identifier);
         }
 
+        [TestMethod]
+        public void TestEndOfLineCommentTokenValue() {
+            var patterns = new InputPatterns();
+            patterns.AddPattern('/', PascalToken.Slash).Add('/', new EndOfLineCommentTokenGroupValue());
+            patterns.AddPattern(new WhitspaceCharacterClass(), new WhiteSpaceTokenGroupValue());
+            TestPattern(patterns, "/", PascalToken.Slash);
+            TestPattern(patterns, "//", PascalToken.Comment);
+            TestPattern(patterns, "// / / /", PascalToken.Comment);
+            TestPattern(patterns, "/// / / /", PascalToken.Comment);
+            TestPattern(patterns, "/ // / / /", PascalToken.Slash, PascalToken.WhiteSpace, PascalToken.Comment);
+            TestPattern(patterns, "/ // / /\n /", PascalToken.Slash, PascalToken.WhiteSpace, PascalToken.Comment, PascalToken.WhiteSpace, PascalToken.Slash);
+        }
+
     }
 }

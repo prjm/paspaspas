@@ -676,7 +676,7 @@ namespace PasPasPas.Parsing.Tokenizer {
     /// <summary>
     ///     token group for end of line comments
     /// </summary>
-    public class EondOfLineCommentTokenGroupValue : PatternContinuation {
+    public class EndOfLineCommentTokenGroupValue : PatternContinuation {
 
         /// <summary>
         ///     parse the complete token
@@ -687,20 +687,11 @@ namespace PasPasPas.Parsing.Tokenizer {
             while (state.IsValid) {
                 char currentChar = state.FetchAndAppendChar();
 
-                if (currentChar == 0x0D) {
-                    if (state.IsValid) {
-                        char nextChar = state.FetchChar();
-                        if (nextChar == 0x0A) {
-                            state.AppendChar(nextChar);
-                        }
-                        else {
-                            state.Putback(nextChar);
-                        }
-                    }
-                    break;
+                if (!LineCounter.IsNewlineChar(currentChar)) {
+                    state.AppendChar(currentChar);
                 }
-
-                if (currentChar == 0x0A) {
+                else {
+                    state.Putback(currentChar);
                     break;
                 }
             }

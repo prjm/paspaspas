@@ -1,4 +1,6 @@
-﻿namespace PasPasPas.Parsing.Tokenizer {
+﻿using System;
+
+namespace PasPasPas.Parsing.Tokenizer {
 
     /// <summary>
     ///     newline style
@@ -149,5 +151,13 @@
 
             return true;
         }
+
+        /// <summary>
+        ///     test if a given character can trigger a new line
+        /// </summary>
+        /// <param name="currentChar">char to test</param>
+        /// <returns><c>true</c> if the character can trigger a new line</returns>
+        public static bool IsNewlineChar(char currentChar)
+            => currentChar == '\r' || currentChar == '\n';
     }
 }
