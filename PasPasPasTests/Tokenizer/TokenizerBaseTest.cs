@@ -297,6 +297,9 @@ namespace PasPasPasTests.Tokenizer {
             tgv.AllowDigits = false;
             TestPattern(patterns, "a", PatternA);
             TestPattern(patterns, "&a", PascalToken.Identifier);
+            TestPattern(patterns, "_a", PascalToken.Identifier);
+            TestPattern(patterns, "€€__画像", PascalToken.Identifier);
+            TestPattern(patterns, "_a_aaA123_33", PascalToken.Identifier);
             TestPattern(patterns, "a b caaa", PatternA, PascalToken.WhiteSpace, PatternB, PascalToken.WhiteSpace, PascalToken.Identifier);
             tgv.AllowAmpersand = false;
             TestPattern(patterns, TokenizerBase.UnexpectedCharacter, "&a", PascalToken.Undefined, PatternA);
@@ -319,6 +322,56 @@ namespace PasPasPasTests.Tokenizer {
             TestPattern(patterns, "/// / / /", PascalToken.Comment);
             TestPattern(patterns, "/ // / / /", PascalToken.Slash, PascalToken.WhiteSpace, PascalToken.Comment);
             TestPattern(patterns, "/ // / /\n /", PascalToken.Slash, PascalToken.WhiteSpace, PascalToken.Comment, PascalToken.WhiteSpace, PascalToken.Slash);
+        }
+
+        [TestMethod]
+        public void TestNumberTokenValue() {
+            var patterns = new InputPatterns();
+            patterns.AddPattern(new NumberCharacterClass(), new NumberTokenGroupValue());
+            patterns.AddPattern('.', PascalToken.Dot);
+            TestPattern(patterns, "9", PascalToken.Integer);
+            TestPattern(patterns, "9.9", PascalToken.Real);
+            TestPattern(patterns, "9999.9999", PascalToken.Real);
+            TestPattern(patterns, "9.", PascalToken.Integer, PascalToken.Dot);
+            TestPattern(patterns, "9.9.", PascalToken.Real, PascalToken.Dot);
+            TestPattern(patterns, TokenizerBase.UnexpectedEndOfToken, "9.9e", PascalToken.Real);
+            TestPattern(patterns, TokenizerBase.UnexpectedEndOfToken, "9.9e+", PascalToken.Real);
+            TestPattern(patterns, TokenizerBase.UnexpectedEndOfToken, "9.9e-", PascalToken.Real);
+            TestPattern(patterns, TokenizerBase.UnexpectedEndOfToken, "9.9e.", PascalToken.Real, PascalToken.Dot);
+            TestPattern(patterns, "9999.9999E+3", PascalToken.Real);
+            TestPattern(patterns, "9999.9999E-3", PascalToken.Real);
+            TestPattern(patterns, "9999.9999E-3.", PascalToken.Real, PascalToken.Dot);
+        }
+
+        [TestMethod]
+        public void TestDoubleQuotedStringTokenValue() {
+            var patterns = new InputPatterns();
+            patterns.AddPattern('.', PascalToken.Dot);
+            patterns.AddPattern('"', new DoubleQuoteStringGroupTokenValue());
+            TestPattern(patterns, "\"aaaaaa\"", PascalToken.DoubleQuotedString);
+            TestPattern(patterns, "\"aaa\"\"aaa\"", PascalToken.DoubleQuotedString);
+            TestPattern(patterns, "\"aaa\"\"\"\"aaa\"", PascalToken.DoubleQuotedString);
+            TestPattern(patterns, TokenizerBase.UnexpectedEndOfToken, "\"aaaaaa", PascalToken.DoubleQuotedString);
+            TestPattern(patterns, TokenizerBase.UnexpectedEndOfToken, "\"", PascalToken.DoubleQuotedString);
+        }
+
+        [TestMethod]
+        public void TestQuotedStringTokenValue() {
+            var patterns = new InputPatterns();
+            patterns.AddPattern('.', PascalToken.Dot);
+            patterns.AddPattern('\'', new QuotedStringTokenValue());
+            TestPattern(patterns, "'aaaaaa'", PascalToken.QuotedString);
+            TestPattern(patterns, "'aaa''aaa'", PascalToken.QuotedString);
+            TestPattern(patterns, "'aaa''''aaa'", PascalToken.QuotedString);
+            TestPattern(patterns, TokenizerBase.UnexpectedEndOfToken, "'aaaaaa", PascalToken.QuotedString);
+            TestPattern(patterns, TokenizerBase.UnexpectedEndOfToken, "'", PascalToken.QuotedString);
+            Assert.AreEqual("a", QuotedStringTokenValue.Unwrap("'a'"));
+            Assert.AreEqual("a'", QuotedStringTokenValue.Unwrap("'a'''"));
+            Assert.AreEqual("a'aa", QuotedStringTokenValue.Unwrap("'a''aa'"));
+            Assert.AreEqual("a", QuotedStringTokenValue.Unwrap("'a"));
+            Assert.AreEqual("a", QuotedStringTokenValue.Unwrap("a'"));
+            Assert.AreEqual("a'a", QuotedStringTokenValue.Unwrap("a''a"));
+            Assert.AreEqual("a''a", QuotedStringTokenValue.Unwrap("a''''a"));
         }
 
     }

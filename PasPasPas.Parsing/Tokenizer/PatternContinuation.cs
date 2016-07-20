@@ -250,8 +250,15 @@ namespace PasPasPas.Parsing.Tokenizer {
                     if (found)
                         state.Putback(nextChar);
                 }
+                else if (currentChar == '\'') {
+                    found = true;
+                }
 
                 state.AppendChar(currentChar);
+            }
+
+            if (!found) {
+                state.Error(TokenizerBase.UnexpectedEndOfToken, "'");
             }
 
             state.Finish(PascalToken.QuotedString);
@@ -265,8 +272,6 @@ namespace PasPasPas.Parsing.Tokenizer {
         public static string Unwrap(string quotedText) {
             var result = quotedText ?? string.Empty;
 
-            // TODO: be more strict here..
-
             if (result.StartsWith("'", StringComparison.Ordinal)) {
                 result = result.Substring(1, result.Length - 1);
             }
@@ -275,6 +280,7 @@ namespace PasPasPas.Parsing.Tokenizer {
                 result = result.Substring(0, result.Length - 1);
             }
 
+            result = result.Replace("''", "'");
             return result;
         }
     }
@@ -319,8 +325,15 @@ namespace PasPasPas.Parsing.Tokenizer {
                     if (found)
                         state.Putback(nextChar);
                 }
+                else if (currentChar == '"') {
+                    found = true;
+                }
 
                 state.AppendChar(currentChar);
+            }
+
+            if (!found) {
+                state.Error(TokenizerBase.UnexpectedEndOfToken, "\"");
             }
 
             state.Finish(PascalToken.DoubleQuotedString);
@@ -720,21 +733,20 @@ namespace PasPasPas.Parsing.Tokenizer {
         private PlusMinusCharacterClass plusminus
             = new PlusMinusCharacterClass();
 
-        private static bool NextCharMatches(StackedFileReader input, StringBuilder builder, CharacterClass c) {
-            if (input.AtEof)
+        private static bool NextCharMatches(ContinuationState state, CharacterClass c) {
+            if (!state.IsValid)
                 return false;
 
-            var file = input.CurrentInputFile;
-            bool switchedInput = false;
-            char n = input.FetchChar(out switchedInput);
-            if (c.Matches(n)) {
-                builder.Append(n);
+            char nextChar = state.FetchChar();
+
+            if (c.Matches(nextChar)) {
+                state.AppendChar(nextChar);
                 return true;
             }
-            else {
-                input.PutbackChar(file, n);
-                return false;
-            }
+
+            state.Putback(nextChar);
+            return false;
+
         }
 
         /// <summary>
@@ -745,23 +757,32 @@ namespace PasPasPas.Parsing.Tokenizer {
             var token = digitTokenizer.Tokenize(state.Input, state.Buffer, state.Log);
             var withDot = false;
             var withExponent = false;
-            if (!state.IsValid)
-                return;
 
-            if (NextCharMatches(state.Input, state.Buffer, dot)) {
-                if (NextCharMatches(state.Input, state.Buffer, numbers)) {
+            if (!state.IsValid) {
+                state.Finish(PascalToken.Integer);
+                return;
+            }
+
+            if (NextCharMatches(state, dot)) {
+                if (NextCharMatches(state, numbers)) {
                     digitTokenizer.Tokenize(state.Input, state.Buffer, state.Log);
                     withDot = true;
                 }
-                else if (state.EndsWith(".")) {
+
+                if (state.EndsWith(".")) {
                     state.Putback('.');
                     state.Buffer.Length -= 1;
                 }
             }
 
-            if (NextCharMatches(state.Input, state.Buffer, exponent)) {
-                NextCharMatches(state.Input, state.Buffer, plusminus);
-                digitTokenizer.Tokenize(state.Input, state.Buffer, state.Log);
+            if (NextCharMatches(state, exponent)) {
+                if (!state.IsValid || !NextCharMatches(state, plusminus)) {
+                    state.Error(TokenizerBase.UnexpectedEndOfToken, "+", "-");
+                }
+                else if (!state.IsValid || digitTokenizer.Tokenize(state.Input, state.Buffer, state.Log).Kind != PascalToken.Integer) {
+                    state.Error(TokenizerBase.UnexpectedEndOfToken);
+                }
+
                 withExponent = true;
             }
 

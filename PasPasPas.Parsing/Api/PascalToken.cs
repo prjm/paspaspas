@@ -1478,7 +1478,7 @@ namespace PasPasPas.Api {
         ///     create a new token
         /// </summary>
         public PascalToken() {
-            Kind = Undef;
+            Kind = Undefined;
             Value = string.Empty;
             FilePath = null;
         }
