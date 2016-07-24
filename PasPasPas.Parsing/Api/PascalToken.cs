@@ -1516,5 +1516,30 @@ namespace PasPasPas.Api {
             => Kind.ToString(CultureInfo.InvariantCulture) + ": " + Value?.Trim();
 
     }
+
+    /// <summary>
+    ///     string literal token
+    /// </summary>
+    public class StringLiteralToken : PascalToken {
+
+        /// <summary>
+        ///     string value
+        /// </summary>
+        public string LiteralValue { get; set; }
+
+    }
+
+    /// <summary>
+    ///     string literal token
+    /// </summary>
+    public class IntegerLiteralToken : PascalToken {
+
+        /// <summary>
+        ///     string value
+        /// </summary>
+        public int LiteralValue { get; set; }
+
+    }
+
 }
 

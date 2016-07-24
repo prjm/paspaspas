@@ -390,7 +390,7 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             Require(PascalToken.QuotedString);
-            messageText = QuotedStringTokenValue.Unwrap(CurrentToken().Value);
+            messageText = QuotedStringTokenValue.Unwrap(CurrentToken());
             return true;
         }
 
@@ -466,7 +466,7 @@ namespace PasPasPas.Parsing.Parser {
             Require(PascalToken.Region);
 
             if (Match(PascalToken.QuotedString)) {
-                regionName = QuotedStringTokenValue.Unwrap(CurrentToken().Value);
+                regionName = QuotedStringTokenValue.Unwrap(CurrentToken());
             }
 
             Meta.StartRegion(regionName);
@@ -598,7 +598,7 @@ namespace PasPasPas.Parsing.Parser {
 
         private void ParseLibParameter() {
             int kind = Require(PascalToken.LibPrefix, PascalToken.LibSuffix, PascalToken.LibVersion).Kind;
-            var libInfo = QuotedStringTokenValue.Unwrap(Require(PascalToken.QuotedString).Value);
+            var libInfo = QuotedStringTokenValue.Unwrap(Require(PascalToken.QuotedString));
 
             switch (kind) {
                 case PascalToken.LibPrefix:
@@ -1381,7 +1381,7 @@ namespace PasPasPas.Parsing.Parser {
             string filename = includeToken.Value;
 
             if (includeToken.Kind == PascalToken.QuotedString) {
-                filename = QuotedStringTokenValue.Unwrap(includeToken.Value);
+                filename = QuotedStringTokenValue.Unwrap(includeToken);
             }
 
             var targetPath = Meta.IncludePathResolver.ResolvePath(sourcePath, new FileReference(filename)).TargetPath;
@@ -1517,7 +1517,7 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseLongDescriptionSwitch() {
-            var description = Require(PascalToken.QuotedString).Value;
+            var description = Require(PascalToken.QuotedString);
             Meta.Description.Value = QuotedStringTokenValue.Unwrap(description);
         }
 
@@ -1759,7 +1759,7 @@ namespace PasPasPas.Parsing.Parser {
             var typeName = Require(PascalToken.Identifier).Value;
             var aliasName = string.Empty;
             if (Optional(PascalToken.QuotedString)) {
-                aliasName = QuotedStringTokenValue.Unwrap(CurrentToken().Value);
+                aliasName = QuotedStringTokenValue.Unwrap(CurrentToken());
             }
 
             Meta.AddObjectFileTypeName(typeName, aliasName);
@@ -1899,7 +1899,7 @@ namespace PasPasPas.Parsing.Parser {
 
             switch (CurrentToken().Kind) {
                 case PascalToken.QuotedString:
-                    filename = QuotedStringTokenValue.Unwrap(CurrentToken().Value);
+                    filename = QuotedStringTokenValue.Unwrap(CurrentToken());
                     break;
 
                 case PascalToken.Identifier:
@@ -1928,7 +1928,7 @@ namespace PasPasPas.Parsing.Parser {
             if (Optional(PascalToken.Identifier, PascalToken.QuotedString)) {
                 rcFile = CurrentToken().Value;
                 if (CurrentToken().Kind == PascalToken.QuotedString) {
-                    rcFile = QuotedStringTokenValue.Unwrap(rcFile);
+                    rcFile = QuotedStringTokenValue.Unwrap(CurrentToken());
                 }
             }
 
@@ -2077,7 +2077,7 @@ namespace PasPasPas.Parsing.Parser {
             string filename = includeToken.Value;
 
             if (includeToken.Kind == PascalToken.QuotedString) {
-                filename = QuotedStringTokenValue.Unwrap(includeToken.Value);
+                filename = QuotedStringTokenValue.Unwrap(includeToken);
             }
 
             var targetPath = Meta.IncludePathResolver.ResolvePath(sourcePath, new FileReference(filename)).TargetPath;
@@ -2144,7 +2144,7 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             if (Match(PascalToken.QuotedString)) {
-                Meta.Description.Value = QuotedStringTokenValue.Unwrap(CurrentToken().Value);
+                Meta.Description.Value = QuotedStringTokenValue.Unwrap(CurrentToken());
                 return true;
             }
 

@@ -164,15 +164,19 @@ namespace PasPasPasTests.Tokenizer {
             };
         }
 
-        public void TestPattern(InputPatterns patterns, string input, params int[] tokenValues) {
-            TestPattern(patterns, Guid.Empty, input, tokenValues);
-        }
+        public PascalToken TestPattern(InputPatterns patterns, string input, params int[] tokenValues)
+            => TestPattern(patterns, Guid.Empty, input, tokenValues);
 
-        public void TestPattern(InputPatterns patterns, Guid expectedMessage, string input, params int[] tokenValues) {
+        public PascalToken TestPattern(InputPatterns patterns, Guid expectedMessage, string input, params int[] tokenValues) {
             IList<PascalToken> result = RunTestPattern(patterns, expectedMessage, input);
             Assert.AreEqual(tokenValues.Length, result.Count);
             for (int i = 0; i < result.Count; i++)
                 Assert.AreEqual(tokenValues[i], result[i].Kind);
+
+            if (result.Count > 0)
+                return result[0];
+
+            return null;
         }
 
         [TestMethod]
@@ -365,13 +369,26 @@ namespace PasPasPasTests.Tokenizer {
             TestPattern(patterns, "'aaa''''aaa'", PascalToken.QuotedString);
             TestPattern(patterns, TokenizerBase.UnexpectedEndOfToken, "'aaaaaa", PascalToken.QuotedString);
             TestPattern(patterns, TokenizerBase.UnexpectedEndOfToken, "'", PascalToken.QuotedString);
-            Assert.AreEqual("a", QuotedStringTokenValue.Unwrap("'a'"));
-            Assert.AreEqual("a'", QuotedStringTokenValue.Unwrap("'a'''"));
-            Assert.AreEqual("a'aa", QuotedStringTokenValue.Unwrap("'a''aa'"));
-            Assert.AreEqual("a", QuotedStringTokenValue.Unwrap("'a"));
-            Assert.AreEqual("a", QuotedStringTokenValue.Unwrap("a'"));
-            Assert.AreEqual("a'a", QuotedStringTokenValue.Unwrap("a''a"));
-            Assert.AreEqual("a''a", QuotedStringTokenValue.Unwrap("a''''a"));
+            Assert.AreEqual("a", QuotedStringTokenValue.Unwrap(TestPattern(patterns, "'a'", PascalToken.QuotedString)));
+            Assert.AreEqual("a'", QuotedStringTokenValue.Unwrap(TestPattern(patterns, "'a'''", PascalToken.QuotedString)));
+            Assert.AreEqual("a'aa", QuotedStringTokenValue.Unwrap(TestPattern(patterns, "'a''aa'", PascalToken.QuotedString)));
+        }
+
+        [TestMethod]
+        public void TestStringGroupTokenValue() {
+            var patterns = new InputPatterns();
+            patterns.AddPattern('.', PascalToken.Dot);
+            patterns.AddPattern('#', new StringGroupTokenValue());
+            patterns.AddPattern('\'', new StringGroupTokenValue());
+            TestPattern(patterns, "'aaa'", PascalToken.QuotedString);
+            TestPattern(patterns, "#09", PascalToken.QuotedString);
+            TestPattern(patterns, "#09'aaaa'", PascalToken.QuotedString);
+            TestPattern(patterns, "#09'aaaa'#09", PascalToken.QuotedString);
+            TestPattern(patterns, "#$09'aaaa'#09", PascalToken.QuotedString);
+            TestPattern(patterns, "#$09'aaaa'#$09", PascalToken.QuotedString);
+            TestPattern(patterns, TokenizerBase.UnexpectedEndOfToken, "#", PascalToken.QuotedString);
+            TestPattern(patterns, TokenizerBase.UnexpectedEndOfToken, "#$", PascalToken.QuotedString);
+            TestPattern(patterns, "'aaaa'#$09", PascalToken.QuotedString);
         }
 
     }

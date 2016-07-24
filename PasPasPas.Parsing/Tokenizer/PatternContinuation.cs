@@ -136,6 +136,14 @@ namespace PasPasPas.Parsing.Tokenizer {
     public abstract class PatternContinuation {
 
         /// <summary>
+        ///     create a new result token
+        /// </summary>
+        /// <param name="path">file path</param>
+        /// <returns>created token</returns>
+        protected virtual PascalToken CreateResult(IFileReference path)
+            => new PascalToken() { FilePath = path };
+
+        /// <summary>
         ///     generate a token
         /// </summary>
         /// <param name="input">input</param>
@@ -144,7 +152,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <returns>tokent</returns>
         public PascalToken Tokenize(StackedFileReader input, StringBuilder prefix, ILogSource log) {
             var state = new ContinuationState() {
-                Result = new PascalToken() { FilePath = input.CurrentInputFile },
+                Result = CreateResult(input.CurrentInputFile),
                 Input = input,
                 Buffer = prefix,
                 Log = log
@@ -159,7 +167,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         ///     complete the parsing of an input pattern with a given prefix
         /// </summary>
         /// <param name="state">current tokenizer state</param>
-        protected abstract void ParseByPrefix(ContinuationState state);
+        public abstract void ParseByPrefix(ContinuationState state);
 
     }
 
@@ -186,7 +194,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         ///     parse the complete token
         /// </summary>
         /// <param name="state">current tokenizer state</param>
-        protected override void ParseByPrefix(ContinuationState state) {
+        public override void ParseByPrefix(ContinuationState state) {
             state.Finish(TokenId);
         }
     }
@@ -205,7 +213,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         ///     parse the complete token
         /// </summary>
         /// <param name="state">current tokenizer state</param>
-        protected override void ParseByPrefix(ContinuationState state) {
+        public override void ParseByPrefix(ContinuationState state) {
             var found = false;
 
             while (state.IsValid && (!found)) {
@@ -230,15 +238,61 @@ namespace PasPasPas.Parsing.Tokenizer {
     }
 
     /// <summary>
+    ///     base class for string literal based token values
+    /// </summary>
+    public abstract class StringBasedTokenValue : PatternContinuation {
+
+        private StringBuilder parsedString = new StringBuilder();
+
+        /// <summary>
+        ///     create a literal result token
+        /// </summary>
+        /// <param name="path">token path</param>
+        /// <returns></returns>
+        protected override PascalToken CreateResult(IFileReference path) {
+            ResetParsedString();
+            return new StringLiteralToken() {
+                FilePath = path
+            };
+        }
+
+        /// <summary>
+        ///     reset the parsed string
+        /// </summary>
+        protected void ResetParsedString() {
+            parsedString.Clear();
+        }
+
+        /// <summary>
+        ///     append char to buffer
+        /// </summary>
+        /// <param name="c"></param>
+        protected void AppendToBuffer(char c) {
+            parsedString.Append(c);
+        }
+
+        /// <summary>
+        ///     finish result
+        /// </summary>
+        /// <param name="state"></param>
+        /// <param name="tokenKind"></param>
+        protected void FinishResult(ContinuationState state, int tokenKind) {
+            ((StringLiteralToken)state.Result).LiteralValue = parsedString.ToString();
+            state.Finish(tokenKind);
+        }
+
+    }
+
+    /// <summary>
     ///     token group for quoted strings
     /// </summary>
-    public class QuotedStringTokenValue : PatternContinuation {
+    public class QuotedStringTokenValue : StringBasedTokenValue {
 
         /// <summary>
         ///     parse a quoted string
         /// </summary>
         /// <param name="state">current tokenizer state</param>
-        protected override void ParseByPrefix(ContinuationState state) {
+        public override void ParseByPrefix(ContinuationState state) {
             var found = false;
 
             while (state.IsValid && (!found)) {
@@ -249,9 +303,14 @@ namespace PasPasPas.Parsing.Tokenizer {
                     found = nextChar != '\'';
                     if (found)
                         state.Putback(nextChar);
+                    else
+                        AppendToBuffer(nextChar);
                 }
                 else if (currentChar == '\'') {
                     found = true;
+                }
+                else {
+                    AppendToBuffer(currentChar);
                 }
 
                 state.AppendChar(currentChar);
@@ -261,7 +320,7 @@ namespace PasPasPas.Parsing.Tokenizer {
                 state.Error(TokenizerBase.UnexpectedEndOfToken, "'");
             }
 
-            state.Finish(PascalToken.QuotedString);
+            FinishResult(state, PascalToken.QuotedString);
         }
 
         /// <summary>
@@ -269,19 +328,9 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         /// <param name="quotedText"></param>
         /// <returns></returns>
-        public static string Unwrap(string quotedText) {
-            var result = quotedText ?? string.Empty;
-
-            if (result.StartsWith("'", StringComparison.Ordinal)) {
-                result = result.Substring(1, result.Length - 1);
-            }
-
-            if (result.EndsWith("'", StringComparison.Ordinal)) {
-                result = result.Substring(0, result.Length - 1);
-            }
-
-            result = result.Replace("''", "'");
-            return result;
+        public static string Unwrap(PascalToken quotedText) {
+            var literal = quotedText as StringLiteralToken;
+            return literal != null ? literal.LiteralValue : string.Empty;
         }
     }
 
@@ -294,7 +343,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         ///     read the file until eof in one token
         /// </summary>
         /// <param name="state">current tokenizer state</param>
-        protected override void ParseByPrefix(ContinuationState state) {
+        public override void ParseByPrefix(ContinuationState state) {
 
             while (state.IsValid)
                 state.FetchChar();
@@ -306,13 +355,13 @@ namespace PasPasPas.Parsing.Tokenizer {
     /// <summary>
     ///     double-quoted string
     /// </summary>
-    public class DoubleQuoteStringGroupTokenValue : PatternContinuation {
+    public class DoubleQuoteStringGroupTokenValue : StringBasedTokenValue {
 
         /// <summary>
         ///     parse the complete token
         /// </summary>
         /// <param name="state">current tokenizer state</param>
-        protected override void ParseByPrefix(ContinuationState state) {
+        public override void ParseByPrefix(ContinuationState state) {
             var found = false;
 
             while (state.IsValid && (!found)) {
@@ -324,9 +373,14 @@ namespace PasPasPas.Parsing.Tokenizer {
 
                     if (found)
                         state.Putback(nextChar);
+                    else
+                        AppendToBuffer(nextChar);
                 }
                 else if (currentChar == '"') {
                     found = true;
+                }
+                else {
+                    AppendToBuffer(currentChar);
                 }
 
                 state.AppendChar(currentChar);
@@ -336,14 +390,14 @@ namespace PasPasPas.Parsing.Tokenizer {
                 state.Error(TokenizerBase.UnexpectedEndOfToken, "\"");
             }
 
-            state.Finish(PascalToken.DoubleQuotedString);
+            FinishResult(state, PascalToken.DoubleQuotedString);
         }
     }
 
     /// <summary>
     ///     token group for strings
     /// </summary>
-    public class StringGroupTokenValue : PatternContinuation {
+    public class StringGroupTokenValue : StringBasedTokenValue {
 
         private QuotedStringTokenValue quotedString
             = new QuotedStringTokenValue();
@@ -358,33 +412,52 @@ namespace PasPasPas.Parsing.Tokenizer {
         ///     parse a string literal
         /// </summary>
         /// <param name="state">current tokenizer state</param>
-        protected override void ParseByPrefix(ContinuationState state) {
+        public override void ParseByPrefix(ContinuationState state) {
             state.PutbackBuffer();
 
             while (state.IsValid) {
                 char currentChar = state.FetchChar();
-                if (currentChar == '#') {
+                if (currentChar == '#' && !state.IsValid) {
+                    state.Error(TokenizerBase.UnexpectedEndOfToken);
+                }
+                else if (currentChar == '#') {
                     char nextChar = state.FetchChar();
                     state.AppendChar(currentChar);
-                    if (nextChar == '$') {
+                    if (nextChar == '$' && !state.IsValid) {
+                        state.Error(TokenizerBase.UnexpectedEndOfToken);
+                    }
+                    else if (nextChar == '$') {
                         state.AppendChar(nextChar);
-                        hexDigits.Tokenize(state.Input, state.Buffer, state.Log);
+                        var controlChar = hexDigits.Tokenize(state.Input, state.Buffer, state.Log);
+                        if (controlChar.Kind != PascalToken.HexNumber) {
+                            state.Error(TokenizerBase.UnexpectedCharacter);
+                        }
+                        else {
+                            AppendToBuffer(char.ConvertFromUtf32(HexNumberTokenValue.Unwrap(controlChar)));
+                        }
                     }
                     else {
                         state.Putback(nextChar);
-                        digits.Tokenize(state.Input, state.Buffer, state.Log);
+                        var controlChar = digits.Tokenize(state.Input, state.Buffer, state.Log);
+                        if (controlChar.Kind != PascalToken.Integer) {
+                            state.Error(TokenizerBase.UnexpectedCharacter);
+                        }
+                        else {
+
+                        }
                     }
                 }
                 else if (currentChar == '\'') {
                     state.AppendChar(currentChar);
-                    quotedString.Tokenize(state.Input, state.Buffer, state.Log);
+                    quotedString.ParseByPrefix(state);
+
                 }
                 else {
                     state.Putback(currentChar);
                     break;
                 }
             }
-            state.Finish(PascalToken.QuotedString);
+            FinishResult(state, PascalToken.QuotedString);
         }
     }
 
@@ -487,7 +560,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         ///     parse the complete token
         /// </summary>
         /// <param name="state">current tokenizer state</param>
-        protected override void ParseByPrefix(ContinuationState state) {
+        public override void ParseByPrefix(ContinuationState state) {
 
             if (state.IsValid) {
 
@@ -580,6 +653,16 @@ namespace PasPasPas.Parsing.Tokenizer {
             => ('0' <= input) && (input <= '9') ||
                ('a' <= input) && (input <= 'f') ||
                ('A' <= input) && (input <= 'F');
+
+        /// <summary>
+        ///     unwrap hexadecimal number
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        public static int Unwrap(PascalToken token) {
+            var literal = token as IntegerLiteralToken;
+            return literal != null ? literal.LiteralValue : 0;
+        }
     }
 
     /// <summary>
@@ -655,7 +738,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         ///     parse the complete token
         /// </summary>
         /// <param name="state">current tokenizer state</param>
-        protected override void ParseByPrefix(ContinuationState state) {
+        public override void ParseByPrefix(ContinuationState state) {
             bool hasAmpersand = state.Buffer[0] == '&';
             bool ignoreKeywords = AllowAmpersand && hasAmpersand;
 
@@ -695,7 +778,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         ///     parse the complete token
         /// </summary>
         /// <param name="state">current tokenizer state</param>
-        protected override void ParseByPrefix(ContinuationState state) {
+        public override void ParseByPrefix(ContinuationState state) {
 
             while (state.IsValid) {
                 char currentChar = state.FetchAndAppendChar();
@@ -753,7 +836,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         ///     parse the complete token
         /// </summary>
         /// <param name="state">current tokenizer state</param>
-        protected override void ParseByPrefix(ContinuationState state) {
+        public override void ParseByPrefix(ContinuationState state) {
             var token = digitTokenizer.Tokenize(state.Input, state.Buffer, state.Log);
             var withDot = false;
             var withExponent = false;
