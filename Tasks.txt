@@ -1,5 +1,4 @@
 On the roadmap:
-- line numbers
 - refactoring
 
 Missing implementation details:
@@ -10,6 +9,7 @@ Missing implementation details:
 - add guards / contracts with a conditional function
 - remove api / internal namespaces
 - {$MESSAGE} does not emit mesages
+- check range of literals during parsing
 
 Complete implementation details:
 

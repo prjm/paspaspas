@@ -285,6 +285,7 @@ namespace PasPasPasTests.Tokenizer {
             TestPattern(patterns, "$000000", PascalToken.HexNumber);
             TestPattern(patterns, "$1234FFFF", PascalToken.HexNumber);
             TestPattern(patterns, TokenizerBase.UnexpectedCharacter, "$CEFO", PascalToken.HexNumber, PascalToken.Undefined);
+            Assert.AreEqual(0x123F, HexNumberTokenValue.Unwrap(TestPattern(patterns, "$123F", PascalToken.HexNumber)));
         }
 
         [TestMethod]
@@ -380,6 +381,7 @@ namespace PasPasPasTests.Tokenizer {
             patterns.AddPattern('.', PascalToken.Dot);
             patterns.AddPattern('#', new StringGroupTokenValue());
             patterns.AddPattern('\'', new StringGroupTokenValue());
+            Assert.AreEqual("a\nb", QuotedStringTokenValue.Unwrap(TestPattern(patterns, "'a'#$A'b'", PascalToken.QuotedString)));
             TestPattern(patterns, "'aaa'", PascalToken.QuotedString);
             TestPattern(patterns, "#09", PascalToken.QuotedString);
             TestPattern(patterns, "#09'aaaa'", PascalToken.QuotedString);

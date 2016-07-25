@@ -272,12 +272,28 @@ namespace PasPasPas.Parsing.Tokenizer {
         }
 
         /// <summary>
+        ///     append string to buffer
+        /// </summary>
+        /// <param name="s"></param>
+        protected void AppendToBuffer(string s) {
+            parsedString.Append(s);
+        }
+
+        /// <summary>
         ///     finish result
         /// </summary>
         /// <param name="state"></param>
         /// <param name="tokenKind"></param>
         protected void FinishResult(ContinuationState state, int tokenKind) {
-            ((StringLiteralToken)state.Result).LiteralValue = parsedString.ToString();
+            var literal = ((StringLiteralToken)state.Result);
+
+
+            if (literal.LiteralValue == null)
+                literal.LiteralValue = parsedString.ToString();
+            else
+                literal.LiteralValue = literal.LiteralValue + parsedString.ToString();
+
+            parsedString.Clear();
             state.Finish(tokenKind);
         }
 
@@ -408,6 +424,9 @@ namespace PasPasPas.Parsing.Tokenizer {
         private HexNumberTokenValue hexDigits
             = new HexNumberTokenValue();
 
+        private StringBuilder controlBuffer
+            = new StringBuilder();
+
         /// <summary>
         ///     parse a string literal
         /// </summary>
@@ -427,30 +446,33 @@ namespace PasPasPas.Parsing.Tokenizer {
                         state.Error(TokenizerBase.UnexpectedEndOfToken);
                     }
                     else if (nextChar == '$') {
-                        state.AppendChar(nextChar);
-                        var controlChar = hexDigits.Tokenize(state.Input, state.Buffer, state.Log);
+                        controlBuffer.Clear();
+                        controlBuffer.Append('$');
+                        var controlChar = hexDigits.Tokenize(state.Input, controlBuffer, state.Log);
                         if (controlChar.Kind != PascalToken.HexNumber) {
                             state.Error(TokenizerBase.UnexpectedCharacter);
                         }
                         else {
-                            AppendToBuffer(char.ConvertFromUtf32(HexNumberTokenValue.Unwrap(controlChar)));
+                            state.Buffer.Append(controlBuffer);
+                            AppendToBuffer((char)HexNumberTokenValue.Unwrap(controlChar));
                         }
                     }
                     else {
                         state.Putback(nextChar);
-                        var controlChar = digits.Tokenize(state.Input, state.Buffer, state.Log);
+                        controlBuffer.Clear();
+                        var controlChar = digits.Tokenize(state.Input, controlBuffer, state.Log);
                         if (controlChar.Kind != PascalToken.Integer) {
                             state.Error(TokenizerBase.UnexpectedCharacter);
                         }
                         else {
-
+                            state.Buffer.Append(controlBuffer);
+                            AppendToBuffer((char)DigitTokenGroupValue.Unwrap(controlChar));
                         }
                     }
                 }
                 else if (currentChar == '\'') {
                     state.AppendChar(currentChar);
-                    quotedString.ParseByPrefix(state);
-
+                    AppendToBuffer(QuotedStringTokenValue.Unwrap(quotedString.Tokenize(state.Input, controlBuffer, state.Log)));
                 }
                 else {
                     state.Putback(currentChar);
@@ -580,6 +602,15 @@ namespace PasPasPas.Parsing.Tokenizer {
             if (MinLength > 0 && state.Length < MinLength)
                 state.Error(TokenizerBase.UnexpectedEndOfToken, state.Buffer.ToString());
 
+            Finish(state);
+        }
+
+
+        /// <summary>
+        ///     finish parsing
+        /// </summary>
+        /// <param name="state">state</param>
+        protected virtual void Finish(ContinuationState state) {
             state.Finish(TokenId);
         }
 
@@ -633,6 +664,16 @@ namespace PasPasPas.Parsing.Tokenizer {
     public class HexNumberTokenValue : CharacterClassTokenGroupValue {
 
         /// <summary>
+        ///     create a new integer literal token
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        protected override PascalToken CreateResult(IFileReference path)
+            => new IntegerLiteralToken() {
+                FilePath = path
+            };
+
+        /// <summary>
         ///     token kind: hex number
         /// </summary>
         protected override int TokenId
@@ -663,12 +704,36 @@ namespace PasPasPas.Parsing.Tokenizer {
             var literal = token as IntegerLiteralToken;
             return literal != null ? literal.LiteralValue : 0;
         }
+
+        /// <summary>
+        ///     finish parsing
+        /// </summary>
+        /// <param name="state"></param>
+        protected override void Finish(ContinuationState state) {
+            int value;
+
+            if (int.TryParse(state.Buffer.ToString(1, state.Buffer.Length - 1), System.Globalization.NumberStyles.HexNumber, System.Globalization.CultureInfo.InvariantCulture, out value))
+                ((IntegerLiteralToken)state.Result).LiteralValue = value;
+
+            base.Finish(state);
+        }
     }
 
     /// <summary>
     ///     token group value for digits
     /// </summary>
     public class DigitTokenGroupValue : CharacterClassTokenGroupValue {
+
+        /// <summary>
+        ///     create a new integer literal token
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        protected override PascalToken CreateResult(IFileReference path)
+            => new IntegerLiteralToken() {
+                FilePath = path
+            };
+
 
         /// <summary>
         ///     token id
@@ -683,7 +748,33 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <returns></returns>
         protected override bool MatchesClass(char input)
             => ('0' <= input) && (input <= '9');
+
+
+        /// <summary>
+        ///     finish parsing
+        /// </summary>
+        /// <param name="state"></param>
+        protected override void Finish(ContinuationState state) {
+            int value;
+
+            if (int.TryParse(state.Buffer.ToString(), out value))
+                ((IntegerLiteralToken)state.Result).LiteralValue = value;
+
+            base.Finish(state);
+        }
+
+        /// <summary>
+        ///     unwrap number
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        public static int Unwrap(PascalToken token) {
+            var literal = token as IntegerLiteralToken;
+            return literal != null ? literal.LiteralValue : 0;
+        }
+
     }
+
 
     /// <summary>
     ///     token group for identifiers
@@ -881,5 +972,4 @@ namespace PasPasPas.Parsing.Tokenizer {
 
 
     }
-
 }
