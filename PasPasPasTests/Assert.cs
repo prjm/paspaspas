@@ -2,6 +2,7 @@
 using PasPasPas.Infrastructure.Input;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Parsing.Parser;
+using PasPasPas.Parsing.SyntaxTree;
 using PasPasPas.Parsing.Tokenizer;
 using System;
 using System.Collections.Generic;

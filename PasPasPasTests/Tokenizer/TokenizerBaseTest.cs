@@ -2,13 +2,10 @@
 using PasPasPas.Parsing.Tokenizer;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using PasPasPas.Infrastructure.Input;
 using PasPasPas.Parsing.Parser;
-using PasPasPas.Api;
 using PasPasPas.Infrastructure.Log;
+using PasPasPas.Parsing.SyntaxTree;
 
 namespace PasPasPasTests.Tokenizer {
 
@@ -183,7 +180,7 @@ namespace PasPasPasTests.Tokenizer {
         public void TestSimpleInputPatterns() {
             var patterns = new InputPatterns();
             TestPattern(patterns, "");
-            TestPattern(patterns, "xx", PascalToken.Undefined, PascalToken.Undefined);
+            TestPattern(patterns, TokenizerBase.UnexpectedCharacter, "x", PascalToken.Undefined);
             patterns.AddPattern('a', PatternA);
             patterns.AddPattern('b', PatternB);
             TestPattern(patterns, "a", PatternA);
@@ -304,14 +301,14 @@ namespace PasPasPasTests.Tokenizer {
             TestPattern(patterns, "&a", PascalToken.Identifier);
             TestPattern(patterns, "_a", PascalToken.Identifier);
             TestPattern(patterns, "€€__画像", PascalToken.Identifier);
-            TestPattern(patterns, "_a_aaA123_33", PascalToken.Identifier);
             TestPattern(patterns, "a b caaa", PatternA, PascalToken.WhiteSpace, PatternB, PascalToken.WhiteSpace, PascalToken.Identifier);
             tgv.AllowAmpersand = false;
             TestPattern(patterns, TokenizerBase.UnexpectedCharacter, "&a", PascalToken.Undefined, PatternA);
             TestPattern(patterns, TokenizerBase.UnexpectedCharacter, "a9", PatternA, PascalToken.Undefined);
-            TestPattern(patterns, TokenizerBase.UnexpectedCharacter, "a.9", PatternA, PascalToken.Undefined);
             tgv.AllowDigits = true;
             TestPattern(patterns, "a9", PascalToken.Identifier);
+            TestPattern(patterns, TokenizerBase.UnexpectedCharacter, "a.a9", PatternA, PascalToken.Undefined, PascalToken.Identifier);
+            TestPattern(patterns, "_a_aaA123_33", PascalToken.Identifier);
             tgv.AllowDots = true;
             TestPattern(patterns, "a.9", PascalToken.Identifier);
         }

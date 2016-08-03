@@ -6,11 +6,12 @@ using System.Globalization;
 using PasPasPas.Options.Bundles;
 using PasPasPas.Parsing.Tokenizer;
 using PasPasPas.Infrastructure.Input;
+using PasPasPas.Parsing.SyntaxTree;
 
 namespace PasPasPas.Parsing.Parser {
 
     /// <summary>
-    ///     helper parser for compiler directives
+    ///     parser for compiler directives
     /// </summary>
     public class CompilerDirectiveParser : ParserBase {
 
@@ -174,161 +175,139 @@ namespace PasPasPas.Parsing.Parser {
                 PascalToken.IfOpt,
             };
 
-        /// <summary>
-        ///     parse a compiler directive
-        /// </summary>
-        public bool ParseCompilerDirective() {
-            var kind = CurrentToken().Kind;
-            var result = false;
-
-            if (switches.Contains(kind)) {
-                result = ParseSwitch();
-            }
-            else if (longSwitches.Contains(kind)) {
-                result = ParseLongSwitch();
-            }
-            else if (parameters.Contains(kind)) {
-                result = ParseParameter();
-            }
-
-            if (!result) {
-                // TODO
-                // if (!ConditionalCompilation.Skip)
-                // log error
-                FetchNextToken();
-            }
-
-            return result;
-        }
-
-        private bool ParseParameter() {
+        private ISyntaxPart ParseParameter() {
 
             if (Match(PascalToken.IfDef)) {
                 ParseIfDef();
-                return true;
+                return null;
             }
 
             if (Match(PascalToken.IfOpt)) {
                 ParseIfOpt();
-                return true;
+                return null;
             }
 
 
             if (Match(PascalToken.EndIf)) {
                 ParseEndIf();
-                return true;
+                return null;
             }
 
             if (Match(PascalToken.ElseCd)) {
                 ParseElse();
-                return true;
+                return null;
             }
 
             if (Match(PascalToken.IfNDef)) {
                 ParseIfNDef();
-                return true;
+                return null;
             }
 
             if (ConditionalCompilation.Skip)
-                return false;
+                return null;
 
             if (Match(PascalToken.Apptype)) {
                 ParseApptypeParameter();
-                return true;
+                return null;
             }
 
             if (Match(PascalToken.CodeAlign)) {
                 ParseCodeAlignParameter();
-                return true;
+                return null;
             }
 
             if (Match(PascalToken.Define)) {
                 ParseDefine();
-                return true;
+                return null;
             }
 
             if (Match(PascalToken.Undef)) {
                 ParseUndef();
-                return true;
+                return null;
             }
 
             if (Match(PascalToken.ExternalSym)) {
                 ParseExternalSym();
-                return true;
+                return null;
             }
 
             if (Match(PascalToken.HppEmit)) {
                 ParseHppEmit();
-                return true;
+                return null;
             }
 
             if (Match(PascalToken.ImageBase)) {
                 ParseImageBase();
-                return true;
+                return null;
             }
 
             if (Match(PascalToken.LibPrefix, PascalToken.LibSuffix, PascalToken.LibVersion)) {
                 ParseLibParameter();
-                return true;
+                return null;
             }
 
             if (Match(PascalToken.Warn)) {
                 ParseWarnParameter();
-                return true;
+                return null;
             }
 
             if (Match(PascalToken.Rtti)) {
                 ParseRttiParameter();
-                return true;
+                return null;
             }
 
             if (Match(PascalToken.Region)) {
                 ParseRegion();
-                return true;
+                return null;
             }
 
             if (Match(PascalToken.EndRegion)) {
                 ParseEndRegion();
-                return true;
+                return null;
             }
 
             if (Match(PascalToken.SetPEOsVersion)) {
                 ParsePEOsVersion();
-                return true;
+                return null;
             }
 
             if (Match(PascalToken.SetPESubsystemVersion)) {
                 ParsePESubsystemVersion();
-                return true;
+                return null;
             }
 
 
             if (Match(PascalToken.SetPEUserVersion)) {
                 ParsePEUserVersion();
-                return true;
+                return null;
             }
 
             if (Match(PascalToken.ObjTypeName)) {
-                return ParseObjTypeNameSwitch();
+                ParseObjTypeNameSwitch();
+                return null;
             }
 
             if (Match(PascalToken.NoInclude)) {
-                return ParseNoInclude();
+                ParseNoInclude();
+                return null;
             }
 
             if (Match(PascalToken.NoDefine)) {
-                return ParseNoDefine();
+                ParseNoDefine();
+                return null;
             }
 
             if (Match(PascalToken.MessageCd)) {
-                return ParseMessage();
+                ParseMessage();
+                return null;
             }
 
             if (Match(PascalToken.MinMemStackSizeSwitchLong, PascalToken.MaxMemStackSizeSwitchLong)) {
-                return ParseStackSizeSwitch(false);
+                ParseStackSizeSwitch(false);
+                return null;
             }
 
-            return false;
+            return null;
         }
 
         private void ParseIfOpt() {
@@ -756,242 +735,239 @@ namespace PasPasPas.Parsing.Parser {
         /// <summary>
         ///     parse a long switch
         /// </summary>
-        private bool ParseLongSwitch() {
-
-            if (ConditionalCompilation.Skip)
-                return false;
+        private ISyntaxPart ParseLongSwitch() {
 
             if (Optional(PascalToken.AlignSwitchLong)) {
                 ParseAlignLongSwitch();
-                return true;
+                return null;
             }
 
             if (Optional(PascalToken.BoolEvalSwitchLong)) {
                 ParseLongBoolEvalSwitch();
-                return true;
+                return null;
             }
 
             if (Optional(PascalToken.AssertSwitchLong)) {
                 ParseLongAssertSwitch();
-                return true;
+                return null;
             }
 
             if (Optional(PascalToken.DebugInfoSwitchLong)) {
                 ParseLongDebugInfoSwitch();
-                return true;
+                return null;
             }
 
             if (Optional(PascalToken.DenyPackageUnit)) {
                 ParseDenyPackageUnitSwitch();
-                return true;
+                return null;
             }
 
             if (Optional(PascalToken.DescriptionSwitchLong)) {
                 ParseLongDescriptionSwitch();
-                return true;
+                return null;
             }
 
             if (Optional(PascalToken.DesignOnly)) {
                 ParseLongDesignOnlySwitch();
-                return true;
+                return null;
             }
 
             if (Optional(PascalToken.ExtensionSwitchLong)) {
                 ParseLongExtensionSwitch();
-                return true;
+                return null;
             }
 
             if (Optional(PascalToken.ObjExportAll)) {
                 ParseObjExportAllSwitch();
-                return true;
+                return null;
             }
 
             if (Optional(PascalToken.ExtendedCompatibility)) {
                 ParseExtendedCompatibilitySwitch();
-                return true;
+                return null;
             }
 
             if (Optional(PascalToken.ExtendedSyntaxSwitchLong)) {
                 ParseLongExtendedSyntaxSwitch();
-                return true;
+                return null;
             }
 
             if (Optional(PascalToken.ExcessPrecision)) {
                 ParseLongExcessPrecisionSwitch();
-                return true;
+                return null;
             }
 
             if (Optional(PascalToken.HighCharUnicode)) {
                 ParseLongHighCharUnicodeSwitch();
-                return true;
+                return null;
             }
 
             if (Optional(PascalToken.Hints)) {
                 ParseLongHintsSwitch();
-                return true;
+                return null;
             }
 
             if (Optional(PascalToken.ImplicitBuild)) {
                 ParseLongImplicitBuildSwitch();
-                return true;
+                return null;
             }
 
             if (Optional(PascalToken.ImportedDataSwitchLong)) {
                 ParseLongImportedDataSwitch();
-                return true;
+                return null;
             }
 
             if (Optional(PascalToken.IncludeSwitchLong)) {
                 ParseLongIncludeSwitch();
-                return true;
+                return null;
             }
 
             if (Optional(PascalToken.IoChecks)) {
                 ParseLongIoChecksSwitch();
-                return true;
+                return null;
             }
 
             if (Optional(PascalToken.LocalSymbolSwithLong)) {
                 ParseLongLocalSymbolSwitch();
-                return true;
+                return null;
             }
 
             if (Optional(PascalToken.LongStringSwitchLong)) {
                 ParseLongLongStringSwitch();
-                return true;
+                return null;
             }
 
             if (Optional(PascalToken.OpenStringSwitchLong)) {
                 ParseLongOpenStringSwitch();
-                return true;
+                return null;
             }
 
             if (Optional(PascalToken.OptimizationSwitchLong)) {
                 ParseLongOptimizationSwitch();
-                return true;
+                return null;
             }
 
             if (Optional(PascalToken.OverflowSwitchLong)) {
                 ParseLongOverflowSwitch();
-                return true;
+                return null;
             }
 
             if (Optional(PascalToken.SaveDivideSwitchLong)) {
                 ParseLongSaveDivideSwitch();
-                return true;
+                return null;
             }
 
             if (Optional(PascalToken.RangeChecks)) {
                 ParseLongRangeChecksSwitch();
-                return true;
+                return null;
             }
 
             if (Optional(PascalToken.StackFramesSwitchLong)) {
                 ParseLongStackFramesSwitch();
-                return true;
+                return null;
             }
 
             if (Optional(PascalToken.ZeroBaseStrings)) {
                 ParseZeroBasedStringSwitch();
-                return true;
+                return null;
             }
 
             if (Optional(PascalToken.WritableConstSwitchLong)) {
                 ParseLongWritableConstSwitch();
-                return true;
+                return null;
             }
 
             if (Optional(PascalToken.WeakLinkRtti)) {
                 ParseWeakLinkRttiSwitch();
-                return true;
+                return null;
             }
 
             if (Optional(PascalToken.WeakPackageUnit)) {
                 ParseWeakPackageUnitSwitch();
-                return true;
+                return null;
             }
 
             if (Optional(PascalToken.Warnings)) {
                 ParseWarningsSwitch();
-                return true;
+                return null;
             }
 
             if (Optional(PascalToken.VarStringCheckSwitchLong)) {
                 ParseLongVarStringCheckSwitch();
-                return true;
+                return null;
             }
 
             if (Optional(PascalToken.TypedPointersSwitchLong)) {
                 ParseLongTypedPointersSwitch();
-                return true;
+                return null;
             }
 
             if (Optional(PascalToken.DefinitionInfo)) {
                 ParseDefinitionInfoSwitch();
-                return true;
+                return null;
             }
 
             if (Optional(PascalToken.ReferenceInfo)) {
                 ParseReferenceInfoSwitch();
-                return true;
+                return null;
             }
 
             if (Optional(PascalToken.StrongLinkTypes)) {
                 ParseStrongLinkTypes();
-                return true;
+                return null;
             }
 
             if (Optional(PascalToken.ScopedEnums)) {
                 ParseScopedEnums();
-                return true;
+                return null;
             }
 
             if (Optional(PascalToken.TypeInfoSwitchLong)) {
                 ParseLongTypeInfoSwitch();
-                return true;
+                return null;
             }
 
             if (Optional(PascalToken.RunOnly)) {
                 ParseRunOnlyParameter();
-                return true;
+                return null;
             }
 
             if (Match(PascalToken.IncludeRessourceLong)) {
                 ParseLongIncludeRessourceSwitch();
-                return true;
+                return null;
             }
 
             if (Optional(PascalToken.RealCompatibility)) {
                 ParseRealCompatibilitySwitch();
-                return true;
+                return null;
             }
 
             if (Optional(PascalToken.Pointermath)) {
                 ParsePointermathSwitch();
-                return true;
+                return null;
             }
 
             if (Optional(PascalToken.OldTypeLayout)) {
                 ParseOldTypeLayoutSwitch();
-                return true;
+                return null;
             }
 
             if (Optional(PascalToken.EnumSizeSwitchLong)) {
                 ParseLongEnumSizeSwitch();
-                return true;
+                return null;
             }
 
             if (Optional(PascalToken.MethodInfo)) {
                 ParseMethodInfoSwitch();
-                return true;
+                return null;
             }
 
             if (Optional(PascalToken.LegacyIfEnd)) {
                 ParseLegacyIfEndSwitch();
-                return true;
+                return null;
             }
 
-            return false;
+            return null;
         }
 
         private void ParseLegacyIfEndSwitch() {
@@ -1618,107 +1594,124 @@ namespace PasPasPas.Parsing.Parser {
         /// <summary>
         ///     parse a switch
         /// </summary>
-        private bool ParseSwitch() {
-
-            if (ConditionalCompilation.Skip)
-                return false;
+        private ISyntaxPart ParseSwitch() {
 
             if (Match(PascalToken.AlignSwitch, PascalToken.AlignSwitch1, PascalToken.AlignSwitch2, PascalToken.AlignSwitch4, PascalToken.AlignSwitch8, PascalToken.AlignSwitch16)) {
-                ParseAlignSwitch();
-                return true;
+                return ParseAlignSwitch();
+
             }
 
             if (Match(PascalToken.BoolEvalSwitch)) {
                 ParseBoolEvalSwitch();
-                return true;
+                return null;
             }
 
             if (Match(PascalToken.AssertSwitch)) {
                 ParseAssertSwitch();
-                return true;
+                return null;
             }
 
             if (Match(PascalToken.DebugInfoOrDescriptionSwitch)) {
-                return ParseDebugInfoOrDescriptionSwitch();
+                ParseDebugInfoOrDescriptionSwitch();
+                return null;
             }
 
             if (Match(PascalToken.ExtensionSwitch)) {
-                return ParseExtensionSwitch();
+                ParseExtensionSwitch();
+                return null;
             }
 
             if (Match(PascalToken.ExtendedSyntaxSwitch)) {
-                return ParseExtendedSyntaxSwitch();
+                ParseExtendedSyntaxSwitch();
+                return null;
             }
 
             if (Match(PascalToken.ImportedDataSwitch)) {
-                return ParseImportedDataSwitch();
+                ParseImportedDataSwitch();
+                return null;
             }
 
             if (Match(PascalToken.IncludeSwitch)) {
-                return ParseIncludeSwitch();
+                ParseIncludeSwitch();
+                return null;
             }
 
             if (Match(PascalToken.LinkOrLocalSymbolSwitch)) {
-                return ParseLocalSymbolSwitch();
+                ParseLocalSymbolSwitch();
+                return null;
             }
 
             if (Match(PascalToken.LongStringSwitch)) {
-                return ParseLongStringSwitch();
+                ParseLongStringSwitch();
+                return null;
             }
 
             if (Match(PascalToken.OpenStringSwitch)) {
-                return ParseOpenStringSwitch();
+                ParseOpenStringSwitch();
+                return null;
             }
 
             if (Match(PascalToken.OptimizationSwitch)) {
-                return ParseOptimizationSwitch();
+                ParseOptimizationSwitch();
+                return null;
             }
 
             if (Match(PascalToken.OverflowSwitch)) {
-                return ParseOverflowSwitch();
+                ParseOverflowSwitch();
+                return null;
             }
 
             if (Match(PascalToken.SaveDivideSwitch)) {
-                return ParseSaveDivideSwitch();
+                ParseSaveDivideSwitch();
+                return null;
             }
 
             if (Match(PascalToken.IncludeRessource)) {
-                return ParseIncludeRessource();
+                ParseIncludeRessource();
+                return null;
             }
 
             if (Match(PascalToken.StackFramesSwitch)) {
-                return ParseStackFramesSwitch();
+                ParseStackFramesSwitch();
+                return null;
             }
 
             if (Match(PascalToken.WritableConstSwitch)) {
-                return ParseWritableConstSwitch();
+                ParseWritableConstSwitch();
+                return null;
             }
 
             if (Match(PascalToken.VarStringCheckSwitch)) {
-                return ParseVarStringCheckSwitch();
+                ParseVarStringCheckSwitch();
+                return null;
             }
 
             if (Match(PascalToken.TypedPointersSwitch)) {
-                return ParseTypedPointersSwitch();
+                ParseTypedPointersSwitch();
+                return null;
             }
 
             if (Match(PascalToken.SymbolDeclarationSwitch)) {
-                return ParseSymbolDeclarationSwitch();
+                ParseSymbolDeclarationSwitch();
+                return null;
             }
 
             if (Match(PascalToken.SymbolDefinitionsOnlySwitch)) {
-                return ParseSymbolDefinitionsOnlySwitch();
+                ParseSymbolDefinitionsOnlySwitch();
+                return null;
             }
 
             if (Match(PascalToken.TypeInfoSwitch)) {
-                return ParseTypeInfoSwitch();
+                ParseTypeInfoSwitch();
+                return null;
             }
 
             if (Match(PascalToken.EnumSizeSwitch, PascalToken.EnumSize1, PascalToken.EnumSize2, PascalToken.EnumSize4)) {
-                return ParseEnumSizeSwitch();
+                ParseEnumSizeSwitch();
+                return null;
             }
 
-            return false;
+            return null;
         }
 
         private bool ParseEnumSizeSwitch() {
@@ -2184,47 +2177,71 @@ namespace PasPasPas.Parsing.Parser {
             Unexpected();
         }
 
-        private void ParseAlignSwitch() {
+        private ISyntaxPart ParseAlignSwitch() {
+            var result = new AlignSwitch();
+
             switch (CurrentToken().Kind) {
 
                 case PascalToken.AlignSwitch1:
                     CompilerOptions.Align.Value = Alignment.Unaligned;
-                    return;
+                    return null;
 
                 case PascalToken.AlignSwitch2:
                     CompilerOptions.Align.Value = Alignment.Word;
-                    return;
+                    return null;
 
                 case PascalToken.AlignSwitch4:
                     CompilerOptions.Align.Value = Alignment.DoubleWord;
-                    return;
+                    return null;
 
                 case PascalToken.AlignSwitch8:
                     CompilerOptions.Align.Value = Alignment.QuadWord;
-                    return;
+                    return null;
 
                 case PascalToken.AlignSwitch16:
                     CompilerOptions.Align.Value = Alignment.DoubleQuadWord;
-                    return;
+                    return null;
             }
 
             FetchNextToken();
 
             if (Optional(PascalToken.Plus)) {
                 CompilerOptions.Align.Value = Alignment.QuadWord;
-                return;
+                return null;
             }
 
             if (Optional(PascalToken.Minus)) {
                 CompilerOptions.Align.Value = Alignment.Unaligned;
-                return;
+                return null;
             }
 
             Unexpected();
+            return null;
         }
 
         public override ISyntaxPart Parse() {
-            throw new NotImplementedException();
+            var kind = CurrentToken().Kind;
+            ISyntaxPart result = null;
+
+            if (switches.Contains(kind)) {
+                result = ParseSwitch();
+            }
+            else if (longSwitches.Contains(kind)) {
+                result = ParseLongSwitch();
+            }
+            else if (parameters.Contains(kind)) {
+                result = ParseParameter();
+            }
+
+            if (result == null) {
+                // TODO
+                // if (!ConditionalCompilation.Skip)
+                // log error
+                FetchNextToken();
+            }
+
+            return result;
+
         }
     }
 }

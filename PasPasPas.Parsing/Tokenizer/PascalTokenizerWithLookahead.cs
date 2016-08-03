@@ -2,6 +2,7 @@
 using PasPasPas.Infrastructure.Input;
 using PasPasPas.Options.Bundles;
 using PasPasPas.Parsing.Parser;
+using PasPasPas.Parsing.SyntaxTree;
 
 namespace PasPasPas.Parsing.Tokenizer {
 

@@ -6,6 +6,7 @@ using System.Text;
 using System.Linq;
 using PasPasPas.Parsing.Tokenizer;
 using PasPasPas.Infrastructure.Log;
+using PasPasPas.Parsing.SyntaxTree;
 
 namespace PasPasPas.Parsing.Parser {
 

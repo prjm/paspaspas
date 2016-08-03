@@ -1,4 +1,5 @@
 ﻿using PasPasPas.Api;
+using PasPasPas.Parsing.SyntaxTree;
 using System;
 using System.Collections.Generic;
 
@@ -9,7 +10,7 @@ namespace PasPasPas.Internal.Parser.Syntax {
     /// </summary>
     /// <typeparam name="TDetail">detail type</typeparam>
     public abstract class ComposedPart<TDetail> : SyntaxPartBase
-        where TDetail : ISyntaxPart {
+        where TDetail : ISyntaxPart, IFormattableSyntaxPart {
 
         /// <summary>
         ///     create a new syntax tree element
@@ -19,6 +20,22 @@ namespace PasPasPas.Internal.Parser.Syntax {
 
         private Lazy<List<TDetail>> details
             = new Lazy<List<TDetail>>(() => new List<TDetail>());
+
+        /// <summary>
+        ///     accepet visitor
+        /// </summary>
+        /// <param name="visitor"></param>
+        public override void Accept(ISyntaxPartVisitor visitor) {
+            visitor.BeginVisit(this);
+
+            if (details.IsValueCreated) {
+                foreach (var detail in details.Value)
+                    detail.Accept(visitor);
+            }
+
+
+            visitor.EndVisit(this);
+        }
 
         /// <summary>
         ///     add a detail

@@ -1,4 +1,6 @@
-﻿namespace PasPasPas.Api {
+﻿using PasPasPas.Parsing.SyntaxTree;
+
+namespace PasPasPas.Api {
 
     /// <summary>
     ///     interface for a pascal parser

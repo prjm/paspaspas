@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using PasPasPas.Api;
 using PasPasPas.Infrastructure.Input;
+using PasPasPas.Parsing.SyntaxTree;
 
 namespace PasPasPas.Parsing.Tokenizer {
 

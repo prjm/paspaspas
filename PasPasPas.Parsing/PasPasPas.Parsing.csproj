@@ -45,10 +45,12 @@
     <Compile Include="Api\IParserInformationProvider.cs" />
     <Compile Include="Parser\IPascalParser.cs" />
     <Compile Include="Api\IPascalTokenizer.cs" />
-    <Compile Include="Api\ISyntaxPart.cs" />
+    <Compile Include="SyntaxTree\CompilerDirectives\AlignSwitch.cs" />
+    <Compile Include="SyntaxTree\ISyntaxPart.cs" />
     <Compile Include="Api\PascalFormatter.cs" />
     <Compile Include="Api\PascalParser.cs" />
-    <Compile Include="Api\PascalToken.cs" />
+    <Compile Include="SyntaxTree\ISyntaxPartVisitor.cs" />
+    <Compile Include="SyntaxTree\PascalToken.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Parser\ParserBase.cs" />
     <Compile Include="Parser\ParserServices.cs" />
@@ -81,7 +83,7 @@
     <Compile Include="Internal\Parser\Syntax\ClassPropertySpecifier.cs" />
     <Compile Include="Internal\Parser\Syntax\ClassTypeDeclaration.cs" />
     <Compile Include="Internal\Parser\Syntax\ClosureExpr.cs" />
-    <Compile Include="Internal\Parser\Syntax\ComposedPart.cs" />
+    <Compile Include="SyntaxTree\ComposedPart.cs" />
     <Compile Include="Internal\Parser\Syntax\CompoundStatement.cs" />
     <Compile Include="Internal\Parser\Syntax\ConstantExpression.cs" />
     <Compile Include="Internal\Parser\Syntax\ConstDeclaration.cs" />
@@ -188,7 +190,7 @@
     <Compile Include="Internal\Parser\Syntax\StringType.cs" />
     <Compile Include="Internal\Parser\Syntax\StructType.cs" />
     <Compile Include="Internal\Parser\Syntax\StructTypePart.cs" />
-    <Compile Include="Internal\Parser\Syntax\SyntaxPartBase.cs" />
+    <Compile Include="SyntaxTree\SyntaxPartBase.cs" />
     <Compile Include="Internal\Parser\Syntax\Term.cs" />
     <Compile Include="Internal\Parser\Syntax\TryStatement.cs" />
     <Compile Include="Internal\Parser\Syntax\TypeAliasDefinition.cs" />
@@ -212,6 +214,7 @@
     <Compile Include="Internal\Parser\Syntax\VarValueSpecification.cs" />
     <Compile Include="Internal\Parser\Syntax\WhileStatement.cs" />
     <Compile Include="Internal\Parser\Syntax\WithStatement.cs" />
+    <Compile Include="SyntaxTree\SyntaxPartVisitorBase.cs" />
     <Compile Include="Tokenizer\CharacterClass.cs" />
     <Compile Include="Parser\CompilerDirectiveParser.cs" />
     <Compile Include="Tokenizer\CompilerDirectiveTokenizer.cs" />
@@ -239,6 +242,9 @@
       <Project>{677a19c0-b2d4-4153-8dc9-0713c7193ece}</Project>
       <Name>PasPasPas.Options</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="SyntaxTree\ObjectPascal\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -5,6 +5,7 @@ using PasPasPas.Infrastructure.Log;
 using PasPasPas.Options.Bundles;
 using PasPasPas.Options.DataTypes;
 using PasPasPas.Parsing.Parser;
+using PasPasPas.Parsing.SyntaxTree;
 using PasPasPas.Parsing.Tokenizer;
 using System;
 using System.Text;
@@ -78,7 +79,7 @@ namespace PasPasPasTests {
 
                 var result = parser.Parse();
                 var formatter = new PascalFormatter();
-                result.ToFormatter(formatter);
+                ((IFormattableSyntaxPart)result).ToFormatter(formatter);
                 Assert.AreEqual(CompactWhitespace(output), CompactWhitespace(formatter.Result));
                 Assert.AreEqual(string.Empty, errorText);
                 Assert.IsFalse(hasError);

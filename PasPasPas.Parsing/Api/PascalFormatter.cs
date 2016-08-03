@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PasPasPas.Parsing.SyntaxTree;
+using System;
 using System.Text;
 
 namespace PasPasPas.Api {
@@ -34,7 +35,7 @@ namespace PasPasPas.Api {
         /// </summary>
         /// <param name="anotherPart">part</param>
         /// <returns>this formatter</returns>
-        public PascalFormatter Part(ISyntaxPart anotherPart) {
+        public PascalFormatter Part(IFormattableSyntaxPart anotherPart) {
             if (anotherPart != null)
                 anotherPart.ToFormatter(this);
             return this;

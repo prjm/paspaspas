@@ -1,4 +1,5 @@
 ﻿using PasPasPas.Api;
+using PasPasPas.Parsing.SyntaxTree;
 
 namespace PasPasPas.Internal.Parser.Syntax {
 

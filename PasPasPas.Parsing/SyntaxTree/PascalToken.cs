@@ -1,7 +1,7 @@
 ﻿using PasPasPas.Infrastructure.Input;
 using System.Globalization;
 
-namespace PasPasPas.Api {
+namespace PasPasPas.Parsing.SyntaxTree {
 
     /// <summary>
     ///     token definition

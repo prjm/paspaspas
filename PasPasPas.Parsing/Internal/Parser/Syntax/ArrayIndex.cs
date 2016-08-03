@@ -1,6 +1,7 @@
 ﻿using PasPasPas.Api;
+using PasPasPas.Internal.Parser.Syntax;
 
-namespace PasPasPas.Internal.Parser.Syntax {
+namespace PasPasPas.Parsing.SyntaxTree {
 
     /// <summary>
     ///     array index definition
