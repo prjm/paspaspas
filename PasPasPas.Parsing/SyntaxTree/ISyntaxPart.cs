@@ -1,4 +1,6 @@
 ﻿using PasPasPas.Api;
+using PasPasPas.Parsing.Parser;
+using System.Collections.Generic;
 
 namespace PasPasPas.Parsing.SyntaxTree {
 
@@ -12,6 +14,11 @@ namespace PasPasPas.Parsing.SyntaxTree {
         /// </summary>
         /// <param name="visitor"></param>
         void Accept(ISyntaxPartVisitor visitor);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        ICollection<ISyntaxPart> Parts { get; }
 
     }
 

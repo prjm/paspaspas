@@ -43,8 +43,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Api\IParserInformationProvider.cs" />
+    <Compile Include="Parser\EmptyCollection.cs" />
     <Compile Include="Parser\IPascalParser.cs" />
     <Compile Include="Api\IPascalTokenizer.cs" />
+    <Compile Include="Parser\Terminal.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\AlignSwitch.cs" />
     <Compile Include="SyntaxTree\ISyntaxPart.cs" />
     <Compile Include="Api\PascalFormatter.cs" />

@@ -7,6 +7,7 @@ using PasPasPas.Options.Bundles;
 using PasPasPas.Parsing.Tokenizer;
 using PasPasPas.Infrastructure.Input;
 using PasPasPas.Parsing.SyntaxTree;
+using PasPasPas.Parsing.SyntaxTree.CompilerDirectives;
 
 namespace PasPasPas.Parsing.Parser {
 
@@ -1598,7 +1599,6 @@ namespace PasPasPas.Parsing.Parser {
 
             if (Match(PascalToken.AlignSwitch, PascalToken.AlignSwitch1, PascalToken.AlignSwitch2, PascalToken.AlignSwitch4, PascalToken.AlignSwitch8, PascalToken.AlignSwitch16)) {
                 return ParseAlignSwitch();
-
             }
 
             if (Match(PascalToken.BoolEvalSwitch)) {
@@ -2178,45 +2178,39 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private ISyntaxPart ParseAlignSwitch() {
-            var result = new AlignSwitch();
+            AlignSwitch result;
 
-            switch (CurrentToken().Kind) {
+            if (OptionalPart(out result, PascalToken.AlignSwitch1)) {
+                result.AlignValue = Alignment.Unaligned;
+            }
+            else if (OptionalPart(out result, PascalToken.AlignSwitch2)) {
+                result.AlignValue = Alignment.Word;
+            }
+            else if (OptionalPart(out result, PascalToken.AlignSwitch4)) {
+                result.AlignValue = Alignment.DoubleWord;
+            }
+            else if (OptionalPart(out result, PascalToken.AlignSwitch8)) {
+                result.AlignValue = Alignment.QuadWord;
+            }
+            else if (OptionalPart(out result, PascalToken.AlignSwitch16)) {
+                result.AlignValue = Alignment.DoubleQuadWord;
+            }
+            else {
+                result = CreatePart<AlignSwitch>();
 
-                case PascalToken.AlignSwitch1:
-                    CompilerOptions.Align.Value = Alignment.Unaligned;
-                    return null;
-
-                case PascalToken.AlignSwitch2:
-                    CompilerOptions.Align.Value = Alignment.Word;
-                    return null;
-
-                case PascalToken.AlignSwitch4:
-                    CompilerOptions.Align.Value = Alignment.DoubleWord;
-                    return null;
-
-                case PascalToken.AlignSwitch8:
-                    CompilerOptions.Align.Value = Alignment.QuadWord;
-                    return null;
-
-                case PascalToken.AlignSwitch16:
-                    CompilerOptions.Align.Value = Alignment.DoubleQuadWord;
-                    return null;
+                if (ContinueOptionalPart(result, PascalToken.Plus)) {
+                    result.AlignValue = Alignment.QuadWord;
+                }
+                else if (ContinueOptionalPart(result, PascalToken.Minus)) {
+                    result.AlignValue = Alignment.Unaligned;
+                }
+                else {
+                    Unexpected();
+                    result = null;
+                }
             }
 
-            FetchNextToken();
-
-            if (Optional(PascalToken.Plus)) {
-                CompilerOptions.Align.Value = Alignment.QuadWord;
-                return null;
-            }
-
-            if (Optional(PascalToken.Minus)) {
-                CompilerOptions.Align.Value = Alignment.Unaligned;
-                return null;
-            }
-
-            Unexpected();
-            return null;
+            return result;
         }
 
         public override ISyntaxPart Parse() {

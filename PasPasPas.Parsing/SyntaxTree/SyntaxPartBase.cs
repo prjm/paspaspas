@@ -1,4 +1,6 @@
-﻿using PasPasPas.Api;
+﻿using System;
+using System.Collections.Generic;
+using PasPasPas.Api;
 
 namespace PasPasPas.Parsing.SyntaxTree {
 
@@ -8,9 +10,17 @@ namespace PasPasPas.Parsing.SyntaxTree {
     public abstract class SyntaxPartBase : ISyntaxPart, IFormattableSyntaxPart {
 
         /// <summary>
+        ///     create a new syntax part base
+        /// </summary>
+        protected SyntaxPartBase() {
+            //..
+        }
+
+        /// <summary>
         ///     create a new syntax tree element
         /// </summary>
         /// <param name="informationProvider">information provider</param>
+        [System.Obsolete()]
         protected SyntaxPartBase(IParserInformationProvider informationProvider) {
             InformationProvider = informationProvider;
         }
@@ -21,11 +31,21 @@ namespace PasPasPas.Parsing.SyntaxTree {
         public IParserInformationProvider InformationProvider { get; }
 
         /// <summary>
+        ///     syntax par
+        /// </summary>
+        public virtual ICollection<ISyntaxPart> Parts { get; }
+            = new List<ISyntaxPart>();
+
+        /// <summary>
         ///     accept this visitor
         /// </summary>
         /// <param name="visitor"></param>
         public virtual void Accept(ISyntaxPartVisitor visitor) {
             visitor.BeginVisit(this);
+
+            foreach (var part in Parts)
+                part.Accept(visitor);
+
             visitor.EndVisit(this);
         }
 
@@ -33,6 +53,8 @@ namespace PasPasPas.Parsing.SyntaxTree {
         ///     output syntax part to a formatter
         /// </summary>                                      
         /// <param name="result">formatter</param>
-        public abstract void ToFormatter(PascalFormatter result);
+        public virtual void ToFormatter(PascalFormatter result) {
+            //..
+        }
     }
 }

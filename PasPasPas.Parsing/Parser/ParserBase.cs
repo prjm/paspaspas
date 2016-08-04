@@ -256,6 +256,56 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         /// <summary>
+        ///     create an syntax part element if the token kind matches
+        /// </summary>
+        /// <typeparam name="T">syntax part type</typeparam>
+        /// <param name="tokenKind">token kind</param>
+        /// <param name="result">created syntax part</param>
+        /// <returns><c>true</c> if match</returns>
+        protected bool OptionalPart<T>(out T result, int tokenKind)
+            where T : ISyntaxPart, new() {
+
+            if (!Match(tokenKind)) {
+                result = default(T);
+                return false;
+            }
+
+            result = CreatePart<T>();
+            return true;
+        }
+
+        /// <summary>
+        ///     continue syntax part
+        /// </summary>
+        /// <param name="tokenKind"></param>
+        /// <param name="part"></param>
+        /// <returns></returns>
+        protected bool ContinueOptionalPart(ISyntaxPart part, int tokenKind) {
+            if (!Match(tokenKind)) {
+                return false;
+            }
+
+            part.Parts.Add(new Terminal(CurrentToken()));
+            FetchNextToken();
+            return true;
+
+        }
+
+        /// <summary>
+        ///     optionally continue a syntax part
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        protected T CreatePart<T>()
+            where T : ISyntaxPart, new() {
+            var result = new T();
+            result.Parts.Add(new Terminal(CurrentToken()));
+            FetchNextToken();
+            return result;
+        }
+
+
+        /// <summary>
         ///     parse input
         /// </summary>
         /// <returns>parsed input</returns>
