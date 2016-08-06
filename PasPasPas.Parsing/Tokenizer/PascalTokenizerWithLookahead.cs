@@ -58,7 +58,7 @@ namespace PasPasPas.Parsing.Tokenizer {
                 var tokenizer = new CompilerDirectiveTokenizer(environment, reader);
                 reader.AddFile(input);
                 parser.BaseTokenizer = tokenizer;
-                parser.ParseCompilerDirective();
+                parser.Parse();
             }
         }
 

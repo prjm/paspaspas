@@ -1,10 +1,10 @@
 ﻿using PasPasPas.Api;
-using PasPasPas.Internal.Parser.Syntax;
 using System.Text;
 using System;
 using System.Collections.Generic;
 using PasPasPas.Parsing.Tokenizer;
 using PasPasPas.Parsing.SyntaxTree;
+using PasPasPas.Parsing.SyntaxTree.ObjectPascal;
 
 namespace PasPasPas.Parsing.Parser {
 

@@ -3,7 +3,7 @@ using PasPasPas.Parsing.SyntaxTree;
 using System;
 using System.Collections.Generic;
 
-namespace PasPasPas.Internal.Parser.Syntax {
+namespace PasPasPas.Parsing.SyntaxTree {
 
     /// <summary>
     ///     composed syntax part
@@ -25,16 +25,16 @@ namespace PasPasPas.Internal.Parser.Syntax {
         ///     accepet visitor
         /// </summary>
         /// <param name="visitor"></param>
-        public override void Accept(ISyntaxPartVisitor visitor) {
-            visitor.BeginVisit(this);
+        public override void Accept<TParam>(ISyntaxPartVisitor<TParam> visitor, TParam param) {
+            visitor.BeginVisit(this, param);
 
             if (details.IsValueCreated) {
                 foreach (var detail in details.Value)
-                    detail.Accept(visitor);
+                    detail.Accept(visitor, param);
             }
 
 
-            visitor.EndVisit(this);
+            visitor.EndVisit(this, param);
         }
 
         /// <summary>

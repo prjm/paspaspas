@@ -6,6 +6,7 @@ using PasPasPas.Options.Bundles;
 using PasPasPas.Options.DataTypes;
 using PasPasPas.Parsing.Parser;
 using PasPasPas.Parsing.SyntaxTree;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 using PasPasPas.Parsing.Tokenizer;
 using System;
 using System.Text;
@@ -107,6 +108,9 @@ namespace PasPasPasTests {
             //environment.Register(TestOptions);
             //environment.Register(fileAccess);
 
+            var visitor = new CompilerDirectiveVisitor();
+            var options = new CompilerDirectiveVisitorOptions() { Environemnt = environment };
+
             ClearOptions();
 
             var directives = directive.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
@@ -120,7 +124,10 @@ namespace PasPasPasTests {
                         var parser = new CompilerDirectiveParser(environment, reader);
                         parser.IncludeInput = reader;
                         while (!reader.AtEof) {
-                            parser.ParseCompilerDirective();
+                            var result = parser.Parse();
+
+                            if (result != null)
+                                result.Accept(visitor, options);
                         }
                         fileCounter++;
                     }

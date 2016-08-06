@@ -1,5 +1,4 @@
 ﻿using PasPasPas.Api;
-using PasPasPas.Parsing.Parser;
 using System.Collections.Generic;
 
 namespace PasPasPas.Parsing.SyntaxTree {
@@ -13,7 +12,8 @@ namespace PasPasPas.Parsing.SyntaxTree {
         ///     accept visitor
         /// </summary>
         /// <param name="visitor"></param>
-        void Accept(ISyntaxPartVisitor visitor);
+        /// <param name="param">parameter</param>
+        void Accept<TParam>(ISyntaxPartVisitor<TParam> visitor, TParam param);
 
         /// <summary>
         /// 

@@ -1,6 +1,4 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using PasPasPas.Infrastructure.Log;
-using PasPasPas.Internal;
 using PasPasPas.Parsing.Tokenizer;
 
 namespace PasPasPasTests.Tokenizer {

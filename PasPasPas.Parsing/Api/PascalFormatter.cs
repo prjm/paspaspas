@@ -1,6 +1,7 @@
 ﻿using PasPasPas.Parsing.SyntaxTree;
 using System;
 using System.Text;
+using PasPasPas.Parsing.SyntaxTree.ObjectPascal;
 
 namespace PasPasPas.Api {
 
