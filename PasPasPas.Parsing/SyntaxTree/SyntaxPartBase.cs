@@ -19,10 +19,15 @@ namespace PasPasPas.Parsing.SyntaxTree {
         ///     create a new syntax tree element
         /// </summary>
         /// <param name="informationProvider">information provider</param>
-        [System.Obsolete()]
+        [System.Obsolete("Old constructor. Remove the calls during refactoring.")]
         protected SyntaxPartBase(IParserInformationProvider informationProvider) {
             InformationProvider = informationProvider;
         }
+
+        /// <summary>
+        ///     parent node
+        /// </summary>
+        public ISyntaxPart Parent { get; set; }
 
         /// <summary>
         ///     information provider

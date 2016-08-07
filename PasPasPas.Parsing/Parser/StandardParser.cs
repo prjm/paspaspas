@@ -11,7 +11,7 @@ namespace PasPasPas.Parsing.Parser {
     /// <summary>
     ///     standard, recursive descend pascal paser
     /// </summary>
-    public class StandardParser : ParserBase, IPascalParser, IParserInformationProvider {
+    public class StandardParser : ParserBase, IParser, IParserInformationProvider {
 
         /// <summary>
         ///     creates a new standard parser

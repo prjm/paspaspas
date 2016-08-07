@@ -10,7 +10,7 @@ namespace PasPasPas.Parsing.Tokenizer {
     /// <summary>
     ///     Standard tokenizer
     /// </summary>
-    public class StandardTokenizer : TokenizerBase, IPascalTokenizer {
+    public class StandardTokenizer : TokenizerBase, ITokenizer {
 
         /// <summary>
         ///     create a new tokenizer

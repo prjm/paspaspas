@@ -1,4 +1,5 @@
-﻿using PasPasPas.Parsing.Parser;
+﻿using PasPasPas.Options.DataTypes;
+using PasPasPas.Parsing.Parser;
 
 namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
@@ -8,9 +9,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
     public class CompilerDirectiveVisitorOptions {
 
         /// <summary>
+        ///     compile options
+        /// </summary>
+        public CompileOptions CompilerOptions
+            => Environment.Options.CompilerOptions;
+        /// <summary>
         ///     parsing environemnt
         /// </summary>
-        public ParserServices Environemnt { get; set; }
+        public ParserServices Environment { get; set; }
 
     }
 }

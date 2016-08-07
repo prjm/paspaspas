@@ -14,34 +14,14 @@ namespace PasPasPas.Parsing.SyntaxTree {
         /// </summary>
         /// <param name="syntaxPart">part to visit</param>
         /// <param name="parameter">parameter</param>
-        public virtual void BeginVisit(ISyntaxPart syntaxPart, TParam parameter) {
-            dynamic element = syntaxPart;
-            BeginVisitElement(element, parameter);
-        }
-
-        /// <summary>
-        ///     start visiting a syntax part
-        /// </summary>
-        /// <param name="element">part to visit</param>
-        /// <param name="parameter">parameter</param>
-        protected virtual void BeginVisitElement(ISyntaxPart element, TParam parameter) { }
+        public virtual void BeginVisit(ISyntaxPart syntaxPart, TParam parameter) { }
 
         /// <summary>
         ///     stop visiting a syntax part
         /// </summary>
         /// <param name="syntaxPart">part to visit</param>
         /// <param name="parameter">parameter</param>
-        public virtual void EndVisit(ISyntaxPart syntaxPart, TParam parameter) {
-            dynamic element = syntaxPart;
-            EndVisitElement(element, parameter);
-        }
-
-        /// <summary>
-        ///     end visiting a syntax part
-        /// </summary>
-        /// <param name="element">part to visit</param>
-        /// <param name="parameter">parameter</param>
-        protected virtual void EndVisitElement(ISyntaxPart element, TParam parameter) { }
+        public virtual void EndVisit(ISyntaxPart syntaxPart, TParam parameter) { }
 
     }
 }

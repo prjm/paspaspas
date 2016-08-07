@@ -19,6 +19,12 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         /// <summary>
+        ///     token
+        /// </summary>
+        public PascalToken Token
+            => pascalToken;
+
+        /// <summary>
         ///     empty part list
         /// </summary>
         public override ICollection<ISyntaxPart> Parts { get; }

@@ -3,14 +3,14 @@
 namespace PasPasPas.Api {
 
     /// <summary>
-    ///     interface for a pascal parser
+    ///     interface for a parser
     /// </summary>
-    interface IPascalParser {
+    public interface IParser {
 
         /// <summary>
         ///     tokenizer to use
         /// </summary>
-        IPascalTokenizer BaseTokenizer { get; set; }
+        ITokenizer BaseTokenizer { get; set; }
 
         /// <summary>
         ///     parse input

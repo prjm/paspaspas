@@ -1,18 +1,18 @@
-﻿using PasPasPas.Parsing.SyntaxTree.CompilerDirectives;
+﻿using PasPasPas.Parsing.Parser;
 
 namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
     /// <summary>
-    ///     visitor to interpret compiler directives
+    ///     visitor for terminal nodes
     /// </summary>
-    public class CompilerDirectiveVisitor : SyntaxPartVisitorBase<CompilerDirectiveVisitorOptions> {
+    public class TerminalVisitor : SyntaxPartVisitorBase<TerminalVisitorOptions> {
 
         /// <summary>
         ///     visit a syntax node
         /// </summary>
         /// <param name="syntaxPart"></param>
         /// <param name="parameter"></param>
-        public override void BeginVisit(ISyntaxPart syntaxPart, CompilerDirectiveVisitorOptions parameter) {
+        public override void BeginVisit(ISyntaxPart syntaxPart, TerminalVisitorOptions parameter) {
             dynamic part = syntaxPart;
             BeginVisitItem(part, parameter);
         }
@@ -22,17 +22,16 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// </summary>
         /// <param name="syntaxPart"></param>
         /// <param name="parameter"></param>
-        public void BeginVisitItem(ISyntaxPart syntaxPart, CompilerDirectiveVisitorOptions parameter) { }
+        public void BeginVisitItem(ISyntaxPart syntaxPart, TerminalVisitorOptions parameter) { }
 
         /// <summary>
-        ///     update alignment
+        ///     get terminal string and append it to the result
         /// </summary>
         /// <param name="syntaxPart"></param>
         /// <param name="parameter"></param>
-        public void BeginVisitItem(AlignSwitch syntaxPart, CompilerDirectiveVisitorOptions parameter) {
-            parameter.CompilerOptions.Align.Value = syntaxPart.AlignValue;
+        public void BeginVisitItem(Terminal syntaxPart, TerminalVisitorOptions parameter) {
+            parameter.ResultBuilder.Append(syntaxPart.Token.Value);
         }
-
 
     }
 }

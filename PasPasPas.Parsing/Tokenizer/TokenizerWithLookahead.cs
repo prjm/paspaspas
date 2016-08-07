@@ -9,7 +9,7 @@ namespace PasPasPas.Parsing.Tokenizer {
     /// <summary>
     ///     tokenizer with lookahear
     /// </summary>
-    public abstract class TokenizerWithLookahead : IPascalTokenizer {
+    public abstract class TokenizerWithLookahead : ITokenizer {
 
         /// <summary>
         ///     protected constructo
@@ -19,7 +19,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <summary>
         ///     base tokenizer
         /// </summary>
-        public IPascalTokenizer BaseTokenizer { get; set; }
+        public ITokenizer BaseTokenizer { get; set; }
 
         /// <summary>
         ///     parser input

@@ -9,7 +9,7 @@ namespace PasPasPas.Parsing.SyntaxTree {
     public class PascalToken {
 
         /// <summary>
-        ///     undefined tokenS
+        ///     undefined tokens
         /// </summary>
         public const int Undefined = 1;
 

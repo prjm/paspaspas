@@ -10,7 +10,7 @@ namespace PasPasPas.Parsing.Tokenizer {
     /// <summary>
     ///     helper for compiler directives
     /// </summary>
-    public class CompilerDirectiveTokenizer : TokenizerBase, IPascalTokenizer {
+    public class CompilerDirectiveTokenizer : TokenizerBase, ITokenizer {
 
         /// <summary>
         ///     create a new compiler directive tokenizer

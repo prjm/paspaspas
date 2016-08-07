@@ -109,7 +109,10 @@ namespace PasPasPasTests {
             //environment.Register(fileAccess);
 
             var visitor = new CompilerDirectiveVisitor();
-            var options = new CompilerDirectiveVisitorOptions() { Environemnt = environment };
+            var options = new CompilerDirectiveVisitorOptions() { Environment = environment };
+
+            var terminals = new TerminalVisitor();
+            var terminalOpts = new TerminalVisitorOptions();
 
             ClearOptions();
 
@@ -128,6 +131,13 @@ namespace PasPasPasTests {
 
                             if (result != null)
                                 result.Accept(visitor, options);
+
+                            terminalOpts.ResultBuilder.Clear();
+                            if (result != null)
+                                result.Accept(terminals, terminalOpts);
+
+                            Assert.AreEqual(subPart, terminalOpts.ResultBuilder.ToString());
+
                         }
                         fileCounter++;
                     }

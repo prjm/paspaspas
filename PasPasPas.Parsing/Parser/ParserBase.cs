@@ -13,7 +13,7 @@ namespace PasPasPas.Parsing.Parser {
     /// <summary>
     ///     base class for parsers
     /// </summary>
-    public abstract class ParserBase : IPascalParser {
+    public abstract class ParserBase : IParser {
 
         /// <summary>
         ///     message group for parser logs
@@ -33,18 +33,18 @@ namespace PasPasPas.Parsing.Parser {
         /// <summary>
         ///     creates a new parser
         /// </summary>
-        /// <param name="aTokenizer"></param>
+        /// <param name="tokenizerWithLookahead"></param>
         /// <param name="environment">environment</param>
-        protected ParserBase(ParserServices environment, TokenizerWithLookahead aTokenizer) {
+        protected ParserBase(ParserServices environment, TokenizerWithLookahead tokenizerWithLookahead) {
             Environment = environment;
-            tokenizer = aTokenizer;
+            tokenizer = tokenizerWithLookahead;
             logSource = new LogSource(environment.Log, ParserLogMessage);
         }
 
         /// <summary>
         ///     tokenizer to use
         /// </summary>        
-        public IPascalTokenizer BaseTokenizer
+        public ITokenizer BaseTokenizer
         {
             get
             {
@@ -261,8 +261,9 @@ namespace PasPasPas.Parsing.Parser {
         /// <typeparam name="T">syntax part type</typeparam>
         /// <param name="tokenKind">token kind</param>
         /// <param name="result">created syntax part</param>
+        /// <param name="parent">parent node</param>
         /// <returns><c>true</c> if match</returns>
-        protected bool OptionalPart<T>(out T result, int tokenKind)
+        protected bool OptionalPart<T>(ISyntaxPart parent, out T result, int tokenKind)
             where T : ISyntaxPart, new() {
 
             if (!Match(tokenKind)) {
@@ -270,7 +271,7 @@ namespace PasPasPas.Parsing.Parser {
                 return false;
             }
 
-            result = CreatePart<T>();
+            result = CreateByTerminal<T>(parent);
             return true;
         }
 
@@ -285,22 +286,41 @@ namespace PasPasPas.Parsing.Parser {
                 return false;
             }
 
-            part.Parts.Add(new Terminal(CurrentToken()));
+            var terminal = new Terminal(CurrentToken());
+            terminal.Parent = part;
+            part.Parts.Add(terminal);
             FetchNextToken();
             return true;
 
         }
 
         /// <summary>
-        ///     optionally continue a syntax part
+        ///     optionally continue a syntax part by a terminal symbol
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="T">parent object</typeparam>
         /// <returns></returns>
-        protected T CreatePart<T>()
+        protected T CreateByTerminal<T>(ISyntaxPart parent)
+            where T : ISyntaxPart, new() {
+            var result = CreateChild<T>(parent);
+            var terminal = new Terminal(CurrentToken());
+            terminal.Parent = result;
+            result.Parts.Add(terminal);
+            FetchNextToken();
+            return result;
+        }
+
+        /// <summary>
+        ///     create a syntax part
+        /// </summary>
+        /// <typeparam name="T">parent object</typeparam>
+        /// <returns></returns>
+        protected T CreateChild<T>(ISyntaxPart parent)
             where T : ISyntaxPart, new() {
             var result = new T();
-            result.Parts.Add(new Terminal(CurrentToken()));
-            FetchNextToken();
+            if (parent != null) {
+                result.Parent = parent;
+                parent.Parts.Add(result);
+            }
             return result;
         }
 

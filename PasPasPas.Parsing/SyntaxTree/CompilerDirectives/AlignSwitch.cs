@@ -1,18 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using PasPasPas.Api;
-using PasPasPas.Options.DataTypes;
+﻿using PasPasPas.Options.DataTypes;
 
 namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
 
+    /// <summary>
+    ///     syntax tree element to change alignment
+    /// </summary>
     public class AlignSwitch : SyntaxPartBase {
-        public Alignment AlignValue { get; internal set; }
 
-        public override void ToFormatter(PascalFormatter result) {
-            throw new NotImplementedException();
-        }
+        /// <summary>
+        ///     new align setting
+        /// </summary>
+        public Alignment AlignValue { get; set; }
+
     }
 }

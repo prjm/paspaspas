@@ -48,6 +48,7 @@
     <Compile Include="Api\IPascalTokenizer.cs" />
     <Compile Include="Parser\Terminal.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\AlignSwitch.cs" />
+    <Compile Include="SyntaxTree\CompilerDirectives\CompilerDirective.cs" />
     <Compile Include="SyntaxTree\ISyntaxPart.cs" />
     <Compile Include="Api\PascalFormatter.cs" />
     <Compile Include="Api\PascalParser.cs" />
@@ -219,6 +220,8 @@
     <Compile Include="SyntaxTree\SyntaxPartVisitorBase.cs" />
     <Compile Include="SyntaxTree\Visitors\CompilerDirectiveVisitor.cs" />
     <Compile Include="SyntaxTree\Visitors\CompilerDirectiveVisitorOptions.cs" />
+    <Compile Include="SyntaxTree\Visitors\TerminalVisitor.cs" />
+    <Compile Include="SyntaxTree\Visitors\TerminalVisitorOptions.cs" />
     <Compile Include="Tokenizer\CharacterClass.cs" />
     <Compile Include="Parser\CompilerDirectiveParser.cs" />
     <Compile Include="Tokenizer\CompilerDirectiveTokenizer.cs" />

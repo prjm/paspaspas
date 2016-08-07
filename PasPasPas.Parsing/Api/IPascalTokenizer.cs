@@ -1,13 +1,12 @@
 ﻿using PasPasPas.Infrastructure.Input;
 using PasPasPas.Parsing.SyntaxTree;
-using PasPasPas.Parsing.SyntaxTree.ObjectPascal;
 
 namespace PasPasPas.Api {
 
     /// <summary>
     ///     interface for classes which tokenize source code
     /// </summary>
-    public interface IPascalTokenizer {
+    public interface ITokenizer {
 
         /// <summary>
         ///     test if a next token is availiable

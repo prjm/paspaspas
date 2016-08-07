@@ -1,5 +1,4 @@
-﻿using PasPasPas.Api;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System;
 using PasPasPas.Options.DataTypes;
 using System.Globalization;
@@ -320,7 +319,7 @@ namespace PasPasPas.Parsing.Parser {
             ConditionalCompilation.AddIfOptCondition(switchKind, requiredInfo, switchInfo);
         }
 
-        private SwitchInfo GetSwitchInfo(int switchState) {
+        private static SwitchInfo GetSwitchInfo(int switchState) {
             if (switchState == PascalToken.Plus)
                 return SwitchInfo.Enabled;
             if (switchState == PascalToken.Minus)
@@ -736,239 +735,191 @@ namespace PasPasPas.Parsing.Parser {
         /// <summary>
         ///     parse a long switch
         /// </summary>
-        private ISyntaxPart ParseLongSwitch() {
+        private void ParseLongSwitch(ISyntaxPart parent) {
 
-            if (Optional(PascalToken.AlignSwitchLong)) {
-                ParseAlignLongSwitch();
-                return null;
+            if (Match(PascalToken.AlignSwitchLong)) {
+                ParseLongAlignSwitch(parent);
             }
 
-            if (Optional(PascalToken.BoolEvalSwitchLong)) {
+            else if (Optional(PascalToken.BoolEvalSwitchLong)) {
                 ParseLongBoolEvalSwitch();
-                return null;
             }
 
-            if (Optional(PascalToken.AssertSwitchLong)) {
+            else if (Optional(PascalToken.AssertSwitchLong)) {
                 ParseLongAssertSwitch();
-                return null;
             }
 
-            if (Optional(PascalToken.DebugInfoSwitchLong)) {
+            else if (Optional(PascalToken.DebugInfoSwitchLong)) {
                 ParseLongDebugInfoSwitch();
-                return null;
             }
 
-            if (Optional(PascalToken.DenyPackageUnit)) {
+            else if (Optional(PascalToken.DenyPackageUnit)) {
                 ParseDenyPackageUnitSwitch();
-                return null;
             }
 
-            if (Optional(PascalToken.DescriptionSwitchLong)) {
+            else if (Optional(PascalToken.DescriptionSwitchLong)) {
                 ParseLongDescriptionSwitch();
-                return null;
             }
 
-            if (Optional(PascalToken.DesignOnly)) {
+            else if (Optional(PascalToken.DesignOnly)) {
                 ParseLongDesignOnlySwitch();
-                return null;
             }
 
-            if (Optional(PascalToken.ExtensionSwitchLong)) {
+            else if (Optional(PascalToken.ExtensionSwitchLong)) {
                 ParseLongExtensionSwitch();
-                return null;
             }
 
-            if (Optional(PascalToken.ObjExportAll)) {
+            else if (Optional(PascalToken.ObjExportAll)) {
                 ParseObjExportAllSwitch();
-                return null;
             }
 
-            if (Optional(PascalToken.ExtendedCompatibility)) {
+            else if (Optional(PascalToken.ExtendedCompatibility)) {
                 ParseExtendedCompatibilitySwitch();
-                return null;
             }
 
-            if (Optional(PascalToken.ExtendedSyntaxSwitchLong)) {
+            else if (Optional(PascalToken.ExtendedSyntaxSwitchLong)) {
                 ParseLongExtendedSyntaxSwitch();
-                return null;
             }
 
-            if (Optional(PascalToken.ExcessPrecision)) {
+            else if (Optional(PascalToken.ExcessPrecision)) {
                 ParseLongExcessPrecisionSwitch();
-                return null;
             }
 
-            if (Optional(PascalToken.HighCharUnicode)) {
+            else if (Optional(PascalToken.HighCharUnicode)) {
                 ParseLongHighCharUnicodeSwitch();
-                return null;
             }
 
-            if (Optional(PascalToken.Hints)) {
+            else if (Optional(PascalToken.Hints)) {
                 ParseLongHintsSwitch();
-                return null;
             }
 
-            if (Optional(PascalToken.ImplicitBuild)) {
+            else if (Optional(PascalToken.ImplicitBuild)) {
                 ParseLongImplicitBuildSwitch();
-                return null;
             }
 
-            if (Optional(PascalToken.ImportedDataSwitchLong)) {
+            else if (Optional(PascalToken.ImportedDataSwitchLong)) {
                 ParseLongImportedDataSwitch();
-                return null;
             }
 
-            if (Optional(PascalToken.IncludeSwitchLong)) {
+            else if (Optional(PascalToken.IncludeSwitchLong)) {
                 ParseLongIncludeSwitch();
-                return null;
             }
 
-            if (Optional(PascalToken.IoChecks)) {
+            else if (Optional(PascalToken.IoChecks)) {
                 ParseLongIoChecksSwitch();
-                return null;
             }
 
-            if (Optional(PascalToken.LocalSymbolSwithLong)) {
+            else if (Optional(PascalToken.LocalSymbolSwithLong)) {
                 ParseLongLocalSymbolSwitch();
-                return null;
             }
 
-            if (Optional(PascalToken.LongStringSwitchLong)) {
+            else if (Optional(PascalToken.LongStringSwitchLong)) {
                 ParseLongLongStringSwitch();
-                return null;
             }
 
-            if (Optional(PascalToken.OpenStringSwitchLong)) {
+            else if (Optional(PascalToken.OpenStringSwitchLong)) {
                 ParseLongOpenStringSwitch();
-                return null;
             }
 
-            if (Optional(PascalToken.OptimizationSwitchLong)) {
+            else if (Optional(PascalToken.OptimizationSwitchLong)) {
                 ParseLongOptimizationSwitch();
-                return null;
             }
 
-            if (Optional(PascalToken.OverflowSwitchLong)) {
+            else if (Optional(PascalToken.OverflowSwitchLong)) {
                 ParseLongOverflowSwitch();
-                return null;
             }
 
-            if (Optional(PascalToken.SaveDivideSwitchLong)) {
+            else if (Optional(PascalToken.SaveDivideSwitchLong)) {
                 ParseLongSaveDivideSwitch();
-                return null;
             }
 
-            if (Optional(PascalToken.RangeChecks)) {
+            else if (Optional(PascalToken.RangeChecks)) {
                 ParseLongRangeChecksSwitch();
-                return null;
             }
 
-            if (Optional(PascalToken.StackFramesSwitchLong)) {
+            else if (Optional(PascalToken.StackFramesSwitchLong)) {
                 ParseLongStackFramesSwitch();
-                return null;
             }
 
-            if (Optional(PascalToken.ZeroBaseStrings)) {
+            else if (Optional(PascalToken.ZeroBaseStrings)) {
                 ParseZeroBasedStringSwitch();
-                return null;
             }
 
-            if (Optional(PascalToken.WritableConstSwitchLong)) {
+            else if (Optional(PascalToken.WritableConstSwitchLong)) {
                 ParseLongWritableConstSwitch();
-                return null;
             }
 
-            if (Optional(PascalToken.WeakLinkRtti)) {
+            else if (Optional(PascalToken.WeakLinkRtti)) {
                 ParseWeakLinkRttiSwitch();
-                return null;
             }
 
-            if (Optional(PascalToken.WeakPackageUnit)) {
+            else if (Optional(PascalToken.WeakPackageUnit)) {
                 ParseWeakPackageUnitSwitch();
-                return null;
             }
 
-            if (Optional(PascalToken.Warnings)) {
+            else if (Optional(PascalToken.Warnings)) {
                 ParseWarningsSwitch();
-                return null;
             }
 
-            if (Optional(PascalToken.VarStringCheckSwitchLong)) {
+            else if (Optional(PascalToken.VarStringCheckSwitchLong)) {
                 ParseLongVarStringCheckSwitch();
-                return null;
             }
 
-            if (Optional(PascalToken.TypedPointersSwitchLong)) {
+            else if (Optional(PascalToken.TypedPointersSwitchLong)) {
                 ParseLongTypedPointersSwitch();
-                return null;
             }
 
-            if (Optional(PascalToken.DefinitionInfo)) {
+            else if (Optional(PascalToken.DefinitionInfo)) {
                 ParseDefinitionInfoSwitch();
-                return null;
             }
 
-            if (Optional(PascalToken.ReferenceInfo)) {
+            else if (Optional(PascalToken.ReferenceInfo)) {
                 ParseReferenceInfoSwitch();
-                return null;
             }
 
-            if (Optional(PascalToken.StrongLinkTypes)) {
+            else if (Optional(PascalToken.StrongLinkTypes)) {
                 ParseStrongLinkTypes();
-                return null;
             }
 
-            if (Optional(PascalToken.ScopedEnums)) {
+            else if (Optional(PascalToken.ScopedEnums)) {
                 ParseScopedEnums();
-                return null;
             }
 
-            if (Optional(PascalToken.TypeInfoSwitchLong)) {
+            else if (Optional(PascalToken.TypeInfoSwitchLong)) {
                 ParseLongTypeInfoSwitch();
-                return null;
             }
 
-            if (Optional(PascalToken.RunOnly)) {
+            else if (Optional(PascalToken.RunOnly)) {
                 ParseRunOnlyParameter();
-                return null;
             }
 
-            if (Match(PascalToken.IncludeRessourceLong)) {
+            else if (Match(PascalToken.IncludeRessourceLong)) {
                 ParseLongIncludeRessourceSwitch();
-                return null;
             }
 
-            if (Optional(PascalToken.RealCompatibility)) {
+            else if (Optional(PascalToken.RealCompatibility)) {
                 ParseRealCompatibilitySwitch();
-                return null;
             }
 
-            if (Optional(PascalToken.Pointermath)) {
+            else if (Optional(PascalToken.Pointermath)) {
                 ParsePointermathSwitch();
-                return null;
             }
 
-            if (Optional(PascalToken.OldTypeLayout)) {
+            else if (Optional(PascalToken.OldTypeLayout)) {
                 ParseOldTypeLayoutSwitch();
-                return null;
             }
 
-            if (Optional(PascalToken.EnumSizeSwitchLong)) {
+            else if (Optional(PascalToken.EnumSizeSwitchLong)) {
                 ParseLongEnumSizeSwitch();
-                return null;
             }
 
-            if (Optional(PascalToken.MethodInfo)) {
+            else if (Optional(PascalToken.MethodInfo)) {
                 ParseMethodInfoSwitch();
-                return null;
             }
-
-            if (Optional(PascalToken.LegacyIfEnd)) {
+            else if (Optional(PascalToken.LegacyIfEnd)) {
                 ParseLegacyIfEndSwitch();
-                return null;
             }
 
-            return null;
         }
 
         private void ParseLegacyIfEndSwitch() {
@@ -1554,37 +1505,35 @@ namespace PasPasPas.Parsing.Parser {
             Unexpected();
         }
 
-        /// <summary>
-        ///     
-        /// </summary>
-        private void ParseAlignLongSwitch() {
-            if (Optional(PascalToken.On)) {
-                CompilerOptions.Align.Value = Alignment.QuadWord;
+        private void ParseLongAlignSwitch(ISyntaxPart parent) {
+            AlignSwitch result = CreateByTerminal<AlignSwitch>(parent);
+
+            if (OptionalPart(parent, out result, PascalToken.On)) {
+                result.AlignValue = Alignment.QuadWord;
                 return;
             }
-
-            if (Optional(PascalToken.Off)) {
-                CompilerOptions.Align.Value = Alignment.Unaligned;
+            else if (OptionalPart(parent, out result, PascalToken.Off)) {
+                result.AlignValue = Alignment.Unaligned;
                 return;
             }
 
             int value;
-            if (Match(PascalToken.Integer) && int.TryParse(CurrentToken().Value, out value)) {
+            if (ContinueOptionalPart(result, PascalToken.Integer) && int.TryParse(CurrentToken().Value, out value)) {
                 switch (value) {
                     case 1:
-                        CompilerOptions.Align.Value = Alignment.Unaligned;
+                        result.AlignValue = Alignment.Unaligned;
                         return;
                     case 2:
-                        CompilerOptions.Align.Value = Alignment.Word;
+                        result.AlignValue = Alignment.Word;
                         return;
                     case 4:
-                        CompilerOptions.Align.Value = Alignment.DoubleWord;
+                        result.AlignValue = Alignment.DoubleWord;
                         return;
                     case 8:
-                        CompilerOptions.Align.Value = Alignment.QuadWord;
+                        result.AlignValue = Alignment.QuadWord;
                         return;
                     case 16:
-                        CompilerOptions.Align.Value = Alignment.DoubleQuadWord;
+                        result.AlignValue = Alignment.DoubleQuadWord;
                         return;
                 }
             }
@@ -1595,123 +1544,79 @@ namespace PasPasPas.Parsing.Parser {
         /// <summary>
         ///     parse a switch
         /// </summary>
-        private ISyntaxPart ParseSwitch() {
+        private void ParseSwitch(ISyntaxPart parent) {
 
             if (Match(PascalToken.AlignSwitch, PascalToken.AlignSwitch1, PascalToken.AlignSwitch2, PascalToken.AlignSwitch4, PascalToken.AlignSwitch8, PascalToken.AlignSwitch16)) {
-                return ParseAlignSwitch();
+                ParseAlignSwitch(parent);
             }
-
-            if (Match(PascalToken.BoolEvalSwitch)) {
+            else if (Match(PascalToken.BoolEvalSwitch)) {
                 ParseBoolEvalSwitch();
-                return null;
             }
-
-            if (Match(PascalToken.AssertSwitch)) {
+            else if (Match(PascalToken.AssertSwitch)) {
                 ParseAssertSwitch();
-                return null;
             }
-
-            if (Match(PascalToken.DebugInfoOrDescriptionSwitch)) {
+            else if (Match(PascalToken.DebugInfoOrDescriptionSwitch)) {
                 ParseDebugInfoOrDescriptionSwitch();
-                return null;
             }
-
-            if (Match(PascalToken.ExtensionSwitch)) {
+            else if (Match(PascalToken.ExtensionSwitch)) {
                 ParseExtensionSwitch();
-                return null;
             }
-
-            if (Match(PascalToken.ExtendedSyntaxSwitch)) {
+            else if (Match(PascalToken.ExtendedSyntaxSwitch)) {
                 ParseExtendedSyntaxSwitch();
-                return null;
-            }
 
-            if (Match(PascalToken.ImportedDataSwitch)) {
+            }
+            else if (Match(PascalToken.ImportedDataSwitch)) {
                 ParseImportedDataSwitch();
-                return null;
             }
-
-            if (Match(PascalToken.IncludeSwitch)) {
+            else if (Match(PascalToken.IncludeSwitch)) {
                 ParseIncludeSwitch();
-                return null;
             }
-
-            if (Match(PascalToken.LinkOrLocalSymbolSwitch)) {
+            else if (Match(PascalToken.LinkOrLocalSymbolSwitch)) {
                 ParseLocalSymbolSwitch();
-                return null;
             }
-
-            if (Match(PascalToken.LongStringSwitch)) {
+            else if (Match(PascalToken.LongStringSwitch)) {
                 ParseLongStringSwitch();
-                return null;
             }
-
-            if (Match(PascalToken.OpenStringSwitch)) {
+            else if (Match(PascalToken.OpenStringSwitch)) {
                 ParseOpenStringSwitch();
-                return null;
             }
-
-            if (Match(PascalToken.OptimizationSwitch)) {
+            else if (Match(PascalToken.OptimizationSwitch)) {
                 ParseOptimizationSwitch();
-                return null;
             }
-
-            if (Match(PascalToken.OverflowSwitch)) {
+            else if (Match(PascalToken.OverflowSwitch)) {
                 ParseOverflowSwitch();
-                return null;
             }
-
-            if (Match(PascalToken.SaveDivideSwitch)) {
+            else if (Match(PascalToken.SaveDivideSwitch)) {
                 ParseSaveDivideSwitch();
-                return null;
             }
-
-            if (Match(PascalToken.IncludeRessource)) {
+            else if (Match(PascalToken.IncludeRessource)) {
                 ParseIncludeRessource();
-                return null;
             }
-
-            if (Match(PascalToken.StackFramesSwitch)) {
+            else if (Match(PascalToken.StackFramesSwitch)) {
                 ParseStackFramesSwitch();
-                return null;
             }
-
-            if (Match(PascalToken.WritableConstSwitch)) {
+            else if (Match(PascalToken.WritableConstSwitch)) {
                 ParseWritableConstSwitch();
-                return null;
             }
-
-            if (Match(PascalToken.VarStringCheckSwitch)) {
+            else if (Match(PascalToken.VarStringCheckSwitch)) {
                 ParseVarStringCheckSwitch();
-                return null;
             }
-
-            if (Match(PascalToken.TypedPointersSwitch)) {
+            else if (Match(PascalToken.TypedPointersSwitch)) {
                 ParseTypedPointersSwitch();
-                return null;
             }
-
-            if (Match(PascalToken.SymbolDeclarationSwitch)) {
+            else if (Match(PascalToken.SymbolDeclarationSwitch)) {
                 ParseSymbolDeclarationSwitch();
-                return null;
             }
-
-            if (Match(PascalToken.SymbolDefinitionsOnlySwitch)) {
+            else if (Match(PascalToken.SymbolDefinitionsOnlySwitch)) {
                 ParseSymbolDefinitionsOnlySwitch();
-                return null;
             }
-
-            if (Match(PascalToken.TypeInfoSwitch)) {
+            else if (Match(PascalToken.TypeInfoSwitch)) {
                 ParseTypeInfoSwitch();
-                return null;
             }
-
-            if (Match(PascalToken.EnumSizeSwitch, PascalToken.EnumSize1, PascalToken.EnumSize2, PascalToken.EnumSize4)) {
+            else if (Match(PascalToken.EnumSizeSwitch, PascalToken.EnumSize1, PascalToken.EnumSize2, PascalToken.EnumSize4)) {
                 ParseEnumSizeSwitch();
-                return null;
             }
 
-            return null;
         }
 
         private bool ParseEnumSizeSwitch() {
@@ -2177,26 +2082,26 @@ namespace PasPasPas.Parsing.Parser {
             Unexpected();
         }
 
-        private ISyntaxPart ParseAlignSwitch() {
+        private ISyntaxPart ParseAlignSwitch(ISyntaxPart parent) {
             AlignSwitch result;
 
-            if (OptionalPart(out result, PascalToken.AlignSwitch1)) {
+            if (OptionalPart(parent, out result, PascalToken.AlignSwitch1)) {
                 result.AlignValue = Alignment.Unaligned;
             }
-            else if (OptionalPart(out result, PascalToken.AlignSwitch2)) {
+            else if (OptionalPart(parent, out result, PascalToken.AlignSwitch2)) {
                 result.AlignValue = Alignment.Word;
             }
-            else if (OptionalPart(out result, PascalToken.AlignSwitch4)) {
+            else if (OptionalPart(parent, out result, PascalToken.AlignSwitch4)) {
                 result.AlignValue = Alignment.DoubleWord;
             }
-            else if (OptionalPart(out result, PascalToken.AlignSwitch8)) {
+            else if (OptionalPart(parent, out result, PascalToken.AlignSwitch8)) {
                 result.AlignValue = Alignment.QuadWord;
             }
-            else if (OptionalPart(out result, PascalToken.AlignSwitch16)) {
+            else if (OptionalPart(parent, out result, PascalToken.AlignSwitch16)) {
                 result.AlignValue = Alignment.DoubleQuadWord;
             }
             else {
-                result = CreatePart<AlignSwitch>();
+                result = CreateByTerminal<AlignSwitch>(parent);
 
                 if (ContinueOptionalPart(result, PascalToken.Plus)) {
                     result.AlignValue = Alignment.QuadWord;
@@ -2206,22 +2111,25 @@ namespace PasPasPas.Parsing.Parser {
                 }
                 else {
                     Unexpected();
-                    result = null;
                 }
             }
 
             return result;
         }
 
+        /// <summary>
+        ///     parse a compiler directive
+        /// </summary>
+        /// <returns>parsed syntax tree</returns>
         public override ISyntaxPart Parse() {
             var kind = CurrentToken().Kind;
-            ISyntaxPart result = null;
+            ISyntaxPart result = CreateChild<CompilerDirective>(null);
 
             if (switches.Contains(kind)) {
-                result = ParseSwitch();
+                ParseSwitch(result);
             }
             else if (longSwitches.Contains(kind)) {
-                result = ParseLongSwitch();
+                ParseLongSwitch(result);
             }
             else if (parameters.Contains(kind)) {
                 result = ParseParameter();

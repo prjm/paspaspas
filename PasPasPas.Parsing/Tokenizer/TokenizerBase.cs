@@ -19,7 +19,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="tokenKind">token kind</param>
         /// <param name="tokenizer">tokenizer</param>
         /// <returns>pseudotoken (empty)</returns>
-        public static PascalToken CreatePseudoToken(this IPascalTokenizer tokenizer, int tokenKind) {
+        public static PascalToken CreatePseudoToken(this ITokenizer tokenizer, int tokenKind) {
             var result = new PascalToken();
             result.FilePath = tokenizer.Input.CurrentInputFile;
             //result.StartPosition = tokenizer.Input.GetCurrentPosition();
@@ -33,7 +33,7 @@ namespace PasPasPas.Parsing.Tokenizer {
     /// <summary>
     ///     base class for tokenizers
     /// </summary>
-    public abstract class TokenizerBase : IPascalTokenizer {
+    public abstract class TokenizerBase : ITokenizer {
 
         /// <summary>
         ///     message group for tokenizer logs

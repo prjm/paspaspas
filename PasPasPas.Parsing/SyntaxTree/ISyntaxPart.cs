@@ -11,14 +11,19 @@ namespace PasPasPas.Parsing.SyntaxTree {
         /// <summary>
         ///     accept visitor
         /// </summary>
-        /// <param name="visitor"></param>
-        /// <param name="param">parameter</param>
-        void Accept<TParam>(ISyntaxPartVisitor<TParam> visitor, TParam param);
+        /// <param name="visitor">visitor to accept</param>
+        /// <param name="visitorParameter">parameter</param>
+        void Accept<T>(ISyntaxPartVisitor<T> visitor, T visitorParameter);
 
         /// <summary>
-        /// 
+        ///     child nodes
         /// </summary>
         ICollection<ISyntaxPart> Parts { get; }
+
+        /// <summary>
+        ///     parent node
+        /// </summary>
+        ISyntaxPart Parent { get; set; }
 
     }
 
