@@ -30,6 +30,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <param name="syntaxPart"></param>
         /// <param name="parameter"></param>
         public void BeginVisitItem(Terminal syntaxPart, TerminalVisitorOptions parameter) {
+            if (syntaxPart.Token.InvalidTokens.IsValueCreated) {
+                foreach (var token in syntaxPart.Token.InvalidTokens.Value)
+                    parameter.ResultBuilder.Append(token.Value);
+            }
             parameter.ResultBuilder.Append(syntaxPart.Token.Value);
         }
 

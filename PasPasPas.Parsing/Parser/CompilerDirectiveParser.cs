@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System;
+using System.Linq;
 using PasPasPas.Options.DataTypes;
 using System.Globalization;
 using PasPasPas.Options.Bundles;
@@ -1508,17 +1509,18 @@ namespace PasPasPas.Parsing.Parser {
         private void ParseLongAlignSwitch(ISyntaxPart parent) {
             AlignSwitch result = CreateByTerminal<AlignSwitch>(parent);
 
-            if (OptionalPart(parent, out result, PascalToken.On)) {
+            if (ContinueWith(result, PascalToken.On)) {
                 result.AlignValue = Alignment.QuadWord;
                 return;
             }
-            else if (OptionalPart(parent, out result, PascalToken.Off)) {
+            else if (ContinueWith(result, PascalToken.Off)) {
                 result.AlignValue = Alignment.Unaligned;
                 return;
             }
 
             int value;
-            if (ContinueOptionalPart(result, PascalToken.Integer) && int.TryParse(CurrentToken().Value, out value)) {
+            if (ContinueWith(result, PascalToken.Integer) && int.TryParse((result.Parts.Last() as Terminal).Token.Value, out value)) {
+
                 switch (value) {
                     case 1:
                         result.AlignValue = Alignment.Unaligned;
@@ -2103,10 +2105,10 @@ namespace PasPasPas.Parsing.Parser {
             else {
                 result = CreateByTerminal<AlignSwitch>(parent);
 
-                if (ContinueOptionalPart(result, PascalToken.Plus)) {
+                if (ContinueWith(result, PascalToken.Plus)) {
                     result.AlignValue = Alignment.QuadWord;
                 }
-                else if (ContinueOptionalPart(result, PascalToken.Minus)) {
+                else if (ContinueWith(result, PascalToken.Minus)) {
                     result.AlignValue = Alignment.Unaligned;
                 }
                 else {

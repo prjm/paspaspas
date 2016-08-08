@@ -32,6 +32,11 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         private Queue<PascalToken> tokenList = new Queue<PascalToken>();
 
+        /// <summary>
+        ///     list of invalid tokens (e.g. whitespace)
+        /// </summary>
+        private Queue<PascalToken> invalidTokens = new Queue<PascalToken>();
+
 
         /// <summary>
         ///     check if other tokens are availiable
@@ -50,10 +55,15 @@ namespace PasPasPas.Parsing.Tokenizer {
                 }
 
                 var nextToken = BaseTokenizer.FetchNextToken();
-                if (IsValidToken(nextToken))
+                if (IsValidToken(nextToken)) {
+                    nextToken.AssignRemainingTokens(invalidTokens);
                     tokenList.Enqueue(nextToken);
-                else if (IsMacroToken(nextToken))
-                    ProcssMacroToken(nextToken);
+                }
+                else {
+                    if (IsMacroToken(nextToken))
+                        ProcssMacroToken(nextToken);
+                    invalidTokens.Enqueue(nextToken);
+                }
             }
         }
 

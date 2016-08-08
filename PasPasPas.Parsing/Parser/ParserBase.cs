@@ -281,7 +281,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind"></param>
         /// <param name="part"></param>
         /// <returns></returns>
-        protected bool ContinueOptionalPart(ISyntaxPart part, int tokenKind) {
+        protected bool ContinueWith(ISyntaxPart part, int tokenKind) {
             if (!Match(tokenKind)) {
                 return false;
             }

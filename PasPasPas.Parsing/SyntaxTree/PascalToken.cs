@@ -1,5 +1,7 @@
 ﻿using PasPasPas.Infrastructure.Input;
 using System.Globalization;
+using System;
+using System.Collections.Generic;
 
 namespace PasPasPas.Parsing.SyntaxTree {
 
@@ -1507,6 +1509,24 @@ namespace PasPasPas.Parsing.SyntaxTree {
         ///     token end position
         /// </summary>
         public TextFilePosition EndPosition { get; internal set; }
+
+        /// <summary>
+        ///     list of invalid tokens
+        /// </summary>
+        public Lazy<IList<PascalToken>> InvalidTokens =
+            new Lazy<IList<PascalToken>>(() => new List<PascalToken>());
+
+        /// <summary>
+        ///     assign remaining tokens
+        /// </summary>
+        /// <param name="invalidTokens"></param>
+        public void AssignRemainingTokens(Queue<PascalToken> invalidTokens) {
+            if (invalidTokens.Count > 0) {
+                foreach (var token in invalidTokens)
+                    InvalidTokens.Value.Add(token);
+                invalidTokens.Clear();
+            }
+        }
 
         /// <summary>
         ///     format token as string

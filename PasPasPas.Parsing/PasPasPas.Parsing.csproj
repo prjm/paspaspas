@@ -218,6 +218,7 @@
     <Compile Include="SyntaxTree\ObjectPascal\WhileStatement.cs" />
     <Compile Include="SyntaxTree\ObjectPascal\WithStatement.cs" />
     <Compile Include="SyntaxTree\SyntaxPartVisitorBase.cs" />
+    <Compile Include="SyntaxTree\TokenKind.cs" />
     <Compile Include="SyntaxTree\Visitors\CompilerDirectiveVisitor.cs" />
     <Compile Include="SyntaxTree\Visitors\CompilerDirectiveVisitorOptions.cs" />
     <Compile Include="SyntaxTree\Visitors\TerminalVisitor.cs" />
