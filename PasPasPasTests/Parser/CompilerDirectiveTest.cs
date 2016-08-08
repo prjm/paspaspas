@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PasPasPas.Options.DataTypes;
+using PasPasPas.Parsing.Parser;
 using System;
 using System.Linq;
 
@@ -10,21 +11,25 @@ namespace PasPasPasTests.Parser {
 
         [TestMethod]
         public void TestAlign() {
-            RunCompilerDirective("", Alignment.Undefined, () => CompilerOptions.Align.Value);
-            RunCompilerDirective("A+", Alignment.QuadWord, () => CompilerOptions.Align.Value);
-            RunCompilerDirective("A-", Alignment.Unaligned, () => CompilerOptions.Align.Value);
-            RunCompilerDirective("A1", Alignment.Unaligned, () => CompilerOptions.Align.Value);
-            RunCompilerDirective("A2", Alignment.Word, () => CompilerOptions.Align.Value);
-            RunCompilerDirective("A4", Alignment.DoubleWord, () => CompilerOptions.Align.Value);
-            RunCompilerDirective("A8", Alignment.QuadWord, () => CompilerOptions.Align.Value);
-            RunCompilerDirective("A16", Alignment.DoubleQuadWord, () => CompilerOptions.Align.Value);
-            RunCompilerDirective("ALIGN ON", Alignment.QuadWord, () => CompilerOptions.Align.Value);
-            RunCompilerDirective("ALIGN OFF", Alignment.Unaligned, () => CompilerOptions.Align.Value);
-            RunCompilerDirective("ALIGN 1", Alignment.Unaligned, () => CompilerOptions.Align.Value);
-            RunCompilerDirective("ALIGN 2", Alignment.Word, () => CompilerOptions.Align.Value);
-            RunCompilerDirective("ALIGN 4", Alignment.DoubleWord, () => CompilerOptions.Align.Value);
-            RunCompilerDirective("ALIGN 8", Alignment.QuadWord, () => CompilerOptions.Align.Value);
-            RunCompilerDirective("ALIGN 16", Alignment.DoubleQuadWord, () => CompilerOptions.Align.Value);
+            Func<object> f = () => CompilerOptions.Align.Value;
+            RunCompilerDirective("", Alignment.Undefined, f);
+            RunCompilerDirective("A+", Alignment.QuadWord, f);
+            RunCompilerDirective("A-", Alignment.Unaligned, f);
+            RunCompilerDirective("A1", Alignment.Unaligned, f);
+            RunCompilerDirective("A2", Alignment.Word, f);
+            RunCompilerDirective("A4", Alignment.DoubleWord, f);
+            RunCompilerDirective("A8", Alignment.QuadWord, f);
+            RunCompilerDirective("A16", Alignment.DoubleQuadWord, f);
+            RunCompilerDirective("ALIGN ON", Alignment.QuadWord, f);
+            RunCompilerDirective("ALIGN OFF", Alignment.Unaligned, f);
+            RunCompilerDirective("ALIGN 1", Alignment.Unaligned, f);
+            RunCompilerDirective("ALIGN 2", Alignment.Word, f);
+            RunCompilerDirective("ALIGN 4", Alignment.DoubleWord, f);
+            RunCompilerDirective("ALIGN 8", Alignment.QuadWord, f);
+            RunCompilerDirective("ALIGN 16", Alignment.DoubleQuadWord, f);
+            RunCompilerDirective("ALIGN KAPUTT", Alignment.Undefined, f, CompilerDirectiveParserErrors.InvalidAlignDirective);
+            RunCompilerDirective("ALIGN 17", Alignment.Undefined, f, CompilerDirectiveParserErrors.InvalidAlignDirective);
+            RunCompilerDirective("A0", Alignment.Undefined, f, CompilerDirectiveParserErrors.InvalidAlignDirective);
         }
 
         [TestMethod]

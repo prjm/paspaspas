@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using PasPasPas.Api;
+using PasPasPas.Parsing.Parser;
 
 namespace PasPasPas.Parsing.SyntaxTree {
 
@@ -37,20 +38,39 @@ namespace PasPasPas.Parsing.SyntaxTree {
         /// <summary>
         ///     syntax par
         /// </summary>
-        public virtual ICollection<ISyntaxPart> Parts { get; }
+        public virtual ICollection<ISyntaxPart> Parts
+            => parts;
+
+        private IList<ISyntaxPart> parts
             = new List<ISyntaxPart>();
 
         /// <summary>
         ///     accept this visitor
         /// </summary>
-        /// <param name="visitor"></param>
-        public virtual void Accept<TParam>(ISyntaxPartVisitor<TParam> visitor, TParam param) {
+        /// <param name="visitor">visitor</param>
+        /// <param name="param">parameter</param>
+        /// <typeparam name="T">parameter type</typeparam>
+        public virtual void Accept<T>(ISyntaxPartVisitor<T> visitor, T param) {
             visitor.BeginVisit(this, param);
 
             foreach (var part in Parts)
                 part.Accept(visitor, param);
 
             visitor.EndVisit(this, param);
+        }
+
+        /// <summary>
+        ///     get the last terminal symbol
+        /// </summary>
+        public Terminal LastTerminal
+        {
+            get
+            {
+                if (parts.Count > 0)
+                    return parts[parts.Count - 1] as Terminal;
+                else
+                    return null;
+            }
         }
 
         /// <summary>

@@ -1,5 +1,4 @@
-﻿using PasPasPas.Api;
-using PasPasPas.Parsing.SyntaxTree;
+﻿using PasPasPas.Parsing.SyntaxTree;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,12 +36,12 @@ namespace PasPasPas.Parsing.Tokenizer {
                         group = Add(match, tokenKind);
                     }
                     else {
-                        group = Add(match, PascalToken.Undefined);
+                        group = Add(match, TokenKind.Undefined);
                     }
                 }
                 else if (lastChar) {
                     var tokenValue = group.TokenValue as SimpleTokenGroupValue;
-                    if (tokenValue == null || tokenValue.TokenId != PascalToken.Undefined)
+                    if (tokenValue == null || tokenValue.TokenId != TokenKind.Undefined)
                         throw new InvalidOperationException();
                     else
                         tokenValue.TokenId = tokenKind;

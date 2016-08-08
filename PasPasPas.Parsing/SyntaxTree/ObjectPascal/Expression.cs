@@ -23,7 +23,7 @@ namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
         /// <summary>
         ///     relational operator kind
         /// </summary>
-        public int Kind { get; internal set; } = PascalToken.Undefined;
+        public int Kind { get; internal set; } = TokenKind.Undefined;
 
         /// <summary>
         ///     simple expression

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Text;
-using PasPasPas.Api;
 using System.Collections.Generic;
 using PasPasPas.Infrastructure.Input;
 using PasPasPas.Infrastructure.Log;
@@ -837,7 +836,7 @@ namespace PasPasPas.Parsing.Tokenizer {
             if (ignoreKeywords)
                 state.PutbackBuffer();
             else if (hasAmpersand) {
-                state.Finish(PascalToken.Undefined);
+                state.Finish(TokenKind.Undefined);
                 state.Error(TokenizerBase.UnexpectedCharacter, "&");
                 return;
             }

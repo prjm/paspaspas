@@ -1,5 +1,4 @@
 ﻿using PasPasPas.Api;
-using PasPasPas.Parsing.SyntaxTree;
 
 namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
 
@@ -18,7 +17,7 @@ namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
         ///     kind of constant
         /// </summary>
         public int Kind { get; internal set; }
-                = PascalToken.Undefined;
+                = TokenKind.Undefined;
 
         /// <summary>
         ///     format const section

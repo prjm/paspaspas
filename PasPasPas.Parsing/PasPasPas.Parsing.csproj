@@ -43,10 +43,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Api\IParserInformationProvider.cs" />
+    <Compile Include="Parser\CompilerDirectiveParserErrors.cs" />
     <Compile Include="Parser\EmptyCollection.cs" />
     <Compile Include="Parser\IPascalParser.cs" />
     <Compile Include="Api\IPascalTokenizer.cs" />
-    <Compile Include="Parser\Terminal.cs" />
+    <Compile Include="SyntaxTree\Terminal.cs" />
+    <Compile Include="SyntaxTree\InvalidToken.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\AlignSwitch.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\CompilerDirective.cs" />
     <Compile Include="SyntaxTree\ISyntaxPart.cs" />

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System;
-using System.Linq;
 using PasPasPas.Options.DataTypes;
 using System.Globalization;
 using PasPasPas.Options.Bundles;
@@ -1519,7 +1518,7 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             int value;
-            if (ContinueWith(result, PascalToken.Integer) && int.TryParse((result.Parts.Last() as Terminal).Token.Value, out value)) {
+            if (ContinueWith(result, PascalToken.Integer) && int.TryParse(result.LastTerminal.Value, out value)) {
 
                 switch (value) {
                     case 1:
@@ -1540,7 +1539,7 @@ namespace PasPasPas.Parsing.Parser {
                 }
             }
 
-            Unexpected();
+            ErrorAndSkip(parent, CompilerDirectiveParserErrors.InvalidAlignDirective, CurrentToken());
         }
 
         /// <summary>
@@ -2112,7 +2111,7 @@ namespace PasPasPas.Parsing.Parser {
                     result.AlignValue = Alignment.Unaligned;
                 }
                 else {
-                    Unexpected();
+                    ErrorAndSkip(parent, CompilerDirectiveParserErrors.InvalidAlignDirective, CurrentToken());
                 }
             }
 

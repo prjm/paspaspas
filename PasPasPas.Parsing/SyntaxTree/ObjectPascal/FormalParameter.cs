@@ -33,7 +33,7 @@ namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
         ///     parameter typs
         /// </summary>
         public int ParamType { get; internal set; }
-            = PascalToken.Undefined;
+            = TokenKind.Undefined;
 
         /// <summary>
         ///     type declaration
@@ -50,7 +50,7 @@ namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
                 result.Space();
             }
 
-            if (ParamType != PascalToken.Undefined) {
+            if (ParamType != TokenKind.Undefined) {
                 if (ParamType == PascalToken.Const) {
                     result.Keyword("const");
                 }

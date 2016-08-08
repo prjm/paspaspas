@@ -1,5 +1,4 @@
 ﻿using PasPasPas.Api;
-using PasPasPas.Parsing.SyntaxTree;
 
 namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
 
@@ -68,7 +67,7 @@ namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
         ///     visibility declaration
         /// </summary>
         public int Visibility { get; internal set; }
-            = PascalToken.Undefined;
+            = TokenKind.Undefined;
 
         /// <summary>
         ///     format source
@@ -128,7 +127,7 @@ namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
                 return;
             }
 
-            if (Visibility != PascalToken.Undefined) {
+            if (Visibility != TokenKind.Undefined) {
                 FormatVisibility(result, Visibility, Strict);
             }
         }

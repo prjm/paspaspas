@@ -72,9 +72,16 @@ namespace PasPasPas.Infrastructure.Log {
     /// </summary>
     public class ListLogTarget : LogTarget {
 
+        /// <summary>
+        ///     message list
+        /// </summary>
         public IList<ILogMessage> Messages { get; }
             = new List<ILogMessage>();
 
+        /// <summary>
+        ///     adds a message to the list
+        /// </summary>
+        /// <param name="message">message to add</param>
         public override void HandleMessage(ILogMessage message) {
             base.HandleMessage(message);
             Messages.Add(message);

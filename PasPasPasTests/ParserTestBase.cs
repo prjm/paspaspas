@@ -1,4 +1,5 @@
-﻿using PasPasPas.Api;
+﻿using System.Linq;
+using PasPasPas.Api;
 using PasPasPas.DesktopPlatform;
 using PasPasPas.Infrastructure.Input;
 using PasPasPas.Infrastructure.Log;
@@ -9,6 +10,7 @@ using PasPasPas.Parsing.SyntaxTree;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 using PasPasPas.Parsing.Tokenizer;
 using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace PasPasPasTests {
@@ -87,7 +89,7 @@ namespace PasPasPasTests {
             }
         }
 
-        protected void RunCompilerDirective(string directive, object expected, Func<object> actual) {
+        protected void RunCompilerDirective(string directive, object expected, Func<object> actual, params Guid[] messages) {
             var fileAccess = (StandardFileAccess)TestOptions.Files;
             var fileCounter = 0;
             var incFile = new FileReference("dummy.inc");
@@ -104,15 +106,15 @@ namespace PasPasPasTests {
             var log = new LogManager();
             var environment = new ParserServices(log);
             environment.Options = TestOptions;
-            //environment.Register(new CommonConfiguration());
-            //environment.Register(TestOptions);
-            //environment.Register(fileAccess);
 
             var visitor = new CompilerDirectiveVisitor();
             var options = new CompilerDirectiveVisitorOptions() { Environment = environment };
 
             var terminals = new TerminalVisitor();
             var terminalOpts = new TerminalVisitorOptions();
+
+            var msgs = new ListLogTarget();
+            log.RegisterTarget(msgs);
 
             ClearOptions();
 
@@ -145,6 +147,18 @@ namespace PasPasPasTests {
             }
 
             Assert.AreEqual(expected, actual());
+
+            log.UnregisterTarget(msgs);
+
+            Assert.AreEqual(messages.Length, msgs.Messages.Count);
+
+            var m = new HashSet<Guid>(msgs.Messages.Select(t => t.MessageID));
+            foreach (var guid in messages)
+                Assert.IsTrue(m.Contains(guid));
+
+            m = new HashSet<Guid>(messages);
+            foreach (var guid in msgs.Messages.Select(t => t.MessageID))
+                Assert.IsTrue(m.Contains(guid));
         }
 
         private void ClearOptions() {

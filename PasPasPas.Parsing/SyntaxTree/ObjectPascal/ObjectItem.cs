@@ -49,7 +49,7 @@ namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
                 return;
             }
 
-            if (Visibility != PascalToken.Undefined) {
+            if (Visibility != TokenKind.Undefined) {
                 ClassDeclarationItem.FormatVisibility(result, Visibility, Strict);
             }
         }

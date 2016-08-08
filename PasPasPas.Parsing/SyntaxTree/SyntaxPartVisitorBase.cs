@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace PasPasPas.Parsing.SyntaxTree {
+﻿namespace PasPasPas.Parsing.SyntaxTree {
 
     /// <summary>
     ///     base class for visitors

@@ -79,6 +79,18 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         /// <summary>
+        ///     parser syntax error
+        /// </summary>
+        /// <param name="message">message id</param>
+        /// <param name="values">error values</param>
+        /// <param name="parent">parent syntax tree node</param>
+        /// <returns></returns>
+        protected void ErrorAndSkip(ISyntaxPart parent, Guid message, params object[] values) {
+            logSource.Error(message, values);
+            CreateByError(parent);
+        }
+
+        /// <summary>
         ///     Require a token kind
         /// </summary>
         /// <param name="tokenKind">required kind of tokem</param>
@@ -113,7 +125,7 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             Unexpected();
-            return Tokenizer.CreatePseudoToken(PascalToken.Undefined);
+            return Tokenizer.CreatePseudoToken(TokenKind.Undefined);
         }
 
         /// <summary>
@@ -144,7 +156,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <returns>optional token kind</returns>
         protected bool Optional(out int matchingType, params int[] tokenKind) {
             if (!Match(tokenKind)) {
-                matchingType = PascalToken.Undefined;
+                matchingType = TokenKind.Undefined;
                 return false;
             }
 
@@ -245,7 +257,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <returns></returns>
         protected bool HasTokenBeforeToken(int tokenToSearch, params int[] tokenToStop) {
             var lookahead = 1;
-            var stopArray = tokenToStop.Concat(new[] { PascalToken.Eof, PascalToken.Undefined }).ToArray();
+            var stopArray = tokenToStop.Concat(new[] { PascalToken.Eof, TokenKind.Undefined }).ToArray();
             while (!LookAhead(lookahead, stopArray)) {
                 if (LookAhead(lookahead, tokenToSearch))
                     return true;
@@ -307,6 +319,19 @@ namespace PasPasPas.Parsing.Parser {
             result.Parts.Add(terminal);
             FetchNextToken();
             return result;
+        }
+
+        /// <summary>
+        ///     add a terminal node marked as invalid
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <returns></returns>
+        protected InvalidToken CreateByError(ISyntaxPart parent) {
+            var invalid = new InvalidToken(CurrentToken());
+            invalid.Parent = parent;
+            parent.Parts.Add(invalid);
+            FetchNextToken();
+            return invalid;
         }
 
         /// <summary>

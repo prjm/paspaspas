@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using PasPasPas.Parsing.SyntaxTree;
+﻿using PasPasPas.Parsing.Parser;
+using System.Collections.Generic;
 
-namespace PasPasPas.Parsing.Parser {
+namespace PasPasPas.Parsing.SyntaxTree {
 
     /// <summary>
     ///     syntax tree terminal
@@ -29,5 +29,11 @@ namespace PasPasPas.Parsing.Parser {
         /// </summary>
         public override ICollection<ISyntaxPart> Parts { get; }
             = EmptyCollection<ISyntaxPart>.Instance;
+
+        /// <summary>
+        ///     token value
+        /// </summary>
+        public string Value
+            => Token.Value;
     }
 }

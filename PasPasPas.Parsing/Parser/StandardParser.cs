@@ -1596,7 +1596,7 @@ namespace PasPasPas.Parsing.Parser {
             result.TypeDecl = ParseTypeSpecification();
             Require(PascalToken.Of);
 
-            while (!Match(PascalToken.Undefined, PascalToken.Eof, PascalToken.End)) {
+            while (!Match(TokenKind.Undefined, PascalToken.Eof, PascalToken.End)) {
                 result.Add(ParseRecordVariant());
             }
 
@@ -1821,7 +1821,7 @@ namespace PasPasPas.Parsing.Parser {
         [Rule("ClassHelperItems", " { ClassHelperItem }")]
         private ClassHelperItems ParseClassHelperItems() {
             var result = new ClassHelperItems(this);
-            while (!Match(PascalToken.End, PascalToken.Undefined, PascalToken.Eof)) {
+            while (!Match(PascalToken.End, TokenKind.Undefined, PascalToken.Eof)) {
                 result.Add(ParseClassHelperItem());
             }
             return result;
@@ -2629,7 +2629,7 @@ namespace PasPasPas.Parsing.Parser {
                     if (Match(PascalToken.Comma, PascalToken.DotDot))
                         part.Continuation = Require(PascalToken.Comma, PascalToken.DotDot).Kind;
                     else
-                        part.Continuation = PascalToken.Undefined;
+                        part.Continuation = TokenKind.Undefined;
                     part.SetExpression = ParseExpression();
                     result.Add(part);
                 } while (Match(PascalToken.Comma, PascalToken.DotDot));
@@ -2672,7 +2672,7 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             Unexpected();
-            return new PascalIdentifier(Tokenizer.CreatePseudoToken(PascalToken.Undefined), this);
+            return new PascalIdentifier(Tokenizer.CreatePseudoToken(TokenKind.Undefined), this);
         }
 
         [Rule("UsesFileClause", "'uses' NamespaceFileNameList")]

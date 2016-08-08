@@ -11,11 +11,6 @@ namespace PasPasPas.Parsing.SyntaxTree {
     public class PascalToken {
 
         /// <summary>
-        ///     undefined tokens
-        /// </summary>
-        public const int Undefined = 1;
-
-        /// <summary>
         ///     end-of-input
         /// </summary>
         public const int Eof = 2;
@@ -1480,7 +1475,7 @@ namespace PasPasPas.Parsing.SyntaxTree {
         ///     create a new token
         /// </summary>
         public PascalToken() {
-            Kind = Undefined;
+            Kind = TokenKind.Undefined;
             Value = string.Empty;
             FilePath = null;
         }

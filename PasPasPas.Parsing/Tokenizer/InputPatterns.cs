@@ -1,5 +1,4 @@
-﻿using PasPasPas.Api;
-using PasPasPas.Infrastructure.Input;
+﻿using PasPasPas.Infrastructure.Input;
 using System.Collections.Generic;
 using System.Text;
 using System;
@@ -152,7 +151,7 @@ namespace PasPasPas.Parsing.Tokenizer {
 
             return new PascalToken() {
                 Value = c.ToString(),
-                Kind = PascalToken.Undefined,
+                Kind = TokenKind.Undefined,
                 FilePath = file
             };
 
@@ -167,6 +166,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="inputStream"></param>
         /// <param name="prefix"></param>
         /// <param name="tokenGroup"></param>
+        /// <param name="log"></param>
         /// <returns></returns>
         public PascalToken FetchTokenByGroup(StackedFileReader inputStream, char prefix, InputPattern tokenGroup, ILogSource log) {
             bool switchedInput = false;
