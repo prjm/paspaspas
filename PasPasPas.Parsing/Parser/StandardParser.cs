@@ -1596,7 +1596,7 @@ namespace PasPasPas.Parsing.Parser {
             result.TypeDecl = ParseTypeSpecification();
             Require(PascalToken.Of);
 
-            while (!Match(TokenKind.Undefined, PascalToken.Eof, PascalToken.End)) {
+            while (!Match(TokenKind.Undefined, TokenKind.Eof, PascalToken.End)) {
                 result.Add(ParseRecordVariant());
             }
 
@@ -1821,7 +1821,7 @@ namespace PasPasPas.Parsing.Parser {
         [Rule("ClassHelperItems", " { ClassHelperItem }")]
         private ClassHelperItems ParseClassHelperItems() {
             var result = new ClassHelperItems(this);
-            while (!Match(PascalToken.End, TokenKind.Undefined, PascalToken.Eof)) {
+            while (!Match(PascalToken.End, TokenKind.Undefined, TokenKind.Eof)) {
                 result.Add(ParseClassHelperItem());
             }
             return result;

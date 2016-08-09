@@ -33,11 +33,11 @@ namespace PasPasPas.Parsing.Parser {
         /// <summary>
         ///     creates a new parser
         /// </summary>
-        /// <param name="tokenizerWithLookahead"></param>
+        /// <param name="tokenizerWithLookAhead"></param>
         /// <param name="environment">environment</param>
-        protected ParserBase(ParserServices environment, TokenizerWithLookahead tokenizerWithLookahead) {
+        protected ParserBase(ParserServices environment, TokenizerWithLookahead tokenizerWithLookAhead) {
             Environment = environment;
-            tokenizer = tokenizerWithLookahead;
+            tokenizer = tokenizerWithLookAhead;
             logSource = new LogSource(environment.Log, ParserLogMessage);
         }
 
@@ -189,11 +189,11 @@ namespace PasPasPas.Parsing.Parser {
         /// <summary>
         ///     look ahead a few tokens
         /// </summary>
-        /// <param name="num">number of tokens to look ahead</param>
+        /// <param name="numberOfTokens">number of tokens to look ahead</param>
         /// <param name="tokenKind">token kind to test for</param>
         /// <returns><c>true</c> if the token kind matches</returns>
-        protected virtual bool LookAhead(int num, params int[] tokenKind) {
-            var token = tokenizer.LookAhead(num);
+        protected virtual bool LookAhead(int numberOfTokens, params int[] tokenKind) {
+            var token = tokenizer.LookAhead(numberOfTokens);
             return tokenKind.Any(t => t == token.Kind);
         }
 
@@ -278,7 +278,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <returns></returns>
         protected bool HasTokenBeforeToken(int tokenToSearch, params int[] tokenToStop) {
             var lookahead = 1;
-            var stopArray = tokenToStop.Concat(new[] { PascalToken.Eof, TokenKind.Undefined }).ToArray();
+            var stopArray = tokenToStop.Concat(new[] { TokenKind.Eof, TokenKind.Undefined }).ToArray();
             while (!LookAhead(lookahead, stopArray)) {
                 if (LookAhead(lookahead, tokenToSearch))
                     return true;
@@ -360,7 +360,7 @@ namespace PasPasPas.Parsing.Parser {
         /// </summary>
         /// <typeparam name="T">parent object</typeparam>
         /// <returns></returns>
-        protected T CreateChild<T>(ISyntaxPart parent)
+        protected static T CreateChild<T>(ISyntaxPart parent)
             where T : ISyntaxPart, new() {
             var result = new T();
             if (parent != null) {

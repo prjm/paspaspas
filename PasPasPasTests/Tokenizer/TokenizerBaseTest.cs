@@ -193,14 +193,14 @@ namespace PasPasPasTests.Tokenizer {
             var patterns = new InputPatterns();
             patterns.AddPattern('a', PatternA);
             patterns.AddPattern('{', new CurlyBraceCommentTokenValue());
-            TestPattern(patterns, "a{}", PatternA, PascalToken.Comment);
-            TestPattern(patterns, "{}", PascalToken.Comment);
-            TestPattern(patterns, "{}a", PascalToken.Comment, PatternA);
-            TestPattern(patterns, "a{}a", PatternA, PascalToken.Comment, PatternA);
-            TestPattern(patterns, "a{//}a", PatternA, PascalToken.Comment, PatternA);
-            TestPattern(patterns, "a{(**)}a", PatternA, PascalToken.Comment, PatternA);
-            TestPattern(patterns, "a{{}a", PatternA, PascalToken.Comment, PatternA);
-            TestPattern(patterns, TokenizerBase.UnexpectedEndOfToken, "a{", PatternA, PascalToken.Comment);
+            TestPattern(patterns, "a{}", PatternA, TokenKind.Comment);
+            TestPattern(patterns, "{}", TokenKind.Comment);
+            TestPattern(patterns, "{}a", TokenKind.Comment, PatternA);
+            TestPattern(patterns, "a{}a", PatternA, TokenKind.Comment, PatternA);
+            TestPattern(patterns, "a{//}a", PatternA, TokenKind.Comment, PatternA);
+            TestPattern(patterns, "a{(**)}a", PatternA, TokenKind.Comment, PatternA);
+            TestPattern(patterns, "a{{}a", PatternA, TokenKind.Comment, PatternA);
+            TestPattern(patterns, TokenizerBase.UnexpectedEndOfToken, "a{", PatternA, TokenKind.Comment);
         }
 
 
@@ -208,19 +208,19 @@ namespace PasPasPasTests.Tokenizer {
         public void TestAlternativeCurlyBraceCommentTokenValue() {
             var patterns = new InputPatterns();
             patterns.AddPattern('a', PatternA);
-            patterns.AddPattern('(', PascalToken.OpenParen).Add('*', new AlternativeCurlyBraceCommenTokenValue());
+            patterns.AddPattern('(', PascalToken.OpenParen).Add('*', new AlternativeCurlyBraceCommentTokenValue());
             TestPattern(patterns, "a(", PatternA, PascalToken.OpenParen);
-            TestPattern(patterns, "(**)", PascalToken.Comment);
-            TestPattern(patterns, "(*a*)", PascalToken.Comment);
-            TestPattern(patterns, "(*(*(*(*a*)", PascalToken.Comment);
-            TestPattern(patterns, "a(*a*)a", PatternA, PascalToken.Comment, PatternA);
-            TestPattern(patterns, "(**)a", PascalToken.Comment, PatternA);
-            TestPattern(patterns, "a(**)a", PatternA, PascalToken.Comment, PatternA);
-            TestPattern(patterns, "a(*\n\n*)a", PatternA, PascalToken.Comment, PatternA);
-            TestPattern(patterns, "a(*\n***())()()\n*)a", PatternA, PascalToken.Comment, PatternA);
-            TestPattern(patterns, "a(*{//}*)a", PatternA, PascalToken.Comment, PatternA);
-            TestPattern(patterns, "a(*(**)a", PatternA, PascalToken.Comment, PatternA);
-            TestPattern(patterns, TokenizerBase.UnexpectedEndOfToken, "a(*", PatternA, PascalToken.Comment);
+            TestPattern(patterns, "(**)", TokenKind.Comment);
+            TestPattern(patterns, "(*a*)", TokenKind.Comment);
+            TestPattern(patterns, "(*(*(*(*a*)", TokenKind.Comment);
+            TestPattern(patterns, "a(*a*)a", PatternA, TokenKind.Comment, PatternA);
+            TestPattern(patterns, "(**)a", TokenKind.Comment, PatternA);
+            TestPattern(patterns, "a(**)a", PatternA, TokenKind.Comment, PatternA);
+            TestPattern(patterns, "a(*\n\n*)a", PatternA, TokenKind.Comment, PatternA);
+            TestPattern(patterns, "a(*\n***())()()\n*)a", PatternA, TokenKind.Comment, PatternA);
+            TestPattern(patterns, "a(*{//}*)a", PatternA, TokenKind.Comment, PatternA);
+            TestPattern(patterns, "a(*(**)a", PatternA, TokenKind.Comment, PatternA);
+            TestPattern(patterns, TokenizerBase.UnexpectedEndOfToken, "a(*", PatternA, TokenKind.Comment);
         }
 
         [TestMethod]
@@ -228,10 +228,10 @@ namespace PasPasPasTests.Tokenizer {
             var patterns = new InputPatterns();
             patterns.AddPattern('a', PatternA);
             patterns.AddPattern('{', PascalToken.Comma).Add('$', new PreprocessorTokenValue());
-            TestPattern(patterns, "a{${//}a", PatternA, PascalToken.Preprocessor, PatternA);
-            TestPattern(patterns, "a{${}a", PatternA, PascalToken.Preprocessor, PatternA);
-            TestPattern(patterns, "{${}a", PascalToken.Preprocessor, PatternA);
-            TestPattern(patterns, TokenizerBase.UnexpectedEndOfToken, "a{$", PatternA, PascalToken.Preprocessor);
+            TestPattern(patterns, "a{${//}a", PatternA, TokenKind.Preprocessor, PatternA);
+            TestPattern(patterns, "a{${}a", PatternA, TokenKind.Preprocessor, PatternA);
+            TestPattern(patterns, "{${}a", TokenKind.Preprocessor, PatternA);
+            TestPattern(patterns, TokenizerBase.UnexpectedEndOfToken, "a{$", PatternA, TokenKind.Preprocessor);
         }
 
 
@@ -319,11 +319,11 @@ namespace PasPasPasTests.Tokenizer {
             patterns.AddPattern('/', PascalToken.Slash).Add('/', new EndOfLineCommentTokenGroupValue());
             patterns.AddPattern(new WhitspaceCharacterClass(), new WhiteSpaceTokenGroupValue());
             TestPattern(patterns, "/", PascalToken.Slash);
-            TestPattern(patterns, "//", PascalToken.Comment);
-            TestPattern(patterns, "// / / /", PascalToken.Comment);
-            TestPattern(patterns, "/// / / /", PascalToken.Comment);
-            TestPattern(patterns, "/ // / / /", PascalToken.Slash, PascalToken.WhiteSpace, PascalToken.Comment);
-            TestPattern(patterns, "/ // / /\n /", PascalToken.Slash, PascalToken.WhiteSpace, PascalToken.Comment, PascalToken.WhiteSpace, PascalToken.Slash);
+            TestPattern(patterns, "//", TokenKind.Comment);
+            TestPattern(patterns, "// / / /", TokenKind.Comment);
+            TestPattern(patterns, "/// / / /", TokenKind.Comment);
+            TestPattern(patterns, "/ // / / /", PascalToken.Slash, PascalToken.WhiteSpace, TokenKind.Comment);
+            TestPattern(patterns, "/ // / /\n /", PascalToken.Slash, PascalToken.WhiteSpace, TokenKind.Comment, PascalToken.WhiteSpace, PascalToken.Slash);
         }
 
         [TestMethod]

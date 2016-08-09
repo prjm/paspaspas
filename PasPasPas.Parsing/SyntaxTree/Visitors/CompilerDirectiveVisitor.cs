@@ -33,6 +33,15 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             parameter.CompilerOptions.Align.Value = syntaxPart.AlignValue;
         }
 
+        /// <summary>
+        ///     update application type
+        /// </summary>
+        /// <param name="syntaxPart"></param>
+        /// <param name="parameter"></param>
+        public void BeginVisitItem(AppTypeParameter syntaxPart, CompilerDirectiveVisitorOptions parameter) {
+            parameter.CompilerOptions.ApplicationType.Value = syntaxPart.ApplicationType;
+        }
+
 
     }
 }

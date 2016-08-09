@@ -266,17 +266,17 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <summary>
         ///     append char to buffer
         /// </summary>
-        /// <param name="c"></param>
-        protected void AppendToBuffer(char c) {
-            parsedString.Append(c);
+        /// <param name="charToAppend"></param>
+        protected void AppendToBuffer(char charToAppend) {
+            parsedString.Append(charToAppend);
         }
 
         /// <summary>
         ///     append string to buffer
         /// </summary>
-        /// <param name="s"></param>
-        protected void AppendToBuffer(string s) {
-            parsedString.Append(s);
+        /// <param name="stringToAppend"></param>
+        protected void AppendToBuffer(string stringToAppend) {
+            parsedString.Append(stringToAppend);
         }
 
         /// <summary>
@@ -364,7 +364,7 @@ namespace PasPasPas.Parsing.Tokenizer {
             while (state.IsValid)
                 state.FetchChar();
 
-            state.Finish(PascalToken.Eof);
+            state.Finish(TokenKind.Eof);
         }
     }
 
@@ -515,19 +515,19 @@ namespace PasPasPas.Parsing.Tokenizer {
         ///     get the token id
         /// </summary>
         protected override int TokenId
-            => PascalToken.Comment;
+            => TokenKind.Comment;
     }
 
     /// <summary>
     ///     token group for curly brace comments
     /// </summary>
-    public class AlternativeCurlyBraceCommenTokenValue : AlternativeCurlyBracedTokenValue {
+    public class AlternativeCurlyBraceCommentTokenValue : AlternativeCurlyBracedTokenValue {
 
         /// <summary>
         ///     get the token id
         /// </summary>
         protected override int TokenId
-            => PascalToken.Comment;
+            => TokenKind.Comment;
     }
 
     /// <summary>
@@ -539,7 +539,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         ///     token kind
         /// </summary>
         protected override int TokenId
-            => PascalToken.Preprocessor;
+            => TokenKind.Preprocessor;
     }
 
     /// <summary>
@@ -551,7 +551,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         ///     token kind
         /// </summary>
         protected override int TokenId
-            => PascalToken.Preprocessor;
+            => TokenKind.Preprocessor;
     }
 
     /// <summary>
@@ -883,7 +883,7 @@ namespace PasPasPas.Parsing.Tokenizer {
                 }
             }
 
-            state.Finish(PascalToken.Comment);
+            state.Finish(TokenKind.Comment);
         }
     }
 
@@ -928,7 +928,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         /// <param name="state">current tokenizer state</param>
         public override void ParseByPrefix(ContinuationState state) {
-            var token = digitTokenizer.Tokenize(state.Input, state.Buffer, state.Log);
+            digitTokenizer.Tokenize(state.Input, state.Buffer, state.Log);
             var withDot = false;
             var withExponent = false;
 

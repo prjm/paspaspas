@@ -47,6 +47,7 @@
     <Compile Include="Parser\EmptyCollection.cs" />
     <Compile Include="Parser\IPascalParser.cs" />
     <Compile Include="Api\IPascalTokenizer.cs" />
+    <Compile Include="SyntaxTree\CompilerDirectives\AppTypeParameter.cs" />
     <Compile Include="SyntaxTree\Terminal.cs" />
     <Compile Include="SyntaxTree\InvalidToken.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\AlignSwitch.cs" />

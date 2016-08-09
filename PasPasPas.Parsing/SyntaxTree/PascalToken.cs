@@ -11,21 +11,6 @@ namespace PasPasPas.Parsing.SyntaxTree {
     public class PascalToken {
 
         /// <summary>
-        ///     end-of-input
-        /// </summary>
-        public const int Eof = 2;
-
-        /// <summary>
-        ///     preprocessor token
-        /// </summary>
-        public const int Preprocessor = 5;
-
-        /// <summary>
-        ///     comment
-        /// </summary>
-        public const int Comment = 6;
-
-        /// <summary>
         ///     token for <c>,</c>
         /// </summary>
         public const int Comma = 10;

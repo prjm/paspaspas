@@ -175,139 +175,83 @@ namespace PasPasPas.Parsing.Parser {
                 PascalToken.IfOpt,
             };
 
-        private ISyntaxPart ParseParameter() {
+        private void ParseParameter(ISyntaxPart parent) {
 
             if (Match(PascalToken.IfDef)) {
                 ParseIfDef();
-                return null;
             }
-
-            if (Match(PascalToken.IfOpt)) {
+            else if (Match(PascalToken.IfOpt)) {
                 ParseIfOpt();
-                return null;
             }
-
-
-            if (Match(PascalToken.EndIf)) {
+            else if (Match(PascalToken.EndIf)) {
                 ParseEndIf();
-                return null;
             }
-
-            if (Match(PascalToken.ElseCd)) {
+            else if (Match(PascalToken.ElseCd)) {
                 ParseElse();
-                return null;
             }
-
-            if (Match(PascalToken.IfNDef)) {
+            else if (Match(PascalToken.IfNDef)) {
                 ParseIfNDef();
-                return null;
             }
-
-            if (ConditionalCompilation.Skip)
-                return null;
-
-            if (Match(PascalToken.Apptype)) {
-                ParseApptypeParameter();
-                return null;
+            else if (Match(PascalToken.Apptype)) {
+                ParseApptypeParameter(parent);
             }
-
-            if (Match(PascalToken.CodeAlign)) {
+            else if (Match(PascalToken.CodeAlign)) {
                 ParseCodeAlignParameter();
-                return null;
             }
-
-            if (Match(PascalToken.Define)) {
+            else if (Match(PascalToken.Define)) {
                 ParseDefine();
-                return null;
             }
-
-            if (Match(PascalToken.Undef)) {
+            else if (Match(PascalToken.Undef)) {
                 ParseUndef();
-                return null;
             }
-
-            if (Match(PascalToken.ExternalSym)) {
+            else if (Match(PascalToken.ExternalSym)) {
                 ParseExternalSym();
-                return null;
             }
-
-            if (Match(PascalToken.HppEmit)) {
+            else if (Match(PascalToken.HppEmit)) {
                 ParseHppEmit();
-                return null;
             }
-
-            if (Match(PascalToken.ImageBase)) {
+            else if (Match(PascalToken.ImageBase)) {
                 ParseImageBase();
-                return null;
             }
-
-            if (Match(PascalToken.LibPrefix, PascalToken.LibSuffix, PascalToken.LibVersion)) {
+            else if (Match(PascalToken.LibPrefix, PascalToken.LibSuffix, PascalToken.LibVersion)) {
                 ParseLibParameter();
-                return null;
             }
-
-            if (Match(PascalToken.Warn)) {
+            else if (Match(PascalToken.Warn)) {
                 ParseWarnParameter();
-                return null;
             }
-
-            if (Match(PascalToken.Rtti)) {
+            else if (Match(PascalToken.Rtti)) {
                 ParseRttiParameter();
-                return null;
             }
-
-            if (Match(PascalToken.Region)) {
+            else if (Match(PascalToken.Region)) {
                 ParseRegion();
-                return null;
             }
-
-            if (Match(PascalToken.EndRegion)) {
+            else if (Match(PascalToken.EndRegion)) {
                 ParseEndRegion();
-                return null;
             }
-
-            if (Match(PascalToken.SetPEOsVersion)) {
+            else if (Match(PascalToken.SetPEOsVersion)) {
                 ParsePEOsVersion();
-                return null;
             }
-
-            if (Match(PascalToken.SetPESubsystemVersion)) {
+            else if (Match(PascalToken.SetPESubsystemVersion)) {
                 ParsePESubsystemVersion();
-                return null;
             }
-
-
-            if (Match(PascalToken.SetPEUserVersion)) {
+            else if (Match(PascalToken.SetPEUserVersion)) {
                 ParsePEUserVersion();
-                return null;
             }
-
-            if (Match(PascalToken.ObjTypeName)) {
+            else if (Match(PascalToken.ObjTypeName)) {
                 ParseObjTypeNameSwitch();
-                return null;
             }
-
-            if (Match(PascalToken.NoInclude)) {
+            else if (Match(PascalToken.NoInclude)) {
                 ParseNoInclude();
-                return null;
             }
-
-            if (Match(PascalToken.NoDefine)) {
+            else if (Match(PascalToken.NoDefine)) {
                 ParseNoDefine();
-                return null;
             }
-
-            if (Match(PascalToken.MessageCd)) {
+            else if (Match(PascalToken.MessageCd)) {
                 ParseMessage();
-                return null;
             }
-
-            if (Match(PascalToken.MinMemStackSizeSwitchLong, PascalToken.MaxMemStackSizeSwitchLong)) {
+            else if (Match(PascalToken.MinMemStackSizeSwitchLong, PascalToken.MaxMemStackSizeSwitchLong)) {
                 ParseStackSizeSwitch(false);
-                return null;
             }
-
-            return null;
         }
 
         private void ParseIfOpt() {
@@ -717,19 +661,27 @@ namespace PasPasPas.Parsing.Parser {
             Unexpected();
         }
 
-        private void ParseApptypeParameter() {
-            Require(PascalToken.Apptype);
-            var value = Require(PascalToken.Identifier).Value;
+        private void ParseApptypeParameter(ISyntaxPart parent) {
+            AppTypeParameter result = CreateByTerminal<AppTypeParameter>(parent);
 
-            if (string.Equals(value, "CONSOLE", StringComparison.OrdinalIgnoreCase)) {
-                CompilerOptions.ApplicationType.Value = AppType.Console;
+            if (ContinueWith(result, PascalToken.Identifier)) {
+
+                var value = result.LastTerminal.Value;
+
+                if (string.Equals(value, "CONSOLE", StringComparison.OrdinalIgnoreCase)) {
+                    result.ApplicationType = AppType.Console;
+                    return;
+                }
+                else if (string.Equals(value, "GUI", StringComparison.OrdinalIgnoreCase)) {
+                    result.ApplicationType = AppType.Gui;
+                    return;
+                }
+
+                ErrorLastPart(result, CompilerDirectiveParserErrors.InvalidApplicationType, result.LastTerminal.Value);
+                return;
             }
-            else if (string.Equals(value, "GUI", StringComparison.OrdinalIgnoreCase)) {
-                CompilerOptions.ApplicationType.Value = AppType.Gui;
-            }
-            else {
-                Unexpected();
-            }
+
+            ErrorAndSkip(parent, CompilerDirectiveParserErrors.InvalidApplicationType, CurrentToken());
         }
 
         /// <summary>
@@ -2136,7 +2088,7 @@ namespace PasPasPas.Parsing.Parser {
                 ParseLongSwitch(result);
             }
             else if (parameters.Contains(kind)) {
-                result = ParseParameter();
+                ParseParameter(result);
             }
 
             if (result == null) {

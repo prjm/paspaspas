@@ -1,5 +1,4 @@
-﻿using PasPasPas.Api;
-using PasPasPas.Infrastructure.Input;
+﻿using PasPasPas.Infrastructure.Input;
 using PasPasPas.Options.Bundles;
 using PasPasPas.Parsing.Parser;
 using PasPasPas.Parsing.SyntaxTree;
@@ -34,7 +33,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="nextToken"></param>
         /// <returns></returns>
         protected override bool IsMacroToken(PascalToken nextToken)
-            => nextToken.Kind == PascalToken.Preprocessor;
+            => nextToken.Kind == TokenKind.Preprocessor;
 
         /// <summary>
         ///     test if a token is a valid token
@@ -44,8 +43,8 @@ namespace PasPasPas.Parsing.Tokenizer {
         protected override bool IsValidToken(PascalToken nextToken)
             => nextToken.Kind != PascalToken.WhiteSpace &&
             nextToken.Kind != PascalToken.ControlChar &&
-            nextToken.Kind != PascalToken.Comment &&
-            nextToken.Kind != PascalToken.Preprocessor;
+            nextToken.Kind != TokenKind.Comment &&
+            nextToken.Kind != TokenKind.Preprocessor;
 
         /// <summary>
         ///     process preprocessor token

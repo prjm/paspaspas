@@ -1,5 +1,4 @@
-﻿using PasPasPas.Api;
-using PasPasPas.Parsing.SyntaxTree;
+﻿using PasPasPas.Parsing.SyntaxTree;
 
 namespace PasPasPas.Parsing.Tokenizer {
 
@@ -18,7 +17,7 @@ namespace PasPasPas.Parsing.Tokenizer {
 
             var lparen = AddPattern('(', PascalToken.OpenParen);
             lparen.Add('.', PascalToken.OpenBraces);
-            lparen.Add('*', new AlternativeCurlyBraceCommenTokenValue()).Add('$', new AlternativePreprocessorTokenValue());
+            lparen.Add('*', new AlternativeCurlyBraceCommentTokenValue()).Add('$', new AlternativePreprocessorTokenValue());
 
             AddPattern(',', PascalToken.Comma);
             AddPattern(')', PascalToken.CloseParen);
