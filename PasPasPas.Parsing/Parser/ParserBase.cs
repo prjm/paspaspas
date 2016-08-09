@@ -91,6 +91,27 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         /// <summary>
+        ///     mark an already parsed terminal as error
+        /// </summary>
+        /// <param name="message">message id</param>
+        /// <param name="values">error values</param>
+        /// <param name="parent">parent syntax tree node</param>
+        /// <returns></returns>
+        protected void ErrorLastPart(ISyntaxPart parent, Guid message, params object[] values) {
+            var lastSymbol = parent.Parts.Last();
+            parent.Parts.Remove(lastSymbol);
+            lastSymbol.Parent = null;
+
+            foreach (Terminal t in SyntaxPartBase.FindAllTerminals(lastSymbol)) {
+                var invalid = new InvalidToken(t.Token);
+                invalid.Parent = parent;
+                parent.Parts.Add(invalid);
+            }
+
+            logSource.Error(message, values);
+        }
+
+        /// <summary>
         ///     Require a token kind
         /// </summary>
         /// <param name="tokenKind">required kind of tokem</param>

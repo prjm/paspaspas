@@ -1537,6 +1537,9 @@ namespace PasPasPas.Parsing.Parser {
                         result.AlignValue = Alignment.DoubleQuadWord;
                         return;
                 }
+
+                ErrorLastPart(result, CompilerDirectiveParserErrors.InvalidAlignDirective, result.LastTerminal.Value);
+                return;
             }
 
             ErrorAndSkip(parent, CompilerDirectiveParserErrors.InvalidAlignDirective, CurrentToken());

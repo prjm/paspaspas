@@ -18,7 +18,7 @@ namespace PasPasPas.Parsing.SyntaxTree {
         /// <summary>
         ///     child nodes
         /// </summary>
-        ICollection<ISyntaxPart> Parts { get; }
+        IList<ISyntaxPart> Parts { get; }
 
         /// <summary>
         ///     parent node

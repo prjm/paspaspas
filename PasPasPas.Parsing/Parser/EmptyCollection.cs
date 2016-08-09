@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using PasPasPas.Parsing.SyntaxTree;
 using System;
 using System.Collections;
 using System.Linq;
@@ -10,18 +9,36 @@ namespace PasPasPas.Parsing.Parser {
     ///     stub for an empty collection
     /// </summary>
     /// <typeparam name="T">collection type</typeparam>
-    public class EmptyCollection<T> : ICollection<T> {
+    public class EmptyCollection<T> : ICollection<T>, IList<T> {
 
         /// <summary>
         ///     field for lazy single instance
         /// </summary>
-        private static Lazy<ICollection<T>> instance
-            = new Lazy<ICollection<T>>(() => new EmptyCollection<T>());
+        private static Lazy<IList<T>> instance
+            = new Lazy<IList<T>>(() => new EmptyCollection<T>());
+
+        /// <summary>
+        ///     access item
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        public T this[int index]
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
 
         /// <summary>
         ///     single instance
         /// </summary>
-        public static ICollection<T> Instance
+        public static IList<T> Instance
             => instance.Value;
 
         /// <summary>
@@ -74,11 +91,36 @@ namespace PasPasPas.Parsing.Parser {
             => Enumerable.Empty<T>().GetEnumerator();
 
         /// <summary>
+        ///     index of an item
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        public int IndexOf(T item)
+            => -1;
+
+        /// <summary>
+        ///     insert ist not supported
+        /// </summary>
+        /// <param name="index"></param>
+        /// <param name="item"></param>
+        public void Insert(int index, T item) {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
         ///     removes an item
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
         public bool Remove(T item) => false;
+
+        /// <summary>
+        ///     remove is not supported
+        /// </summary>
+        /// <param name="index"></param>
+        public void RemoveAt(int index) {
+            throw new NotImplementedException();
+        }
 
         /// <summary>
         ///     gets an empty enumerator

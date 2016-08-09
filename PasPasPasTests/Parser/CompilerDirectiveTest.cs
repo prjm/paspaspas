@@ -29,7 +29,7 @@ namespace PasPasPasTests.Parser {
             RunCompilerDirective("ALIGN 16", Alignment.DoubleQuadWord, f);
             RunCompilerDirective("ALIGN KAPUTT", Alignment.Undefined, f, CompilerDirectiveParserErrors.InvalidAlignDirective);
             RunCompilerDirective("ALIGN 17", Alignment.Undefined, f, CompilerDirectiveParserErrors.InvalidAlignDirective);
-            RunCompilerDirective("A0", Alignment.Undefined, f, CompilerDirectiveParserErrors.InvalidAlignDirective);
+            RunCompilerDirective("A 0", Alignment.Undefined, f, CompilerDirectiveParserErrors.InvalidAlignDirective);
         }
 
         [TestMethod]

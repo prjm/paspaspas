@@ -27,7 +27,7 @@ namespace PasPasPas.Parsing.SyntaxTree {
         /// <summary>
         ///     empty part list
         /// </summary>
-        public override ICollection<ISyntaxPart> Parts { get; }
+        public override IList<ISyntaxPart> Parts { get; }
             = EmptyCollection<ISyntaxPart>.Instance;
 
         /// <summary>

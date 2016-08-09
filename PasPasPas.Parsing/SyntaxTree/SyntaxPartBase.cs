@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using PasPasPas.Api;
-using PasPasPas.Parsing.Parser;
 
 namespace PasPasPas.Parsing.SyntaxTree {
 
@@ -36,9 +35,9 @@ namespace PasPasPas.Parsing.SyntaxTree {
         public IParserInformationProvider InformationProvider { get; }
 
         /// <summary>
-        ///     syntax par
+        ///     syntax parts
         /// </summary>
-        public virtual ICollection<ISyntaxPart> Parts
+        public virtual IList<ISyntaxPart> Parts
             => parts;
 
         private IList<ISyntaxPart> parts
@@ -79,6 +78,19 @@ namespace PasPasPas.Parsing.SyntaxTree {
         /// <param name="result">formatter</param>
         public virtual void ToFormatter(PascalFormatter result) {
             //..
+        }
+
+        /// <summary>
+        ///     find all terminals in a syntax gtree
+        /// </summary>
+        /// <param name="symbol">symbol to search</param>
+        /// <returns></returns>
+        public static IEnumerable<Terminal> FindAllTerminals(ISyntaxPart symbol) {
+            if (symbol is Terminal)
+                yield return symbol as Terminal;
+
+            foreach (var child in symbol.Parts)
+                FindAllTerminals(child);
         }
     }
 }

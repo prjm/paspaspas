@@ -50,7 +50,7 @@ namespace P3Ide.ViewModel.PascalProject {
                 var parser = new CompilerDirectiveParser(env, reader);
                 parser.IncludeInput = reader;
                 while (!reader.AtEof) {
-                    parser.ParseCompilerDirective();
+                    parser.Parse();
                 }
             }
         }
