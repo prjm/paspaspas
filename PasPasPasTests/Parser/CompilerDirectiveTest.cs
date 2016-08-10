@@ -30,13 +30,19 @@ namespace PasPasPasTests.Parser {
             RunCompilerDirective("ALIGN KAPUTT", Alignment.Undefined, f, CompilerDirectiveParserErrors.InvalidAlignDirective);
             RunCompilerDirective("ALIGN 17", Alignment.Undefined, f, CompilerDirectiveParserErrors.InvalidAlignDirective);
             RunCompilerDirective("A 0", Alignment.Undefined, f, CompilerDirectiveParserErrors.InvalidAlignDirective);
+            RunCompilerDirective("ALIGN", Alignment.Undefined, f, CompilerDirectiveParserErrors.InvalidAlignDirective);
+            RunCompilerDirective("A", Alignment.Undefined, f, CompilerDirectiveParserErrors.InvalidAlignDirective);
         }
 
         [TestMethod]
         public void TestApptype() {
-            RunCompilerDirective("", AppType.Undefined, () => CompilerOptions.ApplicationType.Value);
-            RunCompilerDirective("APPTYPE GUI", AppType.Gui, () => CompilerOptions.ApplicationType.Value);
-            RunCompilerDirective("APPTYPE CONSOLE", AppType.Console, () => CompilerOptions.ApplicationType.Value);
+            Func<object> f = () => CompilerOptions.ApplicationType.Value;
+            RunCompilerDirective("", AppType.Undefined, f);
+            RunCompilerDirective("APPTYPE GUI", AppType.Gui, f);
+            RunCompilerDirective("APPTYPE CONSOLE", AppType.Console, f);
+            RunCompilerDirective("APPTYPE 17", AppType.Undefined, f, CompilerDirectiveParserErrors.InvalidApplicationType);
+            RunCompilerDirective("APPTYPE UNDIFINED", AppType.Undefined, f, CompilerDirectiveParserErrors.InvalidApplicationType);
+            RunCompilerDirective("APPTYPE", AppType.Undefined, f, CompilerDirectiveParserErrors.InvalidApplicationType);
         }
 
         [TestMethod]
@@ -61,11 +67,14 @@ namespace PasPasPasTests.Parser {
 
         [TestMethod]
         public void TestBoolEvalSwitch() {
-            RunCompilerDirective("", BooleanEvaluation.Undefined, () => CompilerOptions.BoolEval.Value);
-            RunCompilerDirective("B+", BooleanEvaluation.CompleteEvaluation, () => CompilerOptions.BoolEval.Value);
-            RunCompilerDirective("B-", BooleanEvaluation.ShortEvaluation, () => CompilerOptions.BoolEval.Value);
-            RunCompilerDirective("BOOLEVAL ON", BooleanEvaluation.CompleteEvaluation, () => CompilerOptions.BoolEval.Value);
-            RunCompilerDirective("BOOLEVAL OFF", BooleanEvaluation.ShortEvaluation, () => CompilerOptions.BoolEval.Value);
+            Func<object> f = () => CompilerOptions.BoolEval.Value;
+            RunCompilerDirective("", BooleanEvaluation.Undefined, f);
+            RunCompilerDirective("B+", BooleanEvaluation.CompleteEvaluation, f);
+            RunCompilerDirective("B-", BooleanEvaluation.ShortEvaluation, f);
+            RunCompilerDirective("BOOLEVAL ON", BooleanEvaluation.CompleteEvaluation, f);
+            RunCompilerDirective("BOOLEVAL OFF", BooleanEvaluation.ShortEvaluation, f);
+            RunCompilerDirective("BOOLEVAL FUZZBUFF", BooleanEvaluation.Undefined, f, CompilerDirectiveParserErrors.InvalidBoolEvalDirective);
+            RunCompilerDirective("BOOLEVAL", BooleanEvaluation.Undefined, f, CompilerDirectiveParserErrors.InvalidBoolEvalDirective);
         }
 
         [TestMethod]
@@ -109,11 +118,15 @@ namespace PasPasPasTests.Parser {
 
         [TestMethod]
         public void TestAssertions() {
-            RunCompilerDirective("", AssertionMode.Undefined, () => CompilerOptions.Assertions.Value);
-            RunCompilerDirective("C+", AssertionMode.EnableAssertions, () => CompilerOptions.Assertions.Value);
-            RunCompilerDirective("C-", AssertionMode.DisableAssertions, () => CompilerOptions.Assertions.Value);
-            RunCompilerDirective("ASSERTIONS ON", AssertionMode.EnableAssertions, () => CompilerOptions.Assertions.Value);
-            RunCompilerDirective("ASSERTIONS OFF", AssertionMode.DisableAssertions, () => CompilerOptions.Assertions.Value);
+            Func<object> f = () => CompilerOptions.Assertions.Value;
+            RunCompilerDirective("", AssertionMode.Undefined, f);
+            RunCompilerDirective("C+", AssertionMode.EnableAssertions, f);
+            RunCompilerDirective("C-", AssertionMode.DisableAssertions, f);
+            RunCompilerDirective("ASSERTIONS ON", AssertionMode.EnableAssertions, f);
+            RunCompilerDirective("ASSERTIONS OFF", AssertionMode.DisableAssertions, f);
+            RunCompilerDirective("ASSERTIONS FUZBAZ", AssertionMode.Undefined, f, CompilerDirectiveParserErrors.InvalidAssertDirective);
+            RunCompilerDirective("ASSERTIONS", AssertionMode.Undefined, f, CompilerDirectiveParserErrors.InvalidAssertDirective);
+            RunCompilerDirective("C", AssertionMode.Undefined, f, CompilerDirectiveParserErrors.InvalidAssertDirective);
         }
 
 

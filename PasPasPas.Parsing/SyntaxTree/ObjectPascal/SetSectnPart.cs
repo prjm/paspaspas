@@ -1,5 +1,4 @@
 ﻿using PasPasPas.Api;
-using PasPasPas.Parsing.SyntaxTree;
 
 namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
 
@@ -34,7 +33,7 @@ namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
                 case PascalToken.DotDot:
                     result.Punct("..");
                     break;
-                case PascalToken.Comma:
+                case TokenKind.Comma:
                     result.Punct(",").Space();
                     break;
             }

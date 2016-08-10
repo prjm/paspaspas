@@ -11,61 +11,6 @@ namespace PasPasPas.Parsing.SyntaxTree {
     public class PascalToken {
 
         /// <summary>
-        ///     token for <c>,</c>
-        /// </summary>
-        public const int Comma = 10;
-
-        /// <summary>
-        ///     token for <c>.</c>
-        /// </summary>
-        public const int Dot = 11;
-
-        /// <summary>
-        ///     token for <c>(</c>
-        /// </summary>
-        public const int OpenParen = 12;
-
-        /// <summary>
-        ///     token for <c>)</c>
-        /// </summary>
-        public const int CloseParen = 13;
-
-        /// <summary>
-        ///     token for <c>;</c>
-        /// </summary>
-        public const int Semicolon = 14;
-
-        /// <summary>
-        ///     token for <c>=</c>
-        /// </summary>
-        public const int EqualsSign = 15;
-
-        /// <summary>
-        ///     token for <c>[</c>
-        /// </summary>
-        public const int OpenBraces = 16;
-
-        /// <summary>
-        ///     token for <c>]</c>
-        /// </summary>
-        public const int CloseBraces = 17;
-
-        /// <summary>
-        ///     token for <c>:</c>
-        /// </summary>
-        public const int Colon = 18;
-
-        /// <summary>
-        ///     token for <c>^</c>
-        /// </summary>
-        public const int Circumflex = 19;
-
-        /// <summary>
-        ///     token for <c>&lt;</c>
-        /// </summary>
-        public const int AngleBracketsOpen = LessThen;
-
-        /// <summary>
         ///     token for <c>&gt;</c>
         /// </summary>
         public const int AngleBracketsClose = GreaterThen;

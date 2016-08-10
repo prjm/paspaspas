@@ -1,5 +1,4 @@
-﻿using PasPasPas.Api;
-using PasPasPas.Parsing.SyntaxTree;
+﻿using PasPasPas.Parsing.SyntaxTree;
 
 namespace PasPasPas.Parsing.Tokenizer {
 
@@ -14,11 +13,11 @@ namespace PasPasPas.Parsing.Tokenizer {
         public CompilerDirectivePatterns() {
             AddPattern('+', PascalToken.Plus);
             AddPattern('-', PascalToken.Minus);
-            AddPattern('(', PascalToken.OpenParen);
-            AddPattern(')', PascalToken.CloseParen);
-            AddPattern('[', PascalToken.OpenBraces);
-            AddPattern(']', PascalToken.CloseBraces);
-            AddPattern(',', PascalToken.Comma);
+            AddPattern('(', TokenKind.OpenParen);
+            AddPattern(')', TokenKind.CloseParen);
+            AddPattern('[', TokenKind.OpenBraces);
+            AddPattern(']', TokenKind.CloseBraces);
+            AddPattern(',', TokenKind.Comma);
             AddPattern('*', PascalToken.Times);
             AddPattern(new WhitspaceCharacterClass(), new WhiteSpaceTokenGroupValue());
             AddPattern(new IdentifierCharacterClass() { AllowDots = true }, new IdentifierTokenGroupValue(CompilerDirectiveTokenizer.Keywords) { AllowDots = true });

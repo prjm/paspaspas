@@ -82,11 +82,10 @@ namespace PasPasPas.Parsing.Parser {
         ///     parser syntax error
         /// </summary>
         /// <param name="message">message id</param>
-        /// <param name="values">error values</param>
         /// <param name="parent">parent syntax tree node</param>
         /// <returns></returns>
-        protected void ErrorAndSkip(ISyntaxPart parent, Guid message, params object[] values) {
-            logSource.Error(message, values);
+        protected void ErrorAndSkip(ISyntaxPart parent, Guid message) {
+            logSource.Error(message);
             CreateByError(parent);
         }
 
@@ -315,6 +314,11 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="part"></param>
         /// <returns></returns>
         protected bool ContinueWith(ISyntaxPart part, int tokenKind) {
+
+            if (!Tokenizer.HasNextToken()) {
+                return false;
+            }
+
             if (!Match(tokenKind)) {
                 return false;
             }

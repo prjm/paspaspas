@@ -19,5 +19,17 @@ namespace PasPasPas.Parsing.Parser {
         public static readonly Guid InvalidApplicationType
             = new Guid("{D3121EB7-29C9-4D4A-AE35-4F8D519E381B}");
 
+        /// <summary>
+        ///     invalid assertion type
+        /// </summary>
+        public static readonly Guid InvalidAssertDirective
+            = new Guid("{7680773E-1D99-48BF-8513-F3B6802046B0}");
+
+
+        /// <summary>
+        ///     invalid boolean evaluation switch
+        /// </summary>
+        public static readonly Guid InvalidBoolEvalDirective
+            = new Guid("{4F5AA792-A1F2-4093-9228-E4FE94A6C8E6}");
     }
 }

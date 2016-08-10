@@ -287,7 +287,7 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             if (mSwitch)
-                Require(PascalToken.Comma);
+                Require(TokenKind.Comma);
 
             if (mSwitch || Optional(PascalToken.MaxMemStackSizeSwitchLong)) {
                 size = Require(PascalToken.Integer).Value;
@@ -451,10 +451,10 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private RttiForVisibility ParseRttiVisibility() {
-            if (!RequireTokenKind(PascalToken.OpenParen))
+            if (!RequireTokenKind(TokenKind.OpenParen))
                 return null;
 
-            if (!RequireTokenKind(PascalToken.OpenBraces))
+            if (!RequireTokenKind(TokenKind.OpenBraces))
                 return null;
 
             var result = new RttiForVisibility();
@@ -478,12 +478,12 @@ namespace PasPasPas.Parsing.Parser {
                     default:
                         return null;
                 }
-            } while (Optional(PascalToken.Comma));
+            } while (Optional(TokenKind.Comma));
 
-            if (!RequireTokenKind(PascalToken.CloseBraces))
+            if (!RequireTokenKind(TokenKind.CloseBraces))
                 return null;
 
-            if (!RequireTokenKind(PascalToken.CloseParen))
+            if (!RequireTokenKind(TokenKind.CloseParen))
                 return null;
 
             return result;
@@ -681,7 +681,7 @@ namespace PasPasPas.Parsing.Parser {
                 return;
             }
 
-            ErrorAndSkip(parent, CompilerDirectiveParserErrors.InvalidApplicationType, CurrentToken());
+            ErrorAndSkip(parent, CompilerDirectiveParserErrors.InvalidApplicationType);
         }
 
         /// <summary>
@@ -692,13 +692,11 @@ namespace PasPasPas.Parsing.Parser {
             if (Match(PascalToken.AlignSwitchLong)) {
                 ParseLongAlignSwitch(parent);
             }
-
-            else if (Optional(PascalToken.BoolEvalSwitchLong)) {
-                ParseLongBoolEvalSwitch();
+            else if (Match(PascalToken.BoolEvalSwitchLong)) {
+                ParseLongBoolEvalSwitch(parent);
             }
-
-            else if (Optional(PascalToken.AssertSwitchLong)) {
-                ParseLongAssertSwitch();
+            else if (Match(PascalToken.AssertSwitchLong)) {
+                ParseLongAssertSwitch(parent);
             }
 
             else if (Optional(PascalToken.DebugInfoSwitchLong)) {
@@ -1429,32 +1427,32 @@ namespace PasPasPas.Parsing.Parser {
             Unexpected();
         }
 
-        private void ParseLongAssertSwitch() {
-            if (Optional(PascalToken.On)) {
-                CompilerOptions.Assertions.Value = AssertionMode.EnableAssertions;
-                return;
-            }
+        private void ParseLongAssertSwitch(ISyntaxPart parent) {
+            AssertSwitch result = CreateByTerminal<AssertSwitch>(parent);
 
-            if (Optional(PascalToken.Off)) {
-                CompilerOptions.Assertions.Value = AssertionMode.DisableAssertions;
-                return;
+            if (ContinueWith(result, PascalToken.On)) {
+                result.Assertions = AssertionMode.EnableAssertions;
             }
-
-            Unexpected();
+            else if (ContinueWith(result, PascalToken.Off)) {
+                result.Assertions = AssertionMode.DisableAssertions;
+            }
+            else {
+                ErrorAndSkip(parent, CompilerDirectiveParserErrors.InvalidAssertDirective);
+            }
         }
 
-        private void ParseLongBoolEvalSwitch() {
-            if (Optional(PascalToken.On)) {
-                CompilerOptions.BoolEval.Value = BooleanEvaluation.CompleteEvaluation;
-                return;
-            }
+        private void ParseLongBoolEvalSwitch(ISyntaxPart parent) {
+            var result = CreateByTerminal<BooleanEvaluationSwitch>(parent);
 
-            if (Optional(PascalToken.Off)) {
-                CompilerOptions.BoolEval.Value = BooleanEvaluation.ShortEvaluation;
-                return;
+            if (ContinueWith(result, PascalToken.On)) {
+                result.BoolEval = BooleanEvaluation.CompleteEvaluation;
             }
-
-            Unexpected();
+            else if (ContinueWith(result, PascalToken.Off)) {
+                result.BoolEval = BooleanEvaluation.ShortEvaluation;
+            }
+            else {
+                ErrorAndSkip(parent, CompilerDirectiveParserErrors.InvalidBoolEvalDirective);
+            }
         }
 
         private void ParseLongAlignSwitch(ISyntaxPart parent) {
@@ -1494,7 +1492,7 @@ namespace PasPasPas.Parsing.Parser {
                 return;
             }
 
-            ErrorAndSkip(parent, CompilerDirectiveParserErrors.InvalidAlignDirective, CurrentToken());
+            ErrorAndSkip(parent, CompilerDirectiveParserErrors.InvalidAlignDirective);
         }
 
         /// <summary>
@@ -1506,10 +1504,10 @@ namespace PasPasPas.Parsing.Parser {
                 ParseAlignSwitch(parent);
             }
             else if (Match(PascalToken.BoolEvalSwitch)) {
-                ParseBoolEvalSwitch();
+                ParseBoolEvalSwitch(parent);
             }
             else if (Match(PascalToken.AssertSwitch)) {
-                ParseAssertSwitch();
+                ParseAssertSwitch(parent);
             }
             else if (Match(PascalToken.DebugInfoOrDescriptionSwitch)) {
                 ParseDebugInfoOrDescriptionSwitch();
@@ -2006,36 +2004,32 @@ namespace PasPasPas.Parsing.Parser {
             return false;
         }
 
-        private void ParseAssertSwitch() {
-            FetchNextToken();
+        private void ParseAssertSwitch(ISyntaxPart parent) {
+            AssertSwitch result = CreateByTerminal<AssertSwitch>(parent);
 
-            if (Optional(PascalToken.Plus)) {
-                CompilerOptions.Assertions.Value = AssertionMode.EnableAssertions;
-                return;
+            if (ContinueWith(result, PascalToken.Plus)) {
+                result.Assertions = AssertionMode.EnableAssertions;
             }
-
-            if (Optional(PascalToken.Minus)) {
-                CompilerOptions.Assertions.Value = AssertionMode.DisableAssertions;
-                return;
+            else if (ContinueWith(result, PascalToken.Minus)) {
+                result.Assertions = AssertionMode.DisableAssertions;
             }
-
-            Unexpected();
+            else {
+                ErrorAndSkip(parent, CompilerDirectiveParserErrors.InvalidAssertDirective);
+            }
         }
 
-        private void ParseBoolEvalSwitch() {
-            FetchNextToken();
+        private void ParseBoolEvalSwitch(ISyntaxPart parent) {
+            BooleanEvaluationSwitch result = CreateByTerminal<BooleanEvaluationSwitch>(parent);
 
-            if (Optional(PascalToken.Plus)) {
-                CompilerOptions.BoolEval.Value = BooleanEvaluation.CompleteEvaluation;
-                return;
+            if (ContinueWith(result, PascalToken.Plus)) {
+                result.BoolEval = BooleanEvaluation.CompleteEvaluation;
             }
-
-            if (Optional(PascalToken.Minus)) {
-                CompilerOptions.BoolEval.Value = BooleanEvaluation.ShortEvaluation;
-                return;
+            else if (ContinueWith(result, PascalToken.Minus)) {
+                result.BoolEval = BooleanEvaluation.ShortEvaluation;
             }
-
-            Unexpected();
+            else {
+                ErrorAndSkip(parent, CompilerDirectiveParserErrors.InvalidBoolEvalDirective);
+            }
         }
 
         private ISyntaxPart ParseAlignSwitch(ISyntaxPart parent) {
@@ -2066,7 +2060,7 @@ namespace PasPasPas.Parsing.Parser {
                     result.AlignValue = Alignment.Unaligned;
                 }
                 else {
-                    ErrorAndSkip(parent, CompilerDirectiveParserErrors.InvalidAlignDirective, CurrentToken());
+                    ErrorAndSkip(parent, CompilerDirectiveParserErrors.InvalidAlignDirective);
                 }
             }
 

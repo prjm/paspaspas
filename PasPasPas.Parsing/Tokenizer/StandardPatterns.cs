@@ -11,22 +11,22 @@ namespace PasPasPas.Parsing.Tokenizer {
         ///     register punctuators
         /// </summary>
         public StandardPatterns() {
-            var dot = AddPattern('.', PascalToken.Dot);
+            var dot = AddPattern('.', TokenKind.Dot);
             dot.Add('.', PascalToken.DotDot);
-            dot.Add(')', PascalToken.CloseBraces);
+            dot.Add(')', TokenKind.CloseBraces);
 
-            var lparen = AddPattern('(', PascalToken.OpenParen);
-            lparen.Add('.', PascalToken.OpenBraces);
+            var lparen = AddPattern('(', TokenKind.OpenParen);
+            lparen.Add('.', TokenKind.OpenBraces);
             lparen.Add('*', new AlternativeCurlyBraceCommentTokenValue()).Add('$', new AlternativePreprocessorTokenValue());
 
-            AddPattern(',', PascalToken.Comma);
-            AddPattern(')', PascalToken.CloseParen);
-            AddPattern(';', PascalToken.Semicolon);
-            AddPattern('=', PascalToken.EqualsSign);
-            AddPattern('[', PascalToken.OpenBraces);
-            AddPattern(']', PascalToken.CloseBraces);
-            AddPattern(':', PascalToken.Colon).Add('=', PascalToken.Assignment);
-            AddPattern('^', PascalToken.Circumflex);
+            AddPattern(',', TokenKind.Comma);
+            AddPattern(')', TokenKind.CloseParen);
+            AddPattern(';', TokenKind.Semicolon);
+            AddPattern('=', TokenKind.EqualsSign);
+            AddPattern('[', TokenKind.OpenBraces);
+            AddPattern(']', TokenKind.CloseBraces);
+            AddPattern(':', TokenKind.Colon).Add('=', PascalToken.Assignment);
+            AddPattern('^', TokenKind.Circumflex);
             AddPattern('+', PascalToken.Plus);
             AddPattern('-', PascalToken.Minus);
             AddPattern('*', PascalToken.Times);

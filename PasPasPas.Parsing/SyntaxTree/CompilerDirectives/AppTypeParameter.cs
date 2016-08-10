@@ -10,6 +10,6 @@ namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
         /// <summary>
         ///     application type
         /// </summary>
-        public AppType ApplicationType { get; internal set; }
+        public AppType ApplicationType { get; set; }
     }
 }

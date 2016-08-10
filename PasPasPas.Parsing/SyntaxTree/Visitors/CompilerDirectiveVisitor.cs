@@ -42,6 +42,23 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             parameter.CompilerOptions.ApplicationType.Value = syntaxPart.ApplicationType;
         }
 
+        /// <summary>
+        ///     update assertion mode
+        /// </summary>
+        /// <param name="syntaxPart"></param>
+        /// <param name="parameter"></param>
+        public void BeginVisitItem(AssertSwitch syntaxPart, CompilerDirectiveVisitorOptions parameter) {
+            parameter.CompilerOptions.Assertions.Value = syntaxPart.Assertions;
+        }
+
+        /// <summary>
+        ///     update assertion mode
+        /// </summary>
+        /// <param name="syntaxPart"></param>
+        /// <param name="parameter"></param>
+        public void BeginVisitItem(BooleanEvaluationSwitch syntaxPart, CompilerDirectiveVisitorOptions parameter) {
+            parameter.CompilerOptions.BoolEval.Value = syntaxPart.BoolEval;
+        }
 
     }
 }

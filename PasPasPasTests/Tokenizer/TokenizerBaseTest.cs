@@ -208,8 +208,8 @@ namespace PasPasPasTests.Tokenizer {
         public void TestAlternativeCurlyBraceCommentTokenValue() {
             var patterns = new InputPatterns();
             patterns.AddPattern('a', PatternA);
-            patterns.AddPattern('(', PascalToken.OpenParen).Add('*', new AlternativeCurlyBraceCommentTokenValue());
-            TestPattern(patterns, "a(", PatternA, PascalToken.OpenParen);
+            patterns.AddPattern('(', TokenKind.OpenParen).Add('*', new AlternativeCurlyBraceCommentTokenValue());
+            TestPattern(patterns, "a(", PatternA, TokenKind.OpenParen);
             TestPattern(patterns, "(**)", TokenKind.Comment);
             TestPattern(patterns, "(*a*)", TokenKind.Comment);
             TestPattern(patterns, "(*(*(*(*a*)", TokenKind.Comment);
@@ -227,7 +227,7 @@ namespace PasPasPasTests.Tokenizer {
         public void TestPreprocessorTokenVaue() {
             var patterns = new InputPatterns();
             patterns.AddPattern('a', PatternA);
-            patterns.AddPattern('{', PascalToken.Comma).Add('$', new PreprocessorTokenValue());
+            patterns.AddPattern('{', TokenKind.Comma).Add('$', new PreprocessorTokenValue());
             TestPattern(patterns, "a{${//}a", PatternA, TokenKind.Preprocessor, PatternA);
             TestPattern(patterns, "a{${}a", PatternA, TokenKind.Preprocessor, PatternA);
             TestPattern(patterns, "{${}a", TokenKind.Preprocessor, PatternA);
@@ -330,25 +330,25 @@ namespace PasPasPasTests.Tokenizer {
         public void TestNumberTokenValue() {
             var patterns = new InputPatterns();
             patterns.AddPattern(new NumberCharacterClass(), new NumberTokenGroupValue());
-            patterns.AddPattern('.', PascalToken.Dot);
+            patterns.AddPattern('.', TokenKind.Dot);
             TestPattern(patterns, "9", PascalToken.Integer);
             TestPattern(patterns, "9.9", PascalToken.Real);
             TestPattern(patterns, "9999.9999", PascalToken.Real);
-            TestPattern(patterns, "9.", PascalToken.Integer, PascalToken.Dot);
-            TestPattern(patterns, "9.9.", PascalToken.Real, PascalToken.Dot);
+            TestPattern(patterns, "9.", PascalToken.Integer, TokenKind.Dot);
+            TestPattern(patterns, "9.9.", PascalToken.Real, TokenKind.Dot);
             TestPattern(patterns, TokenizerBase.UnexpectedEndOfToken, "9.9e", PascalToken.Real);
             TestPattern(patterns, TokenizerBase.UnexpectedEndOfToken, "9.9e+", PascalToken.Real);
             TestPattern(patterns, TokenizerBase.UnexpectedEndOfToken, "9.9e-", PascalToken.Real);
-            TestPattern(patterns, TokenizerBase.UnexpectedEndOfToken, "9.9e.", PascalToken.Real, PascalToken.Dot);
+            TestPattern(patterns, TokenizerBase.UnexpectedEndOfToken, "9.9e.", PascalToken.Real, TokenKind.Dot);
             TestPattern(patterns, "9999.9999E+3", PascalToken.Real);
             TestPattern(patterns, "9999.9999E-3", PascalToken.Real);
-            TestPattern(patterns, "9999.9999E-3.", PascalToken.Real, PascalToken.Dot);
+            TestPattern(patterns, "9999.9999E-3.", PascalToken.Real, TokenKind.Dot);
         }
 
         [TestMethod]
         public void TestDoubleQuotedStringTokenValue() {
             var patterns = new InputPatterns();
-            patterns.AddPattern('.', PascalToken.Dot);
+            patterns.AddPattern('.', TokenKind.Dot);
             patterns.AddPattern('"', new DoubleQuoteStringGroupTokenValue());
             TestPattern(patterns, "\"aaaaaa\"", PascalToken.DoubleQuotedString);
             TestPattern(patterns, "\"aaa\"\"aaa\"", PascalToken.DoubleQuotedString);
@@ -360,7 +360,7 @@ namespace PasPasPasTests.Tokenizer {
         [TestMethod]
         public void TestQuotedStringTokenValue() {
             var patterns = new InputPatterns();
-            patterns.AddPattern('.', PascalToken.Dot);
+            patterns.AddPattern('.', TokenKind.Dot);
             patterns.AddPattern('\'', new QuotedStringTokenValue());
             TestPattern(patterns, "'aaaaaa'", PascalToken.QuotedString);
             TestPattern(patterns, "'aaa''aaa'", PascalToken.QuotedString);
@@ -375,7 +375,7 @@ namespace PasPasPasTests.Tokenizer {
         [TestMethod]
         public void TestStringGroupTokenValue() {
             var patterns = new InputPatterns();
-            patterns.AddPattern('.', PascalToken.Dot);
+            patterns.AddPattern('.', TokenKind.Dot);
             patterns.AddPattern('#', new StringGroupTokenValue());
             patterns.AddPattern('\'', new StringGroupTokenValue());
             Assert.AreEqual("a\nb", QuotedStringTokenValue.Unwrap(TestPattern(patterns, "'a'#$A'b'", PascalToken.QuotedString)));

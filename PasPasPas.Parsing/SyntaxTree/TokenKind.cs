@@ -26,6 +26,62 @@
         /// </summary>
         public const int Comment = 6;
 
+        /// <summary>
+        ///     token for <c>,</c>
+        /// </summary>
+        public const int Comma = 10;
+
+        /// <summary>
+        ///     token for <c>.</c>
+        /// </summary>
+        public const int Dot = 11;
+
+        /// <summary>
+        ///     token for <c>(</c>
+        /// </summary>
+        public const int OpenParen = 12;
+
+        /// <summary>
+        ///     token for <c>)</c>
+        /// </summary>
+        public const int CloseParen = 13;
+
+        /// <summary>
+        ///     token for <c>;</c>
+        /// </summary>
+        public const int Semicolon = 14;
+
+        /// <summary>
+        ///     token for <c>=</c>
+        /// </summary>
+        public const int EqualsSign = 15;
+
+        /// <summary>
+        ///     token for <c>[</c>
+        /// </summary>
+        public const int OpenBraces = 16;
+
+        /// <summary>
+        ///     token for <c>]</c>
+        /// </summary>
+        public const int CloseBraces = 17;
+
+        /// <summary>
+        ///     token for <c>:</c>
+        /// </summary>
+        public const int Colon = 18;
+
+        /// <summary>
+        ///     token for <c>^</c>
+        /// </summary>
+        public const int Circumflex = 19;
+
+        /// <summary>
+        ///     token for <c>&lt;</c>
+        /// </summary>
+        public const int AngleBracketsOpen = PascalToken.LessThen;
+
+
 
     }
 }

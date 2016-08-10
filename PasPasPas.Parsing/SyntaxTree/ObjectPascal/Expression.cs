@@ -1,5 +1,4 @@
 ﻿using PasPasPas.Api;
-using PasPasPas.Parsing.SyntaxTree;
 
 namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
 
@@ -60,7 +59,7 @@ namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
                     case PascalToken.NotEquals:
                         result.Operator("<>");
                         break;
-                    case PascalToken.EqualsSign:
+                    case TokenKind.EqualsSign:
                         result.Operator("=");
                         break;
                     case PascalToken.In:
