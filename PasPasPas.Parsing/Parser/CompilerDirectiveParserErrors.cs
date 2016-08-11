@@ -31,5 +31,11 @@ namespace PasPasPas.Parsing.Parser {
         /// </summary>
         public static readonly Guid InvalidBoolEvalDirective
             = new Guid("{4F5AA792-A1F2-4093-9228-E4FE94A6C8E6}");
+
+        /// <summary>
+        ///     invalid code align parameter value
+        /// </summary>
+        public static readonly Guid InvalidCodeAlignDirective
+            = new Guid("{6D9AF0DC-F85E-4B8A-94F5-A07A349D33B0}");
     }
 }

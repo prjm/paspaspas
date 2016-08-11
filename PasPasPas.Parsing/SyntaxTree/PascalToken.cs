@@ -11,36 +11,6 @@ namespace PasPasPas.Parsing.SyntaxTree {
     public class PascalToken {
 
         /// <summary>
-        ///     token for <c>&gt;</c>
-        /// </summary>
-        public const int AngleBracketsClose = GreaterThen;
-
-        /// <summary>
-        ///     toke for <c>..</c>
-        /// </summary>
-        public const int DotDot = 22;
-
-        /// <summary>
-        ///     token for <c>+</c>
-        /// </summary>
-        public const int Plus = 23;
-
-        /// <summary>
-        ///     token for <c>-</c>
-        /// </summary>
-        public const int Minus = 24;
-
-        /// <summary>
-        ///     token for <c>*</c>
-        /// </summary>
-        public const int Times = 25;
-
-        /// <summary>
-        ///     token for <c>/</c>
-        /// </summary>
-        public const int Slash = 26;
-
-        /// <summary>
         ///     token for <c>@</c>
         /// </summary>
         public const int At = 27;

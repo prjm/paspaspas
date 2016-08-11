@@ -81,6 +81,37 @@
         /// </summary>
         public const int AngleBracketsOpen = PascalToken.LessThen;
 
+        /// <summary>
+        ///     token for <c>&gt;</c>
+        /// </summary>
+        public const int AngleBracketsClose = PascalToken.GreaterThen;
+
+        /// <summary>
+        ///     toke for <c>..</c>
+        /// </summary>
+        public const int DotDot = 22;
+
+        /// <summary>
+        ///     token for <c>+</c>
+        /// </summary>
+        public const int Plus = 23;
+
+        /// <summary>
+        ///     token for <c>-</c>
+        /// </summary>
+        public const int Minus = 24;
+
+        /// <summary>
+        ///     token for <c>*</c>
+        /// </summary>
+        public const int Times = 25;
+
+        /// <summary>
+        ///     token for <c>/</c>
+        /// </summary>
+        public const int Slash = 26;
+
+
 
 
     }

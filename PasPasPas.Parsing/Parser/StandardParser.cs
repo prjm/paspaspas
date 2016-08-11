@@ -609,7 +609,7 @@ namespace PasPasPas.Parsing.Parser {
         private CaseLabel ParseCaseLabel() {
             var result = new CaseLabel(this);
             result.StartExpression = ParseExpression();
-            if (Optional(PascalToken.DotDot))
+            if (Optional(TokenKind.DotDot))
                 result.EndExpression = ParseExpression();
             return result;
         }
@@ -1290,7 +1290,7 @@ namespace PasPasPas.Parsing.Parser {
 
             result.NewType = Optional(PascalToken.TypeKeyword);
 
-            if (result.NewType || (MatchIdentifier() && (!LookAhead(1, PascalToken.DotDot)))) {
+            if (result.NewType || (MatchIdentifier() && (!LookAhead(1, TokenKind.DotDot)))) {
                 result.TypeId = ParseNamespaceName();
                 if (Match(TokenKind.AngleBracketsOpen)) {
                     result.GenericPostfix = ParseGenericSuffix();
@@ -1299,7 +1299,7 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             result.SubrangeStart = ParseConstantExpression();
-            if (Optional(PascalToken.DotDot)) {
+            if (Optional(TokenKind.DotDot)) {
                 result.SubrangeEnd = ParseConstantExpression();
             }
 
@@ -2195,7 +2195,7 @@ namespace PasPasPas.Parsing.Parser {
                 result.Add(part);
             } while (Optional(TokenKind.Comma));
 
-            Require(PascalToken.AngleBracketsClose);
+            Require(TokenKind.AngleBracketsClose);
             return result;
 
         }
@@ -2209,7 +2209,7 @@ namespace PasPasPas.Parsing.Parser {
                 result.Add(ParseGenericDefinitionPart());
             } while (Optional(TokenKind.Semicolon));
 
-            Require(PascalToken.AngleBracketsClose);
+            Require(TokenKind.AngleBracketsClose);
             return result;
 
         }
@@ -2310,7 +2310,7 @@ namespace PasPasPas.Parsing.Parser {
                 result.Add(ParseTypeSpecification());
             } while (Optional(TokenKind.Comma));
 
-            Require(PascalToken.AngleBracketsClose);
+            Require(TokenKind.AngleBracketsClose);
             return result;
         }
 
@@ -2341,7 +2341,7 @@ namespace PasPasPas.Parsing.Parser {
             var result = new ArrayIndex(this);
 
             result.StartIndex = ParseConstantExpression();
-            if (Optional(PascalToken.DotDot)) {
+            if (Optional(TokenKind.DotDot)) {
                 result.EndIndex = ParseConstantExpression();
             }
             return result;
@@ -2451,8 +2451,8 @@ namespace PasPasPas.Parsing.Parser {
         private SimplExpr ParseSimpleExpression() {
             var result = new SimplExpr(this);
             result.LeftOperand = ParseTerm();
-            if (Match(PascalToken.Plus, PascalToken.Minus, PascalToken.Or, PascalToken.Xor)) {
-                result.Kind = Require(PascalToken.Plus, PascalToken.Minus, PascalToken.Or, PascalToken.Xor).Kind;
+            if (Match(TokenKind.Plus, TokenKind.Minus, PascalToken.Or, PascalToken.Xor)) {
+                result.Kind = Require(TokenKind.Plus, TokenKind.Minus, PascalToken.Or, PascalToken.Xor).Kind;
                 result.RightOperand = ParseSimpleExpression();
             }
             return result;
@@ -2462,8 +2462,8 @@ namespace PasPasPas.Parsing.Parser {
         private Term ParseTerm() {
             var result = new Term(this);
             result.LeftOperand = ParseFactor();
-            if (Match(PascalToken.Times, PascalToken.Slash, PascalToken.Div, PascalToken.Mod, PascalToken.And, PascalToken.Shl, PascalToken.Shr, PascalToken.As)) {
-                result.Kind = Require(PascalToken.Times, PascalToken.Slash, PascalToken.Div, PascalToken.Mod, PascalToken.And, PascalToken.Shl, PascalToken.Shr, PascalToken.As).Kind;
+            if (Match(TokenKind.Times, TokenKind.Slash, PascalToken.Div, PascalToken.Mod, PascalToken.And, PascalToken.Shl, PascalToken.Shr, PascalToken.As)) {
+                result.Kind = Require(TokenKind.Times, TokenKind.Slash, PascalToken.Div, PascalToken.Mod, PascalToken.And, PascalToken.Shl, PascalToken.Shr, PascalToken.As).Kind;
                 result.RightOperand = ParseTerm();
             }
             return result;
@@ -2483,12 +2483,12 @@ namespace PasPasPas.Parsing.Parser {
                 return result;
             }
 
-            if (Optional(PascalToken.Plus)) {
+            if (Optional(TokenKind.Plus)) {
                 result.Plus = ParseFactor();
                 return result;
             }
 
-            if (Optional(PascalToken.Minus)) {
+            if (Optional(TokenKind.Minus)) {
                 result.Minus = ParseFactor();
                 return result;
             }
@@ -2626,13 +2626,13 @@ namespace PasPasPas.Parsing.Parser {
                 SetSectnPart part;
                 do {
                     part = new SetSectnPart(this);
-                    if (Match(TokenKind.Comma, PascalToken.DotDot))
-                        part.Continuation = Require(TokenKind.Comma, PascalToken.DotDot).Kind;
+                    if (Match(TokenKind.Comma, TokenKind.DotDot))
+                        part.Continuation = Require(TokenKind.Comma, TokenKind.DotDot).Kind;
                     else
                         part.Continuation = TokenKind.Undefined;
                     part.SetExpression = ParseExpression();
                     result.Add(part);
-                } while (Match(TokenKind.Comma, PascalToken.DotDot));
+                } while (Match(TokenKind.Comma, TokenKind.DotDot));
             }
             Require(TokenKind.CloseBraces);
             return result;

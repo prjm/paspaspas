@@ -79,12 +79,16 @@ namespace PasPasPasTests.Parser {
 
         [TestMethod]
         public void TestCodeAlignParameter() {
-            RunCompilerDirective("", CodeAlignment.Undefined, () => CompilerOptions.CodeAlign.Value);
-            RunCompilerDirective("CODEALIGN 1", CodeAlignment.OneByte, () => CompilerOptions.CodeAlign.Value);
-            RunCompilerDirective("CODEALIGN 2", CodeAlignment.TwoByte, () => CompilerOptions.CodeAlign.Value);
-            RunCompilerDirective("CODEALIGN 4", CodeAlignment.FourByte, () => CompilerOptions.CodeAlign.Value);
-            RunCompilerDirective("CODEALIGN 8", CodeAlignment.EightByte, () => CompilerOptions.CodeAlign.Value);
-            RunCompilerDirective("CODEALIGN 16", CodeAlignment.SixteenByte, () => CompilerOptions.CodeAlign.Value);
+            Func<object> f = () => CompilerOptions.CodeAlign.Value;
+            RunCompilerDirective("", CodeAlignment.Undefined, f);
+            RunCompilerDirective("CODEALIGN 1", CodeAlignment.OneByte, f);
+            RunCompilerDirective("CODEALIGN 2", CodeAlignment.TwoByte, f);
+            RunCompilerDirective("CODEALIGN 4", CodeAlignment.FourByte, f);
+            RunCompilerDirective("CODEALIGN 8", CodeAlignment.EightByte, f);
+            RunCompilerDirective("CODEALIGN 16", CodeAlignment.SixteenByte, f);
+            RunCompilerDirective("CODEALIGN 17", CodeAlignment.Undefined, f, CompilerDirectiveParserErrors.InvalidCodeAlignDirective);
+            RunCompilerDirective("CODEALIGN FUZBUZ", CodeAlignment.Undefined, f, CompilerDirectiveParserErrors.InvalidCodeAlignDirective);
+            RunCompilerDirective("CODEALIGN", CodeAlignment.Undefined, f, CompilerDirectiveParserErrors.InvalidCodeAlignDirective);
         }
 
         [TestMethod]

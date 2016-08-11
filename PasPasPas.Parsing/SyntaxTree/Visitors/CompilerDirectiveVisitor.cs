@@ -60,5 +60,16 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             parameter.CompilerOptions.BoolEval.Value = syntaxPart.BoolEval;
         }
 
+
+
+        /// <summary>
+        ///     update code align
+        /// </summary>
+        /// <param name="syntaxPart"></param>
+        /// <param name="parameter"></param>
+        public void BeginVisitItem(CodeAlignParameter syntaxPart, CompilerDirectiveVisitorOptions parameter) {
+            parameter.CompilerOptions.CodeAlign.Value = syntaxPart.CodeAlign;
+        }
+
     }
 }

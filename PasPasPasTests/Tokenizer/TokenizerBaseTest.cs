@@ -316,14 +316,14 @@ namespace PasPasPasTests.Tokenizer {
         [TestMethod]
         public void TestEndOfLineCommentTokenValue() {
             var patterns = new InputPatterns();
-            patterns.AddPattern('/', PascalToken.Slash).Add('/', new EndOfLineCommentTokenGroupValue());
+            patterns.AddPattern('/', TokenKind.Slash).Add('/', new EndOfLineCommentTokenGroupValue());
             patterns.AddPattern(new WhitspaceCharacterClass(), new WhiteSpaceTokenGroupValue());
-            TestPattern(patterns, "/", PascalToken.Slash);
+            TestPattern(patterns, "/", TokenKind.Slash);
             TestPattern(patterns, "//", TokenKind.Comment);
             TestPattern(patterns, "// / / /", TokenKind.Comment);
             TestPattern(patterns, "/// / / /", TokenKind.Comment);
-            TestPattern(patterns, "/ // / / /", PascalToken.Slash, PascalToken.WhiteSpace, TokenKind.Comment);
-            TestPattern(patterns, "/ // / /\n /", PascalToken.Slash, PascalToken.WhiteSpace, TokenKind.Comment, PascalToken.WhiteSpace, PascalToken.Slash);
+            TestPattern(patterns, "/ // / / /", TokenKind.Slash, PascalToken.WhiteSpace, TokenKind.Comment);
+            TestPattern(patterns, "/ // / /\n /", TokenKind.Slash, PascalToken.WhiteSpace, TokenKind.Comment, PascalToken.WhiteSpace, TokenKind.Slash);
         }
 
         [TestMethod]

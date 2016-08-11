@@ -38,11 +38,11 @@ namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
             if (RightOperand != null) {
                 result.Space();
                 switch (Kind) {
-                    case PascalToken.Plus:
+                    case TokenKind.Plus:
                         result.Punct("+");
                         break;
 
-                    case PascalToken.Minus:
+                    case TokenKind.Minus:
                         result.Punct("-");
                         break;
 

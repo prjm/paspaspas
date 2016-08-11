@@ -39,10 +39,10 @@ namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
             if (RightOperand != null) {
                 result.Space();
                 switch (Kind) {
-                    case PascalToken.Times:
+                    case TokenKind.Times:
                         result.Punct("*");
                         break;
-                    case PascalToken.Slash:
+                    case TokenKind.Slash:
                         result.Punct("/");
                         break;
                     case PascalToken.Div:

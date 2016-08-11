@@ -12,7 +12,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         public StandardPatterns() {
             var dot = AddPattern('.', TokenKind.Dot);
-            dot.Add('.', PascalToken.DotDot);
+            dot.Add('.', TokenKind.DotDot);
             dot.Add(')', TokenKind.CloseBraces);
 
             var lparen = AddPattern('(', TokenKind.OpenParen);
@@ -27,10 +27,10 @@ namespace PasPasPas.Parsing.Tokenizer {
             AddPattern(']', TokenKind.CloseBraces);
             AddPattern(':', TokenKind.Colon).Add('=', PascalToken.Assignment);
             AddPattern('^', TokenKind.Circumflex);
-            AddPattern('+', PascalToken.Plus);
-            AddPattern('-', PascalToken.Minus);
-            AddPattern('*', PascalToken.Times);
-            AddPattern('/', PascalToken.Slash).Add('/', new EndOfLineCommentTokenGroupValue());
+            AddPattern('+', TokenKind.Plus);
+            AddPattern('-', TokenKind.Minus);
+            AddPattern('*', TokenKind.Times);
+            AddPattern('/', TokenKind.Slash).Add('/', new EndOfLineCommentTokenGroupValue());
             AddPattern('@', PascalToken.At);
             AddPattern('>', PascalToken.GreaterThen).Add('=', PascalToken.GreaterThenEquals);
             var lt = AddPattern('<', PascalToken.LessThen);

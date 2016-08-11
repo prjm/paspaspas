@@ -196,7 +196,7 @@ namespace PasPasPas.Parsing.Parser {
                 ParseApptypeParameter(parent);
             }
             else if (Match(PascalToken.CodeAlign)) {
-                ParseCodeAlignParameter();
+                ParseCodeAlignParameter(parent);
             }
             else if (Match(PascalToken.Define)) {
                 ParseDefine();
@@ -257,16 +257,16 @@ namespace PasPasPas.Parsing.Parser {
         private void ParseIfOpt() {
             Require(PascalToken.IfOpt);
             var switchKind = Require(PascalToken.Identifier).Value;
-            var switchState = Require(PascalToken.Plus, PascalToken.Minus).Kind;
+            var switchState = Require(TokenKind.Plus, TokenKind.Minus).Kind;
             var requiredInfo = GetSwitchInfo(switchState);
             var switchInfo = Options.GetSwitchInfo(switchKind);
             ConditionalCompilation.AddIfOptCondition(switchKind, requiredInfo, switchInfo);
         }
 
         private static SwitchInfo GetSwitchInfo(int switchState) {
-            if (switchState == PascalToken.Plus)
+            if (switchState == TokenKind.Plus)
                 return SwitchInfo.Enabled;
-            if (switchState == PascalToken.Minus)
+            if (switchState == TokenKind.Minus)
                 return SwitchInfo.Disabled;
             return SwitchInfo.Undefined;
         }
@@ -629,36 +629,34 @@ namespace PasPasPas.Parsing.Parser {
             }
         }
 
-        private void ParseCodeAlignParameter() {
-            Require(PascalToken.CodeAlign);
-            var value = Require(PascalToken.Integer).Value;
-            int align;
+        private void ParseCodeAlignParameter(ISyntaxPart parent) {
+            CodeAlignParameter result = CreateByTerminal<CodeAlignParameter>(parent);
 
-            if (!int.TryParse(value, out align)) {
-                Unexpected();
+            int value;
+            if (ContinueWith(result, PascalToken.Integer) && int.TryParse(result.LastTerminal.Value, out value)) {
+                switch (value) {
+                    case 1:
+                        result.CodeAlign = CodeAlignment.OneByte;
+                        return;
+                    case 2:
+                        result.CodeAlign = CodeAlignment.TwoByte;
+                        return;
+                    case 4:
+                        result.CodeAlign = CodeAlignment.FourByte;
+                        return;
+                    case 8:
+                        result.CodeAlign = CodeAlignment.EightByte;
+                        return;
+                    case 16:
+                        result.CodeAlign = CodeAlignment.SixteenByte;
+                        return;
+                }
+
+                ErrorLastPart(result, CompilerDirectiveParserErrors.InvalidCodeAlignDirective, result.LastTerminal.Value);
                 return;
             }
 
-
-            switch (align) {
-                case 1:
-                    CompilerOptions.CodeAlign.Value = CodeAlignment.OneByte;
-                    return;
-                case 2:
-                    CompilerOptions.CodeAlign.Value = CodeAlignment.TwoByte;
-                    return;
-                case 4:
-                    CompilerOptions.CodeAlign.Value = CodeAlignment.FourByte;
-                    return;
-                case 8:
-                    CompilerOptions.CodeAlign.Value = CodeAlignment.EightByte;
-                    return;
-                case 16:
-                    CompilerOptions.CodeAlign.Value = CodeAlignment.SixteenByte;
-                    return;
-            }
-
-            Unexpected();
+            ErrorAndSkip(parent, CompilerDirectiveParserErrors.InvalidCodeAlignDirective);
         }
 
         private void ParseApptypeParameter(ISyntaxPart parent) {
@@ -1593,12 +1591,12 @@ namespace PasPasPas.Parsing.Parser {
 
             FetchNextToken();
 
-            if (Optional(PascalToken.Plus)) {
+            if (Optional(TokenKind.Plus)) {
                 CompilerOptions.MinumEnumSize.Value = EnumSize.FourByte;
                 return true;
             }
 
-            if (Optional(PascalToken.Minus)) {
+            if (Optional(TokenKind.Minus)) {
                 CompilerOptions.MinumEnumSize.Value = EnumSize.OneByte;
                 return true;
             }
@@ -1625,12 +1623,12 @@ namespace PasPasPas.Parsing.Parser {
                 return ParseStackSizeSwitch(true);
             }
 
-            if (Optional(PascalToken.Plus)) {
+            if (Optional(TokenKind.Plus)) {
                 CompilerOptions.PublishedRtti.Value = RttiForPublishedProperties.Enable;
                 return true;
             }
 
-            if (Optional(PascalToken.Minus)) {
+            if (Optional(TokenKind.Minus)) {
                 CompilerOptions.PublishedRtti.Value = RttiForPublishedProperties.Disable;
                 return true;
             }
@@ -1647,13 +1645,13 @@ namespace PasPasPas.Parsing.Parser {
         private bool ParseSymbolDeclarationSwitch() {
             FetchNextToken();
 
-            if (Optional(PascalToken.Plus)) {
+            if (Optional(TokenKind.Plus)) {
                 CompilerOptions.SymbolReferences.Value = SymbolReferenceInfo.Enable;
                 CompilerOptions.SymbolDefinitions.Value = SymbolDefinitionInfo.Enable;
                 return true;
             }
 
-            if (Optional(PascalToken.Minus)) {
+            if (Optional(TokenKind.Minus)) {
                 CompilerOptions.SymbolReferences.Value = SymbolReferenceInfo.Disable;
                 CompilerOptions.SymbolDefinitions.Value = SymbolDefinitionInfo.Disable;
                 return true;
@@ -1665,12 +1663,12 @@ namespace PasPasPas.Parsing.Parser {
         private bool ParseTypedPointersSwitch() {
             FetchNextToken();
 
-            if (Optional(PascalToken.Plus)) {
+            if (Optional(TokenKind.Plus)) {
                 CompilerOptions.TypedPointers.Value = TypeCheckedPointers.Enable;
                 return true;
             }
 
-            if (Optional(PascalToken.Minus)) {
+            if (Optional(TokenKind.Minus)) {
                 CompilerOptions.TypedPointers.Value = TypeCheckedPointers.Disable;
                 return true;
             }
@@ -1681,12 +1679,12 @@ namespace PasPasPas.Parsing.Parser {
         private bool ParseVarStringCheckSwitch() {
             FetchNextToken();
 
-            if (Optional(PascalToken.Plus)) {
+            if (Optional(TokenKind.Plus)) {
                 CompilerOptions.VarStringChecks.Value = ShortVarStringChecks.EnableChecks;
                 return true;
             }
 
-            if (Optional(PascalToken.Minus)) {
+            if (Optional(TokenKind.Minus)) {
                 CompilerOptions.VarStringChecks.Value = ShortVarStringChecks.DisableChecks;
                 return true;
             }
@@ -1697,12 +1695,12 @@ namespace PasPasPas.Parsing.Parser {
         private bool ParseWritableConstSwitch() {
             FetchNextToken();
 
-            if (Optional(PascalToken.Plus)) {
+            if (Optional(TokenKind.Plus)) {
                 CompilerOptions.WritableConstants.Value = ConstantValues.Writable;
                 return true;
             }
 
-            if (Optional(PascalToken.Minus)) {
+            if (Optional(TokenKind.Minus)) {
                 CompilerOptions.WritableConstants.Value = ConstantValues.Constant;
                 return true;
             }
@@ -1713,12 +1711,12 @@ namespace PasPasPas.Parsing.Parser {
         private bool ParseStackFramesSwitch() {
             FetchNextToken();
 
-            if (Optional(PascalToken.Plus)) {
+            if (Optional(TokenKind.Plus)) {
                 CompilerOptions.StackFrames.Value = StackFrameGeneration.EnableFrames;
                 return true;
             }
 
-            if (Optional(PascalToken.Minus)) {
+            if (Optional(TokenKind.Minus)) {
                 CompilerOptions.StackFrames.Value = StackFrameGeneration.DisableFrames;
                 return true;
             }
@@ -1729,12 +1727,12 @@ namespace PasPasPas.Parsing.Parser {
         private bool ParseIncludeRessource() {
             FetchNextToken();
 
-            if (Optional(PascalToken.Plus)) {
+            if (Optional(TokenKind.Plus)) {
                 CompilerOptions.RangeChecks.Value = RuntimeRangeChecks.EnableRangeChecks;
                 return true;
             }
 
-            if (Optional(PascalToken.Minus)) {
+            if (Optional(TokenKind.Minus)) {
                 CompilerOptions.RangeChecks.Value = RuntimeRangeChecks.DisableRangeChecks;
                 return true;
             }
@@ -1758,7 +1756,7 @@ namespace PasPasPas.Parsing.Parser {
                     filename = CurrentToken().Value;
                     break;
 
-                case PascalToken.Times:
+                case TokenKind.Times:
                     filename = Require(PascalToken.Identifier).Value;
                     break;
 
@@ -1799,12 +1797,12 @@ namespace PasPasPas.Parsing.Parser {
         private bool ParseSaveDivideSwitch() {
             FetchNextToken();
 
-            if (Optional(PascalToken.Plus)) {
+            if (Optional(TokenKind.Plus)) {
                 CompilerOptions.SafeDivide.Value = FDivSafeDivide.EnableSafeDivide;
                 return true;
             }
 
-            if (Optional(PascalToken.Minus)) {
+            if (Optional(TokenKind.Minus)) {
                 CompilerOptions.SafeDivide.Value = FDivSafeDivide.DisableSafeDivide;
                 return true;
             }
@@ -1815,12 +1813,12 @@ namespace PasPasPas.Parsing.Parser {
         private bool ParseOverflowSwitch() {
             FetchNextToken();
 
-            if (Optional(PascalToken.Plus)) {
+            if (Optional(TokenKind.Plus)) {
                 CompilerOptions.CheckOverflows.Value = RuntimeOverflowChecks.EnableChecks;
                 return true;
             }
 
-            if (Optional(PascalToken.Minus)) {
+            if (Optional(TokenKind.Minus)) {
                 CompilerOptions.CheckOverflows.Value = RuntimeOverflowChecks.DisableChecks;
                 return true;
             }
@@ -1831,12 +1829,12 @@ namespace PasPasPas.Parsing.Parser {
         private bool ParseOptimizationSwitch() {
             FetchNextToken();
 
-            if (Optional(PascalToken.Plus)) {
+            if (Optional(TokenKind.Plus)) {
                 CompilerOptions.Optimization.Value = CompilerOptmization.EnableOptimization;
                 return true;
             }
 
-            if (Optional(PascalToken.Minus)) {
+            if (Optional(TokenKind.Minus)) {
                 CompilerOptions.Optimization.Value = CompilerOptmization.DisableOptimization;
                 return true;
             }
@@ -1847,12 +1845,12 @@ namespace PasPasPas.Parsing.Parser {
         private bool ParseOpenStringSwitch() {
             FetchNextToken();
 
-            if (Optional(PascalToken.Plus)) {
+            if (Optional(TokenKind.Plus)) {
                 CompilerOptions.OpenStrings.Value = OpenStringTypes.EnableOpenStrings;
                 return true;
             }
 
-            if (Optional(PascalToken.Minus)) {
+            if (Optional(TokenKind.Minus)) {
                 CompilerOptions.OpenStrings.Value = OpenStringTypes.DisableOpenStrings;
                 return true;
             }
@@ -1863,12 +1861,12 @@ namespace PasPasPas.Parsing.Parser {
         private bool ParseLongStringSwitch() {
             FetchNextToken();
 
-            if (Optional(PascalToken.Plus)) {
+            if (Optional(TokenKind.Plus)) {
                 CompilerOptions.LongStrings.Value = LongStringTypes.EnableLongStrings;
                 return true;
             }
 
-            if (Optional(PascalToken.Minus)) {
+            if (Optional(TokenKind.Minus)) {
                 CompilerOptions.LongStrings.Value = LongStringTypes.DisableLongStrings;
                 return true;
             }
@@ -1879,12 +1877,12 @@ namespace PasPasPas.Parsing.Parser {
         private bool ParseLocalSymbolSwitch() {
             FetchNextToken();
 
-            if (Optional(PascalToken.Plus)) {
+            if (Optional(TokenKind.Plus)) {
                 CompilerOptions.LocalSymbols.Value = LocalDebugSymbols.EnableLocalSymbols;
                 return true;
             }
 
-            if (Optional(PascalToken.Minus)) {
+            if (Optional(TokenKind.Minus)) {
                 CompilerOptions.LocalSymbols.Value = LocalDebugSymbols.DisableLocalSymbols;
                 return true;
             }
@@ -1914,12 +1912,12 @@ namespace PasPasPas.Parsing.Parser {
         private bool ParseIncludeSwitch() {
             FetchNextToken();
 
-            if (Optional(PascalToken.Plus)) {
+            if (Optional(TokenKind.Plus)) {
                 CompilerOptions.IoChecks.Value = IoCallChecks.EnableIoChecks;
                 return true;
             }
 
-            if (Optional(PascalToken.Minus)) {
+            if (Optional(TokenKind.Minus)) {
                 CompilerOptions.IoChecks.Value = IoCallChecks.DisableIoChecks;
                 return true;
             }
@@ -1942,12 +1940,12 @@ namespace PasPasPas.Parsing.Parser {
         private bool ParseImportedDataSwitch() {
             FetchNextToken();
 
-            if (Optional(PascalToken.Plus)) {
+            if (Optional(TokenKind.Plus)) {
                 CompilerOptions.ImportedData.Value = ImportGlobalUnitData.DoImport;
                 return true;
             }
 
-            if (Optional(PascalToken.Minus)) {
+            if (Optional(TokenKind.Minus)) {
                 CompilerOptions.ImportedData.Value = ImportGlobalUnitData.NoImport;
                 return true;
             }
@@ -1959,12 +1957,12 @@ namespace PasPasPas.Parsing.Parser {
         private bool ParseExtendedSyntaxSwitch() {
             FetchNextToken();
 
-            if (Optional(PascalToken.Plus)) {
+            if (Optional(TokenKind.Plus)) {
                 CompilerOptions.UseExtendedSyntax.Value = ExtendedSyntax.UseExtendedSyntax;
                 return true;
             }
 
-            if (Optional(PascalToken.Minus)) {
+            if (Optional(TokenKind.Minus)) {
                 CompilerOptions.UseExtendedSyntax.Value = ExtendedSyntax.NoExtendedSyntax;
                 return true;
             }
@@ -1985,12 +1983,12 @@ namespace PasPasPas.Parsing.Parser {
         private bool ParseDebugInfoOrDescriptionSwitch() {
             FetchNextToken();
 
-            if (Optional(PascalToken.Plus)) {
+            if (Optional(TokenKind.Plus)) {
                 CompilerOptions.DebugInfo.Value = DebugInformation.IncludeDebugInformation;
                 return true;
             }
 
-            if (Optional(PascalToken.Minus)) {
+            if (Optional(TokenKind.Minus)) {
                 CompilerOptions.DebugInfo.Value = DebugInformation.NoDebugInfo;
                 return true;
             }
@@ -2007,10 +2005,10 @@ namespace PasPasPas.Parsing.Parser {
         private void ParseAssertSwitch(ISyntaxPart parent) {
             AssertSwitch result = CreateByTerminal<AssertSwitch>(parent);
 
-            if (ContinueWith(result, PascalToken.Plus)) {
+            if (ContinueWith(result, TokenKind.Plus)) {
                 result.Assertions = AssertionMode.EnableAssertions;
             }
-            else if (ContinueWith(result, PascalToken.Minus)) {
+            else if (ContinueWith(result, TokenKind.Minus)) {
                 result.Assertions = AssertionMode.DisableAssertions;
             }
             else {
@@ -2021,10 +2019,10 @@ namespace PasPasPas.Parsing.Parser {
         private void ParseBoolEvalSwitch(ISyntaxPart parent) {
             BooleanEvaluationSwitch result = CreateByTerminal<BooleanEvaluationSwitch>(parent);
 
-            if (ContinueWith(result, PascalToken.Plus)) {
+            if (ContinueWith(result, TokenKind.Plus)) {
                 result.BoolEval = BooleanEvaluation.CompleteEvaluation;
             }
-            else if (ContinueWith(result, PascalToken.Minus)) {
+            else if (ContinueWith(result, TokenKind.Minus)) {
                 result.BoolEval = BooleanEvaluation.ShortEvaluation;
             }
             else {
@@ -2053,10 +2051,10 @@ namespace PasPasPas.Parsing.Parser {
             else {
                 result = CreateByTerminal<AlignSwitch>(parent);
 
-                if (ContinueWith(result, PascalToken.Plus)) {
+                if (ContinueWith(result, TokenKind.Plus)) {
                     result.AlignValue = Alignment.QuadWord;
                 }
-                else if (ContinueWith(result, PascalToken.Minus)) {
+                else if (ContinueWith(result, TokenKind.Minus)) {
                     result.AlignValue = Alignment.Unaligned;
                 }
                 else {
