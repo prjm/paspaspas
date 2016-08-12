@@ -13,6 +13,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// </summary>
         public CompileOptions CompilerOptions
             => Environment.Options.CompilerOptions;
+
+        /// <summary>
+        ///     conditional compilation options
+        /// </summary>
+        public ConditionalCompilationOptions ConditionalCompilation
+            => Environment.Options.ConditionalCompilation;
+
         /// <summary>
         ///     parsing environemnt
         /// </summary>

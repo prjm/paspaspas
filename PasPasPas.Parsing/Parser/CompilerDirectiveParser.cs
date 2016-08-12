@@ -199,7 +199,7 @@ namespace PasPasPas.Parsing.Parser {
                 ParseCodeAlignParameter(parent);
             }
             else if (Match(PascalToken.Define)) {
-                ParseDefine();
+                ParseDefine(parent);
             }
             else if (Match(PascalToken.Undef)) {
                 ParseUndef();
@@ -621,11 +621,14 @@ namespace PasPasPas.Parsing.Parser {
             }
         }
 
-        private void ParseDefine() {
-            Require(PascalToken.Define);
-            var value = Require(CurrentToken().Kind).Value;
-            if (!string.IsNullOrEmpty(value)) {
-                ConditionalCompilation.DefineSymbol(value);
+        private void ParseDefine(ISyntaxPart parent) {
+            DefineSymbol result = CreateByTerminal<DefineSymbol>(parent);
+
+            if (ContinueWith(result, PascalToken.Identifier)) {
+                result.SymbolName = result.LastTerminal.Value;
+            }
+            else {
+                ErrorAndSkip(parent, CompilerDirectiveParserErrors.InvalidDefineDirective);
             }
         }
 
@@ -696,9 +699,8 @@ namespace PasPasPas.Parsing.Parser {
             else if (Match(PascalToken.AssertSwitchLong)) {
                 ParseLongAssertSwitch(parent);
             }
-
-            else if (Optional(PascalToken.DebugInfoSwitchLong)) {
-                ParseLongDebugInfoSwitch();
+            else if (Match(PascalToken.DebugInfoSwitchLong)) {
+                ParseLongDebugInfoSwitch(parent);
             }
 
             else if (Optional(PascalToken.DenyPackageUnit)) {
@@ -1411,18 +1413,17 @@ namespace PasPasPas.Parsing.Parser {
             Unexpected();
         }
 
-        private void ParseLongDebugInfoSwitch() {
-            if (Optional(PascalToken.On)) {
-                CompilerOptions.DebugInfo.Value = DebugInformation.IncludeDebugInformation;
-                return;
+        private void ParseLongDebugInfoSwitch(ISyntaxPart parent) {
+            DebugInfoSwitch result = CreateByTerminal<DebugInfoSwitch>(parent);
+            if (ContinueWith(result, PascalToken.On)) {
+                result.DebugInfo = DebugInformation.IncludeDebugInformation;
             }
-
-            if (Optional(PascalToken.Off)) {
-                CompilerOptions.DebugInfo.Value = DebugInformation.NoDebugInfo;
-                return;
+            else if (ContinueWith(result, PascalToken.Off)) {
+                result.DebugInfo = DebugInformation.NoDebugInfo;
             }
-
-            Unexpected();
+            else {
+                ErrorAndSkip(parent, CompilerDirectiveParserErrors.InvalidDebugInfoDirective);
+            }
         }
 
         private void ParseLongAssertSwitch(ISyntaxPart parent) {
@@ -1508,7 +1509,7 @@ namespace PasPasPas.Parsing.Parser {
                 ParseAssertSwitch(parent);
             }
             else if (Match(PascalToken.DebugInfoOrDescriptionSwitch)) {
-                ParseDebugInfoOrDescriptionSwitch();
+                ParseDebugInfoOrDescriptionSwitch(parent);
             }
             else if (Match(PascalToken.ExtensionSwitch)) {
                 ParseExtensionSwitch();
@@ -1980,26 +1981,21 @@ namespace PasPasPas.Parsing.Parser {
             return true;
         }
 
-        private bool ParseDebugInfoOrDescriptionSwitch() {
-            FetchNextToken();
+        private void ParseDebugInfoOrDescriptionSwitch(ISyntaxPart parent) {
+            DebugInfoSwitch result = CreateByTerminal<DebugInfoSwitch>(parent);
 
-            if (Optional(TokenKind.Plus)) {
-                CompilerOptions.DebugInfo.Value = DebugInformation.IncludeDebugInformation;
-                return true;
+            if (ContinueWith(result, TokenKind.Plus)) {
+                result.DebugInfo = DebugInformation.IncludeDebugInformation;
             }
-
-            if (Optional(TokenKind.Minus)) {
-                CompilerOptions.DebugInfo.Value = DebugInformation.NoDebugInfo;
-                return true;
+            else if (ContinueWith(result, TokenKind.Minus)) {
+                result.DebugInfo = DebugInformation.NoDebugInfo;
             }
-
-            if (Match(PascalToken.QuotedString)) {
+            else if (ContinueWith(result, PascalToken.QuotedString)) {
                 Meta.Description.Value = QuotedStringTokenValue.Unwrap(CurrentToken());
-                return true;
             }
-
-            Unexpected();
-            return false;
+            else {
+                ErrorAndSkip(parent, CompilerDirectiveParserErrors.InvalidDebugInfoDirective);
+            }
         }
 
         private void ParseAssertSwitch(ISyntaxPart parent) {

@@ -93,26 +93,29 @@ namespace PasPasPasTests.Parser {
 
         [TestMethod]
         public void TestDefine() {
-            RunCompilerDirective("", false, () => ConditionalCompilation.IsSymbolDefined("TESTSYM"));
-            RunCompilerDirective("DEFINE TESTSYM", true, () => ConditionalCompilation.IsSymbolDefined("TESTSYM"));
-            RunCompilerDirective("DEFINE TESTsYM", true, () => ConditionalCompilation.IsSymbolDefined("TESTSYM"));
-            RunCompilerDirective("DEFINE TESTsYM | DEFINE X", false, () => ConditionalCompilation.IsSymbolDefined("TESTSYM"));
-            RunCompilerDirective("DEFINE TESTSYM § DEFINE X", true, () => ConditionalCompilation.IsSymbolDefined("TESTSYM"));
-            RunCompilerDirective("", false, () => ConditionalCompilation.IsSymbolDefined("TESTSYM"));
-            RunCompilerDirective("DEFINE TESTSYM § UNDEF TESTSYM", false, () => ConditionalCompilation.IsSymbolDefined("TESTSYM"));
-            RunCompilerDirective("DEFINE TESTSYM § UNDEF TESTSYM § DEFINE TESTSYM", true, () => ConditionalCompilation.IsSymbolDefined("TESTSYM"));
-            RunCompilerDirective("UNDEF PASPASPAS_TEST | DEFINE X", true, () => ConditionalCompilation.IsSymbolDefined("PASPASPAS_TEST"));
-            RunCompilerDirective("UNDEF PASPASPAS_TEST § DEFINE X", false, () => ConditionalCompilation.IsSymbolDefined("PASPASPAS_TEST"));
+            Func<object> f = () => ConditionalCompilation.IsSymbolDefined("TESTSYM");
+            Func<object> g = () => ConditionalCompilation.IsSymbolDefined("PASPASPAS_TEST");
+            Func<object> h = () => ConditionalCompilation.IsSymbolDefined("PASPASPAS_TEST");
+            Func<object> b = () => ConditionalCompilation.IsSymbolDefined("B");
 
-            RunCompilerDirective("IFDEF TESTSYM § DEFINE A § ENDIF", false, () => ConditionalCompilation.IsSymbolDefined("A"));
-            RunCompilerDirective("IFDEF TESTSYM § ENDIF § DEFINE A ", true, () => ConditionalCompilation.IsSymbolDefined("A"));
-            RunCompilerDirective("IFDEF TESTSYM § IFDEF Q § DEFINE A § ENDIF § ENDIF", false, () => ConditionalCompilation.IsSymbolDefined("A"));
-            RunCompilerDirective("IFDEF PASPASPAS_TEST § DEFINE A § ENDIF", true, () => ConditionalCompilation.IsSymbolDefined("A"));
-
-            RunCompilerDirective("IFDEF TESTSYM $ DEFINE B § ELSE § DEFINE A § ENDIF", true, () => ConditionalCompilation.IsSymbolDefined("A"));
-            RunCompilerDirective("IFDEF TESTSYM $ DEFINE A § ELSE § DEFINE B § ENDIF", false, () => ConditionalCompilation.IsSymbolDefined("A"));
-            RunCompilerDirective("IFDEF TESTSYM $ DEFINE B § ELSE § DEFINE A § ENDIF", false, () => ConditionalCompilation.IsSymbolDefined("B"));
-            RunCompilerDirective("IFDEF TESTSYM $ DEFINE A § ELSE § DEFINE B § ENDIF", true, () => ConditionalCompilation.IsSymbolDefined("B"));
+            RunCompilerDirective("", false, f);
+            RunCompilerDirective("DEFINE TESTSYM", true, f);
+            RunCompilerDirective("DEFINE TESTsYM", true, f);
+            RunCompilerDirective("DEFINE TESTsYM | DEFINE X", false, f);
+            RunCompilerDirective("DEFINE TESTSYM § DEFINE X", true, f);
+            RunCompilerDirective("", false, f);
+            RunCompilerDirective("DEFINE TESTSYM § UNDEF TESTSYM", false, f);
+            RunCompilerDirective("DEFINE TESTSYM § UNDEF TESTSYM § DEFINE TESTSYM", true, f);
+            RunCompilerDirective("UNDEF PASPASPAS_TEST | DEFINE X", true, g);
+            RunCompilerDirective("UNDEF PASPASPAS_TEST § DEFINE X", false, g);
+            RunCompilerDirective("IFDEF TESTSYM § DEFINE A § ENDIF", false, h);
+            RunCompilerDirective("IFDEF TESTSYM § ENDIF § DEFINE A ", true, h);
+            RunCompilerDirective("IFDEF TESTSYM § IFDEF Q § DEFINE A § ENDIF § ENDIF", false, h);
+            RunCompilerDirective("IFDEF PASPASPAS_TEST § DEFINE A § ENDIF", true, h);
+            RunCompilerDirective("IFDEF TESTSYM $ DEFINE B § ELSE § DEFINE A § ENDIF", true, h);
+            RunCompilerDirective("IFDEF TESTSYM $ DEFINE A § ELSE § DEFINE B § ENDIF", false, h);
+            RunCompilerDirective("IFDEF TESTSYM $ DEFINE B § ELSE § DEFINE A § ENDIF", false, b);
+            RunCompilerDirective("IFDEF TESTSYM $ DEFINE A § ELSE § DEFINE B § ENDIF", true, b);
 
             RunCompilerDirective("IFNDEF TESTSYM § DEFINE A § ENDIF", true, () => ConditionalCompilation.IsSymbolDefined("A"));
             RunCompilerDirective("IFNDEF TESTSYM § IFNDEF Q § DEFINE A § ENDIF § ENDIF", true, () => ConditionalCompilation.IsSymbolDefined("A"));
@@ -136,11 +139,15 @@ namespace PasPasPasTests.Parser {
 
         [TestMethod]
         public void TestDebugInfo() {
-            RunCompilerDirective("", DebugInformation.Undefined, () => CompilerOptions.DebugInfo.Value);
-            RunCompilerDirective("D+", DebugInformation.IncludeDebugInformation, () => CompilerOptions.DebugInfo.Value);
-            RunCompilerDirective("D-", DebugInformation.NoDebugInfo, () => CompilerOptions.DebugInfo.Value);
-            RunCompilerDirective("DEBUGINFO ON", DebugInformation.IncludeDebugInformation, () => CompilerOptions.DebugInfo.Value);
-            RunCompilerDirective("DEBUGINFO OFF", DebugInformation.NoDebugInfo, () => CompilerOptions.DebugInfo.Value);
+            Func<object> f = () => CompilerOptions.DebugInfo.Value;
+            RunCompilerDirective("", DebugInformation.Undefined, f);
+            RunCompilerDirective("D+", DebugInformation.IncludeDebugInformation, f);
+            RunCompilerDirective("D-", DebugInformation.NoDebugInfo, f);
+            RunCompilerDirective("DEBUGINFO ON", DebugInformation.IncludeDebugInformation, f);
+            RunCompilerDirective("DEBUGINFO OFF", DebugInformation.NoDebugInfo, f);
+            RunCompilerDirective("DEBUGINFO FUZZ", DebugInformation.Undefined, f, CompilerDirectiveParserErrors.InvalidDebugInfoDirective);
+            RunCompilerDirective("DEBUGINFO", DebugInformation.Undefined, f, CompilerDirectiveParserErrors.InvalidDebugInfoDirective);
+            RunCompilerDirective("D", DebugInformation.Undefined, f, CompilerDirectiveParserErrors.InvalidDebugInfoDirective);
         }
 
         [TestMethod]

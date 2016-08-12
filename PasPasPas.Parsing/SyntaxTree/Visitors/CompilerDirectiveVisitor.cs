@@ -60,8 +60,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             parameter.CompilerOptions.BoolEval.Value = syntaxPart.BoolEval;
         }
 
-
-
         /// <summary>
         ///     update code align
         /// </summary>
@@ -69,6 +67,24 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <param name="parameter"></param>
         public void BeginVisitItem(CodeAlignParameter syntaxPart, CompilerDirectiveVisitorOptions parameter) {
             parameter.CompilerOptions.CodeAlign.Value = syntaxPart.CodeAlign;
+        }
+
+        /// <summary>
+        ///     update debug info mode
+        /// </summary>
+        /// <param name="syntaxPart"></param>
+        /// <param name="parameter"></param>
+        public void BeginVisitItem(DebugInfoSwitch syntaxPart, CompilerDirectiveVisitorOptions parameter) {
+            parameter.CompilerOptions.DebugInfo.Value = syntaxPart.DebugInfo;
+        }
+
+        /// <summary>
+        ///     update debug info mode
+        /// </summary>
+        /// <param name="syntaxPart"></param>
+        /// <param name="parameter"></param>
+        public void BeginVisitItem(DefineSymbol syntaxPart, CompilerDirectiveVisitorOptions parameter) {
+            parameter.ConditionalCompilation.DefineSymbol(syntaxPart.SymbolName);
         }
 
     }
