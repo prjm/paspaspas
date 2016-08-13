@@ -95,7 +95,7 @@ namespace PasPasPasTests.Parser {
         public void TestDefine() {
             Func<object> f = () => ConditionalCompilation.IsSymbolDefined("TESTSYM");
             Func<object> g = () => ConditionalCompilation.IsSymbolDefined("PASPASPAS_TEST");
-            Func<object> h = () => ConditionalCompilation.IsSymbolDefined("PASPASPAS_TEST");
+            Func<object> h = () => ConditionalCompilation.IsSymbolDefined("A");
             Func<object> b = () => ConditionalCompilation.IsSymbolDefined("B");
 
             RunCompilerDirective("", false, f);
@@ -112,10 +112,10 @@ namespace PasPasPasTests.Parser {
             RunCompilerDirective("IFDEF TESTSYM § ENDIF § DEFINE A ", true, h);
             RunCompilerDirective("IFDEF TESTSYM § IFDEF Q § DEFINE A § ENDIF § ENDIF", false, h);
             RunCompilerDirective("IFDEF PASPASPAS_TEST § DEFINE A § ENDIF", true, h);
-            RunCompilerDirective("IFDEF TESTSYM $ DEFINE B § ELSE § DEFINE A § ENDIF", true, h);
-            RunCompilerDirective("IFDEF TESTSYM $ DEFINE A § ELSE § DEFINE B § ENDIF", false, h);
-            RunCompilerDirective("IFDEF TESTSYM $ DEFINE B § ELSE § DEFINE A § ENDIF", false, b);
-            RunCompilerDirective("IFDEF TESTSYM $ DEFINE A § ELSE § DEFINE B § ENDIF", true, b);
+            RunCompilerDirective("IFDEF TESTSYM § DEFINE B § ELSE § DEFINE A § ENDIF", true, h);
+            RunCompilerDirective("IFDEF TESTSYM § DEFINE A § ELSE § DEFINE B § ENDIF", false, h);
+            RunCompilerDirective("IFDEF TESTSYM § DEFINE B § ELSE § DEFINE A § ENDIF", false, b);
+            RunCompilerDirective("IFDEF TESTSYM § DEFINE A § ELSE § DEFINE B § ENDIF", true, b);
 
             RunCompilerDirective("IFNDEF TESTSYM § DEFINE A § ENDIF", true, () => ConditionalCompilation.IsSymbolDefined("A"));
             RunCompilerDirective("IFNDEF TESTSYM § IFNDEF Q § DEFINE A § ENDIF § ENDIF", true, () => ConditionalCompilation.IsSymbolDefined("A"));

@@ -52,6 +52,10 @@
     <Compile Include="SyntaxTree\CompilerDirectives\BooleanEvaluationSwitch.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\DebugInfoSwitch.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\CodeAlignParameter.cs" />
+    <Compile Include="SyntaxTree\CompilerDirectives\Else.cs" />
+    <Compile Include="SyntaxTree\CompilerDirectives\EndIf.cs" />
+    <Compile Include="SyntaxTree\CompilerDirectives\IfDef.cs" />
+    <Compile Include="SyntaxTree\CompilerDirectives\UnDefineSymbol.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\DefineSymbol.cs" />
     <Compile Include="SyntaxTree\Terminal.cs" />
     <Compile Include="SyntaxTree\InvalidToken.cs" />

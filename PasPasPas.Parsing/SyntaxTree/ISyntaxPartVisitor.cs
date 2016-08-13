@@ -12,7 +12,7 @@
         /// <param name="syntaxPart">part to visit</param>
         /// <param name="parameter">parameter</param>
         /// <returns>bool if visiting should be continued</returns>
-        void BeginVisit(ISyntaxPart syntaxPart, TParam parameter);
+        bool BeginVisit(ISyntaxPart syntaxPart, TParam parameter);
 
         /// <summary>
         ///     visit a syntax part (after recursive descent)
@@ -20,7 +20,7 @@
         /// <param name="syntaxPart">part to visit</param>
         /// <param name="parameter">parameter</param>
         /// <returns>bool if visiting should be continued</returns>
-        void EndVisit(ISyntaxPart syntaxPart, TParam parameter);
+        bool EndVisit(ISyntaxPart syntaxPart, TParam parameter);
 
     }
 

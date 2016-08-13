@@ -13,7 +13,7 @@ namespace PasPasPas.Parsing.SyntaxTree {
         /// </summary>
         /// <param name="visitor">visitor to accept</param>
         /// <param name="visitorParameter">parameter</param>
-        void Accept<T>(ISyntaxPartVisitor<T> visitor, T visitorParameter);
+        bool Accept<T>(ISyntaxPartVisitor<T> visitor, T visitorParameter);
 
         /// <summary>
         ///     child nodes

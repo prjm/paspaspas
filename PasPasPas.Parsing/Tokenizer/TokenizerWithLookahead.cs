@@ -47,16 +47,18 @@ namespace PasPasPas.Parsing.Tokenizer {
 
         private void InternalFetchNextToken() {
             int currentTokenCount = tokenList.Count;
-            while (tokenList.Count == currentTokenCount) {
+            while (tokenList.Count == currentTokenCount || tokenList.Count < 2) {
 
-                if (!HasNextToken()) {
+                if (!BaseTokenizer.HasNextToken()) {
+                    if (tokenList.Count > 0)
+                        tokenList.Last().AssignInvalidTokens(invalidTokens, true);
                     //tokenList.Enqueue(new PascalToken(PascalToken.Eof, string.Empty, new FileReference(string.Empty)));
                     return;
                 }
 
                 var nextToken = BaseTokenizer.FetchNextToken();
                 if (IsValidToken(nextToken)) {
-                    nextToken.AssignRemainingTokens(invalidTokens);
+                    nextToken.AssignInvalidTokens(invalidTokens, false);
                     tokenList.Enqueue(nextToken);
                 }
                 else {
@@ -96,20 +98,20 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <summary>
         ///     get tokens and look ahader
         /// </summary>
-        /// <param name="num">number of tokens to look ahead</param>
+        /// <param name="number">number of tokens to look ahead</param>
         /// <returns>token</returns>
-        public PascalToken LookAhead(int num) {
+        public PascalToken LookAhead(int number) {
             checked {
-                while (BaseTokenizer.HasNextToken() && (tokenList.Count < 1 + num)) {
+                while (BaseTokenizer.HasNextToken() && (tokenList.Count < System.Math.Max(2, 1 + number))) {
                     InternalFetchNextToken();
                 }
             }
 
-            if (tokenList.Count <= num) {
+            if (tokenList.Count <= number) {
                 return null; //  new PascalToken(PascalToken.Eof, string.Empty, new FileReference(string.Empty));
             }
             else {
-                return tokenList.ElementAt(num);
+                return tokenList.ElementAt(number);
             }
         }
 

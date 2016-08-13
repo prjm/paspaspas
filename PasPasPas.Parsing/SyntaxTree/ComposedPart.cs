@@ -25,7 +25,7 @@ namespace PasPasPas.Parsing.SyntaxTree {
         ///     accepet visitor
         /// </summary>
         /// <param name="visitor"></param>
-        public override void Accept<TParam>(ISyntaxPartVisitor<TParam> visitor, TParam param) {
+        public override bool Accept<TParam>(ISyntaxPartVisitor<TParam> visitor, TParam param) {
             visitor.BeginVisit(this, param);
 
             if (details.IsValueCreated) {
@@ -35,6 +35,7 @@ namespace PasPasPas.Parsing.SyntaxTree {
 
 
             visitor.EndVisit(this, param);
+            return true;
         }
 
         /// <summary>

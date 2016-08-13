@@ -11,14 +11,16 @@
         /// </summary>
         /// <param name="syntaxPart">part to visit</param>
         /// <param name="parameter">parameter</param>
-        public virtual void BeginVisit(ISyntaxPart syntaxPart, TParam parameter) { }
+        public virtual bool BeginVisit(ISyntaxPart syntaxPart, TParam parameter)
+            => true;
 
         /// <summary>
         ///     stop visiting a syntax part
         /// </summary>
         /// <param name="syntaxPart">part to visit</param>
         /// <param name="parameter">parameter</param>
-        public virtual void EndVisit(ISyntaxPart syntaxPart, TParam parameter) { }
+        public virtual bool EndVisit(ISyntaxPart syntaxPart, TParam parameter)
+            => true;
 
     }
 }

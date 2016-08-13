@@ -1,4 +1,5 @@
-﻿using PasPasPas.Parsing.SyntaxTree.CompilerDirectives;
+﻿using System;
+using PasPasPas.Parsing.SyntaxTree.CompilerDirectives;
 
 namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
@@ -8,13 +9,31 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
     public class CompilerDirectiveVisitor : SyntaxPartVisitorBase<CompilerDirectiveVisitorOptions> {
 
         /// <summary>
+        ///     test if an item can be visited
+        /// </summary>
+        /// <param name="syntaxPart">syntax part to test</param>
+        /// <param name="parameter">options</param>
+        /// <returns></returns>
+        private bool CanVisit(ISyntaxPart syntaxPart, CompilerDirectiveVisitorOptions parameter) {
+            if (!parameter.ConditionalCompilation.Skip)
+                return true;
+
+            return syntaxPart is EndIf || syntaxPart is IfDef || syntaxPart is Else;
+        }
+
+        /// <summary>
         ///     visit a syntax node
         /// </summary>
         /// <param name="syntaxPart"></param>
         /// <param name="parameter"></param>
-        public override void BeginVisit(ISyntaxPart syntaxPart, CompilerDirectiveVisitorOptions parameter) {
+        public override bool BeginVisit(ISyntaxPart syntaxPart, CompilerDirectiveVisitorOptions parameter) {
+
+            if (!CanVisit(syntaxPart, parameter))
+                return true;
+
             dynamic part = syntaxPart;
             BeginVisitItem(part, parameter);
+            return true;
         }
 
         /// <summary>
@@ -79,12 +98,52 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         }
 
         /// <summary>
-        ///     update debug info mode
+        ///     define symbol
         /// </summary>
         /// <param name="syntaxPart"></param>
         /// <param name="parameter"></param>
         public void BeginVisitItem(DefineSymbol syntaxPart, CompilerDirectiveVisitorOptions parameter) {
             parameter.ConditionalCompilation.DefineSymbol(syntaxPart.SymbolName);
+        }
+
+        /// <summary>
+        ///     undefine symbol
+        /// </summary>
+        /// <param name="syntaxPart"></param>
+        /// <param name="parameter"></param>
+        public void BeginVisitItem(UnDefineSymbol syntaxPart, CompilerDirectiveVisitorOptions parameter) {
+            parameter.ConditionalCompilation.UndefineSymbol(syntaxPart.SymbolName);
+        }
+
+        /// <summary>
+        ///     conditional compilation ("ifdef")
+        /// </summary>
+        /// <param name="syntaxPart"></param>
+        /// <param name="parameter"></param>
+        public void BeginVisitItem(IfDef syntaxPart, CompilerDirectiveVisitorOptions parameter) {
+            if (syntaxPart.Negate)
+                parameter.ConditionalCompilation.AddIfNDefCondition(syntaxPart.SymbolName);
+            else
+                parameter.ConditionalCompilation.AddIfDefCondition(syntaxPart.SymbolName);
+        }
+
+        /// <summary>
+        ///     conditional compilation ("ifdef")
+        /// </summary>
+        /// <param name="syntaxPart"></param>
+        /// <param name="parameter"></param>
+        public void BeginVisitItem(EndIf syntaxPart, CompilerDirectiveVisitorOptions parameter) {
+            parameter.ConditionalCompilation.RemoveIfDefCondition();
+        }
+
+
+        /// <summary>
+        ///     conditional compilation ("else")
+        /// </summary>
+        /// <param name="syntaxPart"></param>
+        /// <param name="parameter"></param>
+        public void BeginVisitItem(Else syntaxPart, CompilerDirectiveVisitorOptions parameter) {
+            parameter.ConditionalCompilation.AddElseCondition();
         }
 
     }

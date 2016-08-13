@@ -1,12 +1,12 @@
 ﻿namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
 
     /// <summary>
-    ///     compiler directive to define a symbol
+    ///     compiler directive to undefine a symbol
     /// </summary>
-    public class DefineSymbol : SyntaxPartBase {
+    public class UnDefineSymbol : SyntaxPartBase {
 
         /// <summary>
-        ///     defined symbol name
+        ///     unddefined symbol name
         /// </summary>
         public string SymbolName { get; set; }
     }

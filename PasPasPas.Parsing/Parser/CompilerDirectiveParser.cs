@@ -178,19 +178,19 @@ namespace PasPasPas.Parsing.Parser {
         private void ParseParameter(ISyntaxPart parent) {
 
             if (Match(PascalToken.IfDef)) {
-                ParseIfDef();
+                ParseIfDef(parent);
             }
             else if (Match(PascalToken.IfOpt)) {
                 ParseIfOpt();
             }
             else if (Match(PascalToken.EndIf)) {
-                ParseEndIf();
+                ParseEndIf(parent);
             }
             else if (Match(PascalToken.ElseCd)) {
-                ParseElse();
+                ParseElse(parent);
             }
             else if (Match(PascalToken.IfNDef)) {
-                ParseIfNDef();
+                ParseIfNDef(parent);
             }
             else if (Match(PascalToken.Apptype)) {
                 ParseApptypeParameter(parent);
@@ -202,7 +202,7 @@ namespace PasPasPas.Parsing.Parser {
                 ParseDefine(parent);
             }
             else if (Match(PascalToken.Undef)) {
-                ParseUndef();
+                ParseUndef(parent);
             }
             else if (Match(PascalToken.ExternalSym)) {
                 ParseExternalSym();
@@ -549,11 +549,15 @@ namespace PasPasPas.Parsing.Parser {
             }
         }
 
-        private void ParseIfNDef() {
-            Require(PascalToken.IfNDef);
-            var value = Require(CurrentToken().Kind).Value;
-            if (!string.IsNullOrEmpty(value)) {
-                ConditionalCompilation.AddIfNDefCondition(value);
+        private void ParseIfNDef(ISyntaxPart parent) {
+            IfDef result = CreateByTerminal<IfDef>(parent);
+            result.Negate = true;
+
+            if (ContinueWith(result, PascalToken.Identifier)) {
+                result.SymbolName = result.LastTerminal.Value;
+            }
+            else {
+                ErrorAndSkip(parent, CompilerDirectiveParserErrors.InvalidIfNDefDirective);
             }
         }
 
@@ -595,29 +599,33 @@ namespace PasPasPas.Parsing.Parser {
             Meta.RegisterExternalSymbol(identiferName, symbolName, unionName);
         }
 
-        private void ParseElse() {
-            Require(PascalToken.ElseCd);
-            ConditionalCompilation.AddElseCondition();
+        private void ParseElse(ISyntaxPart parent) {
+            CreateByTerminal<Else>(parent);
         }
 
-        private void ParseEndIf() {
-            Require(PascalToken.EndIf);
-            ConditionalCompilation.RemoveIfDefCondition();
+        private void ParseEndIf(ISyntaxPart parent) {
+            CreateByTerminal<EndIf>(parent);
         }
 
-        private void ParseIfDef() {
-            Require(PascalToken.IfDef);
-            var value = Require(CurrentToken().Kind).Value;
-            if (!string.IsNullOrEmpty(value)) {
-                ConditionalCompilation.AddIfDefCondition(value);
+        private void ParseIfDef(ISyntaxPart parent) {
+            IfDef result = CreateByTerminal<IfDef>(parent);
+
+            if (ContinueWith(result, PascalToken.Identifier)) {
+                result.SymbolName = result.LastTerminal.Value;
+            }
+            else {
+                ErrorAndSkip(parent, CompilerDirectiveParserErrors.InvalidIfDefDirective);
             }
         }
 
-        private void ParseUndef() {
-            Require(PascalToken.Undef);
-            var value = Require(CurrentToken().Kind).Value;
-            if (!string.IsNullOrEmpty(value)) {
-                ConditionalCompilation.UndefineSymbol(value);
+        private void ParseUndef(ISyntaxPart parent) {
+            UnDefineSymbol result = CreateByTerminal<UnDefineSymbol>(parent);
+
+            if (ContinueWith(result, PascalToken.Identifier)) {
+                result.SymbolName = result.LastTerminal.Value;
+            }
+            else {
+                ErrorAndSkip(parent, CompilerDirectiveParserErrors.InvalidUnDefineDirective);
             }
         }
 
@@ -2089,5 +2097,14 @@ namespace PasPasPas.Parsing.Parser {
             return result;
 
         }
+
+        /// <summary>
+        ///     allow an identifier if it was tokenized as a keyword
+        /// </summary>
+        /// <returns></returns>
+        protected override bool AllowIdentifier()
+            => CompilerDirectiveTokenizer.Keywords.ContainsKey(CurrentToken()?.Value);
+
     }
+
 }

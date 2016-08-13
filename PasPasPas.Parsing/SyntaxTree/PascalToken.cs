@@ -1406,19 +1406,58 @@ namespace PasPasPas.Parsing.SyntaxTree {
         public TextFilePosition EndPosition { get; internal set; }
 
         /// <summary>
-        ///     list of invalid tokens
+        ///     invalid tokens before this token
         /// </summary>
-        public Lazy<IList<PascalToken>> InvalidTokens =
+        public IEnumerable<PascalToken> InvalidTokensBefore
+        {
+            get
+            {
+                if (invalidTokensBefore.IsValueCreated) {
+                    foreach (var token in invalidTokensBefore.Value)
+                        yield return token;
+                }
+            }
+        }
+
+        /// <summary>
+        ///     invalid tokens after this token
+        /// </summary>
+        public IEnumerable<PascalToken> InvalidTokensAfter
+        {
+            get
+            {
+                if (invalidTokensAfter.IsValueCreated) {
+                    foreach (var token in invalidTokensAfter.Value)
+                        yield return token;
+                }
+            }
+        }
+
+        /// <summary>
+        ///     list of invalid tokens before this token
+        /// </summary>
+        private Lazy<IList<PascalToken>> invalidTokensBefore =
+            new Lazy<IList<PascalToken>>(() => new List<PascalToken>());
+
+        /// <summary>
+        ///     list of invalid tokens after this token
+        /// </summary>
+        private Lazy<IList<PascalToken>> invalidTokensAfter =
             new Lazy<IList<PascalToken>>(() => new List<PascalToken>());
 
         /// <summary>
         ///     assign remaining tokens
         /// </summary>
         /// <param name="invalidTokens"></param>
-        public void AssignRemainingTokens(Queue<PascalToken> invalidTokens) {
+        /// <param name="afterwards">add tokens after this token</param>
+        public void AssignInvalidTokens(Queue<PascalToken> invalidTokens, bool afterwards) {
             if (invalidTokens.Count > 0) {
                 foreach (var token in invalidTokens)
-                    InvalidTokens.Value.Add(token);
+                    if (afterwards)
+                        invalidTokensAfter.Value.Add(token);
+                    else
+                        invalidTokensBefore.Value.Add(token);
+
                 invalidTokens.Clear();
             }
         }

@@ -319,7 +319,7 @@ namespace PasPasPas.Parsing.Parser {
                 return false;
             }
 
-            if (!Match(tokenKind)) {
+            if (!Match(tokenKind) && ((tokenKind == PascalToken.Identifier) && !AllowIdentifier())) {
                 return false;
             }
 
@@ -330,6 +330,13 @@ namespace PasPasPas.Parsing.Parser {
             return true;
 
         }
+
+        /// <summary>
+        ///     override: allow another symbol instead of an identifier
+        /// </summary>
+        /// <returns></returns>
+        protected virtual bool AllowIdentifier()
+            => false;
 
         /// <summary>
         ///     optionally continue a syntax part by a terminal symbol

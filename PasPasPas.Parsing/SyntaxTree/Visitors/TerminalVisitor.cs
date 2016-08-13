@@ -10,9 +10,10 @@
         /// </summary>
         /// <param name="syntaxPart"></param>
         /// <param name="parameter"></param>
-        public override void BeginVisit(ISyntaxPart syntaxPart, TerminalVisitorOptions parameter) {
+        public override bool BeginVisit(ISyntaxPart syntaxPart, TerminalVisitorOptions parameter) {
             dynamic part = syntaxPart;
             BeginVisitItem(part, parameter);
+            return true;
         }
 
         /// <summary>
@@ -32,11 +33,14 @@
             if (syntaxPart.Token == null)
                 return;
 
-            if (syntaxPart.Token.InvalidTokens.IsValueCreated) {
-                foreach (var token in syntaxPart.Token.InvalidTokens.Value)
-                    parameter.ResultBuilder.Append(token.Value);
-            }
+            foreach (var token in syntaxPart.Token.InvalidTokensBefore)
+                parameter.ResultBuilder.Append(token.Value);
+
             parameter.ResultBuilder.Append(syntaxPart.Token.Value);
+
+            foreach (var token in syntaxPart.Token.InvalidTokensAfter)
+                parameter.ResultBuilder.Append(token.Value);
+
         }
 
     }
