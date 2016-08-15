@@ -54,5 +54,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         public LogSource LogSource
             => logSource;
 
+        /// <summary>
+        ///     meta information
+        /// </summary>
+        public MetaInformation Meta
+            => Environment.Options.Meta;
     }
 }

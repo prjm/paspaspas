@@ -193,6 +193,10 @@ namespace PasPasPas.Parsing.Parser {
         /// <returns><c>true</c> if the token kind matches</returns>
         protected virtual bool LookAhead(int numberOfTokens, params int[] tokenKind) {
             var token = tokenizer.LookAhead(numberOfTokens);
+
+            if (token == null)
+                return false;
+
             return tokenKind.Any(t => t == token.Kind);
         }
 
@@ -319,7 +323,7 @@ namespace PasPasPas.Parsing.Parser {
                 return false;
             }
 
-            if (!Match(tokenKind) && ((tokenKind == PascalToken.Identifier) && !AllowIdentifier())) {
+            if (!Match(tokenKind) && ((tokenKind != PascalToken.Identifier) || !AllowIdentifier())) {
                 return false;
             }
 

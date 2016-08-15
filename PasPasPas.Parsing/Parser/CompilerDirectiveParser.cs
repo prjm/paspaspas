@@ -711,12 +711,12 @@ namespace PasPasPas.Parsing.Parser {
                 ParseLongDebugInfoSwitch(parent);
             }
 
-            else if (Optional(PascalToken.DenyPackageUnit)) {
-                ParseDenyPackageUnitSwitch();
+            else if (Match(PascalToken.DenyPackageUnit)) {
+                ParseDenyPackageUnitSwitch(parent);
             }
 
-            else if (Optional(PascalToken.DescriptionSwitchLong)) {
-                ParseLongDescriptionSwitch();
+            else if (Match(PascalToken.DescriptionSwitchLong)) {
+                ParseLongDescriptionSwitch(parent);
             }
 
             else if (Optional(PascalToken.DesignOnly)) {
@@ -1402,23 +1402,29 @@ namespace PasPasPas.Parsing.Parser {
             Unexpected();
         }
 
-        private void ParseLongDescriptionSwitch() {
-            var description = Require(PascalToken.QuotedString);
-            Meta.Description.Value = QuotedStringTokenValue.Unwrap(description);
+        private void ParseLongDescriptionSwitch(ISyntaxPart parent) {
+            Description result = CreateByTerminal<Description>(parent);
+
+            if (ContinueWith(result, PascalToken.QuotedString)) {
+                result.DescriptionValue = QuotedStringTokenValue.Unwrap(result.LastTerminal.Token);
+            }
+            else {
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidDescriptionDirective);
+            }
         }
 
-        private void ParseDenyPackageUnitSwitch() {
-            if (Optional(PascalToken.On)) {
-                ConditionalCompilation.DenyInPackages.Value = DenyUnitInPackages.DenyUnit;
-                return;
-            }
+        private void ParseDenyPackageUnitSwitch(ISyntaxPart parent) {
+            ParseDenyPackageUnit result = CreateByTerminal<ParseDenyPackageUnit>(parent);
 
-            if (Optional(PascalToken.Off)) {
-                ConditionalCompilation.DenyInPackages.Value = DenyUnitInPackages.AllowUnit;
-                return;
+            if (ContinueWith(result, PascalToken.On)) {
+                result.DenyUnit = DenyUnitInPackages.DenyUnit;
             }
-
-            Unexpected();
+            else if (ContinueWith(result, PascalToken.Off)) {
+                result.DenyUnit = DenyUnitInPackages.AllowUnit;
+            }
+            else {
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidDenyPackageUnitDirective);
+            }
         }
 
         private void ParseLongDebugInfoSwitch(ISyntaxPart parent) {
@@ -1990,19 +1996,24 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseDebugInfoOrDescriptionSwitch(ISyntaxPart parent) {
-            DebugInfoSwitch result = CreateByTerminal<DebugInfoSwitch>(parent);
+            if (LookAhead(1, TokenKind.Plus, TokenKind.Minus)) {
+                DebugInfoSwitch result = CreateByTerminal<DebugInfoSwitch>(parent);
 
-            if (ContinueWith(result, TokenKind.Plus)) {
-                result.DebugInfo = DebugInformation.IncludeDebugInformation;
+                if (ContinueWith(result, TokenKind.Plus)) {
+                    result.DebugInfo = DebugInformation.IncludeDebugInformation;
+                }
+                else if (ContinueWith(result, TokenKind.Minus)) {
+                    result.DebugInfo = DebugInformation.NoDebugInfo;
+                }
             }
-            else if (ContinueWith(result, TokenKind.Minus)) {
-                result.DebugInfo = DebugInformation.NoDebugInfo;
-            }
-            else if (ContinueWith(result, PascalToken.QuotedString)) {
-                Meta.Description.Value = QuotedStringTokenValue.Unwrap(CurrentToken());
+            else if (LookAhead(1, PascalToken.QuotedString)) {
+                Description result = CreateByTerminal<Description>(parent);
+                ContinueWith(result, PascalToken.QuotedString);
+                result.DescriptionValue = QuotedStringTokenValue.Unwrap(result.LastTerminal.Token);
             }
             else {
-                ErrorAndSkip(parent, CompilerDirectiveParserErrors.InvalidDebugInfoDirective);
+                DebugInfoSwitch result = CreateByTerminal<DebugInfoSwitch>(parent);
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidDebugInfoDirective);
             }
         }
 

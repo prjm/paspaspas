@@ -1,5 +1,4 @@
-﻿using System;
-using PasPasPas.Parsing.SyntaxTree.CompilerDirectives;
+﻿using PasPasPas.Parsing.SyntaxTree.CompilerDirectives;
 using PasPasPas.Parsing.Parser;
 
 namespace PasPasPas.Parsing.SyntaxTree.Visitors {
@@ -142,6 +141,23 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             }
         }
 
+        /// <summary>
+        ///     deny unit in package switch
+        /// </summary>
+        /// <param name="syntaxPart"></param>
+        /// <param name="parameter"></param>
+        public void BeginVisitItem(ParseDenyPackageUnit syntaxPart, CompilerDirectiveVisitorOptions parameter) {
+            parameter.ConditionalCompilation.DenyInPackages.Value = syntaxPart.DenyUnit;
+        }
+
+        /// <summary>
+        ///     description
+        /// </summary>
+        /// <param name="syntaxPart"></param>
+        /// <param name="parameter"></param>
+        public void BeginVisitItem(Description syntaxPart, CompilerDirectiveVisitorOptions parameter) {
+            parameter.Meta.Description.Value = syntaxPart.DescriptionValue;
+        }
 
         /// <summary>
         ///     conditional compilation ("else")

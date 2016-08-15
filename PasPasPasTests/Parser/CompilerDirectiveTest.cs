@@ -159,16 +159,24 @@ namespace PasPasPasTests.Parser {
 
         [TestMethod]
         public void TestDenyPackageUnit() {
-            RunCompilerDirective("", DenyUnitInPackages.Undefined, () => ConditionalCompilation.DenyInPackages.Value);
-            RunCompilerDirective("DENYPACKAGEUNIT ON", DenyUnitInPackages.DenyUnit, () => ConditionalCompilation.DenyInPackages.Value);
-            RunCompilerDirective("DENYPACKAGEUNIT OFF", DenyUnitInPackages.AllowUnit, () => ConditionalCompilation.DenyInPackages.Value);
+            Func<object> f = () => ConditionalCompilation.DenyInPackages.Value;
+            RunCompilerDirective("", DenyUnitInPackages.Undefined, f);
+            RunCompilerDirective("DENYPACKAGEUNIT ON", DenyUnitInPackages.DenyUnit, f);
+            RunCompilerDirective("DENYPACKAGEUNIT OFF", DenyUnitInPackages.AllowUnit, f);
+            RunCompilerDirective("DENYPACKAGEUNIT KAPUTT", DenyUnitInPackages.Undefined, f, CompilerDirectiveParserErrors.InvalidDenyPackageUnitDirective);
+            RunCompilerDirective("DENYPACKAGEUNIT", DenyUnitInPackages.Undefined, f, CompilerDirectiveParserErrors.InvalidDenyPackageUnitDirective);
         }
 
         [TestMethod]
         public void TestDescription() {
-            RunCompilerDirective("", null, () => Meta.Description.Value);
-            RunCompilerDirective("DESCRIPTION 'dummy'", "dummy", () => Meta.Description.Value);
-            RunCompilerDirective("D 'dummy1'", "dummy1", () => Meta.Description.Value);
+            Func<object> f = () => Meta.Description.Value;
+            RunCompilerDirective("", null, f);
+            RunCompilerDirective("DESCRIPTION 'dummy'", "dummy", f);
+            RunCompilerDirective("D 'dummy1'", "dummy1", f);
+            RunCompilerDirective("DESCRIPTION KAPUTT", null, f, CompilerDirectiveParserErrors.InvalidDescriptionDirective);
+            RunCompilerDirective("DESCRIPTION", null, f, CompilerDirectiveParserErrors.InvalidDescriptionDirective);
+            RunCompilerDirective("D KAPUTT", null, f, CompilerDirectiveParserErrors.InvalidDebugInfoDirective);
+            RunCompilerDirective("D", null, f, CompilerDirectiveParserErrors.InvalidDebugInfoDirective);
         }
 
         [TestMethod]

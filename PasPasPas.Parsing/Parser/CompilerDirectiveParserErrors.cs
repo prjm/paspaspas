@@ -93,5 +93,19 @@ namespace PasPasPas.Parsing.Parser {
         /* {06956380-7e28-4822-9b2e-f5d45bf2f5b6} */
 
 
+        /// <summary>
+        ///     invalid denypackageunit directive
+        /// </summary>
+        public static readonly Guid InvalidDenyPackageUnitDirective
+            = new Guid(new byte[] { 0x64, 0x90, 0xc2, 0x84, 0xa2, 0x99, 0x56, 0x49, 0xb5, 0x8, 0x76, 0x27, 0xc, 0xc8, 0xf5, 0xca });
+        /* {84c29064-99a2-4956-b508-76270cc8f5ca} */
+
+        /// <summary>
+        ///     invalid description directive
+        /// </summary>
+        public static readonly Guid InvalidDescriptionDirective
+             = new Guid(new byte[] { 0x90, 0xc7, 0xa0, 0x3c, 0xae, 0xdb, 0x3f, 0x43, 0x96, 0xf8, 0x63, 0x92, 0x5a, 0xc2, 0xc, 0xb1 });
+        /* {3ca0c790-dbae-433f-96f8-63925ac20cb1} */
+
     }
 }
