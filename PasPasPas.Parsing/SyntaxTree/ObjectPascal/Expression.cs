@@ -62,7 +62,7 @@ namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
                     case TokenKind.EqualsSign:
                         result.Operator("=");
                         break;
-                    case PascalToken.In:
+                    case TokenKind.In:
                         result.Operator("in");
                         break;
                     case PascalToken.Is:

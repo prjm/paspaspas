@@ -1,6 +1,7 @@
 ﻿using System;
 using PasPasPas.Options.DataTypes;
 using PasPasPas.Infrastructure.Input;
+using PasPasPas.Infrastructure.Log;
 
 namespace PasPasPas.Options.Bundles {
 
@@ -8,6 +9,18 @@ namespace PasPasPas.Options.Bundles {
     ///     set of compiler options
     /// </summary>
     public class OptionSet : IOptionSet {
+
+        private static readonly Guid messageSource
+            = new Guid(new byte[] { 0x21, 0x78, 0xd, 0xe5, 0x2f, 0xb2, 0xca, 0x42, 0xbf, 0x47, 0x71, 0xf1, 0x11, 0x1b, 0x31, 0xc9 });
+        /* {e50d7821-b22f-42ca-bf47-71f1111b31c9} */
+
+
+        /// <summary>
+        ///     open ifdef / ifndef
+        /// </summary>
+        public static readonly Guid PendingCondition
+            = new Guid(new byte[] { 0x31, 0xb0, 0xe3, 0x39, 0x3e, 0x22, 0xef, 0x42, 0xb7, 0x4f, 0x88, 0x18, 0x47, 0x17, 0x2b, 0x6d });
+        /* {39e3b031-223e-42ef-b74f-881847172b6d} */
 
         /// <summary>
         ///     debug configuration
@@ -99,9 +112,11 @@ namespace PasPasPas.Options.Bundles {
         /// <summary>
         ///     reset definitions for a new unit
         /// </summary>
-        public void ResetOnNewUnit() {
+        public void ResetOnNewUnit(ILogManager logManager) {
+            var logSource = new LogSource(logManager, messageSource);
+
             CompilerOptions.ResetOnNewUnit();
-            ConditionalCompilation.ResetOnNewUnit();
+            ConditionalCompilation.ResetOnNewUnit(logSource);
             Meta.ResetOnNewUnit();
             PathOptions.ResetOnNewUnit();
             Warnings.ResetOnNewUnit();

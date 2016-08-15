@@ -31,7 +31,7 @@ namespace PasPasPas.Parsing.Tokenizer {
             AddPattern('-', TokenKind.Minus);
             AddPattern('*', TokenKind.Times);
             AddPattern('/', TokenKind.Slash).Add('/', new EndOfLineCommentTokenGroupValue());
-            AddPattern('@', PascalToken.At);
+            AddPattern('@', TokenKind.At);
             AddPattern('>', PascalToken.GreaterThen).Add('=', PascalToken.GreaterThenEquals);
             var lt = AddPattern('<', PascalToken.LessThen);
             lt.Add('=', PascalToken.LessThenEquals);

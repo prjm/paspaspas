@@ -27,7 +27,7 @@ namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
             if (Count < 1)
                 return;
 
-            if (Kind == PascalToken.Const)
+            if (Kind == TokenKind.Const)
                 result.Keyword("const");
             else if (Kind == PascalToken.Resourcestring)
                 result.Keyword("resourcestring");

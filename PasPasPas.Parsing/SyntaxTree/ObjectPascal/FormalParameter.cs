@@ -51,7 +51,7 @@ namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
             }
 
             if (ParamType != TokenKind.Undefined) {
-                if (ParamType == PascalToken.Const) {
+                if (ParamType == TokenKind.Const) {
                     result.Keyword("const");
                 }
                 else if (ParamType == PascalToken.Var) {

@@ -112,7 +112,70 @@
         public const int Slash = 26;
 
 
+        /// <summary>
+        ///     token for <c>@</c>
+        /// </summary>
+        public const int At = 27;
 
+        /// <summary>
+        ///     token for <c>program</c>
+        /// </summary>
+        public const int Program = 200;
+
+        /// <summary>
+        ///     token for <c>unit</c>
+        /// </summary>
+        public const int Unit = 201;
+
+        /// <summary>
+        ///     token for <c>package</c>
+        /// </summary>
+        public const int Package = 202;
+
+        /// <summary>
+        ///     token for <c>library</c>
+        /// </summary>
+        public const int Library = 203;
+
+        /// <summary>
+        ///     token for <c>uses</c>
+        /// </summary>
+        public const int Uses = 204;
+
+        /// <summary>
+        ///     token for <c>in</c>
+        /// </summary>
+        public const int In = 205;
+
+        /// <summary>
+        ///     token for <c>const</c>
+        /// </summary>
+        public const int Const = 206;
+
+        /// <summary>
+        ///     token for <c>pointer</c>
+        /// </summary>
+        public const int Pointer = 207;
+
+        /// <summary>
+        ///     token for <c>array</c>
+        /// </summary>
+        public const int Array = 208;
+
+        /// <summary>
+        ///     token for <c>of</c>
+        /// </summary>
+        public const int Of = 209;
+
+        /// <summary>
+        ///     token for <c>type</c>
+        /// </summary>
+        public const int TypeKeyword = 210;
+
+        /// <summary>
+        ///     token for <c>packed</c>
+        /// </summary>
+        public const int Packed = 211;
 
     }
 }

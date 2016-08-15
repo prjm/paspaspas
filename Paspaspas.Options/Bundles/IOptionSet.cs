@@ -1,4 +1,5 @@
 ﻿using PasPasPas.Infrastructure.Input;
+using PasPasPas.Infrastructure.Log;
 using PasPasPas.Options.DataTypes;
 
 namespace PasPasPas.Options.Bundles {
@@ -36,7 +37,8 @@ namespace PasPasPas.Options.Bundles {
         /// <summary>
         ///     clear intermediate options
         /// </summary>
-        void ResetOnNewUnit();
+        /// <param name="logManager">log manager for error messages</param>
+        void ResetOnNewUnit(ILogManager logManager);
 
         /// <summary>
         ///     get information for a switch

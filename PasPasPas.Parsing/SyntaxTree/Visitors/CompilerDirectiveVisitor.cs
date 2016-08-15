@@ -1,5 +1,6 @@
 ﻿using System;
 using PasPasPas.Parsing.SyntaxTree.CompilerDirectives;
+using PasPasPas.Parsing.Parser;
 
 namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
@@ -133,7 +134,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <param name="syntaxPart"></param>
         /// <param name="parameter"></param>
         public void BeginVisitItem(EndIf syntaxPart, CompilerDirectiveVisitorOptions parameter) {
-            parameter.ConditionalCompilation.RemoveIfDefCondition();
+            if (parameter.ConditionalCompilation.HasConditions) {
+                parameter.ConditionalCompilation.RemoveIfDefCondition();
+            }
+            else {
+                parameter.LogSource.Error(CompilerDirectiveParserErrors.EndIfWithoutIf, syntaxPart);
+            }
         }
 
 
@@ -143,7 +149,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <param name="syntaxPart"></param>
         /// <param name="parameter"></param>
         public void BeginVisitItem(Else syntaxPart, CompilerDirectiveVisitorOptions parameter) {
-            parameter.ConditionalCompilation.AddElseCondition();
+            if (parameter.ConditionalCompilation.HasConditions) {
+                parameter.ConditionalCompilation.AddElseCondition();
+            }
+            else {
+                parameter.LogSource.Error(CompilerDirectiveParserErrors.ElseIfWithoutIf, syntaxPart);
+            }
         }
 
     }

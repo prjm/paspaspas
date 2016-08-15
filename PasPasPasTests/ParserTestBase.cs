@@ -120,7 +120,7 @@ namespace PasPasPasTests {
 
             var directives = directive.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
             foreach (var directivePart in directives) {
-                TestOptions.ResetOnNewUnit();
+                TestOptions.ResetOnNewUnit(environment.Log);
                 var subParts = directivePart.Split(new[] { '§' }, StringSplitOptions.RemoveEmptyEntries);
                 foreach (var subPart in subParts) {
                     using (var input = new StringInput(subPart, new FileReference("test_" + fileCounter.ToString() + ".pas")))

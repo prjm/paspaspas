@@ -58,7 +58,7 @@ namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
                 }
                 result.Part(EndExpression).Space();
             }
-            else if (Kind == PascalToken.In) {
+            else if (Kind == TokenKind.In) {
                 result.Keyword("in").Space();
                 result.Part(StartExpression).Space();
             }

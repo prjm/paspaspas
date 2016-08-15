@@ -1,4 +1,6 @@
-﻿using System;
+﻿using PasPasPas.Infrastructure.Log;
+using PasPasPas.Options.Bundles;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -35,6 +37,12 @@ namespace PasPasPas.Options.DataTypes {
         ///     design-time only package
         /// </summary>
         public DerivedValueOption<DesignOnlyUnit> DesignOnly { get; }
+
+        /// <summary>
+        ///     test fif conditions are availiabe
+        /// </summary>
+        public bool HasConditions
+            => Conditions.Count > 0;
 
         /// <summary>
         ///     create new option set for conditional compilation
@@ -80,7 +88,7 @@ namespace PasPasPas.Options.DataTypes {
         /// <summary>
         ///     reset local conditionals
         /// </summary>
-        public void ResetOnNewUnit() {
+        public void ResetOnNewUnit(LogSource logSource) {
             DenyInPackages.ResetToDefault();
             DesignOnly.ResetToDefault();
 
@@ -93,6 +101,11 @@ namespace PasPasPas.Options.DataTypes {
             }
 
             UpdateSkipState();
+
+            foreach (var condition in Conditions) {
+                logSource.Error(OptionSet.PendingCondition, condition);
+            }
+            Conditions.Clear();
         }
 
         /// <summary>
@@ -162,6 +175,9 @@ namespace PasPasPas.Options.DataTypes {
         /// </summary>
         /// <param name="value"></param>
         public void AddIfNDefCondition(string value) {
+            if (string.IsNullOrWhiteSpace(value))
+                return;
+
             AddNewCondition(new IfDefCondition() { Matches = !IsSymbolDefined(value), SymbolName = value });
             UpdateSkipState();
         }
@@ -179,6 +195,9 @@ namespace PasPasPas.Options.DataTypes {
         /// </summary>
         /// <param name="value">symbol to look for</param>
         public void AddIfDefCondition(string value) {
+            if (string.IsNullOrWhiteSpace(value))
+                return;
+
             AddNewCondition(new IfDefCondition() { Matches = IsSymbolDefined(value), SymbolName = value });
             UpdateSkipState();
         }

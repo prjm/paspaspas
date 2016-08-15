@@ -22,13 +22,13 @@ namespace PasPasPas.Parsing.Parser {
         private static readonly HashSet<int> reservedWords
             = new HashSet<int>() {
             PascalToken.And,
-            PascalToken.Array,
+            TokenKind.Array,
             PascalToken.As,
             PascalToken.Asm,
             PascalToken.Begin,
             PascalToken.Case,
             PascalToken.Class,
-            PascalToken.Const,
+            TokenKind.Const,
             PascalToken.Constructor,
             PascalToken.Destructor,
             PascalToken.DispInterface,
@@ -47,23 +47,23 @@ namespace PasPasPas.Parsing.Parser {
             PascalToken.GoToKeyword,
             PascalToken.If,
             PascalToken.Implementation,
-            PascalToken.In,
+            TokenKind.In,
             PascalToken.Inherited,
             PascalToken.Initialization,
             PascalToken.Inline,
             PascalToken.Interface,
             PascalToken.Is,
             PascalToken.Label,
-            PascalToken.Library,
+            TokenKind.Library,
             PascalToken.Mod,
             PascalToken.Nil,
             PascalToken.Not,
             PascalToken.Object,
-            PascalToken.Of,
+            TokenKind.Of,
             PascalToken.Or,
-            PascalToken.Packed,
+            TokenKind.Packed,
             PascalToken.Procedure,
-            PascalToken.Program,
+            TokenKind.Program,
             PascalToken.Property,
             PascalToken.Raise,
             PascalToken.Record,
@@ -77,10 +77,10 @@ namespace PasPasPas.Parsing.Parser {
             PascalToken.ThreadVar,
             PascalToken.To,
             PascalToken.Try,
-            PascalToken.TypeKeyword,
-            PascalToken.Unit,
+            TokenKind.TypeKeyword,
+            TokenKind.Unit,
             PascalToken.Until,
-            PascalToken.Uses,
+            TokenKind.Uses,
             PascalToken.Var,
             PascalToken.While,
             PascalToken.With,
@@ -111,13 +111,13 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("File", "Program | Library | Unit | Package")]
         private ISyntaxPart ParseFile() {
-            if (Match(PascalToken.Library)) {
+            if (Match(TokenKind.Library)) {
                 return ParseLibrary();
             }
-            else if (Match(PascalToken.Unit)) {
+            else if (Match(TokenKind.Unit)) {
                 return ParseUnit();
             }
-            else if (Match(PascalToken.Package)) {
+            else if (Match(TokenKind.Package)) {
                 return ParsePackage();
             }
 
@@ -138,7 +138,7 @@ namespace PasPasPas.Parsing.Parser {
         private UnitImplementation ParseUnitImplementation() {
             var result = new UnitImplementation(this);
             Require(PascalToken.Implementation);
-            if (Match(PascalToken.Uses)) {
+            if (Match(TokenKind.Uses)) {
                 result.UsesClause = ParseUsesClause();
             }
             result.DeclarationSections = ParseDeclarationSections();
@@ -148,7 +148,7 @@ namespace PasPasPas.Parsing.Parser {
         [Rule("UsesClause", "'uses' NamespaceNameList")]
         private UsesClause ParseUsesClause() {
             var result = new UsesClause(this);
-            Require(PascalToken.Uses);
+            Require(TokenKind.Uses);
             result.UsesList = ParseNamespaceNameList();
             return result;
         }
@@ -157,7 +157,7 @@ namespace PasPasPas.Parsing.Parser {
         private UnitInterface ParseUnitInterface() {
             var result = new UnitInterface(this);
             Require(PascalToken.Interface);
-            if (Match(PascalToken.Uses)) {
+            if (Match(TokenKind.Uses)) {
                 result.UsesClause = ParseUsesClause();
             }
 
@@ -167,11 +167,11 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("InterfaceDeclarationItem", "ConstSection | TypeSection | VarSection | ExportsSection | AssemblyAttribute | ExportedProcedureHeading")]
         private SyntaxPartBase ParseInterfaceDeclarationItem() {
-            if (Match(PascalToken.Const)) {
+            if (Match(TokenKind.Const)) {
                 return ParseConstSection();
             }
 
-            if (Match(PascalToken.TypeKeyword)) {
+            if (Match(TokenKind.TypeKeyword)) {
                 return ParseTypeSection();
             }
 
@@ -252,7 +252,7 @@ namespace PasPasPas.Parsing.Parser {
                 return ParseOldCallConvention();
             }
 
-            if (Match(PascalToken.Deprecated, PascalToken.Library, PascalToken.Experimental, PascalToken.Platform)) {
+            if (Match(PascalToken.Deprecated, TokenKind.Library, PascalToken.Experimental, PascalToken.Platform)) {
                 return ParseHint();
             }
 
@@ -449,11 +449,11 @@ namespace PasPasPas.Parsing.Parser {
             var result = new RaiseStatement(this);
             Require(PascalToken.Raise);
 
-            if ((!Match(PascalToken.At)) && MatchIdentifier(PascalToken.Inherited)) {
+            if ((!Match(TokenKind.At)) && MatchIdentifier(PascalToken.Inherited)) {
                 result.Raise = ParseDesignator();
             }
 
-            if (Optional(PascalToken.At)) {
+            if (Optional(TokenKind.At)) {
                 result.At = ParseDesignator();
             }
 
@@ -540,7 +540,7 @@ namespace PasPasPas.Parsing.Parser {
                 result.EndExpression = ParseExpression();
             }
             else {
-                result.Kind = Require(PascalToken.In).Kind;
+                result.Kind = Require(TokenKind.In).Kind;
                 result.StartExpression = ParseExpression();
             }
             Require(PascalToken.Do);
@@ -575,7 +575,7 @@ namespace PasPasPas.Parsing.Parser {
             var result = new CaseStatement(this);
             Require(PascalToken.Case);
             result.CaseExpression = ParseExpression();
-            Require(PascalToken.Of);
+            Require(TokenKind.Of);
             CaseItem item;
             do {
                 item = ParseCaseItem();
@@ -680,7 +680,7 @@ namespace PasPasPas.Parsing.Parser {
         [Rule("UnitHead", "'unit' NamespaceName { Hint } ';' ")]
         private UnitHead ParseUnitHead() {
             var result = new UnitHead(this);
-            Require(PascalToken.Unit);
+            Require(TokenKind.Unit);
             result.UnitName = ParseNamespaceName();
             result.Hint = ParseHints();
             Require(TokenKind.Semicolon);
@@ -742,7 +742,7 @@ namespace PasPasPas.Parsing.Parser {
         [Rule("PackageHead", "'package' NamespaceName ';' ")]
         private PackageHead ParsePackageHead() {
             var result = new PackageHead(this);
-            Require(PascalToken.Package);
+            Require(TokenKind.Package);
             result.PackageName = ParseNamespaceName();
             Require(TokenKind.Semicolon);
             return result;
@@ -753,7 +753,7 @@ namespace PasPasPas.Parsing.Parser {
             var result = new Library(this);
             result.LibraryHead = ParseLibraryHead();
 
-            if (Match(PascalToken.Uses))
+            if (Match(TokenKind.Uses))
                 result.Uses = ParseUsesFileClause();
 
             result.MainBlock = ParseBlock();
@@ -764,7 +764,7 @@ namespace PasPasPas.Parsing.Parser {
         [Rule("LibraryHead", "'library' NamespaceName Hints ';'")]
         private LibraryHead ParseLibraryHead() {
             var result = new LibraryHead(this);
-            Require(PascalToken.Library);
+            Require(TokenKind.Library);
             result.Name = ParseNamespaceName();
             result.Hints = ParseHints();
             Require(TokenKind.Semicolon);
@@ -775,10 +775,10 @@ namespace PasPasPas.Parsing.Parser {
         private Program ParseProgram() {
             var result = new Program(this);
 
-            if (Match(PascalToken.Program))
+            if (Match(TokenKind.Program))
                 result.ProgramHead = ParseProgramHead();
 
-            if (Match(PascalToken.Uses))
+            if (Match(TokenKind.Uses))
                 result.Uses = ParseUsesFileClause();
 
             result.MainBlock = ParseBlock();
@@ -789,7 +789,7 @@ namespace PasPasPas.Parsing.Parser {
         [Rule("ProgramHead", "'program' NamespaceName [ProgramParams] ';'")]
         private ProgramHead ParseProgramHead() {
             var result = new ProgramHead(this);
-            Require(PascalToken.Program);
+            Require(TokenKind.Program);
             result.Name = ParseNamespaceName();
             result.Params = ParseProgramParams();
             Require(TokenKind.Semicolon);
@@ -852,12 +852,12 @@ namespace PasPasPas.Parsing.Parser {
                     continue;
                 }
 
-                if (Match(PascalToken.Const, PascalToken.Resourcestring)) {
+                if (Match(TokenKind.Const, PascalToken.Resourcestring)) {
                     result.Add(ParseConstSection());
                     continue;
                 }
 
-                if (Match(PascalToken.TypeKeyword)) {
+                if (Match(TokenKind.TypeKeyword)) {
                     result.Add(ParseTypeSection());
                     continue;
                 }
@@ -960,7 +960,7 @@ namespace PasPasPas.Parsing.Parser {
                 return ParseCallConvention();
             }
 
-            if (Match(PascalToken.Deprecated, PascalToken.Library, PascalToken.Experimental, PascalToken.Platform)) {
+            if (Match(PascalToken.Deprecated, TokenKind.Library, PascalToken.Experimental, PascalToken.Platform)) {
                 return ParseHint();
             }
 
@@ -1185,7 +1185,7 @@ namespace PasPasPas.Parsing.Parser {
         [Rule("ConstSection", "('const' | 'resourcestring') ConstDeclaration { ConstDeclaration }")]
         private ConstSection ParseConstSection() {
             var result = new ConstSection(this);
-            result.Kind = Require(PascalToken.Const, PascalToken.Resourcestring).Kind;
+            result.Kind = Require(TokenKind.Const, PascalToken.Resourcestring).Kind;
             while (MatchIdentifier(TokenKind.OpenBraces)) {
                 result.Add(ParseConstDeclaration());
             }
@@ -1242,7 +1242,7 @@ namespace PasPasPas.Parsing.Parser {
                 return result;
             }
 
-            if (Optional(PascalToken.Library)) {
+            if (Optional(TokenKind.Library)) {
                 result.Library = true;
                 return result;
             }
@@ -1254,13 +1254,13 @@ namespace PasPasPas.Parsing.Parser {
         private TypeSpecification ParseTypeSpecification() {
             var result = new TypeSpecification(this);
 
-            if (Match(PascalToken.Packed, PascalToken.Array, PascalToken.Set, PascalToken.File, //
+            if (Match(TokenKind.Packed, TokenKind.Array, PascalToken.Set, PascalToken.File, //
                 PascalToken.Class, PascalToken.Interface, PascalToken.Record, PascalToken.Object)) {
                 result.StructuredType = ParseStructType();
                 return result;
             }
 
-            if (Match(PascalToken.Pointer, TokenKind.Circumflex)) {
+            if (Match(TokenKind.Pointer, TokenKind.Circumflex)) {
                 result.PointerType = ParsePointerType();
                 return result;
             }
@@ -1288,7 +1288,7 @@ namespace PasPasPas.Parsing.Parser {
                 return result;
             }
 
-            result.NewType = Optional(PascalToken.TypeKeyword);
+            result.NewType = Optional(TokenKind.TypeKeyword);
 
             if (result.NewType || (MatchIdentifier() && (!LookAhead(1, TokenKind.DotDot)))) {
                 result.TypeId = ParseNamespaceName();
@@ -1334,7 +1334,7 @@ namespace PasPasPas.Parsing.Parser {
             if (Match(PascalToken.Procedure, PascalToken.Function)) {
                 result.ProcedureRefType = ParseProcedureRefType();
 
-                if (Optional(PascalToken.Of)) {
+                if (Optional(TokenKind.Of)) {
                     Require(PascalToken.Object);
                     result.ProcedureRefType.MethodDeclaration = true;
                 }
@@ -1433,7 +1433,7 @@ namespace PasPasPas.Parsing.Parser {
         [Rule("StructType", "[ 'packed' ] StructTypePart")]
         private StructType ParseStructType() {
             var result = new StructType(this);
-            result.Packed = Optional(PascalToken.Packed);
+            result.Packed = Optional(TokenKind.Packed);
             result.Part = ParseStructTypePart();
             return result;
         }
@@ -1442,7 +1442,7 @@ namespace PasPasPas.Parsing.Parser {
         private StructTypePart ParseStructTypePart() {
             var result = new StructTypePart(this);
 
-            if (Match(PascalToken.Array)) {
+            if (Match(TokenKind.Array)) {
                 result.ArrayType = ParseArrayType();
                 return result;
             }
@@ -1469,7 +1469,7 @@ namespace PasPasPas.Parsing.Parser {
         private ClassTypeDeclaration ParseClassDeclaration() {
             var result = new ClassTypeDeclaration(this);
 
-            if (Match(PascalToken.Class) && LookAhead(1, PascalToken.Of)) {
+            if (Match(PascalToken.Class) && LookAhead(1, TokenKind.Of)) {
                 result.ClassOf = ParseClassOfDeclaration();
                 return result;
             }
@@ -1561,12 +1561,12 @@ namespace PasPasPas.Parsing.Parser {
                 return result;
             }
 
-            if (!result.Class && Match(PascalToken.Const)) {
+            if (!result.Class && Match(TokenKind.Const)) {
                 result.ConstSection = ParseConstSection();
                 return result;
             }
 
-            if (!result.Class && Match(PascalToken.TypeKeyword)) {
+            if (!result.Class && Match(TokenKind.TypeKeyword)) {
                 result.TypeSection = ParseTypeSection();
                 return result;
             }
@@ -1594,7 +1594,7 @@ namespace PasPasPas.Parsing.Parser {
                 Require(TokenKind.Colon);
             }
             result.TypeDecl = ParseTypeSpecification();
-            Require(PascalToken.Of);
+            Require(TokenKind.Of);
 
             while (!Match(TokenKind.Undefined, TokenKind.Eof, PascalToken.End)) {
                 result.Add(ParseRecordVariant());
@@ -1919,12 +1919,12 @@ namespace PasPasPas.Parsing.Parser {
                 return result;
             }
 
-            if (!result.Class && Match(PascalToken.Const)) {
+            if (!result.Class && Match(TokenKind.Const)) {
                 result.ConstSection = ParseConstSection();
                 return result;
             }
 
-            if (!result.Class && Match(PascalToken.TypeKeyword)) {
+            if (!result.Class && Match(TokenKind.TypeKeyword)) {
                 result.TypeSection = ParseTypeSection();
                 return result;
             }
@@ -2068,7 +2068,7 @@ namespace PasPasPas.Parsing.Parser {
         [Rule("TypeSection", "'type' TypeDeclaration { TypeDeclaration }")]
         private TypeSection ParseTypeSection() {
             var result = new TypeSection(this);
-            Require(PascalToken.TypeKeyword);
+            Require(TokenKind.TypeKeyword);
 
             do {
                 result.Add(ParseTypeDeclaration());
@@ -2149,8 +2149,8 @@ namespace PasPasPas.Parsing.Parser {
             var result = new FormalParameter(this);
             result.Attributes = ParseAttributes();
 
-            if (Match(PascalToken.Const, PascalToken.Var, PascalToken.Out)) {
-                result.ParamType = Require(PascalToken.Const, PascalToken.Var, PascalToken.Out).Kind;
+            if (Match(TokenKind.Const, PascalToken.Var, PascalToken.Out)) {
+                result.ParamType = Require(TokenKind.Const, PascalToken.Var, PascalToken.Out).Kind;
             }
 
             result.ParamNames = ParseIdentList();
@@ -2264,7 +2264,7 @@ namespace PasPasPas.Parsing.Parser {
         private ClassOfDeclaration ParseClassOfDeclaration() {
             var result = new ClassOfDeclaration(this);
             Require(PascalToken.Class);
-            Require(PascalToken.Of);
+            Require(TokenKind.Of);
             result.TypeName = ParseNamespaceName();
             return result;
         }
@@ -2273,7 +2273,7 @@ namespace PasPasPas.Parsing.Parser {
         private FileType ParseFileType() {
             var result = new FileType(this);
             Require(PascalToken.File);
-            if (Optional(PascalToken.Of)) {
+            if (Optional(TokenKind.Of)) {
                 result.TypeDefinition = ParseTypeSpecification();
             }
             return result;
@@ -2283,7 +2283,7 @@ namespace PasPasPas.Parsing.Parser {
         private SetDef ParseSetDefinition() {
             var result = new SetDef(this);
             Require(PascalToken.Set);
-            Require(PascalToken.Of);
+            Require(TokenKind.Of);
             result.TypeDefinition = ParseTypeSpecification();
             return result;
         }
@@ -2291,7 +2291,7 @@ namespace PasPasPas.Parsing.Parser {
         [Rule("TypeAlias", "'type' NamespaceName")]
         private TypeAliasDefinition ParseTypeAlias() {
             var result = new TypeAliasDefinition(this);
-            Require(PascalToken.TypeKeyword);
+            Require(TokenKind.TypeKeyword);
             result.TypeName = ParseNamespaceName();
 
             if (Match(TokenKind.AngleBracketsOpen)) {
@@ -2317,16 +2317,16 @@ namespace PasPasPas.Parsing.Parser {
         [Rule("ArrayType", " 'array' [ '[' ArrayIndex { ',' ArrayIndex } ']']  'of' ( 'const' | TypeDefinition ) ")]
         private ArrayType ParseArrayType() {
             var result = new ArrayType(this);
-            Require(PascalToken.Array);
+            Require(TokenKind.Array);
             if (Optional(TokenKind.OpenBraces)) {
                 do {
                     result.Add(ParseArrayIndex());
                 } while (Optional(TokenKind.Comma));
                 Require(TokenKind.CloseBraces);
             }
-            Require(PascalToken.Of);
+            Require(TokenKind.Of);
 
-            if (Optional(PascalToken.Const)) {
+            if (Optional(TokenKind.Const)) {
                 result.ArrayOfConst = true;
             }
             else {
@@ -2351,7 +2351,7 @@ namespace PasPasPas.Parsing.Parser {
         private PointerType ParsePointerType() {
             var result = new PointerType(this);
 
-            if (Optional(PascalToken.Pointer)) {
+            if (Optional(TokenKind.Pointer)) {
                 result.GenericPointer = true;
                 return result;
             }
@@ -2438,8 +2438,8 @@ namespace PasPasPas.Parsing.Parser {
             }
             else {
                 result.LeftOperand = ParseSimpleExpression();
-                if (Match(PascalToken.LessThen, PascalToken.LessThenEquals, PascalToken.GreaterThen, PascalToken.GreaterThenEquals, PascalToken.NotEquals, TokenKind.EqualsSign, PascalToken.In, PascalToken.Is)) {
-                    result.Kind = Require(PascalToken.LessThen, PascalToken.LessThenEquals, PascalToken.GreaterThen, PascalToken.GreaterThenEquals, PascalToken.NotEquals, TokenKind.EqualsSign, PascalToken.In, PascalToken.Is).Kind;
+                if (Match(PascalToken.LessThen, PascalToken.LessThenEquals, PascalToken.GreaterThen, PascalToken.GreaterThenEquals, PascalToken.NotEquals, TokenKind.EqualsSign, TokenKind.In, PascalToken.Is)) {
+                    result.Kind = Require(PascalToken.LessThen, PascalToken.LessThenEquals, PascalToken.GreaterThen, PascalToken.GreaterThenEquals, PascalToken.NotEquals, TokenKind.EqualsSign, TokenKind.In, PascalToken.Is).Kind;
                     result.RightOperand = ParseSimpleExpression();
                 }
             }
@@ -2473,7 +2473,7 @@ namespace PasPasPas.Parsing.Parser {
         private Factor ParseFactor() {
             var result = new Factor(this);
 
-            if (Optional(PascalToken.At)) {
+            if (Optional(TokenKind.At)) {
                 result.AddressOf = ParseFactor();
                 return result;
             }
@@ -2678,7 +2678,7 @@ namespace PasPasPas.Parsing.Parser {
         [Rule("UsesFileClause", "'uses' NamespaceFileNameList")]
         private UsesFileClause ParseUsesFileClause() {
             var result = new UsesFileClause(this);
-            Require(PascalToken.Uses);
+            Require(TokenKind.Uses);
             result.Files = ParseNamespaceFileNameList();
             return result;
         }
@@ -2687,7 +2687,7 @@ namespace PasPasPas.Parsing.Parser {
         private NamespaceFileName ParseNamespaceFileName() {
             var result = new NamespaceFileName(this);
             result.NamespaceName = ParseNamespaceName();
-            if (Optional(PascalToken.In))
+            if (Optional(TokenKind.In))
                 result.QuotedFileName = RequireString();
             return result;
         }

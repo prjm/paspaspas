@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using PasPasPas.Options.Bundles;
 using PasPasPas.Options.DataTypes;
 using PasPasPas.Parsing.Parser;
 using System;
@@ -116,11 +117,17 @@ namespace PasPasPasTests.Parser {
             RunCompilerDirective("IFDEF TESTSYM § DEFINE A § ELSE § DEFINE B § ENDIF", false, h);
             RunCompilerDirective("IFDEF TESTSYM § DEFINE B § ELSE § DEFINE A § ENDIF", false, b);
             RunCompilerDirective("IFDEF TESTSYM § DEFINE A § ELSE § DEFINE B § ENDIF", true, b);
+            RunCompilerDirective("IFNDEF TESTSYM § DEFINE A § ENDIF", true, h);
+            RunCompilerDirective("IFNDEF TESTSYM § IFNDEF Q § DEFINE A § ENDIF § ENDIF", true, h);
+            RunCompilerDirective("IFNDEF PASPASPAS_TEST § DEFINE A § ENDIF", false, h);
 
-            RunCompilerDirective("IFNDEF TESTSYM § DEFINE A § ENDIF", true, () => ConditionalCompilation.IsSymbolDefined("A"));
-            RunCompilerDirective("IFNDEF TESTSYM § IFNDEF Q § DEFINE A § ENDIF § ENDIF", true, () => ConditionalCompilation.IsSymbolDefined("A"));
-            RunCompilerDirective("IFNDEF PASPASPAS_TEST § DEFINE A § ENDIF", false, () => ConditionalCompilation.IsSymbolDefined("A"));
-
+            RunCompilerDirective("ENDIF", false, f, CompilerDirectiveParserErrors.EndIfWithoutIf);
+            RunCompilerDirective("ELSE", false, f, CompilerDirectiveParserErrors.ElseIfWithoutIf);
+            RunCompilerDirective("IFDEF", false, f, CompilerDirectiveParserErrors.InvalidIfDefDirective);
+            RunCompilerDirective("IFNDEF", false, f, CompilerDirectiveParserErrors.InvalidIfNDefDirective);
+            RunCompilerDirective("IFDEF X | DEFINE Z ", false, f, OptionSet.PendingCondition);
+            RunCompilerDirective("IFNDEF X | DEFINE Z ", false, f, OptionSet.PendingCondition);
+            RunCompilerDirective("IFDEF X § ELSE | DEFINE Z ", false, f, OptionSet.PendingCondition);
         }
 
         [TestMethod]
