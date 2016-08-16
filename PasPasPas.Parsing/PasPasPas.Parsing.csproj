@@ -53,6 +53,7 @@
     <Compile Include="SyntaxTree\CompilerDirectives\DebugInfoSwitch.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\CodeAlignParameter.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\Description.cs" />
+    <Compile Include="SyntaxTree\CompilerDirectives\DesignOnly.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\Else.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\EndIf.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\IfDef.cs" />

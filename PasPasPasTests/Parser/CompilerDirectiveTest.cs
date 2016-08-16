@@ -181,9 +181,12 @@ namespace PasPasPasTests.Parser {
 
         [TestMethod]
         public void TestDesigntimeOnly() {
-            RunCompilerDirective("", DesignOnlyUnit.Undefined, () => ConditionalCompilation.DesignOnly.Value);
-            RunCompilerDirective("DESIGNONLY ON", DesignOnlyUnit.InDesignTimeOnly, () => ConditionalCompilation.DesignOnly.Value);
-            RunCompilerDirective("DESIGNONLY OFF", DesignOnlyUnit.Alltimes, () => ConditionalCompilation.DesignOnly.Value);
+            Func<object> f = () => ConditionalCompilation.DesignOnly.Value;
+            RunCompilerDirective("", DesignOnlyUnit.Undefined, f);
+            RunCompilerDirective("DESIGNONLY ON", DesignOnlyUnit.InDesignTimeOnly, f);
+            RunCompilerDirective("DESIGNONLY OFF", DesignOnlyUnit.Alltimes, f);
+            RunCompilerDirective("DESIGNONLY KAPUTT", DesignOnlyUnit.Undefined, f);
+            RunCompilerDirective("DESIGNONLY", DesignOnlyUnit.Undefined, f);
         }
 
         [TestMethod]

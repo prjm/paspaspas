@@ -719,8 +719,8 @@ namespace PasPasPas.Parsing.Parser {
                 ParseLongDescriptionSwitch(parent);
             }
 
-            else if (Optional(PascalToken.DesignOnly)) {
-                ParseLongDesignOnlySwitch();
+            else if (Match(PascalToken.DesignOnly)) {
+                ParseLongDesignOnlySwitch(parent);
             }
 
             else if (Optional(PascalToken.ExtensionSwitchLong)) {
@@ -1388,18 +1388,18 @@ namespace PasPasPas.Parsing.Parser {
             }
         }
 
-        private void ParseLongDesignOnlySwitch() {
-            if (Optional(PascalToken.On)) {
+        private void ParseLongDesignOnlySwitch(ISyntaxPart parent) {
+            DesignOnly result = CreateByTerminal<DesignOnly>(parent);
+
+            if (ContinueWith(result, PascalToken.On)) {
                 ConditionalCompilation.DesignOnly.Value = DesignOnlyUnit.InDesignTimeOnly;
-                return;
             }
-
-            if (Optional(PascalToken.Off)) {
+            else if (ContinueWith(result, PascalToken.Off)) {
                 ConditionalCompilation.DesignOnly.Value = DesignOnlyUnit.Alltimes;
-                return;
             }
-
-            Unexpected();
+            else {
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidDesignTimeOnlyDirective);
+            }
         }
 
         private void ParseLongDescriptionSwitch(ISyntaxPart parent) {
