@@ -600,7 +600,7 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseElse(ISyntaxPart parent) {
-            CreateByTerminal<Else>(parent);
+            CreateByTerminal<ElseDirective>(parent);
         }
 
         private void ParseEndIf(ISyntaxPart parent) {
@@ -723,20 +723,20 @@ namespace PasPasPas.Parsing.Parser {
                 ParseLongDesignOnlySwitch(parent);
             }
 
-            else if (Optional(PascalToken.ExtensionSwitchLong)) {
-                ParseLongExtensionSwitch();
+            else if (Match(PascalToken.ExtensionSwitchLong)) {
+                ParseLongExtensionSwitch(parent);
             }
 
-            else if (Optional(PascalToken.ObjExportAll)) {
-                ParseObjExportAllSwitch();
+            else if (Match(PascalToken.ObjExportAll)) {
+                ParseObjExportAllSwitch(parent);
             }
 
-            else if (Optional(PascalToken.ExtendedCompatibility)) {
-                ParseExtendedCompatibilitySwitch();
+            else if (Match(PascalToken.ExtendedCompatibility)) {
+                ParseExtendedCompatibilitySwitch(parent);
             }
 
-            else if (Optional(PascalToken.ExtendedSyntaxSwitchLong)) {
-                ParseLongExtendedSyntaxSwitch();
+            else if (Match(PascalToken.ExtendedSyntaxSwitchLong)) {
+                ParseLongExtendedSyntaxSwitch(parent);
             }
 
             else if (Optional(PascalToken.ExcessPrecision)) {
@@ -1341,50 +1341,56 @@ namespace PasPasPas.Parsing.Parser {
             Unexpected();
         }
 
-        private void ParseLongExtendedSyntaxSwitch() {
-            if (Optional(PascalToken.On)) {
-                CompilerOptions.UseExtendedSyntax.Value = ExtendedSyntax.UseExtendedSyntax;
-                return;
-            }
+        private void ParseLongExtendedSyntaxSwitch(ISyntaxPart parent) {
+            ExtSyntax result = CreateByTerminal<ExtSyntax>(parent);
 
-            if (Optional(PascalToken.Off)) {
-                CompilerOptions.UseExtendedSyntax.Value = ExtendedSyntax.NoExtendedSyntax;
-                return;
+            if (ContinueWith(result, PascalToken.On)) {
+                result.Mode = ExtendedSyntax.UseExtendedSyntax;
             }
-            Unexpected();
+            else if (ContinueWith(result, PascalToken.Off)) {
+                result.Mode = ExtendedSyntax.NoExtendedSyntax;
+            }
+            else {
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidExtendedSyntaxDirective);
+            }
         }
 
-        private void ParseExtendedCompatibilitySwitch() {
-            if (Optional(PascalToken.On)) {
-                CompilerOptions.ExtendedCompatibility.Value = ExtendedCompatiblityMode.Enabled;
-                return;
-            }
+        private void ParseExtendedCompatibilitySwitch(ISyntaxPart parent) {
+            ExtendedCompatibility result = CreateByTerminal<ExtendedCompatibility>(parent);
 
-            if (Optional(PascalToken.Off)) {
-                CompilerOptions.ExtendedCompatibility.Value = ExtendedCompatiblityMode.Disabled;
-                return;
+            if (ContinueWith(result, PascalToken.On)) {
+                result.Mode = ExtendedCompatiblityMode.Enabled;
             }
-            Unexpected();
+            else if (ContinueWith(result, PascalToken.Off)) {
+                result.Mode = ExtendedCompatiblityMode.Disabled;
+            }
+            else {
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidExtendedCompatibilityDirective);
+            }
         }
 
-        private void ParseObjExportAllSwitch() {
-            if (Optional(PascalToken.On)) {
+        private void ParseObjExportAllSwitch(ISyntaxPart parent) {
+            ObjectExport result = CreateByTerminal<ObjectExport>(parent);
+
+            if (ContinueWith(result, PascalToken.On)) {
                 CompilerOptions.ExportCppObjects.Value = ExportCppObjects.ExportAll;
-                return;
             }
-
-            if (Optional(PascalToken.Off)) {
+            else if (ContinueWith(result, PascalToken.Off)) {
                 CompilerOptions.ExportCppObjects.Value = ExportCppObjects.DoNotExportAll;
-                return;
             }
-
-            Unexpected();
+            else {
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidObjectExportDirective);
+            }
         }
 
-        private void ParseLongExtensionSwitch() {
-            var value = Require(CurrentToken().Kind).Value;
-            if (!string.IsNullOrEmpty(value)) {
-                Meta.FileExtension.Value = value;
+        private void ParseLongExtensionSwitch(ISyntaxPart parent) {
+            Extension result = CreateByTerminal<Extension>(parent);
+
+            if (ContinueWith(result, PascalToken.Identifier)) {
+                result.ExecutableExtension = result.LastTerminal.Value;
+            }
+            else {
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidExtensionDirective);
             }
         }
 
@@ -1392,10 +1398,10 @@ namespace PasPasPas.Parsing.Parser {
             DesignOnly result = CreateByTerminal<DesignOnly>(parent);
 
             if (ContinueWith(result, PascalToken.On)) {
-                result.DesigntimeOnly = DesignOnlyUnit.InDesignTimeOnly;                
+                result.DesignTimeOnly = DesignOnlyUnit.InDesignTimeOnly;
             }
             else if (ContinueWith(result, PascalToken.Off)) {
-                result.DesigntimeOnly = DesignOnlyUnit.Alltimes;
+                result.DesignTimeOnly = DesignOnlyUnit.Alltimes;
             }
             else {
                 ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidDesignTimeOnlyDirective);
@@ -1526,11 +1532,10 @@ namespace PasPasPas.Parsing.Parser {
                 ParseDebugInfoOrDescriptionSwitch(parent);
             }
             else if (Match(PascalToken.ExtensionSwitch)) {
-                ParseExtensionSwitch();
+                ParseExtensionSwitch(parent);
             }
             else if (Match(PascalToken.ExtendedSyntaxSwitch)) {
-                ParseExtendedSyntaxSwitch();
-
+                ParseExtendedSyntaxSwitch(parent);
             }
             else if (Match(PascalToken.ImportedDataSwitch)) {
                 ParseImportedDataSwitch();
@@ -1969,30 +1974,29 @@ namespace PasPasPas.Parsing.Parser {
             return false;
         }
 
-        private bool ParseExtendedSyntaxSwitch() {
-            FetchNextToken();
+        private void ParseExtendedSyntaxSwitch(ISyntaxPart parent) {
+            ExtSyntax result = CreateByTerminal<ExtSyntax>(parent);
 
-            if (Optional(TokenKind.Plus)) {
-                CompilerOptions.UseExtendedSyntax.Value = ExtendedSyntax.UseExtendedSyntax;
-                return true;
+            if (ContinueWith(result, TokenKind.Plus)) {
+                result.Mode = ExtendedSyntax.UseExtendedSyntax;
             }
-
-            if (Optional(TokenKind.Minus)) {
-                CompilerOptions.UseExtendedSyntax.Value = ExtendedSyntax.NoExtendedSyntax;
-                return true;
+            else if (ContinueWith(result, TokenKind.Minus)) {
+                result.Mode = ExtendedSyntax.NoExtendedSyntax;
             }
-
-            Unexpected();
-            return false;
+            else {
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidExtendedSyntaxDirective);
+            }
         }
 
-        private bool ParseExtensionSwitch() {
-            Require(PascalToken.ExtensionSwitch);
-            var value = Require(CurrentToken().Kind).Value;
-            if (!string.IsNullOrEmpty(value)) {
-                Meta.FileExtension.Value = value;
+        private void ParseExtensionSwitch(ISyntaxPart parent) {
+            Extension result = CreateByTerminal<Extension>(parent);
+
+            if (ContinueWith(result, PascalToken.Identifier)) {
+                result.ExecutableExtension = result.LastTerminal.Value;
             }
-            return true;
+            else {
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidExtensionDirective);
+            }
         }
 
         private void ParseDebugInfoOrDescriptionSwitch(ISyntaxPart parent) {

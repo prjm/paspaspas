@@ -190,32 +190,48 @@ namespace PasPasPasTests.Parser {
 
         [Fact]
         public void TestExtensionsSwitch() {
-            RunCompilerDirective("", null, () => Meta.FileExtension.Value);
-            RunCompilerDirective("EXTENSION ddd", "ddd", () => Meta.FileExtension.Value);
-            RunCompilerDirective("E ddd'", "ddd", () => Meta.FileExtension.Value);
+            Func<object> f = () => Meta.FileExtension.Value;
+            RunCompilerDirective("", null, f);
+            RunCompilerDirective("EXTENSION ddd", "ddd", f);
+            RunCompilerDirective("E ddd", "ddd", f);
+            RunCompilerDirective("E +", null, f, CompilerDirectiveParserErrors.InvalidExtensionDirective);
+            RunCompilerDirective("E", null, f, CompilerDirectiveParserErrors.InvalidExtensionDirective);
+            RunCompilerDirective("EXTENSION +", null, f, CompilerDirectiveParserErrors.InvalidExtensionDirective);
+            RunCompilerDirective("EXTENSION", null, f, CompilerDirectiveParserErrors.InvalidExtensionDirective);
         }
 
         [Fact]
         public void TestObjExportAll() {
-            RunCompilerDirective("", ExportCppObjects.Undefined, () => CompilerOptions.ExportCppObjects.Value);
-            RunCompilerDirective("OBJEXPORTALL ON", ExportCppObjects.ExportAll, () => CompilerOptions.ExportCppObjects.Value);
-            RunCompilerDirective("OBJEXPORTALL OFF", ExportCppObjects.DoNotExportAll, () => CompilerOptions.ExportCppObjects.Value);
+            Func<object> f = () => CompilerOptions.ExportCppObjects.Value;
+            RunCompilerDirective("", ExportCppObjects.Undefined, f);
+            RunCompilerDirective("OBJEXPORTALL ON", ExportCppObjects.ExportAll, f);
+            RunCompilerDirective("OBJEXPORTALL OFF", ExportCppObjects.DoNotExportAll, f);
+            RunCompilerDirective("OBJEXPORTALL KAPUTT", ExportCppObjects.Undefined, f, CompilerDirectiveParserErrors.InvalidObjectExportDirective);
+            RunCompilerDirective("OBJEXPORTALL", ExportCppObjects.Undefined, f, CompilerDirectiveParserErrors.InvalidObjectExportDirective);
         }
 
         [Fact]
         public void TestExtendedCompatibility() {
-            RunCompilerDirective("", ExtendedCompatiblityMode.Undefined, () => CompilerOptions.ExtendedCompatibility.Value);
-            RunCompilerDirective("EXTENDEDCOMPATIBILITY ON", ExtendedCompatiblityMode.Enabled, () => CompilerOptions.ExtendedCompatibility.Value);
-            RunCompilerDirective("EXTENDEDCOMPATIBILITY OFF", ExtendedCompatiblityMode.Disabled, () => CompilerOptions.ExtendedCompatibility.Value);
+            Func<object> f = () => CompilerOptions.ExtendedCompatibility.Value;
+            RunCompilerDirective("", ExtendedCompatiblityMode.Undefined, f);
+            RunCompilerDirective("EXTENDEDCOMPATIBILITY ON", ExtendedCompatiblityMode.Enabled, f);
+            RunCompilerDirective("EXTENDEDCOMPATIBILITY OFF", ExtendedCompatiblityMode.Disabled, f);
+            RunCompilerDirective("EXTENDEDCOMPATIBILITY KAPUTT", ExtendedCompatiblityMode.Undefined, f, CompilerDirectiveParserErrors.InvalidExtendedCompatibilityDirective);
+            RunCompilerDirective("EXTENDEDCOMPATIBILITY", ExtendedCompatiblityMode.Undefined, f, CompilerDirectiveParserErrors.InvalidExtendedCompatibilityDirective);
         }
 
         [Fact]
         public void TestExtendedSyntax() {
-            RunCompilerDirective("", ExtendedSyntax.Undefined, () => CompilerOptions.UseExtendedSyntax.Value);
-            RunCompilerDirective("X+", ExtendedSyntax.UseExtendedSyntax, () => CompilerOptions.UseExtendedSyntax.Value);
-            RunCompilerDirective("X-", ExtendedSyntax.NoExtendedSyntax, () => CompilerOptions.UseExtendedSyntax.Value);
-            RunCompilerDirective("EXTENDEDSYNTAX ON", ExtendedSyntax.UseExtendedSyntax, () => CompilerOptions.UseExtendedSyntax.Value);
-            RunCompilerDirective("EXTENDEDSYNTAX OFF", ExtendedSyntax.NoExtendedSyntax, () => CompilerOptions.UseExtendedSyntax.Value);
+            Func<object> f = () => CompilerOptions.UseExtendedSyntax.Value;
+            RunCompilerDirective("", ExtendedSyntax.Undefined, f);
+            RunCompilerDirective("X+", ExtendedSyntax.UseExtendedSyntax, f);
+            RunCompilerDirective("X-", ExtendedSyntax.NoExtendedSyntax, f);
+            RunCompilerDirective("X A", ExtendedSyntax.Undefined, f, CompilerDirectiveParserErrors.InvalidExtendedSyntaxDirective);
+            RunCompilerDirective("X", ExtendedSyntax.Undefined, f, CompilerDirectiveParserErrors.InvalidExtendedSyntaxDirective);
+            RunCompilerDirective("EXTENDEDSYNTAX ON", ExtendedSyntax.UseExtendedSyntax, f);
+            RunCompilerDirective("EXTENDEDSYNTAX OFF", ExtendedSyntax.NoExtendedSyntax, f);
+            RunCompilerDirective("EXTENDEDSYNTAX KAPUTT", ExtendedSyntax.Undefined, f, CompilerDirectiveParserErrors.InvalidExtendedSyntaxDirective);
+            RunCompilerDirective("EXTENDEDSYNTAX", ExtendedSyntax.Undefined, f, CompilerDirectiveParserErrors.InvalidExtendedSyntaxDirective);
         }
 
         [Fact]

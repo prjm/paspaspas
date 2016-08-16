@@ -323,7 +323,9 @@ namespace PasPasPas.Parsing.Parser {
                 return false;
             }
 
-            if (!Match(tokenKind) && ((tokenKind != PascalToken.Identifier) || !AllowIdentifier())) {
+            if (!Match(tokenKind) &&
+                ((tokenKind != PascalToken.Identifier) ||
+                ((tokenKind == PascalToken.Identifier) && !AllowIdentifier()))) {
                 return false;
             }
 

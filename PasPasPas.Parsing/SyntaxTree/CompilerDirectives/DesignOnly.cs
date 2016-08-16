@@ -8,10 +8,10 @@ namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
     public class DesignOnly : SyntaxPartBase {
 
 
-        /// <summary>
+        /// <summary>       
         ///     switch vlaue
         /// </summary>
-        public DesignOnlyUnit DesigntimeOnly { get; set; }
+        public DesignOnlyUnit DesignTimeOnly { get; set; }
 
     }
 }

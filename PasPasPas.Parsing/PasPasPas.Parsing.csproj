@@ -56,7 +56,11 @@
     <Compile Include="SyntaxTree\CompilerDirectives\DesignOnly.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\Else.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\EndIf.cs" />
+    <Compile Include="SyntaxTree\CompilerDirectives\ExtendedCompatibility.cs" />
+    <Compile Include="SyntaxTree\CompilerDirectives\Extension.cs" />
+    <Compile Include="SyntaxTree\CompilerDirectives\ExtSyntax.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\IfDef.cs" />
+    <Compile Include="SyntaxTree\CompilerDirectives\ObjectExport.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\ParseDenyPackageUnit.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\UnDefineSymbol.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\DefineSymbol.cs" />

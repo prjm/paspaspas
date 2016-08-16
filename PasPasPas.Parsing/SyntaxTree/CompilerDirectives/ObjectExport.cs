@@ -1,8 +1,8 @@
 ﻿namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
 
     /// <summary>
-    ///     syntax part for else conditions
+    ///     object export directive
     /// </summary>
-    public class ElseDirective : SyntaxPartBase {
+    public class ObjectExport : SyntaxPartBase {
     }
 }

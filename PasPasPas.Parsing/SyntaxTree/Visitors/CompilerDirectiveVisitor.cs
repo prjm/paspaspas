@@ -18,7 +18,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (!parameter.ConditionalCompilation.Skip)
                 return true;
 
-            return syntaxPart is EndIf || syntaxPart is IfDef || syntaxPart is Else;
+            return syntaxPart is EndIf || syntaxPart is IfDef || syntaxPart is ElseDirective;
         }
 
         /// <summary>
@@ -164,7 +164,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// </summary>
         /// <param name="syntaxPart"></param>
         /// <param name="parameter"></param>
-        public void BeginVisitItem(Else syntaxPart, CompilerDirectiveVisitorOptions parameter) {
+        public void BeginVisitItem(ElseDirective syntaxPart, CompilerDirectiveVisitorOptions parameter) {
             if (parameter.ConditionalCompilation.HasConditions) {
                 parameter.ConditionalCompilation.AddElseCondition();
             }
@@ -179,7 +179,35 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <param name="syntaxPart"></param>
         /// <param name="parameter"></param>
         public void BeginVisitItem(DesignOnly syntaxPart, CompilerDirectiveVisitorOptions parameter) {
-            parameter.ConditionalCompilation.DesignOnly.Value = syntaxPart.DesigntimeOnly;
+            parameter.ConditionalCompilation.DesignOnly.Value = syntaxPart.DesignTimeOnly;
+        }
+
+        /// <summary>
+        ///     extension
+        /// </summary>
+        /// <param name="syntaxPart"></param>
+        /// <param name="parameter"></param>
+        public void BeginVisitItem(Extension syntaxPart, CompilerDirectiveVisitorOptions parameter) {
+            parameter.Meta.FileExtension.Value = syntaxPart.ExecutableExtension;
+        }
+
+
+        /// <summary>
+        ///     extended compatibility
+        /// </summary>
+        /// <param name="syntaxPart"></param>
+        /// <param name="parameter"></param>
+        public void BeginVisitItem(ExtendedCompatibility syntaxPart, CompilerDirectiveVisitorOptions parameter) {
+            parameter.CompilerOptions.ExtendedCompatibility.Value = syntaxPart.Mode;
+        }
+
+        /// <summary>
+        ///     extended syntax
+        /// </summary>
+        /// <param name="syntaxPart"></param>
+        /// <param name="parameter"></param>
+        public void BeginVisitItem(ExtSyntax syntaxPart, CompilerDirectiveVisitorOptions parameter) {
+            parameter.CompilerOptions.UseExtendedSyntax.Value = syntaxPart.Mode;
         }
 
     }
