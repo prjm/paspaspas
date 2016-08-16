@@ -1,14 +1,13 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PasPasPas.Parsing.Tokenizer;
+using Xunit;
 
 namespace PasPasPasTests.Tokenizer {
 
 
-    [TestClass]
     public class LineCounterTest {
 
-        [TestMethod]
+        [Fact]
         public void TestSimple() {
             Assert.AreEqual(NewlineStyle.Undefined, TestLineCounterMode(""));
             Assert.AreEqual(NewlineStyle.Undefined, TestLineCounterMode("asdasddsaddas\tsdsdsaas\tasdas"));

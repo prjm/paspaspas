@@ -1,12 +1,12 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Xunit;
 
 namespace PasPasPasTests.Parser {
 
-    [TestClass]
+
     public class TestDeclarations : ParserTestBase {
 
 
-        [TestMethod]
+        [Fact]
         public void TestConstants() {
             ParseString("program test; const x = 5; .");
             ParseString("program test; resourcestring x = 5; .");
@@ -28,7 +28,7 @@ namespace PasPasPasTests.Parser {
             ParseString("program test; const x = 5 deprecated experimental platform library; .");
         }
 
-        [TestMethod]
+        [Fact]
         public void TestOtherDeclarations() {
             ParseString("program test; label x; .");
             ParseString("program test; label x, x, x; .");
@@ -46,7 +46,7 @@ namespace PasPasPasTests.Parser {
             ParseString("program test; exports x(a : Pointer) index 4 name 4 resident ; .");
         }
 
-        [TestMethod]
+        [Fact]
         public void TestTypeDeclarations() {
             ParseString("program test; const x : Pointer = 5; .");
             ParseString("program test; const x : array of const = 5; .");
@@ -73,7 +73,7 @@ namespace PasPasPasTests.Parser {
             ParseString("program test; const x : unicodestring = 5; .");
         }
 
-        [TestMethod]
+        [Fact]
         public void TestClassTypeDefinitions() {
             ParseString("unit test; interface implementation procedure x.x ; begin end ; end .");
             ParseString("unit test; interface implementation function x.x : x ; begin end ; end .");
@@ -93,7 +93,7 @@ namespace PasPasPasTests.Parser {
             ParseString("unit test; interface implementation procedure x ; external 5 name 5 index 5; begin end ; end .");
         }
 
-        [TestMethod]
+        [Fact]
         public void TestClassTypeDeclarations() {
             ParseString("program test; const x : procedure = 5; .");
             ParseString("program test; const x : procedure () = 5; .");

@@ -1,26 +1,21 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using PasPasPas.DesktopPlatform;
+﻿using PasPasPas.DesktopPlatform;
 using PasPasPas.Infrastructure.Input;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using Xunit;
 
 namespace PasPasPasTests {
 
     /// <summary>
     ///     test for stacked reader
     /// </summary>
-    [TestClass]
     public class StackedReaderTest {
 
         private string Content1 => "X1X1X1|||X1X1X1------------$";
 
         private string Content2 = "ZZZ$44345845784875DSDFDDFDS";
 
-        [TestMethod]
+        [Fact]
         public void TestSimpleRead() {
             bool switchedInput = false;
 
@@ -35,7 +30,7 @@ namespace PasPasPasTests {
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void TestSimpleFileRead() {
             bool switchedInput = false;
 
@@ -55,7 +50,7 @@ namespace PasPasPasTests {
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void TestStackedRead() {
             bool switchedInput = false;
             int splitIndex = 5;
@@ -102,7 +97,7 @@ namespace PasPasPasTests {
             return result;
         }
 
-        [TestMethod]
+        [Fact]
         public void TestNestedRead() {
             bool switchedInput = false;
 

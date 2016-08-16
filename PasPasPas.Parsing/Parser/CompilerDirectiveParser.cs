@@ -1392,10 +1392,10 @@ namespace PasPasPas.Parsing.Parser {
             DesignOnly result = CreateByTerminal<DesignOnly>(parent);
 
             if (ContinueWith(result, PascalToken.On)) {
-                ConditionalCompilation.DesignOnly.Value = DesignOnlyUnit.InDesignTimeOnly;
+                result.DesigntimeOnly = DesignOnlyUnit.InDesignTimeOnly;                
             }
             else if (ContinueWith(result, PascalToken.Off)) {
-                ConditionalCompilation.DesignOnly.Value = DesignOnlyUnit.Alltimes;
+                result.DesigntimeOnly = DesignOnlyUnit.Alltimes;
             }
             else {
                 ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidDesignTimeOnlyDirective);

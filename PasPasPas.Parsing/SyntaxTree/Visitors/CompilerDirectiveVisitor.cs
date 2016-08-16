@@ -173,5 +173,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             }
         }
 
+        /// <summary>
+        ///     design time only
+        /// </summary>
+        /// <param name="syntaxPart"></param>
+        /// <param name="parameter"></param>
+        public void BeginVisitItem(DesignOnly syntaxPart, CompilerDirectiveVisitorOptions parameter) {
+            parameter.ConditionalCompilation.DesignOnly.Value = syntaxPart.DesigntimeOnly;
+        }
+
     }
 }

@@ -1,12 +1,11 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using PasPasPas.Parsing.Tokenizer;
+﻿using PasPasPas.Parsing.Tokenizer;
+using Xunit;
 
 namespace PasPasPasTests.Tokenizer {
 
-    [TestClass]
     public class TokenizerTest {
 
-        [TestMethod]
+        [Fact]
         public void TestIdentifiers() {
             Assert.IsIdentifier("abcd");
             Assert.IsIdentifier("ABCD");
@@ -18,21 +17,21 @@ namespace PasPasPasTests.Tokenizer {
             Assert.IsIdentifier("asd994");
         }
 
-        [TestMethod]
+        [Fact]
         public void TestIntegers() {
             Assert.IsInteger("123");
             Assert.IsInteger("0000");
             Assert.IsInteger("10000");
         }
 
-        [TestMethod]
+        [Fact]
         public void TestWhitespace() {
             Assert.IsWhitespace(" ");
             Assert.IsWhitespace(" " + System.Environment.NewLine);
             Assert.IsWhitespace("  ");
         }
 
-        [TestMethod]
+        [Fact]
         public void TestRealNumbers() {
             Assert.IsReal("123.123");
             Assert.IsReal("123E+10");
@@ -41,13 +40,13 @@ namespace PasPasPasTests.Tokenizer {
             Assert.IsReal("123.123E+10");
         }
 
-        [TestMethod]
+        [Fact]
         public void TestIsPreprocessorCommand() {
             Assert.IsPreprocessor("{$A}");
             Assert.IsComment("(*$HPPEMIT '}'*)");
         }
 
-        [TestMethod]
+        [Fact]
         public void TestComment() {
             Assert.IsComment("// dsfssdf ");
             Assert.IsComment("{ dsfssdf }");
@@ -55,13 +54,13 @@ namespace PasPasPasTests.Tokenizer {
         }
 
 
-        [TestMethod]
+        [Fact]
         public void TestHexNumbers() {
             Assert.IsHexNumber("$333F");
             Assert.IsHexNumber("$000000");
         }
 
-        [TestMethod]
+        [Fact]
         public void TestQuotedString() {
             Assert.IsQuotedString("''");
             Assert.IsQuotedString("'sdfddfsd'");
@@ -73,7 +72,7 @@ namespace PasPasPasTests.Tokenizer {
             Assert.IsQuotedString("'ddd'#$1245'xxx'");
         }
 
-        [TestMethod]
+        [Fact]
         public void TestMessages() {
             Assert.TokenizerMessageIsGenerated(StandardTokenizer.IncompleteHexNumber, "$");
             Assert.TokenizerMessageIsGenerated(StandardTokenizer.IncompleteIdentifier, "&");

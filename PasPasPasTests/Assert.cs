@@ -7,7 +7,7 @@ using PasPasPas.Parsing.Tokenizer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using A = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
+using A = Xunit.Assert;
 
 
 namespace PasPasPasTests {
@@ -40,27 +40,27 @@ namespace PasPasPasTests {
     public static class Assert {
 
         public static void AreEqual(object expected, object actual, string message = "") {
-            A.AreEqual(expected, actual);
+            A.Equal(expected, actual);
         }
 
         public static void IsTrue(bool o) {
-            A.IsTrue(o);
+            A.True(o);
         }
 
         public static void IsFalse(bool o) {
-            A.IsFalse(o);
+            A.False(o);
         }
 
         public static void AreNotEqual(object notExpected, object actual) {
-            A.AreNotEqual(notExpected, actual);
+            A.NotEqual(notExpected, actual);
         }
 
         public static void IsNotNull(object o) {
-            A.IsNotNull(o);
+            A.NotNull(o);
         }
 
         public static void IsNull(object o) {
-            A.IsNull(o);
+            A.Null(o);
         }
 
         public static void IsToken(int tokenKind, string tokenValue, string input) {
