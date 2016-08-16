@@ -564,7 +564,7 @@ namespace PasPasPas.Parsing.Parser {
         private void ParseHppEmit() {
             Require(PascalToken.HppEmit);
             HppEmitMode mode = HppEmitMode.Standard;
-            if (Optional(PascalToken.End))
+            if (Optional(TokenKind.End))
                 mode = HppEmitMode.AtEnd;
             else if (Optional(PascalToken.LinkUnit))
                 mode = HppEmitMode.LinkUnit;

@@ -177,5 +177,62 @@
         /// </summary>
         public const int Packed = 211;
 
+
+        /// <summary>
+        ///     token for <c>platform</c>
+        /// </summary>
+        public const int Platform = 212;
+
+        /// <summary>
+        ///     token for <c>deprecated</c>
+        /// </summary>
+        public const int Deprecated = 213;
+
+        /// <summary>
+        ///     token for <c>experimental</c>
+        /// </summary>
+        public const int Experimental = 214;
+
+        /// <summary>
+        ///     token for <c>set</c>
+        /// </summary>
+        public const int Set = 215;
+
+        /// <summary>
+        ///     token for <c>file</c>
+        /// </summary>
+        public const int File = 216;
+
+        /// <summary>
+        ///     token for <c>class</c>
+        /// </summary>
+        public const int Class = 217;
+
+        /// <summary>
+        ///     token for <c>begin</c>
+        /// </summary>
+        public const int Begin = 218;
+
+        /// <summary>
+        ///     token for <c>end</c>
+        /// </summary>
+        public const int End = 219;
+
+        /// <summary>
+        ///     token for sealed
+        /// </summary>
+        public const int Sealed = 220;
+
+        /// <summary>
+        ///     token for <c>abstract</c>
+        /// </summary>
+        public const int Abstract = 221;
+
+        /// <summary>
+        ///     toyken for <c>strict</c>
+        /// </summary>
+        public const int Strict = 222;
+
+
     }
 }
