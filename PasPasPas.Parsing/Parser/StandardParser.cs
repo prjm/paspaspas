@@ -29,8 +29,8 @@ namespace PasPasPas.Parsing.Parser {
             PascalToken.Case,
             TokenKind.Class,
             TokenKind.Const,
-            PascalToken.Constructor,
-            PascalToken.Destructor,
+            TokenKind.Constructor,
+            TokenKind.Destructor,
             PascalToken.DispInterface,
             PascalToken.Div,
             PascalToken.Do,
@@ -43,7 +43,7 @@ namespace PasPasPas.Parsing.Parser {
             PascalToken.Finalization   ,
             PascalToken.Finally,
             PascalToken.For,
-            PascalToken.Function,
+            TokenKind.Function,
             PascalToken.GoToKeyword,
             PascalToken.If,
             PascalToken.Implementation,
@@ -62,11 +62,11 @@ namespace PasPasPas.Parsing.Parser {
             TokenKind.Of,
             PascalToken.Or,
             TokenKind.Packed,
-            PascalToken.Procedure,
+            TokenKind.Procedure,
             TokenKind.Program,
             PascalToken.Property,
             PascalToken.Raise,
-            PascalToken.Record,
+            TokenKind.Record,
             PascalToken.Repeat,
             PascalToken.Resourcestring,
             TokenKind.Set,
@@ -187,7 +187,7 @@ namespace PasPasPas.Parsing.Parser {
                 return ParseAssemblyAttribute();
             }
 
-            if (Match(PascalToken.Procedure, PascalToken.Function)) {
+            if (Match(TokenKind.Procedure, TokenKind.Function)) {
                 return ParseExportedProcedureHeading();
             }
 
@@ -209,7 +209,7 @@ namespace PasPasPas.Parsing.Parser {
         [Rule("ExportedProcedureHeading", "")]
         private ExportedProcedureHeading ParseExportedProcedureHeading() {
             var result = new ExportedProcedureHeading(this);
-            result.Kind = Require(PascalToken.Function, PascalToken.Procedure).Kind;
+            result.Kind = Require(TokenKind.Function, TokenKind.Procedure).Kind;
             result.Name = RequireIdentifier();
             if (Optional(TokenKind.OpenParen)) {
                 result.Parameters = ParseFormalParameterSection();
@@ -884,11 +884,11 @@ namespace PasPasPas.Parsing.Parser {
                 }
                 bool useClass = Optional(TokenKind.Class);
 
-                if (Match(PascalToken.Function, PascalToken.Procedure, PascalToken.Constructor, PascalToken.Destructor, PascalToken.Operator)) {
+                if (Match(TokenKind.Function, TokenKind.Procedure, TokenKind.Constructor, TokenKind.Destructor, PascalToken.Operator)) {
 
                     bool useMethodDeclaration = //
                         useClass ||
-                        Match(PascalToken.Constructor, PascalToken.Destructor, PascalToken.Operator) ||
+                        Match(TokenKind.Constructor, TokenKind.Destructor, PascalToken.Operator) ||
                         (LookAhead(1, PascalToken.Identifier) && (LookAhead(2, TokenKind.Dot)));
 
                     if (useMethodDeclaration) {
@@ -1025,7 +1025,7 @@ namespace PasPasPas.Parsing.Parser {
         [Rule("MethodDeclHeading", " ('constructor' | 'destructor' | 'function' | 'procedure') NamespaceName [GenericDefinition] [FormalParameterSection] [':' Attributes TypeSpecification ]")]
         private MethodDeclHeading ParseMethodDeclHeading() {
             var result = new MethodDeclHeading(this);
-            result.Kind = Require(PascalToken.Constructor, PascalToken.Destructor, PascalToken.Function, PascalToken.Procedure).Kind;
+            result.Kind = Require(TokenKind.Constructor, TokenKind.Destructor, TokenKind.Function, TokenKind.Procedure).Kind;
             result.Name = ParseNamespaceName();
             if (Match(TokenKind.AngleBracketsOpen)) {
                 result.GenericDefinition = ParseGenericDefinition();
@@ -1056,7 +1056,7 @@ namespace PasPasPas.Parsing.Parser {
         [Rule("ProcedureDeclarationHeading", "('procedure' | 'function') Identifier [FormalParameterSection][':' TypeSpecification]")]
         private ProcedureDeclarationHeading ParseProcedureDeclarationHeading() {
             var result = new ProcedureDeclarationHeading(this);
-            result.Kind = Require(PascalToken.Function, PascalToken.Procedure).Kind;
+            result.Kind = Require(TokenKind.Function, TokenKind.Procedure).Kind;
             result.Name = RequireIdentifier();
             if (Match(TokenKind.OpenParen)) {
                 result.Parameters = ParseFormalParameterSection();
@@ -1255,7 +1255,7 @@ namespace PasPasPas.Parsing.Parser {
             var result = new TypeSpecification(this);
 
             if (Match(TokenKind.Packed, TokenKind.Array, TokenKind.Set, TokenKind.File, //
-                TokenKind.Class, PascalToken.Interface, PascalToken.Record, PascalToken.Object)) {
+                TokenKind.Class, PascalToken.Interface, TokenKind.Record, PascalToken.Object)) {
                 result.StructuredType = ParseStructType();
                 return result;
             }
@@ -1270,7 +1270,7 @@ namespace PasPasPas.Parsing.Parser {
                 return result;
             }
 
-            if (Match(PascalToken.Function, PascalToken.Procedure, PascalToken.Reference)) {
+            if (Match(TokenKind.Function, TokenKind.Procedure, PascalToken.Reference)) {
                 result.ProcedureType = ParseProcedureType();
                 return result;
             }
@@ -1331,7 +1331,7 @@ namespace PasPasPas.Parsing.Parser {
         private ProcedureType ParseProcedureType() {
             var result = new ProcedureType(this);
 
-            if (Match(PascalToken.Procedure, PascalToken.Function)) {
+            if (Match(TokenKind.Procedure, TokenKind.Function)) {
                 result.ProcedureRefType = ParseProcedureRefType();
 
                 if (Optional(TokenKind.Of)) {
@@ -1363,12 +1363,12 @@ namespace PasPasPas.Parsing.Parser {
         [Rule("ProcedureTypeDefinition", "('function' | 'procedure') [ '(' FormalParameters ')' ] [ ':' TypeSpecification ] [ 'of' 'object']")]
         private ProcedureTypeDefinition ParseProcedureRefType() {
             var result = new ProcedureTypeDefinition(this);
-            result.Kind = Require(PascalToken.Function, PascalToken.Procedure).Kind;
+            result.Kind = Require(TokenKind.Function, TokenKind.Procedure).Kind;
             if (Match(TokenKind.OpenParen)) {
                 result.Parameters = ParseFormalParameterSection();
             };
 
-            if (result.Kind == PascalToken.Function) {
+            if (result.Kind == TokenKind.Function) {
                 Require(TokenKind.Colon);
                 result.ReturnTypeAttributes = ParseAttributes();
                 result.ReturnType = ParseTypeSpecification();
@@ -1457,7 +1457,7 @@ namespace PasPasPas.Parsing.Parser {
                 return result;
             }
 
-            if (Match(TokenKind.Class, PascalToken.Interface, PascalToken.Record, PascalToken.Object)) {
+            if (Match(TokenKind.Class, PascalToken.Interface, TokenKind.Record, PascalToken.Object)) {
                 result.ClassDecl = ParseClassDeclaration();
                 return result;
             }
@@ -1494,12 +1494,12 @@ namespace PasPasPas.Parsing.Parser {
                 return result;
             }
 
-            if (Match(PascalToken.Record) && LookAhead(1, PascalToken.Helper)) {
+            if (Match(TokenKind.Record) && LookAhead(1, PascalToken.Helper)) {
                 result.RecordHelper = ParseRecordHelper();
                 return result;
             }
 
-            if (Match(PascalToken.Record)) {
+            if (Match(TokenKind.Record)) {
                 result.RecordDecl = ParseRecordDecl();
                 return result;
             }
@@ -1511,7 +1511,7 @@ namespace PasPasPas.Parsing.Parser {
         [Rule("RecordDecl", "'record' RecordFieldList (RecordVariantSection | RecordItems ) 'end' ")]
         private RecordDeclaration ParseRecordDecl() {
             var result = new RecordDeclaration(this);
-            Require(PascalToken.Record);
+            Require(TokenKind.Record);
 
             if (MatchIdentifier()) {
                 result.FieldList = ParseFieldList();
@@ -1551,7 +1551,7 @@ namespace PasPasPas.Parsing.Parser {
             result.Class = Optional(TokenKind.Class);
             unexpected = false;
 
-            if (Match(PascalToken.Procedure, PascalToken.Function, PascalToken.Constructor, PascalToken.Destructor)) {
+            if (Match(TokenKind.Procedure, TokenKind.Function, TokenKind.Constructor, TokenKind.Destructor)) {
                 result.MethodDeclaration = ParseMethodDeclaration();
                 return result;
             }
@@ -1639,7 +1639,7 @@ namespace PasPasPas.Parsing.Parser {
         [Rule("RecordHelperDecl", "'record' 'helper' 'for' NamespaceName RecordHelperItems 'end'")]
         private RecordHelperDef ParseRecordHelper() {
             var result = new RecordHelperDef(this);
-            Require(PascalToken.Record);
+            Require(TokenKind.Record);
             Require(PascalToken.Helper);
             Require(PascalToken.For);
             result.Name = ParseNamespaceName();
@@ -1671,7 +1671,7 @@ namespace PasPasPas.Parsing.Parser {
             var result = new RecordHelperItem(this);
             unexpected = false;
 
-            if (Match(PascalToken.Procedure, PascalToken.Function, PascalToken.Constructor, PascalToken.Destructor)) {
+            if (Match(TokenKind.Procedure, TokenKind.Function, TokenKind.Constructor, TokenKind.Destructor)) {
                 result.MethodDeclaration = ParseMethodDeclaration();
                 return result;
             }
@@ -1717,14 +1717,14 @@ namespace PasPasPas.Parsing.Parser {
         private ObjectItem ParseObjectItem(out bool unexpected) {
             var result = new ObjectItem(this);
 
-            if (Match(PascalToken.Public, PascalToken.Protected, PascalToken.Private, TokenKind.Strict, PascalToken.Published, PascalToken.Automated)) {
+            if (Match(TokenKind.Public, TokenKind.Protected, TokenKind.Private, TokenKind.Strict, TokenKind.Published, TokenKind.Automated)) {
                 result.Strict = Optional(TokenKind.Strict);
-                result.Visibility = Require(PascalToken.Public, PascalToken.Protected, PascalToken.Private, PascalToken.Published, PascalToken.Automated).Kind;
+                result.Visibility = Require(TokenKind.Public, TokenKind.Protected, TokenKind.Private, TokenKind.Published, TokenKind.Automated).Kind;
                 unexpected = false;
                 return result;
             }
 
-            if (Match(PascalToken.Procedure, PascalToken.Function, PascalToken.Constructor, PascalToken.Destructor)) {
+            if (Match(TokenKind.Procedure, TokenKind.Function, TokenKind.Constructor, TokenKind.Destructor)) {
                 result.MethodDeclaration = ParseMethodDeclaration();
                 unexpected = false;
                 return result;
@@ -1781,7 +1781,7 @@ namespace PasPasPas.Parsing.Parser {
             var result = new InterfaceItem(this);
             unexpected = true;
 
-            if (Match(PascalToken.Procedure, PascalToken.Function)) {
+            if (Match(TokenKind.Procedure, TokenKind.Function)) {
                 unexpected = false;
                 result.Method = ParseMethodDeclaration();
                 return result;
@@ -1833,13 +1833,13 @@ namespace PasPasPas.Parsing.Parser {
             result.Attributes = ParseAttributes();
             result.Class = Optional(TokenKind.Class);
 
-            if (!result.Class && (result.Attributes.Count < 1) && Match(PascalToken.Public, PascalToken.Protected, PascalToken.Private, TokenKind.Strict, PascalToken.Published, PascalToken.Automated)) {
+            if (!result.Class && (result.Attributes.Count < 1) && Match(TokenKind.Public, TokenKind.Protected, TokenKind.Private, TokenKind.Strict, TokenKind.Published, TokenKind.Automated)) {
                 result.Strict = Optional(TokenKind.Strict);
-                result.Visibility = Require(PascalToken.Public, PascalToken.Protected, PascalToken.Private, PascalToken.Published, PascalToken.Automated).Kind;
+                result.Visibility = Require(TokenKind.Public, TokenKind.Protected, TokenKind.Private, TokenKind.Published, TokenKind.Automated).Kind;
                 return result;
             }
 
-            if (Match(PascalToken.Procedure, PascalToken.Function, PascalToken.Constructor, PascalToken.Destructor)) {
+            if (Match(TokenKind.Procedure, TokenKind.Function, TokenKind.Constructor, TokenKind.Destructor)) {
                 result.MethodDeclaration = ParseMethodDeclaration();
                 return result;
             }
@@ -1898,18 +1898,18 @@ namespace PasPasPas.Parsing.Parser {
             result.Class = Optional(TokenKind.Class);
             unexpected = false;
 
-            if (!result.Class && (result.Attributes.Count < 1) && Match(PascalToken.Public, PascalToken.Protected, PascalToken.Private, TokenKind.Strict, PascalToken.Published, PascalToken.Automated)) {
+            if (!result.Class && (result.Attributes.Count < 1) && Match(TokenKind.Public, TokenKind.Protected, TokenKind.Private, TokenKind.Strict, TokenKind.Published, TokenKind.Automated)) {
                 result.Strict = Optional(TokenKind.Strict);
-                result.Visibility = Require(PascalToken.Public, PascalToken.Protected, PascalToken.Private, PascalToken.Published, PascalToken.Automated).Kind;
+                result.Visibility = Require(TokenKind.Public, TokenKind.Protected, TokenKind.Private, TokenKind.Published, TokenKind.Automated).Kind;
                 return result;
             }
 
-            if (Match(PascalToken.Procedure, PascalToken.Function) && HasTokenBeforeToken(TokenKind.EqualsSign, TokenKind.Semicolon, TokenKind.OpenParen)) {
+            if (Match(TokenKind.Procedure, TokenKind.Function) && HasTokenBeforeToken(TokenKind.EqualsSign, TokenKind.Semicolon, TokenKind.OpenParen)) {
                 result.MethodResolution = ParseMethodResolution();
                 return result;
             }
 
-            if (Match(PascalToken.Procedure, PascalToken.Function, PascalToken.Constructor, PascalToken.Destructor)) {
+            if (Match(TokenKind.Procedure, TokenKind.Function, TokenKind.Constructor, TokenKind.Destructor)) {
                 result.MethodDeclaration = ParseMethodDeclaration();
                 return result;
             }
@@ -2102,7 +2102,7 @@ namespace PasPasPas.Parsing.Parser {
         [Rule("MethodResolution", "( 'function' | 'procedure' ) NamespaceName '=' Identifier ';' ")]
         private MethodResolution ParseMethodResolution() {
             var result = new MethodResolution(this);
-            result.Kind = Require(PascalToken.Function, PascalToken.Procedure).Kind;
+            result.Kind = Require(TokenKind.Function, TokenKind.Procedure).Kind;
             result.TypeName = ParseNamespaceName();
             Require(TokenKind.EqualsSign);
             result.ResolveIdentifier = RequireIdentifier();
@@ -2113,7 +2113,7 @@ namespace PasPasPas.Parsing.Parser {
         [Rule("MethodDeclaration", "( 'constructor' | 'destructor' | 'procedure' | 'function' ) Identifier [GenericDefinition] [FormalParameters] [ ':' [ Attributes ] TypeSpecification ] ';' { MethodDirective } ")]
         private ClassMethod ParseMethodDeclaration() {
             var result = new ClassMethod(this);
-            result.MethodKind = Require(new[] { PascalToken.Constructor, PascalToken.Destructor, PascalToken.Function, PascalToken.Procedure }).Kind;
+            result.MethodKind = Require(new[] { TokenKind.Constructor, TokenKind.Destructor, TokenKind.Function, TokenKind.Procedure }).Kind;
             result.Identifier = RequireIdentifier();
 
             if (Match(TokenKind.AngleBracketsOpen)) {
@@ -2232,13 +2232,13 @@ namespace PasPasPas.Parsing.Parser {
         private ConstrainedGeneric ParseGenericConstraint() {
             var result = new ConstrainedGeneric(this);
 
-            if (Optional(PascalToken.Record)) {
+            if (Optional(TokenKind.Record)) {
                 result.RecordConstraint = true;
             }
             else if (Optional(TokenKind.Class)) {
                 result.ClassConstraint = true;
             }
-            else if (Optional(PascalToken.Constructor)) {
+            else if (Optional(TokenKind.Constructor)) {
                 result.ConstructorConstraint = true;
             }
             else {
@@ -2433,7 +2433,7 @@ namespace PasPasPas.Parsing.Parser {
         private Expression ParseExpression() {
             var result = new Expression(this);
 
-            if (Match(PascalToken.Function, PascalToken.Procedure)) {
+            if (Match(TokenKind.Function, TokenKind.Procedure)) {
                 result.ClosureExpression = ParseClosureExpression();
             }
             else {
@@ -2641,11 +2641,11 @@ namespace PasPasPas.Parsing.Parser {
         [Rule("ClosureExpr", "('function'|'procedure') [ FormalParameterSection ] [ ':' TypeSpecification ] Block ")]
         private ClosureExpr ParseClosureExpression() {
             var result = new ClosureExpr(this);
-            result.Kind = Require(PascalToken.Function, PascalToken.Procedure).Kind;
+            result.Kind = Require(TokenKind.Function, TokenKind.Procedure).Kind;
             if (Match(TokenKind.OpenParen)) {
                 result.Parameters = ParseFormalParameterSection();
             }
-            if (result.Kind == PascalToken.Function) {
+            if (result.Kind == TokenKind.Function) {
                 Require(TokenKind.Colon);
                 result.ReturnType = ParseTypeSpecification();
             }

@@ -83,8 +83,9 @@ namespace PasPasPas.Parsing.Parser {
         /// </summary>
         /// <param name="message">message id</param>
         /// <param name="parent">parent syntax tree node</param>
+        /// <param name="expectedTokens">expected tokens (or)</param>
         /// <returns></returns>
-        protected void ErrorAndSkip(ISyntaxPart parent, Guid message) {
+        protected void ErrorAndSkip(ISyntaxPart parent, Guid message, int[] expectedTokens) {
             logSource.Error(message);
             CreateByError(parent);
         }

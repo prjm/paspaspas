@@ -145,5 +145,37 @@ namespace PasPasPas.Parsing.Parser {
         /* {b44ed67e-91ef-43a9-a07a-0e240ca16b26} */
 
 
+        /// <summary>
+        ///     invalid external symbol directive
+        /// </summary>
+        public static readonly Guid InvalidExternalSymbolDirective
+             = new Guid(new byte[] { 0x2b, 0xba, 0xbf, 0x50, 0x5f, 0x8f, 0xa6, 0x4b, 0xb1, 0x91, 0xb5, 0x42, 0xa0, 0x9e, 0xa0, 0x43 });
+        /* {50bfba2b-8f5f-4ba6-b191-b542a09ea043} */
+
+
+        /// <summary>
+        ///     invalid excess precision directive
+        /// </summary>
+        public static readonly Guid InvalidExcessPrecisionDirective
+             = new Guid(new byte[] { 0xf, 0x5, 0xf7, 0xd0, 0x58, 0x79, 0xea, 0x45, 0x85, 0x2f, 0x3d, 0x39, 0xb0, 0x31, 0x45, 0xc5 });
+        /* {d0f7050f-7958-45ea-852f-3d39b03145c5} */
+
+
+        /// <summary>
+        ///     invalid high char unicode switch
+        /// </summary>
+        public static readonly Guid InvalidHighCharUnicodeDirective
+            = new Guid(new byte[] { 0x42, 0x87, 0xf0, 0x8c, 0x1c, 0x89, 0xc, 0x4e, 0x86, 0x50, 0x7a, 0xa0, 0x18, 0x57, 0x6a, 0xa7 });
+        /* {8cf08742-891c-4e0c-8650-7aa018576aa7} */
+
+
+        /// <summary>
+        ///     invalid hints directive
+        /// </summary>
+        public static readonly Guid InvalidHintsDirective
+             = new Guid(new byte[] { 0xe4, 0x15, 0x1e, 0xaf, 0x61, 0xf5, 0xa6, 0x44, 0xbf, 0x90, 0x6d, 0x61, 0x93, 0xfd, 0x18, 0x7e });
+        /* {af1e15e4-f561-44a6-bf90-6d6193fd187e} */
+
+
     }
 }

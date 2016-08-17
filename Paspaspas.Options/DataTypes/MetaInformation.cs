@@ -176,6 +176,10 @@ namespace PasPasPas.Options.DataTypes {
         /// <param name="symbolName"></param>
         /// <param name="unionName"></param>
         public void RegisterExternalSymbol(string identiferName, string symbolName, string unionName) {
+
+            if (string.IsNullOrWhiteSpace(identiferName))
+                return;
+
             ExternalSymbols.Add(new ExternalSymbol() {
                 IdentifierName = identiferName,
                 SymbolName = symbolName,

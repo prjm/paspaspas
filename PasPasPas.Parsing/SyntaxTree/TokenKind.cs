@@ -5,7 +5,6 @@
     /// </summary>
     public static class TokenKind {
 
-
         /// <summary>
         ///     undefined tokens
         /// </summary>
@@ -232,6 +231,57 @@
         ///     toyken for <c>strict</c>
         /// </summary>
         public const int Strict = 222;
+
+        /// <summary>
+        ///     token for <c>protected</c>
+        /// </summary>
+        public const int Protected = 223;
+
+        /// <summary>
+        ///     token for <c>private</c>
+        /// </summary>
+        public const int Private = 224;
+
+        /// <summary>
+        ///     token for <c>published</c>
+        /// </summary>
+        public const int Published = 225;
+
+        /// <summary>
+        ///     token for <c>automated</c>
+        /// </summary>
+        public const int Automated = 226;
+
+        /// <summary>
+        ///     token for <c>public</c>
+        /// </summary>
+        public const int Public = 227;
+
+        /// <summary>
+        ///     token for <c>constructor</c>
+        /// </summary>
+        public const int Constructor = 228;
+
+        /// <summary>
+        ///     token for <c>destructor</c>
+        /// </summary>
+        public const int Destructor = 229;
+
+        /// <summary>
+        ///     token for <c>procedure</c>
+        /// </summary>
+        public const int Procedure = 230;
+
+        /// <summary>
+        ///     token for <c>function</c>
+        /// </summary>
+        public const int Function = 231;
+
+        /// <summary>
+        ///     token for <c>record</c>
+        /// </summary>
+        public const int Record = 232;
+
 
 
     }

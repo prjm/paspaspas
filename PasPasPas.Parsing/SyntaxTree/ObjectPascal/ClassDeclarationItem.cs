@@ -139,23 +139,23 @@ namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
             };
 
             switch (visibility) {
-                case PascalToken.Private:
+                case TokenKind.Private:
                     result.Keyword("private");
                     break;
 
-                case PascalToken.Protected:
+                case TokenKind.Protected:
                     result.Keyword("protected");
                     break;
 
-                case PascalToken.Public:
+                case TokenKind.Public:
                     result.Keyword("public");
                     break;
 
-                case PascalToken.Published:
+                case TokenKind.Published:
                     result.Keyword("published");
                     break;
 
-                case PascalToken.Automated:
+                case TokenKind.Automated:
                     result.Keyword("automated");
                     break;
             }

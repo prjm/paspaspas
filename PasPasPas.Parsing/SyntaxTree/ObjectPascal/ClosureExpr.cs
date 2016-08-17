@@ -40,10 +40,10 @@ namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
         /// <param name="result"></param>
         public override void ToFormatter(PascalFormatter result) {
             switch (Kind) {
-                case PascalToken.Function:
+                case TokenKind.Function:
                     result.Keyword("function");
                     break;
-                case PascalToken.Procedure:
+                case TokenKind.Procedure:
                     result.Keyword("procedure");
                     break;
             }

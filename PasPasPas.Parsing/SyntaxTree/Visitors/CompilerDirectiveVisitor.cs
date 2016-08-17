@@ -210,5 +210,42 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             parameter.CompilerOptions.UseExtendedSyntax.Value = syntaxPart.Mode;
         }
 
+        /// <summary>
+        ///     external symbol
+        /// </summary>
+        /// <param name="syntaxPart"></param>
+        /// <param name="parameter"></param>
+        public void BeginVisitItem(ExternalSymbolDeclaration syntaxPart, CompilerDirectiveVisitorOptions parameter) {
+            parameter.Meta.RegisterExternalSymbol(syntaxPart.IdentifierName, syntaxPart.SymbolName, syntaxPart.UnionName);
+        }
+
+
+        /// <summary>
+        ///     excess precision
+        /// </summary>
+        /// <param name="syntaxPart"></param>
+        /// <param name="parameter"></param>
+        public void BeginVisitItem(ExcessPrecision syntaxPart, CompilerDirectiveVisitorOptions parameter) {
+            parameter.CompilerOptions.ExcessPrecision.Value = syntaxPart.Mode;
+        }
+
+        /// <summary>
+        ///     high char unicode switch
+        /// </summary>
+        /// <param name="syntaxPart"></param>
+        /// <param name="parameter"></param>
+        public void BeginVisitItem(HighCharUnicodeSwitch syntaxPart, CompilerDirectiveVisitorOptions parameter) {
+            parameter.CompilerOptions.HighCharUnicode.Value = syntaxPart.Mode;
+        }
+
+        /// <summary>
+        ///     hint switch
+        /// </summary>
+        /// <param name="syntaxPart"></param>
+        /// <param name="parameter"></param>
+        public void BeginVisitItem(Hints syntaxPart, CompilerDirectiveVisitorOptions parameter) {
+            parameter.CompilerOptions.Hints.Value = syntaxPart.Mode;
+        }
+
     }
 }

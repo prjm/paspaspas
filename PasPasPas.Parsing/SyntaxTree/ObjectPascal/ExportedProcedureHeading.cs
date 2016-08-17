@@ -49,10 +49,10 @@ namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
         /// </summary>
         /// <param name="result"></param>
         public override void ToFormatter(PascalFormatter result) {
-            if (Kind == PascalToken.Function) {
+            if (Kind == TokenKind.Function) {
                 result.Keyword("function");
             }
-            if (Kind == PascalToken.Procedure) {
+            if (Kind == TokenKind.Procedure) {
                 result.Keyword("procedure");
             }
             result.Space();

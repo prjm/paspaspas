@@ -236,31 +236,44 @@ namespace PasPasPasTests.Parser {
 
         [Fact]
         public void TestExternalSymbol() {
-            RunCompilerDirective("", 0, () => Meta.ExternalSymbols.Count);
-            RunCompilerDirective("EXTERNALSYM dummy", true, () => Meta.ExternalSymbols.Any(t => string.Equals(t.IdentifierName, "dummy")));
-            RunCompilerDirective("EXTERNALSYM dummy 'a'", true, () => Meta.ExternalSymbols.Any(t => string.Equals(t.IdentifierName, "dummy")));
-            RunCompilerDirective("EXTERNALSYM dummy 'a' 'q'", true, () => Meta.ExternalSymbols.Any(t => string.Equals(t.IdentifierName, "dummy")));
+            Func<object> c = () => Meta.ExternalSymbols.Count;
+            Func<object> f = () => Meta.ExternalSymbols.Any(t => string.Equals(t.IdentifierName, "dummy"));
+            RunCompilerDirective("", 0, c);
+            RunCompilerDirective("EXTERNALSYM dummy", true, f);
+            RunCompilerDirective("EXTERNALSYM dummy 'a'", true, f);
+            RunCompilerDirective("EXTERNALSYM dummy 'a' 'q'", true, f);
+            RunCompilerDirective("EXTERNALSYM+", 0, c, CompilerDirectiveParserErrors.InvalidExternalSymbolDirective);
+            RunCompilerDirective("EXTERNALSYM", 0, c, CompilerDirectiveParserErrors.InvalidExternalSymbolDirective);
         }
 
         [Fact]
         public void TestExcessPrecision() {
-            RunCompilerDirective("", ExcessPrecisionForResults.Undefined, () => CompilerOptions.ExcessPrecision.Value);
-            RunCompilerDirective("EXCESSPRECISION  ON", ExcessPrecisionForResults.EnableExcess, () => CompilerOptions.ExcessPrecision.Value);
-            RunCompilerDirective("EXCESSPRECISION  OFF", ExcessPrecisionForResults.DisableExcess, () => CompilerOptions.ExcessPrecision.Value);
+            Func<object> f = () => CompilerOptions.ExcessPrecision.Value;
+            RunCompilerDirective("", ExcessPrecisionForResults.Undefined, f);
+            RunCompilerDirective("EXCESSPRECISION  ON", ExcessPrecisionForResults.EnableExcess, f);
+            RunCompilerDirective("EXCESSPRECISION  OFF", ExcessPrecisionForResults.DisableExcess, f);
+            RunCompilerDirective("EXCESSPRECISION  KAPUTT", ExcessPrecisionForResults.Undefined, f, CompilerDirectiveParserErrors.InvalidExcessPrecisionDirective);
+            RunCompilerDirective("EXCESSPRECISION  ", ExcessPrecisionForResults.Undefined, f, CompilerDirectiveParserErrors.InvalidExcessPrecisionDirective);
         }
 
         [Fact]
         public void TestHighCharUnicode() {
-            RunCompilerDirective("", HighCharsUnicode.Undefined, () => CompilerOptions.HighCharUnicode.Value);
-            RunCompilerDirective("HIGHCHARUNICODE OFF", HighCharsUnicode.DisableHighChars, () => CompilerOptions.HighCharUnicode.Value);
-            RunCompilerDirective("HIGHCHARUNICODE ON", HighCharsUnicode.EnableHighChars, () => CompilerOptions.HighCharUnicode.Value);
+            Func<object> f = () => CompilerOptions.HighCharUnicode.Value;
+            RunCompilerDirective("", HighCharsUnicode.Undefined, f);
+            RunCompilerDirective("HIGHCHARUNICODE OFF", HighCharsUnicode.DisableHighChars, f);
+            RunCompilerDirective("HIGHCHARUNICODE ON", HighCharsUnicode.EnableHighChars, f);
+            RunCompilerDirective("HIGHCHARUNICODE KAPUTT", HighCharsUnicode.Undefined, f, CompilerDirectiveParserErrors.InvalidHighCharUnicodeDirective);
+            RunCompilerDirective("HIGHCHARUNICODE ", HighCharsUnicode.Undefined, f, CompilerDirectiveParserErrors.InvalidHighCharUnicodeDirective);
         }
 
         [Fact]
         public void TestHints() {
-            RunCompilerDirective("", CompilerHints.Undefined, () => CompilerOptions.Hints.Value);
-            RunCompilerDirective("HINTS ON", CompilerHints.EnableHints, () => CompilerOptions.Hints.Value);
-            RunCompilerDirective("HINTS OFF", CompilerHints.DisableHints, () => CompilerOptions.Hints.Value);
+            Func<object> f = () => CompilerOptions.Hints.Value;
+            RunCompilerDirective("", CompilerHints.Undefined, f);
+            RunCompilerDirective("HINTS ON", CompilerHints.EnableHints, f);
+            RunCompilerDirective("HINTS OFF", CompilerHints.DisableHints, f);
+            RunCompilerDirective("HINTS KAPUTT", CompilerHints.Undefined, f, CompilerDirectiveParserErrors.InvalidHintsDirective);
+            RunCompilerDirective("HINTS ", CompilerHints.Undefined, f, CompilerDirectiveParserErrors.InvalidHintsDirective);
         }
 
         [Fact]

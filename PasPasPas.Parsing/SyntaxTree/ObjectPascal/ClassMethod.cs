@@ -61,19 +61,19 @@ namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
         public override void ToFormatter(PascalFormatter result) {
             switch (MethodKind) {
 
-                case PascalToken.Function:
+                case TokenKind.Function:
                     result.Keyword("function");
                     break;
 
-                case PascalToken.Procedure:
+                case TokenKind.Procedure:
                     result.Keyword("procedure");
                     break;
 
-                case PascalToken.Constructor:
+                case TokenKind.Constructor:
                     result.Keyword("constructor");
                     break;
 
-                case PascalToken.Destructor:
+                case TokenKind.Destructor:
                     result.Keyword("destructor");
                     break;
 
