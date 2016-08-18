@@ -24,7 +24,7 @@ namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
         /// <param name="result"></param>
         public override void ToFormatter(PascalFormatter result) {
 
-            if (Kind == PascalToken.Var) {
+            if (Kind == TokenKind.Var) {
                 result.Keyword("var");
             }
             else if (Kind == PascalToken.ThreadVar) {

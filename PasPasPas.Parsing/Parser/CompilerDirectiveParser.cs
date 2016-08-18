@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System;
 using PasPasPas.Options.DataTypes;
-using System.Globalization;
 using PasPasPas.Options.Bundles;
 using PasPasPas.Parsing.Tokenizer;
 using PasPasPas.Infrastructure.Input;
@@ -208,10 +207,10 @@ namespace PasPasPas.Parsing.Parser {
                 ParseExternalSym(parent);
             }
             else if (Match(PascalToken.HppEmit)) {
-                ParseHppEmit();
+                ParseHppEmit(parent);
             }
             else if (Match(PascalToken.ImageBase)) {
-                ParseImageBase();
+                ParseImageBase(parent);
             }
             else if (Match(PascalToken.LibPrefix, PascalToken.LibSuffix, PascalToken.LibVersion)) {
                 ParseLibParameter();
@@ -538,14 +537,17 @@ namespace PasPasPas.Parsing.Parser {
             }
         }
 
-        private void ParseImageBase() {
-            Require(PascalToken.ImageBase);
-            var number = Require(PascalToken.Integer, PascalToken.HexNumber);
-            int value;
+        private void ParseImageBase(ISyntaxPart parent) {
+            ImageBase result = CreateByTerminal<ImageBase>(parent);
 
-            if ((number.Kind == PascalToken.Integer && int.TryParse(number.Value, out value)) ||
-                (number.Kind == PascalToken.HexNumber && int.TryParse(number.Value.Substring(1), NumberStyles.HexNumber, CultureInfo.CurrentCulture, out value))) {
-                CompilerOptions.ImageBase.Value = value;
+            if (ContinueWith(result, PascalToken.Integer)) {
+                result.BaseValue = DigitTokenGroupValue.Unwrap(result.LastTerminal.Token);
+            }
+            else if (ContinueWith(result, PascalToken.HexNumber)) {
+                result.BaseValue = HexNumberTokenValue.Unwrap(result.LastTerminal.Token);
+            }
+            else {
+                ErrorAndSkip(parent, CompilerDirectiveParserErrors.InvalidImageBaseDirective, new[] { PascalToken.Integer, PascalToken.HexNumber });
             }
         }
 
@@ -561,26 +563,30 @@ namespace PasPasPas.Parsing.Parser {
             }
         }
 
-        private void ParseHppEmit() {
-            Require(PascalToken.HppEmit);
-            HppEmitMode mode = HppEmitMode.Standard;
-            if (Optional(TokenKind.End))
-                mode = HppEmitMode.AtEnd;
-            else if (Optional(PascalToken.LinkUnit))
-                mode = HppEmitMode.LinkUnit;
-            else if (Optional(PascalToken.OpenNamespace))
-                mode = HppEmitMode.OpenNamespace;
-            else if (Optional(PascalToken.CloseNamepsace))
-                mode = HppEmitMode.CloseNamespace;
-            else if (Optional(PascalToken.NoUsingNamespace))
-                mode = HppEmitMode.NoUsingNamespace;
+        private void ParseHppEmit(ISyntaxPart parent) {
+            HppEmit result = CreateByTerminal<HppEmit>(parent);
+            result.Mode = HppEmitMode.Standard;
 
-            string emitValue = null;
-            if (mode == HppEmitMode.AtEnd || mode == HppEmitMode.Standard) {
-                emitValue = Require(PascalToken.QuotedString).Value;
+            if (ContinueWith(result, TokenKind.End))
+                result.Mode = HppEmitMode.AtEnd;
+            else if (ContinueWith(result, PascalToken.LinkUnit))
+                result.Mode = HppEmitMode.LinkUnit;
+            else if (ContinueWith(result, PascalToken.OpenNamespace))
+                result.Mode = HppEmitMode.OpenNamespace;
+            else if (ContinueWith(result, PascalToken.CloseNamepsace))
+                result.Mode = HppEmitMode.CloseNamespace;
+            else if (ContinueWith(result, PascalToken.NoUsingNamespace))
+                result.Mode = HppEmitMode.NoUsingNamespace;
+
+            if (result.Mode == HppEmitMode.AtEnd || result.Mode == HppEmitMode.Standard) {
+                if (ContinueWith(result, PascalToken.QuotedString)) {
+                    result.EmitValue = result.LastTerminal.Value;
+                }
+                else {
+                    result.Mode = HppEmitMode.Undefined;
+                    ErrorAndSkip(parent, CompilerDirectiveParserErrors.InvalidHppEmitDirective, new[] { PascalToken.QuotedString });
+                }
             }
-
-            Meta.HeaderEmit(mode, emitValue);
         }
 
         private void ParseExternalSym(ISyntaxPart parent) {
@@ -754,8 +760,8 @@ namespace PasPasPas.Parsing.Parser {
                 ParseLongHintsSwitch(parent);
             }
 
-            else if (Optional(PascalToken.ImplicitBuild)) {
-                ParseLongImplicitBuildSwitch();
+            else if (Match(PascalToken.ImplicitBuild)) {
+                ParseLongImplicitBuildSwitch(parent);
             }
 
             else if (Optional(PascalToken.ImportedDataSwitchLong)) {
@@ -766,12 +772,12 @@ namespace PasPasPas.Parsing.Parser {
                 ParseLongIncludeSwitch();
             }
 
-            else if (Optional(PascalToken.IoChecks)) {
-                ParseLongIoChecksSwitch();
+            else if (Match(PascalToken.IoChecks)) {
+                ParseLongIoChecksSwitch(parent);
             }
 
-            else if (Optional(PascalToken.LocalSymbolSwithLong)) {
-                ParseLongLocalSymbolSwitch();
+            else if (Match(PascalToken.LocalSymbolSwithLong)) {
+                ParseLongLocalSymbolSwitch(parent);
             }
 
             else if (Optional(PascalToken.LongStringSwitchLong)) {
@@ -1238,30 +1244,32 @@ namespace PasPasPas.Parsing.Parser {
             Unexpected();
         }
 
-        private void ParseLongLocalSymbolSwitch() {
-            if (Optional(PascalToken.On)) {
-                CompilerOptions.LocalSymbols.Value = LocalDebugSymbols.EnableLocalSymbols;
-                return;
-            }
+        private void ParseLongLocalSymbolSwitch(ISyntaxPart parent) {
+            LocalSymbols result = CreateByTerminal<LocalSymbols>(parent);
 
-            if (Optional(PascalToken.Off)) {
-                CompilerOptions.LocalSymbols.Value = LocalDebugSymbols.DisableLocalSymbols;
-                return;
+            if (ContinueWith(result, PascalToken.On)) {
+                result.Mode = LocalDebugSymbols.EnableLocalSymbols;
             }
-            Unexpected();
+            else if (ContinueWith(result, PascalToken.Off)) {
+                result.Mode = LocalDebugSymbols.DisableLocalSymbols;
+            }
+            else {
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidLocalSymbolsDirective, new[] { PascalToken.On, PascalToken.Off });
+            }
         }
 
-        private void ParseLongIoChecksSwitch() {
-            if (Optional(PascalToken.On)) {
-                CompilerOptions.IoChecks.Value = IoCallChecks.EnableIoChecks;
-                return;
-            }
+        private void ParseLongIoChecksSwitch(ISyntaxPart parent) {
+            IoChecks result = CreateByTerminal<IoChecks>(parent);
 
-            if (Optional(PascalToken.Off)) {
-                CompilerOptions.IoChecks.Value = IoCallChecks.DisableIoChecks;
-                return;
+            if (ContinueWith(result, PascalToken.On)) {
+                result.Mode = IoCallChecks.EnableIoChecks;
             }
-            Unexpected();
+            else if (ContinueWith(result, PascalToken.Off)) {
+                result.Mode = IoCallChecks.DisableIoChecks;
+            }
+            else {
+                ErrorAndSkip(parent, CompilerDirectiveParserErrors.InvalidIoChecksDirective, new[] { PascalToken.On, PascalToken.Off });
+            }
         }
 
         private void ParseLongIncludeSwitch() {
@@ -1292,17 +1300,18 @@ namespace PasPasPas.Parsing.Parser {
             Unexpected();
         }
 
-        private void ParseLongImplicitBuildSwitch() {
-            if (Optional(PascalToken.On)) {
-                CompilerOptions.ImplicitBuild.Value = ImplicitBuildUnit.EnableImplicitBuild;
-                return;
-            }
+        private void ParseLongImplicitBuildSwitch(ISyntaxPart parent) {
+            ImplicitBuild result = CreateByTerminal<ImplicitBuild>(parent);
 
-            if (Optional(PascalToken.Off)) {
-                CompilerOptions.ImplicitBuild.Value = ImplicitBuildUnit.DisableImplicitBuild;
-                return;
+            if (ContinueWith(result, PascalToken.On)) {
+                result.Mode = ImplicitBuildUnit.EnableImplicitBuild;
             }
-            Unexpected();
+            else if (ContinueWith(result, PascalToken.Off)) {
+                result.Mode = ImplicitBuildUnit.DisableImplicitBuild;
+            }
+            else {
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidImplicitBuildDirective, new[] { PascalToken.On, PascalToken.Off });
+            }
         }
 
         private void ParseLongHintsSwitch(ISyntaxPart parent) {
@@ -1547,10 +1556,10 @@ namespace PasPasPas.Parsing.Parser {
                 ParseImportedDataSwitch();
             }
             else if (Match(PascalToken.IncludeSwitch)) {
-                ParseIncludeSwitch();
+                ParseIncludeSwitch(parent);
             }
             else if (Match(PascalToken.LinkOrLocalSymbolSwitch)) {
-                ParseLocalSymbolSwitch();
+                ParseLocalSymbolSwitch(parent);
             }
             else if (Match(PascalToken.LongStringSwitch)) {
                 ParseLongStringSwitch();
@@ -1900,20 +1909,21 @@ namespace PasPasPas.Parsing.Parser {
             return false;
         }
 
-        private bool ParseLocalSymbolSwitch() {
+        private void ParseLocalSymbolSwitch(ISyntaxPart parent) {
+            if (LookAhead(1, TokenKind.Plus, TokenKind.Minus)) {
+                LocalSymbols result = CreateByTerminal<LocalSymbols>(parent);
+
+                if (ContinueWith(result, TokenKind.Plus)) {
+                    result.Mode = LocalDebugSymbols.EnableLocalSymbols;
+                }
+                else if (ContinueWith(result, TokenKind.Minus)) {
+                    result.Mode = LocalDebugSymbols.DisableLocalSymbols;
+                }
+                return;
+            }
+
             FetchNextToken();
-
-            if (Optional(TokenKind.Plus)) {
-                CompilerOptions.LocalSymbols.Value = LocalDebugSymbols.EnableLocalSymbols;
-                return true;
-            }
-
-            if (Optional(TokenKind.Minus)) {
-                CompilerOptions.LocalSymbols.Value = LocalDebugSymbols.DisableLocalSymbols;
-                return true;
-            }
-
-            return ParseLinkParameter();
+            ParseLinkParameter();
         }
 
         /// <summary>
@@ -1935,32 +1945,36 @@ namespace PasPasPas.Parsing.Parser {
             return false;
         }
 
-        private bool ParseIncludeSwitch() {
-            FetchNextToken();
+        private void ParseIncludeSwitch(ISyntaxPart parent) {
 
-            if (Optional(TokenKind.Plus)) {
-                CompilerOptions.IoChecks.Value = IoCallChecks.EnableIoChecks;
-                return true;
+            if (LookAhead(1, TokenKind.Plus)) {
+                IoChecks result = CreateByTerminal<IoChecks>(parent);
+                ContinueWith(result, TokenKind.Plus);
+                result.Mode = IoCallChecks.EnableIoChecks;
             }
-
-            if (Optional(TokenKind.Minus)) {
-                CompilerOptions.IoChecks.Value = IoCallChecks.DisableIoChecks;
-                return true;
+            else if (LookAhead(1, TokenKind.Minus)) {
+                IoChecks result = CreateByTerminal<IoChecks>(parent);
+                ContinueWith(result, TokenKind.Minus);
+                result.Mode = IoCallChecks.DisableIoChecks;
             }
+            else if (LookAhead(1, PascalToken.Identifier) || LookAhead(1, PascalToken.QuotedString)) {
+                var includeToken = Require(PascalToken.Identifier, PascalToken.QuotedString);
+                var sourcePath = includeToken.FilePath;
+                string filename = includeToken.Value;
 
-            var includeToken = Require(PascalToken.Identifier, PascalToken.QuotedString);
-            var sourcePath = includeToken.FilePath;
-            string filename = includeToken.Value;
+                if (includeToken.Kind == PascalToken.QuotedString) {
+                    filename = QuotedStringTokenValue.Unwrap(includeToken);
+                }
 
-            if (includeToken.Kind == PascalToken.QuotedString) {
-                filename = QuotedStringTokenValue.Unwrap(includeToken);
+                var targetPath = Meta.IncludePathResolver.ResolvePath(sourcePath, new FileReference(filename)).TargetPath;
+
+                IFileAccess fileAccess = Options.Files;
+                IncludeInput.AddFile(fileAccess.OpenFileForReading(targetPath));
             }
-
-            var targetPath = Meta.IncludePathResolver.ResolvePath(sourcePath, new FileReference(filename)).TargetPath;
-
-            IFileAccess fileAccess = Options.Files;
-            IncludeInput.AddFile(fileAccess.OpenFileForReading(targetPath));
-            return true;
+            else {
+                IoChecks result = CreateByTerminal<IoChecks>(parent);
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidIoChecksDirective, new[] { TokenKind.Plus, TokenKind.Minus });
+            }
         }
 
         private bool ParseImportedDataSwitch() {

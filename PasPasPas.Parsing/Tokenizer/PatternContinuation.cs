@@ -770,7 +770,14 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <returns></returns>
         public static int Unwrap(PascalToken token) {
             var literal = token as IntegerLiteralToken;
-            return literal != null ? literal.LiteralValue : 0;
+            if (literal != null)
+                return literal.LiteralValue;
+
+            var numberLiteral = token as NumberLiteralToken;
+            if (numberLiteral != null)
+                return numberLiteral.LiteralValue;
+
+            return 0;
         }
 
     }
@@ -892,6 +899,14 @@ namespace PasPasPas.Parsing.Tokenizer {
     /// </summary>
     public class NumberTokenGroupValue : PatternContinuation {
 
+        /// <summary>
+        ///     create a new result token
+        /// </summary>
+        /// <param name="path">file path</param>
+        /// <returns>created token</returns>
+        protected override PascalToken CreateResult(IFileReference path)
+            => new NumberLiteralToken() { FilePath = path };
+
         private DigitTokenGroupValue digitTokenizer
             = new DigitTokenGroupValue();
 
@@ -928,11 +943,13 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         /// <param name="state">current tokenizer state</param>
         public override void ParseByPrefix(ContinuationState state) {
-            digitTokenizer.Tokenize(state.Input, state.Buffer, state.Log);
+            var intPrefix = DigitTokenGroupValue.Unwrap(digitTokenizer.Tokenize(state.Input, state.Buffer, state.Log));
+            var result = state.Result as NumberLiteralToken;
             var withDot = false;
             var withExponent = false;
 
             if (!state.IsValid) {
+                result.LiteralValue = intPrefix;
                 state.Finish(PascalToken.Integer);
                 return;
             }
@@ -964,6 +981,7 @@ namespace PasPasPas.Parsing.Tokenizer {
                 state.Finish(PascalToken.Real);
             }
             else {
+                result.LiteralValue = intPrefix;
                 state.Finish(PascalToken.Integer);
             }
 

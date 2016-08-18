@@ -278,26 +278,39 @@ namespace PasPasPasTests.Parser {
 
         [Fact]
         public void TestHppEmit() {
-            RunCompilerDirective("", 0, () => Meta.HeaderStrings.Count);
-            RunCompilerDirective("HPPEMIT 'dummy'", true, () => Meta.HeaderStrings.Any(t => string.Equals(t.Value, "'dummy'")));
-            RunCompilerDirective("HPPEMIT END 'dummy'", true, () => Meta.HeaderStrings.Any(t => string.Equals(t.Value, "'dummy'")));
-            RunCompilerDirective("HPPEMIT LINKUNIT", true, () => Meta.HeaderStrings.Any(t => t.Mode == HppEmitMode.LinkUnit));
-            RunCompilerDirective("HPPEMIT OPENNAMESPACE", true, () => Meta.HeaderStrings.Any(t => t.Mode == HppEmitMode.OpenNamespace));
-            RunCompilerDirective("HPPEMIT CLOSENAMESPACE", true, () => Meta.HeaderStrings.Any(t => t.Mode == HppEmitMode.CloseNamespace));
-            RunCompilerDirective("HPPEMIT NOUSINGNAMESPACE", true, () => Meta.HeaderStrings.Any(t => t.Mode == HppEmitMode.NoUsingNamespace));
+            Func<object> c = () => Meta.HeaderStrings.Count;
+            Func<object> f = () => Meta.HeaderStrings.Any(t => string.Equals(t.Value, "'dummy'"));
+            Func<HppEmitMode, Func<object>> g = x => () => Meta.HeaderStrings.Any(t => t.Mode == x);
+            RunCompilerDirective("", 0, c);
+            RunCompilerDirective("HPPEMIT 'dummy'", true, f);
+            RunCompilerDirective("HPPEMIT END 'dummy'", true, f);
+            RunCompilerDirective("HPPEMIT LINKUNIT", true, g(HppEmitMode.LinkUnit));
+            RunCompilerDirective("HPPEMIT OPENNAMESPACE", true, g(HppEmitMode.OpenNamespace));
+            RunCompilerDirective("HPPEMIT CLOSENAMESPACE", true, g(HppEmitMode.CloseNamespace));
+            RunCompilerDirective("HPPEMIT NOUSINGNAMESPACE", true, g(HppEmitMode.NoUsingNamespace));
+            RunCompilerDirective("HPPEMIT KAPUTT", false, f, CompilerDirectiveParserErrors.InvalidHppEmitDirective);
+            RunCompilerDirective("HPPEMIT END KAPUTT", false, f, CompilerDirectiveParserErrors.InvalidHppEmitDirective);
+            RunCompilerDirective("HPPEMIT ", false, f, CompilerDirectiveParserErrors.InvalidHppEmitDirective);
         }
 
         [Fact]
         public void TestImageBase() {
-            RunCompilerDirective("IMAGEBASE $40000000 ", 0x40000000, () => CompilerOptions.ImageBase.Value);
-            RunCompilerDirective("IMAGEBASE 40000000 ", 40000000, () => CompilerOptions.ImageBase.Value);
+            Func<object> f = () => CompilerOptions.ImageBase.Value;
+            RunCompilerDirective("", 0, f);
+            RunCompilerDirective("IMAGEBASE $40000000 ", 0x40000000, f);
+            RunCompilerDirective("IMAGEBASE 40000000 ", 40000000, f);
+            RunCompilerDirective("IMAGEBASE KAPUTT ", 0, f, CompilerDirectiveParserErrors.InvalidImageBaseDirective);
+            RunCompilerDirective("IMAGEBASE ", 0, f, CompilerDirectiveParserErrors.InvalidImageBaseDirective);
         }
 
         [Fact]
         public void TestImplicitBuild() {
-            RunCompilerDirective("", ImplicitBuildUnit.Undefined, () => CompilerOptions.ImplicitBuild.Value);
-            RunCompilerDirective("IMPLICITBUILD ON", ImplicitBuildUnit.EnableImplicitBuild, () => CompilerOptions.ImplicitBuild.Value);
-            RunCompilerDirective("IMPLICITBUILD OFF", ImplicitBuildUnit.DisableImplicitBuild, () => CompilerOptions.ImplicitBuild.Value);
+            Func<object> f = () => CompilerOptions.ImplicitBuild.Value;
+            RunCompilerDirective("", ImplicitBuildUnit.Undefined, f);
+            RunCompilerDirective("IMPLICITBUILD ON", ImplicitBuildUnit.EnableImplicitBuild, f);
+            RunCompilerDirective("IMPLICITBUILD OFF", ImplicitBuildUnit.DisableImplicitBuild, f);
+            RunCompilerDirective("IMPLICITBUILD KAPUTT", ImplicitBuildUnit.Undefined, f, CompilerDirectiveParserErrors.InvalidImplicitBuildDirective);
+            RunCompilerDirective("IMPLICITBUILD ", ImplicitBuildUnit.Undefined, f, CompilerDirectiveParserErrors.InvalidImplicitBuildDirective);
         }
 
         [Fact]
@@ -311,29 +324,38 @@ namespace PasPasPasTests.Parser {
 
         [Fact]
         public void TestInclude() {
-            RunCompilerDirective("", false, () => ConditionalCompilation.IsSymbolDefined("DUMMY_INC"));
-            RunCompilerDirective("INCLUDE 'DUMMY.INC'", true, () => ConditionalCompilation.IsSymbolDefined("DUMMY_INC"));
-            RunCompilerDirective("", false, () => ConditionalCompilation.IsSymbolDefined("DUMMY_INC"));
-            RunCompilerDirective("I 'DUMMY.INC'", true, () => ConditionalCompilation.IsSymbolDefined("DUMMY_INC"));
-            RunCompilerDirective("I DUMMY.INC", true, () => ConditionalCompilation.IsSymbolDefined("DUMMY_INC"));
+            Func<object> f = () => ConditionalCompilation.IsSymbolDefined("DUMMY_INC");
+            RunCompilerDirective("", false, f);
+            RunCompilerDirective("INCLUDE 'DUMMY.INC'", true, f);
+            RunCompilerDirective("", false, f);
+            RunCompilerDirective("I 'DUMMY.INC'", true, f);
+            RunCompilerDirective("I DUMMY.INC", true, f);
         }
 
         [Fact]
         public void TestIoChecks() {
-            RunCompilerDirective("", IoCallChecks.Undefined, () => CompilerOptions.IoChecks.Value);
-            RunCompilerDirective("I+", IoCallChecks.EnableIoChecks, () => CompilerOptions.IoChecks.Value);
-            RunCompilerDirective("I-", IoCallChecks.DisableIoChecks, () => CompilerOptions.IoChecks.Value);
-            RunCompilerDirective("IOCHECKS  ON", IoCallChecks.EnableIoChecks, () => CompilerOptions.IoChecks.Value);
-            RunCompilerDirective("IOCHECKS OFF", IoCallChecks.DisableIoChecks, () => CompilerOptions.IoChecks.Value);
+            Func<object> f = () => CompilerOptions.IoChecks.Value;
+            RunCompilerDirective("", IoCallChecks.Undefined, f);
+            RunCompilerDirective("I+", IoCallChecks.EnableIoChecks, f);
+            RunCompilerDirective("I-", IoCallChecks.DisableIoChecks, f);
+            RunCompilerDirective("I 3", IoCallChecks.Undefined, f, CompilerDirectiveParserErrors.InvalidIoChecksDirective);
+            RunCompilerDirective("I", IoCallChecks.Undefined, f, CompilerDirectiveParserErrors.InvalidIoChecksDirective);
+            RunCompilerDirective("IOCHECKS  ON", IoCallChecks.EnableIoChecks, f);
+            RunCompilerDirective("IOCHECKS OFF", IoCallChecks.DisableIoChecks, f);
+            RunCompilerDirective("IOCHECKS KAPUTT", IoCallChecks.Undefined, f, CompilerDirectiveParserErrors.InvalidIoChecksDirective);
+            RunCompilerDirective("IOCHECKS ", IoCallChecks.Undefined, f, CompilerDirectiveParserErrors.InvalidIoChecksDirective);
         }
 
         [Fact]
         public void TestLocalSymbols() {
-            RunCompilerDirective("", LocalDebugSymbols.Undefined, () => CompilerOptions.LocalSymbols.Value);
-            RunCompilerDirective("L+", LocalDebugSymbols.EnableLocalSymbols, () => CompilerOptions.LocalSymbols.Value);
-            RunCompilerDirective("L-", LocalDebugSymbols.DisableLocalSymbols, () => CompilerOptions.LocalSymbols.Value);
-            RunCompilerDirective("LOCALSYMBOLS  ON", LocalDebugSymbols.EnableLocalSymbols, () => CompilerOptions.LocalSymbols.Value);
-            RunCompilerDirective("LOCALSYMBOLS OFF", LocalDebugSymbols.DisableLocalSymbols, () => CompilerOptions.LocalSymbols.Value);
+            Func<object> f = () => CompilerOptions.LocalSymbols.Value;
+            RunCompilerDirective("", LocalDebugSymbols.Undefined, f);
+            RunCompilerDirective("L+", LocalDebugSymbols.EnableLocalSymbols, f);
+            RunCompilerDirective("L-", LocalDebugSymbols.DisableLocalSymbols, f);
+            RunCompilerDirective("LOCALSYMBOLS  ON", LocalDebugSymbols.EnableLocalSymbols, f);
+            RunCompilerDirective("LOCALSYMBOLS OFF", LocalDebugSymbols.DisableLocalSymbols, f);
+            RunCompilerDirective("LOCALSYMBOLS KAPUTT", LocalDebugSymbols.Undefined, f, CompilerDirectiveParserErrors.InvalidLocalSymbolsDirective);
+            RunCompilerDirective("LOCALSYMBOLS ", LocalDebugSymbols.Undefined, f, CompilerDirectiveParserErrors.InvalidLocalSymbolsDirective);
         }
 
         [Fact]

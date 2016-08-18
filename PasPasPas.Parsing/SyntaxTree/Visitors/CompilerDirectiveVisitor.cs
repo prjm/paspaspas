@@ -247,5 +247,55 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             parameter.CompilerOptions.Hints.Value = syntaxPart.Mode;
         }
 
+
+        /// <summary>
+        ///     c++ header mit
+        /// </summary>
+        /// <param name="syntaxPart"></param>
+        /// <param name="parameter"></param>
+        public void BeginVisitItem(HppEmit syntaxPart, CompilerDirectiveVisitorOptions parameter) {
+            if (syntaxPart.Mode == Options.DataTypes.HppEmitMode.Undefined)
+                return;
+            parameter.Meta.HeaderEmit(syntaxPart.Mode, syntaxPart.EmitValue);
+        }
+
+
+        /// <summary>
+        ///     image base
+        /// </summary>
+        /// <param name="syntaxPart"></param>
+        /// <param name="parameter"></param>
+        public void BeginVisitItem(ImageBase syntaxPart, CompilerDirectiveVisitorOptions parameter) {
+            parameter.CompilerOptions.ImageBase.Value = syntaxPart.BaseValue;
+        }
+
+        /// <summary>
+        ///     implicit build
+        /// </summary>
+        /// <param name="syntaxPart"></param>
+        /// <param name="parameter"></param>
+        public void BeginVisitItem(ImplicitBuild syntaxPart, CompilerDirectiveVisitorOptions parameter) {
+            parameter.CompilerOptions.ImplicitBuild.Value = syntaxPart.Mode;
+        }
+
+        /// <summary>
+        ///     io checks
+        /// </summary>
+        /// <param name="syntaxPart"></param>
+        /// <param name="parameter"></param>
+        public void BeginVisitItem(IoChecks syntaxPart, CompilerDirectiveVisitorOptions parameter) {
+            parameter.CompilerOptions.IoChecks.Value = syntaxPart.Mode;
+        }
+
+        /// <summary>
+        ///     local symbols
+        /// </summary>
+        /// <param name="syntaxPart"></param>
+        /// <param name="parameter"></param>
+        public void BeginVisitItem(LocalSymbols syntaxPart, CompilerDirectiveVisitorOptions parameter) {
+            parameter.CompilerOptions.LocalSymbols.Value = syntaxPart.Mode;
+        }
+
+
     }
 }

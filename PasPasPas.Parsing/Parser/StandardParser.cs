@@ -68,7 +68,7 @@ namespace PasPasPas.Parsing.Parser {
             PascalToken.Raise,
             TokenKind.Record,
             PascalToken.Repeat,
-            PascalToken.Resourcestring,
+            TokenKind.Resourcestring,
             TokenKind.Set,
             PascalToken.Shl,
             PascalToken.Shr,
@@ -81,7 +81,7 @@ namespace PasPasPas.Parsing.Parser {
             TokenKind.Unit,
             PascalToken.Until,
             TokenKind.Uses,
-            PascalToken.Var,
+            TokenKind.Var,
             PascalToken.While,
             PascalToken.With,
             PascalToken.Xor
@@ -175,7 +175,7 @@ namespace PasPasPas.Parsing.Parser {
                 return ParseTypeSection();
             }
 
-            if (Match(PascalToken.Var)) {
+            if (Match(TokenKind.Var)) {
                 return ParseVarSection();
             }
 
@@ -236,7 +236,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("FunctionDirective", "OverloadDirective | InlineDirective | CallConvention | OldCallConvention | Hint | ExternalDirective | UnsafeDirective")]
         private SyntaxPartBase ParseFunctionDirective() {
-            if (Match(PascalToken.Overload)) {
+            if (Match(TokenKind.Overload)) {
                 return ParseOverloadDirective();
             }
 
@@ -852,7 +852,7 @@ namespace PasPasPas.Parsing.Parser {
                     continue;
                 }
 
-                if (Match(TokenKind.Const, PascalToken.Resourcestring)) {
+                if (Match(TokenKind.Const, TokenKind.Resourcestring)) {
                     result.Add(ParseConstSection());
                     continue;
                 }
@@ -862,7 +862,7 @@ namespace PasPasPas.Parsing.Parser {
                     continue;
                 }
 
-                if (Match(PascalToken.Var, PascalToken.ThreadVar)) {
+                if (Match(TokenKind.Var, PascalToken.ThreadVar)) {
                     result.Add(ParseVarSection());
                     continue;
                 }
@@ -936,11 +936,11 @@ namespace PasPasPas.Parsing.Parser {
         [Rule("MethodDirective", "ReintroduceDirective | OverloadDirective | InlineDirective | BindingDirective | AbstractDirective | InlineDirective | CallConvention | HintingDirective | DispIdDirective")]
         private SyntaxPartBase ParseMethodDirective() {
 
-            if (Match(PascalToken.Reintroduce)) {
+            if (Match(TokenKind.Reintroduce)) {
                 return ParseReintroduceDirective();
             }
 
-            if (Match(PascalToken.Overload)) {
+            if (Match(TokenKind.Overload)) {
                 return ParseOverloadDirective();
             }
 
@@ -948,11 +948,11 @@ namespace PasPasPas.Parsing.Parser {
                 return ParseInlineDirective();
             }
 
-            if (Match(PascalToken.Message, PascalToken.Static, PascalToken.Dynamic, PascalToken.Override, PascalToken.Virtual)) {
+            if (Match(TokenKind.Message, TokenKind.Static, TokenKind.Dynamic, TokenKind.Override, TokenKind.Virtual)) {
                 return ParseBindingDirective();
             }
 
-            if (Match(TokenKind.Abstract, PascalToken.Final)) {
+            if (Match(TokenKind.Abstract, TokenKind.Final)) {
                 return ParseAbstractDirective();
             }
 
@@ -990,7 +990,7 @@ namespace PasPasPas.Parsing.Parser {
         [Rule("AbstractDirective", "('abstract' | 'final' ) ';' ")]
         private SyntaxPartBase ParseAbstractDirective() {
             var result = new AbstractDirective(this);
-            result.Kind = Require(TokenKind.Abstract, PascalToken.Final).Kind;
+            result.Kind = Require(TokenKind.Abstract, TokenKind.Final).Kind;
             Require(TokenKind.Semicolon);
             return result;
         }
@@ -998,8 +998,8 @@ namespace PasPasPas.Parsing.Parser {
         [Rule("BindingDirective", " ('message' Expression ) | 'static' | 'dynamic' | 'override' | 'virtual' ")]
         private SyntaxPartBase ParseBindingDirective() {
             var result = new BindingDirective(this);
-            result.Kind = Require(PascalToken.Message, PascalToken.Static, PascalToken.Dynamic, PascalToken.Override, PascalToken.Virtual).Kind;
-            if (result.Kind == PascalToken.Message) {
+            result.Kind = Require(TokenKind.Message, TokenKind.Static, TokenKind.Dynamic, TokenKind.Override, TokenKind.Virtual).Kind;
+            if (result.Kind == TokenKind.Message) {
                 result.MessageExpression = ParseExpression();
             }
             Require(TokenKind.Semicolon);
@@ -1009,7 +1009,7 @@ namespace PasPasPas.Parsing.Parser {
         [Rule("OverloadDirective", "'overload' ';' ")]
         private SyntaxPartBase ParseOverloadDirective() {
             var result = new OverloadDirective(this);
-            Require(PascalToken.Overload);
+            Require(TokenKind.Overload);
             Require(TokenKind.Semicolon);
             return result;
         }
@@ -1017,7 +1017,7 @@ namespace PasPasPas.Parsing.Parser {
         [Rule("ReintroduceDirective", "'reintroduce' ';' ")]
         private SyntaxPartBase ParseReintroduceDirective() {
             var result = new ReintroduceDirective(this);
-            Require(PascalToken.Reintroduce);
+            Require(TokenKind.Reintroduce);
             Require(TokenKind.Semicolon);
             return result;
         }
@@ -1115,7 +1115,7 @@ namespace PasPasPas.Parsing.Parser {
         [Rule("VarSection", "(var | threadvar) VarDeclaration { VarDeclaration }")]
         private VarSection ParseVarSection() {
             var result = new VarSection(this);
-            result.Kind = Require(PascalToken.Var, PascalToken.ThreadVar).Kind;
+            result.Kind = Require(TokenKind.Var, PascalToken.ThreadVar).Kind;
 
             do {
                 result.Add(ParseVarDeclaration());
@@ -1185,7 +1185,7 @@ namespace PasPasPas.Parsing.Parser {
         [Rule("ConstSection", "('const' | 'resourcestring') ConstDeclaration { ConstDeclaration }")]
         private ConstSection ParseConstSection() {
             var result = new ConstSection(this);
-            result.Kind = Require(TokenKind.Const, PascalToken.Resourcestring).Kind;
+            result.Kind = Require(TokenKind.Const, TokenKind.Resourcestring).Kind;
             while (MatchIdentifier(TokenKind.OpenBraces)) {
                 result.Add(ParseConstDeclaration());
             }
@@ -1571,7 +1571,7 @@ namespace PasPasPas.Parsing.Parser {
                 return result;
             }
 
-            if (Match(PascalToken.Var)) {
+            if (Match(TokenKind.Var)) {
                 result.VarSection = ParseVarSection();
                 return result;
             }
@@ -1849,7 +1849,7 @@ namespace PasPasPas.Parsing.Parser {
                 return result;
             }
 
-            if (Match(PascalToken.Var)) {
+            if (Match(TokenKind.Var)) {
                 result.VarSection = ParseVarSection();
                 return result;
             }
@@ -1929,7 +1929,7 @@ namespace PasPasPas.Parsing.Parser {
                 return result;
             }
 
-            if (Match(PascalToken.Var)) {
+            if (Match(TokenKind.Var)) {
                 result.VarSection = ParseVarSection();
                 return result;
             }
@@ -2149,8 +2149,8 @@ namespace PasPasPas.Parsing.Parser {
             var result = new FormalParameter(this);
             result.Attributes = ParseAttributes();
 
-            if (Match(TokenKind.Const, PascalToken.Var, PascalToken.Out)) {
-                result.ParamType = Require(TokenKind.Const, PascalToken.Var, PascalToken.Out).Kind;
+            if (Match(TokenKind.Const, TokenKind.Var, TokenKind.Out)) {
+                result.ParamType = Require(TokenKind.Const, TokenKind.Var, TokenKind.Out).Kind;
             }
 
             result.ParamNames = ParseIdentList();

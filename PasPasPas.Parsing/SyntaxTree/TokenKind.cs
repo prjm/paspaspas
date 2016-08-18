@@ -282,6 +282,60 @@
         /// </summary>
         public const int Record = 232;
 
+        /// <summary>
+        ///     token for <c>var</c>
+        /// </summary>
+        public const int Var = 233;
+
+        /// <summary>
+        ///     token for <c>out</c>
+        /// </summary>
+        public const int Out = 234;
+
+        /// <summary>
+        ///     token for <c>resourcestring</c>
+        /// </summary>
+        public const int Resourcestring = 235;
+
+        /// <summary>
+        ///     token for <c>reintroduce</c>
+        /// </summary>
+        public const int Reintroduce = 236;
+
+        /// <summary>
+        ///     token for <c>overload</c>
+        /// </summary>
+        public const int Overload = 237;
+
+        /// <summary>
+        ///     token for <c>message</c>
+        /// </summary>
+        public const int Message = 238;
+
+        /// <summary>
+        ///     token for <c>static</c>
+        /// </summary>
+        public const int Static = 239;
+
+        /// <summary>
+        ///     token for dynamic
+        /// </summary>
+        public const int Dynamic = 240;
+
+        /// <summary>
+        ///     token for override
+        /// </summary>
+        public const int Override = 241;
+
+        /// <summary>
+        ///     token for <c>virtual</c>
+        /// </summary>
+        public const int Virtual = 242;
+
+        /// <summary>
+        ///     token for <c>final</c>
+        /// </summary>
+        public const int Final = 234;
 
 
     }

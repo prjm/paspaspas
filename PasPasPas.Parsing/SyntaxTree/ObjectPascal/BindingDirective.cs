@@ -1,5 +1,4 @@
 ﻿using PasPasPas.Api;
-using PasPasPas.Parsing.SyntaxTree;
 
 namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
 
@@ -31,20 +30,20 @@ namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
         /// <param name="result"></param>
         public override void ToFormatter(PascalFormatter result) {
             switch (Kind) {
-                case PascalToken.Message:
+                case TokenKind.Message:
                     result.Keyword("message").Space();
                     result.Part(MessageExpression);
                     break;
-                case PascalToken.Static:
+                case TokenKind.Static:
                     result.Keyword("static");
                     break;
-                case PascalToken.Dynamic:
+                case TokenKind.Dynamic:
                     result.Keyword("dynamic");
                     break;
-                case PascalToken.Virtual:
+                case TokenKind.Virtual:
                     result.Keyword("virtual");
                     break;
-                case PascalToken.Override:
+                case TokenKind.Override:
                     result.Keyword("override");
                     break;
             }

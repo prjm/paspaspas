@@ -1,5 +1,4 @@
 ﻿using PasPasPas.Api;
-using PasPasPas.Parsing.SyntaxTree;
 
 namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
 
@@ -54,10 +53,10 @@ namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
                 if (ParamType == TokenKind.Const) {
                     result.Keyword("const");
                 }
-                else if (ParamType == PascalToken.Var) {
+                else if (ParamType == TokenKind.Var) {
                     result.Keyword("var");
                 }
-                else if (ParamType == PascalToken.Out) {
+                else if (ParamType == TokenKind.Out) {
                     result.Keyword("out");
                 }
                 result.Space();

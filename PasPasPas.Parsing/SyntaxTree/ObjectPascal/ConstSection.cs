@@ -29,7 +29,7 @@ namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
 
             if (Kind == TokenKind.Const)
                 result.Keyword("const");
-            else if (Kind == PascalToken.Resourcestring)
+            else if (Kind == TokenKind.Resourcestring)
                 result.Keyword("resourcestring");
 
             result.StartIndent();

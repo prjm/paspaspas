@@ -176,6 +176,44 @@ namespace PasPasPas.Parsing.Parser {
              = new Guid(new byte[] { 0xe4, 0x15, 0x1e, 0xaf, 0x61, 0xf5, 0xa6, 0x44, 0xbf, 0x90, 0x6d, 0x61, 0x93, 0xfd, 0x18, 0x7e });
         /* {af1e15e4-f561-44a6-bf90-6d6193fd187e} */
 
+        /// <summary>
+        ///     invalid hpp emit directive
+        /// </summary>
+        public static readonly Guid InvalidHppEmitDirective
+             = new Guid(new byte[] { 0x12, 0x26, 0x98, 0x1a, 0x70, 0x4f, 0x21, 0x46, 0xaf, 0x30, 0xc8, 0x55, 0xed, 0x5c, 0x8c, 0xfa });
+        /* {1a982612-4f70-4621-af30-c855ed5c8cfa} */
+
+
+        /// <summary>
+        ///     invalid image base directive
+        /// </summary>
+        public static readonly Guid InvalidImageBaseDirective
+             = new Guid(new byte[] { 0xda, 0xf5, 0xfd, 0x64, 0x6a, 0xbb, 0xb1, 0x42, 0x92, 0x23, 0x61, 0xad, 0x56, 0x72, 0xbd, 0x41 });
+        /* {64fdf5da-bb6a-42b1-9223-61ad5672bd41} */
+
+
+        /// <summary>
+        ///     invalid implicit build directive
+        /// </summary>
+        public static readonly Guid InvalidImplicitBuildDirective
+            = new Guid(new byte[] { 0x4a, 0x84, 0x8a, 0xb5, 0x74, 0x77, 0x51, 0x49, 0xbb, 0xcf, 0x0, 0x18, 0xea, 0x15, 0xa1, 0xa0 });
+        /* {b58a844a-7774-4951-bbcf-0018ea15a1a0} */
+
+
+        /// <summary>
+        ///     invalid io checks directive
+        /// </summary>
+        public static readonly Guid InvalidIoChecksDirective
+            = new Guid(new byte[] { 0x21, 0xd, 0x41, 0xaf, 0x7a, 0xae, 0x50, 0x4c, 0x8c, 0x8b, 0x8, 0xe3, 0x82, 0xb3, 0x11, 0xb4 });
+        /* {af410d21-ae7a-4c50-8c8b-08e382b311b4} */
+
+
+        /// <summary>
+        ///     invalid local symbols directive
+        /// </summary>
+        public static readonly Guid InvalidLocalSymbolsDirective
+            = new Guid(new byte[] { 0xd1, 0x65, 0xa0, 0xda, 0x2b, 0x59, 0x96, 0x42, 0x84, 0xd4, 0xe2, 0x6e, 0x95, 0x9f, 0xb4, 0xf1 });
+        /* {daa065d1-592b-4296-84d4-e26e959fb4f1} */
 
     }
 }
