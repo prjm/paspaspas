@@ -360,47 +360,72 @@ namespace PasPasPasTests.Parser {
 
         [Fact]
         public void TestLongStrings() {
-            RunCompilerDirective("", LongStringTypes.Undefined, () => CompilerOptions.LongStrings.Value);
-            RunCompilerDirective("H+", LongStringTypes.EnableLongStrings, () => CompilerOptions.LongStrings.Value);
-            RunCompilerDirective("H-", LongStringTypes.DisableLongStrings, () => CompilerOptions.LongStrings.Value);
-            RunCompilerDirective("LONGSTRINGS  ON", LongStringTypes.EnableLongStrings, () => CompilerOptions.LongStrings.Value);
-            RunCompilerDirective("LONGSTRINGS  OFF", LongStringTypes.DisableLongStrings, () => CompilerOptions.LongStrings.Value);
+            Func<object> f = () => CompilerOptions.LongStrings.Value;
+            RunCompilerDirective("", LongStringTypes.Undefined, f);
+            RunCompilerDirective("H+", LongStringTypes.EnableLongStrings, f);
+            RunCompilerDirective("H-", LongStringTypes.DisableLongStrings, f);
+            RunCompilerDirective("H 3", LongStringTypes.Undefined, f, CompilerDirectiveParserErrors.InvalidLongStringSwitchDirective);
+            RunCompilerDirective("H", LongStringTypes.Undefined, f, CompilerDirectiveParserErrors.InvalidLongStringSwitchDirective);
+            RunCompilerDirective("LONGSTRINGS  ON", LongStringTypes.EnableLongStrings, f);
+            RunCompilerDirective("LONGSTRINGS  OFF", LongStringTypes.DisableLongStrings, f);
+            RunCompilerDirective("LONGSTRINGS  KAPUTT", LongStringTypes.Undefined, f, CompilerDirectiveParserErrors.InvalidLongStringSwitchDirective);
+            RunCompilerDirective("LONGSTRINGS  ", LongStringTypes.Undefined, f, CompilerDirectiveParserErrors.InvalidLongStringSwitchDirective);
         }
 
         [Fact]
         public void TestOpenStrings() {
-            RunCompilerDirective("", OpenStringTypes.Undefined, () => CompilerOptions.OpenStrings.Value);
-            RunCompilerDirective("P+", OpenStringTypes.EnableOpenStrings, () => CompilerOptions.OpenStrings.Value);
-            RunCompilerDirective("P-", OpenStringTypes.DisableOpenStrings, () => CompilerOptions.OpenStrings.Value);
-            RunCompilerDirective("OPENSTRINGS  ON", OpenStringTypes.EnableOpenStrings, () => CompilerOptions.OpenStrings.Value);
-            RunCompilerDirective("OPENSTRINGS  OFF", OpenStringTypes.DisableOpenStrings, () => CompilerOptions.OpenStrings.Value);
+            Func<object> f = () => CompilerOptions.OpenStrings.Value;
+            RunCompilerDirective("", OpenStringTypes.Undefined, f);
+            RunCompilerDirective("P+", OpenStringTypes.EnableOpenStrings, f);
+            RunCompilerDirective("P-", OpenStringTypes.DisableOpenStrings, f);
+            RunCompilerDirective("P 3", OpenStringTypes.Undefined, f, CompilerDirectiveParserErrors.InvalidOpenStringsDirective);
+            RunCompilerDirective("P", OpenStringTypes.Undefined, f, CompilerDirectiveParserErrors.InvalidOpenStringsDirective);
+            RunCompilerDirective("OPENSTRINGS  ON", OpenStringTypes.EnableOpenStrings, f);
+            RunCompilerDirective("OPENSTRINGS  OFF", OpenStringTypes.DisableOpenStrings, f);
+            RunCompilerDirective("OPENSTRINGS  KAPUTT", OpenStringTypes.Undefined, f, CompilerDirectiveParserErrors.InvalidOpenStringsDirective);
+            RunCompilerDirective("OPENSTRINGS  ", OpenStringTypes.Undefined, f, CompilerDirectiveParserErrors.InvalidOpenStringsDirective);
         }
 
         [Fact]
         public void TestOptimization() {
-            RunCompilerDirective("", CompilerOptmization.Undefined, () => CompilerOptions.Optimization.Value);
-            RunCompilerDirective("O+", CompilerOptmization.EnableOptimization, () => CompilerOptions.Optimization.Value);
-            RunCompilerDirective("O-", CompilerOptmization.DisableOptimization, () => CompilerOptions.Optimization.Value);
-            RunCompilerDirective("OPTIMIZATION  ON", CompilerOptmization.EnableOptimization, () => CompilerOptions.Optimization.Value);
-            RunCompilerDirective("OPTIMIZATION  OFF", CompilerOptmization.DisableOptimization, () => CompilerOptions.Optimization.Value);
+            Func<object> f = () => CompilerOptions.Optimization.Value;
+            RunCompilerDirective("", CompilerOptmization.Undefined, f);
+            RunCompilerDirective("O+", CompilerOptmization.EnableOptimization, f);
+            RunCompilerDirective("O-", CompilerOptmization.DisableOptimization, f);
+            RunCompilerDirective("O 4", CompilerOptmization.Undefined, f, CompilerDirectiveParserErrors.InvalidOptimizationDirective);
+            RunCompilerDirective("O ", CompilerOptmization.Undefined, f, CompilerDirectiveParserErrors.InvalidOptimizationDirective);
+            RunCompilerDirective("OPTIMIZATION  ON", CompilerOptmization.EnableOptimization, f);
+            RunCompilerDirective("OPTIMIZATION  OFF", CompilerOptmization.DisableOptimization, f);
+            RunCompilerDirective("OPTIMIZATION  KAPUTT", CompilerOptmization.Undefined, f, CompilerDirectiveParserErrors.InvalidOptimizationDirective);
+            RunCompilerDirective("OPTIMIZATION  ", CompilerOptmization.Undefined, f, CompilerDirectiveParserErrors.InvalidOptimizationDirective);
         }
 
         [Fact]
         public void TestOverflow() {
-            RunCompilerDirective("", RuntimeOverflowChecks.Undefined, () => CompilerOptions.CheckOverflows.Value);
-            RunCompilerDirective("Q+", RuntimeOverflowChecks.EnableChecks, () => CompilerOptions.CheckOverflows.Value);
-            RunCompilerDirective("Q-", RuntimeOverflowChecks.DisableChecks, () => CompilerOptions.CheckOverflows.Value);
-            RunCompilerDirective("OVERFLOWCHECKS ON", RuntimeOverflowChecks.EnableChecks, () => CompilerOptions.CheckOverflows.Value);
-            RunCompilerDirective("OVERFLOWCHECKS OFF", RuntimeOverflowChecks.DisableChecks, () => CompilerOptions.CheckOverflows.Value);
+            Func<object> f = () => CompilerOptions.CheckOverflows.Value;
+            RunCompilerDirective("", RuntimeOverflowChecks.Undefined, f);
+            RunCompilerDirective("Q+", RuntimeOverflowChecks.EnableChecks, f);
+            RunCompilerDirective("Q-", RuntimeOverflowChecks.DisableChecks, f);
+            RunCompilerDirective("Q 4", RuntimeOverflowChecks.Undefined, f, CompilerDirectiveParserErrors.InvalidOverflowCheckDirective);
+            RunCompilerDirective("Q ", RuntimeOverflowChecks.Undefined, f, CompilerDirectiveParserErrors.InvalidOverflowCheckDirective);
+            RunCompilerDirective("OVERFLOWCHECKS ON", RuntimeOverflowChecks.EnableChecks, f);
+            RunCompilerDirective("OVERFLOWCHECKS OFF", RuntimeOverflowChecks.DisableChecks, f);
+            RunCompilerDirective("OVERFLOWCHECKS KAPUTT", RuntimeOverflowChecks.Undefined, f, CompilerDirectiveParserErrors.InvalidOverflowCheckDirective);
+            RunCompilerDirective("OVERFLOWCHECKS ", RuntimeOverflowChecks.Undefined, f, CompilerDirectiveParserErrors.InvalidOverflowCheckDirective);
         }
 
         [Fact]
         public void TestSaveDivide() {
-            RunCompilerDirective("", FDivSafeDivide.Undefined, () => CompilerOptions.SafeDivide.Value);
-            RunCompilerDirective("U+", FDivSafeDivide.EnableSafeDivide, () => CompilerOptions.SafeDivide.Value);
-            RunCompilerDirective("U-", FDivSafeDivide.DisableSafeDivide, () => CompilerOptions.SafeDivide.Value);
-            RunCompilerDirective("SAFEDIVIDE  ON", FDivSafeDivide.EnableSafeDivide, () => CompilerOptions.SafeDivide.Value);
-            RunCompilerDirective("SAFEDIVIDE  OFF", FDivSafeDivide.DisableSafeDivide, () => CompilerOptions.SafeDivide.Value);
+            Func<object> f = () => CompilerOptions.SafeDivide.Value;
+            RunCompilerDirective("", FDivSafeDivide.Undefined, f);
+            RunCompilerDirective("U+", FDivSafeDivide.EnableSafeDivide, f);
+            RunCompilerDirective("U-", FDivSafeDivide.DisableSafeDivide, f);
+            RunCompilerDirective("U 3", FDivSafeDivide.Undefined, f, CompilerDirectiveParserErrors.InvalidSafeDivide);
+            RunCompilerDirective("U", FDivSafeDivide.Undefined, f, CompilerDirectiveParserErrors.InvalidSafeDivide);
+            RunCompilerDirective("SAFEDIVIDE  ON", FDivSafeDivide.EnableSafeDivide, f);
+            RunCompilerDirective("SAFEDIVIDE  OFF", FDivSafeDivide.DisableSafeDivide, f);
+            RunCompilerDirective("SAFEDIVIDE  KAPUTT", FDivSafeDivide.Undefined, f, CompilerDirectiveParserErrors.InvalidSafeDivide);
+            RunCompilerDirective("SAFEDIVIDE  ", FDivSafeDivide.Undefined, f, CompilerDirectiveParserErrors.InvalidSafeDivide);
         }
 
         [Fact]

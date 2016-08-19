@@ -297,5 +297,51 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         }
 
 
+        /// <summary>
+        ///     long strings
+        /// </summary>
+        /// <param name="syntaxPart"></param>
+        /// <param name="parameter"></param>
+        public void BeginVisitItem(LongStrings syntaxPart, CompilerDirectiveVisitorOptions parameter) {
+            parameter.CompilerOptions.LongStrings.Value = syntaxPart.Mode;
+        }
+
+        /// <summary>
+        ///     open strings
+        /// </summary>
+        /// <param name="syntaxPart"></param>
+        /// <param name="parameter"></param>
+        public void BeginVisitItem(OpenStrings syntaxPart, CompilerDirectiveVisitorOptions parameter) {
+            parameter.CompilerOptions.OpenStrings.Value = syntaxPart.Mode;
+        }
+
+
+        /// <summary>
+        ///        optimization
+        /// </summary>
+        /// <param name="syntaxPart"></param>
+        /// <param name="parameter"></param>
+        public void BeginVisitItem(Optimization syntaxPart, CompilerDirectiveVisitorOptions parameter) {
+            parameter.CompilerOptions.Optimization.Value = syntaxPart.Mode;
+        }
+
+
+        /// <summary>
+        ///        overflow
+        /// </summary>
+        /// <param name="syntaxPart"></param>
+        /// <param name="parameter"></param>
+        public void BeginVisitItem(Overflow syntaxPart, CompilerDirectiveVisitorOptions parameter) {
+            parameter.CompilerOptions.CheckOverflows.Value = syntaxPart.Mode;
+        }
+
+        /// <summary>
+        ///        overflow
+        /// </summary>
+        /// <param name="syntaxPart"></param>
+        /// <param name="parameter"></param>
+        public void BeginVisitItem(SafeDivide syntaxPart, CompilerDirectiveVisitorOptions parameter) {
+            parameter.CompilerOptions.SafeDivide.Value = syntaxPart.Mode;
+        }
     }
 }

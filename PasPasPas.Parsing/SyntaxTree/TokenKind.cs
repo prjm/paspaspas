@@ -338,5 +338,59 @@
         public const int Final = 234;
 
 
+
+
+        /// <summary>
+        ///     token for <c>inline</c>
+        /// </summary>
+        public const int Inline = 244;
+
+        /// <summary>
+        ///     token for <c>assembler</c>
+        /// </summary>
+        public const int Assembler = 245;
+
+        /// <summary>
+        ///     token for <c>cdecl</c>
+        /// </summary>
+        public const int Cdecl = 246;
+
+        /// <summary>
+        ///     token for <c>pascal</c>
+        /// </summary>
+        public const int Pascal = 247;
+
+        /// <summary>
+        ///     token for <c>register</c>
+        /// </summary>
+        public const int Register = 248;
+
+        /// <summary>
+        ///     token for <c>safecall</c>
+        /// </summary>
+        public const int Safecall = 249;
+
+        /// <summary>
+        ///     token for <c>stdcall</c>
+        /// </summary>
+        public const int Stdcall = 250;
+
+        /// <summary>
+        ///     token for <c>export</c>
+        /// </summary>
+        public const int Export = 251;
+
+        /// <summary>
+        ///     token for <c>far</c>
+        /// </summary>
+        public const int Far = 252;
+
+        /// <summary>
+        ///     toke for <c>local</c>
+        /// </summary>
+        public const int Local = 253;
+
+
+
     }
 }

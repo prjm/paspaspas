@@ -215,5 +215,43 @@ namespace PasPasPas.Parsing.Parser {
             = new Guid(new byte[] { 0xd1, 0x65, 0xa0, 0xda, 0x2b, 0x59, 0x96, 0x42, 0x84, 0xd4, 0xe2, 0x6e, 0x95, 0x9f, 0xb4, 0xf1 });
         /* {daa065d1-592b-4296-84d4-e26e959fb4f1} */
 
+
+        /// <summary>
+        ///     invalid long string switch directive
+        /// </summary>
+        public static readonly Guid InvalidLongStringSwitchDirective
+         = new Guid(new byte[] { 0x58, 0x94, 0xce, 0x60, 0xdf, 0x58, 0x36, 0x4b, 0x8d, 0x3d, 0x69, 0xeb, 0xf6, 0x21, 0x2, 0x4b });
+        /* {60ce9458-58df-4b36-8d3d-69ebf621024b} */
+
+
+        /// <summary>
+        ///     invalid open strings directive
+        /// </summary>
+        public static readonly Guid InvalidOpenStringsDirective
+             = new Guid(new byte[] { 0x91, 0x4, 0x23, 0x6b, 0x57, 0x13, 0x8a, 0x47, 0xb4, 0x59, 0x69, 0x8, 0xf4, 0x5c, 0x77, 0xb9 });
+        /* {6b230491-1357-478a-b459-6908f45c77b9} */
+
+
+        /// <summary>
+        ///     invalid optimization directive
+        /// </summary>
+        public static readonly Guid InvalidOptimizationDirective
+            = new Guid(new byte[] { 0xb8, 0xb, 0xb2, 0xe2, 0x45, 0x4e, 0x2, 0x41, 0xb0, 0xb8, 0x3c, 0xf5, 0x66, 0x24, 0x26, 0x1e });
+        /* {e2b20bb8-4e45-4102-b0b8-3cf56624261e} */
+
+
+        /// <summary>
+        ///     invalid check overflow directive
+        /// </summary>
+        public static readonly Guid InvalidOverflowCheckDirective
+             = new Guid(new byte[] { 0x36, 0xbe, 0x6a, 0x5c, 0x93, 0xc3, 0xdb, 0x40, 0x94, 0x97, 0x79, 0x37, 0xe2, 0xc7, 0xfa, 0x9a });
+        /* {5c6abe36-c393-40db-9497-7937e2c7fa9a} */
+
+        /// <summary>
+        ///     invalid safe divide
+        /// </summary>
+        public static readonly Guid InvalidSafeDivide
+            = new Guid(new byte[] { 0xdc, 0xde, 0x27, 0x28, 0xb0, 0x6d, 0x75, 0x48, 0xa6, 0x9f, 0x61, 0xad, 0x15, 0xea, 0x5b, 0x9e });
+        /* {2827dedc-6db0-4875-a69f-61ad15ea5b9e} */
     }
 }

@@ -26,10 +26,10 @@ namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
         /// <param name="result"></param>
         public override void ToFormatter(PascalFormatter result) {
             switch (Kind) {
-                case PascalToken.Inline:
+                case TokenKind.Inline:
                     result.Keyword("inline");
                     break;
-                case PascalToken.Assembler:
+                case TokenKind.Assembler:
                     result.Keyword("assembler");
                     break;
             }

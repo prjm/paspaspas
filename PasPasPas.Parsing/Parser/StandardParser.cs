@@ -50,7 +50,7 @@ namespace PasPasPas.Parsing.Parser {
             TokenKind.In,
             PascalToken.Inherited,
             PascalToken.Initialization,
-            PascalToken.Inline,
+            TokenKind.Inline,
             PascalToken.Interface,
             PascalToken.Is,
             PascalToken.Label,
@@ -240,15 +240,15 @@ namespace PasPasPas.Parsing.Parser {
                 return ParseOverloadDirective();
             }
 
-            if (Match(PascalToken.Inline)) {
+            if (Match(TokenKind.Inline)) {
                 return ParseInlineDirective();
             }
 
-            if (Match(PascalToken.Cdecl, PascalToken.Pascal, PascalToken.Register, PascalToken.Safecall, PascalToken.Stdcall, PascalToken.Export)) {
+            if (Match(TokenKind.Cdecl, TokenKind.Pascal, TokenKind.Register, TokenKind.Safecall, TokenKind.Stdcall, TokenKind.Export)) {
                 return ParseCallConvention();
             }
 
-            if (Match(PascalToken.Far, PascalToken.Local, PascalToken.Near)) {
+            if (Match(TokenKind.Far, TokenKind.Local, PascalToken.Near)) {
                 return ParseOldCallConvention();
             }
 
@@ -317,7 +317,7 @@ namespace PasPasPas.Parsing.Parser {
 
         private SyntaxPartBase ParseOldCallConvention() {
             var result = new OldCallConvention(this);
-            result.Kind = Require(PascalToken.Near, PascalToken.Far, PascalToken.Local).Kind;
+            result.Kind = Require(PascalToken.Near, TokenKind.Far, TokenKind.Local).Kind;
             Require(TokenKind.Semicolon);
             return result;
         }
@@ -944,7 +944,7 @@ namespace PasPasPas.Parsing.Parser {
                 return ParseOverloadDirective();
             }
 
-            if (Match(PascalToken.Inline, PascalToken.Assembler)) {
+            if (Match(TokenKind.Inline, TokenKind.Assembler)) {
                 return ParseInlineDirective();
             }
 
@@ -956,7 +956,7 @@ namespace PasPasPas.Parsing.Parser {
                 return ParseAbstractDirective();
             }
 
-            if (Match(PascalToken.Cdecl, PascalToken.Pascal, PascalToken.Register, PascalToken.Safecall, PascalToken.Stdcall, PascalToken.Export)) {
+            if (Match(TokenKind.Cdecl, TokenKind.Pascal, TokenKind.Register, TokenKind.Safecall, TokenKind.Stdcall, TokenKind.Export)) {
                 return ParseCallConvention();
             }
 
@@ -974,7 +974,7 @@ namespace PasPasPas.Parsing.Parser {
         [Rule("InlineDirective", "('inline' | 'assembler' ) ';'")]
         private SyntaxPartBase ParseInlineDirective() {
             var result = new InlineDirective(this);
-            result.Kind = Require(PascalToken.Inline, PascalToken.Assembler).Kind;
+            result.Kind = Require(TokenKind.Inline, TokenKind.Assembler).Kind;
             Require(TokenKind.Semicolon);
             return result;
         }
@@ -982,7 +982,7 @@ namespace PasPasPas.Parsing.Parser {
         [Rule("CallConvention", "('cdecl' | 'pascal' | 'register' | 'safecall' | 'stdcall' | 'export') ';' ")]
         private SyntaxPartBase ParseCallConvention() {
             var result = new CallConvention(this);
-            result.Kind = Require(PascalToken.Cdecl, PascalToken.Pascal, PascalToken.Register, PascalToken.Safecall, PascalToken.Stdcall, PascalToken.Export).Kind;
+            result.Kind = Require(TokenKind.Cdecl, TokenKind.Pascal, TokenKind.Register, TokenKind.Safecall, TokenKind.Stdcall, TokenKind.Export).Kind;
             Require(TokenKind.Semicolon);
             return result;
         }

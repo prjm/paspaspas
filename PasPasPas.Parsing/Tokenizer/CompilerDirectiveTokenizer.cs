@@ -106,7 +106,7 @@ namespace PasPasPas.Parsing.Tokenizer {
                 ["SETPESUBSYSVERSION"] = PascalToken.SetPESubsystemVersion,
                 ["SETPEUSERVERSION"] = PascalToken.SetPEUserVersion,
                 ["U"] = PascalToken.SaveDivideSwitch,
-                ["SAFEDIVIDE"] = PascalToken.SaveDivideSwitchLong,
+                ["SAFEDIVIDE"] = PascalToken.SafeDivideSwitchLong,
                 ["POINTERMATH"] = PascalToken.Pointermath,
                 ["R"] = PascalToken.IncludeRessource,
                 ["RANGECHECKS"] = PascalToken.RangeChecks,

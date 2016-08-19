@@ -114,7 +114,7 @@ namespace PasPasPas.Parsing.Parser {
                 PascalToken.OpenStringSwitchLong,
                 PascalToken.OptimizationSwitchLong,
                 PascalToken.OverflowSwitchLong,
-                PascalToken.SaveDivideSwitchLong,
+                PascalToken.SafeDivideSwitchLong,
                 PascalToken.RangeChecks,
                 PascalToken.StackFramesSwitchLong,
                 PascalToken.ZeroBaseStrings,
@@ -780,24 +780,24 @@ namespace PasPasPas.Parsing.Parser {
                 ParseLongLocalSymbolSwitch(parent);
             }
 
-            else if (Optional(PascalToken.LongStringSwitchLong)) {
-                ParseLongLongStringSwitch();
+            else if (Match(PascalToken.LongStringSwitchLong)) {
+                ParseLongLongStringSwitch(parent);
             }
 
-            else if (Optional(PascalToken.OpenStringSwitchLong)) {
-                ParseLongOpenStringSwitch();
+            else if (Match(PascalToken.OpenStringSwitchLong)) {
+                ParseLongOpenStringSwitch(parent);
             }
 
-            else if (Optional(PascalToken.OptimizationSwitchLong)) {
-                ParseLongOptimizationSwitch();
+            else if (Match(PascalToken.OptimizationSwitchLong)) {
+                ParseLongOptimizationSwitch(parent);
             }
 
-            else if (Optional(PascalToken.OverflowSwitchLong)) {
-                ParseLongOverflowSwitch();
+            else if (Match(PascalToken.OverflowSwitchLong)) {
+                ParseLongOverflowSwitch(parent);
             }
 
-            else if (Optional(PascalToken.SaveDivideSwitchLong)) {
-                ParseLongSaveDivideSwitch();
+            else if (Match(PascalToken.SafeDivideSwitchLong)) {
+                ParseLongSafeDivideSwitch(parent);
             }
 
             else if (Optional(PascalToken.RangeChecks)) {
@@ -1179,69 +1179,74 @@ namespace PasPasPas.Parsing.Parser {
             Unexpected();
         }
 
-        private void ParseLongSaveDivideSwitch() {
-            if (Optional(PascalToken.On)) {
-                CompilerOptions.SafeDivide.Value = FDivSafeDivide.EnableSafeDivide;
-                return;
-            }
+        private void ParseLongSafeDivideSwitch(ISyntaxPart parent) {
+            SafeDivide result = CreateByTerminal<SafeDivide>(parent);
 
-            if (Optional(PascalToken.Off)) {
-                CompilerOptions.SafeDivide.Value = FDivSafeDivide.DisableSafeDivide;
-                return;
+            if (ContinueWith(result, PascalToken.On)) {
+                result.Mode = FDivSafeDivide.EnableSafeDivide;
             }
-            Unexpected();
+            else if (ContinueWith(result, PascalToken.Off)) {
+                result.Mode = FDivSafeDivide.DisableSafeDivide;
+            }
+            else {
+                ErrorAndSkip(parent, CompilerDirectiveParserErrors.InvalidSafeDivide, new[] { PascalToken.On, PascalToken.Off });
+            }
         }
 
-        private void ParseLongOverflowSwitch() {
-            if (Optional(PascalToken.On)) {
-                CompilerOptions.CheckOverflows.Value = RuntimeOverflowChecks.EnableChecks;
-                return;
-            }
+        private void ParseLongOverflowSwitch(ISyntaxPart parent) {
+            Overflow result = CreateByTerminal<Overflow>(parent);
 
-            if (Optional(PascalToken.Off)) {
-                CompilerOptions.CheckOverflows.Value = RuntimeOverflowChecks.DisableChecks;
-                return;
+            if (ContinueWith(result, PascalToken.On)) {
+                result.Mode = RuntimeOverflowChecks.EnableChecks;
             }
-            Unexpected();
+            else if (ContinueWith(result, PascalToken.Off)) {
+                result.Mode = RuntimeOverflowChecks.DisableChecks;
+            }
+            else {
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidOverflowCheckDirective, new[] { PascalToken.On, PascalToken.Off });
+            }
         }
 
-        private void ParseLongOptimizationSwitch() {
-            if (Optional(PascalToken.On)) {
-                CompilerOptions.Optimization.Value = CompilerOptmization.EnableOptimization;
-                return;
-            }
+        private void ParseLongOptimizationSwitch(ISyntaxPart parent) {
+            Optimization result = CreateByTerminal<Optimization>(parent);
 
-            if (Optional(PascalToken.Off)) {
-                CompilerOptions.Optimization.Value = CompilerOptmization.DisableOptimization;
-                return;
+            if (ContinueWith(result, PascalToken.On)) {
+                result.Mode = CompilerOptmization.EnableOptimization;
             }
-            Unexpected();
+            else if (ContinueWith(result, PascalToken.Off)) {
+                result.Mode = CompilerOptmization.DisableOptimization;
+            }
+            else {
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidOptimizationDirective, new[] { PascalToken.On, PascalToken.Off });
+            }
         }
 
-        private void ParseLongOpenStringSwitch() {
-            if (Optional(PascalToken.On)) {
-                CompilerOptions.OpenStrings.Value = OpenStringTypes.EnableOpenStrings;
-                return;
-            }
+        private void ParseLongOpenStringSwitch(ISyntaxPart parent) {
+            OpenStrings result = CreateByTerminal<OpenStrings>(parent);
 
-            if (Optional(PascalToken.Off)) {
-                CompilerOptions.OpenStrings.Value = OpenStringTypes.DisableOpenStrings;
-                return;
+            if (ContinueWith(result, PascalToken.On)) {
+                result.Mode = OpenStringTypes.EnableOpenStrings;
             }
-            Unexpected();
+            else if (ContinueWith(result, PascalToken.Off)) {
+                result.Mode = OpenStringTypes.DisableOpenStrings;
+            }
+            else {
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidOpenStringsDirective, new[] { PascalToken.On, PascalToken.Off });
+            }
         }
 
-        private void ParseLongLongStringSwitch() {
-            if (Optional(PascalToken.On)) {
-                CompilerOptions.LongStrings.Value = LongStringTypes.EnableLongStrings;
-                return;
-            }
+        private void ParseLongLongStringSwitch(ISyntaxPart parent) {
+            LongStrings result = CreateByTerminal<LongStrings>(parent);
 
-            if (Optional(PascalToken.Off)) {
-                CompilerOptions.LongStrings.Value = LongStringTypes.DisableLongStrings;
-                return;
+            if (ContinueWith(result, PascalToken.On)) {
+                result.Mode = LongStringTypes.EnableLongStrings;
             }
-            Unexpected();
+            else if (ContinueWith(result, PascalToken.Off)) {
+                result.Mode = LongStringTypes.DisableLongStrings;
+            }
+            else {
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidLongStringSwitchDirective, new[] { PascalToken.On, PascalToken.Off });
+            }
         }
 
         private void ParseLongLocalSymbolSwitch(ISyntaxPart parent) {
@@ -1562,19 +1567,19 @@ namespace PasPasPas.Parsing.Parser {
                 ParseLocalSymbolSwitch(parent);
             }
             else if (Match(PascalToken.LongStringSwitch)) {
-                ParseLongStringSwitch();
+                ParseLongStringSwitch(parent);
             }
             else if (Match(PascalToken.OpenStringSwitch)) {
-                ParseOpenStringSwitch();
+                ParseOpenStringSwitch(parent);
             }
             else if (Match(PascalToken.OptimizationSwitch)) {
-                ParseOptimizationSwitch();
+                ParseOptimizationSwitch(parent);
             }
             else if (Match(PascalToken.OverflowSwitch)) {
-                ParseOverflowSwitch();
+                ParseOverflowSwitch(parent);
             }
             else if (Match(PascalToken.SaveDivideSwitch)) {
-                ParseSaveDivideSwitch();
+                ParseSaveDivideSwitch(parent);
             }
             else if (Match(PascalToken.IncludeRessource)) {
                 ParseIncludeRessource();
@@ -1829,84 +1834,74 @@ namespace PasPasPas.Parsing.Parser {
             return true;
         }
 
-        private bool ParseSaveDivideSwitch() {
-            FetchNextToken();
+        private void ParseSaveDivideSwitch(ISyntaxPart parent) {
+            SafeDivide result = CreateByTerminal<SafeDivide>(parent);
 
-            if (Optional(TokenKind.Plus)) {
-                CompilerOptions.SafeDivide.Value = FDivSafeDivide.EnableSafeDivide;
-                return true;
+            if (ContinueWith(result, TokenKind.Plus)) {
+                result.Mode = FDivSafeDivide.EnableSafeDivide;
             }
-
-            if (Optional(TokenKind.Minus)) {
-                CompilerOptions.SafeDivide.Value = FDivSafeDivide.DisableSafeDivide;
-                return true;
+            else if (ContinueWith(result, TokenKind.Minus)) {
+                result.Mode = FDivSafeDivide.DisableSafeDivide;
             }
-
-            return false;
+            else {
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidSafeDivide, new[] { TokenKind.Plus, TokenKind.Minus });
+            }
         }
 
-        private bool ParseOverflowSwitch() {
-            FetchNextToken();
+        private void ParseOverflowSwitch(ISyntaxPart parent) {
+            Overflow result = CreateByTerminal<Overflow>(parent);
 
-            if (Optional(TokenKind.Plus)) {
-                CompilerOptions.CheckOverflows.Value = RuntimeOverflowChecks.EnableChecks;
-                return true;
+            if (ContinueWith(result, TokenKind.Plus)) {
+                result.Mode = RuntimeOverflowChecks.EnableChecks;
             }
-
-            if (Optional(TokenKind.Minus)) {
-                CompilerOptions.CheckOverflows.Value = RuntimeOverflowChecks.DisableChecks;
-                return true;
+            else if (ContinueWith(result, TokenKind.Minus)) {
+                result.Mode = RuntimeOverflowChecks.DisableChecks;
             }
-
-            return false;
+            else {
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidOverflowCheckDirective, new[] { TokenKind.Plus, TokenKind.Minus });
+            }
         }
 
-        private bool ParseOptimizationSwitch() {
-            FetchNextToken();
+        private void ParseOptimizationSwitch(ISyntaxPart parent) {
+            Optimization result = CreateByTerminal<Optimization>(parent);
 
-            if (Optional(TokenKind.Plus)) {
-                CompilerOptions.Optimization.Value = CompilerOptmization.EnableOptimization;
-                return true;
+            if (ContinueWith(result, TokenKind.Plus)) {
+                result.Mode = CompilerOptmization.EnableOptimization;
             }
-
-            if (Optional(TokenKind.Minus)) {
-                CompilerOptions.Optimization.Value = CompilerOptmization.DisableOptimization;
-                return true;
+            else if (ContinueWith(result, TokenKind.Minus)) {
+                result.Mode = CompilerOptmization.DisableOptimization;
             }
-
-            return false;
+            else {
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidOptimizationDirective, new[] { TokenKind.Plus, TokenKind.Minus });
+            }
         }
 
-        private bool ParseOpenStringSwitch() {
-            FetchNextToken();
+        private void ParseOpenStringSwitch(ISyntaxPart parent) {
+            OpenStrings result = CreateByTerminal<OpenStrings>(parent);
 
-            if (Optional(TokenKind.Plus)) {
-                CompilerOptions.OpenStrings.Value = OpenStringTypes.EnableOpenStrings;
-                return true;
+            if (ContinueWith(result, TokenKind.Plus)) {
+                result.Mode = OpenStringTypes.EnableOpenStrings;
             }
-
-            if (Optional(TokenKind.Minus)) {
-                CompilerOptions.OpenStrings.Value = OpenStringTypes.DisableOpenStrings;
-                return true;
+            else if (ContinueWith(result, TokenKind.Minus)) {
+                result.Mode = OpenStringTypes.DisableOpenStrings;
             }
-
-            return false;
+            else {
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidOpenStringsDirective, new[] { TokenKind.Plus, TokenKind.Minus });
+            }
         }
 
-        private bool ParseLongStringSwitch() {
-            FetchNextToken();
+        private void ParseLongStringSwitch(ISyntaxPart parent) {
+            LongStrings result = CreateByTerminal<LongStrings>(parent);
 
-            if (Optional(TokenKind.Plus)) {
-                CompilerOptions.LongStrings.Value = LongStringTypes.EnableLongStrings;
-                return true;
+            if (ContinueWith(result, TokenKind.Plus)) {
+                result.Mode = LongStringTypes.EnableLongStrings;
             }
-
-            if (Optional(TokenKind.Minus)) {
-                CompilerOptions.LongStrings.Value = LongStringTypes.DisableLongStrings;
-                return true;
+            else if (ContinueWith(result, TokenKind.Minus)) {
+                result.Mode = LongStringTypes.DisableLongStrings;
             }
-
-            return false;
+            else {
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidLongStringSwitchDirective, new[] { TokenKind.Plus, TokenKind.Minus });
+            }
         }
 
         private void ParseLocalSymbolSwitch(ISyntaxPart parent) {

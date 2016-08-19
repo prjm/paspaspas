@@ -31,11 +31,11 @@ namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
                     result.Keyword("near");
                     break;
 
-                case PascalToken.Far:
+                case TokenKind.Far:
                     result.Keyword("far");
                     break;
 
-                case PascalToken.Local:
+                case TokenKind.Local:
                     result.Keyword("local");
                     break;
             }

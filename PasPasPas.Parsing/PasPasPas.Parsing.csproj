@@ -69,8 +69,13 @@
     <Compile Include="SyntaxTree\CompilerDirectives\ImplicitBuild.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\IoChecks.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\LocalSymbols.cs" />
+    <Compile Include="SyntaxTree\CompilerDirectives\LongStrings.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\ObjectExport.cs" />
+    <Compile Include="SyntaxTree\CompilerDirectives\OpenStrings.cs" />
+    <Compile Include="SyntaxTree\CompilerDirectives\Optimization.cs" />
+    <Compile Include="SyntaxTree\CompilerDirectives\Overflow.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\ParseDenyPackageUnit.cs" />
+    <Compile Include="SyntaxTree\CompilerDirectives\SafeDivide.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\UnDefineSymbol.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\DefineSymbol.cs" />
     <Compile Include="SyntaxTree\Terminal.cs" />

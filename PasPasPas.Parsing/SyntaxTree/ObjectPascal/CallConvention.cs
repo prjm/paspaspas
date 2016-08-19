@@ -27,27 +27,27 @@ namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
         /// <param name="result"></param>
         public override void ToFormatter(PascalFormatter result) {
             switch (Kind) {
-                case PascalToken.Cdecl:
+                case TokenKind.Cdecl:
                     result.Keyword("cdecl");
                     break;
 
-                case PascalToken.Pascal:
+                case TokenKind.Pascal:
                     result.Keyword("pascal");
                     break;
 
-                case PascalToken.Register:
+                case TokenKind.Register:
                     result.Keyword("register");
                     break;
 
-                case PascalToken.Safecall:
+                case TokenKind.Safecall:
                     result.Keyword("safecall");
                     break;
 
-                case PascalToken.Stdcall:
+                case TokenKind.Stdcall:
                     result.Keyword("stdcall");
                     break;
 
-                case PascalToken.Export:
+                case TokenKind.Export:
                     result.Keyword("export");
                     break;
             }
