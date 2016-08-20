@@ -336,12 +336,80 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         }
 
         /// <summary>
-        ///        overflow
+        ///         safe division
         /// </summary>
         /// <param name="syntaxPart"></param>
         /// <param name="parameter"></param>
         public void BeginVisitItem(SafeDivide syntaxPart, CompilerDirectiveVisitorOptions parameter) {
             parameter.CompilerOptions.SafeDivide.Value = syntaxPart.Mode;
         }
+
+        /// <summary>
+        ///        range checks
+        /// </summary>
+        /// <param name="syntaxPart"></param>
+        /// <param name="parameter"></param>
+        public void BeginVisitItem(RangeChecks syntaxPart, CompilerDirectiveVisitorOptions parameter) {
+            parameter.CompilerOptions.RangeChecks.Value = syntaxPart.Mode;
+        }
+
+        /// <summary>
+        ///        stack frames
+        /// </summary>
+        /// <param name="syntaxPart"></param>
+        /// <param name="parameter"></param>
+        public void BeginVisitItem(StackFrames syntaxPart, CompilerDirectiveVisitorOptions parameter) {
+            parameter.CompilerOptions.StackFrames.Value = syntaxPart.Mode;
+        }
+
+        /// <summary>
+        ///        zero based strings
+        /// </summary>
+        /// <param name="syntaxPart"></param>
+        /// <param name="parameter"></param>
+        public void BeginVisitItem(ZeroBasedStrings syntaxPart, CompilerDirectiveVisitorOptions parameter) {
+            parameter.CompilerOptions.IndexOfFirstCharInString.Value = syntaxPart.Mode;
+        }
+
+        /// <summary>
+        ///     writable consts
+        /// </summary>
+        /// <param name="syntaxPart"></param>
+        /// <param name="parameter"></param>
+        public void BeginVisitItem(WritableConsts syntaxPart, CompilerDirectiveVisitorOptions parameter) {
+            parameter.CompilerOptions.WritableConstants.Value = syntaxPart.Mode;
+        }
+
+        /// <summary>
+        ///     weak link rtti
+        /// </summary>
+        /// <param name="syntaxPart"></param>
+        /// <param name="parameter"></param>
+        public void BeginVisitItem(WeakLinkRtti syntaxPart, CompilerDirectiveVisitorOptions parameter) {
+            parameter.CompilerOptions.WeakLinkRtti.Value = syntaxPart.Mode;
+        }
+
+        /// <summary>
+        ///     weak link rtti
+        /// </summary>
+        /// <param name="syntaxPart"></param>
+        /// <param name="parameter"></param>
+        public void BeginVisitItem(Warnings syntaxPart, CompilerDirectiveVisitorOptions parameter) {
+            parameter.CompilerOptions.Warnings.Value = syntaxPart.Mode;
+        }
+
+        /// <summary>
+        ///     warn switch
+        /// </summary>
+        /// <param name="syntaxPart"></param>
+        /// <param name="parameter"></param>
+        public void BeginVisitItem(WarnSwitch syntaxPart, CompilerDirectiveVisitorOptions parameter) {
+            if (string.IsNullOrWhiteSpace(syntaxPart.WarningType))
+                return;
+
+            parameter.Warnings.SetModeByIdentifier(syntaxPart.WarningType, syntaxPart.Mode);
+        }
+
+
     }
 }

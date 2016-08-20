@@ -27,7 +27,7 @@ namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
         /// <param name="result"></param>
         public override void ToFormatter(PascalFormatter result) {
             switch (Kind) {
-                case PascalToken.Near:
+                case TokenKind.Near:
                     result.Keyword("near");
                     break;
 

@@ -430,43 +430,62 @@ namespace PasPasPasTests.Parser {
 
         [Fact]
         public void TestRangeChecks() {
-            RunCompilerDirective("", RuntimeRangeChecks.Undefined, () => CompilerOptions.RangeChecks.Value);
-            RunCompilerDirective("R+", RuntimeRangeChecks.EnableRangeChecks, () => CompilerOptions.RangeChecks.Value);
-            RunCompilerDirective("R-", RuntimeRangeChecks.DisableRangeChecks, () => CompilerOptions.RangeChecks.Value);
-            RunCompilerDirective("RANGECHECKS ON", RuntimeRangeChecks.EnableRangeChecks, () => CompilerOptions.RangeChecks.Value);
-            RunCompilerDirective("RANGECHECKS OFF", RuntimeRangeChecks.DisableRangeChecks, () => CompilerOptions.RangeChecks.Value);
+            Func<object> f = () => CompilerOptions.RangeChecks.Value;
+            RunCompilerDirective("", RuntimeRangeChecks.Undefined, f);
+            RunCompilerDirective("R+", RuntimeRangeChecks.EnableRangeChecks, f);
+            RunCompilerDirective("R-", RuntimeRangeChecks.DisableRangeChecks, f);
+            RunCompilerDirective("RANGECHECKS ON", RuntimeRangeChecks.EnableRangeChecks, f);
+            RunCompilerDirective("RANGECHECKS OFF", RuntimeRangeChecks.DisableRangeChecks, f);
+            RunCompilerDirective("RANGECHECKS KAPUTT", RuntimeRangeChecks.Undefined, f, CompilerDirectiveParserErrors.InvalidRangeCheckDirective);
+            RunCompilerDirective("RANGECHECKS ", RuntimeRangeChecks.Undefined, f, CompilerDirectiveParserErrors.InvalidRangeCheckDirective);
         }
 
         [Fact]
         public void TestStackFrames() {
-            RunCompilerDirective("", StackFrameGeneration.Undefined, () => CompilerOptions.StackFrames.Value);
-            RunCompilerDirective("W+", StackFrameGeneration.EnableFrames, () => CompilerOptions.StackFrames.Value);
-            RunCompilerDirective("W-", StackFrameGeneration.DisableFrames, () => CompilerOptions.StackFrames.Value);
-            RunCompilerDirective("STACKFRAMES  ON", StackFrameGeneration.EnableFrames, () => CompilerOptions.StackFrames.Value);
-            RunCompilerDirective("STACKFRAMES  OFF", StackFrameGeneration.DisableFrames, () => CompilerOptions.StackFrames.Value);
+            Func<object> f = () => CompilerOptions.StackFrames.Value;
+            RunCompilerDirective("", StackFrameGeneration.Undefined, f);
+            RunCompilerDirective("W+", StackFrameGeneration.EnableFrames, f);
+            RunCompilerDirective("W-", StackFrameGeneration.DisableFrames, f);
+            RunCompilerDirective("W 3", StackFrameGeneration.Undefined, f, CompilerDirectiveParserErrors.InvalidStackFramesDirective);
+            RunCompilerDirective("W", StackFrameGeneration.Undefined, f, CompilerDirectiveParserErrors.InvalidStackFramesDirective);
+            RunCompilerDirective("STACKFRAMES  ON", StackFrameGeneration.EnableFrames, f);
+            RunCompilerDirective("STACKFRAMES  OFF", StackFrameGeneration.DisableFrames, f);
+            RunCompilerDirective("STACKFRAMES  KAPUTT", StackFrameGeneration.Undefined, f, CompilerDirectiveParserErrors.InvalidStackFramesDirective);
+            RunCompilerDirective("STACKFRAMES  ", StackFrameGeneration.Undefined, f, CompilerDirectiveParserErrors.InvalidStackFramesDirective);
         }
 
         [Fact]
         public void TestZeroBasedStrings() {
-            RunCompilerDirective("", FirstCharIndex.Undefined, () => CompilerOptions.IndexOfFirstCharInString.Value);
-            RunCompilerDirective("ZEROBASEDSTRINGS  ON", FirstCharIndex.IsZero, () => CompilerOptions.IndexOfFirstCharInString.Value);
-            RunCompilerDirective("ZEROBASEDSTRINGS  OFF", FirstCharIndex.IsOne, () => CompilerOptions.IndexOfFirstCharInString.Value);
+            Func<object> f = () => CompilerOptions.IndexOfFirstCharInString.Value;
+            RunCompilerDirective("", FirstCharIndex.Undefined, f);
+            RunCompilerDirective("ZEROBASEDSTRINGS  ON", FirstCharIndex.IsZero, f);
+            RunCompilerDirective("ZEROBASEDSTRINGS  OFF", FirstCharIndex.IsOne, f);
+            RunCompilerDirective("ZEROBASEDSTRINGS  KAPUTT", FirstCharIndex.Undefined, f, CompilerDirectiveParserErrors.InvalidZeroBasedStringsDirective);
+            RunCompilerDirective("ZEROBASEDSTRINGS  ", FirstCharIndex.Undefined, f, CompilerDirectiveParserErrors.InvalidZeroBasedStringsDirective);
         }
 
         [Fact]
         public void TestWritableConst() {
-            RunCompilerDirective("", ConstantValues.Undefined, () => CompilerOptions.WritableConstants.Value);
-            RunCompilerDirective("J-", ConstantValues.Constant, () => CompilerOptions.WritableConstants.Value);
-            RunCompilerDirective("J+", ConstantValues.Writable, () => CompilerOptions.WritableConstants.Value);
-            RunCompilerDirective("WRITEABLECONST  OFF", ConstantValues.Constant, () => CompilerOptions.WritableConstants.Value);
-            RunCompilerDirective("WRITEABLECONST  ON", ConstantValues.Writable, () => CompilerOptions.WritableConstants.Value);
+            Func<object> f = () => CompilerOptions.WritableConstants.Value;
+            RunCompilerDirective("", ConstantValues.Undefined, f);
+            RunCompilerDirective("J-", ConstantValues.Constant, f);
+            RunCompilerDirective("J+", ConstantValues.Writable, f);
+            RunCompilerDirective("J 3", ConstantValues.Undefined, f, CompilerDirectiveParserErrors.InvalidWritableConstantsDirective);
+            RunCompilerDirective("J", ConstantValues.Undefined, f, CompilerDirectiveParserErrors.InvalidWritableConstantsDirective);
+            RunCompilerDirective("WRITEABLECONST  OFF", ConstantValues.Constant, f);
+            RunCompilerDirective("WRITEABLECONST  ON", ConstantValues.Writable, f);
+            RunCompilerDirective("WRITEABLECONST  KAPUTT", ConstantValues.Undefined, f, CompilerDirectiveParserErrors.InvalidWritableConstantsDirective);
+            RunCompilerDirective("WRITEABLECONST  ", ConstantValues.Undefined, f, CompilerDirectiveParserErrors.InvalidWritableConstantsDirective);
         }
 
         [Fact]
         public void TestWeakLinkRtti() {
-            RunCompilerDirective("", RttiLinkMode.Undefined, () => CompilerOptions.WeakLinkRtti.Value);
-            RunCompilerDirective("WEAKLINKRTTI  ON", RttiLinkMode.LinkWeakRtti, () => CompilerOptions.WeakLinkRtti.Value);
-            RunCompilerDirective("WEAKLINKRTTI  OFF", RttiLinkMode.LinkFullRtti, () => CompilerOptions.WeakLinkRtti.Value);
+            Func<object> f = () => CompilerOptions.WeakLinkRtti.Value;
+            RunCompilerDirective("", RttiLinkMode.Undefined, f);
+            RunCompilerDirective("WEAKLINKRTTI  ON", RttiLinkMode.LinkWeakRtti, f);
+            RunCompilerDirective("WEAKLINKRTTI  OFF", RttiLinkMode.LinkFullRtti, f);
+            RunCompilerDirective("WEAKLINKRTTI  KAPUTT", RttiLinkMode.Undefined, f, CompilerDirectiveParserErrors.InvalidWeakLinkRttiDirective);
+            RunCompilerDirective("WEAKLINKRTTI  ", RttiLinkMode.Undefined, f, CompilerDirectiveParserErrors.InvalidWeakLinkRttiDirective);
         }
 
         [Fact]
@@ -478,18 +497,28 @@ namespace PasPasPasTests.Parser {
 
         [Fact]
         public void TestWarnings() {
-            RunCompilerDirective("", CompilerWarnings.Undefined, () => CompilerOptions.Warnings.Value);
-            RunCompilerDirective("WARNINGS  ON", CompilerWarnings.Enable, () => CompilerOptions.Warnings.Value);
-            RunCompilerDirective("WARNINGS  OFF", CompilerWarnings.Disable, () => CompilerOptions.Warnings.Value);
+            Func<object> f = () => CompilerOptions.Warnings.Value;
+            RunCompilerDirective("", CompilerWarnings.Undefined, f);
+            RunCompilerDirective("WARNINGS  ON", CompilerWarnings.Enable, f);
+            RunCompilerDirective("WARNINGS  OFF", CompilerWarnings.Disable, f);
+            RunCompilerDirective("WARNINGS  KAPUTT", CompilerWarnings.Undefined, f, CompilerDirectiveParserErrors.InvalidWarningsDirective);
+            RunCompilerDirective("WARNINGS  ", CompilerWarnings.Undefined, f, CompilerDirectiveParserErrors.InvalidWarningsDirective);
         }
 
         [Fact]
         public void TestWarn() {
-            RunCompilerDirective("", WarningMode.Undefined, () => Warnings.GetModeByIdentifier("SYMBOL_DEPRECATED"));
-            RunCompilerDirective("WARN SYMBOL_DEPRECATED ON", WarningMode.On, () => Warnings.GetModeByIdentifier("SYMBOL_DEPRECATED"));
-            RunCompilerDirective("WARN SYMBOL_DEPRECATED OFF", WarningMode.Off, () => Warnings.GetModeByIdentifier("SYMBOL_DEPRECATED"));
-            RunCompilerDirective("WARN SYMBOL_DEPRECATED ERROR", WarningMode.Error, () => Warnings.GetModeByIdentifier("SYMBOL_DEPRECATED"));
-            RunCompilerDirective("WARN SYMBOL_DEPRECATED DEFAULT", WarningMode.Undefined, () => Warnings.GetModeByIdentifier("SYMBOL_DEPRECATED"));
+            Func<object> f = () => Warnings.GetModeByIdentifier("SYMBOL_DEPRECATED");
+            RunCompilerDirective("", WarningMode.Undefined, f);
+            RunCompilerDirective("WARN SYMBOL_DEPRECATED ON", WarningMode.On, f);
+            RunCompilerDirective("WARN SYMBOL_DEPRECATED OFF", WarningMode.Off, f);
+            RunCompilerDirective("WARN SYMBOL_DEPRECATED ERROR", WarningMode.Error, f);
+            RunCompilerDirective("WARN SYMBOL_DEPRECATED DEFAULT", WarningMode.Undefined, f);
+            RunCompilerDirective("WARN SYMBOL_DEPRECATED KAPUTT", WarningMode.Undefined, f, CompilerDirectiveParserErrors.InvalidWarnDirective);
+            RunCompilerDirective("WARN SYMBOL_DEPRECATED ", WarningMode.Undefined, f, CompilerDirectiveParserErrors.InvalidWarnDirective);
+            RunCompilerDirective("WARN KAPUTT ", WarningMode.Undefined, f, CompilerDirectiveParserErrors.InvalidWarnDirective);
+            RunCompilerDirective("WARN KAPUTT ERROR ", WarningMode.Undefined, f, CompilerDirectiveParserErrors.InvalidWarnDirective);
+            RunCompilerDirective("WARN KAPUTT KAPUTT ", WarningMode.Undefined, f, CompilerDirectiveParserErrors.InvalidWarnDirective);
+            RunCompilerDirective("WARN  ", WarningMode.Undefined, f, CompilerDirectiveParserErrors.InvalidWarnDirective);
         }
 
         [Fact]

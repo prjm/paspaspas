@@ -51,6 +51,7 @@ namespace PasPasPas.Parsing.Tokenizer {
                 ["DESCRIPTION"] = PascalToken.DescriptionSwitchLong,
                 ["DEBUGINFO"] = PascalToken.DebugInfoSwitchLong,
                 ["DEFINE"] = PascalToken.Define,
+                ["DEFAULT"] = TokenKind.Default,
                 ["DENYPACKAGEUNIT"] = PascalToken.DenyPackageUnit,
                 ["DESIGNONLY"] = PascalToken.DesignOnly,
                 ["E"] = PascalToken.ExtensionSwitch,

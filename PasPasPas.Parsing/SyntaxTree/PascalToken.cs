@@ -9,60 +9,6 @@ namespace PasPasPas.Parsing.SyntaxTree {
     ///     token definition
     /// </summary>
     public class PascalToken {
-        /// <summary>
-        ///     token for <c>near</c>
-        /// </summary>
-        public const int Near = 254;
-
-        /// <summary>
-        ///     token for <c>property</c>
-        /// </summary>
-        public const int Property = 255;
-
-        /// <summary>
-        ///     token for <c>index</c>
-        /// </summary>
-        public const int Index = 256;
-
-        /// <summary>
-        ///     token for <c>read</c>
-        /// </summary>
-        public const int Read = 257;
-
-        /// <summary>
-        ///     token for <c>write</c>
-        /// </summary>
-        public const int Write = 258;
-
-        /// <summary>
-        ///     token for <c>add</c>
-        /// </summary>
-        public const int Add = 259;
-
-        /// <summary>
-        ///     token for <c>remove</c>
-        /// </summary>
-        public const int Remove = 260;
-
-        /// <summary>
-        ///     token for <c>readonly</c>
-        /// </summary>
-        public const int ReadOnly = 261;
-
-        /// <summary>
-        ///     token for <c>writeonly</c>
-        /// </summary>
-        public const int WriteOnly = 262;
-
-        /// <summary>
-        ///     token for <c>dispid</c>
-        /// </summary>
-        public const int DispId = 263;
-
-        /// <summary>
-        ///     token for <c>default</c>
-        /// </summary>
-        public const int Default = 264;
 
         /// <summary>
         ///     token for <c>nodefault</c>

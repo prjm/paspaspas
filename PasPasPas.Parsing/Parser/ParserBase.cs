@@ -318,15 +318,17 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind"></param>
         /// <param name="part"></param>
         /// <returns></returns>
-        protected bool ContinueWith(ISyntaxPart part, int tokenKind) {
+        protected bool ContinueWith(ISyntaxPart part, params int[] tokenKind) {
+
+            var requiresIdentifier = tokenKind.Length == 1 && tokenKind[0] == PascalToken.Identifier;
 
             if (!Tokenizer.HasNextToken()) {
                 return false;
             }
 
             if (!Match(tokenKind) &&
-                ((tokenKind != PascalToken.Identifier) ||
-                ((tokenKind == PascalToken.Identifier) && !AllowIdentifier()))) {
+                (!requiresIdentifier ||
+                (requiresIdentifier && !AllowIdentifier()))) {
                 return false;
             }
 

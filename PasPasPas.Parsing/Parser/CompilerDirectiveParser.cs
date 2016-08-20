@@ -216,7 +216,7 @@ namespace PasPasPas.Parsing.Parser {
                 ParseLibParameter();
             }
             else if (Match(PascalToken.Warn)) {
-                ParseWarnParameter();
+                ParseWarnParameter(parent);
             }
             else if (Match(PascalToken.Rtti)) {
                 ParseRttiParameter();
@@ -488,10 +488,23 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
-        private void ParseWarnParameter() {
-            Require(PascalToken.Warn);
-            var warningType = Require(PascalToken.Identifier).Value;
-            var warningMode = Require(PascalToken.On, PascalToken.Off, PascalToken.Error, PascalToken.Default).Kind;
+        private void ParseWarnParameter(ISyntaxPart parent) {
+            WarnSwitch result = CreateByTerminal<WarnSwitch>(parent);
+
+            if (!ContinueWith(result, PascalToken.Identifier)) {
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidWarnDirective, new[] { PascalToken.Identifier });
+                return;
+            }
+
+            var warningType = result.LastTerminal.Value;
+            var warningModes = new[] { PascalToken.On, PascalToken.Off, PascalToken.Error, TokenKind.Default };
+
+            if (!ContinueWith(result, warningModes)) {
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidWarnDirective, warningModes);
+                return;
+            }
+
+            var warningMode = result.LastTerminal.Token.Kind;
             var parsedMode = WarningMode.Undefined;
 
             switch (warningMode) {
@@ -503,7 +516,7 @@ namespace PasPasPas.Parsing.Parser {
                     parsedMode = WarningMode.Off;
                     break;
 
-                case PascalToken.Default:
+                case TokenKind.Default:
                     parsedMode = WarningMode.Default;
                     break;
 
@@ -512,10 +525,15 @@ namespace PasPasPas.Parsing.Parser {
                     break;
             }
 
-            if (parsedMode != WarningMode.Undefined && Options.Warnings.HasWarningIdent(warningType))
-                Options.Warnings.SetModeByIdentifier(warningType, parsedMode);
-            else
-                Unexpected();
+            if (parsedMode != WarningMode.Undefined && Options.Warnings.HasWarningIdent(warningType)) {
+                result.WarningType = warningType;
+                result.Mode = parsedMode;
+            }
+            else {
+                result.WarningType = null;
+                result.Mode = WarningMode.Undefined;
+                ErrorLastPart(result, CompilerDirectiveParserErrors.InvalidWarnDirective, new object[] { });
+            }
         }
 
         private void ParseLibParameter() {
@@ -800,32 +818,32 @@ namespace PasPasPas.Parsing.Parser {
                 ParseLongSafeDivideSwitch(parent);
             }
 
-            else if (Optional(PascalToken.RangeChecks)) {
-                ParseLongRangeChecksSwitch();
+            else if (Match(PascalToken.RangeChecks)) {
+                ParseLongRangeChecksSwitch(parent);
             }
 
-            else if (Optional(PascalToken.StackFramesSwitchLong)) {
-                ParseLongStackFramesSwitch();
+            else if (Match(PascalToken.StackFramesSwitchLong)) {
+                ParseLongStackFramesSwitch(parent);
             }
 
-            else if (Optional(PascalToken.ZeroBaseStrings)) {
-                ParseZeroBasedStringSwitch();
+            else if (Match(PascalToken.ZeroBaseStrings)) {
+                ParseZeroBasedStringSwitch(parent);
             }
 
-            else if (Optional(PascalToken.WritableConstSwitchLong)) {
-                ParseLongWritableConstSwitch();
+            else if (Match(PascalToken.WritableConstSwitchLong)) {
+                ParseLongWritableConstSwitch(parent);
             }
 
-            else if (Optional(PascalToken.WeakLinkRtti)) {
-                ParseWeakLinkRttiSwitch();
+            else if (Match(PascalToken.WeakLinkRtti)) {
+                ParseWeakLinkRttiSwitch(parent);
             }
 
-            else if (Optional(PascalToken.WeakPackageUnit)) {
+            else if (Match(PascalToken.WeakPackageUnit)) {
                 ParseWeakPackageUnitSwitch();
             }
 
-            else if (Optional(PascalToken.Warnings)) {
-                ParseWarningsSwitch();
+            else if (Match(PascalToken.Warnings)) {
+                ParseWarningsSwitch(parent);
             }
 
             else if (Optional(PascalToken.VarStringCheckSwitchLong)) {
@@ -1088,17 +1106,18 @@ namespace PasPasPas.Parsing.Parser {
             Unexpected();
         }
 
-        private void ParseWarningsSwitch() {
-            if (Optional(PascalToken.On)) {
-                CompilerOptions.Warnings.Value = CompilerWarnings.Enable;
-                return;
-            }
+        private void ParseWarningsSwitch(ISyntaxPart parent) {
+            Warnings result = CreateByTerminal<Warnings>(parent);
 
-            if (Optional(PascalToken.Off)) {
-                CompilerOptions.Warnings.Value = CompilerWarnings.Disable;
-                return;
+            if (ContinueWith(result, PascalToken.On)) {
+                result.Mode = CompilerWarnings.Enable;
             }
-            Unexpected();
+            else if (ContinueWith(result, PascalToken.Off)) {
+                result.Mode = CompilerWarnings.Disable;
+            }
+            else {
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidWarningsDirective, new[] { PascalToken.On, PascalToken.Off });
+            }
         }
 
         private void ParseWeakPackageUnitSwitch() {
@@ -1114,69 +1133,74 @@ namespace PasPasPas.Parsing.Parser {
             Unexpected();
         }
 
-        private void ParseWeakLinkRttiSwitch() {
-            if (Optional(PascalToken.On)) {
-                CompilerOptions.WeakLinkRtti.Value = RttiLinkMode.LinkWeakRtti;
-                return;
-            }
+        private void ParseWeakLinkRttiSwitch(ISyntaxPart parent) {
+            WeakLinkRtti result = CreateByTerminal<WeakLinkRtti>(parent);
 
-            if (Optional(PascalToken.Off)) {
-                CompilerOptions.WeakLinkRtti.Value = RttiLinkMode.LinkFullRtti;
-                return;
+            if (ContinueWith(result, PascalToken.On)) {
+                result.Mode = RttiLinkMode.LinkWeakRtti;
             }
-            Unexpected();
+            else if (ContinueWith(result, PascalToken.Off)) {
+                result.Mode = RttiLinkMode.LinkFullRtti;
+            }
+            else {
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidWeakLinkRttiDirective, new[] { PascalToken.On, PascalToken.Off });
+            }
         }
 
-        private void ParseLongWritableConstSwitch() {
-            if (Optional(PascalToken.On)) {
-                CompilerOptions.WritableConstants.Value = ConstantValues.Writable;
-                return;
-            }
+        private void ParseLongWritableConstSwitch(ISyntaxPart parent) {
+            WritableConsts result = CreateByTerminal<WritableConsts>(parent);
 
-            if (Optional(PascalToken.Off)) {
-                CompilerOptions.WritableConstants.Value = ConstantValues.Constant;
-                return;
+            if (ContinueWith(result, PascalToken.On)) {
+                result.Mode = ConstantValues.Writable;
             }
-            Unexpected();
+            else if (ContinueWith(result, PascalToken.Off)) {
+                result.Mode = ConstantValues.Constant;
+            }
+            else {
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidWritableConstantsDirective, new[] { PascalToken.On, PascalToken.Off });
+            }
         }
 
-        private void ParseZeroBasedStringSwitch() {
-            if (Optional(PascalToken.On)) {
-                CompilerOptions.IndexOfFirstCharInString.Value = FirstCharIndex.IsZero;
-                return;
-            }
+        private void ParseZeroBasedStringSwitch(ISyntaxPart parent) {
+            ZeroBasedStrings result = CreateByTerminal<ZeroBasedStrings>(parent);
 
-            if (Optional(PascalToken.Off)) {
-                CompilerOptions.IndexOfFirstCharInString.Value = FirstCharIndex.IsOne;
-                return;
+            if (ContinueWith(result, PascalToken.On)) {
+                result.Mode = FirstCharIndex.IsZero;
             }
-            Unexpected();
+            else if (ContinueWith(result, PascalToken.Off)) {
+                result.Mode = FirstCharIndex.IsOne;
+            }
+            else {
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidZeroBasedStringsDirective, new[] { PascalToken.On, PascalToken.Off });
+            }
         }
 
-        private void ParseLongStackFramesSwitch() {
-            if (Optional(PascalToken.On)) {
-                CompilerOptions.StackFrames.Value = StackFrameGeneration.EnableFrames;
-                return;
-            }
+        private void ParseLongStackFramesSwitch(ISyntaxPart parent) {
+            StackFrames result = CreateByTerminal<StackFrames>(parent);
 
-            if (Optional(PascalToken.Off)) {
-                CompilerOptions.StackFrames.Value = StackFrameGeneration.DisableFrames;
-                return;
+            if (ContinueWith(result, PascalToken.On)) {
+                result.Mode = StackFrameGeneration.EnableFrames;
             }
-            Unexpected();
+            else if (ContinueWith(result, PascalToken.Off)) {
+                result.Mode = StackFrameGeneration.DisableFrames;
+            }
+            else {
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidStackFramesDirective, new[] { PascalToken.On, PascalToken.Off });
+            }
         }
 
-        private void ParseLongRangeChecksSwitch() {
-            if (Optional(PascalToken.On)) {
-                CompilerOptions.RangeChecks.Value = RuntimeRangeChecks.EnableRangeChecks;
-                return;
-            }
+        private void ParseLongRangeChecksSwitch(ISyntaxPart parent) {
+            RangeChecks result = CreateByTerminal<RangeChecks>(parent);
 
-            if (Optional(PascalToken.Off)) {
-                CompilerOptions.RangeChecks.Value = RuntimeRangeChecks.DisableRangeChecks;
-                return;
+            if (ContinueWith(result, PascalToken.On)) {
+                result.Mode = RuntimeRangeChecks.EnableRangeChecks;
             }
-            Unexpected();
+            else if (ContinueWith(result, PascalToken.Off)) {
+                result.Mode = RuntimeRangeChecks.DisableRangeChecks;
+            }
+            else {
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidRangeCheckDirective, new[] { PascalToken.On, PascalToken.Off });
+            }
         }
 
         private void ParseLongSafeDivideSwitch(ISyntaxPart parent) {
@@ -1582,13 +1606,13 @@ namespace PasPasPas.Parsing.Parser {
                 ParseSaveDivideSwitch(parent);
             }
             else if (Match(PascalToken.IncludeRessource)) {
-                ParseIncludeRessource();
+                ParseIncludeRessource(parent);
             }
             else if (Match(PascalToken.StackFramesSwitch)) {
-                ParseStackFramesSwitch();
+                ParseStackFramesSwitch(parent);
             }
             else if (Match(PascalToken.WritableConstSwitch)) {
-                ParseWritableConstSwitch();
+                ParseWritableConstSwitch(parent);
             }
             else if (Match(PascalToken.VarStringCheckSwitch)) {
                 ParseVarStringCheckSwitch();
@@ -1732,56 +1756,54 @@ namespace PasPasPas.Parsing.Parser {
             return false;
         }
 
-        private bool ParseWritableConstSwitch() {
-            FetchNextToken();
+        private void ParseWritableConstSwitch(ISyntaxPart parent) {
+            WritableConsts result = CreateByTerminal<WritableConsts>(parent);
 
-            if (Optional(TokenKind.Plus)) {
-                CompilerOptions.WritableConstants.Value = ConstantValues.Writable;
-                return true;
+            if (ContinueWith(result, TokenKind.Plus)) {
+                result.Mode = ConstantValues.Writable;
             }
-
-            if (Optional(TokenKind.Minus)) {
-                CompilerOptions.WritableConstants.Value = ConstantValues.Constant;
-                return true;
+            else if (ContinueWith(result, TokenKind.Minus)) {
+                result.Mode = ConstantValues.Constant;
             }
-
-            return false;
+            else {
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidWritableConstantsDirective, new[] { TokenKind.Plus, TokenKind.Minus });
+            }
         }
 
-        private bool ParseStackFramesSwitch() {
-            FetchNextToken();
+        private void ParseStackFramesSwitch(ISyntaxPart parent) {
+            StackFrames result = CreateByTerminal<StackFrames>(parent);
 
-            if (Optional(TokenKind.Plus)) {
-                CompilerOptions.StackFrames.Value = StackFrameGeneration.EnableFrames;
-                return true;
+            if (ContinueWith(result, TokenKind.Plus)) {
+                result.Mode = StackFrameGeneration.EnableFrames;
             }
-
-            if (Optional(TokenKind.Minus)) {
-                CompilerOptions.StackFrames.Value = StackFrameGeneration.DisableFrames;
-                return true;
+            else if (ContinueWith(result, TokenKind.Minus)) {
+                result.Mode = StackFrameGeneration.DisableFrames;
             }
-
-            return false;
+            else {
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidStackFramesDirective, new[] { TokenKind.Plus, TokenKind.Minus });
+            }
         }
 
-        private bool ParseIncludeRessource() {
+        private void ParseIncludeRessource(ISyntaxPart parent) {
+
+            if (LookAhead(1, TokenKind.Plus, TokenKind.Minus)) {
+                RangeChecks result = CreateByTerminal<RangeChecks>(parent);
+
+                if (ContinueWith(result, TokenKind.Plus)) {
+                    result.Mode = RuntimeRangeChecks.EnableRangeChecks;
+                }
+                else if (ContinueWith(result, TokenKind.Minus)) {
+                    result.Mode = RuntimeRangeChecks.DisableRangeChecks;
+                }
+                return;
+            }
+
             FetchNextToken();
-
-            if (Optional(TokenKind.Plus)) {
-                CompilerOptions.RangeChecks.Value = RuntimeRangeChecks.EnableRangeChecks;
-                return true;
-            }
-
-            if (Optional(TokenKind.Minus)) {
-                CompilerOptions.RangeChecks.Value = RuntimeRangeChecks.DisableRangeChecks;
-                return true;
-            }
-
             var sourcePath = CurrentToken().FilePath;
             if (!ParseResourceFileName(sourcePath))
-                return false;
+                return;
 
-            return true;
+            return;
         }
 
         private string ParseFileName() {

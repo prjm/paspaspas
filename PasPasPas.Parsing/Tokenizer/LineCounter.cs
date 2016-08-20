@@ -1,11 +1,9 @@
-﻿using System;
-
-namespace PasPasPas.Parsing.Tokenizer {
+﻿namespace PasPasPas.Parsing.Tokenizer {
 
     /// <summary>
     ///     newline style
     /// </summary>
-    public enum NewlineStyle {
+    public enum NewLineStyle {
 
         /// <summary>
         ///     undefined newline style
@@ -67,12 +65,12 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <summary>
         ///     newline style
         /// </summary>
-        private NewlineStyle style = NewlineStyle.Undefined;
+        private NewLineStyle style = NewLineStyle.Undefined;
 
         /// <summary>
         ///     newline style
         /// </summary>
-        public NewlineStyle Style => style;
+        public NewLineStyle Style => style;
 
         /// <summary>
         ///     flag to indicate following charcaters
@@ -88,11 +86,11 @@ namespace PasPasPas.Parsing.Tokenizer {
             bool countLine = false;
 
             if (input == '\r') {
-                countLine = SetStyle(NewlineStyle.Cr);
+                countLine = SetStyle(NewLineStyle.Cr);
                 isFollowing = true;
             }
             else if (input == '\n') {
-                countLine = SetStyle(NewlineStyle.Lf);
+                countLine = SetStyle(NewLineStyle.Lf);
                 isFollowing = true;
             }
             else {
@@ -110,44 +108,44 @@ namespace PasPasPas.Parsing.Tokenizer {
             return false;
         }
 
-        private bool SetStyle(NewlineStyle followingStyle) {
-            if (style == NewlineStyle.Undefined) {
+        private bool SetStyle(NewLineStyle followingStyle) {
+            if (style == NewLineStyle.Undefined) {
                 style = followingStyle;
                 return true;
             }
 
-            if (style == followingStyle && (style == NewlineStyle.Cr || style == NewlineStyle.Lf))
+            if (style == followingStyle && (style == NewLineStyle.Cr || style == NewLineStyle.Lf))
                 return true;
 
-            if (!isFollowing && (style == NewlineStyle.CrLf || style == NewlineStyle.LfCr))
+            if (!isFollowing && (style == NewLineStyle.CrLf || style == NewLineStyle.LfCr))
                 return true;
 
-            if (style == NewlineStyle.Cr || style == NewlineStyle.CrLf) {
-                if (followingStyle == NewlineStyle.Lf) {
+            if (style == NewLineStyle.Cr || style == NewLineStyle.CrLf) {
+                if (followingStyle == NewLineStyle.Lf) {
                     if (isFollowing) {
-                        style = NewlineStyle.CrLf;
+                        style = NewLineStyle.CrLf;
                         return false;
                     }
 
-                    style = NewlineStyle.Mixed;
+                    style = NewLineStyle.Mixed;
                     return true;
                 }
             }
 
-            if (style == NewlineStyle.Lf || style == NewlineStyle.LfCr) {
-                if (followingStyle == NewlineStyle.Cr) {
+            if (style == NewLineStyle.Lf || style == NewLineStyle.LfCr) {
+                if (followingStyle == NewLineStyle.Cr) {
                     if (isFollowing) {
-                        style = NewlineStyle.LfCr;
+                        style = NewLineStyle.LfCr;
                         return false;
                     }
 
-                    style = NewlineStyle.Mixed;
+                    style = NewLineStyle.Mixed;
                     return true;
                 }
             }
 
             if (style != followingStyle)
-                style = NewlineStyle.Mixed;
+                style = NewLineStyle.Mixed;
 
             return true;
         }
@@ -157,7 +155,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         /// <param name="currentChar">char to test</param>
         /// <returns><c>true</c> if the character can trigger a new line</returns>
-        public static bool IsNewlineChar(char currentChar)
+        public static bool IsNewLineChar(char currentChar)
             => currentChar == '\r' || currentChar == '\n';
     }
 }

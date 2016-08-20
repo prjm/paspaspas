@@ -881,7 +881,7 @@ namespace PasPasPas.Parsing.Tokenizer {
             while (state.IsValid) {
                 char currentChar = state.FetchAndAppendChar();
 
-                if (!LineCounter.IsNewlineChar(currentChar)) {
+                if (!LineCounter.IsNewLineChar(currentChar)) {
                     state.AppendChar(currentChar);
                 }
                 else {

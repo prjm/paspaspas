@@ -64,7 +64,7 @@ namespace PasPasPas.Parsing.Parser {
             TokenKind.Packed,
             TokenKind.Procedure,
             TokenKind.Program,
-            PascalToken.Property,
+            TokenKind.Property,
             PascalToken.Raise,
             TokenKind.Record,
             PascalToken.Repeat,
@@ -248,7 +248,7 @@ namespace PasPasPas.Parsing.Parser {
                 return ParseCallConvention();
             }
 
-            if (Match(TokenKind.Far, TokenKind.Local, PascalToken.Near)) {
+            if (Match(TokenKind.Far, TokenKind.Local, TokenKind.Near)) {
                 return ParseOldCallConvention();
             }
 
@@ -306,18 +306,18 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("ExternalSpecifier", "('Name' | 'Index' ) ConstExpression")]
         private ExternalSpecifier ParseExternalSpecifier() {
-            if (!Match(PascalToken.Name, PascalToken.Index))
+            if (!Match(PascalToken.Name, TokenKind.Index))
                 return null;
 
             var result = new ExternalSpecifier(this);
-            result.Kind = Require(PascalToken.Name, PascalToken.Index).Kind;
+            result.Kind = Require(PascalToken.Name, TokenKind.Index).Kind;
             result.Expression = ParseConstantExpression();
             return result;
         }
 
         private SyntaxPartBase ParseOldCallConvention() {
             var result = new OldCallConvention(this);
-            result.Kind = Require(PascalToken.Near, TokenKind.Far, TokenKind.Local).Kind;
+            result.Kind = Require(TokenKind.Near, TokenKind.Far, TokenKind.Local).Kind;
             Require(TokenKind.Semicolon);
             return result;
         }
@@ -964,7 +964,7 @@ namespace PasPasPas.Parsing.Parser {
                 return ParseHint();
             }
 
-            if (Match(PascalToken.DispId)) {
+            if (Match(TokenKind.DispId)) {
                 return ParseDispIdDirective();
             }
 
@@ -1100,7 +1100,7 @@ namespace PasPasPas.Parsing.Parser {
                 Require(TokenKind.CloseParen);
             }
 
-            if (Optional(PascalToken.Index)) {
+            if (Optional(TokenKind.Index)) {
                 result.IndexParameter = ParseExpression();
             }
 
@@ -1556,7 +1556,7 @@ namespace PasPasPas.Parsing.Parser {
                 return result;
             }
 
-            if (Match(PascalToken.Property)) {
+            if (Match(TokenKind.Property)) {
                 result.PropertyDeclaration = ParsePropertyDeclaration();
                 return result;
             }
@@ -1676,7 +1676,7 @@ namespace PasPasPas.Parsing.Parser {
                 return result;
             }
 
-            if (Match(PascalToken.Property)) {
+            if (Match(TokenKind.Property)) {
                 result.PropertyDeclaration = ParsePropertyDeclaration();
                 return result;
             }
@@ -1787,7 +1787,7 @@ namespace PasPasPas.Parsing.Parser {
                 return result;
             }
 
-            if (Match(PascalToken.Property)) {
+            if (Match(TokenKind.Property)) {
                 unexpected = false;
                 result.Property = ParsePropertyDeclaration();
                 return result;
@@ -1844,7 +1844,7 @@ namespace PasPasPas.Parsing.Parser {
                 return result;
             }
 
-            if (Match(PascalToken.Property)) {
+            if (Match(TokenKind.Property)) {
                 result.PropertyDeclaration = ParsePropertyDeclaration();
                 return result;
             }
@@ -1914,7 +1914,7 @@ namespace PasPasPas.Parsing.Parser {
                 return result;
             }
 
-            if (Match(PascalToken.Property)) {
+            if (Match(TokenKind.Property)) {
                 result.PropertyDeclaration = ParsePropertyDeclaration();
                 return result;
             }
@@ -1957,7 +1957,7 @@ namespace PasPasPas.Parsing.Parser {
         [Rule("PropertyDeclaration", "'property' Identifier [ '[' FormalParameters  ']' ] [ ':' NamespaceName ] [ 'index' Expression ]  { ClassPropertySpecifier } ';' ")]
         private ClassProperty ParsePropertyDeclaration() {
             var result = new ClassProperty(this);
-            Require(PascalToken.Property);
+            Require(TokenKind.Property);
             result.PropertyName = RequireIdentifier();
             if (Optional(TokenKind.OpenBraces)) {
                 result.ArrayIndex = ParseFormalParameters();
@@ -1968,11 +1968,11 @@ namespace PasPasPas.Parsing.Parser {
                 result.TypeName = ParseNamespaceName();
             }
 
-            if (Optional(PascalToken.Index)) {
+            if (Optional(TokenKind.Index)) {
                 result.PropertyIndex = ParseExpression();
             }
 
-            while (Match(PascalToken.Read, PascalToken.Write, PascalToken.Add, PascalToken.Remove, PascalToken.ReadOnly, PascalToken.WriteOnly, PascalToken.DispId)) {
+            while (Match(TokenKind.Read, TokenKind.Write, TokenKind.Add, TokenKind.Remove, TokenKind.ReadOnly, TokenKind.WriteOnly, TokenKind.DispId)) {
                 result.Add(ParseClassPropertyAccessSpecifier());
             }
 
@@ -1985,12 +1985,12 @@ namespace PasPasPas.Parsing.Parser {
         private ClassPropertySpecifier ParseClassPropertyAccessSpecifier() {
             var result = new ClassPropertySpecifier(this);
 
-            if (Match(PascalToken.Read, PascalToken.Write, PascalToken.Add, PascalToken.Remove)) {
+            if (Match(TokenKind.Read, TokenKind.Write, TokenKind.Add, TokenKind.Remove)) {
                 result.PropertyReadWrite = ParseClassPropertyReadWrite();
                 return result;
             }
 
-            if (Match(PascalToken.ReadOnly, PascalToken.WriteOnly, PascalToken.DispId)) {
+            if (Match(TokenKind.ReadOnly, TokenKind.WriteOnly, TokenKind.DispId)) {
                 result.PropertyDispInterface = ParseClassPropertyDispInterface();
                 return result;
             }
@@ -2002,7 +2002,7 @@ namespace PasPasPas.Parsing.Parser {
                 return result;
             }
 
-            if (Optional(PascalToken.Default)) {
+            if (Optional(TokenKind.Default)) {
                 result.IsDefault = true;
                 if (!Optional(TokenKind.Semicolon)) {
                     result.DefaultProperty = ParseExpression();
@@ -2030,13 +2030,13 @@ namespace PasPasPas.Parsing.Parser {
         private ClassPropertyDispInterface ParseClassPropertyDispInterface() {
             var result = new ClassPropertyDispInterface(this);
 
-            if (Optional(PascalToken.ReadOnly)) {
+            if (Optional(TokenKind.ReadOnly)) {
                 result.ReadOnly = true;
                 Require(TokenKind.Semicolon);
                 return result;
             }
 
-            if (Optional(PascalToken.WriteOnly)) {
+            if (Optional(TokenKind.WriteOnly)) {
                 result.WriteOnly = true;
                 Require(TokenKind.Semicolon);
                 return result;
@@ -2049,7 +2049,7 @@ namespace PasPasPas.Parsing.Parser {
         [Rule("DispIdDirective", "'dispid' Expression ';'")]
         private DispIdDirective ParseDispIdDirective() {
             var result = new DispIdDirective(this);
-            Require(PascalToken.DispId);
+            Require(TokenKind.DispId);
             result.DispExpression = ParseExpression();
             Require(TokenKind.Semicolon);
             return result;
@@ -2059,7 +2059,7 @@ namespace PasPasPas.Parsing.Parser {
         private ClassPropertyReadWrite ParseClassPropertyReadWrite() {
             var result = new ClassPropertyReadWrite(this);
 
-            result.Kind = Require(PascalToken.Read, PascalToken.Write, PascalToken.Add, PascalToken.Remove).Kind;
+            result.Kind = Require(TokenKind.Read, TokenKind.Write, TokenKind.Add, TokenKind.Remove).Kind;
             result.Member = ParseNamespaceName();
 
             return result;

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using PasPasPas.Api;
+﻿using System.Collections.Generic;
 using PasPasPas.Infrastructure.Input;
 using PasPasPas.Parsing.SyntaxTree;
 
@@ -39,7 +34,7 @@ namespace PasPasPas.Parsing.Tokenizer {
             ProcessToken(token, counter);
         }
 
-        private void ProcessToken(PascalToken token, LineCounter counter) {
+        private static void ProcessToken(PascalToken token, LineCounter counter) {
             token.StartPosition = new TextFilePosition(counter.Line, counter.Column);
 
             for (int index = 0; index < token.Value.Length; index++) {

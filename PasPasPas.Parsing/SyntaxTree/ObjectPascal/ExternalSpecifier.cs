@@ -34,7 +34,7 @@ namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
                     result.Keyword("name");
                     break;
 
-                case PascalToken.Index:
+                case TokenKind.Index:
                     result.Keyword("index");
                     break;
             }

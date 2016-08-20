@@ -248,10 +248,63 @@ namespace PasPasPas.Parsing.Parser {
         /* {5c6abe36-c393-40db-9497-7937e2c7fa9a} */
 
         /// <summary>
-        ///     invalid safe divide
+        ///     invalid safe divide directive
         /// </summary>
         public static readonly Guid InvalidSafeDivide
             = new Guid(new byte[] { 0xdc, 0xde, 0x27, 0x28, 0xb0, 0x6d, 0x75, 0x48, 0xa6, 0x9f, 0x61, 0xad, 0x15, 0xea, 0x5b, 0x9e });
         /* {2827dedc-6db0-4875-a69f-61ad15ea5b9e} */
+
+
+        /// <summary>
+        ///     invalid range check directive
+        /// </summary>
+        public static readonly Guid InvalidRangeCheckDirective
+            = new Guid(new byte[] { 0xf9, 0x92, 0x81, 0x3, 0x56, 0x43, 0x5d, 0x4c, 0x9d, 0xf1, 0x71, 0x6d, 0x79, 0x5d, 0xb1, 0x9f });
+        /* {038192f9-4356-4c5d-9df1-716d795db19f} */
+
+        /// <summary>
+        ///    invalid stack frames directive
+        /// </summary>
+        public static readonly Guid InvalidStackFramesDirective
+            = new Guid(new byte[] { 0x6d, 0xe5, 0xb3, 0xe, 0x45, 0xb7, 0xa2, 0x4f, 0x95, 0x85, 0x11, 0x16, 0xc4, 0x6, 0x4, 0xa0 });
+        /* {0eb3e56d-b745-4fa2-9585-1116c40604a0} */
+
+
+        /// <summary>
+        ///     invalid zero based string directive
+        /// </summary>
+        public static readonly Guid InvalidZeroBasedStringsDirective
+            = new Guid(new byte[] { 0xa5, 0x94, 0xc4, 0x9a, 0x8, 0xb3, 0xdf, 0x4a, 0x9e, 0xaa, 0xd2, 0x25, 0x33, 0x8b, 0x65, 0xd0 });
+        /* {9ac494a5-b308-4adf-9eaa-d225338b65d0} */
+
+        /// <summary>
+        ///     invalid writeable constants directive
+        /// </summary>  
+        public static readonly Guid InvalidWritableConstantsDirective
+            = new Guid(new byte[] { 0x7c, 0xbd, 0x56, 0x8c, 0x76, 0xaf, 0x60, 0x42, 0x9a, 0x35, 0xee, 0x1f, 0x4a, 0x48, 0x9, 0xb0 });
+        /* {8c56bd7c-af76-4260-9a35-ee1f4a4809b0} */
+
+
+        /// <summary>
+        ///     invalid weak link directive
+        /// </summary>
+        public static readonly Guid InvalidWeakLinkRttiDirective
+            = new Guid(new byte[] { 0x2a, 0xa9, 0x19, 0xdd, 0x1a, 0x55, 0x19, 0x41, 0xa7, 0xfe, 0x1b, 0xc1, 0xfb, 0xdb, 0x9e, 0xf1 });
+        /* {dd19a92a-551a-4119-a7fe-1bc1fbdb9ef1} */
+
+        /// <summary>
+        ///     invalid warnings directive
+        /// </summary>
+        public static readonly Guid InvalidWarningsDirective
+            = new Guid(new byte[] { 0xb9, 0x1a, 0x56, 0xa0, 0x11, 0x94, 0x3c, 0x43, 0x89, 0x2c, 0x46, 0xde, 0xb9, 0x71, 0x91, 0x71 });
+        /* {a0561ab9-9411-433c-892c-46deb9719171} */
+
+        /// <summary>
+        ///     invalid warn directive
+        /// </summary>
+        public static readonly Guid InvalidWarnDirective
+            = new Guid(new byte[] { 0xa, 0xcb, 0x14, 0x65, 0xd6, 0xbb, 0xbd, 0x48, 0x88, 0x37, 0xbc, 0x7b, 0xf1, 0x81, 0xbe, 0xa8 });
+        /* {6514cb0a-bbd6-48bd-8837-bc7bf181bea8} */
+
     }
 }

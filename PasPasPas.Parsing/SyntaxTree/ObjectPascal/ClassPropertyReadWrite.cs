@@ -31,19 +31,19 @@ namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
         public override void ToFormatter(PascalFormatter result) {
             switch (Kind) {
 
-                case PascalToken.Read:
+                case TokenKind.Read:
                     result.Keyword("read");
                     break;
 
-                case PascalToken.Write:
+                case TokenKind.Write:
                     result.Keyword("write");
                     break;
 
-                case PascalToken.Add:
+                case TokenKind.Add:
                     result.Keyword("add");
                     break;
 
-                case PascalToken.Remove:
+                case TokenKind.Remove:
                     result.Keyword("remove");
                     break;
 

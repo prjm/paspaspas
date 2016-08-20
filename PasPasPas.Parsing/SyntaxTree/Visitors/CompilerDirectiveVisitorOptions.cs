@@ -29,6 +29,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             => Environment.Options.ConditionalCompilation;
 
         /// <summary>
+        ///     warnings
+        /// </summary>
+        public WarningOptions Warnings
+            => Environment.Options.Warnings;
+
+        /// <summary>
         ///     parsing environemnt
         /// </summary>
         public ParserServices Environment
