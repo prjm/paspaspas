@@ -1,5 +1,6 @@
 ﻿using PasPasPas.Parsing.SyntaxTree.CompilerDirectives;
 using PasPasPas.Parsing.Parser;
+using PasPasPas.Options.DataTypes;
 
 namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
@@ -254,7 +255,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <param name="syntaxPart"></param>
         /// <param name="parameter"></param>
         public void BeginVisitItem(HppEmit syntaxPart, CompilerDirectiveVisitorOptions parameter) {
-            if (syntaxPart.Mode == Options.DataTypes.HppEmitMode.Undefined)
+            if (syntaxPart.Mode == HppEmitMode.Undefined)
                 return;
             parameter.Meta.HeaderEmit(syntaxPart.Mode, syntaxPart.EmitValue);
         }
@@ -410,6 +411,84 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             parameter.Warnings.SetModeByIdentifier(syntaxPart.WarningType, syntaxPart.Mode);
         }
 
+        /// <summary>
+        ///     var string checks
+        /// </summary>
+        /// <param name="syntaxPart"></param>
+        /// <param name="parameter"></param>
+        public void BeginVisitItem(VarStringChecks syntaxPart, CompilerDirectiveVisitorOptions parameter) {
+            parameter.CompilerOptions.VarStringChecks.Value = syntaxPart.Mode;
+        }
 
+        /// <summary>
+        ///     type chedk pointers
+        /// </summary>
+        /// <param name="syntaxPart"></param>
+        /// <param name="parameter"></param>
+        public void BeginVisitItem(TypedPointers syntaxPart, CompilerDirectiveVisitorOptions parameter) {
+            parameter.CompilerOptions.TypedPointers.Value = syntaxPart.Mode;
+        }
+
+        /// <summary>
+        ///     type chedk pointers
+        /// </summary>
+        /// <param name="syntaxPart"></param>
+        /// <param name="parameter"></param>
+        public void BeginVisitItem(SymbolDefinitions syntaxPart, CompilerDirectiveVisitorOptions parameter) {
+
+            if (syntaxPart.Mode != SymbolDefinitionInfo.Undefined)
+                parameter.CompilerOptions.SymbolDefinitions.Value = syntaxPart.Mode;
+
+            if (syntaxPart.ReferencesMode != SymbolReferenceInfo.Undefined)
+                parameter.CompilerOptions.SymbolReferences.Value = syntaxPart.ReferencesMode;
+        }
+
+
+        /// <summary>
+        ///     type chedk pointers
+        /// </summary>
+        /// <param name="syntaxPart"></param>
+        /// <param name="parameter"></param>
+        public void BeginVisitItem(StrongLinkTypes syntaxPart, CompilerDirectiveVisitorOptions parameter) {
+            parameter.CompilerOptions.LinkAllTypes.Value = syntaxPart.Mode;
+        }
+
+
+        /// <summary>
+        ///     scoped enums directive
+        /// </summary>
+        /// <param name="syntaxPart"></param>
+        /// <param name="parameter"></param>
+        public void BeginVisitItem(ScopedEnums syntaxPart, CompilerDirectiveVisitorOptions parameter) {
+            parameter.CompilerOptions.ScopedEnums.Value = syntaxPart.Mode;
+        }
+
+        /// <summary>
+        ///     published rtti
+        /// </summary>
+        /// <param name="syntaxPart"></param>
+        /// <param name="parameter"></param>
+        public void BeginVisitItem(PublishedRtti syntaxPart, CompilerDirectiveVisitorOptions parameter) {
+            parameter.CompilerOptions.PublishedRtti.Value = syntaxPart.Mode;
+        }
+
+        /// <summary>
+        ///      runtime only
+        /// </summary>
+        /// <param name="syntaxPart"></param>
+        /// <param name="parameter"></param>
+        public void BeginVisitItem(RunOnly syntaxPart, CompilerDirectiveVisitorOptions parameter) {
+            parameter.CompilerOptions.RuntimeOnlyPackage.Value = syntaxPart.Mode;
+        }
+
+
+        /// <summary>
+        ///      legacy if end
+        /// </summary>
+        /// <param name="syntaxPart"></param>
+        /// <param name="parameter"></param>
+        public void BeginVisitItem(LegacyIfEnd syntaxPart, CompilerDirectiveVisitorOptions parameter) {
+            parameter.CompilerOptions.LegacyIfEnd.Value = syntaxPart.Mode;
+        }
     }
 }

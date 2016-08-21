@@ -10,9 +10,4 @@ Missing implementation details:
 - remove api / internal namespaces
 - {$MESSAGE} does not emit mesages
 - check range of literals during parsing
-
-Complete implementation details:
-
-- remove services
-
-Refactor to visitor: 
+- check $legacyifend

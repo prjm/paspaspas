@@ -306,5 +306,68 @@ namespace PasPasPas.Parsing.Parser {
             = new Guid(new byte[] { 0xa, 0xcb, 0x14, 0x65, 0xd6, 0xbb, 0xbd, 0x48, 0x88, 0x37, 0xbc, 0x7b, 0xf1, 0x81, 0xbe, 0xa8 });
         /* {6514cb0a-bbd6-48bd-8837-bc7bf181bea8} */
 
+
+        /// <summary>
+        ///     invalid string check directive
+        /// </summary>
+        public static readonly Guid InvalidStringCheckDirective
+            = new Guid(new byte[] { 0x2f, 0xbe, 0x59, 0x6f, 0x17, 0x19, 0xb3, 0x44, 0x92, 0xf4, 0x67, 0x6a, 0x45, 0x96, 0x43, 0xb3 });
+        /* {6f59be2f-1917-44b3-92f4-676a459643b3} */
+
+
+        /// <summary>        
+        ///     invalid type checked pointer directive
+        /// </summary>
+        public static readonly Guid InvalidTypeCheckedPointersDirective
+            = new Guid(new byte[] { 0x7a, 0x6e, 0x1b, 0x96, 0x6f, 0xa5, 0xf7, 0x48, 0xa7, 0x34, 0xe4, 0x4f, 0x38, 0x8b, 0xab, 0x5c });
+        /* {961b6e7a-a56f-48f7-a734-e44f388bab5c} */
+
+        /// <summary>
+        ///     invlaid definition info switch
+        /// </summary>
+        public static readonly Guid InvalidDefinitionInfoDirective
+            = new Guid(new byte[] { 0x56, 0x24, 0xc5, 0x99, 0x80, 0xb1, 0x76, 0x44, 0x95, 0xf, 0x10, 0x9, 0x6f, 0xf, 0xc8, 0x5e });
+        /* {99c52456-b180-4476-950f-10096f0fc85e} */
+
+        /// <summary>
+        ///     invalid strong link types directive
+        /// </summary>
+        public static readonly Guid InvalidStrongLinkTypesDirective
+            = new Guid(new byte[] { 0xda, 0xa6, 0xe2, 0xd7, 0x11, 0xdf, 0x8f, 0x43, 0xb8, 0x8e, 0xe6, 0xf6, 0x4e, 0xfe, 0x7a, 0xe4 });
+
+        /* {d7e2a6da-df11-438f-b88e-e6f64efe7ae4} */
+
+
+        /// <summary>
+        ///     invalid scoped enums directive
+        /// </summary>
+        public static readonly Guid InvalidScopedEnumsDirective
+         = new Guid(new byte[] { 0x49, 0x11, 0x34, 0x24, 0x4a, 0xa3, 0x4d, 0x40, 0xb0, 0x63, 0x55, 0xf2, 0x2e, 0x6f, 0x5d, 0x70 });
+        /* {24341149-a34a-404d-b063-55f22e6f5d70} */
+
+
+        /// <summary>
+        ///     invalid published rtti directive
+        /// </summary>
+        public static readonly Guid InvalidPublishedRttiDirective
+            = new Guid(new byte[] { 0x7f, 0xf9, 0x72, 0x63, 0xf7, 0xd4, 0xca, 0x49, 0x89, 0x84, 0x46, 0x6f, 0xe9, 0x18, 0x17, 0x4a });
+        /* {6372f97f-d4f7-49ca-8984-466fe918174a} */
+
+
+        /// <summary>
+        ///     invalid run only directive
+        /// </summary>
+        public static readonly Guid InvalidRunOnlyDirective
+            = new Guid(new byte[] { 0xe0, 0xb, 0xf2, 0x89, 0xb9, 0xdb, 0x35, 0x42, 0xb5, 0x9e, 0xc1, 0x4d, 0xf0, 0x13, 0x2c, 0x4 });
+        /* {89f20be0-dbb9-4235-b59e-c14df0132c04} */
+
+
+        /// <summary>
+        ///     invalid legacy if end directive
+        /// </summary>
+        public static readonly Guid InvalidLegacyIfEndDirective
+            = new Guid(new byte[] { 0x65, 0x66, 0x24, 0xec, 0x76, 0x15, 0x6, 0x45, 0xaf, 0x39, 0xe0, 0xf8, 0xe5, 0x87, 0x95, 0x17 });
+        /* {ec246665-1576-4506-af39-e0f8e5879517} */
+
     }
 }

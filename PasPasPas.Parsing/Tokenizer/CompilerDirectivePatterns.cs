@@ -19,7 +19,7 @@ namespace PasPasPas.Parsing.Tokenizer {
             AddPattern(']', TokenKind.CloseBraces);
             AddPattern(',', TokenKind.Comma);
             AddPattern('*', TokenKind.Times);
-            AddPattern(new WhitspaceCharacterClass(), new WhiteSpaceTokenGroupValue());
+            AddPattern(new WhitespaceCharacterClass(), new WhiteSpaceTokenGroupValue());
             AddPattern(new IdentifierCharacterClass() { AllowDots = true }, new IdentifierTokenGroupValue(CompilerDirectiveTokenizer.Keywords) { AllowDots = true });
             AddPattern(new NumberCharacterClass(), new NumberTokenGroupValue());
             AddPattern('$', new HexNumberTokenValue());

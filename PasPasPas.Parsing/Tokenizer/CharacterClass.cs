@@ -74,7 +74,7 @@
     /// <summary>
     ///     matches whitespace
     /// </summary>
-    public class WhitspaceCharacterClass : CharacterClass {
+    public class WhitespaceCharacterClass : CharacterClass {
 
         /// <summary>
         ///     test if the char is whitespace

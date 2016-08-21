@@ -68,6 +68,7 @@
     <Compile Include="SyntaxTree\CompilerDirectives\ImageBase.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\ImplicitBuild.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\IoChecks.cs" />
+    <Compile Include="SyntaxTree\CompilerDirectives\LegacyIfEnd.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\LocalSymbols.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\LongStrings.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\ObjectExport.cs" />
@@ -75,11 +76,18 @@
     <Compile Include="SyntaxTree\CompilerDirectives\Optimization.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\Overflow.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\ParseDenyPackageUnit.cs" />
+    <Compile Include="SyntaxTree\CompilerDirectives\PublishedRtti.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\RangeChecks.cs" />
+    <Compile Include="SyntaxTree\CompilerDirectives\RunOnly.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\SafeDivide.cs" />
+    <Compile Include="SyntaxTree\CompilerDirectives\ScopedEnums.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\StackFrames.cs" />
+    <Compile Include="SyntaxTree\CompilerDirectives\StrongLinkTypes.cs" />
+    <Compile Include="SyntaxTree\CompilerDirectives\SymbolDefinitions.cs" />
+    <Compile Include="SyntaxTree\CompilerDirectives\TypedPointers.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\UnDefineSymbol.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\DefineSymbol.cs" />
+    <Compile Include="SyntaxTree\CompilerDirectives\VarStringChecks.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\Warnings.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\WarnSwitch.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\WeakLinkRtti.cs" />

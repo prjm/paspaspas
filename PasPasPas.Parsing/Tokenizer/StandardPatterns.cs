@@ -39,7 +39,7 @@ namespace PasPasPas.Parsing.Tokenizer {
 
             AddPattern('{', new CurlyBraceCommentTokenValue()).Add('$', new PreprocessorTokenValue());
             AddPattern('$', new HexNumberTokenValue());
-            AddPattern(new WhitspaceCharacterClass(), new WhiteSpaceTokenGroupValue());
+            AddPattern(new WhitespaceCharacterClass(), new WhiteSpaceTokenGroupValue());
             AddPattern(new IdentifierCharacterClass(), new IdentifierTokenGroupValue(StandardTokenizer.Keywords));
             AddPattern(new NumberCharacterClass(), new NumberTokenGroupValue());
             AddPattern(new ControlCharacterClass(), new ControlTokenGroupValue());

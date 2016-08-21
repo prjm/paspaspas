@@ -523,70 +523,102 @@ namespace PasPasPasTests.Parser {
 
         [Fact]
         public void TestVarStringChecks() {
-            RunCompilerDirective("", ShortVarStringChecks.Undefined, () => CompilerOptions.VarStringChecks.Value);
-            RunCompilerDirective("V+", ShortVarStringChecks.EnableChecks, () => CompilerOptions.VarStringChecks.Value);
-            RunCompilerDirective("V-", ShortVarStringChecks.DisableChecks, () => CompilerOptions.VarStringChecks.Value);
-            RunCompilerDirective("VARSTRINGCHECKS ON", ShortVarStringChecks.EnableChecks, () => CompilerOptions.VarStringChecks.Value);
-            RunCompilerDirective("VARSTRINGCHECKS  OFF", ShortVarStringChecks.DisableChecks, () => CompilerOptions.VarStringChecks.Value);
+            Func<object> f = () => CompilerOptions.VarStringChecks.Value;
+            RunCompilerDirective("", ShortVarStringChecks.Undefined, f);
+            RunCompilerDirective("V+", ShortVarStringChecks.EnableChecks, f);
+            RunCompilerDirective("V-", ShortVarStringChecks.DisableChecks, f);
+            RunCompilerDirective("V 3", ShortVarStringChecks.Undefined, f, CompilerDirectiveParserErrors.InvalidStringCheckDirective);
+            RunCompilerDirective("V", ShortVarStringChecks.Undefined, f, CompilerDirectiveParserErrors.InvalidStringCheckDirective);
+            RunCompilerDirective("VARSTRINGCHECKS ON", ShortVarStringChecks.EnableChecks, f);
+            RunCompilerDirective("VARSTRINGCHECKS  OFF", ShortVarStringChecks.DisableChecks, f);
+            RunCompilerDirective("VARSTRINGCHECKS  KAPUTT", ShortVarStringChecks.Undefined, f, CompilerDirectiveParserErrors.InvalidStringCheckDirective);
+            RunCompilerDirective("VARSTRINGCHECKS  ", ShortVarStringChecks.Undefined, f, CompilerDirectiveParserErrors.InvalidStringCheckDirective);
         }
 
         [Fact]
         public void TestTypeCheckedPointers() {
-            RunCompilerDirective("", TypeCheckedPointers.Undefined, () => CompilerOptions.TypedPointers.Value);
-            RunCompilerDirective("T+", TypeCheckedPointers.Enable, () => CompilerOptions.TypedPointers.Value);
-            RunCompilerDirective("T-", TypeCheckedPointers.Disable, () => CompilerOptions.TypedPointers.Value);
-            RunCompilerDirective("TYPEDADDRESS ON", TypeCheckedPointers.Enable, () => CompilerOptions.TypedPointers.Value);
-            RunCompilerDirective("TYPEDADDRESS OFF", TypeCheckedPointers.Disable, () => CompilerOptions.TypedPointers.Value);
+            Func<object> f = () => CompilerOptions.TypedPointers.Value;
+            RunCompilerDirective("", TypeCheckedPointers.Undefined, f);
+            RunCompilerDirective("T+", TypeCheckedPointers.Enable, f);
+            RunCompilerDirective("T-", TypeCheckedPointers.Disable, f);
+            RunCompilerDirective("T 3", TypeCheckedPointers.Undefined, f, CompilerDirectiveParserErrors.InvalidTypeCheckedPointersDirective);
+            RunCompilerDirective("T", TypeCheckedPointers.Undefined, f, CompilerDirectiveParserErrors.InvalidTypeCheckedPointersDirective);
+            RunCompilerDirective("TYPEDADDRESS ON", TypeCheckedPointers.Enable, f);
+            RunCompilerDirective("TYPEDADDRESS OFF", TypeCheckedPointers.Disable, f);
+            RunCompilerDirective("TYPEDADDRESS KAPUTT", TypeCheckedPointers.Undefined, f, CompilerDirectiveParserErrors.InvalidTypeCheckedPointersDirective);
+            RunCompilerDirective("TYPEDADDRESS ", TypeCheckedPointers.Undefined, f, CompilerDirectiveParserErrors.InvalidTypeCheckedPointersDirective);
         }
 
         [Fact]
         public void TestSymbolDefinitionInfo() {
-            RunCompilerDirective("", SymbolDefinitionInfo.Undefined, () => CompilerOptions.SymbolDefinitions.Value);
-            RunCompilerDirective("Y+", SymbolDefinitionInfo.Enable, () => CompilerOptions.SymbolDefinitions.Value);
-            RunCompilerDirective("Y-", SymbolDefinitionInfo.Disable, () => CompilerOptions.SymbolDefinitions.Value);
-            RunCompilerDirective("YD", SymbolDefinitionInfo.Enable, () => CompilerOptions.SymbolDefinitions.Value);
-            RunCompilerDirective("DEFINITIONINFO OFF", SymbolDefinitionInfo.Disable, () => CompilerOptions.SymbolDefinitions.Value);
-            RunCompilerDirective("DEFINITIONINFO ON", SymbolDefinitionInfo.Enable, () => CompilerOptions.SymbolDefinitions.Value);
+            Func<object> f = () => CompilerOptions.SymbolDefinitions.Value;
+            RunCompilerDirective("", SymbolDefinitionInfo.Undefined, f);
+            RunCompilerDirective("Y+", SymbolDefinitionInfo.Enable, f);
+            RunCompilerDirective("Y-", SymbolDefinitionInfo.Disable, f);
+            RunCompilerDirective("YD", SymbolDefinitionInfo.Enable, f);
+            RunCompilerDirective("Y 3", SymbolDefinitionInfo.Undefined, f, CompilerDirectiveParserErrors.InvalidDefinitionInfoDirective);
+            RunCompilerDirective("Y", SymbolDefinitionInfo.Undefined, f, CompilerDirectiveParserErrors.InvalidDefinitionInfoDirective);
+            RunCompilerDirective("DEFINITIONINFO OFF", SymbolDefinitionInfo.Disable, f);
+            RunCompilerDirective("DEFINITIONINFO ON", SymbolDefinitionInfo.Enable, f);
+            RunCompilerDirective("DEFINITIONINFO KAPUTT", SymbolDefinitionInfo.Undefined, f, CompilerDirectiveParserErrors.InvalidDefinitionInfoDirective);
+            RunCompilerDirective("DEFINITIONINFO ", SymbolDefinitionInfo.Undefined, f, CompilerDirectiveParserErrors.InvalidDefinitionInfoDirective);
         }
 
         [Fact]
         public void TestSymbolReferenceInfo() {
-            RunCompilerDirective("", SymbolReferenceInfo.Undefined, () => CompilerOptions.SymbolReferences.Value);
-            RunCompilerDirective("Y-", SymbolReferenceInfo.Disable, () => CompilerOptions.SymbolReferences.Value);
-            RunCompilerDirective("Y+", SymbolReferenceInfo.Enable, () => CompilerOptions.SymbolReferences.Value);
-            RunCompilerDirective("YD", SymbolReferenceInfo.Disable, () => CompilerOptions.SymbolReferences.Value);
-            RunCompilerDirective("REFERENCEINFO ON", SymbolReferenceInfo.Enable, () => CompilerOptions.SymbolReferences.Value);
-            RunCompilerDirective("REFERENCEINFO OFF", SymbolReferenceInfo.Disable, () => CompilerOptions.SymbolReferences.Value);
+            Func<object> f = () => CompilerOptions.SymbolReferences.Value;
+            RunCompilerDirective("", SymbolReferenceInfo.Undefined, f);
+            RunCompilerDirective("Y-", SymbolReferenceInfo.Disable, f);
+            RunCompilerDirective("Y+", SymbolReferenceInfo.Enable, f);
+            RunCompilerDirective("YD", SymbolReferenceInfo.Disable, f);
+            RunCompilerDirective("Y 3", SymbolReferenceInfo.Undefined, f, CompilerDirectiveParserErrors.InvalidDefinitionInfoDirective);
+            RunCompilerDirective("Y", SymbolReferenceInfo.Undefined, f, CompilerDirectiveParserErrors.InvalidDefinitionInfoDirective);
+            RunCompilerDirective("REFERENCEINFO ON", SymbolReferenceInfo.Enable, f);
+            RunCompilerDirective("REFERENCEINFO OFF", SymbolReferenceInfo.Disable, f);
+            RunCompilerDirective("REFERENCEINFO KAPUTT", SymbolReferenceInfo.Undefined, f, CompilerDirectiveParserErrors.InvalidDefinitionInfoDirective);
+            RunCompilerDirective("REFERENCEINFO ", SymbolReferenceInfo.Undefined, f, CompilerDirectiveParserErrors.InvalidDefinitionInfoDirective);
         }
 
         [Fact]
         public void TestStrongLinking() {
-            RunCompilerDirective("", StrongTypeLinking.Undefined, () => CompilerOptions.LinkAllTypes.Value);
-            RunCompilerDirective("STRONGLINKTYPES ON", StrongTypeLinking.Enable, () => CompilerOptions.LinkAllTypes.Value);
-            RunCompilerDirective("STRONGLINKTYPES OFF", StrongTypeLinking.Disable, () => CompilerOptions.LinkAllTypes.Value);
+            Func<object> f = () => CompilerOptions.LinkAllTypes.Value;
+            RunCompilerDirective("", StrongTypeLinking.Undefined, f);
+            RunCompilerDirective("STRONGLINKTYPES ON", StrongTypeLinking.Enable, f);
+            RunCompilerDirective("STRONGLINKTYPES OFF", StrongTypeLinking.Disable, f);
         }
 
         [Fact]
         public void TestScopedEnums() {
-            RunCompilerDirective("", RequireScopedEnums.Undefined, () => CompilerOptions.ScopedEnums.Value);
-            RunCompilerDirective("SCOPEDENUMS ON", RequireScopedEnums.Enable, () => CompilerOptions.ScopedEnums.Value);
-            RunCompilerDirective("SCOPEDENUMS OFF", RequireScopedEnums.Disable, () => CompilerOptions.ScopedEnums.Value);
+            Func<object> f = () => CompilerOptions.ScopedEnums.Value;
+            RunCompilerDirective("", RequireScopedEnums.Undefined, f);
+            RunCompilerDirective("SCOPEDENUMS ON", RequireScopedEnums.Enable, f);
+            RunCompilerDirective("SCOPEDENUMS OFF", RequireScopedEnums.Disable, f);
+            RunCompilerDirective("SCOPEDENUMS KAPUTT", RequireScopedEnums.Undefined, f, CompilerDirectiveParserErrors.InvalidScopedEnumsDirective);
+            RunCompilerDirective("SCOPEDENUMS ", RequireScopedEnums.Undefined, f, CompilerDirectiveParserErrors.InvalidScopedEnumsDirective);
         }
 
         [Fact]
         public void TestTypeInfo() {
-            RunCompilerDirective("", RttiForPublishedProperties.Undefined, () => CompilerOptions.PublishedRtti.Value);
-            RunCompilerDirective("M+", RttiForPublishedProperties.Enable, () => CompilerOptions.PublishedRtti.Value);
-            RunCompilerDirective("M-", RttiForPublishedProperties.Disable, () => CompilerOptions.PublishedRtti.Value);
-            RunCompilerDirective("TYPEINFO ON", RttiForPublishedProperties.Enable, () => CompilerOptions.PublishedRtti.Value);
-            RunCompilerDirective("TYPEINFO OFF", RttiForPublishedProperties.Disable, () => CompilerOptions.PublishedRtti.Value);
+            Func<object> f = () => CompilerOptions.PublishedRtti.Value;
+            RunCompilerDirective("", RttiForPublishedProperties.Undefined, f);
+            RunCompilerDirective("M+", RttiForPublishedProperties.Enable, f);
+            RunCompilerDirective("M-", RttiForPublishedProperties.Disable, f);
+            RunCompilerDirective("M X", RttiForPublishedProperties.Undefined, f, CompilerDirectiveParserErrors.InvalidPublishedRttiDirective);
+            RunCompilerDirective("M", RttiForPublishedProperties.Undefined, f, CompilerDirectiveParserErrors.InvalidPublishedRttiDirective);
+            RunCompilerDirective("TYPEINFO ON", RttiForPublishedProperties.Enable, f);
+            RunCompilerDirective("TYPEINFO OFF", RttiForPublishedProperties.Disable, f);
+            RunCompilerDirective("TYPEINFO KAPUTT", RttiForPublishedProperties.Undefined, f, CompilerDirectiveParserErrors.InvalidPublishedRttiDirective);
+            RunCompilerDirective("TYPEINFO ", RttiForPublishedProperties.Undefined, f, CompilerDirectiveParserErrors.InvalidPublishedRttiDirective);
         }
 
         [Fact]
         public void TestRunOnly() {
-            RunCompilerDirective("", RuntimePackageMode.Undefined, () => CompilerOptions.RuntimeOnlyPackage.Value);
-            RunCompilerDirective("RUNONLY OFF", RuntimePackageMode.Standard, () => CompilerOptions.RuntimeOnlyPackage.Value);
-            RunCompilerDirective("RUNONLY ON", RuntimePackageMode.RuntimeOnly, () => CompilerOptions.RuntimeOnlyPackage.Value);
+            Func<object> f = () => CompilerOptions.RuntimeOnlyPackage.Value;
+            RunCompilerDirective("", RuntimePackageMode.Undefined, f);
+            RunCompilerDirective("RUNONLY OFF", RuntimePackageMode.Standard, f);
+            RunCompilerDirective("RUNONLY ON", RuntimePackageMode.RuntimeOnly, f);
+            RunCompilerDirective("RUNONLY KAPUTT", RuntimePackageMode.Undefined, f, CompilerDirectiveParserErrors.InvalidRunOnlyDirective);
+            RunCompilerDirective("RUNONLY ", RuntimePackageMode.Undefined, f, CompilerDirectiveParserErrors.InvalidRunOnlyDirective);
         }
 
         [Fact]
@@ -598,9 +630,12 @@ namespace PasPasPasTests.Parser {
 
         [Fact]
         public void TestLegacyIfEnd() {
+            Func<object> f = () => CompilerOptions.LegacyIfEnd.Value;
             RunCompilerDirective("", EndIfMode.Undefined, () => CompilerOptions.LegacyIfEnd.Value);
-            RunCompilerDirective("LEGACYIFEND ON", EndIfMode.LegacyIfEnd, () => CompilerOptions.LegacyIfEnd.Value);
-            RunCompilerDirective("LEGACYIFEND OFF", EndIfMode.Standard, () => CompilerOptions.LegacyIfEnd.Value);
+            RunCompilerDirective("LEGACYIFEND ON", EndIfMode.LegacyIfEnd, f);
+            RunCompilerDirective("LEGACYIFEND OFF", EndIfMode.Standard, f);
+            RunCompilerDirective("LEGACYIFEND KAPUTT", EndIfMode.Undefined, f, CompilerDirectiveParserErrors.InvalidLegacyIfEndDirective);
+            RunCompilerDirective("LEGACYIFEND ", EndIfMode.Undefined, f, CompilerDirectiveParserErrors.InvalidLegacyIfEndDirective);
         }
 
         private void TestIfOpt(char opt) {
