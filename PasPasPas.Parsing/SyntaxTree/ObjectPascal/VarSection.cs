@@ -27,7 +27,7 @@ namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
             if (Kind == TokenKind.Var) {
                 result.Keyword("var");
             }
-            else if (Kind == PascalToken.ThreadVar) {
+            else if (Kind == TokenKind.ThreadVar) {
                 result.Keyword("threadvar");
             }
 
