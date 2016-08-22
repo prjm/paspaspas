@@ -72,12 +72,15 @@
     <Compile Include="SyntaxTree\CompilerDirectives\LocalSymbols.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\LongStrings.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\ObjectExport.cs" />
+    <Compile Include="SyntaxTree\CompilerDirectives\OldTypeLayout.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\OpenStrings.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\Optimization.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\Overflow.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\ParseDenyPackageUnit.cs" />
+    <Compile Include="SyntaxTree\CompilerDirectives\PointerMath.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\PublishedRtti.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\RangeChecks.cs" />
+    <Compile Include="SyntaxTree\CompilerDirectives\RealCompatibilty.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\RunOnly.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\SafeDivide.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\ScopedEnums.cs" />

@@ -734,23 +734,32 @@ namespace PasPasPasTests.Parser {
 
         [Fact]
         public void TestRealCompatibility() {
-            RunCompilerDirective("", Real48.Undefined, () => CompilerOptions.RealCompatiblity.Value);
-            RunCompilerDirective("REALCOMPATIBILITY ON", Real48.EnableCompatibility, () => CompilerOptions.RealCompatiblity.Value);
-            RunCompilerDirective("REALCOMPATIBILITY OFF", Real48.DisableCompatibility, () => CompilerOptions.RealCompatiblity.Value);
+            Func<object> f = () => CompilerOptions.RealCompatiblity.Value;
+            RunCompilerDirective("", Real48.Undefined, f);
+            RunCompilerDirective("REALCOMPATIBILITY ON", Real48.EnableCompatibility, f);
+            RunCompilerDirective("REALCOMPATIBILITY OFF", Real48.DisableCompatibility, f);
+            RunCompilerDirective("REALCOMPATIBILITY KAPUTT", Real48.Undefined, f, CompilerDirectiveParserErrors.InvalidRealCompitibilityMode);
+            RunCompilerDirective("REALCOMPATIBILITY UNDEFINED", Real48.Undefined, f, CompilerDirectiveParserErrors.InvalidRealCompitibilityMode);
         }
 
         [Fact]
         public void TestPointerMath() {
-            RunCompilerDirective("", PointerManipulation.Undefined, () => CompilerOptions.PointerMath.Value);
-            RunCompilerDirective("POINTERMATH ON", PointerManipulation.EnablePointerMath, () => CompilerOptions.PointerMath.Value);
-            RunCompilerDirective("POINTERMATH OFF", PointerManipulation.DisablePointerMath, () => CompilerOptions.PointerMath.Value);
+            Func<object> f = () => CompilerOptions.PointerMath.Value;
+            RunCompilerDirective("", PointerManipulation.Undefined, f);
+            RunCompilerDirective("POINTERMATH ON", PointerManipulation.EnablePointerMath, f);
+            RunCompilerDirective("POINTERMATH OFF", PointerManipulation.DisablePointerMath, f);
+            RunCompilerDirective("POINTERMATH KAPUTT", PointerManipulation.Undefined, f, CompilerDirectiveParserErrors.InvalidPointerMathDirective);
+            RunCompilerDirective("POINTERMATH ", PointerManipulation.Undefined, f, CompilerDirectiveParserErrors.InvalidPointerMathDirective);
         }
 
         [Fact]
         public void TestOldTypeLayout() {
-            RunCompilerDirective("", OldRecordTypes.Undefined, () => CompilerOptions.OldTypeLayout.Value);
-            RunCompilerDirective("OLDTYPELAYOUT  ON", OldRecordTypes.EnableOldRecordPacking, () => CompilerOptions.OldTypeLayout.Value);
-            RunCompilerDirective("OLDTYPELAYOUT  OFF", OldRecordTypes.DisableOldRecordPacking, () => CompilerOptions.OldTypeLayout.Value);
+            Func<object> f = () => CompilerOptions.OldTypeLayout.Value;
+            RunCompilerDirective("", OldRecordTypes.Undefined, f);
+            RunCompilerDirective("OLDTYPELAYOUT  ON", OldRecordTypes.EnableOldRecordPacking, f);
+            RunCompilerDirective("OLDTYPELAYOUT  OFF", OldRecordTypes.DisableOldRecordPacking, f);
+            RunCompilerDirective("OLDTYPELAYOUT  KAPUTT", OldRecordTypes.Undefined, f, CompilerDirectiveParserErrors.InvalidOldTypeLayoutDirective);
+            RunCompilerDirective("OLDTYPELAYOUT  ", OldRecordTypes.Undefined, f, CompilerDirectiveParserErrors.InvalidOldTypeLayoutDirective);
         }
 
         [Fact]

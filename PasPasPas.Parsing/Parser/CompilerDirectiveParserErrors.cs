@@ -369,5 +369,29 @@ namespace PasPasPas.Parsing.Parser {
             = new Guid(new byte[] { 0x65, 0x66, 0x24, 0xec, 0x76, 0x15, 0x6, 0x45, 0xaf, 0x39, 0xe0, 0xf8, 0xe5, 0x87, 0x95, 0x17 });
         /* {ec246665-1576-4506-af39-e0f8e5879517} */
 
+
+        /// <summary>
+        ///     invalid real48 mode
+        /// </summary>
+        public static readonly Guid InvalidRealCompitibilityMode
+            = new Guid(new byte[] { 0xd, 0xda, 0xb7, 0xeb, 0xa7, 0xa1, 0x30, 0x42, 0xa9, 0x2, 0xb8, 0x73, 0x33, 0xfe, 0xa8, 0xde });
+        /* {ebb7da0d-a1a7-4230-a902-b87333fea8de} */
+
+
+        /// <summary>
+        ///     invalid pointermath directive
+        /// </summary>
+        public static readonly Guid InvalidPointerMathDirective
+            = new Guid(new byte[] { 0xe2, 0x8, 0x42, 0xda, 0xf7, 0xbe, 0xa5, 0x43, 0x94, 0x19, 0x4f, 0x4e, 0xb0, 0xd1, 0xac, 0xa1 });
+        /* {da4208e2-bef7-43a5-9419-4f4eb0d1aca1} */
+
+
+        /// <summary>
+        ///     invalid old type layout directive
+        /// </summary>
+        public static readonly Guid InvalidOldTypeLayoutDirective
+            = new Guid(new byte[] { 0x88, 0x13, 0x43, 0x23, 0xb8, 0xa6, 0xf1, 0x43, 0xb0, 0xe, 0x25, 0xcd, 0x24, 0xc2, 0x38, 0xed });
+        /* {23431388-a6b8-43f1-b00e-25cd24c238ed} */
+
     }
 }

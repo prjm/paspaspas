@@ -490,5 +490,34 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         public void BeginVisitItem(LegacyIfEnd syntaxPart, CompilerDirectiveVisitorOptions parameter) {
             parameter.CompilerOptions.LegacyIfEnd.Value = syntaxPart.Mode;
         }
+
+        /// <summary>
+        ///      legacy if end
+        /// </summary>
+        /// <param name="syntaxPart"></param>
+        /// <param name="parameter"></param>
+        public void BeginVisitItem(RealCompatibility syntaxPart, CompilerDirectiveVisitorOptions parameter) {
+            parameter.CompilerOptions.RealCompatiblity.Value = syntaxPart.Mode;
+        }
+
+
+
+        /// <summary>
+        ///      legacy if end
+        /// </summary>
+        /// <param name="syntaxPart"></param>
+        /// <param name="parameter"></param>
+        public void BeginVisitItem(PointerMath syntaxPart, CompilerDirectiveVisitorOptions parameter) {
+            parameter.CompilerOptions.PointerMath.Value = syntaxPart.Mode;
+        }
+
+        /// <summary>
+        ///      old type layout
+        /// </summary>
+        /// <param name="syntaxPart"></param>
+        /// <param name="parameter"></param>
+        public void BeginVisitItem(OldTypeLayout syntaxPart, CompilerDirectiveVisitorOptions parameter) {
+            parameter.CompilerOptions.OldTypeLayout.Value = syntaxPart.Mode;
+        }
     }
 }

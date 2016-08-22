@@ -882,16 +882,16 @@ namespace PasPasPas.Parsing.Parser {
                 ParseLongIncludeRessourceSwitch();
             }
 
-            else if (Optional(PascalToken.RealCompatibility)) {
-                ParseRealCompatibilitySwitch();
+            else if (Match(PascalToken.RealCompatibility)) {
+                ParseRealCompatibilitySwitch(parent);
             }
 
-            else if (Optional(PascalToken.Pointermath)) {
-                ParsePointermathSwitch();
+            else if (Match(PascalToken.Pointermath)) {
+                ParsePointermathSwitch(parent);
             }
 
-            else if (Optional(PascalToken.OldTypeLayout)) {
-                ParseOldTypeLayoutSwitch();
+            else if (Match(PascalToken.OldTypeLayout)) {
+                ParseOldTypeLayoutSwitch(parent);
             }
 
             else if (Optional(PascalToken.EnumSizeSwitchLong)) {
@@ -956,43 +956,46 @@ namespace PasPasPas.Parsing.Parser {
             }
         }
 
-        private void ParseOldTypeLayoutSwitch() {
-            if (Optional(PascalToken.On)) {
-                CompilerOptions.OldTypeLayout.Value = OldRecordTypes.EnableOldRecordPacking;
-                return;
-            }
+        private void ParseOldTypeLayoutSwitch(ISyntaxPart parent) {
+            OldTypeLayout result = CreateByTerminal<OldTypeLayout>(parent);
 
-            if (Optional(PascalToken.Off)) {
-                CompilerOptions.OldTypeLayout.Value = OldRecordTypes.DisableOldRecordPacking;
-                return;
+            if (ContinueWith(result, PascalToken.On)) {
+                result.Mode = OldRecordTypes.EnableOldRecordPacking;
             }
-            Unexpected();
+            else if (ContinueWith(result, PascalToken.Off)) {
+                result.Mode = OldRecordTypes.DisableOldRecordPacking;
+            }
+            else {
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidOldTypeLayoutDirective, new[] { PascalToken.On, PascalToken.Off });
+            }
         }
 
-        private void ParsePointermathSwitch() {
-            if (Optional(PascalToken.On)) {
-                CompilerOptions.PointerMath.Value = PointerManipulation.EnablePointerMath;
-                return;
-            }
+        private void ParsePointermathSwitch(ISyntaxPart parent) {
+            PointerMath result = CreateByTerminal<PointerMath>(parent);
 
-            if (Optional(PascalToken.Off)) {
-                CompilerOptions.PointerMath.Value = PointerManipulation.DisablePointerMath;
-                return;
+            if (ContinueWith(result, PascalToken.On)) {
+                result.Mode = PointerManipulation.EnablePointerMath;
             }
-            Unexpected();
+            else if (ContinueWith(result, PascalToken.Off)) {
+                result.Mode = PointerManipulation.DisablePointerMath;
+            }
+            else {
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidPointerMathDirective, new[] { PascalToken.On, PascalToken.Off });
+            }
         }
 
-        private void ParseRealCompatibilitySwitch() {
-            if (Optional(PascalToken.On)) {
-                CompilerOptions.RealCompatiblity.Value = Real48.EnableCompatibility;
-                return;
-            }
+        private void ParseRealCompatibilitySwitch(ISyntaxPart parent) {
+            RealCompatibility result = CreateByTerminal<RealCompatibility>(parent);
 
-            if (Optional(PascalToken.Off)) {
-                CompilerOptions.RealCompatiblity.Value = Real48.DisableCompatibility;
-                return;
+            if (ContinueWith(result, PascalToken.On)) {
+                result.Mode = Real48.EnableCompatibility;
             }
-            Unexpected();
+            else if (ContinueWith(result, PascalToken.Off)) {
+                result.Mode = Real48.DisableCompatibility;
+            }
+            else {
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidRealCompitibilityMode, new[] { PascalToken.On, PascalToken.Off });
+            }
         }
 
         private void ParseLongIncludeRessourceSwitch() {
