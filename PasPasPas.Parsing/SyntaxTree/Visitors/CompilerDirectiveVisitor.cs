@@ -519,5 +519,15 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         public void BeginVisitItem(OldTypeLayout syntaxPart, CompilerDirectiveVisitorOptions parameter) {
             parameter.CompilerOptions.OldTypeLayout.Value = syntaxPart.Mode;
         }
+
+        /// <summary>
+        ///      nodefine
+        /// </summary>
+        /// <param name="syntaxPart"></param>
+        /// <param name="parameter"></param>
+        public void BeginVisitItem(NoDefine syntaxPart, CompilerDirectiveVisitorOptions parameter) {
+            if (!string.IsNullOrEmpty(syntaxPart.TypeName))
+                parameter.Meta.AddNoDefine(syntaxPart.TypeName, syntaxPart.TypeNameInHpp, syntaxPart.TypeNameInUnion);
+        }
     }
 }

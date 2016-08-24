@@ -764,10 +764,17 @@ namespace PasPasPasTests.Parser {
 
         [Fact]
         public void TestNoDefine() {
-            RunCompilerDirective("", false, () => Meta.NoDefines.Any());
-            RunCompilerDirective("NODEFINE TDEMO", true, () => Meta.NoDefines.Any(t => t.TypeName.StartsWith("TDemo", StringComparison.OrdinalIgnoreCase)));
-            RunCompilerDirective("NODEFINE TMIMOA", false, () => Meta.NoDefines.Any(t => t.TypeName.StartsWith("TDemo", StringComparison.OrdinalIgnoreCase)));
-            RunCompilerDirective("NODEFINE TMIMOA FUZZ", true, () => Meta.NoDefines.Any(t => t.UnionTypeName.StartsWith("fuz", StringComparison.OrdinalIgnoreCase)));
+            Func<object> f = () => Meta.NoDefines.Any(t => t.TypeName.StartsWith("TDemo", StringComparison.OrdinalIgnoreCase));
+            Func<object> g = () => Meta.NoDefines.Any(t => t.HppName.StartsWith("baz", StringComparison.OrdinalIgnoreCase));
+            Func<object> h = () => Meta.NoDefines.Any(t => t.UnionTypeName.StartsWith("fuz", StringComparison.OrdinalIgnoreCase));
+
+            RunCompilerDirective("", false, f);
+            RunCompilerDirective("NODEFINE TDEMO", true, f);
+            RunCompilerDirective("NODEFINE TMIMOA", false, f);
+            RunCompilerDirective("NODEFINE TMIMOA 'BAZ' ", true, g);
+            RunCompilerDirective("NODEFINE TMIMOA 'BAZ' 'FUZZ'", true, h);
+            RunCompilerDirective("NODEFINE 3 ", false, f, CompilerDirectiveParserErrors.InvalidNoDefineDirective);
+            RunCompilerDirective("NODEFINE ", false, f, CompilerDirectiveParserErrors.InvalidNoDefineDirective);
         }
 
         [Fact]

@@ -243,9 +243,10 @@ namespace PasPasPas.Options.DataTypes {
         ///     add a type name which is excluded from the generated header file
         /// </summary>
         /// <param name="typeName">type name</param>
+        /// <param name="nameInHpp">tpye name used in headers</param>
         /// <param name="typeNameInUnion">type name used in unions</param>
-        public void AddNoDefine(string typeName, string typeNameInUnion) {
-            NoDefines.Add(new DoNotDefineInHeader(typeName, typeNameInUnion));
+        public void AddNoDefine(string typeName, string nameInHpp, string typeNameInUnion) {
+            NoDefines.Add(new DoNotDefineInHeader(typeName, nameInHpp, typeNameInUnion));
         }
 
         /// <summary>

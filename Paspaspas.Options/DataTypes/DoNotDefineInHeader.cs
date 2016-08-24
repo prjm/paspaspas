@@ -10,10 +10,17 @@
         /// </summary>
         /// <param name="typeName">type name to skip</param>
         /// <param name="typeNameInUnion">type name in unions to skip</param>
-        public DoNotDefineInHeader(string typeName, string typeNameInUnion) {
+        /// <param name="nameInHpp">header file name</param>
+        public DoNotDefineInHeader(string typeName, string nameInHpp, string typeNameInUnion) {
             TypeName = typeName;
             UnionTypeName = typeNameInUnion;
+            HppName = nameInHpp;
         }
+
+        /// <summary>
+        ///     header file name
+        /// </summary>
+        public string HppName { get; }
 
         /// <summary>
         ///     type alias name

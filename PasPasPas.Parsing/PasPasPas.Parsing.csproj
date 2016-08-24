@@ -71,6 +71,7 @@
     <Compile Include="SyntaxTree\CompilerDirectives\LegacyIfEnd.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\LocalSymbols.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\LongStrings.cs" />
+    <Compile Include="SyntaxTree\CompilerDirectives\NoDefine.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\ObjectExport.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\OldTypeLayout.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\OpenStrings.cs" />

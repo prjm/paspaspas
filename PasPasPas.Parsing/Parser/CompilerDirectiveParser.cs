@@ -243,7 +243,7 @@ namespace PasPasPas.Parsing.Parser {
                 ParseNoInclude();
             }
             else if (Match(PascalToken.NoDefine)) {
-                ParseNoDefine();
+                ParseNoDefine(parent);
             }
             else if (Match(PascalToken.MessageCd)) {
                 ParseMessage();
@@ -316,16 +316,24 @@ namespace PasPasPas.Parsing.Parser {
             return true;
         }
 
-        private bool ParseNoDefine() {
-            Require(PascalToken.NoDefine);
-            var typeName = Require(PascalToken.NoInclude).Value;
-            var typeNameInUnion = string.Empty;
-            if (Match(PascalToken.Identifier)) {
-                typeNameInUnion = CurrentToken().Value;
+        private void ParseNoDefine(ISyntaxPart parent) {
+            NoDefine result = CreateByTerminal<NoDefine>(parent);
+
+
+            if (!ContinueWith(result, PascalToken.Identifier)) {
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidNoDefineDirective, new[] { PascalToken.Identifier });
+                return;
             }
 
-            Meta.AddNoDefine(typeName, typeNameInUnion);
-            return true;
+            result.TypeName = result.LastTerminal.Value;
+
+            if (ContinueWith(result, PascalToken.QuotedString)) {
+                result.TypeNameInHpp = QuotedStringTokenValue.Unwrap(result.LastTerminal.Token);
+
+                if (ContinueWith(result, PascalToken.QuotedString)) {
+                    result.TypeNameInUnion = QuotedStringTokenValue.Unwrap(result.LastTerminal.Token);
+                }
+            }
         }
 
         private bool ParseNoInclude() {
