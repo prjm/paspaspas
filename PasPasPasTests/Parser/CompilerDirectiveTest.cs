@@ -738,8 +738,8 @@ namespace PasPasPasTests.Parser {
             RunCompilerDirective("", Real48.Undefined, f);
             RunCompilerDirective("REALCOMPATIBILITY ON", Real48.EnableCompatibility, f);
             RunCompilerDirective("REALCOMPATIBILITY OFF", Real48.DisableCompatibility, f);
-            RunCompilerDirective("REALCOMPATIBILITY KAPUTT", Real48.Undefined, f, CompilerDirectiveParserErrors.InvalidRealCompitibilityMode);
-            RunCompilerDirective("REALCOMPATIBILITY UNDEFINED", Real48.Undefined, f, CompilerDirectiveParserErrors.InvalidRealCompitibilityMode);
+            RunCompilerDirective("REALCOMPATIBILITY KAPUTT", Real48.Undefined, f, CompilerDirectiveParserErrors.InvalidRealCompatibilityMode);
+            RunCompilerDirective("REALCOMPATIBILITY UNDEFINED", Real48.Undefined, f, CompilerDirectiveParserErrors.InvalidRealCompatibilityMode);
         }
 
         [Fact]
@@ -779,30 +779,42 @@ namespace PasPasPasTests.Parser {
 
         [Fact]
         public void TestObjTypeName() {
-            RunCompilerDirective("", false, () => Meta.ObjectFileTypeNames.Any(t => t.TypeName.StartsWith("TDemo", StringComparison.OrdinalIgnoreCase)));
-            RunCompilerDirective("OBJTYPENAME tdemo", true, () => Meta.ObjectFileTypeNames.Any(t => t.TypeName.StartsWith("TDemo", StringComparison.OrdinalIgnoreCase)));
-            RunCompilerDirective("OBJTYPENAME tmemo", false, () => Meta.ObjectFileTypeNames.Any(t => t.TypeName.StartsWith("TDemo", StringComparison.OrdinalIgnoreCase)));
-            RunCompilerDirective("OBJTYPENAME tdemo 'Bul'", true, () => Meta.ObjectFileTypeNames.Any(t => t.TypeName.StartsWith("TDemo", StringComparison.OrdinalIgnoreCase)));
-            RunCompilerDirective("OBJTYPENAME tdemo 'Ntdemo'", true, () => Meta.ObjectFileTypeNames.Any(t => t.TypeName.StartsWith("TDemo", StringComparison.OrdinalIgnoreCase)));
+            Func<object> f = () => Meta.ObjectFileTypeNames.Any(t => t.TypeName.StartsWith("TDemo", StringComparison.OrdinalIgnoreCase));
+            RunCompilerDirective("", false, f);
+            RunCompilerDirective("OBJTYPENAME tdemo", true, f);
+            RunCompilerDirective("OBJTYPENAME tmemo", false, f);
+            RunCompilerDirective("OBJTYPENAME tdemo 'Bul'", true, f);
+            RunCompilerDirective("OBJTYPENAME tdemo 'Ntdemo'", true, f);
+            RunCompilerDirective("OBJTYPENAME tdemo 'Xtdemo'", false, f, CompilerDirectiveParserErrors.InvalidObjTypeDirective);
+            RunCompilerDirective("OBJTYPENAME tdemo ''", false, f, CompilerDirectiveParserErrors.InvalidObjTypeDirective);
+            RunCompilerDirective("OBJTYPENAME ''", false, f, CompilerDirectiveParserErrors.InvalidObjTypeDirective);
         }
 
         [Fact]
         public void TestNoInclude() {
-            RunCompilerDirective("", false, () => Meta.NoIncludes.Any(t => t.StartsWith("Winapi", StringComparison.OrdinalIgnoreCase)));
-            RunCompilerDirective("NOINCLUDE WinApi.Messages", true, () => Meta.NoIncludes.Any(t => t.StartsWith("Winapi", StringComparison.OrdinalIgnoreCase)));
+            Func<object> f = () => Meta.NoIncludes.Any(t => t.StartsWith("Winapi", StringComparison.OrdinalIgnoreCase));
+            RunCompilerDirective("", false, f);
+            RunCompilerDirective("NOINCLUDE WinApi.Messages", true, f);
+            RunCompilerDirective("NOINCLUDE 3", false, f, CompilerDirectiveParserErrors.InvalidNoIncludeDirective);
+            RunCompilerDirective("NOINCLUDE ", false, f, CompilerDirectiveParserErrors.InvalidNoIncludeDirective);
         }
 
         [Fact]
         public void TestMinEnumSize() {
-            RunCompilerDirective("", EnumSize.Undefined, () => CompilerOptions.MinumEnumSize.Value);
-            RunCompilerDirective("Z+", EnumSize.FourByte, () => CompilerOptions.MinumEnumSize.Value);
-            RunCompilerDirective("Z-", EnumSize.OneByte, () => CompilerOptions.MinumEnumSize.Value);
-            RunCompilerDirective("Z1", EnumSize.OneByte, () => CompilerOptions.MinumEnumSize.Value);
-            RunCompilerDirective("Z2", EnumSize.TwoByte, () => CompilerOptions.MinumEnumSize.Value);
-            RunCompilerDirective("Z4", EnumSize.FourByte, () => CompilerOptions.MinumEnumSize.Value);
-            RunCompilerDirective("MINENUMSIZE 1", EnumSize.OneByte, () => CompilerOptions.MinumEnumSize.Value);
-            RunCompilerDirective("MINENUMSIZE 2", EnumSize.TwoByte, () => CompilerOptions.MinumEnumSize.Value);
-            RunCompilerDirective("MINENUMSIZE 4", EnumSize.FourByte, () => CompilerOptions.MinumEnumSize.Value);
+            Func<object> f = () => CompilerOptions.MinumEnumSize.Value;
+            RunCompilerDirective("", EnumSize.Undefined, f);
+            RunCompilerDirective("Z+", EnumSize.FourByte, f);
+            RunCompilerDirective("Z-", EnumSize.OneByte, f);
+            RunCompilerDirective("Z1", EnumSize.OneByte, f);
+            RunCompilerDirective("Z2", EnumSize.TwoByte, f);
+            RunCompilerDirective("Z4", EnumSize.FourByte, f);
+            RunCompilerDirective("Z 4", EnumSize.Undefined, f, CompilerDirectiveParserErrors.InvalidMinEnumSizeDirective);
+            RunCompilerDirective("Z", EnumSize.Undefined, f, CompilerDirectiveParserErrors.InvalidMinEnumSizeDirective);
+            RunCompilerDirective("MINENUMSIZE 1", EnumSize.OneByte, f);
+            RunCompilerDirective("MINENUMSIZE 2", EnumSize.TwoByte, f);
+            RunCompilerDirective("MINENUMSIZE 4", EnumSize.FourByte, f);
+            RunCompilerDirective("MINENUMSIZE KAPUTT", EnumSize.Undefined, f, CompilerDirectiveParserErrors.InvalidMinEnumSizeDirective);
+            RunCompilerDirective("MINENUMSIZE ", EnumSize.Undefined, f, CompilerDirectiveParserErrors.InvalidMinEnumSizeDirective);
         }
 
         [Fact]

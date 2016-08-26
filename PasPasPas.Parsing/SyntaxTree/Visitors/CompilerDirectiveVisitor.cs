@@ -529,5 +529,36 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (!string.IsNullOrEmpty(syntaxPart.TypeName))
                 parameter.Meta.AddNoDefine(syntaxPart.TypeName, syntaxPart.TypeNameInHpp, syntaxPart.TypeNameInUnion);
         }
+
+        /// <summary>
+        ///      nodefine
+        /// </summary>
+        /// <param name="syntaxPart"></param>
+        /// <param name="parameter"></param>
+        public void BeginVisitItem(ObjTypeName syntaxPart, CompilerDirectiveVisitorOptions parameter) {
+            if (!string.IsNullOrEmpty(syntaxPart.TypeName))
+                parameter.Meta.AddObjectFileTypeName(syntaxPart.TypeName, syntaxPart.AliasName);
+        }
+
+
+        /// <summary>
+        ///      nodefine
+        /// </summary>
+        /// <param name="syntaxPart"></param>
+        /// <param name="parameter"></param>
+        public void BeginVisitItem(NoInclude syntaxPart, CompilerDirectiveVisitorOptions parameter) {
+            if (!string.IsNullOrEmpty(syntaxPart.UnitName))
+                parameter.Meta.AddNoInclude(syntaxPart.UnitName);
+        }
+
+
+        /// <summary>
+        ///      nodefine
+        /// </summary>
+        /// <param name="syntaxPart"></param>
+        /// <param name="parameter"></param>
+        public void BeginVisitItem(MinEnumSize syntaxPart, CompilerDirectiveVisitorOptions parameter) {
+            parameter.CompilerOptions.MinumEnumSize.Value = syntaxPart.Size;
+        }
     }
 }

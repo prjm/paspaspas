@@ -373,7 +373,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <summary>
         ///     invalid real48 mode
         /// </summary>
-        public static readonly Guid InvalidRealCompitibilityMode
+        public static readonly Guid InvalidRealCompatibilityMode
             = new Guid(new byte[] { 0xd, 0xda, 0xb7, 0xeb, 0xa7, 0xa1, 0x30, 0x42, 0xa9, 0x2, 0xb8, 0x73, 0x33, 0xfe, 0xa8, 0xde });
         /* {ebb7da0d-a1a7-4230-a902-b87333fea8de} */
 
@@ -400,6 +400,30 @@ namespace PasPasPas.Parsing.Parser {
         public static readonly Guid InvalidNoDefineDirective
             = new Guid(new byte[] { 0x12, 0xf6, 0x95, 0x28, 0x2f, 0x28, 0xb8, 0x4d, 0xa5, 0x58, 0x68, 0xeb, 0x30, 0x74, 0x5, 0xe6 });
         /* {2895f612-282f-4db8-a558-68eb307405e6} */
+
+
+        /// <summary>
+        ///     invalid object type directive
+        /// </summary>
+        public static readonly Guid InvalidObjTypeDirective
+         = new Guid(new byte[] { 0xff, 0x9, 0x86, 0x10, 0xab, 0x4f, 0xfe, 0x42, 0x97, 0x6d, 0x8b, 0xc, 0x29, 0x90, 0xf6, 0x71 });
+        /* {108609ff-4fab-42fe-976d-8b0c2990f671} */
+
+
+        /// <summary>
+        ///     invalid no include directive
+        /// </summary>
+        public static readonly Guid InvalidNoIncludeDirective
+             = new Guid(new byte[] { 0xde, 0xd3, 0x51, 0xe1, 0xa0, 0x5, 0x6, 0x4d, 0x99, 0xf4, 0x8b, 0x46, 0x2c, 0x24, 0x88, 0x1f });
+        /* {e151d3de-05a0-4d06-99f4-8b462c24881f} */
+
+
+        /// <summary>
+        ///     invalid min enum size
+        /// </summary>
+        public static readonly Guid InvalidMinEnumSizeDirective
+            = new Guid(new byte[] { 0x46, 0x5b, 0xd1, 0x47, 0x82, 0x6, 0x76, 0x40, 0x90, 0x36, 0x75, 0x69, 0xa, 0x6b, 0xd7, 0x85 });
+        /* {47d15b46-0682-4076-9036-75690a6bd785} */
 
     }
 }

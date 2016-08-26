@@ -237,10 +237,10 @@ namespace PasPasPas.Parsing.Parser {
                 ParsePEUserVersion();
             }
             else if (Match(PascalToken.ObjTypeName)) {
-                ParseObjTypeNameSwitch();
+                ParseObjTypeNameSwitch(parent);
             }
             else if (Match(PascalToken.NoInclude)) {
-                ParseNoInclude();
+                ParseNoInclude(parent);
             }
             else if (Match(PascalToken.NoDefine)) {
                 ParseNoDefine(parent);
@@ -336,11 +336,15 @@ namespace PasPasPas.Parsing.Parser {
             }
         }
 
-        private bool ParseNoInclude() {
-            Require(PascalToken.NoInclude);
-            var unitName = Require(PascalToken.NoInclude).Value;
-            Meta.AddNoInclude(unitName);
-            return true;
+        private void ParseNoInclude(ISyntaxPart parent) {
+            NoInclude result = CreateByTerminal<NoInclude>(parent);
+
+            if (!ContinueWith(result, PascalToken.Identifier)) {
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidNoIncludeDirective, new[] { PascalToken.Identifier });
+                return;
+            }
+
+            result.UnitName = result.LastTerminal.Value;
         }
 
         private void ParsePEUserVersion() {
@@ -902,8 +906,8 @@ namespace PasPasPas.Parsing.Parser {
                 ParseOldTypeLayoutSwitch(parent);
             }
 
-            else if (Optional(PascalToken.EnumSizeSwitchLong)) {
-                ParseLongEnumSizeSwitch();
+            else if (Match(PascalToken.EnumSizeSwitchLong)) {
+                ParseLongEnumSizeSwitch(parent);
             }
 
             else if (Optional(PascalToken.MethodInfo)) {
@@ -942,25 +946,30 @@ namespace PasPasPas.Parsing.Parser {
             Unexpected();
         }
 
-        private void ParseLongEnumSizeSwitch() {
-            var size = Require(PascalToken.Integer);
-            int intSize;
+        private void ParseLongEnumSizeSwitch(ISyntaxPart parent) {
+            MinEnumSize result = CreateByTerminal<MinEnumSize>(parent);
 
-            if (int.TryParse(size.Value, out intSize)) {
-                switch (intSize) {
-                    case 1:
-                        CompilerOptions.MinumEnumSize.Value = EnumSize.OneByte;
-                        break;
-                    case 2:
-                        CompilerOptions.MinumEnumSize.Value = EnumSize.TwoByte;
-                        break;
-                    case 4:
-                        CompilerOptions.MinumEnumSize.Value = EnumSize.FourByte;
-                        break;
-                    default:
-                        Unexpected();
-                        break;
-                }
+            if (!ContinueWith(result, PascalToken.Integer)) {
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidMinEnumSizeDirective, new[] { PascalToken.Integer });
+                return;
+            }
+
+            var size = DigitTokenGroupValue.Unwrap(result.LastTerminal.Token);
+
+            switch (size) {
+                case 1:
+                    result.Size = EnumSize.OneByte;
+                    break;
+                case 2:
+                    result.Size = EnumSize.TwoByte;
+                    break;
+                case 4:
+                    result.Size = EnumSize.FourByte;
+                    break;
+                default:
+                    result.Size = EnumSize.Undefined;
+                    ErrorLastPart(result, CompilerDirectiveParserErrors.InvalidMinEnumSizeDirective);
+                    break;
             }
         }
 
@@ -1002,7 +1011,7 @@ namespace PasPasPas.Parsing.Parser {
                 result.Mode = Real48.DisableCompatibility;
             }
             else {
-                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidRealCompitibilityMode, new[] { PascalToken.On, PascalToken.Off });
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidRealCompatibilityMode, new[] { PascalToken.On, PascalToken.Off });
             }
         }
 
@@ -1648,54 +1657,64 @@ namespace PasPasPas.Parsing.Parser {
                 ParseTypeInfoSwitch(parent);
             }
             else if (Match(PascalToken.EnumSizeSwitch, PascalToken.EnumSize1, PascalToken.EnumSize2, PascalToken.EnumSize4)) {
-                ParseEnumSizeSwitch();
+                ParseEnumSizeSwitch(parent);
             }
 
         }
 
-        private bool ParseEnumSizeSwitch() {
-            var kind = CurrentToken().Kind;
+        private void ParseEnumSizeSwitch(ISyntaxPart parent) {
+            MinEnumSize result = CreateByTerminal<MinEnumSize>(parent);
+            var kind = result.LastTerminal.Token.Kind;
 
             if (kind == PascalToken.EnumSize1) {
-                CompilerOptions.MinumEnumSize.Value = EnumSize.OneByte;
-                return true;
+                result.Size = EnumSize.OneByte;
             }
-
-            if (kind == PascalToken.EnumSize2) {
-                CompilerOptions.MinumEnumSize.Value = EnumSize.TwoByte;
-                return true;
+            else if (kind == PascalToken.EnumSize2) {
+                result.Size = EnumSize.TwoByte;
             }
-
-            if (kind == PascalToken.EnumSize4) {
-                CompilerOptions.MinumEnumSize.Value = EnumSize.FourByte;
-                return true;
+            else if (kind == PascalToken.EnumSize4) {
+                result.Size = EnumSize.FourByte;
             }
-
-            FetchNextToken();
-
-            if (Optional(TokenKind.Plus)) {
-                CompilerOptions.MinumEnumSize.Value = EnumSize.FourByte;
-                return true;
+            else if (ContinueWith(result, TokenKind.Plus)) {
+                result.Size = EnumSize.FourByte;
             }
-
-            if (Optional(TokenKind.Minus)) {
-                CompilerOptions.MinumEnumSize.Value = EnumSize.OneByte;
-                return true;
+            else if (ContinueWith(result, TokenKind.Minus)) {
+                result.Size = EnumSize.OneByte;
             }
-
-            return false;
+            else {
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidMinEnumSizeDirective, new[] { TokenKind.Plus, TokenKind.Minus });
+            }
         }
 
-        private bool ParseObjTypeNameSwitch() {
-            FetchNextToken();
-            var typeName = Require(PascalToken.Identifier).Value;
-            var aliasName = string.Empty;
-            if (Optional(PascalToken.QuotedString)) {
-                aliasName = QuotedStringTokenValue.Unwrap(CurrentToken());
+        private void ParseObjTypeNameSwitch(ISyntaxPart parent) {
+            ObjTypeName result = CreateByTerminal<ObjTypeName>(parent);
+
+            if (!ContinueWith(result, PascalToken.Identifier)) {
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidObjTypeDirective, new[] { PascalToken.Identifier });
+                return;
             }
 
-            Meta.AddObjectFileTypeName(typeName, aliasName);
-            return true;
+            result.TypeName = result.LastTerminal.Value;
+
+            if (ContinueWith(result, PascalToken.QuotedString)) {
+                result.AliasName = QuotedStringTokenValue.Unwrap(result.LastTerminal.Token);
+                if (string.IsNullOrWhiteSpace(result.AliasName)) {
+                    result.AliasName = null;
+                    result.TypeName = null;
+                    ErrorLastPart(result, CompilerDirectiveParserErrors.InvalidObjTypeDirective);
+                    return;
+                }
+
+
+                string prefix = result.AliasName.Substring(0, 1);
+                if (!string.Equals(prefix, "N", StringComparison.OrdinalIgnoreCase) &&
+                    !string.Equals(prefix, "B", StringComparison.OrdinalIgnoreCase)) {
+                    result.AliasName = null;
+                    result.TypeName = null;
+                    ErrorLastPart(result, CompilerDirectiveParserErrors.InvalidObjTypeDirective);
+                    return;
+                }
+            }
         }
 
         private void ParseTypeInfoSwitch(ISyntaxPart parent) {
