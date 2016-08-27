@@ -819,19 +819,31 @@ namespace PasPasPasTests.Parser {
 
         [Fact]
         public void TestMethodInfo() {
-            RunCompilerDirective("", MethodInfoRtti.Undefined, () => CompilerOptions.MethodInfo.Value);
-            RunCompilerDirective("METHODINFO ON", MethodInfoRtti.EnableMethodInfo, () => CompilerOptions.MethodInfo.Value);
-            RunCompilerDirective("METHODINFO OFF", MethodInfoRtti.DisableMethodInfo, () => CompilerOptions.MethodInfo.Value);
+            Func<object> f = () => CompilerOptions.MethodInfo.Value;
+            RunCompilerDirective("", MethodInfoRtti.Undefined, f);
+            RunCompilerDirective("METHODINFO ON", MethodInfoRtti.EnableMethodInfo, f);
+            RunCompilerDirective("METHODINFO OFF", MethodInfoRtti.DisableMethodInfo, f);
+            RunCompilerDirective("METHODINFO KAPUTT", MethodInfoRtti.Undefined, f, CompilerDirectiveParserErrors.InvalidMethodInfoDirective);
+            RunCompilerDirective("METHODINFO ", MethodInfoRtti.Undefined, f, CompilerDirectiveParserErrors.InvalidMethodInfoDirective);
         }
 
         [Fact]
         public void TestLibMeta() {
-            RunCompilerDirective("", null, () => Meta.LibPrefix.Value);
-            RunCompilerDirective("", null, () => Meta.LibSuffix.Value);
-            RunCompilerDirective("", null, () => Meta.LibVersion.Value);
-            RunCompilerDirective("LIBPREFIX 'P'", "P", () => Meta.LibPrefix.Value);
-            RunCompilerDirective("LIBSUFFIX 'M'", "M", () => Meta.LibSuffix.Value);
-            RunCompilerDirective("LIBVERSION 'V'", "V", () => Meta.LibVersion.Value);
+            Func<object> f = () => Meta.LibPrefix.Value;
+            Func<object> g = () => Meta.LibPrefix.Value;
+            Func<object> h = () => Meta.LibVersion.Value;
+            RunCompilerDirective("", null, f);
+            RunCompilerDirective("", null, g);
+            RunCompilerDirective("", null, h);
+            RunCompilerDirective("LIBPREFIX 'P'", "P", f);
+            RunCompilerDirective("LIBSUFFIX 'M'", "M", g);
+            RunCompilerDirective("LIBVERSION 'V'", "V", h);
+            RunCompilerDirective("LIBPREFIX KAPUTT", null, f, CompilerDirectiveParserErrors.InvalidLibDirective);
+            RunCompilerDirective("LIBSUFFIX KAPUTT", null, g, CompilerDirectiveParserErrors.InvalidLibDirective);
+            RunCompilerDirective("LIBVERSION KAPUTT", null, h, CompilerDirectiveParserErrors.InvalidLibDirective);
+            RunCompilerDirective("LIBPREFIX ", null, f, CompilerDirectiveParserErrors.InvalidLibDirective);
+            RunCompilerDirective("LIBSUFFIX ", null, g, CompilerDirectiveParserErrors.InvalidLibDirective);
+            RunCompilerDirective("LIBVERSION ", null, h, CompilerDirectiveParserErrors.InvalidLibDirective);
         }
 
         [Fact]

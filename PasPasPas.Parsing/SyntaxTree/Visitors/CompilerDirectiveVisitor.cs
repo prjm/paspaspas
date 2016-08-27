@@ -531,7 +531,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         }
 
         /// <summary>
-        ///      nodefine
+        ///      obj type name
         /// </summary>
         /// <param name="syntaxPart"></param>
         /// <param name="parameter"></param>
@@ -542,7 +542,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
 
         /// <summary>
-        ///      nodefine
+        ///      nocinlude
         /// </summary>
         /// <param name="syntaxPart"></param>
         /// <param name="parameter"></param>
@@ -553,12 +553,39 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
 
         /// <summary>
-        ///      nodefine
+        ///      min enum size
         /// </summary>
         /// <param name="syntaxPart"></param>
         /// <param name="parameter"></param>
         public void BeginVisitItem(MinEnumSize syntaxPart, CompilerDirectiveVisitorOptions parameter) {
             parameter.CompilerOptions.MinumEnumSize.Value = syntaxPart.Size;
+        }
+
+
+        /// <summary>
+        ///      method info
+        /// </summary>
+        /// <param name="syntaxPart"></param>
+        /// <param name="parameter"></param>
+        public void BeginVisitItem(MethodInfo syntaxPart, CompilerDirectiveVisitorOptions parameter) {
+            parameter.CompilerOptions.MethodInfo.Value = syntaxPart.Mode;
+        }
+
+        /// <summary>
+        ///      libprefix / libsuffix / libversion
+        /// </summary>
+        /// <param name="syntaxPart"></param>
+        /// <param name="parameter"></param>
+        public void BeginVisitItem(LibInfo syntaxPart, CompilerDirectiveVisitorOptions parameter) {
+            if (syntaxPart.LibPrefix != null)
+                parameter.Meta.LibPrefix.Value = syntaxPart.LibPrefix;
+
+            if (syntaxPart.LibSuffix != null)
+                parameter.Meta.LibSuffix.Value = syntaxPart.LibSuffix;
+
+            if (syntaxPart.LibVersion != null)
+                parameter.Meta.LibVersion.Value = syntaxPart.LibVersion;
+
         }
     }
 }

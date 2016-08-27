@@ -213,7 +213,7 @@ namespace PasPasPas.Parsing.Parser {
                 ParseImageBase(parent);
             }
             else if (Match(PascalToken.LibPrefix, PascalToken.LibSuffix, PascalToken.LibVersion)) {
-                ParseLibParameter();
+                ParseLibParameter(parent);
             }
             else if (Match(PascalToken.Warn)) {
                 ParseWarnParameter(parent);
@@ -548,21 +548,28 @@ namespace PasPasPas.Parsing.Parser {
             }
         }
 
-        private void ParseLibParameter() {
-            int kind = Require(PascalToken.LibPrefix, PascalToken.LibSuffix, PascalToken.LibVersion).Kind;
-            var libInfo = QuotedStringTokenValue.Unwrap(Require(PascalToken.QuotedString));
+        private void ParseLibParameter(ISyntaxPart parent) {
+            LibInfo result = CreateByTerminal<LibInfo>(parent);
+            int kind = result.LastTerminal.Token.Kind;
+
+            if (!ContinueWith(result, PascalToken.QuotedString)) {
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidLibDirective, new[] { PascalToken.QuotedString });
+                return;
+            }
+
+            var libInfo = QuotedStringTokenValue.Unwrap(result.LastTerminal.Token);
 
             switch (kind) {
                 case PascalToken.LibPrefix:
-                    Meta.LibPrefix.Value = libInfo;
+                    result.LibPrefix = libInfo;
                     break;
 
                 case PascalToken.LibSuffix:
-                    Meta.LibSuffix.Value = libInfo;
+                    result.LibSuffix = libInfo;
                     break;
 
                 case PascalToken.LibVersion:
-                    Meta.LibVersion.Value = libInfo;
+                    result.LibVersion = libInfo;
                     break;
             }
         }
@@ -910,8 +917,8 @@ namespace PasPasPas.Parsing.Parser {
                 ParseLongEnumSizeSwitch(parent);
             }
 
-            else if (Optional(PascalToken.MethodInfo)) {
-                ParseMethodInfoSwitch();
+            else if (Match(PascalToken.MethodInfo)) {
+                ParseMethodInfoSwitch(parent);
             }
             else if (Match(PascalToken.LegacyIfEnd)) {
                 ParseLegacyIfEndSwitch(parent);
@@ -933,17 +940,18 @@ namespace PasPasPas.Parsing.Parser {
             }
         }
 
-        private void ParseMethodInfoSwitch() {
-            if (Optional(PascalToken.On)) {
-                CompilerOptions.MethodInfo.Value = MethodInfoRtti.EnableMethodInfo;
-                return;
-            }
+        private void ParseMethodInfoSwitch(ISyntaxPart parent) {
+            MethodInfo result = CreateByTerminal<MethodInfo>(parent);
 
-            if (Optional(PascalToken.Off)) {
-                CompilerOptions.MethodInfo.Value = MethodInfoRtti.DisableMethodInfo;
-                return;
+            if (ContinueWith(result, PascalToken.On)) {
+                result.Mode = MethodInfoRtti.EnableMethodInfo;
             }
-            Unexpected();
+            else if (ContinueWith(result, PascalToken.Off)) {
+                result.Mode = MethodInfoRtti.DisableMethodInfo;
+            }
+            else {
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidMethodInfoDirective, new[] { PascalToken.On, PascalToken.Off });
+            }
         }
 
         private void ParseLongEnumSizeSwitch(ISyntaxPart parent) {
