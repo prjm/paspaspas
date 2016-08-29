@@ -222,19 +222,19 @@ namespace PasPasPas.Parsing.Parser {
                 ParseRttiParameter();
             }
             else if (Match(PascalToken.Region)) {
-                ParseRegion();
+                ParseRegion(parent);
             }
             else if (Match(PascalToken.EndRegion)) {
-                ParseEndRegion();
+                ParseEndRegion(parent);
             }
             else if (Match(PascalToken.SetPEOsVersion)) {
-                ParsePEOsVersion();
+                ParsePEOsVersion(parent);
             }
             else if (Match(PascalToken.SetPESubsystemVersion)) {
-                ParsePESubsystemVersion();
+                ParsePESubsystemVersion(parent);
             }
             else if (Match(PascalToken.SetPEUserVersion)) {
-                ParsePEUserVersion();
+                ParsePEUserVersion(parent);
             }
             else if (Match(PascalToken.ObjTypeName)) {
                 ParseObjTypeNameSwitch(parent);
@@ -347,63 +347,64 @@ namespace PasPasPas.Parsing.Parser {
             result.UnitName = result.LastTerminal.Value;
         }
 
-        private void ParsePEUserVersion() {
-            Require(PascalToken.SetPEUserVersion);
-            var version = ParsePEVersion();
-            if (version != null) {
-                Meta.PEUserVersion.MajorVersion.Value = version.Item1;
-                Meta.PEUserVersion.MinorVersion.Value = version.Item2;
-            }
+        private void ParsePEUserVersion(ISyntaxPart parent) {
+            ParsedVersion result = CreateByTerminal<ParsedVersion>(parent);
+            result.Kind = PascalToken.SetPEUserVersion;
+            ParsePEVersion(result);
         }
 
-        private void ParsePESubsystemVersion() {
-            Require(PascalToken.SetPESubsystemVersion);
-            var version = ParsePEVersion();
-            if (version != null) {
-                Meta.PESubsystemVersion.MajorVersion.Value = version.Item1;
-                Meta.PESubsystemVersion.MinorVersion.Value = version.Item2;
-            }
+        private void ParsePESubsystemVersion(ISyntaxPart parent) {
+            ParsedVersion result = CreateByTerminal<ParsedVersion>(parent);
+            result.Kind = PascalToken.SetPESubsystemVersion;
+            ParsePEVersion(result);
         }
 
-        private void ParsePEOsVersion() {
-            Require(PascalToken.SetPEOsVersion);
-            var version = ParsePEVersion();
-            if (version != null) {
-                Meta.PEOsVersion.MajorVersion.Value = version.Item1;
-                Meta.PEOsVersion.MinorVersion.Value = version.Item2;
-            }
+        private void ParsePEOsVersion(ISyntaxPart parent) {
+            ParsedVersion result = CreateByTerminal<ParsedVersion>(parent);
+            result.Kind = PascalToken.SetPEOsVersion;
+            ParsePEVersion(result);
         }
 
-        private Tuple<int, int> ParsePEVersion() {
-            var text = (Require(PascalToken.Identifier).Value ?? string.Empty).Split(new[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
-            var major = text.Length > 0 ? text[0] : string.Empty;
-            var minor = text.Length > 1 ? text[1] : string.Empty;
+        private void ParsePEVersion(ParsedVersion result) {
+
+            if (!ContinueWith(result, PascalToken.Real)) {
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidPEVersionDirective, new[] { PascalToken.Real });
+                return;
+            }
+
+            var text = result.LastTerminal.Value.Split(new[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
+
+            if (text.Length != 2) {
+                ErrorLastPart(result, CompilerDirectiveParserErrors.InvalidPEVersionDirective);
+                return;
+            }
 
             int majorVersion;
             int minorVersion;
 
-            if (int.TryParse(major, out majorVersion) && int.TryParse(minor, out minorVersion)) {
-                return Tuple.Create(majorVersion, minorVersion);
+            if (!int.TryParse(text[0], out majorVersion) || !int.TryParse(text[1], out minorVersion)) {
+                ErrorLastPart(result, CompilerDirectiveParserErrors.InvalidPEVersionDirective);
+                return;
             }
-            else {
-                return null;
-            }
+
+            result.MajorVersion = majorVersion;
+            result.MinorVersion = minorVersion;
+
         }
 
-        private void ParseEndRegion() {
-            Require(PascalToken.EndRegion);
-            Meta.StopRegion();
+        private void ParseEndRegion(ISyntaxPart parent) {
+            CreateByTerminal<EndRegion>(parent);
         }
 
-        private void ParseRegion() {
-            var regionName = "";
-            Require(PascalToken.Region);
+        private void ParseRegion(ISyntaxPart parent) {
+            Region result = CreateByTerminal<Region>(parent);
 
-            if (Match(PascalToken.QuotedString)) {
-                regionName = QuotedStringTokenValue.Unwrap(CurrentToken());
+            if (!ContinueWith(result, PascalToken.QuotedString)) {
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidRegionDirective, new[] { PascalToken.QuotedString });
+                return;
             }
 
-            Meta.StartRegion(regionName);
+            result.RegionName = QuotedStringTokenValue.Unwrap(result.LastTerminal.Token);
         }
 
         /// <summary>

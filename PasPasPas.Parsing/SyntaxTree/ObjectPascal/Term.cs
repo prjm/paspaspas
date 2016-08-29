@@ -45,13 +45,13 @@ namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
                     case TokenKind.Slash:
                         result.Punct("/");
                         break;
-                    case PascalToken.Div:
+                    case TokenKind.Div:
                         result.Keyword("div");
                         break;
                     case PascalToken.Mod:
                         result.Keyword("mod");
                         break;
-                    case PascalToken.And:
+                    case TokenKind.And:
                         result.Keyword("and");
                         break;
                     case PascalToken.Shl:
@@ -60,7 +60,7 @@ namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
                     case PascalToken.Shr:
                         result.Keyword("shr");
                         break;
-                    case PascalToken.As:
+                    case TokenKind.As:
                         result.Keyword("as");
                         break;
                 }

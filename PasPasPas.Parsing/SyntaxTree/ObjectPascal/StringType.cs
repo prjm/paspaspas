@@ -34,22 +34,22 @@ namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
         /// </summary>
         /// <param name="result"></param>
         public override void ToFormatter(PascalFormatter result) {
-            if (Kind == PascalToken.ShortString) {
+            if (Kind == TokenKind.ShortString) {
                 result.Keyword("shortstring").Space();
                 return;
             }
 
-            if (Kind == PascalToken.WideString) {
+            if (Kind == TokenKind.WideString) {
                 result.Keyword("widestring").Space();
                 return;
             }
 
-            if (Kind == PascalToken.UnicodeString) {
+            if (Kind == TokenKind.UnicodeString) {
                 result.Keyword("unicodestring").Space();
                 return;
             }
 
-            if (Kind == PascalToken.AnsiString) {
+            if (Kind == TokenKind.AnsiString) {
                 result.Keyword("ansistring");
                 if (CodePage != null) {
                     result.Punct("(");
@@ -60,7 +60,7 @@ namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
                 return;
             }
 
-            if (Kind == PascalToken.String) {
+            if (Kind == TokenKind.String) {
                 result.Keyword("string");
                 if (StringLength != null) {
                     result.Punct("[");

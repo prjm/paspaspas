@@ -563,6 +563,30 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
 
         /// <summary>
+        ///      start region
+        /// </summary>
+        /// <param name="syntaxPart"></param>
+        /// <param name="parameter"></param>
+        public void BeginVisitItem(Region syntaxPart, CompilerDirectiveVisitorOptions parameter) {
+            if (!string.IsNullOrWhiteSpace(syntaxPart.RegionName))
+                parameter.Meta.StartRegion(syntaxPart.RegionName);
+        }
+
+
+        /// <summary>
+        ///      end region
+        /// </summary>
+        /// <param name="syntaxPart"></param>
+        /// <param name="parameter"></param>
+        public void BeginVisitItem(EndRegion syntaxPart, CompilerDirectiveVisitorOptions parameter) {
+            if (parameter.Meta.Regions.Count > 0)
+                parameter.Meta.StopRegion();
+            else
+                parameter.LogSource.Error(CompilerDirectiveParserErrors.EndRegionWithoutRegion, syntaxPart);
+        }
+
+
+        /// <summary>
         ///      method info
         /// </summary>
         /// <param name="syntaxPart"></param>
@@ -586,6 +610,30 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (syntaxPart.LibVersion != null)
                 parameter.Meta.LibVersion.Value = syntaxPart.LibVersion;
 
+        }
+
+        /// <summary>
+        ///     pe version
+        /// </summary>
+        /// <param name="syntaxPart"></param>
+        /// <param name="parameter"></param>
+        public void BeginVisitItem(ParsedVersion syntaxPart, CompilerDirectiveVisitorOptions parameter) {
+            switch (syntaxPart.Kind) {
+                case PascalToken.SetPEOsVersion:
+                    parameter.Meta.PEOsVersion.MajorVersion.Value = syntaxPart.MajorVersion;
+                    parameter.Meta.PEOsVersion.MinorVersion.Value = syntaxPart.MinorVersion;
+                    break;
+
+                case PascalToken.SetPESubsystemVersion:
+                    parameter.Meta.PESubsystemVersion.MajorVersion.Value = syntaxPart.MajorVersion;
+                    parameter.Meta.PESubsystemVersion.MinorVersion.Value = syntaxPart.MinorVersion;
+                    break;
+
+                case PascalToken.SetPEUserVersion:
+                    parameter.Meta.PEUserVersion.MajorVersion.Value = syntaxPart.MajorVersion;
+                    parameter.Meta.PEUserVersion.MinorVersion.Value = syntaxPart.MinorVersion;
+                    break;
+            }
         }
     }
 }

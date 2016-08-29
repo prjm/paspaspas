@@ -516,5 +516,106 @@
         ///     token for <c>assembly</c>
         /// </summary>
         public const int Assembly = 278;
+
+        /// <summary>
+        ///     token for <c>operator</c>
+        /// </summary>
+        public const int Operator = 279;
+
+        /// <summary>
+        ///     token for <c>absolute</c>
+        /// </summary>
+        public const int Absolute = 280;
+
+        /// <summary>
+        ///     token for <c>name</c>
+        /// </summary>
+        public const int Name = 281;
+
+        /// <summary>
+        ///     token for <c>resident</c>
+        /// </summary>
+        public const int Resident = 282;
+
+        /// <summary>
+        ///     token for <c>AnsiString</c>
+        /// </summary>
+        public const int AnsiString = 283;
+
+        /// <summary>
+        ///     token for <c>ShortString</c>
+        /// </summary>
+        public const int ShortString = 284;
+
+        /// <summary>
+        ///     token for <c>string</c>
+        /// </summary>
+        public const int String = 285;
+
+        /// <summary>
+        ///     token for <c>widestring</c>
+        /// </summary>
+        public const int WideString = 286;
+
+        /// <summary>
+        ///     token for UniCodeString
+        /// </summary>
+        public const int UnicodeString = 287;
+
+        /// <summary>
+        ///     token for reference
+        /// </summary>
+        public const int Reference = 288;
+
+        /// <summary>
+        ///     token for <c>object</c>
+        /// </summary>
+        public const int Object = 289;
+
+        /// <summary>
+        ///     token for <c>to</c>
+        /// </summary>
+        public const int To = 290;
+
+        /// <summary>
+        ///     token for <c>helper</c>
+        /// </summary>
+        public const int Helper = 291;
+
+        /// <summary>
+        ///     token for <c>dispinterfaces</c>
+        /// </summary>
+        public const int DispInterface = 292;
+
+        /// <summary>
+        ///     token for <c>for</c>
+        /// </summary>
+        public const int For = 293;
+
+        /// <summary>
+        ///     token for <c>and</c>
+        /// </summary>
+        public const int And = 294;
+
+        /// <summary>
+        ///     token for <c>as</c>
+        /// </summary>
+        public const int As = 295;
+
+        /// <summary>
+        ///     token for <c>case</c>
+        /// </summary>
+        public const int Case = 296;
+
+        /// <summary>
+        ///     token for <c>div</c>
+        /// </summary>
+        public const int Div = 297;
+
+        /// <summary>
+        ///     token for <c>downto</c>
+        /// </summary>
+        public const int DownTo = 298;
+
     }
 }

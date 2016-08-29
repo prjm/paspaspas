@@ -1,4 +1,5 @@
-﻿using PasPasPas.Options.Bundles;
+﻿using PasPasPas.Infrastructure.Log;
+using PasPasPas.Options.Bundles;
 using System.Collections.Generic;
 
 namespace PasPasPas.Options.DataTypes {
@@ -139,7 +140,12 @@ namespace PasPasPas.Options.DataTypes {
         /// <summary>
         ///     reset on new unit
         /// </summary>
-        public void ResetOnNewUnit() {
+        public void ResetOnNewUnit(LogSource logSource) {
+
+            foreach (var region in Regions) {
+                logSource.Error(OptionSet.PendingRegion, region);
+            }
+
             HeaderStrings.Clear();
             Regions.Clear();
             NoIncludes.Clear();

@@ -726,10 +726,13 @@ namespace PasPasPasTests.Parser {
 
         [Fact]
         public void TestRegion() {
-            RunCompilerDirective("", 0, () => Meta.Regions.Count);
-            RunCompilerDirective("REGION", 1, () => Meta.Regions.Count);
-            RunCompilerDirective("REGION 'XXX' ", "XXX", () => Meta.Regions.Peek());
-            RunCompilerDirective("REGION § ENDREGION", 0, () => Meta.Regions.Count);
+            Func<object> f = () => Meta.Regions.Count;
+            Func<object> g = () => Meta.Regions.Peek();
+            RunCompilerDirective("", 0, f);
+            RunCompilerDirective("REGION", 0, f, CompilerDirectiveParserErrors.InvalidRegionDirective);
+            RunCompilerDirective("REGION 'XXX' | DEFINE Q  ", 0, f, OptionSet.PendingRegion);
+            RunCompilerDirective("REGION 'XXX' § ENDREGION", 0, f);
+            RunCompilerDirective("ENDREGION", 0, f, CompilerDirectiveParserErrors.EndRegionWithoutRegion);
         }
 
         [Fact]
@@ -848,16 +851,36 @@ namespace PasPasPasTests.Parser {
 
         [Fact]
         public void TestPeVersions() {
-            RunCompilerDirective("", 0, () => Meta.PEOsVersion.MajorVersion.Value);
-            RunCompilerDirective("SETPEOSVERSION 1.43", 1, () => Meta.PEOsVersion.MajorVersion.Value);
-            RunCompilerDirective("SETPEOSVERSION 1.44", 44, () => Meta.PEOsVersion.MinorVersion.Value);
-            RunCompilerDirective("", 0, () => Meta.PESubsystemVersion.MajorVersion.Value);
-            RunCompilerDirective("SETPESUBSYSVERSION 2.43", 2, () => Meta.PESubsystemVersion.MajorVersion.Value);
-            RunCompilerDirective("SETPESUBSYSVERSION 2.44", 44, () => Meta.PESubsystemVersion.MinorVersion.Value);
-            RunCompilerDirective("", 0, () => Meta.PEUserVersion.MajorVersion.Value);
-            RunCompilerDirective("SETPEUSERVERSION 4.43", 4, () => Meta.PEUserVersion.MajorVersion.Value);
-            RunCompilerDirective("SETPEUSERVERSION 4.44", 44, () => Meta.PEUserVersion.MinorVersion.Value);
+            Func<object> ma = () => Meta.PEOsVersion.MajorVersion.Value;
+            Func<object> mi = () => Meta.PEOsVersion.MinorVersion.Value;
+            RunCompilerDirective("", 0, ma);
+            RunCompilerDirective("", 0, mi);
+            RunCompilerDirective("SETPEOSVERSION 1.43", 1, ma);
+            RunCompilerDirective("SETPEOSVERSION 1.44", 44, mi);
+            RunCompilerDirective("SETPEOSVERSION 1", 0, ma, CompilerDirectiveParserErrors.InvalidPEVersionDirective);
+            RunCompilerDirective("SETPEOSVERSION KAPUTT", 0, ma, CompilerDirectiveParserErrors.InvalidPEVersionDirective);
+            RunCompilerDirective("SETPEOSVERSION ", 0, ma, CompilerDirectiveParserErrors.InvalidPEVersionDirective);
 
+            ma = () => Meta.PESubsystemVersion.MajorVersion.Value;
+            mi = () => Meta.PESubsystemVersion.MinorVersion.Value;
+            RunCompilerDirective("", 0, ma);
+            RunCompilerDirective("", 0, mi);
+            RunCompilerDirective("SETPESUBSYSVERSION 2.43", 2, ma);
+            RunCompilerDirective("SETPESUBSYSVERSION 2.44", 44, mi);
+            RunCompilerDirective("SETPESUBSYSVERSION 1", 0, ma, CompilerDirectiveParserErrors.InvalidPEVersionDirective);
+            RunCompilerDirective("SETPESUBSYSVERSION KAPUTT", 0, ma, CompilerDirectiveParserErrors.InvalidPEVersionDirective);
+            RunCompilerDirective("SETPESUBSYSVERSION ", 0, ma, CompilerDirectiveParserErrors.InvalidPEVersionDirective);
+
+
+            ma = () => Meta.PEUserVersion.MajorVersion.Value;
+            mi = () => Meta.PEUserVersion.MinorVersion.Value;
+            RunCompilerDirective("", 0, ma);
+            RunCompilerDirective("", 0, mi);
+            RunCompilerDirective("SETPEUSERVERSION 4.43", 4, ma);
+            RunCompilerDirective("SETPEUSERVERSION 4.44", 44, mi);
+            RunCompilerDirective("SETPEUSERVERSION 1", 0, ma, CompilerDirectiveParserErrors.InvalidPEVersionDirective);
+            RunCompilerDirective("SETPEUSERVERSION KAPUTT", 0, ma, CompilerDirectiveParserErrors.InvalidPEVersionDirective);
+            RunCompilerDirective("SETPEUSERVERSION ", 0, ma, CompilerDirectiveParserErrors.InvalidPEVersionDirective);
         }
 
     }

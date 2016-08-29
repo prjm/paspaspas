@@ -46,14 +46,14 @@ namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
         public override void ToFormatter(PascalFormatter result) {
             result.Keyword("for").Space();
             result.Part(Variable).Space();
-            if (Kind == PascalToken.To || Kind == PascalToken.DownTo) {
+            if (Kind == TokenKind.To || Kind == TokenKind.DownTo) {
                 result.Operator(":=");
                 result.Space().Part(StartExpression).Space();
 
-                if (Kind == PascalToken.To) {
+                if (Kind == TokenKind.To) {
                     result.Keyword("to").Space();
                 }
-                else if (Kind == PascalToken.DownTo) {
+                else if (Kind == TokenKind.DownTo) {
                     result.Keyword("downto").Space();
                 }
                 result.Part(EndExpression).Space();

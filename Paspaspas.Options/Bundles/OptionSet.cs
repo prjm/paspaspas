@@ -23,6 +23,13 @@ namespace PasPasPas.Options.Bundles {
         /* {39e3b031-223e-42ef-b74f-881847172b6d} */
 
         /// <summary>
+        ///     pending region
+        /// </summary>
+        public static readonly Guid PendingRegion
+            = new Guid(new byte[] { 0xdc, 0x6e, 0x35, 0x28, 0x76, 0xcd, 0xba, 0x47, 0xbe, 0x3, 0xf5, 0x37, 0x3c, 0x5, 0x8b, 0xbf });
+        /* {28356edc-cd76-47ba-be03-f5373c058bbf} */
+
+        /// <summary>
         ///     debug configuration
         /// </summary>
         public const string DebugConfigurationName = "Debug";
@@ -68,17 +75,6 @@ namespace PasPasPas.Options.Bundles {
         public MetaInformation Meta { get; }
 
         /// <summary>
-        ///     option service id
-        /// </summary>
-        public static readonly Guid OptionSetServiceId
-            = new Guid("E177A4B4-012F-4929-A084-B341D23BCC12");
-
-        /// <summary>
-        ///     service id
-        /// </summary>
-        public Guid ServiceId => OptionSetServiceId;
-
-        /// <summary>
         ///     service name
         /// </summary>
         public string ServiceName => "CompilerOptions";
@@ -117,7 +113,7 @@ namespace PasPasPas.Options.Bundles {
 
             CompilerOptions.ResetOnNewUnit();
             ConditionalCompilation.ResetOnNewUnit(logSource);
-            Meta.ResetOnNewUnit();
+            Meta.ResetOnNewUnit(logSource);
             PathOptions.ResetOnNewUnit();
             Warnings.ResetOnNewUnit();
         }
