@@ -859,7 +859,7 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             else if (Match(PascalToken.WeakPackageUnit)) {
-                ParseWeakPackageUnitSwitch();
+                ParseWeakPackageUnitSwitch(parent);
             }
 
             else if (Match(PascalToken.Warnings)) {
@@ -1156,17 +1156,18 @@ namespace PasPasPas.Parsing.Parser {
             }
         }
 
-        private void ParseWeakPackageUnitSwitch() {
-            if (Optional(PascalToken.On)) {
-                CompilerOptions.WeakPackageUnit.Value = WeakPackaging.Enable;
-                return;
-            }
+        private void ParseWeakPackageUnitSwitch(ISyntaxPart parent) {
+            WeakPackageUnit result = CreateByTerminal<WeakPackageUnit>(parent);
 
-            if (Optional(PascalToken.Off)) {
-                CompilerOptions.WeakPackageUnit.Value = WeakPackaging.Disable;
-                return;
+            if (ContinueWith(result, PascalToken.On)) {
+                result.Mode = WeakPackaging.Enable;
             }
-            Unexpected();
+            else if (ContinueWith(result, PascalToken.Off)) {
+                result.Mode = WeakPackaging.Disable;
+            }
+            else {
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidWeakPackageUnitDirective, new[] { PascalToken.On, PascalToken.Off });
+            }
         }
 
         private void ParseWeakLinkRttiSwitch(ISyntaxPart parent) {

@@ -490,9 +490,12 @@ namespace PasPasPasTests.Parser {
 
         [Fact]
         public void TestWeakPackageUnit() {
-            RunCompilerDirective("", WeakPackaging.Undefined, () => CompilerOptions.WeakPackageUnit.Value);
-            RunCompilerDirective("WEAKPACKAGEUNIT ON", WeakPackaging.Enable, () => CompilerOptions.WeakPackageUnit.Value);
-            RunCompilerDirective("WEAKPACKAGEUNIT OFF", WeakPackaging.Disable, () => CompilerOptions.WeakPackageUnit.Value);
+            Func<object> f = () => CompilerOptions.WeakPackageUnit.Value;
+            RunCompilerDirective("", WeakPackaging.Undefined, f);
+            RunCompilerDirective("WEAKPACKAGEUNIT ON", WeakPackaging.Enable, f);
+            RunCompilerDirective("WEAKPACKAGEUNIT OFF", WeakPackaging.Disable, f);
+            RunCompilerDirective("WEAKPACKAGEUNIT KAPUTT", WeakPackaging.Undefined, f, CompilerDirectiveParserErrors.InvalidWeakPackageUnitDirective);
+            RunCompilerDirective("WEAKPACKAGEUNIT", WeakPackaging.Undefined, f, CompilerDirectiveParserErrors.InvalidWeakPackageUnitDirective);
         }
 
         [Fact]

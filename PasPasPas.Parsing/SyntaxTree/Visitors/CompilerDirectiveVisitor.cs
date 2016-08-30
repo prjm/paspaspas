@@ -635,5 +635,17 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                     break;
             }
         }
+
+
+
+        /// <summary>
+        ///      weak package unit
+        /// </summary>
+        /// <param name="syntaxPart"></param>
+        /// <param name="parameter"></param>
+        public void BeginVisitItem(WeakPackageUnit syntaxPart, CompilerDirectiveVisitorOptions parameter) {
+            parameter.CompilerOptions.WeakPackageUnit.Value = syntaxPart.Mode;
+        }
+
     }
 }

@@ -103,6 +103,7 @@
     <Compile Include="SyntaxTree\CompilerDirectives\Warnings.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\WarnSwitch.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\WeakLinkRtti.cs" />
+    <Compile Include="SyntaxTree\CompilerDirectives\WeakPackageUnit.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\WritableConsts.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\ZeroBasedStrings.cs" />
     <Compile Include="SyntaxTree\Terminal.cs" />
