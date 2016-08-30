@@ -2985,16 +2985,8 @@
       }
     },
     "UAP,Version=v10.0": {
-      "Desktop.Analyzers/1.1.0": {
-        "frameworkAssemblies": [
-          "System"
-        ]
-      },
-      "Microsoft.AnalyzerPowerPack/1.1.0": {
-        "frameworkAssemblies": [
-          "System"
-        ]
-      },
+      "Desktop.Analyzers/1.1.0": {},
+      "Microsoft.AnalyzerPowerPack/1.1.0": {},
       "Microsoft.CodeAnalysis.FxCopAnalyzers/1.1.0": {
         "dependencies": {
           "Desktop.Analyzers": "[1.0.0, 1.2.0)",
@@ -3002,10 +2994,7 @@
           "System.Runtime.Analyzers": "[1.0.0, 1.2.0)",
           "System.Runtime.InteropServices.Analyzers": "[1.0.0, 1.2.0)",
           "System.Security.Cryptography.Hashing.Algorithms.Analyzers": "[1.0.0, 1.2.0)"
-        },
-        "frameworkAssemblies": [
-          "System"
-        ]
+        }
       },
       "Microsoft.CSharp/4.0.0": {
         "dependencies": {
@@ -3976,11 +3965,7 @@
           }
         }
       },
-      "System.Runtime.Analyzers/1.1.0": {
-        "frameworkAssemblies": [
-          "System"
-        ]
-      },
+      "System.Runtime.Analyzers/1.1.0": {},
       "System.Runtime.Extensions/4.0.10": {
         "dependencies": {
           "System.Runtime": "4.0.20"
@@ -4035,11 +4020,7 @@
           }
         }
       },
-      "System.Runtime.InteropServices.Analyzers/1.1.0": {
-        "frameworkAssemblies": [
-          "System"
-        ]
-      },
+      "System.Runtime.InteropServices.Analyzers/1.1.0": {},
       "System.Runtime.InteropServices.WindowsRuntime/4.0.0": {
         "compile": {
           "ref/netcore50/System.Runtime.InteropServices.WindowsRuntime.dll": {}
@@ -4112,11 +4093,7 @@
           "lib/dotnet/System.Security.Claims.dll": {}
         }
       },
-      "System.Security.Cryptography.Hashing.Algorithms.Analyzers/1.1.0": {
-        "frameworkAssemblies": [
-          "System"
-        ]
-      },
+      "System.Security.Cryptography.Hashing.Algorithms.Analyzers/1.1.0": {},
       "System.Security.Principal/4.0.0": {
         "dependencies": {
           "System.Runtime": "4.0.0"
@@ -4330,16 +4307,8 @@
       }
     },
     "UAP,Version=v10.0/win10-arm": {
-      "Desktop.Analyzers/1.1.0": {
-        "frameworkAssemblies": [
-          "System"
-        ]
-      },
-      "Microsoft.AnalyzerPowerPack/1.1.0": {
-        "frameworkAssemblies": [
-          "System"
-        ]
-      },
+      "Desktop.Analyzers/1.1.0": {},
+      "Microsoft.AnalyzerPowerPack/1.1.0": {},
       "Microsoft.CodeAnalysis.FxCopAnalyzers/1.1.0": {
         "dependencies": {
           "Desktop.Analyzers": "[1.0.0, 1.2.0)",
@@ -4347,10 +4316,7 @@
           "System.Runtime.Analyzers": "[1.0.0, 1.2.0)",
           "System.Runtime.InteropServices.Analyzers": "[1.0.0, 1.2.0)",
           "System.Security.Cryptography.Hashing.Algorithms.Analyzers": "[1.0.0, 1.2.0)"
-        },
-        "frameworkAssemblies": [
-          "System"
-        ]
+        }
       },
       "Microsoft.CSharp/4.0.0": {
         "dependencies": {
@@ -5271,11 +5237,7 @@
           "lib/netcore50/System.Runtime.dll": {}
         }
       },
-      "System.Runtime.Analyzers/1.1.0": {
-        "frameworkAssemblies": [
-          "System"
-        ]
-      },
+      "System.Runtime.Analyzers/1.1.0": {},
       "System.Runtime.Extensions/4.0.10": {
         "dependencies": {
           "System.Runtime": "4.0.20"
@@ -5312,11 +5274,7 @@
           "lib/netcore50/System.Runtime.InteropServices.dll": {}
         }
       },
-      "System.Runtime.InteropServices.Analyzers/1.1.0": {
-        "frameworkAssemblies": [
-          "System"
-        ]
-      },
+      "System.Runtime.InteropServices.Analyzers/1.1.0": {},
       "System.Runtime.InteropServices.WindowsRuntime/4.0.0": {
         "compile": {
           "ref/netcore50/System.Runtime.InteropServices.WindowsRuntime.dll": {}
@@ -5377,11 +5335,7 @@
           "lib/dotnet/System.Security.Claims.dll": {}
         }
       },
-      "System.Security.Cryptography.Hashing.Algorithms.Analyzers/1.1.0": {
-        "frameworkAssemblies": [
-          "System"
-        ]
-      },
+      "System.Security.Cryptography.Hashing.Algorithms.Analyzers/1.1.0": {},
       "System.Security.Principal/4.0.0": {
         "dependencies": {
           "System.Runtime": "4.0.0"
@@ -5565,16 +5519,8 @@
       }
     },
     "UAP,Version=v10.0/win10-arm-aot": {
-      "Desktop.Analyzers/1.1.0": {
-        "frameworkAssemblies": [
-          "System"
-        ]
-      },
-      "Microsoft.AnalyzerPowerPack/1.1.0": {
-        "frameworkAssemblies": [
-          "System"
-        ]
-      },
+      "Desktop.Analyzers/1.1.0": {},
+      "Microsoft.AnalyzerPowerPack/1.1.0": {},
       "Microsoft.CodeAnalysis.FxCopAnalyzers/1.1.0": {
         "dependencies": {
           "Desktop.Analyzers": "[1.0.0, 1.2.0)",
@@ -5582,10 +5528,7 @@
           "System.Runtime.Analyzers": "[1.0.0, 1.2.0)",
           "System.Runtime.InteropServices.Analyzers": "[1.0.0, 1.2.0)",
           "System.Security.Cryptography.Hashing.Algorithms.Analyzers": "[1.0.0, 1.2.0)"
-        },
-        "frameworkAssemblies": [
-          "System"
-        ]
+        }
       },
       "Microsoft.CSharp/4.0.0": {
         "dependencies": {
@@ -6444,11 +6387,7 @@
           "runtimes/win8-aot/lib/netcore50/System.Runtime.dll": {}
         }
       },
-      "System.Runtime.Analyzers/1.1.0": {
-        "frameworkAssemblies": [
-          "System"
-        ]
-      },
+      "System.Runtime.Analyzers/1.1.0": {},
       "System.Runtime.Extensions/4.0.10": {
         "dependencies": {
           "System.Runtime": "4.0.20"
@@ -6485,11 +6424,7 @@
           "runtimes/win8-aot/lib/netcore50/System.Runtime.InteropServices.dll": {}
         }
       },
-      "System.Runtime.InteropServices.Analyzers/1.1.0": {
-        "frameworkAssemblies": [
-          "System"
-        ]
-      },
+      "System.Runtime.InteropServices.Analyzers/1.1.0": {},
       "System.Runtime.InteropServices.WindowsRuntime/4.0.0": {
         "compile": {
           "ref/netcore50/System.Runtime.InteropServices.WindowsRuntime.dll": {}
@@ -6550,11 +6485,7 @@
           "lib/dotnet/System.Security.Claims.dll": {}
         }
       },
-      "System.Security.Cryptography.Hashing.Algorithms.Analyzers/1.1.0": {
-        "frameworkAssemblies": [
-          "System"
-        ]
-      },
+      "System.Security.Cryptography.Hashing.Algorithms.Analyzers/1.1.0": {},
       "System.Security.Principal/4.0.0": {
         "dependencies": {
           "System.Runtime": "4.0.0"
@@ -6738,16 +6669,8 @@
       }
     },
     "UAP,Version=v10.0/win10-x64": {
-      "Desktop.Analyzers/1.1.0": {
-        "frameworkAssemblies": [
-          "System"
-        ]
-      },
-      "Microsoft.AnalyzerPowerPack/1.1.0": {
-        "frameworkAssemblies": [
-          "System"
-        ]
-      },
+      "Desktop.Analyzers/1.1.0": {},
+      "Microsoft.AnalyzerPowerPack/1.1.0": {},
       "Microsoft.CodeAnalysis.FxCopAnalyzers/1.1.0": {
         "dependencies": {
           "Desktop.Analyzers": "[1.0.0, 1.2.0)",
@@ -6755,10 +6678,7 @@
           "System.Runtime.Analyzers": "[1.0.0, 1.2.0)",
           "System.Runtime.InteropServices.Analyzers": "[1.0.0, 1.2.0)",
           "System.Security.Cryptography.Hashing.Algorithms.Analyzers": "[1.0.0, 1.2.0)"
-        },
-        "frameworkAssemblies": [
-          "System"
-        ]
+        }
       },
       "Microsoft.CSharp/4.0.0": {
         "dependencies": {
@@ -7685,11 +7605,7 @@
           "lib/netcore50/System.Runtime.dll": {}
         }
       },
-      "System.Runtime.Analyzers/1.1.0": {
-        "frameworkAssemblies": [
-          "System"
-        ]
-      },
+      "System.Runtime.Analyzers/1.1.0": {},
       "System.Runtime.Extensions/4.0.10": {
         "dependencies": {
           "System.Runtime": "4.0.20"
@@ -7726,11 +7642,7 @@
           "lib/netcore50/System.Runtime.InteropServices.dll": {}
         }
       },
-      "System.Runtime.InteropServices.Analyzers/1.1.0": {
-        "frameworkAssemblies": [
-          "System"
-        ]
-      },
+      "System.Runtime.InteropServices.Analyzers/1.1.0": {},
       "System.Runtime.InteropServices.WindowsRuntime/4.0.0": {
         "compile": {
           "ref/netcore50/System.Runtime.InteropServices.WindowsRuntime.dll": {}
@@ -7791,11 +7703,7 @@
           "lib/dotnet/System.Security.Claims.dll": {}
         }
       },
-      "System.Security.Cryptography.Hashing.Algorithms.Analyzers/1.1.0": {
-        "frameworkAssemblies": [
-          "System"
-        ]
-      },
+      "System.Security.Cryptography.Hashing.Algorithms.Analyzers/1.1.0": {},
       "System.Security.Principal/4.0.0": {
         "dependencies": {
           "System.Runtime": "4.0.0"
@@ -7979,16 +7887,8 @@
       }
     },
     "UAP,Version=v10.0/win10-x64-aot": {
-      "Desktop.Analyzers/1.1.0": {
-        "frameworkAssemblies": [
-          "System"
-        ]
-      },
-      "Microsoft.AnalyzerPowerPack/1.1.0": {
-        "frameworkAssemblies": [
-          "System"
-        ]
-      },
+      "Desktop.Analyzers/1.1.0": {},
+      "Microsoft.AnalyzerPowerPack/1.1.0": {},
       "Microsoft.CodeAnalysis.FxCopAnalyzers/1.1.0": {
         "dependencies": {
           "Desktop.Analyzers": "[1.0.0, 1.2.0)",
@@ -7996,10 +7896,7 @@
           "System.Runtime.Analyzers": "[1.0.0, 1.2.0)",
           "System.Runtime.InteropServices.Analyzers": "[1.0.0, 1.2.0)",
           "System.Security.Cryptography.Hashing.Algorithms.Analyzers": "[1.0.0, 1.2.0)"
-        },
-        "frameworkAssemblies": [
-          "System"
-        ]
+        }
       },
       "Microsoft.CSharp/4.0.0": {
         "dependencies": {
@@ -8858,11 +8755,7 @@
           "runtimes/win8-aot/lib/netcore50/System.Runtime.dll": {}
         }
       },
-      "System.Runtime.Analyzers/1.1.0": {
-        "frameworkAssemblies": [
-          "System"
-        ]
-      },
+      "System.Runtime.Analyzers/1.1.0": {},
       "System.Runtime.Extensions/4.0.10": {
         "dependencies": {
           "System.Runtime": "4.0.20"
@@ -8899,11 +8792,7 @@
           "runtimes/win8-aot/lib/netcore50/System.Runtime.InteropServices.dll": {}
         }
       },
-      "System.Runtime.InteropServices.Analyzers/1.1.0": {
-        "frameworkAssemblies": [
-          "System"
-        ]
-      },
+      "System.Runtime.InteropServices.Analyzers/1.1.0": {},
       "System.Runtime.InteropServices.WindowsRuntime/4.0.0": {
         "compile": {
           "ref/netcore50/System.Runtime.InteropServices.WindowsRuntime.dll": {}
@@ -8964,11 +8853,7 @@
           "lib/dotnet/System.Security.Claims.dll": {}
         }
       },
-      "System.Security.Cryptography.Hashing.Algorithms.Analyzers/1.1.0": {
-        "frameworkAssemblies": [
-          "System"
-        ]
-      },
+      "System.Security.Cryptography.Hashing.Algorithms.Analyzers/1.1.0": {},
       "System.Security.Principal/4.0.0": {
         "dependencies": {
           "System.Runtime": "4.0.0"
@@ -9152,16 +9037,8 @@
       }
     },
     "UAP,Version=v10.0/win10-x86": {
-      "Desktop.Analyzers/1.1.0": {
-        "frameworkAssemblies": [
-          "System"
-        ]
-      },
-      "Microsoft.AnalyzerPowerPack/1.1.0": {
-        "frameworkAssemblies": [
-          "System"
-        ]
-      },
+      "Desktop.Analyzers/1.1.0": {},
+      "Microsoft.AnalyzerPowerPack/1.1.0": {},
       "Microsoft.CodeAnalysis.FxCopAnalyzers/1.1.0": {
         "dependencies": {
           "Desktop.Analyzers": "[1.0.0, 1.2.0)",
@@ -9169,10 +9046,7 @@
           "System.Runtime.Analyzers": "[1.0.0, 1.2.0)",
           "System.Runtime.InteropServices.Analyzers": "[1.0.0, 1.2.0)",
           "System.Security.Cryptography.Hashing.Algorithms.Analyzers": "[1.0.0, 1.2.0)"
-        },
-        "frameworkAssemblies": [
-          "System"
-        ]
+        }
       },
       "Microsoft.CSharp/4.0.0": {
         "dependencies": {
@@ -10099,11 +9973,7 @@
           "lib/netcore50/System.Runtime.dll": {}
         }
       },
-      "System.Runtime.Analyzers/1.1.0": {
-        "frameworkAssemblies": [
-          "System"
-        ]
-      },
+      "System.Runtime.Analyzers/1.1.0": {},
       "System.Runtime.Extensions/4.0.10": {
         "dependencies": {
           "System.Runtime": "4.0.20"
@@ -10140,11 +10010,7 @@
           "lib/netcore50/System.Runtime.InteropServices.dll": {}
         }
       },
-      "System.Runtime.InteropServices.Analyzers/1.1.0": {
-        "frameworkAssemblies": [
-          "System"
-        ]
-      },
+      "System.Runtime.InteropServices.Analyzers/1.1.0": {},
       "System.Runtime.InteropServices.WindowsRuntime/4.0.0": {
         "compile": {
           "ref/netcore50/System.Runtime.InteropServices.WindowsRuntime.dll": {}
@@ -10205,11 +10071,7 @@
           "lib/dotnet/System.Security.Claims.dll": {}
         }
       },
-      "System.Security.Cryptography.Hashing.Algorithms.Analyzers/1.1.0": {
-        "frameworkAssemblies": [
-          "System"
-        ]
-      },
+      "System.Security.Cryptography.Hashing.Algorithms.Analyzers/1.1.0": {},
       "System.Security.Principal/4.0.0": {
         "dependencies": {
           "System.Runtime": "4.0.0"
@@ -10393,16 +10255,8 @@
       }
     },
     "UAP,Version=v10.0/win10-x86-aot": {
-      "Desktop.Analyzers/1.1.0": {
-        "frameworkAssemblies": [
-          "System"
-        ]
-      },
-      "Microsoft.AnalyzerPowerPack/1.1.0": {
-        "frameworkAssemblies": [
-          "System"
-        ]
-      },
+      "Desktop.Analyzers/1.1.0": {},
+      "Microsoft.AnalyzerPowerPack/1.1.0": {},
       "Microsoft.CodeAnalysis.FxCopAnalyzers/1.1.0": {
         "dependencies": {
           "Desktop.Analyzers": "[1.0.0, 1.2.0)",
@@ -10410,10 +10264,7 @@
           "System.Runtime.Analyzers": "[1.0.0, 1.2.0)",
           "System.Runtime.InteropServices.Analyzers": "[1.0.0, 1.2.0)",
           "System.Security.Cryptography.Hashing.Algorithms.Analyzers": "[1.0.0, 1.2.0)"
-        },
-        "frameworkAssemblies": [
-          "System"
-        ]
+        }
       },
       "Microsoft.CSharp/4.0.0": {
         "dependencies": {
@@ -11272,11 +11123,7 @@
           "runtimes/win8-aot/lib/netcore50/System.Runtime.dll": {}
         }
       },
-      "System.Runtime.Analyzers/1.1.0": {
-        "frameworkAssemblies": [
-          "System"
-        ]
-      },
+      "System.Runtime.Analyzers/1.1.0": {},
       "System.Runtime.Extensions/4.0.10": {
         "dependencies": {
           "System.Runtime": "4.0.20"
@@ -11313,11 +11160,7 @@
           "runtimes/win8-aot/lib/netcore50/System.Runtime.InteropServices.dll": {}
         }
       },
-      "System.Runtime.InteropServices.Analyzers/1.1.0": {
-        "frameworkAssemblies": [
-          "System"
-        ]
-      },
+      "System.Runtime.InteropServices.Analyzers/1.1.0": {},
       "System.Runtime.InteropServices.WindowsRuntime/4.0.0": {
         "compile": {
           "ref/netcore50/System.Runtime.InteropServices.WindowsRuntime.dll": {}
@@ -11378,11 +11221,7 @@
           "lib/dotnet/System.Security.Claims.dll": {}
         }
       },
-      "System.Security.Cryptography.Hashing.Algorithms.Analyzers/1.1.0": {
-        "frameworkAssemblies": [
-          "System"
-        ]
-      },
+      "System.Security.Cryptography.Hashing.Algorithms.Analyzers/1.1.0": {},
       "System.Security.Principal/4.0.0": {
         "dependencies": {
           "System.Runtime": "4.0.0"

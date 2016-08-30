@@ -90,6 +90,7 @@
     <Compile Include="SyntaxTree\CompilerDirectives\RangeChecks.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\RealCompatibilty.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\Region.cs" />
+    <Compile Include="SyntaxTree\CompilerDirectives\RttiControl.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\RunOnly.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\SafeDivide.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\ScopedEnums.cs" />

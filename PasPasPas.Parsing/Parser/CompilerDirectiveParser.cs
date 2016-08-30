@@ -219,7 +219,7 @@ namespace PasPasPas.Parsing.Parser {
                 ParseWarnParameter(parent);
             }
             else if (Match(PascalToken.Rtti)) {
-                ParseRttiParameter();
+                ParseRttiParameter(parent);
             }
             else if (Match(PascalToken.Region)) {
                 ParseRegion(parent);
@@ -410,95 +410,102 @@ namespace PasPasPas.Parsing.Parser {
         /// <summary>
         ///     parse the rtti parameter
         /// </summary>
-        private void ParseRttiParameter() {
-            Require(PascalToken.Rtti);
-            RttiGenerationMode mode;
+        private void ParseRttiParameter(ISyntaxPart parent) {
+            RttiControl result = CreateByTerminal<RttiControl>(parent);
 
-            if (Optional(PascalToken.Inherit)) {
-                mode = RttiGenerationMode.Inherit;
+            if (ContinueWith(result, PascalToken.Inherit)) {
+                result.Mode = RttiGenerationMode.Inherit;
             }
-            else if (Optional(PascalToken.Explicit)) {
-                mode = RttiGenerationMode.Explicit;
+            else if (ContinueWith(result, PascalToken.Explicit)) {
+                result.Mode = RttiGenerationMode.Explicit;
             }
             else {
-                Unexpected();
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidRttiDirective, new[] { PascalToken.Inherit, PascalToken.Explicit });
                 return;
             }
 
-            RttiForVisibility methods = null;
-            RttiForVisibility properties = null;
-            RttiForVisibility fields = null;
             bool canContinue;
 
             do {
                 canContinue = false;
-                if (Optional(PascalToken.Methods)) {
-                    if (methods != null) {
-                        Unexpected();
+                if (ContinueWith(result, PascalToken.Methods)) {
+                    if (result.Methods != null) {
+                        ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidRttiDirective, new int[0]);
                         return;
                     }
-                    methods = ParseRttiVisibility();
-                    canContinue = methods != null;
+                    result.Methods = ParseRttiVisibility(result);
+                    canContinue = result.Methods != null;
                 }
-                else if (Optional(PascalToken.Properties)) {
-                    if (properties != null) {
-                        Unexpected();
+                else if (ContinueWith(result, PascalToken.Properties)) {
+                    if (result.Properties != null) {
+                        ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidRttiDirective, new int[0]);
                         return;
                     }
-                    properties = ParseRttiVisibility();
-                    canContinue = properties != null;
+                    result.Properties = ParseRttiVisibility(result);
+                    canContinue = result.Properties != null;
                 }
-                else if (Optional(PascalToken.Fields)) {
-                    if (fields != null) {
-                        Unexpected();
+                else if (ContinueWith(result, PascalToken.Fields)) {
+                    if (result.Fields != null) {
+                        ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidRttiDirective, new int[0]);
                         return;
                     }
-                    fields = ParseRttiVisibility();
-                    canContinue = fields != null;
+                    result.Fields = ParseRttiVisibility(result);
+                    canContinue = result.Fields != null;
                 }
             } while (canContinue);
-
-            CompilerOptions.Rtti.Mode = mode;
-            CompilerOptions.Rtti.AssignVisibility(properties, methods, fields);
         }
 
-        private RttiForVisibility ParseRttiVisibility() {
-            if (!RequireTokenKind(TokenKind.OpenParen))
+        private RttiForVisibility ParseRttiVisibility(RttiControl result) {
+            if (!RequireTokenKind(TokenKind.OpenParen)) {
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidRttiDirective, new[] { TokenKind.OpenBraces });
                 return null;
+            }
 
-            if (!RequireTokenKind(TokenKind.OpenBraces))
+            if (!RequireTokenKind(TokenKind.OpenBraces)) {
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidRttiDirective, new[] { TokenKind.OpenBraces });
                 return null;
+            }
 
-            var result = new RttiForVisibility();
+            var visibility = new RttiForVisibility();
 
             do {
-                var kind = Require(PascalToken.VcPrivate, PascalToken.VcProtected, PascalToken.VcPublic, PascalToken.VcPublished).Kind;
+                if (!ContinueWith(result, PascalToken.VcPrivate, PascalToken.VcProtected, PascalToken.VcPublic, PascalToken.VcPublished)) {
+                    ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidRttiDirective, new[] { PascalToken.VcPrivate, PascalToken.VcProtected, PascalToken.VcPublic, PascalToken.VcPublished });
+                    return null;
+                }
+                var kind = result.LastTerminal.Token.Kind;
 
                 switch (kind) {
                     case PascalToken.VcPrivate:
-                        result.ForPrivate = true;
+                        visibility.ForPrivate = true;
                         break;
                     case PascalToken.VcProtected:
-                        result.ForProtected = true;
+                        visibility.ForProtected = true;
                         break;
                     case PascalToken.VcPublic:
-                        result.ForPublic = true;
+                        visibility.ForPublic = true;
                         break;
                     case PascalToken.VcPublished:
-                        result.ForPublished = true;
+                        visibility.ForPublished = true;
                         break;
-                    default:
-                        return null;
+                    default: {
+                            ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidRttiDirective, new int[0]);
+                            return null;
+                        }
                 }
-            } while (Optional(TokenKind.Comma));
+            } while (ContinueWith(result, TokenKind.Comma));
 
-            if (!RequireTokenKind(TokenKind.CloseBraces))
+            if (!RequireTokenKind(TokenKind.CloseBraces)) {
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidRttiDirective, new[] { TokenKind.CloseBraces });
                 return null;
+            }
 
-            if (!RequireTokenKind(TokenKind.CloseParen))
+            if (!RequireTokenKind(TokenKind.CloseParen)) {
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidRttiDirective, new[] { TokenKind.CloseParen });
                 return null;
+            }
 
-            return result;
+            return visibility;
         }
 
         private void ParseWarnParameter(ISyntaxPart parent) {

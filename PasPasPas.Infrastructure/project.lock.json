@@ -3263,16 +3263,10 @@
     },
     "UAP,Version=v10.0": {
       "Desktop.Analyzers/1.1.0": {
-        "type": "package",
-        "frameworkAssemblies": [
-          "System"
-        ]
+        "type": "package"
       },
       "Microsoft.AnalyzerPowerPack/1.1.0": {
-        "type": "package",
-        "frameworkAssemblies": [
-          "System"
-        ]
+        "type": "package"
       },
       "Microsoft.CodeAnalysis.FxCopAnalyzers/1.1.0": {
         "type": "package",
@@ -3282,10 +3276,7 @@
           "System.Runtime.Analyzers": "[1.0.0, 1.2.0)",
           "System.Runtime.InteropServices.Analyzers": "[1.0.0, 1.2.0)",
           "System.Security.Cryptography.Hashing.Algorithms.Analyzers": "[1.0.0, 1.2.0)"
-        },
-        "frameworkAssemblies": [
-          "System"
-        ]
+        }
       },
       "Microsoft.CSharp/4.0.0": {
         "type": "package",
@@ -4309,10 +4300,7 @@
         }
       },
       "System.Runtime.Analyzers/1.1.0": {
-        "type": "package",
-        "frameworkAssemblies": [
-          "System"
-        ]
+        "type": "package"
       },
       "System.Runtime.Extensions/4.0.10": {
         "type": "package",
@@ -4372,10 +4360,7 @@
         }
       },
       "System.Runtime.InteropServices.Analyzers/1.1.0": {
-        "type": "package",
-        "frameworkAssemblies": [
-          "System"
-        ]
+        "type": "package"
       },
       "System.Runtime.InteropServices.WindowsRuntime/4.0.0": {
         "type": "package",
@@ -4454,10 +4439,7 @@
         }
       },
       "System.Security.Cryptography.Hashing.Algorithms.Analyzers/1.1.0": {
-        "type": "package",
-        "frameworkAssemblies": [
-          "System"
-        ]
+        "type": "package"
       },
       "System.Security.Principal/4.0.0": {
         "type": "package",
@@ -4685,16 +4667,10 @@
     },
     "UAP,Version=v10.0/win10-arm": {
       "Desktop.Analyzers/1.1.0": {
-        "type": "package",
-        "frameworkAssemblies": [
-          "System"
-        ]
+        "type": "package"
       },
       "Microsoft.AnalyzerPowerPack/1.1.0": {
-        "type": "package",
-        "frameworkAssemblies": [
-          "System"
-        ]
+        "type": "package"
       },
       "Microsoft.CodeAnalysis.FxCopAnalyzers/1.1.0": {
         "type": "package",
@@ -4704,10 +4680,7 @@
           "System.Runtime.Analyzers": "[1.0.0, 1.2.0)",
           "System.Runtime.InteropServices.Analyzers": "[1.0.0, 1.2.0)",
           "System.Security.Cryptography.Hashing.Algorithms.Analyzers": "[1.0.0, 1.2.0)"
-        },
-        "frameworkAssemblies": [
-          "System"
-        ]
+        }
       },
       "Microsoft.CSharp/4.0.0": {
         "type": "package",
@@ -5686,10 +5659,7 @@
         }
       },
       "System.Runtime.Analyzers/1.1.0": {
-        "type": "package",
-        "frameworkAssemblies": [
-          "System"
-        ]
+        "type": "package"
       },
       "System.Runtime.Extensions/4.0.10": {
         "type": "package",
@@ -5731,10 +5701,7 @@
         }
       },
       "System.Runtime.InteropServices.Analyzers/1.1.0": {
-        "type": "package",
-        "frameworkAssemblies": [
-          "System"
-        ]
+        "type": "package"
       },
       "System.Runtime.InteropServices.WindowsRuntime/4.0.0": {
         "type": "package",
@@ -5801,10 +5768,7 @@
         }
       },
       "System.Security.Cryptography.Hashing.Algorithms.Analyzers/1.1.0": {
-        "type": "package",
-        "frameworkAssemblies": [
-          "System"
-        ]
+        "type": "package"
       },
       "System.Security.Principal/4.0.0": {
         "type": "package",
@@ -6002,16 +5966,10 @@
     },
     "UAP,Version=v10.0/win10-arm-aot": {
       "Desktop.Analyzers/1.1.0": {
-        "type": "package",
-        "frameworkAssemblies": [
-          "System"
-        ]
+        "type": "package"
       },
       "Microsoft.AnalyzerPowerPack/1.1.0": {
-        "type": "package",
-        "frameworkAssemblies": [
-          "System"
-        ]
+        "type": "package"
       },
       "Microsoft.CodeAnalysis.FxCopAnalyzers/1.1.0": {
         "type": "package",
@@ -6021,10 +5979,7 @@
           "System.Runtime.Analyzers": "[1.0.0, 1.2.0)",
           "System.Runtime.InteropServices.Analyzers": "[1.0.0, 1.2.0)",
           "System.Security.Cryptography.Hashing.Algorithms.Analyzers": "[1.0.0, 1.2.0)"
-        },
-        "frameworkAssemblies": [
-          "System"
-        ]
+        }
       },
       "Microsoft.CSharp/4.0.0": {
         "type": "package",
@@ -6938,10 +6893,7 @@
         }
       },
       "System.Runtime.Analyzers/1.1.0": {
-        "type": "package",
-        "frameworkAssemblies": [
-          "System"
-        ]
+        "type": "package"
       },
       "System.Runtime.Extensions/4.0.10": {
         "type": "package",
@@ -6983,10 +6935,7 @@
         }
       },
       "System.Runtime.InteropServices.Analyzers/1.1.0": {
-        "type": "package",
-        "frameworkAssemblies": [
-          "System"
-        ]
+        "type": "package"
       },
       "System.Runtime.InteropServices.WindowsRuntime/4.0.0": {
         "type": "package",
@@ -7053,10 +7002,7 @@
         }
       },
       "System.Security.Cryptography.Hashing.Algorithms.Analyzers/1.1.0": {
-        "type": "package",
-        "frameworkAssemblies": [
-          "System"
-        ]
+        "type": "package"
       },
       "System.Security.Principal/4.0.0": {
         "type": "package",
@@ -7254,16 +7200,10 @@
     },
     "UAP,Version=v10.0/win10-x64": {
       "Desktop.Analyzers/1.1.0": {
-        "type": "package",
-        "frameworkAssemblies": [
-          "System"
-        ]
+        "type": "package"
       },
       "Microsoft.AnalyzerPowerPack/1.1.0": {
-        "type": "package",
-        "frameworkAssemblies": [
-          "System"
-        ]
+        "type": "package"
       },
       "Microsoft.CodeAnalysis.FxCopAnalyzers/1.1.0": {
         "type": "package",
@@ -7273,10 +7213,7 @@
           "System.Runtime.Analyzers": "[1.0.0, 1.2.0)",
           "System.Runtime.InteropServices.Analyzers": "[1.0.0, 1.2.0)",
           "System.Security.Cryptography.Hashing.Algorithms.Analyzers": "[1.0.0, 1.2.0)"
-        },
-        "frameworkAssemblies": [
-          "System"
-        ]
+        }
       },
       "Microsoft.CSharp/4.0.0": {
         "type": "package",
@@ -8262,10 +8199,7 @@
         }
       },
       "System.Runtime.Analyzers/1.1.0": {
-        "type": "package",
-        "frameworkAssemblies": [
-          "System"
-        ]
+        "type": "package"
       },
       "System.Runtime.Extensions/4.0.10": {
         "type": "package",
@@ -8307,10 +8241,7 @@
         }
       },
       "System.Runtime.InteropServices.Analyzers/1.1.0": {
-        "type": "package",
-        "frameworkAssemblies": [
-          "System"
-        ]
+        "type": "package"
       },
       "System.Runtime.InteropServices.WindowsRuntime/4.0.0": {
         "type": "package",
@@ -8377,10 +8308,7 @@
         }
       },
       "System.Security.Cryptography.Hashing.Algorithms.Analyzers/1.1.0": {
-        "type": "package",
-        "frameworkAssemblies": [
-          "System"
-        ]
+        "type": "package"
       },
       "System.Security.Principal/4.0.0": {
         "type": "package",
@@ -8578,16 +8506,10 @@
     },
     "UAP,Version=v10.0/win10-x64-aot": {
       "Desktop.Analyzers/1.1.0": {
-        "type": "package",
-        "frameworkAssemblies": [
-          "System"
-        ]
+        "type": "package"
       },
       "Microsoft.AnalyzerPowerPack/1.1.0": {
-        "type": "package",
-        "frameworkAssemblies": [
-          "System"
-        ]
+        "type": "package"
       },
       "Microsoft.CodeAnalysis.FxCopAnalyzers/1.1.0": {
         "type": "package",
@@ -8597,10 +8519,7 @@
           "System.Runtime.Analyzers": "[1.0.0, 1.2.0)",
           "System.Runtime.InteropServices.Analyzers": "[1.0.0, 1.2.0)",
           "System.Security.Cryptography.Hashing.Algorithms.Analyzers": "[1.0.0, 1.2.0)"
-        },
-        "frameworkAssemblies": [
-          "System"
-        ]
+        }
       },
       "Microsoft.CSharp/4.0.0": {
         "type": "package",
@@ -9514,10 +9433,7 @@
         }
       },
       "System.Runtime.Analyzers/1.1.0": {
-        "type": "package",
-        "frameworkAssemblies": [
-          "System"
-        ]
+        "type": "package"
       },
       "System.Runtime.Extensions/4.0.10": {
         "type": "package",
@@ -9559,10 +9475,7 @@
         }
       },
       "System.Runtime.InteropServices.Analyzers/1.1.0": {
-        "type": "package",
-        "frameworkAssemblies": [
-          "System"
-        ]
+        "type": "package"
       },
       "System.Runtime.InteropServices.WindowsRuntime/4.0.0": {
         "type": "package",
@@ -9629,10 +9542,7 @@
         }
       },
       "System.Security.Cryptography.Hashing.Algorithms.Analyzers/1.1.0": {
-        "type": "package",
-        "frameworkAssemblies": [
-          "System"
-        ]
+        "type": "package"
       },
       "System.Security.Principal/4.0.0": {
         "type": "package",
@@ -9830,16 +9740,10 @@
     },
     "UAP,Version=v10.0/win10-x86": {
       "Desktop.Analyzers/1.1.0": {
-        "type": "package",
-        "frameworkAssemblies": [
-          "System"
-        ]
+        "type": "package"
       },
       "Microsoft.AnalyzerPowerPack/1.1.0": {
-        "type": "package",
-        "frameworkAssemblies": [
-          "System"
-        ]
+        "type": "package"
       },
       "Microsoft.CodeAnalysis.FxCopAnalyzers/1.1.0": {
         "type": "package",
@@ -9849,10 +9753,7 @@
           "System.Runtime.Analyzers": "[1.0.0, 1.2.0)",
           "System.Runtime.InteropServices.Analyzers": "[1.0.0, 1.2.0)",
           "System.Security.Cryptography.Hashing.Algorithms.Analyzers": "[1.0.0, 1.2.0)"
-        },
-        "frameworkAssemblies": [
-          "System"
-        ]
+        }
       },
       "Microsoft.CSharp/4.0.0": {
         "type": "package",
@@ -10838,10 +10739,7 @@
         }
       },
       "System.Runtime.Analyzers/1.1.0": {
-        "type": "package",
-        "frameworkAssemblies": [
-          "System"
-        ]
+        "type": "package"
       },
       "System.Runtime.Extensions/4.0.10": {
         "type": "package",
@@ -10883,10 +10781,7 @@
         }
       },
       "System.Runtime.InteropServices.Analyzers/1.1.0": {
-        "type": "package",
-        "frameworkAssemblies": [
-          "System"
-        ]
+        "type": "package"
       },
       "System.Runtime.InteropServices.WindowsRuntime/4.0.0": {
         "type": "package",
@@ -10953,10 +10848,7 @@
         }
       },
       "System.Security.Cryptography.Hashing.Algorithms.Analyzers/1.1.0": {
-        "type": "package",
-        "frameworkAssemblies": [
-          "System"
-        ]
+        "type": "package"
       },
       "System.Security.Principal/4.0.0": {
         "type": "package",
@@ -11154,16 +11046,10 @@
     },
     "UAP,Version=v10.0/win10-x86-aot": {
       "Desktop.Analyzers/1.1.0": {
-        "type": "package",
-        "frameworkAssemblies": [
-          "System"
-        ]
+        "type": "package"
       },
       "Microsoft.AnalyzerPowerPack/1.1.0": {
-        "type": "package",
-        "frameworkAssemblies": [
-          "System"
-        ]
+        "type": "package"
       },
       "Microsoft.CodeAnalysis.FxCopAnalyzers/1.1.0": {
         "type": "package",
@@ -11173,10 +11059,7 @@
           "System.Runtime.Analyzers": "[1.0.0, 1.2.0)",
           "System.Runtime.InteropServices.Analyzers": "[1.0.0, 1.2.0)",
           "System.Security.Cryptography.Hashing.Algorithms.Analyzers": "[1.0.0, 1.2.0)"
-        },
-        "frameworkAssemblies": [
-          "System"
-        ]
+        }
       },
       "Microsoft.CSharp/4.0.0": {
         "type": "package",
@@ -12090,10 +11973,7 @@
         }
       },
       "System.Runtime.Analyzers/1.1.0": {
-        "type": "package",
-        "frameworkAssemblies": [
-          "System"
-        ]
+        "type": "package"
       },
       "System.Runtime.Extensions/4.0.10": {
         "type": "package",
@@ -12135,10 +12015,7 @@
         }
       },
       "System.Runtime.InteropServices.Analyzers/1.1.0": {
-        "type": "package",
-        "frameworkAssemblies": [
-          "System"
-        ]
+        "type": "package"
       },
       "System.Runtime.InteropServices.WindowsRuntime/4.0.0": {
         "type": "package",
@@ -12205,10 +12082,7 @@
         }
       },
       "System.Security.Cryptography.Hashing.Algorithms.Analyzers/1.1.0": {
-        "type": "package",
-        "frameworkAssemblies": [
-          "System"
-        ]
+        "type": "package"
       },
       "System.Security.Principal/4.0.0": {
         "type": "package",
@@ -15046,5 +14920,7 @@
       "System.Runtime.InteropServices.Analyzers >= 1.1.0"
     ],
     ".NETPlatform,Version=v5.0": []
-  }
+  },
+  "tools": {},
+  "projectFileToolGroups": {}
 }

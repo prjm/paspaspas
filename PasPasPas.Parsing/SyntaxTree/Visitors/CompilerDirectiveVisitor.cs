@@ -636,8 +636,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             }
         }
 
-
-
         /// <summary>
         ///      weak package unit
         /// </summary>
@@ -645,6 +643,16 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <param name="parameter"></param>
         public void BeginVisitItem(WeakPackageUnit syntaxPart, CompilerDirectiveVisitorOptions parameter) {
             parameter.CompilerOptions.WeakPackageUnit.Value = syntaxPart.Mode;
+        }
+
+        /// <summary>
+        ///      weak package unit
+        /// </summary>
+        /// <param name="syntaxPart"></param>
+        /// <param name="parameter"></param>
+        public void BeginVisitItem(RttiControl syntaxPart, CompilerDirectiveVisitorOptions parameter) {
+            parameter.CompilerOptions.Rtti.Mode = syntaxPart.Mode;
+            parameter.CompilerOptions.Rtti.AssignVisibility(syntaxPart.Properties, syntaxPart.Methods, syntaxPart.Fields);
         }
 
     }
