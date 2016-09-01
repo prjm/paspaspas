@@ -6,6 +6,7 @@ using PasPasPas.Parsing.Tokenizer;
 using PasPasPas.Infrastructure.Input;
 using PasPasPas.Parsing.SyntaxTree;
 using PasPasPas.Parsing.SyntaxTree.CompilerDirectives;
+using PasPasPas.Infrastructure.Log;
 
 namespace PasPasPas.Parsing.Parser {
 
@@ -180,7 +181,7 @@ namespace PasPasPas.Parsing.Parser {
                 ParseIfDef(parent);
             }
             else if (Match(PascalToken.IfOpt)) {
-                ParseIfOpt();
+                ParseIfOpt(parent);
             }
             else if (Match(PascalToken.EndIf)) {
                 ParseEndIf(parent);
@@ -246,20 +247,28 @@ namespace PasPasPas.Parsing.Parser {
                 ParseNoDefine(parent);
             }
             else if (Match(PascalToken.MessageCd)) {
-                ParseMessage();
+                ParseMessage(parent);
             }
             else if (Match(PascalToken.MinMemStackSizeSwitchLong, PascalToken.MaxMemStackSizeSwitchLong)) {
-                ParseStackSizeSwitch(false);
+                ParseStackSizeSwitch(parent, false);
             }
         }
 
-        private void ParseIfOpt() {
-            Require(PascalToken.IfOpt);
-            var switchKind = Require(PascalToken.Identifier).Value;
-            var switchState = Require(TokenKind.Plus, TokenKind.Minus).Kind;
-            var requiredInfo = GetSwitchInfo(switchState);
-            var switchInfo = Options.GetSwitchInfo(switchKind);
-            ConditionalCompilation.AddIfOptCondition(switchKind, requiredInfo, switchInfo);
+        private void ParseIfOpt(ISyntaxPart parent) {
+            IfOpt result = CreateByTerminal<IfOpt>(parent);
+
+            if (!ContinueWith(result, PascalToken.Identifier)) {
+                return;
+            }
+
+            result.SwitchKind = result.LastTerminal.Value;
+            result.SwitchInfo = Options.GetSwitchInfo(result.LastTerminal.Value);
+
+            if (!ContinueWith(result, TokenKind.Plus, TokenKind.Minus)) {
+                return;
+            }
+
+            result.SwitchState = GetSwitchInfo(result.LastTerminal.Token.Kind);
         }
 
         private static SwitchInfo GetSwitchInfo(int switchState) {
@@ -270,50 +279,69 @@ namespace PasPasPas.Parsing.Parser {
             return SwitchInfo.Undefined;
         }
 
-        private bool ParseStackSizeSwitch(bool mSwitch) {
-            int sizeValue;
-            string size;
+        private void ParseStackSizeSwitch(ISyntaxPart parent, bool mSwitch) {
+            StackMemSize result = CreateByTerminal<StackMemSize>(parent);
 
-            if (mSwitch || Optional(PascalToken.MinMemStackSizeSwitchLong)) {
-                size = Require(PascalToken.Integer).Value;
-                if (int.TryParse(size, out sizeValue)) {
-                    CompilerOptions.MinimumStackMemSize.Value = sizeValue;
-                    if (!mSwitch)
-                        return true;
+            if (mSwitch || result.LastTerminal.Token.Kind == PascalToken.MinMemStackSizeSwitchLong) {
+
+                if (!ContinueWith(result, PascalToken.Integer)) {
+                    ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidStackMemSizeDirective, new[] { PascalToken.Integer });
+                    return;
                 }
-                if (!mSwitch)
-                    return false;
+
+                result.MinStackSize = DigitTokenGroupValue.Unwrap(result.LastTerminal.Token);
             }
 
             if (mSwitch)
-                Require(TokenKind.Comma);
+                ContinueWith(result, TokenKind.Comma);
 
-            if (mSwitch || Optional(PascalToken.MaxMemStackSizeSwitchLong)) {
-                size = Require(PascalToken.Integer).Value;
-                if (int.TryParse(size, out sizeValue)) {
-                    CompilerOptions.MaximumStackMemSize.Value = sizeValue;
-                    if (!mSwitch)
-                        return true;
+            if (mSwitch || result.LastTerminal.Token.Kind == PascalToken.MaxMemStackSizeSwitchLong) {
+
+                if (!ContinueWith(result, PascalToken.Integer)) {
+                    result.MinStackSize = null;
+                    ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidStackMemSizeDirective, new[] { PascalToken.Integer });
+                    return;
                 }
-                if (!mSwitch)
-                    return false;
-            }
 
-            return mSwitch;
+                result.MaxStackSize = DigitTokenGroupValue.Unwrap(result.LastTerminal.Token);
+            }
         }
 
-        private bool ParseMessage() {
-            Require(PascalToken.MessageCd);
-            string messageText = string.Empty;
-            string messageType = string.Empty;
+        private void ParseMessage(ISyntaxPart parent) {
+            Message result = CreateByTerminal<Message>(parent);
 
-            if (Optional(PascalToken.Identifier)) {
-                messageType = CurrentToken().Value;
+            string messageText = string.Empty;
+
+            if (ContinueWith(result, PascalToken.Identifier)) {
+                string messageType = result.LastTerminal.Value;
+
+                if (string.Equals(messageType, "Hint", StringComparison.OrdinalIgnoreCase)) {
+                    result.MessageType = MessageSeverity.Hint;
+                }
+                else if (string.Equals(messageType, "Warn", StringComparison.OrdinalIgnoreCase)) {
+                    result.MessageType = MessageSeverity.Warning;
+                }
+                else if (string.Equals(messageType, "Error", StringComparison.OrdinalIgnoreCase)) {
+                    result.MessageType = MessageSeverity.Error;
+                }
+                else if (string.Equals(messageType, "Fatal", StringComparison.OrdinalIgnoreCase)) {
+                    result.MessageType = MessageSeverity.FatalError;
+                }
+                else {
+                    ErrorLastPart(result, CompilerDirectiveParserErrors.InvalidMessageDirective);
+                    return;
+                }
+            }
+            else {
+                result.MessageType = MessageSeverity.Hint;
             }
 
-            Require(PascalToken.QuotedString);
-            messageText = QuotedStringTokenValue.Unwrap(CurrentToken());
-            return true;
+            if (!ContinueWith(result, PascalToken.QuotedString)) {
+                result.MessageType = MessageSeverity.Undefined;
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidMessageDirective, new[] { PascalToken.QuotedString });
+            }
+
+            result.MessageText = QuotedStringTokenValue.Unwrap(CurrentToken());
         }
 
         private void ParseNoDefine(ISyntaxPart parent) {
@@ -424,12 +452,16 @@ namespace PasPasPas.Parsing.Parser {
                 return;
             }
 
+            if (!Match(new[] { PascalToken.Fields, PascalToken.Methods, PascalToken.Properties }))
+                return;
+
             bool canContinue;
 
             do {
                 canContinue = false;
                 if (ContinueWith(result, PascalToken.Methods)) {
                     if (result.Methods != null) {
+                        result.Mode = RttiGenerationMode.Undefined;
                         ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidRttiDirective, new int[0]);
                         return;
                     }
@@ -438,6 +470,7 @@ namespace PasPasPas.Parsing.Parser {
                 }
                 else if (ContinueWith(result, PascalToken.Properties)) {
                     if (result.Properties != null) {
+                        result.Mode = RttiGenerationMode.Undefined;
                         ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidRttiDirective, new int[0]);
                         return;
                     }
@@ -446,6 +479,7 @@ namespace PasPasPas.Parsing.Parser {
                 }
                 else if (ContinueWith(result, PascalToken.Fields)) {
                     if (result.Fields != null) {
+                        result.Mode = RttiGenerationMode.Undefined;
                         ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidRttiDirective, new int[0]);
                         return;
                     }
@@ -456,13 +490,15 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private RttiForVisibility ParseRttiVisibility(RttiControl result) {
-            if (!RequireTokenKind(TokenKind.OpenParen)) {
+            if (!ContinueWith(result, TokenKind.OpenParen)) {
                 ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidRttiDirective, new[] { TokenKind.OpenBraces });
+                result.Mode = RttiGenerationMode.Undefined;
                 return null;
             }
 
-            if (!RequireTokenKind(TokenKind.OpenBraces)) {
+            if (!ContinueWith(result, TokenKind.OpenBraces)) {
                 ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidRttiDirective, new[] { TokenKind.OpenBraces });
+                result.Mode = RttiGenerationMode.Undefined;
                 return null;
             }
 
@@ -470,9 +506,9 @@ namespace PasPasPas.Parsing.Parser {
 
             do {
                 if (!ContinueWith(result, PascalToken.VcPrivate, PascalToken.VcProtected, PascalToken.VcPublic, PascalToken.VcPublished)) {
-                    ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidRttiDirective, new[] { PascalToken.VcPrivate, PascalToken.VcProtected, PascalToken.VcPublic, PascalToken.VcPublished });
-                    return null;
+                    break;
                 }
+
                 var kind = result.LastTerminal.Token.Kind;
 
                 switch (kind) {
@@ -490,18 +526,21 @@ namespace PasPasPas.Parsing.Parser {
                         break;
                     default: {
                             ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidRttiDirective, new int[0]);
+                            result.Mode = RttiGenerationMode.Undefined;
                             return null;
                         }
                 }
             } while (ContinueWith(result, TokenKind.Comma));
 
-            if (!RequireTokenKind(TokenKind.CloseBraces)) {
+            if (!ContinueWith(result, TokenKind.CloseBraces)) {
                 ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidRttiDirective, new[] { TokenKind.CloseBraces });
+                result.Mode = RttiGenerationMode.Undefined;
                 return null;
             }
 
-            if (!RequireTokenKind(TokenKind.CloseParen)) {
+            if (!ContinueWith(result, TokenKind.CloseParen)) {
                 ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidRttiDirective, new[] { TokenKind.CloseParen });
+                result.Mode = RttiGenerationMode.Undefined;
                 return null;
             }
 
@@ -809,8 +848,8 @@ namespace PasPasPas.Parsing.Parser {
                 ParseLongImplicitBuildSwitch(parent);
             }
 
-            else if (Optional(PascalToken.ImportedDataSwitchLong)) {
-                ParseLongImportedDataSwitch();
+            else if (Match(PascalToken.ImportedDataSwitchLong)) {
+                ParseLongImportedDataSwitch(parent);
             }
 
             else if (Optional(PascalToken.IncludeSwitchLong)) {
@@ -1360,17 +1399,19 @@ namespace PasPasPas.Parsing.Parser {
             IncludeInput.AddFile(fileAccess.OpenFileForReading(targetPath));
         }
 
-        private void ParseLongImportedDataSwitch() {
-            if (Optional(PascalToken.On)) {
-                CompilerOptions.ImportedData.Value = ImportGlobalUnitData.DoImport;
-                return;
-            }
+        private void ParseLongImportedDataSwitch(ISyntaxPart parent) {
+            ImportedData result = CreateByTerminal<ImportedData>(parent);
 
-            if (Optional(PascalToken.Off)) {
-                CompilerOptions.ImportedData.Value = ImportGlobalUnitData.NoImport;
+            if (ContinueWith(result, PascalToken.On)) {
+                result.Mode = ImportGlobalUnitData.DoImport;
+            }
+            else if (ContinueWith(result, PascalToken.Off)) {
+                result.Mode = ImportGlobalUnitData.NoImport;
                 return;
             }
-            Unexpected();
+            else {
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidImportedDataDirective, new[] { PascalToken.On, PascalToken.Off });
+            }
         }
 
         private void ParseLongImplicitBuildSwitch(ISyntaxPart parent) {
@@ -1626,7 +1667,7 @@ namespace PasPasPas.Parsing.Parser {
                 ParseExtendedSyntaxSwitch(parent);
             }
             else if (Match(PascalToken.ImportedDataSwitch)) {
-                ParseImportedDataSwitch();
+                ParseImportedDataSwitch(parent);
             }
             else if (Match(PascalToken.IncludeSwitch)) {
                 ParseIncludeSwitch(parent);
@@ -1737,12 +1778,7 @@ namespace PasPasPas.Parsing.Parser {
         private void ParseTypeInfoSwitch(ISyntaxPart parent) {
 
             if (LookAhead(1, PascalToken.Integer)) {
-                FetchNextToken();
-
-                if (CurrentToken().Kind == PascalToken.Integer) {
-                    ParseStackSizeSwitch(true);
-                }
-
+                ParseStackSizeSwitch(parent, true);
                 return;
             }
 
@@ -1859,36 +1895,37 @@ namespace PasPasPas.Parsing.Parser {
             return;
         }
 
-        private string ParseFileName() {
+        private string ParseFileName(SyntaxPartBase parent) {
             string filename = string.Empty;
 
-            switch (CurrentToken().Kind) {
-                case PascalToken.QuotedString:
-                    filename = QuotedStringTokenValue.Unwrap(CurrentToken());
-                    break;
-
-                case PascalToken.Identifier:
-                    filename = CurrentToken().Value;
-                    break;
-
-                case TokenKind.Times:
-                    filename = Require(PascalToken.Identifier).Value;
-                    break;
-
-
-                default:
-                    Unexpected();
-                    return string.Empty;
-
+            if (ContinueWith(parent, PascalToken.QuotedString)) {
+                return QuotedStringTokenValue.Unwrap(parent.LastTerminal.Token);
             }
 
-            return filename;
+            else if (ContinueWith(parent, PascalToken.Identifier)) {
+                return parent.LastTerminal.Value;
+            }
+
+            else if (ContinueWith(parent, TokenKind.Times)) {
+                if (!ContinueWith(parent, PascalToken.Identifier)) {
+                    ErrorAndSkip(parent, CompilerDirectiveParserErrors.InvalidFileName, new[] { PascalToken.Identifier });
+                    return null;
+                }
+                else {
+                    return string.Concat("*", parent.LastTerminal.Value);
+                }
+            }
+
+            else {
+                ErrorAndSkip(parent, CompilerDirectiveParserErrors.InvalidFileName, new[] { PascalToken.Identifier });
+                return null;
+            }
         }
 
         private bool ParseResourceFileName(IFileReference sourcePath) {
             var kind = CurrentToken().Kind;
             string rcFile = string.Empty;
-            string filename = ParseFileName();
+            string filename = ParseFileName(null);
 
             if (Optional(PascalToken.Identifier, PascalToken.QuotedString)) {
                 rcFile = CurrentToken().Value;
@@ -1992,27 +2029,16 @@ namespace PasPasPas.Parsing.Parser {
                 return;
             }
 
-            FetchNextToken();
-            ParseLinkParameter();
+            Link resultLink = CreateByTerminal<Link>(parent);
+            ParseLinkParameter(resultLink);
         }
 
         /// <summary>
         ///     parse a linked file parameter
         /// </summary>
         /// <returns></returns>
-        private bool ParseLinkParameter() {
-            var filename = ParseFileName();
-            var resolvedFile = Meta.LinkedFileResolver.ResolvePath(new FileReference(string.Empty), new FileReference(filename));
-
-            if (resolvedFile.IsResolved) {
-                var linkedFile = new LinkedFile();
-                linkedFile.OriginalFileName = filename;
-                linkedFile.TargetPath = resolvedFile.TargetPath;
-                Meta.AddLinkedFile(linkedFile);
-                return true;
-            }
-
-            return false;
+        private void ParseLinkParameter(Link result) {
+            result.Filename = ParseFileName(result);
         }
 
         private void ParseIncludeSwitch(ISyntaxPart parent) {
@@ -2047,21 +2073,18 @@ namespace PasPasPas.Parsing.Parser {
             }
         }
 
-        private bool ParseImportedDataSwitch() {
-            FetchNextToken();
+        private void ParseImportedDataSwitch(ISyntaxPart parent) {
+            ImportedData result = CreateByTerminal<ImportedData>(parent);
 
-            if (Optional(TokenKind.Plus)) {
-                CompilerOptions.ImportedData.Value = ImportGlobalUnitData.DoImport;
-                return true;
+            if (ContinueWith(result, TokenKind.Plus)) {
+                result.Mode = ImportGlobalUnitData.DoImport;
             }
-
-            if (Optional(TokenKind.Minus)) {
-                CompilerOptions.ImportedData.Value = ImportGlobalUnitData.NoImport;
-                return true;
+            else if (ContinueWith(result, TokenKind.Minus)) {
+                result.Mode = ImportGlobalUnitData.NoImport;
             }
-
-            Unexpected();
-            return false;
+            else {
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidImportedDataDirective, new[] { TokenKind.Plus, TokenKind.Minus });
+            }
         }
 
         private void ParseExtendedSyntaxSwitch(ISyntaxPart parent) {

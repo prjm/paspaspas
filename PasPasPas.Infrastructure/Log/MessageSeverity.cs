@@ -35,5 +35,9 @@
         /// </summary>
         FatalError = 5,
 
+        /// <summary>
+        ///     hint message
+        /// </summary>
+        Hint = 6,
     }
 }

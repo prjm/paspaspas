@@ -19,13 +19,22 @@ namespace PasPasPas.Parsing.Parser {
         ///     message group for parser logs
         /// </summary>
         public static readonly Guid ParserLogMessage
-            = new Guid("{5EFB031C-8B43-4749-9C2E-6670F91D6B4C}");
+            = new Guid(new byte[] { 0x22, 0xc3, 0x76, 0x5e, 0x97, 0x6c, 0xe8, 0x49, 0xb7, 0x65, 0x1d, 0xa7, 0x31, 0xf4, 0x5b, 0x33 });
+        /* {5e76c322-6c97-49e8-b765-1da731f45b33} */
 
         /// <summary>
         ///     message: unexpected token
         /// </summary>    
         public static readonly Guid UnexpectedToken
-            = new Guid("{62E2B740-13A1-46B6-A3CA-298318753C39}");
+            = new Guid(new byte[] { 0xe0, 0xbb, 0xd3, 0x5, 0xe2, 0x32, 0xeb, 0x43, 0x85, 0xb, 0xeb, 0xdb, 0x2b, 0x7e, 0xf2, 0x72 });
+        /* {05d3bbe0-32e2-43eb-850b-ebdb2b7ef272} */
+
+        /// <summary>
+        ///     message: user generated message
+        /// </summary>
+        public static readonly Guid UserGeneratedMessage
+            = new Guid(new byte[] { 0xac, 0xe2, 0xd4, 0x74, 0xdd, 0x54, 0xcc, 0x4a, 0x90, 0x8a, 0x9f, 0x2e, 0x8a, 0x2d, 0x91, 0x65 });
+        /* {74d4e2ac-54dd-4acc-908a-9f2e8a2d9165} */
 
         private readonly TokenizerWithLookahead tokenizer;
         private readonly LogSource logSource;
@@ -68,6 +77,7 @@ namespace PasPasPas.Parsing.Parser {
         ///     basic working environment
         /// </summary>
         public ParserServices Environment { get; }
+
 
         /// <summary>
         ///     unexpected input token
@@ -206,8 +216,14 @@ namespace PasPasPas.Parsing.Parser {
         /// </summary>
         /// <param name="tokenKind"></param>
         /// <returns></returns>
-        protected bool Match(int tokenKind)
-            => CurrentToken().Kind == tokenKind;
+        protected bool Match(int tokenKind) {
+            var token = CurrentToken();
+            if (token == null)
+                return false;
+
+            return token.Kind == tokenKind;
+        }
+
 
         /// <summary>
         ///     get the current token

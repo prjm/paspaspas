@@ -6,13 +6,26 @@ namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
     ///     rrti control directive
     /// </summary>
     public class RttiControl : SyntaxPartBase {
-        public RttiForVisibility Fields { get; internal set; }
-        public RttiForVisibility Methods { get; internal set; }
+
+        /// <summary>
+        ///     fields visibility
+        /// </summary>
+        public RttiForVisibility Fields { get; set; }
+
+        /// <summary>
+        ///     methods visibilty
+        /// </summary>
+        public RttiForVisibility Methods { get; set; }
+
+        /// <summary>
+        ///     properties visibility
+        /// </summary>
+        public RttiForVisibility Properties { get; internal set; }
+
 
         /// <summary>
         ///     selected rtti mode
         /// </summary>
         public RttiGenerationMode Mode { get; internal set; }
-        public RttiForVisibility Properties { get; internal set; }
     }
 }

@@ -47,22 +47,34 @@ namespace PasPasPasTests.Parser {
 
         [Fact]
         public void TestMessage() {
-            RunCompilerDirective("", true, () => true);
-            RunCompilerDirective("MESSAGE 'X'", true, () => true);
-            RunCompilerDirective("MESSAGE Hint 'X' ", true, () => true);
-            RunCompilerDirective("MESSAGE Warn 'X' ", true, () => true);
-            RunCompilerDirective("MESSAGE Error 'X'", true, () => true);
-            RunCompilerDirective("MESSAGE Fatal 'x'", true, () => true);
+            Func<object> f = () => true;
+            RunCompilerDirective("", true, f);
+            RunCompilerDirective("MESSAGE 'X'", true, f, ParserBase.UserGeneratedMessage);
+            RunCompilerDirective("MESSAGE Hint 'X' ", true, f, ParserBase.UserGeneratedMessage);
+            RunCompilerDirective("MESSAGE Warn 'X' ", true, f, ParserBase.UserGeneratedMessage);
+            RunCompilerDirective("MESSAGE Error 'X'", true, f, ParserBase.UserGeneratedMessage);
+            RunCompilerDirective("MESSAGE Fatal 'x'", true, f, ParserBase.UserGeneratedMessage);
+            RunCompilerDirective("MESSAGE hint KAPUTT ", true, f, CompilerDirectiveParserErrors.InvalidMessageDirective);
+            RunCompilerDirective("MESSAGE KAPUTT ", true, f, CompilerDirectiveParserErrors.InvalidMessageDirective);
+            RunCompilerDirective("MESSAGE ", true, f, CompilerDirectiveParserErrors.InvalidMessageDirective);
         }
 
         [Fact]
         public void TestMemStackSize() {
-            RunCompilerDirective("", 0L, () => CompilerOptions.MinimumStackMemSize.Value);
-            RunCompilerDirective("", 0L, () => CompilerOptions.MaximumStackMemSize.Value);
-            RunCompilerDirective("M 100, 200", 200L, () => CompilerOptions.MaximumStackMemSize.Value);
-            RunCompilerDirective("M 100, 200", 100L, () => CompilerOptions.MinimumStackMemSize.Value);
-            RunCompilerDirective("MINSTACKSIZE 300", 300L, () => CompilerOptions.MinimumStackMemSize.Value);
-            RunCompilerDirective("MAXSTACKSIZE 400", 400L, () => CompilerOptions.MaximumStackMemSize.Value);
+            Func<object> mi = () => CompilerOptions.MinimumStackMemSize.Value;
+            Func<object> ma = () => CompilerOptions.MaximumStackMemSize.Value;
+            RunCompilerDirective("", 0L, ma);
+            RunCompilerDirective("", 0L, mi);
+            RunCompilerDirective("M 100, 200", 200L, ma);
+            RunCompilerDirective("M 100, 200", 100L, mi);
+            RunCompilerDirective("MINSTACKSIZE 300", 300L, mi);
+            RunCompilerDirective("MAXSTACKSIZE 400", 400L, ma);
+            RunCompilerDirective("MAXSTACKSIZE KAPUTT", 0L, ma, CompilerDirectiveParserErrors.InvalidStackMemSizeDirective);
+            RunCompilerDirective("MAXSTACKSIZE ", 0L, ma, CompilerDirectiveParserErrors.InvalidStackMemSizeDirective);
+            RunCompilerDirective("MINSTACKSIZE KAPUTT", 0L, ma, CompilerDirectiveParserErrors.InvalidStackMemSizeDirective);
+            RunCompilerDirective("MINSTACKSIZE ", 0L, ma, CompilerDirectiveParserErrors.InvalidStackMemSizeDirective);
+            RunCompilerDirective("M 1, KAPUTT ", 0L, ma, CompilerDirectiveParserErrors.InvalidStackMemSizeDirective);
+            RunCompilerDirective("M 1 KAPUTT ", 0L, ma, CompilerDirectiveParserErrors.InvalidStackMemSizeDirective);
         }
 
         [Fact]
@@ -315,11 +327,17 @@ namespace PasPasPasTests.Parser {
 
         [Fact]
         public void TestImportUnitData() {
-            RunCompilerDirective("", ImportGlobalUnitData.Undefined, () => CompilerOptions.ImportedData.Value);
-            RunCompilerDirective("G+", ImportGlobalUnitData.DoImport, () => CompilerOptions.ImportedData.Value);
-            RunCompilerDirective("G-", ImportGlobalUnitData.NoImport, () => CompilerOptions.ImportedData.Value);
-            RunCompilerDirective("IMPORTEDDATA  ON", ImportGlobalUnitData.DoImport, () => CompilerOptions.ImportedData.Value);
-            RunCompilerDirective("IMPORTEDDATA OFF", ImportGlobalUnitData.NoImport, () => CompilerOptions.ImportedData.Value);
+            Func<object> f = () => CompilerOptions.ImportedData.Value;
+            RunCompilerDirective("", ImportGlobalUnitData.Undefined, f);
+            RunCompilerDirective("G+", ImportGlobalUnitData.DoImport, f);
+            RunCompilerDirective("G-", ImportGlobalUnitData.NoImport, f);
+            RunCompilerDirective("G 3", ImportGlobalUnitData.Undefined, f, CompilerDirectiveParserErrors.InvalidImportedDataDirective);
+            RunCompilerDirective("G", ImportGlobalUnitData.Undefined, f, CompilerDirectiveParserErrors.InvalidImportedDataDirective);
+
+            RunCompilerDirective("IMPORTEDDATA  ON", ImportGlobalUnitData.DoImport, f);
+            RunCompilerDirective("IMPORTEDDATA OFF", ImportGlobalUnitData.NoImport, f);
+            RunCompilerDirective("IMPORTEDDATA  KAPUTT", ImportGlobalUnitData.Undefined, f, CompilerDirectiveParserErrors.InvalidImportedDataDirective);
+            RunCompilerDirective("IMPORTEDDATA ", ImportGlobalUnitData.Undefined, f, CompilerDirectiveParserErrors.InvalidImportedDataDirective);
         }
 
         [Fact]
@@ -626,9 +644,10 @@ namespace PasPasPasTests.Parser {
 
         [Fact]
         public void TestLinkedFiles() {
-            RunCompilerDirective("", false, () => Meta.LinkedFiles.Any(t => string.Equals(t.TargetPath.Path, "link.dll", StringComparison.OrdinalIgnoreCase)));
-            RunCompilerDirective("L link.dll", true, () => Meta.LinkedFiles.Any(t => string.Equals(t.TargetPath.Path, "link.dll", StringComparison.OrdinalIgnoreCase)));
-            RunCompilerDirective("LINK 'link.dll'", true, () => Meta.LinkedFiles.Any(t => string.Equals(t.TargetPath.Path, "link.dll", StringComparison.OrdinalIgnoreCase)));
+            Func<object> f = () => Meta.LinkedFiles.Any(t => string.Equals(t.TargetPath.Path, "link.dll", StringComparison.OrdinalIgnoreCase));
+            RunCompilerDirective("", false, f);
+            RunCompilerDirective("L link.dll", true, f);
+            RunCompilerDirective("LINK 'link.dll'", true, f);
         }
 
         [Fact]
@@ -641,78 +660,83 @@ namespace PasPasPasTests.Parser {
             RunCompilerDirective("LEGACYIFEND ", EndIfMode.Undefined, f, CompilerDirectiveParserErrors.InvalidLegacyIfEndDirective);
         }
 
-        private void TestIfOpt(char opt) {
-            RunCompilerDirective("IFOPT " + opt + "+ § DEFINE TT § ENDIF", false, () => ConditionalCompilation.Conditionals.Any(t => string.Equals(t.Name, "TT", StringComparison.OrdinalIgnoreCase)));
-            RunCompilerDirective(opt + "+ § IFOPT " + opt + "+ § DEFINE TT § ENDIF", true, () => ConditionalCompilation.Conditionals.Any(t => string.Equals(t.Name, "TT", StringComparison.OrdinalIgnoreCase)));
-            RunCompilerDirective(opt + "+ § IFOPT " + opt + "- § DEFINE TT § ENDIF", false, () => ConditionalCompilation.Conditionals.Any(t => string.Equals(t.Name, "TT", StringComparison.OrdinalIgnoreCase)));
-            RunCompilerDirective(opt + "- § IFOPT " + opt + "- § DEFINE TT § ENDIF", true, () => ConditionalCompilation.Conditionals.Any(t => string.Equals(t.Name, "TT", StringComparison.OrdinalIgnoreCase)));
-            RunCompilerDirective(opt + "- § IFOPT " + opt + "+ § DEFINE TT § ENDIF", false, () => ConditionalCompilation.Conditionals.Any(t => string.Equals(t.Name, "TT", StringComparison.OrdinalIgnoreCase)));
+        private void TestIfOptHelper(char opt) {
+            Func<object> f = () => ConditionalCompilation.Conditionals.Any(t => string.Equals(t.Name, "TT", StringComparison.OrdinalIgnoreCase));
+            RunCompilerDirective("IFOPT " + opt + "+ § DEFINE TT § ENDIF", false, f);
+            RunCompilerDirective(opt + "+ § IFOPT " + opt + "+ § DEFINE TT § ENDIF", true, f);
+            RunCompilerDirective(opt + "+ § IFOPT " + opt + "- § DEFINE TT § ENDIF", false, f);
+            RunCompilerDirective(opt + "- § IFOPT " + opt + "- § DEFINE TT § ENDIF", true, f);
+            RunCompilerDirective(opt + "- § IFOPT " + opt + "+ § DEFINE TT § ENDIF", false, f);
         }
 
         [Fact]
         public void TestIfOpt() {
-            TestIfOpt('A');
-            TestIfOpt('B');
-            TestIfOpt('C');
-            TestIfOpt('D');
-            TestIfOpt('G');
-            TestIfOpt('I');
-            TestIfOpt('J');
-            TestIfOpt('H');
-            TestIfOpt('L');
-            TestIfOpt('M');
-            TestIfOpt('O');
-            TestIfOpt('P');
-            TestIfOpt('Q');
-            TestIfOpt('R');
-            TestIfOpt('T');
-            TestIfOpt('U');
-            TestIfOpt('V');
-            TestIfOpt('W');
-            TestIfOpt('X');
-            TestIfOpt('Y');
-            TestIfOpt('Z');
+            TestIfOptHelper('A');
+            TestIfOptHelper('B');
+            TestIfOptHelper('C');
+            TestIfOptHelper('D');
+            TestIfOptHelper('G');
+            TestIfOptHelper('I');
+            TestIfOptHelper('J');
+            TestIfOptHelper('H');
+            TestIfOptHelper('L');
+            TestIfOptHelper('M');
+            TestIfOptHelper('O');
+            TestIfOptHelper('P');
+            TestIfOptHelper('Q');
+            TestIfOptHelper('R');
+            TestIfOptHelper('T');
+            TestIfOptHelper('U');
+            TestIfOptHelper('V');
+            TestIfOptHelper('W');
+            TestIfOptHelper('X');
+            TestIfOptHelper('Y');
+            TestIfOptHelper('Z');
         }
 
         [Fact]
         public void TestRtti() {
-            RunCompilerDirective("", RttiGenerationMode.Undefined, () => CompilerOptions.Rtti.Mode);
 
-            RunCompilerDirective("RTTI INHERIT", //
-                Tuple.Create(RttiGenerationMode.Inherit, new RttiForVisibility()), //
-                () => Tuple.Create(CompilerOptions.Rtti.Mode, CompilerOptions.Rtti.Methods));
+            var i = RttiGenerationMode.Inherit;
+            var e = RttiGenerationMode.Explicit;
+            var u = RttiGenerationMode.Undefined;
+            Func<RttiGenerationMode, object[]> p = (_) => new object[] { _, new RttiForVisibility() };
+            Func<RttiGenerationMode, object[]> q = (_) => new object[] { _, new RttiForVisibility() { ForPrivate = true } };
+            Func<RttiGenerationMode, object[]> r = (_) => new object[] { _, new RttiForVisibility() { ForPrivate = true, ForProtected = true } };
+            Func<RttiGenerationMode, object[]> s = (_) => new object[] { _, new RttiForVisibility() { ForPrivate = true, ForProtected = true, ForPublic = true } };
+            Func<RttiGenerationMode, object[]> t = (_) => new object[] { _, new RttiForVisibility() { ForPrivate = true, ForProtected = true, ForPublic = true, ForPublished = true } };
+            var l = new[] { CompilerOptions.Rtti.Methods, CompilerOptions.Rtti.Fields, CompilerOptions.Rtti.Properties };
+            var k = new[] { "METHODS", "FIELDS", "PROPERTIES" };
+            Func<object> m = () => CompilerOptions.Rtti.Mode;
+            Func<RttiForVisibility, Func<object>> n = (_) => () => new object[] { CompilerOptions.Rtti.Mode, _ };
 
-            RunCompilerDirective("RTTI INHERIT METHODS([])", //
-                Tuple.Create(RttiGenerationMode.Inherit, new RttiForVisibility()), //
-                () => Tuple.Create(CompilerOptions.Rtti.Mode, CompilerOptions.Rtti.Methods));
+            RunCompilerDirective("", RttiGenerationMode.Undefined, m);
 
-            RunCompilerDirective("RTTI INHERIT METHODS([vcPrivate])", //
-                Tuple.Create(RttiGenerationMode.Inherit, new RttiForVisibility() { ForPrivate = true }), //
-                () => Tuple.Create(CompilerOptions.Rtti.Mode, CompilerOptions.Rtti.Methods));
+            for (int idx = 0; idx < k.Length; idx++) {
+                var _ = l[idx];
+                RunCompilerDirective("RTTI INHERIT", p(i), n(_));
+                RunCompilerDirective("RTTI INHERIT " + k[idx] + "([])", p(i), n(_));
+                RunCompilerDirective("RTTI INHERIT " + k[idx] + "([vcPrivate])", q(i), n(_));
+                RunCompilerDirective("RTTI INHERIT " + k[idx] + "([vcPrivate, vcProtected])", r(i), n(_));
+                RunCompilerDirective("RTTI INHERIT " + k[idx] + "([vcPrivate, vcProtected, vcPublic])", s(i), n(_));
+                RunCompilerDirective("RTTI INHERIT " + k[idx] + "([vcPrivate, vcProtected, vcPublic, vcPublished])", t(i), n(_));
 
-            RunCompilerDirective("RTTI INHERIT METHODS([vcPrivate, vcProtected])", //
-                Tuple.Create(RttiGenerationMode.Inherit, new RttiForVisibility() { ForPrivate = true, ForProtected = true }), //
-                () => Tuple.Create(CompilerOptions.Rtti.Mode, CompilerOptions.Rtti.Methods));
+                RunCompilerDirective("RTTI EXPLICIT", p(e), n(_));
+                RunCompilerDirective("RTTI EXPLICIT " + k[idx] + "([])", p(e), n(_));
+                RunCompilerDirective("RTTI EXPLICIT " + k[idx] + "([vcPrivate])", q(e), n(_));
+                RunCompilerDirective("RTTI EXPLICIT " + k[idx] + "([vcPrivate, vcProtected])", r(e), n(_));
+                RunCompilerDirective("RTTI EXPLICIT " + k[idx] + "([vcPrivate, vcProtected, vcPublic])", s(e), n(_));
+                RunCompilerDirective("RTTI EXPLICIT " + k[idx] + "([vcPrivate, vcProtected, vcPublic, vcPublished])", t(e), n(_));
+            }
 
-            RunCompilerDirective("RTTI INHERIT METHODS([vcPrivate, vcProtected, vcPublic])", //
-                Tuple.Create(RttiGenerationMode.Inherit, new RttiForVisibility() { ForPrivate = true, ForProtected = true, ForPublic = true }), //
-                () => Tuple.Create(CompilerOptions.Rtti.Mode, CompilerOptions.Rtti.Methods));
-
-            RunCompilerDirective("RTTI INHERIT METHODS([vcPrivate, vcProtected, vcPublic, vcPublished])", //
-                Tuple.Create(RttiGenerationMode.Inherit, new RttiForVisibility() { ForPrivate = true, ForProtected = true, ForPublic = true, ForPublished = true }), //
-                () => Tuple.Create(CompilerOptions.Rtti.Mode, CompilerOptions.Rtti.Methods));
-
-            RunCompilerDirective("RTTI EXPLICIT METHODS([vcPrivate]) PROPERTIES([vcPrivate])", //
-                Tuple.Create(RttiGenerationMode.Explicit, new RttiForVisibility() { ForPrivate = true }, new RttiForVisibility() { ForPrivate = true }), //
-                () => Tuple.Create(CompilerOptions.Rtti.Mode, CompilerOptions.Rtti.Methods, CompilerOptions.Rtti.Properties));
-
-            RunCompilerDirective("RTTI EXPLICIT METHODS([vcPrivate]) PROPERTIES([vcPrivate]) FIELDS([vcPublic])", //
-                Tuple.Create(RttiGenerationMode.Explicit, new RttiForVisibility() { ForPrivate = true }, new RttiForVisibility() { ForPrivate = true }, new RttiForVisibility() { ForPublic = true }), //
-                () => Tuple.Create(CompilerOptions.Rtti.Mode, CompilerOptions.Rtti.Methods, CompilerOptions.Rtti.Properties, CompilerOptions.Rtti.Fields));
-
-            RunCompilerDirective("RTTI EXPLICIT METHODS([]) PROPERTIES([]) FIELDS([])", //
-                Tuple.Create(RttiGenerationMode.Explicit, new RttiForVisibility(), new RttiForVisibility(), new RttiForVisibility()), //
-                () => Tuple.Create(CompilerOptions.Rtti.Mode, CompilerOptions.Rtti.Methods, CompilerOptions.Rtti.Properties, CompilerOptions.Rtti.Fields));
+            RunCompilerDirective("RTTI INHERIT METHODS([KAPUTT", p(u), n(l[0]), CompilerDirectiveParserErrors.InvalidRttiDirective);
+            RunCompilerDirective("RTTI EXPLICIT METHODS([KAPUTT", p(u), n(l[0]), CompilerDirectiveParserErrors.InvalidRttiDirective);
+            RunCompilerDirective("RTTI INHERIT METHODS(KAPUTT", p(u), n(l[0]), CompilerDirectiveParserErrors.InvalidRttiDirective);
+            RunCompilerDirective("RTTI EXPLICIT METHODS(KAPUTT", p(u), n(l[0]), CompilerDirectiveParserErrors.InvalidRttiDirective);
+            RunCompilerDirective("RTTI INHERIT METHODS KAPUTT", p(u), n(l[0]), CompilerDirectiveParserErrors.InvalidRttiDirective);
+            RunCompilerDirective("RTTI EXPLICIT METHODS KAPUTT", p(u), n(l[0]), CompilerDirectiveParserErrors.InvalidRttiDirective);
+            RunCompilerDirective("RTTI KAPUTT", p(u), n(l[0]), CompilerDirectiveParserErrors.InvalidRttiDirective);
+            RunCompilerDirective("RTTI ", p(u), n(l[0]), CompilerDirectiveParserErrors.InvalidRttiDirective);
         }
 
         [Fact]

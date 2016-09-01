@@ -1,6 +1,8 @@
 ﻿using PasPasPas.Parsing.SyntaxTree.CompilerDirectives;
 using PasPasPas.Parsing.Parser;
 using PasPasPas.Options.DataTypes;
+using PasPasPas.Infrastructure.Log;
+using PasPasPas.Infrastructure.Input;
 
 namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
@@ -653,6 +655,65 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         public void BeginVisitItem(RttiControl syntaxPart, CompilerDirectiveVisitorOptions parameter) {
             parameter.CompilerOptions.Rtti.Mode = syntaxPart.Mode;
             parameter.CompilerOptions.Rtti.AssignVisibility(syntaxPart.Properties, syntaxPart.Methods, syntaxPart.Fields);
+        }
+
+
+        /// <summary>
+        ///      if opt
+        /// </summary>
+        /// <param name="syntaxPart"></param>
+        /// <param name="parameter"></param>
+        public void BeginVisitItem(IfOpt syntaxPart, CompilerDirectiveVisitorOptions parameter) {
+            parameter.ConditionalCompilation.AddIfOptCondition(syntaxPart.SwitchKind, syntaxPart.SwitchInfo, syntaxPart.SwitchState);
+        }
+
+        /// <summary>
+        ///      imported data
+        /// </summary>
+        /// <param name="syntaxPart"></param>
+        /// <param name="parameter"></param>
+        public void BeginVisitItem(ImportedData syntaxPart, CompilerDirectiveVisitorOptions parameter) {
+            parameter.CompilerOptions.ImportedData.Value = syntaxPart.Mode;
+        }
+
+        /// <summary>
+        ///      min / max stack size
+        /// </summary>
+        /// <param name="syntaxPart"></param>
+        /// <param name="parameter"></param>
+        public void BeginVisitItem(StackMemSize syntaxPart, CompilerDirectiveVisitorOptions parameter) {
+            if (syntaxPart.MinStackSize != null)
+                parameter.CompilerOptions.MinimumStackMemSize.Value = syntaxPart.MinStackSize.Value;
+            if (syntaxPart.MaxStackSize != null)
+                parameter.CompilerOptions.MaximumStackMemSize.Value = syntaxPart.MaxStackSize.Value;
+        }
+
+        /// <summary>
+        ///      message
+        /// </summary>
+        /// <param name="syntaxPart"></param>
+        /// <param name="parameter"></param>
+        public void BeginVisitItem(Message syntaxPart, CompilerDirectiveVisitorOptions parameter) {
+            if (syntaxPart.MessageType == MessageSeverity.Undefined)
+                return;
+
+            parameter.LogSource.ProcessMessage(new LogMessage(syntaxPart.MessageType, ParserBase.ParserLogMessage, ParserBase.UserGeneratedMessage, syntaxPart.MessageType, syntaxPart.LastTerminal));
+        }
+
+        /// <summary>
+        ///     link
+        /// </summary>
+        /// <param name="syntaxPart"></param>
+        /// <param name="parameter"></param>
+        public void BeginVisitItem(Link syntaxPart, CompilerDirectiveVisitorOptions parameter) {
+            var resolvedFile = parameter.Meta.LinkedFileResolver.ResolvePath(new FileReference(string.Empty), new FileReference(syntaxPart.Filename));
+
+            if (resolvedFile.IsResolved) {
+                var linkedFile = new LinkedFile();
+                linkedFile.OriginalFileName = syntaxPart.Filename;
+                linkedFile.TargetPath = resolvedFile.TargetPath;
+                parameter.Meta.AddLinkedFile(linkedFile);
+            }
         }
 
     }
