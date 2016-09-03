@@ -138,6 +138,7 @@ namespace PasPasPas.Parsing.Parser {
                 PascalToken.EnumSizeSwitchLong,
                 PascalToken.MethodInfo,
                 PascalToken.LegacyIfEnd,
+                PascalToken.LinkSwitchLong
             };
 
         /// <summary>
@@ -945,7 +946,7 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             else if (Match(PascalToken.IncludeRessourceLong)) {
-                ParseLongIncludeRessourceSwitch();
+                ParseLongIncludeRessourceSwitch(parent);
             }
 
             else if (Match(PascalToken.RealCompatibility)) {
@@ -967,10 +968,20 @@ namespace PasPasPas.Parsing.Parser {
             else if (Match(PascalToken.MethodInfo)) {
                 ParseMethodInfoSwitch(parent);
             }
+
             else if (Match(PascalToken.LegacyIfEnd)) {
                 ParseLegacyIfEndSwitch(parent);
             }
 
+            else if (Match(PascalToken.LinkSwitchLong)) {
+                ParseLongLinkSwitch(parent);
+            }
+
+        }
+
+        private void ParseLongLinkSwitch(ISyntaxPart parent) {
+            Link resultLink = CreateByTerminal<Link>(parent);
+            ParseLinkParameter(resultLink);
         }
 
         private void ParseLegacyIfEndSwitch(ISyntaxPart parent) {
@@ -1070,10 +1081,9 @@ namespace PasPasPas.Parsing.Parser {
             }
         }
 
-        private void ParseLongIncludeRessourceSwitch() {
-            var sourcePath = CurrentToken().FilePath;
-            FetchNextToken();
-            ParseResourceFileName(sourcePath);
+        private void ParseLongIncludeRessourceSwitch(ISyntaxPart parent) {
+            Resource result = CreateByTerminal<Resource>(parent);
+            ParseResourceFileName(result);
         }
 
         private void ParseRunOnlyParameter(ISyntaxPart parent) {
@@ -1887,16 +1897,11 @@ namespace PasPasPas.Parsing.Parser {
                 return;
             }
 
-            FetchNextToken();
-            var sourcePath = CurrentToken().FilePath;
-            if (!ParseResourceFileName(sourcePath))
-                return;
-
-            return;
+            Resource resultR = CreateByTerminal<Resource>(parent);
+            ParseResourceFileName(resultR);
         }
 
-        private string ParseFileName(SyntaxPartBase parent) {
-            string filename = string.Empty;
+        private string ParseFileName(SyntaxPartBase parent, bool allowTimes) {
 
             if (ContinueWith(parent, PascalToken.QuotedString)) {
                 return QuotedStringTokenValue.Unwrap(parent.LastTerminal.Token);
@@ -1906,7 +1911,7 @@ namespace PasPasPas.Parsing.Parser {
                 return parent.LastTerminal.Value;
             }
 
-            else if (ContinueWith(parent, TokenKind.Times)) {
+            else if (allowTimes && ContinueWith(parent, TokenKind.Times)) {
                 if (!ContinueWith(parent, PascalToken.Identifier)) {
                     ErrorAndSkip(parent, CompilerDirectiveParserErrors.InvalidFileName, new[] { PascalToken.Identifier });
                     return null;
@@ -1922,28 +1927,21 @@ namespace PasPasPas.Parsing.Parser {
             }
         }
 
-        private bool ParseResourceFileName(IFileReference sourcePath) {
-            var kind = CurrentToken().Kind;
-            string rcFile = string.Empty;
-            string filename = ParseFileName(null);
+        private void ParseResourceFileName(Resource sourcePath) {
 
-            if (Optional(PascalToken.Identifier, PascalToken.QuotedString)) {
-                rcFile = CurrentToken().Value;
-                if (CurrentToken().Kind == PascalToken.QuotedString) {
-                    rcFile = QuotedStringTokenValue.Unwrap(CurrentToken());
-                }
+            sourcePath.Filename = ParseFileName(sourcePath, true);
+
+            if (sourcePath.Filename == null) {
+                ErrorLastPart(sourcePath, CompilerDirectiveParserErrors.InvalidResourceDirective, new[] { PascalToken.Identifier });
+                return;
             }
 
-            var resolvedFile = Meta.ResourceFilePathResolver.ResolvePath(sourcePath, new FileReference(filename));
-
-            if (resolvedFile.IsResolved) {
-                var resourceReference = new ResourceReference();
-                resourceReference.OriginalFileName = filename;
-                resourceReference.TargetPath = resolvedFile.TargetPath;
-                resourceReference.RcFile = rcFile;
-                Meta.AddResourceReference(resourceReference);
+            if (ContinueWith(sourcePath, PascalToken.Identifier)) {
+                sourcePath.RcFile = sourcePath.LastTerminal.Value;
             }
-            return true;
+            else if (ContinueWith(sourcePath, PascalToken.QuotedString)) {
+                sourcePath.RcFile = QuotedStringTokenValue.Unwrap(sourcePath.LastTerminal.Token);
+            }
         }
 
         private void ParseSaveDivideSwitch(ISyntaxPart parent) {
@@ -2038,7 +2036,10 @@ namespace PasPasPas.Parsing.Parser {
         /// </summary>
         /// <returns></returns>
         private void ParseLinkParameter(Link result) {
-            result.Filename = ParseFileName(result);
+            result.Filename = ParseFileName(result, false);
+            if (result.Filename == null) {
+                ErrorLastPart(result, CompilerDirectiveParserErrors.InvalidLinkDirective);
+            }
         }
 
         private void ParseIncludeSwitch(ISyntaxPart parent) {

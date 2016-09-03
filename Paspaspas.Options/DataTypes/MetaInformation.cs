@@ -55,7 +55,7 @@ namespace PasPasPas.Options.DataTypes {
         ///     list of directly linked files
         /// </summary>
         public IList<LinkedFile> LinkedFiles { get; }
-        = new List<LinkedFile>();
+            = new List<LinkedFile>();
 
         /// <summary>
         ///     creates a new meta information option object
@@ -172,7 +172,7 @@ namespace PasPasPas.Options.DataTypes {
             ObjectFileTypeNames.Clear();
             NoIncludes.Clear();
             NoDefines.Clear();
-
+            LinkedFiles.Clear();
         }
 
         /// <summary>

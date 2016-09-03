@@ -706,13 +706,51 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <param name="syntaxPart"></param>
         /// <param name="parameter"></param>
         public void BeginVisitItem(Link syntaxPart, CompilerDirectiveVisitorOptions parameter) {
-            var resolvedFile = parameter.Meta.LinkedFileResolver.ResolvePath(new FileReference(string.Empty), new FileReference(syntaxPart.Filename));
+            var basePath = syntaxPart?.LastTerminal?.Token?.FilePath;
+            var fileName = syntaxPart?.Filename;
+
+            if (basePath == null || string.IsNullOrWhiteSpace(basePath.Path))
+                return;
+
+            if (fileName == null || string.IsNullOrWhiteSpace(fileName))
+                return;
+
+
+            var resolvedFile = parameter.Meta.LinkedFileResolver.ResolvePath(basePath, new FileReference(fileName));
 
             if (resolvedFile.IsResolved) {
                 var linkedFile = new LinkedFile();
                 linkedFile.OriginalFileName = syntaxPart.Filename;
                 linkedFile.TargetPath = resolvedFile.TargetPath;
                 parameter.Meta.AddLinkedFile(linkedFile);
+            }
+        }
+
+
+        /// <summary>
+        ///     link
+        /// </summary>
+        /// <param name="syntaxPart"></param>
+        /// <param name="parameter"></param>
+        public void BeginVisitItem(Resource syntaxPart, CompilerDirectiveVisitorOptions parameter) {
+            var basePath = syntaxPart?.LastTerminal?.Token?.FilePath;
+            var fileName = syntaxPart?.Filename;
+
+            if (basePath == null || string.IsNullOrWhiteSpace(basePath.Path))
+                return;
+
+            if (fileName == null || string.IsNullOrWhiteSpace(fileName))
+                return;
+
+
+            var resolvedFile = parameter.Meta.ResourceFilePathResolver.ResolvePath(basePath, new FileReference(fileName));
+
+            if (resolvedFile.IsResolved) {
+                var resourceReference = new ResourceReference();
+                resourceReference.OriginalFileName = fileName;
+                resourceReference.TargetPath = resolvedFile.TargetPath;
+                resourceReference.RcFile = syntaxPart.RcFile;
+                parameter.Meta.AddResourceReference(resourceReference);
             }
         }
 

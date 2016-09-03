@@ -644,10 +644,12 @@ namespace PasPasPasTests.Parser {
 
         [Fact]
         public void TestLinkedFiles() {
-            Func<object> f = () => Meta.LinkedFiles.Any(t => string.Equals(t.TargetPath.Path, "link.dll", StringComparison.OrdinalIgnoreCase));
+            Func<object> f = () => Meta.LinkedFiles.Where(t => t.TargetPath != null).Select(t => t.TargetPath).Any(t => t.FileName.IndexOf("link.dll", StringComparison.OrdinalIgnoreCase) >= 0);
             RunCompilerDirective("", false, f);
             RunCompilerDirective("L link.dll", true, f);
             RunCompilerDirective("LINK 'link.dll'", true, f);
+            RunCompilerDirective("LINK 3", false, f, CompilerDirectiveParserErrors.InvalidLinkDirective, CompilerDirectiveParserErrors.InvalidFileName);
+            RunCompilerDirective("LINK ", false, f, CompilerDirectiveParserErrors.InvalidLinkDirective, CompilerDirectiveParserErrors.InvalidFileName);
         }
 
         [Fact]
@@ -860,7 +862,7 @@ namespace PasPasPasTests.Parser {
         [Fact]
         public void TestLibMeta() {
             Func<object> f = () => Meta.LibPrefix.Value;
-            Func<object> g = () => Meta.LibPrefix.Value;
+            Func<object> g = () => Meta.LibSuffix.Value;
             Func<object> h = () => Meta.LibVersion.Value;
             RunCompilerDirective("", null, f);
             RunCompilerDirective("", null, g);
