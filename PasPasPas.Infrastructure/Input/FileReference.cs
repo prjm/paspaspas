@@ -66,10 +66,7 @@ namespace PasPasPas.Infrastructure.Input {
             if (ReferenceEquals(obj, null))
                 return false;
 
-            return string.Equals(
-                System.IO.Path.GetFullPath(path),
-                System.IO.Path.GetFullPath(other.Path),
-                StringComparison.OrdinalIgnoreCase);
+            return string.Equals(path, other.Path, StringComparison.OrdinalIgnoreCase);
         }
     }
 }

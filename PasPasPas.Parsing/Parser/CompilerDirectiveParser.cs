@@ -853,8 +853,8 @@ namespace PasPasPas.Parsing.Parser {
                 ParseLongImportedDataSwitch(parent);
             }
 
-            else if (Optional(PascalToken.IncludeSwitchLong)) {
-                ParseLongIncludeSwitch();
+            else if (Match(PascalToken.IncludeSwitchLong)) {
+                ParseLongIncludeSwitch(parent);
             }
 
             else if (Match(PascalToken.IoChecks)) {
@@ -1394,19 +1394,9 @@ namespace PasPasPas.Parsing.Parser {
             }
         }
 
-        private void ParseLongIncludeSwitch() {
-            var includeToken = Require(PascalToken.Identifier, PascalToken.QuotedString);
-            var sourcePath = includeToken.FilePath;
-            string filename = includeToken.Value;
-
-            if (includeToken.Kind == PascalToken.QuotedString) {
-                filename = QuotedStringTokenValue.Unwrap(includeToken);
-            }
-
-            var targetPath = Meta.IncludePathResolver.ResolvePath(sourcePath, new FileReference(filename)).TargetPath;
-
-            var fileAccess = Options.Files;
-            IncludeInput.AddFile(fileAccess.OpenFileForReading(targetPath));
+        private void ParseLongIncludeSwitch(ISyntaxPart parent) {
+            Include result = CreateByTerminal<Include>(parent);
+            ParseIncludeFileName(result);
         }
 
         private void ParseLongImportedDataSwitch(ISyntaxPart parent) {
@@ -1927,20 +1917,28 @@ namespace PasPasPas.Parsing.Parser {
             }
         }
 
-        private void ParseResourceFileName(Resource sourcePath) {
+        private void ParseIncludeFileName(Include result) {
+            result.Filename = ParseFileName(result, false);
 
-            sourcePath.Filename = ParseFileName(sourcePath, true);
+            if (result.Filename == null) {
+                ErrorLastPart(result, CompilerDirectiveParserErrors.InvalidIncludeDirective, new[] { PascalToken.Identifier });
+                return;
+            }
+        }
 
-            if (sourcePath.Filename == null) {
-                ErrorLastPart(sourcePath, CompilerDirectiveParserErrors.InvalidResourceDirective, new[] { PascalToken.Identifier });
+        private void ParseResourceFileName(Resource result) {
+            result.Filename = ParseFileName(result, true);
+
+            if (result.Filename == null) {
+                ErrorLastPart(result, CompilerDirectiveParserErrors.InvalidResourceDirective, new[] { PascalToken.Identifier });
                 return;
             }
 
-            if (ContinueWith(sourcePath, PascalToken.Identifier)) {
-                sourcePath.RcFile = sourcePath.LastTerminal.Value;
+            if (ContinueWith(result, PascalToken.Identifier)) {
+                result.RcFile = result.LastTerminal.Value;
             }
-            else if (ContinueWith(sourcePath, PascalToken.QuotedString)) {
-                sourcePath.RcFile = QuotedStringTokenValue.Unwrap(sourcePath.LastTerminal.Token);
+            else if (ContinueWith(result, PascalToken.QuotedString)) {
+                result.RcFile = QuotedStringTokenValue.Unwrap(result.LastTerminal.Token);
             }
         }
 
@@ -2055,18 +2053,8 @@ namespace PasPasPas.Parsing.Parser {
                 result.Mode = IoCallChecks.DisableIoChecks;
             }
             else if (LookAhead(1, PascalToken.Identifier) || LookAhead(1, PascalToken.QuotedString)) {
-                var includeToken = Require(PascalToken.Identifier, PascalToken.QuotedString);
-                var sourcePath = includeToken.FilePath;
-                string filename = includeToken.Value;
-
-                if (includeToken.Kind == PascalToken.QuotedString) {
-                    filename = QuotedStringTokenValue.Unwrap(includeToken);
-                }
-
-                var targetPath = Meta.IncludePathResolver.ResolvePath(sourcePath, new FileReference(filename)).TargetPath;
-
-                IFileAccess fileAccess = Options.Files;
-                IncludeInput.AddFile(fileAccess.OpenFileForReading(targetPath));
+                Include result = CreateByTerminal<Include>(parent);
+                ParseIncludeFileName(result);
             }
             else {
                 IoChecks result = CreateByTerminal<IoChecks>(parent);

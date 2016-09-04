@@ -345,9 +345,13 @@ namespace PasPasPasTests.Parser {
             Func<object> f = () => ConditionalCompilation.IsSymbolDefined("DUMMY_INC");
             RunCompilerDirective("", false, f);
             RunCompilerDirective("INCLUDE 'DUMMY.INC'", true, f);
+            RunCompilerDirective("INCLUDE 3", false, f, CompilerDirectiveParserErrors.InvalidIncludeDirective, CompilerDirectiveParserErrors.InvalidFileName);
+            RunCompilerDirective("INCLUDE ", false, f, CompilerDirectiveParserErrors.InvalidIncludeDirective, CompilerDirectiveParserErrors.InvalidFileName);
             RunCompilerDirective("", false, f);
             RunCompilerDirective("I 'DUMMY.INC'", true, f);
             RunCompilerDirective("I DUMMY.INC", true, f);
+            RunCompilerDirective("I 3", false, f, CompilerDirectiveParserErrors.InvalidIoChecksDirective);
+            RunCompilerDirective("I ", false, f, CompilerDirectiveParserErrors.InvalidIoChecksDirective);
         }
 
         [Fact]
@@ -743,14 +747,23 @@ namespace PasPasPasTests.Parser {
 
         [Fact]
         public void TestResourceReference() {
-            RunCompilerDirective("R Res ", true, () => Meta.ResourceReferences.Any(t => t.TargetPath.Path.EndsWith("res.res", StringComparison.OrdinalIgnoreCase)));
-            RunCompilerDirective("R Res.Res ", true, () => Meta.ResourceReferences.Any(t => t.TargetPath.Path.EndsWith("res.res", StringComparison.OrdinalIgnoreCase)));
-            RunCompilerDirective("R Res.Res Res.rc", true, () => Meta.ResourceReferences.Any(t => t.RcFile.EndsWith("res.rc", StringComparison.OrdinalIgnoreCase)));
-            RunCompilerDirective("R *.Res ", true, () => Meta.ResourceReferences.Any(t => t.TargetPath.Path.EndsWith("test_0.res", StringComparison.OrdinalIgnoreCase)));
-            RunCompilerDirective("RESOURCE Res ", true, () => Meta.ResourceReferences.Any(t => t.TargetPath.Path.EndsWith("res.res", StringComparison.OrdinalIgnoreCase)));
-            RunCompilerDirective("RESOURCE Res.Res ", true, () => Meta.ResourceReferences.Any(t => t.TargetPath.Path.EndsWith("res.res", StringComparison.OrdinalIgnoreCase)));
-            RunCompilerDirective("RESOURCE *.Res ", true, () => Meta.ResourceReferences.Any(t => t.TargetPath.Path.EndsWith("test_0.res", StringComparison.OrdinalIgnoreCase)));
-            RunCompilerDirective("RESOURCE Res.Res Res.rc", true, () => Meta.ResourceReferences.Any(t => t.RcFile.EndsWith("res.rc", StringComparison.OrdinalIgnoreCase)));
+
+            Func<object> f = () => Meta.ResourceReferences.Any(t => t.TargetPath.Path.EndsWith("res.res", StringComparison.OrdinalIgnoreCase));
+            Func<object> g = () => Meta.ResourceReferences.Any(t => t.RcFile.EndsWith("res.rc", StringComparison.OrdinalIgnoreCase));
+            Func<object> h = () => Meta.ResourceReferences.Any(t => t.TargetPath.Path.EndsWith("test_0.res", StringComparison.OrdinalIgnoreCase));
+
+            RunCompilerDirective("R Res ", true, f);
+            RunCompilerDirective("R Res.Res ", true, f);
+            RunCompilerDirective("R Res.Res Res.rc", true, g);
+            RunCompilerDirective("R *.Res ", true, h);
+            RunCompilerDirective("R 3 ", false, h, CompilerDirectiveParserErrors.InvalidResourceDirective, CompilerDirectiveParserErrors.InvalidFileName);
+            RunCompilerDirective("R  ", false, h, CompilerDirectiveParserErrors.InvalidResourceDirective, CompilerDirectiveParserErrors.InvalidFileName);
+            RunCompilerDirective("RESOURCE Res ", true, f);
+            RunCompilerDirective("RESOURCE Res.Res ", true, f);
+            RunCompilerDirective("RESOURCE *.Res ", true, h);
+            RunCompilerDirective("RESOURCE Res.Res Res.rc", true, g);
+            RunCompilerDirective("RESOURCE 3 ", false, h, CompilerDirectiveParserErrors.InvalidResourceDirective, CompilerDirectiveParserErrors.InvalidFileName);
+            RunCompilerDirective("RESOURCE  ", false, h, CompilerDirectiveParserErrors.InvalidResourceDirective, CompilerDirectiveParserErrors.InvalidFileName);
         }
 
         [Fact]

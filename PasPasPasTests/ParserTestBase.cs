@@ -123,6 +123,7 @@ namespace PasPasPasTests {
                 TestOptions.ResetOnNewUnit(environment.Log);
                 var subParts = directivePart.Split(new[] { '§' }, StringSplitOptions.RemoveEmptyEntries);
                 foreach (var subPart in subParts) {
+                    bool hasFoundInput = false;
                     using (var input = new StringInput(subPart, new FileReference("test_" + fileCounter.ToString() + ".pas")))
                     using (var reader = new StackedFileReader()) {
                         reader.AddFile(input);
@@ -131,14 +132,18 @@ namespace PasPasPasTests {
                         while (!reader.AtEof) {
                             var result = parser.Parse();
 
+                            if (!hasFoundInput) {
+                                terminalOpts.ResultBuilder.Clear();
+                                if (result != null)
+                                    result.Accept(terminals, terminalOpts);
+
+                                Assert.AreEqual(subPart, terminalOpts.ResultBuilder.ToString());
+                            }
+                            hasFoundInput = reader.AtEof || hasFoundInput;
+
+                            options.IncludeInput = reader;
                             if (result != null)
                                 result.Accept(visitor, options);
-
-                            terminalOpts.ResultBuilder.Clear();
-                            if (result != null)
-                                result.Accept(terminals, terminalOpts);
-
-                            Assert.AreEqual(subPart, terminalOpts.ResultBuilder.ToString());
 
                         }
                         fileCounter++;

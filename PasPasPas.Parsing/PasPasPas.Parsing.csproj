@@ -70,6 +70,7 @@
     <Compile Include="SyntaxTree\CompilerDirectives\ImageBase.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\ImplicitBuild.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\ImportedData.cs" />
+    <Compile Include="SyntaxTree\CompilerDirectives\Include.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\IoChecks.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\LegacyIfEnd.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\LibInfo.cs" />

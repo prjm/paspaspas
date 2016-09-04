@@ -23,10 +23,9 @@ namespace PasPasPas.Options.DataTypes {
         /// <param name="pathToResolve"></param>
         /// <returns></returns>
         protected override ResolvedFile DoResolvePath(IFileReference basePath, IFileReference pathToResolve) {
-            var path = pathToResolve.Path;
 
-            if (path.StartsWith("*", StringComparison.Ordinal)) {
-                path = path.Replace("*", Path.GetFileNameWithoutExtension(basePath.Path));
+            if (pathToResolve.Path.StartsWith("*", StringComparison.Ordinal)) {
+                pathToResolve = new FileReference(pathToResolve.Path.Replace("*", Path.GetFileNameWithoutExtension(basePath.Path)));
             }
 
             if (string.IsNullOrWhiteSpace(Path.GetExtension(pathToResolve.Path))) {

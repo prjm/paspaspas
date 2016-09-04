@@ -728,7 +728,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
 
         /// <summary>
-        ///     link
+        ///     resource
         /// </summary>
         /// <param name="syntaxPart"></param>
         /// <param name="parameter"></param>
@@ -752,6 +752,30 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 resourceReference.RcFile = syntaxPart.RcFile;
                 parameter.Meta.AddResourceReference(resourceReference);
             }
+        }
+
+        /// <summary>
+        ///     include
+        /// </summary>
+        /// <param name="syntaxPart"></param>
+        /// <param name="parameter"></param>
+        public void BeginVisitItem(Include syntaxPart, CompilerDirectiveVisitorOptions parameter) {
+            var basePath = syntaxPart?.LastTerminal?.Token?.FilePath;
+            var fileName = syntaxPart?.Filename;
+
+            if (basePath == null || string.IsNullOrWhiteSpace(basePath.Path))
+                return;
+
+            if (fileName == null || string.IsNullOrWhiteSpace(fileName))
+                return;
+
+
+            var targetPath = parameter.Meta.IncludePathResolver.ResolvePath(basePath, new FileReference(fileName)).TargetPath;
+
+            IFileAccess fileAccess = parameter.FileAccess;
+            if (parameter.IncludeInput != null)
+                parameter.IncludeInput.AddFile(fileAccess.OpenFileForReading(targetPath));
+
         }
 
     }
