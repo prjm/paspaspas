@@ -48,16 +48,16 @@ namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
                     case TokenKind.Div:
                         result.Keyword("div");
                         break;
-                    case PascalToken.Mod:
+                    case TokenKind.Mod:
                         result.Keyword("mod");
                         break;
                     case TokenKind.And:
                         result.Keyword("and");
                         break;
-                    case PascalToken.Shl:
+                    case TokenKind.Shl:
                         result.Keyword("shl");
                         break;
-                    case PascalToken.Shr:
+                    case TokenKind.Shr:
                         result.Keyword("shr");
                         break;
                     case TokenKind.As:

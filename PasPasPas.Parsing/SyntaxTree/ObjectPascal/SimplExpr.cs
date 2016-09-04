@@ -46,11 +46,11 @@ namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
                         result.Punct("-");
                         break;
 
-                    case PascalToken.Or:
+                    case TokenKind.Or:
                         result.Keyword("or");
                         break;
 
-                    case PascalToken.Xor:
+                    case TokenKind.Xor:
                         result.Keyword("xor");
                         break;
 

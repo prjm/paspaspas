@@ -78,12 +78,12 @@
         /// <summary>
         ///     token for <c>&lt;</c>
         /// </summary>
-        public const int AngleBracketsOpen = PascalToken.LessThen;
+        public const int AngleBracketsOpen = LessThen;
 
         /// <summary>
         ///     token for <c>&gt;</c>
         /// </summary>
-        public const int AngleBracketsClose = PascalToken.GreaterThen;
+        public const int AngleBracketsClose = GreaterThen;
 
         /// <summary>
         ///     toke for <c>..</c>
@@ -336,9 +336,6 @@
         ///     token for <c>final</c>
         /// </summary>
         public const int Final = 234;
-
-
-
 
         /// <summary>
         ///     token for <c>inline</c>
@@ -616,6 +613,177 @@
         ///     token for <c>downto</c>
         /// </summary>
         public const int DownTo = 298;
+
+        /// <summary>
+        ///     token for <c>do</c>
+        /// </summary>
+        public const int Do = 299;
+
+        /// <summary>
+        ///     token for <c>else</c>
+        /// </summary>
+        public const int Else = 300;
+
+        /// <summary>
+        ///     token for <c>except</c>
+        /// </summary>
+        public const int Except = 301;
+
+        /// <summary>
+        ///     token for <c>finally</c>
+        /// </summary>
+        public const int Finally = 302;
+
+        /// <summary>
+        ///     token for <c>kexword</c>
+        /// </summary>
+        public const int GoToKeyword = 303;
+
+        /// <summary>
+        ///     token for <c>if</c>
+        /// </summary>
+        public const int If = 304;
+
+        /// <summary>
+        ///     token for <c>inherited</c>
+        /// </summary>
+        public const int Inherited = 305;
+
+        /// <summary>
+        ///     token for <c>is</c>
+        /// </summary>
+        public const int Is = 306;
+
+        /// <summary>
+        ///     token for <c>not</c>
+        /// </summary>
+        public const int Not = 307;
+
+        /// <summary>
+        ///     token for <c>nil</c>
+        /// </summary>
+        public const int Nil = 308;
+
+        /// <summary>
+        ///     token for <c>mod</c>
+        /// </summary>
+        public const int Mod = 309;
+
+        /// <summary>
+        ///     token for <c>or</c>
+        /// </summary>
+        public const int Or = 310;
+
+        /// <summary>
+        ///     token for <c>repeat</c>
+        /// </summary>
+        public const int Repeat = 311;
+
+        /// <summary>
+        ///     token for <c>raise</c>
+        /// </summary>
+        public const int Raise = 312;
+
+        /// <summary>
+        ///     token for <c>shl</c>
+        /// </summary>
+        public const int Shl = 313;
+
+        /// <summary>
+        ///     token for <c>shr</c>
+        /// </summary>
+        public const int Shr = 314;
+
+        /// <summary>
+        ///     token for <c>then</c>
+        /// </summary>
+        public const int Then = 315;
+
+        /// <summary>
+        ///     token for <c>try</c>
+        /// </summary>
+        public const int Try = 316;
+
+        /// <summary>
+        ///     token for <c>until</c>
+        /// </summary>
+        public const int Until = 318;
+
+        /// <summary>
+        ///     token for <c>while</c>
+        /// </summary>
+        public const int While = 319;
+
+        /// <summary>
+        ///     token for <c>with</c>
+        /// </summary>
+        public const int With = 320;
+
+        /// <summary>
+        ///     token for <c>xor</c>
+        /// </summary>
+        public const int Xor = 321;
+
+        /// <summary>
+        ///     token for <c>varargs</c>
+        /// </summary>
+        public const int VarArgs = 322;
+
+        /// <summary>
+        ///     token for <c>external</c>
+        /// </summary>
+        public const int External = 323;
+
+        /// <summary>
+        ///     token for <c>unsafe</c>
+        /// </summary>
+        public const int Unsafe = 324;
+
+        /// <summary>
+        ///     token for <c>forward</c>
+        /// </summary>
+        public const int Forward = 325;
+
+        /// <summary>
+        ///     token for <c>true</c>
+        /// </summary>
+        public const int True = 326;
+
+        /// <summary>
+        ///     token for <c>false</c>
+        /// </summary>
+        public const int False = 327;
+
+        /// <summary>
+        ///     token for <c>&lt;</c>
+        /// </summary>
+        public const int LessThen = 328;
+
+        /// <summary>
+        ///     token for <c>&lt;=</c>
+        /// </summary>
+        public const int LessThenEquals = 329;
+
+        /// <summary>
+        ///     token for <c>&gt;</c>
+        /// </summary>
+        public const int GreaterThen = 330;
+
+        /// <summary>
+        ///     token for <c>&gt;=</c>
+        /// </summary>
+        public const int GreaterThenEquals = 331;
+
+        /// <summary>
+        ///     token for <c>&lt;&gt;</c>
+        /// </summary>
+        public const int NotEquals = 332;
+
+        /// <summary>
+        ///     token for <c>exit</c>
+        /// </summary>
+        public const int Exit = 333;
+
 
     }
 }

@@ -32,10 +32,10 @@ namespace PasPasPas.Parsing.Tokenizer {
             AddPattern('*', TokenKind.Times);
             AddPattern('/', TokenKind.Slash).Add('/', new EndOfLineCommentTokenGroupValue());
             AddPattern('@', TokenKind.At);
-            AddPattern('>', PascalToken.GreaterThen).Add('=', PascalToken.GreaterThenEquals);
-            var lt = AddPattern('<', PascalToken.LessThen);
-            lt.Add('=', PascalToken.LessThenEquals);
-            lt.Add('>', PascalToken.NotEquals);
+            AddPattern('>', TokenKind.GreaterThen).Add('=', TokenKind.GreaterThenEquals);
+            var lt = AddPattern('<', TokenKind.LessThen);
+            lt.Add('=', TokenKind.LessThenEquals);
+            lt.Add('>', TokenKind.NotEquals);
 
             AddPattern('{', new CurlyBraceCommentTokenValue()).Add('$', new PreprocessorTokenValue());
             AddPattern('$', new HexNumberTokenValue());

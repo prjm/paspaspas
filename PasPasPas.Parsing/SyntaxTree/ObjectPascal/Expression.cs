@@ -44,19 +44,19 @@ namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
             if (RightOperand != null) {
                 result.Space();
                 switch (Kind) {
-                    case PascalToken.LessThen:
+                    case TokenKind.LessThen:
                         result.Operator("<");
                         break;
-                    case PascalToken.LessThenEquals:
+                    case TokenKind.LessThenEquals:
                         result.Operator("<=");
                         break;
-                    case PascalToken.GreaterThen:
+                    case TokenKind.GreaterThen:
                         result.Operator(">");
                         break;
-                    case PascalToken.GreaterThenEquals:
+                    case TokenKind.GreaterThenEquals:
                         result.Operator(">=");
                         break;
-                    case PascalToken.NotEquals:
+                    case TokenKind.NotEquals:
                         result.Operator("<>");
                         break;
                     case TokenKind.EqualsSign:
@@ -65,7 +65,7 @@ namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
                     case TokenKind.In:
                         result.Operator("in");
                         break;
-                    case PascalToken.Is:
+                    case TokenKind.Is:
                         result.Operator("is");
                         break;
                 }
