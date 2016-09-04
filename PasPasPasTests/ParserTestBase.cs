@@ -74,7 +74,7 @@ namespace PasPasPasTests {
                 string errorText = string.Empty;
 
                 log.ProcessMessage += (x, y) => {
-                    errorText += y.Message.FormattedMessage + Environment.NewLine;
+                    errorText += y.Message.MessageID.ToString() + Environment.NewLine;
                     hasError = hasError ||
                     y.Message.Severity == MessageSeverity.Error ||
                     y.Message.Severity == MessageSeverity.FatalError;

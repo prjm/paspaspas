@@ -10,14 +10,14 @@ namespace PasPasPas.Infrastructure.Input {
         /// <summary>
         ///     desciption of a resolved file
         /// </summary>
-        /// <param name="currentDir">current directory</param>
+        /// <param name="currentDirectory">current directory</param>
         /// <param name="pathToResolve">path to resolve</param>
         /// <param name="target">target directory</param>
         /// <param name="isResolved"><c>true</c> if the file is resolved</param>
-        public ResolvedFile(IFileReference currentDir, IFileReference pathToResolve, IFileReference target, bool isResolved) {
+        public ResolvedFile(IFileReference currentDirectory, IFileReference pathToResolve, IFileReference target, bool isResolved) {
 
-            if (currentDir == null)
-                throw new ArgumentNullException(nameof(currentDir));
+            if (currentDirectory == null)
+                throw new ArgumentNullException(nameof(currentDirectory));
 
             if (pathToResolve == null)
                 throw new ArgumentNullException(nameof(pathToResolve));
@@ -25,7 +25,7 @@ namespace PasPasPas.Infrastructure.Input {
             if (target == null)
                 throw new ArgumentNullException(nameof(target));
 
-            CurrentDirectory = currentDir;
+            CurrentDirectory = currentDirectory;
             PathToResolve = pathToResolve;
             TargetPath = target;
             IsResolved = isResolved;

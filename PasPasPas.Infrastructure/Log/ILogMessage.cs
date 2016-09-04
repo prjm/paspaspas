@@ -21,10 +21,5 @@
         /// </summary>
         System.Guid GroupID { get; }
 
-        /// <summary>
-        ///     formatted message
-        /// </summary>
-        string FormattedMessage { get; }
-
     }
 }

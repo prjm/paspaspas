@@ -53,10 +53,10 @@ namespace PasPasPas.Infrastructure.Input {
             string fileName = path.FileName;
 
             if (string.IsNullOrEmpty(fileName))
-                throw new ArgumentException("Undefined filename", nameof(path));
+                throw new InvalidOperationException("Undefined filename");
 
             if (mockupFiles.Value.ContainsKey(fileName))
-                throw new ArgumentException($"Duplicate mockup file {path}");
+                throw new InvalidOperationException($"Duplicate mockup file {path}");
 
             mockupFiles.Value.Add(fileName, input);
         }
@@ -64,18 +64,18 @@ namespace PasPasPas.Infrastructure.Input {
         /// <summary>
         ///     test if a given files exists
         /// </summary>
-        /// <param name="file">file path</param>
+        /// <param name="filePath">file path</param>
         /// <returns><c>true</c> if the file exists</returns>
-        public bool FileExists(IFileReference file) {
+        public bool FileExists(IFileReference filePath) {
 
-            if (file == null)
-                throw new ArgumentNullException(nameof(file));
+            if (filePath == null)
+                throw new ArgumentNullException(nameof(filePath));
 
-            var fileNameWithoutPath = file.FileName;
+            var fileNameWithoutPath = filePath.FileName;
             if (mockupFiles.IsValueCreated && mockupFiles.Value.ContainsKey(fileNameWithoutPath))
                 return true;
 
-            return DoCheckIfFileExists(file);
+            return DoCheckIfFileExists(filePath);
         }
 
         /// <summary>

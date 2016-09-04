@@ -4,6 +4,10 @@
     ///     include directive
     /// </summary>
     public class Include : SyntaxPartBase {
-        public string Filename { get; internal set; }
+
+        /// <summary>
+        ///     include file name
+        /// </summary>
+        public string Filename { get; set; }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 
 namespace PasPasPas.Infrastructure.Log {
 
@@ -12,7 +11,6 @@ namespace PasPasPas.Infrastructure.Log {
         private readonly Guid group;
         private readonly Guid id;
         private readonly MessageSeverity severity;
-        private readonly string text;
 
         /// <summary>
         ///     create a new log message
@@ -37,12 +35,6 @@ namespace PasPasPas.Infrastructure.Log {
             severity = messageServerity;
             data = messageData ?? new object[0];
         }
-
-        /// <summary>
-        ///     format log message
-        /// </summary>
-        public string FormattedMessage
-            => string.Format(CultureInfo.CurrentCulture, text, data);
 
         /// <summary>
         ///     groud id

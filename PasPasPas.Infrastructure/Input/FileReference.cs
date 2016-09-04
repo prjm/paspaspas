@@ -36,10 +36,10 @@ namespace PasPasPas.Infrastructure.Input {
         /// <summary>
         ///     add a subpath
         /// </summary>
-        /// <param name="path">path to add</param>
+        /// <param name="basePath">path to add</param>
         /// <returns>combined path</returns>
-        public IFileReference Append(IFileReference path)
-            => new FileReference(System.IO.Path.Combine(this.path, path.Path));
+        public IFileReference Append(IFileReference basePath)
+            => new FileReference(System.IO.Path.Combine(path, basePath.Path));
 
         /// <summary>
         ///     string representation of this file reference
@@ -53,7 +53,7 @@ namespace PasPasPas.Infrastructure.Input {
         /// </summary>
         /// <returns></returns>
         public override int GetHashCode()
-            => path.ToLowerInvariant().GetHashCode();
+            => path.ToUpperInvariant().GetHashCode();
 
         /// <summary>
         ///     test for equality

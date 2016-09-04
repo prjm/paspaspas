@@ -88,7 +88,7 @@ namespace PasPasPas.Infrastructure.Input {
         ///     open the file
         /// </summary>
         public void Open() {
-            /// ,,,
+            // ...
         }
 
         #region IDisposable Support
