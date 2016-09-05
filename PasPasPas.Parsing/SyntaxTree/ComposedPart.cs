@@ -10,7 +10,7 @@ namespace PasPasPas.Parsing.SyntaxTree {
     /// </summary>
     /// <typeparam name="TDetail">detail type</typeparam>
     public abstract class ComposedPart<TDetail> : SyntaxPartBase
-        where TDetail : ISyntaxPart, IFormattableSyntaxPart {
+        where TDetail : ISyntaxTreeNode, IFormattableSyntaxPart {
 
         /// <summary>
         ///     create a new syntax tree element
@@ -25,7 +25,7 @@ namespace PasPasPas.Parsing.SyntaxTree {
         ///     accepet visitor
         /// </summary>
         /// <param name="visitor"></param>
-        public override bool Accept<TParam>(ISyntaxPartVisitor<TParam> visitor, TParam param) {
+        public override bool Accept<TParam>(ISyntaxTreeNodeVisitor<TParam> visitor, TParam param) {
             visitor.BeginVisit(this, param);
 
             if (details.IsValueCreated) {

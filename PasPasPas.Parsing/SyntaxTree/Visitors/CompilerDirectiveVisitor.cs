@@ -17,7 +17,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <param name="syntaxPart">syntax part to test</param>
         /// <param name="parameter">options</param>
         /// <returns></returns>
-        private bool CanVisit(ISyntaxPart syntaxPart, CompilerDirectiveVisitorOptions parameter) {
+        private bool CanVisit(ISyntaxTreeNode syntaxPart, CompilerDirectiveVisitorOptions parameter) {
             if (!parameter.ConditionalCompilation.Skip)
                 return true;
 
@@ -29,7 +29,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// </summary>
         /// <param name="syntaxPart"></param>
         /// <param name="parameter"></param>
-        public override bool BeginVisit(ISyntaxPart syntaxPart, CompilerDirectiveVisitorOptions parameter) {
+        public override bool BeginVisit(ISyntaxTreeNode syntaxPart, CompilerDirectiveVisitorOptions parameter) {
 
             if (!CanVisit(syntaxPart, parameter))
                 return true;
@@ -44,7 +44,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// </summary>
         /// <param name="syntaxPart"></param>
         /// <param name="parameter"></param>
-        public void BeginVisitItem(ISyntaxPart syntaxPart, CompilerDirectiveVisitorOptions parameter) { }
+        public void BeginVisitItem(ISyntaxTreeNode syntaxPart, CompilerDirectiveVisitorOptions parameter) { }
 
         /// <summary>
         ///     update alignment

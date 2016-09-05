@@ -10,7 +10,7 @@
         /// </summary>
         /// <param name="syntaxPart"></param>
         /// <param name="parameter"></param>
-        public override bool BeginVisit(ISyntaxPart syntaxPart, TerminalVisitorOptions parameter) {
+        public override bool BeginVisit(ISyntaxTreeNode syntaxPart, TerminalVisitorOptions parameter) {
             dynamic part = syntaxPart;
             BeginVisitItem(part, parameter);
             return true;
@@ -21,7 +21,7 @@
         /// </summary>
         /// <param name="syntaxPart"></param>
         /// <param name="parameter"></param>
-        public void BeginVisitItem(ISyntaxPart syntaxPart, TerminalVisitorOptions parameter) { }
+        public void BeginVisitItem(ISyntaxTreeNode syntaxPart, TerminalVisitorOptions parameter) { }
 
         /// <summary>
         ///     get terminal string and append it to the result

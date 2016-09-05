@@ -15,6 +15,6 @@ namespace PasPasPas.Api {
         /// <summary>
         ///     parse input
         /// </summary>
-        ISyntaxPart Parse();
+        ISyntaxTreeNode Parse();
     }
 }
