@@ -106,10 +106,11 @@ namespace PasPasPas.Parsing.Parser {
         /// <summary>
         ///     parse input
         /// </summary>
-        public override ISyntaxTreeNode Parse()
+        public override ISyntaxPart Parse()
             => ParseFile();
 
-        private ISyntaxTreeNode ParseFile() {
+        [Rule("File", "Program | Library | Unit | Package")]
+        private ISyntaxPart ParseFile() {
             if (Match(TokenKind.Library)) {
                 return ParseLibrary();
             }
@@ -123,8 +124,9 @@ namespace PasPasPas.Parsing.Parser {
             return ParseProgram();
         }
 
+        [Rule("Unit", "UnitHead UnitInterface UnitImplementation UnitBlock '.' ")]
         private Unit ParseUnit() {
-            var result = CreateChild<Unit>(null);
+            var result = new Unit(this);
             result.UnitHead = ParseUnitHead();
             result.UnitInterface = ParseUnitInterface();
             result.UnitImplementation = ParseUnitImplementation();

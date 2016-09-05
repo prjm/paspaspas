@@ -114,15 +114,14 @@
     <Compile Include="SyntaxTree\CompilerDirectives\WeakPackageUnit.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\WritableConsts.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\ZeroBasedStrings.cs" />
-    <Compile Include="SyntaxTree\SyntraxTreeNodeBase.cs" />
     <Compile Include="SyntaxTree\Terminal.cs" />
     <Compile Include="SyntaxTree\InvalidToken.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\AlignSwitch.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\CompilerDirective.cs" />
-    <Compile Include="SyntaxTree\ISyntaxTreeNode.cs" />
+    <Compile Include="SyntaxTree\ISyntaxPart.cs" />
     <Compile Include="Api\PascalFormatter.cs" />
     <Compile Include="Api\PascalParser.cs" />
-    <Compile Include="SyntaxTree\ISyntaxTreeNodeVisitor.cs" />
+    <Compile Include="SyntaxTree\ISyntaxPartVisitor.cs" />
     <Compile Include="SyntaxTree\PascalToken.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Parser\ParserBase.cs" />

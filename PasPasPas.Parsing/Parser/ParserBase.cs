@@ -83,7 +83,7 @@ namespace PasPasPas.Parsing.Parser {
         ///     unexpected input token
         /// </summary>
         /// <returns></returns>
-        protected ISyntaxTreeNode Unexpected() {
+        protected ISyntaxPart Unexpected() {
             logSource.Error(UnexpectedToken, CurrentToken().Kind, CurrentToken().Value);
             return null;
         }
@@ -95,7 +95,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="parent">parent syntax tree node</param>
         /// <param name="expectedTokens">expected tokens (or)</param>
         /// <returns></returns>
-        protected void ErrorAndSkip(ISyntaxTreeNode parent, Guid message, int[] expectedTokens) {
+        protected void ErrorAndSkip(ISyntaxPart parent, Guid message, int[] expectedTokens) {
             logSource.Error(message);
             CreateByError(parent);
         }
@@ -107,7 +107,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="values">error values</param>
         /// <param name="parent">parent syntax tree node</param>
         /// <returns></returns>
-        protected void ErrorLastPart(ISyntaxTreeNode parent, Guid message, params object[] values) {
+        protected void ErrorLastPart(ISyntaxPart parent, Guid message, params object[] values) {
             var lastSymbol = parent.Parts.Last();
             parent.Parts.Remove(lastSymbol);
             lastSymbol.Parent = null;
@@ -316,8 +316,8 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="result">created syntax part</param>
         /// <param name="parent">parent node</param>
         /// <returns><c>true</c> if match</returns>
-        protected bool OptionalPart<T>(ISyntaxTreeNode parent, out T result, int tokenKind)
-            where T : ISyntaxTreeNode, new() {
+        protected bool OptionalPart<T>(ISyntaxPart parent, out T result, int tokenKind)
+            where T : ISyntaxPart, new() {
 
             if (!Match(tokenKind)) {
                 result = default(T);
@@ -334,7 +334,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind"></param>
         /// <param name="part"></param>
         /// <returns></returns>
-        protected bool ContinueWith(ISyntaxTreeNode part, params int[] tokenKind) {
+        protected bool ContinueWith(ISyntaxPart part, params int[] tokenKind) {
 
             var requiresIdentifier = tokenKind.Length == 1 && tokenKind[0] == PascalToken.Identifier;
 
@@ -368,8 +368,8 @@ namespace PasPasPas.Parsing.Parser {
         /// </summary>
         /// <typeparam name="T">parent object</typeparam>
         /// <returns></returns>
-        protected T CreateByTerminal<T>(ISyntaxTreeNode parent)
-            where T : ISyntaxTreeNode, new() {
+        protected T CreateByTerminal<T>(ISyntaxPart parent)
+            where T : ISyntaxPart, new() {
             var result = CreateChild<T>(parent);
             var terminal = new Terminal(CurrentToken());
             terminal.Parent = result;
@@ -383,7 +383,7 @@ namespace PasPasPas.Parsing.Parser {
         /// </summary>
         /// <param name="parent"></param>
         /// <returns></returns>
-        protected InvalidToken CreateByError(ISyntaxTreeNode parent) {
+        protected InvalidToken CreateByError(ISyntaxPart parent) {
             var invalid = new InvalidToken(CurrentToken());
             invalid.Parent = parent;
             parent.Parts.Add(invalid);
@@ -396,8 +396,8 @@ namespace PasPasPas.Parsing.Parser {
         /// </summary>
         /// <typeparam name="T">parent object</typeparam>
         /// <returns></returns>
-        protected static T CreateChild<T>(ISyntaxTreeNode parent)
-            where T : ISyntaxTreeNode, new() {
+        protected static T CreateChild<T>(ISyntaxPart parent)
+            where T : ISyntaxPart, new() {
             var result = new T();
             if (parent != null) {
                 result.Parent = parent;
@@ -411,6 +411,6 @@ namespace PasPasPas.Parsing.Parser {
         ///     parse input
         /// </summary>
         /// <returns>parsed input</returns>
-        public abstract ISyntaxTreeNode Parse();
+        public abstract ISyntaxPart Parse();
     }
 }

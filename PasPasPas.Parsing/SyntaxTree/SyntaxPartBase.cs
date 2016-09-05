@@ -1,13 +1,12 @@
 ﻿using System.Collections.Generic;
 using PasPasPas.Api;
-using System;
 
 namespace PasPasPas.Parsing.SyntaxTree {
 
     /// <summary>
     ///     base class for syntax pars
     /// </summary>
-    public abstract class SyntaxPartBase : SyntraxTreeNodeBase, IFormattableSyntaxPart {
+    public abstract class SyntaxPartBase : ISyntaxPart, IFormattableSyntaxPart {
 
         /// <summary>
         ///     create a new syntax part base
@@ -26,27 +25,44 @@ namespace PasPasPas.Parsing.SyntaxTree {
         }
 
         /// <summary>
+        ///     parent node
+        /// </summary>
+        public ISyntaxPart Parent { get; set; }
+
+        /// <summary>
         ///     information provider
         /// </summary>
         public IParserInformationProvider InformationProvider { get; }
 
         /// <summary>
-        ///     syntax tree parts
+        ///     syntax parts
         /// </summary>
-        public override IEnumerable<ISyntaxTreeNode> Parts
-        {
-            get
-            {
-                if (parts.IsValueCreated) {
-                    foreach (var part in parts.Value) {
-                        yield return part;
-                    }
-                }
-            }
-        }
+        public virtual IList<ISyntaxPart> Parts
+            => parts;
 
-        private Lazy<IList<ISyntaxTreeNode>> parts
-            = new Lazy<IList<ISyntaxTreeNode>>(() => new List<ISyntaxTreeNode>());
+        private IList<ISyntaxPart> parts
+            = new List<ISyntaxPart>();
+
+        /// <summary>
+        ///     accept this visitor
+        /// </summary>
+        /// <param name="visitor">visitor</param>
+        /// <param name="param">parameter</param>
+        /// <typeparam name="T">parameter type</typeparam>
+        public virtual bool Accept<T>(ISyntaxPartVisitor<T> visitor, T param) {
+            if (!visitor.BeginVisit(this, param))
+                return false;
+
+            var result = true;
+
+            foreach (var part in Parts)
+                result = result && part.Accept(visitor, param);
+
+            if (!visitor.EndVisit(this, param))
+                return false;
+
+            return result;
+        }
 
         /// <summary>
         ///     get the last terminal symbol
@@ -55,8 +71,8 @@ namespace PasPasPas.Parsing.SyntaxTree {
         {
             get
             {
-                if (parts.IsValueCreated && parts.Value.Count > 0)
-                    return parts.Value[parts.Value.Count - 1] as Terminal;
+                if (parts.Count > 0)
+                    return parts[parts.Count - 1] as Terminal;
                 else
                     return null;
             }
@@ -75,7 +91,7 @@ namespace PasPasPas.Parsing.SyntaxTree {
         /// </summary>
         /// <param name="symbol">symbol to search</param>
         /// <returns></returns>
-        public static IEnumerable<Terminal> FindAllTerminals(ISyntaxTreeNode symbol) {
+        public static IEnumerable<Terminal> FindAllTerminals(ISyntaxPart symbol) {
             if (symbol is Terminal)
                 yield return symbol as Terminal;
 

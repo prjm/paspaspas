@@ -6,31 +6,31 @@ namespace PasPasPas.Parsing.SyntaxTree {
     /// <summary>
     ///     interface for syntax tree elements
     /// </summary>
-    public interface ISyntaxTreeNode {
+    public interface ISyntaxPart {
 
         /// <summary>
         ///     accept visitor
         /// </summary>
         /// <param name="visitor">visitor to accept</param>
         /// <param name="visitorParameter">parameter</param>
-        bool Accept<T>(ISyntaxTreeNodeVisitor<T> visitor, T visitorParameter);
+        bool Accept<T>(ISyntaxPartVisitor<T> visitor, T visitorParameter);
 
         /// <summary>
         ///     child nodes
         /// </summary>
-        IEnumerable<ISyntaxTreeNode> Parts { get; }
+        IList<ISyntaxPart> Parts { get; }
 
         /// <summary>
         ///     parent node
         /// </summary>
-        ISyntaxTreeNode Parent { get; set; }
+        ISyntaxPart Parent { get; set; }
 
     }
 
     /// <summary>
     ///     temporary interface
     /// </summary>
-    public interface IFormattableSyntaxPart : ISyntaxTreeNode {
+    public interface IFormattableSyntaxPart : ISyntaxPart {
 
 
         /// <summary>

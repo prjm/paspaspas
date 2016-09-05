@@ -27,8 +27,8 @@ namespace PasPasPas.Parsing.SyntaxTree {
         /// <summary>
         ///     empty part list
         /// </summary>
-        public override IEnumerable<ISyntaxTreeNode> Parts { get; }
-            = EmptyCollection<ISyntaxTreeNode>.Instance;
+        public override IList<ISyntaxPart> Parts { get; }
+            = EmptyCollection<ISyntaxPart>.Instance;
 
         /// <summary>
         ///     token value
