@@ -406,6 +406,18 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
+        /// <summary>
+        ///     continue with a specific token and mark it as missing
+        /// </summary>
+        /// <param name="result"></param>
+        /// <param name="tokenKind"></param>
+        protected void ContinueWithOrMissing(ISyntaxPart result, int tokenKind) {
+            if (!ContinueWith(result, tokenKind)) {
+                // add missing token / todo
+            }
+        }
+
+
 
         /// <summary>
         ///     parse input

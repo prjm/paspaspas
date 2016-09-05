@@ -35,5 +35,11 @@ namespace PasPasPas.Parsing.SyntaxTree {
         /// </summary>
         public string Value
             => Token.Value;
+
+        /// <summary>
+        ///     token kind
+        /// </summary>
+        public int Kind
+            => Token.Kind;
     }
 }

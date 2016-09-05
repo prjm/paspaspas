@@ -8,13 +8,6 @@ namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
     public class BindingDirective : SyntaxPartBase {
 
         /// <summary>
-        ///     create a new directive
-        /// </summary>
-        /// <param name="informationProvider"></param>
-        public BindingDirective(IParserInformationProvider informationProvider) : base(informationProvider) {
-        }
-
-        /// <summary>
         ///     directive kind
         /// </summary>
         public int Kind { get; internal set; }
