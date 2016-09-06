@@ -1,6 +1,4 @@
-﻿using PasPasPas.Api;
-
-namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
+﻿namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
 
     /// <summary>
     ///     property accessor for disp interfaces
@@ -8,44 +6,19 @@ namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
     public class ClassPropertyDispInterface : SyntaxPartBase {
 
         /// <summary>
-        ///     create a new syntax tree element
-        /// </summary>
-        /// <param name="informationProvider">current parser state</param>
-        public ClassPropertyDispInterface(IParserInformationProvider informationProvider) : base(informationProvider) { }
-
-        /// <summary>
         ///     Disp id directive
         /// </summary>
-        public DispIdDirective DispId { get; internal set; }
+        public DispIdDirective DispId { get; set; }
 
         /// <summary>
         ///     readonly
         /// </summary>
-        public bool ReadOnly { get; internal set; }
+        public bool ReadOnly { get; set; }
 
         /// <summary>
         ///    write only
         /// </summary>
-        public bool WriteOnly { get; internal set; }
+        public bool WriteOnly { get; set; }
 
-        /// <summary>
-        ///     format 
-        /// </summary>
-        /// <param name="result"></param>
-        public override void ToFormatter(PascalFormatter result) {
-            if (ReadOnly) {
-                result.Keyword("readonly");
-                result.Punct(";");
-                return;
-            }
-
-            if (WriteOnly) {
-                result.Keyword("writeonly");
-                result.Punct(";");
-                return;
-            }
-
-            DispId.ToFormatter(result);
-        }
     }
 }

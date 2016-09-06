@@ -1,6 +1,4 @@
-﻿using PasPasPas.Api;
-
-namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
+﻿namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
 
     /// <summary>
     ///     class helper item
@@ -8,83 +6,39 @@ namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
     public class ClassHelperItem : SyntaxPartBase {
 
         /// <summary>
-        ///     create a new syntax tree element
-        /// </summary>
-        /// <param name="informationProvider">current parser state</param>
-        public ClassHelperItem(IParserInformationProvider informationProvider) : base(informationProvider) { }
-
-        /// <summary>
         ///     attributes
         /// </summary>
-        public UserAttributes Attributes { get; internal set; }
+        public UserAttributes Attributes { get; set; }
 
         /// <summary>
         ///     marker for class properties
         /// </summary>
-        public bool Class { get; internal set; }
+        public bool Class { get; set; }
 
         /// <summary>
         ///     method declaration
         /// </summary>
-        public ClassMethod MethodDeclaration { get; internal set; }
+        public ClassMethod MethodDeclaration { get; set; }
 
         /// <summary>
         ///     property declaration
         /// </summary>
-        public ClassProperty PropertyDeclaration { get; internal set; }
+        public ClassProperty PropertyDeclaration { get; set; }
 
         /// <summary>
         ///     strict
         /// </summary>
-        public bool Strict { get; internal set; }
+        public bool Strict { get; set; }
 
         /// <summary>
         ///     variable section
         /// </summary>
-        public VarSection VarSection { get; internal set; }
+        public VarSection VarSection { get; set; }
 
         /// <summary>
         ///     visibility
         /// </summary>
-        public int Visibility { get; internal set; }
+        public int Visibility { get; set; }
 
-        /// <summary>
-        ///     format class helper item
-        /// </summary>
-        /// <param name="result"></param>
-        public override void ToFormatter(PascalFormatter result) {
-            result.Part(Attributes).NewLine();
-
-            if (MethodDeclaration != null) {
-                if (Class) {
-                    result.Keyword("class");
-                    result.Space();
-                }
-                result.Part(MethodDeclaration);
-                return;
-            }
-
-            if (PropertyDeclaration != null) {
-                if (Class) {
-                    result.Keyword("class");
-                    result.Space();
-                }
-                PropertyDeclaration.ToFormatter(result);
-                return;
-            }
-
-            if (VarSection != null) {
-                if (Class) {
-                    result.Keyword("class");
-                    result.Space();
-                }
-                result.Part(VarSection);
-                return;
-            }
-
-            if (Visibility != TokenKind.Undefined) {
-                ClassDeclarationItem.FormatVisibility(result, Visibility, Strict);
-            }
-        }
     }
 }

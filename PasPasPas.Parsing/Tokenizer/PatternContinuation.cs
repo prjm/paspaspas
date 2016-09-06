@@ -739,7 +739,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         ///     token id
         /// </summary>
         protected override int TokenId
-            => PascalToken.Integer;
+            => TokenKind.Integer;
 
         /// <summary>
         ///     matches a digit
@@ -950,7 +950,7 @@ namespace PasPasPas.Parsing.Tokenizer {
 
             if (!state.IsValid) {
                 result.LiteralValue = intPrefix;
-                state.Finish(PascalToken.Integer);
+                state.Finish(TokenKind.Integer);
                 return;
             }
 
@@ -970,7 +970,7 @@ namespace PasPasPas.Parsing.Tokenizer {
                 if (!state.IsValid || !NextCharMatches(state, plusminus)) {
                     state.Error(TokenizerBase.UnexpectedEndOfToken, "+", "-");
                 }
-                else if (!state.IsValid || digitTokenizer.Tokenize(state.Input, state.Buffer, state.Log).Kind != PascalToken.Integer) {
+                else if (!state.IsValid || digitTokenizer.Tokenize(state.Input, state.Buffer, state.Log).Kind != TokenKind.Integer) {
                     state.Error(TokenizerBase.UnexpectedEndOfToken);
                 }
 
@@ -978,11 +978,11 @@ namespace PasPasPas.Parsing.Tokenizer {
             }
 
             if (withDot || withExponent) {
-                state.Finish(PascalToken.Real);
+                state.Finish(TokenKind.Real);
             }
             else {
                 result.LiteralValue = intPrefix;
-                state.Finish(PascalToken.Integer);
+                state.Finish(TokenKind.Integer);
             }
 
         }

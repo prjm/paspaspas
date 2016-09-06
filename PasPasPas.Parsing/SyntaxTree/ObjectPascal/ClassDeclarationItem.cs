@@ -1,6 +1,4 @@
-﻿using PasPasPas.Api;
-
-namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
+﻿namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
 
     /// <summary>
     ///     class declaration item
@@ -8,159 +6,61 @@ namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
     public class ClassDeclarationItem : SyntaxPartBase {
 
         /// <summary>
-        ///     create a new syntax tree element
-        /// </summary>
-        /// <param name="informationProvider">current parser state</param>
-        public ClassDeclarationItem(IParserInformationProvider informationProvider) : base(informationProvider) { }
-
-        /// <summary>
         ///     attributes
         /// </summary>
-        public UserAttributes Attributes { get; internal set; }
+        public UserAttributes Attributes { get; set; }
 
         /// <summary>
         ///     class-wide declaration
         /// </summary>
-        public bool Class { get; internal set; }
+        public bool Class { get; set; }
 
         /// <summary>
         ///     constant class section
         /// </summary>
-        public ConstSection ConstSection { get; internal set; }
+        public ConstSection ConstSection { get; set; }
 
         /// <summary>
         ///     field declaration
         /// </summary>
-        public ClassField FieldDeclaration { get; internal set; }
+        public ClassField FieldDeclaration { get; set; }
 
         /// <summary>
         ///     method declaration
         /// </summary>
-        public ClassMethod MethodDeclaration { get; internal set; }
+        public ClassMethod MethodDeclaration { get; set; }
 
         /// <summary>
         ///     method resolution
         /// </summary>
-        public MethodResolution MethodResolution { get; internal set; }
+        public MethodResolution MethodResolution { get; set; }
 
         /// <summary>
         ///     property declaration
         /// </summary>
-        public ClassProperty PropertyDeclaration { get; internal set; }
+        public ClassProperty PropertyDeclaration { get; set; }
 
         /// <summary>
         ///     strict declaration
         /// </summary>
-        public bool Strict { get; internal set; }
+        public bool Strict { get; set; }
 
         /// <summary>
         ///     type section
         /// </summary>
-        public TypeSection TypeSection { get; internal set; }
+        public TypeSection TypeSection { get; set; }
 
         /// <summary>
         ///     variabkes
         /// </summary>
-        public VarSection VarSection { get; internal set; }
+        public VarSection VarSection { get; set; }
 
         /// <summary>
         ///     visibility declaration
         /// </summary>
-        public int Visibility { get; internal set; }
+        public int Visibility { get; set; }
             = TokenKind.Undefined;
 
-        /// <summary>
-        ///     format source
-        /// </summary>
-        /// <param name="result"></param>
-        public override void ToFormatter(PascalFormatter result) {
-            result.Part(Attributes).NewLine();
 
-            if (MethodResolution != null) {
-                if (Class) {
-                    result.Keyword("class");
-                    result.Space();
-                }
-                result.Part(MethodResolution);
-                return;
-            }
-
-            if (MethodDeclaration != null) {
-                if (Class) {
-                    result.Keyword("class");
-                    result.Space();
-                }
-                result.Part(MethodDeclaration);
-                return;
-            }
-
-            if (FieldDeclaration != null) {
-                result.Part(FieldDeclaration);
-                return;
-            }
-
-            if (PropertyDeclaration != null) {
-                if (Class) {
-                    result.Keyword("class");
-                    result.Space();
-                }
-                PropertyDeclaration.ToFormatter(result);
-                return;
-            }
-
-            if (ConstSection != null) {
-                ConstSection.ToFormatter(result);
-                return;
-            }
-
-            if (TypeSection != null) {
-                TypeSection.ToFormatter(result);
-                return;
-            }
-
-            if (VarSection != null) {
-                if (Class) {
-                    result.Keyword("class");
-                    result.Space();
-                }
-                result.Part(VarSection);
-                return;
-            }
-
-            if (Visibility != TokenKind.Undefined) {
-                FormatVisibility(result, Visibility, Strict);
-            }
-        }
-
-        internal static void FormatVisibility(PascalFormatter result, int visibility, bool strict) {
-            if (strict) {
-                result.Keyword("strict");
-                result.Space();
-            };
-
-            switch (visibility) {
-                case TokenKind.Private:
-                    result.Keyword("private");
-                    break;
-
-                case TokenKind.Protected:
-                    result.Keyword("protected");
-                    break;
-
-                case TokenKind.Public:
-                    result.Keyword("public");
-                    break;
-
-                case TokenKind.Published:
-                    result.Keyword("published");
-                    break;
-
-                case TokenKind.Automated:
-                    result.Keyword("automated");
-                    break;
-            }
-
-            result.Space();
-        }
     }
 }

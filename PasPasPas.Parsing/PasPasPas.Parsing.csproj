@@ -161,7 +161,6 @@
     <Compile Include="SyntaxTree\ObjectPascal\ConstDeclaration.cs" />
     <Compile Include="SyntaxTree\ObjectPascal\ConstrainedGeneric.cs" />
     <Compile Include="SyntaxTree\ObjectPascal\ConstSection.cs" />
-    <Compile Include="SyntaxTree\ObjectPascal\DeclarationBase.cs" />
     <Compile Include="SyntaxTree\ObjectPascal\Declarations.cs" />
     <Compile Include="SyntaxTree\ObjectPascal\DesignatorItem.cs" />
     <Compile Include="SyntaxTree\ObjectPascal\DesignatorStatement.cs" />

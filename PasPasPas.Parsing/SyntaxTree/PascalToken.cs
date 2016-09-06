@@ -11,66 +11,6 @@ namespace PasPasPas.Parsing.SyntaxTree {
     public class PascalToken {
 
         /// <summary>
-        ///     token for <c>continue</c>
-        /// </summary>
-        public const int Continue = 334;
-
-        /// <summary>
-        ///     toke for <c>break</c>
-        /// </summary>
-        public const int Break = 335;
-
-        /// <summary>
-        ///     token for <c>:=</c>
-        /// </summary>
-        public const int Assignment = 336;
-
-        /// <summary>
-        ///     token for <c>on</c>
-        /// </summary>
-        public const int On = 337;
-
-        /// <summary>
-        ///     token for any identifier
-        /// </summary>
-        public const int Identifier = 500;
-
-        /// <summary>
-        ///     token for any integer
-        /// </summary>
-        public const int Integer = 501;
-
-        /// <summary>
-        ///     token for any real number
-        /// </summary>
-        public const int Real = 502;
-
-        /// <summary>
-        ///     token for any hex number
-        /// </summary>
-        public const int HexNumber = 503;
-
-        /// <summary>
-        ///     token for quoted strings
-        /// </summary>
-        public const int QuotedString = 504;
-
-        /// <summary>
-        ///     token for strings in double quotes
-        /// </summary>
-        public const int DoubleQuotedString = 505;
-
-        /// <summary>
-        ///     white space
-        /// </summary>
-        public const int WhiteSpace = 600;
-
-        /// <summary>
-        ///     control chars
-        /// </summary>
-        public const int ControlChar = 601;
-
-        /// <summary>
         ///     token for <c>$A</c>
         /// </summary>
         public const int AlignSwitch = 701;

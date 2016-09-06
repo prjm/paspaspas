@@ -25,7 +25,7 @@ namespace PasPasPas.Parsing.Tokenizer {
             AddPattern('=', TokenKind.EqualsSign);
             AddPattern('[', TokenKind.OpenBraces);
             AddPattern(']', TokenKind.CloseBraces);
-            AddPattern(':', TokenKind.Colon).Add('=', PascalToken.Assignment);
+            AddPattern(':', TokenKind.Colon).Add('=', TokenKind.Assignment);
             AddPattern('^', TokenKind.Circumflex);
             AddPattern('+', TokenKind.Plus);
             AddPattern('-', TokenKind.Minus);

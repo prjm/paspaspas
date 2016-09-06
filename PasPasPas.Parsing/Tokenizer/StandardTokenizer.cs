@@ -206,10 +206,10 @@ namespace PasPasPas.Parsing.Tokenizer {
                 ["true"] = TokenKind.True,
                 ["false"] = TokenKind.False,
                 ["exit"] = TokenKind.Exit,
-                ["break"] = PascalToken.Break,
-                ["continue"] = PascalToken.Continue,
+                ["break"] = TokenKind.Break,
+                ["continue"] = TokenKind.Continue,
                 ["at"] = TokenKind.At,
-                ["on"] = PascalToken.On
+                ["on"] = TokenKind.On
             };
 
     }

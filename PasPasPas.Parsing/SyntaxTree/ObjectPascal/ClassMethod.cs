@@ -1,7 +1,4 @@
-﻿using PasPasPas.Api;
-using PasPasPas.Parsing.SyntaxTree;
-
-namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
+﻿namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
 
     /// <summary>
     ///     class method definition
@@ -9,104 +6,39 @@ namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
     public class ClassMethod : SyntaxPartBase {
 
         /// <summary>
-        ///     create a new syntax tree element
-        /// </summary>
-        /// <param name="informationProvider">current parser state</param>
-        public ClassMethod(IParserInformationProvider informationProvider) : base(informationProvider) { }
-
-        /// <summary>
         ///     directviea
         /// </summary>
-        public MethodDirectives Directives { get; internal set; }
+        public MethodDirectives Directives { get; set; }
 
         /// <summary>
         ///     generic definition
         /// </summary>
-        public GenericDefinition GenericDefinition { get; internal set; }
+        public GenericDefinition GenericDefinition { get; set; }
 
         /// <summary>
         ///     method identifier
         /// </summary>
-        public PascalIdentifier Identifier { get; internal set; }
-
-        /// <summary>
-        ///     expression for a message method
-        /// </summary>
-        public SyntaxPartBase MessageExpression { get; internal set; }
+        public PascalIdentifier Identifier { get; set; }
 
         /// <summary>
         ///     method kind
         /// </summary>
-        public int MethodKind { get; internal set; }
+        public int MethodKind { get; set; }
 
         /// <summary>
         ///     formal parameters
         /// </summary>
-        public FormalParameters Parameters { get; internal set; }
+        public FormalParameters Parameters { get; set; }
 
         /// <summary>
         ///     Result type attributes
         /// </summary>
-        public UserAttributes ResultAttributes { get; internal set; }
+        public UserAttributes ResultAttributes { get; set; }
 
         /// <summary>
         ///     parse a type specification
         /// </summary>
-        public TypeSpecification ResultType { get; internal set; }
+        public TypeSpecification ResultType { get; set; }
 
-        /// <summary>
-        ///     format method declaration
-        /// </summary>
-        /// <param name="result"></param>
-        public override void ToFormatter(PascalFormatter result) {
-            switch (MethodKind) {
-
-                case TokenKind.Function:
-                    result.Keyword("function");
-                    break;
-
-                case TokenKind.Procedure:
-                    result.Keyword("procedure");
-                    break;
-
-                case TokenKind.Constructor:
-                    result.Keyword("constructor");
-                    break;
-
-                case TokenKind.Destructor:
-                    result.Keyword("destructor");
-                    break;
-
-            }
-
-            result.Space();
-            result.Identifier(Identifier.Value);
-
-            if (GenericDefinition != null)
-                GenericDefinition.ToFormatter(result);
-
-            if (Parameters != null) {
-                result.Punct("(");
-                Parameters.ToFormatter(result);
-                result.Punct(")");
-            }
-
-            if (ResultType != null) {
-                result.Punct(":");
-                result.Space();
-
-                if (ResultAttributes.Count > 0) {
-                    ResultAttributes.ToFormatter(result);
-                    result.Space();
-
-                }
-
-
-                ResultType.ToFormatter(result);
-            }
-
-            result.Punct(";").Space();
-            result.Part(Directives);
-        }
     }
 }

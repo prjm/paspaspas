@@ -138,7 +138,7 @@ namespace PasPasPas.Parsing.Tokenizer {
                 ["J"] = PascalToken.WritableConstSwitch,
                 ["WRITEABLECONST"] = PascalToken.WritableConstSwitchLong,
                 ["ZEROBASEDSTRINGS"] = PascalToken.ZeroBaseStrings,
-                ["ON"] = PascalToken.On,
+                ["ON"] = TokenKind.On,
                 ["OFF"] = PascalToken.Off,
                 ["LINKUNIT"] = PascalToken.LinkUnit,
                 ["OPENNAMESPACE"] = PascalToken.OpenNamespace,

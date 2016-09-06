@@ -336,7 +336,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <returns></returns>
         protected bool ContinueWith(ISyntaxPart part, params int[] tokenKind) {
 
-            var requiresIdentifier = tokenKind.Length == 1 && tokenKind[0] == PascalToken.Identifier;
+            var requiresIdentifier = tokenKind.Length == 1 && tokenKind[0] == TokenKind.Identifier;
 
             if (!Tokenizer.HasNextToken()) {
                 return false;
@@ -411,7 +411,7 @@ namespace PasPasPas.Parsing.Parser {
         /// </summary>
         /// <param name="result"></param>
         /// <param name="tokenKind"></param>
-        protected void ContinueWithOrMissing(ISyntaxPart result, int tokenKind) {
+        protected void ContinueWithOrMissing(ISyntaxPart result, params int[] tokenKind) {
             if (!ContinueWith(result, tokenKind)) {
                 // add missing token / todo
             }

@@ -9,12 +9,6 @@ namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
     public class ClassTypeDeclaration : SyntaxPartBase {
 
         /// <summary>
-        ///     create a new syntax tree element
-        /// </summary>
-        /// <param name="informationProvider">current parser state</param>
-        public ClassTypeDeclaration(IParserInformationProvider informationProvider) : base(informationProvider) { }
-
-        /// <summary>
         ///     class declaration
         /// </summary>
         public ClassDeclaration ClassDef { get; internal set; }
