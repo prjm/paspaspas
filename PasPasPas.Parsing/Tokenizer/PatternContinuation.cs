@@ -336,7 +336,7 @@ namespace PasPasPas.Parsing.Tokenizer {
                 state.Error(TokenizerBase.UnexpectedEndOfToken, "'");
             }
 
-            FinishResult(state, PascalToken.QuotedString);
+            FinishResult(state, TokenKind.QuotedString);
         }
 
         /// <summary>
@@ -406,7 +406,7 @@ namespace PasPasPas.Parsing.Tokenizer {
                 state.Error(TokenizerBase.UnexpectedEndOfToken, "\"");
             }
 
-            FinishResult(state, PascalToken.DoubleQuotedString);
+            FinishResult(state, TokenKind.DoubleQuotedString);
         }
     }
 
@@ -449,7 +449,7 @@ namespace PasPasPas.Parsing.Tokenizer {
                         controlBuffer.Clear();
                         controlBuffer.Append('$');
                         var controlChar = hexDigits.Tokenize(state.Input, controlBuffer, state.Log);
-                        if (controlChar.Kind != PascalToken.HexNumber) {
+                        if (controlChar.Kind != TokenKind.HexNumber) {
                             state.Error(TokenizerBase.UnexpectedCharacter);
                         }
                         else {
@@ -461,7 +461,7 @@ namespace PasPasPas.Parsing.Tokenizer {
                         state.Putback(nextChar);
                         controlBuffer.Clear();
                         var controlChar = digits.Tokenize(state.Input, controlBuffer, state.Log);
-                        if (controlChar.Kind != PascalToken.Integer) {
+                        if (controlChar.Kind != TokenKind.Integer) {
                             state.Error(TokenizerBase.UnexpectedCharacter);
                         }
                         else {
@@ -479,7 +479,7 @@ namespace PasPasPas.Parsing.Tokenizer {
                     break;
                 }
             }
-            FinishResult(state, PascalToken.QuotedString);
+            FinishResult(state, TokenKind.QuotedString);
         }
     }
 
@@ -625,7 +625,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         ///     token id: ControlChar
         /// </summary>
         protected override int TokenId
-            => PascalToken.ControlChar;
+            => TokenKind.ControlChar;
 
 
         /// <summary>
@@ -647,7 +647,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         ///     get the token id
         /// </summary>
         protected override int TokenId
-            => PascalToken.WhiteSpace;
+            => TokenKind.WhiteSpace;
 
         /// <summary>
         ///     test if the character is whitespace
@@ -677,7 +677,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         ///     token kind: hex number
         /// </summary>
         protected override int TokenId
-            => PascalToken.HexNumber;
+            => TokenKind.HexNumber;
 
         /// <summary>
         ///     minimal length: "$" + hexdigit
@@ -862,7 +862,7 @@ namespace PasPasPas.Parsing.Tokenizer {
             if ((!ignoreKeywords) && (knownKeywords.TryGetValue(value, out tokenKind)))
                 state.Finish(tokenKind, value);
             else
-                state.Finish(PascalToken.Identifier, value);
+                state.Finish(TokenKind.Identifier, value);
 
         }
     }

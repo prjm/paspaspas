@@ -75,7 +75,7 @@ namespace PasPasPasTests {
             if (output == null)
                 output = input;
 
-            IsToken(PascalToken.Identifier, output, input);
+            IsToken(TokenKind.Identifier, output, input);
         }
 
         internal static void TokenizerMessageIsGenerated(Guid messageNumber, string input) {
@@ -86,23 +86,23 @@ namespace PasPasPasTests {
         }
 
         public static void IsQuotedString(string input) {
-            IsToken(PascalToken.QuotedString, input, input);
+            IsToken(TokenKind.QuotedString, input, input);
         }
 
         public static void IsInteger(string input) {
-            IsToken(PascalToken.Integer, input, input);
+            IsToken(TokenKind.Integer, input, input);
         }
 
         public static void IsWhitespace(string input) {
-            IsToken(PascalToken.WhiteSpace, input, input);
+            IsToken(TokenKind.WhiteSpace, input, input);
         }
 
         public static void IsReal(string input) {
-            IsToken(PascalToken.Real, input, input);
+            IsToken(TokenKind.Real, input, input);
         }
 
         public static void IsHexNumber(string input) {
-            IsToken(PascalToken.HexNumber, input, input);
+            IsToken(TokenKind.HexNumber, input, input);
         }
 
         public static void IsPreprocessor(string input) {

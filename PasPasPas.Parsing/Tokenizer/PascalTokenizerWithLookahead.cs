@@ -41,8 +41,8 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="nextToken"></param>
         /// <returns></returns>
         protected override bool IsValidToken(PascalToken nextToken)
-            => nextToken.Kind != PascalToken.WhiteSpace &&
-            nextToken.Kind != PascalToken.ControlChar &&
+            => nextToken.Kind != TokenKind.WhiteSpace &&
+            nextToken.Kind != TokenKind.ControlChar &&
             nextToken.Kind != TokenKind.Comment &&
             nextToken.Kind != TokenKind.Preprocessor;
 
