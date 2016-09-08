@@ -3,7 +3,7 @@
     /// <summary>
     ///     closure expression
     /// </summary>
-    public class ClosureExpr : SyntaxPartBase {
+    public class ClosureExpression : SyntaxPartBase {
 
         /// <summary>
         /// block

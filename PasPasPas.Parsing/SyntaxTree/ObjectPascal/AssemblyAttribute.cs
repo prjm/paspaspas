@@ -3,7 +3,7 @@
     /// <summary>
     ///     assembly attribute
     /// </summary>
-    public class AssemblyAttribute : SyntaxPartBase {
+    public class AssemblyAttributeDeclaration : SyntaxPartBase {
 
         /// <summary>
         ///     attribute definition

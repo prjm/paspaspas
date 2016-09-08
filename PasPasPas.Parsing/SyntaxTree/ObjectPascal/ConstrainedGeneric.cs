@@ -1,6 +1,4 @@
-﻿using PasPasPas.Api;
-
-namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
+﻿namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
 
     /// <summary>
     ///     generic constraint
@@ -8,46 +6,24 @@ namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
     public class ConstrainedGeneric : SyntaxPartBase {
 
         /// <summary>
-        ///     create a new syntax tree element
-        /// </summary>
-        /// <param name="informationProvider">current parser state</param>
-        public ConstrainedGeneric(IParserInformationProvider informationProvider) : base(informationProvider) { }
-
-        /// <summary>
         ///     class constraints
         /// </summary>
-        public bool ClassConstraint { get; internal set; }
+        public bool ClassConstraint { get; set; }
 
         /// <summary>
         ///     constraint identifier
         /// </summary>
-        public PascalIdentifier ConstraintIdentifier { get; internal set; }
+        public PascalIdentifier ConstraintIdentifier { get; set; }
 
         /// <summary>
         ///     constructor constraint
         /// </summary>
-        public bool ConstructorConstraint { get; internal set; }
+        public bool ConstructorConstraint { get; set; }
 
         /// <summary>
         ///     record constraint
         /// </summary>
-        public bool RecordConstraint { get; internal set; }
+        public bool RecordConstraint { get; set; }
 
-        /// <summary>
-        ///     format constraint
-        /// </summary>
-        /// <param name="result"></param>
-        public override void ToFormatter(PascalFormatter result) {
-
-            if (ClassConstraint)
-                result.Keyword("class");
-            else if (RecordConstraint)
-                result.Keyword("record");
-            else if (ConstructorConstraint)
-                result.Keyword("constructor");
-            else
-                result.Identifier(ConstraintIdentifier.Value);
-
-        }
     }
 }

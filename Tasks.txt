@@ -8,6 +8,5 @@ Missing implementation details:
 - assembler (ASM parsing)
 - add guards / contracts with a conditional function
 - remove api / internal namespaces
-- {$MESSAGE} does not emit mesages
 - check range of literals during parsing
 - check $legacyifend

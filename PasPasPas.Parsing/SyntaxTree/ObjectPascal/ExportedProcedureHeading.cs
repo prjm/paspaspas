@@ -1,7 +1,4 @@
-﻿using PasPasPas.Api;
-using PasPasPas.Parsing.SyntaxTree;
-
-namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
+﻿namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
 
     /// <summary>
     ///     exported procedure heading for an interace section
@@ -9,61 +6,35 @@ namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
     public class ExportedProcedureHeading : SyntaxPartBase {
 
         /// <summary>
-        ///     create a new syntax tree element
-        /// </summary>
-        /// <param name="informationProvider">current parser state</param>
-        public ExportedProcedureHeading(IParserInformationProvider informationProvider) : base(informationProvider) { }
-
-        /// <summary>
         ///     function directives
         /// </summary>
-        public FunctionDirectives Directives { get; internal set; }
+        public FunctionDirectives Directives { get; set; }
 
         /// <summary>
         ///     heading kind
         /// </summary>
-        public int Kind { get; internal set; }
+        public int Kind { get; set; }
 
         /// <summary>
         ///     exported proc name
         /// </summary>
-        public PascalIdentifier Name { get; internal set; }
+        public PascalIdentifier Name { get; set; }
 
         /// <summary>
         ///     parameters
         /// </summary>
-        public FormalParameterSection Parameters { get; internal set; }
+        public FormalParameterSection Parameters { get; set; }
 
         /// <summary>
         ///     result attributes
         /// </summary>
-        public UserAttributes ResultAttributes { get; internal set; }
+        public UserAttributes ResultAttributes { get; set; }
 
         /// <summary>
         ///     result types
         /// </summary>
-        public TypeSpecification ResultType { get; internal set; }
+        public TypeSpecification ResultType { get; set; }
 
-        /// <summary>
-        ///     format exported procedure headiing
-        /// </summary>
-        /// <param name="result"></param>
-        public override void ToFormatter(PascalFormatter result) {
-            if (Kind == TokenKind.Function) {
-                result.Keyword("function");
-            }
-            if (Kind == TokenKind.Procedure) {
-                result.Keyword("procedure");
-            }
-            result.Space();
-            result.Part(Name);
-            result.Part(Parameters);
-            if (ResultType != null) {
-                result.Punct(":").Space();
-                result.Part(ResultAttributes);
-                result.Part(ResultType);
-            }
-            result.Punct(";");
-        }
     }
+
 }
