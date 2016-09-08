@@ -1,48 +1,18 @@
-﻿using PasPasPas.Api;
-
-namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
+﻿namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
 
     /// <summary>
     ///     external directive
     /// </summary>
-    public class ExternalDirective : ComposedPart<ExternalSpecifier> {
-
-        /// <summary>
-        ///     create a new syntax tree element
-        /// </summary>
-        /// <param name="informationProvider">current parser state</param>
-        public ExternalDirective(IParserInformationProvider informationProvider) : base(informationProvider) { }
+    public class ExternalDirective : SyntaxPartBase {
 
         /// <summary>
         ///     external expression
         /// </summary>
-        public ConstantExpression ExternalExpression { get; internal set; }
+        public ConstantExpression ExternalExpression { get; set; }
 
         /// <summary>
         ///     kind
         /// </summary>
-        public int Kind { get; internal set; }
-
-        /// <summary>
-        ///     format external directive
-        /// </summary>
-        /// <param name="result"></param>
-        public override void ToFormatter(PascalFormatter result) {
-            switch (Kind) {
-                case TokenKind.VarArgs:
-                    result.Keyword("varargs");
-                    break;
-                case TokenKind.External:
-                    result.Keyword("external");
-                    break;
-            }
-
-            if (ExternalExpression != null) {
-                result.Space().Part(ExternalExpression).Space();
-                FlattenToPascal(result, x => x.Space());
-            }
-
-            result.Punct(";");
-        }
+        public int Kind { get; set; }
     }
 }

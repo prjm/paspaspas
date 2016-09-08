@@ -1,6 +1,4 @@
-﻿using PasPasPas.Api;
-
-namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
+﻿namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
 
     /// <summary>
     ///     create a new for statement
@@ -8,64 +6,29 @@ namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
     public class ForStatement : SyntaxPartBase {
 
         /// <summary>
-        ///     create a new for statement
-        /// </summary>
-        /// <param name="paser"></param>
-        public ForStatement(IParserInformationProvider paser) : base(paser) { }
-
-        /// <summary>
         ///     iteration end
         /// </summary>
-        public Expression EndExpression { get; internal set; }
+        public Expression EndExpression { get; set; }
 
         /// <summary>
         ///     iteration kind
         /// </summary>
-        public int Kind { get; internal set; }
+        public int Kind { get; set; }
 
         /// <summary>
         ///     iteration start
         /// </summary>
-        public Expression StartExpression { get; internal set; }
+        public Expression StartExpression { get; set; }
 
         /// <summary>
         ///     iteration statement
         /// </summary>
-        public Statement Statement { get; internal set; }
+        public Statement Statement { get; set; }
 
         /// <summary>
         ///     iteration variable
         /// </summary>
-        public DesignatorStatement Variable { get; internal set; }
+        public DesignatorStatement Variable { get; set; }
 
-        /// <summary>
-        ///     format statement
-        /// </summary>
-        /// <param name="result"></param>
-        public override void ToFormatter(PascalFormatter result) {
-            result.Keyword("for").Space();
-            result.Part(Variable).Space();
-            if (Kind == TokenKind.To || Kind == TokenKind.DownTo) {
-                result.Operator(":=");
-                result.Space().Part(StartExpression).Space();
-
-                if (Kind == TokenKind.To) {
-                    result.Keyword("to").Space();
-                }
-                else if (Kind == TokenKind.DownTo) {
-                    result.Keyword("downto").Space();
-                }
-                result.Part(EndExpression).Space();
-            }
-            else if (Kind == TokenKind.In) {
-                result.Keyword("in").Space();
-                result.Part(StartExpression).Space();
-            }
-            result.Keyword("do").StartIndent();
-            result.NewLine();
-            result.Part(Statement);
-            result.EndIndent();
-            result.NewLine();
-        }
     }
 }
