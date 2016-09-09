@@ -8,24 +8,9 @@ namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
     public class InterfaceGuid : SyntaxPartBase {
 
         /// <summary>
-        ///     create a new syntax tree element
-        /// </summary>
-        /// <param name="informationProvider">current parser state</param>
-        public InterfaceGuid(IParserInformationProvider informationProvider) : base(informationProvider) { }
-
-        /// <summary>
         ///     guid for this interface
         /// </summary>
-        public QuotedString Id { get; internal set; }
+        public QuotedString Id { get; set; }
 
-        /// <summary>
-        ///     format guid
-        /// </summary>
-        /// <param name="result"></param>
-        public override void ToFormatter(PascalFormatter result) {
-            result.Punct("[");
-            result.Part(Id);
-            result.Punct("]").NewLine();
-        }
     }
 }

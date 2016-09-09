@@ -8,30 +8,14 @@ namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
     public class GenericTypeIdent : SyntaxPartBase {
 
         /// <summary>
-        ///     create a new syntax tree element
-        /// </summary>
-        /// <param name="informationProvider">current parser state</param>
-        public GenericTypeIdent(IParserInformationProvider informationProvider) : base(informationProvider) { }
-
-        /// <summary>
         ///     generic definition
         /// </summary>
-        public GenericDefinition GenericDefinition { get; internal set; }
+        public GenericDefinition GenericDefinition { get; set; }
 
         /// <summary>
         ///     type name
         /// </summary>
-        public PascalIdentifier Ident { get; internal set; }
+        public PascalIdentifier Ident { get; set; }
 
-        /// <summary>
-        ///     format type declaration
-        /// </summary>
-        /// <param name="result"></param>
-        public override void ToFormatter(PascalFormatter result) {
-            Ident.ToFormatter(result);
-            if (GenericDefinition != null) {
-                GenericDefinition.ToFormatter(result);
-            }
-        }
     }
 }

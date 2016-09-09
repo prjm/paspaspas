@@ -1,6 +1,4 @@
-﻿using PasPasPas.Api;
-
-namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
+﻿namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
 
     /// <summary>
     ///     if statement
@@ -8,44 +6,19 @@ namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
     public class IfStatement : SyntaxPartBase {
 
         /// <summary>
-        ///     create a new if statement
-        /// </summary>
-        /// <param name="parser"></param>
-        public IfStatement(IParserInformationProvider parser) : base(parser) {
-        }
-
-        /// <summary>
         ///     condition
         /// </summary>
-        public Expression Condition { get; internal set; }
+        public Expression Condition { get; set; }
 
         /// <summary>
         ///     else part
         /// </summary>
-        public Statement ElsePart { get; internal set; }
+        public Statement ElsePart { get; set; }
 
         /// <summary>
         ///     then part
         /// </summary>
-        public Statement ThenPart { get; internal set; }
+        public Statement ThenPart { get; set; }
 
-        /// <summary>
-        ///     format the statement
-        /// </summary>
-        /// <param name="result"></param>
-        public override void ToFormatter(PascalFormatter result) {
-            result.Keyword("if").Space();
-            result.Part(Condition).Space();
-            result.Keyword("then").StartIndent();
-            result.NewLine().Part(ThenPart);
-            result.EndIndent();
-            result.NewLine();
-            if (ElsePart != null) {
-                result.Keyword("else").StartIndent();
-                result.NewLine().Part(ElsePart);
-                result.EndIndent();
-                result.NewLine();
-            }
-        }
     }
 }

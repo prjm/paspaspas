@@ -1,6 +1,4 @@
-﻿using PasPasPas.Api;
-
-namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
+﻿namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
 
     /// <summary>
     ///     library head
@@ -8,31 +6,14 @@ namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
     public class LibraryHead : SyntaxPartBase {
 
         /// <summary>
-        ///     create a new syntax tree element
-        /// </summary>
-        /// <param name="informationProvider">current parser state</param>
-        public LibraryHead(IParserInformationProvider informationProvider) : base(informationProvider) { }
-
-        /// <summary>
         ///     hints
         /// </summary>
-        public HintingInformationList Hints { get; internal set; }
+        public HintingInformationList Hints { get; set; }
 
         /// <summary>
         ///     library name
         /// </summary>
-        public NamespaceName Name { get; internal set; }
+        public NamespaceName Name { get; set; }
 
-        /// <summary>
-        ///     format library
-        /// </summary>
-        /// <param name="result"></param>
-        public override void ToFormatter(PascalFormatter result) {
-            result.Keyword("library").Space();
-            result.Part(Name);
-            result.Part(Hints);
-            result.Punct(";");
-            result.NewLine();
-        }
     }
 }

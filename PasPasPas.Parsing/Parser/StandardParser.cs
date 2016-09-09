@@ -112,7 +112,7 @@ namespace PasPasPas.Parsing.Parser {
         [Rule("File", "Program | Library | Unit | Package")]
         private ISyntaxPart ParseFile() {
             if (Match(TokenKind.Library)) {
-                return ParseLibrary();
+                return ParseLibrary(null);
             }
             else if (Match(TokenKind.Unit)) {
                 return ParseUnit();
@@ -162,7 +162,7 @@ namespace PasPasPas.Parsing.Parser {
                 result.UsesClause = ParseUsesClause(result);
             }
 
-            result.InterfaceDeclaration = ParseInterfaceDeclaration();
+            result.InterfaceDeclaration = ParseInterfaceDeclaration(result);
             return result;
         }
 
@@ -196,14 +196,14 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         [Rule("InterfaceDeclaration", "{ InterfaceDeclarationItem }")]
-        private InterfaceDeclaration ParseInterfaceDeclaration() {
-            var result = new InterfaceDeclaration(this);
+        private InterfaceDeclaration ParseInterfaceDeclaration(ISyntaxPart parent) {
+            var result = CreateChild<InterfaceDeclaration>(parent);
             SyntaxPartBase item;
 
             do {
                 item = ParseInterfaceDeclarationItem(result);
-                result.Add(item);
             } while (item != null);
+
             return result;
         }
 
@@ -243,7 +243,7 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             if (Match(TokenKind.Inline)) {
-                return ParseInlineDirective();
+                return ParseInlineDirective(parent);
             }
 
             if (Match(TokenKind.Cdecl, TokenKind.Pascal, TokenKind.Register, TokenKind.Safecall, TokenKind.Stdcall, TokenKind.Export)) {
@@ -255,7 +255,7 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             if (Match(TokenKind.Deprecated, TokenKind.Library, TokenKind.Experimental, TokenKind.Platform)) {
-                return ParseHint();
+                return ParseHint(parent);
             }
 
             if (Match(TokenKind.VarArgs, TokenKind.External)) {
@@ -386,7 +386,7 @@ namespace PasPasPas.Parsing.Parser {
 
             Label label = null;
             if (MatchIdentifier(TokenKind.Integer) && LookAhead(1, TokenKind.Colon)) {
-                label = ParseLabel();
+                label = ParseLabel(result);
             }
 
             StatementPart part = ParseStatementPart(result);
@@ -405,8 +405,9 @@ namespace PasPasPas.Parsing.Parser {
         [Rule("StatementPart", "IfStatement | CaseStatement | ReapeatStatement | WhileStatment | ForStatement | WithStatement | TryStatement | RaiseStatement | AsmStatement | CompoundStatement | SimpleStatement ")]
         private StatementPart ParseStatementPart(ISyntaxPart parent) {
             var result = new StatementPart(this);
+
             if (Match(TokenKind.If)) {
-                result.If = ParseIfStatement();
+                result.If = ParseIfStatement(result);
                 return result;
             }
             if (Match(TokenKind.Case)) {
@@ -625,15 +626,16 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         [Rule("IfStatement", "'if' Expression 'then' Statement [ 'else' Statement ]")]
-        private IfStatement ParseIfStatement() {
-            var result = new IfStatement(this);
-            Require(TokenKind.If);
+        private IfStatement ParseIfStatement(ISyntaxPart parent) {
+            var result = CreateByTerminal<IfStatement>(parent);
+
             result.Condition = ParseExpression(result);
-            Require(TokenKind.Then);
+            ContinueWithOrMissing(result, TokenKind.Then);
             result.ThenPart = ParseStatement();
-            if (Optional(TokenKind.Else)) {
+            if (ContinueWith(result, TokenKind.Else)) {
                 result.ElsePart = ParseStatement();
             }
+
             return result;
         }
 
@@ -641,7 +643,7 @@ namespace PasPasPas.Parsing.Parser {
         private StatementPart ParseSimpleStatement() {
             if (Match(TokenKind.GoToKeyword, TokenKind.Exit, TokenKind.Break, TokenKind.Continue)) {
                 var result = new StatementPart(this);
-                result.GoTo = ParseGoToStatement();
+                result.GoTo = ParseGoToStatement(result);
                 return result;
             }
 
@@ -660,10 +662,11 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         [Rule("GoToStatement", "('goto' Label) | 'break' | 'continue' | 'exit' '(' Expression ')' ")]
-        private GoToStatement ParseGoToStatement() {
-            var result = new GoToStatement(this);
+        private GoToStatement ParseGoToStatement(ISyntaxPart parent) {
+            var result = CreateChild<GoToStatement>(parent);
+
             if (Optional(TokenKind.GoToKeyword)) {
-                result.GoToLabel = ParseLabel();
+                result.GoToLabel = ParseLabel(result);
                 return result;
             }
             if (Optional(TokenKind.Break)) {
@@ -692,7 +695,7 @@ namespace PasPasPas.Parsing.Parser {
             var result = new UnitHead(this);
             Require(TokenKind.Unit);
             result.UnitName = ParseNamespaceName();
-            result.Hint = ParseHints();
+            result.Hint = ParseHints(result);
             Require(TokenKind.Semicolon);
             return result;
         }
@@ -759,9 +762,9 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         [Rule("Library", "LibraryHead [UsesFileClause] Block '.' ")]
-        private Library ParseLibrary() {
-            var result = new Library(this);
-            result.LibraryHead = ParseLibraryHead();
+        private Library ParseLibrary(ISyntaxPart parent) {
+            var result = CreateChild<Library>(parent);
+            result.LibraryHead = ParseLibraryHead(parent);
 
             if (Match(TokenKind.Uses))
                 result.Uses = ParseUsesFileClause();
@@ -772,12 +775,11 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         [Rule("LibraryHead", "'library' NamespaceName Hints ';'")]
-        private LibraryHead ParseLibraryHead() {
-            var result = new LibraryHead(this);
-            Require(TokenKind.Library);
+        private LibraryHead ParseLibraryHead(ISyntaxPart parent) {
+            var result = CreateByTerminal<LibraryHead>(parent);
             result.Name = ParseNamespaceName();
-            result.Hints = ParseHints();
-            Require(TokenKind.Semicolon);
+            result.Hints = ParseHints(result);
+            ContinueWithOrMissing(result, TokenKind.Semicolon);
             return result;
         }
 
@@ -858,7 +860,7 @@ namespace PasPasPas.Parsing.Parser {
             while (!stop) {
 
                 if (Match(TokenKind.Label)) {
-                    ParseLabelDeclarationSection();
+                    ParseLabelDeclarationSection(result);
                     continue;
                 }
 
@@ -954,7 +956,7 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             if (Match(TokenKind.Inline, TokenKind.Assembler)) {
-                return ParseInlineDirective();
+                return ParseInlineDirective(parent);
             }
 
             if (Match(TokenKind.Message, TokenKind.Static, TokenKind.Dynamic, TokenKind.Override, TokenKind.Virtual)) {
@@ -970,7 +972,7 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             if (Match(TokenKind.Deprecated, TokenKind.Library, TokenKind.Experimental, TokenKind.Platform)) {
-                return ParseHint();
+                return ParseHint(parent);
             }
 
             if (Match(TokenKind.DispId)) {
@@ -981,9 +983,9 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         [Rule("InlineDirective", "('inline' | 'assembler' ) ';'")]
-        private SyntaxPartBase ParseInlineDirective() {
-            var result = new InlineDirective(this);
-            result.Kind = Require(TokenKind.Inline, TokenKind.Assembler).Kind;
+        private SyntaxPartBase ParseInlineDirective(ISyntaxPart parent) {
+            var result = CreateByTerminal<InlineDirective>(parent);
+            result.Kind = result.LastTerminal.Kind;
             Require(TokenKind.Semicolon);
             return result;
         }
@@ -1037,7 +1039,7 @@ namespace PasPasPas.Parsing.Parser {
             result.Kind = Require(TokenKind.Constructor, TokenKind.Destructor, TokenKind.Function, TokenKind.Procedure).Kind;
             result.Name = ParseNamespaceName();
             if (Match(TokenKind.AngleBracketsOpen)) {
-                result.GenericDefinition = ParseGenericDefinition();
+                result.GenericDefinition = ParseGenericDefinition(result);
             }
             if (Match(TokenKind.OpenParen)) {
                 result.Parameters = ParseFormalParameterSection(result);
@@ -1139,7 +1141,7 @@ namespace PasPasPas.Parsing.Parser {
         private VarDeclaration ParseVarDeclaration() {
             var result = new VarDeclaration(this);
             result.Attributes = ParseAttributes();
-            result.Identifiers = ParseIdentList();
+            result.Identifiers = ParseIdentList(result);
             Require(TokenKind.Colon);
             result.TypeDeclaration = ParseTypeSpecification();
 
@@ -1147,7 +1149,7 @@ namespace PasPasPas.Parsing.Parser {
                 result.ValueSpecification = ParseValueSpecification();
             }
 
-            result.Hints = ParseHints();
+            result.Hints = ParseHints(result);
             Require(TokenKind.Semicolon);
             return result;
         }
@@ -1166,19 +1168,20 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         [Rule("LabelSection", "'label' Label { ',' Label } ';' ")]
-        private LabelDeclarationSection ParseLabelDeclarationSection() {
-            var result = new LabelDeclarationSection(this);
-            Require(TokenKind.Label);
+        private LabelDeclarationSection ParseLabelDeclarationSection(ISyntaxPart parent) {
+            var result = CreateByTerminal<LabelDeclarationSection>(parent);
+
             do {
-                result.Add(ParseLabel());
-            } while (Optional(TokenKind.Comma));
-            Require(TokenKind.Semicolon);
+                ParseLabel(result);
+            } while (ContinueWith(result, TokenKind.Comma));
+
+            ContinueWithOrMissing(result, TokenKind.Semicolon);
             return result;
         }
 
         [Rule("Label", "Identifier | Integer")]
-        private Label ParseLabel() {
-            var result = new Label(this);
+        private Label ParseLabel(ISyntaxPart parent) {
+            var result = CreateChild<Label>(parent);
 
             if (MatchIdentifier()) {
                 result.LabelName = RequireIdentifier();
@@ -1215,27 +1218,28 @@ namespace PasPasPas.Parsing.Parser {
 
             ContinueWithOrMissing(result, TokenKind.EqualsSign);
             result.Value = ParseConstantExpression(result);
-            result.Hint = ParseHints();
+            result.Hint = ParseHints(result);
             Require(TokenKind.Semicolon);
             return result;
         }
 
         [Rule("Hints", " { Hint }")]
-        private HintingInformationList ParseHints() {
-            var result = new HintingInformationList(this);
+        private HintingInformationList ParseHints(ISyntaxPart parent) {
+            var result = CreateChild<HintingInformationList>(parent);
+
             HintingInformation hint;
             do {
-                hint = ParseHint();
-                result.Add(hint);
+                hint = ParseHint(result);
             } while (hint != null);
+
             return result;
         }
 
         [Rule("Hint", " ('deprecated' [QuotedString] | 'experimental' | 'platform' | 'library' ) ")]
-        private HintingInformation ParseHint() {
-            var result = new HintingInformation(this);
+        private HintingInformation ParseHint(ISyntaxPart parent) {
+            var result = CreateChild<HintingInformation>(parent);
 
-            if (Optional(TokenKind.Deprecated)) {
+            if (ContinueWith(result, TokenKind.Deprecated)) {
                 result.Deprecated = true;
                 if (Match(TokenKind.QuotedString))
                     result.DeprecatedComment = RequireString();
@@ -1243,17 +1247,17 @@ namespace PasPasPas.Parsing.Parser {
                 return result;
             }
 
-            if (Optional(TokenKind.Experimental)) {
+            if (ContinueWith(result, TokenKind.Experimental)) {
                 result.Experimental = true;
                 return result;
             }
 
-            if (Optional(TokenKind.Platform)) {
+            if (ContinueWith(result, TokenKind.Platform)) {
                 result.Platform = true;
                 return result;
             }
 
-            if (Optional(TokenKind.Library)) {
+            if (ContinueWith(result, TokenKind.Library)) {
                 result.Library = true;
                 return result;
             }
@@ -1304,7 +1308,7 @@ namespace PasPasPas.Parsing.Parser {
             if (result.NewType || (MatchIdentifier() && (!LookAhead(1, TokenKind.DotDot)))) {
                 result.TypeId = ParseNamespaceName();
                 if (Match(TokenKind.AngleBracketsOpen)) {
-                    result.GenericPostfix = ParseGenericSuffix();
+                    result.GenericPostfix = ParseGenericSuffix(result);
                 }
                 return result;
             }
@@ -1500,7 +1504,7 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             if (Match(TokenKind.Interface, TokenKind.DispInterface)) {
-                result.InterfaceDef = ParseInterfaceDef();
+                result.InterfaceDef = ParseInterfaceDef(result);
                 return result;
             }
 
@@ -1643,10 +1647,10 @@ namespace PasPasPas.Parsing.Parser {
         [Rule("RecordField", "IdentList ':' TypeSpecification Hints ';'")]
         private RecordField ParseRecordField() {
             var result = new RecordField(this);
-            result.Names = ParseIdentList();
+            result.Names = ParseIdentList(result);
             Require(TokenKind.Colon);
             result.FieldType = ParseTypeSpecification();
-            result.Hint = ParseHints();
+            result.Hint = ParseHints(result);
             Require(TokenKind.Semicolon);
             return result;
         }
@@ -1757,33 +1761,33 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         [Rule("InterfaceDef", "('inteface' | 'dispinterface') ClassParent [InterfaceGuid] InterfaceDefItems 'end'")]
-        private InterfaceDefinition ParseInterfaceDef() {
-            var result = new InterfaceDefinition(this);
-            if (!Optional(TokenKind.Interface)) {
-                Require(TokenKind.DispInterface);
+        private InterfaceDefinition ParseInterfaceDef(ISyntaxPart parent) {
+            var result = CreateChild<InterfaceDefinition>(parent);
+
+            if (!ContinueWith(result, TokenKind.Interface)) {
+                ContinueWithOrMissing(result, TokenKind.DispInterface);
                 result.DispInterface = true;
             }
             result.ParentInterface = ParseClassParent();
             if (Match(TokenKind.OpenBraces))
-                result.Guid = ParseInterfaceGuid();
-            result.Items = ParseInterfaceItems();
-            if (result.Items.Count > 0)
-                Require(TokenKind.End);
+                result.Guid = ParseInterfaceGuid(result);
+            result.Items = ParseInterfaceItems(result);
+            if (result.Items.Parts.Count > 0)
+                ContinueWithOrMissing(result, TokenKind.End);
             else
-                Optional(TokenKind.End);
+                ContinueWith(result, TokenKind.End);
+
             return result;
         }
 
         [Rule("InterfaceItems", "{ InterfaceItem }")]
-        private InterfaceItems ParseInterfaceItems() {
-            var result = new InterfaceItems(this);
+        private InterfaceItems ParseInterfaceItems(ISyntaxPart parent) {
+            var result = CreateChild<InterfaceItems>(parent);
             var unexpected = false;
 
             while ((!Match(TokenKind.End)) && (!unexpected)) {
-                var item = ParseInterfaceItem(out unexpected);
-                if (!unexpected)
-                    result.Add(item);
-                else if (result.Count > 0) {
+                var item = ParseInterfaceItem(result, out unexpected);
+                if (unexpected && result.Parts.Count > 0) {
                     Unexpected();
                     return result;
                 }
@@ -1793,8 +1797,8 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         [Rule("InterfaceItem", "MethodDeclaration | PropertyDeclaration")]
-        private InterfaceItem ParseInterfaceItem(out bool unexpected) {
-            var result = new InterfaceItem(this);
+        private InterfaceItem ParseInterfaceItem(ISyntaxPart parent, out bool unexpected) {
+            var result = CreateChild<InterfaceItem>(parent);
             unexpected = true;
 
             if (Match(TokenKind.Procedure, TokenKind.Function)) {
@@ -1813,11 +1817,10 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         [Rule("InterfaceGuid", "'[' QuotedString ']'")]
-        private InterfaceGuid ParseInterfaceGuid() {
-            var result = new InterfaceGuid(this);
-            Require(TokenKind.OpenBraces);
+        private InterfaceGuid ParseInterfaceGuid(ISyntaxPart parent) {
+            var result = CreateByTerminal<InterfaceGuid>(parent);
             result.Id = RequireString();
-            Require(TokenKind.CloseBraces);
+            ContinueWithOrMissing(result, TokenKind.CloseBraces);
             return result;
         }
 
@@ -1965,10 +1968,10 @@ namespace PasPasPas.Parsing.Parser {
         [Rule("FieldDeclaration", "IdentList ':' TypeSpecification Hints ';'")]
         private ClassField ParseClassFieldDeclararation(ISyntaxPart parent) {
             var result = CreateChild<ClassField>(parent);
-            result.Names = ParseIdentList();
+            result.Names = ParseIdentList(result);
             ContinueWithOrMissing(result, TokenKind.Colon);
             result.TypeDecl = ParseTypeSpecification();
-            result.Hint = ParseHints();
+            result.Hint = ParseHints(result);
             ContinueWithOrMissing(result, TokenKind.Semicolon);
             return result;
         }
@@ -2098,20 +2101,20 @@ namespace PasPasPas.Parsing.Parser {
         private TypeDeclaration ParseTypeDeclaration() {
             var result = new TypeDeclaration(this);
             result.Attributes = ParseAttributes();
-            result.TypeId = ParseGenericTypeIdent();
+            result.TypeId = ParseGenericTypeIdent(result);
             Require(TokenKind.EqualsSign);
             result.TypeSpecification = ParseTypeSpecification();
-            result.Hint = ParseHints();
+            result.Hint = ParseHints(result);
             Require(TokenKind.Semicolon);
             return result;
         }
 
         [Rule("GenericTypeIdent", "Ident [ GenericDefintion ] ")]
-        private GenericTypeIdent ParseGenericTypeIdent() {
-            var result = new GenericTypeIdent(this);
+        private GenericTypeIdent ParseGenericTypeIdent(ISyntaxPart parent) {
+            var result = CreateChild<GenericTypeIdent>(parent);
             result.Ident = RequireIdentifier();
             if (Match(TokenKind.AngleBracketsOpen)) {
-                result.GenericDefinition = ParseGenericDefinition();
+                result.GenericDefinition = ParseGenericDefinition(result);
             }
             return result;
         }
@@ -2134,7 +2137,7 @@ namespace PasPasPas.Parsing.Parser {
             result.Identifier = RequireIdentifier();
 
             if (ContinueWith(result, TokenKind.AngleBracketsOpen)) {
-                result.GenericDefinition = ParseGenericDefinition();
+                result.GenericDefinition = ParseGenericDefinition(result);
             }
 
             if (ContinueWith(result, TokenKind.OpenParen) && (!ContinueWith(result, TokenKind.CloseParen))) {
@@ -2172,7 +2175,7 @@ namespace PasPasPas.Parsing.Parser {
                 result.ParamType = result.LastTerminal.Kind;
             }
 
-            result.ParamNames = ParseIdentList();
+            result.ParamNames = ParseIdentList(result);
 
             if (ContinueWith(result, TokenKind.Colon)) {
                 result.TypeDeclaration = ParseTypeSpecification();
@@ -2186,62 +2189,60 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         [Rule("IdentList", "Identifiert { ',' Identifier }")]
-        private IdentList ParseIdentList() {
-            var result = new IdentList(this);
+        private IdentList ParseIdentList(ISyntaxPart parent) {
+            var result = CreateChild<IdentList>(parent);
+
             do {
-                result.Add(RequireIdentifier());
-            } while (Optional(TokenKind.Comma));
+                RequireIdentifier();
+            } while (ContinueWith(result, TokenKind.Comma));
+
             return result;
         }
 
         [Rule("GenericDefinition", "SimpleGenericDefinition | ConstrainedGenericDefinition")]
-        private GenericDefinition ParseGenericDefinition() {
+        private GenericDefinition ParseGenericDefinition(ISyntaxPart parent) {
             if (!LookAhead(2, TokenKind.Comma)) {
-                return ParseConstrainedGenericDefinition();
+                return ParseConstrainedGenericDefinition(parent);
             }
 
-            return ParseSimpleGenericDefinition();
+            return ParseSimpleGenericDefinition(parent);
         }
 
         [Rule("SimpleGenericDefinition", "'<' Identifier { ',' Identifier } '>'")]
-        private GenericDefinition ParseSimpleGenericDefinition() {
-            var result = new GenericDefinition(this);
-            Require(TokenKind.AngleBracketsOpen);
+        private GenericDefinition ParseSimpleGenericDefinition(ISyntaxPart parent) {
+            var result = CreateByTerminal<GenericDefinition>(parent);
 
             do {
-                var part = new GenericDefinitionPart(this);
+                var part = CreateChild<GenericDefinitionPart>(result);
                 part.Identifier = RequireIdentifier();
-                result.Add(part);
-            } while (Optional(TokenKind.Comma));
+            } while (ContinueWith(result, TokenKind.Comma));
 
-            Require(TokenKind.AngleBracketsClose);
+            ContinueWithOrMissing(result, TokenKind.AngleBracketsClose);
             return result;
-
         }
 
         [Rule("ConstrainedGenericDefinition", "'<' GenericDefinitionPart { ';' GenericDefinitionPart } '>'")]
-        private GenericDefinition ParseConstrainedGenericDefinition() {
-            var result = new GenericDefinition(this);
-            Require(TokenKind.AngleBracketsOpen);
+        private GenericDefinition ParseConstrainedGenericDefinition(ISyntaxPart parent) {
+            var result = CreateByTerminal<GenericDefinition>(parent);
 
             do {
-                result.Add(ParseGenericDefinitionPart());
-            } while (Optional(TokenKind.Semicolon));
+                ParseGenericDefinitionPart(result);
+            } while (ContinueWith(result, TokenKind.Semicolon));
 
-            Require(TokenKind.AngleBracketsClose);
+            ContinueWithOrMissing(result, TokenKind.AngleBracketsClose);
             return result;
 
         }
 
         [Rule("GenericDefinitionPart", "Identifier [ ':' GenericConstraint { ',' GenericConstraint } ]")]
-        private GenericDefinitionPart ParseGenericDefinitionPart() {
-            var result = new GenericDefinitionPart(this);
+        private GenericDefinitionPart ParseGenericDefinitionPart(ISyntaxPart parent) {
+            var result = CreateChild<GenericDefinitionPart>(parent);
             result.Identifier = RequireIdentifier();
 
             if (Optional(TokenKind.Colon)) {
                 do {
-                    result.Add(ParseGenericConstraint(result));
-                } while (Optional(TokenKind.Comma));
+                    ParseGenericConstraint(result);
+                } while (ContinueWith(result, TokenKind.Comma));
             }
 
             return result;
@@ -2314,22 +2315,21 @@ namespace PasPasPas.Parsing.Parser {
             result.TypeName = ParseNamespaceName();
 
             if (Match(TokenKind.AngleBracketsOpen)) {
-                result.GenericSuffix = ParseGenericSuffix();
+                result.GenericSuffix = ParseGenericSuffix(result);
             }
 
             return result;
         }
 
         [Rule("GenericSuffix", "'<' TypeDefinition { ',' TypeDefinition '}' '>'")]
-        private GenericTypesuffix ParseGenericSuffix() {
-            var result = new GenericTypesuffix(this);
-            Require(TokenKind.AngleBracketsOpen);
+        private GenericTypesuffix ParseGenericSuffix(ISyntaxPart parent) {
+            var result = CreateByTerminal<GenericTypesuffix>(parent);
 
             do {
-                result.Add(ParseTypeSpecification());
-            } while (Optional(TokenKind.Comma));
+                ParseTypeSpecification();
+            } while (ContinueWith(result, TokenKind.Comma));
 
-            Require(TokenKind.AngleBracketsClose);
+            ContinueWithOrMissing(result, TokenKind.AngleBracketsClose);
             return result;
         }
 
