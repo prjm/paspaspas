@@ -324,7 +324,7 @@ namespace PasPasPas.Parsing.Parser {
                 return false;
             }
 
-            result = CreateByTerminal<T>(parent);
+            result = CreateByTerminal<T>(parent, tokenKind);
             return true;
         }
 
@@ -367,13 +367,21 @@ namespace PasPasPas.Parsing.Parser {
         ///     optionally continue a syntax part by a terminal symbol
         /// </summary>
         /// <typeparam name="T">parent object</typeparam>
-        /// <returns></returns>
-        protected T CreateByTerminal<T>(ISyntaxPart parent)
+        /// <param name="parent">parent node</param>
+        /// <param name="tokenKind">expected token kind</param>
+        /// <returns>syntax tree node</returns>
+        protected T CreateByTerminal<T>(ISyntaxPart parent, params int[] tokenKind)
             where T : ISyntaxPart, new() {
             var result = CreateChild<T>(parent);
-            var terminal = new Terminal(CurrentToken());
-            terminal.Parent = result;
-            result.Parts.Add(terminal);
+            if (Match(tokenKind)) {
+                var terminal = new Terminal(CurrentToken());
+                terminal.Parent = result;
+                result.Parts.Add(terminal);
+            }
+            else {
+                ContinueWithOrMissing(result, tokenKind);
+            }
+
             FetchNextToken();
             return result;
         }

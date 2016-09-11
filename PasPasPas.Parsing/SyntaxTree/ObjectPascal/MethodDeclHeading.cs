@@ -1,7 +1,4 @@
-﻿using PasPasPas.Api;
-using PasPasPas.Parsing.SyntaxTree;
-
-namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
+﻿namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
 
     /// <summary>
     ///     method declaration heading
@@ -9,68 +6,33 @@ namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
     public class MethodDeclHeading : SyntaxPartBase {
 
         /// <summary>
-        ///     create a new syntax tree element
-        /// </summary>
-        /// <param name="informationProvider">current parser state</param>
-        public MethodDeclHeading(IParserInformationProvider informationProvider) : base(informationProvider) { }
-
-        /// <summary>
         ///     generic definition
         /// </summary>
-        public GenericDefinition GenericDefinition { get; internal set; }
+        public GenericDefinition GenericDefinition { get; set; }
 
         /// <summary>
         ///     method kind
         /// </summary>
-        public int Kind { get; internal set; }
+        public int Kind { get; set; }
 
         /// <summary>
         ///     method name
         /// </summary>
-        public NamespaceName Name { get; internal set; }
+        public NamespaceName Name { get; set; }
 
         /// <summary>
         ///     parameters
         /// </summary>
-        public FormalParameterSection Parameters { get; internal set; }
+        public FormalParameterSection Parameters { get; set; }
 
         /// <summary>
         ///     result type
         /// </summary>
-        public TypeSpecification ResultType { get; internal set; }
+        public TypeSpecification ResultType { get; set; }
 
         /// <summary>
         ///     result type attributes
         /// </summary>
-        public UserAttributes ResultTypeAttributes { get; internal set; }
-
-        /// <summary>
-        ///     format headinger
-        /// </summary>
-        /// <param name="result"></param>
-        public override void ToFormatter(PascalFormatter result) {
-            switch (Kind) {
-                case TokenKind.Constructor:
-                    result.Keyword("constructor").Space();
-                    break;
-                case TokenKind.Destructor:
-                    result.Keyword("destructor").Space();
-                    break;
-                case TokenKind.Function:
-                    result.Keyword("function").Space();
-                    break;
-                case TokenKind.Procedure:
-                    result.Keyword("procedure").Space();
-                    break;
-            }
-            result.Part(Name).Space();
-            result.Part(GenericDefinition).Space();
-            result.Part(Parameters);
-            if (ResultType != null) {
-                result.Punct(":").Space();
-                result.Part(ResultTypeAttributes).Space();
-                result.Part(ResultType);
-            }
-        }
+        public UserAttributes ResultTypeAttributes { get; set; }
     }
 }

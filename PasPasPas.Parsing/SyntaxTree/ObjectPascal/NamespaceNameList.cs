@@ -1,25 +1,10 @@
-﻿using PasPasPas.Api;
-
-namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
+﻿namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
 
     /// <summary>
     ///     list of namespace names
     /// </summary>
-    public class NamespaceNameList : ComposedPart<NamespaceName> {
+    public class NamespaceNameList : SyntaxPartBase {
 
-        /// <summary>
-        ///     create a new syntax tree element
-        /// </summary>
-        /// <param name="informationProvider">current parser state</param>
-        public NamespaceNameList(IParserInformationProvider informationProvider) : base(informationProvider) { }
 
-        /// <summary>
-        ///     format namespace name list
-        /// </summary>
-        /// <param name="result"></param>
-        public override void ToFormatter(PascalFormatter result) {
-            FlattenToPascal(result, x => x.Punct(",").NewLine());
-            result.Punct(";").NewLine().NewLine();
-        }
     }
 }

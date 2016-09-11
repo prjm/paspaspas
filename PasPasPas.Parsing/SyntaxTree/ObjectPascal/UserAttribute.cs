@@ -31,7 +31,7 @@ namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
         public override void ToFormatter(PascalFormatter result) {
             Name.ToFormatter(result);
 
-            if ((Expressions != null) && (Expressions.Count > 0)) {
+            if ((Expressions != null) && (Expressions.Parts.Count > 0)) {
                 result.Punct("(");
                 Expressions.ToFormatter(result);
                 result.Punct(")");
