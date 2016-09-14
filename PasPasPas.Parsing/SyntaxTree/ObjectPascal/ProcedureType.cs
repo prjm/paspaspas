@@ -1,6 +1,4 @@
-﻿using PasPasPas.Api;
-
-namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
+﻿namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
 
     /// <summary>
     ///     procedurual type
@@ -8,28 +6,14 @@ namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
     public class ProcedureType : SyntaxPartBase {
 
         /// <summary>
-        ///     create a new syntax tree element
-        /// </summary>
-        /// <param name="informationProvider">current parser state</param>
-        public ProcedureType(IParserInformationProvider informationProvider) : base(informationProvider) { }
-
-        /// <summary>
         ///     procedure reference
         /// </summary>
-        public ProcedureReference ProcedureReference { get; internal set; }
+        public ProcedureReference ProcedureReference { get; set; }
 
         /// <summary>
         ///     procedure type
         /// </summary>
-        public ProcedureTypeDefinition ProcedureRefType { get; internal set; }
+        public ProcedureTypeDefinition ProcedureRefType { get; set; }
 
-        /// <summary>
-        ///     format type
-        /// </summary>
-        /// <param name="result"></param>
-        public override void ToFormatter(PascalFormatter result) {
-            result.Part(ProcedureRefType);
-            result.Part(ProcedureReference);
-        }
     }
 }

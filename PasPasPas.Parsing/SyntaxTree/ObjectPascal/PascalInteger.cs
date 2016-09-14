@@ -8,7 +8,7 @@
         /// <summary>
         ///     integer value
         /// </summary>
-        public string Value { get; }
+        public int Value { get; }
 
     }
 }
