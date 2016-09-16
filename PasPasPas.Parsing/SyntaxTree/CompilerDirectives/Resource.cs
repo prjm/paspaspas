@@ -8,7 +8,7 @@
         /// <summary>
         ///     file name
         /// </summary>
-        public string Filename { get; internal set; }
+        public string FileName { get; internal set; }
 
         /// <summary>
         ///     resource file

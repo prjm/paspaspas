@@ -17,7 +17,7 @@ namespace PasPasPasTests.Tokenizer {
         public TestTokenizer(ParserServices environment, StackedFileReader input)
             : base(environment, input) {
             puncts = new InputPatterns();
-            puncts.AddPattern(new WhitespaceCharacterClass(), new WhiteSpaceTokenGroupValue());
+            puncts.AddPattern(new WhiteSpaceCharacterClass(), new WhiteSpaceTokenGroupValue());
         }
 
         protected override InputPatterns CharacterClasses
@@ -249,7 +249,7 @@ namespace PasPasPasTests.Tokenizer {
         public void TestWhitespaceCharTokenValue() {
             var patterns = new InputPatterns();
             patterns.AddPattern('a', PatternA);
-            patterns.AddPattern(new WhitespaceCharacterClass(), new WhiteSpaceTokenGroupValue());
+            patterns.AddPattern(new WhiteSpaceCharacterClass(), new WhiteSpaceTokenGroupValue());
             TestPattern(patterns, "");
             TestPattern(patterns, "a    a", PatternA, TokenKind.WhiteSpace, PatternA);
             TestPattern(patterns, "   ", TokenKind.WhiteSpace);
@@ -293,7 +293,7 @@ namespace PasPasPasTests.Tokenizer {
             var tgv = new IdentifierTokenGroupValue(tokens);
             patterns.AddPattern('b', PatternB);
             patterns.AddPattern(new IdentifierCharacterClass(), tgv);
-            patterns.AddPattern(new WhitespaceCharacterClass(), new WhiteSpaceTokenGroupValue());
+            patterns.AddPattern(new WhiteSpaceCharacterClass(), new WhiteSpaceTokenGroupValue());
             tgv.AllowAmpersand = true;
             tgv.AllowDigits = false;
             TestPattern(patterns, "a", PatternA);
@@ -316,7 +316,7 @@ namespace PasPasPasTests.Tokenizer {
         public void TestEndOfLineCommentTokenValue() {
             var patterns = new InputPatterns();
             patterns.AddPattern('/', TokenKind.Slash).Add('/', new EndOfLineCommentTokenGroupValue());
-            patterns.AddPattern(new WhitespaceCharacterClass(), new WhiteSpaceTokenGroupValue());
+            patterns.AddPattern(new WhiteSpaceCharacterClass(), new WhiteSpaceTokenGroupValue());
             TestPattern(patterns, "/", TokenKind.Slash);
             TestPattern(patterns, "//", TokenKind.Comment);
             TestPattern(patterns, "// / / /", TokenKind.Comment);

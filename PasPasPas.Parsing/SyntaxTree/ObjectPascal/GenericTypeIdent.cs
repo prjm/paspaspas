@@ -1,11 +1,9 @@
-﻿using PasPasPas.Api;
-
-namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
+﻿namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
 
     /// <summary>
     ///     generic type ident
     /// </summary>
-    public class GenericTypeIdent : SyntaxPartBase {
+    public class GenericTypeIdentifier : SyntaxPartBase {
 
         /// <summary>
         ///     generic definition
@@ -15,7 +13,7 @@ namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
         /// <summary>
         ///     type name
         /// </summary>
-        public PascalIdentifier Ident { get; set; }
+        public PascalIdentifier Identifier { get; set; }
 
     }
 }

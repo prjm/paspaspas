@@ -73,7 +73,7 @@
         /// <summary>
         ///     set section
         /// </summary>
-        public SetSectn SetSection { get; set; }
+        public SetSection SetSection { get; set; }
 
         /// <summary>
         ///     string factor

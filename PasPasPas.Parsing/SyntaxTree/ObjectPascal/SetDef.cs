@@ -3,7 +3,7 @@
     /// <summary>
     ///     a set definition
     /// </summary>
-    public class SetDef : SyntaxPartBase {
+    public class SetDefinition : SyntaxPartBase {
 
         /// <summary>
         ///     inner type reference

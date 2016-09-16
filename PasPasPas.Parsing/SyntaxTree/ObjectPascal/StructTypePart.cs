@@ -13,7 +13,7 @@
         /// <summary>
         ///     class type declaration
         /// </summary>
-        public ClassTypeDeclaration ClassDecl { get; set; }
+        public ClassTypeDeclaration ClassDeclaration { get; set; }
 
         /// <summary>
         ///     file type declaration
@@ -23,7 +23,7 @@
         /// <summary>
         ///     set type declaration
         /// </summary>
-        public SetDef SetType { get; set; }
+        public SetDefinition SetType { get; set; }
 
     }
 }

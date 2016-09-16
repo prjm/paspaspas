@@ -3,7 +3,7 @@
     /// <summary>
     ///     set expression
     /// </summary>
-    public class SetSectn : SyntaxPartBase {
+    public class SetSection : SyntaxPartBase {
 
     }
 }

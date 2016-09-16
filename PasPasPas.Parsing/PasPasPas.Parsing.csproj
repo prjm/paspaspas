@@ -42,7 +42,6 @@
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Api\IParserInformationProvider.cs" />
     <Compile Include="Parser\CompilerDirectiveParserErrors.cs" />
     <Compile Include="Parser\EmptyCollection.cs" />
     <Compile Include="Parser\IPascalParser.cs" />
@@ -119,7 +118,6 @@
     <Compile Include="SyntaxTree\CompilerDirectives\AlignSwitch.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\CompilerDirective.cs" />
     <Compile Include="SyntaxTree\ISyntaxPart.cs" />
-    <Compile Include="Api\PascalFormatter.cs" />
     <Compile Include="Api\PascalParser.cs" />
     <Compile Include="SyntaxTree\ISyntaxPartVisitor.cs" />
     <Compile Include="SyntaxTree\PascalToken.cs" />
@@ -155,7 +153,6 @@
     <Compile Include="SyntaxTree\ObjectPascal\ClassPropertySpecifier.cs" />
     <Compile Include="SyntaxTree\ObjectPascal\ClassTypeDeclaration.cs" />
     <Compile Include="SyntaxTree\ObjectPascal\ClosureExpr.cs" />
-    <Compile Include="SyntaxTree\ComposedPart.cs" />
     <Compile Include="SyntaxTree\ObjectPascal\CompoundStatement.cs" />
     <Compile Include="SyntaxTree\ObjectPascal\ConstantExpression.cs" />
     <Compile Include="SyntaxTree\ObjectPascal\ConstDeclaration.cs" />

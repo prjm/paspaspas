@@ -23,7 +23,7 @@
         /// <summary>
         ///     procedure body
         /// </summary>
-        public Block ProcBody { get; set; }
+        public Block ProcedureBody { get; set; }
 
     }
 }

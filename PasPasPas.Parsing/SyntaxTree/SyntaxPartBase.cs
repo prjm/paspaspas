@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
-using PasPasPas.Api;
 
 namespace PasPasPas.Parsing.SyntaxTree {
 
     /// <summary>
     ///     base class for syntax pars
     /// </summary>
-    public abstract class SyntaxPartBase : ISyntaxPart, IFormattableSyntaxPart {
+    public abstract class SyntaxPartBase : ISyntaxPart {
 
         /// <summary>
         ///     create a new syntax part base
@@ -16,23 +15,9 @@ namespace PasPasPas.Parsing.SyntaxTree {
         }
 
         /// <summary>
-        ///     create a new syntax tree element
-        /// </summary>
-        /// <param name="informationProvider">information provider</param>
-        [System.Obsolete("Old constructor. Remove the calls during refactoring.")]
-        protected SyntaxPartBase(IParserInformationProvider informationProvider) {
-            InformationProvider = informationProvider;
-        }
-
-        /// <summary>
         ///     parent node
         /// </summary>
         public ISyntaxPart Parent { get; set; }
-
-        /// <summary>
-        ///     information provider
-        /// </summary>
-        public IParserInformationProvider InformationProvider { get; }
 
         /// <summary>
         ///     syntax parts
@@ -47,18 +32,18 @@ namespace PasPasPas.Parsing.SyntaxTree {
         ///     accept this visitor
         /// </summary>
         /// <param name="visitor">visitor</param>
-        /// <param name="param">parameter</param>
+        /// <param name="visitorParameter">parameter</param>
         /// <typeparam name="T">parameter type</typeparam>
-        public virtual bool Accept<T>(ISyntaxPartVisitor<T> visitor, T param) {
-            if (!visitor.BeginVisit(this, param))
+        public virtual bool Accept<T>(ISyntaxPartVisitor<T> visitor, T visitorParameter) {
+            if (!visitor.BeginVisit(this, visitorParameter))
                 return false;
 
             var result = true;
 
             foreach (var part in Parts)
-                result = result && part.Accept(visitor, param);
+                result = result && part.Accept(visitor, visitorParameter);
 
-            if (!visitor.EndVisit(this, param))
+            if (!visitor.EndVisit(this, visitorParameter))
                 return false;
 
             return result;
@@ -76,14 +61,6 @@ namespace PasPasPas.Parsing.SyntaxTree {
                 else
                     return null;
             }
-        }
-
-        /// <summary>
-        ///     output syntax part to a formatter
-        /// </summary>                                      
-        /// <param name="result">formatter</param>
-        public virtual void ToFormatter(PascalFormatter result) {
-            //..
         }
 
         /// <summary>

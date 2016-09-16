@@ -8,7 +8,7 @@
         /// <summary>
         ///     generic type suffix
         /// </summary>
-        public GenericTypesuffix GenericSuffix { get; set; }
+        public GenericTypeSuffix GenericSuffix { get; set; }
 
         /// <summary>
         ///     source type name

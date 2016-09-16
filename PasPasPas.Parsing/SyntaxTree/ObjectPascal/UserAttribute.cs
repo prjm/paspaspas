@@ -3,7 +3,7 @@
     /// <summary>
     ///     user defined attribute (rtti)
     /// </summary>
-    public class UserAttribute : SyntaxPartBase {
+    public class UserAttributeDefinition : SyntaxPartBase {
 
         /// <summary>
         ///     üaraparameter expressions

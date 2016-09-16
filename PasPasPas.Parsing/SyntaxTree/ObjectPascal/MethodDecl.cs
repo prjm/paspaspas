@@ -3,7 +3,7 @@
     /// <summary>
     ///     method declaration
     /// </summary>
-    public class MethodDecl : SyntaxPartBase {
+    public class MethodDeclaration : SyntaxPartBase {
 
         /// <summary>
         ///     user attributes
@@ -23,7 +23,7 @@
         /// <summary>
         ///     method heading
         /// </summary>
-        public MethodDeclHeading Heading { get; set; }
+        public MethodDeclarationHeading Heading { get; set; }
 
         /// <summary>
         ///     method implementation

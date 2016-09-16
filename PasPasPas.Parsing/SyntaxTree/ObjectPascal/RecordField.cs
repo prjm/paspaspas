@@ -19,7 +19,7 @@
         /// <summary>
         ///     field names
         /// </summary>
-        public IdentList Names { get; set; }
+        public IdentifierList Names { get; set; }
 
     }
 }

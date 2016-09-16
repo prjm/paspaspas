@@ -3,7 +3,7 @@
     /// <summary>
     ///     simple expression
     /// </summary>
-    public class SimplExpr : SyntaxPartBase {
+    public class SimpleExpression : SyntaxPartBase {
 
         /// <summary>
         ///     expression kind
@@ -18,7 +18,7 @@
         /// <summary>
         ///     right operand
         /// </summary>
-        public SimplExpr RightOperand { get; set; }
+        public SimpleExpression RightOperand { get; set; }
 
     }
 }

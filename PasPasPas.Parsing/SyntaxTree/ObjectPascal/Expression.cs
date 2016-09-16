@@ -19,12 +19,12 @@
         /// <summary>
         ///     simple expression
         /// </summary>
-        public SimplExpr LeftOperand { get; set; }
+        public SimpleExpression LeftOperand { get; set; }
 
         /// <summary>
         ///     right operand
         /// </summary>
-        public SimplExpr RightOperand { get; set; }
+        public SimpleExpression RightOperand { get; set; }
 
     }
 }

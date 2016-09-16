@@ -3,7 +3,7 @@
     /// <summary>
     ///     method declaration heading
     /// </summary>
-    public class MethodDeclHeading : SyntaxPartBase {
+    public class MethodDeclarationHeading : SyntaxPartBase {
 
         /// <summary>
         ///     generic definition

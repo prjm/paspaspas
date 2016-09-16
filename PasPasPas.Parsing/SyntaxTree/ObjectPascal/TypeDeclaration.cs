@@ -23,7 +23,7 @@
         /// <summary>
         ///     type id
         /// </summary>
-        public GenericTypeIdent TypeId { get; set; }
+        public GenericTypeIdentifier TypeId { get; set; }
 
     }
 }

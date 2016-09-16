@@ -18,7 +18,7 @@
         /// <summary>
         ///     var names
         /// </summary>
-        public IdentList Identifiers { get; set; }
+        public IdentifierList Identifiers { get; set; }
 
         /// <summary>
         ///     var types

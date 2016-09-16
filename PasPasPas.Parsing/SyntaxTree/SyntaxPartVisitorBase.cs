@@ -3,15 +3,15 @@
     /// <summary>
     ///     base class for visitors
     /// </summary>
-    /// <typeparam name="TParam">parameter type</typeparam>
-    public class SyntaxPartVisitorBase<TParam> : ISyntaxPartVisitor<TParam> {
+    /// <typeparam name="TParameterType">parameter type</typeparam>
+    public class SyntaxPartVisitorBase<TParameterType> : ISyntaxPartVisitor<TParameterType> {
 
         /// <summary>
         ///     start visiting a syntax part
         /// </summary>
         /// <param name="syntaxPart">part to visit</param>
         /// <param name="parameter">parameter</param>
-        public virtual bool BeginVisit(ISyntaxPart syntaxPart, TParam parameter)
+        public virtual bool BeginVisit(ISyntaxPart syntaxPart, TParameterType parameter)
             => true;
 
         /// <summary>
@@ -19,7 +19,7 @@
         /// </summary>
         /// <param name="syntaxPart">part to visit</param>
         /// <param name="parameter">parameter</param>
-        public virtual bool EndVisit(ISyntaxPart syntaxPart, TParam parameter)
+        public virtual bool EndVisit(ISyntaxPart syntaxPart, TParameterType parameter)
             => true;
 
     }

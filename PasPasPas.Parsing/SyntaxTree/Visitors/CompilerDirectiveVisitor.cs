@@ -681,7 +681,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// </summary>
         /// <param name="syntaxPart"></param>
         /// <param name="parameter"></param>
-        public void BeginVisitItem(StackMemSize syntaxPart, CompilerDirectiveVisitorOptions parameter) {
+        public void BeginVisitItem(StackMemorySize syntaxPart, CompilerDirectiveVisitorOptions parameter) {
             if (syntaxPart.MinStackSize != null)
                 parameter.CompilerOptions.MinimumStackMemSize.Value = syntaxPart.MinStackSize.Value;
             if (syntaxPart.MaxStackSize != null)
@@ -707,7 +707,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <param name="parameter"></param>
         public void BeginVisitItem(Link syntaxPart, CompilerDirectiveVisitorOptions parameter) {
             var basePath = syntaxPart?.LastTerminal?.Token?.FilePath;
-            var fileName = syntaxPart?.Filename;
+            var fileName = syntaxPart?.FileName;
 
             if (basePath == null || string.IsNullOrWhiteSpace(basePath.Path))
                 return;
@@ -720,7 +720,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
             if (resolvedFile.IsResolved) {
                 var linkedFile = new LinkedFile();
-                linkedFile.OriginalFileName = syntaxPart.Filename;
+                linkedFile.OriginalFileName = syntaxPart.FileName;
                 linkedFile.TargetPath = resolvedFile.TargetPath;
                 parameter.Meta.AddLinkedFile(linkedFile);
             }
@@ -734,7 +734,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <param name="parameter"></param>
         public void BeginVisitItem(Resource syntaxPart, CompilerDirectiveVisitorOptions parameter) {
             var basePath = syntaxPart?.LastTerminal?.Token?.FilePath;
-            var fileName = syntaxPart?.Filename;
+            var fileName = syntaxPart?.FileName;
 
             if (basePath == null || string.IsNullOrWhiteSpace(basePath.Path))
                 return;
@@ -761,7 +761,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <param name="parameter"></param>
         public void BeginVisitItem(Include syntaxPart, CompilerDirectiveVisitorOptions parameter) {
             var basePath = syntaxPart?.LastTerminal?.Token?.FilePath;
-            var fileName = syntaxPart?.Filename;
+            var fileName = syntaxPart?.FileName;
 
             if (basePath == null || string.IsNullOrWhiteSpace(basePath.Path))
                 return;

@@ -1,5 +1,4 @@
-﻿using PasPasPas.Api;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace PasPasPas.Parsing.SyntaxTree {
 
@@ -24,20 +23,6 @@ namespace PasPasPas.Parsing.SyntaxTree {
         ///     parent node
         /// </summary>
         ISyntaxPart Parent { get; set; }
-
-    }
-
-    /// <summary>
-    ///     temporary interface
-    /// </summary>
-    public interface IFormattableSyntaxPart : ISyntaxPart {
-
-
-        /// <summary>
-        ///     print a pascal representation of this program part
-        /// </summary>        
-        /// <param name="result">output</param>
-        void ToFormatter(PascalFormatter result);
 
     }
 

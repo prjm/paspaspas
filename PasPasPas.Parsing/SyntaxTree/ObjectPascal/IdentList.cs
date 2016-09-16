@@ -3,6 +3,6 @@
     /// <summary>
     ///     comma separated list of identifiers
     /// </summary>
-    public class IdentList : SyntaxPartBase {
+    public class IdentifierList : SyntaxPartBase {
     }
 }

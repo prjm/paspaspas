@@ -53,15 +53,15 @@ namespace PasPasPas.DesktopPlatform {
         /// Detects the byte order mark of a file and returns
         /// an appropriate encoding for the file.
         /// </summary>
-        /// <param name="srcFile"></param>
+        /// <param name="sourceFile"></param>
         /// <returns></returns>
-        public Encoding GetFileEncoding(string srcFile) {
+        public static Encoding GetFileEncoding(string sourceFile) {
 
             Encoding enc = Encoding.Default;
 
             // *** Detect byte order mark if any - otherwise assume default
             byte[] buffer = new byte[5];
-            using (FileStream inputFile = new FileStream(srcFile, FileMode.Open, FileAccess.Read, FileShare.Read)) {
+            using (FileStream inputFile = new FileStream(sourceFile, FileMode.Open, FileAccess.Read, FileShare.Read)) {
                 inputFile.Read(buffer, 0, 5);
             }
 

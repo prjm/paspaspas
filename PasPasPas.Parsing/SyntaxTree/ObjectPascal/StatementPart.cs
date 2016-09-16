@@ -23,7 +23,7 @@
         /// <summary>
         ///     compunt statement
         /// </summary>
-        public CompoundStatement CompundStatement { get; set; }
+        public CompoundStatement CompoundStatement { get; set; }
 
         /// <summary>
         ///     deisgnator part
@@ -53,7 +53,7 @@
         /// <summary>
         ///     repeat statement
         /// </summary>
-        public RepeatStatement Reapeat { get; set; }
+        public RepeatStatement Repeat { get; set; }
 
         /// <summary>
         ///     try statement

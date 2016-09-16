@@ -18,12 +18,12 @@
         /// <summary>
         ///     parse a list of identifiers
         /// </summary>
-        public IdentList ParamNames { get; set; }
+        public IdentifierList ParameterNames { get; set; }
 
         /// <summary>
         ///     parameter typs
         /// </summary>
-        public int ParamType { get; set; }
+        public int ParameterType { get; set; }
             = TokenKind.Undefined;
 
         /// <summary>

@@ -8,7 +8,7 @@
         /// <summary>
         ///     attribute definition
         /// </summary>
-        public UserAttribute Attribute { get; set; }
+        public UserAttributeDefinition Attribute { get; set; }
 
     }
 }

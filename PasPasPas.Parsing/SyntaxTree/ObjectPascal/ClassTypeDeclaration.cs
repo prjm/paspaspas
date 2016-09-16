@@ -1,6 +1,4 @@
-﻿using PasPasPas.Api;
-
-namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
+﻿namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
 
 
     /// <summary>
@@ -41,20 +39,7 @@ namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
         /// <summary>
         ///     record helper
         /// </summary>
-        public RecordHelperDef RecordHelper { get; internal set; }
+        public RecordHelperDefinition RecordHelper { get; internal set; }
 
-        /// <summary>
-        ///     format class type declaration
-        /// </summary>
-        /// <param name="result"></param>
-        public override void ToFormatter(PascalFormatter result) {
-            result.Part(ClassOf);
-            result.Part(ClassDef);
-            result.Part(ClassHelper);
-            result.Part(InterfaceDef);
-            result.Part(ObjectDecl);
-            result.Part(RecordHelper);
-            result.Part(RecordDecl);
-        }
     }
 }

@@ -3,7 +3,7 @@
     /// <summary>
     ///     record helper
     /// </summary>
-    public class RecordHelperDef : SyntaxPartBase {
+    public class RecordHelperDefinition : SyntaxPartBase {
 
         /// <summary>
         ///     record helper items

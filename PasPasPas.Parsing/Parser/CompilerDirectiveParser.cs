@@ -281,7 +281,7 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseStackSizeSwitch(ISyntaxPart parent, bool mSwitch) {
-            StackMemSize result = CreateByTerminal<StackMemSize>(parent);
+            StackMemorySize result = CreateByTerminal<StackMemorySize>(parent);
 
             if (mSwitch || result.LastTerminal.Token.Kind == PascalToken.MinMemStackSizeSwitchLong) {
 
@@ -1919,18 +1919,18 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseIncludeFileName(Include result) {
-            result.Filename = ParseFileName(result, false);
+            result.FileName = ParseFileName(result, false);
 
-            if (result.Filename == null) {
+            if (result.FileName == null) {
                 ErrorLastPart(result, CompilerDirectiveParserErrors.InvalidIncludeDirective, new[] { TokenKind.Identifier });
                 return;
             }
         }
 
         private void ParseResourceFileName(Resource result) {
-            result.Filename = ParseFileName(result, true);
+            result.FileName = ParseFileName(result, true);
 
-            if (result.Filename == null) {
+            if (result.FileName == null) {
                 ErrorLastPart(result, CompilerDirectiveParserErrors.InvalidResourceDirective, new[] { TokenKind.Identifier });
                 return;
             }
@@ -2035,8 +2035,8 @@ namespace PasPasPas.Parsing.Parser {
         /// </summary>
         /// <returns></returns>
         private void ParseLinkParameter(Link result) {
-            result.Filename = ParseFileName(result, false);
-            if (result.Filename == null) {
+            result.FileName = ParseFileName(result, false);
+            if (result.FileName == null) {
                 ErrorLastPart(result, CompilerDirectiveParserErrors.InvalidLinkDirective);
             }
         }

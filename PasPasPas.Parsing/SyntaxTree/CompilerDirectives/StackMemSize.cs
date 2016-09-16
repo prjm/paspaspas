@@ -3,7 +3,7 @@
     /// <summary>
     ///     stack mem size directive
     /// </summary>
-    public class StackMemSize : SyntaxPartBase {
+    public class StackMemorySize : SyntaxPartBase {
 
         /// <summary>
         ///     maximum stack size

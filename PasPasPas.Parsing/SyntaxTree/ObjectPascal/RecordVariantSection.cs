@@ -13,7 +13,7 @@
         /// <summary>
         ///     type declaration
         /// </summary>
-        public TypeSpecification TypeDecl { get; set; }
+        public TypeSpecification TypeDeclaration { get; set; }
 
     }
 }

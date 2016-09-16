@@ -8,7 +8,7 @@
         /// <summary>
         ///     <c>true</c> if dispinterface
         /// </summary>
-        public bool DispInterface { get; set; }
+        public bool DisplayInterface { get; set; }
 
         /// <summary>
         ///     guid declaration

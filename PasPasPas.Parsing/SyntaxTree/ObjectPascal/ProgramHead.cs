@@ -13,7 +13,7 @@
         /// <summary>
         ///     program parameters
         /// </summary>
-        public ProgramParameterList Params { get; set; }
+        public ProgramParameterList Parameters { get; set; }
 
     }
 }

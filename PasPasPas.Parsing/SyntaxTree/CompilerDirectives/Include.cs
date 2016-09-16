@@ -8,6 +8,6 @@
         /// <summary>
         ///     include file name
         /// </summary>
-        public string Filename { get; set; }
+        public string FileName { get; set; }
     }
 }
