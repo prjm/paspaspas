@@ -435,7 +435,7 @@ namespace PasPasPas.Parsing.Parser {
                 return result;
             }
             if (Match(TokenKind.Raise)) {
-                result.Raise = ParseRaiseStatement();
+                result.Raise = ParseRaiseStatement(result);
                 return result;
             }
             if (Match(TokenKind.Asm)) {
@@ -452,15 +452,14 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         [Rule("RaiseStatement", "'raise' [ Designator ] [ 'at' Designator ]")]
-        private RaiseStatement ParseRaiseStatement() {
-            var result = new RaiseStatement(this);
-            Require(TokenKind.Raise);
+        private RaiseStatement ParseRaiseStatement(ISyntaxPart parent) {
+            var result = CreateByTerminal<RaiseStatement>(parent, TokenKind.Raise);
 
             if ((!Match(TokenKind.At)) && MatchIdentifier(TokenKind.Inherited)) {
                 result.Raise = ParseDesignator(result);
             }
 
-            if (Optional(TokenKind.At)) {
+            if (ContinueWith(result, TokenKind.At)) {
                 result.At = ParseDesignator(result);
             }
 
@@ -788,7 +787,7 @@ namespace PasPasPas.Parsing.Parser {
             var result = CreateChild<Program>(parent);
 
             if (Match(TokenKind.Program))
-                result.ProgramHead = ParseProgramHead();
+                result.ProgramHead = ParseProgramHead(result);
 
             if (Match(TokenKind.Uses))
                 result.Uses = ParseUsesFileClause();
@@ -799,29 +798,28 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         [Rule("ProgramHead", "'program' NamespaceName [ProgramParams] ';'")]
-        private ProgramHead ParseProgramHead() {
-            var result = new ProgramHead(this);
-            Require(TokenKind.Program);
+        private ProgramHead ParseProgramHead(ISyntaxPart parent) {
+            var result = CreateByTerminal<ProgramHead>(parent, TokenKind.Program);
             result.Name = ParseNamespaceName(result);
-            result.Params = ParseProgramParams();
-            Require(TokenKind.Semicolon);
+            result.Params = ParseProgramParams(result);
+            ContinueWithOrMissing(result, TokenKind.Semicolon);
             return result;
         }
 
         [Rule("ProgramParams", "'(' [ Identifier { ',' Identifier } ] ')'")]
-        private ProgramParameterList ParseProgramParams() {
-            var result = new ProgramParameterList(this);
+        private ProgramParameterList ParseProgramParams(ISyntaxPart parent) {
+            var result = CreateChild<ProgramParameterList>(parent);
 
-            if (Optional(TokenKind.OpenParen)) {
+            if (ContinueWith(result, TokenKind.OpenParen)) {
 
                 if (MatchIdentifier()) {
-                    result.Add(RequireIdentifier(result));
+                    RequireIdentifier(result);
 
-                    while (Optional(TokenKind.Comma))
-                        result.Add(RequireIdentifier(result));
+                    while (ContinueWith(result, TokenKind.Comma))
+                        RequireIdentifier(result);
                 }
 
-                Require(TokenKind.CloseParen);
+                ContinueWithOrMissing(result, TokenKind.CloseParen);
             }
 
             return result;
@@ -1246,7 +1244,7 @@ namespace PasPasPas.Parsing.Parser {
             if (ContinueWith(result, TokenKind.Deprecated)) {
                 result.Deprecated = true;
                 if (Match(TokenKind.QuotedString))
-                    result.DeprecatedComment = RequireString();
+                    result.DeprecatedComment = RequireString(result);
 
                 return result;
             }
@@ -1517,12 +1515,12 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             if (Match(TokenKind.Record) && LookAhead(1, TokenKind.Helper)) {
-                result.RecordHelper = ParseRecordHelper();
+                result.RecordHelper = ParseRecordHelper(result);
                 return result;
             }
 
             if (Match(TokenKind.Record)) {
-                result.RecordDecl = ParseRecordDecl();
+                result.RecordDecl = ParseRecordDecl(result);
                 return result;
             }
 
@@ -1531,34 +1529,31 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         [Rule("RecordDecl", "'record' RecordFieldList (RecordVariantSection | RecordItems ) 'end' ")]
-        private RecordDeclaration ParseRecordDecl() {
-            var result = new RecordDeclaration(this);
-            Require(TokenKind.Record);
+        private RecordDeclaration ParseRecordDecl(ISyntaxPart parent) {
+            var result = CreateByTerminal<RecordDeclaration>(parent, TokenKind.Record);
 
             if (MatchIdentifier()) {
-                result.FieldList = ParseFieldList();
+                result.FieldList = ParseFieldList(result);
             }
 
             if (Match(TokenKind.Case)) {
                 result.VariantSection = ParseRecordVariantSection();
             }
             else {
-                result.Items = ParseRecordItems();
+                result.Items = ParseRecordItems(result);
             }
-            Require(TokenKind.End);
+            ContinueWithOrMissing(result, TokenKind.End);
             return result;
         }
 
         [Rule("RecordItems", "{ RecordItem }")]
-        private RecordItems ParseRecordItems() {
-            var result = new RecordItems(this);
+        private RecordItems ParseRecordItems(ISyntaxPart parent) {
+            var result = CreateChild<RecordItems>(parent);
             var unexpected = false;
 
             while ((!Match(TokenKind.End)) && (!unexpected)) {
-                var item = ParseRecordItem(out unexpected);
-                if (!unexpected)
-                    result.Add(item);
-                else {
+                var item = ParseRecordItem(result, out unexpected);
+                if (unexpected) {
                     Unexpected();
                     return result;
                 }
@@ -1568,9 +1563,9 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         [Rule("RecordItem", "MethodDeclaration | PropertyDeclaration | ConstSection | TypeSection | RecordField | ( ['class'] VarSection)")]
-        private RecordItem ParseRecordItem(out bool unexpected) {
-            var result = new RecordItem(this);
-            result.Class = Optional(TokenKind.Class);
+        private RecordItem ParseRecordItem(ISyntaxPart parent, out bool unexpected) {
+            var result = CreateChild<RecordItem>(parent);
+            result.Class = ContinueWith(result, TokenKind.Class);
             unexpected = false;
 
             if (Match(TokenKind.Procedure, TokenKind.Function, TokenKind.Constructor, TokenKind.Destructor)) {
@@ -1599,7 +1594,7 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             if (MatchIdentifier()) {
-                result.Fields = ParseFieldList();
+                result.Fields = ParseFieldList(result);
                 return result;
             }
 
@@ -1633,53 +1628,50 @@ namespace PasPasPas.Parsing.Parser {
             } while (Optional(TokenKind.Comma));
             Require(TokenKind.Colon);
             Require(TokenKind.OpenParen);
-            result.FieldList = ParseFieldList();
+            result.FieldList = ParseFieldList(result);
             Require(TokenKind.CloseParen);
             return result;
         }
 
         [Rule("RecordFieldList", " { RecordField } ")]
-        private RecordFieldList ParseFieldList() {
-            var result = new RecordFieldList(this);
+        private RecordFieldList ParseFieldList(ISyntaxPart parent) {
+            var result = CreateChild<RecordFieldList>(parent);
             while (MatchIdentifier()) {
-                result.Add(ParseRecordField());
+                ParseRecordField(result);
             }
             return result;
         }
 
         [Rule("RecordField", "IdentList ':' TypeSpecification Hints ';'")]
-        private RecordField ParseRecordField() {
-            var result = new RecordField(this);
+        private RecordField ParseRecordField(ISyntaxPart parent) {
+            var result = CreateChild<RecordField>(parent);
             result.Names = ParseIdentList(result);
-            Require(TokenKind.Colon);
+            ContinueWithOrMissing(result, TokenKind.Colon);
             result.FieldType = ParseTypeSpecification();
             result.Hint = ParseHints(result);
-            Require(TokenKind.Semicolon);
+            ContinueWithOrMissing(result, TokenKind.Semicolon);
             return result;
         }
 
         [Rule("RecordHelperDecl", "'record' 'helper' 'for' NamespaceName RecordHelperItems 'end'")]
-        private RecordHelperDef ParseRecordHelper() {
-            var result = new RecordHelperDef(this);
-            Require(TokenKind.Record);
-            Require(TokenKind.Helper);
-            Require(TokenKind.For);
+        private RecordHelperDef ParseRecordHelper(ISyntaxPart parent) {
+            var result = CreateByTerminal<RecordHelperDef>(parent, TokenKind.Record);
+            ContinueWithOrMissing(result, TokenKind.Helper);
+            ContinueWithOrMissing(result, TokenKind.For);
             result.Name = ParseNamespaceName(result);
-            result.Items = ParseRecordHelperItems();
-            Require(TokenKind.End);
+            result.Items = ParseRecordHelperItems(result);
+            ContinueWithOrMissing(result, TokenKind.End);
             return result;
         }
 
         [Rule("RecordHelperItems", " { RecordHelperItem }")]
-        private RecordHelperItems ParseRecordHelperItems() {
-            var result = new RecordHelperItems(this);
+        private RecordHelperItems ParseRecordHelperItems(ISyntaxPart parent) {
+            var result = CreateChild<RecordHelperItems>(parent);
             var unexpected = false;
 
             while ((!Match(TokenKind.End)) && (!unexpected)) {
-                var item = ParseRecordHelperItem(out unexpected);
-                if (!unexpected)
-                    result.Add(item);
-                else {
+                ParseRecordHelperItem(result, out unexpected);
+                if (unexpected) {
                     Unexpected();
                     return result;
                 }
@@ -1689,8 +1681,8 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         [Rule("RecordHelperItem", "")]
-        private RecordHelperItem ParseRecordHelperItem(out bool unexpected) {
-            var result = new RecordHelperItem(this);
+        private RecordHelperItem ParseRecordHelperItem(ISyntaxPart parent, out bool unexpected) {
+            var result = CreateChild<RecordHelperItem>(parent);
             unexpected = false;
 
             if (Match(TokenKind.Procedure, TokenKind.Function, TokenKind.Constructor, TokenKind.Destructor)) {
@@ -1821,7 +1813,7 @@ namespace PasPasPas.Parsing.Parser {
         [Rule("InterfaceGuid", "'[' QuotedString ']'")]
         private InterfaceGuid ParseInterfaceGuid(ISyntaxPart parent) {
             var result = CreateByTerminal<InterfaceGuid>(parent, TokenKind.OpenBraces);
-            result.Id = RequireString();
+            result.Id = RequireString(result);
             ContinueWithOrMissing(result, TokenKind.CloseBraces);
             return result;
         }
@@ -2435,7 +2427,7 @@ namespace PasPasPas.Parsing.Parser {
 
             if (ContinueWith(result, TokenKind.OpenParen)) {
                 if (MatchIdentifier() && (LookAhead(1, TokenKind.Colon)))
-                    result.RecordConstant = ParseRecordConstant();
+                    result.RecordConstant = ParseRecordConstant(result);
                 else do {
                         ParseConstantExpression(result);
                     } while (ContinueWith(result, TokenKind.Comma));
@@ -2449,10 +2441,10 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         [Rule("RecordConstantExpression", "Identifier ':' ConstantExpression")]
-        private RecordConstantExpression ParseRecordConstant() {
-            var result = new RecordConstantExpression(this);
+        private RecordConstantExpression ParseRecordConstant(ISyntaxPart parent) {
+            var result = CreateChild<RecordConstantExpression>(parent);
             result.Name = RequireIdentifier(result);
-            Require(TokenKind.Colon);
+            ContinueWithOrMissing(result, TokenKind.Colon);
             result.Value = ParseConstantExpression(result);
             return result;
         }
@@ -2542,7 +2534,7 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             if (Match(TokenKind.QuotedString)) {
-                result.StringValue = RequireString();
+                result.StringValue = RequireString(result);
                 return result;
             }
 
@@ -2719,14 +2711,14 @@ namespace PasPasPas.Parsing.Parser {
 
             result.NamespaceName = ParseNamespaceName(result);
             if (ContinueWith(result, TokenKind.In))
-                result.QuotedFileName = RequireString();
+                result.QuotedFileName = RequireString(result);
 
             return result;
         }
 
-        private QuotedString RequireString() {
-            var result = new QuotedString(this);
-            result.UnquotedValue = Require(TokenKind.QuotedString).Value;
+        private QuotedString RequireString(ISyntaxPart parent) {
+            var result = CreateByTerminal<QuotedString>(parent, TokenKind.QuotedString);
+            result.UnquotedValue = result.LastTerminal.Value;
             return result;
         }
 

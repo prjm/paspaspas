@@ -1,6 +1,4 @@
-﻿using PasPasPas.Api;
-
-namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
+﻿namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
 
     /// <summary>
     ///     record item
@@ -8,58 +6,40 @@ namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
     public class RecordItem : SyntaxPartBase {
 
         /// <summary>
-        ///     create a new syntax tree element
-        /// </summary>
-        /// <param name="informationProvider">current parser state</param>
-        public RecordItem(IParserInformationProvider informationProvider) : base(informationProvider) { }
-
-        /// <summary>
         ///     class item
         /// </summary>
-        public bool Class { get; internal set; }
+        public bool Class { get; set; }
 
         /// <summary>
         ///     const section
         /// </summary>
-        public ConstSection ConstSection { get; internal set; }
+        public ConstSection ConstSection { get; set; }
 
         /// <summary>
         ///     record fields
         /// </summary>
-        public RecordFieldList Fields { get; internal set; }
+        public RecordFieldList Fields { get; set; }
 
         /// <summary>
         ///     method
         /// </summary>
-        public ClassMethod MethodDeclaration { get; internal set; }
+        public ClassMethod MethodDeclaration { get; set; }
 
         /// <summary>
         ///     property
         /// </summary>
-        public ClassProperty PropertyDeclaration { get; internal set; }
+        public ClassProperty PropertyDeclaration { get; set; }
 
         /// <summary>
         ///     type
         /// </summary>
-        public TypeSection TypeSection { get; internal set; }
+        public TypeSection TypeSection { get; set; }
 
         /// <summary>
         ///     var section
         /// </summary>
-        public VarSection VarSection { get; internal set; }
+        public VarSection VarSection { get; set; }
 
-        /// <summary>
-        ///     format record item
-        /// </summary>
-        /// <param name="result"></param>
-        public override void ToFormatter(PascalFormatter result) {
-            if (Class) result.Keyword("class").Space();
-            result.Part(Fields);
-            result.Part(MethodDeclaration);
-            result.Part(PropertyDeclaration);
-            result.Part(TypeSection);
-            result.Part(VarSection);
-            result.Part(ConstSection);
-        }
+
     }
 }

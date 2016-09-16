@@ -1,6 +1,4 @@
-﻿using PasPasPas.Api;
-
-namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
+﻿namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
 
     /// <summary>
     ///     class for a record constant expressopn
@@ -8,32 +6,14 @@ namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
     public class RecordConstantExpression : SyntaxPartBase {
 
         /// <summary>
-        ///     create a new syntax tree element
-        /// </summary>
-        /// <param name="informationProvider">current parser state</param>
-        public RecordConstantExpression(IParserInformationProvider informationProvider) : base(informationProvider) { }
-
-        /// <summary>
         ///     field name
         /// </summary>
-        public PascalIdentifier Name { get; internal set; }
+        public PascalIdentifier Name { get; set; }
 
         /// <summary>
         ///     field value
         /// </summary>
-        public ConstantExpression Value { get; internal set; }
+        public ConstantExpression Value { get; set; }
 
-        /// <summary>
-        ///     format record constant
-        /// </summary>
-        /// <param name="result"></param>
-        public override void ToFormatter(PascalFormatter result) {
-            result.Punct("(");
-            result.Identifier(Name.Value);
-            result.Punct(":");
-            result.Space();
-            Value.ToFormatter(result);
-            result.Punct(")");
-        }
     }
 }

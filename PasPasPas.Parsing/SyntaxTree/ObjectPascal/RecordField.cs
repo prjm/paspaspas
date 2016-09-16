@@ -1,6 +1,4 @@
-﻿using PasPasPas.Api;
-
-namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
+﻿namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
 
     /// <summary>
     ///     record field
@@ -8,37 +6,20 @@ namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
     public class RecordField : SyntaxPartBase {
 
         /// <summary>
-        ///     create a new syntax tree element
+        ///     field type
         /// </summary>
-        /// <param name="informationProvider">current parser state</param>
-        public RecordField(IParserInformationProvider informationProvider) : base(informationProvider) { }
-
-        /// <summary>
-        ///     fiel type
-        /// </summary>
-        public TypeSpecification FieldType { get; internal set; }
+        public TypeSpecification FieldType { get; set; }
 
         /// <summary>
         ///     hinting directive
         /// </summary>
-        public HintingInformationList Hint { get; internal set; }
+        public HintingInformationList Hint { get; set; }
 
 
         /// <summary>
         ///     field names
         /// </summary>
-        public IdentList Names { get; internal set; }
+        public IdentList Names { get; set; }
 
-        /// <summary>
-        ///     format record field
-        /// </summary>
-        /// <param name="result"></param>
-        public override void ToFormatter(PascalFormatter result) {
-            result.Part(Names);
-            result.Punct(":").Space();
-            result.Part(FieldType).Space();
-            result.Part(Hint);
-            result.Punct(";");
-        }
     }
 }
