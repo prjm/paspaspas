@@ -1,6 +1,4 @@
-﻿using PasPasPas.Api;
-
-namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
+﻿namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
 
     /// <summary>
     ///     struct type
@@ -8,29 +6,14 @@ namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
     public class StructType : SyntaxPartBase {
 
         /// <summary>
-        ///     create a new syntax tree element
-        /// </summary>
-        /// <param name="informationProvider">current parser state</param>
-        public StructType(IParserInformationProvider informationProvider) : base(informationProvider) { }
-
-        /// <summary>
         ///     Packed struct type
         /// </summary>
-        public bool Packed { get; internal set; }
+        public bool Packed { get; set; }
 
         /// <summary>
         ///     part
         /// </summary>
-        public StructTypePart Part { get; internal set; }
+        public StructTypePart Part { get; set; }
 
-        /// <summary>
-        ///     format type
-        /// </summary>
-        /// <param name="result"></param>
-        public override void ToFormatter(PascalFormatter result) {
-            if (Packed)
-                result.Keyword("packed").Space();
-            result.Part(Part);
-        }
     }
 }

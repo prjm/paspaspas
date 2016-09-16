@@ -1,6 +1,4 @@
-﻿using PasPasPas.Api;
-
-namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
+﻿namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
 
     /// <summary>
     ///     simple type definiion
@@ -8,20 +6,14 @@ namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
     public class SimpleType : SyntaxPartBase {
 
         /// <summary>
-        ///     create a new syntax tree element
-        /// </summary>
-        /// <param name="informationProvider">current parser state</param>
-        public SimpleType(IParserInformationProvider informationProvider) : base(informationProvider) { }
-
-        /// <summary>
         ///     enumeration
         /// </summary>
-        public EnumTypeDefinition EnumType { get; internal set; }
+        public EnumTypeDefinition EnumType { get; set; }
 
         /// <summary>
         ///     generic postfix
         /// </summary>
-        public GenericTypesuffix GenericPostfix { get; internal set; }
+        public GenericTypesuffix GenericPostfix { get; set; }
 
         /// <summary>
         ///     <c>true</c> for a new type definition
@@ -31,41 +23,16 @@ namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
         /// <summary>
         ///     subrange start
         /// </summary>
-        public ConstantExpression SubrangeEnd { get; internal set; }
+        public ConstantExpression SubrangeEnd { get; set; }
 
         /// <summary>
         ///     subrange end
         /// </summary>
-        public ConstantExpression SubrangeStart { get; internal set; }
+        public ConstantExpression SubrangeStart { get; set; }
 
         /// <summary>
         ///     type id
         /// </summary>
-        public NamespaceName TypeId { get; internal set; }
-
-        /// <summary>
-        ///     format type
-        /// </summary>
-        /// <param name="result"></param>
-        public override void ToFormatter(PascalFormatter result) {
-            if (EnumType != null) {
-                result.Part(EnumType);
-                return;
-            }
-
-            if (SubrangeStart != null) {
-                result.Part(SubrangeStart);
-                if (SubrangeEnd != null) {
-                    result.Operator("..");
-                    result.Part(SubrangeEnd);
-                }
-                return;
-            }
-
-            if (NewType)
-                result.Keyword("type").Space();
-            result.Part(TypeId);
-            result.Part(GenericPostfix);
-        }
+        public NamespaceName TypeId { get; set; }
     }
 }

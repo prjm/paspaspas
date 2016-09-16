@@ -1,7 +1,4 @@
-﻿using PasPasPas.Api;
-using PasPasPas.Parsing.SyntaxTree;
-
-namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
+﻿namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
 
     /// <summary>
     ///     simple expression
@@ -9,55 +6,19 @@ namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
     public class SimplExpr : SyntaxPartBase {
 
         /// <summary>
-        ///     create a new syntax tree element
-        /// </summary>
-        /// <param name="informationProvider">current parser state</param>
-        public SimplExpr(IParserInformationProvider informationProvider) : base(informationProvider) { }
-
-        /// <summary>
         ///     expression kind
         /// </summary>
-        public int Kind { get; internal set; }
+        public int Kind { get; set; }
 
         /// <summary>
         ///     left operand
         /// </summary>
-        public Term LeftOperand { get; internal set; }
+        public Term LeftOperand { get; set; }
 
         /// <summary>
         ///     right operand
         /// </summary>
-        public SimplExpr RightOperand { get; internal set; }
+        public SimplExpr RightOperand { get; set; }
 
-        /// <summary>
-        ///     format expression
-        /// </summary>
-        /// <param name="result"></param>
-        public override void ToFormatter(PascalFormatter result) {
-            result.Part(LeftOperand);
-            if (RightOperand != null) {
-                result.Space();
-                switch (Kind) {
-                    case TokenKind.Plus:
-                        result.Punct("+");
-                        break;
-
-                    case TokenKind.Minus:
-                        result.Punct("-");
-                        break;
-
-                    case TokenKind.Or:
-                        result.Keyword("or");
-                        break;
-
-                    case TokenKind.Xor:
-                        result.Keyword("xor");
-                        break;
-
-                }
-                result.Space();
-                result.Part(RightOperand);
-            }
-        }
     }
 }

@@ -1,6 +1,4 @@
-﻿using PasPasPas.Api;
-
-namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
+﻿namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
 
     /// <summary>
     ///     unit initialization part
@@ -8,25 +6,9 @@ namespace PasPasPas.Parsing.SyntaxTree.ObjectPascal {
     public class UnitInitialization : SyntaxPartBase {
 
         /// <summary>
-        ///     create a new syntax tree element
-        /// </summary>
-        /// <param name="informationProvider">current parser state</param>
-        public UnitInitialization(IParserInformationProvider informationProvider) : base(informationProvider) { }
-
-        /// <summary>
         ///     unit finalization
         /// </summary>
-        public UnitFinalization Finalization { get; internal set; }
+        public UnitFinalization Finalization { get; set; }
 
-        /// <summary>
-        ///     format initialization
-        /// </summary>
-        /// <param name="result"></param>
-        public override void ToFormatter(PascalFormatter result) {
-            result.Keyword("initialization").NewLine();
-            if (Finalization != null)
-                result.Part(Finalization);
-            result.NewLine().Keyword("end");
-        }
     }
 }
