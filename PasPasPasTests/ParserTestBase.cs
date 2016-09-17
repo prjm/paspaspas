@@ -81,9 +81,10 @@ namespace PasPasPasTests {
                 };
 
                 var result = parser.Parse();
-                var formatter = new PascalFormatter();
-                ((IFormattableSyntaxPart)result).ToFormatter(formatter);
-                Assert.AreEqual(CompactWhitespace(output), CompactWhitespace(formatter.Result));
+                var visitor = new TerminalVisitor();
+                var options = new TerminalVisitorOptions();
+                result.Accept(visitor, options);
+                Assert.AreEqual(output, options.ResultBuilder.ToString());
                 Assert.AreEqual(string.Empty, errorText);
                 Assert.IsFalse(hasError);
             }

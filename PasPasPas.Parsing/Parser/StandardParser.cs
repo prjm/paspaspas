@@ -87,14 +87,20 @@ namespace PasPasPas.Parsing.Parser {
             TokenKind.Xor
             };
 
-        private bool MatchIdentifier(params int[] otherTokens) {
-            if (Match(otherTokens))
+        private bool MatchIdentifier(params int[] otherTokens)
+            => LookAheadIdentifier(0, otherTokens);
+
+        private bool LookAheadIdentifier(int lookAhead, int[] otherTokens) {
+            if (LookAhead(lookAhead, otherTokens))
                 return true;
 
-            if (Match(TokenKind.Identifier))
+            if (LookAhead(lookAhead, TokenKind.Identifier))
                 return true;
 
-            var token = CurrentToken();
+            var token = Tokenizer.LookAhead(lookAhead);
+
+            if (token == null)
+                return false;
 
             if (reservedWords.Contains(token.Kind))
                 return false;
@@ -763,7 +769,7 @@ namespace PasPasPas.Parsing.Parser {
         [Rule("Library", "LibraryHead [UsesFileClause] Block '.' ")]
         private Library ParseLibrary(ISyntaxPart parent) {
             var result = CreateChild<Library>(parent);
-            result.LibraryHead = ParseLibraryHead(parent);
+            result.LibraryHead = ParseLibraryHead(result);
 
             if (Match(TokenKind.Uses))
                 result.Uses = ParseUsesFileClause(result);
@@ -2740,7 +2746,7 @@ namespace PasPasPas.Parsing.Parser {
 
             RequireIdentifier(result);
 
-            while (ContinueWith(result, TokenKind.Dot)) {
+            while (LookAheadIdentifier(1, new int[0]) && ContinueWith(result, TokenKind.Dot)) {
                 RequireIdentifier(result);
             }
 

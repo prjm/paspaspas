@@ -63,7 +63,7 @@ namespace PasPasPas.Infrastructure.Input {
         public override bool Equals(object obj) {
             var other = obj as IFileReference;
 
-            if (ReferenceEquals(obj, null))
+            if (ReferenceEquals(other, null))
                 return false;
 
             return string.Equals(path, other.Path, StringComparison.OrdinalIgnoreCase);

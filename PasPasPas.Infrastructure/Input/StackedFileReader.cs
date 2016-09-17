@@ -293,7 +293,7 @@ namespace PasPasPas.Infrastructure.Input {
                 currentFile = putbackFragments.Peek().FilePath;
             }
 
-            if (currentFile != null && file.Equals(currentFile.Path)) {
+            if (currentFile != null && file.Equals(currentFile)) {
                 fragment = putbackFragments.Peek();
             }
             else {

@@ -473,6 +473,7 @@ namespace PasPasPas.Parsing.Tokenizer {
                 else if (currentChar == '\'') {
                     state.AppendChar(currentChar);
                     AppendToBuffer(QuotedStringTokenValue.Unwrap(quotedString.Tokenize(state.Input, controlBuffer, state.Log)));
+                    state.AppendChar(currentChar);
                 }
                 else {
                     state.Putback(currentChar);
