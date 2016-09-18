@@ -13,11 +13,11 @@ namespace PasPasPasTests {
 
     public static class TestHelper {
 
-        public static List<PascalToken> RunTokenizer(string input, IList<ILogMessage> messages = null) {
+        public static List<Token> RunTokenizer(string input, IList<ILogMessage> messages = null) {
             var logManager = new LogManager();
             var services = new ParserServices(logManager);
             var messageHandler = new LogTarget();
-            var result = new List<PascalToken>();
+            var result = new List<Token>();
             logManager.RegisterTarget(messageHandler);
             using (var inputString = new StringInput(input, new FileReference("test.pas")))
             using (var reader = new StackedFileReader()) {

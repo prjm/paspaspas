@@ -8,7 +8,7 @@
         /// <summary>
         ///     create a new invalid token
         /// </summary>
-        /// <param name="pascalToken"></param>
-        public InvalidToken(PascalToken pascalToken) : base(pascalToken) { }
+        /// <param name="token"></param>
+        public InvalidToken(Token token) : base(token) { }
     }
 }

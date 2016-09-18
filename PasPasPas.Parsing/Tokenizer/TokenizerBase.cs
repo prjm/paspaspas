@@ -18,8 +18,8 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="tokenKind">token kind</param>
         /// <param name="tokenizer">tokenizer</param>
         /// <returns>pseudotoken (empty)</returns>
-        public static PascalToken CreatePseudoToken(this ITokenizer tokenizer, int tokenKind) {
-            var result = new PascalToken();
+        public static Token CreatePseudoToken(this ITokenizer tokenizer, int tokenKind) {
+            var result = new Token();
             result.FilePath = tokenizer.Input.CurrentInputFile;
             //result.StartPosition = tokenizer.Input.GetCurrentPosition();
             //result.EndPosition = tokenizer.Input.GetCurrentPosition();
@@ -90,7 +90,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="currentChar"></param>
         /// <param name="file">file</param>
         /// <returns></returns>
-        protected PascalToken GenerateUndefinedToken(char currentChar, IFileReference file) {
+        protected Token GenerateUndefinedToken(char currentChar, IFileReference file) {
             var value = new string(currentChar, 1);
             LogSource.Error(UnexpectedCharacter, value);
             return null; // new PascalToken(PascalToken.Undefined, value, file);
@@ -105,8 +105,8 @@ namespace PasPasPas.Parsing.Tokenizer {
         ///     fetch the next token
         /// </summary>
         /// <returns>next token</returns>
-        public PascalToken FetchNextToken() {
-            PascalToken result = CharacterClasses.FetchNextToken(Input, LogSource);
+        public Token FetchNextToken() {
+            Token result = CharacterClasses.FetchNextToken(Input, LogSource);
             Lines.ProcessToken(result);
             return result;
         }

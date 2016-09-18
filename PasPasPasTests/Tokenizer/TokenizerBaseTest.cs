@@ -28,8 +28,8 @@ namespace PasPasPasTests.Tokenizer {
 
         private const string TestFileName = "test_file_name.pas";
 
-        protected IList<PascalToken> RunTestTokenizer(string input) {
-            var result = new List<PascalToken>();
+        protected IList<Token> RunTestTokenizer(string input) {
+            var result = new List<Token>();
             var log = new LogManager();
             var environment = new ParserServices(log);
 
@@ -135,8 +135,8 @@ namespace PasPasPasTests.Tokenizer {
         private const int PatternB = 3;
         private readonly Guid LogGuid = new Guid("{7FD95F57-A165-4736-A2BF-BC3EE2C30F5F}");
 
-        private IList<PascalToken> RunTestPattern(InputPatterns patterns, Guid expectedMessage, string input) {
-            var result = new List<PascalToken>();
+        private IList<Token> RunTestPattern(InputPatterns patterns, Guid expectedMessage, string input) {
+            var result = new List<Token>();
             var manager = new LogManager();
             var log = new LogSource(manager, LogGuid);
             var logTarget = new ListLogTarget();
@@ -160,11 +160,11 @@ namespace PasPasPasTests.Tokenizer {
             };
         }
 
-        public PascalToken TestPattern(InputPatterns patterns, string input, params int[] tokenValues)
+        public Token TestPattern(InputPatterns patterns, string input, params int[] tokenValues)
             => TestPattern(patterns, Guid.Empty, input, tokenValues);
 
-        public PascalToken TestPattern(InputPatterns patterns, Guid expectedMessage, string input, params int[] tokenValues) {
-            IList<PascalToken> result = RunTestPattern(patterns, expectedMessage, input);
+        public Token TestPattern(InputPatterns patterns, Guid expectedMessage, string input, params int[] tokenValues) {
+            IList<Token> result = RunTestPattern(patterns, expectedMessage, input);
             Assert.AreEqual(tokenValues.Length, result.Count);
             for (int i = 0; i < result.Count; i++)
                 Assert.AreEqual(tokenValues[i], result[i].Kind);

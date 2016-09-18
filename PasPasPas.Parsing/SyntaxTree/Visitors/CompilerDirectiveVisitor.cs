@@ -621,17 +621,17 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <param name="parameter"></param>
         public void BeginVisitItem(ParsedVersion syntaxPart, CompilerDirectiveVisitorOptions parameter) {
             switch (syntaxPart.Kind) {
-                case PascalToken.SetPEOsVersion:
+                case TokenKind.SetPEOsVersion:
                     parameter.Meta.PEOsVersion.MajorVersion.Value = syntaxPart.MajorVersion;
                     parameter.Meta.PEOsVersion.MinorVersion.Value = syntaxPart.MinorVersion;
                     break;
 
-                case PascalToken.SetPESubsystemVersion:
+                case TokenKind.SetPESubsystemVersion:
                     parameter.Meta.PESubsystemVersion.MajorVersion.Value = syntaxPart.MajorVersion;
                     parameter.Meta.PESubsystemVersion.MinorVersion.Value = syntaxPart.MinorVersion;
                     break;
 
-                case PascalToken.SetPEUserVersion:
+                case TokenKind.SetPEUserVersion:
                     parameter.Meta.PEUserVersion.MajorVersion.Value = syntaxPart.MajorVersion;
                     parameter.Meta.PEUserVersion.MinorVersion.Value = syntaxPart.MinorVersion;
                     break;

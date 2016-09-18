@@ -42,7 +42,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <summary>
         ///     parsed token
         /// </summary>
-        public PascalToken Result { get; set; }
+        public Token Result { get; set; }
 
         /// <summary>
         ///     input buffer
@@ -140,8 +140,8 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         /// <param name="path">file path</param>
         /// <returns>created token</returns>
-        protected virtual PascalToken CreateResult(IFileReference path)
-            => new PascalToken() { FilePath = path };
+        protected virtual Token CreateResult(IFileReference path)
+            => new Token() { FilePath = path };
 
         /// <summary>
         ///     generate a token
@@ -150,7 +150,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="prefix">prefix</param>
         /// <param name="log">log source</param>
         /// <returns>tokent</returns>
-        public PascalToken Tokenize(StackedFileReader input, StringBuilder prefix, ILogSource log) {
+        public Token Tokenize(StackedFileReader input, StringBuilder prefix, ILogSource log) {
             var state = new ContinuationState() {
                 Result = CreateResult(input.CurrentInputFile),
                 Input = input,
@@ -249,7 +249,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         /// <param name="path">token path</param>
         /// <returns></returns>
-        protected override PascalToken CreateResult(IFileReference path) {
+        protected override Token CreateResult(IFileReference path) {
             ResetParsedString();
             return new StringLiteralToken() {
                 FilePath = path
@@ -346,7 +346,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         /// <param name="quotedText"></param>
         /// <returns></returns>
-        public static string Unwrap(PascalToken quotedText) {
+        public static string Unwrap(Token quotedText) {
             var literal = quotedText as StringLiteralToken;
             return literal != null ? literal.LiteralValue : string.Empty;
         }
@@ -676,7 +676,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        protected override PascalToken CreateResult(IFileReference path)
+        protected override Token CreateResult(IFileReference path)
             => new IntegerLiteralToken() {
                 FilePath = path
             };
@@ -714,7 +714,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         /// <param name="token"></param>
         /// <returns></returns>
-        public static int Unwrap(PascalToken token) {
+        public static int Unwrap(Token token) {
             var literal = token as IntegerLiteralToken;
             return literal != null ? literal.LiteralValue : 0;
         }
@@ -743,7 +743,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        protected override PascalToken CreateResult(IFileReference path)
+        protected override Token CreateResult(IFileReference path)
             => new IntegerLiteralToken() {
                 FilePath = path
             };
@@ -782,7 +782,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         /// <param name="token"></param>
         /// <returns></returns>
-        public static int Unwrap(PascalToken token) {
+        public static int Unwrap(Token token) {
             var literal = token as IntegerLiteralToken;
             if (literal != null)
                 return literal.LiteralValue;
@@ -922,7 +922,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         /// <param name="path">file path</param>
         /// <returns>created token</returns>
-        protected override PascalToken CreateResult(IFileReference path)
+        protected override Token CreateResult(IFileReference path)
             => new NumberLiteralToken() { FilePath = path };
 
         private DigitTokenGroupValue digitTokenizer

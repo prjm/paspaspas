@@ -125,7 +125,7 @@ namespace PasPasPas.Parsing.Parser {
         /// </summary>
         /// <param name="tokenKind">required kind of tokem</param>
         /// <returns>parser token</returns>
-        protected PascalToken Require(int tokenKind) {
+        protected Token Require(int tokenKind) {
             if (!Match(tokenKind))
                 Unexpected();
 
@@ -147,7 +147,7 @@ namespace PasPasPas.Parsing.Parser {
         /// </summary>
         /// <param name="tokenKind"></param>
         /// <returns></returns>
-        protected PascalToken Require(params int[] tokenKind) {
+        protected Token Require(params int[] tokenKind) {
             foreach (var token in tokenKind) {
                 if (Match(token)) {
                     return Require(token);
@@ -228,7 +228,7 @@ namespace PasPasPas.Parsing.Parser {
         ///     get the current token
         /// </summary>
         /// <returns></returns>
-        protected PascalToken CurrentToken()
+        protected Token CurrentToken()
             => tokenizer.CurrentToken();
 
         /// <summary>

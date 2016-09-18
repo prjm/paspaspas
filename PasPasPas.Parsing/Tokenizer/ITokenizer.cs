@@ -18,7 +18,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         ///     get the next token
         /// </summary>
         /// <returns>next pascal token</returns>
-        PascalToken FetchNextToken();
+        Token FetchNextToken();
 
         /// <summary>
         ///     parser input

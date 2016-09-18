@@ -8,21 +8,21 @@ namespace PasPasPas.Parsing.SyntaxTree {
     /// </summary>
     public class Terminal : SyntaxPartBase {
 
-        private PascalToken pascalToken;
+        private Token token;
 
         /// <summary>
         ///     create a new terminal token
         /// </summary>
-        /// <param name="pascalToken"></param>
-        public Terminal(PascalToken pascalToken) {
-            this.pascalToken = pascalToken;
+        /// <param name="baseToken"></param>
+        public Terminal(Token baseToken) {
+            token = baseToken;
         }
 
         /// <summary>
         ///     token
         /// </summary>
-        public PascalToken Token
-            => pascalToken;
+        public Token Token
+            => token;
 
         /// <summary>
         ///     empty part list

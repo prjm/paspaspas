@@ -19,7 +19,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         ///     processs token
         /// </summary>
         /// <param name="token">token to process</param>
-        public void ProcessToken(PascalToken token) {
+        public void ProcessToken(Token token) {
             if (token == null)
                 return;
 
@@ -34,7 +34,7 @@ namespace PasPasPas.Parsing.Tokenizer {
             ProcessToken(token, counter);
         }
 
-        private static void ProcessToken(PascalToken token, LineCounter counter) {
+        private static void ProcessToken(Token token, LineCounter counter) {
             token.StartPosition = new TextFilePosition(counter.Line, counter.Column);
 
             for (int index = 0; index < token.Value.Length; index++) {

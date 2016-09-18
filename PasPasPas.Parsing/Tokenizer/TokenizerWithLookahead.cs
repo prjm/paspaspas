@@ -29,12 +29,12 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <summary>
         ///     list of tokens
         /// </summary>
-        private Queue<PascalToken> tokenList = new Queue<PascalToken>();
+        private Queue<Token> tokenList = new Queue<Token>();
 
         /// <summary>
         ///     list of invalid tokens (e.g. whitespace)
         /// </summary>
-        private Queue<PascalToken> invalidTokens = new Queue<PascalToken>();
+        private Queue<Token> invalidTokens = new Queue<Token>();
 
 
         /// <summary>
@@ -72,26 +72,26 @@ namespace PasPasPas.Parsing.Tokenizer {
         ///     process preprocessor token
         /// </summary>
         /// <param name="nextToken"></param>
-        protected abstract void ProcssMacroToken(PascalToken nextToken);
+        protected abstract void ProcssMacroToken(Token nextToken);
 
         /// <summary>
         ///     test if a token is a macro token
         /// </summary>
         /// <param name="nextToken"></param>
         /// <returns></returns>
-        protected abstract bool IsMacroToken(PascalToken nextToken);
+        protected abstract bool IsMacroToken(Token nextToken);
 
         /// <summary>
         ///     test if a token is relevant and valid
         /// </summary>
         /// <param name="nextToken"></param>
         /// <returns></returns>
-        protected abstract bool IsValidToken(PascalToken nextToken);
+        protected abstract bool IsValidToken(Token nextToken);
 
         /// <summary>
         ///     gets the current token
         /// </summary>
-        public PascalToken CurrentToken()
+        public Token CurrentToken()
             => LookAhead(0);
 
         /// <summary>
@@ -99,7 +99,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         /// <param name="number">number of tokens to look ahead</param>
         /// <returns>token</returns>
-        public PascalToken LookAhead(int number) {
+        public Token LookAhead(int number) {
             checked {
                 while (BaseTokenizer.HasNextToken() && (tokenList.Count < System.Math.Max(2, 1 + number))) {
                     InternalFetchNextToken();
@@ -118,8 +118,8 @@ namespace PasPasPas.Parsing.Tokenizer {
         ///     fetches the next token
         /// </summary>
         /// <returns></returns>
-        public PascalToken FetchNextToken() {
-            PascalToken result = LookAhead(0);
+        public Token FetchNextToken() {
+            Token result = LookAhead(0);
             if (tokenList.Count > 0) {
                 tokenList.Dequeue();
             }

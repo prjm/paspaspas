@@ -3,12 +3,12 @@ using System;
 using System.Collections.Generic;
 using PasPasPas.Parsing.Tokenizer;
 using PasPasPas.Parsing.SyntaxTree;
-using PasPasPas.Parsing.SyntaxTree.ObjectPascal;
+using PasPasPas.Parsing.SyntaxTree.Standard;
 
 namespace PasPasPas.Parsing.Parser {
 
     /// <summary>
-    ///     standard, recursive descend pascal paser
+    ///     standard, recursive descend paser
     /// </summary>
     public class StandardParser : ParserBase, IParser {
 
@@ -16,7 +16,7 @@ namespace PasPasPas.Parsing.Parser {
         ///     creates a new standard parser
         /// </summary>
         public StandardParser(ParserServices environment) :
-            base(environment, new PascalTokenizerWithLookahead(environment)) { }
+            base(environment, new StandardTokenizerWithLookahead(environment)) { }
 
         private static readonly HashSet<int> reservedWords
             = new HashSet<int>() {
@@ -2695,22 +2695,22 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
-        private PascalInteger RequireInteger(ISyntaxPart parent)
-            => CreateByTerminal<PascalInteger>(parent, TokenKind.Integer);
+        private StandardInteger RequireInteger(ISyntaxPart parent)
+            => CreateByTerminal<StandardInteger>(parent, TokenKind.Integer);
 
-        private PascalHexNumber RequireHexValue(ISyntaxPart parent)
-            => CreateByTerminal<PascalHexNumber>(parent, TokenKind.HexNumber);
+        private HexNumber RequireHexValue(ISyntaxPart parent)
+            => CreateByTerminal<HexNumber>(parent, TokenKind.HexNumber);
 
-        private PascalRealNumber RequireRealValue(ISyntaxPart parent)
-            => CreateByTerminal<PascalRealNumber>(parent, TokenKind.Real);
+        private RealNumber RequireRealValue(ISyntaxPart parent)
+            => CreateByTerminal<RealNumber>(parent, TokenKind.Real);
 
-        private PascalIdentifier RequireIdentifier(ISyntaxPart parent) {
+        private Identifier RequireIdentifier(ISyntaxPart parent) {
             if (Match(TokenKind.Identifier)) {
-                return CreateByTerminal<PascalIdentifier>(parent, TokenKind.Identifier);
+                return CreateByTerminal<Identifier>(parent, TokenKind.Identifier);
             };
 
             if (!reservedWords.Contains(CurrentToken().Kind)) {
-                return CreateByTerminal<PascalIdentifier>(parent, CurrentToken().Kind);
+                return CreateByTerminal<Identifier>(parent, CurrentToken().Kind);
             }
 
             ContinueWithOrMissing(parent, TokenKind.Identifier);

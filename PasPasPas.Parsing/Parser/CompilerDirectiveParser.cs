@@ -59,32 +59,32 @@ namespace PasPasPas.Parsing.Parser {
         /// </summary>
         private static HashSet<int> switches
             = new HashSet<int>() {
-                PascalToken.AlignSwitch, PascalToken.AlignSwitch1,PascalToken.AlignSwitch2,PascalToken.AlignSwitch4,PascalToken.AlignSwitch8,PascalToken.AlignSwitch16, /* A */
-                PascalToken.BoolEvalSwitch, /* B */
-                PascalToken.AssertSwitch, /* C */
-                PascalToken.DebugInfoOrDescriptionSwitch, /* D */
-                PascalToken.ExtensionSwitch, /* E */
-                PascalToken.ExtendedSyntaxSwitch, /* X */
-                PascalToken.ImportedDataSwitch,  /* G */
-                PascalToken.IncludeSwitch, /* I */ /* IOCHECKS */
-                PascalToken.LinkOrLocalSymbolSwitch,  /* L */
-                PascalToken.LongStringSwitch, /* H */
-                PascalToken.OpenStringSwitch, /* P */
-                PascalToken.OptimizationSwitch, /* O */
-                PascalToken.OverflowSwitch, /* Q */
-                PascalToken.SaveDivideSwitch, /* U */
-                PascalToken.IncludeRessource, /* R */ /* RANGECHECKS */
-                PascalToken.StackFramesSwitch, /* W */
-                PascalToken.WritableConstSwitch, /* J */
-                PascalToken.VarStringCheckSwitch, /* V */
-                PascalToken.TypedPointersSwitch, /* T */
-                PascalToken.SymbolDeclarationSwitch, /* Y */
-                PascalToken.SymbolDefinitionsOnlySwitch, /* YD */
-                PascalToken.TypeInfoSwitch, /* M */
-                PascalToken.EnumSize1, /* Z1 */
-                PascalToken.EnumSize2, /* Z2 */
-                PascalToken.EnumSize4, /* Z4 */
-                PascalToken.EnumSizeSwitch, /* Z */
+                TokenKind.AlignSwitch, TokenKind.AlignSwitch1,TokenKind.AlignSwitch2,TokenKind.AlignSwitch4,TokenKind.AlignSwitch8,TokenKind.AlignSwitch16, /* A */
+                TokenKind.BoolEvalSwitch, /* B */
+                TokenKind.AssertSwitch, /* C */
+                TokenKind.DebugInfoOrDescriptionSwitch, /* D */
+                TokenKind.ExtensionSwitch, /* E */
+                TokenKind.ExtendedSyntaxSwitch, /* X */
+                TokenKind.ImportedDataSwitch,  /* G */
+                TokenKind.IncludeSwitch, /* I */ /* IOCHECKS */
+                TokenKind.LinkOrLocalSymbolSwitch,  /* L */
+                TokenKind.LongStringSwitch, /* H */
+                TokenKind.OpenStringSwitch, /* P */
+                TokenKind.OptimizationSwitch, /* O */
+                TokenKind.OverflowSwitch, /* Q */
+                TokenKind.SaveDivideSwitch, /* U */
+                TokenKind.IncludeRessource, /* R */ /* RANGECHECKS */
+                TokenKind.StackFramesSwitch, /* W */
+                TokenKind.WritableConstSwitch, /* J */
+                TokenKind.VarStringCheckSwitch, /* V */
+                TokenKind.TypedPointersSwitch, /* T */
+                TokenKind.SymbolDeclarationSwitch, /* Y */
+                TokenKind.SymbolDefinitionsOnlySwitch, /* YD */
+                TokenKind.TypeInfoSwitch, /* M */
+                TokenKind.EnumSize1, /* Z1 */
+                TokenKind.EnumSize2, /* Z2 */
+                TokenKind.EnumSize4, /* Z4 */
+                TokenKind.EnumSizeSwitch, /* Z */
             };
 
         /// <summary>
@@ -92,53 +92,53 @@ namespace PasPasPas.Parsing.Parser {
         /// </summary>
         private static HashSet<int> longSwitches
             = new HashSet<int>() {
-                PascalToken.AlignSwitchLong,
-                PascalToken.BoolEvalSwitchLong,
-                PascalToken.AssertSwitchLong,
-                PascalToken.DebugInfoSwitchLong,
-                PascalToken.DenyPackageUnit,
-                PascalToken.DescriptionSwitchLong,
-                PascalToken.DesignOnly,
-                PascalToken.ExtensionSwitchLong,
-                PascalToken.ObjExportAll,
-                PascalToken.ExtendedCompatibility,
-                PascalToken.ExtendedSyntaxSwitchLong,
-                PascalToken.ExcessPrecision,
-                PascalToken.HighCharUnicode,
-                PascalToken.Hints,
-                PascalToken.ImplicitBuild,
-                PascalToken.ImportedDataSwitchLong,
-                PascalToken.IncludeSwitchLong,
-                PascalToken.IoChecks,
-                PascalToken.LocalSymbolSwithLong,
-                PascalToken.LongStringSwitchLong,
-                PascalToken.OpenStringSwitchLong,
-                PascalToken.OptimizationSwitchLong,
-                PascalToken.OverflowSwitchLong,
-                PascalToken.SafeDivideSwitchLong,
-                PascalToken.RangeChecks,
-                PascalToken.StackFramesSwitchLong,
-                PascalToken.ZeroBaseStrings,
-                PascalToken.WritableConstSwitchLong,
-                PascalToken.WeakLinkRtti,
-                PascalToken.WeakPackageUnit,
-                PascalToken.Warnings,
-                PascalToken.VarStringCheckSwitchLong,
-                PascalToken.TypedPointersSwitchLong,
-                PascalToken.ReferenceInfo,
-                PascalToken.DefinitionInfo,
-                PascalToken.StrongLinkTypes,
-                PascalToken.ScopedEnums,
-                PascalToken.TypeInfoSwitchLong,
-                PascalToken.RunOnly,
-                PascalToken.IncludeRessourceLong,
-                PascalToken.RealCompatibility,
-                PascalToken.Pointermath,
-                PascalToken.OldTypeLayout,
-                PascalToken.EnumSizeSwitchLong,
-                PascalToken.MethodInfo,
-                PascalToken.LegacyIfEnd,
-                PascalToken.LinkSwitchLong
+                TokenKind.AlignSwitchLong,
+                TokenKind.BoolEvalSwitchLong,
+                TokenKind.AssertSwitchLong,
+                TokenKind.DebugInfoSwitchLong,
+                TokenKind.DenyPackageUnit,
+                TokenKind.DescriptionSwitchLong,
+                TokenKind.DesignOnly,
+                TokenKind.ExtensionSwitchLong,
+                TokenKind.ObjExportAll,
+                TokenKind.ExtendedCompatibility,
+                TokenKind.ExtendedSyntaxSwitchLong,
+                TokenKind.ExcessPrecision,
+                TokenKind.HighCharUnicode,
+                TokenKind.Hints,
+                TokenKind.ImplicitBuild,
+                TokenKind.ImportedDataSwitchLong,
+                TokenKind.IncludeSwitchLong,
+                TokenKind.IoChecks,
+                TokenKind.LocalSymbolSwithLong,
+                TokenKind.LongStringSwitchLong,
+                TokenKind.OpenStringSwitchLong,
+                TokenKind.OptimizationSwitchLong,
+                TokenKind.OverflowSwitchLong,
+                TokenKind.SafeDivideSwitchLong,
+                TokenKind.RangeChecks,
+                TokenKind.StackFramesSwitchLong,
+                TokenKind.ZeroBaseStrings,
+                TokenKind.WritableConstSwitchLong,
+                TokenKind.WeakLinkRtti,
+                TokenKind.WeakPackageUnit,
+                TokenKind.Warnings,
+                TokenKind.VarStringCheckSwitchLong,
+                TokenKind.TypedPointersSwitchLong,
+                TokenKind.ReferenceInfo,
+                TokenKind.DefinitionInfo,
+                TokenKind.StrongLinkTypes,
+                TokenKind.ScopedEnums,
+                TokenKind.TypeInfoSwitchLong,
+                TokenKind.RunOnly,
+                TokenKind.IncludeRessourceLong,
+                TokenKind.RealCompatibility,
+                TokenKind.Pointermath,
+                TokenKind.OldTypeLayout,
+                TokenKind.EnumSizeSwitchLong,
+                TokenKind.MethodInfo,
+                TokenKind.LegacyIfEnd,
+                TokenKind.LinkSwitchLong
             };
 
         /// <summary>
@@ -146,111 +146,111 @@ namespace PasPasPas.Parsing.Parser {
         /// </summary>
         private static HashSet<int> parameters
             = new HashSet<int>() {
-                PascalToken.Apptype,
-                PascalToken.CodeAlign,
-                PascalToken.Define,
-                PascalToken.Undef,
-                PascalToken.IfDef,
-                PascalToken.EndIf,
-                PascalToken.ElseCd,
-                PascalToken.ExternalSym,
-                PascalToken.HppEmit,
-                PascalToken.IfNDef,
-                PascalToken.ImageBase,
-                PascalToken.LibPrefix,
-                PascalToken.LibSuffix,
-                PascalToken.LibVersion,
-                PascalToken.Warn,
-                PascalToken.Rtti,
-                PascalToken.Region,
-                PascalToken.EndRegion,
-                PascalToken.SetPEOsVersion,
-                PascalToken.SetPESubsystemVersion,
-                PascalToken.SetPEUserVersion,
-                PascalToken.ObjTypeName,
-                PascalToken.NoInclude,
-                PascalToken.NoDefine,
-                PascalToken.MessageCd,
-                PascalToken.MinMemStackSizeSwitchLong,
-                PascalToken.MaxMemStackSizeSwitchLong,
-                PascalToken.IfOpt,
+                TokenKind.Apptype,
+                TokenKind.CodeAlign,
+                TokenKind.Define,
+                TokenKind.Undef,
+                TokenKind.IfDef,
+                TokenKind.EndIf,
+                TokenKind.ElseCd,
+                TokenKind.ExternalSym,
+                TokenKind.HppEmit,
+                TokenKind.IfNDef,
+                TokenKind.ImageBase,
+                TokenKind.LibPrefix,
+                TokenKind.LibSuffix,
+                TokenKind.LibVersion,
+                TokenKind.Warn,
+                TokenKind.Rtti,
+                TokenKind.Region,
+                TokenKind.EndRegion,
+                TokenKind.SetPEOsVersion,
+                TokenKind.SetPESubsystemVersion,
+                TokenKind.SetPEUserVersion,
+                TokenKind.ObjTypeName,
+                TokenKind.NoInclude,
+                TokenKind.NoDefine,
+                TokenKind.MessageCd,
+                TokenKind.MinMemStackSizeSwitchLong,
+                TokenKind.MaxMemStackSizeSwitchLong,
+                TokenKind.IfOpt,
             };
 
         private void ParseParameter(ISyntaxPart parent) {
 
-            if (Match(PascalToken.IfDef)) {
+            if (Match(TokenKind.IfDef)) {
                 ParseIfDef(parent);
             }
-            else if (Match(PascalToken.IfOpt)) {
+            else if (Match(TokenKind.IfOpt)) {
                 ParseIfOpt(parent);
             }
-            else if (Match(PascalToken.EndIf)) {
+            else if (Match(TokenKind.EndIf)) {
                 ParseEndIf(parent);
             }
-            else if (Match(PascalToken.ElseCd)) {
+            else if (Match(TokenKind.ElseCd)) {
                 ParseElse(parent);
             }
-            else if (Match(PascalToken.IfNDef)) {
+            else if (Match(TokenKind.IfNDef)) {
                 ParseIfNDef(parent);
             }
-            else if (Match(PascalToken.Apptype)) {
+            else if (Match(TokenKind.Apptype)) {
                 ParseApptypeParameter(parent);
             }
-            else if (Match(PascalToken.CodeAlign)) {
+            else if (Match(TokenKind.CodeAlign)) {
                 ParseCodeAlignParameter(parent);
             }
-            else if (Match(PascalToken.Define)) {
+            else if (Match(TokenKind.Define)) {
                 ParseDefine(parent);
             }
-            else if (Match(PascalToken.Undef)) {
+            else if (Match(TokenKind.Undef)) {
                 ParseUndef(parent);
             }
-            else if (Match(PascalToken.ExternalSym)) {
+            else if (Match(TokenKind.ExternalSym)) {
                 ParseExternalSym(parent);
             }
-            else if (Match(PascalToken.HppEmit)) {
+            else if (Match(TokenKind.HppEmit)) {
                 ParseHppEmit(parent);
             }
-            else if (Match(PascalToken.ImageBase)) {
+            else if (Match(TokenKind.ImageBase)) {
                 ParseImageBase(parent);
             }
-            else if (Match(PascalToken.LibPrefix, PascalToken.LibSuffix, PascalToken.LibVersion)) {
+            else if (Match(TokenKind.LibPrefix, TokenKind.LibSuffix, TokenKind.LibVersion)) {
                 ParseLibParameter(parent);
             }
-            else if (Match(PascalToken.Warn)) {
+            else if (Match(TokenKind.Warn)) {
                 ParseWarnParameter(parent);
             }
-            else if (Match(PascalToken.Rtti)) {
+            else if (Match(TokenKind.Rtti)) {
                 ParseRttiParameter(parent);
             }
-            else if (Match(PascalToken.Region)) {
+            else if (Match(TokenKind.Region)) {
                 ParseRegion(parent);
             }
-            else if (Match(PascalToken.EndRegion)) {
+            else if (Match(TokenKind.EndRegion)) {
                 ParseEndRegion(parent);
             }
-            else if (Match(PascalToken.SetPEOsVersion)) {
+            else if (Match(TokenKind.SetPEOsVersion)) {
                 ParsePEOsVersion(parent);
             }
-            else if (Match(PascalToken.SetPESubsystemVersion)) {
+            else if (Match(TokenKind.SetPESubsystemVersion)) {
                 ParsePESubsystemVersion(parent);
             }
-            else if (Match(PascalToken.SetPEUserVersion)) {
+            else if (Match(TokenKind.SetPEUserVersion)) {
                 ParsePEUserVersion(parent);
             }
-            else if (Match(PascalToken.ObjTypeName)) {
+            else if (Match(TokenKind.ObjTypeName)) {
                 ParseObjTypeNameSwitch(parent);
             }
-            else if (Match(PascalToken.NoInclude)) {
+            else if (Match(TokenKind.NoInclude)) {
                 ParseNoInclude(parent);
             }
-            else if (Match(PascalToken.NoDefine)) {
+            else if (Match(TokenKind.NoDefine)) {
                 ParseNoDefine(parent);
             }
-            else if (Match(PascalToken.MessageCd)) {
+            else if (Match(TokenKind.MessageCd)) {
                 ParseMessage(parent);
             }
-            else if (Match(PascalToken.MinMemStackSizeSwitchLong, PascalToken.MaxMemStackSizeSwitchLong)) {
+            else if (Match(TokenKind.MinMemStackSizeSwitchLong, TokenKind.MaxMemStackSizeSwitchLong)) {
                 ParseStackSizeSwitch(parent, false);
             }
         }
@@ -269,7 +269,7 @@ namespace PasPasPas.Parsing.Parser {
                 return;
             }
 
-            result.SwitchState = GetSwitchInfo(result.LastTerminal.Token.Kind);
+            result.SwitchState = GetSwitchInfo(result.LastTerminal.Kind);
         }
 
         private static SwitchInfo GetSwitchInfo(int switchState) {
@@ -283,7 +283,7 @@ namespace PasPasPas.Parsing.Parser {
         private void ParseStackSizeSwitch(ISyntaxPart parent, bool mSwitch) {
             StackMemorySize result = CreateByTerminal<StackMemorySize>(parent);
 
-            if (mSwitch || result.LastTerminal.Token.Kind == PascalToken.MinMemStackSizeSwitchLong) {
+            if (mSwitch || result.LastTerminal.Kind == TokenKind.MinMemStackSizeSwitchLong) {
 
                 if (!ContinueWith(result, TokenKind.Integer)) {
                     ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidStackMemSizeDirective, new[] { TokenKind.Integer });
@@ -296,7 +296,7 @@ namespace PasPasPas.Parsing.Parser {
             if (mSwitch)
                 ContinueWith(result, TokenKind.Comma);
 
-            if (mSwitch || result.LastTerminal.Token.Kind == PascalToken.MaxMemStackSizeSwitchLong) {
+            if (mSwitch || result.LastTerminal.Kind == TokenKind.MaxMemStackSizeSwitchLong) {
 
                 if (!ContinueWith(result, TokenKind.Integer)) {
                     result.MinStackSize = null;
@@ -379,19 +379,19 @@ namespace PasPasPas.Parsing.Parser {
 
         private void ParsePEUserVersion(ISyntaxPart parent) {
             ParsedVersion result = CreateByTerminal<ParsedVersion>(parent);
-            result.Kind = PascalToken.SetPEUserVersion;
+            result.Kind = TokenKind.SetPEUserVersion;
             ParsePEVersion(result);
         }
 
         private void ParsePESubsystemVersion(ISyntaxPart parent) {
             ParsedVersion result = CreateByTerminal<ParsedVersion>(parent);
-            result.Kind = PascalToken.SetPESubsystemVersion;
+            result.Kind = TokenKind.SetPESubsystemVersion;
             ParsePEVersion(result);
         }
 
         private void ParsePEOsVersion(ISyntaxPart parent) {
             ParsedVersion result = CreateByTerminal<ParsedVersion>(parent);
-            result.Kind = PascalToken.SetPEOsVersion;
+            result.Kind = TokenKind.SetPEOsVersion;
             ParsePEVersion(result);
         }
 
@@ -443,25 +443,25 @@ namespace PasPasPas.Parsing.Parser {
         private void ParseRttiParameter(ISyntaxPart parent) {
             RttiControl result = CreateByTerminal<RttiControl>(parent);
 
-            if (ContinueWith(result, PascalToken.Inherit)) {
+            if (ContinueWith(result, TokenKind.Inherit)) {
                 result.Mode = RttiGenerationMode.Inherit;
             }
-            else if (ContinueWith(result, PascalToken.Explicit)) {
+            else if (ContinueWith(result, TokenKind.Explicit)) {
                 result.Mode = RttiGenerationMode.Explicit;
             }
             else {
-                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidRttiDirective, new[] { PascalToken.Inherit, PascalToken.Explicit });
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidRttiDirective, new[] { TokenKind.Inherit, TokenKind.Explicit });
                 return;
             }
 
-            if (!Match(new[] { PascalToken.Fields, PascalToken.Methods, PascalToken.Properties }))
+            if (!Match(new[] { TokenKind.Fields, TokenKind.Methods, TokenKind.Properties }))
                 return;
 
             bool canContinue;
 
             do {
                 canContinue = false;
-                if (ContinueWith(result, PascalToken.Methods)) {
+                if (ContinueWith(result, TokenKind.Methods)) {
                     if (result.Methods != null) {
                         result.Mode = RttiGenerationMode.Undefined;
                         ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidRttiDirective, new int[0]);
@@ -470,7 +470,7 @@ namespace PasPasPas.Parsing.Parser {
                     result.Methods = ParseRttiVisibility(result);
                     canContinue = result.Methods != null;
                 }
-                else if (ContinueWith(result, PascalToken.Properties)) {
+                else if (ContinueWith(result, TokenKind.Properties)) {
                     if (result.Properties != null) {
                         result.Mode = RttiGenerationMode.Undefined;
                         ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidRttiDirective, new int[0]);
@@ -479,7 +479,7 @@ namespace PasPasPas.Parsing.Parser {
                     result.Properties = ParseRttiVisibility(result);
                     canContinue = result.Properties != null;
                 }
-                else if (ContinueWith(result, PascalToken.Fields)) {
+                else if (ContinueWith(result, TokenKind.Fields)) {
                     if (result.Fields != null) {
                         result.Mode = RttiGenerationMode.Undefined;
                         ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidRttiDirective, new int[0]);
@@ -507,23 +507,23 @@ namespace PasPasPas.Parsing.Parser {
             var visibility = new RttiForVisibility();
 
             do {
-                if (!ContinueWith(result, PascalToken.VcPrivate, PascalToken.VcProtected, PascalToken.VcPublic, PascalToken.VcPublished)) {
+                if (!ContinueWith(result, TokenKind.VcPrivate, TokenKind.VcProtected, TokenKind.VcPublic, TokenKind.VcPublished)) {
                     break;
                 }
 
-                var kind = result.LastTerminal.Token.Kind;
+                var kind = result.LastTerminal.Kind;
 
                 switch (kind) {
-                    case PascalToken.VcPrivate:
+                    case TokenKind.VcPrivate:
                         visibility.ForPrivate = true;
                         break;
-                    case PascalToken.VcProtected:
+                    case TokenKind.VcProtected:
                         visibility.ForProtected = true;
                         break;
-                    case PascalToken.VcPublic:
+                    case TokenKind.VcPublic:
                         visibility.ForPublic = true;
                         break;
-                    case PascalToken.VcPublished:
+                    case TokenKind.VcPublished:
                         visibility.ForPublished = true;
                         break;
                     default: {
@@ -558,14 +558,14 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             var warningType = result.LastTerminal.Value;
-            var warningModes = new[] { TokenKind.On, PascalToken.Off, PascalToken.Error, TokenKind.Default };
+            var warningModes = new[] { TokenKind.On, TokenKind.Off, TokenKind.Error, TokenKind.Default };
 
             if (!ContinueWith(result, warningModes)) {
                 ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidWarnDirective, warningModes);
                 return;
             }
 
-            var warningMode = result.LastTerminal.Token.Kind;
+            var warningMode = result.LastTerminal.Kind;
             var parsedMode = WarningMode.Undefined;
 
             switch (warningMode) {
@@ -573,7 +573,7 @@ namespace PasPasPas.Parsing.Parser {
                     parsedMode = WarningMode.On;
                     break;
 
-                case PascalToken.Off:
+                case TokenKind.Off:
                     parsedMode = WarningMode.Off;
                     break;
 
@@ -581,7 +581,7 @@ namespace PasPasPas.Parsing.Parser {
                     parsedMode = WarningMode.Default;
                     break;
 
-                case PascalToken.Error:
+                case TokenKind.Error:
                     parsedMode = WarningMode.Error;
                     break;
             }
@@ -599,7 +599,7 @@ namespace PasPasPas.Parsing.Parser {
 
         private void ParseLibParameter(ISyntaxPart parent) {
             LibInfo result = CreateByTerminal<LibInfo>(parent);
-            int kind = result.LastTerminal.Token.Kind;
+            int kind = result.LastTerminal.Kind;
 
             if (!ContinueWith(result, TokenKind.QuotedString)) {
                 ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidLibDirective, new[] { TokenKind.QuotedString });
@@ -609,15 +609,15 @@ namespace PasPasPas.Parsing.Parser {
             var libInfo = QuotedStringTokenValue.Unwrap(result.LastTerminal.Token);
 
             switch (kind) {
-                case PascalToken.LibPrefix:
+                case TokenKind.LibPrefix:
                     result.LibPrefix = libInfo;
                     break;
 
-                case PascalToken.LibSuffix:
+                case TokenKind.LibSuffix:
                     result.LibSuffix = libInfo;
                     break;
 
-                case PascalToken.LibVersion:
+                case TokenKind.LibVersion:
                     result.LibVersion = libInfo;
                     break;
             }
@@ -655,13 +655,13 @@ namespace PasPasPas.Parsing.Parser {
 
             if (ContinueWith(result, TokenKind.End))
                 result.Mode = HppEmitMode.AtEnd;
-            else if (ContinueWith(result, PascalToken.LinkUnit))
+            else if (ContinueWith(result, TokenKind.LinkUnit))
                 result.Mode = HppEmitMode.LinkUnit;
-            else if (ContinueWith(result, PascalToken.OpenNamespace))
+            else if (ContinueWith(result, TokenKind.OpenNamespace))
                 result.Mode = HppEmitMode.OpenNamespace;
-            else if (ContinueWith(result, PascalToken.CloseNamepsace))
+            else if (ContinueWith(result, TokenKind.CloseNamepsace))
                 result.Mode = HppEmitMode.CloseNamespace;
-            else if (ContinueWith(result, PascalToken.NoUsingNamespace))
+            else if (ContinueWith(result, TokenKind.NoUsingNamespace))
                 result.Mode = HppEmitMode.NoUsingNamespace;
 
             if (result.Mode == HppEmitMode.AtEnd || result.Mode == HppEmitMode.Standard) {
@@ -793,188 +793,188 @@ namespace PasPasPas.Parsing.Parser {
         /// </summary>
         private void ParseLongSwitch(ISyntaxPart parent) {
 
-            if (Match(PascalToken.AlignSwitchLong)) {
+            if (Match(TokenKind.AlignSwitchLong)) {
                 ParseLongAlignSwitch(parent);
             }
-            else if (Match(PascalToken.BoolEvalSwitchLong)) {
+            else if (Match(TokenKind.BoolEvalSwitchLong)) {
                 ParseLongBoolEvalSwitch(parent);
             }
-            else if (Match(PascalToken.AssertSwitchLong)) {
+            else if (Match(TokenKind.AssertSwitchLong)) {
                 ParseLongAssertSwitch(parent);
             }
-            else if (Match(PascalToken.DebugInfoSwitchLong)) {
+            else if (Match(TokenKind.DebugInfoSwitchLong)) {
                 ParseLongDebugInfoSwitch(parent);
             }
 
-            else if (Match(PascalToken.DenyPackageUnit)) {
+            else if (Match(TokenKind.DenyPackageUnit)) {
                 ParseDenyPackageUnitSwitch(parent);
             }
 
-            else if (Match(PascalToken.DescriptionSwitchLong)) {
+            else if (Match(TokenKind.DescriptionSwitchLong)) {
                 ParseLongDescriptionSwitch(parent);
             }
 
-            else if (Match(PascalToken.DesignOnly)) {
+            else if (Match(TokenKind.DesignOnly)) {
                 ParseLongDesignOnlySwitch(parent);
             }
 
-            else if (Match(PascalToken.ExtensionSwitchLong)) {
+            else if (Match(TokenKind.ExtensionSwitchLong)) {
                 ParseLongExtensionSwitch(parent);
             }
 
-            else if (Match(PascalToken.ObjExportAll)) {
+            else if (Match(TokenKind.ObjExportAll)) {
                 ParseObjExportAllSwitch(parent);
             }
 
-            else if (Match(PascalToken.ExtendedCompatibility)) {
+            else if (Match(TokenKind.ExtendedCompatibility)) {
                 ParseExtendedCompatibilitySwitch(parent);
             }
 
-            else if (Match(PascalToken.ExtendedSyntaxSwitchLong)) {
+            else if (Match(TokenKind.ExtendedSyntaxSwitchLong)) {
                 ParseLongExtendedSyntaxSwitch(parent);
             }
 
-            else if (Match(PascalToken.ExcessPrecision)) {
+            else if (Match(TokenKind.ExcessPrecision)) {
                 ParseLongExcessPrecisionSwitch(parent);
             }
 
-            else if (Match(PascalToken.HighCharUnicode)) {
+            else if (Match(TokenKind.HighCharUnicode)) {
                 ParseLongHighCharUnicodeSwitch(parent);
             }
 
-            else if (Match(PascalToken.Hints)) {
+            else if (Match(TokenKind.Hints)) {
                 ParseLongHintsSwitch(parent);
             }
 
-            else if (Match(PascalToken.ImplicitBuild)) {
+            else if (Match(TokenKind.ImplicitBuild)) {
                 ParseLongImplicitBuildSwitch(parent);
             }
 
-            else if (Match(PascalToken.ImportedDataSwitchLong)) {
+            else if (Match(TokenKind.ImportedDataSwitchLong)) {
                 ParseLongImportedDataSwitch(parent);
             }
 
-            else if (Match(PascalToken.IncludeSwitchLong)) {
+            else if (Match(TokenKind.IncludeSwitchLong)) {
                 ParseLongIncludeSwitch(parent);
             }
 
-            else if (Match(PascalToken.IoChecks)) {
+            else if (Match(TokenKind.IoChecks)) {
                 ParseLongIoChecksSwitch(parent);
             }
 
-            else if (Match(PascalToken.LocalSymbolSwithLong)) {
+            else if (Match(TokenKind.LocalSymbolSwithLong)) {
                 ParseLongLocalSymbolSwitch(parent);
             }
 
-            else if (Match(PascalToken.LongStringSwitchLong)) {
+            else if (Match(TokenKind.LongStringSwitchLong)) {
                 ParseLongLongStringSwitch(parent);
             }
 
-            else if (Match(PascalToken.OpenStringSwitchLong)) {
+            else if (Match(TokenKind.OpenStringSwitchLong)) {
                 ParseLongOpenStringSwitch(parent);
             }
 
-            else if (Match(PascalToken.OptimizationSwitchLong)) {
+            else if (Match(TokenKind.OptimizationSwitchLong)) {
                 ParseLongOptimizationSwitch(parent);
             }
 
-            else if (Match(PascalToken.OverflowSwitchLong)) {
+            else if (Match(TokenKind.OverflowSwitchLong)) {
                 ParseLongOverflowSwitch(parent);
             }
 
-            else if (Match(PascalToken.SafeDivideSwitchLong)) {
+            else if (Match(TokenKind.SafeDivideSwitchLong)) {
                 ParseLongSafeDivideSwitch(parent);
             }
 
-            else if (Match(PascalToken.RangeChecks)) {
+            else if (Match(TokenKind.RangeChecks)) {
                 ParseLongRangeChecksSwitch(parent);
             }
 
-            else if (Match(PascalToken.StackFramesSwitchLong)) {
+            else if (Match(TokenKind.StackFramesSwitchLong)) {
                 ParseLongStackFramesSwitch(parent);
             }
 
-            else if (Match(PascalToken.ZeroBaseStrings)) {
+            else if (Match(TokenKind.ZeroBaseStrings)) {
                 ParseZeroBasedStringSwitch(parent);
             }
 
-            else if (Match(PascalToken.WritableConstSwitchLong)) {
+            else if (Match(TokenKind.WritableConstSwitchLong)) {
                 ParseLongWritableConstSwitch(parent);
             }
 
-            else if (Match(PascalToken.WeakLinkRtti)) {
+            else if (Match(TokenKind.WeakLinkRtti)) {
                 ParseWeakLinkRttiSwitch(parent);
             }
 
-            else if (Match(PascalToken.WeakPackageUnit)) {
+            else if (Match(TokenKind.WeakPackageUnit)) {
                 ParseWeakPackageUnitSwitch(parent);
             }
 
-            else if (Match(PascalToken.Warnings)) {
+            else if (Match(TokenKind.Warnings)) {
                 ParseWarningsSwitch(parent);
             }
 
-            else if (Match(PascalToken.VarStringCheckSwitchLong)) {
+            else if (Match(TokenKind.VarStringCheckSwitchLong)) {
                 ParseLongVarStringCheckSwitch(parent);
             }
 
-            else if (Match(PascalToken.TypedPointersSwitchLong)) {
+            else if (Match(TokenKind.TypedPointersSwitchLong)) {
                 ParseLongTypedPointersSwitch(parent);
             }
 
-            else if (Match(PascalToken.DefinitionInfo)) {
+            else if (Match(TokenKind.DefinitionInfo)) {
                 ParseDefinitionInfoSwitch(parent);
             }
 
-            else if (Match(PascalToken.ReferenceInfo)) {
+            else if (Match(TokenKind.ReferenceInfo)) {
                 ParseReferenceInfoSwitch(parent);
             }
 
-            else if (Match(PascalToken.StrongLinkTypes)) {
+            else if (Match(TokenKind.StrongLinkTypes)) {
                 ParseStrongLinkTypes(parent);
             }
 
-            else if (Match(PascalToken.ScopedEnums)) {
+            else if (Match(TokenKind.ScopedEnums)) {
                 ParseScopedEnums(parent);
             }
 
-            else if (Match(PascalToken.TypeInfoSwitchLong)) {
+            else if (Match(TokenKind.TypeInfoSwitchLong)) {
                 ParseLongTypeInfoSwitch(parent);
             }
 
-            else if (Match(PascalToken.RunOnly)) {
+            else if (Match(TokenKind.RunOnly)) {
                 ParseRunOnlyParameter(parent);
             }
 
-            else if (Match(PascalToken.IncludeRessourceLong)) {
+            else if (Match(TokenKind.IncludeRessourceLong)) {
                 ParseLongIncludeRessourceSwitch(parent);
             }
 
-            else if (Match(PascalToken.RealCompatibility)) {
+            else if (Match(TokenKind.RealCompatibility)) {
                 ParseRealCompatibilitySwitch(parent);
             }
 
-            else if (Match(PascalToken.Pointermath)) {
+            else if (Match(TokenKind.Pointermath)) {
                 ParsePointermathSwitch(parent);
             }
 
-            else if (Match(PascalToken.OldTypeLayout)) {
+            else if (Match(TokenKind.OldTypeLayout)) {
                 ParseOldTypeLayoutSwitch(parent);
             }
 
-            else if (Match(PascalToken.EnumSizeSwitchLong)) {
+            else if (Match(TokenKind.EnumSizeSwitchLong)) {
                 ParseLongEnumSizeSwitch(parent);
             }
 
-            else if (Match(PascalToken.MethodInfo)) {
+            else if (Match(TokenKind.MethodInfo)) {
                 ParseMethodInfoSwitch(parent);
             }
 
-            else if (Match(PascalToken.LegacyIfEnd)) {
+            else if (Match(TokenKind.LegacyIfEnd)) {
                 ParseLegacyIfEndSwitch(parent);
             }
 
-            else if (Match(PascalToken.LinkSwitchLong)) {
+            else if (Match(TokenKind.LinkSwitchLong)) {
                 ParseLongLinkSwitch(parent);
             }
 
@@ -991,11 +991,11 @@ namespace PasPasPas.Parsing.Parser {
             if (ContinueWith(result, TokenKind.On)) {
                 result.Mode = EndIfMode.LegacyIfEnd;
             }
-            else if (ContinueWith(result, PascalToken.Off)) {
+            else if (ContinueWith(result, TokenKind.Off)) {
                 result.Mode = EndIfMode.Standard;
             }
             else {
-                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidLegacyIfEndDirective, new[] { PascalToken.Off, TokenKind.On });
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidLegacyIfEndDirective, new[] { TokenKind.Off, TokenKind.On });
             }
         }
 
@@ -1005,11 +1005,11 @@ namespace PasPasPas.Parsing.Parser {
             if (ContinueWith(result, TokenKind.On)) {
                 result.Mode = MethodInfoRtti.EnableMethodInfo;
             }
-            else if (ContinueWith(result, PascalToken.Off)) {
+            else if (ContinueWith(result, TokenKind.Off)) {
                 result.Mode = MethodInfoRtti.DisableMethodInfo;
             }
             else {
-                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidMethodInfoDirective, new[] { TokenKind.On, PascalToken.Off });
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidMethodInfoDirective, new[] { TokenKind.On, TokenKind.Off });
             }
         }
 
@@ -1046,11 +1046,11 @@ namespace PasPasPas.Parsing.Parser {
             if (ContinueWith(result, TokenKind.On)) {
                 result.Mode = OldRecordTypes.EnableOldRecordPacking;
             }
-            else if (ContinueWith(result, PascalToken.Off)) {
+            else if (ContinueWith(result, TokenKind.Off)) {
                 result.Mode = OldRecordTypes.DisableOldRecordPacking;
             }
             else {
-                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidOldTypeLayoutDirective, new[] { TokenKind.On, PascalToken.Off });
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidOldTypeLayoutDirective, new[] { TokenKind.On, TokenKind.Off });
             }
         }
 
@@ -1060,11 +1060,11 @@ namespace PasPasPas.Parsing.Parser {
             if (ContinueWith(result, TokenKind.On)) {
                 result.Mode = PointerManipulation.EnablePointerMath;
             }
-            else if (ContinueWith(result, PascalToken.Off)) {
+            else if (ContinueWith(result, TokenKind.Off)) {
                 result.Mode = PointerManipulation.DisablePointerMath;
             }
             else {
-                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidPointerMathDirective, new[] { TokenKind.On, PascalToken.Off });
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidPointerMathDirective, new[] { TokenKind.On, TokenKind.Off });
             }
         }
 
@@ -1074,11 +1074,11 @@ namespace PasPasPas.Parsing.Parser {
             if (ContinueWith(result, TokenKind.On)) {
                 result.Mode = Real48.EnableCompatibility;
             }
-            else if (ContinueWith(result, PascalToken.Off)) {
+            else if (ContinueWith(result, TokenKind.Off)) {
                 result.Mode = Real48.DisableCompatibility;
             }
             else {
-                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidRealCompatibilityMode, new[] { TokenKind.On, PascalToken.Off });
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidRealCompatibilityMode, new[] { TokenKind.On, TokenKind.Off });
             }
         }
 
@@ -1093,11 +1093,11 @@ namespace PasPasPas.Parsing.Parser {
             if (ContinueWith(result, TokenKind.On)) {
                 result.Mode = RuntimePackageMode.RuntimeOnly;
             }
-            else if (ContinueWith(result, PascalToken.Off)) {
+            else if (ContinueWith(result, TokenKind.Off)) {
                 result.Mode = RuntimePackageMode.Standard;
             }
             else {
-                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidRunOnlyDirective, new[] { TokenKind.On, PascalToken.Off });
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidRunOnlyDirective, new[] { TokenKind.On, TokenKind.Off });
             }
         }
 
@@ -1107,11 +1107,11 @@ namespace PasPasPas.Parsing.Parser {
             if (ContinueWith(result, TokenKind.On)) {
                 result.Mode = RttiForPublishedProperties.Enable;
             }
-            else if (ContinueWith(result, PascalToken.Off)) {
+            else if (ContinueWith(result, TokenKind.Off)) {
                 result.Mode = RttiForPublishedProperties.Disable;
             }
             else {
-                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidPublishedRttiDirective, new[] { TokenKind.On, PascalToken.Off });
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidPublishedRttiDirective, new[] { TokenKind.On, TokenKind.Off });
             }
         }
 
@@ -1121,11 +1121,11 @@ namespace PasPasPas.Parsing.Parser {
             if (ContinueWith(result, TokenKind.On)) {
                 result.Mode = RequireScopedEnums.Enable;
             }
-            else if (ContinueWith(result, PascalToken.Off)) {
+            else if (ContinueWith(result, TokenKind.Off)) {
                 result.Mode = RequireScopedEnums.Disable;
             }
             else {
-                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidScopedEnumsDirective, new[] { TokenKind.On, PascalToken.Off });
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidScopedEnumsDirective, new[] { TokenKind.On, TokenKind.Off });
             }
         }
 
@@ -1135,11 +1135,11 @@ namespace PasPasPas.Parsing.Parser {
             if (ContinueWith(result, TokenKind.On)) {
                 result.Mode = StrongTypeLinking.Enable;
             }
-            else if (ContinueWith(result, PascalToken.Off)) {
+            else if (ContinueWith(result, TokenKind.Off)) {
                 result.Mode = StrongTypeLinking.Disable;
             }
             else {
-                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidStrongLinkTypesDirective, new[] { TokenKind.On, PascalToken.Off });
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidStrongLinkTypesDirective, new[] { TokenKind.On, TokenKind.Off });
             }
         }
 
@@ -1149,11 +1149,11 @@ namespace PasPasPas.Parsing.Parser {
             if (ContinueWith(result, TokenKind.On)) {
                 result.ReferencesMode = SymbolReferenceInfo.Enable;
             }
-            else if (ContinueWith(result, PascalToken.Off)) {
+            else if (ContinueWith(result, TokenKind.Off)) {
                 result.ReferencesMode = SymbolReferenceInfo.Disable;
             }
             else {
-                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidDefinitionInfoDirective, new[] { TokenKind.On, PascalToken.Off });
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidDefinitionInfoDirective, new[] { TokenKind.On, TokenKind.Off });
             }
         }
 
@@ -1163,11 +1163,11 @@ namespace PasPasPas.Parsing.Parser {
             if (ContinueWith(result, TokenKind.On)) {
                 result.Mode = SymbolDefinitionInfo.Enable;
             }
-            else if (ContinueWith(result, PascalToken.Off)) {
+            else if (ContinueWith(result, TokenKind.Off)) {
                 result.Mode = SymbolDefinitionInfo.Disable;
             }
             else {
-                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidDefinitionInfoDirective, new[] { TokenKind.On, PascalToken.Off });
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidDefinitionInfoDirective, new[] { TokenKind.On, TokenKind.Off });
             }
         }
 
@@ -1177,11 +1177,11 @@ namespace PasPasPas.Parsing.Parser {
             if (ContinueWith(result, TokenKind.On)) {
                 result.Mode = TypeCheckedPointers.Enable;
             }
-            else if (ContinueWith(result, PascalToken.Off)) {
+            else if (ContinueWith(result, TokenKind.Off)) {
                 result.Mode = TypeCheckedPointers.Disable;
             }
             else {
-                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidTypeCheckedPointersDirective, new[] { TokenKind.On, PascalToken.Off });
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidTypeCheckedPointersDirective, new[] { TokenKind.On, TokenKind.Off });
             }
         }
 
@@ -1191,11 +1191,11 @@ namespace PasPasPas.Parsing.Parser {
             if (ContinueWith(result, TokenKind.On)) {
                 result.Mode = ShortVarStringChecks.EnableChecks;
             }
-            else if (ContinueWith(result, PascalToken.Off)) {
+            else if (ContinueWith(result, TokenKind.Off)) {
                 result.Mode = ShortVarStringChecks.DisableChecks;
             }
             else {
-                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidStringCheckDirective, new[] { TokenKind.On, PascalToken.Off });
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidStringCheckDirective, new[] { TokenKind.On, TokenKind.Off });
             }
         }
 
@@ -1205,11 +1205,11 @@ namespace PasPasPas.Parsing.Parser {
             if (ContinueWith(result, TokenKind.On)) {
                 result.Mode = CompilerWarnings.Enable;
             }
-            else if (ContinueWith(result, PascalToken.Off)) {
+            else if (ContinueWith(result, TokenKind.Off)) {
                 result.Mode = CompilerWarnings.Disable;
             }
             else {
-                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidWarningsDirective, new[] { TokenKind.On, PascalToken.Off });
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidWarningsDirective, new[] { TokenKind.On, TokenKind.Off });
             }
         }
 
@@ -1219,11 +1219,11 @@ namespace PasPasPas.Parsing.Parser {
             if (ContinueWith(result, TokenKind.On)) {
                 result.Mode = WeakPackaging.Enable;
             }
-            else if (ContinueWith(result, PascalToken.Off)) {
+            else if (ContinueWith(result, TokenKind.Off)) {
                 result.Mode = WeakPackaging.Disable;
             }
             else {
-                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidWeakPackageUnitDirective, new[] { TokenKind.On, PascalToken.Off });
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidWeakPackageUnitDirective, new[] { TokenKind.On, TokenKind.Off });
             }
         }
 
@@ -1233,11 +1233,11 @@ namespace PasPasPas.Parsing.Parser {
             if (ContinueWith(result, TokenKind.On)) {
                 result.Mode = RttiLinkMode.LinkWeakRtti;
             }
-            else if (ContinueWith(result, PascalToken.Off)) {
+            else if (ContinueWith(result, TokenKind.Off)) {
                 result.Mode = RttiLinkMode.LinkFullRtti;
             }
             else {
-                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidWeakLinkRttiDirective, new[] { TokenKind.On, PascalToken.Off });
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidWeakLinkRttiDirective, new[] { TokenKind.On, TokenKind.Off });
             }
         }
 
@@ -1247,11 +1247,11 @@ namespace PasPasPas.Parsing.Parser {
             if (ContinueWith(result, TokenKind.On)) {
                 result.Mode = ConstantValues.Writable;
             }
-            else if (ContinueWith(result, PascalToken.Off)) {
+            else if (ContinueWith(result, TokenKind.Off)) {
                 result.Mode = ConstantValues.Constant;
             }
             else {
-                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidWritableConstantsDirective, new[] { TokenKind.On, PascalToken.Off });
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidWritableConstantsDirective, new[] { TokenKind.On, TokenKind.Off });
             }
         }
 
@@ -1261,11 +1261,11 @@ namespace PasPasPas.Parsing.Parser {
             if (ContinueWith(result, TokenKind.On)) {
                 result.Mode = FirstCharIndex.IsZero;
             }
-            else if (ContinueWith(result, PascalToken.Off)) {
+            else if (ContinueWith(result, TokenKind.Off)) {
                 result.Mode = FirstCharIndex.IsOne;
             }
             else {
-                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidZeroBasedStringsDirective, new[] { TokenKind.On, PascalToken.Off });
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidZeroBasedStringsDirective, new[] { TokenKind.On, TokenKind.Off });
             }
         }
 
@@ -1275,11 +1275,11 @@ namespace PasPasPas.Parsing.Parser {
             if (ContinueWith(result, TokenKind.On)) {
                 result.Mode = StackFrameGeneration.EnableFrames;
             }
-            else if (ContinueWith(result, PascalToken.Off)) {
+            else if (ContinueWith(result, TokenKind.Off)) {
                 result.Mode = StackFrameGeneration.DisableFrames;
             }
             else {
-                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidStackFramesDirective, new[] { TokenKind.On, PascalToken.Off });
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidStackFramesDirective, new[] { TokenKind.On, TokenKind.Off });
             }
         }
 
@@ -1289,11 +1289,11 @@ namespace PasPasPas.Parsing.Parser {
             if (ContinueWith(result, TokenKind.On)) {
                 result.Mode = RuntimeRangeChecks.EnableRangeChecks;
             }
-            else if (ContinueWith(result, PascalToken.Off)) {
+            else if (ContinueWith(result, TokenKind.Off)) {
                 result.Mode = RuntimeRangeChecks.DisableRangeChecks;
             }
             else {
-                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidRangeCheckDirective, new[] { TokenKind.On, PascalToken.Off });
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidRangeCheckDirective, new[] { TokenKind.On, TokenKind.Off });
             }
         }
 
@@ -1303,11 +1303,11 @@ namespace PasPasPas.Parsing.Parser {
             if (ContinueWith(result, TokenKind.On)) {
                 result.Mode = FDivSafeDivide.EnableSafeDivide;
             }
-            else if (ContinueWith(result, PascalToken.Off)) {
+            else if (ContinueWith(result, TokenKind.Off)) {
                 result.Mode = FDivSafeDivide.DisableSafeDivide;
             }
             else {
-                ErrorAndSkip(parent, CompilerDirectiveParserErrors.InvalidSafeDivide, new[] { TokenKind.On, PascalToken.Off });
+                ErrorAndSkip(parent, CompilerDirectiveParserErrors.InvalidSafeDivide, new[] { TokenKind.On, TokenKind.Off });
             }
         }
 
@@ -1317,11 +1317,11 @@ namespace PasPasPas.Parsing.Parser {
             if (ContinueWith(result, TokenKind.On)) {
                 result.Mode = RuntimeOverflowChecks.EnableChecks;
             }
-            else if (ContinueWith(result, PascalToken.Off)) {
+            else if (ContinueWith(result, TokenKind.Off)) {
                 result.Mode = RuntimeOverflowChecks.DisableChecks;
             }
             else {
-                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidOverflowCheckDirective, new[] { TokenKind.On, PascalToken.Off });
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidOverflowCheckDirective, new[] { TokenKind.On, TokenKind.Off });
             }
         }
 
@@ -1331,11 +1331,11 @@ namespace PasPasPas.Parsing.Parser {
             if (ContinueWith(result, TokenKind.On)) {
                 result.Mode = CompilerOptmization.EnableOptimization;
             }
-            else if (ContinueWith(result, PascalToken.Off)) {
+            else if (ContinueWith(result, TokenKind.Off)) {
                 result.Mode = CompilerOptmization.DisableOptimization;
             }
             else {
-                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidOptimizationDirective, new[] { TokenKind.On, PascalToken.Off });
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidOptimizationDirective, new[] { TokenKind.On, TokenKind.Off });
             }
         }
 
@@ -1345,11 +1345,11 @@ namespace PasPasPas.Parsing.Parser {
             if (ContinueWith(result, TokenKind.On)) {
                 result.Mode = OpenStringTypes.EnableOpenStrings;
             }
-            else if (ContinueWith(result, PascalToken.Off)) {
+            else if (ContinueWith(result, TokenKind.Off)) {
                 result.Mode = OpenStringTypes.DisableOpenStrings;
             }
             else {
-                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidOpenStringsDirective, new[] { TokenKind.On, PascalToken.Off });
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidOpenStringsDirective, new[] { TokenKind.On, TokenKind.Off });
             }
         }
 
@@ -1359,11 +1359,11 @@ namespace PasPasPas.Parsing.Parser {
             if (ContinueWith(result, TokenKind.On)) {
                 result.Mode = LongStringTypes.EnableLongStrings;
             }
-            else if (ContinueWith(result, PascalToken.Off)) {
+            else if (ContinueWith(result, TokenKind.Off)) {
                 result.Mode = LongStringTypes.DisableLongStrings;
             }
             else {
-                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidLongStringSwitchDirective, new[] { TokenKind.On, PascalToken.Off });
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidLongStringSwitchDirective, new[] { TokenKind.On, TokenKind.Off });
             }
         }
 
@@ -1373,11 +1373,11 @@ namespace PasPasPas.Parsing.Parser {
             if (ContinueWith(result, TokenKind.On)) {
                 result.Mode = LocalDebugSymbols.EnableLocalSymbols;
             }
-            else if (ContinueWith(result, PascalToken.Off)) {
+            else if (ContinueWith(result, TokenKind.Off)) {
                 result.Mode = LocalDebugSymbols.DisableLocalSymbols;
             }
             else {
-                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidLocalSymbolsDirective, new[] { TokenKind.On, PascalToken.Off });
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidLocalSymbolsDirective, new[] { TokenKind.On, TokenKind.Off });
             }
         }
 
@@ -1387,11 +1387,11 @@ namespace PasPasPas.Parsing.Parser {
             if (ContinueWith(result, TokenKind.On)) {
                 result.Mode = IoCallChecks.EnableIoChecks;
             }
-            else if (ContinueWith(result, PascalToken.Off)) {
+            else if (ContinueWith(result, TokenKind.Off)) {
                 result.Mode = IoCallChecks.DisableIoChecks;
             }
             else {
-                ErrorAndSkip(parent, CompilerDirectiveParserErrors.InvalidIoChecksDirective, new[] { TokenKind.On, PascalToken.Off });
+                ErrorAndSkip(parent, CompilerDirectiveParserErrors.InvalidIoChecksDirective, new[] { TokenKind.On, TokenKind.Off });
             }
         }
 
@@ -1406,12 +1406,12 @@ namespace PasPasPas.Parsing.Parser {
             if (ContinueWith(result, TokenKind.On)) {
                 result.Mode = ImportGlobalUnitData.DoImport;
             }
-            else if (ContinueWith(result, PascalToken.Off)) {
+            else if (ContinueWith(result, TokenKind.Off)) {
                 result.Mode = ImportGlobalUnitData.NoImport;
                 return;
             }
             else {
-                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidImportedDataDirective, new[] { TokenKind.On, PascalToken.Off });
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidImportedDataDirective, new[] { TokenKind.On, TokenKind.Off });
             }
         }
 
@@ -1421,11 +1421,11 @@ namespace PasPasPas.Parsing.Parser {
             if (ContinueWith(result, TokenKind.On)) {
                 result.Mode = ImplicitBuildUnit.EnableImplicitBuild;
             }
-            else if (ContinueWith(result, PascalToken.Off)) {
+            else if (ContinueWith(result, TokenKind.Off)) {
                 result.Mode = ImplicitBuildUnit.DisableImplicitBuild;
             }
             else {
-                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidImplicitBuildDirective, new[] { TokenKind.On, PascalToken.Off });
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidImplicitBuildDirective, new[] { TokenKind.On, TokenKind.Off });
             }
         }
 
@@ -1435,11 +1435,11 @@ namespace PasPasPas.Parsing.Parser {
             if (ContinueWith(result, TokenKind.On)) {
                 result.Mode = CompilerHints.EnableHints;
             }
-            else if (ContinueWith(result, PascalToken.Off)) {
+            else if (ContinueWith(result, TokenKind.Off)) {
                 result.Mode = CompilerHints.DisableHints;
             }
             else {
-                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidHintsDirective, new[] { TokenKind.On, PascalToken.Off });
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidHintsDirective, new[] { TokenKind.On, TokenKind.Off });
             }
         }
 
@@ -1449,11 +1449,11 @@ namespace PasPasPas.Parsing.Parser {
             if (ContinueWith(result, TokenKind.On)) {
                 result.Mode = HighCharsUnicode.EnableHighChars;
             }
-            else if (ContinueWith(result, PascalToken.Off)) {
+            else if (ContinueWith(result, TokenKind.Off)) {
                 result.Mode = HighCharsUnicode.DisableHighChars;
             }
             else {
-                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidHighCharUnicodeDirective, new[] { TokenKind.On, PascalToken.Off });
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidHighCharUnicodeDirective, new[] { TokenKind.On, TokenKind.Off });
             }
         }
 
@@ -1463,11 +1463,11 @@ namespace PasPasPas.Parsing.Parser {
             if (ContinueWith(result, TokenKind.On)) {
                 result.Mode = ExcessPrecisionForResults.EnableExcess;
             }
-            else if (ContinueWith(result, PascalToken.Off)) {
+            else if (ContinueWith(result, TokenKind.Off)) {
                 result.Mode = ExcessPrecisionForResults.DisableExcess;
             }
             else {
-                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidExcessPrecisionDirective, new[] { TokenKind.On, PascalToken.Off });
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidExcessPrecisionDirective, new[] { TokenKind.On, TokenKind.Off });
             }
         }
 
@@ -1477,11 +1477,11 @@ namespace PasPasPas.Parsing.Parser {
             if (ContinueWith(result, TokenKind.On)) {
                 result.Mode = ExtendedSyntax.UseExtendedSyntax;
             }
-            else if (ContinueWith(result, PascalToken.Off)) {
+            else if (ContinueWith(result, TokenKind.Off)) {
                 result.Mode = ExtendedSyntax.NoExtendedSyntax;
             }
             else {
-                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidExtendedSyntaxDirective, new[] { TokenKind.On, PascalToken.Off });
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidExtendedSyntaxDirective, new[] { TokenKind.On, TokenKind.Off });
             }
         }
 
@@ -1491,11 +1491,11 @@ namespace PasPasPas.Parsing.Parser {
             if (ContinueWith(result, TokenKind.On)) {
                 result.Mode = ExtendedCompatiblityMode.Enabled;
             }
-            else if (ContinueWith(result, PascalToken.Off)) {
+            else if (ContinueWith(result, TokenKind.Off)) {
                 result.Mode = ExtendedCompatiblityMode.Disabled;
             }
             else {
-                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidExtendedCompatibilityDirective, new[] { TokenKind.On, PascalToken.Off });
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidExtendedCompatibilityDirective, new[] { TokenKind.On, TokenKind.Off });
             }
         }
 
@@ -1505,11 +1505,11 @@ namespace PasPasPas.Parsing.Parser {
             if (ContinueWith(result, TokenKind.On)) {
                 CompilerOptions.ExportCppObjects.Value = ExportCppObjects.ExportAll;
             }
-            else if (ContinueWith(result, PascalToken.Off)) {
+            else if (ContinueWith(result, TokenKind.Off)) {
                 CompilerOptions.ExportCppObjects.Value = ExportCppObjects.DoNotExportAll;
             }
             else {
-                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidObjectExportDirective, new[] { TokenKind.On, PascalToken.Off });
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidObjectExportDirective, new[] { TokenKind.On, TokenKind.Off });
             }
         }
 
@@ -1530,11 +1530,11 @@ namespace PasPasPas.Parsing.Parser {
             if (ContinueWith(result, TokenKind.On)) {
                 result.DesignTimeOnly = DesignOnlyUnit.InDesignTimeOnly;
             }
-            else if (ContinueWith(result, PascalToken.Off)) {
+            else if (ContinueWith(result, TokenKind.Off)) {
                 result.DesignTimeOnly = DesignOnlyUnit.Alltimes;
             }
             else {
-                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidDesignTimeOnlyDirective, new[] { TokenKind.On, PascalToken.Off });
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidDesignTimeOnlyDirective, new[] { TokenKind.On, TokenKind.Off });
             }
         }
 
@@ -1555,11 +1555,11 @@ namespace PasPasPas.Parsing.Parser {
             if (ContinueWith(result, TokenKind.On)) {
                 result.DenyUnit = DenyUnitInPackages.DenyUnit;
             }
-            else if (ContinueWith(result, PascalToken.Off)) {
+            else if (ContinueWith(result, TokenKind.Off)) {
                 result.DenyUnit = DenyUnitInPackages.AllowUnit;
             }
             else {
-                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidDenyPackageUnitDirective, new[] { TokenKind.On, PascalToken.Off });
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidDenyPackageUnitDirective, new[] { TokenKind.On, TokenKind.Off });
             }
         }
 
@@ -1568,11 +1568,11 @@ namespace PasPasPas.Parsing.Parser {
             if (ContinueWith(result, TokenKind.On)) {
                 result.DebugInfo = DebugInformation.IncludeDebugInformation;
             }
-            else if (ContinueWith(result, PascalToken.Off)) {
+            else if (ContinueWith(result, TokenKind.Off)) {
                 result.DebugInfo = DebugInformation.NoDebugInfo;
             }
             else {
-                ErrorAndSkip(parent, CompilerDirectiveParserErrors.InvalidDebugInfoDirective, new[] { TokenKind.On, PascalToken.Off });
+                ErrorAndSkip(parent, CompilerDirectiveParserErrors.InvalidDebugInfoDirective, new[] { TokenKind.On, TokenKind.Off });
             }
         }
 
@@ -1582,11 +1582,11 @@ namespace PasPasPas.Parsing.Parser {
             if (ContinueWith(result, TokenKind.On)) {
                 result.Assertions = AssertionMode.EnableAssertions;
             }
-            else if (ContinueWith(result, PascalToken.Off)) {
+            else if (ContinueWith(result, TokenKind.Off)) {
                 result.Assertions = AssertionMode.DisableAssertions;
             }
             else {
-                ErrorAndSkip(parent, CompilerDirectiveParserErrors.InvalidAssertDirective, new[] { TokenKind.On, PascalToken.Off });
+                ErrorAndSkip(parent, CompilerDirectiveParserErrors.InvalidAssertDirective, new[] { TokenKind.On, TokenKind.Off });
             }
         }
 
@@ -1596,11 +1596,11 @@ namespace PasPasPas.Parsing.Parser {
             if (ContinueWith(result, TokenKind.On)) {
                 result.BoolEval = BooleanEvaluation.CompleteEvaluation;
             }
-            else if (ContinueWith(result, PascalToken.Off)) {
+            else if (ContinueWith(result, TokenKind.Off)) {
                 result.BoolEval = BooleanEvaluation.ShortEvaluation;
             }
             else {
-                ErrorAndSkip(parent, CompilerDirectiveParserErrors.InvalidBoolEvalDirective, new[] { TokenKind.On, PascalToken.Off });
+                ErrorAndSkip(parent, CompilerDirectiveParserErrors.InvalidBoolEvalDirective, new[] { TokenKind.On, TokenKind.Off });
             }
         }
 
@@ -1611,7 +1611,7 @@ namespace PasPasPas.Parsing.Parser {
                 result.AlignValue = Alignment.QuadWord;
                 return;
             }
-            else if (ContinueWith(result, PascalToken.Off)) {
+            else if (ContinueWith(result, TokenKind.Off)) {
                 result.AlignValue = Alignment.Unaligned;
                 return;
             }
@@ -1649,73 +1649,73 @@ namespace PasPasPas.Parsing.Parser {
         /// </summary>
         private void ParseSwitch(ISyntaxPart parent) {
 
-            if (Match(PascalToken.AlignSwitch, PascalToken.AlignSwitch1, PascalToken.AlignSwitch2, PascalToken.AlignSwitch4, PascalToken.AlignSwitch8, PascalToken.AlignSwitch16)) {
+            if (Match(TokenKind.AlignSwitch, TokenKind.AlignSwitch1, TokenKind.AlignSwitch2, TokenKind.AlignSwitch4, TokenKind.AlignSwitch8, TokenKind.AlignSwitch16)) {
                 ParseAlignSwitch(parent);
             }
-            else if (Match(PascalToken.BoolEvalSwitch)) {
+            else if (Match(TokenKind.BoolEvalSwitch)) {
                 ParseBoolEvalSwitch(parent);
             }
-            else if (Match(PascalToken.AssertSwitch)) {
+            else if (Match(TokenKind.AssertSwitch)) {
                 ParseAssertSwitch(parent);
             }
-            else if (Match(PascalToken.DebugInfoOrDescriptionSwitch)) {
+            else if (Match(TokenKind.DebugInfoOrDescriptionSwitch)) {
                 ParseDebugInfoOrDescriptionSwitch(parent);
             }
-            else if (Match(PascalToken.ExtensionSwitch)) {
+            else if (Match(TokenKind.ExtensionSwitch)) {
                 ParseExtensionSwitch(parent);
             }
-            else if (Match(PascalToken.ExtendedSyntaxSwitch)) {
+            else if (Match(TokenKind.ExtendedSyntaxSwitch)) {
                 ParseExtendedSyntaxSwitch(parent);
             }
-            else if (Match(PascalToken.ImportedDataSwitch)) {
+            else if (Match(TokenKind.ImportedDataSwitch)) {
                 ParseImportedDataSwitch(parent);
             }
-            else if (Match(PascalToken.IncludeSwitch)) {
+            else if (Match(TokenKind.IncludeSwitch)) {
                 ParseIncludeSwitch(parent);
             }
-            else if (Match(PascalToken.LinkOrLocalSymbolSwitch)) {
+            else if (Match(TokenKind.LinkOrLocalSymbolSwitch)) {
                 ParseLocalSymbolSwitch(parent);
             }
-            else if (Match(PascalToken.LongStringSwitch)) {
+            else if (Match(TokenKind.LongStringSwitch)) {
                 ParseLongStringSwitch(parent);
             }
-            else if (Match(PascalToken.OpenStringSwitch)) {
+            else if (Match(TokenKind.OpenStringSwitch)) {
                 ParseOpenStringSwitch(parent);
             }
-            else if (Match(PascalToken.OptimizationSwitch)) {
+            else if (Match(TokenKind.OptimizationSwitch)) {
                 ParseOptimizationSwitch(parent);
             }
-            else if (Match(PascalToken.OverflowSwitch)) {
+            else if (Match(TokenKind.OverflowSwitch)) {
                 ParseOverflowSwitch(parent);
             }
-            else if (Match(PascalToken.SaveDivideSwitch)) {
+            else if (Match(TokenKind.SaveDivideSwitch)) {
                 ParseSaveDivideSwitch(parent);
             }
-            else if (Match(PascalToken.IncludeRessource)) {
+            else if (Match(TokenKind.IncludeRessource)) {
                 ParseIncludeRessource(parent);
             }
-            else if (Match(PascalToken.StackFramesSwitch)) {
+            else if (Match(TokenKind.StackFramesSwitch)) {
                 ParseStackFramesSwitch(parent);
             }
-            else if (Match(PascalToken.WritableConstSwitch)) {
+            else if (Match(TokenKind.WritableConstSwitch)) {
                 ParseWritableConstSwitch(parent);
             }
-            else if (Match(PascalToken.VarStringCheckSwitch)) {
+            else if (Match(TokenKind.VarStringCheckSwitch)) {
                 ParseVarStringCheckSwitch(parent);
             }
-            else if (Match(PascalToken.TypedPointersSwitch)) {
+            else if (Match(TokenKind.TypedPointersSwitch)) {
                 ParseTypedPointersSwitch(parent);
             }
-            else if (Match(PascalToken.SymbolDeclarationSwitch)) {
+            else if (Match(TokenKind.SymbolDeclarationSwitch)) {
                 ParseSymbolDeclarationSwitch(parent);
             }
-            else if (Match(PascalToken.SymbolDefinitionsOnlySwitch)) {
+            else if (Match(TokenKind.SymbolDefinitionsOnlySwitch)) {
                 ParseSymbolDefinitionsOnlySwitch(parent);
             }
-            else if (Match(PascalToken.TypeInfoSwitch)) {
+            else if (Match(TokenKind.TypeInfoSwitch)) {
                 ParseTypeInfoSwitch(parent);
             }
-            else if (Match(PascalToken.EnumSizeSwitch, PascalToken.EnumSize1, PascalToken.EnumSize2, PascalToken.EnumSize4)) {
+            else if (Match(TokenKind.EnumSizeSwitch, TokenKind.EnumSize1, TokenKind.EnumSize2, TokenKind.EnumSize4)) {
                 ParseEnumSizeSwitch(parent);
             }
 
@@ -1723,15 +1723,15 @@ namespace PasPasPas.Parsing.Parser {
 
         private void ParseEnumSizeSwitch(ISyntaxPart parent) {
             MinEnumSize result = CreateByTerminal<MinEnumSize>(parent);
-            var kind = result.LastTerminal.Token.Kind;
+            var kind = result.LastTerminal.Kind;
 
-            if (kind == PascalToken.EnumSize1) {
+            if (kind == TokenKind.EnumSize1) {
                 result.Size = EnumSize.OneByte;
             }
-            else if (kind == PascalToken.EnumSize2) {
+            else if (kind == TokenKind.EnumSize2) {
                 result.Size = EnumSize.TwoByte;
             }
-            else if (kind == PascalToken.EnumSize4) {
+            else if (kind == TokenKind.EnumSize4) {
                 result.Size = EnumSize.FourByte;
             }
             else if (ContinueWith(result, TokenKind.Plus)) {
@@ -1792,7 +1792,7 @@ namespace PasPasPas.Parsing.Parser {
                 result.Mode = RttiForPublishedProperties.Disable;
             }
             else {
-                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidPublishedRttiDirective, new[] { TokenKind.On, PascalToken.Off });
+                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidPublishedRttiDirective, new[] { TokenKind.On, TokenKind.Off });
             }
         }
 
@@ -2155,19 +2155,19 @@ namespace PasPasPas.Parsing.Parser {
         private ISyntaxPart ParseAlignSwitch(ISyntaxPart parent) {
             AlignSwitch result;
 
-            if (OptionalPart(parent, out result, PascalToken.AlignSwitch1)) {
+            if (OptionalPart(parent, out result, TokenKind.AlignSwitch1)) {
                 result.AlignValue = Alignment.Unaligned;
             }
-            else if (OptionalPart(parent, out result, PascalToken.AlignSwitch2)) {
+            else if (OptionalPart(parent, out result, TokenKind.AlignSwitch2)) {
                 result.AlignValue = Alignment.Word;
             }
-            else if (OptionalPart(parent, out result, PascalToken.AlignSwitch4)) {
+            else if (OptionalPart(parent, out result, TokenKind.AlignSwitch4)) {
                 result.AlignValue = Alignment.DoubleWord;
             }
-            else if (OptionalPart(parent, out result, PascalToken.AlignSwitch8)) {
+            else if (OptionalPart(parent, out result, TokenKind.AlignSwitch8)) {
                 result.AlignValue = Alignment.QuadWord;
             }
-            else if (OptionalPart(parent, out result, PascalToken.AlignSwitch16)) {
+            else if (OptionalPart(parent, out result, TokenKind.AlignSwitch16)) {
                 result.AlignValue = Alignment.DoubleQuadWord;
             }
             else {

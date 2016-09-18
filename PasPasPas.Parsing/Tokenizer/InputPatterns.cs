@@ -133,7 +133,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="input"></param>
         /// <param name="log">message log</param>
         /// <returns></returns>
-        public PascalToken FetchNextToken(StackedFileReader input, ILogSource log) {
+        public Token FetchNextToken(StackedFileReader input, ILogSource log) {
 
             if (input.AtEof)
                 throw new InvalidOperationException();
@@ -149,7 +149,7 @@ namespace PasPasPas.Parsing.Tokenizer {
 
             log.ProcessMessage(new LogMessage(MessageSeverity.Error, TokenizerBase.TokenizerLogMessage, TokenizerBase.UnexpectedCharacter, c.ToString()));
 
-            return new PascalToken() {
+            return new Token() {
                 Value = c.ToString(),
                 Kind = TokenKind.Undefined,
                 FilePath = file
@@ -168,7 +168,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="tokenGroup"></param>
         /// <param name="log"></param>
         /// <returns></returns>
-        public PascalToken FetchTokenByGroup(StackedFileReader inputStream, char prefix, InputPattern tokenGroup, ILogSource log) {
+        public Token FetchTokenByGroup(StackedFileReader inputStream, char prefix, InputPattern tokenGroup, ILogSource log) {
             bool switchedInput = false;
             inputBuffer.Clear();
             inputBuffer.Append(prefix);

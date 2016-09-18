@@ -12,7 +12,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         /// <param name="nextToken"></param>
         /// <returns></returns>
-        protected override bool IsMacroToken(PascalToken nextToken)
+        protected override bool IsMacroToken(Token nextToken)
             => false;
 
         /// <summary>
@@ -20,7 +20,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         /// <param name="nextToken"></param>
         /// <returns></returns>
-        protected override bool IsValidToken(PascalToken nextToken)
+        protected override bool IsValidToken(Token nextToken)
             => nextToken.Kind != TokenKind.WhiteSpace &&
             nextToken.Kind != TokenKind.ControlChar;
 
@@ -28,7 +28,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         ///     do nothing
         /// </summary>
         /// <param name="nextToken"></param>
-        protected override void ProcssMacroToken(PascalToken nextToken) {
+        protected override void ProcssMacroToken(Token nextToken) {
         }
     }
 }
