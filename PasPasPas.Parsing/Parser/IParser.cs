@@ -1,6 +1,7 @@
 ﻿using PasPasPas.Parsing.SyntaxTree;
+using PasPasPas.Parsing.Tokenizer;
 
-namespace PasPasPas.Api {
+namespace PasPasPas.Parsing.Parser {
 
     /// <summary>
     ///     interface for a parser

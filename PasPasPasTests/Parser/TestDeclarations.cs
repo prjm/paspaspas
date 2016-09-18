@@ -13,7 +13,7 @@ namespace PasPasPasTests.Parser {
             ParseString("program test; const x = 5; const y = 5; .");
             ParseString("program test; const [z] x = 5; .");
             ParseString("program test; const [z] [k] x = 5; .");
-            ParseString("program test; const [z, k] x = 5; .", "program test; const [z] [k] x = 5; .");
+            ParseString("program test; const [z, k] x = 5; .");
             ParseString("program test; const [z(5)] x = 5; .");
             ParseString("program test; const x = (a: 5); .");
             ParseString("program test; const x = (a: (b: 5)); .");

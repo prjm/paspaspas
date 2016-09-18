@@ -159,7 +159,7 @@
         /// <param name="input">input</param>
         /// <returns><c>true</c> if the char can be part of an identifier</returns>
         public override bool Matches(char input) =>
-            input > 127 ||
+            (input > 127 && ((AllowDigits && char.IsLetterOrDigit(input)) || char.IsLetter(input))) ||
             (input >= 'A' && input <= 'Z') ||
             (input >= 'a' && input <= 'z') ||
             input == '_' ||

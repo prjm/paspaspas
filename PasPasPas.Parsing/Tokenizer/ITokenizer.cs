@@ -1,7 +1,7 @@
 ﻿using PasPasPas.Infrastructure.Input;
 using PasPasPas.Parsing.SyntaxTree;
 
-namespace PasPasPas.Api {
+namespace PasPasPas.Parsing.Tokenizer {
 
     /// <summary>
     ///     interface for classes which tokenize source code

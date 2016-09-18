@@ -319,8 +319,10 @@ namespace PasPasPas.Parsing.Tokenizer {
                     found = nextChar != '\'';
                     if (found)
                         state.Putback(nextChar);
-                    else
+                    else {
                         AppendToBuffer(nextChar);
+                        state.AppendChar(nextChar);
+                    }
                 }
                 else if (currentChar == '\'') {
                     found = true;
@@ -472,8 +474,7 @@ namespace PasPasPas.Parsing.Tokenizer {
                 }
                 else if (currentChar == '\'') {
                     state.AppendChar(currentChar);
-                    AppendToBuffer(QuotedStringTokenValue.Unwrap(quotedString.Tokenize(state.Input, controlBuffer, state.Log)));
-                    state.AppendChar(currentChar);
+                    AppendToBuffer(QuotedStringTokenValue.Unwrap(quotedString.Tokenize(state.Input, state.Buffer, state.Log)));
                 }
                 else {
                     state.Putback(currentChar);
@@ -573,6 +574,12 @@ namespace PasPasPas.Parsing.Tokenizer {
         protected virtual int MinLength { get; } = 0;
 
         /// <summary>
+        ///     error message
+        /// </summary>
+        protected virtual Guid MinLengthMessage
+            => TokenizerBase.UnexpectedEndOfToken;
+
+        /// <summary>
         ///     test if a character matches the given class
         /// </summary>
         /// <param name="input">char to test</param>
@@ -601,7 +608,7 @@ namespace PasPasPas.Parsing.Tokenizer {
             }
 
             if (MinLength > 0 && state.Length < MinLength)
-                state.Error(TokenizerBase.UnexpectedEndOfToken, state.Buffer.ToString());
+                state.Error(MinLengthMessage, state.Buffer.ToString());
 
             Finish(state);
         }
@@ -685,6 +692,12 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         protected override int MinLength
             => 2;
+
+        /// <summary>
+        ///     error message id
+        /// </summary>
+        protected override Guid MinLengthMessage
+            => StandardTokenizer.IncompleteHexNumber;
 
         /// <summary>
         ///     test if a char matches a hex number
@@ -860,6 +873,10 @@ namespace PasPasPas.Parsing.Tokenizer {
 
             int tokenKind;
             string value = state.Buffer.ToString();
+
+            if (hasAmpersand && state.Buffer.Length < 2)
+                state.Error(StandardTokenizer.IncompleteIdentifier, state.Buffer.ToString());
+
             if ((!ignoreKeywords) && (knownKeywords.TryGetValue(value, out tokenKind)))
                 state.Finish(tokenKind, value);
             else
@@ -880,7 +897,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         public override void ParseByPrefix(ContinuationState state) {
 
             while (state.IsValid) {
-                char currentChar = state.FetchAndAppendChar();
+                char currentChar = state.FetchChar();
 
                 if (!LineCounter.IsNewLineChar(currentChar)) {
                     state.AppendChar(currentChar);

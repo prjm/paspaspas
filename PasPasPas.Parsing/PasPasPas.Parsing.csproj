@@ -44,8 +44,8 @@
   <ItemGroup>
     <Compile Include="Parser\CompilerDirectiveParserErrors.cs" />
     <Compile Include="Parser\EmptyCollection.cs" />
-    <Compile Include="Parser\IPascalParser.cs" />
-    <Compile Include="Api\IPascalTokenizer.cs" />
+    <Compile Include="Parser\IParser.cs" />
+    <Compile Include="Tokenizer\ITokenizer.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\AppTypeParameter.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\AssertSwitch.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\BooleanEvaluationSwitch.cs" />
@@ -118,7 +118,6 @@
     <Compile Include="SyntaxTree\CompilerDirectives\AlignSwitch.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\CompilerDirective.cs" />
     <Compile Include="SyntaxTree\ISyntaxPart.cs" />
-    <Compile Include="Api\PascalParser.cs" />
     <Compile Include="SyntaxTree\ISyntaxPartVisitor.cs" />
     <Compile Include="SyntaxTree\PascalToken.cs" />
     <Compile Include="GlobalSuppressions.cs" />

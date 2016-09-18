@@ -1,5 +1,4 @@
-﻿using PasPasPas.Api;
-using System.Text;
+﻿using System.Text;
 using System;
 using System.Collections.Generic;
 using PasPasPas.Parsing.Tokenizer;
@@ -121,7 +120,7 @@ namespace PasPasPas.Parsing.Parser {
                 return ParseLibrary(null);
             }
             else if (Match(TokenKind.Unit)) {
-                return ParseUnit();
+                return ParseUnit(null);
             }
             else if (Match(TokenKind.Package)) {
                 return ParsePackage(null);
@@ -131,12 +130,13 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         [Rule("Unit", "UnitHead UnitInterface UnitImplementation UnitBlock '.' ")]
-        private Unit ParseUnit() {
-            var result = CreateChild<Unit>(null);
+        private Unit ParseUnit(ISyntaxPart parent) {
+            var result = CreateChild<Unit>(parent);
             result.UnitHead = ParseUnitHead(result);
             result.UnitInterface = ParseUnitInterface(result);
             result.UnitImplementation = ParseUnitImplementation(result);
             result.UnitBlock = ParseUnitBlock(result);
+            ContinueWithOrMissing(result, TokenKind.Dot);
             return result;
         }
 
@@ -364,7 +364,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("CompoundStatement", "'begin' [ StatementList ] 'end'")]
         private CompoundStatement ParseCompoundStatement(ISyntaxPart parent) {
-            var result = CreateByTerminal<CompoundStatement>(parent, TokenKind.End);
+            var result = CreateByTerminal<CompoundStatement>(parent, TokenKind.Begin);
 
             if (!Match(TokenKind.End))
                 result.Statements = ParseStatementList(result);
@@ -2139,7 +2139,7 @@ namespace PasPasPas.Parsing.Parser {
             result.MethodKind = result.LastTerminal.Kind;
             result.Identifier = RequireIdentifier(result);
 
-            if (ContinueWith(result, TokenKind.AngleBracketsOpen)) {
+            if (Match(TokenKind.AngleBracketsOpen)) {
                 result.GenericDefinition = ParseGenericDefinition(result);
             }
 
@@ -2204,7 +2204,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("GenericDefinition", "SimpleGenericDefinition | ConstrainedGenericDefinition")]
         private GenericDefinition ParseGenericDefinition(ISyntaxPart parent) {
-            if (!LookAhead(2, TokenKind.Comma)) {
+            if (!LookAhead(2, TokenKind.Comma, TokenKind.AngleBracketsClose)) {
                 return ParseConstrainedGenericDefinition(parent);
             }
 

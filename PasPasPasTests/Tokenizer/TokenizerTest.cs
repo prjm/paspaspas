@@ -13,7 +13,7 @@ namespace PasPasPasTests.Tokenizer {
             Assert.IsIdentifier("_dummy");
             Assert.IsIdentifier("du_mmy");
             Assert.IsIdentifier("dummy_");
-            Assert.IsIdentifier("&program", "program");
+            Assert.IsIdentifier("&program");
             Assert.IsIdentifier("asd994");
         }
 
@@ -43,7 +43,7 @@ namespace PasPasPasTests.Tokenizer {
         [Fact]
         public void TestIsPreprocessorCommand() {
             Assert.IsPreprocessor("{$A}");
-            Assert.IsComment("(*$HPPEMIT '}'*)");
+            Assert.IsPreprocessor("(*$HPPEMIT '}'*)");
         }
 
         [Fact]
