@@ -274,7 +274,7 @@ namespace PasPasPasTests.Tokenizer {
             var patterns = new InputPatterns();
             patterns.AddPattern('a', PatternA);
             patterns.AddPattern('$', new HexNumberTokenValue());
-            TestPattern(patterns, TokenizerBase.UnexpectedEndOfToken, "$", TokenKind.HexNumber);
+            TestPattern(patterns, StandardTokenizer.IncompleteHexNumber, "$", TokenKind.HexNumber);
             TestPattern(patterns, "$1234567890", TokenKind.HexNumber);
             TestPattern(patterns, "$ABCDEF", TokenKind.HexNumber);
             TestPattern(patterns, "$abcdef", TokenKind.HexNumber);
@@ -299,7 +299,7 @@ namespace PasPasPasTests.Tokenizer {
             TestPattern(patterns, "a", PatternA);
             TestPattern(patterns, "&a", TokenKind.Identifier);
             TestPattern(patterns, "_a", TokenKind.Identifier);
-            TestPattern(patterns, "€€__画像", TokenKind.Identifier);
+            TestPattern(patterns, "画像", TokenKind.Identifier);
             TestPattern(patterns, "a b caaa", PatternA, TokenKind.WhiteSpace, PatternB, TokenKind.WhiteSpace, TokenKind.Identifier);
             tgv.AllowAmpersand = false;
             TestPattern(patterns, TokenizerBase.UnexpectedCharacter, "&a", TokenKind.Undefined, PatternA);

@@ -2680,7 +2680,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("ClosureExpr", "('function'|'procedure') [ FormalParameterSection ] [ ':' TypeSpecification ] Block ")]
         private ClosureExpression ParseClosureExpression(ISyntaxPart parent) {
-            var result = CreateChild<ClosureExpression>(parent);
+            var result = CreateByTerminal<ClosureExpression>(parent, TokenKind.Function, TokenKind.Procedure);
             result.Kind = result.LastTerminal.Kind;
 
             if (Match(TokenKind.OpenParen)) {
