@@ -12390,6 +12390,7 @@
     "Microsoft.NETCore.Portable.Compatibility/1.0.0": {
       "sha512": "5/IFqf2zN1jzktRJitxO+5kQ+0AilcIbPvSojSJwDG3cGNSMZg44LXLB5E9RkSETE0Wh4QoALdNh1koKoF7/mA==",
       "type": "package",
+      "path": "Microsoft.NETCore.Portable.Compatibility/1.0.0",
       "files": [
         "Microsoft.NETCore.Portable.Compatibility.1.0.0.nupkg.sha512",
         "Microsoft.NETCore.Portable.Compatibility.nuspec",
@@ -12469,6 +12470,7 @@
     "Microsoft.NETCore.Runtime/1.0.0": {
       "sha512": "AjaMNpXLW4miEQorIqyn6iQ+BZBId6qXkhwyeh1vl6kXLqosZusbwmLNlvj/xllSQrd3aImJbvlHusam85g+xQ==",
       "type": "package",
+      "path": "Microsoft.NETCore.Runtime/1.0.0",
       "files": [
         "Microsoft.NETCore.Runtime.1.0.0.nupkg.sha512",
         "Microsoft.NETCore.Runtime.nuspec",
@@ -12478,6 +12480,7 @@
     "Microsoft.NETCore.Runtime.CoreCLR-arm/1.0.0": {
       "sha512": "hoJfIl981eXwn9Tz8onO/J1xaYApIfp/YrhjSh9rRhml1U5Wj80LBgyp/6n+KI3VlvcAraThhnHnCTp+M3Uh+w==",
       "type": "package",
+      "path": "Microsoft.NETCore.Runtime.CoreCLR-arm/1.0.0",
       "files": [
         "Microsoft.NETCore.Runtime.CoreCLR-arm.1.0.0.nupkg.sha512",
         "Microsoft.NETCore.Runtime.CoreCLR-arm.nuspec",
@@ -12495,6 +12498,7 @@
     "Microsoft.NETCore.Runtime.CoreCLR-x64/1.0.0": {
       "sha512": "DaY5Z13xCZpnVIGluC5sCo4/0wy1rl6mptBH7v3RYi3guAmG88aSeFoQzyZepo0H0jEixUxNFM0+MB6Jc+j0bw==",
       "type": "package",
+      "path": "Microsoft.NETCore.Runtime.CoreCLR-x64/1.0.0",
       "files": [
         "Microsoft.NETCore.Runtime.CoreCLR-x64.1.0.0.nupkg.sha512",
         "Microsoft.NETCore.Runtime.CoreCLR-x64.nuspec",
@@ -12512,6 +12516,7 @@
     "Microsoft.NETCore.Runtime.CoreCLR-x86/1.0.0": {
       "sha512": "2LDffu5Is/X01GVPVuye4Wmz9/SyGDNq1Opgl5bXG3206cwNiCwsQgILOtfSWVp5mn4w401+8cjhBy3THW8HQQ==",
       "type": "package",
+      "path": "Microsoft.NETCore.Runtime.CoreCLR-x86/1.0.0",
       "files": [
         "Microsoft.NETCore.Runtime.CoreCLR-x86.1.0.0.nupkg.sha512",
         "Microsoft.NETCore.Runtime.CoreCLR-x86.nuspec",
@@ -12529,6 +12534,7 @@
     "Microsoft.NETCore.Runtime.Native/1.0.0": {
       "sha512": "tMsWWrH1AJCguiM22zK/vr6COxqz62Q1F02B07IXAUN405R3HGk5SkD/DL0Hte+OTjNtW9LkKXpOggGBRwYFNg==",
       "type": "package",
+      "path": "Microsoft.NETCore.Runtime.Native/1.0.0",
       "files": [
         "Microsoft.NETCore.Runtime.Native.1.0.0.nupkg.sha512",
         "Microsoft.NETCore.Runtime.Native.nuspec",
@@ -12565,6 +12571,7 @@
     "Microsoft.NETCore.Windows.ApiSets-x64/1.0.0": {
       "sha512": "NC+dpFMdhujz2sWAdJ8EmBk07p1zOlNi0FCCnZEbzftABpw9xZ99EMP/bUJrPTgCxHfzJAiuLPOtAauzVINk0w==",
       "type": "package",
+      "path": "Microsoft.NETCore.Windows.ApiSets-x64/1.0.0",
       "files": [
         "Microsoft.NETCore.Windows.ApiSets-x64.1.0.0.nupkg.sha512",
         "Microsoft.NETCore.Windows.ApiSets-x64.nuspec",
@@ -12730,6 +12737,7 @@
     "Microsoft.NETCore.Windows.ApiSets-x86/1.0.0": {
       "sha512": "/HDRdhz5bZyhHwQ/uk/IbnDIX5VDTsHntEZYkTYo57dM+U3Ttel9/OJv0mjL64wTO/QKUJJNKp9XO+m7nSVjJQ==",
       "type": "package",
+      "path": "Microsoft.NETCore.Windows.ApiSets-x86/1.0.0",
       "files": [
         "Microsoft.NETCore.Windows.ApiSets-x86.1.0.0.nupkg.sha512",
         "Microsoft.NETCore.Windows.ApiSets-x86.nuspec",
@@ -13214,6 +13222,7 @@
     "System.Diagnostics.StackTrace/4.0.0": {
       "sha512": "PItgenqpRiMqErvQONBlfDwctKpWVrcDSW5pppNZPJ6Bpiyz+KjsWoSiaqs5dt03HEbBTMNCrZb8KCkh7YfXmw==",
       "type": "package",
+      "path": "System.Diagnostics.StackTrace/4.0.0",
       "files": [
         "System.Diagnostics.StackTrace.4.0.0.nupkg.sha512",
         "System.Diagnostics.StackTrace.nuspec",

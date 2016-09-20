@@ -65,6 +65,13 @@ namespace PasPasPas.Infrastructure.Log {
         public void UnregisteredAt(LogManager logManager) {
             //..
         }
+
+        /// <summary>
+        ///     clear  event handlers
+        /// </summary>
+        public void ClearEventHandlers() {
+            ProcessMessage = null;
+        }
     }
 
     /// <summary>

@@ -9,14 +9,14 @@ using System.Runtime.InteropServices;
 // Attribute gesteuert. Ändern Sie diese Attributwerte, um die Informationen zu ändern,
 // die einer Assembly zugeordnet sind.
 [assembly: AssemblyTitle("Paspaspas.Options")]
-[assembly: AssemblyDescription("Options for PasPasPas")]
+[assembly: AssemblyDescription("Compiler Options for PasPasPas projects")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Paspaspas.Options")]
-[assembly: AssemblyCopyright("Copyright ©  2016 Bastian Turcs")]
-[assembly: AssemblyTrademark("PasPasPas")]
+[assembly: AssemblyCopyright("Copyright ©  2016 The PasPasPas Project")]
+[assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
-[assembly: NeutralResourcesLanguage("de")]
+[assembly: NeutralResourcesLanguage("en")]
 
 // Versionsinformationen für eine Assembly bestehen aus den folgenden vier Werten:
 //

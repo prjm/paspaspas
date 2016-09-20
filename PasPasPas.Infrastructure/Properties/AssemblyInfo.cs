@@ -12,12 +12,12 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("PasPasPas.Infrastructure")]
 [assembly: AssemblyDescription("Basic services for PasPasPas projects")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("The PasPasPas Project")]
+[assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("PasPasPas.Infrastructure")]
-[assembly: AssemblyCopyright("Copyright ©  2016 Bastian Turcs")]
-[assembly: AssemblyTrademark("PasPasPas")]
+[assembly: AssemblyCopyright("Copyright ©  2016 The PasPasPas Project")]
+[assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
-[assembly: NeutralResourcesLanguage("de")]
+[assembly: NeutralResourcesLanguage("en")]
 
 // Versionsinformationen für eine Assembly bestehen aus den folgenden vier Werten:
 //
