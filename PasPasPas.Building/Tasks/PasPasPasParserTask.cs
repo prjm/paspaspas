@@ -8,6 +8,7 @@ using PasPasPas.Options.Bundles;
 using PasPasPas.Infrastructure.Input;
 using PasPasPas.Parsing.Tokenizer;
 using System.Text;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Building.Tasks {
 
@@ -70,18 +71,33 @@ namespace PasPasPas.Building.Tasks {
                         y.Message.Severity == MessageSeverity.FatalError;
                     };
 
-                    parser.Parse();
+                    var resultTree = parser.Parse();
+                    var result1 = new StringBuilder();
+
+                    bool dummy = false;
+                    using (var reader1 = new StackedFileReader()) {
+                        reader1.AddFile(inputFile);
+
+                        while (!reader1.AtEof)
+                            result1.Append(reader1.FetchChar(out dummy));
+                    }
 
                     log.ClearEventHandlers();
 
                     /*
+
                     var visitor = new TerminalVisitor();
                     var options = new TerminalVisitorOptions();
-                    result.Accept(visitor, options);
-                    Assert.AreEqual(output, options.ResultBuilder.ToString());
-                    Assert.AreEqual(string.Empty, errorText);
-                    Assert.IsFalse(hasError);
+                    resultTree.Accept(visitor, options);
+                    if (!string.Equals(result1.ToString(), options.ResultBuilder.ToString(), StringComparison.Ordinal)) {
+                        result.Append("<<XXXX>> Different!");
+                        result.AppendLine(result1.ToString());
+                        result.Append("<<XXXX>> Different!");
+                        result.AppendLine(options.ResultBuilder.ToString());
+                    }
+
                     */
+
                 }
 
             }

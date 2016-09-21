@@ -159,40 +159,10 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         /// <summary>
-        ///     assume an optional token kind
-        /// </summary>
-        /// <param name="tokenKind">token kind</param>
-        /// <returns>optional token kind</returns>
-        protected bool Optional(params int[] tokenKind) {
-            if (!Match(tokenKind))
-                return false;
-
-            FetchNextToken();
-            return true;
-        }
-
-        /// <summary>
         ///     fetch the next token
         /// </summary>
         protected void FetchNextToken() {
             tokenizer.FetchNextToken();
-        }
-
-        /// <summary>
-        ///     assume an optional token kind
-        /// </summary>
-        /// <param name="tokenKind">token kind</param>
-        /// <param name="matchingType">matched token</param>
-        /// <returns>optional token kind</returns>
-        protected bool Optional(out int matchingType, params int[] tokenKind) {
-            if (!Match(tokenKind)) {
-                matchingType = TokenKind.Undefined;
-                return false;
-            }
-
-            matchingType = CurrentToken().Kind;
-            FetchNextToken();
-            return true;
         }
 
         /// <summary>
@@ -211,16 +181,175 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         /// <summary>
-        ///     tests if a token is currently availiable
+        ///     tests if the current token matches the selected token
         /// </summary>
         /// <param name="tokenKind"></param>
         /// <returns></returns>
         protected bool Match(int tokenKind) {
             var token = CurrentToken();
-            if (token == null)
-                return false;
+            return token == null ? false : token.Kind == tokenKind;
+        }
 
-            return token.Kind == tokenKind;
+        /// <summary>
+        ///     tests if the current token matches one of the selected tokens
+        /// </summary>
+        /// <param name="tokenKind1">first token</param>
+        /// <param name="tokenKind2"></param>
+        /// <returns></returns>
+        protected bool Match(int tokenKind1, int tokenKind2) {
+            var token = CurrentToken();
+            return token == null ? false :
+                (token.Kind == tokenKind1) ||
+                (token.Kind == tokenKind2);
+        }
+
+        /// <summary>
+        ///     tests if the current token matches one of the selected tokens
+        /// </summary>
+        /// <param name="tokenKind1">first token</param>
+        /// <param name="tokenKind2">second token</param>
+        /// <param name="tokenKind3">third token</param>
+        /// <returns></returns>
+        protected bool Match(int tokenKind1, int tokenKind2, int tokenKind3) {
+            var token = CurrentToken();
+            return token == null ? false :
+                (token.Kind == tokenKind1) ||
+                (token.Kind == tokenKind2) ||
+                (token.Kind == tokenKind3);
+        }
+
+        /// <summary>
+        ///     tests if the current token matches one of the selected tokens
+        /// </summary>
+        /// <param name="tokenKind1">first token</param>
+        /// <param name="tokenKind2">second token</param>
+        /// <param name="tokenKind3">third token</param>
+        /// <param name="tokenKind4">fourth token</param>
+        /// <returns></returns>
+        protected bool Match(int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4) {
+            var token = CurrentToken();
+            return token == null ? false :
+                (token.Kind == tokenKind1) ||
+                (token.Kind == tokenKind2) ||
+                (token.Kind == tokenKind3) ||
+                (token.Kind == tokenKind4);
+        }
+
+        /// <summary>
+        ///     tests if the current token matches one of the selected tokens
+        /// </summary>
+        /// <param name="tokenKind1">first token</param>
+        /// <param name="tokenKind2">second token</param>
+        /// <param name="tokenKind3">third token</param>
+        /// <param name="tokenKind4">fourth token</param>
+        /// <param name="tokenKind5">fifth token</param>
+        /// <returns></returns>
+        protected bool Match(int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5) {
+            var token = CurrentToken();
+            return token == null ? false :
+                (token.Kind == tokenKind1) ||
+                (token.Kind == tokenKind2) ||
+                (token.Kind == tokenKind3) ||
+                (token.Kind == tokenKind4) ||
+                (token.Kind == tokenKind5);
+        }
+
+        /// <summary>
+        ///     tests if the current token matches one of the selected tokens
+        /// </summary>
+        /// <param name="tokenKind1">first token</param>
+        /// <param name="tokenKind2">second token</param>
+        /// <param name="tokenKind3">third token</param>
+        /// <param name="tokenKind4">fourth token</param>
+        /// <param name="tokenKind5">fifth token</param>
+        /// <param name="tokenKind6">sixth token</param>
+        /// <returns></returns>
+        protected bool Match(int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5, int tokenKind6) {
+            var token = CurrentToken();
+            return token == null ? false :
+                (token.Kind == tokenKind1) ||
+                (token.Kind == tokenKind2) ||
+                (token.Kind == tokenKind3) ||
+                (token.Kind == tokenKind4) ||
+                (token.Kind == tokenKind5) ||
+                (token.Kind == tokenKind6);
+        }
+
+        /// <summary>
+        ///     tests if the current token matches one of the selected tokens
+        /// </summary>
+        /// <param name="tokenKind1">first token</param>
+        /// <param name="tokenKind2">second token</param>
+        /// <param name="tokenKind3">third token</param>
+        /// <param name="tokenKind4">fourth token</param>
+        /// <param name="tokenKind5">fifth token</param>
+        /// <param name="tokenKind6">sixth token</param>
+        /// <param name="tokenKind7">seventh token</param>
+        /// <returns></returns>
+        protected bool Match(int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5, int tokenKind6, int tokenKind7) {
+            var token = CurrentToken();
+            return token == null ? false :
+                (token.Kind == tokenKind1) ||
+                (token.Kind == tokenKind2) ||
+                (token.Kind == tokenKind3) ||
+                (token.Kind == tokenKind4) ||
+                (token.Kind == tokenKind5) ||
+                (token.Kind == tokenKind6) ||
+                (token.Kind == tokenKind7);
+        }
+
+        /// <summary>
+        ///     tests if the current token matches one of the selected tokens
+        /// </summary>
+        /// <param name="tokenKind1">first token</param>
+        /// <param name="tokenKind2">second token</param>
+        /// <param name="tokenKind3">third token</param>
+        /// <param name="tokenKind4">fourth token</param>
+        /// <param name="tokenKind5">fifth token</param>
+        /// <param name="tokenKind6">sixth token</param>
+        /// <param name="tokenKind7">seventh token</param>
+        /// <param name="tokenKind8">eigth token</param>
+        /// <param name="tokenKind9">eigth token</param>
+        /// <returns></returns>
+        protected bool Match(int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5, int tokenKind6, int tokenKind7, int tokenKind8, int tokenKind9) {
+            var token = CurrentToken();
+            return token == null ? false :
+                (token.Kind == tokenKind1) ||
+                (token.Kind == tokenKind2) ||
+                (token.Kind == tokenKind3) ||
+                (token.Kind == tokenKind4) ||
+                (token.Kind == tokenKind5) ||
+                (token.Kind == tokenKind6) ||
+                (token.Kind == tokenKind7) ||
+                (token.Kind == tokenKind8) ||
+                (token.Kind == tokenKind9);
+        }
+
+
+
+        /// <summary>
+        ///     tests if the current token matches one of the selected tokens
+        /// </summary>
+        /// <param name="tokenKind1">first token</param>
+        /// <param name="tokenKind2">second token</param>
+        /// <param name="tokenKind3">third token</param>
+        /// <param name="tokenKind4">fourth token</param>
+        /// <param name="tokenKind5">fifth token</param>
+        /// <param name="tokenKind6">sixth token</param>
+        /// <param name="tokenKind7">seventh token</param>
+        /// <param name="tokenKind8">eigth token</param>
+        /// <returns></returns>
+        protected bool Match(int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5, int tokenKind6, int tokenKind7, int tokenKind8) {
+            var token = CurrentToken();
+            return token == null ? false :
+                (token.Kind == tokenKind1) ||
+                (token.Kind == tokenKind2) ||
+                (token.Kind == tokenKind3) ||
+                (token.Kind == tokenKind4) ||
+                (token.Kind == tokenKind5) ||
+                (token.Kind == tokenKind6) ||
+                (token.Kind == tokenKind7) ||
+                (token.Kind == tokenKind8);
         }
 
 
@@ -230,21 +359,6 @@ namespace PasPasPas.Parsing.Parser {
         /// <returns></returns>
         protected Token CurrentToken()
             => tokenizer.CurrentToken();
-
-        /// <summary>
-        ///     mach any token
-        /// </summary>
-        /// <param name="tokens">token list</param>
-        /// <returns><c>true</c> if matched</returns>
-        protected bool Match(params int[] tokens) {
-            foreach (var token in tokens) {
-                if (Match(token))
-                    return true;
-            }
-
-            return false;
-        }
-
 
         /// <summary>
         ///     print a parser grammar
@@ -333,9 +447,8 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind"></param>
         /// <param name="part"></param>
         /// <returns></returns>
-        protected bool ContinueWith(ISyntaxPart part, params int[] tokenKind) {
-
-            var requiresIdentifier = tokenKind.Length == 1 && tokenKind[0] == TokenKind.Identifier;
+        protected bool ContinueWith(ISyntaxPart part, int tokenKind) {
+            var requiresIdentifier = tokenKind == TokenKind.Identifier;
 
             if (!Tokenizer.HasNextToken()) {
                 return false;
@@ -352,8 +465,281 @@ namespace PasPasPas.Parsing.Parser {
             part.Parts.Add(terminal);
             FetchNextToken();
             return true;
-
         }
+
+        /// <summary>
+        ///     continue syntax part
+        /// </summary>
+        /// <param name="tokenKind1"></param>
+        /// <param name="tokenKind2"></param>
+        /// <param name="part"></param>
+        /// <returns></returns>
+        protected bool ContinueWith(ISyntaxPart part, int tokenKind1, int tokenKind2) {
+            var requiresIdentifier = (tokenKind1 == TokenKind.Identifier) || (tokenKind2 == TokenKind.Identifier);
+
+            if (!Tokenizer.HasNextToken()) {
+                return false;
+            }
+
+            if (!Match(tokenKind1, tokenKind2) &&
+                (!requiresIdentifier ||
+                (requiresIdentifier && !AllowIdentifier()))) {
+                return false;
+            }
+
+            var terminal = new Terminal(CurrentToken());
+            terminal.Parent = part;
+            part.Parts.Add(terminal);
+            FetchNextToken();
+            return true;
+        }
+
+
+        /// <summary>
+        ///     continue syntax part
+        /// </summary>
+        /// <param name="tokenKind1"></param>
+        /// <param name="tokenKind2"></param>
+        /// <param name="tokenKind3"></param>
+        /// <param name="part"></param>
+        /// <returns></returns>
+        protected bool ContinueWith(ISyntaxPart part, int tokenKind1, int tokenKind2, int tokenKind3) {
+            var requiresIdentifier = (tokenKind1 == TokenKind.Identifier) || (tokenKind2 == TokenKind.Identifier) || (tokenKind3 == TokenKind.Identifier);
+
+            if (!Tokenizer.HasNextToken()) {
+                return false;
+            }
+
+            if (!Match(tokenKind1, tokenKind2, tokenKind3) &&
+                (!requiresIdentifier ||
+                (requiresIdentifier && !AllowIdentifier()))) {
+                return false;
+            }
+
+            var terminal = new Terminal(CurrentToken());
+            terminal.Parent = part;
+            part.Parts.Add(terminal);
+            FetchNextToken();
+            return true;
+        }
+
+        /// <summary>
+        ///     continue syntax part
+        /// </summary>
+        /// <param name="tokenKind1"></param>
+        /// <param name="tokenKind2"></param>
+        /// <param name="tokenKind3"></param>
+        /// <param name="tokenKind4"></param>
+        /// <param name="part"></param>
+        /// <returns></returns>
+        protected bool ContinueWith(ISyntaxPart part, int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4) {
+            var requiresIdentifier =
+                (tokenKind1 == TokenKind.Identifier) ||
+                (tokenKind2 == TokenKind.Identifier) ||
+                (tokenKind3 == TokenKind.Identifier) ||
+                (tokenKind4 == TokenKind.Identifier);
+
+            if (!Tokenizer.HasNextToken()) {
+                return false;
+            }
+
+            if (!Match(tokenKind1, tokenKind2, tokenKind3, tokenKind4) &&
+                (!requiresIdentifier ||
+                (requiresIdentifier && !AllowIdentifier()))) {
+                return false;
+            }
+
+            var terminal = new Terminal(CurrentToken());
+            terminal.Parent = part;
+            part.Parts.Add(terminal);
+            FetchNextToken();
+            return true;
+        }
+
+
+        /// <summary>
+        ///     continue syntax part
+        /// </summary>
+        /// <param name="tokenKind1"></param>
+        /// <param name="tokenKind2"></param>
+        /// <param name="tokenKind3"></param>
+        /// <param name="tokenKind4"></param>
+        /// <param name="tokenKind5"></param>
+        /// <param name="part"></param>
+        /// <returns></returns>
+        protected bool ContinueWith(ISyntaxPart part, int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5) {
+            var requiresIdentifier = (tokenKind1 == TokenKind.Identifier) ||
+                (tokenKind2 == TokenKind.Identifier) ||
+                (tokenKind3 == TokenKind.Identifier) ||
+                (tokenKind4 == TokenKind.Identifier) ||
+                (tokenKind5 == TokenKind.Identifier);
+
+            if (!Tokenizer.HasNextToken()) {
+                return false;
+            }
+
+            if (!Match(tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5) &&
+                (!requiresIdentifier ||
+                (requiresIdentifier && !AllowIdentifier()))) {
+                return false;
+            }
+
+            var terminal = new Terminal(CurrentToken());
+            terminal.Parent = part;
+            part.Parts.Add(terminal);
+            FetchNextToken();
+            return true;
+        }
+
+
+        /// <summary>
+        ///     continue syntax part
+        /// </summary>
+        /// <param name="tokenKind1"></param>
+        /// <param name="tokenKind2"></param>
+        /// <param name="tokenKind3"></param>
+        /// <param name="tokenKind4"></param>
+        /// <param name="tokenKind5"></param>
+        /// <param name="tokenKind6"></param>
+        /// <param name="tokenKind7"></param>
+        /// <param name="part"></param>
+        /// <returns></returns>
+        protected bool ContinueWith(ISyntaxPart part, int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5, int tokenKind6) {
+            var requiresIdentifier = (tokenKind1 == TokenKind.Identifier) ||
+                (tokenKind2 == TokenKind.Identifier) ||
+                (tokenKind3 == TokenKind.Identifier) ||
+                (tokenKind4 == TokenKind.Identifier) ||
+                (tokenKind5 == TokenKind.Identifier) ||
+                (tokenKind6 == TokenKind.Identifier);
+
+            if (!Tokenizer.HasNextToken()) {
+                return false;
+            }
+
+            if (!Match(tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5, tokenKind6) &&
+                (!requiresIdentifier ||
+                (requiresIdentifier && !AllowIdentifier()))) {
+                return false;
+            }
+
+            var terminal = new Terminal(CurrentToken());
+            terminal.Parent = part;
+            part.Parts.Add(terminal);
+            FetchNextToken();
+            return true;
+        }
+
+
+
+
+        /// <summary>
+        ///     continue syntax part
+        /// </summary>
+        /// <param name="tokenKind1"></param>
+        /// <param name="tokenKind2"></param>
+        /// <param name="tokenKind3"></param>
+        /// <param name="tokenKind4"></param>
+        /// <param name="tokenKind5"></param>
+        /// <param name="tokenKind6"></param>
+        /// <param name="tokenKind7"></param>
+        /// <param name="part"></param>
+        /// <returns></returns>
+        protected bool ContinueWith(ISyntaxPart part, int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5, int tokenKind6, int tokenKind7) {
+            var requiresIdentifier = (tokenKind1 == TokenKind.Identifier) ||
+                (tokenKind2 == TokenKind.Identifier) ||
+                (tokenKind3 == TokenKind.Identifier) ||
+                (tokenKind4 == TokenKind.Identifier) ||
+                (tokenKind5 == TokenKind.Identifier) ||
+                (tokenKind6 == TokenKind.Identifier) ||
+                (tokenKind7 == TokenKind.Identifier);
+
+            if (!Tokenizer.HasNextToken()) {
+                return false;
+            }
+
+            if (!Match(tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5, tokenKind6, tokenKind7) &&
+                (!requiresIdentifier ||
+                (requiresIdentifier && !AllowIdentifier()))) {
+                return false;
+            }
+
+            var terminal = new Terminal(CurrentToken());
+            terminal.Parent = part;
+            part.Parts.Add(terminal);
+            FetchNextToken();
+            return true;
+        }
+
+        protected bool ContinueWith(ISyntaxPart part, int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5, int tokenKind6, int tokenKind7, int tokenKind8) {
+            var requiresIdentifier = (tokenKind1 == TokenKind.Identifier) ||
+                (tokenKind2 == TokenKind.Identifier) ||
+                (tokenKind3 == TokenKind.Identifier) ||
+                (tokenKind4 == TokenKind.Identifier) ||
+                (tokenKind5 == TokenKind.Identifier) ||
+                (tokenKind6 == TokenKind.Identifier) ||
+                (tokenKind7 == TokenKind.Identifier) ||
+                (tokenKind8 == TokenKind.Identifier);
+
+            if (!Tokenizer.HasNextToken()) {
+                return false;
+            }
+
+            if (!Match(tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5, tokenKind6, tokenKind7) &&
+                (!requiresIdentifier ||
+                (requiresIdentifier && !AllowIdentifier()))) {
+                return false;
+            }
+
+            var terminal = new Terminal(CurrentToken());
+            terminal.Parent = part;
+            part.Parts.Add(terminal);
+            FetchNextToken();
+            return true;
+        }
+
+
+        /// <summary>
+        ///     continue syntax part
+        /// </summary>
+        /// <param name="tokenKind1"></param>
+        /// <param name="tokenKind2"></param>
+        /// <param name="tokenKind3"></param>
+        /// <param name="tokenKind4"></param>
+        /// <param name="tokenKind5"></param>
+        /// <param name="tokenKind6"></param>
+        /// <param name="tokenKind7"></param>
+        /// <param name="tokenKind8"></param>
+        /// <param name="tokenKind9"></param>
+        /// <param name="part"></param>
+        /// <returns></returns>
+        protected bool ContinueWith(ISyntaxPart part, int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5, int tokenKind6, int tokenKind7, int tokenKind8, int tokenKind9) {
+            var requiresIdentifier = (tokenKind1 == TokenKind.Identifier) ||
+                (tokenKind2 == TokenKind.Identifier) ||
+                (tokenKind3 == TokenKind.Identifier) ||
+                (tokenKind4 == TokenKind.Identifier) ||
+                (tokenKind5 == TokenKind.Identifier) ||
+                (tokenKind6 == TokenKind.Identifier) ||
+                (tokenKind8 == TokenKind.Identifier) ||
+                (tokenKind7 == TokenKind.Identifier) ||
+                (tokenKind9 == TokenKind.Identifier);
+
+            if (!Tokenizer.HasNextToken()) {
+                return false;
+            }
+
+            if (!Match(tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5, tokenKind6, tokenKind7, tokenKind8, tokenKind9) &&
+                (!requiresIdentifier ||
+                (requiresIdentifier && !AllowIdentifier()))) {
+                return false;
+            }
+
+            var terminal = new Terminal(CurrentToken());
+            terminal.Parent = part;
+            part.Parts.Add(terminal);
+            FetchNextToken();
+            return true;
+        }
+
 
         /// <summary>
         ///     override: allow another symbol instead of an identifier
@@ -369,9 +755,9 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="parent">parent node</param>
         /// <param name="tokenKind">expected token kind</param>
         /// <returns>syntax tree node</returns>
-        protected T CreateByTerminal<T>(ISyntaxPart parent, params int[] tokenKind)
-            where T : ISyntaxPart, new() {
+        protected T CreateByTerminal<T>(ISyntaxPart parent, int tokenKind) where T : ISyntaxPart, new() {
             var result = CreateChild<T>(parent);
+
             if (Match(tokenKind)) {
                 var terminal = new Terminal(CurrentToken());
                 terminal.Parent = result;
@@ -384,6 +770,170 @@ namespace PasPasPas.Parsing.Parser {
             FetchNextToken();
             return result;
         }
+
+        /// <summary>
+        ///     optionally continue a syntax part by a terminal symbol
+        /// </summary>
+        /// <typeparam name="T">parent object</typeparam>
+        /// <param name="parent">parent node</param>
+        /// <param name="tokenKind1">expected token kind</param>
+        /// <param name="tokenKind2">expected token kind</param>/// 
+        /// <returns>syntax tree node</returns>
+        protected T CreateByTerminal<T>(ISyntaxPart parent, int tokenKind1, int tokenKind2) where T : ISyntaxPart, new() {
+            var result = CreateChild<T>(parent);
+
+            if (Match(tokenKind1, tokenKind2)) {
+                var terminal = new Terminal(CurrentToken());
+                terminal.Parent = result;
+                result.Parts.Add(terminal);
+            }
+            else {
+                ContinueWithOrMissing(result, tokenKind1, tokenKind2);
+            }
+
+            FetchNextToken();
+            return result;
+        }
+
+        /// <summary>
+        ///     optionally continue a syntax part by a terminal symbol
+        /// </summary>
+        /// <typeparam name="T">parent object</typeparam>
+        /// <param name="parent">parent node</param>
+        /// <param name="tokenKind1">expected token kind</param>
+        /// <param name="tokenKind2">expected token kind</param>
+        /// <param name="tokenKind3">expected token kind</param>
+        /// <returns>syntax tree node</returns>
+        protected T CreateByTerminal<T>(ISyntaxPart parent, int tokenKind1, int tokenKind2, int tokenKind3) where T : ISyntaxPart, new() {
+            var result = CreateChild<T>(parent);
+
+            if (Match(tokenKind1, tokenKind2, tokenKind3)) {
+                var terminal = new Terminal(CurrentToken());
+                terminal.Parent = result;
+                result.Parts.Add(terminal);
+            }
+            else {
+                ContinueWithOrMissing(result, tokenKind1, tokenKind2, tokenKind3);
+            }
+
+            FetchNextToken();
+            return result;
+        }
+
+        /// <summary>
+        ///     optionally continue a syntax part by a terminal symbol
+        /// </summary>
+        /// <typeparam name="T">parent object</typeparam>
+        /// <param name="parent">parent node</param>
+        /// <param name="tokenKind1">expected token kind</param>
+        /// <param name="tokenKind2">expected token kind</param>
+        /// <param name="tokenKind3">expected token kind</param>
+        /// <param name="tokenKind4">expected token kind</param>
+        /// <returns>syntax tree node</returns>
+        protected T CreateByTerminal<T>(ISyntaxPart parent, int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4) where T : ISyntaxPart, new() {
+            var result = CreateChild<T>(parent);
+
+            if (Match(tokenKind1, tokenKind2, tokenKind3, tokenKind4)) {
+                var terminal = new Terminal(CurrentToken());
+                terminal.Parent = result;
+                result.Parts.Add(terminal);
+            }
+            else {
+                ContinueWithOrMissing(result, tokenKind1, tokenKind2, tokenKind3, tokenKind4);
+            }
+
+            FetchNextToken();
+            return result;
+        }
+
+
+        /// <summary>
+        ///     optionally continue a syntax part by a terminal symbol
+        /// </summary>
+        /// <typeparam name="T">parent object</typeparam>
+        /// <param name="parent">parent node</param>
+        /// <param name="tokenKind1">expected token kind</param>
+        /// <param name="tokenKind2">expected token kind</param>
+        /// <param name="tokenKind3">expected token kind</param>
+        /// <param name="tokenKind4">expected token kind</param>
+        /// <param name="tokenKind5">expected token kind</param>
+        /// <returns>syntax tree node</returns>
+        protected T CreateByTerminal<T>(ISyntaxPart parent, int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5) where T : ISyntaxPart, new() {
+            var result = CreateChild<T>(parent);
+
+            if (Match(tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5)) {
+                var terminal = new Terminal(CurrentToken());
+                terminal.Parent = result;
+                result.Parts.Add(terminal);
+            }
+            else {
+                ContinueWithOrMissing(result, tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5);
+            }
+
+            FetchNextToken();
+            return result;
+        }
+
+
+        /// <summary>
+        ///     optionally continue a syntax part by a terminal symbol
+        /// </summary>
+        /// <typeparam name="T">parent object</typeparam>
+        /// <param name="parent">parent node</param>
+        /// <param name="tokenKind1">expected token kind</param>
+        /// <param name="tokenKind2">expected token kind</param>
+        /// <param name="tokenKind3">expected token kind</param>
+        /// <param name="tokenKind4">expected token kind</param>
+        /// <param name="tokenKind5">expected token kind</param>
+        /// <param name="tokenKind6">expected token kind</param>
+        /// <returns>syntax tree node</returns>
+        protected T CreateByTerminal<T>(ISyntaxPart parent, int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5, int tokenKind6) where T : ISyntaxPart, new() {
+            var result = CreateChild<T>(parent);
+
+            if (Match(tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5, tokenKind6)) {
+                var terminal = new Terminal(CurrentToken());
+                terminal.Parent = result;
+                result.Parts.Add(terminal);
+            }
+            else {
+                ContinueWithOrMissing(result, tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5, tokenKind6);
+            }
+
+            FetchNextToken();
+            return result;
+        }
+
+
+        /// <summary>
+        ///     optionally continue a syntax part by a terminal symbol
+        /// </summary>
+        /// <typeparam name="T">parent object</typeparam>
+        /// <param name="parent">parent node</param>
+        /// <param name="tokenKind1">expected token kind</param>
+        /// <param name="tokenKind2">expected token kind</param>
+        /// <param name="tokenKind3">expected token kind</param>
+        /// <param name="tokenKind4">expected token kind</param>
+        /// <param name="tokenKind5">expected token kind</param>
+        /// <param name="tokenKind6">expected token kind</param>
+        /// <param name="tokenKind7">expected token kind</param>
+        /// <param name="tokenKind8">expected token kind</param>
+        /// <returns>syntax tree node</returns>
+        protected T CreateByTerminal<T>(ISyntaxPart parent, int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5, int tokenKind6, int tokenKind7, int tokenKind8) where T : ISyntaxPart, new() {
+            var result = CreateChild<T>(parent);
+
+            if (Match(tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5, tokenKind6, tokenKind7, tokenKind8)) {
+                var terminal = new Terminal(CurrentToken());
+                terminal.Parent = result;
+                result.Parts.Add(terminal);
+            }
+            else {
+                ContinueWithOrMissing(result, tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5, tokenKind6, tokenKind7, tokenKind8);
+            }
+
+            FetchNextToken();
+            return result;
+        }
+
 
         /// <summary>
         ///     add a terminal node marked as invalid
@@ -418,8 +968,119 @@ namespace PasPasPas.Parsing.Parser {
         /// </summary>
         /// <param name="result"></param>
         /// <param name="tokenKind"></param>
-        protected void ContinueWithOrMissing(ISyntaxPart result, params int[] tokenKind) {
+        protected void ContinueWithOrMissing(ISyntaxPart result, int tokenKind) {
             if (!ContinueWith(result, tokenKind)) {
+                // add missing token / todo
+            }
+        }
+
+        /// <summary>
+        ///     continue with a specific token and mark it as missing
+        /// </summary>
+        /// <param name="result"></param>
+        /// <param name="tokenKind1"></param>
+        /// <param name="tokenKind2"></param>
+        protected void ContinueWithOrMissing(ISyntaxPart result, int tokenKind1, int tokenKind2) {
+            if (!ContinueWith(result, tokenKind1, tokenKind2)) {
+                // add missing token / todo
+            }
+        }
+
+        /// <summary>
+        ///     continue with a specific token and mark it as missing
+        /// </summary>
+        /// <param name="result"></param>
+        /// <param name="tokenKind1"></param>
+        /// <param name="tokenKind2"></param>
+        /// <param name="tokenKind3"></param>
+        protected void ContinueWithOrMissing(ISyntaxPart result, int tokenKind1, int tokenKind2, int tokenKind3) {
+            if (!ContinueWith(result, tokenKind1, tokenKind2, tokenKind3)) {
+                // add missing token / todo
+            }
+        }
+
+        /// <summary>
+        ///     continue with a specific token and mark it as missing
+        /// </summary>
+        /// <param name="result"></param>
+        /// <param name="tokenKind1"></param>
+        /// <param name="tokenKind2"></param>
+        /// <param name="tokenKind3"></param>
+        /// <param name="tokenKind4"></param>
+        protected void ContinueWithOrMissing(ISyntaxPart result, int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4) {
+            if (!ContinueWith(result, tokenKind1, tokenKind2, tokenKind3, tokenKind4)) {
+                // add missing token / todo
+            }
+        }
+
+
+        /// <summary>
+        ///     continue with a specific token and mark it as missing
+        /// </summary>
+        /// <param name="result"></param>
+        /// <param name="tokenKind1"></param>
+        /// <param name="tokenKind2"></param>
+        /// <param name="tokenKind3"></param>
+        /// <param name="tokenKind4"></param>
+        /// <param name="tokenKind5"></param>
+        protected void ContinueWithOrMissing(ISyntaxPart result, int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5) {
+            if (!ContinueWith(result, tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5)) {
+                // add missing token / todo
+            }
+        }
+
+
+
+        /// <summary>
+        ///     continue with a specific token and mark it as missing
+        /// </summary>
+        /// <param name="result"></param>
+        /// <param name="tokenKind1"></param>
+        /// <param name="tokenKind2"></param>
+        /// <param name="tokenKind3"></param>
+        /// <param name="tokenKind4"></param>
+        /// <param name="tokenKind5"></param>
+        /// <param name="tokenKind6"></param>
+        protected void ContinueWithOrMissing(ISyntaxPart result, int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5, int tokenKind6) {
+            if (!ContinueWith(result, tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5, tokenKind6)) {
+                // add missing token / todo
+            }
+        }
+
+
+
+        /// <summary>
+        ///     continue with a specific token and mark it as missing
+        /// </summary>
+        /// <param name="result"></param>
+        /// <param name="tokenKind1"></param>
+        /// <param name="tokenKind2"></param>
+        /// <param name="tokenKind3"></param>
+        /// <param name="tokenKind4"></param>
+        /// <param name="tokenKind5"></param>
+        /// <param name="tokenKind6"></param>
+        /// <param name="tokenKind7"></param>
+        protected void ContinueWithOrMissing(ISyntaxPart result, int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5, int tokenKind6, int tokenKind7) {
+            if (!ContinueWith(result, tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5, tokenKind6, tokenKind7)) {
+                // add missing token / todo
+            }
+        }
+
+
+        /// <summary>
+        ///     continue with a specific token and mark it as missing
+        /// </summary>
+        /// <param name="result"></param>
+        /// <param name="tokenKind1"></param>
+        /// <param name="tokenKind2"></param>
+        /// <param name="tokenKind3"></param>
+        /// <param name="tokenKind4"></param>
+        /// <param name="tokenKind5"></param>
+        /// <param name="tokenKind6"></param>
+        /// <param name="tokenKind7"></param>
+        /// <param name="tokenKind8"></param>
+        protected void ContinueWithOrMissing(ISyntaxPart result, int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5, int tokenKind6, int tokenKind7, int tokenKind8) {
+            if (!ContinueWith(result, tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5, tokenKind6, tokenKind7, tokenKind8)) {
                 // add missing token / todo
             }
         }

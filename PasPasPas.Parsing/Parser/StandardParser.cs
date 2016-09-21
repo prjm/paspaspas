@@ -347,7 +347,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("UnitInitialization", "'initialization' StatementList [ UnitFinalization ]", true)]
         private UnitInitialization ParseUnitInitialization(ISyntaxPart parent) {
-            var result = CreateByTerminal<UnitInitialization>(parent);
+            var result = CreateByTerminal<UnitInitialization>(parent, TokenKind.Initialization);
 
             if (Match(TokenKind.Finalization)) {
                 result.Finalization = ParseFinalization(result);
@@ -358,7 +358,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("UnitFinalization", "'finalization' StatementList", true)]
         private UnitFinalization ParseFinalization(ISyntaxPart parent) {
-            var result = CreateByTerminal<UnitFinalization>(parent);
+            var result = CreateByTerminal<UnitFinalization>(parent, TokenKind.Finalization);
             return result;
         }
 

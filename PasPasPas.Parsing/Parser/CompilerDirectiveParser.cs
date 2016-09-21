@@ -281,7 +281,7 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseStackSizeSwitch(ISyntaxPart parent, bool mSwitch) {
-            StackMemorySize result = CreateByTerminal<StackMemorySize>(parent, new[] { TokenKind.MinMemStackSizeSwitchLong, TokenKind.MaxMemStackSizeSwitchLong, TokenKind.TypeInfoSwitch });
+            StackMemorySize result = CreateByTerminal<StackMemorySize>(parent, TokenKind.MinMemStackSizeSwitchLong, TokenKind.MaxMemStackSizeSwitchLong, TokenKind.TypeInfoSwitch);
 
             if (mSwitch || result.LastTerminal.Kind == TokenKind.MinMemStackSizeSwitchLong) {
 
@@ -454,7 +454,7 @@ namespace PasPasPas.Parsing.Parser {
                 return;
             }
 
-            if (!Match(new[] { TokenKind.Fields, TokenKind.Methods, TokenKind.Properties }))
+            if (!Match(TokenKind.Fields, TokenKind.Methods, TokenKind.Properties))
                 return;
 
             bool canContinue;
@@ -560,7 +560,7 @@ namespace PasPasPas.Parsing.Parser {
             var warningType = result.LastTerminal.Value;
             var warningModes = new[] { TokenKind.On, TokenKind.Off, TokenKind.Error, TokenKind.Default };
 
-            if (!ContinueWith(result, warningModes)) {
+            if (!ContinueWith(result, TokenKind.On, TokenKind.Off, TokenKind.Error, TokenKind.Default)) {
                 ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidWarnDirective, warningModes);
                 return;
             }
