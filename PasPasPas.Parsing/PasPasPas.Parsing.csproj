@@ -45,6 +45,9 @@
     <Compile Include="Parser\CompilerDirectiveParserErrors.cs" />
     <Compile Include="Parser\EmptyCollection.cs" />
     <Compile Include="Parser\IParser.cs" />
+    <Compile Include="SyntaxTree\Standard\TypeName.cs" />
+    <Compile Include="SyntaxTree\Visitors\StructureVisitor.cs" />
+    <Compile Include="SyntaxTree\Visitors\StructureVisitorOptions.cs" />
     <Compile Include="Tokenizer\ITokenizer.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\AppTypeParameter.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\AssertSwitch.cs" />

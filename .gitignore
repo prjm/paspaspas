@@ -30,3 +30,6 @@
 /PasPasPas.Building/obj
 /ParserRunner/bin
 /ParserRunner/obj
+/*.diagsession
+/*.vsp
+/PasPasPas.Parsing/Parser/*.TMP

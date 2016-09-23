@@ -23,7 +23,7 @@
         /// <summary>
         ///     property type
         /// </summary>
-        public NamespaceName TypeName { get; set; }
+        public TypeName TypeName { get; set; }
 
     }
 }

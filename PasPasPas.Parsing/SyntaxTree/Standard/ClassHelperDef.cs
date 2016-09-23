@@ -18,7 +18,7 @@
         /// <summary>
         ///     class helper name
         /// </summary>
-        public NamespaceName HelperName { get; set; }
+        public TypeName HelperName { get; set; }
 
     }
 }

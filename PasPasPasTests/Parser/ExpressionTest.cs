@@ -17,8 +17,19 @@ namespace PasPasPasTests.Parser {
             ParseString("program test; const x = function (const x : string ): integer begin end ; .");
         }
 
+        class x<Q> {
+
+        }
+
+        class t {
+
+        }
+
         [Fact]
         public void TestSimpleExpressions() {
+            ParseString("program test; const x = TDemo<A,B>.Create(); .");
+            ParseString("program test; const x = TDemo<A,B, C<D>>.Create(); .");
+            ParseString("program test; const x = 5 as 5; .");
             ParseString("program test; const x = 5 + 5; .");
             ParseString("program test; const x = 5 - 5; .");
             ParseString("program test; const x = 5 xor 5; .");
@@ -39,7 +50,7 @@ namespace PasPasPasTests.Parser {
             ParseString("program test; const x = 5 <> 5; .");
             ParseString("program test; const x = 5 = 5; .");
             ParseString("program test; const x = 5 in 5; .");
-            ParseString("program test; const x = 5 as 5; .");
+            ParseString("program test; const x = x is TObject; .");
         }
 
         [Fact]

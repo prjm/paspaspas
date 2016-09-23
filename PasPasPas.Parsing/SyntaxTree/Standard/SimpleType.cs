@@ -13,7 +13,7 @@
         /// <summary>
         ///     generic postfix
         /// </summary>
-        public GenericTypeSuffix GenericPostfix { get; set; }
+        public GenericPostfix GenericPostfix { get; set; }
 
         /// <summary>
         ///     <c>true</c> for a new type definition

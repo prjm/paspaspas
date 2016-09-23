@@ -422,6 +422,24 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         /// <summary>
+        ///     test if the searched tokens match until a given token is reached
+        /// </summary>
+        /// <param name="tokenToStop">search token</param>
+        /// <param name="allowedTokens">stop token</param>
+        /// <returns></returns>
+        protected bool HasTokenUntilToken(int[] tokenToStop, params int[] allowedTokens) {
+            var lookahead = 1;
+            var stopArray = new[] { TokenKind.Eof, TokenKind.Undefined };
+            while (!LookAhead(lookahead, tokenToStop) && !LookAhead(lookahead, stopArray)) {
+                if (!LookAhead(lookahead, allowedTokens))
+                    return false;
+                lookahead++;
+            }
+
+            return true;
+        }
+
+        /// <summary>
         ///     create an syntax part element if the token kind matches
         /// </summary>
         /// <typeparam name="T">syntax part type</typeparam>
@@ -684,7 +702,7 @@ namespace PasPasPas.Parsing.Parser {
                 return false;
             }
 
-            if (!Match(tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5, tokenKind6, tokenKind7) &&
+            if (!Match(tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5, tokenKind6, tokenKind7, tokenKind8) &&
                 (!requiresIdentifier ||
                 (requiresIdentifier && !AllowIdentifier()))) {
                 return false;

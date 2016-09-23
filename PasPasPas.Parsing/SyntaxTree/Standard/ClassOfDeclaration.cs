@@ -8,7 +8,7 @@
         /// <summary>
         ///     type name
         /// </summary>
-        public NamespaceName TypeName { get; set; }
+        public TypeName TypeRef { get; set; }
 
     }
 }

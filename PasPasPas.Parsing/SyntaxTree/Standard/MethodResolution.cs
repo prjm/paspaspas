@@ -18,6 +18,6 @@
         /// <summary>
         ///     identifier to be resolved
         /// </summary>
-        public NamespaceName TypeName { get; set; }
+        public TypeName Name { get; set; }
     }
 }

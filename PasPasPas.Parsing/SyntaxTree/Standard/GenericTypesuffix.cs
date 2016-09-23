@@ -3,7 +3,7 @@
     /// <summary>
     ///    generic type siffox
     /// </summary>
-    public class GenericTypeSuffix : SyntaxPartBase {
+    public class GenericPostfix : SyntaxPartBase {
 
 
     }

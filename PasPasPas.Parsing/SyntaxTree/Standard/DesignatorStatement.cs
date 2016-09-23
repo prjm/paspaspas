@@ -13,7 +13,7 @@
         /// <summary>
         ///     name
         /// </summary>
-        public NamespaceName Name { get; set; }
+        public TypeName Name { get; set; }
 
     }
 }

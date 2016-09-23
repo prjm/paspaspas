@@ -908,7 +908,7 @@ namespace PasPasPas.Parsing.Parser {
                         (LookAhead(1, TokenKind.Identifier) && (LookAhead(2, TokenKind.Dot)));
 
                     if (useMethodDeclaration) {
-                        var methodDecl = ParseMethodDecl(parent);
+                        var methodDecl = ParseMethodDecl(result);
                         methodDecl.Class = useClass;
                         methodDecl.Attributes = attrs;
                         continue;
@@ -1317,7 +1317,7 @@ namespace PasPasPas.Parsing.Parser {
             if (result.NewType || (MatchIdentifier() && (!LookAhead(1, TokenKind.DotDot)))) {
                 result.TypeId = ParseNamespaceName(result);
                 if (Match(TokenKind.AngleBracketsOpen)) {
-                    result.GenericPostfix = ParseGenericSuffix(result);
+                    result.GenericPostfix = ParseGenericPostfix(result);
                 }
                 return result;
             }
@@ -1663,12 +1663,12 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
-        [Rule("RecordHelperDecl", "'record' 'helper' 'for' NamespaceName RecordHelperItems 'end'")]
+        [Rule("RecordHelperDecl", "'record' 'helper' 'for' TypeName RecordHelperItems 'end'")]
         private RecordHelperDefinition ParseRecordHelper(ISyntaxPart parent) {
             var result = CreateByTerminal<RecordHelperDefinition>(parent, TokenKind.Record);
             ContinueWithOrMissing(result, TokenKind.Helper);
             ContinueWithOrMissing(result, TokenKind.For);
-            result.Name = ParseNamespaceName(result);
+            result.Name = ParseTypeName(result);
             result.Items = ParseRecordHelperItems(result);
             ContinueWithOrMissing(result, TokenKind.End);
             return result;
@@ -1828,13 +1828,13 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
-        [Rule("ClassHelper", "'class' 'helper' ClassParent 'for' NamespaceName ClassHelperItems 'end'")]
+        [Rule("ClassHelper", "'class' 'helper' ClassParent 'for' TypeName ClassHelperItems 'end'")]
         private ClassHelperDef ParseClassHelper(ISyntaxPart parent) {
             var result = CreateByTerminal<ClassHelperDef>(parent, TokenKind.Class);
             ContinueWithOrMissing(result, TokenKind.Helper);
             result.ClassParent = ParseClassParent(result);
             ContinueWithOrMissing(result, TokenKind.For);
-            result.HelperName = ParseNamespaceName(result);
+            result.HelperName = ParseTypeName(result);
             result.HelperItems = ParseClassHelperItems(result);
             ContinueWithOrMissing(result, TokenKind.End);
             return result;
@@ -1980,7 +1980,7 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
-        [Rule("PropertyDeclaration", "'property' Identifier [ '[' FormalParameters  ']' ] [ ':' NamespaceName ] [ 'index' Expression ]  { ClassPropertySpecifier } ';' ")]
+        [Rule("PropertyDeclaration", "'property' Identifier [ '[' FormalParameters  ']' ] [ ':' TypeName ] [ 'index' Expression ]  { ClassPropertySpecifier } ';' ")]
         private ClassProperty ParsePropertyDeclaration(ISyntaxPart parent) {
             var result = CreateByTerminal<ClassProperty>(parent, TokenKind.Property);
             result.PropertyName = RequireIdentifier(result);
@@ -1990,7 +1990,7 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             if (ContinueWith(result, TokenKind.Colon)) {
-                result.TypeName = ParseNamespaceName(result);
+                result.TypeName = ParseTypeName(result);
             }
 
             if (ContinueWith(result, TokenKind.Index)) {
@@ -2126,7 +2126,7 @@ namespace PasPasPas.Parsing.Parser {
         private MethodResolution ParseMethodResolution(ISyntaxPart parent) {
             var result = CreateByTerminal<MethodResolution>(parent, TokenKind.Function, TokenKind.Procedure);
             result.Kind = result.LastTerminal.Kind;
-            result.TypeName = ParseNamespaceName(result);
+            result.Name = ParseTypeName(result);
             ContinueWithOrMissing(result, TokenKind.EqualsSign);
             result.ResolveIdentifier = RequireIdentifier(result);
             ContinueWithOrMissing(result, TokenKind.Semicolon);
@@ -2271,13 +2271,13 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
-        [Rule("ClassParent", " [ '(' NamespaceName { ',' NamespaceName } ')' ]")]
+        [Rule("ClassParent", " [ '(' TypeName { ',' TypeName } ')' ]")]
         private ParentClass ParseClassParent(ISyntaxPart parent) {
             var result = CreateChild<ParentClass>(parent);
 
             if (ContinueWith(result, TokenKind.OpenParen)) {
                 do {
-                    ParseNamespaceName(result);
+                    ParseTypeName(result);
                 } while (ContinueWith(result, TokenKind.Comma));
                 ContinueWithOrMissing(result, TokenKind.CloseParen);
             }
@@ -2285,11 +2285,24 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
-        [Rule("ClassOfDeclaration", "'class' 'of' NamespaceName")]
+        [Rule("ClassOfDeclaration", "'class' 'of' TypeName")]
         private ClassOfDeclaration ParseClassOfDeclaration(ISyntaxPart parent) {
             var result = CreateByTerminal<ClassOfDeclaration>(parent, TokenKind.Class);
             ContinueWithOrMissing(result, TokenKind.Of);
-            result.TypeName = ParseNamespaceName(result);
+            result.TypeRef = ParseTypeName(result);
+            return result;
+        }
+
+        [Rule("TypeName", "'class' 'of' TypeName")]
+        private TypeName ParseTypeName(ISyntaxPart parent) {
+            var result = CreateChild<TypeName>(parent);
+            result.TypeId = ParseNamespaceName(result);
+
+            if (Match(TokenKind.AngleBracketsOpen) && LookAheadIdentifier(1, new int[0]) &&
+                HasTokenUntilToken(new[] { TokenKind.AngleBracketsClose }, TokenKind.Identifier, TokenKind.Dot, TokenKind.Comma, TokenKind.AngleBracketsOpen)) {
+                result.GenericType = ParseGenericPostfix(result);
+            }
+
             return result;
         }
 
@@ -2319,15 +2332,15 @@ namespace PasPasPas.Parsing.Parser {
             result.TypeName = ParseNamespaceName(result);
 
             if (Match(TokenKind.AngleBracketsOpen)) {
-                result.GenericSuffix = ParseGenericSuffix(result);
+                result.GenericSuffix = ParseGenericPostfix(result);
             }
 
             return result;
         }
 
         [Rule("GenericSuffix", "'<' TypeDefinition { ',' TypeDefinition '}' '>'")]
-        private GenericTypeSuffix ParseGenericSuffix(ISyntaxPart parent) {
-            var result = CreateByTerminal<GenericTypeSuffix>(parent, TokenKind.AngleBracketsOpen);
+        private GenericPostfix ParseGenericPostfix(ISyntaxPart parent) {
+            var result = CreateByTerminal<GenericPostfix>(parent, TokenKind.AngleBracketsOpen);
 
             do {
                 ParseTypeSpecification(result);
@@ -2594,7 +2607,7 @@ namespace PasPasPas.Parsing.Parser {
             var result = CreateChild<DesignatorStatement>(parent);
             result.Inherited = ContinueWith(result, TokenKind.Inherited);
             if (MatchIdentifier()) {
-                result.Name = ParseNamespaceName(result);
+                result.Name = ParseTypeName(result);
             }
 
             DesignatorItem item;

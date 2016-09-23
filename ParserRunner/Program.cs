@@ -29,7 +29,10 @@ namespace ParserRunner {
             var task = new PasPasPasParserTask();
             var settings = new SettingGroup();
 
-            foreach (var filePath in (new[] { "Demo.pas" }.Select(t => path + t))) {
+            var files1 = Directory.GetFiles(path, "*.pas").Take(100);
+            var files2 = new[] { path + "Demo.pas" };
+
+            foreach (var filePath in files1) {
                 var inputFiles = new FilesSetting();
                 inputFiles.Name = filePath;
                 inputFiles.Path = filePath;
@@ -47,24 +50,20 @@ namespace ParserRunner {
             buildSettings.Targets.Add(target.Name);
             buildSettings.FileSystemAccess = new StandardFileAccess();
 
-            PerformanceCounter theCPUCounter =
-               new PerformanceCounter("Process", "% Processor Time",
-               Process.GetCurrentProcess().ProcessName);
-
-            PerformanceCounter theMemCounter =
-               new PerformanceCounter("Process", "Working Set",
-               Process.GetCurrentProcess().ProcessName);
-
             var watch = new Stopwatch();
 
             watch.Start();
             var result = projectBuilder.BuildProject(project, buildSettings);
             watch.Stop();
 
-            Console.WriteLine("Duration: " + watch.ElapsedMilliseconds.ToString());
-            Console.WriteLine("Processor time: " + theCPUCounter.NextValue().ToString("F"));
-            Console.WriteLine("Memory: " + theMemCounter.NextValue().ToString("F"));
+            Console.WriteLine("Completed.");
+            Console.ReadLine();
 
+            var p = Process.GetCurrentProcess();
+            p.Refresh();
+            Console.WriteLine("Duration: " + watch.ElapsedMilliseconds.ToString());
+            Console.WriteLine("Processor time: " + p.TotalProcessorTime);
+            Console.WriteLine("Memory: " + p.WorkingSet64);
 
             foreach (var buildResult in result)
                 Console.WriteLine(buildResult.ToString());
