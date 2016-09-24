@@ -4,7 +4,17 @@
     ///     type name / reference to a type
     /// </summary>
     public class TypeName : SyntaxPartBase {
-        public GenericPostfix GenericType { get; internal set; }
+
+        /// <summary>
+        ///     generic type postfix
+        /// </summary>
+        public GenericPostfix GenericType { get; set; }
+
+        /// <summary>
+        ///     string type
+        /// </summary>
+        public int StringType { get; set; }
+            = TokenKind.Undefined;
 
         /// <summary>
         ///     type id

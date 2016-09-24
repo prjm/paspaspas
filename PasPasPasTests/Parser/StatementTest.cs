@@ -11,6 +11,7 @@ namespace PasPasPasTests.Parser {
 
         [Fact]
         public void TestIfStatement() {
+            ParseString("program test; begin if a <= b then begin a() end else b() end .");
             ParseString("program test; begin if a <> b then a() ; end .");
             ParseString("program test; begin if a <> b then a() else b() ; end .");
             ParseString("program test; begin if a <> b then begin a(); end end .");
@@ -33,6 +34,7 @@ namespace PasPasPasTests.Parser {
 
         [Fact]
         public void TestWhileStatement() {
+            //ParseString("program test; begin while a <= a do begin if a = b then (if not x(a, false) then break) else (if not t(a, true) then break); a :=  a + 1; end; ; end .");
             ParseString("program test; begin while a() do b() ; end .");
             ParseString("program test; begin while a() do begin b(); end end .");
         }

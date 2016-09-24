@@ -79,6 +79,7 @@ namespace PasPasPasTests {
                     y.Message.Severity == MessageSeverity.FatalError;
                 };
 
+
                 var result = parser.Parse();
                 var visitor = new TerminalVisitor();
                 var options = new TerminalVisitorOptions();

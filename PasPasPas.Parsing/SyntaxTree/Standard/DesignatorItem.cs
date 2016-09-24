@@ -20,5 +20,9 @@
         /// </summary>
         public Identifier Subitem { get; set; }
 
+        /// <summary>
+        ///     generic type of the subitem
+        /// </summary>
+        public GenericPostfix SubItemGenericType { get; set; }
     }
 }

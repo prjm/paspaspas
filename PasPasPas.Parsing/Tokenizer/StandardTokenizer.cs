@@ -187,7 +187,6 @@ namespace PasPasPas.Parsing.Tokenizer {
                 ["set"] = TokenKind.Set,
                 ["shl"] = TokenKind.Shl,
                 ["shr"] = TokenKind.Shr,
-                ["string"] = TokenKind.String,
                 ["then"] = TokenKind.Then,
                 ["threadvar"] = TokenKind.ThreadVar,
                 ["to"] = TokenKind.To,
