@@ -1980,7 +1980,7 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
-        [Rule("PropertyDeclaration", "'property' Identifier [ '[' FormalParameters  ']' ] [ ':' TypeName ] [ 'index' Expression ]  { ClassPropertySpecifier } ';' ")]
+        [Rule("PropertyDeclaration", "'property' Identifier [ '[' FormalParameters  ']' ] [ ':' TypeName ] [ 'index' Expression ]  { ClassPropertySpecifier } ';' [ 'default' ';' ]  ")]
         private ClassProperty ParsePropertyDeclaration(ISyntaxPart parent) {
             var result = CreateByTerminal<ClassProperty>(parent, TokenKind.Property);
             result.PropertyName = RequireIdentifier(result);
@@ -2002,6 +2002,11 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             ContinueWithOrMissing(result, TokenKind.Semicolon);
+
+            if (ContinueWith(result, TokenKind.Default)) {
+                result.HasDefaultFlag = true;
+                ContinueWithOrMissing(result, TokenKind.Semicolon);
+            }
 
             return result;
         }

@@ -11,6 +11,11 @@
         public FormalParameters ArrayIndex { get; set; }
 
         /// <summary>
+        ///     default flag (for dispinterface)
+        /// </summary>
+        public bool HasDefaultFlag { get; internal set; }
+
+        /// <summary>
         ///     index of the property
         /// </summary>
         public Expression PropertyIndex { get; set; }
