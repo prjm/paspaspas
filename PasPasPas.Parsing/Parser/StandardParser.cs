@@ -112,21 +112,26 @@ namespace PasPasPas.Parsing.Parser {
         ///     parse input
         /// </summary>
         public override ISyntaxPart Parse()
-            => ParseFile();
+            => ParseFile(null);
 
+        /// <summary>
+        ///     parse a standard file
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <returns></returns>
         [Rule("File", "Program | Library | Unit | Package")]
-        private ISyntaxPart ParseFile() {
+        public ISyntaxPart ParseFile(ISyntaxPart parent) {
             if (Match(TokenKind.Library)) {
-                return ParseLibrary(null);
+                return ParseLibrary(parent);
             }
             else if (Match(TokenKind.Unit)) {
-                return ParseUnit(null);
+                return ParseUnit(parent);
             }
             else if (Match(TokenKind.Package)) {
-                return ParsePackage(null);
+                return ParsePackage(parent);
             }
 
-            return ParseProgram(null);
+            return ParseProgram(parent);
         }
 
         [Rule("Unit", "UnitHead UnitInterface UnitImplementation UnitBlock '.' ")]
@@ -590,10 +595,10 @@ namespace PasPasPas.Parsing.Parser {
             result.CaseExpression = ParseExpression(result);
             ContinueWithOrMissing(result, TokenKind.Of);
 
-            CaseItem item;
+            CaseItem item = null;
             do {
                 item = ParseCaseItem(result);
-            } while (item != null);
+            } while (Tokenizer.HasNextToken() && item != null);
 
             if (ContinueWith(result, TokenKind.Else)) {
                 result.Else = ParseStatementList(result);
@@ -606,6 +611,9 @@ namespace PasPasPas.Parsing.Parser {
         [Rule("CaseItem", "CaseLabel { ',' CaseLabel } ':' Statement [';']")]
         private CaseItem ParseCaseItem(ISyntaxPart parent) {
             if (Match(TokenKind.Else, TokenKind.End))
+                return null;
+
+            if (!HasTokenBeforeToken(TokenKind.Colon, TokenKind.Semicolon, TokenKind.End, TokenKind.Begin))
                 return null;
 
             var result = CreateChild<CaseItem>(parent);
@@ -1294,7 +1302,12 @@ namespace PasPasPas.Parsing.Parser {
                 return result;
             }
 
-            if (Match(TokenKind.Function, TokenKind.Procedure, TokenKind.Reference)) {
+            if (Match(TokenKind.Function, TokenKind.Procedure)) {
+                result.ProcedureType = ParseProcedureType(result);
+                return result;
+            }
+
+            if (Match(TokenKind.Reference) && LookAhead(1, TokenKind.To)) {
                 result.ProcedureType = ParseProcedureType(result);
                 return result;
             }
@@ -2462,11 +2475,15 @@ namespace PasPasPas.Parsing.Parser {
             var result = CreateChild<ConstantExpression>(parent);
 
             if (ContinueWith(result, TokenKind.OpenParen)) {
-                if (MatchIdentifier() && (LookAhead(1, TokenKind.Colon)))
-                    result.RecordConstant = ParseRecordConstant(result);
+
+                if (MatchIdentifier() && (LookAhead(1, TokenKind.Colon))) do {
+                        ParseRecordConstant(result);
+                    } while (ContinueWith(result, TokenKind.Semicolon));
+
                 else do {
                         ParseConstantExpression(result);
                     } while (ContinueWith(result, TokenKind.Comma));
+
                 ContinueWithOrMissing(result, TokenKind.CloseParen);
             }
             else {
@@ -2516,11 +2533,12 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
-        [Rule("Termin", "Factor [ ('*'|'/'|'div'|'mod'|'and'|'shl'|'shr'|'as') Term ]")]
+        [Rule("Term", "Factor [ ('*'|'/'|'div'|'mod'|'and'|'shl'|'shr'|'as') Term ]")]
         private Term ParseTerm(ISyntaxPart parent) {
             var result = CreateChild<Term>(parent);
 
             result.LeftOperand = ParseFactor(result);
+
             if (ContinueWith(result, TokenKind.Times, TokenKind.Slash, TokenKind.Div, TokenKind.Mod, TokenKind.And, TokenKind.Shl, TokenKind.Shr, TokenKind.As)) {
                 result.Kind = result.LastTerminal.Kind;
                 result.RightOperand = ParseTerm(result);
@@ -2593,18 +2611,17 @@ namespace PasPasPas.Parsing.Parser {
                 return result;
             }
 
-            if (ContinueWith(result, TokenKind.OpenParen)) {
-                result.ParenExpression = ParseExpression(result);
-                ContinueWithOrMissing(result, TokenKind.CloseParen);
-                return result;
-            }
-
             if (Match(TokenKind.OpenBraces)) {
                 result.SetSection = ParseSetSection(result);
                 return result;
             }
 
             if (MatchIdentifier(TokenKind.Inherited)) {
+                result.Designator = ParseDesignator(result);
+                return result;
+            }
+
+            if (Match(TokenKind.Circumflex, TokenKind.Dot, TokenKind.OpenBraces, TokenKind.OpenParen)) {
                 result.Designator = ParseDesignator(result);
                 return result;
             }

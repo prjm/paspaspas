@@ -14,6 +14,13 @@ using PasPasPas.Parsing.SyntaxTree;
 namespace PasPasPas.Building.Tasks {
 
     /// <summary>
+    ///     dummy parent item
+    /// </summary>
+    internal class StubParent : SyntaxPartBase {
+
+    }
+
+    /// <summary>
     ///     a simple parser runner
     /// </summary>
     public class PasPasPasParserTask : TaskBase {
@@ -75,7 +82,14 @@ namespace PasPasPas.Building.Tasks {
                         y.Message.Severity == MessageSeverity.FatalError;
                     };
 
-                    resultTree = parser.Parse();
+                    resultTree = new StubParent();
+                    try {
+                        parser.ParseFile(resultTree);
+                    }
+                    catch (Exception exception) {
+                        result.AppendLine("<<XXXX>> Exception!");
+                        result.Append(exception.ToString());
+                    }
                 }
 
                 var result1 = new StringBuilder();
