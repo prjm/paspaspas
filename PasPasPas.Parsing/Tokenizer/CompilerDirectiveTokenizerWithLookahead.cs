@@ -28,7 +28,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         ///     do nothing
         /// </summary>
         /// <param name="nextToken"></param>
-        protected override void ProcssMacroToken(Token nextToken) {
+        protected override void ProcessMacroToken(Token nextToken) {
         }
     }
 }

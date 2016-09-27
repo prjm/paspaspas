@@ -44,7 +44,6 @@ namespace ParserRunner {
             project.Targets.Add(target);
             target.Tasks.Add(task);
 
-            var projectBuilder = new ProjectBuilder();
             var buildSettings = new BuildSettings();
 
             buildSettings.Targets.Add(target.Name);
@@ -53,7 +52,7 @@ namespace ParserRunner {
             var watch = new Stopwatch();
 
             watch.Start();
-            var result = projectBuilder.BuildProject(project, buildSettings);
+            var result = ProjectBuilder.BuildProject(project, buildSettings);
             watch.Stop();
 
             Console.WriteLine("Completed.");

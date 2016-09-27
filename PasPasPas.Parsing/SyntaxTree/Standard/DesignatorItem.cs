@@ -23,6 +23,6 @@
         /// <summary>
         ///     generic type of the subitem
         /// </summary>
-        public GenericPostfix SubItemGenericType { get; set; }
+        public GenericPostfix SubitemGenericType { get; set; }
     }
 }

@@ -13,7 +13,7 @@
         /// <summary>
         ///     default flag (for dispinterface)
         /// </summary>
-        public bool HasDefaultFlag { get; internal set; }
+        public bool IsDefault { get; internal set; }
 
         /// <summary>
         ///     index of the property

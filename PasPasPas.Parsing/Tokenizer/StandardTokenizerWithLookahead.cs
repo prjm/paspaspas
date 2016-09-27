@@ -2,6 +2,7 @@
 using PasPasPas.Options.Bundles;
 using PasPasPas.Parsing.Parser;
 using PasPasPas.Parsing.SyntaxTree;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.Tokenizer {
 
@@ -44,20 +45,25 @@ namespace PasPasPas.Parsing.Tokenizer {
             => nextToken.Kind != TokenKind.WhiteSpace &&
             nextToken.Kind != TokenKind.ControlChar &&
             nextToken.Kind != TokenKind.Comment &&
-            nextToken.Kind != TokenKind.Preprocessor;
+            nextToken.Kind != TokenKind.Preprocessor &&
+            (!environment.Options.ConditionalCompilation.Skip);
 
         /// <summary>
         ///     process preprocessor token
         /// </summary>
         /// <param name="nextToken"></param>
-        protected override void ProcssMacroToken(Token nextToken) {
+        protected override void ProcessMacroToken(Token nextToken) {
             using (var input = new StringInput(CompilerDirectiveTokenizer.Unwrap(nextToken.Value), nextToken.FilePath))
             using (var reader = new StackedFileReader()) {
                 var parser = new CompilerDirectiveParser(environment, reader);
                 var tokenizer = new CompilerDirectiveTokenizer(environment, reader);
                 reader.AddFile(input);
                 parser.BaseTokenizer = tokenizer;
-                parser.Parse();
+                var result = parser.Parse();
+                CompilerDirectiveVisitor visitor = new CompilerDirectiveVisitor();
+                CompilerDirectiveVisitorOptions visitorOptions = new CompilerDirectiveVisitorOptions();
+                visitorOptions.Environment = environment;
+                result.Accept(visitor, visitorOptions);
             }
         }
 

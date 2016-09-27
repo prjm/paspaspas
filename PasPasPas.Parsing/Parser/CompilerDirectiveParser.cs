@@ -311,8 +311,6 @@ namespace PasPasPas.Parsing.Parser {
         private void ParseMessage(ISyntaxPart parent) {
             Message result = CreateByTerminal<Message>(parent, TokenKind.MessageCd);
 
-            string messageText = string.Empty;
-
             if (ContinueWith(result, TokenKind.Identifier)) {
                 string messageType = result.LastTerminal.Value;
 

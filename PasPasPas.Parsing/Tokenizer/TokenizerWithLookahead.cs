@@ -6,12 +6,12 @@ using PasPasPas.Parsing.SyntaxTree;
 namespace PasPasPas.Parsing.Tokenizer {
 
     /// <summary>
-    ///     tokenizer with lookahear
+    ///     base class for a tokenizer with a lookead list
     /// </summary>
     public abstract class TokenizerWithLookahead : ITokenizer {
 
         /// <summary>
-        ///     protected constructo
+        ///     protected constructor
         /// </summary>
         protected TokenizerWithLookahead() { }
 
@@ -29,12 +29,14 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <summary>
         ///     list of tokens
         /// </summary>
-        private Queue<Token> tokenList = new Queue<Token>();
+        private Queue<Token> tokenList
+            = new Queue<Token>();
 
         /// <summary>
         ///     list of invalid tokens (e.g. whitespace)
         /// </summary>
-        private Queue<Token> invalidTokens = new Queue<Token>();
+        private Queue<Token> invalidTokens
+            = new Queue<Token>();
 
 
         /// <summary>
@@ -62,23 +64,23 @@ namespace PasPasPas.Parsing.Tokenizer {
                 }
                 else {
                     if (IsMacroToken(nextToken))
-                        ProcssMacroToken(nextToken);
+                        ProcessMacroToken(nextToken);
                     invalidTokens.Enqueue(nextToken);
                 }
             }
         }
 
         /// <summary>
-        ///     process preprocessor token
+        ///     process a macro token
         /// </summary>
-        /// <param name="nextToken"></param>
-        protected abstract void ProcssMacroToken(Token nextToken);
+        /// <param name="nextToken">token to process</param>
+        protected abstract void ProcessMacroToken(Token nextToken);
 
         /// <summary>
         ///     test if a token is a macro token
         /// </summary>
-        /// <param name="nextToken"></param>
-        /// <returns></returns>
+        /// <param name="nextToken">token to test</param>
+        /// <returns><c>true</c> if the token is a macro token</returns>
         protected abstract bool IsMacroToken(Token nextToken);
 
         /// <summary>

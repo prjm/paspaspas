@@ -619,7 +619,6 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind4"></param>
         /// <param name="tokenKind5"></param>
         /// <param name="tokenKind6"></param>
-        /// <param name="tokenKind7"></param>
         /// <param name="part"></param>
         /// <returns></returns>
         protected bool ContinueWith(ISyntaxPart part, int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5, int tokenKind6) {
@@ -688,6 +687,19 @@ namespace PasPasPas.Parsing.Parser {
             return true;
         }
 
+        /// <summary>
+        ///     continue with token
+        /// </summary>
+        /// <param name="part"></param>
+        /// <param name="tokenKind1"></param>
+        /// <param name="tokenKind2"></param>
+        /// <param name="tokenKind3"></param>
+        /// <param name="tokenKind4"></param>
+        /// <param name="tokenKind5"></param>
+        /// <param name="tokenKind6"></param>
+        /// <param name="tokenKind7"></param>
+        /// <param name="tokenKind8"></param>
+        /// <returns></returns>
         protected bool ContinueWith(ISyntaxPart part, int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5, int tokenKind6, int tokenKind7, int tokenKind8) {
             var requiresIdentifier = (tokenKind1 == TokenKind.Identifier) ||
                 (tokenKind2 == TokenKind.Identifier) ||

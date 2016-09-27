@@ -12,7 +12,7 @@ namespace PasPasPas.Building.Definition {
         ///     get a list of referenced files
         /// </summary>
         /// <returns></returns>
-        IList<FileReference> GetRerencedFiles();
+        IList<FileReference> GetReferencedFiles();
 
     }
 }

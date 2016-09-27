@@ -51,7 +51,7 @@ namespace PasPasPas.Building.Definition {
 
 
                 var fileBasedSettings = setting as IFileReferenceSetting;
-                foreach (var path in fileBasedSettings.GetRerencedFiles())
+                foreach (var path in fileBasedSettings.GetReferencedFiles())
                     result.Add(path);
 
             }

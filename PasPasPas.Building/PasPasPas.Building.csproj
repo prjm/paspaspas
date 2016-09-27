@@ -55,6 +55,7 @@
     <Compile Include="Engine\BuildSettings.cs" />
     <Compile Include="Engine\BuildWorkItem.cs" />
     <Compile Include="Engine\ProjectBuilder.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tasks\PasPasPasParserTask.cs" />
     <Compile Include="Tasks\TaskBase.cs" />

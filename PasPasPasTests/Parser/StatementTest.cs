@@ -10,6 +10,12 @@ namespace PasPasPasTests.Parser {
     public class StatementTest : ParserTestBase {
 
         [Fact]
+        public void TestMiscStatements() {
+            ParseString("program test; label x; begin x: ; end .");
+            ParseString("program test; begin (x as TB).z(); end .");
+        }
+
+        [Fact]
         public void TestIfStatement() {
             ParseString("program test; begin if a <= b then begin a() end else b() end .");
             ParseString("program test; begin if a <> b then a() ; end .");

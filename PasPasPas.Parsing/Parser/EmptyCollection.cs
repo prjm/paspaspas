@@ -26,12 +26,12 @@ namespace PasPasPas.Parsing.Parser {
         {
             get
             {
-                throw new NotImplementedException();
+                throw new InvalidOperationException();
             }
 
             set
             {
-                throw new NotImplementedException();
+                throw new InvalidOperationException();
             }
         }
 

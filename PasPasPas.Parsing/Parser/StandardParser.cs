@@ -178,16 +178,16 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("InterfaceDeclarationItem", "ConstSection | TypeSection | VarSection | ExportsSection | AssemblyAttribute | ExportedProcedureHeading")]
         private SyntaxPartBase ParseInterfaceDeclarationItem(ISyntaxPart parent) {
-            if (Match(TokenKind.Const)) {
-                return ParseConstSection(parent);
+            if (Match(TokenKind.Const) || Match(TokenKind.Resourcestring)) {
+                return ParseConstSection(parent, false);
             }
 
             if (Match(TokenKind.TypeKeyword)) {
-                return ParseTypeSection(parent);
+                return ParseTypeSection(parent, false);
             }
 
             if (Match(TokenKind.Var)) {
-                return ParseVarSection(parent);
+                return ParseVarSection(parent, false);
             }
 
             if (Match(TokenKind.Exports)) {
@@ -396,6 +396,7 @@ namespace PasPasPas.Parsing.Parser {
             Label label = null;
             if (MatchIdentifier(TokenKind.Integer) && LookAhead(1, TokenKind.Colon)) {
                 label = ParseLabel(result);
+                ContinueWithOrMissing(result, TokenKind.Colon);
             }
 
             StatementPart part = ParseStatementPart(result);
@@ -531,13 +532,13 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
-        [Rule("WithStatement", "'with' Designator { ',' Designator }  'do' Statement")]
+        [Rule("WithStatement", "'with' Expression { ',' Expression }  'do' Statement")]
         private WithStatement ParseWithStatement(ISyntaxPart parent) {
             var result = CreateByTerminal<WithStatement>(parent, TokenKind.With);
 
 
             do {
-                ParseDesignator(result);
+                ParseExpression(result);
             } while (ContinueWith(result, TokenKind.Comma));
 
             ContinueWithOrMissing(result, TokenKind.Do);
@@ -653,13 +654,13 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("SimpleStatement", "GoToStatement | Designator [ ':=' (Expression  | NewStatement) ] ")]
         private StatementPart ParseSimpleStatement(ISyntaxPart parent) {
-            if (Match(TokenKind.GoToKeyword, TokenKind.Exit, TokenKind.Break, TokenKind.Continue)) {
+            if (!(LookAhead(1, TokenKind.Assignment, TokenKind.OpenBraces, TokenKind.OpenParen)) && Match(TokenKind.GoToKeyword, TokenKind.Exit, TokenKind.Break, TokenKind.Continue)) {
                 var result = CreateChild<StatementPart>(parent);
                 result.GoTo = ParseGoToStatement(result);
                 return result;
             }
 
-            if (MatchIdentifier(TokenKind.Inherited)) {
+            if (MatchIdentifier(TokenKind.Inherited, TokenKind.Circumflex, TokenKind.OpenParen)) {
                 var result = CreateChild<StatementPart>(parent);
                 result.DesignatorPart = ParseDesignator(result);
 
@@ -877,17 +878,17 @@ namespace PasPasPas.Parsing.Parser {
                 }
 
                 if (Match(TokenKind.Const, TokenKind.Resourcestring)) {
-                    ParseConstSection(result);
+                    ParseConstSection(result, false);
                     continue;
                 }
 
                 if (Match(TokenKind.TypeKeyword)) {
-                    ParseTypeSection(result);
+                    ParseTypeSection(result, false);
                     continue;
                 }
 
                 if (Match(TokenKind.Var, TokenKind.ThreadVar)) {
-                    ParseVarSection(result);
+                    ParseVarSection(result, false);
                     continue;
                 }
 
@@ -1141,13 +1142,13 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         [Rule("VarSection", "(var | threadvar) VarDeclaration { VarDeclaration }")]
-        private VarSection ParseVarSection(ISyntaxPart parent) {
+        private VarSection ParseVarSection(ISyntaxPart parent, bool inClassDeclaration) {
             var result = CreateByTerminal<VarSection>(parent, TokenKind.Var, TokenKind.ThreadVar);
             result.Kind = result.LastTerminal.Kind;
 
             do {
                 ParseVarDeclaration(result);
-            } while (MatchIdentifier(TokenKind.OpenBraces));
+            } while ((!inClassDeclaration || !Match(TokenKind.Private, TokenKind.Protected, TokenKind.Public, TokenKind.Published, TokenKind.Automated)) && MatchIdentifier(TokenKind.OpenBraces));
 
             return result;
         }
@@ -1214,10 +1215,10 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         [Rule("ConstSection", "('const' | 'resourcestring') ConstDeclaration { ConstDeclaration }")]
-        private ConstSection ParseConstSection(ISyntaxPart parent) {
+        private ConstSection ParseConstSection(ISyntaxPart parent, bool inClassDeclaration) {
             var result = CreateByTerminal<ConstSection>(parent, TokenKind.Const, TokenKind.Resourcestring);
             result.Kind = result.LastTerminal.Kind;
-            while (MatchIdentifier(TokenKind.OpenBraces)) {
+            while ((!inClassDeclaration || !(Match(TokenKind.Private, TokenKind.Protected, TokenKind.Public, TokenKind.Published, TokenKind.Automated))) && MatchIdentifier(TokenKind.OpenBraces)) {
                 ParseConstDeclaration(result);
             }
             return result;
@@ -1600,17 +1601,17 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             if (!result.Class && Match(TokenKind.Const)) {
-                result.ConstSection = ParseConstSection(result);
+                result.ConstSection = ParseConstSection(result, false);
                 return result;
             }
 
             if (!result.Class && Match(TokenKind.TypeKeyword)) {
-                result.TypeSection = ParseTypeSection(result);
+                result.TypeSection = ParseTypeSection(result, false);
                 return result;
             }
 
             if (Match(TokenKind.Var)) {
-                result.VarSection = ParseVarSection(result);
+                result.VarSection = ParseVarSection(result, false);
                 return result;
             }
 
@@ -1886,7 +1887,7 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             if (Match(TokenKind.Var)) {
-                result.VarSection = ParseVarSection(result);
+                result.VarSection = ParseVarSection(result, true);
                 return result;
             }
 
@@ -1959,21 +1960,21 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             if (!result.Class && Match(TokenKind.Const)) {
-                result.ConstSection = ParseConstSection(result);
+                result.ConstSection = ParseConstSection(result, true);
                 return result;
             }
 
             if (!result.Class && Match(TokenKind.TypeKeyword)) {
-                result.TypeSection = ParseTypeSection(result);
+                result.TypeSection = ParseTypeSection(result, true);
                 return result;
             }
 
             if (Match(TokenKind.Var)) {
-                result.VarSection = ParseVarSection(result);
+                result.VarSection = ParseVarSection(result, true);
                 return result;
             }
 
-            if (MatchIdentifier()) {
+            if (MatchIdentifier() && (!Match(TokenKind.Private, TokenKind.Protected, TokenKind.Public, TokenKind.Published, TokenKind.Automated))) {
                 result.FieldDeclaration = ParseClassFieldDeclararation(result);
                 return result;
             }
@@ -2017,7 +2018,7 @@ namespace PasPasPas.Parsing.Parser {
             ContinueWithOrMissing(result, TokenKind.Semicolon);
 
             if (ContinueWith(result, TokenKind.Default)) {
-                result.HasDefaultFlag = true;
+                result.IsDefault = true;
                 ContinueWithOrMissing(result, TokenKind.Semicolon);
             }
 
@@ -2108,12 +2109,12 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         [Rule("TypeSection", "'type' TypeDeclaration { TypeDeclaration }")]
-        private TypeSection ParseTypeSection(ISyntaxPart parent) {
+        private TypeSection ParseTypeSection(ISyntaxPart parent, bool inClassDeclaration) {
             var result = CreateByTerminal<TypeSection>(parent, TokenKind.TypeKeyword);
 
             do {
                 ParseTypeDeclaration(result);
-            } while (MatchIdentifier(TokenKind.OpenBraces));
+            } while ((!inClassDeclaration || !Match(TokenKind.Private, TokenKind.Protected, TokenKind.Public, TokenKind.Published, TokenKind.Automated)) && MatchIdentifier(TokenKind.OpenBraces));
 
             return result;
         }
@@ -2660,7 +2661,7 @@ namespace PasPasPas.Parsing.Parser {
 
                 if (Match(TokenKind.AngleBracketsOpen) && LookAheadIdentifier(1, new[] { TokenKind.String, TokenKind.ShortString, TokenKind.WideString, TokenKind.UnicodeString, TokenKind.AnsiString }) &&
                     HasTokenUntilToken(new[] { TokenKind.AngleBracketsClose }, TokenKind.Identifier, TokenKind.Dot, TokenKind.Comma, TokenKind.AngleBracketsOpen, TokenKind.String, TokenKind.ShortString, TokenKind.WideString, TokenKind.UnicodeString, TokenKind.AnsiString)) {
-                    result.SubItemGenericType = ParseGenericPostfix(result);
+                    result.SubitemGenericType = ParseGenericPostfix(result);
                 }
 
                 return result;
