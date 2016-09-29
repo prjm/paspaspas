@@ -10,5 +10,9 @@
         /// </summary>
         public UnitFinalization Finalization { get; set; }
 
+        /// <summary>
+        ///     initialization statements
+        /// </summary>
+        public StatementList Statements { get; internal set; }
     }
 }

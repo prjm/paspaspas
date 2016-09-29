@@ -8,12 +8,12 @@
         /// <summary>
         ///     at part
         /// </summary>
-        public DesignatorStatement At { get; set; }
+        public Expression At { get; set; }
 
         /// <summary>
         ///     raise part
         /// </summary>
-        public DesignatorStatement Raise { get; set; }
+        public Expression Raise { get; set; }
 
     }
 }

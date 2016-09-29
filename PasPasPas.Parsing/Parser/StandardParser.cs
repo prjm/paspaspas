@@ -346,13 +346,20 @@ namespace PasPasPas.Parsing.Parser {
                 return result;
             }
 
-            result.Initialization = ParseUnitInitialization(result);
+            if (Match(TokenKind.Initialization)) {
+                result.Initialization = ParseUnitInitialization(result);
+                ContinueWithOrMissing(result, TokenKind.End);
+            }
+
+            Unexpected();
             return result;
         }
 
         [Rule("UnitInitialization", "'initialization' StatementList [ UnitFinalization ]", true)]
         private UnitInitialization ParseUnitInitialization(ISyntaxPart parent) {
             var result = CreateByTerminal<UnitInitialization>(parent, TokenKind.Initialization);
+
+            result.Statements = ParseStatementList(result);
 
             if (Match(TokenKind.Finalization)) {
                 result.Finalization = ParseFinalization(result);
@@ -364,6 +371,7 @@ namespace PasPasPas.Parsing.Parser {
         [Rule("UnitFinalization", "'finalization' StatementList", true)]
         private UnitFinalization ParseFinalization(ISyntaxPart parent) {
             var result = CreateByTerminal<UnitFinalization>(parent, TokenKind.Finalization);
+            result.Statements = ParseStatementList(result);
             return result;
         }
 
@@ -461,16 +469,16 @@ namespace PasPasPas.Parsing.Parser {
             return ParseSimpleStatement(parent);
         }
 
-        [Rule("RaiseStatement", "'raise' [ Designator ] [ 'at' Designator ]")]
+        [Rule("RaiseStatement", "'raise' [ Expression ] [ 'at' Expression ]")]
         private RaiseStatement ParseRaiseStatement(ISyntaxPart parent) {
             var result = CreateByTerminal<RaiseStatement>(parent, TokenKind.Raise);
 
             if ((!Match(TokenKind.At)) && MatchIdentifier(TokenKind.Inherited)) {
-                result.Raise = ParseDesignator(result);
+                result.Raise = ParseExpression(result);
             }
 
-            if (ContinueWith(result, TokenKind.At)) {
-                result.At = ParseDesignator(result);
+            if (ContinueWith(result, TokenKind.AtWord)) {
+                result.At = ParseExpression(result);
             }
 
             return result;
@@ -660,7 +668,7 @@ namespace PasPasPas.Parsing.Parser {
                 return result;
             }
 
-            if (MatchIdentifier(TokenKind.Inherited, TokenKind.Circumflex, TokenKind.OpenParen)) {
+            if (MatchIdentifier(TokenKind.Inherited, TokenKind.Circumflex, TokenKind.OpenParen, TokenKind.At, TokenKind.AnsiString, TokenKind.UnicodeString, TokenKind.String, TokenKind.WideString, TokenKind.ShortString)) {
                 var result = CreateChild<StatementPart>(parent);
                 result.DesignatorPart = ParseDesignator(result);
 
@@ -2011,7 +2019,8 @@ namespace PasPasPas.Parsing.Parser {
                 result.PropertyIndex = ParseExpression(result);
             }
 
-            while (Match(TokenKind.Read, TokenKind.Write, TokenKind.Add, TokenKind.Remove, TokenKind.ReadOnly, TokenKind.WriteOnly, TokenKind.DispId)) {
+            while (Match(TokenKind.Read, TokenKind.Write, TokenKind.Add, TokenKind.Remove, TokenKind.ReadOnly, TokenKind.WriteOnly, TokenKind.DispId) ||
+                Match(TokenKind.Default, TokenKind.Stored, TokenKind.Implements)) {
                 ParseClassPropertyAccessSpecifier(result);
             }
 
@@ -2617,7 +2626,7 @@ namespace PasPasPas.Parsing.Parser {
                 return result;
             }
 
-            if (MatchIdentifier(TokenKind.Inherited)) {
+            if (MatchIdentifier(TokenKind.Inherited, TokenKind.ShortString, TokenKind.String, TokenKind.WideString, TokenKind.UnicodeString, TokenKind.AnsiString)) {
                 result.Designator = ParseDesignator(result);
                 return result;
             }
@@ -2634,8 +2643,9 @@ namespace PasPasPas.Parsing.Parser {
         [Rule("Designator", "[ 'inherited' ] [ NamespaceName ] { DesignatorItem }")]
         private DesignatorStatement ParseDesignator(ISyntaxPart parent) {
             var result = CreateChild<DesignatorStatement>(parent);
+            result.AddressOf = ContinueWith(result, TokenKind.At);
             result.Inherited = ContinueWith(result, TokenKind.Inherited);
-            if (MatchIdentifier()) {
+            if (MatchIdentifier(TokenKind.String, TokenKind.ShortString, TokenKind.AnsiString, TokenKind.WideString, TokenKind.String)) {
                 result.Name = ParseTypeName(result);
             }
 

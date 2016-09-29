@@ -95,6 +95,9 @@ namespace PasPasPasTests.Parser {
 
         [Fact]
         public void TestClassTypeDeclarations() {
+            ParseString("program test; type x = class property k: y read k write k default true; property x : y read x write x default 0; end; .");
+            ParseString("program test; type x = class property x : Integer read x default 0; end; .");
+            ParseString("program test; type x = class function x : Reference; end; .");
             ParseString("program test; type x = dispinterface property x read x; default; end; .");
             ParseString("program test; type x = dispinterface; .");
             ParseString("program test; const x : procedure = 5; .");

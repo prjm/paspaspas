@@ -1476,5 +1476,9 @@
         /// </summary>
         public const int EnumSize4 = 827;
 
+        /// <summary>
+        ///     token for <c>at</c>
+        /// </summary>
+        public const int AtWord = 828;
     }
 }

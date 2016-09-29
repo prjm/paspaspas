@@ -24,6 +24,8 @@ namespace PasPasPasTests.Parser {
             ParseString("unit test.x; interface uses x, x, x; implementation end .");
             ParseString("unit test.x; interface uses x, x, x; implementation uses x, x, x; end .");
             ParseString("unit test.x deprecated experimental library; interface uses x, x, x; implementation uses x, x, x; end .");
+            ParseString("unit test.x; interface implementation initialization x; end .");
+            ParseString("unit test.x; interface implementation initialization x; finalization x; end .");
         }
 
     }

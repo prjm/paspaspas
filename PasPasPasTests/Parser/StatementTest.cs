@@ -11,6 +11,8 @@ namespace PasPasPasTests.Parser {
 
         [Fact]
         public void TestMiscStatements() {
+            ParseString("program test; begin x := string(z); end .");
+            ParseString("program test; begin @x := z; end .");
             ParseString("program test; label x; begin x: ; end .");
             ParseString("program test; begin (x as TB).z(); end .");
         }
