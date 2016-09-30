@@ -1650,7 +1650,7 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
-        [Rule("RecordVariant", "ConstantExpression { , ConstantExpression } ")]
+        [Rule("RecordVariant", "ConstantExpression { , ConstantExpression } : '(' FieldList ')' ';' ")]
         private RecordVariant ParseRecordVariant(ISyntaxPart parent) {
             var result = CreateChild<RecordVariant>(parent);
 
@@ -1662,6 +1662,7 @@ namespace PasPasPas.Parsing.Parser {
             ContinueWithOrMissing(result, TokenKind.OpenParen);
             result.FieldList = ParseFieldList(result);
             ContinueWithOrMissing(result, TokenKind.CloseParen);
+            ContinueWithOrMissing(result, TokenKind.Semicolon);
             return result;
         }
 

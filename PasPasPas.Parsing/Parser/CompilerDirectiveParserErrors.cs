@@ -501,7 +501,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <summary>
         ///     invalid stack mem size directive
         /// </summary>
-        public static readonly Guid InvalidStackMemSizeDirective
+        public static readonly Guid InvalidStackMemorySizeDirective
             = new Guid(new byte[] { 0x7e, 0xeb, 0x9, 0x0, 0x7f, 0xc3, 0xd6, 0x44, 0x92, 0xb8, 0x1a, 0xd7, 0x2d, 0x99, 0xf0, 0x2b });
         /* {0009eb7e-c37f-44d6-92b8-1ad72d99f02b} */
 

@@ -11,6 +11,7 @@ namespace PasPasPasTests.Parser {
 
         [Fact]
         public void TestMiscStatements() {
+            ParseString("unit test; interface implementation procedure x; type x = record case 0: (v: w); end ; begin end .");
             ParseString("program test; begin x := string(z); end .");
             ParseString("program test; begin @x := z; end .");
             ParseString("program test; label x; begin x: ; end .");

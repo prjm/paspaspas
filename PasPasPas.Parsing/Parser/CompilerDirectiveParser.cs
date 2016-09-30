@@ -286,7 +286,7 @@ namespace PasPasPas.Parsing.Parser {
             if (mSwitch || result.LastTerminal.Kind == TokenKind.MinMemStackSizeSwitchLong) {
 
                 if (!ContinueWith(result, TokenKind.Integer)) {
-                    ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidStackMemSizeDirective, new[] { TokenKind.Integer });
+                    ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidStackMemorySizeDirective, new[] { TokenKind.Integer });
                     return;
                 }
 
@@ -300,7 +300,7 @@ namespace PasPasPas.Parsing.Parser {
 
                 if (!ContinueWith(result, TokenKind.Integer)) {
                     result.MinStackSize = null;
-                    ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidStackMemSizeDirective, new[] { TokenKind.Integer });
+                    ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidStackMemorySizeDirective, new[] { TokenKind.Integer });
                     return;
                 }
 
