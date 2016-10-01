@@ -11,7 +11,14 @@ namespace PasPasPasTests.Parser {
 
         [Fact]
         public void TestMiscStatements() {
-            ParseString("unit test; interface implementation procedure x; type x = record case 0: (v: w); end ; begin end .");
+            ParseString("program test; begin if a(a) then a(a, a.a < a.a, a.a > 0); end .");
+            ParseString("program test; begin a(a < x, b > (c)); end .");
+            ParseString("program test; begin a(a < x, b > 0); end .");
+            ParseString("program test; begin a(a < x, b > x); end .");
+            ParseString("program test; begin a.goto(5); end .");
+            ParseString("program test; begin a(x:=z,,y:=z); end .");
+            ParseString("program test; begin a(z,,z); end .");
+            ParseString("unit test; interface implementation procedure x; type x = record case 0: (v: w); 1: (z: T); end ; begin end .");
             ParseString("program test; begin x := string(z); end .");
             ParseString("program test; begin @x := z; end .");
             ParseString("program test; label x; begin x: ; end .");

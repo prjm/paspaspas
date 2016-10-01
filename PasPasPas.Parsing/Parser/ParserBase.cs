@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
-using System.Linq;
 using PasPasPas.Parsing.Tokenizer;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Parsing.SyntaxTree;
+using System.Linq;
 
 namespace PasPasPas.Parsing.Parser {
 
@@ -427,16 +427,17 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenToStop">search token</param>
         /// <param name="allowedTokens">stop token</param>
         /// <returns></returns>
-        protected bool HasTokenUntilToken(int[] tokenToStop, params int[] allowedTokens) {
+        protected Tuple<bool, int> HasTokenUntilToken(int[] tokenToStop, params int[] allowedTokens) {
             var lookahead = 1;
             var stopArray = new[] { TokenKind.Eof, TokenKind.Undefined };
+
             while (!LookAhead(lookahead, tokenToStop) && !LookAhead(lookahead, stopArray)) {
                 if (!LookAhead(lookahead, allowedTokens))
-                    return false;
+                    return new Tuple<bool, int>(false, lookahead);
                 lookahead++;
             }
 
-            return true;
+            return new Tuple<bool, int>(true, lookahead);
         }
 
         /// <summary>

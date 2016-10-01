@@ -87,9 +87,12 @@ namespace PasPasPas.Parsing.Parser {
             };
 
         private bool MatchIdentifier(params int[] otherTokens)
-            => LookAheadIdentifier(0, otherTokens);
+                    => LookAheadIdentifier(0, otherTokens, false);
 
-        private bool LookAheadIdentifier(int lookAhead, int[] otherTokens) {
+        private bool MatchIdentifier(bool allowReservedWords)
+            => LookAheadIdentifier(0, new int[0], allowReservedWords);
+
+        private bool LookAheadIdentifier(int lookAhead, int[] otherTokens, bool allowReservedWords) {
             if (LookAhead(lookAhead, otherTokens))
                 return true;
 
@@ -101,7 +104,7 @@ namespace PasPasPas.Parsing.Parser {
             if (token == null)
                 return false;
 
-            if (reservedWords.Contains(token.Kind))
+            if (!allowReservedWords && reservedWords.Contains(token.Kind))
                 return false;
 
             return StandardTokenizer.Keywords.ContainsKey(token.Value);
@@ -473,7 +476,7 @@ namespace PasPasPas.Parsing.Parser {
         private RaiseStatement ParseRaiseStatement(ISyntaxPart parent) {
             var result = CreateByTerminal<RaiseStatement>(parent, TokenKind.Raise);
 
-            if ((!Match(TokenKind.At)) && MatchIdentifier(TokenKind.Inherited)) {
+            if ((!Match(TokenKind.AtWord)) && MatchIdentifier(TokenKind.Inherited)) {
                 result.Raise = ParseExpression(result);
             }
 
@@ -555,7 +558,7 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
-        [Rule("ForStatement", "('for' Designator ':=' Expression ('to' | 'downto' )  Expression 'do' Statement) | ('for' Deisgnator 'in' Expression  'do' Statement)")]
+        [Rule("ForStatement", "('for' Designator ':=' Expression ('to' | 'downto' )  Expression 'do' Statement) | ('for' Designator 'in' Expression  'do' Statement)")]
         private ForStatement ParseForStatement(ISyntaxPart parent) {
             var result = CreateByTerminal<ForStatement>(parent, TokenKind.For);
 
@@ -2333,9 +2336,12 @@ namespace PasPasPas.Parsing.Parser {
 
             result.TypeId = ParseNamespaceName(result);
 
-            if (Match(TokenKind.AngleBracketsOpen) && LookAheadIdentifier(1, new[] { TokenKind.String, TokenKind.ShortString, TokenKind.WideString, TokenKind.UnicodeString, TokenKind.AnsiString }) &&
-                HasTokenUntilToken(new[] { TokenKind.AngleBracketsClose }, TokenKind.Identifier, TokenKind.Dot, TokenKind.Comma, TokenKind.AngleBracketsOpen, TokenKind.String, TokenKind.ShortString, TokenKind.WideString, TokenKind.UnicodeString, TokenKind.AnsiString)) {
-                result.GenericType = ParseGenericPostfix(result);
+            if (Match(TokenKind.AngleBracketsOpen) && LookAheadIdentifier(1, new[] { TokenKind.String, TokenKind.ShortString, TokenKind.WideString, TokenKind.UnicodeString, TokenKind.AnsiString }, false)) {
+                var whereCloseBrackets = HasTokenUntilToken(new[] { TokenKind.AngleBracketsClose }, TokenKind.Identifier, TokenKind.Dot, TokenKind.Comma, TokenKind.AngleBracketsOpen, TokenKind.String, TokenKind.ShortString, TokenKind.WideString, TokenKind.UnicodeString, TokenKind.AnsiString);
+                if (whereCloseBrackets.Item1 && LookAhead(1 + whereCloseBrackets.Item2, TokenKind.OpenBraces, TokenKind.CloseBraces, TokenKind.Comma, TokenKind.End, TokenKind.Semicolon, TokenKind.Colon, TokenKind.AngleBracketsClose, TokenKind.CloseBraces, TokenKind.OpenBraces)) {
+                    result.GenericType = ParseGenericPostfix(result);
+                    return result;
+                }
             }
 
             return result;
@@ -2670,9 +2676,14 @@ namespace PasPasPas.Parsing.Parser {
                 var result = CreateByTerminal<DesignatorItem>(parent, TokenKind.Dot);
                 result.Subitem = RequireIdentifier(result);
 
-                if (Match(TokenKind.AngleBracketsOpen) && LookAheadIdentifier(1, new[] { TokenKind.String, TokenKind.ShortString, TokenKind.WideString, TokenKind.UnicodeString, TokenKind.AnsiString }) &&
-                    HasTokenUntilToken(new[] { TokenKind.AngleBracketsClose }, TokenKind.Identifier, TokenKind.Dot, TokenKind.Comma, TokenKind.AngleBracketsOpen, TokenKind.String, TokenKind.ShortString, TokenKind.WideString, TokenKind.UnicodeString, TokenKind.AnsiString)) {
-                    result.SubitemGenericType = ParseGenericPostfix(result);
+                if (Match(TokenKind.AngleBracketsOpen) &&
+                    LookAheadIdentifier(1, new[] { TokenKind.String, TokenKind.ShortString, TokenKind.WideString, TokenKind.UnicodeString, TokenKind.AnsiString }, false)) {
+                    var whereCloseBrackets = HasTokenUntilToken(new[] { TokenKind.AngleBracketsClose }, TokenKind.Identifier, TokenKind.Dot, TokenKind.Comma, TokenKind.AngleBracketsOpen, TokenKind.String, TokenKind.ShortString, TokenKind.WideString, TokenKind.UnicodeString, TokenKind.AnsiString);
+
+                    if (whereCloseBrackets.Item1 && LookAhead(1 + whereCloseBrackets.Item2, TokenKind.OpenBraces, TokenKind.CloseBraces, TokenKind.Comma, TokenKind.End, TokenKind.Semicolon, TokenKind.Colon, TokenKind.AngleBracketsClose, TokenKind.CloseBraces, TokenKind.OpenBraces)) {
+                        result.SubitemGenericType = ParseGenericPostfix(result);
+
+                    }
                 }
 
                 return result;
@@ -2689,7 +2700,16 @@ namespace PasPasPas.Parsing.Parser {
                 var result = CreateByTerminal<DesignatorItem>(parent, TokenKind.OpenParen);
                 if (!Match(TokenKind.CloseParen)) {
                     do {
-                        ParseFormattedExpression(result);
+                        var parameter = CreateChild<Parameter>(result);
+
+                        if (MatchIdentifier(true) && LookAhead(1, TokenKind.Assignment)) {
+                            parameter.ParameterName = RequireIdentifier(parameter, true);
+                            ContinueWithOrMissing(parameter, TokenKind.Assignment);
+                        }
+
+                        if (!Match(TokenKind.Comma))
+                            parameter.Expression = ParseFormattedExpression(parameter);
+
                     } while (ContinueWith(result, TokenKind.Comma));
                 }
                 ContinueWithOrMissing(result, TokenKind.CloseParen);
@@ -2763,12 +2783,12 @@ namespace PasPasPas.Parsing.Parser {
         private RealNumber RequireRealValue(ISyntaxPart parent)
             => CreateByTerminal<RealNumber>(parent, TokenKind.Real);
 
-        private Identifier RequireIdentifier(ISyntaxPart parent) {
+        private Identifier RequireIdentifier(ISyntaxPart parent, bool allowReserverdWords = false) {
             if (Match(TokenKind.Identifier)) {
                 return CreateByTerminal<Identifier>(parent, TokenKind.Identifier);
             };
 
-            if (!reservedWords.Contains(CurrentToken().Kind)) {
+            if (allowReserverdWords || !reservedWords.Contains(CurrentToken().Kind)) {
                 return CreateByTerminal<Identifier>(parent, CurrentToken().Kind);
             }
 
@@ -2805,8 +2825,8 @@ namespace PasPasPas.Parsing.Parser {
 
             RequireIdentifier(result);
 
-            while (LookAheadIdentifier(1, new int[0]) && ContinueWith(result, TokenKind.Dot)) {
-                RequireIdentifier(result);
+            while (LookAheadIdentifier(1, new int[0], true) && ContinueWith(result, TokenKind.Dot)) {
+                RequireIdentifier(result, true);
             }
 
             return result;
