@@ -48,6 +48,8 @@ namespace PasPasPasTests.Parser {
 
         [Fact]
         public void TestTypeDeclarations() {
+            ParseString("program test; type x = packed record x : array[0..(High(integer) div 4) - 4] of integer; end; .");
+            ParseString("program test; const x : type dummy = type string; .");
             ParseString("program test; const x : Pointer = 5; .");
             ParseString("program test; const x : array of const = 5; .");
             ParseString("program test; const x : array of Pointer = 5; .");
@@ -75,6 +77,7 @@ namespace PasPasPasTests.Parser {
 
         [Fact]
         public void TestClassTypeDefinitions() {
+            ParseString("unit test; interface implementation procedure x<x>.x<x>() ; begin end ; end .");
             ParseString("unit test; interface implementation procedure x.x ; begin end ; end .");
             ParseString("unit test; interface implementation function x.x : x ; begin end ; end .");
             ParseString("unit test; interface implementation class function x.x : x ; begin end ; end .");
@@ -95,6 +98,10 @@ namespace PasPasPasTests.Parser {
 
         [Fact]
         public void TestClassTypeDeclarations() {
+            ParseString("program test; type x = class procedure x; overload; deprecated 'x'; procedure x; end; .");
+            ParseString("program test; type x = class procedure x(x:x;x:x); ovrride; end; .");
+            ParseString("program test; type x = class property k: y<x> read k write k default true; property x : y read x write x default 0; end; .");
+            ParseString("program test; type x = class property k: y<x,x> read k write k default true; property x : y read x write x default 0; end; .");
             ParseString("program test; type x = class property k: y read k write k default true; property x : y read x write x default 0; end; .");
             ParseString("program test; type x = class property x : Integer read x default 0; end; .");
             ParseString("program test; type x = class function x : Reference; end; .");

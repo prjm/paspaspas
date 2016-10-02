@@ -915,7 +915,8 @@ namespace PasPasPas.Parsing.Parser {
                     bool useMethodDeclaration = //
                         useClass ||
                         Match(TokenKind.Constructor, TokenKind.Destructor, TokenKind.Operator) ||
-                        (LookAhead(1, TokenKind.Identifier) && (LookAhead(2, TokenKind.Dot)));
+                        (LookAhead(1, TokenKind.Identifier) && (LookAhead(2, TokenKind.Dot)) ||
+                        HasTokenBeforeToken(TokenKind.Dot, TokenKind.OpenParen, TokenKind.Colon, TokenKind.Semicolon, TokenKind.Begin, TokenKind.End, TokenKind.Comma));
 
                     if (useMethodDeclaration) {
                         var methodDecl = ParseMethodDecl(result);
@@ -990,7 +991,9 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             if (Match(TokenKind.Deprecated, TokenKind.Library, TokenKind.Experimental, TokenKind.Platform)) {
-                return ParseHint(parent);
+                var result = ParseHint(parent);
+                ContinueWithOrMissing(result, TokenKind.Semicolon);
+                return result;
             }
 
             if (Match(TokenKind.DispId)) {
@@ -1053,11 +1056,16 @@ namespace PasPasPas.Parsing.Parser {
         private MethodDeclarationHeading ParseMethodDeclHeading(ISyntaxPart parent) {
             var result = CreateByTerminal<MethodDeclarationHeading>(parent, TokenKind.Constructor, TokenKind.Destructor, TokenKind.Function, TokenKind.Procedure);
             result.Kind = result.LastTerminal.Kind;
-            result.Name = ParseNamespaceName(result);
 
-            if (Match(TokenKind.AngleBracketsOpen)) {
-                result.GenericDefinition = ParseGenericDefinition(result);
-            }
+            do {
+                result.Name = ParseNamespaceName(result);
+
+                if (Match(TokenKind.AngleBracketsOpen)) {
+                    result.GenericDefinition = ParseGenericDefinition(result);
+                }
+            } while (ContinueWith(result, TokenKind.Dot));
+
+
             if (Match(TokenKind.OpenParen)) {
                 result.Parameters = ParseFormalParameterSection(result);
             }
@@ -1149,7 +1157,7 @@ namespace PasPasPas.Parsing.Parser {
 
             do {
                 ParseVarDeclaration(result);
-            } while ((!inClassDeclaration || !Match(TokenKind.Private, TokenKind.Protected, TokenKind.Public, TokenKind.Published, TokenKind.Automated)) && MatchIdentifier(TokenKind.OpenBraces));
+            } while ((!inClassDeclaration || !Match(TokenKind.Private, TokenKind.Protected, TokenKind.Public, TokenKind.Published, TokenKind.Automated, TokenKind.Strict)) && MatchIdentifier(TokenKind.OpenBraces));
 
             return result;
         }
@@ -1219,7 +1227,7 @@ namespace PasPasPas.Parsing.Parser {
         private ConstSection ParseConstSection(ISyntaxPart parent, bool inClassDeclaration) {
             var result = CreateByTerminal<ConstSection>(parent, TokenKind.Const, TokenKind.Resourcestring);
             result.Kind = result.LastTerminal.Kind;
-            while ((!inClassDeclaration || !(Match(TokenKind.Private, TokenKind.Protected, TokenKind.Public, TokenKind.Published, TokenKind.Automated))) && MatchIdentifier(TokenKind.OpenBraces)) {
+            while ((!inClassDeclaration || !(Match(TokenKind.Private, TokenKind.Protected, TokenKind.Public, TokenKind.Published, TokenKind.Automated, TokenKind.Strict))) && MatchIdentifier(TokenKind.OpenBraces)) {
                 ParseConstDeclaration(result);
             }
             return result;
@@ -1329,7 +1337,7 @@ namespace PasPasPas.Parsing.Parser {
 
             result.NewType = ContinueWith(result, TokenKind.TypeKeyword);
 
-            if (result.NewType || (MatchIdentifier() && (!LookAhead(1, TokenKind.DotDot)))) {
+            if (result.NewType || (MatchIdentifier(TokenKind.ShortString, TokenKind.String, TokenKind.WideString, TokenKind.UnicodeString, TokenKind.AnsiString) && (!LookAhead(1, TokenKind.DotDot)))) {
                 result.TypeId = ParseNamespaceName(result);
                 if (Match(TokenKind.AngleBracketsOpen)) {
                     result.GenericPostfix = ParseGenericPostfix(result);
@@ -1976,7 +1984,7 @@ namespace PasPasPas.Parsing.Parser {
                 return result;
             }
 
-            if (MatchIdentifier() && (!Match(TokenKind.Private, TokenKind.Protected, TokenKind.Public, TokenKind.Published, TokenKind.Automated))) {
+            if (MatchIdentifier() && (!Match(TokenKind.Private, TokenKind.Protected, TokenKind.Public, TokenKind.Published, TokenKind.Automated, TokenKind.Strict))) {
                 result.FieldDeclaration = ParseClassFieldDeclararation(result);
                 return result;
             }
@@ -2117,7 +2125,7 @@ namespace PasPasPas.Parsing.Parser {
 
             do {
                 ParseTypeDeclaration(result);
-            } while ((!inClassDeclaration || !Match(TokenKind.Private, TokenKind.Protected, TokenKind.Public, TokenKind.Published, TokenKind.Automated)) && MatchIdentifier(TokenKind.OpenBraces));
+            } while ((!inClassDeclaration || !Match(TokenKind.Private, TokenKind.Protected, TokenKind.Public, TokenKind.Published, TokenKind.Automated, TokenKind.Strict)) && MatchIdentifier(TokenKind.OpenBraces));
 
             return result;
         }
@@ -2328,7 +2336,7 @@ namespace PasPasPas.Parsing.Parser {
 
             if (Match(TokenKind.AngleBracketsOpen) && LookAheadIdentifier(1, new[] { TokenKind.String, TokenKind.ShortString, TokenKind.WideString, TokenKind.UnicodeString, TokenKind.AnsiString }, false)) {
                 var whereCloseBrackets = HasTokenUntilToken(new[] { TokenKind.AngleBracketsClose }, TokenKind.Identifier, TokenKind.Dot, TokenKind.Comma, TokenKind.AngleBracketsOpen, TokenKind.String, TokenKind.ShortString, TokenKind.WideString, TokenKind.UnicodeString, TokenKind.AnsiString);
-                if (whereCloseBrackets.Item1 && LookAhead(1 + whereCloseBrackets.Item2, TokenKind.OpenBraces, TokenKind.CloseBraces, TokenKind.Comma, TokenKind.End, TokenKind.Semicolon, TokenKind.Colon, TokenKind.AngleBracketsClose, TokenKind.CloseBraces, TokenKind.OpenBraces, TokenKind.OpenParen, TokenKind.CloseParen, TokenKind.Dot)) {
+                if (whereCloseBrackets.Item1 && LookAhead(1 + whereCloseBrackets.Item2, TokenKind.OpenBraces, TokenKind.CloseBraces, TokenKind.Comma, TokenKind.End, TokenKind.Semicolon, TokenKind.Colon, TokenKind.AngleBracketsClose, TokenKind.CloseBraces, TokenKind.OpenBraces, TokenKind.OpenParen, TokenKind.CloseParen, TokenKind.Dot, TokenKind.Read, TokenKind.Write, TokenKind.ReadOnly, TokenKind.WriteOnly, TokenKind.Add, TokenKind.Remove, TokenKind.DispId)) {
                     result.GenericType = ParseGenericPostfix(result);
                     return result;
                 }
@@ -2487,9 +2495,12 @@ namespace PasPasPas.Parsing.Parser {
                         ParseRecordConstant(result);
                     } while (ContinueWith(result, TokenKind.Semicolon));
 
-                else do {
+                else if (HasTokenBeforeToken(TokenKind.Comma, TokenKind.OpenParen, TokenKind.OpenBraces, TokenKind.CloseBraces, TokenKind.CloseParen)) do {
                         ParseConstantExpression(result);
                     } while (ContinueWith(result, TokenKind.Comma));
+                else {
+                    result.Value = ParseExpression(result);
+                }
 
                 ContinueWithOrMissing(result, TokenKind.CloseParen);
             }
@@ -2670,7 +2681,7 @@ namespace PasPasPas.Parsing.Parser {
                     LookAheadIdentifier(1, new[] { TokenKind.String, TokenKind.ShortString, TokenKind.WideString, TokenKind.UnicodeString, TokenKind.AnsiString }, false)) {
                     var whereCloseBrackets = HasTokenUntilToken(new[] { TokenKind.AngleBracketsClose }, TokenKind.Identifier, TokenKind.Dot, TokenKind.Comma, TokenKind.AngleBracketsOpen, TokenKind.String, TokenKind.ShortString, TokenKind.WideString, TokenKind.UnicodeString, TokenKind.AnsiString);
 
-                    if (whereCloseBrackets.Item1 && LookAhead(1 + whereCloseBrackets.Item2, TokenKind.OpenBraces, TokenKind.CloseBraces, TokenKind.Comma, TokenKind.End, TokenKind.Semicolon, TokenKind.Colon, TokenKind.AngleBracketsClose, TokenKind.CloseBraces, TokenKind.OpenBraces, TokenKind.OpenParen, TokenKind.CloseParen, TokenKind.Dot)) {
+                    if (whereCloseBrackets.Item1 && LookAhead(1 + whereCloseBrackets.Item2, TokenKind.OpenBraces, TokenKind.CloseBraces, TokenKind.Comma, TokenKind.End, TokenKind.Semicolon, TokenKind.Colon, TokenKind.AngleBracketsClose, TokenKind.CloseBraces, TokenKind.OpenBraces, TokenKind.OpenParen, TokenKind.CloseParen, TokenKind.Dot, TokenKind.Read, TokenKind.Write, TokenKind.ReadOnly, TokenKind.WriteOnly, TokenKind.Add, TokenKind.Remove, TokenKind.DispId)) {
                         result.SubitemGenericType = ParseGenericPostfix(result);
 
                     }
@@ -2813,7 +2824,8 @@ namespace PasPasPas.Parsing.Parser {
         private NamespaceName ParseNamespaceName(ISyntaxPart parent) {
             var result = CreateChild<NamespaceName>(parent);
 
-            RequireIdentifier(result);
+            if (!ContinueWith(result, TokenKind.AnsiString, TokenKind.String, TokenKind.WideString, TokenKind.ShortString, TokenKind.UnicodeString))
+                RequireIdentifier(result);
 
             while (LookAheadIdentifier(1, new int[0], true) && ContinueWith(result, TokenKind.Dot)) {
                 RequireIdentifier(result, true);
