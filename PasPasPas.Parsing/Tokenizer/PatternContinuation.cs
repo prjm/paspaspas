@@ -17,13 +17,14 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         /// <param name="stringBuilder">string builder to look at</param>
         /// <param name="test">search string</param>
+        /// <param name="comparison">comparison</param>
         /// <returns><c>true</c> if the string builder ends with that string</returns>
-        public static bool EndsWith(this StringBuilder stringBuilder, string test) {
+        public static bool EndsWith(this StringBuilder stringBuilder, string test, StringComparison comparison = StringComparison.Ordinal) {
             if (stringBuilder.Length < test.Length)
                 return false;
 
             string end = stringBuilder.ToString(stringBuilder.Length - test.Length, test.Length);
-            return end.Equals(test, StringComparison.Ordinal);
+            return end.Equals(test, comparison);
         }
     }
 
@@ -806,6 +807,12 @@ namespace PasPasPas.Parsing.Tokenizer {
             = new IdentifierCharacterClass() { AllowAmpersand = false, AllowDigits = true };
 
         /// <summary>
+        ///     if <c>true</c> asm blocks are parsed as a token
+        /// </summary>
+        public bool ParseAsm { get; set; }
+            = false;
+
+        /// <summary>
         ///     allow dots in identifiers
         /// </summary>
         public bool AllowDots
@@ -873,6 +880,23 @@ namespace PasPasPas.Parsing.Tokenizer {
 
             int tokenKind;
             string value = state.Buffer.ToString();
+
+            if (ParseAsm && string.Equals(value, "asm", StringComparison.OrdinalIgnoreCase)) {
+                while (state.IsValid) {
+                    var currentChar = state.FetchChar();
+                    if (state.Buffer.EndsWith("end", StringComparison.OrdinalIgnoreCase)) {
+                        state.Putback(currentChar);
+                        break;
+                    }
+                    state.AppendChar(currentChar);
+                }
+
+                if (!state.Buffer.EndsWith("end", StringComparison.OrdinalIgnoreCase))
+                    state.Error(StandardTokenizer.IncompleteAsmGroup, state.Buffer.ToString());
+
+                state.Finish(TokenKind.Asm);
+                return;
+            }
 
             if (hasAmpersand && state.Buffer.Length < 2)
                 state.Error(StandardTokenizer.IncompleteIdentifier, state.Buffer.ToString());

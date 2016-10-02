@@ -1,5 +1,4 @@
 ﻿using System.Text;
-using System;
 using System.Collections.Generic;
 using PasPasPas.Parsing.Tokenizer;
 using PasPasPas.Parsing.SyntaxTree;
@@ -459,11 +458,6 @@ namespace PasPasPas.Parsing.Parser {
                 result.Raise = ParseRaiseStatement(result);
                 return result;
             }
-            if (Match(TokenKind.Asm)) {
-                result.Asm = ParseAsmStatement();
-                return result;
-            }
-
             if (Match(TokenKind.Begin)) {
                 result.CompoundStatement = ParseCompoundStatement(result);
                 return result;
@@ -485,10 +479,6 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             return result;
-        }
-
-        private AsmStatement ParseAsmStatement() {
-            throw new NotImplementedException();
         }
 
         [Rule("TryStatement", "'try' StatementList  ('except' HandlerList | 'finally' StatementList) 'end'")]
@@ -865,8 +855,8 @@ namespace PasPasPas.Parsing.Parser {
         private BlockBody ParseBlockBody(ISyntaxPart parent) {
             var result = CreateChild<BlockBody>(parent);
 
-            if (Match(TokenKind.Asm)) {
-                result.AssemblerBlock = ParseAsmStatement();
+            if (ContinueWith(result, TokenKind.Asm)) {
+                result.AssemblerBlock = result.LastTerminal;
             }
 
             if (Match(TokenKind.Begin)) {
@@ -2338,7 +2328,7 @@ namespace PasPasPas.Parsing.Parser {
 
             if (Match(TokenKind.AngleBracketsOpen) && LookAheadIdentifier(1, new[] { TokenKind.String, TokenKind.ShortString, TokenKind.WideString, TokenKind.UnicodeString, TokenKind.AnsiString }, false)) {
                 var whereCloseBrackets = HasTokenUntilToken(new[] { TokenKind.AngleBracketsClose }, TokenKind.Identifier, TokenKind.Dot, TokenKind.Comma, TokenKind.AngleBracketsOpen, TokenKind.String, TokenKind.ShortString, TokenKind.WideString, TokenKind.UnicodeString, TokenKind.AnsiString);
-                if (whereCloseBrackets.Item1 && LookAhead(1 + whereCloseBrackets.Item2, TokenKind.OpenBraces, TokenKind.CloseBraces, TokenKind.Comma, TokenKind.End, TokenKind.Semicolon, TokenKind.Colon, TokenKind.AngleBracketsClose, TokenKind.CloseBraces, TokenKind.OpenBraces)) {
+                if (whereCloseBrackets.Item1 && LookAhead(1 + whereCloseBrackets.Item2, TokenKind.OpenBraces, TokenKind.CloseBraces, TokenKind.Comma, TokenKind.End, TokenKind.Semicolon, TokenKind.Colon, TokenKind.AngleBracketsClose, TokenKind.CloseBraces, TokenKind.OpenBraces, TokenKind.OpenParen, TokenKind.CloseParen, TokenKind.Dot)) {
                     result.GenericType = ParseGenericPostfix(result);
                     return result;
                 }
@@ -2680,7 +2670,7 @@ namespace PasPasPas.Parsing.Parser {
                     LookAheadIdentifier(1, new[] { TokenKind.String, TokenKind.ShortString, TokenKind.WideString, TokenKind.UnicodeString, TokenKind.AnsiString }, false)) {
                     var whereCloseBrackets = HasTokenUntilToken(new[] { TokenKind.AngleBracketsClose }, TokenKind.Identifier, TokenKind.Dot, TokenKind.Comma, TokenKind.AngleBracketsOpen, TokenKind.String, TokenKind.ShortString, TokenKind.WideString, TokenKind.UnicodeString, TokenKind.AnsiString);
 
-                    if (whereCloseBrackets.Item1 && LookAhead(1 + whereCloseBrackets.Item2, TokenKind.OpenBraces, TokenKind.CloseBraces, TokenKind.Comma, TokenKind.End, TokenKind.Semicolon, TokenKind.Colon, TokenKind.AngleBracketsClose, TokenKind.CloseBraces, TokenKind.OpenBraces)) {
+                    if (whereCloseBrackets.Item1 && LookAhead(1 + whereCloseBrackets.Item2, TokenKind.OpenBraces, TokenKind.CloseBraces, TokenKind.Comma, TokenKind.End, TokenKind.Semicolon, TokenKind.Colon, TokenKind.AngleBracketsClose, TokenKind.CloseBraces, TokenKind.OpenBraces, TokenKind.OpenParen, TokenKind.CloseParen, TokenKind.Dot)) {
                         result.SubitemGenericType = ParseGenericPostfix(result);
 
                     }

@@ -112,5 +112,9 @@ namespace PasPasPasTests {
             IsToken(TokenKind.Comment, input, input);
         }
 
+        public static void IsAssembler(string input) {
+            IsToken(TokenKind.Asm, input, input);
+        }
+
     }
 }

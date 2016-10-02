@@ -6,11 +6,6 @@
     public class StatementPart : SyntaxPartBase {
 
         /// <summary>
-        ///     assembler block
-        /// </summary>
-        public AsmStatement Asm { get; set; }
-
-        /// <summary>
         ///     assignment
         /// </summary>
         public Expression Assignment { get; set; }

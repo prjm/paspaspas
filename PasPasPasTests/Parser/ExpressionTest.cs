@@ -27,8 +27,8 @@ namespace PasPasPasTests.Parser {
 
         [Fact]
         public void TestSimpleExpressions() {
-            ParseString("program test; const x = a(((x[0]).q)^); .");
             ParseString("program test; const x = TDemo.GetInstance().Func<T>(); .");
+            ParseString("program test; const x = a(((x[0]).q)^); .");
             ParseString("program test; const x = TDemo<string>.Create(); .");
             ParseString("program test; const x = TDemo<A,B>.Create(); .");
             ParseString("program test; const x = TDemo<A,B, C<D>>.Create(); .");

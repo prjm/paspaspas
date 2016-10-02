@@ -8,7 +8,7 @@
         /// <summary>
         ///    assembler block
         /// </summary>
-        public AsmStatement AssemblerBlock { get; set; }
+        public Terminal AssemblerBlock { get; set; }
 
         /// <summary>
         ///     block bode

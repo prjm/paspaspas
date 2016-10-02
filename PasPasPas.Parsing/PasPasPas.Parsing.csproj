@@ -132,7 +132,6 @@
     <Compile Include="SyntaxTree\Standard\AbstractDirective.cs" />
     <Compile Include="SyntaxTree\Standard\ArrayIndex.cs" />
     <Compile Include="SyntaxTree\Standard\ArrayType.cs" />
-    <Compile Include="SyntaxTree\Standard\AsmStatement.cs" />
     <Compile Include="SyntaxTree\Standard\AssemblyAttribute.cs" />
     <Compile Include="SyntaxTree\Standard\BindingDirective.cs" />
     <Compile Include="SyntaxTree\Standard\Block.cs" />

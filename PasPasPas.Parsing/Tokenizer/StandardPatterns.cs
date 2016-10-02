@@ -11,6 +11,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         ///     register punctuators
         /// </summary>
         public StandardPatterns() {
+
             var dot = AddPattern('.', TokenKind.Dot);
             dot.Add('.', TokenKind.DotDot);
             dot.Add(')', TokenKind.CloseBraces);
@@ -40,7 +41,7 @@ namespace PasPasPas.Parsing.Tokenizer {
             AddPattern('{', new CurlyBraceCommentTokenValue()).Add('$', new PreprocessorTokenValue());
             AddPattern('$', new HexNumberTokenValue());
             AddPattern(new WhiteSpaceCharacterClass(), new WhiteSpaceTokenGroupValue());
-            AddPattern(new IdentifierCharacterClass(), new IdentifierTokenGroupValue(StandardTokenizer.Keywords) { AllowAmpersand = true });
+            AddPattern(new IdentifierCharacterClass(), new IdentifierTokenGroupValue(StandardTokenizer.Keywords) { AllowAmpersand = true, ParseAsm = true });
             AddPattern(new NumberCharacterClass(), new NumberTokenGroupValue());
             AddPattern(new ControlCharacterClass(), new ControlTokenGroupValue());
             AddPattern('\'', new StringGroupTokenValue());

@@ -53,6 +53,11 @@ namespace PasPasPasTests.Tokenizer {
             Assert.IsComment("(* HPPEMIT '}'*)");
         }
 
+        [Fact]
+        public void TestAsm() {
+            Assert.IsAssembler("asm efdsf dfdsf sd sdf sdf end");
+        }
+
 
         [Fact]
         public void TestHexNumbers() {
@@ -77,6 +82,7 @@ namespace PasPasPasTests.Tokenizer {
             Assert.TokenizerMessageIsGenerated(StandardTokenizer.IncompleteHexNumber, "$");
             Assert.TokenizerMessageIsGenerated(StandardTokenizer.IncompleteIdentifier, "&");
             Assert.TokenizerMessageIsGenerated(TokenizerBase.UnexpectedCharacter, "´");
+            Assert.TokenizerMessageIsGenerated(StandardTokenizer.IncompleteAsmGroup, "asm csdd df sdf ds");
         }
     }
 }

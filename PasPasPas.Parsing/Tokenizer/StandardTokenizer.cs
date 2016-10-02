@@ -25,13 +25,22 @@ namespace PasPasPas.Parsing.Tokenizer {
         ///     message id: incomplete hex number
         /// </summary>
         public static readonly Guid IncompleteHexNumber
-            = new Guid("{489C8577-E50F-43AE-83F8-F418343C5271}");
+            = new Guid(new byte[] { 0xfc, 0x7b, 0x96, 0xb1, 0xaf, 0x9e, 0x7e, 0x4a, 0x88, 0x7c, 0xc9, 0xa9, 0xaa, 0xab, 0xa7, 0xa8 });
+        /* {b1967bfc-9eaf-4a7e-887c-c9a9aaaba7a8} */
 
         /// <summary>
         ///     message id: incomplete identifier
         /// </summary>
         public static readonly Guid IncompleteIdentifier
-            = new Guid("{988D22EB-E405-4391-BD7E-7DF3D4E553D3}");
+            = new Guid(new byte[] { 0x68, 0x3f, 0x9c, 0x79, 0x2, 0xe0, 0xf3, 0x42, 0x98, 0x8a, 0xef, 0xa3, 0x59, 0x4f, 0xf9, 0x42 });
+        /* {799c3f68-e002-42f3-988a-efa3594ff942} */
+
+        /// <summary>
+        ///     message id: incomplete asm statement
+        /// </summary>
+        public static readonly Guid IncompleteAsmGroup
+            = new Guid(new byte[] { 0x98, 0xe4, 0x4, 0x18, 0x87, 0x60, 0x2d, 0x4e, 0xbe, 0x7e, 0x83, 0x61, 0x31, 0xd, 0x4b, 0xae });
+        /* {1804e498-6087-4e2d-be7e-8361310d4bae} */
 
         /// <summary>
         ///     get punctuators
@@ -140,7 +149,6 @@ namespace PasPasPas.Parsing.Tokenizer {
                 ["and"] = TokenKind.And,
                 ["array"] = TokenKind.Array,
                 ["as"] = TokenKind.As,
-                ["asm"] = TokenKind.Asm,
                 ["begin"] = TokenKind.Begin,
                 ["case"] = TokenKind.Case,
                 ["class"] = TokenKind.Class,
