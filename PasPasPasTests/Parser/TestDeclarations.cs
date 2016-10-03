@@ -30,6 +30,8 @@ namespace PasPasPasTests.Parser {
 
         [Fact]
         public void TestOtherDeclarations() {
+            ParseString("program test; function x; deprecated; platform; .");
+            ParseString("program test; function x; assembler; .");
             ParseString("program test; label x; .");
             ParseString("program test; label x, x, x; .");
             ParseString("program test; var x : Pointer ; .");
@@ -48,6 +50,7 @@ namespace PasPasPasTests.Parser {
 
         [Fact]
         public void TestTypeDeclarations() {
+            ParseString("program test; var x : x = ((x:01;x:99;x:'x';x:(x,0,0,0,0,0,0))); .");
             ParseString("program test; type x = packed record x : array[0..(High(integer) div 4) - 4] of integer; end; .");
             ParseString("program test; const x : type dummy = type string; .");
             ParseString("program test; const x : Pointer = 5; .");
@@ -98,6 +101,11 @@ namespace PasPasPasTests.Parser {
 
         [Fact]
         public void TestClassTypeDeclarations() {
+            ParseString("program test; type x = record var x: x; private x:x end; .");
+            ParseString("program test; type x = record class operator Implicit(x: x): x; end; .");
+            ParseString("program test; type x = record class function x:x; case x of 0: (x:x); 1: (x:x);  end; .");
+            ParseString("program test; type x = record private x:x end; .");
+            ParseString("program test; type x = class procedure x; assembler; end; .");
             ParseString("program test; type x = class procedure x; overload; deprecated 'x'; procedure x; end; .");
             ParseString("program test; type x = class procedure x(x:x;x:x); ovrride; end; .");
             ParseString("program test; type x = class property k: y<x> read k write k default true; property x : y read x write x default 0; end; .");

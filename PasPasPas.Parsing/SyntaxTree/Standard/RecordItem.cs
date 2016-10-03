@@ -31,15 +31,28 @@
         public ClassProperty PropertyDeclaration { get; set; }
 
         /// <summary>
+        ///     strict visibility
+        /// </summary>
+        public bool Strict { get; internal set; }
+
+        /// <summary>
         ///     type
         /// </summary>
         public TypeSection TypeSection { get; set; }
+
+        /// <summary>
+        ///     record variant section
+        /// </summary>
+        public RecordVariantSection VariantSection { get; set; }
 
         /// <summary>
         ///     var section
         /// </summary>
         public VarSection VarSection { get; set; }
 
-
+        /// <summary>
+        ///     visibility declaration
+        /// </summary>
+        public int Visibility { get; internal set; }
     }
 }
