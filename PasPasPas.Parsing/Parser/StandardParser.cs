@@ -318,15 +318,23 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
-        [Rule("ExternalSpecifier", "('Name' | 'Index' ) ConstExpression")]
+        [Rule("ExternalSpecifier", "(('Name' | 'Index' ) ConstExpression) |  'Dependency' ConstExpression { ', ' ConstExpression } ) ")]
         private ExternalSpecifier ParseExternalSpecifier(ISyntaxPart parent) {
 
-            if (!Match(TokenKind.Name, TokenKind.Index))
+            if (!Match(TokenKind.Name, TokenKind.Index, TokenKind.Dependency))
                 return null;
 
-            var result = CreateByTerminal<ExternalSpecifier>(parent, TokenKind.Name, TokenKind.Index);
+            var result = CreateByTerminal<ExternalSpecifier>(parent, TokenKind.Name, TokenKind.Index, TokenKind.Dependency);
             result.Kind = result.LastTerminal.Kind;
-            result.Expression = ParseConstantExpression(result);
+
+            if (result.Kind != TokenKind.Dependency) {
+                result.Expression = ParseConstantExpression(result);
+            }
+            else {
+                do {
+                    ParseConstantExpression(result);
+                } while (ContinueWith(result, TokenKind.Comma));
+            }
 
             return result;
         }

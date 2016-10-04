@@ -215,7 +215,8 @@ namespace PasPasPas.Parsing.Tokenizer {
                 ["break"] = TokenKind.Break,
                 ["continue"] = TokenKind.Continue,
                 ["at"] = TokenKind.AtWord,
-                ["on"] = TokenKind.On
+                ["on"] = TokenKind.On,
+                ["dependency"] = TokenKind.Dependency
             };
 
     }

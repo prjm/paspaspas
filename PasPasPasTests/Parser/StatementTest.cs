@@ -11,6 +11,8 @@ namespace PasPasPasTests.Parser {
 
         [Fact]
         public void TestMiscStatements() {
+            ParseString("program test; procedure x; external x name x + 'x' dependency 'x', 'x', 'x' + x; .");
+            ParseString("program test; procedure x; external x name x + 'x'; .");
             ParseString("program test; begin if a(a) then a(a, a.a < a.a, a.a > 0); end .");
             ParseString("program test; begin a(a < x, b > (c)); end .");
             ParseString("program test; begin a(a < x, b > 0); end .");

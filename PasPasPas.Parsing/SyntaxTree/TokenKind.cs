@@ -1480,5 +1480,10 @@
         ///     token for <c>at</c>
         /// </summary>
         public const int AtWord = 828;
+
+        /// <summary>
+        ///     token for <c>dependency</c>
+        /// </summary>
+        public const int Dependency = 829;
     }
 }
