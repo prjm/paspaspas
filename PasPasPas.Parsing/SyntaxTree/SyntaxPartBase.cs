@@ -50,18 +50,65 @@ namespace PasPasPas.Parsing.SyntaxTree {
         }
 
         /// <summary>
-        ///     get the last terminal symbol
+        ///     get the last terminal value
         /// </summary>
-        public Terminal LastTerminal
+        public string LastTerminalValue
         {
             get
             {
-                if (parts.Count > 0)
-                    return parts[parts.Count - 1] as Terminal;
-                else
-                    return null;
+                if (parts.Count < 1)
+                    return string.Empty;
+
+
+                var terminal = parts[parts.Count - 1] as Terminal;
+
+                if (terminal == null)
+                    return string.Empty;
+
+                return terminal.Value;
             }
         }
+
+        /// <summary>
+        ///     get the last terminal symbol
+        /// </summary>
+        public int LastTerminalKind
+        {
+            get
+            {
+                if (parts.Count < 1)
+                    return TokenKind.Undefined;
+
+
+                var terminal = parts[parts.Count - 1] as Terminal;
+
+                if (terminal == null)
+                    return TokenKind.Undefined;
+
+                return terminal.Kind;
+            }
+        }
+
+        /// <summary>
+        ///     get the last terminal symbol
+        /// </summary>
+        public Token LastTerminalToken
+        {
+            get
+            {
+                if (parts.Count < 1)
+                    return null;
+
+
+                var terminal = parts[parts.Count - 1] as Terminal;
+
+                if (terminal == null)
+                    return null;
+
+                return terminal.Token;
+            }
+        }
+
 
         /// <summary>
         ///     find all terminals in a syntax gtree

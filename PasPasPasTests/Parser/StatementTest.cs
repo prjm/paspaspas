@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Xunit;
+﻿using Xunit;
 
 namespace PasPasPasTests.Parser {
 
@@ -11,6 +6,9 @@ namespace PasPasPasTests.Parser {
 
         [Fact]
         public void TestMiscStatements() {
+            ParseString("program test; begin if a > b then a.a<x> else a.a<x>; end .");
+            ParseString("program test; begin if a<b> then asm 5 end; end .");
+            ParseString("program test; begin if (a < b) then asm 5 end; end .");
             ParseString("program test; procedure x; external x name x + 'x' dependency 'x', 'x', 'x' + x; .");
             ParseString("program test; procedure x; external x name x + 'x'; .");
             ParseString("program test; begin if a(a) then a(a, a.a < a.a, a.a > 0); end .");

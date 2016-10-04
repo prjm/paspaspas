@@ -697,7 +697,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (syntaxPart.MessageType == MessageSeverity.Undefined)
                 return;
 
-            parameter.LogSource.ProcessMessage(new LogMessage(syntaxPart.MessageType, ParserBase.ParserLogMessage, ParserBase.UserGeneratedMessage, syntaxPart.MessageType, syntaxPart.LastTerminal));
+            parameter.LogSource.ProcessMessage(new LogMessage(syntaxPart.MessageType, ParserBase.ParserLogMessage, ParserBase.UserGeneratedMessage, syntaxPart.MessageType, syntaxPart.LastTerminalToken));
         }
 
         /// <summary>
@@ -706,7 +706,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <param name="syntaxPart"></param>
         /// <param name="parameter"></param>
         public void BeginVisitItem(Link syntaxPart, CompilerDirectiveVisitorOptions parameter) {
-            var basePath = syntaxPart?.LastTerminal?.Token?.FilePath;
+            var basePath = syntaxPart?.LastTerminalToken?.FilePath;
             var fileName = syntaxPart?.FileName;
 
             if (basePath == null || string.IsNullOrWhiteSpace(basePath.Path))
@@ -733,7 +733,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <param name="syntaxPart"></param>
         /// <param name="parameter"></param>
         public void BeginVisitItem(Resource syntaxPart, CompilerDirectiveVisitorOptions parameter) {
-            var basePath = syntaxPart?.LastTerminal?.Token?.FilePath;
+            var basePath = syntaxPart?.LastTerminalToken?.FilePath;
             var fileName = syntaxPart?.FileName;
 
             if (basePath == null || string.IsNullOrWhiteSpace(basePath.Path))
@@ -760,7 +760,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <param name="syntaxPart"></param>
         /// <param name="parameter"></param>
         public void BeginVisitItem(Include syntaxPart, CompilerDirectiveVisitorOptions parameter) {
-            var basePath = syntaxPart?.LastTerminal?.Token?.FilePath;
+            var basePath = syntaxPart?.LastTerminalToken?.FilePath;
             var fileName = syntaxPart?.FileName;
 
             if (basePath == null || string.IsNullOrWhiteSpace(basePath.Path))

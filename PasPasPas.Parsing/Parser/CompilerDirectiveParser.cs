@@ -262,14 +262,14 @@ namespace PasPasPas.Parsing.Parser {
                 return;
             }
 
-            result.SwitchKind = result.LastTerminal.Value;
-            result.SwitchInfo = Options.GetSwitchInfo(result.LastTerminal.Value);
+            result.SwitchKind = result.LastTerminalValue;
+            result.SwitchInfo = Options.GetSwitchInfo(result.LastTerminalValue);
 
             if (!ContinueWith(result, TokenKind.Plus, TokenKind.Minus)) {
                 return;
             }
 
-            result.SwitchState = GetSwitchInfo(result.LastTerminal.Kind);
+            result.SwitchState = GetSwitchInfo(result.LastTerminalKind);
         }
 
         private static SwitchInfo GetSwitchInfo(int switchState) {
@@ -283,20 +283,20 @@ namespace PasPasPas.Parsing.Parser {
         private void ParseStackSizeSwitch(ISyntaxPart parent, bool mSwitch) {
             StackMemorySize result = CreateByTerminal<StackMemorySize>(parent, TokenKind.MinMemStackSizeSwitchLong, TokenKind.MaxMemStackSizeSwitchLong, TokenKind.TypeInfoSwitch);
 
-            if (mSwitch || result.LastTerminal.Kind == TokenKind.MinMemStackSizeSwitchLong) {
+            if (mSwitch || result.LastTerminalKind == TokenKind.MinMemStackSizeSwitchLong) {
 
                 if (!ContinueWith(result, TokenKind.Integer)) {
                     ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidStackMemorySizeDirective, new[] { TokenKind.Integer });
                     return;
                 }
 
-                result.MinStackSize = DigitTokenGroupValue.Unwrap(result.LastTerminal.Token);
+                result.MinStackSize = DigitTokenGroupValue.Unwrap(result.LastTerminalToken);
             }
 
             if (mSwitch)
                 ContinueWith(result, TokenKind.Comma);
 
-            if (mSwitch || result.LastTerminal.Kind == TokenKind.MaxMemStackSizeSwitchLong) {
+            if (mSwitch || result.LastTerminalKind == TokenKind.MaxMemStackSizeSwitchLong) {
 
                 if (!ContinueWith(result, TokenKind.Integer)) {
                     result.MinStackSize = null;
@@ -304,7 +304,7 @@ namespace PasPasPas.Parsing.Parser {
                     return;
                 }
 
-                result.MaxStackSize = DigitTokenGroupValue.Unwrap(result.LastTerminal.Token);
+                result.MaxStackSize = DigitTokenGroupValue.Unwrap(result.LastTerminalToken);
             }
         }
 
@@ -312,7 +312,7 @@ namespace PasPasPas.Parsing.Parser {
             Message result = CreateByTerminal<Message>(parent, TokenKind.MessageCd);
 
             if (ContinueWith(result, TokenKind.Identifier)) {
-                string messageType = result.LastTerminal.Value;
+                string messageType = result.LastTerminalValue;
 
                 if (string.Equals(messageType, "Hint", StringComparison.OrdinalIgnoreCase)) {
                     result.MessageType = MessageSeverity.Hint;
@@ -353,13 +353,13 @@ namespace PasPasPas.Parsing.Parser {
                 return;
             }
 
-            result.TypeName = result.LastTerminal.Value;
+            result.TypeName = result.LastTerminalValue;
 
             if (ContinueWith(result, TokenKind.QuotedString)) {
-                result.TypeNameInHpp = QuotedStringTokenValue.Unwrap(result.LastTerminal.Token);
+                result.TypeNameInHpp = QuotedStringTokenValue.Unwrap(result.LastTerminalToken);
 
                 if (ContinueWith(result, TokenKind.QuotedString)) {
-                    result.TypeNameInUnion = QuotedStringTokenValue.Unwrap(result.LastTerminal.Token);
+                    result.TypeNameInUnion = QuotedStringTokenValue.Unwrap(result.LastTerminalToken);
                 }
             }
         }
@@ -372,7 +372,7 @@ namespace PasPasPas.Parsing.Parser {
                 return;
             }
 
-            result.UnitName = result.LastTerminal.Value;
+            result.UnitName = result.LastTerminalValue;
         }
 
         private void ParsePEUserVersion(ISyntaxPart parent) {
@@ -400,7 +400,7 @@ namespace PasPasPas.Parsing.Parser {
                 return;
             }
 
-            var text = result.LastTerminal.Value.Split(new[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
+            var text = result.LastTerminalValue.Split(new[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
 
             if (text.Length != 2) {
                 ErrorLastPart(result, CompilerDirectiveParserErrors.InvalidPEVersionDirective);
@@ -432,7 +432,7 @@ namespace PasPasPas.Parsing.Parser {
                 return;
             }
 
-            result.RegionName = QuotedStringTokenValue.Unwrap(result.LastTerminal.Token);
+            result.RegionName = QuotedStringTokenValue.Unwrap(result.LastTerminalToken);
         }
 
         /// <summary>
@@ -509,7 +509,7 @@ namespace PasPasPas.Parsing.Parser {
                     break;
                 }
 
-                var kind = result.LastTerminal.Kind;
+                var kind = result.LastTerminalKind;
 
                 switch (kind) {
                     case TokenKind.VcPrivate:
@@ -555,7 +555,7 @@ namespace PasPasPas.Parsing.Parser {
                 return;
             }
 
-            var warningType = result.LastTerminal.Value;
+            var warningType = result.LastTerminalValue;
             var warningModes = new[] { TokenKind.On, TokenKind.Off, TokenKind.Error, TokenKind.Default };
 
             if (!ContinueWith(result, TokenKind.On, TokenKind.Off, TokenKind.Error, TokenKind.Default)) {
@@ -563,7 +563,7 @@ namespace PasPasPas.Parsing.Parser {
                 return;
             }
 
-            var warningMode = result.LastTerminal.Kind;
+            var warningMode = result.LastTerminalKind;
             var parsedMode = WarningMode.Undefined;
 
             switch (warningMode) {
@@ -597,14 +597,14 @@ namespace PasPasPas.Parsing.Parser {
 
         private void ParseLibParameter(ISyntaxPart parent) {
             LibInfo result = CreateByTerminal<LibInfo>(parent, TokenKind.LibPrefix, TokenKind.LibSuffix, TokenKind.LibVersion);
-            int kind = result.LastTerminal.Kind;
+            int kind = result.LastTerminalKind;
 
             if (!ContinueWith(result, TokenKind.QuotedString)) {
                 ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidLibDirective, new[] { TokenKind.QuotedString });
                 return;
             }
 
-            var libInfo = QuotedStringTokenValue.Unwrap(result.LastTerminal.Token);
+            var libInfo = QuotedStringTokenValue.Unwrap(result.LastTerminalToken);
 
             switch (kind) {
                 case TokenKind.LibPrefix:
@@ -625,10 +625,10 @@ namespace PasPasPas.Parsing.Parser {
             ImageBase result = CreateByTerminal<ImageBase>(parent, TokenKind.ImageBase);
 
             if (ContinueWith(result, TokenKind.Integer)) {
-                result.BaseValue = DigitTokenGroupValue.Unwrap(result.LastTerminal.Token);
+                result.BaseValue = DigitTokenGroupValue.Unwrap(result.LastTerminalToken);
             }
             else if (ContinueWith(result, TokenKind.HexNumber)) {
-                result.BaseValue = HexNumberTokenValue.Unwrap(result.LastTerminal.Token);
+                result.BaseValue = HexNumberTokenValue.Unwrap(result.LastTerminalToken);
             }
             else {
                 ErrorAndSkip(parent, CompilerDirectiveParserErrors.InvalidImageBaseDirective, new[] { TokenKind.Integer, TokenKind.HexNumber });
@@ -640,7 +640,7 @@ namespace PasPasPas.Parsing.Parser {
             result.Negate = true;
 
             if (ContinueWith(result, TokenKind.Identifier)) {
-                result.SymbolName = result.LastTerminal.Value;
+                result.SymbolName = result.LastTerminalValue;
             }
             else {
                 ErrorAndSkip(parent, CompilerDirectiveParserErrors.InvalidIfNDefDirective, new[] { TokenKind.Identifier });
@@ -664,7 +664,7 @@ namespace PasPasPas.Parsing.Parser {
 
             if (result.Mode == HppEmitMode.AtEnd || result.Mode == HppEmitMode.Standard) {
                 if (ContinueWith(result, TokenKind.QuotedString)) {
-                    result.EmitValue = result.LastTerminal.Value;
+                    result.EmitValue = result.LastTerminalValue;
                 }
                 else {
                     result.Mode = HppEmitMode.Undefined;
@@ -681,14 +681,14 @@ namespace PasPasPas.Parsing.Parser {
                 return;
             }
 
-            result.IdentifierName = result.LastTerminal.Value;
+            result.IdentifierName = result.LastTerminalValue;
 
             if (ContinueWith(result, TokenKind.QuotedString)) {
-                result.SymbolName = result.LastTerminal.Value;
+                result.SymbolName = result.LastTerminalValue;
             }
 
             if (ContinueWith(result, TokenKind.QuotedString)) {
-                result.UnionName = result.LastTerminal.Value;
+                result.UnionName = result.LastTerminalValue;
             }
         }
 
@@ -704,7 +704,7 @@ namespace PasPasPas.Parsing.Parser {
             IfDef result = CreateByTerminal<IfDef>(parent, TokenKind.IfDef);
 
             if (ContinueWith(result, TokenKind.Identifier)) {
-                result.SymbolName = result.LastTerminal.Value;
+                result.SymbolName = result.LastTerminalValue;
             }
             else {
                 ErrorAndSkip(parent, CompilerDirectiveParserErrors.InvalidIfDefDirective, new[] { TokenKind.Identifier });
@@ -715,7 +715,7 @@ namespace PasPasPas.Parsing.Parser {
             UnDefineSymbol result = CreateByTerminal<UnDefineSymbol>(parent, TokenKind.Undef);
 
             if (ContinueWith(result, TokenKind.Identifier)) {
-                result.SymbolName = result.LastTerminal.Value;
+                result.SymbolName = result.LastTerminalValue;
             }
             else {
                 ErrorAndSkip(parent, CompilerDirectiveParserErrors.InvalidUnDefineDirective, new[] { TokenKind.Identifier });
@@ -726,7 +726,7 @@ namespace PasPasPas.Parsing.Parser {
             DefineSymbol result = CreateByTerminal<DefineSymbol>(parent, TokenKind.Define);
 
             if (ContinueWith(result, TokenKind.Identifier)) {
-                result.SymbolName = result.LastTerminal.Value;
+                result.SymbolName = result.LastTerminalValue;
             }
             else {
                 ErrorAndSkip(parent, CompilerDirectiveParserErrors.InvalidDefineDirective, new[] { TokenKind.Identifier });
@@ -737,7 +737,7 @@ namespace PasPasPas.Parsing.Parser {
             CodeAlignParameter result = CreateByTerminal<CodeAlignParameter>(parent, TokenKind.CodeAlign);
 
             int value;
-            if (ContinueWith(result, TokenKind.Integer) && int.TryParse(result.LastTerminal.Value, out value)) {
+            if (ContinueWith(result, TokenKind.Integer) && int.TryParse(result.LastTerminalValue, out value)) {
                 switch (value) {
                     case 1:
                         result.CodeAlign = CodeAlignment.OneByte;
@@ -756,7 +756,7 @@ namespace PasPasPas.Parsing.Parser {
                         return;
                 }
 
-                ErrorLastPart(result, CompilerDirectiveParserErrors.InvalidCodeAlignDirective, result.LastTerminal.Value);
+                ErrorLastPart(result, CompilerDirectiveParserErrors.InvalidCodeAlignDirective, result.LastTerminalValue);
                 return;
             }
 
@@ -768,7 +768,7 @@ namespace PasPasPas.Parsing.Parser {
 
             if (ContinueWith(result, TokenKind.Identifier)) {
 
-                var value = result.LastTerminal.Value;
+                var value = result.LastTerminalValue;
 
                 if (string.Equals(value, "CONSOLE", StringComparison.OrdinalIgnoreCase)) {
                     result.ApplicationType = AppType.Console;
@@ -779,7 +779,7 @@ namespace PasPasPas.Parsing.Parser {
                     return;
                 }
 
-                ErrorLastPart(result, CompilerDirectiveParserErrors.InvalidApplicationType, result.LastTerminal.Value);
+                ErrorLastPart(result, CompilerDirectiveParserErrors.InvalidApplicationType, result.LastTerminalValue);
                 return;
             }
 
@@ -1019,7 +1019,7 @@ namespace PasPasPas.Parsing.Parser {
                 return;
             }
 
-            var size = DigitTokenGroupValue.Unwrap(result.LastTerminal.Token);
+            var size = DigitTokenGroupValue.Unwrap(result.LastTerminalToken);
 
             switch (size) {
                 case 1:
@@ -1515,7 +1515,7 @@ namespace PasPasPas.Parsing.Parser {
             Extension result = CreateByTerminal<Extension>(parent, TokenKind.ExtensionSwitchLong);
 
             if (ContinueWith(result, TokenKind.Identifier)) {
-                result.ExecutableExtension = result.LastTerminal.Value;
+                result.ExecutableExtension = result.LastTerminalValue;
             }
             else {
                 ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidExtensionDirective, new[] { TokenKind.Identifier });
@@ -1540,7 +1540,7 @@ namespace PasPasPas.Parsing.Parser {
             Description result = CreateByTerminal<Description>(parent, TokenKind.DescriptionSwitchLong);
 
             if (ContinueWith(result, TokenKind.QuotedString)) {
-                result.DescriptionValue = QuotedStringTokenValue.Unwrap(result.LastTerminal.Token);
+                result.DescriptionValue = QuotedStringTokenValue.Unwrap(result.LastTerminalToken);
             }
             else {
                 ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidDescriptionDirective, new[] { TokenKind.QuotedString });
@@ -1615,7 +1615,7 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             int value;
-            if (ContinueWith(result, TokenKind.Integer) && int.TryParse(result.LastTerminal.Value, out value)) {
+            if (ContinueWith(result, TokenKind.Integer) && int.TryParse(result.LastTerminalValue, out value)) {
 
                 switch (value) {
                     case 1:
@@ -1635,7 +1635,7 @@ namespace PasPasPas.Parsing.Parser {
                         return;
                 }
 
-                ErrorLastPart(result, CompilerDirectiveParserErrors.InvalidAlignDirective, result.LastTerminal.Value);
+                ErrorLastPart(result, CompilerDirectiveParserErrors.InvalidAlignDirective, result.LastTerminalValue);
                 return;
             }
 
@@ -1721,7 +1721,7 @@ namespace PasPasPas.Parsing.Parser {
 
         private void ParseEnumSizeSwitch(ISyntaxPart parent) {
             MinEnumSize result = CreateByTerminal<MinEnumSize>(parent, TokenKind.EnumSize1, TokenKind.EnumSize2, TokenKind.EnumSize4, TokenKind.EnumSizeSwitch);
-            var kind = result.LastTerminal.Kind;
+            var kind = result.LastTerminalKind;
 
             if (kind == TokenKind.EnumSize1) {
                 result.Size = EnumSize.OneByte;
@@ -1751,10 +1751,10 @@ namespace PasPasPas.Parsing.Parser {
                 return;
             }
 
-            result.TypeName = result.LastTerminal.Value;
+            result.TypeName = result.LastTerminalValue;
 
             if (ContinueWith(result, TokenKind.QuotedString)) {
-                result.AliasName = QuotedStringTokenValue.Unwrap(result.LastTerminal.Token);
+                result.AliasName = QuotedStringTokenValue.Unwrap(result.LastTerminalToken);
                 if (string.IsNullOrWhiteSpace(result.AliasName)) {
                     result.AliasName = null;
                     result.TypeName = null;
@@ -1893,11 +1893,11 @@ namespace PasPasPas.Parsing.Parser {
         private string ParseFileName(SyntaxPartBase parent, bool allowTimes) {
 
             if (ContinueWith(parent, TokenKind.QuotedString)) {
-                return QuotedStringTokenValue.Unwrap(parent.LastTerminal.Token);
+                return QuotedStringTokenValue.Unwrap(parent.LastTerminalToken);
             }
 
             else if (ContinueWith(parent, TokenKind.Identifier)) {
-                return parent.LastTerminal.Value;
+                return parent.LastTerminalValue;
             }
 
             else if (allowTimes && ContinueWith(parent, TokenKind.Times)) {
@@ -1906,7 +1906,7 @@ namespace PasPasPas.Parsing.Parser {
                     return null;
                 }
                 else {
-                    return string.Concat("*", parent.LastTerminal.Value);
+                    return string.Concat("*", parent.LastTerminalValue);
                 }
             }
 
@@ -1934,10 +1934,10 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             if (ContinueWith(result, TokenKind.Identifier)) {
-                result.RcFile = result.LastTerminal.Value;
+                result.RcFile = result.LastTerminalValue;
             }
             else if (ContinueWith(result, TokenKind.QuotedString)) {
-                result.RcFile = QuotedStringTokenValue.Unwrap(result.LastTerminal.Token);
+                result.RcFile = QuotedStringTokenValue.Unwrap(result.LastTerminalToken);
             }
         }
 
@@ -2093,7 +2093,7 @@ namespace PasPasPas.Parsing.Parser {
             Extension result = CreateByTerminal<Extension>(parent, TokenKind.ExtensionSwitch);
 
             if (ContinueWith(result, TokenKind.Identifier)) {
-                result.ExecutableExtension = result.LastTerminal.Value;
+                result.ExecutableExtension = result.LastTerminalValue;
             }
             else {
                 ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidExtensionDirective, new[] { TokenKind.Identifier });
@@ -2114,7 +2114,7 @@ namespace PasPasPas.Parsing.Parser {
             else if (LookAhead(1, TokenKind.QuotedString)) {
                 Description result = CreateByTerminal<Description>(parent, TokenKind.DebugInfoOrDescriptionSwitch);
                 ContinueWith(result, TokenKind.QuotedString);
-                result.DescriptionValue = QuotedStringTokenValue.Unwrap(result.LastTerminal.Token);
+                result.DescriptionValue = QuotedStringTokenValue.Unwrap(result.LastTerminalToken);
             }
             else {
                 DebugInfoSwitch result = CreateByTerminal<DebugInfoSwitch>(parent, TokenKind.DebugInfoOrDescriptionSwitch);

@@ -964,6 +964,26 @@ namespace PasPasPas.Parsing.Tokenizer {
         private PlusMinusCharacterClass plusminus
             = new PlusMinusCharacterClass();
 
+        private IdentifierCharacterClass idents
+            = new IdentifierCharacterClass() { AllowAmpersand = false, AllowDigits = false, AllowDots = false };
+
+
+        private static bool NextCharMatches(ContinuationState state, char c) {
+            if (!state.IsValid)
+                return false;
+
+            char nextChar = state.FetchChar();
+
+            if (c == nextChar) {
+                state.AppendChar(nextChar);
+                return true;
+            }
+
+            state.Putback(nextChar);
+            return false;
+
+        }
+
         private static bool NextCharMatches(ContinuationState state, CharacterClass c) {
             if (!state.IsValid)
                 return false;
@@ -997,15 +1017,18 @@ namespace PasPasPas.Parsing.Tokenizer {
             }
 
             if (NextCharMatches(state, dot)) {
+                withDot = true;
+
                 if (NextCharMatches(state, numbers)) {
                     digitTokenizer.Tokenize(state.Input, state.Buffer, state.Log);
-                    withDot = true;
                 }
 
-                if (state.EndsWith(".")) {
+                if (state.EndsWith(".") && (NextCharMatches(state, idents) || (NextCharMatches(state, '.')))) {
+                    state.Putback(state.Buffer[state.Buffer.Length - 1]);
                     state.Putback('.');
-                    state.Buffer.Length -= 1;
+                    state.Buffer.Length -= 2;
                 }
+
             }
 
             if (NextCharMatches(state, exponent)) {
