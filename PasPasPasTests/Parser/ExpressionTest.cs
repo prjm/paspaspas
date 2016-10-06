@@ -27,6 +27,7 @@ namespace PasPasPasTests.Parser {
 
         [Fact]
         public void TestSimpleExpressions() {
+            ParseString("program test; const x = a.b.c^.d[q].d(asd:d, asd:d:d, ad:d); .");
             ParseString("program test; const x : array[0..1+1] of x = (); .");
             ParseString("program test; const x = TDemo.GetInstance().Func<T>(); .");
             ParseString("program test; const x = a(((x[0]).q)^); .");
@@ -46,7 +47,6 @@ namespace PasPasPasTests.Parser {
             ParseString("program test; const x = a.b.c^; .");
             ParseString("program test; const x = a.b.c^.d[q]; .");
             ParseString("program test; const x = a.b.c^.d[q].d(asd, asd, ad); .");
-            ParseString("program test; const x = a.b.c^.d[q].d(asd:d, asd:d:d, ad:d); .");
             ParseString("program test; const x = 5 < 5; .");
             ParseString("program test; const x = 5 > 5; .");
             ParseString("program test; const x = 5 <= 5; .");

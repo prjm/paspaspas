@@ -263,7 +263,6 @@
     <Compile Include="SyntaxTree\SyntaxPartBase.cs" />
     <Compile Include="SyntaxTree\Standard\Term.cs" />
     <Compile Include="SyntaxTree\Standard\TryStatement.cs" />
-    <Compile Include="SyntaxTree\Standard\TypeAliasDefinition.cs" />
     <Compile Include="SyntaxTree\Standard\TypeDeclaration.cs" />
     <Compile Include="SyntaxTree\Standard\TypeSection.cs" />
     <Compile Include="SyntaxTree\Standard\TypeSpecification.cs" />

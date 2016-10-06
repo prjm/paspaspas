@@ -6,6 +6,15 @@ namespace PasPasPasTests.Parser {
 
         [Fact]
         public void TestMiscStatements() {
+            ParseString("program test; var x: x.x<x,x,x,x>.x.x begin end.");
+            ParseString("program test; procedure x([ref] a, [ref] b: string); .");
+            ParseString("program test; begin a := 5.ToString(); end .");
+            ParseString("program test; begin a := 5.0.ToString(); end .");
+            ParseString("program test; begin a := 'a'.ToString(); end .");
+            ParseString("program test; begin a := $5.ToString(); end .");
+            ParseString("program test; begin a := #5.ToString(); end .");
+            ParseString("program test; begin a := false.ToString(); end .");
+            ParseString("program test; begin a := true.ToString(); end .");
             ParseString("program test; begin if a > b then a.a<x> else a.a<x>; end .");
             ParseString("program test; begin if a<b> then asm 5 end; end .");
             ParseString("program test; begin if (a < b) then asm 5 end; end .");

@@ -11,11 +11,6 @@
         public EnumTypeDefinition EnumType { get; set; }
 
         /// <summary>
-        ///     generic postfix
-        /// </summary>
-        public GenericPostfix GenericPostfix { get; set; }
-
-        /// <summary>
         ///     <c>true</c> for a new type definition
         /// </summary>
         public bool NewType { get; internal set; }
@@ -31,8 +26,8 @@
         public ConstantExpression SubrangeStart { get; set; }
 
         /// <summary>
-        ///     type id
+        ///     <c>type of</c> declaration
         /// </summary>
-        public NamespaceName TypeId { get; set; }
+        public bool TypeOf { get; set; }
     }
 }

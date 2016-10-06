@@ -71,6 +71,11 @@
         public RealNumber RealValue { get; set; }
 
         /// <summary>
+        ///     record helper calls
+        /// </summary>
+        public DesignatorStatement RecordHelper { get; set; }
+
+        /// <summary>
         ///     set section
         /// </summary>
         public SetSection SetSection { get; set; }

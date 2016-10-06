@@ -329,11 +329,12 @@ namespace PasPasPasTests.Tokenizer {
         public void TestNumberTokenValue() {
             var patterns = new InputPatterns();
             patterns.AddPattern(new NumberCharacterClass(), new NumberTokenGroupValue());
-            patterns.AddPattern('.', TokenKind.Dot);
+            patterns.AddPattern('.', TokenKind.Dot).Add('.', TokenKind.DotDot);
+            TestPattern(patterns, "9..", TokenKind.Integer, TokenKind.DotDot);
             TestPattern(patterns, "9", TokenKind.Integer);
             TestPattern(patterns, "9.9", TokenKind.Real);
             TestPattern(patterns, "9999.9999", TokenKind.Real);
-            TestPattern(patterns, "9.", TokenKind.Integer, TokenKind.Dot);
+            TestPattern(patterns, "9.", TokenKind.Real);
             TestPattern(patterns, "9.9.", TokenKind.Real, TokenKind.Dot);
             TestPattern(patterns, TokenizerBase.UnexpectedEndOfToken, "9.9e", TokenKind.Real);
             TestPattern(patterns, TokenizerBase.UnexpectedEndOfToken, "9.9e+", TokenKind.Real);

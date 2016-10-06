@@ -68,6 +68,12 @@ namespace PasPasPas.Parsing.Tokenizer {
              => Buffer.Length;
 
         /// <summary>
+        ///     switched file flag
+        /// </summary>
+        public bool SwitchedFile
+            => switchedFile;
+
+        /// <summary>
         ///     tests if the buffer ends with a given string value
         /// </summary>
         /// <param name="value"></param>
@@ -104,7 +110,9 @@ namespace PasPasPas.Parsing.Tokenizer {
         ///     putback a character
         /// </summary>
         /// <param name="nextChar">character to putback</param>
-        public void Putback(char nextChar) {
+        /// <param name="switchState">switch state</param>
+        public void Putback(char nextChar, bool switchState) {
+            switchedFile = switchState;
             Input.PutbackChar(Result.FilePath, nextChar);
         }
 
@@ -317,9 +325,10 @@ namespace PasPasPas.Parsing.Tokenizer {
 
                 if (state.IsValid && currentChar == '\'') {
                     var nextChar = state.FetchChar();
+                    var switchState = state.SwitchedFile;
                     found = nextChar != '\'';
                     if (found)
-                        state.Putback(nextChar);
+                        state.Putback(nextChar, switchState);
                     else {
                         AppendToBuffer(nextChar);
                         state.AppendChar(nextChar);
@@ -387,11 +396,12 @@ namespace PasPasPas.Parsing.Tokenizer {
                 char currentChar = state.FetchChar();
 
                 if (currentChar == '"' && state.IsValid) {
+                    var switchState = state.SwitchedFile;
                     char nextChar = state.FetchChar();
                     found = nextChar != '"';
 
                     if (found)
-                        state.Putback(nextChar);
+                        state.Putback(nextChar, switchState);
                     else
                         AppendToBuffer(nextChar);
                 }
@@ -438,11 +448,13 @@ namespace PasPasPas.Parsing.Tokenizer {
             state.PutbackBuffer();
 
             while (state.IsValid) {
+                bool switchState = state.SwitchedFile;
                 char currentChar = state.FetchChar();
                 if (currentChar == '#' && !state.IsValid) {
                     state.Error(TokenizerBase.UnexpectedEndOfToken);
                 }
                 else if (currentChar == '#') {
+                    switchState = state.SwitchedFile;
                     char nextChar = state.FetchChar();
                     state.AppendChar(currentChar);
                     if (nextChar == '$' && !state.IsValid) {
@@ -461,7 +473,7 @@ namespace PasPasPas.Parsing.Tokenizer {
                         }
                     }
                     else {
-                        state.Putback(nextChar);
+                        state.Putback(nextChar, switchState);
                         controlBuffer.Clear();
                         var controlChar = digits.Tokenize(state.Input, controlBuffer, state.Log);
                         if (controlChar.Kind != TokenKind.Integer) {
@@ -478,7 +490,7 @@ namespace PasPasPas.Parsing.Tokenizer {
                     AppendToBuffer(QuotedStringTokenValue.Unwrap(quotedString.Tokenize(state.Input, state.Buffer, state.Log)));
                 }
                 else {
-                    state.Putback(currentChar);
+                    state.Putback(currentChar, switchState);
                     break;
                 }
             }
@@ -595,15 +607,17 @@ namespace PasPasPas.Parsing.Tokenizer {
 
             if (state.IsValid) {
 
+                var switchState = state.SwitchedFile;
                 var currentChar = state.FetchChar();
 
                 while (state.IsValid && MatchesClass(currentChar)) {
                     state.AppendChar(currentChar);
+                    switchState = state.SwitchedFile;
                     currentChar = state.FetchChar();
                 }
 
                 if (!MatchesClass(currentChar))
-                    state.Putback(currentChar);
+                    state.Putback(currentChar, switchState);
                 else
                     state.AppendChar(currentChar);
             }
@@ -870,9 +884,10 @@ namespace PasPasPas.Parsing.Tokenizer {
             }
 
             while (state.IsValid) {
+                var switchState = state.SwitchedFile;
                 var currentChar = state.FetchChar();
                 if (!identifierCharClass.Matches(currentChar)) {
-                    state.Putback(currentChar);
+                    state.Putback(currentChar, switchState);
                     break;
                 }
                 state.AppendChar(currentChar);
@@ -883,9 +898,10 @@ namespace PasPasPas.Parsing.Tokenizer {
 
             if (ParseAsm && string.Equals(value, "asm", StringComparison.OrdinalIgnoreCase)) {
                 while (state.IsValid) {
+                    var switchState = state.SwitchedFile;
                     var currentChar = state.FetchChar();
                     if (state.Buffer.EndsWith("end", StringComparison.OrdinalIgnoreCase)) {
-                        state.Putback(currentChar);
+                        state.Putback(currentChar, switchState);
                         break;
                     }
                     state.AppendChar(currentChar);
@@ -921,13 +937,14 @@ namespace PasPasPas.Parsing.Tokenizer {
         public override void ParseByPrefix(ContinuationState state) {
 
             while (state.IsValid) {
+                var switchState = state.SwitchedFile;
                 char currentChar = state.FetchChar();
 
                 if (!LineCounter.IsNewLineChar(currentChar)) {
                     state.AppendChar(currentChar);
                 }
                 else {
-                    state.Putback(currentChar);
+                    state.Putback(currentChar, switchState);
                     break;
                 }
             }
@@ -972,6 +989,7 @@ namespace PasPasPas.Parsing.Tokenizer {
             if (!state.IsValid)
                 return false;
 
+            var switchState = state.SwitchedFile;
             char nextChar = state.FetchChar();
 
             if (c == nextChar) {
@@ -979,7 +997,7 @@ namespace PasPasPas.Parsing.Tokenizer {
                 return true;
             }
 
-            state.Putback(nextChar);
+            state.Putback(nextChar, switchState);
             return false;
 
         }
@@ -988,6 +1006,7 @@ namespace PasPasPas.Parsing.Tokenizer {
             if (!state.IsValid)
                 return false;
 
+            var switchState = state.SwitchedFile;
             char nextChar = state.FetchChar();
 
             if (c.Matches(nextChar)) {
@@ -995,7 +1014,7 @@ namespace PasPasPas.Parsing.Tokenizer {
                 return true;
             }
 
-            state.Putback(nextChar);
+            state.Putback(nextChar, switchState);
             return false;
 
         }
@@ -1023,9 +1042,11 @@ namespace PasPasPas.Parsing.Tokenizer {
                     digitTokenizer.Tokenize(state.Input, state.Buffer, state.Log);
                 }
 
+                var switchState = state.SwitchedFile;
                 if (state.EndsWith(".") && (NextCharMatches(state, idents) || (NextCharMatches(state, '.')))) {
-                    state.Putback(state.Buffer[state.Buffer.Length - 1]);
-                    state.Putback('.');
+                    if (state.EndsWith("..")) withDot = false;
+                    state.Putback(state.Buffer[state.Buffer.Length - 1], switchState);
+                    state.Putback('.', switchState);
                     state.Buffer.Length -= 2;
                 }
 
