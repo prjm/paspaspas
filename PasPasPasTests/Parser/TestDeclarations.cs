@@ -103,6 +103,9 @@ namespace PasPasPasTests.Parser {
 
         [Fact]
         public void TestClassTypeDeclarations() {
+            ParseString("program test; type x = record helper for x private class [Result: unsafe] function x:x; end; .");
+            ParseString("program test; type x = record helper for x private class function x:x; end; .");
+            ParseString("program test; type x = record helper for x private function x:x; end; .");
             ParseString("program test; type x = class property x : x<x,x>.x<x>.x read x; end; .");
             ParseString("program test; type x = type of TObject; begin end .");
             ParseString("program test; type x = record private [weak] x: x; private x:x end; .");

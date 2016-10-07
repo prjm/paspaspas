@@ -1053,10 +1053,11 @@ namespace PasPasPas.Parsing.Tokenizer {
             }
 
             if (NextCharMatches(state, exponent)) {
-                if (!state.IsValid || !NextCharMatches(state, plusminus)) {
+                if (!state.IsValid) {
                     state.Error(TokenizerBase.UnexpectedEndOfToken, "+", "-");
                 }
-                else if (!state.IsValid || digitTokenizer.Tokenize(state.Input, state.Buffer, state.Log).Kind != TokenKind.Integer) {
+                NextCharMatches(state, plusminus);
+                if (!state.IsValid || digitTokenizer.Tokenize(state.Input, state.Buffer, state.Log).Kind != TokenKind.Integer) {
                     state.Error(TokenizerBase.UnexpectedEndOfToken);
                 }
 

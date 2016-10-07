@@ -1626,6 +1626,11 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             result.Class = ContinueWith(result, TokenKind.Class);
+
+            if (Match(TokenKind.OpenBraces)) {
+                ParseAttributes(result);
+            }
+
             unexpected = false;
 
             if (Match(TokenKind.OpenBraces)) {
@@ -1765,6 +1770,16 @@ namespace PasPasPas.Parsing.Parser {
             var result = CreateChild<RecordHelperItem>(parent);
             unexpected = false;
 
+            if (Match(TokenKind.OpenBraces)) {
+                ParseAttributes(result);
+            }
+
+            result.Class = ContinueWith(result, TokenKind.Class);
+
+            if (Match(TokenKind.OpenBraces)) {
+                ParseAttributes(result);
+            }
+
             if (Match(TokenKind.Procedure, TokenKind.Function, TokenKind.Constructor, TokenKind.Destructor)) {
                 result.MethodDeclaration = ParseMethodDeclaration(result);
                 return result;
@@ -1772,6 +1787,14 @@ namespace PasPasPas.Parsing.Parser {
 
             if (Match(TokenKind.Property)) {
                 result.PropertyDeclaration = ParsePropertyDeclaration(result);
+                return result;
+            }
+
+            if (Match(TokenKind.Public, TokenKind.Protected, TokenKind.Private, TokenKind.Strict, TokenKind.Published)) {
+                result.Strict = ContinueWith(result, TokenKind.Strict);
+                ContinueWith(result, TokenKind.Public, TokenKind.Protected, TokenKind.Private, TokenKind.Published);
+                result.Visibility = result.LastTerminalKind;
+                unexpected = false;
                 return result;
             }
 
@@ -1989,11 +2012,21 @@ namespace PasPasPas.Parsing.Parser {
         [Rule("ClassItem", "Visibility | MethodResolution | MethodDeclaration | ConstSection | TypeSection | PropertyDeclaration | [ 'class'] VarSection | FieldDeclarations ")]
         private ClassDeclarationItem ParseClassDeclarationItem(ISyntaxPart parent, out bool unexpected) {
             var result = CreateChild<ClassDeclarationItem>(parent);
-            result.Attributes = ParseAttributes(result);
+
+            if (Match(TokenKind.OpenBraces)) {
+                ParseAttributes(result);
+            }
+
             result.Class = ContinueWith(result, TokenKind.Class);
+
+            if (Match(TokenKind.OpenBraces)) {
+                ParseAttributes(result);
+            }
+
+
             unexpected = false;
 
-            if (!result.Class && (result.Attributes.Parts.Count < 1) && Match(TokenKind.Public, TokenKind.Protected, TokenKind.Private, TokenKind.Strict, TokenKind.Published, TokenKind.Automated)) {
+            if (!result.Class && Match(TokenKind.Public, TokenKind.Protected, TokenKind.Private, TokenKind.Strict, TokenKind.Published, TokenKind.Automated)) {
                 result.Strict = ContinueWith(result, TokenKind.Strict);
                 ContinueWith(result, TokenKind.Public, TokenKind.Protected, TokenKind.Private, TokenKind.Published, TokenKind.Automated);
                 result.Visibility = result.LastTerminalKind;
@@ -2501,9 +2534,14 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
-        [Rule("Attribute", "NamespaceName [ '(' Expressions ')' ]")]
+        [Rule("Attribute", " [ 'Result' ':' ] NamespaceName [ '(' Expressions ')' ]")]
         private UserAttributeDefinition ParseAttribute(ISyntaxPart parent) {
             var result = CreateChild<UserAttributeDefinition>(parent);
+
+            if (LookAhead(1, TokenKind.Colon)) {
+                result.Prefix = RequireIdentifier(result, true);
+                ContinueWith(result, TokenKind.Colon);
+            }
 
             result.Name = ParseNamespaceName(result);
 

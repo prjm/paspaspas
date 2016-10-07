@@ -33,6 +33,7 @@ namespace PasPasPasTests.Tokenizer {
 
         [Fact]
         public void TestRealNumbers() {
+            Assert.IsReal("123E10");
             Assert.IsReal("123.");
             Assert.IsReal("123.123");
             Assert.IsReal("123E+10");

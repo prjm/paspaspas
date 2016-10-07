@@ -15,5 +15,9 @@
         /// </summary>
         public NamespaceName Name { get; set; }
 
+        /// <summary>
+        ///     attribute prefix
+        /// </summary>
+        public Identifier Prefix { get; set; }
     }
 }

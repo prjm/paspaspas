@@ -6,11 +6,6 @@
     public class ClassDeclarationItem : SyntaxPartBase {
 
         /// <summary>
-        ///     attributes
-        /// </summary>
-        public UserAttributes Attributes { get; set; }
-
-        /// <summary>
         ///     class-wide declaration
         /// </summary>
         public bool Class { get; set; }
