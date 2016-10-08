@@ -2903,6 +2903,7 @@ namespace PasPasPas.Parsing.Parser {
             => CreateByTerminal<RealNumber>(parent, TokenKind.Real);
 
         private Identifier RequireIdentifier(ISyntaxPart parent, bool allowReserverdWords = false) {
+
             if (Match(TokenKind.Identifier)) {
                 return CreateByTerminal<Identifier>(parent, TokenKind.Identifier);
             };

@@ -900,7 +900,9 @@ namespace PasPasPas.Parsing.Tokenizer {
                 while (state.IsValid) {
                     var switchState = state.SwitchedFile;
                     var currentChar = state.FetchChar();
-                    if (state.Buffer.EndsWith("end", StringComparison.OrdinalIgnoreCase)) {
+                    if (state.Buffer.EndsWith("end", StringComparison.OrdinalIgnoreCase) &&
+                        (!state.Buffer.EndsWith("$ifend", StringComparison.OrdinalIgnoreCase)) &&
+                        (!state.Buffer.EndsWith("$end", StringComparison.OrdinalIgnoreCase))) {
                         state.Putback(currentChar, switchState);
                         break;
                     }

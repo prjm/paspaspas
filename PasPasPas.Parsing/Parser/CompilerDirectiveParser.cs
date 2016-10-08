@@ -153,6 +153,7 @@ namespace PasPasPas.Parsing.Parser {
                 TokenKind.IfDef,
                 TokenKind.EndIf,
                 TokenKind.ElseCd,
+                TokenKind.IfCd,
                 TokenKind.ExternalSym,
                 TokenKind.HppEmit,
                 TokenKind.IfNDef,
@@ -192,6 +193,9 @@ namespace PasPasPas.Parsing.Parser {
             }
             else if (Match(TokenKind.IfNDef)) {
                 ParseIfNDef(parent);
+            }
+            else if (Match(TokenKind.IfCd)) {
+                ParseIf(parent);
             }
             else if (Match(TokenKind.Apptype)) {
                 ParseApptypeParameter(parent);
@@ -633,6 +637,10 @@ namespace PasPasPas.Parsing.Parser {
             else {
                 ErrorAndSkip(parent, CompilerDirectiveParserErrors.InvalidImageBaseDirective, new[] { TokenKind.Integer, TokenKind.HexNumber });
             }
+        }
+
+        private void ParseIf(ISyntaxPart parent) {
+            CreateByTerminal<IfDirective>(parent, TokenKind.IfCd);
         }
 
         private void ParseIfNDef(ISyntaxPart parent) {

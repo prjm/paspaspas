@@ -54,6 +54,8 @@
     <Compile Include="DataTypes\CompilerOptmization.cs" />
     <Compile Include="DataTypes\CompilerWarnings.cs" />
     <Compile Include="DataTypes\ConditionalCompilationOptions.cs" />
+    <Compile Include="DataTypes\ConditionBranch.cs" />
+    <Compile Include="DataTypes\ConditionRoot.cs" />
     <Compile Include="DataTypes\ConditonalDefine.cs" />
     <Compile Include="DataTypes\ConstantValues.cs" />
     <Compile Include="DataTypes\DebugInformation.cs" />
@@ -76,7 +78,10 @@
     <Compile Include="DataTypes\HeaderString.cs" />
     <Compile Include="DataTypes\HighCharsUnicode.cs" />
     <Compile Include="DataTypes\ICondition.cs" />
+    <Compile Include="DataTypes\IConditionBranch.cs" />
+    <Compile Include="DataTypes\IConditionRoot.cs" />
     <Compile Include="DataTypes\IDerivedOption.cs" />
+    <Compile Include="DataTypes\IfCondition.cs" />
     <Compile Include="DataTypes\IfDefCondition.cs" />
     <Compile Include="DataTypes\IfOptCondition.cs" />
     <Compile Include="DataTypes\ImplicitBuildUnit.cs" />

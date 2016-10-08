@@ -45,6 +45,7 @@
     <Compile Include="Parser\CompilerDirectiveParserErrors.cs" />
     <Compile Include="Parser\EmptyCollection.cs" />
     <Compile Include="Parser\IParser.cs" />
+    <Compile Include="SyntaxTree\CompilerDirectives\IfDirective.cs" />
     <Compile Include="SyntaxTree\Standard\Parameter.cs" />
     <Compile Include="SyntaxTree\Standard\TypeName.cs" />
     <Compile Include="SyntaxTree\Visitors\StructureVisitor.cs" />

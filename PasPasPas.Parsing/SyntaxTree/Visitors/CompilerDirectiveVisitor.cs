@@ -163,6 +163,15 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         }
 
         /// <summary>
+        ///     <c>$if</c>
+        /// </summary>
+        /// <param name="syntaxPart"></param>
+        /// <param name="parameter"></param>
+        public void BeginVisitItem(IfDirective syntaxPart, CompilerDirectiveVisitorOptions parameter) {
+            parameter.ConditionalCompilation.AddIfCondition(false);
+        }
+
+        /// <summary>
         ///     conditional compilation ("else")
         /// </summary>
         /// <param name="syntaxPart"></param>

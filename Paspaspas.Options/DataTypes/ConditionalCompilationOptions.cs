@@ -1,8 +1,6 @@
 ﻿using PasPasPas.Infrastructure.Log;
 using PasPasPas.Options.Bundles;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace PasPasPas.Options.DataTypes {
 
@@ -16,12 +14,10 @@ namespace PasPasPas.Options.DataTypes {
         /// </summary>
         public DerivedListOption<ConditionalSymbol> Conditionals { get; }
 
-
         /// <summary>
         ///     active conditional
         /// </summary>
-        public Stack<List<ICondition>> Conditions { get; }
-            = new Stack<List<ICondition>>();
+        public IConditionBranch CurrentCondition { get; private set; }
 
         /// <summary>
         ///     skip tokens
@@ -42,7 +38,7 @@ namespace PasPasPas.Options.DataTypes {
         ///     test fif conditions are availiabe
         /// </summary>
         public bool HasConditions
-            => Conditions.Count > 0;
+            => CurrentCondition != null;
 
         /// <summary>
         ///     create new option set for conditional compilation
@@ -100,12 +96,12 @@ namespace PasPasPas.Options.DataTypes {
                     Conditionals.OwnValues[i].IsActive = true;
             }
 
-            UpdateSkipState();
-
-            foreach (var condition in Conditions) {
-                logSource.Error(OptionSet.PendingCondition, condition);
+            while (CurrentCondition != null) {
+                logSource.Error(OptionSet.PendingCondition, CurrentCondition);
+                CurrentCondition = CurrentCondition.ParentBranch;
             }
-            Conditions.Clear();
+
+            UpdateSkipState();
         }
 
         /// <summary>
@@ -137,29 +133,39 @@ namespace PasPasPas.Options.DataTypes {
         ///     add a else condition
         /// </summary>
         public void AddElseCondition() {
-            bool anotherConditionMatches = false;
-            if (Conditions.Count > 0) {
-                var lastConditions = Conditions.Peek();
-                foreach (var condition in lastConditions) {
+            bool inInvalidBranch = false;
+            bool anotherConditionMatches = true;
+
+            if (CurrentCondition != null && CurrentCondition.ParentBranch != null && !CurrentCondition.ParentBranch.Matches) {
+                inInvalidBranch = true;
+            }
+            else if (CurrentCondition != null) {
+                foreach (var condition in CurrentCondition.Parent.Conditions) {
                     if (condition.Matches) {
                         anotherConditionMatches = true;
                         break;
                     }
                 }
+                anotherConditionMatches = false;
             }
 
-            AddConditionBranch(new ElseCondition() { Matches = !anotherConditionMatches });
+            AddConditionBranch(new ElseCondition() { Matches = !anotherConditionMatches && !inInvalidBranch });
             UpdateSkipState();
         }
 
         private void AddConditionBranch(ICondition condition) {
-            if (Conditions.Count < 1) {
-                AddNewCondition(condition);
-                return;
+            IConditionRoot root;
+
+            if (CurrentCondition == null) {
+                root = new ConditionRoot(null);
+            }
+            else {
+                root = CurrentCondition.Parent;
             }
 
-            var lastConditions = Conditions.Peek();
-            lastConditions.Add(condition);
+            var branch = new ConditionBranch(root, condition);
+            root.Conditions.Add(branch);
+            CurrentCondition = branch;
         }
 
         /// <summary>
@@ -172,7 +178,7 @@ namespace PasPasPas.Options.DataTypes {
 
         /// <summary>
         ///     add a <c>ifndef</c> condition
-        /// </summary>
+        /// </summary>     
         /// <param name="value"></param>
         public void AddIfNDefCondition(string value) {
             if (string.IsNullOrWhiteSpace(value))
@@ -186,7 +192,7 @@ namespace PasPasPas.Options.DataTypes {
         ///     remove an ifdef condition
         /// </summary>
         public void RemoveIfDefCondition() {
-            Conditions.Pop();
+            CurrentCondition = CurrentCondition.ParentBranch;
             UpdateSkipState();
         }
 
@@ -202,10 +208,20 @@ namespace PasPasPas.Options.DataTypes {
             UpdateSkipState();
         }
 
-        private void AddNewCondition(ICondition ifDefCondition) {
-            var conditions = new List<ICondition>();
-            conditions.Add(ifDefCondition);
-            Conditions.Push(conditions);
+        /// <summary>
+        ///     add a new if condition
+        /// </summary>
+        /// <param name="isValid"></param>
+        public void AddIfCondition(bool isValid) {
+            AddNewCondition(new IfCondition() { Matches = isValid });
+            UpdateSkipState();
+        }
+
+        private void AddNewCondition(ICondition condition) {
+            var root = new ConditionRoot(CurrentCondition);
+            var branch = new ConditionBranch(root, condition);
+            root.Conditions.Add(branch);
+            CurrentCondition = branch;
         }
 
         /// <summary>
@@ -213,16 +229,15 @@ namespace PasPasPas.Options.DataTypes {
         /// </summary>
         private void UpdateSkipState() {
             var doSkip = false;
+            var condition = CurrentCondition;
 
-            foreach (var conditions in Conditions) {
-                if (conditions.Count < 1)
-                    continue;
-
-                var condition = conditions.Last();
+            while (condition != null) {
                 if (!condition.Matches) {
                     doSkip = true;
                     break;
                 }
+
+                condition = condition.ParentBranch;
             }
 
             Skip = doSkip;

@@ -5,7 +5,6 @@
     /// </summary>
     public interface ICondition {
 
-
         /// <summary>
         ///      test if the condition matches
         /// </summary>
