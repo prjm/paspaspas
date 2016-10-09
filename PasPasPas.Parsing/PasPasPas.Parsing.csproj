@@ -46,6 +46,13 @@
     <Compile Include="Parser\EmptyCollection.cs" />
     <Compile Include="Parser\IParser.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\IfDirective.cs" />
+    <Compile Include="SyntaxTree\Standard\AsmBlock.cs" />
+    <Compile Include="SyntaxTree\Standard\AsmLabel.cs" />
+    <Compile Include="SyntaxTree\Standard\AsmOpCode.cs" />
+    <Compile Include="SyntaxTree\Standard\AsmOperand.cs" />
+    <Compile Include="SyntaxTree\Standard\AsmPrefix.cs" />
+    <Compile Include="SyntaxTree\Standard\AsmStatement.cs" />
+    <Compile Include="SyntaxTree\Standard\LocalAsmLabel.cs" />
     <Compile Include="SyntaxTree\Standard\Parameter.cs" />
     <Compile Include="SyntaxTree\Standard\TypeName.cs" />
     <Compile Include="SyntaxTree\Visitors\StructureVisitor.cs" />

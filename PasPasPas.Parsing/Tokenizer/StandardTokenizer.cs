@@ -36,13 +36,6 @@ namespace PasPasPas.Parsing.Tokenizer {
         /* {799c3f68-e002-42f3-988a-efa3594ff942} */
 
         /// <summary>
-        ///     message id: incomplete asm statement
-        /// </summary>
-        public static readonly Guid IncompleteAsmGroup
-            = new Guid(new byte[] { 0x98, 0xe4, 0x4, 0x18, 0x87, 0x60, 0x2d, 0x4e, 0xbe, 0x7e, 0x83, 0x61, 0x31, 0xd, 0x4b, 0xae });
-        /* {1804e498-6087-4e2d-be7e-8361310d4bae} */
-
-        /// <summary>
         ///     get punctuators
         /// </summary>
         protected override InputPatterns CharacterClasses

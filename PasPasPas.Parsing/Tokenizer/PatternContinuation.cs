@@ -896,26 +896,6 @@ namespace PasPasPas.Parsing.Tokenizer {
             int tokenKind;
             string value = state.Buffer.ToString();
 
-            if (ParseAsm && string.Equals(value, "asm", StringComparison.OrdinalIgnoreCase)) {
-                while (state.IsValid) {
-                    var switchState = state.SwitchedFile;
-                    var currentChar = state.FetchChar();
-                    if (state.Buffer.EndsWith("end", StringComparison.OrdinalIgnoreCase) &&
-                        (!state.Buffer.EndsWith("$ifend", StringComparison.OrdinalIgnoreCase)) &&
-                        (!state.Buffer.EndsWith("$end", StringComparison.OrdinalIgnoreCase))) {
-                        state.Putback(currentChar, switchState);
-                        break;
-                    }
-                    state.AppendChar(currentChar);
-                }
-
-                if (!state.Buffer.EndsWith("end", StringComparison.OrdinalIgnoreCase))
-                    state.Error(StandardTokenizer.IncompleteAsmGroup, state.Buffer.ToString());
-
-                state.Finish(TokenKind.Asm);
-                return;
-            }
-
             if (hasAmpersand && state.Buffer.Length < 2)
                 state.Error(StandardTokenizer.IncompleteIdentifier, state.Buffer.ToString());
 
@@ -986,6 +966,17 @@ namespace PasPasPas.Parsing.Tokenizer {
         private IdentifierCharacterClass idents
             = new IdentifierCharacterClass() { AllowAmpersand = false, AllowDigits = false, AllowDots = false };
 
+        private IdentifierCharacterClass allIdents
+            = new IdentifierCharacterClass() { AllowAmpersand = true, AllowDigits = true, AllowDots = true, };
+
+        private IdentifierTokenGroupValue identTokenizer
+            = new IdentifierTokenGroupValue(new Dictionary<string, int>());
+
+        /// <summary>
+        ///     flag, if <c>true</c> idents are generated if possible
+        /// </summary>
+        public bool AllowIdents { get; set; }
+            = false;
 
         private static bool NextCharMatches(ContinuationState state, char c) {
             if (!state.IsValid)
@@ -1064,6 +1055,12 @@ namespace PasPasPas.Parsing.Tokenizer {
                 }
 
                 withExponent = true;
+            }
+
+            if (AllowIdents && NextCharMatches(state, allIdents)) {
+                identTokenizer.Tokenize(state.Input, state.Buffer, state.Log);
+                state.Finish(TokenKind.Identifier);
+                return;
             }
 
             if (withDot || withExponent) {

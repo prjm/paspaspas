@@ -42,7 +42,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="nextToken"></param>
         /// <returns></returns>
         protected override bool IsValidToken(Token nextToken)
-            => nextToken.Kind != TokenKind.WhiteSpace &&
+            => (nextToken.Kind != TokenKind.WhiteSpace) &&
             nextToken.Kind != TokenKind.ControlChar &&
             nextToken.Kind != TokenKind.Comment &&
             nextToken.Kind != TokenKind.Preprocessor &&

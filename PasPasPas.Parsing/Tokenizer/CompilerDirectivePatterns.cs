@@ -21,7 +21,7 @@ namespace PasPasPas.Parsing.Tokenizer {
             AddPattern('*', TokenKind.Times);
             AddPattern(new WhiteSpaceCharacterClass(), new WhiteSpaceTokenGroupValue());
             AddPattern(new IdentifierCharacterClass() { AllowDots = true }, new IdentifierTokenGroupValue(CompilerDirectiveTokenizer.Keywords) { AllowDots = true });
-            AddPattern(new NumberCharacterClass(), new NumberTokenGroupValue());
+            AddPattern(new NumberCharacterClass(), new NumberTokenGroupValue() { AllowIdents = true });
             AddPattern('$', new HexNumberTokenValue());
             AddPattern(new ControlCharacterClass(), new ControlTokenGroupValue());
             AddPattern('\'', new QuotedStringTokenValue());

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using PasPasPas.Parsing.Tokenizer;
 using PasPasPas.Parsing.SyntaxTree;
 using PasPasPas.Parsing.SyntaxTree.Standard;
+using System;
 
 namespace PasPasPas.Parsing.Parser {
 
@@ -84,6 +85,24 @@ namespace PasPasPas.Parsing.Parser {
             TokenKind.With,
             TokenKind.Xor
             };
+
+        private HashSet<string> lockPrefixes =
+            new HashSet<string>(StringComparer.OrdinalIgnoreCase) {
+                "lock",
+                "repne",
+                "repnz",
+                "rep",
+                "repe",
+                "repz" };
+
+        private HashSet<string> segmentPrefixes =
+            new HashSet<string>(StringComparer.OrdinalIgnoreCase) {
+                "cs", "ds", "es", "fs", "gs", "ss"};
+
+        private HashSet<string> asmDirectives =
+            new HashSet<string>(StringComparer.OrdinalIgnoreCase) {
+                "db", "dw", "dd", "dq" };
+
 
         private bool MatchIdentifier(params int[] otherTokens)
                     => LookAheadIdentifier(0, otherTokens, false);
@@ -387,13 +406,12 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
-        [Rule("CompoundStatement", "(('begin' [ StatementList ] ) | 'asm' ... ) 'end'")]
+        [Rule("CompoundStatement", "(('begin' [ StatementList ] 'end' ) | AsmBlock )")]
         private CompoundStatement ParseCompoundStatement(ISyntaxPart parent) {
 
             if (Match(TokenKind.Asm)) {
                 var result = CreateChild<CompoundStatement>(parent);
-                ContinueWith(result, TokenKind.Asm);
-                result.AssemblerBlock = result.LastTerminalToken;
+                result.AssemblerBlock = ParseAsmBlock(result);
                 return result;
             }
             else {
@@ -874,8 +892,8 @@ namespace PasPasPas.Parsing.Parser {
         private BlockBody ParseBlockBody(ISyntaxPart parent) {
             var result = CreateChild<BlockBody>(parent);
 
-            if (ContinueWith(result, TokenKind.Asm)) {
-                result.AssemblerBlock = result.LastTerminalToken;
+            if (Match(TokenKind.Asm)) {
+                result.AssemblerBlock = ParseAsmBlock(result);
             }
 
             if (Match(TokenKind.Begin)) {
@@ -883,6 +901,128 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             return result;
+        }
+
+        [Rule("AsmBlock", "'asm' { AssemblyStatement } 'end'")]
+        private AsmBlock ParseAsmBlock(ISyntaxPart parent) {
+            var result = CreateByTerminal<AsmBlock>(parent, TokenKind.Asm);
+
+            while (Tokenizer.HasNextToken() && (!ContinueWith(result, TokenKind.End))) {
+                ParseAsmStatement(result);
+            }
+
+            return result;
+        }
+
+        [Rule("AsmBlock", "[AssemblyLabel ':'] [AssemblyPrefix] AssemblyOpcode [AssemblyOperand {','  AssemblyOperand}]")]
+        private AsmStatement ParseAsmStatement(ISyntaxPart parent) {
+            var result = CreateChild<AsmStatement>(parent);
+
+            if (Match(TokenKind.At) || LookAhead(1, TokenKind.Colon)) {
+                ParseAssemblyLabel(result);
+                ContinueWithOrMissing(result, TokenKind.Colon);
+            }
+
+            result.Prefix = ParseAssemblyPrefix(result);
+            result.OpCode = ParseAssemblyOpcode(result);
+
+            while (!Match(TokenKind.End) && Tokenizer.HasNextToken() && !CurrentTokenIsAfterNewline()) {
+                ParseAssemblyOperand(result);
+                ContinueWith(result, TokenKind.Comma);
+            }
+
+            return result;
+        }
+
+
+        [Rule("AssemblyOperand", " Expression | ( '[' Expression ']' )")]
+        private AsmOperand ParseAssemblyOperand(ISyntaxPart parent) {
+            var result = CreateChild<AsmOperand>(parent);
+            var withBraces = ContinueWith(result, TokenKind.OpenBraces);
+
+            ParseExpression(result);
+
+            if (withBraces)
+                ContinueWithOrMissing(result, TokenKind.CloseBraces);
+
+            return result;
+        }
+
+        private bool CurrentTokenIsAfterNewline() {
+            foreach (var invalidToken in CurrentToken().InvalidTokensBefore) {
+                if (invalidToken.Kind == TokenKind.WhiteSpace && LineCounter.ContainsNewLineChar(invalidToken.Value))
+                    return true;
+            }
+
+            return false;
+        }
+
+        [Rule("AssemblyOpCode", "Identifier [AssemblyDirective] ")]
+        private AsmOpCode ParseAssemblyOpcode(ISyntaxPart parent) {
+            if (Match(TokenKind.End))
+                return null;
+
+            var result = CreateChild<AsmOpCode>(parent);
+
+            result.OpCode = RequireIdentifier(result, true);
+
+            if (MatchIdentifier(true) && asmDirectives.Contains(CurrentToken().Value)) {
+                result.Directive = RequireIdentifier(result, true);
+            }
+
+            return result;
+        }
+
+        [Rule("AssemblyPrefix", "(LockPrefix | [SegmentPrefix]) | (SegmentPrefix [LockPrefix])")]
+        private AsmPrefix ParseAssemblyPrefix(ISyntaxPart parent) {
+            if (!MatchIdentifier())
+                return null;
+
+            if (lockPrefixes.Contains(CurrentToken().Value)) {
+                var result = CreateChild<AsmPrefix>(parent);
+                result.LockPrefix = RequireIdentifier(result);
+
+                if (MatchIdentifier() && segmentPrefixes.Contains(CurrentToken().Value)) {
+                    result.SegmentPrefix = RequireIdentifier(result);
+                }
+
+                return result;
+            }
+
+            if (segmentPrefixes.Contains(CurrentToken().Value)) {
+                var result = CreateChild<AsmPrefix>(parent);
+                result.SegmentPrefix = RequireIdentifier(result);
+
+                if (MatchIdentifier() && lockPrefixes.Contains(CurrentToken().Value)) {
+                    result.LockPrefix = RequireIdentifier(result);
+                }
+
+                return result;
+            }
+
+            return null;
+        }
+
+        [Rule("AsmLabel", "(Label | LocalAsmLabel { LocalAsmLabel } )")]
+        private AsmLabel ParseAssemblyLabel(AsmStatement parent) {
+            var result = CreateChild<AsmLabel>(parent);
+            if (Match(TokenKind.At)) {
+                ParseLocalAsmLabel(result);
+            }
+            else {
+                ParseLabel(result);
+            }
+            return result;
+        }
+
+        [Rule("LocalAsmLabel", "@ { @ } Label ")]
+        private void ParseLocalAsmLabel(AsmLabel parent) {
+            do {
+                LocalAsmLabel result = CreateByTerminal<LocalAsmLabel>(parent, TokenKind.At);
+                while (ContinueWith(result, TokenKind.At)) ;
+                result.Label = ParseLabel(result);
+
+            } while (Match(TokenKind.At));
         }
 
         [Rule("DeclarationSection", "{ LabelDeclarationSection | ConstSection | TypeSection | VarSection | ExportsSection | AssemblyAttribute | MethodDecl | ProcedureDeclaration }", true)]
@@ -1234,6 +1374,9 @@ namespace PasPasPas.Parsing.Parser {
             }
             else if (Match(TokenKind.Integer)) {
                 result.LabelName = RequireInteger(result);
+            }
+            else if (Match(TokenKind.HexNumber)) {
+                result.LabelName = RequireHexValue(result);
             }
             else {
                 Unexpected();

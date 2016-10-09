@@ -103,5 +103,9 @@ namespace PasPasPasTests.Parser {
             ParseString("program test; begin continue; end .");
         }
 
+        [Fact]
+        public void TestAsmStatement() {
+            ParseString("program test; asm end .");
+        }
     }
 }

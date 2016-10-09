@@ -109,8 +109,10 @@ namespace PasPasPasTests.Parser {
             Func<object> g = () => ConditionalCompilation.IsSymbolDefined("PASPASPAS_TEST");
             Func<object> h = () => ConditionalCompilation.IsSymbolDefined("A");
             Func<object> b = () => ConditionalCompilation.IsSymbolDefined("B");
+            Func<object> c = () => ConditionalCompilation.IsSymbolDefined("32BIT");
 
             RunCompilerDirective("", false, f);
+            RunCompilerDirective("DEFINE 32BIT", true, c);
             RunCompilerDirective("IFDEF TESTSYM § IFDEF 32BIT § ELSE § DEFINE A  § ENDIF § ENDIF", false, h);
             RunCompilerDirective("IFDEF TESTSYM § DEFINE B § ELSE § DEFINE A § ENDIF", true, h);
             RunCompilerDirective("IFDEF TESTSYM § IFDEF TESTSYM § DEFINE A § ELSE § DEFINE A § ENDIF § ENDIF", false, h);

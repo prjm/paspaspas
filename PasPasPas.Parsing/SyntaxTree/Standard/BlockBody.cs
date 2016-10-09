@@ -8,7 +8,7 @@
         /// <summary>
         ///    assembler block
         /// </summary>
-        public Token AssemblerBlock { get; set; }
+        public AsmBlock AssemblerBlock { get; set; }
 
         /// <summary>
         ///     block bode
