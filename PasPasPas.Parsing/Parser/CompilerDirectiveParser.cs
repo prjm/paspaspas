@@ -175,6 +175,7 @@ namespace PasPasPas.Parsing.Parser {
                 TokenKind.MinMemStackSizeSwitchLong,
                 TokenKind.MaxMemStackSizeSwitchLong,
                 TokenKind.IfOpt,
+                TokenKind.IfEnd,
             };
 
         private void ParseParameter(ISyntaxPart parent) {
@@ -187,6 +188,9 @@ namespace PasPasPas.Parsing.Parser {
             }
             else if (Match(TokenKind.EndIf)) {
                 ParseEndIf(parent);
+            }
+            else if (Match(TokenKind.IfEnd)) {
+                ParseIfEnd(parent);
             }
             else if (Match(TokenKind.ElseCd)) {
                 ParseElse(parent);
@@ -706,6 +710,10 @@ namespace PasPasPas.Parsing.Parser {
 
         private void ParseEndIf(ISyntaxPart parent) {
             CreateByTerminal<EndIf>(parent, TokenKind.EndIf);
+        }
+
+        private void ParseIfEnd(ISyntaxPart parent) {
+            CreateByTerminal<EndIf>(parent, TokenKind.IfEnd);
         }
 
         private void ParseIfDef(ISyntaxPart parent) {

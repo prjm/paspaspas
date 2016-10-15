@@ -106,6 +106,16 @@ namespace PasPasPasTests.Parser {
         [Fact]
         public void TestAsmStatement() {
             ParseString("program test; asm end .");
+            ParseString("program test; asm mov 1, not 1 end .");
+            ParseString("program test; asm mov 1, not 1 xor 1 end .");
+            ParseString("program test; asm mov 1, not 1 and 1 end .");
+            ParseString("program test; asm mov 1, not 1 or 1 end .");
+            ParseString("program test; asm mov 1, type (1) end .");
+            ParseString("program test; asm mov 1, byte ptr (1) end .");
+            ParseString("program test; asm mov 1, word ptr (1) end .");
+            ParseString("program test; asm mov 1, dword ptr (1) end .");
+            ParseString("program test; asm mov 1, qword ptr (1) end .");
+            ParseString("program test; asm mov 1, tbyte ptr (1) end .");
         }
     }
 }

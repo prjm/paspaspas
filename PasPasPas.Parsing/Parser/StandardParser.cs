@@ -103,6 +103,10 @@ namespace PasPasPas.Parsing.Parser {
             new HashSet<string>(StringComparer.OrdinalIgnoreCase) {
                 "db", "dw", "dd", "dq" };
 
+        private HashSet<string> asmPtr =
+            new HashSet<string>(StringComparer.OrdinalIgnoreCase) {
+                "byte", "word", "dword", "qword", "tbyte" };
+
 
         private bool MatchIdentifier(params int[] otherTokens)
                     => LookAheadIdentifier(0, otherTokens, false);
@@ -903,18 +907,51 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
-        [Rule("AsmBlock", "'asm' { AssemblyStatement } 'end'")]
+        [Rule("AsmBlock", "'asm' { AssemblyStatement | PseudoOp } 'end'")]
         private AsmBlock ParseAsmBlock(ISyntaxPart parent) {
             var result = CreateByTerminal<AsmBlock>(parent, TokenKind.Asm);
 
             while (Tokenizer.HasNextToken() && (!ContinueWith(result, TokenKind.End))) {
-                ParseAsmStatement(result);
+                if (Match(TokenKind.Dot)) {
+                    ParseAsmPseudoOp(result);
+                }
+                else {
+                    ParseAsmStatement(result);
+                }
             }
 
             return result;
         }
 
-        [Rule("AsmBlock", "[AssemblyLabel ':'] [AssemblyPrefix] AssemblyOpcode [AssemblyOperand {','  AssemblyOperand}]")]
+        [Rule("PseudoOp", "( '.PARAMS ' Integer | '.PUSHNV' Register | '.SAVNENV' Register | '.NOFRAME'.")]
+        private AsmPseudoOp ParseAsmPseudoOp(AsmBlock parent) {
+            var result = CreateByTerminal<AsmPseudoOp>(parent, TokenKind.Dot);
+            var kind = CurrentToken().Value;
+            result.Kind = RequireIdentifier(result);
+
+            if (string.Equals(kind, "params", StringComparison.OrdinalIgnoreCase)) {
+                result.ParamsOperation = true;
+                result.NumberOfParams = RequireInteger(parent);
+            }
+            else if (string.Equals(kind, "pushenv", StringComparison.OrdinalIgnoreCase)) {
+                result.PushEnvOperation = true;
+                result.Register = RequireIdentifier(result);
+            }
+            else if (string.Equals(kind, "savenv", StringComparison.OrdinalIgnoreCase)) {
+                result.SaveEnvOperation = true;
+                result.Register = RequireIdentifier(result);
+            }
+            else if (string.Equals(kind, "noframe", StringComparison.OrdinalIgnoreCase)) {
+                result.NoFrame = true;
+            }
+            else {
+                Unexpected();
+            }
+
+            return result;
+        }
+
+        [Rule("AssemblyStatement", "[AssemblyLabel ':'] [AssemblyPrefix] AssemblyOpcode [AssemblyOperand {','  AssemblyOperand}]")]
         private AsmStatement ParseAsmStatement(ISyntaxPart parent) {
             var result = CreateChild<AsmStatement>(parent);
 
@@ -926,25 +963,134 @@ namespace PasPasPas.Parsing.Parser {
             result.Prefix = ParseAssemblyPrefix(result);
             result.OpCode = ParseAssemblyOpcode(result);
 
-            while (!Match(TokenKind.End) && Tokenizer.HasNextToken() && !CurrentTokenIsAfterNewline()) {
+            while (Tokenizer.HasNextToken() && !Match(TokenKind.End) && !Match(TokenKind.Semicolon) && Tokenizer.HasNextToken() && !CurrentTokenIsAfterNewline()) {
                 ParseAssemblyOperand(result);
                 ContinueWith(result, TokenKind.Comma);
+            }
+
+            if (Match(TokenKind.Semicolon)) {
+                Tokenizer.SkipUntilEol();
             }
 
             return result;
         }
 
 
-        [Rule("AssemblyOperand", " Expression | ( '[' Expression ']' )")]
+        [Rule("AssemblyOperand", " AssemblyExpression ('and' | 'or' | 'xor') | ( 'not' AssemblyExpression ']' )")]
         private AsmOperand ParseAssemblyOperand(ISyntaxPart parent) {
             var result = CreateChild<AsmOperand>(parent);
-            var withBraces = ContinueWith(result, TokenKind.OpenBraces);
 
-            ParseExpression(result);
+            if (ContinueWith(result, TokenKind.Not)) {
+                result.NotExpression = ParseAssemblyOperand(result);
+                return result;
+            }
 
-            if (withBraces)
+            result.LeftTerm = ParseAssemblyExpression(result);
+
+            if (ContinueWith(result, TokenKind.And, TokenKind.Or, TokenKind.Xor)) {
+                result.RightTerm = ParseAssemblyOperand(result);
+            }
+
+            return result;
+        }
+
+        [Rule("AssemblyExpression", " ('OFFSET' AssemblyOperand ) | ('TYPE' AssemblyOperand) | (('BYTE' | 'WORD' | 'DWORD' | 'QWORD' | 'TBYTE' ) PTR AssemblyOperand) | AssemblyTerm ('+' | '-' ) AssemblyOperand ")]
+        private AsmExpression ParseAssemblyExpression(AsmOperand parent) {
+            var result = CreateChild<AsmExpression>(parent);
+            var tokenValue = CurrentToken().Value;
+
+            if (MatchIdentifier()) {
+
+                if (string.Equals(tokenValue, "OFFSET", StringComparison.OrdinalIgnoreCase)) {
+                    ContinueWith(result, TokenKind.Identifier);
+                    result.Offset = ParseAssemblyOperand(result);
+                    return result;
+                }
+
+                if (asmPtr.Contains(tokenValue)) {
+                    ContinueWith(result, TokenKind.Identifier);
+                    result.BytePtr = ParseAssemblyOperand(result);
+                    return result;
+                }
+
+            }
+
+            if (ContinueWith(result, TokenKind.TypeKeyword)) {
+                result.TypeExpression = ParseAssemblyOperand(result);
+                return result;
+            }
+
+            result.LeftOperand = ParseAssemblyTerm(result);
+
+            if (ContinueWith(result, TokenKind.Plus, TokenKind.Minus)) {
+                result.RightOperand = ParseAssemblyOperand(result);
+            }
+
+            return result;
+        }
+
+        [Rule("AssemblyTerm", "AssemblyFactor [( '*' | '/' | 'mod' | 'shl' | 'shr' ) AssemblyOperand ]")]
+        private AsmTerm ParseAssemblyTerm(ISyntaxPart parent) {
+            var result = CreateChild<AsmTerm>(parent);
+
+            result.LeftOperand = ParseAssemblyFactor(result);
+
+            if (ContinueWith(result, TokenKind.Dot)) {
+                result.Subtype = ParseAssemblyOperand(result);
+            }
+
+            if (ContinueWith(result, TokenKind.Times, TokenKind.Slash, TokenKind.Mod, TokenKind.Shl, TokenKind.Shr)) {
+                result.RightOperand = ParseAssemblyOperand(result);
+            }
+
+
+            return result;
+        }
+
+        [Rule("AssemblyFactor", "(SegmentPrefix ':' AssemblyOperand) | '(' AssemblyOperand ')' | '[' AssemblyOperand ']' | Identifier | QuotedString | DoubleQuotedString | Integer | HexNumber ")]
+        private AsmFactor ParseAssemblyFactor(AsmTerm parent) {
+            var result = CreateChild<AsmFactor>(parent);
+
+            if (MatchIdentifier() && segmentPrefixes.Contains(CurrentToken().Value) && LookAhead(1, TokenKind.Colon)) {
+                result.SegmentPrefix = RequireIdentifier(result);
+                ContinueWithOrMissing(result, TokenKind.Colon);
+                result.SegmentExpression = ParseAssemblyOperand(result);
+                return result;
+            }
+
+            if (ContinueWith(result, TokenKind.OpenParen)) {
+                result.Subexpression = ParseAssemblyOperand(result);
+                ContinueWithOrMissing(result, TokenKind.CloseParen);
+                return result;
+            }
+
+            if (ContinueWith(result, TokenKind.OpenBraces)) {
+                result.MemorySubexpression = ParseAssemblyOperand(result);
                 ContinueWithOrMissing(result, TokenKind.CloseBraces);
+                return result;
+            }
 
+            if (MatchIdentifier(true)) {
+                result.Identifier = RequireIdentifier(result, true);
+            }
+            else if (Match(TokenKind.Integer)) {
+                result.Number = RequireInteger(result);
+            }
+            else if (Match(TokenKind.HexNumber)) {
+                result.HexNumber = RequireHexValue(result);
+            }
+            else if (Match(TokenKind.QuotedString)) {
+                result.QuotedString = RequireString(result);
+            }
+            else if (Match(TokenKind.DoubleQuotedString)) {
+                result.QuotedString = RequireDoubleQuotedString(result);
+            }
+            else if (Match(TokenKind.At)) {
+                ParseLocalAsmLabel(result);
+            }
+            else {
+                Unexpected();
+            }
             return result;
         }
 
@@ -975,6 +1121,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("AssemblyPrefix", "(LockPrefix | [SegmentPrefix]) | (SegmentPrefix [LockPrefix])")]
         private AsmPrefix ParseAssemblyPrefix(ISyntaxPart parent) {
+
             if (!MatchIdentifier())
                 return null;
 
@@ -1015,15 +1162,32 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
-        [Rule("LocalAsmLabel", "@ { @ } Label ")]
-        private void ParseLocalAsmLabel(AsmLabel parent) {
-            do {
-                LocalAsmLabel result = CreateByTerminal<LocalAsmLabel>(parent, TokenKind.At);
-                while (ContinueWith(result, TokenKind.At)) ;
-                result.Label = ParseLabel(result);
+        [Rule("LocalAsmLabel", "'@' { '@' | Integer | Identifier | HexNumber }")]
+        private void ParseLocalAsmLabel(ISyntaxPart parent) {
+            LocalAsmLabel result = CreateChild<LocalAsmLabel>(parent);
 
-            } while (Match(TokenKind.At));
+            ContinueWithOrMissing(result, TokenKind.At);
+
+            do {
+                if (Match(TokenKind.Integer)) {
+                    RequireInteger(result);
+                }
+                else if (MatchIdentifier(true)) {
+                    RequireIdentifier(result);
+                }
+                else if (Match(TokenKind.HexNumber)) {
+                    RequireHexValue(result);
+                }
+                else if (ContinueWith(result, TokenKind.At)) {
+                    //..
+                }
+                else {
+                    Unexpected();
+                }
+            }
+            while ((!CurrentTokenIsAfterNewline()) && ContinueWith(result, TokenKind.At));
         }
+
 
         [Rule("DeclarationSection", "{ LabelDeclarationSection | ConstSection | TypeSection | VarSection | ExportsSection | AssemblyAttribute | MethodDecl | ProcedureDeclaration }", true)]
         private Declarations ParseDeclarationSections(ISyntaxPart parent) {
@@ -3047,6 +3211,9 @@ namespace PasPasPas.Parsing.Parser {
 
         private Identifier RequireIdentifier(ISyntaxPart parent, bool allowReserverdWords = false) {
 
+            //if (CurrentToken().Value == "MoveX16LP")
+            //    System.Diagnostics.Debugger.Break();
+
             if (Match(TokenKind.Identifier)) {
                 return CreateByTerminal<Identifier>(parent, TokenKind.Identifier);
             };
@@ -3081,6 +3248,12 @@ namespace PasPasPas.Parsing.Parser {
 
         private QuotedString RequireString(ISyntaxPart parent) {
             var result = CreateByTerminal<QuotedString>(parent, TokenKind.QuotedString);
+            result.UnquotedValue = result.LastTerminalValue;
+            return result;
+        }
+
+        private QuotedString RequireDoubleQuotedString(ISyntaxPart parent) {
+            var result = CreateByTerminal<QuotedString>(parent, TokenKind.DoubleQuotedString);
             result.UnquotedValue = result.LastTerminalValue;
             return result;
         }

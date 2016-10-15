@@ -21,7 +21,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (!parameter.ConditionalCompilation.Skip)
                 return true;
 
-            return syntaxPart is EndIf || syntaxPart is IfDef || syntaxPart is ElseDirective;
+            return syntaxPart is EndIf ||
+                syntaxPart is IfDef ||
+                syntaxPart is IfDirective ||
+                syntaxPart is IfOpt ||
+                syntaxPart is ElseDirective;
         }
 
         /// <summary>
@@ -131,7 +135,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         }
 
         /// <summary>
-        ///     conditional compilation ("ifdef")
+        ///     conditional compilation ("endif")
         /// </summary>
         /// <param name="syntaxPart"></param>
         /// <param name="parameter"></param>

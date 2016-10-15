@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using PasPasPas.Infrastructure.Input;
 using PasPasPas.Parsing.SyntaxTree;
@@ -103,7 +104,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <returns>token</returns>
         public Token LookAhead(int number) {
             checked {
-                while (BaseTokenizer.HasNextToken() && (tokenList.Count < System.Math.Max(2, 1 + number))) {
+                while (BaseTokenizer.HasNextToken() && (tokenList.Count < Math.Max(2, 1 + number))) {
                     InternalFetchNextToken();
                 }
             }
@@ -127,5 +128,19 @@ namespace PasPasPas.Parsing.Tokenizer {
             }
             return result;
         }
+
+        /// <summary>
+        ///     skip until whitespace
+        /// </summary>
+        public void SkipUntilEol() {
+            while (HasNextToken() && (CurrentToken().Kind != TokenKind.WhiteSpace || !LineCounter.ContainsNewLineChar(CurrentToken().Value))) {
+                if (tokenList.Count > 0) {
+                    var currentInvalidTokens = CurrentToken().InvalidTokensBefore;
+                    invalidTokens.Enqueue(tokenList.Dequeue());
+                }
+                FetchNextToken();
+            }
+        }
+
     }
 }
