@@ -105,7 +105,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         ///     fetch the next token
         /// </summary>
         /// <returns>next token</returns>
-        public Token FetchNextToken() {
+        public virtual Token FetchNextToken() {
             Token result = CharacterClasses.FetchNextToken(Input, LogSource);
             Lines.ProcessToken(result);
             return result;

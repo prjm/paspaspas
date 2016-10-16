@@ -968,10 +968,6 @@ namespace PasPasPas.Parsing.Parser {
                 ContinueWith(result, TokenKind.Comma);
             }
 
-            if (Match(TokenKind.Semicolon)) {
-                Tokenizer.SkipUntilEol();
-            }
-
             return result;
         }
 

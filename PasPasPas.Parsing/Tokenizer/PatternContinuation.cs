@@ -247,6 +247,48 @@ namespace PasPasPas.Parsing.Tokenizer {
     }
 
     /// <summary>
+    ///     semicolon or asm comment
+    /// </summary>
+    public class SemicolonOrAsmTokenValue : PatternContinuation {
+
+        /// <summary>
+        ///     allow a comment
+        /// </summary>
+        public bool AllowComment { get; set; }
+
+        /// <summary>
+        ///     parse until eol or semicolon
+        /// </summary>
+        /// <param name="state"></param>
+        public override void ParseByPrefix(ContinuationState state) {
+            if (!AllowComment) {
+                state.Finish(TokenKind.Semicolon);
+                return;
+            }
+
+            bool found = false;
+            while (state.IsValid && (!found)) {
+                var currentChar = state.FetchAndAppendChar();
+                found = LineCounter.IsNewLineChar(currentChar);
+
+                if (found && state.IsValid) {
+                    var nextChar = state.FetchChar();
+
+                    if (LineCounter.IsNewLineChar(nextChar))
+                        state.AppendChar(nextChar);
+                    else
+                        state.Putback(nextChar, state.SwitchedFile);
+                }
+            }
+
+            if (!found)
+                state.Error(TokenizerBase.UnexpectedEndOfToken);
+
+            state.Finish(TokenKind.Comment);
+        }
+    }
+
+    /// <summary>
     ///     base class for string literal based token values
     /// </summary>
     public abstract class StringBasedTokenValue : PatternContinuation {

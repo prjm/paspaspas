@@ -129,18 +129,5 @@ namespace PasPasPas.Parsing.Tokenizer {
             return result;
         }
 
-        /// <summary>
-        ///     skip until whitespace
-        /// </summary>
-        public void SkipUntilEol() {
-            while (HasNextToken() && (CurrentToken().Kind != TokenKind.WhiteSpace || !LineCounter.ContainsNewLineChar(CurrentToken().Value))) {
-                if (tokenList.Count > 0) {
-                    var currentInvalidTokens = CurrentToken().InvalidTokensBefore;
-                    invalidTokens.Enqueue(tokenList.Dequeue());
-                }
-                FetchNextToken();
-            }
-        }
-
     }
 }

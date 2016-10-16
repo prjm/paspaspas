@@ -42,6 +42,12 @@ namespace PasPasPas.Parsing.Tokenizer {
             => punctuators;
 
         /// <summary>
+        ///     input patterns
+        /// </summary>
+        public InputPatterns Patterns
+            => punctuators;
+
+        /// <summary>
         ///     keywords
         /// </summary>
         public static IDictionary<string, int> Keywords { get; }
@@ -212,5 +218,37 @@ namespace PasPasPas.Parsing.Tokenizer {
                 ["dependency"] = TokenKind.Dependency
             };
 
+        /// <summary>
+        ///     toggle semicolons as asm connets
+        /// </summary>
+        public bool AllowAsmComment
+        {
+            get
+            {
+                return punctuators.SemicolonOrAsmComment.AllowComment;
+            }
+
+            set
+            {
+                punctuators.SemicolonOrAsmComment.AllowComment = value;
+            }
+        }
+
+        /// <summary>
+        ///     fetch next token
+        /// </summary>
+        /// <returns></returns>
+        public override Token FetchNextToken() {
+            var result = base.FetchNextToken();
+
+            if (result != null && result.Kind == TokenKind.Asm) {
+                AllowAsmComment = true;
+            }
+            else if (AllowAsmComment && (result == null || result.Kind == TokenKind.End)) {
+                AllowAsmComment = false;
+            }
+
+            return result;
+        }
     }
 }

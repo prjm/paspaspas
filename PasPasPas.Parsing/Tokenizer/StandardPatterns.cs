@@ -8,6 +8,18 @@ namespace PasPasPas.Parsing.Tokenizer {
     public class StandardPatterns : InputPatterns {
 
         /// <summary>
+        ///     semicolon or comment token group
+        /// </summary>
+        private SemicolonOrAsmTokenValue semicolonTokenGroup
+            = new SemicolonOrAsmTokenValue() { AllowComment = false };
+
+        /// <summary>
+        ///     special semicolon or asm comment
+        /// </summary>
+        public SemicolonOrAsmTokenValue SemicolonOrAsmComment
+            => semicolonTokenGroup;
+
+        /// <summary>
         ///     register punctuators
         /// </summary>
         public StandardPatterns() {
@@ -22,7 +34,7 @@ namespace PasPasPas.Parsing.Tokenizer {
 
             AddPattern(',', TokenKind.Comma);
             AddPattern(')', TokenKind.CloseParen);
-            AddPattern(';', TokenKind.Semicolon);
+            AddPattern(';', semicolonTokenGroup);
             AddPattern('=', TokenKind.EqualsSign);
             AddPattern('[', TokenKind.OpenBraces);
             AddPattern(']', TokenKind.CloseBraces);

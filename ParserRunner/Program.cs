@@ -30,9 +30,9 @@ namespace ParserRunner {
             var settings = new SettingGroup();
 
             var files1 = Directory.GetFiles(path, "*.pas").Skip(22 * 100).Take(200);
-            var files2 = new[] { path + "FastMM4.pas" };
+            var files2 = new[] { path + "Demo.pas" };
 
-            foreach (var filePath in files2) {
+            foreach (var filePath in files1) {
                 var inputFiles = new FilesSetting();
                 inputFiles.Name = filePath;
                 inputFiles.Path = filePath;
