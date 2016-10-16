@@ -960,6 +960,9 @@ namespace PasPasPas.Parsing.Parser {
                 ContinueWithOrMissing(result, TokenKind.Colon);
             }
 
+            if (Match(TokenKind.End))
+                return result;
+
             result.Prefix = ParseAssemblyPrefix(result);
             result.OpCode = ParseAssemblyOpcode(result);
 
@@ -1174,7 +1177,7 @@ namespace PasPasPas.Parsing.Parser {
                 else if (Match(TokenKind.HexNumber)) {
                     RequireHexValue(result);
                 }
-                else if (ContinueWith(result, TokenKind.At)) {
+                else if (Match(TokenKind.At)) {
                     //..
                 }
                 else {
@@ -3207,8 +3210,8 @@ namespace PasPasPas.Parsing.Parser {
 
         private Identifier RequireIdentifier(ISyntaxPart parent, bool allowReserverdWords = false) {
 
-            //if (CurrentToken().Value == "MoveX16LP")
-            //    System.Diagnostics.Debugger.Break();
+            //if (CurrentToken().Value == "BinTheRemainder")
+            //   System.Diagnostics.Debugger.Break();
 
             if (Match(TokenKind.Identifier)) {
                 return CreateByTerminal<Identifier>(parent, TokenKind.Identifier);

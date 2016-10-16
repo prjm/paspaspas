@@ -29,7 +29,7 @@ namespace ParserRunner {
             var task = new PasPasPasParserTask();
             var settings = new SettingGroup();
 
-            var files1 = Directory.GetFiles(path, "*.pas").Skip(22 * 100).Take(200);
+            var files1 = Directory.GetFiles(path, "*.pas").Skip(28 * 100).Take(200);
             var files2 = new[] { path + "Demo.pas" };
 
             foreach (var filePath in files1) {

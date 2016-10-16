@@ -5,10 +5,6 @@
     /// </summary>
     public class LocalAsmLabel : SyntaxPartBase {
 
-        /// <summary>
-        ///     label
-        /// </summary>
-        public Label Label { get; internal set; }
     }
 }
 
