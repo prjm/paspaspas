@@ -10,5 +10,9 @@
         /// </summary>
         public QuotedString Id { get; set; }
 
+        /// <summary>
+        ///     named guid for this interface
+        /// </summary>
+        public Identifier IdIdentifier { get; set; }
     }
 }

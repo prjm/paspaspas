@@ -6,9 +6,14 @@
     public class RecordHelperItem : SyntaxPartBase {
 
         /// <summary>
+        ///     constant declaration
+        /// </summary>
+        public ConstSection ConstDeclaration { get; set; }
+
+        /// <summary>
         ///     class flag
         /// </summary>
-        public bool Class { get; internal set; }
+        public bool Class { get; set; }
 
         /// <summary>
         ///     method
@@ -23,11 +28,11 @@
         /// <summary>
         ///     strict visibility
         /// </summary>
-        public bool Strict { get; internal set; }
+        public bool Strict { get; set; }
 
         /// <summary>
         ///     visibility definition
         /// </summary>
-        public int Visibility { get; internal set; }
+        public int Visibility { get; set; }
     }
 }

@@ -344,11 +344,14 @@ namespace PasPasPas.Parsing.Parser {
         [Rule("ExternalSpecifier", "(('Name' | 'Index' ) ConstExpression) |  'Dependency' ConstExpression { ', ' ConstExpression } ) ")]
         private ExternalSpecifier ParseExternalSpecifier(ISyntaxPart parent) {
 
-            if (!Match(TokenKind.Name, TokenKind.Index, TokenKind.Dependency))
+            if (!Match(TokenKind.Name, TokenKind.Index, TokenKind.Dependency, TokenKind.Delayed))
                 return null;
 
-            var result = CreateByTerminal<ExternalSpecifier>(parent, TokenKind.Name, TokenKind.Index, TokenKind.Dependency);
+            var result = CreateByTerminal<ExternalSpecifier>(parent, TokenKind.Name, TokenKind.Index, TokenKind.Dependency, TokenKind.Delayed);
             result.Kind = result.LastTerminalKind;
+
+            if (result.Kind == TokenKind.Delayed)
+                return result;
 
             if (result.Kind != TokenKind.Dependency) {
                 result.Expression = ParseConstantExpression(result);
@@ -2086,6 +2089,11 @@ namespace PasPasPas.Parsing.Parser {
                 ParseAttributes(result);
             }
 
+            if (Match(TokenKind.Const)) {
+                result.ConstDeclaration = ParseConstSection(result, true);
+                return result;
+            }
+
             if (Match(TokenKind.Procedure, TokenKind.Function, TokenKind.Constructor, TokenKind.Destructor)) {
                 result.MethodDeclaration = ParseMethodDeclaration(result);
                 return result;
@@ -2222,7 +2230,12 @@ namespace PasPasPas.Parsing.Parser {
         [Rule("InterfaceGuid", "'[' QuotedString ']'")]
         private InterfaceGuid ParseInterfaceGuid(ISyntaxPart parent) {
             var result = CreateByTerminal<InterfaceGuid>(parent, TokenKind.OpenBraces);
-            result.Id = RequireString(result);
+
+            if (Match(TokenKind.Identifier))
+                result.IdIdentifier = RequireIdentifier(result);
+            else
+                result.Id = RequireString(result);
+
             ContinueWithOrMissing(result, TokenKind.CloseBraces);
             return result;
         }
@@ -3210,8 +3223,8 @@ namespace PasPasPas.Parsing.Parser {
 
         private Identifier RequireIdentifier(ISyntaxPart parent, bool allowReserverdWords = false) {
 
-            //if (CurrentToken().Value == "BinTheRemainder")
-            //   System.Diagnostics.Debugger.Break();
+            //if (CurrentToken().Value == "SQLITE_OPEN_SHAREDCACHE")
+            //    System.Diagnostics.Debugger.Break();
 
             if (Match(TokenKind.Identifier)) {
                 return CreateByTerminal<Identifier>(parent, TokenKind.Identifier);

@@ -512,7 +512,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <param name="syntaxPart"></param>
         /// <param name="parameter"></param>
         public void BeginVisitItem(RealCompatibility syntaxPart, CompilerDirectiveVisitorOptions parameter) {
-            parameter.CompilerOptions.RealCompatiblity.Value = syntaxPart.Mode;
+            parameter.CompilerOptions.RealCompatibility.Value = syntaxPart.Mode;
         }
 
 

@@ -45,6 +45,12 @@
     <Compile Include="Parser\CompilerDirectiveParserErrors.cs" />
     <Compile Include="Parser\EmptyCollection.cs" />
     <Compile Include="Parser\IParser.cs" />
+    <Compile Include="SyntaxTree\Abstract\CompilationUnit.cs" />
+    <Compile Include="SyntaxTree\Abstract\ISymbolTable.cs" />
+    <Compile Include="SyntaxTree\Abstract\ISymbolTableEntry.cs" />
+    <Compile Include="SyntaxTree\Abstract\ProjectRoot.cs" />
+    <Compile Include="SyntaxTree\Abstract\SymbolTableBase.cs" />
+    <Compile Include="SyntaxTree\Abstract\SymbolTableEntryBase.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\IfDirective.cs" />
     <Compile Include="SyntaxTree\Standard\AsmBlock.cs" />
     <Compile Include="SyntaxTree\Standard\AsmFactor.cs" />
@@ -61,6 +67,8 @@
     <Compile Include="SyntaxTree\Standard\TypeName.cs" />
     <Compile Include="SyntaxTree\Visitors\StructureVisitor.cs" />
     <Compile Include="SyntaxTree\Visitors\StructureVisitorOptions.cs" />
+    <Compile Include="SyntaxTree\Visitors\TreeTransformer.cs" />
+    <Compile Include="SyntaxTree\Visitors\TreeTransformerOptions.cs" />
     <Compile Include="Tokenizer\ITokenizer.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\AppTypeParameter.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\AssertSwitch.cs" />
