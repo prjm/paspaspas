@@ -140,13 +140,13 @@ namespace PasPasPas.Options.DataTypes {
                 inInvalidBranch = true;
             }
             else if (CurrentCondition != null) {
+                anotherConditionMatches = false;
                 foreach (var condition in CurrentCondition.Parent.Conditions) {
                     if (condition.Matches) {
                         anotherConditionMatches = true;
                         break;
                     }
                 }
-                anotherConditionMatches = false;
             }
 
             AddConditionBranch(new ElseCondition() { Matches = !anotherConditionMatches && !inInvalidBranch });

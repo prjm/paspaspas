@@ -65,7 +65,7 @@ namespace PasPasPas.Building.Tasks {
                 var log = new LogTarget();
                 environment.Options = new OptionSet(settings.FileSystemAccess);
 
-                ISyntaxPart resultTree;
+                IExtendableSyntaxPart resultTree;
 
                 StandardParser parser = new StandardParser(environment);
                 using (var inputFile = settings.FileSystemAccess.OpenFileForReading(file))

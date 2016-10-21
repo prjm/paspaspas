@@ -80,6 +80,7 @@ namespace PasPasPasTests.Parser {
 
         [Fact]
         public void TestClassTypeDefinitions() {
+            ParseString("unit test; interface implementation procedure x ; external 5 name '5' delayed; end .");
             ParseString("unit test; interface implementation function x<x, x>.x(): x; begin end ; end .");
             ParseString("unit test; interface implementation class operator x.x : x ; begin end ; end .");
             ParseString("unit test; interface implementation procedure x<x>.x<x>() ; begin end ; end .");
@@ -103,6 +104,8 @@ namespace PasPasPasTests.Parser {
 
         [Fact]
         public void TestClassTypeDeclarations() {
+            ParseString("program test; type x = interface(IUnknown) [X_ID] procedure test; end; .");
+            ParseString("program test; type x = record helper for x const x=x; end; .");
             ParseString("program test; type x = record helper for x private class [Result: unsafe] function x:x; end; .");
             ParseString("program test; type x = record helper for x private class function x:x; end; .");
             ParseString("program test; type x = record helper for x private function x:x; end; .");

@@ -17,13 +17,31 @@ namespace PasPasPas.Parsing.SyntaxTree {
         /// <summary>
         ///     child nodes
         /// </summary>
-        IList<ISyntaxPart> Parts { get; }
+        IReadOnlyList<ISyntaxPart> Parts { get; }
 
         /// <summary>
         ///     parent node
         /// </summary>
         ISyntaxPart Parent { get; set; }
+    }
 
+
+    /// <summary>
+    ///     extendable syntax part
+    /// </summary>
+    public interface IExtendableSyntaxPart : ISyntaxPart {
+
+        /// <summary>
+        ///     add an part
+        /// </summary>
+        /// <param name="result"></param>
+        void Add(ISyntaxPart result);
+
+        /// <summary>
+        ///     remove an part
+        /// </summary>
+        /// <param name="lastSymbol"></param>
+        void Remove(ISyntaxPart lastSymbol);
     }
 
 }

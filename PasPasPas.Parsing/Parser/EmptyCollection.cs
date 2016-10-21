@@ -9,7 +9,7 @@ namespace PasPasPas.Parsing.Parser {
     ///     stub for an empty collection
     /// </summary>
     /// <typeparam name="T">collection type</typeparam>
-    public class EmptyCollection<T> : ICollection<T>, IList<T> {
+    public class EmptyCollection<T> : ICollection<T>, IList<T>, IReadOnlyList<T> {
 
         /// <summary>
         ///     field for lazy single instance
@@ -40,6 +40,13 @@ namespace PasPasPas.Parsing.Parser {
         /// </summary>
         public static IList<T> Instance
             => instance.Value;
+
+        /// <summary>
+        ///     single instance
+        /// </summary>
+        public static IReadOnlyList<T> ReadOnlyInstance
+            => (IReadOnlyList<T>)instance.Value;
+
 
         /// <summary>
         ///     get item count (is always <code>0</code>)

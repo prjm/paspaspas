@@ -5,7 +5,7 @@ namespace PasPasPas.Parsing.SyntaxTree {
     /// <summary>
     ///     base class for syntax pars
     /// </summary>
-    public abstract class SyntaxPartBase : ISyntaxPart {
+    public abstract class SyntaxPartBase : IExtendableSyntaxPart {
 
         /// <summary>
         ///     create a new syntax part base
@@ -22,10 +22,10 @@ namespace PasPasPas.Parsing.SyntaxTree {
         /// <summary>
         ///     syntax parts
         /// </summary>
-        public virtual IList<ISyntaxPart> Parts
+        public virtual IReadOnlyList<ISyntaxPart> Parts
             => parts;
 
-        private IList<ISyntaxPart> parts
+        private List<ISyntaxPart> parts
             = new List<ISyntaxPart>();
 
         /// <summary>
@@ -121,6 +121,22 @@ namespace PasPasPas.Parsing.SyntaxTree {
 
             foreach (var child in symbol.Parts)
                 FindAllTerminals(child);
+        }
+
+        /// <summary>
+        ///     add an iten
+        /// </summary>
+        /// <param name="result"></param>
+        public void Add(ISyntaxPart result) {
+            parts.Add(result);
+        }
+
+        /// <summary>
+        ///     remove an item
+        /// </summary>
+        /// <param name="lastSymbol"></param>
+        public void Remove(ISyntaxPart lastSymbol) {
+            parts.Remove(lastSymbol);
         }
     }
 }

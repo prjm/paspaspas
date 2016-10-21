@@ -27,11 +27,17 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <param name="parameter"></param>
         private void BeginVisitItem(Unit unit, TreeTransformerOptions parameter) {
             var result = CreateTreeNode<CompilationUnit>(unit);
+            result.DefineSymbolName("a");
             parameter.Project.Add(result);
         }
 
-        private T CreateTreeNode<T>(ISyntaxPart parent) where T : new() {
+        private void BeginVisitItem(ISyntaxPart part, TreeTransformerOptions parameter) {
+            //..
+        }
+
+        private static T CreateTreeNode<T>(ISyntaxPart parent) where T : ISyntaxPart, new() {
             var result = new T();
+            result.Parent = parent;
             return result;
         }
 

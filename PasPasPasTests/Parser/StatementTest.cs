@@ -6,6 +6,7 @@ namespace PasPasPasTests.Parser {
 
         [Fact]
         public void TestMiscStatements() {
+            ParseString("program test; const x: array[x] of Integer = (a, {$IFNDEF X} b {$ELSE} 0 {$ENDIF}, c); begin end.");
             ParseString("program test; var x: x.x<x,x,x,x>.x.x begin end.");
             ParseString("program test; procedure x([ref] a, [ref] b: string); .");
             ParseString("program test; begin a := 5.ToString(); end .");

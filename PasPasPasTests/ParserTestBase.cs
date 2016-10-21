@@ -90,6 +90,64 @@ namespace PasPasPasTests {
             }
         }
 
+        private class AstVisitor<T> : SyntaxPartVisitorBase<AstVisitorOptions<T>> where T : class {
+
+            public override bool BeginVisit(ISyntaxPart part, AstVisitorOptions<T> options) {
+                options.Result = options.SearchFunction(part);
+                return options.Result == default(T);
+            }
+
+        }
+
+        private class AstVisitorOptions<T> {
+            public T Result { get; internal set; }
+            public Func<object, T> SearchFunction { get; set; }
+
+        }
+
+        protected void RunAstTest(string input, Func<object, string> searchFunction, string expectedResult) {
+            var tree = RunAstTest(input);
+            var visitor = new TreeTransformer();
+            var options = new TreeTransformerOptions();
+            tree.Accept(visitor, options);
+
+            var astVisitor = new AstVisitor<string>();
+            var astOptions = new AstVisitorOptions<string>() { SearchFunction = searchFunction };
+            options.Project.Accept(astVisitor, astOptions);
+        }
+
+
+        protected ISyntaxPart RunAstTest(string input) {
+            ClearOptions();
+
+            var logManager = new LogManager();
+            var environment = new ParserServices(logManager);
+            var log = new LogTarget();
+            environment.Options = TestOptions;
+
+            StandardParser parser = new StandardParser(environment);
+            using (var inputFile = new StringInput(input, new FileReference("test.pas")))
+            using (var reader = new StackedFileReader()) {
+                reader.AddFile(inputFile);
+                parser.BaseTokenizer = new StandardTokenizer(environment, reader);
+                var hasError = false;
+                string errorText = string.Empty;
+
+                log.ProcessMessage += (x, y) => {
+                    errorText += y.Message.MessageID.ToString() + Environment.NewLine;
+                    hasError = hasError ||
+                    y.Message.Severity == MessageSeverity.Error ||
+                    y.Message.Severity == MessageSeverity.FatalError;
+                };
+
+
+                Assert.AreEqual(string.Empty, errorText);
+                Assert.IsFalse(hasError);
+                return parser.Parse();
+            }
+        }
+
+
         protected void RunCompilerDirective(string directive, object expected, Func<object> actual, params Guid[] messages) {
             var fileAccess = (StandardFileAccess)TestOptions.Files;
             var fileCounter = 0;

@@ -783,7 +783,7 @@ namespace PasPasPasTests.Parser {
 
         [Fact]
         public void TestRealCompatibility() {
-            Func<object> f = () => CompilerOptions.RealCompatiblity.Value;
+            Func<object> f = () => CompilerOptions.RealCompatibility.Value;
             RunCompilerDirective("", Real48.Undefined, f);
             RunCompilerDirective("REALCOMPATIBILITY ON", Real48.EnableCompatibility, f);
             RunCompilerDirective("REALCOMPATIBILITY OFF", Real48.DisableCompatibility, f);

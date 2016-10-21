@@ -94,7 +94,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="parent">parent syntax tree node</param>
         /// <param name="expectedTokens">expected tokens (or)</param>
         /// <returns></returns>
-        protected void ErrorAndSkip(ISyntaxPart parent, Guid message, int[] expectedTokens) {
+        protected void ErrorAndSkip(IExtendableSyntaxPart parent, Guid message, int[] expectedTokens) {
             logSource.Error(message);
             CreateByError(parent);
         }
@@ -106,15 +106,15 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="values">error values</param>
         /// <param name="parent">parent syntax tree node</param>
         /// <returns></returns>
-        protected void ErrorLastPart(ISyntaxPart parent, Guid message, params object[] values) {
+        protected void ErrorLastPart(IExtendableSyntaxPart parent, Guid message, params object[] values) {
             var lastSymbol = parent.Parts.Last();
-            parent.Parts.Remove(lastSymbol);
+            parent.Remove(lastSymbol);
             lastSymbol.Parent = null;
 
             foreach (Terminal t in SyntaxPartBase.FindAllTerminals(lastSymbol)) {
                 var invalid = new InvalidToken(t.Token);
                 invalid.Parent = parent;
-                parent.Parts.Add(invalid);
+                parent.Add(invalid);
             }
 
             logSource.Error(message, values);
@@ -448,8 +448,8 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="result">created syntax part</param>
         /// <param name="parent">parent node</param>
         /// <returns><c>true</c> if match</returns>
-        protected bool OptionalPart<T>(ISyntaxPart parent, out T result, int tokenKind)
-            where T : ISyntaxPart, new() {
+        protected bool OptionalPart<T>(IExtendableSyntaxPart parent, out T result, int tokenKind)
+            where T : IExtendableSyntaxPart, new() {
 
             if (!Match(tokenKind)) {
                 result = default(T);
@@ -466,7 +466,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind"></param>
         /// <param name="part"></param>
         /// <returns></returns>
-        protected bool ContinueWith(ISyntaxPart part, int tokenKind) {
+        protected bool ContinueWith(IExtendableSyntaxPart part, int tokenKind) {
             var requiresIdentifier = tokenKind == TokenKind.Identifier;
 
             if (!Tokenizer.HasNextToken()) {
@@ -481,7 +481,7 @@ namespace PasPasPas.Parsing.Parser {
 
             var terminal = new Terminal(CurrentToken());
             terminal.Parent = part;
-            part.Parts.Add(terminal);
+            part.Add(terminal);
             FetchNextToken();
             return true;
         }
@@ -493,7 +493,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind2"></param>
         /// <param name="part"></param>
         /// <returns></returns>
-        protected bool ContinueWith(ISyntaxPart part, int tokenKind1, int tokenKind2) {
+        protected bool ContinueWith(IExtendableSyntaxPart part, int tokenKind1, int tokenKind2) {
             var requiresIdentifier = (tokenKind1 == TokenKind.Identifier) || (tokenKind2 == TokenKind.Identifier);
 
             if (!Tokenizer.HasNextToken()) {
@@ -508,7 +508,7 @@ namespace PasPasPas.Parsing.Parser {
 
             var terminal = new Terminal(CurrentToken());
             terminal.Parent = part;
-            part.Parts.Add(terminal);
+            part.Add(terminal);
             FetchNextToken();
             return true;
         }
@@ -522,7 +522,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind3"></param>
         /// <param name="part"></param>
         /// <returns></returns>
-        protected bool ContinueWith(ISyntaxPart part, int tokenKind1, int tokenKind2, int tokenKind3) {
+        protected bool ContinueWith(IExtendableSyntaxPart part, int tokenKind1, int tokenKind2, int tokenKind3) {
             var requiresIdentifier = (tokenKind1 == TokenKind.Identifier) || (tokenKind2 == TokenKind.Identifier) || (tokenKind3 == TokenKind.Identifier);
 
             if (!Tokenizer.HasNextToken()) {
@@ -537,7 +537,7 @@ namespace PasPasPas.Parsing.Parser {
 
             var terminal = new Terminal(CurrentToken());
             terminal.Parent = part;
-            part.Parts.Add(terminal);
+            part.Add(terminal);
             FetchNextToken();
             return true;
         }
@@ -551,7 +551,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind4"></param>
         /// <param name="part"></param>
         /// <returns></returns>
-        protected bool ContinueWith(ISyntaxPart part, int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4) {
+        protected bool ContinueWith(IExtendableSyntaxPart part, int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4) {
             var requiresIdentifier =
                 (tokenKind1 == TokenKind.Identifier) ||
                 (tokenKind2 == TokenKind.Identifier) ||
@@ -570,7 +570,7 @@ namespace PasPasPas.Parsing.Parser {
 
             var terminal = new Terminal(CurrentToken());
             terminal.Parent = part;
-            part.Parts.Add(terminal);
+            part.Add(terminal);
             FetchNextToken();
             return true;
         }
@@ -586,7 +586,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind5"></param>
         /// <param name="part"></param>
         /// <returns></returns>
-        protected bool ContinueWith(ISyntaxPart part, int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5) {
+        protected bool ContinueWith(IExtendableSyntaxPart part, int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5) {
             var requiresIdentifier = (tokenKind1 == TokenKind.Identifier) ||
                 (tokenKind2 == TokenKind.Identifier) ||
                 (tokenKind3 == TokenKind.Identifier) ||
@@ -605,7 +605,7 @@ namespace PasPasPas.Parsing.Parser {
 
             var terminal = new Terminal(CurrentToken());
             terminal.Parent = part;
-            part.Parts.Add(terminal);
+            part.Add(terminal);
             FetchNextToken();
             return true;
         }
@@ -622,7 +622,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind6"></param>
         /// <param name="part"></param>
         /// <returns></returns>
-        protected bool ContinueWith(ISyntaxPart part, int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5, int tokenKind6) {
+        protected bool ContinueWith(IExtendableSyntaxPart part, int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5, int tokenKind6) {
             var requiresIdentifier = (tokenKind1 == TokenKind.Identifier) ||
                 (tokenKind2 == TokenKind.Identifier) ||
                 (tokenKind3 == TokenKind.Identifier) ||
@@ -642,7 +642,7 @@ namespace PasPasPas.Parsing.Parser {
 
             var terminal = new Terminal(CurrentToken());
             terminal.Parent = part;
-            part.Parts.Add(terminal);
+            part.Add(terminal);
             FetchNextToken();
             return true;
         }
@@ -662,7 +662,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind7"></param>
         /// <param name="part"></param>
         /// <returns></returns>
-        protected bool ContinueWith(ISyntaxPart part, int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5, int tokenKind6, int tokenKind7) {
+        protected bool ContinueWith(IExtendableSyntaxPart part, int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5, int tokenKind6, int tokenKind7) {
             var requiresIdentifier = (tokenKind1 == TokenKind.Identifier) ||
                 (tokenKind2 == TokenKind.Identifier) ||
                 (tokenKind3 == TokenKind.Identifier) ||
@@ -683,7 +683,7 @@ namespace PasPasPas.Parsing.Parser {
 
             var terminal = new Terminal(CurrentToken());
             terminal.Parent = part;
-            part.Parts.Add(terminal);
+            part.Add(terminal);
             FetchNextToken();
             return true;
         }
@@ -701,7 +701,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind7"></param>
         /// <param name="tokenKind8"></param>
         /// <returns></returns>
-        protected bool ContinueWith(ISyntaxPart part, int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5, int tokenKind6, int tokenKind7, int tokenKind8) {
+        protected bool ContinueWith(IExtendableSyntaxPart part, int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5, int tokenKind6, int tokenKind7, int tokenKind8) {
             var requiresIdentifier = (tokenKind1 == TokenKind.Identifier) ||
                 (tokenKind2 == TokenKind.Identifier) ||
                 (tokenKind3 == TokenKind.Identifier) ||
@@ -723,7 +723,7 @@ namespace PasPasPas.Parsing.Parser {
 
             var terminal = new Terminal(CurrentToken());
             terminal.Parent = part;
-            part.Parts.Add(terminal);
+            part.Add(terminal);
             FetchNextToken();
             return true;
         }
@@ -743,7 +743,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind9"></param>
         /// <param name="part"></param>
         /// <returns></returns>
-        protected bool ContinueWith(ISyntaxPart part, int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5, int tokenKind6, int tokenKind7, int tokenKind8, int tokenKind9) {
+        protected bool ContinueWith(IExtendableSyntaxPart part, int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5, int tokenKind6, int tokenKind7, int tokenKind8, int tokenKind9) {
             var requiresIdentifier = (tokenKind1 == TokenKind.Identifier) ||
                 (tokenKind2 == TokenKind.Identifier) ||
                 (tokenKind3 == TokenKind.Identifier) ||
@@ -766,7 +766,7 @@ namespace PasPasPas.Parsing.Parser {
 
             var terminal = new Terminal(CurrentToken());
             terminal.Parent = part;
-            part.Parts.Add(terminal);
+            part.Add(terminal);
             FetchNextToken();
             return true;
         }
@@ -786,13 +786,13 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="parent">parent node</param>
         /// <param name="tokenKind">expected token kind</param>
         /// <returns>syntax tree node</returns>
-        protected T CreateByTerminal<T>(ISyntaxPart parent, int tokenKind) where T : ISyntaxPart, new() {
+        protected T CreateByTerminal<T>(IExtendableSyntaxPart parent, int tokenKind) where T : IExtendableSyntaxPart, new() {
             var result = CreateChild<T>(parent);
 
             if (Match(tokenKind)) {
                 var terminal = new Terminal(CurrentToken());
                 terminal.Parent = result;
-                result.Parts.Add(terminal);
+                result.Add(terminal);
             }
             else {
                 ContinueWithOrMissing(result, tokenKind);
@@ -810,13 +810,13 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind1">expected token kind</param>
         /// <param name="tokenKind2">expected token kind</param>/// 
         /// <returns>syntax tree node</returns>
-        protected T CreateByTerminal<T>(ISyntaxPart parent, int tokenKind1, int tokenKind2) where T : ISyntaxPart, new() {
+        protected T CreateByTerminal<T>(IExtendableSyntaxPart parent, int tokenKind1, int tokenKind2) where T : IExtendableSyntaxPart, new() {
             var result = CreateChild<T>(parent);
 
             if (Match(tokenKind1, tokenKind2)) {
                 var terminal = new Terminal(CurrentToken());
                 terminal.Parent = result;
-                result.Parts.Add(terminal);
+                result.Add(terminal);
             }
             else {
                 ContinueWithOrMissing(result, tokenKind1, tokenKind2);
@@ -835,13 +835,13 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind2">expected token kind</param>
         /// <param name="tokenKind3">expected token kind</param>
         /// <returns>syntax tree node</returns>
-        protected T CreateByTerminal<T>(ISyntaxPart parent, int tokenKind1, int tokenKind2, int tokenKind3) where T : ISyntaxPart, new() {
+        protected T CreateByTerminal<T>(IExtendableSyntaxPart parent, int tokenKind1, int tokenKind2, int tokenKind3) where T : IExtendableSyntaxPart, new() {
             var result = CreateChild<T>(parent);
 
             if (Match(tokenKind1, tokenKind2, tokenKind3)) {
                 var terminal = new Terminal(CurrentToken());
                 terminal.Parent = result;
-                result.Parts.Add(terminal);
+                result.Add(terminal);
             }
             else {
                 ContinueWithOrMissing(result, tokenKind1, tokenKind2, tokenKind3);
@@ -861,13 +861,13 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind3">expected token kind</param>
         /// <param name="tokenKind4">expected token kind</param>
         /// <returns>syntax tree node</returns>
-        protected T CreateByTerminal<T>(ISyntaxPart parent, int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4) where T : ISyntaxPart, new() {
+        protected T CreateByTerminal<T>(IExtendableSyntaxPart parent, int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4) where T : IExtendableSyntaxPart, new() {
             var result = CreateChild<T>(parent);
 
             if (Match(tokenKind1, tokenKind2, tokenKind3, tokenKind4)) {
                 var terminal = new Terminal(CurrentToken());
                 terminal.Parent = result;
-                result.Parts.Add(terminal);
+                result.Add(terminal);
             }
             else {
                 ContinueWithOrMissing(result, tokenKind1, tokenKind2, tokenKind3, tokenKind4);
@@ -889,13 +889,13 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind4">expected token kind</param>
         /// <param name="tokenKind5">expected token kind</param>
         /// <returns>syntax tree node</returns>
-        protected T CreateByTerminal<T>(ISyntaxPart parent, int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5) where T : ISyntaxPart, new() {
+        protected T CreateByTerminal<T>(IExtendableSyntaxPart parent, int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5) where T : IExtendableSyntaxPart, new() {
             var result = CreateChild<T>(parent);
 
             if (Match(tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5)) {
                 var terminal = new Terminal(CurrentToken());
                 terminal.Parent = result;
-                result.Parts.Add(terminal);
+                result.Add(terminal);
             }
             else {
                 ContinueWithOrMissing(result, tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5);
@@ -918,13 +918,13 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind5">expected token kind</param>
         /// <param name="tokenKind6">expected token kind</param>
         /// <returns>syntax tree node</returns>
-        protected T CreateByTerminal<T>(ISyntaxPart parent, int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5, int tokenKind6) where T : ISyntaxPart, new() {
+        protected T CreateByTerminal<T>(IExtendableSyntaxPart parent, int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5, int tokenKind6) where T : IExtendableSyntaxPart, new() {
             var result = CreateChild<T>(parent);
 
             if (Match(tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5, tokenKind6)) {
                 var terminal = new Terminal(CurrentToken());
                 terminal.Parent = result;
-                result.Parts.Add(terminal);
+                result.Add(terminal);
             }
             else {
                 ContinueWithOrMissing(result, tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5, tokenKind6);
@@ -949,13 +949,13 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind7">expected token kind</param>
         /// <param name="tokenKind8">expected token kind</param>
         /// <returns>syntax tree node</returns>
-        protected T CreateByTerminal<T>(ISyntaxPart parent, int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5, int tokenKind6, int tokenKind7, int tokenKind8) where T : ISyntaxPart, new() {
+        protected T CreateByTerminal<T>(IExtendableSyntaxPart parent, int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5, int tokenKind6, int tokenKind7, int tokenKind8) where T : IExtendableSyntaxPart, new() {
             var result = CreateChild<T>(parent);
 
             if (Match(tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5, tokenKind6, tokenKind7, tokenKind8)) {
                 var terminal = new Terminal(CurrentToken());
                 terminal.Parent = result;
-                result.Parts.Add(terminal);
+                result.Add(terminal);
             }
             else {
                 ContinueWithOrMissing(result, tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5, tokenKind6, tokenKind7, tokenKind8);
@@ -971,10 +971,10 @@ namespace PasPasPas.Parsing.Parser {
         /// </summary>
         /// <param name="parent"></param>
         /// <returns></returns>
-        protected InvalidToken CreateByError(ISyntaxPart parent) {
+        protected InvalidToken CreateByError(IExtendableSyntaxPart parent) {
             var invalid = new InvalidToken(CurrentToken());
             invalid.Parent = parent;
-            parent.Parts.Add(invalid);
+            parent.Add(invalid);
             FetchNextToken();
             return invalid;
         }
@@ -984,12 +984,12 @@ namespace PasPasPas.Parsing.Parser {
         /// </summary>
         /// <typeparam name="T">parent object</typeparam>
         /// <returns></returns>
-        protected static T CreateChild<T>(ISyntaxPart parent)
-            where T : ISyntaxPart, new() {
+        protected static T CreateChild<T>(IExtendableSyntaxPart parent)
+            where T : IExtendableSyntaxPart, new() {
             var result = new T();
             if (parent != null) {
                 result.Parent = parent;
-                parent.Parts.Add(result);
+                parent.Add(result);
             }
             return result;
         }
@@ -999,7 +999,7 @@ namespace PasPasPas.Parsing.Parser {
         /// </summary>
         /// <param name="result"></param>
         /// <param name="tokenKind"></param>
-        protected void ContinueWithOrMissing(ISyntaxPart result, int tokenKind) {
+        protected void ContinueWithOrMissing(IExtendableSyntaxPart result, int tokenKind) {
             if (!ContinueWith(result, tokenKind)) {
                 // add missing token / todo
             }
@@ -1011,7 +1011,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="result"></param>
         /// <param name="tokenKind1"></param>
         /// <param name="tokenKind2"></param>
-        protected void ContinueWithOrMissing(ISyntaxPart result, int tokenKind1, int tokenKind2) {
+        protected void ContinueWithOrMissing(IExtendableSyntaxPart result, int tokenKind1, int tokenKind2) {
             if (!ContinueWith(result, tokenKind1, tokenKind2)) {
                 // add missing token / todo
             }
@@ -1024,7 +1024,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind1"></param>
         /// <param name="tokenKind2"></param>
         /// <param name="tokenKind3"></param>
-        protected void ContinueWithOrMissing(ISyntaxPart result, int tokenKind1, int tokenKind2, int tokenKind3) {
+        protected void ContinueWithOrMissing(IExtendableSyntaxPart result, int tokenKind1, int tokenKind2, int tokenKind3) {
             if (!ContinueWith(result, tokenKind1, tokenKind2, tokenKind3)) {
                 // add missing token / todo
             }
@@ -1038,7 +1038,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind2"></param>
         /// <param name="tokenKind3"></param>
         /// <param name="tokenKind4"></param>
-        protected void ContinueWithOrMissing(ISyntaxPart result, int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4) {
+        protected void ContinueWithOrMissing(IExtendableSyntaxPart result, int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4) {
             if (!ContinueWith(result, tokenKind1, tokenKind2, tokenKind3, tokenKind4)) {
                 // add missing token / todo
             }
@@ -1054,7 +1054,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind3"></param>
         /// <param name="tokenKind4"></param>
         /// <param name="tokenKind5"></param>
-        protected void ContinueWithOrMissing(ISyntaxPart result, int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5) {
+        protected void ContinueWithOrMissing(IExtendableSyntaxPart result, int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5) {
             if (!ContinueWith(result, tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5)) {
                 // add missing token / todo
             }
@@ -1072,7 +1072,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind4"></param>
         /// <param name="tokenKind5"></param>
         /// <param name="tokenKind6"></param>
-        protected void ContinueWithOrMissing(ISyntaxPart result, int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5, int tokenKind6) {
+        protected void ContinueWithOrMissing(IExtendableSyntaxPart result, int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5, int tokenKind6) {
             if (!ContinueWith(result, tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5, tokenKind6)) {
                 // add missing token / todo
             }
@@ -1091,7 +1091,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind5"></param>
         /// <param name="tokenKind6"></param>
         /// <param name="tokenKind7"></param>
-        protected void ContinueWithOrMissing(ISyntaxPart result, int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5, int tokenKind6, int tokenKind7) {
+        protected void ContinueWithOrMissing(IExtendableSyntaxPart result, int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5, int tokenKind6, int tokenKind7) {
             if (!ContinueWith(result, tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5, tokenKind6, tokenKind7)) {
                 // add missing token / todo
             }
@@ -1110,7 +1110,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind6"></param>
         /// <param name="tokenKind7"></param>
         /// <param name="tokenKind8"></param>
-        protected void ContinueWithOrMissing(ISyntaxPart result, int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5, int tokenKind6, int tokenKind7, int tokenKind8) {
+        protected void ContinueWithOrMissing(IExtendableSyntaxPart result, int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5, int tokenKind6, int tokenKind7, int tokenKind8) {
             if (!ContinueWith(result, tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5, tokenKind6, tokenKind7, tokenKind8)) {
                 // add missing token / todo
             }
