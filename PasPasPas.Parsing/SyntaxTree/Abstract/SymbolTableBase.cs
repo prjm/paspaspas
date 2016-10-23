@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using PasPasPas.Parsing.Parser;
+using PasPasPas.Infrastructure.Log;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
 
@@ -42,8 +43,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     add a symbol table entry
         /// </summary>
         /// <param name="entry"></param>
+        /// <param name="logSource"></param>
         /// <returns></returns>
-        public bool Add(T entry) {
+        public bool Add(T entry, LogSource logSource) {
             var name = entry.SymbolName;
             var symbolTable = symbols.Value;
             if (!symbolTable.Contains(name)) {
@@ -52,7 +54,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
             }
 
             if (!HasDuplicateReplacement) {
-                LogDuplicateSymbolError(entry);
+                LogDuplicateSymbolError(entry, logSource);
                 return false;
             }
 
@@ -103,7 +105,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     log duplicate symbol error
         /// </summary>
         /// <param name="newDuplicate"></param>
-        protected virtual void LogDuplicateSymbolError(T newDuplicate) {
+        /// <param name="logSource"></param>
+        protected virtual void LogDuplicateSymbolError(T newDuplicate, LogSource logSource) {
             //...
         }
 
@@ -153,16 +156,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
             else {
                 return EmptyCollection<object>.Instance.GetEnumerator();
             }
-        }
-
-        /// <summary>
-        ///     add an entry
-        /// </summary>
-        /// <param name="result"></param>
-        public void Add(ISyntaxPart result) {
-            var entry = result as T;
-            if (entry != null)
-                Add(entry);
         }
 
         /// <summary>

@@ -105,44 +105,63 @@ namespace PasPasPasTests {
 
         }
 
-        protected void RunAstTest(string input, Func<object, string> searchFunction, string expectedResult) {
-            var tree = RunAstTest(input);
-            var visitor = new TreeTransformer();
-            var options = new TreeTransformerOptions();
-            tree.Accept(visitor, options);
+        protected void RunAstTest(string completeInput, Func<object, string> searchFunction, string expectedResult, params Guid[] errorMessages) {
+            var msgs = new List<ILogMessage>();
+            var logMgr = new LogManager();
+            var log = new LogTarget();
+            logMgr.RegisterTarget(log);
 
-            var astVisitor = new AstVisitor<string>();
-            var astOptions = new AstVisitorOptions<string>() { SearchFunction = searchFunction };
-            options.Project.Accept(astVisitor, astOptions);
+            var hasError = false;
+            string errorText = string.Empty;
+
+            var options = new TreeTransformerOptions() { LogManager = logMgr };
+
+            log.ProcessMessage += (x, y) => {
+                msgs.Add(y.Message);
+                errorText += y.Message.MessageID.ToString() + Environment.NewLine;
+                hasError = hasError ||
+                y.Message.Severity == MessageSeverity.Error ||
+                y.Message.Severity == MessageSeverity.FatalError;
+            };
+
+            foreach (var input in completeInput.Split('§')) {
+
+                var tree = RunAstTest(input, logMgr, msgs);
+                Assert.AreEqual(string.Empty, errorText);
+                Assert.IsFalse(hasError);
+
+
+                var visitor = new TreeTransformer();
+                tree.Accept(visitor, options);
+
+                var astVisitor = new AstVisitor<string>();
+                var astOptions = new AstVisitorOptions<string>() { SearchFunction = searchFunction };
+                options.Project.Accept(astVisitor, astOptions);
+
+                var validator = new StructureValidator();
+                var validatorOptions = new StructureValidatorOptions() { Manager = logMgr };
+                options.Project.Accept(validator, validatorOptions);
+
+            }
+
+
+            Assert.AreEqual(errorMessages.Length, msgs.Count);
+            foreach (var guid in errorMessages)
+                Assert.IsTrue(msgs.Where(t => t.MessageID == guid).Any());
         }
 
 
-        protected ISyntaxPart RunAstTest(string input) {
+        protected ISyntaxPart RunAstTest(string input, LogManager logManager, IList<ILogMessage> messages) {
             ClearOptions();
 
-            var logManager = new LogManager();
             var environment = new ParserServices(logManager);
-            var log = new LogTarget();
             environment.Options = TestOptions;
 
             StandardParser parser = new StandardParser(environment);
-            using (var inputFile = new StringInput(input, new FileReference("test.pas")))
+            using (var inputFile = new StringInput(input, new FileReference("z.x.pas")))
             using (var reader = new StackedFileReader()) {
                 reader.AddFile(inputFile);
                 parser.BaseTokenizer = new StandardTokenizer(environment, reader);
-                var hasError = false;
-                string errorText = string.Empty;
-
-                log.ProcessMessage += (x, y) => {
-                    errorText += y.Message.MessageID.ToString() + Environment.NewLine;
-                    hasError = hasError ||
-                    y.Message.Severity == MessageSeverity.Error ||
-                    y.Message.Severity == MessageSeverity.FatalError;
-                };
-
-
-                Assert.AreEqual(string.Empty, errorText);
-                Assert.IsFalse(hasError);
                 return parser.Parse();
             }
         }

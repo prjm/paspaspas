@@ -24,9 +24,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     symbol name
         /// </summary>
-        public string SymbolName
+        public virtual string SymbolName
             => symbolName;
 
+        /// <summary>
+        ///     define the name of the symbol
+        /// </summary>
+        /// <param name="newName"></param>
         public void DefineSymbolName(string newName) {
             symbolName = newName;
         }

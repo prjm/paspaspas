@@ -25,5 +25,10 @@
         /// </summary>
         public UnitInterface UnitInterface { get; set; }
 
+        /// <summary>
+        ///     unit name
+        /// </summary>
+        public NamespaceName UnitName
+            => UnitHead?.UnitName;
     }
 }

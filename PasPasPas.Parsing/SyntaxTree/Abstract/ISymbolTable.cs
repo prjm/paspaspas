@@ -1,4 +1,6 @@
-﻿namespace PasPasPas.Parsing.SyntaxTree.Abstract {
+﻿using PasPasPas.Infrastructure.Log;
+
+namespace PasPasPas.Parsing.SyntaxTree.Abstract {
 
     /// <summary>
     ///     symbol table
@@ -10,8 +12,9 @@
         ///     try to add the symbol
         /// </summary>
         /// <param name="entry">entry to add</param>
+        /// <param name="logSource">log source</param>
         /// <returns><c>true</c> if added</returns>
-        bool Add(T entry);
+        bool Add(T entry, LogSource logSource);
 
         /// <summary>
         ///     try to remove the symbol

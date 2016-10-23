@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using PasPasPas.Parsing.SyntaxTree.Standard;
+using System.Collections.Generic;
 
 namespace PasPasPas.Parsing.SyntaxTree {
 
@@ -90,6 +91,26 @@ namespace PasPasPas.Parsing.SyntaxTree {
         }
 
         /// <summary>
+        ///     first terminal
+        /// </summary>
+        public Token FirstTerminalToken
+        {
+            get
+            {
+                if (parts.Count < 1)
+                    return null;
+
+
+                var terminal = parts[0] as Terminal;
+
+                if (terminal == null)
+                    return null;
+
+                return terminal.Token;
+            }
+        }
+
+        /// <summary>
         ///     get the last terminal symbol
         /// </summary>
         public Token LastTerminalToken
@@ -137,6 +158,32 @@ namespace PasPasPas.Parsing.SyntaxTree {
         /// <param name="lastSymbol"></param>
         public void Remove(ISyntaxPart lastSymbol) {
             parts.Remove(lastSymbol);
+        }
+
+        /// <summary>
+        ///     value of a terminal
+        /// </summary>
+        /// <param name="syntaxPart"></param>
+        /// <returns></returns>
+        public string TerminalValue(ISyntaxPart syntaxPart) {
+            var result = syntaxPart as Terminal;
+            if (result != null)
+                return result.Token.Value;
+            else
+                return null;
+        }
+
+        /// <summary>
+        ///     value of an identifier
+        /// </summary>
+        /// <param name="part"></param>
+        /// <returns></returns>
+        public string IdentifierValue(ISyntaxPart part) {
+            var result = part as Identifier;
+            if (result != null && result.Parts.Count > 0)
+                return TerminalValue(result.Parts[0]);
+            else
+                return null;
         }
     }
 }
