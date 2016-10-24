@@ -18,7 +18,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     unit name does not match filename
         /// </summary>
-        public static readonly Guid UnitNameDoesNotMatchFilename
+        public static readonly Guid UnitNameDoesNotMatchFileName
             = new Guid(new byte[] { 0xb7, 0x9e, 0x4f, 0x1a, 0xbf, 0x3b, 0xa6, 0x40, 0x89, 0xc1, 0x6a, 0x78, 0x31, 0x89, 0x53, 0xac });
         /* {1a4f9eb7-3bbf-40a6-89c1-6a78318953ac} */
 

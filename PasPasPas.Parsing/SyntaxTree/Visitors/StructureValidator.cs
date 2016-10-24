@@ -24,7 +24,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         private void BeginVisitItem(CompilationUnit unit, StructureValidatorOptions parameter) {
 
             if (!string.Equals(Path.GetFileNameWithoutExtension(unit.FilePath.Path), unit.SymbolName, StringComparison.OrdinalIgnoreCase)) {
-                parameter.Log.Error(StructuralErrors.UnitNameDoesNotMatchFilename, unit.FilePath.Path, unit.SymbolName);
+                parameter.Log.Error(StructuralErrors.UnitNameDoesNotMatchFileName, unit.FilePath.Path, unit.SymbolName);
             }
 
         }

@@ -50,6 +50,7 @@
     <Compile Include="SyntaxTree\Abstract\ISymbolTable.cs" />
     <Compile Include="SyntaxTree\Abstract\ISymbolTableEntry.cs" />
     <Compile Include="SyntaxTree\Abstract\ProjectRoot.cs" />
+    <Compile Include="SyntaxTree\Abstract\SymbolHints.cs" />
     <Compile Include="SyntaxTree\Abstract\SymbolName.cs" />
     <Compile Include="SyntaxTree\Abstract\SymbolTableBase.cs" />
     <Compile Include="SyntaxTree\Abstract\SymbolTableEntryBase.cs" />

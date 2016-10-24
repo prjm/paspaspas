@@ -1,9 +1,16 @@
-﻿namespace PasPasPas.Parsing.SyntaxTree.Standard {
+﻿using PasPasPas.Infrastructure.Input;
+
+namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
     /// <summary>
     ///     syntax tree for a program
     /// </summary>
     public class Program : SyntaxPartBase {
+
+        /// <summary>
+        ///     file path
+        /// </summary>
+        public IFileReference FilePath { get; internal set; }
 
         /// <summary>
         ///     main block
@@ -14,6 +21,12 @@
         ///     program header
         /// </summary>
         public ProgramHead ProgramHead { get; set; }
+
+        /// <summary>
+        ///     program name
+        /// </summary>
+        public NamespaceName ProgramName
+            => ProgramHead.Name;
 
         /// <summary>
         ///     uses list

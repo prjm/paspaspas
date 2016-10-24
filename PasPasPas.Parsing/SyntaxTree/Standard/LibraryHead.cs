@@ -13,7 +13,7 @@
         /// <summary>
         ///     library name
         /// </summary>
-        public NamespaceName Name { get; set; }
+        public NamespaceName LibraryName { get; set; }
 
     }
 }

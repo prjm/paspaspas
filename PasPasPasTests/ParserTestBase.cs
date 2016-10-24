@@ -90,11 +90,11 @@ namespace PasPasPasTests {
             }
         }
 
-        private class AstVisitor<T> : SyntaxPartVisitorBase<AstVisitorOptions<T>> where T : class {
+        private class AstVisitor<T> : SyntaxPartVisitorBase<AstVisitorOptions<T>> {
 
             public override bool BeginVisit(ISyntaxPart part, AstVisitorOptions<T> options) {
                 options.Result = options.SearchFunction(part);
-                return options.Result == default(T);
+                return EqualityComparer<T>.Default.Equals(default(T), options.Result);
             }
 
         }
@@ -105,7 +105,7 @@ namespace PasPasPasTests {
 
         }
 
-        protected void RunAstTest(string completeInput, Func<object, string> searchFunction, string expectedResult, params Guid[] errorMessages) {
+        protected void RunAstTest<T>(string completeInput, Func<object, T> searchFunction, T expectedResult, params Guid[] errorMessages) {
             var msgs = new List<ILogMessage>();
             var logMgr = new LogManager();
             var log = new LogTarget();
@@ -134,8 +134,8 @@ namespace PasPasPasTests {
                 var visitor = new TreeTransformer();
                 tree.Accept(visitor, options);
 
-                var astVisitor = new AstVisitor<string>();
-                var astOptions = new AstVisitorOptions<string>() { SearchFunction = searchFunction };
+                var astVisitor = new AstVisitor<T>();
+                var astOptions = new AstVisitorOptions<T>() { SearchFunction = searchFunction };
                 options.Project.Accept(astVisitor, astOptions);
 
                 var validator = new StructureValidator();

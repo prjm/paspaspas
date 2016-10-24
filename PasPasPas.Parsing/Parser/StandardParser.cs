@@ -752,8 +752,8 @@ namespace PasPasPas.Parsing.Parser {
         private UnitHead ParseUnitHead(IExtendableSyntaxPart parent) {
             var result = CreateByTerminal<UnitHead>(parent, TokenKind.Unit);
             result.UnitName = ParseNamespaceName(result);
-            result.Hint = ParseHints(result);
             ContinueWithOrMissing(result, TokenKind.Semicolon);
+            result.Hint = ParseHints(result);
             return result;
         }
 
@@ -836,7 +836,7 @@ namespace PasPasPas.Parsing.Parser {
         [Rule("LibraryHead", "'library' NamespaceName Hints ';'")]
         private LibraryHead ParseLibraryHead(IExtendableSyntaxPart parent) {
             var result = CreateByTerminal<LibraryHead>(parent, TokenKind.Library);
-            result.Name = ParseNamespaceName(result);
+            result.LibraryName = ParseNamespaceName(result);
             result.Hints = ParseHints(result);
             ContinueWithOrMissing(result, TokenKind.Semicolon);
             return result;
@@ -1578,13 +1578,14 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
-        [Rule("Hints", " { Hint }")]
+        [Rule("Hints", " { Hint ';' }")]
         private HintingInformationList ParseHints(IExtendableSyntaxPart parent) {
             var result = CreateChild<HintingInformationList>(parent);
 
             HintingInformation hint;
             do {
                 hint = ParseHint(result);
+                ContinueWithOrMissing(result, TokenKind.Semicolon);
             } while (hint != null);
 
             return result;

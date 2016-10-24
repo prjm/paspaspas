@@ -1,9 +1,23 @@
-﻿namespace PasPasPas.Parsing.SyntaxTree.Standard {
+﻿using PasPasPas.Infrastructure.Input;
+
+namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
     /// <summary>
     ///     pascal unit
     /// </summary>
     public class Unit : SyntaxPartBase {
+
+        /// <summary>
+        ///     file path
+        /// </summary>
+        public IFileReference FilePath
+            => UnitHead?.FirstTerminalToken?.FilePath;
+
+        /// <summary>
+        ///     hints
+        /// </summary>
+        public HintingInformationList Hints
+            => UnitHead?.Hint;
 
         /// <summary>
         ///     unit block
