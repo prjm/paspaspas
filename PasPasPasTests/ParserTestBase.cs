@@ -142,6 +142,7 @@ namespace PasPasPasTests {
                 var validatorOptions = new StructureValidatorOptions() { Manager = logMgr };
                 options.Project.Accept(validator, validatorOptions);
 
+                Assert.AreEqual(expectedResult, astOptions.Result);
             }
 
 

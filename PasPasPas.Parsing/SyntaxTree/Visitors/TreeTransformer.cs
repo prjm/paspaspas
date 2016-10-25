@@ -55,10 +55,22 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <param name="parameter"></param>
         private void BeginVisitItem(Program program, TreeTransformerOptions parameter) {
             var result = CreateTreeNode<CompilationUnit>(null, program);
-            result.FileType = CompilationUnitType.Unit;
+            result.FileType = CompilationUnitType.Program;
             result.UnitName = ExtractSymbolName(result, program.ProgramName);
-            result.Hints = CreateLeafNode<SymbolHints>(result, program);
             result.FilePath = program.FilePath;
+            parameter.Project.Add(result, parameter.LogSource);
+        }
+
+        /// <summary>
+        ///     visit a package
+        /// </summary>
+        /// <param name="package"></param>
+        /// <param name="parameter"></param>
+        private void BeginVisitItem(Package package, TreeTransformerOptions parameter) {
+            var result = CreateTreeNode<CompilationUnit>(null, package);
+            result.FileType = CompilationUnitType.Package;
+            result.UnitName = ExtractSymbolName(result, package.PackageName);
+            result.FilePath = package.FilePath;
             parameter.Project.Add(result, parameter.LogSource);
         }
 
@@ -95,10 +107,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 var hint = part as HintingInformation;
                 if (hint == null) continue;
                 result.SymbolIsDeprecated = result.SymbolIsDeprecated || hint.Deprecated;
-                result.DeprecratedInformation = hint.DeprecatedComment?.QuotedValue;
+                result.DeprecratedInformation = (result.DeprecratedInformation ?? string.Empty) + hint.DeprecatedComment?.UnquotedValue;
                 result.SymbolInLibrary = result.SymbolInLibrary || hint.Library;
-                result.SymbolIsPlatformSpecific = result.SymbolInLibrary || hint.Platform;
-                result.SymbolIsExperimental = result.SymbolInLibrary || hint.Experimental;
+                result.SymbolIsPlatformSpecific = result.SymbolIsPlatformSpecific || hint.Platform;
+                result.SymbolIsExperimental = result.SymbolIsExperimental || hint.Experimental;
             }
 
             return result;

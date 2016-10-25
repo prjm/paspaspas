@@ -837,8 +837,8 @@ namespace PasPasPas.Parsing.Parser {
         private LibraryHead ParseLibraryHead(IExtendableSyntaxPart parent) {
             var result = CreateByTerminal<LibraryHead>(parent, TokenKind.Library);
             result.LibraryName = ParseNamespaceName(result);
-            result.Hints = ParseHints(result);
             ContinueWithOrMissing(result, TokenKind.Semicolon);
+            result.Hints = ParseHints(result);
             return result;
         }
 
@@ -3261,7 +3261,7 @@ namespace PasPasPas.Parsing.Parser {
 
         private QuotedString RequireString(IExtendableSyntaxPart parent) {
             var result = CreateByTerminal<QuotedString>(parent, TokenKind.QuotedString);
-            result.UnquotedValue = result.LastTerminalValue;
+            result.UnquotedValue = QuotedStringTokenValue.Unwrap(result.LastTerminalToken);
             return result;
         }
 

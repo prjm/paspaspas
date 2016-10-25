@@ -165,7 +165,7 @@ namespace PasPasPas.Parsing.SyntaxTree {
         /// </summary>
         /// <param name="syntaxPart"></param>
         /// <returns></returns>
-        public string TerminalValue(ISyntaxPart syntaxPart) {
+        public static string TerminalValue(ISyntaxPart syntaxPart) {
             var result = syntaxPart as Terminal;
             if (result != null)
                 return result.Token.Value;

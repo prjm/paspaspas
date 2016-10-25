@@ -469,7 +469,7 @@ namespace PasPasPas.Parsing.Parser {
         protected bool ContinueWith(IExtendableSyntaxPart part, int tokenKind) {
             var requiresIdentifier = tokenKind == TokenKind.Identifier;
 
-            if (!Tokenizer.HasNextToken()) {
+            if (CurrentToken() == null) {
                 return false;
             }
 

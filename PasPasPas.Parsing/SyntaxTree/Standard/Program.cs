@@ -10,7 +10,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     file path
         /// </summary>
-        public IFileReference FilePath { get; internal set; }
+        public IFileReference FilePath
+            => LastTerminalToken?.FilePath;
 
         /// <summary>
         ///     main block
