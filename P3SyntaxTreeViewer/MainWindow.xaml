@@ -1,0 +1,62 @@
+﻿<Window x:Class="P3SyntaxTreeViewer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:P3SyntaxTreeViewer"
+        mc:Ignorable="d"
+        Title="P3SyntaxTreeViewer" Height="450" Width="700" WindowStartupLocation="CenterScreen">
+    <DockPanel LastChildFill="True">
+
+        <ListBox DockPanel.Dock="Bottom" Name="Messages" Height="100">
+
+        </ListBox>
+
+
+        <StackPanel DockPanel.Dock="Top" FlowDirection="LeftToRight" HorizontalAlignment="Left">
+            <Button Width="100" Click="Button_Click" Visibility="Hidden">
+                Parse!
+            </Button>
+        </StackPanel>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"  />
+                <ColumnDefinition Width="*"  />
+                <ColumnDefinition Width="*"  />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <DockPanel LastChildFill="True" Grid.Column="0" Grid.Row="0">
+                <Label DockPanel.Dock="Top">Standard Tree</Label>
+                <TreeView Name="StandardTreeView"></TreeView>
+            </DockPanel>
+
+            <DockPanel LastChildFill="True" Grid.Column="2" Grid.Row="0">
+                <Label DockPanel.Dock="Top"  HorizontalAlignment="Right">Abstract Tree</Label>
+                <TreeView Name="AbstractTreeView"></TreeView>
+            </DockPanel>
+
+
+            <DockPanel LastChildFill="True" Grid.Column="1" Grid.Row="0">
+                <Label DockPanel.Dock="Top" HorizontalContentAlignment="Center">Input</Label>
+                <TextBox TextWrapping="WrapWithOverflow" AcceptsReturn="True" FontFamily="Monaco" FontSize="11" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" Foreground="LightGray" Background="Black" xml:space="preserve" Name="Code"
+                         TextChanged="Code_TextChanged">unit Demo;
+
+                
+interface
+                
+                
+implementation
+                
+                
+end;
+            </TextBox>
+            </DockPanel>
+
+        </Grid>
+
+    </DockPanel>
+
+</Window>

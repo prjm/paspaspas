@@ -82,6 +82,17 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
             => false;
 
         /// <summary>
+        ///     test if a given key exits
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public bool Contains(string key) {
+            if (!symbols.IsValueCreated)
+                return false;
+            return symbols.Value.Contains(key);
+        }
+
+        /// <summary>
         ///     parts
         /// </summary>
         public IReadOnlyList<ISyntaxPart> Parts

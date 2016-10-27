@@ -203,6 +203,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("InterfaceDeclarationItem", "ConstSection | TypeSection | VarSection | ExportsSection | AssemblyAttribute | ExportedProcedureHeading")]
         private SyntaxPartBase ParseInterfaceDeclarationItem(IExtendableSyntaxPart parent) {
+
             if (Match(TokenKind.Const) || Match(TokenKind.Resourcestring)) {
                 return ParseConstSection(parent, false);
             }

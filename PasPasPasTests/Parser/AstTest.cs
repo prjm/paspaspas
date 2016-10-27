@@ -92,5 +92,24 @@ namespace PasPasPasTests.Parser {
 
         }
 
+        [Fact]
+        public void TestUsesClause() {
+            Func<object, UnitNameList> u = t => (t as CompilationUnit)?.RequiredUnits;
+            RunAstTest("unit z.x; interface uses a; implementation end.", t => u(t)?.Contains("a"), true);
+            RunAstTest("unit z.x; interface uses a; implementation end.", t => u(t)?["a"].Mode, UnitMode.Interface);
+
+            RunAstTest("unit z.x; interface implementation uses a; end.", t => u(t)?.Contains("a"), true);
+            RunAstTest("unit z.x; interface implementation uses a; end.", t => u(t)?["a"].Mode, UnitMode.Implementation);
+
+            RunAstTest("unit z.x; interface uses a, a; implementation end.", t => u(t)?.Contains("a"), true,
+                StructuralErrors.RedeclaredUnitNameInUsesList);
+
+            RunAstTest("unit z.x; interface uses a; implementation uses a; end.", t => u(t)?.Contains("a"), true,
+                StructuralErrors.RedeclaredUnitNameInUsesList);
+
+            RunAstTest("unit z.x; interface implementation uses a, a; end.", t => u(t)?.Contains("a"), true,
+                StructuralErrors.RedeclaredUnitNameInUsesList);
+        }
+
     }
 }

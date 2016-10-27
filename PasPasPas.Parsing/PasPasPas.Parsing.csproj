@@ -54,6 +54,9 @@
     <Compile Include="SyntaxTree\Abstract\SymbolName.cs" />
     <Compile Include="SyntaxTree\Abstract\SymbolTableBase.cs" />
     <Compile Include="SyntaxTree\Abstract\SymbolTableEntryBase.cs" />
+    <Compile Include="SyntaxTree\Abstract\UnitMode.cs" />
+    <Compile Include="SyntaxTree\Abstract\UnitName.cs" />
+    <Compile Include="SyntaxTree\Abstract\UnitNameList.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\IfDirective.cs" />
     <Compile Include="SyntaxTree\Standard\AsmBlock.cs" />
     <Compile Include="SyntaxTree\Standard\AsmFactor.cs" />

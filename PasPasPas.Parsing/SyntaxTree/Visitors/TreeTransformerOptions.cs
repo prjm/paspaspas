@@ -47,5 +47,15 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// </summary>
         public ProjectRoot Project { get; }
             = new ProjectRoot();
+
+        /// <summary>
+        ///     current compilation unit
+        /// </summary>
+        public CompilationUnit CurrentUnit { get; set; }
+
+        /// <summary>
+        ///     current unit mode
+        /// </summary>
+        public UnitMode CurrentUnitMode { get; set; }
     }
 }

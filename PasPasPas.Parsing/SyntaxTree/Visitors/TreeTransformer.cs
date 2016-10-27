@@ -21,6 +21,18 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         }
 
         /// <summary>
+        ///     end visiting a syntax node
+        /// </summary>
+        /// <param name="syntaxPart"></param>
+        /// <param name="parameter"></param>
+        /// <returns></returns>
+        public override bool EndVisit(ISyntaxPart syntaxPart, TreeTransformerOptions parameter) {
+            dynamic part = syntaxPart;
+            EndVisitItem(part, parameter);
+            return true;
+        }
+
+        /// <summary>
         ///     visit a unit
         /// </summary>
         /// <param name="unit"></param>
@@ -32,6 +44,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             result.Hints = ExtractHints(result, unit.Hints);
             result.FilePath = unit.FilePath;
             parameter.Project.Add(result, parameter.LogSource);
+            parameter.CurrentUnit = result;
+        }
+
+        private void EndVisitItem(Unit unit, TreeTransformerOptions parameter) {
+            parameter.CurrentUnit = null;
         }
 
         /// <summary>
@@ -46,6 +63,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             result.Hints = ExtractHints(result, library.Hints);
             result.FilePath = library.FilePath;
             parameter.Project.Add(result, parameter.LogSource);
+            parameter.CurrentUnit = result;
+        }
+
+        private void EndVisitItem(Library unit, TreeTransformerOptions parameter) {
+            parameter.CurrentUnit = null;
         }
 
         /// <summary>
@@ -59,6 +81,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             result.UnitName = ExtractSymbolName(result, program.ProgramName);
             result.FilePath = program.FilePath;
             parameter.Project.Add(result, parameter.LogSource);
+            parameter.CurrentUnit = result;
+        }
+
+        private void EndVisitItem(Program unit, TreeTransformerOptions parameter) {
+            parameter.CurrentUnit = null;
         }
 
         /// <summary>
@@ -72,11 +99,47 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             result.UnitName = ExtractSymbolName(result, package.PackageName);
             result.FilePath = package.FilePath;
             parameter.Project.Add(result, parameter.LogSource);
+            parameter.CurrentUnit = result;
         }
 
-        private void BeginVisitItem(ISyntaxPart part, TreeTransformerOptions parameter) {
-            //..
+        private void EndVisitItem(Package unit, TreeTransformerOptions parameter) {
+            parameter.CurrentUnit = null;
         }
+
+        private void BeginVisitItem(UnitInterface unit, TreeTransformerOptions parameter) {
+            parameter.CurrentUnitMode = UnitMode.Interface;
+        }
+
+
+        private void EndVisitItem(UnitInterface unit, TreeTransformerOptions parameter) {
+            parameter.CurrentUnitMode = UnitMode.Unknown;
+        }
+
+        private void BeginVisitItem(UnitImplementation unit, TreeTransformerOptions parameter) {
+            parameter.CurrentUnitMode = UnitMode.Implementation;
+        }
+
+
+        private void EndVisitItem(UnitImplementation unit, TreeTransformerOptions parameter) {
+            parameter.CurrentUnitMode = UnitMode.Unknown;
+        }
+
+        private void BeginVisitItem(UsesClause unit, TreeTransformerOptions parameter) {
+            if (unit.UsesList == null)
+                return;
+
+            foreach (var part in unit.UsesList.Parts) {
+                var name = part as NamespaceName;
+                if (name == null)
+                    continue;
+
+                var unitName = new UnitName();
+                unitName.Name = ExtractSymbolName(unitName, name);
+                unitName.Mode = parameter.CurrentUnitMode;
+                parameter.CurrentUnit.RequiredUnits.Add(unitName, parameter.LogSource);
+            }
+        }
+
 
         /// <summary>
         ///     extract the name of a symbol
@@ -127,6 +190,16 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             var result = new T();
             return result;
         }
+
+        private void BeginVisitItem(ISyntaxPart part, TreeTransformerOptions parameter) {
+            //..
+        }
+
+
+        private void EndVisitItem(ISyntaxPart part, TreeTransformerOptions parameter) {
+            //..
+        }
+
 
     }
 }

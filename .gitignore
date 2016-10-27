@@ -33,3 +33,5 @@
 /*.diagsession
 /*.vsp
 /PasPasPas.Parsing/Parser/*.TMP
+/P3SyntaxTreeViewer/bin/Debug
+/P3SyntaxTreeViewer/obj/Debug

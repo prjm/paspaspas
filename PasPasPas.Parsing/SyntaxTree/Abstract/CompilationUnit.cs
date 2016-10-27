@@ -40,5 +40,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     symbol hints
         /// </summary>
         public SymbolHints Hints { get; set; }
+
+        /// <summary>
+        ///     required units
+        /// </summary>
+        public UnitNameList RequiredUnits { get; }
+            = new UnitNameList();
+
+
     }
 }

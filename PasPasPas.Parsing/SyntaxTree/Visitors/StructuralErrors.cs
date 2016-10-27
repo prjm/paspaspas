@@ -23,6 +23,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /* {1a4f9eb7-3bbf-40a6-89c1-6a78318953ac} */
 
 
+        /// <summary>
+        ///     duplicated unit name
+        /// </summary>
+        public static readonly Guid RedeclaredUnitNameInUsesList
+            = new Guid(new byte[] { 0x72, 0x6a, 0x2c, 0x2b, 0x16, 0x5e, 0xef, 0x44, 0xb9, 0xd4, 0x53, 0x62, 0x5a, 0x63, 0x89, 0xac });
+        /* {2b2c6a72-5e16-44ef-b9d4-53625a6389ac} */
+
+
 
 
     }
