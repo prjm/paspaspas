@@ -8,7 +8,7 @@
         /// <summary>
         ///     deprecated information
         /// </summary>
-        public string DeprecratedInformation { get; set; }
+        public string DeprecatedInformation { get; set; }
             = string.Empty;
 
         /// <summary>

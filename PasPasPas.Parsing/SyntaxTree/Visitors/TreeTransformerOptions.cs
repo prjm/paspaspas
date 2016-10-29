@@ -1,6 +1,7 @@
 ﻿using PasPasPas.Infrastructure.Log;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
 using System;
+using System.Collections.Generic;
 
 namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
@@ -57,5 +58,30 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     current unit mode
         /// </summary>
         public UnitMode CurrentUnitMode { get; set; }
+
+        /// <summary>
+        ///     current definition scope
+        /// </summary>
+        public Stack<DeclaredSymbols> CurrentDefinitionScope { get; }
+            = new Stack<DeclaredSymbols>();
+
+        /// <summary>
+        ///     const declaration mode
+        /// </summary>
+        public ConstMode CurrentConstDeclarationMode { get; internal set; }
+
+        /// <summary>
+        ///     remove an expected parameter from the stack
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="stack"></param>
+        /// <param name="expected"></param>
+        public void PopOrFail<T>(Stack<T> stack, T expected) {
+            if (EqualityComparer<T>.Default.Equals(stack.Peek(), expected))
+                stack.Pop();
+            else
+                throw new Exception("Invalid state");
+
+        }
     }
 }

@@ -2185,7 +2185,7 @@ namespace PasPasPas.Parsing.Parser {
             if (Match(TokenKind.OpenBraces))
                 result.Guid = ParseInterfaceGuid(result);
             result.Items = ParseInterfaceItems(result);
-            if (result.Items.Parts.Count > 0)
+            if (result.Items.PartList.Count > 0)
                 ContinueWithOrMissing(result, TokenKind.End);
             else
                 ContinueWith(result, TokenKind.End);
@@ -2200,7 +2200,7 @@ namespace PasPasPas.Parsing.Parser {
 
             while ((!Match(TokenKind.End)) && (!unexpected)) {
                 ParseInterfaceItem(result, out unexpected);
-                if (unexpected && result.Parts.Count > 0) {
+                if (unexpected && result.PartList.Count > 0) {
                     Unexpected();
                     return result;
                 }
@@ -2269,7 +2269,7 @@ namespace PasPasPas.Parsing.Parser {
             result.Attributes = ParseAttributes(result);
             result.Class = ContinueWith(result, TokenKind.Class);
 
-            if (!result.Class && (result.Attributes.Parts.Count < 1) && Match(TokenKind.Public, TokenKind.Protected, TokenKind.Private, TokenKind.Strict, TokenKind.Published, TokenKind.Automated)) {
+            if (!result.Class && (result.Attributes.PartList.Count < 1) && Match(TokenKind.Public, TokenKind.Protected, TokenKind.Private, TokenKind.Strict, TokenKind.Published, TokenKind.Automated)) {
                 result.Strict = ContinueWith(result, TokenKind.Strict);
                 ContinueWithOrMissing(result, TokenKind.Public, TokenKind.Protected, TokenKind.Private, TokenKind.Published, TokenKind.Automated);
                 result.Visibility = result.LastTerminalKind;
@@ -2305,7 +2305,7 @@ namespace PasPasPas.Parsing.Parser {
             result.ClassParent = ParseClassParent(result);
             result.ClassItems = ParseClassItems(result);
 
-            if (result.ClassItems.Parts.Count > 0)
+            if (result.ClassItems.PartList.Count > 0)
                 ContinueWithOrMissing(result, TokenKind.End);
             else
                 ContinueWith(result, TokenKind.End);
@@ -2321,7 +2321,7 @@ namespace PasPasPas.Parsing.Parser {
             while ((!Match(TokenKind.End)) && (!unexpected)) {
                 ParseClassDeclarationItem(result, out unexpected);
 
-                if (unexpected && result.Parts.Count > 0) {
+                if (unexpected && result.PartList.Count > 0) {
                     Unexpected();
                     return result;
                 }
@@ -3100,7 +3100,7 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         [Rule("DesignatorItem", "'^' | '.' Ident [GenericSuffix] | '[' ExpressionList ']' | '(' [ FormattedExpression  { ',' FormattedExpression } ] ')'")]
-        private ISyntaxPart ParseDesignatorItem(IExtendableSyntaxPart parent, bool hasIdentifier) {
+        private ISyntaxPart ParseDesignatorItem(SyntaxPartBase parent, bool hasIdentifier) {
             if (Match(TokenKind.Circumflex)) {
                 var result = CreateByTerminal<DesignatorItem>(parent, TokenKind.Circumflex);
                 result.Dereference = true;
@@ -3131,7 +3131,7 @@ namespace PasPasPas.Parsing.Parser {
 
             if (Match(TokenKind.OpenParen)) {
                 if (LookAheadIdentifier(1, new int[0], true) && LookAhead(2, TokenKind.Colon)) {
-                    var prevDesignatorItem = parent.Parts.Count > 0 ? parent.Parts[parent.Parts.Count - 1] as DesignatorItem : null;
+                    var prevDesignatorItem = parent.PartList.Count > 0 ? parent.PartList[parent.PartList.Count - 1] as DesignatorItem : null;
                     if (!hasIdentifier && ((prevDesignatorItem == null) || (prevDesignatorItem.Subitem == null))) {
                         return ParseConstantExpression(parent);
                     }

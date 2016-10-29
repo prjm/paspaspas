@@ -18,7 +18,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     parts
         /// </summary>
-        public virtual IReadOnlyList<ISyntaxPart> Parts
+        public virtual IEnumerable<ISyntaxPart> Parts
             => EmptyCollection<ISyntaxPart>.ReadOnlyInstance;
 
         /// <summary>

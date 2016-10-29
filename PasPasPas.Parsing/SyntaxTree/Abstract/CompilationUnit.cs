@@ -1,4 +1,5 @@
-﻿using PasPasPas.Infrastructure.Input;
+﻿using System.Collections.Generic;
+using PasPasPas.Infrastructure.Input;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
 
@@ -47,6 +48,32 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         public UnitNameList RequiredUnits { get; }
             = new UnitNameList();
 
+        /// <summary>
+        ///     symbols in the interface part of the unit
+        /// </summary>
+        public DeclaredSymbols InterfaceSymbols { get; }
+            = new DeclaredSymbols();
 
+        /// <summary>
+        ///     symbols in the implementation part of the unit
+        /// </summary>
+        public DeclaredSymbols ImplementationSymbols { get; }
+            = new DeclaredSymbols();
+
+        /// <summary>
+        ///     get all parts
+        /// </summary>
+        public override IEnumerable<ISyntaxPart> Parts
+        {
+            get
+            {
+                foreach (var unit in RequiredUnits)
+                    yield return unit;
+                foreach (var unit in InterfaceSymbols)
+                    yield return unit;
+                foreach (var unit in ImplementationSymbols)
+                    yield return unit;
+            }
+        }
     }
 }

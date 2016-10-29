@@ -17,7 +17,7 @@ namespace PasPasPas.Parsing.SyntaxTree {
         /// <summary>
         ///     child nodes
         /// </summary>
-        IReadOnlyList<ISyntaxPart> Parts { get; }
+        IEnumerable<ISyntaxPart> Parts { get; }
 
         /// <summary>
         ///     parent node

@@ -41,7 +41,7 @@
 
             <DockPanel LastChildFill="True" Grid.Column="1" Grid.Row="0">
                 <Label DockPanel.Dock="Top" HorizontalContentAlignment="Center">Input</Label>
-                <TextBox TextWrapping="WrapWithOverflow" AcceptsReturn="True" FontFamily="Monaco" FontSize="11" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" Foreground="LightGray" Background="Black" xml:space="preserve" Name="Code"
+                <TextBox TextWrapping="WrapWithOverflow" AcceptsReturn="True" FontFamily="Monaco" FontSize="11" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" Foreground="LightGray" Background="Black" xml:space="preserve" Name="Code" AcceptsTab="True"
                          TextChanged="Code_TextChanged">unit Demo;
 
                 

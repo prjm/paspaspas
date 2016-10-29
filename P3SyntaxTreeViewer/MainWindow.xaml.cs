@@ -4,13 +4,16 @@ using PasPasPas.Infrastructure.Log;
 using PasPasPas.Options.Bundles;
 using PasPasPas.Parsing.Parser;
 using PasPasPas.Parsing.SyntaxTree;
+using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 using PasPasPas.Parsing.Tokenizer;
 using System;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
 namespace P3SyntaxTreeViewer {
+
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
@@ -31,13 +34,20 @@ namespace P3SyntaxTreeViewer {
 
         private void UpdateTrees() {
             var code = Code.Text;
-            var env = CreateEnvironment();
-            var cst = Parse(env, code);
-            var visitor = new TreeTransformer();
-            var options = new TreeTransformerOptions() { LogManager = (LogManager)env.Log };
-            cst.Accept(visitor, options);
-            DisplayTree(StandardTreeView, cst);
-            DisplayTree(AbstractTreeView, options.Project);
+            var task = new Task(() => {
+                var env = CreateEnvironment();
+                var cst = Parse(env, code);
+                var visitor = new TreeTransformer();
+                var options = new TreeTransformerOptions() { LogManager = (LogManager)env.Log };
+
+                cst.Accept(visitor, options);
+
+                Dispatcher.Invoke(() => {
+                    DisplayTree(StandardTreeView, cst);
+                    DisplayTree(AbstractTreeView, options.Project);
+                });
+            });
+            task.Start();
         }
 
         private void DisplayTree(TreeView tv, ISyntaxPart cst) {
@@ -48,6 +58,7 @@ namespace P3SyntaxTreeViewer {
         private void AddNodes(TreeView tv, TreeViewItem parent, ISyntaxPart cst) {
             var treeViewItem = new TreeViewItem();
             var terminal = cst as Terminal;
+            var symbol = cst as ISymbolTableEntry;
 
             if (terminal != null) {
                 treeViewItem.Header = "'" + terminal.Token.Value + "'";
@@ -55,6 +66,9 @@ namespace P3SyntaxTreeViewer {
             else {
                 treeViewItem.Header = cst.GetType().Name;
             }
+
+            if (symbol != null)
+                treeViewItem.Header += ": " + symbol.SymbolName;
 
             if (parent != null) {
                 parent.Items.Add(treeViewItem);

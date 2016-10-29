@@ -70,10 +70,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     merge duplicates
         /// </summary>
-        /// <param name="t">existing entry</param>
+        /// <param name="existingEntry">existing entry</param>
         /// <param name="entry">new entry</param>
         /// <returns></returns>
-        protected virtual T MergeDuplicates(T t, T entry) => default(T);
+        protected virtual T MergeDuplicates(T existingEntry, T entry) => default(T);
 
         /// <summary>
         ///     check if duplicates are allowd
@@ -95,7 +95,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     parts
         /// </summary>
-        public IReadOnlyList<ISyntaxPart> Parts
+        public IEnumerable<ISyntaxPart> Parts
             => this;
 
         /// <summary>

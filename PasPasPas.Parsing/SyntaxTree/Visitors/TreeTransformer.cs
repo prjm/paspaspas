@@ -108,17 +108,39 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         private void BeginVisitItem(UnitInterface unit, TreeTransformerOptions parameter) {
             parameter.CurrentUnitMode = UnitMode.Interface;
+            parameter.CurrentDefinitionScope.Push(parameter.CurrentUnit.InterfaceSymbols);
         }
 
 
         private void EndVisitItem(UnitInterface unit, TreeTransformerOptions parameter) {
             parameter.CurrentUnitMode = UnitMode.Unknown;
+            parameter.PopOrFail(parameter.CurrentDefinitionScope, parameter.CurrentUnit.InterfaceSymbols);
         }
 
         private void BeginVisitItem(UnitImplementation unit, TreeTransformerOptions parameter) {
             parameter.CurrentUnitMode = UnitMode.Implementation;
         }
 
+        private void BeginVisitItem(ConstSection unit, TreeTransformerOptions parameter) {
+            if (unit.Kind == TokenKind.Const) {
+                parameter.CurrentConstDeclarationMode = ConstMode.Const;
+            }
+            else if (unit.Kind == TokenKind.Resourcestring) {
+                parameter.CurrentConstDeclarationMode = ConstMode.ResourceString;
+            }
+        }
+
+        private void BeginVisitItem(ConstDeclaration unit, TreeTransformerOptions parameter) {
+
+            var definitionScope = parameter.CurrentDefinitionScope.Peek();
+            var declaration = CreateLeafNode<ConstantDeclaration>(definitionScope, unit);
+            declaration.Name = ExtractSymbolName(definitionScope, unit.Identifier);
+            definitionScope.Add(declaration, parameter.LogSource);
+        }
+
+        private void EndVisitItem(ConstSection unit, TreeTransformerOptions parameter) {
+            parameter.CurrentConstDeclarationMode = ConstMode.Unknown;
+        }
 
         private void EndVisitItem(UnitImplementation unit, TreeTransformerOptions parameter) {
             parameter.CurrentUnitMode = UnitMode.Unknown;
@@ -133,13 +155,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 if (name == null)
                     continue;
 
-                var unitName = new UnitName();
+                var unitName = CreateLeafNode<UnitName>(unit, part);
                 unitName.Name = ExtractSymbolName(unitName, name);
                 unitName.Mode = parameter.CurrentUnitMode;
                 parameter.CurrentUnit.RequiredUnits.Add(unitName, parameter.LogSource);
             }
         }
-
 
         /// <summary>
         ///     extract the name of a symbol
@@ -154,6 +175,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             return result;
         }
 
+        private static SymbolName ExtractSymbolName(object parent, Identifier name) {
+            var result = CreateLeafNode<SymbolName>(parent, name);
+            result.Name = name.FirstTerminalToken.Value;
+            return result;
+        }
+
         /// <summary>
         ///     extract symbol hints
         /// </summary>
@@ -163,14 +190,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         private static SymbolHints ExtractHints(object parent, HintingInformationList hints) {
             var result = CreateLeafNode<SymbolHints>(parent, hints);
 
-            if (hints == null || hints.Parts.Count < 1)
+            if (hints == null || hints.PartList.Count < 1)
                 return result;
 
             foreach (var part in hints.Parts) {
                 var hint = part as HintingInformation;
                 if (hint == null) continue;
                 result.SymbolIsDeprecated = result.SymbolIsDeprecated || hint.Deprecated;
-                result.DeprecratedInformation = (result.DeprecratedInformation ?? string.Empty) + hint.DeprecatedComment?.UnquotedValue;
+                result.DeprecatedInformation = (result.DeprecatedInformation ?? string.Empty) + hint.DeprecatedComment?.UnquotedValue;
                 result.SymbolInLibrary = result.SymbolInLibrary || hint.Library;
                 result.SymbolIsPlatformSpecific = result.SymbolIsPlatformSpecific || hint.Platform;
                 result.SymbolIsExperimental = result.SymbolIsExperimental || hint.Experimental;

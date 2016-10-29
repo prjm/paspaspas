@@ -23,11 +23,18 @@ namespace PasPasPas.Parsing.SyntaxTree {
         /// <summary>
         ///     syntax parts
         /// </summary>
-        public virtual IReadOnlyList<ISyntaxPart> Parts
+        public virtual IEnumerable<ISyntaxPart> Parts
             => parts;
 
         private List<ISyntaxPart> parts
             = new List<ISyntaxPart>();
+
+        /// <summary>
+        ///     list of parts
+        /// </summary>
+        public IList<ISyntaxPart> PartList
+            => parts;
+
 
         /// <summary>
         ///     accept this visitor
@@ -178,10 +185,10 @@ namespace PasPasPas.Parsing.SyntaxTree {
         /// </summary>
         /// <param name="part"></param>
         /// <returns></returns>
-        public string IdentifierValue(ISyntaxPart part) {
+        public static string IdentifierValue(ISyntaxPart part) {
             var result = part as Identifier;
-            if (result != null && result.Parts.Count > 0)
-                return TerminalValue(result.Parts[0]);
+            if (result != null && result.parts.Count > 0)
+                return TerminalValue(result.parts[0]);
             else
                 return null;
         }

@@ -23,7 +23,7 @@ namespace PasPasPasTests.Parser {
             RunAstTest("unit z.x; interface implementation end.", t => u(t)?.UnitName.Namespace, "z");
             RunAstTest("unit z.x; interface implementation end.", t => u(t)?.FileType, CompilationUnitType.Unit);
             RunAstTest("unit z.x; deprecated; interface implementation end.", t => u(t)?.Hints?.SymbolIsDeprecated, true);
-            RunAstTest("unit z.x; deprecated 'X'; interface implementation end.", t => u(t)?.Hints?.DeprecratedInformation, "X");
+            RunAstTest("unit z.x; deprecated 'X'; interface implementation end.", t => u(t)?.Hints?.DeprecatedInformation, "X");
             RunAstTest("unit z.x; library; interface implementation end.", t => u(t)?.Hints?.SymbolInLibrary, true);
             RunAstTest("unit z.x; platform; interface implementation end.", t => u(t)?.Hints?.SymbolIsPlatformSpecific, true);
             RunAstTest("unit z.x; experimental; interface implementation end.", t => u(t)?.Hints?.SymbolIsExperimental, true);
@@ -47,7 +47,7 @@ namespace PasPasPasTests.Parser {
             RunAstTest("library z.x; begin end.", t => u(t)?.FileType, CompilationUnitType.Library);
 
             RunAstTest("library z.x; deprecated;  begin end.", t => u(t)?.Hints?.SymbolIsDeprecated, true);
-            RunAstTest("library z.x; deprecated 'X'; begin end.", t => u(t)?.Hints?.DeprecratedInformation, "X");
+            RunAstTest("library z.x; deprecated 'X'; begin end.", t => u(t)?.Hints?.DeprecatedInformation, "X");
             RunAstTest("library z.x; library; begin end.", t => u(t)?.Hints?.SymbolInLibrary, true);
             RunAstTest("library z.x; platform; begin end.", t => u(t)?.Hints?.SymbolIsPlatformSpecific, true);
             RunAstTest("library z.x; experimental; begin end.", t => u(t)?.Hints?.SymbolIsExperimental, true);
@@ -109,6 +109,14 @@ namespace PasPasPasTests.Parser {
 
             RunAstTest("unit z.x; interface implementation uses a, a; end.", t => u(t)?.Contains("a"), true,
                 StructuralErrors.RedeclaredUnitNameInUsesList);
+        }
+
+        [Fact]
+        public void TestConstDeclaration() {
+            Func<object, DeclaredSymbols> u = t => (t as CompilationUnit)?.InterfaceSymbols;
+            Func<object, DeclaredSymbols> v = t => (t as CompilationUnit)?.ImplementationSymbols;
+
+            RunAstTest("unit z.x; interface const x = 5; implementation end.", t => u(t)?["x"].SymbolName, "x");
         }
 
     }
