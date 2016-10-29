@@ -1,20 +1,43 @@
-﻿namespace PasPasPas.Parsing.SyntaxTree.Abstract {
+﻿using System.Collections.Generic;
+
+namespace PasPasPas.Parsing.SyntaxTree.Abstract {
 
     /// <summary>
     ///     declared constant
     /// </summary>
-    public class ConstantDeclaration : DeclaredSymbol {
+    public class ConstantDeclaration : DeclaredSymbol, ISymbolWithAttributes {
 
         /// <summary>
-        ///     constant symbol name
+        ///     constant mode
         /// </summary>
-        public override string SymbolName
-            => Name.Name;
+        public ConstMode Mode { get; set; }
 
         /// <summary>
-        ///     name of the constant
+        ///     declared constant type
         /// </summary>
-        public SymbolName Name { get; set; }
+        public DeclaredType ConstantType { get; set; }
+
+        /// <summary>
+        ///     Symbol hints
+        /// </summary>
+        public SymbolHints Hints { get; set; }
+
+        /// <summary>
+        ///     attributes
+        /// </summary>
+        public IEnumerable<SymbolAttribute> Attributes { get; set; }
+
+        /// <summary>
+        ///     enumerate all children
+        /// </summary>
+        public override IEnumerable<ISyntaxPart> Parts
+        {
+            get
+            {
+                foreach (var attribute in Attributes)
+                    yield return attribute;
+            }
+        }
 
     }
 }

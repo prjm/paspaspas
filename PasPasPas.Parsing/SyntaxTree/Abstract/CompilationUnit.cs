@@ -45,8 +45,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     required units
         /// </summary>
-        public UnitNameList RequiredUnits { get; }
-            = new UnitNameList();
+        public RequiredUnitNameList RequiredUnits { get; }
+            = new RequiredUnitNameList();
 
         /// <summary>
         ///     symbols in the interface part of the unit

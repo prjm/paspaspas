@@ -3,7 +3,7 @@
     /// <summary>
     ///     a unit name
     /// </summary>
-    public class UnitName : SymbolTableEntryBase {
+    public class RequiredUnitName : SymbolTableEntryBase {
 
 
         /// <summary>

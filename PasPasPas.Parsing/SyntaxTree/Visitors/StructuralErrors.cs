@@ -31,6 +31,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /* {2b2c6a72-5e16-44ef-b9d4-53625a6389ac} */
 
 
+        /// <summary>
+        ///     redeclared symbol
+        /// </summary>
+        public static readonly Guid RedeclaredSymbol
+             = new Guid(new byte[] { 0x2c, 0xc9, 0x36, 0xbd, 0xcf, 0xba, 0x2c, 0x49, 0x8b, 0xf8, 0x17, 0xe8, 0x90, 0xcb, 0xaa, 0xfa });
+        /* {bd36c92c-bacf-492c-8bf8-17e890cbaafa} */
+
 
 
     }

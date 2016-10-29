@@ -1,9 +1,9 @@
 ﻿namespace PasPasPas.Parsing.SyntaxTree.Abstract {
 
     /// <summary>
-    ///     a declared symbol
+    ///     attribute
     /// </summary>
-    public class DeclaredSymbol : SymbolTableEntryBase {
+    public class SymbolAttribute : SymbolTableEntryBase {
 
         /// <summary>
         ///     constant symbol name
@@ -12,9 +12,8 @@
             => Name.Name;
 
         /// <summary>
-        ///     name of the constant
+        ///     attribute name
         /// </summary>
         public SymbolName Name { get; set; }
-
     }
 }

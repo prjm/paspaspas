@@ -1,4 +1,4 @@
-﻿namespace PasPasPas.Parsing.SyntaxTree.Visitors {
+﻿namespace PasPasPas.Parsing.SyntaxTree.Abstract {
 
     /// <summary>
     ///     constand declaration mode

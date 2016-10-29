@@ -1,5 +1,7 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Abstract;
+﻿using System.Collections.Generic;
+using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Parsing.SyntaxTree.Standard;
+using PasPasPas.Parsing.Parser;
 
 namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
@@ -66,7 +68,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             parameter.CurrentUnit = result;
         }
 
-        private void EndVisitItem(Library unit, TreeTransformerOptions parameter) {
+        private void EndVisitItem(Library library, TreeTransformerOptions parameter) {
             parameter.CurrentUnit = null;
         }
 
@@ -84,7 +86,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             parameter.CurrentUnit = result;
         }
 
-        private void EndVisitItem(Program unit, TreeTransformerOptions parameter) {
+        private void EndVisitItem(Program program, TreeTransformerOptions parameter) {
             parameter.CurrentUnit = null;
         }
 
@@ -102,40 +104,61 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             parameter.CurrentUnit = result;
         }
 
-        private void EndVisitItem(Package unit, TreeTransformerOptions parameter) {
+        private void EndVisitItem(Package package, TreeTransformerOptions parameter) {
             parameter.CurrentUnit = null;
         }
 
-        private void BeginVisitItem(UnitInterface unit, TreeTransformerOptions parameter) {
+        private void BeginVisitItem(UnitInterface unitInterface, TreeTransformerOptions parameter) {
             parameter.CurrentUnitMode = UnitMode.Interface;
             parameter.CurrentDefinitionScope.Push(parameter.CurrentUnit.InterfaceSymbols);
         }
 
 
-        private void EndVisitItem(UnitInterface unit, TreeTransformerOptions parameter) {
+        private void EndVisitItem(UnitInterface unitInterface, TreeTransformerOptions parameter) {
             parameter.CurrentUnitMode = UnitMode.Unknown;
             parameter.PopOrFail(parameter.CurrentDefinitionScope, parameter.CurrentUnit.InterfaceSymbols);
         }
 
-        private void BeginVisitItem(UnitImplementation unit, TreeTransformerOptions parameter) {
+        private void BeginVisitItem(UnitImplementation unitImplementation, TreeTransformerOptions parameter) {
             parameter.CurrentUnitMode = UnitMode.Implementation;
+            parameter.CurrentDefinitionScope.Push(parameter.CurrentUnit.ImplementationSymbols);
         }
 
-        private void BeginVisitItem(ConstSection unit, TreeTransformerOptions parameter) {
-            if (unit.Kind == TokenKind.Const) {
+        private void BeginVisitItem(ConstSection constSection, TreeTransformerOptions parameter) {
+            if (constSection.Kind == TokenKind.Const) {
                 parameter.CurrentConstDeclarationMode = ConstMode.Const;
             }
-            else if (unit.Kind == TokenKind.Resourcestring) {
+            else if (constSection.Kind == TokenKind.Resourcestring) {
                 parameter.CurrentConstDeclarationMode = ConstMode.ResourceString;
             }
         }
 
-        private void BeginVisitItem(ConstDeclaration unit, TreeTransformerOptions parameter) {
-
+        private void BeginVisitItem(ConstDeclaration constDeclaration, TreeTransformerOptions parameter) {
             var definitionScope = parameter.CurrentDefinitionScope.Peek();
-            var declaration = CreateLeafNode<ConstantDeclaration>(definitionScope, unit);
-            declaration.Name = ExtractSymbolName(definitionScope, unit.Identifier);
+            var declaration = CreateLeafNode<ConstantDeclaration>(definitionScope, constDeclaration);
+            declaration.Name = ExtractSymbolName(definitionScope, constDeclaration.Identifier);
+            declaration.Mode = parameter.CurrentConstDeclarationMode;
+            declaration.Attributes = ExtractAttributes(declaration, constDeclaration.Attributes);
+            declaration.Hints = ExtractHints(constDeclaration, constDeclaration.Hint);
             definitionScope.Add(declaration, parameter.LogSource);
+        }
+
+        private IEnumerable<SymbolAttribute> ExtractAttributes(object parent, UserAttributes attributes) {
+            if (attributes == null || attributes.PartList.Count < 1)
+                return EmptyCollection<SymbolAttribute>.Instance;
+
+            var result = new List<SymbolAttribute>();
+
+            foreach (var part in attributes.Parts) {
+                var attribute = part as UserAttributeDefinition;
+                if (attribute == null)
+                    continue;
+                var userAttribute = CreateLeafNode<SymbolAttribute>(parent, attribute);
+                userAttribute.Name = ExtractSymbolName(userAttribute, attribute.Name);
+                result.Add(userAttribute);
+            }
+
+            return result;
         }
 
         private void EndVisitItem(ConstSection unit, TreeTransformerOptions parameter) {
@@ -144,6 +167,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         private void EndVisitItem(UnitImplementation unit, TreeTransformerOptions parameter) {
             parameter.CurrentUnitMode = UnitMode.Unknown;
+            parameter.PopOrFail(parameter.CurrentDefinitionScope, parameter.CurrentUnit.ImplementationSymbols);
         }
 
         private void BeginVisitItem(UsesClause unit, TreeTransformerOptions parameter) {
@@ -155,7 +179,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 if (name == null)
                     continue;
 
-                var unitName = CreateLeafNode<UnitName>(unit, part);
+                var unitName = CreateLeafNode<RequiredUnitName>(unit, part);
                 unitName.Name = ExtractSymbolName(unitName, name);
                 unitName.Mode = parameter.CurrentUnitMode;
                 parameter.CurrentUnit.RequiredUnits.Add(unitName, parameter.LogSource);

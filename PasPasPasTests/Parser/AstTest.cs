@@ -94,7 +94,7 @@ namespace PasPasPasTests.Parser {
 
         [Fact]
         public void TestUsesClause() {
-            Func<object, UnitNameList> u = t => (t as CompilationUnit)?.RequiredUnits;
+            Func<object, RequiredUnitNameList> u = t => (t as CompilationUnit)?.RequiredUnits;
             RunAstTest("unit z.x; interface uses a; implementation end.", t => u(t)?.Contains("a"), true);
             RunAstTest("unit z.x; interface uses a; implementation end.", t => u(t)?["a"].Mode, UnitMode.Interface);
 
@@ -113,10 +113,19 @@ namespace PasPasPasTests.Parser {
 
         [Fact]
         public void TestConstDeclaration() {
-            Func<object, DeclaredSymbols> u = t => (t as CompilationUnit)?.InterfaceSymbols;
-            Func<object, DeclaredSymbols> v = t => (t as CompilationUnit)?.ImplementationSymbols;
+            Func<object, ConstantDeclaration> u = t => ((t as CompilationUnit)?.InterfaceSymbols["x"]) as ConstantDeclaration;
+            Func<object, ConstantDeclaration> v = t => ((t as CompilationUnit)?.ImplementationSymbols["x"]) as ConstantDeclaration;
 
-            RunAstTest("unit z.x; interface const x = 5; implementation end.", t => u(t)?["x"].SymbolName, "x");
+            RunAstTest("unit z.x; interface const x = 5; implementation end.", t => u(t)?.SymbolName, "x");
+            RunAstTest("unit z.x; interface const x = 5; implementation end.", t => u(t)?.Mode, ConstMode.Const);
+            RunAstTest("unit z.x; interface resourcestring x = 'a'; implementation end.", t => u(t)?.Mode, ConstMode.ResourceString);
+
+            RunAstTest("unit z.x; interface implementation const x = 5; end.", t => v(t)?.SymbolName, "x");
+            RunAstTest("unit z.x; interface implementation const x = 5; end.", t => v(t)?.Mode, ConstMode.Const);
+            RunAstTest("unit z.x; interface implementation resourcestring x = 'a'; end.", t => v(t)?.Mode, ConstMode.ResourceString);
+
+            RunAstTest("unit z.x; interface const x = 5; x = 6; implementation end.", t => u(t)?.Mode, ConstMode.Const,
+                StructuralErrors.RedeclaredSymbol);
         }
 
     }
