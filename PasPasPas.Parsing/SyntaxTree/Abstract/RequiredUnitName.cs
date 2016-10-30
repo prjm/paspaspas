@@ -19,16 +19,7 @@
         /// <summary>
         ///     symbol name
         /// </summary>
-        public override string SymbolName
-        {
-            get
-            {
-                if (Name != null)
-                    return Name.CompleteName;
-                else
-                    return "Unit_" + GetHashCode();
-            }
-        }
-
+        protected override string InternalSymbolName
+            => Name?.CompleteName;
     }
 }

@@ -1,22 +1,22 @@
 ﻿namespace PasPasPas.Parsing.SyntaxTree.Abstract {
 
     /// <summary>
-    ///     type of compilation unit
+    ///     type of a compilation unit
     /// </summary>
     public enum CompilationUnitType {
 
         /// <summary>
-        ///     unknown compilation unit type
+        ///     unknown compilation unit
         /// </summary>
         Unknown = 0,
 
         /// <summary>
-        ///     unit
+        ///     standard unit (common file extension: <code>.pas</code>)
         /// </summary>
         Unit,
 
         /// <summary>
-        ///     package
+        ///     package (common file extension: <code>.bpr</code>)
         /// </summary>
         Package,
 
@@ -26,7 +26,7 @@
         Library,
 
         /// <summary>
-        ///     program
+        ///     program (common file extension: <code>.dpr</code>)
         /// </summary>
         Program,
 

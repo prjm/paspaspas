@@ -71,6 +71,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         public ConstMode CurrentConstDeclarationMode { get; internal set; }
 
         /// <summary>
+        ///     current expression scope
+        /// </summary>
+        public Stack<ExpressionBase> CurrentExpressionScope { get; }
+            = new Stack<ExpressionBase>();
+
+        /// <summary>
         ///     remove an expected parameter from the stack
         /// </summary>
         /// <typeparam name="T"></typeparam>
@@ -80,8 +86,23 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (EqualityComparer<T>.Default.Equals(stack.Peek(), expected))
                 stack.Pop();
             else
-                throw new Exception("Invalid state");
+                throw new InvalidOperationException();
 
+        }
+
+        /// <summary>
+        ///     pop the last element from the stack
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="stack"></param>
+        public void PopLastOrFail<T>(Stack<T> stack) {
+            if (stack.Count > 1) {
+                stack.Clear();
+                throw new InvalidOperationException();
+            }
+            else {
+                stack.Pop();
+            }
         }
     }
 }

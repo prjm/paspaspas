@@ -1,61 +1,20 @@
-﻿using PasPasPas.Parsing.Parser;
-using System.Collections.Generic;
-
-namespace PasPasPas.Parsing.SyntaxTree.Abstract {
+﻿namespace PasPasPas.Parsing.SyntaxTree.Abstract {
 
     /// <summary>
     ///     base class for symbol table entries
     /// </summary>
-    public abstract class SymbolTableEntryBase : ISymbolTableEntry, ISyntaxPart {
-
-        private string symbolName;
+    public abstract class SymbolTableEntryBase : AbstractSyntaxPart, ISymbolTableEntry {
 
         /// <summary>
-        ///     parent table
+        ///     name of the symbol
         /// </summary>
-        public ISyntaxPart Parent { get; set; }
+        public string SymbolName
+            => InternalSymbolName ?? "Undefined_" + GetType().FullName + "_" + GetHashCode();
 
         /// <summary>
-        ///     parts
+        ///     overridable symbol name
         /// </summary>
-        public virtual IEnumerable<ISyntaxPart> Parts
-            => EmptyCollection<ISyntaxPart>.ReadOnlyInstance;
+        protected abstract string InternalSymbolName { get; }
 
-        /// <summary>
-        ///     symbol name
-        /// </summary>
-        public virtual string SymbolName
-            => symbolName;
-
-        /// <summary>
-        ///     define the name of the symbol
-        /// </summary>
-        /// <param name="newName"></param>
-        public void DefineSymbolName(string newName) {
-            symbolName = newName;
-        }
-
-
-        /// <summary>
-        ///     accept a visitors
-        /// </summary>
-        /// <typeparam name="TVisitorType"></typeparam>
-        /// <param name="visitor"></param>
-        /// <param name="visitorParameter"></param>
-        /// <returns></returns>
-        public bool Accept<TVisitorType>(ISyntaxPartVisitor<TVisitorType> visitor, TVisitorType visitorParameter) {
-            if (!visitor.BeginVisit(this, visitorParameter))
-                return false;
-
-            var result = true;
-
-            foreach (var part in Parts)
-                result = result && part.Accept(visitor, visitorParameter);
-
-            if (!visitor.EndVisit(this, visitorParameter))
-                return false;
-
-            return result;
-        }
     }
 }

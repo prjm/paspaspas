@@ -22,6 +22,23 @@
         /// <returns>bool if visiting should be continued</returns>
         bool EndVisit(ISyntaxPart syntaxPart, TParameterType parameter);
 
+        /// <summary>
+        ///     begin visiting a syntax cild
+        /// </summary>
+        /// <typeparam name="TVisitorType"></typeparam>
+        /// <param name="parent"></param>
+        /// <param name="visitorParameter"></param>
+        /// <param name="child"></param>
+        void BeginVisitChild<TVisitorType>(ISyntaxPart parent, TVisitorType visitorParameter, ISyntaxPart child);
+
+        /// <summary>
+        ///     end visiting a syntax chid
+        /// </summary>
+        /// <typeparam name="TVisitorType"></typeparam>
+        /// <param name="parent"></param>
+        /// <param name="visitorParameter"></param>
+        /// <param name="child"></param>
+        void EndVisitChild<TVisitorType>(ISyntaxPart parent, TVisitorType visitorParameter, ISyntaxPart child);
     }
 
 

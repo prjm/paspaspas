@@ -8,8 +8,8 @@
         /// <summary>
         ///     constant symbol name
         /// </summary>
-        public override string SymbolName
-            => Name.Name;
+        protected override string InternalSymbolName
+            => Name?.CompleteName;
 
         /// <summary>
         ///     attribute name

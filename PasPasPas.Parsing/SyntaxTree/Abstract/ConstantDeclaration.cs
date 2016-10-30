@@ -18,12 +18,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         public DeclaredType ConstantType { get; set; }
 
         /// <summary>
-        ///     Symbol hints
+        ///     symbol hints
         /// </summary>
         public SymbolHints Hints { get; set; }
 
         /// <summary>
-        ///     attributes
+        ///     attributes of the constants
         /// </summary>
         public IEnumerable<SymbolAttribute> Attributes { get; set; }
 
@@ -36,8 +36,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
             {
                 foreach (var attribute in Attributes)
                     yield return attribute;
+                yield return Value;
             }
         }
 
+        /// <summary>
+        ///     expression value
+        /// </summary>
+        public ConstExpression Value { get; set; }
     }
 }

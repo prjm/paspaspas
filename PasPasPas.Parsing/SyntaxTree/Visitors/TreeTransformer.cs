@@ -138,12 +138,29 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             var declaration = CreateLeafNode<ConstantDeclaration>(definitionScope, constDeclaration);
             declaration.Name = ExtractSymbolName(definitionScope, constDeclaration.Identifier);
             declaration.Mode = parameter.CurrentConstDeclarationMode;
-            declaration.Attributes = ExtractAttributes(declaration, constDeclaration.Attributes);
+            declaration.Attributes = ExtractAttributes(declaration, constDeclaration.Attributes, parameter.CurrentUnit);
             declaration.Hints = ExtractHints(constDeclaration, constDeclaration.Hint);
+            declaration.Value = CreateLeafNode<ConstExpression>(declaration, constDeclaration.Value);
             definitionScope.Add(declaration, parameter.LogSource);
         }
 
-        private IEnumerable<SymbolAttribute> ExtractAttributes(object parent, UserAttributes attributes) {
+        private void EndVisitItem(ConstDeclaration constDeclaration, TreeTransformerOptions parameter) {
+            parameter.PopLastOrFail(parameter.CurrentExpressionScope);
+        }
+
+        private void BeginVisitItem(ConstantExpression constDeclaration, TreeTransformerOptions parameter) {
+            var currentExpression = parameter.CurrentExpressionScope.Peek();
+
+            if (constDeclaration.IsArrayConstant) {
+
+            }
+
+            if (constDeclaration.IsRecordConstant) {
+
+            }
+        }
+
+        private IEnumerable<SymbolAttribute> ExtractAttributes(object parent, UserAttributes attributes, CompilationUnit parentUnit) {
             if (attributes == null || attributes.PartList.Count < 1)
                 return EmptyCollection<SymbolAttribute>.Instance;
 
@@ -151,11 +168,24 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
             foreach (var part in attributes.Parts) {
                 var attribute = part as UserAttributeDefinition;
-                if (attribute == null)
-                    continue;
+                var isAssemblyAttribute = false;
+
+                if (attribute == null) {
+                    var assemblyAttribute = part as AssemblyAttributeDeclaration;
+                    if (assemblyAttribute == null)
+                        continue;
+
+                    attribute = assemblyAttribute.Attribute;
+                    isAssemblyAttribute = true;
+                }
+
                 var userAttribute = CreateLeafNode<SymbolAttribute>(parent, attribute);
                 userAttribute.Name = ExtractSymbolName(userAttribute, attribute.Name);
-                result.Add(userAttribute);
+
+                if (!isAssemblyAttribute)
+                    result.Add(userAttribute);
+                else
+                    parentUnit.AddAssemblyAttribute(userAttribute);
             }
 
             return result;

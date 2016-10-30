@@ -2894,6 +2894,7 @@ namespace PasPasPas.Parsing.Parser {
             if (Match(TokenKind.OpenParen)) {
 
                 if (LookAheadIdentifier(1, new int[0], true) && (LookAhead(2, TokenKind.Colon))) {
+                    result.IsRecordConstant = true;
                     ContinueWithOrMissing(result, TokenKind.OpenParen);
                     do {
                         ParseRecordConstant(result);
@@ -2901,6 +2902,7 @@ namespace PasPasPas.Parsing.Parser {
                     ContinueWithOrMissing(result, TokenKind.CloseParen);
                 }
                 else if (HasTokenBeforeToken(TokenKind.Comma, TokenKind.OpenParen, TokenKind.OpenBraces, TokenKind.CloseBraces, TokenKind.CloseParen)) {
+                    result.IsArrayConstant = true;
                     ContinueWithOrMissing(result, TokenKind.OpenParen);
                     do {
                         ParseConstantExpression(result);

@@ -4,7 +4,7 @@ using PasPasPas.Infrastructure.Input;
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
 
     /// <summary>
-    ///     
+    ///     basic representation of a compilation unit
     /// </summary>
     public class CompilationUnit : SymbolTableEntryBase {
 
@@ -21,16 +21,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     name of the unit
         /// </summary>
-        public override string SymbolName
-        {
-            get
-            {
-                if (UnitName != null)
-                    return UnitName.CompleteName;
-                else
-                    return "Unit_" + GetHashCode();
-            }
-        }
+        protected override string InternalSymbolName
+            => UnitName?.CompleteName;
 
         /// <summary>
         ///     file reference of the unit
@@ -67,6 +59,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         {
             get
             {
+                foreach (var attribute in AssemblyAttributes)
+                    yield return attribute;
                 foreach (var unit in RequiredUnits)
                     yield return unit;
                 foreach (var unit in InterfaceSymbols)
@@ -74,6 +68,26 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
                 foreach (var unit in ImplementationSymbols)
                     yield return unit;
             }
+        }
+
+        /// <summary>
+        ///     assembly attributes
+        /// </summary>
+        public IEnumerable<SymbolAttribute> AssemblyAttributes
+            => assemblyAttributes;
+
+        /// <summary>
+        ///     list of assembly attributes
+        /// </summary>
+        private IList<SymbolAttribute> assemblyAttributes
+            = new List<SymbolAttribute>();
+
+        /// <summary>
+        ///     add an assembly attribute
+        /// </summary>
+        /// <param name="assemblyAttribute"></param>
+        public void AddAssemblyAttribute(SymbolAttribute assemblyAttribute) {
+            assemblyAttributes.Add(assemblyAttribute);
         }
     }
 }
