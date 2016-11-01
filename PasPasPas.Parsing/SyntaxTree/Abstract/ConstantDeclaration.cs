@@ -5,7 +5,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// <summary>
     ///     declared constant
     /// </summary>
-    public class ConstantDeclaration : DeclaredSymbol, ISymbolWithAttributes {
+    public class ConstantDeclaration : DeclaredSymbol, ISymbolWithAttributes, IExpressionTarget {
 
         /// <summary>
         ///     constant mode
@@ -36,13 +36,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
             {
                 foreach (var attribute in Attributes)
                     yield return attribute;
-                yield return Value;
+                if (Value != null)
+                    yield return Value;
             }
         }
 
         /// <summary>
         ///     expression value
         /// </summary>
-        public ConstExpression Value { get; set; }
+        public ExpressionBase Value { get; set; }
     }
 }

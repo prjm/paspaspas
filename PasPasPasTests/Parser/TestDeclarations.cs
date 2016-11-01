@@ -8,6 +8,7 @@ namespace PasPasPasTests.Parser {
 
         [Fact]
         public void TestConstants() {
+            ParseString("program test; const x = (); .");
             ParseString("program test; const x = 5; .");
             ParseString("program test; resourcestring x = 5; .");
             ParseString("program test; const x = 5; const y = 5; .");

@@ -25,20 +25,18 @@
         /// <summary>
         ///     begin visiting a syntax cild
         /// </summary>
-        /// <typeparam name="TVisitorType"></typeparam>
         /// <param name="parent"></param>
         /// <param name="visitorParameter"></param>
         /// <param name="child"></param>
-        void BeginVisitChild<TVisitorType>(ISyntaxPart parent, TVisitorType visitorParameter, ISyntaxPart child);
+        void BeginVisitChild(ISyntaxPart parent, TParameterType visitorParameter, ISyntaxPart child);
 
         /// <summary>
         ///     end visiting a syntax chid
         /// </summary>
-        /// <typeparam name="TVisitorType"></typeparam>
         /// <param name="parent"></param>
         /// <param name="visitorParameter"></param>
         /// <param name="child"></param>
-        void EndVisitChild<TVisitorType>(ISyntaxPart parent, TVisitorType visitorParameter, ISyntaxPart child);
+        void EndVisitChild(ISyntaxPart parent, TParameterType visitorParameter, ISyntaxPart child);
     }
 
 

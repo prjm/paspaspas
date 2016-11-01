@@ -16,12 +16,11 @@
 
         /// <summary>
         ///     begin visting a child
-        /// </summary>
-        /// <typeparam name="TVisitorType"></typeparam>
+        /// </summary>       
         /// <param name="parent"></param>
         /// <param name="visitorParameter"></param>
         /// <param name="child"></param>
-        public void BeginVisitChild<TVisitorType>(ISyntaxPart parent, TVisitorType visitorParameter, ISyntaxPart child) {
+        public virtual void BeginVisitChild(ISyntaxPart parent, TParameterType visitorParameter, ISyntaxPart child) {
         }
 
         /// <summary>
@@ -35,11 +34,10 @@
         /// <summary>
         ///     end visiting a child
         /// </summary>
-        /// <typeparam name="TVisitorType"></typeparam>
         /// <param name="parent"></param>
         /// <param name="visitorParameter"></param>
         /// <param name="child"></param>
-        public virtual void EndVisitChild<TVisitorType>(ISyntaxPart parent, TVisitorType visitorParameter, ISyntaxPart child) {
+        public virtual void EndVisitChild(ISyntaxPart parent, TParameterType visitorParameter, ISyntaxPart child) {
         }
     }
 }

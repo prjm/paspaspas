@@ -73,8 +73,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     current expression scope
         /// </summary>
-        public Stack<ExpressionBase> CurrentExpressionScope { get; }
-            = new Stack<ExpressionBase>();
+        public Stack<IExpressionTarget> CurrentExpressionScope { get; }
+            = new Stack<IExpressionTarget>();
 
         /// <summary>
         ///     remove an expected parameter from the stack

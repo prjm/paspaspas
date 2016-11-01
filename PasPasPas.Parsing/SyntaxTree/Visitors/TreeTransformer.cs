@@ -23,6 +23,17 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         }
 
         /// <summary>
+        ///     start visiting a child item
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="visitorParameter"></param>
+        /// <param name="child"></param>
+        public override void BeginVisitChild(ISyntaxPart parent, TreeTransformerOptions visitorParameter, ISyntaxPart child) {
+            dynamic part = parent;
+            BeginVisitChildItem(part, visitorParameter, child); ;
+        }
+
+        /// <summary>
         ///     end visiting a syntax node
         /// </summary>
         /// <param name="syntaxPart"></param>
@@ -32,6 +43,17 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             dynamic part = syntaxPart;
             EndVisitItem(part, parameter);
             return true;
+        }
+
+        /// <summary>
+        ///     end visiting a child
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="visitorParameter"></param>
+        /// <param name="child"></param>
+        public override void EndVisitChild(ISyntaxPart parent, TreeTransformerOptions visitorParameter, ISyntaxPart child) {
+            dynamic part = parent;
+            EndVisitChildItem(part, visitorParameter, child);
         }
 
         /// <summary>
@@ -140,23 +162,46 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             declaration.Mode = parameter.CurrentConstDeclarationMode;
             declaration.Attributes = ExtractAttributes(declaration, constDeclaration.Attributes, parameter.CurrentUnit);
             declaration.Hints = ExtractHints(constDeclaration, constDeclaration.Hint);
-            declaration.Value = CreateLeafNode<ConstExpression>(declaration, constDeclaration.Value);
             definitionScope.Add(declaration, parameter.LogSource);
+            parameter.CurrentExpressionScope.Push(declaration);
         }
 
         private void EndVisitItem(ConstDeclaration constDeclaration, TreeTransformerOptions parameter) {
-            parameter.PopLastOrFail(parameter.CurrentExpressionScope);
+            if (parameter.CurrentExpressionScope.Count > 0) {
+                // .. error ..
+            }
         }
 
-        private void BeginVisitItem(ConstantExpression constDeclaration, TreeTransformerOptions parameter) {
+        private void BeginVisitItem(ConstantExpression constExpression, TreeTransformerOptions parameter) {
             var currentExpression = parameter.CurrentExpressionScope.Peek();
 
-            if (constDeclaration.IsArrayConstant) {
-
+            if (constExpression.IsArrayConstant) {
+                currentExpression.Value = CreateLeafNode<ArrayConstant>(currentExpression, constExpression);
             }
 
-            if (constDeclaration.IsRecordConstant) {
+            if (constExpression.IsRecordConstant) {
+                //
+                //currentExpression.Value = new RecordConstant();
+            }
+        }
 
+        private void EndVisitItem(ConstantExpression constExpression, TreeTransformerOptions parameter) {
+            if (constExpression.IsArrayConstant || constExpression.IsRecordConstant)
+                parameter.CurrentExpressionScope.Pop();
+        }
+
+        private void BeginVisitChildItem(ConstantExpression constExpression, TreeTransformerOptions parameter, ISyntaxPart child) {
+            if (constExpression.IsArrayConstant && (child is ConstantExpression)) {
+                var array = ((ArrayConstant)parameter.CurrentExpressionScope.Peek().Value);
+                var newItem = new ArrayConstantItem();
+                array.Items.Add(newItem);
+                parameter.CurrentExpressionScope.Push(newItem);
+            }
+        }
+
+        private void EndVisitChildItem(ConstantExpression constExpression, TreeTransformerOptions parameter, ISyntaxPart child) {
+            if (constExpression.IsArrayConstant && (child is ConstantExpression)) {
+                parameter.CurrentExpressionScope.Pop();
             }
         }
 
@@ -276,8 +321,16 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             //..
         }
 
+        private void BeginVisitChildItem(ISyntaxPart part, TreeTransformerOptions parameter, ISyntaxPart child) {
+            //..
+        }
+
 
         private void EndVisitItem(ISyntaxPart part, TreeTransformerOptions parameter) {
+            //..
+        }
+
+        private void EndVisitChildItem(ISyntaxPart part, TreeTransformerOptions parameter, ISyntaxPart child) {
             //..
         }
 

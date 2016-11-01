@@ -48,8 +48,11 @@ namespace PasPasPas.Parsing.SyntaxTree {
 
             var result = true;
 
-            foreach (var part in Parts)
+            foreach (var part in Parts) {
+                visitor.BeginVisitChild(this, visitorParameter, part);
                 result = result && part.Accept(visitor, visitorParameter);
+                visitor.EndVisitChild(this, visitorParameter, part);
+            }
 
             if (!visitor.EndVisit(this, visitorParameter))
                 return false;

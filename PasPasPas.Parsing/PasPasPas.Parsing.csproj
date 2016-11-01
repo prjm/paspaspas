@@ -46,6 +46,8 @@
     <Compile Include="Parser\EmptyCollection.cs" />
     <Compile Include="Parser\IParser.cs" />
     <Compile Include="SyntaxTree\Abstract\AbstractSyntaxPart.cs" />
+    <Compile Include="SyntaxTree\Abstract\ArrayConstant.cs" />
+    <Compile Include="SyntaxTree\Abstract\ArrayConstantItem.cs" />
     <Compile Include="SyntaxTree\Abstract\CompilationUnit.cs" />
     <Compile Include="SyntaxTree\Abstract\CompilationUnitType.cs" />
     <Compile Include="SyntaxTree\Abstract\ConstantDeclaration.cs" />
@@ -54,6 +56,7 @@
     <Compile Include="SyntaxTree\Abstract\DeclaredSymbols.cs" />
     <Compile Include="SyntaxTree\Abstract\DeclaredType.cs" />
     <Compile Include="SyntaxTree\Abstract\ExpressionBase.cs" />
+    <Compile Include="SyntaxTree\Abstract\IExpressionTarget.cs" />
     <Compile Include="SyntaxTree\Abstract\ISymbolTable.cs" />
     <Compile Include="SyntaxTree\Abstract\ISymbolTableEntry.cs" />
     <Compile Include="SyntaxTree\Abstract\ISymbolWithAttributes.cs" />
