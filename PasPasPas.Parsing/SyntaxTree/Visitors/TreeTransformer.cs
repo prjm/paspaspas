@@ -167,9 +167,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         }
 
         private void EndVisitItem(ConstDeclaration constDeclaration, TreeTransformerOptions parameter) {
-            if (parameter.CurrentExpressionScope.Count > 0) {
-                // .. error ..
-            }
+            parameter.PopLastOrFail(parameter.CurrentExpressionScope);
         }
 
         private void BeginVisitItem(ConstantExpression constExpression, TreeTransformerOptions parameter) {
@@ -180,14 +178,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             }
 
             if (constExpression.IsRecordConstant) {
-                //
-                //currentExpression.Value = new RecordConstant();
+                currentExpression.Value = CreateLeafNode<RecordConstant>(currentExpression, constExpression);
             }
-        }
-
-        private void EndVisitItem(ConstantExpression constExpression, TreeTransformerOptions parameter) {
-            if (constExpression.IsArrayConstant || constExpression.IsRecordConstant)
-                parameter.CurrentExpressionScope.Pop();
         }
 
         private void BeginVisitChildItem(ConstantExpression constExpression, TreeTransformerOptions parameter, ISyntaxPart child) {
@@ -197,13 +189,28 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 array.Items.Add(newItem);
                 parameter.CurrentExpressionScope.Push(newItem);
             }
+            else if (constExpression.IsRecordConstant && (child is RecordConstantExpression)) {
+                var record = ((RecordConstant)parameter.CurrentExpressionScope.Peek().Value);
+                var newItem = new RecordConstantItem();
+                record.Items.Add(newItem);
+                parameter.CurrentExpressionScope.Push(newItem);
+            }
         }
 
         private void EndVisitChildItem(ConstantExpression constExpression, TreeTransformerOptions parameter, ISyntaxPart child) {
             if (constExpression.IsArrayConstant && (child is ConstantExpression)) {
                 parameter.CurrentExpressionScope.Pop();
             }
+            else if (constExpression.IsRecordConstant && (child is RecordConstantExpression)) {
+                parameter.CurrentExpressionScope.Pop();
+            }
         }
+
+        private void BeginVisitItem(RecordConstantExpression constExpression, TreeTransformerOptions parameter) {
+            var currentExpression = parameter.CurrentExpressionScope.Peek() as RecordConstantItem;
+            currentExpression.Name = ExtractSymbolName(constExpression, constExpression.Name);
+        }
+
 
         private IEnumerable<SymbolAttribute> ExtractAttributes(object parent, UserAttributes attributes, CompilationUnit parentUnit) {
             if (attributes == null || attributes.PartList.Count < 1)

@@ -27,7 +27,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         ///     program name
         /// </summary>
         public NamespaceName ProgramName
-            => ProgramHead.Name;
+            => ProgramHead?.Name;
 
         /// <summary>
         ///     uses list

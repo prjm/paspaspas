@@ -61,6 +61,8 @@
     <Compile Include="SyntaxTree\Abstract\ISymbolTableEntry.cs" />
     <Compile Include="SyntaxTree\Abstract\ISymbolWithAttributes.cs" />
     <Compile Include="SyntaxTree\Abstract\ProjectRoot.cs" />
+    <Compile Include="SyntaxTree\Abstract\RecordConstant.cs" />
+    <Compile Include="SyntaxTree\Abstract\RecordConstantItem.cs" />
     <Compile Include="SyntaxTree\Abstract\SymbolAttribute.cs" />
     <Compile Include="SyntaxTree\Abstract\SymbolHints.cs" />
     <Compile Include="SyntaxTree\Abstract\SymbolName.cs" />
