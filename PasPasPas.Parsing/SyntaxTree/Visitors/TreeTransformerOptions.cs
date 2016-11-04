@@ -2,6 +2,7 @@
 using PasPasPas.Parsing.SyntaxTree.Abstract;
 using System;
 using System.Collections.Generic;
+using PasPasPas.Parsing.SyntaxTree.Standard;
 
 namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
@@ -68,13 +69,29 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     const declaration mode
         /// </summary>
-        public ConstMode CurrentConstDeclarationMode { get; internal set; }
+        public DeclarationMode CurrentDeclarationMode { get; internal set; }
 
         /// <summary>
         ///     current expression scope
         /// </summary>
         public Stack<IExpressionTarget> CurrentExpressionScope { get; }
             = new Stack<IExpressionTarget>();
+
+
+        /// <summary>
+        ///     last expression
+        /// </summary>
+        public IExpressionTarget LastExpression
+        {
+            get
+            {
+                if (CurrentExpressionScope.Count > 0)
+                    return CurrentExpressionScope.Peek();
+                else
+                    return null;
+
+            }
+        }
 
         /// <summary>
         ///     remove an expected parameter from the stack
@@ -98,10 +115,125 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         public void PopLastOrFail<T>(Stack<T> stack) {
             if (stack.Count > 1) {
                 stack.Clear();
-                throw new InvalidOperationException();
+                // error ?
             }
             else {
                 stack.Pop();
+            }
+        }
+
+        /// <summary>
+        ///     stop declaring symbols
+        /// </summary>
+        /// <param name="symbolsToDeclare">symbol list</param>
+        public void EndDeclare(DeclaredSymbols symbolsToDeclare) {
+            PopOrFail(CurrentDefinitionScope, symbolsToDeclare);
+        }
+
+        /// <summary>
+        ///     start decalring symbols
+        /// </summary>
+        /// <param name="symbolsToDeclare">symbols to declare</param>
+        public void BeginDeclare(DeclaredSymbols symbolsToDeclare) {
+            CurrentDefinitionScope.Push(symbolsToDeclare);
+        }
+
+        /// <summary>
+        ///     define an expression value
+        /// </summary>
+        /// <param name="value"></param>
+        public void DefineExpressionValue(ExpressionBase value) {
+            if (CurrentExpressionScope.Count > 0) {
+                CurrentExpressionScope.Peek().Value = value;
+                var target = value as IExpressionTarget;
+                if (target != null) {
+                    CurrentExpressionScope.Push(target);
+                }
+            }
+            else {
+                // error ??
+            }
+        }
+
+        /// <summary>
+        ///     declare an object
+        /// </summary>
+        /// <typeparam name="T">object type to declare</typeparam>
+        /// <param name="constDeclaration"></param>
+        /// <returns></returns>
+        public T Declare<T>(ConstDeclaration constDeclaration) where T : DeclaredSymbol, new() {
+            if (CurrentDefinitionScope.Count > 0) {
+                var scope = CurrentDefinitionScope.Peek();
+                T declaration = CreateNode<T>(scope, constDeclaration);
+                return declaration;
+            }
+            else {
+                // error ?
+                T declaration = CreateNode<T>(null, constDeclaration);
+                return declaration;
+            }
+        }
+
+        private static T CreateNode<T>(object parent, ISyntaxPart element) where T : new() {
+            var result = new T();
+            return result;
+        }
+
+        /// <summary>
+        ///     complaete a declaration
+        /// </summary>
+        /// <param name="declaration"></param>
+        public void CompleteDeclaration(DeclaredSymbol declaration) {
+            if (CurrentDefinitionScope.Count > 0) {
+                var scope = CurrentDefinitionScope.Peek();
+                scope.Add(declaration, LogSource);
+            }
+            else {
+                // error ??
+            }
+        }
+
+        /// <summary>
+        ///     define an expression value
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="parent"></param>
+        public T DefineExpressionValue<T>(ISyntaxPart parent) where T : ExpressionBase, new() {
+            var node = CreateNode<T>(LastExpression, parent);
+            DefineExpressionValue(node);
+            return node;
+        }
+
+
+        /// <summary>
+        ///     complete expression
+        /// </summary>
+        public void CompleteExpression() {
+            if (CurrentExpressionScope.Count > 0) {
+                CurrentExpressionScope.Pop();
+            }
+            else {
+                // error ?               
+            }
+        }
+
+        /// <summary>
+        ///     end expression definition
+        /// </summary>
+        public void EndExpression() {
+            PopLastOrFail(CurrentExpressionScope);
+        }
+
+        /// <summary>
+        ///     begin expression
+        /// </summary>
+        /// <param name="declaration"></param>
+        public void BeginExpression(IExpressionTarget declaration) {
+            if (CurrentExpressionScope.Count > 0) {
+                // error ?
+            }
+            else {
+                CurrentExpressionScope.Push(declaration);
             }
         }
     }

@@ -10,7 +10,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     constant mode
         /// </summary>
-        public ConstMode Mode { get; set; }
+        public DeclarationMode Mode { get; set; }
 
         /// <summary>
         ///     declared constant type

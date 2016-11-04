@@ -1,9 +1,9 @@
 ﻿namespace PasPasPas.Parsing.SyntaxTree.Abstract {
 
     /// <summary>
-    ///     constand declaration mode
+    ///     declaration mode
     /// </summary>
-    public enum ConstMode {
+    public enum DeclarationMode {
 
         /// <summary>
         ///     undefined mode

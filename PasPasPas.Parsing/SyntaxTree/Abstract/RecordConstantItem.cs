@@ -6,7 +6,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// <summary>
     ///     record constant item
     /// </summary>
-    public class RecordConstantItem : SymbolTableEntryBase, IExpressionTarget {
+    public class RecordConstantItem : ExpressionBase, IExpressionTarget {
 
         /// <summary>
         ///     constant item value
@@ -24,12 +24,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
                     yield return Value;
             }
         }
-
-        /// <summary>
-        ///     symbol name
-        /// </summary>
-        protected override string InternalSymbolName
-            => Name?.CompleteName;
 
         /// <summary>
         ///     symbol name

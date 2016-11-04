@@ -117,14 +117,14 @@ namespace PasPasPasTests.Parser {
             Func<object, ConstantDeclaration> v = t => ((t as CompilationUnit)?.ImplementationSymbols["x"]) as ConstantDeclaration;
 
             RunAstTest("unit z.x; interface const x = 5; implementation end.", t => u(t)?.SymbolName, "x");
-            RunAstTest("unit z.x; interface const x = 5; implementation end.", t => u(t)?.Mode, ConstMode.Const);
-            RunAstTest("unit z.x; interface resourcestring x = 'a'; implementation end.", t => u(t)?.Mode, ConstMode.ResourceString);
+            RunAstTest("unit z.x; interface const x = 5; implementation end.", t => u(t)?.Mode, DeclarationMode.Const);
+            RunAstTest("unit z.x; interface resourcestring x = 'a'; implementation end.", t => u(t)?.Mode, DeclarationMode.ResourceString);
 
             RunAstTest("unit z.x; interface implementation const x = 5; end.", t => v(t)?.SymbolName, "x");
-            RunAstTest("unit z.x; interface implementation const x = 5; end.", t => v(t)?.Mode, ConstMode.Const);
-            RunAstTest("unit z.x; interface implementation resourcestring x = 'a'; end.", t => v(t)?.Mode, ConstMode.ResourceString);
+            RunAstTest("unit z.x; interface implementation const x = 5; end.", t => v(t)?.Mode, DeclarationMode.Const);
+            RunAstTest("unit z.x; interface implementation resourcestring x = 'a'; end.", t => v(t)?.Mode, DeclarationMode.ResourceString);
 
-            RunAstTest("unit z.x; interface const x = 5; x = 6; implementation end.", t => u(t)?.Mode, ConstMode.Const,
+            RunAstTest("unit z.x; interface const x = 5; x = 6; implementation end.", t => u(t)?.Mode, DeclarationMode.Const,
                 StructuralErrors.RedeclaredSymbol);
         }
 

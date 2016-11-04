@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
 
     /// <summary>
     ///     record constant
     /// </summary>
-    public class RecordConstant : ExpressionBase {
+    public class RecordConstant : ExpressionBase, IExpressionTarget {
 
 
         /// <summary>
@@ -20,6 +21,25 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         public override IEnumerable<ISyntaxPart> Parts
             => Items;
 
+        /// <summary>
+        ///     record value
+        /// </summary>
+        public ExpressionBase Value
+        {
+            get
+            {
+                if (Items.Count > 0)
+                    return Items[Items.Count - 1];
+                else
+                    return null;
+            }
 
+            set
+            {
+                var item = value as RecordConstantItem;
+                if (item != null)
+                    Items.Add(item);
+            }
+        }
     }
 }
