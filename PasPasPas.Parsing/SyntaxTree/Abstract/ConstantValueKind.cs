@@ -13,6 +13,16 @@
         /// <summary>
         ///     nil value
         /// </summary>
-        Nil = 1,
+        Nil,
+
+        /// <summary>
+        ///     true value
+        /// </summary>
+        True,
+
+        /// <summary>
+        ///     false value
+        /// </summary>
+        False,
     }
 }

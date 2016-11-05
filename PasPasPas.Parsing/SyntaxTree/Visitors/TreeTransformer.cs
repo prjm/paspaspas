@@ -175,48 +175,108 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         }
 
         #endregion
+        #region Expression
 
-        /*
-        private void BeginVisitItem(Expression simpleExpression, TreeTransformerOptions parameter) {
-            if (simpleExpression.LeftOperand != null && simpleExpression.RightOperand != null) {
-                var currentExpression = parameter.CurrentExpressionScope.Peek();
-                var comparison = CreateLeafNode<ComparisonExpression>(currentExpression, simpleExpression);
-                comparison.Kind = ComparisonExpression.ConvertKind(simpleExpression.Kind);
-                currentExpression.Value = comparison;
+        private void BeginVisitItem(Expression expression, TreeTransformerOptions parameter) {
+            if (expression.LeftOperand != null && expression.RightOperand != null) {
+                var currentExpression = parameter.DefineExpressionValue<BinaryOperator>(expression);
+                currentExpression.Kind = BinaryOperator.ConvertKind(expression.Kind);
             }
         }
 
-        private void BeginVisitChildItem(Expression simpleExpression, TreeTransformerOptions parameter, ISyntaxPart child) {
-            if (simpleExpression.LeftOperand != null && simpleExpression.RightOperand != null) {
-                var currentExpression = (ComparisonExpression)parameter.CurrentExpressionScope.Peek().Value;
-                var operand = CreateLeafNode<ExpressionOperand>(currentExpression, child);
-
-                if (currentExpression.LeftOperand == null) {
-                    currentExpression.LeftOperand = operand;
-                }
-                else if (currentExpression.RightOperand == null) {
-                    currentExpression.RightOperand = operand;
-                }
-                parameter.CurrentExpressionScope.Push(operand);
+        private void EndVisitItem(Expression expression, TreeTransformerOptions parameter) {
+            if (expression.LeftOperand != null && expression.RightOperand != null) {
+                parameter.CompleteExpression();
             }
         }
 
-        private void EndVisitChildItem(Expression simpleExpression, TreeTransformerOptions parameter, ISyntaxPart child) {
+        #endregion
+        #region SimpleExpression
+
+        private void BeginVisitItem(SimpleExpression simpleExpression, TreeTransformerOptions parameter) {
             if (simpleExpression.LeftOperand != null && simpleExpression.RightOperand != null) {
-                parameter.CurrentExpressionScope.Pop();
+                var currentExpression = parameter.DefineExpressionValue<BinaryOperator>(simpleExpression);
+                currentExpression.Kind = BinaryOperator.ConvertKind(simpleExpression.Kind);
             }
         }
 
-        */
+        private void EndVisitItem(SimpleExpression simpleExpression, TreeTransformerOptions parameter) {
+            if (simpleExpression.LeftOperand != null && simpleExpression.RightOperand != null) {
+                parameter.CompleteExpression();
+            }
+        }
+
+        #endregion
+        #region Term
+
+        private void BeginVisitItem(Term term, TreeTransformerOptions parameter) {
+            if (term.LeftOperand != null && term.RightOperand != null) {
+                var currentExpression = parameter.DefineExpressionValue<BinaryOperator>(term);
+                currentExpression.Kind = BinaryOperator.ConvertKind(term.Kind);
+            }
+        }
+
+        private void EndVisitItem(Term term, TreeTransformerOptions parameter) {
+            if (term.LeftOperand != null && term.RightOperand != null) {
+                parameter.CompleteExpression();
+            }
+        }
+
+
+
+        #endregion
+        #region Factor
 
         private void BeginVisitItem(Factor factor, TreeTransformerOptions parameter) {
+
+            if (factor.AddressOf != null || factor.Not != null || factor.Plus != null || factor.Minus != null) {
+                var value = parameter.DefineExpressionValue<UnaryOperator>(factor);
+                if (factor.AddressOf != null)
+                    value.Kind = ExpressionKind.AddressOf;
+                else if (factor.Not != null)
+                    value.Kind = ExpressionKind.Not;
+                else if (factor.Plus != null)
+                    value.Kind = ExpressionKind.UnaryPlus;
+                else if (factor.Minus != null)
+                    value.Kind = ExpressionKind.UnaryMinus;
+                return;
+            }
+
             if (factor.IsNil) {
                 var value = CreateLeafNode<ConstantValue>(parameter.LastExpression, factor);
                 value.Kind = ConstantValueKind.Nil;
                 parameter.DefineExpressionValue(value);
                 return;
             }
+
+            if (factor.IsFalse) {
+                var value = CreateLeafNode<ConstantValue>(parameter.LastExpression, factor);
+                value.Kind = ConstantValueKind.False;
+                parameter.DefineExpressionValue(value);
+            }
+            else if (factor.IsTrue) {
+                var value = CreateLeafNode<ConstantValue>(parameter.LastExpression, factor);
+                value.Kind = ConstantValueKind.True;
+                parameter.DefineExpressionValue(value);
+            }
+            else if (factor.IntValue != null) {
+
+            }
+            else if (factor.RealValue != null) {
+
+            }
+            if (factor.StringValue != null) {
+
+            }
         }
+
+        private void EndVisitItem(Factor factor, TreeTransformerOptions parameter) {
+            if (factor.AddressOf != null || factor.Not != null || factor.Plus != null || factor.Minus != null) {
+                parameter.CompleteExpression();
+            }
+        }
+
+        #endregion
 
         private IEnumerable<SymbolAttribute> ExtractAttributes(object parent, UserAttributes attributes, CompilationUnit parentUnit) {
             if (attributes == null || attributes.PartList.Count < 1)

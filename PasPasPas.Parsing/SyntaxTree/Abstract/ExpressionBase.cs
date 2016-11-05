@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace PasPasPas.Parsing.SyntaxTree.Abstract {
+﻿namespace PasPasPas.Parsing.SyntaxTree.Abstract {
 
     /// <summary>
     ///     base class for expression parts

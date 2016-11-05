@@ -2,7 +2,6 @@
 using PasPasPas.Parsing.SyntaxTree.Abstract;
 using System;
 using System.Collections.Generic;
-using PasPasPas.Parsing.SyntaxTree.Standard;
 
 namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
@@ -161,7 +160,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <typeparam name="T">object type to declare</typeparam>
         /// <param name="constDeclaration"></param>
         /// <returns></returns>
-        public T Declare<T>(ConstDeclaration constDeclaration) where T : DeclaredSymbol, new() {
+        public T Declare<T>(ISyntaxPart constDeclaration) where T : DeclaredSymbol, new() {
             if (CurrentDefinitionScope.Count > 0) {
                 var scope = CurrentDefinitionScope.Peek();
                 T declaration = CreateNode<T>(scope, constDeclaration);

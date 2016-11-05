@@ -47,8 +47,8 @@
     <Compile Include="Parser\IParser.cs" />
     <Compile Include="SyntaxTree\Abstract\AbstractSyntaxPart.cs" />
     <Compile Include="SyntaxTree\Abstract\ArrayConstant.cs" />
-    <Compile Include="SyntaxTree\Abstract\ComparisonExpression.cs" />
-    <Compile Include="SyntaxTree\Abstract\ComparisonExpressionKind.cs" />
+    <Compile Include="SyntaxTree\Abstract\BinaryOperator.cs" />
+    <Compile Include="SyntaxTree\Abstract\ExpressionKind.cs" />
     <Compile Include="SyntaxTree\Abstract\CompilationUnit.cs" />
     <Compile Include="SyntaxTree\Abstract\CompilationUnitType.cs" />
     <Compile Include="SyntaxTree\Abstract\ConstantDeclaration.cs" />
@@ -59,7 +59,6 @@
     <Compile Include="SyntaxTree\Abstract\DeclaredSymbols.cs" />
     <Compile Include="SyntaxTree\Abstract\DeclaredType.cs" />
     <Compile Include="SyntaxTree\Abstract\ExpressionBase.cs" />
-    <Compile Include="SyntaxTree\Abstract\ExpressionOperand.cs" />
     <Compile Include="SyntaxTree\Abstract\IExpressionTarget.cs" />
     <Compile Include="SyntaxTree\Abstract\ISymbolTable.cs" />
     <Compile Include="SyntaxTree\Abstract\ISymbolTableEntry.cs" />
@@ -72,6 +71,7 @@
     <Compile Include="SyntaxTree\Abstract\SymbolName.cs" />
     <Compile Include="SyntaxTree\Abstract\SymbolTableBase.cs" />
     <Compile Include="SyntaxTree\Abstract\SymbolTableEntryBase.cs" />
+    <Compile Include="SyntaxTree\Abstract\UnaryOperator.cs" />
     <Compile Include="SyntaxTree\Abstract\UnitMode.cs" />
     <Compile Include="SyntaxTree\Abstract\RequiredUnitName.cs" />
     <Compile Include="SyntaxTree\Abstract\RequiredUnitNameList.cs" />
