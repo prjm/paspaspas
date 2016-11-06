@@ -8,9 +8,12 @@ using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 using PasPasPas.Parsing.Tokenizer;
 using System;
+using System.IO;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.ComponentModel;
 
 namespace P3SyntaxTreeViewer {
 
@@ -21,6 +24,14 @@ namespace P3SyntaxTreeViewer {
 
         public MainWindow() {
             InitializeComponent();
+
+            if (File.Exists(@"c:\temp\editor.pas"))
+                Code.Text = File.ReadAllText(@"c:\temp\editor.pas", Encoding.UTF8);
+        }
+
+        protected override void OnClosing(CancelEventArgs e) {
+            File.WriteAllText(@"c:\temp\editor.pas", Code.Text, Encoding.UTF8);
+            base.OnClosing(e);
         }
 
         /// <summary>

@@ -18,6 +18,8 @@ namespace PasPasPas.Parsing.Parser {
         public StandardParser(ParserServices environment) :
             base(environment, new StandardTokenizerWithLookahead(environment)) { }
 
+        #region Reserved Words
+
         private static readonly HashSet<int> reservedWords
             = new HashSet<int>() {
             TokenKind.And,
@@ -86,6 +88,9 @@ namespace PasPasPas.Parsing.Parser {
             TokenKind.Xor
             };
 
+        #endregion
+        #region Asm symbols
+
         private HashSet<string> lockPrefixes =
             new HashSet<string>(StringComparer.OrdinalIgnoreCase) {
                 "lock",
@@ -107,37 +112,15 @@ namespace PasPasPas.Parsing.Parser {
             new HashSet<string>(StringComparer.OrdinalIgnoreCase) {
                 "byte", "word", "dword", "qword", "tbyte" };
 
-
-        private bool MatchIdentifier(params int[] otherTokens)
-                    => LookAheadIdentifier(0, otherTokens, false);
-
-        private bool MatchIdentifier(bool allowReservedWords)
-            => LookAheadIdentifier(0, new int[0], allowReservedWords);
-
-        private bool LookAheadIdentifier(int lookAhead, int[] otherTokens, bool allowReservedWords) {
-            if (LookAhead(lookAhead, otherTokens))
-                return true;
-
-            if (LookAhead(lookAhead, TokenKind.Identifier))
-                return true;
-
-            var token = Tokenizer.LookAhead(lookAhead);
-
-            if (token == null)
-                return false;
-
-            if (!allowReservedWords && reservedWords.Contains(token.Kind))
-                return false;
-
-            return StandardTokenizer.Keywords.ContainsKey(token.Value);
-        }
-
+        #endregion
 
         /// <summary>
         ///     parse input
         /// </summary>
         public override ISyntaxPart Parse()
             => ParseFile(null);
+
+        #region ParseFile
 
         /// <summary>
         ///     parse a standard file
@@ -159,6 +142,9 @@ namespace PasPasPas.Parsing.Parser {
             return ParseProgram(parent);
         }
 
+        #endregion
+        #region ParseUnit
+
         [Rule("Unit", "UnitHead UnitInterface UnitImplementation UnitBlock '.' ")]
         private Unit ParseUnit(IExtendableSyntaxPart parent) {
             var result = CreateChild<Unit>(parent);
@@ -169,6 +155,24 @@ namespace PasPasPas.Parsing.Parser {
             ContinueWithOrMissing(result, TokenKind.Dot);
             return result;
         }
+
+        #endregion
+        #region ParseUnitInterface
+
+        [Rule("UnitInterface", "'interface' [ UsesClause ] InterfaceDeclaration ")]
+        private UnitInterface ParseUnitInterface(IExtendableSyntaxPart parent) {
+            var result = CreateByTerminal<UnitInterface>(parent, TokenKind.Interface);
+
+            if (Match(TokenKind.Uses)) {
+                result.UsesClause = ParseUsesClause(result);
+            }
+
+            result.InterfaceDeclaration = ParseInterfaceDeclaration(result);
+            return result;
+        }
+
+        #endregion
+        #region ParseUnitImplementation
 
         [Rule("UnitImplementation", "'implementation' [ UsesClause ] DeclarationSections", true)]
         private UnitImplementation ParseUnitImplementation(IExtendableSyntaxPart parent) {
@@ -182,6 +186,9 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
+        #endregion
+        #region ParseUsesClause
+
         [Rule("UsesClause", "'uses' NamespaceNameList")]
         private UsesClause ParseUsesClause(IExtendableSyntaxPart parent) {
             var result = CreateByTerminal<UsesClause>(parent, TokenKind.Uses);
@@ -189,17 +196,48 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
-        [Rule("UnitInterface", "'interface' [ UsesClause ] InterfaceDeclaration ")]
-        private UnitInterface ParseUnitInterface(IExtendableSyntaxPart parent) {
-            var result = CreateByTerminal<UnitInterface>(parent, TokenKind.Interface);
+        #endregion
+        #region ParseUsesFileClause
 
-            if (Match(TokenKind.Uses)) {
-                result.UsesClause = ParseUsesClause(result);
-            }
-
-            result.InterfaceDeclaration = ParseInterfaceDeclaration(result);
+        [Rule("UsesFileClause", "'uses' NamespaceFileNameList")]
+        private UsesFileClause ParseUsesFileClause(IExtendableSyntaxPart parent) {
+            var result = CreateByTerminal<UsesFileClause>(parent, TokenKind.Uses);
+            result.Files = ParseNamespaceFileNameList(result);
             return result;
         }
+
+        #endregion
+        #region ParseNamespaceFileNameList
+
+        [Rule("NamespaceFileNameList", "NamespaceFileName { ',' NamespaceFileName }")]
+        private NamespaceFileNameList ParseNamespaceFileNameList(IExtendableSyntaxPart parent) {
+            var result = CreateChild<NamespaceFileNameList>(parent);
+
+            do {
+                ParseNamespaceFileName(result);
+            } while (ContinueWith(result, TokenKind.Comma));
+
+            ContinueWithOrMissing(result, TokenKind.Semicolon);
+
+            return result;
+        }
+
+        #endregion
+        #region ParseNamespaceFileName
+
+        [Rule("NamespaceFileName", "NamespaceName [ 'in' QuotedString ]")]
+        private NamespaceFileName ParseNamespaceFileName(IExtendableSyntaxPart parent) {
+            var result = CreateChild<NamespaceFileName>(parent);
+
+            result.NamespaceName = ParseNamespaceName(result);
+            if (ContinueWith(result, TokenKind.In))
+                result.QuotedFileName = RequireString(result);
+
+            return result;
+        }
+
+        #endregion
+
 
         [Rule("InterfaceDeclarationItem", "ConstSection | TypeSection | VarSection | ExportsSection | AssemblyAttribute | ExportedProcedureHeading")]
         private SyntaxPartBase ParseInterfaceDeclarationItem(IExtendableSyntaxPart parent) {
@@ -758,6 +796,8 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
+        #region ParsePackage
+
         [Rule("Package", "PackageHead RequiresClause [ ContainsClause ] 'end' '.' ")]
         private Package ParsePackage(IExtendableSyntaxPart parent) {
             var result = CreateChild<Package>(parent);
@@ -774,6 +814,9 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
+        #endregion
+        #region ParseContainsClause
+
         [Rule("ContainsClause", "'contains' NamespaceFileNameList")]
         private PackageContains ParseContainsClause(IExtendableSyntaxPart parent) {
             var result = CreateByTerminal<PackageContains>(parent, TokenKind.Contains);
@@ -781,18 +824,8 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
-        [Rule("NamespaceFileNameList", "NamespaceFileName { ',' NamespaceFileName }")]
-        private NamespaceFileNameList ParseNamespaceFileNameList(IExtendableSyntaxPart parent) {
-            var result = CreateChild<NamespaceFileNameList>(parent);
-
-            do {
-                ParseNamespaceFileName(result);
-            } while (ContinueWith(result, TokenKind.Comma));
-
-            ContinueWithOrMissing(result, TokenKind.Semicolon);
-
-            return result;
-        }
+        #endregion
+        #region ParseRequiresClause
 
         [Rule("RequiresClause", "'requires' NamespaceNameList")]
         private PackageRequires ParseRequiresClause(IExtendableSyntaxPart parent) {
@@ -800,6 +833,8 @@ namespace PasPasPas.Parsing.Parser {
             result.RequiresList = ParseNamespaceNameList(result);
             return result;
         }
+
+        #endregion
 
         [Rule("NamespaceNameList", "NamespaceName { ',' NamespaceName } ';' ")]
         private NamespaceNameList ParseNamespaceNameList(IExtendableSyntaxPart parent) {
@@ -3244,24 +3279,6 @@ namespace PasPasPas.Parsing.Parser {
             return null;
         }
 
-        [Rule("UsesFileClause", "'uses' NamespaceFileNameList")]
-        private UsesFileClause ParseUsesFileClause(IExtendableSyntaxPart parent) {
-            var result = CreateByTerminal<UsesFileClause>(parent, TokenKind.Uses);
-            result.Files = ParseNamespaceFileNameList(result);
-            return result;
-        }
-
-        [Rule("NamespaceFileName", "NamespaceName [ 'in' QuotedString ]")]
-        private NamespaceFileName ParseNamespaceFileName(IExtendableSyntaxPart parent) {
-            var result = CreateChild<NamespaceFileName>(parent);
-
-            result.NamespaceName = ParseNamespaceName(result);
-            if (ContinueWith(result, TokenKind.In))
-                result.QuotedFileName = RequireString(result);
-
-            return result;
-        }
-
         private QuotedString RequireString(IExtendableSyntaxPart parent) {
             var result = CreateByTerminal<QuotedString>(parent, TokenKind.QuotedString);
             result.UnquotedValue = QuotedStringTokenValue.Unwrap(result.LastTerminalToken);
@@ -3293,6 +3310,31 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="result">Result</param>
         public static void PrintGrammar(StringBuilder result) {
             PrintGrammar(typeof(StandardParser), result);
+        }
+
+
+        private bool MatchIdentifier(params int[] otherTokens)
+                    => LookAheadIdentifier(0, otherTokens, false);
+
+        private bool MatchIdentifier(bool allowReservedWords)
+            => LookAheadIdentifier(0, new int[0], allowReservedWords);
+
+        private bool LookAheadIdentifier(int lookAhead, int[] otherTokens, bool allowReservedWords) {
+            if (LookAhead(lookAhead, otherTokens))
+                return true;
+
+            if (LookAhead(lookAhead, TokenKind.Identifier))
+                return true;
+
+            var token = Tokenizer.LookAhead(lookAhead);
+
+            if (token == null)
+                return false;
+
+            if (!allowReservedWords && reservedWords.Contains(token.Kind))
+                return false;
+
+            return StandardTokenizer.Keywords.ContainsKey(token.Value);
         }
 
 

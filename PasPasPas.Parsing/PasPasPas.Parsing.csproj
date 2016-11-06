@@ -75,6 +75,7 @@
     <Compile Include="SyntaxTree\Abstract\UnitMode.cs" />
     <Compile Include="SyntaxTree\Abstract\RequiredUnitName.cs" />
     <Compile Include="SyntaxTree\Abstract\RequiredUnitNameList.cs" />
+    <Compile Include="SyntaxTree\Abstract\VariableValue.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\IfDirective.cs" />
     <Compile Include="SyntaxTree\Standard\AsmBlock.cs" />
     <Compile Include="SyntaxTree\Standard\AsmFactor.cs" />

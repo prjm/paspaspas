@@ -21,5 +21,10 @@
         /// </summary>
         protected override string InternalSymbolName
             => Name?.CompleteName;
+
+        /// <summary>
+        ///     file name of to the unit
+        /// </summary>
+        public string FileName { get; set; }
     }
 }

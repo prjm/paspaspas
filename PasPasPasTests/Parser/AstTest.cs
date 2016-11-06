@@ -109,7 +109,39 @@ namespace PasPasPasTests.Parser {
 
             RunAstTest("unit z.x; interface implementation uses a, a; end.", t => u(t)?.Contains("a"), true,
                 StructuralErrors.RedeclaredUnitNameInUsesList);
+
+            RunAstTest("package z.x; requires x; contains a; end.", t => u(t)?.Contains("a"), true);
+            RunAstTest("package z.x; requires x; contains a; end.", t => u(t)?["a"].Mode, UnitMode.Requires);
+
+            RunAstTest("package z.x; requires x, x; end.", t => u(t)?.Contains("a"), true,
+                StructuralErrors.RedeclaredUnitNameInUsesList);
         }
+
+        [Fact]
+        public void TestUsesFileClause() {
+            Func<object, RequiredUnitNameList> u = t => (t as CompilationUnit)?.RequiredUnits;
+            RunAstTest("program z.x; uses a; begin end.", t => u(t)?.Contains("a"), true);
+            RunAstTest("program z.x; uses a; begin end.", t => u(t)?["a"].Mode, UnitMode.Program);
+            RunAstTest("program z.x; uses a in 'a\\a\\a.pas'; begin end.", t => u(t)?["a"].FileName, "a\\a\\a.pas");
+
+            RunAstTest("program z.x; uses a, a; begin end.", t => u(t)?.Contains("a"), true,
+                StructuralErrors.RedeclaredUnitNameInUsesList);
+
+            RunAstTest("library z.x; uses a; begin end.", t => u(t)?.Contains("a"), true);
+            RunAstTest("library z.x; uses a; begin end.", t => u(t)?["a"].Mode, UnitMode.Library);
+            RunAstTest("library z.x; uses a in 'a\\a\\a.pas'; begin end.", t => u(t)?["a"].FileName, "a\\a\\a.pas");
+
+            RunAstTest("library z.x; uses a, a; begin end.", t => u(t)?.Contains("a"), true,
+                StructuralErrors.RedeclaredUnitNameInUsesList);
+
+            RunAstTest("package z.x; requires x; contains a; end.", t => u(t)?.Contains("a"), true);
+            RunAstTest("package z.x; requires x; contains a; end.", t => u(t)?["a"].Mode, UnitMode.Contains);
+            RunAstTest("package z.x; requires x; contains a in 'a\\a\\a.pas'; end.", t => u(t)?["a"].FileName, "a\\a\\a.pas");
+
+            RunAstTest("package z.x; requires x; contains a, a; end.", t => u(t)?.Contains("a"), true,
+                StructuralErrors.RedeclaredUnitNameInUsesList);
+        }
+
 
         [Fact]
         public void TestConstDeclaration() {

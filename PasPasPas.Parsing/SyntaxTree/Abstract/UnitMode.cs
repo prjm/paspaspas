@@ -18,7 +18,26 @@
         /// <summary>
         ///     implementation
         /// </summary>
-        Implementation
+        Implementation,
 
+        /// <summary>
+        ///     package - requires
+        /// </summary>
+        Contains,
+
+        /// <summary>
+        ///     package - contains
+        /// </summary>
+        Requires,
+
+        /// <summary>
+        ///     program
+        /// </summary>
+        Program,
+
+        /// <summary>
+        ///     library
+        /// </summary>
+        Library
     }
 }
