@@ -138,10 +138,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             declaration.Hints = ExtractHints(constDeclaration, constDeclaration.Hint);
             parameter.CompleteDeclaration(declaration);
             parameter.BeginExpression(declaration);
+            parameter.BeginTypeSpecification(declaration);
         }
 
         private void EndVisitItem(ConstDeclaration constDeclaration, TreeTransformerOptions parameter) {
             parameter.EndExpression();
+            parameter.EndTypeSpecification();
         }
 
         #endregion
@@ -167,7 +169,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         #endregion
         #region RecordConstantExpression
-
 
         private void BeginVisitItem(RecordConstantExpression constExpression, TreeTransformerOptions parameter) {
             var expression = parameter.DefineExpressionValue<RecordConstantItem>(constExpression);
@@ -377,6 +378,55 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         private void EndVisitItem(PackageContains contains, TreeTransformerOptions parameter) {
             parameter.CurrentUnitMode = UnitMode.Unknown;
+        }
+
+        #endregion
+        #region StructType
+
+        private void BeginVisitItem(StructType structType, TreeTransformerOptions parameter) {
+            if (structType.Packed)
+                parameter.CurrentStructTypeMode = StructTypeMode.Packed;
+            else
+                parameter.CurrentStructTypeMode = StructTypeMode.Unpacked;
+        }
+
+        private void EndVisitItem(StructType factor, TreeTransformerOptions parameter) {
+            parameter.CurrentStructTypeMode = StructTypeMode.Undefined;
+        }
+
+        #endregion
+        #region ArrayType
+
+        private void BeginVisitItem(ArrayType array, TreeTransformerOptions parameter) {
+            var value = CreateLeafNode<ArrayTypeDeclaration>(parameter.LastTypeDeclaration, array);
+            value.PackedType = parameter.CurrentStructTypeMode == StructTypeMode.Packed;
+            parameter.BeginExpression(value);
+            parameter.DefineTypeValue(value);
+
+            if (array.ArrayOfConst) {
+                var metaType = parameter.DefineTypeValue<MetaType>(array);
+                metaType.Kind = MetaTypeKind.Const;
+            }
+        }
+
+        private void EndVisitItem(ArrayType array, TreeTransformerOptions parameter) {
+            parameter.EndExpression();
+        }
+
+        #endregion
+        #region ArrayIndex
+
+        private void BeginVisitItem(ArrayIndex arrayIndex, TreeTransformerOptions parameter) {
+            if (arrayIndex.EndIndex != null) {
+                var binOp = parameter.DefineExpressionValue<BinaryOperator>(arrayIndex);
+                binOp.Kind = ExpressionKind.RangeOperator;
+            }
+        }
+
+        private void EndVisitItem(ArrayIndex arrayIndex, TreeTransformerOptions parameter) {
+            if (arrayIndex.EndIndex != null) {
+                parameter.EndExpression();
+            }
         }
 
         #endregion

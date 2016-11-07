@@ -47,6 +47,7 @@
     <Compile Include="Parser\IParser.cs" />
     <Compile Include="SyntaxTree\Abstract\AbstractSyntaxPart.cs" />
     <Compile Include="SyntaxTree\Abstract\ArrayConstant.cs" />
+    <Compile Include="SyntaxTree\Abstract\ArrayTypeDeclaration.cs" />
     <Compile Include="SyntaxTree\Abstract\BinaryOperator.cs" />
     <Compile Include="SyntaxTree\Abstract\ExpressionKind.cs" />
     <Compile Include="SyntaxTree\Abstract\CompilationUnit.cs" />
@@ -63,14 +64,19 @@
     <Compile Include="SyntaxTree\Abstract\ISymbolTable.cs" />
     <Compile Include="SyntaxTree\Abstract\ISymbolTableEntry.cs" />
     <Compile Include="SyntaxTree\Abstract\ISymbolWithAttributes.cs" />
+    <Compile Include="SyntaxTree\Abstract\ITypeTarget.cs" />
+    <Compile Include="SyntaxTree\Abstract\MetaType.cs" />
     <Compile Include="SyntaxTree\Abstract\ProjectRoot.cs" />
     <Compile Include="SyntaxTree\Abstract\RecordConstant.cs" />
     <Compile Include="SyntaxTree\Abstract\RecordConstantItem.cs" />
+    <Compile Include="SyntaxTree\Abstract\StructTypeMode.cs" />
+    <Compile Include="SyntaxTree\Abstract\StructuredType.cs" />
     <Compile Include="SyntaxTree\Abstract\SymbolAttribute.cs" />
     <Compile Include="SyntaxTree\Abstract\SymbolHints.cs" />
     <Compile Include="SyntaxTree\Abstract\SymbolName.cs" />
     <Compile Include="SyntaxTree\Abstract\SymbolTableBase.cs" />
     <Compile Include="SyntaxTree\Abstract\SymbolTableEntryBase.cs" />
+    <Compile Include="SyntaxTree\Abstract\TypeSpecificationBase.cs" />
     <Compile Include="SyntaxTree\Abstract\UnaryOperator.cs" />
     <Compile Include="SyntaxTree\Abstract\UnitMode.cs" />
     <Compile Include="SyntaxTree\Abstract\RequiredUnitName.cs" />
@@ -366,7 +372,9 @@
       <Name>PasPasPas.Options</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Compile Include="SyntaxTree\Abstract\MetaTypeKind.cs" />
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

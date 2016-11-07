@@ -53,11 +53,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     current compilation unit
         /// </summary>
         public CompilationUnit CurrentUnit { get; set; }
+            = null;
 
         /// <summary>
         ///     current unit mode
         /// </summary>
         public UnitMode CurrentUnitMode { get; set; }
+            = UnitMode.Unknown;
 
         /// <summary>
         ///     current definition scope
@@ -76,6 +78,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         public Stack<IExpressionTarget> CurrentExpressionScope { get; }
             = new Stack<IExpressionTarget>();
 
+        /// <summary>
+        ///     current type specification scope
+        /// </summary>
+        public Stack<ITypeTarget> CurrentTypeSpecificationScope { get; }
+            = new Stack<ITypeTarget>();
 
         /// <summary>
         ///     last expression
@@ -93,6 +100,18 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         }
 
         /// <summary>
+        ///     struct type mode
+        /// </summary>
+        public StructTypeMode CurrentStructTypeMode { get; set; }
+            = StructTypeMode.Undefined;
+
+        /// <summary>
+        ///     last type declaration
+        /// </summary>
+        public ITypeTarget LastTypeDeclaration
+            => CurrentTypeSpecificationScope.Peek();
+
+        /// <summary>
         ///     remove an expected parameter from the stack
         /// </summary>
         /// <typeparam name="T"></typeparam>
@@ -104,21 +123,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             else
                 throw new InvalidOperationException();
 
-        }
-
-        /// <summary>
-        ///     pop the last element from the stack
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="stack"></param>
-        public void PopLastOrFail<T>(Stack<T> stack) {
-            if (stack.Count > 1) {
-                stack.Clear();
-                // error ?
-            }
-            else {
-                stack.Pop();
-            }
         }
 
         /// <summary>
@@ -155,6 +159,23 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         }
 
         /// <summary>
+        ///     define an expression value
+        /// </summary>
+        /// <param name="value"></param>
+        public void DefineTypeValue(TypeSpecificationBase value) {
+            if (CurrentTypeSpecificationScope.Count > 0) {
+                CurrentTypeSpecificationScope.Peek().TypeValue = value;
+                var target = value as ITypeTarget;
+                if (target != null) {
+                    CurrentTypeSpecificationScope.Push(target);
+                }
+            }
+            else {
+                // error ??
+            }
+        }
+
+        /// <summary>
         ///     declare an object
         /// </summary>
         /// <typeparam name="T">object type to declare</typeparam>
@@ -179,7 +200,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         }
 
         /// <summary>
-        ///     complaete a declaration
+        ///     complate a declaration
         /// </summary>
         /// <param name="declaration"></param>
         public void CompleteDeclaration(DeclaredSymbol declaration) {
@@ -189,6 +210,27 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             }
             else {
                 // error ??
+            }
+        }
+
+        /// <summary>
+        ///     end a type specification
+        /// </summary>
+        public void EndTypeSpecification() {
+            if (CurrentTypeSpecificationScope.Count > 0)
+                CurrentTypeSpecificationScope.Pop();
+        }
+
+        /// <summary>
+        ///     begin a type specification
+        /// </summary>
+        /// <param name="declaration">type declaraction</param>
+        public void BeginTypeSpecification(ITypeTarget declaration) {
+            if (CurrentTypeSpecificationScope.Count > 0) {
+                // error ?
+            }
+            else {
+                CurrentTypeSpecificationScope.Push(declaration);
             }
         }
 
@@ -220,7 +262,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     end expression definition
         /// </summary>
         public void EndExpression() {
-            PopLastOrFail(CurrentExpressionScope);
+            if (CurrentExpressionScope.Count > 0)
+                CurrentExpressionScope.Pop();
         }
 
         /// <summary>
@@ -229,11 +272,23 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <param name="declaration"></param>
         public void BeginExpression(IExpressionTarget declaration) {
             if (CurrentExpressionScope.Count > 0) {
-                // error ?
+                CurrentExpressionScope.Push(declaration);
             }
             else {
                 CurrentExpressionScope.Push(declaration);
             }
+        }
+
+        /// <summary>
+        ///     define a type value
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="parent"></param>
+        /// <returns></returns>
+        public T DefineTypeValue<T>(ISyntaxPart parent) where T : TypeSpecificationBase, new() {
+            var node = CreateNode<T>(LastTypeDeclaration, parent);
+            DefineTypeValue(node);
+            return node;
         }
     }
 }

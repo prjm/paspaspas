@@ -124,5 +124,10 @@
         ///     unary plus
         /// </summary>
         UnaryPlus = 23,
+
+        /// <summary>
+        ///     range operator
+        /// </summary>
+        RangeOperator = 24,
     }
 }

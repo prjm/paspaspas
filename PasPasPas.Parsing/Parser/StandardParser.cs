@@ -237,7 +237,22 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         #endregion
+        #region ParseInterfaceDeclaration
 
+        [Rule("InterfaceDeclaration", "{ InterfaceDeclarationItem }")]
+        private InterfaceDeclaration ParseInterfaceDeclaration(IExtendableSyntaxPart parent) {
+            var result = CreateChild<InterfaceDeclaration>(parent);
+            SyntaxPartBase item;
+
+            do {
+                item = ParseInterfaceDeclarationItem(result);
+            } while (item != null);
+
+            return result;
+        }
+
+        #endregion
+        #region ParseInterfaceDeclarationItem
 
         [Rule("InterfaceDeclarationItem", "ConstSection | TypeSection | VarSection | ExportsSection | AssemblyAttribute | ExportedProcedureHeading")]
         private SyntaxPartBase ParseInterfaceDeclarationItem(IExtendableSyntaxPart parent) {
@@ -269,17 +284,21 @@ namespace PasPasPas.Parsing.Parser {
             return null;
         }
 
-        [Rule("InterfaceDeclaration", "{ InterfaceDeclarationItem }")]
-        private InterfaceDeclaration ParseInterfaceDeclaration(IExtendableSyntaxPart parent) {
-            var result = CreateChild<InterfaceDeclaration>(parent);
-            SyntaxPartBase item;
+        #endregion
+        #region ParseConstSection
 
-            do {
-                item = ParseInterfaceDeclarationItem(result);
-            } while (item != null);
-
+        [Rule("ConstSection", "('const' | 'resourcestring') ConstDeclaration { ConstDeclaration }")]
+        private ConstSection ParseConstSection(IExtendableSyntaxPart parent, bool inClassDeclaration) {
+            var result = CreateByTerminal<ConstSection>(parent, TokenKind.Const, TokenKind.Resourcestring);
+            result.Kind = result.LastTerminalKind;
+            while ((!inClassDeclaration || !(Match(TokenKind.Private, TokenKind.Protected, TokenKind.Public, TokenKind.Published, TokenKind.Automated, TokenKind.Strict))) && MatchIdentifier(TokenKind.OpenBraces)) {
+                ParseConstDeclaration(result);
+            }
             return result;
         }
+
+        #endregion
+
 
         [Rule("ExportedProcedureHeading", "")]
         private ExportedProcedureHeading ParseExportedProcedureHeading(IExtendableSyntaxPart parent) {
@@ -1587,15 +1606,7 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
-        [Rule("ConstSection", "('const' | 'resourcestring') ConstDeclaration { ConstDeclaration }")]
-        private ConstSection ParseConstSection(IExtendableSyntaxPart parent, bool inClassDeclaration) {
-            var result = CreateByTerminal<ConstSection>(parent, TokenKind.Const, TokenKind.Resourcestring);
-            result.Kind = result.LastTerminalKind;
-            while ((!inClassDeclaration || !(Match(TokenKind.Private, TokenKind.Protected, TokenKind.Public, TokenKind.Published, TokenKind.Automated, TokenKind.Strict))) && MatchIdentifier(TokenKind.OpenBraces)) {
-                ParseConstDeclaration(result);
-            }
-            return result;
-        }
+        #region ParseConstDeclaration
 
         [Rule("ConstDeclaration", "[Attributes] Identifier [ ':' TypeSpecification ] = ConstantExpression Hints';'")]
         private ConstDeclaration ParseConstDeclaration(IExtendableSyntaxPart parent) {
@@ -1613,6 +1624,8 @@ namespace PasPasPas.Parsing.Parser {
             ContinueWithOrMissing(result, TokenKind.Semicolon);
             return result;
         }
+
+        #endregion
 
         [Rule("Hints", " { Hint ';' }")]
         private HintingInformationList ParseHints(IExtendableSyntaxPart parent) {
@@ -1849,6 +1862,7 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
+        #region ParseStructType
 
         [Rule("StructType", "[ 'packed' ] StructTypePart")]
         private StructType ParseStructType(IExtendableSyntaxPart parent) {
@@ -1857,6 +1871,9 @@ namespace PasPasPas.Parsing.Parser {
             result.Part = ParseStructTypePart(result);
             return result;
         }
+
+        #endregion
+        #region ParseStructTypePart
 
         [Rule("StructTypePart", "ArrayType | SetType | FileType | ClassDecl")]
         private StructTypePart ParseStructTypePart(IExtendableSyntaxPart parent) {
@@ -1884,6 +1901,8 @@ namespace PasPasPas.Parsing.Parser {
 
             return result;
         }
+
+        #endregion
 
         [Rule("ClassDeclaration", "ClassOfDeclaration | ClassDefinition | ClassHelper | InterfaceDef | ObjectDecl | RecordDecl | RecordHelperDecl ")]
         private ClassTypeDeclaration ParseClassDeclaration(IExtendableSyntaxPart parent) {
@@ -2821,6 +2840,8 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
+        #region ParseArrayType
+
         [Rule("ArrayType", " 'array' [ '[' ArrayIndex { ',' ArrayIndex } ']']  'of' ( 'const' | TypeDefinition ) ")]
         private ArrayType ParseArrayType(IExtendableSyntaxPart parent) {
             var result = CreateByTerminal<ArrayType>(parent, TokenKind.Array);
@@ -2845,6 +2866,8 @@ namespace PasPasPas.Parsing.Parser {
 
             return result;
         }
+
+        #endregion
 
         [Rule("ArrayIndex", "ConstantExpression [ '..' ConstantExpression ] ")]
         private ArrayIndex ParseArrayIndex(IExtendableSyntaxPart parent) {
