@@ -1,4 +1,6 @@
-﻿namespace PasPasPas.Parsing.SyntaxTree.Standard {
+﻿using PasPasPas.Parsing.SyntaxTree.Abstract;
+
+namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
     /// <summary>
     ///     type name / reference to a type
@@ -11,5 +13,34 @@
         public int StringType { get; set; }
             = TokenKind.Undefined;
 
+        /// <summary>
+        ///     named type
+        /// </summary>
+        public NamespaceName NamedType { get; set; }
+
+        /// <summary>
+        ///     map typ name kind
+        /// </summary>
+        /// <returns></returns>
+        public MetaTypeKind MapTypeKind() {
+            switch (StringType) {
+                case TokenKind.String:
+                    return MetaTypeKind.String;
+
+                case TokenKind.AnsiString:
+                    return MetaTypeKind.AnsiString;
+
+                case TokenKind.ShortString:
+                    return MetaTypeKind.ShortString;
+
+                case TokenKind.WideString:
+                    return MetaTypeKind.WideString;
+
+                case TokenKind.UnicodeString:
+                    return MetaTypeKind.UnicodeString;
+            }
+
+            return MetaTypeKind.NamedType;
+        }
     }
 }

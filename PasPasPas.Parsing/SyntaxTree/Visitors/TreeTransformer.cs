@@ -414,6 +414,46 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         }
 
         #endregion
+        #region SetDefinition
+
+        private void BeginVisitItem(SetDefinition set, TreeTransformerOptions parameter) {
+            var value = CreateLeafNode<SetTypeDeclaration>(parameter.LastTypeDeclaration, set);
+            value.PackedType = parameter.CurrentStructTypeMode == StructTypeMode.Packed;
+            parameter.DefineTypeValue(value);
+        }
+
+        #endregion
+        #region FileTypeDefinition
+
+        private void BeginVisitItem(FileType set, TreeTransformerOptions parameter) {
+            var value = CreateLeafNode<FileTypeDeclaration>(parameter.LastTypeDeclaration, set);
+            value.PackedType = parameter.CurrentStructTypeMode == StructTypeMode.Packed;
+            parameter.DefineTypeValue(value);
+        }
+
+        #endregion
+        #region ClassOf
+
+        private void BeginVisitItem(ClassOfDeclaration classOf, TreeTransformerOptions parameter) {
+            var value = CreateLeafNode<ClassOfTypeDeclaration>(parameter.LastTypeDeclaration, classOf);
+            value.PackedType = parameter.CurrentStructTypeMode == StructTypeMode.Packed;
+            parameter.DefineTypeValue(value);
+        }
+
+        #endregion
+        #region TypeName
+
+        private void BeginVisitItem(TypeName typeName, TreeTransformerOptions parameter) {
+            var value = CreateLeafNode<MetaType>(parameter.LastTypeDeclaration, typeName);
+            value.Kind = typeName.MapTypeKind();
+            value.Name = ExtractSymbolName(value, typeName.NamedType);
+            parameter.DefineTypeValue(value);
+        }
+
+
+
+        #endregion
+
         #region ArrayIndex
 
         private void BeginVisitItem(ArrayIndex arrayIndex, TreeTransformerOptions parameter) {

@@ -9,7 +9,13 @@
         ///     type kind
         /// </summary>
         public MetaTypeKind Kind { get; set; }
-        = MetaTypeKind.Undefined;
+            = MetaTypeKind.Undefined;
+
+        /// <summary>
+        ///     type name
+        /// </summary>
+        public SymbolName Name { get; set; }
+
 
     }
 }

@@ -113,6 +113,7 @@ namespace PasPasPas.Parsing.Parser {
                 "byte", "word", "dword", "qword", "tbyte" };
 
         #endregion
+        #region Parse
 
         /// <summary>
         ///     parse input
@@ -120,6 +121,7 @@ namespace PasPasPas.Parsing.Parser {
         public override ISyntaxPart Parse()
             => ParseFile(null);
 
+        #endregion
         #region ParseFile
 
         /// <summary>
@@ -298,7 +300,6 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         #endregion
-
 
         [Rule("ExportedProcedureHeading", "")]
         private ExportedProcedureHeading ParseExportedProcedureHeading(IExtendableSyntaxPart parent) {
@@ -1904,6 +1905,8 @@ namespace PasPasPas.Parsing.Parser {
 
         #endregion
 
+        #region ParseClassDeclaration
+
         [Rule("ClassDeclaration", "ClassOfDeclaration | ClassDefinition | ClassHelper | InterfaceDef | ObjectDecl | RecordDecl | RecordHelperDecl ")]
         private ClassTypeDeclaration ParseClassDeclaration(IExtendableSyntaxPart parent) {
             var result = CreateChild<ClassTypeDeclaration>(parent);
@@ -1946,6 +1949,8 @@ namespace PasPasPas.Parsing.Parser {
             Unexpected();
             return result;
         }
+
+        #endregion
 
         [Rule("RecordDecl", "'record' RecordFieldList (RecordVariantSection | RecordItems ) 'end' ")]
         private RecordDeclaration ParseRecordDecl(IExtendableSyntaxPart parent) {
@@ -2778,6 +2783,8 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
+        #region ParseClassOfDeclaration
+
         [Rule("ClassOfDeclaration", "'class' 'of' TypeName")]
         private ClassOfDeclaration ParseClassOfDeclaration(IExtendableSyntaxPart parent) {
             var result = CreateByTerminal<ClassOfDeclaration>(parent, TokenKind.Class);
@@ -2786,7 +2793,9 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
-        [Rule("TypeName", "'class' 'of' TypeName")]
+        #endregion
+
+        [Rule("TypeName", "'string' | 'ansistring' | 'shortstring' | 'unicodestring' | 'widestring' | (NamespaceName [ GenericSuffix ]) ")]
         private TypeName ParseTypeName(IExtendableSyntaxPart parent) {
             var result = CreateChild<TypeName>(parent);
 
@@ -2796,7 +2805,7 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             do {
-                ParseNamespaceName(result);
+                result.NamedType = ParseNamespaceName(result);
 
                 if (Match(TokenKind.AngleBracketsOpen) && LookAheadIdentifier(1, new[] { TokenKind.String, TokenKind.ShortString, TokenKind.WideString, TokenKind.UnicodeString, TokenKind.AnsiString, TokenKind.Pointer }, false)) {
                     var whereCloseBrackets = HasTokenUntilToken(new[] { TokenKind.AngleBracketsClose }, TokenKind.Identifier, TokenKind.Dot, TokenKind.Comma, TokenKind.AngleBracketsOpen, TokenKind.String, TokenKind.ShortString, TokenKind.WideString, TokenKind.UnicodeString, TokenKind.AnsiString, TokenKind.Pointer);
@@ -2809,6 +2818,8 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
+        #region ParseFileType
+
         [Rule("FileType", "'file' [ 'of' TypeSpecification ]")]
         private FileType ParseFileType(IExtendableSyntaxPart parent) {
             var result = CreateByTerminal<FileType>(parent, TokenKind.File);
@@ -2820,6 +2831,9 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
+        #endregion
+        #region SetDefinition
+
         [Rule("SetDef", "'set' 'of' TypeSpecification")]
         private SetDefinition ParseSetDefinition(IExtendableSyntaxPart parent) {
             var result = CreateByTerminal<SetDefinition>(parent, TokenKind.Set);
@@ -2827,6 +2841,8 @@ namespace PasPasPas.Parsing.Parser {
             result.TypeDefinition = ParseTypeSpecification(result);
             return result;
         }
+
+        #endregion
 
         [Rule("GenericSuffix", "'<' TypeDefinition { ',' TypeDefinition '}' '>'")]
         private GenericPostfix ParseGenericSuffix(IExtendableSyntaxPart parent) {
@@ -2868,6 +2884,7 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         #endregion
+        #region ParseArrayIndex
 
         [Rule("ArrayIndex", "ConstantExpression [ '..' ConstantExpression ] ")]
         private ArrayIndex ParseArrayIndex(IExtendableSyntaxPart parent) {
@@ -2879,6 +2896,8 @@ namespace PasPasPas.Parsing.Parser {
             }
             return result;
         }
+
+        #endregion
 
         [Rule("PointerType", "( 'pointer' | '^' TypeSpecification )")]
         private PointerType ParsePointerType(IExtendableSyntaxPart parent) {
