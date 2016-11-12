@@ -2589,6 +2589,8 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
+        #region ParseTypeDeclaration
+
         [Rule("TypeDeclaration", "[ Attributes ] GenericTypeIdent '=' TypeDeclaration Hints ';' ")]
         private TypeDeclaration ParseTypeDeclaration(IExtendableSyntaxPart parent) {
             var result = CreateChild<TypeDeclaration>(parent);
@@ -2601,6 +2603,9 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
+        #endregion
+        #region ParseGenericTypeIdent
+
         [Rule("GenericTypeIdent", "Ident [ GenericDefintion ] ")]
         private GenericTypeIdentifier ParseGenericTypeIdent(IExtendableSyntaxPart parent) {
             var result = CreateChild<GenericTypeIdentifier>(parent);
@@ -2610,6 +2615,8 @@ namespace PasPasPas.Parsing.Parser {
             }
             return result;
         }
+
+        #endregion
 
         [Rule("MethodResolution", "( 'function' | 'procedure' ) NamespaceName '=' Identifier ';' ")]
         private MethodResolution ParseMethodResolution(IExtendableSyntaxPart parent) {
@@ -2700,6 +2707,8 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
+        #region ParseGenericDefinition
+
         [Rule("GenericDefinition", "SimpleGenericDefinition | ConstrainedGenericDefinition")]
         private GenericDefinition ParseGenericDefinition(IExtendableSyntaxPart parent) {
             if (!LookAhead(2, TokenKind.Comma, TokenKind.AngleBracketsClose)) {
@@ -2708,6 +2717,9 @@ namespace PasPasPas.Parsing.Parser {
 
             return ParseSimpleGenericDefinition(parent);
         }
+
+        #endregion
+        #region SimpleGenericDefinition
 
         [Rule("SimpleGenericDefinition", "'<' Identifier { ',' Identifier } '>'")]
         private GenericDefinition ParseSimpleGenericDefinition(IExtendableSyntaxPart parent) {
@@ -2722,6 +2734,9 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
+        #endregion
+        #region ParseConstrainedGenericDefinition
+
         [Rule("ConstrainedGenericDefinition", "'<' GenericDefinitionPart { ';' GenericDefinitionPart } '>'")]
         private GenericDefinition ParseConstrainedGenericDefinition(IExtendableSyntaxPart parent) {
             var result = CreateByTerminal<GenericDefinition>(parent, TokenKind.AngleBracketsOpen);
@@ -2734,6 +2749,9 @@ namespace PasPasPas.Parsing.Parser {
             return result;
 
         }
+
+        #endregion
+        #region ParseGenericDefinitionPart
 
         [Rule("GenericDefinitionPart", "Identifier [ ':' GenericConstraint { ',' GenericConstraint } ]")]
         private GenericDefinitionPart ParseGenericDefinitionPart(IExtendableSyntaxPart parent) {
@@ -2748,6 +2766,9 @@ namespace PasPasPas.Parsing.Parser {
 
             return result;
         }
+
+        #endregion
+        #region ParseGenericConstraint
 
         [Rule("GenericConstraint", " 'record' | 'class' | 'constructor' | Identifier ")]
         private ConstrainedGeneric ParseGenericConstraint(IExtendableSyntaxPart parent) {
@@ -2768,6 +2789,8 @@ namespace PasPasPas.Parsing.Parser {
 
             return result;
         }
+
+        #endregion
 
         [Rule("ClassParent", " [ '(' TypeName { ',' TypeName } ')' ]")]
         private ParentClass ParseClassParent(IExtendableSyntaxPart parent) {

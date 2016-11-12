@@ -23,6 +23,7 @@ namespace PasPasPas.Parsing.SyntaxTree {
         ///     parent node
         /// </summary>
         ISyntaxPart Parent { get; set; }
+
     }
 
 

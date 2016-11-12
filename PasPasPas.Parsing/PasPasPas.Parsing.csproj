@@ -62,6 +62,10 @@
     <Compile Include="SyntaxTree\Abstract\DeclaredType.cs" />
     <Compile Include="SyntaxTree\Abstract\ExpressionBase.cs" />
     <Compile Include="SyntaxTree\Abstract\FileTypeDeclaration.cs" />
+    <Compile Include="SyntaxTree\Abstract\GenericConstraint.cs" />
+    <Compile Include="SyntaxTree\Abstract\GenericConstraintKind.cs" />
+    <Compile Include="SyntaxTree\Abstract\GenericType.cs" />
+    <Compile Include="SyntaxTree\Abstract\GenericTypes.cs" />
     <Compile Include="SyntaxTree\Abstract\IExpressionTarget.cs" />
     <Compile Include="SyntaxTree\Abstract\ISymbolTable.cs" />
     <Compile Include="SyntaxTree\Abstract\ISymbolTableEntry.cs" />
@@ -79,6 +83,7 @@
     <Compile Include="SyntaxTree\Abstract\SymbolName.cs" />
     <Compile Include="SyntaxTree\Abstract\SymbolTableBase.cs" />
     <Compile Include="SyntaxTree\Abstract\SymbolTableEntryBase.cs" />
+    <Compile Include="SyntaxTree\Abstract\TypeDeclaration.cs" />
     <Compile Include="SyntaxTree\Abstract\TypeSpecificationBase.cs" />
     <Compile Include="SyntaxTree\Abstract\UnaryOperator.cs" />
     <Compile Include="SyntaxTree\Abstract\UnitMode.cs" />

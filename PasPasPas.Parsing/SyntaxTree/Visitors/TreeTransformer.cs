@@ -128,6 +128,34 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         }
 
         #endregion
+        #region TypeSection
+
+        private void BeginVisitItem(TypeSection constSection, TreeTransformerOptions parameter) {
+            parameter.CurrentDeclarationMode = DeclarationMode.Types;
+        }
+
+        private void EndVisitItem(TypeSection constSection, TreeTransformerOptions parameter) {
+            parameter.CurrentDeclarationMode = DeclarationMode.Unknown;
+        }
+
+        #endregion
+        #region TypeDeclaration
+
+        private void BeginVisitItem(Standard.TypeDeclaration typeDeclaration, TreeTransformerOptions parameter) {
+            var declaration = parameter.Declare<Abstract.TypeDeclaration>(typeDeclaration);
+            declaration.Name = ExtractSymbolName(declaration, typeDeclaration.TypeId?.Identifier);
+            declaration.Generics = ExtractGenericDefinition(declaration, typeDeclaration.TypeId?.GenericDefinition, parameter);
+            declaration.Attributes = ExtractAttributes(declaration, typeDeclaration.Attributes, parameter.CurrentUnit);
+            declaration.Hints = ExtractHints(typeDeclaration, typeDeclaration.Hint);
+            parameter.CompleteDeclaration(declaration);
+            parameter.BeginTypeSpecification(declaration);
+        }
+
+        private void EndVisitItem(Standard.TypeDeclaration typeDeclaration, TreeTransformerOptions parameter) {
+            parameter.EndTypeSpecification();
+        }
+
+        #endregion
         #region ConstDeclaration
 
         private void BeginVisitItem(ConstDeclaration constDeclaration, TreeTransformerOptions parameter) {
@@ -482,7 +510,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         private static SymbolName ExtractSymbolName(object parent, Identifier name) {
             var result = CreateLeafNode<SymbolName>(parent, name);
-            result.Name = name.FirstTerminalToken.Value;
+            result.Name = name.FirstTerminalToken?.Value;
             return result;
         }
 
@@ -493,12 +521,47 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             return result;
         }
 
-        /// <summary>
-        ///     extract symbol hints
-        /// </summary>
-        /// <param name="parent"></param>
-        /// <param name="hints"></param>
-        /// <returns></returns>
+        private GenericTypes ExtractGenericDefinition(object parent, GenericDefinition genericDefinition, TreeTransformerOptions parameter) {
+            var result = CreateLeafNode<GenericTypes>(parent, genericDefinition);
+
+            if (genericDefinition == null)
+                return result;
+
+            foreach (var part in genericDefinition.Parts) {
+                var idPart = part as Identifier;
+
+                if (idPart != null) {
+                    var generic = CreateLeafNode<GenericType>(result, part);
+                    generic.Name = ExtractSymbolName(genericDefinition, idPart);
+                    result.Add(generic, parameter.LogSource);
+                    continue;
+                }
+
+                var genericPart = part as GenericDefinitionPart;
+
+                if (genericPart != null) {
+                    var generic = CreateLeafNode<GenericType>(result, part);
+                    generic.Name = ExtractSymbolName(genericDefinition, genericPart.Identifier);
+                    result.Add(generic, parameter.LogSource);
+
+                    foreach (var constraintPart in genericPart.Parts) {
+                        var constraint = constraintPart as Standard.ConstrainedGeneric;
+                        if (constraint != null) {
+                            var cr = CreateLeafNode<GenericConstraint>(generic, constraint);
+                            cr.Kind = constraint.MapKind();
+                            cr.Name = ExtractSymbolName(cr, constraint.ConstraintIdentifier);
+                            generic.Add(cr, parameter.LogSource);
+                        }
+                    }
+
+                    continue;
+                }
+            }
+
+
+            return result;
+        }
+
         private static SymbolHints ExtractHints(object parent, HintingInformationList hints) {
             var result = CreateLeafNode<SymbolHints>(parent, hints);
 

@@ -18,7 +18,11 @@
         /// <summary>
         ///     resource strings
         /// </summary>
-        ResourceString = 2
+        ResourceString = 2,
 
+        /// <summary>
+        ///     type section
+        /// </summary>
+        Types = 3
     }
 }
