@@ -194,5 +194,17 @@ namespace PasPasPasTests.Parser {
             RunAstTest("unit z.x; interface const x : class of TFuzz = nil; implementation end.", t => (u(t)?.TypeValue as MetaType)?.Name?.CompleteName, "TFuzz");
         }
 
+        [Fact]
+        public void TestEnumType() {
+            Func<object, EnumType> u = t => (((t as CompilationUnit)?.InterfaceSymbols["x"]) as TypeDeclaration)?.TypeValue as EnumType;
+
+            RunAstTest("unit z.x; interface type x = (a, b); implementation end.", t => u(t)?.Contains("a"), true);
+            RunAstTest("unit z.x; interface type x = (a, b); implementation end.", t => u(t)?["a"].Name.CompleteName, "a");
+
+            RunAstTest("unit z.x; interface type x = (a, b, a); implementation end.", t => u(t)?["a"].Name.CompleteName, "a",
+                StructuralErrors.RedeclaredEnumName);
+
+        }
+
     }
 }

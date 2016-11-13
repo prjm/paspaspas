@@ -1,7 +1,4 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Abstract;
-using System;
-
-namespace PasPasPas.Parsing.SyntaxTree.Standard {
+﻿namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
     /// <summary>
     ///     generic constraint
@@ -28,21 +25,5 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// </summary>
         public bool RecordConstraint { get; set; }
 
-        /// <summary>
-        ///     map a constraint kind
-        /// </summary>
-        /// <returns></returns>
-        public GenericConstraintKind MapKind() {
-            if (RecordConstraint)
-                return GenericConstraintKind.Record;
-            else if (ClassConstraint)
-                return GenericConstraintKind.Class;
-            else if (ConstructorConstraint)
-                return GenericConstraintKind.Constructor;
-            else if (ConstraintIdentifier != null)
-                return GenericConstraintKind.Identifier;
-            else
-                return GenericConstraintKind.Unknown;
-        }
     }
 }

@@ -1671,6 +1671,8 @@ namespace PasPasPas.Parsing.Parser {
             return null;
         }
 
+        #region ParseTypeSpecification
+
         [Rule("TypeSpecification", "StructType | PointerType | StringType | ProcedureType | SimpleType ")]
         private TypeSpecification ParseTypeSpecification(IExtendableSyntaxPart parent) {
             var result = CreateChild<TypeSpecification>(parent);
@@ -1705,6 +1707,9 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
+        #endregion
+        #region ParseSimpleType
+
         [Rule("SimpleType", "EnumType | (ConstExpression [ '..' ConstExpression ]) | ([ 'type' ] NamespaceName [ GenericPostix ])")]
         private SimpleType ParseSimpleType(IExtendableSyntaxPart parent) {
             var result = CreateChild<SimpleType>(parent);
@@ -1737,6 +1742,9 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
+        #endregion
+        #region EnumType
+
         [Rule("EnumType", "'(' EnumTypeValue { ',' EnumTypeValue } ')'")]
         private EnumTypeDefinition ParseEnumType(IExtendableSyntaxPart parent) {
             var result = CreateByTerminal<EnumTypeDefinition>(parent, TokenKind.OpenParen);
@@ -1748,6 +1756,8 @@ namespace PasPasPas.Parsing.Parser {
             ContinueWithOrMissing(result, TokenKind.CloseParen);
             return result;
         }
+
+        #endregion
 
         [Rule("EnumTypeValue", "Identifier [ '=' Expression ]")]
         private EnumValue ParseEnumTypeValue(IExtendableSyntaxPart parent) {

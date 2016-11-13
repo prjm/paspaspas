@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace PasPasPas.Parsing.SyntaxTree.Abstract {
+﻿namespace PasPasPas.Parsing.SyntaxTree.Abstract {
 
     /// <summary>
     ///     generic type

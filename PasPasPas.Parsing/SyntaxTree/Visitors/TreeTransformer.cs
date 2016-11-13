@@ -478,7 +478,35 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             parameter.DefineTypeValue(value);
         }
 
+        #endregion
+        #region EnumTypeDefinition
 
+        private void BeginVisitItem(EnumTypeDefinition type, TreeTransformerOptions parameter) {
+            var value = CreateLeafNode<EnumType>(parameter.LastTypeDeclaration, type);
+            parameter.DefineTypeValue(value);
+        }
+
+
+        #endregion
+        #region EnumTypeDefinition
+
+        private void BeginVisitItem(EnumValue enumValue, TreeTransformerOptions parameter) {
+            var enumDeclaration = parameter.LastTypeDeclaration.TypeValue as EnumType;
+            if (enumDeclaration != null) {
+                var value = CreateLeafNode<EnumTypeValue>(enumDeclaration, enumValue);
+                value.Name = ExtractSymbolName(value, enumValue.EnumName);
+                enumDeclaration.Add(value, parameter.LogSource);
+                if (enumValue.Value != null) {
+                    parameter.BeginExpression(value);
+                }
+            }
+        }
+
+        private void EndVisitItem(EnumValue enumValue, TreeTransformerOptions parameter) {
+            if (enumValue.Value != null) {
+                parameter.CompleteExpression();
+            }
+        }
 
         #endregion
 
@@ -548,7 +576,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                         var constraint = constraintPart as Standard.ConstrainedGeneric;
                         if (constraint != null) {
                             var cr = CreateLeafNode<GenericConstraint>(generic, constraint);
-                            cr.Kind = constraint.MapKind();
+                            cr.Kind = GenericConstraint.MapKind(constraint);
                             cr.Name = ExtractSymbolName(cr, constraint.ConstraintIdentifier);
                             generic.Add(cr, parameter.LogSource);
                         }

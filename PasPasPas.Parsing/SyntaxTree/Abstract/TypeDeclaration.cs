@@ -15,7 +15,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     declare type
         /// </summary>
-        public TypeSpecificationBase TypeValue { get; set; }
+        public ITypeSpecification TypeValue { get; set; }
 
         /// <summary>
         ///     symbol hints

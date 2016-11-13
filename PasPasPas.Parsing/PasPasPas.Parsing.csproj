@@ -50,6 +50,7 @@
     <Compile Include="SyntaxTree\Abstract\ArrayTypeDeclaration.cs" />
     <Compile Include="SyntaxTree\Abstract\BinaryOperator.cs" />
     <Compile Include="SyntaxTree\Abstract\ClassOfTypeDeclaration.cs" />
+    <Compile Include="SyntaxTree\Abstract\EnumTypeValue.cs" />
     <Compile Include="SyntaxTree\Abstract\ExpressionKind.cs" />
     <Compile Include="SyntaxTree\Abstract\CompilationUnit.cs" />
     <Compile Include="SyntaxTree\Abstract\CompilationUnitType.cs" />
@@ -70,12 +71,14 @@
     <Compile Include="SyntaxTree\Abstract\ISymbolTable.cs" />
     <Compile Include="SyntaxTree\Abstract\ISymbolTableEntry.cs" />
     <Compile Include="SyntaxTree\Abstract\ISymbolWithAttributes.cs" />
+    <Compile Include="SyntaxTree\Abstract\ITypeSpecification.cs" />
     <Compile Include="SyntaxTree\Abstract\ITypeTarget.cs" />
     <Compile Include="SyntaxTree\Abstract\MetaType.cs" />
     <Compile Include="SyntaxTree\Abstract\ProjectRoot.cs" />
     <Compile Include="SyntaxTree\Abstract\RecordConstant.cs" />
     <Compile Include="SyntaxTree\Abstract\RecordConstantItem.cs" />
     <Compile Include="SyntaxTree\Abstract\SetTypeDeclaration.cs" />
+    <Compile Include="SyntaxTree\Abstract\EnumType.cs" />
     <Compile Include="SyntaxTree\Abstract\StructTypeMode.cs" />
     <Compile Include="SyntaxTree\Abstract\StructuredType.cs" />
     <Compile Include="SyntaxTree\Abstract\SymbolAttribute.cs" />

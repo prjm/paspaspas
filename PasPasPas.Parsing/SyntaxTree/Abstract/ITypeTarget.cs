@@ -8,7 +8,7 @@
         /// <summary>
         ///     value of this type specification target
         /// </summary>
-        TypeSpecificationBase TypeValue { get; set; }
+        ITypeSpecification TypeValue { get; set; }
 
     }
 }

@@ -54,7 +54,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     array type
         /// </summary>
-        public TypeSpecificationBase TypeValue { get; set; }
+        public ITypeSpecification TypeValue { get; set; }
 
     }
 }

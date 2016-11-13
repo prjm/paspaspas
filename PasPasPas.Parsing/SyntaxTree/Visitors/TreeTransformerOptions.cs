@@ -162,7 +162,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     define an expression value
         /// </summary>
         /// <param name="value"></param>
-        public void DefineTypeValue(TypeSpecificationBase value) {
+        public void DefineTypeValue(ITypeSpecification value) {
             if (CurrentTypeSpecificationScope.Count > 0) {
                 CurrentTypeSpecificationScope.Peek().TypeValue = value;
                 var target = value as ITypeTarget;
@@ -290,5 +290,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             DefineTypeValue(node);
             return node;
         }
+
     }
 }
