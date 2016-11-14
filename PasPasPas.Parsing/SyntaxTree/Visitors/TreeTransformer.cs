@@ -479,6 +479,19 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         }
 
         #endregion
+        #region SimpleType
+
+        private void BeginVisitItem(SimpleType simpleType, TreeTransformerOptions parameter) {
+            if (simpleType.SubrangeStart != null) {
+                /*parameter.BeginExpression(value);
+                if (simpleType.SubrangeEnd != null)
+                var value = CreateLeafNode<BinaryOperator>(parameter.LastTypeDeclaration, simpleType);
+                value.Kind = ExpressionKind.RangeOperator;*/
+            }
+        }
+
+        #endregion
+
         #region EnumTypeDefinition
 
         private void BeginVisitItem(EnumTypeDefinition type, TreeTransformerOptions parameter) {
@@ -509,7 +522,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         }
 
         #endregion
-
         #region ArrayIndex
 
         private void BeginVisitItem(ArrayIndex arrayIndex, TreeTransformerOptions parameter) {

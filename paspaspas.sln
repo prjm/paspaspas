@@ -33,6 +33,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParserRunner", "ParserRunne
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "P3SyntaxTreeViewer", "P3SyntaxTreeViewer\P3SyntaxTreeViewer.csproj", "{B3649E9A-4BCC-437B-B233-D4C71A175E66}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PasPasPas.Typings", "PasPasPas.Typings\PasPasPas.Typings.csproj", "{E22933E4-0571-4997-93DD-AAE65FF517F7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -71,6 +73,10 @@ Global
 		{B3649E9A-4BCC-437B-B233-D4C71A175E66}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B3649E9A-4BCC-437B-B233-D4C71A175E66}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B3649E9A-4BCC-437B-B233-D4C71A175E66}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E22933E4-0571-4997-93DD-AAE65FF517F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E22933E4-0571-4997-93DD-AAE65FF517F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E22933E4-0571-4997-93DD-AAE65FF517F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E22933E4-0571-4997-93DD-AAE65FF517F7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -84,5 +90,6 @@ Global
 		{EEB2B9DC-E131-46CF-AAC3-6AB662D67DBE} = {AC53D98C-87A1-42D9-859E-4182316C25AB}
 		{804E4A76-D32D-49C3-B8DD-9EB999933E00} = {F28AC463-2553-4704-AE77-B9A356E953BC}
 		{B3649E9A-4BCC-437B-B233-D4C71A175E66} = {F28AC463-2553-4704-AE77-B9A356E953BC}
+		{E22933E4-0571-4997-93DD-AAE65FF517F7} = {AC53D98C-87A1-42D9-859E-4182316C25AB}
 	EndGlobalSection
 EndGlobal

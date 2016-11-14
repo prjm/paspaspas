@@ -35,3 +35,6 @@
 /PasPasPas.Parsing/Parser/*.TMP
 /P3SyntaxTreeViewer/bin/Debug
 /P3SyntaxTreeViewer/obj/Debug
+/PasPasPas.Typings/project.lock.json
+/PasPasPas.Typings/bin
+/PasPasPas.Typings/obj

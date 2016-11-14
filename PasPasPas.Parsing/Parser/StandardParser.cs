@@ -1758,6 +1758,7 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         #endregion
+        #region ParseEnumTypeValue
 
         [Rule("EnumTypeValue", "Identifier [ '=' Expression ]")]
         private EnumValue ParseEnumTypeValue(IExtendableSyntaxPart parent) {
@@ -1769,6 +1770,8 @@ namespace PasPasPas.Parsing.Parser {
             }
             return result;
         }
+
+        #endregion
 
         [Rule("ProcedureType", "(ProcedureRefType [ 'of' 'object' ] ( | ProcedureReference")]
         private ProcedureType ParseProcedureType(IExtendableSyntaxPart parent) {

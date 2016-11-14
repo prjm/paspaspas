@@ -1,0 +1,20 @@
+﻿{
+  "supports": {
+    "net46.app": {},
+    "uwp.10.0.app": {}
+  },
+  "dependencies": {
+    "Microsoft.AnalyzerPowerPack": "1.1.0",
+    "Microsoft.CodeAnalysis.FxCopAnalyzers": "1.1.0",
+    "Microsoft.NETCore": "5.0.0",
+    "Microsoft.NETCore.Portable.Compatibility": "1.0.0",
+    "System.Collections.Specialized": "4.0.0",
+    "System.Runtime.Analyzers": "1.1.0",
+    "System.Runtime.InteropServices.Analyzers": "1.1.0"
+  },
+  "frameworks": {
+    "dotnet": {
+      "imports": "portable-net452+win81"
+    }
+  }
+}
