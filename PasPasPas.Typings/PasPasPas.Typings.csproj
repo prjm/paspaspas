@@ -42,9 +42,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TypeSystem\ClassType.cs" />
     <Compile Include="TypeSystem\DefinedType.cs" />
     <Compile Include="TypeSystem\IDefinedType.cs" />
+    <Compile Include="TypeSystem\NumericType.cs" />
     <Compile Include="TypeSystem\OrdinalType.cs" />
+    <Compile Include="TypeSystem\ProceduralType.cs" />
+    <Compile Include="TypeSystem\RealType.cs" />
+    <Compile Include="TypeSystem\RecordType.cs" />
+    <Compile Include="TypeSystem\ReferenceType.cs" />
+    <Compile Include="TypeSystem\SubrangeType.cs" />
     <Compile Include="TypeSystem\ValueType.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />

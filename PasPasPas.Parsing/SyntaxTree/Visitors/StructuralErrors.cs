@@ -46,5 +46,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /* {9644962e-cb9c-4435-9e09-8f546ffcabc6} */
 
 
+        /// <summary>
+        ///     invalid type of construct
+        /// </summary>
+        public static readonly Guid UnsupportedTypeOfConstruct
+            = new Guid(new byte[] { 0x94, 0xc4, 0xb9, 0xeb, 0xcb, 0x1c, 0xc, 0x4e, 0xb7, 0x21, 0x51, 0xd9, 0x37, 0xf3, 0xd2, 0xe3 });
+        /* {ebb9c494-1ccb-4e0c-b721-51d937f3d2e3} */
+
     }
 }

@@ -483,10 +483,44 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         private void BeginVisitItem(SimpleType simpleType, TreeTransformerOptions parameter) {
             if (simpleType.SubrangeStart != null) {
-                /*parameter.BeginExpression(value);
-                if (simpleType.SubrangeEnd != null)
-                var value = CreateLeafNode<BinaryOperator>(parameter.LastTypeDeclaration, simpleType);
-                value.Kind = ExpressionKind.RangeOperator;*/
+                var value = CreateLeafNode<SubrangeType>(parameter.LastTypeDeclaration, simpleType);
+                parameter.BeginExpression(value);
+                parameter.DefineTypeValue(value);
+            }
+
+            else {
+                var value = CreateLeafNode<TypeAlias>(parameter.LastTypeDeclaration, simpleType);
+                value.AliasedName = CreateLeafNode<GenericName>(value, simpleType);
+                value.IsNewType = simpleType.NewType;
+
+                if (simpleType.TypeOf)
+                    parameter.LogSource.Warning(StructuralErrors.UnsupportedTypeOfConstruct, simpleType);
+
+                parameter.DefineTypeValue(value);
+            }
+        }
+
+        private void BeginVisitChildItem(SimpleType simpleType, TreeTransformerOptions parameter, ISyntaxPart part) {
+            var name = part as NamespaceName;
+            if (name == null)
+                return;
+            var value = parameter.LastTypeDeclaration as TypeAlias;
+            var fragment = CreateLeafNode<GenericNameFragment>(value, name);
+            fragment.Name = ExtractSymbolName(fragment, name);
+            value.AliasedName.AddFragment(fragment);
+            parameter.BeginTypeSpecification(fragment);
+        }
+
+        private void EndVisitChildItem(SimpleType simpleType, TreeTransformerOptions parameter, ISyntaxPart part) {
+            var name = part as NamespaceName;
+            if (name == null)
+                return;
+            parameter.EndTypeSpecification();
+        }
+
+        private void EndVisitItem(SimpleType simpleType, TreeTransformerOptions parameter) {
+            if (simpleType.SubrangeStart != null) {
+                parameter.CompleteExpression();
             }
         }
 
@@ -501,7 +535,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
 
         #endregion
-        #region EnumTypeDefinition
+        #region EnumValue
 
         private void BeginVisitItem(EnumValue enumValue, TreeTransformerOptions parameter) {
             var enumDeclaration = parameter.LastTypeDeclaration.TypeValue as EnumType;
@@ -689,7 +723,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <param name="child"></param>
         public override void BeginVisitChild(ISyntaxPart parent, TreeTransformerOptions visitorParameter, ISyntaxPart child) {
             dynamic part = parent;
-            BeginVisitChildItem(part, visitorParameter, child); ;
+            BeginVisitChildItem(part, visitorParameter, child);
         }
 
         /// <summary>

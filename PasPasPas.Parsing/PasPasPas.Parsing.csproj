@@ -65,6 +65,7 @@
     <Compile Include="SyntaxTree\Abstract\FileTypeDeclaration.cs" />
     <Compile Include="SyntaxTree\Abstract\GenericConstraint.cs" />
     <Compile Include="SyntaxTree\Abstract\GenericConstraintKind.cs" />
+    <Compile Include="SyntaxTree\Abstract\GenericNameFragment.cs" />
     <Compile Include="SyntaxTree\Abstract\GenericType.cs" />
     <Compile Include="SyntaxTree\Abstract\GenericTypes.cs" />
     <Compile Include="SyntaxTree\Abstract\IExpressionTarget.cs" />
@@ -81,11 +82,13 @@
     <Compile Include="SyntaxTree\Abstract\EnumType.cs" />
     <Compile Include="SyntaxTree\Abstract\StructTypeMode.cs" />
     <Compile Include="SyntaxTree\Abstract\StructuredType.cs" />
+    <Compile Include="SyntaxTree\Abstract\SubrangeType.cs" />
     <Compile Include="SyntaxTree\Abstract\SymbolAttribute.cs" />
     <Compile Include="SyntaxTree\Abstract\SymbolHints.cs" />
     <Compile Include="SyntaxTree\Abstract\SymbolName.cs" />
     <Compile Include="SyntaxTree\Abstract\SymbolTableBase.cs" />
     <Compile Include="SyntaxTree\Abstract\SymbolTableEntryBase.cs" />
+    <Compile Include="SyntaxTree\Abstract\TypeAlias.cs" />
     <Compile Include="SyntaxTree\Abstract\TypeDeclaration.cs" />
     <Compile Include="SyntaxTree\Abstract\TypeSpecificationBase.cs" />
     <Compile Include="SyntaxTree\Abstract\UnaryOperator.cs" />
@@ -93,6 +96,7 @@
     <Compile Include="SyntaxTree\Abstract\RequiredUnitName.cs" />
     <Compile Include="SyntaxTree\Abstract\RequiredUnitNameList.cs" />
     <Compile Include="SyntaxTree\Abstract\VariableValue.cs" />
+    <Compile Include="SyntaxTree\Abstract\GenericName.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\IfDirective.cs" />
     <Compile Include="SyntaxTree\Standard\AsmBlock.cs" />
     <Compile Include="SyntaxTree\Standard\AsmFactor.cs" />

@@ -1,9 +1,9 @@
 ﻿namespace PasPasPas.Typings.TypeSystem {
 
     /// <summary>
-    ///     ordinal types
+    ///     reference type
     /// </summary>
-    public class OrdinalType : NumericType {
+    public class ReferenceType : DefinedType {
 
     }
 }

@@ -206,5 +206,13 @@ namespace PasPasPasTests.Parser {
 
         }
 
+        [Fact]
+        public void TestSubrangeType() {
+            Func<object, SubrangeType> u = t => (((t as CompilationUnit)?.InterfaceSymbols["x"]) as TypeDeclaration)?.TypeValue as SubrangeType;
+
+            RunAstTest("unit z.x; interface type x = 3..4; implementation end.", t => u(t) != null, true);
+
+        }
+
     }
 }

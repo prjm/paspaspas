@@ -1,9 +1,9 @@
 ﻿namespace PasPasPas.Typings.TypeSystem {
 
     /// <summary>
-    ///     ordinal types
+    ///     numeric type
     /// </summary>
-    public class OrdinalType : NumericType {
+    public class NumericType : ValueType {
 
     }
 }
