@@ -15,7 +15,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     symbol type
         /// </summary>
-        public ITypeSpecification TypeValue { get; set; }
+        public IList<ITypeSpecification> TypeValues { get; }
+            = new List<ITypeSpecification>();
 
         /// <summary>
         ///     children
@@ -24,8 +25,27 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         {
             get
             {
-                if (TypeValue != null)
-                    yield return TypeValue;
+                foreach (var value in TypeValues)
+                    yield return value;
+            }
+        }
+
+        /// <summary>
+        ///     type value
+        /// </summary>
+        public ITypeSpecification TypeValue
+        {
+            get
+            {
+                if (TypeValues.Count > 0)
+                    return TypeValues[TypeValues.Count - 1];
+                else
+                    return null;
+            }
+
+            set
+            {
+                TypeValues.Add(value);
             }
         }
     }

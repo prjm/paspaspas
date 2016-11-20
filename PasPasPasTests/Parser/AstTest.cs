@@ -214,5 +214,22 @@ namespace PasPasPasTests.Parser {
 
         }
 
+        [Fact]
+        public void TestTypeAlias() {
+            Func<object, TypeAlias> u = t => (((t as CompilationUnit)?.InterfaceSymbols["x"]) as TypeDeclaration)?.TypeValue as TypeAlias;
+
+            RunAstTest("unit z.x; interface type x = z.q; implementation end.", t => u(t)?.Fragments[0].Name.CompleteName, "z.q");
+            RunAstTest("unit z.x; interface type x = z.q; implementation end.", t => u(t)?.IsNewType, false);
+            RunAstTest("unit z.x; interface type x = type z.q; implementation end.", t => u(t)?.Fragments[0].Name.CompleteName, "z.q");
+            RunAstTest("unit z.x; interface type x = type z.q; implementation end.", t => u(t)?.IsNewType, true);
+
+            RunAstTest("unit z.x; interface type x = type z<r>.q; implementation end.", t => u(t)?.Fragments[0]?.TypeValue is TypeAlias, true);
+            //RunAstTest("unit z.x; interface type x = type z<r,array of const>.q<t>; implementation end.", t => u(t)?.Fragments[0]?.TypeValue is TypeAlias, false);
+            RunAstTest("unit z.x; interface type x = type z<r>.q<t>; implementation end.", t => u(t)?.Fragments[1]?.TypeValue is TypeAlias, true);
+
+            RunAstTest("unit z.x; interface type x = type of z.q; implementation end.", t => u(t)?.IsNewType, true,
+                StructuralErrors.UnsupportedTypeOfConstruct);
+        }
+
     }
 }

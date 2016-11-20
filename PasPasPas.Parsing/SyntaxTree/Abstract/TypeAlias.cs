@@ -7,10 +7,23 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// </summary>
     public class TypeAlias : TypeSpecificationBase {
 
+        private IList<GenericNameFragment> fragments
+                = new List<GenericNameFragment>();
+
+
         /// <summary>
-        ///     aliased type name
+        ///     name fragements
         /// </summary>
-        public GenericName AliasedName { get; set; }
+        public IList<GenericNameFragment> Fragments
+            => fragments;
+
+        /// <summary>
+        ///     add a afragment
+        /// </summary>
+        /// <param name="fragment"></param>
+        public void AddFragment(GenericNameFragment fragment) {
+            fragments.Add(fragment);
+        }
 
         /// <summary>
         ///     <c>true</c> if the aliased type is considered as new type
@@ -24,8 +37,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         {
             get
             {
-                if (AliasedName != null)
-                    yield return AliasedName;
+                foreach (var fragment in fragments)
+                    yield return fragment;
             }
         }
     }

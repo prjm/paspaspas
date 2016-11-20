@@ -109,7 +109,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     last type declaration
         /// </summary>
         public ITypeTarget LastTypeDeclaration
-            => CurrentTypeSpecificationScope.Peek();
+        {
+            get
+            {
+                if (CurrentTypeSpecificationScope.Count < 1) return null;
+                return CurrentTypeSpecificationScope.Peek();
+            }
+        }
 
         /// <summary>
         ///     remove an expected parameter from the stack
@@ -226,12 +232,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// </summary>
         /// <param name="declaration">type declaraction</param>
         public void BeginTypeSpecification(ITypeTarget declaration) {
-            if (CurrentTypeSpecificationScope.Count > 0) {
-                // error ?
-            }
-            else {
-                CurrentTypeSpecificationScope.Push(declaration);
-            }
+            CurrentTypeSpecificationScope.Push(declaration);
         }
 
         /// <summary>

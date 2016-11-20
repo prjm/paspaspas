@@ -239,7 +239,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             }
         }
 
-        #endregion
+        #endregion       
         #region Term
 
         private void BeginVisitItem(Term term, TreeTransformerOptions parameter) {
@@ -490,7 +490,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
             else {
                 var value = CreateLeafNode<TypeAlias>(parameter.LastTypeDeclaration, simpleType);
-                value.AliasedName = CreateLeafNode<GenericName>(value, simpleType);
                 value.IsNewType = simpleType.NewType;
 
                 if (simpleType.TypeOf)
@@ -501,19 +500,22 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         }
 
         private void BeginVisitChildItem(SimpleType simpleType, TreeTransformerOptions parameter, ISyntaxPart part) {
-            var name = part as NamespaceName;
-            if (name == null)
+            var name = part as GenericNamespaceName;
+            var value = parameter.LastTypeDeclaration?.TypeValue as TypeAlias;
+
+            if (name == null || value == null)
                 return;
-            var value = parameter.LastTypeDeclaration as TypeAlias;
+
             var fragment = CreateLeafNode<GenericNameFragment>(value, name);
-            fragment.Name = ExtractSymbolName(fragment, name);
-            value.AliasedName.AddFragment(fragment);
-            parameter.BeginTypeSpecification(fragment);
+            fragment.Name = ExtractSymbolName(fragment, name.Name);
+            value.AddFragment(fragment);
+            if (name.GenericPart != null)
+                parameter.BeginTypeSpecification(fragment);
         }
 
         private void EndVisitChildItem(SimpleType simpleType, TreeTransformerOptions parameter, ISyntaxPart part) {
-            var name = part as NamespaceName;
-            if (name == null)
+            var name = part as GenericNamespaceName;
+            if (name == null || name.GenericPart == null)
                 return;
             parameter.EndTypeSpecification();
         }
@@ -525,7 +527,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         }
 
         #endregion
-
         #region EnumTypeDefinition
 
         private void BeginVisitItem(EnumTypeDefinition type, TreeTransformerOptions parameter) {

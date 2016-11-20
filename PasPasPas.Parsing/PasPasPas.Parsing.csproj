@@ -96,7 +96,6 @@
     <Compile Include="SyntaxTree\Abstract\RequiredUnitName.cs" />
     <Compile Include="SyntaxTree\Abstract\RequiredUnitNameList.cs" />
     <Compile Include="SyntaxTree\Abstract\VariableValue.cs" />
-    <Compile Include="SyntaxTree\Abstract\GenericName.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\IfDirective.cs" />
     <Compile Include="SyntaxTree\Standard\AsmBlock.cs" />
     <Compile Include="SyntaxTree\Standard\AsmFactor.cs" />
@@ -108,6 +107,7 @@
     <Compile Include="SyntaxTree\Standard\AsmStatement.cs" />
     <Compile Include="SyntaxTree\Standard\AsmExpression.cs" />
     <Compile Include="SyntaxTree\Standard\AsmTerm.cs" />
+    <Compile Include="SyntaxTree\Standard\GenericNamespaceName.cs" />
     <Compile Include="SyntaxTree\Standard\LocalAsmLabel.cs" />
     <Compile Include="SyntaxTree\Standard\Parameter.cs" />
     <Compile Include="SyntaxTree\Standard\TypeName.cs" />

@@ -1627,6 +1627,7 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         #endregion
+        #region ParseHints
 
         [Rule("Hints", " { Hint ';' }")]
         private HintingInformationList ParseHints(IExtendableSyntaxPart parent) {
@@ -1641,6 +1642,8 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
+        #endregion
+        #region ParseHint
         [Rule("Hint", " ('deprecated' [QuotedString] | 'experimental' | 'platform' | 'library' ) ")]
         private HintingInformation ParseHint(IExtendableSyntaxPart parent) {
             var result = CreateChild<HintingInformation>(parent);
@@ -1671,6 +1674,7 @@ namespace PasPasPas.Parsing.Parser {
             return null;
         }
 
+        #endregion
         #region ParseTypeSpecification
 
         [Rule("TypeSpecification", "StructType | PointerType | StringType | ProcedureType | SimpleType ")]
@@ -1710,7 +1714,7 @@ namespace PasPasPas.Parsing.Parser {
         #endregion
         #region ParseSimpleType
 
-        [Rule("SimpleType", "EnumType | (ConstExpression [ '..' ConstExpression ]) | ([ 'type' ] NamespaceName [ GenericPostix ])")]
+        [Rule("SimpleType", "EnumType | (ConstExpression [ '..' ConstExpression ]) | ([ 'type' ] GenericNamespaceName {'.' GenericNamespaceName })")]
         private SimpleType ParseSimpleType(IExtendableSyntaxPart parent) {
             var result = CreateChild<SimpleType>(parent);
 
@@ -1726,10 +1730,7 @@ namespace PasPasPas.Parsing.Parser {
 
             if (result.NewType || (MatchIdentifier(TokenKind.ShortString, TokenKind.String, TokenKind.WideString, TokenKind.UnicodeString, TokenKind.AnsiString) && (!LookAhead(1, TokenKind.DotDot)))) {
                 do {
-                    ParseNamespaceName(result);
-                    if (Match(TokenKind.AngleBracketsOpen)) {
-                        ParseGenericSuffix(result);
-                    }
+                    ParseGenericNamespaceName(result);
                 } while (ContinueWith(result, TokenKind.Dot));
                 return result;
             }
@@ -1739,6 +1740,19 @@ namespace PasPasPas.Parsing.Parser {
                 result.SubrangeEnd = ParseConstantExpression(result);
             }
 
+            return result;
+        }
+
+        #endregion
+        #region GenericNamespaceName
+
+        [Rule("GenericNamespaceName", "NamespaceName [ GenericPostfix ]")]
+        private GenericNamespaceName ParseGenericNamespaceName(IExtendableSyntaxPart parent) {
+            var result = CreateChild<GenericNamespaceName>(parent);
+            result.Name = ParseNamespaceName(result);
+            if (Match(TokenKind.AngleBracketsOpen)) {
+                result.GenericPart = ParseGenericSuffix(result);
+            }
             return result;
         }
 
