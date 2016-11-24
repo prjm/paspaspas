@@ -44,6 +44,11 @@
         ///     named type
         /// </summary>
         NamedType = 7,
+
+        /// <summary>
+        ///     generic pointer type
+        /// </summary>
+        Pointer = 8,
     }
 
 

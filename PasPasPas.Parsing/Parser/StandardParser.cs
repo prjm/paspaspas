@@ -2948,6 +2948,7 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         #endregion
+        #region ParsePointerType
 
         [Rule("PointerType", "( 'pointer' | '^' TypeSpecification )")]
         private PointerType ParsePointerType(IExtendableSyntaxPart parent) {
@@ -2962,6 +2963,8 @@ namespace PasPasPas.Parsing.Parser {
             result.TypeSpecification = ParseTypeSpecification(result);
             return result;
         }
+
+        #endregion
 
         [Rule("Attributes", "{ '[' Attribute | AssemblyAttribue ']' }")]
         private UserAttributes ParseAttributes(IExtendableSyntaxPart parent) {

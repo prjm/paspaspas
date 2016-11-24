@@ -573,6 +573,26 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         }
 
         #endregion
+        #region PointerType
+
+        private void BeginVisitItem(PointerType pointer, TreeTransformerOptions parameter) {
+            if (pointer.GenericPointer) {
+                var result = CreateLeafNode<MetaType>(parameter.CurrentTypeSpecificationScope, pointer);
+                result.Kind = MetaTypeKind.Pointer;
+                parameter.DefineTypeValue(result);
+            }
+            else {
+                var result = CreateLeafNode<PointerToType>(parameter.CurrentTypeSpecificationScope, pointer);
+                parameter.DefineTypeValue(result);
+            }
+        }
+
+        private void EndVisitItem(PointerType pointer, TreeTransformerOptions parameter) {
+            if (!pointer.GenericPointer)
+                parameter.EndTypeSpecification();
+        }
+
+        #endregion
 
         #region Extractors
 

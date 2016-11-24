@@ -111,9 +111,9 @@ namespace PasPasPasTests.Parser {
                 StructuralErrors.RedeclaredUnitNameInUsesList);
 
             RunAstTest("package z.x; requires x; contains a; end.", t => u(t)?.Contains("a"), true);
-            RunAstTest("package z.x; requires x; contains a; end.", t => u(t)?["a"].Mode, UnitMode.Requires);
+            RunAstTest("package z.x; requires x; contains a; end.", t => u(t)?["a"].Mode, UnitMode.Contains);
 
-            RunAstTest("package z.x; requires x, x; end.", t => u(t)?.Contains("a"), true,
+            RunAstTest("package z.x; requires x, x; end.", t => u(t)?.Contains("x"), true,
                 StructuralErrors.RedeclaredUnitNameInUsesList);
         }
 
@@ -173,10 +173,19 @@ namespace PasPasPasTests.Parser {
         }
 
         [Fact]
-        public void TestSetType() {
+        public void TestSetOfType() {
             Func<object, SetTypeDeclaration> u = t => (((t as CompilationUnit)?.InterfaceSymbols["x"]) as ConstantDeclaration)?.TypeValue as SetTypeDeclaration;
 
-            RunAstTest("unit z.x; interface const x : class of array of const = nil; implementation end.", t => ((u(t)?.TypeValue as ArrayTypeDeclaration)?.TypeValue as MetaType)?.Kind, MetaTypeKind.Const);
+            RunAstTest("unit z.x; interface const x : set of array of const = nil; implementation end.", t => ((u(t)?.TypeValue as ArrayTypeDeclaration)?.TypeValue as MetaType)?.Kind, MetaTypeKind.Const);
+        }
+
+        [Fact]
+        public void TestPointerToType() {
+            Func<object, PointerToType> u = t => (((t as CompilationUnit)?.InterfaceSymbols["x"]) as TypeDeclaration)?.TypeValue as PointerToType;
+            Func<object, TypeDeclaration> v = t => ((t as CompilationUnit)?.InterfaceSymbols["x"]) as TypeDeclaration;
+
+            RunAstTest("unit z.x; interface type x = ^Pointer; implementation end.", t => (u(t)?.TypeValue as MetaType)?.Kind, MetaTypeKind.Pointer);
+            RunAstTest("unit z.x; interface type x = Pointer; implementation end.", t => (v(t)?.TypeValue as MetaType)?.Kind, MetaTypeKind.Pointer);
         }
 
         [Fact]
@@ -224,7 +233,8 @@ namespace PasPasPasTests.Parser {
             RunAstTest("unit z.x; interface type x = type z.q; implementation end.", t => u(t)?.IsNewType, true);
 
             RunAstTest("unit z.x; interface type x = type z<r>.q; implementation end.", t => u(t)?.Fragments[0]?.TypeValue is TypeAlias, true);
-            //RunAstTest("unit z.x; interface type x = type z<r,array of const>.q<t>; implementation end.", t => u(t)?.Fragments[0]?.TypeValue is TypeAlias, false);
+
+            RunAstTest("unit z.x; interface type x = type z<r,array of const>.q<t>; implementation end.", t => u(t)?.Fragments[0]?.TypeValue is TypeAlias, false);
             RunAstTest("unit z.x; interface type x = type z<r>.q<t>; implementation end.", t => u(t)?.Fragments[1]?.TypeValue is TypeAlias, true);
 
             RunAstTest("unit z.x; interface type x = type of z.q; implementation end.", t => u(t)?.IsNewType, true,
