@@ -142,7 +142,6 @@ namespace PasPasPasTests.Parser {
                 StructuralErrors.RedeclaredUnitNameInUsesList);
         }
 
-
         [Fact]
         public void TestConstDeclaration() {
             Func<object, ConstantDeclaration> u = t => ((t as CompilationUnit)?.InterfaceSymbols["x"]) as ConstantDeclaration;
@@ -221,6 +220,20 @@ namespace PasPasPasTests.Parser {
 
             RunAstTest("unit z.x; interface type x = 3..4; implementation end.", t => u(t) != null, true);
 
+        }
+
+        [Fact]
+        public void TestStringType() {
+            Func<object, MetaType> u = t => (((t as CompilationUnit)?.InterfaceSymbols["x"]) as TypeDeclaration)?.TypeValue as MetaType;
+
+            RunAstTest("unit z.x; interface type x = string; implementation end.", t => u(t)?.Kind, MetaTypeKind.String);
+            RunAstTest("unit z.x; interface type x = ShortString; implementation end.", t => u(t)?.Kind, MetaTypeKind.ShortString);
+            RunAstTest("unit z.x; interface type x = Ansistring; implementation end.", t => u(t)?.Kind, MetaTypeKind.AnsiString);
+            RunAstTest("unit z.x; interface type x = uniCodeString; implementation end.", t => u(t)?.Kind, MetaTypeKind.UnicodeString);
+            RunAstTest("unit z.x; interface type x = wideString; implementation end.", t => u(t)?.Kind, MetaTypeKind.WideString);
+
+            RunAstTest("unit z.x; interface type x = string[nil]; implementation end.", t => (u(t)?.Value as ConstantValue)?.Kind, ConstantValueKind.Nil);
+            RunAstTest("unit z.x; interface type x = ansistring(nil); implementation end.", t => (u(t)?.Value as ConstantValue)?.Kind, ConstantValueKind.Nil);
         }
 
         [Fact]

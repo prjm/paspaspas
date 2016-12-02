@@ -75,7 +75,10 @@
     <Compile Include="SyntaxTree\Abstract\ITypeSpecification.cs" />
     <Compile Include="SyntaxTree\Abstract\ITypeTarget.cs" />
     <Compile Include="SyntaxTree\Abstract\MetaType.cs" />
+    <Compile Include="SyntaxTree\Abstract\ParameterDefinition.cs" />
     <Compile Include="SyntaxTree\Abstract\PointerToType.cs" />
+    <Compile Include="SyntaxTree\Abstract\ProceduralType.cs" />
+    <Compile Include="SyntaxTree\Abstract\ProcedureKind.cs" />
     <Compile Include="SyntaxTree\Abstract\ProjectRoot.cs" />
     <Compile Include="SyntaxTree\Abstract\RecordConstant.cs" />
     <Compile Include="SyntaxTree\Abstract\RecordConstantItem.cs" />

@@ -1819,6 +1819,8 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
+        #region ParseProcedureRefType
+
         [Rule("ProcedureTypeDefinition", "('function' | 'procedure') [ '(' FormalParameters ')' ] [ ':' TypeSpecification ] [ 'of' 'object']")]
         private ProcedureTypeDefinition ParseProcedureRefType(IExtendableSyntaxPart parent) {
             var result = CreateByTerminal<ProcedureTypeDefinition>(parent, TokenKind.Function, TokenKind.Procedure);
@@ -1837,6 +1839,9 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
+        #endregion
+        #region FormalParameterSecion
+
         [Rule("FormalParameterSection", "'(' [ FormalParameters ] ')'")]
         private FormalParameterSection ParseFormalParameterSection(IExtendableSyntaxPart parent) {
             var result = CreateByTerminal<FormalParameterSection>(parent, TokenKind.OpenParen);
@@ -1848,6 +1853,9 @@ namespace PasPasPas.Parsing.Parser {
             ContinueWithOrMissing(result, TokenKind.CloseParen);
             return result;
         }
+
+        #endregion
+        #region ParseStringType
 
         [Rule("StringType", "ShortString | WideString | UnicodeString |('string' [ '[' Expression ']'  ]) | ('AnsiString' '(' ConstExpression ')') ")]
         private StringType ParseStringType(IExtendableSyntaxPart parent) {
@@ -1890,6 +1898,7 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
+        #endregion
         #region ParseStructType
 
         [Rule("StructType", "[ 'packed' ] StructTypePart")]
@@ -2681,6 +2690,8 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
+        #region FormalParameters
+
         [Rule("FormalParameters", "FormalParameter { ';' FormalParameter }")]
         private FormalParameters ParseFormalParameters(IExtendableSyntaxPart parent) {
             var result = CreateChild<FormalParameters>(parent);
@@ -2691,6 +2702,9 @@ namespace PasPasPas.Parsing.Parser {
 
             return result;
         }
+
+        #endregion
+        #region FormalParameter
 
         [Rule("FormalParameter", "[Attributes] [( 'const' | 'var' | 'out' )] [Attributes] IdentList [ ':' TypeDeclaration ] [ '=' Expression ]")]
         private FormalParameter ParseFormalParameter(IExtendableSyntaxPart parent) {
@@ -2720,6 +2734,8 @@ namespace PasPasPas.Parsing.Parser {
 
             return result;
         }
+
+        #endregion
 
         [Rule("IdentList", "Identifiert { ',' Identifier }")]
         private IdentifierList ParseIdentList(IExtendableSyntaxPart parent, bool allowAttributes) {

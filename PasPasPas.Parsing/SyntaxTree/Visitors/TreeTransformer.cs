@@ -593,7 +593,52 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         }
 
         #endregion
+        #region StringType
 
+        private void BeginVisitItem(StringType stringType, TreeTransformerOptions parameter) {
+            var result = CreateLeafNode<MetaType>(parameter.CurrentTypeSpecificationScope, stringType);
+            result.Kind = MetaType.ConvertKind(stringType.Kind);
+            parameter.DefineTypeValue(result);
+
+            if (stringType.CodePage != null || stringType.StringLength != null) {
+                parameter.BeginExpression(result);
+            }
+        }
+
+        private void EndVisitItem(StringType stringType, TreeTransformerOptions parameter) {
+            if (stringType.CodePage != null || stringType.StringLength != null) {
+                parameter.EndExpression();
+            }
+        }
+
+
+        #endregion
+        #region ProcedureTypeDefinition
+
+        private void BeginVisitItem(ProcedureTypeDefinition proceduralType, TreeTransformerOptions parameter) {
+            var result = CreateLeafNode<ProceduralType>(parameter.CurrentTypeSpecificationScope, proceduralType);
+            result.Kind = ProceduralType.MapKind(proceduralType.Kind);
+
+            if (proceduralType.ReturnTypeAttributes != null)
+                result.ReturnAttributes = ExtractAttributes(result, proceduralType.ReturnTypeAttributes, parameter.CurrentUnit);
+        }
+
+        private void EndVisitItem(ProcedureTypeDefinition proceduralType, TreeTransformerOptions parameter) {
+        }
+
+        #endregion
+        #region FormalParameter
+
+        private void BeginVisitItem(FormalParameter formalParameter, TreeTransformerOptions parameter) {
+
+        }
+
+        private void EndVisitItem(FormalParameter formalParameter, TreeTransformerOptions parameter) {
+
+        }
+
+
+        #endregion
         #region Extractors
 
         private static SymbolName ExtractSymbolName(object parent, NamespaceName name) {

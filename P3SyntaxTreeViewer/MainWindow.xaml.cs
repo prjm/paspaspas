@@ -14,6 +14,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.ComponentModel;
+using System.Collections.Generic;
+using System.Resources;
 
 namespace P3SyntaxTreeViewer {
 
@@ -50,15 +52,36 @@ namespace P3SyntaxTreeViewer {
                 var cst = Parse(env, code);
                 var visitor = new TreeTransformer();
                 var options = new TreeTransformerOptions() { LogManager = (LogManager)env.Log };
+                var listLog = new ListLogTarget();
+                env.Log.RegisterTarget(listLog);
 
                 cst.Accept(visitor, options);
 
                 Dispatcher.Invoke(() => {
                     DisplayTree(StandardTreeView, cst);
                     DisplayTree(AbstractTreeView, options.Project);
+                    DisplayLog(listLog.Messages);
                 });
             });
             task.Start();
+        }
+
+        private void DisplayLog(IList<ILogMessage> messages) {
+            Messages.Items.Clear();
+
+            foreach (var logentry in messages) {
+                var block = new TextBlock();
+                var key = "m_" + logentry.MessageID.ToString("n");
+                var m = key;
+                var r = P3SyntaxTreeViewer.Messages.ResourceManager.GetString(key);
+                if (r != null)
+                    block.Text = r.ToString();
+                else
+                    block.Text = key;
+                var item = new ListBoxItem();
+                item.Content = block;
+                Messages.Items.Add(item);
+            }
         }
 
         private void DisplayTree(TreeView tv, ISyntaxPart cst) {
