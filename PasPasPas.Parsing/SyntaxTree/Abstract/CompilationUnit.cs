@@ -63,10 +63,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
                     yield return attribute;
                 foreach (var unit in RequiredUnits)
                     yield return unit;
-                foreach (var unit in InterfaceSymbols)
-                    yield return unit;
-                foreach (var unit in ImplementationSymbols)
-                    yield return unit;
+                yield return InterfaceSymbols;
+                yield return ImplementationSymbols;
             }
         }
 

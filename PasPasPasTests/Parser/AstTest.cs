@@ -163,12 +163,13 @@ namespace PasPasPasTests.Parser {
         public void TestArrayType() {
             Func<object, ArrayTypeDeclaration> u = t => (((t as CompilationUnit)?.InterfaceSymbols["x"]) as ConstantDeclaration)?.TypeValue as ArrayTypeDeclaration;
 
+            RunAstTest("unit z.x; interface const x : array of const = nil; implementation end.", t => u(t) != null, true);
             RunAstTest("unit z.x; interface const x : array of const = nil; implementation end.", t => (u(t)?.TypeValue as MetaType)?.Kind, MetaTypeKind.Const);
             RunAstTest("unit z.x; interface const x : array of const = nil; implementation end.", t => u(t)?.PackedType, false);
             RunAstTest("unit z.x; interface const x : packed array of const = nil; implementation end.", t => u(t)?.PackedType, true);
             RunAstTest("unit z.x; interface const x : array [5] of const = nil; implementation end.", t => u(t)?.IndexItems.Count, 1);
             RunAstTest("unit z.x; interface const x : array [5, 5] of cost = nil; implementation end.", t => u(t)?.IndexItems.Count, 2);
-            RunAstTest("unit z.x; interface const x : array [5..5, 5] of const = nil; implementation end.", t => (u(t)?.IndexItems[0] as BinaryOperator).Kind, ExpressionKind.RangeOperator);
+            RunAstTest("unit z.x; interface const x : array [5..5, 5] of const = nil; implementation end.", t => (u(t)?.IndexItems[0] as BinaryOperator)?.Kind, ExpressionKind.RangeOperator);
         }
 
         [Fact]

@@ -6,6 +6,45 @@ using System.Collections.Generic;
 namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
     /// <summary>
+    ///     stack entry
+    /// </summary>
+    public class WorkingStackEntry {
+        private ISyntaxPart child;
+        private ISyntaxPart parent;
+        private AbstractSyntaxPart visitResult;
+
+        /// <summary>
+        ///     create a new entry
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="child"></param>
+        /// <param name="visitResult"></param>
+        public WorkingStackEntry(ISyntaxPart parent, ISyntaxPart child, AbstractSyntaxPart visitResult) {
+            this.parent = parent;
+            this.child = child;
+            this.visitResult = visitResult;
+        }
+
+        /// <summary>
+        ///     data
+        /// </summary>
+        public AbstractSyntaxPart Data
+            => visitResult;
+
+        /// <summary>
+        ///     defining node
+        /// </summary>
+        public ISyntaxPart DefiningNode
+            => parent;
+
+        /// <summary>
+        ///     defining child node
+        /// </summary>
+        public ISyntaxPart ChildNode
+             => child;
+    }
+
+    /// <summary>
     ///     options to transform a concrete syntax tree to an abstract one
     /// </summary>
     public class TreeTransformerOptions {
@@ -62,27 +101,15 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             = UnitMode.Unknown;
 
         /// <summary>
-        ///     current definition scope
+        ///     working stack for tree transformations
         /// </summary>
-        public Stack<DeclaredSymbols> CurrentDefinitionScope { get; }
-            = new Stack<DeclaredSymbols>();
+        public Stack<WorkingStackEntry> WorkingStack { get; }
+            = new Stack<WorkingStackEntry>();
 
         /// <summary>
         ///     const declaration mode
         /// </summary>
         public DeclarationMode CurrentDeclarationMode { get; internal set; }
-
-        /// <summary>
-        ///     current expression scope
-        /// </summary>
-        public Stack<IExpressionTarget> CurrentExpressionScope { get; }
-            = new Stack<IExpressionTarget>();
-
-        /// <summary>
-        ///     current type specification scope
-        /// </summary>
-        public Stack<ITypeTarget> CurrentTypeSpecificationScope { get; }
-            = new Stack<ITypeTarget>();
 
         /// <summary>
         ///     last expression
@@ -91,8 +118,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         {
             get
             {
-                if (CurrentExpressionScope.Count > 0)
-                    return CurrentExpressionScope.Peek();
+                if (WorkingStack.Count > 0)
+                    return WorkingStack.Peek().Data as IExpressionTarget;
                 else
                     return null;
 
@@ -112,39 +139,25 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         {
             get
             {
-                if (CurrentTypeSpecificationScope.Count < 1) return null;
-                return CurrentTypeSpecificationScope.Peek();
+                if (WorkingStack.Count > 0)
+                    return WorkingStack.Peek().Data as ITypeTarget;
+                else
+                    return null;
             }
         }
 
         /// <summary>
-        ///     remove an expected parameter from the stack
+        ///     last value from the working stack
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="stack"></param>
-        /// <param name="expected"></param>
-        public void PopOrFail<T>(Stack<T> stack, T expected) {
-            if (EqualityComparer<T>.Default.Equals(stack.Peek(), expected))
-                stack.Pop();
-            else
-                throw new InvalidOperationException();
-
-        }
-
-        /// <summary>
-        ///     stop declaring symbols
-        /// </summary>
-        /// <param name="symbolsToDeclare">symbol list</param>
-        public void EndDeclare(DeclaredSymbols symbolsToDeclare) {
-            PopOrFail(CurrentDefinitionScope, symbolsToDeclare);
-        }
-
-        /// <summary>
-        ///     start decalring symbols
-        /// </summary>
-        /// <param name="symbolsToDeclare">symbols to declare</param>
-        public void BeginDeclare(DeclaredSymbols symbolsToDeclare) {
-            CurrentDefinitionScope.Push(symbolsToDeclare);
+        public ISyntaxPart LastValue
+        {
+            get
+            {
+                if (WorkingStack.Count > 0)
+                    return WorkingStack.Peek().Data;
+                else
+                    return null;
+            }
         }
 
         /// <summary>
@@ -152,16 +165,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// </summary>
         /// <param name="value"></param>
         public void DefineExpressionValue(ExpressionBase value) {
-            if (CurrentExpressionScope.Count > 0) {
-                CurrentExpressionScope.Peek().Value = value;
-                var target = value as IExpressionTarget;
-                if (target != null) {
-                    CurrentExpressionScope.Push(target);
+            if (WorkingStack.Count > 0) {
+                var lastExpression = WorkingStack.Peek().Data as IExpressionTarget;
+                if (lastExpression != null) {
+                    lastExpression.Value = value;
+                    return;
                 }
             }
-            else {
-                // error ??
-            }
+            // error ??
         }
 
         /// <summary>
@@ -169,33 +180,30 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// </summary>
         /// <param name="value"></param>
         public void DefineTypeValue(ITypeSpecification value) {
-            if (CurrentTypeSpecificationScope.Count > 0) {
-                CurrentTypeSpecificationScope.Peek().TypeValue = value;
-                var target = value as ITypeTarget;
-                if (target != null) {
-                    CurrentTypeSpecificationScope.Push(target);
+            if (WorkingStack.Count > 0) {
+                var typeTarget = WorkingStack.Peek().Data as ITypeTarget;
+                if (typeTarget != null) {
+                    typeTarget.TypeValue = value;
+                    return;
                 }
             }
-            else {
-                // error ??
-            }
+            // error ??
         }
 
         /// <summary>
-        ///     declare an object
+        ///     define a tree node
         /// </summary>
         /// <typeparam name="T">object type to declare</typeparam>
-        /// <param name="constDeclaration"></param>
+        /// <param name="parentItem"></param>
         /// <returns></returns>
-        public T Declare<T>(ISyntaxPart constDeclaration) where T : DeclaredSymbol, new() {
-            if (CurrentDefinitionScope.Count > 0) {
-                var scope = CurrentDefinitionScope.Peek();
-                T declaration = CreateNode<T>(scope, constDeclaration);
+        public T Define<T>(ISyntaxPart parentItem) where T : AbstractSyntaxPart, new() {
+            if (WorkingStack.Count > 0) {
+                var scope = WorkingStack.Peek();
+                T declaration = CreateNode<T>(scope, parentItem);
                 return declaration;
             }
             else {
-                // error ?
-                T declaration = CreateNode<T>(null, constDeclaration);
+                T declaration = CreateNode<T>(null, parentItem);
                 return declaration;
             }
         }
@@ -206,33 +214,18 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         }
 
         /// <summary>
-        ///     complate a declaration
+        ///     add entry to symbol table
         /// </summary>
         /// <param name="declaration"></param>
-        public void CompleteDeclaration(DeclaredSymbol declaration) {
-            if (CurrentDefinitionScope.Count > 0) {
-                var scope = CurrentDefinitionScope.Peek();
-                scope.Add(declaration, LogSource);
+        public void AddSymbolTableEntry<T>(T declaration) where T : SymbolTableEntryBase {
+            if (WorkingStack.Count > 0) {
+                var scope = WorkingStack.Peek().Data as SymbolTableBase<T>;
+                if (scope != null) {
+                    scope.Add(declaration, LogSource);
+                    return;
+                }
             }
-            else {
-                // error ??
-            }
-        }
-
-        /// <summary>
-        ///     end a type specification
-        /// </summary>
-        public void EndTypeSpecification() {
-            if (CurrentTypeSpecificationScope.Count > 0)
-                CurrentTypeSpecificationScope.Pop();
-        }
-
-        /// <summary>
-        ///     begin a type specification
-        /// </summary>
-        /// <param name="declaration">type declaraction</param>
-        public void BeginTypeSpecification(ITypeTarget declaration) {
-            CurrentTypeSpecificationScope.Push(declaration);
+            // error ??            
         }
 
         /// <summary>
@@ -246,39 +239,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             return node;
         }
 
-
-        /// <summary>
-        ///     complete expression
-        /// </summary>
-        public void CompleteExpression() {
-            if (CurrentExpressionScope.Count > 0) {
-                CurrentExpressionScope.Pop();
-            }
-            else {
-                // error ?               
-            }
-        }
-
-        /// <summary>
-        ///     end expression definition
-        /// </summary>
-        public void EndExpression() {
-            if (CurrentExpressionScope.Count > 0)
-                CurrentExpressionScope.Pop();
-        }
-
-        /// <summary>
-        ///     begin expression
-        /// </summary>
-        /// <param name="declaration"></param>
-        public void BeginExpression(IExpressionTarget declaration) {
-            if (CurrentExpressionScope.Count > 0) {
-                CurrentExpressionScope.Push(declaration);
-            }
-            else {
-                CurrentExpressionScope.Push(declaration);
-            }
-        }
 
         /// <summary>
         ///     define a type value

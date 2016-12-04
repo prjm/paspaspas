@@ -24,5 +24,10 @@
         ///     false value
         /// </summary>
         False,
+
+        /// <summary>
+        ///     integer value
+        /// </summary>
+        Integer,
     }
 }

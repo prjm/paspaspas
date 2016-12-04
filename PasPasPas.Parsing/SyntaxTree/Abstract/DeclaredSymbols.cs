@@ -8,7 +8,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// </summary>
     public class DeclaredSymbols : SymbolTableBase<DeclaredSymbol> {
 
-
         /// <summary>
         ///     log duplicated unit name
         /// </summary>

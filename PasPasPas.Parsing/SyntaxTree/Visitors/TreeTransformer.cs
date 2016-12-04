@@ -12,7 +12,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         #region Unit
 
-        private void BeginVisitItem(Unit unit, TreeTransformerOptions parameter) {
+        private AbstractSyntaxPart BeginVisitItem(Unit unit, TreeTransformerOptions parameter) {
             var result = CreateTreeNode<CompilationUnit>(null, unit);
             result.FileType = CompilationUnitType.Unit;
             result.UnitName = ExtractSymbolName(result, unit.UnitName);
@@ -20,6 +20,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             result.FilePath = unit.FilePath;
             parameter.Project.Add(result, parameter.LogSource);
             parameter.CurrentUnit = result;
+            return result;
         }
 
         private void EndVisitItem(Unit unit, TreeTransformerOptions parameter) {
@@ -29,7 +30,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region Library
 
-        private void BeginVisitItem(Library library, TreeTransformerOptions parameter) {
+        private AbstractSyntaxPart BeginVisitItem(Library library, TreeTransformerOptions parameter) {
             var result = CreateTreeNode<CompilationUnit>(null, library);
             result.FileType = CompilationUnitType.Library;
             result.UnitName = ExtractSymbolName(result, library.LibraryName);
@@ -38,6 +39,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             parameter.Project.Add(result, parameter.LogSource);
             parameter.CurrentUnitMode = UnitMode.Library;
             parameter.CurrentUnit = result;
+            return result;
         }
 
         private void EndVisitItem(Library library, TreeTransformerOptions parameter) {
@@ -53,7 +55,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// </summary>
         /// <param name="program"></param>
         /// <param name="parameter"></param>
-        private void BeginVisitItem(Program program, TreeTransformerOptions parameter) {
+        private AbstractSyntaxPart BeginVisitItem(Program program, TreeTransformerOptions parameter) {
             var result = CreateTreeNode<CompilationUnit>(null, program);
             result.FileType = CompilationUnitType.Program;
             result.UnitName = ExtractSymbolName(result, program.ProgramName);
@@ -61,6 +63,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             parameter.CurrentUnitMode = UnitMode.Program;
             parameter.Project.Add(result, parameter.LogSource);
             parameter.CurrentUnit = result;
+            return result;
         }
 
         private void EndVisitItem(Program program, TreeTransformerOptions parameter) {
@@ -71,13 +74,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region Package
 
-        private void BeginVisitItem(Package package, TreeTransformerOptions parameter) {
+        private AbstractSyntaxPart BeginVisitItem(Package package, TreeTransformerOptions parameter) {
             var result = CreateTreeNode<CompilationUnit>(null, package);
             result.FileType = CompilationUnitType.Package;
             result.UnitName = ExtractSymbolName(result, package.PackageName);
             result.FilePath = package.FilePath;
             parameter.Project.Add(result, parameter.LogSource);
             parameter.CurrentUnit = result;
+            return result;
         }
 
         private void EndVisitItem(Package package, TreeTransformerOptions parameter) {
@@ -87,40 +91,39 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region UnitInterface
 
-        private void BeginVisitItem(UnitInterface unitInterface, TreeTransformerOptions parameter) {
+        private AbstractSyntaxPart BeginVisitItem(UnitInterface unitInterface, TreeTransformerOptions parameter) {
             parameter.CurrentUnitMode = UnitMode.Interface;
-            parameter.BeginDeclare(parameter.CurrentUnit.InterfaceSymbols);
+            return parameter.CurrentUnit.InterfaceSymbols;
         }
 
 
         private void EndVisitItem(UnitInterface unitInterface, TreeTransformerOptions parameter) {
             parameter.CurrentUnitMode = UnitMode.Unknown;
-            parameter.EndDeclare(parameter.CurrentUnit.InterfaceSymbols);
         }
 
         #endregion
         #region UnitImplementation
 
-        private void BeginVisitItem(UnitImplementation unitImplementation, TreeTransformerOptions parameter) {
+        private AbstractSyntaxPart BeginVisitItem(UnitImplementation unitImplementation, TreeTransformerOptions parameter) {
             parameter.CurrentUnitMode = UnitMode.Implementation;
-            parameter.BeginDeclare(parameter.CurrentUnit.ImplementationSymbols);
+            return parameter.CurrentUnit.ImplementationSymbols;
         }
 
         private void EndVisitItem(UnitImplementation unit, TreeTransformerOptions parameter) {
             parameter.CurrentUnitMode = UnitMode.Unknown;
-            parameter.EndDeclare(parameter.CurrentUnit.ImplementationSymbols);
         }
 
         #endregion
         #region ConstSection
 
-        private void BeginVisitItem(ConstSection constSection, TreeTransformerOptions parameter) {
+        private AbstractSyntaxPart BeginVisitItem(ConstSection constSection, TreeTransformerOptions parameter) {
             if (constSection.Kind == TokenKind.Const) {
                 parameter.CurrentDeclarationMode = DeclarationMode.Const;
             }
             else if (constSection.Kind == TokenKind.Resourcestring) {
                 parameter.CurrentDeclarationMode = DeclarationMode.ResourceString;
             }
+            return null;
         }
 
         private void EndVisitItem(ConstSection constSection, TreeTransformerOptions parameter) {
@@ -130,8 +133,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region TypeSection
 
-        private void BeginVisitItem(TypeSection constSection, TreeTransformerOptions parameter) {
+        private AbstractSyntaxPart BeginVisitItem(TypeSection constSection, TreeTransformerOptions parameter) {
             parameter.CurrentDeclarationMode = DeclarationMode.Types;
+            return null;
         }
 
         private void EndVisitItem(TypeSection constSection, TreeTransformerOptions parameter) {
@@ -141,126 +145,94 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region TypeDeclaration
 
-        private void BeginVisitItem(Standard.TypeDeclaration typeDeclaration, TreeTransformerOptions parameter) {
-            var declaration = parameter.Declare<Abstract.TypeDeclaration>(typeDeclaration);
+        private AbstractSyntaxPart BeginVisitItem(Standard.TypeDeclaration typeDeclaration, TreeTransformerOptions parameter) {
+            var declaration = parameter.Define<Abstract.TypeDeclaration>(typeDeclaration);
             declaration.Name = ExtractSymbolName(declaration, typeDeclaration.TypeId?.Identifier);
             declaration.Generics = ExtractGenericDefinition(declaration, typeDeclaration.TypeId?.GenericDefinition, parameter);
             declaration.Attributes = ExtractAttributes(declaration, typeDeclaration.Attributes, parameter.CurrentUnit);
             declaration.Hints = ExtractHints(typeDeclaration, typeDeclaration.Hint);
-            parameter.CompleteDeclaration(declaration);
-            parameter.BeginTypeSpecification(declaration);
-        }
-
-        private void EndVisitItem(Standard.TypeDeclaration typeDeclaration, TreeTransformerOptions parameter) {
-            parameter.EndTypeSpecification();
+            parameter.AddSymbolTableEntry<DeclaredSymbol>(declaration);
+            return declaration;
         }
 
         #endregion
         #region ConstDeclaration
 
-        private void BeginVisitItem(ConstDeclaration constDeclaration, TreeTransformerOptions parameter) {
-            var declaration = parameter.Declare<ConstantDeclaration>(constDeclaration);
+        private AbstractSyntaxPart BeginVisitItem(ConstDeclaration constDeclaration, TreeTransformerOptions parameter) {
+            var declaration = parameter.Define<ConstantDeclaration>(constDeclaration);
             declaration.Name = ExtractSymbolName(declaration, constDeclaration.Identifier);
             declaration.Mode = parameter.CurrentDeclarationMode;
             declaration.Attributes = ExtractAttributes(declaration, constDeclaration.Attributes, parameter.CurrentUnit);
             declaration.Hints = ExtractHints(constDeclaration, constDeclaration.Hint);
-            parameter.CompleteDeclaration(declaration);
-            parameter.BeginExpression(declaration);
-            parameter.BeginTypeSpecification(declaration);
-        }
-
-        private void EndVisitItem(ConstDeclaration constDeclaration, TreeTransformerOptions parameter) {
-            parameter.EndExpression();
-            parameter.EndTypeSpecification();
+            parameter.AddSymbolTableEntry<DeclaredSymbol>(declaration);
+            return declaration;
         }
 
         #endregion
         #region ConstantExpression
 
-        private void BeginVisitItem(ConstantExpression constExpression, TreeTransformerOptions parameter) {
+        private AbstractSyntaxPart BeginVisitItem(ConstantExpression constExpression, TreeTransformerOptions parameter) {
 
             if (constExpression.IsArrayConstant) {
-                parameter.DefineExpressionValue<ArrayConstant>(constExpression);
+                return parameter.DefineExpressionValue<ArrayConstant>(constExpression);
             }
 
             if (constExpression.IsRecordConstant) {
-                parameter.DefineExpressionValue<RecordConstant>(constExpression);
+                return parameter.DefineExpressionValue<RecordConstant>(constExpression);
             }
-        }
 
-        private void EndVisitItem(ConstantExpression constExpression, TreeTransformerOptions parameter) {
-
-            if (constExpression.IsArrayConstant || constExpression.IsRecordConstant) {
-                parameter.CompleteExpression();
-            }
+            return null;
         }
 
         #endregion
         #region RecordConstantExpression
 
-        private void BeginVisitItem(RecordConstantExpression constExpression, TreeTransformerOptions parameter) {
+        private AbstractSyntaxPart BeginVisitItem(RecordConstantExpression constExpression, TreeTransformerOptions parameter) {
             var expression = parameter.DefineExpressionValue<RecordConstantItem>(constExpression);
             expression.Name = ExtractSymbolName(constExpression, constExpression.Name);
-        }
-
-        private void EndVisitItem(RecordConstantExpression constExpression, TreeTransformerOptions parameter) {
-            parameter.CompleteExpression();
+            return expression;
         }
 
         #endregion
         #region Expression
 
-        private void BeginVisitItem(Expression expression, TreeTransformerOptions parameter) {
+        private AbstractSyntaxPart BeginVisitItem(Expression expression, TreeTransformerOptions parameter) {
             if (expression.LeftOperand != null && expression.RightOperand != null) {
                 var currentExpression = parameter.DefineExpressionValue<BinaryOperator>(expression);
                 currentExpression.Kind = BinaryOperator.ConvertKind(expression.Kind);
+                return currentExpression;
             }
-        }
-
-        private void EndVisitItem(Expression expression, TreeTransformerOptions parameter) {
-            if (expression.LeftOperand != null && expression.RightOperand != null) {
-                parameter.CompleteExpression();
-            }
+            return null;
         }
 
         #endregion
         #region SimpleExpression
 
-        private void BeginVisitItem(SimpleExpression simpleExpression, TreeTransformerOptions parameter) {
+        private AbstractSyntaxPart BeginVisitItem(SimpleExpression simpleExpression, TreeTransformerOptions parameter) {
             if (simpleExpression.LeftOperand != null && simpleExpression.RightOperand != null) {
                 var currentExpression = parameter.DefineExpressionValue<BinaryOperator>(simpleExpression);
                 currentExpression.Kind = BinaryOperator.ConvertKind(simpleExpression.Kind);
+                return currentExpression;
             }
-        }
-
-        private void EndVisitItem(SimpleExpression simpleExpression, TreeTransformerOptions parameter) {
-            if (simpleExpression.LeftOperand != null && simpleExpression.RightOperand != null) {
-                parameter.CompleteExpression();
-            }
+            return null;
         }
 
         #endregion       
         #region Term
 
-        private void BeginVisitItem(Term term, TreeTransformerOptions parameter) {
+        private AbstractSyntaxPart BeginVisitItem(Term term, TreeTransformerOptions parameter) {
             if (term.LeftOperand != null && term.RightOperand != null) {
                 var currentExpression = parameter.DefineExpressionValue<BinaryOperator>(term);
                 currentExpression.Kind = BinaryOperator.ConvertKind(term.Kind);
+                return currentExpression;
             }
+            return null;
         }
-
-        private void EndVisitItem(Term term, TreeTransformerOptions parameter) {
-            if (term.LeftOperand != null && term.RightOperand != null) {
-                parameter.CompleteExpression();
-            }
-        }
-
-
 
         #endregion
         #region Factor
 
-        private void BeginVisitItem(Factor factor, TreeTransformerOptions parameter) {
+        private AbstractSyntaxPart BeginVisitItem(Factor factor, TreeTransformerOptions parameter) {
 
             // unary operators
             if (factor.AddressOf != null || factor.Not != null || factor.Plus != null || factor.Minus != null) {
@@ -273,7 +245,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                     value.Kind = ExpressionKind.UnaryPlus;
                 else if (factor.Minus != null)
                     value.Kind = ExpressionKind.UnaryMinus;
-                return;
+                return value;
             }
 
             // constant values
@@ -281,28 +253,33 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 var value = CreateLeafNode<ConstantValue>(parameter.LastExpression, factor);
                 value.Kind = ConstantValueKind.Nil;
                 parameter.DefineExpressionValue(value);
-                return;
+                return value;
             }
 
             if (factor.PointerTo != null) {
                 var value = CreateLeafNode<VariableValue>(parameter.LastExpression, factor);
                 value.Name = ExtractSymbolName(value, factor.PointerTo);
                 parameter.DefineExpressionValue(value);
-                return;
+                return value;
             }
 
             if (factor.IsFalse) {
                 var value = CreateLeafNode<ConstantValue>(parameter.LastExpression, factor);
                 value.Kind = ConstantValueKind.False;
                 parameter.DefineExpressionValue(value);
+                return value;
             }
             else if (factor.IsTrue) {
                 var value = CreateLeafNode<ConstantValue>(parameter.LastExpression, factor);
                 value.Kind = ConstantValueKind.True;
                 parameter.DefineExpressionValue(value);
+                return value;
             }
             else if (factor.IntValue != null) {
-
+                var value = CreateLeafNode<ConstantValue>(parameter.LastExpression, factor);
+                value.Kind = ConstantValueKind.Integer;
+                parameter.DefineExpressionValue(value);
+                return value;
             }
             else if (factor.RealValue != null) {
 
@@ -310,20 +287,15 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (factor.StringValue != null) {
 
             }
-        }
-
-        private void EndVisitItem(Factor factor, TreeTransformerOptions parameter) {
-            if (factor.AddressOf != null || factor.Not != null || factor.Plus != null || factor.Minus != null) {
-                parameter.CompleteExpression();
-            }
+            return null;
         }
 
         #endregion
         #region UsesClause
 
-        private void BeginVisitItem(UsesClause unit, TreeTransformerOptions parameter) {
+        private AbstractSyntaxPart BeginVisitItem(UsesClause unit, TreeTransformerOptions parameter) {
             if (unit.UsesList == null)
-                return;
+                return null;
 
             foreach (var part in unit.UsesList.Parts) {
                 var name = part as NamespaceName;
@@ -335,14 +307,16 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 unitName.Mode = parameter.CurrentUnitMode;
                 parameter.CurrentUnit.RequiredUnits.Add(unitName, parameter.LogSource);
             }
+
+            return null;
         }
 
         #endregion
         #region UsesFileClause
 
-        private void BeginVisitItem(UsesFileClause unit, TreeTransformerOptions parameter) {
+        private AbstractSyntaxPart BeginVisitItem(UsesFileClause unit, TreeTransformerOptions parameter) {
             if (unit.Files == null)
-                return;
+                return null;
 
             foreach (var part in unit.Files.Parts) {
                 var name = part as NamespaceFileName;
@@ -355,16 +329,18 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 unitName.FileName = name.QuotedFileName?.UnquotedValue;
                 parameter.CurrentUnit.RequiredUnits.Add(unitName, parameter.LogSource);
             }
+
+            return null;
         }
 
         #endregion
         #region PackageRequires
 
-        private void BeginVisitItem(PackageRequires requires, TreeTransformerOptions parameter) {
+        private AbstractSyntaxPart BeginVisitItem(PackageRequires requires, TreeTransformerOptions parameter) {
             parameter.CurrentUnitMode = UnitMode.Requires;
 
             if (requires.RequiresList == null)
-                return;
+                return null;
 
             foreach (var part in requires.RequiresList.Parts) {
                 var name = part as NamespaceName;
@@ -376,6 +352,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 unitName.Mode = parameter.CurrentUnitMode;
                 parameter.CurrentUnit.RequiredUnits.Add(unitName, parameter.LogSource);
             }
+
+            return null;
         }
 
         private void EndVisitItem(PackageRequires requires, TreeTransformerOptions parameter) {
@@ -385,11 +363,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region PackageContains
 
-        private void BeginVisitItem(PackageContains contains, TreeTransformerOptions parameter) {
+        private AbstractSyntaxPart BeginVisitItem(PackageContains contains, TreeTransformerOptions parameter) {
             parameter.CurrentUnitMode = UnitMode.Contains;
 
             if (contains.ContainsList == null)
-                return;
+                return null;
 
             foreach (var part in contains.ContainsList.Parts) {
                 var name = part as NamespaceFileName;
@@ -402,6 +380,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 unitName.FileName = name.QuotedFileName?.UnquotedValue;
                 parameter.CurrentUnit.RequiredUnits.Add(unitName, parameter.LogSource);
             }
+
+            return null;
         }
 
         private void EndVisitItem(PackageContains contains, TreeTransformerOptions parameter) {
@@ -411,11 +391,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region StructType
 
-        private void BeginVisitItem(StructType structType, TreeTransformerOptions parameter) {
+        private AbstractSyntaxPart BeginVisitItem(StructType structType, TreeTransformerOptions parameter) {
             if (structType.Packed)
                 parameter.CurrentStructTypeMode = StructTypeMode.Packed;
             else
                 parameter.CurrentStructTypeMode = StructTypeMode.Unpacked;
+            return null;
         }
 
         private void EndVisitItem(StructType factor, TreeTransformerOptions parameter) {
@@ -425,217 +406,184 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region ArrayType
 
-        private void BeginVisitItem(ArrayType array, TreeTransformerOptions parameter) {
+        private AbstractSyntaxPart BeginVisitItem(ArrayType array, TreeTransformerOptions parameter) {
             var value = CreateLeafNode<ArrayTypeDeclaration>(parameter.LastTypeDeclaration, array);
             value.PackedType = parameter.CurrentStructTypeMode == StructTypeMode.Packed;
-            parameter.BeginExpression(value);
             parameter.DefineTypeValue(value);
 
             if (array.ArrayOfConst) {
-                var metaType = parameter.DefineTypeValue<MetaType>(array);
+                var metaType = CreateLeafNode<MetaType>(value, array);
                 metaType.Kind = MetaTypeKind.Const;
+                value.TypeValue = metaType;
             }
-        }
 
-        private void EndVisitItem(ArrayType array, TreeTransformerOptions parameter) {
-            parameter.EndExpression();
+            return value;
         }
 
         #endregion
         #region SetDefinition
 
-        private void BeginVisitItem(SetDefinition set, TreeTransformerOptions parameter) {
+        private AbstractSyntaxPart BeginVisitItem(SetDefinition set, TreeTransformerOptions parameter) {
             var value = CreateLeafNode<SetTypeDeclaration>(parameter.LastTypeDeclaration, set);
             value.PackedType = parameter.CurrentStructTypeMode == StructTypeMode.Packed;
             parameter.DefineTypeValue(value);
+            return value;
         }
 
         #endregion
         #region FileTypeDefinition
 
-        private void BeginVisitItem(FileType set, TreeTransformerOptions parameter) {
+        private AbstractSyntaxPart BeginVisitItem(FileType set, TreeTransformerOptions parameter) {
             var value = CreateLeafNode<FileTypeDeclaration>(parameter.LastTypeDeclaration, set);
             value.PackedType = parameter.CurrentStructTypeMode == StructTypeMode.Packed;
             parameter.DefineTypeValue(value);
+            return value;
         }
 
         #endregion
         #region ClassOf
 
-        private void BeginVisitItem(ClassOfDeclaration classOf, TreeTransformerOptions parameter) {
+        private AbstractSyntaxPart BeginVisitItem(ClassOfDeclaration classOf, TreeTransformerOptions parameter) {
             var value = CreateLeafNode<ClassOfTypeDeclaration>(parameter.LastTypeDeclaration, classOf);
             value.PackedType = parameter.CurrentStructTypeMode == StructTypeMode.Packed;
             parameter.DefineTypeValue(value);
+            return value;
         }
 
         #endregion
         #region TypeName
 
-        private void BeginVisitItem(TypeName typeName, TreeTransformerOptions parameter) {
+        private AbstractSyntaxPart BeginVisitItem(TypeName typeName, TreeTransformerOptions parameter) {
             var value = CreateLeafNode<MetaType>(parameter.LastTypeDeclaration, typeName);
             value.Kind = typeName.MapTypeKind();
             value.Name = ExtractSymbolName(value, typeName.NamedType);
             parameter.DefineTypeValue(value);
+            return value;
         }
 
         #endregion
         #region SimpleType
 
-        private void BeginVisitItem(SimpleType simpleType, TreeTransformerOptions parameter) {
+        private AbstractSyntaxPart BeginVisitItem(SimpleType simpleType, TreeTransformerOptions parameter) {
             if (simpleType.SubrangeStart != null) {
-                var value = CreateLeafNode<SubrangeType>(parameter.LastTypeDeclaration, simpleType);
-                parameter.BeginExpression(value);
-                parameter.DefineTypeValue(value);
+                var subrange = CreateLeafNode<SubrangeType>(parameter.LastTypeDeclaration, simpleType);
+                parameter.DefineTypeValue(subrange);
+                return subrange;
             }
 
-            else {
-                var value = CreateLeafNode<TypeAlias>(parameter.LastTypeDeclaration, simpleType);
-                value.IsNewType = simpleType.NewType;
+            if (simpleType.EnumType != null)
+                return null;
 
-                if (simpleType.TypeOf)
-                    parameter.LogSource.Warning(StructuralErrors.UnsupportedTypeOfConstruct, simpleType);
+            var value = CreateLeafNode<TypeAlias>(parameter.LastTypeDeclaration, simpleType);
+            value.IsNewType = simpleType.NewType;
 
-                parameter.DefineTypeValue(value);
-            }
+            if (simpleType.TypeOf)
+                parameter.LogSource.Warning(StructuralErrors.UnsupportedTypeOfConstruct, simpleType);
+
+            parameter.DefineTypeValue(value);
+            return value;
         }
 
-        private void BeginVisitChildItem(SimpleType simpleType, TreeTransformerOptions parameter, ISyntaxPart part) {
+        private AbstractSyntaxPart BeginVisitChildItem(SimpleType simpleType, TreeTransformerOptions parameter, ISyntaxPart part) {
             var name = part as GenericNamespaceName;
-            var value = parameter.LastTypeDeclaration?.TypeValue as TypeAlias;
+            var value = parameter.LastValue as TypeAlias;
 
             if (name == null || value == null)
-                return;
+                return null;
 
             var fragment = CreateLeafNode<GenericNameFragment>(value, name);
             fragment.Name = ExtractSymbolName(fragment, name.Name);
             value.AddFragment(fragment);
-            if (name.GenericPart != null)
-                parameter.BeginTypeSpecification(fragment);
-        }
-
-        private void EndVisitChildItem(SimpleType simpleType, TreeTransformerOptions parameter, ISyntaxPart part) {
-            var name = part as GenericNamespaceName;
-            if (name == null || name.GenericPart == null)
-                return;
-            parameter.EndTypeSpecification();
-        }
-
-        private void EndVisitItem(SimpleType simpleType, TreeTransformerOptions parameter) {
-            if (simpleType.SubrangeStart != null) {
-                parameter.CompleteExpression();
-            }
+            return fragment;
         }
 
         #endregion
         #region EnumTypeDefinition
 
-        private void BeginVisitItem(EnumTypeDefinition type, TreeTransformerOptions parameter) {
+        private AbstractSyntaxPart BeginVisitItem(EnumTypeDefinition type, TreeTransformerOptions parameter) {
             var value = CreateLeafNode<EnumType>(parameter.LastTypeDeclaration, type);
             parameter.DefineTypeValue(value);
+            return value;
         }
 
 
         #endregion
         #region EnumValue
 
-        private void BeginVisitItem(EnumValue enumValue, TreeTransformerOptions parameter) {
-            var enumDeclaration = parameter.LastTypeDeclaration.TypeValue as EnumType;
+        private AbstractSyntaxPart BeginVisitItem(EnumValue enumValue, TreeTransformerOptions parameter) {
+            var enumDeclaration = parameter.LastValue as EnumType;
             if (enumDeclaration != null) {
                 var value = CreateLeafNode<EnumTypeValue>(enumDeclaration, enumValue);
                 value.Name = ExtractSymbolName(value, enumValue.EnumName);
                 enumDeclaration.Add(value, parameter.LogSource);
-                if (enumValue.Value != null) {
-                    parameter.BeginExpression(value);
-                }
+                return value;
             }
-        }
-
-        private void EndVisitItem(EnumValue enumValue, TreeTransformerOptions parameter) {
-            if (enumValue.Value != null) {
-                parameter.CompleteExpression();
-            }
+            return null;
         }
 
         #endregion
         #region ArrayIndex
 
-        private void BeginVisitItem(ArrayIndex arrayIndex, TreeTransformerOptions parameter) {
+        private AbstractSyntaxPart BeginVisitItem(ArrayIndex arrayIndex, TreeTransformerOptions parameter) {
             if (arrayIndex.EndIndex != null) {
                 var binOp = parameter.DefineExpressionValue<BinaryOperator>(arrayIndex);
                 binOp.Kind = ExpressionKind.RangeOperator;
+                return binOp;
             }
-        }
 
-        private void EndVisitItem(ArrayIndex arrayIndex, TreeTransformerOptions parameter) {
-            if (arrayIndex.EndIndex != null) {
-                parameter.EndExpression();
-            }
+            return null;
         }
 
         #endregion
         #region PointerType
 
-        private void BeginVisitItem(PointerType pointer, TreeTransformerOptions parameter) {
+        private AbstractSyntaxPart BeginVisitItem(PointerType pointer, TreeTransformerOptions parameter) {
             if (pointer.GenericPointer) {
-                var result = CreateLeafNode<MetaType>(parameter.CurrentTypeSpecificationScope, pointer);
+                var result = CreateLeafNode<MetaType>(parameter.LastValue, pointer);
                 result.Kind = MetaTypeKind.Pointer;
                 parameter.DefineTypeValue(result);
+                return result;
             }
             else {
-                var result = CreateLeafNode<PointerToType>(parameter.CurrentTypeSpecificationScope, pointer);
+                var result = CreateLeafNode<PointerToType>(parameter.LastValue, pointer);
                 parameter.DefineTypeValue(result);
+                return result;
             }
-        }
-
-        private void EndVisitItem(PointerType pointer, TreeTransformerOptions parameter) {
-            if (!pointer.GenericPointer)
-                parameter.EndTypeSpecification();
         }
 
         #endregion
         #region StringType
 
-        private void BeginVisitItem(StringType stringType, TreeTransformerOptions parameter) {
-            var result = CreateLeafNode<MetaType>(parameter.CurrentTypeSpecificationScope, stringType);
+        private AbstractSyntaxPart BeginVisitItem(StringType stringType, TreeTransformerOptions parameter) {
+            var result = CreateLeafNode<MetaType>(parameter.LastValue, stringType);
             result.Kind = MetaType.ConvertKind(stringType.Kind);
             parameter.DefineTypeValue(result);
-
-            if (stringType.CodePage != null || stringType.StringLength != null) {
-                parameter.BeginExpression(result);
-            }
+            return result;
         }
-
-        private void EndVisitItem(StringType stringType, TreeTransformerOptions parameter) {
-            if (stringType.CodePage != null || stringType.StringLength != null) {
-                parameter.EndExpression();
-            }
-        }
-
 
         #endregion
         #region ProcedureTypeDefinition
 
-        private void BeginVisitItem(ProcedureTypeDefinition proceduralType, TreeTransformerOptions parameter) {
-            var result = CreateLeafNode<ProceduralType>(parameter.CurrentTypeSpecificationScope, proceduralType);
+        private AbstractSyntaxPart BeginVisitItem(ProcedureTypeDefinition proceduralType, TreeTransformerOptions parameter) {
+            var result = CreateLeafNode<ProceduralType>(parameter.LastValue, proceduralType);
             result.Kind = ProceduralType.MapKind(proceduralType.Kind);
 
             if (proceduralType.ReturnTypeAttributes != null)
                 result.ReturnAttributes = ExtractAttributes(result, proceduralType.ReturnTypeAttributes, parameter.CurrentUnit);
-        }
 
-        private void EndVisitItem(ProcedureTypeDefinition proceduralType, TreeTransformerOptions parameter) {
+            return result;
         }
 
         #endregion
         #region FormalParameter
 
-        private void BeginVisitItem(FormalParameter formalParameter, TreeTransformerOptions parameter) {
+        /*
+
+        private AbstractSyntaxPart BeginVisitItem(FormalParameter formalParameter, TreeTransformerOptions parameter) {
 
         }
 
-        private void EndVisitItem(FormalParameter formalParameter, TreeTransformerOptions parameter) {
-
-        }
+        */
 
 
         #endregion
@@ -777,7 +725,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <returns></returns>
         public override bool BeginVisit(ISyntaxPart syntaxPart, TreeTransformerOptions parameter) {
             dynamic part = syntaxPart;
-            BeginVisitItem(part, parameter);
+            AbstractSyntaxPart visitResult = BeginVisitItem(part, parameter);
+            if (visitResult != null)
+                parameter.WorkingStack.Push(new WorkingStackEntry(syntaxPart, null, visitResult));
             return true;
         }
 
@@ -789,7 +739,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <param name="child"></param>
         public override void BeginVisitChild(ISyntaxPart parent, TreeTransformerOptions visitorParameter, ISyntaxPart child) {
             dynamic part = parent;
-            BeginVisitChildItem(part, visitorParameter, child);
+            AbstractSyntaxPart visitResult = BeginVisitChildItem(part, visitorParameter, child);
+            if (visitResult != null)
+                visitorParameter.WorkingStack.Push(new WorkingStackEntry(parent, child, visitResult));
         }
 
         /// <summary>
@@ -801,6 +753,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         public override bool EndVisit(ISyntaxPart syntaxPart, TreeTransformerOptions parameter) {
             dynamic part = syntaxPart;
             EndVisitItem(part, parameter);
+            if (parameter.WorkingStack.Count < 1) return true;
+
+            var lastEntry = parameter.WorkingStack.Peek();
+            if (lastEntry.DefiningNode == syntaxPart && //
+                lastEntry.ChildNode == null)
+                parameter.WorkingStack.Pop();
+
             return true;
         }
 
@@ -813,18 +772,22 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         public override void EndVisitChild(ISyntaxPart parent, TreeTransformerOptions visitorParameter, ISyntaxPart child) {
             dynamic part = parent;
             EndVisitChildItem(part, visitorParameter, child);
+            if (visitorParameter.WorkingStack.Count < 1)
+                return;
+
+            var lastEntry = visitorParameter.WorkingStack.Peek();
+            if (lastEntry.DefiningNode == parent && //
+                lastEntry.ChildNode == child)
+                visitorParameter.WorkingStack.Pop();
         }
 
 
 
-        private void BeginVisitItem(ISyntaxPart part, TreeTransformerOptions parameter) {
-            //..
-        }
+        private AbstractSyntaxPart BeginVisitItem(ISyntaxPart part, TreeTransformerOptions parameter)
+            => null;
 
-        private void BeginVisitChildItem(ISyntaxPart part, TreeTransformerOptions parameter, ISyntaxPart child) {
-            //..
-        }
-
+        private AbstractSyntaxPart BeginVisitChildItem(ISyntaxPart part, TreeTransformerOptions parameter, ISyntaxPart child)
+            => null;
 
         private void EndVisitItem(ISyntaxPart part, TreeTransformerOptions parameter) {
             //..

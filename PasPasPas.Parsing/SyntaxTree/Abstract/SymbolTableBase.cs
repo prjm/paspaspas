@@ -12,7 +12,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     ///     base class for symbolic tables
     /// </summary>
     /// <typeparam name="T">symbol type</typeparam>
-    public abstract class SymbolTableBase<T> : ISymbolTable<T>, IReadOnlyList<ISyntaxPart>
+    public abstract class SymbolTableBase<T> : AbstractSyntaxPart, ISymbolTable<T>, IReadOnlyList<ISyntaxPart>
         where T : class, ISymbolTableEntry {
 
         /// <summary>
@@ -26,11 +26,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         protected SymbolTableBase() {
             symbols = new Lazy<OrderedDictionary>(() => CreateSymbols());
         }
-
-        /// <summary>
-        ///     parent symbol table
-        /// </summary>
-        public ISyntaxPart Parent { get; set; }
 
         /// <summary>
         ///     create symbols
@@ -95,7 +90,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     parts
         /// </summary>
-        public IEnumerable<ISyntaxPart> Parts
+        public override IEnumerable<ISyntaxPart> Parts
             => this;
 
         /// <summary>
@@ -119,28 +114,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <param name="logSource"></param>
         protected virtual void LogDuplicateSymbolError(T newDuplicate, LogSource logSource) {
             //...
-        }
-
-        /// <summary>
-        ///     accept a visitors
-        /// </summary>
-        /// <typeparam name="TVisitorType"></typeparam>
-        /// <param name="visitor"></param>
-        /// <param name="visitorParameter"></param>
-        /// <returns></returns>
-        public bool Accept<TVisitorType>(ISyntaxPartVisitor<TVisitorType> visitor, TVisitorType visitorParameter) {
-            if (!visitor.BeginVisit(this, visitorParameter))
-                return false;
-
-            var result = true;
-
-            foreach (var part in Parts)
-                result = result && part.Accept(visitor, visitorParameter);
-
-            if (!visitor.EndVisit(this, visitorParameter))
-                return false;
-
-            return result;
         }
 
         /// <summary>
