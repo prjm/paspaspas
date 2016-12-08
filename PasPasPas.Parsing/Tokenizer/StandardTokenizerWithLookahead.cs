@@ -63,7 +63,7 @@ namespace PasPasPas.Parsing.Tokenizer {
                 CompilerDirectiveVisitor visitor = new CompilerDirectiveVisitor();
                 CompilerDirectiveVisitorOptions visitorOptions = new CompilerDirectiveVisitorOptions();
                 visitorOptions.Environment = environment;
-                result.Accept(visitor, visitorOptions);
+                VisitorHelper.AcceptVisitor(result, visitor, visitorOptions);
             }
         }
 

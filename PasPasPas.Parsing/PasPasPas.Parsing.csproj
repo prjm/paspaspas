@@ -116,6 +116,7 @@
     <Compile Include="SyntaxTree\Standard\Parameter.cs" />
     <Compile Include="SyntaxTree\Standard\TypeName.cs" />
     <Compile Include="SyntaxTree\Abstract\DeclarationMode.cs" />
+    <Compile Include="SyntaxTree\VisitorHelper.cs" />
     <Compile Include="SyntaxTree\Visitors\StructuralErrors.cs" />
     <Compile Include="SyntaxTree\Visitors\StructureValidator.cs" />
     <Compile Include="SyntaxTree\Visitors\StructureValidatorOptions.cs" />

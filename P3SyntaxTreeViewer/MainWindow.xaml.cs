@@ -55,7 +55,7 @@ namespace P3SyntaxTreeViewer {
                 var listLog = new ListLogTarget();
                 env.Log.RegisterTarget(listLog);
 
-                cst.Accept(visitor, options);
+                VisitorHelper.AcceptVisitor(cst, visitor, options);
 
                 Dispatcher.Invoke(() => {
                     DisplayTree(StandardTreeView, cst);

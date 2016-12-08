@@ -35,31 +35,6 @@ namespace PasPasPas.Parsing.SyntaxTree {
         public IList<ISyntaxPart> PartList
             => parts;
 
-
-        /// <summary>
-        ///     accept this visitor
-        /// </summary>
-        /// <param name="visitor">visitor</param>
-        /// <param name="visitorParameter">parameter</param>
-        /// <typeparam name="T">parameter type</typeparam>
-        public virtual bool Accept<T>(ISyntaxPartVisitor<T> visitor, T visitorParameter) {
-            if (!visitor.BeginVisit(this, visitorParameter))
-                return false;
-
-            var result = true;
-
-            foreach (var part in Parts) {
-                visitor.BeginVisitChild(this, visitorParameter, part);
-                result = result && part.Accept(visitor, visitorParameter);
-                visitor.EndVisitChild(this, visitorParameter, part);
-            }
-
-            if (!visitor.EndVisit(this, visitorParameter))
-                return false;
-
-            return result;
-        }
-
         /// <summary>
         ///     get the last terminal value
         /// </summary>

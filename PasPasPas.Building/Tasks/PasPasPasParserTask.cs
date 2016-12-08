@@ -107,7 +107,7 @@ namespace PasPasPas.Building.Tasks {
 
                 var visitor = new TerminalVisitor();
                 var options = new TerminalVisitorOptions();
-                resultTree.Accept(visitor, options);
+                VisitorHelper.AcceptVisitor(resultTree, visitor, options);
                 if (!string.Equals(result1.ToString(), options.ResultBuilder.ToString(), StringComparison.Ordinal)) {
                     result.AppendLine("<<XXXX>> Different!");
                     result.AppendLine(result1.ToString());
@@ -118,7 +118,7 @@ namespace PasPasPas.Building.Tasks {
                     var options1 = new StructureVisitorOptions();
 
                     result.AppendLine("<<XXXX>> Tree");
-                    resultTree.Accept(visitor1, options1);
+                    VisitorHelper.AcceptVisitor(resultTree, visitor1, options1);
                     result.AppendLine(options1.ResultBuilder.ToString());
 
 

@@ -83,7 +83,7 @@ namespace PasPasPasTests {
                 var result = parser.Parse();
                 var visitor = new TerminalVisitor();
                 var options = new TerminalVisitorOptions();
-                result.Accept(visitor, options);
+                VisitorHelper.AcceptVisitor(result, visitor, options);
                 Assert.AreEqual(output, options.ResultBuilder.ToString());
                 Assert.AreEqual(string.Empty, errorText);
                 Assert.IsFalse(hasError);
@@ -132,19 +132,18 @@ namespace PasPasPasTests {
 
 
                 var visitor = new TreeTransformer();
-                tree.Accept(visitor, options);
+                VisitorHelper.AcceptVisitor(tree, visitor, options);
 
                 var astVisitor = new AstVisitor<T>();
                 var astOptions = new AstVisitorOptions<T>() { SearchFunction = searchFunction };
-                options.Project.Accept(astVisitor, astOptions);
+                VisitorHelper.AcceptVisitor(options.Project, astVisitor, astOptions);
 
                 var validator = new StructureValidator();
                 var validatorOptions = new StructureValidatorOptions() { Manager = logMgr };
-                options.Project.Accept(validator, validatorOptions);
+                VisitorHelper.AcceptVisitor(options.Project, validator, validatorOptions);
 
                 Assert.AreEqual(expectedResult, astOptions.Result);
             }
-
 
             Assert.AreEqual(errorMessages.Length, msgs.Count);
             foreach (var guid in errorMessages)
@@ -214,7 +213,7 @@ namespace PasPasPasTests {
                             if (!hasFoundInput) {
                                 terminalOpts.ResultBuilder.Clear();
                                 if (result != null)
-                                    result.Accept(terminals, terminalOpts);
+                                    VisitorHelper.AcceptVisitor(result, terminals, terminalOpts);
 
                                 Assert.AreEqual(subPart, terminalOpts.ResultBuilder.ToString());
                             }
@@ -222,7 +221,7 @@ namespace PasPasPasTests {
 
                             options.IncludeInput = reader;
                             if (result != null)
-                                result.Accept(visitor, options);
+                                VisitorHelper.AcceptVisitor(result, visitor, options);
 
                         }
                         fileCounter++;

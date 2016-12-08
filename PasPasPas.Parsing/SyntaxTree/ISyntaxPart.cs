@@ -8,13 +8,6 @@ namespace PasPasPas.Parsing.SyntaxTree {
     public interface ISyntaxPart {
 
         /// <summary>
-        ///     accept visitor
-        /// </summary>
-        /// <param name="visitor">visitor to accept</param>
-        /// <param name="visitorParameter">parameter</param>
-        bool Accept<T>(ISyntaxPartVisitor<T> visitor, T visitorParameter);
-
-        /// <summary>
         ///     child nodes
         /// </summary>
         IEnumerable<ISyntaxPart> Parts { get; }
