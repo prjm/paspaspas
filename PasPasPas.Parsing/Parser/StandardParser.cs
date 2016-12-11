@@ -2711,7 +2711,7 @@ namespace PasPasPas.Parsing.Parser {
             var result = CreateChild<FormalParameter>(parent);
 
             if (Match(TokenKind.OpenBraces)) {
-                ParseAttributes(result);
+                result.Attributes = ParseAttributes(result);
             }
 
             if (ContinueWith(result, TokenKind.Const, TokenKind.Var, TokenKind.Out)) {

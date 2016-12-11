@@ -68,5 +68,14 @@ namespace P3SyntaxTreeViewer {
                 return ResourceManager.GetString("m_bd36c92cbacf492c8bf817e890cbaafa", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Redeclared Parameter.
+        /// </summary>
+        internal static string m_c795d660c7a44bce8af426235295bf3d {
+            get {
+                return ResourceManager.GetString("m_c795d660c7a44bce8af426235295bf3d", resourceCulture);
+            }
+        }
     }
 }

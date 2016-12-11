@@ -13,10 +13,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #region Unit
 
         private AbstractSyntaxPart BeginVisitItem(Unit unit, TreeTransformerOptions parameter) {
-            var result = CreateTreeNode<CompilationUnit>(null, unit);
+            var result = CreateRootNode<CompilationUnit>(unit);
             result.FileType = CompilationUnitType.Unit;
-            result.UnitName = ExtractSymbolName(result, unit.UnitName);
-            result.Hints = ExtractHints(result, unit.Hints);
+            result.UnitName = ExtractSymbolName(unit.UnitName);
+            result.Hints = ExtractHints(unit.Hints);
             result.FilePath = unit.FilePath;
             parameter.Project.Add(result, parameter.LogSource);
             parameter.CurrentUnit = result;
@@ -31,10 +31,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #region Library
 
         private AbstractSyntaxPart BeginVisitItem(Library library, TreeTransformerOptions parameter) {
-            var result = CreateTreeNode<CompilationUnit>(null, library);
+            var result = CreateNode<CompilationUnit>(parameter, library);
             result.FileType = CompilationUnitType.Library;
-            result.UnitName = ExtractSymbolName(result, library.LibraryName);
-            result.Hints = ExtractHints(result, library.Hints);
+            result.UnitName = ExtractSymbolName(library.LibraryName);
+            result.Hints = ExtractHints(library.Hints);
             result.FilePath = library.FilePath;
             parameter.Project.Add(result, parameter.LogSource);
             parameter.CurrentUnitMode = UnitMode.Library;
@@ -56,9 +56,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <param name="program"></param>
         /// <param name="parameter"></param>
         private AbstractSyntaxPart BeginVisitItem(Program program, TreeTransformerOptions parameter) {
-            var result = CreateTreeNode<CompilationUnit>(null, program);
+            var result = CreateRootNode<CompilationUnit>(program);
             result.FileType = CompilationUnitType.Program;
-            result.UnitName = ExtractSymbolName(result, program.ProgramName);
+            result.UnitName = ExtractSymbolName(program.ProgramName);
             result.FilePath = program.FilePath;
             parameter.CurrentUnitMode = UnitMode.Program;
             parameter.Project.Add(result, parameter.LogSource);
@@ -75,9 +75,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #region Package
 
         private AbstractSyntaxPart BeginVisitItem(Package package, TreeTransformerOptions parameter) {
-            var result = CreateTreeNode<CompilationUnit>(null, package);
+            var result = CreateRootNode<CompilationUnit>(package);
             result.FileType = CompilationUnitType.Package;
-            result.UnitName = ExtractSymbolName(result, package.PackageName);
+            result.UnitName = ExtractSymbolName(package.PackageName);
             result.FilePath = package.FilePath;
             parameter.Project.Add(result, parameter.LogSource);
             parameter.CurrentUnit = result;
@@ -147,10 +147,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         private AbstractSyntaxPart BeginVisitItem(Standard.TypeDeclaration typeDeclaration, TreeTransformerOptions parameter) {
             var declaration = parameter.Define<Abstract.TypeDeclaration>(typeDeclaration);
-            declaration.Name = ExtractSymbolName(declaration, typeDeclaration.TypeId?.Identifier);
-            declaration.Generics = ExtractGenericDefinition(declaration, typeDeclaration.TypeId?.GenericDefinition, parameter);
-            declaration.Attributes = ExtractAttributes(declaration, typeDeclaration.Attributes, parameter.CurrentUnit);
-            declaration.Hints = ExtractHints(typeDeclaration, typeDeclaration.Hint);
+            declaration.Name = ExtractSymbolName(typeDeclaration.TypeId?.Identifier);
+            declaration.Generics = ExtractGenericDefinition(typeDeclaration.TypeId?.GenericDefinition, parameter);
+            declaration.Attributes = ExtractAttributes(typeDeclaration.Attributes, parameter.CurrentUnit);
+            declaration.Hints = ExtractHints(typeDeclaration.Hint);
             parameter.AddSymbolTableEntry<DeclaredSymbol>(declaration);
             return declaration;
         }
@@ -160,10 +160,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         private AbstractSyntaxPart BeginVisitItem(ConstDeclaration constDeclaration, TreeTransformerOptions parameter) {
             var declaration = parameter.Define<ConstantDeclaration>(constDeclaration);
-            declaration.Name = ExtractSymbolName(declaration, constDeclaration.Identifier);
+            declaration.Name = ExtractSymbolName(constDeclaration.Identifier);
             declaration.Mode = parameter.CurrentDeclarationMode;
-            declaration.Attributes = ExtractAttributes(declaration, constDeclaration.Attributes, parameter.CurrentUnit);
-            declaration.Hints = ExtractHints(constDeclaration, constDeclaration.Hint);
+            declaration.Attributes = ExtractAttributes(constDeclaration.Attributes, parameter.CurrentUnit);
+            declaration.Hints = ExtractHints(constDeclaration.Hint);
             parameter.AddSymbolTableEntry<DeclaredSymbol>(declaration);
             return declaration;
         }
@@ -189,7 +189,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         private AbstractSyntaxPart BeginVisitItem(RecordConstantExpression constExpression, TreeTransformerOptions parameter) {
             var expression = parameter.DefineExpressionValue<RecordConstantItem>(constExpression);
-            expression.Name = ExtractSymbolName(constExpression, constExpression.Name);
+            expression.Name = ExtractSymbolName(constExpression.Name);
             return expression;
         }
 
@@ -250,33 +250,33 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
             // constant values
             if (factor.IsNil) {
-                var value = CreateLeafNode<ConstantValue>(parameter.LastExpression, factor);
+                var value = CreateNode<ConstantValue>(parameter, factor);
                 value.Kind = ConstantValueKind.Nil;
                 parameter.DefineExpressionValue(value);
                 return value;
             }
 
             if (factor.PointerTo != null) {
-                var value = CreateLeafNode<VariableValue>(parameter.LastExpression, factor);
-                value.Name = ExtractSymbolName(value, factor.PointerTo);
+                var value = CreateNode<VariableValue>(parameter, factor);
+                value.Name = ExtractSymbolName(factor.PointerTo);
                 parameter.DefineExpressionValue(value);
                 return value;
             }
 
             if (factor.IsFalse) {
-                var value = CreateLeafNode<ConstantValue>(parameter.LastExpression, factor);
+                var value = CreateNode<ConstantValue>(parameter, factor);
                 value.Kind = ConstantValueKind.False;
                 parameter.DefineExpressionValue(value);
                 return value;
             }
             else if (factor.IsTrue) {
-                var value = CreateLeafNode<ConstantValue>(parameter.LastExpression, factor);
+                var value = CreateNode<ConstantValue>(parameter, factor);
                 value.Kind = ConstantValueKind.True;
                 parameter.DefineExpressionValue(value);
                 return value;
             }
             else if (factor.IntValue != null) {
-                var value = CreateLeafNode<ConstantValue>(parameter.LastExpression, factor);
+                var value = CreateNode<ConstantValue>(parameter, factor);
                 value.Kind = ConstantValueKind.Integer;
                 parameter.DefineExpressionValue(value);
                 return value;
@@ -302,8 +302,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 if (name == null)
                     continue;
 
-                var unitName = CreateLeafNode<RequiredUnitName>(unit, part);
-                unitName.Name = ExtractSymbolName(unitName, name);
+                var unitName = CreatePartNode<RequiredUnitName>(parameter.CurrentUnit.RequiredUnits, part);
+                unitName.Name = ExtractSymbolName(name);
                 unitName.Mode = parameter.CurrentUnitMode;
                 parameter.CurrentUnit.RequiredUnits.Add(unitName, parameter.LogSource);
             }
@@ -323,8 +323,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 if (name == null)
                     continue;
 
-                var unitName = CreateLeafNode<RequiredUnitName>(parameter.CurrentUnit, part);
-                unitName.Name = ExtractSymbolName(unitName, name);
+                var unitName = CreatePartNode<RequiredUnitName>(parameter.CurrentUnit.RequiredUnits, part);
+                unitName.Name = ExtractSymbolName(name);
                 unitName.Mode = parameter.CurrentUnitMode;
                 unitName.FileName = name.QuotedFileName?.UnquotedValue;
                 parameter.CurrentUnit.RequiredUnits.Add(unitName, parameter.LogSource);
@@ -347,8 +347,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 if (name == null)
                     continue;
 
-                var unitName = CreateLeafNode<RequiredUnitName>(parameter.CurrentUnit, part);
-                unitName.Name = ExtractSymbolName(unitName, name);
+                var unitName = CreatePartNode<RequiredUnitName>(parameter.CurrentUnit.RequiredUnits, part);
+                unitName.Name = ExtractSymbolName(name);
                 unitName.Mode = parameter.CurrentUnitMode;
                 parameter.CurrentUnit.RequiredUnits.Add(unitName, parameter.LogSource);
             }
@@ -374,8 +374,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 if (name == null)
                     continue;
 
-                var unitName = CreateLeafNode<RequiredUnitName>(parameter.CurrentUnit, part);
-                unitName.Name = ExtractSymbolName(unitName, name);
+                var unitName = CreatePartNode<RequiredUnitName>(parameter.CurrentUnit.RequiredUnits, part);
+                unitName.Name = ExtractSymbolName(name);
                 unitName.Mode = parameter.CurrentUnitMode;
                 unitName.FileName = name.QuotedFileName?.UnquotedValue;
                 parameter.CurrentUnit.RequiredUnits.Add(unitName, parameter.LogSource);
@@ -407,12 +407,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #region ArrayType
 
         private AbstractSyntaxPart BeginVisitItem(ArrayType array, TreeTransformerOptions parameter) {
-            var value = CreateLeafNode<ArrayTypeDeclaration>(parameter.LastTypeDeclaration, array);
+            var value = CreateNode<ArrayTypeDeclaration>(parameter, array);
             value.PackedType = parameter.CurrentStructTypeMode == StructTypeMode.Packed;
             parameter.DefineTypeValue(value);
 
             if (array.ArrayOfConst) {
-                var metaType = CreateLeafNode<MetaType>(value, array);
+                var metaType = CreatePartNode<MetaType>(value, array);
                 metaType.Kind = MetaTypeKind.Const;
                 value.TypeValue = metaType;
             }
@@ -424,7 +424,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #region SetDefinition
 
         private AbstractSyntaxPart BeginVisitItem(SetDefinition set, TreeTransformerOptions parameter) {
-            var value = CreateLeafNode<SetTypeDeclaration>(parameter.LastTypeDeclaration, set);
+            var value = CreateNode<SetTypeDeclaration>(parameter, set);
             value.PackedType = parameter.CurrentStructTypeMode == StructTypeMode.Packed;
             parameter.DefineTypeValue(value);
             return value;
@@ -434,7 +434,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #region FileTypeDefinition
 
         private AbstractSyntaxPart BeginVisitItem(FileType set, TreeTransformerOptions parameter) {
-            var value = CreateLeafNode<FileTypeDeclaration>(parameter.LastTypeDeclaration, set);
+            var value = CreateNode<FileTypeDeclaration>(parameter, set);
             value.PackedType = parameter.CurrentStructTypeMode == StructTypeMode.Packed;
             parameter.DefineTypeValue(value);
             return value;
@@ -444,7 +444,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #region ClassOf
 
         private AbstractSyntaxPart BeginVisitItem(ClassOfDeclaration classOf, TreeTransformerOptions parameter) {
-            var value = CreateLeafNode<ClassOfTypeDeclaration>(parameter.LastTypeDeclaration, classOf);
+            var value = CreateNode<ClassOfTypeDeclaration>(parameter, classOf);
             value.PackedType = parameter.CurrentStructTypeMode == StructTypeMode.Packed;
             parameter.DefineTypeValue(value);
             return value;
@@ -454,9 +454,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #region TypeName
 
         private AbstractSyntaxPart BeginVisitItem(TypeName typeName, TreeTransformerOptions parameter) {
-            var value = CreateLeafNode<MetaType>(parameter.LastTypeDeclaration, typeName);
+            var value = CreateNode<MetaType>(parameter, typeName);
             value.Kind = typeName.MapTypeKind();
-            value.Name = ExtractSymbolName(value, typeName.NamedType);
+            value.Name = ExtractSymbolName(typeName.NamedType);
             parameter.DefineTypeValue(value);
             return value;
         }
@@ -466,7 +466,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         private AbstractSyntaxPart BeginVisitItem(SimpleType simpleType, TreeTransformerOptions parameter) {
             if (simpleType.SubrangeStart != null) {
-                var subrange = CreateLeafNode<SubrangeType>(parameter.LastTypeDeclaration, simpleType);
+                var subrange = CreateNode<SubrangeType>(parameter, simpleType);
                 parameter.DefineTypeValue(subrange);
                 return subrange;
             }
@@ -474,7 +474,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (simpleType.EnumType != null)
                 return null;
 
-            var value = CreateLeafNode<TypeAlias>(parameter.LastTypeDeclaration, simpleType);
+            var value = CreateNode<TypeAlias>(parameter, simpleType);
             value.IsNewType = simpleType.NewType;
 
             if (simpleType.TypeOf)
@@ -491,8 +491,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (name == null || value == null)
                 return null;
 
-            var fragment = CreateLeafNode<GenericNameFragment>(value, name);
-            fragment.Name = ExtractSymbolName(fragment, name.Name);
+            var fragment = CreatePartNode<GenericNameFragment>(value, name);
+            fragment.Name = ExtractSymbolName(name.Name);
             value.AddFragment(fragment);
             return fragment;
         }
@@ -501,7 +501,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #region EnumTypeDefinition
 
         private AbstractSyntaxPart BeginVisitItem(EnumTypeDefinition type, TreeTransformerOptions parameter) {
-            var value = CreateLeafNode<EnumType>(parameter.LastTypeDeclaration, type);
+            var value = CreateNode<EnumType>(parameter, type);
             parameter.DefineTypeValue(value);
             return value;
         }
@@ -513,8 +513,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         private AbstractSyntaxPart BeginVisitItem(EnumValue enumValue, TreeTransformerOptions parameter) {
             var enumDeclaration = parameter.LastValue as EnumType;
             if (enumDeclaration != null) {
-                var value = CreateLeafNode<EnumTypeValue>(enumDeclaration, enumValue);
-                value.Name = ExtractSymbolName(value, enumValue.EnumName);
+                var value = CreateNode<EnumTypeValue>(parameter, enumValue);
+                value.Name = ExtractSymbolName(enumValue.EnumName);
                 enumDeclaration.Add(value, parameter.LogSource);
                 return value;
             }
@@ -539,13 +539,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         private AbstractSyntaxPart BeginVisitItem(PointerType pointer, TreeTransformerOptions parameter) {
             if (pointer.GenericPointer) {
-                var result = CreateLeafNode<MetaType>(parameter.LastValue, pointer);
+                var result = CreateNode<MetaType>(parameter, pointer);
                 result.Kind = MetaTypeKind.Pointer;
                 parameter.DefineTypeValue(result);
                 return result;
             }
             else {
-                var result = CreateLeafNode<PointerToType>(parameter.LastValue, pointer);
+                var result = CreateNode<PointerToType>(parameter, pointer);
                 parameter.DefineTypeValue(result);
                 return result;
             }
@@ -555,7 +555,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #region StringType
 
         private AbstractSyntaxPart BeginVisitItem(StringType stringType, TreeTransformerOptions parameter) {
-            var result = CreateLeafNode<MetaType>(parameter.LastValue, stringType);
+            var result = CreateNode<MetaType>(parameter, stringType);
             result.Kind = MetaType.ConvertKind(stringType.Kind);
             parameter.DefineTypeValue(result);
             return result;
@@ -565,11 +565,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #region ProcedureTypeDefinition
 
         private AbstractSyntaxPart BeginVisitItem(ProcedureTypeDefinition proceduralType, TreeTransformerOptions parameter) {
-            var result = CreateLeafNode<ProceduralType>(parameter.LastValue, proceduralType);
+            var result = CreateNode<ProceduralType>(parameter, proceduralType);
+            parameter.DefineTypeValue(result);
             result.Kind = ProceduralType.MapKind(proceduralType.Kind);
 
             if (proceduralType.ReturnTypeAttributes != null)
-                result.ReturnAttributes = ExtractAttributes(result, proceduralType.ReturnTypeAttributes, parameter.CurrentUnit);
+                result.ReturnAttributes = ExtractAttributes(proceduralType.ReturnTypeAttributes, parameter.CurrentUnit);
 
             return result;
         }
@@ -577,40 +578,49 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region FormalParameter
 
-        /*
-
         private AbstractSyntaxPart BeginVisitItem(FormalParameter formalParameter, TreeTransformerOptions parameter) {
+            var paramterTarget = parameter.LastValue as IParameterTarget;
 
+            foreach (var parameterName in formalParameter.ParameterNames.Parts) {
+                var identifier = parameterName as Identifier;
+                if (identifier != null) {
+                    var result = CreateNode<ParameterDefinition>(parameter, formalParameter);
+                    result.Name = ExtractSymbolName(identifier);
+                    result.Attributes = ExtractAttributes(formalParameter.Attributes, parameter.CurrentUnit);
+                    result.ParameterKind = ParameterDefinition.MapKind(formalParameter.ParameterType);
+                    paramterTarget.Parameters.Add(result, parameter.LogSource);
+                }
+            }
+            return null;
         }
 
-        */
 
 
         #endregion
         #region Extractors
 
-        private static SymbolName ExtractSymbolName(object parent, NamespaceName name) {
-            var result = CreateLeafNode<SymbolName>(parent, name);
+        private static SymbolName ExtractSymbolName(NamespaceName name) {
+            var result = new SymbolName();
             result.Name = name?.Name;
             result.Namespace = name?.Namespace;
             return result;
         }
 
-        private static SymbolName ExtractSymbolName(object parent, Identifier name) {
-            var result = CreateLeafNode<SymbolName>(parent, name);
+        private static SymbolName ExtractSymbolName(Identifier name) {
+            var result = new SymbolName();
             result.Name = name.FirstTerminalToken?.Value;
             return result;
         }
 
-        private static SymbolName ExtractSymbolName(object parent, NamespaceFileName name) {
-            var result = CreateLeafNode<SymbolName>(parent, name);
+        private static SymbolName ExtractSymbolName(NamespaceFileName name) {
+            var result = new SymbolName();
             result.Name = name?.NamespaceName?.Name;
             result.Namespace = name?.NamespaceName?.Namespace;
             return result;
         }
 
-        private GenericTypes ExtractGenericDefinition(object parent, GenericDefinition genericDefinition, TreeTransformerOptions parameter) {
-            var result = CreateLeafNode<GenericTypes>(parent, genericDefinition);
+        private GenericTypes ExtractGenericDefinition(GenericDefinition genericDefinition, TreeTransformerOptions parameter) {
+            var result = new GenericTypes();
 
             if (genericDefinition == null)
                 return result;
@@ -619,8 +629,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 var idPart = part as Identifier;
 
                 if (idPart != null) {
-                    var generic = CreateLeafNode<GenericType>(result, part);
-                    generic.Name = ExtractSymbolName(genericDefinition, idPart);
+                    var generic = CreatePartNode<GenericType>(result, part);
+                    generic.Name = ExtractSymbolName(idPart);
                     result.Add(generic, parameter.LogSource);
                     continue;
                 }
@@ -628,16 +638,16 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 var genericPart = part as GenericDefinitionPart;
 
                 if (genericPart != null) {
-                    var generic = CreateLeafNode<GenericType>(result, part);
-                    generic.Name = ExtractSymbolName(genericDefinition, genericPart.Identifier);
+                    var generic = CreatePartNode<GenericType>(result, part);
+                    generic.Name = ExtractSymbolName(genericPart.Identifier);
                     result.Add(generic, parameter.LogSource);
 
                     foreach (var constraintPart in genericPart.Parts) {
                         var constraint = constraintPart as Standard.ConstrainedGeneric;
                         if (constraint != null) {
-                            var cr = CreateLeafNode<GenericConstraint>(generic, constraint);
+                            var cr = CreatePartNode<GenericConstraint>(generic, constraint);
                             cr.Kind = GenericConstraint.MapKind(constraint);
-                            cr.Name = ExtractSymbolName(cr, constraint.ConstraintIdentifier);
+                            cr.Name = ExtractSymbolName(constraint.ConstraintIdentifier);
                             generic.Add(cr, parameter.LogSource);
                         }
                     }
@@ -650,8 +660,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             return result;
         }
 
-        private static SymbolHints ExtractHints(object parent, HintingInformationList hints) {
-            var result = CreateLeafNode<SymbolHints>(parent, hints);
+        private static SymbolHints ExtractHints(HintingInformationList hints) {
+            var result = new SymbolHints();
 
             if (hints == null || hints.PartList.Count < 1)
                 return result;
@@ -669,7 +679,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             return result;
         }
 
-        private IEnumerable<SymbolAttribute> ExtractAttributes(object parent, UserAttributes attributes, CompilationUnit parentUnit) {
+        private IEnumerable<SymbolAttribute> ExtractAttributes(UserAttributes attributes, CompilationUnit parentUnit) {
             if (attributes == null || attributes.PartList.Count < 1)
                 return EmptyCollection<SymbolAttribute>.Instance;
 
@@ -688,8 +698,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                     isAssemblyAttribute = true;
                 }
 
-                var userAttribute = CreateLeafNode<SymbolAttribute>(parent, attribute);
-                userAttribute.Name = ExtractSymbolName(userAttribute, attribute.Name);
+                var userAttribute = new SymbolAttribute();
+                userAttribute.Name = ExtractSymbolName(attribute.Name);
 
                 if (!isAssemblyAttribute)
                     result.Add(userAttribute);
@@ -705,14 +715,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region Helper functions
 
-        private static T CreateTreeNode<T>(ISyntaxPart parent, ISyntaxPart element) where T : ISyntaxPart, new() {
-            var result = new T();
-            result.Parent = parent;
-            return result;
-        }
+        private static T CreateNode<T>(TreeTransformerOptions parameter, ISyntaxPart element) where T : new()
+            => CreatePartNode<T>(parameter.LastValue, element);
 
+        private static T CreateRootNode<T>(ISyntaxPart element) where T : new()
+            => CreatePartNode<T>(null, element);
 
-        private static T CreateLeafNode<T>(object parent, ISyntaxPart element) where T : new() {
+        private static T CreatePartNode<T>(ISyntaxPart parent, ISyntaxPart element) where T : new() {
             var result = new T();
             return result;
         }

@@ -69,13 +69,16 @@
     <Compile Include="SyntaxTree\Abstract\GenericType.cs" />
     <Compile Include="SyntaxTree\Abstract\GenericTypes.cs" />
     <Compile Include="SyntaxTree\Abstract\IExpressionTarget.cs" />
+    <Compile Include="SyntaxTree\Abstract\IParameterTarget.cs" />
     <Compile Include="SyntaxTree\Abstract\ISymbolTable.cs" />
     <Compile Include="SyntaxTree\Abstract\ISymbolTableEntry.cs" />
     <Compile Include="SyntaxTree\Abstract\ISymbolWithAttributes.cs" />
     <Compile Include="SyntaxTree\Abstract\ITypeSpecification.cs" />
     <Compile Include="SyntaxTree\Abstract\ITypeTarget.cs" />
     <Compile Include="SyntaxTree\Abstract\MetaType.cs" />
+    <Compile Include="SyntaxTree\Abstract\ParameterDefinitions.cs" />
     <Compile Include="SyntaxTree\Abstract\ParameterDefinition.cs" />
+    <Compile Include="SyntaxTree\Abstract\ParameterReferenceKind.cs" />
     <Compile Include="SyntaxTree\Abstract\PointerToType.cs" />
     <Compile Include="SyntaxTree\Abstract\ProceduralType.cs" />
     <Compile Include="SyntaxTree\Abstract\ProcedureKind.cs" />

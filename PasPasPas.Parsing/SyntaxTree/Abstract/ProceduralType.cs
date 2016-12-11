@@ -5,7 +5,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// <summary>
     ///     procedural type specification
     /// </summary>
-    public class ProceduralType : TypeSpecificationBase {
+    public class ProceduralType : TypeSpecificationBase, IParameterTarget {
 
         /// <summary>
         ///     procedure kind
@@ -15,13 +15,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     return type attributes
         /// </summary>
-        public IEnumerable<SymbolAttribute> ReturnAttributes { get; internal set; }
+        public IEnumerable<SymbolAttribute> ReturnAttributes { get; set; }
 
         /// <summary>
         ///     parameters
         /// </summary>
-        public IList<ParameterDefinition> Parameters { get; }
-            = new List<ParameterDefinition>();
+        public ParameterDefinitions Parameters { get; }
+            = new ParameterDefinitions();
 
         /// <summary>
         ///     maps a token kind to a procedure kind
