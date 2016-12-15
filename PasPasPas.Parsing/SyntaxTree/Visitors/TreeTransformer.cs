@@ -568,6 +568,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             var result = CreateNode<ProceduralType>(parameter, proceduralType);
             parameter.DefineTypeValue(result);
             result.Kind = ProceduralType.MapKind(proceduralType.Kind);
+            result.MethodDeclaration = proceduralType.MethodDeclaration;
+            result.AllowAnonymousMethods = proceduralType.AllowAnonymousMethods;
 
             if (proceduralType.ReturnTypeAttributes != null)
                 result.ReturnAttributes = ExtractAttributes(proceduralType.ReturnTypeAttributes, parameter.CurrentUnit);
@@ -619,7 +621,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             return result;
         }
 
-        private GenericTypes ExtractGenericDefinition(GenericDefinition genericDefinition, TreeTransformerOptions parameter) {
+        private static GenericTypes ExtractGenericDefinition(GenericDefinition genericDefinition, TreeTransformerOptions parameter) {
             var result = new GenericTypes();
 
             if (genericDefinition == null)

@@ -36,7 +36,6 @@ namespace PasPasPasTests.Parser {
                 t => (t as CompilationUnit)?.SymbolName, "z.x.q", StructuralErrors.UnitNameDoesNotMatchFileName);
         }
 
-
         [Fact]
         public void TestLibrary() {
             Func<object, CompilationUnit> u = t => (t as CompilationUnit);
@@ -255,5 +254,34 @@ namespace PasPasPasTests.Parser {
                 StructuralErrors.UnsupportedTypeOfConstruct);
         }
 
+        [Fact]
+        public void TestProceduralType() {
+            Func<object, ProceduralType> u = t => (((t as CompilationUnit)?.InterfaceSymbols["x"]) as TypeDeclaration)?.TypeValue as ProceduralType;
+
+            RunAstTest("unit z.x; interface type x = procedure(x: string); implementation end.", t => u(t)?.Kind, ProcedureKind.Procedure);
+            RunAstTest("unit z.x; interface type x = procedure(x: string); implementation end.", t => u(t)?.MethodDeclaration, false);
+            RunAstTest("unit z.x; interface type x = procedure(x: string) of object; implementation end.", t => u(t)?.MethodDeclaration, true);
+            RunAstTest("unit z.x; interface type x = procedure(x: string); implementation end.", t => u(t)?.AllowAnonymousMethods, false);
+            RunAstTest("unit z.x; interface type x = procedure(x: string) of object; implementation end.", t => u(t)?.AllowAnonymousMethods, false);
+            RunAstTest("unit z.x; interface type x = reference to procedure(x: string); implementation end.", t => u(t)?.AllowAnonymousMethods, true);
+            RunAstTest("unit z.x; interface type x = function(x: string): string; implementation end.", t => u(t)?.Kind, ProcedureKind.Function);
+            RunAstTest("unit z.x; interface type x = function(x: string): string; implementation end.", t => (u(t)?.TypeValue as MetaType)?.Kind, MetaTypeKind.String);
+            RunAstTest("unit z.x; interface type x = function(x: string): [x] string; implementation end.", t => (u(t)?.ReturnAttributes.FirstOrDefault())?.SymbolName, "x");
+
+        }
+
+        [Fact]
+        public void TestFormalParameters() {
+            Func<object, ParameterDefinitions> u = t => ((((t as CompilationUnit)?.InterfaceSymbols["x"]) as TypeDeclaration)?.TypeValue as ProceduralType)?.Parameters;
+
+            RunAstTest("unit z.x; interface type x = procedure(x: string); implementation end.", t => (u(t)?[0] as ParameterDefinition)?.SymbolName, "x");
+            RunAstTest("unit z.x; interface type x = procedure(x: string); implementation end.", t => ((u(t)?[0] as ParameterDefinition)?.TypeValue as MetaType)?.Kind, MetaTypeKind.String);
+            RunAstTest("unit z.x; interface type x = procedure([n] x: string); implementation end.", t => (u(t)?[0] as ParameterDefinition)?.Attributes?.FirstOrDefault().SymbolName, "n");
+            RunAstTest("unit z.x; interface type x = procedure([n] const [m] x: string); implementation end.", t => (u(t)?[0] as ParameterDefinition)?.Attributes?.Skip(1)?.FirstOrDefault().SymbolName, "m");
+            RunAstTest("unit z.x; interface type x = procedure([n] x: string); implementation end.", t => (u(t)?[0] as ParameterDefinition)?.ParameterKind, ParameterReferenceKind.Undefined);
+            RunAstTest("unit z.x; interface type x = procedure([n] var x: string); implementation end.", t => (u(t)?[0] as ParameterDefinition)?.ParameterKind, ParameterReferenceKind.Var);
+            RunAstTest("unit z.x; interface type x = procedure([n] const x: string); implementation end.", t => (u(t)?[0] as ParameterDefinition)?.ParameterKind, ParameterReferenceKind.Const);
+            RunAstTest("unit z.x; interface type x = procedure([n] out x: string); implementation end.", t => (u(t)?[0] as ParameterDefinition)?.ParameterKind, ParameterReferenceKind.Out);
+        }
     }
 }

@@ -1786,6 +1786,7 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         #endregion
+        #region ParseProcedureType
 
         [Rule("ProcedureType", "(ProcedureRefType [ 'of' 'object' ] ( | ProcedureReference")]
         private ProcedureType ParseProcedureType(IExtendableSyntaxPart parent) {
@@ -1793,6 +1794,7 @@ namespace PasPasPas.Parsing.Parser {
 
             if (Match(TokenKind.Procedure, TokenKind.Function)) {
                 result.ProcedureRefType = ParseProcedureRefType(result);
+                result.ProcedureRefType.AllowAnonymousMethods = false;
 
                 if (ContinueWith(result, TokenKind.Of)) {
                     ContinueWithOrMissing(result, TokenKind.Object);
@@ -1811,14 +1813,19 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
+        #endregion
+        #region  ParseProcedureReference
+
         [Rule("ProcedureReference", "'reference' 'to' ProcedureTypeDefinition ")]
         private ProcedureReference ParseProcedureReference(IExtendableSyntaxPart parent) {
             var result = CreateByTerminal<ProcedureReference>(parent, TokenKind.Reference);
             ContinueWithOrMissing(result, TokenKind.To);
             result.ProcedureType = ParseProcedureRefType(result);
+            result.ProcedureType.AllowAnonymousMethods = true;
             return result;
         }
 
+        #endregion
         #region ParseProcedureRefType
 
         [Rule("ProcedureTypeDefinition", "('function' | 'procedure') [ '(' FormalParameters ')' ] [ ':' TypeSpecification ] [ 'of' 'object']")]
@@ -2719,7 +2726,7 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             if (Match(TokenKind.OpenBraces)) {
-                ParseAttributes(result);
+                result.Attributes = ParseAttributes(result, result.Attributes);
             }
 
             result.ParameterNames = ParseIdentList(result, true);
@@ -2983,8 +2990,9 @@ namespace PasPasPas.Parsing.Parser {
         #endregion
 
         [Rule("Attributes", "{ '[' Attribute | AssemblyAttribue ']' }")]
-        private UserAttributes ParseAttributes(IExtendableSyntaxPart parent) {
-            var result = CreateChild<UserAttributes>(parent);
+        private UserAttributes ParseAttributes(IExtendableSyntaxPart parent, UserAttributes result = null) {
+            if (result == null)
+                result = CreateChild<UserAttributes>(parent);
 
             while (Match(TokenKind.OpenBraces)) {
                 if (LookAhead(1, TokenKind.Assembly)) {

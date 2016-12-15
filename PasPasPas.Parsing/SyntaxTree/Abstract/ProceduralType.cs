@@ -5,7 +5,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// <summary>
     ///     procedural type specification
     /// </summary>
-    public class ProceduralType : TypeSpecificationBase, IParameterTarget {
+    public class ProceduralType : TypeSpecificationBase, IParameterTarget, ITypeTarget {
 
         /// <summary>
         ///     procedure kind
@@ -53,7 +53,25 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
                     foreach (var attribute in ReturnAttributes)
                         yield return attribute;
                 }
+
+                if (TypeValue != null)
+                    yield return TypeValue;
             }
         }
+
+        /// <summary>
+        ///     return type
+        /// </summary>
+        public ITypeSpecification TypeValue { get; set; }
+
+        /// <summary>
+        ///     true if this is a method declaration
+        /// </summary>
+        public bool MethodDeclaration { get; set; }
+
+        /// <summary>
+        ///     <true></true> if anonyous methods can be assigned
+        /// </summary>
+        public bool AllowAnonymousMethods { get; set; }
     }
 }

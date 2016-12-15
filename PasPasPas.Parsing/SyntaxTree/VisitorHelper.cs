@@ -35,7 +35,8 @@ namespace PasPasPas.Parsing.SyntaxTree {
 
             while (true) {
 
-                visitor.BeginVisit(current, visitorParameter);
+                if (!visitor.BeginVisit(current, visitorParameter))
+                    return;
 
                 var firstChild = GetFirstChild(current);
 
@@ -44,9 +45,13 @@ namespace PasPasPas.Parsing.SyntaxTree {
                     current = firstChild;
                 }
                 else {
-                    visitor.EndVisit(current, visitorParameter);
+
+                    if (!visitor.EndVisit(current, visitorParameter))
+                        return;
+
                     if (current.Parent == null)
                         return;
+
                     visitor.EndVisitChild(current.Parent, visitorParameter, current);
 
                     var sibling = GetNextSibling(current);
@@ -54,7 +59,10 @@ namespace PasPasPas.Parsing.SyntaxTree {
                         current = current.Parent;
                         if (current == part)
                             return;
-                        visitor.EndVisit(current, visitorParameter);
+
+                        if (!visitor.EndVisit(current, visitorParameter))
+                            return;
+
                         visitor.EndVisitChild(current.Parent, visitorParameter, current);
                         sibling = GetNextSibling(current);
                     }

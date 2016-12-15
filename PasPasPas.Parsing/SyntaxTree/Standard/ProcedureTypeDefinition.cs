@@ -22,6 +22,11 @@
         public FormalParameterSection Parameters { get; set; }
 
         /// <summary>
+        ///     <c>true</c> for reference types
+        /// </summary>
+        public bool AllowAnonymousMethods { get; internal set; }
+
+        /// <summary>
         ///     return types
         /// </summary>
         public TypeSpecification ReturnType { get; set; }

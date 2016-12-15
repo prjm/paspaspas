@@ -5,7 +5,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// <summary>
     ///     formal parameter definition
     /// </summary>
-    public class ParameterDefinition : SymbolTableEntryBase {
+    public class ParameterDefinition : SymbolTableEntryBase, ITypeTarget {
 
         /// <summary>
         ///     attributes
@@ -21,6 +21,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     parameter kind
         /// </summary>
         public ParameterReferenceKind ParameterKind { get; set; }
+
+        /// <summary>
+        ///     parameter type
+        /// </summary>
+        public ITypeSpecification TypeValue { get; set; }
 
         /// <summary>
         ///     symbol name
