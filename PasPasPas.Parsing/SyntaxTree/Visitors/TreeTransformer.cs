@@ -13,7 +13,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #region Unit
 
         private AbstractSyntaxPart BeginVisitItem(Unit unit, TreeTransformerOptions parameter) {
-            var result = CreateRootNode<CompilationUnit>(unit);
+            var result = CreatePartNode<CompilationUnit>(parameter.Project, unit);
             result.FileType = CompilationUnitType.Unit;
             result.UnitName = ExtractSymbolName(unit.UnitName);
             result.Hints = ExtractHints(unit.Hints);
@@ -31,7 +31,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #region Library
 
         private AbstractSyntaxPart BeginVisitItem(Library library, TreeTransformerOptions parameter) {
-            var result = CreateNode<CompilationUnit>(parameter, library);
+            var result = CreatePartNode<CompilationUnit>(parameter.Project, library);
             result.FileType = CompilationUnitType.Library;
             result.UnitName = ExtractSymbolName(library.LibraryName);
             result.Hints = ExtractHints(library.Hints);
@@ -56,7 +56,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <param name="program"></param>
         /// <param name="parameter"></param>
         private AbstractSyntaxPart BeginVisitItem(Program program, TreeTransformerOptions parameter) {
-            var result = CreateRootNode<CompilationUnit>(program);
+            var result = CreatePartNode<CompilationUnit>(parameter.Project, program);
             result.FileType = CompilationUnitType.Program;
             result.UnitName = ExtractSymbolName(program.ProgramName);
             result.FilePath = program.FilePath;
@@ -75,7 +75,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #region Package
 
         private AbstractSyntaxPart BeginVisitItem(Package package, TreeTransformerOptions parameter) {
-            var result = CreateRootNode<CompilationUnit>(package);
+            var result = CreatePartNode<CompilationUnit>(parameter.Project, package);
             result.FileType = CompilationUnitType.Package;
             result.UnitName = ExtractSymbolName(package.PackageName);
             result.FilePath = package.FilePath;
@@ -146,7 +146,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #region TypeDeclaration
 
         private AbstractSyntaxPart BeginVisitItem(Standard.TypeDeclaration typeDeclaration, TreeTransformerOptions parameter) {
-            var declaration = parameter.Define<Abstract.TypeDeclaration>(typeDeclaration);
+            var declaration = CreateNode<Abstract.TypeDeclaration>(parameter, typeDeclaration);
             declaration.Name = ExtractSymbolName(typeDeclaration.TypeId?.Identifier);
             declaration.Generics = ExtractGenericDefinition(typeDeclaration.TypeId?.GenericDefinition, parameter);
             declaration.Attributes = ExtractAttributes(typeDeclaration.Attributes, parameter.CurrentUnit);
@@ -159,7 +159,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #region ConstDeclaration
 
         private AbstractSyntaxPart BeginVisitItem(ConstDeclaration constDeclaration, TreeTransformerOptions parameter) {
-            var declaration = parameter.Define<ConstantDeclaration>(constDeclaration);
+            var declaration = CreateNode<ConstantDeclaration>(parameter, constDeclaration);
             declaration.Name = ExtractSymbolName(constDeclaration.Identifier);
             declaration.Mode = parameter.CurrentDeclarationMode;
             declaration.Attributes = ExtractAttributes(constDeclaration.Attributes, parameter.CurrentUnit);
@@ -578,22 +578,26 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         }
 
         #endregion
+        #region FormalParameterDefinition
+
+        private AbstractSyntaxPart BeginVisitItem(FormalParameterDefinition formalParameter, TreeTransformerOptions parameter) {
+            var result = CreateNode<ParameterTypeDefinition>(parameter, formalParameter);
+            var paramterTarget = parameter.LastValue as IParameterTarget;
+            paramterTarget.Parameters.Add(result);
+            return result;
+        }
+
+        #endregion
         #region FormalParameter
 
         private AbstractSyntaxPart BeginVisitItem(FormalParameter formalParameter, TreeTransformerOptions parameter) {
-            var paramterTarget = parameter.LastValue as IParameterTarget;
-
-            foreach (var parameterName in formalParameter.ParameterNames.Parts) {
-                var identifier = parameterName as Identifier;
-                if (identifier != null) {
-                    var result = CreateNode<ParameterDefinition>(parameter, formalParameter);
-                    result.Name = ExtractSymbolName(identifier);
-                    result.Attributes = ExtractAttributes(formalParameter.Attributes, parameter.CurrentUnit);
-                    result.ParameterKind = ParameterDefinition.MapKind(formalParameter.ParameterType);
-                    paramterTarget.Parameters.Add(result, parameter.LogSource);
-                }
-            }
-            return null;
+            var result = CreateNode<ParameterDefinition>(parameter, formalParameter);
+            var typeDefinition = parameter.LastValue as ParameterTypeDefinition;
+            result.Name = ExtractSymbolName(formalParameter.ParameterName);
+            result.Attributes = ExtractAttributes(formalParameter.Attributes, parameter.CurrentUnit);
+            result.ParameterKind = ParameterDefinition.MapKind(formalParameter.ParameterType);
+            typeDefinition.Add(result, parameter.LogSource);
+            return result;
         }
 
 
@@ -703,8 +707,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 var userAttribute = new SymbolAttribute();
                 userAttribute.Name = ExtractSymbolName(attribute.Name);
 
-                if (!isAssemblyAttribute)
+                if (!isAssemblyAttribute) {
                     result.Add(userAttribute);
+                }
                 else
                     parentUnit.AddAssemblyAttribute(userAttribute);
             }
@@ -717,14 +722,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region Helper functions
 
-        private static T CreateNode<T>(TreeTransformerOptions parameter, ISyntaxPart element) where T : new()
+        private static T CreateNode<T>(TreeTransformerOptions parameter, ISyntaxPart element) where T : AbstractSyntaxPart, new()
             => CreatePartNode<T>(parameter.LastValue, element);
 
-        private static T CreateRootNode<T>(ISyntaxPart element) where T : new()
-            => CreatePartNode<T>(null, element);
-
-        private static T CreatePartNode<T>(ISyntaxPart parent, ISyntaxPart element) where T : new() {
+        private static T CreatePartNode<T>(AbstractSyntaxPart parent, ISyntaxPart element) where T : AbstractSyntaxPart, new() {
             var result = new T();
+            result.Parent = parent;
             return result;
         }
 
@@ -767,9 +770,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (parameter.WorkingStack.Count < 1) return true;
 
             var lastEntry = parameter.WorkingStack.Peek();
-            if (lastEntry.DefiningNode == syntaxPart && //
-                lastEntry.ChildNode == null)
+
+            while (lastEntry.DefiningNode == syntaxPart && //
+                lastEntry.ChildNode == null) {
                 parameter.WorkingStack.Pop();
+                if (parameter.WorkingStack.Count < 1)
+                    return true;
+                lastEntry = parameter.WorkingStack.Peek();
+            }
 
             return true;
         }

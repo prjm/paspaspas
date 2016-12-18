@@ -11,25 +11,15 @@
         public UserAttributes Attributes { get; set; }
 
         /// <summary>
-        ///     default value
+        ///     parameter name
         /// </summary>
-        public Expression DefaultValue { get; set; }
+        public Identifier ParameterName { get; set; }
 
         /// <summary>
-        ///     parse a list of identifiers
-        /// </summary>
-        public IdentifierList ParameterNames { get; set; }
-
-        /// <summary>
-        ///     parameter typs
+        ///     parameter type (var, const, out)
         /// </summary>
         public int ParameterType { get; set; }
             = TokenKind.Undefined;
-
-        /// <summary>
-        ///     type declaration
-        /// </summary>
-        public TypeSpecification TypeDeclaration { get; set; }
 
     }
 }

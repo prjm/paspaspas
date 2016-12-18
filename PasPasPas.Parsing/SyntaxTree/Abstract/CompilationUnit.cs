@@ -38,19 +38,29 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     required units
         /// </summary>
         public RequiredUnitNameList RequiredUnits { get; }
-            = new RequiredUnitNameList();
 
         /// <summary>
         ///     symbols in the interface part of the unit
         /// </summary>
         public DeclaredSymbols InterfaceSymbols { get; }
-            = new DeclaredSymbols();
 
         /// <summary>
         ///     symbols in the implementation part of the unit
         /// </summary>
         public DeclaredSymbols ImplementationSymbols { get; }
-            = new DeclaredSymbols();
+
+        /// <summary>
+        ///     create a new compilation unit
+        /// </summary>
+        public CompilationUnit() {
+            RequiredUnits = new RequiredUnitNameList();
+            InterfaceSymbols = new DeclaredSymbols();
+            ImplementationSymbols = new DeclaredSymbols();
+
+            RequiredUnits.Parent = this;
+            InterfaceSymbols.Parent = this;
+            ImplementationSymbols.Parent = this;
+        }
 
         /// <summary>
         ///     get all parts
@@ -59,8 +69,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         {
             get
             {
-                foreach (var attribute in AssemblyAttributes)
-                    yield return attribute;
                 foreach (var unit in RequiredUnits)
                     yield return unit;
                 yield return InterfaceSymbols;

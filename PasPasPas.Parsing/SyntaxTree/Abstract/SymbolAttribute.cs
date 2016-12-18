@@ -3,17 +3,17 @@
     /// <summary>
     ///     attribute
     /// </summary>
-    public class SymbolAttribute : SymbolTableEntryBase {
-
-        /// <summary>
-        ///     constant symbol name
-        /// </summary>
-        protected override string InternalSymbolName
-            => Name?.CompleteName;
+    public class SymbolAttribute {
 
         /// <summary>
         ///     attribute name
         /// </summary>
         public SymbolName Name { get; set; }
+
+        /// <summary>
+        ///     symbol name
+        /// </summary>
+        public string SymbolName
+            => Name?.CompleteName;
     }
 }

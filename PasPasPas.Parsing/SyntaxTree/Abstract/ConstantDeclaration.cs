@@ -34,8 +34,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         {
             get
             {
-                foreach (var attribute in Attributes)
-                    yield return attribute;
                 if (TypeValue != null)
                     yield return TypeValue;
                 if (Value != null)

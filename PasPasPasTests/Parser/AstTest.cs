@@ -272,16 +272,25 @@ namespace PasPasPasTests.Parser {
 
         [Fact]
         public void TestFormalParameters() {
-            Func<object, ParameterDefinitions> u = t => ((((t as CompilationUnit)?.InterfaceSymbols["x"]) as TypeDeclaration)?.TypeValue as ProceduralType)?.Parameters;
+            Func<object, ParameterTypeDefinition> u = t => ((((t as CompilationUnit)?.InterfaceSymbols["x"]) as TypeDeclaration)?.TypeValue as ProceduralType)?.Parameters?.Parameters[0] as ParameterTypeDefinition;
 
-            RunAstTest("unit z.x; interface type x = procedure(x: string); implementation end.", t => (u(t)?[0] as ParameterDefinition)?.SymbolName, "x");
-            RunAstTest("unit z.x; interface type x = procedure(x: string); implementation end.", t => ((u(t)?[0] as ParameterDefinition)?.TypeValue as MetaType)?.Kind, MetaTypeKind.String);
-            RunAstTest("unit z.x; interface type x = procedure([n] x: string); implementation end.", t => (u(t)?[0] as ParameterDefinition)?.Attributes?.FirstOrDefault().SymbolName, "n");
-            RunAstTest("unit z.x; interface type x = procedure([n] const [m] x: string); implementation end.", t => (u(t)?[0] as ParameterDefinition)?.Attributes?.Skip(1)?.FirstOrDefault().SymbolName, "m");
-            RunAstTest("unit z.x; interface type x = procedure([n] x: string); implementation end.", t => (u(t)?[0] as ParameterDefinition)?.ParameterKind, ParameterReferenceKind.Undefined);
-            RunAstTest("unit z.x; interface type x = procedure([n] var x: string); implementation end.", t => (u(t)?[0] as ParameterDefinition)?.ParameterKind, ParameterReferenceKind.Var);
-            RunAstTest("unit z.x; interface type x = procedure([n] const x: string); implementation end.", t => (u(t)?[0] as ParameterDefinition)?.ParameterKind, ParameterReferenceKind.Const);
-            RunAstTest("unit z.x; interface type x = procedure([n] out x: string); implementation end.", t => (u(t)?[0] as ParameterDefinition)?.ParameterKind, ParameterReferenceKind.Out);
+            RunAstTest("unit z.x; interface type x = procedure(x: string); implementation end.", t => u(t)?[0].Name.CompleteName, "x");
+            RunAstTest("unit z.x; interface type x = procedure(x: string); implementation end.", t => (u(t)?.TypeValue as MetaType)?.Kind, MetaTypeKind.String);
+            RunAstTest("unit z.x; interface type x = procedure([n] x: string); implementation end.", t => u(t)?[0]?.Attributes?.FirstOrDefault()?.SymbolName, "n");
+            RunAstTest("unit z.x; interface type x = procedure([n] const [m] x: string); implementation end.", t => u(t)?[0]?.Attributes?.Skip(1)?.FirstOrDefault()?.SymbolName, "m");
+            RunAstTest("unit z.x; interface type x = procedure([n] x: string); implementation end.", t => u(t)?[0]?.ParameterKind, ParameterReferenceKind.Undefined);
+            RunAstTest("unit z.x; interface type x = procedure([n] var x: string); implementation end.", t => u(t)?[0]?.ParameterKind, ParameterReferenceKind.Var);
+            RunAstTest("unit z.x; interface type x = procedure([n] const x: string); implementation end.", t => u(t)?[0]?.ParameterKind, ParameterReferenceKind.Const);
+            RunAstTest("unit z.x; interface type x = procedure([n] out x: string); implementation end.", t => u(t)?[0]?.ParameterKind, ParameterReferenceKind.Out);
+            RunAstTest("unit z.x; interface type x = procedure([n] var x, z: string); implementation end.", t => u(t)?[1]?.ParameterKind, ParameterReferenceKind.Var);
+            RunAstTest("unit z.x; interface type x = procedure([n] const x, z: string); implementation end.", t => u(t)?[1]?.ParameterKind, ParameterReferenceKind.Const);
+            RunAstTest("unit z.x; interface type x = procedure([n] out x, z: string); implementation end.", t => u(t)?[1]?.ParameterKind, ParameterReferenceKind.Out);
+
+            RunAstTest("unit z.x; interface type x = procedure(x, x: string); implementation end.", t => u(t)?[0].Name.CompleteName, "x",
+                StructuralErrors.DuplicateParameterName);
+
+            RunAstTest("unit z.x; interface type x = procedure(x: string; x: string); implementation end.", t => u(t)?[0].Name.CompleteName, "x",
+                StructuralErrors.DuplicateParameterName);
         }
     }
 }

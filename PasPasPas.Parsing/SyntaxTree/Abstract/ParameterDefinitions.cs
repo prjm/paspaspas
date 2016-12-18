@@ -1,20 +1,36 @@
-﻿using PasPasPas.Infrastructure.Log;
-using PasPasPas.Parsing.SyntaxTree.Visitors;
+﻿using System.Collections.Generic;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
 
     /// <summary>
     ///     parameter definitions
     /// </summary>
-    public class ParameterDefinitions : SymbolTableBase<ParameterDefinition> {
+    public class ParameterDefinitions : AbstractSyntaxPart {
 
         /// <summary>
-        ///     log duplicate parameter
+        ///     parameter list
         /// </summary>
-        /// <param name="newDuplicate">duplicate parameter</param>
-        /// <param name="logSource">log source</param>
-        protected override void LogDuplicateSymbolError(ParameterDefinition newDuplicate, LogSource logSource) {
-            logSource.Error(StructuralErrors.DuplicateParameterName, newDuplicate);
+        public IList<ParameterTypeDefinition> Parameters { get; }
+            = new List<ParameterTypeDefinition>();
+
+        /// <summary>
+        ///     add an parameter
+        /// </summary>
+        /// <param name="parameter"></param>
+        public void Add(ParameterTypeDefinition parameter) {
+            Parameters.Add(parameter);
+        }
+
+        /// <summary>
+        ///     list all parameters
+        /// </summary>
+        public override IEnumerable<ISyntaxPart> Parts
+        {
+            get
+            {
+                foreach (var param in Parameters)
+                    yield return param;
+            }
         }
 
     }

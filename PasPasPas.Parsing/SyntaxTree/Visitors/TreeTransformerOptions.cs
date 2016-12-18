@@ -149,7 +149,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     last value from the working stack
         /// </summary>
-        public ISyntaxPart LastValue
+        public AbstractSyntaxPart LastValue
         {
             get
             {
@@ -188,24 +188,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 }
             }
             // error ??
-        }
-
-        /// <summary>
-        ///     define a tree node
-        /// </summary>
-        /// <typeparam name="T">object type to declare</typeparam>
-        /// <param name="parentItem"></param>
-        /// <returns></returns>
-        public T Define<T>(ISyntaxPart parentItem) where T : AbstractSyntaxPart, new() {
-            if (WorkingStack.Count > 0) {
-                var scope = WorkingStack.Peek();
-                T declaration = CreateNode<T>(scope, parentItem);
-                return declaration;
-            }
-            else {
-                T declaration = CreateNode<T>(null, parentItem);
-                return declaration;
-            }
         }
 
         private static T CreateNode<T>(object parent, ISyntaxPart element) where T : new() {

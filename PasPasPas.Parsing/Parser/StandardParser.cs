@@ -2714,32 +2714,45 @@ namespace PasPasPas.Parsing.Parser {
         #region FormalParameter
 
         [Rule("FormalParameter", "[Attributes] [( 'const' | 'var' | 'out' )] [Attributes] IdentList [ ':' TypeDeclaration ] [ '=' Expression ]")]
-        private FormalParameter ParseFormalParameter(IExtendableSyntaxPart parent) {
-            var result = CreateChild<FormalParameter>(parent);
+        private void ParseFormalParameter(IExtendableSyntaxPart parent) {
+            var kind = TokenKind.Undefined - 1;
+            var parentDefinition = CreateChild<FormalParameterDefinition>(parent);
 
-            if (Match(TokenKind.OpenBraces)) {
-                result.Attributes = ParseAttributes(result);
+            do {
+                var result = CreateChild<FormalParameter>(parentDefinition);
+
+                if (Match(TokenKind.OpenBraces)) {
+                    result.Attributes = ParseAttributes(result);
+                }
+
+                if (kind < TokenKind.Undefined && ContinueWith(result, TokenKind.Const, TokenKind.Var, TokenKind.Out)) {
+                    kind = result.LastTerminalKind;
+                }
+                else if (kind < TokenKind.Undefined - 1) {
+                    kind = TokenKind.Undefined;
+                }
+
+                if (kind > TokenKind.Undefined) {
+                    result.ParameterType = kind;
+                }
+
+                if (Match(TokenKind.OpenBraces)) {
+                    result.Attributes = ParseAttributes(result, result.Attributes);
+                }
+
+                result.ParameterName = RequireIdentifier(result, true);
+
+
+            } while (ContinueWith(parentDefinition, TokenKind.Comma));
+
+            if (ContinueWith(parentDefinition, TokenKind.Colon)) {
+                parentDefinition.TypeDeclaration = ParseTypeSpecification(parentDefinition);
             }
 
-            if (ContinueWith(result, TokenKind.Const, TokenKind.Var, TokenKind.Out)) {
-                result.ParameterType = result.LastTerminalKind;
+            if (ContinueWith(parentDefinition, TokenKind.EqualsSign)) {
+                parentDefinition.DefaultValue = ParseExpression(parentDefinition);
             }
 
-            if (Match(TokenKind.OpenBraces)) {
-                result.Attributes = ParseAttributes(result, result.Attributes);
-            }
-
-            result.ParameterNames = ParseIdentList(result, true);
-
-            if (ContinueWith(result, TokenKind.Colon)) {
-                result.TypeDeclaration = ParseTypeSpecification(result);
-            }
-
-            if (ContinueWith(result, TokenKind.EqualsSign)) {
-                result.DefaultValue = ParseExpression(result);
-            }
-
-            return result;
         }
 
         #endregion

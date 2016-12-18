@@ -55,7 +55,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     duplacate parameter name
         /// </summary>
-        internal static readonly Guid DuplicateParameterName
+        public static readonly Guid DuplicateParameterName
              = new Guid(new byte[] { 0x60, 0xd6, 0x95, 0xc7, 0xa4, 0xc7, 0xce, 0x4b, 0x8a, 0xf4, 0x26, 0x23, 0x52, 0x95, 0xbf, 0x3d });
         /* {c795d660-c7a4-4bce-8af4-26235295bf3d} */
 

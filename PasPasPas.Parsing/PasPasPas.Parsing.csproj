@@ -39,6 +39,7 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="project.json" />
+    <Compile Include="SyntaxTree\Abstract\ParameterTypeDefinition.cs" />
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
   <ItemGroup>
@@ -114,6 +115,7 @@
     <Compile Include="SyntaxTree\Standard\AsmStatement.cs" />
     <Compile Include="SyntaxTree\Standard\AsmExpression.cs" />
     <Compile Include="SyntaxTree\Standard\AsmTerm.cs" />
+    <Compile Include="SyntaxTree\Standard\FormalParameterDefinition.cs" />
     <Compile Include="SyntaxTree\Standard\GenericNamespaceName.cs" />
     <Compile Include="SyntaxTree\Standard\LocalAsmLabel.cs" />
     <Compile Include="SyntaxTree\Standard\Parameter.cs" />

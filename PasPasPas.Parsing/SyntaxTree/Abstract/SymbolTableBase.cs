@@ -12,7 +12,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     ///     base class for symbolic tables
     /// </summary>
     /// <typeparam name="T">symbol type</typeparam>
-    public abstract class SymbolTableBase<T> : AbstractSyntaxPart, ISymbolTable<T>, IReadOnlyList<ISyntaxPart>
+    public abstract class SymbolTableBase<T> : AbstractSyntaxPart, ISymbolTable<T>, IReadOnlyList<T>
         where T : class, ISymbolTableEntry {
 
         /// <summary>
@@ -43,7 +43,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         public bool Add(T entry, LogSource logSource) {
             var name = entry.SymbolName;
             var symbolTable = symbols.Value;
-            if (!symbolTable.Contains(name)) {
+            if (!Contains(name)) {
                 symbolTable.Add(name, entry);
                 return true;
             }
@@ -81,7 +81,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public bool Contains(string key) {
+        public virtual bool Contains(string key) {
             if (!symbols.IsValueCreated)
                 return false;
             return symbols.Value.Contains(key);
@@ -91,7 +91,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     parts
         /// </summary>
         public override IEnumerable<ISyntaxPart> Parts
-            => this;
+        {
+            get
+            {
+                foreach (var value in symbols.Value.Values)
+                    yield return (ISyntaxPart)value;
+            }
+        }
 
         /// <summary>
         ///     number of symbols
@@ -104,8 +110,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public ISyntaxPart this[int index]
-            => ((ISyntaxPart)symbols.Value[index]);
+        public T this[int index]
+            => ((T)symbols.Value[index]);
 
         /// <summary>
         ///     log duplicate symbol error
@@ -120,12 +126,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     get an enumerator
         /// </summary>
         /// <returns></returns>
-        public IEnumerator<ISyntaxPart> GetEnumerator() {
+        public IEnumerator<T> GetEnumerator() {
             if (symbols.IsValueCreated) {
-                return symbols.Value.Values.Cast<ISyntaxPart>().GetEnumerator();
+                return symbols.Value.Values.Cast<T>().GetEnumerator();
             }
             else {
-                return EmptyCollection<ISyntaxPart>.Instance.GetEnumerator();
+                return EmptyCollection<T>.Instance.GetEnumerator();
             }
         }
 
