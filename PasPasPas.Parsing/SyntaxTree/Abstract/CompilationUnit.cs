@@ -73,6 +73,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
                     yield return unit;
                 yield return InterfaceSymbols;
                 yield return ImplementationSymbols;
+                if (InitializationBlock != null)
+                    yield return InitializationBlock;
+                if (FinalizationBlock != null)
+                    yield return FinalizationBlock;
             }
         }
 
@@ -81,6 +85,16 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         public IEnumerable<SymbolAttribute> AssemblyAttributes
             => assemblyAttributes;
+
+        /// <summary>
+        ///     initialization
+        /// </summary>
+        public BlockOfStatements InitializationBlock { get; set; }
+
+        /// <summary>
+        ///     initialization
+        /// </summary>
+        public BlockOfStatements FinalizationBlock { get; set; }
 
         /// <summary>
         ///     list of assembly attributes

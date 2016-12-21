@@ -39,6 +39,8 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="project.json" />
+    <Compile Include="SyntaxTree\Abstract\BlockOfStatements.cs" />
+    <Compile Include="SyntaxTree\Abstract\IStatementTarget.cs" />
     <Compile Include="SyntaxTree\Abstract\ParameterTypeDefinition.cs" />
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>

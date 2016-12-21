@@ -292,5 +292,28 @@ namespace PasPasPasTests.Parser {
             RunAstTest("unit z.x; interface type x = procedure(x: string; x: string); implementation end.", t => u(t)?[0].Name.CompleteName, "x",
                 StructuralErrors.DuplicateParameterName);
         }
+
+        [Fact]
+        public void TestUnitInitialization() {
+            Func<object, BlockOfStatements> u = t => (t as CompilationUnit)?.InitializationBlock;
+
+            RunAstTest("unit z.x; interface implementation initialization begin end end.", t => u(t)?.Statements[0]?.GetType(), typeof(BlockOfStatements));
+        }
+
+
+        [Fact]
+        public void TestUnitFinalization() {
+            Func<object, BlockOfStatements> u = t => (t as CompilationUnit)?.FinalizationBlock;
+
+            RunAstTest("unit z.x; interface implementation initialization finalization begin end end.", t => u(t)?.Statements[0]?.GetType(), typeof(BlockOfStatements));
+        }
+
+        [Fact]
+        public void TestCompoundStatement() {
+            Func<object, BlockOfStatements> u = t => (t as CompilationUnit)?.FinalizationBlock;
+
+            RunAstTest("unit z.x; interface implementation initialization finalization begin begin end; end; end.", t => (u(t)?.Statements[0] as BlockOfStatements)?.Statements[0]?.GetType(), typeof(BlockOfStatements));
+        }
+
     }
 }

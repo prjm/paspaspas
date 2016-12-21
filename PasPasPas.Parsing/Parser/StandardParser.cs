@@ -431,6 +431,8 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
+        #region ParseUnitBlock
+
         [Rule("UnitBlock", "( UnitInitilization 'end' ) | CompoundStatement | 'end' ")]
         private UnitBlock ParseUnitBlock(IExtendableSyntaxPart parent) {
             var result = CreateChild<UnitBlock>(parent);
@@ -446,11 +448,15 @@ namespace PasPasPas.Parsing.Parser {
             if (Match(TokenKind.Initialization)) {
                 result.Initialization = ParseUnitInitialization(result);
                 ContinueWithOrMissing(result, TokenKind.End);
+                return result;
             }
 
             Unexpected();
             return result;
         }
+
+        #endregion
+        #region ParseInitialiParseUnitInitialization
 
         [Rule("UnitInitialization", "'initialization' StatementList [ UnitFinalization ]", true)]
         private UnitInitialization ParseUnitInitialization(IExtendableSyntaxPart parent) {
@@ -459,18 +465,23 @@ namespace PasPasPas.Parsing.Parser {
             result.Statements = ParseStatementList(result);
 
             if (Match(TokenKind.Finalization)) {
-                result.Finalization = ParseFinalization(result);
+                result.Finalization = ParseUnitFinalization(result);
             }
 
             return result;
         }
 
+        #endregion
+        #region ParseUnitFinalization
+
         [Rule("UnitFinalization", "'finalization' StatementList", true)]
-        private UnitFinalization ParseFinalization(IExtendableSyntaxPart parent) {
+        private UnitFinalization ParseUnitFinalization(IExtendableSyntaxPart parent) {
             var result = CreateByTerminal<UnitFinalization>(parent, TokenKind.Finalization);
             result.Statements = ParseStatementList(result);
             return result;
         }
+
+        #endregion
 
         [Rule("CompoundStatement", "(('begin' [ StatementList ] 'end' ) | AsmBlock )")]
         private CompoundStatement ParseCompoundStatement(IExtendableSyntaxPart parent) {
@@ -491,6 +502,8 @@ namespace PasPasPas.Parsing.Parser {
             }
         }
 
+        #region StatementList
+
         [Rule("StatementList", "[Statement], { ';' [Statement]}")]
         private StatementList ParseStatementList(IExtendableSyntaxPart parent) {
             var result = CreateChild<StatementList>(parent);
@@ -501,6 +514,8 @@ namespace PasPasPas.Parsing.Parser {
 
             return result;
         }
+
+        #endregion
 
         [Rule("Statement", "[ Label ':' ] StatementPart")]
         private Statement ParseStatement(IExtendableSyntaxPart parent) {

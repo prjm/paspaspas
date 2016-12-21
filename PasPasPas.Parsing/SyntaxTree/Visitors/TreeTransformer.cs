@@ -603,6 +603,36 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
 
         #endregion
+
+        #region UnitInitialization
+
+        private AbstractSyntaxPart BeginVisitItem(UnitInitialization unitBlock, TreeTransformerOptions parameter) {
+            var result = CreatePartNode<BlockOfStatements>(parameter.CurrentUnit, unitBlock);
+            parameter.CurrentUnit.InitializationBlock = result;
+            return result;
+        }
+
+        #endregion
+        #region UnitFinalization
+
+        private AbstractSyntaxPart BeginVisitItem(UnitFinalization unitBlock, TreeTransformerOptions parameter) {
+            var result = CreatePartNode<BlockOfStatements>(parameter.CurrentUnit, unitBlock);
+            parameter.CurrentUnit.FinalizationBlock = result;
+            return result;
+        }
+
+        #endregion
+        #region CompoundStatement
+
+        private AbstractSyntaxPart BeginVisitItem(CompoundStatement block, TreeTransformerOptions parameter) {
+            var statementTarget = parameter.LastValue as IStatementTarget;
+            var result = CreatePartNode<BlockOfStatements>(parameter.LastValue, block);
+            statementTarget.Statements.Add(result);
+            return result;
+        }
+
+
+        #endregion
         #region Extractors
 
         private static SymbolName ExtractSymbolName(NamespaceName name) {
