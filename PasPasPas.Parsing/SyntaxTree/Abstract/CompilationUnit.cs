@@ -6,7 +6,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// <summary>
     ///     basic representation of a compilation unit
     /// </summary>
-    public class CompilationUnit : SymbolTableEntryBase {
+    public class CompilationUnit : SymbolTableEntryBase, IStatementTarget {
 
         /// <summary>
         ///     unit file type
@@ -95,6 +95,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     initialization
         /// </summary>
         public BlockOfStatements FinalizationBlock { get; set; }
+
+        /// <summary>
+        ///     statements
+        /// </summary>
+        public BlockOfStatements Statements
+            => InitializationBlock;
 
         /// <summary>
         ///     list of assembly attributes

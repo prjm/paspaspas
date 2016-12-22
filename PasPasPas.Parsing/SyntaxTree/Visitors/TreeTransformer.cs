@@ -36,6 +36,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             result.UnitName = ExtractSymbolName(library.LibraryName);
             result.Hints = ExtractHints(library.Hints);
             result.FilePath = library.FilePath;
+            result.InitializationBlock = new BlockOfStatements();
             parameter.Project.Add(result, parameter.LogSource);
             parameter.CurrentUnitMode = UnitMode.Library;
             parameter.CurrentUnit = result;
@@ -60,6 +61,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             result.FileType = CompilationUnitType.Program;
             result.UnitName = ExtractSymbolName(program.ProgramName);
             result.FilePath = program.FilePath;
+            result.InitializationBlock = new BlockOfStatements();
             parameter.CurrentUnitMode = UnitMode.Program;
             parameter.Project.Add(result, parameter.LogSource);
             parameter.CurrentUnit = result;
@@ -174,11 +176,15 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         private AbstractSyntaxPart BeginVisitItem(ConstantExpression constExpression, TreeTransformerOptions parameter) {
 
             if (constExpression.IsArrayConstant) {
-                return parameter.DefineExpressionValue<ArrayConstant>(constExpression);
+                var result = CreateNode<ArrayConstant>(parameter, constExpression);
+                parameter.DefineExpressionValue(result);
+                return result;
             }
 
             if (constExpression.IsRecordConstant) {
-                return parameter.DefineExpressionValue<RecordConstant>(constExpression);
+                var result = CreateNode<RecordConstant>(parameter, constExpression);
+                parameter.DefineExpressionValue(result);
+                return result;
             }
 
             return null;
@@ -188,7 +194,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #region RecordConstantExpression
 
         private AbstractSyntaxPart BeginVisitItem(RecordConstantExpression constExpression, TreeTransformerOptions parameter) {
-            var expression = parameter.DefineExpressionValue<RecordConstantItem>(constExpression);
+            var expression = CreateNode<RecordConstantItem>(parameter, constExpression);
+            parameter.DefineExpressionValue(expression);
             expression.Name = ExtractSymbolName(constExpression.Name);
             return expression;
         }
@@ -198,7 +205,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         private AbstractSyntaxPart BeginVisitItem(Expression expression, TreeTransformerOptions parameter) {
             if (expression.LeftOperand != null && expression.RightOperand != null) {
-                var currentExpression = parameter.DefineExpressionValue<BinaryOperator>(expression);
+                var currentExpression = CreateNode<BinaryOperator>(parameter, expression);
+                parameter.DefineExpressionValue(currentExpression);
                 currentExpression.Kind = BinaryOperator.ConvertKind(expression.Kind);
                 return currentExpression;
             }
@@ -210,7 +218,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         private AbstractSyntaxPart BeginVisitItem(SimpleExpression simpleExpression, TreeTransformerOptions parameter) {
             if (simpleExpression.LeftOperand != null && simpleExpression.RightOperand != null) {
-                var currentExpression = parameter.DefineExpressionValue<BinaryOperator>(simpleExpression);
+                var currentExpression = CreateNode<BinaryOperator>(parameter, simpleExpression);
+                parameter.DefineExpressionValue(currentExpression);
                 currentExpression.Kind = BinaryOperator.ConvertKind(simpleExpression.Kind);
                 return currentExpression;
             }
@@ -222,7 +231,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         private AbstractSyntaxPart BeginVisitItem(Term term, TreeTransformerOptions parameter) {
             if (term.LeftOperand != null && term.RightOperand != null) {
-                var currentExpression = parameter.DefineExpressionValue<BinaryOperator>(term);
+                var currentExpression = CreateNode<BinaryOperator>(parameter, term);
+                parameter.DefineExpressionValue(currentExpression);
                 currentExpression.Kind = BinaryOperator.ConvertKind(term.Kind);
                 return currentExpression;
             }
@@ -236,7 +246,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
             // unary operators
             if (factor.AddressOf != null || factor.Not != null || factor.Plus != null || factor.Minus != null) {
-                var value = parameter.DefineExpressionValue<UnaryOperator>(factor);
+                var value = CreateNode<UnaryOperator>(parameter, factor);
+                parameter.DefineExpressionValue(value);
+
                 if (factor.AddressOf != null)
                     value.Kind = ExpressionKind.AddressOf;
                 else if (factor.Not != null)
@@ -526,7 +538,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         private AbstractSyntaxPart BeginVisitItem(ArrayIndex arrayIndex, TreeTransformerOptions parameter) {
             if (arrayIndex.EndIndex != null) {
-                var binOp = parameter.DefineExpressionValue<BinaryOperator>(arrayIndex);
+                var binOp = CreateNode<BinaryOperator>(parameter, arrayIndex);
+                parameter.DefineExpressionValue(binOp);
                 binOp.Kind = ExpressionKind.RangeOperator;
                 return binOp;
             }

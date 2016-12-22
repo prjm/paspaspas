@@ -190,11 +190,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             // error ??
         }
 
-        private static T CreateNode<T>(object parent, ISyntaxPart element) where T : new() {
-            var result = new T();
-            return result;
-        }
-
         /// <summary>
         ///     add entry to symbol table
         /// </summary>
@@ -208,30 +203,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 }
             }
             // error ??            
-        }
-
-        /// <summary>
-        ///     define an expression value
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="parent"></param>
-        public T DefineExpressionValue<T>(ISyntaxPart parent) where T : ExpressionBase, new() {
-            var node = CreateNode<T>(LastExpression, parent);
-            DefineExpressionValue(node);
-            return node;
-        }
-
-
-        /// <summary>
-        ///     define a type value
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="parent"></param>
-        /// <returns></returns>
-        public T DefineTypeValue<T>(ISyntaxPart parent) where T : TypeSpecificationBase, new() {
-            var node = CreateNode<T>(LastTypeDeclaration, parent);
-            DefineTypeValue(node);
-            return node;
         }
 
     }
