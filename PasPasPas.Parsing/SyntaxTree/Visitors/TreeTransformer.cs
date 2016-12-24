@@ -638,12 +638,52 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #region CompoundStatement
 
         private AbstractSyntaxPart BeginVisitItem(CompoundStatement block, TreeTransformerOptions parameter) {
-            var statementTarget = parameter.LastValue as IStatementTarget;
-            var result = CreatePartNode<BlockOfStatements>(parameter.LastValue, block);
-            statementTarget.Statements.Add(result);
-            return result;
+
+            if (block.AssemblerBlock != null) {
+                var statementTarget = parameter.LastValue as IStatementTarget;
+                var result = CreatePartNode<BlockOfAssemblerStatements>(parameter.LastValue, block);
+                statementTarget.Statements.Add(result);
+                return result;
+            }
+
+            else {
+                var statementTarget = parameter.LastValue as IStatementTarget;
+                var result = CreatePartNode<BlockOfStatements>(parameter.LastValue, block);
+                statementTarget.Statements.Add(result);
+                return result;
+            }
+
         }
 
+        #endregion
+        #region Label
+
+        private AbstractSyntaxPart BeginVisitItem(Label label, TreeTransformerOptions parameter) {
+            var parent = parameter.LastValue as StatementBase;
+
+            if (parent == null)
+                return null;
+
+            var standardLabel = label.LabelName as Identifier;
+            if (standardLabel != null) {
+                parent.LabelName = ExtractSymbolName(standardLabel);
+                return null;
+            }
+
+            var intLabel = label.LabelName as StandardInteger;
+            if (intLabel != null) {
+                parent.LabelName = new SymbolName() { Name = intLabel.Value.ToString() };
+                return null;
+            }
+
+            var hexLabel = label.LabelName as HexNumber;
+            if (hexLabel != null) {
+                parent.LabelName = new SymbolName() { Name = hexLabel.Value };
+                return null;
+            }
+
+            return null;
+        }
 
         #endregion
         #region Extractors

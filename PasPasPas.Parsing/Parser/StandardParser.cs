@@ -482,6 +482,7 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         #endregion
+        #region ParseCompoundStatement
 
         [Rule("CompoundStatement", "(('begin' [ StatementList ] 'end' ) | AsmBlock )")]
         private CompoundStatement ParseCompoundStatement(IExtendableSyntaxPart parent) {
@@ -502,6 +503,7 @@ namespace PasPasPas.Parsing.Parser {
             }
         }
 
+        #endregion
         #region StatementList
 
         [Rule("StatementList", "[Statement], { ';' [Statement]}")]
@@ -516,7 +518,7 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         #endregion
-
+        #region ParseStatement
         [Rule("Statement", "[ Label ':' ] StatementPart")]
         private Statement ParseStatement(IExtendableSyntaxPart parent) {
             var result = CreateChild<Statement>(parent);
@@ -539,6 +541,7 @@ namespace PasPasPas.Parsing.Parser {
             result.Part = part;
             return result;
         }
+        #endregion
 
         [Rule("StatementPart", "IfStatement | CaseStatement | ReapeatStatement | WhileStatment | ForStatement | WithStatement | TryStatement | RaiseStatement | AsmStatement | CompoundStatement | SimpleStatement ")]
         private StatementPart ParseStatementPart(IExtendableSyntaxPart parent) {
@@ -1602,6 +1605,8 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
+        #region ParseLabel
+
         [Rule("Label", "Identifier | Integer")]
         private Label ParseLabel(IExtendableSyntaxPart parent) {
             var result = CreateChild<Label>(parent);
@@ -1622,6 +1627,7 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
+        #endregion
         #region ParseConstDeclaration
 
         [Rule("ConstDeclaration", "[Attributes] Identifier [ ':' TypeSpecification ] = ConstantExpression Hints';'")]

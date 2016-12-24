@@ -5,20 +5,20 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// <summary>
     ///     a block of statements
     /// </summary>
-    public class BlockOfStatements : AbstractSyntaxPart, IStatementTarget {
+    public class BlockOfStatements : StatementBase, IStatementTarget {
 
         /// <summary>
         ///     contained statements
         /// </summary>
-        public IList<AbstractSyntaxPart> Statements { get; }
-            = new List<AbstractSyntaxPart>();
+        public IList<StatementBase> Statements { get; }
+            = new List<StatementBase>();
 
 
         /// <summary>
         ///     add a statement
         /// </summary>
         /// <param name="part">statement part to add</param>
-        public void Add(AbstractSyntaxPart part) {
+        public void Add(StatementBase part) {
             Statements.Add(part);
         }
 
