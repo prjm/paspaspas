@@ -27,7 +27,7 @@ namespace PasPasPas.Options.DataTypes {
         /// <summary>
         ///     deny unit in packages
         /// </summary>
-        public DerivedValueOption<DenyUnitInPackages> DenyInPackages { get; }
+        public DerivedValueOption<DenyUnitInPackage> DenyInPackages { get; }
 
         /// <summary>
         ///     design-time only package
@@ -46,7 +46,7 @@ namespace PasPasPas.Options.DataTypes {
         /// <param name="baseOptions"></param>
         public ConditionalCompilationOptions(ConditionalCompilationOptions baseOptions) {
             Conditionals = new DerivedListOption<ConditionalSymbol>(baseOptions?.Conditionals);
-            DenyInPackages = new DerivedValueOption<DenyUnitInPackages>(baseOptions?.DenyInPackages);
+            DenyInPackages = new DerivedValueOption<DenyUnitInPackage>(baseOptions?.DenyInPackages);
             DesignOnly = new DerivedValueOption<DesignOnlyUnit>(baseOptions?.DesignOnly);
         }
 
@@ -56,7 +56,7 @@ namespace PasPasPas.Options.DataTypes {
         /// <param name="symbolName">symbol name</param>
         /// <returns><c>true</c> if the symbol is defined</returns>
         public bool IsSymbolDefined(string symbolName) {
-            foreach (var conditional in Conditionals) {
+            foreach (ConditionalSymbol conditional in Conditionals) {
                 if (string.Equals(conditional.Name, symbolName, StringComparison.OrdinalIgnoreCase) && conditional.IsActive)
                     return true;
             }
@@ -88,8 +88,8 @@ namespace PasPasPas.Options.DataTypes {
             DenyInPackages.ResetToDefault();
             DesignOnly.ResetToDefault();
 
-            for (int i = Conditionals.OwnValues.Count - 1; i >= 0; i--) {
-                var symbol = Conditionals.OwnValues[i];
+            for (var i = Conditionals.OwnValues.Count - 1; i >= 0; i--) {
+                ConditionalSymbol symbol = Conditionals.OwnValues[i];
                 if (symbol.IsLocal)
                     Conditionals.OwnValues.RemoveAt(i);
                 else
@@ -114,7 +114,7 @@ namespace PasPasPas.Options.DataTypes {
             if (string.IsNullOrEmpty(symbolName))
                 return;
 
-            foreach (var conditional in Conditionals) {
+            foreach (ConditionalSymbol conditional in Conditionals) {
                 if (string.Equals(conditional.Name, symbolName, StringComparison.OrdinalIgnoreCase)) {
                     conditional.IsActive = isActive;
                     return;
@@ -133,15 +133,15 @@ namespace PasPasPas.Options.DataTypes {
         ///     add a else condition
         /// </summary>
         public void AddElseCondition() {
-            bool inInvalidBranch = false;
-            bool anotherConditionMatches = true;
+            var inInvalidBranch = false;
+            var anotherConditionMatches = true;
 
             if (CurrentCondition != null && CurrentCondition.ParentBranch != null && !CurrentCondition.ParentBranch.Matches) {
                 inInvalidBranch = true;
             }
             else if (CurrentCondition != null) {
                 anotherConditionMatches = false;
-                foreach (var condition in CurrentCondition.Parent.Conditions) {
+                foreach (IConditionBranch condition in CurrentCondition.Parent.Conditions) {
                     if (condition.Matches) {
                         anotherConditionMatches = true;
                         break;
@@ -229,7 +229,7 @@ namespace PasPasPas.Options.DataTypes {
         /// </summary>
         private void UpdateSkipState() {
             var doSkip = false;
-            var condition = CurrentCondition;
+            IConditionBranch condition = CurrentCondition;
 
             while (condition != null) {
                 if (!condition.Matches) {

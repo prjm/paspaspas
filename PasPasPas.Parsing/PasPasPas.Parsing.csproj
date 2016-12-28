@@ -28,6 +28,7 @@
     <CodeAnalysisRuleSet>..\PasPasPas.Ruleset</CodeAnalysisRuleSet>
     <DocumentationFile>bin\Debug\PasPasPas.Parsing.XML</DocumentationFile>
     <RunCodeAnalysis>true</RunCodeAnalysis>
+    <LangVersion>6</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>

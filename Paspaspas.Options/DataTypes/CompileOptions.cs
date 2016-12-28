@@ -17,28 +17,28 @@
             Assertions = new DerivedValueOption<AssertionMode>(baseOptions?.Assertions);
             DebugInfo = new DerivedValueOption<DebugInformation>(baseOptions?.DebugInfo);
             ExportCppObjects = new DerivedValueOption<ExportCppObjects>(baseOptions?.ExportCppObjects);
-            ExtendedCompatibility = new DerivedValueOption<ExtendedCompatiblityMode>(baseOptions?.ExtendedCompatibility);
+            ExtendedCompatibility = new DerivedValueOption<ExtendedCompatibilityMode>(baseOptions?.ExtendedCompatibility);
             UseExtendedSyntax = new DerivedValueOption<ExtendedSyntax>(baseOptions?.UseExtendedSyntax);
-            ExcessPrecision = new DerivedValueOption<ExcessPrecisionForResults>(baseOptions?.ExcessPrecision);
+            ExcessPrecision = new DerivedValueOption<ExcessPrecisionForResult>(baseOptions?.ExcessPrecision);
             HighCharUnicode = new DerivedValueOption<HighCharsUnicode>(baseOptions?.HighCharUnicode);
-            Hints = new DerivedValueOption<CompilerHints>(baseOptions?.Hints);
+            Hints = new DerivedValueOption<CompilerHint>(baseOptions?.Hints);
             ImageBase = new DerivedValueOption<int>(baseOptions?.ImageBase);
             ImplicitBuild = new DerivedValueOption<ImplicitBuildUnit>(baseOptions?.ImplicitBuild);
             ImportedData = new DerivedValueOption<ImportGlobalUnitData>(baseOptions?.ImportedData);
-            IoChecks = new DerivedValueOption<IoCallChecks>(baseOptions?.IoChecks);
+            IoChecks = new DerivedValueOption<IoCallCheck>(baseOptions?.IoChecks);
             LocalSymbols = new DerivedValueOption<LocalDebugSymbols>(baseOptions?.LocalSymbols);
             LongStrings = new DerivedValueOption<LongStringTypes>(baseOptions?.LongStrings);
             OpenStrings = new DerivedValueOption<OpenStringTypes>(baseOptions?.OpenStrings);
-            Optimization = new DerivedValueOption<CompilerOptmization>(baseOptions?.Optimization);
+            Optimization = new DerivedValueOption<CompilerOptimization>(baseOptions?.Optimization);
             CheckOverflows = new DerivedValueOption<RuntimeOverflowChecks>(baseOptions?.CheckOverflows);
             SafeDivide = new DerivedValueOption<FDivSafeDivide>(baseOptions?.SafeDivide);
             RangeChecks = new DerivedValueOption<RuntimeRangeChecks>(baseOptions?.RangeChecks);
             StackFrames = new DerivedValueOption<StackFrameGeneration>(baseOptions?.StackFrames);
             IndexOfFirstCharInString = new DerivedValueOption<FirstCharIndex>(baseOptions?.IndexOfFirstCharInString);
-            WritableConstants = new DerivedValueOption<ConstantValues>(baseOptions?.WritableConstants);
+            WritableConstants = new DerivedValueOption<ConstantValue>(baseOptions?.WritableConstants);
             WeakLinkRtti = new DerivedValueOption<RttiLinkMode>(baseOptions?.WeakLinkRtti);
             WeakPackageUnit = new DerivedValueOption<WeakPackaging>(baseOptions?.WeakPackageUnit);
-            Warnings = new DerivedValueOption<CompilerWarnings>(baseOptions?.Warnings);
+            Warnings = new DerivedValueOption<CompilerWarning>(baseOptions?.Warnings);
             VarStringChecks = new DerivedValueOption<ShortVarStringChecks>(baseOptions?.VarStringChecks);
             TypedPointers = new DerivedValueOption<TypeCheckedPointers>(baseOptions?.TypedPointers);
             SymbolDefinitions = new DerivedValueOption<SymbolDefinitionInfo>(baseOptions?.SymbolDefinitions);
@@ -51,10 +51,10 @@
             RealCompatibility = new DerivedValueOption<Real48>(baseOptions?.RealCompatibility);
             PointerMath = new DerivedValueOption<PointerManipulation>(baseOptions?.PointerMath);
             OldTypeLayout = new DerivedValueOption<OldRecordTypes>(baseOptions?.OldTypeLayout);
-            MinumEnumSize = new DerivedValueOption<EnumSize>(baseOptions?.MinumEnumSize);
+            MinimumEnumSize = new DerivedValueOption<EnumSize>(baseOptions?.MinimumEnumSize);
             MethodInfo = new DerivedValueOption<MethodInfoRtti>(baseOptions?.MethodInfo);
-            MinimumStackMemSize = new DerivedValueOption<long>(baseOptions?.MinimumStackMemSize);
-            MaximumStackMemSize = new DerivedValueOption<long>(baseOptions?.MaximumStackMemSize);
+            MinimumStackMemorySize = new DerivedValueOption<long>(baseOptions?.MinimumStackMemorySize);
+            MaximumStackMemorySize = new DerivedValueOption<long>(baseOptions?.MaximumStackMemorySize);
             LegacyIfEnd = new DerivedValueOption<EndIfMode>(baseOptions?.LegacyIfEnd);
         }
 
@@ -96,7 +96,7 @@
         /// <summary>
         ///     excess precision on x64
         /// </summary>
-        public DerivedValueOption<ExcessPrecisionForResults> ExcessPrecision { get; }
+        public DerivedValueOption<ExcessPrecisionForResult> ExcessPrecision { get; }
 
         /// <summary>
         ///     export all cpp objects
@@ -106,7 +106,7 @@
         /// <summary>
         ///     exteded compatibility mode
         /// </summary>
-        public DerivedValueOption<ExtendedCompatiblityMode> ExtendedCompatibility { get; }
+        public DerivedValueOption<ExtendedCompatibilityMode> ExtendedCompatibility { get; }
 
         /// <summary>
         ///     high chars for unicode
@@ -116,7 +116,7 @@
         /// <summary>
         ///     enable or disable hints
         /// </summary>
-        public DerivedValueOption<CompilerHints> Hints { get; }
+        public DerivedValueOption<CompilerHint> Hints { get; }
 
         /// <summary>
         ///     switch to enable extended syntax
@@ -136,7 +136,7 @@
         /// <summary>
         ///     io checks flag
         /// </summary>
-        public DerivedValueOption<IoCallChecks> IoChecks { get; }
+        public DerivedValueOption<IoCallCheck> IoChecks { get; }
 
         /// <summary>
         ///     local symbols flag
@@ -156,7 +156,7 @@
         /// <summary>
         ///     flag to enable optimization
         /// </summary>
-        public DerivedValueOption<CompilerOptmization> Optimization { get; }
+        public DerivedValueOption<CompilerOptimization> Optimization { get; }
 
         /// <summary>
         ///     flag to enable overflow checks
@@ -186,7 +186,7 @@
         /// <summary>
         ///     writeable constants
         /// </summary>
-        public DerivedValueOption<ConstantValues> WritableConstants { get; }
+        public DerivedValueOption<ConstantValue> WritableConstants { get; }
 
         /// <summary>
         ///     weak rtti linking
@@ -201,7 +201,7 @@
         /// <summary>
         ///     compiler warnings
         /// </summary>
-        public DerivedValueOption<CompilerWarnings> Warnings { get; }
+        public DerivedValueOption<CompilerWarning> Warnings { get; }
 
         /// <summary>
         ///     var string checks
@@ -266,7 +266,7 @@
         /// <summary>
         ///     minimum enum size
         /// </summary>
-        public DerivedValueOption<EnumSize> MinumEnumSize { get; }
+        public DerivedValueOption<EnumSize> MinimumEnumSize { get; }
 
         /// <summary>
         ///     enable or disable method info generation
@@ -276,12 +276,12 @@
         /// <summary>
         ///     maximum stack memory size
         /// </summary>
-        public DerivedValueOption<long> MaximumStackMemSize { get; }
+        public DerivedValueOption<long> MaximumStackMemorySize { get; }
 
         /// <summary>
         ///     mininun stack memory size
         /// </summary>
-        public DerivedValueOption<long> MinimumStackMemSize { get; }
+        public DerivedValueOption<long> MinimumStackMemorySize { get; }
 
         /// <summary>
         ///     legacy if / endif mode
@@ -333,10 +333,10 @@
             RealCompatibility.ResetToDefault();
             PointerMath.ResetToDefault();
             OldTypeLayout.ResetToDefault();
-            MinumEnumSize.ResetToDefault();
+            MinimumEnumSize.ResetToDefault();
             MethodInfo.ResetToDefault();
-            MinimumStackMemSize.ResetToDefault();
-            MaximumStackMemSize.ResetToDefault();
+            MinimumStackMemorySize.ResetToDefault();
+            MaximumStackMemorySize.ResetToDefault();
             LegacyIfEnd.ResetToDefault();
         }
 
@@ -374,7 +374,7 @@
             RealCompatibility.ResetToDefault();
             PointerMath.ResetToDefault();
             OldTypeLayout.ResetToDefault();
-            MinumEnumSize.ResetToDefault();
+            MinimumEnumSize.ResetToDefault();
             MethodInfo.ResetToDefault();
             LegacyIfEnd.ResetToDefault();
         }

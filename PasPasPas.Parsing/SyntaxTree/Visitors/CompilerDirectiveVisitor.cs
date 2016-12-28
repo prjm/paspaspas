@@ -573,7 +573,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <param name="syntaxPart"></param>
         /// <param name="parameter"></param>
         public void BeginVisitItem(MinEnumSize syntaxPart, CompilerDirectiveVisitorOptions parameter) {
-            parameter.CompilerOptions.MinumEnumSize.Value = syntaxPart.Size;
+            parameter.CompilerOptions.MinimumEnumSize.Value = syntaxPart.Size;
         }
 
 
@@ -696,9 +696,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <param name="parameter"></param>
         public void BeginVisitItem(StackMemorySize syntaxPart, CompilerDirectiveVisitorOptions parameter) {
             if (syntaxPart.MinStackSize != null)
-                parameter.CompilerOptions.MinimumStackMemSize.Value = syntaxPart.MinStackSize.Value;
+                parameter.CompilerOptions.MinimumStackMemorySize.Value = syntaxPart.MinStackSize.Value;
             if (syntaxPart.MaxStackSize != null)
-                parameter.CompilerOptions.MaximumStackMemSize.Value = syntaxPart.MaxStackSize.Value;
+                parameter.CompilerOptions.MaximumStackMemorySize.Value = syntaxPart.MaxStackSize.Value;
         }
 
         /// <summary>

@@ -3,7 +3,7 @@
     /// <summary>
     ///     flag to enable / disable compiler warnings
     /// </summary>
-    public enum CompilerWarnings {
+    public enum CompilerWarning {
 
         /// <summary>
         ///     undefined flag state

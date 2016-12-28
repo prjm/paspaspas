@@ -18,6 +18,6 @@
         /// <summary>
         ///     allow unit always
         /// </summary>
-        Alltimes = 2,
+        AllTimes = 2,
     }
 }

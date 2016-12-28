@@ -10,6 +10,6 @@ namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
         /// <summary>
         ///     switch mode
         /// </summary>
-        public ConstantValues Mode { get; set; }
+        public ConstantValue Mode { get; set; }
     }
 }

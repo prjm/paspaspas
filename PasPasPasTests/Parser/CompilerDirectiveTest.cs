@@ -61,8 +61,8 @@ namespace PasPasPasTests.Parser {
 
         [Fact]
         public void TestMemStackSize() {
-            Func<object> mi = () => CompilerOptions.MinimumStackMemSize.Value;
-            Func<object> ma = () => CompilerOptions.MaximumStackMemSize.Value;
+            Func<object> mi = () => CompilerOptions.MinimumStackMemorySize.Value;
+            Func<object> ma = () => CompilerOptions.MaximumStackMemorySize.Value;
             RunCompilerDirective("", 0L, ma);
             RunCompilerDirective("", 0L, mi);
             RunCompilerDirective("M 100, 200", 200L, ma);
@@ -175,11 +175,11 @@ namespace PasPasPasTests.Parser {
         [Fact]
         public void TestDenyPackageUnit() {
             Func<object> f = () => ConditionalCompilation.DenyInPackages.Value;
-            RunCompilerDirective("", DenyUnitInPackages.Undefined, f);
-            RunCompilerDirective("DENYPACKAGEUNIT ON", DenyUnitInPackages.DenyUnit, f);
-            RunCompilerDirective("DENYPACKAGEUNIT OFF", DenyUnitInPackages.AllowUnit, f);
-            RunCompilerDirective("DENYPACKAGEUNIT KAPUTT", DenyUnitInPackages.Undefined, f, CompilerDirectiveParserErrors.InvalidDenyPackageUnitDirective);
-            RunCompilerDirective("DENYPACKAGEUNIT", DenyUnitInPackages.Undefined, f, CompilerDirectiveParserErrors.InvalidDenyPackageUnitDirective);
+            RunCompilerDirective("", DenyUnitInPackage.Undefined, f);
+            RunCompilerDirective("DENYPACKAGEUNIT ON", DenyUnitInPackage.DenyUnit, f);
+            RunCompilerDirective("DENYPACKAGEUNIT OFF", DenyUnitInPackage.AllowUnit, f);
+            RunCompilerDirective("DENYPACKAGEUNIT KAPUTT", DenyUnitInPackage.Undefined, f, CompilerDirectiveParserErrors.InvalidDenyPackageUnitDirective);
+            RunCompilerDirective("DENYPACKAGEUNIT", DenyUnitInPackage.Undefined, f, CompilerDirectiveParserErrors.InvalidDenyPackageUnitDirective);
         }
 
         [Fact]
@@ -199,7 +199,7 @@ namespace PasPasPasTests.Parser {
             Func<object> f = () => ConditionalCompilation.DesignOnly.Value;
             RunCompilerDirective("", DesignOnlyUnit.Undefined, f);
             RunCompilerDirective("DESIGNONLY ON", DesignOnlyUnit.InDesignTimeOnly, f);
-            RunCompilerDirective("DESIGNONLY OFF", DesignOnlyUnit.Alltimes, f);
+            RunCompilerDirective("DESIGNONLY OFF", DesignOnlyUnit.AllTimes, f);
             RunCompilerDirective("DESIGNONLY KAPUTT", DesignOnlyUnit.Undefined, f, CompilerDirectiveParserErrors.InvalidDesignTimeOnlyDirective);
             RunCompilerDirective("DESIGNONLY", DesignOnlyUnit.Undefined, f, CompilerDirectiveParserErrors.InvalidDesignTimeOnlyDirective);
         }
@@ -229,11 +229,11 @@ namespace PasPasPasTests.Parser {
         [Fact]
         public void TestExtendedCompatibility() {
             Func<object> f = () => CompilerOptions.ExtendedCompatibility.Value;
-            RunCompilerDirective("", ExtendedCompatiblityMode.Undefined, f);
-            RunCompilerDirective("EXTENDEDCOMPATIBILITY ON", ExtendedCompatiblityMode.Enabled, f);
-            RunCompilerDirective("EXTENDEDCOMPATIBILITY OFF", ExtendedCompatiblityMode.Disabled, f);
-            RunCompilerDirective("EXTENDEDCOMPATIBILITY KAPUTT", ExtendedCompatiblityMode.Undefined, f, CompilerDirectiveParserErrors.InvalidExtendedCompatibilityDirective);
-            RunCompilerDirective("EXTENDEDCOMPATIBILITY", ExtendedCompatiblityMode.Undefined, f, CompilerDirectiveParserErrors.InvalidExtendedCompatibilityDirective);
+            RunCompilerDirective("", ExtendedCompatibilityMode.Undefined, f);
+            RunCompilerDirective("EXTENDEDCOMPATIBILITY ON", ExtendedCompatibilityMode.Enabled, f);
+            RunCompilerDirective("EXTENDEDCOMPATIBILITY OFF", ExtendedCompatibilityMode.Disabled, f);
+            RunCompilerDirective("EXTENDEDCOMPATIBILITY KAPUTT", ExtendedCompatibilityMode.Undefined, f, CompilerDirectiveParserErrors.InvalidExtendedCompatibilityDirective);
+            RunCompilerDirective("EXTENDEDCOMPATIBILITY", ExtendedCompatibilityMode.Undefined, f, CompilerDirectiveParserErrors.InvalidExtendedCompatibilityDirective);
         }
 
         [Fact]
@@ -265,11 +265,11 @@ namespace PasPasPasTests.Parser {
         [Fact]
         public void TestExcessPrecision() {
             Func<object> f = () => CompilerOptions.ExcessPrecision.Value;
-            RunCompilerDirective("", ExcessPrecisionForResults.Undefined, f);
-            RunCompilerDirective("EXCESSPRECISION  ON", ExcessPrecisionForResults.EnableExcess, f);
-            RunCompilerDirective("EXCESSPRECISION  OFF", ExcessPrecisionForResults.DisableExcess, f);
-            RunCompilerDirective("EXCESSPRECISION  KAPUTT", ExcessPrecisionForResults.Undefined, f, CompilerDirectiveParserErrors.InvalidExcessPrecisionDirective);
-            RunCompilerDirective("EXCESSPRECISION  ", ExcessPrecisionForResults.Undefined, f, CompilerDirectiveParserErrors.InvalidExcessPrecisionDirective);
+            RunCompilerDirective("", ExcessPrecisionForResult.Undefined, f);
+            RunCompilerDirective("EXCESSPRECISION  ON", ExcessPrecisionForResult.EnableExcess, f);
+            RunCompilerDirective("EXCESSPRECISION  OFF", ExcessPrecisionForResult.DisableExcess, f);
+            RunCompilerDirective("EXCESSPRECISION  KAPUTT", ExcessPrecisionForResult.Undefined, f, CompilerDirectiveParserErrors.InvalidExcessPrecisionDirective);
+            RunCompilerDirective("EXCESSPRECISION  ", ExcessPrecisionForResult.Undefined, f, CompilerDirectiveParserErrors.InvalidExcessPrecisionDirective);
         }
 
         [Fact]
@@ -285,11 +285,11 @@ namespace PasPasPasTests.Parser {
         [Fact]
         public void TestHints() {
             Func<object> f = () => CompilerOptions.Hints.Value;
-            RunCompilerDirective("", CompilerHints.Undefined, f);
-            RunCompilerDirective("HINTS ON", CompilerHints.EnableHints, f);
-            RunCompilerDirective("HINTS OFF", CompilerHints.DisableHints, f);
-            RunCompilerDirective("HINTS KAPUTT", CompilerHints.Undefined, f, CompilerDirectiveParserErrors.InvalidHintsDirective);
-            RunCompilerDirective("HINTS ", CompilerHints.Undefined, f, CompilerDirectiveParserErrors.InvalidHintsDirective);
+            RunCompilerDirective("", CompilerHint.Undefined, f);
+            RunCompilerDirective("HINTS ON", CompilerHint.EnableHints, f);
+            RunCompilerDirective("HINTS OFF", CompilerHint.DisableHints, f);
+            RunCompilerDirective("HINTS KAPUTT", CompilerHint.Undefined, f, CompilerDirectiveParserErrors.InvalidHintsDirective);
+            RunCompilerDirective("HINTS ", CompilerHint.Undefined, f, CompilerDirectiveParserErrors.InvalidHintsDirective);
         }
 
         [Fact]
@@ -361,15 +361,15 @@ namespace PasPasPasTests.Parser {
         [Fact]
         public void TestIoChecks() {
             Func<object> f = () => CompilerOptions.IoChecks.Value;
-            RunCompilerDirective("", IoCallChecks.Undefined, f);
-            RunCompilerDirective("I+", IoCallChecks.EnableIoChecks, f);
-            RunCompilerDirective("I-", IoCallChecks.DisableIoChecks, f);
-            RunCompilerDirective("I 3", IoCallChecks.Undefined, f, CompilerDirectiveParserErrors.InvalidIoChecksDirective);
-            RunCompilerDirective("I", IoCallChecks.Undefined, f, CompilerDirectiveParserErrors.InvalidIoChecksDirective);
-            RunCompilerDirective("IOCHECKS  ON", IoCallChecks.EnableIoChecks, f);
-            RunCompilerDirective("IOCHECKS OFF", IoCallChecks.DisableIoChecks, f);
-            RunCompilerDirective("IOCHECKS KAPUTT", IoCallChecks.Undefined, f, CompilerDirectiveParserErrors.InvalidIoChecksDirective);
-            RunCompilerDirective("IOCHECKS ", IoCallChecks.Undefined, f, CompilerDirectiveParserErrors.InvalidIoChecksDirective);
+            RunCompilerDirective("", IoCallCheck.Undefined, f);
+            RunCompilerDirective("I+", IoCallCheck.EnableIoChecks, f);
+            RunCompilerDirective("I-", IoCallCheck.DisableIoChecks, f);
+            RunCompilerDirective("I 3", IoCallCheck.Undefined, f, CompilerDirectiveParserErrors.InvalidIoChecksDirective);
+            RunCompilerDirective("I", IoCallCheck.Undefined, f, CompilerDirectiveParserErrors.InvalidIoChecksDirective);
+            RunCompilerDirective("IOCHECKS  ON", IoCallCheck.EnableIoChecks, f);
+            RunCompilerDirective("IOCHECKS OFF", IoCallCheck.DisableIoChecks, f);
+            RunCompilerDirective("IOCHECKS KAPUTT", IoCallCheck.Undefined, f, CompilerDirectiveParserErrors.InvalidIoChecksDirective);
+            RunCompilerDirective("IOCHECKS ", IoCallCheck.Undefined, f, CompilerDirectiveParserErrors.InvalidIoChecksDirective);
         }
 
         [Fact]
@@ -415,15 +415,15 @@ namespace PasPasPasTests.Parser {
         [Fact]
         public void TestOptimization() {
             Func<object> f = () => CompilerOptions.Optimization.Value;
-            RunCompilerDirective("", CompilerOptmization.Undefined, f);
-            RunCompilerDirective("O+", CompilerOptmization.EnableOptimization, f);
-            RunCompilerDirective("O-", CompilerOptmization.DisableOptimization, f);
-            RunCompilerDirective("O 4", CompilerOptmization.Undefined, f, CompilerDirectiveParserErrors.InvalidOptimizationDirective);
-            RunCompilerDirective("O ", CompilerOptmization.Undefined, f, CompilerDirectiveParserErrors.InvalidOptimizationDirective);
-            RunCompilerDirective("OPTIMIZATION  ON", CompilerOptmization.EnableOptimization, f);
-            RunCompilerDirective("OPTIMIZATION  OFF", CompilerOptmization.DisableOptimization, f);
-            RunCompilerDirective("OPTIMIZATION  KAPUTT", CompilerOptmization.Undefined, f, CompilerDirectiveParserErrors.InvalidOptimizationDirective);
-            RunCompilerDirective("OPTIMIZATION  ", CompilerOptmization.Undefined, f, CompilerDirectiveParserErrors.InvalidOptimizationDirective);
+            RunCompilerDirective("", CompilerOptimization.Undefined, f);
+            RunCompilerDirective("O+", CompilerOptimization.EnableOptimization, f);
+            RunCompilerDirective("O-", CompilerOptimization.DisableOptimization, f);
+            RunCompilerDirective("O 4", CompilerOptimization.Undefined, f, CompilerDirectiveParserErrors.InvalidOptimizationDirective);
+            RunCompilerDirective("O ", CompilerOptimization.Undefined, f, CompilerDirectiveParserErrors.InvalidOptimizationDirective);
+            RunCompilerDirective("OPTIMIZATION  ON", CompilerOptimization.EnableOptimization, f);
+            RunCompilerDirective("OPTIMIZATION  OFF", CompilerOptimization.DisableOptimization, f);
+            RunCompilerDirective("OPTIMIZATION  KAPUTT", CompilerOptimization.Undefined, f, CompilerDirectiveParserErrors.InvalidOptimizationDirective);
+            RunCompilerDirective("OPTIMIZATION  ", CompilerOptimization.Undefined, f, CompilerDirectiveParserErrors.InvalidOptimizationDirective);
         }
 
         [Fact]
@@ -493,15 +493,15 @@ namespace PasPasPasTests.Parser {
         [Fact]
         public void TestWritableConst() {
             Func<object> f = () => CompilerOptions.WritableConstants.Value;
-            RunCompilerDirective("", ConstantValues.Undefined, f);
-            RunCompilerDirective("J-", ConstantValues.Constant, f);
-            RunCompilerDirective("J+", ConstantValues.Writable, f);
-            RunCompilerDirective("J 3", ConstantValues.Undefined, f, CompilerDirectiveParserErrors.InvalidWritableConstantsDirective);
-            RunCompilerDirective("J", ConstantValues.Undefined, f, CompilerDirectiveParserErrors.InvalidWritableConstantsDirective);
-            RunCompilerDirective("WRITEABLECONST  OFF", ConstantValues.Constant, f);
-            RunCompilerDirective("WRITEABLECONST  ON", ConstantValues.Writable, f);
-            RunCompilerDirective("WRITEABLECONST  KAPUTT", ConstantValues.Undefined, f, CompilerDirectiveParserErrors.InvalidWritableConstantsDirective);
-            RunCompilerDirective("WRITEABLECONST  ", ConstantValues.Undefined, f, CompilerDirectiveParserErrors.InvalidWritableConstantsDirective);
+            RunCompilerDirective("", ConstantValue.Undefined, f);
+            RunCompilerDirective("J-", ConstantValue.Constant, f);
+            RunCompilerDirective("J+", ConstantValue.Writable, f);
+            RunCompilerDirective("J 3", ConstantValue.Undefined, f, CompilerDirectiveParserErrors.InvalidWritableConstantsDirective);
+            RunCompilerDirective("J", ConstantValue.Undefined, f, CompilerDirectiveParserErrors.InvalidWritableConstantsDirective);
+            RunCompilerDirective("WRITEABLECONST  OFF", ConstantValue.Constant, f);
+            RunCompilerDirective("WRITEABLECONST  ON", ConstantValue.Writable, f);
+            RunCompilerDirective("WRITEABLECONST  KAPUTT", ConstantValue.Undefined, f, CompilerDirectiveParserErrors.InvalidWritableConstantsDirective);
+            RunCompilerDirective("WRITEABLECONST  ", ConstantValue.Undefined, f, CompilerDirectiveParserErrors.InvalidWritableConstantsDirective);
         }
 
         [Fact]
@@ -527,11 +527,11 @@ namespace PasPasPasTests.Parser {
         [Fact]
         public void TestWarnings() {
             Func<object> f = () => CompilerOptions.Warnings.Value;
-            RunCompilerDirective("", CompilerWarnings.Undefined, f);
-            RunCompilerDirective("WARNINGS  ON", CompilerWarnings.Enable, f);
-            RunCompilerDirective("WARNINGS  OFF", CompilerWarnings.Disable, f);
-            RunCompilerDirective("WARNINGS  KAPUTT", CompilerWarnings.Undefined, f, CompilerDirectiveParserErrors.InvalidWarningsDirective);
-            RunCompilerDirective("WARNINGS  ", CompilerWarnings.Undefined, f, CompilerDirectiveParserErrors.InvalidWarningsDirective);
+            RunCompilerDirective("", CompilerWarning.Undefined, f);
+            RunCompilerDirective("WARNINGS  ON", CompilerWarning.Enable, f);
+            RunCompilerDirective("WARNINGS  OFF", CompilerWarning.Disable, f);
+            RunCompilerDirective("WARNINGS  KAPUTT", CompilerWarning.Undefined, f, CompilerDirectiveParserErrors.InvalidWarningsDirective);
+            RunCompilerDirective("WARNINGS  ", CompilerWarning.Undefined, f, CompilerDirectiveParserErrors.InvalidWarningsDirective);
         }
 
         [Fact]
@@ -850,7 +850,7 @@ namespace PasPasPasTests.Parser {
 
         [Fact]
         public void TestMinEnumSize() {
-            Func<object> f = () => CompilerOptions.MinumEnumSize.Value;
+            Func<object> f = () => CompilerOptions.MinimumEnumSize.Value;
             RunCompilerDirective("", EnumSize.Undefined, f);
             RunCompilerDirective("Z+", EnumSize.FourByte, f);
             RunCompilerDirective("Z-", EnumSize.OneByte, f);

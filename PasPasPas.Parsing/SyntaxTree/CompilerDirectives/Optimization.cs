@@ -10,6 +10,6 @@ namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
         /// <summary>
         ///     optimization mode
         /// </summary>
-        public CompilerOptmization Mode { get; set; }
+        public CompilerOptimization Mode { get; set; }
     }
 }

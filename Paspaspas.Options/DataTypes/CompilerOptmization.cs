@@ -3,7 +3,7 @@
     /// <summary>
     ///     flag for compiler optimization
     /// </summary>
-    public enum CompilerOptmization {
+    public enum CompilerOptimization {
 
         /// <summary>
         ///     undefined flag state

@@ -3,7 +3,7 @@
     /// <summary>
     ///     flag for precission excess under x64
     /// </summary>
-    public enum ExcessPrecisionForResults {
+    public enum ExcessPrecisionForResult {
 
         /// <summary>
         ///     undefined precision excess

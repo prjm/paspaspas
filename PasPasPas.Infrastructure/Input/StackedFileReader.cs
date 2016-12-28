@@ -123,7 +123,7 @@ namespace PasPasPas.Infrastructure.Input {
             if (string.IsNullOrEmpty(valueToPutback))
                 throw new ArgumentNullException(nameof(valueToPutback));
 
-            for (int charIndex = valueToPutback.Length - 1; charIndex >= 0; charIndex--) {
+            for (var charIndex = valueToPutback.Length - 1; charIndex >= 0; charIndex--) {
                 buffer.Push(valueToPutback[charIndex]);
             }
         }
@@ -131,13 +131,13 @@ namespace PasPasPas.Infrastructure.Input {
         /// <summary>
         ///     putback a string buffer
         /// </summary>
-        /// <param name="buffer"></param>
-        internal void Putback(StringBuilder buffer) {
+        /// <param name="charsToPutback"></param>
+        internal void Putback(StringBuilder charsToPutback) {
             // REMOVE REMOVE
-            for (int charIndex = buffer.Length - 1; charIndex >= 0; charIndex--) {
-                this.buffer.Push(buffer[charIndex]);
+            for (var charIndex = charsToPutback.Length - 1; charIndex >= 0; charIndex--) {
+                buffer.Push(charsToPutback[charIndex]);
             }
-            buffer.Clear();
+            charsToPutback.Clear();
         }
 
         /// <summary>
@@ -218,7 +218,7 @@ namespace PasPasPas.Infrastructure.Input {
                 return FetchCharFromFragment(out switchedInput);
             }
 
-            var file = files.Peek();
+            PartlyReadFile file = files.Peek();
             result = file.InputFile.NextChar();
 
             if (file.InputFile.AtEof) {
@@ -247,7 +247,7 @@ namespace PasPasPas.Infrastructure.Input {
         }
 
         private char FetchCharFromFragment(out bool switchedInput) {
-            var fragment = putbackFragments.Peek();
+            PutbackFragment fragment = putbackFragments.Peek();
             char result;
             result = fragment.Pop();
             if (fragment.AtEof()) {
@@ -349,7 +349,7 @@ namespace PasPasPas.Infrastructure.Input {
             if (files.Count < 1)
                 return;
 
-            var file = files.Peek();
+            PartlyReadFile file = files.Peek();
             file.Close(false);
         }
 
@@ -369,7 +369,7 @@ namespace PasPasPas.Infrastructure.Input {
             if (!disposedValue) {
                 if (disposing) {
                     while (files != null && files.Count > 0) {
-                        var file = files.Pop();
+                        PartlyReadFile file = files.Pop();
                         lastFilePath = file.InputFile.FilePath;
                         file.Close(true);
                     }

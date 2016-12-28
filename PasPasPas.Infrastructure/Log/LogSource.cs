@@ -18,7 +18,7 @@ namespace PasPasPas.Infrastructure.Log {
         public LogSource(ILogManager logManager, Guid groupId) {
 
             if (logManager == null)
-                throw new ArgumentNullException(nameof(manager));
+                throw new ArgumentNullException(nameof(logManager));
 
             if (groupId == default(Guid))
                 throw new ArgumentOutOfRangeException(nameof(groupId));

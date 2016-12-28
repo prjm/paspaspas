@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace PasPasPas.Infrastructure.Log {
 
@@ -18,11 +19,11 @@ namespace PasPasPas.Infrastructure.Log {
         /// <param name="messageId">message id</param>
         /// <param name="messageData">message data</param>
         /// <param name="groupId">group id</param>
-        /// <param name="messageServerity">severity</param>
-        public LogMessage(MessageSeverity messageServerity, Guid groupId, Guid messageId, params object[] messageData) {
+        /// <param name="messageSeverity">severity</param>
+        public LogMessage(MessageSeverity messageSeverity, Guid groupId, Guid messageId, params object[] messageData) {
 
-            if (messageServerity == MessageSeverity.Undefined)
-                throw new ArgumentOutOfRangeException(nameof(messageServerity));
+            if (messageSeverity == MessageSeverity.Undefined)
+                throw new ArgumentOutOfRangeException(nameof(messageSeverity));
 
             if (groupId == default(Guid))
                 throw new ArgumentOutOfRangeException(nameof(groupId));
@@ -32,7 +33,7 @@ namespace PasPasPas.Infrastructure.Log {
 
             group = groupId;
             id = messageId;
-            severity = messageServerity;
+            severity = messageSeverity;
             data = messageData ?? new object[0];
         }
 
@@ -53,6 +54,13 @@ namespace PasPasPas.Infrastructure.Log {
         /// </summary>
         public MessageSeverity Severity
             => severity;
+
+
+        /// <summary>
+        ///     get message data
+        /// </summary>
+        public IList<object> Data
+            => data;
 
     }
 }

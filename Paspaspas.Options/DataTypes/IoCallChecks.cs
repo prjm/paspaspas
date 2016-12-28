@@ -3,7 +3,7 @@
     /// <summary>
     ///     option for io call checks
     /// </summary>
-    public enum IoCallChecks {
+    public enum IoCallCheck {
 
         /// <summary>
         ///     undefined setting

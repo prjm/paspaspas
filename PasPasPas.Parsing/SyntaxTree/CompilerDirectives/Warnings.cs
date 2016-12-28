@@ -10,6 +10,6 @@ namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
         /// <summary>
         ///     warning mode
         /// </summary>
-        public CompilerWarnings Mode { get; set; }
+        public CompilerWarning Mode { get; set; }
     }
 }

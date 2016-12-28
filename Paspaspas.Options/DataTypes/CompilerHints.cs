@@ -3,7 +3,7 @@
     /// <summary>
     ///     setting for compiler hints
     /// </summary>
-    public enum CompilerHints {
+    public enum CompilerHint {
 
         /// <summary>
         ///     undefined hints

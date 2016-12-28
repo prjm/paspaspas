@@ -10,6 +10,6 @@ namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
         /// <summary>
         ///     compatibility mode
         /// </summary>
-        public ExtendedCompatiblityMode Mode { get; set; }
+        public ExtendedCompatibilityMode Mode { get; set; }
     }
 }

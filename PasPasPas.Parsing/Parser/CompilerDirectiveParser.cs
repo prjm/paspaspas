@@ -1217,10 +1217,10 @@ namespace PasPasPas.Parsing.Parser {
             Warnings result = CreateByTerminal<Warnings>(parent, TokenKind.Warnings);
 
             if (ContinueWith(result, TokenKind.On)) {
-                result.Mode = CompilerWarnings.Enable;
+                result.Mode = CompilerWarning.Enable;
             }
             else if (ContinueWith(result, TokenKind.Off)) {
-                result.Mode = CompilerWarnings.Disable;
+                result.Mode = CompilerWarning.Disable;
             }
             else {
                 ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidWarningsDirective, new[] { TokenKind.On, TokenKind.Off });
@@ -1259,10 +1259,10 @@ namespace PasPasPas.Parsing.Parser {
             WritableConsts result = CreateByTerminal<WritableConsts>(parent, TokenKind.WritableConstSwitchLong);
 
             if (ContinueWith(result, TokenKind.On)) {
-                result.Mode = ConstantValues.Writable;
+                result.Mode = ConstantValue.Writable;
             }
             else if (ContinueWith(result, TokenKind.Off)) {
-                result.Mode = ConstantValues.Constant;
+                result.Mode = ConstantValue.Constant;
             }
             else {
                 ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidWritableConstantsDirective, new[] { TokenKind.On, TokenKind.Off });
@@ -1343,10 +1343,10 @@ namespace PasPasPas.Parsing.Parser {
             Optimization result = CreateByTerminal<Optimization>(parent, TokenKind.OptimizationSwitchLong);
 
             if (ContinueWith(result, TokenKind.On)) {
-                result.Mode = CompilerOptmization.EnableOptimization;
+                result.Mode = CompilerOptimization.EnableOptimization;
             }
             else if (ContinueWith(result, TokenKind.Off)) {
-                result.Mode = CompilerOptmization.DisableOptimization;
+                result.Mode = CompilerOptimization.DisableOptimization;
             }
             else {
                 ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidOptimizationDirective, new[] { TokenKind.On, TokenKind.Off });
@@ -1399,10 +1399,10 @@ namespace PasPasPas.Parsing.Parser {
             IoChecks result = CreateByTerminal<IoChecks>(parent, TokenKind.IoChecks);
 
             if (ContinueWith(result, TokenKind.On)) {
-                result.Mode = IoCallChecks.EnableIoChecks;
+                result.Mode = IoCallCheck.EnableIoChecks;
             }
             else if (ContinueWith(result, TokenKind.Off)) {
-                result.Mode = IoCallChecks.DisableIoChecks;
+                result.Mode = IoCallCheck.DisableIoChecks;
             }
             else {
                 ErrorAndSkip(parent, CompilerDirectiveParserErrors.InvalidIoChecksDirective, new[] { TokenKind.On, TokenKind.Off });
@@ -1447,10 +1447,10 @@ namespace PasPasPas.Parsing.Parser {
             Hints result = CreateByTerminal<Hints>(parent, TokenKind.Hints);
 
             if (ContinueWith(result, TokenKind.On)) {
-                result.Mode = CompilerHints.EnableHints;
+                result.Mode = CompilerHint.EnableHints;
             }
             else if (ContinueWith(result, TokenKind.Off)) {
-                result.Mode = CompilerHints.DisableHints;
+                result.Mode = CompilerHint.DisableHints;
             }
             else {
                 ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidHintsDirective, new[] { TokenKind.On, TokenKind.Off });
@@ -1475,10 +1475,10 @@ namespace PasPasPas.Parsing.Parser {
             ExcessPrecision result = CreateByTerminal<ExcessPrecision>(parent, TokenKind.ExcessPrecision);
 
             if (ContinueWith(result, TokenKind.On)) {
-                result.Mode = ExcessPrecisionForResults.EnableExcess;
+                result.Mode = ExcessPrecisionForResult.EnableExcess;
             }
             else if (ContinueWith(result, TokenKind.Off)) {
-                result.Mode = ExcessPrecisionForResults.DisableExcess;
+                result.Mode = ExcessPrecisionForResult.DisableExcess;
             }
             else {
                 ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidExcessPrecisionDirective, new[] { TokenKind.On, TokenKind.Off });
@@ -1503,10 +1503,10 @@ namespace PasPasPas.Parsing.Parser {
             ExtendedCompatibility result = CreateByTerminal<ExtendedCompatibility>(parent, TokenKind.ExtendedCompatibility);
 
             if (ContinueWith(result, TokenKind.On)) {
-                result.Mode = ExtendedCompatiblityMode.Enabled;
+                result.Mode = ExtendedCompatibilityMode.Enabled;
             }
             else if (ContinueWith(result, TokenKind.Off)) {
-                result.Mode = ExtendedCompatiblityMode.Disabled;
+                result.Mode = ExtendedCompatibilityMode.Disabled;
             }
             else {
                 ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidExtendedCompatibilityDirective, new[] { TokenKind.On, TokenKind.Off });
@@ -1545,7 +1545,7 @@ namespace PasPasPas.Parsing.Parser {
                 result.DesignTimeOnly = DesignOnlyUnit.InDesignTimeOnly;
             }
             else if (ContinueWith(result, TokenKind.Off)) {
-                result.DesignTimeOnly = DesignOnlyUnit.Alltimes;
+                result.DesignTimeOnly = DesignOnlyUnit.AllTimes;
             }
             else {
                 ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidDesignTimeOnlyDirective, new[] { TokenKind.On, TokenKind.Off });
@@ -1567,10 +1567,10 @@ namespace PasPasPas.Parsing.Parser {
             ParseDenyPackageUnit result = CreateByTerminal<ParseDenyPackageUnit>(parent, TokenKind.DenyPackageUnit);
 
             if (ContinueWith(result, TokenKind.On)) {
-                result.DenyUnit = DenyUnitInPackages.DenyUnit;
+                result.DenyUnit = DenyUnitInPackage.DenyUnit;
             }
             else if (ContinueWith(result, TokenKind.Off)) {
-                result.DenyUnit = DenyUnitInPackages.AllowUnit;
+                result.DenyUnit = DenyUnitInPackage.AllowUnit;
             }
             else {
                 ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidDenyPackageUnitDirective, new[] { TokenKind.On, TokenKind.Off });
@@ -1864,10 +1864,10 @@ namespace PasPasPas.Parsing.Parser {
             WritableConsts result = CreateByTerminal<WritableConsts>(parent, TokenKind.WritableConstSwitch);
 
             if (ContinueWith(result, TokenKind.Plus)) {
-                result.Mode = ConstantValues.Writable;
+                result.Mode = ConstantValue.Writable;
             }
             else if (ContinueWith(result, TokenKind.Minus)) {
-                result.Mode = ConstantValues.Constant;
+                result.Mode = ConstantValue.Constant;
             }
             else {
                 ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidWritableConstantsDirective, new[] { TokenKind.Plus, TokenKind.Minus });
@@ -1989,10 +1989,10 @@ namespace PasPasPas.Parsing.Parser {
             Optimization result = CreateByTerminal<Optimization>(parent, TokenKind.OptimizationSwitch);
 
             if (ContinueWith(result, TokenKind.Plus)) {
-                result.Mode = CompilerOptmization.EnableOptimization;
+                result.Mode = CompilerOptimization.EnableOptimization;
             }
             else if (ContinueWith(result, TokenKind.Minus)) {
-                result.Mode = CompilerOptmization.DisableOptimization;
+                result.Mode = CompilerOptimization.DisableOptimization;
             }
             else {
                 ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidOptimizationDirective, new[] { TokenKind.Plus, TokenKind.Minus });
@@ -2060,12 +2060,12 @@ namespace PasPasPas.Parsing.Parser {
             if (LookAhead(1, TokenKind.Plus)) {
                 IoChecks result = CreateByTerminal<IoChecks>(parent, TokenKind.IncludeSwitch);
                 ContinueWith(result, TokenKind.Plus);
-                result.Mode = IoCallChecks.EnableIoChecks;
+                result.Mode = IoCallCheck.EnableIoChecks;
             }
             else if (LookAhead(1, TokenKind.Minus)) {
                 IoChecks result = CreateByTerminal<IoChecks>(parent, TokenKind.IncludeSwitch);
                 ContinueWith(result, TokenKind.Minus);
-                result.Mode = IoCallChecks.DisableIoChecks;
+                result.Mode = IoCallCheck.DisableIoChecks;
             }
             else if (LookAhead(1, TokenKind.Identifier) || LookAhead(1, TokenKind.QuotedString)) {
                 Include result = CreateByTerminal<Include>(parent, TokenKind.IncludeSwitch);

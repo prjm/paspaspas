@@ -3,7 +3,7 @@
     /// <summary>
     ///     flag to enable writeable constants
     /// </summary>
-    public enum ConstantValues {
+    public enum ConstantValue {
 
         /// <summary>
         ///     undefined flag state

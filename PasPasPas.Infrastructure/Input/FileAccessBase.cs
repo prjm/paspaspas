@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using PasPasPas.Infrastructure.Utils;
 
 namespace PasPasPas.Infrastructure.Input {
 
@@ -50,13 +51,13 @@ namespace PasPasPas.Infrastructure.Input {
 
 
             IFileReference path = input.FilePath;
-            string fileName = path.FileName;
+            var fileName = path.FileName;
 
             if (string.IsNullOrEmpty(fileName))
                 throw new InvalidOperationException("Undefined filename");
 
             if (mockupFiles.Value.ContainsKey(fileName))
-                throw new InvalidOperationException($"Duplicate mockup file {path}");
+                throw new InvalidOperationException(StringUtils.Invariant($"Duplicate mockup file {path}"));
 
             mockupFiles.Value.Add(fileName, input);
         }

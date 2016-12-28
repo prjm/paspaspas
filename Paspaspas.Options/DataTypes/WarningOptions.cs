@@ -111,7 +111,7 @@ namespace PasPasPas.Options.DataTypes {
         ///     clear options
         /// </summary>
         public void Clear() {
-            foreach (var option in options.Values)
+            foreach (WarningOption option in options.Values)
                 option.ResetToDefault();
         }
 
@@ -119,7 +119,7 @@ namespace PasPasPas.Options.DataTypes {
         ///     reset options on a new unit
         /// </summary>
         public void ResetOnNewUnit() {
-            foreach (var option in options.Values)
+            foreach (WarningOption option in options.Values)
                 option.ResetToDefault();
         }
 

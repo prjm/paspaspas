@@ -10,6 +10,6 @@ namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
         /// <summary>
         ///     switch mode
         /// </summary>
-        public IoCallChecks Mode { get; set; }
+        public IoCallCheck Mode { get; set; }
     }
 }

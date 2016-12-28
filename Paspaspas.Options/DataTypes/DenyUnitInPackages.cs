@@ -3,7 +3,7 @@
     /// <summary>
     ///     flag to dissallow unit in packages
     /// </summary>
-    public enum DenyUnitInPackages {
+    public enum DenyUnitInPackage {
 
 
         /// <summary>

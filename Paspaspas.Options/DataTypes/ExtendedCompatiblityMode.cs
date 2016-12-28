@@ -3,7 +3,7 @@
     /// <summary>
     ///     exteded compatibility mode
     /// </summary>
-    public enum ExtendedCompatiblityMode {
+    public enum ExtendedCompatibilityMode {
 
         /// <summary>
         ///     compatibility mode undefined

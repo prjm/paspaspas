@@ -10,6 +10,6 @@ namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
         /// <summary>
         ///     switch value
         /// </summary>
-        public DenyUnitInPackages DenyUnit { get; set; }
+        public DenyUnitInPackage DenyUnit { get; set; }
     }
 }

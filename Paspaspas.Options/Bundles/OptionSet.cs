@@ -73,12 +73,7 @@ namespace PasPasPas.Options.Bundles {
         ///     meta information
         /// </summary>
         public MetaInformation Meta { get; }
-
-        /// <summary>
-        ///     service name
-        /// </summary>
-        public string ServiceName => "CompilerOptions";
-
+        
         /// <summary>
         ///     path options
         /// </summary>
@@ -151,9 +146,9 @@ namespace PasPasPas.Options.Bundles {
                 case 'G':
                     return GetSwitchInfo(CompilerOptions.ImportedData, ImportGlobalUnitData.DoImport, ImportGlobalUnitData.NoImport);
                 case 'I':
-                    return GetSwitchInfo(CompilerOptions.IoChecks, IoCallChecks.EnableIoChecks, IoCallChecks.DisableIoChecks);
+                    return GetSwitchInfo(CompilerOptions.IoChecks, IoCallCheck.EnableIoChecks, IoCallCheck.DisableIoChecks);
                 case 'J':
-                    return GetSwitchInfo(CompilerOptions.WritableConstants, ConstantValues.Writable, ConstantValues.Constant);
+                    return GetSwitchInfo(CompilerOptions.WritableConstants, ConstantValue.Writable, ConstantValue.Constant);
                 case 'H':
                     return GetSwitchInfo(CompilerOptions.LongStrings, LongStringTypes.EnableLongStrings, LongStringTypes.DisableLongStrings);
                 case 'L':
@@ -161,7 +156,7 @@ namespace PasPasPas.Options.Bundles {
                 case 'M':
                     return GetSwitchInfo(CompilerOptions.PublishedRtti, RttiForPublishedProperties.Enable, RttiForPublishedProperties.Disable);
                 case 'O':
-                    return GetSwitchInfo(CompilerOptions.Optimization, CompilerOptmization.EnableOptimization, CompilerOptmization.DisableOptimization);
+                    return GetSwitchInfo(CompilerOptions.Optimization, CompilerOptimization.EnableOptimization, CompilerOptimization.DisableOptimization);
                 case 'P':
                     return GetSwitchInfo(CompilerOptions.OpenStrings, OpenStringTypes.EnableOpenStrings, OpenStringTypes.DisableOpenStrings);
                 case 'Q':
@@ -181,7 +176,7 @@ namespace PasPasPas.Options.Bundles {
                 case 'Y':
                     return GetSwitchInfo(CompilerOptions.SymbolReferences, SymbolReferenceInfo.Enable, SymbolReferenceInfo.Disable);
                 case 'Z':
-                    return GetSwitchInfo(CompilerOptions.MinumEnumSize, EnumSize.FourByte, EnumSize.OneByte);
+                    return GetSwitchInfo(CompilerOptions.MinimumEnumSize, EnumSize.FourByte, EnumSize.OneByte);
 
                 default:
                     return SwitchInfo.Undefined;

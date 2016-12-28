@@ -10,6 +10,6 @@ namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
         /// <summary>
         ///     switch mode
         /// </summary>
-        public ExcessPrecisionForResults Mode { get; set; }
+        public ExcessPrecisionForResult Mode { get; set; }
     }
 }

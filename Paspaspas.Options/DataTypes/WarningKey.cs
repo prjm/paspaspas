@@ -45,7 +45,7 @@ namespace PasPasPas.Options.DataTypes {
         /// </summary>
         /// <returns></returns>
         public override int GetHashCode() {
-            int result = 17;
+            var result = 17;
             result = result * 31 + StringComparer.OrdinalIgnoreCase.GetHashCode(WarningIdentifier);
             return result;
         }

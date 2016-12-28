@@ -315,7 +315,7 @@ namespace PasPasPasTests.Parser {
             RunAstTest("unit z.x; interface implementation initialization finalization begin begin end; end; end.", t => (u(t)?.Statements[0] as BlockOfStatements)?.Statements[0]?.GetType(), typeof(BlockOfStatements));
             RunAstTest("unit z.x; interface implementation initialization finalization begin asm end; end; end.", t => (u(t)?.Statements[0] as BlockOfStatements)?.Statements[0]?.GetType(), typeof(BlockOfAssemblerStatements));
 
-            RunAstTest("unit z.x; interface implementation initialization finalization begin a : begin end; end; end.", t => (u(t)?.Statements[0] as BlockOfStatements)?.Statements[0]?.LabelName?.CompleteName, "a");
+            RunAstTest("unit z.x; interface implementation initialization finalization begin a : begin end; end; end.", t => (u(t)?.Statements[0] as BlockOfStatements)?.LabelName?.CompleteName, "a");
         }
 
     }
