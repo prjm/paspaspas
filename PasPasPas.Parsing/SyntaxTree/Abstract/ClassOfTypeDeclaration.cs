@@ -5,7 +5,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// <summary>
     ///     class of declaratation
     /// </summary>
-    public class ClassOfTypeDeclaration : StructuredType, ITypeTarget {
+    public class ClassOfTypeDeclaration : StructuredTypeBase, ITypeTarget {
 
         /// <summary>
         ///     type value

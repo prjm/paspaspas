@@ -28,7 +28,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         {
             get
             {
-                foreach (var param in Parameters)
+                foreach (ParameterTypeDefinition param in Parameters)
                     yield return param;
             }
         }

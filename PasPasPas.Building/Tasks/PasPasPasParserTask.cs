@@ -58,7 +58,7 @@ namespace PasPasPas.Building.Tasks {
             StringBuilder result = new StringBuilder();
             int count = 0;
 
-            foreach (var file in Path.AsFileList()) {
+            foreach (FileReference file in Path.AsFileList()) {
                 count++;
                 var logManager = new LogManager();
                 var environment = new ParserServices(logManager);
@@ -68,7 +68,7 @@ namespace PasPasPas.Building.Tasks {
                 IExtendableSyntaxPart resultTree;
 
                 StandardParser parser = new StandardParser(environment);
-                using (var inputFile = settings.FileSystemAccess.OpenFileForReading(file))
+                using (IParserInput inputFile = settings.FileSystemAccess.OpenFileForReading(file))
                 using (var reader = new StackedFileReader()) {
                     result.AppendLine("-----------------------<< " + file.Path + " (" + count + ")");
                     reader.AddFile(inputFile);
@@ -95,7 +95,7 @@ namespace PasPasPas.Building.Tasks {
                 var result1 = new StringBuilder();
 
                 bool dummy = false;
-                using (var inputFile1 = settings.FileSystemAccess.OpenFileForReading(file))
+                using (IParserInput inputFile1 = settings.FileSystemAccess.OpenFileForReading(file))
                 using (var reader1 = new StackedFileReader()) {
                     reader1.AddFile(inputFile1);
 

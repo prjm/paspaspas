@@ -41,7 +41,7 @@ namespace PasPasPas.Infrastructure.Log {
             if (message == null)
                 throw new ArgumentNullException(nameof(message));
 
-            foreach (var target in targets)
+            foreach (ILogTarget target in targets)
                 target.HandleMessage(message);
         }
 
@@ -58,7 +58,7 @@ namespace PasPasPas.Infrastructure.Log {
             bool found = false;
 
             for (int i = targets.Count - 1; i >= 0; i--) {
-                var currentTarget = targets[i];
+                ILogTarget currentTarget = targets[i];
                 if (currentTarget == target) {
                     target.UnregisteredAt(this);
                     targets.RemoveAt(i);

@@ -14,11 +14,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
             = TokenKind.Undefined;
 
         /// <summary>
-        ///     named type
-        /// </summary>
-        public NamespaceName NamedType { get; set; }
-
-        /// <summary>
         ///     map typ name kind
         /// </summary>
         /// <returns></returns>

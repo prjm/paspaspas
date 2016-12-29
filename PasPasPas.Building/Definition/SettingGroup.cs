@@ -19,7 +19,7 @@ namespace PasPasPas.Building.Definition {
         ///     clear settings
         /// </summary>
         public void Clear() {
-            foreach (var item in Items.OfType<IClearableSetting>())
+            foreach (IClearableSetting item in Items.OfType<IClearableSetting>())
                 item.Clear();
         }
 
@@ -28,7 +28,7 @@ namespace PasPasPas.Building.Definition {
         /// </summary>
         /// <param name="variables"></param>
         public void Resolve(Dictionary<string, Setting> variables) {
-            foreach (var item in Items.OfType<IResolvableSetting>())
+            foreach (IResolvableSetting item in Items.OfType<IResolvableSetting>())
                 item.Resolve(variables);
         }
 
@@ -40,7 +40,7 @@ namespace PasPasPas.Building.Definition {
             var result = new List<FileReference>();
 
 
-            foreach (var item in Items) {
+            foreach (Setting item in Items) {
                 var reference = item as IResolvableSetting;
                 Setting setting;
 
@@ -51,7 +51,7 @@ namespace PasPasPas.Building.Definition {
 
 
                 var fileBasedSettings = setting as IFileReferenceSetting;
-                foreach (var path in fileBasedSettings.GetReferencedFiles())
+                foreach (FileReference path in fileBasedSettings.GetReferencedFiles())
                     result.Add(path);
 
             }

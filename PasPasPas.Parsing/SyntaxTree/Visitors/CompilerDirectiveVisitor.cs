@@ -719,7 +719,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <param name="syntaxPart"></param>
         /// <param name="parameter"></param>
         public void BeginVisitItem(Link syntaxPart, CompilerDirectiveVisitorOptions parameter) {
-            var basePath = syntaxPart?.LastTerminalToken?.FilePath;
+            IFileReference basePath = syntaxPart?.LastTerminalToken?.FilePath;
             var fileName = syntaxPart?.FileName;
 
             if (basePath == null || string.IsNullOrWhiteSpace(basePath.Path))
@@ -729,7 +729,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 return;
 
 
-            var resolvedFile = parameter.Meta.LinkedFileResolver.ResolvePath(basePath, new FileReference(fileName));
+            ResolvedFile resolvedFile = parameter.Meta.LinkedFileResolver.ResolvePath(basePath, new FileReference(fileName));
 
             if (resolvedFile.IsResolved) {
                 var linkedFile = new LinkedFile();
@@ -746,7 +746,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <param name="syntaxPart"></param>
         /// <param name="parameter"></param>
         public void BeginVisitItem(Resource syntaxPart, CompilerDirectiveVisitorOptions parameter) {
-            var basePath = syntaxPart?.LastTerminalToken?.FilePath;
+            IFileReference basePath = syntaxPart?.LastTerminalToken?.FilePath;
             var fileName = syntaxPart?.FileName;
 
             if (basePath == null || string.IsNullOrWhiteSpace(basePath.Path))
@@ -756,7 +756,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 return;
 
 
-            var resolvedFile = parameter.Meta.ResourceFilePathResolver.ResolvePath(basePath, new FileReference(fileName));
+            ResolvedFile resolvedFile = parameter.Meta.ResourceFilePathResolver.ResolvePath(basePath, new FileReference(fileName));
 
             if (resolvedFile.IsResolved) {
                 var resourceReference = new ResourceReference();
@@ -773,7 +773,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <param name="syntaxPart"></param>
         /// <param name="parameter"></param>
         public void BeginVisitItem(Include syntaxPart, CompilerDirectiveVisitorOptions parameter) {
-            var basePath = syntaxPart?.LastTerminalToken?.FilePath;
+            IFileReference basePath = syntaxPart?.LastTerminalToken?.FilePath;
             var fileName = syntaxPart?.FileName;
 
             if (basePath == null || string.IsNullOrWhiteSpace(basePath.Path))
@@ -783,7 +783,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 return;
 
 
-            var targetPath = parameter.Meta.IncludePathResolver.ResolvePath(basePath, new FileReference(fileName)).TargetPath;
+            IFileReference targetPath = parameter.Meta.IncludePathResolver.ResolvePath(basePath, new FileReference(fileName)).TargetPath;
 
             IFileAccess fileAccess = parameter.FileAccess;
             if (parameter.IncludeInput != null)

@@ -107,7 +107,7 @@ namespace PasPasPas.Infrastructure.Input {
         /// <param name="pathToResolve">path to resolve</param>
         /// <returns></returns>
         protected ResolvedFile ResolveInDirectory(IFileReference currentDirectory, IFileReference pathToResolve) {
-            var fileAccess = Files;
+            IFileAccess fileAccess = Files;
 
             if (currentDirectory == null)
                 throw new ArgumentNullException(nameof(currentDirectory));

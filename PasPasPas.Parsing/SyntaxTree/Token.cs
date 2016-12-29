@@ -52,7 +52,7 @@ namespace PasPasPas.Parsing.SyntaxTree {
             get
             {
                 if (invalidTokensBefore.IsValueCreated) {
-                    foreach (var token in invalidTokensBefore.Value)
+                    foreach (Token token in invalidTokensBefore.Value)
                         yield return token;
                 }
             }
@@ -66,7 +66,7 @@ namespace PasPasPas.Parsing.SyntaxTree {
             get
             {
                 if (invalidTokensAfter.IsValueCreated) {
-                    foreach (var token in invalidTokensAfter.Value)
+                    foreach (Token token in invalidTokensAfter.Value)
                         yield return token;
                 }
             }
@@ -91,7 +91,7 @@ namespace PasPasPas.Parsing.SyntaxTree {
         /// <param name="afterwards">add tokens after this token</param>
         public void AssignInvalidTokens(Queue<Token> invalidTokens, bool afterwards) {
             if (invalidTokens.Count > 0) {
-                foreach (var token in invalidTokens)
+                foreach (Token token in invalidTokens)
                     if (afterwards)
                         invalidTokensAfter.Value.Add(token);
                     else

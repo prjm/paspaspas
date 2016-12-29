@@ -37,7 +37,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         {
             get
             {
-                foreach (var fragment in fragments)
+                foreach (GenericNameFragment fragment in fragments)
                     yield return fragment;
             }
         }

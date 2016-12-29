@@ -33,12 +33,12 @@
             if (syntaxPart.Token == null)
                 return;
 
-            foreach (var token in syntaxPart.Token.InvalidTokensBefore)
+            foreach (Token token in syntaxPart.Token.InvalidTokensBefore)
                 parameter.ResultBuilder.Append(token.Value);
 
             parameter.ResultBuilder.Append(syntaxPart.Token.Value);
 
-            foreach (var token in syntaxPart.Token.InvalidTokensAfter)
+            foreach (Token token in syntaxPart.Token.InvalidTokensAfter)
                 parameter.ResultBuilder.Append(token.Value);
 
         }

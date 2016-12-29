@@ -38,12 +38,12 @@ namespace PasPasPas.Options.DataTypes {
                 currentDirectory = null;
             }
 
-            var result = ResolveInDirectory(new FileReference(currentDirectory), pathToResolve);
+            ResolvedFile result = ResolveInDirectory(new FileReference(currentDirectory), pathToResolve);
             if (result.IsResolved) {
                 return result;
             }
 
-            foreach (var path in optionSet.PathOptions.SearchPaths) {
+            foreach (IFileReference path in optionSet.PathOptions.SearchPaths) {
                 result = ResolveInDirectory(path, pathToResolve);
                 if (result.IsResolved) {
                     return result;

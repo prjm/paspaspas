@@ -80,7 +80,7 @@ namespace PasPasPasTests {
                 };
 
 
-                var result = parser.Parse();
+                ISyntaxPart result = parser.Parse();
                 var visitor = new TerminalVisitor();
                 var options = new TerminalVisitorOptions();
                 VisitorHelper.AcceptVisitor(result, visitor, options);
@@ -126,7 +126,7 @@ namespace PasPasPasTests {
 
             foreach (var input in completeInput.Split('§')) {
 
-                var tree = RunAstTest(input, logMgr, msgs);
+                ISyntaxPart tree = RunAstTest(input, logMgr, msgs);
                 Assert.AreEqual(string.Empty, errorText);
                 Assert.IsFalse(hasError);
 
@@ -146,7 +146,7 @@ namespace PasPasPasTests {
             }
 
             Assert.AreEqual(errorMessages.Length, msgs.Count);
-            foreach (var guid in errorMessages)
+            foreach (Guid guid in errorMessages)
                 Assert.IsTrue(msgs.Where(t => t.MessageID == guid).Any());
         }
 
@@ -196,10 +196,10 @@ namespace PasPasPasTests {
 
             ClearOptions();
 
-            var directives = directive.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+            string[] directives = directive.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
             foreach (var directivePart in directives) {
                 TestOptions.ResetOnNewUnit(environment.Log);
-                var subParts = directivePart.Split(new[] { '§' }, StringSplitOptions.RemoveEmptyEntries);
+                string[] subParts = directivePart.Split(new[] { '§' }, StringSplitOptions.RemoveEmptyEntries);
                 foreach (var subPart in subParts) {
                     bool hasFoundInput = false;
                     using (var input = new StringInput(subPart, new FileReference("test_" + fileCounter.ToString() + ".pas")))
@@ -208,7 +208,7 @@ namespace PasPasPasTests {
                         var parser = new CompilerDirectiveParser(environment, reader);
                         parser.IncludeInput = reader;
                         while (!reader.AtEof) {
-                            var result = parser.Parse();
+                            ISyntaxPart result = parser.Parse();
 
                             if (!hasFoundInput) {
                                 terminalOpts.ResultBuilder.Clear();
@@ -236,11 +236,11 @@ namespace PasPasPasTests {
             Assert.AreEqual(messages.Length, msgs.Messages.Count);
 
             var m = new HashSet<Guid>(msgs.Messages.Select(t => t.MessageID));
-            foreach (var guid in messages)
+            foreach (Guid guid in messages)
                 Assert.IsTrue(m.Contains(guid));
 
             m = new HashSet<Guid>(messages);
-            foreach (var guid in msgs.Messages.Select(t => t.MessageID))
+            foreach (Guid guid in msgs.Messages.Select(t => t.MessageID))
                 Assert.IsTrue(m.Contains(guid));
         }
 

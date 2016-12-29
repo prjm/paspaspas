@@ -25,7 +25,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         {
             get
             {
-                foreach (var value in TypeValues)
+                foreach (ITypeSpecification value in TypeValues)
                     yield return value;
             }
         }

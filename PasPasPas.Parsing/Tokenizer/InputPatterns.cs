@@ -117,7 +117,7 @@ namespace PasPasPas.Parsing.Tokenizer {
             if (simplePatterns.TryGetValue(valueToMatch, out tokenGroup))
                 return true;
 
-            foreach (var pattern in complexPatterns) {
+            foreach (InputPatternAndClass pattern in complexPatterns) {
                 if (pattern.CharClass.Matches(valueToMatch)) {
                     tokenGroup = pattern.GroupValue;
                     return true;
@@ -138,7 +138,7 @@ namespace PasPasPas.Parsing.Tokenizer {
             if (input.AtEof)
                 throw new InvalidOperationException();
 
-            var file = input.CurrentInputFile;
+            IFileReference file = input.CurrentInputFile;
             bool switchedInput = false;
             char c = input.FetchChar(out switchedInput);
             InputPattern tokenGroup;
@@ -177,8 +177,8 @@ namespace PasPasPas.Parsing.Tokenizer {
             }
 
             int tokenLength;
-            var file = inputStream.CurrentInputFile;
-            var tokenKind = tokenGroup.Match(inputBuffer, out tokenLength);
+            IFileReference file = inputStream.CurrentInputFile;
+            PatternContinuation tokenKind = tokenGroup.Match(inputBuffer, out tokenLength);
 
             for (int inputIndex = inputBuffer.Length - 1; inputIndex >= tokenLength; inputIndex--) {
                 inputStream.PutbackChar(file, inputBuffer[inputIndex]); ;

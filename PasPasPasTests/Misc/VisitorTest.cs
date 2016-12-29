@@ -30,7 +30,7 @@ namespace PasPasPasTests.Misc {
 
             var result = true;
 
-            foreach (var part in Parts) {
+            foreach (ISyntaxPart part in Parts) {
                 visitor.BeginVisitChild(this, visitorParameter, part);
                 result = result && ((TreeImplementation)part).Accept(visitor, visitorParameter);
                 visitor.EndVisitChild(this, visitorParameter, part);
@@ -84,13 +84,13 @@ namespace PasPasPasTests.Misc {
         // 1BX1.22B2EY1.2X1.33BX3.55B5EY3.5X3.66B6EY3.6X3.77B7EY3.73EY1.3X1.44B4EY1.41E
         private TreeImplementation CreateSampleTree1() {
             var result = new TreeImplementation("1");
-            var c1 = result.AddChild("2");
-            var c2 = result.AddChild("3");
-            var c3 = result.AddChild("4");
+            TreeImplementation c1 = result.AddChild("2");
+            TreeImplementation c2 = result.AddChild("3");
+            TreeImplementation c3 = result.AddChild("4");
 
-            var c4 = c2.AddChild("5");
-            var c5 = c2.AddChild("6");
-            var c6 = c2.AddChild("7");
+            TreeImplementation c4 = c2.AddChild("5");
+            TreeImplementation c5 = c2.AddChild("6");
+            TreeImplementation c6 = c2.AddChild("7");
 
             return result;
         }
@@ -102,19 +102,19 @@ namespace PasPasPasTests.Misc {
 
         private TreeImplementation CreateSampleTree3() {
             var result = new TreeImplementation("1");
-            var c2 = result.AddChild("2");
-            var c3 = c2.AddChild("2");
-            var c4 = c3.AddChild("2");
+            TreeImplementation c2 = result.AddChild("2");
+            TreeImplementation c3 = c2.AddChild("2");
+            TreeImplementation c4 = c3.AddChild("2");
             return result;
         }
 
         private TreeImplementation CreateSampleTree4() {
             var result = new TreeImplementation("1");
-            var c2 = result.AddChild("2");
-            var c3 = c2.AddChild("2");
-            var c31 = c3.AddChild("31");
-            var c32 = c3.AddChild("32");
-            var c4 = c3.AddChild("2");
+            TreeImplementation c2 = result.AddChild("2");
+            TreeImplementation c3 = c2.AddChild("2");
+            TreeImplementation c31 = c3.AddChild("31");
+            TreeImplementation c32 = c3.AddChild("32");
+            TreeImplementation c4 = c3.AddChild("2");
             return result;
         }
 
@@ -140,7 +140,7 @@ namespace PasPasPasTests.Misc {
 
         [Fact]
         public void TestHelper() {
-            var data = CreateSampleTree1();
+            TreeImplementation data = CreateSampleTree1();
             var expected = Stringify1(data);
             var occured = Stringify2(data);
             Assert.Equals(expected, occured);

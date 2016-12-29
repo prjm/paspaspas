@@ -42,7 +42,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <returns></returns>
         public bool Add(T entry, LogSource logSource) {
             var name = entry.SymbolName;
-            var symbolTable = symbols.Value;
+            OrderedDictionary symbolTable = symbols.Value;
             if (!Contains(name)) {
                 symbolTable.Add(name, entry);
                 return true;

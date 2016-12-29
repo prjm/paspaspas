@@ -25,6 +25,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <remarks>used for string length / string codepage</remarks>
         public ExpressionBase Value { get; set; }
 
+        private IList<GenericNameFragment> fragments
+                = new List<GenericNameFragment>();
+
         /// <summary>
         ///     parts
         /// </summary>
@@ -34,7 +37,24 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
             {
                 if (Value != null)
                     yield return Value;
+                foreach (GenericNameFragment fragment in Fragments)
+                    yield return fragment;
             }
+        }
+
+        /// <summary>
+        ///     name fragements
+        /// </summary>
+        public IList<GenericNameFragment> Fragments
+            => fragments;
+
+        /// <summary>
+        ///     add a afragment
+        /// </summary>
+        /// <param name="fragment"></param>
+        public void AddFragment(GenericNameFragment fragment)
+        {
+            fragments.Add(fragment);
         }
 
         /// <summary>

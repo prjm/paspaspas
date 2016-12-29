@@ -23,7 +23,7 @@ namespace PasPasPas.Parsing.Tokenizer {
             if (token == null)
                 return;
 
-            var path = token.FilePath;
+            IFileReference path = token.FilePath;
             LineCounter counter = null;
 
             if (!counters.TryGetValue(path, out counter)) {

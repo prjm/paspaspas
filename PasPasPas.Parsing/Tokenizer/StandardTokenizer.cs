@@ -240,7 +240,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         /// <returns></returns>
         public override Token FetchNextToken() {
-            var result = base.FetchNextToken();
+            Token result = base.FetchNextToken();
 
             if (result != null && result.Kind == TokenKind.Asm) {
                 AllowAsmComment = true;

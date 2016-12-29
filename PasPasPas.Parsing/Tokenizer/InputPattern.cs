@@ -26,7 +26,7 @@ namespace PasPasPas.Parsing.Tokenizer {
             if (string.IsNullOrEmpty(template))
                 throw new ArgumentNullException(nameof(template));
 
-            var group = this;
+            InputPattern group = this;
 
             for (int index = 0; index < template.Length; index++) {
                 var match = template[index];
@@ -142,10 +142,10 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="tokenLength">token length</param>
         /// <returns>matched token value</returns>
         public PatternContinuation Match(StringBuilder input, out int tokenLength) {
-            var subgroup = this;
+            InputPattern subgroup = this;
             int index = 1;
             while (index < Length && index < input.Length) {
-                var oldSubgroup = subgroup;
+                InputPattern oldSubgroup = subgroup;
                 if (subgroup.Tokens.IsValueCreated && subgroup.Tokens.Value.TryGetValue(input[index], out subgroup))
                     index++;
                 else {

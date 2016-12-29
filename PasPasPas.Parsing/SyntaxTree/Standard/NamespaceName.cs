@@ -33,7 +33,7 @@
                 var result = string.Empty;
 
                 for (int i = 0; i <= PartList.Count - 2; i++) {
-                    var part = PartList[i];
+                    ISyntaxPart part = PartList[i];
                     if (!(part is Identifier)) continue;
                     if (i > 0)
                         result = string.Concat(result, ".", IdentifierValue(part));

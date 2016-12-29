@@ -39,9 +39,9 @@ namespace PasPasPas.Building.Engine {
             targetsInOrder.AddRange(settings.Targets);
 
             foreach (var target in targetsInOrder) {
-                var targetToRun = projectToBuild.Targets.Single(t => string.Equals(t.Name, target, System.StringComparison.OrdinalIgnoreCase));
+                Target targetToRun = projectToBuild.Targets.Single(t => string.Equals(t.Name, target, System.StringComparison.OrdinalIgnoreCase));
 
-                foreach (var task in targetToRun.Tasks) {
+                foreach (IBuildTask task in targetToRun.Tasks) {
                     var taskResult = RunTask(task);
 
                     if (taskResult != null)
@@ -54,9 +54,9 @@ namespace PasPasPas.Building.Engine {
         }
 
         private object RunTask(IBuildTask task) {
-            var variables = projectToBuild.Settings.SelectMany(t => t.Items);
+            IEnumerable<Setting> variables = projectToBuild.Settings.SelectMany(t => t.Items);
             var indexedVariables = new Dictionary<string, Setting>();
-            foreach (var variable in variables)
+            foreach (Setting variable in variables)
                 if (!indexedVariables.ContainsKey(variable.Name))
                     indexedVariables.Add(variable.Name, variable);
 

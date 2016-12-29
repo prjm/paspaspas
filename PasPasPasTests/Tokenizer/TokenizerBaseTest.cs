@@ -39,7 +39,7 @@ namespace PasPasPasTests.Tokenizer {
                 var tokenizer = new TestTokenizer(environment, reader);
 
                 while (!reader.AtEof) {
-                    var token = tokenizer.FetchNextToken();
+                    Token token = tokenizer.FetchNextToken();
                     Assert.IsNotNull(token);
                     result.Add(token);
                 }

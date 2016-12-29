@@ -5,7 +5,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// <summary>
     ///     array type definition
     /// </summary>
-    public class ArrayTypeDeclaration : StructuredType, IExpressionTarget, ITypeTarget {
+    public class ArrayTypeDeclaration : StructuredTypeBase, IExpressionTarget, ITypeTarget {
 
         /// <summary>
         ///     index items
@@ -23,7 +23,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         {
             get
             {
-                foreach (var item in indexItems)
+                foreach (ExpressionBase item in indexItems)
                     yield return item;
                 if (TypeValue != null)
                     yield return TypeValue;

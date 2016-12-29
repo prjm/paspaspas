@@ -408,7 +408,7 @@ namespace PasPasPas.Parsing.Parser {
                 return;
             }
 
-            var text = result.LastTerminalValue.Split(new[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
+            string[] text = result.LastTerminalValue.Split(new[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
 
             if (text.Length != 2) {
                 ErrorLastPart(result, CompilerDirectiveParserErrors.InvalidPEVersionDirective);
@@ -564,7 +564,7 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             var warningType = result.LastTerminalValue;
-            var warningModes = new[] { TokenKind.On, TokenKind.Off, TokenKind.Error, TokenKind.Default };
+            int[] warningModes = new[] { TokenKind.On, TokenKind.Off, TokenKind.Error, TokenKind.Default };
 
             if (!ContinueWith(result, TokenKind.On, TokenKind.Off, TokenKind.Error, TokenKind.Default)) {
                 ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidWarnDirective, warningModes);
@@ -572,7 +572,7 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             var warningMode = result.LastTerminalKind;
-            var parsedMode = WarningMode.Undefined;
+            WarningMode parsedMode = WarningMode.Undefined;
 
             switch (warningMode) {
                 case TokenKind.On:
@@ -1605,7 +1605,7 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseLongBoolEvalSwitch(IExtendableSyntaxPart parent) {
-            var result = CreateByTerminal<BooleanEvaluationSwitch>(parent, TokenKind.BoolEvalSwitchLong);
+            BooleanEvaluationSwitch result = CreateByTerminal<BooleanEvaluationSwitch>(parent, TokenKind.BoolEvalSwitchLong);
 
             if (ContinueWith(result, TokenKind.On)) {
                 result.BoolEval = BooleanEvaluation.CompleteEvaluation;

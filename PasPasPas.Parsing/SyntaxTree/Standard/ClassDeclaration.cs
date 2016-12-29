@@ -21,6 +21,11 @@
         public ParentClass ClassParent { get; set; }
 
         /// <summary>
+        ///     forward declaration
+        /// </summary>
+        public bool ForwardDeclaration { get; set; }
+
+        /// <summary>
         ///     abstract class
         /// </summary>
         public bool Sealed { get; set; }

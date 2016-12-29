@@ -69,7 +69,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         {
             get
             {
-                foreach (var unit in RequiredUnits)
+                foreach (RequiredUnitName unit in RequiredUnits)
                     yield return unit;
                 yield return InterfaceSymbols;
                 yield return ImplementationSymbols;

@@ -29,8 +29,8 @@ namespace ParserRunner {
             var task = new PasPasPasParserTask();
             var settings = new SettingGroup();
 
-            var files1 = Directory.GetFiles(path, "*.pas").Skip(48 * 100).Take(200);
-            var files2 = new[] { path + "Demo.pas" };
+            IEnumerable<string> files1 = Directory.GetFiles(path, "*.pas").Skip(48 * 100).Take(200);
+            string[] files2 = new[] { path + "Demo.pas" };
 
             foreach (var filePath in files1) {
                 var inputFiles = new FilesSetting();
@@ -52,7 +52,7 @@ namespace ParserRunner {
             var watch = new Stopwatch();
 
             watch.Start();
-            var result = ProjectBuilder.BuildProject(project, buildSettings);
+            IList<object> result = ProjectBuilder.BuildProject(project, buildSettings);
             watch.Stop();
 
             Console.WriteLine("Completed.");

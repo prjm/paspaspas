@@ -29,7 +29,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         {
             get
             {
-                foreach (var generic in Generics)
+                foreach (GenericType generic in Generics)
                     yield return generic;
                 if (TypeValue != null)
                     yield return TypeValue;

@@ -95,6 +95,8 @@
     <Compile Include="SyntaxTree\Abstract\StatementBase.cs" />
     <Compile Include="SyntaxTree\Abstract\StructTypeMode.cs" />
     <Compile Include="SyntaxTree\Abstract\StructuredType.cs" />
+    <Compile Include="SyntaxTree\Abstract\StructuredTypeBase.cs" />
+    <Compile Include="SyntaxTree\Abstract\StructuredTypeKind.cs" />
     <Compile Include="SyntaxTree\Abstract\SubrangeType.cs" />
     <Compile Include="SyntaxTree\Abstract\SymbolAttribute.cs" />
     <Compile Include="SyntaxTree\Abstract\SymbolHints.cs" />

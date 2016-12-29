@@ -125,7 +125,7 @@ namespace PasPasPas.Parsing.SyntaxTree {
             if (symbol is Terminal)
                 yield return symbol as Terminal;
 
-            foreach (var child in symbol.Parts)
+            foreach (ISyntaxPart child in symbol.Parts)
                 FindAllTerminals(child);
         }
 

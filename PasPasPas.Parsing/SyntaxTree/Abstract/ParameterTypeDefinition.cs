@@ -33,7 +33,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
                 return true;
 
             var parameterDefinition = Parent as IParameterTarget;
-            foreach (var parameter in parameterDefinition.Parameters.Parameters)
+            foreach (ParameterTypeDefinition parameter in parameterDefinition.Parameters.Parameters)
                 if (parameter != this && parameter.Contains(key))
                     return true;
 
@@ -48,7 +48,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         {
             get
             {
-                foreach (var parameter in base.Parts)
+                foreach (ISyntaxPart parameter in base.Parts)
                     yield return parameter;
                 if (TypeValue != null)
                     yield return TypeValue;

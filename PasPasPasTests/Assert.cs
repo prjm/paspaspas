@@ -63,7 +63,7 @@ namespace PasPasPasTests {
         }
 
         public static void IsToken(int tokenKind, string tokenValue, string input) {
-            var result = TestHelper.RunTokenizer(input);
+            List<Token> result = TestHelper.RunTokenizer(input);
             IsNotNull(result);
             AreEqual(1, result.Count);
             AreEqual(tokenKind, result[0].Kind);
@@ -79,7 +79,7 @@ namespace PasPasPasTests {
 
         internal static void TokenizerMessageIsGenerated(Guid messageNumber, string input) {
             var messages = new List<ILogMessage>();
-            var result = TestHelper.RunTokenizer(input, messages);
+            List<Token> result = TestHelper.RunTokenizer(input, messages);
             bool hasMessage = messages.Any(t => t.MessageID == messageNumber);
             IsTrue(hasMessage);
         }

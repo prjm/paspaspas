@@ -58,7 +58,7 @@ namespace PasPasPas.Parsing.Tokenizer {
                     return;
                 }
 
-                var nextToken = BaseTokenizer.FetchNextToken();
+                Token nextToken = BaseTokenizer.FetchNextToken();
                 if (IsValidToken(nextToken)) {
                     nextToken.AssignInvalidTokens(invalidTokens, false);
                     tokenList.Enqueue(nextToken);

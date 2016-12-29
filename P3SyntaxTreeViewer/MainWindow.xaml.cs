@@ -48,8 +48,8 @@ namespace P3SyntaxTreeViewer {
         private void UpdateTrees() {
             var code = Code.Text;
             var task = new Task(() => {
-                var env = CreateEnvironment();
-                var cst = Parse(env, code);
+                ParserServices env = CreateEnvironment();
+                ISyntaxPart cst = Parse(env, code);
                 var visitor = new TreeTransformer();
                 var options = new TreeTransformerOptions() { LogManager = (LogManager)env.Log };
                 var listLog = new ListLogTarget();
@@ -69,7 +69,7 @@ namespace P3SyntaxTreeViewer {
         private void DisplayLog(IList<ILogMessage> messages) {
             Messages.Items.Clear();
 
-            foreach (var logentry in messages) {
+            foreach (ILogMessage logentry in messages) {
                 var block = new TextBlock();
                 var key = "m_" + logentry.MessageID.ToString("n");
                 var m = key;
@@ -111,7 +111,7 @@ namespace P3SyntaxTreeViewer {
                 tv.Items.Add(treeViewItem);
             }
 
-            foreach (var child in cst.Parts) {
+            foreach (ISyntaxPart child in cst.Parts) {
                 AddNodes(tv, treeViewItem, child);
             }
 

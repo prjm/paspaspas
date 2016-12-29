@@ -5,7 +5,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// <summary>
     ///     declaration of a set type
     /// </summary>
-    public class SetTypeDeclaration : StructuredType, ITypeTarget {
+    public class SetTypeDeclaration : StructuredTypeBase, ITypeTarget {
 
         /// <summary>
         ///     set type

@@ -2,9 +2,9 @@
 using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Parsing.SyntaxTree.Standard;
 using PasPasPas.Parsing.Parser;
-using System.Globalization;
 
-namespace PasPasPas.Parsing.SyntaxTree.Visitors {
+namespace PasPasPas.Parsing.SyntaxTree.Visitors
+{
 
     /// <summary>
     ///     convert a concrete syntax tree to an abstract one
@@ -457,15 +457,29 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         }
 
         #endregion
-        #region TypeName
+        #region TypeName                                       
 
         private AbstractSyntaxPart BeginVisitItem(TypeName typeName, TreeTransformerOptions parameter) {
             MetaType value = CreateNode<MetaType>(parameter, typeName);
             value.Kind = typeName.MapTypeKind();
-            value.Name = ExtractSymbolName(typeName.NamedType);
             parameter.DefineTypeValue(value);
             return value;
         }
+
+        private AbstractSyntaxPart BeginVisitChildItem(TypeName typeName, TreeTransformerOptions parameter, ISyntaxPart part)
+        {
+            var name = part as GenericNamespaceName;
+            var value = parameter.LastValue as MetaType;
+
+            if (name == null || value == null)
+                return null;
+
+            GenericNameFragment fragment = CreatePartNode<GenericNameFragment>(value, name);
+            fragment.Name = ExtractSymbolName(name.Name);
+            value.AddFragment(fragment);
+            return fragment;
+        }
+
 
         #endregion
         #region SimpleType
@@ -610,7 +624,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
 
         #endregion
-
         #region UnitInitialization
 
         private AbstractSyntaxPart BeginVisitItem(UnitInitialization unitBlock, TreeTransformerOptions parameter) {
@@ -664,19 +677,43 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 return null;
             }
 
-            var intLabel = label.LabelName as StandardInteger;
+            Token intLabel = (label.LabelName as StandardInteger)?.LastTerminalToken;
             if (intLabel != null) {
-                parent.LabelName = new SymbolName() { Name = intLabel.Value.ToString(CultureInfo.InvariantCulture) };
+                parent.LabelName = new SymbolName() { Name = intLabel.Value };
                 return null;
             }
 
-            var hexLabel = label.LabelName as HexNumber;
+            Token hexLabel = (label.LabelName as HexNumber)?.LastTerminalToken;
             if (hexLabel != null) {
                 parent.LabelName = new SymbolName() { Name = hexLabel.Value };
                 return null;
             }
 
             return null;
+        }
+
+        #endregion
+        #region ClassDeclaration
+
+        private AbstractSyntaxPart BeginVisitItem(ClassDeclaration classDeclaration, TreeTransformerOptions parameter)
+        {
+            StructuredType result = CreateNode<StructuredType>(parameter, classDeclaration);
+            result.Kind = StructuredTypeKind.Class;
+            result.SealedClass = classDeclaration.Sealed;
+            result.AbstractClass = classDeclaration.Abstract;
+            result.ForwardDeclaration = classDeclaration.ForwardDeclaration;
+            parameter.DefineTypeValue(result);
+            return result;
+            /*
+            result.Kind = ProceduralType.MapKind(proceduralType.Kind);
+            result.MethodDeclaration = proceduralType.MethodDeclaration;
+            result.AllowAnonymousMethods = proceduralType.AllowAnonymousMethods;
+
+            if (proceduralType.ReturnTypeAttributes != null)
+                result.ReturnAttributes = ExtractAttributes(proceduralType.ReturnTypeAttributes, parameter.CurrentUnit);
+
+            return result;
+            */
         }
 
         #endregion

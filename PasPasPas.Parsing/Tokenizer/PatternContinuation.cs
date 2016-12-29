@@ -505,7 +505,7 @@ namespace PasPasPas.Parsing.Tokenizer {
                     else if (nextChar == '$') {
                         controlBuffer.Clear();
                         controlBuffer.Append('$');
-                        var controlChar = hexDigits.Tokenize(state.Input, controlBuffer, state.Log);
+                        Token controlChar = hexDigits.Tokenize(state.Input, controlBuffer, state.Log);
                         if (controlChar.Kind != TokenKind.HexNumber) {
                             state.Error(TokenizerBase.UnexpectedCharacter);
                         }
@@ -517,7 +517,7 @@ namespace PasPasPas.Parsing.Tokenizer {
                     else {
                         state.Putback(nextChar, switchState);
                         controlBuffer.Clear();
-                        var controlChar = digits.Tokenize(state.Input, controlBuffer, state.Log);
+                        Token controlChar = digits.Tokenize(state.Input, controlBuffer, state.Log);
                         if (controlChar.Kind != TokenKind.Integer) {
                             state.Error(TokenizerBase.UnexpectedCharacter);
                         }
