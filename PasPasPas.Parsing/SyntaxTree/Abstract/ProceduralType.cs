@@ -42,10 +42,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     parts
         /// </summary>
-        public override IEnumerable<ISyntaxPart> Parts
-        {
-            get
-            {
+        public override IEnumerable<ISyntaxPart> Parts {
+            get {
                 foreach (ParameterTypeDefinition parameter in Parameters.Parameters)
                     yield return parameter;
 

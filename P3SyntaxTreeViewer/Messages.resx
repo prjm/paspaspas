@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="m_8165f2988eb84cd28547752d9d2ed624" xml:space="preserve">
+    <value>Redeclared Field</value>
+  </data>
   <data name="m_bd36c92cbacf492c8bf817e890cbaafa" xml:space="preserve">
     <value>Redeclared Symbol</value>
   </data>

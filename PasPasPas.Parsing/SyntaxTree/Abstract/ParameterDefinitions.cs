@@ -5,7 +5,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// <summary>
     ///     parameter definitions
     /// </summary>
-    public class ParameterDefinitions : AbstractSyntaxPart {
+    public class ParameterDefinitions {
 
         /// <summary>
         ///     parameter list
@@ -19,18 +19,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <param name="parameter"></param>
         public void Add(ParameterTypeDefinition parameter) {
             Parameters.Add(parameter);
-        }
-
-        /// <summary>
-        ///     list all parameters
-        /// </summary>
-        public override IEnumerable<ISyntaxPart> Parts
-        {
-            get
-            {
-                foreach (ParameterTypeDefinition param in Parameters)
-                    yield return param;
-            }
         }
 
     }

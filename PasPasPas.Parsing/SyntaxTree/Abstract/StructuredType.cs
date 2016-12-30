@@ -1,19 +1,24 @@
 ﻿using System.Linq;
 using System.Collections.Generic;
 
-namespace PasPasPas.Parsing.SyntaxTree.Abstract
-{
+namespace PasPasPas.Parsing.SyntaxTree.Abstract {
 
     /// <summary>
     ///     structured type definition
     /// </summary>
-    public class StructuredType : StructuredTypeBase, ITypeTarget
-    {
+    public class StructuredType : StructuredTypeBase, ITypeTarget {
 
         /// <summary>
         ///     type kind
         /// </summary>
         public StructuredTypeKind Kind { get; set; }
+            = StructuredTypeKind.Undefined;
+
+        /// <summary>
+        ///     fields
+        /// </summary>
+        public StructureFieldDefinition Fields { get; }
+            = new StructureFieldDefinition();
 
         /// <summary>
         ///     list of base types
@@ -24,8 +29,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract
         /// <summary>
         ///     base type values
         /// </summary>
-        public ITypeSpecification TypeValue
-        {
+        public ITypeSpecification TypeValue {
             get {
                 return BaseTypes.LastOrDefault();
             }
@@ -38,11 +42,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract
         /// <summary>
         ///     parts
         /// </summary>
-        public override IEnumerable<ISyntaxPart> Parts
-        {
+        public override IEnumerable<ISyntaxPart> Parts {
             get {
                 foreach (ITypeSpecification baseType in BaseTypes)
                     yield return baseType;
+                foreach (StructureFields fields in Fields.Fields)
+                    yield return fields;
             }
         }
 
@@ -60,5 +65,34 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract
         ///     forward declaration
         /// </summary>
         public bool ForwardDeclaration { get; set; }
+
+        /// <summary>
+        ///     map visilibity
+        /// </summary>
+        /// <param name="visibility"></param>
+        /// <param name="strict"></param>
+        /// <returns></returns>
+        public static MemberVisibility MapVisibility(int visibility, bool strict) {
+
+            switch (visibility) {
+                case TokenKind.Private:
+                    return strict ? MemberVisibility.StrictPrivate : MemberVisibility.Private;
+
+                case TokenKind.Protected:
+                    return strict ? MemberVisibility.StrictProtected : MemberVisibility.Protected;
+
+                case TokenKind.Public:
+                    return MemberVisibility.Public;
+
+                case TokenKind.Published:
+                    return MemberVisibility.Published;
+
+                case TokenKind.Automated:
+                    return MemberVisibility.Automated;
+
+            }
+
+            return MemberVisibility.Undefined;
+        }
     }
 }

@@ -2,6 +2,7 @@
 using PasPasPas.Parsing.SyntaxTree.Abstract;
 using System;
 using System.Collections.Generic;
+using PasPasPas.Infrastructure.Utils;
 
 namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
@@ -59,12 +60,16 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /* {ae661b09-4cc7-45d3-b575-1d4f097ecb68} */
 
         /// <summary>
+        ///     tree states
+        /// </summary>
+        private IDictionary<AbstractSyntaxPart, object> currentValues
+            = new Dictionary<AbstractSyntaxPart, object>();
+
+        /// <summary>
         ///     log source
         /// </summary>
-        public LogSource LogSource
-        {
-            get
-            {
+        public LogSource LogSource {
+            get {
                 if (logSource != null)
                     return logSource;
 
@@ -97,8 +102,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     current unit mode
         /// </summary>
-        public UnitMode CurrentUnitMode { get; set; }
-            = UnitMode.Unknown;
+        public DictionaryIndexHelper<AbstractSyntaxPart, UnitMode> CurrentUnitMode { get; }
+
+        /// <summary>
+        ///     currennt member visibility
+        /// </summary>
+        public DictionaryIndexHelper<AbstractSyntaxPart, MemberVisibility> CurrentMemberVisibility { get; }
 
         /// <summary>
         ///     working stack for tree transformations
@@ -114,16 +123,22 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     last expression
         /// </summary>
-        public IExpressionTarget LastExpression
-        {
-            get
-            {
+        public IExpressionTarget LastExpression {
+            get {
                 if (WorkingStack.Count > 0)
                     return WorkingStack.Peek().Data as IExpressionTarget;
                 else
                     return null;
 
             }
+        }
+
+        /// <summary>
+        ///     create a new options set
+        /// </summary>
+        public TreeTransformerOptions() {
+            CurrentUnitMode = new DictionaryIndexHelper<AbstractSyntaxPart, UnitMode>(currentValues);
+            CurrentMemberVisibility = new DictionaryIndexHelper<AbstractSyntaxPart, MemberVisibility>(currentValues);
         }
 
         /// <summary>
@@ -135,10 +150,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     last type declaration
         /// </summary>
-        public ITypeTarget LastTypeDeclaration
-        {
-            get
-            {
+        public ITypeTarget LastTypeDeclaration {
+            get {
                 if (WorkingStack.Count > 0)
                     return WorkingStack.Peek().Data as ITypeTarget;
                 else
@@ -149,10 +162,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     last value from the working stack
         /// </summary>
-        public AbstractSyntaxPart LastValue
-        {
-            get
-            {
+        public AbstractSyntaxPart LastValue {
+            get {
                 if (WorkingStack.Count > 0)
                     return WorkingStack.Peek().Data;
                 else

@@ -14,12 +14,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
             = MetaTypeKind.Undefined;
 
         /// <summary>
-        ///     type name
-        /// </summary>
-        /// <remarks>used for class of xx</remarks>
-        public SymbolName Name { get; set; }
-
-        /// <summary>
         ///     subexpression
         /// </summary>
         /// <remarks>used for string length / string codepage</remarks>
@@ -31,10 +25,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     parts
         /// </summary>
-        public override IEnumerable<ISyntaxPart> Parts
-        {
-            get
-            {
+        public override IEnumerable<ISyntaxPart> Parts {
+            get {
                 if (Value != null)
                     yield return Value;
                 foreach (GenericNameFragment fragment in Fragments)
@@ -52,8 +44,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     add a afragment
         /// </summary>
         /// <param name="fragment"></param>
-        public void AddFragment(GenericNameFragment fragment)
-        {
+        public void AddFragment(GenericNameFragment fragment) {
             fragments.Add(fragment);
         }
 

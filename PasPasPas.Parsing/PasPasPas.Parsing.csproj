@@ -43,6 +43,7 @@
     <Compile Include="SyntaxTree\Abstract\BlockOfAssemblerStatements.cs" />
     <Compile Include="SyntaxTree\Abstract\BlockOfStatements.cs" />
     <Compile Include="SyntaxTree\Abstract\IStatementTarget.cs" />
+    <Compile Include="SyntaxTree\Abstract\MemberVisibility.cs" />
     <Compile Include="SyntaxTree\Abstract\ParameterTypeDefinition.cs" />
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
@@ -97,6 +98,9 @@
     <Compile Include="SyntaxTree\Abstract\StructuredType.cs" />
     <Compile Include="SyntaxTree\Abstract\StructuredTypeBase.cs" />
     <Compile Include="SyntaxTree\Abstract\StructuredTypeKind.cs" />
+    <Compile Include="SyntaxTree\Abstract\StructureField.cs" />
+    <Compile Include="SyntaxTree\Abstract\StructureFieldDefinition.cs" />
+    <Compile Include="SyntaxTree\Abstract\StructureFields.cs" />
     <Compile Include="SyntaxTree\Abstract\SubrangeType.cs" />
     <Compile Include="SyntaxTree\Abstract\SymbolAttribute.cs" />
     <Compile Include="SyntaxTree\Abstract\SymbolHints.cs" />

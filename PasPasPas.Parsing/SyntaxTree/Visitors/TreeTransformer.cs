@@ -3,8 +3,7 @@ using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Parsing.SyntaxTree.Standard;
 using PasPasPas.Parsing.Parser;
 
-namespace PasPasPas.Parsing.SyntaxTree.Visitors
-{
+namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
     /// <summary>
     ///     convert a concrete syntax tree to an abstract one
@@ -39,14 +38,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors
             result.FilePath = library.FilePath;
             result.InitializationBlock = new BlockOfStatements();
             parameter.Project.Add(result, parameter.LogSource);
-            parameter.CurrentUnitMode = UnitMode.Library;
+            parameter.CurrentUnitMode[result] = UnitMode.Library;
             parameter.CurrentUnit = result;
             return result;
         }
 
         private void EndVisitItem(Library library, TreeTransformerOptions parameter) {
+            parameter.CurrentUnitMode.Reset(parameter.CurrentUnit);
             parameter.CurrentUnit = null;
-            parameter.CurrentUnitMode = UnitMode.Unknown;
         }
 
         #endregion
@@ -63,15 +62,15 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors
             result.UnitName = ExtractSymbolName(program.ProgramName);
             result.FilePath = program.FilePath;
             result.InitializationBlock = new BlockOfStatements();
-            parameter.CurrentUnitMode = UnitMode.Program;
+            parameter.CurrentUnitMode[result] = UnitMode.Program;
             parameter.Project.Add(result, parameter.LogSource);
             parameter.CurrentUnit = result;
             return result;
         }
 
         private void EndVisitItem(Program program, TreeTransformerOptions parameter) {
+            parameter.CurrentUnitMode.Reset(parameter.CurrentUnit);
             parameter.CurrentUnit = null;
-            parameter.CurrentUnitMode = UnitMode.Unknown;
         }
 
         #endregion
@@ -87,31 +86,34 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors
             return result;
         }
 
-        private void EndVisitItem(Package package, TreeTransformerOptions parameter) 
+        private void EndVisitItem(Package package, TreeTransformerOptions parameter)
             => parameter.CurrentUnit = null;
 
         #endregion
         #region UnitInterface
 
         private AbstractSyntaxPart BeginVisitItem(UnitInterface unitInterface, TreeTransformerOptions parameter) {
-            parameter.CurrentUnitMode = UnitMode.Interface;
+            parameter.CurrentUnitMode[parameter.CurrentUnit] = UnitMode.Interface;
             return parameter.CurrentUnit.InterfaceSymbols;
         }
 
 
-        private void EndVisitItem(UnitInterface unitInterface, TreeTransformerOptions parameter) 
-            => parameter.CurrentUnitMode = UnitMode.Unknown;
+        private void EndVisitItem(UnitInterface unitInterface, TreeTransformerOptions parameter) {
+            parameter.CurrentUnitMode.Reset(parameter.CurrentUnit);
+        }
 
         #endregion
         #region UnitImplementation
 
         private AbstractSyntaxPart BeginVisitItem(UnitImplementation unitImplementation, TreeTransformerOptions parameter) {
-            parameter.CurrentUnitMode = UnitMode.Implementation;
+            parameter.CurrentUnitMode[parameter.CurrentUnit] = UnitMode.Implementation;
             return parameter.CurrentUnit.ImplementationSymbols;
         }
 
-        private void EndVisitItem(UnitImplementation unit, TreeTransformerOptions parameter) 
-            => parameter.CurrentUnitMode = UnitMode.Unknown;
+        private void EndVisitItem(UnitImplementation unit, TreeTransformerOptions parameter) {
+            parameter.CurrentUnitMode.Reset(parameter.CurrentUnit);
+        }
+
 
         #endregion
         #region ConstSection
@@ -126,7 +128,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors
             return null;
         }
 
-        private void EndVisitItem(ConstSection constSection, TreeTransformerOptions parameter) 
+        private void EndVisitItem(ConstSection constSection, TreeTransformerOptions parameter)
             => parameter.CurrentDeclarationMode = DeclarationMode.Unknown;
 
         #endregion
@@ -137,7 +139,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors
             return null;
         }
 
-        private void EndVisitItem(TypeSection constSection, TreeTransformerOptions parameter) 
+        private void EndVisitItem(TypeSection constSection, TreeTransformerOptions parameter)
             => parameter.CurrentDeclarationMode = DeclarationMode.Unknown;
 
         #endregion
@@ -312,7 +314,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors
 
                 RequiredUnitName unitName = CreatePartNode<RequiredUnitName>(parameter.CurrentUnit.RequiredUnits, part);
                 unitName.Name = ExtractSymbolName(name);
-                unitName.Mode = parameter.CurrentUnitMode;
+                unitName.Mode = parameter.CurrentUnitMode[parameter.CurrentUnit];
                 parameter.CurrentUnit.RequiredUnits.Add(unitName, parameter.LogSource);
             }
 
@@ -333,7 +335,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors
 
                 RequiredUnitName unitName = CreatePartNode<RequiredUnitName>(parameter.CurrentUnit.RequiredUnits, part);
                 unitName.Name = ExtractSymbolName(name);
-                unitName.Mode = parameter.CurrentUnitMode;
+                unitName.Mode = parameter.CurrentUnitMode[parameter.CurrentUnit];
                 unitName.FileName = name.QuotedFileName?.UnquotedValue;
                 parameter.CurrentUnit.RequiredUnits.Add(unitName, parameter.LogSource);
             }
@@ -345,7 +347,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors
         #region PackageRequires
 
         private AbstractSyntaxPart BeginVisitItem(PackageRequires requires, TreeTransformerOptions parameter) {
-            parameter.CurrentUnitMode = UnitMode.Requires;
+            parameter.CurrentUnitMode[parameter.CurrentUnit] = UnitMode.Requires;
 
             if (requires.RequiresList == null)
                 return null;
@@ -357,21 +359,22 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors
 
                 RequiredUnitName unitName = CreatePartNode<RequiredUnitName>(parameter.CurrentUnit.RequiredUnits, part);
                 unitName.Name = ExtractSymbolName(name);
-                unitName.Mode = parameter.CurrentUnitMode;
+                unitName.Mode = parameter.CurrentUnitMode[parameter.CurrentUnit];
                 parameter.CurrentUnit.RequiredUnits.Add(unitName, parameter.LogSource);
             }
 
             return null;
         }
 
-        private void EndVisitItem(PackageRequires requires, TreeTransformerOptions parameter) 
-            => parameter.CurrentUnitMode = UnitMode.Unknown;
+        private void EndVisitItem(PackageRequires requires, TreeTransformerOptions parameter) {
+            parameter.CurrentUnitMode[parameter.CurrentUnit] = UnitMode.Interface;
+        }
 
         #endregion
         #region PackageContains
 
         private AbstractSyntaxPart BeginVisitItem(PackageContains contains, TreeTransformerOptions parameter) {
-            parameter.CurrentUnitMode = UnitMode.Contains;
+            parameter.CurrentUnitMode[parameter.CurrentUnit] = UnitMode.Contains;
 
             if (contains.ContainsList == null)
                 return null;
@@ -383,7 +386,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors
 
                 RequiredUnitName unitName = CreatePartNode<RequiredUnitName>(parameter.CurrentUnit.RequiredUnits, part);
                 unitName.Name = ExtractSymbolName(name);
-                unitName.Mode = parameter.CurrentUnitMode;
+                unitName.Mode = parameter.CurrentUnitMode[parameter.CurrentUnit];
                 unitName.FileName = name.QuotedFileName?.UnquotedValue;
                 parameter.CurrentUnit.RequiredUnits.Add(unitName, parameter.LogSource);
             }
@@ -391,8 +394,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors
             return null;
         }
 
-        private void EndVisitItem(PackageContains contains, TreeTransformerOptions parameter) 
-            => parameter.CurrentUnitMode = UnitMode.Unknown;
+        private void EndVisitItem(PackageContains contains, TreeTransformerOptions parameter) {
+            parameter.CurrentUnitMode.Reset(parameter.CurrentUnit);
+        }
 
         #endregion
         #region StructType
@@ -466,8 +470,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors
             return value;
         }
 
-        private AbstractSyntaxPart BeginVisitChildItem(TypeName typeName, TreeTransformerOptions parameter, ISyntaxPart part)
-        {
+        private AbstractSyntaxPart BeginVisitChildItem(TypeName typeName, TreeTransformerOptions parameter, ISyntaxPart part) {
             var name = part as GenericNamespaceName;
             var value = parameter.LastValue as MetaType;
 
@@ -695,28 +698,74 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors
         #endregion
         #region ClassDeclaration
 
-        private AbstractSyntaxPart BeginVisitItem(ClassDeclaration classDeclaration, TreeTransformerOptions parameter)
-        {
+        private AbstractSyntaxPart BeginVisitItem(ClassDeclaration classDeclaration, TreeTransformerOptions parameter) {
             StructuredType result = CreateNode<StructuredType>(parameter, classDeclaration);
             result.Kind = StructuredTypeKind.Class;
             result.SealedClass = classDeclaration.Sealed;
             result.AbstractClass = classDeclaration.Abstract;
             result.ForwardDeclaration = classDeclaration.ForwardDeclaration;
             parameter.DefineTypeValue(result);
+            parameter.CurrentMemberVisibility[result] = MemberVisibility.Public;
             return result;
-            /*
-            result.Kind = ProceduralType.MapKind(proceduralType.Kind);
-            result.MethodDeclaration = proceduralType.MethodDeclaration;
-            result.AllowAnonymousMethods = proceduralType.AllowAnonymousMethods;
+        }
 
-            if (proceduralType.ReturnTypeAttributes != null)
-                result.ReturnAttributes = ExtractAttributes(proceduralType.ReturnTypeAttributes, parameter.CurrentUnit);
-
-            return result;
-            */
+        private void EndVisitItem(ClassDeclaration classDeclaration, TreeTransformerOptions parameter) {
+            var parentType = parameter.LastValue as StructuredType;
+            parameter.CurrentMemberVisibility.Reset(parentType);
         }
 
         #endregion
+        #region ClassDeclarationItem
+
+        private AbstractSyntaxPart BeginVisitItem(ClassDeclarationItem classDeclarationItem, TreeTransformerOptions parameter) {
+            var parentType = parameter.LastValue as StructuredType;
+
+            if (parentType == null)
+                return null;
+
+            if (classDeclarationItem.Visibility != TokenKind.Undefined) {
+                parameter.CurrentMemberVisibility[parentType] = StructuredType.MapVisibility(classDeclarationItem.Visibility, classDeclarationItem.Strict);
+            };
+
+            return null;
+        }
+
+        #endregion
+        #region ClassField
+
+        private AbstractSyntaxPart BeginVisitItem(ClassField field, TreeTransformerOptions parameter) {
+            var structType = parameter.LastValue as StructuredType;
+            StructureFields result = CreateNode<StructureFields>(parameter, field);
+            result.Visibility = parameter.CurrentMemberVisibility[structType];
+            structType.Fields.Fields.Add(result);
+            IList<SymbolAttribute> extractedAttributes = ExtractAttributes(((ClassDeclarationItem)field.Parent).Attributes, parameter.CurrentUnit);
+
+
+            foreach (ISyntaxPart part in field.Names.Parts) {
+                var attrs = part as UserAttributes;
+
+                if (attrs != null) {
+                    extractedAttributes = ExtractAttributes(attrs, parameter.CurrentUnit, extractedAttributes);
+                    continue;
+                }
+
+                var partName = part as Identifier;
+                if (partName == null)
+                    continue;
+
+                StructureField fieldName = CreatePartNode<StructureField>(result, partName);
+                fieldName.Name = ExtractSymbolName(partName);
+                fieldName.Attributes = extractedAttributes;
+                result.Add(fieldName, parameter.LogSource);
+                extractedAttributes = null;
+            }
+
+
+            return result;
+        }
+
+        #endregion
+
         #region Extractors
 
         private static SymbolName ExtractSymbolName(NamespaceName name) {
@@ -802,11 +851,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors
             return result;
         }
 
-        private IEnumerable<SymbolAttribute> ExtractAttributes(UserAttributes attributes, CompilationUnit parentUnit) {
+        private IList<SymbolAttribute> ExtractAttributes(UserAttributes attributes, CompilationUnit parentUnit, IList<SymbolAttribute> result = null) {
             if (attributes == null || attributes.PartList.Count < 1)
                 return EmptyCollection<SymbolAttribute>.Instance;
 
-            var result = new List<SymbolAttribute>();
+            if (result == null)
+                result = new List<SymbolAttribute>();
 
             foreach (ISyntaxPart part in attributes.Parts) {
                 var attribute = part as UserAttributeDefinition;

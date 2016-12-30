@@ -61,6 +61,15 @@ namespace P3SyntaxTreeViewer {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Redeclared Field.
+        /// </summary>
+        internal static string m_8165f2988eb84cd28547752d9d2ed624 {
+            get {
+                return ResourceManager.GetString("m_8165f2988eb84cd28547752d9d2ed624", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Redeclared Symbol.
         /// </summary>
         internal static string m_bd36c92cbacf492c8bf817e890cbaafa {

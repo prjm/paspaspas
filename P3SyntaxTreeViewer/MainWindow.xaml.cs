@@ -78,8 +78,9 @@ namespace P3SyntaxTreeViewer {
                     block.Text = r.ToString();
                 else
                     block.Text = key;
-                var item = new ListBoxItem();
-                item.Content = block;
+                var item = new ListBoxItem() {
+                    Content = block
+                };
                 Messages.Items.Add(item);
             }
         }
@@ -119,7 +120,7 @@ namespace P3SyntaxTreeViewer {
         }
 
         private ISyntaxPart Parse(ParserServices environment, string code) {
-            StandardParser parser = new StandardParser(environment);
+            var parser = new StandardParser(environment);
             using (var inputFile = new StringInput(code, new FileReference("z.x.pas")))
             using (var reader = new StackedFileReader()) {
                 reader.AddFile(inputFile);
@@ -132,8 +133,9 @@ namespace P3SyntaxTreeViewer {
         private ParserServices CreateEnvironment() {
             var mgr = new LogManager();
             var options = new OptionSet(new StandardFileAccess());
-            var environment = new ParserServices(mgr);
-            environment.Options = options;
+            var environment = new ParserServices(mgr) {
+                Options = options
+            };
             return environment;
         }
 

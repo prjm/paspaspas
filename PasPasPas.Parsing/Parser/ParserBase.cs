@@ -52,15 +52,12 @@ namespace PasPasPas.Parsing.Parser {
         /// <summary>
         ///     tokenizer to use
         /// </summary>        
-        public ITokenizer BaseTokenizer
-        {
-            get
-            {
+        public ITokenizer BaseTokenizer {
+            get {
                 return tokenizer.BaseTokenizer;
             }
 
-            set
-            {
+            set {
                 tokenizer.BaseTokenizer = value;
             }
         }
@@ -112,8 +109,9 @@ namespace PasPasPas.Parsing.Parser {
             lastSymbol.Parent = null;
 
             foreach (Terminal t in SyntaxPartBase.FindAllTerminals(lastSymbol)) {
-                var invalid = new InvalidToken(t.Token);
-                invalid.Parent = parent;
+                var invalid = new InvalidToken(t.Token) {
+                    Parent = parent
+                };
                 parent.Add(invalid);
             }
 
@@ -479,8 +477,9 @@ namespace PasPasPas.Parsing.Parser {
                 return false;
             }
 
-            var terminal = new Terminal(CurrentToken());
-            terminal.Parent = part;
+            var terminal = new Terminal(CurrentToken()) {
+                Parent = part
+            };
             part.Add(terminal);
             FetchNextToken();
             return true;
@@ -506,8 +505,9 @@ namespace PasPasPas.Parsing.Parser {
                 return false;
             }
 
-            var terminal = new Terminal(CurrentToken());
-            terminal.Parent = part;
+            var terminal = new Terminal(CurrentToken()) {
+                Parent = part
+            };
             part.Add(terminal);
             FetchNextToken();
             return true;
@@ -535,8 +535,9 @@ namespace PasPasPas.Parsing.Parser {
                 return false;
             }
 
-            var terminal = new Terminal(CurrentToken());
-            terminal.Parent = part;
+            var terminal = new Terminal(CurrentToken()) {
+                Parent = part
+            };
             part.Add(terminal);
             FetchNextToken();
             return true;
@@ -568,8 +569,9 @@ namespace PasPasPas.Parsing.Parser {
                 return false;
             }
 
-            var terminal = new Terminal(CurrentToken());
-            terminal.Parent = part;
+            var terminal = new Terminal(CurrentToken()) {
+                Parent = part
+            };
             part.Add(terminal);
             FetchNextToken();
             return true;
@@ -603,8 +605,9 @@ namespace PasPasPas.Parsing.Parser {
                 return false;
             }
 
-            var terminal = new Terminal(CurrentToken());
-            terminal.Parent = part;
+            var terminal = new Terminal(CurrentToken()) {
+                Parent = part
+            };
             part.Add(terminal);
             FetchNextToken();
             return true;
@@ -640,8 +643,9 @@ namespace PasPasPas.Parsing.Parser {
                 return false;
             }
 
-            var terminal = new Terminal(CurrentToken());
-            terminal.Parent = part;
+            var terminal = new Terminal(CurrentToken()) {
+                Parent = part
+            };
             part.Add(terminal);
             FetchNextToken();
             return true;
@@ -681,8 +685,9 @@ namespace PasPasPas.Parsing.Parser {
                 return false;
             }
 
-            var terminal = new Terminal(CurrentToken());
-            terminal.Parent = part;
+            var terminal = new Terminal(CurrentToken()) {
+                Parent = part
+            };
             part.Add(terminal);
             FetchNextToken();
             return true;
@@ -721,8 +726,9 @@ namespace PasPasPas.Parsing.Parser {
                 return false;
             }
 
-            var terminal = new Terminal(CurrentToken());
-            terminal.Parent = part;
+            var terminal = new Terminal(CurrentToken()) {
+                Parent = part
+            };
             part.Add(terminal);
             FetchNextToken();
             return true;
@@ -764,8 +770,9 @@ namespace PasPasPas.Parsing.Parser {
                 return false;
             }
 
-            var terminal = new Terminal(CurrentToken());
-            terminal.Parent = part;
+            var terminal = new Terminal(CurrentToken()) {
+                Parent = part
+            };
             part.Add(terminal);
             FetchNextToken();
             return true;
@@ -790,8 +797,9 @@ namespace PasPasPas.Parsing.Parser {
             T result = CreateChild<T>(parent);
 
             if (Match(tokenKind)) {
-                var terminal = new Terminal(CurrentToken());
-                terminal.Parent = result;
+                var terminal = new Terminal(CurrentToken()) {
+                    Parent = result
+                };
                 result.Add(terminal);
             }
             else {
@@ -814,8 +822,9 @@ namespace PasPasPas.Parsing.Parser {
             T result = CreateChild<T>(parent);
 
             if (Match(tokenKind1, tokenKind2)) {
-                var terminal = new Terminal(CurrentToken());
-                terminal.Parent = result;
+                var terminal = new Terminal(CurrentToken()) {
+                    Parent = result
+                };
                 result.Add(terminal);
             }
             else {
@@ -839,8 +848,9 @@ namespace PasPasPas.Parsing.Parser {
             T result = CreateChild<T>(parent);
 
             if (Match(tokenKind1, tokenKind2, tokenKind3)) {
-                var terminal = new Terminal(CurrentToken());
-                terminal.Parent = result;
+                var terminal = new Terminal(CurrentToken()) {
+                    Parent = result
+                };
                 result.Add(terminal);
             }
             else {
@@ -865,8 +875,9 @@ namespace PasPasPas.Parsing.Parser {
             T result = CreateChild<T>(parent);
 
             if (Match(tokenKind1, tokenKind2, tokenKind3, tokenKind4)) {
-                var terminal = new Terminal(CurrentToken());
-                terminal.Parent = result;
+                var terminal = new Terminal(CurrentToken()) {
+                    Parent = result
+                };
                 result.Add(terminal);
             }
             else {
@@ -893,8 +904,9 @@ namespace PasPasPas.Parsing.Parser {
             T result = CreateChild<T>(parent);
 
             if (Match(tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5)) {
-                var terminal = new Terminal(CurrentToken());
-                terminal.Parent = result;
+                var terminal = new Terminal(CurrentToken()) {
+                    Parent = result
+                };
                 result.Add(terminal);
             }
             else {
@@ -922,8 +934,9 @@ namespace PasPasPas.Parsing.Parser {
             T result = CreateChild<T>(parent);
 
             if (Match(tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5, tokenKind6)) {
-                var terminal = new Terminal(CurrentToken());
-                terminal.Parent = result;
+                var terminal = new Terminal(CurrentToken()) {
+                    Parent = result
+                };
                 result.Add(terminal);
             }
             else {
@@ -953,8 +966,9 @@ namespace PasPasPas.Parsing.Parser {
             T result = CreateChild<T>(parent);
 
             if (Match(tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5, tokenKind6, tokenKind7, tokenKind8)) {
-                var terminal = new Terminal(CurrentToken());
-                terminal.Parent = result;
+                var terminal = new Terminal(CurrentToken()) {
+                    Parent = result
+                };
                 result.Add(terminal);
             }
             else {
@@ -972,8 +986,9 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="parent"></param>
         /// <returns></returns>
         protected InvalidToken CreateByError(IExtendableSyntaxPart parent) {
-            var invalid = new InvalidToken(CurrentToken());
-            invalid.Parent = parent;
+            var invalid = new InvalidToken(CurrentToken()) {
+                Parent = parent
+            };
             parent.Add(invalid);
             FetchNextToken();
             return invalid;
