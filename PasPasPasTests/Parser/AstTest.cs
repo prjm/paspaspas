@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;
+using PasPasPas.Parsing.Parser;
 
 namespace PasPasPasTests.Parser {
 
@@ -13,6 +14,15 @@ namespace PasPasPasTests.Parser {
     ///     test abstract syntax trees
     /// </summary>
     public class AstTest : ParserTestBase {
+
+        /*
+        [Fact]
+        public void TestMisc() {
+            Func<object, CompilationUnit> u = t => (t as CompilationUnit);
+            RunAstTest("unit z.x; interface type class x implementation end.", t => u(t)?.SymbolName, "z.x",
+                ParserBase.UnexpectedToken);
+        }
+        */
 
         [Fact]
         public void TestUnit() {
@@ -312,6 +322,8 @@ namespace PasPasPasTests.Parser {
             RunAstTest("unit z.x; interface type x = class end; implementation end.", t => u(t)?.ForwardDeclaration, false);
             RunAstTest("unit z.x; interface type x = class; implementation end.", t => u(t)?.ForwardDeclaration, true);
 
+            RunAstTest("unit z.x; interface type x = class n: integer; end; implementation end.", t => (u(t)?.Fields.Fields[0]?.TypeValue as TypeAlias)?.Fragments[0]?.Name?.CompleteName, "integer");
+
             RunAstTest("unit z.x; interface type x = class n: integer; end; implementation end.", t => f(t)?.Visibility, MemberVisibility.Public);
             RunAstTest("unit z.x; interface type x = class strict private n: integer; end; implementation end.", t => f(t)?.Visibility, MemberVisibility.StrictPrivate);
             RunAstTest("unit z.x; interface type x = class strict protected n: integer; end; implementation end.", t => f(t)?.Visibility, MemberVisibility.StrictProtected);
@@ -323,6 +335,14 @@ namespace PasPasPasTests.Parser {
 
             RunAstTest("unit z.x; interface type x = class [a] n: integer; end; implementation end.", t => f(t)?.Attributes[0]?.Name?.CompleteName, "a");
             RunAstTest("unit z.x; interface type x = class [a] x, [b] n: integer; end; implementation end.", t => f(t)?.Attributes[0]?.Name?.CompleteName, "b");
+
+            RunAstTest("unit z.x; interface type x = class n: integer; deprecated; end; implementation end.", t => u(t)?.Fields?.Fields[0].Hints.SymbolIsDeprecated, true);
+
+            RunAstTest("unit z.x; interface type x = class n, n: integer; end; implementation end.", t => f(t)?.Name?.CompleteName, "n",
+                StructuralErrors.DuplicateFieldName);
+
+            RunAstTest("unit z.x; interface type x = class n: integer; n: integer; end; implementation end.", t => f(t)?.Name?.CompleteName, "n",
+                StructuralErrors.DuplicateFieldName);
 
         }
 

@@ -101,6 +101,8 @@
     <Compile Include="SyntaxTree\Abstract\StructureField.cs" />
     <Compile Include="SyntaxTree\Abstract\StructureFieldDefinition.cs" />
     <Compile Include="SyntaxTree\Abstract\StructureFields.cs" />
+    <Compile Include="SyntaxTree\Abstract\StructureProperty.cs" />
+    <Compile Include="SyntaxTree\Abstract\StructurePropertyDefinition.cs" />
     <Compile Include="SyntaxTree\Abstract\SubrangeType.cs" />
     <Compile Include="SyntaxTree\Abstract\SymbolAttribute.cs" />
     <Compile Include="SyntaxTree\Abstract\SymbolHints.cs" />

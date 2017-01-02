@@ -760,7 +760,21 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 extractedAttributes = null;
             }
 
+            result.Hints = ExtractHints(field.Hint);
 
+            return result;
+        }
+
+        #endregion
+        #region ClassProperty
+
+        private AbstractSyntaxPart BeginVisitItem(ClassProperty property, TreeTransformerOptions parameter) {
+            StructureProperty result = CreateNode<StructureProperty>(parameter, property);
+            var parent = parameter.LastValue as StructuredType;
+            result.Name = ExtractSymbolName(property.PropertyName);
+            parent.Properties.Add(result, parameter.LogSource);
+            result.Visibility = parameter.CurrentMemberVisibility[parent];
+            result.Attributes = ExtractAttributes(((ClassDeclarationItem)property.Parent).Attributes, parameter.CurrentUnit);
             return result;
         }
 
@@ -778,7 +792,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         private static SymbolName ExtractSymbolName(Identifier name) {
             var result = new SymbolName() {
-                Name = name.FirstTerminalToken?.Value
+                Name = name?.FirstTerminalToken?.Value
             };
             return result;
         }

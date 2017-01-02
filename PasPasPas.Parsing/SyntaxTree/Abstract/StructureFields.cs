@@ -58,5 +58,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         public MemberVisibility Visibility { get; set; }
             = MemberVisibility.Public;
+
+        /// <summary>
+        ///     hints
+        /// </summary>
+        public SymbolHints Hints { get; set; }
     }
 }

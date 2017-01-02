@@ -2541,12 +2541,13 @@ namespace PasPasPas.Parsing.Parser {
             result.Names = ParseIdentList(result, true);
             ContinueWithOrMissing(result, TokenKind.Colon);
             result.TypeDecl = ParseTypeSpecification(result);
-            result.Hint = ParseHints(result);
             ContinueWithOrMissing(result, TokenKind.Semicolon);
+            result.Hint = ParseHints(result);
             return result;
         }
 
         #endregion
+        #region PropertyDeclaration
 
         [Rule("PropertyDeclaration", "'property' Identifier [ '[' FormalParameters  ']' ] [ ':' TypeName ] [ 'index' Expression ]  { ClassPropertySpecifier } ';' [ 'default' ';' ]  ")]
         private ClassProperty ParsePropertyDeclaration(IExtendableSyntaxPart parent) {
@@ -2579,6 +2580,8 @@ namespace PasPasPas.Parsing.Parser {
 
             return result;
         }
+
+        #endregion
 
         [Rule("ClassPropertySpecifier", "ClassPropertyReadWrite | ClassPropertyDispInterface | ('stored' Expression ';') | ('default' [ Expression ] ';' ) | ('nodefault' ';') | ('implements' NamespaceName) ")]
         private ClassPropertySpecifier ParseClassPropertyAccessSpecifier(IExtendableSyntaxPart parent) {
@@ -2683,8 +2686,8 @@ namespace PasPasPas.Parsing.Parser {
             result.TypeId = ParseGenericTypeIdent(result);
             ContinueWithOrMissing(result, TokenKind.EqualsSign);
             result.TypeSpecification = ParseTypeSpecification(result);
-            result.Hint = ParseHints(result);
             ContinueWithOrMissing(result, TokenKind.Semicolon);
+            result.Hint = ParseHints(result);
             return result;
         }
 

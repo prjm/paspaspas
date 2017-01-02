@@ -10,7 +10,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         private IList<GenericNameFragment> fragments
                 = new List<GenericNameFragment>();
 
-
         /// <summary>
         ///     name fragements
         /// </summary>
@@ -33,10 +32,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     parts
         /// </summary>
-        public override IEnumerable<ISyntaxPart> Parts
-        {
-            get
-            {
+        public override IEnumerable<ISyntaxPart> Parts {
+            get {
                 foreach (GenericNameFragment fragment in fragments)
                     yield return fragment;
             }

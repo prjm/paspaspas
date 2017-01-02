@@ -21,10 +21,16 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
             = new StructureFieldDefinition();
 
         /// <summary>
+        ///     properties
+        /// </summary>
+        public StructurePropertyDefinition Properties { get; }
+            = new StructurePropertyDefinition();
+
+        /// <summary>
         ///     list of base types
         /// </summary>
         public IList<ITypeSpecification> BaseTypes { get; }
-            = new List<ITypeSpecification>();
+                = new List<ITypeSpecification>();
 
         /// <summary>
         ///     base type values
@@ -48,6 +54,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
                     yield return baseType;
                 foreach (StructureFields fields in Fields.Fields)
                     yield return fields;
+                foreach (StructureProperty property in Properties)
+                    yield return property;
             }
         }
 
