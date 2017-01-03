@@ -2567,7 +2567,7 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             while (Match(TokenKind.Read, TokenKind.Write, TokenKind.Add, TokenKind.Remove, TokenKind.ReadOnly, TokenKind.WriteOnly, TokenKind.DispId) ||
-                Match(TokenKind.Default, TokenKind.Stored, TokenKind.Implements)) {
+                Match(TokenKind.Default, TokenKind.Stored, TokenKind.Implements, TokenKind.NoDefault)) {
                 ParseClassPropertyAccessSpecifier(result);
             }
 
@@ -2582,6 +2582,7 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         #endregion
+        #region ParseClassPropertyAccessSpecifier
 
         [Rule("ClassPropertySpecifier", "ClassPropertyReadWrite | ClassPropertyDispInterface | ('stored' Expression ';') | ('default' [ Expression ] ';' ) | ('nodefault' ';') | ('implements' NamespaceName) ")]
         private ClassPropertySpecifier ParseClassPropertyAccessSpecifier(IExtendableSyntaxPart parent) {
@@ -2628,6 +2629,9 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
+        #endregion
+        #region ParseClassPropertyDispInterface
+
         [Rule("ClassPropertyDispInterface", "( 'readonly' ';')  | ( 'writeonly' ';' ) | DispIdDirective ")]
         private ClassPropertyDispInterface ParseClassPropertyDispInterface(IExtendableSyntaxPart parent) {
             ClassPropertyDispInterface result = CreateChild<ClassPropertyDispInterface>(parent);
@@ -2648,6 +2652,9 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
+        #endregion
+        #region ParseDispIdDirective
+
         [Rule("DispIdDirective", "'dispid' Expression ';'")]
         private DispIdDirective ParseDispIdDirective(IExtendableSyntaxPart parent) {
             DispIdDirective result = CreateByTerminal<DispIdDirective>(parent, TokenKind.DispId);
@@ -2655,6 +2662,9 @@ namespace PasPasPas.Parsing.Parser {
             ContinueWithOrMissing(result, TokenKind.Semicolon);
             return result;
         }
+
+        #endregion
+        #region ParseClassPropertyReadWrite
 
         [Rule("ClassPropertyReadWrite", "('read' | 'write' | 'add' | 'remove' ) NamespaceName ")]
         private ClassPropertyReadWrite ParseClassPropertyReadWrite(IExtendableSyntaxPart parent) {
@@ -2665,6 +2675,8 @@ namespace PasPasPas.Parsing.Parser {
 
             return result;
         }
+
+        #endregion
 
         [Rule("TypeSection", "'type' TypeDeclaration { TypeDeclaration }")]
         private TypeSection ParseTypeSection(IExtendableSyntaxPart parent, bool inClassDeclaration) {

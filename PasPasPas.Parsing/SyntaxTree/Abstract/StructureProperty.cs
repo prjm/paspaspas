@@ -45,6 +45,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
                     yield return TypeValue;
                 if (Value != null)
                     yield return Value;
+                foreach (StructurePropertyAccessor accessor in Accessors)
+                    yield return accessor;
             }
         }
 
@@ -58,6 +60,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         public ExpressionBase Value { get; set; }
 
+        /// <summary>
+        ///     property accessors
+        /// </summary>
+        public IList<StructurePropertyAccessor> Accessors { get; }
+            = new List<StructurePropertyAccessor>();
     }
 
 }

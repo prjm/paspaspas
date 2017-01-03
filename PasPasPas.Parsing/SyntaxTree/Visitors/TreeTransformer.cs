@@ -779,6 +779,73 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         }
 
         #endregion
+        #region ClassPropertyReadWrite
+
+        private AbstractSyntaxPart BeginVisitItem(ClassPropertyReadWrite property, TreeTransformerOptions parameter) {
+            var parent = parameter.LastValue as StructureProperty;
+            StructurePropertyAccessor result = CreateNode<StructurePropertyAccessor>(parameter, property);
+            result.Kind = StructurePropertyAccessor.MapKind(property.Kind);
+            result.Name = ExtractSymbolName(property.Member);
+            parent.Accessors.Add(result);
+            return result;
+        }
+
+        #endregion
+        #region  ClassPropertyDispInterface
+
+        private AbstractSyntaxPart BeginVisitItem(ClassPropertyDispInterface property, TreeTransformerOptions parameter) {
+            var parent = parameter.LastValue as StructureProperty;
+            StructurePropertyAccessor result = CreateNode<StructurePropertyAccessor>(parameter, property);
+
+            if (property.ReadOnly) {
+                result.Kind = StructurePropertyAccessorKind.ReadOnly;
+            }
+            else if (property.WriteOnly) {
+                result.Kind = StructurePropertyAccessorKind.WriteOnly;
+            }
+            else if (property.DispId != null) {
+                result.Kind = StructurePropertyAccessorKind.DispId;
+            }
+            else {
+                result.Kind = StructurePropertyAccessorKind.Undefined;
+            }
+
+            parent.Accessors.Add(result);
+            return result;
+        }
+
+        #endregion
+        #region ParseClassPropertyAccessSpecifier
+
+        private AbstractSyntaxPart BeginVisitItem(ClassPropertySpecifier property, TreeTransformerOptions parameter) {
+            if (property.PropertyReadWrite != null)
+                return null;
+
+            if (property.PropertyDispInterface != null)
+                return null;
+
+            var parent = parameter.LastValue as StructureProperty;
+            StructurePropertyAccessor result = CreateNode<StructurePropertyAccessor>(parameter, property);
+
+            if (property.IsStored) {
+                result.Kind = StructurePropertyAccessorKind.Stored;
+            }
+            else if (property.IsDefault) {
+                result.Kind = StructurePropertyAccessorKind.Default;
+            }
+            else if (property.NoDefault) {
+                result.Kind = StructurePropertyAccessorKind.NoDefault;
+            }
+            else if (property.ImplementsTypeId != null) {
+                result.Kind = StructurePropertyAccessorKind.Implements;
+                result.Name = ExtractSymbolName(property.ImplementsTypeId);
+            }
+
+            parent.Accessors.Add(result);
+            return result;
+        }
+
+        #endregion
 
         #region Extractors
 
@@ -897,8 +964,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
             return result;
         }
-
-
 
         #endregion
         #region Helper functions
