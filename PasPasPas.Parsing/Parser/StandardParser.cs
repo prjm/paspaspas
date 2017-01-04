@@ -1350,6 +1350,8 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
+        #region ParseMethodDirectives
+
         [Rule("MethodDirectives", "{ MethodDirective }")]
         private MethodDirectives ParseMethodDirectives(IExtendableSyntaxPart parent) {
             MethodDirectives result = CreateChild<MethodDirectives>(parent);
@@ -1361,6 +1363,9 @@ namespace PasPasPas.Parsing.Parser {
 
             return result;
         }
+
+        #endregion
+        #region ParseMethodDirective
 
         [Rule("MethodDirective", "ReintroduceDirective | OverloadDirective | InlineDirective | BindingDirective | AbstractDirective | InlineDirective | CallConvention | HintingDirective | DispIdDirective")]
         private SyntaxPartBase ParseMethodDirective(IExtendableSyntaxPart parent) {
@@ -1402,6 +1407,9 @@ namespace PasPasPas.Parsing.Parser {
             return null;
         }
 
+        #endregion
+        #region ParseInlineDirective
+
         [Rule("InlineDirective", "('inline' | 'assembler' ) ';'")]
         private SyntaxPartBase ParseInlineDirective(IExtendableSyntaxPart parent) {
             InlineDirective result = CreateByTerminal<InlineDirective>(parent, TokenKind.Inline, TokenKind.Assembler);
@@ -1409,6 +1417,9 @@ namespace PasPasPas.Parsing.Parser {
             ContinueWithOrMissing(result, TokenKind.Semicolon);
             return result;
         }
+
+        #endregion
+        #region ParseCallConvention
 
         [Rule("CallConvention", "('cdecl' | 'pascal' | 'register' | 'safecall' | 'stdcall' | 'export') ';' ")]
         private SyntaxPartBase ParseCallConvention(IExtendableSyntaxPart parent) {
@@ -1418,6 +1429,9 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
+        #endregion
+        #region ParseAbstractDirective
+
         [Rule("AbstractDirective", "('abstract' | 'final' ) ';' ")]
         private SyntaxPartBase ParseAbstractDirective(IExtendableSyntaxPart parent) {
             AbstractDirective result = CreateByTerminal<AbstractDirective>(parent, TokenKind.Abstract, TokenKind.Final);
@@ -1425,6 +1439,9 @@ namespace PasPasPas.Parsing.Parser {
             ContinueWithOrMissing(result, TokenKind.Semicolon);
             return result;
         }
+
+        #endregion
+        #region ParseBindingDirective
 
         [Rule("BindingDirective", " ('message' Expression ) | 'static' | 'dynamic' | 'override' | 'virtual' ")]
         private SyntaxPartBase ParseBindingDirective(IExtendableSyntaxPart parent) {
@@ -1437,6 +1454,9 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
+        #endregion
+        #region ParseOverloadDirective
+
         [Rule("OverloadDirective", "'overload' ';' ")]
         private SyntaxPartBase ParseOverloadDirective(IExtendableSyntaxPart parent) {
             OverloadDirective result = CreateByTerminal<OverloadDirective>(parent, TokenKind.Overload);
@@ -1444,12 +1464,17 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
+        #endregion
+        #region ParseReintroduceDirective
+
         [Rule("ReintroduceDirective", "'reintroduce' ';' ")]
         private SyntaxPartBase ParseReintroduceDirective(IExtendableSyntaxPart parent) {
             ReintroduceDirective result = CreateByTerminal<ReintroduceDirective>(parent, TokenKind.Reintroduce);
             ContinueWithOrMissing(result, TokenKind.Semicolon);
             return result;
         }
+
+        #endregion
 
         [Rule("MethodDeclHeading", " ('constructor' | 'destructor' | 'function' | 'procedure' | 'operator') NamespaceName [GenericDefinition] [FormalParameterSection] [':' Attributes TypeSpecification ]")]
         private MethodDeclarationHeading ParseMethodDeclHeading(IExtendableSyntaxPart parent) {
@@ -2729,6 +2754,8 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
+        #region ParseMethodDeclaration
+
         [Rule("MethodDeclaration", "( 'constructor' | 'destructor' | 'procedure' | 'function' | 'operator') Identifier [GenericDefinition] [FormalParameters] [ ':' [ Attributes ] TypeSpecification ] ';' { MethodDirective } ")]
         private ClassMethod ParseMethodDeclaration(IExtendableSyntaxPart parent) {
             ClassMethod result = CreateByTerminal<ClassMethod>(parent, TokenKind.Constructor, TokenKind.Destructor, TokenKind.Procedure, TokenKind.Function, TokenKind.Operator);
@@ -2753,6 +2780,8 @@ namespace PasPasPas.Parsing.Parser {
             result.Directives = ParseMethodDirectives(result);
             return result;
         }
+
+        #endregion
 
         #region FormalParameters
 

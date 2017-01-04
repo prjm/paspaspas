@@ -15,22 +15,28 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
             = StructuredTypeKind.Undefined;
 
         /// <summary>
+        ///     list of base types
+        /// </summary>
+        public IList<ITypeSpecification> BaseTypes { get; }
+                = new List<ITypeSpecification>();
+
+        /// <summary>
         ///     fields
         /// </summary>
         public StructureFieldDefinition Fields { get; }
             = new StructureFieldDefinition();
 
         /// <summary>
+        ///     methods
+        /// </summary>
+        public StructureMethodDefinition Methods { get; }
+            = new StructureMethodDefinition();
+
+        /// <summary>
         ///     properties
         /// </summary>
         public StructurePropertyDefinition Properties { get; }
             = new StructurePropertyDefinition();
-
-        /// <summary>
-        ///     list of base types
-        /// </summary>
-        public IList<ITypeSpecification> BaseTypes { get; }
-                = new List<ITypeSpecification>();
 
         /// <summary>
         ///     base type values
@@ -54,6 +60,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
                     yield return baseType;
                 foreach (StructureFields fields in Fields.Fields)
                     yield return fields;
+                foreach (StructureMethod method in Methods)
+                    yield return method;
                 foreach (StructureProperty property in Properties)
                     yield return property;
             }

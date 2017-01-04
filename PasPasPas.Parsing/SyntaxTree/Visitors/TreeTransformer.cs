@@ -846,6 +846,146 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         }
 
         #endregion
+        #region ClassMethod
+
+        private AbstractSyntaxPart BeginVisitItem(ClassMethod method, TreeTransformerOptions parameter) {
+            StructureMethod result = CreateNode<StructureMethod>(parameter, method);
+            var parent = parameter.LastValue as StructuredType;
+            result.Name = ExtractSymbolName(method.Identifier);
+            result.Kind = StructureMethod.MapKind(method.MethodKind);
+            result.Generics = ExtractGenericDefinition(method.GenericDefinition, parameter);
+            parent.Methods.Add(result, parameter.LogSource);
+            return result;
+        }
+
+        #endregion
+        #region ReintroduceDirective
+
+        private AbstractSyntaxPart BeginVisitItem(ReintroduceDirective directive, TreeTransformerOptions parameter) {
+            var parent = parameter.LastValue as StructureMethod;
+            MethodDirective result = CreateNode<MethodDirective>(parameter, directive);
+            result.Kind = MethodDirectiveKind.Reintroduce;
+            parent.Directives.Add(result);
+            return result;
+        }
+
+        #endregion
+        #region OverloadDirective
+
+        private AbstractSyntaxPart BeginVisitItem(OverloadDirective directive, TreeTransformerOptions parameter) {
+            var parent = parameter.LastValue as StructureMethod;
+            MethodDirective result = CreateNode<MethodDirective>(parameter, directive);
+            result.Kind = MethodDirectiveKind.Overload;
+            parent.Directives.Add(result);
+            return result;
+        }
+
+        #endregion
+        #region DispIdDirective
+
+        private AbstractSyntaxPart BeginVisitItem(DispIdDirective directive, TreeTransformerOptions parameter) {
+            var parent = parameter.LastValue as StructureMethod;
+            MethodDirective result = CreateNode<MethodDirective>(parameter, directive);
+            result.Kind = MethodDirectiveKind.DispId;
+            parent.Directives.Add(result);
+            return result;
+        }
+
+        #endregion
+        #region InlineDirective
+
+        private AbstractSyntaxPart BeginVisitItem(InlineDirective directive, TreeTransformerOptions parameter) {
+            var parent = parameter.LastValue as StructureMethod;
+            MethodDirective result = CreateNode<MethodDirective>(parameter, directive);
+
+            if (directive.Kind == TokenKind.Inline) {
+                result.Kind = MethodDirectiveKind.Inline;
+            }
+            else if (directive.Kind == TokenKind.Assembler) {
+                result.Kind = MethodDirectiveKind.Assembler;
+            }
+
+            parent.Directives.Add(result);
+            return result;
+        }
+
+        #endregion
+        #region AbstractDirective
+
+        private AbstractSyntaxPart BeginVisitItem(AbstractDirective directive, TreeTransformerOptions parameter) {
+            var parent = parameter.LastValue as StructureMethod;
+            MethodDirective result = CreateNode<MethodDirective>(parameter, directive);
+
+            if (directive.Kind == TokenKind.Abstract) {
+                result.Kind = MethodDirectiveKind.Abstract;
+            }
+            else if (directive.Kind == TokenKind.Final) {
+                result.Kind = MethodDirectiveKind.Final;
+            }
+
+            parent.Directives.Add(result);
+            return result;
+        }
+
+        #endregion
+        #region CallConvention
+
+        private AbstractSyntaxPart BeginVisitItem(CallConvention directive, TreeTransformerOptions parameter) {
+            var parent = parameter.LastValue as StructureMethod;
+            MethodDirective result = CreateNode<MethodDirective>(parameter, directive);
+
+            if (directive.Kind == TokenKind.Cdecl) {
+                result.Kind = MethodDirectiveKind.Cdecl;
+            }
+            else if (directive.Kind == TokenKind.Pascal) {
+                result.Kind = MethodDirectiveKind.Pascal;
+            }
+            else if (directive.Kind == TokenKind.Register) {
+                result.Kind = MethodDirectiveKind.Register;
+            }
+            else if (directive.Kind == TokenKind.Safecall) {
+                result.Kind = MethodDirectiveKind.Safecall;
+            }
+            else if (directive.Kind == TokenKind.Stdcall) {
+                result.Kind = MethodDirectiveKind.StdCall;
+            }
+            else if (directive.Kind == TokenKind.Export) {
+                result.Kind = MethodDirectiveKind.Export;
+            }
+
+            parent.Directives.Add(result);
+            return result;
+        }
+
+
+        #endregion
+        #region BindingDirective
+
+        private AbstractSyntaxPart BeginVisitItem(BindingDirective directive, TreeTransformerOptions parameter) {
+            var parent = parameter.LastValue as StructureMethod;
+            MethodDirective result = CreateNode<MethodDirective>(parameter, directive);
+
+            if (directive.Kind == TokenKind.Static) {
+                result.Kind = MethodDirectiveKind.Static;
+            }
+            else if (directive.Kind == TokenKind.Dynamic) {
+                result.Kind = MethodDirectiveKind.Dynamic;
+            }
+            else if (directive.Kind == TokenKind.Virtual) {
+                result.Kind = MethodDirectiveKind.Virtual;
+            }
+            else if (directive.Kind == TokenKind.Override) {
+                result.Kind = MethodDirectiveKind.Override;
+            }
+            else if (directive.Kind == TokenKind.Message) {
+                result.Kind = MethodDirectiveKind.Message;
+            }
+
+            parent.Directives.Add(result);
+            return result;
+        }
+
+        #endregion
 
         #region Extractors
 

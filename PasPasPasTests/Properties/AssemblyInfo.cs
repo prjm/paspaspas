@@ -11,7 +11,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("PasPasPasTests")]
-[assembly: AssemblyCopyright("Copyright ©  2016 The PasPasPas Project")]
+[assembly: AssemblyCopyright("Copyright © 2016-2017 The PasPasPas Project")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

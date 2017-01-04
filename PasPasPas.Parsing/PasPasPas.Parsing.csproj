@@ -44,6 +44,8 @@
     <Compile Include="SyntaxTree\Abstract\BlockOfStatements.cs" />
     <Compile Include="SyntaxTree\Abstract\IStatementTarget.cs" />
     <Compile Include="SyntaxTree\Abstract\MemberVisibility.cs" />
+    <Compile Include="SyntaxTree\Abstract\MethodDirective.cs" />
+    <Compile Include="SyntaxTree\Abstract\MethodDirectiveKind.cs" />
     <Compile Include="SyntaxTree\Abstract\ParameterTypeDefinition.cs" />
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
@@ -101,6 +103,9 @@
     <Compile Include="SyntaxTree\Abstract\StructureField.cs" />
     <Compile Include="SyntaxTree\Abstract\StructureFieldDefinition.cs" />
     <Compile Include="SyntaxTree\Abstract\StructureFields.cs" />
+    <Compile Include="SyntaxTree\Abstract\StructureMethod.cs" />
+    <Compile Include="SyntaxTree\Abstract\StructureMethodDefinition.cs" />
+    <Compile Include="SyntaxTree\Abstract\StructureMethodKind.cs" />
     <Compile Include="SyntaxTree\Abstract\StructureProperty.cs" />
     <Compile Include="SyntaxTree\Abstract\StructurePropertyAccessor.cs" />
     <Compile Include="SyntaxTree\Abstract\StructurePropertyAccessorKind.cs" />

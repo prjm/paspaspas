@@ -12,7 +12,7 @@ using System.Windows;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("P3SyntaxTreeViewer")]
-[assembly: AssemblyCopyright("Copyright ©  2016")]
+[assembly: AssemblyCopyright("Copyright © 2016-2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
