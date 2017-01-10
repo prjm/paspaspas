@@ -58,6 +58,16 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         }
 
         /// <summary>
+        ///     symbol hints
+        /// </summary>
+        public SymbolHints Hints { get; set; }
+
+        /// <summary>
+        ///     user attributes
+        /// </summary>
+        public IList<SymbolAttribute> Attributes { get; set; }
+
+        /// <summary>
         ///     method kind
         /// </summary>
         /// <param name="methodKind"></param>

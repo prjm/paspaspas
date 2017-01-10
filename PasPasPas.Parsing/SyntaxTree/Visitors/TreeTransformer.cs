@@ -851,10 +851,24 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         private AbstractSyntaxPart BeginVisitItem(ClassMethod method, TreeTransformerOptions parameter) {
             StructureMethod result = CreateNode<StructureMethod>(parameter, method);
             var parent = parameter.LastValue as StructuredType;
+            result.Attributes = ExtractAttributes(((ClassDeclarationItem)method.Parent).Attributes, parameter.CurrentUnit);
             result.Name = ExtractSymbolName(method.Identifier);
             result.Kind = StructureMethod.MapKind(method.MethodKind);
             result.Generics = ExtractGenericDefinition(method.GenericDefinition, parameter);
             parent.Methods.Add(result, parameter.LogSource);
+            return result;
+        }
+
+        #endregion
+        #region MethodResolution
+
+        private AbstractSyntaxPart BeginVisitItem(MethodResolution methodResolution, TreeTransformerOptions parameter) {
+            StructureMethodResolution result = CreateNode<StructureMethodResolution>(parameter, methodResolution);
+            var parent = parameter.LastValue as StructuredType;
+            result.Attributes = ExtractAttributes(((ClassDeclarationItem)methodResolution.Parent).Attributes, parameter.CurrentUnit);
+            result.Kind = StructureMethodResolution.MapKind(methodResolution.Kind);
+            result.Target = ExtractSymbolName(methodResolution.ResolveIdentifier);
+            parent.MethodResolutions.Add(result);
             return result;
         }
 
@@ -885,6 +899,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         private AbstractSyntaxPart BeginVisitItem(DispIdDirective directive, TreeTransformerOptions parameter) {
             var parent = parameter.LastValue as StructureMethod;
+
+            if (parent == null)
+                return null;
+
             MethodDirective result = CreateNode<MethodDirective>(parameter, directive);
             result.Kind = MethodDirectiveKind.DispId;
             parent.Directives.Add(result);
@@ -986,6 +1004,20 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         }
 
         #endregion
+        #region MethodDirectives
+
+        private AbstractSyntaxPart BeginVisitChildItem(MethodDirectives parent, TreeTransformerOptions parameter, ISyntaxPart child) {
+            var hints = child as HintingInformation;
+            var lastValue = parameter.LastValue as StructureMethod;
+
+            if (hints != null && lastValue != null) {
+                lastValue.Hints = ExtractHints(hints, lastValue.Hints);
+            }
+
+            return null;
+        }
+
+        #endregion
 
         #region Extractors
 
@@ -1062,13 +1094,21 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             foreach (ISyntaxPart part in hints.Parts) {
                 var hint = part as HintingInformation;
                 if (hint == null) continue;
-                result.SymbolIsDeprecated = result.SymbolIsDeprecated || hint.Deprecated;
-                result.DeprecatedInformation = (result.DeprecatedInformation ?? string.Empty) + hint.DeprecatedComment?.UnquotedValue;
-                result.SymbolInLibrary = result.SymbolInLibrary || hint.Library;
-                result.SymbolIsPlatformSpecific = result.SymbolIsPlatformSpecific || hint.Platform;
-                result.SymbolIsExperimental = result.SymbolIsExperimental || hint.Experimental;
+                ExtractHints(hint, result);
             }
 
+            return result;
+        }
+
+        private static SymbolHints ExtractHints(HintingInformation hint, SymbolHints result = null) {
+            if (result == null)
+                result = new SymbolHints();
+
+            result.SymbolIsDeprecated = result.SymbolIsDeprecated || hint.Deprecated;
+            result.DeprecatedInformation = (result.DeprecatedInformation ?? string.Empty) + hint.DeprecatedComment?.UnquotedValue;
+            result.SymbolInLibrary = result.SymbolInLibrary || hint.Library;
+            result.SymbolIsPlatformSpecific = result.SymbolIsPlatformSpecific || hint.Platform;
+            result.SymbolIsExperimental = result.SymbolIsExperimental || hint.Experimental;
             return result;
         }
 

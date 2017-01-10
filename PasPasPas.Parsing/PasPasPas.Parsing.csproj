@@ -106,6 +106,9 @@
     <Compile Include="SyntaxTree\Abstract\StructureMethod.cs" />
     <Compile Include="SyntaxTree\Abstract\StructureMethodDefinition.cs" />
     <Compile Include="SyntaxTree\Abstract\StructureMethodKind.cs" />
+    <Compile Include="SyntaxTree\Abstract\StructureMethodResolution.cs" />
+    <Compile Include="SyntaxTree\Abstract\StructureMethodResolutionDefinition.cs" />
+    <Compile Include="SyntaxTree\Abstract\StructureMethodResolutionKind.cs" />
     <Compile Include="SyntaxTree\Abstract\StructureProperty.cs" />
     <Compile Include="SyntaxTree\Abstract\StructurePropertyAccessor.cs" />
     <Compile Include="SyntaxTree\Abstract\StructurePropertyAccessorKind.cs" />

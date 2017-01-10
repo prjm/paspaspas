@@ -2742,6 +2742,7 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         #endregion
+        #region ParseMethodResolution
 
         [Rule("MethodResolution", "( 'function' | 'procedure' ) NamespaceName '=' Identifier ';' ")]
         private MethodResolution ParseMethodResolution(IExtendableSyntaxPart parent) {
@@ -2754,6 +2755,7 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
+        #endregion
         #region ParseMethodDeclaration
 
         [Rule("MethodDeclaration", "( 'constructor' | 'destructor' | 'procedure' | 'function' | 'operator') Identifier [GenericDefinition] [FormalParameters] [ ':' [ Attributes ] TypeSpecification ] ';' { MethodDirective } ")]

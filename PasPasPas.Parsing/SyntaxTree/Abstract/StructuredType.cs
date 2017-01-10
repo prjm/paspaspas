@@ -33,6 +33,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
             = new StructureMethodDefinition();
 
         /// <summary>
+        ///     method resolutions
+        /// </summary>
+        public StructureMethodResolutionDefinition MethodResolutions { get; }
+            = new StructureMethodResolutionDefinition();
+
+        /// <summary>
         ///     properties
         /// </summary>
         public StructurePropertyDefinition Properties { get; }
@@ -64,6 +70,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
                     yield return method;
                 foreach (StructureProperty property in Properties)
                     yield return property;
+                foreach (StructureMethodResolution resolution in MethodResolutions.Resolutions)
+                    yield return resolution;
             }
         }
 
