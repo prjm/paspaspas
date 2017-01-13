@@ -21,7 +21,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     parameters (indexed property)
         /// </summary>
         public ParameterDefinitions Parameters { get; }
-            = new ParameterDefinitions();
 
         /// <summary>
         ///     property visiblity
@@ -35,11 +34,18 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
             => Name?.CompleteName;
 
         /// <summary>
+        ///     initialzie ovbject
+        /// </summary>
+        public StructureProperty() {
+            Parameters = new ParameterDefinitions() { Parent = this };
+        }
+
+        /// <summary>
         ///     enumerate syntax parts
         /// </summary>
         public override IEnumerable<ISyntaxPart> Parts {
             get {
-                foreach (ParameterTypeDefinition parameter in Parameters.Parameters)
+                foreach (ParameterTypeDefinition parameter in Parameters.Items)
                     yield return parameter;
                 if (TypeValue != null)
                     yield return TypeValue;

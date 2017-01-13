@@ -1,48 +1,25 @@
 ﻿using System.Collections.Generic;
-using PasPasPas.Infrastructure.Log;
-using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
 
     /// <summary>
     ///     fields
     /// </summary>
-    public class StructureFields : SymbolTableBase<StructureField>, ITypeTarget {
+    public class StructureFields : AbstractSyntaxPart, ITypeTarget {
 
         /// <summary>
-        ///     log duplicate field
+        ///     list of fields
         /// </summary>
-        /// <param name="newDuplicate">duplicate parameter</param>
-        /// <param name="logSource">log source</param>
-        protected override void LogDuplicateSymbolError(StructureField newDuplicate, LogSource logSource) {
-            logSource.Error(StructuralErrors.DuplicateFieldName, newDuplicate);
-        }
-
-        /// <summary>
-        ///     check for duplicate parameter names
-        /// </summary>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        public override bool Contains(string key) {
-            if (base.Contains(key))
-                return true;
-
-            var structType = Parent as StructuredType;
-            foreach (StructureFields fields in structType.Fields.Fields)
-                if (fields != this && fields.Contains(key))
-                    return true;
-
-            return false;
-        }
-
+        public IList<StructureField> Fields { get; }
+            = new List<StructureField>();
 
         /// <summary>
         ///     enumerate all parts
         /// </summary>
         public override IEnumerable<ISyntaxPart> Parts {
             get {
-                foreach (ISyntaxPart parameter in base.Parts)
-                    yield return parameter;
+                foreach (StructureField field in Fields)
+                    yield return field;
                 if (TypeValue != null)
                     yield return TypeValue;
             }
@@ -63,5 +40,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     hints
         /// </summary>
         public SymbolHints Hints { get; set; }
+
+        /// <summary>
+        ///     <c>true</c> for class variables
+        /// </summary>
+        public bool ClassItem { get; set; }
     }
 }

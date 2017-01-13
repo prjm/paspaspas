@@ -2478,12 +2478,12 @@ namespace PasPasPas.Parsing.Parser {
         [Rule("ClassItems", "{ ClassItem } ")]
         private ClassDeclarationItems ParseClassItems(IExtendableSyntaxPart parent) {
             ClassDeclarationItems result = CreateChild<ClassDeclarationItems>(parent);
-            var unexpected = false;
+            ClassDeclarationMode mode = ClassDeclarationMode.Fields;
 
-            while ((!Match(TokenKind.End)) && (!unexpected)) {
-                ParseClassDeclarationItem(result, out unexpected);
+            while ((!Match(TokenKind.End)) && (mode != ClassDeclarationMode.Undefined)) {
+                ParseClassDeclarationItem(result, ref mode);
 
-                if (unexpected && result.PartList.Count > 0) {
+                if (mode == ClassDeclarationMode.Undefined && result.PartList.Count > 0) {
                     Unexpected();
                     return result;
                 }
@@ -2496,7 +2496,20 @@ namespace PasPasPas.Parsing.Parser {
         #region ParseClassDeclarationItem
 
         [Rule("ClassItem", "Visibility | MethodResolution | MethodDeclaration | ConstSection | TypeSection | PropertyDeclaration | [ 'class'] VarSection | FieldDeclarations ")]
-        private ClassDeclarationItem ParseClassDeclarationItem(IExtendableSyntaxPart parent, out bool unexpected) {
+        private ClassDeclarationItem ParseClassDeclarationItem(IExtendableSyntaxPart parent, ref ClassDeclarationMode mode) {
+
+            if (ContinueWith(parent, TokenKind.Var)) {
+                mode = ClassDeclarationMode.Fields;
+                return null;
+            }
+
+            if (Match(TokenKind.Class) && LookAhead(1, TokenKind.Var)) {
+                ContinueWith(parent, TokenKind.Class);
+                ContinueWith(parent, TokenKind.Var);
+                mode = ClassDeclarationMode.ClassFields;
+                return null;
+            }
+
             ClassDeclarationItem result = CreateChild<ClassDeclarationItem>(parent);
 
             if (Match(TokenKind.OpenBraces)) {
@@ -2509,26 +2522,38 @@ namespace PasPasPas.Parsing.Parser {
                 result.Attributes = ParseAttributes(result, result.Attributes);
             }
 
-            unexpected = false;
-
-            if (!result.Class && Match(TokenKind.Public, TokenKind.Protected, TokenKind.Private, TokenKind.Strict, TokenKind.Published, TokenKind.Automated)) {
-                result.Strict = ContinueWith(result, TokenKind.Strict);
-                ContinueWith(result, TokenKind.Public, TokenKind.Protected, TokenKind.Private, TokenKind.Published, TokenKind.Automated);
-                result.Visibility = result.LastTerminalKind;
+            if (Match(TokenKind.Public, TokenKind.Protected, TokenKind.Private, TokenKind.Strict, TokenKind.Published, TokenKind.Automated)) {
+                if (result.Class) {
+                    Unexpected();
+                }
+                else {
+                    result.Strict = ContinueWith(result, TokenKind.Strict);
+                    ContinueWith(result, TokenKind.Public, TokenKind.Protected, TokenKind.Private, TokenKind.Published, TokenKind.Automated);
+                    result.Visibility = result.LastTerminalKind;
+                }
+                mode = ClassDeclarationMode.Fields;
                 return result;
             }
 
             if (Match(TokenKind.Procedure, TokenKind.Function) && HasTokenBeforeToken(TokenKind.EqualsSign, TokenKind.Semicolon, TokenKind.OpenParen)) {
-                result.MethodResolution = ParseMethodResolution(result);
+                if (result.Class) {
+                    Unexpected();
+                }
+                else {
+                    result.MethodResolution = ParseMethodResolution(result);
+                }
+                mode = ClassDeclarationMode.Other;
                 return result;
             }
 
             if (Match(TokenKind.Procedure, TokenKind.Function, TokenKind.Constructor, TokenKind.Destructor)) {
+                mode = ClassDeclarationMode.Other;
                 result.MethodDeclaration = ParseMethodDeclaration(result);
                 return result;
             }
 
             if (Match(TokenKind.Property)) {
+                mode = ClassDeclarationMode.Other;
                 result.PropertyDeclaration = ParsePropertyDeclaration(result);
                 return result;
             }
@@ -2543,17 +2568,19 @@ namespace PasPasPas.Parsing.Parser {
                 return result;
             }
 
-            if (Match(TokenKind.Var)) {
-                result.VarSection = ParseVarSection(result, true);
-                return result;
-            }
-
             if (MatchIdentifier() && (!Match(TokenKind.Private, TokenKind.Protected, TokenKind.Public, TokenKind.Published, TokenKind.Automated, TokenKind.Strict))) {
-                result.FieldDeclaration = ParseClassFieldDeclararation(result);
-                return result;
+
+                if (mode == ClassDeclarationMode.Fields || mode == ClassDeclarationMode.ClassFields) {
+                    result.FieldDeclaration = ParseClassFieldDeclararation(result);
+                    result.Class = mode == ClassDeclarationMode.ClassFields;
+                    return result;
+                }
+                else {
+                    Unexpected();
+                }
             }
 
-            unexpected = true;
+            mode = ClassDeclarationMode.Undefined;
             return result;
         }
 
@@ -2784,7 +2811,6 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         #endregion
-
         #region FormalParameters
 
         [Rule("FormalParameters", "FormalParameter { ';' FormalParameter }")]

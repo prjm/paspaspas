@@ -81,7 +81,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public virtual bool Contains(string key) {
+        public bool Contains(string key) {
             if (!symbols.IsValueCreated)
                 return false;
             return symbols.Value.Contains(key);
@@ -90,10 +90,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     parts
         /// </summary>
-        public override IEnumerable<ISyntaxPart> Parts
-        {
-            get
-            {
+        public override IEnumerable<ISyntaxPart> Parts {
+            get {
                 foreach (var value in symbols.Value.Values)
                     yield return (ISyntaxPart)value;
             }

@@ -605,9 +605,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #region FormalParameterDefinition
 
         private AbstractSyntaxPart BeginVisitItem(FormalParameterDefinition formalParameter, TreeTransformerOptions parameter) {
-            ParameterTypeDefinition result = CreateNode<ParameterTypeDefinition>(parameter, formalParameter);
             var paramterTarget = parameter.LastValue as IParameterTarget;
-            paramterTarget.Parameters.Add(result);
+            ParameterTypeDefinition result = CreatePartNode<ParameterTypeDefinition>(paramterTarget.Parameters, formalParameter);
+            paramterTarget.Parameters.Items.Add(result);
             return result;
         }
 
@@ -617,10 +617,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         private AbstractSyntaxPart BeginVisitItem(FormalParameter formalParameter, TreeTransformerOptions parameter) {
             ParameterDefinition result = CreateNode<ParameterDefinition>(parameter, formalParameter);
             var typeDefinition = parameter.LastValue as ParameterTypeDefinition;
+            var allParams = typeDefinition.Parent as ParameterDefinitions;
             result.Name = ExtractSymbolName(formalParameter.ParameterName);
             result.Attributes = ExtractAttributes(formalParameter.Attributes, parameter.CurrentUnit);
             result.ParameterKind = ParameterDefinition.MapKind(formalParameter.ParameterType);
-            typeDefinition.Add(result, parameter.LogSource);
+            typeDefinition.Parameters.Add(result);
+            allParams.Add(result, parameter.LogSource);
             return result;
         }
 
@@ -735,11 +737,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         private AbstractSyntaxPart BeginVisitItem(ClassField field, TreeTransformerOptions parameter) {
             var structType = parameter.LastValue as StructuredType;
+            var declItem = field.Parent as ClassDeclarationItem;
             StructureFields result = CreateNode<StructureFields>(parameter, field);
             result.Visibility = parameter.CurrentMemberVisibility[structType];
-            structType.Fields.Fields.Add(result);
-            IList<SymbolAttribute> extractedAttributes = ExtractAttributes(((ClassDeclarationItem)field.Parent).Attributes, parameter.CurrentUnit);
-
+            structType.Fields.Items.Add(result);
+            IList<SymbolAttribute> extractedAttributes = ExtractAttributes(declItem.Attributes, parameter.CurrentUnit);
+            result.ClassItem = declItem.Class;
 
             foreach (ISyntaxPart part in field.Names.Parts) {
                 var attrs = part as UserAttributes;
@@ -756,7 +759,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 StructureField fieldName = CreatePartNode<StructureField>(result, partName);
                 fieldName.Name = ExtractSymbolName(partName);
                 fieldName.Attributes = extractedAttributes;
-                result.Add(fieldName, parameter.LogSource);
+                structType.Fields.Add(fieldName, parameter.LogSource);
+                result.Fields.Add(fieldName);
                 extractedAttributes = null;
             }
 
@@ -851,7 +855,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         private AbstractSyntaxPart BeginVisitItem(ClassMethod method, TreeTransformerOptions parameter) {
             StructureMethod result = CreateNode<StructureMethod>(parameter, method);
             var parent = parameter.LastValue as StructuredType;
-            result.Attributes = ExtractAttributes(((ClassDeclarationItem)method.Parent).Attributes, parameter.CurrentUnit);
+            var declItem = method.Parent as ClassDeclarationItem;
+            result.ClassItem = declItem.Class;
+            result.Attributes = ExtractAttributes(declItem.Attributes, parameter.CurrentUnit);
             result.Name = ExtractSymbolName(method.Identifier);
             result.Kind = StructureMethod.MapKind(method.MethodKind);
             result.Generics = ExtractGenericDefinition(method.GenericDefinition, parameter);

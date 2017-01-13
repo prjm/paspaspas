@@ -8,6 +8,16 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     public class StructureField : SymbolTableEntryBase {
 
         /// <summary>
+        ///     class item
+        /// </summary>
+        public bool ClassItem {
+            get {
+                var parent = Parent as StructureFields;
+                return parent?.ClassItem ?? false;
+            }
+        }
+
+        /// <summary>
         ///     attributes
         /// </summary>
         public IList<SymbolAttribute> Attributes { get; set; }
@@ -31,5 +41,17 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
                 return Name?.CompleteName;
             }
         }
+
+        /// <summary>
+        ///     hints
+        /// </summary>
+        public SymbolHints Hints
+            => (Parent as StructureFields)?.Hints;
+
+        /// <summary>
+        ///     type vlaue
+        /// </summary>
+        public ITypeSpecification TypeValue
+            => (Parent as StructureFields)?.TypeValue;
     }
 }

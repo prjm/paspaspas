@@ -48,7 +48,7 @@ namespace PasPasPas.Parsing.Tokenizer {
             => (tokenList.Count > 0) || BaseTokenizer.HasNextToken();
 
         private void InternalFetchNextToken() {
-            int currentTokenCount = tokenList.Count;
+            var currentTokenCount = tokenList.Count;
             while (tokenList.Count == currentTokenCount || tokenList.Count < 2) {
 
                 if (!BaseTokenizer.HasNextToken()) {

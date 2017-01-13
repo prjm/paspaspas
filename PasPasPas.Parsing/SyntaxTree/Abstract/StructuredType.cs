@@ -64,7 +64,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
             get {
                 foreach (ITypeSpecification baseType in BaseTypes)
                     yield return baseType;
-                foreach (StructureFields fields in Fields.Fields)
+                foreach (StructureFields fields in Fields.Items)
                     yield return fields;
                 foreach (StructureMethod method in Methods)
                     yield return method;

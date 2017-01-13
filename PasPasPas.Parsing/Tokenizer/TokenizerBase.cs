@@ -19,12 +19,11 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="tokenizer">tokenizer</param>
         /// <returns>pseudotoken (empty)</returns>
         public static Token CreatePseudoToken(this ITokenizer tokenizer, int tokenKind) {
-            var result = new Token();
-            result.FilePath = tokenizer.Input.CurrentInputFile;
-            //result.StartPosition = tokenizer.Input.GetCurrentPosition();
-            //result.EndPosition = tokenizer.Input.GetCurrentPosition();
-            result.Kind = tokenKind;
-            result.Value = string.Empty;
+            var result = new Token() {
+                FilePath = tokenizer.Input.CurrentInputFile,
+                Kind = tokenKind,
+                Value = string.Empty
+            };
             return result;
         }
     }

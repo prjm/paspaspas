@@ -8,6 +8,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     public class ProceduralType : TypeSpecificationBase, IParameterTarget, ITypeTarget {
 
         /// <summary>
+        ///     create a new procedurail type
+        /// </summary>
+        public ProceduralType() {
+            Parameters = new ParameterDefinitions() { Parent = this };
+        }
+
+        /// <summary>
         ///     procedure kind
         /// </summary>
         public ProcedureKind Kind { get; set; }
@@ -21,7 +28,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     parameters
         /// </summary>
         public ParameterDefinitions Parameters { get; }
-            = new ParameterDefinitions();
 
         /// <summary>
         ///     maps a token kind to a procedure kind
@@ -44,7 +50,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         public override IEnumerable<ISyntaxPart> Parts {
             get {
-                foreach (ParameterTypeDefinition parameter in Parameters.Parameters)
+                foreach (ParameterTypeDefinition parameter in Parameters.Items)
                     yield return parameter;
 
                 if (TypeValue != null)

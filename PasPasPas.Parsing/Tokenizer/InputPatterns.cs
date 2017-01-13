@@ -139,8 +139,8 @@ namespace PasPasPas.Parsing.Tokenizer {
                 throw new InvalidOperationException();
 
             IFileReference file = input.CurrentInputFile;
-            bool switchedInput = false;
-            char c = input.FetchChar(out switchedInput);
+            var switchedInput = false;
+            var c = input.FetchChar(out switchedInput);
             InputPattern tokenGroup;
 
             if (Match(c, out tokenGroup)) {
@@ -169,7 +169,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="log"></param>
         /// <returns></returns>
         public Token FetchTokenByGroup(StackedFileReader inputStream, char prefix, InputPattern tokenGroup, ILogSource log) {
-            bool switchedInput = false;
+            var switchedInput = false;
             inputBuffer.Clear();
             inputBuffer.Append(prefix);
             while (inputBuffer.Length < tokenGroup.Length && (!inputStream.AtEof) && (!switchedInput)) {
@@ -180,7 +180,7 @@ namespace PasPasPas.Parsing.Tokenizer {
             IFileReference file = inputStream.CurrentInputFile;
             PatternContinuation tokenKind = tokenGroup.Match(inputBuffer, out tokenLength);
 
-            for (int inputIndex = inputBuffer.Length - 1; inputIndex >= tokenLength; inputIndex--) {
+            for (var inputIndex = inputBuffer.Length - 1; inputIndex >= tokenLength; inputIndex--) {
                 inputStream.PutbackChar(file, inputBuffer[inputIndex]); ;
             }
             inputBuffer.Length = tokenLength;

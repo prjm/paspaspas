@@ -1,13 +1,11 @@
-﻿using PasPasPas.Infrastructure.Log;
-using PasPasPas.Parsing.SyntaxTree.Visitors;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
 
     /// <summary>
     ///     formal parameter definition
     /// </summary>
-    public class ParameterTypeDefinition : SymbolTableBase<ParameterDefinition>, ITypeTarget {
+    public class ParameterTypeDefinition : AbstractSyntaxPart, ITypeTarget {
 
         /// <summary>
         ///     parameter type
@@ -15,40 +13,17 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         public ITypeSpecification TypeValue { get; set; }
 
         /// <summary>
-        ///     log duplicate parameter
+        ///     parameter definitions
         /// </summary>
-        /// <param name="newDuplicate">duplicate parameter</param>
-        /// <param name="logSource">log source</param>
-        protected override void LogDuplicateSymbolError(ParameterDefinition newDuplicate, LogSource logSource) {
-            logSource.Error(StructuralErrors.DuplicateParameterName, newDuplicate);
-        }
-
-        /// <summary>
-        ///     check for duplicate parameter names
-        /// </summary>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        public override bool Contains(string key) {
-            if (base.Contains(key))
-                return true;
-
-            var parameterDefinition = Parent as IParameterTarget;
-            foreach (ParameterTypeDefinition parameter in parameterDefinition.Parameters.Parameters)
-                if (parameter != this && parameter.Contains(key))
-                    return true;
-
-            return false;
-        }
-
+        public IList<ParameterDefinition> Parameters { get; }
+            = new List<ParameterDefinition>();
 
         /// <summary>
         ///     enumerate all parts
         /// </summary>
-        public override IEnumerable<ISyntaxPart> Parts
-        {
-            get
-            {
-                foreach (ISyntaxPart parameter in base.Parts)
+        public override IEnumerable<ISyntaxPart> Parts {
+            get {
+                foreach (ISyntaxPart parameter in Parameters)
                     yield return parameter;
                 if (TypeValue != null)
                     yield return TypeValue;

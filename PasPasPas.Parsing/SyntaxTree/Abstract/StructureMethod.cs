@@ -8,6 +8,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     public class StructureMethod : SymbolTableEntryBase, IParameterTarget, ITypeTarget {
 
         /// <summary>
+        ///     initalize method
+        /// </summary>
+        public StructureMethod() {
+            Parameters = new ParameterDefinitions() { Parent = this };
+        }
+
+        /// <summary>
         ///     directives
         /// </summary>
         public IList<MethodDirective> Directives { get; }
@@ -32,7 +39,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     parameters
         /// </summary>
         public ParameterDefinitions Parameters { get; }
-            = new ParameterDefinitions();
+
 
         /// <summary>
         ///     return type
@@ -66,6 +73,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     user attributes
         /// </summary>
         public IList<SymbolAttribute> Attributes { get; set; }
+
+        /// <summary>
+        ///     <c>true</c> if class method
+        /// </summary>
+        public bool ClassItem { get; set; }
 
         /// <summary>
         ///     method kind
