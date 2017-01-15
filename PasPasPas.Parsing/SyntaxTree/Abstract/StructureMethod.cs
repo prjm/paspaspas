@@ -5,14 +5,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// <summary>
     ///     method
     /// </summary>
-    public class StructureMethod : SymbolTableEntryBase, IParameterTarget, ITypeTarget {
-
-        /// <summary>
-        ///     initalize method
-        /// </summary>
-        public StructureMethod() {
-            Parameters = new ParameterDefinitions() { Parent = this };
-        }
+    public class StructureMethod : MethodDeclaration, IParameterTarget, ITypeTarget {
 
         /// <summary>
         ///     directives
@@ -26,39 +19,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         public GenericTypes Generics { get; set; }
 
         /// <summary>
-        ///     method kind
-        /// </summary>
-        public StructureMethodKind Kind { get; set; }
-
-        /// <summary>
-        ///     name
-        /// </summary>
-        public SymbolName Name { get; set; }
-
-        /// <summary>
-        ///     parameters
-        /// </summary>
-        public ParameterDefinitions Parameters { get; }
-
-
-        /// <summary>
-        ///     return type
-        /// </summary>
-        public ITypeSpecification TypeValue {
-            get; set;
-        }
-
-        /// <summary>
-        ///     symbol name
-        /// </summary>
-        protected override string InternalSymbolName
-            => Name?.CompleteName;
-
-        /// <summary>
         ///     parts
         /// </summary>
         public override IEnumerable<ISyntaxPart> Parts {
             get {
+                foreach (ISyntaxPart part in base.Parts)
+                    yield return part;
+                foreach (ISyntaxPart genericType in Generics)
+                    yield return genericType;
                 foreach (MethodDirective directive in Directives)
                     yield return directive;
             }
@@ -70,35 +38,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         public SymbolHints Hints { get; set; }
 
         /// <summary>
-        ///     user attributes
-        /// </summary>
-        public IList<SymbolAttribute> Attributes { get; set; }
-
-        /// <summary>
         ///     <c>true</c> if class method
         /// </summary>
         public bool ClassItem { get; set; }
 
-        /// <summary>
-        ///     method kind
-        /// </summary>
-        /// <param name="methodKind"></param>
-        /// <returns></returns>
-        public static StructureMethodKind MapKind(int methodKind) {
-            switch (methodKind) {
-                case TokenKind.Function:
-                    return StructureMethodKind.Function;
-                case TokenKind.Procedure:
-                    return StructureMethodKind.Procedure;
-                case TokenKind.Constructor:
-                    return StructureMethodKind.Constructor;
-                case TokenKind.Destructor:
-                    return StructureMethodKind.Destructor;
-                case TokenKind.Operator:
-                    return StructureMethodKind.Operator;
-                default:
-                    return StructureMethodKind.Undefined;
-            }
-        }
     }
 }

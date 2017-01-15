@@ -31,6 +31,11 @@
         public UserAttributes ResultAttributes { get; set; }
 
         /// <summary>
+        ///     result attributes
+        /// </summary>
+        public UserAttributes Attributes { get; set; }
+
+        /// <summary>
         ///     result types
         /// </summary>
         public TypeSpecification ResultType { get; set; }

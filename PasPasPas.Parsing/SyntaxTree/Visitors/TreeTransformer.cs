@@ -94,12 +94,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         private AbstractSyntaxPart BeginVisitItem(UnitInterface unitInterface, TreeTransformerOptions parameter) {
             parameter.CurrentUnitMode[parameter.CurrentUnit] = UnitMode.Interface;
+            parameter.CurrentUnit.Symbols = parameter.CurrentUnit.InterfaceSymbols;
             return parameter.CurrentUnit.InterfaceSymbols;
         }
 
 
         private void EndVisitItem(UnitInterface unitInterface, TreeTransformerOptions parameter) {
             parameter.CurrentUnitMode.Reset(parameter.CurrentUnit);
+            parameter.CurrentUnit.Symbols = null; ;
         }
 
         #endregion
@@ -107,10 +109,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         private AbstractSyntaxPart BeginVisitItem(UnitImplementation unitImplementation, TreeTransformerOptions parameter) {
             parameter.CurrentUnitMode[parameter.CurrentUnit] = UnitMode.Implementation;
+            parameter.CurrentUnit.Symbols = parameter.CurrentUnit.ImplementationSymbols;
             return parameter.CurrentUnit.ImplementationSymbols;
         }
 
         private void EndVisitItem(UnitImplementation unit, TreeTransformerOptions parameter) {
+            parameter.CurrentUnit.Symbols = null;
             parameter.CurrentUnitMode.Reset(parameter.CurrentUnit);
         }
 
@@ -146,12 +150,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #region TypeDeclaration
 
         private AbstractSyntaxPart BeginVisitItem(Standard.TypeDeclaration typeDeclaration, TreeTransformerOptions parameter) {
+            var symbols = parameter.LastValue as IDeclaredSymbolTarget;
             Abstract.TypeDeclaration declaration = CreateNode<Abstract.TypeDeclaration>(parameter, typeDeclaration);
             declaration.Name = ExtractSymbolName(typeDeclaration.TypeId?.Identifier);
             declaration.Generics = ExtractGenericDefinition(typeDeclaration.TypeId?.GenericDefinition, parameter);
             declaration.Attributes = ExtractAttributes(typeDeclaration.Attributes, parameter.CurrentUnit);
             declaration.Hints = ExtractHints(typeDeclaration.Hint);
-            parameter.AddSymbolTableEntry<DeclaredSymbol>(declaration);
+            symbols.Symbols.Add(declaration, parameter.LogSource);
             return declaration;
         }
 
@@ -159,12 +164,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #region ConstDeclaration
 
         private AbstractSyntaxPart BeginVisitItem(ConstDeclaration constDeclaration, TreeTransformerOptions parameter) {
+            var symbols = parameter.LastValue as IDeclaredSymbolTarget;
             ConstantDeclaration declaration = CreateNode<ConstantDeclaration>(parameter, constDeclaration);
             declaration.Name = ExtractSymbolName(constDeclaration.Identifier);
             declaration.Mode = parameter.CurrentDeclarationMode;
             declaration.Attributes = ExtractAttributes(constDeclaration.Attributes, parameter.CurrentUnit);
             declaration.Hints = ExtractHints(constDeclaration.Hint);
-            parameter.AddSymbolTableEntry<DeclaredSymbol>(declaration);
+            symbols.Symbols.Add(declaration, parameter.LogSource);
             return declaration;
         }
 
@@ -591,7 +597,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         private AbstractSyntaxPart BeginVisitItem(ProcedureTypeDefinition proceduralType, TreeTransformerOptions parameter) {
             ProceduralType result = CreateNode<ProceduralType>(parameter, proceduralType);
             parameter.DefineTypeValue(result);
-            result.Kind = ProceduralType.MapKind(proceduralType.Kind);
+            result.Kind = Abstract.MethodDeclaration.MapKind(proceduralType.Kind);
             result.MethodDeclaration = proceduralType.MethodDeclaration;
             result.AllowAnonymousMethods = proceduralType.AllowAnonymousMethods;
 
@@ -859,7 +865,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             result.ClassItem = declItem.Class;
             result.Attributes = ExtractAttributes(declItem.Attributes, parameter.CurrentUnit);
             result.Name = ExtractSymbolName(method.Identifier);
-            result.Kind = StructureMethod.MapKind(method.MethodKind);
+            result.Kind = Abstract.MethodDeclaration.MapKind(method.MethodKind);
             result.Generics = ExtractGenericDefinition(method.GenericDefinition, parameter);
             parent.Methods.Add(result, parameter.LogSource);
             return result;
@@ -1021,6 +1027,20 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             }
 
             return null;
+        }
+
+        #endregion
+        #region ExportedProcedureHeading
+
+        private AbstractSyntaxPart BeginVisitChildItem(ExportedProcedureHeading procHeading, TreeTransformerOptions parameter, ISyntaxPart child) {
+            var symbols = parameter.LastValue as IDeclaredSymbolTarget;
+            GlobalMethod result = CreateNode<GlobalMethod>(parameter, procHeading);
+            result.Name = ExtractSymbolName(procHeading.Name);
+            result.Kind = Abstract.MethodDeclaration.MapKind(procHeading.Kind);
+            result.Attributes = ExtractAttributes(procHeading.Attributes, parameter.CurrentUnit);
+            result.ReturnAttributes = ExtractAttributes(procHeading.ResultAttributes, parameter.CurrentUnit);
+            symbols.Symbols.Add(result, parameter.LogSource);
+            return result;
         }
 
         #endregion

@@ -6,7 +6,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// <summary>
     ///     basic representation of a compilation unit
     /// </summary>
-    public class CompilationUnit : SymbolTableEntryBase, IStatementTarget {
+    public class CompilationUnit : SymbolTableEntryBase, IStatementTarget, IDeclaredSymbolTarget {
 
         /// <summary>
         ///     unit file type
@@ -65,10 +65,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     get all parts
         /// </summary>
-        public override IEnumerable<ISyntaxPart> Parts
-        {
-            get
-            {
+        public override IEnumerable<ISyntaxPart> Parts {
+            get {
                 foreach (RequiredUnitName unit in RequiredUnits)
                     yield return unit;
                 yield return InterfaceSymbols;
@@ -101,6 +99,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         public BlockOfStatements Statements
             => InitializationBlock;
+
+        /// <summary>
+        ///     declared symbols (wraps to intf. symbols and impl. symbols)
+        /// </summary>
+        public SymbolTableBase<DeclaredSymbol> Symbols { get; set; }
 
         /// <summary>
         ///     list of assembly attributes

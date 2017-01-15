@@ -18,7 +18,25 @@
         /// <summary>
         ///     function
         /// </summary>
-        Function = 2
+        Function = 2,
+
+        /// <summary>
+        ///     constructor
+        /// </summary>
+        Constructor = 3,
+
+        /// <summary>
+        ///     destructor
+        /// </summary>
+        Destructor = 4,
+
+        /// <summary>
+        ///     operator
+        /// </summary>
+        Operator = 5,
+
+
+
 
     }
 }

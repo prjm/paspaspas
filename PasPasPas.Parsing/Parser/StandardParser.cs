@@ -300,6 +300,7 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         #endregion
+        #region ParseExportedProcedureHeading
 
         [Rule("ExportedProcedureHeading", "")]
         private ExportedProcedureHeading ParseExportedProcedureHeading(IExtendableSyntaxPart parent) {
@@ -318,6 +319,8 @@ namespace PasPasPas.Parsing.Parser {
             result.Directives = ParseFunctionDirectives(result);
             return result;
         }
+
+        #endregion
 
         [Rule("FunctionDirectives", "{ FunctionDirective } ")]
         private FunctionDirectives ParseFunctionDirectives(IExtendableSyntaxPart parent) {
@@ -2729,6 +2732,7 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         #endregion
+        #region ParseTypeSection
 
         [Rule("TypeSection", "'type' TypeDeclaration { TypeDeclaration }")]
         private TypeSection ParseTypeSection(IExtendableSyntaxPart parent, bool inClassDeclaration) {
@@ -2741,6 +2745,7 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
+        #endregion
         #region ParseTypeDeclaration
 
         [Rule("TypeDeclaration", "[ Attributes ] GenericTypeIdent '=' TypeDeclaration Hints ';' ")]
@@ -2968,6 +2973,7 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         #endregion
+        #region ParseClassParent
 
         [Rule("ClassParent", " [ '(' TypeName { ',' TypeName } ')' ]")]
         private ParentClass ParseClassParent(IExtendableSyntaxPart parent) {
@@ -2983,6 +2989,7 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
+        #endregion
         #region ParseClassOfDeclaration
 
         [Rule("ClassOfDeclaration", "'class' 'of' TypeName")]

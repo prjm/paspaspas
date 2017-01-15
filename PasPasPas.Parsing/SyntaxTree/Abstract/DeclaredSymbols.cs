@@ -6,7 +6,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// <summary>
     ///     a list of declared symbols
     /// </summary>
-    public class DeclaredSymbols : SymbolTableBase<DeclaredSymbol> {
+    public class DeclaredSymbols : SymbolTableBase<DeclaredSymbol>, IDeclaredSymbolTarget {
+
+        /// <summary>
+        ///     declared sybols
+        /// </summary>
+        public SymbolTableBase<DeclaredSymbol> Symbols
+            => this;
 
         /// <summary>
         ///     log duplicated unit name

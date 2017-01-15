@@ -200,21 +200,5 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             }
             // error ??
         }
-
-        /// <summary>
-        ///     add entry to symbol table
-        /// </summary>
-        /// <param name="declaration"></param>
-        public void AddSymbolTableEntry<T>(T declaration) where T : SymbolTableEntryBase {
-            if (WorkingStack.Count > 0) {
-                var scope = WorkingStack.Peek().Data as SymbolTableBase<T>;
-                if (scope != null) {
-                    scope.Add(declaration, LogSource);
-                    return;
-                }
-            }
-            // error ??            
-        }
-
     }
 }

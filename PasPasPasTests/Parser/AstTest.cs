@@ -317,6 +317,7 @@ namespace PasPasPasTests.Parser {
             Func<object, StructureProperty> p = t => (t as StructuredType)?.Properties["n"];
             Func<object, StructureMethod> m = t => (t as StructuredType)?.Methods["m"];
             Func<object, StructureMethodResolution> r = t => (t as StructuredType)?.MethodResolutions.Resolutions[0];
+            Func<object, DeclaredSymbol> c = t => (t as StructuredType)?.Symbols["c"];
 
             RunAstTest("unit z.x; interface type x = class class var c: integer; var n: integer; end; implementation end.", t => f(t)?.ClassItem, false);
 
@@ -344,9 +345,9 @@ namespace PasPasPasTests.Parser {
 
             RunAstTest("unit z.x; interface type x = class n: integer; end; implementation end.", t => f(t)?.ClassItem, false);
 
-            //RunAstTest("unit z.x; interface type x = class class var c: integer; protected n: integer; end; implementation end.", t => f(t)?.ClassItem, false);
-            //RunAstTest("unit z.x; interface type x = class class var n: integer; end; implementation end.", t => f(t)?.ClassItem, true);
-            //RunAstTest("unit z.x; interface type x = class class var q: integer; n: integer; end; implementation end.", t => f(t)?.ClassItem, true);
+            RunAstTest("unit z.x; interface type x = class class var c: integer; protected n: integer; end; implementation end.", t => f(t)?.ClassItem, false);
+            RunAstTest("unit z.x; interface type x = class class var n: integer; end; implementation end.", t => f(t)?.ClassItem, true);
+            RunAstTest("unit z.x; interface type x = class class var q: integer; n: integer; end; implementation end.", t => f(t)?.ClassItem, true);
 
             RunAstTest("unit z.x; interface type x = class n: integer; deprecated; end; implementation end.", t => u(t)?.Fields["n"].Hints.SymbolIsDeprecated, true);
 
@@ -400,10 +401,10 @@ namespace PasPasPasTests.Parser {
             RunAstTest("unit z.x; interface type x = class function m(q: string): integer; end; implementation end.", t => m(t)?.Parameters?.Items[0]?.TypeValue?.GetType(), typeof(MetaType));
             RunAstTest("unit z.x; interface type x = class function m(q: integer): string; end; implementation end.", t => m(t)?.TypeValue?.GetType(), typeof(MetaType));
 
-            RunAstTest("unit z.x; interface type x = class constructor m(q: string); end; implementation end.", t => m(t)?.Kind, StructureMethodKind.Constructor);
-            RunAstTest("unit z.x; interface type x = class destructor m(q: string); end; implementation end.", t => m(t)?.Kind, StructureMethodKind.Destructor);
-            RunAstTest("unit z.x; interface type x = class procedure m(q: string); end; implementation end.", t => m(t)?.Kind, StructureMethodKind.Procedure);
-            RunAstTest("unit z.x; interface type x = class function m(q: string): integer; end; implementation end.", t => m(t)?.Kind, StructureMethodKind.Function);
+            RunAstTest("unit z.x; interface type x = class constructor m(q: string); end; implementation end.", t => m(t)?.Kind, ProcedureKind.Constructor);
+            RunAstTest("unit z.x; interface type x = class destructor m(q: string); end; implementation end.", t => m(t)?.Kind, ProcedureKind.Destructor);
+            RunAstTest("unit z.x; interface type x = class procedure m(q: string); end; implementation end.", t => m(t)?.Kind, ProcedureKind.Procedure);
+            RunAstTest("unit z.x; interface type x = class function m(q: string): integer; end; implementation end.", t => m(t)?.Kind, ProcedureKind.Function);
 
             RunAstTest("unit z.x; interface type x = class procedure m(q: integer); reintroduce; end; implementation end.", t => m(t)?.Directives[0].Kind, MethodDirectiveKind.Reintroduce);
             RunAstTest("unit z.x; interface type x = class procedure m(q: integer); overload; end; implementation end.", t => m(t)?.Directives[0].Kind, MethodDirectiveKind.Overload);
@@ -436,6 +437,14 @@ namespace PasPasPasTests.Parser {
             RunAstTest("unit z.x; interface type x = class function m.x = t; end; implementation end.", t => r(t)?.Kind, StructureMethodResolutionKind.Function);
             RunAstTest("unit z.x; interface type x = class function m.x = t; end; implementation end.", t => r(t)?.Target?.CompleteName, "t");
             RunAstTest("unit z.x; interface type x = class function m.x = t; end; implementation end.", t => r(t)?.TypeValue?.GetType(), typeof(MetaType));
+
+            // symbols
+
+            RunAstTest("unit z.x; interface type x = class const c = 5; end; implementation end.", t => (c(t) as ConstantDeclaration)?.Mode, DeclarationMode.Const);
+            RunAstTest("unit z.x; interface type x = class type c = string; end; implementation end.", t => (c(t) as TypeDeclaration)?.TypeValue?.GetType(), typeof(MetaType));
+
+
+            // attributes
 
             RunAstTest("unit z.x; interface type x = class [a] procedure m(q: integer); platform; end; implementation end.", t => m(t)?.Attributes?[0]?.SymbolName, "a");
 
