@@ -99,5 +99,20 @@
         ///     dispid directive
         /// </summary>
         DispId = 18,
+
+        /// <summary>
+        ///     old call convention: <c>far</c>
+        /// </summary>
+        Far = 19,
+
+        /// <summary>
+        ///     old call convention: <c>local</c>
+        /// </summary>
+        Local = 20,
+
+        /// <summary>
+        ///     old call convention <c>near</c>
+        /// </summary>
+        Near = 21,
     }
 }

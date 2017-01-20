@@ -899,7 +899,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #region OverloadDirective
 
         private AbstractSyntaxPart BeginVisitItem(OverloadDirective directive, TreeTransformerOptions parameter) {
-            var parent = parameter.LastValue as StructureMethod;
+            var parent = parameter.LastValue as Abstract.MethodDeclaration;
             MethodDirective result = CreateNode<MethodDirective>(parameter, directive);
             result.Kind = MethodDirectiveKind.Overload;
             parent.Directives.Add(result);
@@ -925,7 +925,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #region InlineDirective
 
         private AbstractSyntaxPart BeginVisitItem(InlineDirective directive, TreeTransformerOptions parameter) {
-            var parent = parameter.LastValue as StructureMethod;
+            var parent = parameter.LastValue as Abstract.MethodDeclaration;
             MethodDirective result = CreateNode<MethodDirective>(parameter, directive);
 
             if (directive.Kind == TokenKind.Inline) {
@@ -958,10 +958,32 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         }
 
         #endregion
+        #region OldCallConvention
+
+        private AbstractSyntaxPart BeginVisitItem(OldCallConvention directive, TreeTransformerOptions parameter) {
+            var parent = parameter.LastValue as Abstract.MethodDeclaration;
+            MethodDirective result = CreateNode<MethodDirective>(parameter, directive);
+
+            if (directive.Kind == TokenKind.Far) {
+                result.Kind = MethodDirectiveKind.Far;
+            }
+
+            else if (directive.Kind == TokenKind.Local) {
+                result.Kind = MethodDirectiveKind.Local;
+            }
+
+            else if (directive.Kind == TokenKind.Near) {
+                result.Kind = MethodDirectiveKind.Near;
+            }
+
+            return result;
+        }
+
+        #endregion
         #region CallConvention
 
         private AbstractSyntaxPart BeginVisitItem(CallConvention directive, TreeTransformerOptions parameter) {
-            var parent = parameter.LastValue as StructureMethod;
+            var parent = parameter.LastValue as Abstract.MethodDeclaration;
             MethodDirective result = CreateNode<MethodDirective>(parameter, directive);
 
             if (directive.Kind == TokenKind.Cdecl) {
@@ -986,7 +1008,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             parent.Directives.Add(result);
             return result;
         }
-
 
         #endregion
         #region BindingDirective
@@ -1030,9 +1051,24 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         }
 
         #endregion
+        #region FunctionDirectives
+
+        private AbstractSyntaxPart BeginVisitChildItem(FunctionDirectives parent, TreeTransformerOptions parameter, ISyntaxPart child) {
+            var hints = child as HintingInformation;
+            var lastValue = parameter.LastValue as Abstract.MethodDeclaration;
+
+            if (hints != null && lastValue != null) {
+                lastValue.Hints = ExtractHints(hints, lastValue.Hints);
+            }
+
+            return null;
+        }
+
+        #endregion
+
         #region ExportedProcedureHeading
 
-        private AbstractSyntaxPart BeginVisitChildItem(ExportedProcedureHeading procHeading, TreeTransformerOptions parameter, ISyntaxPart child) {
+        private AbstractSyntaxPart BeginVisitItem(ExportedProcedureHeading procHeading, TreeTransformerOptions parameter) {
             var symbols = parameter.LastValue as IDeclaredSymbolTarget;
             GlobalMethod result = CreateNode<GlobalMethod>(parameter, procHeading);
             result.Name = ExtractSymbolName(procHeading.Name);

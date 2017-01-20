@@ -8,12 +8,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     public class StructureMethod : MethodDeclaration, IParameterTarget, ITypeTarget {
 
         /// <summary>
-        ///     directives
-        /// </summary>
-        public IList<MethodDirective> Directives { get; }
-            = new List<MethodDirective>();
-
-        /// <summary>
         ///     generic method parameter
         /// </summary>
         public GenericTypes Generics { get; set; }
@@ -31,11 +25,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
                     yield return directive;
             }
         }
-
-        /// <summary>
-        ///     symbol hints
-        /// </summary>
-        public SymbolHints Hints { get; set; }
 
         /// <summary>
         ///     <c>true</c> if class method

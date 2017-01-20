@@ -321,6 +321,7 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         #endregion
+        #region ParseFunctionDirectives
 
         [Rule("FunctionDirectives", "{ FunctionDirective } ")]
         private FunctionDirectives ParseFunctionDirectives(IExtendableSyntaxPart parent) {
@@ -332,6 +333,9 @@ namespace PasPasPas.Parsing.Parser {
             } while (directive != null);
             return result;
         }
+
+        #endregion
+        #region ParseFunctionDirective
 
         [Rule("FunctionDirective", "OverloadDirective | InlineDirective | CallConvention | OldCallConvention | Hint | ExternalDirective | UnsafeDirective")]
         private SyntaxPartBase ParseFunctionDirective(IExtendableSyntaxPart parent) {
@@ -371,6 +375,8 @@ namespace PasPasPas.Parsing.Parser {
 
             return null;
         }
+
+        #endregion
 
         [Rule("ForwardDirective", "'forward' ';' ")]
         private ForwardDirective ParseForwardDirective(IExtendableSyntaxPart parent) {
@@ -2738,9 +2744,9 @@ namespace PasPasPas.Parsing.Parser {
         private TypeSection ParseTypeSection(IExtendableSyntaxPart parent, bool inClassDeclaration) {
             TypeSection result = CreateByTerminal<TypeSection>(parent, TokenKind.TypeKeyword);
 
-            do {
+            while ((!inClassDeclaration || !Match(TokenKind.Private, TokenKind.Protected, TokenKind.Public, TokenKind.Published, TokenKind.Automated, TokenKind.Strict)) && MatchIdentifier(TokenKind.OpenBraces)) {
                 ParseTypeDeclaration(result);
-            } while ((!inClassDeclaration || !Match(TokenKind.Private, TokenKind.Protected, TokenKind.Public, TokenKind.Published, TokenKind.Automated, TokenKind.Strict)) && MatchIdentifier(TokenKind.OpenBraces));
+            };
 
             return result;
         }

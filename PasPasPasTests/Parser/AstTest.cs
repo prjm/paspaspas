@@ -311,6 +311,36 @@ namespace PasPasPasTests.Parser {
         }
 
         [Fact]
+        public void TestExportedProcedureHeading() {
+            Func<object, GlobalMethod> f = t => ((t as CompilationUnit)?.InterfaceSymbols["e"] as GlobalMethod);
+
+            RunAstTest("unit z.x; interface type procedure e(); implementation end.", t => f(t)?.Name?.CompleteName, "e");
+            RunAstTest("unit z.x; interface type procedure e(); implementation end.", t => f(t)?.Kind, ProcedureKind.Procedure);
+            RunAstTest("unit z.x; interface type function e(): string; implementation end.", t => f(t)?.Name?.CompleteName, "e");
+            RunAstTest("unit z.x; interface type function e(): string; implementation end.", t => f(t)?.Kind, ProcedureKind.Function);
+            //BOGUS: RunAstTest("unit z.x; interface type [a] procedure e(); implementation end.", t => f(t)?.Attributes[0]?.Name?.CompleteName, "a");
+
+            RunAstTest("unit z.x; interface type function e(): string; implementation end.", t => f(t)?.TypeValue?.GetType(), typeof(MetaType));
+            RunAstTest("unit z.x; interface type procedure e(e: string); implementation end.", t => f(t)?.Parameters["e"]?.Name?.CompleteName, "e");
+            RunAstTest("unit z.x; interface type procedure e(e: string); implementation end.", t => (f(t)?.Parameters["e"]?.Parent as ParameterTypeDefinition)?.TypeValue?.GetType(), typeof(MetaType));
+
+            RunAstTest("unit z.x; interface type procedure e(e: string); overload; implementation end.", t => f(t)?.Directives[0]?.Kind, MethodDirectiveKind.Overload);
+            RunAstTest("unit z.x; interface type procedure e(e: string); inline; implementation end.", t => f(t)?.Directives[0]?.Kind, MethodDirectiveKind.Inline);
+            RunAstTest("unit z.x; interface type procedure e(e: string); assembler; implementation end.", t => f(t)?.Directives[0]?.Kind, MethodDirectiveKind.Assembler);
+            RunAstTest("unit z.x; interface type procedure e(e: string); cdecl; implementation end.", t => f(t)?.Directives[0]?.Kind, MethodDirectiveKind.Cdecl);
+            RunAstTest("unit z.x; interface type procedure e(e: string); pascal; implementation end.", t => f(t)?.Directives[0]?.Kind, MethodDirectiveKind.Pascal);
+            RunAstTest("unit z.x; interface type procedure e(e: string); register; implementation end.", t => f(t)?.Directives[0]?.Kind, MethodDirectiveKind.Register);
+            RunAstTest("unit z.x; interface type procedure e(e: string); safecall; implementation end.", t => f(t)?.Directives[0]?.Kind, MethodDirectiveKind.Safecall);
+            RunAstTest("unit z.x; interface type procedure e(e: string); stdcall; implementation end.", t => f(t)?.Directives[0]?.Kind, MethodDirectiveKind.StdCall);
+            RunAstTest("unit z.x; interface type procedure e(e: string); export; implementation end.", t => f(t)?.Directives[0]?.Kind, MethodDirectiveKind.Export);
+            RunAstTest("unit z.x; interface type procedure e(e: string); far; implementation end.", t => f(t)?.Directives[0]?.Kind, MethodDirectiveKind.Far);
+            RunAstTest("unit z.x; interface type procedure e(e: string); near; implementation end.", t => f(t)?.Directives[0]?.Kind, MethodDirectiveKind.Near);
+            RunAstTest("unit z.x; interface type procedure e(e: string); local; implementation end.", t => f(t)?.Directives[0]?.Kind, MethodDirectiveKind.Local);
+            RunAstTest("unit z.x; interface type procedure e(e: string); deprecated; implementation end.", t => f(t)?.Hints?.SymbolIsExperimental, true);
+            RunAstTest("unit z.x; interface type procedure e(e: string); experimental; implementation end.", t => f(t)?.Hints?.SymbolIsDeprecated, true);
+        }
+
+        [Fact]
         public void TestClassType() {
             Func<object, StructuredType> u = t => ((t as CompilationUnit)?.InterfaceSymbols["x"] as TypeDeclaration)?.TypeValue as StructuredType;
             Func<object, StructureField> f = t => (t as StructuredType)?.Fields["n"];
