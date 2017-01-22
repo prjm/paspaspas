@@ -976,6 +976,37 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 result.Kind = MethodDirectiveKind.Near;
             }
 
+            parent.Directives.Add(result);
+            return result;
+        }
+
+        #endregion
+        #region ExternalDirective
+
+        private AbstractSyntaxPart BeginVisitItem(ExternalDirective directive, TreeTransformerOptions parameter) {
+            var parent = parameter.LastValue as Abstract.MethodDeclaration;
+            MethodDirective result = CreateNode<MethodDirective>(parameter, directive);
+
+            if (directive.Kind == TokenKind.VarArgs) {
+                result.Kind = MethodDirectiveKind.VarArgs;
+            }
+
+            else if (directive.Kind == TokenKind.External) {
+                result.Kind = MethodDirectiveKind.External;
+            }
+
+            parent.Directives.Add(result);
+            return result;
+        }
+
+        #endregion
+        #region ExternalSpecifier
+
+        private AbstractSyntaxPart BeginVisitItem(ExternalSpecifier directive, TreeTransformerOptions parameter) {
+            var parent = parameter.LastValue as MethodDirective;
+            MethodDirectiveSpecifier result = CreateNode<MethodDirectiveSpecifier>(parameter, directive);
+            result.Kind = MethodDirectiveSpecifier.MapKind(directive.Kind);
+            parent.Specifiers.Add(result);
             return result;
         }
 

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26020.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{AC53D98C-87A1-42D9-859E-4182316C25AB}"
 	ProjectSection(SolutionItems) = preProject
@@ -21,9 +21,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PasPasPas.DesktopPlatform", "PasPasPas.DesktopPlatform\PasPasPas.DesktopPlatform.csproj", "{8ADB6566-773F-4487-8611-2D8AD5337163}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0F2B3F2A-F734-4F73-B2A7-9AC41898F3A8}"
-	ProjectSection(SolutionItems) = preProject
-		Tasks.txt = Tasks.txt
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PasPasPasTests", "PasPasPasTests\PasPasPasTests.csproj", "{3767F617-68CB-49CD-9ADB-828C4E2D4D73}"
 EndProject

@@ -18,12 +18,20 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         public ExpressionBase Value { get; set; }
 
         /// <summary>
+        ///     directive specifiers
+        /// </summary>
+        public IList<MethodDirectiveSpecifier> Specifiers { get; } =
+            new List<MethodDirectiveSpecifier>();
+
+        /// <summary>
         ///     enumerate parts
         /// </summary>
         public override IEnumerable<ISyntaxPart> Parts {
             get {
                 if (Value != null)
                     yield return Value;
+                foreach (MethodDirectiveSpecifier specifier in Specifiers)
+                    yield return specifier;
             }
         }
 

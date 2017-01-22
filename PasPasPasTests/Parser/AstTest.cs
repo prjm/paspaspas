@@ -336,8 +336,8 @@ namespace PasPasPasTests.Parser {
             RunAstTest("unit z.x; interface type procedure e(e: string); far; implementation end.", t => f(t)?.Directives[0]?.Kind, MethodDirectiveKind.Far);
             RunAstTest("unit z.x; interface type procedure e(e: string); near; implementation end.", t => f(t)?.Directives[0]?.Kind, MethodDirectiveKind.Near);
             RunAstTest("unit z.x; interface type procedure e(e: string); local; implementation end.", t => f(t)?.Directives[0]?.Kind, MethodDirectiveKind.Local);
-            RunAstTest("unit z.x; interface type procedure e(e: string); deprecated; implementation end.", t => f(t)?.Hints?.SymbolIsExperimental, true);
-            RunAstTest("unit z.x; interface type procedure e(e: string); experimental; implementation end.", t => f(t)?.Hints?.SymbolIsDeprecated, true);
+            RunAstTest("unit z.x; interface type procedure e(e: string); deprecated; implementation end.", t => f(t)?.Hints?.SymbolIsDeprecated, true);
+            RunAstTest("unit z.x; interface type procedure e(e: string); experimental; implementation end.", t => f(t)?.Hints?.SymbolIsExperimental, true);
         }
 
         [Fact]

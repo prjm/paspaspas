@@ -392,6 +392,8 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
+        #region ParseExternalDirective
+
         [Rule("ExternalDirective", "(varargs | external [ ConstExpression { ExternalSpecifier } ]) ';' ")]
         private ExternalDirective ParseExternalDirective(IExtendableSyntaxPart parent) {
             ExternalDirective result = CreateByTerminal<ExternalDirective>(parent, TokenKind.VarArgs, TokenKind.External);
@@ -409,7 +411,10 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
-        [Rule("ExternalSpecifier", "(('Name' | 'Index' ) ConstExpression) |  'Dependency' ConstExpression { ', ' ConstExpression } ) ")]
+        #endregion
+        #region ParseExternalSpecifier
+
+        [Rule("ExternalSpecifier", "(('Name' | 'Index' ) ConstExpression) |  'Dependency' ConstExpression { ', ' ConstExpression } ) | delayed ")]
         private ExternalSpecifier ParseExternalSpecifier(IExtendableSyntaxPart parent) {
 
             if (!Match(TokenKind.Name, TokenKind.Index, TokenKind.Dependency, TokenKind.Delayed))
@@ -433,6 +438,10 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
+        #endregion
+        #region ParseOldCallConvention
+
+        [Rule("OrdCallConvention", "'Near' | 'Far' | 'Local'")]
         private SyntaxPartBase ParseOldCallConvention(IExtendableSyntaxPart parent) {
             OldCallConvention result = CreateByTerminal<OldCallConvention>(parent, TokenKind.Near, TokenKind.Far, TokenKind.Local);
             result.Kind = result.LastTerminalKind;
@@ -440,6 +449,7 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
+        #endregion
         #region ParseUnitBlock
 
         [Rule("UnitBlock", "( UnitInitilization 'end' ) | CompoundStatement | 'end' ")]

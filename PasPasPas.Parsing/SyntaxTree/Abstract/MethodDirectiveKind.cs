@@ -114,5 +114,16 @@
         ///     old call convention <c>near</c>
         /// </summary>
         Near = 21,
+
+        /// <summary>
+        ///     <c>varargs</c> directive
+        /// </summary>
+        VarArgs = 22,
+
+        /// <summary>
+        ///     <c>external</c> directive
+        /// </summary>
+        External = 23,
+
     }
 }

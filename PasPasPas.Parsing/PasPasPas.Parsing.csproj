@@ -50,6 +50,8 @@
     <Compile Include="SyntaxTree\Abstract\MethodDeclaration.cs" />
     <Compile Include="SyntaxTree\Abstract\MethodDirective.cs" />
     <Compile Include="SyntaxTree\Abstract\MethodDirectiveKind.cs" />
+    <Compile Include="SyntaxTree\Abstract\MethodDirectiveSpecifier.cs" />
+    <Compile Include="SyntaxTree\Abstract\MethodDirectiveSpecifierKind.cs" />
     <Compile Include="SyntaxTree\Abstract\ParameterTypeDefinition.cs" />
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
