@@ -80,7 +80,13 @@ namespace PasPasPas.Parsing.Parser {
         /// </summary>
         /// <returns></returns>
         protected ISyntaxPart Unexpected() {
-            logSource.Error(UnexpectedToken, CurrentToken().Kind, CurrentToken().Value);
+            Token token = CurrentToken();
+            if (token != null) {
+                logSource.Error(UnexpectedToken, token.Kind, token.Value);
+            }
+            else {
+                logSource.Error(UnexpectedToken);
+            }
             return null;
         }
 

@@ -13,7 +13,7 @@
         /// <summary>
         ///     declared symbols
         /// </summary>
-        public SymbolTableBase<DeclaredSymbol> Symbols { get; }
+        public DeclaredSymbols Symbols { get; }
             = new DeclaredSymbols();
     }
 }

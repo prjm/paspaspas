@@ -338,6 +338,14 @@ namespace PasPasPasTests.Parser {
             RunAstTest("unit z.x; interface type procedure e(e: string); local; implementation end.", t => f(t)?.Directives[0]?.Kind, MethodDirectiveKind.Local);
             RunAstTest("unit z.x; interface type procedure e(e: string); deprecated; implementation end.", t => f(t)?.Hints?.SymbolIsDeprecated, true);
             RunAstTest("unit z.x; interface type procedure e(e: string); experimental; implementation end.", t => f(t)?.Hints?.SymbolIsExperimental, true);
+            RunAstTest("unit z.x; interface type procedure e(e: string); varargs; implementation end.", t => f(t)?.Directives[0]?.Kind, MethodDirectiveKind.VarArgs);
+            RunAstTest("unit z.x; interface type procedure e(e: string); external 'e'; implementation end.", t => f(t)?.Directives[0]?.Kind, MethodDirectiveKind.External);
+            RunAstTest("unit z.x; interface type procedure e(e: string); external 'e' name 'e'; implementation end.", t => f(t)?.Directives[0]?.Specifiers[0]?.Kind, MethodDirectiveSpecifierKind.Name);
+            RunAstTest("unit z.x; interface type procedure e(e: string); external 'e' index 'e'; implementation end.", t => f(t)?.Directives[0]?.Specifiers[0]?.Kind, MethodDirectiveSpecifierKind.Index);
+            RunAstTest("unit z.x; interface type procedure e(e: string); external 'e' delayed; implementation end.", t => f(t)?.Directives[0]?.Specifiers[0]?.Kind, MethodDirectiveSpecifierKind.Delayed);
+            RunAstTest("unit z.x; interface type procedure e(e: string); external 'e' dependency 'a', 'b'; implementation end.", t => f(t)?.Directives[0]?.Specifiers[0]?.Kind, MethodDirectiveSpecifierKind.Dependency);
+            RunAstTest("unit z.x; interface type procedure e(e: string); forward; implementation end.", t => f(t)?.Directives[0]?.Kind, MethodDirectiveKind.Forward);
+            RunAstTest("unit z.x; interface type procedure e(e: string); unsafe; implementation end.", t => f(t)?.Directives[0]?.Kind, MethodDirectiveKind.Unsafe);
         }
 
         [Fact]

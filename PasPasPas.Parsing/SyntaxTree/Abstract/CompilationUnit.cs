@@ -103,7 +103,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     declared symbols (wraps to intf. symbols and impl. symbols)
         /// </summary>
-        public SymbolTableBase<DeclaredSymbol> Symbols { get; set; }
+        public DeclaredSymbols Symbols { get; set; }
 
         /// <summary>
         ///     list of assembly attributes

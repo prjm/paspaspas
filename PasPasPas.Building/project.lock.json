@@ -15778,7 +15778,7 @@
       "projectName": "PasPasPas.Building",
       "projectPath": "C:\\Users\\basti\\Documents\\Visual Studio 2017\\Projects\\paspaspas\\paspaspas\\PasPasPas.Building\\PasPasPas.Building.csproj",
       "projectJsonPath": "C:\\Users\\basti\\Documents\\Visual Studio 2017\\Projects\\paspaspas\\paspaspas\\PasPasPas.Building\\project.json",
-      "outputType": "UAP",
+      "projectStyle": "ProjectJson",
       "frameworks": {
         "dotnet5.0": {
           "projectReferences": {

@@ -23,9 +23,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             return result;
         }
 
-        private void EndVisitItem(Unit unit, TreeTransformerOptions parameter) {
-            parameter.CurrentUnit = null;
-        }
+        private void EndVisitItem(Unit unit, TreeTransformerOptions parameter)
+            => parameter.CurrentUnit = null;
 
         #endregion
         #region Library
@@ -138,12 +137,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region TypeSection
 
-        private AbstractSyntaxPart BeginVisitItem(TypeSection constSection, TreeTransformerOptions parameter) {
+        private AbstractSyntaxPart BeginVisitItem(TypeSection typeSection, TreeTransformerOptions parameter) {
             parameter.CurrentDeclarationMode = DeclarationMode.Types;
             return null;
         }
 
-        private void EndVisitItem(TypeSection constSection, TreeTransformerOptions parameter)
+        private void EndVisitItem(TypeSection typeSection, TreeTransformerOptions parameter)
             => parameter.CurrentDeclarationMode = DeclarationMode.Unknown;
 
         #endregion
@@ -156,7 +155,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             declaration.Generics = ExtractGenericDefinition(typeDeclaration.TypeId?.GenericDefinition, parameter);
             declaration.Attributes = ExtractAttributes(typeDeclaration.Attributes, parameter.CurrentUnit);
             declaration.Hints = ExtractHints(typeDeclaration.Hint);
-            symbols.Symbols.Add(declaration, parameter.LogSource);
+            symbols.Symbols.AddDirect(declaration, parameter.LogSource);
             return declaration;
         }
 
@@ -170,11 +169,36 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             declaration.Mode = parameter.CurrentDeclarationMode;
             declaration.Attributes = ExtractAttributes(constDeclaration.Attributes, parameter.CurrentUnit);
             declaration.Hints = ExtractHints(constDeclaration.Hint);
-            symbols.Symbols.Add(declaration, parameter.LogSource);
+            symbols.Symbols.AddDirect(declaration, parameter.LogSource);
             return declaration;
         }
 
         #endregion
+        #region VarDeclaration
+
+        private AbstractSyntaxPart BeginVisitItem(VarDeclaration varDeclaration, TreeTransformerOptions parameter) {
+            var symbols = parameter.LastValue as IDeclaredSymbolTarget;
+            VariableDeclaration declaration = CreateNode<VariableDeclaration>(parameter, varDeclaration);
+            declaration.Mode = parameter.CurrentDeclarationMode;
+            declaration.Hints = ExtractHints(varDeclaration.Hints);
+
+            foreach (ISyntaxPart child in varDeclaration.Identifiers.Parts) {
+                var ident = child as Identifier;
+                if (ident != null) {
+                    VariableName name = CreatePartNode<VariableName>(declaration, child);
+                    name.Name = ExtractSymbolName(ident);
+                    declaration.Names.Add(name);
+                    symbols.Symbols.Add(name, parameter.LogSource);
+                }
+            }
+
+            /* declaration.Attributes = ExtractAttributes(constDeclaration.Attributes, parameter.CurrentUnit); */
+            symbols.Symbols.Items.Add(declaration);
+            return declaration;
+        }
+
+        #endregion
+
         #region ConstantExpression
 
         private AbstractSyntaxPart BeginVisitItem(ConstantExpression constExpression, TreeTransformerOptions parameter) {
@@ -372,9 +396,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             return null;
         }
 
-        private void EndVisitItem(PackageRequires requires, TreeTransformerOptions parameter) {
-            parameter.CurrentUnitMode[parameter.CurrentUnit] = UnitMode.Interface;
-        }
+        private void EndVisitItem(PackageRequires requires, TreeTransformerOptions parameter)
+            => parameter.CurrentUnitMode[parameter.CurrentUnit] = UnitMode.Interface;
 
         #endregion
         #region PackageContains
@@ -400,9 +423,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             return null;
         }
 
-        private void EndVisitItem(PackageContains contains, TreeTransformerOptions parameter) {
-            parameter.CurrentUnitMode.Reset(parameter.CurrentUnit);
-        }
+        private void EndVisitItem(PackageContains contains, TreeTransformerOptions parameter)
+            => parameter.CurrentUnitMode.Reset(parameter.CurrentUnit);
 
         #endregion
         #region StructType
@@ -415,9 +437,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             return null;
         }
 
-        private void EndVisitItem(StructType factor, TreeTransformerOptions parameter) {
-            parameter.CurrentStructTypeMode = StructTypeMode.Undefined;
-        }
+        private void EndVisitItem(StructType factor, TreeTransformerOptions parameter)
+            => parameter.CurrentStructTypeMode = StructTypeMode.Undefined;
 
         #endregion
         #region ArrayType
@@ -1096,7 +1117,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         }
 
         #endregion
-
         #region ExportedProcedureHeading
 
         private AbstractSyntaxPart BeginVisitItem(ExportedProcedureHeading procHeading, TreeTransformerOptions parameter) {
@@ -1106,12 +1126,33 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             result.Kind = Abstract.MethodDeclaration.MapKind(procHeading.Kind);
             result.Attributes = ExtractAttributes(procHeading.Attributes, parameter.CurrentUnit);
             result.ReturnAttributes = ExtractAttributes(procHeading.ResultAttributes, parameter.CurrentUnit);
-            symbols.Symbols.Add(result, parameter.LogSource);
+            symbols.Symbols.AddDirect(result, parameter.LogSource);
             return result;
         }
 
         #endregion
+        #region UnsafeDirective
 
+        private AbstractSyntaxPart BeginVisitItem(UnsafeDirective directive, TreeTransformerOptions parameter) {
+            var parent = parameter.LastValue as Abstract.MethodDeclaration;
+            MethodDirective result = CreateNode<MethodDirective>(parameter, directive);
+            result.Kind = MethodDirectiveKind.Unsafe;
+            parent.Directives.Add(result);
+            return result;
+        }
+
+        #endregion
+        #region ForwardDirective
+
+        private AbstractSyntaxPart BeginVisitItem(ForwardDirective directive, TreeTransformerOptions parameter) {
+            var parent = parameter.LastValue as Abstract.MethodDeclaration;
+            MethodDirective result = CreateNode<MethodDirective>(parameter, directive);
+            result.Kind = MethodDirectiveKind.Forward;
+            parent.Directives.Add(result);
+            return result;
+        }
+
+        #endregion
         #region Extractors
 
         private static SymbolName ExtractSymbolName(NamespaceName name) {

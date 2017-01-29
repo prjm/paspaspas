@@ -68,9 +68,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
             get {
                 foreach (ParameterTypeDefinition parameter in Parameters.Items)
                     yield return parameter;
-
                 if (TypeValue != null)
                     yield return TypeValue;
+                foreach (MethodDirective directive in Directives)
+                    yield return directive;
             }
         }
 

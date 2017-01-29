@@ -1,4 +1,5 @@
-﻿using PasPasPas.Infrastructure.Log;
+﻿using System.Collections.Generic;
+using PasPasPas.Infrastructure.Log;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
@@ -6,13 +7,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// <summary>
     ///     a list of declared symbols
     /// </summary>
-    public class DeclaredSymbols : SymbolTableBase<DeclaredSymbol>, IDeclaredSymbolTarget {
+    public class DeclaredSymbols : CombinedSymbolTableBase<DeclaredSymbolGroup, DeclaredSymbol>, IDeclaredSymbolTarget {
 
         /// <summary>
-        ///     declared sybols
+        ///     direct items
         /// </summary>
-        public SymbolTableBase<DeclaredSymbol> Symbols
-            => this;
+        public IList<DeclaredSymbol> DirectItems { get; } =
+            new List<DeclaredSymbol>();
 
         /// <summary>
         ///     log duplicated unit name
@@ -24,5 +25,33 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
             logSource.Error(StructuralErrors.RedeclaredSymbol, newDuplicate);
         }
 
+        /// <summary>
+        ///     enumerate all parts
+        /// </summary>
+        public override IEnumerable<ISyntaxPart> Parts {
+            get {
+                foreach (AbstractSyntaxPart part in Items)
+                    yield return part;
+                foreach (DeclaredSymbol part in DirectItems)
+                    yield return part;
+            }
+        }
+
+        /// <summary>
+        ///     declared symbols
+        /// </summary>
+        public DeclaredSymbols Symbols
+            => this;
+
+        /// <summary>
+        ///     add symbols
+        /// </summary>
+        /// <param name="entry"></param>
+        /// <param name="logSource"></param>
+        public void AddDirect(DeclaredSymbol entry, LogSource logSource) {
+            if (Add(entry, logSource)) {
+                DirectItems.Add(entry);
+            }
+        }
     }
 }

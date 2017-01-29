@@ -8,7 +8,7 @@
         /// <summary>
         ///     get symbols
         /// </summary>
-        SymbolTableBase<DeclaredSymbol> Symbols { get; }
+        DeclaredSymbols Symbols { get; }
 
     }
 }

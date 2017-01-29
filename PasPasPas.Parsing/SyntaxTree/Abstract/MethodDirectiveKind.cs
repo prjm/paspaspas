@@ -125,5 +125,14 @@
         /// </summary>
         External = 23,
 
+        /// <summary>
+        ///     unsafe directive
+        /// </summary>
+        Unsafe = 24,
+
+        /// <summary>
+        ///     forward directive
+        /// </summary>
+        Forward = 25,
     }
 }

@@ -47,10 +47,8 @@ namespace PasPasPas.Parsing.SyntaxTree {
         /// <summary>
         ///     invalid tokens before this token
         /// </summary>
-        public IEnumerable<Token> InvalidTokensBefore
-        {
-            get
-            {
+        public IEnumerable<Token> InvalidTokensBefore {
+            get {
                 if (invalidTokensBefore.IsValueCreated) {
                     foreach (Token token in invalidTokensBefore.Value)
                         yield return token;
@@ -61,10 +59,8 @@ namespace PasPasPas.Parsing.SyntaxTree {
         /// <summary>
         ///     invalid tokens after this token
         /// </summary>
-        public IEnumerable<Token> InvalidTokensAfter
-        {
-            get
-            {
+        public IEnumerable<Token> InvalidTokensAfter {
+            get {
                 if (invalidTokensAfter.IsValueCreated) {
                     foreach (Token token in invalidTokensAfter.Value)
                         yield return token;

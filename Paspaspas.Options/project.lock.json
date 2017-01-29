@@ -15143,7 +15143,7 @@
       "projectName": "PasPasPas.Options",
       "projectPath": "C:\\Users\\basti\\Documents\\Visual Studio 2017\\Projects\\paspaspas\\paspaspas\\Paspaspas.Options\\PasPasPas.Options.csproj",
       "projectJsonPath": "C:\\Users\\basti\\Documents\\Visual Studio 2017\\Projects\\paspaspas\\paspaspas\\Paspaspas.Options\\project.json",
-      "outputType": "UAP",
+      "projectStyle": "ProjectJson",
       "frameworks": {
         "dotnet5.0": {
           "projectReferences": {

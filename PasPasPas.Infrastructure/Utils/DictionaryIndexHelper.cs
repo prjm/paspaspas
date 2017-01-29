@@ -3,7 +3,7 @@
 namespace PasPasPas.Infrastructure.Utils {
 
     /// <summary>
-    ///     index helper for diciontaries
+    ///     index helper for dicionaries
     /// </summary>
     /// <typeparam name="TMapType"></typeparam>
     /// <typeparam name="TTargetType"></typeparam>

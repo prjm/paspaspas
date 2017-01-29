@@ -208,6 +208,7 @@ namespace PasPasPas.Parsing.Tokenizer {
                 ["varargs"] = TokenKind.VarArgs,
                 ["external"] = TokenKind.External,
                 ["forward"] = TokenKind.Forward,
+                ["unsafe"] = TokenKind.Unsafe,
                 ["true"] = TokenKind.True,
                 ["false"] = TokenKind.False,
                 ["exit"] = TokenKind.Exit,
@@ -222,15 +223,12 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <summary>
         ///     toggle semicolons as asm connets
         /// </summary>
-        public bool AllowAsmComment
-        {
-            get
-            {
+        public bool AllowAsmComment {
+            get {
                 return punctuators.SemicolonOrAsmComment.AllowComment;
             }
 
-            set
-            {
+            set {
                 punctuators.SemicolonOrAsmComment.AllowComment = value;
             }
         }

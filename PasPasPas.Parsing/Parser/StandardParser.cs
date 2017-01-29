@@ -377,6 +377,7 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         #endregion
+        #region ParseForwardDirective
 
         [Rule("ForwardDirective", "'forward' ';' ")]
         private ForwardDirective ParseForwardDirective(IExtendableSyntaxPart parent) {
@@ -385,6 +386,9 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
+        #endregion
+        #region ParseUnsafeDirective
+
         [Rule("UnsafeDirective", "'unsafe' ';' ")]
         private UnsafeDirective ParseUnsafeDirective(IExtendableSyntaxPart parent) {
             UnsafeDirective result = CreateByTerminal<UnsafeDirective>(parent, TokenKind.Unsafe);
@@ -392,6 +396,7 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
+        #endregion
         #region ParseExternalDirective
 
         [Rule("ExternalDirective", "(varargs | external [ ConstExpression { ExternalSpecifier } ]) ';' ")]
@@ -1605,6 +1610,8 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
+        #region ParseVarDeclaration
+
         [Rule("VarDeclaration", " IdentList ':' TypeSpecification [ VarValueSpecification ] Hints ';' ")]
         private VarDeclaration ParseVarDeclaration(IExtendableSyntaxPart parent) {
             VarDeclaration result = CreateChild<VarDeclaration>(parent);
@@ -1622,6 +1629,8 @@ namespace PasPasPas.Parsing.Parser {
             ContinueWithOrMissing(result, TokenKind.Semicolon);
             return result;
         }
+
+        #endregion
 
         [Rule("VarValueSpecification", "('absolute' ConstExpression) | ('=' ConstExpression)")]
         private VarValueSpecification ParseValueSpecification(IExtendableSyntaxPart parent) {
@@ -3572,13 +3581,12 @@ namespace PasPasPas.Parsing.Parser {
         ///     print the parser grammar
         /// </summary>
         /// <param name="result">Result</param>
-        public static void PrintGrammar(StringBuilder result) {
-            PrintGrammar(typeof(StandardParser), result);
-        }
+        public static void PrintGrammar(StringBuilder result)
+            => PrintGrammar(typeof(StandardParser), result);
 
 
         private bool MatchIdentifier(params int[] otherTokens)
-                    => LookAheadIdentifier(0, otherTokens, false);
+            => LookAheadIdentifier(0, otherTokens, false);
 
         private bool MatchIdentifier(bool allowReservedWords)
             => LookAheadIdentifier(0, new int[0], allowReservedWords);

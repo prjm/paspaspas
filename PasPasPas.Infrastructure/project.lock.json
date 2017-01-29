@@ -15006,7 +15006,7 @@
       "projectName": "PasPasPas.Infrastructure",
       "projectPath": "C:\\Users\\basti\\Documents\\Visual Studio 2017\\Projects\\paspaspas\\paspaspas\\PasPasPas.Infrastructure\\PasPasPas.Infrastructure.csproj",
       "projectJsonPath": "C:\\Users\\basti\\Documents\\Visual Studio 2017\\Projects\\paspaspas\\paspaspas\\PasPasPas.Infrastructure\\project.json",
-      "outputType": "UAP"
+      "projectStyle": "ProjectJson"
     },
     "dependencies": {
       "Microsoft.AnalyzerPowerPack": "1.1.0",
