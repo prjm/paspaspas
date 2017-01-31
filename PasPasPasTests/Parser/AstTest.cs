@@ -311,6 +311,21 @@ namespace PasPasPasTests.Parser {
         }
 
         [Fact]
+        public void TestVarDeclaration() {
+            Func<object, VariableDeclaration> f = t => ((t as CompilationUnit)?.ImplementationSymbols["x"]?.Parent as VariableDeclaration);
+
+            RunAstTest("unit z.x; interface implementation var x: string; end.", t => f(t)?.Names[0]?.Name.CompleteName, "x");
+            RunAstTest("unit z.x; interface implementation var x: string; end.", t => f(t)?.Mode, DeclarationMode.Var);
+            RunAstTest("unit z.x; interface implementation threadvar x: string; end.", t => f(t)?.Mode, DeclarationMode.ThreadVar);
+            RunAstTest("unit z.x; interface implementation var x: string experimental; end.", t => f(t)?.Hints?.SymbolIsExperimental, true);
+            RunAstTest("unit z.x; interface implementation var [a] x: string; end.", t => f(t)?.Attributes[0]?.SymbolName, "a");
+            RunAstTest("unit z.x; interface implementation var x: string; end.", t => f(t)?.TypeValue?.GetType(), typeof(MetaType));
+            RunAstTest("unit z.x; interface implementation var x: string = 5; end.", t => f(t)?.ValueKind, VariableValueKind.InitialValue);
+            RunAstTest("unit z.x; interface implementation var x: string = nil; end.", t => f(t)?.Value?.GetType(), typeof(ConstantValue));
+            RunAstTest("unit z.x; interface implementation var x: string absolute 5; end.", t => f(t)?.ValueKind, VariableValueKind.Absolute);
+        }
+
+        [Fact]
         public void TestExportedProcedureHeading() {
             Func<object, GlobalMethod> f = t => ((t as CompilationUnit)?.InterfaceSymbols["e"] as GlobalMethod);
 

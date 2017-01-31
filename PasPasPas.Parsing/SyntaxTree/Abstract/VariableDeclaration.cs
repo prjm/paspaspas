@@ -5,7 +5,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// <summary>
     ///     variable declaration
     /// </summary>
-    public class VariableDeclaration : DeclaredSymbolGroup, ITypeTarget {
+    public class VariableDeclaration : DeclaredSymbolGroup, ITypeTarget, IExpressionTarget {
 
         /// <summary>
         ///     declaration mode
@@ -37,6 +37,22 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
                     yield return name;
             }
         }
+
+        /// <summary>
+        ///     attribuetes
+        /// </summary>
+        public IList<SymbolAttribute> Attributes { get; internal set; }
+
+        /// <summary>
+        ///     value kind
+        /// </summary>
+        public VariableValueKind ValueKind { get; set; }
+            = VariableValueKind.Unknown;
+
+        /// <summary>
+        ///     variable initialization value
+        /// </summary>
+        public ExpressionBase Value { get; set; }
 
     }
 }

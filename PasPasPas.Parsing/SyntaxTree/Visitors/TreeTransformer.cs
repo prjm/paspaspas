@@ -174,6 +174,24 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         }
 
         #endregion
+        #region VarSection
+
+        private AbstractSyntaxPart BeginVisitItem(VarSection varSection, TreeTransformerOptions parameter) {
+            if (varSection.Kind == TokenKind.Var)
+                parameter.CurrentDeclarationMode = DeclarationMode.Var;
+            else if (varSection.Kind == TokenKind.ThreadVar)
+                parameter.CurrentDeclarationMode = DeclarationMode.ThreadVar;
+            else
+                parameter.CurrentDeclarationMode = DeclarationMode.Unknown;
+
+            return null;
+        }
+
+        private void EndVisitItem(VarSection varSection, TreeTransformerOptions parameter)
+            => parameter.CurrentDeclarationMode = DeclarationMode.Unknown;
+
+
+        #endregion
         #region VarDeclaration
 
         private AbstractSyntaxPart BeginVisitItem(VarDeclaration varDeclaration, TreeTransformerOptions parameter) {
@@ -192,13 +210,26 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 }
             }
 
-            /* declaration.Attributes = ExtractAttributes(constDeclaration.Attributes, parameter.CurrentUnit); */
+            declaration.Attributes = ExtractAttributes(varDeclaration.Attributes, parameter.CurrentUnit);
             symbols.Symbols.Items.Add(declaration);
             return declaration;
         }
 
         #endregion
+        #region VarValueSpecification
 
+        private AbstractSyntaxPart BeginVisitItem(VarValueSpecification varValue, TreeTransformerOptions parameter) {
+            var varDeclaration = parameter.LastValue as VariableDeclaration;
+
+            if (varValue.Absolute != null)
+                varDeclaration.ValueKind = VariableValueKind.Absolute;
+            else if (varValue.InitialValue != null)
+                varDeclaration.ValueKind = VariableValueKind.InitialValue;
+
+            return null;
+        }
+
+        #endregion
         #region ConstantExpression
 
         private AbstractSyntaxPart BeginVisitItem(ConstantExpression constExpression, TreeTransformerOptions parameter) {

@@ -23,6 +23,16 @@
         /// <summary>
         ///     type section
         /// </summary>
-        Types = 3
+        Types = 3,
+
+        /// <summary>
+        ///     var declaration
+        /// </summary>
+        Var = 4,
+
+        /// <summary>
+        ///     thread variables
+        /// </summary>
+        ThreadVar = 5
     }
 }

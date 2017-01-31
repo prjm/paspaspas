@@ -1598,6 +1598,8 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
+        #region ParseVarSection
+
         [Rule("VarSection", "(var | threadvar) VarDeclaration { VarDeclaration }")]
         private VarSection ParseVarSection(IExtendableSyntaxPart parent, bool inClassDeclaration) {
             VarSection result = CreateByTerminal<VarSection>(parent, TokenKind.Var, TokenKind.ThreadVar);
@@ -1610,6 +1612,7 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
+        #endregion
         #region ParseVarDeclaration
 
         [Rule("VarDeclaration", " IdentList ':' TypeSpecification [ VarValueSpecification ] Hints ';' ")]
@@ -1631,6 +1634,7 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         #endregion
+        #region ParseValueSpecification
 
         [Rule("VarValueSpecification", "('absolute' ConstExpression) | ('=' ConstExpression)")]
         private VarValueSpecification ParseValueSpecification(IExtendableSyntaxPart parent) {
@@ -1645,6 +1649,8 @@ namespace PasPasPas.Parsing.Parser {
             result.InitialValue = ParseConstantExpression(result);
             return result;
         }
+
+        #endregion
 
         [Rule("LabelSection", "'label' Label { ',' Label } ';' ")]
         private LabelDeclarationSection ParseLabelDeclarationSection(IExtendableSyntaxPart parent) {
