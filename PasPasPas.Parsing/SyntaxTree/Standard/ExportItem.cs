@@ -25,5 +25,9 @@
         /// </summary>
         public bool Resident { get; set; }
 
+        /// <summary>
+        ///     export name
+        /// </summary>
+        public Identifier ExportName { get; set; }
     }
 }

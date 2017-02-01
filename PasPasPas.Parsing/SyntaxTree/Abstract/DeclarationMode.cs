@@ -33,6 +33,11 @@
         /// <summary>
         ///     thread variables
         /// </summary>
-        ThreadVar = 5
+        ThreadVar = 5,
+
+        /// <summary>
+        ///     binary exported functions
+        /// </summary>
+        Exports = 6
     }
 }

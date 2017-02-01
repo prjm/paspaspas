@@ -686,7 +686,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
 
 
-        #endregion
+        #endregion   
         #region UnitInitialization
 
         private AbstractSyntaxPart BeginVisitItem(UnitInitialization unitBlock, TreeTransformerOptions parameter) {
@@ -1180,6 +1180,34 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             MethodDirective result = CreateNode<MethodDirective>(parameter, directive);
             result.Kind = MethodDirectiveKind.Forward;
             parent.Directives.Add(result);
+            return result;
+        }
+
+        #endregion
+        #region ExportsSection
+
+        private AbstractSyntaxPart BeginVisitItem(ExportsSection exportsSection, TreeTransformerOptions parameter) {
+            parameter.CurrentDeclarationMode = DeclarationMode.Exports;
+            return null;
+        }
+
+        private AbstractSyntaxPart EndVisitItem(ExportsSection exportsSection, TreeTransformerOptions parameter) {
+            parameter.CurrentDeclarationMode = DeclarationMode.Unknown;
+            return null;
+        }
+
+
+        #endregion
+        #region ExportItem
+
+        private AbstractSyntaxPart BeginVisitItem(ExportItem exportsSection, TreeTransformerOptions parameter) {
+            var declarations = parameter.LastValue as IDeclaredSymbolTarget;
+            ExportedMethodDeclaration result = CreateNode<ExportedMethodDeclaration>(parameter, exportsSection);
+            result.Name = ExtractSymbolName(exportsSection.ExportName);
+            result.IsResident = exportsSection.Resident;
+            result.HasIndex = exportsSection.IndexParameter != null;
+            result.HasName = exportsSection.NameParameter != null;
+            declarations.Symbols.AddDirect(result, parameter.LogSource);
             return result;
         }
 

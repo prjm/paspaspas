@@ -1,12 +1,8 @@
 ﻿using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
-using PasPasPas.Parsing.Parser;
 
 namespace PasPasPasTests.Parser {
 
@@ -361,6 +357,18 @@ namespace PasPasPasTests.Parser {
             RunAstTest("unit z.x; interface type procedure e(e: string); external 'e' dependency 'a', 'b'; implementation end.", t => f(t)?.Directives[0]?.Specifiers[0]?.Kind, MethodDirectiveSpecifierKind.Dependency);
             RunAstTest("unit z.x; interface type procedure e(e: string); forward; implementation end.", t => f(t)?.Directives[0]?.Kind, MethodDirectiveKind.Forward);
             RunAstTest("unit z.x; interface type procedure e(e: string); unsafe; implementation end.", t => f(t)?.Directives[0]?.Kind, MethodDirectiveKind.Unsafe);
+        }
+
+        [Fact]
+        public void TestExportedMethods() {
+            Func<object, ExportedMethodDeclaration> f = t => ((t as CompilationUnit)?.InterfaceSymbols["e"] as ExportedMethodDeclaration);
+
+            RunAstTest("unit z.x; interface exports e(); implementation end.", t => f(t)?.Name?.CompleteName, "e");
+            RunAstTest("unit z.x; interface exports e() index nil; implementation end.", t => f(t)?.HasIndex, true);
+            RunAstTest("unit z.x; interface exports e() name nil; implementation end.", t => f(t)?.HasName, true);
+            RunAstTest("unit z.x; interface exports e() index nil name nil; implementation end.", t => f(t)?.HasName, true);
+            RunAstTest("unit z.x; interface exports e() index nil name nil; implementation end.", t => f(t)?.HasIndex, true);
+            RunAstTest("unit z.x; interface exports e(a: integer); implementation end.", t => f(t)?.Parameters[0]?.Name?.CompleteName, "a");
         }
 
         [Fact]

@@ -1564,10 +1564,11 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
-        [Rule("ExportsSection", "'exports' Identifier ExportItem { ',' ExportItem } ';' ")]
+        #region ParseExportsSection
+
+        [Rule("ExportsSection", "'exports' ExportItem { ',' ExportItem } ';' ")]
         private ExportsSection ParseExportsSection(IExtendableSyntaxPart parent) {
             ExportsSection result = CreateByTerminal<ExportsSection>(parent, TokenKind.Exports);
-            result.ExportName = RequireIdentifier(result);
 
             do {
                 ParseExportItem(result);
@@ -1577,9 +1578,14 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
-        [Rule("ExportItem", "[ '(' FormalParameters ')' ] [ 'index' Expression ] [ 'name' Expression ]")]
+        #endregion
+        #region ParseExportItem
+
+        [Rule("ExportItem", " Identifier [ '(' FormalParameters ')' ] [ 'index' Expression ] [ 'name' Expression ]")]
         private ExportItem ParseExportItem(IExtendableSyntaxPart parent) {
             ExportItem result = CreateChild<ExportItem>(parent);
+
+            result.ExportName = RequireIdentifier(result);
 
             if (ContinueWith(result, TokenKind.OpenParen)) {
                 result.Parameters = ParseFormalParameters(result);
@@ -1598,6 +1604,7 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
+        #endregion
         #region ParseVarSection
 
         [Rule("VarSection", "(var | threadvar) VarDeclaration { VarDeclaration }")]
@@ -2854,7 +2861,8 @@ namespace PasPasPas.Parsing.Parser {
             FormalParameters result = CreateChild<FormalParameters>(parent);
 
             do {
-                ParseFormalParameter(result);
+                if (!Match(TokenKind.CloseParen))
+                    ParseFormalParameter(result);
             } while (ContinueWith(result, TokenKind.Semicolon));
 
             return result;
