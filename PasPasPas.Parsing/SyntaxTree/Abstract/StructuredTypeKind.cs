@@ -1,18 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PasPasPas.Parsing.SyntaxTree.Abstract
-{
+﻿namespace PasPasPas.Parsing.SyntaxTree.Abstract {
 
     /// <summary>
     ///     kind of structured type
     /// </summary>
-    public enum StructuredTypeKind
-    {
-        
+    public enum StructuredTypeKind {
+
         /// <summary>
         ///     undefined type
         /// </summary>
@@ -23,5 +15,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract
         /// </summary>
         Class = 1,
 
+        /// <summary>
+        ///     record type
+        /// </summary>
+        Record = 2,
     }
 }

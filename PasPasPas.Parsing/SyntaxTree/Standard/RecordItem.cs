@@ -53,6 +53,12 @@
         /// <summary>
         ///     visibility declaration
         /// </summary>
-        public int Visibility { get; internal set; }
+        public int Visibility { get; set; }
+            = TokenKind.Undefined;
+
+        /// <summary>
+        ///     attributes
+        /// </summary>
+        public UserAttributes Attributes { get; set; }
     }
 }

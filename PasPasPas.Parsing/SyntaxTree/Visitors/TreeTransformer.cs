@@ -1212,6 +1212,79 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         }
 
         #endregion
+        #region RecordItem
+
+        private AbstractSyntaxPart BeginVisitItem(RecordItem recordDeclarationItem, TreeTransformerOptions parameter) {
+            var parentType = parameter.LastValue as StructuredType;
+
+            if (parentType == null)
+                return null;
+
+            if (recordDeclarationItem.Visibility != TokenKind.Undefined) {
+                parameter.CurrentMemberVisibility[parentType] = StructuredType.MapVisibility(recordDeclarationItem.Visibility, recordDeclarationItem.Strict);
+            };
+
+            return null;
+        }
+
+        #endregion
+        #region RecordDeclaration
+
+        private AbstractSyntaxPart BeginVisitItem(RecordDeclaration recordDeclaration, TreeTransformerOptions parameter) {
+            StructuredType result = CreateNode<StructuredType>(parameter, recordDeclaration);
+            result.Kind = StructuredTypeKind.Record;
+            parameter.DefineTypeValue(result);
+            parameter.CurrentMemberVisibility[result] = MemberVisibility.Public;
+            return result;
+        }
+
+        private void EndVisitItem(RecordDeclaration classDeclaration, TreeTransformerOptions parameter) {
+            var parentType = parameter.LastValue as StructuredType;
+            parameter.CurrentMemberVisibility.Reset(parentType);
+        }
+
+        #endregion
+        #region RecordField
+
+        private AbstractSyntaxPart BeginVisitItem(RecordField fieldDeclaration, TreeTransformerOptions parameter) {
+            var structType = parameter.LastValue as StructuredType;
+            var declItem = fieldDeclaration.Parent as RecordItem;
+            StructureFields result = CreateNode<StructureFields>(parameter, fieldDeclaration);
+            result.Visibility = parameter.CurrentMemberVisibility[structType];
+            structType.Fields.Items.Add(result);
+
+            IList<SymbolAttribute> extractedAttributes = null;
+            if (declItem != null)
+                extractedAttributes = ExtractAttributes(declItem.Attributes, parameter.CurrentUnit);
+
+            foreach (ISyntaxPart part in fieldDeclaration.Names.Parts) {
+                var attrs = part as UserAttributes;
+
+                if (attrs != null) {
+                    extractedAttributes = ExtractAttributes(attrs, parameter.CurrentUnit, extractedAttributes);
+                    continue;
+                }
+
+                var partName = part as Identifier;
+                if (partName == null)
+                    continue;
+
+                StructureField fieldName = CreatePartNode<StructureField>(result, partName);
+                fieldName.Name = ExtractSymbolName(partName);
+                fieldName.Attributes = extractedAttributes;
+                structType.Fields.Add(fieldName, parameter.LogSource);
+                result.Fields.Add(fieldName);
+                extractedAttributes = null;
+            }
+
+            result.Hints = ExtractHints(fieldDeclaration.Hint);
+
+            return result;
+
+        }
+
+
+        #endregion
         #region Extractors
 
         private static SymbolName ExtractSymbolName(NamespaceName name) {

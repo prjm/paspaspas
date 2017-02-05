@@ -2088,13 +2088,14 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         #endregion
+        #region ParseRecordDecl
 
         [Rule("RecordDecl", "'record' RecordFieldList (RecordVariantSection | RecordItems ) 'end' ")]
         private RecordDeclaration ParseRecordDecl(IExtendableSyntaxPart parent) {
             RecordDeclaration result = CreateByTerminal<RecordDeclaration>(parent, TokenKind.Record);
 
-            if (MatchIdentifier() && !Match(TokenKind.Strict, TokenKind.Protected, TokenKind.Private, TokenKind.Public, TokenKind.Published)) {
-                result.FieldList = ParseFieldList(result);
+            if (MatchIdentifier() && !Match(TokenKind.Strict, TokenKind.Protected, TokenKind.Private, TokenKind.Public, TokenKind.Published, TokenKind.Automated)) {
+                result.FieldList = ParseRecordFieldList(result);
             }
 
             if (Match(TokenKind.Case)) {
@@ -2108,14 +2109,18 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
+        #endregion
+        #region ParseRecordItems
+
         [Rule("RecordItems", "{ RecordItem }")]
         private RecordItems ParseRecordItems(IExtendableSyntaxPart parent) {
             RecordItems result = CreateChild<RecordItems>(parent);
-            var unexpected = false;
+            RecordDeclarationMode mode = RecordDeclarationMode.Fields;
 
-            while ((!Match(TokenKind.End)) && (!unexpected)) {
-                ParseRecordItem(result, out unexpected);
-                if (unexpected) {
+            while ((!Match(TokenKind.End)) && (mode != RecordDeclarationMode.Undefined)) {
+                ParseRecordItem(result, ref mode);
+
+                if (mode == RecordDeclarationMode.Undefined && result.PartList.Count > 0) {
                     Unexpected();
                     return result;
                 }
@@ -2124,33 +2129,51 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
+        #endregion
+        #region ParseRecordItem
+
         [Rule("RecordItem", "MethodDeclaration | PropertyDeclaration | ConstSection | TypeSection | RecordField | ( ['class'] VarSection) | Visibility ")]
-        private RecordItem ParseRecordItem(IExtendableSyntaxPart parent, out bool unexpected) {
+        private RecordItem ParseRecordItem(IExtendableSyntaxPart parent, ref RecordDeclarationMode mode) {
+
+            if (ContinueWith(parent, TokenKind.Var)) {
+                mode = RecordDeclarationMode.Fields;
+                return null;
+            }
+
             RecordItem result = CreateChild<RecordItem>(parent);
 
             if (Match(TokenKind.OpenBraces)) {
-                ParseAttributes(result);
+                result.Attributes = ParseAttributes(result);
             }
 
             result.Class = ContinueWith(result, TokenKind.Class);
 
             if (Match(TokenKind.OpenBraces)) {
-                ParseAttributes(result);
+                result.Attributes = ParseAttributes(result, result.Attributes);
             }
 
-            unexpected = false;
-
-            if (Match(TokenKind.OpenBraces)) {
-                ParseAttributes(result);
+            if (Match(TokenKind.Public, TokenKind.Protected, TokenKind.Private, TokenKind.Strict, TokenKind.Published, TokenKind.Automated)) {
+                if (result.Class) {
+                    Unexpected();
+                }
+                else {
+                    result.Strict = ContinueWith(result, TokenKind.Strict);
+                    ContinueWith(result, TokenKind.Public, TokenKind.Protected, TokenKind.Private, TokenKind.Published, TokenKind.Automated);
+                    result.Visibility = result.LastTerminalKind;
+                }
+                mode = RecordDeclarationMode.Fields;
+                return result;
             }
 
             if (Match(TokenKind.Procedure, TokenKind.Function, TokenKind.Constructor, TokenKind.Destructor, TokenKind.Operator)) {
                 result.MethodDeclaration = ParseMethodDeclaration(result);
+                mode = RecordDeclarationMode.Other;
                 return result;
             }
 
             if (Match(TokenKind.Property)) {
                 result.PropertyDeclaration = ParsePropertyDeclaration(result);
+                mode = RecordDeclarationMode.Other;
                 return result;
             }
 
@@ -2169,27 +2192,21 @@ namespace PasPasPas.Parsing.Parser {
                 return result;
             }
 
-            if (Match(TokenKind.Var)) {
-                result.VarSection = ParseVarSection(result, true);
-                return result;
+            if (MatchIdentifier() && (!Match(TokenKind.Private, TokenKind.Protected, TokenKind.Public, TokenKind.Published, TokenKind.Automated, TokenKind.Strict))) {
+                if (mode == RecordDeclarationMode.Fields) {
+                    result.Fields = ParseRecordFieldList(result);
+                    return result;
+                }
+                else {
+                    Unexpected();
+                }
             }
 
-            if (Match(TokenKind.Public, TokenKind.Protected, TokenKind.Private, TokenKind.Strict, TokenKind.Published)) {
-                result.Strict = ContinueWith(result, TokenKind.Strict);
-                ContinueWith(result, TokenKind.Public, TokenKind.Protected, TokenKind.Private, TokenKind.Published);
-                result.Visibility = result.LastTerminalKind;
-                unexpected = false;
-                return result;
-            }
-
-            if (MatchIdentifier()) {
-                result.Fields = ParseFieldList(result);
-                return result;
-            }
-
-            unexpected = true;
+            mode = RecordDeclarationMode.Undefined;
             return result;
         }
+
+        #endregion
 
         [Rule("RecordVariantSection", "'case' [ Identifier ': ' ] TypeDeclaration 'of' { RecordVariant } ")]
         private RecordVariantSection ParseRecordVariantSection(IExtendableSyntaxPart parent) {
@@ -2219,20 +2236,25 @@ namespace PasPasPas.Parsing.Parser {
 
             ContinueWithOrMissing(result, TokenKind.Colon);
             ContinueWithOrMissing(result, TokenKind.OpenParen);
-            result.FieldList = ParseFieldList(result);
+            result.FieldList = ParseRecordFieldList(result);
             ContinueWithOrMissing(result, TokenKind.CloseParen);
             ContinueWithOrMissing(result, TokenKind.Semicolon);
             return result;
         }
 
+        #region ParseRecordFieldList
+
         [Rule("RecordFieldList", " { RecordField } ")]
-        private RecordFieldList ParseFieldList(IExtendableSyntaxPart parent) {
+        private RecordFieldList ParseRecordFieldList(IExtendableSyntaxPart parent) {
             RecordFieldList result = CreateChild<RecordFieldList>(parent);
             while (MatchIdentifier() && (!Match(TokenKind.Private, TokenKind.Protected, TokenKind.Public, TokenKind.Published, TokenKind.Strict))) {
                 ParseRecordField(result);
             }
             return result;
         }
+
+        #endregion
+        #region ParseRecordField
 
         [Rule("RecordField", "IdentList ':' TypeSpecification Hints ';'")]
         private RecordField ParseRecordField(IExtendableSyntaxPart parent) {
@@ -2244,6 +2266,8 @@ namespace PasPasPas.Parsing.Parser {
             ContinueWithOrMissing(result, TokenKind.Semicolon);
             return result;
         }
+
+        #endregion
 
         [Rule("RecordHelperDecl", "'record' 'helper' 'for' TypeName RecordHelperItems 'end'")]
         private RecordHelperDefinition ParseRecordHelper(IExtendableSyntaxPart parent) {

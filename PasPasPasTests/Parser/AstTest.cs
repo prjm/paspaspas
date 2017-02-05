@@ -372,6 +372,28 @@ namespace PasPasPasTests.Parser {
         }
 
         [Fact]
+        public void TestRecordType() {
+            Func<object, StructuredType> r = t => ((t as CompilationUnit)?.InterfaceSymbols["z"] as TypeDeclaration)?.TypeValue as StructuredType;
+            RunAstTest("unit z.x; interface type z = record x: integer; end; implementation end.", t => r(t)?.Kind, StructuredTypeKind.Record);
+
+            // fields
+            RunAstTest("unit z.x; interface type z = record x: integer; end; implementation end.", t => r(t)?.Fields["x"]?.Name?.CompleteName, "x");
+            RunAstTest("unit z.x; interface type z = record x: integer; end; implementation end.", t => r(t)?.Fields.Items[0]?.Fields[0]?.Name?.CompleteName, "x");
+            RunAstTest("unit z.x; interface type z = record x: integer; end; implementation end.", t => r(t)?.Fields["x"]?.Visibility, MemberVisibility.Public);
+            RunAstTest("unit z.x; interface type z = record x: integer experimental; end; implementation end.", t => r(t)?.Fields["x"]?.Hints?.SymbolIsExperimental, true);
+            RunAstTest("unit z.x; interface type z = record x: string; end; implementation end.", t => r(t)?.Fields.Items[0]?.TypeValue?.GetType(), typeof(MetaType));
+
+            RunAstTest("unit z.x; interface type z = record private x: integer; end; implementation end.", t => r(t)?.Fields["x"]?.Visibility, MemberVisibility.Private);
+            RunAstTest("unit z.x; interface type z = record protected x: integer; end; implementation end.", t => r(t)?.Fields["x"]?.Visibility, MemberVisibility.Protected);
+            RunAstTest("unit z.x; interface type z = record public x: integer; end; implementation end.", t => r(t)?.Fields["x"]?.Visibility, MemberVisibility.Public);
+            RunAstTest("unit z.x; interface type z = record strict private x: integer; end; implementation end.", t => r(t)?.Fields["x"]?.Visibility, MemberVisibility.StrictPrivate);
+            RunAstTest("unit z.x; interface type z = record strict protected x: integer; end; implementation end.", t => r(t)?.Fields["x"]?.Visibility, MemberVisibility.StrictProtected);
+            RunAstTest("unit z.x; interface type z = record published x: integer; end; implementation end.", t => r(t)?.Fields["x"]?.Visibility, MemberVisibility.Published);
+            RunAstTest("unit z.x; interface type z = record automated x: integer; end; implementation end.", t => r(t)?.Fields["x"]?.Visibility, MemberVisibility.Automated);
+
+        }
+
+        [Fact]
         public void TestClassType() {
             Func<object, StructuredType> u = t => ((t as CompilationUnit)?.InterfaceSymbols["x"] as TypeDeclaration)?.TypeValue as StructuredType;
             Func<object, StructureField> f = t => (t as StructuredType)?.Fields["n"];
