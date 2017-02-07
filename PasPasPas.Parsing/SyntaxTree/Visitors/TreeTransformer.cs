@@ -800,7 +800,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             result.Visibility = parameter.CurrentMemberVisibility[structType];
             structType.Fields.Items.Add(result);
             IList<SymbolAttribute> extractedAttributes = ExtractAttributes(declItem.Attributes, parameter.CurrentUnit);
-            result.ClassItem = declItem.Class;
+            result.ClassItem = declItem.ClassItem;
 
             foreach (ISyntaxPart part in field.Names.Parts) {
                 var attrs = part as UserAttributes;
@@ -913,8 +913,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         private AbstractSyntaxPart BeginVisitItem(ClassMethod method, TreeTransformerOptions parameter) {
             StructureMethod result = CreateNode<StructureMethod>(parameter, method);
             var parent = parameter.LastValue as StructuredType;
-            var declItem = method.Parent as ClassDeclarationItem;
-            result.ClassItem = declItem.Class;
+            var declItem = method.Parent as IStructuredTypeMember;
+            result.Visibility = parameter.CurrentMemberVisibility[parent];
+            result.ClassItem = declItem.ClassItem;
             result.Attributes = ExtractAttributes(declItem.Attributes, parameter.CurrentUnit);
             result.Name = ExtractSymbolName(method.Identifier);
             result.Kind = Abstract.MethodDeclaration.MapKind(method.MethodKind);

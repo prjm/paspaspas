@@ -151,9 +151,11 @@
     <Compile Include="SyntaxTree\Standard\ClassDeclarationMode.cs" />
     <Compile Include="SyntaxTree\Standard\FormalParameterDefinition.cs" />
     <Compile Include="SyntaxTree\Standard\GenericNamespaceName.cs" />
+    <Compile Include="SyntaxTree\Standard\IStructuredTypeMember.cs" />
     <Compile Include="SyntaxTree\Standard\LocalAsmLabel.cs" />
     <Compile Include="SyntaxTree\Standard\Parameter.cs" />
     <Compile Include="SyntaxTree\Standard\RecordDeclarationMode.cs" />
+    <Compile Include="SyntaxTree\Standard\RecordItem.cs" />
     <Compile Include="SyntaxTree\Standard\TypeName.cs" />
     <Compile Include="SyntaxTree\Abstract\DeclarationMode.cs" />
     <Compile Include="SyntaxTree\VisitorHelper.cs" />
@@ -358,7 +360,6 @@
     <Compile Include="SyntaxTree\Standard\RecordHelperDef.cs" />
     <Compile Include="SyntaxTree\Standard\RecordHelperItem.cs" />
     <Compile Include="SyntaxTree\Standard\RecordHelperItems.cs" />
-    <Compile Include="SyntaxTree\Standard\RecordItem.cs" />
     <Compile Include="SyntaxTree\Standard\RecordItems.cs" />
     <Compile Include="SyntaxTree\Standard\RecordVariant.cs" />
     <Compile Include="SyntaxTree\Standard\RecordVariantSection.cs" />

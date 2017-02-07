@@ -3,12 +3,12 @@
     /// <summary>
     ///     record item
     /// </summary>
-    public class RecordItem : SyntaxPartBase {
+    public class RecordItem : SyntaxPartBase, IStructuredTypeMember {
 
         /// <summary>
         ///     class item
         /// </summary>
-        public bool Class { get; set; }
+        public bool ClassItem { get; set; }
 
         /// <summary>
         ///     const section
@@ -44,11 +44,6 @@
         ///     record variant section
         /// </summary>
         public RecordVariantSection VariantSection { get; set; }
-
-        /// <summary>
-        ///     var section
-        /// </summary>
-        public VarSection VarSection { get; set; }
 
         /// <summary>
         ///     visibility declaration

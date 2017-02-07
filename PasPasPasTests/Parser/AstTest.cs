@@ -391,6 +391,10 @@ namespace PasPasPasTests.Parser {
             RunAstTest("unit z.x; interface type z = record published x: integer; end; implementation end.", t => r(t)?.Fields["x"]?.Visibility, MemberVisibility.Published);
             RunAstTest("unit z.x; interface type z = record automated x: integer; end; implementation end.", t => r(t)?.Fields["x"]?.Visibility, MemberVisibility.Automated);
 
+            // methods
+            RunAstTest("unit z.x; interface type z = record function x: string; end; implementation end.", t => r(t)?.Methods["x"]?.Name?.CompleteName, "x");
+            RunAstTest("unit z.x; interface type z = record private function x: string; end; implementation end.", t => r(t)?.Methods["x"]?.Visibility, MemberVisibility.Private);
+            RunAstTest("unit z.x; interface type z = record private function x: string; experimental; end; implementation end.", t => r(t)?.Methods["x"]?.Visibility, MemberVisibility.Private);
         }
 
         [Fact]

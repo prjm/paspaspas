@@ -3,7 +3,7 @@
     /// <summary>
     ///     class declaration item
     /// </summary>
-    public class ClassDeclarationItem : SyntaxPartBase {
+    public class ClassDeclarationItem : SyntaxPartBase, IStructuredTypeMember {
 
         /// <summary>
         ///     attributes
@@ -13,7 +13,7 @@
         /// <summary>
         ///     class-wide declaration
         /// </summary>
-        public bool Class { get; set; }
+        public bool ClassItem { get; set; }
 
         /// <summary>
         ///     constant class section
@@ -49,11 +49,6 @@
         ///     type section
         /// </summary>
         public TypeSection TypeSection { get; set; }
-
-        /// <summary>
-        ///     variabkes
-        /// </summary>
-        public VarSection VarSection { get; set; }
 
         /// <summary>
         ///     visibility declaration

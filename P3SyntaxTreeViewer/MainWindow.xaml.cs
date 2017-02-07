@@ -49,11 +49,12 @@ namespace P3SyntaxTreeViewer {
             var code = Code.Text;
             var task = new Task(() => {
                 ParserServices env = CreateEnvironment();
+                var listLog = new ListLogTarget();
+                env.Log.RegisterTarget(listLog);
+
                 ISyntaxPart cst = Parse(env, code);
                 var visitor = new TreeTransformer();
                 var options = new TreeTransformerOptions() { LogManager = (LogManager)env.Log };
-                var listLog = new ListLogTarget();
-                env.Log.RegisterTarget(listLog);
 
                 VisitorHelper.AcceptVisitor(cst, visitor, options);
 

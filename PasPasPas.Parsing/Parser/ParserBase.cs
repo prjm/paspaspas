@@ -35,6 +35,13 @@ namespace PasPasPas.Parsing.Parser {
             = new Guid(new byte[] { 0xac, 0xe2, 0xd4, 0x74, 0xdd, 0x54, 0xcc, 0x4a, 0x90, 0x8a, 0x9f, 0x2e, 0x8a, 0x2d, 0x91, 0x65 });
         /* {74d4e2ac-54dd-4acc-908a-9f2e8a2d9165} */
 
+        /// <summary>
+        ///     missing token
+        /// </summary>
+        public static readonly Guid MissingToken
+            = new Guid(new byte[] { 0x84, 0x1f, 0xb1, 0x9f, 0xe3, 0x2f, 0x9c, 0x48, 0xb7, 0x15, 0xdd, 0x29, 0x45, 0x8e, 0x43, 0x4e });
+        /* {9fb11f84-2fe3-489c-b715-dd29458e434e} */
+
         private readonly TokenizerWithLookahead tokenizer;
         private readonly LogSource logSource;
 
@@ -1022,7 +1029,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind"></param>
         protected void ContinueWithOrMissing(IExtendableSyntaxPart result, int tokenKind) {
             if (!ContinueWith(result, tokenKind)) {
-                // add missing token / todo
+                logSource.Error(MissingToken, tokenKind);
             }
         }
 
@@ -1034,6 +1041,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind2"></param>
         protected void ContinueWithOrMissing(IExtendableSyntaxPart result, int tokenKind1, int tokenKind2) {
             if (!ContinueWith(result, tokenKind1, tokenKind2)) {
+                logSource.Error(MissingToken, tokenKind1, tokenKind2);
                 // add missing token / todo
             }
         }
@@ -1047,6 +1055,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind3"></param>
         protected void ContinueWithOrMissing(IExtendableSyntaxPart result, int tokenKind1, int tokenKind2, int tokenKind3) {
             if (!ContinueWith(result, tokenKind1, tokenKind2, tokenKind3)) {
+                logSource.Error(MissingToken, tokenKind1, tokenKind2, tokenKind3);
                 // add missing token / todo
             }
         }
@@ -1061,6 +1070,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind4"></param>
         protected void ContinueWithOrMissing(IExtendableSyntaxPart result, int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4) {
             if (!ContinueWith(result, tokenKind1, tokenKind2, tokenKind3, tokenKind4)) {
+                logSource.Error(MissingToken, tokenKind1, tokenKind2, tokenKind3, tokenKind4);
                 // add missing token / todo
             }
         }
@@ -1077,6 +1087,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind5"></param>
         protected void ContinueWithOrMissing(IExtendableSyntaxPart result, int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5) {
             if (!ContinueWith(result, tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5)) {
+                logSource.Error(MissingToken, tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5);
                 // add missing token / todo
             }
         }
@@ -1095,6 +1106,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind6"></param>
         protected void ContinueWithOrMissing(IExtendableSyntaxPart result, int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5, int tokenKind6) {
             if (!ContinueWith(result, tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5, tokenKind6)) {
+                logSource.Error(MissingToken, tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5, tokenKind6);
                 // add missing token / todo
             }
         }
@@ -1114,6 +1126,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind7"></param>
         protected void ContinueWithOrMissing(IExtendableSyntaxPart result, int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5, int tokenKind6, int tokenKind7) {
             if (!ContinueWith(result, tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5, tokenKind6, tokenKind7)) {
+                logSource.Error(MissingToken, tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5, tokenKind6, tokenKind7);
                 // add missing token / todo
             }
         }
@@ -1133,11 +1146,10 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind8"></param>
         protected void ContinueWithOrMissing(IExtendableSyntaxPart result, int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5, int tokenKind6, int tokenKind7, int tokenKind8) {
             if (!ContinueWith(result, tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5, tokenKind6, tokenKind7, tokenKind8)) {
+                logSource.Error(MissingToken, tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5, tokenKind6, tokenKind7, tokenKind8);
                 // add missing token / todo
             }
         }
-
-
 
         /// <summary>
         ///     parse input

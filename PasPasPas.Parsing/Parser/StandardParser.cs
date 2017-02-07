@@ -853,8 +853,8 @@ namespace PasPasPas.Parsing.Parser {
         private UnitHead ParseUnitHead(IExtendableSyntaxPart parent) {
             UnitHead result = CreateByTerminal<UnitHead>(parent, TokenKind.Unit);
             result.UnitName = ParseNamespaceName(result);
+            result.Hint = ParseHints(result, false);
             ContinueWithOrMissing(result, TokenKind.Semicolon);
-            result.Hint = ParseHints(result);
             return result;
         }
 
@@ -935,8 +935,8 @@ namespace PasPasPas.Parsing.Parser {
         private LibraryHead ParseLibraryHead(IExtendableSyntaxPart parent) {
             LibraryHead result = CreateByTerminal<LibraryHead>(parent, TokenKind.Library);
             result.LibraryName = ParseNamespaceName(result);
+            result.Hints = ParseHints(result, false);
             ContinueWithOrMissing(result, TokenKind.Semicolon);
-            result.Hints = ParseHints(result);
             return result;
         }
 
@@ -1635,8 +1635,8 @@ namespace PasPasPas.Parsing.Parser {
                 result.ValueSpecification = ParseValueSpecification(result);
             }
 
-            result.Hints = ParseHints(result);
             ContinueWithOrMissing(result, TokenKind.Semicolon);
+            result.Hints = ParseHints(result, false);
             return result;
         }
 
@@ -1708,7 +1708,7 @@ namespace PasPasPas.Parsing.Parser {
 
             ContinueWithOrMissing(result, TokenKind.EqualsSign);
             result.Value = ParseConstantExpression(result);
-            result.Hint = ParseHints(result);
+            result.Hint = ParseHints(result, false);
             ContinueWithOrMissing(result, TokenKind.Semicolon);
             return result;
         }
@@ -1717,13 +1717,15 @@ namespace PasPasPas.Parsing.Parser {
         #region ParseHints
 
         [Rule("Hints", " { Hint ';' }")]
-        private HintingInformationList ParseHints(IExtendableSyntaxPart parent) {
+        private HintingInformationList ParseHints(IExtendableSyntaxPart parent, bool requireSemicolon) {
             HintingInformationList result = CreateChild<HintingInformationList>(parent);
 
             HintingInformation hint;
             do {
                 hint = ParseHint(result);
-                ContinueWithOrMissing(result, TokenKind.Semicolon);
+                if (hint != null && requireSemicolon) {
+                    ContinueWithOrMissing(result, TokenKind.Semicolon);
+                }
             } while (hint != null);
 
             return result;
@@ -2146,14 +2148,14 @@ namespace PasPasPas.Parsing.Parser {
                 result.Attributes = ParseAttributes(result);
             }
 
-            result.Class = ContinueWith(result, TokenKind.Class);
+            result.ClassItem = ContinueWith(result, TokenKind.Class);
 
             if (Match(TokenKind.OpenBraces)) {
                 result.Attributes = ParseAttributes(result, result.Attributes);
             }
 
             if (Match(TokenKind.Public, TokenKind.Protected, TokenKind.Private, TokenKind.Strict, TokenKind.Published, TokenKind.Automated)) {
-                if (result.Class) {
+                if (result.ClassItem) {
                     Unexpected();
                 }
                 else {
@@ -2182,12 +2184,12 @@ namespace PasPasPas.Parsing.Parser {
                 return result;
             }
 
-            if (!result.Class && Match(TokenKind.Const)) {
+            if (!result.ClassItem && Match(TokenKind.Const)) {
                 result.ConstSection = ParseConstSection(result, true);
                 return result;
             }
 
-            if (!result.Class && Match(TokenKind.TypeKeyword)) {
+            if (!result.ClassItem && Match(TokenKind.TypeKeyword)) {
                 result.TypeSection = ParseTypeSection(result, true);
                 return result;
             }
@@ -2262,7 +2264,7 @@ namespace PasPasPas.Parsing.Parser {
             result.Names = ParseIdentList(result, true);
             ContinueWithOrMissing(result, TokenKind.Colon);
             result.FieldType = ParseTypeSpecification(result);
-            result.Hint = ParseHints(result);
+            result.Hint = ParseHints(result, false);
             ContinueWithOrMissing(result, TokenKind.Semicolon);
             return result;
         }
@@ -2581,14 +2583,14 @@ namespace PasPasPas.Parsing.Parser {
                 result.Attributes = ParseAttributes(result);
             }
 
-            result.Class = ContinueWith(result, TokenKind.Class);
+            result.ClassItem = ContinueWith(result, TokenKind.Class);
 
             if (Match(TokenKind.OpenBraces)) {
                 result.Attributes = ParseAttributes(result, result.Attributes);
             }
 
             if (Match(TokenKind.Public, TokenKind.Protected, TokenKind.Private, TokenKind.Strict, TokenKind.Published, TokenKind.Automated)) {
-                if (result.Class) {
+                if (result.ClassItem) {
                     Unexpected();
                 }
                 else {
@@ -2601,7 +2603,7 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             if (Match(TokenKind.Procedure, TokenKind.Function) && HasTokenBeforeToken(TokenKind.EqualsSign, TokenKind.Semicolon, TokenKind.OpenParen)) {
-                if (result.Class) {
+                if (result.ClassItem) {
                     Unexpected();
                 }
                 else {
@@ -2623,12 +2625,12 @@ namespace PasPasPas.Parsing.Parser {
                 return result;
             }
 
-            if (!result.Class && Match(TokenKind.Const)) {
+            if (!result.ClassItem && Match(TokenKind.Const)) {
                 result.ConstSection = ParseConstSection(result, true);
                 return result;
             }
 
-            if (!result.Class && Match(TokenKind.TypeKeyword)) {
+            if (!result.ClassItem && Match(TokenKind.TypeKeyword)) {
                 result.TypeSection = ParseTypeSection(result, true);
                 return result;
             }
@@ -2637,7 +2639,7 @@ namespace PasPasPas.Parsing.Parser {
 
                 if (mode == ClassDeclarationMode.Fields || mode == ClassDeclarationMode.ClassFields) {
                     result.FieldDeclaration = ParseClassFieldDeclararation(result);
-                    result.Class = mode == ClassDeclarationMode.ClassFields;
+                    result.ClassItem = mode == ClassDeclarationMode.ClassFields;
                     return result;
                 }
                 else {
@@ -2652,14 +2654,14 @@ namespace PasPasPas.Parsing.Parser {
         #endregion
         #region ParseFieldDeclaration
 
-        [Rule("FieldDeclaration", "IdentList ':' TypeSpecification Hints ';'")]
+        [Rule("ClassFieldDeclaration", "IdentList ':' TypeSpecification Hints ';'")]
         private ClassField ParseClassFieldDeclararation(IExtendableSyntaxPart parent) {
             ClassField result = CreateChild<ClassField>(parent);
             result.Names = ParseIdentList(result, true);
             ContinueWithOrMissing(result, TokenKind.Colon);
             result.TypeDecl = ParseTypeSpecification(result);
+            result.Hint = ParseHints(result, false);
             ContinueWithOrMissing(result, TokenKind.Semicolon);
-            result.Hint = ParseHints(result);
             return result;
         }
 
@@ -2817,8 +2819,8 @@ namespace PasPasPas.Parsing.Parser {
             result.TypeId = ParseGenericTypeIdent(result);
             ContinueWithOrMissing(result, TokenKind.EqualsSign);
             result.TypeSpecification = ParseTypeSpecification(result);
+            result.Hint = ParseHints(result, false);
             ContinueWithOrMissing(result, TokenKind.Semicolon);
-            result.Hint = ParseHints(result);
             return result;
         }
 

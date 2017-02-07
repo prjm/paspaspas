@@ -31,5 +31,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         public bool ClassItem { get; set; }
 
+        /// <summary>
+        ///     visibility mode
+        /// </summary>
+        public MemberVisibility Visibility { get; set; }
     }
 }
