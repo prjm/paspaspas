@@ -18,7 +18,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     list of base types
         /// </summary>
         public IList<ITypeSpecification> BaseTypes { get; }
-                = new List<ITypeSpecification>();
+            = new List<ITypeSpecification>();
 
         /// <summary>
         ///     fields
@@ -43,6 +43,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         public StructurePropertyDefinition Properties { get; }
             = new StructurePropertyDefinition();
+
+        /// <summary>
+        ///     variant parts
+        /// </summary>
+        public StructureVariant Variants { get; }
+            = new StructureVariant();
 
         /// <summary>
         ///     base type values
@@ -72,6 +78,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
                     yield return property;
                 foreach (StructureMethodResolution resolution in MethodResolutions.Resolutions)
                     yield return resolution;
+                foreach (DeclaredSymbol symbol in Symbols)
+                    yield return symbol;
+                foreach (StructureVariantItem variant in Variants.Items)
+                    yield return variant;
             }
         }
 

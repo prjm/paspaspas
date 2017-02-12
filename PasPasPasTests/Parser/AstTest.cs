@@ -395,6 +395,21 @@ namespace PasPasPasTests.Parser {
             RunAstTest("unit z.x; interface type z = record function x: string; end; implementation end.", t => r(t)?.Methods["x"]?.Name?.CompleteName, "x");
             RunAstTest("unit z.x; interface type z = record private function x: string; end; implementation end.", t => r(t)?.Methods["x"]?.Visibility, MemberVisibility.Private);
             RunAstTest("unit z.x; interface type z = record private function x: string; experimental; end; implementation end.", t => r(t)?.Methods["x"]?.Visibility, MemberVisibility.Private);
+
+            // properties
+            RunAstTest("unit z.x; interface type z = record property x: string read q; end; implementation end.", t => r(t)?.Properties["x"]?.SymbolName, "x");
+            RunAstTest("unit z.x; interface type z = record property x: string read q; end; implementation end.", t => r(t)?.Properties["x"]?.Accessors[0]?.Name?.CompleteName, "q");
+            RunAstTest("unit z.x; interface type z = record property x: string read q; end; implementation end.", t => r(t)?.Properties["x"]?.Accessors[0]?.Kind, StructurePropertyAccessorKind.Read);
+
+            // symbols
+            RunAstTest("unit z.x; interface type z = record const c = nil; end; implementation end.", t => r(t)?.Symbols["c"]?.Name?.CompleteName, "c");
+            RunAstTest("unit z.x; interface type z = record type t = string; end; implementation end.", t => (r(t)?.Symbols["t"] as TypeDeclaration)?.TypeValue?.GetType(), typeof(MetaType));
+
+            // variants
+            RunAstTest("unit z.x; interface type z = record case z : integer of 1, 2: (a: string); 3: (q: string); end; implementation end.", t => r(t)?.Variants["a"]?.TypeValue?.GetType(), typeof(MetaType));
+            RunAstTest("unit z.x; interface type z = record case z : integer of 1, 2: (a: string); 3: (q: string); end; implementation end.", t => r(t)?.Variants?.Items[0]?.Items[0]?.Fields[0]?.TypeValue?.GetType(), typeof(MetaType));
+            RunAstTest("unit z.x; interface type z = record case z : integer of 1, 2: (a: string); 3: (q: string); end; implementation end.", t => r(t)?.Variants?.Items[0]?.Name?.CompleteName, "z");
+            RunAstTest("unit z.x; interface type z = record case z : integer of 1, 2: (a: string); 3: (q: string); end; implementation end.", t => r(t)?.Variants?.Items[0]?.Items[0]?.Expressions?.Count, 2);
         }
 
         [Fact]

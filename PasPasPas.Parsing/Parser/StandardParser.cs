@@ -849,6 +849,8 @@ namespace PasPasPas.Parsing.Parser {
             return null;
         }
 
+        #region ParseUnitHead
+
         [Rule("UnitHead", "'unit' NamespaceName { Hint } ';' ")]
         private UnitHead ParseUnitHead(IExtendableSyntaxPart parent) {
             UnitHead result = CreateByTerminal<UnitHead>(parent, TokenKind.Unit);
@@ -858,6 +860,7 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
+        #endregion
         #region ParsePackage
 
         [Rule("Package", "PackageHead RequiresClause [ ContainsClause ] 'end' '.' ")]
@@ -2097,7 +2100,7 @@ namespace PasPasPas.Parsing.Parser {
             RecordDeclaration result = CreateByTerminal<RecordDeclaration>(parent, TokenKind.Record);
 
             if (MatchIdentifier() && !Match(TokenKind.Strict, TokenKind.Protected, TokenKind.Private, TokenKind.Public, TokenKind.Published, TokenKind.Automated)) {
-                result.FieldList = ParseRecordFieldList(result);
+                result.FieldList = ParseRecordFieldList(result, true);
             }
 
             if (Match(TokenKind.Case)) {
@@ -2196,7 +2199,7 @@ namespace PasPasPas.Parsing.Parser {
 
             if (MatchIdentifier() && (!Match(TokenKind.Private, TokenKind.Protected, TokenKind.Public, TokenKind.Published, TokenKind.Automated, TokenKind.Strict))) {
                 if (mode == RecordDeclarationMode.Fields) {
-                    result.Fields = ParseRecordFieldList(result);
+                    result.Fields = ParseRecordFieldList(result, true);
                     return result;
                 }
                 else {
@@ -2238,7 +2241,7 @@ namespace PasPasPas.Parsing.Parser {
 
             ContinueWithOrMissing(result, TokenKind.Colon);
             ContinueWithOrMissing(result, TokenKind.OpenParen);
-            result.FieldList = ParseRecordFieldList(result);
+            result.FieldList = ParseRecordFieldList(result, false);
             ContinueWithOrMissing(result, TokenKind.CloseParen);
             ContinueWithOrMissing(result, TokenKind.Semicolon);
             return result;
@@ -2247,10 +2250,10 @@ namespace PasPasPas.Parsing.Parser {
         #region ParseRecordFieldList
 
         [Rule("RecordFieldList", " { RecordField } ")]
-        private RecordFieldList ParseRecordFieldList(IExtendableSyntaxPart parent) {
+        private RecordFieldList ParseRecordFieldList(IExtendableSyntaxPart parent, bool requireSemicolon) {
             RecordFieldList result = CreateChild<RecordFieldList>(parent);
             while (MatchIdentifier() && (!Match(TokenKind.Private, TokenKind.Protected, TokenKind.Public, TokenKind.Published, TokenKind.Strict))) {
-                ParseRecordField(result);
+                ParseRecordField(result, requireSemicolon);
             }
             return result;
         }
@@ -2259,13 +2262,14 @@ namespace PasPasPas.Parsing.Parser {
         #region ParseRecordField
 
         [Rule("RecordField", "IdentList ':' TypeSpecification Hints ';'")]
-        private RecordField ParseRecordField(IExtendableSyntaxPart parent) {
+        private RecordField ParseRecordField(IExtendableSyntaxPart parent, bool requireSemicolon) {
             RecordField result = CreateChild<RecordField>(parent);
             result.Names = ParseIdentList(result, true);
             ContinueWithOrMissing(result, TokenKind.Colon);
             result.FieldType = ParseTypeSpecification(result);
             result.Hint = ParseHints(result, false);
-            ContinueWithOrMissing(result, TokenKind.Semicolon);
+            if (requireSemicolon)
+                ContinueWithOrMissing(result, TokenKind.Semicolon);
             return result;
         }
 

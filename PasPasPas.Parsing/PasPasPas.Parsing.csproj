@@ -120,6 +120,9 @@
     <Compile Include="SyntaxTree\Abstract\StructurePropertyAccessor.cs" />
     <Compile Include="SyntaxTree\Abstract\StructurePropertyAccessorKind.cs" />
     <Compile Include="SyntaxTree\Abstract\StructurePropertyDefinition.cs" />
+    <Compile Include="SyntaxTree\Abstract\StructureVariant.cs" />
+    <Compile Include="SyntaxTree\Abstract\StructureVariantFields.cs" />
+    <Compile Include="SyntaxTree\Abstract\StructureVariantItem.cs" />
     <Compile Include="SyntaxTree\Abstract\SubrangeType.cs" />
     <Compile Include="SyntaxTree\Abstract\SymbolAttribute.cs" />
     <Compile Include="SyntaxTree\Abstract\SymbolHints.cs" />

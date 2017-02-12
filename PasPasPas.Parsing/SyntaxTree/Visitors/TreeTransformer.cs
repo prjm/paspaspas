@@ -836,11 +836,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             result.Name = ExtractSymbolName(property.PropertyName);
             parent.Properties.Add(result, parameter.LogSource);
             result.Visibility = parameter.CurrentMemberVisibility[parent];
-            result.Attributes = ExtractAttributes(((ClassDeclarationItem)property.Parent).Attributes, parameter.CurrentUnit);
+            result.Attributes = ExtractAttributes(((IStructuredTypeMember)property.Parent).Attributes, parameter.CurrentUnit);
             return result;
         }
 
-        #endregion
+        #endregion    
         #region ClassPropertyReadWrite
 
         private AbstractSyntaxPart BeginVisitItem(ClassPropertyReadWrite property, TreeTransformerOptions parameter) {
@@ -1248,11 +1248,26 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #region RecordField
 
         private AbstractSyntaxPart BeginVisitItem(RecordField fieldDeclaration, TreeTransformerOptions parameter) {
-            var structType = parameter.LastValue as StructuredType;
+            StructuredType structType = null;
+            StructureVariant varFields = null;
+            IList<StructureFields> fields = null;
+
+            if (parameter.LastValue is StructureVariantFields) {
+                structType = parameter.LastValue.Parent?.Parent as StructuredType;
+                varFields = structType.Variants;
+                fields = (parameter.LastValue as StructureVariantFields)?.Fields;
+            }
+            else {
+                structType = parameter.LastValue as StructuredType;
+                fields = structType.Fields.Items;
+            }
+
             var declItem = fieldDeclaration.Parent as RecordItem;
             StructureFields result = CreateNode<StructureFields>(parameter, fieldDeclaration);
             result.Visibility = parameter.CurrentMemberVisibility[structType];
-            structType.Fields.Items.Add(result);
+
+            if (fields != null)
+                fields.Add(result);
 
             IList<SymbolAttribute> extractedAttributes = null;
             if (declItem != null)
@@ -1273,17 +1288,44 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 StructureField fieldName = CreatePartNode<StructureField>(result, partName);
                 fieldName.Name = ExtractSymbolName(partName);
                 fieldName.Attributes = extractedAttributes;
-                structType.Fields.Add(fieldName, parameter.LogSource);
+
+                if (varFields == null)
+                    structType.Fields.Add(fieldName, parameter.LogSource);
+                else
+                    varFields.Add(fieldName, parameter.LogSource);
+
                 result.Fields.Add(fieldName);
                 extractedAttributes = null;
             }
 
             result.Hints = ExtractHints(fieldDeclaration.Hint);
-
             return result;
-
         }
 
+
+        #endregion
+        #region ParseRecordVariantSection
+
+        private AbstractSyntaxPart BeginVisitItem(RecordVariantSection variantSection, TreeTransformerOptions parameter) {
+            var structType = parameter.LastValue as StructuredType;
+            StructureVariantItem result = CreateNode<StructureVariantItem>(parameter, variantSection);
+            result.Name = ExtractSymbolName(variantSection.Name);
+            structType.Variants.Items.Add(result);
+            return result;
+        }
+
+        #endregion
+        #region RecordVariant
+
+        private AbstractSyntaxPart BeginVisitItem(RecordVariant variantItem, TreeTransformerOptions parameter) {
+            var structType = parameter.LastValue as StructureVariantItem;
+            StructureVariantFields result = CreateNode<StructureVariantFields>(parameter, variantItem);
+            structType.Items.Add(result);
+            return result;
+        }
+
+        #endregion
+        #region RecordVariant
 
         #endregion
         #region Extractors
