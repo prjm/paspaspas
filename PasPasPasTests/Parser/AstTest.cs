@@ -372,6 +372,28 @@ namespace PasPasPasTests.Parser {
         }
 
         [Fact]
+        public void TestRecordHelperType() {
+            Func<object, StructuredType> r = t => ((t as CompilationUnit)?.InterfaceSymbols["z"] as TypeDeclaration)?.TypeValue as StructuredType;
+            RunAstTest("unit z.x; interface type z = record helper for T function x(): string; end; implementation end.", t => r(t)?.Kind, StructuredTypeKind.RecordHelper);
+            RunAstTest("unit z.x; interface type z = record helper for string function x(): string; end; implementation end.", t => r(t)?.BaseTypes[0]?.GetType(), typeof(MetaType));
+
+            // methods
+            RunAstTest("unit z.x; interface type z = record helper for T function x: string; end; implementation end.", t => r(t)?.Methods["x"]?.Name?.CompleteName, "x");
+            RunAstTest("unit z.x; interface type z = record helper for T private function x: string; end; implementation end.", t => r(t)?.Methods["x"]?.Visibility, MemberVisibility.Private);
+            RunAstTest("unit z.x; interface type z = record helper for T private function x: string; experimental; end; implementation end.", t => r(t)?.Methods["x"]?.Visibility, MemberVisibility.Private);
+
+            // properties
+            RunAstTest("unit z.x; interface type z = record helper for T property x: string read q; end; implementation end.", t => r(t)?.Properties["x"]?.SymbolName, "x");
+            RunAstTest("unit z.x; interface type z = record helper for T property x: string read q; end; implementation end.", t => r(t)?.Properties["x"]?.Accessors[0]?.Name?.CompleteName, "q");
+            RunAstTest("unit z.x; interface type z = record helper for T property x: string read q; end; implementation end.", t => r(t)?.Properties["x"]?.Accessors[0]?.Kind, StructurePropertyAccessorKind.Read);
+
+            // symbols
+            RunAstTest("unit z.x; interface type z = record helper for T const c = nil; end; implementation end.", t => r(t)?.Symbols["c"]?.Name?.CompleteName, "c");
+            RunAstTest("unit z.x; interface type z = record helper for T type t = string; end; implementation end.", t => (r(t)?.Symbols["t"] as TypeDeclaration)?.TypeValue?.GetType(), typeof(MetaType));
+
+        }
+
+        [Fact]
         public void TestRecordType() {
             Func<object, StructuredType> r = t => ((t as CompilationUnit)?.InterfaceSymbols["z"] as TypeDeclaration)?.TypeValue as StructuredType;
             RunAstTest("unit z.x; interface type z = record x: integer; end; implementation end.", t => r(t)?.Kind, StructuredTypeKind.Record);

@@ -1325,7 +1325,32 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         }
 
         #endregion
-        #region RecordVariant
+        #region RecordHelperDefinition       
+
+        private AbstractSyntaxPart BeginVisitItem(RecordHelperDefinition recordHelper, TreeTransformerOptions parameter) {
+            StructuredType result = CreateNode<StructuredType>(parameter, recordHelper);
+            result.Kind = StructuredTypeKind.RecordHelper;
+            parameter.DefineTypeValue(result);
+            parameter.CurrentMemberVisibility[result] = MemberVisibility.Public;
+            return result;
+        }
+
+
+        #endregion
+        #region RecordHelperItem
+
+        private AbstractSyntaxPart BeginVisitItem(RecordHelperItem recordDeclarationItem, TreeTransformerOptions parameter) {
+            var parentType = parameter.LastValue as StructuredType;
+
+            if (parentType == null)
+                return null;
+
+            if (recordDeclarationItem.Visibility != TokenKind.Undefined) {
+                parameter.CurrentMemberVisibility[parentType] = StructuredType.MapVisibility(recordDeclarationItem.Visibility, recordDeclarationItem.Strict);
+            };
+
+            return null;
+        }
 
         #endregion
         #region Extractors

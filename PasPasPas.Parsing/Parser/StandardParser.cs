@@ -2212,6 +2212,7 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         #endregion
+        #region ParseRecordVariantSection
 
         [Rule("RecordVariantSection", "'case' [ Identifier ': ' ] TypeDeclaration 'of' { RecordVariant } ")]
         private RecordVariantSection ParseRecordVariantSection(IExtendableSyntaxPart parent) {
@@ -2231,6 +2232,9 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
+        #endregion
+        #region ParseRecordVariant
+
         [Rule("RecordVariant", "ConstantExpression { , ConstantExpression } : '(' FieldList ')' ';' ")]
         private RecordVariant ParseRecordVariant(IExtendableSyntaxPart parent) {
             RecordVariant result = CreateChild<RecordVariant>(parent);
@@ -2247,6 +2251,7 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
+        #endregion
         #region ParseRecordFieldList
 
         [Rule("RecordFieldList", " { RecordField } ")]
@@ -2274,6 +2279,7 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         #endregion
+        #region ParseRecordHelper
 
         [Rule("RecordHelperDecl", "'record' 'helper' 'for' TypeName RecordHelperItems 'end'")]
         private RecordHelperDefinition ParseRecordHelper(IExtendableSyntaxPart parent) {
@@ -2286,14 +2292,17 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
+        #endregion
+        #region ParseRecordHelperItems
+
         [Rule("RecordHelperItems", " { RecordHelperItem }")]
         private RecordHelperItems ParseRecordHelperItems(IExtendableSyntaxPart parent) {
             RecordHelperItems result = CreateChild<RecordHelperItems>(parent);
-            var unexpected = false;
+            RecordDeclarationMode mode = RecordDeclarationMode.Fields;
 
-            while ((!Match(TokenKind.End)) && (!unexpected)) {
-                ParseRecordHelperItem(result, out unexpected);
-                if (unexpected) {
+            while ((!Match(TokenKind.End)) && (mode != RecordDeclarationMode.Undefined)) {
+                ParseRecordHelperItem(result, ref mode);
+                if (mode == RecordDeclarationMode.Undefined) {
                     Unexpected();
                     return result;
                 }
@@ -2302,32 +2311,42 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
-        [Rule("RecordHelperItem", "")]
-        private RecordHelperItem ParseRecordHelperItem(IExtendableSyntaxPart parent, out bool unexpected) {
+        #endregion
+        #region ParseRecordHelperItem
+
+        [Rule("RecordHelperItem", "MethodDeclaration | PropertyDeclaration | ConstSection | TypeSection | Visibility ")]
+        private RecordHelperItem ParseRecordHelperItem(IExtendableSyntaxPart parent, ref RecordDeclarationMode mode) {
             RecordHelperItem result = CreateChild<RecordHelperItem>(parent);
-            unexpected = false;
 
             if (Match(TokenKind.OpenBraces)) {
-                ParseAttributes(result);
+                result.Attributes = ParseAttributes(result);
             }
 
-            result.Class = ContinueWith(result, TokenKind.Class);
+            result.ClassItem = ContinueWith(result, TokenKind.Class);
 
             if (Match(TokenKind.OpenBraces)) {
-                ParseAttributes(result);
+                result.Attributes = ParseAttributes(result, result.Attributes);
             }
 
             if (Match(TokenKind.Const)) {
                 result.ConstDeclaration = ParseConstSection(result, true);
+                mode = RecordDeclarationMode.Other;
+                return result;
+            }
+
+            if (!result.ClassItem && Match(TokenKind.TypeKeyword)) {
+                result.TypeSection = ParseTypeSection(result, true);
                 return result;
             }
 
             if (Match(TokenKind.Procedure, TokenKind.Function, TokenKind.Constructor, TokenKind.Destructor)) {
                 result.MethodDeclaration = ParseMethodDeclaration(result);
+                mode = RecordDeclarationMode.Other;
                 return result;
             }
 
             if (Match(TokenKind.Property)) {
+                mode = RecordDeclarationMode.Other;
                 result.PropertyDeclaration = ParsePropertyDeclaration(result);
                 return result;
             }
@@ -2336,13 +2355,15 @@ namespace PasPasPas.Parsing.Parser {
                 result.Strict = ContinueWith(result, TokenKind.Strict);
                 ContinueWith(result, TokenKind.Public, TokenKind.Protected, TokenKind.Private, TokenKind.Published);
                 result.Visibility = result.LastTerminalKind;
-                unexpected = false;
+                mode = RecordDeclarationMode.Other;
                 return result;
             }
 
-            unexpected = true;
+            mode = RecordDeclarationMode.Undefined;
             return result;
         }
+
+        #endregion
 
         [Rule("ObjectDecl", "'object' ClassParent ObjectItems 'end' ")]
         private ObjectDeclaration ParseObjectDecl(IExtendableSyntaxPart parent) {

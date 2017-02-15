@@ -3,7 +3,7 @@
     /// <summary>
     ///     record helper item
     /// </summary>
-    public class RecordHelperItem : SyntaxPartBase {
+    public class RecordHelperItem : SyntaxPartBase, IStructuredTypeMember {
 
         /// <summary>
         ///     constant declaration
@@ -13,7 +13,7 @@
         /// <summary>
         ///     class flag
         /// </summary>
-        public bool Class { get; set; }
+        public bool ClassItem { get; set; }
 
         /// <summary>
         ///     method
@@ -34,5 +34,16 @@
         ///     visibility definition
         /// </summary>
         public int Visibility { get; set; }
+            = TokenKind.Undefined;
+
+        /// <summary>
+        ///     attributes
+        /// </summary>
+        public UserAttributes Attributes { get; set; }
+
+        /// <summary>
+        ///     report helper types
+        /// </summary>
+        public TypeSection TypeSection { get; set; }
     }
 }

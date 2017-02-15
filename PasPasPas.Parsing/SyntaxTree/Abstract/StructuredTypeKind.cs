@@ -19,5 +19,10 @@
         ///     record type
         /// </summary>
         Record = 2,
+
+        /// <summary>
+        ///     record helper
+        /// </summary>
+        RecordHelper = 3,
     }
 }
