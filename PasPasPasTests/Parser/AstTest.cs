@@ -594,8 +594,44 @@ namespace PasPasPasTests.Parser {
         }
 
         [Fact]
-        public void TestLabel() {
+        public void TestObjectType() {
+            Func<object, StructuredType> r = t => ((t as CompilationUnit)?.InterfaceSymbols["z"] as TypeDeclaration)?.TypeValue as StructuredType;
+            RunAstTest("unit z.x; interface type z = object x: integer; end; implementation end.", t => r(t)?.Kind, StructuredTypeKind.Object);
 
+            // fields
+            RunAstTest("unit z.x; interface type z = object x: integer; end; implementation end.", t => r(t)?.Fields["x"]?.Name?.CompleteName, "x");
+            RunAstTest("unit z.x; interface type z = object x: integer; end; implementation end.", t => r(t)?.Fields.Items[0]?.Fields[0]?.Name?.CompleteName, "x");
+            RunAstTest("unit z.x; interface type z = object x: integer; end; implementation end.", t => r(t)?.Fields["x"]?.Visibility, MemberVisibility.Public);
+            RunAstTest("unit z.x; interface type z = object x: integer experimental; end; implementation end.", t => r(t)?.Fields["x"]?.Hints?.SymbolIsExperimental, true);
+            RunAstTest("unit z.x; interface type z = object x: string; end; implementation end.", t => r(t)?.Fields.Items[0]?.TypeValue?.GetType(), typeof(MetaType));
+
+            RunAstTest("unit z.x; interface type z = object private x: integer; end; implementation end.", t => r(t)?.Fields["x"]?.Visibility, MemberVisibility.Private);
+            RunAstTest("unit z.x; interface type z = object protected x: integer; end; implementation end.", t => r(t)?.Fields["x"]?.Visibility, MemberVisibility.Protected);
+            RunAstTest("unit z.x; interface type z = object public x: integer; end; implementation end.", t => r(t)?.Fields["x"]?.Visibility, MemberVisibility.Public);
+            RunAstTest("unit z.x; interface type z = object strict private x: integer; end; implementation end.", t => r(t)?.Fields["x"]?.Visibility, MemberVisibility.StrictPrivate);
+            RunAstTest("unit z.x; interface type z = object strict protected x: integer; end; implementation end.", t => r(t)?.Fields["x"]?.Visibility, MemberVisibility.StrictProtected);
+            RunAstTest("unit z.x; interface type z = object published x: integer; end; implementation end.", t => r(t)?.Fields["x"]?.Visibility, MemberVisibility.Published);
+            RunAstTest("unit z.x; interface type z = object automated x: integer; end; implementation end.", t => r(t)?.Fields["x"]?.Visibility, MemberVisibility.Automated);
+
+            // methods
+            RunAstTest("unit z.x; interface type z = object function x: string; end; implementation end.", t => r(t)?.Methods["x"]?.Name?.CompleteName, "x");
+            RunAstTest("unit z.x; interface type z = object private function x: string; end; implementation end.", t => r(t)?.Methods["x"]?.Visibility, MemberVisibility.Private);
+            RunAstTest("unit z.x; interface type z = object private function x: string; experimental; end; implementation end.", t => r(t)?.Methods["x"]?.Visibility, MemberVisibility.Private);
+
+            // properties
+            RunAstTest("unit z.x; interface type z = object property x: string read q; end; implementation end.", t => r(t)?.Properties["x"]?.SymbolName, "x");
+            RunAstTest("unit z.x; interface type z = object property x: string read q; end; implementation end.", t => r(t)?.Properties["x"]?.Accessors[0]?.Name?.CompleteName, "q");
+            RunAstTest("unit z.x; interface type z = object property x: string read q; end; implementation end.", t => r(t)?.Properties["x"]?.Accessors[0]?.Kind, StructurePropertyAccessorKind.Read);
+
+            // symbols
+            RunAstTest("unit z.x; interface type z = object const c = nil; end; implementation end.", t => r(t)?.Symbols["c"]?.Name?.CompleteName, "c");
+            RunAstTest("unit z.x; interface type z = object type t = string; end; implementation end.", t => (r(t)?.Symbols["t"] as TypeDeclaration)?.TypeValue?.GetType(), typeof(MetaType));
+
+        }
+
+        [Fact]
+        public void TestLabel() {
+            // stil missing??
         }
 
     }

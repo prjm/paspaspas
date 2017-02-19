@@ -795,7 +795,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         private AbstractSyntaxPart BeginVisitItem(ClassField field, TreeTransformerOptions parameter) {
             var structType = parameter.LastValue as StructuredType;
-            var declItem = field.Parent as ClassDeclarationItem;
+            var declItem = field.Parent as IStructuredTypeMember;
             StructureFields result = CreateNode<StructureFields>(parameter, field);
             result.Visibility = parameter.CurrentMemberVisibility[structType];
             structType.Fields.Items.Add(result);
@@ -1239,7 +1239,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             return result;
         }
 
-        private void EndVisitItem(RecordDeclaration classDeclaration, TreeTransformerOptions parameter) {
+        private void EndVisitItem(RecordDeclaration recordDeclaration, TreeTransformerOptions parameter) {
             var parentType = parameter.LastValue as StructuredType;
             parameter.CurrentMemberVisibility.Reset(parentType);
         }
@@ -1335,6 +1335,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             return result;
         }
 
+        private void EndVisitItem(RecordHelperDefinition classDeclaration, TreeTransformerOptions parameter) {
+            var parentType = parameter.LastValue as StructuredType;
+            parameter.CurrentMemberVisibility.Reset(parentType);
+        }
+
+
 
         #endregion
         #region RecordHelperItem
@@ -1353,6 +1359,61 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         }
 
         #endregion
+        #region ObjectDeclaration       
+
+        private AbstractSyntaxPart BeginVisitItem(ObjectDeclaration objectDeclaration, TreeTransformerOptions parameter) {
+            StructuredType result = CreateNode<StructuredType>(parameter, objectDeclaration);
+            result.Kind = StructuredTypeKind.Object;
+            parameter.DefineTypeValue(result);
+            parameter.CurrentMemberVisibility[result] = MemberVisibility.Public;
+            return result;
+        }
+
+        private void EndVisitItem(ObjectDeclaration objectDeclaration, TreeTransformerOptions parameter) {
+            var parentType = parameter.LastValue as StructuredType;
+            parameter.CurrentMemberVisibility.Reset(parentType);
+        }
+
+
+        #endregion
+        #region ObjectItem
+
+        private AbstractSyntaxPart BeginVisitItem(ObjectItem objectItem, TreeTransformerOptions parameter) {
+            var parentType = parameter.LastValue as StructuredType;
+
+            if (parentType == null)
+                return null;
+
+            if (objectItem.Visibility != TokenKind.Undefined) {
+                parameter.CurrentMemberVisibility[parentType] = StructuredType.MapVisibility(objectItem.Visibility, objectItem.Strict);
+            };
+
+            return null;
+        }
+
+        #endregion
+        #region InterfaceDefinition
+
+        private AbstractSyntaxPart BeginVisitItem(InterfaceDefinition interfaceDeclaration, TreeTransformerOptions parameter) {
+            StructuredType result = CreateNode<StructuredType>(parameter, interfaceDeclaration);
+            if (interfaceDeclaration.DisplayInterface)
+                result.Kind = StructuredTypeKind.DispInterface;
+            else
+                result.Kind = StructuredTypeKind.Interface;
+
+            result.ForwardDeclaration = interfaceDeclaration.ForwardDeclaration;
+            parameter.DefineTypeValue(result);
+            parameter.CurrentMemberVisibility[result] = MemberVisibility.Public;
+            return result;
+        }
+
+        private void EndVisitItem(InterfaceDefinition interfaceDeclaration, TreeTransformerOptions parameter) {
+            var parentType = parameter.LastValue as StructuredType;
+            parameter.CurrentMemberVisibility.Reset(parentType);
+        }
+
+        #endregion
+
         #region Extractors
 
         private static SymbolName ExtractSymbolName(NamespaceName name) {

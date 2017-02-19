@@ -2364,11 +2364,11 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         #endregion
+        #region ParseObjectDecl
 
         [Rule("ObjectDecl", "'object' ClassParent ObjectItems 'end' ")]
         private ObjectDeclaration ParseObjectDecl(IExtendableSyntaxPart parent) {
             ObjectDeclaration result = CreateByTerminal<ObjectDeclaration>(parent, TokenKind.Object);
-
             result.ClassParent = ParseClassParent(result);
             result.Items = ParseObjectItems(result);
 
@@ -2376,14 +2376,17 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
+        #endregion
+        #region ParseObjectItems
+
         [Rule("ObjectItems", " { ObjectItem } ")]
         private ObjectItems ParseObjectItems(IExtendableSyntaxPart parent) {
             ObjectItems result = CreateChild<ObjectItems>(parent);
-            var unexpected = false;
+            ClassDeclarationMode mode = ClassDeclarationMode.Fields;
 
-            while ((!Match(TokenKind.End)) && (!unexpected)) {
-                ParseObjectItem(result, out unexpected);
-                if (unexpected) {
+            while ((!Match(TokenKind.End)) && (mode != ClassDeclarationMode.Undefined)) {
+                ParseObjectItem(result, ref mode);
+                if (mode == ClassDeclarationMode.Undefined) {
                     Unexpected();
                     return result;
                 }
@@ -2392,35 +2395,58 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
-        [Rule("ObjectItem", "Visibility | MethodDeclaration | ClassFieldDeclaration ")]
-        private ObjectItem ParseObjectItem(IExtendableSyntaxPart parent, out bool unexpected) {
+        #endregion
+        #region ParseObjectItem
+
+        [Rule("ObjectItem", "Visibility | MethodDeclaration | ClassFieldDeclaration | PropertyDeclaration ")]
+        private ObjectItem ParseObjectItem(IExtendableSyntaxPart parent, ref ClassDeclarationMode mode) {
             ObjectItem result = CreateChild<ObjectItem>(parent);
 
             if (Match(TokenKind.Public, TokenKind.Protected, TokenKind.Private, TokenKind.Strict, TokenKind.Published, TokenKind.Automated)) {
                 result.Strict = ContinueWith(result, TokenKind.Strict);
                 ContinueWith(result, TokenKind.Public, TokenKind.Protected, TokenKind.Private, TokenKind.Published, TokenKind.Automated);
                 result.Visibility = result.LastTerminalKind;
-                unexpected = false;
+                mode = ClassDeclarationMode.Other;
                 return result;
             }
 
             if (Match(TokenKind.Procedure, TokenKind.Function, TokenKind.Constructor, TokenKind.Destructor)) {
                 result.MethodDeclaration = ParseMethodDeclaration(result);
-                unexpected = false;
+                mode = ClassDeclarationMode.Other;
+                return result;
+            }
+
+            if (Match(TokenKind.Property)) {
+                mode = ClassDeclarationMode.Other;
+                result.Property = ParsePropertyDeclaration(result);
+                return result;
+            }
+
+            if (!result.ClassItem && Match(TokenKind.Const)) {
+                result.ConstSection = ParseConstSection(result, true);
+                return result;
+            }
+
+            if (!result.ClassItem && Match(TokenKind.TypeKeyword)) {
+                result.TypeSection = ParseTypeSection(result, true);
                 return result;
             }
 
             if (MatchIdentifier()) {
                 result.FieldDeclaration = ParseClassFieldDeclararation(result);
-                unexpected = false;
+                mode = ClassDeclarationMode.Fields;
                 return result;
             }
 
-            unexpected = true;
+
+            mode = ClassDeclarationMode.Undefined;
             return result;
         }
 
-        [Rule("InterfaceDef", "('inteface' | 'dispinterface') ClassParent [InterfaceGuid] InterfaceDefItems 'end'")]
+        #endregion
+        #region ParseInterfaceDef
+
+        [Rule("InterfaceDef", "('interface' | 'dispinterface') ClassParent [InterfaceGuid] InterfaceDefItems 'end'")]
         private InterfaceDefinition ParseInterfaceDef(IExtendableSyntaxPart parent) {
             InterfaceDefinition result = CreateChild<InterfaceDefinition>(parent);
 
@@ -2432,13 +2458,16 @@ namespace PasPasPas.Parsing.Parser {
             if (Match(TokenKind.OpenBraces))
                 result.Guid = ParseInterfaceGuid(result);
             result.Items = ParseInterfaceItems(result);
-            if (result.Items.PartList.Count > 0)
+
+            if (result.Items != null && result.Items.PartList.Count > 0)
                 ContinueWithOrMissing(result, TokenKind.End);
             else
-                ContinueWith(result, TokenKind.End);
+                result.ForwardDeclaration = !ContinueWith(result, TokenKind.End);
 
             return result;
         }
+
+        #endregion
 
         [Rule("InterfaceItems", "{ InterfaceItem }")]
         private InterfaceItems ParseInterfaceItems(IExtendableSyntaxPart parent) {

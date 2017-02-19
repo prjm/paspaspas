@@ -24,5 +24,20 @@
         ///     record helper
         /// </summary>
         RecordHelper = 3,
+
+        /// <summary>
+        ///     object type
+        /// </summary>
+        Object = 4,
+
+        /// <summary>
+        ///     interface declaration
+        /// </summary>
+        Interface = 5,
+
+        /// <summary>
+        ///     display interface declaration
+        /// </summary>
+        DispInterface = 6,
     }
 }

@@ -3,7 +3,7 @@
     /// <summary>
     ///     object item
     /// </summary>
-    public class ObjectItem : SyntaxPartBase {
+    public class ObjectItem : SyntaxPartBase, IStructuredTypeMember {
 
         /// <summary>
         ///     field declaration
@@ -24,6 +24,31 @@
         ///     visibility
         /// </summary>
         public int Visibility { get; set; }
+            = TokenKind.Undefined;
 
+        /// <summary>
+        ///     class item
+        /// </summary>
+        public bool ClassItem { get; set; }
+
+        /// <summary>
+        ///     attributes
+        /// </summary>
+        public UserAttributes Attributes { get; set; }
+
+        /// <summary>
+        ///     properties
+        /// </summary>
+        public ClassProperty Property { get; set; }
+
+        /// <summary>
+        ///     type section
+        /// </summary>
+        public TypeSection TypeSection { get; set; }
+
+        /// <summary>
+        ///     const section
+        /// </summary>
+        public ConstSection ConstSection { get; set; }
     }
 }

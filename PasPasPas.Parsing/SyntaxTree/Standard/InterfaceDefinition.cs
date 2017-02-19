@@ -25,5 +25,9 @@
         /// </summary>
         public ParentClass ParentInterface { get; set; }
 
+        /// <summary>
+        ///     <c>true</c> for forward declarations
+        /// </summary>
+        public bool ForwardDeclaration { get; set; }
     }
 }
