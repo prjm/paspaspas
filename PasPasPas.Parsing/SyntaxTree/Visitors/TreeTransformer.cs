@@ -2,6 +2,7 @@
 using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Parsing.SyntaxTree.Standard;
 using PasPasPas.Parsing.Parser;
+using PasPasPas.Parsing.Tokenizer;
 
 namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
@@ -833,10 +834,15 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         private AbstractSyntaxPart BeginVisitItem(ClassProperty property, TreeTransformerOptions parameter) {
             StructureProperty result = CreateNode<StructureProperty>(parameter, property);
             var parent = parameter.LastValue as StructuredType;
+            var declItem = property.Parent as IStructuredTypeMember;
             result.Name = ExtractSymbolName(property.PropertyName);
             parent.Properties.Add(result, parameter.LogSource);
             result.Visibility = parameter.CurrentMemberVisibility[parent];
-            result.Attributes = ExtractAttributes(((IStructuredTypeMember)property.Parent).Attributes, parameter.CurrentUnit);
+
+            if (declItem != null) {
+                result.Attributes = ExtractAttributes(declItem.Attributes, parameter.CurrentUnit);
+            }
+
             return result;
         }
 
@@ -913,10 +919,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         private AbstractSyntaxPart BeginVisitItem(ClassMethod method, TreeTransformerOptions parameter) {
             StructureMethod result = CreateNode<StructureMethod>(parameter, method);
             var parent = parameter.LastValue as StructuredType;
-            var declItem = method.Parent as IStructuredTypeMember;
             result.Visibility = parameter.CurrentMemberVisibility[parent];
-            result.ClassItem = declItem.ClassItem;
-            result.Attributes = ExtractAttributes(declItem.Attributes, parameter.CurrentUnit);
+
+            var declItem = method.Parent as IStructuredTypeMember;
+            if (declItem != null) {
+                result.ClassItem = declItem.ClassItem;
+                result.Attributes = ExtractAttributes(declItem.Attributes, parameter.CurrentUnit);
+            }
+
             result.Name = ExtractSymbolName(method.Identifier);
             result.Kind = Abstract.MethodDeclaration.MapKind(method.MethodKind);
             result.Generics = ExtractGenericDefinition(method.GenericDefinition, parameter);
@@ -1413,6 +1423,24 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         }
 
         #endregion
+        #region InterfaceGuid
+
+        private AbstractSyntaxPart BeginVisitItem(InterfaceGuid interfaceGuid, TreeTransformerOptions parameter) {
+            var structType = parameter.LastValue as StructuredType;
+
+            if (interfaceGuid.IdIdentifier != null) {
+                structType.GuidName = ExtractSymbolName(interfaceGuid.IdIdentifier);
+            }
+            else if (interfaceGuid.Id != null) {
+                structType.GuidId = QuotedStringTokenValue.Unwrap(interfaceGuid.Id.FirstTerminalToken);
+            }
+
+
+            return null;
+        }
+
+        #endregion
+
 
         #region Extractors
 

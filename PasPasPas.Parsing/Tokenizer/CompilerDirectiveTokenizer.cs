@@ -169,7 +169,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="value"></param>
         /// <returns></returns>
         public static string Unwrap(string value) {
-            int startOffset = 0;
+            var startOffset = 0;
             var endOffset = 0;
 
             if (value.StartsWith("{", StringComparison.Ordinal))

@@ -101,6 +101,16 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         public bool ForwardDeclaration { get; set; }
 
         /// <summary>
+        ///     guid id (for interfaces)
+        /// </summary>
+        public string GuidId { get; internal set; }
+
+        /// <summary>
+        ///     guid name (for interfaces)
+        /// </summary>
+        public SymbolName GuidName { get; internal set; }
+
+        /// <summary>
         ///     map visilibity
         /// </summary>
         /// <param name="visibility"></param>

@@ -2468,6 +2468,7 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         #endregion
+        #region  ParseInterfaceItems
 
         [Rule("InterfaceItems", "{ InterfaceItem }")]
         private InterfaceItems ParseInterfaceItems(IExtendableSyntaxPart parent) {
@@ -2484,6 +2485,9 @@ namespace PasPasPas.Parsing.Parser {
 
             return result;
         }
+
+        #endregion
+        #region ParseInterfaceItem
 
         [Rule("InterfaceItem", "MethodDeclaration | PropertyDeclaration")]
         private InterfaceItem ParseInterfaceItem(IExtendableSyntaxPart parent, out bool unexpected) {
@@ -2505,7 +2509,10 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
-        [Rule("InterfaceGuid", "'[' QuotedString ']'")]
+        #endregion
+        #region ParseInterfaceGuid
+
+        [Rule("InterfaceGuid", "'[' ( QuotedString ) | Identifier ']'")]
         private InterfaceGuid ParseInterfaceGuid(IExtendableSyntaxPart parent) {
             InterfaceGuid result = CreateByTerminal<InterfaceGuid>(parent, TokenKind.OpenBraces);
 
@@ -2517,6 +2524,8 @@ namespace PasPasPas.Parsing.Parser {
             ContinueWithOrMissing(result, TokenKind.CloseBraces);
             return result;
         }
+
+        #endregion
 
         [Rule("ClassHelper", "'class' 'helper' ClassParent 'for' TypeName ClassHelperItems 'end'")]
         private ClassHelperDef ParseClassHelper(IExtendableSyntaxPart parent) {
@@ -2774,7 +2783,6 @@ namespace PasPasPas.Parsing.Parser {
             if (ContinueWith(result, TokenKind.Stored)) {
                 result.IsStored = true;
                 result.StoredProperty = ParseExpression(result);
-                ContinueWithOrMissing(result, TokenKind.Semicolon);
                 return result;
             }
 
@@ -2782,14 +2790,12 @@ namespace PasPasPas.Parsing.Parser {
                 result.IsDefault = true;
                 if (!ContinueWith(result, TokenKind.Semicolon)) {
                     result.DefaultProperty = ParseExpression(result);
-                    ContinueWithOrMissing(result, TokenKind.Semicolon);
                 }
                 return result;
             }
 
             if (ContinueWith(result, TokenKind.NoDefault)) {
                 result.NoDefault = true;
-                ContinueWithOrMissing(result, TokenKind.Semicolon);
                 return result;
             }
 
@@ -2811,13 +2817,11 @@ namespace PasPasPas.Parsing.Parser {
 
             if (ContinueWith(result, TokenKind.ReadOnly)) {
                 result.ReadOnly = true;
-                ContinueWithOrMissing(result, TokenKind.Semicolon);
                 return result;
             }
 
             if (ContinueWith(result, TokenKind.WriteOnly)) {
                 result.WriteOnly = true;
-                ContinueWithOrMissing(result, TokenKind.Semicolon);
                 return result;
             }
 
@@ -2832,7 +2836,6 @@ namespace PasPasPas.Parsing.Parser {
         private DispIdDirective ParseDispIdDirective(IExtendableSyntaxPart parent) {
             DispIdDirective result = CreateByTerminal<DispIdDirective>(parent, TokenKind.DispId);
             result.DispExpression = ParseExpression(result);
-            ContinueWithOrMissing(result, TokenKind.Semicolon);
             return result;
         }
 

@@ -579,6 +579,8 @@ namespace PasPasPasTests.Parser {
             Func<object, BlockOfStatements> u = t => (t as CompilationUnit)?.FinalizationBlock;
 
             RunAstTest("unit z.x; interface implementation initialization finalization begin end end.", t => u(t)?.Statements[0]?.GetType(), typeof(BlockOfStatements));
+
+
         }
 
         [Fact]
@@ -591,6 +593,42 @@ namespace PasPasPasTests.Parser {
             RunAstTest("unit z.x; interface implementation initialization finalization begin a : begin end; end; end.", t => (u(t)?.Statements[0] as BlockOfStatements)?.LabelName?.CompleteName, "a");
             RunAstTest("unit z.x; interface implementation initialization finalization begin 10 : begin end; end; end.", t => (u(t)?.Statements[0] as BlockOfStatements)?.LabelName?.CompleteName, "10");
             RunAstTest("unit z.x; interface implementation initialization finalization begin $FF : begin end; end; end.", t => (u(t)?.Statements[0] as BlockOfStatements)?.LabelName?.CompleteName, "$FF");
+        }
+
+        [Fact]
+        public void TestInterfaceType() {
+            Func<object, StructuredType> r = t => ((t as CompilationUnit)?.InterfaceSymbols["z"] as TypeDeclaration)?.TypeValue as StructuredType;
+            Func<object, StructureMethod> m = t => r(t)?.Methods?["m"];
+            Func<object, StructureProperty> p = t => r(t)?.Properties?["n"];
+            RunAstTest("unit z.x; interface type z = interface end; implementation end.", t => r(t)?.Kind, StructuredTypeKind.Interface);
+            RunAstTest("unit z.x; interface type z = interface(q) end; implementation end.", t => (r(t)?.BaseTypes[0] as MetaType)?.Fragments[0]?.Name?.CompleteName, "q");
+            RunAstTest("unit z.x; interface type z = interface(q) [s] end; implementation end.", t => r(t)?.GuidName?.CompleteName, "s");
+            RunAstTest("unit z.x; interface type z = interface(q) ['s'] end; implementation end.", t => r(t)?.GuidId, "s");
+
+            RunAstTest("unit z.x; interface type z = interface procedure m(q: integer); end; implementation end.", t => m(t)?.Kind, ProcedureKind.Procedure);
+            RunAstTest("unit z.x; interface type z = interface function m(q: integer): string; end; implementation end.", t => m(t)?.Kind, ProcedureKind.Function);
+
+            RunAstTest("unit z.x; interface type z = interface property n: integer; end; implementation end.", t => p(t)?.Visibility, MemberVisibility.Public);
+            RunAstTest("unit z.x; interface type z = interface property n: integer; end; implementation end.", t => p(t)?.Name.CompleteName, "n");
+            RunAstTest("unit z.x; interface type z = interface property n: integer read q; end; implementation end.", t => p(t)?.Accessors[0]?.Kind, StructurePropertyAccessorKind.Read);
+            RunAstTest("unit z.x; interface type z = interface property n: integer read q; end; implementation end.", t => p(t)?.Accessors[0]?.Name.CompleteName, "q");
+            RunAstTest("unit z.x; interface type z = interface property n: integer write q; end; implementation end.", t => p(t)?.Accessors[0]?.Kind, StructurePropertyAccessorKind.Write);
+            RunAstTest("unit z.x; interface type z = interface property n: integer write q; end; implementation end.", t => p(t)?.Accessors[0]?.Name.CompleteName, "q");
+            RunAstTest("unit z.x; interface type z = interface property n: integer add q; end; implementation end.", t => p(t)?.Accessors[0]?.Kind, StructurePropertyAccessorKind.Add);
+            RunAstTest("unit z.x; interface type z = interface property n: integer add q; end; implementation end.", t => p(t)?.Accessors[0]?.Name.CompleteName, "q");
+            RunAstTest("unit z.x; interface type z = interface property n: integer remove q; end; implementation end.", t => p(t)?.Accessors[0]?.Kind, StructurePropertyAccessorKind.Remove);
+            RunAstTest("unit z.x; interface type z = interface property n: integer remove q; end; implementation end.", t => p(t)?.Accessors[0]?.Name.CompleteName, "q");
+            RunAstTest("unit z.x; interface type z = interface property n: integer readonly; end; implementation end.", t => p(t)?.Accessors[0]?.Kind, StructurePropertyAccessorKind.ReadOnly);
+            RunAstTest("unit z.x; interface type z = interface property n: integer writeonly; end; implementation end.", t => p(t)?.Accessors[0]?.Kind, StructurePropertyAccessorKind.WriteOnly);
+            RunAstTest("unit z.x; interface type z = interface property n: integer dispid 27; end; implementation end.", t => p(t)?.Accessors[0]?.Kind, StructurePropertyAccessorKind.DispId);
+            RunAstTest("unit z.x; interface type z = interface property n: integer stored 27; end; implementation end.", t => p(t)?.Accessors[0]?.Kind, StructurePropertyAccessorKind.Stored);
+            RunAstTest("unit z.x; interface type z = interface property n: integer default 27; end; implementation end.", t => p(t)?.Accessors[0]?.Kind, StructurePropertyAccessorKind.Default);
+            RunAstTest("unit z.x; interface type z = interface property n: integer nodefault; end; implementation end.", t => p(t)?.Accessors[0]?.Kind, StructurePropertyAccessorKind.NoDefault);
+            RunAstTest("unit z.x; interface type z = interface property n: integer implements x; end; implementation end.", t => p(t)?.Accessors[0]?.Kind, StructurePropertyAccessorKind.Implements);
+            RunAstTest("unit z.x; interface type z = interface property n: integer implements x; end; implementation end.", t => p(t)?.Accessors[0]?.Name?.CompleteName, "x");
+            RunAstTest("unit z.x; interface type z = interface property n[q: integer]: integer; end; implementation end.", t => p(t)?.Parameters.Items[0]?.Parameters[0]?.Name?.CompleteName, "q");
+
+
         }
 
         [Fact]
