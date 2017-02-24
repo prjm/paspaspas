@@ -19,5 +19,10 @@
         ///     other declaration mode
         /// </summary>
         Other = 2,
+
+        /// <summary>
+        ///     static fields
+        /// </summary>
+        ClassFields = 3,
     }
 }

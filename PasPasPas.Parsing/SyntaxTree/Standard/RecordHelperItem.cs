@@ -45,5 +45,10 @@
         ///     report helper types
         /// </summary>
         public TypeSection TypeSection { get; set; }
+
+        /// <summary>
+        ///     field
+        /// </summary>
+        public ClassField FieldDeclaration { get; internal set; }
     }
 }

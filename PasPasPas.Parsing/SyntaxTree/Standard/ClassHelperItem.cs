@@ -39,6 +39,21 @@
         ///     visibility
         /// </summary>
         public int Visibility { get; set; }
+            = TokenKind.Undefined;
 
+        /// <summary>
+        ///     constants
+        /// </summary>
+        public ConstSection ConstDeclaration { get; internal set; }
+
+        /// <summary>
+        ///     types
+        /// </summary>
+        public TypeSection TypeSection { get; internal set; }
+
+        /// <summary>
+        ///     fields
+        /// </summary>
+        public ClassField FieldDeclaration { get; internal set; }
     }
 }

@@ -2300,7 +2300,7 @@ namespace PasPasPas.Parsing.Parser {
             RecordHelperItems result = CreateChild<RecordHelperItems>(parent);
             RecordDeclarationMode mode = RecordDeclarationMode.Fields;
 
-            while ((!Match(TokenKind.End)) && (mode != RecordDeclarationMode.Undefined)) {
+            while ((!Match(TokenKind.End, TokenKind.Undefined, TokenKind.Eof)) && (mode != RecordDeclarationMode.Undefined)) {
                 ParseRecordHelperItem(result, ref mode);
                 if (mode == RecordDeclarationMode.Undefined) {
                     Unexpected();
@@ -2317,16 +2317,9 @@ namespace PasPasPas.Parsing.Parser {
         [Rule("RecordHelperItem", "MethodDeclaration | PropertyDeclaration | ConstSection | TypeSection | Visibility ")]
         private RecordHelperItem ParseRecordHelperItem(IExtendableSyntaxPart parent, ref RecordDeclarationMode mode) {
             RecordHelperItem result = CreateChild<RecordHelperItem>(parent);
-
-            if (Match(TokenKind.OpenBraces)) {
-                result.Attributes = ParseAttributes(result);
-            }
-
+            result.Attributes = ParseAttributes(result);
             result.ClassItem = ContinueWith(result, TokenKind.Class);
-
-            if (Match(TokenKind.OpenBraces)) {
-                result.Attributes = ParseAttributes(result, result.Attributes);
-            }
+            result.Attributes = ParseAttributes(result, result.Attributes);
 
             if (Match(TokenKind.Const)) {
                 result.ConstDeclaration = ParseConstSection(result, true);
@@ -2357,6 +2350,18 @@ namespace PasPasPas.Parsing.Parser {
                 result.Visibility = result.LastTerminalKind;
                 mode = RecordDeclarationMode.Other;
                 return result;
+            }
+
+            if (MatchIdentifier() && (!Match(TokenKind.Private, TokenKind.Protected, TokenKind.Public, TokenKind.Published, TokenKind.Automated, TokenKind.Strict))) {
+
+                if (mode == RecordDeclarationMode.Fields || mode == RecordDeclarationMode.ClassFields) {
+                    result.FieldDeclaration = ParseClassFieldDeclararation(result);
+                    result.ClassItem = mode == RecordDeclarationMode.ClassFields;
+                    return result;
+                }
+                else {
+                    Unexpected();
+                }
             }
 
             mode = RecordDeclarationMode.Undefined;
@@ -2526,6 +2531,7 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         #endregion
+        #region ParseClassHelper
 
         [Rule("ClassHelper", "'class' 'helper' ClassParent 'for' TypeName ClassHelperItems 'end'")]
         private ClassHelperDef ParseClassHelper(IExtendableSyntaxPart parent) {
@@ -2539,47 +2545,96 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
+        #endregion
+        #region ClassHelperItems
+
         [Rule("ClassHelperItems", " { ClassHelperItem }")]
         private ClassHelperItems ParseClassHelperItems(IExtendableSyntaxPart parent) {
             ClassHelperItems result = CreateChild<ClassHelperItems>(parent);
-            while (!Match(TokenKind.End, TokenKind.Undefined, TokenKind.Eof)) {
-                ParseClassHelperItem(result);
+            ClassDeclarationMode mode = ClassDeclarationMode.Fields;
+
+            while (!Match(TokenKind.End, TokenKind.Undefined, TokenKind.Eof) && (mode != ClassDeclarationMode.Undefined)) {
+                ParseClassHelperItem(result, ref mode);
+                if (mode == ClassDeclarationMode.Undefined) {
+                    Unexpected();
+                    return result;
+                }
             }
             return result;
         }
 
+        #endregion
+        #region ParseClassHelperItem
+
         [Rule("ClassHelperItem", "Visibility | MethodDeclaration | PropertyDeclaration | [ 'class' ] VarSection")]
-        private ClassHelperItem ParseClassHelperItem(IExtendableSyntaxPart parent) {
+        private ClassHelperItem ParseClassHelperItem(IExtendableSyntaxPart parent, ref ClassDeclarationMode mode) {
             ClassHelperItem result = CreateChild<ClassHelperItem>(parent);
+
+            if (ContinueWith(parent, TokenKind.Var)) {
+                mode = ClassDeclarationMode.Fields;
+                return null;
+            }
+
+            if (Match(TokenKind.Class) && LookAhead(1, TokenKind.Var)) {
+                ContinueWith(parent, TokenKind.Class);
+                ContinueWith(parent, TokenKind.Var);
+                mode = ClassDeclarationMode.ClassFields;
+                return null;
+            }
+
             result.Attributes = ParseAttributes(result);
             result.Class = ContinueWith(result, TokenKind.Class);
+            result.Attributes = ParseAttributes(result, result.Attributes);
 
-            if (!result.Class && (result.Attributes.PartList.Count < 1) && Match(TokenKind.Public, TokenKind.Protected, TokenKind.Private, TokenKind.Strict, TokenKind.Published, TokenKind.Automated)) {
-                result.Strict = ContinueWith(result, TokenKind.Strict);
-                ContinueWithOrMissing(result, TokenKind.Public, TokenKind.Protected, TokenKind.Private, TokenKind.Published, TokenKind.Automated);
-                result.Visibility = result.LastTerminalKind;
+            if (Match(TokenKind.Const)) {
+                result.ConstDeclaration = ParseConstSection(result, true);
+                mode = ClassDeclarationMode.Other;
+                return result;
+            }
+
+            if (!result.Class && Match(TokenKind.TypeKeyword)) {
+                result.TypeSection = ParseTypeSection(result, true);
+                mode = ClassDeclarationMode.Other;
                 return result;
             }
 
             if (Match(TokenKind.Procedure, TokenKind.Function, TokenKind.Constructor, TokenKind.Destructor)) {
                 result.MethodDeclaration = ParseMethodDeclaration(result);
+                mode = ClassDeclarationMode.Other;
                 return result;
             }
 
             if (Match(TokenKind.Property)) {
+                mode = ClassDeclarationMode.Other;
                 result.PropertyDeclaration = ParsePropertyDeclaration(result);
                 return result;
             }
 
-            if (Match(TokenKind.Var)) {
-                result.VarSection = ParseVarSection(result, true);
+            if (Match(TokenKind.Public, TokenKind.Protected, TokenKind.Private, TokenKind.Strict, TokenKind.Published)) {
+                result.Strict = ContinueWith(result, TokenKind.Strict);
+                ContinueWith(result, TokenKind.Public, TokenKind.Protected, TokenKind.Private, TokenKind.Published);
+                result.Visibility = result.LastTerminalKind;
+                mode = ClassDeclarationMode.Other;
                 return result;
             }
 
-            Unexpected();
+            if (MatchIdentifier() && (!Match(TokenKind.Private, TokenKind.Protected, TokenKind.Public, TokenKind.Published, TokenKind.Automated, TokenKind.Strict))) {
+
+                if (mode == ClassDeclarationMode.Fields || mode == ClassDeclarationMode.ClassFields) {
+                    result.FieldDeclaration = ParseClassFieldDeclararation(result);
+                    result.Class = mode == ClassDeclarationMode.ClassFields;
+                    return result;
+                }
+                else {
+                    Unexpected();
+                }
+            }
+
+            mode = ClassDeclarationMode.Undefined;
             return result;
         }
 
+        #endregion
         #region ParseClassDefinition
 
         [Rule("ClassDefinition", "'class' [( 'sealed' | 'abstract' )] [ClassParent] ClassItems 'end' ")]
@@ -2642,15 +2697,9 @@ namespace PasPasPas.Parsing.Parser {
 
             ClassDeclarationItem result = CreateChild<ClassDeclarationItem>(parent);
 
-            if (Match(TokenKind.OpenBraces)) {
-                result.Attributes = ParseAttributes(result);
-            }
-
+            result.Attributes = ParseAttributes(result);
             result.ClassItem = ContinueWith(result, TokenKind.Class);
-
-            if (Match(TokenKind.OpenBraces)) {
-                result.Attributes = ParseAttributes(result, result.Attributes);
-            }
+            result.Attributes = ParseAttributes(result, result.Attributes);
 
             if (Match(TokenKind.Public, TokenKind.Protected, TokenKind.Private, TokenKind.Strict, TokenKind.Published, TokenKind.Automated)) {
                 if (result.ClassItem) {
@@ -3239,6 +3288,7 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         #endregion
+        #region ParseAttributes
 
         [Rule("Attributes", "{ '[' Attribute | AssemblyAttribue ']' }")]
         private UserAttributes ParseAttributes(IExtendableSyntaxPart parent, UserAttributes result = null) {
@@ -3260,6 +3310,9 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
+        #endregion
+        #region ParseAttribute
+
         [Rule("Attribute", " [ 'Result' ':' ] NamespaceName [ '(' Expressions ')' ]")]
         private UserAttributeDefinition ParseAttribute(IExtendableSyntaxPart parent) {
             UserAttributeDefinition result = CreateChild<UserAttributeDefinition>(parent);
@@ -3280,6 +3333,8 @@ namespace PasPasPas.Parsing.Parser {
 
             return result;
         }
+
+        #endregion
 
         [Rule("Expressions", "Expression { ',' Expression }")]
         private ExpressionList ParseExpressions(IExtendableSyntaxPart parent) {

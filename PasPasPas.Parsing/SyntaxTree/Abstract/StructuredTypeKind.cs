@@ -39,5 +39,10 @@
         ///     display interface declaration
         /// </summary>
         DispInterface = 6,
+
+        /// <summary>
+        ///     classhelper
+        /// </summary>
+        ClassHelper = 7,
     }
 }
