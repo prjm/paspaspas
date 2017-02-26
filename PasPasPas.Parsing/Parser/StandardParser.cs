@@ -900,6 +900,7 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         #endregion
+        #region ParseNamespaceNameList
 
         [Rule("NamespaceNameList", "NamespaceName { ',' NamespaceName } ';' ")]
         private NamespaceNameList ParseNamespaceNameList(IExtendableSyntaxPart parent) {
@@ -913,6 +914,9 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
+        #endregion
+        #region ParsePackageHead
+
         [Rule("PackageHead", "'package' NamespaceName ';' ")]
         private PackageHead ParsePackageHead(IExtendableSyntaxPart parent) {
             PackageHead result = CreateByTerminal<PackageHead>(parent, TokenKind.Package);
@@ -920,6 +924,9 @@ namespace PasPasPas.Parsing.Parser {
             ContinueWithOrMissing(result, TokenKind.Semicolon);
             return result;
         }
+
+        #endregion
+        #region ParseLibrary
 
         [Rule("Library", "LibraryHead [UsesFileClause] Block '.' ")]
         private Library ParseLibrary(IExtendableSyntaxPart parent) {
@@ -934,6 +941,9 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
+        #endregion
+        #region ParseLibraryHead
+
         [Rule("LibraryHead", "'library' NamespaceName Hints ';'")]
         private LibraryHead ParseLibraryHead(IExtendableSyntaxPart parent) {
             LibraryHead result = CreateByTerminal<LibraryHead>(parent, TokenKind.Library);
@@ -942,6 +952,9 @@ namespace PasPasPas.Parsing.Parser {
             ContinueWithOrMissing(result, TokenKind.Semicolon);
             return result;
         }
+
+        #endregion
+        #region ParseProgram
 
         [Rule("Program", "[ProgramHead] [UsesFileClause] Block '.'")]
         private Program ParseProgram(IExtendableSyntaxPart parent) {
@@ -958,6 +971,9 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
+        #endregion
+        #region ParseProgramHead
+
         [Rule("ProgramHead", "'program' NamespaceName [ProgramParams] ';'")]
         private ProgramHead ParseProgramHead(IExtendableSyntaxPart parent) {
             ProgramHead result = CreateByTerminal<ProgramHead>(parent, TokenKind.Program);
@@ -966,6 +982,9 @@ namespace PasPasPas.Parsing.Parser {
             ContinueWithOrMissing(result, TokenKind.Semicolon);
             return result;
         }
+
+        #endregion
+        #region ParseProgramParams
 
         [Rule("ProgramParams", "'(' [ Identifier { ',' Identifier } ] ')'")]
         private ProgramParameterList ParseProgramParams(IExtendableSyntaxPart parent) {
@@ -986,6 +1005,9 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
+        #endregion
+        #region ParseBlock
+
         [Rule("Block", "DeclarationSections [ BlockBody ] ")]
         private Block ParseBlock(IExtendableSyntaxPart parent) {
             Block result = CreateChild<Block>(parent);
@@ -995,6 +1017,8 @@ namespace PasPasPas.Parsing.Parser {
             }
             return result;
         }
+
+        #endregion
 
         [Rule("BlockBody", "AssemblerBlock | CompoundStatement")]
         private BlockBody ParseBlockBody(IExtendableSyntaxPart parent) {

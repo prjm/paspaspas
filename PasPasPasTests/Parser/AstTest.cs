@@ -51,11 +51,13 @@ namespace PasPasPasTests.Parser {
             RunAstTest("library z.x; begin end.", t => u(t)?.UnitName.Namespace, "z");
             RunAstTest("library z.x; begin end.", t => u(t)?.FileType, CompilationUnitType.Library);
 
-            RunAstTest("library z.x; deprecated;  begin end.", t => u(t)?.Hints?.SymbolIsDeprecated, true);
-            RunAstTest("library z.x; deprecated 'X'; begin end.", t => u(t)?.Hints?.DeprecatedInformation, "X");
-            RunAstTest("library z.x; library; begin end.", t => u(t)?.Hints?.SymbolInLibrary, true);
-            RunAstTest("library z.x; platform; begin end.", t => u(t)?.Hints?.SymbolIsPlatformSpecific, true);
-            RunAstTest("library z.x; experimental; begin end.", t => u(t)?.Hints?.SymbolIsExperimental, true);
+            RunAstTest("library z.x; uses a; begin end.", t => u(t)?.RequiredUnits["a"]?.Name.CompleteName, "a");
+
+            RunAstTest("library z.x deprecated;  begin end.", t => u(t)?.Hints?.SymbolIsDeprecated, true);
+            RunAstTest("library z.x deprecated 'X'; begin end.", t => u(t)?.Hints?.DeprecatedInformation, "X");
+            RunAstTest("library z.x library; begin end.", t => u(t)?.Hints?.SymbolInLibrary, true);
+            RunAstTest("library z.x platform; begin end.", t => u(t)?.Hints?.SymbolIsPlatformSpecific, true);
+            RunAstTest("library z.x experimental; begin end.", t => u(t)?.Hints?.SymbolIsExperimental, true);
 
             RunAstTest("library z.x; begin end. § unit z.x; interface implementation end.",
                 t => (t as CompilationUnit)?.SymbolName, "z.x", StructuralErrors.DuplicateUnitName);
@@ -75,6 +77,12 @@ namespace PasPasPasTests.Parser {
             RunAstTest("program z.x; begin end.", t => u(t)?.UnitName.Name, "x");
             RunAstTest("program z.x; begin end.", t => u(t)?.UnitName.Namespace, "z");
 
+            RunAstTest("program z.x(a); begin end.", t => u(t)?.SymbolName, "z.x");
+            RunAstTest("program z.x(a,b,c); begin end.", t => u(t)?.SymbolName, "z.x");
+
+            RunAstTest("program z.x; uses a; begin end.", t => u(t)?.RequiredUnits?["a"]?.Name?.CompleteName, "a");
+            RunAstTest("program z.x; uses a in 'a.pas'; begin end.", t => u(t)?.RequiredUnits?["a"]?.FileName, "a.pas");
+
             RunAstTest("program z.x; begin end. § unit z.x; interface implementation end.",
                 t => (t as CompilationUnit)?.SymbolName, "z.x", StructuralErrors.DuplicateUnitName);
 
@@ -93,6 +101,13 @@ namespace PasPasPasTests.Parser {
             RunAstTest("package z.x; requires a, a.a, a.a.a, x; end.", t => u(t)?.SymbolName, "z.x");
             RunAstTest("package z.x; requires a, a.a, a.a.a, x; end.", t => u(t)?.UnitName.Name, "x");
             RunAstTest("package z.x; requires a, a.a, a.a.a, x; end.", t => u(t)?.UnitName.Namespace, "z");
+
+            RunAstTest("package z.x; requires a, a.a, a.a.a, x; end.", t => u(t)?.RequiredUnits["a.a"]?.Name?.CompleteName, "a.a");
+            RunAstTest("package z.x; requires a, a.a, a.a.a, x; end.", t => u(t)?.RequiredUnits["a.a"]?.Mode, UnitMode.Requires);
+
+            RunAstTest("package z.x; requires a.a, a.a.a; contains b.b in 'b.pas'; end.", t => u(t)?.RequiredUnits["a.a"]?.Name.CompleteName, "a.a");
+            RunAstTest("package z.x; requires a, a.a, a.a.a; contains b.b in 'b.pas'; end.", t => u(t)?.RequiredUnits["a.a"]?.Mode, UnitMode.Requires);
+            RunAstTest("package z.x; requires a, a.a, a.a.a; contains b.b in 'b.pas'; end.", t => u(t)?.RequiredUnits["b.b"]?.Mode, UnitMode.Contains);
 
 
         }
@@ -687,6 +702,20 @@ namespace PasPasPasTests.Parser {
             RunAstTest("unit z.x; interface type z = object const c = nil; end; implementation end.", t => r(t)?.Symbols["c"]?.Name?.CompleteName, "c");
             RunAstTest("unit z.x; interface type z = object type t = string; end; implementation end.", t => (r(t)?.Symbols["t"] as TypeDeclaration)?.TypeValue?.GetType(), typeof(MetaType));
 
+        }
+
+        [Fact]
+        public void TestBlockDeclaredSymbols() {
+            Func<object, CompilationUnit> u = t => t as CompilationUnit;
+            RunAstTest("library z.x; const x = nil; begin end.", t => u(t)?.Symbols?["x"]?.Name?.CompleteName, "x");
+            RunAstTest("program z.x; const x = nil; begin end.", t => u(t)?.Symbols?["x"]?.Name?.CompleteName, "x");
+        }
+
+        [Fact]
+        public void TestMethodImplementation() {
+            Func<object, StructuredType> r = t => ((t as CompilationUnit)?.InterfaceSymbols["Tx"] as TypeDeclaration)?.TypeValue as StructuredType;
+            Func<object, MethodImplementation> i = t => r(t)?.Methods["m"]?.Implementation;
+            RunAstTest("unit z.x; interface type Tx = class procedure m(); end; implementation procedure Tx.m; begin end; end.", t => i(t)?.Kind, ProcedureKind.Procedure);
         }
 
         [Fact]

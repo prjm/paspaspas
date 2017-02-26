@@ -127,10 +127,8 @@ namespace PasPasPasTests {
             foreach (var input in completeInput.Split('§')) {
 
                 ISyntaxPart tree = RunAstTest(input, logMgr, msgs);
-                if (!errorMessages.Contains(ParserBase.UnexpectedToken)) {
-                    Assert.AreEqual(string.Empty, errorText);
-                    Assert.IsFalse(hasError);
-                }
+                Assert.AreEqual(string.Empty, errorText);
+                Assert.IsFalse(hasError);
 
 
                 var visitor = new TreeTransformer();
@@ -147,6 +145,8 @@ namespace PasPasPasTests {
                 Assert.AreEqual(expectedResult, astOptions.Result);
             }
 
+            Assert.AreEqual(string.Empty, errorText);
+            Assert.IsFalse(hasError);
             Assert.AreEqual(errorMessages.Length, msgs.Count);
             foreach (Guid guid in errorMessages)
                 Assert.IsTrue(msgs.Where(t => t.MessageID == guid).Any());

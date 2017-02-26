@@ -37,6 +37,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             result.Hints = ExtractHints(library.Hints);
             result.FilePath = library.FilePath;
             result.InitializationBlock = new BlockOfStatements();
+            result.Symbols = new DeclaredSymbols();
             parameter.Project.Add(result, parameter.LogSource);
             parameter.CurrentUnitMode[result] = UnitMode.Library;
             parameter.CurrentUnit = result;
@@ -62,6 +63,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             result.UnitName = ExtractSymbolName(program.ProgramName);
             result.FilePath = program.FilePath;
             result.InitializationBlock = new BlockOfStatements();
+            result.Symbols = new DeclaredSymbols();
             parameter.CurrentUnitMode[result] = UnitMode.Program;
             parameter.Project.Add(result, parameter.LogSource);
             parameter.CurrentUnit = result;
@@ -1470,6 +1472,32 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             return null;
         }
 
+        #endregion
+        #region Block
+
+        /*
+        private AbstractSyntaxPart BeginVisitItem(Block block, TreeTransformerOptions parameter) {
+            IDeclaredBlockTarget parent = parameter.LastValue as IDeclaredBlockTarget;
+            BlockWithDeclarations result = CreateNode<BlockWithDeclarations>(parameter, block);
+            return result;
+        }
+        */
+
+        #endregion
+        #region MethodDecl
+
+        private AbstractSyntaxPart BeginVisitItem(Standard.MethodDeclaration method, TreeTransformerOptions parameter) {
+            CompilationUnit unit = parameter.CurrentUnit;
+            SymbolName name = ExtractSymbolName(method.Heading.Name);
+            DeclaredSymbol type = unit.InterfaceSymbols.Find(name.Namespace);
+            var typeDecl = type as Abstract.TypeDeclaration;
+            var typeStruct = typeDecl.TypeValue as StructuredType;
+            StructureMethod declaration = typeStruct.Methods[name.Name];
+            MethodImplementation result = CreateNode<MethodImplementation>(parameter, method);
+            result.Kind = Abstract.MethodDeclaration.MapKind(method.Heading.Kind);
+            declaration.Implementation = result;
+            return result;
+        }
 
         #endregion
 
@@ -1698,7 +1726,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         }
 
         #endregion
-
 
     }
 }

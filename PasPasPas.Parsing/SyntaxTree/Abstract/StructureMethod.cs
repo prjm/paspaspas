@@ -35,5 +35,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     visibility mode
         /// </summary>
         public MemberVisibility Visibility { get; set; }
+
+        /// <summary>
+        ///     implementation
+        /// </summary>
+        public MethodImplementation Implementation { get; set; }
     }
 }
