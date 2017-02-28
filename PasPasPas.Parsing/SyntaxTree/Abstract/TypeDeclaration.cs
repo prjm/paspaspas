@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
 
     /// <summary>
     ///     abstract type declaration
     /// </summary>
-    public class TypeDeclaration : DeclaredSymbol, ISymbolWithAttributes, ITypeTarget {
+    public class TypeDeclaration : DeclaredSymbol, ISymbolWithAttributes, ITypeTarget, IDeclaredSymbolTarget {
 
         /// <summary>
         ///     attribues
@@ -25,10 +26,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     enumerate all children
         /// </summary>
-        public override IEnumerable<ISyntaxPart> Parts
-        {
-            get
-            {
+        public override IEnumerable<ISyntaxPart> Parts {
+            get {
                 foreach (GenericType generic in Generics)
                     yield return generic;
                 if (TypeValue != null)
@@ -40,5 +39,18 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     generic typey
         /// </summary>
         public GenericTypes Generics { get; set; }
+
+        /// <summary>
+        ///     declared symbols
+        /// </summary>
+        public DeclaredSymbols Symbols {
+            get {
+                var delegatedValue = TypeValue as IDeclaredSymbolTarget;
+                if (delegatedValue != null)
+                    return delegatedValue.Symbols;
+                else
+                    return null;
+            }
+        }
     }
 }

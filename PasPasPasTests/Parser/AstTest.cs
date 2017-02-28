@@ -707,15 +707,30 @@ namespace PasPasPasTests.Parser {
         [Fact]
         public void TestBlockDeclaredSymbols() {
             Func<object, CompilationUnit> u = t => t as CompilationUnit;
+            Func<object, StructuredType> r = t => ((t as CompilationUnit)?.InterfaceSymbols["Tx"] as TypeDeclaration)?.TypeValue as StructuredType;
+            Func<object, string> i = t => r(t)?.Methods["m"]?.Implementation?.Symbols["x"]?.Name?.CompleteName;
+
             RunAstTest("library z.x; const x = nil; begin end.", t => u(t)?.Symbols?["x"]?.Name?.CompleteName, "x");
             RunAstTest("program z.x; const x = nil; begin end.", t => u(t)?.Symbols?["x"]?.Name?.CompleteName, "x");
+            RunAstTest("unit z.x; interface type Tx = class procedure m(); end; implementation procedure Tx.m; const x = nil; begin end; end.", t => i(t), "x");
         }
 
         [Fact]
         public void TestMethodImplementation() {
             Func<object, StructuredType> r = t => ((t as CompilationUnit)?.InterfaceSymbols["Tx"] as TypeDeclaration)?.TypeValue as StructuredType;
+            Func<object, StructuredType> n = t => (r(t)?.Symbols["Tz"] as TypeDeclaration)?.TypeValue as StructuredType;
             Func<object, MethodImplementation> i = t => r(t)?.Methods["m"]?.Implementation;
+            Func<object, MethodImplementation> j = t => n(t)?.Methods["m"]?.Implementation;
+
+            Func<object, StructuredType> r1 = t => ((t as CompilationUnit)?.ImplementationSymbols["Tx"] as TypeDeclaration)?.TypeValue as StructuredType;
+            Func<object, StructuredType> n1 = t => (r1(t)?.Symbols["Tz"] as TypeDeclaration)?.TypeValue as StructuredType;
+            Func<object, MethodImplementation> i1 = t => r1(t)?.Methods["m"]?.Implementation;
+            Func<object, MethodImplementation> j1 = t => n1(t)?.Methods["m"]?.Implementation;
+
             RunAstTest("unit z.x; interface type Tx = class procedure m(); end; implementation procedure Tx.m; begin end; end.", t => i(t)?.Kind, ProcedureKind.Procedure);
+            RunAstTest("unit z.x; interface type Tx = class type Tz = class procedure m(); end; end; implementation procedure Tx.Tz.m; begin end; end.", t => j(t)?.Kind, ProcedureKind.Procedure);
+            RunAstTest("unit z.x; interface implementation type Tx = class procedure m(); end; procedure Tx.m; begin end; end.", t => i1(t)?.Kind, ProcedureKind.Procedure);
+            RunAstTest("unit z.x; interface implementation type Tx = class type Tz = class procedure m(); end; end; procedure Tx.Tz.m; begin end; end.", t => j1(t)?.Kind, ProcedureKind.Procedure);
         }
 
         [Fact]

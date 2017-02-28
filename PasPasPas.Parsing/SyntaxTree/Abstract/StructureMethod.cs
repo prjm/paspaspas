@@ -23,6 +23,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
                     yield return genericType;
                 foreach (MethodDirective directive in Directives)
                     yield return directive;
+                if (Implementation != null)
+                    yield return Implementation;
             }
         }
 

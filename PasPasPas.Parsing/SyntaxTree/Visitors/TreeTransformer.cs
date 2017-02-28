@@ -1490,6 +1490,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             CompilationUnit unit = parameter.CurrentUnit;
             SymbolName name = ExtractSymbolName(method.Heading.Name);
             DeclaredSymbol type = unit.InterfaceSymbols.Find(name.Namespace);
+
+            if (type == null)
+                type = unit.ImplementationSymbols.Find(name.Namespace);
+
             var typeDecl = type as Abstract.TypeDeclaration;
             var typeStruct = typeDecl.TypeValue as StructuredType;
             StructureMethod declaration = typeStruct.Methods[name.Name];
