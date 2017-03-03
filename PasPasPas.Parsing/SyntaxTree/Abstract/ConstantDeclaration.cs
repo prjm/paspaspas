@@ -30,10 +30,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     enumerate all children
         /// </summary>
-        public override IEnumerable<ISyntaxPart> Parts
-        {
-            get
-            {
+        public override IEnumerable<ISyntaxPart> Parts {
+            get {
                 if (TypeValue != null)
                     yield return TypeValue;
                 if (Value != null)
@@ -44,7 +42,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     expression value
         /// </summary>
-        public ExpressionBase Value { get; set; }
+        public IExpression Value { get; set; }
 
         /// <summary>
         ///     type specification value

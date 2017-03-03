@@ -3,7 +3,7 @@
     /// <summary>
     ///     base class for expression parts
     /// </summary>
-    public abstract class ExpressionBase : AbstractSyntaxPart {
+    public abstract class ExpressionBase : AbstractSyntaxPart, IExpression {
 
     }
 }

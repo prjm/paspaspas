@@ -23,18 +23,16 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     record value
         /// </summary>
-        public ExpressionBase Value
-        {
-            get
-            {
+        public IExpression Value {
+
+            get {
                 if (Items.Count > 0)
                     return Items[Items.Count - 1];
                 else
                     return null;
             }
 
-            set
-            {
+            set {
                 var item = value as RecordConstantItem;
                 if (item != null)
                     Items.Add(item);

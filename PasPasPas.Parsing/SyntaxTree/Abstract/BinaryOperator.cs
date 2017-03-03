@@ -15,12 +15,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     left operand
         /// </summary>
-        public ExpressionBase LeftOperand { get; set; }
+        public IExpression LeftOperand { get; set; }
 
         /// <summary>
         ///     right operand
         /// </summary>
-        public ExpressionBase RightOperand { get; set; }
+        public IExpression RightOperand { get; set; }
 
         /// <summary>
         ///     convert an expression kind
@@ -96,10 +96,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     enumerate parts
         /// </summary>
-        public override IEnumerable<ISyntaxPart> Parts
-        {
-            get
-            {
+        public override IEnumerable<ISyntaxPart> Parts {
+            get {
                 if (LeftOperand != null)
                     yield return LeftOperand;
                 if (RightOperand != null)
@@ -110,18 +108,15 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     expression value
         /// </summary>
-        public ExpressionBase Value
-        {
-            get
-            {
+        public IExpression Value {
+            get {
                 if (RightOperand != null)
                     return RightOperand;
                 else
                     return LeftOperand;
             }
 
-            set
-            {
+            set {
                 if (LeftOperand == null)
                     LeftOperand = value;
                 else if (RightOperand == null)

@@ -175,7 +175,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     define an expression value
         /// </summary>
         /// <param name="value"></param>
-        public void DefineExpressionValue(ExpressionBase value) {
+        public void DefineExpressionValue(IExpression value) {
             if (WorkingStack.Count > 0) {
                 var lastExpression = WorkingStack.Peek().Data as IExpressionTarget;
                 if (lastExpression != null) {

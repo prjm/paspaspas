@@ -16,13 +16,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     specified constraints
         /// </summary>
-        public IList<ExpressionBase> Constraints { get; }
-            = new List<ExpressionBase>();
+        public IList<IExpression> Constraints { get; }
+            = new List<IExpression>();
 
         /// <summary>
         ///     values
         /// </summary>
-        public ExpressionBase Value {
+        public IExpression Value {
             get {
                 return Constraints.LastOrDefault();
             }

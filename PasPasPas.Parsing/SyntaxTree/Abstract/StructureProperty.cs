@@ -64,7 +64,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     expression value (default value)
         /// </summary>
-        public ExpressionBase Value { get; set; }
+        public IExpression Value { get; set; }
 
         /// <summary>
         ///     property accessors

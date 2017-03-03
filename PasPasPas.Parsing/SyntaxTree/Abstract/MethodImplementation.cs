@@ -1,9 +1,12 @@
-﻿namespace PasPasPas.Parsing.SyntaxTree.Abstract {
+﻿using System;
+using System.Collections.Generic;
+
+namespace PasPasPas.Parsing.SyntaxTree.Abstract {
 
     /// <summary>
     ///     method implementation
     /// </summary>
-    public class MethodImplementation : AbstractSyntaxPart, IDeclaredSymbolTarget, IStatementTarget {
+    public class MethodImplementation : DeclaredSymbol, IDeclaredSymbolTarget, IBlockTarget, IExpression {
 
         /// <summary>
         ///     symbols
@@ -19,8 +22,18 @@
         /// <summary>
         ///     statements
         /// </summary>
-        public BlockOfStatements Statements { get; }
-            = new BlockOfStatements();
+        public override IEnumerable<ISyntaxPart> Parts {
+            get {
+                yield return Symbols;
+                if (Block != null)
+                    yield return Block;
+            }
+        }
+
+        /// <summary>
+        ///     statements
+        /// </summary>
+        public BlockOfStatements Block { get; set; }
 
     }
 }

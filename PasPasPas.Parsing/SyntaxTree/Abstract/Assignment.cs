@@ -1,25 +1,19 @@
-﻿
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
 
     /// <summary>
-    ///     unary operator
+    ///     assignment statements
     /// </summary>
-    public class UnaryOperator : ExpressionBase, IExpressionTarget {
+    public class Assignment : StatementBase, IExpressionTarget {
 
         /// <summary>
-        ///     operator kind
-        /// </summary>
-        public ExpressionKind Kind { get; set; }
-
-        /// <summary>
-        ///     expression value
+        ///     assignment expression 
         /// </summary>
         public IExpression Value { get; set; }
 
         /// <summary>
-        ///     operator parts
+        ///     parts
         /// </summary>
         public override IEnumerable<ISyntaxPart> Parts {
             get {

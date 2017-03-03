@@ -721,8 +721,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
             else {
                 var statementTarget = parameter.LastValue as IStatementTarget;
+                var blockTarget = parameter.LastValue as IBlockTarget;
                 BlockOfStatements result = CreatePartNode<BlockOfStatements>(parameter.LastValue, block);
-                statementTarget.Statements.Add(result);
+                if (statementTarget != null)
+                    statementTarget.Statements.Add(result);
+                else if (blockTarget != null)
+                    blockTarget.Block = result;
                 return result;
             }
 
@@ -1473,15 +1477,15 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         }
 
         #endregion
-        #region Block
+        #region ProcedureDeclaration
 
-        /*
-        private AbstractSyntaxPart BeginVisitItem(Block block, TreeTransformerOptions parameter) {
-            IDeclaredBlockTarget parent = parameter.LastValue as IDeclaredBlockTarget;
-            BlockWithDeclarations result = CreateNode<BlockWithDeclarations>(parameter, block);
+        private AbstractSyntaxPart BeginVisitItem(ProcedureDeclaration procedure, TreeTransformerOptions parameter) {
+            var symbolTarget = parameter.LastValue as IDeclaredSymbolTarget;
+            MethodImplementation result = CreateNode<MethodImplementation>(parameter, procedure);
+            result.Name = ExtractSymbolName(procedure.Heading.Name);
+            symbolTarget.Symbols.AddDirect(result, parameter.LogSource);
             return result;
         }
-        */
 
         #endregion
         #region MethodDecl
@@ -1500,6 +1504,29 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             MethodImplementation result = CreateNode<MethodImplementation>(parameter, method);
             result.Kind = Abstract.MethodDeclaration.MapKind(method.Heading.Kind);
             declaration.Implementation = result;
+            return result;
+        }
+
+        #endregion
+        #region StatementPart
+
+        private AbstractSyntaxPart BeginVisitItem(StatementPart part, TreeTransformerOptions parameter) {
+            if (part.Assignment != null) {
+                Assignment result = CreateNode<Assignment>(parameter, part);
+                var parent = parameter.LastValue as IStatementTarget;
+                parent.Statements.Add(result);
+                return result;
+            };
+            return null;
+        }
+
+        #endregion
+        #region ClosureExpression
+
+        private AbstractSyntaxPart BeginVisitItem(ClosureExpression closure, TreeTransformerOptions parameter) {
+            MethodImplementation result = CreateNode<MethodImplementation>(parameter, closure);
+            IExpressionTarget expression = parameter.LastExpression;
+            expression.Value = result;
             return result;
         }
 

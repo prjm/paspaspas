@@ -10,19 +10,17 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     index items
         /// </summary>
-        public IList<ExpressionBase> IndexItems
+        public IList<IExpression> IndexItems
             => indexItems;
 
-        private List<ExpressionBase> indexItems
-            = new List<ExpressionBase>();
+        private List<IExpression> indexItems
+            = new List<IExpression>();
 
         /// <summary>
         ///     constant array items
         /// </summary>
-        public override IEnumerable<ISyntaxPart> Parts
-        {
-            get
-            {
+        public override IEnumerable<ISyntaxPart> Parts {
+            get {
                 foreach (ExpressionBase item in indexItems)
                     yield return item;
                 if (TypeValue != null)
@@ -34,18 +32,15 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     array indexes
         /// </summary>
-        public ExpressionBase Value
-        {
-            get
-            {
+        public IExpression Value {
+            get {
                 if (indexItems.Count > 0)
                     return indexItems[indexItems.Count - 1];
                 else
                     return null;
             }
 
-            set
-            {
+            set {
                 if (value != null)
                     indexItems.Add(value);
             }

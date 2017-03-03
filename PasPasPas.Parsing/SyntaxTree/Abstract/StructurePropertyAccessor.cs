@@ -20,7 +20,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     expression for disp ids
         /// </summary>
-        public ExpressionBase Value { get; set; }
+        public IExpression Value { get; set; }
 
         /// <summary>
         ///     map accessor lind

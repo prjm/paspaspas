@@ -15,20 +15,18 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     left operand
         /// </summary>
-        public ExpressionBase RangeStart { get; set; }
+        public IExpression RangeStart { get; set; }
 
         /// <summary>
         ///     right operand
         /// </summary>
-        public ExpressionBase RangeEnd { get; set; }
+        public IExpression RangeEnd { get; set; }
 
         /// <summary>
         ///     enumerate parts
         /// </summary>
-        public override IEnumerable<ISyntaxPart> Parts
-        {
-            get
-            {
+        public override IEnumerable<ISyntaxPart> Parts {
+            get {
                 if (RangeStart != null)
                     yield return RangeStart;
                 if (RangeEnd != null)
@@ -39,18 +37,15 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     expression value
         /// </summary>
-        public ExpressionBase Value
-        {
-            get
-            {
+        public IExpression Value {
+            get {
                 if (RangeEnd != null)
                     return RangeEnd;
                 else
                     return RangeStart;
             }
 
-            set
-            {
+            set {
                 if (RangeStart == null)
                     RangeStart = value;
                 else if (RangeEnd == null)

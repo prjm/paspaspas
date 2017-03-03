@@ -8,7 +8,7 @@
         /// <summary>
         ///     value of this expression target
         /// </summary>
-        ExpressionBase Value { get; set; }
+        IExpression Value { get; set; }
 
     }
 }

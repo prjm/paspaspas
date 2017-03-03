@@ -15,7 +15,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     expression value
         /// </summary>
-        public ExpressionBase Value { get; set; }
+        public IExpression Value { get; set; }
 
         /// <summary>
         ///     directive specifiers

@@ -14,13 +14,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         public bool IsResident { get; internal set; }
 
-        private ExpressionBase nameExpression;
-        private ExpressionBase indexExpression;
+        private IExpression nameExpression;
+        private IExpression indexExpression;
 
         /// <summary>
         ///     constant values
         /// </summary>
-        public ExpressionBase Value {
+        public IExpression Value {
             get {
                 return nameExpression ?? indexExpression;
             }

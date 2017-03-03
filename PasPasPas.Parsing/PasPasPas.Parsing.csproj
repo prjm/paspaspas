@@ -40,6 +40,7 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="project.json" />
+    <Compile Include="SyntaxTree\Abstract\Assignment.cs" />
     <Compile Include="SyntaxTree\Abstract\BlockOfAssemblerStatements.cs" />
     <Compile Include="SyntaxTree\Abstract\BlockOfStatements.cs" />
     <Compile Include="SyntaxTree\Abstract\BlockWithDeclarations.cs" />
@@ -47,7 +48,9 @@
     <Compile Include="SyntaxTree\Abstract\DeclaredSymbolGroup.cs" />
     <Compile Include="SyntaxTree\Abstract\ExportedMethodDeclaration.cs" />
     <Compile Include="SyntaxTree\Abstract\GlobalMethod.cs" />
+    <Compile Include="SyntaxTree\Abstract\IBlockTarget.cs" />
     <Compile Include="SyntaxTree\Abstract\IDeclaredSymbolTarget.cs" />
+    <Compile Include="SyntaxTree\Abstract\IExpression.cs" />
     <Compile Include="SyntaxTree\Abstract\IStatementTarget.cs" />
     <Compile Include="SyntaxTree\Abstract\MemberVisibility.cs" />
     <Compile Include="SyntaxTree\Abstract\MethodDeclaration.cs" />

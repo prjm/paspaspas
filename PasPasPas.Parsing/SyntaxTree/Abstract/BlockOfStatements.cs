@@ -25,8 +25,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     statement parts
         /// </summary>
-        public override IEnumerable<ISyntaxPart> Parts
-            => Statements;
+        public override IEnumerable<ISyntaxPart> Parts {
+            get {
+                foreach (StatementBase part in Statements)
+                    yield return part;
+            }
+        }
+
 
         BlockOfStatements IStatementTarget.Statements
             => this;

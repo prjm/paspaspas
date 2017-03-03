@@ -17,7 +17,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     subexpression
         /// </summary>
         /// <remarks>used for string length / string codepage</remarks>
-        public ExpressionBase Value { get; set; }
+        public IExpression Value { get; set; }
 
         private IList<GenericNameFragment> fragments
                 = new List<GenericNameFragment>();

@@ -52,7 +52,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     variable initialization value
         /// </summary>
-        public ExpressionBase Value { get; set; }
+        public IExpression Value { get; set; }
 
     }
 }

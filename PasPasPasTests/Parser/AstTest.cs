@@ -709,10 +709,29 @@ namespace PasPasPasTests.Parser {
             Func<object, CompilationUnit> u = t => t as CompilationUnit;
             Func<object, StructuredType> r = t => ((t as CompilationUnit)?.InterfaceSymbols["Tx"] as TypeDeclaration)?.TypeValue as StructuredType;
             Func<object, string> i = t => r(t)?.Methods["m"]?.Implementation?.Symbols["x"]?.Name?.CompleteName;
+            Func<object, MethodImplementation> p = t => ((t as CompilationUnit)?.ImplementationSymbols["m"] as MethodImplementation);
 
             RunAstTest("library z.x; const x = nil; begin end.", t => u(t)?.Symbols?["x"]?.Name?.CompleteName, "x");
             RunAstTest("program z.x; const x = nil; begin end.", t => u(t)?.Symbols?["x"]?.Name?.CompleteName, "x");
             RunAstTest("unit z.x; interface type Tx = class procedure m(); end; implementation procedure Tx.m; const x = nil; begin end; end.", t => i(t), "x");
+            RunAstTest("unit z.x; interface implementation procedure m(); const x = nil; begin end; end.", t => p(t)?.Symbols?["x"]?.Name?.CompleteName, "x");
+        }
+
+        [Fact]
+        public void TestAssignment() {
+
+        }
+
+        [Fact]
+        public void TestAnonymousFunction() {
+            //Func<object, MethodImplementation> p = t => ((t as CompilationUnit)?.ImplementationSymbols["m"] as MethodImplementation)?.Statements a;
+            //RunAstTest("unit z.x; interface implementation procedure m(); var q: TAction; begin q := procedure begin end; end; end.", t => p(t)?.Symbols?["x"]?.Name?.CompleteName, "x");
+        }
+
+        [Fact]
+        public void TestProcedure() {
+            Func<object, MethodImplementation> r = t => ((t as CompilationUnit)?.ImplementationSymbols["m"] as MethodImplementation);
+            RunAstTest("unit z.x; interface implementation procedure m(); begin end; end.", t => r(t)?.Name.CompleteName, "m");
         }
 
         [Fact]

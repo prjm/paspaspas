@@ -10,11 +10,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     items
         /// </summary>
-        public IList<ExpressionBase> Items
+        public IList<IExpression> Items
             => items;
 
-        private List<ExpressionBase> items
-            = new List<ExpressionBase>();
+        private List<IExpression> items
+            = new List<IExpression>();
 
         /// <summary>
         ///     constant array items
@@ -25,17 +25,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     value
         /// </summary>
-        public ExpressionBase Value
-        {
-            get
-            {
+        public IExpression Value {
+            get {
                 if (items.Count > 0)
                     return items[items.Count - 1];
                 else return null;
             }
 
-            set
-            {
+            set {
                 if (value != null)
                     items.Add(value);
             }

@@ -11,8 +11,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     matching expression for record constants
         /// </summary>
-        public IList<ExpressionBase> Expressions { get; }
-            = new List<ExpressionBase>();
+        public IList<IExpression> Expressions { get; }
+            = new List<IExpression>();
 
         /// <summary>
         ///     fields
@@ -23,7 +23,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     expression values
         /// </summary>
-        public ExpressionBase Value {
+        public IExpression Value {
             get { return Expressions.Last(); }
             set { Expressions.Add(value); }
         }
