@@ -40,6 +40,8 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="project.json" />
+    <Compile Include="SyntaxTree\Abstract\AssemblerStatement.cs" />
+    <Compile Include="SyntaxTree\Abstract\AssemblerStatementKind.cs" />
     <Compile Include="SyntaxTree\Abstract\Assignment.cs" />
     <Compile Include="SyntaxTree\Abstract\BlockOfAssemblerStatements.cs" />
     <Compile Include="SyntaxTree\Abstract\BlockOfStatements.cs" />

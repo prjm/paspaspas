@@ -1019,6 +1019,7 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         #endregion
+        #region ParseBlockBody
 
         [Rule("BlockBody", "AssemblerBlock | CompoundStatement")]
         private BlockBody ParseBlockBody(IExtendableSyntaxPart parent) {
@@ -1035,6 +1036,9 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
+        #endregion
+        #region ParseAsmBlock
+
         [Rule("AsmBlock", "'asm' { AssemblyStatement | PseudoOp } 'end'")]
         private AsmBlock ParseAsmBlock(IExtendableSyntaxPart parent) {
             AsmBlock result = CreateByTerminal<AsmBlock>(parent, TokenKind.Asm);
@@ -1050,6 +1054,9 @@ namespace PasPasPas.Parsing.Parser {
 
             return result;
         }
+
+        #endregion
+        #region ParseAsmPseudoOp
 
         [Rule("PseudoOp", "( '.PARAMS ' Integer | '.PUSHNV' Register | '.SAVNENV' Register | '.NOFRAME'.")]
         private AsmPseudoOp ParseAsmPseudoOp(AsmBlock parent) {
@@ -1078,6 +1085,8 @@ namespace PasPasPas.Parsing.Parser {
 
             return result;
         }
+
+        #endregion
 
         [Rule("AssemblyStatement", "[AssemblyLabel ':'] [AssemblyPrefix] AssemblyOpcode [AssemblyOperand {','  AssemblyOperand}]")]
         private AsmStatement ParseAsmStatement(IExtendableSyntaxPart parent) {
@@ -1662,8 +1671,8 @@ namespace PasPasPas.Parsing.Parser {
                 result.ValueSpecification = ParseValueSpecification(result);
             }
 
-            ContinueWithOrMissing(result, TokenKind.Semicolon);
             result.Hints = ParseHints(result, false);
+            ContinueWithOrMissing(result, TokenKind.Semicolon);
             return result;
         }
 
@@ -2898,7 +2907,7 @@ namespace PasPasPas.Parsing.Parser {
                 return result;
             }
 
-            result.DispId = ParseDispIdDirective(parent);
+            result.DispId = ParseDispIdDirective(parent, false);
             return result;
         }
 
@@ -2906,9 +2915,11 @@ namespace PasPasPas.Parsing.Parser {
         #region ParseDispIdDirective
 
         [Rule("DispIdDirective", "'dispid' Expression ';'")]
-        private DispIdDirective ParseDispIdDirective(IExtendableSyntaxPart parent) {
+        private DispIdDirective ParseDispIdDirective(IExtendableSyntaxPart parent, bool requireSemi = true) {
             DispIdDirective result = CreateByTerminal<DispIdDirective>(parent, TokenKind.DispId);
             result.DispExpression = ParseExpression(result);
+            if (requireSemi)
+                ContinueWithOrMissing(result, TokenKind.Semicolon);
             return result;
         }
 

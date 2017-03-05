@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using PasPasPas.Infrastructure.Input;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
@@ -6,7 +7,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// <summary>
     ///     basic representation of a compilation unit
     /// </summary>
-    public class CompilationUnit : SymbolTableEntryBase, IStatementTarget, IDeclaredSymbolTarget {
+    public class CompilationUnit : SymbolTableEntryBase, IBlockTarget, IDeclaredSymbolTarget {
 
         /// <summary>
         ///     unit file type
@@ -42,24 +43,20 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     symbols in the interface part of the unit
         /// </summary>
-        public DeclaredSymbols InterfaceSymbols { get; }
+        public DeclaredSymbols InterfaceSymbols { get; set; }
 
         /// <summary>
         ///     symbols in the implementation part of the unit
         /// </summary>
-        public DeclaredSymbols ImplementationSymbols { get; }
+        public DeclaredSymbols ImplementationSymbols { get; set; }
 
         /// <summary>
         ///     create a new compilation unit
         /// </summary>
         public CompilationUnit() {
-            RequiredUnits = new RequiredUnitNameList();
-            InterfaceSymbols = new DeclaredSymbols();
-            ImplementationSymbols = new DeclaredSymbols();
-
-            RequiredUnits.Parent = this;
-            InterfaceSymbols.Parent = this;
-            ImplementationSymbols.Parent = this;
+            RequiredUnits = new RequiredUnitNameList() {
+                Parent = this
+            };
         }
 
         /// <summary>
@@ -69,8 +66,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
             get {
                 foreach (RequiredUnitName unit in RequiredUnits)
                     yield return unit;
-                yield return InterfaceSymbols;
-                yield return ImplementationSymbols;
+                if (InterfaceSymbols != null)
+                    yield return InterfaceSymbols;
+                if (ImplementationSymbols != null)
+                    yield return ImplementationSymbols;
+                if (Symbols != null)
+                    yield return Symbols;
                 if (InitializationBlock != null)
                     yield return InitializationBlock;
                 if (FinalizationBlock != null)
@@ -87,21 +88,20 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     initialization
         /// </summary>
-        public BlockOfStatements InitializationBlock { get; set; }
+        public StatementBase InitializationBlock { get; set; }
 
         /// <summary>
         ///     initialization
         /// </summary>
-        public BlockOfStatements FinalizationBlock { get; set; }
+        public StatementBase FinalizationBlock { get; set; }
 
         /// <summary>
         ///     statements
         /// </summary>
-        public BlockOfStatements Statements
-            => InitializationBlock;
+        public StatementBase Block { get { return InitializationBlock; } set { InitializationBlock = value; } }
 
         /// <summary>
-        ///     declared symbols (wraps to intf. symbols and impl. symbols)
+        ///     declared symbols (wraps to intf. symbols and impl. symbols for units)
         /// </summary>
         public DeclaredSymbols Symbols { get; set; }
 
@@ -117,6 +117,17 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <param name="assemblyAttribute"></param>
         public void AddAssemblyAttribute(SymbolAttribute assemblyAttribute) {
             assemblyAttributes.Add(assemblyAttribute);
+        }
+
+        private int symbolNames = 0;
+
+        /// <summary>
+        ///     generate a new symbol name
+        /// </summary>
+        /// <returns></returns>
+        public string GenerateSymbolName() {
+            symbolNames++;
+            return string.Format(CultureInfo.InvariantCulture, "${0:d}", symbolNames);
         }
     }
 }

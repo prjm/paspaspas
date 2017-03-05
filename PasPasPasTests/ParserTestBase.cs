@@ -145,8 +145,10 @@ namespace PasPasPasTests {
                 Assert.AreEqual(expectedResult, astOptions.Result);
             }
 
-            Assert.AreEqual(string.Empty, errorText);
-            Assert.IsFalse(hasError);
+            if (errorMessages.Length < 1) {
+                Assert.AreEqual(string.Empty, errorText);
+                Assert.IsFalse(hasError);
+            }
             Assert.AreEqual(errorMessages.Length, msgs.Count);
             foreach (Guid guid in errorMessages)
                 Assert.IsTrue(msgs.Where(t => t.MessageID == guid).Any());

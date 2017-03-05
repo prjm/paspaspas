@@ -8,7 +8,7 @@
         /// <summary>
         ///     block
         /// </summary>
-        BlockOfStatements Block { get; set; }
+        StatementBase Block { get; set; }
 
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
 
@@ -33,7 +32,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     statements
         /// </summary>
-        public BlockOfStatements Block { get; set; }
+        public StatementBase Block { get; set; }
 
     }
 }

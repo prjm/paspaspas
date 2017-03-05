@@ -28,11 +28,11 @@ namespace PasPasPasTests.Parser {
             RunAstTest("unit z.x; interface implementation end.", t => u(t)?.UnitName.Name, "x");
             RunAstTest("unit z.x; interface implementation end.", t => u(t)?.UnitName.Namespace, "z");
             RunAstTest("unit z.x; interface implementation end.", t => u(t)?.FileType, CompilationUnitType.Unit);
-            RunAstTest("unit z.x; deprecated; interface implementation end.", t => u(t)?.Hints?.SymbolIsDeprecated, true);
-            RunAstTest("unit z.x; deprecated 'X'; interface implementation end.", t => u(t)?.Hints?.DeprecatedInformation, "X");
-            RunAstTest("unit z.x; library; interface implementation end.", t => u(t)?.Hints?.SymbolInLibrary, true);
-            RunAstTest("unit z.x; platform; interface implementation end.", t => u(t)?.Hints?.SymbolIsPlatformSpecific, true);
-            RunAstTest("unit z.x; experimental; interface implementation end.", t => u(t)?.Hints?.SymbolIsExperimental, true);
+            RunAstTest("unit z.x deprecated; interface implementation end.", t => u(t)?.Hints?.SymbolIsDeprecated, true);
+            RunAstTest("unit z.x deprecated 'X'; interface implementation end.", t => u(t)?.Hints?.DeprecatedInformation, "X");
+            RunAstTest("unit z.x library; interface implementation end.", t => u(t)?.Hints?.SymbolInLibrary, true);
+            RunAstTest("unit z.x platform; interface implementation end.", t => u(t)?.Hints?.SymbolIsPlatformSpecific, true);
+            RunAstTest("unit z.x experimental; interface implementation end.", t => u(t)?.Hints?.SymbolIsExperimental, true);
 
 
             RunAstTest("unit z.x; interface implementation end. § unit z.x; interface implementation end.",
@@ -316,7 +316,7 @@ namespace PasPasPasTests.Parser {
 
         [Fact]
         public void TestUnitInitialization() {
-            Func<object, BlockOfStatements> u = t => (t as CompilationUnit)?.InitializationBlock;
+            Func<object, BlockOfStatements> u = t => (t as CompilationUnit)?.InitializationBlock as BlockOfStatements;
 
             RunAstTest("unit z.x; interface implementation initialization begin end end.", t => u(t)?.Statements[0]?.GetType(), typeof(BlockOfStatements));
         }
@@ -510,7 +510,7 @@ namespace PasPasPasTests.Parser {
             RunAstTest("unit z.x; interface type x = class class var n: integer; end; implementation end.", t => f(t)?.ClassItem, true);
             RunAstTest("unit z.x; interface type x = class class var q: integer; n: integer; end; implementation end.", t => f(t)?.ClassItem, true);
 
-            RunAstTest("unit z.x; interface type x = class n: integer; deprecated; end; implementation end.", t => u(t)?.Fields["n"].Hints.SymbolIsDeprecated, true);
+            RunAstTest("unit z.x; interface type x = class n: integer deprecated; end; implementation end.", t => u(t)?.Fields["n"].Hints.SymbolIsDeprecated, true);
 
             RunAstTest("unit z.x; interface type x = class n, n: integer; end; implementation end.", t => f(t)?.Name?.CompleteName, "n",
                 StructuralErrors.DuplicateFieldName);
@@ -613,7 +613,7 @@ namespace PasPasPasTests.Parser {
 
         [Fact]
         public void TestUnitFinalization() {
-            Func<object, BlockOfStatements> u = t => (t as CompilationUnit)?.FinalizationBlock;
+            Func<object, BlockOfStatements> u = t => (t as CompilationUnit)?.FinalizationBlock as BlockOfStatements;
 
             RunAstTest("unit z.x; interface implementation initialization finalization begin end end.", t => u(t)?.Statements[0]?.GetType(), typeof(BlockOfStatements));
 
@@ -622,7 +622,7 @@ namespace PasPasPasTests.Parser {
 
         [Fact]
         public void TestCompoundStatement() {
-            Func<object, BlockOfStatements> u = t => (t as CompilationUnit)?.FinalizationBlock;
+            Func<object, BlockOfStatements> u = t => (t as CompilationUnit)?.FinalizationBlock as BlockOfStatements;
 
             RunAstTest("unit z.x; interface implementation initialization finalization begin begin end; end; end.", t => (u(t)?.Statements[0] as BlockOfStatements)?.Statements[0]?.GetType(), typeof(BlockOfStatements));
             RunAstTest("unit z.x; interface implementation initialization finalization begin asm end; end; end.", t => (u(t)?.Statements[0] as BlockOfStatements)?.Statements[0]?.GetType(), typeof(BlockOfAssemblerStatements));
@@ -710,12 +710,31 @@ namespace PasPasPasTests.Parser {
             Func<object, StructuredType> r = t => ((t as CompilationUnit)?.InterfaceSymbols["Tx"] as TypeDeclaration)?.TypeValue as StructuredType;
             Func<object, string> i = t => r(t)?.Methods["m"]?.Implementation?.Symbols["x"]?.Name?.CompleteName;
             Func<object, MethodImplementation> p = t => ((t as CompilationUnit)?.ImplementationSymbols["m"] as MethodImplementation);
+            Func<object, MethodImplementation> v = t => ((((t as CompilationUnit)?.ImplementationSymbols["m"] as MethodImplementation)?.Block as BlockOfStatements)?.Statements?[0] as Assignment)?.Value as MethodImplementation;
 
             RunAstTest("library z.x; const x = nil; begin end.", t => u(t)?.Symbols?["x"]?.Name?.CompleteName, "x");
             RunAstTest("program z.x; const x = nil; begin end.", t => u(t)?.Symbols?["x"]?.Name?.CompleteName, "x");
             RunAstTest("unit z.x; interface type Tx = class procedure m(); end; implementation procedure Tx.m; const x = nil; begin end; end.", t => i(t), "x");
             RunAstTest("unit z.x; interface implementation procedure m(); const x = nil; begin end; end.", t => p(t)?.Symbols?["x"]?.Name?.CompleteName, "x");
+            RunAstTest("unit z.x; interface implementation procedure m(); var q: TAction; begin q := procedure const x = nil; begin end; end; end.", t => v(t)?.Symbols?["x"]?.Name?.CompleteName, "x");
         }
+
+        [Fact]
+        public void TestAsmBlock() {
+            Func<object, CompilationUnit> u = t => t as CompilationUnit;
+            Func<object, StructuredType> r = t => ((t as CompilationUnit)?.InterfaceSymbols["Tx"] as TypeDeclaration)?.TypeValue as StructuredType;
+            Func<object, MethodImplementation> i = t => r(t)?.Methods["m"]?.Implementation;
+            Func<object, MethodImplementation> p = t => ((t as CompilationUnit)?.ImplementationSymbols["m"] as MethodImplementation);
+            Func<object, MethodImplementation> v = t => ((((t as CompilationUnit)?.ImplementationSymbols["m"] as MethodImplementation)?.Block as BlockOfStatements)?.Statements?[0] as Assignment)?.Value as MethodImplementation;
+
+            RunAstTest("library z.x; asm end.", t => u(t)?.Block.GetType(), typeof(BlockOfAssemblerStatements));
+            RunAstTest("program z.x; asm end.", t => u(t)?.Block.GetType(), typeof(BlockOfAssemblerStatements));
+            RunAstTest("unit z.x; interface type Tx = class procedure m(); end; implementation procedure Tx.m; asm end; end.", t => i(t)?.Block.GetType(), typeof(BlockOfAssemblerStatements));
+            RunAstTest("unit z.x; interface implementation procedure m(); asm end; end.", t => p(t)?.Block.GetType(), typeof(BlockOfAssemblerStatements));
+            RunAstTest("unit z.x; interface implementation procedure m(); var q: TAction; begin q := procedure asm end; end; end.", t => v(t)?.Block.GetType(), typeof(BlockOfAssemblerStatements));
+        }
+
+
 
         [Fact]
         public void TestAssignment() {
@@ -724,8 +743,8 @@ namespace PasPasPasTests.Parser {
 
         [Fact]
         public void TestAnonymousFunction() {
-            //Func<object, MethodImplementation> p = t => ((t as CompilationUnit)?.ImplementationSymbols["m"] as MethodImplementation)?.Statements a;
-            //RunAstTest("unit z.x; interface implementation procedure m(); var q: TAction; begin q := procedure begin end; end; end.", t => p(t)?.Symbols?["x"]?.Name?.CompleteName, "x");
+            Func<object, MethodImplementation> p = t => ((((t as CompilationUnit)?.ImplementationSymbols["m"] as MethodImplementation)?.Block as BlockOfStatements)?.Statements?[0] as Assignment)?.Value as MethodImplementation;
+            RunAstTest("unit z.x; interface implementation procedure m(); var q: TAction; begin q := procedure begin end; end; end.", t => p(t)?.Name?.CompleteName, "$1");
         }
 
         [Fact]

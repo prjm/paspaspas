@@ -19,6 +19,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             result.UnitName = ExtractSymbolName(unit.UnitName);
             result.Hints = ExtractHints(unit.Hints);
             result.FilePath = unit.FilePath;
+            result.InterfaceSymbols = new DeclaredSymbols() { Parent = result };
+            result.ImplementationSymbols = new DeclaredSymbols() { Parent = result };
             parameter.Project.Add(result, parameter.LogSource);
             parameter.CurrentUnit = result;
             return result;
@@ -36,8 +38,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             result.UnitName = ExtractSymbolName(library.LibraryName);
             result.Hints = ExtractHints(library.Hints);
             result.FilePath = library.FilePath;
-            result.InitializationBlock = new BlockOfStatements();
-            result.Symbols = new DeclaredSymbols();
+            if (library.MainBlock.Body.AssemblerBlock != null)
+                result.InitializationBlock = new BlockOfAssemblerStatements();
+            else
+                result.InitializationBlock = new BlockOfStatements();
+            result.Symbols = new DeclaredSymbols() { Parent = result };
             parameter.Project.Add(result, parameter.LogSource);
             parameter.CurrentUnitMode[result] = UnitMode.Library;
             parameter.CurrentUnit = result;
@@ -63,7 +68,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             result.UnitName = ExtractSymbolName(program.ProgramName);
             result.FilePath = program.FilePath;
             result.InitializationBlock = new BlockOfStatements();
-            result.Symbols = new DeclaredSymbols();
+            result.Symbols = new DeclaredSymbols() { Parent = result };
             parameter.CurrentUnitMode[result] = UnitMode.Program;
             parameter.Project.Add(result, parameter.LogSource);
             parameter.CurrentUnit = result;
@@ -714,8 +719,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
             if (block.AssemblerBlock != null) {
                 var statementTarget = parameter.LastValue as IStatementTarget;
+                var blockTarget = parameter.LastValue as IBlockTarget;
                 BlockOfAssemblerStatements result = CreatePartNode<BlockOfAssemblerStatements>(parameter.LastValue, block);
-                statementTarget.Statements.Add(result);
+                if (statementTarget != null)
+                    statementTarget.Statements.Add(result);
+                else if (blockTarget != null)
+                    blockTarget.Block = result;
                 return result;
             }
 
@@ -1525,13 +1534,53 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         private AbstractSyntaxPart BeginVisitItem(ClosureExpression closure, TreeTransformerOptions parameter) {
             MethodImplementation result = CreateNode<MethodImplementation>(parameter, closure);
+
+            result.Name = new SymbolName() { Name = parameter.CurrentUnit.GenerateSymbolName() };
             IExpressionTarget expression = parameter.LastExpression;
             expression.Value = result;
             return result;
         }
 
         #endregion
+        #region AsmBlock
 
+        private AbstractSyntaxPart BeginVisitItem(AsmBlock block, TreeTransformerOptions parameter) {
+            var statementTarget = parameter.LastValue as IStatementTarget;
+            var blockTarget = parameter.LastValue as IBlockTarget;
+            BlockOfAssemblerStatements result = CreatePartNode<BlockOfAssemblerStatements>(parameter.LastValue, block);
+            if (statementTarget != null)
+                statementTarget.Statements.Add(result);
+            else if (blockTarget != null)
+                blockTarget.Block = result;
+            return result;
+        }
+
+        #endregion
+        #region AsmPseudoOp
+
+        private AbstractSyntaxPart BeginVisitItem(AsmPseudoOp op, TreeTransformerOptions parameter) {
+            var statementTarget = parameter.LastValue as BlockOfAssemblerStatements;
+            AssemblerStatement result = CreatePartNode<AssemblerStatement>(parameter.LastValue, op);
+
+
+            if (op.ParamsOperation) {
+                result.Kind = AssemblerStatementKind.ParamsOperation;
+            }
+            else if (op.PushEnvOperation) {
+                result.Kind = AssemblerStatementKind.PushEnvOperation;
+            }
+            else if (op.SaveEnvOperation) {
+                result.Kind = AssemblerStatementKind.SaveEnvOperation;
+            }
+            else if (op.NoFrame) {
+                result.Kind = AssemblerStatementKind.NoFrameOperation;
+            }
+
+            statementTarget.Statements.Add(result);
+            return result;
+        }
+
+        #endregion
         #region Extractors
 
         private static SymbolName ExtractSymbolName(NamespaceName name) {
