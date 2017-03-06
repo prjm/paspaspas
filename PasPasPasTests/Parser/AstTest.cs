@@ -772,6 +772,19 @@ namespace PasPasPasTests.Parser {
         }
 
         [Fact]
+        public void TestAsmStatement() {
+            Func<object, AssemblerStatement> r = t => (((t as CompilationUnit)?.ImplementationSymbols["p"] as MethodImplementation)?.Block as BlockOfAssemblerStatements)?.Statements[0];
+
+            RunAstTest("unit z.x; interface implementation procedure p; asm .noframe end; end.", t => r(t)?.Kind, AssemblerStatementKind.NoFrameOperation);
+            RunAstTest("unit z.x; interface implementation procedure p; asm .pushenv a end; end.", t => r(t)?.Kind, AssemblerStatementKind.PushEnvOperation);
+            RunAstTest("unit z.x; interface implementation procedure p; asm .pushenv a end; end.", t => (r(t)?.FirstOperand as SymbolReference)?.Name?.CompleteName, "a");
+            RunAstTest("unit z.x; interface implementation procedure p; asm .savenv a end; end.", t => r(t)?.Kind, AssemblerStatementKind.SaveEnvOperation);
+            RunAstTest("unit z.x; interface implementation procedure p; asm .savenv a end; end.", t => (r(t)?.FirstOperand as SymbolReference)?.Name?.CompleteName, "a");
+            RunAstTest("unit z.x; interface implementation procedure p; asm .params 1 end; end.", t => r(t)?.Kind, AssemblerStatementKind.ParamsOperation);
+            RunAstTest("unit z.x; interface implementation procedure p; asm .params 1 end; end.", t => (r(t)?.FirstOperand as ConstantValue)?.IntValue, 1);
+        }
+
+        [Fact]
         public void TestLabel() {
             // stil missing??
         }

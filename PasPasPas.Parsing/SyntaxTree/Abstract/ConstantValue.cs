@@ -10,5 +10,9 @@
         /// </summary>
         public ConstantValueKind Kind { get; set; }
 
+        /// <summary>
+        ///     integer value
+        /// </summary>
+        public int IntValue { get; internal set; }
     }
 }

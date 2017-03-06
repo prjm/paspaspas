@@ -32,11 +32,11 @@ namespace PasPasPasTests {
             => TestOptions.Meta;
 
         protected string CompactWhitespace(string input) {
-            StringBuilder result = new StringBuilder();
-            bool wasWhitespace = false;
+            var result = new StringBuilder();
+            var wasWhitespace = false;
 
-            for (int charIndex = 0; charIndex < input.Length; charIndex++) {
-                char currentChar = input[charIndex];
+            for (var charIndex = 0; charIndex < input.Length; charIndex++) {
+                var currentChar = input[charIndex];
 
                 if (char.IsWhiteSpace(currentChar)) {
                     if (!wasWhitespace) {
@@ -64,13 +64,13 @@ namespace PasPasPasTests {
             var log = new LogTarget();
             environment.Options = TestOptions;
 
-            StandardParser parser = new StandardParser(environment);
+            var parser = new StandardParser(environment);
             using (var inputFile = new StringInput(input, new FileReference("test.pas")))
             using (var reader = new StackedFileReader()) {
                 reader.AddFile(inputFile);
                 parser.BaseTokenizer = new StandardTokenizer(environment, reader);
                 var hasError = false;
-                string errorText = string.Empty;
+                var errorText = string.Empty;
 
                 log.ProcessMessage += (x, y) => {
                     errorText += y.Message.MessageID.ToString() + Environment.NewLine;
@@ -112,7 +112,7 @@ namespace PasPasPasTests {
             logMgr.RegisterTarget(log);
 
             var hasError = false;
-            string errorText = string.Empty;
+            var errorText = string.Empty;
 
             var options = new TreeTransformerOptions() { LogManager = logMgr };
 
@@ -158,10 +158,11 @@ namespace PasPasPasTests {
         protected ISyntaxPart RunAstTest(string input, LogManager logManager, IList<ILogMessage> messages) {
             ClearOptions();
 
-            var environment = new ParserServices(logManager);
-            environment.Options = TestOptions;
+            var environment = new ParserServices(logManager) {
+                Options = TestOptions
+            };
 
-            StandardParser parser = new StandardParser(environment);
+            var parser = new StandardParser(environment);
             using (var inputFile = new StringInput(input, new FileReference("z.x.pas")))
             using (var reader = new StackedFileReader()) {
                 reader.AddFile(inputFile);
@@ -186,9 +187,9 @@ namespace PasPasPasTests {
             fileAccess.AddOneTimeMockup(new StringInput("MZE!", linkDll));
 
             var log = new LogManager();
-            var environment = new ParserServices(log);
-            environment.Options = TestOptions;
-
+            var environment = new ParserServices(log) {
+                Options = TestOptions
+            };
             var visitor = new CompilerDirectiveVisitor();
             var options = new CompilerDirectiveVisitorOptions() { Environment = environment };
 
@@ -205,12 +206,13 @@ namespace PasPasPasTests {
                 TestOptions.ResetOnNewUnit(environment.Log);
                 string[] subParts = directivePart.Split(new[] { '§' }, StringSplitOptions.RemoveEmptyEntries);
                 foreach (var subPart in subParts) {
-                    bool hasFoundInput = false;
+                    var hasFoundInput = false;
                     using (var input = new StringInput(subPart, new FileReference("test_" + fileCounter.ToString() + ".pas")))
                     using (var reader = new StackedFileReader()) {
                         reader.AddFile(input);
-                        var parser = new CompilerDirectiveParser(environment, reader);
-                        parser.IncludeInput = reader;
+                        var parser = new CompilerDirectiveParser(environment, reader) {
+                            IncludeInput = reader
+                        };
                         while (!reader.AtEof) {
                             ISyntaxPart result = parser.Parse();
 

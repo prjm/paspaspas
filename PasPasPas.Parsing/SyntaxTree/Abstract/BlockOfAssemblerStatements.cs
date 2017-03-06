@@ -10,7 +10,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     assembler statements
         /// </summary>
-        public IList<AssemblerStatement> Statements { get; set; }
+        public IList<AssemblerStatement> Statements { get; }
             = new List<AssemblerStatement>();
 
         /// <summary>
@@ -18,7 +18,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         public override IEnumerable<ISyntaxPart> Parts {
             get {
-                foreach (AssemblerStatement part in Parts)
+                foreach (AssemblerStatement part in Statements)
                     yield return part;
             }
         }

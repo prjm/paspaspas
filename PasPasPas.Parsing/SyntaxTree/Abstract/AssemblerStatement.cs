@@ -1,7 +1,4 @@
-﻿using System;
-using PasPasPas.Parsing.SyntaxTree.Standard;
-
-namespace PasPasPas.Parsing.SyntaxTree.Abstract {
+﻿namespace PasPasPas.Parsing.SyntaxTree.Abstract {
 
     /// <summary>
     ///     assembler statement
@@ -13,5 +10,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         public AssemblerStatementKind Kind { get; set; }
 
+        /// <summary>
+        ///     first operand
+        /// </summary>
+        public IExpression FirstOperand { get; set; }
     }
 }

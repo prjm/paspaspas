@@ -1562,15 +1562,24 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             var statementTarget = parameter.LastValue as BlockOfAssemblerStatements;
             AssemblerStatement result = CreatePartNode<AssemblerStatement>(parameter.LastValue, op);
 
-
             if (op.ParamsOperation) {
                 result.Kind = AssemblerStatementKind.ParamsOperation;
+                ConstantValue operand = CreateNode<ConstantValue>(parameter, op.NumberOfParams);
+                operand.Kind = ConstantValueKind.Integer;
+                operand.IntValue = DigitTokenGroupValue.Unwrap(op.NumberOfParams.FirstTerminalToken);
+                result.FirstOperand = operand;
             }
             else if (op.PushEnvOperation) {
                 result.Kind = AssemblerStatementKind.PushEnvOperation;
+                SymbolReference operand = CreateNode<SymbolReference>(parameter, op.Register);
+                operand.Name = ExtractSymbolName(op.Register);
+                result.FirstOperand = operand;
             }
             else if (op.SaveEnvOperation) {
                 result.Kind = AssemblerStatementKind.SaveEnvOperation;
+                SymbolReference operand = CreateNode<SymbolReference>(parameter, op.Register);
+                operand.Name = ExtractSymbolName(op.Register);
+                result.FirstOperand = operand;
             }
             else if (op.NoFrame) {
                 result.Kind = AssemblerStatementKind.NoFrameOperation;
