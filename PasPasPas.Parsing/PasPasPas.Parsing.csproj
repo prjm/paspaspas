@@ -53,6 +53,7 @@
     <Compile Include="SyntaxTree\Abstract\IBlockTarget.cs" />
     <Compile Include="SyntaxTree\Abstract\IDeclaredSymbolTarget.cs" />
     <Compile Include="SyntaxTree\Abstract\IExpression.cs" />
+    <Compile Include="SyntaxTree\Abstract\ILabelTarget.cs" />
     <Compile Include="SyntaxTree\Abstract\IStatementTarget.cs" />
     <Compile Include="SyntaxTree\Abstract\MemberVisibility.cs" />
     <Compile Include="SyntaxTree\Abstract\MethodDeclaration.cs" />

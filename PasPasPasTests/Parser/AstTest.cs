@@ -782,6 +782,13 @@ namespace PasPasPasTests.Parser {
             RunAstTest("unit z.x; interface implementation procedure p; asm .savenv a end; end.", t => (r(t)?.FirstOperand as SymbolReference)?.Name?.CompleteName, "a");
             RunAstTest("unit z.x; interface implementation procedure p; asm .params 1 end; end.", t => r(t)?.Kind, AssemblerStatementKind.ParamsOperation);
             RunAstTest("unit z.x; interface implementation procedure p; asm .params 1 end; end.", t => (r(t)?.FirstOperand as ConstantValue)?.IntValue, 1);
+
+            RunAstTest("unit z.x; interface implementation procedure p; asm mov ax, 1 end; end.", t => r(t)?.OpCode?.CompleteName, "mov");
+            RunAstTest("unit z.x; interface implementation procedure p; asm @1: mov ax, 1 end; end.", t => r(t)?.LabelName?.CompleteName, "@1");
+            RunAstTest("unit z.x; interface implementation procedure p; asm @@TestOne: mov ax, 1 end; end.", t => r(t)?.LabelName?.CompleteName, "@@TestOne");
+            RunAstTest("unit z.x; interface implementation procedure p; asm @_@_@_: mov ax, 1 end; end.", t => r(t)?.LabelName?.CompleteName, "@_@_@_");
+            RunAstTest("unit z.x; interface implementation procedure p; asm 1: mov ax, 1 end; end.", t => r(t)?.LabelName?.CompleteName, "1");
+            RunAstTest("unit z.x; interface implementation procedure p; asm x: mov ax, 1 end; end.", t => r(t)?.LabelName?.CompleteName, "x");
         }
 
         [Fact]

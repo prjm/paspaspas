@@ -5,5 +5,14 @@
     /// </summary>
     public class AsmLabel : SyntaxPartBase {
 
+        /// <summary>
+        ///     asm label
+        /// </summary>
+        public LocalAsmLabel LocalLabel { get; set; }
+
+        /// <summary>
+        ///     generic label
+        /// </summary>
+        public Label Label { get; set; }
     }
 }

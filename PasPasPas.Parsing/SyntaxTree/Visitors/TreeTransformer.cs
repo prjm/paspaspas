@@ -745,7 +745,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #region Label
 
         private AbstractSyntaxPart BeginVisitItem(Label label, TreeTransformerOptions parameter) {
-            var parent = parameter.LastValue as StatementBase;
+            var parent = parameter.LastValue as ILabelTarget;
 
             if (parent == null)
                 return null;
@@ -1590,6 +1590,46 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         }
 
         #endregion
+        #region LocalAsmLabel
+
+        private AbstractSyntaxPart BeginVisitItem(LocalAsmLabel label, TreeTransformerOptions parameter) {
+            var value = string.Empty;
+            foreach (ISyntaxPart token in label.Parts) {
+                var terminal = token as Terminal;
+                var integer = token as StandardInteger;
+                var ident = token as Identifier;
+
+                if (terminal != null)
+                    value = string.Concat(value, terminal.Value);
+
+                if (integer != null)
+                    value = string.Concat(value, integer.FirstTerminalToken.Value);
+
+                if (ident != null)
+                    value = string.Concat(value, ident.FirstTerminalToken.Value);
+
+            }
+
+            var parent = parameter.LastValue as ILabelTarget;
+            parent.LabelName = new SymbolName() { Name = value };
+            return null;
+        }
+
+        #endregion
+        #region AsmStatement
+
+        private AbstractSyntaxPart BeginVisitItem(AsmStatement statement, TreeTransformerOptions parameter) {
+            AssemblerStatement result = CreateNode<AssemblerStatement>(parameter, statement);
+            var parent = parameter.LastValue as BlockOfAssemblerStatements;
+            parent.Statements.Add(result);
+            result.OpCode = ExtractSymbolName(statement.OpCode?.OpCode);
+
+            return result;
+        }
+
+        #endregion
+
+
         #region Extractors
 
         private static SymbolName ExtractSymbolName(NamespaceName name) {

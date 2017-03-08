@@ -104,10 +104,6 @@ namespace PasPasPas.Parsing.Parser {
             new HashSet<string>(StringComparer.OrdinalIgnoreCase) {
                 "cs", "ds", "es", "fs", "gs", "ss"};
 
-        private HashSet<string> asmDirectives =
-            new HashSet<string>(StringComparer.OrdinalIgnoreCase) {
-                "db", "dw", "dd", "dq" };
-
         private HashSet<string> asmPtr =
             new HashSet<string>(StringComparer.OrdinalIgnoreCase) {
                 "byte", "word", "dword", "qword", "tbyte" };
@@ -1087,13 +1083,14 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         #endregion
+        #region ParseAsmStatement
 
         [Rule("AssemblyStatement", "[AssemblyLabel ':'] [AssemblyPrefix] AssemblyOpcode [AssemblyOperand {','  AssemblyOperand}]")]
         private AsmStatement ParseAsmStatement(IExtendableSyntaxPart parent) {
             AsmStatement result = CreateChild<AsmStatement>(parent);
 
             if (Match(TokenKind.At) || LookAhead(1, TokenKind.Colon)) {
-                ParseAssemblyLabel(result);
+                result.Label = ParseAssemblyLabel(result);
                 ContinueWithOrMissing(result, TokenKind.Colon);
             }
 
@@ -1110,6 +1107,8 @@ namespace PasPasPas.Parsing.Parser {
 
             return result;
         }
+
+        #endregion
 
 
         [Rule("AssemblyOperand", " AssemblyExpression ('and' | 'or' | 'xor') | ( 'not' AssemblyExpression ']' )")]
@@ -1239,21 +1238,20 @@ namespace PasPasPas.Parsing.Parser {
             return false;
         }
 
+        #region ParseAssemblyOpcode
+
         [Rule("AssemblyOpCode", "Identifier [AssemblyDirective] ")]
         private AsmOpCode ParseAssemblyOpcode(IExtendableSyntaxPart parent) {
             if (Match(TokenKind.End))
                 return null;
 
             AsmOpCode result = CreateChild<AsmOpCode>(parent);
-
             result.OpCode = RequireIdentifier(result, true);
-
-            if (MatchIdentifier(true) && asmDirectives.Contains(CurrentToken().Value)) {
-                result.Directive = RequireIdentifier(result, true);
-            }
-
             return result;
         }
+
+        #endregion
+        #region ParseAssemblyPrefix
 
         [Rule("AssemblyPrefix", "(LockPrefix | [SegmentPrefix]) | (SegmentPrefix [LockPrefix])")]
         private AsmPrefix ParseAssemblyPrefix(IExtendableSyntaxPart parent) {
@@ -1286,20 +1284,26 @@ namespace PasPasPas.Parsing.Parser {
             return null;
         }
 
+        #endregion
+        #region ParseAssemblyLabel
+
         [Rule("AsmLabel", "(Label | LocalAsmLabel { LocalAsmLabel } )")]
         private AsmLabel ParseAssemblyLabel(AsmStatement parent) {
             AsmLabel result = CreateChild<AsmLabel>(parent);
             if (Match(TokenKind.At)) {
-                ParseLocalAsmLabel(result);
+                result.LocalLabel = ParseLocalAsmLabel(result);
             }
             else {
-                ParseLabel(result);
+                result.Label = ParseLabel(result);
             }
             return result;
         }
 
+        #endregion
+        #region ParseLocalAsmLabel
+
         [Rule("LocalAsmLabel", "'@' { '@' | Integer | Identifier | HexNumber }")]
-        private void ParseLocalAsmLabel(IExtendableSyntaxPart parent) {
+        private LocalAsmLabel ParseLocalAsmLabel(IExtendableSyntaxPart parent) {
             LocalAsmLabel result = CreateChild<LocalAsmLabel>(parent);
 
             ContinueWithOrMissing(result, TokenKind.At);
@@ -1322,8 +1326,10 @@ namespace PasPasPas.Parsing.Parser {
                 }
             }
             while ((!CurrentTokenIsAfterNewline()) && ContinueWith(result, TokenKind.At));
+            return result;
         }
 
+        #endregion
 
         [Rule("DeclarationSection", "{ LabelDeclarationSection | ConstSection | TypeSection | VarSection | ExportsSection | AssemblyAttribute | MethodDecl | ProcedureDeclaration }", true)]
         private Declarations ParseDeclarationSections(IExtendableSyntaxPart parent) {

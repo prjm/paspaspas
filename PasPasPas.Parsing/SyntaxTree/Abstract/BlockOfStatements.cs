@@ -5,7 +5,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// <summary>
     ///     a block of statements
     /// </summary>
-    public class BlockOfStatements : StatementBase, IStatementTarget {
+    public class BlockOfStatements : StatementBase, IStatementTarget, ILabelTarget {
 
         /// <summary>
         ///     contained statements

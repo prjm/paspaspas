@@ -14,5 +14,11 @@
         ///     lock / segment prefix
         /// </summary>
         public AsmPrefix Prefix { get; set; }
+
+        /// <summary>
+        ///     label
+        /// </summary>
+        public AsmLabel Label { get; internal set; }
+
     }
 }
