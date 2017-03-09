@@ -777,11 +777,11 @@ namespace PasPasPasTests.Parser {
 
             RunAstTest("unit z.x; interface implementation procedure p; asm .noframe end; end.", t => r(t)?.Kind, AssemblerStatementKind.NoFrameOperation);
             RunAstTest("unit z.x; interface implementation procedure p; asm .pushenv a end; end.", t => r(t)?.Kind, AssemblerStatementKind.PushEnvOperation);
-            RunAstTest("unit z.x; interface implementation procedure p; asm .pushenv a end; end.", t => (r(t)?.FirstOperand as SymbolReference)?.Name?.CompleteName, "a");
+            RunAstTest("unit z.x; interface implementation procedure p; asm .pushenv a end; end.", t => (r(t)?.Operands[0] as SymbolReference)?.Name?.CompleteName, "a");
             RunAstTest("unit z.x; interface implementation procedure p; asm .savenv a end; end.", t => r(t)?.Kind, AssemblerStatementKind.SaveEnvOperation);
-            RunAstTest("unit z.x; interface implementation procedure p; asm .savenv a end; end.", t => (r(t)?.FirstOperand as SymbolReference)?.Name?.CompleteName, "a");
+            RunAstTest("unit z.x; interface implementation procedure p; asm .savenv a end; end.", t => (r(t)?.Operands[0] as SymbolReference)?.Name?.CompleteName, "a");
             RunAstTest("unit z.x; interface implementation procedure p; asm .params 1 end; end.", t => r(t)?.Kind, AssemblerStatementKind.ParamsOperation);
-            RunAstTest("unit z.x; interface implementation procedure p; asm .params 1 end; end.", t => (r(t)?.FirstOperand as ConstantValue)?.IntValue, 1);
+            RunAstTest("unit z.x; interface implementation procedure p; asm .params 1 end; end.", t => (r(t)?.Operands[0] as ConstantValue)?.IntValue, 1);
 
             RunAstTest("unit z.x; interface implementation procedure p; asm mov ax, 1 end; end.", t => r(t)?.OpCode?.CompleteName, "mov");
             RunAstTest("unit z.x; interface implementation procedure p; asm @1: mov ax, 1 end; end.", t => r(t)?.LabelName?.CompleteName, "@1");
@@ -789,6 +789,24 @@ namespace PasPasPasTests.Parser {
             RunAstTest("unit z.x; interface implementation procedure p; asm @_@_@_: mov ax, 1 end; end.", t => r(t)?.LabelName?.CompleteName, "@_@_@_");
             RunAstTest("unit z.x; interface implementation procedure p; asm 1: mov ax, 1 end; end.", t => r(t)?.LabelName?.CompleteName, "1");
             RunAstTest("unit z.x; interface implementation procedure p; asm x: mov ax, 1 end; end.", t => r(t)?.LabelName?.CompleteName, "x");
+
+            RunAstTest("unit z.x; interface implementation procedure p; asm lock mov ax, 1 end; end.", t => r(t)?.LockPrefix?.CompleteName, "lock");
+            RunAstTest("unit z.x; interface implementation procedure p; asm repne mov ax, 1 end; end.", t => r(t)?.LockPrefix?.CompleteName, "repne");
+            RunAstTest("unit z.x; interface implementation procedure p; asm repnz mov ax, 1 end; end.", t => r(t)?.LockPrefix?.CompleteName, "repnz");
+            RunAstTest("unit z.x; interface implementation procedure p; asm cs mov ax, 1 end; end.", t => r(t)?.SegmentPrefix?.CompleteName, "cs");
+            RunAstTest("unit z.x; interface implementation procedure p; asm ds mov ax, 1 end; end.", t => r(t)?.SegmentPrefix?.CompleteName, "ds");
+            RunAstTest("unit z.x; interface implementation procedure p; asm es mov ax, 1 end; end.", t => r(t)?.SegmentPrefix?.CompleteName, "es");
+            RunAstTest("unit z.x; interface implementation procedure p; asm cs lock mov ax, 1 end; end.", t => r(t)?.LockPrefix?.CompleteName, "lock");
+            RunAstTest("unit z.x; interface implementation procedure p; asm ds repne mov ax, 1 end; end.", t => r(t)?.LockPrefix?.CompleteName, "repne");
+            RunAstTest("unit z.x; interface implementation procedure p; asm es repnz mov ax, 1 end; end.", t => r(t)?.LockPrefix?.CompleteName, "repnz");
+            RunAstTest("unit z.x; interface implementation procedure p; asm lock cs mov ax, 1 end; end.", t => r(t)?.LockPrefix?.CompleteName, "lock");
+            RunAstTest("unit z.x; interface implementation procedure p; asm repne ds mov ax, 1 end; end.", t => r(t)?.LockPrefix?.CompleteName, "repne");
+            RunAstTest("unit z.x; interface implementation procedure p; asm repnz es mov ax, 1 end; end.", t => r(t)?.LockPrefix?.CompleteName, "repnz");
+
+            RunAstTest("unit z.x; interface implementation procedure p; asm mov 1 and 1, 1 end; end.", t => (r(t)?.Operands[0] as BinaryOperator)?.Kind, ExpressionKind.And);
+            RunAstTest("unit z.x; interface implementation procedure p; asm mov 1 or 1, 1 end; end.", t => (r(t)?.Operands[0] as BinaryOperator)?.Kind, ExpressionKind.Or);
+            RunAstTest("unit z.x; interface implementation procedure p; asm mov 1 xor 1, 1 end; end.", t => (r(t)?.Operands[0] as BinaryOperator)?.Kind, ExpressionKind.Xor);
+            RunAstTest("unit z.x; interface implementation procedure p; asm mov  not 1, 1 end; end.", t => (r(t)?.Operands[0] as UnaryOperator)?.Kind, ExpressionKind.Not);
         }
 
         [Fact]

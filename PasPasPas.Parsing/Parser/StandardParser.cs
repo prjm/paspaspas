@@ -1109,7 +1109,7 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         #endregion
-
+        #region ParseAssemblyOperand
 
         [Rule("AssemblyOperand", " AssemblyExpression ('and' | 'or' | 'xor') | ( 'not' AssemblyExpression ']' )")]
         private AsmOperand ParseAssemblyOperand(IExtendableSyntaxPart parent) {
@@ -1122,12 +1122,16 @@ namespace PasPasPas.Parsing.Parser {
 
             result.LeftTerm = ParseAssemblyExpression(result);
 
-            if (ContinueWith(result, TokenKind.And, TokenKind.Or, TokenKind.Xor)) {
+            if (Match(TokenKind.And, TokenKind.Or, TokenKind.Xor)) {
+                result.Kind = CurrentToken().Kind;
+                FetchNextToken();
                 result.RightTerm = ParseAssemblyOperand(result);
             }
 
             return result;
         }
+
+        #endregion
 
         [Rule("AssemblyExpression", " ('OFFSET' AssemblyOperand ) | ('TYPE' AssemblyOperand) | (('BYTE' | 'WORD' | 'DWORD' | 'QWORD' | 'TBYTE' ) PTR AssemblyOperand) | AssemblyTerm ('+' | '-' ) AssemblyOperand ")]
         private AsmExpression ParseAssemblyExpression(AsmOperand parent) {

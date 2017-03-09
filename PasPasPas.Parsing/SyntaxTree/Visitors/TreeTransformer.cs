@@ -1567,19 +1567,19 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 ConstantValue operand = CreateNode<ConstantValue>(parameter, op.NumberOfParams);
                 operand.Kind = ConstantValueKind.Integer;
                 operand.IntValue = DigitTokenGroupValue.Unwrap(op.NumberOfParams.FirstTerminalToken);
-                result.FirstOperand = operand;
+                result.Operands.Add(operand);
             }
             else if (op.PushEnvOperation) {
                 result.Kind = AssemblerStatementKind.PushEnvOperation;
                 SymbolReference operand = CreateNode<SymbolReference>(parameter, op.Register);
                 operand.Name = ExtractSymbolName(op.Register);
-                result.FirstOperand = operand;
+                result.Operands.Add(operand);
             }
             else if (op.SaveEnvOperation) {
                 result.Kind = AssemblerStatementKind.SaveEnvOperation;
                 SymbolReference operand = CreateNode<SymbolReference>(parameter, op.Register);
                 operand.Name = ExtractSymbolName(op.Register);
-                result.FirstOperand = operand;
+                result.Operands.Add(operand);
             }
             else if (op.NoFrame) {
                 result.Kind = AssemblerStatementKind.NoFrameOperation;
@@ -1623,8 +1623,32 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             var parent = parameter.LastValue as BlockOfAssemblerStatements;
             parent.Statements.Add(result);
             result.OpCode = ExtractSymbolName(statement.OpCode?.OpCode);
+            result.SegmentPrefix = ExtractSymbolName(statement.Prefix?.SegmentPrefix);
+            result.LockPrefix = ExtractSymbolName(statement.Prefix?.LockPrefix);
 
             return result;
+        }
+
+        #endregion
+        #region ParseAssemblyOperand
+
+        private AbstractSyntaxPart BeginVisitItem(AsmOperand statement, TreeTransformerOptions parameter) {
+
+            if (statement.LeftTerm != null && statement.RightTerm != null) {
+                BinaryOperator currentExpression = CreateNode<BinaryOperator>(parameter, statement);
+                parameter.DefineExpressionValue(currentExpression);
+                currentExpression.Kind = BinaryOperator.ConvertKind(statement.Kind);
+                return currentExpression;
+            }
+
+            if (statement.NotExpression != null) {
+                UnaryOperator currentExpression = CreateNode<UnaryOperator>(parameter, statement);
+                parameter.DefineExpressionValue(currentExpression);
+                currentExpression.Kind = ExpressionKind.Not;
+                return currentExpression;
+            }
+
+            return null;
         }
 
         #endregion

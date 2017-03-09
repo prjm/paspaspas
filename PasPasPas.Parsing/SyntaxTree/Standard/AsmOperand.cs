@@ -18,6 +18,12 @@
         /// <summary>
         ///     right term
         /// </summary>
-        public AsmOperand RightTerm { get; internal set; }
+        public AsmOperand RightTerm { get; set; }
+
+        /// <summary>
+        ///     operand kind
+        /// </summary>
+        public int Kind { get; set; }
+
     }
 }
