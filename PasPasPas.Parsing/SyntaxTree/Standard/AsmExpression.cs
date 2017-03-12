@@ -29,5 +29,10 @@
         ///     type expression
         /// </summary>
         public AsmOperand TypeExpression { get; set; }
+
+        /// <summary>
+        ///     byte pointer kind
+        /// </summary>
+        public Identifier BytePtrKind { get; internal set; }
     }
 }

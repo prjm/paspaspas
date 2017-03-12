@@ -1652,7 +1652,28 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         }
 
         #endregion
+        #region 
 
+        private AbstractSyntaxPart BeginVisitItem(AsmExpression statement, TreeTransformerOptions parameter) {
+
+            if (statement.Offset != null) {
+                UnaryOperator currentExpression = CreateNode<UnaryOperator>(parameter, statement);
+                parameter.DefineExpressionValue(currentExpression);
+                currentExpression.Kind = ExpressionKind.AsmOffset;
+                return currentExpression;
+            }
+
+            if (statement.BytePtrKind != null) {
+                UnaryOperator currentExpression = CreateNode<UnaryOperator>(parameter, statement);
+                parameter.DefineExpressionValue(currentExpression);
+                currentExpression.Kind = UnaryOperator.MapKind(ExtractSymbolName(statement.BytePtrKind)?.CompleteName);
+                return currentExpression;
+            }
+
+            return null;
+        }
+
+        #endregion
 
         #region Extractors
 

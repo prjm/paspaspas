@@ -1111,7 +1111,7 @@ namespace PasPasPas.Parsing.Parser {
         #endregion
         #region ParseAssemblyOperand
 
-        [Rule("AssemblyOperand", " AssemblyExpression ('and' | 'or' | 'xor') | ( 'not' AssemblyExpression ']' )")]
+        [Rule("AssemblyOperand", " AssemblyExpression ('and' | 'or' | 'xor') AssemblyOperand | ( 'not' AssemblyOperand ']' )")]
         private AsmOperand ParseAssemblyOperand(IExtendableSyntaxPart parent) {
             AsmOperand result = CreateChild<AsmOperand>(parent);
 
@@ -1147,7 +1147,7 @@ namespace PasPasPas.Parsing.Parser {
                 }
 
                 if (asmPtr.Contains(tokenValue)) {
-                    ContinueWith(result, TokenKind.Identifier);
+                    result.BytePtrKind = RequireIdentifier(result);
                     result.BytePtr = ParseAssemblyOperand(result);
                     return result;
                 }

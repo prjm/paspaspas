@@ -807,6 +807,13 @@ namespace PasPasPasTests.Parser {
             RunAstTest("unit z.x; interface implementation procedure p; asm mov 1 or 1, 1 end; end.", t => (r(t)?.Operands[0] as BinaryOperator)?.Kind, ExpressionKind.Or);
             RunAstTest("unit z.x; interface implementation procedure p; asm mov 1 xor 1, 1 end; end.", t => (r(t)?.Operands[0] as BinaryOperator)?.Kind, ExpressionKind.Xor);
             RunAstTest("unit z.x; interface implementation procedure p; asm mov  not 1, 1 end; end.", t => (r(t)?.Operands[0] as UnaryOperator)?.Kind, ExpressionKind.Not);
+
+            RunAstTest("unit z.x; interface implementation procedure p; asm mov  offset 1, 1 end; end.", t => (r(t)?.Operands[0] as UnaryOperator)?.Kind, ExpressionKind.AsmOffset);
+            RunAstTest("unit z.x; interface implementation procedure p; asm mov  byte 1, 1 end; end.", t => (r(t)?.Operands[0] as UnaryOperator)?.Kind, ExpressionKind.AsmBytePointerByte);
+            RunAstTest("unit z.x; interface implementation procedure p; asm mov  word 1, 1 end; end.", t => (r(t)?.Operands[0] as UnaryOperator)?.Kind, ExpressionKind.AsmBytePointerWord);
+            RunAstTest("unit z.x; interface implementation procedure p; asm mov  dword 1, 1 end; end.", t => (r(t)?.Operands[0] as UnaryOperator)?.Kind, ExpressionKind.AsmBytePointerDWord);
+            RunAstTest("unit z.x; interface implementation procedure p; asm mov  qword 1, 1 end; end.", t => (r(t)?.Operands[0] as UnaryOperator)?.Kind, ExpressionKind.AsmBytePointerQWord);
+            RunAstTest("unit z.x; interface implementation procedure p; asm mov  tbyte 1, 1 end; end.", t => (r(t)?.Operands[0] as UnaryOperator)?.Kind, ExpressionKind.AsmBytePointerTByte);
         }
 
         [Fact]

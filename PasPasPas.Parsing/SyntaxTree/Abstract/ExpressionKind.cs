@@ -129,5 +129,35 @@
         ///     range operator
         /// </summary>
         RangeOperator = 24,
+
+        /// <summary>
+        ///     assembler offset operator
+        /// </summary>
+        AsmOffset = 25,
+
+        /// <summary>
+        ///     assembler byte pointer
+        /// </summary>
+        AsmBytePointerByte = 26,
+
+        /// <summary>
+        ///     assembler word pointer
+        /// </summary>
+        AsmBytePointerWord = 27,
+
+        /// <summary>
+        ///     assembler dword pointer
+        /// </summary>
+        AsmBytePointerDWord = 28,
+
+        /// <summary>
+        ///     assembler qword pointer
+        /// </summary>
+        AsmBytePointerQWord = 29,
+
+        /// <summary>
+        ///     assembler tbyte pointer
+        /// </summary>
+        AsmBytePointerTByte = 30,
     }
 }
