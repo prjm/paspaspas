@@ -18,6 +18,12 @@
         /// <summary>
         ///     subtype
         /// </summary>
-        public AsmOperand Subtype { get; internal set; }
+        public AsmOperand Subtype { get; set; }
+
+        /// <summary>
+        ///     term kind
+        /// </summary>
+        public int Kind { get; set; }
+            = TokenKind.Undefined;
     }
 }

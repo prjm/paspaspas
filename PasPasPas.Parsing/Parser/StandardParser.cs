@@ -1132,6 +1132,7 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         #endregion
+        #region ParseAssemblyExpression
 
         [Rule("AssemblyExpression", " ('OFFSET' AssemblyOperand ) | ('TYPE' AssemblyOperand) | (('BYTE' | 'WORD' | 'DWORD' | 'QWORD' | 'TBYTE' ) PTR AssemblyOperand) | AssemblyTerm ('+' | '-' ) AssemblyOperand ")]
         private AsmExpression ParseAssemblyExpression(AsmOperand parent) {
@@ -1161,14 +1162,19 @@ namespace PasPasPas.Parsing.Parser {
 
             result.LeftOperand = ParseAssemblyTerm(result);
 
-            if (ContinueWith(result, TokenKind.Plus, TokenKind.Minus)) {
+            if (Match(TokenKind.Plus, TokenKind.Minus)) {
+                result.BinaryOperatorKind = CurrentToken().Kind;
+                FetchNextToken();
                 result.RightOperand = ParseAssemblyOperand(result);
             }
 
             return result;
         }
 
-        [Rule("AssemblyTerm", "AssemblyFactor [( '*' | '/' | 'mod' | 'shl' | 'shr' ) AssemblyOperand ]")]
+        #endregion
+        #region ParseAssemblyTerm
+
+        [Rule("AssemblyTerm", "AssemblyFactor [( '*' | '/' | 'mod' | 'shl' | 'shr' | '.' ) AssemblyOperand ]")]
         private AsmTerm ParseAssemblyTerm(IExtendableSyntaxPart parent) {
             AsmTerm result = CreateChild<AsmTerm>(parent);
 
@@ -1178,13 +1184,18 @@ namespace PasPasPas.Parsing.Parser {
                 result.Subtype = ParseAssemblyOperand(result);
             }
 
-            if (ContinueWith(result, TokenKind.Times, TokenKind.Slash, TokenKind.Mod, TokenKind.Shl, TokenKind.Shr)) {
+            if (Match(TokenKind.Times, TokenKind.Slash, TokenKind.Mod, TokenKind.Shl, TokenKind.Shr)) {
+                result.Kind = CurrentToken().Kind;
+                FetchNextToken();
                 result.RightOperand = ParseAssemblyOperand(result);
             }
 
 
             return result;
         }
+
+        #endregion
+        #region ParseAssemblyFactor
 
         [Rule("AssemblyFactor", "(SegmentPrefix ':' AssemblyOperand) | '(' AssemblyOperand ')' | '[' AssemblyOperand ']' | Identifier | QuotedString | DoubleQuotedString | Integer | HexNumber ")]
         private AsmFactor ParseAssemblyFactor(AsmTerm parent) {
@@ -1215,6 +1226,9 @@ namespace PasPasPas.Parsing.Parser {
             else if (Match(TokenKind.Integer)) {
                 result.Number = RequireInteger(result);
             }
+            else if (Match(TokenKind.Real)) {
+                result.RealNumber = RequireRealValue(result);
+            }
             else if (Match(TokenKind.HexNumber)) {
                 result.HexNumber = RequireHexValue(result);
             }
@@ -1225,13 +1239,15 @@ namespace PasPasPas.Parsing.Parser {
                 result.QuotedString = RequireDoubleQuotedString(result);
             }
             else if (Match(TokenKind.At)) {
-                ParseLocalAsmLabel(result);
+                result.Label = ParseLocalAsmLabel(result);
             }
             else {
                 Unexpected();
             }
             return result;
         }
+
+        #endregion
 
         private bool CurrentTokenIsAfterNewline() {
             foreach (Token invalidToken in CurrentToken().InvalidTokensBefore) {

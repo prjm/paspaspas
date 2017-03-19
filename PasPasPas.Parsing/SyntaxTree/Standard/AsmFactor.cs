@@ -44,5 +44,15 @@
         ///     subexpression
         /// </summary>
         public AsmOperand Subexpression { get; internal set; }
+
+        /// <summary>
+        ///     real number
+        /// </summary>
+        public RealNumber RealNumber { get; internal set; }
+
+        /// <summary>
+        ///     referenced label
+        /// </summary>
+        public LocalAsmLabel Label { get; internal set; }
     }
 }

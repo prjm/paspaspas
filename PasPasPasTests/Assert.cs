@@ -80,7 +80,7 @@ namespace PasPasPasTests {
         internal static void TokenizerMessageIsGenerated(Guid messageNumber, string input) {
             var messages = new List<ILogMessage>();
             List<Token> result = TestHelper.RunTokenizer(input, messages);
-            bool hasMessage = messages.Any(t => t.MessageID == messageNumber);
+            var hasMessage = messages.Any(t => t.MessageID == messageNumber);
             IsTrue(hasMessage);
         }
 

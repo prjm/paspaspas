@@ -159,5 +159,25 @@
         ///     assembler tbyte pointer
         /// </summary>
         AsmBytePointerTByte = 30,
+
+        /// <summary>
+        ///     assembler type expression
+        /// </summary>
+        AsmType = 31,
+
+        /// <summary>
+        ///     dot operator
+        /// </summary>
+        Dot = 32,
+
+        /// <summary>
+        ///     segment prefix
+        /// </summary>
+        AsmSegmentPrefix = 33,
+
+        /// <summary>
+        ///     memory subexpression
+        /// </summary>
+        AsmMemorySubexpression = 34,
     }
 }

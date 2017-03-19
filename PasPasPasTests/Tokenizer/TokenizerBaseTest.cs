@@ -59,7 +59,7 @@ namespace PasPasPasTests.Tokenizer {
 
         [Fact]
         public void TestSimpleCharClass() {
-            SingleCharClass cc = new SingleCharClass('x');
+            var cc = new SingleCharClass('x');
             Assert.IsTrue(cc.Matches('x'));
             Assert.IsFalse(cc.Matches('y'));
             Assert.IsFalse(cc.Matches('\0'));
@@ -67,7 +67,7 @@ namespace PasPasPasTests.Tokenizer {
 
         [Fact]
         public void TestControlCharClass() {
-            ControlCharacterClass cc = new ControlCharacterClass();
+            var cc = new ControlCharacterClass();
             Assert.IsTrue(cc.Matches('\a'));
             Assert.IsFalse(cc.Matches('\r'));
             Assert.IsFalse(cc.Matches('\n'));
@@ -75,7 +75,7 @@ namespace PasPasPasTests.Tokenizer {
 
         [Fact]
         public void TestNumberCharClass() {
-            NumberCharacterClass cc = new NumberCharacterClass();
+            var cc = new NumberCharacterClass();
             Assert.IsTrue(cc.Matches('0'));
             Assert.IsTrue(cc.Matches('1'));
             Assert.IsTrue(cc.Matches('2'));
@@ -141,8 +141,8 @@ namespace PasPasPasTests.Tokenizer {
             var log = new LogSource(manager, LogGuid);
             var logTarget = new ListLogTarget();
             manager.RegisterTarget(logTarget);
-            using (StringInput inputFile = new StringInput(input, new FileReference(TestFileName)))
-            using (StackedFileReader reader = new StackedFileReader()) {
+            using (var inputFile = new StringInput(input, new FileReference(TestFileName)))
+            using (var reader = new StackedFileReader()) {
                 reader.AddFile(inputFile);
                 while (!reader.AtEof) {
                     result.Add(patterns.FetchNextToken(reader, log));
@@ -166,7 +166,7 @@ namespace PasPasPasTests.Tokenizer {
         public Token TestPattern(InputPatterns patterns, Guid expectedMessage, string input, params int[] tokenValues) {
             IList<Token> result = RunTestPattern(patterns, expectedMessage, input);
             Assert.AreEqual(tokenValues.Length, result.Count);
-            for (int i = 0; i < result.Count; i++)
+            for (var i = 0; i < result.Count; i++)
                 Assert.AreEqual(tokenValues[i], result[i].Kind);
 
             if (result.Count > 0)
@@ -329,12 +329,14 @@ namespace PasPasPasTests.Tokenizer {
         public void TestNumberTokenValue() {
             var patterns = new InputPatterns();
             patterns.AddPattern(new NumberCharacterClass(), new NumberTokenGroupValue());
+            patterns.AddPattern(new IdentifierCharacterClass(), new IdentifierTokenGroupValue(new Dictionary<string, int>()));
             patterns.AddPattern('.', TokenKind.Dot).Add('.', TokenKind.DotDot);
             TestPattern(patterns, "9..", TokenKind.Integer, TokenKind.DotDot);
             TestPattern(patterns, "9", TokenKind.Integer);
             TestPattern(patterns, "9.9", TokenKind.Real);
             TestPattern(patterns, "9999.9999", TokenKind.Real);
-            TestPattern(patterns, "9.", TokenKind.Real);
+            TestPattern(patterns, "9.", TokenKind.Integer, TokenKind.Dot);
+            TestPattern(patterns, "9.X", TokenKind.Integer, TokenKind.Dot, TokenKind.Identifier);
             TestPattern(patterns, "9.9.", TokenKind.Real, TokenKind.Dot);
             TestPattern(patterns, TokenizerBase.UnexpectedEndOfToken, "9.9e", TokenKind.Real);
             TestPattern(patterns, TokenizerBase.UnexpectedEndOfToken, "9.9e+", TokenKind.Real);

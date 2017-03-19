@@ -23,7 +23,7 @@ namespace PasPasPas.Parsing.Tokenizer {
             if (stringBuilder.Length < test.Length)
                 return false;
 
-            string end = stringBuilder.ToString(stringBuilder.Length - test.Length, test.Length);
+            var end = stringBuilder.ToString(stringBuilder.Length - test.Length, test.Length);
             return end.Equals(test, comparison);
         }
     }
@@ -94,7 +94,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         ///     append a character
         /// </summary>
         public char FetchAndAppendChar() {
-            char result = Input.FetchChar(out switchedFile);
+            var result = Input.FetchChar(out switchedFile);
             Buffer.Append(result);
             return result;
         }
@@ -266,7 +266,7 @@ namespace PasPasPas.Parsing.Tokenizer {
                 return;
             }
 
-            bool found = false;
+            var found = false;
             while (state.IsValid && (!found)) {
                 var currentChar = state.FetchAndAppendChar();
                 found = LineCounter.IsNewLineChar(currentChar);
@@ -435,11 +435,11 @@ namespace PasPasPas.Parsing.Tokenizer {
             var found = false;
 
             while (state.IsValid && (!found)) {
-                char currentChar = state.FetchChar();
+                var currentChar = state.FetchChar();
 
                 if (currentChar == '"' && state.IsValid) {
                     var switchState = state.SwitchedFile;
-                    char nextChar = state.FetchChar();
+                    var nextChar = state.FetchChar();
                     found = nextChar != '"';
 
                     if (found)
@@ -490,14 +490,14 @@ namespace PasPasPas.Parsing.Tokenizer {
             state.PutbackBuffer();
 
             while (state.IsValid) {
-                bool switchState = state.SwitchedFile;
-                char currentChar = state.FetchChar();
+                var switchState = state.SwitchedFile;
+                var currentChar = state.FetchChar();
                 if (currentChar == '#' && !state.IsValid) {
                     state.Error(TokenizerBase.UnexpectedEndOfToken);
                 }
                 else if (currentChar == '#') {
                     switchState = state.SwitchedFile;
-                    char nextChar = state.FetchChar();
+                    var nextChar = state.FetchChar();
                     state.AppendChar(currentChar);
                     if (nextChar == '$' && !state.IsValid) {
                         state.Error(TokenizerBase.UnexpectedEndOfToken);
@@ -871,8 +871,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <summary>
         ///     allow dots in identifiers
         /// </summary>
-        public bool AllowDots
-        {
+        public bool AllowDots {
             get { return identifierCharClass.AllowDots; }
             set { identifierCharClass.AllowDots = value; }
         }
@@ -880,8 +879,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <summary>
         ///     allow digits in identifiers
         /// </summary>
-        public bool AllowDigits
-        {
+        public bool AllowDigits {
             get { return identifierCharClass.AllowDigits; }
             set { identifierCharClass.AllowDigits = value; }
         }
@@ -889,8 +887,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <summary>
         ///     allow ampersand in identifiers
         /// </summary>
-        public bool AllowAmpersand
-        {
+        public bool AllowAmpersand {
             get { return identifierCharClass.AllowAmpersand; }
             set { identifierCharClass.AllowAmpersand = value; }
         }
@@ -914,8 +911,8 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         /// <param name="state">current tokenizer state</param>
         public override void ParseByPrefix(ContinuationState state) {
-            bool hasAmpersand = state.Buffer[0] == '&';
-            bool ignoreKeywords = AllowAmpersand && hasAmpersand;
+            var hasAmpersand = state.Buffer[0] == '&';
+            var ignoreKeywords = AllowAmpersand && hasAmpersand;
 
             if (ignoreKeywords)
                 state.PutbackBuffer();
@@ -936,7 +933,7 @@ namespace PasPasPas.Parsing.Tokenizer {
             }
 
             int tokenKind;
-            string value = state.Buffer.ToString();
+            var value = state.Buffer.ToString();
 
             if (hasAmpersand && state.Buffer.Length < 2)
                 state.Error(StandardTokenizer.IncompleteIdentifier, state.Buffer.ToString());
@@ -962,7 +959,7 @@ namespace PasPasPas.Parsing.Tokenizer {
 
             while (state.IsValid) {
                 var switchState = state.SwitchedFile;
-                char currentChar = state.FetchChar();
+                var currentChar = state.FetchChar();
 
                 if (!LineCounter.IsNewLineChar(currentChar)) {
                     state.AppendChar(currentChar);
@@ -1005,9 +1002,6 @@ namespace PasPasPas.Parsing.Tokenizer {
         private PlusMinusCharacterClass plusminus
             = new PlusMinusCharacterClass();
 
-        private IdentifierCharacterClass idents
-            = new IdentifierCharacterClass() { AllowAmpersand = false, AllowDigits = false, AllowDots = false };
-
         private IdentifierCharacterClass allIdents
             = new IdentifierCharacterClass() { AllowAmpersand = true, AllowDigits = true, AllowDots = true, };
 
@@ -1020,29 +1014,12 @@ namespace PasPasPas.Parsing.Tokenizer {
         public bool AllowIdents { get; set; }
             = false;
 
-        private static bool NextCharMatches(ContinuationState state, char c) {
-            if (!state.IsValid)
-                return false;
-
-            var switchState = state.SwitchedFile;
-            char nextChar = state.FetchChar();
-
-            if (c == nextChar) {
-                state.AppendChar(nextChar);
-                return true;
-            }
-
-            state.Putback(nextChar, switchState);
-            return false;
-
-        }
-
         private static bool NextCharMatches(ContinuationState state, CharacterClass c) {
             if (!state.IsValid)
                 return false;
 
             var switchState = state.SwitchedFile;
-            char nextChar = state.FetchChar();
+            var nextChar = state.FetchChar();
 
             if (c.Matches(nextChar)) {
                 state.AppendChar(nextChar);
@@ -1078,11 +1055,10 @@ namespace PasPasPas.Parsing.Tokenizer {
                 }
 
                 var switchState = state.SwitchedFile;
-                if (state.EndsWith(".") && (NextCharMatches(state, idents) || (NextCharMatches(state, '.')))) {
-                    if (state.EndsWith("..")) withDot = false;
-                    state.Putback(state.Buffer[state.Buffer.Length - 1], switchState);
+                if (state.EndsWith(".")) {
+                    withDot = false;
                     state.Putback('.', switchState);
-                    state.Buffer.Length -= 2;
+                    state.Buffer.Length -= 1;
                 }
 
             }
@@ -1091,9 +1067,12 @@ namespace PasPasPas.Parsing.Tokenizer {
                 if (!state.IsValid) {
                     state.Error(TokenizerBase.UnexpectedEndOfToken, "+", "-");
                 }
-                NextCharMatches(state, plusminus);
-                if (!state.IsValid || digitTokenizer.Tokenize(state.Input, state.Buffer, state.Log).Kind != TokenKind.Integer) {
-                    state.Error(TokenizerBase.UnexpectedEndOfToken);
+                else {
+                    NextCharMatches(state, plusminus);
+                    var currentLen = state.Buffer.Length;
+                    if (!state.IsValid || digitTokenizer.Tokenize(state.Input, state.Buffer, state.Log).Kind != TokenKind.Integer || state.Buffer.Length == currentLen) {
+                        state.Error(TokenizerBase.UnexpectedEndOfToken);
+                    }
                 }
 
                 withExponent = true;

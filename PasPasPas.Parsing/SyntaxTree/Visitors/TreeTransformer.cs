@@ -1652,7 +1652,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         }
 
         #endregion
-        #region 
+        #region AsmExpression
 
         private AbstractSyntaxPart BeginVisitItem(AsmExpression statement, TreeTransformerOptions parameter) {
 
@@ -1668,6 +1668,108 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 parameter.DefineExpressionValue(currentExpression);
                 currentExpression.Kind = UnaryOperator.MapKind(ExtractSymbolName(statement.BytePtrKind)?.CompleteName);
                 return currentExpression;
+            }
+
+            if (statement.TypeExpression != null) {
+                UnaryOperator currentExpression = CreateNode<UnaryOperator>(parameter, statement);
+                parameter.DefineExpressionValue(currentExpression);
+                currentExpression.Kind = ExpressionKind.AsmType;
+                return currentExpression;
+            }
+
+            if (statement.RightOperand != null) {
+                BinaryOperator currentExpression = CreateNode<BinaryOperator>(parameter, statement);
+                parameter.DefineExpressionValue(currentExpression);
+                currentExpression.Kind = BinaryOperator.ConvertKind(statement.BinaryOperatorKind);
+                return currentExpression;
+            }
+
+            return null;
+        }
+
+        #endregion
+        #region AsmTerm
+
+        private AbstractSyntaxPart BeginVisitItem(AsmTerm statement, TreeTransformerOptions parameter) {
+
+            if (statement.Kind != TokenKind.Undefined) {
+                BinaryOperator currentExpression = CreateNode<BinaryOperator>(parameter, statement);
+                parameter.DefineExpressionValue(currentExpression);
+                currentExpression.Kind = BinaryOperator.ConvertKind(statement.Kind);
+                return currentExpression;
+            }
+
+            if (statement.Subtype != null) {
+                BinaryOperator currentExpression = CreateNode<BinaryOperator>(parameter, statement);
+                parameter.DefineExpressionValue(currentExpression);
+                currentExpression.Kind = ExpressionKind.Dot;
+                return currentExpression;
+            }
+
+            return null;
+        }
+
+        #endregion
+        #region AsmFactor
+
+        private AbstractSyntaxPart BeginVisitItem(AsmFactor factor, TreeTransformerOptions parameter) {
+
+            if (factor.Number != null) {
+                ConstantValue value = CreateNode<ConstantValue>(parameter, factor);
+                value.Kind = ConstantValueKind.Integer;
+                parameter.DefineExpressionValue(value);
+                return value;
+            }
+
+            if (factor.RealNumber != null) {
+                ConstantValue value = CreateNode<ConstantValue>(parameter, factor);
+                value.Kind = ConstantValueKind.RealNumber;
+                parameter.DefineExpressionValue(value);
+                return value;
+            }
+
+            if (factor.HexNumber != null) {
+                ConstantValue value = CreateNode<ConstantValue>(parameter, factor);
+                value.Kind = ConstantValueKind.HexNumber;
+                parameter.DefineExpressionValue(value);
+                return value;
+            }
+
+            if (factor.QuotedString != null) {
+                ConstantValue value = CreateNode<ConstantValue>(parameter, factor);
+                value.Kind = ConstantValueKind.QuotedString;
+                parameter.DefineExpressionValue(value);
+                return value;
+            }
+
+            if (factor.Identifier != null) {
+                SymbolReference value = CreateNode<SymbolReference>(parameter, factor);
+                value.Name = ExtractSymbolName(factor.Identifier);
+                parameter.DefineExpressionValue(value);
+                return value;
+            }
+
+            if (factor.SegmentPrefix != null) {
+                BinaryOperator currentExpression = CreateNode<BinaryOperator>(parameter, factor);
+                parameter.DefineExpressionValue(currentExpression);
+                currentExpression.Kind = ExpressionKind.AsmSegmentPrefix;
+                SymbolReference reference = CreatePartNode<SymbolReference>(currentExpression, factor);
+                reference.Name = ExtractSymbolName(factor.SegmentPrefix);
+                currentExpression.LeftOperand = reference;
+                return currentExpression;
+            }
+
+            if (factor.MemorySubexpression != null) {
+                UnaryOperator currentExpression = CreateNode<UnaryOperator>(parameter, factor);
+                parameter.DefineExpressionValue(currentExpression);
+                currentExpression.Kind = ExpressionKind.AsmMemorySubexpression;
+                return currentExpression;
+            }
+
+            if (factor.Label != null) {
+                SymbolReference reference = CreateNode<SymbolReference>(parameter, factor);
+                parameter.DefineExpressionValue(reference);
+                return reference;
             }
 
             return null;

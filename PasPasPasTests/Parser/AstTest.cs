@@ -807,6 +807,26 @@ namespace PasPasPasTests.Parser {
             RunAstTest("unit z.x; interface implementation procedure p; asm mov 1 or 1, 1 end; end.", t => (r(t)?.Operands[0] as BinaryOperator)?.Kind, ExpressionKind.Or);
             RunAstTest("unit z.x; interface implementation procedure p; asm mov 1 xor 1, 1 end; end.", t => (r(t)?.Operands[0] as BinaryOperator)?.Kind, ExpressionKind.Xor);
             RunAstTest("unit z.x; interface implementation procedure p; asm mov  not 1, 1 end; end.", t => (r(t)?.Operands[0] as UnaryOperator)?.Kind, ExpressionKind.Not);
+            RunAstTest("unit z.x; interface implementation procedure p; asm mov  type 1, 1 end; end.", t => (r(t)?.Operands[0] as UnaryOperator)?.Kind, ExpressionKind.AsmType);
+            RunAstTest("unit z.x; interface implementation procedure p; asm mov  [1], 1 end; end.", t => (r(t)?.Operands[0] as UnaryOperator)?.Kind, ExpressionKind.AsmMemorySubexpression);
+
+            RunAstTest("unit z.x; interface implementation procedure p; asm mov  1 + 2, 1 end; end.", t => (r(t)?.Operands[0] as BinaryOperator)?.Kind, ExpressionKind.Plus);
+            RunAstTest("unit z.x; interface implementation procedure p; asm mov  1 - 2, 1 end; end.", t => (r(t)?.Operands[0] as BinaryOperator)?.Kind, ExpressionKind.Minus);
+            RunAstTest("unit z.x; interface implementation procedure p; asm mov  1 * 2, 1 end; end.", t => (r(t)?.Operands[0] as BinaryOperator)?.Kind, ExpressionKind.Times);
+            RunAstTest("unit z.x; interface implementation procedure p; asm mov  1 / 2, 1 end; end.", t => (r(t)?.Operands[0] as BinaryOperator)?.Kind, ExpressionKind.Slash);
+            RunAstTest("unit z.x; interface implementation procedure p; asm mov  1 mod 2, 1 end; end.", t => (r(t)?.Operands[0] as BinaryOperator)?.Kind, ExpressionKind.Mod);
+            RunAstTest("unit z.x; interface implementation procedure p; asm mov  1 shr 2, 1 end; end.", t => (r(t)?.Operands[0] as BinaryOperator)?.Kind, ExpressionKind.Shr);
+            RunAstTest("unit z.x; interface implementation procedure p; asm mov  1 shl 2, 1 end; end.", t => (r(t)?.Operands[0] as BinaryOperator)?.Kind, ExpressionKind.Shl);
+            RunAstTest("unit z.x; interface implementation procedure p; asm mov  1.OFFSET 5, 1 end; end.", t => (r(t)?.Operands[0] as BinaryOperator)?.Kind, ExpressionKind.Dot);
+            RunAstTest("unit z.x; interface implementation procedure p; asm mov  CS:5, 1 end; end.", t => (r(t)?.Operands[0] as BinaryOperator)?.Kind, ExpressionKind.AsmSegmentPrefix);
+
+            RunAstTest("unit z.x; interface implementation procedure p; asm mov  1, 1 end; end.", t => (r(t)?.Operands[0] as ConstantValue)?.Kind, ConstantValueKind.Integer);
+            RunAstTest("unit z.x; interface implementation procedure p; asm mov  1.1, 1 end; end.", t => (r(t)?.Operands[0] as ConstantValue)?.Kind, ConstantValueKind.RealNumber);
+            RunAstTest("unit z.x; interface implementation procedure p; asm mov  $FF, 1 end; end.", t => (r(t)?.Operands[0] as ConstantValue)?.Kind, ConstantValueKind.HexNumber);
+            RunAstTest("unit z.x; interface implementation procedure p; asm mov  'a', 1 end; end.", t => (r(t)?.Operands[0] as ConstantValue)?.Kind, ConstantValueKind.QuotedString);
+            RunAstTest("unit z.x; interface implementation procedure p; asm mov  \"a\", 1 end; end.", t => (r(t)?.Operands[0] as ConstantValue)?.Kind, ConstantValueKind.QuotedString);
+            RunAstTest("unit z.x; interface implementation procedure p; asm mov  a, 1 end; end.", t => (r(t)?.Operands[0] as SymbolReference)?.Name?.CompleteName, "a");
+            RunAstTest("unit z.x; interface implementation procedure p; asm mov  @a, 1 end; end.", t => (r(t)?.Operands[0] as SymbolReference)?.LabelName?.CompleteName, "@a");
 
             RunAstTest("unit z.x; interface implementation procedure p; asm mov  offset 1, 1 end; end.", t => (r(t)?.Operands[0] as UnaryOperator)?.Kind, ExpressionKind.AsmOffset);
             RunAstTest("unit z.x; interface implementation procedure p; asm mov  byte 1, 1 end; end.", t => (r(t)?.Operands[0] as UnaryOperator)?.Kind, ExpressionKind.AsmBytePointerByte);

@@ -29,5 +29,20 @@
         ///     integer value
         /// </summary>
         Integer,
+
+        /// <summary>
+        ///     real value
+        /// </summary>
+        RealNumber,
+
+        /// <summary>
+        ///     hex number
+        /// </summary>
+        HexNumber,
+
+        /// <summary>
+        ///     string value
+        /// </summary>
+        QuotedString,
     }
 }

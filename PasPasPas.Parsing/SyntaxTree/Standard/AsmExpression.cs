@@ -34,5 +34,10 @@
         ///     byte pointer kind
         /// </summary>
         public Identifier BytePtrKind { get; internal set; }
+
+        /// <summary>
+        ///     token kind
+        /// </summary>
+        public int BinaryOperatorKind { get; set; } = TokenKind.Undefined;
     }
 }
