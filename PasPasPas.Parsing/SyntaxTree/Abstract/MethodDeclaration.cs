@@ -5,7 +5,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// <summary>
     ///     a basic method declaration
     /// </summary>
-    public class MethodDeclaration : DeclaredSymbol, IParameterTarget, ITypeTarget {
+    public class MethodDeclaration : DeclaredSymbol, IParameterTarget, ITypeTarget, IDirectiveTarget {
 
         /// <summary>
         ///     create a new procedurail type
@@ -75,14 +75,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
             }
         }
 
-
         /// <summary>
         ///     directives
         /// </summary>
         public IList<MethodDirective> Directives { get; }
             = new List<MethodDirective>();
-
-
 
         /// <summary>
         ///     symbol hints

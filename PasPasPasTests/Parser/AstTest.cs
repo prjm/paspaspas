@@ -765,10 +765,34 @@ namespace PasPasPasTests.Parser {
             Func<object, MethodImplementation> i1 = t => r1(t)?.Methods["m"]?.Implementation;
             Func<object, MethodImplementation> j1 = t => n1(t)?.Methods["m"]?.Implementation;
 
+            RunAstTest("unit z.x; interface type Tx = class procedure m(); end; implementation procedure Tx.m; begin end; end.", t => i(t)?.Name?.Name, "m");
+            RunAstTest("unit z.x; interface type Tx = class procedure m(); end; implementation procedure Tx.m; begin end; end.", t => i(t)?.Name?.Namespace, "Tx");
+
             RunAstTest("unit z.x; interface type Tx = class procedure m(); end; implementation procedure Tx.m; begin end; end.", t => i(t)?.Kind, ProcedureKind.Procedure);
             RunAstTest("unit z.x; interface type Tx = class type Tz = class procedure m(); end; end; implementation procedure Tx.Tz.m; begin end; end.", t => j(t)?.Kind, ProcedureKind.Procedure);
             RunAstTest("unit z.x; interface implementation type Tx = class procedure m(); end; procedure Tx.m; begin end; end.", t => i1(t)?.Kind, ProcedureKind.Procedure);
             RunAstTest("unit z.x; interface implementation type Tx = class type Tz = class procedure m(); end; end; procedure Tx.Tz.m; begin end; end.", t => j1(t)?.Kind, ProcedureKind.Procedure);
+
+            RunAstTest("unit z.x; interface type Tx = class procedure m(); end; implementation procedure Tx.m; reintroduce; begin end; end.", t => i(t)?.Directives[0]?.Kind, MethodDirectiveKind.Reintroduce);
+            RunAstTest("unit z.x; interface type Tx = class procedure m(); end; implementation procedure Tx.m; overload; begin end; end.", t => i(t)?.Directives[0]?.Kind, MethodDirectiveKind.Overload);
+            RunAstTest("unit z.x; interface type Tx = class procedure m(); end; implementation procedure Tx.m; inline; begin end; end.", t => i(t)?.Directives[0]?.Kind, MethodDirectiveKind.Inline);
+            RunAstTest("unit z.x; interface type Tx = class procedure m(); end; implementation procedure Tx.m; assembler; begin end; end.", t => i(t)?.Directives[0]?.Kind, MethodDirectiveKind.Assembler);
+            RunAstTest("unit z.x; interface type Tx = class procedure m(); end; implementation procedure Tx.m; message 0; begin end; end.", t => i(t)?.Directives[0]?.Kind, MethodDirectiveKind.Message);
+            RunAstTest("unit z.x; interface type Tx = class procedure m(); end; implementation procedure Tx.m; static; begin end; end.", t => i(t)?.Directives[0]?.Kind, MethodDirectiveKind.Static);
+            RunAstTest("unit z.x; interface type Tx = class procedure m(); end; implementation procedure Tx.m; dynamic; begin end; end.", t => i(t)?.Directives[0]?.Kind, MethodDirectiveKind.Dynamic);
+            RunAstTest("unit z.x; interface type Tx = class procedure m(); end; implementation procedure Tx.m; override; begin end; end.", t => i(t)?.Directives[0]?.Kind, MethodDirectiveKind.Override);
+            RunAstTest("unit z.x; interface type Tx = class procedure m(); end; implementation procedure Tx.m; virtual; begin end; end.", t => i(t)?.Directives[0]?.Kind, MethodDirectiveKind.Virtual);
+            RunAstTest("unit z.x; interface type Tx = class procedure m(); end; implementation procedure Tx.m; abstract; begin end; end.", t => i(t)?.Directives[0]?.Kind, MethodDirectiveKind.Abstract);
+            RunAstTest("unit z.x; interface type Tx = class procedure m(); end; implementation procedure Tx.m; final; begin end; end.", t => i(t)?.Directives[0]?.Kind, MethodDirectiveKind.Final);
+            RunAstTest("unit z.x; interface type Tx = class procedure m(); end; implementation procedure Tx.m; cdecl; begin end; end.", t => i(t)?.Directives[0]?.Kind, MethodDirectiveKind.Cdecl);
+            RunAstTest("unit z.x; interface type Tx = class procedure m(); end; implementation procedure Tx.m; pascal; begin end; end.", t => i(t)?.Directives[0]?.Kind, MethodDirectiveKind.Pascal);
+            RunAstTest("unit z.x; interface type Tx = class procedure m(); end; implementation procedure Tx.m; register; begin end; end.", t => i(t)?.Directives[0]?.Kind, MethodDirectiveKind.Register);
+            RunAstTest("unit z.x; interface type Tx = class procedure m(); end; implementation procedure Tx.m; stdcall; begin end; end.", t => i(t)?.Directives[0]?.Kind, MethodDirectiveKind.StdCall);
+            RunAstTest("unit z.x; interface type Tx = class procedure m(); end; implementation procedure Tx.m; safecall; begin end; end.", t => i(t)?.Directives[0]?.Kind, MethodDirectiveKind.Safecall);
+            RunAstTest("unit z.x; interface type Tx = class procedure m(); end; implementation procedure Tx.m; register; begin end; end.", t => i(t)?.Directives[0]?.Kind, MethodDirectiveKind.Register);
+            RunAstTest("unit z.x; interface type Tx = class procedure m(); end; implementation procedure Tx.m; experimental; begin end; end.", t => i(t)?.Hints?.SymbolIsExperimental, true);
+
+
         }
 
         [Fact]

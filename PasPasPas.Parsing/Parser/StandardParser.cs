@@ -1248,16 +1248,6 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         #endregion
-
-        private bool CurrentTokenIsAfterNewline() {
-            foreach (Token invalidToken in CurrentToken().InvalidTokensBefore) {
-                if (invalidToken.Kind == TokenKind.WhiteSpace && LineCounter.ContainsNewLineChar(invalidToken.Value))
-                    return true;
-            }
-
-            return false;
-        }
-
         #region ParseAssemblyOpcode
 
         [Rule("AssemblyOpCode", "Identifier [AssemblyDirective] ")]
@@ -1421,6 +1411,8 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
+        #region ParseMethodDecl
+
         [Rule("MethodDecl", "MethodDeclHeading ';' MethodDirectives [ Block ';' ]")]
         private MethodDeclaration ParseMethodDecl(IExtendableSyntaxPart parent) {
             MethodDeclaration result = CreateChild<MethodDeclaration>(parent);
@@ -1436,6 +1428,7 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
+        #endregion
         #region ParseMethodDirectives
 
         [Rule("MethodDirectives", "{ MethodDirective }")]
@@ -3775,6 +3768,15 @@ namespace PasPasPas.Parsing.Parser {
             QuotedString result = CreateByTerminal<QuotedString>(parent, TokenKind.DoubleQuotedString);
             result.UnquotedValue = result.LastTerminalValue;
             return result;
+        }
+
+        private bool CurrentTokenIsAfterNewline() {
+            foreach (Token invalidToken in CurrentToken().InvalidTokensBefore) {
+                if (invalidToken.Kind == TokenKind.WhiteSpace && LineCounter.ContainsNewLineChar(invalidToken.Value))
+                    return true;
+            }
+
+            return false;
         }
 
         private NamespaceName ParseNamespaceName(IExtendableSyntaxPart parent) {
