@@ -49,7 +49,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         public SymbolHints Hints { get; set; }
 
-
     }
 }
 

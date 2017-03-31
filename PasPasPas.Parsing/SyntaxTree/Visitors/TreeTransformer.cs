@@ -3,6 +3,7 @@ using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Parsing.SyntaxTree.Standard;
 using PasPasPas.Parsing.Parser;
 using PasPasPas.Parsing.Tokenizer;
+using System;
 
 namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
@@ -160,7 +161,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             var symbols = parameter.LastValue as IDeclaredSymbolTarget;
             Abstract.TypeDeclaration declaration = CreateNode<Abstract.TypeDeclaration>(parameter, typeDeclaration);
             declaration.Name = ExtractSymbolName(typeDeclaration.TypeId?.Identifier);
-            declaration.Generics = ExtractGenericDefinition(typeDeclaration.TypeId?.GenericDefinition, parameter);
+            declaration.Generics = ExtractGenericDefinition(declaration, typeDeclaration.TypeId?.GenericDefinition, parameter);
             declaration.Attributes = ExtractAttributes(typeDeclaration.Attributes, parameter.CurrentUnit);
             declaration.Hints = ExtractHints(typeDeclaration.Hint);
             symbols.Symbols.AddDirect(declaration, parameter.LogSource);
@@ -758,13 +759,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
             Token intLabel = (label.LabelName as StandardInteger)?.LastTerminalToken;
             if (intLabel != null) {
-                parent.LabelName = new SymbolName() { Name = intLabel.Value };
+                parent.LabelName = new SimpleSymbolName(intLabel.Value);
                 return null;
             }
 
             Token hexLabel = (label.LabelName as HexNumber)?.LastTerminalToken;
             if (hexLabel != null) {
-                parent.LabelName = new SymbolName() { Name = hexLabel.Value };
+                parent.LabelName = new SimpleSymbolName(hexLabel.Value);
                 return null;
             }
 
@@ -944,7 +945,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
             result.Name = ExtractSymbolName(method.Identifier);
             result.Kind = Abstract.MethodDeclaration.MapKind(method.MethodKind);
-            result.Generics = ExtractGenericDefinition(method.GenericDefinition, parameter);
+            result.Generics = ExtractGenericDefinition(result, method.GenericDefinition, parameter);
             parent.Methods.Add(result, parameter.LogSource);
             return result;
         }
@@ -1501,15 +1502,15 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         private AbstractSyntaxPart BeginVisitItem(Standard.MethodDeclaration method, TreeTransformerOptions parameter) {
             CompilationUnit unit = parameter.CurrentUnit;
-            SymbolName name = ExtractSymbolName(method.Heading.Name);
+            GenericSymbolName name = ExtractSymbolName(method.Heading.Qualifiers);
             MethodImplementation result = CreateNode<MethodImplementation>(parameter, method);
             result.Kind = Abstract.MethodDeclaration.MapKind(method.Heading.Kind);
             result.Name = name;
 
-            DeclaredSymbol type = unit.InterfaceSymbols.Find(name.Namespace);
+            DeclaredSymbol type = unit.InterfaceSymbols.Find(name.NamespaceParts);
 
             if (type == null)
-                type = unit.ImplementationSymbols.Find(name.Namespace);
+                type = unit.ImplementationSymbols.Find(name.NamespaceParts);
 
             var typeDecl = type as Abstract.TypeDeclaration;
             var typeStruct = typeDecl.TypeValue as StructuredType;
@@ -1538,7 +1539,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         private AbstractSyntaxPart BeginVisitItem(ClosureExpression closure, TreeTransformerOptions parameter) {
             MethodImplementation result = CreateNode<MethodImplementation>(parameter, closure);
 
-            result.Name = new SymbolName() { Name = parameter.CurrentUnit.GenerateSymbolName() };
+            result.Name = new SimpleSymbolName(parameter.CurrentUnit.GenerateSymbolName());
             IExpressionTarget expression = parameter.LastExpression;
             expression.Value = result;
             return result;
@@ -1614,7 +1615,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             }
 
             var parent = parameter.LastValue as ILabelTarget;
-            parent.LabelName = new SymbolName() { Name = value };
+            parent.LabelName = new SimpleSymbolName(value);
             return null;
         }
 
@@ -1783,33 +1784,79 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #region Extractors
 
         private static SymbolName ExtractSymbolName(NamespaceName name) {
-            var result = new SymbolName() {
-                Name = name?.Name,
-                Namespace = name?.Namespace
-            };
+            if (name == null)
+                throw new ArgumentNullException(nameof(name));
+
+            var result = new NamespacedSymbolName();
+
+            foreach (var nspace in name.Namespace)
+                if (!string.IsNullOrWhiteSpace(nspace))
+                    result.Append(nspace);
+
+            if (!string.IsNullOrWhiteSpace(name.Name))
+                result.Append(name.Name);
+
+            return result;
+        }
+
+        private GenericSymbolName ExtractSymbolName(IList<MethodDeclarationName> qualifiers) {
+            var result = new GenericSymbolName();
+
+            foreach (MethodDeclarationName name in qualifiers) {
+                if (name.Name != null) {
+                    foreach (var namePart in name.Name.Namespace)
+                        if (!string.IsNullOrWhiteSpace(namePart))
+                            result.AddName(namePart);
+                    if (!string.IsNullOrWhiteSpace(name.Name.Name))
+                        result.AddName(name.Name.Name);
+                    if (name.GenericDefinition != null) {
+                        foreach (ISyntaxPart part in name.GenericDefinition.Parts) {
+                            var idPart = part as Identifier;
+
+                            if (idPart != null) {
+                                result.AddGenericPart(SyntaxPartBase.IdentifierValue(idPart));
+                                continue;
+                            }
+
+                            var genericPart = part as GenericDefinitionPart;
+
+                            if (genericPart != null) {
+                                result.AddGenericPart(SyntaxPartBase.IdentifierValue(genericPart.Identifier));
+                            }
+                        }
+                    }
+                }
+            }
+
             return result;
         }
 
         private static SymbolName ExtractSymbolName(Identifier name) {
-            var result = new SymbolName() {
-                Name = name?.FirstTerminalToken?.Value
-            };
+            var result = new SimpleSymbolName(name?.FirstTerminalToken?.Value);
             return result;
         }
 
         private static SymbolName ExtractSymbolName(NamespaceFileName name) {
-            var result = new SymbolName() {
-                Name = name?.NamespaceName?.Name,
-                Namespace = name?.NamespaceName?.Namespace
-            };
+            if (name == null)
+                throw new ArgumentNullException(nameof(name));
+
+            var result = new NamespacedSymbolFileName();
+
+            foreach (var nspace in name.NamespaceName?.Namespace)
+                if (!string.IsNullOrWhiteSpace(nspace))
+                    result.Append(nspace);
+
+            if (!string.IsNullOrWhiteSpace(name.NamespaceName?.Name))
+                result.Append(name.NamespaceName?.Name);
+
             return result;
         }
 
-        private static GenericTypes ExtractGenericDefinition(GenericDefinition genericDefinition, TreeTransformerOptions parameter) {
-            var result = new GenericTypes();
-
+        private static GenericTypes ExtractGenericDefinition(AbstractSyntaxPart parent, GenericDefinition genericDefinition, TreeTransformerOptions parameter) {
             if (genericDefinition == null)
-                return result;
+                return null;
+
+            GenericTypes result = CreatePartNode<GenericTypes>(parent, genericDefinition);
 
             foreach (ISyntaxPart part in genericDefinition.Parts) {
                 var idPart = part as Identifier;

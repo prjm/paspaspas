@@ -1,4 +1,6 @@
-﻿namespace PasPasPas.Parsing.SyntaxTree.Standard {
+﻿using System.Collections.Generic;
+
+namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
     /// <summary>
     ///     namespaced name
@@ -8,10 +10,8 @@
         /// <summary>
         ///     unit name
         /// </summary>
-        public string Name
-        {
-            get
-            {
+        public string Name {
+            get {
                 if (Parts == null || PartList.Count < 1)
                     return null;
 
@@ -23,25 +23,16 @@
         /// <summary>
         ///     namespace name
         /// </summary>
-        public string Namespace
-        {
-            get
-            {
+        public IEnumerable<string> Namespace {
+            get {
                 if (Parts == null || PartList.Count < 2)
-                    return null;
+                    yield break;
 
-                var result = string.Empty;
-
-                for (int i = 0; i <= PartList.Count - 2; i++) {
+                for (var i = 0; i <= PartList.Count - 2; i++) {
                     ISyntaxPart part = PartList[i];
                     if (!(part is Identifier)) continue;
-                    if (i > 0)
-                        result = string.Concat(result, ".", IdentifierValue(part));
-                    else
-                        result = IdentifierValue(part);
+                    yield return IdentifierValue(part);
                 }
-
-                return result;
             }
         }
     }

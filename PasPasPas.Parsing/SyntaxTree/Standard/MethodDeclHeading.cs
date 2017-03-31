@@ -1,4 +1,6 @@
-﻿namespace PasPasPas.Parsing.SyntaxTree.Standard {
+﻿using System.Collections.Generic;
+
+namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
     /// <summary>
     ///     method declaration heading
@@ -6,19 +8,9 @@
     public class MethodDeclarationHeading : SyntaxPartBase {
 
         /// <summary>
-        ///     generic definition
-        /// </summary>
-        public GenericDefinition GenericDefinition { get; set; }
-
-        /// <summary>
         ///     method kind
         /// </summary>
         public int Kind { get; set; }
-
-        /// <summary>
-        ///     method name
-        /// </summary>
-        public NamespaceName Name { get; set; }
 
         /// <summary>
         ///     parameters
@@ -34,5 +26,11 @@
         ///     result type attributes
         /// </summary>
         public UserAttributes ResultTypeAttributes { get; set; }
+
+        /// <summary>
+        ///     method qualifier
+        /// </summary>
+        public IList<MethodDeclarationName> Qualifiers { get; }
+            = new List<MethodDeclarationName>();
     }
 }

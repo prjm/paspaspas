@@ -19,8 +19,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
             get {
                 foreach (ISyntaxPart part in base.Parts)
                     yield return part;
-                foreach (ISyntaxPart genericType in Generics)
-                    yield return genericType;
+                if (Generics != null)
+                    foreach (ISyntaxPart genericType in Generics)
+                        yield return genericType;
                 foreach (MethodDirective directive in Directives)
                     yield return directive;
                 if (Implementation != null)

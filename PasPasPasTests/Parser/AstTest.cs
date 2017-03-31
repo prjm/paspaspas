@@ -26,7 +26,7 @@ namespace PasPasPasTests.Parser {
 
             RunAstTest("unit z.x; interface implementation end.", t => u(t)?.SymbolName, "z.x");
             RunAstTest("unit z.x; interface implementation end.", t => u(t)?.UnitName.Name, "x");
-            RunAstTest("unit z.x; interface implementation end.", t => u(t)?.UnitName.Namespace, "z");
+            RunAstTest("unit z.x; interface implementation end.", t => u(t)?.UnitName.NamespaceName, "z");
             RunAstTest("unit z.x; interface implementation end.", t => u(t)?.FileType, CompilationUnitType.Unit);
             RunAstTest("unit z.x deprecated; interface implementation end.", t => u(t)?.Hints?.SymbolIsDeprecated, true);
             RunAstTest("unit z.x deprecated 'X'; interface implementation end.", t => u(t)?.Hints?.DeprecatedInformation, "X");
@@ -48,7 +48,7 @@ namespace PasPasPasTests.Parser {
 
             RunAstTest("library z.x; begin end.", t => u(t)?.SymbolName, "z.x");
             RunAstTest("library z.x; begin end.", t => u(t)?.UnitName.Name, "x");
-            RunAstTest("library z.x; begin end.", t => u(t)?.UnitName.Namespace, "z");
+            RunAstTest("library z.x; begin end.", t => u(t)?.UnitName.NamespaceName, "z");
             RunAstTest("library z.x; begin end.", t => u(t)?.FileType, CompilationUnitType.Library);
 
             RunAstTest("library z.x; uses a; begin end.", t => u(t)?.RequiredUnits["a"]?.Name.CompleteName, "a");
@@ -75,7 +75,7 @@ namespace PasPasPasTests.Parser {
             RunAstTest("program z.x; begin end.", t => u(t)?.FileType, CompilationUnitType.Program);
             RunAstTest("program z.x; begin end.", t => u(t)?.SymbolName, "z.x");
             RunAstTest("program z.x; begin end.", t => u(t)?.UnitName.Name, "x");
-            RunAstTest("program z.x; begin end.", t => u(t)?.UnitName.Namespace, "z");
+            RunAstTest("program z.x; begin end.", t => u(t)?.UnitName.NamespaceName, "z");
 
             RunAstTest("program z.x(a); begin end.", t => u(t)?.SymbolName, "z.x");
             RunAstTest("program z.x(a,b,c); begin end.", t => u(t)?.SymbolName, "z.x");
@@ -100,7 +100,7 @@ namespace PasPasPasTests.Parser {
             RunAstTest("package z.x; requires a, a.a, a.a.a, x; end.", t => u(t)?.FileType, CompilationUnitType.Package);
             RunAstTest("package z.x; requires a, a.a, a.a.a, x; end.", t => u(t)?.SymbolName, "z.x");
             RunAstTest("package z.x; requires a, a.a, a.a.a, x; end.", t => u(t)?.UnitName.Name, "x");
-            RunAstTest("package z.x; requires a, a.a, a.a.a, x; end.", t => u(t)?.UnitName.Namespace, "z");
+            RunAstTest("package z.x; requires a, a.a, a.a.a, x; end.", t => u(t)?.UnitName.NamespaceName, "z");
 
             RunAstTest("package z.x; requires a, a.a, a.a.a, x; end.", t => u(t)?.RequiredUnits["a.a"]?.Name?.CompleteName, "a.a");
             RunAstTest("package z.x; requires a, a.a, a.a.a, x; end.", t => u(t)?.RequiredUnits["a.a"]?.Mode, UnitMode.Requires);
@@ -766,7 +766,7 @@ namespace PasPasPasTests.Parser {
             Func<object, MethodImplementation> j1 = t => n1(t)?.Methods["m"]?.Implementation;
 
             RunAstTest("unit z.x; interface type Tx = class procedure m(); end; implementation procedure Tx.m; begin end; end.", t => i(t)?.Name?.Name, "m");
-            RunAstTest("unit z.x; interface type Tx = class procedure m(); end; implementation procedure Tx.m; begin end; end.", t => i(t)?.Name?.Namespace, "Tx");
+            RunAstTest("unit z.x; interface type Tx = class procedure m(); end; implementation procedure Tx.m; begin end; end.", t => i(t)?.Name?.NamespaceName, "Tx");
 
             RunAstTest("unit z.x; interface type Tx = class procedure m(); end; implementation procedure Tx.m; begin end; end.", t => i(t)?.Kind, ProcedureKind.Procedure);
             RunAstTest("unit z.x; interface type Tx = class type Tz = class procedure m(); end; end; implementation procedure Tx.Tz.m; begin end; end.", t => j(t)?.Kind, ProcedureKind.Procedure);
@@ -791,6 +791,9 @@ namespace PasPasPasTests.Parser {
             RunAstTest("unit z.x; interface type Tx = class procedure m(); end; implementation procedure Tx.m; safecall; begin end; end.", t => i(t)?.Directives[0]?.Kind, MethodDirectiveKind.Safecall);
             RunAstTest("unit z.x; interface type Tx = class procedure m(); end; implementation procedure Tx.m; register; begin end; end.", t => i(t)?.Directives[0]?.Kind, MethodDirectiveKind.Register);
             RunAstTest("unit z.x; interface type Tx = class procedure m(); end; implementation procedure Tx.m; experimental; begin end; end.", t => i(t)?.Hints?.SymbolIsExperimental, true);
+
+            //RunAstTest("unit z.x; interface type Tx = class procedure m<T>(); end; implementation procedure Tx.m<T>; begin end; end.", t => (i(t)?.Generics?["T"] as GenericType)?.SymbolName, "T");
+            //RunAstTest("unit z.x; interface type Tx<Q> = class procedure m<T>(); end; implementation procedure Tx<Q>.m<T>; begin end; end.", t => (i(t)?.Generics?["Q"] as GenericType)?.SymbolName, "Q");
 
 
         }

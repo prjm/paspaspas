@@ -1561,11 +1561,15 @@ namespace PasPasPas.Parsing.Parser {
             result.Kind = result.LastTerminalKind;
 
             do {
-                result.Name = ParseNamespaceName(result);
+                MethodDeclarationName name = CreateChild<MethodDeclarationName>(result);
+                name.Name = ParseNamespaceName(name);
 
                 if (Match(TokenKind.AngleBracketsOpen)) {
-                    result.GenericDefinition = ParseGenericDefinition(result);
+                    name.GenericDefinition = ParseGenericDefinition(name);
                 }
+
+                result.Qualifiers.Add(name);
+
             } while (ContinueWith(result, TokenKind.Dot));
 
 

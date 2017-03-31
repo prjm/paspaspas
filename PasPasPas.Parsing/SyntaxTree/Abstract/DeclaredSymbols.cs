@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 
@@ -60,11 +59,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         /// <param name="name">symbol to find</param>
         /// <returns></returns>
-        public DeclaredSymbol Find(string name) {
+        public DeclaredSymbol Find(IEnumerable<string> name) {
             DeclaredSymbols symbols = this;
             DeclaredSymbol symbol = null;
 
-            foreach (var part in name.Split(new char[] { '.' }, StringSplitOptions.RemoveEmptyEntries)) {
+            foreach (var part in name) {
 
                 if (symbols == null)
                     return null;

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
 
@@ -28,8 +27,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         public override IEnumerable<ISyntaxPart> Parts {
             get {
-                foreach (GenericType generic in Generics)
-                    yield return generic;
+                if (Generics != null)
+                    foreach (GenericType generic in Generics)
+                        yield return generic;
+
                 if (TypeValue != null)
                     yield return TypeValue;
             }
