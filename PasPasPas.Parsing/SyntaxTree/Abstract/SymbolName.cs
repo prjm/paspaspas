@@ -123,6 +123,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
             => name;
 
         /// <summary>
+        ///     parameters
+        /// </summary>
+        public IList<string> Parameters
+            => parameters;
+
+        /// <summary>
         ///     complete name
         /// </summary>
         public override string CompleteName {
@@ -179,10 +185,16 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
             => parts.LastOrDefault()?.Name;
 
         /// <summary>
+        ///     name part
+        /// </summary>
+        public GenericSymbolNamePart NamePart
+            => parts.LastOrDefault();
+
+        /// <summary>
         ///     namespace parts
         /// </summary>
-        public IEnumerable<string> NamespaceParts
-            => parts.Select(t => t.CompleteName).DropLast();
+        public IEnumerable<GenericSymbolNamePart> NamespaceParts
+            => parts.DropLast();
 
         /// <summary>
         ///     add a name

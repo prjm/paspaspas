@@ -1554,6 +1554,7 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         #endregion
+        #region MethodDeclarationHeading
 
         [Rule("MethodDeclHeading", " ('constructor' | 'destructor' | 'function' | 'procedure' | 'operator') NamespaceName [GenericDefinition] [FormalParameterSection] [':' Attributes TypeSpecification ]")]
         private MethodDeclarationHeading ParseMethodDeclHeading(IExtendableSyntaxPart parent) {
@@ -1582,6 +1583,8 @@ namespace PasPasPas.Parsing.Parser {
             }
             return result;
         }
+
+        #endregion
 
         [Rule("ProcedureDeclaration", "ProcedureDeclarationHeading ';' FunctionDirectives [ ProcBody ]")]
         private ProcedureDeclaration ParseProcedureDeclaration(IExtendableSyntaxPart parent, UserAttributes attributes) {

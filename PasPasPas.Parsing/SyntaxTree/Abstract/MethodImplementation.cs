@@ -5,7 +5,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// <summary>
     ///     method implementation
     /// </summary>
-    public class MethodImplementation : DeclaredSymbol, IDeclaredSymbolTarget, IBlockTarget, IDirectiveTarget, IExpression {
+    public class MethodImplementation : DeclaredSymbol, IDeclaredSymbolTarget, IBlockTarget, IDirectiveTarget, IExpression, IParameterTarget {
+
+        /// <summary>
+        ///     new method implementation
+        /// </summary>
+        public MethodImplementation() {
+            Parameters = new ParameterDefinitions() { Parent = this };
+        }
 
         /// <summary>
         ///     symbols
@@ -23,6 +30,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         public override IEnumerable<ISyntaxPart> Parts {
             get {
+                foreach (ParameterTypeDefinition parameter in Parameters.Items)
+                    yield return parameter;
+
                 foreach (MethodDirective directive in Directives)
                     yield return directive;
 
@@ -48,6 +58,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     hints
         /// </summary>
         public SymbolHints Hints { get; set; }
+
+        /// <summary>
+        ///     parameters
+        /// </summary>
+        public ParameterDefinitions Parameters { get; }
 
     }
 }

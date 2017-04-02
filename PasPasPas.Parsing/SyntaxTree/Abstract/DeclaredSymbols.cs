@@ -59,16 +59,16 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         /// <param name="name">symbol to find</param>
         /// <returns></returns>
-        public DeclaredSymbol Find(IEnumerable<string> name) {
+        public DeclaredSymbol Find(IEnumerable<GenericSymbolNamePart> name) {
             DeclaredSymbols symbols = this;
             DeclaredSymbol symbol = null;
 
-            foreach (var part in name) {
+            foreach (GenericSymbolNamePart part in name) {
 
                 if (symbols == null)
                     return null;
 
-                symbol = symbols[part];
+                symbol = symbols[part.Name];
 
                 if (symbol == null)
                     return null;

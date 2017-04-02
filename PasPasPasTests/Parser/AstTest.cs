@@ -792,10 +792,20 @@ namespace PasPasPasTests.Parser {
             RunAstTest("unit z.x; interface type Tx = class procedure m(); end; implementation procedure Tx.m; register; begin end; end.", t => i(t)?.Directives[0]?.Kind, MethodDirectiveKind.Register);
             RunAstTest("unit z.x; interface type Tx = class procedure m(); end; implementation procedure Tx.m; experimental; begin end; end.", t => i(t)?.Hints?.SymbolIsExperimental, true);
 
-            //RunAstTest("unit z.x; interface type Tx = class procedure m<T>(); end; implementation procedure Tx.m<T>; begin end; end.", t => (i(t)?.Generics?["T"] as GenericType)?.SymbolName, "T");
-            //RunAstTest("unit z.x; interface type Tx<Q> = class procedure m<T>(); end; implementation procedure Tx<Q>.m<T>; begin end; end.", t => (i(t)?.Generics?["Q"] as GenericType)?.SymbolName, "Q");
+            RunAstTest("unit z.x; interface type Tx = class procedure m<T>(); end; implementation procedure Tx.m<T>; begin end; end.", t => (i(t)?.Name as GenericSymbolName)?.NamePart?.Parameters[0], "T");
+            RunAstTest("unit z.x; interface type Tx<Q> = class procedure m<T>(); end; implementation procedure Tx<Q>.m<T>; begin end; end.", t => (i(t)?.Name as GenericSymbolName)?.NamespaceParts.FirstOrDefault()?.Parameters[0], "Q");
 
+            //RunAstTest("unit z.x; interface type Tx = class procedure m(const a: string); end; implementation procedure Tx.m; begin end; end.", t => i(t)?., "Tx");
+        }
 
+        [Fact]
+        public void TestProcedureDeclaration() {
+            Func<object, MethodImplementation> r = t => ((t as CompilationUnit)?.ImplementationSymbols["p"] as MethodImplementation);
+
+            RunAstTest("unit z.x; interface implementation procedure p; begin end; end.", t => r(t)?.Kind, ProcedureKind.Procedure);
+            RunAstTest("unit z.x; interface implementation procedure p(x: string); begin end; end.", t => r(t)?.Parameters[0]?.SymbolName, "x");
+            RunAstTest("unit z.x; interface implementation function p: string; begin end; end.", t => r(t)?.Kind, ProcedureKind.Function);
+            //RunAstTest("unit z.x; interface implementation funcion p: string; begin end; end.", t => r(t)?.K, ProcedureKind.Function);
         }
 
         [Fact]

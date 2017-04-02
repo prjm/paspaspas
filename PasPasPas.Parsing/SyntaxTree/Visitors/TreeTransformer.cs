@@ -1493,6 +1493,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             var symbolTarget = parameter.LastValue as IDeclaredSymbolTarget;
             MethodImplementation result = CreateNode<MethodImplementation>(parameter, procedure);
             result.Name = ExtractSymbolName(procedure.Heading.Name);
+            result.Kind = Abstract.MethodDeclaration.MapKind(procedure.Heading.Kind);
             symbolTarget.Symbols.AddDirect(result, parameter.LogSource);
             return result;
         }
