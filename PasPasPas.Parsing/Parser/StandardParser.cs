@@ -1585,6 +1585,7 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         #endregion
+        #region ParseProcedureDeclaration
 
         [Rule("ProcedureDeclaration", "ProcedureDeclarationHeading ';' FunctionDirectives [ ProcBody ]")]
         private ProcedureDeclaration ParseProcedureDeclaration(IExtendableSyntaxPart parent, UserAttributes attributes) {
@@ -1598,6 +1599,9 @@ namespace PasPasPas.Parsing.Parser {
                 ContinueWithOrMissing(result, TokenKind.Semicolon);
             return result;
         }
+
+        #endregion
+        #region ParseProcedureDeclarationHeading
 
         [Rule("ProcedureDeclarationHeading", "('procedure' | 'function') Identifier [FormalParameterSection][':' TypeSpecification]")]
         private ProcedureDeclarationHeading ParseProcedureDeclarationHeading(IExtendableSyntaxPart parent) {
@@ -1616,6 +1620,9 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
+        #endregion
+        #region ParseAssemblyAttribute
+
         [Rule("AssemblyAttribute", "'[' 'assembly' ':' ']'")]
         private AssemblyAttributeDeclaration ParseAssemblyAttribute(IExtendableSyntaxPart parent) {
             AssemblyAttributeDeclaration result = CreateByTerminal<AssemblyAttributeDeclaration>(parent, TokenKind.OpenBraces);
@@ -1626,6 +1633,7 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
+        #endregion
         #region ParseExportsSection
 
         [Rule("ExportsSection", "'exports' ExportItem { ',' ExportItem } ';' ")]
@@ -1720,6 +1728,7 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         #endregion
+        #region ParseLabelDeclarationSection
 
         [Rule("LabelSection", "'label' Label { ',' Label } ';' ")]
         private LabelDeclarationSection ParseLabelDeclarationSection(IExtendableSyntaxPart parent) {
@@ -1733,6 +1742,7 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
+        #endregion
         #region ParseLabel
 
         [Rule("Label", "Identifier | Integer")]
@@ -1897,7 +1907,7 @@ namespace PasPasPas.Parsing.Parser {
         #endregion
         #region GenericNamespaceName
 
-        [Rule("GenericNamespaceName", "NamespaceName [ GenericPostfix ]")]
+        [Rule("GenericNamespaceName", "NamespaceName [ GenericSuffix ]")]
         private GenericNamespaceName ParseGenericNamespaceName(IExtendableSyntaxPart parent, bool advancedCheck = false) {
             GenericNamespaceName result = CreateChild<GenericNamespaceName>(parent);
             result.Name = ParseNamespaceName(result);
@@ -3277,6 +3287,7 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         #endregion
+        #region ParseGenericSuffix
 
         [Rule("GenericSuffix", "'<' TypeDefinition { ',' TypeDefinition '}' '>'")]
         private GenericPostfix ParseGenericSuffix(IExtendableSyntaxPart parent) {
@@ -3290,6 +3301,7 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
+        #endregion
         #region ParseArrayType
 
         [Rule("ArrayType", " 'array' [ '[' ArrayIndex { ',' ArrayIndex } ']']  'of' ( 'const' | TypeDefinition ) ")]
@@ -3442,6 +3454,8 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
+        #region ParseRecordConstant 
+
         [Rule("RecordConstantExpression", "Identifier ':' ConstantExpression")]
         private RecordConstantExpression ParseRecordConstant(IExtendableSyntaxPart parent) {
             RecordConstantExpression result = CreateChild<RecordConstantExpression>(parent);
@@ -3450,6 +3464,8 @@ namespace PasPasPas.Parsing.Parser {
             result.Value = ParseConstantExpression(result);
             return result;
         }
+
+        #endregion
 
         [Rule("Expression", "SimpleExpression [ ('<'|'<='|'>'|'>='|'<>'|'='|'in'|'as') SimpleExpression ] | ClosureExpression")]
         private Expression ParseExpression(IExtendableSyntaxPart parent) {

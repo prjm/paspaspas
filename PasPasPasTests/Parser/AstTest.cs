@@ -801,11 +801,36 @@ namespace PasPasPasTests.Parser {
         [Fact]
         public void TestProcedureDeclaration() {
             Func<object, MethodImplementation> r = t => ((t as CompilationUnit)?.ImplementationSymbols["p"] as MethodImplementation);
+            Func<object, MethodImplementation> i = t => r(t);
 
             RunAstTest("unit z.x; interface implementation procedure p; begin end; end.", t => r(t)?.Kind, ProcedureKind.Procedure);
             RunAstTest("unit z.x; interface implementation procedure p(x: string); begin end; end.", t => r(t)?.Parameters[0]?.SymbolName, "x");
             RunAstTest("unit z.x; interface implementation function p: string; begin end; end.", t => r(t)?.Kind, ProcedureKind.Function);
-            //RunAstTest("unit z.x; interface implementation funcion p: string; begin end; end.", t => r(t)?.K, ProcedureKind.Function);
+            RunAstTest("unit z.x; interface implementation function p: string; begin end; end.", t => r(t)?.TypeValue?.GetType(), typeof(MetaType));
+
+            RunAstTest("unit z.x; interface implementation procedure p; overload; begin end; end.", t => i(t)?.Directives[0]?.Kind, MethodDirectiveKind.Overload);
+            RunAstTest("unit z.x; interface implementation procedure p; inline; begin end; end.", t => i(t)?.Directives[0]?.Kind, MethodDirectiveKind.Inline);
+            RunAstTest("unit z.x; interface implementation procedure p; assembler; begin end; end.", t => i(t)?.Directives[0]?.Kind, MethodDirectiveKind.Assembler);
+            RunAstTest("unit z.x; interface implementation procedure p; cdecl; begin end; end.", t => i(t)?.Directives[0]?.Kind, MethodDirectiveKind.Cdecl);
+            RunAstTest("unit z.x; interface implementation procedure p; pascal; begin end; end.", t => i(t)?.Directives[0]?.Kind, MethodDirectiveKind.Pascal);
+            RunAstTest("unit z.x; interface implementation procedure p; register; begin end; end.", t => i(t)?.Directives[0]?.Kind, MethodDirectiveKind.Register);
+            RunAstTest("unit z.x; interface implementation procedure p; stdcall; begin end; end.", t => i(t)?.Directives[0]?.Kind, MethodDirectiveKind.StdCall);
+            RunAstTest("unit z.x; interface implementation procedure p; safecall; begin end; end.", t => i(t)?.Directives[0]?.Kind, MethodDirectiveKind.Safecall);
+            RunAstTest("unit z.x; interface implementation procedure p; register; begin end; end.", t => i(t)?.Directives[0]?.Kind, MethodDirectiveKind.Register);
+            RunAstTest("unit z.x; interface implementation procedure p; near; begin end; end.", t => i(t)?.Directives[0]?.Kind, MethodDirectiveKind.Near);
+            RunAstTest("unit z.x; interface implementation procedure p; local; begin end; end.", t => i(t)?.Directives[0]?.Kind, MethodDirectiveKind.Local);
+            RunAstTest("unit z.x; interface implementation procedure p; far; begin end; end.", t => i(t)?.Directives[0]?.Kind, MethodDirectiveKind.Far);
+            RunAstTest("unit z.x; interface implementation procedure p; unsafe; begin end; end.", t => i(t)?.Directives[0]?.Kind, MethodDirectiveKind.Unsafe);
+            RunAstTest("unit z.x; interface implementation procedure p; forward; begin end; end.", t => i(t)?.Directives[0]?.Kind, MethodDirectiveKind.Forward);
+            RunAstTest("unit z.x; interface implementation procedure p; varargs; begin end; end.", t => i(t)?.Directives[0]?.Kind, MethodDirectiveKind.VarArgs);
+            RunAstTest("unit z.x; interface implementation procedure p; external; begin end; end.", t => i(t)?.Directives[0]?.Kind, MethodDirectiveKind.External);
+            RunAstTest("unit z.x; interface implementation procedure p; experimental; begin end; end.", t => i(t)?.Hints?.SymbolIsExperimental, true);
+
+            RunAstTest("unit z.x; interface implementation procedure p; external 'e'; begin end; end.", t => i(t)?.Directives[0]?.Kind, MethodDirectiveKind.External);
+            RunAstTest("unit z.x; interface implementation procedure p; external 'e' name 'e'; begin end; end.", t => i(t)?.Directives[0]?.Specifiers[0]?.Kind, MethodDirectiveSpecifierKind.Name);
+            RunAstTest("unit z.x; interface implementation procedure p; external 'e' index 'e'; begin end; end.", t => i(t)?.Directives[0]?.Specifiers[0]?.Kind, MethodDirectiveSpecifierKind.Index);
+            RunAstTest("unit z.x; interface implementation procedure p; external 'e' delayed; begin end; end.", t => i(t)?.Directives[0]?.Specifiers[0]?.Kind, MethodDirectiveSpecifierKind.Delayed);
+            RunAstTest("unit z.x; interface implementation procedure p; external 'e' dependency 'a', 'b'; begin end; end.", t => i(t)?.Directives[0]?.Specifiers[0]?.Kind, MethodDirectiveSpecifierKind.Dependency);
         }
 
         [Fact]
@@ -875,7 +900,19 @@ namespace PasPasPasTests.Parser {
 
         [Fact]
         public void TestLabel() {
-            // stil missing??
+            Func<object, MethodImplementation> r = t => ((t as CompilationUnit)?.ImplementationSymbols["p"] as MethodImplementation);
+
+            RunAstTest("unit z.x; interface implementation procedure p; label l; begin l: s; end; end.", t => r(t)?.LabelDeclarations[0]?.CompleteName, "l");
+            RunAstTest("unit z.x; interface implementation procedure p; label 1; begin 1: s; end; end.", t => r(t)?.LabelDeclarations[0]?.CompleteName, "1");
+        }
+
+        [Fact]
+        public void TestRecordConstant() {
+            Func<object, RecordConstant> r = t => (((t as CompilationUnit)?.ImplementationSymbols["p"] as MethodImplementation)?.Symbols["n"] as ConstantDeclaration)?.Value as RecordConstant;
+
+            RunAstTest("unit z.x; interface implementation procedure p; const n = (a: 1); begin l: s; end; end.", t => r(t)?.GetType(), typeof(RecordConstant));
+            RunAstTest("unit z.x; interface implementation procedure p; const n = (a: 1); begin l: s; end; end.", t => r(t)?.Items[0]?.Name?.CompleteName, "a");
+            RunAstTest("unit z.x; interface implementation procedure p; const n = (a: 1); begin l: s; end; end.", t => r(t)?.Items?.Count, 1);
         }
 
     }

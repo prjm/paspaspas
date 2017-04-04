@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
 
     /// <summary>
     ///     method implementation
     /// </summary>
-    public class MethodImplementation : DeclaredSymbol, IDeclaredSymbolTarget, IBlockTarget, IDirectiveTarget, IExpression, IParameterTarget {
+    public class MethodImplementation : DeclaredSymbol, IDeclaredSymbolTarget, IBlockTarget, IDirectiveTarget, IExpression, IParameterTarget, ITypeTarget, ILabelTarget {
 
         /// <summary>
         ///     new method implementation
@@ -64,6 +65,29 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         public ParameterDefinitions Parameters { get; }
 
+        /// <summary>
+        ///     return type
+        /// </summary>
+        public ITypeSpecification TypeValue { get; set; }
+
+        /// <summary>
+        ///     label declarations
+        /// </summary>
+        public IList<SymbolName> LabelDeclarations { get; }
+            = new List<SymbolName>();
+
+        /// <summary>
+        ///     labels
+        /// </summary>
+        public SymbolName LabelName {
+            get {
+                return LabelDeclarations.LastOrDefault();
+            }
+
+            set {
+                LabelDeclarations.Add(value);
+            }
+        }
     }
 }
 

@@ -1165,7 +1165,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         private AbstractSyntaxPart BeginVisitChildItem(FunctionDirectives parent, TreeTransformerOptions parameter, ISyntaxPart child) {
             var hints = child as HintingInformation;
-            var lastValue = parameter.LastValue as Abstract.MethodDeclaration;
+            var lastValue = parameter.LastValue as IDirectiveTarget;
 
             if (hints != null && lastValue != null) {
                 lastValue.Hints = ExtractHints(hints, lastValue.Hints);
