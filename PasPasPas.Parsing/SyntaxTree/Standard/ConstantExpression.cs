@@ -8,7 +8,7 @@
         /// <summary>
         ///     <c>true</c> if this is an array constant
         /// </summary>
-        public bool IsArrayConstant { get; set; }
+        public bool IsSetConstant { get; set; }
 
         /// <summary>
         ///     <c>true</c> if this in an record constant

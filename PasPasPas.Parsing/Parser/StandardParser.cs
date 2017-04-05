@@ -3420,6 +3420,8 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
+        #region ParseConstantExpression
+
         [Rule("ConstantExpression", " '(' ( RecordConstant | ConstantExpression ) ')' | Expression")]
         private ConstantExpression ParseConstantExpression(IExtendableSyntaxPart parent) {
             ConstantExpression result = CreateChild<ConstantExpression>(parent);
@@ -3435,7 +3437,7 @@ namespace PasPasPas.Parsing.Parser {
                     ContinueWithOrMissing(result, TokenKind.CloseParen);
                 }
                 else if (HasTokenBeforeToken(TokenKind.Comma, TokenKind.OpenParen, TokenKind.OpenBraces, TokenKind.CloseBraces, TokenKind.CloseParen)) {
-                    result.IsArrayConstant = true;
+                    result.IsSetConstant = true;
                     ContinueWithOrMissing(result, TokenKind.OpenParen);
                     do {
                         ParseConstantExpression(result);
@@ -3454,6 +3456,7 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
+        #endregion
         #region ParseRecordConstant 
 
         [Rule("RecordConstantExpression", "Identifier ':' ConstantExpression")]
@@ -3466,8 +3469,9 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         #endregion
+        #region ParseExpression
 
-        [Rule("Expression", "SimpleExpression [ ('<'|'<='|'>'|'>='|'<>'|'='|'in'|'as') SimpleExpression ] | ClosureExpression")]
+        [Rule("Expression", "SimpleExpression [ ('<'|'<='|'>'|'>='|'<>'|'='|'in'|'is') SimpleExpression ] | ClosureExpression")]
         private Expression ParseExpression(IExtendableSyntaxPart parent) {
             Expression result = CreateChild<Expression>(parent);
 
@@ -3485,6 +3489,9 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
+        #endregion
+        #region ParseSimpleExpression
+
         [Rule("SimpleExpression", "Term { ('+'|'-'|'or'|'xor') SimpleExpression }")]
         private SimpleExpression ParseSimpleExpression(IExtendableSyntaxPart parent) {
             SimpleExpression result = CreateChild<SimpleExpression>(parent);
@@ -3497,6 +3504,9 @@ namespace PasPasPas.Parsing.Parser {
 
             return result;
         }
+
+        #endregion
+        #region ParseTerm
 
         [Rule("Term", "Factor [ ('*'|'/'|'div'|'mod'|'and'|'shl'|'shr'|'as') Term ]")]
         private Term ParseTerm(IExtendableSyntaxPart parent) {
@@ -3511,6 +3521,8 @@ namespace PasPasPas.Parsing.Parser {
 
             return result;
         }
+
+        #endregion
 
         [Rule("Factor", "'@' Factor  | 'not' Factor | '+' Factor | '-' Factor | '^' Identifier | Integer | HexNumber | Real | 'true' | 'false' | 'nil' | '(' Expression ')' | String | SetSection | Designator | TypeCast")]
         private Factor ParseFactor(IExtendableSyntaxPart parent) {

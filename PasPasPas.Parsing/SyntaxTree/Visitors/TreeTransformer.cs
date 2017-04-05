@@ -243,8 +243,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         private AbstractSyntaxPart BeginVisitItem(ConstantExpression constExpression, TreeTransformerOptions parameter) {
 
-            if (constExpression.IsArrayConstant) {
-                ArrayConstant result = CreateNode<ArrayConstant>(parameter, constExpression);
+            if (constExpression.IsSetConstant) {
+                SetConstant result = CreateNode<SetConstant>(parameter, constExpression);
                 parameter.DefineExpressionValue(result);
                 return result;
             }

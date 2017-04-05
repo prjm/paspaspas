@@ -87,6 +87,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
                 case TokenKind.Shr:
                     return ExpressionKind.Shr;
 
+                case TokenKind.Is:
+                    return ExpressionKind.Is;
+
                 default:
                     return ExpressionKind.Undefined;
             }

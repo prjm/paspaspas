@@ -179,5 +179,10 @@
         ///     memory subexpression
         /// </summary>
         AsmMemorySubexpression = 34,
+
+        /// <summary>
+        ///     is subexpression
+        /// </summary>
+        Is = 35,
     }
 }

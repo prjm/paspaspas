@@ -5,7 +5,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// <summary>
     ///     constant array
     /// </summary>
-    public class ArrayConstant : ExpressionBase, IExpressionTarget {
+    public class SetConstant : ExpressionBase, IExpressionTarget {
 
         /// <summary>
         ///     items

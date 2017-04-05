@@ -915,5 +915,41 @@ namespace PasPasPasTests.Parser {
             RunAstTest("unit z.x; interface implementation procedure p; const n = (a: 1); begin l: s; end; end.", t => r(t)?.Items?.Count, 1);
         }
 
+        [Fact]
+        public void TestSetConstant() {
+            Func<object, SetConstant> r = t => (((t as CompilationUnit)?.ImplementationSymbols["p"] as MethodImplementation)?.Symbols["n"] as ConstantDeclaration)?.Value as SetConstant;
+
+            RunAstTest("unit z.x; interface implementation procedure p; const n = (2, 1); begin l: s; end; end.", t => r(t)?.GetType(), typeof(SetConstant));
+            RunAstTest("unit z.x; interface implementation procedure p; const n = (nil, nil); begin l: s; end; end.", t => r(t)?.Items[0]?.GetType(), typeof(ConstantValue));
+        }
+
+        [Fact]
+        public void TestBinaryOperators() {
+            Func<object, BinaryOperator> r = t => (((t as CompilationUnit)?.ImplementationSymbols["p"] as MethodImplementation)?.Symbols["n"] as ConstantDeclaration)?.Value as BinaryOperator;
+
+            RunAstTest("unit z.x; interface implementation procedure p; const n = 1 < 2; begin l: s; end; end.", t => r(t)?.Kind, ExpressionKind.LessThen);
+            RunAstTest("unit z.x; interface implementation procedure p; const n = 1 <= 2; begin l: s; end; end.", t => r(t)?.Kind, ExpressionKind.LessThenEquals);
+            RunAstTest("unit z.x; interface implementation procedure p; const n = 1 > 2; begin l: s; end; end.", t => r(t)?.Kind, ExpressionKind.GreaterThen);
+            RunAstTest("unit z.x; interface implementation procedure p; const n = 1 >= 2; begin l: s; end; end.", t => r(t)?.Kind, ExpressionKind.GreaterThenEquals);
+            RunAstTest("unit z.x; interface implementation procedure p; const n = 1 <> 2; begin l: s; end; end.", t => r(t)?.Kind, ExpressionKind.NotEquals);
+            RunAstTest("unit z.x; interface implementation procedure p; const n = 1 = 2; begin l: s; end; end.", t => r(t)?.Kind, ExpressionKind.EqualsSign);
+            RunAstTest("unit z.x; interface implementation procedure p; const n = a is TObject; begin l: s; end; end.", t => r(t)?.Kind, ExpressionKind.Is);
+            RunAstTest("unit z.x; interface implementation procedure p; const n = 1 in (1,2); begin l: s; end; end.", t => r(t)?.Kind, ExpressionKind.In);
+
+            RunAstTest("unit z.x; interface implementation procedure p; const n = 1 + 2; begin l: s; end; end.", t => r(t)?.Kind, ExpressionKind.Plus);
+            RunAstTest("unit z.x; interface implementation procedure p; const n = 1 - 2; begin l: s; end; end.", t => r(t)?.Kind, ExpressionKind.Minus);
+            RunAstTest("unit z.x; interface implementation procedure p; const n = 1 or 2; begin l: s; end; end.", t => r(t)?.Kind, ExpressionKind.Or);
+            RunAstTest("unit z.x; interface implementation procedure p; const n = 1 xor 2; begin l: s; end; end.", t => r(t)?.Kind, ExpressionKind.Xor);
+
+            RunAstTest("unit z.x; interface implementation procedure p; const n = 1 * 2; begin l: s; end; end.", t => r(t)?.Kind, ExpressionKind.Times);
+            RunAstTest("unit z.x; interface implementation procedure p; const n = 1 / 2; begin l: s; end; end.", t => r(t)?.Kind, ExpressionKind.Slash);
+            RunAstTest("unit z.x; interface implementation procedure p; const n = 1 div 2; begin l: s; end; end.", t => r(t)?.Kind, ExpressionKind.Div);
+            RunAstTest("unit z.x; interface implementation procedure p; const n = 1 mod 2; begin l: s; end; end.", t => r(t)?.Kind, ExpressionKind.Mod);
+            RunAstTest("unit z.x; interface implementation procedure p; const n = 1 and 2; begin l: s; end; end.", t => r(t)?.Kind, ExpressionKind.And);
+            RunAstTest("unit z.x; interface implementation procedure p; const n = 1 shl 2; begin l: s; end; end.", t => r(t)?.Kind, ExpressionKind.Shl);
+            RunAstTest("unit z.x; interface implementation procedure p; const n = 1 shr 2; begin l: s; end; end.", t => r(t)?.Kind, ExpressionKind.Shr);
+            RunAstTest("unit z.x; interface implementation procedure p; const n = a as TObject; begin l: s; end; end.", t => r(t)?.Kind, ExpressionKind.As);
+        }
+
     }
 }
