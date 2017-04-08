@@ -148,7 +148,6 @@
     <Compile Include="SyntaxTree\Abstract\RequiredUnitNameList.cs" />
     <Compile Include="SyntaxTree\Abstract\VariableDeclaration.cs" />
     <Compile Include="SyntaxTree\Abstract\VariableName.cs" />
-    <Compile Include="SyntaxTree\Abstract\VariableValue.cs" />
     <Compile Include="SyntaxTree\Abstract\VariableValueKind.cs" />
     <Compile Include="SyntaxTree\CompilerDirectives\IfDirective.cs" />
     <Compile Include="SyntaxTree\Standard\AsmBlock.cs" />

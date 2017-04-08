@@ -924,6 +924,30 @@ namespace PasPasPasTests.Parser {
         }
 
         [Fact]
+        public void TestUnaryOperators() {
+            Func<object, UnaryOperator> r = t => (((t as CompilationUnit)?.ImplementationSymbols["p"] as MethodImplementation)?.Symbols["n"] as ConstantDeclaration)?.Value as UnaryOperator;
+
+            RunAstTest("unit z.x; interface implementation procedure p; const n = @1; begin l: s; end; end.", t => r(t)?.Kind, ExpressionKind.AddressOf);
+            RunAstTest("unit z.x; interface implementation procedure p; const n = not 1; begin l: s; end; end.", t => r(t)?.Kind, ExpressionKind.Not);
+            RunAstTest("unit z.x; interface implementation procedure p; const n = +1; begin l: s; end; end.", t => r(t)?.Kind, ExpressionKind.UnaryPlus);
+            RunAstTest("unit z.x; interface implementation procedure p; const n = -1; begin l: s; end; end.", t => r(t)?.Kind, ExpressionKind.UnaryMinus);
+        }
+
+        [Fact]
+        public void TestFactors() {
+            Func<object, IExpression> r = t => (((t as CompilationUnit)?.ImplementationSymbols["p"] as MethodImplementation)?.Symbols["n"] as ConstantDeclaration)?.Value;
+
+            RunAstTest("unit z.x; interface implementation procedure p; const n = ^Baz; begin l: s; end; end.", t => (r(t) as SymbolReference)?.PointerTo, true);
+            RunAstTest("unit z.x; interface implementation procedure p; const n = nil; begin l: s; end; end.", t => (r(t) as ConstantValue)?.Kind, ConstantValueKind.Nil);
+            RunAstTest("unit z.x; interface implementation procedure p; const n = false; begin l: s; end; end.", t => (r(t) as ConstantValue)?.Kind, ConstantValueKind.False);
+            RunAstTest("unit z.x; interface implementation procedure p; const n = true; begin l: s; end; end.", t => (r(t) as ConstantValue)?.Kind, ConstantValueKind.True);
+            RunAstTest("unit z.x; interface implementation procedure p; const n = 5; begin l: s; end; end.", t => (r(t) as ConstantValue)?.Kind, ConstantValueKind.Integer);
+            RunAstTest("unit z.x; interface implementation procedure p; const n = 5.55; begin l: s; end; end.", t => (r(t) as ConstantValue)?.Kind, ConstantValueKind.RealNumber);
+            RunAstTest("unit z.x; interface implementation procedure p; const n = 'a'; begin l: s; end; end.", t => (r(t) as ConstantValue)?.Kind, ConstantValueKind.QuotedString);
+            RunAstTest("unit z.x; interface implementation procedure p; const n = $FFFF; begin l: s; end; end.", t => (r(t) as ConstantValue)?.Kind, ConstantValueKind.HexNumber);
+        }
+
+        [Fact]
         public void TestBinaryOperators() {
             Func<object, BinaryOperator> r = t => (((t as CompilationUnit)?.ImplementationSymbols["p"] as MethodImplementation)?.Symbols["n"] as ConstantDeclaration)?.Value as BinaryOperator;
 

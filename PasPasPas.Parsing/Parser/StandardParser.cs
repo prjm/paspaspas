@@ -3523,6 +3523,7 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         #endregion
+        #region ParseFactor
 
         [Rule("Factor", "'@' Factor  | 'not' Factor | '+' Factor | '-' Factor | '^' Identifier | Integer | HexNumber | Real | 'true' | 'false' | 'nil' | '(' Expression ')' | String | SetSection | Designator | TypeCast")]
         private Factor ParseFactor(IExtendableSyntaxPart parent) {
@@ -3622,7 +3623,7 @@ namespace PasPasPas.Parsing.Parser {
                 return result;
             }
 
-            if (Match(TokenKind.Circumflex, TokenKind.Dot, TokenKind.OpenBraces, TokenKind.OpenParen)) {
+            if (Match(TokenKind.Dot, TokenKind.OpenBraces, TokenKind.OpenParen)) {
                 result.Designator = ParseDesignator(result);
                 return result;
             }
@@ -3631,10 +3632,11 @@ namespace PasPasPas.Parsing.Parser {
             return null;
         }
 
+        #endregion
+
         [Rule("Designator", "[ 'inherited' ] [ NamespaceName ] { DesignatorItem }")]
         private DesignatorStatement ParseDesignator(IExtendableSyntaxPart parent) {
             DesignatorStatement result = CreateChild<DesignatorStatement>(parent);
-            result.AddressOf = ContinueWith(result, TokenKind.At);
             result.Inherited = ContinueWith(result, TokenKind.Inherited);
             if (MatchIdentifier(TokenKind.String, TokenKind.ShortString, TokenKind.AnsiString, TokenKind.WideString, TokenKind.String)) {
                 result.Name = ParseTypeName(result);

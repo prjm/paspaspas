@@ -337,8 +337,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             }
 
             if (factor.PointerTo != null) {
-                VariableValue value = CreateNode<VariableValue>(parameter, factor);
+                SymbolReference value = CreateNode<SymbolReference>(parameter, factor);
                 value.Name = ExtractSymbolName(factor.PointerTo);
+                value.PointerTo = true;
                 parameter.DefineExpressionValue(value);
                 return value;
             }
@@ -362,10 +363,22 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 return value;
             }
             else if (factor.RealValue != null) {
-
+                ConstantValue value = CreateNode<ConstantValue>(parameter, factor);
+                value.Kind = ConstantValueKind.RealNumber;
+                parameter.DefineExpressionValue(value);
+                return value;
             }
             if (factor.StringValue != null) {
-
+                ConstantValue value = CreateNode<ConstantValue>(parameter, factor);
+                value.Kind = ConstantValueKind.QuotedString;
+                parameter.DefineExpressionValue(value);
+                return value;
+            }
+            if (factor.HexValue != null) {
+                ConstantValue value = CreateNode<ConstantValue>(parameter, factor);
+                value.Kind = ConstantValueKind.HexNumber;
+                parameter.DefineExpressionValue(value);
+                return value;
             }
             return null;
         }
@@ -1712,6 +1725,19 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             }
 
             return null;
+        }
+
+        #endregion
+        #region DesignatorStatement
+
+        private AbstractSyntaxPart BeginVisitItem(DesignatorStatement designator, TreeTransformerOptions parameter) {
+            if (!designator.Inherited && designator.Name == null)
+                return null;
+
+            SymbolReference result = CreateNode<SymbolReference>(parameter, designator);
+            if (designator.Inherited)
+                result.Inherited = true;
+            return result;
         }
 
         #endregion
