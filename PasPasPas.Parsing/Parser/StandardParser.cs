@@ -3633,6 +3633,7 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         #endregion
+        #region ParseDesignator
 
         [Rule("Designator", "[ 'inherited' ] [ NamespaceName ] { DesignatorItem }")]
         private DesignatorStatement ParseDesignator(IExtendableSyntaxPart parent) {
@@ -3651,6 +3652,8 @@ namespace PasPasPas.Parsing.Parser {
 
             return result;
         }
+
+        #endregion
 
         [Rule("DesignatorItem", "'^' | '.' Ident [GenericSuffix] | '[' ExpressionList ']' | '(' [ FormattedExpression  { ',' FormattedExpression } ] ')'")]
         private ISyntaxPart ParseDesignatorItem(SyntaxPartBase parent, bool hasIdentifier) {

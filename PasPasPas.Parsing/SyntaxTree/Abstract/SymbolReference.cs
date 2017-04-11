@@ -3,7 +3,7 @@
     /// <summary>
     ///     reference to a symbol
     /// </summary>
-    public class SymbolReference : AbstractSyntaxPart, IExpression, ILabelTarget, ITypeTarget {
+    public class SymbolReference : AbstractSyntaxPart, IExpression, ILabelTarget, ITypeTarget, IExpressionTarget {
 
         /// <summary>
         ///     identifier name
@@ -30,5 +30,9 @@
         /// </summary>
         public ITypeSpecification TypeValue { get; set; }
 
+        /// <summary>
+        ///     expression target
+        /// </summary>
+        public IExpression Value { get; set; }
     }
 }

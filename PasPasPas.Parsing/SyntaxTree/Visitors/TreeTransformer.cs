@@ -1737,7 +1737,33 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             SymbolReference result = CreateNode<SymbolReference>(parameter, designator);
             if (designator.Inherited)
                 result.Inherited = true;
+
+            parameter.DefineExpressionValue(result);
             return result;
+        }
+
+        #endregion
+        #region DesignatorItem
+
+        private AbstractSyntaxPart BeginVisitItem(DesignatorItem designator, TreeTransformerOptions parameter) {
+
+            if (designator.Dereference) {
+                UnaryOperator currentExpression = CreateNode<UnaryOperator>(parameter, designator);
+                parameter.DefineExpressionValue(currentExpression);
+                currentExpression.Kind = ExpressionKind.Dereference;
+                return currentExpression;
+            }
+
+            if (designator.Subitem != null) {
+                UnaryOperator currentExpression = CreateNode<UnaryOperator>(parameter, designator);
+                parameter.DefineExpressionValue(currentExpression);
+                currentExpression.Name = ExtractSymbolName(designator.Subitem);
+                //currentExpression.GenericType = ExtractGenericDefinition(currentExpression, designator.SubitemGenericType, parameter);
+                currentExpression.Kind = ExpressionKind.SubItem;
+                return currentExpression;
+            }
+
+            return null;
         }
 
         #endregion
@@ -1877,6 +1903,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 result.Append(name.NamespaceName?.Name);
 
             return result;
+        }
+        private static GenericTypes ExtractGenericDefinition(AbstractSyntaxPart parent, GenericPostfix genericDefinition, TreeTransformerOptions parameter) {
+            if (genericDefinition == null)
+                return null;
+            return null;
         }
 
         private static GenericTypes ExtractGenericDefinition(AbstractSyntaxPart parent, GenericDefinition genericDefinition, TreeTransformerOptions parameter) {

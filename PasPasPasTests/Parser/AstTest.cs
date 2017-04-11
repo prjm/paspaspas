@@ -926,11 +926,13 @@ namespace PasPasPasTests.Parser {
         [Fact]
         public void TestUnaryOperators() {
             Func<object, UnaryOperator> r = t => (((t as CompilationUnit)?.ImplementationSymbols["p"] as MethodImplementation)?.Symbols["n"] as ConstantDeclaration)?.Value as UnaryOperator;
+            Func<object, UnaryOperator> q = t => ((((t as CompilationUnit)?.ImplementationSymbols["p"] as MethodImplementation)?.Symbols["n"] as ConstantDeclaration)?.Value as SymbolReference)?.Value as UnaryOperator;
 
             RunAstTest("unit z.x; interface implementation procedure p; const n = @1; begin l: s; end; end.", t => r(t)?.Kind, ExpressionKind.AddressOf);
             RunAstTest("unit z.x; interface implementation procedure p; const n = not 1; begin l: s; end; end.", t => r(t)?.Kind, ExpressionKind.Not);
             RunAstTest("unit z.x; interface implementation procedure p; const n = +1; begin l: s; end; end.", t => r(t)?.Kind, ExpressionKind.UnaryPlus);
             RunAstTest("unit z.x; interface implementation procedure p; const n = -1; begin l: s; end; end.", t => r(t)?.Kind, ExpressionKind.UnaryMinus);
+            RunAstTest("unit z.x; interface implementation procedure p; const n = l^; begin l: s; end; end.", t => q(t)?.Kind, ExpressionKind.Dereference);
         }
 
         [Fact]
@@ -945,6 +947,15 @@ namespace PasPasPasTests.Parser {
             RunAstTest("unit z.x; interface implementation procedure p; const n = 5.55; begin l: s; end; end.", t => (r(t) as ConstantValue)?.Kind, ConstantValueKind.RealNumber);
             RunAstTest("unit z.x; interface implementation procedure p; const n = 'a'; begin l: s; end; end.", t => (r(t) as ConstantValue)?.Kind, ConstantValueKind.QuotedString);
             RunAstTest("unit z.x; interface implementation procedure p; const n = $FFFF; begin l: s; end; end.", t => (r(t) as ConstantValue)?.Kind, ConstantValueKind.HexNumber);
+        }
+
+        [Fact]
+        public void TestDesignator() {
+            Func<object, SymbolReference> r = t => (((t as CompilationUnit)?.ImplementationSymbols["p"] as MethodImplementation)?.Symbols["n"] as ConstantDeclaration)?.Value as SymbolReference;
+
+            RunAstTest("unit z.x; interface implementation procedure p; const n = inherited; begin l: s; end; end.", t => r(t)?.Inherited, true);
+            RunAstTest("unit z.x; interface implementation procedure p; const n = q; begin l: s; end; end.", t => r(t)?.Inherited, false);
+            RunAstTest("unit z.x; interface implementation procedure p; const n = q; begin l: s; end; end.", t => (r(t)?.TypeValue as MetaType)?.Fragments[0]?.Name?.CompleteName, "q");
         }
 
         [Fact]

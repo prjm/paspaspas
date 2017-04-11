@@ -184,5 +184,15 @@
         ///     is subexpression
         /// </summary>
         Is = 35,
+
+        /// <summary>
+        ///     dereference
+        /// </summary>
+        Dereference = 36,
+
+        /// <summary>
+        ///     subitem
+        /// </summary>
+        SubItem = 37,
     }
 }
