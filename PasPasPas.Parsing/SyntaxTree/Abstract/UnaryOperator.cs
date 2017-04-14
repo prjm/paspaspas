@@ -30,11 +30,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         }
 
         /// <summary>
-        ///     referenced identifier
-        /// </summary>
-        public SymbolName Name { get; set; }
-
-        /// <summary>
         ///     map asm byte pointer kind
         /// </summary>
         /// <param name="value"></param>

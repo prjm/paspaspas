@@ -926,13 +926,27 @@ namespace PasPasPasTests.Parser {
         [Fact]
         public void TestUnaryOperators() {
             Func<object, UnaryOperator> r = t => (((t as CompilationUnit)?.ImplementationSymbols["p"] as MethodImplementation)?.Symbols["n"] as ConstantDeclaration)?.Value as UnaryOperator;
-            Func<object, UnaryOperator> q = t => ((((t as CompilationUnit)?.ImplementationSymbols["p"] as MethodImplementation)?.Symbols["n"] as ConstantDeclaration)?.Value as SymbolReference)?.Value as UnaryOperator;
+            Func<object, SymbolReferencePart> q0 = t => ((((t as CompilationUnit)?.ImplementationSymbols["p"] as MethodImplementation)?.Symbols["n"] as ConstantDeclaration)?.Value as SymbolReference)?.SymbolParts[0];
+            Func<object, SymbolReferencePart> q1 = t => ((((t as CompilationUnit)?.ImplementationSymbols["p"] as MethodImplementation)?.Symbols["n"] as ConstantDeclaration)?.Value as SymbolReference)?.SymbolParts[1];
 
             RunAstTest("unit z.x; interface implementation procedure p; const n = @1; begin l: s; end; end.", t => r(t)?.Kind, ExpressionKind.AddressOf);
             RunAstTest("unit z.x; interface implementation procedure p; const n = not 1; begin l: s; end; end.", t => r(t)?.Kind, ExpressionKind.Not);
             RunAstTest("unit z.x; interface implementation procedure p; const n = +1; begin l: s; end; end.", t => r(t)?.Kind, ExpressionKind.UnaryPlus);
             RunAstTest("unit z.x; interface implementation procedure p; const n = -1; begin l: s; end; end.", t => r(t)?.Kind, ExpressionKind.UnaryMinus);
-            RunAstTest("unit z.x; interface implementation procedure p; const n = l^; begin l: s; end; end.", t => q(t)?.Kind, ExpressionKind.Dereference);
+            RunAstTest("unit z.x; interface implementation procedure p; const n = l^; begin l: s; end; end.", t => q0(t)?.Kind, SymbolReferencePartKind.Dereference);
+            RunAstTest("unit z.x; interface implementation procedure p; const n = l^.q; begin l: s; end; end.", t => q1(t)?.Kind, SymbolReferencePartKind.SubItem);
+            RunAstTest("unit z.x; interface implementation procedure p; const n = l^.q; begin l: s; end; end.", t => q1(t)?.Name?.CompleteName, "q");
+            RunAstTest("unit z.x; interface implementation procedure p; const n = l^.q<z>; begin l: s; end; end.", t => q1(t)?.GenericType?.TypeReference, true);
+            RunAstTest("unit z.x; interface implementation procedure p; const n = l^.q<z>; begin l: s; end; end.", t => (q1(t)?.GenericType?.TypeValue as TypeAlias)?.Fragments[0]?.Name?.CompleteName, "z");
+            RunAstTest("unit z.x; interface implementation procedure p; const n = l^[1]; begin l: s; end; end.", t => q1(t)?.Kind, SymbolReferencePartKind.ArrayIndex);
+            RunAstTest("unit z.x; interface implementation procedure p; const n = l^[1]; begin l: s; end; end.", t => q1(t)?.Expressions[0]?.GetType(), typeof(ConstantValue));
+            RunAstTest("unit z.x; interface implementation procedure p; const n = l^(1); begin l: s; end; end.", t => q1(t)?.Kind, SymbolReferencePartKind.CallParameters);
+            RunAstTest("unit z.x; interface implementation procedure p; const n = l^(1); begin l: s; end; end.", t => q1(t)?.Expressions[0]?.GetType(), typeof(ConstantValue));
+            RunAstTest("unit z.x; interface implementation procedure p; const n = l^(x := 1); begin l: s; end; end.", t => (q1(t)?.Expressions[0] as SymbolReference)?.NamedParameter, true);
+            RunAstTest("unit z.x; interface implementation procedure p; const n = l^(x := 1); begin l: s; end; end.", t => (q1(t)?.Expressions[0] as SymbolReference)?.Name?.CompleteName, "x");
+            RunAstTest("unit z.x; interface implementation procedure p; const n = l^(x := 1); begin l: s; end; end.", t => (q1(t)?.Expressions[0] as SymbolReference)?.Value?.GetType(), typeof(ConstantValue));
+            RunAstTest("unit z.x; interface implementation procedure p; const n = l^(1:1:1); begin l: s; end; end.", t => q1(t)?.Kind, SymbolReferencePartKind.CallParameters);
+            RunAstTest("unit z.x; interface implementation procedure p; const n = l^(1:1:1); begin l: s; end; end.", t => q1(t)?.Expressions[0]?.GetType(), typeof(FormattedExpression));
         }
 
         [Fact]

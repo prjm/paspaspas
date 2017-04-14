@@ -1,9 +1,9 @@
 ﻿namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
     /// <summary>
-    ///    generic type siffox
+    ///    generic type suffix
     /// </summary>
-    public class GenericPostfix : SyntaxPartBase {
+    public class GenericSuffix : SyntaxPartBase {
 
 
     }

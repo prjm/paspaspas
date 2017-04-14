@@ -23,6 +23,11 @@
         /// <summary>
         ///     generic type of the subitem
         /// </summary>
-        public GenericPostfix SubitemGenericType { get; set; }
+        public GenericSuffix SubitemGenericType { get; set; }
+
+        /// <summary>
+        ///     <true>if a parameter list</true>
+        /// </summary>
+        public bool ParameterList { get; set; }
     }
 }

@@ -706,8 +706,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             return result;
         }
 
-
-
         #endregion   
         #region UnitInitialization
 
@@ -1746,27 +1744,69 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #region DesignatorItem
 
         private AbstractSyntaxPart BeginVisitItem(DesignatorItem designator, TreeTransformerOptions parameter) {
+            var parent = parameter.LastValue as SymbolReference;
 
             if (designator.Dereference) {
-                UnaryOperator currentExpression = CreateNode<UnaryOperator>(parameter, designator);
-                parameter.DefineExpressionValue(currentExpression);
-                currentExpression.Kind = ExpressionKind.Dereference;
-                return currentExpression;
+                SymbolReferencePart part = CreateNode<SymbolReferencePart>(parameter, designator);
+                parent.AddPart(part);
+                part.Kind = SymbolReferencePartKind.Dereference;
+                return part;
             }
 
             if (designator.Subitem != null) {
-                UnaryOperator currentExpression = CreateNode<UnaryOperator>(parameter, designator);
-                parameter.DefineExpressionValue(currentExpression);
-                currentExpression.Name = ExtractSymbolName(designator.Subitem);
-                //currentExpression.GenericType = ExtractGenericDefinition(currentExpression, designator.SubitemGenericType, parameter);
-                currentExpression.Kind = ExpressionKind.SubItem;
-                return currentExpression;
+                SymbolReferencePart part = CreateNode<SymbolReferencePart>(parameter, designator);
+                parent.AddPart(part);
+                part.Kind = SymbolReferencePartKind.SubItem;
+                part.Name = ExtractSymbolName(designator.Subitem);
+                part.GenericType = ExtractGenericDefinition(part, designator.SubitemGenericType, parameter);
+                return (AbstractSyntaxPart)part.GenericType ?? part;
+            }
+
+            if (designator.IndexExpression != null) {
+                SymbolReferencePart part = CreateNode<SymbolReferencePart>(parameter, designator);
+                parent.AddPart(part);
+                part.Kind = SymbolReferencePartKind.ArrayIndex;
+                return part;
+            }
+
+            if (designator.ParameterList) {
+                SymbolReferencePart part = CreateNode<SymbolReferencePart>(parameter, designator);
+                parent.AddPart(part);
+                part.Kind = SymbolReferencePartKind.CallParameters;
+                return part;
             }
 
             return null;
         }
 
         #endregion
+        #region Parameter
+
+        private AbstractSyntaxPart BeginVisitItem(Parameter param, TreeTransformerOptions parameter) {
+            if (param.ParameterName == null)
+                return null;
+
+            SymbolReference result = CreateNode<SymbolReference>(parameter, param);
+            result.NamedParameter = true;
+            result.Name = ExtractSymbolName(param.ParameterName);
+            parameter.DefineExpressionValue(result);
+            return result;
+        }
+
+        #endregion
+        #region FormattedExpression
+
+        private AbstractSyntaxPart BeginVisitItem(Standard.FormattedExpression expr, TreeTransformerOptions parameter) {
+            if (expr.Width == null && expr.Decimals == null)
+                return null;
+
+            Abstract.FormattedExpression result = CreateNode<Abstract.FormattedExpression>(parameter, expr);
+            parameter.DefineExpressionValue(result);
+            return result;
+        }
+
+        #endregion
+
         #region AsmFactor
 
         private AbstractSyntaxPart BeginVisitItem(AsmFactor factor, TreeTransformerOptions parameter) {
@@ -1904,10 +1944,15 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
             return result;
         }
-        private static GenericTypes ExtractGenericDefinition(AbstractSyntaxPart parent, GenericPostfix genericDefinition, TreeTransformerOptions parameter) {
+
+        private static GenericTypes ExtractGenericDefinition(AbstractSyntaxPart parent, GenericSuffix genericDefinition, TreeTransformerOptions parameter) {
             if (genericDefinition == null)
                 return null;
-            return null;
+
+            GenericTypes result = CreatePartNode<GenericTypes>(parent, genericDefinition);
+            result.TypeReference = true;
+
+            return result;
         }
 
         private static GenericTypes ExtractGenericDefinition(AbstractSyntaxPart parent, GenericDefinition genericDefinition, TreeTransformerOptions parameter) {

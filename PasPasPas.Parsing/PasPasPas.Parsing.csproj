@@ -49,6 +49,7 @@
     <Compile Include="SyntaxTree\Abstract\CombinedSymbolTableBase.cs" />
     <Compile Include="SyntaxTree\Abstract\DeclaredSymbolGroup.cs" />
     <Compile Include="SyntaxTree\Abstract\ExportedMethodDeclaration.cs" />
+    <Compile Include="SyntaxTree\Abstract\FormattedExpression.cs" />
     <Compile Include="SyntaxTree\Abstract\GlobalMethod.cs" />
     <Compile Include="SyntaxTree\Abstract\IBlockTarget.cs" />
     <Compile Include="SyntaxTree\Abstract\IDeclaredSymbolTarget.cs" />
@@ -137,6 +138,8 @@
     <Compile Include="SyntaxTree\Abstract\SymbolHints.cs" />
     <Compile Include="SyntaxTree\Abstract\SymbolName.cs" />
     <Compile Include="SyntaxTree\Abstract\SymbolReference.cs" />
+    <Compile Include="SyntaxTree\Abstract\SymbolReferencePart.cs" />
+    <Compile Include="SyntaxTree\Abstract\SymbolReferencePartKind.cs" />
     <Compile Include="SyntaxTree\Abstract\SymbolTableBase.cs" />
     <Compile Include="SyntaxTree\Abstract\SymbolTableEntryBase.cs" />
     <Compile Include="SyntaxTree\Abstract\TypeAlias.cs" />

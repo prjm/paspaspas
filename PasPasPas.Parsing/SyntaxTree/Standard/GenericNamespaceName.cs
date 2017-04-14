@@ -8,7 +8,7 @@
         /// <summary>
         ///     generic part
         /// </summary>
-        public GenericPostfix GenericPart { get; set; }
+        public GenericSuffix GenericPart { get; set; }
 
         /// <summary>
         ///     namespace name

@@ -3290,8 +3290,8 @@ namespace PasPasPas.Parsing.Parser {
         #region ParseGenericSuffix
 
         [Rule("GenericSuffix", "'<' TypeDefinition { ',' TypeDefinition '}' '>'")]
-        private GenericPostfix ParseGenericSuffix(IExtendableSyntaxPart parent) {
-            GenericPostfix result = CreateByTerminal<GenericPostfix>(parent, TokenKind.AngleBracketsOpen);
+        private GenericSuffix ParseGenericSuffix(IExtendableSyntaxPart parent) {
+            GenericSuffix result = CreateByTerminal<GenericSuffix>(parent, TokenKind.AngleBracketsOpen);
 
             do {
                 ParseTypeSpecification(result);
@@ -3654,6 +3654,7 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         #endregion
+        #region ParseDesignatorItem
 
         [Rule("DesignatorItem", "'^' | '.' Ident [GenericSuffix] | '[' ExpressionList ']' | '(' [ FormattedExpression  { ',' FormattedExpression } ] ')'")]
         private ISyntaxPart ParseDesignatorItem(SyntaxPartBase parent, bool hasIdentifier) {
@@ -3709,11 +3710,15 @@ namespace PasPasPas.Parsing.Parser {
                     } while (ContinueWith(result, TokenKind.Comma));
                 }
                 ContinueWithOrMissing(result, TokenKind.CloseParen);
+                result.ParameterList = true;
                 return result;
             }
 
             return null;
         }
+
+        #endregion
+        #region ParseFormattedExpression
 
         [Rule("FormattedExpression", "Expression [ ':' Expression [ ':' Expression ] ]")]
         private FormattedExpression ParseFormattedExpression(IExtendableSyntaxPart parent) {
@@ -3728,6 +3733,8 @@ namespace PasPasPas.Parsing.Parser {
             }
             return result;
         }
+
+        #endregion
 
         [Rule("SetSection", "'[' [ Expression ] { (',' | '..') Expression } ']'")]
         private SetSection ParseSetSection(IExtendableSyntaxPart parent) {
@@ -3769,6 +3776,8 @@ namespace PasPasPas.Parsing.Parser {
             result.Block = ParseBlock(result);
             return result;
         }
+
+        #region Helper Functions
 
         private StandardInteger RequireInteger(IExtendableSyntaxPart parent)
             => CreateByTerminal<StandardInteger>(parent, TokenKind.Integer);
@@ -3865,6 +3874,7 @@ namespace PasPasPas.Parsing.Parser {
         }
 
 
+        #endregion
 
     }
 }
