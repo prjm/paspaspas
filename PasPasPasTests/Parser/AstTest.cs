@@ -973,6 +973,33 @@ namespace PasPasPasTests.Parser {
         }
 
         [Fact]
+        public void TestSetExpressions() {
+            Func<object, SetExpression> r = t => (((t as CompilationUnit)?.ImplementationSymbols["p"] as MethodImplementation)?.Symbols["n"] as ConstantDeclaration)?.Value as SetExpression;
+
+            RunAstTest("unit z.x; interface implementation procedure p; const n = [1,2,3]; begin l: s; end; end.", t => r(t)?.Expressions[0]?.GetType(), typeof(ConstantValue));
+            RunAstTest("unit z.x; interface implementation procedure p; const n = [1..2,2,3]; begin l: s; end; end.", t => r(t)?.Expressions[0]?.GetType(), typeof(BinaryOperator));
+            RunAstTest("unit z.x; interface implementation procedure p; const n = [1..2,2,3]; begin l: s; end; end.", t => (r(t)?.Expressions[0] as BinaryOperator)?.LeftOperand?.GetType(), typeof(ConstantValue));
+        }
+
+        [Fact]
+        public void TestExceptionStatements() {
+            Func<object, StructuredStatement> r = t => (((t as CompilationUnit)?.ImplementationSymbols["p"] as MethodImplementation)?.Block as BlockOfStatements)?.Statements[0] as StructuredStatement;
+
+            RunAstTest("unit z.x; interface implementation procedure p; begin raise x; end; end.", t => r(t)?.Kind, StructuredStatementKind.Raise);
+        }
+
+        [Fact]
+        public void TestClosureExpression() {
+            Func<object, MethodImplementation> r = t => (((t as CompilationUnit)?.ImplementationSymbols["p"] as MethodImplementation)?.Symbols["n"] as ConstantDeclaration)?.Value as MethodImplementation;
+
+            RunAstTest("unit z.x; interface implementation procedure p; const n = procedure(const a: string) begin end; begin end; end.", t => r(t)?.Name.CompleteName, "$1");
+            RunAstTest("unit z.x; interface implementation procedure p; const n = procedure(const a: string) begin end; begin end; end.", t => r(t)?.Parameters[0]?.ParameterKind, ParameterReferenceKind.Const);
+            RunAstTest("unit z.x; interface implementation procedure p; const n = procedure(const a: string) begin end; begin end; end.", t => r(t)?.Parameters[0]?.Name?.CompleteName, "a");
+            RunAstTest("unit z.x; interface implementation procedure p; const n = function(const a: string): Integer begin end; begin end; end.", t => r(t)?.Name.CompleteName, "$1");
+            RunAstTest("unit z.x; interface implementation procedure p; const n = function(const a: string): String begin end; begin end; end.", t => (r(t)?.TypeValue as MetaType)?.Kind, MetaTypeKind.String);
+        }
+
+        [Fact]
         public void TestBinaryOperators() {
             Func<object, BinaryOperator> r = t => (((t as CompilationUnit)?.ImplementationSymbols["p"] as MethodImplementation)?.Symbols["n"] as ConstantDeclaration)?.Value as BinaryOperator;
 

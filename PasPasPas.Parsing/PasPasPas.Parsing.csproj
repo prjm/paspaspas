@@ -111,10 +111,13 @@
     <Compile Include="SyntaxTree\Abstract\ProjectRoot.cs" />
     <Compile Include="SyntaxTree\Abstract\RecordConstant.cs" />
     <Compile Include="SyntaxTree\Abstract\RecordConstantItem.cs" />
+    <Compile Include="SyntaxTree\Abstract\SetExpression.cs" />
     <Compile Include="SyntaxTree\Abstract\SetTypeDeclaration.cs" />
     <Compile Include="SyntaxTree\Abstract\EnumType.cs" />
     <Compile Include="SyntaxTree\Abstract\StatementBase.cs" />
     <Compile Include="SyntaxTree\Abstract\StructTypeMode.cs" />
+    <Compile Include="SyntaxTree\Abstract\StructuredStatement.cs" />
+    <Compile Include="SyntaxTree\Abstract\StructuredStatementKind.cs" />
     <Compile Include="SyntaxTree\Abstract\StructuredType.cs" />
     <Compile Include="SyntaxTree\Abstract\StructuredTypeBase.cs" />
     <Compile Include="SyntaxTree\Abstract\StructuredTypeKind.cs" />

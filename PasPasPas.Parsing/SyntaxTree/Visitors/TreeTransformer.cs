@@ -4,6 +4,7 @@ using PasPasPas.Parsing.SyntaxTree.Standard;
 using PasPasPas.Parsing.Parser;
 using PasPasPas.Parsing.Tokenizer;
 using System;
+using System.Linq;
 
 namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
@@ -1558,6 +1559,26 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         }
 
         #endregion
+        #region RaiseStatement
+
+        private AbstractSyntaxPart BeginVisitItem(RaiseStatement raise, TreeTransformerOptions parameter) {
+            StructuredStatement result = CreateNode<StructuredStatement>(parameter, raise);
+            var target = parameter.LastValue as IStatementTarget;
+            target.Statements.Add(result);
+
+            if (raise.Raise != null && raise.At == null) {
+                result.Kind = StructuredStatementKind.Raise;
+            }
+            else if (raise.Raise != null && raise.At != null) {
+                result.Kind = StructuredStatementKind.RaiseAt;
+            }
+            else if (raise.Raise == null && raise.At != null) {
+                result.Kind = StructuredStatementKind.RaiseAtOnly;
+            }
+            return result;
+        }
+
+        #endregion
         #region AsmBlock
 
         private AbstractSyntaxPart BeginVisitItem(AsmBlock block, TreeTransformerOptions parameter) {
@@ -1806,6 +1827,36 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         }
 
         #endregion
+        #region SetSection
+
+        private AbstractSyntaxPart BeginVisitItem(SetSection expr, TreeTransformerOptions parameter) {
+            SetExpression result = CreateNode<SetExpression>(parameter, expr);
+            parameter.DefineExpressionValue(result);
+            return result;
+        }
+
+        #endregion
+
+        private AbstractSyntaxPart BeginVisitItem(SetSectnPart part, TreeTransformerOptions parameter) {
+            if (part.Continuation != TokenKind.DotDot) {
+                var arrayExpression = parameter.LastExpression as SetExpression;
+
+                if (arrayExpression == null)
+                    return null;
+
+                var binOp = arrayExpression.Expressions.LastOrDefault() as BinaryOperator;
+
+                if (binOp != null && binOp.RightOperand == null)
+                    return binOp;
+
+                return null;
+            }
+
+            BinaryOperator result = CreateNode<BinaryOperator>(parameter, part);
+            result.Kind = ExpressionKind.RangeOperator;
+            parameter.DefineExpressionValue(result);
+            return result;
+        }
 
         #region AsmFactor
 

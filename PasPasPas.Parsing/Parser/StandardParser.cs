@@ -562,6 +562,7 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
         #endregion
+        #region ParseStatementPart
 
         [Rule("StatementPart", "IfStatement | CaseStatement | ReapeatStatement | WhileStatment | ForStatement | WithStatement | TryStatement | RaiseStatement | AsmStatement | CompoundStatement | SimpleStatement ")]
         private StatementPart ParseStatementPart(IExtendableSyntaxPart parent) {
@@ -607,6 +608,9 @@ namespace PasPasPas.Parsing.Parser {
             return ParseSimpleStatement(parent);
         }
 
+        #endregion
+        #region ParseRaiseStatement
+
         [Rule("RaiseStatement", "'raise' [ Expression ] [ 'at' Expression ]")]
         private RaiseStatement ParseRaiseStatement(IExtendableSyntaxPart parent) {
             RaiseStatement result = CreateByTerminal<RaiseStatement>(parent, TokenKind.Raise);
@@ -621,6 +625,8 @@ namespace PasPasPas.Parsing.Parser {
 
             return result;
         }
+
+        #endregion
 
         [Rule("TryStatement", "'try' StatementList  ('except' HandlerList | 'finally' StatementList) 'end'")]
         private TryStatement ParseTryStatement(IExtendableSyntaxPart parent) {
@@ -3735,23 +3741,39 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         #endregion
+        #region ParseSetSection
 
         [Rule("SetSection", "'[' [ Expression ] { (',' | '..') Expression } ']'")]
         private SetSection ParseSetSection(IExtendableSyntaxPart parent) {
             SetSection result = CreateByTerminal<SetSection>(parent, TokenKind.OpenBraces);
-
+            SetSectnPart lastPart = null;
 
             if (!Match(TokenKind.CloseBraces)) {
                 SetSectnPart part;
                 do {
+
+
+                    if (ContinueWith(result, TokenKind.Comma)) {
+                        if (lastPart != null)
+                            lastPart.Continuation = TokenKind.Comma;
+                        else
+                            Unexpected();
+                    }
+                    else if (ContinueWith(result, TokenKind.DotDot)) {
+                        if (lastPart != null && lastPart.Continuation == TokenKind.Undefined)
+                            lastPart.Continuation = TokenKind.DotDot;
+                        else
+                            Unexpected();
+                    }
+                    else {
+                        if (lastPart != null)
+                            Unexpected();
+                    }
+
                     part = CreateChild<SetSectnPart>(result);
-
-                    if (ContinueWith(result, TokenKind.Comma, TokenKind.DotDot))
-                        part.Continuation = result.LastTerminalKind;
-                    else
-                        part.Continuation = TokenKind.Undefined;
-
-                    part.SetExpression = ParseExpression(result);
+                    part.Continuation = TokenKind.Undefined;
+                    part.SetExpression = ParseExpression(part);
+                    lastPart = part;
 
                 } while (Match(TokenKind.Comma, TokenKind.DotDot));
             }
@@ -3759,6 +3781,9 @@ namespace PasPasPas.Parsing.Parser {
             ContinueWithOrMissing(result, TokenKind.CloseBraces);
             return result;
         }
+
+        #endregion
+        #region ParseClosureExpression
 
         [Rule("ClosureExpr", "('function'|'procedure') [ FormalParameterSection ] [ ':' TypeSpecification ] Block ")]
         private ClosureExpression ParseClosureExpression(IExtendableSyntaxPart parent) {
@@ -3776,6 +3801,8 @@ namespace PasPasPas.Parsing.Parser {
             result.Block = ParseBlock(result);
             return result;
         }
+
+        #endregion
 
         #region Helper Functions
 
