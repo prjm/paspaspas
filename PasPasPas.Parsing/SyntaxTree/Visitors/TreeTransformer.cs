@@ -1579,6 +1579,58 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         }
 
         #endregion
+        #region TryStatement
+
+        private AbstractSyntaxPart BeginVisitItem(TryStatement tryStatement, TreeTransformerOptions parameter) {
+            StructuredStatement result = CreateNode<StructuredStatement>(parameter, tryStatement);
+            var target = parameter.LastValue as IStatementTarget;
+            target.Statements.Add(result);
+
+            if (tryStatement.Finally != null) {
+                result.Kind = StructuredStatementKind.TryFinally;
+            }
+            else if (tryStatement.Handlers != null) {
+                result.Kind = StructuredStatementKind.TryExcept;
+            }
+
+            return result;
+        }
+
+        private AbstractSyntaxPart BeginVisitChildItem(TryStatement tryStatement, TreeTransformerOptions parameter, ISyntaxPart child) {
+            var statements = child as StatementList;
+            if (statements == null)
+                return null;
+
+            BlockOfStatements result = CreateNode<BlockOfStatements>(parameter, child);
+            var target = parameter.LastValue as IStatementTarget;
+            target.Statements.Add(result);
+            return result;
+        }
+
+        #endregion
+        #region ExceptHandlers
+
+        private AbstractSyntaxPart BeginVisitItem(ExceptHandlers exceptHandlers, TreeTransformerOptions parameter) {
+            StructuredStatement result = CreateNode<StructuredStatement>(parameter, exceptHandlers);
+            var target = parameter.LastValue as IStatementTarget;
+            result.Kind = StructuredStatementKind.ExceptElse;
+            target.Statements.Add(result);
+            return result;
+        }
+
+        #endregion
+        #region ExceptHandler
+
+        private AbstractSyntaxPart BeginVisitItem(ExceptHandler exceptHandler, TreeTransformerOptions parameter) {
+            StructuredStatement result = CreateNode<StructuredStatement>(parameter, exceptHandler);
+            var target = parameter.LastValue as IStatementTarget;
+            result.Kind = StructuredStatementKind.ExceptOn;
+            result.Name = ExtractSymbolName(exceptHandler.Name);
+            target.Statements.Add(result);
+            return result;
+        }
+
+        #endregion
         #region AsmBlock
 
         private AbstractSyntaxPart BeginVisitItem(AsmBlock block, TreeTransformerOptions parameter) {

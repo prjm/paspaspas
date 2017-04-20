@@ -627,6 +627,7 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         #endregion
+        #region ParseTryStatement
 
         [Rule("TryStatement", "'try' StatementList  ('except' HandlerList | 'finally' StatementList) 'end'")]
         private TryStatement ParseTryStatement(IExtendableSyntaxPart parent) {
@@ -649,6 +650,9 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
+        #endregion
+        #region ParseExceptHandlers
+
         [Rule("ExceptHandlers", "({ Handler } [ 'else' StatementList ]) | StatementList")]
         private ExceptHandlers ParseExceptHandlers(IExtendableSyntaxPart parent) {
             ExceptHandlers result = CreateChild<ExceptHandlers>(parent);
@@ -668,17 +672,22 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
+        #endregion
+        #region ParseExceptHandler
+
         [Rule("ExceptHandler", "'on' Identifier ':' NamespaceName 'do' Statement ';'")]
         private ExceptHandler ParseExceptHandler(IExtendableSyntaxPart parent) {
             ExceptHandler result = CreateByTerminal<ExceptHandler>(parent, TokenKind.On);
             result.Name = RequireIdentifier(result);
             ContinueWithOrMissing(result, TokenKind.Colon);
-            result.HandlerType = ParseNamespaceName(result);
+            result.HandlerType = ParseTypeName(result);
             ContinueWithOrMissing(result, TokenKind.Do);
             result.Statement = ParseStatement(result);
             ContinueWithOrMissing(result, TokenKind.Semicolon);
             return result;
         }
+
+        #endregion
 
         [Rule("WithStatement", "'with' Expression { ',' Expression }  'do' Statement")]
         private WithStatement ParseWithStatement(IExtendableSyntaxPart parent) {

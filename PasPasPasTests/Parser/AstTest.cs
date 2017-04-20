@@ -986,6 +986,19 @@ namespace PasPasPasTests.Parser {
             Func<object, StructuredStatement> r = t => (((t as CompilationUnit)?.ImplementationSymbols["p"] as MethodImplementation)?.Block as BlockOfStatements)?.Statements[0] as StructuredStatement;
 
             RunAstTest("unit z.x; interface implementation procedure p; begin raise x; end; end.", t => r(t)?.Kind, StructuredStatementKind.Raise);
+            RunAstTest("unit z.x; interface implementation procedure p; begin raise x at z; end; end.", t => r(t)?.Kind, StructuredStatementKind.RaiseAt);
+            RunAstTest("unit z.x; interface implementation procedure p; begin raise at z; end; end.", t => r(t)?.Kind, StructuredStatementKind.RaiseAtOnly);
+
+            RunAstTest("unit z.x; interface implementation procedure p; begin try raise at z; finally raise at z; end; end; end.", t => r(t)?.Kind, StructuredStatementKind.TryFinally);
+            RunAstTest("unit z.x; interface implementation procedure p; begin try raise at z; finally raise at z; end; end; end.", t => r(t)?.Statements?.Statements[0]?.GetType(), typeof(BlockOfStatements));
+            RunAstTest("unit z.x; interface implementation procedure p; begin try raise at z; finally raise at z; end; end; end.", t => r(t)?.Statements?.Statements[1]?.GetType(), typeof(BlockOfStatements));
+
+            RunAstTest("unit z.x; interface implementation procedure p; begin try raise at z; except on E: Exception do begin raise at z; end; end; end; end.", t => r(t)?.Kind, StructuredStatementKind.TryExcept);
+            RunAstTest("unit z.x; interface implementation procedure p; begin try raise at z; except on E: Exception do begin raise at z; end; else begin end; end; end; end.", t => r(t)?.Statements?.Statements[0]?.GetType(), typeof(BlockOfStatements));
+            RunAstTest("unit z.x; interface implementation procedure p; begin try raise at z; except on E: Exception do begin raise at z; end; else begin end; end; end; end.", t => r(t)?.Statements?.Statements[1]?.GetType(), typeof(StructuredStatement));
+            RunAstTest("unit z.x; interface implementation procedure p; begin try raise at z; except on E: Exception do begin raise at z; end; else begin end; end; end; end.", t => (r(t)?.Statements?.Statements[1] as StructuredStatement)?.Kind, StructuredStatementKind.ExceptElse);
+            RunAstTest("unit z.x; interface implementation procedure p; begin try raise at z; except on E: Exception do begin raise at z; end; else begin end; end; end; end.", t => (r(t)?.Statements?.Statements[1] as StructuredStatement)?.Statements.Statements[0]?.GetType(), typeof(StructuredStatement));
+            RunAstTest("unit z.x; interface implementation procedure p; begin try raise at z; except on E: Exception do begin raise at z; end; else begin end; end; end; end.", t => ((r(t)?.Statements?.Statements[1] as StructuredStatement)?.Statements.Statements[0] as StructuredStatement)?.Kind, StructuredStatementKind.ExceptOn);
         }
 
         [Fact]

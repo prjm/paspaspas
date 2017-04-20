@@ -8,7 +8,7 @@
         /// <summary>
         ///     handler type
         /// </summary>
-        public NamespaceName HandlerType { get; set; }
+        public TypeName HandlerType { get; set; }
 
         /// <summary>
         ///     handler name
