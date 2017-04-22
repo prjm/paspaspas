@@ -28,7 +28,7 @@
         /// <summary>
         ///     iteration variable
         /// </summary>
-        public DesignatorStatement Variable { get; set; }
+        public Identifier Variable { get; set; }
 
     }
 }

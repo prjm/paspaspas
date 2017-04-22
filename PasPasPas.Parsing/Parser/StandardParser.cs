@@ -688,11 +688,11 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         #endregion
+        #region ParseWithStatement
 
         [Rule("WithStatement", "'with' Expression { ',' Expression }  'do' Statement")]
         private WithStatement ParseWithStatement(IExtendableSyntaxPart parent) {
             WithStatement result = CreateByTerminal<WithStatement>(parent, TokenKind.With);
-
 
             do {
                 ParseExpression(result);
@@ -704,11 +704,14 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
+        #endregion
+        #region ParseForStatement
+
         [Rule("ForStatement", "('for' Designator ':=' Expression ('to' | 'downto' )  Expression 'do' Statement) | ('for' Designator 'in' Expression  'do' Statement)")]
         private ForStatement ParseForStatement(IExtendableSyntaxPart parent) {
             ForStatement result = CreateByTerminal<ForStatement>(parent, TokenKind.For);
 
-            result.Variable = ParseDesignator(result);
+            result.Variable = RequireIdentifier(result);
             if (ContinueWith(result, TokenKind.Assignment)) {
                 result.StartExpression = ParseExpression(result);
                 ContinueWithOrMissing(result, TokenKind.To, TokenKind.DownTo);
@@ -725,15 +728,20 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
+        #endregion
+        #region ParseWhileStatement
+
         [Rule("WhileStatement", "'while' Expression 'do' Statement")]
         private WhileStatement ParseWhileStatement(IExtendableSyntaxPart parent) {
             WhileStatement result = CreateByTerminal<WhileStatement>(parent, TokenKind.While);
-            ContinueWithOrMissing(result, TokenKind.While);
             result.Condition = ParseExpression(result);
             ContinueWithOrMissing(result, TokenKind.Do);
             result.Statement = ParseStatement(result);
             return result;
         }
+
+        #endregion
+        #region ParseRepeatStatement
 
         [Rule("RepeatStatement", "'repeat' [ StatementList ] 'until' Expression")]
         private RepeatStatement ParseRepeatStatement(IExtendableSyntaxPart parent) {
@@ -746,6 +754,8 @@ namespace PasPasPas.Parsing.Parser {
             result.Condition = ParseExpression(result);
             return result;
         }
+
+        #endregion
 
         [Rule("CaseStatement", "'case' Expression 'of' { CaseItem } ['else' StatementList[';']] 'end' ")]
         private CaseStatement ParseCaseStatement(IExtendableSyntaxPart parent) {

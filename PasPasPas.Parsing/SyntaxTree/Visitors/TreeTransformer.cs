@@ -1631,6 +1631,65 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         }
 
         #endregion
+        #region WithStatement
+
+        private AbstractSyntaxPart BeginVisitItem(WithStatement withStatement, TreeTransformerOptions parameter) {
+            StructuredStatement result = CreateNode<StructuredStatement>(parameter, withStatement);
+            var target = parameter.LastValue as IStatementTarget;
+            result.Kind = StructuredStatementKind.With;
+            target.Statements.Add(result);
+            return result;
+        }
+
+        #endregion
+        #region ForStatement
+
+        private AbstractSyntaxPart BeginVisitItem(ForStatement forStatement, TreeTransformerOptions parameter) {
+            StructuredStatement result = CreateNode<StructuredStatement>(parameter, forStatement);
+            var target = parameter.LastValue as IStatementTarget;
+
+            switch (forStatement.Kind) {
+                case TokenKind.To:
+                    result.Kind = StructuredStatementKind.ForTo;
+                    break;
+                case TokenKind.DownTo:
+                    result.Kind = StructuredStatementKind.ForDownTo;
+                    break;
+                case TokenKind.In:
+                    result.Kind = StructuredStatementKind.ForIn;
+                    break;
+            }
+
+            result.Name = ExtractSymbolName(forStatement.Variable);
+            target.Statements.Add(result);
+            return result;
+        }
+
+        #endregion
+        #region WhileStatement
+
+        private AbstractSyntaxPart BeginVisitItem(WhileStatement withStatement, TreeTransformerOptions parameter) {
+            StructuredStatement result = CreateNode<StructuredStatement>(parameter, withStatement);
+            var target = parameter.LastValue as IStatementTarget;
+            result.Kind = StructuredStatementKind.While;
+            target.Statements.Add(result);
+            return result;
+        }
+
+        #endregion
+        #region RepeatStatement
+
+        private AbstractSyntaxPart BeginVisitItem(RepeatStatement repeateStatement, TreeTransformerOptions parameter) {
+            StructuredStatement result = CreateNode<StructuredStatement>(parameter, repeateStatement);
+            var target = parameter.LastValue as IStatementTarget;
+            result.Kind = StructuredStatementKind.Repeat;
+            target.Statements.Add(result);
+            return result;
+        }
+
+        #endregion
+
+
         #region AsmBlock
 
         private AbstractSyntaxPart BeginVisitItem(AsmBlock block, TreeTransformerOptions parameter) {

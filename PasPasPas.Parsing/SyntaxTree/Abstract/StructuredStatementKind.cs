@@ -45,5 +45,35 @@
         ///     except handler
         /// </summary>
         ExceptOn = 7,
+
+        /// <summary>
+        ///     with statement
+        /// </summary>
+        With = 8,
+
+        /// <summary>
+        ///     for / to statement
+        /// </summary>
+        ForTo = 9,
+
+        /// <summary>
+        ///     for / downto statement
+        /// </summary>
+        ForDownTo = 10,
+
+        /// <summary>
+        ///     for / in statement
+        /// </summary>
+        ForIn = 11,
+
+        /// <summary>
+        ///     while statement
+        /// </summary>
+        While = 12,
+
+        /// <summary>
+        ///     repeat statement
+        /// </summary>
+        Repeat = 13,
     }
 }

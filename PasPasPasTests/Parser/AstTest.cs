@@ -1002,6 +1002,46 @@ namespace PasPasPasTests.Parser {
         }
 
         [Fact]
+        public void TestWithStatement() {
+            Func<object, StructuredStatement> r = t => (((t as CompilationUnit)?.ImplementationSymbols["p"] as MethodImplementation)?.Block as BlockOfStatements)?.Statements[0] as StructuredStatement;
+
+            RunAstTest("unit z.x; interface implementation procedure p; begin with 1 do begin end; end; end.", t => r(t)?.Kind, StructuredStatementKind.With);
+        }
+
+        [Fact]
+        public void TestRepeatStatement() {
+            Func<object, StructuredStatement> r = t => (((t as CompilationUnit)?.ImplementationSymbols["p"] as MethodImplementation)?.Block as BlockOfStatements)?.Statements[0] as StructuredStatement;
+
+            RunAstTest("unit z.x; interface implementation procedure p; begin repeat x until true; end; end.", t => r(t)?.Kind, StructuredStatementKind.Repeat);
+        }
+
+        [Fact]
+        public void TestWhileStatement() {
+            Func<object, StructuredStatement> r = t => (((t as CompilationUnit)?.ImplementationSymbols["p"] as MethodImplementation)?.Block as BlockOfStatements)?.Statements[0] as StructuredStatement;
+
+            RunAstTest("unit z.x; interface implementation procedure p; begin while true do x; end; end.", t => r(t)?.Kind, StructuredStatementKind.While);
+            RunAstTest("unit z.x; interface implementation procedure p; begin while true do x; end; end.", t => r(t)?.Expressions?.FirstOrDefault()?.GetType(), typeof(ConstantValue));
+        }
+
+        [Fact]
+        public void TestForStatement() {
+            Func<object, StructuredStatement> r = t => (((t as CompilationUnit)?.ImplementationSymbols["p"] as MethodImplementation)?.Block as BlockOfStatements)?.Statements[0] as StructuredStatement;
+
+            RunAstTest("unit z.x; interface implementation procedure p; begin for I:= 0 to 1 do x; end; end.", t => r(t)?.Kind, StructuredStatementKind.ForTo);
+            RunAstTest("unit z.x; interface implementation procedure p; begin for I:= 0 to 1 do x; end; end.", t => r(t)?.Name?.CompleteName, "I");
+            RunAstTest("unit z.x; interface implementation procedure p; begin for I:= 0 to 1 do x; end; end.", t => r(t)?.Expressions?.FirstOrDefault()?.GetType(), typeof(ConstantValue));
+            //RunAstTest("unit z.x; interface implementation procedure p; begin for I:= 0 to 1 do x; end; end.", t => r(t)?.Expressions?.LastOrDefault()?.GetType(), typeof(ConstantValue));
+
+            RunAstTest("unit z.x; interface implementation procedure p; begin for I:= 0 downto 1 do x; end; end.", t => r(t)?.Kind, StructuredStatementKind.ForDownTo);
+            RunAstTest("unit z.x; interface implementation procedure p; begin for I:= 0 downto 1 do x; end; end.", t => r(t)?.Name?.CompleteName, "I");
+            RunAstTest("unit z.x; interface implementation procedure p; begin for I:= 0 downto 1 do x; end; end.", t => r(t)?.Expressions?.FirstOrDefault()?.GetType(), typeof(ConstantValue));
+            //RunAstTest("unit z.x; interface implementation procedure p; begin for I:= 0 downto 1 do x; end; end.", t => r(t)?.Expressions?.LastOrDefault()?.GetType(), typeof(ConstantValue));
+
+            RunAstTest("unit z.x; interface implementation procedure p; begin for I in Q do x; end; end.", t => r(t)?.Kind, StructuredStatementKind.ForIn);
+            RunAstTest("unit z.x; interface implementation procedure p; begin for I in Q do x; end; end.", t => r(t)?.Name?.CompleteName, "I");
+        }
+
+        [Fact]
         public void TestClosureExpression() {
             Func<object, MethodImplementation> r = t => (((t as CompilationUnit)?.ImplementationSymbols["p"] as MethodImplementation)?.Symbols["n"] as ConstantDeclaration)?.Value as MethodImplementation;
 
