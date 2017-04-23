@@ -756,6 +756,7 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         #endregion
+        #region ParseCaseStatement
 
         [Rule("CaseStatement", "'case' Expression 'of' { CaseItem } ['else' StatementList[';']] 'end' ")]
         private CaseStatement ParseCaseStatement(IExtendableSyntaxPart parent) {
@@ -775,6 +776,9 @@ namespace PasPasPas.Parsing.Parser {
             ContinueWithOrMissing(result, TokenKind.End);
             return result;
         }
+
+        #endregion
+        #region ParseCaseItem
 
         [Rule("CaseItem", "CaseLabel { ',' CaseLabel } ':' Statement [';']")]
         private CaseItem ParseCaseItem(IExtendableSyntaxPart parent) {
@@ -796,6 +800,9 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
+        #endregion
+        #region ParseCaseLabel
+
         [Rule("CaseLabel", "Expression [ '..' Expression ]")]
         private CaseLabel ParseCaseLabel(IExtendableSyntaxPart parent) {
             CaseLabel result = CreateChild<CaseLabel>(parent);
@@ -804,6 +811,9 @@ namespace PasPasPas.Parsing.Parser {
                 result.EndExpression = ParseExpression(result);
             return result;
         }
+
+        #endregion
+        #region IfStatement
 
         [Rule("IfStatement", "'if' Expression 'then' Statement [ 'else' Statement ]")]
         private IfStatement ParseIfStatement(IExtendableSyntaxPart parent) {
@@ -818,6 +828,9 @@ namespace PasPasPas.Parsing.Parser {
 
             return result;
         }
+
+        #endregion
+        #region ParseSimpleStatement
 
         [Rule("SimpleStatement", "GoToStatement | Designator [ ':=' (Expression  | NewStatement) ] ")]
         private StatementPart ParseSimpleStatement(IExtendableSyntaxPart parent) {
@@ -840,6 +853,9 @@ namespace PasPasPas.Parsing.Parser {
 
             return null;
         }
+
+        #endregion
+        #region ParseGoToStatement
 
         [Rule("GoToStatement", "('goto' Label) | 'break' | 'continue' | 'exit' '(' Expression ')' ")]
         private GoToStatement ParseGoToStatement(IExtendableSyntaxPart parent) {
@@ -870,6 +886,7 @@ namespace PasPasPas.Parsing.Parser {
             return null;
         }
 
+        #endregion
         #region ParseUnitHead
 
         [Rule("UnitHead", "'unit' NamespaceName { Hint } ';' ")]
@@ -1365,6 +1382,7 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         #endregion
+        #region ParseDeclarationSections
 
         [Rule("DeclarationSection", "{ LabelDeclarationSection | ConstSection | TypeSection | VarSection | ExportsSection | AssemblyAttribute | MethodDecl | ProcedureDeclaration }", true)]
         private Declarations ParseDeclarationSections(IExtendableSyntaxPart parent) {
@@ -1436,6 +1454,7 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
+        #endregion
         #region ParseMethodDecl
 
         [Rule("MethodDecl", "MethodDeclHeading ';' MethodDirectives [ Block ';' ]")]
@@ -3142,8 +3161,9 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         #endregion
+        #region ParseIdentList
 
-        [Rule("IdentList", "Identifiert { ',' Identifier }")]
+        [Rule("IdentList", "Identifier { ',' Identifier }")]
         private IdentifierList ParseIdentList(IExtendableSyntaxPart parent, bool allowAttributes) {
             IdentifierList result = CreateChild<IdentifierList>(parent);
 
@@ -3156,6 +3176,7 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
+        #endregion
         #region ParseGenericDefinition
 
         [Rule("GenericDefinition", "SimpleGenericDefinition | ConstrainedGenericDefinition")]
@@ -3433,6 +3454,7 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         #endregion
+        #region Expressions
 
         [Rule("Expressions", "Expression { ',' Expression }")]
         private ExpressionList ParseExpressions(IExtendableSyntaxPart parent) {
@@ -3445,6 +3467,7 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
+        #endregion
         #region ParseConstantExpression
 
         [Rule("ConstantExpression", " '(' ( RecordConstant | ConstantExpression ) ')' | Expression")]

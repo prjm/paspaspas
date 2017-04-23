@@ -184,6 +184,18 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         }
 
         #endregion
+
+        #region VarSection
+
+        private AbstractSyntaxPart BeginVisitItem(LabelDeclarationSection lblSection, TreeTransformerOptions parameter) {
+            parameter.CurrentDeclarationMode = DeclarationMode.Label;
+            return null;
+        }
+
+        private void EndVisitItem(LabelDeclarationSection lblSection, TreeTransformerOptions parameter)
+            => parameter.CurrentDeclarationMode = DeclarationMode.Unknown;
+
+        #endregion
         #region VarSection
 
         private AbstractSyntaxPart BeginVisitItem(VarSection varSection, TreeTransformerOptions parameter) {
@@ -758,29 +770,39 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #region Label
 
         private AbstractSyntaxPart BeginVisitItem(Label label, TreeTransformerOptions parameter) {
-            var parent = parameter.LastValue as ILabelTarget;
-
-            if (parent == null)
-                return null;
+            SymbolName name = null;
 
             var standardLabel = label.LabelName as Identifier;
             if (standardLabel != null) {
-                parent.LabelName = ExtractSymbolName(standardLabel);
-                return null;
+                name = ExtractSymbolName(standardLabel);
             }
 
             Token intLabel = (label.LabelName as StandardInteger)?.LastTerminalToken;
             if (intLabel != null) {
-                parent.LabelName = new SimpleSymbolName(intLabel.Value);
-                return null;
+                name = new SimpleSymbolName(intLabel.Value);
             }
 
             Token hexLabel = (label.LabelName as HexNumber)?.LastTerminalToken;
             if (hexLabel != null) {
-                parent.LabelName = new SimpleSymbolName(hexLabel.Value);
-                return null;
+                name = new SimpleSymbolName(hexLabel.Value);
             }
 
+            if (name == null)
+                return null;
+
+            if (parameter.CurrentDeclarationMode == DeclarationMode.Label) {
+                var symbols = parameter.LastValue as IDeclaredSymbolTarget;
+                ConstantDeclaration declaration = CreateNode<ConstantDeclaration>(parameter, label);
+                declaration.Name = name;
+                declaration.Mode = parameter.CurrentDeclarationMode;
+                symbols.Symbols.AddDirect(declaration, parameter.LogSource);
+                return declaration;
+            }
+
+            var parent = parameter.LastValue as ILabelTarget;
+            if (parent == null)
+                return null;
+            parent.LabelName = name;
             return null;
         }
 
@@ -1537,13 +1559,21 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #region StatementPart
 
         private AbstractSyntaxPart BeginVisitItem(StatementPart part, TreeTransformerOptions parameter) {
+
+            if (part.DesignatorPart == null && part.Assignment == null)
+                return null;
+
+            StructuredStatement result = CreateNode<StructuredStatement>(parameter, part);
+            var target = parameter.LastValue as IStatementTarget;
             if (part.Assignment != null) {
-                Assignment result = CreateNode<Assignment>(parameter, part);
-                var parent = parameter.LastValue as IStatementTarget;
-                parent.Statements.Add(result);
-                return result;
-            };
-            return null;
+                result.Kind = StructuredStatementKind.Assignment;
+            }
+            else {
+                result.Kind = StructuredStatementKind.ExpressionStatement;
+            }
+
+            target.Statements.Add(result);
+            return result;
         }
 
         #endregion
@@ -1688,8 +1718,97 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         }
 
         #endregion
+        #region CaseStatement
 
+        private AbstractSyntaxPart BeginVisitItem(CaseStatement caseStatement, TreeTransformerOptions parameter) {
+            StructuredStatement result = CreateNode<StructuredStatement>(parameter, caseStatement);
+            var target = parameter.LastValue as IStatementTarget;
+            result.Kind = StructuredStatementKind.Case;
+            target.Statements.Add(result);
+            return result;
+        }
 
+        private AbstractSyntaxPart BeginVisitChildItem(CaseStatement caseStatement, TreeTransformerOptions parameter, ISyntaxPart child) {
+
+            if (caseStatement.Else != child)
+                return null;
+
+            StructuredStatement result = CreateNode<StructuredStatement>(parameter, caseStatement);
+            var target = parameter.LastValue as IStatementTarget;
+            result.Kind = StructuredStatementKind.CaseElse;
+            target.Statements.Add(result);
+            return result;
+        }
+
+        #endregion
+        #region CaseItem
+
+        private AbstractSyntaxPart BeginVisitItem(CaseItem caseItem, TreeTransformerOptions parameter) {
+            StructuredStatement result = CreateNode<StructuredStatement>(parameter, caseItem);
+            var target = parameter.LastValue as IStatementTarget;
+            result.Kind = StructuredStatementKind.CaseItem;
+            target.Statements.Add(result);
+            return result;
+        }
+
+        #endregion
+        #region CaseLabel
+
+        private AbstractSyntaxPart BeginVisitItem(CaseLabel caseLabel, TreeTransformerOptions parameter) {
+            if (caseLabel.EndExpression != null) {
+                BinaryOperator binOp = CreateNode<BinaryOperator>(parameter, caseLabel);
+                parameter.DefineExpressionValue(binOp);
+                binOp.Kind = ExpressionKind.RangeOperator;
+                return binOp;
+            }
+
+            return null;
+        }
+
+        #endregion
+        #region IfStatement
+
+        private AbstractSyntaxPart BeginVisitItem(IfStatement ifStatement, TreeTransformerOptions parameter) {
+            StructuredStatement result = CreateNode<StructuredStatement>(parameter, ifStatement);
+            var target = parameter.LastValue as IStatementTarget;
+            result.Kind = StructuredStatementKind.IfThen;
+            target.Statements.Add(result);
+            return result;
+        }
+
+        private AbstractSyntaxPart BeginVisitChildItem(IfStatement ifStatement, TreeTransformerOptions parameter, ISyntaxPart child) {
+
+            if (ifStatement.ElsePart != child)
+                return null;
+
+            StructuredStatement result = CreateNode<StructuredStatement>(parameter, ifStatement);
+            var target = parameter.LastValue as IStatementTarget;
+            result.Kind = StructuredStatementKind.IfElse;
+            target.Statements.Add(result);
+            return result;
+        }
+
+        #endregion
+        #region GoToStatement
+
+        private AbstractSyntaxPart BeginVisitItem(GoToStatement gotoStatement, TreeTransformerOptions parameter) {
+            StructuredStatement result = CreateNode<StructuredStatement>(parameter, gotoStatement);
+            var target = parameter.LastValue as IStatementTarget;
+
+            if (gotoStatement.Break)
+                result.Kind = StructuredStatementKind.Break;
+            else if (gotoStatement.Continue)
+                result.Kind = StructuredStatementKind.Continue;
+            else if (gotoStatement.GoToLabel != null)
+                result.Kind = StructuredStatementKind.GoToLabel;
+            else if (gotoStatement.Exit)
+                result.Kind = StructuredStatementKind.Exit;
+
+            target.Statements.Add(result);
+            return result;
+        }
+
+        #endregion
         #region AsmBlock
 
         private AbstractSyntaxPart BeginVisitItem(AsmBlock block, TreeTransformerOptions parameter) {

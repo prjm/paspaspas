@@ -6,7 +6,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// <summary>
     ///     structured statement
     /// </summary>
-    public class StructuredStatement : StatementBase, IExpressionTarget, IStatementTarget {
+    public class StructuredStatement : StatementBase, IExpressionTarget, IStatementTarget, ILabelTarget {
 
         /// <summary>
         ///     create a a new structured Statement

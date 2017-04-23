@@ -75,5 +75,60 @@
         ///     repeat statement
         /// </summary>
         Repeat = 13,
+
+        /// <summary>
+        ///     case statement
+        /// </summary>
+        Case = 14,
+
+        /// <summary>
+        ///     else part of case statement
+        /// </summary>
+        CaseElse = 15,
+
+        /// <summary>
+        ///     case item
+        /// </summary>
+        CaseItem = 16,
+
+        /// <summary>
+        ///     if / then
+        /// </summary>
+        IfThen = 17,
+
+        /// <summary>
+        ///     if / else
+        /// </summary>
+        IfElse = 18,
+
+        /// <summary>
+        ///     break
+        /// </summary>
+        Break = 19,
+
+        /// <summary>
+        ///     continue
+        /// </summary>
+        Continue = 20,
+
+        /// <summary>
+        ///     goto
+        /// </summary>
+        GoToLabel = 21,
+
+        /// <summary>
+        ///     exit label
+        /// </summary>
+        Exit = 22,
+
+        /// <summary>
+        ///     assignment
+        /// </summary>
+        Assignment = 23,
+
+        /// <summary>
+        ///     expression statement
+        /// </summary>
+        ExpressionStatement = 24,
     }
 }

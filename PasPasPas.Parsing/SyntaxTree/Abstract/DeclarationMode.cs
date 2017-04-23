@@ -38,6 +38,11 @@
         /// <summary>
         ///     binary exported functions
         /// </summary>
-        Exports = 6
+        Exports = 6,
+
+        /// <summary>
+        ///     label declaration
+        /// </summary>
+        Label = 7
     }
 }
