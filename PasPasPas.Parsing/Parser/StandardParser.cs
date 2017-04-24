@@ -1604,10 +1604,11 @@ namespace PasPasPas.Parsing.Parser {
         private MethodDeclarationHeading ParseMethodDeclHeading(IExtendableSyntaxPart parent) {
             MethodDeclarationHeading result = CreateByTerminal<MethodDeclarationHeading>(parent, TokenKind.Constructor, TokenKind.Destructor, TokenKind.Function, TokenKind.Procedure, TokenKind.Operator);
             result.Kind = result.LastTerminalKind;
+            var allowIn = result.Kind == TokenKind.Operator;
 
             do {
                 MethodDeclarationName name = CreateChild<MethodDeclarationName>(result);
-                name.Name = ParseNamespaceName(name);
+                name.Name = ParseNamespaceName(name, allowIn);
 
                 if (Match(TokenKind.AngleBracketsOpen)) {
                     name.GenericDefinition = ParseGenericDefinition(name);
@@ -2258,6 +2259,13 @@ namespace PasPasPas.Parsing.Parser {
                 return null;
             }
 
+            if (Match(TokenKind.Class) && LookAhead(1, TokenKind.Var)) {
+                ContinueWith(parent, TokenKind.Class);
+                ContinueWith(parent, TokenKind.Var);
+                mode = RecordDeclarationMode.ClassFields;
+                return null;
+            }
+
             RecordItem result = CreateChild<RecordItem>(parent);
 
             if (Match(TokenKind.OpenBraces)) {
@@ -2311,7 +2319,8 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             if (MatchIdentifier() && (!Match(TokenKind.Private, TokenKind.Protected, TokenKind.Public, TokenKind.Published, TokenKind.Automated, TokenKind.Strict))) {
-                if (mode == RecordDeclarationMode.Fields) {
+                if (mode == RecordDeclarationMode.Fields || mode == RecordDeclarationMode.ClassFields) {
+                    result.ClassItem = mode == RecordDeclarationMode.ClassFields;
                     result.Fields = ParseRecordFieldList(result, true);
                     return result;
                 }
@@ -2429,6 +2438,19 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("RecordHelperItem", "MethodDeclaration | PropertyDeclaration | ConstSection | TypeSection | Visibility ")]
         private RecordHelperItem ParseRecordHelperItem(IExtendableSyntaxPart parent, ref RecordDeclarationMode mode) {
+
+            if (ContinueWith(parent, TokenKind.Var)) {
+                mode = RecordDeclarationMode.Fields;
+                return null;
+            }
+
+            if (Match(TokenKind.Class) && LookAhead(1, TokenKind.Var)) {
+                ContinueWith(parent, TokenKind.Class);
+                ContinueWith(parent, TokenKind.Var);
+                mode = RecordDeclarationMode.ClassFields;
+                return null;
+            }
+
             RecordHelperItem result = CreateChild<RecordHelperItem>(parent);
             result.Attributes = ParseAttributes(result);
             result.ClassItem = ContinueWith(result, TokenKind.Class);
@@ -3079,7 +3101,8 @@ namespace PasPasPas.Parsing.Parser {
         private ClassMethod ParseMethodDeclaration(IExtendableSyntaxPart parent) {
             ClassMethod result = CreateByTerminal<ClassMethod>(parent, TokenKind.Constructor, TokenKind.Destructor, TokenKind.Procedure, TokenKind.Function, TokenKind.Operator);
             result.MethodKind = result.LastTerminalKind;
-            result.Identifier = RequireIdentifier(result);
+            var isInOperator = result.MethodKind == TokenKind.Operator && Match(TokenKind.In);
+            result.Identifier = RequireIdentifier(result, isInOperator);
 
             if (Match(TokenKind.AngleBracketsOpen)) {
                 result.GenericDefinition = ParseGenericDefinition(result);
@@ -3897,11 +3920,12 @@ namespace PasPasPas.Parsing.Parser {
             return false;
         }
 
-        private NamespaceName ParseNamespaceName(IExtendableSyntaxPart parent) {
+        private NamespaceName ParseNamespaceName(IExtendableSyntaxPart parent, bool allowIn = false) {
             NamespaceName result = CreateChild<NamespaceName>(parent);
 
             if (!ContinueWith(result, TokenKind.AnsiString, TokenKind.String, TokenKind.WideString, TokenKind.ShortString, TokenKind.UnicodeString))
-                RequireIdentifier(result);
+                if (!allowIn || !ContinueWith(result, TokenKind.In))
+                    RequireIdentifier(result);
 
             while (LookAheadIdentifier(1, new int[0], true) && ContinueWith(result, TokenKind.Dot)) {
                 RequireIdentifier(result, true);

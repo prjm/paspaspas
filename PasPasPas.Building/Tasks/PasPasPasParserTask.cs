@@ -85,6 +85,7 @@ namespace PasPasPas.Building.Tasks {
                     resultTree = new StubParent();
                     try {
                         parser.ParseFile(resultTree);
+
                     }
                     catch (Exception exception) {
                         result.AppendLine("<<XXXX>> Exception!");
@@ -126,7 +127,9 @@ namespace PasPasPas.Building.Tasks {
                 }
 
                 //return resultTree;
-
+                var transformVisitor = new TreeTransformer();
+                var transformVisitorOptions = new TreeTransformerOptions();
+                VisitorHelper.AcceptVisitor(resultTree, transformVisitor, transformVisitorOptions);
 
             }
 

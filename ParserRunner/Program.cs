@@ -30,12 +30,13 @@ namespace ParserRunner {
             var settings = new SettingGroup();
 
             IEnumerable<string> files1 = Directory.GetFiles(path, "*.pas").Skip(48 * 100).Take(200);
-            string[] files2 = new[] { path + "Demo.pas" };
+            string[] files2 = new[] { path + "Spring.pas" };
 
-            foreach (var filePath in files1) {
-                var inputFiles = new FilesSetting();
-                inputFiles.Name = filePath;
-                inputFiles.Path = filePath;
+            foreach (var filePath in files2) {
+                var inputFiles = new FilesSetting() {
+                    Name = filePath,
+                    Path = filePath
+                };
                 settings.Items.Add(inputFiles);
                 task.Path.Items.Add(new SettingReference() { ReferenceName = inputFiles.Name });
             }
