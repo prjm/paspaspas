@@ -57,7 +57,7 @@ namespace PasPasPas.Infrastructure.Utils {
             if (len < 1)
                 throw new InvalidOperationException();
 
-            T result = array[start];
+            T result = First;
             ++start;
             --len;
             return result;

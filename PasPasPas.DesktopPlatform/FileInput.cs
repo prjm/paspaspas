@@ -40,10 +40,8 @@ namespace PasPasPas.DesktopPlatform {
         /// <summary>
         ///     stream reader
         /// </summary>
-        private StreamReader Reader
-        {
-            get
-            {
+        private StreamReader Reader {
+            get {
                 Open();
                 return reader;
             }
@@ -57,7 +55,7 @@ namespace PasPasPas.DesktopPlatform {
         /// <returns></returns>
         public static Encoding GetFileEncoding(string sourceFile) {
 
-            Encoding enc = Encoding.Default;
+            Encoding enc = Encoding.UTF8;
 
             // *** Detect byte order mark if any - otherwise assume default
             byte[] buffer = new byte[5];
@@ -132,7 +130,7 @@ namespace PasPasPas.DesktopPlatform {
             if (file == null)
                 return;
 
-            file.Close();
+            file.Dispose();
             file = null;
         }
 
@@ -140,7 +138,7 @@ namespace PasPasPas.DesktopPlatform {
             if (reader == null)
                 return;
 
-            reader.Close();
+            reader.Dispose();
             reader = null;
         }
 

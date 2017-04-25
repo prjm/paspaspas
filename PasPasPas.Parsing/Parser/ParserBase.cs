@@ -402,6 +402,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <returns></returns>
         private static IList<RuleAttribute> GetRules(Type type) {
             var result = new List<RuleAttribute>();
+            /*
             MethodInfo[] methods = type.GetMethods(BindingFlags.NonPublic | BindingFlags.DeclaredOnly | BindingFlags.Instance);
 
             foreach (MethodInfo method in methods) {
@@ -410,7 +411,7 @@ namespace PasPasPas.Parsing.Parser {
                     result.Add(attr);
                 }
             }
-
+            */
             return result;
         }
 

@@ -1,93 +1,13 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{804E4A76-D32D-49C3-B8DD-9EB999933E00}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ParserRunner</RootNamespace>
-    <AssemblyName>ParserRunner</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <LangVersion>6</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <TargetFramework>net46</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Collections.NonGeneric, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Collections.NonGeneric.4.0.0\lib\net46\System.Collections.NonGeneric.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Collections.Specialized, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Collections.Specialized.4.0.0\lib\net46\System.Collections.Specialized.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Core" />
-    <Reference Include="System.Globalization.Extensions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Globalization.Extensions.4.0.0\lib\net46\System.Globalization.Extensions.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
+    <ProjectReference Include="..\PasPasPas.Building\PasPasPas.Building.csproj" />
+    <ProjectReference Include="..\PasPasPas.DesktopPlatform\PasPasPas.DesktopPlatform.csproj" />
+    <ProjectReference Include="..\PasPasPas.Infrastructure\PasPasPas.Infrastructure.csproj" />
+    <ProjectReference Include="..\Paspaspas.Options\PasPasPas.Options.csproj" />
+    <ProjectReference Include="..\PasPasPas.Parsing\PasPasPas.Parsing.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Program.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\PasPasPas.Building\PasPasPas.Building.csproj">
-      <Project>{eeb2b9dc-e131-46cf-aac3-6ab662d67dbe}</Project>
-      <Name>PasPasPas.Building</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PasPasPas.DesktopPlatform\PasPasPas.DesktopPlatform.csproj">
-      <Project>{8adb6566-773f-4487-8611-2d8ad5337163}</Project>
-      <Name>PasPasPas.DesktopPlatform</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PasPasPas.Infrastructure\PasPasPas.Infrastructure.csproj">
-      <Project>{4cef569a-4ece-42ee-847b-5029958f757c}</Project>
-      <Name>PasPasPas.Infrastructure</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Paspaspas.Options\PasPasPas.Options.csproj">
-      <Project>{677a19c0-b2d4-4153-8dc9-0713c7193ece}</Project>
-      <Name>PasPasPas.Options</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PasPasPas.Parsing\PasPasPas.Parsing.csproj">
-      <Project>{efa1da73-0c34-4bfb-9006-dcffa12218ed}</Project>
-      <Name>PasPasPas.Parsing</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

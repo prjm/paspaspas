@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using PasPasPas.Parsing.Parser;
 using PasPasPas.Infrastructure.Log;
+using PasPasPas.Infrastructure.Utils;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
 
@@ -18,21 +19,21 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     symbols
         /// </summary>
-        private Lazy<OrderedDictionary> symbols;
+        private Lazy<OrderedDictionary<string, T>> symbols;
 
         /// <summary>
         ///     create a new symbol table
         /// </summary>
         protected SymbolTableBase() {
-            symbols = new Lazy<OrderedDictionary>(() => CreateSymbols());
+            symbols = new Lazy<OrderedDictionary<string, T>>(() => CreateSymbols());
         }
 
         /// <summary>
         ///     create symbols
         /// </summary>
         /// <returns></returns>
-        protected virtual OrderedDictionary CreateSymbols()
-            => new OrderedDictionary(StringComparer.OrdinalIgnoreCase);
+        protected virtual OrderedDictionary<string, T> CreateSymbols()
+            => new OrderedDictionary<string, T>(StringComparer.OrdinalIgnoreCase);
 
         /// <summary>
         ///     add a symbol table entry
@@ -42,7 +43,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <returns></returns>
         public bool Add(T entry, LogSource logSource) {
             var name = entry.SymbolName;
-            OrderedDictionary symbolTable = symbols.Value;
+            OrderedDictionary<string, T> symbolTable = symbols.Value;
             if (!Contains(name)) {
                 symbolTable.Add(name, entry);
                 return true;
@@ -84,7 +85,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         public bool Contains(string key) {
             if (!symbols.IsValueCreated)
                 return false;
-            return symbols.Value.Contains(key);
+            return symbols.Value.ContainsKey(key);
         }
 
         /// <summary>
@@ -164,7 +165,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         public bool Remove(T entry) {
             var name = entry.SymbolName;
 
-            if (!symbols.Value.Contains(name))
+            if (!symbols.Value.ContainsKey(name))
                 return false;
             else {
                 symbols.Value.Remove(name);
