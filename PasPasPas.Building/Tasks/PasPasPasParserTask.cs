@@ -55,8 +55,8 @@ namespace PasPasPas.Building.Tasks {
         /// </summary>
         /// <param name="settings">settings</param>
         public override object Run(BuildSettings settings) {
-            StringBuilder result = new StringBuilder();
-            int count = 0;
+            var result = new StringBuilder();
+            var count = 0;
 
             foreach (FileReference file in Path.AsFileList()) {
                 count++;
@@ -67,7 +67,7 @@ namespace PasPasPas.Building.Tasks {
 
                 IExtendableSyntaxPart resultTree;
 
-                StandardParser parser = new StandardParser(environment);
+                var parser = new StandardParser(environment);
                 using (IParserInput inputFile = settings.FileSystemAccess.OpenFileForReading(file))
                 using (var reader = new StackedFileReader()) {
                     result.AppendLine("-----------------------<< " + file.Path + " (" + count + ")");
@@ -93,6 +93,8 @@ namespace PasPasPas.Building.Tasks {
                     }
                 }
 
+#if DEBUG
+
                 var result1 = new StringBuilder();
 
                 bool dummy = false;
@@ -104,7 +106,11 @@ namespace PasPasPas.Building.Tasks {
                         result1.Append(reader1.FetchChar(out dummy));
                 }
 
+#endif
+
                 log.ClearEventHandlers();
+
+#if DEBUG
 
                 var visitor = new TerminalVisitor();
                 var options = new TerminalVisitorOptions();
@@ -126,12 +132,16 @@ namespace PasPasPas.Building.Tasks {
                     return result;
                 }
 
+
+
                 //return resultTree;
                 var transformVisitor = new TreeTransformer();
                 var transformVisitorOptions = new TreeTransformerOptions();
                 VisitorHelper.AcceptVisitor(resultTree, transformVisitor, transformVisitorOptions);
+#endif
 
             }
+
 
 
             return result;

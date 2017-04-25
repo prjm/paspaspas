@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using PasPasPas.Infrastructure.Input;
+using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree;
 
 namespace PasPasPas.Parsing.Tokenizer {
@@ -30,8 +31,8 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <summary>
         ///     list of tokens
         /// </summary>
-        private Queue<Token> tokenList
-            = new Queue<Token>();
+        private IndexedQueue<Token> tokenList
+            = new IndexedQueue<Token>();
 
         /// <summary>
         ///     list of invalid tokens (e.g. whitespace)
@@ -53,7 +54,7 @@ namespace PasPasPas.Parsing.Tokenizer {
 
                 if (!BaseTokenizer.HasNextToken()) {
                     if (tokenList.Count > 0)
-                        tokenList.Last().AssignInvalidTokens(invalidTokens, true);
+                        tokenList.Last.AssignInvalidTokens(invalidTokens, true);
                     //tokenList.Enqueue(new PascalToken(PascalToken.Eof, string.Empty, new FileReference(string.Empty)));
                     return;
                 }
@@ -110,10 +111,10 @@ namespace PasPasPas.Parsing.Tokenizer {
             }
 
             if (tokenList.Count <= number) {
-                return null; //  new PascalToken(PascalToken.Eof, string.Empty, new FileReference(string.Empty));
+                return null;
             }
             else {
-                return tokenList.ElementAt(number);
+                return tokenList[number];
             }
         }
 

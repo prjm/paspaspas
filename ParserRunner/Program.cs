@@ -57,7 +57,10 @@ namespace ParserRunner {
             watch.Stop();
 
             Console.WriteLine("Completed.");
+
             Console.ReadLine();
+
+#if DEBUG
 
             var p = Process.GetCurrentProcess();
             p.Refresh();
@@ -67,6 +70,8 @@ namespace ParserRunner {
 
             foreach (var buildResult in result)
                 Console.WriteLine(buildResult.ToString());
+
+#endif
 
         }
     }
