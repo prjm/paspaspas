@@ -1,15 +1,29 @@
 ﻿using PasPasPas.Options.DataTypes;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
 
     /// <summary>
     ///     local symbols directive
     /// </summary>
-    public class LocalSymbols : SyntaxPartBase {
+    public class LocalSymbols : CompilerDirectiveBase {
 
         /// <summary>
         ///     symbol mode
         /// </summary>
         public LocalDebugSymbols Mode { get; set; }
+
+        /// <summary>
+        ///     accept visitor
+        /// </summary>
+        /// <param name="startVisitor">start visitor</param>
+        /// <param name="endVisitor">end visitor</param>
+        public override void Accept(IStartVisitor startVisitor, IEndVisitor endVisitor) {
+            startVisitor.StartVisit(this);
+            AcceptParts(startVisitor, endVisitor);
+            endVisitor.EndVisit(this);
+        }
+
+
     }
 }

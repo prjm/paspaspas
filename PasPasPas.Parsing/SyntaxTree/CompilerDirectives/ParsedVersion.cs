@@ -1,9 +1,11 @@
-﻿namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
+﻿using PasPasPas.Parsing.SyntaxTree.Visitors;
+
+namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
 
     /// <summary>
     ///     pe version directive
     /// </summary>
-    public class ParsedVersion : SyntaxPartBase {
+    public class ParsedVersion : CompilerDirectiveBase {
 
         /// <summary>
         ///     version kind
@@ -13,11 +15,24 @@
         /// <summary>
         ///     major version
         /// </summary>
-        public int MajorVersion { get; internal set; }
+        public int MajorVersion { get; set; }
 
         /// <summary>
         ///     minor version
         /// </summary>
-        public int MinorVersion { get; internal set; }
+        public int MinorVersion { get; set; }
+
+        /// <summary>
+        ///     accept visitor
+        /// </summary>
+        /// <param name="startVisitor">start visitor</param>
+        /// <param name="endVisitor">end visitor</param>
+        public override void Accept(IStartVisitor startVisitor, IEndVisitor endVisitor) {
+            startVisitor.StartVisit(this);
+            AcceptParts(startVisitor, endVisitor);
+            endVisitor.EndVisit(this);
+        }
+
+
     }
 }

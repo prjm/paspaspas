@@ -1,5 +1,6 @@
 ﻿using PasPasPas.Parsing.SyntaxTree.Standard;
 using System.Collections.Generic;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree {
 
@@ -38,10 +39,8 @@ namespace PasPasPas.Parsing.SyntaxTree {
         /// <summary>
         ///     get the last terminal value
         /// </summary>
-        public string LastTerminalValue
-        {
-            get
-            {
+        public string LastTerminalValue {
+            get {
                 if (parts.Count < 1)
                     return string.Empty;
 
@@ -58,10 +57,8 @@ namespace PasPasPas.Parsing.SyntaxTree {
         /// <summary>
         ///     get the last terminal symbol
         /// </summary>
-        public int LastTerminalKind
-        {
-            get
-            {
+        public int LastTerminalKind {
+            get {
                 if (parts.Count < 1)
                     return TokenKind.Undefined;
 
@@ -78,10 +75,8 @@ namespace PasPasPas.Parsing.SyntaxTree {
         /// <summary>
         ///     first terminal
         /// </summary>
-        public Token FirstTerminalToken
-        {
-            get
-            {
+        public Token FirstTerminalToken {
+            get {
                 if (parts.Count < 1)
                     return null;
 
@@ -98,10 +93,8 @@ namespace PasPasPas.Parsing.SyntaxTree {
         /// <summary>
         ///     get the last terminal symbol
         /// </summary>
-        public Token LastTerminalToken
-        {
-            get
-            {
+        public Token LastTerminalToken {
+            get {
                 if (parts.Count < 1)
                     return null;
 
@@ -170,5 +163,18 @@ namespace PasPasPas.Parsing.SyntaxTree {
             else
                 return null;
         }
+
+        protected void AcceptParts(IStartVisitor startVisitor, IEndVisitor endVisitor) {
+            foreach (ISyntaxPart part in Parts)
+                part.Accept(startVisitor, endVisitor);
+        }
+
+        /// <summary>
+        ///     accept visitors
+        /// </summary>
+        /// <param name="startVisitor"></param>
+        /// <param name="endVisitor"></param>
+        public abstract void Accept(IStartVisitor startVisitor, IEndVisitor endVisitor);
+
     }
 }

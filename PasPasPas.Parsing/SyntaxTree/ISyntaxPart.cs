@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree {
 
     /// <summary>
-    ///     interface for syntax tree elements
+    ///     basic interface for syntax tree elements
     /// </summary>
     public interface ISyntaxPart {
 
@@ -17,25 +18,14 @@ namespace PasPasPas.Parsing.SyntaxTree {
         /// </summary>
         ISyntaxPart Parent { get; set; }
 
+        /// <summary>
+        ///     accept a visitor object
+        /// </summary>
+        /// <param name="startVisitor">start visitor</param>
+        /// <param name="endVisitor">end visitor</param>
+        void Accept(IStartVisitor startVisitor, IEndVisitor endVisitor);
+
     }
 
-
-    /// <summary>
-    ///     extendable syntax part
-    /// </summary>
-    public interface IExtendableSyntaxPart : ISyntaxPart {
-
-        /// <summary>
-        ///     add an part
-        /// </summary>
-        /// <param name="result"></param>
-        void Add(ISyntaxPart result);
-
-        /// <summary>
-        ///     remove an part
-        /// </summary>
-        /// <param name="lastSymbol"></param>
-        void Remove(ISyntaxPart lastSymbol);
-    }
 
 }

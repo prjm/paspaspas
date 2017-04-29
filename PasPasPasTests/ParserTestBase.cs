@@ -190,7 +190,7 @@ namespace PasPasPasTests {
             var environment = new ParserServices(log) {
                 Options = TestOptions
             };
-            var visitor = new CompilerDirectiveVisitor();
+            var visitor = new OldCompilerDirectiveVisitor();
             var options = new CompilerDirectiveVisitorOptions() { Environment = environment };
 
             var terminals = new TerminalVisitor();
