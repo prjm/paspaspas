@@ -1,14 +1,28 @@
-﻿namespace PasPasPas.Parsing.SyntaxTree.Standard {
+﻿using PasPasPas.Parsing.SyntaxTree.Visitors;
+
+namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
     /// <summary>
     ///     one part of a variant part of a record
     /// </summary>
-    public class RecordVariant : SyntaxPartBase {
+    public class RecordVariant : StandardSyntaxTreeBase {
 
         /// <summary>
         ///     field list
         /// </summary>
         public RecordFieldList FieldList { get; set; }
+
+        /// <summary>
+        ///     accept visitor
+        /// </summary>
+        /// <param name="startVisitor">start visitor</param>
+        /// <param name="endVisitor">end visitor</param>
+        public override void Accept(IStartVisitor startVisitor, IEndVisitor endVisitor) {
+            startVisitor.StartVisit(this);
+            AcceptParts(startVisitor, endVisitor);
+            endVisitor.EndVisit(this);
+        }
+
 
 
     }

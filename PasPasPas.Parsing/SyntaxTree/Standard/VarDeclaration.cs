@@ -1,9 +1,11 @@
-﻿namespace PasPasPas.Parsing.SyntaxTree.Standard {
+﻿using PasPasPas.Parsing.SyntaxTree.Visitors;
+
+namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
     /// <summary>
     ///     variable declaration
     /// </summary>
-    public class VarDeclaration : SyntaxPartBase {
+    public class VarDeclaration : StandardSyntaxTreeBase {
 
         /// <summary>
         ///     attributes
@@ -29,6 +31,18 @@
         ///     var values
         /// </summary>
         public VarValueSpecification ValueSpecification { get; set; }
+
+
+        /// <summary>
+        ///     accept visitor
+        /// </summary>
+        /// <param name="startVisitor">start visitor</param>
+        /// <param name="endVisitor">end visitor</param>
+        public override void Accept(IStartVisitor startVisitor, IEndVisitor endVisitor) {
+            startVisitor.StartVisit(this);
+            AcceptParts(startVisitor, endVisitor);
+            endVisitor.EndVisit(this);
+        }
 
     }
 }

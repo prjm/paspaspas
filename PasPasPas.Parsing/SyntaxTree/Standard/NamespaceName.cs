@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
     /// <summary>
     ///     namespaced name
     /// </summary>
-    public class NamespaceName : SyntaxPartBase {
+    public class NamespaceName : StandardSyntaxTreeBase {
 
         /// <summary>
         ///     unit name
@@ -35,6 +36,18 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
                 }
             }
         }
+
+        /// <summary>
+        ///     accept visitor
+        /// </summary>
+        /// <param name="startVisitor">start visitor</param>
+        /// <param name="endVisitor">end visitor</param>
+        public override void Accept(IStartVisitor startVisitor, IEndVisitor endVisitor) {
+            startVisitor.StartVisit(this);
+            AcceptParts(startVisitor, endVisitor);
+            endVisitor.EndVisit(this);
+        }
+
     }
 
 }

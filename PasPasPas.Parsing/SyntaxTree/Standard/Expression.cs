@@ -1,9 +1,11 @@
-﻿namespace PasPasPas.Parsing.SyntaxTree.Standard {
+﻿using PasPasPas.Parsing.SyntaxTree.Visitors;
+
+namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
     /// <summary>
     ///     expression
     /// </summary>
-    public class Expression : SyntaxPartBase {
+    public class Expression : StandardSyntaxTreeBase {
 
         /// <summary>
         ///     closue expression
@@ -25,6 +27,18 @@
         ///     right operand
         /// </summary>
         public SimpleExpression RightOperand { get; set; }
+
+        /// <summary>
+        ///     accept visitor
+        /// </summary>
+        /// <param name="startVisitor">start visitor</param>
+        /// <param name="endVisitor">end visitor</param>
+        public override void Accept(IStartVisitor startVisitor, IEndVisitor endVisitor) {
+            startVisitor.StartVisit(this);
+            AcceptParts(startVisitor, endVisitor);
+            endVisitor.EndVisit(this);
+        }
+
 
     }
 }

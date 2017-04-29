@@ -1,9 +1,11 @@
-﻿namespace PasPasPas.Parsing.SyntaxTree.Standard {
+﻿using PasPasPas.Parsing.SyntaxTree.Visitors;
+
+namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
     /// <summary>
     ///     generic constraint
     /// </summary>
-    public class ConstrainedGeneric : SyntaxPartBase {
+    public class ConstrainedGeneric : StandardSyntaxTreeBase {
 
         /// <summary>
         ///     class constraints
@@ -24,6 +26,18 @@
         ///     record constraint
         /// </summary>
         public bool RecordConstraint { get; set; }
+
+        /// <summary>
+        ///     accept visitor
+        /// </summary>
+        /// <param name="startVisitor">start visitor</param>
+        /// <param name="endVisitor">end visitor</param>
+        public override void Accept(IStartVisitor startVisitor, IEndVisitor endVisitor) {
+            startVisitor.StartVisit(this);
+            AcceptParts(startVisitor, endVisitor);
+            endVisitor.EndVisit(this);
+        }
+
 
     }
 }

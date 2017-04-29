@@ -1,11 +1,12 @@
 ﻿using PasPasPas.Infrastructure.Input;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
     /// <summary>
     ///     pascal unit
     /// </summary>
-    public class Unit : SyntaxPartBase {
+    public class Unit : StandardSyntaxTreeBase {
 
         /// <summary>
         ///     file path
@@ -44,5 +45,17 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// </summary>
         public NamespaceName UnitName
             => UnitHead?.UnitName;
+
+        /// <summary>
+        ///     accept visitor
+        /// </summary>
+        /// <param name="startVisitor">start visitor</param>
+        /// <param name="endVisitor">end visitor</param>
+        public override void Accept(IStartVisitor startVisitor, IEndVisitor endVisitor) {
+            startVisitor.StartVisit(this);
+            AcceptParts(startVisitor, endVisitor);
+            endVisitor.EndVisit(this);
+        }
+
     }
 }

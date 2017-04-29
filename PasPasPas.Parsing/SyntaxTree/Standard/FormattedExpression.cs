@@ -1,9 +1,11 @@
-﻿namespace PasPasPas.Parsing.SyntaxTree.Standard {
+﻿using PasPasPas.Parsing.SyntaxTree.Visitors;
+
+namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
     /// <summary>
     ///     formatted expression
     /// </summary>
-    public class FormattedExpression : SyntaxPartBase {
+    public class FormattedExpression : StandardSyntaxTreeBase {
 
         /// <summary>
         ///     decimals subexpression
@@ -19,6 +21,18 @@
         ///     base expression
         /// </summary>
         public Expression Expression { get; set; }
+
+        /// <summary>
+        ///     accept visitor
+        /// </summary>
+        /// <param name="startVisitor">start visitor</param>
+        /// <param name="endVisitor">end visitor</param>
+        public override void Accept(IStartVisitor startVisitor, IEndVisitor endVisitor) {
+            startVisitor.StartVisit(this);
+            AcceptParts(startVisitor, endVisitor);
+            endVisitor.EndVisit(this);
+        }
+
 
 
     }

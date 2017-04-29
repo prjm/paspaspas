@@ -1,11 +1,12 @@
 ﻿using PasPasPas.Parsing.SyntaxTree.Abstract;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
     /// <summary>
     ///     type name / reference to a type
     /// </summary>
-    public class TypeName : SyntaxPartBase {
+    public class TypeName : StandardSyntaxTreeBase {
 
         /// <summary>
         ///     string type
@@ -37,5 +38,17 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
             return MetaTypeKind.NamedType;
         }
+
+        /// <summary>
+        ///     accept visitor
+        /// </summary>
+        /// <param name="startVisitor">start visitor</param>
+        /// <param name="endVisitor">end visitor</param>
+        public override void Accept(IStartVisitor startVisitor, IEndVisitor endVisitor) {
+            startVisitor.StartVisit(this);
+            AcceptParts(startVisitor, endVisitor);
+            endVisitor.EndVisit(this);
+        }
+
     }
 }

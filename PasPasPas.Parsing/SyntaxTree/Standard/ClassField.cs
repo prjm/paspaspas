@@ -1,9 +1,11 @@
-﻿namespace PasPasPas.Parsing.SyntaxTree.Standard {
+﻿using PasPasPas.Parsing.SyntaxTree.Visitors;
+
+namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
     /// <summary>
     ///     simple field declaration
     /// </summary>
-    public class ClassField : SyntaxPartBase {
+    public class ClassField : StandardSyntaxTreeBase {
 
         /// <summary>
         ///     hints
@@ -19,6 +21,18 @@
         ///     type declaration
         /// </summary>
         public TypeSpecification TypeDecl { get; set; }
+
+
+        /// <summary>
+        ///     accept visitor
+        /// </summary>
+        /// <param name="startVisitor">start visitor</param>
+        /// <param name="endVisitor">end visitor</param>
+        public override void Accept(IStartVisitor startVisitor, IEndVisitor endVisitor) {
+            startVisitor.StartVisit(this);
+            AcceptParts(startVisitor, endVisitor);
+            endVisitor.EndVisit(this);
+        }
 
     }
 }

@@ -1,9 +1,11 @@
-﻿namespace PasPasPas.Parsing.SyntaxTree.Standard {
+﻿using PasPasPas.Parsing.SyntaxTree.Visitors;
+
+namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
     /// <summary>
     ///     formal parameter
     /// </summary>
-    public class FormalParameter : SyntaxPartBase {
+    public class FormalParameter : StandardSyntaxTreeBase {
 
         /// <summary>
         ///     parameter attributes
@@ -20,6 +22,18 @@
         /// </summary>
         public int ParameterType { get; set; }
             = TokenKind.Undefined;
+
+        /// <summary>
+        ///     accept visitor
+        /// </summary>
+        /// <param name="startVisitor">start visitor</param>
+        /// <param name="endVisitor">end visitor</param>
+        public override void Accept(IStartVisitor startVisitor, IEndVisitor endVisitor) {
+            startVisitor.StartVisit(this);
+            AcceptParts(startVisitor, endVisitor);
+            endVisitor.EndVisit(this);
+        }
+
 
     }
 }

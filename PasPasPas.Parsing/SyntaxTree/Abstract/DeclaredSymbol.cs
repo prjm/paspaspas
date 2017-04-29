@@ -3,7 +3,7 @@
     /// <summary>
     ///     a declared symbol
     /// </summary>
-    public class DeclaredSymbol : SymbolTableEntryBase {
+    public class DeclaredSymbol {
 
         /// <summary>
         ///     constant symbol name

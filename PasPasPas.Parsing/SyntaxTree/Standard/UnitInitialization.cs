@@ -1,9 +1,11 @@
-﻿namespace PasPasPas.Parsing.SyntaxTree.Standard {
+﻿using PasPasPas.Parsing.SyntaxTree.Visitors;
+
+namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
     /// <summary>
     ///     unit initialization part
     /// </summary>
-    public class UnitInitialization : SyntaxPartBase {
+    public class UnitInitialization : StandardSyntaxTreeBase {
 
         /// <summary>
         ///     unit finalization
@@ -13,6 +15,18 @@
         /// <summary>
         ///     initialization statements
         /// </summary>
-        public StatementList Statements { get; internal set; }
+        public StatementList Statements { get; set; }
+
+        /// <summary>
+        ///     accept visitor
+        /// </summary>
+        /// <param name="startVisitor">start visitor</param>
+        /// <param name="endVisitor">end visitor</param>
+        public override void Accept(IStartVisitor startVisitor, IEndVisitor endVisitor) {
+            startVisitor.StartVisit(this);
+            AcceptParts(startVisitor, endVisitor);
+            endVisitor.EndVisit(this);
+        }
+
     }
 }

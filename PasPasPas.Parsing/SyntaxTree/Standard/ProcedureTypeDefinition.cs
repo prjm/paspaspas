@@ -1,9 +1,11 @@
-﻿namespace PasPasPas.Parsing.SyntaxTree.Standard {
+﻿using PasPasPas.Parsing.SyntaxTree.Visitors;
+
+namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
     /// <summary>
     ///     procedure type definition
     /// </summary>
-    public class ProcedureTypeDefinition : SyntaxPartBase {
+    public class ProcedureTypeDefinition : StandardSyntaxTreeBase {
 
         /// <summary>
         ///     kind (function or procedure)
@@ -35,6 +37,18 @@
         ///     attributes of return types
         /// </summary>
         public UserAttributes ReturnTypeAttributes { get; set; }
+
+        /// <summary>
+        ///     accept visitor
+        /// </summary>
+        /// <param name="startVisitor">start visitor</param>
+        /// <param name="endVisitor">end visitor</param>
+        public override void Accept(IStartVisitor startVisitor, IEndVisitor endVisitor) {
+            startVisitor.StartVisit(this);
+            AcceptParts(startVisitor, endVisitor);
+            endVisitor.EndVisit(this);
+        }
+
 
 
     }

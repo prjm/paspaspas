@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
     /// <summary>
     ///     method declaration heading
     /// </summary>
-    public class MethodDeclarationHeading : SyntaxPartBase {
+    public class MethodDeclarationHeading : StandardSyntaxTreeBase {
 
         /// <summary>
         ///     method kind
@@ -32,5 +33,17 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// </summary>
         public IList<MethodDeclarationName> Qualifiers { get; }
             = new List<MethodDeclarationName>();
+
+        /// <summary>
+        ///     accept visitor
+        /// </summary>
+        /// <param name="startVisitor">start visitor</param>
+        /// <param name="endVisitor">end visitor</param>
+        public override void Accept(IStartVisitor startVisitor, IEndVisitor endVisitor) {
+            startVisitor.StartVisit(this);
+            AcceptParts(startVisitor, endVisitor);
+            endVisitor.EndVisit(this);
+        }
+
     }
 }

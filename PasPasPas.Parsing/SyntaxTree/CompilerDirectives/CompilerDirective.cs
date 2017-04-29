@@ -1,4 +1,6 @@
-﻿namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
+﻿using PasPasPas.Parsing.SyntaxTree.Visitors;
+
+namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
 
     /// <summary>
     ///     a compiler directive

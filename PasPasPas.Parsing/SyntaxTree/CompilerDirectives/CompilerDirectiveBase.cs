@@ -5,7 +5,7 @@ namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
     /// <summary>
     ///     base class for compiler directive syntax nodes
     /// </summary>
-    public class CompilerDirectiveBase : SyntaxPartBase {
+    public abstract class CompilerDirectiveBase : SyntaxPartBase {
 
 
     }

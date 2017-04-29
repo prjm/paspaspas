@@ -1,9 +1,11 @@
-﻿namespace PasPasPas.Parsing.SyntaxTree.Standard {
+﻿using PasPasPas.Parsing.SyntaxTree.Visitors;
+
+namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
     /// <summary>
     ///     assembly expression term
     /// </summary>
-    public class AsmExpression : SyntaxPartBase {
+    public class AsmExpression : StandardSyntaxTreeBase {
 
         /// <summary>
         ///     byte ppointer
@@ -23,7 +25,7 @@
         /// <summary>
         ///     right operand
         /// </summary>
-        public AsmOperand RightOperand { get; internal set; }
+        public AsmOperand RightOperand { get; set; }
 
         /// <summary>
         ///     type expression
@@ -33,11 +35,22 @@
         /// <summary>
         ///     byte pointer kind
         /// </summary>
-        public Identifier BytePtrKind { get; internal set; }
+        public Identifier BytePtrKind { get; set; }
 
         /// <summary>
         ///     token kind
         /// </summary>
         public int BinaryOperatorKind { get; set; } = TokenKind.Undefined;
+
+        /// <summary>
+        ///     accept visitor
+        /// </summary>
+        /// <param name="startVisitor">start visitor</param>
+        /// <param name="endVisitor">end visitor</param>
+        public override void Accept(IStartVisitor startVisitor, IEndVisitor endVisitor) {
+            startVisitor.StartVisit(this);
+            AcceptParts(startVisitor, endVisitor);
+            endVisitor.EndVisit(this);
+        }
     }
 }

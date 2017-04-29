@@ -4,7 +4,7 @@
     /// <summary>
     ///     abstract directive
     /// </summary>
-    public class AbstractDirective : SyntaxPartBase {
+    public class AbstractDirective : StandardSyntaxTreeBase {
 
         /// <summary>
         ///     final or abstract

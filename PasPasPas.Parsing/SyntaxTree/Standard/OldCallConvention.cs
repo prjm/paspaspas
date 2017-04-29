@@ -3,7 +3,7 @@
     /// <summary>
     ///     call convention
     /// </summary>
-    public class OldCallConvention : SyntaxPartBase {
+    public class OldCallConvention : StandardSyntaxTreeBase {
 
         /// <summary>
         ///     call convention kind

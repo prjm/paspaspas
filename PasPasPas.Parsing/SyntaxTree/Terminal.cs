@@ -1,12 +1,14 @@
 ﻿using PasPasPas.Parsing.Parser;
 using System.Collections.Generic;
+using PasPasPas.Parsing.SyntaxTree.Standard;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree {
 
     /// <summary>
     ///     syntax tree terminal
     /// </summary>
-    public class Terminal : SyntaxPartBase {
+    public class Terminal : StandardSyntaxTreeBase {
 
         private Token token;
 
@@ -41,5 +43,16 @@ namespace PasPasPas.Parsing.SyntaxTree {
         /// </summary>
         public int Kind
             => Token.Kind;
+
+        /// <summary>
+        ///     accept visitor
+        /// </summary>
+        /// <param name="startVisitor">start visitor</param>
+        /// <param name="endVisitor">end visitor</param>
+        public override void Accept(IStartVisitor startVisitor, IEndVisitor endVisitor) {
+            startVisitor.StartVisit(this);
+            AcceptParts(startVisitor, endVisitor);
+            endVisitor.EndVisit(this);
+        }
     }
 }

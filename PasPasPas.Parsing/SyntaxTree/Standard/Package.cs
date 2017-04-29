@@ -1,11 +1,12 @@
 ﻿using PasPasPas.Infrastructure.Input;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
     /// <summary>
     ///     package definition
     /// </summary>
-    public class Package : SyntaxPartBase {
+    public class Package : StandardSyntaxTreeBase {
 
         /// <summary>
         ///     contans clause
@@ -33,6 +34,18 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         ///     requires clause
         /// </summary>
         public PackageRequires RequiresClause { get; set; }
+
+        /// <summary>
+        ///     accept visitor
+        /// </summary>
+        /// <param name="startVisitor">start visitor</param>
+        /// <param name="endVisitor">end visitor</param>
+        public override void Accept(IStartVisitor startVisitor, IEndVisitor endVisitor) {
+            startVisitor.StartVisit(this);
+            AcceptParts(startVisitor, endVisitor);
+            endVisitor.EndVisit(this);
+        }
+
 
     }
 }
