@@ -1,4 +1,4 @@
-﻿Fusing PasPasPas.Parsing.SyntaxTree.Visitors;
+﻿using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
 

@@ -3,7 +3,7 @@
     /// <summary>
     ///     block with declarations
     /// </summary>
-    public class BlockWithDeclarations : AbstractSyntaxPart {
+    public abstract class BlockWithDeclarations : AbstractSyntaxPart {
 
     }
 }

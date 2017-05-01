@@ -3,6 +3,6 @@
     /// <summary>
     ///     declared symbol group
     /// </summary>
-    public class DeclaredSymbolGroup : AbstractSyntaxPart {
+    public abstract class DeclaredSymbolGroup : AbstractSyntaxPart {
     }
 }

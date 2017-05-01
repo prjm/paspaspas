@@ -3,7 +3,7 @@
     /// <summary>
     ///     structured type definition
     /// </summary>
-    public class StructuredTypeBase : TypeSpecificationBase, IDeclaredSymbolTarget {
+    public abstract class StructuredTypeBase : TypeSpecificationBase, IDeclaredSymbolTarget {
 
         /// <summary>
         ///     packed type

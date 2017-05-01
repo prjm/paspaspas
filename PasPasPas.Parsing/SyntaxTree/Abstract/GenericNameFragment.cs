@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
 
@@ -21,10 +22,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     children
         /// </summary>
-        public override IEnumerable<ISyntaxPart> Parts
-        {
-            get
-            {
+        public override IEnumerable<ISyntaxPart> Parts {
+            get {
                 foreach (ITypeSpecification value in TypeValues)
                     yield return value;
             }
@@ -33,20 +32,28 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     type value
         /// </summary>
-        public ITypeSpecification TypeValue
-        {
-            get
-            {
+        public ITypeSpecification TypeValue {
+            get {
                 if (TypeValues.Count > 0)
                     return TypeValues[TypeValues.Count - 1];
                 else
                     return null;
             }
 
-            set
-            {
+            set {
                 TypeValues.Add(value);
             }
+        }
+
+        /// <summary>
+        ///     accept visitor
+        /// </summary>
+        /// <param name="startVisitor">start visitor</param>
+        /// <param name="endVisitor">end visitor</param>
+        public override void Accept(IStartVisitor startVisitor, IEndVisitor endVisitor) {
+            startVisitor.StartVisit(this);
+            AcceptParts(startVisitor, endVisitor);
+            endVisitor.EndVisit(this);
         }
     }
 }

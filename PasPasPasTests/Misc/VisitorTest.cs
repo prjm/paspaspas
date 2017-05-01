@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPasTests.Misc {
 
@@ -44,10 +45,23 @@ namespace PasPasPasTests.Misc {
         }
 
         public TreeImplementation AddChild(string v) {
-            var result = new TreeImplementation(v);
-            result.Parent = this;
+            var result = new TreeImplementation(v) {
+                Parent = this
+            };
+
             Children.Add(result);
             return result;
+        }
+
+        /// <summary>
+        ///     accept visitor
+        /// </summary>
+        /// <param name="startVisitor">start visitor</param>
+        /// <param name="endVisitor">end visitor</param>
+        public void Accept(IStartVisitor startVisitor, IEndVisitor endVisitor) {
+            startVisitor.StartVisit(this);
+            SyntaxPartBase.AcceptParts(Parts, startVisitor, endVisitor);
+            endVisitor.EndVisit(this);
         }
     }
 

@@ -164,8 +164,11 @@ namespace PasPasPas.Parsing.SyntaxTree {
                 return null;
         }
 
-        protected void AcceptParts(IStartVisitor startVisitor, IEndVisitor endVisitor) {
-            foreach (ISyntaxPart part in Parts)
+        protected void AcceptParts(IStartVisitor startVisitor, IEndVisitor endVisitor)
+            => AcceptParts(Parts, startVisitor, endVisitor);
+
+        public static void AcceptParts(IEnumerable<ISyntaxPart> parts, IStartVisitor startVisitor, IEndVisitor endVisitor) {
+            foreach (ISyntaxPart part in parts)
                 part.Accept(startVisitor, endVisitor);
         }
 
