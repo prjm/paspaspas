@@ -60,10 +60,8 @@ namespace PasPasPas.Parsing.Tokenizer {
                 reader.AddFile(input);
                 parser.BaseTokenizer = tokenizer;
                 ISyntaxPart result = parser.Parse();
-                OldCompilerDirectiveVisitor visitor = new OldCompilerDirectiveVisitor();
-                CompilerDirectiveVisitorOptions visitorOptions = new CompilerDirectiveVisitorOptions();
-                visitorOptions.Environment = environment;
-                VisitorHelper.AcceptVisitor(result, visitor, visitorOptions);
+                var visitor = new Visitor(new CompilerDirectiveVisitor() { Environment = environment });
+                result.Accept(visitor, visitor);
             }
         }
 

@@ -190,8 +190,8 @@ namespace PasPasPasTests {
             var environment = new ParserServices(log) {
                 Options = TestOptions
             };
-            var visitor = new OldCompilerDirectiveVisitor();
-            var options = new CompilerDirectiveVisitorOptions() { Environment = environment };
+            var cVisitor = new CompilerDirectiveVisitor() { Environment = environment };
+            var visitor = new Visitor(cVisitor);
 
             var terminals = new TerminalVisitor();
             var terminalOpts = new TerminalVisitorOptions();
@@ -225,9 +225,9 @@ namespace PasPasPasTests {
                             }
                             hasFoundInput = reader.AtEof || hasFoundInput;
 
-                            options.IncludeInput = reader;
+                            cVisitor.IncludeInput = reader;
                             if (result != null)
-                                VisitorHelper.AcceptVisitor(result, visitor, options);
+                                result.Accept(visitor, visitor);
 
                         }
                         fileCounter++;
