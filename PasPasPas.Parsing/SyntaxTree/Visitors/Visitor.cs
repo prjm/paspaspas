@@ -3,7 +3,7 @@
     /// <summary>
     ///     base class for a visitor
     /// </summary>
-    public sealed class Visitor : IStartVisitor, IEndVisitor {
+    public sealed class Visitor : IStartEndVisitor {
 
         private readonly object specificVisitor;
 

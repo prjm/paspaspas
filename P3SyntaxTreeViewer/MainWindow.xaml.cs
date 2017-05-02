@@ -53,14 +53,13 @@ namespace P3SyntaxTreeViewer {
                 env.Log.RegisterTarget(listLog);
 
                 ISyntaxPart cst = Parse(env, code);
-                var visitor = new TreeTransformer();
-                var options = new TreeTransformerOptions() { LogManager = (LogManager)env.Log };
+                var visitor = new TreeTransformer() { LogManager = (LogManager)env.Log };
 
-                VisitorHelper.AcceptVisitor(cst, visitor, options);
+                cst.Accept(visitor.AsVisitor(), visitor.AsVisitor());
 
                 Dispatcher.Invoke(() => {
                     DisplayTree(StandardTreeView, cst);
-                    DisplayTree(AbstractTreeView, options.Project);
+                    DisplayTree(AbstractTreeView, visitor.Project);
                     DisplayLog(listLog.Messages);
                 });
             });

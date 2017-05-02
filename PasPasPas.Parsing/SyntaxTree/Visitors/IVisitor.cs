@@ -34,6 +34,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
     }
 
+    /// <summary>
+    ///     start / end visitor
+    /// </summary>
+    public interface IStartEndVisitor : IStartVisitor, IEndVisitor {
+
+    }
+
 
     /// <summary>
     ///     visitor for a concrete type
@@ -45,7 +52,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     get the concrete visitor
         /// </summary>
         /// <returns>concrete visitor</returns>
-        IStartVisitor AsVisitor();
+        IStartEndVisitor AsVisitor();
 
         /// <summary>
         ///     visit an element
@@ -65,7 +72,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     get the concrete visitor
         /// </summary>
         /// <returns>concrete visitor</returns>
-        IEndVisitor AsVisitor();
+        IStartEndVisitor AsVisitor();
 
         /// <summary>
         ///     visit an element

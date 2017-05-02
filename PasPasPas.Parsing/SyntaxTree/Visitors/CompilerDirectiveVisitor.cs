@@ -1121,7 +1121,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         }
 
 
-        public IStartVisitor AsVisitor()
+        public IStartEndVisitor AsVisitor()
             => visitor;
 
     }

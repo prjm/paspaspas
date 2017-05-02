@@ -82,9 +82,8 @@ namespace PasPasPasTests {
 
                 ISyntaxPart result = parser.Parse();
                 var visitor = new TerminalVisitor();
-                var options = new TerminalVisitorOptions();
-                VisitorHelper.AcceptVisitor(result, visitor, options);
-                Assert.AreEqual(output, options.ResultBuilder.ToString());
+                result.Accept(visitor.AsVisitor(), visitor.AsVisitor());
+                Assert.AreEqual(output, visitor.ResultBuilder.ToString());
                 Assert.AreEqual(string.Empty, errorText);
                 Assert.IsFalse(hasError);
             }
@@ -114,8 +113,6 @@ namespace PasPasPasTests {
             var hasError = false;
             var errorText = string.Empty;
 
-            var options = new TreeTransformerOptions() { LogManager = logMgr };
-
             log.ProcessMessage += (x, y) => {
                 msgs.Add(y.Message);
                 errorText += y.Message.MessageID.ToString() + Environment.NewLine;
@@ -131,16 +128,15 @@ namespace PasPasPasTests {
                 Assert.IsFalse(hasError);
 
 
-                var visitor = new TreeTransformer();
-                VisitorHelper.AcceptVisitor(tree, visitor, options);
+                var visitor = new TreeTransformer() { LogManager = logMgr };
+                tree.Accept(visitor.AsVisitor(), visitor.AsVisitor());
 
                 var astVisitor = new AstVisitor<T>();
                 var astOptions = new AstVisitorOptions<T>() { SearchFunction = searchFunction };
-                VisitorHelper.AcceptVisitor(options.Project, astVisitor, astOptions);
+                VisitorHelper.AcceptVisitor(visitor.Project, astVisitor, astOptions);
 
-                var validator = new StructureValidator();
-                var validatorOptions = new StructureValidatorOptions() { Manager = logMgr };
-                VisitorHelper.AcceptVisitor(options.Project, validator, validatorOptions);
+                var validator = new StructureValidator() { Manager = logMgr };
+                visitor.Project.Accept(validator.AsVisitor(), validator.AsVisitor());
 
                 Assert.AreEqual(expectedResult, astOptions.Result);
             }
@@ -190,11 +186,9 @@ namespace PasPasPasTests {
             var environment = new ParserServices(log) {
                 Options = TestOptions
             };
-            var cVisitor = new CompilerDirectiveVisitor() { Environment = environment };
-            var visitor = new Visitor(cVisitor);
+            var visitor = new CompilerDirectiveVisitor() { Environment = environment };
 
             var terminals = new TerminalVisitor();
-            var terminalOpts = new TerminalVisitorOptions();
 
             var msgs = new ListLogTarget();
             log.RegisterTarget(msgs);
@@ -217,17 +211,17 @@ namespace PasPasPasTests {
                             ISyntaxPart result = parser.Parse();
 
                             if (!hasFoundInput) {
-                                terminalOpts.ResultBuilder.Clear();
+                                terminals.ResultBuilder.Clear();
                                 if (result != null)
-                                    VisitorHelper.AcceptVisitor(result, terminals, terminalOpts);
+                                    result.Accept(terminals.AsVisitor(), terminals.AsVisitor());
 
-                                Assert.AreEqual(subPart, terminalOpts.ResultBuilder.ToString());
+                                Assert.AreEqual(subPart, terminals.ResultBuilder.ToString());
                             }
                             hasFoundInput = reader.AtEof || hasFoundInput;
 
-                            cVisitor.IncludeInput = reader;
+                            visitor.IncludeInput = reader;
                             if (result != null)
-                                result.Accept(visitor, visitor);
+                                result.Accept(visitor.AsVisitor(), visitor.AsVisitor());
 
                         }
                         fileCounter++;
