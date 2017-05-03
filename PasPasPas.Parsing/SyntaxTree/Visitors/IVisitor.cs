@@ -66,7 +66,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
     ///     visitor for a concrete type
     /// </summary>
     /// <typeparam name="VisitorType">Visitor type</typeparam>
-    public interface IEndVisitor<VisitorType> : IEndVisitor {
+    public interface IEndVisitor<VisitorType> {
 
         /// <summary>
         ///     get the concrete visitor
@@ -79,6 +79,23 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// </summary>
         /// <param name="element">element to visit</param>
         void EndVisit(VisitorType element);
+
+    }
+
+    public interface IChildVisitor<VisitorType> {
+
+        void StartVisitChild(VisitorType element, ISyntaxPart child);
+
+        void EndVisitChild(VisitorType element, ISyntaxPart child);
+
+    }
+
+    public interface IChildVisitor {
+
+        void StartVisitChild<VisitorType>(VisitorType element, ISyntaxPart child);
+
+        void EndVisitChild<VisitorType>(VisitorType element, ISyntaxPart child);
+
 
     }
 }

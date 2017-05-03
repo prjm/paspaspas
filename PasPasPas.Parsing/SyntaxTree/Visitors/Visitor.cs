@@ -1,11 +1,16 @@
-﻿namespace PasPasPas.Parsing.SyntaxTree.Visitors {
+﻿using System;
+
+namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
     /// <summary>
     ///     base class for a visitor
     /// </summary>
-    public sealed class Visitor : IStartEndVisitor {
+    public class Visitor : IStartEndVisitor {
 
         private readonly object specificVisitor;
+
+        public object SpecificVisitor
+            => specificVisitor;
 
         /// <summary>
         ///     create a new visitor
@@ -35,4 +40,30 @@
             e?.EndVisit(element);
         }
     }
+
+
+    /// <summary>
+    ///     base class for a visitor
+    /// </summary>
+    public sealed class ChildVisitor : Visitor, IChildVisitor {
+
+        /// <summary>
+        ///     create a new visitor
+        /// </summary>
+        /// <param name="specificVisitor">specific visitor</param>
+        public ChildVisitor(object specificVisitor) : base(specificVisitor) { }
+
+        public void StartVisitChild<VisitorType>(VisitorType element, ISyntaxPart child) {
+            var e = SpecificVisitor as IChildVisitor<VisitorType>;
+            e?.StartVisitChild(element, child);
+        }
+
+        public void EndVisitChild<VisitorType>(VisitorType element, ISyntaxPart child) {
+            var e = SpecificVisitor as IChildVisitor<VisitorType>;
+            e?.EndVisitChild(element, child);
+        }
+
+
+    }
+
 }

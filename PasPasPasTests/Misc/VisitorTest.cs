@@ -60,7 +60,7 @@ namespace PasPasPasTests.Misc {
         /// <param name="endVisitor">end visitor</param>
         public void Accept(IStartVisitor startVisitor, IEndVisitor endVisitor) {
             startVisitor.StartVisit(this);
-            SyntaxPartBase.AcceptParts(Parts, startVisitor, endVisitor);
+            SyntaxPartBase.AcceptParts(this, Parts, startVisitor, endVisitor);
             endVisitor.EndVisit(this);
         }
     }

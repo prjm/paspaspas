@@ -69,7 +69,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <param name="endVisitor">end visitor</param>
         public override void Accept(IStartVisitor startVisitor, IEndVisitor endVisitor) {
             startVisitor.StartVisit(this);
-            AcceptParts(startVisitor, endVisitor);
+            AcceptParts(this, startVisitor, endVisitor);
             endVisitor.EndVisit(this);
         }
     }
