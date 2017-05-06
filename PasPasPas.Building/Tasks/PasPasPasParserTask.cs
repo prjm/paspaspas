@@ -108,7 +108,7 @@ namespace PasPasPas.Building.Tasks {
 
                 var result1 = new StringBuilder();
 
-                bool dummy = false;
+                var dummy = false;
                 using (IParserInput inputFile1 = settings.FileSystemAccess.OpenFileForReading(file))
                 using (var reader1 = new StackedFileReader()) {
                     reader1.AddFile(inputFile1);
@@ -124,20 +124,19 @@ namespace PasPasPas.Building.Tasks {
 #if DEBUG
 
                 var visitor = new TerminalVisitor();
-                var options = new TerminalVisitorOptions();
-                VisitorHelper.AcceptVisitor(resultTree, visitor, options);
-                if (!string.Equals(result1.ToString(), options.ResultBuilder.ToString(), StringComparison.Ordinal)) {
+                resultTree.Accept(visitor.AsVisitor(), visitor.AsVisitor());
+                if (!string.Equals(result1.ToString(), visitor.ResultBuilder.ToString(), StringComparison.Ordinal)) {
                     result.AppendLine("<<XXXX>> Different!");
                     result.AppendLine(result1.ToString());
                     result.AppendLine("<<XXXX>> Different!");
-                    result.AppendLine(options.ResultBuilder.ToString());
+                    result.AppendLine(visitor.ResultBuilder.ToString());
 
-                    var visitor1 = new StructureVisitor();
-                    var options1 = new StructureVisitorOptions();
+                    //var visitor1 = new StructureVisitor();
+                    //var options1 = new StructureVisitorOptions();
 
-                    result.AppendLine("<<XXXX>> Tree");
-                    VisitorHelper.AcceptVisitor(resultTree, visitor1, options1);
-                    result.AppendLine(options1.ResultBuilder.ToString());
+                    //result.AppendLine("<<XXXX>> Tree");
+                    //VisitorHelper.AcceptVisitor(resultTree, visitor1, options1);
+                    //result.AppendLine(options1.ResultBuilder.ToString());
 
 
                     return result;
@@ -147,8 +146,8 @@ namespace PasPasPas.Building.Tasks {
 
                 //return resultTree;
                 var transformVisitor = new TreeTransformer();
-                var transformVisitorOptions = new TreeTransformerOptions();
-                VisitorHelper.AcceptVisitor(resultTree, transformVisitor, transformVisitorOptions);
+                resultTree.Accept(transformVisitor.AsVisitor(), transformVisitor.AsVisitor());
+
 #endif
 
             }

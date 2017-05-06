@@ -133,15 +133,15 @@ namespace PasPasPasTests.Misc {
         }
 
         private string Stringify1(TreeImplementation t) {
-            VisitorImplementation v = new VisitorImplementation();
-            VisitorOptions o = new VisitorOptions();
+            var v = new VisitorImplementation();
+            var o = new VisitorOptions();
             t.Accept(v, o);
             return o.History.Aggregate((a, b) => string.Concat(a, b));
         }
 
         private string Stringify2(TreeImplementation t) {
-            VisitorImplementation v = new VisitorImplementation();
-            VisitorOptions o = new VisitorOptions();
+            var v = new VisitorImplementation();
+            var o = new VisitorOptions();
             VisitorHelper.AcceptVisitor(t, v, o);
             return o.History.Aggregate((a, b) => string.Concat(a, b));
         }

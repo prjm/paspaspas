@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
@@ -8,9 +9,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
     public class Visitor : IStartEndVisitor {
 
         private readonly object specificVisitor;
+        private readonly Stack<WorkingStackEntry> stack
+            = new Stack<WorkingStackEntry>();
 
         public object SpecificVisitor
             => specificVisitor;
+
+        public Stack<WorkingStackEntry> WorkingStack
+            => stack;
 
         /// <summary>
         ///     create a new visitor
@@ -25,7 +31,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// </summary>
         /// <typeparam name="VisitorType"></typeparam>
         /// <param name="element to visit"></param>
-        public void StartVisit<VisitorType>(VisitorType element) {
+        public void StartVisit<VisitorType>(VisitorType element) where VisitorType : class {
             var s = specificVisitor as IStartVisitor<VisitorType>;
             s?.StartVisit(element);
         }
@@ -35,9 +41,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// </summary>
         /// <typeparam name="VisitorType"></typeparam>
         /// <param name="element to visit"></param>
-        public void EndVisit<VisitorType>(VisitorType element) {
+        public void EndVisit<VisitorType>(VisitorType element) where VisitorType : class {
             var e = specificVisitor as IEndVisitor<VisitorType>;
             e?.EndVisit(element);
+            while (stack != null && stack.Count > 0 && stack.Peek().DefiningNode == element)
+                stack.Pop();
         }
     }
 
@@ -53,14 +61,16 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <param name="specificVisitor">specific visitor</param>
         public ChildVisitor(object specificVisitor) : base(specificVisitor) { }
 
-        public void StartVisitChild<VisitorType>(VisitorType element, ISyntaxPart child) {
+        public void StartVisitChild<VisitorType>(VisitorType element, ISyntaxPart child) where VisitorType : class {
             var e = SpecificVisitor as IChildVisitor<VisitorType>;
             e?.StartVisitChild(element, child);
         }
 
-        public void EndVisitChild<VisitorType>(VisitorType element, ISyntaxPart child) {
+        public void EndVisitChild<VisitorType>(VisitorType element, ISyntaxPart child) where VisitorType : class {
             var e = SpecificVisitor as IChildVisitor<VisitorType>;
             e?.EndVisitChild(element, child);
+            while (WorkingStack != null && WorkingStack.Count > 0 && WorkingStack.Peek().DefiningNode == element && WorkingStack.Peek().ChildNode == child)
+                WorkingStack.Pop();
         }
 
 

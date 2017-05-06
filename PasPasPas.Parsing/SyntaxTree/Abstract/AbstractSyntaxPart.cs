@@ -32,10 +32,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         /// <param name="startVisitor"></param>
         /// <param name="endVisitor"></param>
-        protected void AcceptParts<T>(T element, IStartVisitor startVisitor, IEndVisitor endVisitor)
+        protected void AcceptParts<T>(T element, IStartVisitor startVisitor, IEndVisitor endVisitor) where T : class
             => SyntaxPartBase.AcceptParts<T>(element, Parts, startVisitor, endVisitor);
-
-
 
     }
 }
