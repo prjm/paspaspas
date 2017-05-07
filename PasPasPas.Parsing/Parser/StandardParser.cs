@@ -3494,7 +3494,7 @@ namespace PasPasPas.Parsing.Parser {
         #region ParseConstantExpression
 
         [Rule("ConstantExpression", " '(' ( RecordConstant | ConstantExpression ) ')' | Expression")]
-        private ConstantExpression ParseConstantExpression(IExtendableSyntaxPart parent) {
+        private ConstantExpression ParseConstantExpression(IExtendableSyntaxPart parent, bool fromDesignator = false) {
             ConstantExpression result = CreateChild<ConstantExpression>(parent);
 
             if (Match(TokenKind.OpenParen)) {
@@ -3507,18 +3507,18 @@ namespace PasPasPas.Parsing.Parser {
                     } while (ContinueWith(result, TokenKind.Semicolon));
                     ContinueWithOrMissing(result, TokenKind.CloseParen);
                 }
-                else if (HasTokenBeforeToken(TokenKind.Comma, TokenKind.OpenParen, TokenKind.OpenBraces, TokenKind.CloseBraces, TokenKind.CloseParen)) {
+                else if (HasTokenBeforeToken(TokenKind.Comma, TokenKind.OpenParen, TokenKind.OpenBraces, TokenKind.CloseBraces, TokenKind.CloseParen) || fromDesignator) {
                     result.IsSetConstant = true;
                     ContinueWithOrMissing(result, TokenKind.OpenParen);
                     do {
-                        ParseConstantExpression(result);
+                        if (!Match(TokenKind.CloseParen))
+                            ParseConstantExpression(result);
                     } while (ContinueWith(result, TokenKind.Comma));
                     ContinueWithOrMissing(result, TokenKind.CloseParen);
                 }
-                else {
+                else if (!fromDesignator) {
                     result.Value = ParseExpression(result);
                 }
-
             }
             else {
                 result.Value = ParseExpression(result);
@@ -3715,10 +3715,8 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             ISyntaxPart item;
-            var first = true;
             do {
-                item = ParseDesignatorItem(result, first && result.Name != null);
-                first = false;
+                item = ParseDesignatorItem(result, result.Name != null);
             } while (item != null);
 
             return result;
@@ -3758,11 +3756,9 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             if (Match(TokenKind.OpenParen)) {
-                if (LookAheadIdentifier(1, new int[0], true) && LookAhead(2, TokenKind.Colon)) {
-                    DesignatorItem prevDesignatorItem = parent.PartList.Count > 0 ? parent.PartList[parent.PartList.Count - 1] as DesignatorItem : null;
-                    if (!hasIdentifier && ((prevDesignatorItem == null) || (prevDesignatorItem.Subitem == null))) {
-                        return ParseConstantExpression(parent);
-                    }
+                DesignatorItem prevDesignatorItem = parent.PartList.Count > 0 ? parent.PartList[parent.PartList.Count - 1] as DesignatorItem : null;
+                if (!hasIdentifier && ((prevDesignatorItem == null) || (prevDesignatorItem.Subitem == null))) {
+                    return ParseConstantExpression(parent, true);
                 }
 
                 DesignatorItem result = CreateByTerminal<DesignatorItem>(parent, TokenKind.OpenParen);

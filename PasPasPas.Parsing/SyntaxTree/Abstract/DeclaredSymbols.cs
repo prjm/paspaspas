@@ -68,6 +68,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
                 if (symbols == null)
                     return null;
 
+                if (!symbols.Contains(part.Name))
+                    return null;
+
                 symbol = symbols[part.Name];
 
                 if (symbol == null)

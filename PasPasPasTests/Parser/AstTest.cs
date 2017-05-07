@@ -34,7 +34,6 @@ namespace PasPasPasTests.Parser {
             RunAstTest("unit z.x platform; interface implementation end.", t => u(t)?.Hints?.SymbolIsPlatformSpecific, true);
             RunAstTest("unit z.x experimental; interface implementation end.", t => u(t)?.Hints?.SymbolIsExperimental, true);
 
-
             RunAstTest("unit z.x; interface implementation end. § unit z.x; interface implementation end.",
                 t => (t as CompilationUnit)?.SymbolName, "z.x", StructuralErrors.DuplicateUnitName);
 
@@ -170,6 +169,8 @@ namespace PasPasPasTests.Parser {
             RunAstTest("unit z.x; interface const x = 5; implementation end.", t => u(t)?.SymbolName, "x");
             RunAstTest("unit z.x; interface const x = 5; implementation end.", t => u(t)?.Mode, DeclarationMode.Const);
             RunAstTest("unit z.x; interface resourcestring x = 'a'; implementation end.", t => u(t)?.Mode, DeclarationMode.ResourceString);
+
+            RunAstTest("unit z.x; interface const x : TValue = (); implementation end.", t => u(t)?.SymbolName, "x");
 
             RunAstTest("unit z.x; interface implementation const x = 5; end.", t => v(t)?.SymbolName, "x");
             RunAstTest("unit z.x; interface implementation const x = 5; end.", t => v(t)?.Mode, DeclarationMode.Const);
@@ -1093,6 +1094,7 @@ namespace PasPasPasTests.Parser {
             RunAstTest("unit z.x; interface implementation procedure p; const n = 1 = 2; begin l: s; end; end.", t => r(t)?.Kind, ExpressionKind.EqualsSign);
             RunAstTest("unit z.x; interface implementation procedure p; const n = a is TObject; begin l: s; end; end.", t => r(t)?.Kind, ExpressionKind.Is);
             RunAstTest("unit z.x; interface implementation procedure p; const n = 1 in (1,2); begin l: s; end; end.", t => r(t)?.Kind, ExpressionKind.In);
+            RunAstTest("unit z.x; interface implementation procedure p; const n = 1 in (1,2); begin l: s; end; end.", t => r(t)?.RightOperand?.GetType(), typeof(SetConstant));
 
             RunAstTest("unit z.x; interface implementation procedure p; const n = 1 + 2; begin l: s; end; end.", t => r(t)?.Kind, ExpressionKind.Plus);
             RunAstTest("unit z.x; interface implementation procedure p; const n = 1 - 2; begin l: s; end; end.", t => r(t)?.Kind, ExpressionKind.Minus);

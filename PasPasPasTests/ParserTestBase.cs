@@ -11,6 +11,7 @@ using PasPasPas.Parsing.Tokenizer;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using PasPasPas.Parsing.SyntaxTree.Abstract;
 
 namespace PasPasPasTests {
 
@@ -121,6 +122,8 @@ namespace PasPasPasTests {
                 y.Message.Severity == MessageSeverity.FatalError;
             };
 
+            var project = new ProjectRoot();
+
             foreach (var input in completeInput.Split('§')) {
 
                 ISyntaxPart tree = RunAstTest(input, logMgr, msgs);
@@ -128,7 +131,7 @@ namespace PasPasPasTests {
                 Assert.IsFalse(hasError);
 
 
-                var visitor = new TreeTransformer() { LogManager = logMgr };
+                var visitor = new TreeTransformer(project) { LogManager = logMgr };
                 tree.Accept(visitor.AsVisitor(), visitor.AsVisitor());
 
                 var astVisitor = new AstVisitor<T>();

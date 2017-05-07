@@ -10,6 +10,7 @@ using PasPasPas.Parsing.Tokenizer;
 using System.Text;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 using PasPasPas.Parsing.SyntaxTree;
+using PasPasPas.Parsing.SyntaxTree.Abstract;
 
 namespace PasPasPas.Building.Tasks {
 
@@ -145,7 +146,7 @@ namespace PasPasPas.Building.Tasks {
 
 
                 //return resultTree;
-                var transformVisitor = new TreeTransformer();
+                var transformVisitor = new TreeTransformer(new ProjectRoot());
                 resultTree.Accept(transformVisitor.AsVisitor(), transformVisitor.AsVisitor());
 
 #endif

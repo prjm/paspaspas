@@ -53,7 +53,7 @@ namespace P3SyntaxTreeViewer {
                 env.Log.RegisterTarget(listLog);
 
                 ISyntaxPart cst = Parse(env, code);
-                var visitor = new TreeTransformer() { LogManager = (LogManager)env.Log };
+                var visitor = new TreeTransformer(new ProjectRoot()) { LogManager = (LogManager)env.Log };
 
                 cst.Accept(visitor.AsVisitor(), visitor.AsVisitor());
 
