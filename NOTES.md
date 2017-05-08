@@ -1,13 +1,20 @@
-﻿# Strange things
+﻿# Parsing notes
 
-1. Missing semicolon
+I've found some minor parsing issues and try to 
+document them here briefly.
 
-    `constructor Create(instanceClass: TClass) overload;`
+#### Semicolon can be left out before an `overload` directive:
 
-    is allowed!
+Example:
 
-2.  () is ambigious
+The following declaration
 
-     it can be a empty record
-     value OR ad empty set (depends on context)
+    constructor Create(instanceClass: TClass) overload;
+
+is allowed and parsed valid.
+
+####  The `()`  construct is ambigious
+
+`()`  it can be a empty record consant value
+_or_  an empty set  declaraton. This depends on context.
 

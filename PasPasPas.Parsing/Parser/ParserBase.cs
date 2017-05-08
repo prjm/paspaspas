@@ -188,7 +188,12 @@ namespace PasPasPas.Parsing.Parser {
             if (token == null)
                 return false;
 
-            return tokenKind.Any(t => t == token.Kind);
+            for (var i = 0; i < tokenKind.Length; i++) {
+                if (tokenKind[i] == token.Kind)
+                    return true;
+            }
+
+            return false;
         }
 
         /// <summary>
