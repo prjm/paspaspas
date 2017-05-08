@@ -6,6 +6,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     label in <c>asm</c>
     /// </summary>
     public class AsmLabel : StandardSyntaxTreeBase {
+        public AsmLabel(AsmStatement parent) {
+            Parent = parent;
+            parent?.Add(this);
+        }
 
         /// <summary>
         ///     asm label

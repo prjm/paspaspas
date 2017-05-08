@@ -7,6 +7,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// </summary>
     public class MethodDeclarationName : StandardSyntaxTreeBase {
 
+
+        public MethodDeclarationName(MethodDeclarationHeading parent) {
+            Parent = parent;
+            parent?.Add(this);
+        }
+
         /// <summary>
         ///     namespace name
         /// </summary>

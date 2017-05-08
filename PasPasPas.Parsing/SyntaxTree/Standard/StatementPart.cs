@@ -7,6 +7,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// </summary>
     public class StatementPart : StandardSyntaxTreeBase {
 
+        public StatementPart(IExtendableSyntaxPart parent) {
+            Parent = parent;
+            parent?.Add(this);
+        }
+
         /// <summary>
         ///     assignment
         /// </summary>

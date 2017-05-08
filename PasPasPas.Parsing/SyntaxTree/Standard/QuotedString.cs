@@ -6,6 +6,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     Quoted string
     /// </summary>
     public class QuotedString : StandardSyntaxTreeBase {
+        public QuotedString(IExtendableSyntaxPart parent) {
+            Parent = parent;
+            parent?.Add(this);
+        }
 
         /// <summary>
         ///     unquoted value

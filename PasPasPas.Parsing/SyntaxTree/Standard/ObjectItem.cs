@@ -6,6 +6,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     object item
     /// </summary>
     public class ObjectItem : StandardSyntaxTreeBase, IStructuredTypeMember {
+        public ObjectItem(IExtendableSyntaxPart parent) {
+            Parent = parent;
+            parent?.Add(this);
+        }
 
         /// <summary>
         ///     field declaration

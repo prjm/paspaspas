@@ -6,6 +6,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     formal parameter section
     /// </summary>
     public class FormalParameterSection : StandardSyntaxTreeBase {
+        public FormalParameterSection(IExtendableSyntaxPart parent) {
+            Parent = parent;
+            parent?.Add(this);
+        }
 
         /// <summary>
         ///     parameter list

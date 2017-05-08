@@ -6,6 +6,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     var section
     /// </summary>
     public class VarSection : StandardSyntaxTreeBase {
+        public VarSection(IExtendableSyntaxPart parent) {
+            Parent = parent;
+            parent?.Add(this);
+        }
 
         /// <summary>
         ///     section kind: var or threadvar

@@ -6,6 +6,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     asm prefix
     /// </summary>
     public class AsmPrefix : StandardSyntaxTreeBase {
+        public AsmPrefix(IExtendableSyntaxPart parent) {
+            Parent = parent;
+            parent?.Add(this);
+        }
 
         /// <summary>
         ///     lock prefix

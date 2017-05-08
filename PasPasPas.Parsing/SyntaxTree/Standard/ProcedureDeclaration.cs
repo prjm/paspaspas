@@ -7,6 +7,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// </summary>
     public class ProcedureDeclaration : StandardSyntaxTreeBase {
 
+        public ProcedureDeclaration(IExtendableSyntaxPart parent) {
+            Parent = parent;
+            parent?.Add(this);
+        }
+
         /// <summary>
         ///     attributes
         /// </summary>

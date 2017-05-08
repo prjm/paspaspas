@@ -6,6 +6,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     binding directive
     /// </summary>
     public class BindingDirective : StandardSyntaxTreeBase {
+        public BindingDirective(IExtendableSyntaxPart parent) {
+            Parent = parent;
+            parent?.Add(this);
+        }
 
         /// <summary>
         ///     directive kind

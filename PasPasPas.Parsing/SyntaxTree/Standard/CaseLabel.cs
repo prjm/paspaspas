@@ -6,6 +6,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     case label
     /// </summary>
     public class CaseLabel : StandardSyntaxTreeBase {
+        public CaseLabel(IExtendableSyntaxPart parent) {
+            Parent = parent;
+            parent?.Add(this);
+        }
 
         /// <summary>
         ///     end expression

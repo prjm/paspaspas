@@ -7,6 +7,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// </summary>
     public class CallConvention : StandardSyntaxTreeBase {
 
+        public CallConvention(IExtendableSyntaxPart parent) {
+            Parent = parent;
+            parent?.Add(this);
+        }
+
         /// <summary>
         ///     call convention kind
         /// </summary>

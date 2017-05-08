@@ -6,6 +6,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     unit head
     /// </summary>
     public class UnitHead : StandardSyntaxTreeBase {
+        public UnitHead(IExtendableSyntaxPart parent) {
+            Parent = parent;
+            parent?.Add(this);
+        }
 
         /// <summary>
         ///     hinting directives

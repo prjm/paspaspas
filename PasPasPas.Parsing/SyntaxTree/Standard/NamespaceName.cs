@@ -7,6 +7,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     namespaced name
     /// </summary>
     public class NamespaceName : StandardSyntaxTreeBase {
+        public NamespaceName(IExtendableSyntaxPart parent) {
+            Parent = parent;
+            parent?.Add(this);
+        }
 
         /// <summary>
         ///     unit name

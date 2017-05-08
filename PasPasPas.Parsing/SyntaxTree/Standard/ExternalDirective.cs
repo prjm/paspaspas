@@ -6,6 +6,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     external directive
     /// </summary>
     public class ExternalDirective : StandardSyntaxTreeBase {
+        public ExternalDirective(IExtendableSyntaxPart parent) {
+            Parent = parent;
+            parent?.Add(this);
+        }
 
         /// <summary>
         ///     external expression

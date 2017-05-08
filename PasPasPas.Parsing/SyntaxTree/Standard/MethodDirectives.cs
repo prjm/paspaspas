@@ -6,6 +6,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     method directrives
     /// </summary>
     public class MethodDirectives : StandardSyntaxTreeBase {
+        public MethodDirectives(IExtendableSyntaxPart parent) {
+            Parent = parent;
+            parent?.Add(this);
+        }
 
         /// <summary>
         ///     accept visitor

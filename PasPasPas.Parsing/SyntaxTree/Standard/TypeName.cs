@@ -7,6 +7,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     type name / reference to a type
     /// </summary>
     public class TypeName : StandardSyntaxTreeBase {
+        public TypeName(IExtendableSyntaxPart parent) {
+            Parent = parent;
+            parent?.Add(this);
+        }
 
         /// <summary>
         ///     string type

@@ -6,6 +6,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     set expression
     /// </summary>
     public class SetSection : StandardSyntaxTreeBase {
+        public SetSection(IExtendableSyntaxPart parent) {
+            Parent = parent;
+            parent?.Add(this);
+        }
 
         /// <summary>
         ///     accept visitor

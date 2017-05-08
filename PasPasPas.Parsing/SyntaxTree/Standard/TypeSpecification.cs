@@ -6,6 +6,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     a type specification
     /// </summary>
     public class TypeSpecification : StandardSyntaxTreeBase {
+        public TypeSpecification(IExtendableSyntaxPart parent) {
+            Parent = parent;
+            parent?.Add(this);
+        }
 
         /// <summary>
         ///     pointer type

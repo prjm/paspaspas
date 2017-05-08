@@ -6,6 +6,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     one part of a variant part of a record
     /// </summary>
     public class RecordVariant : StandardSyntaxTreeBase {
+        public RecordVariant(IExtendableSyntaxPart parent) {
+            Parent = parent;
+            parent?.Add(this);
+        }
 
         /// <summary>
         ///     field list

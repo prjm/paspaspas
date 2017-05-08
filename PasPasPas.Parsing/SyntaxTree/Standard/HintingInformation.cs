@@ -6,6 +6,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     additinal hinting information
     /// </summary>
     public class HintingInformation : StandardSyntaxTreeBase {
+        public HintingInformation(IExtendableSyntaxPart parent) {
+            Parent = parent;
+            parent?.Add(this);
+        }
 
         /// <summary>
         ///     hint for deprecation

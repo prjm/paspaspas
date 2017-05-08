@@ -6,6 +6,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     create a new for statement
     /// </summary>
     public class ForStatement : StandardSyntaxTreeBase {
+        public ForStatement(IExtendableSyntaxPart parent) {
+            Parent = parent;
+            parent?.Add(this);
+        }
 
         /// <summary>
         ///     iteration end

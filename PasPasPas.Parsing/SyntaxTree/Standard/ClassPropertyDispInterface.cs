@@ -6,6 +6,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     property accessor for disp interfaces
     /// </summary>
     public class ClassPropertyDispInterface : StandardSyntaxTreeBase {
+        public ClassPropertyDispInterface(IExtendableSyntaxPart parent) {
+            Parent = parent;
+            parent?.Add(this);
+        }
 
         /// <summary>
         ///     Disp id directive

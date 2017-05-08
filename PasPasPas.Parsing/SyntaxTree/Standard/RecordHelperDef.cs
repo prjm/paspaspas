@@ -6,6 +6,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     record helper
     /// </summary>
     public class RecordHelperDefinition : StandardSyntaxTreeBase {
+        public RecordHelperDefinition(IExtendableSyntaxPart parent) {
+            Parent = parent;
+            parent?.Add(this);
+        }
 
         /// <summary>
         ///     record helper items

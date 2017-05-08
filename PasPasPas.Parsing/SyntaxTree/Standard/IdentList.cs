@@ -6,6 +6,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     comma separated list of identifiers
     /// </summary>
     public class IdentifierList : StandardSyntaxTreeBase {
+        public IdentifierList(IExtendableSyntaxPart parent) {
+            Parent = parent;
+            parent?.Add(this);
+        }
 
         /// <summary>
         ///     accept visitor

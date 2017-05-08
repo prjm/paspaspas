@@ -145,7 +145,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("Unit", "UnitHead UnitInterface UnitImplementation UnitBlock '.' ")]
         private Unit ParseUnit(IExtendableSyntaxPart parent) {
-            Unit result = CreateChild<Unit>(parent);
+            var result = new Unit(parent);
             result.UnitHead = ParseUnitHead(result);
             result.UnitInterface = ParseUnitInterface(result);
             result.UnitImplementation = ParseUnitImplementation(result);
@@ -159,7 +159,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("UnitInterface", "'interface' [ UsesClause ] InterfaceDeclaration ")]
         private UnitInterface ParseUnitInterface(IExtendableSyntaxPart parent) {
-            UnitInterface result = CreateByTerminal<UnitInterface>(parent, TokenKind.Interface);
+            UnitInterface result = CreateByTerminal<UnitInterface>(new UnitInterface(parent), TokenKind.Interface);
 
             if (Match(TokenKind.Uses)) {
                 result.UsesClause = ParseUsesClause(result);
@@ -174,7 +174,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("UnitImplementation", "'implementation' [ UsesClause ] DeclarationSections", true)]
         private UnitImplementation ParseUnitImplementation(IExtendableSyntaxPart parent) {
-            UnitImplementation result = CreateByTerminal<UnitImplementation>(parent, TokenKind.Implementation);
+            UnitImplementation result = CreateByTerminal<UnitImplementation>(new UnitImplementation(parent), TokenKind.Implementation);
 
             if (Match(TokenKind.Uses)) {
                 result.UsesClause = ParseUsesClause(result);
@@ -189,7 +189,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("UsesClause", "'uses' NamespaceNameList")]
         private UsesClause ParseUsesClause(IExtendableSyntaxPart parent) {
-            UsesClause result = CreateByTerminal<UsesClause>(parent, TokenKind.Uses);
+            UsesClause result = CreateByTerminal<UsesClause>(new UsesClause(parent), TokenKind.Uses);
             result.UsesList = ParseNamespaceNameList(result);
             return result;
         }
@@ -199,7 +199,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("UsesFileClause", "'uses' NamespaceFileNameList")]
         private UsesFileClause ParseUsesFileClause(IExtendableSyntaxPart parent) {
-            UsesFileClause result = CreateByTerminal<UsesFileClause>(parent, TokenKind.Uses);
+            UsesFileClause result = CreateByTerminal<UsesFileClause>(new UsesFileClause(parent), TokenKind.Uses);
             result.Files = ParseNamespaceFileNameList(result);
             return result;
         }
@@ -209,7 +209,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("NamespaceFileNameList", "NamespaceFileName { ',' NamespaceFileName }")]
         private NamespaceFileNameList ParseNamespaceFileNameList(IExtendableSyntaxPart parent) {
-            NamespaceFileNameList result = CreateChild<NamespaceFileNameList>(parent);
+            var result = new NamespaceFileNameList(parent);
 
             do {
                 ParseNamespaceFileName(result);
@@ -225,7 +225,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("NamespaceFileName", "NamespaceName [ 'in' QuotedString ]")]
         private NamespaceFileName ParseNamespaceFileName(IExtendableSyntaxPart parent) {
-            NamespaceFileName result = CreateChild<NamespaceFileName>(parent);
+            var result = new NamespaceFileName(parent);
 
             result.NamespaceName = ParseNamespaceName(result);
             if (ContinueWith(result, TokenKind.In))
@@ -239,7 +239,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("InterfaceDeclaration", "{ InterfaceDeclarationItem }")]
         private InterfaceDeclaration ParseInterfaceDeclaration(IExtendableSyntaxPart parent) {
-            InterfaceDeclaration result = CreateChild<InterfaceDeclaration>(parent);
+            var result = new InterfaceDeclaration(parent);
             SyntaxPartBase item;
 
             do {
@@ -287,7 +287,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("ConstSection", "('const' | 'resourcestring') ConstDeclaration { ConstDeclaration }")]
         private ConstSection ParseConstSection(IExtendableSyntaxPart parent, bool inClassDeclaration) {
-            ConstSection result = CreateByTerminal<ConstSection>(parent, TokenKind.Const, TokenKind.Resourcestring);
+            ConstSection result = CreateByTerminal<ConstSection>(new ConstSection(parent), TokenKind.Const, TokenKind.Resourcestring);
             result.Kind = result.LastTerminalKind;
             while ((!inClassDeclaration || !(Match(TokenKind.Private, TokenKind.Protected, TokenKind.Public, TokenKind.Published, TokenKind.Automated, TokenKind.Strict))) && MatchIdentifier(TokenKind.OpenBraces)) {
                 ParseConstDeclaration(result);
@@ -300,7 +300,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("ExportedProcedureHeading", "")]
         private ExportedProcedureHeading ParseExportedProcedureHeading(IExtendableSyntaxPart parent) {
-            ExportedProcedureHeading result = CreateByTerminal<ExportedProcedureHeading>(parent, TokenKind.Function, TokenKind.Procedure);
+            ExportedProcedureHeading result = CreateByTerminal<ExportedProcedureHeading>(new ExportedProcedureHeading(parent), TokenKind.Function, TokenKind.Procedure);
             result.Kind = result.LastTerminalKind;
             result.Name = RequireIdentifier(result);
 
@@ -321,7 +321,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("FunctionDirectives", "{ FunctionDirective } ")]
         private FunctionDirectives ParseFunctionDirectives(IExtendableSyntaxPart parent) {
-            FunctionDirectives result = CreateChild<FunctionDirectives>(parent);
+            var result = new FunctionDirectives(parent);
 
             SyntaxPartBase directive;
             do {
@@ -377,7 +377,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("ForwardDirective", "'forward' ';' ")]
         private ForwardDirective ParseForwardDirective(IExtendableSyntaxPart parent) {
-            ForwardDirective result = CreateByTerminal<ForwardDirective>(parent, TokenKind.Forward);
+            ForwardDirective result = CreateByTerminal<ForwardDirective>(new ForwardDirective(parent), TokenKind.Forward);
             ContinueWithOrMissing(result, TokenKind.Semicolon);
             return result;
         }
@@ -387,7 +387,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("UnsafeDirective", "'unsafe' ';' ")]
         private UnsafeDirective ParseUnsafeDirective(IExtendableSyntaxPart parent) {
-            UnsafeDirective result = CreateByTerminal<UnsafeDirective>(parent, TokenKind.Unsafe);
+            UnsafeDirective result = CreateByTerminal<UnsafeDirective>(new UnsafeDirective(parent), TokenKind.Unsafe);
             ContinueWithOrMissing(result, TokenKind.Semicolon);
             return result;
         }
@@ -397,7 +397,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("ExternalDirective", "(varargs | external [ ConstExpression { ExternalSpecifier } ]) ';' ")]
         private ExternalDirective ParseExternalDirective(IExtendableSyntaxPart parent) {
-            ExternalDirective result = CreateByTerminal<ExternalDirective>(parent, TokenKind.VarArgs, TokenKind.External);
+            ExternalDirective result = CreateByTerminal<ExternalDirective>(new ExternalDirective(parent), TokenKind.VarArgs, TokenKind.External);
             result.Kind = result.LastTerminalKind;
 
             if ((result.Kind == TokenKind.External) && (!Match(TokenKind.Semicolon))) {
@@ -421,7 +421,7 @@ namespace PasPasPas.Parsing.Parser {
             if (!Match(TokenKind.Name, TokenKind.Index, TokenKind.Dependency, TokenKind.Delayed))
                 return null;
 
-            ExternalSpecifier result = CreateByTerminal<ExternalSpecifier>(parent, TokenKind.Name, TokenKind.Index, TokenKind.Dependency, TokenKind.Delayed);
+            ExternalSpecifier result = CreateByTerminal<ExternalSpecifier>(new ExternalSpecifier(parent), TokenKind.Name, TokenKind.Index, TokenKind.Dependency, TokenKind.Delayed);
             result.Kind = result.LastTerminalKind;
 
             if (result.Kind == TokenKind.Delayed)
@@ -444,7 +444,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("OrdCallConvention", "'Near' | 'Far' | 'Local'")]
         private SyntaxPartBase ParseOldCallConvention(IExtendableSyntaxPart parent) {
-            OldCallConvention result = CreateByTerminal<OldCallConvention>(parent, TokenKind.Near, TokenKind.Far, TokenKind.Local);
+            OldCallConvention result = CreateByTerminal<OldCallConvention>(new OldCallConvention(parent), TokenKind.Near, TokenKind.Far, TokenKind.Local);
             result.Kind = result.LastTerminalKind;
             ContinueWithOrMissing(result, TokenKind.Semicolon);
             return result;
@@ -455,7 +455,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("UnitBlock", "( UnitInitilization 'end' ) | CompoundStatement | 'end' ")]
         private UnitBlock ParseUnitBlock(IExtendableSyntaxPart parent) {
-            UnitBlock result = CreateChild<UnitBlock>(parent);
+            var result = new UnitBlock(parent);
 
             if (ContinueWith(result, TokenKind.End))
                 return result;
@@ -480,7 +480,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("UnitInitialization", "'initialization' StatementList [ UnitFinalization ]", true)]
         private UnitInitialization ParseUnitInitialization(IExtendableSyntaxPart parent) {
-            UnitInitialization result = CreateByTerminal<UnitInitialization>(parent, TokenKind.Initialization);
+            UnitInitialization result = CreateByTerminal<UnitInitialization>(new UnitInitialization(parent), TokenKind.Initialization);
 
             result.Statements = ParseStatementList(result);
 
@@ -496,7 +496,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("UnitFinalization", "'finalization' StatementList", true)]
         private UnitFinalization ParseUnitFinalization(IExtendableSyntaxPart parent) {
-            UnitFinalization result = CreateByTerminal<UnitFinalization>(parent, TokenKind.Finalization);
+            UnitFinalization result = CreateByTerminal<UnitFinalization>(new UnitFinalization(parent), TokenKind.Finalization);
             result.Statements = ParseStatementList(result);
             return result;
         }
@@ -508,12 +508,12 @@ namespace PasPasPas.Parsing.Parser {
         private CompoundStatement ParseCompoundStatement(IExtendableSyntaxPart parent) {
 
             if (Match(TokenKind.Asm)) {
-                CompoundStatement result = CreateChild<CompoundStatement>(parent);
+                var result = new CompoundStatement(parent);
                 result.AssemblerBlock = ParseAsmBlock(result);
                 return result;
             }
             else {
-                CompoundStatement result = CreateByTerminal<CompoundStatement>(parent, TokenKind.Begin);
+                CompoundStatement result = CreateByTerminal<CompoundStatement>(new CompoundStatement(parent), TokenKind.Begin);
 
                 if (!Match(TokenKind.End))
                     result.Statements = ParseStatementList(result);
@@ -528,7 +528,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("StatementList", "[Statement], { ';' [Statement]}")]
         private StatementList ParseStatementList(IExtendableSyntaxPart parent) {
-            StatementList result = CreateChild<StatementList>(parent);
+            var result = new StatementList(parent);
 
             do {
                 ParseStatement(result);
@@ -541,7 +541,7 @@ namespace PasPasPas.Parsing.Parser {
         #region ParseStatement
         [Rule("Statement", "[ Label ':' ] StatementPart")]
         private Statement ParseStatement(IExtendableSyntaxPart parent) {
-            Statement result = CreateChild<Statement>(parent);
+            var result = new Statement(parent);
 
             Label label = null;
             if (MatchIdentifier(TokenKind.Integer, TokenKind.HexNumber) && LookAhead(1, TokenKind.Colon)) {
@@ -566,7 +566,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("StatementPart", "IfStatement | CaseStatement | ReapeatStatement | WhileStatment | ForStatement | WithStatement | TryStatement | RaiseStatement | AsmStatement | CompoundStatement | SimpleStatement ")]
         private StatementPart ParseStatementPart(IExtendableSyntaxPart parent) {
-            StatementPart result = CreateChild<StatementPart>(parent);
+            var result = new StatementPart(parent);
 
             if (Match(TokenKind.If)) {
                 result.If = ParseIfStatement(result);
@@ -613,7 +613,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("RaiseStatement", "'raise' [ Expression ] [ 'at' Expression ]")]
         private RaiseStatement ParseRaiseStatement(IExtendableSyntaxPart parent) {
-            RaiseStatement result = CreateByTerminal<RaiseStatement>(parent, TokenKind.Raise);
+            RaiseStatement result = CreateByTerminal<RaiseStatement>(new RaiseStatement(parent), TokenKind.Raise);
 
             if ((!Match(TokenKind.AtWord)) && MatchIdentifier(TokenKind.Inherited)) {
                 result.Raise = ParseExpression(result);
@@ -631,7 +631,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("TryStatement", "'try' StatementList  ('except' HandlerList | 'finally' StatementList) 'end'")]
         private TryStatement ParseTryStatement(IExtendableSyntaxPart parent) {
-            TryStatement result = CreateByTerminal<TryStatement>(parent, TokenKind.Try);
+            TryStatement result = CreateByTerminal<TryStatement>(new TryStatement(parent), TokenKind.Try);
 
             result.Try = ParseStatementList(result);
 
@@ -655,7 +655,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("ExceptHandlers", "({ Handler } [ 'else' StatementList ]) | StatementList")]
         private ExceptHandlers ParseExceptHandlers(IExtendableSyntaxPart parent) {
-            ExceptHandlers result = CreateChild<ExceptHandlers>(parent);
+            var result = new ExceptHandlers(parent);
 
             if (Match(TokenKind.On, TokenKind.Else)) {
                 while (Match(TokenKind.On)) {
@@ -677,7 +677,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("ExceptHandler", "'on' Identifier ':' NamespaceName 'do' Statement ';'")]
         private ExceptHandler ParseExceptHandler(IExtendableSyntaxPart parent) {
-            ExceptHandler result = CreateByTerminal<ExceptHandler>(parent, TokenKind.On);
+            ExceptHandler result = CreateByTerminal<ExceptHandler>(new ExceptHandler(parent), TokenKind.On);
             result.Name = RequireIdentifier(result);
             ContinueWithOrMissing(result, TokenKind.Colon);
             result.HandlerType = ParseTypeName(result);
@@ -692,7 +692,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("WithStatement", "'with' Expression { ',' Expression }  'do' Statement")]
         private WithStatement ParseWithStatement(IExtendableSyntaxPart parent) {
-            WithStatement result = CreateByTerminal<WithStatement>(parent, TokenKind.With);
+            WithStatement result = CreateByTerminal<WithStatement>(new WithStatement(parent), TokenKind.With);
 
             do {
                 ParseExpression(result);
@@ -709,7 +709,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("ForStatement", "('for' Designator ':=' Expression ('to' | 'downto' )  Expression 'do' Statement) | ('for' Designator 'in' Expression  'do' Statement)")]
         private ForStatement ParseForStatement(IExtendableSyntaxPart parent) {
-            ForStatement result = CreateByTerminal<ForStatement>(parent, TokenKind.For);
+            ForStatement result = CreateByTerminal<ForStatement>(new ForStatement(parent), TokenKind.For);
 
             result.Variable = RequireIdentifier(result);
             if (ContinueWith(result, TokenKind.Assignment)) {
@@ -733,7 +733,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("WhileStatement", "'while' Expression 'do' Statement")]
         private WhileStatement ParseWhileStatement(IExtendableSyntaxPart parent) {
-            WhileStatement result = CreateByTerminal<WhileStatement>(parent, TokenKind.While);
+            WhileStatement result = CreateByTerminal<WhileStatement>(new WhileStatement(parent), TokenKind.While);
             result.Condition = ParseExpression(result);
             ContinueWithOrMissing(result, TokenKind.Do);
             result.Statement = ParseStatement(result);
@@ -745,7 +745,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("RepeatStatement", "'repeat' [ StatementList ] 'until' Expression")]
         private RepeatStatement ParseRepeatStatement(IExtendableSyntaxPart parent) {
-            RepeatStatement result = CreateByTerminal<RepeatStatement>(parent, TokenKind.Repeat);
+            RepeatStatement result = CreateByTerminal<RepeatStatement>(new RepeatStatement(parent), TokenKind.Repeat);
 
             if (!Match(TokenKind.Until)) {
                 result.Statements = ParseStatementList(result);
@@ -760,7 +760,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("CaseStatement", "'case' Expression 'of' { CaseItem } ['else' StatementList[';']] 'end' ")]
         private CaseStatement ParseCaseStatement(IExtendableSyntaxPart parent) {
-            CaseStatement result = CreateByTerminal<CaseStatement>(parent, TokenKind.Case);
+            CaseStatement result = CreateByTerminal<CaseStatement>(new CaseStatement(parent), TokenKind.Case);
             result.CaseExpression = ParseExpression(result);
             ContinueWithOrMissing(result, TokenKind.Of);
 
@@ -788,7 +788,7 @@ namespace PasPasPas.Parsing.Parser {
             if (!HasTokenBeforeToken(TokenKind.Colon, TokenKind.Semicolon, TokenKind.End, TokenKind.Begin))
                 return null;
 
-            CaseItem result = CreateChild<CaseItem>(parent);
+            var result = new CaseItem(parent);
 
             do {
                 ParseCaseLabel(result);
@@ -805,7 +805,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("CaseLabel", "Expression [ '..' Expression ]")]
         private CaseLabel ParseCaseLabel(IExtendableSyntaxPart parent) {
-            CaseLabel result = CreateChild<CaseLabel>(parent);
+            var result = new CaseLabel(parent);
             result.StartExpression = ParseExpression(result);
             if (ContinueWith(result, TokenKind.DotDot))
                 result.EndExpression = ParseExpression(result);
@@ -817,7 +817,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("IfStatement", "'if' Expression 'then' Statement [ 'else' Statement ]")]
         private IfStatement ParseIfStatement(IExtendableSyntaxPart parent) {
-            IfStatement result = CreateByTerminal<IfStatement>(parent, TokenKind.If);
+            IfStatement result = CreateByTerminal<IfStatement>(new IfStatement(parent), TokenKind.If);
 
             result.Condition = ParseExpression(result);
             ContinueWithOrMissing(result, TokenKind.Then);
@@ -835,13 +835,13 @@ namespace PasPasPas.Parsing.Parser {
         [Rule("SimpleStatement", "GoToStatement | Designator [ ':=' (Expression  | NewStatement) ] ")]
         private StatementPart ParseSimpleStatement(IExtendableSyntaxPart parent) {
             if (!(LookAhead(1, TokenKind.Assignment, TokenKind.OpenBraces, TokenKind.OpenParen)) && Match(TokenKind.GoToKeyword, TokenKind.Exit, TokenKind.Break, TokenKind.Continue)) {
-                StatementPart result = CreateChild<StatementPart>(parent);
+                var result = new StatementPart(parent);
                 result.GoTo = ParseGoToStatement(result);
                 return result;
             }
 
             if (MatchIdentifier(TokenKind.Inherited, TokenKind.Circumflex, TokenKind.OpenParen, TokenKind.At, TokenKind.AnsiString, TokenKind.UnicodeString, TokenKind.String, TokenKind.WideString, TokenKind.ShortString)) {
-                StatementPart result = CreateChild<StatementPart>(parent);
+                var result = new StatementPart(parent);
                 result.DesignatorPart = ParseDesignator(result);
 
                 if (ContinueWith(result, TokenKind.Assignment)) {
@@ -859,7 +859,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("GoToStatement", "('goto' Label) | 'break' | 'continue' | 'exit' '(' Expression ')' ")]
         private GoToStatement ParseGoToStatement(IExtendableSyntaxPart parent) {
-            GoToStatement result = CreateChild<GoToStatement>(parent);
+            var result = new GoToStatement(parent);
 
             if (ContinueWith(result, TokenKind.GoToKeyword)) {
                 result.GoToLabel = ParseLabel(result);
@@ -891,7 +891,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("UnitHead", "'unit' NamespaceName { Hint } ';' ")]
         private UnitHead ParseUnitHead(IExtendableSyntaxPart parent) {
-            UnitHead result = CreateByTerminal<UnitHead>(parent, TokenKind.Unit);
+            UnitHead result = CreateByTerminal<UnitHead>(new UnitHead(parent), TokenKind.Unit);
             result.UnitName = ParseNamespaceName(result);
             result.Hint = ParseHints(result, false);
             ContinueWithOrMissing(result, TokenKind.Semicolon);
@@ -903,7 +903,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("Package", "PackageHead RequiresClause [ ContainsClause ] 'end' '.' ")]
         private Package ParsePackage(IExtendableSyntaxPart parent) {
-            Package result = CreateChild<Package>(parent);
+            var result = new Package(parent);
             result.PackageHead = ParsePackageHead(result);
             result.RequiresClause = ParseRequiresClause(result);
 
@@ -922,7 +922,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("ContainsClause", "'contains' NamespaceFileNameList")]
         private PackageContains ParseContainsClause(IExtendableSyntaxPart parent) {
-            PackageContains result = CreateByTerminal<PackageContains>(parent, TokenKind.Contains);
+            PackageContains result = CreateByTerminal<PackageContains>(new PackageContains(parent), TokenKind.Contains);
             result.ContainsList = ParseNamespaceFileNameList(result);
             return result;
         }
@@ -932,7 +932,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("RequiresClause", "'requires' NamespaceNameList")]
         private PackageRequires ParseRequiresClause(IExtendableSyntaxPart parent) {
-            PackageRequires result = CreateByTerminal<PackageRequires>(parent, TokenKind.Requires);
+            PackageRequires result = CreateByTerminal<PackageRequires>(new PackageRequires(parent), TokenKind.Requires);
             result.RequiresList = ParseNamespaceNameList(result);
             return result;
         }
@@ -942,7 +942,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("NamespaceNameList", "NamespaceName { ',' NamespaceName } ';' ")]
         private NamespaceNameList ParseNamespaceNameList(IExtendableSyntaxPart parent) {
-            NamespaceNameList result = CreateChild<NamespaceNameList>(parent);
+            var result = new NamespaceNameList(parent);
 
             do {
                 ParseNamespaceName(result);
@@ -957,7 +957,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("PackageHead", "'package' NamespaceName ';' ")]
         private PackageHead ParsePackageHead(IExtendableSyntaxPart parent) {
-            PackageHead result = CreateByTerminal<PackageHead>(parent, TokenKind.Package);
+            PackageHead result = CreateByTerminal<PackageHead>(new PackageHead(parent), TokenKind.Package);
             result.PackageName = ParseNamespaceName(result);
             ContinueWithOrMissing(result, TokenKind.Semicolon);
             return result;
@@ -968,7 +968,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("Library", "LibraryHead [UsesFileClause] Block '.' ")]
         private Library ParseLibrary(IExtendableSyntaxPart parent) {
-            Library result = CreateChild<Library>(parent);
+            var result = new Library(parent);
             result.LibraryHead = ParseLibraryHead(result);
 
             if (Match(TokenKind.Uses))
@@ -984,7 +984,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("LibraryHead", "'library' NamespaceName Hints ';'")]
         private LibraryHead ParseLibraryHead(IExtendableSyntaxPart parent) {
-            LibraryHead result = CreateByTerminal<LibraryHead>(parent, TokenKind.Library);
+            LibraryHead result = CreateByTerminal<LibraryHead>(new LibraryHead(parent), TokenKind.Library);
             result.LibraryName = ParseNamespaceName(result);
             result.Hints = ParseHints(result, false);
             ContinueWithOrMissing(result, TokenKind.Semicolon);
@@ -996,7 +996,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("Program", "[ProgramHead] [UsesFileClause] Block '.'")]
         private Program ParseProgram(IExtendableSyntaxPart parent) {
-            Program result = CreateChild<Program>(parent);
+            var result = new Program(parent);
 
             if (Match(TokenKind.Program))
                 result.ProgramHead = ParseProgramHead(result);
@@ -1014,7 +1014,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("ProgramHead", "'program' NamespaceName [ProgramParams] ';'")]
         private ProgramHead ParseProgramHead(IExtendableSyntaxPart parent) {
-            ProgramHead result = CreateByTerminal<ProgramHead>(parent, TokenKind.Program);
+            ProgramHead result = CreateByTerminal<ProgramHead>(new ProgramHead(parent), TokenKind.Program);
             result.Name = ParseNamespaceName(result);
             result.Parameters = ParseProgramParams(result);
             ContinueWithOrMissing(result, TokenKind.Semicolon);
@@ -1026,7 +1026,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("ProgramParams", "'(' [ Identifier { ',' Identifier } ] ')'")]
         private ProgramParameterList ParseProgramParams(IExtendableSyntaxPart parent) {
-            ProgramParameterList result = CreateChild<ProgramParameterList>(parent);
+            var result = new ProgramParameterList(parent);
 
             if (ContinueWith(result, TokenKind.OpenParen)) {
 
@@ -1048,7 +1048,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("Block", "DeclarationSections [ BlockBody ] ")]
         private Block ParseBlock(IExtendableSyntaxPart parent) {
-            Block result = CreateChild<Block>(parent);
+            var result = new Block(parent);
             result.DeclarationSections = ParseDeclarationSections(result);
             if (Match(TokenKind.Asm, TokenKind.Begin)) {
                 result.Body = ParseBlockBody(result);
@@ -1061,7 +1061,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("BlockBody", "AssemblerBlock | CompoundStatement")]
         private BlockBody ParseBlockBody(IExtendableSyntaxPart parent) {
-            BlockBody result = CreateChild<BlockBody>(parent);
+            var result = new BlockBody(parent);
 
             if (Match(TokenKind.Asm)) {
                 result.AssemblerBlock = ParseAsmBlock(result);
@@ -1079,7 +1079,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("AsmBlock", "'asm' { AssemblyStatement | PseudoOp } 'end'")]
         private AsmBlock ParseAsmBlock(IExtendableSyntaxPart parent) {
-            AsmBlock result = CreateByTerminal<AsmBlock>(parent, TokenKind.Asm);
+            AsmBlock result = CreateByTerminal<AsmBlock>(new AsmBlock(parent), TokenKind.Asm);
 
             while (Tokenizer.HasNextToken() && (!ContinueWith(result, TokenKind.End))) {
                 if (Match(TokenKind.Dot)) {
@@ -1098,7 +1098,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("PseudoOp", "( '.PARAMS ' Integer | '.PUSHNV' Register | '.SAVNENV' Register | '.NOFRAME'.")]
         private AsmPseudoOp ParseAsmPseudoOp(AsmBlock parent) {
-            AsmPseudoOp result = CreateByTerminal<AsmPseudoOp>(parent, TokenKind.Dot);
+            AsmPseudoOp result = CreateByTerminal<AsmPseudoOp>(new AsmPseudoOp(parent), TokenKind.Dot);
             var kind = CurrentToken().Value;
             result.Kind = RequireIdentifier(result);
 
@@ -1129,7 +1129,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("AssemblyStatement", "[AssemblyLabel ':'] [AssemblyPrefix] AssemblyOpcode [AssemblyOperand {','  AssemblyOperand}]")]
         private AsmStatement ParseAsmStatement(IExtendableSyntaxPart parent) {
-            AsmStatement result = CreateChild<AsmStatement>(parent);
+            var result = new AsmStatement(parent);
 
             if (Match(TokenKind.At) || LookAhead(1, TokenKind.Colon)) {
                 result.Label = ParseAssemblyLabel(result);
@@ -1155,7 +1155,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("AssemblyOperand", " AssemblyExpression ('and' | 'or' | 'xor') AssemblyOperand | ( 'not' AssemblyOperand ']' )")]
         private AsmOperand ParseAssemblyOperand(IExtendableSyntaxPart parent) {
-            AsmOperand result = CreateChild<AsmOperand>(parent);
+            var result = new AsmOperand(parent);
 
             if (ContinueWith(result, TokenKind.Not)) {
                 result.NotExpression = ParseAssemblyOperand(result);
@@ -1178,7 +1178,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("AssemblyExpression", " ('OFFSET' AssemblyOperand ) | ('TYPE' AssemblyOperand) | (('BYTE' | 'WORD' | 'DWORD' | 'QWORD' | 'TBYTE' ) PTR AssemblyOperand) | AssemblyTerm ('+' | '-' ) AssemblyOperand ")]
         private AsmExpression ParseAssemblyExpression(AsmOperand parent) {
-            AsmExpression result = CreateChild<AsmExpression>(parent);
+            var result = new AsmExpression(parent);
             var tokenValue = CurrentToken().Value;
 
             if (MatchIdentifier()) {
@@ -1218,7 +1218,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("AssemblyTerm", "AssemblyFactor [( '*' | '/' | 'mod' | 'shl' | 'shr' | '.' ) AssemblyOperand ]")]
         private AsmTerm ParseAssemblyTerm(IExtendableSyntaxPart parent) {
-            AsmTerm result = CreateChild<AsmTerm>(parent);
+            var result = new AsmTerm(parent);
 
             result.LeftOperand = ParseAssemblyFactor(result);
 
@@ -1240,8 +1240,8 @@ namespace PasPasPas.Parsing.Parser {
         #region ParseAssemblyFactor
 
         [Rule("AssemblyFactor", "(SegmentPrefix ':' AssemblyOperand) | '(' AssemblyOperand ')' | '[' AssemblyOperand ']' | Identifier | QuotedString | DoubleQuotedString | Integer | HexNumber ")]
-        private AsmFactor ParseAssemblyFactor(AsmTerm parent) {
-            AsmFactor result = CreateChild<AsmFactor>(parent);
+        private AsmFactor ParseAssemblyFactor(IExtendableSyntaxPart parent) {
+            var result = new AsmFactor(parent);
 
             if (MatchIdentifier() && segmentPrefixes.Contains(CurrentToken().Value) && LookAhead(1, TokenKind.Colon)) {
                 result.SegmentPrefix = RequireIdentifier(result);
@@ -1297,7 +1297,7 @@ namespace PasPasPas.Parsing.Parser {
             if (Match(TokenKind.End))
                 return null;
 
-            AsmOpCode result = CreateChild<AsmOpCode>(parent);
+            var result = new AsmOpCode(parent);
             result.OpCode = RequireIdentifier(result, true);
             return result;
         }
@@ -1312,7 +1312,7 @@ namespace PasPasPas.Parsing.Parser {
                 return null;
 
             if (lockPrefixes.Contains(CurrentToken().Value)) {
-                AsmPrefix result = CreateChild<AsmPrefix>(parent);
+                var result = new AsmPrefix(parent);
                 result.LockPrefix = RequireIdentifier(result);
 
                 if (MatchIdentifier() && segmentPrefixes.Contains(CurrentToken().Value)) {
@@ -1323,7 +1323,7 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             if (segmentPrefixes.Contains(CurrentToken().Value)) {
-                AsmPrefix result = CreateChild<AsmPrefix>(parent);
+                var result = new AsmPrefix(parent);
                 result.SegmentPrefix = RequireIdentifier(result);
 
                 if (MatchIdentifier() && lockPrefixes.Contains(CurrentToken().Value)) {
@@ -1341,7 +1341,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("AsmLabel", "(Label | LocalAsmLabel { LocalAsmLabel } )")]
         private AsmLabel ParseAssemblyLabel(AsmStatement parent) {
-            AsmLabel result = CreateChild<AsmLabel>(parent);
+            var result = new AsmLabel(parent);
             if (Match(TokenKind.At)) {
                 result.LocalLabel = ParseLocalAsmLabel(result);
             }
@@ -1356,7 +1356,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("LocalAsmLabel", "'@' { '@' | Integer | Identifier | HexNumber }")]
         private LocalAsmLabel ParseLocalAsmLabel(IExtendableSyntaxPart parent) {
-            LocalAsmLabel result = CreateChild<LocalAsmLabel>(parent);
+            var result = new LocalAsmLabel(parent);
 
             ContinueWithOrMissing(result, TokenKind.At);
 
@@ -1386,7 +1386,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("DeclarationSection", "{ LabelDeclarationSection | ConstSection | TypeSection | VarSection | ExportsSection | AssemblyAttribute | MethodDecl | ProcedureDeclaration }", true)]
         private Declarations ParseDeclarationSections(IExtendableSyntaxPart parent) {
-            Declarations result = CreateChild<Declarations>(parent);
+            var result = new Declarations(parent);
             var stop = false;
 
             while (!stop) {
@@ -1459,7 +1459,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("MethodDecl", "MethodDeclHeading ';' MethodDirectives [ Block ';' ]")]
         private MethodDeclaration ParseMethodDecl(IExtendableSyntaxPart parent) {
-            MethodDeclaration result = CreateChild<MethodDeclaration>(parent);
+            var result = new MethodDeclaration(parent);
             result.Heading = ParseMethodDeclHeading(result);
             ContinueWithOrMissing(result, TokenKind.Semicolon);
 
@@ -1477,7 +1477,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("MethodDirectives", "{ MethodDirective }")]
         private MethodDirectives ParseMethodDirectives(IExtendableSyntaxPart parent) {
-            MethodDirectives result = CreateChild<MethodDirectives>(parent);
+            var result = new MethodDirectives(parent);
 
             SyntaxPartBase directive;
             do {
@@ -1535,7 +1535,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("InlineDirective", "('inline' | 'assembler' ) ';'")]
         private SyntaxPartBase ParseInlineDirective(IExtendableSyntaxPart parent) {
-            InlineDirective result = CreateByTerminal<InlineDirective>(parent, TokenKind.Inline, TokenKind.Assembler);
+            InlineDirective result = CreateByTerminal<InlineDirective>(new InlineDirective(parent), TokenKind.Inline, TokenKind.Assembler);
             result.Kind = result.LastTerminalKind;
             ContinueWithOrMissing(result, TokenKind.Semicolon);
             return result;
@@ -1546,7 +1546,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("CallConvention", "('cdecl' | 'pascal' | 'register' | 'safecall' | 'stdcall' | 'export') ';' ")]
         private SyntaxPartBase ParseCallConvention(IExtendableSyntaxPart parent) {
-            CallConvention result = CreateByTerminal<CallConvention>(parent, TokenKind.Cdecl, TokenKind.Pascal, TokenKind.Register, TokenKind.Safecall, TokenKind.Stdcall, TokenKind.Export);
+            CallConvention result = CreateByTerminal<CallConvention>(new CallConvention(parent), TokenKind.Cdecl, TokenKind.Pascal, TokenKind.Register, TokenKind.Safecall, TokenKind.Stdcall, TokenKind.Export);
             result.Kind = result.LastTerminalKind;
             ContinueWithOrMissing(result, TokenKind.Semicolon);
             return result;
@@ -1557,7 +1557,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("AbstractDirective", "('abstract' | 'final' ) ';' ")]
         private SyntaxPartBase ParseAbstractDirective(IExtendableSyntaxPart parent) {
-            AbstractDirective result = CreateByTerminal<AbstractDirective>(parent, TokenKind.Abstract, TokenKind.Final);
+            AbstractDirective result = CreateByTerminal<AbstractDirective>(new AbstractDirective(parent), TokenKind.Abstract, TokenKind.Final);
             result.Kind = result.LastTerminalKind;
             ContinueWithOrMissing(result, TokenKind.Semicolon);
             return result;
@@ -1568,7 +1568,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("BindingDirective", " ('message' Expression ) | 'static' | 'dynamic' | 'override' | 'virtual' ")]
         private SyntaxPartBase ParseBindingDirective(IExtendableSyntaxPart parent) {
-            BindingDirective result = CreateByTerminal<BindingDirective>(parent, TokenKind.Message, TokenKind.Static, TokenKind.Dynamic, TokenKind.Override, TokenKind.Virtual);
+            BindingDirective result = CreateByTerminal<BindingDirective>(new BindingDirective(parent), TokenKind.Message, TokenKind.Static, TokenKind.Dynamic, TokenKind.Override, TokenKind.Virtual);
             result.Kind = result.LastTerminalKind;
             if (result.Kind == TokenKind.Message) {
                 result.MessageExpression = ParseExpression(result);
@@ -1582,7 +1582,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("OverloadDirective", "'overload' ';' ")]
         private SyntaxPartBase ParseOverloadDirective(IExtendableSyntaxPart parent) {
-            OverloadDirective result = CreateByTerminal<OverloadDirective>(parent, TokenKind.Overload);
+            OverloadDirective result = CreateByTerminal<OverloadDirective>(new OverloadDirective(parent), TokenKind.Overload);
             ContinueWithOrMissing(result, TokenKind.Semicolon);
             return result;
         }
@@ -1592,7 +1592,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("ReintroduceDirective", "'reintroduce' ';' ")]
         private SyntaxPartBase ParseReintroduceDirective(IExtendableSyntaxPart parent) {
-            ReintroduceDirective result = CreateByTerminal<ReintroduceDirective>(parent, TokenKind.Reintroduce);
+            ReintroduceDirective result = CreateByTerminal<ReintroduceDirective>(new ReintroduceDirective(parent), TokenKind.Reintroduce);
             ContinueWithOrMissing(result, TokenKind.Semicolon);
             return result;
         }
@@ -1602,12 +1602,12 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("MethodDeclHeading", " ('constructor' | 'destructor' | 'function' | 'procedure' | 'operator') NamespaceName [GenericDefinition] [FormalParameterSection] [':' Attributes TypeSpecification ]")]
         private MethodDeclarationHeading ParseMethodDeclHeading(IExtendableSyntaxPart parent) {
-            MethodDeclarationHeading result = CreateByTerminal<MethodDeclarationHeading>(parent, TokenKind.Constructor, TokenKind.Destructor, TokenKind.Function, TokenKind.Procedure, TokenKind.Operator);
+            MethodDeclarationHeading result = CreateByTerminal<MethodDeclarationHeading>(new MethodDeclarationHeading(parent), TokenKind.Constructor, TokenKind.Destructor, TokenKind.Function, TokenKind.Procedure, TokenKind.Operator);
             result.Kind = result.LastTerminalKind;
             var allowIn = result.Kind == TokenKind.Operator;
 
             do {
-                MethodDeclarationName name = CreateChild<MethodDeclarationName>(result);
+                var name = new MethodDeclarationName(result);
                 name.Name = ParseNamespaceName(name, allowIn);
 
                 if (Match(TokenKind.AngleBracketsOpen)) {
@@ -1634,7 +1634,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("ProcedureDeclaration", "ProcedureDeclarationHeading ';' FunctionDirectives [ ProcBody ]")]
         private ProcedureDeclaration ParseProcedureDeclaration(IExtendableSyntaxPart parent, UserAttributes attributes) {
-            ProcedureDeclaration result = CreateChild<ProcedureDeclaration>(parent);
+            var result = new ProcedureDeclaration(parent);
             result.Attributes = attributes;
             result.Heading = ParseProcedureDeclarationHeading(result);
             ContinueWithOrMissing(result, TokenKind.Semicolon);
@@ -1650,7 +1650,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("ProcedureDeclarationHeading", "('procedure' | 'function') Identifier [FormalParameterSection][':' TypeSpecification]")]
         private ProcedureDeclarationHeading ParseProcedureDeclarationHeading(IExtendableSyntaxPart parent) {
-            ProcedureDeclarationHeading result = CreateByTerminal<ProcedureDeclarationHeading>(parent, TokenKind.Function, TokenKind.Procedure);
+            ProcedureDeclarationHeading result = CreateByTerminal<ProcedureDeclarationHeading>(new ProcedureDeclarationHeading(parent), TokenKind.Function, TokenKind.Procedure);
             result.Kind = result.LastTerminalKind;
             result.Name = RequireIdentifier(result);
 
@@ -1670,7 +1670,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("AssemblyAttribute", "'[' 'assembly' ':' ']'")]
         private AssemblyAttributeDeclaration ParseAssemblyAttribute(IExtendableSyntaxPart parent) {
-            AssemblyAttributeDeclaration result = CreateByTerminal<AssemblyAttributeDeclaration>(parent, TokenKind.OpenBraces);
+            AssemblyAttributeDeclaration result = CreateByTerminal<AssemblyAttributeDeclaration>(new AssemblyAttributeDeclaration(parent), TokenKind.OpenBraces);
             ContinueWithOrMissing(result, TokenKind.Assembly);
             ContinueWithOrMissing(result, TokenKind.Colon);
             result.Attribute = ParseAttribute(result);
@@ -1683,7 +1683,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("ExportsSection", "'exports' ExportItem { ',' ExportItem } ';' ")]
         private ExportsSection ParseExportsSection(IExtendableSyntaxPart parent) {
-            ExportsSection result = CreateByTerminal<ExportsSection>(parent, TokenKind.Exports);
+            ExportsSection result = CreateByTerminal<ExportsSection>(new ExportsSection(parent), TokenKind.Exports);
 
             do {
                 ParseExportItem(result);
@@ -1698,7 +1698,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("ExportItem", " Identifier [ '(' FormalParameters ')' ] [ 'index' Expression ] [ 'name' Expression ]")]
         private ExportItem ParseExportItem(IExtendableSyntaxPart parent) {
-            ExportItem result = CreateChild<ExportItem>(parent);
+            var result = new ExportItem(parent);
 
             result.ExportName = RequireIdentifier(result);
 
@@ -1724,7 +1724,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("VarSection", "(var | threadvar) VarDeclaration { VarDeclaration }")]
         private VarSection ParseVarSection(IExtendableSyntaxPart parent, bool inClassDeclaration) {
-            VarSection result = CreateByTerminal<VarSection>(parent, TokenKind.Var, TokenKind.ThreadVar);
+            VarSection result = CreateByTerminal<VarSection>(new VarSection(parent), TokenKind.Var, TokenKind.ThreadVar);
             result.Kind = result.LastTerminalKind;
 
             do {
@@ -1739,7 +1739,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("VarDeclaration", " IdentList ':' TypeSpecification [ VarValueSpecification ] Hints ';' ")]
         private VarDeclaration ParseVarDeclaration(IExtendableSyntaxPart parent) {
-            VarDeclaration result = CreateChild<VarDeclaration>(parent);
+            var result = new VarDeclaration(parent);
 
             result.Attributes = ParseAttributes(result);
             result.Identifiers = ParseIdentList(result, false);
@@ -1760,7 +1760,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("VarValueSpecification", "('absolute' ConstExpression) | ('=' ConstExpression)")]
         private VarValueSpecification ParseValueSpecification(IExtendableSyntaxPart parent) {
-            VarValueSpecification result = CreateChild<VarValueSpecification>(parent);
+            var result = new VarValueSpecification(parent);
 
             if (ContinueWith(result, TokenKind.Absolute)) {
                 result.Absolute = ParseConstantExpression(result);
@@ -1777,7 +1777,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("LabelSection", "'label' Label { ',' Label } ';' ")]
         private LabelDeclarationSection ParseLabelDeclarationSection(IExtendableSyntaxPart parent) {
-            LabelDeclarationSection result = CreateByTerminal<LabelDeclarationSection>(parent, TokenKind.Label);
+            LabelDeclarationSection result = CreateByTerminal<LabelDeclarationSection>(new LabelDeclarationSection(parent), TokenKind.Label);
 
             do {
                 ParseLabel(result);
@@ -1792,7 +1792,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("Label", "Identifier | Integer")]
         private Label ParseLabel(IExtendableSyntaxPart parent) {
-            Label result = CreateChild<Label>(parent);
+            var result = new Label(parent);
 
             if (MatchIdentifier()) {
                 result.LabelName = RequireIdentifier(result);
@@ -1815,7 +1815,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("ConstDeclaration", "[Attributes] Identifier [ ':' TypeSpecification ] = ConstantExpression Hints';'")]
         private ConstDeclaration ParseConstDeclaration(IExtendableSyntaxPart parent) {
-            ConstDeclaration result = CreateChild<ConstDeclaration>(parent);
+            var result = new ConstDeclaration(parent);
             result.Attributes = ParseAttributes(result);
             result.Identifier = RequireIdentifier(result);
 
@@ -1835,7 +1835,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("Hints", " { Hint ';' }")]
         private HintingInformationList ParseHints(IExtendableSyntaxPart parent, bool requireSemicolon) {
-            HintingInformationList result = CreateChild<HintingInformationList>(parent);
+            var result = new HintingInformationList(parent);
 
             HintingInformation hint;
             do {
@@ -1852,7 +1852,7 @@ namespace PasPasPas.Parsing.Parser {
         #region ParseHint
         [Rule("Hint", " ('deprecated' [QuotedString] | 'experimental' | 'platform' | 'library' ) ")]
         private HintingInformation ParseHint(IExtendableSyntaxPart parent) {
-            HintingInformation result = CreateChild<HintingInformation>(parent);
+            var result = new HintingInformation(parent);
 
             if (ContinueWith(result, TokenKind.Deprecated)) {
                 result.Deprecated = true;
@@ -1885,7 +1885,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("TypeSpecification", "StructType | PointerType | StringType | ProcedureType | SimpleType ")]
         private TypeSpecification ParseTypeSpecification(IExtendableSyntaxPart parent) {
-            TypeSpecification result = CreateChild<TypeSpecification>(parent);
+            var result = new TypeSpecification(parent);
 
             if (Match(TokenKind.Packed, TokenKind.Array, TokenKind.Set, TokenKind.File, //
                 TokenKind.Class, TokenKind.Interface, TokenKind.Record, TokenKind.Object, TokenKind.DispInterface)) {
@@ -1922,7 +1922,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("SimpleType", "EnumType | (ConstExpression [ '..' ConstExpression ]) | ([ 'type' ] GenericNamespaceName {'.' GenericNamespaceName })")]
         private SimpleType ParseSimpleType(IExtendableSyntaxPart parent) {
-            SimpleType result = CreateChild<SimpleType>(parent);
+            var result = new SimpleType(parent);
 
             if (Match(TokenKind.OpenParen)) {
                 result.EnumType = ParseEnumType(result);
@@ -1954,7 +1954,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("GenericNamespaceName", "NamespaceName [ GenericSuffix ]")]
         private GenericNamespaceName ParseGenericNamespaceName(IExtendableSyntaxPart parent, bool advancedCheck = false) {
-            GenericNamespaceName result = CreateChild<GenericNamespaceName>(parent);
+            var result = new GenericNamespaceName(parent);
             result.Name = ParseNamespaceName(result);
             if (Match(TokenKind.AngleBracketsOpen)) {
                 if (!advancedCheck) {
@@ -1975,7 +1975,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("EnumType", "'(' EnumTypeValue { ',' EnumTypeValue } ')'")]
         private EnumTypeDefinition ParseEnumType(IExtendableSyntaxPart parent) {
-            EnumTypeDefinition result = CreateByTerminal<EnumTypeDefinition>(parent, TokenKind.OpenParen);
+            EnumTypeDefinition result = CreateByTerminal<EnumTypeDefinition>(new EnumTypeDefinition(parent), TokenKind.OpenParen);
 
             do {
                 ParseEnumTypeValue(result);
@@ -1990,7 +1990,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("EnumTypeValue", "Identifier [ '=' Expression ]")]
         private EnumValue ParseEnumTypeValue(IExtendableSyntaxPart parent) {
-            EnumValue result = CreateChild<EnumValue>(parent);
+            var result = new EnumValue(parent);
 
             result.EnumName = RequireIdentifier(result);
             if (ContinueWith(result, TokenKind.EqualsSign)) {
@@ -2004,7 +2004,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("ProcedureType", "(ProcedureRefType [ 'of' 'object' ] ( | ProcedureReference")]
         private ProcedureType ParseProcedureType(IExtendableSyntaxPart parent) {
-            ProcedureType result = CreateChild<ProcedureType>(parent);
+            var result = new ProcedureType(parent);
 
             if (Match(TokenKind.Procedure, TokenKind.Function)) {
                 result.ProcedureRefType = ParseProcedureRefType(result);
@@ -2032,7 +2032,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("ProcedureReference", "'reference' 'to' ProcedureTypeDefinition ")]
         private ProcedureReference ParseProcedureReference(IExtendableSyntaxPart parent) {
-            ProcedureReference result = CreateByTerminal<ProcedureReference>(parent, TokenKind.Reference);
+            ProcedureReference result = CreateByTerminal<ProcedureReference>(new ProcedureReference(parent), TokenKind.Reference);
             ContinueWithOrMissing(result, TokenKind.To);
             result.ProcedureType = ParseProcedureRefType(result);
             result.ProcedureType.AllowAnonymousMethods = true;
@@ -2044,7 +2044,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("ProcedureTypeDefinition", "('function' | 'procedure') [ '(' FormalParameters ')' ] [ ':' TypeSpecification ] [ 'of' 'object']")]
         private ProcedureTypeDefinition ParseProcedureRefType(IExtendableSyntaxPart parent) {
-            ProcedureTypeDefinition result = CreateByTerminal<ProcedureTypeDefinition>(parent, TokenKind.Function, TokenKind.Procedure);
+            ProcedureTypeDefinition result = CreateByTerminal<ProcedureTypeDefinition>(new ProcedureTypeDefinition(parent), TokenKind.Function, TokenKind.Procedure);
             result.Kind = result.LastTerminalKind;
 
             if (Match(TokenKind.OpenParen)) {
@@ -2065,7 +2065,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("FormalParameterSection", "'(' [ FormalParameters ] ')'")]
         private FormalParameterSection ParseFormalParameterSection(IExtendableSyntaxPart parent) {
-            FormalParameterSection result = CreateByTerminal<FormalParameterSection>(parent, TokenKind.OpenParen);
+            FormalParameterSection result = CreateByTerminal<FormalParameterSection>(new FormalParameterSection(parent), TokenKind.OpenParen);
 
             if (!Match(TokenKind.CloseParen)) {
                 result.ParameterList = ParseFormalParameters(result);
@@ -2080,7 +2080,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("StringType", "ShortString | WideString | UnicodeString |('string' [ '[' Expression ']'  ]) | ('AnsiString' '(' ConstExpression ')') ")]
         private StringType ParseStringType(IExtendableSyntaxPart parent) {
-            StringType result = CreateChild<StringType>(parent);
+            var result = new StringType(parent);
 
             if (ContinueWith(result, TokenKind.String)) {
                 result.Kind = TokenKind.String;
@@ -2124,7 +2124,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("StructType", "[ 'packed' ] StructTypePart")]
         private StructType ParseStructType(IExtendableSyntaxPart parent) {
-            StructType result = CreateChild<StructType>(parent);
+            var result = new StructType(parent);
             result.Packed = ContinueWith(result, TokenKind.Packed);
             result.Part = ParseStructTypePart(result);
             return result;
@@ -2135,7 +2135,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("StructTypePart", "ArrayType | SetType | FileType | ClassDecl")]
         private StructTypePart ParseStructTypePart(IExtendableSyntaxPart parent) {
-            StructTypePart result = CreateChild<StructTypePart>(parent);
+            var result = new StructTypePart(parent);
 
             if (Match(TokenKind.Array)) {
                 result.ArrayType = ParseArrayType(result);
@@ -2165,7 +2165,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("ClassDeclaration", "ClassOfDeclaration | ClassDefinition | ClassHelper | InterfaceDef | ObjectDecl | RecordDecl | RecordHelperDecl ")]
         private ClassTypeDeclaration ParseClassDeclaration(IExtendableSyntaxPart parent) {
-            ClassTypeDeclaration result = CreateChild<ClassTypeDeclaration>(parent);
+            var result = new ClassTypeDeclaration(parent);
 
             if (Match(TokenKind.Class) && LookAhead(1, TokenKind.Of)) {
                 result.ClassOf = ParseClassOfDeclaration(result);
@@ -2211,7 +2211,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("RecordDecl", "'record' RecordFieldList (RecordVariantSection | RecordItems ) 'end' ")]
         private RecordDeclaration ParseRecordDecl(IExtendableSyntaxPart parent) {
-            RecordDeclaration result = CreateByTerminal<RecordDeclaration>(parent, TokenKind.Record);
+            RecordDeclaration result = CreateByTerminal<RecordDeclaration>(new RecordDeclaration(parent), TokenKind.Record);
 
             if (MatchIdentifier() && !Match(TokenKind.Strict, TokenKind.Protected, TokenKind.Private, TokenKind.Public, TokenKind.Published, TokenKind.Automated)) {
                 result.FieldList = ParseRecordFieldList(result, true);
@@ -2233,7 +2233,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("RecordItems", "{ RecordItem }")]
         private RecordItems ParseRecordItems(IExtendableSyntaxPart parent) {
-            RecordItems result = CreateChild<RecordItems>(parent);
+            var result = new RecordItems(parent);
             RecordDeclarationMode mode = RecordDeclarationMode.Fields;
 
             while ((!Match(TokenKind.End)) && (mode != RecordDeclarationMode.Undefined)) {
@@ -2266,7 +2266,7 @@ namespace PasPasPas.Parsing.Parser {
                 return null;
             }
 
-            RecordItem result = CreateChild<RecordItem>(parent);
+            var result = new RecordItem(parent);
 
             if (Match(TokenKind.OpenBraces)) {
                 result.Attributes = ParseAttributes(result);
@@ -2338,7 +2338,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("RecordVariantSection", "'case' [ Identifier ': ' ] TypeDeclaration 'of' { RecordVariant } ")]
         private RecordVariantSection ParseRecordVariantSection(IExtendableSyntaxPart parent) {
-            RecordVariantSection result = CreateByTerminal<RecordVariantSection>(parent, TokenKind.Case);
+            RecordVariantSection result = CreateByTerminal<RecordVariantSection>(new RecordVariantSection(parent), TokenKind.Case);
 
             if (MatchIdentifier() && LookAhead(1, TokenKind.Colon)) {
                 result.Name = RequireIdentifier(result);
@@ -2359,7 +2359,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("RecordVariant", "ConstantExpression { , ConstantExpression } : '(' FieldList ')' ';' ")]
         private RecordVariant ParseRecordVariant(IExtendableSyntaxPart parent) {
-            RecordVariant result = CreateChild<RecordVariant>(parent);
+            var result = new RecordVariant(parent);
 
             do {
                 ParseConstantExpression(result);
@@ -2378,7 +2378,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("RecordFieldList", " { RecordField } ")]
         private RecordFieldList ParseRecordFieldList(IExtendableSyntaxPart parent, bool requireSemicolon) {
-            RecordFieldList result = CreateChild<RecordFieldList>(parent);
+            var result = new RecordFieldList(parent);
             while (MatchIdentifier() && (!Match(TokenKind.Private, TokenKind.Protected, TokenKind.Public, TokenKind.Published, TokenKind.Strict))) {
                 ParseRecordField(result, requireSemicolon);
             }
@@ -2390,7 +2390,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("RecordField", "IdentList ':' TypeSpecification Hints ';'")]
         private RecordField ParseRecordField(IExtendableSyntaxPart parent, bool requireSemicolon) {
-            RecordField result = CreateChild<RecordField>(parent);
+            var result = new RecordField(parent);
             result.Names = ParseIdentList(result, true);
             ContinueWithOrMissing(result, TokenKind.Colon);
             result.FieldType = ParseTypeSpecification(result);
@@ -2405,7 +2405,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("RecordHelperDecl", "'record' 'helper' 'for' TypeName RecordHelperItems 'end'")]
         private RecordHelperDefinition ParseRecordHelper(IExtendableSyntaxPart parent) {
-            RecordHelperDefinition result = CreateByTerminal<RecordHelperDefinition>(parent, TokenKind.Record);
+            RecordHelperDefinition result = CreateByTerminal<RecordHelperDefinition>(new RecordHelperDefinition(parent), TokenKind.Record);
             ContinueWithOrMissing(result, TokenKind.Helper);
             ContinueWithOrMissing(result, TokenKind.For);
             result.Name = ParseTypeName(result);
@@ -2419,7 +2419,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("RecordHelperItems", " { RecordHelperItem }")]
         private RecordHelperItems ParseRecordHelperItems(IExtendableSyntaxPart parent) {
-            RecordHelperItems result = CreateChild<RecordHelperItems>(parent);
+            var result = new RecordHelperItems(parent);
             RecordDeclarationMode mode = RecordDeclarationMode.Fields;
 
             while ((!Match(TokenKind.End, TokenKind.Undefined, TokenKind.Eof)) && (mode != RecordDeclarationMode.Undefined)) {
@@ -2451,7 +2451,7 @@ namespace PasPasPas.Parsing.Parser {
                 return null;
             }
 
-            RecordHelperItem result = CreateChild<RecordHelperItem>(parent);
+            var result = new RecordHelperItem(parent);
             result.Attributes = ParseAttributes(result);
             result.ClassItem = ContinueWith(result, TokenKind.Class);
             result.Attributes = ParseAttributes(result, result.Attributes);
@@ -2508,7 +2508,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("ObjectDecl", "'object' ClassParent ObjectItems 'end' ")]
         private ObjectDeclaration ParseObjectDecl(IExtendableSyntaxPart parent) {
-            ObjectDeclaration result = CreateByTerminal<ObjectDeclaration>(parent, TokenKind.Object);
+            ObjectDeclaration result = CreateByTerminal<ObjectDeclaration>(new ObjectDeclaration(parent), TokenKind.Object);
             result.ClassParent = ParseClassParent(result);
             result.Items = ParseObjectItems(result);
 
@@ -2521,7 +2521,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("ObjectItems", " { ObjectItem } ")]
         private ObjectItems ParseObjectItems(IExtendableSyntaxPart parent) {
-            ObjectItems result = CreateChild<ObjectItems>(parent);
+            var result = new ObjectItems(parent);
             ClassDeclarationMode mode = ClassDeclarationMode.Fields;
 
             while ((!Match(TokenKind.End)) && (mode != ClassDeclarationMode.Undefined)) {
@@ -2540,7 +2540,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("ObjectItem", "Visibility | MethodDeclaration | ClassFieldDeclaration | PropertyDeclaration ")]
         private ObjectItem ParseObjectItem(IExtendableSyntaxPart parent, ref ClassDeclarationMode mode) {
-            ObjectItem result = CreateChild<ObjectItem>(parent);
+            var result = new ObjectItem(parent);
 
             if (Match(TokenKind.Public, TokenKind.Protected, TokenKind.Private, TokenKind.Strict, TokenKind.Published, TokenKind.Automated)) {
                 result.Strict = ContinueWith(result, TokenKind.Strict);
@@ -2588,7 +2588,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("InterfaceDef", "('interface' | 'dispinterface') ClassParent [InterfaceGuid] InterfaceDefItems 'end'")]
         private InterfaceDefinition ParseInterfaceDef(IExtendableSyntaxPart parent) {
-            InterfaceDefinition result = CreateChild<InterfaceDefinition>(parent);
+            var result = new InterfaceDefinition(parent);
 
             if (!ContinueWith(result, TokenKind.Interface)) {
                 ContinueWithOrMissing(result, TokenKind.DispInterface);
@@ -2612,7 +2612,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("InterfaceItems", "{ InterfaceItem }")]
         private InterfaceItems ParseInterfaceItems(IExtendableSyntaxPart parent) {
-            InterfaceItems result = CreateChild<InterfaceItems>(parent);
+            var result = new InterfaceItems(parent);
             var unexpected = false;
 
             while ((!Match(TokenKind.End)) && (!unexpected)) {
@@ -2631,7 +2631,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("InterfaceItem", "MethodDeclaration | PropertyDeclaration")]
         private InterfaceItem ParseInterfaceItem(IExtendableSyntaxPart parent, out bool unexpected) {
-            InterfaceItem result = CreateChild<InterfaceItem>(parent);
+            var result = new InterfaceItem(parent);
             unexpected = true;
 
             if (Match(TokenKind.Procedure, TokenKind.Function)) {
@@ -2654,7 +2654,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("InterfaceGuid", "'[' ( QuotedString ) | Identifier ']'")]
         private InterfaceGuid ParseInterfaceGuid(IExtendableSyntaxPart parent) {
-            InterfaceGuid result = CreateByTerminal<InterfaceGuid>(parent, TokenKind.OpenBraces);
+            InterfaceGuid result = CreateByTerminal<InterfaceGuid>(new InterfaceGuid(parent), TokenKind.OpenBraces);
 
             if (Match(TokenKind.Identifier))
                 result.IdIdentifier = RequireIdentifier(result);
@@ -2670,7 +2670,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("ClassHelper", "'class' 'helper' ClassParent 'for' TypeName ClassHelperItems 'end'")]
         private ClassHelperDef ParseClassHelper(IExtendableSyntaxPart parent) {
-            ClassHelperDef result = CreateByTerminal<ClassHelperDef>(parent, TokenKind.Class);
+            ClassHelperDef result = CreateByTerminal<ClassHelperDef>(new ClassHelperDef(parent), TokenKind.Class);
             ContinueWithOrMissing(result, TokenKind.Helper);
             result.ClassParent = ParseClassParent(result);
             ContinueWithOrMissing(result, TokenKind.For);
@@ -2685,7 +2685,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("ClassHelperItems", " { ClassHelperItem }")]
         private ClassHelperItems ParseClassHelperItems(IExtendableSyntaxPart parent) {
-            ClassHelperItems result = CreateChild<ClassHelperItems>(parent);
+            var result = new ClassHelperItems(parent);
             ClassDeclarationMode mode = ClassDeclarationMode.Fields;
 
             while (!Match(TokenKind.End, TokenKind.Undefined, TokenKind.Eof) && (mode != ClassDeclarationMode.Undefined)) {
@@ -2703,7 +2703,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("ClassHelperItem", "Visibility | MethodDeclaration | PropertyDeclaration | [ 'class' ] VarSection")]
         private ClassHelperItem ParseClassHelperItem(IExtendableSyntaxPart parent, ref ClassDeclarationMode mode) {
-            ClassHelperItem result = CreateChild<ClassHelperItem>(parent);
+            var result = new ClassHelperItem(parent);
 
             if (ContinueWith(parent, TokenKind.Var)) {
                 mode = ClassDeclarationMode.Fields;
@@ -2774,7 +2774,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("ClassDefinition", "'class' [( 'sealed' | 'abstract' )] [ClassParent] ClassItems 'end' ")]
         private ClassDeclaration ParseClassDefinition(IExtendableSyntaxPart parent) {
-            ClassDeclaration result = CreateByTerminal<ClassDeclaration>(parent, TokenKind.Class);
+            ClassDeclaration result = CreateByTerminal<ClassDeclaration>(new ClassDeclaration(parent), TokenKind.Class);
 
             result.Sealed = ContinueWith(result, TokenKind.Sealed);
             result.Abstract = ContinueWith(result, TokenKind.Abstract);
@@ -2797,7 +2797,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("ClassItems", "{ ClassItem } ")]
         private ClassDeclarationItems ParseClassItems(IExtendableSyntaxPart parent) {
-            ClassDeclarationItems result = CreateChild<ClassDeclarationItems>(parent);
+            var result = new ClassDeclarationItems(parent);
             ClassDeclarationMode mode = ClassDeclarationMode.Fields;
 
             while ((!Match(TokenKind.End)) && (mode != ClassDeclarationMode.Undefined)) {
@@ -2830,7 +2830,7 @@ namespace PasPasPas.Parsing.Parser {
                 return null;
             }
 
-            ClassDeclarationItem result = CreateChild<ClassDeclarationItem>(parent);
+            var result = new ClassDeclarationItem(parent);
 
             result.Attributes = ParseAttributes(result);
             result.ClassItem = ContinueWith(result, TokenKind.Class);
@@ -2903,7 +2903,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("ClassFieldDeclaration", "IdentList ':' TypeSpecification Hints ';'")]
         private ClassField ParseClassFieldDeclararation(IExtendableSyntaxPart parent) {
-            ClassField result = CreateChild<ClassField>(parent);
+            var result = new ClassField(parent);
             result.Names = ParseIdentList(result, true);
             ContinueWithOrMissing(result, TokenKind.Colon);
             result.TypeDecl = ParseTypeSpecification(result);
@@ -2917,7 +2917,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("PropertyDeclaration", "'property' Identifier [ '[' FormalParameters  ']' ] [ ':' TypeName ] [ 'index' Expression ]  { ClassPropertySpecifier } ';' [ 'default' ';' ]  ")]
         private ClassProperty ParsePropertyDeclaration(IExtendableSyntaxPart parent) {
-            ClassProperty result = CreateByTerminal<ClassProperty>(parent, TokenKind.Property);
+            ClassProperty result = CreateByTerminal<ClassProperty>(new ClassProperty(parent), TokenKind.Property);
             result.PropertyName = RequireIdentifier(result);
             if (ContinueWith(result, TokenKind.OpenBraces)) {
                 result.ArrayIndex = ParseFormalParameters(result);
@@ -2952,7 +2952,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("ClassPropertySpecifier", "ClassPropertyReadWrite | ClassPropertyDispInterface | ('stored' Expression ';') | ('default' [ Expression ] ';' ) | ('nodefault' ';') | ('implements' NamespaceName) ")]
         private ClassPropertySpecifier ParseClassPropertyAccessSpecifier(IExtendableSyntaxPart parent) {
-            ClassPropertySpecifier result = CreateChild<ClassPropertySpecifier>(parent);
+            var result = new ClassPropertySpecifier(parent);
 
             if (Match(TokenKind.Read, TokenKind.Write, TokenKind.Add, TokenKind.Remove)) {
                 result.PropertyReadWrite = ParseClassPropertyReadWrite(result);
@@ -2997,7 +2997,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("ClassPropertyDispInterface", "( 'readonly' ';')  | ( 'writeonly' ';' ) | DispIdDirective ")]
         private ClassPropertyDispInterface ParseClassPropertyDispInterface(IExtendableSyntaxPart parent) {
-            ClassPropertyDispInterface result = CreateChild<ClassPropertyDispInterface>(parent);
+            var result = new ClassPropertyDispInterface(parent);
 
             if (ContinueWith(result, TokenKind.ReadOnly)) {
                 result.ReadOnly = true;
@@ -3018,7 +3018,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("DispIdDirective", "'dispid' Expression ';'")]
         private DispIdDirective ParseDispIdDirective(IExtendableSyntaxPart parent, bool requireSemi = true) {
-            DispIdDirective result = CreateByTerminal<DispIdDirective>(parent, TokenKind.DispId);
+            DispIdDirective result = CreateByTerminal<DispIdDirective>(new DispIdDirective(parent), TokenKind.DispId);
             result.DispExpression = ParseExpression(result);
             if (requireSemi)
                 ContinueWithOrMissing(result, TokenKind.Semicolon);
@@ -3030,7 +3030,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("ClassPropertyReadWrite", "('read' | 'write' | 'add' | 'remove' ) NamespaceName ")]
         private ClassPropertyReadWrite ParseClassPropertyReadWrite(IExtendableSyntaxPart parent) {
-            ClassPropertyReadWrite result = CreateByTerminal<ClassPropertyReadWrite>(parent, TokenKind.Read, TokenKind.Write, TokenKind.Add, TokenKind.Remove);
+            ClassPropertyReadWrite result = CreateByTerminal<ClassPropertyReadWrite>(new ClassPropertyReadWrite(parent), TokenKind.Read, TokenKind.Write, TokenKind.Add, TokenKind.Remove);
 
             result.Kind = result.LastTerminalKind;
             result.Member = ParseNamespaceName(result);
@@ -3043,7 +3043,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("TypeSection", "'type' TypeDeclaration { TypeDeclaration }")]
         private TypeSection ParseTypeSection(IExtendableSyntaxPart parent, bool inClassDeclaration) {
-            TypeSection result = CreateByTerminal<TypeSection>(parent, TokenKind.TypeKeyword);
+            TypeSection result = CreateByTerminal<TypeSection>(new TypeSection(parent), TokenKind.TypeKeyword);
 
             while ((!inClassDeclaration || !Match(TokenKind.Private, TokenKind.Protected, TokenKind.Public, TokenKind.Published, TokenKind.Automated, TokenKind.Strict)) && MatchIdentifier(TokenKind.OpenBraces)) {
                 ParseTypeDeclaration(result);
@@ -3057,7 +3057,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("TypeDeclaration", "[ Attributes ] GenericTypeIdent '=' TypeDeclaration Hints ';' ")]
         private TypeDeclaration ParseTypeDeclaration(IExtendableSyntaxPart parent) {
-            TypeDeclaration result = CreateChild<TypeDeclaration>(parent);
+            var result = new TypeDeclaration(parent);
             result.Attributes = ParseAttributes(result);
             result.TypeId = ParseGenericTypeIdent(result);
             ContinueWithOrMissing(result, TokenKind.EqualsSign);
@@ -3072,7 +3072,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("GenericTypeIdent", "Ident [ GenericDefintion ] ")]
         private GenericTypeIdentifier ParseGenericTypeIdent(IExtendableSyntaxPart parent) {
-            GenericTypeIdentifier result = CreateChild<GenericTypeIdentifier>(parent);
+            var result = new GenericTypeIdentifier(parent);
             result.Identifier = RequireIdentifier(result);
             if (Match(TokenKind.AngleBracketsOpen)) {
                 result.GenericDefinition = ParseGenericDefinition(result);
@@ -3085,7 +3085,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("MethodResolution", "( 'function' | 'procedure' ) NamespaceName '=' Identifier ';' ")]
         private MethodResolution ParseMethodResolution(IExtendableSyntaxPart parent) {
-            MethodResolution result = CreateByTerminal<MethodResolution>(parent, TokenKind.Function, TokenKind.Procedure);
+            MethodResolution result = CreateByTerminal<MethodResolution>(new MethodResolution(parent), TokenKind.Function, TokenKind.Procedure);
             result.Kind = result.LastTerminalKind;
             result.Name = ParseTypeName(result);
             ContinueWithOrMissing(result, TokenKind.EqualsSign);
@@ -3099,7 +3099,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("MethodDeclaration", "( 'constructor' | 'destructor' | 'procedure' | 'function' | 'operator') Identifier [GenericDefinition] [FormalParameters] [ ':' [ Attributes ] TypeSpecification ] ';' { MethodDirective } ")]
         private ClassMethod ParseMethodDeclaration(IExtendableSyntaxPart parent) {
-            ClassMethod result = CreateByTerminal<ClassMethod>(parent, TokenKind.Constructor, TokenKind.Destructor, TokenKind.Procedure, TokenKind.Function, TokenKind.Operator);
+            ClassMethod result = CreateByTerminal<ClassMethod>(new ClassMethod(parent), TokenKind.Constructor, TokenKind.Destructor, TokenKind.Procedure, TokenKind.Function, TokenKind.Operator);
             result.MethodKind = result.LastTerminalKind;
             var isInOperator = result.MethodKind == TokenKind.Operator && Match(TokenKind.In);
             result.Identifier = RequireIdentifier(result, isInOperator);
@@ -3128,7 +3128,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("FormalParameters", "FormalParameter { ';' FormalParameter }")]
         private FormalParameters ParseFormalParameters(IExtendableSyntaxPart parent) {
-            FormalParameters result = CreateChild<FormalParameters>(parent);
+            var result = new FormalParameters(parent);
 
             do {
                 if (!Match(TokenKind.CloseParen))
@@ -3144,10 +3144,10 @@ namespace PasPasPas.Parsing.Parser {
         [Rule("FormalParameter", "[Attributes] [( 'const' | 'var' | 'out' )] [Attributes] IdentList [ ':' TypeDeclaration ] [ '=' Expression ]")]
         private void ParseFormalParameter(IExtendableSyntaxPart parent) {
             var kind = TokenKind.Undefined - 1;
-            FormalParameterDefinition parentDefinition = CreateChild<FormalParameterDefinition>(parent);
+            var parentDefinition = new FormalParameterDefinition(parent);
 
             do {
-                FormalParameter result = CreateChild<FormalParameter>(parentDefinition);
+                var result = new FormalParameter(parentDefinition);
 
                 if (Match(TokenKind.OpenBraces)) {
                     result.Attributes = ParseAttributes(result);
@@ -3188,7 +3188,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("IdentList", "Identifier { ',' Identifier }")]
         private IdentifierList ParseIdentList(IExtendableSyntaxPart parent, bool allowAttributes) {
-            IdentifierList result = CreateChild<IdentifierList>(parent);
+            var result = new IdentifierList(parent);
 
             do {
                 if (allowAttributes && Match(TokenKind.OpenBraces))
@@ -3216,10 +3216,10 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("SimpleGenericDefinition", "'<' Identifier { ',' Identifier } '>'")]
         private GenericDefinition ParseSimpleGenericDefinition(IExtendableSyntaxPart parent) {
-            GenericDefinition result = CreateByTerminal<GenericDefinition>(parent, TokenKind.AngleBracketsOpen);
+            GenericDefinition result = CreateByTerminal<GenericDefinition>(new GenericDefinition(parent), TokenKind.AngleBracketsOpen);
 
             do {
-                GenericDefinitionPart part = CreateChild<GenericDefinitionPart>(result);
+                var part = new GenericDefinitionPart(result);
                 part.Identifier = RequireIdentifier(result);
             } while (ContinueWith(result, TokenKind.Comma));
 
@@ -3232,7 +3232,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("ConstrainedGenericDefinition", "'<' GenericDefinitionPart { ';' GenericDefinitionPart } '>'")]
         private GenericDefinition ParseConstrainedGenericDefinition(IExtendableSyntaxPart parent) {
-            GenericDefinition result = CreateByTerminal<GenericDefinition>(parent, TokenKind.AngleBracketsOpen);
+            GenericDefinition result = CreateByTerminal<GenericDefinition>(new GenericDefinition(parent), TokenKind.AngleBracketsOpen);
 
             do {
                 ParseGenericDefinitionPart(result);
@@ -3248,7 +3248,8 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("GenericDefinitionPart", "Identifier [ ':' GenericConstraint { ',' GenericConstraint } ]")]
         private GenericDefinitionPart ParseGenericDefinitionPart(IExtendableSyntaxPart parent) {
-            GenericDefinitionPart result = CreateChild<GenericDefinitionPart>(parent);
+
+            var result = new GenericDefinitionPart(parent);
             result.Identifier = RequireIdentifier(result);
 
             if (ContinueWith(result, TokenKind.Colon)) {
@@ -3265,7 +3266,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("GenericConstraint", " 'record' | 'class' | 'constructor' | Identifier ")]
         private ConstrainedGeneric ParseGenericConstraint(IExtendableSyntaxPart parent) {
-            ConstrainedGeneric result = CreateChild<ConstrainedGeneric>(parent);
+            var result = new ConstrainedGeneric(parent);
 
             if (ContinueWith(result, TokenKind.Record)) {
                 result.RecordConstraint = true;
@@ -3288,7 +3289,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("ClassParent", " [ '(' TypeName { ',' TypeName } ')' ]")]
         private ParentClass ParseClassParent(IExtendableSyntaxPart parent) {
-            ParentClass result = CreateChild<ParentClass>(parent);
+            var result = new ParentClass(parent);
 
             if (ContinueWith(result, TokenKind.OpenParen)) {
                 do {
@@ -3305,7 +3306,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("ClassOfDeclaration", "'class' 'of' TypeName")]
         private ClassOfDeclaration ParseClassOfDeclaration(IExtendableSyntaxPart parent) {
-            ClassOfDeclaration result = CreateByTerminal<ClassOfDeclaration>(parent, TokenKind.Class);
+            ClassOfDeclaration result = CreateByTerminal<ClassOfDeclaration>(new ClassOfDeclaration(parent), TokenKind.Class);
             ContinueWithOrMissing(result, TokenKind.Of);
             result.TypeRef = ParseTypeName(result);
             return result;
@@ -3316,7 +3317,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("TypeName", "'string' | 'ansistring' | 'shortstring' | 'unicodestring' | 'widestring' | (NamespaceName [ GenericSuffix ]) ")]
         private TypeName ParseTypeName(IExtendableSyntaxPart parent) {
-            TypeName result = CreateChild<TypeName>(parent);
+            var result = new TypeName(parent);
 
             if (ContinueWith(result, TokenKind.String, TokenKind.AnsiString, TokenKind.ShortString, TokenKind.UnicodeString, TokenKind.WideString)) {
                 result.StringType = result.LastTerminalKind;
@@ -3335,7 +3336,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("FileType", "'file' [ 'of' TypeSpecification ]")]
         private FileType ParseFileType(IExtendableSyntaxPart parent) {
-            FileType result = CreateByTerminal<FileType>(parent, TokenKind.File);
+            FileType result = CreateByTerminal<FileType>(new FileType(parent), TokenKind.File);
 
             if (ContinueWith(result, TokenKind.Of)) {
                 result.TypeDefinition = ParseTypeSpecification(result);
@@ -3349,7 +3350,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("SetDef", "'set' 'of' TypeSpecification")]
         private SetDefinition ParseSetDefinition(IExtendableSyntaxPart parent) {
-            SetDefinition result = CreateByTerminal<SetDefinition>(parent, TokenKind.Set);
+            SetDefinition result = CreateByTerminal<SetDefinition>(new SetDefinition(parent), TokenKind.Set);
             ContinueWithOrMissing(result, TokenKind.Of);
             result.TypeDefinition = ParseTypeSpecification(result);
             return result;
@@ -3360,7 +3361,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("GenericSuffix", "'<' TypeDefinition { ',' TypeDefinition '}' '>'")]
         private GenericSuffix ParseGenericSuffix(IExtendableSyntaxPart parent) {
-            GenericSuffix result = CreateByTerminal<GenericSuffix>(parent, TokenKind.AngleBracketsOpen);
+            GenericSuffix result = CreateByTerminal<GenericSuffix>(new GenericSuffix(parent), TokenKind.AngleBracketsOpen);
 
             do {
                 ParseTypeSpecification(result);
@@ -3375,7 +3376,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("ArrayType", " 'array' [ '[' ArrayIndex { ',' ArrayIndex } ']']  'of' ( 'const' | TypeDefinition ) ")]
         private ArrayType ParseArrayType(IExtendableSyntaxPart parent) {
-            ArrayType result = CreateByTerminal<ArrayType>(parent, TokenKind.Array);
+            ArrayType result = CreateByTerminal<ArrayType>(new ArrayType(parent), TokenKind.Array);
 
             if (ContinueWith(result, TokenKind.OpenBraces)) {
 
@@ -3403,7 +3404,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("ArrayIndex", "ConstantExpression [ '..' ConstantExpression ] ")]
         private ArrayIndex ParseArrayIndex(IExtendableSyntaxPart parent) {
-            ArrayIndex result = CreateChild<ArrayIndex>(parent);
+            var result = new ArrayIndex(parent);
 
             result.StartIndex = ParseConstantExpression(result);
             if (ContinueWith(result, TokenKind.DotDot)) {
@@ -3417,7 +3418,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("PointerType", "( 'pointer' | '^' TypeSpecification )")]
         private PointerType ParsePointerType(IExtendableSyntaxPart parent) {
-            PointerType result = CreateChild<PointerType>(parent);
+            var result = new PointerType(parent);
 
             if (ContinueWith(result, TokenKind.Pointer)) {
                 result.GenericPointer = true;
@@ -3435,7 +3436,7 @@ namespace PasPasPas.Parsing.Parser {
         [Rule("Attributes", "{ '[' Attribute | AssemblyAttribue ']' }")]
         private UserAttributes ParseAttributes(IExtendableSyntaxPart parent, UserAttributes result = null) {
             if (result == null)
-                result = CreateChild<UserAttributes>(parent);
+                result = new UserAttributes(parent);
 
             while (Match(TokenKind.OpenBraces)) {
                 if (LookAhead(1, TokenKind.Assembly)) {
@@ -3457,7 +3458,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("Attribute", " [ 'Result' ':' ] NamespaceName [ '(' Expressions ')' ]")]
         private UserAttributeDefinition ParseAttribute(IExtendableSyntaxPart parent) {
-            UserAttributeDefinition result = CreateChild<UserAttributeDefinition>(parent);
+            var result = new UserAttributeDefinition(parent);
 
             if (LookAhead(1, TokenKind.Colon)) {
                 result.Prefix = RequireIdentifier(result, true);
@@ -3481,7 +3482,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("Expressions", "Expression { ',' Expression }")]
         private ExpressionList ParseExpressions(IExtendableSyntaxPart parent) {
-            ExpressionList result = CreateChild<ExpressionList>(parent);
+            var result = new ExpressionList(parent);
 
             do {
                 ParseExpression(result);
@@ -3495,7 +3496,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("ConstantExpression", " '(' ( RecordConstant | ConstantExpression ) ')' | Expression")]
         private ConstantExpression ParseConstantExpression(IExtendableSyntaxPart parent, bool fromDesignator = false) {
-            ConstantExpression result = CreateChild<ConstantExpression>(parent);
+            var result = new ConstantExpression(parent);
 
             if (Match(TokenKind.OpenParen)) {
 
@@ -3532,7 +3533,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("RecordConstantExpression", "Identifier ':' ConstantExpression")]
         private RecordConstantExpression ParseRecordConstant(IExtendableSyntaxPart parent) {
-            RecordConstantExpression result = CreateChild<RecordConstantExpression>(parent);
+            var result = new RecordConstantExpression(parent);
             result.Name = RequireIdentifier(result);
             ContinueWithOrMissing(result, TokenKind.Colon);
             result.Value = ParseConstantExpression(result);
@@ -3544,7 +3545,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("Expression", "SimpleExpression [ ('<'|'<='|'>'|'>='|'<>'|'='|'in'|'is') SimpleExpression ] | ClosureExpression")]
         private Expression ParseExpression(IExtendableSyntaxPart parent) {
-            Expression result = CreateChild<Expression>(parent);
+            var result = new Expression(parent);
 
             if (Match(TokenKind.Function, TokenKind.Procedure)) {
                 result.ClosureExpression = ParseClosureExpression(result);
@@ -3565,7 +3566,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("SimpleExpression", "Term { ('+'|'-'|'or'|'xor') SimpleExpression }")]
         private SimpleExpression ParseSimpleExpression(IExtendableSyntaxPart parent) {
-            SimpleExpression result = CreateChild<SimpleExpression>(parent);
+            var result = new SimpleExpression(parent);
 
             result.LeftOperand = ParseTerm(result);
             if (ContinueWith(result, TokenKind.Plus, TokenKind.Minus, TokenKind.Or, TokenKind.Xor)) {
@@ -3581,7 +3582,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("Term", "Factor [ ('*'|'/'|'div'|'mod'|'and'|'shl'|'shr'|'as') Term ]")]
         private Term ParseTerm(IExtendableSyntaxPart parent) {
-            Term result = CreateChild<Term>(parent);
+            var result = new Term(parent);
 
             result.LeftOperand = ParseFactor(result);
 
@@ -3598,7 +3599,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("Factor", "'@' Factor  | 'not' Factor | '+' Factor | '-' Factor | '^' Identifier | Integer | HexNumber | Real | 'true' | 'false' | 'nil' | '(' Expression ')' | String | SetSection | Designator | TypeCast")]
         private Factor ParseFactor(IExtendableSyntaxPart parent) {
-            Factor result = CreateChild<Factor>(parent);
+            var result = new Factor(parent);
 
             if (ContinueWith(result, TokenKind.At)) {
                 result.AddressOf = ParseFactor(result);
@@ -3708,7 +3709,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("Designator", "[ 'inherited' ] [ NamespaceName ] { DesignatorItem }")]
         private DesignatorStatement ParseDesignator(IExtendableSyntaxPart parent) {
-            DesignatorStatement result = CreateChild<DesignatorStatement>(parent);
+            var result = new DesignatorStatement(parent);
             result.Inherited = ContinueWith(result, TokenKind.Inherited);
             if (MatchIdentifier(TokenKind.String, TokenKind.ShortString, TokenKind.AnsiString, TokenKind.WideString, TokenKind.String)) {
                 result.Name = ParseTypeName(result);
@@ -3728,13 +3729,13 @@ namespace PasPasPas.Parsing.Parser {
         [Rule("DesignatorItem", "'^' | '.' Ident [GenericSuffix] | '[' ExpressionList ']' | '(' [ FormattedExpression  { ',' FormattedExpression } ] ')'")]
         private ISyntaxPart ParseDesignatorItem(SyntaxPartBase parent, bool hasIdentifier) {
             if (Match(TokenKind.Circumflex)) {
-                DesignatorItem result = CreateByTerminal<DesignatorItem>(parent, TokenKind.Circumflex);
+                DesignatorItem result = CreateByTerminal<DesignatorItem>(new DesignatorItem(parent), TokenKind.Circumflex);
                 result.Dereference = true;
                 return result;
             }
 
             if (Match(TokenKind.Dot)) {
-                DesignatorItem result = CreateByTerminal<DesignatorItem>(parent, TokenKind.Dot);
+                DesignatorItem result = CreateByTerminal<DesignatorItem>(new DesignatorItem(parent), TokenKind.Dot);
                 result.Subitem = RequireIdentifier(result);
 
                 if (Match(TokenKind.AngleBracketsOpen) &&
@@ -3749,7 +3750,7 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             if (Match(TokenKind.OpenBraces)) {
-                DesignatorItem result = CreateByTerminal<DesignatorItem>(parent, TokenKind.OpenBraces);
+                DesignatorItem result = CreateByTerminal<DesignatorItem>(new DesignatorItem(parent), TokenKind.OpenBraces);
                 result.IndexExpression = ParseExpressions(result);
                 ContinueWithOrMissing(result, TokenKind.CloseBraces);
                 return result;
@@ -3761,10 +3762,10 @@ namespace PasPasPas.Parsing.Parser {
                     return ParseConstantExpression(parent, true);
                 }
 
-                DesignatorItem result = CreateByTerminal<DesignatorItem>(parent, TokenKind.OpenParen);
+                DesignatorItem result = CreateByTerminal<DesignatorItem>(new DesignatorItem(parent), TokenKind.OpenParen);
                 if (!Match(TokenKind.CloseParen)) {
                     do {
-                        Parameter parameter = CreateChild<Parameter>(result);
+                        var parameter = new Parameter(result);
 
                         if (MatchIdentifier(true) && LookAhead(1, TokenKind.Assignment)) {
                             parameter.ParameterName = RequireIdentifier(parameter, true);
@@ -3789,7 +3790,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("FormattedExpression", "Expression [ ':' Expression [ ':' Expression ] ]")]
         private FormattedExpression ParseFormattedExpression(IExtendableSyntaxPart parent) {
-            FormattedExpression result = CreateChild<FormattedExpression>(parent);
+            var result = new FormattedExpression(parent);
             result.Expression = ParseExpression(result);
 
             if (ContinueWith(result, TokenKind.Colon)) {
@@ -3806,7 +3807,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("SetSection", "'[' [ Expression ] { (',' | '..') Expression } ']'")]
         private SetSection ParseSetSection(IExtendableSyntaxPart parent) {
-            SetSection result = CreateByTerminal<SetSection>(parent, TokenKind.OpenBraces);
+            SetSection result = CreateByTerminal<SetSection>(new SetSection(parent), TokenKind.OpenBraces);
             SetSectnPart lastPart = null;
 
             if (!Match(TokenKind.CloseBraces)) {
@@ -3831,7 +3832,7 @@ namespace PasPasPas.Parsing.Parser {
                             Unexpected();
                     }
 
-                    part = CreateChild<SetSectnPart>(result);
+                    part = new SetSectnPart(result);
                     part.Continuation = TokenKind.Undefined;
                     part.SetExpression = ParseExpression(part);
                     lastPart = part;
@@ -3848,7 +3849,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("ClosureExpr", "('function'|'procedure') [ FormalParameterSection ] [ ':' TypeSpecification ] Block ")]
         private ClosureExpression ParseClosureExpression(IExtendableSyntaxPart parent) {
-            ClosureExpression result = CreateByTerminal<ClosureExpression>(parent, TokenKind.Function, TokenKind.Procedure);
+            ClosureExpression result = CreateByTerminal<ClosureExpression>(new ClosureExpression(parent), TokenKind.Function, TokenKind.Procedure);
             result.Kind = result.LastTerminalKind;
 
             if (Match(TokenKind.OpenParen)) {
@@ -3868,13 +3869,13 @@ namespace PasPasPas.Parsing.Parser {
         #region Helper Functions
 
         private StandardInteger RequireInteger(IExtendableSyntaxPart parent)
-            => CreateByTerminal<StandardInteger>(parent, TokenKind.Integer);
+            => CreateByTerminal(new StandardInteger(parent), TokenKind.Integer);
 
         private HexNumber RequireHexValue(IExtendableSyntaxPart parent)
-            => CreateByTerminal<HexNumber>(parent, TokenKind.HexNumber);
+            => CreateByTerminal<HexNumber>(new HexNumber(parent), TokenKind.HexNumber);
 
         private RealNumber RequireRealValue(IExtendableSyntaxPart parent)
-            => CreateByTerminal<RealNumber>(parent, TokenKind.Real);
+            => CreateByTerminal<RealNumber>(new RealNumber(parent), TokenKind.Real);
 
         private Identifier RequireIdentifier(IExtendableSyntaxPart parent, bool allowReserverdWords = false) {
 
@@ -3882,13 +3883,13 @@ namespace PasPasPas.Parsing.Parser {
             //    System.Diagnostics.Debugger.Break();
 
             if (Match(TokenKind.Identifier)) {
-                return CreateByTerminal<Identifier>(parent, TokenKind.Identifier);
+                return CreateByTerminal<Identifier>(new Identifier(parent), TokenKind.Identifier);
             };
 
             Token token = CurrentToken();
 
             if (token != null && (allowReserverdWords || !reservedWords.Contains(token.Kind))) {
-                return CreateByTerminal<Identifier>(parent, token.Kind);
+                return CreateByTerminal<Identifier>(new Identifier(parent), token.Kind);
             }
 
             ContinueWithOrMissing(parent, TokenKind.Identifier);
@@ -3896,13 +3897,13 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private QuotedString RequireString(IExtendableSyntaxPart parent) {
-            QuotedString result = CreateByTerminal<QuotedString>(parent, TokenKind.QuotedString);
+            QuotedString result = CreateByTerminal<QuotedString>(new QuotedString(parent), TokenKind.QuotedString);
             result.UnquotedValue = QuotedStringTokenValue.Unwrap(result.LastTerminalToken);
             return result;
         }
 
         private QuotedString RequireDoubleQuotedString(IExtendableSyntaxPart parent) {
-            QuotedString result = CreateByTerminal<QuotedString>(parent, TokenKind.DoubleQuotedString);
+            QuotedString result = CreateByTerminal<QuotedString>(new QuotedString(parent), TokenKind.DoubleQuotedString);
             result.UnquotedValue = result.LastTerminalValue;
             return result;
         }
@@ -3917,7 +3918,7 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private NamespaceName ParseNamespaceName(IExtendableSyntaxPart parent, bool allowIn = false) {
-            NamespaceName result = CreateChild<NamespaceName>(parent);
+            var result = new NamespaceName(parent);
 
             if (!ContinueWith(result, TokenKind.AnsiString, TokenKind.String, TokenKind.WideString, TokenKind.ShortString, TokenKind.UnicodeString))
                 if (!allowIn || !ContinueWith(result, TokenKind.In))

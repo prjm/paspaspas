@@ -6,6 +6,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     repeat statement
     /// </summary>
     public class RepeatStatement : StandardSyntaxTreeBase {
+        public RepeatStatement(IExtendableSyntaxPart parent) {
+            Parent = parent;
+            parent?.Add(this);
+        }
 
         /// <summary>
         ///     condition

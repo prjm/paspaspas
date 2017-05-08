@@ -6,6 +6,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     label section
     /// </summary>
     public class LabelDeclarationSection : StandardSyntaxTreeBase {
+        public LabelDeclarationSection(IExtendableSyntaxPart parent) {
+            Parent = parent;
+            parent?.Add(this);
+        }
 
         /// <summary>
         ///     accept visitor

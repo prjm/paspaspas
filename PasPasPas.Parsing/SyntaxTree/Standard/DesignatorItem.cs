@@ -6,6 +6,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     designator item
     /// </summary>
     public class DesignatorItem : StandardSyntaxTreeBase {
+        public DesignatorItem(SyntaxPartBase parent) {
+            Parent = parent;
+            parent?.Add(this);
+        }
 
         /// <summary>
         ///     dereference

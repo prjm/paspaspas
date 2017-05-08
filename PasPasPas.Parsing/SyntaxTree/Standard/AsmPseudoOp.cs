@@ -6,6 +6,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     pseudo x64 operation
     /// </summary>
     public class AsmPseudoOp : StandardSyntaxTreeBase {
+        public AsmPseudoOp(AsmBlock parent) {
+            Parent = parent;
+            parent?.Add(this);
+        }
 
         /// <summary>
         ///     operation kind

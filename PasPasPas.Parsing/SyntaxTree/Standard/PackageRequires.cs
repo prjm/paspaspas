@@ -6,6 +6,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     requires clause
     /// </summary>
     public class PackageRequires : StandardSyntaxTreeBase {
+        public PackageRequires(IExtendableSyntaxPart parent) {
+            Parent = parent;
+            parent?.Add(this);
+        }
+
         /// <summary>
         ///     required packages
         /// </summary>

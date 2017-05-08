@@ -1619,7 +1619,7 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseLongAlignSwitch(IExtendableSyntaxPart parent) {
-            AlignSwitch result = CreateByTerminal<AlignSwitch>(parent, TokenKind.AlignSwitchLong);
+            AlignSwitch result = CreateByTerminal<AlignSwitch>(new AlignSwitch(parent), TokenKind.AlignSwitchLong);
 
             if (ContinueWith(result, TokenKind.On)) {
                 result.AlignValue = Alignment.QuadWord;

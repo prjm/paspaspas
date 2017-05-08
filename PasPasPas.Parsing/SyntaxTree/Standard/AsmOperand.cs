@@ -6,6 +6,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     assembly operand
     /// </summary>
     public class AsmOperand : StandardSyntaxTreeBase {
+        public AsmOperand(IExtendableSyntaxPart parent) {
+            Parent = parent;
+            parent?.Add(this);
+        }
 
         /// <summary>
         ///     left term

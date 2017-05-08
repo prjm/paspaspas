@@ -6,6 +6,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     overload directive
     /// </summary>
     public class OverloadDirective : StandardSyntaxTreeBase {
+        public OverloadDirective(IExtendableSyntaxPart parent) {
+            Parent = parent;
+            parent?.Add(this);
+        }
 
         /// <summary>
         ///     accept visitor

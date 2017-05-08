@@ -6,6 +6,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///  while statement
     /// </summary>
     public class WhileStatement : StandardSyntaxTreeBase {
+        public WhileStatement(IExtendableSyntaxPart parent) {
+            Parent = parent;
+            parent?.Add(this);
+        }
 
         /// <summary>
         ///     condition

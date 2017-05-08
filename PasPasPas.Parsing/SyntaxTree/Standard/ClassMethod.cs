@@ -8,6 +8,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// </summary>
     public class ClassMethod : StandardSyntaxTreeBase {
 
+        public ClassMethod(IExtendableSyntaxPart parent) {
+            Parent = parent;
+            parent?.Add(this);
+        }
+
         /// <summary>
         ///     directviea
         /// </summary>

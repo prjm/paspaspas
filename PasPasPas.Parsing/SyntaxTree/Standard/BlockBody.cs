@@ -6,6 +6,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     block body
     /// </summary>
     public class BlockBody : StandardSyntaxTreeBase {
+        public BlockBody(IExtendableSyntaxPart parent) {
+            Parent = parent;
+            parent?.Add(this);
+        }
 
         /// <summary>
         ///    assembler block

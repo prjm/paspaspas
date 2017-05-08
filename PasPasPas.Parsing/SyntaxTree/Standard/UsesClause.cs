@@ -6,6 +6,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     uses clause
     /// </summary>
     public class UsesClause : StandardSyntaxTreeBase {
+        public UsesClause(IExtendableSyntaxPart parent) {
+            Parent = parent;
+            parent?.Add(this);
+        }
 
         /// <summary>
         ///     names of the units to use

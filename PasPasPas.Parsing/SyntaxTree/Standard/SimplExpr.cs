@@ -6,6 +6,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     simple expression
     /// </summary>
     public class SimpleExpression : StandardSyntaxTreeBase {
+        public SimpleExpression(IExtendableSyntaxPart parent) {
+            Parent = parent;
+            parent?.Add(this);
+        }
 
         /// <summary>
         ///     expression kind

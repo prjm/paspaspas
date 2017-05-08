@@ -6,6 +6,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     procedure declaration heading
     /// </summary>
     public class ProcedureDeclarationHeading : StandardSyntaxTreeBase {
+        public ProcedureDeclarationHeading(IExtendableSyntaxPart parent) {
+            Parent = parent;
+            parent?.Add(this);
+        }
 
         /// <summary>
         ///     procedure kind

@@ -7,6 +7,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// </summary>
     public class GenericTypeIdentifier : StandardSyntaxTreeBase {
 
+        public GenericTypeIdentifier(IExtendableSyntaxPart parent) {
+            Parent = parent;
+            parent?.Add(this);
+        }
+
         /// <summary>
         ///     generic definition
         /// </summary>

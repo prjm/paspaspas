@@ -6,6 +6,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     unit block
     /// </summary>
     public class UnitBlock : StandardSyntaxTreeBase {
+        public UnitBlock(IExtendableSyntaxPart parent) {
+            Parent = parent;
+            parent?.Add(this);
+        }
 
         /// <summary>
         ///     initializarion

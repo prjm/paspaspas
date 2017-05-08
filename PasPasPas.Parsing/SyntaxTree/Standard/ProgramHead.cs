@@ -6,6 +6,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     program header
     /// </summary>
     public class ProgramHead : StandardSyntaxTreeBase {
+        public ProgramHead(IExtendableSyntaxPart parent) {
+            Parent = parent;
+            parent?.Add(this);
+        }
 
         /// <summary>
         ///     name of the program

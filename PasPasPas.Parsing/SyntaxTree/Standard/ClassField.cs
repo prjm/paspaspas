@@ -6,6 +6,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     simple field declaration
     /// </summary>
     public class ClassField : StandardSyntaxTreeBase {
+        public ClassField(IExtendableSyntaxPart parent) {
+            Parent = parent;
+            parent?.Add(this);
+        }
 
         /// <summary>
         ///     hints

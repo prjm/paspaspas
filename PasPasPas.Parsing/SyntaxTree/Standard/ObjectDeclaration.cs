@@ -6,6 +6,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     object declaration
     /// </summary>
     public class ObjectDeclaration : StandardSyntaxTreeBase {
+        public ObjectDeclaration(IExtendableSyntaxPart parent) {
+            Parent = parent;
+            parent?.Add(this);
+        }
 
         /// <summary>
         ///     parent class

@@ -6,6 +6,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     generic defnition part
     /// </summary>
     public class GenericDefinitionPart : StandardSyntaxTreeBase {
+        private GenericDefinition result;
+
+        public GenericDefinitionPart(IExtendableSyntaxPart parent) {
+            Parent = parent;
+            parent?.Add(this);
+        }
 
         /// <summary>
         ///     parse identifiert

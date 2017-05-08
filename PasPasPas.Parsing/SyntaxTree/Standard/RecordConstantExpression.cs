@@ -7,6 +7,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// </summary>
     public class RecordConstantExpression : StandardSyntaxTreeBase {
 
+        public RecordConstantExpression(IExtendableSyntaxPart parent) {
+            Parent = parent;
+            parent?.Add(this);
+        }
+
         /// <summary>
         ///     field name
         /// </summary>

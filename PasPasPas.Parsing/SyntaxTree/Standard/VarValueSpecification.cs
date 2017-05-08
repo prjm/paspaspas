@@ -6,6 +6,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     variable value
     /// </summary>
     public class VarValueSpecification : StandardSyntaxTreeBase {
+        public VarValueSpecification(IExtendableSyntaxPart parent) {
+            Parent = parent;
+            parent?.Add(this);
+        }
 
         /// <summary>
         ///     absolute index

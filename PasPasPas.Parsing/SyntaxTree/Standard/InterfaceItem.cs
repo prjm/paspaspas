@@ -6,6 +6,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     interface item
     /// </summary>
     public class InterfaceItem : StandardSyntaxTreeBase {
+        public InterfaceItem(IExtendableSyntaxPart parent) {
+            Parent = parent;
+            parent?.Add(this);
+        }
 
         /// <summary>
         ///     method declaration

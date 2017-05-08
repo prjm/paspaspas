@@ -6,6 +6,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     statement list
     /// </summary>
     public class StatementList : StandardSyntaxTreeBase {
+        public StatementList(IExtendableSyntaxPart parent) {
+            Parent = parent;
+            parent?.Add(this);
+        }
 
 
         /// <summary>

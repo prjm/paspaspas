@@ -7,6 +7,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// </summary>
     public class UserAttributeDefinition : StandardSyntaxTreeBase {
 
+        public UserAttributeDefinition(IExtendableSyntaxPart parent) {
+            Parent = parent;
+            parent?.Add(this);
+        }
+
         /// <summary>
         ///     üaraparameter expressions
         /// </summary>

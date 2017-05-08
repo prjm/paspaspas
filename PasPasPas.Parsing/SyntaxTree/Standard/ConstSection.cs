@@ -6,6 +6,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     section for constants
     /// </summary>
     public class ConstSection : StandardSyntaxTreeBase {
+        public ConstSection(IExtendableSyntaxPart parent) {
+            Parent = parent;
+            parent?.Add(this);
+        }
 
         /// <summary>
         ///     kind of constant

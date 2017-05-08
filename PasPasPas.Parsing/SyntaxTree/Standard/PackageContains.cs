@@ -6,6 +6,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     contains clause
     /// </summary>
     public class PackageContains : StandardSyntaxTreeBase {
+        public PackageContains(IExtendableSyntaxPart parent) {
+            Parent = parent;
+            parent?.Add(this);
+        }
 
         /// <summary>
         ///     contained units

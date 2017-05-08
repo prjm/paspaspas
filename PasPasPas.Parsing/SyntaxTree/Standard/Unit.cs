@@ -7,6 +7,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     pascal unit
     /// </summary>
     public class Unit : StandardSyntaxTreeBase {
+        public Unit(IExtendableSyntaxPart parent) {
+            Parent = parent;
+            parent?.Add(this);
+        }
 
         /// <summary>
         ///     file path

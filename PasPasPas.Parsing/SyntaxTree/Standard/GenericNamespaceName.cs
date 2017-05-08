@@ -7,6 +7,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// </summary>
     public class GenericNamespaceName : StandardSyntaxTreeBase {
 
+        public GenericNamespaceName(IExtendableSyntaxPart parent) {
+            Parent = parent;
+            parent?.Add(this);
+        }
+
         /// <summary>
         ///     generic part
         /// </summary>

@@ -812,8 +812,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="parent">parent node</param>
         /// <param name="tokenKind">expected token kind</param>
         /// <returns>syntax tree node</returns>
-        protected T CreateByTerminal<T>(IExtendableSyntaxPart parent, int tokenKind) where T : IExtendableSyntaxPart, new() {
-            T result = CreateChild<T>(parent);
+        protected T CreateByTerminal<T>(T result, int tokenKind) where T : IExtendableSyntaxPart {
 
             if (Match(tokenKind)) {
                 var terminal = new Terminal(CurrentToken()) {
@@ -837,8 +836,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind1">expected token kind</param>
         /// <param name="tokenKind2">expected token kind</param>/// 
         /// <returns>syntax tree node</returns>
-        protected T CreateByTerminal<T>(IExtendableSyntaxPart parent, int tokenKind1, int tokenKind2) where T : IExtendableSyntaxPart, new() {
-            T result = CreateChild<T>(parent);
+        protected T CreateByTerminal<T>(T result, int tokenKind1, int tokenKind2) where T : IExtendableSyntaxPart {
 
             if (Match(tokenKind1, tokenKind2)) {
                 var terminal = new Terminal(CurrentToken()) {
@@ -863,8 +861,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind2">expected token kind</param>
         /// <param name="tokenKind3">expected token kind</param>
         /// <returns>syntax tree node</returns>
-        protected T CreateByTerminal<T>(IExtendableSyntaxPart parent, int tokenKind1, int tokenKind2, int tokenKind3) where T : IExtendableSyntaxPart, new() {
-            T result = CreateChild<T>(parent);
+        protected T CreateByTerminal<T>(T result, int tokenKind1, int tokenKind2, int tokenKind3) where T : IExtendableSyntaxPart {
 
             if (Match(tokenKind1, tokenKind2, tokenKind3)) {
                 var terminal = new Terminal(CurrentToken()) {
@@ -890,8 +887,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind3">expected token kind</param>
         /// <param name="tokenKind4">expected token kind</param>
         /// <returns>syntax tree node</returns>
-        protected T CreateByTerminal<T>(IExtendableSyntaxPart parent, int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4) where T : IExtendableSyntaxPart, new() {
-            T result = CreateChild<T>(parent);
+        protected T CreateByTerminal<T>(T result, int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4) where T : IExtendableSyntaxPart {
 
             if (Match(tokenKind1, tokenKind2, tokenKind3, tokenKind4)) {
                 var terminal = new Terminal(CurrentToken()) {
@@ -919,8 +915,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind4">expected token kind</param>
         /// <param name="tokenKind5">expected token kind</param>
         /// <returns>syntax tree node</returns>
-        protected T CreateByTerminal<T>(IExtendableSyntaxPart parent, int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5) where T : IExtendableSyntaxPart, new() {
-            T result = CreateChild<T>(parent);
+        protected T CreateByTerminal<T>(T result, int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5) where T : IExtendableSyntaxPart {
 
             if (Match(tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5)) {
                 var terminal = new Terminal(CurrentToken()) {
@@ -949,8 +944,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind5">expected token kind</param>
         /// <param name="tokenKind6">expected token kind</param>
         /// <returns>syntax tree node</returns>
-        protected T CreateByTerminal<T>(IExtendableSyntaxPart parent, int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5, int tokenKind6) where T : IExtendableSyntaxPart, new() {
-            T result = CreateChild<T>(parent);
+        protected T CreateByTerminal<T>(T result, int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5, int tokenKind6) where T : IExtendableSyntaxPart {
 
             if (Match(tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5, tokenKind6)) {
                 var terminal = new Terminal(CurrentToken()) {
@@ -966,7 +960,6 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
-
         /// <summary>
         ///     optionally continue a syntax part by a terminal symbol
         /// </summary>
@@ -981,8 +974,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind7">expected token kind</param>
         /// <param name="tokenKind8">expected token kind</param>
         /// <returns>syntax tree node</returns>
-        protected T CreateByTerminal<T>(IExtendableSyntaxPart parent, int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5, int tokenKind6, int tokenKind7, int tokenKind8) where T : IExtendableSyntaxPart, new() {
-            T result = CreateChild<T>(parent);
+        protected T CreateByTerminal<T>(T result, int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5, int tokenKind6, int tokenKind7, int tokenKind8) where T : IExtendableSyntaxPart, new() {
 
             if (Match(tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5, tokenKind6, tokenKind7, tokenKind8)) {
                 var terminal = new Terminal(CurrentToken()) {
@@ -1018,6 +1010,7 @@ namespace PasPasPas.Parsing.Parser {
         /// </summary>
         /// <typeparam name="T">parent object</typeparam>
         /// <returns></returns>
+        [Obsolete]
         protected static T CreateChild<T>(IExtendableSyntaxPart parent)
             where T : IExtendableSyntaxPart, new() {
             var result = new T();

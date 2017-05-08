@@ -6,6 +6,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     exported procedure heading for an interace section
     /// </summary>
     public class ExportedProcedureHeading : StandardSyntaxTreeBase {
+        public ExportedProcedureHeading(IExtendableSyntaxPart parent) {
+            Parent = parent;
+            parent?.Add(this);
+        }
 
         /// <summary>
         ///     function directives
