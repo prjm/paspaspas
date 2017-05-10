@@ -6,10 +6,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     reintroduce directive
     /// </summary>
     public class ReintroduceDirective : StandardSyntaxTreeBase {
-        public ReintroduceDirective(IExtendableSyntaxPart parent) {
-            Parent = parent;
-            parent?.Add(this);
-        }
 
         /// <summary>
         ///     accept visitor

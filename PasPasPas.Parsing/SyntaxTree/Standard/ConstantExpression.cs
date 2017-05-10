@@ -7,11 +7,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// </summary>
     public class ConstantExpression : StandardSyntaxTreeBase {
 
-        public ConstantExpression(IExtendableSyntaxPart parent) {
-            Parent = parent;
-            parent?.Add(this);
-        }
-
         /// <summary>
         ///     <c>true</c> if this is an array constant
         /// </summary>

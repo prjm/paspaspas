@@ -7,13 +7,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// </summary>
     public class AsmExpression : StandardSyntaxTreeBase {
 
-        public AsmExpression(IExtendableSyntaxPart parent) {
-            Parent = parent;
-            parent?.Add(this);
-        }
-
         /// <summary>
-        ///     byte ppointer
+        ///     byte pointer
         /// </summary>
         public AsmOperand BytePtr { get; set; }
 

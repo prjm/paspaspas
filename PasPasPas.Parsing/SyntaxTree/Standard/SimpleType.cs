@@ -6,10 +6,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     simple type definiion
     /// </summary>
     public class SimpleType : StandardSyntaxTreeBase {
-        public SimpleType(IExtendableSyntaxPart parent) {
-            Parent = parent;
-            parent?.Add(this);
-        }
 
         /// <summary>
         ///     enumeration

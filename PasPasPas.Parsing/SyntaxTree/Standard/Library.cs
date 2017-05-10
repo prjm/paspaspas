@@ -8,11 +8,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// </summary>
     public class Library : StandardSyntaxTreeBase {
 
-        public Library(IExtendableSyntaxPart parent) {
-            Parent = parent;
-            parent?.Add(this);
-        }
-
         /// <summary>
         ///     file path
         /// </summary>

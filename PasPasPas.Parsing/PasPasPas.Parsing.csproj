@@ -17,8 +17,4 @@
     <ProjectReference Include="..\Paspaspas.Options\PasPasPas.Options.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="CompilerDirectives\SyntaxTree\" />
-  </ItemGroup>
-
 </Project>

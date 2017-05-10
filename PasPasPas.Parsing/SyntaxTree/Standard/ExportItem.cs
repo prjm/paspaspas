@@ -6,9 +6,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     exported item
     /// </summary>
     public class ExportItem : StandardSyntaxTreeBase {
-        public ExportItem(IExtendableSyntaxPart parent) {
-            Parent = parent;
-        }
 
         /// <summary>
         ///     index parameter

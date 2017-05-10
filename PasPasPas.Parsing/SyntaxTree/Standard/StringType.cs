@@ -6,10 +6,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     string type
     /// </summary>
     public class StringType : StandardSyntaxTreeBase {
-        public StringType(IExtendableSyntaxPart parent) {
-            Parent = parent;
-            parent?.Add(this);
-        }
 
         /// <summary>
         ///     code page

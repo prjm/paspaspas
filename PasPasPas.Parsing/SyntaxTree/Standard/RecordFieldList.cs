@@ -6,10 +6,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     record field list
     /// </summary>
     public class RecordFieldList : StandardSyntaxTreeBase {
-        public RecordFieldList(IExtendableSyntaxPart parent) {
-            Parent = parent;
-            parent?.Add(this);
-        }
 
         /// <summary>
         ///     accept visitor

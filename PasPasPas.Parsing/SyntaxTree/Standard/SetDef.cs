@@ -6,10 +6,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     a set definition
     /// </summary>
     public class SetDefinition : StandardSyntaxTreeBase {
-        public SetDefinition(IExtendableSyntaxPart parent) {
-            Parent = parent;
-            parent?.Add(this);
-        }
 
         /// <summary>
         ///     inner type reference

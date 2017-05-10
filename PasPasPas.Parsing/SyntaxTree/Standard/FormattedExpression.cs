@@ -6,10 +6,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     formatted expression
     /// </summary>
     public class FormattedExpression : StandardSyntaxTreeBase {
-        public FormattedExpression(IExtendableSyntaxPart parent) {
-            Parent = parent;
-            parent?.Add(this);
-        }
 
         /// <summary>
         ///     decimals subexpression

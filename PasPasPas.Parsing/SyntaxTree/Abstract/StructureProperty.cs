@@ -34,12 +34,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         protected override string InternalSymbolName
             => Name?.CompleteName;
 
-        /// <summary>
-        ///     initialzie ovbject
-        /// </summary>
-        public StructureProperty() {
-            Parameters = new ParameterDefinitions() { Parent = this };
-        }
 
         /// <summary>
         ///     enumerate syntax parts

@@ -8,10 +8,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// </summary>
     public class Package : StandardSyntaxTreeBase {
 
-        public Package(IExtendableSyntaxPart parent) {
-            Parent = parent;
-            parent?.Add(this);
-        }
 
         /// <summary>
         ///     contans clause

@@ -6,10 +6,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     assembly factor
     /// </summary>
     public class AsmFactor : StandardSyntaxTreeBase {
-        public AsmFactor(IExtendableSyntaxPart parent) {
-            Parent = parent;
-            parent?.Add(this);
-        }
+
 
         /// <summary>
         ///     hex number

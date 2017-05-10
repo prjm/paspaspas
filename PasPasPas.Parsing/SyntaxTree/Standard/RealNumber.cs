@@ -6,10 +6,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     real literal
     /// </summary>
     public class RealNumber : StandardSyntaxTreeBase {
-        public RealNumber(IExtendableSyntaxPart parent) {
-            Parent = parent;
-            parent?.Add(this);
-        }
 
         /// <summary>
         ///     integer value

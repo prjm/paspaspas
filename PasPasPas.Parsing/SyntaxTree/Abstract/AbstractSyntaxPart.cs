@@ -12,7 +12,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     parent node
         /// </summary>
-        public ISyntaxPart Parent { get; set; }
+        public ISyntaxPart ParentItem { get; set; }
 
         /// <summary>
         ///     child parts

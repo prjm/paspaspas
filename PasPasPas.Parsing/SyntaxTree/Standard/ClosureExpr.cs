@@ -7,11 +7,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// </summary>
     public class ClosureExpression : StandardSyntaxTreeBase {
 
-        public ClosureExpression(IExtendableSyntaxPart parent) {
-            Parent = parent;
-            parent?.Add(this);
-        }
-
         /// <summary>
         /// block
         /// </summary>

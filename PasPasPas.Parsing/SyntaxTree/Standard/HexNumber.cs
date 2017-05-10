@@ -6,10 +6,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     hex number literal
     /// </summary>
     public class HexNumber : StandardSyntaxTreeBase {
-        public HexNumber(IExtendableSyntaxPart parent) {
-            Parent = parent;
-            parent?.Add(this);
-        }
 
         /// <summary>
         ///     number value

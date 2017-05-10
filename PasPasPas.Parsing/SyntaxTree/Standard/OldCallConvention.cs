@@ -6,10 +6,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     call convention
     /// </summary>
     public class OldCallConvention : StandardSyntaxTreeBase {
-        public OldCallConvention(IExtendableSyntaxPart parent) {
-            Parent = parent;
-            parent?.Add(this);
-        }
 
         /// <summary>
         ///     call convention kind

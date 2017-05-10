@@ -6,10 +6,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     assembly attribute
     /// </summary>
     public class AssemblyAttributeDeclaration : StandardSyntaxTreeBase {
-        public AssemblyAttributeDeclaration(IExtendableSyntaxPart parent) {
-            Parent = parent;
-            parent?.Add(this);
-        }
 
         /// <summary>
         ///     attribute definition

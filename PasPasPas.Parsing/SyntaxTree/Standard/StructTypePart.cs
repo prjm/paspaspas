@@ -6,10 +6,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     struct type part
     /// </summary>
     public class StructTypePart : StandardSyntaxTreeBase {
-        public StructTypePart(IExtendableSyntaxPart parent) {
-            Parent = parent;
-            parent?.Add(this);
-        }
 
         /// <summary>
         ///     array type

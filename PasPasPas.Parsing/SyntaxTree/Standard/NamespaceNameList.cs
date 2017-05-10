@@ -6,10 +6,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     list of namespace names
     /// </summary>
     public class NamespaceNameList : StandardSyntaxTreeBase {
-        public NamespaceNameList(IExtendableSyntaxPart parent) {
-            Parent = parent;
-            parent?.Add(this);
-        }
 
         /// <summary>
         ///     accept visitor

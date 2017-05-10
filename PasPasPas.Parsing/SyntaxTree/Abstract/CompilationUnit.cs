@@ -56,7 +56,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         public CompilationUnit() {
             RequiredUnits = new RequiredUnitNameList() {
-                Parent = this
+                ParentItem = this
             };
         }
 

@@ -8,11 +8,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// </summary>
     public class MethodDeclarationHeading : StandardSyntaxTreeBase {
 
-        public MethodDeclarationHeading(IExtendableSyntaxPart parent) {
-            Parent = parent;
-            parent?.Add(this);
-        }
-
         /// <summary>
         ///     method kind
         /// </summary>

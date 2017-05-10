@@ -10,13 +10,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     public class StructuredStatement : StatementBase, IExpressionTarget, IStatementTarget, ILabelTarget {
 
         /// <summary>
-        ///     create a a new structured Statement
-        /// </summary>
-        public StructuredStatement() {
-            Statements = new BlockOfStatements() { Parent = this };
-        }
-
-        /// <summary>
         ///     expressions
         /// </summary>
         public IList<IExpression> Expressions { get; }

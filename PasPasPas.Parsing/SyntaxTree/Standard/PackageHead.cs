@@ -6,10 +6,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     package head
     /// </summary>
     public class PackageHead : StandardSyntaxTreeBase {
-        public PackageHead(IExtendableSyntaxPart parent) {
-            Parent = parent;
-            parent?.Add(this);
-        }
 
         /// <summary>
         ///     package name

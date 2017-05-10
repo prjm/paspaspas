@@ -6,10 +6,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     try statement
     /// </summary>
     public class TryStatement : StandardSyntaxTreeBase {
-        public TryStatement(IExtendableSyntaxPart parent) {
-            Parent = parent;
-            parent?.Add(this);
-        }
 
         /// <summary>
         ///     finally part

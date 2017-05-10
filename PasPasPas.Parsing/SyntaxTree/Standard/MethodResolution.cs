@@ -6,10 +6,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     method resolution
     /// </summary>
     public class MethodResolution : StandardSyntaxTreeBase {
-        public MethodResolution(IExtendableSyntaxPart parent) {
-            Parent = parent;
-            parent?.Add(this);
-        }
 
         /// <summary>
         ///     kind (procedure/function)

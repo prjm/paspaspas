@@ -6,10 +6,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     generic constraint
     /// </summary>
     public class ConstrainedGeneric : StandardSyntaxTreeBase {
-        public ConstrainedGeneric(IExtendableSyntaxPart parent) {
-            Parent = parent;
-            parent?.Add(this);
-        }
 
         /// <summary>
         ///     class constraints

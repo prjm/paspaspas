@@ -6,10 +6,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     interface definition
     /// </summary>
     public class InterfaceDefinition : StandardSyntaxTreeBase {
-        public InterfaceDefinition(IExtendableSyntaxPart parent) {
-            Parent = parent;
-            parent?.Add(this);
-        }
 
         /// <summary>
         ///     <c>true</c> if dispinterface

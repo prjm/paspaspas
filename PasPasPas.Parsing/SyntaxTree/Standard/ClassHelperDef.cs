@@ -6,11 +6,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     class helper declaration
     /// </summary>
     public class ClassHelperDef : StandardSyntaxTreeBase {
-        public ClassHelperDef(IExtendableSyntaxPart parent) {
-            Parent = parent;
-            parent?.Add(this);
-        }
-
         /// <summary>
         ///     items
         /// </summary>

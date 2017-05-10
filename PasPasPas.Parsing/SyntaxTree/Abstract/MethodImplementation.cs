@@ -9,13 +9,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     public class MethodImplementation : DeclaredSymbol, IDeclaredSymbolTarget, IBlockTarget, IDirectiveTarget, IExpression, IParameterTarget, ITypeTarget {
 
         /// <summary>
-        ///     new method implementation
-        /// </summary>
-        public MethodImplementation() {
-            Parameters = new ParameterDefinitions() { Parent = this };
-        }
-
-        /// <summary>
         ///     symbols
         /// </summary>
         public DeclaredSymbols Symbols { get; }

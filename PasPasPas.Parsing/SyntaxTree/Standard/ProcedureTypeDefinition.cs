@@ -6,10 +6,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     procedure type definition
     /// </summary>
     public class ProcedureTypeDefinition : StandardSyntaxTreeBase {
-        public ProcedureTypeDefinition(IExtendableSyntaxPart parent) {
-            Parent = parent;
-            parent?.Add(this);
-        }
 
         /// <summary>
         ///     kind (function or procedure)

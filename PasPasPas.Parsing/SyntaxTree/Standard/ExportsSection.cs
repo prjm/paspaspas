@@ -6,10 +6,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     exports section
     /// </summary>
     public class ExportsSection : StandardSyntaxTreeBase {
-        public ExportsSection(IExtendableSyntaxPart parent) {
-            Parent = parent;
-            parent?.Add(this);
-        }
 
         /// <summary>
         ///     accept visitor

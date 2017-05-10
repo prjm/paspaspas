@@ -6,10 +6,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     guid declaration
     /// </summary>
     public class InterfaceGuid : StandardSyntaxTreeBase {
-        public InterfaceGuid(IExtendableSyntaxPart parent) {
-            Parent = parent;
-            parent?.Add(this);
-        }
 
         /// <summary>
         ///     guid for this interface

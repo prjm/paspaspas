@@ -7,10 +7,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     syntax tree for a program
     /// </summary>
     public class Program : StandardSyntaxTreeBase {
-        public Program(IExtendableSyntaxPart parent) {
-            Parent = parent;
-            parent?.Add(this);
-        }
 
         /// <summary>
         ///     file path

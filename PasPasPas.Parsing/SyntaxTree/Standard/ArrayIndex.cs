@@ -6,10 +6,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     array index definition
     /// </summary>
     public class ArrayIndex : StandardSyntaxTreeBase {
-        public ArrayIndex(IExtendableSyntaxPart parent) {
-            Parent = parent;
-            parent?.Add(this);
-        }
 
         /// <summary>
         ///     start index

@@ -6,10 +6,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     inlining directive
     /// </summary>
     public class InlineDirective : StandardSyntaxTreeBase {
-        public InlineDirective(IExtendableSyntaxPart parent) {
-            Parent = parent;
-            parent?.Add(this);
-        }
 
         /// <summary>
         ///     inline or assembler

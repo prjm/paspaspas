@@ -6,10 +6,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     unsafe directive
     /// </summary>
     public class UnsafeDirective : StandardSyntaxTreeBase {
-        public UnsafeDirective(IExtendableSyntaxPart parent) {
-            Parent = parent;
-            parent?.Add(this);
-        }
 
         /// <summary>
         ///     accept visitor

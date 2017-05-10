@@ -8,7 +8,7 @@ namespace PasPasPas.Parsing.SyntaxTree {
     public static class VisitorHelper {
 
         private static ISyntaxPart GetNextSibling(ISyntaxPart part) {
-            ISyntaxPart parent = part.Parent;
+            ISyntaxPart parent = part.ParentItem;
             var found = false;
 
             foreach (ISyntaxPart child in parent.Parts) {
@@ -49,25 +49,25 @@ namespace PasPasPas.Parsing.SyntaxTree {
                     if (!visitor.EndVisit(current, visitorParameter))
                         return;
 
-                    if (current.Parent == null)
+                    if (current.ParentItem == null)
                         return;
 
-                    visitor.EndVisitChild(current.Parent, visitorParameter, current);
+                    visitor.EndVisitChild(current.ParentItem, visitorParameter, current);
 
                     ISyntaxPart sibling = GetNextSibling(current);
                     while (sibling == null) {
-                        current = current.Parent;
+                        current = current.ParentItem;
                         if (current == part)
                             return;
 
                         if (!visitor.EndVisit(current, visitorParameter))
                             return;
 
-                        visitor.EndVisitChild(current.Parent, visitorParameter, current);
+                        visitor.EndVisitChild(current.ParentItem, visitorParameter, current);
                         sibling = GetNextSibling(current);
                     }
                     current = sibling;
-                    visitor.BeginVisitChild(current.Parent, visitorParameter, current);
+                    visitor.BeginVisitChild(current.ParentItem, visitorParameter, current);
                 }
 
             }

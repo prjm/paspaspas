@@ -6,10 +6,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     local asm label
     /// </summary>
     public class LocalAsmLabel : StandardSyntaxTreeBase {
-        public LocalAsmLabel(IExtendableSyntaxPart parent) {
-            Parent = parent;
-            parent?.Add(this);
-        }
 
         /// <summary>
         ///     accept visitor

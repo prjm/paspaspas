@@ -6,10 +6,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     a list of user attributes
     /// </summary>
     public class UserAttributes : StandardSyntaxTreeBase {
-        public UserAttributes(IExtendableSyntaxPart parent) {
-            Parent = parent;
-            parent?.Add(this);
-        }
 
         /// <summary>
         ///     accept visitor

@@ -6,10 +6,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     forward directive
     /// </summary>
     public class ForwardDirective : StandardSyntaxTreeBase {
-        public ForwardDirective(IExtendableSyntaxPart parent) {
-            Parent = parent;
-            parent?.Add(this);
-        }
 
         /// <summary>
         ///     accept visitor

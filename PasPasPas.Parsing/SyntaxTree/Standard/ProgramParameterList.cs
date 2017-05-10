@@ -6,10 +6,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     list of program parameters
     /// </summary>
     public class ProgramParameterList : StandardSyntaxTreeBase {
-        public ProgramParameterList(IExtendableSyntaxPart parent) {
-            Parent = parent;
-            parent?.Add(this);
-        }
 
         /// <summary>
         ///     accept visitor

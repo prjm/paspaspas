@@ -6,11 +6,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///    generic type suffix
     /// </summary>
     public class GenericSuffix : StandardSyntaxTreeBase {
-        public GenericSuffix(IExtendableSyntaxPart parent) {
-            Parent = parent;
-            parent?.Add(this);
-        }
-
         /// <summary>
         ///     accept visitor
         /// </summary>

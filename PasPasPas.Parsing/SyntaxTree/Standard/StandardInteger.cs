@@ -6,11 +6,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     constant integer
     /// </summary>
     public class StandardInteger : StandardSyntaxTreeBase {
-        public StandardInteger(IExtendableSyntaxPart parent) {
-            Parent = parent;
-            parent?.Add(this);
-        }
-
         /// <summary>
         ///     integer value
         /// </summary>

@@ -149,8 +149,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             result.UnitName = ExtractSymbolName(unit.UnitName);
             result.Hints = ExtractHints(unit.Hints);
             result.FilePath = unit.FilePath;
-            result.InterfaceSymbols = new DeclaredSymbols() { Parent = result };
-            result.ImplementationSymbols = new DeclaredSymbols() { Parent = result };
+            result.InterfaceSymbols = new DeclaredSymbols() { ParentItem = result };
+            result.ImplementationSymbols = new DeclaredSymbols() { ParentItem = result };
             Project.Add(result, LogSource);
             CurrentUnit = result;
         }
@@ -172,7 +172,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 result.InitializationBlock = new BlockOfAssemblerStatements();
             else
                 result.InitializationBlock = new BlockOfStatements();
-            result.Symbols = new DeclaredSymbols() { Parent = result };
+            result.Symbols = new DeclaredSymbols();
             Project.Add(result, LogSource);
             CurrentUnitMode[result] = UnitMode.Library;
             CurrentUnit = result;
@@ -197,7 +197,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             result.UnitName = ExtractSymbolName(program.ProgramName);
             result.FilePath = program.FilePath;
             result.InitializationBlock = new BlockOfStatements();
-            result.Symbols = new DeclaredSymbols() { Parent = result };
+            result.Symbols = new DeclaredSymbols() { ParentItem = result };
             CurrentUnitMode[result] = UnitMode.Program;
             Project.Add(result, LogSource);
             CurrentUnit = result;
@@ -833,7 +833,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         public void StartVisit(FormalParameter formalParameter) {
             var typeDefinition = LastValue as ParameterTypeDefinition;
             ParameterDefinition result = AddNode<ParameterDefinition, FormalParameter>(formalParameter);
-            var allParams = typeDefinition.Parent as ParameterDefinitions;
+            var allParams = typeDefinition.ParentItem as ParameterDefinitions;
             result.Name = ExtractSymbolName(formalParameter.ParameterName);
             result.Attributes = ExtractAttributes(formalParameter.Attributes, CurrentUnit);
             result.ParameterKind = ParameterDefinition.MapKind(formalParameter.ParameterType);
@@ -972,7 +972,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         public void StartVisit(ClassField field) {
             var structType = LastValue as StructuredType;
-            var declItem = field.Parent as IStructuredTypeMember;
+            var declItem = field.ParentItem as IStructuredTypeMember;
             StructureFields result = AddNode<StructureFields, ClassField>(field);
             result.Visibility = CurrentMemberVisibility[structType];
             structType.Fields.Items.Add(result);
@@ -1009,7 +1009,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         public void StartVisit(ClassProperty property) {
             var parent = LastValue as StructuredType;
             StructureProperty result = AddNode<StructureProperty, ClassProperty>(property);
-            var declItem = property.Parent as IStructuredTypeMember;
+            var declItem = property.ParentItem as IStructuredTypeMember;
             result.Name = ExtractSymbolName(property.PropertyName);
             parent.Properties.Add(result, LogSource);
             result.Visibility = CurrentMemberVisibility[parent];
@@ -1096,7 +1096,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             StructureMethod result = AddNode<StructureMethod, ClassMethod>(method);
             result.Visibility = CurrentMemberVisibility[parent];
 
-            var declItem = method.Parent as IStructuredTypeMember;
+            var declItem = method.ParentItem as IStructuredTypeMember;
             if (declItem != null) {
                 result.ClassItem = declItem.ClassItem;
                 result.Attributes = ExtractAttributes(declItem.Attributes, CurrentUnit);
@@ -1115,7 +1115,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         public void StartVisit(MethodResolution methodResolution) {
             var parent = LastValue as StructuredType;
             StructureMethodResolution result = AddNode<StructureMethodResolution, MethodResolution>(methodResolution);
-            result.Attributes = ExtractAttributes(((ClassDeclarationItem)methodResolution.Parent).Attributes, CurrentUnit);
+            result.Attributes = ExtractAttributes(((ClassDeclarationItem)methodResolution.ParentItem).Attributes, CurrentUnit);
             result.Kind = StructureMethodResolution.MapKind(methodResolution.Kind);
             result.Target = ExtractSymbolName(methodResolution.ResolveIdentifier);
             parent.MethodResolutions.Add(result);
@@ -1433,7 +1433,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             IList<StructureFields> fields = null;
 
             if (LastValue is StructureVariantFields) {
-                structType = LastValue.Parent?.Parent as StructuredType;
+                structType = LastValue.ParentItem?.ParentItem as StructuredType;
                 varFields = structType.Variants;
                 fields = (LastValue as StructureVariantFields)?.Fields;
             }
@@ -1442,7 +1442,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 fields = structType.Fields.Items;
             }
 
-            var declItem = fieldDeclaration.Parent as RecordItem;
+            var declItem = fieldDeclaration.ParentItem as RecordItem;
             StructureFields result = AddNode<StructureFields, RecordField>(fieldDeclaration);
             result.Visibility = CurrentMemberVisibility[structType];
 
@@ -2470,7 +2470,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         private ChildType AddNode<ChildType, NodeType>(NodeType node, AbstractSyntaxPart parent, ISyntaxPart child) where ChildType : ISyntaxPart, new() {
             var result = new ChildType();
-            result.Parent = parent;
+            result.ParentItem = parent;
             visitor.WorkingStack.Push(new WorkingStackEntry(node, result, child));
             return result;
         }

@@ -6,10 +6,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     except handlers
     /// </summary>
     public class ExceptHandlers : StandardSyntaxTreeBase {
-        public ExceptHandlers(IExtendableSyntaxPart parent) {
-            Parent = parent;
-            parent?.Add(this);
-        }
 
         /// <summary>
         ///     else statements

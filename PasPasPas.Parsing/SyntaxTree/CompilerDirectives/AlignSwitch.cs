@@ -8,10 +8,6 @@ namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
     ///     syntax tree element to change alignment
     /// </summary>
     public class AlignSwitch : CompilerDirectiveBase {
-        public AlignSwitch(IExtendableSyntaxPart parent) {
-            Parent = parent;
-            parent?.Add(this);
-        }
 
         /// <summary>
         ///     new align setting

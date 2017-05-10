@@ -13,7 +13,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         public bool ClassItem {
             get {
-                var parent = Parent as StructureFields;
+                var parent = ParentItem as StructureFields;
                 return parent?.ClassItem ?? false;
             }
         }
@@ -32,7 +32,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     visibility
         /// </summary>
         public MemberVisibility Visibility
-            => (Parent as StructureFields).Visibility;
+            => (ParentItem as StructureFields).Visibility;
 
         /// <summary>
         ///     symbol name
@@ -47,13 +47,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     hints
         /// </summary>
         public SymbolHints Hints
-            => (Parent as StructureFields)?.Hints;
+            => (ParentItem as StructureFields)?.Hints;
 
         /// <summary>
         ///     type vlaue
         /// </summary>
         public ITypeSpecification TypeValue
-            => (Parent as StructureFields)?.TypeValue;
+            => (ParentItem as StructureFields)?.TypeValue;
 
         /// <summary>
         ///     accept visitor

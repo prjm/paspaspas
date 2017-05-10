@@ -6,10 +6,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     pointer type specification
     /// </summary>
     public class PointerType : StandardSyntaxTreeBase {
-        public PointerType(IExtendableSyntaxPart parent) {
-            Parent = parent;
-            parent?.Add(this);
-        }
 
         /// <summary>
         ///     true if a generic pointer type is found

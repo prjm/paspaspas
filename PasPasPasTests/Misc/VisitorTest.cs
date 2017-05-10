@@ -11,13 +11,11 @@ namespace PasPasPasTests.Misc {
 
     public class TreeImplementation : ISyntaxPart {
 
-        public TreeImplementation(string v) {
-            Data = v;
-        }
+        public TreeImplementation(string v) => Data = v;
 
         public string Data { get; set; }
 
-        public ISyntaxPart Parent { get; set; }
+        public ISyntaxPart ParentItem { get; set; }
 
         public IList<ISyntaxPart> Children { get; }
             = new List<ISyntaxPart>();
@@ -46,7 +44,7 @@ namespace PasPasPasTests.Misc {
 
         public TreeImplementation AddChild(string v) {
             var result = new TreeImplementation(v) {
-                Parent = this
+                ParentItem = this
             };
 
             Children.Add(result);
@@ -79,18 +77,14 @@ namespace PasPasPasTests.Misc {
             return true;
         }
 
-        public void BeginVisitChild(ISyntaxPart parent, VisitorOptions visitorParameter, ISyntaxPart child) {
-            visitorParameter.History.Add("X" + (parent as TreeImplementation).Data + '.' + (child as TreeImplementation).Data);
-        }
+        public void BeginVisitChild(ISyntaxPart parent, VisitorOptions visitorParameter, ISyntaxPart child) => visitorParameter.History.Add("X" + (parent as TreeImplementation).Data + '.' + (child as TreeImplementation).Data);
 
         public bool EndVisit(ISyntaxPart syntaxPart, VisitorOptions parameter) {
             parameter.History.Add((syntaxPart as TreeImplementation).Data + 'E');
             return true;
         }
 
-        public void EndVisitChild(ISyntaxPart parent, VisitorOptions visitorParameter, ISyntaxPart child) {
-            visitorParameter.History.Add('Y' + (parent as TreeImplementation).Data + '.' + (child as TreeImplementation).Data);
-        }
+        public void EndVisitChild(ISyntaxPart parent, VisitorOptions visitorParameter, ISyntaxPart child) => visitorParameter.History.Add('Y' + (parent as TreeImplementation).Data + '.' + (child as TreeImplementation).Data);
     }
 
     public class VisitorTest {

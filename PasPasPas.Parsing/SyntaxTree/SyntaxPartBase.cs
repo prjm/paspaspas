@@ -19,7 +19,7 @@ namespace PasPasPas.Parsing.SyntaxTree {
         /// <summary>
         ///     parent node
         /// </summary>
-        public ISyntaxPart Parent { get; set; }
+        public ISyntaxPart ParentItem { get; set; }
 
         /// <summary>
         ///     syntax parts
@@ -125,9 +125,9 @@ namespace PasPasPas.Parsing.SyntaxTree {
         /// <summary>
         ///     add an iten
         /// </summary>
-        /// <param name="result"></param>
-        public void Add(ISyntaxPart result) {
-            parts.Add(result);
+        /// <param name="newChildItem"></param>
+        public void Add(ISyntaxPart newChildItem) {
+            parts.Add(newChildItem);
         }
 
         /// <summary>

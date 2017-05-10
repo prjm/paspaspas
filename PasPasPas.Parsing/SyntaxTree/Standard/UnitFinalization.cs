@@ -6,10 +6,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     finalization part
     /// </summary>
     public class UnitFinalization : StandardSyntaxTreeBase {
-        public UnitFinalization(IExtendableSyntaxPart parent) {
-            Parent = parent;
-            parent?.Add(this);
-        }
 
         /// <summary>
         ///     final statements

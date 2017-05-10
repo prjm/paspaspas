@@ -7,10 +7,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     a list of expressions
     /// </summary>
     public class ExpressionList : StandardSyntaxTreeBase {
-        public ExpressionList(IExtendableSyntaxPart parent) {
-            Parent = parent;
-            parent?.Add(this);
-        }
 
         /// <summary>
         ///     accept visitor

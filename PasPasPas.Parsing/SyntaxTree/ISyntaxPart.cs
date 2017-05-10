@@ -14,9 +14,9 @@ namespace PasPasPas.Parsing.SyntaxTree {
         IEnumerable<ISyntaxPart> Parts { get; }
 
         /// <summary>
-        ///     parent node
+        ///     parent syntax tree node
         /// </summary>
-        ISyntaxPart Parent { get; set; }
+        ISyntaxPart ParentItem { get; set; }
 
         /// <summary>
         ///     accept a visitor object

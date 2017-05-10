@@ -6,10 +6,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     if statement
     /// </summary>
     public class IfStatement : StandardSyntaxTreeBase {
-        public IfStatement(IExtendableSyntaxPart parent) {
-            Parent = parent;
-            parent?.Add(this);
-        }
 
         /// <summary>
         ///     condition

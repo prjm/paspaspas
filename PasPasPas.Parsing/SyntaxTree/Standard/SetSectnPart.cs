@@ -7,11 +7,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// </summary>
     public class SetSectnPart : StandardSyntaxTreeBase {
 
-        public SetSectnPart(IExtendableSyntaxPart parent) {
-            Parent = parent;
-            parent?.Add(this);
-        }
-
         /// <summary>
         ///     continuation
         /// </summary>

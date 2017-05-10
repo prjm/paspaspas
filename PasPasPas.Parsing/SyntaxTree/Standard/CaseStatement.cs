@@ -6,10 +6,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     case statement
     /// </summary>
     public class CaseStatement : StandardSyntaxTreeBase {
-        public CaseStatement(IExtendableSyntaxPart parent) {
-            Parent = parent;
-            parent?.Add(this);
-        }
 
         /// <summary>
         ///     case expression

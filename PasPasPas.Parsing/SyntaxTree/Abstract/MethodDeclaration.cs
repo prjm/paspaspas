@@ -9,13 +9,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     public class MethodDeclaration : DeclaredSymbol, IParameterTarget, ITypeTarget, IDirectiveTarget {
 
         /// <summary>
-        ///     create a new procedurail type
-        /// </summary>
-        public MethodDeclaration() {
-            Parameters = new ParameterDefinitions() { Parent = this };
-        }
-
-        /// <summary>
         ///     procedure kind
         /// </summary>
         public ProcedureKind Kind { get; set; }

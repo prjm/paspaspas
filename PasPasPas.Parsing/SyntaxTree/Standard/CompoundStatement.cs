@@ -6,10 +6,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     compound statement
     /// </summary>
     public class CompoundStatement : StandardSyntaxTreeBase {
-        public CompoundStatement(IExtendableSyntaxPart parent) {
-            Parent = parent;
-            parent?.Add(this);
-        }
 
         /// <summary>
         ///     assembler block

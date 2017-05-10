@@ -6,10 +6,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     asm statement
     /// </summary>
     public class AsmStatement : StandardSyntaxTreeBase {
-        public AsmStatement(IExtendableSyntaxPart parent) {
-            Parent = parent;
-            parent?.Add(this);
-        }
 
         /// <summary>
         ///     opcode

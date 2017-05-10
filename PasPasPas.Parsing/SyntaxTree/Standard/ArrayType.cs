@@ -6,10 +6,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     array type definition
     /// </summary>
     public class ArrayType : StandardSyntaxTreeBase {
-        public ArrayType(IExtendableSyntaxPart parent) {
-            Parent = parent;
-            parent?.Add(this);
-        }
+
 
         /// <summary>
         ///     true if the array is of type <c>array of const</c>

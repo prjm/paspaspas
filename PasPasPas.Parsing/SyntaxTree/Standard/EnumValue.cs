@@ -6,10 +6,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     enumeration value
     /// </summary>
     public class EnumValue : StandardSyntaxTreeBase {
-        public EnumValue(IExtendableSyntaxPart parent) {
-            Parent = parent;
-            parent?.Add(this);
-        }
 
         /// <summary>
         ///     name

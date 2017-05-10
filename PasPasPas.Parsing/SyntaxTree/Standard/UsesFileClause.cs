@@ -6,10 +6,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     uses clause with file names
     /// </summary>
     public class UsesFileClause : StandardSyntaxTreeBase {
-        public UsesFileClause(IExtendableSyntaxPart parent) {
-            Parent = parent;
-            parent?.Add(this);
-        }
 
         /// <summary>
         ///     Namespace files

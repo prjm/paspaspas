@@ -6,10 +6,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     property declaration
     /// </summary>
     public class ClassProperty : StandardSyntaxTreeBase {
-        public ClassProperty(IExtendableSyntaxPart parent) {
-            Parent = parent;
-            parent?.Add(this);
-        }
 
         /// <summary>
         ///     property access index

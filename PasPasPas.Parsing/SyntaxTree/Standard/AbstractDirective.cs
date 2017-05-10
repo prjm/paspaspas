@@ -8,11 +8,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// </summary>
     public class AbstractDirective : StandardSyntaxTreeBase {
 
-        public AbstractDirective(IExtendableSyntaxPart parent) {
-            Parent = parent;
-            parent?.Add(this);
-        }
-
         /// <summary>
         ///     final or abstract
         /// </summary>

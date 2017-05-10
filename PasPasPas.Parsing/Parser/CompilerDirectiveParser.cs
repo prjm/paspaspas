@@ -264,7 +264,8 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseIfOpt(IExtendableSyntaxPart parent) {
-            IfOpt result = CreateByTerminal<IfOpt>(parent, TokenKind.IfOpt);
+            IfOpt result = new IfOpt();
+            InitByTerminal(result, parent, TokenKind.IfOpt);
 
             if (!ContinueWith(result, TokenKind.Identifier)) {
                 return;
@@ -289,7 +290,8 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseStackSizeSwitch(IExtendableSyntaxPart parent, bool mSwitch) {
-            StackMemorySize result = CreateByTerminal<StackMemorySize>(parent, TokenKind.MinMemStackSizeSwitchLong, TokenKind.MaxMemStackSizeSwitchLong, TokenKind.TypeInfoSwitch);
+            StackMemorySize result = new StackMemorySize();
+            InitByTerminal(result, parent, TokenKind.MinMemStackSizeSwitchLong, TokenKind.MaxMemStackSizeSwitchLong, TokenKind.TypeInfoSwitch);
 
             if (mSwitch || result.LastTerminalKind == TokenKind.MinMemStackSizeSwitchLong) {
 
@@ -317,7 +319,8 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseMessage(IExtendableSyntaxPart parent) {
-            Message result = CreateByTerminal<Message>(parent, TokenKind.MessageCd);
+            Message result = new Message();
+            InitByTerminal(result, parent, TokenKind.MessageCd);
 
             if (ContinueWith(result, TokenKind.Identifier)) {
                 string messageType = result.LastTerminalValue;
@@ -352,7 +355,8 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseNoDefine(IExtendableSyntaxPart parent) {
-            NoDefine result = CreateByTerminal<NoDefine>(parent, TokenKind.NoDefine);
+            NoDefine result = new NoDefine();
+            InitByTerminal(result, parent, TokenKind.NoDefine);
 
 
 
@@ -373,7 +377,8 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseNoInclude(IExtendableSyntaxPart parent) {
-            NoInclude result = CreateByTerminal<NoInclude>(parent, TokenKind.NoInclude);
+            NoInclude result = new NoInclude();
+            InitByTerminal(result, parent, TokenKind.NoInclude);
 
             if (!ContinueWith(result, TokenKind.Identifier)) {
                 ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidNoIncludeDirective, new[] { TokenKind.Identifier });
@@ -384,19 +389,22 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParsePEUserVersion(IExtendableSyntaxPart parent) {
-            ParsedVersion result = CreateByTerminal<ParsedVersion>(parent, TokenKind.SetPEUserVersion);
+            ParsedVersion result = new ParsedVersion();
+            InitByTerminal(result, parent, TokenKind.SetPEUserVersion);
             result.Kind = TokenKind.SetPEUserVersion;
             ParsePEVersion(result);
         }
 
         private void ParsePESubsystemVersion(IExtendableSyntaxPart parent) {
-            ParsedVersion result = CreateByTerminal<ParsedVersion>(parent, TokenKind.SetPESubsystemVersion);
+            ParsedVersion result = new ParsedVersion();
+            InitByTerminal(result, parent, TokenKind.SetPESubsystemVersion);
             result.Kind = TokenKind.SetPESubsystemVersion;
             ParsePEVersion(result);
         }
 
         private void ParsePEOsVersion(IExtendableSyntaxPart parent) {
-            ParsedVersion result = CreateByTerminal<ParsedVersion>(parent, TokenKind.SetPEOsVersion);
+            ParsedVersion result = new ParsedVersion();
+            InitByTerminal(result, parent, TokenKind.SetPEOsVersion);
             result.Kind = TokenKind.SetPEOsVersion;
             ParsePEVersion(result);
         }
@@ -429,11 +437,13 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseEndRegion(IExtendableSyntaxPart parent) {
-            CreateByTerminal<EndRegion>(parent, TokenKind.EndRegion);
+            EndRegion result = new EndRegion();
+            InitByTerminal(result, parent, TokenKind.EndRegion);
         }
 
         private void ParseRegion(IExtendableSyntaxPart parent) {
-            Region result = CreateByTerminal<Region>(parent, TokenKind.Region);
+            Region result = new Region();
+            InitByTerminal(result, parent, TokenKind.Region);
 
             if (!ContinueWith(result, TokenKind.QuotedString)) {
                 ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidRegionDirective, new[] { TokenKind.QuotedString });
@@ -447,7 +457,8 @@ namespace PasPasPas.Parsing.Parser {
         ///     parse the rtti parameter
         /// </summary>
         private void ParseRttiParameter(IExtendableSyntaxPart parent) {
-            RttiControl result = CreateByTerminal<RttiControl>(parent, TokenKind.Rtti);
+            RttiControl result = new RttiControl();
+            InitByTerminal(result, parent, TokenKind.Rtti);
 
             if (ContinueWith(result, TokenKind.Inherit)) {
                 result.Mode = RttiGenerationMode.Inherit;
@@ -556,7 +567,8 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseWarnParameter(IExtendableSyntaxPart parent) {
-            WarnSwitch result = CreateByTerminal<WarnSwitch>(parent, TokenKind.Warn);
+            WarnSwitch result = new WarnSwitch();
+            InitByTerminal(result, parent, TokenKind.Warn);
 
             if (!ContinueWith(result, TokenKind.Identifier)) {
                 ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidWarnDirective, new[] { TokenKind.Identifier });
@@ -604,7 +616,8 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseLibParameter(IExtendableSyntaxPart parent) {
-            LibInfo result = CreateByTerminal<LibInfo>(parent, TokenKind.LibPrefix, TokenKind.LibSuffix, TokenKind.LibVersion);
+            LibInfo result = new LibInfo();
+            InitByTerminal(result, parent, TokenKind.LibPrefix, TokenKind.LibSuffix, TokenKind.LibVersion);
             int kind = result.LastTerminalKind;
 
             if (!ContinueWith(result, TokenKind.QuotedString)) {
@@ -630,7 +643,8 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseImageBase(IExtendableSyntaxPart parent) {
-            ImageBase result = CreateByTerminal<ImageBase>(parent, TokenKind.ImageBase);
+            ImageBase result = new ImageBase();
+            InitByTerminal(result, parent, TokenKind.ImageBase);
 
             if (ContinueWith(result, TokenKind.Integer)) {
                 result.BaseValue = DigitTokenGroupValue.Unwrap(result.LastTerminalToken);
@@ -644,11 +658,13 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseIf(IExtendableSyntaxPart parent) {
-            CreateByTerminal<IfDirective>(parent, TokenKind.IfCd);
+            var result = new IfDirective();
+            InitByTerminal(result, parent, TokenKind.IfCd);
         }
 
         private void ParseIfNDef(IExtendableSyntaxPart parent) {
-            IfDef result = CreateByTerminal<IfDef>(parent, TokenKind.IfNDef);
+            IfDef result = new IfDef();
+            InitByTerminal(result, parent, TokenKind.IfNDef);
             result.Negate = true;
 
             if (ContinueWith(result, TokenKind.Identifier)) {
@@ -660,7 +676,8 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseHppEmit(IExtendableSyntaxPart parent) {
-            HppEmit result = CreateByTerminal<HppEmit>(parent, TokenKind.HppEmit);
+            HppEmit result = new HppEmit();
+            InitByTerminal(result, parent, TokenKind.HppEmit);
             result.Mode = HppEmitMode.Standard;
 
             if (ContinueWith(result, TokenKind.End))
@@ -686,7 +703,8 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseExternalSym(IExtendableSyntaxPart parent) {
-            ExternalSymbolDeclaration result = CreateByTerminal<ExternalSymbolDeclaration>(parent, TokenKind.ExternalSym);
+            ExternalSymbolDeclaration result = new ExternalSymbolDeclaration();
+            InitByTerminal(result, parent, TokenKind.ExternalSym);
 
             if (!ContinueWith(result, TokenKind.Identifier)) {
                 ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidExternalSymbolDirective, new[] { TokenKind.Identifier });
@@ -705,19 +723,23 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseElse(IExtendableSyntaxPart parent) {
-            CreateByTerminal<ElseDirective>(parent, TokenKind.ElseCd);
+            var result = new ElseDirective();
+            InitByTerminal(result, parent, TokenKind.ElseCd);
         }
 
         private void ParseEndIf(IExtendableSyntaxPart parent) {
-            CreateByTerminal<EndIf>(parent, TokenKind.EndIf);
+            var result = new EndIf(); new EndIf();
+            InitByTerminal(result, parent, TokenKind.EndIf);
         }
 
         private void ParseIfEnd(IExtendableSyntaxPart parent) {
-            CreateByTerminal<EndIf>(parent, TokenKind.IfEnd);
+            var result = new EndIf();
+            InitByTerminal(result, parent, TokenKind.IfEnd);
         }
 
         private void ParseIfDef(IExtendableSyntaxPart parent) {
-            IfDef result = CreateByTerminal<IfDef>(parent, TokenKind.IfDef);
+            IfDef result = new IfDef();
+            InitByTerminal(result, parent, TokenKind.IfDef);
 
             if (ContinueWith(result, TokenKind.Identifier)) {
                 result.SymbolName = result.LastTerminalValue;
@@ -728,7 +750,8 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseUndef(IExtendableSyntaxPart parent) {
-            UnDefineSymbol result = CreateByTerminal<UnDefineSymbol>(parent, TokenKind.Undef);
+            UnDefineSymbol result = new UnDefineSymbol();
+            InitByTerminal(result, parent, TokenKind.Undef);
 
             if (ContinueWith(result, TokenKind.Identifier)) {
                 result.SymbolName = result.LastTerminalValue;
@@ -739,7 +762,8 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseDefine(IExtendableSyntaxPart parent) {
-            DefineSymbol result = CreateByTerminal<DefineSymbol>(parent, TokenKind.Define);
+            DefineSymbol result = new DefineSymbol();
+            InitByTerminal(result, parent, TokenKind.Define);
 
             if (ContinueWith(result, TokenKind.Identifier)) {
                 result.SymbolName = result.LastTerminalValue;
@@ -750,7 +774,8 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseCodeAlignParameter(IExtendableSyntaxPart parent) {
-            CodeAlignParameter result = CreateByTerminal<CodeAlignParameter>(parent, TokenKind.CodeAlign);
+            CodeAlignParameter result = new CodeAlignParameter();
+            InitByTerminal(result, parent, TokenKind.CodeAlign);
 
             int value;
             if (ContinueWith(result, TokenKind.Integer) && int.TryParse(result.LastTerminalValue, out value)) {
@@ -780,7 +805,10 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseApptypeParameter(IExtendableSyntaxPart parent) {
-            AppTypeParameter result = CreateByTerminal<AppTypeParameter>(parent, TokenKind.Apptype);
+            AppTypeParameter result = new AppTypeParameter();
+            InitByTerminal(result, parent, TokenKind.Apptype);
+            result = new AppTypeParameter();
+            InitByTerminal(result, parent, TokenKind.Apptype);
 
             if (ContinueWith(result, TokenKind.Identifier)) {
 
@@ -995,12 +1023,14 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseLongLinkSwitch(IExtendableSyntaxPart parent) {
-            Link resultLink = CreateByTerminal<Link>(parent, TokenKind.LinkSwitchLong);
-            ParseLinkParameter(resultLink);
+            Link result = new Link();
+            InitByTerminal(result, parent, TokenKind.LinkSwitchLong);
+            ParseLinkParameter(result);
         }
 
         private void ParseLegacyIfEndSwitch(IExtendableSyntaxPart parent) {
-            LegacyIfEnd result = CreateByTerminal<LegacyIfEnd>(parent, TokenKind.LegacyIfEnd);
+            LegacyIfEnd result = new LegacyIfEnd();
+            InitByTerminal(result, parent, TokenKind.LegacyIfEnd);
 
             if (ContinueWith(result, TokenKind.On)) {
                 result.Mode = EndIfMode.LegacyIfEnd;
@@ -1014,7 +1044,8 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseMethodInfoSwitch(IExtendableSyntaxPart parent) {
-            MethodInfo result = CreateByTerminal<MethodInfo>(parent, TokenKind.MethodInfo);
+            MethodInfo result = new MethodInfo();
+            InitByTerminal(result, parent, TokenKind.MethodInfo);
 
             if (ContinueWith(result, TokenKind.On)) {
                 result.Mode = MethodInfoRtti.EnableMethodInfo;
@@ -1028,7 +1059,8 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseLongEnumSizeSwitch(IExtendableSyntaxPart parent) {
-            MinEnumSize result = CreateByTerminal<MinEnumSize>(parent, TokenKind.EnumSizeSwitchLong);
+            MinEnumSize result = new MinEnumSize();
+            InitByTerminal(result, parent, TokenKind.EnumSizeSwitchLong);
 
             if (!ContinueWith(result, TokenKind.Integer)) {
                 ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidMinEnumSizeDirective, new[] { TokenKind.Integer });
@@ -1055,7 +1087,8 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseOldTypeLayoutSwitch(IExtendableSyntaxPart parent) {
-            OldTypeLayout result = CreateByTerminal<OldTypeLayout>(parent, TokenKind.OldTypeLayout);
+            OldTypeLayout result = new OldTypeLayout();
+            InitByTerminal(result, parent, TokenKind.OldTypeLayout);
 
             if (ContinueWith(result, TokenKind.On)) {
                 result.Mode = OldRecordTypes.EnableOldRecordPacking;
@@ -1069,7 +1102,8 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParsePointermathSwitch(IExtendableSyntaxPart parent) {
-            PointerMath result = CreateByTerminal<PointerMath>(parent, TokenKind.Pointermath);
+            PointerMath result = new PointerMath();
+            InitByTerminal(result, parent, TokenKind.Pointermath);
 
             if (ContinueWith(result, TokenKind.On)) {
                 result.Mode = PointerManipulation.EnablePointerMath;
@@ -1083,7 +1117,8 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseRealCompatibilitySwitch(IExtendableSyntaxPart parent) {
-            RealCompatibility result = CreateByTerminal<RealCompatibility>(parent, TokenKind.RealCompatibility);
+            RealCompatibility result = new RealCompatibility();
+            InitByTerminal(result, parent, TokenKind.RealCompatibility);
 
             if (ContinueWith(result, TokenKind.On)) {
                 result.Mode = Real48.EnableCompatibility;
@@ -1097,12 +1132,14 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseLongIncludeRessourceSwitch(IExtendableSyntaxPart parent) {
-            Resource result = CreateByTerminal<Resource>(parent, TokenKind.IncludeRessourceLong);
+            Resource result = new Resource();
+            InitByTerminal(result, parent, TokenKind.IncludeRessourceLong);
             ParseResourceFileName(result);
         }
 
         private void ParseRunOnlyParameter(IExtendableSyntaxPart parent) {
-            RunOnly result = CreateByTerminal<RunOnly>(parent, TokenKind.RunOnly);
+            RunOnly result = new RunOnly();
+            InitByTerminal(result, parent, TokenKind.RunOnly);
 
             if (ContinueWith(result, TokenKind.On)) {
                 result.Mode = RuntimePackageMode.RuntimeOnly;
@@ -1116,7 +1153,8 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseLongTypeInfoSwitch(IExtendableSyntaxPart parent) {
-            PublishedRtti result = CreateByTerminal<PublishedRtti>(parent, TokenKind.TypeInfoSwitchLong);
+            PublishedRtti result = new PublishedRtti();
+            InitByTerminal(result, parent, TokenKind.TypeInfoSwitchLong);
 
             if (ContinueWith(result, TokenKind.On)) {
                 result.Mode = RttiForPublishedProperties.Enable;
@@ -1130,7 +1168,8 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseScopedEnums(IExtendableSyntaxPart parent) {
-            ScopedEnums result = CreateByTerminal<ScopedEnums>(parent, TokenKind.ScopedEnums);
+            ScopedEnums result = new ScopedEnums();
+            InitByTerminal(result, parent, TokenKind.ScopedEnums);
 
             if (ContinueWith(result, TokenKind.On)) {
                 result.Mode = RequireScopedEnums.Enable;
@@ -1144,7 +1183,8 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseStrongLinkTypes(IExtendableSyntaxPart parent) {
-            StrongLinkTypes result = CreateByTerminal<StrongLinkTypes>(parent, TokenKind.StrongLinkTypes);
+            StrongLinkTypes result = new StrongLinkTypes();
+            InitByTerminal(result, parent, TokenKind.StrongLinkTypes);
 
             if (ContinueWith(result, TokenKind.On)) {
                 result.Mode = StrongTypeLinking.Enable;
@@ -1158,7 +1198,8 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseReferenceInfoSwitch(IExtendableSyntaxPart parent) {
-            SymbolDefinitions result = CreateByTerminal<SymbolDefinitions>(parent, TokenKind.ReferenceInfo);
+            SymbolDefinitions result = new SymbolDefinitions();
+            InitByTerminal(result, parent, TokenKind.ReferenceInfo);
 
             if (ContinueWith(result, TokenKind.On)) {
                 result.ReferencesMode = SymbolReferenceInfo.Enable;
@@ -1172,7 +1213,8 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseDefinitionInfoSwitch(IExtendableSyntaxPart parent) {
-            SymbolDefinitions result = CreateByTerminal<SymbolDefinitions>(parent, TokenKind.DefinitionInfo);
+            SymbolDefinitions result = new SymbolDefinitions();
+            InitByTerminal(result, parent, TokenKind.DefinitionInfo);
 
             if (ContinueWith(result, TokenKind.On)) {
                 result.Mode = SymbolDefinitionInfo.Enable;
@@ -1186,7 +1228,8 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseLongTypedPointersSwitch(IExtendableSyntaxPart parent) {
-            TypedPointers result = CreateByTerminal<TypedPointers>(parent, TokenKind.TypedPointersSwitchLong);
+            TypedPointers result = new TypedPointers();
+            InitByTerminal(result, parent, TokenKind.TypedPointersSwitchLong);
 
             if (ContinueWith(result, TokenKind.On)) {
                 result.Mode = TypeCheckedPointers.Enable;
@@ -1200,7 +1243,8 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseLongVarStringCheckSwitch(IExtendableSyntaxPart parent) {
-            VarStringChecks result = CreateByTerminal<VarStringChecks>(parent, TokenKind.VarStringCheckSwitchLong);
+            VarStringChecks result = new VarStringChecks();
+            InitByTerminal(result, parent, TokenKind.VarStringCheckSwitchLong);
 
             if (ContinueWith(result, TokenKind.On)) {
                 result.Mode = ShortVarStringChecks.EnableChecks;
@@ -1214,7 +1258,8 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseWarningsSwitch(IExtendableSyntaxPart parent) {
-            Warnings result = CreateByTerminal<Warnings>(parent, TokenKind.Warnings);
+            Warnings result = new Warnings();
+            InitByTerminal(result, parent, TokenKind.Warnings);
 
             if (ContinueWith(result, TokenKind.On)) {
                 result.Mode = CompilerWarning.Enable;
@@ -1228,7 +1273,8 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseWeakPackageUnitSwitch(IExtendableSyntaxPart parent) {
-            WeakPackageUnit result = CreateByTerminal<WeakPackageUnit>(parent, TokenKind.WeakPackageUnit);
+            WeakPackageUnit result = new WeakPackageUnit();
+            InitByTerminal(result, parent, TokenKind.WeakPackageUnit);
 
             if (ContinueWith(result, TokenKind.On)) {
                 result.Mode = WeakPackaging.Enable;
@@ -1242,7 +1288,8 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseWeakLinkRttiSwitch(IExtendableSyntaxPart parent) {
-            WeakLinkRtti result = CreateByTerminal<WeakLinkRtti>(parent, TokenKind.WeakLinkRtti);
+            WeakLinkRtti result = new WeakLinkRtti();
+            InitByTerminal(result, parent, TokenKind.WeakLinkRtti);
 
             if (ContinueWith(result, TokenKind.On)) {
                 result.Mode = RttiLinkMode.LinkWeakRtti;
@@ -1256,7 +1303,8 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseLongWritableConstSwitch(IExtendableSyntaxPart parent) {
-            WritableConsts result = CreateByTerminal<WritableConsts>(parent, TokenKind.WritableConstSwitchLong);
+            WritableConsts result = new WritableConsts();
+            InitByTerminal(result, parent, TokenKind.WritableConstSwitchLong);
 
             if (ContinueWith(result, TokenKind.On)) {
                 result.Mode = ConstantValue.Writable;
@@ -1270,7 +1318,8 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseZeroBasedStringSwitch(IExtendableSyntaxPart parent) {
-            ZeroBasedStrings result = CreateByTerminal<ZeroBasedStrings>(parent, TokenKind.ZeroBaseStrings);
+            ZeroBasedStrings result = new ZeroBasedStrings();
+            InitByTerminal(result, parent, TokenKind.ZeroBaseStrings);
 
             if (ContinueWith(result, TokenKind.On)) {
                 result.Mode = FirstCharIndex.IsZero;
@@ -1284,7 +1333,8 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseLongStackFramesSwitch(IExtendableSyntaxPart parent) {
-            StackFrames result = CreateByTerminal<StackFrames>(parent, TokenKind.StackFramesSwitchLong);
+            StackFrames result = new StackFrames();
+            InitByTerminal(result, parent, TokenKind.StackFramesSwitchLong);
 
             if (ContinueWith(result, TokenKind.On)) {
                 result.Mode = StackFrameGeneration.EnableFrames;
@@ -1298,7 +1348,8 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseLongRangeChecksSwitch(IExtendableSyntaxPart parent) {
-            RangeChecks result = CreateByTerminal<RangeChecks>(parent, TokenKind.RangeChecks);
+            RangeChecks result = new RangeChecks();
+            InitByTerminal(result, parent, TokenKind.RangeChecks);
 
             if (ContinueWith(result, TokenKind.On)) {
                 result.Mode = RuntimeRangeChecks.EnableRangeChecks;
@@ -1312,7 +1363,8 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseLongSafeDivideSwitch(IExtendableSyntaxPart parent) {
-            SafeDivide result = CreateByTerminal<SafeDivide>(parent, TokenKind.SafeDivideSwitchLong);
+            SafeDivide result = new SafeDivide();
+            InitByTerminal(result, parent, TokenKind.SafeDivideSwitchLong);
 
             if (ContinueWith(result, TokenKind.On)) {
                 result.Mode = FDivSafeDivide.EnableSafeDivide;
@@ -1326,7 +1378,8 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseLongOverflowSwitch(IExtendableSyntaxPart parent) {
-            Overflow result = CreateByTerminal<Overflow>(parent, TokenKind.OverflowSwitchLong);
+            Overflow result = new Overflow();
+            InitByTerminal(result, parent, TokenKind.OverflowSwitchLong);
 
             if (ContinueWith(result, TokenKind.On)) {
                 result.Mode = RuntimeOverflowChecks.EnableChecks;
@@ -1340,7 +1393,8 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseLongOptimizationSwitch(IExtendableSyntaxPart parent) {
-            Optimization result = CreateByTerminal<Optimization>(parent, TokenKind.OptimizationSwitchLong);
+            Optimization result = new Optimization();
+            InitByTerminal(result, parent, TokenKind.OptimizationSwitchLong);
 
             if (ContinueWith(result, TokenKind.On)) {
                 result.Mode = CompilerOptimization.EnableOptimization;
@@ -1354,7 +1408,8 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseLongOpenStringSwitch(IExtendableSyntaxPart parent) {
-            OpenStrings result = CreateByTerminal<OpenStrings>(parent, TokenKind.OpenStringSwitchLong);
+            OpenStrings result = new OpenStrings();
+            InitByTerminal(result, parent, TokenKind.OpenStringSwitchLong);
 
             if (ContinueWith(result, TokenKind.On)) {
                 result.Mode = OpenStringTypes.EnableOpenStrings;
@@ -1368,7 +1423,8 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseLongLongStringSwitch(IExtendableSyntaxPart parent) {
-            LongStrings result = CreateByTerminal<LongStrings>(parent, TokenKind.LongStringSwitchLong);
+            LongStrings result = new LongStrings();
+            InitByTerminal(result, parent, TokenKind.LongStringSwitchLong);
 
             if (ContinueWith(result, TokenKind.On)) {
                 result.Mode = LongStringTypes.EnableLongStrings;
@@ -1382,7 +1438,8 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseLongLocalSymbolSwitch(IExtendableSyntaxPart parent) {
-            LocalSymbols result = CreateByTerminal<LocalSymbols>(parent, TokenKind.LocalSymbolSwithLong);
+            LocalSymbols result = new LocalSymbols();
+            InitByTerminal(result, parent, TokenKind.LocalSymbolSwithLong);
 
             if (ContinueWith(result, TokenKind.On)) {
                 result.Mode = LocalDebugSymbols.EnableLocalSymbols;
@@ -1396,7 +1453,8 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseLongIoChecksSwitch(IExtendableSyntaxPart parent) {
-            IoChecks result = CreateByTerminal<IoChecks>(parent, TokenKind.IoChecks);
+            IoChecks result = new IoChecks();
+            InitByTerminal(result, parent, TokenKind.IoChecks);
 
             if (ContinueWith(result, TokenKind.On)) {
                 result.Mode = IoCallCheck.EnableIoChecks;
@@ -1410,12 +1468,14 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseLongIncludeSwitch(IExtendableSyntaxPart parent) {
-            Include result = CreateByTerminal<Include>(parent, TokenKind.IncludeSwitchLong);
+            Include result = new Include();
+            InitByTerminal(result, parent, TokenKind.IncludeSwitchLong);
             ParseIncludeFileName(result);
         }
 
         private void ParseLongImportedDataSwitch(IExtendableSyntaxPart parent) {
-            ImportedData result = CreateByTerminal<ImportedData>(parent, TokenKind.ImportedDataSwitchLong);
+            ImportedData result = new ImportedData();
+            InitByTerminal(result, parent, TokenKind.ImportedDataSwitchLong);
 
             if (ContinueWith(result, TokenKind.On)) {
                 result.Mode = ImportGlobalUnitData.DoImport;
@@ -1430,7 +1490,8 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseLongImplicitBuildSwitch(IExtendableSyntaxPart parent) {
-            ImplicitBuild result = CreateByTerminal<ImplicitBuild>(parent, TokenKind.ImplicitBuild);
+            ImplicitBuild result = new ImplicitBuild();
+            InitByTerminal(result, parent, TokenKind.ImplicitBuild);
 
             if (ContinueWith(result, TokenKind.On)) {
                 result.Mode = ImplicitBuildUnit.EnableImplicitBuild;
@@ -1444,7 +1505,8 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseLongHintsSwitch(IExtendableSyntaxPart parent) {
-            Hints result = CreateByTerminal<Hints>(parent, TokenKind.Hints);
+            Hints result = new Hints();
+            InitByTerminal(result, parent, TokenKind.Hints);
 
             if (ContinueWith(result, TokenKind.On)) {
                 result.Mode = CompilerHint.EnableHints;
@@ -1458,7 +1520,8 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseLongHighCharUnicodeSwitch(IExtendableSyntaxPart parent) {
-            HighCharUnicodeSwitch result = CreateByTerminal<HighCharUnicodeSwitch>(parent, TokenKind.HighCharUnicode);
+            HighCharUnicodeSwitch result = new HighCharUnicodeSwitch();
+            InitByTerminal(result, parent, TokenKind.HighCharUnicode);
 
             if (ContinueWith(result, TokenKind.On)) {
                 result.Mode = HighCharsUnicode.EnableHighChars;
@@ -1472,7 +1535,8 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseLongExcessPrecisionSwitch(IExtendableSyntaxPart parent) {
-            ExcessPrecision result = CreateByTerminal<ExcessPrecision>(parent, TokenKind.ExcessPrecision);
+            ExcessPrecision result = new ExcessPrecision();
+            InitByTerminal(result, parent, TokenKind.ExcessPrecision);
 
             if (ContinueWith(result, TokenKind.On)) {
                 result.Mode = ExcessPrecisionForResult.EnableExcess;
@@ -1486,7 +1550,8 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseLongExtendedSyntaxSwitch(IExtendableSyntaxPart parent) {
-            ExtSyntax result = CreateByTerminal<ExtSyntax>(parent, TokenKind.ExtendedSyntaxSwitchLong);
+            ExtSyntax result = new ExtSyntax();
+            InitByTerminal(result, parent, TokenKind.ExtendedSyntaxSwitchLong);
 
             if (ContinueWith(result, TokenKind.On)) {
                 result.Mode = ExtendedSyntax.UseExtendedSyntax;
@@ -1500,7 +1565,8 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseExtendedCompatibilitySwitch(IExtendableSyntaxPart parent) {
-            ExtendedCompatibility result = CreateByTerminal<ExtendedCompatibility>(parent, TokenKind.ExtendedCompatibility);
+            ExtendedCompatibility result = new ExtendedCompatibility();
+            InitByTerminal(result, parent, TokenKind.ExtendedCompatibility);
 
             if (ContinueWith(result, TokenKind.On)) {
                 result.Mode = ExtendedCompatibilityMode.Enabled;
@@ -1514,7 +1580,8 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseObjExportAllSwitch(IExtendableSyntaxPart parent) {
-            ObjectExport result = CreateByTerminal<ObjectExport>(parent, TokenKind.ObjExportAll);
+            ObjectExport result = new ObjectExport();
+            InitByTerminal(result, parent, TokenKind.ObjExportAll);
 
             if (ContinueWith(result, TokenKind.On)) {
                 CompilerOptions.ExportCppObjects.Value = ExportCppObjects.ExportAll;
@@ -1528,7 +1595,8 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseLongExtensionSwitch(IExtendableSyntaxPart parent) {
-            Extension result = CreateByTerminal<Extension>(parent, TokenKind.ExtensionSwitchLong);
+            Extension result = new Extension();
+            InitByTerminal(result, parent, TokenKind.ExtensionSwitchLong);
 
             if (ContinueWith(result, TokenKind.Identifier)) {
                 result.ExecutableExtension = result.LastTerminalValue;
@@ -1539,7 +1607,8 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseLongDesignOnlySwitch(IExtendableSyntaxPart parent) {
-            DesignOnly result = CreateByTerminal<DesignOnly>(parent, TokenKind.DesignOnly);
+            DesignOnly result = new DesignOnly();
+            InitByTerminal(result, parent, TokenKind.DesignOnly);
 
             if (ContinueWith(result, TokenKind.On)) {
                 result.DesignTimeOnly = DesignOnlyUnit.InDesignTimeOnly;
@@ -1553,7 +1622,8 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseLongDescriptionSwitch(IExtendableSyntaxPart parent) {
-            Description result = CreateByTerminal<Description>(parent, TokenKind.DescriptionSwitchLong);
+            Description result = new Description();
+            InitByTerminal(result, parent, TokenKind.DescriptionSwitchLong);
 
             if (ContinueWith(result, TokenKind.QuotedString)) {
                 result.DescriptionValue = QuotedStringTokenValue.Unwrap(result.LastTerminalToken);
@@ -1564,7 +1634,8 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseDenyPackageUnitSwitch(IExtendableSyntaxPart parent) {
-            ParseDenyPackageUnit result = CreateByTerminal<ParseDenyPackageUnit>(parent, TokenKind.DenyPackageUnit);
+            ParseDenyPackageUnit result = new ParseDenyPackageUnit();
+            InitByTerminal(result, parent, TokenKind.DenyPackageUnit);
 
             if (ContinueWith(result, TokenKind.On)) {
                 result.DenyUnit = DenyUnitInPackage.DenyUnit;
@@ -1578,7 +1649,8 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseLongDebugInfoSwitch(IExtendableSyntaxPart parent) {
-            DebugInfoSwitch result = CreateByTerminal<DebugInfoSwitch>(parent, TokenKind.DebugInfoSwitchLong);
+            DebugInfoSwitch result = new DebugInfoSwitch();
+            InitByTerminal(result, parent, TokenKind.DebugInfoSwitchLong);
             if (ContinueWith(result, TokenKind.On)) {
                 result.DebugInfo = DebugInformation.IncludeDebugInformation;
             }
@@ -1591,7 +1663,8 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseLongAssertSwitch(IExtendableSyntaxPart parent) {
-            AssertSwitch result = CreateByTerminal<AssertSwitch>(parent, TokenKind.AssertSwitchLong);
+            AssertSwitch result = new AssertSwitch();
+            InitByTerminal(result, parent, TokenKind.AssertSwitchLong);
 
             if (ContinueWith(result, TokenKind.On)) {
                 result.Assertions = AssertionMode.EnableAssertions;
@@ -1605,7 +1678,8 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseLongBoolEvalSwitch(IExtendableSyntaxPart parent) {
-            BooleanEvaluationSwitch result = CreateByTerminal<BooleanEvaluationSwitch>(parent, TokenKind.BoolEvalSwitchLong);
+            BooleanEvaluationSwitch result = new BooleanEvaluationSwitch();
+            InitByTerminal(result, parent, TokenKind.BoolEvalSwitchLong);
 
             if (ContinueWith(result, TokenKind.On)) {
                 result.BoolEval = BooleanEvaluation.CompleteEvaluation;
@@ -1619,7 +1693,8 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseLongAlignSwitch(IExtendableSyntaxPart parent) {
-            AlignSwitch result = CreateByTerminal<AlignSwitch>(new AlignSwitch(parent), TokenKind.AlignSwitchLong);
+            AlignSwitch result = new AlignSwitch();
+            InitByTerminal(result, parent, TokenKind.AlignSwitchLong);
 
             if (ContinueWith(result, TokenKind.On)) {
                 result.AlignValue = Alignment.QuadWord;
@@ -1736,7 +1811,8 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseEnumSizeSwitch(IExtendableSyntaxPart parent) {
-            MinEnumSize result = CreateByTerminal<MinEnumSize>(parent, TokenKind.EnumSize1, TokenKind.EnumSize2, TokenKind.EnumSize4, TokenKind.EnumSizeSwitch);
+            var result = new MinEnumSize();
+            InitByTerminal(result, parent, TokenKind.EnumSize1, TokenKind.EnumSize2, TokenKind.EnumSize4, TokenKind.EnumSizeSwitch);
             var kind = result.LastTerminalKind;
 
             if (kind == TokenKind.EnumSize1) {
@@ -1760,7 +1836,8 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseObjTypeNameSwitch(IExtendableSyntaxPart parent) {
-            ObjTypeName result = CreateByTerminal<ObjTypeName>(parent, TokenKind.ObjTypeName);
+            ObjTypeName result = new ObjTypeName();
+            InitByTerminal(result, parent, TokenKind.ObjTypeName);
 
             if (!ContinueWith(result, TokenKind.Identifier)) {
                 ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidObjTypeDirective, new[] { TokenKind.Identifier });
@@ -1797,7 +1874,8 @@ namespace PasPasPas.Parsing.Parser {
                 return;
             }
 
-            PublishedRtti result = CreateByTerminal<PublishedRtti>(parent, TokenKind.TypeInfoSwitch);
+            PublishedRtti result = new PublishedRtti();
+            InitByTerminal(result, parent, TokenKind.TypeInfoSwitch);
 
             if (ContinueWith(result, TokenKind.Plus)) {
                 result.Mode = RttiForPublishedProperties.Enable;
@@ -1811,13 +1889,15 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseSymbolDefinitionsOnlySwitch(IExtendableSyntaxPart parent) {
-            SymbolDefinitions result = CreateByTerminal<SymbolDefinitions>(parent, TokenKind.SymbolDefinitionsOnlySwitch);
+            SymbolDefinitions result = new SymbolDefinitions();
+            InitByTerminal(result, parent, TokenKind.SymbolDefinitionsOnlySwitch);
             result.ReferencesMode = SymbolReferenceInfo.Disable;
             result.Mode = SymbolDefinitionInfo.Enable;
         }
 
         private void ParseSymbolDeclarationSwitch(IExtendableSyntaxPart parent) {
-            SymbolDefinitions result = CreateByTerminal<SymbolDefinitions>(parent, TokenKind.SymbolDeclarationSwitch);
+            SymbolDefinitions result = new SymbolDefinitions();
+            InitByTerminal(result, parent, TokenKind.SymbolDeclarationSwitch);
 
             if (ContinueWith(result, TokenKind.Plus)) {
                 result.ReferencesMode = SymbolReferenceInfo.Enable;
@@ -1833,7 +1913,8 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseTypedPointersSwitch(IExtendableSyntaxPart parent) {
-            TypedPointers result = CreateByTerminal<TypedPointers>(parent, TokenKind.TypedPointersSwitch);
+            TypedPointers result = new TypedPointers();
+            InitByTerminal(result, parent, TokenKind.TypedPointersSwitch);
 
             if (ContinueWith(result, TokenKind.Plus)) {
                 result.Mode = TypeCheckedPointers.Enable;
@@ -1847,7 +1928,8 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseVarStringCheckSwitch(IExtendableSyntaxPart parent) {
-            VarStringChecks result = CreateByTerminal<VarStringChecks>(parent, TokenKind.VarStringCheckSwitch);
+            VarStringChecks result = new VarStringChecks();
+            InitByTerminal(result, parent, TokenKind.VarStringCheckSwitch);
 
             if (ContinueWith(result, TokenKind.Plus)) {
                 result.Mode = ShortVarStringChecks.EnableChecks;
@@ -1861,7 +1943,8 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseWritableConstSwitch(IExtendableSyntaxPart parent) {
-            WritableConsts result = CreateByTerminal<WritableConsts>(parent, TokenKind.WritableConstSwitch);
+            WritableConsts result = new WritableConsts();
+            InitByTerminal(result, parent, TokenKind.WritableConstSwitch);
 
             if (ContinueWith(result, TokenKind.Plus)) {
                 result.Mode = ConstantValue.Writable;
@@ -1875,7 +1958,8 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseStackFramesSwitch(IExtendableSyntaxPart parent) {
-            StackFrames result = CreateByTerminal<StackFrames>(parent, TokenKind.StackFramesSwitch);
+            StackFrames result = new StackFrames();
+            InitByTerminal(result, parent, TokenKind.StackFramesSwitch);
 
             if (ContinueWith(result, TokenKind.Plus)) {
                 result.Mode = StackFrameGeneration.EnableFrames;
@@ -1891,7 +1975,8 @@ namespace PasPasPas.Parsing.Parser {
         private void ParseIncludeRessource(IExtendableSyntaxPart parent) {
 
             if (LookAhead(1, TokenKind.Plus, TokenKind.Minus)) {
-                RangeChecks result = CreateByTerminal<RangeChecks>(parent, TokenKind.IncludeRessource);
+                RangeChecks result = new RangeChecks();
+                InitByTerminal(result, parent, TokenKind.IncludeRessource);
 
                 if (ContinueWith(result, TokenKind.Plus)) {
                     result.Mode = RuntimeRangeChecks.EnableRangeChecks;
@@ -1902,7 +1987,8 @@ namespace PasPasPas.Parsing.Parser {
                 return;
             }
 
-            Resource resultR = CreateByTerminal<Resource>(parent, TokenKind.IncludeRessource);
+            Resource resultR = new Resource();
+            InitByTerminal(resultR, parent, TokenKind.IncludeRessource);
             ParseResourceFileName(resultR);
         }
 
@@ -1958,7 +2044,8 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseSaveDivideSwitch(IExtendableSyntaxPart parent) {
-            SafeDivide result = CreateByTerminal<SafeDivide>(parent, TokenKind.SaveDivideSwitch);
+            SafeDivide result = new SafeDivide();
+            InitByTerminal(result, parent, TokenKind.SaveDivideSwitch);
 
             if (ContinueWith(result, TokenKind.Plus)) {
                 result.Mode = FDivSafeDivide.EnableSafeDivide;
@@ -1972,7 +2059,8 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseOverflowSwitch(IExtendableSyntaxPart parent) {
-            Overflow result = CreateByTerminal<Overflow>(parent, TokenKind.OverflowSwitch);
+            Overflow result = new Overflow();
+            InitByTerminal(result, parent, TokenKind.OverflowSwitch);
 
             if (ContinueWith(result, TokenKind.Plus)) {
                 result.Mode = RuntimeOverflowChecks.EnableChecks;
@@ -1986,7 +2074,8 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseOptimizationSwitch(IExtendableSyntaxPart parent) {
-            Optimization result = CreateByTerminal<Optimization>(parent, TokenKind.OptimizationSwitch);
+            Optimization result = new Optimization();
+            InitByTerminal(result, parent, TokenKind.OptimizationSwitch);
 
             if (ContinueWith(result, TokenKind.Plus)) {
                 result.Mode = CompilerOptimization.EnableOptimization;
@@ -2000,7 +2089,8 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseOpenStringSwitch(IExtendableSyntaxPart parent) {
-            OpenStrings result = CreateByTerminal<OpenStrings>(parent, TokenKind.OpenStringSwitch);
+            OpenStrings result = new OpenStrings();
+            InitByTerminal(result, parent, TokenKind.OpenStringSwitch);
 
             if (ContinueWith(result, TokenKind.Plus)) {
                 result.Mode = OpenStringTypes.EnableOpenStrings;
@@ -2014,7 +2104,8 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseLongStringSwitch(IExtendableSyntaxPart parent) {
-            LongStrings result = CreateByTerminal<LongStrings>(parent, TokenKind.LongStringSwitch);
+            LongStrings result = new LongStrings();
+            InitByTerminal(result, parent, TokenKind.LongStringSwitch);
 
             if (ContinueWith(result, TokenKind.Plus)) {
                 result.Mode = LongStringTypes.EnableLongStrings;
@@ -2029,7 +2120,8 @@ namespace PasPasPas.Parsing.Parser {
 
         private void ParseLocalSymbolSwitch(IExtendableSyntaxPart parent) {
             if (LookAhead(1, TokenKind.Plus, TokenKind.Minus)) {
-                LocalSymbols result = CreateByTerminal<LocalSymbols>(parent, TokenKind.LinkOrLocalSymbolSwitch);
+                LocalSymbols result = new LocalSymbols();
+                InitByTerminal(result, parent, TokenKind.LinkOrLocalSymbolSwitch);
 
                 if (ContinueWith(result, TokenKind.Plus)) {
                     result.Mode = LocalDebugSymbols.EnableLocalSymbols;
@@ -2040,7 +2132,8 @@ namespace PasPasPas.Parsing.Parser {
                 return;
             }
 
-            Link resultLink = CreateByTerminal<Link>(parent, TokenKind.LinkOrLocalSymbolSwitch);
+            Link resultLink = new Link();
+            InitByTerminal(resultLink, parent, TokenKind.LinkOrLocalSymbolSwitch);
             ParseLinkParameter(resultLink);
         }
 
@@ -2058,27 +2151,32 @@ namespace PasPasPas.Parsing.Parser {
         private void ParseIncludeSwitch(IExtendableSyntaxPart parent) {
 
             if (LookAhead(1, TokenKind.Plus)) {
-                IoChecks result = CreateByTerminal<IoChecks>(parent, TokenKind.IncludeSwitch);
+                IoChecks result = new IoChecks();
+                InitByTerminal(result, parent, TokenKind.IncludeSwitch);
                 ContinueWith(result, TokenKind.Plus);
                 result.Mode = IoCallCheck.EnableIoChecks;
             }
             else if (LookAhead(1, TokenKind.Minus)) {
-                IoChecks result = CreateByTerminal<IoChecks>(parent, TokenKind.IncludeSwitch);
+                IoChecks result = new IoChecks();
+                InitByTerminal(result, parent, TokenKind.IncludeSwitch);
                 ContinueWith(result, TokenKind.Minus);
                 result.Mode = IoCallCheck.DisableIoChecks;
             }
             else if (LookAhead(1, TokenKind.Identifier) || LookAhead(1, TokenKind.QuotedString)) {
-                Include result = CreateByTerminal<Include>(parent, TokenKind.IncludeSwitch);
+                Include result = new Include();
+                InitByTerminal(result, parent, TokenKind.IncludeSwitch);
                 ParseIncludeFileName(result);
             }
             else {
-                IoChecks result = CreateByTerminal<IoChecks>(parent, TokenKind.IncludeSwitch);
+                IoChecks result = new IoChecks();
+                InitByTerminal(result, parent, TokenKind.IncludeSwitch);
                 ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidIoChecksDirective, new[] { TokenKind.Plus, TokenKind.Minus });
             }
         }
 
         private void ParseImportedDataSwitch(IExtendableSyntaxPart parent) {
-            ImportedData result = CreateByTerminal<ImportedData>(parent, TokenKind.ImportedDataSwitch);
+            ImportedData result = new ImportedData();
+            InitByTerminal(result, parent, TokenKind.ImportedDataSwitch);
 
             if (ContinueWith(result, TokenKind.Plus)) {
                 result.Mode = ImportGlobalUnitData.DoImport;
@@ -2092,7 +2190,8 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseExtendedSyntaxSwitch(IExtendableSyntaxPart parent) {
-            ExtSyntax result = CreateByTerminal<ExtSyntax>(parent, TokenKind.ExtendedSyntaxSwitch);
+            ExtSyntax result = new ExtSyntax();
+            InitByTerminal(result, parent, TokenKind.ExtendedSyntaxSwitch);
 
             if (ContinueWith(result, TokenKind.Plus)) {
                 result.Mode = ExtendedSyntax.UseExtendedSyntax;
@@ -2106,7 +2205,8 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseExtensionSwitch(IExtendableSyntaxPart parent) {
-            Extension result = CreateByTerminal<Extension>(parent, TokenKind.ExtensionSwitch);
+            Extension result = new Extension();
+            InitByTerminal(result, parent, TokenKind.ExtensionSwitch);
 
             if (ContinueWith(result, TokenKind.Identifier)) {
                 result.ExecutableExtension = result.LastTerminalValue;
@@ -2118,7 +2218,8 @@ namespace PasPasPas.Parsing.Parser {
 
         private void ParseDebugInfoOrDescriptionSwitch(IExtendableSyntaxPart parent) {
             if (LookAhead(1, TokenKind.Plus, TokenKind.Minus)) {
-                DebugInfoSwitch result = CreateByTerminal<DebugInfoSwitch>(parent, TokenKind.DebugInfoOrDescriptionSwitch);
+                DebugInfoSwitch result = new DebugInfoSwitch();
+                InitByTerminal(result, parent, TokenKind.DebugInfoOrDescriptionSwitch);
 
                 if (ContinueWith(result, TokenKind.Plus)) {
                     result.DebugInfo = DebugInformation.IncludeDebugInformation;
@@ -2128,18 +2229,21 @@ namespace PasPasPas.Parsing.Parser {
                 }
             }
             else if (LookAhead(1, TokenKind.QuotedString)) {
-                Description result = CreateByTerminal<Description>(parent, TokenKind.DebugInfoOrDescriptionSwitch);
+                Description result = new Description();
+                InitByTerminal(result, parent, TokenKind.DebugInfoOrDescriptionSwitch);
                 ContinueWith(result, TokenKind.QuotedString);
                 result.DescriptionValue = QuotedStringTokenValue.Unwrap(result.LastTerminalToken);
             }
             else {
-                DebugInfoSwitch result = CreateByTerminal<DebugInfoSwitch>(parent, TokenKind.DebugInfoOrDescriptionSwitch);
+                DebugInfoSwitch result = new DebugInfoSwitch();
+                InitByTerminal(result, parent, TokenKind.DebugInfoOrDescriptionSwitch);
                 ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidDebugInfoDirective, new[] { TokenKind.Plus, TokenKind.Minus, TokenKind.QuotedString });
             }
         }
 
         private void ParseAssertSwitch(IExtendableSyntaxPart parent) {
-            AssertSwitch result = CreateByTerminal<AssertSwitch>(parent, TokenKind.AssertSwitch);
+            AssertSwitch result = new AssertSwitch();
+            InitByTerminal(result, parent, TokenKind.AssertSwitch);
 
             if (ContinueWith(result, TokenKind.Plus)) {
                 result.Assertions = AssertionMode.EnableAssertions;
@@ -2153,7 +2257,8 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseBoolEvalSwitch(IExtendableSyntaxPart parent) {
-            BooleanEvaluationSwitch result = CreateByTerminal<BooleanEvaluationSwitch>(parent, TokenKind.BoolEvalSwitch);
+            BooleanEvaluationSwitch result = new BooleanEvaluationSwitch();
+            InitByTerminal(result, parent, TokenKind.BoolEvalSwitch);
 
             if (ContinueWith(result, TokenKind.Plus)) {
                 result.BoolEval = BooleanEvaluation.CompleteEvaluation;
@@ -2167,25 +2272,30 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private ISyntaxPart ParseAlignSwitch(IExtendableSyntaxPart parent) {
-            AlignSwitch result;
+            AlignSwitch result = new AlignSwitch();
 
-            if (OptionalPart(parent, out result, TokenKind.AlignSwitch1)) {
+            if (Match(TokenKind.AlignSwitch1)) {
+                InitByTerminal(result, parent, TokenKind.AlignSwitch1);
                 result.AlignValue = Alignment.Unaligned;
             }
-            else if (OptionalPart(parent, out result, TokenKind.AlignSwitch2)) {
+            else if (Match(TokenKind.AlignSwitch2)) {
+                InitByTerminal(result, parent, TokenKind.AlignSwitch2);
                 result.AlignValue = Alignment.Word;
             }
-            else if (OptionalPart(parent, out result, TokenKind.AlignSwitch4)) {
+            else if (Match(TokenKind.AlignSwitch4)) {
+                InitByTerminal(result, parent, TokenKind.AlignSwitch4);
                 result.AlignValue = Alignment.DoubleWord;
             }
-            else if (OptionalPart(parent, out result, TokenKind.AlignSwitch8)) {
+            else if (Match(TokenKind.AlignSwitch8)) {
+                InitByTerminal(result, parent, TokenKind.AlignSwitch8);
                 result.AlignValue = Alignment.QuadWord;
             }
-            else if (OptionalPart(parent, out result, TokenKind.AlignSwitch16)) {
+            else if (Match(TokenKind.AlignSwitch16)) {
+                InitByTerminal(result, parent, TokenKind.AlignSwitch16);
                 result.AlignValue = Alignment.DoubleQuadWord;
             }
             else {
-                result = CreateByTerminal<AlignSwitch>(parent, TokenKind.AlignSwitch);
+                InitByTerminal(result, parent, TokenKind.AlignSwitch);
 
                 if (ContinueWith(result, TokenKind.Plus)) {
                     result.AlignValue = Alignment.QuadWord;
@@ -2207,7 +2317,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <returns>parsed syntax tree</returns>
         public override ISyntaxPart Parse() {
             var kind = CurrentToken().Kind;
-            IExtendableSyntaxPart result = CreateChild<CompilerDirective>(null);
+            IExtendableSyntaxPart result = new CompilerDirective();
 
             if (switches.Contains(kind)) {
                 ParseSwitch(result);

@@ -6,10 +6,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     property accessor
     /// </summary>
     public class ClassPropertyReadWrite : StandardSyntaxTreeBase {
-        public ClassPropertyReadWrite(IExtendableSyntaxPart parent) {
-            Parent = parent;
-            parent?.Add(this);
-        }
 
         /// <summary>
         ///     accessor kind

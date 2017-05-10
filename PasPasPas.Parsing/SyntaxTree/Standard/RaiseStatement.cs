@@ -6,10 +6,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     raise statemenmt
     /// </summary>
     public class RaiseStatement : StandardSyntaxTreeBase {
-        public RaiseStatement(IExtendableSyntaxPart parent) {
-            Parent = parent;
-            parent?.Add(this);
-        }
 
         /// <summary>
         ///     at part

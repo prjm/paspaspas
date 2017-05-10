@@ -6,10 +6,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     simple pascal identifier
     /// </summary>
     public class Identifier : StandardSyntaxTreeBase {
-        public Identifier(IExtendableSyntaxPart parent) {
-            Parent = parent;
-            parent?.Add(this);
-        }
 
         /// <summary>
         ///     identifier value

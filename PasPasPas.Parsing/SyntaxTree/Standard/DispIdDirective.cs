@@ -6,10 +6,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     disp id directive
     /// </summary>
     public class DispIdDirective : StandardSyntaxTreeBase {
-        public DispIdDirective(IExtendableSyntaxPart parent) {
-            Parent = parent;
-            parent?.Add(this);
-        }
 
         /// <summary>
         ///     disp id expression

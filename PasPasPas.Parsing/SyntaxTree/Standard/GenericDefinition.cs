@@ -6,10 +6,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     generic definition
     /// </summary>
     public class GenericDefinition : StandardSyntaxTreeBase {
-        public GenericDefinition(IExtendableSyntaxPart parent) {
-            Parent = parent;
-            parent?.Add(this);
-        }
 
         /// <summary>
         ///     accept visitor
