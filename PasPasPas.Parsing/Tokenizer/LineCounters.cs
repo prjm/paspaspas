@@ -37,7 +37,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         private static void ProcessToken(Token token, LineCounter counter) {
             token.StartPosition = new TextFilePosition(counter.Line, counter.Column);
 
-            for (int index = 0; index < token.Value.Length; index++) {
+            for (var index = 0; index < token.Value.Length; index++) {
                 counter.ProcessChar(token.Value[index]);
             }
 

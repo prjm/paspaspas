@@ -1,4 +1,5 @@
 ﻿using PasPasPas.Infrastructure.Log;
+using PasPasPas.Parsing.SyntaxTree.Utils;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
 

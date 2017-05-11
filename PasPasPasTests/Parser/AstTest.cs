@@ -324,7 +324,7 @@ namespace PasPasPasTests.Parser {
 
         [Fact]
         public void TestVarDeclaration() {
-            Func<object, VariableDeclaration> f = t => ((t as CompilationUnit)?.ImplementationSymbols["x"]?.Parent as VariableDeclaration);
+            Func<object, VariableDeclaration> f = t => ((t as CompilationUnit)?.ImplementationSymbols["x"]?.ParentItem as VariableDeclaration);
 
             RunAstTest("unit z.x; interface implementation var x: string; end.", t => f(t)?.Names[0]?.Name.CompleteName, "x");
             RunAstTest("unit z.x; interface implementation var x: string; end.", t => f(t)?.Mode, DeclarationMode.Var);
@@ -349,7 +349,7 @@ namespace PasPasPasTests.Parser {
 
             RunAstTest("unit z.x; interface type function e(): string; implementation end.", t => f(t)?.TypeValue?.GetType(), typeof(MetaType));
             RunAstTest("unit z.x; interface type procedure e(e: string); implementation end.", t => f(t)?.Parameters["e"]?.Name?.CompleteName, "e");
-            RunAstTest("unit z.x; interface type procedure e(e: string); implementation end.", t => (f(t)?.Parameters["e"]?.Parent as ParameterTypeDefinition)?.TypeValue?.GetType(), typeof(MetaType));
+            RunAstTest("unit z.x; interface type procedure e(e: string); implementation end.", t => (f(t)?.Parameters["e"]?.ParentItem as ParameterTypeDefinition)?.TypeValue?.GetType(), typeof(MetaType));
 
             RunAstTest("unit z.x; interface type procedure e(e: string); overload; implementation end.", t => f(t)?.Directives[0]?.Kind, MethodDirectiveKind.Overload);
             RunAstTest("unit z.x; interface type procedure e(e: string); inline; implementation end.", t => f(t)?.Directives[0]?.Kind, MethodDirectiveKind.Inline);

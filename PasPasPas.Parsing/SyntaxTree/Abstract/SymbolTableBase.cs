@@ -6,6 +6,7 @@ using System.Collections.Specialized;
 using PasPasPas.Parsing.Parser;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Infrastructure.Utils;
+using PasPasPas.Parsing.SyntaxTree.Utils;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
 

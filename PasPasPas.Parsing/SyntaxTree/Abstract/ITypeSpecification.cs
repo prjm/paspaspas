@@ -1,4 +1,6 @@
-﻿namespace PasPasPas.Parsing.SyntaxTree.Abstract {
+﻿using PasPasPas.Parsing.SyntaxTree.Utils;
+
+namespace PasPasPas.Parsing.SyntaxTree.Abstract {
 
     /// <summary>
     ///     interface for type specifications

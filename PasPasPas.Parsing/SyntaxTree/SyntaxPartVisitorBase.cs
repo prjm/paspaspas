@@ -1,4 +1,6 @@
-﻿namespace PasPasPas.Parsing.SyntaxTree {
+﻿using PasPasPas.Parsing.SyntaxTree.Utils;
+
+namespace PasPasPas.Parsing.SyntaxTree {
 
     /// <summary>
     ///     base class for visitors

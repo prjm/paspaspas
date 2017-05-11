@@ -1,4 +1,4 @@
-﻿using PasPasPas.Parsing.SyntaxTree;
+﻿using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.Tokenizer;
 
 namespace PasPasPas.Parsing.Parser {

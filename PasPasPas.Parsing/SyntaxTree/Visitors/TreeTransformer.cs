@@ -7,6 +7,7 @@ using System;
 using System.Linq;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Infrastructure.Utils;
+using PasPasPas.Parsing.SyntaxTree.Utils;
 
 namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 

@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 
-namespace PasPasPas.Parsing.SyntaxTree {
+namespace PasPasPas.Parsing.SyntaxTree.Utils {
 
     /// <summary>
-    ///     basic interface for syntax tree elements
+    ///     common interface for syntax tree elements
     /// </summary>
     public interface ISyntaxPart {
 

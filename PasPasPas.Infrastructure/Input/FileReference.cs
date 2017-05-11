@@ -4,22 +4,25 @@ using PasPasPas.Infrastructure.Utils;
 namespace PasPasPas.Infrastructure.Input {
 
     /// <summary>
-    ///     a simple file reference
+    ///     Common way to reference files.
     /// </summary>
     public class FileReference : IFileReference {
 
         private readonly string filePath;
+        private readonly int hashcode;
 
         /// <summary>
         ///     create a new file reference
         /// </summary>
-        /// <param name="path">file path</param>
+        /// <param name="path">path to fhe file</param>
+        /// <exception cref="System.ArgumentException">Thrown if the path is empty</exception>
         public FileReference(string path) {
 
             if (string.IsNullOrWhiteSpace(path))
-                throw new ArgumentException(StringUtils.Invariant($"Invalid path {path}"), nameof(path));
+                throw new ArgumentException(StringUtils.Invariant($"Empty path {path}"), nameof(path));
 
             filePath = path;
+            hashcode = filePath.ToUpperInvariant().GetHashCode();
         }
 
         /// <summary>
@@ -29,7 +32,7 @@ namespace PasPasPas.Infrastructure.Input {
             => filePath;
 
         /// <summary>
-        ///     file name of the file
+        ///     name of the file (without path)
         /// </summary>
         public string FileName
             => System.IO.Path.GetFileName(filePath);
@@ -54,7 +57,7 @@ namespace PasPasPas.Infrastructure.Input {
         /// </summary>
         /// <returns></returns>
         public override int GetHashCode()
-            => filePath.ToUpperInvariant().GetHashCode();
+            => hashcode;
 
         /// <summary>
         ///     test for equality

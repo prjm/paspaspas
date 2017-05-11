@@ -16,6 +16,7 @@ using System.Windows.Controls;
 using System.ComponentModel;
 using System.Collections.Generic;
 using System.Resources;
+using PasPasPas.Parsing.SyntaxTree.Utils;
 
 namespace P3SyntaxTreeViewer {
 
@@ -55,11 +56,11 @@ namespace P3SyntaxTreeViewer {
                 ISyntaxPart cst = Parse(env, code);
                 var visitor = new TreeTransformer(new ProjectRoot()) { LogManager = (LogManager)env.Log };
 
-                cst.Accept(visitor.AsVisitor(), visitor.AsVisitor());
+                //cst.Accept(visitor.AsVisitor(), visitor.AsVisitor());
 
                 Dispatcher.Invoke(() => {
                     DisplayTree(StandardTreeView, cst);
-                    DisplayTree(AbstractTreeView, visitor.Project);
+                    //DisplayTree(AbstractTreeView, visitor.Project);
                     DisplayLog(listLog.Messages);
                 });
             });

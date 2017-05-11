@@ -4,6 +4,7 @@ using PasPasPas.Infrastructure.Log;
 using PasPasPas.Options.DataTypes;
 using PasPasPas.Parsing.Parser;
 using PasPasPas.Parsing.SyntaxTree.CompilerDirectives;
+using PasPasPas.Parsing.SyntaxTree.Utils;
 
 namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 

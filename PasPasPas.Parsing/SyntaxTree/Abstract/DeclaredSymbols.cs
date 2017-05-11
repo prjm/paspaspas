@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using PasPasPas.Infrastructure.Log;
+using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {

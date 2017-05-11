@@ -68,8 +68,10 @@ namespace ParserRunner {
             Console.WriteLine("Processor time: " + p.TotalProcessorTime);
             Console.WriteLine("Memory: " + p.WorkingSet64);
 
+
             foreach (var buildResult in result)
                 Console.WriteLine(buildResult.ToString());
+
 
 #endif
 

@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
+using PasPasPas.Parsing.SyntaxTree.Utils;
 
 namespace PasPasPasTests.Misc {
 

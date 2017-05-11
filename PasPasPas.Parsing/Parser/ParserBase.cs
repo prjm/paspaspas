@@ -6,6 +6,7 @@ using PasPasPas.Parsing.Tokenizer;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Parsing.SyntaxTree;
 using System.Linq;
+using PasPasPas.Parsing.SyntaxTree.Utils;
 
 namespace PasPasPas.Parsing.Parser {
 
@@ -117,17 +118,6 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="parent">parent syntax tree node</param>
         /// <returns></returns>
         protected void ErrorLastPart(IExtendableSyntaxPart parent, Guid message, params object[] values) {
-            ISyntaxPart lastSymbol = parent.Parts.Last();
-            parent.Remove(lastSymbol);
-            lastSymbol.ParentItem = null;
-
-            foreach (Terminal t in SyntaxPartBase.FindAllTerminals(lastSymbol)) {
-                var invalid = new InvalidToken(t.Token) {
-                    ParentItem = parent
-                };
-                parent.Add(invalid);
-            }
-
             logSource.Error(message, values);
         }
 
@@ -1029,8 +1019,8 @@ namespace PasPasPas.Parsing.Parser {
         /// </summary>
         /// <param name="parent"></param>
         /// <returns></returns>
-        protected InvalidToken CreateByError(IExtendableSyntaxPart parent) {
-            var invalid = new InvalidToken(CurrentToken()) {
+        protected Terminal CreateByError(IExtendableSyntaxPart parent) {
+            var invalid = new Terminal(CurrentToken()) {
                 ParentItem = parent
             };
             parent.Add(invalid);
