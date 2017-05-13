@@ -42,9 +42,8 @@ namespace P3SyntaxTreeViewer {
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void Button_Click(object sender, RoutedEventArgs e) {
-            UpdateTrees();
-        }
+        private void Button_Click(object sender, RoutedEventArgs e)
+            => UpdateTrees();
 
         private void UpdateTrees() {
             var code = Code.Text;
@@ -56,11 +55,11 @@ namespace P3SyntaxTreeViewer {
                 ISyntaxPart cst = Parse(env, code);
                 var visitor = new TreeTransformer(new ProjectRoot()) { LogManager = (LogManager)env.Log };
 
-                //cst.Accept(visitor.AsVisitor(), visitor.AsVisitor());
+                cst.Accept(visitor.AsVisitor(), visitor.AsVisitor());
 
                 Dispatcher.Invoke(() => {
                     DisplayTree(StandardTreeView, cst);
-                    //DisplayTree(AbstractTreeView, visitor.Project);
+                    DisplayTree(AbstractTreeView, visitor.Project);
                     DisplayLog(listLog.Messages);
                 });
             });
@@ -140,9 +139,8 @@ namespace P3SyntaxTreeViewer {
             return environment;
         }
 
-        private void Code_TextChanged(object sender, TextChangedEventArgs e) {
-            UpdateTrees();
-        }
+        private void Code_TextChanged(object sender, TextChangedEventArgs e)
+            => UpdateTrees();
     }
 
 

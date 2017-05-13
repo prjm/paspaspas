@@ -21,9 +21,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <remarks>used for string length / string codepage</remarks>
         public IExpression Value { get; set; }
 
-        private IList<GenericNameFragment> fragments
-                = new List<GenericNameFragment>();
-
         /// <summary>
         ///     parts
         /// </summary>
@@ -37,24 +34,29 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         }
 
         /// <summary>
+        ///     creates a new meta typedefinition
+        /// </summary>
+        public MetaType()
+            => Fragments = new SyntaxPartCollection<GenericNameFragment>(this);
+
+        /// <summary>
         ///     name fragements
         /// </summary>
-        public IList<GenericNameFragment> Fragments
-            => fragments;
+        public ISyntaxPartList<GenericNameFragment> Fragments;
 
         /// <summary>
         ///     add a afragment
         /// </summary>
         /// <param name="fragment"></param>
-        public void AddFragment(GenericNameFragment fragment) {
-            fragments.Add(fragment);
-        }
+        public void AddFragment(GenericNameFragment fragment)
+            => Fragments.Add(fragment);
 
         /// <summary>
         ///     convert a string type kind
         /// </summary>
         /// <param name="kind"></param>
         /// <returns></returns>
+        [System.Obsolete]
         public static MetaTypeKind ConvertKind(int kind) {
             switch (kind) {
                 case TokenKind.String:

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 
@@ -29,6 +31,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         /// <param name="kind"></param>
         /// <returns></returns>
+        [Obsolete]
         public static ExpressionKind ConvertKind(int kind) {
 
             switch (kind) {
@@ -114,18 +117,15 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     expression value
         /// </summary>
         public IExpression Value {
-            get {
-                if (RightOperand != null)
-                    return RightOperand;
-                else
-                    return LeftOperand;
-            }
+            get => RightOperand ?? LeftOperand;
 
             set {
                 if (LeftOperand == null)
                     LeftOperand = value;
                 else if (RightOperand == null)
                     RightOperand = value;
+                else
+                    ExceptionHelper.InvalidOperation();
             }
         }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree.Utils;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
@@ -22,28 +23,27 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     constant values
         /// </summary>
         public IExpression Value {
-            get {
-                return nameExpression ?? indexExpression;
-            }
+            get => nameExpression ?? indexExpression;
 
             set {
                 if (HasIndex && indexExpression == null)
                     indexExpression = value;
                 else if (HasName && nameExpression == null)
                     nameExpression = value;
-                else throw new InvalidOperationException();
+                else
+                    ExceptionHelper.InvalidOperation();
             }
         }
 
         /// <summary>
         ///     export has a name
         /// </summary>
-        public bool HasName { get; internal set; }
+        public bool HasName { get; set; }
 
         /// <summary>
         ///     export has an index
         /// </summary>
-        public bool HasIndex { get; internal set; }
+        public bool HasIndex { get; set; }
 
         /// <summary>
         ///     enumerate all parts

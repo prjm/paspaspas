@@ -22,13 +22,18 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     symbol hints
         /// </summary>
-        public SymbolHints Hints { get; internal set; }
+        public SymbolHints Hints { get; set; }
 
         /// <summary>
         ///     variable names
         /// </summary>
-        public IList<VariableName> Names { get; }
-            = new List<VariableName>();
+        public ISyntaxPartList<VariableName> Names { get; }
+
+        /// <summary>
+        ///     create a new variable declaration
+        /// </summary>
+        public VariableDeclaration()
+            => Names = new SyntaxPartCollection<VariableName>(this);
 
         /// <summary>
         ///     enumerate part

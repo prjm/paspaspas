@@ -7,7 +7,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// <summary>
     ///     reference to a symbol
     /// </summary>
-    public class SymbolReference : AbstractSyntaxPart, IExpression, ILabelTarget, ITypeTarget, IExpressionTarget {
+    public class SymbolReference : AbstractSyntaxPartBase, IExpression, ILabelTarget, ITypeTarget, IExpressionTarget {
 
         /// <summary>
         ///     identifier name
@@ -47,6 +47,22 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     parts
         /// </summary>
+        public SyntaxPartCollection<SymbolReferencePart> SymbolParts { get; }
+
+        /// <summary>
+        ///     name parameter
+        /// </summary>
+        public bool NamedParameter { get; set; }
+
+        /// <summary>
+        ///     create a a new symbol reference
+        /// </summary>
+        public SymbolReference()
+            => SymbolParts = new SyntaxPartCollection<SymbolReferencePart>(this);
+
+        /// <summary>
+        ///     parts
+        /// </summary>
         public override IEnumerable<ISyntaxPart> Parts {
             get {
                 if (TypeValue != null)
@@ -59,23 +75,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         }
 
         /// <summary>
-        ///     parts
-        /// </summary>
-        public IList<SymbolReferencePart> SymbolParts { get; }
-            = new List<SymbolReferencePart>();
-
-        /// <summary>
-        ///     name parameter
-        /// </summary>
-        public bool NamedParameter { get; set; }
-
-        /// <summary>
         ///     add a part
         /// </summary>
         /// <param name="part"></param>
-        public void AddPart(SymbolReferencePart part) {
-            SymbolParts.Add(part);
-        }
+        public void AddPart(SymbolReferencePart part)
+            => SymbolParts.Add(part);
 
         /// <summary>
         ///     accept visitor

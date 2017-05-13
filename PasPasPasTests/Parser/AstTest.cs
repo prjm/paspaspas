@@ -905,7 +905,7 @@ namespace PasPasPasTests.Parser {
             Func<object, RecordConstant> r = t => (((t as CompilationUnit)?.ImplementationSymbols["p"] as MethodImplementation)?.Symbols["n"] as ConstantDeclaration)?.Value as RecordConstant;
 
             RunAstTest("unit z.x; interface implementation procedure p; const n = (a: 1); begin l: s; end; end.", t => r(t)?.GetType(), typeof(RecordConstant));
-            RunAstTest("unit z.x; interface implementation procedure p; const n = (a: 1); begin l: s; end; end.", t => r(t)?.Items[0]?.Name?.CompleteName, "a");
+            RunAstTest("unit z.x; interface implementation procedure p; const n = (a: 1); begin l: s; end; end.", t => (r(t)?.Items[0] as RecordConstantItem)?.Name?.CompleteName, "a");
             RunAstTest("unit z.x; interface implementation procedure p; const n = (a: 1); begin l: s; end; end.", t => r(t)?.Items?.Count, 1);
         }
 

@@ -7,7 +7,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// <summary>
     ///     formal parameter definition
     /// </summary>
-    public class ParameterTypeDefinition : AbstractSyntaxPart, ITypeTarget {
+    public class ParameterTypeDefinition : AbstractSyntaxPartBase, ITypeTarget {
 
         /// <summary>
         ///     parameter type
@@ -17,8 +17,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     parameter definitions
         /// </summary>
-        public IList<ParameterDefinition> Parameters { get; }
-            = new List<ParameterDefinition>();
+        public ISyntaxPartList<ParameterDefinition> Parameters { get; }
+
+        /// <summary>
+        ///     creates a new set of parameter definitions
+        /// </summary>
+        public ParameterTypeDefinition()
+            => Parameters = new SyntaxPartCollection<ParameterDefinition>(this);
 
         /// <summary>
         ///     enumerate all parts

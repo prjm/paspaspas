@@ -7,7 +7,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// <summary>
     ///     part of a generic ame
     /// </summary>
-    public class GenericNameFragment : AbstractSyntaxPart, ITypeTarget {
+    public class GenericNameFragment : AbstractSyntaxPartBase, ITypeTarget {
 
         /// <summary>
         ///     symbol name
@@ -17,8 +17,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     symbol type
         /// </summary>
-        public IList<ITypeSpecification> TypeValues { get; }
-            = new List<ITypeSpecification>();
+        public ISyntaxPartList<ITypeSpecification> TypeValues { get; }
+
+        /// <summary>
+        ///     create a new generic name fragment
+        /// </summary>
+        public GenericNameFragment()
+            => TypeValues = new SyntaxPartCollection<ITypeSpecification>(this);
 
         /// <summary>
         ///     children
@@ -34,16 +39,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     type value
         /// </summary>
         public ITypeSpecification TypeValue {
-            get {
-                if (TypeValues.Count > 0)
-                    return TypeValues[TypeValues.Count - 1];
-                else
-                    return null;
-            }
-
-            set {
-                TypeValues.Add(value);
-            }
+            get => TypeValues.LastOrDefault();
+            set => TypeValues.Add(value);
         }
 
         /// <summary>

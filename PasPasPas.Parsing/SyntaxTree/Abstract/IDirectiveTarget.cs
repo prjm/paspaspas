@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using PasPasPas.Parsing.SyntaxTree.Utils;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
 
@@ -10,7 +10,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     directives
         /// </summary>
-        IList<MethodDirective> Directives { get; }
+        ISyntaxPartList<MethodDirective> Directives { get; }
 
         /// <summary>
         ///     hints

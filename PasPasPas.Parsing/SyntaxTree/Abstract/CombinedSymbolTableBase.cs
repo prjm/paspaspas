@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using PasPasPas.Parsing.SyntaxTree.Utils;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
 
@@ -8,14 +9,19 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// <typeparam name="TItems"></typeparam>
     /// <typeparam name="TSymbol"></typeparam>
     public abstract class CombinedSymbolTableBase<TItems, TSymbol> : SymbolTableBase<TSymbol>
-        where TItems : AbstractSyntaxPart
-        where TSymbol : AbstractSyntaxPart, ISymbolTableEntry {
+        where TItems : AbstractSyntaxPartBase
+        where TSymbol : AbstractSyntaxPartBase, ISymbolTableEntry {
 
         /// <summary>
         ///     list of items
         /// </summary>
-        public IList<TItems> Items { get; }
-            = new List<TItems>();
+        public ISyntaxPartList<TItems> Items { get; }
+
+        /// <summary>
+        ///     creates a new combined symbol table
+        /// </summary>
+        public CombinedSymbolTableBase()
+            => Items = new SyntaxPartCollection<TItems>(this);
 
     }
 }

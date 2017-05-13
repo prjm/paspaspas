@@ -21,6 +21,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     symbol name
         /// </summary>
+        [System.Obsolete]
         protected override string InternalSymbolName {
             get {
                 switch (Kind) {
@@ -39,6 +40,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     map a constraint kind
         /// </summary>
         /// <returns></returns>
+        [System.Obsolete]
         public static GenericConstraintKind MapKind(ConstrainedGeneric constraint) {
 
             if (constraint.RecordConstraint)

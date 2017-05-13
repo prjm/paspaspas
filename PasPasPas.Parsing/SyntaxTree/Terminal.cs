@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using PasPasPas.Parsing.SyntaxTree.Standard;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 using PasPasPas.Parsing.SyntaxTree.Utils;
+using PasPasPas.Infrastructure.Utils;
 
 namespace PasPasPas.Parsing.SyntaxTree {
 
@@ -31,7 +32,7 @@ namespace PasPasPas.Parsing.SyntaxTree {
         ///     empty part list
         /// </summary>
         public override IEnumerable<ISyntaxPart> Parts { get; }
-            = EmptyCollection<ISyntaxPart>.ReadOnlyInstance;
+            = new EmptyEnumerable<ISyntaxPart>();
 
         /// <summary>
         ///     token value

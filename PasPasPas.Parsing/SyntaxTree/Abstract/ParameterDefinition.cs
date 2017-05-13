@@ -11,7 +11,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     attributes
         /// </summary>
-        public IEnumerable<SymbolAttribute> Attributes { get; set; }
+        public IList<SymbolAttribute> Attributes { get; set; }
 
         /// <summary>
         ///     parameter name
@@ -34,6 +34,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         /// <param name="parameterType"></param>
         /// <returns></returns>
+        [System.Obsolete]
         public static ParameterReferenceKind MapKind(int parameterType) {
             switch (parameterType) {
                 case TokenKind.Const:

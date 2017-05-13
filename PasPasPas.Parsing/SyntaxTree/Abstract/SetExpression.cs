@@ -8,26 +8,26 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// <summary>
     ///     set expression
     /// </summary>
-    public class SetExpression : AbstractSyntaxPart, IExpression, IExpressionTarget {
+    public class SetExpression : AbstractSyntaxPartBase, IExpression, IExpressionTarget {
 
         /// <summary>
         ///     subexpressions
         /// </summary>
-        public IList<IExpression> Expressions { get; } =
-            new List<IExpression>();
+        public ISyntaxPartList<IExpression> Expressions { get; }
 
         /// <summary>
         ///     expression value
         /// </summary>
         public IExpression Value {
-            get {
-                return Expressions.LastOrDefault();
-            }
-
-            set {
-                Expressions.Add(value);
-            }
+            get => Expressions.LastOrDefault();
+            set => Expressions.Add(value);
         }
+
+        /// <summary>
+        ///     creates a new set expressio
+        /// </summary>
+        public SetExpression()
+            => Expressions = new SyntaxPartCollection<IExpression>(this);
 
         /// <summary>
         ///     enumerate parts

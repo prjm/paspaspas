@@ -55,11 +55,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     create a new compilation unit
         /// </summary>
-        public CompilationUnit() {
+        public CompilationUnit() =>
             RequiredUnits = new RequiredUnitNameList() {
                 ParentItem = this
             };
-        }
 
         /// <summary>
         ///     get all parts
@@ -82,12 +81,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         }
 
         /// <summary>
-        ///     assembly attributes
-        /// </summary>
-        public IEnumerable<SymbolAttribute> AssemblyAttributes
-            => assemblyAttributes;
-
-        /// <summary>
         ///     initialization
         /// </summary>
         public StatementBase InitializationBlock { get; set; }
@@ -100,7 +93,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     statements
         /// </summary>
-        public StatementBase Block { get { return InitializationBlock; } set { InitializationBlock = value; } }
+        public StatementBase Block {
+            get => InitializationBlock;
+            set => InitializationBlock = value;
+        }
 
         /// <summary>
         ///     declared symbols (wraps to intf. symbols and impl. symbols for units)
@@ -110,16 +106,15 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     list of assembly attributes
         /// </summary>
-        private IList<SymbolAttribute> assemblyAttributes
+        private IList<SymbolAttribute> AssemblyAttributes { get; }
             = new List<SymbolAttribute>();
 
         /// <summary>
         ///     add an assembly attribute
         /// </summary>
         /// <param name="assemblyAttribute"></param>
-        public void AddAssemblyAttribute(SymbolAttribute assemblyAttribute) {
-            assemblyAttributes.Add(assemblyAttribute);
-        }
+        public void AddAssemblyAttribute(SymbolAttribute assemblyAttribute)
+            => AssemblyAttributes.Add(assemblyAttribute);
 
         private int symbolNames = 0;
 

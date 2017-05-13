@@ -2,8 +2,6 @@
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.Specialized;
-using PasPasPas.Parsing.Parser;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree.Utils;
@@ -11,28 +9,24 @@ using PasPasPas.Parsing.SyntaxTree.Utils;
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
 
     /// <summary>
-    ///     base class for symbolic tables
+    ///     base class for symbol tables
     /// </summary>
     /// <typeparam name="T">symbol type</typeparam>
-    public abstract class SymbolTableBase<T> : AbstractSyntaxPart, ISymbolTable<T>, IReadOnlyList<T>
-        where T : class, ISymbolTableEntry {
+    public abstract class SymbolTableBase<T> :
+        AbstractSyntaxPartBase,
+        ISymbolTable<T>,
+        IReadOnlyList<T>
+        where T : class, ISymbolTableEntry, ISyntaxPart {
 
         /// <summary>
         ///     symbols
         /// </summary>
-        private Lazy<OrderedDictionary<string, T>> symbols;
+        private OrderedDictionary<string, T> symbols = null;
 
         /// <summary>
-        ///     create a new symbol table
+        ///     create symbol table
         /// </summary>
-        protected SymbolTableBase() {
-            symbols = new Lazy<OrderedDictionary<string, T>>(() => CreateSymbols());
-        }
-
-        /// <summary>
-        ///     create symbols
-        /// </summary>
-        /// <returns></returns>
+        /// <returns>symbol table</returns>
         protected virtual OrderedDictionary<string, T> CreateSymbols()
             => new OrderedDictionary<string, T>(StringComparer.OrdinalIgnoreCase);
 
@@ -44,9 +38,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <returns></returns>
         public bool Add(T entry, LogSource logSource) {
             var name = entry.SymbolName;
-            OrderedDictionary<string, T> symbolTable = symbols.Value;
+
+            if (symbols == null)
+                symbols = CreateSymbols();
+
             if (!Contains(name)) {
-                symbolTable.Add(name, entry);
+                symbols.Add(name, entry);
                 return true;
             }
 
@@ -60,7 +57,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
             if (replacement == null)
                 return false;
 
-            symbolTable[name] = replacement;
+            symbols[name] = replacement;
             return true;
         }
 
@@ -70,7 +67,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <param name="existingEntry">existing entry</param>
         /// <param name="entry">new entry</param>
         /// <returns></returns>
-        protected virtual T MergeDuplicates(T existingEntry, T entry) => default(T);
+        protected virtual T MergeDuplicates(T existingEntry, T entry)
+            => default(T);
 
         /// <summary>
         ///     check if duplicates are allowd
@@ -83,19 +81,16 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public bool Contains(string key) {
-            if (!symbols.IsValueCreated)
-                return false;
-            return symbols.Value.ContainsKey(key);
-        }
+        public bool Contains(string key)
+            => symbols == null ? false : symbols.ContainsKey(key);
 
         /// <summary>
         ///     parts
         /// </summary>
         public override IEnumerable<ISyntaxPart> Parts {
             get {
-                foreach (var value in symbols.Value.Values)
-                    yield return (ISyntaxPart)value;
+                foreach (T value in symbols.Values)
+                    yield return value;
             }
         }
 
@@ -103,7 +98,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     number of symbols
         /// </summary>
         public int Count
-            => symbols.IsValueCreated ? symbols.Value.Count : 0;
+            => symbols == null ? 0 : symbols.Count;
 
         /// <summary>
         ///     acces item by index
@@ -111,7 +106,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <param name="index"></param>
         /// <returns></returns>
         public T this[int index]
-            => ((T)symbols.Value[index]);
+            => symbols[index];
 
         /// <summary>
         ///     log duplicate symbol error
@@ -126,35 +121,26 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     get an enumerator
         /// </summary>
         /// <returns></returns>
-        public IEnumerator<T> GetEnumerator() {
-            if (symbols.IsValueCreated) {
-                return symbols.Value.Values.Cast<T>().GetEnumerator();
-            }
-            else {
-                return EmptyCollection<T>.Instance.GetEnumerator();
-            }
-        }
+        public IEnumerator<T> GetEnumerator()
+            => symbols != null ?
+                symbols.Values.GetEnumerator() :
+                new EmptyEnumerable<T>().GetEnumerator();
 
         /// <summary>
         ///     simple wrapper
         /// </summary>
         /// <returns></returns>
-        IEnumerator IEnumerable.GetEnumerator() {
-            if (symbols.IsValueCreated) {
-                return symbols.Value.Values.GetEnumerator();
-            }
-            else {
-                return EmptyCollection<object>.Instance.GetEnumerator();
-            }
-        }
+        IEnumerator IEnumerable.GetEnumerator()
+            => symbols != null ?
+                symbols.Values.GetEnumerator() :
+                new EmptyEnumerable<T>().GetEnumerator();
 
         /// <summary>
         ///     remove an entry
         /// </summary>
         /// <param name="result"></param>
         public void Remove(ISyntaxPart result) {
-            var entry = result as T;
-            if (entry != null)
+            if (result is T entry)
                 Remove(entry);
         }
 
@@ -163,16 +149,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         /// <param name="entry"></param>
         /// <returns></returns>
-        public bool Remove(T entry) {
-            var name = entry.SymbolName;
-
-            if (!symbols.Value.ContainsKey(name))
-                return false;
-            else {
-                symbols.Value.Remove(name);
-                return true;
-            }
-        }
+        public bool Remove(T entry)
+            => symbols.Remove(entry.SymbolName);
 
         /// <summary>
         ///     get a symbol by key
@@ -180,7 +158,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <param name="key"></param>
         /// <returns></returns>
         public T this[string key]
-            => (T)symbols.Value[key];
+            => symbols[key];
 
     }
 }

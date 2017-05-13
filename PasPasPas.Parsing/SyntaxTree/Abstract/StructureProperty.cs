@@ -65,8 +65,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     property accessors
         /// </summary>
-        public IList<StructurePropertyAccessor> Accessors { get; }
-            = new List<StructurePropertyAccessor>();
+        public ISyntaxPartList<StructurePropertyAccessor> Accessors { get; }
+
+        /// <summary>
+        ///     create a new property of a structured type
+        /// </summary>
+        public StructureProperty()
+            => Accessors = new SyntaxPartCollection<StructurePropertyAccessor>(this);
 
         /// <summary>
         ///     accept visitor

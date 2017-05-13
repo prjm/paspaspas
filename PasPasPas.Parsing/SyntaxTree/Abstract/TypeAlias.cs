@@ -9,22 +9,20 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// </summary>
     public class TypeAlias : TypeSpecificationBase {
 
-        private IList<GenericNameFragment> fragments
-                = new List<GenericNameFragment>();
-
         /// <summary>
         ///     name fragements
         /// </summary>
-        public IList<GenericNameFragment> Fragments
-            => fragments;
+        public ISyntaxPartList<GenericNameFragment> Fragments { get; }
+
+        public TypeAlias()
+            => Fragments = new SyntaxPartCollection<GenericNameFragment>(this);
 
         /// <summary>
         ///     add a afragment
         /// </summary>
         /// <param name="fragment"></param>
-        public void AddFragment(GenericNameFragment fragment) {
-            fragments.Add(fragment);
-        }
+        public void AddFragment(GenericNameFragment fragment)
+            => Fragments.Add(fragment);
 
         /// <summary>
         ///     <c>true</c> if the aliased type is considered as new type
@@ -36,7 +34,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         public override IEnumerable<ISyntaxPart> Parts {
             get {
-                foreach (GenericNameFragment fragment in fragments)
+                foreach (GenericNameFragment fragment in Fragments)
                     yield return fragment;
             }
         }

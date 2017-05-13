@@ -61,13 +61,8 @@ namespace PasPasPas.Parsing.Parser {
         ///     tokenizer to use
         /// </summary>        
         public ITokenizer BaseTokenizer {
-            get {
-                return tokenizer.BaseTokenizer;
-            }
-
-            set {
-                tokenizer.BaseTokenizer = value;
-            }
+            get => tokenizer.BaseTokenizer;
+            set => tokenizer.BaseTokenizer = value;
         }
 
         /// <summary>
@@ -117,9 +112,8 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="values">error values</param>
         /// <param name="parent">parent syntax tree node</param>
         /// <returns></returns>
-        protected void ErrorLastPart(IExtendableSyntaxPart parent, Guid message, params object[] values) {
-            logSource.Error(message, values);
-        }
+        protected void ErrorLastPart(IExtendableSyntaxPart parent, Guid message, params object[] values)
+            => logSource.Error(message, values);
 
         /// <summary>
         ///     Require a token kind
@@ -162,9 +156,8 @@ namespace PasPasPas.Parsing.Parser {
         /// <summary>
         ///     fetch the next token
         /// </summary>
-        protected void FetchNextToken() {
-            tokenizer.FetchNextToken();
-        }
+        protected void FetchNextToken()
+            => tokenizer.FetchNextToken();
 
         /// <summary>
         ///     look ahead a few tokens

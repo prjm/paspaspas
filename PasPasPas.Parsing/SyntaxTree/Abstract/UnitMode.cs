@@ -13,31 +13,31 @@
         /// <summary>
         ///     interface
         /// </summary>
-        Interface,
+        Interface = 1,
 
         /// <summary>
         ///     implementation
         /// </summary>
-        Implementation,
+        Implementation = 2,
 
         /// <summary>
         ///     package - requires
         /// </summary>
-        Contains,
+        Contains = 3,
 
         /// <summary>
         ///     package - contains
         /// </summary>
-        Requires,
+        Requires = 4,
 
         /// <summary>
         ///     program
         /// </summary>
-        Program,
+        Program = 5,
 
         /// <summary>
         ///     library
         /// </summary>
-        Library
+        Library = 6
     }
 }

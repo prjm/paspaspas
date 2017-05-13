@@ -7,7 +7,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// <summary>
     ///     item in a variant structure
     /// </summary>
-    public class StructureVariantItem : AbstractSyntaxPart, ITypeTarget {
+    public class StructureVariantItem : AbstractSyntaxPartBase, ITypeTarget {
 
         /// <summary>
         ///     variant name
@@ -17,14 +17,18 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     fields
         /// </summary>
-        public IList<StructureVariantFields> Items { get; }
-            = new List<StructureVariantFields>();
-
+        public ISyntaxPartList<StructureVariantFields> Items { get; }
 
         /// <summary>
         ///     type target
         /// </summary>
         public ITypeSpecification TypeValue { get; set; }
+
+        /// <summary>
+        ///     create a new variant item of a structure
+        /// </summary>
+        public StructureVariantItem() =>
+            Items = new SyntaxPartCollection<StructureVariantFields>(this);
 
         /// <summary>
         ///     parts

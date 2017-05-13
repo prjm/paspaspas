@@ -5,7 +5,6 @@
     /// </summary>
     public enum SymbolReferencePartKind {
 
-
         /// <summary>
         ///     unknown part
         /// </summary>

@@ -3,7 +3,7 @@
     /// <summary>
     ///     base class for a type specification
     /// </summary>
-    public abstract class TypeSpecificationBase : AbstractSyntaxPart, ITypeSpecification {
+    public abstract class TypeSpecificationBase : AbstractSyntaxPartBase, ITypeSpecification {
 
 
     }

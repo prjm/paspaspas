@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 
@@ -8,7 +7,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// <summary>
     ///     method specifiers
     /// </summary>
-    public class MethodDirectiveSpecifier : AbstractSyntaxPart, IExpressionTarget {
+    public class MethodDirectiveSpecifier : AbstractSyntaxPartBase, IExpressionTarget {
 
         /// <summary>
         ///     directive kind
@@ -18,20 +17,20 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     specified constraints
         /// </summary>
-        public IList<IExpression> Constraints { get; }
-            = new List<IExpression>();
+        public ISyntaxPartList<IExpression> Constraints { get; }
+
+        /// <summary>
+        ///     create a new method directive specifier
+        /// </summary>
+        public MethodDirectiveSpecifier()
+            => Constraints = new SyntaxPartCollection<IExpression>(this);
 
         /// <summary>
         ///     values
         /// </summary>
         public IExpression Value {
-            get {
-                return Constraints.LastOrDefault();
-            }
-
-            set {
-                Constraints.Add(value);
-            }
+            get => Constraints.LastOrDefault();
+            set => Constraints.Add(value);
         }
 
         /// <summary>
@@ -39,6 +38,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         /// <param name="kind"></param>
         /// <returns></returns>
+        [System.Obsolete]
         public static MethodDirectiveSpecifierKind MapKind(int kind) {
             switch (kind) {
 

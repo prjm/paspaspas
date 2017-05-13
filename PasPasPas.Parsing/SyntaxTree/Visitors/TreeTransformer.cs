@@ -138,9 +138,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         private Visitor visitor;
 
-        public IStartEndVisitor AsVisitor() {
-            return visitor;
-        }
+        public IStartEndVisitor AsVisitor()
+            => visitor;
 
         #region Unit
 
@@ -1374,7 +1373,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             ;
         }
 
-        private AbstractSyntaxPart EndVisitItem(ExportsSection exportsSection) {
+        private AbstractSyntaxPartBase EndVisitItem(ExportsSection exportsSection) {
             CurrentDeclarationMode = DeclarationMode.Unknown;
             return null; ;
         }
@@ -2347,7 +2346,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             return result;
         }
 
-        private GenericTypes ExtractGenericDefinition(AbstractSyntaxPart parent, GenericSuffix genericDefinition) {
+        private GenericTypes ExtractGenericDefinition(AbstractSyntaxPartBase parent, GenericSuffix genericDefinition) {
             if (genericDefinition == null)
                 return null;
 
@@ -2357,7 +2356,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             return result;
         }
 
-        private GenericTypes ExtractGenericDefinition(AbstractSyntaxPart parent, GenericDefinition genericDefinition) {
+        private GenericTypes ExtractGenericDefinition(AbstractSyntaxPartBase parent, GenericDefinition genericDefinition) {
             if (genericDefinition == null)
                 return null;
 
@@ -2427,7 +2426,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         private IList<SymbolAttribute> ExtractAttributes(UserAttributes attributes, CompilationUnit parentUnit, IList<SymbolAttribute> result = null) {
             if (attributes == null || attributes.PartList.Count < 1)
-                return EmptyCollection<SymbolAttribute>.Instance;
+                return new EmptyList<SymbolAttribute>();
 
             if (result == null)
                 result = new List<SymbolAttribute>();
@@ -2465,11 +2464,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             return AddNode<ChildType, NodeType>(node, LastValue, null);
         }
 
-        private ChildType AddNode<ChildType, NodeType>(NodeType node, AbstractSyntaxPart parent) where ChildType : ISyntaxPart, new() {
+        private ChildType AddNode<ChildType, NodeType>(NodeType node, AbstractSyntaxPartBase parent) where ChildType : ISyntaxPart, new() {
             return AddNode<ChildType, NodeType>(node, parent, null);
         }
 
-        private ChildType AddNode<ChildType, NodeType>(NodeType node, AbstractSyntaxPart parent, ISyntaxPart child) where ChildType : ISyntaxPart, new() {
+        private ChildType AddNode<ChildType, NodeType>(NodeType node, AbstractSyntaxPartBase parent, ISyntaxPart child) where ChildType : ISyntaxPart, new() {
             var result = new ChildType();
             result.ParentItem = parent;
             visitor.WorkingStack.Push(new WorkingStackEntry(node, result, child));
@@ -2490,8 +2489,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     tree states
         /// </summary>
-        private IDictionary<AbstractSyntaxPart, object> currentValues
-            = new Dictionary<AbstractSyntaxPart, object>();
+        private IDictionary<AbstractSyntaxPartBase, object> currentValues
+            = new Dictionary<AbstractSyntaxPartBase, object>();
 
         /// <summary>
         ///     log source
@@ -2529,12 +2528,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     current unit mode
         /// </summary>
-        public DictionaryIndexHelper<AbstractSyntaxPart, UnitMode> CurrentUnitMode { get; }
+        public DictionaryIndexHelper<AbstractSyntaxPartBase, UnitMode> CurrentUnitMode { get; }
 
         /// <summary>
         ///     currennt member visibility
         /// </summary>
-        public DictionaryIndexHelper<AbstractSyntaxPart, MemberVisibility> CurrentMemberVisibility { get; }
+        public DictionaryIndexHelper<AbstractSyntaxPartBase, MemberVisibility> CurrentMemberVisibility { get; }
 
         /// <summary>
         ///     const declaration mode
@@ -2559,8 +2558,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         public TreeTransformer(ProjectRoot projectRoot) {
             visitor = new ChildVisitor(this);
             Project = projectRoot;
-            CurrentUnitMode = new DictionaryIndexHelper<AbstractSyntaxPart, UnitMode>(currentValues);
-            CurrentMemberVisibility = new DictionaryIndexHelper<AbstractSyntaxPart, MemberVisibility>(currentValues);
+            CurrentUnitMode = new DictionaryIndexHelper<AbstractSyntaxPartBase, UnitMode>(currentValues);
+            CurrentMemberVisibility = new DictionaryIndexHelper<AbstractSyntaxPartBase, MemberVisibility>(currentValues);
         }
 
         /// <summary>
@@ -2584,16 +2583,16 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     last value from the working stack
         /// </summary>
-        public AbstractSyntaxPart LastValue {
+        public AbstractSyntaxPartBase LastValue {
             get {
                 if (visitor.WorkingStack.Count > 0)
-                    return visitor.WorkingStack.Peek().Data as AbstractSyntaxPart;
+                    return visitor.WorkingStack.Peek().Data as AbstractSyntaxPartBase;
                 else
                     return null;
             }
         }
 
-        private void AddToStack(object part, AbstractSyntaxPart result) {
+        private void AddToStack(object part, AbstractSyntaxPartBase result) {
             visitor.WorkingStack.Push(new WorkingStackEntry(part, result));
         }
 

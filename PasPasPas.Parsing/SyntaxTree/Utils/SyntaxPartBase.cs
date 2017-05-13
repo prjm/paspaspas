@@ -13,9 +13,8 @@ namespace PasPasPas.Parsing.SyntaxTree {
         /// <summary>
         ///     create a new syntax part base
         /// </summary>
-        protected SyntaxPartBase() {
-            //..
-        }
+        protected SyntaxPartBase() =>
+            parts = new SyntaxPartCollection<ISyntaxPart>(this);
 
         /// <summary>
         ///     parent node
@@ -28,13 +27,12 @@ namespace PasPasPas.Parsing.SyntaxTree {
         public virtual IEnumerable<ISyntaxPart> Parts
             => parts;
 
-        private List<ISyntaxPart> parts
-            = new List<ISyntaxPart>();
+        private readonly ISyntaxPartList<ISyntaxPart> parts;
 
         /// <summary>
-        ///     list of parts
+        ///     get the list of syntax parts
         /// </summary>
-        public IList<ISyntaxPart> PartList
+        public ISyntaxPartList<ISyntaxPart> PartList
             => parts;
 
         /// <summary>
@@ -44,7 +42,6 @@ namespace PasPasPas.Parsing.SyntaxTree {
             get {
                 if (parts.Count < 1)
                     return string.Empty;
-
 
                 var terminal = parts[parts.Count - 1] as Terminal;
 
@@ -109,7 +106,6 @@ namespace PasPasPas.Parsing.SyntaxTree {
             }
         }
 
-
         /// <summary>
         ///     find all terminals in a syntax gtree
         /// </summary>
@@ -127,17 +123,15 @@ namespace PasPasPas.Parsing.SyntaxTree {
         ///     add an iten
         /// </summary>
         /// <param name="newChildItem"></param>
-        public void Add(ISyntaxPart newChildItem) {
-            parts.Add(newChildItem);
-        }
+        public void Add(ISyntaxPart newChildItem)
+            => parts.Add(newChildItem);
 
         /// <summary>
         ///     remove an item
         /// </summary>
         /// <param name="lastSymbol"></param>
-        public void Remove(ISyntaxPart lastSymbol) {
-            parts.Remove(lastSymbol);
-        }
+        public void Remove(ISyntaxPart lastSymbol)
+            => parts.Remove(lastSymbol);
 
         /// <summary>
         ///     value of a terminal
@@ -165,9 +159,8 @@ namespace PasPasPas.Parsing.SyntaxTree {
                 return null;
         }
 
-        protected void AcceptParts<T>(T element, IStartVisitor startVisitor, IEndVisitor endVisitor) where T : class {
-            AcceptParts<T>(element, Parts, startVisitor, endVisitor);
-        }
+        protected void AcceptParts<T>(T element, IStartVisitor startVisitor, IEndVisitor endVisitor) where T : class
+            => AcceptParts<T>(element, Parts, startVisitor, endVisitor);
 
         public static void AcceptParts<T>(T element, IEnumerable<ISyntaxPart> parts, IStartVisitor startVisitor, IEndVisitor endVisitor) where T : class {
             var childVisitor = startVisitor as IChildVisitor;

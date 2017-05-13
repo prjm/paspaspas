@@ -9,12 +9,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// </summary>
     public class RecordConstant : ExpressionBase, IExpressionTarget {
 
-
         /// <summary>
         ///     items
         /// </summary>
-        public IList<RecordConstantItem> Items { get; }
-        = new List<RecordConstantItem>();
+        public ISyntaxPartList<IExpression> Items { get; }
 
         /// <summary>
         ///     constant array items
@@ -26,20 +24,15 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     record value
         /// </summary>
         public IExpression Value {
-
-            get {
-                if (Items.Count > 0)
-                    return Items[Items.Count - 1];
-                else
-                    return null;
-            }
-
-            set {
-                var item = value as RecordConstantItem;
-                if (item != null)
-                    Items.Add(item);
-            }
+            get => Items.LastOrDefault();
+            set => Items.Add(value);
         }
+
+        /// <summary>
+        ///     create a new record constant
+        /// </summary>
+        public RecordConstant()
+            => Items = new SyntaxPartCollection<IExpression>(this);
 
         /// <summary>
         ///     accept visitor

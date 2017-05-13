@@ -9,14 +9,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// </summary>
     public class SetConstant : ExpressionBase, IExpressionTarget {
 
-        /// <summary>
-        ///     items
-        /// </summary>
-        public IList<IExpression> Items
-            => items;
+        public ISyntaxPartList<IExpression> Items { get; }
 
-        private List<IExpression> items
-            = new List<IExpression>();
+        /// <summary>
+        ///     Create a new set constant
+        /// </summary>
+        public SetConstant()
+            => Items = new SyntaxPartCollection<IExpression>(this);
 
         /// <summary>
         ///     constant array items
@@ -28,17 +27,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     value
         /// </summary>
         public IExpression Value {
-            get {
-                if (items.Count > 0)
-                    return items[items.Count - 1];
-                else return null;
-            }
-
-            set {
-                if (value != null)
-                    items.Add(value);
-            }
+            get => Items.LastOrDefault();
+            set => Items.Add(value);
         }
+
 
         /// <summary>
         ///     accept visitor

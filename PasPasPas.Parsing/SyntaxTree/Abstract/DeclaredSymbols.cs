@@ -13,8 +13,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     direct items
         /// </summary>
-        public IList<DeclaredSymbol> DirectItems { get; } =
-            new List<DeclaredSymbol>();
+        public IList<DeclaredSymbol> DirectItems { get; }
+
+        /// <summary>
+        ///     create a new set of declared symbols
+        /// </summary>
+        public DeclaredSymbols() =>
+            DirectItems = new SyntaxPartCollection<DeclaredSymbol>(this);
 
         /// <summary>
         ///     log duplicated unit name
@@ -31,7 +36,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         public override IEnumerable<ISyntaxPart> Parts {
             get {
-                foreach (AbstractSyntaxPart part in Items)
+                foreach (AbstractSyntaxPartBase part in Items)
                     yield return part;
                 foreach (DeclaredSymbol part in DirectItems)
                     yield return part;

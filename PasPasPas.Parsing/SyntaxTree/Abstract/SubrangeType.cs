@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 
@@ -40,18 +41,15 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     expression value
         /// </summary>
         public IExpression Value {
-            get {
-                if (RangeEnd != null)
-                    return RangeEnd;
-                else
-                    return RangeStart;
-            }
+            get => RangeEnd != null ? RangeEnd : RangeStart;
 
             set {
                 if (RangeStart == null)
                     RangeStart = value;
                 else if (RangeEnd == null)
                     RangeEnd = value;
+                else
+                    ExceptionHelper.InvalidOperation();
             }
 
         }

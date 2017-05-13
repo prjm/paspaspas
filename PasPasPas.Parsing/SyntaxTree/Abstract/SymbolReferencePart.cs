@@ -8,7 +8,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// <summary>
     ///     part of complex symbol references
     /// </summary>
-    public class SymbolReferencePart : AbstractSyntaxPart, IExpressionTarget {
+    public class SymbolReferencePart : AbstractSyntaxPartBase, IExpressionTarget {
 
         /// <summary>
         ///     reference kind
@@ -18,30 +18,30 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     generic part
         /// </summary>
-        public GenericTypes GenericType { get; internal set; }
+        public GenericTypes GenericType { get; set; }
 
         /// <summary>
         ///     symbol name
         /// </summary>
-        public SymbolName Name { get; internal set; }
+        public SymbolName Name { get; set; }
 
         /// <summary>
         ///     expressions
         /// </summary>
-        public IList<IExpression> Expressions { get; }
-            = new List<IExpression>();
+        public ISyntaxPartList<IExpression> Expressions { get; }
 
         /// <summary>
-        ///     expressiona
+        ///     create a new symbol reference part
+        /// </summary>
+        public SymbolReferencePart()
+            => Expressions = new SyntaxPartCollection<IExpression>(this);
+
+        /// <summary>
+        ///     expression value
         /// </summary>
         public IExpression Value {
-            get {
-                return Expressions.LastOrDefault();
-            }
-
-            set {
-                Expressions.Add(value);
-            }
+            get => Expressions.LastOrDefault();
+            set => Expressions.Add(value);
         }
 
         /// <summary>

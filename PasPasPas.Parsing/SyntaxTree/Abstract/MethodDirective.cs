@@ -7,7 +7,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// <summary>
     ///     method directive
     /// </summary>
-    public class MethodDirective : AbstractSyntaxPart, IExpressionTarget {
+    public class MethodDirective : AbstractSyntaxPartBase, IExpressionTarget {
 
         /// <summary>
         ///     kind
@@ -22,8 +22,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     directive specifiers
         /// </summary>
-        public IList<MethodDirectiveSpecifier> Specifiers { get; } =
-            new List<MethodDirectiveSpecifier>();
+        public ISyntaxPartList<MethodDirectiveSpecifier> Specifiers { get; }
+
+        /// <summary>
+        ///     create a new method directive
+        /// </summary>
+        public MethodDirective()
+            => Specifiers = new SyntaxPartCollection<MethodDirectiveSpecifier>(this);
 
         /// <summary>
         ///     enumerate parts

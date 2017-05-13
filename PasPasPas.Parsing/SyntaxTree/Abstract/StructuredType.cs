@@ -19,8 +19,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     list of base types
         /// </summary>
-        public IList<ITypeSpecification> BaseTypes { get; }
-            = new List<ITypeSpecification>();
+        public ISyntaxPartList<ITypeSpecification> BaseTypes { get; }
 
         /// <summary>
         ///     fields
@@ -53,16 +52,17 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
             = new StructureVariant();
 
         /// <summary>
+        ///     creates a new structured type
+        /// </summary>
+        public StructuredType()
+            => BaseTypes = new SyntaxPartCollection<ITypeSpecification>(this);
+
+        /// <summary>
         ///     base type values
         /// </summary>
         public ITypeSpecification TypeValue {
-            get {
-                return BaseTypes.LastOrDefault();
-            }
-
-            set {
-                BaseTypes.Add(value);
-            }
+            get => BaseTypes.LastOrDefault();
+            set => BaseTypes.Add(value);
         }
 
         /// <summary>
@@ -105,12 +105,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     guid id (for interfaces)
         /// </summary>
-        public string GuidId { get; internal set; }
+        public string GuidId { get; set; }
 
         /// <summary>
         ///     guid name (for interfaces)
         /// </summary>
-        public SymbolName GuidName { get; internal set; }
+        public SymbolName GuidName { get; set; }
 
         /// <summary>
         ///     map visilibity
@@ -118,6 +118,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <param name="visibility"></param>
         /// <param name="strict"></param>
         /// <returns></returns>
+        [System.Obsolete]
         public static MemberVisibility MapVisibility(int visibility, bool strict) {
 
             switch (visibility) {

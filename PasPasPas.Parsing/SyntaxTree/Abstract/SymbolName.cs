@@ -46,9 +46,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     create a simple symbol name
         /// </summary>
         /// <param name="name">symbol name</param>
-        public SimpleSymbolName(string name) {
-            this.name = name;
-        }
+        public SimpleSymbolName(string name)
+            => this.name = name;
 
         /// <summary>
         ///     complete name
@@ -200,11 +199,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     add a name
         /// </summary>
         /// <param name="namePart"></param>
-        public void AddName(string namePart) {
-            parts.Add(new GenericSymbolNamePart(namePart));
-        }
+        public void AddName(string namePart)
+            => parts.Add(new GenericSymbolNamePart(namePart));
 
-        internal void AddGenericPart(string genericPart) {
+        /// <summary>
+        ///     add a generic part
+        /// </summary>
+        /// <param name="genericPart">part to add</param>
+        public void AddGenericPart(string genericPart) {
             GenericSymbolNamePart lastPart = parts.Last();
             lastPart.AddParameter(genericPart);
         }

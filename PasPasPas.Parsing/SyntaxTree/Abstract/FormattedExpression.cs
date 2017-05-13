@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 
@@ -8,26 +7,26 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// <summary>
     ///     formatted expression
     /// </summary>
-    public class FormattedExpression : AbstractSyntaxPart, IExpressionTarget, IExpression {
+    public class FormattedExpression : AbstractSyntaxPartBase, IExpressionTarget, IExpression {
 
         /// <summary>
         ///     expressions
         /// </summary>
-        public IList<IExpression> Expressions { get; }
-            = new List<IExpression>();
+        public ISyntaxPartList<IExpression> Expressions { get; }
 
         /// <summary>
         ///     expressiona
         /// </summary>
         public IExpression Value {
-            get {
-                return Expressions.LastOrDefault();
-            }
-
-            set {
-                Expressions.Add(value);
-            }
+            get => Expressions.LastOrDefault();
+            set => Expressions.Add(value);
         }
+
+        /// <summary>
+        ///     create a new formatted expression
+        /// </summary>
+        public FormattedExpression()
+            => Expressions = new SyntaxPartCollection<IExpression>(this);
 
         /// <summary>
         ///     parts

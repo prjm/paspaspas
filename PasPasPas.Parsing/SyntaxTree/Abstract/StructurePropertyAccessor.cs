@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 
@@ -7,7 +8,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// <summary>
     ///     property accessor kind
     /// </summary>
-    public class StructurePropertyAccessor : AbstractSyntaxPart, IExpressionTarget {
+    public class StructurePropertyAccessor : AbstractSyntaxPartBase, IExpressionTarget {
 
         /// <summary>
         ///     accessor kind
@@ -29,6 +30,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         /// <param name="kind"></param>
         /// <returns>mapped kind</returns>
+        [Obsolete]
         public static StructurePropertyAccessorKind MapKind(int kind) {
 
             switch (kind) {

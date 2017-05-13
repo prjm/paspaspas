@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
@@ -6,24 +7,22 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// <summary>
     ///     method resolutions
     /// </summary>
-    public class StructureMethodResolutionDefinition : AbstractSyntaxPart {
+    public class StructureMethodResolutionDefinition : AbstractSyntaxPartBase {
 
-        private IList<StructureMethodResolution> resolutions
-               = new List<StructureMethodResolution>();
+        public ISyntaxPartList<StructureMethodResolution> Resolutions { get; }
 
         /// <summary>
-        ///     resolutions
+        ///     create a new method resolution definition of a structured type
         /// </summary>
-        public IList<StructureMethodResolution> Resolutions
-            => resolutions;
+        public StructureMethodResolutionDefinition()
+            => Resolutions = new SyntaxPartCollection<StructureMethodResolution>(this);
 
         /// <summary>
         ///     add a method resolution
         /// </summary>
         /// <param name="result"></param>
-        public void Add(StructureMethodResolution result) {
-            resolutions.Add(result);
-        }
+        public void Add(StructureMethodResolution result)
+            => Resolutions.Add(result);
 
         /// <summary>
         ///     accept visitor

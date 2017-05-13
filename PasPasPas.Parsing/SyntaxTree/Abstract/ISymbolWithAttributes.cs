@@ -10,6 +10,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     availiable attributes
         /// </summary>
+        [System.Obsolete]
         IEnumerable<SymbolAttribute> Attributes { get; set; }
 
     }

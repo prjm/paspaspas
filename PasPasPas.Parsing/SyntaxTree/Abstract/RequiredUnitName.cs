@@ -7,7 +7,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// </summary>
     public class RequiredUnitName : SymbolTableEntryBase {
 
-
         /// <summary>
         ///     symbol name
         /// </summary>

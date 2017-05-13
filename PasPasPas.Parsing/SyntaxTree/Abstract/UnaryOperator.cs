@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
@@ -36,6 +35,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
+        [Obsolete]
         public static ExpressionKind MapKind(string value) {
 
             if (string.IsNullOrWhiteSpace(value))

@@ -13,8 +13,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     expressions
         /// </summary>
-        public IList<IExpression> Expressions { get; }
-            = new List<IExpression>();
+        public ISyntaxPartList<IExpression> Expressions { get; }
 
         /// <summary>
         ///     statement kind
@@ -25,14 +24,15 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     expressions
         /// </summary>
         public IExpression Value {
-            get {
-                return Expressions.LastOrDefault();
-            }
-
-            set {
-                Expressions.Add(value);
-            }
+            get => Expressions.LastOrDefault();
+            set => Expressions.Add(value);
         }
+
+        /// <summary>
+        ///     create a new structured statement
+        /// </summary>
+        public StructuredStatement()
+            => Expressions = new SyntaxPartCollection<IExpression>(this);
 
         /// <summary>
         ///     parts

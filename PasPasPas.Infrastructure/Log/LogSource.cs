@@ -44,31 +44,27 @@ namespace PasPasPas.Infrastructure.Log {
         /// </summary>
         /// <param name="id">message id</param>
         /// <param name="data">message parameters</param>
-        public void Error(Guid id, params object[] data) {
-            MessageForGuid(MessageSeverity.Error, id, data);
-        }
+        public void Error(Guid id, params object[] data)
+            => MessageForGuid(MessageSeverity.Error, id, data);
 
         /// <summary>
         ///     generate an warning message
         /// </summary>
         /// <param name="id">message id</param>
         /// <param name="data">message parameters</param>
-        public void Warning(Guid id, params object[] data) {
-            MessageForGuid(MessageSeverity.Warning, id, data);
-        }
+        public void Warning(Guid id, params object[] data)
+            => MessageForGuid(MessageSeverity.Warning, id, data);
 
         /// <summary>
         ///     generate an information message
         /// </summary>
         /// <param name="id">message id</param>
         /// <param name="data">message parameters</param>
-        public void Information(Guid id, params object[] data) {
-            MessageForGuid(MessageSeverity.Information, id, data);
-        }
+        public void Information(Guid id, params object[] data)
+            => MessageForGuid(MessageSeverity.Information, id, data);
 
-        private void MessageForGuid(MessageSeverity severity, Guid id, object[] data) {
-            ProcessMessage(new LogMessage(severity, group, id, data));
-        }
+        private void MessageForGuid(MessageSeverity severity, Guid id, object[] data)
+            => ProcessMessage(new LogMessage(severity, group, id, data));
 
     }
 }

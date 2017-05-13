@@ -12,9 +12,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     contained statements
         /// </summary>
-        public IList<StatementBase> Statements { get; }
-            = new List<StatementBase>();
+        public ISyntaxPartList<StatementBase> Statements { get; }
 
+        /// <summary>
+        ///     creates a ew block of statements
+        /// </summary>
+        public BlockOfStatements()
+            => Statements = new SyntaxPartCollection<StatementBase>(this);
 
         /// <summary>
         ///     add a statement
@@ -35,6 +39,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         }
 
 
+        /// <summary>
+        ///     get all statements
+        /// </summary>
         BlockOfStatements IStatementTarget.Statements
             => this;
 

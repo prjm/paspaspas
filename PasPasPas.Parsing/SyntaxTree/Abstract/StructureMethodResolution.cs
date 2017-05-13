@@ -7,7 +7,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// <summary>
     ///     method resolution
     /// </summary>
-    public class StructureMethodResolution : AbstractSyntaxPart, ITypeTarget {
+    public class StructureMethodResolution : AbstractSyntaxPartBase, ITypeTarget {
 
         /// <summary>
         ///     type value
@@ -45,6 +45,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         /// <param name="kind"></param>
         /// <returns></returns>
+        [System.Obsolete]
         public static StructureMethodResolutionKind MapKind(int kind) {
             switch (kind) {
                 case TokenKind.Function:

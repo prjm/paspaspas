@@ -29,6 +29,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         /// <param name="methodKind"></param>
         /// <returns></returns>
+        [System.Obsolete]
         public static ProcedureKind MapKind(int methodKind) {
             switch (methodKind) {
                 case TokenKind.Function:
@@ -57,6 +58,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         public IList<SymbolAttribute> Attributes { get; set; }
 
         /// <summary>
+        ///     creates a new method declaration
+        /// </summary>
+        public MethodDeclaration() {
+            Directives = new SyntaxPartCollection<MethodDirective>(this);
+            Parameters = new ParameterDefinitions() { ParentItem = this };
+        }
+
+        /// <summary>
         ///     parts
         /// </summary>
         public override IEnumerable<ISyntaxPart> Parts {
@@ -73,8 +82,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     directives
         /// </summary>
-        public IList<MethodDirective> Directives { get; }
-            = new List<MethodDirective>();
+        public ISyntaxPartList<MethodDirective> Directives { get; }
 
         /// <summary>
         ///     symbol hints

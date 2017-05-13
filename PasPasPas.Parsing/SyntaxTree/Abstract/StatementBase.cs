@@ -3,7 +3,7 @@
     /// <summary>
     ///     base class for statements
     /// </summary>
-    public abstract class StatementBase : AbstractSyntaxPart {
+    public abstract class StatementBase : AbstractSyntaxPartBase {
 
 
         /// <summary>

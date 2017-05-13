@@ -8,26 +8,32 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// <summary>
     ///     list of variant
     /// </summary>
-    public class StructureVariantFields : AbstractSyntaxPart, IExpressionTarget {
+    public class StructureVariantFields : AbstractSyntaxPartBase, IExpressionTarget {
 
         /// <summary>
         ///     matching expression for record constants
         /// </summary>
-        public IList<IExpression> Expressions { get; }
-            = new List<IExpression>();
+        public ISyntaxPartList<IExpression> Expressions { get; }
 
         /// <summary>
         ///     fields
         /// </summary>
-        public IList<StructureFields> Fields { get; }
-            = new List<StructureFields>();
+        public ISyntaxPartList<StructureFields> Fields { get; }
 
         /// <summary>
         ///     expression values
         /// </summary>
         public IExpression Value {
-            get { return Expressions.Last(); }
-            set { Expressions.Add(value); }
+            get => Expressions.LastOrDefault();
+            set => Expressions.Add(value);
+        }
+
+        /// <summary>
+        ///     create a new set of structure variant fields
+        /// </summary>
+        public StructureVariantFields() {
+            Expressions = new SyntaxPartCollection<IExpression>(this);
+            Fields = new SyntaxPartCollection<StructureFields>(this);
         }
 
         /// <summary>

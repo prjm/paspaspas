@@ -6,7 +6,7 @@
     public interface ISymbolTableEntry {
 
         /// <summary>
-        ///     get the name of the symbol
+        ///     symbol name
         /// </summary>
         string SymbolName { get; }
 

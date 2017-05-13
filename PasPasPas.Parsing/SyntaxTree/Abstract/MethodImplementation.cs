@@ -21,6 +21,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         public ProcedureKind Kind { get; set; }
 
         /// <summary>
+        ///     create a new method implementation
+        /// </summary>
+        public MethodImplementation()
+            => Directives = new SyntaxPartCollection<MethodDirective>(this);
+
+        /// <summary>
         ///     statements
         /// </summary>
         public override IEnumerable<ISyntaxPart> Parts {
@@ -46,8 +52,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     directives
         /// </summary>
-        public IList<MethodDirective> Directives { get; }
-            = new List<MethodDirective>();
+        public ISyntaxPartList<MethodDirective> Directives { get; }
 
         /// <summary>
         ///     hints

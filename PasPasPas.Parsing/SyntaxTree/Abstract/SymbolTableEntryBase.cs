@@ -3,7 +3,7 @@
     /// <summary>
     ///     base class for symbol table entries
     /// </summary>
-    public abstract class SymbolTableEntryBase : AbstractSyntaxPart, ISymbolTableEntry {
+    public abstract class SymbolTableEntryBase : AbstractSyntaxPartBase, ISymbolTableEntry {
 
         /// <summary>
         ///     name of the symbol

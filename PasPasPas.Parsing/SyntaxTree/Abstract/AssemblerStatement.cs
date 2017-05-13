@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 
@@ -8,7 +7,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// <summary>
     ///     assembler statement
     /// </summary>
-    public class AssemblerStatement : AbstractSyntaxPart, ILabelTarget, IExpressionTarget {
+    public class AssemblerStatement : AbstractSyntaxPartBase, ILabelTarget, IExpressionTarget {
 
         /// <summary>
         ///     kind of the assembler statement
@@ -18,7 +17,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     operand code
         /// </summary>
-        public SymbolName OpCode { get; internal set; }
+        public SymbolName OpCode { get; set; }
 
         /// <summary>
         ///     statement label
@@ -28,30 +27,30 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     lock prefix
         /// </summary>
-        public SymbolName LockPrefix { get; internal set; }
+        public SymbolName LockPrefix { get; set; }
 
         /// <summary>
         ///     segment prefix
         /// </summary>
-        public SymbolName SegmentPrefix { get; internal set; }
+        public SymbolName SegmentPrefix { get; set; }
 
         /// <summary>
         ///     operands
         /// </summary>
-        public IList<IExpression> Operands { get; }
-            = new List<IExpression>();
+        public ISyntaxPartList<IExpression> Operands { get; }
+
+        /// <summary>
+        ///     create a new assembler statement
+        /// </summary>
+        public AssemblerStatement()
+            => Operands = new SyntaxPartCollection<IExpression>(this);
 
         /// <summary>
         ///     operands
         /// </summary>
         public IExpression Value {
-            get {
-                return Operands.LastOrDefault();
-            }
-
-            set {
-                Operands.Add(value);
-            }
+            get => Operands.LastOrDefault();
+            set => Operands.Add(value);
         }
 
         /// <summary>
