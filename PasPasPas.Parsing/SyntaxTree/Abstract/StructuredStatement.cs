@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 using PasPasPas.Parsing.SyntaxTree.Utils;
 
@@ -8,7 +7,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// <summary>
     ///     structured statement
     /// </summary>
-    public class StructuredStatement : StatementBase, IExpressionTarget, IStatementTarget, ILabelTarget {
+    public class StructuredStatement : StatementBase, IExpressionTarget, IStatementTarget, ILabelTarget, ITypeTarget {
 
         /// <summary>
         ///     expressions
@@ -31,8 +30,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     create a new structured statement
         /// </summary>
-        public StructuredStatement()
-            => Expressions = new SyntaxPartCollection<IExpression>(this);
+        public StructuredStatement() {
+            Expressions = new SyntaxPartCollection<IExpression>(this);
+            Statements = new BlockOfStatements();
+        }
 
         /// <summary>
         ///     parts
@@ -55,6 +56,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     name
         /// </summary>
         public SymbolName Name { get; set; }
+
+        /// <summary>
+        ///     type value
+        /// </summary>
+        public ITypeSpecification TypeValue { get; set; }
 
         /// <summary>
         ///     accept visitor

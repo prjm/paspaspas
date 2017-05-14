@@ -24,7 +24,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         }
 
         /// <summary>
-        ///     creates a new set expressio
+        ///     creates a new set expression
         /// </summary>
         public SetExpression()
             => Expressions = new SyntaxPartCollection<IExpression>(this);

@@ -29,7 +29,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         public WorkingStackEntry(object definingNode, ISyntaxPart createdNote, ISyntaxPart childNode) {
             node = definingNode;
             data = createdNote;
-            child = ChildNode;
+            child = childNode;
         }
 
         /// <summary>

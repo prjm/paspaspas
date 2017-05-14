@@ -116,7 +116,7 @@ namespace PasPasPas.Parsing.Parser {
         ///     parse input
         /// </summary>
         public override ISyntaxPart Parse()
-            => ParseFile(null);
+            => ParseFile();
 
         #endregion
         #region ParseFile
@@ -127,27 +127,26 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="parent"></param>
         /// <returns></returns>
         [Rule("File", "Program | Library | Unit | Package")]
-        public ISyntaxPart ParseFile(IExtendableSyntaxPart parent) {
+        public ISyntaxPart ParseFile() {
             if (Match(TokenKind.Library)) {
-                return ParseLibrary(parent);
+                return ParseLibrary();
             }
             else if (Match(TokenKind.Unit)) {
-                return ParseUnit(parent);
+                return ParseUnit();
             }
             else if (Match(TokenKind.Package)) {
-                return ParsePackage(parent);
+                return ParsePackage();
             }
 
-            return ParseProgram(parent);
+            return ParseProgram();
         }
 
         #endregion
         #region ParseUnit
 
         [Rule("Unit", "UnitHead UnitInterface UnitImplementation UnitBlock '.' ")]
-        private Unit ParseUnit(IExtendableSyntaxPart parent) {
+        private Unit ParseUnit() {
             var result = new Unit();
-            parent?.Add(result);
             result.UnitHead = ParseUnitHead(result);
             result.UnitInterface = ParseUnitInterface(result);
             result.UnitImplementation = ParseUnitImplementation(result);
@@ -946,9 +945,8 @@ namespace PasPasPas.Parsing.Parser {
         #region ParsePackage
 
         [Rule("Package", "PackageHead RequiresClause [ ContainsClause ] 'end' '.' ")]
-        private Package ParsePackage(IExtendableSyntaxPart parent) {
+        private Package ParsePackage() {
             var result = new Package();
-            parent?.Add(result);
             result.PackageHead = ParsePackageHead(result);
             result.RequiresClause = ParseRequiresClause(result);
 
@@ -1016,9 +1014,8 @@ namespace PasPasPas.Parsing.Parser {
         #region ParseLibrary
 
         [Rule("Library", "LibraryHead [UsesFileClause] Block '.' ")]
-        private Library ParseLibrary(IExtendableSyntaxPart parent) {
+        private Library ParseLibrary() {
             var result = new Library();
-            parent?.Add(result);
             result.LibraryHead = ParseLibraryHead(result);
 
             if (Match(TokenKind.Uses))
@@ -1046,9 +1043,8 @@ namespace PasPasPas.Parsing.Parser {
         #region ParseProgram
 
         [Rule("Program", "[ProgramHead] [UsesFileClause] Block '.'")]
-        private Program ParseProgram(IExtendableSyntaxPart parent) {
+        private Program ParseProgram() {
             var result = new Program();
-            parent.Add(result);
 
             if (Match(TokenKind.Program))
                 result.ProgramHead = ParseProgramHead(result);

@@ -89,8 +89,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         public override IEnumerable<ISyntaxPart> Parts {
             get {
-                foreach (T value in symbols.Values)
-                    yield return value;
+                if (symbols != null)
+                    foreach (T value in symbols.Values)
+                        yield return value;
             }
         }
 

@@ -1,10 +1,8 @@
 ﻿using System.Collections.Generic;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Parsing.SyntaxTree.Standard;
-using PasPasPas.Parsing.Parser;
 using PasPasPas.Parsing.Tokenizer;
 using System;
-using System.Linq;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree.Utils;
@@ -1433,7 +1431,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             IList<StructureFields> fields = null;
 
             if (LastValue is StructureVariantFields) {
-                structType = LastValue.ParentItem?.ParentItem as StructuredType;
+                structType = LastValue.ParentItem?.ParentItem?.ParentItem as StructuredType;
                 varFields = structType.Variants;
                 fields = (LastValue as StructureVariantFields)?.Fields;
             }
@@ -1476,6 +1474,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
                 result.Fields.Add(fieldName);
                 extractedAttributes = null;
+                visitor.WorkingStack.Pop();
+
             }
 
             result.Hints = ExtractHints(fieldDeclaration.Hint);
@@ -2181,7 +2181,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             IExpressionTarget lastExpression = LastExpression;
             SetExpression result = AddNode<SetExpression, SetSection>(expr);
             lastExpression.Value = result;
-
         }
 
         #endregion

@@ -25,37 +25,38 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     fields
         /// </summary>
         public StructureFieldDefinition Fields { get; }
-            = new StructureFieldDefinition();
 
         /// <summary>
         ///     methods
         /// </summary>
         public StructureMethodDefinition Methods { get; }
-            = new StructureMethodDefinition();
 
         /// <summary>
         ///     method resolutions
         /// </summary>
         public StructureMethodResolutionDefinition MethodResolutions { get; }
-            = new StructureMethodResolutionDefinition();
 
         /// <summary>
         ///     properties
         /// </summary>
         public StructurePropertyDefinition Properties { get; }
-            = new StructurePropertyDefinition();
 
         /// <summary>
         ///     variant parts
         /// </summary>
         public StructureVariant Variants { get; }
-            = new StructureVariant();
 
         /// <summary>
         ///     creates a new structured type
         /// </summary>
-        public StructuredType()
-            => BaseTypes = new SyntaxPartCollection<ITypeSpecification>(this);
+        public StructuredType() {
+            BaseTypes = new SyntaxPartCollection<ITypeSpecification>(this);
+            Variants = new StructureVariant() { ParentItem = this };
+            Fields = new StructureFieldDefinition() { ParentItem = this };
+            Methods = new StructureMethodDefinition() { ParentItem = this };
+            MethodResolutions = new StructureMethodResolutionDefinition() { ParentItem = this };
+            Properties = new StructurePropertyDefinition() { ParentItem = this };
+        }
 
         /// <summary>
         ///     base type values

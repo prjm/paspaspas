@@ -70,8 +70,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     create a new property of a structured type
         /// </summary>
-        public StructureProperty()
-            => Accessors = new SyntaxPartCollection<StructurePropertyAccessor>(this);
+        public StructureProperty() {
+            Accessors = new SyntaxPartCollection<StructurePropertyAccessor>(this);
+            Parameters = new ParameterDefinitions() { ParentItem = this };
+        }
 
         /// <summary>
         ///     accept visitor
