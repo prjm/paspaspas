@@ -55,7 +55,7 @@ namespace P3SyntaxTreeViewer {
                 ISyntaxPart cst = Parse(env, code);
                 var visitor = new TreeTransformer(new ProjectRoot()) { LogManager = (LogManager)env.Log };
 
-                cst.Accept(visitor.AsVisitor(), visitor.AsVisitor());
+                cst.Accept(visitor.AsVisitor());
 
                 Dispatcher.Invoke(() => {
                     DisplayTree(StandardTreeView, cst);

@@ -21,9 +21,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Utils {
         /// <summary>
         ///     accept a visitor object
         /// </summary>
-        /// <param name="startVisitor">start visitor</param>
-        /// <param name="endVisitor">end visitor</param>
-        void Accept(IStartVisitor startVisitor, IEndVisitor endVisitor);
+        /// <param name="visitor">visitor</param>
+        void Accept(IStartEndVisitor visitor);
 
     }
 

@@ -24,10 +24,10 @@ namespace PasPasPas.Building.Tasks {
         /// </summary>
         /// <param name="startVisitor">start visitor</param>
         /// <param name="endVisitor">end visitor</param>
-        public override void Accept(IStartVisitor startVisitor, IEndVisitor endVisitor) {
-            startVisitor.StartVisit(this);
-            AcceptParts(this, startVisitor, endVisitor);
-            endVisitor.EndVisit(this);
+        public override void Accept(IStartEndVisitor visitor) {
+            visitor.StartVisit(this);
+            AcceptParts(this, visitor);
+            visitor.EndVisit(this);
         }
 
     }
@@ -96,7 +96,7 @@ namespace PasPasPas.Building.Tasks {
 
                     resultTree = new StubParent();
                     try {
-                        parser.ParseFile(resultTree);
+                        parser.ParseFile();
                     }
                     catch (Exception exception) {
                         result.AppendLine("<<XXXX>> Exception!");
@@ -124,7 +124,7 @@ namespace PasPasPas.Building.Tasks {
 #if DEBUG
 
                 var visitor = new TerminalVisitor();
-                resultTree.Accept(visitor.AsVisitor(), visitor.AsVisitor());
+                resultTree.Accept(visitor.AsVisitor());
                 if (!string.Equals(result1.ToString(), visitor.ResultBuilder.ToString(), StringComparison.Ordinal)) {
                     result.AppendLine("<<XXXX>> Different!");
                     result.AppendLine(result1.ToString());
@@ -146,7 +146,7 @@ namespace PasPasPas.Building.Tasks {
 
                 //return resultTree;
                 var transformVisitor = new TreeTransformer(new ProjectRoot());
-                resultTree.Accept(transformVisitor.AsVisitor(), transformVisitor.AsVisitor());
+                resultTree.Accept(transformVisitor.AsVisitor());
 
 #endif
 

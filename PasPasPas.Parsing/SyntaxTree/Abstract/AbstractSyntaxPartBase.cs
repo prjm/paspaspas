@@ -24,17 +24,15 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     accept visitors
         /// </summary>
-        /// <param name="startVisitor"></param>
-        /// <param name="endVisitor"></param>
-        public abstract void Accept(IStartVisitor startVisitor, IEndVisitor endVisitor);
+        public abstract void Accept(IStartEndVisitor visitor);
 
         /// <summary>
         ///     accept parts
         /// </summary>
         /// <param name="startVisitor"></param>
         /// <param name="endVisitor"></param>
-        protected void AcceptParts<T>(T element, IStartVisitor startVisitor, IEndVisitor endVisitor) where T : class
-            => SyntaxPartBase.AcceptParts<T>(element, Parts, startVisitor, endVisitor);
+        protected void AcceptParts<T>(T element, IStartEndVisitor visitor)
+            => SyntaxPartBase.AcceptParts<T>(element, Parts, visitor);
 
     }
 }

@@ -84,25 +84,26 @@ namespace PasPasPasTests {
 
                 ISyntaxPart result = parser.Parse();
                 var visitor = new TerminalVisitor();
-                result.Accept(visitor.AsVisitor(), visitor.AsVisitor());
+                result.Accept(visitor.AsVisitor());
                 Assert.AreEqual(output, visitor.ResultBuilder.ToString());
                 Assert.AreEqual(string.Empty, errorText);
                 Assert.IsFalse(hasError);
             }
         }
 
-        private class AstVisitor<T> : SyntaxPartVisitorBase<AstVisitorOptions<T>> {
+        private class AstVisitor<T> : IStartEndVisitor {
 
-            public override bool BeginVisit(ISyntaxPart part, AstVisitorOptions<T> options) {
-                options.Result = options.SearchFunction(part);
-                return EqualityComparer<T>.Default.Equals(default(T), options.Result);
-            }
-
-        }
-
-        private class AstVisitorOptions<T> {
             public T Result { get; internal set; }
             public Func<object, T> SearchFunction { get; set; }
+
+            public IStartEndVisitor AsVisitor() => this;
+            public void EndVisit<VisitorType>(VisitorType element) { }
+
+            public void StartVisit<ISyntaxPart>(ISyntaxPart part) {
+                T data = SearchFunction(part);
+                if (EqualityComparer<T>.Default.Equals(default(T), Result))
+                    Result = data;
+            }
 
         }
 
@@ -133,16 +134,15 @@ namespace PasPasPasTests {
 
 
                 var visitor = new TreeTransformer(project) { LogManager = logMgr };
-                tree.Accept(visitor.AsVisitor(), visitor.AsVisitor());
+                tree.Accept(visitor.AsVisitor());
 
-                var astVisitor = new AstVisitor<T>();
-                var astOptions = new AstVisitorOptions<T>() { SearchFunction = searchFunction };
-                VisitorHelper.AcceptVisitor(visitor.Project, astVisitor, astOptions);
+                var astVisitor = new AstVisitor<T>() { SearchFunction = searchFunction };
+                visitor.Project.Accept(astVisitor.AsVisitor());
 
                 var validator = new StructureValidator() { Manager = logMgr };
-                visitor.Project.Accept(validator.AsVisitor(), validator.AsVisitor());
+                visitor.Project.Accept(validator.AsVisitor());
 
-                Assert.AreEqual(expectedResult, astOptions.Result);
+                Assert.AreEqual(expectedResult, astVisitor.Result);
             }
 
             if (errorMessages.Length < 1) {
@@ -217,7 +217,7 @@ namespace PasPasPasTests {
                             if (!hasFoundInput) {
                                 terminals.ResultBuilder.Clear();
                                 if (result != null)
-                                    result.Accept(terminals.AsVisitor(), terminals.AsVisitor());
+                                    result.Accept(terminals.AsVisitor());
 
                                 Assert.AreEqual(subPart, terminals.ResultBuilder.ToString());
                             }
@@ -225,7 +225,7 @@ namespace PasPasPasTests {
 
                             visitor.IncludeInput = reader;
                             if (result != null)
-                                result.Accept(visitor.AsVisitor(), visitor.AsVisitor());
+                                result.Accept(visitor.AsVisitor());
 
                         }
                         fileCounter++;

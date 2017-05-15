@@ -19,9 +19,8 @@ namespace PasPasPas.Parsing.Tokenizer {
         ///     create a new pascal tokenizer
         /// </summary>
         /// <param name="environment"></param>
-        public StandardTokenizerWithLookahead(ParserServices environment) {
-            this.environment = environment;
-        }
+        public StandardTokenizerWithLookahead(ParserServices environment)
+            => this.environment = environment;
 
         /// <summary>
         ///     compiler options
@@ -62,7 +61,7 @@ namespace PasPasPas.Parsing.Tokenizer {
                 parser.BaseTokenizer = tokenizer;
                 ISyntaxPart result = parser.Parse();
                 var visitor = new CompilerDirectiveVisitor() { Environment = environment };
-                result.Accept(visitor.AsVisitor(), visitor.AsVisitor());
+                result.Accept(visitor.AsVisitor());
             }
         }
 
