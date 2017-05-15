@@ -30,25 +30,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
             => Name?.CompleteName;
 
         /// <summary>
-        ///     map parameter reference kind
-        /// </summary>
-        /// <param name="parameterType"></param>
-        /// <returns></returns>
-        [System.Obsolete]
-        public static ParameterReferenceKind MapKind(int parameterType) {
-            switch (parameterType) {
-                case TokenKind.Const:
-                    return ParameterReferenceKind.Const;
-                case TokenKind.Var:
-                    return ParameterReferenceKind.Var;
-                case TokenKind.Out:
-                    return ParameterReferenceKind.Out;
-                default:
-                    return ParameterReferenceKind.Undefined;
-            }
-        }
-
-        /// <summary>
         ///     accept visitor
         /// </summary>
         /// <param name="startVisitor">start visitor</param>

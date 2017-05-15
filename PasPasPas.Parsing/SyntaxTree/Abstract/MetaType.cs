@@ -52,29 +52,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
             => Fragments.Add(fragment);
 
         /// <summary>
-        ///     convert a string type kind
-        /// </summary>
-        /// <param name="kind"></param>
-        /// <returns></returns>
-        [System.Obsolete]
-        public static MetaTypeKind ConvertKind(int kind) {
-            switch (kind) {
-                case TokenKind.String:
-                    return MetaTypeKind.String;
-                case TokenKind.AnsiString:
-                    return MetaTypeKind.AnsiString;
-                case TokenKind.ShortString:
-                    return MetaTypeKind.ShortString;
-                case TokenKind.WideString:
-                    return MetaTypeKind.WideString;
-                case TokenKind.UnicodeString:
-                    return MetaTypeKind.UnicodeString;
-                default:
-                    return MetaTypeKind.Undefined;
-            }
-        }
-
-        /// <summary>
         ///     accept visitor
         /// </summary>
         /// <param name="startVisitor">start visitor</param>

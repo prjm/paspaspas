@@ -26,35 +26,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         public IExpression Value { get; set; }
 
         /// <summary>
-        ///     map accessor lind
-        /// </summary>
-        /// <param name="kind"></param>
-        /// <returns>mapped kind</returns>
-        [Obsolete]
-        public static StructurePropertyAccessorKind MapKind(int kind) {
-
-            switch (kind) {
-
-                case TokenKind.Read:
-                    return StructurePropertyAccessorKind.Read;
-
-                case TokenKind.Write:
-                    return StructurePropertyAccessorKind.Write;
-
-                case TokenKind.Add:
-                    return StructurePropertyAccessorKind.Add;
-
-                case TokenKind.Remove:
-                    return StructurePropertyAccessorKind.Remove;
-
-                default:
-                    return StructurePropertyAccessorKind.Remove;
-
-
-            }
-        }
-
-        /// <summary>
         ///     enumerate party
         /// </summary>
         public override IEnumerable<ISyntaxPart> Parts {

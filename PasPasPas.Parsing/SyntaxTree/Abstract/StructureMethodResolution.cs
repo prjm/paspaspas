@@ -41,26 +41,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         public SymbolName Target { get; set; }
 
         /// <summary>
-        ///     map token kind to method kind
-        /// </summary>
-        /// <param name="kind"></param>
-        /// <returns></returns>
-        [System.Obsolete]
-        public static StructureMethodResolutionKind MapKind(int kind) {
-            switch (kind) {
-                case TokenKind.Function:
-                    return StructureMethodResolutionKind.Function;
-
-                case TokenKind.Procedure:
-                    return StructureMethodResolutionKind.Procedure;
-
-                default:
-                    return StructureMethodResolutionKind.Undefined;
-
-            }
-        }
-
-        /// <summary>
         ///     accept visitor
         /// </summary>
         /// <param name="startVisitor">start visitor</param>

@@ -25,29 +25,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         public ITypeSpecification TypeValue { get; set; }
 
         /// <summary>
-        ///     method kind
-        /// </summary>
-        /// <param name="methodKind"></param>
-        /// <returns></returns>
-        [System.Obsolete]
-        public static ProcedureKind MapKind(int methodKind) {
-            switch (methodKind) {
-                case TokenKind.Function:
-                    return ProcedureKind.Function;
-                case TokenKind.Procedure:
-                    return ProcedureKind.Procedure;
-                case TokenKind.Constructor:
-                    return ProcedureKind.Constructor;
-                case TokenKind.Destructor:
-                    return ProcedureKind.Destructor;
-                case TokenKind.Operator:
-                    return ProcedureKind.Operator;
-                default:
-                    return ProcedureKind.Unknown;
-            }
-        }
-
-        /// <summary>
         ///     return type attributes
         /// </summary>
         public IList<SymbolAttribute> ReturnAttributes { get; set; }

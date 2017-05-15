@@ -34,32 +34,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         }
 
         /// <summary>
-        ///     map directive kind
-        /// </summary>
-        /// <param name="kind"></param>
-        /// <returns></returns>
-        [System.Obsolete]
-        public static MethodDirectiveSpecifierKind MapKind(int kind) {
-            switch (kind) {
-
-                case TokenKind.Name:
-                    return MethodDirectiveSpecifierKind.Name;
-
-                case TokenKind.Index:
-                    return MethodDirectiveSpecifierKind.Index;
-
-                case TokenKind.Delayed:
-                    return MethodDirectiveSpecifierKind.Delayed;
-
-                case TokenKind.Dependency:
-                    return MethodDirectiveSpecifierKind.Dependency;
-
-                default:
-                    return MethodDirectiveSpecifierKind.Unknown;
-            }
-        }
-
-        /// <summary>
         ///     expression parts
         /// </summary>
         public override IEnumerable<ISyntaxPart> Parts {

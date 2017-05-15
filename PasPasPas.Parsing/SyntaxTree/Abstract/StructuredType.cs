@@ -114,36 +114,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         public SymbolName GuidName { get; set; }
 
         /// <summary>
-        ///     map visilibity
-        /// </summary>
-        /// <param name="visibility"></param>
-        /// <param name="strict"></param>
-        /// <returns></returns>
-        [System.Obsolete]
-        public static MemberVisibility MapVisibility(int visibility, bool strict) {
-
-            switch (visibility) {
-                case TokenKind.Private:
-                    return strict ? MemberVisibility.StrictPrivate : MemberVisibility.Private;
-
-                case TokenKind.Protected:
-                    return strict ? MemberVisibility.StrictProtected : MemberVisibility.Protected;
-
-                case TokenKind.Public:
-                    return MemberVisibility.Public;
-
-                case TokenKind.Published:
-                    return MemberVisibility.Published;
-
-                case TokenKind.Automated:
-                    return MemberVisibility.Automated;
-
-            }
-
-            return MemberVisibility.Undefined;
-        }
-
-        /// <summary>
         ///     accept visitor
         /// </summary>
         /// <param name="startVisitor">start visitor</param>
