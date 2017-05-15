@@ -3939,7 +3939,7 @@ namespace PasPasPas.Parsing.Parser {
                 if (!Match(TokenKind.CloseParen)) {
                     do {
                         var parameter = new Parameter();
-                        parent.Add(result);
+                        result.Add(parameter);
 
                         if (MatchIdentifier(true) && LookAhead(1, TokenKind.Assignment)) {
                             parameter.ParameterName = RequireIdentifier(parameter, true);
@@ -3990,7 +3990,6 @@ namespace PasPasPas.Parsing.Parser {
                 SetSectnPart part;
                 do {
 
-
                     if (ContinueWith(result, TokenKind.Comma)) {
                         if (lastPart != null)
                             lastPart.Continuation = TokenKind.Comma;
@@ -4009,7 +4008,7 @@ namespace PasPasPas.Parsing.Parser {
                     }
 
                     part = new SetSectnPart();
-                    parent.Add(result);
+                    result.Add(part);
                     part.Continuation = TokenKind.Undefined;
                     part.SetExpression = ParseExpression(part);
                     lastPart = part;
