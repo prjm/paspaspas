@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 
@@ -7,7 +8,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// <summary>
     ///     formal parameter definition
     /// </summary>
-    public class ParameterTypeDefinition : AbstractSyntaxPartBase, ITypeTarget {
+    public class ParameterTypeDefinition : AbstractSyntaxPartBase, ITypeTarget, IExpressionTarget {
 
         /// <summary>
         ///     parameter type
@@ -34,8 +35,15 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
                     yield return parameter;
                 if (TypeValue != null)
                     yield return TypeValue;
+                if (Value != null)
+                    yield return Value;
             }
         }
+
+        /// <summary>
+        ///     default value
+        /// </summary>
+        public IExpression Value { get; set; }
 
         /// <summary>
         ///     accept visitor

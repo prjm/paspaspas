@@ -142,7 +142,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #region Unit
 
         public void StartVisit(Unit unit) {
-            CompilationUnit result = AddNode<CompilationUnit, Unit>(unit, Project);
+            var result = new CompilationUnit();
+            InitNode(result, unit, Project);
             result.FileType = CompilationUnitType.Unit;
             result.UnitName = ExtractSymbolName(unit.UnitName);
             result.Hints = ExtractHints(unit.Hints);
@@ -160,7 +161,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #region Library
 
         public void StartVisit(Library library) {
-            CompilationUnit result = AddNode<CompilationUnit, Library>(library, Project);
+            var result = new CompilationUnit();
+            InitNode(result, library, Project);
             result.FileType = CompilationUnitType.Library;
             result.UnitName = ExtractSymbolName(library.LibraryName);
             result.Hints = ExtractHints(library.Hints);
@@ -189,7 +191,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <param name="program"></param>
         /// <param name="parameter"></param>
         public void StartVisit(Program program) {
-            CompilationUnit result = AddNode<CompilationUnit, Program>(program, Project);
+            var result = new CompilationUnit();
+            InitNode(result, program, Project);
             result.FileType = CompilationUnitType.Program;
             result.UnitName = ExtractSymbolName(program.ProgramName);
             result.FilePath = program.FilePath;
@@ -209,7 +212,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #region Package
 
         public void StartVisit(Package package) {
-            CompilationUnit result = AddNode<CompilationUnit, Package>(package, Project);
+            var result = new CompilationUnit();
+            InitNode(result, package, Project);
             result.FileType = CompilationUnitType.Package;
             result.UnitName = ExtractSymbolName(package.PackageName);
             result.FilePath = package.FilePath;
@@ -279,9 +283,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         public void StartVisit(Standard.TypeDeclaration typeDeclaration) {
             var symbols = LastValue as IDeclaredSymbolTarget;
-            Abstract.TypeDeclaration declaration = AddNode<Abstract.TypeDeclaration, Standard.TypeDeclaration>(typeDeclaration);
+            var declaration = new Abstract.TypeDeclaration();
+            InitNode(declaration, typeDeclaration);
             declaration.Name = ExtractSymbolName(typeDeclaration.TypeId?.Identifier);
-            declaration.Generics = ExtractGenericDefinition(declaration, typeDeclaration.TypeId?.GenericDefinition);
+            declaration.Generics = ExtractGenericDefinition(declaration, typeDeclaration, typeDeclaration.TypeId?.GenericDefinition);
             declaration.Attributes = ExtractAttributes(typeDeclaration.Attributes, CurrentUnit);
             declaration.Hints = ExtractHints(typeDeclaration.Hint);
             symbols.Symbols.AddDirect(declaration, LogSource);
@@ -295,7 +300,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         public void StartVisit(ConstDeclaration constDeclaration) {
             var symbols = LastValue as IDeclaredSymbolTarget;
-            ConstantDeclaration declaration = AddNode<ConstantDeclaration, ConstDeclaration>(constDeclaration);
+            var declaration = new ConstantDeclaration();
+            InitNode(declaration, constDeclaration);
             declaration.Name = ExtractSymbolName(constDeclaration.Identifier);
             declaration.Mode = CurrentDeclarationMode;
             declaration.Attributes = ExtractAttributes(constDeclaration.Attributes, CurrentUnit);
@@ -334,13 +340,15 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         public void StartVisit(VarDeclaration varDeclaration) {
             var symbols = LastValue as IDeclaredSymbolTarget;
-            VariableDeclaration declaration = AddNode<VariableDeclaration, VarDeclaration>(varDeclaration);
+            var declaration = new VariableDeclaration();
+            InitNode(declaration, varDeclaration);
             declaration.Mode = CurrentDeclarationMode;
             declaration.Hints = ExtractHints(varDeclaration.Hints);
 
             foreach (ISyntaxPart child in varDeclaration.Identifiers.Parts) {
                 if (child is Identifier ident) {
-                    VariableName name = AddNode<VariableName, VarDeclaration>(varDeclaration, declaration);
+                    var name = new VariableName();
+                    InitNode(name, child, declaration);
                     name.Name = ExtractSymbolName(ident);
                     declaration.Names.Add(name);
                     symbols.Symbols.Add(name, LogSource);
@@ -374,13 +382,15 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
             if (constExpression.IsSetConstant) {
                 IExpressionTarget lastExpression = LastExpression;
-                SetConstant result = AddNode<SetConstant, ConstantExpression>(constExpression);
+                var result = new SetConstant();
+                InitNode(result, constExpression);
                 lastExpression.Value = result;
             }
 
             if (constExpression.IsRecordConstant) {
                 IExpressionTarget lastExpression = LastExpression;
-                RecordConstant result = AddNode<RecordConstant, ConstantExpression>(constExpression);
+                var result = new RecordConstant();
+                InitNode(result, constExpression);
                 lastExpression.Value = result;
             }
 
@@ -391,7 +401,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         public void StartVisit(RecordConstantExpression constExpression) {
             IExpressionTarget lastExpression = LastExpression;
-            RecordConstantItem expression = AddNode<RecordConstantItem, RecordConstantExpression>(constExpression);
+            var expression = new RecordConstantItem();
+            InitNode(expression, constExpression);
             lastExpression.Value = expression;
             expression.Name = ExtractSymbolName(constExpression.Name);
         }
@@ -402,7 +413,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         public void StartVisit(Expression expression) {
             if (expression.LeftOperand != null && expression.RightOperand != null) {
                 IExpressionTarget lastExpression = LastExpression;
-                BinaryOperator currentExpression = AddNode<BinaryOperator, Expression>(expression);
+                var currentExpression = new BinaryOperator();
+                InitNode(currentExpression, expression);
                 lastExpression.Value = currentExpression;
                 currentExpression.Kind = TokenKindMapper.ForExpression(expression.Kind);
             }
@@ -414,7 +426,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         public void StartVisit(SimpleExpression simpleExpression) {
             if (simpleExpression.LeftOperand != null && simpleExpression.RightOperand != null) {
                 IExpressionTarget lastExpression = LastExpression;
-                BinaryOperator currentExpression = AddNode<BinaryOperator, SimpleExpression>(simpleExpression);
+                var currentExpression = new BinaryOperator();
+                InitNode(currentExpression, simpleExpression);
                 lastExpression.Value = currentExpression;
                 currentExpression.Kind = TokenKindMapper.ForExpression(simpleExpression.Kind);
             }
@@ -426,7 +439,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         public void StartVisit(Term term) {
             if (term.LeftOperand != null && term.RightOperand != null) {
                 IExpressionTarget lastExpression = LastExpression;
-                BinaryOperator currentExpression = AddNode<BinaryOperator, Term>(term);
+                var currentExpression = new BinaryOperator();
+                InitNode(currentExpression, term);
                 lastExpression.Value = currentExpression;
                 currentExpression.Kind = TokenKindMapper.ForExpression(term.Kind);
             }
@@ -440,7 +454,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             // unary operators
             if (factor.AddressOf != null || factor.Not != null || factor.Plus != null || factor.Minus != null) {
                 IExpressionTarget lastExpression = LastExpression;
-                UnaryOperator value = AddNode<UnaryOperator, Factor>(factor);
+                var value = new UnaryOperator();
+                InitNode(value, factor);
                 lastExpression.Value = value;
 
                 if (factor.AddressOf != null)
@@ -457,7 +472,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             // constant values
             if (factor.IsNil) {
                 IExpressionTarget lastExpression = LastExpression;
-                ConstantValue value = AddNode<ConstantValue, Factor>(factor);
+                var value = new ConstantValue();
+                InitNode(value, factor);
                 value.Kind = ConstantValueKind.Nil;
                 lastExpression.Value = value;
                 return;
@@ -465,7 +481,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
             if (factor.PointerTo != null) {
                 IExpressionTarget lastExpression = LastExpression;
-                SymbolReference value = AddNode<SymbolReference, Factor>(factor);
+                var value = new SymbolReference();
+                InitNode(value, factor);
                 value.Name = ExtractSymbolName(factor.PointerTo);
                 value.PointerTo = true;
                 lastExpression.Value = value;
@@ -474,7 +491,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
             if (factor.IsFalse) {
                 IExpressionTarget lastExpression = LastExpression;
-                ConstantValue value = AddNode<ConstantValue, Factor>(factor);
+                var value = new ConstantValue();
+                InitNode(value, factor);
                 value.Kind = ConstantValueKind.False;
                 lastExpression.Value = value;
                 return;
@@ -482,7 +500,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
             if (factor.IsTrue) {
                 IExpressionTarget lastExpression = LastExpression;
-                ConstantValue value = AddNode<ConstantValue, Factor>(factor);
+                var value = new ConstantValue();
+                InitNode(value, factor);
                 value.Kind = ConstantValueKind.True;
                 lastExpression.Value = value;
                 return;
@@ -490,15 +509,18 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
             if (factor.IntValue != null) {
                 IExpressionTarget lastExpression = LastExpression;
-                ConstantValue value = AddNode<ConstantValue, Factor>(factor);
+                var value = new ConstantValue();
+                InitNode(value, factor);
                 value.Kind = ConstantValueKind.Integer;
+                value.IntValue = DigitTokenGroupValue.Unwrap(factor.IntValue.FirstTerminalToken);
                 lastExpression.Value = value;
                 return;
             }
 
             if (factor.RealValue != null) {
                 IExpressionTarget lastExpression = LastExpression;
-                ConstantValue value = AddNode<ConstantValue, Factor>(factor);
+                var value = new ConstantValue();
+                InitNode(value, factor);
                 value.Kind = ConstantValueKind.RealNumber;
                 lastExpression.Value = value;
                 return;
@@ -506,7 +528,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
             if (factor.StringValue != null) {
                 IExpressionTarget lastExpression = LastExpression;
-                ConstantValue value = AddNode<ConstantValue, Factor>(factor);
+                var value = new ConstantValue();
+                InitNode(value, factor);
                 value.Kind = ConstantValueKind.QuotedString;
                 lastExpression.Value = value;
                 return;
@@ -514,7 +537,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
             if (factor.HexValue != null) {
                 IExpressionTarget lastExpression = LastExpression;
-                ConstantValue value = AddNode<ConstantValue, Factor>(factor);
+                var value = new ConstantValue();
+                InitNode(value, factor);
                 value.Kind = ConstantValueKind.HexNumber;
                 lastExpression.Value = value;
                 return;
@@ -533,10 +557,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 if (name == null)
                     continue;
 
-                RequiredUnitName unitName = AddNode<RequiredUnitName, UsesClause>(unit, CurrentUnit.RequiredUnits);
+                var unitName = new RequiredUnitName();
+                InitNode(unitName, part, CurrentUnit.RequiredUnits);
                 unitName.Name = ExtractSymbolName(name);
                 unitName.Mode = CurrentUnitMode[CurrentUnit];
                 CurrentUnit.RequiredUnits.Add(unitName, LogSource);
+                visitor.WorkingStack.Pop();
             }
         }
 
@@ -552,7 +578,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 if (name == null)
                     continue;
 
-                RequiredUnitName unitName = AddNode<RequiredUnitName, UsesFileClause>(unit, CurrentUnit.RequiredUnits);
+                var unitName = new RequiredUnitName();
+                InitNode(unitName, part, CurrentUnit.RequiredUnits);
                 unitName.Name = ExtractSymbolName(name);
                 unitName.Mode = CurrentUnitMode[CurrentUnit];
                 unitName.FileName = name.QuotedFileName?.UnquotedValue;
@@ -574,7 +601,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 if (name == null)
                     continue;
 
-                RequiredUnitName unitName = AddNode<RequiredUnitName, PackageRequires>(requires, CurrentUnit.RequiredUnits);
+                var unitName = new RequiredUnitName();
+                InitNode(unitName, name, CurrentUnit.RequiredUnits);
                 unitName.Name = ExtractSymbolName(name);
                 unitName.Mode = CurrentUnitMode[CurrentUnit];
                 CurrentUnit.RequiredUnits.Add(unitName, LogSource);
@@ -598,7 +626,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 if (name == null)
                     continue;
 
-                RequiredUnitName unitName = AddNode<RequiredUnitName, PackageContains>(contains, CurrentUnit.RequiredUnits);
+                var unitName = new RequiredUnitName();
+                InitNode(unitName, name, CurrentUnit.RequiredUnits);
                 unitName.Name = ExtractSymbolName(name);
                 unitName.Mode = CurrentUnitMode[CurrentUnit];
                 unitName.FileName = name.QuotedFileName?.UnquotedValue;
@@ -628,12 +657,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         public void StartVisit(ArrayType array) {
             ITypeTarget target = LastTypeDeclaration;
-            ArrayTypeDeclaration value = AddNode<ArrayTypeDeclaration, ArrayType>(array);
+            var value = new ArrayTypeDeclaration();
+            InitNode(value, array);
             value.PackedType = CurrentStructTypeMode == StructTypeMode.Packed;
             target.TypeValue = value;
 
             if (array.ArrayOfConst) {
-                MetaType metaType = AddNode<MetaType, ArrayType>(array, value);
+                var metaType = new MetaType();
+                InitNode(metaType, array, value);
                 metaType.Kind = MetaTypeKind.Const;
                 value.TypeValue = metaType;
                 visitor.WorkingStack.Pop();
@@ -645,7 +676,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         public void StartVisit(SetDefinition set) {
             ITypeTarget typeTarget = LastTypeDeclaration;
-            SetTypeDeclaration value = AddNode<SetTypeDeclaration, SetDefinition>(set);
+            var value = new SetTypeDeclaration();
+            InitNode(value, set);
             value.PackedType = CurrentStructTypeMode == StructTypeMode.Packed;
             typeTarget.TypeValue = value;
         }
@@ -655,7 +687,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         public void StartVisit(FileType fileType) {
             ITypeTarget typeTarget = LastTypeDeclaration;
-            FileTypeDeclaration value = AddNode<FileTypeDeclaration, FileType>(fileType);
+            var value = new FileTypeDeclaration();
+            InitNode(value, fileType);
             value.PackedType = CurrentStructTypeMode == StructTypeMode.Packed;
             typeTarget.TypeValue = value;
         }
@@ -665,7 +698,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         public void StartVisit(ClassOfDeclaration classOf) {
             ITypeTarget typeTarget = LastTypeDeclaration;
-            ClassOfTypeDeclaration value = AddNode<ClassOfTypeDeclaration, ClassOfDeclaration>(classOf);
+            var value = new ClassOfTypeDeclaration();
+            InitNode(value, classOf);
             value.PackedType = CurrentStructTypeMode == StructTypeMode.Packed;
             typeTarget.TypeValue = value;
         }
@@ -675,7 +709,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         public void StartVisit(TypeName typeName) {
             ITypeTarget typeTarget = LastTypeDeclaration;
-            MetaType value = AddNode<MetaType, TypeName>(typeName);
+            var value = new MetaType();
+            InitNode(value, typeName);
             value.Kind = typeName.MapTypeKind();
             typeTarget.TypeValue = value;
         }
@@ -687,7 +722,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (name == null || value == null)
                 return;
 
-            GenericNameFragment fragment = AddNode<GenericNameFragment, TypeName>(typeName, LastValue, name);
+            var fragment = new GenericNameFragment();
+            InitNode(fragment, name);
             fragment.Name = ExtractSymbolName(name.Name);
             value.AddFragment(fragment);
         }
@@ -700,7 +736,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             ITypeTarget typeTarget = LastTypeDeclaration;
 
             if (simpleType.SubrangeStart != null) {
-                SubrangeType subrange = AddNode<SubrangeType, SimpleType>(simpleType);
+                var subrange = new SubrangeType();
+                InitNode(subrange, simpleType);
                 typeTarget.TypeValue = subrange;
                 return;
             }
@@ -708,7 +745,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (simpleType.EnumType != null)
                 return;
 
-            TypeAlias value = AddNode<TypeAlias, SimpleType>(simpleType);
+            var value = new TypeAlias();
+            InitNode(value, simpleType);
             value.IsNewType = simpleType.NewType;
 
             if (simpleType.TypeOf)
@@ -724,7 +762,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (name == null || value == null)
                 return;
 
-            GenericNameFragment fragment = AddNode<GenericNameFragment, SimpleType>(simpleType, LastValue, part);
+            var fragment = new GenericNameFragment();
+            InitNode(fragment, part);
             fragment.Name = ExtractSymbolName(name.Name);
             value.AddFragment(fragment);
         }
@@ -734,7 +773,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         public void StartVisit(EnumTypeDefinition type) {
             ITypeTarget typeTarget = LastTypeDeclaration;
-            EnumType value = AddNode<EnumType, EnumTypeDefinition>(type);
+            var value = new EnumType();
+            InitNode(value, type);
             typeTarget.TypeValue = value;
         }
 
@@ -743,7 +783,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         public void StartVisit(EnumValue enumValue) {
             if (LastValue is EnumType enumDeclaration) {
-                EnumTypeValue value = AddNode<EnumTypeValue, EnumValue>(enumValue);
+                var value = new EnumTypeValue();
+                InitNode(value, enumValue);
                 value.Name = ExtractSymbolName(enumValue.EnumName);
                 enumDeclaration.Add(value, LogSource);
             }
@@ -755,7 +796,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         public void StartVisit(ArrayIndex arrayIndex) {
             if (arrayIndex.EndIndex != null) {
                 IExpressionTarget lastExpression = LastExpression;
-                BinaryOperator binOp = AddNode<BinaryOperator, ArrayIndex>(arrayIndex);
+                var binOp = new BinaryOperator();
+                InitNode(binOp, arrayIndex);
                 lastExpression.Value = binOp;
                 binOp.Kind = ExpressionKind.RangeOperator;
             }
@@ -768,12 +810,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             ITypeTarget typeTarget = LastTypeDeclaration;
 
             if (pointer.GenericPointer) {
-                MetaType result = AddNode<MetaType, PointerType>(pointer);
+                var result = new MetaType();
+                InitNode(result, pointer);
                 result.Kind = MetaTypeKind.Pointer;
                 typeTarget.TypeValue = result;
             }
             else {
-                PointerToType result = AddNode<PointerToType, PointerType>(pointer);
+                var result = new PointerToType();
+                InitNode(result, pointer);
                 typeTarget.TypeValue = result;
             }
         }
@@ -783,7 +827,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         public void StartVisit(StringType stringType) {
             ITypeTarget typeTarget = LastTypeDeclaration;
-            MetaType result = AddNode<MetaType, StringType>(stringType);
+            var result = new MetaType();
+            InitNode(result, stringType);
             result.Kind = TokenKindMapper.ForMetaType(stringType.Kind);
             typeTarget.TypeValue = result;
         }
@@ -793,7 +838,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         public void StartVisit(ProcedureTypeDefinition proceduralType) {
             ITypeTarget typeTarget = LastTypeDeclaration;
-            ProceduralType result = AddNode<ProceduralType, ProcedureTypeDefinition>(proceduralType);
+            var result = new ProceduralType();
+            InitNode(result, proceduralType);
             typeTarget.TypeValue = result;
             result.Kind = TokenKindMapper.MapMethodKind(proceduralType.Kind);
             result.MethodDeclaration = proceduralType.MethodDeclaration;
@@ -808,7 +854,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         public void StartVisit(FormalParameterDefinition formalParameter) {
             var paramterTarget = LastValue as IParameterTarget;
-            ParameterTypeDefinition result = AddNode<ParameterTypeDefinition, FormalParameterDefinition>(formalParameter, paramterTarget.Parameters);
+            var result = new ParameterTypeDefinition();
+            InitNode(result, formalParameter, paramterTarget.Parameters);
             paramterTarget.Parameters.Items.Add(result);
         }
 
@@ -817,7 +864,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         public void StartVisit(FormalParameter formalParameter) {
             var typeDefinition = LastValue as ParameterTypeDefinition;
-            ParameterDefinition result = AddNode<ParameterDefinition, FormalParameter>(formalParameter);
+            var result = new ParameterDefinition();
+            InitNode(result, formalParameter);
             var allParams = typeDefinition.ParentItem as ParameterDefinitions;
             result.Name = ExtractSymbolName(formalParameter.ParameterName);
             result.Attributes = ExtractAttributes(formalParameter.Attributes, CurrentUnit);
@@ -830,7 +878,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #region UnitInitialization
 
         public void StartVisit(UnitInitialization unitBlock) {
-            BlockOfStatements result = AddNode<BlockOfStatements, UnitInitialization>(unitBlock, CurrentUnit);
+            var result = new BlockOfStatements();
+            InitNode(result, unitBlock, CurrentUnit);
             CurrentUnit.InitializationBlock = result;
         }
 
@@ -838,7 +887,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #region UnitFinalization
 
         public void StartVisit(UnitFinalization unitBlock) {
-            BlockOfStatements result = AddNode<BlockOfStatements, UnitFinalization>(unitBlock, CurrentUnit);
+            var result = new BlockOfStatements();
+            InitNode(result, unitBlock, CurrentUnit);
             CurrentUnit.FinalizationBlock = result;
         }
 
@@ -851,7 +901,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (block.AssemblerBlock != null) {
                 var statementTarget = LastValue as IStatementTarget;
                 var blockTarget = LastValue as IBlockTarget;
-                BlockOfAssemblerStatements result = AddNode<BlockOfAssemblerStatements, CompoundStatement>(block, LastValue);
+                var result = new BlockOfAssemblerStatements();
+                InitNode(result, block, LastValue);
                 if (statementTarget != null)
                     statementTarget.Statements.Add(result);
                 else if (blockTarget != null)
@@ -862,7 +913,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             else {
                 var statementTarget = LastValue as IStatementTarget;
                 var blockTarget = LastValue as IBlockTarget;
-                BlockOfStatements result = AddNode<BlockOfStatements, CompoundStatement>(block, LastValue);
+                var result = new BlockOfStatements();
+                InitNode(result, block, LastValue);
                 if (statementTarget != null)
                     statementTarget.Statements.Add(result);
                 else if (blockTarget != null)
@@ -900,7 +952,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
             if (CurrentDeclarationMode == DeclarationMode.Label) {
                 var symbols = LastValue as IDeclaredSymbolTarget;
-                ConstantDeclaration declaration = AddNode<ConstantDeclaration, Label>(label);
+                var declaration = new ConstantDeclaration();
+                InitNode(declaration, label);
                 declaration.Name = name;
                 declaration.Mode = CurrentDeclarationMode;
                 symbols.Symbols.AddDirect(declaration, LogSource);
@@ -922,7 +975,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         public void StartVisit(ClassDeclaration classDeclaration) {
             ITypeTarget typeTarget = LastTypeDeclaration;
-            StructuredType result = AddNode<StructuredType, ClassDeclaration>(classDeclaration);
+            var result = new StructuredType();
+            InitNode(result, classDeclaration);
             result.Kind = StructuredTypeKind.Class;
             result.SealedClass = classDeclaration.Sealed;
             result.AbstractClass = classDeclaration.Abstract;
@@ -957,7 +1011,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         public void StartVisit(ClassField field) {
             var structType = LastValue as StructuredType;
             var declItem = field.ParentItem as IStructuredTypeMember;
-            StructureFields result = AddNode<StructureFields, ClassField>(field);
+            var result = new StructureFields();
+            InitNode(result, field);
             result.Visibility = CurrentMemberVisibility[structType];
             structType.Fields.Items.Add(result);
             IList<SymbolAttribute> extractedAttributes = ExtractAttributes(declItem.Attributes, CurrentUnit);
@@ -974,7 +1029,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 if (partName == null)
                     continue;
 
-                StructureField fieldName = AddNode<StructureField, ClassField>(field, result);
+                var fieldName = new StructureField();
+                InitNode(fieldName, part, result);
                 fieldName.Name = ExtractSymbolName(partName);
                 fieldName.Attributes = extractedAttributes;
                 structType.Fields.Add(fieldName, LogSource);
@@ -991,7 +1047,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         public void StartVisit(ClassProperty property) {
             var parent = LastValue as StructuredType;
-            StructureProperty result = AddNode<StructureProperty, ClassProperty>(property);
+            var result = new StructureProperty();
+            InitNode(result, property);
             var declItem = property.ParentItem as IStructuredTypeMember;
             result.Name = ExtractSymbolName(property.PropertyName);
             parent.Properties.Add(result, LogSource);
@@ -1009,7 +1066,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         public void StartVisit(ClassPropertyReadWrite property) {
             var parent = LastValue as StructureProperty;
-            StructurePropertyAccessor result = AddNode<StructurePropertyAccessor, ClassPropertyReadWrite>(property);
+            var result = new StructurePropertyAccessor();
+            InitNode(result, property);
             result.Kind = TokenKindMapper.ForPropertyAccessor(property.Kind);
             result.Name = ExtractSymbolName(property.Member);
             parent.Accessors.Add(result);
@@ -1021,7 +1079,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         public void StartVisit(ClassPropertyDispInterface property) {
             var parent = LastValue as StructureProperty;
-            StructurePropertyAccessor result = AddNode<StructurePropertyAccessor, ClassPropertyDispInterface>(property);
+            var result = new StructurePropertyAccessor();
+            InitNode(result, property);
 
             if (property.ReadOnly) {
                 result.Kind = StructurePropertyAccessorKind.ReadOnly;
@@ -1051,7 +1110,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 return;
 
             var parent = LastValue as StructureProperty;
-            StructurePropertyAccessor result = AddNode<StructurePropertyAccessor, ClassPropertySpecifier>(property);
+            var result = new StructurePropertyAccessor();
+            InitNode(result, property);
 
             if (property.IsStored) {
                 result.Kind = StructurePropertyAccessorKind.Stored;
@@ -1076,7 +1136,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         public void StartVisit(ClassMethod method) {
             var parent = LastValue as StructuredType;
-            StructureMethod result = AddNode<StructureMethod, ClassMethod>(method);
+            var result = new StructureMethod();
+            InitNode(result, method);
             result.Visibility = CurrentMemberVisibility[parent];
 
             if (method.ParentItem is IStructuredTypeMember declItem) {
@@ -1086,7 +1147,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
             result.Name = ExtractSymbolName(method.Identifier);
             result.Kind = TokenKindMapper.MapMethodKind(method.MethodKind);
-            result.Generics = ExtractGenericDefinition(result, method.GenericDefinition);
+            result.Generics = ExtractGenericDefinition(result, method, method.GenericDefinition);
             parent.Methods.Add(result, LogSource);
 
         }
@@ -1096,7 +1157,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         public void StartVisit(MethodResolution methodResolution) {
             var parent = LastValue as StructuredType;
-            StructureMethodResolution result = AddNode<StructureMethodResolution, MethodResolution>(methodResolution);
+            var result = new StructureMethodResolution();
+            InitNode(result, methodResolution);
             result.Attributes = ExtractAttributes(((ClassDeclarationItem)methodResolution.ParentItem).Attributes, CurrentUnit);
             result.Kind = TokenKindMapper.ForMethodResolutionKind(methodResolution.Kind);
             result.Target = ExtractSymbolName(methodResolution.ResolveIdentifier);
@@ -1109,7 +1171,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         public void StartVisit(ReintroduceDirective directive) {
             var parent = LastValue as IDirectiveTarget;
-            MethodDirective result = AddNode<MethodDirective, ReintroduceDirective>(directive);
+            var result = new MethodDirective();
+            InitNode(result, directive);
             result.Kind = MethodDirectiveKind.Reintroduce;
             parent.Directives.Add(result);
 
@@ -1120,7 +1183,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         public void StartVisit(OverloadDirective directive) {
             var parent = LastValue as IDirectiveTarget;
-            MethodDirective result = AddNode<MethodDirective, OverloadDirective>(directive);
+            var result = new MethodDirective();
+            InitNode(result, directive);
             result.Kind = MethodDirectiveKind.Overload;
             parent.Directives.Add(result);
 
@@ -1135,7 +1199,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (parent == null)
                 return;
 
-            MethodDirective result = AddNode<MethodDirective, DispIdDirective>(directive);
+            var result = new MethodDirective();
+            InitNode(result, directive);
             result.Kind = MethodDirectiveKind.DispId;
             parent.Directives.Add(result);
 
@@ -1146,7 +1211,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         public void StartVisit(InlineDirective directive) {
             var parent = LastValue as IDirectiveTarget;
-            MethodDirective result = AddNode<MethodDirective, InlineDirective>(directive);
+            var result = new MethodDirective();
+            InitNode(result, directive);
 
             if (directive.Kind == TokenKind.Inline) {
                 result.Kind = MethodDirectiveKind.Inline;
@@ -1164,7 +1230,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         public void StartVisit(AbstractDirective directive) {
             var parent = LastValue as IDirectiveTarget;
-            MethodDirective result = AddNode<MethodDirective, AbstractDirective>(directive);
+            var result = new MethodDirective();
+            InitNode(result, directive);
 
             if (directive.Kind == TokenKind.Abstract) {
                 result.Kind = MethodDirectiveKind.Abstract;
@@ -1182,7 +1249,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         public void StartVisit(OldCallConvention directive) {
             var parent = LastValue as IDirectiveTarget;
-            MethodDirective result = AddNode<MethodDirective, OldCallConvention>(directive);
+            var result = new MethodDirective();
+            InitNode(result, directive);
 
             if (directive.Kind == TokenKind.Far) {
                 result.Kind = MethodDirectiveKind.Far;
@@ -1205,7 +1273,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         public void StartVisit(ExternalDirective directive) {
             var parent = LastValue as IDirectiveTarget;
-            MethodDirective result = AddNode<MethodDirective, ExternalDirective>(directive);
+            var result = new MethodDirective();
+            InitNode(result, directive);
 
             if (directive.Kind == TokenKind.VarArgs) {
                 result.Kind = MethodDirectiveKind.VarArgs;
@@ -1224,7 +1293,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         public void StartVisit(ExternalSpecifier directive) {
             var parent = LastValue as MethodDirective;
-            MethodDirectiveSpecifier result = AddNode<MethodDirectiveSpecifier, ExternalSpecifier>(directive);
+            var result = new MethodDirectiveSpecifier();
+            InitNode(result, directive);
             result.Kind = TokenKindMapper.ForMethodDirective(directive.Kind);
             parent.Specifiers.Add(result);
 
@@ -1235,7 +1305,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         public void StartVisit(CallConvention directive) {
             var parent = LastValue as IDirectiveTarget;
-            MethodDirective result = AddNode<MethodDirective, CallConvention>(directive);
+            var result = new MethodDirective();
+            InitNode(result, directive);
 
             if (directive.Kind == TokenKind.Cdecl) {
                 result.Kind = MethodDirectiveKind.Cdecl;
@@ -1265,7 +1336,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         public void StartVisit(BindingDirective directive) {
             var parent = LastValue as IDirectiveTarget;
-            MethodDirective result = AddNode<MethodDirective, BindingDirective>(directive);
+            var result = new MethodDirective();
+            InitNode(result, directive);
 
             if (directive.Kind == TokenKind.Static) {
                 result.Kind = MethodDirectiveKind.Static;
@@ -1316,7 +1388,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         public void StartVisit(ExportedProcedureHeading procHeading) {
             var symbols = LastValue as IDeclaredSymbolTarget;
-            GlobalMethod result = AddNode<GlobalMethod, ExportedProcedureHeading>(procHeading);
+            var result = new GlobalMethod();
+            InitNode(result, procHeading);
             result.Name = ExtractSymbolName(procHeading.Name);
             result.Kind = TokenKindMapper.MapMethodKind(procHeading.Kind);
             result.Attributes = ExtractAttributes(procHeading.Attributes, CurrentUnit);
@@ -1330,7 +1403,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         public void StartVisit(UnsafeDirective directive) {
             var parent = LastValue as IDirectiveTarget;
-            MethodDirective result = AddNode<MethodDirective, UnsafeDirective>(directive);
+            var result = new MethodDirective();
+            InitNode(result, directive);
             result.Kind = MethodDirectiveKind.Unsafe;
             parent.Directives.Add(result);
 
@@ -1341,7 +1415,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         public void StartVisit(ForwardDirective directive) {
             var parent = LastValue as IDirectiveTarget;
-            MethodDirective result = AddNode<MethodDirective, ForwardDirective>(directive);
+            var result = new MethodDirective();
+            InitNode(result, directive);
             result.Kind = MethodDirectiveKind.Forward;
             parent.Directives.Add(result);
 
@@ -1366,7 +1441,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         public void StartVisit(ExportItem exportsSection) {
             var declarations = LastValue as IDeclaredSymbolTarget;
-            ExportedMethodDeclaration result = AddNode<ExportedMethodDeclaration, ExportItem>(exportsSection);
+            var result = new ExportedMethodDeclaration();
+            InitNode(result, exportsSection);
             result.Name = ExtractSymbolName(exportsSection.ExportName);
             result.IsResident = exportsSection.Resident;
             result.HasIndex = exportsSection.IndexParameter != null;
@@ -1394,7 +1470,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         public void StartVisit(RecordDeclaration recordDeclaration) {
             ITypeTarget typeTarget = LastTypeDeclaration;
-            StructuredType result = AddNode<StructuredType, RecordDeclaration>(recordDeclaration);
+            var result = new StructuredType();
+            InitNode(result, recordDeclaration);
             result.Kind = StructuredTypeKind.Record;
             typeTarget.TypeValue = result;
             CurrentMemberVisibility[result] = MemberVisibility.Public;
@@ -1425,7 +1502,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             }
 
             var declItem = fieldDeclaration.ParentItem as RecordItem;
-            StructureFields result = AddNode<StructureFields, RecordField>(fieldDeclaration);
+            var result = new StructureFields();
+            InitNode(result, fieldDeclaration);
             result.Visibility = CurrentMemberVisibility[structType];
 
             if (fields != null)
@@ -1446,7 +1524,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 if (partName == null)
                     continue;
 
-                StructureField fieldName = AddNode<StructureField, RecordField>(fieldDeclaration, result);
+                var fieldName = new StructureField();
+                InitNode(fieldName, partName, result);
                 fieldName.Name = ExtractSymbolName(partName);
                 fieldName.Attributes = extractedAttributes;
 
@@ -1471,7 +1550,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         public void StartVisit(RecordVariantSection variantSection) {
             var structType = LastValue as StructuredType;
-            StructureVariantItem result = AddNode<StructureVariantItem, RecordVariantSection>(variantSection);
+            var result = new StructureVariantItem();
+            InitNode(result, variantSection);
             result.Name = ExtractSymbolName(variantSection.Name);
             structType.Variants.Items.Add(result);
 
@@ -1482,7 +1562,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         public void StartVisit(RecordVariant variantItem) {
             var structType = LastValue as StructureVariantItem;
-            StructureVariantFields result = AddNode<StructureVariantFields, RecordVariant>(variantItem);
+            var result = new StructureVariantFields();
+            InitNode(result, variantItem);
             structType.Items.Add(result);
 
         }
@@ -1492,7 +1573,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         public void StartVisit(RecordHelperDefinition recordHelper) {
             ITypeTarget typeTarget = LastTypeDeclaration;
-            StructuredType result = AddNode<StructuredType, RecordHelperDefinition>(recordHelper);
+            var result = new StructuredType();
+            InitNode(result, recordHelper);
             result.Kind = StructuredTypeKind.RecordHelper;
             typeTarget.TypeValue = result;
             CurrentMemberVisibility[result] = MemberVisibility.Public;
@@ -1523,7 +1605,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         public void StartVisit(ObjectDeclaration objectDeclaration) {
             ITypeTarget typeTarget = LastTypeDeclaration;
-            StructuredType result = AddNode<StructuredType, ObjectDeclaration>(objectDeclaration);
+            var result = new StructuredType();
+            InitNode(result, objectDeclaration);
             result.Kind = StructuredTypeKind.Object;
             typeTarget.TypeValue = result;
             CurrentMemberVisibility[result] = MemberVisibility.Public;
@@ -1555,7 +1638,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         public void StartVisit(InterfaceDefinition interfaceDeclaration) {
             ITypeTarget typeTarget = LastTypeDeclaration;
-            StructuredType result = AddNode<StructuredType, InterfaceDefinition>(interfaceDeclaration);
+            var result = new StructuredType();
+            InitNode(result, interfaceDeclaration);
             if (interfaceDeclaration.DisplayInterface)
                 result.Kind = StructuredTypeKind.DispInterface;
             else
@@ -1594,7 +1678,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         public void StartVisit(ClassHelperDef classHelper) {
             ITypeTarget typeTarget = LastTypeDeclaration;
-            StructuredType result = AddNode<StructuredType, ClassHelperDef>(classHelper);
+            var result = new StructuredType();
+            InitNode(result, classHelper);
             result.Kind = StructuredTypeKind.ClassHelper;
             typeTarget.TypeValue = result;
             CurrentMemberVisibility[result] = MemberVisibility.Public;
@@ -1626,7 +1711,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         public void StartVisit(ProcedureDeclaration procedure) {
             var symbolTarget = LastValue as IDeclaredSymbolTarget;
-            MethodImplementation result = AddNode<MethodImplementation, ProcedureDeclaration>(procedure);
+            var result = new MethodImplementation();
+            InitNode(result, procedure);
             result.Name = ExtractSymbolName(procedure.Heading.Name);
             result.Kind = TokenKindMapper.MapMethodKind(procedure.Heading.Kind);
             symbolTarget.Symbols.AddDirect(result, LogSource);
@@ -1639,7 +1725,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         public void StartVisit(Standard.MethodDeclaration method) {
             CompilationUnit unit = CurrentUnit;
             GenericSymbolName name = ExtractSymbolName(method.Heading.Qualifiers);
-            MethodImplementation result = AddNode<MethodImplementation, Standard.MethodDeclaration>(method);
+            var result = new MethodImplementation();
+            InitNode(result, method);
             result.Kind = TokenKindMapper.MapMethodKind(method.Heading.Kind);
             result.Name = name;
 
@@ -1648,12 +1735,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (type == null)
                 type = unit.ImplementationSymbols.Find(name.NamespaceParts);
 
-            var typeDecl = type as Abstract.TypeDeclaration;
-            var typeStruct = typeDecl.TypeValue as StructuredType;
-            StructureMethod declaration = typeStruct.Methods[name.Name];
-            declaration.Implementation = result;
-
-
+            if (type != null) {
+                var typeDecl = type as Abstract.TypeDeclaration;
+                var typeStruct = typeDecl.TypeValue as StructuredType;
+                if (typeStruct.Methods.Contains(name.Name)) {
+                    StructureMethod declaration = typeStruct.Methods[name.Name];
+                    declaration.Implementation = result;
+                }
+            }
         }
 
         #endregion
@@ -1665,7 +1754,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 return;
 
             var target = LastValue as IStatementTarget;
-            StructuredStatement result = AddNode<StructuredStatement, StatementPart>(part);
+            var result = new StructuredStatement();
+            InitNode(result, part);
 
             if (part.Assignment != null) {
                 result.Kind = StructuredStatementKind.Assignment;
@@ -1683,7 +1773,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         public void StartVisit(ClosureExpression closure) {
             IExpressionTarget expression = LastExpression;
-            MethodImplementation result = AddNode<MethodImplementation, ClosureExpression>(closure);
+            var result = new MethodImplementation();
+            InitNode(result, closure);
             result.Name = new SimpleSymbolName(CurrentUnit.GenerateSymbolName());
             expression.Value = result;
         }
@@ -1693,7 +1784,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         public void StartVisit(RaiseStatement raise) {
             var target = LastValue as IStatementTarget;
-            StructuredStatement result = AddNode<StructuredStatement, RaiseStatement>(raise);
+            var result = new StructuredStatement();
+            InitNode(result, raise);
             target.Statements.Add(result);
 
             if (raise.Raise != null && raise.At == null) {
@@ -1713,7 +1805,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         public void StartVisit(TryStatement tryStatement) {
             var target = LastValue as IStatementTarget;
-            StructuredStatement result = AddNode<StructuredStatement, TryStatement>(tryStatement);
+            var result = new StructuredStatement();
+            InitNode(result, tryStatement);
             target.Statements.Add(result);
 
             if (tryStatement.Finally != null) {
@@ -1733,7 +1826,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 return;
 
             var target = LastValue as IStatementTarget;
-            BlockOfStatements result = AddNode<BlockOfStatements, TryStatement>(tryStatement, LastValue, child);
+            var result = new BlockOfStatements();
+            InitNode(result, child);
             target.Statements.Add(result);
         }
 
@@ -1742,7 +1836,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         public void StartVisit(ExceptHandlers exceptHandlers) {
             var target = LastValue as IStatementTarget;
-            StructuredStatement result = AddNode<StructuredStatement, ExceptHandlers>(exceptHandlers);
+            var result = new StructuredStatement();
+            InitNode(result, exceptHandlers);
             result.Kind = StructuredStatementKind.ExceptElse;
             target.Statements.Add(result);
 
@@ -1753,7 +1848,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         public void StartVisit(ExceptHandler exceptHandler) {
             var target = LastValue as IStatementTarget;
-            StructuredStatement result = AddNode<StructuredStatement, ExceptHandler>(exceptHandler);
+            var result = new StructuredStatement();
+            InitNode(result, exceptHandler);
             result.Kind = StructuredStatementKind.ExceptOn;
             result.Name = ExtractSymbolName(exceptHandler.Name);
             target.Statements.Add(result);
@@ -1765,7 +1861,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         public void StartVisit(WithStatement withStatement) {
             var target = LastValue as IStatementTarget;
-            StructuredStatement result = AddNode<StructuredStatement, WithStatement>(withStatement);
+            var result = new StructuredStatement();
+            InitNode(result, withStatement);
             result.Kind = StructuredStatementKind.With;
             target.Statements.Add(result);
 
@@ -1776,7 +1873,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         public void StartVisit(ForStatement forStatement) {
             var target = LastValue as IStatementTarget;
-            StructuredStatement result = AddNode<StructuredStatement, ForStatement>(forStatement);
+            var result = new StructuredStatement();
+            InitNode(result, forStatement);
 
             switch (forStatement.Kind) {
                 case TokenKind.To:
@@ -1800,7 +1898,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         public void StartVisit(WhileStatement withStatement) {
             var target = LastValue as IStatementTarget;
-            StructuredStatement result = AddNode<StructuredStatement, WhileStatement>(withStatement);
+            var result = new StructuredStatement();
+            InitNode(result, withStatement);
             result.Kind = StructuredStatementKind.While;
             target.Statements.Add(result);
 
@@ -1811,7 +1910,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         public void StartVisit(RepeatStatement repeateStatement) {
             var target = LastValue as IStatementTarget;
-            StructuredStatement result = AddNode<StructuredStatement, RepeatStatement>(repeateStatement);
+            var result = new StructuredStatement();
+            InitNode(result, repeateStatement);
             result.Kind = StructuredStatementKind.Repeat;
             target.Statements.Add(result);
 
@@ -1822,7 +1922,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         public void StartVisit(CaseStatement caseStatement) {
             var target = LastValue as IStatementTarget;
-            StructuredStatement result = AddNode<StructuredStatement, CaseStatement>(caseStatement);
+            var result = new StructuredStatement();
+            InitNode(result, caseStatement);
             result.Kind = StructuredStatementKind.Case;
             target.Statements.Add(result);
 
@@ -1834,7 +1935,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 return;
 
             var target = LastValue as IStatementTarget;
-            StructuredStatement result = AddNode<StructuredStatement, CaseStatement>(caseStatement, LastValue, child);
+            var result = new StructuredStatement();
+            InitNode(result, child);
             result.Kind = StructuredStatementKind.CaseElse;
             target.Statements.Add(result);
         }
@@ -1844,7 +1946,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         public void StartVisit(CaseItem caseItem) {
             var target = LastValue as IStatementTarget;
-            StructuredStatement result = AddNode<StructuredStatement, CaseItem>(caseItem);
+            var result = new StructuredStatement();
+            InitNode(result, caseItem);
             result.Kind = StructuredStatementKind.CaseItem;
             target.Statements.Add(result);
 
@@ -1856,7 +1959,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         public void StartVisit(CaseLabel caseLabel) {
             if (caseLabel.EndExpression != null) {
                 IExpressionTarget lastExpression = LastExpression;
-                BinaryOperator binOp = AddNode<BinaryOperator, CaseLabel>(caseLabel);
+                var binOp = new BinaryOperator();
+                InitNode(binOp, caseLabel);
                 lastExpression.Value = binOp;
                 binOp.Kind = ExpressionKind.RangeOperator;
             }
@@ -1867,7 +1971,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         public void StartVisit(IfStatement ifStatement) {
             var target = LastValue as IStatementTarget;
-            StructuredStatement result = AddNode<StructuredStatement, IfStatement>(ifStatement);
+            var result = new StructuredStatement();
+            InitNode(result, ifStatement);
             result.Kind = StructuredStatementKind.IfThen;
             target.Statements.Add(result);
 
@@ -1879,7 +1984,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 return;
 
             var target = LastValue as IStatementTarget;
-            StructuredStatement result = AddNode<StructuredStatement, IfStatement>(ifStatement, LastValue, child);
+            var result = new StructuredStatement();
+            InitNode(result, child);
             result.Kind = StructuredStatementKind.IfElse;
             target.Statements.Add(result);
         }
@@ -1889,7 +1995,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         public void StartVisit(GoToStatement gotoStatement) {
             var target = LastValue as IStatementTarget;
-            StructuredStatement result = AddNode<StructuredStatement, GoToStatement>(gotoStatement);
+            var result = new StructuredStatement();
+            InitNode(result, gotoStatement);
 
             if (gotoStatement.Break)
                 result.Kind = StructuredStatementKind.Break;
@@ -1910,7 +2017,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         public void StartVisit(AsmBlock block) {
             var statementTarget = LastValue as IStatementTarget;
             var blockTarget = LastValue as IBlockTarget;
-            BlockOfAssemblerStatements result = AddNode<BlockOfAssemblerStatements, AsmBlock>(block, LastValue, block);
+            var result = new BlockOfAssemblerStatements();
+            InitNode(result, block);
             if (statementTarget != null)
                 statementTarget.Statements.Add(result);
             else if (blockTarget != null)
@@ -1923,24 +2031,28 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         public void StartVisit(AsmPseudoOp op) {
             var statementTarget = LastValue as BlockOfAssemblerStatements;
-            AssemblerStatement result = AddNode<AssemblerStatement, AsmPseudoOp>(op);
+            var result = new AssemblerStatement();
+            InitNode(result, op);
 
             if (op.ParamsOperation) {
                 result.Kind = AssemblerStatementKind.ParamsOperation;
-                ConstantValue operand = AddNode<ConstantValue, StandardInteger>(op.NumberOfParams);
+                var operand = new ConstantValue();
+                InitNode(operand, op.NumberOfParams);
                 operand.Kind = ConstantValueKind.Integer;
                 operand.IntValue = DigitTokenGroupValue.Unwrap(op.NumberOfParams.FirstTerminalToken);
                 result.Operands.Add(operand);
             }
             else if (op.PushEnvOperation) {
                 result.Kind = AssemblerStatementKind.PushEnvOperation;
-                SymbolReference operand = AddNode<SymbolReference, Identifier>(op.Register);
+                var operand = new SymbolReference();
+                InitNode(operand, op.Register);
                 operand.Name = ExtractSymbolName(op.Register);
                 result.Operands.Add(operand);
             }
             else if (op.SaveEnvOperation) {
                 result.Kind = AssemblerStatementKind.SaveEnvOperation;
-                SymbolReference operand = AddNode<SymbolReference, Identifier>(op.Register);
+                var operand = new SymbolReference();
+                InitNode(operand, op.Register);
                 operand.Name = ExtractSymbolName(op.Register);
                 result.Operands.Add(operand);
             }
@@ -1983,7 +2095,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         public void StartVisit(AsmStatement statement) {
             var parent = LastValue as BlockOfAssemblerStatements;
-            AssemblerStatement result = AddNode<AssemblerStatement, AsmStatement>(statement);
+            var result = new AssemblerStatement();
+            InitNode(result, statement);
             parent.Statements.Add(result);
             result.OpCode = ExtractSymbolName(statement.OpCode?.OpCode);
             result.SegmentPrefix = ExtractSymbolName(statement.Prefix?.SegmentPrefix);
@@ -1999,14 +2112,16 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
             if (statement.LeftTerm != null && statement.RightTerm != null) {
                 IExpressionTarget lastExpression = LastExpression;
-                BinaryOperator currentExpression = AddNode<BinaryOperator, AsmOperand>(statement);
+                var currentExpression = new BinaryOperator();
+                InitNode(currentExpression, statement);
                 lastExpression.Value = currentExpression;
                 currentExpression.Kind = TokenKindMapper.ForExpression(statement.Kind);
             }
 
             if (statement.NotExpression != null) {
                 IExpressionTarget lastExpression = LastExpression;
-                UnaryOperator currentExpression = AddNode<UnaryOperator, AsmOperand>(statement);
+                var currentExpression = new UnaryOperator();
+                InitNode(currentExpression, statement);
                 lastExpression.Value = currentExpression;
                 currentExpression.Kind = ExpressionKind.Not;
             }
@@ -2021,21 +2136,24 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
             if (statement.Offset != null) {
                 IExpressionTarget lastExpression = LastExpression;
-                UnaryOperator currentExpression = AddNode<UnaryOperator, AsmExpression>(statement);
+                var currentExpression = new UnaryOperator();
+                InitNode(currentExpression, statement);
                 lastExpression.Value = currentExpression;
                 currentExpression.Kind = ExpressionKind.AsmOffset;
             }
 
             if (statement.BytePtrKind != null) {
                 IExpressionTarget lastExpression = LastExpression;
-                UnaryOperator currentExpression = AddNode<UnaryOperator, AsmExpression>(statement);
+                var currentExpression = new UnaryOperator();
+                InitNode(currentExpression, statement);
                 lastExpression.Value = currentExpression;
                 currentExpression.Kind = TokenKindMapper.ForAsmBytePointerKind(ExtractSymbolName(statement.BytePtrKind)?.CompleteName);
             }
 
             if (statement.TypeExpression != null) {
                 IExpressionTarget lastExpression = LastExpression;
-                UnaryOperator currentExpression = AddNode<UnaryOperator, AsmExpression>(statement);
+                var currentExpression = new UnaryOperator();
+                InitNode(currentExpression, statement);
                 lastExpression.Value = currentExpression;
                 currentExpression.Kind = ExpressionKind.AsmType;
                 return;
@@ -2043,7 +2161,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
             if (statement.RightOperand != null) {
                 IExpressionTarget lastExpression = LastExpression;
-                BinaryOperator currentExpression = AddNode<BinaryOperator, AsmExpression>(statement);
+                var currentExpression = new BinaryOperator();
+                InitNode(currentExpression, statement);
                 lastExpression.Value = currentExpression;
                 currentExpression.Kind = TokenKindMapper.ForExpression(statement.BinaryOperatorKind);
                 return;
@@ -2059,14 +2178,16 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
             if (statement.Kind != TokenKind.Undefined) {
                 IExpressionTarget lastExpression = LastExpression;
-                BinaryOperator currentExpression = AddNode<BinaryOperator, AsmTerm>(statement);
+                var currentExpression = new BinaryOperator();
+                InitNode(currentExpression, statement);
                 lastExpression.Value = currentExpression;
                 currentExpression.Kind = TokenKindMapper.ForExpression(statement.Kind);
             }
 
             if (statement.Subtype != null) {
                 IExpressionTarget lastExpression = LastExpression;
-                BinaryOperator currentExpression = AddNode<BinaryOperator, AsmTerm>(statement);
+                var currentExpression = new BinaryOperator();
+                InitNode(currentExpression, statement);
                 lastExpression.Value = currentExpression;
                 currentExpression.Kind = ExpressionKind.Dot;
             }
@@ -2082,7 +2203,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 return;
 
             IExpressionTarget lastExpression = LastExpression;
-            SymbolReference result = AddNode<SymbolReference, DesignatorStatement>(designator);
+            var result = new SymbolReference();
+            InitNode(result, designator);
             if (designator.Inherited)
                 result.Inherited = true;
 
@@ -2097,14 +2219,16 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             var parent = LastValue as SymbolReference;
 
             if (designator.Dereference) {
-                SymbolReferencePart part = AddNode<SymbolReferencePart, DesignatorItem>(designator);
+                var part = new SymbolReferencePart();
+                InitNode(part, designator);
                 parent.AddPart(part);
                 part.Kind = SymbolReferencePartKind.Dereference;
                 return;
             }
 
             if (designator.Subitem != null) {
-                SymbolReferencePart part = AddNode<SymbolReferencePart, DesignatorItem>(designator);
+                var part = new SymbolReferencePart();
+                InitNode(part, designator);
                 parent.AddPart(part);
                 part.Kind = SymbolReferencePartKind.SubItem;
                 part.Name = ExtractSymbolName(designator.Subitem);
@@ -2113,14 +2237,16 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             }
 
             if (designator.IndexExpression != null) {
-                SymbolReferencePart part = AddNode<SymbolReferencePart, DesignatorItem>(designator);
+                var part = new SymbolReferencePart();
+                InitNode(part, designator);
                 parent.AddPart(part);
                 part.Kind = SymbolReferencePartKind.ArrayIndex;
                 return;
             }
 
             if (designator.ParameterList) {
-                SymbolReferencePart part = AddNode<SymbolReferencePart, DesignatorItem>(designator);
+                var part = new SymbolReferencePart();
+                InitNode(part, designator);
                 parent.AddPart(part);
                 part.Kind = SymbolReferencePartKind.CallParameters;
                 return;
@@ -2137,7 +2263,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 return;
 
             IExpressionTarget lastExpression = LastExpression;
-            SymbolReference result = AddNode<SymbolReference, Parameter>(param);
+            var result = new SymbolReference();
+            InitNode(result, param);
             result.NamedParameter = true;
             result.Name = ExtractSymbolName(param.ParameterName);
             lastExpression.Value = result;
@@ -2152,7 +2279,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 return;
 
             IExpressionTarget lastExpression = LastExpression;
-            Abstract.FormattedExpression result = AddNode<Abstract.FormattedExpression, Standard.FormattedExpression>(expr);
+            var result = new Abstract.FormattedExpression();
+            InitNode(result, expr);
             lastExpression.Value = result;
 
         }
@@ -2162,7 +2290,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         public void StartVisit(SetSection expr) {
             IExpressionTarget lastExpression = LastExpression;
-            SetExpression result = AddNode<SetExpression, SetSection>(expr);
+            var result = new SetExpression();
+            InitNode(result, expr);
             lastExpression.Value = result;
         }
 
@@ -2184,7 +2313,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             }
 
             IExpressionTarget lastExpression = LastExpression;
-            BinaryOperator result = AddNode<BinaryOperator, SetSectnPart>(part);
+            var result = new BinaryOperator();
+            InitNode(result, part);
             result.Kind = ExpressionKind.RangeOperator;
             lastExpression.Value = result;
 
@@ -2196,59 +2326,68 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             IExpressionTarget expression = LastExpression;
 
             if (factor.Number != null) {
-                ConstantValue value = AddNode<ConstantValue, AsmFactor>(factor);
+                var value = new ConstantValue();
+                InitNode(value, factor);
                 value.Kind = ConstantValueKind.Integer;
                 expression.Value = value;
                 return;
             }
 
             if (factor.RealNumber != null) {
-                ConstantValue value = AddNode<ConstantValue, AsmFactor>(factor);
+                var value = new ConstantValue();
+                InitNode(value, factor);
                 value.Kind = ConstantValueKind.RealNumber;
                 expression.Value = value;
                 return;
             }
 
             if (factor.HexNumber != null) {
-                ConstantValue value = AddNode<ConstantValue, AsmFactor>(factor);
+                var value = new ConstantValue();
+                InitNode(value, factor);
                 value.Kind = ConstantValueKind.HexNumber;
                 expression.Value = value;
                 return;
             }
 
             if (factor.QuotedString != null) {
-                ConstantValue value = AddNode<ConstantValue, AsmFactor>(factor);
+                var value = new ConstantValue();
+                InitNode(value, factor);
                 value.Kind = ConstantValueKind.QuotedString;
                 expression.Value = value;
                 return;
             }
 
             if (factor.Identifier != null) {
-                SymbolReference value = AddNode<SymbolReference, AsmFactor>(factor);
+                var value = new SymbolReference();
+                InitNode(value, factor);
                 value.Name = ExtractSymbolName(factor.Identifier);
                 expression.Value = value;
                 return;
             }
 
             if (factor.SegmentPrefix != null) {
-                BinaryOperator currentExpression = AddNode<BinaryOperator, AsmFactor>(factor);
+                var currentExpression = new BinaryOperator();
+                InitNode(currentExpression, factor);
                 expression.Value = currentExpression;
                 currentExpression.Kind = ExpressionKind.AsmSegmentPrefix;
-                SymbolReference reference = AddNode<SymbolReference, AsmFactor>(factor, currentExpression);
+                var reference = new SymbolReference();
+                InitNode(reference, factor.SegmentPrefix, currentExpression);
                 reference.Name = ExtractSymbolName(factor.SegmentPrefix);
                 currentExpression.LeftOperand = reference;
                 return;
             }
 
             if (factor.MemorySubexpression != null) {
-                UnaryOperator currentExpression = AddNode<UnaryOperator, AsmFactor>(factor);
+                var currentExpression = new UnaryOperator();
+                InitNode(currentExpression, factor);
                 expression.Value = currentExpression;
                 currentExpression.Kind = ExpressionKind.AsmMemorySubexpression;
                 return;
             }
 
             if (factor.Label != null) {
-                SymbolReference reference = AddNode<SymbolReference, AsmFactor>(factor);
+                var reference = new SymbolReference();
+                InitNode(reference, factor);
                 expression.Value = reference;
                 return;
             }
@@ -2329,44 +2468,53 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (genericDefinition == null)
                 return null;
 
-            GenericTypes result = AddNode<GenericTypes, GenericSuffix>(genericDefinition, parent);
+            var result = new GenericTypes();
+            InitNode(result, genericDefinition, parent);
             result.TypeReference = true;
 
             return result;
         }
 
-        private GenericTypes ExtractGenericDefinition(AbstractSyntaxPartBase parent, GenericDefinition genericDefinition) {
+        private GenericTypes ExtractGenericDefinition(AbstractSyntaxPartBase parent, ISyntaxPart node, GenericDefinition genericDefinition) {
             if (genericDefinition == null)
                 return null;
 
-            GenericTypes result = AddNode<GenericTypes, GenericDefinition>(genericDefinition, parent);
+            var result = new GenericTypes();
+            InitNode(result, node, parent);
 
             foreach (ISyntaxPart part in genericDefinition.Parts) {
 
                 if (part is Identifier idPart) {
-                    GenericType generic = AddNode<GenericType, GenericDefinition>(genericDefinition, parent);
+                    var generic = new GenericType();
+                    InitNode(generic, node, parent);
                     generic.Name = ExtractSymbolName(idPart);
                     result.Add(generic, LogSource);
+                    visitor.WorkingStack.Pop();
                     continue;
                 }
 
                 if (part is GenericDefinitionPart genericPart) {
-                    GenericType generic = AddNode<GenericType, GenericDefinition>(genericDefinition, result);
+                    var generic = new GenericType();
+                    InitNode(generic, node, result);
                     generic.Name = ExtractSymbolName(genericPart.Identifier);
                     result.Add(generic, LogSource);
 
                     foreach (ISyntaxPart constraintPart in genericPart.Parts) {
                         if (constraintPart is Standard.ConstrainedGeneric constraint) {
-                            GenericConstraint cr = AddNode<GenericConstraint, GenericDefinition>(genericDefinition, generic);
+                            var cr = new GenericConstraint();
+                            InitNode(cr, node, generic);
                             cr.Kind = TokenKindMapper.ForGenericConstraint(constraint);
                             cr.Name = ExtractSymbolName(constraint.ConstraintIdentifier);
                             generic.Add(cr, LogSource);
+                            visitor.WorkingStack.Pop();
                         }
                     }
 
-                    continue;
+                    visitor.WorkingStack.Pop();
                 }
             }
+
+            visitor.WorkingStack.Pop();
 
 
             return result;
@@ -2435,18 +2583,19 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region Helper functions
 
-        private ChildType AddNode<ChildType, NodeType>(NodeType node) where ChildType : ISyntaxPart, new()
-            => AddNode<ChildType, NodeType>(node, LastValue, null);
+        private void InitNode(AbstractSyntaxPartBase result, ISyntaxPart node)
+            => InitNode(result, node, LastValue, null);
 
-        private ChildType AddNode<ChildType, NodeType>(NodeType node, AbstractSyntaxPartBase parent) where ChildType : ISyntaxPart, new()
-            => AddNode<ChildType, NodeType>(node, parent, null);
+        private void InitNode(AbstractSyntaxPartBase result, ISyntaxPart node, AbstractSyntaxPartBase parent)
+            => InitNode(result, node, parent, null);
 
-        private ChildType AddNode<ChildType, NodeType>(NodeType node, AbstractSyntaxPartBase parent, ISyntaxPart child) where ChildType : ISyntaxPart, new() {
-            var result = new ChildType() {
-                ParentItem = parent
-            };
+        private void InitNode(AbstractSyntaxPartBase result, ISyntaxPart node, AbstractSyntaxPartBase parent, ISyntaxPart child) {
+
+            if (node is AbstractSyntaxPartBase)
+                ExceptionHelper.InvalidOperation();
+
+            result.ParentItem = parent;
             visitor.WorkingStack.Push(new WorkingStackEntry(node, result, child));
-            return result;
         }
 
         #endregion
@@ -2486,7 +2635,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     log manager
         /// </summary>
-        public LogManager LogManager { get; set; }
+        public ILogManager LogManager { get; set; }
 
         /// <summary>
         ///     project root

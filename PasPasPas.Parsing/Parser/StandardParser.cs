@@ -1683,7 +1683,7 @@ namespace PasPasPas.Parsing.Parser {
 
             do {
                 var name = new MethodDeclarationName();
-                parent.Add(name);
+                result.Add(name);
                 name.Name = ParseNamespaceName(name, allowIn);
 
                 if (Match(TokenKind.AngleBracketsOpen)) {
@@ -3365,7 +3365,7 @@ namespace PasPasPas.Parsing.Parser {
 
             do {
                 var part = new GenericDefinitionPart();
-                parent.Add(result);
+                result.Add(part);
                 part.Identifier = RequireIdentifier(result);
             } while (ContinueWith(result, TokenKind.Comma));
 

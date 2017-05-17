@@ -745,6 +745,7 @@ namespace PasPasPasTests.Parser {
         public void TestProcedure() {
             Func<object, MethodImplementation> r = t => ((t as CompilationUnit)?.ImplementationSymbols["m"] as MethodImplementation);
             RunAstTest("unit z.x; interface implementation procedure m(); begin end; end.", t => r(t)?.Name.CompleteName, "m");
+            RunAstTest("unit z.x; interface implementation procedure m(var x: Integer = 5); begin end; end.", t => (r(t)?.Parameters?.Items[0]?.Value as ConstantValue)?.IntValue, 5);
         }
 
         [Fact]

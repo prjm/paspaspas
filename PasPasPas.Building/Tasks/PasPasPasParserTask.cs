@@ -11,26 +11,9 @@ using System.Text;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 using PasPasPas.Parsing.SyntaxTree;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
+using PasPasPas.Parsing.SyntaxTree.Utils;
 
 namespace PasPasPas.Building.Tasks {
-
-    /// <summary>
-    ///     dummy parent item
-    /// </summary>
-    internal class StubParent : SyntaxPartBase {
-
-        /// <summary>
-        ///     accept visitor
-        /// </summary>
-        /// <param name="startVisitor">start visitor</param>
-        /// <param name="endVisitor">end visitor</param>
-        public override void Accept(IStartEndVisitor visitor) {
-            visitor.StartVisit(this);
-            AcceptParts(this, visitor);
-            visitor.EndVisit(this);
-        }
-
-    }
 
     /// <summary>
     ///     a simple parser runner
@@ -77,7 +60,7 @@ namespace PasPasPas.Building.Tasks {
                 var log = new LogTarget();
                 environment.Options = new OptionSet(settings.FileSystemAccess);
 
-                IExtendableSyntaxPart resultTree;
+                ISyntaxPart resultTree = null;
 
                 var parser = new StandardParser(environment);
                 using (IParserInput inputFile = settings.FileSystemAccess.OpenFileForReading(file))
@@ -94,13 +77,13 @@ namespace PasPasPas.Building.Tasks {
                         y.Message.Severity == MessageSeverity.FatalError;
                     };
 
-                    resultTree = new StubParent();
                     try {
-                        parser.ParseFile();
+                        resultTree = parser.ParseFile();
                     }
                     catch (Exception exception) {
                         result.AppendLine("<<XXXX>> Exception!");
                         result.Append(exception.ToString());
+                        return result;
                     }
                 }
 
@@ -145,7 +128,9 @@ namespace PasPasPas.Building.Tasks {
 
 
                 //return resultTree;
-                var transformVisitor = new TreeTransformer(new ProjectRoot());
+                var transformVisitor = new TreeTransformer(new ProjectRoot()) {
+                    LogManager = environment.Log
+                };
                 resultTree.Accept(transformVisitor.AsVisitor());
 
 #endif
