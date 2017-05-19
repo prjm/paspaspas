@@ -3663,11 +3663,12 @@ namespace PasPasPas.Parsing.Parser {
 
             if (Match(TokenKind.OpenParen)) {
 
-                if (LookAheadIdentifier(1, new int[0], true) && (LookAhead(2, TokenKind.Colon))) {
+                if (LookAhead(1, TokenKind.CloseParen) || (LookAheadIdentifier(1, new int[0], true) && (LookAhead(2, TokenKind.Colon)))) {
                     result.IsRecordConstant = true;
                     ContinueWithOrMissing(result, TokenKind.OpenParen);
                     do {
-                        ParseRecordConstant(result);
+                        if (!Match(TokenKind.CloseParen))
+                            ParseRecordConstant(result);
                     } while (ContinueWith(result, TokenKind.Semicolon));
                     ContinueWithOrMissing(result, TokenKind.CloseParen);
                 }
@@ -3863,8 +3864,14 @@ namespace PasPasPas.Parsing.Parser {
                 return result;
             }
 
-            if (Match(TokenKind.Dot, TokenKind.OpenBraces, TokenKind.OpenParen)) {
+            if (Match(TokenKind.Dot, TokenKind.OpenBraces)) {
                 result.Designator = ParseDesignator(result);
+                return result;
+            }
+
+            if (ContinueWith(result, TokenKind.OpenParen)) {
+                result.ParenExpression = ParseExpression(result);
+                ContinueWithOrMissing(result, TokenKind.CloseParen);
                 return result;
             }
 

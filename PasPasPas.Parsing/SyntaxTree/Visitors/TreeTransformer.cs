@@ -2234,6 +2234,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 part.Name = ExtractSymbolName(designator.Subitem);
                 part.GenericType = ExtractGenericDefinition(part, designator.SubitemGenericType);
                 //return (AbstractSyntaxPart)part.GenericType ?? part;
+                return;
             }
 
             if (designator.IndexExpression != null) {
@@ -2251,8 +2252,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 part.Kind = SymbolReferencePartKind.CallParameters;
                 return;
             }
-
-            ;
         }
 
         #endregion
@@ -2290,7 +2289,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         public void StartVisit(SetSection expr) {
             IExpressionTarget lastExpression = LastExpression;
-            var result = new SetExpression();
+            var result = new ArrayExpression();
             InitNode(result, expr);
             lastExpression.Value = result;
         }
@@ -2299,7 +2298,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         public void StartVisit(SetSectnPart part) {
             if (part.Continuation != TokenKind.DotDot) {
-                var arrayExpression = LastExpression as SetExpression;
+                var arrayExpression = LastExpression as ArrayExpression;
 
                 if (arrayExpression == null)
                     return;

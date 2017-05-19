@@ -8,7 +8,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// <summary>
     ///     set expression
     /// </summary>
-    public class SetExpression : AbstractSyntaxPartBase, IExpression, IExpressionTarget {
+    public class ArrayExpression : AbstractSyntaxPartBase, IExpression, IExpressionTarget {
 
         /// <summary>
         ///     subexpressions
@@ -26,7 +26,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     creates a new set expression
         /// </summary>
-        public SetExpression()
+        public ArrayExpression()
             => Expressions = new SyntaxPartCollection<IExpression>(this);
 
         /// <summary>
