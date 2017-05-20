@@ -3656,6 +3656,23 @@ namespace PasPasPas.Parsing.Parser {
         #endregion
         #region ParseConstantExpression
 
+        private bool IsArrayConstant() {
+            var level = 1;
+            var counter = 1;
+
+            while (level > 0 && (Tokenizer.BaseTokenizer.HasNextToken())) {
+                if (LookAhead(counter, TokenKind.OpenParen))
+                    level++;
+                else if (LookAhead(counter, TokenKind.CloseParen))
+                    level--;
+                if (level == 1 && LookAhead(counter, TokenKind.Comma))
+                    return true;
+                counter = counter + 1;
+            }
+
+            return false;
+        }
+
         [Rule("ConstantExpression", " '(' ( RecordConstant | ConstantExpression ) ')' | Expression")]
         private ConstantExpression ParseConstantExpression(IExtendableSyntaxPart parent, bool fromDesignator = false) {
             var result = new ConstantExpression();
@@ -3672,8 +3689,8 @@ namespace PasPasPas.Parsing.Parser {
                     } while (ContinueWith(result, TokenKind.Semicolon));
                     ContinueWithOrMissing(result, TokenKind.CloseParen);
                 }
-                else if (HasTokenBeforeToken(TokenKind.Comma, TokenKind.OpenParen, TokenKind.OpenBraces, TokenKind.CloseBraces, TokenKind.CloseParen) || fromDesignator) {
-                    result.IsSetConstant = true;
+                else if (IsArrayConstant() || fromDesignator) {
+                    result.IsArrayConstant = true;
                     ContinueWithOrMissing(result, TokenKind.OpenParen);
                     do {
                         if (!Match(TokenKind.CloseParen))
@@ -3764,6 +3781,21 @@ namespace PasPasPas.Parsing.Parser {
 
         #endregion
         #region ParseFactor
+
+        private bool IsDesignator() {
+            var level = 1;
+            var counter = 1;
+
+            while (level > 0 && (Tokenizer.BaseTokenizer.HasNextToken())) {
+                if (LookAhead(counter, TokenKind.OpenParen))
+                    level++;
+                else if (LookAhead(counter, TokenKind.CloseParen))
+                    level--;
+                counter = counter + 1;
+            }
+
+            return LookAhead(counter, TokenKind.Dot);
+        }
 
         [Rule("Factor", "'@' Factor  | 'not' Factor | '+' Factor | '-' Factor | '^' Identifier | Integer | HexNumber | Real | 'true' | 'false' | 'nil' | '(' Expression ')' | String | SetSection | Designator | TypeCast")]
         private Factor ParseFactor(IExtendableSyntaxPart parent) {
@@ -3869,6 +3901,11 @@ namespace PasPasPas.Parsing.Parser {
                 return result;
             }
 
+            if (Match(TokenKind.OpenParen) && IsDesignator()) {
+                result.Designator = ParseDesignator(result);
+                return result;
+            }
+
             if (ContinueWith(result, TokenKind.OpenParen)) {
                 result.ParenExpression = ParseExpression(result);
                 ContinueWithOrMissing(result, TokenKind.CloseParen);
@@ -3938,7 +3975,10 @@ namespace PasPasPas.Parsing.Parser {
             if (Match(TokenKind.OpenParen)) {
                 DesignatorItem prevDesignatorItem = parent.PartList.Count > 0 ? parent.PartList[parent.PartList.Count - 1] as DesignatorItem : null;
                 if (!hasIdentifier && ((prevDesignatorItem == null) || (prevDesignatorItem.Subitem == null))) {
-                    return ParseConstantExpression(parent, true);
+                    ContinueWithOrMissing(parent, TokenKind.OpenParen);
+                    ConstantExpression children = ParseConstantExpression(parent, true);
+                    ContinueWithOrMissing(parent, TokenKind.CloseParen);
+                    return children;
                 }
 
                 var result = new DesignatorItem();

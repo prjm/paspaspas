@@ -7,14 +7,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// <summary>
     ///     constant array
     /// </summary>
-    public class SetConstant : ExpressionBase, IExpressionTarget {
+    public class ArrayConstant : ExpressionBase, IExpressionTarget {
 
         public ISyntaxPartList<IExpression> Items { get; }
 
         /// <summary>
         ///     Create a new set constant
         /// </summary>
-        public SetConstant()
+        public ArrayConstant()
             => Items = new SyntaxPartCollection<IExpression>(this);
 
         /// <summary>

@@ -171,6 +171,8 @@ namespace PasPasPasTests.Parser {
             RunAstTest("unit z.x; interface resourcestring x = 'a'; implementation end.", t => u(t)?.Mode, DeclarationMode.ResourceString);
 
             RunAstTest("unit z.x; interface const x : TValue = (); implementation end.", t => u(t)?.SymbolName, "x");
+            RunAstTest("unit z.x; interface const x : array[2,2] of integer = ((0,0),(0,0)); implementation end.", t => u(t)?.Value?.GetType(), typeof(ArrayConstant));
+            RunAstTest("unit z.x; interface const x : array[2] of integer = (SizeOf(T),SizeOf(T)); implementation end.", t => u(t)?.Value?.GetType(), typeof(ArrayConstant));
 
             RunAstTest("unit z.x; interface implementation const x = 5; end.", t => v(t)?.SymbolName, "x");
             RunAstTest("unit z.x; interface implementation const x = 5; end.", t => v(t)?.Mode, DeclarationMode.Const);
@@ -912,9 +914,9 @@ namespace PasPasPasTests.Parser {
 
         [Fact]
         public void TestSetConstant() {
-            Func<object, SetConstant> r = t => (((t as CompilationUnit)?.ImplementationSymbols["p"] as MethodImplementation)?.Symbols["n"] as ConstantDeclaration)?.Value as SetConstant;
+            Func<object, ArrayConstant> r = t => (((t as CompilationUnit)?.ImplementationSymbols["p"] as MethodImplementation)?.Symbols["n"] as ConstantDeclaration)?.Value as ArrayConstant;
 
-            RunAstTest("unit z.x; interface implementation procedure p; const n = (2, 1); begin l: s; end; end.", t => r(t)?.GetType(), typeof(SetConstant));
+            RunAstTest("unit z.x; interface implementation procedure p; const n = (2, 1); begin l: s; end; end.", t => r(t)?.GetType(), typeof(ArrayConstant));
             RunAstTest("unit z.x; interface implementation procedure p; const n = (nil, nil); begin l: s; end; end.", t => r(t)?.Items[0]?.GetType(), typeof(ConstantValue));
         }
 
@@ -956,6 +958,8 @@ namespace PasPasPasTests.Parser {
             RunAstTest("unit z.x; interface implementation procedure p; const n = 5.55; begin l: s; end; end.", t => (r(t) as ConstantValue)?.Kind, ConstantValueKind.RealNumber);
             RunAstTest("unit z.x; interface implementation procedure p; const n = 'a'; begin l: s; end; end.", t => (r(t) as ConstantValue)?.Kind, ConstantValueKind.QuotedString);
             RunAstTest("unit z.x; interface implementation procedure p; const n = $FFFF; begin l: s; end; end.", t => (r(t) as ConstantValue)?.Kind, ConstantValueKind.HexNumber);
+
+            RunAstTest("unit z.x; interface implementation procedure p; const n = r = (a).q; begin l: s; end; end.", t => ((r(t) as BinaryOperator)?.RightOperand as SymbolReference)?.Inherited, false);
         }
 
         [Fact]
@@ -965,6 +969,7 @@ namespace PasPasPasTests.Parser {
             RunAstTest("unit z.x; interface implementation procedure p; const n = inherited; begin l: s; end; end.", t => r(t)?.Inherited, true);
             RunAstTest("unit z.x; interface implementation procedure p; const n = q; begin l: s; end; end.", t => r(t)?.Inherited, false);
             RunAstTest("unit z.x; interface implementation procedure p; const n = q; begin l: s; end; end.", t => (r(t)?.TypeValue as MetaType)?.Fragments[0]?.Name?.CompleteName, "q");
+            RunAstTest("unit z.x; interface implementation procedure p; const n = (q).a; begin l: s; end; end.", t => (r(t)?.Inherited), false);
         }
 
         [Fact]

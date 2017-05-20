@@ -380,9 +380,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         public void StartVisit(ConstantExpression constExpression) {
 
-            if (constExpression.IsSetConstant) {
+            if (constExpression.IsArrayConstant) {
                 IExpressionTarget lastExpression = LastExpression;
-                var result = new SetConstant();
+                var result = new ArrayConstant();
                 InitNode(result, constExpression);
                 lastExpression.Value = result;
             }
@@ -2199,9 +2199,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #region DesignatorStatement
 
         public void StartVisit(DesignatorStatement designator) {
-            if (!designator.Inherited && designator.Name == null)
-                return;
-
             IExpressionTarget lastExpression = LastExpression;
             var result = new SymbolReference();
             InitNode(result, designator);
