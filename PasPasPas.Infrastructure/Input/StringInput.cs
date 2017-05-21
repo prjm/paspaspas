@@ -1,4 +1,5 @@
 ﻿using System;
+using PasPasPas.Infrastructure.Files;
 
 namespace PasPasPas.Infrastructure.Input {
 
@@ -48,15 +49,12 @@ namespace PasPasPas.Infrastructure.Input {
         /// <summary>
         ///     retrieve current position
         /// </summary>
-        public long Position
-        {
-            get
-            {
+        public long Position {
+            get {
                 return position;
             }
 
-            set
-            {
+            set {
                 position = (int)value;
             }
         }

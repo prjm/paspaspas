@@ -3,6 +3,7 @@ using PasPasPas.Infrastructure.Log;
 using PasPasPas.Parsing.Parser;
 using PasPasPas.Parsing.SyntaxTree;
 using System;
+using PasPasPas.Infrastructure.Files;
 
 namespace PasPasPas.Parsing.Tokenizer {
 

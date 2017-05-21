@@ -1,17 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
+using PasPasPas.Infrastructure.Files;
 using PasPasPas.Infrastructure.Utils;
 
 namespace PasPasPas.Infrastructure.Input {
 
+    using FileDictionary = IDictionary<string, IParserInput>;
+
     /// <summary>
-    ///    base class for file access
+    ///    abstract base class for file access
     /// </summary>
     public abstract class FileAccessBase : IFileAccess {
 
-        private Lazy<IDictionary<string, IParserInput>> mockupFiles
-            = new Lazy<IDictionary<string, IParserInput>>(()
-                => new Dictionary<string, IParserInput>(StringComparer.OrdinalIgnoreCase));
+        private readonly Lazy<FileDictionary> mockupFiles;
+
+        private FileDictionary CreateFileDictionary()
+            => new Dictionary<string, IParserInput>(StringComparer.OrdinalIgnoreCase);
+
+        /// <summary>
+        ///     create a new file access base clase
+        /// </summary>
+        protected FileAccessBase()
+            => mockupFiles = new Lazy<FileDictionary>(CreateFileDictionary);
 
         /// <summary>
         ///     open a file for reading
@@ -21,7 +31,7 @@ namespace PasPasPas.Infrastructure.Input {
         public IParserInput OpenFileForReading(IFileReference path) {
 
             if (path == null)
-                throw new ArgumentNullException(nameof(path));
+                ExceptionHelper.ArgumentIsNull(nameof(path));
 
             IParserInput result;
 
@@ -87,10 +97,10 @@ namespace PasPasPas.Infrastructure.Input {
         protected abstract bool DoCheckIfFileExists(IFileReference file);
 
         /// <summary>
-        ///     clear mockups
+        ///     clear mockup files
         /// </summary>
-        public void ClearMockups() {
-            mockupFiles.Value.Clear();
-        }
+        public void ClearMockups()
+            => mockupFiles.Value.Clear();
+
     }
 }

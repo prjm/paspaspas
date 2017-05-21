@@ -17,6 +17,7 @@ using System.ComponentModel;
 using System.Collections.Generic;
 using System.Resources;
 using PasPasPas.Parsing.SyntaxTree.Utils;
+using PasPasPas.Infrastructure.Files;
 
 namespace P3SyntaxTreeViewer {
 

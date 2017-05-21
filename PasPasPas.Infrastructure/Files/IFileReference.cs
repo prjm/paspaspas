@@ -1,4 +1,4 @@
-﻿namespace PasPasPas.Infrastructure.Input {
+﻿namespace PasPasPas.Infrastructure.Files {
 
     /// <summary>
     ///     reference to a file

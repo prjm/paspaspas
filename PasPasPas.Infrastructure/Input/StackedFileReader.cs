@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using PasPasPas.Infrastructure.Files;
 
 namespace PasPasPas.Infrastructure.Input {
 
@@ -175,10 +176,8 @@ namespace PasPasPas.Infrastructure.Input {
         /// <summary>
         ///     test if end of input has reached
         /// </summary>
-        public bool AtEof
-        {
-            get
-            {
+        public bool AtEof {
+            get {
                 RemoveEmptyFiles();
                 return (putbackFragments.Count < 1) && (files.Count < 1);
             }
@@ -187,10 +186,8 @@ namespace PasPasPas.Infrastructure.Input {
         /// <summary>
         ///     currently read file path
         /// </summary>
-        public IFileReference CurrentInputFile
-        {
-            get
-            {
+        public IFileReference CurrentInputFile {
+            get {
                 if (putbackFragments.Count > 0)
                     return putbackFragments.Peek().FilePath;
                 else if (files.Count > 0)

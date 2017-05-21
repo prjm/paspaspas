@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Text;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Parsing.SyntaxTree.Utils;
+using PasPasPas.Infrastructure.Files;
 
 namespace PasPasPasTests {
 

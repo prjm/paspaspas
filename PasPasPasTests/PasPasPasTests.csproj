@@ -61,6 +61,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assert.cs" />
+    <Compile Include="Misc\FileBufferTest.cs" />
     <Compile Include="ParserTestBase.cs" />
     <Compile Include="Parser\AstTest.cs" />
     <Compile Include="Parser\CompilerDirectiveTest.cs" />
@@ -99,7 +100,6 @@
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Misc\" />
     <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

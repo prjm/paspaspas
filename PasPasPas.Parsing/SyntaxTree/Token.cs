@@ -2,6 +2,7 @@
 using System.Globalization;
 using System;
 using System.Collections.Generic;
+using PasPasPas.Infrastructure.Files;
 
 namespace PasPasPas.Parsing.SyntaxTree {
 

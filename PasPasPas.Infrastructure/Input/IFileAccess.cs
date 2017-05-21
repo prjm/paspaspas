@@ -1,4 +1,6 @@
-﻿namespace PasPasPas.Infrastructure.Input {
+﻿using PasPasPas.Infrastructure.Files;
+
+namespace PasPasPas.Infrastructure.Input {
 
     /// <summary>
     ///     service to access files

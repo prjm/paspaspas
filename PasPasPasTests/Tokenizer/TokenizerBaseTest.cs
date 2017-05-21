@@ -6,6 +6,7 @@ using PasPasPas.Parsing.Parser;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Parsing.SyntaxTree;
 using Xunit;
+using PasPasPas.Infrastructure.Files;
 
 namespace PasPasPasTests.Tokenizer {
 

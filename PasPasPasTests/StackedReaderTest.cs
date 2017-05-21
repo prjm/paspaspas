@@ -3,6 +3,7 @@ using PasPasPas.Infrastructure.Input;
 using System.IO;
 using System.Text;
 using Xunit;
+using PasPasPas.Infrastructure.Files;
 
 namespace PasPasPasTests {
 

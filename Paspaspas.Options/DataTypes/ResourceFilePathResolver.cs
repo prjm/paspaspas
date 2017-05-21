@@ -2,6 +2,7 @@
 using PasPasPas.Options.Bundles;
 using System;
 using System.IO;
+using PasPasPas.Infrastructure.Files;
 
 namespace PasPasPas.Options.DataTypes {
 

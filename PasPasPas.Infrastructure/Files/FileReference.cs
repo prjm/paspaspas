@@ -1,11 +1,12 @@
 ﻿using System;
 using PasPasPas.Infrastructure.Utils;
 
-namespace PasPasPas.Infrastructure.Input {
+namespace PasPasPas.Infrastructure.Files {
 
     /// <summary>
-    ///     Common way to reference files.
+    ///     common way to reference files
     /// </summary>
+    /// <remarks>immutable</remarks>
     public class FileReference : IFileReference {
 
         private readonly string filePath;
@@ -19,7 +20,7 @@ namespace PasPasPas.Infrastructure.Input {
         public FileReference(string path) {
 
             if (string.IsNullOrWhiteSpace(path))
-                throw new ArgumentException(StringUtils.Invariant($"Empty path {path}"), nameof(path));
+                ExceptionHelper.StringEmpty(nameof(path));
 
             filePath = path;
             hashcode = filePath.ToUpperInvariant().GetHashCode();
