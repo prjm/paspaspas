@@ -1,4 +1,5 @@
 ﻿using System;
+using PasPasPas.Infrastructure.Files;
 
 namespace PasPasPas.Infrastructure.Utils {
 
@@ -15,16 +16,47 @@ namespace PasPasPas.Infrastructure.Utils {
     }
 
     /// <summary>
+    ///     exception for duplicate keys in a dictionary
+    /// </summary>
+    public class DuplicateKeyInDictionary : ArgumentException {
+
+        /// <summary>
+        ///     create a new exception, thrown if a key is already in a dictionary
+        /// </summary>
+        /// <param name="keyvalue">keyvalue</param>
+        /// <param name="argumentName">parameter name</param>
+        public DuplicateKeyInDictionary(object keyvalue, string argumentName) :
+            base((keyvalue ?? "null").ToString(), argumentName) { }
+
+    }
+
+    /// <summary>
     ///     helper class for exceptions
     /// </summary>
     public class ExceptionHelper {
 
         /// <summary>
-        ///     generates an exception if the argument ist null
+        ///     generates an exception if the argument is null
         /// </summary>
         /// <param name="argumentName"></param>
         public static void ArgumentIsNull(string argumentName)
             => throw new ArgumentNullException(argumentName);
+
+        /// <summary>
+        ///     generates an exception if the argument is out of range
+        /// </summary>
+        /// <param name="argumentValue"></param>
+        /// <param name="argumentName"></param>
+        public static void ArgumetOutOfRange(object argumentValue, string argumentName)
+            => throw new ArgumentOutOfRangeException(argumentName, (argumentValue ?? "null").ToString());
+
+        /// <summary>
+        ///     generates an exception if the key is already present in the dictionary
+        /// </summary>
+        /// <param name="keyvalue">keyvalue</param>
+        /// <param name="argumentName">argument name</param>
+        public static void DuplicateKeyInDictionary(object keyvalue, string argumentName)
+            => throw new DuplicateKeyInDictionary(keyvalue, argumentName);
 
         /// <summary>
         ///     generates an exception for an invalid operation

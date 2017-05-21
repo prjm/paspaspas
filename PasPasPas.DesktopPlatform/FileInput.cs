@@ -12,7 +12,7 @@ namespace PasPasPas.DesktopPlatform {
     public class FileInput : IParserInput {
 
         /// <summary>
-        ///     name of thedefaul encoding
+        ///     name of the default encoding
         /// </summary>
         public const string DefaultEncodingSettingName
             = "FileInput.DefaultEncoding";

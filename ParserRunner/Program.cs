@@ -10,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PasPasPas.Infrastructure.Files;
 
 namespace ParserRunner {
 
@@ -17,6 +18,13 @@ namespace ParserRunner {
     class Program {
 
         static void Main(string[] args) {
+            var buffer = new FileBuffer();
+            var reference = new FileReference("test.pas");
+            var tempPath = @"C:\temp\Testfiles\spring.pas";
+            var content = new DesktopFileReadable(new FileReference(tempPath));
+            buffer.Add(reference, content);
+            return;
+
 
             var path = @"C:\temp\Testfiles\";
 
