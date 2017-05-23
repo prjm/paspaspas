@@ -58,7 +58,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <summary>
         ///     create a new tokenizer
         /// </summary>
-        protected TokenizerBase(ParserServices environment, StackedFileReader input) {
+        protected TokenizerBase(ParserServices environment, OldStackedFileReader input) {
 
             if (environment == null)
                 throw new ArgumentNullException(nameof(environment));
@@ -75,7 +75,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <summary>
         ///     parser input
         /// </summary>
-        public StackedFileReader Input { get; }
+        public OldStackedFileReader Input { get; }
 
         /// <summary>
         ///     check if tokens are availiable

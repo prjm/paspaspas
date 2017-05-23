@@ -65,7 +65,7 @@ namespace PasPasPas.Building.Tasks {
 
                 var parser = new StandardParser(environment);
                 using (IParserInput inputFile = settings.FileSystemAccess.OpenFileForReading(file))
-                using (var reader = new StackedFileReader()) {
+                using (var reader = new OldStackedFileReader()) {
                     result.AppendLine("-----------------------<< " + file.Path + " (" + count + ")");
                     reader.AddFile(inputFile);
                     parser.BaseTokenizer = new StandardTokenizer(environment, reader);

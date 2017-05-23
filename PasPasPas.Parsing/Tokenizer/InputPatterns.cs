@@ -134,7 +134,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="input"></param>
         /// <param name="log">message log</param>
         /// <returns></returns>
-        public Token FetchNextToken(StackedFileReader input, ILogSource log) {
+        public Token FetchNextToken(OldStackedFileReader input, ILogSource log) {
 
             if (input.AtEof)
                 throw new InvalidOperationException();
@@ -169,7 +169,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="tokenGroup"></param>
         /// <param name="log"></param>
         /// <returns></returns>
-        public Token FetchTokenByGroup(StackedFileReader inputStream, char prefix, InputPattern tokenGroup, ILogSource log) {
+        public Token FetchTokenByGroup(OldStackedFileReader inputStream, char prefix, InputPattern tokenGroup, ILogSource log) {
             var switchedInput = false;
             inputBuffer.Clear();
             inputBuffer.Append(prefix);

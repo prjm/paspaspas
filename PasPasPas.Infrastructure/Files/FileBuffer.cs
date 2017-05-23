@@ -9,20 +9,20 @@ namespace PasPasPas.Infrastructure.Files {
     /// </summary>
     public class FileBuffer {
 
-        private readonly IDictionary<FileReference, FileBufferItem> items;
+        private readonly IDictionary<IFileReference, FileBufferItem> items;
 
         /// <summary>
         ///     create a new file buffer
         /// </summary>
         public FileBuffer()
-            => items = new Dictionary<FileReference, FileBufferItem>();
+            => items = new Dictionary<IFileReference, FileBufferItem>();
 
         /// <summary>
         ///     add content to the bzffer
         /// </summary>
         /// <param name="reference">file path</param>
         /// <param name="content">content</param>
-        public void Add(FileReference reference, IBufferReadable content) {
+        public void Add(IFileReference reference, IBufferReadable content) {
             if (items.ContainsKey(reference))
                 ExceptionHelper.DuplicateKeyInDictionary(reference, nameof(reference));
 
@@ -36,7 +36,7 @@ namespace PasPasPas.Infrastructure.Files {
         /// </summary>
         /// <param name="index">file index</param>
         /// <returns></returns>
-        public FileBufferItem this[FileReference index] {
+        public FileBufferItem this[IFileReference index] {
             get {
                 FileBufferItem result;
                 if (!items.TryGetValue(index, out result))

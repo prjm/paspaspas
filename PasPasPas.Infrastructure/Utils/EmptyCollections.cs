@@ -77,10 +77,10 @@ namespace PasPasPas.Infrastructure.Utils {
         /// <exception cref="System.IndexOutOfRangeException">always</exception>
         public T this[int index] {
             get {
-                ExceptionHelper.IndexOutOfRange();
+                ExceptionHelper.IndexOutOfRange(index);
                 return default(T);
             }
-            set => ExceptionHelper.IndexOutOfRange();
+            set => ExceptionHelper.IndexOutOfRange(index);
         }
 
         /// <summary>

@@ -1,4 +1,5 @@
-﻿using PasPasPas.Infrastructure.Input;
+﻿using PasPasPas.Infrastructure.Files;
+using PasPasPas.Infrastructure.Input;
 using PasPasPas.Parsing.SyntaxTree;
 
 namespace PasPasPas.Parsing.Tokenizer {
@@ -23,6 +24,6 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <summary>
         ///     parser input
         /// </summary>
-        StackedFileReader Input { get; }
+        OldStackedFileReader Input { get; }
     }
 }

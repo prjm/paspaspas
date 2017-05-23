@@ -21,7 +21,7 @@ namespace PasPasPasTests {
             bool switchedInput = false;
 
             using (var input = new StringInput(Content1, new FileReference("test.pas")))
-            using (var reader = new StackedFileReader()) {
+            using (var reader = new OldStackedFileReader()) {
                 reader.AddFile(input);
                 StringBuilder result = new StringBuilder();
                 while (!reader.AtEof) {
@@ -37,7 +37,7 @@ namespace PasPasPasTests {
 
             var path = GenerateTempFile(Content1);
             try {
-                using (var reader = new StackedFileReader()) {
+                using (var reader = new OldStackedFileReader()) {
                     reader.AddFile(new FileInput(new FileReference(path)));
                     StringBuilder result = new StringBuilder();
                     while (!reader.AtEof) {
@@ -59,7 +59,7 @@ namespace PasPasPasTests {
             var path1 = GenerateTempFile(Content1);
             var path2 = GenerateTempFile(Content2);
             try {
-                using (var reader = new StackedFileReader())
+                using (var reader = new OldStackedFileReader())
                 using (var file1 = new FileInput(new FileReference(path1)))
                 using (var file2 = new FileInput(new FileReference(path2))) {
                     reader.AddFile(file1);
@@ -104,7 +104,7 @@ namespace PasPasPasTests {
 
             using (var input1 = new StringInput(Content1, new FileReference("c1")))
             using (var input2 = new StringInput(Content2, new FileReference("c2")))
-            using (var reader = new StackedFileReader()) {
+            using (var reader = new OldStackedFileReader()) {
                 reader.AddFile(input1);
                 StringBuilder result = new StringBuilder();
                 while (!reader.AtEof && result.Length < 5) {

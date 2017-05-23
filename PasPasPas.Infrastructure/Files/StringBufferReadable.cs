@@ -26,6 +26,7 @@ namespace PasPasPas.Infrastructure.Files {
         /// <param name="item"></param>
         public void ToBufferItem(FileBufferItem item) {
             item.Data.Clear();
+            item.Data.Capacity = value.Length;
             item.Data.Append(value);
         }
 

@@ -35,6 +35,7 @@ namespace PasPasPas.DesktopPlatform {
             char[] buffer = new char[bufferSize];
 
             sb.Clear();
+            sb.Capacity = encoding.GetMaxCharCount((int)new FileInfo(file.Path).Length);
 
             using (var fileStream = new FileStream(file.Path, FileMode.Open, FileAccess.Read, FileShare.Read, DefaultFileStreamBufferSize, FileOptions.SequentialScan))
             using (var reader = new StreamReader(fileStream, encoding, true, DefaultFileStreamBufferSize, false)) {

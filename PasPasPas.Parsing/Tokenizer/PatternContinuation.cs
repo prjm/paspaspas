@@ -39,7 +39,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <summary>
         ///     input
         /// </summary>
-        public StackedFileReader Input { get; set; }
+        public OldStackedFileReader Input { get; set; }
 
         /// <summary>
         ///     parsed token
@@ -160,7 +160,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="prefix">prefix</param>
         /// <param name="log">log source</param>
         /// <returns>tokent</returns>
-        public Token Tokenize(StackedFileReader input, StringBuilder prefix, ILogSource log) {
+        public Token Tokenize(OldStackedFileReader input, StringBuilder prefix, ILogSource log) {
             var state = new ContinuationState() {
                 Result = CreateResult(input.CurrentInputFile),
                 Input = input,

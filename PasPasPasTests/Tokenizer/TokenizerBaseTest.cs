@@ -15,7 +15,7 @@ namespace PasPasPasTests.Tokenizer {
 
         private readonly InputPatterns puncts;
 
-        public TestTokenizer(ParserServices environment, StackedFileReader input)
+        public TestTokenizer(ParserServices environment, OldStackedFileReader input)
             : base(environment, input) {
             puncts = new InputPatterns();
             puncts.AddPattern(new WhiteSpaceCharacterClass(), new WhiteSpaceTokenGroupValue());
@@ -35,7 +35,7 @@ namespace PasPasPasTests.Tokenizer {
             var environment = new ParserServices(log);
 
             using (var inputFile = new StringInput(input, new FileReference(TestFileName)))
-            using (var reader = new StackedFileReader()) {
+            using (var reader = new OldStackedFileReader()) {
                 reader.AddFile(inputFile);
                 var tokenizer = new TestTokenizer(environment, reader);
 
@@ -143,7 +143,7 @@ namespace PasPasPasTests.Tokenizer {
             var logTarget = new ListLogTarget();
             manager.RegisterTarget(logTarget);
             using (var inputFile = new StringInput(input, new FileReference(TestFileName)))
-            using (var reader = new StackedFileReader()) {
+            using (var reader = new OldStackedFileReader()) {
                 reader.AddFile(inputFile);
                 while (!reader.AtEof) {
                     result.Add(patterns.FetchNextToken(reader, log));

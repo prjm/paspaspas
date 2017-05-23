@@ -1,4 +1,5 @@
-﻿using PasPasPas.Infrastructure.Input;
+﻿using PasPasPas.Infrastructure.Files;
+using PasPasPas.Infrastructure.Input;
 using PasPasPas.Options.Bundles;
 using PasPasPas.Parsing.Parser;
 using PasPasPas.Parsing.SyntaxTree;
@@ -54,7 +55,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="nextToken"></param>
         protected override void ProcessMacroToken(Token nextToken) {
             using (var input = new StringInput(CompilerDirectiveTokenizer.Unwrap(nextToken.Value), nextToken.FilePath))
-            using (var reader = new StackedFileReader()) {
+            using (var reader = new OldStackedFileReader()) {
                 var parser = new CompilerDirectiveParser(environment, reader);
                 var tokenizer = new CompilerDirectiveTokenizer(environment, reader);
                 reader.AddFile(input);

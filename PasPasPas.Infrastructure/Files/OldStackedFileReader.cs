@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using PasPasPas.Infrastructure.Files;
+using PasPasPas.Infrastructure.Input;
 
-namespace PasPasPas.Infrastructure.Input {
+namespace PasPasPas.Infrastructure.Files {
 
     /// <summary>
     ///     helper class to store file state
@@ -153,7 +153,7 @@ namespace PasPasPas.Infrastructure.Input {
     /// <summary>
     ///     read from a combiniation of textfiles
     /// </summary>
-    public class StackedFileReader : IDisposable {
+    public class OldStackedFileReader : IDisposable {
 
         /// <summary>
         ///     files to read

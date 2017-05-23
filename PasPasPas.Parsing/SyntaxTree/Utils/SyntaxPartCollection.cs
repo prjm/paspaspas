@@ -42,7 +42,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Utils {
                 if ((index >= 0) && (index < Count))
                     return internalList[index];
                 else {
-                    ExceptionHelper.IndexOutOfRange();
+                    ExceptionHelper.IndexOutOfRange(index);
                     return default(T);
                 };
             }
@@ -51,7 +51,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Utils {
                 if ((index >= 0) && (index < Count))
                     internalList[index] = value;
                 else {
-                    ExceptionHelper.IndexOutOfRange();
+                    ExceptionHelper.IndexOutOfRange(index);
                 };
 
             }

@@ -74,8 +74,9 @@ namespace PasPasPas.Infrastructure.Utils {
         /// <summary>
         ///     generates an index out of range exception
         /// </summary>
-        public static void IndexOutOfRange()
-            => throw new IndexOutOfRangeException();
+        /// <param name="indexValue">index value</param>
+        public static void IndexOutOfRange(object indexValue)
+            => throw new IndexOutOfRangeException((indexValue ?? "null").ToString());
 
     }
 }

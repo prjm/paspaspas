@@ -123,7 +123,7 @@ namespace P3SyntaxTreeViewer {
         private ISyntaxPart Parse(ParserServices environment, string code) {
             var parser = new StandardParser(environment);
             using (var inputFile = new StringInput(code, new FileReference("z.x.pas")))
-            using (var reader = new StackedFileReader()) {
+            using (var reader = new OldStackedFileReader()) {
                 reader.AddFile(inputFile);
                 parser.BaseTokenizer = new StandardTokenizer(environment, reader);
                 return parser.Parse();

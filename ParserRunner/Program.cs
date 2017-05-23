@@ -23,6 +23,19 @@ namespace ParserRunner {
             var tempPath = @"C:\temp\Testfiles\spring.pas";
             var content = new DesktopFileReadable(new FileReference(tempPath));
             buffer.Add(reference, content);
+
+            var reader = new StackedFileReader(buffer);
+            reader.AddFileToRead(reference);
+
+            while (reader.CurrentFile != null) {
+                var c = reader.CurrentFile.Value;
+                reader.CurrentFile.NextChar();
+
+                if (reader.CurrentFile.AtEof)
+                    reader.FinishCurrentFile();
+                //result.Append(reader.FetchChar(out switchedInput));
+            }
+
             return;
 
 

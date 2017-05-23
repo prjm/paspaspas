@@ -3,6 +3,7 @@ using PasPasPas.Parsing.Parser;
 using PasPasPas.Parsing.SyntaxTree;
 using System;
 using System.Collections.Generic;
+using PasPasPas.Infrastructure.Files;
 
 namespace PasPasPas.Parsing.Tokenizer {
 
@@ -16,7 +17,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         /// <param name="services"></param>
         /// <param name="input">input files</param>
-        public StandardTokenizer(ParserServices services, StackedFileReader input) : base(services, input) { }
+        public StandardTokenizer(ParserServices services, OldStackedFileReader input) : base(services, input) { }
 
         private StandardPatterns punctuators
             = new StandardPatterns();

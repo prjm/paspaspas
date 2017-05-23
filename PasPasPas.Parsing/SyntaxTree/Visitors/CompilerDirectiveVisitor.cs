@@ -154,7 +154,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     include reader
         /// </summary>
-        public StackedFileReader IncludeInput { get; set; }
+        public OldStackedFileReader IncludeInput { get; set; }
 
         /// <summary>
         ///     test if an item can be visited
