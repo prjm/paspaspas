@@ -38,8 +38,7 @@ namespace PasPasPas.Infrastructure.Files {
         /// <returns></returns>
         public FileBufferItem this[IFileReference index] {
             get {
-                FileBufferItem result;
-                if (!items.TryGetValue(index, out result))
+                if (!items.TryGetValue(index, out var result))
                     ExceptionHelper.ArgumetOutOfRange(index, nameof(index));
                 return result;
             }

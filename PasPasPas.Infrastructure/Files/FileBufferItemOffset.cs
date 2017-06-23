@@ -47,5 +47,15 @@ namespace PasPasPas.Infrastructure.Files {
         public char Value
             => reader.Buffer[input].CharAt(offset);
 
+        /// <summary>
+        ///     current file
+        /// </summary>
+        public IFileReference File
+            => input;
+
+        public void PreviousChar() {
+            if (!AtBof) offset--;
+        }
+
     }
 }

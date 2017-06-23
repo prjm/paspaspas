@@ -22,7 +22,7 @@ namespace PasPasPas.Parsing.Parser {
         /// </summary>
         /// <param name="environment">services</param>
         /// <param name="input">input file</param>
-        public CompilerDirectiveParser(ParserServices environment, OldStackedFileReader input)
+        public CompilerDirectiveParser(ParserServices environment, StackedFileReader input)
             : base(environment, new CompilerDirectiveTokenizerWithLookahead()) {
             BaseTokenizer = new CompilerDirectiveTokenizer(environment, input);
         }
@@ -54,7 +54,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <summary>
         ///     reader to include files into
         /// </summary>
-        public OldStackedFileReader IncludeInput { get; set; }
+        public StackedFileReader IncludeInput { get; set; }
 
         /// <summary>
         ///     supported switches

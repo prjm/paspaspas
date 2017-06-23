@@ -2,15 +2,15 @@
 using PasPasPas.Building.Engine;
 using PasPasPas.Building.Tasks;
 using PasPasPas.DesktopPlatform;
-using PasPasPas.Infrastructure.Input;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using PasPasPas.Infrastructure.Files;
+using PasPasPas.Parsing.Tokenizer;
+using PasPasPas.Parsing.Parser;
+using PasPasPas.Infrastructure.Log;
 
 namespace ParserRunner {
 
@@ -22,19 +22,20 @@ namespace ParserRunner {
             var reference = new FileReference("test.pas");
             var tempPath = @"C:\temp\Testfiles\spring.pas";
             var content = new DesktopFileReadable(new FileReference(tempPath));
+            var logManager = new LogManager();
+            var services = new ParserServices(logManager);
+
             buffer.Add(reference, content);
 
             var reader = new StackedFileReader(buffer);
             reader.AddFileToRead(reference);
 
-            while (reader.CurrentFile != null) {
-                var c = reader.CurrentFile.Value;
-                reader.CurrentFile.NextChar();
+            var tokenizer = new StandardTokenizer(services, reader);
 
-                if (reader.CurrentFile.AtEof)
-                    reader.FinishCurrentFile();
-                //result.Append(reader.FetchChar(out switchedInput));
+            while (tokenizer.HasNextToken()) {
+                tokenizer.FetchNextToken();
             }
+
 
             return;
 

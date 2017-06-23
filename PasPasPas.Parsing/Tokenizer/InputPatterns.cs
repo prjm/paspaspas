@@ -134,18 +134,24 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="input"></param>
         /// <param name="log">message log</param>
         /// <returns></returns>
-        public Token FetchNextToken(OldStackedFileReader input, ILogSource log) {
+        public Token FetchNextToken(StackedFileReader input, ILogSource log) {
+            FileBufferItemOffset currentFile = input.CurrentFile;
 
-            if (input.AtEof)
+            if (currentFile == null)
                 throw new InvalidOperationException();
 
-            IFileReference file = input.CurrentInputFile;
-            var switchedInput = false;
-            var c = input.FetchChar(out switchedInput);
-            InputPattern tokenGroup;
+            IFileReference file = currentFile.File;
+            var c = currentFile.Value;
 
-            if (Match(c, out tokenGroup)) {
-                return FetchTokenByGroup(input, c, tokenGroup, log);
+            try {
+                if (Match(c, out InputPattern tokenGroup)) {
+                    currentFile.NextChar();
+                    return FetchTokenByGroup(input, c, tokenGroup, log);
+                }
+            }
+            finally {
+                while (input.CurrentFile != null && input.CurrentFile.AtEof)
+                    input.FinishCurrentFile();
             }
 
             log.ProcessMessage(new LogMessage(MessageSeverity.Error, TokenizerBase.TokenizerLogMessage, TokenizerBase.UnexpectedCharacter, c.ToString()));
@@ -169,24 +175,33 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="tokenGroup"></param>
         /// <param name="log"></param>
         /// <returns></returns>
-        public Token FetchTokenByGroup(OldStackedFileReader inputStream, char prefix, InputPattern tokenGroup, ILogSource log) {
-            var switchedInput = false;
+        public Token FetchTokenByGroup(StackedFileReader inputStream, char prefix, InputPattern tokenGroup, ILogSource log) {
+            var currentFile = inputStream.CurrentFile;
+
             inputBuffer.Clear();
             inputBuffer.Append(prefix);
-            while (inputBuffer.Length < tokenGroup.Length && (!inputStream.AtEof) && (!switchedInput)) {
-                inputBuffer.Append(inputStream.FetchChar(out switchedInput));
+
+            while (inputBuffer.Length < tokenGroup.Length && (!currentFile.AtEof)) {
+                inputBuffer.Append(currentFile.Value);
+                currentFile.NextChar();
             }
 
             int tokenLength;
-            IFileReference file = inputStream.CurrentInputFile;
+            IFileReference file = currentFile.File;
             PatternContinuation tokenKind = tokenGroup.Match(inputBuffer, out tokenLength);
 
             for (var inputIndex = inputBuffer.Length - 1; inputIndex >= tokenLength; inputIndex--) {
-                inputStream.PutbackChar(file, inputBuffer[inputIndex]); ;
+                currentFile.PreviousChar();
             }
             inputBuffer.Length = tokenLength;
 
-            return tokenKind.Tokenize(inputStream, inputBuffer, log);
+            var state = new ContinuationState() {
+                Buffer = inputBuffer,
+                InputFile = currentFile,
+                Log = log
+            };
+            return tokenKind.Tokenize(state);
         }
     }
+
 }

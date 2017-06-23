@@ -6,15 +6,20 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <LangVersion>7</LangVersion>
-    <DocumentationFile>bin\Release\netstandard1.3\.xml</DocumentationFile>
     <DefineConstants>RELEASE;NETSTANDARD1_3</DefineConstants>
     <DebugType>pdbonly</DebugType>
     <DebugSymbols>True</DebugSymbols>
+    <DocumentationFile>bin\Release\netstandard1.3\.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <LangVersion>7</LangVersion>
-    <DocumentationFile>bin\Debug\netstandard1.3\PasPasPas.Infrastructure.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\netstandard1.3\.xml</DocumentationFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PasPasPas.Infrastructure\PasPasPas.Infrastructure.csproj" />
+  </ItemGroup>
+
 
 </Project>

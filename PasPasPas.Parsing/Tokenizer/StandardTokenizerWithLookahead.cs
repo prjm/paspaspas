@@ -54,6 +54,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         /// <param name="nextToken"></param>
         protected override void ProcessMacroToken(Token nextToken) {
+            /*
             using (var input = new StringInput(CompilerDirectiveTokenizer.Unwrap(nextToken.Value), nextToken.FilePath))
             using (var reader = new OldStackedFileReader()) {
                 var parser = new CompilerDirectiveParser(environment, reader);
@@ -64,6 +65,7 @@ namespace PasPasPas.Parsing.Tokenizer {
                 var visitor = new CompilerDirectiveVisitor() { Environment = environment };
                 result.Accept(visitor.AsVisitor());
             }
+            */
         }
 
 

@@ -1,144 +1,11 @@
 ﻿using System;
 using System.Text;
 using System.Collections.Generic;
-using PasPasPas.Infrastructure.Input;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Parsing.SyntaxTree;
 using PasPasPas.Infrastructure.Files;
 
 namespace PasPasPas.Parsing.Tokenizer {
-
-    /// <summary>
-    ///     helper class for a string builder
-    /// </summary>
-    static class StringBuilderHelper {
-
-        /// <summary>
-        ///     test if a string builder ends with a given string
-        /// </summary>
-        /// <param name="stringBuilder">string builder to look at</param>
-        /// <param name="test">search string</param>
-        /// <param name="comparison">comparison</param>
-        /// <returns><c>true</c> if the string builder ends with that string</returns>
-        public static bool EndsWith(this StringBuilder stringBuilder, string test, StringComparison comparison = StringComparison.Ordinal) {
-            if (stringBuilder.Length < test.Length)
-                return false;
-
-            var end = stringBuilder.ToString(stringBuilder.Length - test.Length, test.Length);
-            return end.Equals(test, comparison);
-        }
-    }
-
-    /// <summary>
-    ///     encapsulation of current continuation state
-    /// </summary>
-    public class ContinuationState {
-
-        private bool switchedFile = false;
-
-        /// <summary>
-        ///     input
-        /// </summary>
-        public OldStackedFileReader Input { get; set; }
-
-        /// <summary>
-        ///     parsed token
-        /// </summary>
-        public Token Result { get; set; }
-
-        /// <summary>
-        ///     input buffer
-        /// </summary>
-        public StringBuilder Buffer { get; set; }
-
-        /// <summary>
-        ///     test if reading from the buffer is invalid
-        /// </summary>
-        public bool IsValid
-            => (!Input.AtEof) && (!switchedFile);
-
-        /// <summary>
-        ///     log source
-        /// </summary>
-        public ILogSource Log { get; set; }
-
-        /// <summary>
-        ///     current input length
-        /// </summary>
-        public int Length
-             => Buffer.Length;
-
-        /// <summary>
-        ///     switched file flag
-        /// </summary>
-        public bool SwitchedFile
-            => switchedFile;
-
-        /// <summary>
-        ///     tests if the buffer ends with a given string value
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        public bool EndsWith(string value)
-            => Buffer.EndsWith(value);
-
-        /// <summary>
-        ///     finish tokenizing
-        /// </summary>
-        /// <param name="tokenId">generated token id</param>
-        public void Finish(int tokenId) {
-            Result.Kind = tokenId;
-            Result.Value = Buffer.ToString();
-        }
-
-        /// <summary>
-        ///     append a character
-        /// </summary>
-        public char FetchAndAppendChar() {
-            var result = Input.FetchChar(out switchedFile);
-            Buffer.Append(result);
-            return result;
-        }
-
-        /// <summary>
-        ///     fetch a single character without appending it
-        /// </summary>
-        /// <returns></returns>
-        public char FetchChar()
-            => Input.FetchChar(out switchedFile);
-
-        /// <summary>
-        ///     putback a character
-        /// </summary>
-        /// <param name="nextChar">character to putback</param>
-        /// <param name="switchState">switch state</param>
-        public void Putback(char nextChar, bool switchState) {
-            switchedFile = switchState;
-            Input.PutbackChar(Result.FilePath, nextChar);
-        }
-
-        /// <summary>
-        ///     append a character
-        /// </summary>
-        /// <param name="currentChar"></param>
-        internal void AppendChar(char currentChar) {
-            Buffer.Append(currentChar);
-        }
-
-        internal void PutbackBuffer() {
-            Input.PutbackStringBuffer(Result.FilePath, Buffer);
-            Buffer.Clear();
-        }
-
-        internal void Finish(int tokenKind, string value) {
-            Result.Kind = tokenKind;
-            Result.Value = value;
-        }
-
-        internal void Error(Guid messageId, params object[] messageData) {
-            Log.ProcessMessage(new LogMessage(MessageSeverity.Error, TokenizerBase.TokenizerLogMessage, messageId, messageData));
-        }
-    }
 
     /// <summary>
     ///     token group value
@@ -160,14 +27,26 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="prefix">prefix</param>
         /// <param name="log">log source</param>
         /// <returns>tokent</returns>
-        public Token Tokenize(OldStackedFileReader input, StringBuilder prefix, ILogSource log) {
+        public Token Tokenize(StackedFileReader input, StringBuilder prefix, ILogSource log) {
             var state = new ContinuationState() {
-                Result = CreateResult(input.CurrentInputFile),
-                Input = input,
+                Result = CreateResult(input.CurrentFile.File),
+                InputFile = input.CurrentFile,
                 Buffer = prefix,
                 Log = log
             };
 
+            ParseByPrefix(state);
+            return state.Result;
+        }
+
+        /// <summary>
+        ///     generate a token
+        /// </summary>
+        /// <param name="state">input state</param>
+        /// <returns>read token</returns>
+        public Token Tokenize(ContinuationState state) {
+            state.Clear();
+            state.Result = CreateResult(state.InputFile.File);
             ParseByPrefix(state);
             return state.Result;
         }
@@ -506,7 +385,7 @@ namespace PasPasPas.Parsing.Tokenizer {
                     else if (nextChar == '$') {
                         controlBuffer.Clear();
                         controlBuffer.Append('$');
-                        Token controlChar = hexDigits.Tokenize(state.Input, controlBuffer, state.Log);
+                        Token controlChar = hexDigits.Tokenize(state);
                         if (controlChar.Kind != TokenKind.HexNumber) {
                             state.Error(TokenizerBase.UnexpectedCharacter);
                         }
@@ -518,7 +397,7 @@ namespace PasPasPas.Parsing.Tokenizer {
                     else {
                         state.Putback(nextChar, switchState);
                         controlBuffer.Clear();
-                        Token controlChar = digits.Tokenize(state.Input, controlBuffer, state.Log);
+                        Token controlChar = digits.Tokenize(state);
                         if (controlChar.Kind != TokenKind.Integer) {
                             state.Error(TokenizerBase.UnexpectedCharacter);
                         }
@@ -530,7 +409,7 @@ namespace PasPasPas.Parsing.Tokenizer {
                 }
                 else if (currentChar == '\'') {
                     state.AppendChar(currentChar);
-                    AppendToBuffer(QuotedStringTokenValue.Unwrap(quotedString.Tokenize(state.Input, state.Buffer, state.Log)));
+                    AppendToBuffer(QuotedStringTokenValue.Unwrap(quotedString.Tokenize(state)));
                 }
                 else {
                     state.Putback(currentChar, switchState);
@@ -1037,7 +916,8 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         /// <param name="state">current tokenizer state</param>
         public override void ParseByPrefix(ContinuationState state) {
-            var intPrefix = DigitTokenGroupValue.Unwrap(digitTokenizer.Tokenize(state.Input, state.Buffer, state.Log));
+            int intPrefix = DigitTokenGroupValue.Unwrap(digitTokenizer.Tokenize(state));
+
             var result = state.Result as NumberLiteralToken;
             var withDot = false;
             var withExponent = false;
@@ -1052,7 +932,7 @@ namespace PasPasPas.Parsing.Tokenizer {
                 withDot = true;
 
                 if (NextCharMatches(state, numbers)) {
-                    digitTokenizer.Tokenize(state.Input, state.Buffer, state.Log);
+                    digitTokenizer.Tokenize(state);
                 }
 
                 var switchState = state.SwitchedFile;
@@ -1071,7 +951,7 @@ namespace PasPasPas.Parsing.Tokenizer {
                 else {
                     NextCharMatches(state, plusminus);
                     var currentLen = state.Buffer.Length;
-                    if (!state.IsValid || digitTokenizer.Tokenize(state.Input, state.Buffer, state.Log).Kind != TokenKind.Integer || state.Buffer.Length == currentLen) {
+                    if (!state.IsValid || digitTokenizer.Tokenize(state).Kind != TokenKind.Integer || state.Buffer.Length == currentLen) {
                         state.Error(TokenizerBase.UnexpectedEndOfToken);
                     }
                 }
@@ -1080,7 +960,7 @@ namespace PasPasPas.Parsing.Tokenizer {
             }
 
             if (AllowIdents && NextCharMatches(state, allIdents)) {
-                identTokenizer.Tokenize(state.Input, state.Buffer, state.Log);
+                identTokenizer.Tokenize(state);
                 state.Finish(TokenKind.Identifier);
                 return;
             }

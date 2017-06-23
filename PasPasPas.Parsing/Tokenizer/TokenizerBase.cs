@@ -1,5 +1,4 @@
-﻿using PasPasPas.Infrastructure.Input;
-using PasPasPas.Infrastructure.Log;
+﻿using PasPasPas.Infrastructure.Log;
 using PasPasPas.Parsing.Parser;
 using PasPasPas.Parsing.SyntaxTree;
 using System;
@@ -12,7 +11,6 @@ namespace PasPasPas.Parsing.Tokenizer {
     /// </summary>
     public static class TokenizerHelper {
 
-
         /// <summary>
         ///     create a pseudo-token for the current input file
         /// </summary>
@@ -21,7 +19,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <returns>pseudotoken (empty)</returns>
         public static Token CreatePseudoToken(this ITokenizer tokenizer, int tokenKind) {
             var result = new Token() {
-                FilePath = tokenizer.Input.CurrentInputFile,
+                FilePath = null,
                 Kind = tokenKind,
                 Value = string.Empty
             };
@@ -58,7 +56,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <summary>
         ///     create a new tokenizer
         /// </summary>
-        protected TokenizerBase(ParserServices environment, OldStackedFileReader input) {
+        protected TokenizerBase(ParserServices environment, StackedFileReader input) {
 
             if (environment == null)
                 throw new ArgumentNullException(nameof(environment));
@@ -73,16 +71,12 @@ namespace PasPasPas.Parsing.Tokenizer {
         }
 
         /// <summary>
-        ///     parser input
-        /// </summary>
-        public OldStackedFileReader Input { get; }
-
-        /// <summary>
         ///     check if tokens are availiable
         /// </summary>
         /// <returns><c>true</c> if tokens are avaliable</returns>
-        public bool HasNextToken()
-            => !Input.AtEof;
+        public bool HasNextToken() {
+            return Input.CurrentFile != null;
+        }
 
         /// <summary>
         ///     generates an undefined token
@@ -106,7 +100,10 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         /// <returns>next token</returns>
         public virtual Token FetchNextToken() {
-            Token result = CharacterClasses.FetchNextToken(Input, LogSource);
+            Token result;
+
+            result = CharacterClasses.FetchNextToken(Input, LogSource);
+
             Lines.ProcessToken(result);
             return result;
         }
@@ -125,5 +122,10 @@ namespace PasPasPas.Parsing.Tokenizer {
         ///     line counters
         /// </summary>
         public LineCounters Lines { get; }
+
+        /// <summary>
+        ///     file input
+        /// </summary>
+        public StackedFileReader Input { get; private set; }
     }
 }

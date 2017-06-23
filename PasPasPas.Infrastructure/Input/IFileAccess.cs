@@ -13,7 +13,7 @@ namespace PasPasPas.Infrastructure.Input {
         /// </summary>
         /// <param name="path">file path</param>
         /// <returns>input file</returns>
-        IParserInput OpenFileForReading(IFileReference path);
+        IBufferReadable OpenFileForReading(IFileReference path);
 
         /// <summary>
         ///     test if a files exists

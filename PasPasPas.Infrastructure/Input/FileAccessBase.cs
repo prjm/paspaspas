@@ -5,7 +5,7 @@ using PasPasPas.Infrastructure.Utils;
 
 namespace PasPasPas.Infrastructure.Input {
 
-    using FileDictionary = IDictionary<string, IParserInput>;
+    using FileDictionary = IDictionary<string, IBufferReadable>;
 
     /// <summary>
     ///    abstract base class for file access
@@ -15,7 +15,7 @@ namespace PasPasPas.Infrastructure.Input {
         private readonly Lazy<FileDictionary> mockupFiles;
 
         private FileDictionary CreateFileDictionary()
-            => new Dictionary<string, IParserInput>(StringComparer.OrdinalIgnoreCase);
+            => new Dictionary<string, IBufferReadable>(StringComparer.OrdinalIgnoreCase);
 
         /// <summary>
         ///     create a new file access base clase
@@ -28,12 +28,12 @@ namespace PasPasPas.Infrastructure.Input {
         /// </summary>
         /// <param name="path">file path</param>
         /// <returns>opened file</returns>
-        public IParserInput OpenFileForReading(IFileReference path) {
+        public IBufferReadable OpenFileForReading(IFileReference path) {
 
             if (path == null)
                 ExceptionHelper.ArgumentIsNull(nameof(path));
 
-            IParserInput result;
+            IBufferReadable result;
 
             if (mockupFiles.IsValueCreated && mockupFiles.Value.TryGetValue(path.FileName, out result))
                 return result;
@@ -48,19 +48,18 @@ namespace PasPasPas.Infrastructure.Input {
         /// </summary>
         /// <param name="path">path to the file</param>
         /// <returns>input file</returns>
-        protected abstract IParserInput DoOpenFileForReading(IFileReference path);
+        protected abstract IBufferReadable DoOpenFileForReading(IFileReference path);
 
         /// <summary>
         ///     add a one-time mockup-file
         /// </summary>
         /// <param name="input">file to add</param>
-        public void AddOneTimeMockup(IParserInput input) {
+        /// <param name="path">file path</param>
+        public void AddOneTimeMockup(IFileReference path, IBufferReadable input) {
 
             if (input == null)
                 throw new ArgumentNullException(nameof(input));
 
-
-            IFileReference path = input.FilePath;
             var fileName = path.FileName;
 
             if (string.IsNullOrEmpty(fileName))

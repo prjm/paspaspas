@@ -64,28 +64,29 @@ namespace PasPasPas.Building.Tasks {
                 ISyntaxPart resultTree = null;
 
                 var parser = new StandardParser(environment);
-                using (IParserInput inputFile = settings.FileSystemAccess.OpenFileForReading(file))
-                using (var reader = new OldStackedFileReader()) {
-                    result.AppendLine("-----------------------<< " + file.Path + " (" + count + ")");
-                    reader.AddFile(inputFile);
-                    parser.BaseTokenizer = new StandardTokenizer(environment, reader);
-                    var hasError = false;
+                var buffer = new FileBuffer();
+                var reader = new StackedFileReader(buffer);
 
-                    log.ProcessMessage += (x, y) => {
-                        result.Append(y.Message.MessageID.ToString() + Environment.NewLine);
-                        hasError = hasError ||
-                        y.Message.Severity == MessageSeverity.Error ||
-                        y.Message.Severity == MessageSeverity.FatalError;
-                    };
+                buffer.Add(file, settings.FileSystemAccess.OpenFileForReading(file));
+                result.AppendLine("-----------------------<< " + file.Path + " (" + count + ")");
+                reader.AddFileToRead(file);
+                parser.BaseTokenizer = new StandardTokenizer(environment, reader);
+                var hasError = false;
 
-                    try {
-                        resultTree = parser.ParseFile();
-                    }
-                    catch (Exception exception) {
-                        result.AppendLine("<<XXXX>> Exception!");
-                        result.Append(exception.ToString());
-                        return result;
-                    }
+                log.ProcessMessage += (x, y) => {
+                    result.Append(y.Message.MessageID.ToString() + Environment.NewLine);
+                    hasError = hasError ||
+                    y.Message.Severity == MessageSeverity.Error ||
+                    y.Message.Severity == MessageSeverity.FatalError;
+                };
+
+                try {
+                    resultTree = parser.ParseFile();
+                }
+                catch (Exception exception) {
+                    result.AppendLine("<<XXXX>> Exception!");
+                    result.Append(exception.ToString());
+                    return result;
                 }
 
 #if DEBUG
@@ -94,7 +95,7 @@ namespace PasPasPas.Building.Tasks {
 
                 var dummy = false;
                 using (IParserInput inputFile1 = settings.FileSystemAccess.OpenFileForReading(file))
-                using (var reader1 = new StackedFileReader()) {
+                using (var reader1 = new OldStackedFileReader()) {
                     reader1.AddFile(inputFile1);
 
                     while (!reader1.AtEof)

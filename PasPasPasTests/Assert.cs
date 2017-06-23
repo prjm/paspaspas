@@ -1,13 +1,10 @@
-﻿using PasPasPas.Infrastructure.Input;
-using PasPasPas.Infrastructure.Log;
+﻿using PasPasPas.Infrastructure.Log;
 using PasPasPas.Parsing.Parser;
 using PasPasPas.Parsing.SyntaxTree;
-using PasPasPas.Parsing.Tokenizer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using A = Xunit.Assert;
-using PasPasPas.Infrastructure.Files;
 
 namespace PasPasPasTests {
 
@@ -19,6 +16,7 @@ namespace PasPasPasTests {
             var messageHandler = new LogTarget();
             var result = new List<Token>();
             logManager.RegisterTarget(messageHandler);
+            /*
             using (var inputString = new StringInput(input, new FileReference("test.pas")))
             using (var reader = new OldStackedFileReader()) {
                 EventHandler<LogMessageEvent> handler = (_, x) => messages.Add(x.Message);
@@ -33,6 +31,8 @@ namespace PasPasPasTests {
 
                 return result;
             }
+            */
+            return null;
         }
     }
 
@@ -57,7 +57,7 @@ namespace PasPasPasTests {
             => A.Null(o);
 
         public static void IsToken(int tokenKind, string tokenValue, string input) {
-            List<Token> result = TestHelper.RunTokenizer(input);
+            var result = TestHelper.RunTokenizer(input);
             IsNotNull(result);
             AreEqual(1, result.Count);
             AreEqual(tokenKind, result[0].Kind);
@@ -73,7 +73,7 @@ namespace PasPasPasTests {
 
         internal static void TokenizerMessageIsGenerated(Guid messageNumber, string input) {
             var messages = new List<ILogMessage>();
-            List<Token> result = TestHelper.RunTokenizer(input, messages);
+            var result = TestHelper.RunTokenizer(input, messages);
             var hasMessage = messages.Any(t => t.MessageID == messageNumber);
             IsTrue(hasMessage);
         }

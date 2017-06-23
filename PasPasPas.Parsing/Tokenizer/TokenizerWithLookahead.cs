@@ -26,8 +26,8 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <summary>
         ///     parser input
         /// </summary>
-        public OldStackedFileReader Input
-            => BaseTokenizer.Input;
+        public StackedFileReader Input
+            => null;
 
         /// <summary>
         ///     list of tokens

@@ -1,7 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace PasPasPas.Infrastructure.Utils {
+
+    /// <summary>
+    ///     helper class for a string builder
+    /// </summary>
+    public static class StringBuilderHelper {
+
+        /// <summary>
+        ///     test if a string builder ends with a given string
+        /// </summary>
+        /// <param name="stringBuilder">string builder to look at</param>
+        /// <param name="test">search string</param>
+        /// <returns><c>true</c> if the string builder ends with that string</returns>
+        public static bool EndsWith(this StringBuilder stringBuilder, string test) {
+            if (stringBuilder.Length < test.Length)
+                return false;
+
+            var offset = stringBuilder.Length - test.Length;
+            for (var i = 0; i < test.Length; i++) {
+                if (test[i] != stringBuilder[offset + i])
+                    return false;
+            }
+
+            return true;
+        }
+    }
 
     /// <summary>
     ///     some linq extensions

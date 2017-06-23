@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.6
+VisualStudioVersion = 15.0.26430.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{AC53D98C-87A1-42D9-859E-4182316C25AB}"
 	ProjectSection(SolutionItems) = preProject
@@ -46,10 +46,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Language Guide", "Language 
 		Documentation\Language Guide\unit.md = Documentation\Language Guide\unit.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PasPasPas.Api", "PasPasPas.Api\PasPasPas.Api.csproj", "{CF92A709-525F-450E-858F-A6AD8EDC16BA}"
+EndProject
 Global
-	GlobalSection(Performance) = preSolution
-		HasPerformanceSessions = true
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -95,6 +94,10 @@ Global
 		{EE56DD08-21EB-46D6-A08D-33E06B16EBA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EE56DD08-21EB-46D6-A08D-33E06B16EBA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EE56DD08-21EB-46D6-A08D-33E06B16EBA1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CF92A709-525F-450E-858F-A6AD8EDC16BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF92A709-525F-450E-858F-A6AD8EDC16BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF92A709-525F-450E-858F-A6AD8EDC16BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF92A709-525F-450E-858F-A6AD8EDC16BA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -111,6 +114,13 @@ Global
 		{E22933E4-0571-4997-93DD-AAE65FF517F7} = {AC53D98C-87A1-42D9-859E-4182316C25AB}
 		{EE56DD08-21EB-46D6-A08D-33E06B16EBA1} = {F28AC463-2553-4704-AE77-B9A356E953BC}
 		{4C71B556-0B02-4EC8-9347-28B4B0FABD3F} = {E845C2C3-4DD8-47A3-8753-DA481207CD30}
+		{CF92A709-525F-450E-858F-A6AD8EDC16BA} = {AC53D98C-87A1-42D9-859E-4182316C25AB}
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
 	EndGlobalSection
 	GlobalSection(Performance) = preSolution
 		HasPerformanceSessions = true

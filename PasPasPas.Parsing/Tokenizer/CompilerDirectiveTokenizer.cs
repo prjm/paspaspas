@@ -17,7 +17,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         /// <param name="services">environment</param>
         /// <param name="input">file to parse</param>
-        public CompilerDirectiveTokenizer(ParserServices services, OldStackedFileReader input) : base(services, input) { }
+        public CompilerDirectiveTokenizer(ParserServices services, StackedFileReader input) : base(services, input) { }
 
         private CompilerDirectivePatterns punctuators
             = new CompilerDirectivePatterns();

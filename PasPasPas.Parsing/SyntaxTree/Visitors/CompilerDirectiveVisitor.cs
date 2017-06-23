@@ -154,7 +154,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     include reader
         /// </summary>
-        public OldStackedFileReader IncludeInput { get; set; }
+        public StackedFileReader IncludeInput { get; set; }
 
         /// <summary>
         ///     test if an item can be visited
@@ -1116,9 +1116,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
             IFileReference targetPath = Meta.IncludePathResolver.ResolvePath(basePath, new FileReference(fileName)).TargetPath;
 
-            IFileAccess fileAccess = FileAccess;
             if (IncludeInput != null)
-                IncludeInput.AddFile(fileAccess.OpenFileForReading(targetPath));
+                IncludeInput.AddFileToRead(targetPath);
 
         }
 

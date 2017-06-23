@@ -15,9 +15,9 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <summary>
         ///     create a new tokenizer
         /// </summary>
-        /// <param name="services"></param>
+        /// <param name="services">parser services</param>
         /// <param name="input">input files</param>
-        public StandardTokenizer(ParserServices services, OldStackedFileReader input) : base(services, input) { }
+        public StandardTokenizer(ParserServices services, StackedFileReader input) : base(services, input) { }
 
         private StandardPatterns punctuators
             = new StandardPatterns();

@@ -15,7 +15,7 @@ namespace PasPasPasTests.Tokenizer {
 
         private readonly InputPatterns puncts;
 
-        public TestTokenizer(ParserServices environment, OldStackedFileReader input)
+        public TestTokenizer(ParserServices environment, StackedFileReader input)
             : base(environment, input) {
             puncts = new InputPatterns();
             puncts.AddPattern(new WhiteSpaceCharacterClass(), new WhiteSpaceTokenGroupValue());
@@ -34,18 +34,19 @@ namespace PasPasPasTests.Tokenizer {
             var log = new LogManager();
             var environment = new ParserServices(log);
 
-            using (var inputFile = new StringInput(input, new FileReference(TestFileName)))
-            using (var reader = new OldStackedFileReader()) {
-                reader.AddFile(inputFile);
-                var tokenizer = new TestTokenizer(environment, reader);
+            var inputFile = new StringBufferReadable(input);
+            var buffer = new FileBuffer();
+            var path = new FileReference(TestFileName);
+            buffer.Add(path, inputFile);
+            var reader = new StackedFileReader(buffer);
+            reader.AddFileToRead(path);
+            var tokenizer = new TestTokenizer(environment, reader);
 
-                while (!reader.AtEof) {
-                    Token token = tokenizer.FetchNextToken();
-                    Assert.IsNotNull(token);
-                    result.Add(token);
-                }
+            while (!reader.CurrentFile.AtEof) {
+                Token token = tokenizer.FetchNextToken();
+                Assert.IsNotNull(token);
+                result.Add(token);
             }
-
 
             return result;
         }
@@ -142,23 +143,25 @@ namespace PasPasPasTests.Tokenizer {
             var log = new LogSource(manager, LogGuid);
             var logTarget = new ListLogTarget();
             manager.RegisterTarget(logTarget);
-            using (var inputFile = new StringInput(input, new FileReference(TestFileName)))
-            using (var reader = new OldStackedFileReader()) {
-                reader.AddFile(inputFile);
-                while (!reader.AtEof) {
-                    result.Add(patterns.FetchNextToken(reader, log));
-                }
+            var path = new FileReference(TestFileName);
+            var file = new StringBufferReadable(input);
+            var buffer = new FileBuffer();
+            var reader = new StackedFileReader(buffer);
+            buffer.Add(path, file);
+            reader.AddFileToRead(path);
+            while (!reader.CurrentFile.AtEof) {
+                result.Add(patterns.FetchNextToken(reader, log));
+            }
 
-                if (expectedMessage != Guid.Empty) {
-                    Assert.AreEqual(1, logTarget.Messages.Count);
-                    Assert.AreEqual(expectedMessage, logTarget.Messages[0].MessageID);
-                }
-                else {
-                    Assert.AreEqual(0, logTarget.Messages.Count);
-                }
+            if (expectedMessage != Guid.Empty) {
+                Assert.AreEqual(1, logTarget.Messages.Count);
+                Assert.AreEqual(expectedMessage, logTarget.Messages[0].MessageID);
+            }
+            else {
+                Assert.AreEqual(0, logTarget.Messages.Count);
+            }
 
-                return result;
-            };
+            return result;
         }
 
         public Token TestPattern(InputPatterns patterns, string input, params int[] tokenValues)

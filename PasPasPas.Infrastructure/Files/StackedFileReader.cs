@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using PasPasPas.Infrastructure.Utils;
 
 namespace PasPasPas.Infrastructure.Files {
@@ -56,5 +57,41 @@ namespace PasPasPas.Infrastructure.Files {
         /// </summary>
         public FileBufferItemOffset CurrentFile
             => files.Count > 0 ? files.Peek() : null;
+
+        /// <summary>
+        ///     get the current character value
+        /// </summary>
+        public char Value {
+            get {
+                if (files.Count > 0)
+                    return files.Peek().Value;
+
+                ExceptionHelper.InvalidOperation();
+                return '\0';
+            }
+        }
+
+        /// <summary>
+        ///     check if the reader has reached eof
+        /// </summary>
+        public bool AtEof {
+            get {
+                if (files.Count > 0)
+                    return files.Peek().AtEof;
+
+                ExceptionHelper.InvalidOperation();
+                return false;
+            }
+        }
+
+        /// <summary>
+        ///     fetch the ext char
+        /// </summary>
+        public void NextChar() {
+            if (files.Count > 0)
+                files.Peek().NextChar();
+            else
+                ExceptionHelper.InvalidOperation();
+        }
     }
 }

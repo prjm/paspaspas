@@ -21,8 +21,8 @@ namespace PasPasPas.DesktopPlatform {
         /// </summary>
         /// <param name="path">path to the file</param>
         /// <returns>opened file</returns>
-        protected override IParserInput DoOpenFileForReading(IFileReference path)
-            => new FileInput(path);
+        protected override IBufferReadable DoOpenFileForReading(IFileReference path)
+            => new DesktopFileReadable(path);
 
 
     }

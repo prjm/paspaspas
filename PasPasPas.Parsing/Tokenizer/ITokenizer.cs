@@ -21,9 +21,5 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <returns>next pascal token</returns>
         Token FetchNextToken();
 
-        /// <summary>
-        ///     parser input
-        /// </summary>
-        OldStackedFileReader Input { get; }
     }
 }

@@ -122,14 +122,16 @@ namespace P3SyntaxTreeViewer {
 
         private ISyntaxPart Parse(ParserServices environment, string code) {
             var parser = new StandardParser(environment);
-            using (var inputFile = new StringInput(code, new FileReference("z.x.pas")))
-            using (var reader = new OldStackedFileReader()) {
-                reader.AddFile(inputFile);
-                parser.BaseTokenizer = new StandardTokenizer(environment, reader);
-                return parser.Parse();
-            }
-
+            var inputFile = new StringBufferReadable(code);
+            var path = new FileReference("z.x.pas");
+            var buffer = new FileBuffer();
+            var reader = new StackedFileReader(buffer);
+            buffer.Add(path, inputFile);
+            reader.AddFileToRead(path);
+            parser.BaseTokenizer = new StandardTokenizer(environment, reader);
+            return parser.Parse();
         }
+
 
         private ParserServices CreateEnvironment() {
             var mgr = new LogManager();
@@ -143,6 +145,5 @@ namespace P3SyntaxTreeViewer {
         private void Code_TextChanged(object sender, TextChangedEventArgs e)
             => UpdateTrees();
     }
-
 
 }

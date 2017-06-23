@@ -75,7 +75,7 @@
     <Compile Include="Parser\ProgramTest.cs" />
     <Compile Include="Parser\StatementTest.cs" />
     <Compile Include="Parser\TestDeclarations.cs" />
-    <Compile Include="StackedReaderTest.cs" />
+    <Compile Include="Infra\StackedReaderTest.cs" />
     <Compile Include="Tokenizer\LineCounterTest.cs" />
     <Compile Include="Tokenizer\TokenizerBaseTest.cs" />
     <Compile Include="Tokenizer\TokenizerTest.cs" />
@@ -85,6 +85,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\PasPasPas.Api\PasPasPas.Api.csproj">
+      <Project>{CF92A709-525F-450E-858F-A6AD8EDC16BA}</Project>
+      <Name>PasPasPas.Api</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PasPasPas.DesktopPlatform\PasPasPas.DesktopPlatform.csproj">
       <Project>{8adb6566-773f-4487-8611-2d8ad5337163}</Project>
       <Name>PasPasPas.DesktopPlatform</Name>
