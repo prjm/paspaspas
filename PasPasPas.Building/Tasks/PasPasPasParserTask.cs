@@ -54,7 +54,7 @@ namespace PasPasPas.Building.Tasks {
             var result = new StringBuilder();
             var count = 0;
 
-            foreach (FileReference file in Path.AsFileList()) {
+            foreach (var file in Path.AsFileList(settings.FileSystemAccess)) {
                 count++;
                 var logManager = new LogManager();
                 var environment = new ParserServices(logManager);
@@ -92,15 +92,16 @@ namespace PasPasPas.Building.Tasks {
 #if DEBUG
 
                 var result1 = new StringBuilder();
+                /*
+   var dummy = false;
+   using (IParserInput inputFile1 = settings.FileSystemAccess.OpenFileForReading(file))
+   using (var reader1 = new OldStackedFileReader()) {
+       reader1.AddFile(inputFile1);
 
-                var dummy = false;
-                using (IParserInput inputFile1 = settings.FileSystemAccess.OpenFileForReading(file))
-                using (var reader1 = new OldStackedFileReader()) {
-                    reader1.AddFile(inputFile1);
-
-                    while (!reader1.AtEof)
-                        result1.Append(reader1.FetchChar(out dummy));
-                }
+       while (!reader1.AtEof)
+           result1.Append(reader1.FetchChar(out dummy));
+   }
+   */
 
 #endif
 

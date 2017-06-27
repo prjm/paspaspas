@@ -1,4 +1,5 @@
-﻿using PasPasPas.Infrastructure.Files;
+﻿using System;
+using PasPasPas.Infrastructure.Files;
 using PasPasPas.Infrastructure.Input;
 
 namespace PasPasPas.DesktopPlatform {
@@ -7,6 +8,9 @@ namespace PasPasPas.DesktopPlatform {
     ///     standard file access
     /// </summary>
     public class StandardFileAccess : FileAccessBase {
+
+        public override IFileReference ReferenceToFile(string path)
+            => new DesktopFileReference(path);
 
         /// <summary>
         ///     check if a file exists

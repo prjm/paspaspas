@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using PasPasPas.Infrastructure.Files;
-using PasPasPas.Infrastructure.Input;
 
 namespace PasPasPas.Building.Definition {
 
@@ -18,9 +17,9 @@ namespace PasPasPas.Building.Definition {
         ///     get a list of referenced files
         /// </summary>
         /// <returns></returns>
-        public IList<FileReference> GetReferencedFiles() {
-            var result = new List<FileReference>();
-            result.Add(new FileReference(Path));
+        public IList<IFileReference> GetReferencedFiles(IFileAccess fileAccess) {
+            var result = new List<IFileReference>();
+            result.Add(fileAccess.ReferenceToFile(Path));
             return result;
         }
     }

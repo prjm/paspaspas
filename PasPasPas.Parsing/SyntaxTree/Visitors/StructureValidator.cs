@@ -3,6 +3,7 @@ using System;
 using System.IO;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Infrastructure.Input;
+using PasPasPas.Infrastructure.Files;
 
 namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 

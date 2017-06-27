@@ -39,7 +39,7 @@ namespace PasPasPas.Options.DataTypes {
                 currentDirectory = null;
             }
 
-            ResolvedFile result = ResolveInDirectory(new FileReference(currentDirectory), pathToResolve);
+            ResolvedFile result = ResolveInDirectory(Files.ReferenceToFile(currentDirectory), pathToResolve);
             if (result.IsResolved) {
                 return result;
             }

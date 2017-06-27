@@ -8,6 +8,7 @@
     <DebugSymbols>True</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
+    <ProjectReference Include="..\PasPasPas.Api\PasPasPas.Api.csproj" />
     <ProjectReference Include="..\PasPasPas.Building\PasPasPas.Building.csproj" />
     <ProjectReference Include="..\PasPasPas.DesktopPlatform\PasPasPas.DesktopPlatform.csproj" />
     <ProjectReference Include="..\PasPasPas.Infrastructure\PasPasPas.Infrastructure.csproj" />

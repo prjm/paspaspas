@@ -37,11 +37,10 @@ namespace PasPasPas.Building.Definition {
         ///     get file references from this setting
         /// </summary>
         /// <returns>file references</returns>
-        public IList<FileReference> AsFileList() {
-            var result = new List<FileReference>();
+        public IList<IFileReference> AsFileList(IFileAccess fileAccess) {
+            var result = new List<IFileReference>();
 
-
-            foreach (Setting item in Items) {
+            foreach (var item in Items) {
                 var reference = item as IResolvableSetting;
                 Setting setting;
 
@@ -52,7 +51,7 @@ namespace PasPasPas.Building.Definition {
 
 
                 var fileBasedSettings = setting as IFileReferenceSetting;
-                foreach (FileReference path in fileBasedSettings.GetReferencedFiles())
+                foreach (var path in fileBasedSettings.GetReferencedFiles(fileAccess))
                     result.Add(path);
 
             }

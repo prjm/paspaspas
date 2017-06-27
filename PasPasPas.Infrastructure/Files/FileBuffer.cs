@@ -18,7 +18,7 @@ namespace PasPasPas.Infrastructure.Files {
             => items = new Dictionary<IFileReference, FileBufferItem>();
 
         /// <summary>
-        ///     add content to the bzffer
+        ///     add content to the buffer
         /// </summary>
         /// <param name="reference">file path</param>
         /// <param name="content">content</param>
@@ -26,7 +26,7 @@ namespace PasPasPas.Infrastructure.Files {
             if (items.ContainsKey(reference))
                 ExceptionHelper.DuplicateKeyInDictionary(reference, nameof(reference));
 
-            var item = new FileBufferItem();
+            var item = new FileBufferItem(reference);
             content.ToBufferItem(item);
             items.Add(reference, item);
         }

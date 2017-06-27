@@ -2,6 +2,7 @@
 using PasPasPas.Options.DataTypes;
 using PasPasPas.Infrastructure.Input;
 using PasPasPas.Infrastructure.Log;
+using PasPasPas.Infrastructure.Files;
 
 namespace PasPasPas.Options.Bundles {
 
@@ -73,7 +74,7 @@ namespace PasPasPas.Options.Bundles {
         ///     meta information
         /// </summary>
         public MetaInformation Meta { get; }
-        
+
         /// <summary>
         ///     path options
         /// </summary>

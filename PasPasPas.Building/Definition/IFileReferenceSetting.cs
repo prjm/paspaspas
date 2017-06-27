@@ -12,8 +12,9 @@ namespace PasPasPas.Building.Definition {
         /// <summary>
         ///     get a list of referenced files
         /// </summary>
+        /// <param name="fileAccess">file access</param>
         /// <returns></returns>
-        IList<FileReference> GetReferencedFiles();
+        IList<IFileReference> GetReferencedFiles(IFileAccess fileAccess);
 
     }
 }

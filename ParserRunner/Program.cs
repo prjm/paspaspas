@@ -11,6 +11,7 @@ using PasPasPas.Infrastructure.Files;
 using PasPasPas.Parsing.Tokenizer;
 using PasPasPas.Parsing.Parser;
 using PasPasPas.Infrastructure.Log;
+using PasPasPas.Api;
 
 namespace ParserRunner {
 
@@ -18,27 +19,29 @@ namespace ParserRunner {
     class Program {
 
         static void Main(string[] args) {
-            var buffer = new FileBuffer();
-            var reference = new FileReference("test.pas");
+
+            var readerApi = new ReaderApi(new StandardFileAccess());
             var tempPath = @"C:\temp\Testfiles\spring.pas";
-            var content = new DesktopFileReadable(new FileReference(tempPath));
-            var logManager = new LogManager();
-            var services = new ParserServices(logManager);
+            var reader = readerApi.CreateReaderForPath(tempPath);
 
-            buffer.Add(reference, content);
+            while (!reader.AtEof) {
+                reader.NextChar();
+            }
 
-            var reader = new StackedFileReader(buffer);
-            reader.AddFileToRead(reference);
-
+            /*
             var tokenizer = new StandardTokenizer(services, reader);
 
             while (tokenizer.HasNextToken()) {
                 tokenizer.FetchNextToken();
             }
 
+            */
+
+
 
             return;
 
+            /*
 
             var path = @"C:\temp\Testfiles\";
 
@@ -51,8 +54,8 @@ namespace ParserRunner {
             var task = new PasPasPasParserTask();
             var settings = new SettingGroup();
 
-            IEnumerable<string> files1 = Directory.GetFiles(path, "*.pas").Skip(48 * 100).Take(200);
-            string[] files2 = new[] { path + "Spring.pas" };
+            var files1 = Directory.GetFiles(path, "*.pas").Skip(48 * 100).Take(200);
+            var files2 = new[] { path + "Spring.pas" };
 
             foreach (var filePath in files2) {
                 var inputFiles = new FilesSetting() {
@@ -75,7 +78,7 @@ namespace ParserRunner {
             var watch = new Stopwatch();
 
             watch.Start();
-            IList<object> result = ProjectBuilder.BuildProject(project, buildSettings);
+            var result = ProjectBuilder.BuildProject(project, buildSettings);
             watch.Stop();
 
             Console.WriteLine("Completed.");
@@ -96,7 +99,7 @@ namespace ParserRunner {
 
 
 #endif
-
+              */
         }
     }
 }

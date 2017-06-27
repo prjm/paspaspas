@@ -1,6 +1,6 @@
 ﻿using PasPasPas.Infrastructure.Files;
 
-namespace PasPasPas.Infrastructure.Input {
+namespace PasPasPas.Infrastructure.Files {
 
     /// <summary>
     ///     service to access files
@@ -22,5 +22,11 @@ namespace PasPasPas.Infrastructure.Input {
         /// <returns><c>true</c> if the file exists</returns>
         bool FileExists(IFileReference filePath);
 
+        /// <summary>
+        ///     create a reference to a file
+        /// </summary>
+        /// <param name="path">file to reference</param>
+        /// <returns>file reference</returns>
+        IFileReference ReferenceToFile(string path);
     }
 }

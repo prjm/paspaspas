@@ -32,7 +32,7 @@ namespace PasPasPas.Infrastructure.Files {
             if (input == null)
                 ExceptionHelper.ArgumentIsNull(nameof(input));
 
-            files.Push(new FileBufferItemOffset(this, input));
+            files.Push(new FileBufferItemOffset(this, buffer[input]));
         }
 
         /// <summary>

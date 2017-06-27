@@ -1,12 +1,12 @@
 ﻿using PasPasPas.Parsing.Tokenizer;
 using System;
 using System.Collections.Generic;
-using PasPasPas.Infrastructure.Input;
 using PasPasPas.Parsing.Parser;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Parsing.SyntaxTree;
 using Xunit;
 using PasPasPas.Infrastructure.Files;
+using PasPasPas.DesktopPlatform;
 
 namespace PasPasPasTests.Tokenizer {
 
@@ -36,7 +36,7 @@ namespace PasPasPasTests.Tokenizer {
 
             var inputFile = new StringBufferReadable(input);
             var buffer = new FileBuffer();
-            var path = new FileReference(TestFileName);
+            var path = new DesktopFileReference(TestFileName);
             buffer.Add(path, inputFile);
             var reader = new StackedFileReader(buffer);
             reader.AddFileToRead(path);
@@ -143,7 +143,7 @@ namespace PasPasPasTests.Tokenizer {
             var log = new LogSource(manager, LogGuid);
             var logTarget = new ListLogTarget();
             manager.RegisterTarget(logTarget);
-            var path = new FileReference(TestFileName);
+            var path = new DesktopFileReference(TestFileName);
             var file = new StringBufferReadable(input);
             var buffer = new FileBuffer();
             var reader = new StackedFileReader(buffer);

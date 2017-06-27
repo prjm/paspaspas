@@ -33,9 +33,7 @@ namespace PasPasPas.Infrastructure.Input {
             if (path == null)
                 ExceptionHelper.ArgumentIsNull(nameof(path));
 
-            IBufferReadable result;
-
-            if (mockupFiles.IsValueCreated && mockupFiles.Value.TryGetValue(path.FileName, out result))
+            if (mockupFiles.IsValueCreated && mockupFiles.Value.TryGetValue(path.FileName, out var result))
                 return result;
 
             result = DoOpenFileForReading(path);
@@ -101,5 +99,11 @@ namespace PasPasPas.Infrastructure.Input {
         public void ClearMockups()
             => mockupFiles.Value.Clear();
 
+        /// <summary>
+        ///     create a new reference to a file
+        /// </summary>
+        /// <param name="path">file path</param>
+        /// <returns>file reference</returns>
+        public abstract IFileReference ReferenceToFile(string path);
     }
 }

@@ -1054,7 +1054,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 return;
 
 
-            ResolvedFile resolvedFile = Meta.LinkedFileResolver.ResolvePath(basePath, new FileReference(fileName));
+            ResolvedFile resolvedFile = Meta.LinkedFileResolver.ResolvePath(basePath, Meta.LinkedFileResolver.Files.ReferenceToFile(fileName));
 
             if (resolvedFile.IsResolved) {
                 var linkedFile = new LinkedFile();
@@ -1084,7 +1084,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 return;
 
 
-            ResolvedFile resolvedFile = Meta.ResourceFilePathResolver.ResolvePath(basePath, new FileReference(fileName));
+            ResolvedFile resolvedFile = Meta.ResourceFilePathResolver.ResolvePath(basePath, Meta.ResourceFilePathResolver.Files.ReferenceToFile(fileName));
 
             if (resolvedFile.IsResolved) {
                 var resourceReference = new ResourceReference();
@@ -1114,7 +1114,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 return;
 
 
-            IFileReference targetPath = Meta.IncludePathResolver.ResolvePath(basePath, new FileReference(fileName)).TargetPath;
+            IFileReference targetPath = Meta.IncludePathResolver.ResolvePath(basePath, Meta.IncludePathResolver.Files.ReferenceToFile(fileName)).TargetPath;
 
             if (IncludeInput != null)
                 IncludeInput.AddFileToRead(targetPath);

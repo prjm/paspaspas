@@ -13,6 +13,18 @@ namespace PasPasPas.Infrastructure.Files {
             = new StringBuilder();
 
         /// <summary>
+        ///     referenced file
+        /// </summary>
+        private IFileReference file;
+
+        /// <summary>
+        ///     create a new file buffer item
+        /// </summary>
+        /// <param name="fileName">file name</param>
+        public FileBufferItem(IFileReference fileName)
+            => file = fileName;
+
+        /// <summary>
         ///     file content
         /// </summary>
         public StringBuilder Data
@@ -34,5 +46,11 @@ namespace PasPasPas.Infrastructure.Files {
                 ExceptionHelper.IndexOutOfRange(offset);
             return data[offset];
         }
+
+        /// <summary>
+        ///     filename
+        /// </summary>
+        public IFileReference File
+            => file;
     }
 }

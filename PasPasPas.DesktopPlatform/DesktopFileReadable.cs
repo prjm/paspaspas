@@ -26,13 +26,13 @@ namespace PasPasPas.DesktopPlatform {
         /// </summary>
         /// <param name="item">buffer item</param>
         public void ToBufferItem(FileBufferItem item) {
-            Encoding encoding = Encoding.UTF8;
-            StringBuilder sb = item.Data;
+            var encoding = Encoding.UTF8;
+            var sb = item.Data;
 
             var bufferSize = encoding.GetMaxCharCount(DefaultFileStreamBufferSize);
             var count = bufferSize;
 
-            char[] buffer = new char[bufferSize];
+            var buffer = new char[bufferSize];
 
             sb.Clear();
             sb.Capacity = encoding.GetMaxCharCount((int)new FileInfo(file.Path).Length);
