@@ -65,8 +65,8 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         /// <param name="tokenId">generated token id</param>
         public void Finish(int tokenId) {
-            Result.Kind = tokenId;
-            Result.Value = Buffer.ToString();
+            //Result.Kind = tokenId;
+            //Result.Value = Buffer.ToString();
         }
 
         /// <summary>
@@ -87,7 +87,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         public void Clear() {
             switchedFile = false;
-            Result = null;
+            Result = Token.Empty;
         }
 
         /// <summary>
@@ -125,8 +125,8 @@ namespace PasPasPas.Parsing.Tokenizer {
         }
 
         internal void Finish(int tokenKind, string value) {
-            Result.Kind = tokenKind;
-            Result.Value = value;
+            //Result.Kind = tokenKind;
+            //Result.Value = value;
         }
 
         internal void Error(Guid messageId, params object[] messageData) {

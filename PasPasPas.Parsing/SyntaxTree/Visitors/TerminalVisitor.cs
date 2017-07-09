@@ -28,9 +28,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <param name="parameter"></param>
         public void StartVisit(Terminal syntaxPart) {
 
-            if (syntaxPart.Token == null)
-                return;
-
             foreach (Token token in syntaxPart.Token.InvalidTokensBefore)
                 ResultBuilder.Append(token.Value);
 

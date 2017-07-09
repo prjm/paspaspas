@@ -70,7 +70,6 @@ namespace PasPasPas.Building.Tasks {
                 buffer.Add(file, settings.FileSystemAccess.OpenFileForReading(file));
                 result.AppendLine("-----------------------<< " + file.Path + " (" + count + ")");
                 reader.AddFileToRead(file);
-                parser.BaseTokenizer = new StandardTokenizer(environment, reader);
                 var hasError = false;
 
                 log.ProcessMessage += (x, y) => {

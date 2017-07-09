@@ -60,5 +60,10 @@ namespace PasPasPas.Infrastructure.Files {
         public IFileReference File
             => input.File;
 
+        /// <summary>
+        ///     current position
+        /// </summary>
+        public int Position
+            => offset;
     }
 }

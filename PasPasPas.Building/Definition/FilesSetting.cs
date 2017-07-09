@@ -18,8 +18,9 @@ namespace PasPasPas.Building.Definition {
         /// </summary>
         /// <returns></returns>
         public IList<IFileReference> GetReferencedFiles(IFileAccess fileAccess) {
-            var result = new List<IFileReference>();
-            result.Add(fileAccess.ReferenceToFile(Path));
+            var result = new List<IFileReference> {
+                fileAccess.ReferenceToFile(Path)
+            };
             return result;
         }
     }

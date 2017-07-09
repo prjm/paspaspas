@@ -1,31 +1,10 @@
 ﻿using PasPasPas.Infrastructure.Log;
-using PasPasPas.Parsing.Parser;
 using PasPasPas.Parsing.SyntaxTree;
 using System;
 using PasPasPas.Infrastructure.Files;
+using PasPasPas.Infrastructure.Utils;
 
 namespace PasPasPas.Parsing.Tokenizer {
-
-    /// <summary>
-    ///     helper methods for tokenizers
-    /// </summary>
-    public static class TokenizerHelper {
-
-        /// <summary>
-        ///     create a pseudo-token for the current input file
-        /// </summary>
-        /// <param name="tokenKind">token kind</param>
-        /// <param name="tokenizer">tokenizer</param>
-        /// <returns>pseudotoken (empty)</returns>
-        public static Token CreatePseudoToken(this ITokenizer tokenizer, int tokenKind) {
-            var result = new Token() {
-                FilePath = null,
-                Kind = tokenKind,
-                Value = string.Empty
-            };
-            return result;
-        }
-    }
 
     /// <summary>
     ///     base class for tokenizers
@@ -36,13 +15,15 @@ namespace PasPasPas.Parsing.Tokenizer {
         ///     message group for tokenizer logs
         /// </summary>
         public static readonly Guid TokenizerLogMessage
-            = new Guid("{1E7738B4-6758-4493-B4AC-654353CF7228}");
+            = new Guid(new byte[] { 0xc6, 0x78, 0xdb, 0x93, 0x84, 0x6a, 0xff, 0x47, 0xaf, 0xe2, 0x82, 0xb3, 0xb3, 0x7f, 0x33, 0x26 });
+        /* {93db78c6-6a84-47ff-afe2-82b3b37f3326} */
 
         /// <summary>
         ///     message: unexpected token
         /// </summary>    
         public static readonly Guid UnexpectedCharacter
-            = new Guid("{FA4EBD35-325B-4869-A2CD-B21EE430BAC4}");
+            = new Guid(new byte[] { 0xd0, 0x79, 0xa5, 0xd0, 0x34, 0xa6, 0xba, 0x4c, 0x9d, 0x6, 0xc, 0x69, 0xde, 0xa6, 0x9e, 0xb });
+        /* {d0a579d0-a634-4cba-9d06-0c69dea69e0b} */
 
         /// <summary>
         ///     message: unexptected end of token
@@ -51,44 +32,38 @@ namespace PasPasPas.Parsing.Tokenizer {
         ///     data: expected-token-end sequence
         /// </remarks>
         public static readonly Guid UnexpectedEndOfToken
-            = new Guid("{9FADE757-DA74-4DE8-8346-EBCC04E173DD}");
+            = new Guid(new byte[] { 0x7d, 0xd3, 0xfc, 0xf2, 0x4a, 0x89, 0x71, 0x4e, 0x8a, 0xaa, 0x2f, 0x1a, 0x95, 0x6b, 0xdc, 0x49 });
+        /* {f2fcd37d-894a-4e71-8aaa-2f1a956bdc49} */
 
         /// <summary>
         ///     create a new tokenizer
         /// </summary>
-        protected TokenizerBase(ParserServices environment, StackedFileReader input) {
+        protected TokenizerBase(ILogManager log, StackedFileReader input) {
 
-            if (environment == null)
-                throw new ArgumentNullException(nameof(environment));
+            if (log == null)
+                ExceptionHelper.ArgumentIsNull(nameof(log));
 
             if (input == null)
-                throw new ArgumentNullException(nameof(input));
+                ExceptionHelper.ArgumentIsNull(nameof(input));
 
-            Environment = environment;
             Input = input;
-            LogSource = new LogSource(environment.Log, TokenizerLogMessage);
-            Lines = new LineCounters();
+            LogSource = new LogSource(log, TokenizerLogMessage);
         }
 
-        /// <summary>
-        ///     check if tokens are availiable
-        /// </summary>
-        /// <returns><c>true</c> if tokens are avaliable</returns>
-        public bool HasNextToken() {
-            return Input.CurrentFile != null;
-        }
+        public virtual bool HasNextToken
+            => !Input.AtEof;
+
+        public virtual void FetchNextToken()
+            => token = CharacterClasses.FetchNextToken(Input, LogSource);
+
+        private Token token;
 
         /// <summary>
-        ///     generates an undefined token
+        ///     get the current token
         /// </summary>
-        /// <param name="currentChar"></param>
-        /// <param name="file">file</param>
         /// <returns></returns>
-        protected Token GenerateUndefinedToken(char currentChar, IFileReference file) {
-            var value = new string(currentChar, 1);
-            LogSource.Error(UnexpectedCharacter, value);
-            return null; // new PascalToken(PascalToken.Undefined, value, file);
-        }
+        public ref Token CurrentToken
+            => ref token;
 
         /// <summary>
         ///     used char classes
@@ -96,32 +71,9 @@ namespace PasPasPas.Parsing.Tokenizer {
         protected abstract InputPatterns CharacterClasses { get; }
 
         /// <summary>
-        ///     fetch the next token
-        /// </summary>
-        /// <returns>next token</returns>
-        public virtual Token FetchNextToken() {
-            Token result;
-
-            result = CharacterClasses.FetchNextToken(Input, LogSource);
-
-            Lines.ProcessToken(result);
-            return result;
-        }
-
-        /// <summary>
-        ///     environment
-        /// </summary>
-        public ParserServices Environment { get; }
-
-        /// <summary>
         ///     log source
         /// </summary>
         public LogSource LogSource { get; }
-
-        /// <summary>
-        ///     line counters
-        /// </summary>
-        public LineCounters Lines { get; }
 
         /// <summary>
         ///     file input

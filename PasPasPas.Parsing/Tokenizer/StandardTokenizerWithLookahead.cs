@@ -21,6 +21,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         /// <param name="environment"></param>
         public StandardTokenizerWithLookahead(ParserServices environment)
+            : base(null)
             => this.environment = environment;
 
         /// <summary>

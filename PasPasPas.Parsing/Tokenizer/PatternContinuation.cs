@@ -18,7 +18,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="path">file path</param>
         /// <returns>created token</returns>
         protected virtual Token CreateResult(IFileReference path)
-            => new Token() { FilePath = path };
+            => Token.Empty;
 
         /// <summary>
         ///     generate a token
@@ -182,9 +182,10 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <returns></returns>
         protected override Token CreateResult(IFileReference path) {
             ResetParsedString();
-            return new StringLiteralToken() {
-                FilePath = path
-            };
+            return Token.Empty;
+            //return new StringLiteralToken() {
+            //FilePath = path
+            //};
         }
 
         /// <summary>
@@ -216,13 +217,16 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="state"></param>
         /// <param name="tokenKind"></param>
         protected void FinishResult(ContinuationState state, int tokenKind) {
-            var literal = ((StringLiteralToken)state.Result);
+            var literal = ((Token)state.Result);
 
+            /*
 
             if (literal.LiteralValue == null)
                 literal.LiteralValue = parsedString.ToString();
             else
                 literal.LiteralValue = literal.LiteralValue + parsedString.ToString();
+
+            */
 
             parsedString.Clear();
             state.Finish(tokenKind);
@@ -279,8 +283,9 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="quotedText"></param>
         /// <returns></returns>
         public static string Unwrap(Token quotedText) {
-            var literal = quotedText as StringLiteralToken;
-            return literal != null ? literal.LiteralValue : string.Empty;
+            return null;
+            //var literal = quotedText as StringLiteralToken;
+            //return literal != null ? literal.LiteralValue : string.Empty;
         }
     }
 
@@ -614,9 +619,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="path"></param>
         /// <returns></returns>
         protected override Token CreateResult(IFileReference path)
-            => new IntegerLiteralToken() {
-                FilePath = path
-            };
+            => Token.Empty;
 
         /// <summary>
         ///     token kind: hex number
@@ -652,8 +655,9 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="token"></param>
         /// <returns></returns>
         public static int Unwrap(Token token) {
-            var literal = token as IntegerLiteralToken;
-            return literal != null ? literal.LiteralValue : 0;
+            return 0;
+            //var literal = token as IntegerLiteralToken;
+            //return literal != null ? literal.LiteralValue : 0;
         }
 
         /// <summary>
@@ -663,8 +667,8 @@ namespace PasPasPas.Parsing.Tokenizer {
         protected override void Finish(ContinuationState state) {
             int value;
 
-            if (int.TryParse(state.Buffer.ToString(1, state.Buffer.Length - 1), System.Globalization.NumberStyles.HexNumber, System.Globalization.CultureInfo.InvariantCulture, out value))
-                ((IntegerLiteralToken)state.Result).LiteralValue = value;
+            //if (int.TryParse(state.Buffer.ToString(1, state.Buffer.Length - 1), System.Globalization.NumberStyles.HexNumber, System.Globalization.CultureInfo.InvariantCulture, out value))
+            //((Token)state.Result).LiteralValue = value;
 
             base.Finish(state);
         }
@@ -681,9 +685,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="path"></param>
         /// <returns></returns>
         protected override Token CreateResult(IFileReference path)
-            => new IntegerLiteralToken() {
-                FilePath = path
-            };
+            => Token.Empty;
 
 
         /// <summary>
@@ -708,8 +710,8 @@ namespace PasPasPas.Parsing.Tokenizer {
         protected override void Finish(ContinuationState state) {
             int value;
 
-            if (int.TryParse(state.Buffer.ToString(), out value))
-                ((IntegerLiteralToken)state.Result).LiteralValue = value;
+            //if (int.TryParse(state.Buffer.ToString(), out value))
+            //    ((IntegerLiteralToken)state.Result).LiteralValue = value;
 
             base.Finish(state);
         }
@@ -720,6 +722,8 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="token"></param>
         /// <returns></returns>
         public static int Unwrap(Token token) {
+            return 0;
+            /*
             var literal = token as IntegerLiteralToken;
             if (literal != null)
                 return literal.LiteralValue;
@@ -729,6 +733,7 @@ namespace PasPasPas.Parsing.Tokenizer {
                 return numberLiteral.LiteralValue;
 
             return 0;
+            */
         }
 
     }
@@ -865,7 +870,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="path">file path</param>
         /// <returns>created token</returns>
         protected override Token CreateResult(IFileReference path)
-            => new NumberLiteralToken() { FilePath = path };
+            => Token.Empty;
 
         private DigitTokenGroupValue digitTokenizer
             = new DigitTokenGroupValue();
@@ -918,12 +923,12 @@ namespace PasPasPas.Parsing.Tokenizer {
         public override void ParseByPrefix(ContinuationState state) {
             int intPrefix = DigitTokenGroupValue.Unwrap(digitTokenizer.Tokenize(state));
 
-            var result = state.Result as NumberLiteralToken;
+            var result = state.Result;
             var withDot = false;
             var withExponent = false;
 
             if (!state.IsValid) {
-                result.LiteralValue = intPrefix;
+                //result.LiteralValue = intPrefix;
                 state.Finish(TokenKind.Integer);
                 return;
             }
@@ -969,7 +974,7 @@ namespace PasPasPas.Parsing.Tokenizer {
                 state.Finish(TokenKind.Real);
             }
             else {
-                result.LiteralValue = intPrefix;
+                //result.LiteralValue = intPrefix;
                 state.Finish(TokenKind.Integer);
             }
 

@@ -1,9 +1,8 @@
-﻿using PasPasPas.Infrastructure.Input;
-using PasPasPas.Parsing.Parser;
-using PasPasPas.Parsing.SyntaxTree;
+﻿using PasPasPas.Parsing.SyntaxTree;
 using System;
 using System.Collections.Generic;
 using PasPasPas.Infrastructure.Files;
+using PasPasPas.Infrastructure.Log;
 
 namespace PasPasPas.Parsing.Tokenizer {
 
@@ -15,12 +14,10 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <summary>
         ///     create a new tokenizer
         /// </summary>
-        /// <param name="services">parser services</param>
+        /// <param name="log">log</param>
         /// <param name="input">input files</param>
-        public StandardTokenizer(ParserServices services, StackedFileReader input) : base(services, input) { }
-
-        private StandardPatterns punctuators
-            = new StandardPatterns();
+        public StandardTokenizer(ILogManager log, StackedFileReader input) :
+            base(log, input) { }
 
         /// <summary>
         ///     message id: incomplete hex number
@@ -36,17 +33,14 @@ namespace PasPasPas.Parsing.Tokenizer {
             = new Guid(new byte[] { 0x68, 0x3f, 0x9c, 0x79, 0x2, 0xe0, 0xf3, 0x42, 0x98, 0x8a, 0xef, 0xa3, 0x59, 0x4f, 0xf9, 0x42 });
         /* {799c3f68-e002-42f3-988a-efa3594ff942} */
 
+        private static Lazy<StandardPatterns> patterns
+            = new Lazy<StandardPatterns>(() => new StandardPatterns());
+
         /// <summary>
         ///     get punctuators
         /// </summary>
         protected override InputPatterns CharacterClasses
-            => punctuators;
-
-        /// <summary>
-        ///     input patterns
-        /// </summary>
-        public InputPatterns Patterns
-            => punctuators;
+            => patterns.Value;
 
         /// <summary>
         ///     keywords
@@ -226,11 +220,11 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         public bool AllowAsmComment {
             get {
-                return punctuators.SemicolonOrAsmComment.AllowComment;
+                return patterns.Value.SemicolonOrAsmComment.AllowComment;
             }
 
             set {
-                punctuators.SemicolonOrAsmComment.AllowComment = value;
+                patterns.Value.SemicolonOrAsmComment.AllowComment = value;
             }
         }
 
@@ -238,17 +232,16 @@ namespace PasPasPas.Parsing.Tokenizer {
         ///     fetch next token
         /// </summary>
         /// <returns></returns>
-        public override Token FetchNextToken() {
-            Token result = base.FetchNextToken();
+        public override void FetchNextToken() {
+            base.FetchNextToken();
+            var token = CurrentToken;
 
-            if (result != null && result.Kind == TokenKind.Asm) {
+            if (token.Kind == TokenKind.Asm) {
                 AllowAsmComment = true;
             }
-            else if (AllowAsmComment && (result == null || result.Kind == TokenKind.End)) {
+            else if (AllowAsmComment && (token.Kind == TokenKind.End)) {
                 AllowAsmComment = false;
             }
-
-            return result;
         }
     }
 }

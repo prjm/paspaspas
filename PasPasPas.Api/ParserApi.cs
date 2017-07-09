@@ -4,10 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PasPasPas.Api
-{
-    public class ParserApi
-    {
-        
+namespace PasPasPas.Api {
+
+    /// <summary>
+    ///     encapsulation for tokenizer api
+    /// </summary>
+    public class ParserApi {
+
     }
 }

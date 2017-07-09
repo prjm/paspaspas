@@ -89,9 +89,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     creates a new visitor
         /// </summary>
-        public CompilerDirectiveVisitor() {
-            visitor = new Visitor(this);
-        }
+        public CompilerDirectiveVisitor() => visitor = new Visitor(this);
 
         private static readonly Guid messageSource
             = new Guid(new byte[] { 0xcc, 0x3b, 0xd8, 0xdd, 0xbf, 0x76, 0x5f, 0x40, 0xa2, 0xe8, 0x8a, 0xbd, 0x9f, 0xb6, 0x20, 0xc4 });
@@ -126,9 +124,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     parsing environemnt
         /// </summary>
         public ParserServices Environment {
-            get {
-                return services;
-            }
+
+            get => services;
+
             set {
                 logSource = null;
                 services = value;
@@ -1044,7 +1042,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
                 return;
 
-            IFileReference basePath = syntaxPart?.LastTerminalToken?.FilePath;
+            IFileReference basePath = null;
             var fileName = syntaxPart?.FileName;
 
             if (basePath == null || string.IsNullOrWhiteSpace(basePath.Path))
@@ -1054,12 +1052,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 return;
 
 
-            ResolvedFile resolvedFile = Meta.LinkedFileResolver.ResolvePath(basePath, Meta.LinkedFileResolver.Files.ReferenceToFile(fileName));
+            var resolvedFile = Meta.LinkedFileResolver.ResolvePath(basePath, Meta.LinkedFileResolver.Files.ReferenceToFile(fileName));
 
             if (resolvedFile.IsResolved) {
-                var linkedFile = new LinkedFile();
-                linkedFile.OriginalFileName = syntaxPart.FileName;
-                linkedFile.TargetPath = resolvedFile.TargetPath;
+                var linkedFile = new LinkedFile() {
+                    OriginalFileName = syntaxPart.FileName,
+                    TargetPath = resolvedFile.TargetPath
+                };
                 Meta.AddLinkedFile(linkedFile);
             }
         }
@@ -1074,7 +1073,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (!CanVisit(syntaxPart))
                 return;
 
-            IFileReference basePath = syntaxPart?.LastTerminalToken?.FilePath;
+            IFileReference basePath = null;
             var fileName = syntaxPart?.FileName;
 
             if (basePath == null || string.IsNullOrWhiteSpace(basePath.Path))
@@ -1084,13 +1083,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 return;
 
 
-            ResolvedFile resolvedFile = Meta.ResourceFilePathResolver.ResolvePath(basePath, Meta.ResourceFilePathResolver.Files.ReferenceToFile(fileName));
+            var resolvedFile = Meta.ResourceFilePathResolver.ResolvePath(basePath, Meta.ResourceFilePathResolver.Files.ReferenceToFile(fileName));
 
             if (resolvedFile.IsResolved) {
-                var resourceReference = new ResourceReference();
-                resourceReference.OriginalFileName = fileName;
-                resourceReference.TargetPath = resolvedFile.TargetPath;
-                resourceReference.RcFile = syntaxPart.RcFile;
+                var resourceReference = new ResourceReference() {
+                    OriginalFileName = fileName,
+                    TargetPath = resolvedFile.TargetPath,
+                    RcFile = syntaxPart.RcFile
+                };
                 Meta.AddResourceReference(resourceReference);
             }
         }
@@ -1104,7 +1104,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (!CanVisit(syntaxPart))
                 return;
 
-            IFileReference basePath = syntaxPart?.LastTerminalToken?.FilePath;
+            IFileReference basePath = null;
             var fileName = syntaxPart?.FileName;
 
             if (basePath == null || string.IsNullOrWhiteSpace(basePath.Path))
@@ -1114,7 +1114,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 return;
 
 
-            IFileReference targetPath = Meta.IncludePathResolver.ResolvePath(basePath, Meta.IncludePathResolver.Files.ReferenceToFile(fileName)).TargetPath;
+            var targetPath = Meta.IncludePathResolver.ResolvePath(basePath, Meta.IncludePathResolver.Files.ReferenceToFile(fileName)).TargetPath;
 
             if (IncludeInput != null)
                 IncludeInput.AddFileToRead(targetPath);

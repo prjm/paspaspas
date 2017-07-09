@@ -16,12 +16,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         public PackageContains ContainsClause { get; set; }
 
         /// <summary>
-        ///     package file path
-        /// </summary>
-        public IFileReference FilePath
-            => PackageHead?.FirstTerminalToken?.FilePath;
-
-        /// <summary>
         ///     package head
         /// </summary>
         public PackageHead PackageHead { get; set; }

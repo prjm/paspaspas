@@ -21,10 +21,8 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         /// <param name="token">token to process</param>
         public void ProcessToken(Token token) {
-            if (token == null)
-                return;
 
-            IFileReference path = token.FilePath;
+            IFileReference path = null;
             LineCounter counter = null;
 
             if (!counters.TryGetValue(path, out counter)) {
@@ -36,13 +34,13 @@ namespace PasPasPas.Parsing.Tokenizer {
         }
 
         private static void ProcessToken(Token token, LineCounter counter) {
-            token.StartPosition = new TextFilePosition(counter.Line, counter.Column);
+            //token.StartPosition = new TextFilePosition(counter.Line, counter.Column);
 
             for (var index = 0; index < token.Value.Length; index++) {
                 counter.ProcessChar(token.Value[index]);
             }
 
-            token.EndPosition = new TextFilePosition(counter.Line, counter.Column);
+            //token.EndPosition = new TextFilePosition(counter.Line, counter.Column);
         }
     }
 }

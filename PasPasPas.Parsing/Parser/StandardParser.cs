@@ -801,7 +801,7 @@ namespace PasPasPas.Parsing.Parser {
             CaseItem item = null;
             do {
                 item = ParseCaseItem(result);
-            } while (Tokenizer.HasNextToken() && item != null);
+            } while (Tokenizer.HasNextToken && item != null);
 
             if (ContinueWith(result, TokenKind.Else)) {
                 result.Else = ParseStatementList(result);
@@ -1134,7 +1134,7 @@ namespace PasPasPas.Parsing.Parser {
             var result = new AsmBlock();
             InitByTerminal(result, parent, TokenKind.Asm);
 
-            while (Tokenizer.HasNextToken() && (!ContinueWith(result, TokenKind.End))) {
+            while (Tokenizer.HasNextToken && (!ContinueWith(result, TokenKind.End))) {
                 if (Match(TokenKind.Dot)) {
                     ParseAsmPseudoOp(result);
                 }
@@ -1197,7 +1197,7 @@ namespace PasPasPas.Parsing.Parser {
             result.Prefix = ParseAssemblyPrefix(result);
             result.OpCode = ParseAssemblyOpcode(result);
 
-            while (Tokenizer.HasNextToken() && !Match(TokenKind.End) && !Match(TokenKind.Semicolon) && Tokenizer.HasNextToken() && !CurrentTokenIsAfterNewline()) {
+            while (Tokenizer.HasNextToken && !Match(TokenKind.End) && !Match(TokenKind.Semicolon) && Tokenizer.HasNextToken && !CurrentTokenIsAfterNewline()) {
                 ParseAssemblyOperand(result);
                 ContinueWith(result, TokenKind.Comma);
             }
@@ -3660,7 +3660,7 @@ namespace PasPasPas.Parsing.Parser {
             var level = 1;
             var counter = 1;
 
-            while (level > 0 && (Tokenizer.BaseTokenizer.HasNextToken())) {
+            while (level > 0 && (Tokenizer.BaseTokenizer.HasNextToken)) {
                 if (LookAhead(counter, TokenKind.OpenParen))
                     level++;
                 else if (LookAhead(counter, TokenKind.CloseParen))
@@ -3786,7 +3786,7 @@ namespace PasPasPas.Parsing.Parser {
             var level = 1;
             var counter = 1;
 
-            while (level > 0 && (Tokenizer.BaseTokenizer.HasNextToken())) {
+            while (level > 0 && (Tokenizer.BaseTokenizer.HasNextToken)) {
                 if (LookAhead(counter, TokenKind.OpenParen))
                     level++;
                 else if (LookAhead(counter, TokenKind.CloseParen))
@@ -4123,7 +4123,7 @@ namespace PasPasPas.Parsing.Parser {
 
             Token token = CurrentToken();
 
-            if (token != null && (allowReserverdWords || !reservedWords.Contains(token.Kind))) {
+            if (allowReserverdWords || !reservedWords.Contains(token.Kind)) {
                 var result = new Identifier();
                 InitByTerminal(result, parent, token.Kind);
                 return result;
@@ -4193,9 +4193,6 @@ namespace PasPasPas.Parsing.Parser {
                 return true;
 
             Token token = Tokenizer.LookAhead(lookAhead);
-
-            if (token == null)
-                return false;
 
             if (!allowReservedWords && reservedWords.Contains(token.Kind))
                 return false;

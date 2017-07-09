@@ -1,6 +1,4 @@
-﻿using PasPasPas.Infrastructure.Files;
-using PasPasPas.Infrastructure.Input;
-using PasPasPas.Parsing.SyntaxTree;
+﻿using PasPasPas.Parsing.SyntaxTree;
 
 namespace PasPasPas.Parsing.Tokenizer {
 
@@ -10,16 +8,20 @@ namespace PasPasPas.Parsing.Tokenizer {
     public interface ITokenizer {
 
         /// <summary>
-        ///     test if a next token is availiable
+        ///     fetch then next token if possible
         /// </summary>
-        /// <returns><c>true</c> if a next token is available</returns>
-        bool HasNextToken();
+        void FetchNextToken();
 
         /// <summary>
-        ///     get the next token
+        ///     check if a next token exists
         /// </summary>
-        /// <returns>next pascal token</returns>
-        Token FetchNextToken();
+        bool HasNextToken { get; }
+
+        /// <summary>
+        ///     get the current token
+        /// </summary>
+        /// <returns>current token</returns>
+        ref Token CurrentToken { get; }
 
     }
 }

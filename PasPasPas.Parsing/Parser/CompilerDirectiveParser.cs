@@ -23,8 +23,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="environment">services</param>
         /// <param name="input">input file</param>
         public CompilerDirectiveParser(ParserServices environment, StackedFileReader input)
-            : base(environment, new CompilerDirectiveTokenizerWithLookahead()) {
-            BaseTokenizer = new CompilerDirectiveTokenizer(environment, input);
+            : base(environment, new CompilerDirectiveTokenizerWithLookahead(new CompilerDirectiveTokenizer(environment, input))) {
         }
 
         /// <summary>
@@ -2347,7 +2346,7 @@ namespace PasPasPas.Parsing.Parser {
         /// </summary>
         /// <returns></returns>
         protected override bool AllowIdentifier()
-            => CompilerDirectiveTokenizer.Keywords.ContainsKey(CurrentToken()?.Value);
+            => CompilerDirectiveTokenizer.Keywords.ContainsKey(CurrentToken().Value);
 
     }
 

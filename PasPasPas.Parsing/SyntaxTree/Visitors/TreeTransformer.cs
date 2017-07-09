@@ -147,7 +147,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             result.FileType = CompilationUnitType.Unit;
             result.UnitName = ExtractSymbolName(unit.UnitName);
             result.Hints = ExtractHints(unit.Hints);
-            result.FilePath = unit.FilePath;
             result.InterfaceSymbols = new DeclaredSymbols() { ParentItem = result };
             result.ImplementationSymbols = new DeclaredSymbols() { ParentItem = result };
             Project.Add(result, LogSource);
@@ -166,7 +165,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             result.FileType = CompilationUnitType.Library;
             result.UnitName = ExtractSymbolName(library.LibraryName);
             result.Hints = ExtractHints(library.Hints);
-            result.FilePath = library.FilePath;
             if (library.MainBlock.Body.AssemblerBlock != null)
                 result.InitializationBlock = new BlockOfAssemblerStatements();
             else
@@ -195,7 +193,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             InitNode(result, program, Project);
             result.FileType = CompilationUnitType.Program;
             result.UnitName = ExtractSymbolName(program.ProgramName);
-            result.FilePath = program.FilePath;
             result.InitializationBlock = new BlockOfStatements();
             result.Symbols = new DeclaredSymbols() { ParentItem = result };
             CurrentUnitMode[result] = UnitMode.Program;
@@ -216,7 +213,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             InitNode(result, package, Project);
             result.FileType = CompilationUnitType.Package;
             result.UnitName = ExtractSymbolName(package.PackageName);
-            result.FilePath = package.FilePath;
             Project.Add(result, LogSource);
             CurrentUnit = result;
         }
@@ -937,15 +933,19 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 name = ExtractSymbolName(standardLabel);
             }
 
-            Token intLabel = (label.LabelName as StandardInteger)?.LastTerminalToken;
+            /*
+
+            Token intLabel = (label.LabelName as StandardInteger).LastTerminalToken;
             if (intLabel != null) {
                 name = new SimpleSymbolName(intLabel.Value);
             }
 
-            Token hexLabel = (label.LabelName as HexNumber)?.LastTerminalToken;
+            Token hexLabel = (label.LabelName as HexNumber).LastTerminalToken;
             if (hexLabel != null) {
                 name = new SimpleSymbolName(hexLabel.Value);
             }
+
+            */
 
             if (name == null)
                 return;
@@ -2440,7 +2440,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         }
 
         private static SymbolName ExtractSymbolName(Identifier name) {
-            var result = new SimpleSymbolName(name?.FirstTerminalToken?.Value);
+            var result = new SimpleSymbolName(name?.FirstTerminalToken.Value);
             return result;
         }
 

@@ -1,4 +1,5 @@
-﻿using PasPasPas.Infrastructure.Log;
+﻿using System;
+using PasPasPas.Infrastructure.Log;
 using PasPasPas.Options.Bundles;
 
 namespace PasPasPas.Parsing.Parser {
@@ -6,6 +7,7 @@ namespace PasPasPas.Parsing.Parser {
     /// <summary>
     ///     parser services
     /// </summary>
+    [Obsolete]
     public class ParserServices {
 
         /// <summary>

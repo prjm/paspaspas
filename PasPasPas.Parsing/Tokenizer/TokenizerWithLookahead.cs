@@ -16,18 +16,13 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <summary>
         ///     protected constructor
         /// </summary>
-        protected TokenizerWithLookahead() { }
+        protected TokenizerWithLookahead(ITokenizer baseTokenizer) =>
+            BaseTokenizer = baseTokenizer;
 
         /// <summary>
         ///     base tokenizer
         /// </summary>
-        public ITokenizer BaseTokenizer { get; set; }
-
-        /// <summary>
-        ///     parser input
-        /// </summary>
-        public StackedFileReader Input
-            => null;
+        public ITokenizer BaseTokenizer { get; private set; }
 
         /// <summary>
         ///     list of tokens
@@ -38,29 +33,32 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <summary>
         ///     list of invalid tokens (e.g. whitespace)
         /// </summary>
-        private Queue<Token> invalidTokens
-            = new Queue<Token>();
-
+        private IndexedQueue<Token> invalidTokens
+            = new IndexedQueue<Token>();
 
         /// <summary>
-        ///     check if other tokens are availiable
+        ///     check if a next token exists
         /// </summary>
-        /// <returns><c>false</c> if <c>eof</c> is reached</returns>
-        public bool HasNextToken()
-            => (tokenList.Count > 0) || BaseTokenizer.HasNextToken();
+        public bool HasNextToken
+            => (tokenList.Count > 0) || BaseTokenizer.HasNextToken;
 
+        /// <summary>
+        ///     fetch a next token / fill token list
+        /// </summary>
         private void InternalFetchNextToken() {
             var currentTokenCount = tokenList.Count;
+
             while (tokenList.Count == currentTokenCount || tokenList.Count < 2) {
 
-                if (!BaseTokenizer.HasNextToken()) {
+                if (!BaseTokenizer.HasNextToken) {
                     if (tokenList.Count > 0)
                         tokenList.Last.AssignInvalidTokens(invalidTokens, true);
-                    //tokenList.Enqueue(new PascalToken(PascalToken.Eof, string.Empty, new FileReference(string.Empty)));
                     return;
                 }
 
-                Token nextToken = BaseTokenizer.FetchNextToken();
+                BaseTokenizer.FetchNextToken();
+                var nextToken = BaseTokenizer.CurrentToken;
+
                 if (IsValidToken(nextToken)) {
                     nextToken.AssignInvalidTokens(invalidTokens, false);
                     tokenList.Enqueue(nextToken);
@@ -96,26 +94,26 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <summary>
         ///     gets the current token
         /// </summary>
-        public Token CurrentToken()
-            => LookAhead(0);
+        public ref Token CurrentToken
+            => ref LookAhead(0);
 
         /// <summary>
         ///     get tokens and look ahader
         /// </summary>
         /// <param name="number">number of tokens to look ahead</param>
         /// <returns>token</returns>
-        public Token LookAhead(int number) {
+        public ref Token LookAhead(int number) {
             checked {
-                while (BaseTokenizer.HasNextToken() && (tokenList.Count < Math.Max(2, 1 + number))) {
+                while (BaseTokenizer.HasNextToken && (tokenList.Count < Math.Max(2, 1 + number))) {
                     InternalFetchNextToken();
                 }
             }
 
             if (tokenList.Count <= number) {
-                return null;
+                return ref Token.Empty;
             }
             else {
-                return tokenList[number];
+                return ref tokenList[number];
             }
         }
 
@@ -123,12 +121,11 @@ namespace PasPasPas.Parsing.Tokenizer {
         ///     fetches the next token
         /// </summary>
         /// <returns></returns>
-        public Token FetchNextToken() {
-            Token result = LookAhead(0);
+        public void FetchNextToken() {
+            var result = LookAhead(0);
             if (tokenList.Count > 0) {
                 tokenList.Dequeue();
             }
-            return result;
         }
 
     }

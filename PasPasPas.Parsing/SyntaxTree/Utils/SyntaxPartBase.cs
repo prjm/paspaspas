@@ -76,13 +76,13 @@ namespace PasPasPas.Parsing.SyntaxTree {
         public Token FirstTerminalToken {
             get {
                 if (parts.Count < 1)
-                    return null;
+                    return Token.Empty;
 
 
                 var terminal = parts[0] as Terminal;
 
                 if (terminal == null)
-                    return null;
+                    return Token.Empty;
 
                 return terminal.Token;
             }
@@ -94,13 +94,13 @@ namespace PasPasPas.Parsing.SyntaxTree {
         public Token LastTerminalToken {
             get {
                 if (parts.Count < 1)
-                    return null;
+                    return Token.Empty;
 
 
                 var terminal = parts[parts.Count - 1] as Terminal;
 
                 if (terminal == null)
-                    return null;
+                    return Token.Empty;
 
                 return terminal.Token;
             }

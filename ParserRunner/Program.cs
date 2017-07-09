@@ -1,17 +1,7 @@
-﻿using PasPasPas.Building.Definition;
-using PasPasPas.Building.Engine;
-using PasPasPas.Building.Tasks;
-using PasPasPas.DesktopPlatform;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using PasPasPas.Infrastructure.Files;
-using PasPasPas.Parsing.Tokenizer;
-using PasPasPas.Parsing.Parser;
-using PasPasPas.Infrastructure.Log;
+﻿using PasPasPas.DesktopPlatform;
 using PasPasPas.Api;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ParserRunner {
 
@@ -20,13 +10,26 @@ namespace ParserRunner {
 
         static void Main(string[] args) {
 
-            var readerApi = new ReaderApi(new StandardFileAccess());
+            var tokenizerApi = new TokenizerApi(new StandardFileAccess());
             var tempPath = @"C:\temp\Testfiles\spring.pas";
-            var reader = readerApi.CreateReaderForPath(tempPath);
+            var tokenizer = tokenizerApi.CreateTokenizerForPath(tempPath);
+            var registry = new Dictionary<int, ulong>();
 
-            while (!reader.AtEof) {
-                reader.NextChar();
+            while (tokenizer.HasNextToken) {
+                tokenizer.FetchNextToken();
+
+                var kind = tokenizer.CurrentToken.Kind;
+
+                if (registry.TryGetValue(kind, out ulong value))
+                    registry[kind] = 1 + value;
+                else
+                    registry.Add(kind, 1);
             }
+
+
+            foreach (var entry in registry.OrderByDescending(t => t.Value))
+                System.Console.WriteLine($"{entry.Key.ToString()} => {entry.Value.ToString()}");
+
 
             /*
             var tokenizer = new StandardTokenizer(services, reader);

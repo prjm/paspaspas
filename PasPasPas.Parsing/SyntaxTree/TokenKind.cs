@@ -1490,5 +1490,10 @@
         ///     token for <c>delayed</c>
         /// </summary>
         public const int Delayed = 830;
+
+        /// <summary>
+        ///     invalid tokens
+        /// </summary>
+        public const int Invalid = 999;
     }
 }

@@ -20,7 +20,7 @@ namespace PasPasPas.Building.Definition {
         ///     clear settings
         /// </summary>
         public void Clear() {
-            foreach (IClearableSetting item in Items.OfType<IClearableSetting>())
+            foreach (var item in Items.OfType<IClearableSetting>())
                 item.Clear();
         }
 
@@ -29,7 +29,7 @@ namespace PasPasPas.Building.Definition {
         /// </summary>
         /// <param name="variables"></param>
         public void Resolve(Dictionary<string, Setting> variables) {
-            foreach (IResolvableSetting item in Items.OfType<IResolvableSetting>())
+            foreach (var item in Items.OfType<IResolvableSetting>())
                 item.Resolve(variables);
         }
 

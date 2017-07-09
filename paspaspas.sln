@@ -1,36 +1,36 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.14
+VisualStudioVersion = 15.0.26430.15
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{AC53D98C-87A1-42D9-859E-4182316C25AB}"
 	ProjectSection(SolutionItems) = preProject
 		PasPasPas.Ruleset = PasPasPas.Ruleset
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PasPasPas.Infrastructure", "PasPasPas.Infrastructure\PasPasPas.Infrastructure.csproj", "{4CEF569A-4ECE-42EE-847B-5029958F757C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PasPasPas.Infrastructure", "PasPasPas.Infrastructure\PasPasPas.Infrastructure.csproj", "{4CEF569A-4ECE-42EE-847B-5029958F757C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PasPasPas.Options", "Paspaspas.Options\PasPasPas.Options.csproj", "{677A19C0-B2D4-4153-8DC9-0713C7193ECE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PasPasPas.Options", "Paspaspas.Options\PasPasPas.Options.csproj", "{677A19C0-B2D4-4153-8DC9-0713C7193ECE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PasPasPas.Parsing", "PasPasPas.Parsing\PasPasPas.Parsing.csproj", "{EFA1DA73-0C34-4BFB-9006-DCFFA12218ED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PasPasPas.Parsing", "PasPasPas.Parsing\PasPasPas.Parsing.csproj", "{EFA1DA73-0C34-4BFB-9006-DCFFA12218ED}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{F28AC463-2553-4704-AE77-B9A356E953BC}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Platform", "Platform", "{9EF2045A-8E0D-4315-8754-8385F5776216}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PasPasPas.DesktopPlatform", "PasPasPas.DesktopPlatform\PasPasPas.DesktopPlatform.csproj", "{8ADB6566-773F-4487-8611-2D8AD5337163}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PasPasPas.DesktopPlatform", "PasPasPas.DesktopPlatform\PasPasPas.DesktopPlatform.csproj", "{8ADB6566-773F-4487-8611-2D8AD5337163}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PasPasPasTests", "PasPasPasTests\PasPasPasTests.csproj", "{3767F617-68CB-49CD-9ADB-828C4E2D4D73}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PasPasPas.Building", "PasPasPas.Building\PasPasPas.Building.csproj", "{EEB2B9DC-E131-46CF-AAC3-6AB662D67DBE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PasPasPas.Building", "PasPasPas.Building\PasPasPas.Building.csproj", "{EEB2B9DC-E131-46CF-AAC3-6AB662D67DBE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParserRunner", "ParserRunner\ParserRunner.csproj", "{804E4A76-D32D-49C3-B8DD-9EB999933E00}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ParserRunner", "ParserRunner\ParserRunner.csproj", "{804E4A76-D32D-49C3-B8DD-9EB999933E00}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "P3SyntaxTreeViewer", "P3SyntaxTreeViewer\P3SyntaxTreeViewer.csproj", "{B3649E9A-4BCC-437B-B233-D4C71A175E66}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PasPasPas.Typings", "PasPasPas.Typings\PasPasPas.Typings.csproj", "{E22933E4-0571-4997-93DD-AAE65FF517F7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PasPasPas.Typings", "PasPasPas.Typings\PasPasPas.Typings.csproj", "{E22933E4-0571-4997-93DD-AAE65FF517F7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "P3Benchmark", "P3Benchmark\P3Benchmark.csproj", "{EE56DD08-21EB-46D6-A08D-33E06B16EBA1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3Benchmark", "P3Benchmark\P3Benchmark.csproj", "{EE56DD08-21EB-46D6-A08D-33E06B16EBA1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{E845C2C3-4DD8-47A3-8753-DA481207CD30}"
 	ProjectSection(SolutionItems) = preProject
@@ -46,7 +46,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Language Guide", "Language 
 		Documentation\Language Guide\unit.md = Documentation\Language Guide\unit.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PasPasPas.Api", "PasPasPas.Api\PasPasPas.Api.csproj", "{CF92A709-525F-450E-858F-A6AD8EDC16BA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PasPasPas.Api", "PasPasPas.Api\PasPasPas.Api.csproj", "{CF92A709-525F-450E-858F-A6AD8EDC16BA}"
 EndProject
 Global
 	GlobalSection(Performance) = preSolution
@@ -118,6 +118,15 @@ Global
 		{EE56DD08-21EB-46D6-A08D-33E06B16EBA1} = {F28AC463-2553-4704-AE77-B9A356E953BC}
 		{4C71B556-0B02-4EC8-9347-28B4B0FABD3F} = {E845C2C3-4DD8-47A3-8753-DA481207CD30}
 		{CF92A709-525F-450E-858F-A6AD8EDC16BA} = {AC53D98C-87A1-42D9-859E-4182316C25AB}
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
 	EndGlobalSection
 	GlobalSection(Performance) = preSolution
 		HasPerformanceSessions = true

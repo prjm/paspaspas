@@ -38,12 +38,17 @@ namespace PasPasPas.Infrastructure.Files {
         /// <summary>
         ///     finish current file
         /// </summary>
-        public void FinishCurrentFile() {
+        public FileBufferItemOffset FinishCurrentFile() {
 
             if (files.Count < 1)
                 ExceptionHelper.InvalidOperation();
 
             files.Pop();
+
+            if (files.Count == 0)
+                return null;
+            else
+                return files.Peek();
         }
 
         /// <summary>
@@ -83,6 +88,12 @@ namespace PasPasPas.Infrastructure.Files {
                 return false;
             }
         }
+
+        /// <summary>
+        ///     current position
+        /// </summary>
+        public int Position
+            => files.Count > 0 ? files.Peek().Position : -1;
 
         /// <summary>
         ///     fetch the ext char

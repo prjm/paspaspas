@@ -1,12 +1,65 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace PasPasPas.Infrastructure.Utils {
+
+    /// <summary>
+    ///     enumerator for queues
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    internal class IndexedQueueEnumerator<T> : IEnumerator<T> {
+
+        private readonly IndexedQueue<T> refQueue;
+        private int index = 0;
+
+        /// <summary>
+        ///     create a new enumerator
+        /// </summary>
+        /// <param name="queue"></param>
+        public IndexedQueueEnumerator(IndexedQueue<T> queue)
+            => refQueue = queue;
+
+        /// <summary>
+        ///     get current item
+        /// </summary>
+        public T Current =>
+            refQueue[index];
+
+        /// <summary>
+        ///     current item
+        /// </summary>
+        object IEnumerator.Current
+            => Current;
+
+        /// <summary>
+        ///     dispose enumerator
+        /// </summary>
+        public void Dispose() { }
+
+        /// <summary>
+        ///     move to the next itme
+        /// </summary>
+        /// <returns></returns>
+        public bool MoveNext() {
+            if (index >= refQueue.Count)
+                return false;
+            index++;
+            return true;
+        }
+
+        /// <summary>
+        ///     reset enumerator
+        /// </summary>
+        public void Reset()
+            => index = 0;
+    }
 
     /// <summary>
     ///     indexed queue
     /// </summary>
     /// <typeparam name="T">queue type</typeparam>
-    public class IndexedQueue<T> {
+    public class IndexedQueue<T> : IEnumerable<T> {
 
         private T[] array;
         private int start;
@@ -37,7 +90,7 @@ namespace PasPasPas.Infrastructure.Utils {
         /// <param name="item">element to add</param>
         public void Enqueue(T item) {
             if (len == array.Length) {
-                T[] bigger = new T[array.Length * 2];
+                var bigger = new T[array.Length * 2];
                 for (var i = 0; i < len; i++) {
                     bigger[i] = array[(start + i) % len];
                 }
@@ -57,11 +110,33 @@ namespace PasPasPas.Infrastructure.Utils {
             if (len < 1)
                 throw new InvalidOperationException();
 
-            T result = First;
+            var result = First;
             ++start;
             --len;
             return result;
         }
+
+        /// <summary>
+        ///     clear the queue
+        /// </summary>
+        public void Clear() {
+            start = 0;
+            len = 0;
+        }
+
+        /// <summary>
+        ///     get anenumerator
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerator<T> GetEnumerator()
+            => new IndexedQueueEnumerator<T>(this);
+
+        /// <summary>
+        ///     enumerate all queue items
+        /// </summary>
+        /// <returns></returns>
+        IEnumerator IEnumerable.GetEnumerator()
+            => GetEnumerator();
 
         /// <summary>
         ///     get item count
@@ -96,10 +171,7 @@ namespace PasPasPas.Infrastructure.Utils {
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public T this[int index] {
-            get {
-                return array[(start + index) % array.Length];
-            }
-        }
+        public ref T this[int index]
+            => ref array[(start + index) % array.Length];
     }
 }

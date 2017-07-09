@@ -7,6 +7,9 @@ namespace PasPasPas.Parsing.Tokenizer {
     /// </summary>
     public class CompilerDirectiveTokenizerWithLookahead : TokenizerWithLookahead {
 
+        public CompilerDirectiveTokenizerWithLookahead(ITokenizer baseTokenizer)
+            : base(baseTokenizer) { }
+
         /// <summary>
         ///     no macors avail
         /// </summary>

@@ -16,19 +16,9 @@ namespace PasPasPas.Infrastructure.Input {
         /// <param name="target">target directory</param>
         /// <param name="isResolved"><c>true</c> if the file is resolved</param>
         public ResolvedFile(IFileReference currentDirectory, IFileReference pathToResolve, IFileReference target, bool isResolved) {
-
-            if (currentDirectory == null)
-                throw new ArgumentNullException(nameof(currentDirectory));
-
-            if (pathToResolve == null)
-                throw new ArgumentNullException(nameof(pathToResolve));
-
-            if (target == null)
-                throw new ArgumentNullException(nameof(target));
-
-            CurrentDirectory = currentDirectory;
-            PathToResolve = pathToResolve;
-            TargetPath = target;
+            CurrentDirectory = currentDirectory ?? throw new ArgumentNullException(nameof(currentDirectory));
+            PathToResolve = pathToResolve ?? throw new ArgumentNullException(nameof(pathToResolve));
+            TargetPath = target ?? throw new ArgumentNullException(nameof(target));
             IsResolved = isResolved;
         }
 

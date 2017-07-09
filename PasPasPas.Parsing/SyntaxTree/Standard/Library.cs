@@ -10,12 +10,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     public class Library : StandardSyntaxTreeBase {
 
         /// <summary>
-        ///     file path
-        /// </summary>
-        public IFileReference FilePath
-            => LibraryHead?.FirstTerminalToken?.FilePath;
-
-        /// <summary>
         ///     hints
         /// </summary>
         public HintingInformationList Hints

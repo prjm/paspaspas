@@ -128,7 +128,6 @@ namespace P3SyntaxTreeViewer {
             var reader = new StackedFileReader(buffer);
             buffer.Add(path, inputFile);
             reader.AddFileToRead(path);
-            parser.BaseTokenizer = new StandardTokenizer(environment, reader);
             return parser.Parse();
         }
 

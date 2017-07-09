@@ -23,6 +23,8 @@ namespace PasPasPas.Parsing.Tokenizer {
         ///     register punctuators
         /// </summary>
         public StandardPatterns() {
+            AddPattern(',', TokenKind.Comma);
+            return;
 
             InputPattern dot = AddPattern('.', TokenKind.Dot);
             dot.Add('.', TokenKind.DotDot);
@@ -32,7 +34,6 @@ namespace PasPasPas.Parsing.Tokenizer {
             lparen.Add('.', TokenKind.OpenBraces);
             lparen.Add('*', new AlternativeCurlyBraceCommentTokenValue()).Add('$', new AlternativePreprocessorTokenValue());
 
-            AddPattern(',', TokenKind.Comma);
             AddPattern(')', TokenKind.CloseParen);
             AddPattern(';', semicolonTokenGroup);
             AddPattern('=', TokenKind.EqualsSign);

@@ -11,7 +11,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <summary>
         ///     tokenizer to use
         /// </summary>
-        ITokenizer BaseTokenizer { get; set; }
+        ITokenizer BaseTokenizer { get; }
 
         /// <summary>
         ///     parse input

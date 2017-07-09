@@ -10,12 +10,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     public class Program : StandardSyntaxTreeBase {
 
         /// <summary>
-        ///     file path
-        /// </summary>
-        public IFileReference FilePath
-            => LastTerminalToken?.FilePath;
-
-        /// <summary>
         ///     main block
         /// </summary>
         public Block MainBlock { get; set; }

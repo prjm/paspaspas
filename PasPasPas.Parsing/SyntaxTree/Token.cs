@@ -3,47 +3,48 @@ using System.Globalization;
 using System;
 using System.Collections.Generic;
 using PasPasPas.Infrastructure.Files;
+using PasPasPas.Infrastructure.Utils;
 
 namespace PasPasPas.Parsing.SyntaxTree {
 
     /// <summary>
     ///     token definition
     /// </summary>
-    public class Token {
+    public struct Token {
+
+        private static Token empty
+            = new Token();
+
+        private static Token eof
+                    = new Token(TokenKind.Eof, 0, string.Empty);
 
         /// <summary>
-        ///     create a new token
+        ///     empty token
         /// </summary>
-        public Token() {
-            Kind = TokenKind.Undefined;
-            Value = string.Empty;
-            FilePath = null;
-        }
+        public static ref Token Empty
+            => ref empty;
+
+        /// <summary>
+        ///     empty token
+        /// </summary>
+        public static ref Token Eof
+            => ref eof;
+
 
         /// <summary>
         ///     Token value
         /// </summary>
-        public string Value { get; set; }
+        public string Value { get; }
 
         /// <summary>
         ///     Token kind
         /// </summary>
-        public int Kind { get; set; }
+        public int Kind { get; }
 
         /// <summary>
-        ///     file path
+        ///     token position
         /// </summary>
-        public IFileReference FilePath { get; set; }
-
-        /// <summary>
-        ///     token start position
-        /// </summary>
-        public TextFilePosition StartPosition { get; internal set; }
-
-        /// <summary>
-        ///     token end position
-        /// </summary>
-        public TextFilePosition EndPosition { get; internal set; }
+        public int Position { get; }
 
         /// <summary>
         ///     invalid tokens before this token
@@ -51,7 +52,7 @@ namespace PasPasPas.Parsing.SyntaxTree {
         public IEnumerable<Token> InvalidTokensBefore {
             get {
                 if (invalidTokensBefore != null) {
-                    foreach (Token token in invalidTokensBefore)
+                    foreach (var token in invalidTokensBefore)
                         yield return token;
                 }
             }
@@ -63,7 +64,7 @@ namespace PasPasPas.Parsing.SyntaxTree {
         public IEnumerable<Token> InvalidTokensAfter {
             get {
                 if (invalidTokensAfter != null) {
-                    foreach (Token token in invalidTokensAfter)
+                    foreach (var token in invalidTokensAfter)
                         yield return token;
                 }
             }
@@ -72,19 +73,44 @@ namespace PasPasPas.Parsing.SyntaxTree {
         /// <summary>
         ///     list of invalid tokens before this token
         /// </summary>
-        private IList<Token> invalidTokensBefore = null;
+        private IList<Token> invalidTokensBefore;
 
         /// <summary>
         ///     list of invalid tokens after this token
         /// </summary>
-        private IList<Token> invalidTokensAfter = null;
+        private IList<Token> invalidTokensAfter;
+
+        /// <summary>
+        ///     create a new syntax token
+        /// </summary>
+        /// <param name="tokenKind">token kind</param>
+        /// <param name="tokenPosition">token position</param>
+        /// <param name="value">token value</param>
+        public Token(int tokenKind, int tokenPosition, string value) : this() {
+            Kind = tokenKind;
+            Position = tokenPosition;
+            Value = value.Pool();
+        }
+
+        /// <summary>
+        ///     create a new syntax token
+        /// </summary>
+        /// <param name="tokenKind">token kind</param>
+        /// <param name="tokenPosition">token position</param>
+        /// <param name="value">token value</param>
+        public Token(int tokenKind, int tokenPosition, char value) : this() {
+            Kind = tokenKind;
+            Position = tokenPosition;
+            Value = value.Pool();
+        }
+
 
         /// <summary>
         ///     assign remaining tokens
         /// </summary>
         /// <param name="invalidTokens"></param>
         /// <param name="afterwards">add tokens after this token</param>
-        public void AssignInvalidTokens(Queue<Token> invalidTokens, bool afterwards) {
+        public void AssignInvalidTokens(IndexedQueue<Token> invalidTokens, bool afterwards) {
 
             if (invalidTokens.Count > 0) {
 
@@ -94,7 +120,7 @@ namespace PasPasPas.Parsing.SyntaxTree {
                     invalidTokensBefore = new List<Token>(invalidTokens.Count);
 
 
-                foreach (Token token in invalidTokens)
+                foreach (var token in invalidTokens)
                     if (afterwards)
                         invalidTokensAfter.Add(token);
                     else
@@ -110,43 +136,6 @@ namespace PasPasPas.Parsing.SyntaxTree {
         /// <returns></returns>
         public override string ToString()
             => Kind.ToString(CultureInfo.InvariantCulture) + ": " + Value?.Trim();
-
-    }
-
-    /// <summary>
-    ///     string literal token
-    /// </summary>
-    public class StringLiteralToken : Token {
-
-        /// <summary>
-        ///     string value
-        /// </summary>
-        public string LiteralValue { get; set; }
-
-    }
-
-    /// <summary>
-    ///     string literal token
-    /// </summary>
-    public class IntegerLiteralToken : Token {
-
-        /// <summary>
-        ///     int value
-        /// </summary>
-        public int LiteralValue { get; set; }
-
-    }
-
-    /// <summary>
-    ///     number token
-    /// </summary>
-    public class NumberLiteralToken : Token {
-
-
-        /// <summary>
-        ///     int value
-        /// </summary>
-        public int LiteralValue { get; set; }
 
     }
 
