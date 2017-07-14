@@ -301,7 +301,7 @@ namespace PasPasPas.Parsing.Parser {
                     return;
                 }
 
-                result.MinStackSize = DigitTokenGroupValue.Unwrap(result.LastTerminalToken);
+                result.MinStackSize = 1; // DigitTokenGroupValue.Unwrap(result.LastTerminalToken);
             }
 
             if (mSwitch)
@@ -315,7 +315,7 @@ namespace PasPasPas.Parsing.Parser {
                     return;
                 }
 
-                result.MaxStackSize = DigitTokenGroupValue.Unwrap(result.LastTerminalToken);
+                result.MaxStackSize = 0; // DigitTokenGroupValue.Unwrap(result.LastTerminalToken);
             }
         }
 
@@ -352,7 +352,7 @@ namespace PasPasPas.Parsing.Parser {
                 ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidMessageDirective, new[] { TokenKind.QuotedString });
             }
 
-            result.MessageText = QuotedStringTokenValue.Unwrap(CurrentToken());
+            result.MessageText = string.Empty;// QuotedStringTokenValue.Unwrap(CurrentToken());
         }
 
         private void ParseNoDefine(IExtendableSyntaxPart parent) {
@@ -369,10 +369,10 @@ namespace PasPasPas.Parsing.Parser {
             result.TypeName = result.LastTerminalValue;
 
             if (ContinueWith(result, TokenKind.QuotedString)) {
-                result.TypeNameInHpp = QuotedStringTokenValue.Unwrap(result.LastTerminalToken);
+                result.TypeNameInHpp = string.Empty; // QuotedStringTokenValue.Unwrap(result.LastTerminalToken);
 
                 if (ContinueWith(result, TokenKind.QuotedString)) {
-                    result.TypeNameInUnion = QuotedStringTokenValue.Unwrap(result.LastTerminalToken);
+                    result.TypeNameInUnion = string.Empty; // QuotedStringTokenValue.Unwrap(result.LastTerminalToken);
                 }
             }
         }
@@ -451,7 +451,7 @@ namespace PasPasPas.Parsing.Parser {
                 return;
             }
 
-            result.RegionName = QuotedStringTokenValue.Unwrap(result.LastTerminalToken);
+            result.RegionName = string.Empty; // QuotedStringTokenValue.Unwrap(result.LastTerminalToken);
         }
 
         /// <summary>
@@ -626,7 +626,7 @@ namespace PasPasPas.Parsing.Parser {
                 return;
             }
 
-            var libInfo = QuotedStringTokenValue.Unwrap(result.LastTerminalToken);
+            var libInfo = string.Empty; // QuotedStringTokenValue.Unwrap(result.LastTerminalToken);
 
             switch (kind) {
                 case TokenKind.LibPrefix:
@@ -648,10 +648,10 @@ namespace PasPasPas.Parsing.Parser {
             InitByTerminal(result, parent, TokenKind.ImageBase);
 
             if (ContinueWith(result, TokenKind.Integer)) {
-                result.BaseValue = DigitTokenGroupValue.Unwrap(result.LastTerminalToken);
+                result.BaseValue = 0;// DigitTokenGroupValue.Unwrap(result.LastTerminalToken);
             }
             else if (ContinueWith(result, TokenKind.HexNumber)) {
-                result.BaseValue = HexNumberTokenValue.Unwrap(result.LastTerminalToken);
+                result.BaseValue = 0; // HexNumberTokenValue.Unwrap(result.LastTerminalToken);
             }
             else {
                 ErrorAndSkip(parent, CompilerDirectiveParserErrors.InvalidImageBaseDirective, new[] { TokenKind.Integer, TokenKind.HexNumber });
@@ -1068,7 +1068,7 @@ namespace PasPasPas.Parsing.Parser {
                 return;
             }
 
-            var size = DigitTokenGroupValue.Unwrap(result.LastTerminalToken);
+            var size = 99; // DigitTokenGroupValue.Unwrap(result.LastTerminalToken);
 
             switch (size) {
                 case 1:
@@ -1627,7 +1627,7 @@ namespace PasPasPas.Parsing.Parser {
             InitByTerminal(result, parent, TokenKind.DescriptionSwitchLong);
 
             if (ContinueWith(result, TokenKind.QuotedString)) {
-                result.DescriptionValue = QuotedStringTokenValue.Unwrap(result.LastTerminalToken);
+                result.DescriptionValue = string.Empty;// QuotedStringTokenValue.Unwrap(result.LastTerminalToken);
             }
             else {
                 ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidDescriptionDirective, new[] { TokenKind.QuotedString });
@@ -1848,7 +1848,7 @@ namespace PasPasPas.Parsing.Parser {
             result.TypeName = result.LastTerminalValue;
 
             if (ContinueWith(result, TokenKind.QuotedString)) {
-                result.AliasName = QuotedStringTokenValue.Unwrap(result.LastTerminalToken);
+                result.AliasName = string.Empty; // QuotedStringTokenValue.Unwrap(result.LastTerminalToken);
                 if (string.IsNullOrWhiteSpace(result.AliasName)) {
                     result.AliasName = null;
                     result.TypeName = null;
@@ -1996,7 +1996,7 @@ namespace PasPasPas.Parsing.Parser {
         private string ParseFileName(SyntaxPartBase parent, bool allowTimes) {
 
             if (ContinueWith(parent, TokenKind.QuotedString)) {
-                return QuotedStringTokenValue.Unwrap(parent.LastTerminalToken);
+                return string.Empty; // QuotedStringTokenValue.Unwrap(parent.LastTerminalToken);
             }
 
             else if (ContinueWith(parent, TokenKind.Identifier)) {
@@ -2040,7 +2040,7 @@ namespace PasPasPas.Parsing.Parser {
                 result.RcFile = result.LastTerminalValue;
             }
             else if (ContinueWith(result, TokenKind.QuotedString)) {
-                result.RcFile = QuotedStringTokenValue.Unwrap(result.LastTerminalToken);
+                result.RcFile = string.Empty; // QuotedStringTokenValue.Unwrap(result.LastTerminalToken);
             }
         }
 
@@ -2233,7 +2233,7 @@ namespace PasPasPas.Parsing.Parser {
                 var result = new Description();
                 InitByTerminal(result, parent, TokenKind.DebugInfoOrDescriptionSwitch);
                 ContinueWith(result, TokenKind.QuotedString);
-                result.DescriptionValue = QuotedStringTokenValue.Unwrap(result.LastTerminalToken);
+                result.DescriptionValue = string.Empty; // QuotedStringTokenValue.Unwrap(result.LastTerminalToken);
             }
             else {
                 var result = new DebugInfoSwitch();

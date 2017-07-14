@@ -26,9 +26,9 @@ namespace PasPasPas.Parsing.Tokenizer {
             if (string.IsNullOrEmpty(template))
                 throw new ArgumentNullException(nameof(template));
 
-            InputPattern group = this;
+            var group = this;
 
-            for (int index = 0; index < template.Length; index++) {
+            for (var index = 0; index < template.Length; index++) {
                 var match = template[index];
                 var lastChar = index + 1 == template.Length;
                 if (!group.Tokens.Value.TryGetValue(match, out group)) {
@@ -55,15 +55,8 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="prefix">prefix</param>
         /// <param name="tokenValue">token value</param>
         public InputPattern(CharacterClass prefix, PatternContinuation tokenValue) {
-
-            if (prefix == null)
-                throw new ArgumentNullException(nameof(prefix));
-
-            if (tokenValue == null)
-                throw new ArgumentNullException(nameof(tokenValue));
-
-            Prefix = prefix;
-            TokenValue = tokenValue;
+            Prefix = prefix ?? throw new ArgumentNullException(nameof(prefix));
+            TokenValue = tokenValue ?? throw new ArgumentNullException(nameof(tokenValue));
         }
 
         /// <summary>
@@ -78,10 +71,8 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <summary>
         ///     token group length
         /// </summary>
-        public int Length
-        {
-            get
-            {
+        public int Length {
+            get {
                 if (length > 0)
                     return length;
 
@@ -142,10 +133,11 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="tokenLength">token length</param>
         /// <returns>matched token value</returns>
         public PatternContinuation Match(StringBuilder input, out int tokenLength) {
-            InputPattern subgroup = this;
-            int index = 1;
+            var subgroup = this;
+            var index = 1;
+
             while (index < Length && index < input.Length) {
-                InputPattern oldSubgroup = subgroup;
+                var oldSubgroup = subgroup;
                 if (subgroup.Tokens.IsValueCreated && subgroup.Tokens.Value.TryGetValue(input[index], out subgroup))
                     index++;
                 else {

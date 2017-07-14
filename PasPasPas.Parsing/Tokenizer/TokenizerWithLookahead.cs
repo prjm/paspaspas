@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using PasPasPas.Infrastructure.Files;
 using PasPasPas.Infrastructure.Input;
+using PasPasPas.Infrastructure.Log;
 using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree;
 
@@ -40,7 +41,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         ///     check if a next token exists
         /// </summary>
         public bool HasNextToken
-            => (tokenList.Count > 0) || BaseTokenizer.HasNextToken;
+            => (tokenList.Count > 0) || !BaseTokenizer.AtEof;
 
         /// <summary>
         ///     fetch a next token / fill token list
@@ -50,7 +51,7 @@ namespace PasPasPas.Parsing.Tokenizer {
 
             while (tokenList.Count == currentTokenCount || tokenList.Count < 2) {
 
-                if (!BaseTokenizer.HasNextToken) {
+                if (BaseTokenizer.AtEof) {
                     if (tokenList.Count > 0)
                         tokenList.Last.AssignInvalidTokens(invalidTokens, true);
                     return;
@@ -94,26 +95,34 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <summary>
         ///     gets the current token
         /// </summary>
-        public ref Token CurrentToken
-            => ref LookAhead(0);
+        public Token CurrentToken
+            => LookAhead(0);
+
+        public bool AtEof => throw new NotImplementedException();
+
+        public char CurrentCharacter => throw new NotImplementedException();
+
+        public int CurrentPosition => throw new NotImplementedException();
+
+        public ILogSource Log => throw new NotImplementedException();
 
         /// <summary>
         ///     get tokens and look ahader
         /// </summary>
         /// <param name="number">number of tokens to look ahead</param>
         /// <returns>token</returns>
-        public ref Token LookAhead(int number) {
+        public Token LookAhead(int number) {
             checked {
-                while (BaseTokenizer.HasNextToken && (tokenList.Count < Math.Max(2, 1 + number))) {
+                while (!BaseTokenizer.AtEof && (tokenList.Count < Math.Max(2, 1 + number))) {
                     InternalFetchNextToken();
                 }
             }
 
             if (tokenList.Count <= number) {
-                return ref Token.Empty;
+                return Token.Empty;
             }
             else {
-                return ref tokenList[number];
+                return tokenList[number];
             }
         }
 
@@ -128,5 +137,8 @@ namespace PasPasPas.Parsing.Tokenizer {
             }
         }
 
+        public void NextChar() => throw new NotImplementedException();
+        public void PreviousChar() => throw new NotImplementedException();
+        public void PrepareNextToken() => throw new NotImplementedException();
     }
 }

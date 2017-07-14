@@ -3660,7 +3660,7 @@ namespace PasPasPas.Parsing.Parser {
             var level = 1;
             var counter = 1;
 
-            while (level > 0 && (Tokenizer.BaseTokenizer.HasNextToken)) {
+            while (level > 0 && (!Tokenizer.BaseTokenizer.AtEof)) {
                 if (LookAhead(counter, TokenKind.OpenParen))
                     level++;
                 else if (LookAhead(counter, TokenKind.CloseParen))
@@ -3786,7 +3786,7 @@ namespace PasPasPas.Parsing.Parser {
             var level = 1;
             var counter = 1;
 
-            while (level > 0 && (Tokenizer.BaseTokenizer.HasNextToken)) {
+            while (level > 0 && (!Tokenizer.BaseTokenizer.AtEof)) {
                 if (LookAhead(counter, TokenKind.OpenParen))
                     level++;
                 else if (LookAhead(counter, TokenKind.CloseParen))
@@ -4136,7 +4136,7 @@ namespace PasPasPas.Parsing.Parser {
         private QuotedString RequireString(IExtendableSyntaxPart parent) {
             var result = new QuotedString();
             InitByTerminal(result, parent, TokenKind.QuotedString);
-            result.UnquotedValue = QuotedStringTokenValue.Unwrap(result.LastTerminalToken);
+            result.UnquotedValue = string.Empty; // QuotedStringTokenValue.Unwrap(result.LastTerminalToken);
             return result;
         }
 

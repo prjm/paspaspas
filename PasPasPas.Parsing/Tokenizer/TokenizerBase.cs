@@ -1,6 +1,6 @@
-﻿using PasPasPas.Infrastructure.Log;
+﻿using System;
+using PasPasPas.Infrastructure.Log;
 using PasPasPas.Parsing.SyntaxTree;
-using System;
 using PasPasPas.Infrastructure.Files;
 using PasPasPas.Infrastructure.Utils;
 
@@ -47,23 +47,40 @@ namespace PasPasPas.Parsing.Tokenizer {
                 ExceptionHelper.ArgumentIsNull(nameof(input));
 
             Input = input;
-            LogSource = new LogSource(log, TokenizerLogMessage);
+            Log = new LogSource(log, TokenizerLogMessage);
         }
 
-        public virtual bool HasNextToken
-            => !Input.AtEof;
+        public void PrepareNextToken() {
+            var file = Input.CurrentFile;
 
+            while (file != null && file.AtEof)
+                file = Input.FinishCurrentFile();
+        }
+
+        public virtual bool AtEof {
+            get {
+                var file = Input.CurrentFile;
+                return file == null || file.AtEof;
+            }
+        }
+
+        /// <summary>
+        ///     fetch the next token
+        /// </summary>
         public virtual void FetchNextToken()
-            => token = CharacterClasses.FetchNextToken(Input, LogSource);
+            => CurrentToken = CharacterClasses.FetchNextToken(this);
 
-        private Token token;
+        public void NextChar()
+            => Input.NextChar();
+
+        public void PreviousChar()
+            => Input.PreviousChar();
 
         /// <summary>
         ///     get the current token
         /// </summary>
         /// <returns></returns>
-        public ref Token CurrentToken
-            => ref token;
+        public Token CurrentToken { get; private set; }
 
         /// <summary>
         ///     used char classes
@@ -73,11 +90,23 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <summary>
         ///     log source
         /// </summary>
-        public LogSource LogSource { get; }
+        public ILogSource Log { get; }
 
         /// <summary>
-        ///     file input
+        ///     inut
         /// </summary>
         public StackedFileReader Input { get; private set; }
+
+        /// <summary>
+        ///     get the current value
+        /// </summary>
+        public char CurrentCharacter
+            => Input.Value;
+
+        /// <summary>
+        ///     get the current position
+        /// </summary>
+        public int CurrentPosition
+            => Input.Position;
     }
 }

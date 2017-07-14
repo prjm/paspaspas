@@ -15,7 +15,7 @@ namespace ParserRunner {
             var tokenizer = tokenizerApi.CreateTokenizerForPath(tempPath);
             var registry = new Dictionary<int, ulong>();
 
-            while (tokenizer.HasNextToken) {
+            while (!tokenizer.AtEof) {
                 tokenizer.FetchNextToken();
 
                 var kind = tokenizer.CurrentToken.Kind;

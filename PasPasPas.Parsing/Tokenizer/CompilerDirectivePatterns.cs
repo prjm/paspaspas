@@ -11,6 +11,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         ///     create the preprocessor punctuators
         /// </summary>
         public CompilerDirectivePatterns() {
+            /*
             AddPattern('+', TokenKind.Plus);
             AddPattern('-', TokenKind.Minus);
             AddPattern('(', TokenKind.OpenParen);
@@ -25,6 +26,7 @@ namespace PasPasPas.Parsing.Tokenizer {
             AddPattern('$', new HexNumberTokenValue());
             AddPattern(new ControlCharacterClass(), new ControlTokenGroupValue());
             AddPattern('\'', new QuotedStringTokenValue());
+            */
         }
     }
 }

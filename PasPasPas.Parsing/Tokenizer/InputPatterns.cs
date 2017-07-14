@@ -8,32 +8,6 @@ using PasPasPas.Infrastructure.Files;
 namespace PasPasPas.Parsing.Tokenizer {
 
     /// <summary>
-    ///     manually group token group values and their character classes
-    /// </summary>
-    public class InputPatternAndClass {
-
-        /// <summary>
-        ///     combination of input pattern and character class
-        /// </summary>
-        /// <param name="chrClass">character class</param>
-        /// <param name="value">group value (tokenizer)</param>
-        public InputPatternAndClass(CharacterClass chrClass, InputPattern value) {
-            CharClass = chrClass ?? throw new ArgumentNullException(nameof(chrClass));
-            GroupValue = value ?? throw new ArgumentNullException(nameof(value));
-        }
-
-        /// <summary>
-        ///     character class
-        /// </summary>
-        public CharacterClass CharClass { get; }
-
-        /// <summary>
-        ///     tokenizer group        
-        /// </summary>
-        public InputPattern GroupValue { get; }
-    }
-
-    /// <summary>
     ///     storage for input patterns, used by the tokenizer
     /// </summary>
     public class InputPatterns {
@@ -121,72 +95,56 @@ namespace PasPasPas.Parsing.Tokenizer {
             return false;
         }
 
-        private Token currentToken;
-
         /// <summary>
         ///     fetch the next token from the input
         /// </summary>
-        /// <param name="input"></param>
-        /// <param name="log">message log</param>
         /// <returns></returns>
-        public ref Token FetchNextToken(StackedFileReader input, ILogSource log) {
-            var file = input.CurrentFile;
+        public Token FetchNextToken(ITokenizer tokenizer) {
 
-            while (file != null && file.AtEof)
-                file = input.FinishCurrentFile();
+            tokenizer.PrepareNextToken();
 
-            if (file == null)
-                return ref Token.Eof;
+            if (tokenizer.AtEof) {
+                return Token.Eof;
+            }
 
-            var startValue = file.Value;
-            file.NextChar();
+            var startValue = tokenizer.CurrentCharacter;
+            var position = tokenizer.CurrentPosition;
+            tokenizer.NextChar();
 
             if (Match(startValue, out InputPattern tokenGroup)) {
-                currentToken = FetchTokenByGroup(input, startValue, tokenGroup, log);
-                return ref currentToken;
+                inputBuffer.Clear();
+                inputBuffer.Append(startValue);
+                return FetchTokenByGroup(tokenizer, tokenGroup);
             }
 
             //log.ProcessMessage(new LogMessage(MessageSeverity.Error, TokenizerBase.TokenizerLogMessage, TokenizerBase.UnexpectedCharacter, startValue.ToString()));
-            currentToken = new Token(TokenKind.Invalid, input.Position, startValue);
-            return ref currentToken;
+            return new Token(TokenKind.Invalid, position, startValue);
         }
 
-        private StringBuilder inputBuffer
+        private readonly StringBuilder inputBuffer
             = new StringBuilder(100);
 
         /// <summary>
         ///     fetch a token for this group
         /// </summary>
-        /// <param name="inputStream"></param>
-        /// <param name="prefix"></param>
-        /// <param name="tokenGroup"></param>
-        /// <param name="log"></param>
         /// <returns></returns>
-        public Token FetchTokenByGroup(StackedFileReader inputStream, char prefix, InputPattern tokenGroup, ILogSource log) {
-            var currentFile = inputStream.CurrentFile;
+        public Token FetchTokenByGroup(ITokenizer tokenizer, InputPattern tokenGroup) {
 
-            inputBuffer.Clear();
-            inputBuffer.Append(prefix);
+            var position = tokenizer.CurrentPosition;
 
-            while (inputBuffer.Length < tokenGroup.Length && (!currentFile.AtEof)) {
-                inputBuffer.Append(currentFile.Value);
-                currentFile.NextChar();
+            while (inputBuffer.Length < tokenGroup.Length && (!tokenizer.AtEof)) {
+                inputBuffer.Append(tokenizer.CurrentCharacter);
+                tokenizer.NextChar();
             }
 
-            var file = currentFile.File;
             var tokenKind = tokenGroup.Match(inputBuffer, out var tokenLength);
 
             for (var inputIndex = inputBuffer.Length - 1; inputIndex >= tokenLength; inputIndex--) {
-                currentFile.PreviousChar();
+                tokenizer.PreviousChar();
             }
             inputBuffer.Length = tokenLength;
 
-            var state = new ContinuationState() {
-                Buffer = inputBuffer,
-                InputFile = currentFile,
-                Log = log
-            };
-            return tokenKind.Tokenize(state);
+            return tokenKind.Tokenize(inputBuffer, position, tokenizer);
         }
     }
 

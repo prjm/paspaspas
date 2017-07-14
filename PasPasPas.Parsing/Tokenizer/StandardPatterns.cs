@@ -7,6 +7,8 @@ namespace PasPasPas.Parsing.Tokenizer {
     /// </summary>
     public class StandardPatterns : InputPatterns {
 
+        /*
+
         /// <summary>
         ///     semicolon or comment token group
         /// </summary>
@@ -19,12 +21,14 @@ namespace PasPasPas.Parsing.Tokenizer {
         public SemicolonOrAsmTokenValue SemicolonOrAsmComment
             => semicolonTokenGroup;
 
+    */
+
         /// <summary>
         ///     register punctuators
         /// </summary>
         public StandardPatterns() {
             AddPattern(',', TokenKind.Comma);
-            return;
+            /*return;
 
             InputPattern dot = AddPattern('.', TokenKind.Dot);
             dot.Add('.', TokenKind.DotDot);
@@ -60,7 +64,7 @@ namespace PasPasPas.Parsing.Tokenizer {
             AddPattern('\'', new StringGroupTokenValue());
             AddPattern('"', new DoubleQuoteStringGroupTokenValue());
             AddPattern('#', new StringGroupTokenValue());
-            AddPattern('\x001A', new SoftEofTokenValue());
+            AddPattern('\x001A', new SoftEofTokenValue()); */
         }
 
 

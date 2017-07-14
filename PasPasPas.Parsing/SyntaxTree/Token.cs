@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using PasPasPas.Infrastructure.Files;
 using PasPasPas.Infrastructure.Utils;
+using System.Text;
 
 namespace PasPasPas.Parsing.SyntaxTree {
 
@@ -12,23 +13,17 @@ namespace PasPasPas.Parsing.SyntaxTree {
     /// </summary>
     public struct Token {
 
-        private static Token empty
+        /// <summary>
+        ///     empty token
+        /// </summary>
+        public static readonly Token Empty
             = new Token();
 
-        private static Token eof
-                    = new Token(TokenKind.Eof, 0, string.Empty);
-
         /// <summary>
         ///     empty token
         /// </summary>
-        public static ref Token Empty
-            => ref empty;
-
-        /// <summary>
-        ///     empty token
-        /// </summary>
-        public static ref Token Eof
-            => ref eof;
+        public static readonly Token Eof
+            = new Token(TokenKind.Eof, 0, string.Empty);
 
 
         /// <summary>
@@ -79,6 +74,8 @@ namespace PasPasPas.Parsing.SyntaxTree {
         ///     list of invalid tokens after this token
         /// </summary>
         private IList<Token> invalidTokensAfter;
+        private int tokenId;
+        private StringBuilder buffer;
 
         /// <summary>
         ///     create a new syntax token
@@ -102,6 +99,12 @@ namespace PasPasPas.Parsing.SyntaxTree {
             Kind = tokenKind;
             Position = tokenPosition;
             Value = value.Pool();
+        }
+
+        public Token(int tokenKind, int tokenPosition, StringBuilder buffer) : this() {
+            Kind = tokenKind;
+            Position = tokenPosition;
+            Value = buffer.ToString().Pool();
         }
 
 

@@ -508,7 +508,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 var value = new ConstantValue();
                 InitNode(value, factor);
                 value.Kind = ConstantValueKind.Integer;
-                value.IntValue = DigitTokenGroupValue.Unwrap(factor.IntValue.FirstTerminalToken);
+                value.IntValue = 0; // DigitTokenGroupValue.Unwrap(factor.IntValue.FirstTerminalToken);
                 lastExpression.Value = value;
                 return;
             }
@@ -1666,7 +1666,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 structType.GuidName = ExtractSymbolName(interfaceGuid.IdIdentifier);
             }
             else if (interfaceGuid.Id != null) {
-                structType.GuidId = QuotedStringTokenValue.Unwrap(interfaceGuid.Id.FirstTerminalToken);
+                structType.GuidId = string.Empty; // QuotedStringTokenValue.Unwrap(interfaceGuid.Id.FirstTerminalToken);
             }
 
 
@@ -2039,7 +2039,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 var operand = new ConstantValue();
                 InitNode(operand, op.NumberOfParams);
                 operand.Kind = ConstantValueKind.Integer;
-                operand.IntValue = DigitTokenGroupValue.Unwrap(op.NumberOfParams.FirstTerminalToken);
+                operand.IntValue = 0; // DigitTokenGroupValue.Unwrap(op.NumberOfParams.FirstTerminalToken);
                 result.Operands.Add(operand);
             }
             else if (op.PushEnvOperation) {

@@ -220,11 +220,11 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         public bool AllowAsmComment {
             get {
-                return patterns.Value.SemicolonOrAsmComment.AllowComment;
+                return false; // return patterns.Value.SemicolonOrAsmComment.AllowComment;
             }
 
             set {
-                patterns.Value.SemicolonOrAsmComment.AllowComment = value;
+                // patterns.Value.SemicolonOrAsmComment.AllowComment = value;
             }
         }
 

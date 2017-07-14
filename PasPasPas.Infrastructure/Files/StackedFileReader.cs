@@ -90,6 +90,16 @@ namespace PasPasPas.Infrastructure.Files {
         }
 
         /// <summary>
+        ///     move to the previous char
+        /// </summary>
+        public void PreviousChar() {
+            if (files.Count > 0)
+                files.Peek().PreviousChar();
+            else
+                ExceptionHelper.InvalidOperation();
+        }
+
+        /// <summary>
         ///     current position
         /// </summary>
         public int Position

@@ -11,7 +11,7 @@ namespace PasPasPas.DesktopPlatform {
     public class DesktopFileReference : IFileReference {
 
         private readonly string filePath;
-        private readonly int hashcode;
+        private int hashcode;
 
         /// <summary>
         ///     create a new file reference
@@ -23,7 +23,7 @@ namespace PasPasPas.DesktopPlatform {
             if (string.IsNullOrWhiteSpace(path))
                 ExceptionHelper.StringEmpty(nameof(path));
 
-            filePath = path;
+            filePath = path.Pool();
             hashcode = filePath.ToUpperInvariant().GetHashCode();
         }
 

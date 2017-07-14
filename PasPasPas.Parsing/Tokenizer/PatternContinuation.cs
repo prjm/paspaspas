@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Text;
 using System.Collections.Generic;
-using PasPasPas.Infrastructure.Log;
 using PasPasPas.Parsing.SyntaxTree;
 using PasPasPas.Infrastructure.Files;
+using PasPasPas.Infrastructure.Utils;
 
 namespace PasPasPas.Parsing.Tokenizer {
 
@@ -13,118 +13,18 @@ namespace PasPasPas.Parsing.Tokenizer {
     public abstract class PatternContinuation {
 
         /// <summary>
-        ///     create a new result token
-        /// </summary>
-        /// <param name="path">file path</param>
-        /// <returns>created token</returns>
-        protected virtual Token CreateResult(IFileReference path)
-            => Token.Empty;
-
-        /// <summary>
         ///     generate a token
         /// </summary>
-        /// <param name="input">input</param>
-        /// <param name="prefix">prefix</param>
-        /// <param name="log">log source</param>
-        /// <returns>tokent</returns>
-        public Token Tokenize(StackedFileReader input, StringBuilder prefix, ILogSource log) {
-            var state = new ContinuationState() {
-                Result = CreateResult(input.CurrentFile.File),
-                InputFile = input.CurrentFile,
-                Buffer = prefix,
-                Log = log
-            };
+        public abstract Token Tokenize(StringBuilder buffer, int position, ITokenizer tokenizer);
 
-            ParseByPrefix(state);
-            return state.Result;
+        protected void FetchAndAppendChar(StringBuilder buffer, ITokenizer tokenizer) {
+            buffer.Append(tokenizer.CurrentCharacter);
+            tokenizer.NextChar();
         }
-
-        /// <summary>
-        ///     generate a token
-        /// </summary>
-        /// <param name="state">input state</param>
-        /// <returns>read token</returns>
-        public Token Tokenize(ContinuationState state) {
-            state.Clear();
-            state.Result = CreateResult(state.InputFile.File);
-            ParseByPrefix(state);
-            return state.Result;
-        }
-
-
-        /// <summary>
-        ///     complete the parsing of an input pattern with a given prefix
-        /// </summary>
-        /// <param name="state">current tokenizer state</param>
-        public abstract void ParseByPrefix(ContinuationState state);
 
     }
 
-    /// <summary>
-    ///     simple token group value: no more characters
-    /// </summary>
-    public class SimpleTokenGroupValue : PatternContinuation {
-
-
-        /// <summary>
-        ///     creates a new simple token without suffix
-        /// </summary>
-        /// <param name="tokenValue"></param>
-        public SimpleTokenGroupValue(int tokenValue) {
-            TokenId = tokenValue;
-        }
-
-        /// <summary>
-        ///     token kind
-        /// </summary>
-        public int TokenId { get; set; }
-
-        /// <summary>
-        ///     parse the complete token
-        /// </summary>
-        /// <param name="state">current tokenizer state</param>
-        public override void ParseByPrefix(ContinuationState state) {
-            state.Finish(TokenId);
-        }
-    }
-
-    /// <summary>
-    ///     token group value based on a sequence
-    /// </summary>
-    public abstract class SequenceGroupTokenValue : PatternContinuation {
-
-        /// <summary>
-        ///     token id
-        /// </summary>
-        protected abstract int TokenId { get; }
-
-        /// <summary>
-        ///     parse the complete token
-        /// </summary>
-        /// <param name="state">current tokenizer state</param>
-        public override void ParseByPrefix(ContinuationState state) {
-            var found = false;
-
-            while (state.IsValid && (!found)) {
-                found = state.EndsWith(EndSequence);
-
-                if (!found)
-                    state.FetchAndAppendChar();
-            }
-
-            found = state.EndsWith(EndSequence);
-
-            if (!found)
-                state.Error(TokenizerBase.UnexpectedEndOfToken, EndSequence);
-
-            state.Finish(TokenId);
-        }
-
-        /// <summary>
-        ///     end sequence
-        /// </summary>
-        protected abstract string EndSequence { get; }
-    }
+    /*
 
     /// <summary>
     ///     semicolon or asm comment
@@ -226,7 +126,7 @@ namespace PasPasPas.Parsing.Tokenizer {
             else
                 literal.LiteralValue = literal.LiteralValue + parsedString.ToString();
 
-            */
+            
 
             parsedString.Clear();
             state.Finish(tokenKind);
@@ -733,8 +633,8 @@ namespace PasPasPas.Parsing.Tokenizer {
                 return numberLiteral.LiteralValue;
 
             return 0;
-            */
-        }
+            
+}
 
     }
 
@@ -744,243 +644,238 @@ namespace PasPasPas.Parsing.Tokenizer {
     /// </summary>
     public class IdentifierTokenGroupValue : PatternContinuation {
 
-        private IdentifierCharacterClass identifierCharClass
-            = new IdentifierCharacterClass() { AllowAmpersand = false, AllowDigits = true };
+    private IdentifierCharacterClass identifierCharClass
+        = new IdentifierCharacterClass() { AllowAmpersand = false, AllowDigits = true };
 
-        /// <summary>
-        ///     if <c>true</c> asm blocks are parsed as a token
-        /// </summary>
-        public bool ParseAsm { get; set; }
-            = false;
+    /// <summary>
+    ///     if <c>true</c> asm blocks are parsed as a token
+    /// </summary>
+    public bool ParseAsm { get; set; }
+        = false;
 
-        /// <summary>
-        ///     allow dots in identifiers
-        /// </summary>
-        public bool AllowDots {
-            get { return identifierCharClass.AllowDots; }
-            set { identifierCharClass.AllowDots = value; }
+    /// <summary>
+    ///     allow dots in identifiers
+    /// </summary>
+    public bool AllowDots {
+        get { return identifierCharClass.AllowDots; }
+        set { identifierCharClass.AllowDots = value; }
+    }
+
+    /// <summary>
+    ///     allow digits in identifiers
+    /// </summary>
+    public bool AllowDigits {
+        get { return identifierCharClass.AllowDigits; }
+        set { identifierCharClass.AllowDigits = value; }
+    }
+
+    /// <summary>
+    ///     allow ampersand in identifiers
+    /// </summary>
+    public bool AllowAmpersand {
+        get { return identifierCharClass.AllowAmpersand; }
+        set { identifierCharClass.AllowAmpersand = value; }
+    }
+
+    private readonly IDictionary<string, int> knownKeywords;
+
+    /// <summary>
+    ///     create a new token group for ids and keywords
+    /// </summary>
+    /// <param name="keywords"></param>
+    public IdentifierTokenGroupValue(IDictionary<string, int> keywords) {
+
+        if (keywords == null)
+            throw new ArgumentNullException(nameof(keywords));
+
+        knownKeywords = keywords;
+    }
+
+    /// <summary>
+    ///     parse the complete token
+    /// </summary>
+    /// <param name="state">current tokenizer state</param>
+    public override void ParseByPrefix(ContinuationState state) {
+        var hasAmpersand = state.Buffer[0] == '&';
+        var ignoreKeywords = AllowAmpersand && hasAmpersand;
+
+        if (ignoreKeywords)
+            state.PutbackBuffer();
+        else if (hasAmpersand) {
+            state.Finish(TokenKind.Undefined);
+            state.Error(TokenizerBase.UnexpectedCharacter, "&");
+            return;
         }
 
-        /// <summary>
-        ///     allow digits in identifiers
-        /// </summary>
-        public bool AllowDigits {
-            get { return identifierCharClass.AllowDigits; }
-            set { identifierCharClass.AllowDigits = value; }
-        }
-
-        /// <summary>
-        ///     allow ampersand in identifiers
-        /// </summary>
-        public bool AllowAmpersand {
-            get { return identifierCharClass.AllowAmpersand; }
-            set { identifierCharClass.AllowAmpersand = value; }
-        }
-
-        private readonly IDictionary<string, int> knownKeywords;
-
-        /// <summary>
-        ///     create a new token group for ids and keywords
-        /// </summary>
-        /// <param name="keywords"></param>
-        public IdentifierTokenGroupValue(IDictionary<string, int> keywords) {
-
-            if (keywords == null)
-                throw new ArgumentNullException(nameof(keywords));
-
-            knownKeywords = keywords;
-        }
-
-        /// <summary>
-        ///     parse the complete token
-        /// </summary>
-        /// <param name="state">current tokenizer state</param>
-        public override void ParseByPrefix(ContinuationState state) {
-            var hasAmpersand = state.Buffer[0] == '&';
-            var ignoreKeywords = AllowAmpersand && hasAmpersand;
-
-            if (ignoreKeywords)
-                state.PutbackBuffer();
-            else if (hasAmpersand) {
-                state.Finish(TokenKind.Undefined);
-                state.Error(TokenizerBase.UnexpectedCharacter, "&");
-                return;
+        while (state.IsValid) {
+            var switchState = state.SwitchedFile;
+            var currentChar = state.FetchChar();
+            if (!identifierCharClass.Matches(currentChar)) {
+                state.Putback(currentChar, switchState);
+                break;
             }
+            state.AppendChar(currentChar);
+        }
 
-            while (state.IsValid) {
-                var switchState = state.SwitchedFile;
-                var currentChar = state.FetchChar();
-                if (!identifierCharClass.Matches(currentChar)) {
-                    state.Putback(currentChar, switchState);
-                    break;
-                }
+        int tokenKind;
+        var value = state.Buffer.ToString();
+
+        if (hasAmpersand && state.Buffer.Length < 2)
+            state.Error(StandardTokenizer.IncompleteIdentifier, state.Buffer.ToString());
+
+        if ((!ignoreKeywords) && (knownKeywords.TryGetValue(value, out tokenKind)))
+            state.Finish(tokenKind, value);
+        else
+            state.Finish(TokenKind.Identifier, value);
+
+    }
+}
+
+/// <summary>
+///     token group for end of line comments
+/// </summary>
+public class EndOfLineCommentTokenGroupValue : PatternContinuation {
+
+    /// <summary>
+    ///     parse the complete token
+    /// </summary>
+    /// <param name="state">current tokenizer state</param>
+    public override void ParseByPrefix(ContinuationState state) {
+
+        while (state.IsValid) {
+            var switchState = state.SwitchedFile;
+            var currentChar = state.FetchChar();
+
+            if (!LineCounter.IsNewLineChar(currentChar)) {
                 state.AppendChar(currentChar);
             }
-
-            int tokenKind;
-            var value = state.Buffer.ToString();
-
-            if (hasAmpersand && state.Buffer.Length < 2)
-                state.Error(StandardTokenizer.IncompleteIdentifier, state.Buffer.ToString());
-
-            if ((!ignoreKeywords) && (knownKeywords.TryGetValue(value, out tokenKind)))
-                state.Finish(tokenKind, value);
-            else
-                state.Finish(TokenKind.Identifier, value);
-
+            else {
+                state.Putback(currentChar, switchState);
+                break;
+            }
         }
+
+        state.Finish(TokenKind.Comment);
     }
+}
+
+/// <summary>
+///     token group for numbers
+/// </summary>
+public class NumberTokenGroupValue : PatternContinuation {
 
     /// <summary>
-    ///     token group for end of line comments
+    ///     create a new result token
     /// </summary>
-    public class EndOfLineCommentTokenGroupValue : PatternContinuation {
+    /// <param name="path">file path</param>
+    /// <returns>created token</returns>
+    protected override Token CreateResult(IFileReference path)
+        => Token.Empty;
 
-        /// <summary>
-        ///     parse the complete token
-        /// </summary>
-        /// <param name="state">current tokenizer state</param>
-        public override void ParseByPrefix(ContinuationState state) {
+    private DigitTokenGroupValue digitTokenizer
+        = new DigitTokenGroupValue();
 
-            while (state.IsValid) {
-                var switchState = state.SwitchedFile;
-                var currentChar = state.FetchChar();
+    private NumberCharacterClass numbers
+        = new NumberCharacterClass();
 
-                if (!LineCounter.IsNewLineChar(currentChar)) {
-                    state.AppendChar(currentChar);
-                }
-                else {
-                    state.Putback(currentChar, switchState);
-                    break;
-                }
-            }
+    private SingleCharClass dot
+        = new SingleCharClass('.');
 
-            state.Finish(TokenKind.Comment);
-        }
-    }
+    private ExponentCharacterClass exponent
+        = new ExponentCharacterClass();
+
+    private PlusMinusCharacterClass plusminus
+        = new PlusMinusCharacterClass();
+
+    private IdentifierCharacterClass allIdents
+        = new IdentifierCharacterClass() { AllowAmpersand = true, AllowDigits = true, AllowDots = true, };
+
+    private IdentifierTokenGroupValue identTokenizer
+        = new IdentifierTokenGroupValue(new Dictionary<string, int>());
 
     /// <summary>
-    ///     token group for numbers
+    ///     flag, if <c>true</c> idents are generated if possible
     /// </summary>
-    public class NumberTokenGroupValue : PatternContinuation {
+    public bool AllowIdents { get; set; }
+        = false;
 
-        /// <summary>
-        ///     create a new result token
-        /// </summary>
-        /// <param name="path">file path</param>
-        /// <returns>created token</returns>
-        protected override Token CreateResult(IFileReference path)
-            => Token.Empty;
-
-        private DigitTokenGroupValue digitTokenizer
-            = new DigitTokenGroupValue();
-
-        private NumberCharacterClass numbers
-            = new NumberCharacterClass();
-
-        private SingleCharClass dot
-            = new SingleCharClass('.');
-
-        private ExponentCharacterClass exponent
-            = new ExponentCharacterClass();
-
-        private PlusMinusCharacterClass plusminus
-            = new PlusMinusCharacterClass();
-
-        private IdentifierCharacterClass allIdents
-            = new IdentifierCharacterClass() { AllowAmpersand = true, AllowDigits = true, AllowDots = true, };
-
-        private IdentifierTokenGroupValue identTokenizer
-            = new IdentifierTokenGroupValue(new Dictionary<string, int>());
-
-        /// <summary>
-        ///     flag, if <c>true</c> idents are generated if possible
-        /// </summary>
-        public bool AllowIdents { get; set; }
-            = false;
-
-        private static bool NextCharMatches(ContinuationState state, CharacterClass c) {
-            if (!state.IsValid)
-                return false;
-
-            var switchState = state.SwitchedFile;
-            var nextChar = state.FetchChar();
-
-            if (c.Matches(nextChar)) {
-                state.AppendChar(nextChar);
-                return true;
-            }
-
-            state.Putback(nextChar, switchState);
+    private static bool NextCharMatches(ContinuationState state, CharacterClass c) {
+        if (!state.IsValid)
             return false;
 
+        var switchState = state.SwitchedFile;
+        var nextChar = state.FetchChar();
+
+        if (c.Matches(nextChar)) {
+            state.AppendChar(nextChar);
+            return true;
         }
 
-        /// <summary>
-        ///     parse the complete token
-        /// </summary>
-        /// <param name="state">current tokenizer state</param>
-        public override void ParseByPrefix(ContinuationState state) {
-            int intPrefix = DigitTokenGroupValue.Unwrap(digitTokenizer.Tokenize(state));
-
-            var result = state.Result;
-            var withDot = false;
-            var withExponent = false;
-
-            if (!state.IsValid) {
-                //result.LiteralValue = intPrefix;
-                state.Finish(TokenKind.Integer);
-                return;
-            }
-
-            if (NextCharMatches(state, dot)) {
-                withDot = true;
-
-                if (NextCharMatches(state, numbers)) {
-                    digitTokenizer.Tokenize(state);
-                }
-
-                var switchState = state.SwitchedFile;
-                if (state.EndsWith(".")) {
-                    withDot = false;
-                    state.Putback('.', switchState);
-                    state.Buffer.Length -= 1;
-                }
-
-            }
-
-            if (NextCharMatches(state, exponent)) {
-                if (!state.IsValid) {
-                    state.Error(TokenizerBase.UnexpectedEndOfToken, "+", "-");
-                }
-                else {
-                    NextCharMatches(state, plusminus);
-                    var currentLen = state.Buffer.Length;
-                    if (!state.IsValid || digitTokenizer.Tokenize(state).Kind != TokenKind.Integer || state.Buffer.Length == currentLen) {
-                        state.Error(TokenizerBase.UnexpectedEndOfToken);
-                    }
-                }
-
-                withExponent = true;
-            }
-
-            if (AllowIdents && NextCharMatches(state, allIdents)) {
-                identTokenizer.Tokenize(state);
-                state.Finish(TokenKind.Identifier);
-                return;
-            }
-
-            if (withDot || withExponent) {
-                state.Finish(TokenKind.Real);
-            }
-            else {
-                //result.LiteralValue = intPrefix;
-                state.Finish(TokenKind.Integer);
-            }
-
-        }
-
-
+        state.Putback(nextChar, switchState);
+        return false;
 
     }
+
+    public override void ParseByPrefix(ContinuationState state) {
+        int intPrefix = DigitTokenGroupValue.Unwrap(digitTokenizer.Tokenize(state));
+
+        var result = state.Result;
+        var withDot = false;
+        var withExponent = false;
+
+        if (!state.IsValid) {
+            //result.LiteralValue = intPrefix;
+            state.Finish(TokenKind.Integer);
+            return;
+        }
+
+        if (NextCharMatches(state, dot)) {
+            withDot = true;
+
+            if (NextCharMatches(state, numbers)) {
+                digitTokenizer.Tokenize(state);
+            }
+
+            var switchState = state.SwitchedFile;
+            if (state.EndsWith(".")) {
+                withDot = false;
+                state.Putback('.', switchState);
+                state.Buffer.Length -= 1;
+            }
+
+        }
+
+        if (NextCharMatches(state, exponent)) {
+            if (!state.IsValid) {
+                state.Error(TokenizerBase.UnexpectedEndOfToken, "+", "-");
+            }
+            else {
+                NextCharMatches(state, plusminus);
+                var currentLen = state.Buffer.Length;
+                if (!state.IsValid || digitTokenizer.Tokenize(state).Kind != TokenKind.Integer || state.Buffer.Length == currentLen) {
+                    state.Error(TokenizerBase.UnexpectedEndOfToken);
+                }
+            }
+
+            withExponent = true;
+        }
+
+        if (AllowIdents && NextCharMatches(state, allIdents)) {
+            identTokenizer.Tokenize(state);
+            state.Finish(TokenKind.Identifier);
+            return;
+        }
+
+        if (withDot || withExponent) {
+            state.Finish(TokenKind.Real);
+        }
+        else {
+            //result.LiteralValue = intPrefix;
+            state.Finish(TokenKind.Integer);
+        }
+
+    }
+
+        */
+
 }
