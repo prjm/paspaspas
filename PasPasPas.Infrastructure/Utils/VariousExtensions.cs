@@ -15,6 +15,19 @@ namespace PasPasPas.Infrastructure.Utils {
         /// <param name="stringBuilder">string builder to look at</param>
         /// <param name="test">search string</param>
         /// <returns><c>true</c> if the string builder ends with that string</returns>
+        public static bool EndsWith(this StringBuilder stringBuilder, char test) {
+            if (stringBuilder.Length < 1)
+                return false;
+
+            return test == stringBuilder[stringBuilder.Length - 1];
+        }
+
+        /// <summary>
+        ///     test if a string builder ends with a given string
+        /// </summary>
+        /// <param name="stringBuilder">string builder to look at</param>
+        /// <param name="test">search string</param>
+        /// <returns><c>true</c> if the string builder ends with that string</returns>
         public static bool EndsWith(this StringBuilder stringBuilder, string test) {
             if (stringBuilder.Length < test.Length)
                 return false;

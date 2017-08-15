@@ -150,26 +150,6 @@
             return true;
         }
 
-        /// <summary>
-        ///     test if a given character can trigger a new line
-        /// </summary>
-        /// <param name="value">char to test</param>
-        /// <returns><c>true</c> if the character can trigger a new line</returns>
-        public static bool IsNewLineChar(char value)
-            => value == '\r' || value == '\n';
-
-        /// <summary>
-        ///     test if a string contains a newline character
-        /// </summary>
-        /// <param name="value">string to tet</param>
-        /// <returns><c>true</c> if it contains a new line character</returns>
-        public static bool ContainsNewLineChar(string value) {
-            for (int index = 0; index < value.Length; index++) {
-                if (IsNewLineChar(value[index]))
-                    return true;
-            }
-            return false;
-        }
 
     }
 }

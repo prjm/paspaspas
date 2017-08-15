@@ -1,5 +1,4 @@
-﻿using PasPasPas.Infrastructure.Log;
-using PasPasPas.Parsing.SyntaxTree;
+﻿using PasPasPas.Parsing.SyntaxTree;
 
 namespace PasPasPas.Parsing.Tokenizer {
 
@@ -23,34 +22,5 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         Token CurrentToken { get; }
 
-        /// <summary>
-        ///     current char
-        /// </summary>
-        char CurrentCharacter { get; }
-
-        /// <summary>
-        ///     current position
-        /// </summary>
-        int CurrentPosition { get; }
-
-        /// <summary>
-        ///     move to the next char
-        /// </summary>
-        void NextChar();
-
-        /// <summary>
-        ///     move to the previous char
-        /// </summary>
-        void PreviousChar();
-
-        /// <summary>
-        ///     prepare to fetch the next token
-        /// </summary>
-        void PrepareNextToken();
-
-        /// <summary>
-        ///     log
-        /// </summary>
-        ILogSource Log { get; }
     }
 }

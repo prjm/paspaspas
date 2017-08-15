@@ -7,38 +7,48 @@ namespace PasPasPas.Parsing.Tokenizer {
     /// <summary>
     ///     token group value based on a sequence
     /// </summary>
-    public abstract class SequenceGroupTokenValue : PatternContinuation {
+    public class SequenceGroupTokenValue : PatternContinuation {
 
         /// <summary>
         ///     token id
         /// </summary>
-        protected abstract int TokenId { get; }
+        public int TokenId { get; private set; }
+
+        /// <summary>
+        ///     end sequence
+        /// </summary>
+        public string EndSequence { get; private set; }
+
+        /// <summary>
+        ///     Create a new sequence token group value
+        /// </summary>
+        /// <param name="tokenId"></param>
+        /// <param name="endSequence"></param>
+        public SequenceGroupTokenValue(int tokenId, string endSequence) {
+            TokenId = tokenId;
+            EndSequence = endSequence;
+        }
 
         /// <summary>
         ///     parse the complete token
         /// </summary>
         /// <param name="state">current tokenizer state</param>
-        public override Token Tokenize(StringBuilder buffer, int position, ITokenizer tokenizer) {
+        public override Token Tokenize(ITokenizerState state) {
             var found = false;
 
-            while ((!found) && (!tokenizer.AtEof)) {
-                found = buffer.EndsWith(EndSequence);
-
-                if (!found)
-                    FetchAndAppendChar(buffer, tokenizer);
+            while ((!found) && (!state.AtEof)) {
+                state.NextChar(true);
+                found = state.BufferEndsWith(EndSequence);
             }
 
-            found = buffer.EndsWith(EndSequence);
+            if (!found)
+                found = state.BufferEndsWith(EndSequence);
 
             if (!found)
-                tokenizer.Log.ProcessMessage(new LogMessage(MessageSeverity.Error, TokenizerBase.TokenizerLogMessage, TokenizerBase.UnexpectedEndOfToken, EndSequence));
+                state.Error(TokenizerBase.UnexpectedEndOfToken);
 
-            return new Token(TokenId, position, buffer.ToString());
+            return new Token(TokenId, state);
         }
 
-        /// <summary>
-        ///     end sequence
-        /// </summary>
-        protected abstract string EndSequence { get; }
     }
 }

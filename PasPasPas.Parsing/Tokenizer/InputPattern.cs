@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using PasPasPas.Infrastructure.Utils;
 
 namespace PasPasPas.Parsing.Tokenizer {
 
@@ -54,9 +55,10 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         /// <param name="prefix">prefix</param>
         /// <param name="tokenValue">token value</param>
-        public InputPattern(CharacterClass prefix, PatternContinuation tokenValue) {
+        public InputPattern(CharacterClass prefix, PatternContinuation tokenValue, string completePrefix) {
             Prefix = prefix ?? throw new ArgumentNullException(nameof(prefix));
             TokenValue = tokenValue ?? throw new ArgumentNullException(nameof(tokenValue));
+            CompletePrefix = completePrefix.Pool();
         }
 
         /// <summary>
@@ -64,7 +66,8 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         /// <param name="prefix">prefix</param>
         /// <param name="tokenValue">token value</param>
-        public InputPattern(char prefix, int tokenValue) : this(new SingleCharClass(prefix), new SimpleTokenGroupValue(tokenValue)) {
+        public InputPattern(char prefix, int tokenValue, string completePrefix)
+            : this(new SingleCharClass(prefix), new SimpleTokenGroupValue(tokenValue, completePrefix), completePrefix) {
             //..
         }
 
@@ -95,6 +98,11 @@ namespace PasPasPas.Parsing.Tokenizer {
         public PatternContinuation TokenValue { get; }
 
         /// <summary>
+        ///     complete prefix
+        /// </summary>
+        public string CompletePrefix { get; }
+
+        /// <summary>
         ///     tokens
         /// </summary>
         private Lazy<IDictionary<char, InputPattern>> Tokens { get; }
@@ -107,7 +115,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="token"></param>
         /// <returns>new token</returns>
         public InputPattern Add(char nextPunct, int token) {
-            var result = new InputPattern(nextPunct, token);
+            var result = new InputPattern(nextPunct, token, CompletePrefix + nextPunct);
             Tokens.Value.Add(nextPunct, result);
             length = -1;
             return result;
@@ -120,7 +128,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="token"></param>
         /// <returns>new token</returns>
         public InputPattern Add(char nextPunct, PatternContinuation token) {
-            var result = new InputPattern(new SingleCharClass(nextPunct), token);
+            var result = new InputPattern(new SingleCharClass(nextPunct), token, CompletePrefix + nextPunct);
             Tokens.Value.Add(nextPunct, result);
             length = -1;
             return result;
@@ -132,17 +140,16 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="input">input</param>
         /// <param name="tokenLength">token length</param>
         /// <returns>matched token value</returns>
-        public PatternContinuation Match(StringBuilder input, out int tokenLength) {
+        public PatternContinuation Match(ITokenizerState state, out int tokenLength) {
             var subgroup = this;
             var index = 1;
 
-            while (index < Length && index < input.Length) {
+            while (index < Length && index < state.Length) {
                 var oldSubgroup = subgroup;
-                if (subgroup.Tokens.IsValueCreated && subgroup.Tokens.Value.TryGetValue(input[index], out subgroup))
+                if (subgroup.Tokens.IsValueCreated && subgroup.Tokens.Value.TryGetValue(state.GetBufferCharAt(index), out subgroup))
                     index++;
                 else {
                     subgroup = oldSubgroup;
-
                     break;
                 }
             }

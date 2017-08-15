@@ -4149,7 +4149,7 @@ namespace PasPasPas.Parsing.Parser {
 
         private bool CurrentTokenIsAfterNewline() {
             foreach (Token invalidToken in CurrentToken().InvalidTokensBefore) {
-                if (invalidToken.Kind == TokenKind.WhiteSpace && LineCounter.ContainsNewLineChar(invalidToken.Value))
+                if (invalidToken.Kind == TokenKind.WhiteSpace && PatternContinuation.ContainsNewLineChar(invalidToken.Value))
                     return true;
             }
 

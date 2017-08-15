@@ -1,17 +1,15 @@
-﻿using PasPasPas.Infrastructure.Input;
-using System.Globalization;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using PasPasPas.Infrastructure.Files;
 using PasPasPas.Infrastructure.Utils;
 using System.Text;
+using PasPasPas.Parsing.Tokenizer;
 
 namespace PasPasPas.Parsing.SyntaxTree {
 
     /// <summary>
     ///     token definition
     /// </summary>
-    public struct Token {
+    public struct Token : IEquatable<Token> {
 
         /// <summary>
         ///     empty token
@@ -23,7 +21,7 @@ namespace PasPasPas.Parsing.SyntaxTree {
         ///     empty token
         /// </summary>
         public static readonly Token Eof
-            = new Token(TokenKind.Eof, 0, string.Empty);
+            = new Token(TokenKind.Eof, -1, string.Empty);
 
 
         /// <summary>
@@ -74,8 +72,6 @@ namespace PasPasPas.Parsing.SyntaxTree {
         ///     list of invalid tokens after this token
         /// </summary>
         private IList<Token> invalidTokensAfter;
-        private int tokenId;
-        private StringBuilder buffer;
 
         /// <summary>
         ///     create a new syntax token
@@ -101,10 +97,16 @@ namespace PasPasPas.Parsing.SyntaxTree {
             Value = value.Pool();
         }
 
-        public Token(int tokenKind, int tokenPosition, StringBuilder buffer) : this() {
+        public Token(int tokenKind, StringBuilder buffer) : this() {
             Kind = tokenKind;
-            Position = tokenPosition;
+            Position = -1;
             Value = buffer.ToString().Pool();
+        }
+
+        public Token(int tokenId, ITokenizerState state) : this() {
+            Kind = tokenId;
+            Position = -1;
+            Value = state.GetBufferContent().Pool();
         }
 
 
@@ -138,8 +140,15 @@ namespace PasPasPas.Parsing.SyntaxTree {
         /// </summary>
         /// <returns></returns>
         public override string ToString()
-            => Kind.ToString(CultureInfo.InvariantCulture) + ": " + Value?.Trim();
+            => $"{Kind}: {Value} [{Position}]";
 
+        /// <summary>
+        ///     compare to another token
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public bool Equals(Token other)
+            => (Kind == other.Kind) && (string.Equals(Value, other.Value));
     }
 
 }

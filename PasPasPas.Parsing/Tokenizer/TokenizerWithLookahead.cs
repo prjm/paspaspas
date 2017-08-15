@@ -12,7 +12,7 @@ namespace PasPasPas.Parsing.Tokenizer {
     /// <summary>
     ///     base class for a tokenizer with a lookead list
     /// </summary>
-    public abstract class TokenizerWithLookahead : ITokenizer {
+    public abstract class TokenizerWithLookahead {
 
         /// <summary>
         ///     protected constructor
@@ -137,8 +137,8 @@ namespace PasPasPas.Parsing.Tokenizer {
             }
         }
 
-        public void NextChar() => throw new NotImplementedException();
-        public void PreviousChar() => throw new NotImplementedException();
-        public void PrepareNextToken() => throw new NotImplementedException();
+        public char NextChar() => throw new NotImplementedException();
+        public char PreviousChar() => throw new NotImplementedException();
+        public bool PrepareNextToken() => throw new NotImplementedException();
     }
 }

@@ -31,7 +31,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="tokenValue">resulting token value</param>
         /// <returns></returns>
         public InputPattern AddPattern(char prefix, int tokenValue) {
-            var result = new InputPattern(prefix, tokenValue);
+            var result = new InputPattern(prefix, tokenValue, string.Empty);
             simplePatterns.Add(prefix, result);
             return result;
         }
@@ -50,7 +50,7 @@ namespace PasPasPas.Parsing.Tokenizer {
             if (tokenValue == null)
                 throw new ArgumentNullException(nameof(tokenValue));
 
-            var result = new InputPattern(prefix, tokenValue);
+            var result = new InputPattern(prefix, tokenValue, string.Empty);
             var prefixedCharecterClass = prefix as PrefixedCharacterClass;
 
             if (prefixedCharecterClass == null)
@@ -68,7 +68,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="tokenValue">pattern continuation</param>
         /// <returns>created pattern</returns>
         public InputPattern AddPattern(char prefix, PatternContinuation tokenValue) {
-            var result = new InputPattern(new SingleCharClass(prefix), tokenValue);
+            var result = new InputPattern(new SingleCharClass(prefix), tokenValue, string.Empty);
             simplePatterns.Add(prefix, result);
             return result;
         }
@@ -99,52 +99,46 @@ namespace PasPasPas.Parsing.Tokenizer {
         ///     fetch the next token from the input
         /// </summary>
         /// <returns></returns>
-        public Token FetchNextToken(ITokenizer tokenizer) {
+        public Token FetchNextToken(ITokenizerState state) {
 
-            tokenizer.PrepareNextToken();
-
-            if (tokenizer.AtEof) {
+            if (!state.PrepareNextToken()) {
                 return Token.Eof;
             }
 
-            var startValue = tokenizer.CurrentCharacter;
-            var position = tokenizer.CurrentPosition;
-            tokenizer.NextChar();
+            var startValue = state.CurrentCharacter;
 
             if (Match(startValue, out InputPattern tokenGroup)) {
-                inputBuffer.Clear();
-                inputBuffer.Append(startValue);
-                return FetchTokenByGroup(tokenizer, tokenGroup);
+                state.StartBufferWith(startValue);
+                return FetchTokenByGroup(state, tokenGroup);
             }
 
+            var position = state.CurrentPosition;
+            state.NextChar(false);
             //log.ProcessMessage(new LogMessage(MessageSeverity.Error, TokenizerBase.TokenizerLogMessage, TokenizerBase.UnexpectedCharacter, startValue.ToString()));
             return new Token(TokenKind.Invalid, position, startValue);
         }
-
-        private readonly StringBuilder inputBuffer
-            = new StringBuilder(100);
 
         /// <summary>
         ///     fetch a token for this group
         /// </summary>
         /// <returns></returns>
-        public Token FetchTokenByGroup(ITokenizer tokenizer, InputPattern tokenGroup) {
+        public Token FetchTokenByGroup(ITokenizerState state, InputPattern tokenGroup) {
 
-            var position = tokenizer.CurrentPosition;
+            var position = state.CurrentPosition;
+            var len = tokenGroup.Length;
 
-            while (inputBuffer.Length < tokenGroup.Length && (!tokenizer.AtEof)) {
-                inputBuffer.Append(tokenizer.CurrentCharacter);
-                tokenizer.NextChar();
+            while (state.Length < len && (!state.AtEof)) {
+                state.NextChar(true);
             }
 
-            var tokenKind = tokenGroup.Match(inputBuffer, out var tokenLength);
+            var tokenKind = tokenGroup.Match(state, out var tokenLength);
 
-            for (var inputIndex = inputBuffer.Length - 1; inputIndex >= tokenLength; inputIndex--) {
-                tokenizer.PreviousChar();
+            for (var inputIndex = state.Length - 1; inputIndex > tokenLength; inputIndex--) {
+                state.PreviousChar();
             }
-            inputBuffer.Length = tokenLength;
+            state.Length = tokenLength;
 
-            return tokenKind.Tokenize(inputBuffer, position, tokenizer);
+            return tokenKind.Tokenize(state);
         }
     }
 

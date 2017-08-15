@@ -23,7 +23,7 @@
             = false;
 
         /// <summary>
-        ///     test if a char is accecpable for an identifier
+        ///     test if a char is acceptable for an identifier
         /// </summary>
         /// <param name="input">input</param>
         /// <returns><c>true</c> if the char can be part of an identifier</returns>

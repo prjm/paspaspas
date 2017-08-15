@@ -13,9 +13,12 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <summary>
         ///     creates a new simple token without suffix
         /// </summary>
+        /// <param name="completePrefix">complete prefix</param>
         /// <param name="tokenValue"></param>
-        public SimpleTokenGroupValue(int tokenValue) : base()
-            => TokenId = tokenValue;
+        public SimpleTokenGroupValue(int tokenValue, string completePrefix) : base() {
+            TokenId = tokenValue;
+            Prefix = completePrefix;
+        }
 
         /// <summary>
         ///     token kind
@@ -23,10 +26,17 @@ namespace PasPasPas.Parsing.Tokenizer {
         public int TokenId { get; set; }
 
         /// <summary>
+        ///     prefix
+        /// </summary>
+        public string Prefix { get; }
+
+        /// <summary>
         ///     create a simple token
         /// </summary>
-        public override Token Tokenize(StringBuilder buffer, int position, ITokenizer tokenizer)
-           => new Token(TokenId, position, buffer);
+        public override Token Tokenize(ITokenizerState state) {
+            state.NextChar(false);
+            return new Token(TokenId, state);
+        }
 
 
     }

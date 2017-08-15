@@ -9,6 +9,7 @@ namespace PasPasPas.Infrastructure.Files {
 
         private readonly FileBufferItem input;
         private readonly StackedFileReader reader;
+        private readonly int length;
         private int offset;
 
         /// <summary>
@@ -18,40 +19,49 @@ namespace PasPasPas.Infrastructure.Files {
         /// <param name="owner">owner reader</param>
         public FileBufferItemOffset(StackedFileReader owner, FileBufferItem inputFile) {
             input = inputFile;
+            length = input.Length;
             reader = owner;
-            offset = 0;
+            offset = -1;
         }
 
         /// <summary>
         ///     <c>true</c> if the end of read file is reached (EOF)
         /// </summary>
         public bool AtEof
-            => offset >= input.Length;
+            => offset >= length;
 
         /// <summary>
         ///     fetch the next char
         /// </summary>
-        public void NextChar() {
-            if (!AtEof) offset++;
+        public char NextChar() {
+            if (offset >= length) return '\0';
+            offset++;
+            return Value;
         }
 
         /// <summary>
         ///     <c>true</c> if the begin of the read file is reached (BOF)
         /// </summary>
         public bool AtBof
-            => offset == 0;
+            => offset < 0;
 
         /// <summary>
         ///     current reader value
         /// </summary>
-        public char Value
-            => input.CharAt(offset);
+        public char Value {
+            get {
+                if (offset < 0 || offset >= length) return '\0';
+                return input.CharAt(offset);
+            }
+        }
 
         /// <summary>
         ///     navigate to the previous char
         /// </summary>
-        public void PreviousChar() {
-            if (!AtBof) offset--;
+        public char PreviousChar() {
+            if (offset < 0) return '\0';
+            offset--;
+            return Value;
         }
 
         /// <summary>

@@ -18,7 +18,8 @@ namespace ParserRunner {
             while (!tokenizer.AtEof) {
                 tokenizer.FetchNextToken();
 
-                var kind = tokenizer.CurrentToken.Kind;
+                var token = tokenizer.CurrentToken;
+                var kind = token.Kind;
 
                 if (registry.TryGetValue(kind, out ulong value))
                     registry[kind] = 1 + value;

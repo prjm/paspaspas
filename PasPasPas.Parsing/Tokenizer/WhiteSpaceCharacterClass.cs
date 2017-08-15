@@ -10,7 +10,10 @@
         /// <param name="input"></param>
         /// <returns></returns>
         public override bool Matches(char input)
-            => char.IsWhiteSpace(input);
+            => //
+                input == ' ' ||
+                input == '\t' ||
+                char.IsWhiteSpace(input);
     }
 
 }

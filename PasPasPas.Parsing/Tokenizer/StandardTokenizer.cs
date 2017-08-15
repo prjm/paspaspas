@@ -232,6 +232,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         ///     fetch next token
         /// </summary>
         /// <returns></returns>
+        /*
         public override void FetchNextToken() {
             base.FetchNextToken();
             var token = CurrentToken;
@@ -243,5 +244,6 @@ namespace PasPasPas.Parsing.Tokenizer {
                 AllowAsmComment = false;
             }
         }
+        */
     }
 }

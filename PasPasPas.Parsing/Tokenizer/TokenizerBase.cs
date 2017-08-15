@@ -3,6 +3,7 @@ using PasPasPas.Infrastructure.Log;
 using PasPasPas.Parsing.SyntaxTree;
 using PasPasPas.Infrastructure.Files;
 using PasPasPas.Infrastructure.Utils;
+using System.Text;
 
 namespace PasPasPas.Parsing.Tokenizer {
 
@@ -10,6 +11,101 @@ namespace PasPasPas.Parsing.Tokenizer {
     ///     base class for tokenizers
     /// </summary>
     public abstract class TokenizerBase : ITokenizer {
+
+        internal class TokenizerState : ITokenizerState {
+
+            private TokenizerBase tokenizer;
+
+            private readonly StringBuilder buffer
+                = new StringBuilder(100);
+
+            private readonly StackedFileReader input;
+
+            private readonly ILogSource log;
+
+            /// <summary>
+            ///     create a new tokenizer state
+            /// </summary>
+            /// <param name="tokenizer"></param>
+            internal TokenizerState(TokenizerBase tokenizer, StackedFileReader input, ILogSource log) {
+                this.tokenizer = tokenizer;
+                this.log = log;
+                this.input = input;
+            }
+
+            public int Length {
+                get => buffer.Length;
+                set => buffer.Length = value;
+            }
+
+            public bool AtEof {
+                get {
+                    var file = input;
+                    return file == null || file.AtEof;
+                }
+            }
+
+            /// <summary>
+            ///     get the current value
+            /// </summary>
+            public char CurrentCharacter
+                => input.Value;
+
+            /// <summary>
+            ///     get the current position
+            /// </summary>
+            public int CurrentPosition
+                => input.Position;
+
+            public void Append(char currentChar)
+                => buffer.Append(currentChar);
+
+            public bool BufferEndsWith(char endSequence)
+                => buffer.EndsWith(endSequence);
+
+            public bool BufferEndsWith(string endSequence)
+                => buffer.EndsWith(endSequence);
+
+            public void Clear()
+                => buffer.Clear();
+
+            public void Error(Guid errorId)
+                => log.Error(errorId);
+
+            public char GetBufferCharAt(int index)
+                => buffer[index];
+
+            public string GetBufferContent()
+                => buffer.ToString();
+
+            public bool KeepTokenValue(int tokenId)
+                => tokenizer.KeepTokenValue(tokenId);
+
+            public char NextChar(bool append) {
+                var result = input.NextChar();
+                if (append)
+                    buffer.Append(result);
+                return result;
+            }
+
+            public bool PrepareNextToken() {
+                var file = input.CurrentFile;
+
+                while (file != null && file.AtEof)
+                    file = input.FinishCurrentFile();
+
+                return file != null;
+            }
+
+
+            public char PreviousChar()
+                => input.PreviousChar();
+
+            public void StartBufferWith(char startValue) {
+                buffer.Clear();
+                buffer.Append(startValue);
+            }
+        }
 
         /// <summary>
         ///     message group for tokenizer logs
@@ -48,16 +144,10 @@ namespace PasPasPas.Parsing.Tokenizer {
 
             Input = input;
             Log = new LogSource(log, TokenizerLogMessage);
+            state = new TokenizerState(this, input, Log);
         }
 
-        public void PrepareNextToken() {
-            var file = Input.CurrentFile;
-
-            while (file != null && file.AtEof)
-                file = Input.FinishCurrentFile();
-        }
-
-        public virtual bool AtEof {
+        public bool AtEof {
             get {
                 var file = Input.CurrentFile;
                 return file == null || file.AtEof;
@@ -65,22 +155,48 @@ namespace PasPasPas.Parsing.Tokenizer {
         }
 
         /// <summary>
+        ///     interalstate
+        /// </summary>
+        private readonly TokenizerState state;
+
+        /// <summary>
         ///     fetch the next token
         /// </summary>
-        public virtual void FetchNextToken()
-            => CurrentToken = CharacterClasses.FetchNextToken(this);
+        public void FetchNextToken()
+            => currentToken = CharacterClasses.FetchNextToken(state);
 
-        public void NextChar()
+        public char NextChar()
             => Input.NextChar();
 
-        public void PreviousChar()
+        public char PreviousChar()
             => Input.PreviousChar();
+
+        /// <summary>
+        ///     keep whitspace literals
+        /// </summary>
+        public bool KeepWhitspace { get; set; }
+            = false;
+
+        /// <summary>
+        ///     check if a token value should be kept
+        /// </summary>
+        /// <param name="tokenId"></param>
+        /// <returns></returns>
+        public bool KeepTokenValue(int tokenId) {
+            if (tokenId == TokenKind.WhiteSpace)
+                return KeepWhitspace;
+            return true;
+        }
 
         /// <summary>
         ///     get the current token
         /// </summary>
         /// <returns></returns>
-        public Token CurrentToken { get; private set; }
+        public Token CurrentToken
+            => currentToken;
+
+        private Token currentToken
+            = new Token();
 
         /// <summary>
         ///     used char classes
@@ -97,16 +213,5 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         public StackedFileReader Input { get; private set; }
 
-        /// <summary>
-        ///     get the current value
-        /// </summary>
-        public char CurrentCharacter
-            => Input.Value;
-
-        /// <summary>
-        ///     get the current position
-        /// </summary>
-        public int CurrentPosition
-            => Input.Position;
     }
 }

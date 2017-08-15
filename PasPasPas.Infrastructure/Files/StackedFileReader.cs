@@ -1,27 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using PasPasPas.Infrastructure.Utils;
+﻿using PasPasPas.Infrastructure.Utils;
 
 namespace PasPasPas.Infrastructure.Files {
+
+    /// <summary>
+    ///     helper class for nested input
+    /// </summary>
+    internal class NestedInput {
+        internal FileBufferItemOffset Input;
+        internal NestedInput Parent;
+    }
 
     /// <summary>
     ///     read from a combiniation of textfiles
     /// </summary>
     public class StackedFileReader {
 
-        private readonly Stack<FileBufferItemOffset> files;
+        private NestedInput input = null;
         private readonly FileBuffer buffer;
 
         /// <summary>
         ///     create a new stacked file reader
         /// </summary>
-        /// <param name="fileBuffer"></param>
+        /// <param name="fileBuffer">file buffer</param>
         public StackedFileReader(FileBuffer fileBuffer) {
             if (fileBuffer == null)
                 ExceptionHelper.ArgumentIsNull(nameof(fileBuffer));
 
             buffer = fileBuffer;
-            files = new Stack<FileBufferItemOffset>();
         }
 
         /// <summary>
@@ -32,7 +37,10 @@ namespace PasPasPas.Infrastructure.Files {
             if (input == null)
                 ExceptionHelper.ArgumentIsNull(nameof(input));
 
-            files.Push(new FileBufferItemOffset(this, buffer[input]));
+            this.input = new NestedInput() {
+                Input = new FileBufferItemOffset(this, buffer[input]),
+                Parent = this.input
+            };
         }
 
         /// <summary>
@@ -40,15 +48,15 @@ namespace PasPasPas.Infrastructure.Files {
         /// </summary>
         public FileBufferItemOffset FinishCurrentFile() {
 
-            if (files.Count < 1)
+            if (input == null)
                 ExceptionHelper.InvalidOperation();
 
-            files.Pop();
+            input = input.Parent;
 
-            if (files.Count == 0)
+            if (input == null)
                 return null;
             else
-                return files.Peek();
+                return input.Input;
         }
 
         /// <summary>
@@ -61,15 +69,15 @@ namespace PasPasPas.Infrastructure.Files {
         ///     access the current file
         /// </summary>
         public FileBufferItemOffset CurrentFile
-            => files.Count > 0 ? files.Peek() : null;
+            => input != null ? input.Input : null;
 
         /// <summary>
         ///     get the current character value
         /// </summary>
         public char Value {
             get {
-                if (files.Count > 0)
-                    return files.Peek().Value;
+                if (input != null)
+                    return input.Input.Value;
 
                 ExceptionHelper.InvalidOperation();
                 return '\0';
@@ -81,8 +89,8 @@ namespace PasPasPas.Infrastructure.Files {
         /// </summary>
         public bool AtEof {
             get {
-                if (files.Count > 0)
-                    return files.Peek().AtEof;
+                if (input != null)
+                    return input.Input.AtEof;
 
                 ExceptionHelper.InvalidOperation();
                 return false;
@@ -92,27 +100,26 @@ namespace PasPasPas.Infrastructure.Files {
         /// <summary>
         ///     move to the previous char
         /// </summary>
-        public void PreviousChar() {
-            if (files.Count > 0)
-                files.Peek().PreviousChar();
-            else
+        public char PreviousChar() {
+            if (input == null)
                 ExceptionHelper.InvalidOperation();
+
+            return input.Input.PreviousChar();
         }
 
         /// <summary>
         ///     current position
         /// </summary>
         public int Position
-            => files.Count > 0 ? files.Peek().Position : -1;
+            => input != null ? input.Input.Position : -1;
 
         /// <summary>
         ///     fetch the ext char
         /// </summary>
-        public void NextChar() {
-            if (files.Count > 0)
-                files.Peek().NextChar();
-            else
+        public char NextChar() {
+            if (input == null)
                 ExceptionHelper.InvalidOperation();
+            return input.Input.NextChar();
         }
     }
 }
