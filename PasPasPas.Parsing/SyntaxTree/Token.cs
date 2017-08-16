@@ -63,6 +63,8 @@ namespace PasPasPas.Parsing.SyntaxTree {
             }
         }
 
+        public object ParsedValue { get; set; }
+
         /// <summary>
         ///     list of invalid tokens before this token
         /// </summary>

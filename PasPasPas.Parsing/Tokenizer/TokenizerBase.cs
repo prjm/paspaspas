@@ -38,12 +38,11 @@ namespace PasPasPas.Parsing.Tokenizer {
                 set => buffer.Length = value;
             }
 
-            public bool AtEof {
-                get {
-                    var file = input;
-                    return file == null || file.AtEof;
-                }
-            }
+            /// <summary>
+            ///     check if the end of the current input file is reached
+            /// </summary>
+            public bool AtEof
+                => input == null || input.CurrentFile.AtEof;
 
             /// <summary>
             ///     get the current value
@@ -147,12 +146,8 @@ namespace PasPasPas.Parsing.Tokenizer {
             state = new TokenizerState(this, input, Log);
         }
 
-        public bool AtEof {
-            get {
-                var file = Input.CurrentFile;
-                return file == null || file.AtEof;
-            }
-        }
+        public bool AtEof
+            => Input.CurrentFile == null;
 
         /// <summary>
         ///     interalstate

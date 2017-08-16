@@ -1,38 +1,28 @@
 ﻿using PasPasPas.Infrastructure.Log;
-using PasPasPas.Parsing.Parser;
 using PasPasPas.Parsing.SyntaxTree;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using A = Xunit.Assert;
+using PasPasPas.Api;
+using PasPasPas.DesktopPlatform;
 
 namespace PasPasPasTests {
 
     public static class TestHelper {
 
-        public static List<Token> RunTokenizer(string input, IList<ILogMessage> messages = null) {
-            var logManager = new LogManager();
-            var services = new ParserServices(logManager);
-            var messageHandler = new LogTarget();
+        public static IList<Token> RunTokenizer(string input, IList<ILogMessage> messages = null) {
+
             var result = new List<Token>();
-            logManager.RegisterTarget(messageHandler);
-            /*
-            using (var inputString = new StringInput(input, new FileReference("test.pas")))
-            using (var reader = new OldStackedFileReader()) {
-                EventHandler<LogMessageEvent> handler = (_, x) => messages.Add(x.Message);
-                reader.AddFile(inputString);
-                var tokenizer = new StandardTokenizer(services, reader);
+            var messageHandler = new ListLogTarget();
+            var api = new TokenizerApi(new StandardFileAccess());
+            var tokenizer = api.CreateTokenizerForString("test.pas", input);
+            api.Log.RegisterTarget(messageHandler);
 
-                if (messages != null)
-                    messageHandler.ProcessMessage += handler;
-
-                while (tokenizer.HasNextToken())
-                    result.Add(tokenizer.FetchNextToken());
-
-                return result;
+            while (!tokenizer.AtEof) {
+                tokenizer.FetchNextToken();
+                result.Add(tokenizer.CurrentToken);
             }
-            */
-            return null;
+
+            return result;
         }
     }
 
@@ -55,52 +45,6 @@ namespace PasPasPasTests {
 
         public static void IsNull(object o)
             => A.Null(o);
-
-        public static void IsToken(int tokenKind, string tokenValue, string input) {
-            var result = TestHelper.RunTokenizer(input);
-            IsNotNull(result);
-            AreEqual(1, result.Count);
-            AreEqual(tokenKind, result[0].Kind);
-            AreEqual(tokenValue, result[0].Value);
-        }
-
-        public static void IsIdentifier(string input, string output = null) {
-            if (output == null)
-                output = input;
-
-            IsToken(TokenKind.Identifier, output, input);
-        }
-
-        internal static void TokenizerMessageIsGenerated(Guid messageNumber, string input) {
-            var messages = new List<ILogMessage>();
-            var result = TestHelper.RunTokenizer(input, messages);
-            var hasMessage = messages.Any(t => t.MessageID == messageNumber);
-            IsTrue(hasMessage);
-        }
-
-        public static void IsQuotedString(string input)
-            => IsToken(TokenKind.QuotedString, input, input);
-
-        public static void IsInteger(string input)
-            => IsToken(TokenKind.Integer, input, input);
-
-        public static void IsWhitespace(string input)
-            => IsToken(TokenKind.WhiteSpace, input, input);
-
-        public static void IsReal(string input)
-            => IsToken(TokenKind.Real, input, input);
-
-        public static void IsHexNumber(string input)
-            => IsToken(TokenKind.HexNumber, input, input);
-
-        public static void IsPreprocessor(string input)
-            => IsToken(TokenKind.Preprocessor, input, input);
-
-        public static void IsComment(string input)
-            => IsToken(TokenKind.Comment, input, input);
-
-        public static void IsAssembler(string input)
-            => IsToken(TokenKind.Asm, input, input);
 
     }
 }

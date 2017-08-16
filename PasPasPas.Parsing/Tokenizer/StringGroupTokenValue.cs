@@ -21,9 +21,6 @@ namespace PasPasPas.Parsing.Tokenizer {
         private HexNumberTokenValue hexDigits
             = new HexNumberTokenValue();
 
-        private StringBuilder controlBuffer
-            = new StringBuilder();
-
         /// <summary>
         ///     parse a string literal
         /// </summary>
@@ -43,8 +40,6 @@ namespace PasPasPas.Parsing.Tokenizer {
                         state.Error(TokenizerBase.UnexpectedEndOfToken);
                     }
                     else if (nextChar == '$') {
-                        controlBuffer.Clear();
-                        controlBuffer.Append('$');
                         var controlChar = hexDigits.Tokenize(state);
                         if (controlChar.Kind != TokenKind.HexNumber) {
                             state.Error(TokenizerBase.UnexpectedCharacter);
@@ -52,7 +47,6 @@ namespace PasPasPas.Parsing.Tokenizer {
                     }
                     else {
                         state.PreviousChar();
-                        controlBuffer.Clear();
                         var controlChar = digits.Tokenize(state);
                         if (controlChar.Kind != TokenKind.Integer) {
                             state.Error(TokenizerBase.UnexpectedCharacter);
@@ -60,7 +54,7 @@ namespace PasPasPas.Parsing.Tokenizer {
                     }
                 }
                 else if (currentChar == '\'') {
-                    state.Append(currentChar);
+                    quotedString.Tokenize(state);
                 }
                 else {
                     state.PreviousChar();

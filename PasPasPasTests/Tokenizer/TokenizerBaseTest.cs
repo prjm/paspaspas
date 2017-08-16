@@ -195,7 +195,7 @@ namespace PasPasPasTests.Tokenizer {
         public void TestCurlyBraceCommentTokenValue() {
             var patterns = new InputPatterns();
             patterns.AddPattern('a', PatternA);
-            patterns.AddPattern('{', new CurlyBraceCommentTokenValue());
+            patterns.AddPattern('{', new SequenceGroupTokenValue(TokenKind.Comment, "}"));
             TestPattern(patterns, "a{}", PatternA, TokenKind.Comment);
             TestPattern(patterns, "{}", TokenKind.Comment);
             TestPattern(patterns, "{}a", TokenKind.Comment, PatternA);
@@ -211,7 +211,7 @@ namespace PasPasPasTests.Tokenizer {
         public void TestAlternativeCurlyBraceCommentTokenValue() {
             var patterns = new InputPatterns();
             patterns.AddPattern('a', PatternA);
-            patterns.AddPattern('(', TokenKind.OpenParen).Add('*', new AlternativeCurlyBraceCommentTokenValue());
+            patterns.AddPattern('(', TokenKind.OpenParen).Add('*', new SequenceGroupTokenValue(TokenKind.Comment, "*)"));
             TestPattern(patterns, "a(", PatternA, TokenKind.OpenParen);
             TestPattern(patterns, "(**)", TokenKind.Comment);
             TestPattern(patterns, "(*a*)", TokenKind.Comment);
@@ -230,7 +230,7 @@ namespace PasPasPasTests.Tokenizer {
         public void TestPreprocessorTokenVaue() {
             var patterns = new InputPatterns();
             patterns.AddPattern('a', PatternA);
-            patterns.AddPattern('{', TokenKind.Comma).Add('$', new PreprocessorTokenValue());
+            patterns.AddPattern('{', TokenKind.Comma).Add('$', new SequenceGroupTokenValue(TokenKind.Preprocessor, "}"));
             TestPattern(patterns, "a{${//}a", PatternA, TokenKind.Preprocessor, PatternA);
             TestPattern(patterns, "a{${}a", PatternA, TokenKind.Preprocessor, PatternA);
             TestPattern(patterns, "{${}a", TokenKind.Preprocessor, PatternA);
@@ -285,7 +285,7 @@ namespace PasPasPasTests.Tokenizer {
             TestPattern(patterns, "$000000", TokenKind.HexNumber);
             TestPattern(patterns, "$1234FFFF", TokenKind.HexNumber);
             TestPattern(patterns, TokenizerBase.UnexpectedCharacter, "$CEFO", TokenKind.HexNumber, TokenKind.Undefined);
-            Assert.AreEqual(0x123F, HexNumberTokenValue.Unwrap(TestPattern(patterns, "$123F", TokenKind.HexNumber)));
+            Assert.AreEqual(0x123F, TestPattern(patterns, "$123F", TokenKind.HexNumber).ParsedValue);
         }
 
         [Fact]
@@ -355,7 +355,7 @@ namespace PasPasPasTests.Tokenizer {
         public void TestDoubleQuotedStringTokenValue() {
             var patterns = new InputPatterns();
             patterns.AddPattern('.', TokenKind.Dot);
-            patterns.AddPattern('"', new DoubleQuoteStringGroupTokenValue());
+            patterns.AddPattern('"', new QuotedStringTokenValue(TokenKind.DoubleQuotedString, '"'));
             TestPattern(patterns, "\"aaaaaa\"", TokenKind.DoubleQuotedString);
             TestPattern(patterns, "\"aaa\"\"aaa\"", TokenKind.DoubleQuotedString);
             TestPattern(patterns, "\"aaa\"\"\"\"aaa\"", TokenKind.DoubleQuotedString);
@@ -367,15 +367,15 @@ namespace PasPasPasTests.Tokenizer {
         public void TestQuotedStringTokenValue() {
             var patterns = new InputPatterns();
             patterns.AddPattern('.', TokenKind.Dot);
-            patterns.AddPattern('\'', new QuotedStringTokenValue());
+            patterns.AddPattern('\'', new QuotedStringTokenValue(TokenKind.QuotedString, '\''));
             TestPattern(patterns, "'aaaaaa'", TokenKind.QuotedString);
             TestPattern(patterns, "'aaa''aaa'", TokenKind.QuotedString);
             TestPattern(patterns, "'aaa''''aaa'", TokenKind.QuotedString);
             TestPattern(patterns, TokenizerBase.UnexpectedEndOfToken, "'aaaaaa", TokenKind.QuotedString);
             TestPattern(patterns, TokenizerBase.UnexpectedEndOfToken, "'", TokenKind.QuotedString);
-            Assert.AreEqual("a", QuotedStringTokenValue.Unwrap(TestPattern(patterns, "'a'", TokenKind.QuotedString)));
-            Assert.AreEqual("a'", QuotedStringTokenValue.Unwrap(TestPattern(patterns, "'a'''", TokenKind.QuotedString)));
-            Assert.AreEqual("a'aa", QuotedStringTokenValue.Unwrap(TestPattern(patterns, "'a''aa'", TokenKind.QuotedString)));
+            Assert.AreEqual("a", TestPattern(patterns, "'a'", TokenKind.QuotedString).ParsedValue);
+            Assert.AreEqual("a'", TestPattern(patterns, "'a'''", TokenKind.QuotedString).ParsedValue);
+            Assert.AreEqual("a'aa", TestPattern(patterns, "'a''aa'", TokenKind.QuotedString).ParsedValue);
         }
 
         [Fact]
@@ -384,7 +384,7 @@ namespace PasPasPasTests.Tokenizer {
             patterns.AddPattern('.', TokenKind.Dot);
             patterns.AddPattern('#', new StringGroupTokenValue());
             patterns.AddPattern('\'', new StringGroupTokenValue());
-            Assert.AreEqual("a\nb", QuotedStringTokenValue.Unwrap(TestPattern(patterns, "'a'#$A'b'", TokenKind.QuotedString)));
+            Assert.AreEqual("a\nb", TestPattern(patterns, "'a'#$A'b'", TokenKind.QuotedString).ParsedValue);
             TestPattern(patterns, "'aaa'", TokenKind.QuotedString);
             TestPattern(patterns, "#09", TokenKind.QuotedString);
             TestPattern(patterns, "#09'aaaa'", TokenKind.QuotedString);

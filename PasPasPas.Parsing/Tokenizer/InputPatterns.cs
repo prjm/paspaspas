@@ -133,7 +133,7 @@ namespace PasPasPas.Parsing.Tokenizer {
 
             var tokenKind = tokenGroup.Match(state, out var tokenLength);
 
-            for (var inputIndex = state.Length - 1; inputIndex > tokenLength; inputIndex--) {
+            for (var inputIndex = state.Length - 1; inputIndex >= tokenLength; inputIndex--) {
                 state.PreviousChar();
             }
             state.Length = tokenLength;

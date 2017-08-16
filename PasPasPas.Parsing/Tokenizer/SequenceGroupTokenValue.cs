@@ -44,6 +44,9 @@ namespace PasPasPas.Parsing.Tokenizer {
             if (!found)
                 found = state.BufferEndsWith(EndSequence);
 
+            if (!state.AtEof)
+                state.NextChar(false);
+
             if (!found)
                 state.Error(TokenizerBase.UnexpectedEndOfToken);
 
