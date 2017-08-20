@@ -63,17 +63,14 @@ namespace PasPasPas.Parsing.Tokenizer {
             var hasAmpersand = state.GetBufferCharAt(0) == '&';
             var ignoreKeywords = AllowAmpersand && hasAmpersand;
 
-            if (ignoreKeywords)
-                state.NextChar(false);
-            else if (hasAmpersand)
+            if (!AllowAmpersand && hasAmpersand)
                 return new Token(TokenKind.Undefined, state);
 
             while (!state.AtEof) {
-                var currentChar = state.CurrentCharacter;
+                var currentChar = state.NextChar(false);
                 if (!identifierCharClass.Matches(currentChar))
                     break;
                 state.Append(currentChar);
-                state.NextChar(false);
             }
 
             int tokenKind;

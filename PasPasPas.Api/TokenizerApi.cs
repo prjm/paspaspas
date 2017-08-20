@@ -23,11 +23,16 @@ namespace PasPasPas.Api {
         ///     create a new tokenizer ap
         /// </summary>
         /// <param name="access">file access</param>
-        public TokenizerApi(IFileAccess access) {
+        /// <param name="options">options (not required)</param>
+        public TokenizerApi(IFileAccess access, TokenizerApiOptions options = null) {
             standardFileAccess = access;
             reader = new ReaderApi(access);
-            options = new TokenizerApiOptions();
             log = new LogManager();
+
+            if (options != null)
+                this.options = options;
+            else
+                options = new TokenizerApiOptions();
         }
 
         /// <summary>
@@ -37,6 +42,15 @@ namespace PasPasPas.Api {
         /// <returns>tokenizer</returns>
         public ITokenizer CreateTokenizerForPath(string path) {
             var fileReader = reader.CreateReaderForPath(path);
+            return CreateTokenizer(fileReader);
+        }
+
+        /// <summary>
+        ///     create a tokenizer
+        /// </summary>
+        /// <param name="fileReader"></param>
+        /// <returns></returns>
+        private ITokenizer CreateTokenizer(StackedFileReader fileReader) {
             var tokenizer = new StandardTokenizer(log, fileReader);
             tokenizer.KeepWhitspace = options.KeepWhitespace;
             return tokenizer;
@@ -50,9 +64,7 @@ namespace PasPasPas.Api {
         /// <returns></returns>
         public ITokenizer CreateTokenizerForString(string virtualPath, string content) {
             var fileReader = reader.CreateReaderForString(virtualPath, content);
-            var tokenizer = new StandardTokenizer(log, fileReader);
-            tokenizer.KeepWhitspace = options.KeepWhitespace;
-            return tokenizer;
+            return CreateTokenizer(fileReader);
         }
 
         /// <summary>

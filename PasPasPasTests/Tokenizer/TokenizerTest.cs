@@ -39,7 +39,7 @@ namespace PasPasPasTests.Tokenizer {
         [Fact]
         public void TestRealNumbers() {
             IsReal("123E10");
-            IsReal("123.");
+            IsReal("123.", Tuple.Create(TokenKind.Integer, "123"), Tuple.Create(TokenKind.Dot, "."), Tuple.Create(TokenKind.Eof, string.Empty));
             IsReal("123.123");
             IsReal("123E+10");
             IsReal("123E-10");
@@ -94,8 +94,8 @@ namespace PasPasPasTests.Tokenizer {
         public static void IsWhitespace(string input)
             => IsToken(TokenKind.WhiteSpace, input, input);
 
-        public static void IsReal(string input)
-            => IsToken(TokenKind.Real, input, input);
+        public static void IsReal(string input, params Tuple<int, string>[] tokens)
+            => IsToken(TokenKind.Real, input, input, tokens);
 
         public static void IsHexNumber(string input)
             => IsToken(TokenKind.HexNumber, input, input);
@@ -116,13 +116,23 @@ namespace PasPasPasTests.Tokenizer {
             IsToken(TokenKind.Identifier, output, input);
         }
 
-        public static void IsToken(int tokenKind, string tokenValue, string input) {
+        public static void IsToken(int tokenKind, string tokenValue, string input, params Tuple<int, string>[] tokens) {
             var result = TestHelper.RunTokenizer(input);
             Assert.IsNotNull(result);
-            Assert.AreEqual(2, result.Count);
-            Assert.AreEqual(tokenKind, result[0].Kind);
-            Assert.AreEqual(tokenValue, result[0].Value);
-            Assert.AreEqual(TokenKind.Eof, result[1].Kind);
+
+            if (tokens.Length < 1) {
+                Assert.AreEqual(2, result.Count);
+                Assert.AreEqual(tokenKind, result[0].Kind);
+                Assert.AreEqual(tokenValue, result[0].Value);
+                Assert.AreEqual(TokenKind.Eof, result[1].Kind);
+            }
+            else {
+                Assert.AreEqual(tokens.Length, result.Count);
+                for (var index = 0; index < tokens.Length; index++) {
+                    Assert.AreEqual(tokens[index].Item1, result[index].Kind);
+                    Assert.AreEqual(tokens[index].Item2, result[index].Value);
+                }
+            }
         }
 
         internal static void TokenizerMessageIsGenerated(Guid messageNumber, string input) {

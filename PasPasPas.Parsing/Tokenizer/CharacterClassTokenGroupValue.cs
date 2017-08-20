@@ -38,9 +38,13 @@ namespace PasPasPas.Parsing.Tokenizer {
 
             if (!state.AtEof) {
                 var currentChar = state.NextChar(false);
-                while (MatchesClass(currentChar) && (!state.AtEof)) {
+                while (MatchesClass(currentChar)) {
                     state.Append(currentChar);
-                    currentChar = state.NextChar(false);
+
+                    if (state.AtEof)
+                        break;
+                    else
+                        currentChar = state.NextChar(false);
                 }
 
                 if (MatchesClass(currentChar))

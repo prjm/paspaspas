@@ -36,18 +36,17 @@ namespace PasPasPas.Parsing.Tokenizer {
         public bool AllowIdents { get; set; }
             = false;
 
-        private static bool NextCharMatches(ITokenizerState state, CharacterClass c) {
+        private static bool CurrentCharMatches(ITokenizerState state, CharacterClass c) {
             if (state.AtEof)
                 return false;
 
-            var nextChar = state.NextChar(false);
+            var currentChar = state.CurrentCharacter;
 
-            if (c.Matches(nextChar)) {
-                state.Append(nextChar);
+            if (c.Matches(currentChar)) {
+                state.Append(currentChar);
                 return true;
             }
 
-            state.PreviousChar();
             return false;
         }
 
@@ -62,29 +61,35 @@ namespace PasPasPas.Parsing.Tokenizer {
                 digitTokenizer.Tokenize(state);
             }
 
-            if (NextCharMatches(state, dot)) {
+            if (CurrentCharMatches(state, dot)) {
+                state.NextChar(false);
                 withDot = true;
 
-                if (NextCharMatches(state, numbers)) {
+                if (CurrentCharMatches(state, numbers)) {
                     digitTokenizer.Tokenize(state);
                 }
 
                 if (state.BufferEndsWith(".")) {
-                    withDot = false;
                     state.PreviousChar();
+                    withDot = false;
                     state.Length -= 1;
                 }
 
             }
 
-            if (NextCharMatches(state, exponent)) {
+            if (CurrentCharMatches(state, exponent)) {
+                state.NextChar(false);
                 if (state.AtEof) {
                     state.Error(TokenizerBase.UnexpectedEndOfToken);
                 }
                 else {
-                    NextCharMatches(state, plusminus);
-                    var currentLen = state.Length;
-                    if (state.AtEof || digitTokenizer.Tokenize(state).Kind != TokenKind.Integer || state.Length == currentLen) {
+                    if (CurrentCharMatches(state, plusminus))
+                        state.NextChar(false);
+
+                    if (CurrentCharMatches(state, numbers)) {
+                        digitTokenizer.Tokenize(state);
+                    }
+                    else {
                         state.Error(TokenizerBase.UnexpectedEndOfToken);
                     }
                 }
@@ -92,7 +97,7 @@ namespace PasPasPas.Parsing.Tokenizer {
                 withExponent = true;
             }
 
-            if (AllowIdents && NextCharMatches(state, allIdents)) {
+            if (AllowIdents && CurrentCharMatches(state, allIdents)) {
                 identTokenizer.Tokenize(state);
                 return new Token(TokenKind.Identifier, state);
             }

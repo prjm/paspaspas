@@ -114,7 +114,7 @@ namespace PasPasPas.Parsing.Tokenizer {
 
             var position = state.CurrentPosition;
             state.NextChar(false);
-            //log.ProcessMessage(new LogMessage(MessageSeverity.Error, TokenizerBase.TokenizerLogMessage, TokenizerBase.UnexpectedCharacter, startValue.ToString()));
+            state.Error(TokenizerBase.UnexpectedCharacter);
             return new Token(TokenKind.Invalid, position, startValue);
         }
 

@@ -13,7 +13,8 @@ namespace PasPasPasTests {
 
             var result = new List<Token>();
             var messageHandler = new ListLogTarget();
-            var api = new TokenizerApi(new StandardFileAccess());
+            var options = new TokenizerApiOptions() { KeepWhitespace = true };
+            var api = new TokenizerApi(new StandardFileAccess(), options);
             var tokenizer = api.CreateTokenizerForString("test.pas", input);
             api.Log.RegisterTarget(messageHandler);
 
@@ -21,6 +22,10 @@ namespace PasPasPasTests {
                 tokenizer.FetchNextToken();
                 result.Add(tokenizer.CurrentToken);
             }
+
+            if (messages != null)
+                foreach (var message in messageHandler.Messages)
+                    messages.Add(message);
 
             return result;
         }
