@@ -29,14 +29,13 @@ namespace PasPasPas.Parsing.Tokenizer {
             state.PreviousChar();
             state.Clear();
 
+            var currentChar = state.NextChar(false);
             while (!state.AtEof) {
-                var currentChar = state.NextChar(true);
-                if (currentChar == '#' && state.AtEof) {
-                    state.Error(TokenizerBase.UnexpectedEndOfToken);
-                }
-                else if (currentChar == '#') {
+                currentChar = state.CurrentCharacter;
+                if (currentChar == '#') {
+                    state.Append('#');
                     var nextChar = state.NextChar(true);
-                    if (nextChar == '$' && state.AtEof) {
+                    if (state.AtEof) {
                         state.Error(TokenizerBase.UnexpectedEndOfToken);
                     }
                     else if (nextChar == '$') {
@@ -46,7 +45,6 @@ namespace PasPasPas.Parsing.Tokenizer {
                         }
                     }
                     else {
-                        state.PreviousChar();
                         var controlChar = digits.Tokenize(state);
                         if (controlChar.Kind != TokenKind.Integer) {
                             state.Error(TokenizerBase.UnexpectedCharacter);
@@ -54,6 +52,7 @@ namespace PasPasPas.Parsing.Tokenizer {
                     }
                 }
                 else if (currentChar == '\'') {
+                    state.Append('\'');                    
                     quotedString.Tokenize(state);
                 }
                 else {

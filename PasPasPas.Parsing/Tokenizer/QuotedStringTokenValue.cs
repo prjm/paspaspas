@@ -107,9 +107,14 @@ namespace PasPasPas.Parsing.Tokenizer {
                     found = nextChar != quote;
 
                     if (found)
-                        state.PreviousChar();
+                    {
+                        state.Append(quote);
+                    }
                     else
+                    {
+                        state.Append(quote);
                         state.Append(nextChar);
+                    }
                 }
                 else {
                     state.Append(currentChar);

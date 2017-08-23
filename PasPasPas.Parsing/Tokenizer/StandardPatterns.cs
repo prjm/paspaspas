@@ -39,7 +39,7 @@ namespace PasPasPas.Parsing.Tokenizer {
 
             var lt = AddPattern('<', TokenKind.LessThen);
             lt.Add('=', TokenKind.LessThenEquals);
-            lt.Add('>', TokenKind.NotEquals);
+            lt.Add('>', TokenKind.NotEquals);  
 
             AddPattern('{', new SequenceGroupTokenValue(TokenKind.Comment, "}")).Add('$', new SequenceGroupTokenValue(TokenKind.Preprocessor, "}"));
             AddPattern('$', new HexNumberTokenValue());
@@ -49,11 +49,10 @@ namespace PasPasPas.Parsing.Tokenizer {
             AddPattern(new NumberCharacterClass(), new NumberTokenGroupValue());
             AddPattern(new ControlCharacterClass(), new ControlTokenGroupValue());
             AddPattern('\'', new StringGroupTokenValue());
-            /*
-            AddPattern('"', new DoubleQuoteStringGroupTokenValue());
+            AddPattern('"', new QuotedStringTokenValue(TokenKind.DoubleQuotedString, '"'));
             AddPattern('#', new StringGroupTokenValue());
             AddPattern('\x001A', new SoftEofTokenValue());
-            */
+
         }
 
 

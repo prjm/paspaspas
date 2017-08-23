@@ -61,6 +61,39 @@ namespace PasPasPasTests.Tokenizer {
         }
 
         [Fact]
+        public void TestSimpleTokens()
+        {
+            IsToken(TokenKind.Comma, ",");
+            IsToken(TokenKind.Dot, ".");
+            IsToken(TokenKind.DotDot, "..");
+            IsToken(TokenKind.OpenParen, "(");
+            IsToken(TokenKind.CloseParen, ")");
+            IsToken(TokenKind.OpenBraces, "(.");
+            IsToken(TokenKind.CloseBraces, ".)");
+            IsToken(TokenKind.Comment, "(* xx *)");
+            IsToken(TokenKind.Semicolon, ";");
+            IsToken(TokenKind.EqualsSign, "=");
+            IsToken(TokenKind.Assignment, ":=");
+            IsToken(TokenKind.Colon, ":");
+            IsToken(TokenKind.Circumflex, "^");
+            IsToken(TokenKind.Plus, "+");
+            IsToken(TokenKind.Minus, "-");
+            IsToken(TokenKind.Times, "*");
+            IsToken(TokenKind.Slash, "/");
+            IsToken(TokenKind.Comment, "// xxx");
+            IsToken(TokenKind.At, "@");
+            IsToken(TokenKind.LessThen, "<");
+            IsToken(TokenKind.LessThenEquals, "<=");
+            IsToken(TokenKind.GreaterThen, ">");
+            IsToken(TokenKind.GreaterThenEquals, ">=");
+            IsToken(TokenKind.NotEquals, "<>");
+            IsToken(TokenKind.Comment, "{ ddd }");
+            IsToken(TokenKind.Preprocessor, "{$ ddd }");
+            IsToken(TokenKind.WhiteSpace, "  ");
+            IsToken(TokenKind.HexNumber, "$0000");
+        }
+
+        [Fact]
         public void TestHexNumbers() {
             IsHexNumber("$333F");
             IsHexNumber("$000000");
@@ -108,6 +141,9 @@ namespace PasPasPasTests.Tokenizer {
 
         public static void IsAssembler(string input)
             => IsToken(TokenKind.Asm, input, input);
+
+        public static void IsToken(int tokenKind, string input)
+            => IsToken(tokenKind, input, input);
 
         public static void IsIdentifier(string input, string output = null) {
             if (output == null)
