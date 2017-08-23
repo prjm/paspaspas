@@ -38,7 +38,7 @@ namespace PasPasPas.Parsing.Tokenizer {
             AddPattern('>', TokenKind.GreaterThen).Add('=', TokenKind.GreaterThenEquals);
 
             var lt = AddPattern('<', TokenKind.LessThen);
-            lt.Add('=', TokenKind.LessThenEquals);
+            lt.Add('=', TokenKind.LessThenEquals); 
             lt.Add('>', TokenKind.NotEquals);  
 
             AddPattern('{', new SequenceGroupTokenValue(TokenKind.Comment, "}")).Add('$', new SequenceGroupTokenValue(TokenKind.Preprocessor, "}"));
