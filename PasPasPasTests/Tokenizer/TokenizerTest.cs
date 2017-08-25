@@ -91,6 +91,7 @@ namespace PasPasPasTests.Tokenizer {
             IsToken(TokenKind.Preprocessor, "{$ ddd }");
             IsToken(TokenKind.WhiteSpace, "  ");
             IsToken(TokenKind.HexNumber, "$0000");
+            IsToken(TokenKind.DoubleQuotedString, "\"");
         }
 
         [Fact]

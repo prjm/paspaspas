@@ -32,7 +32,7 @@ namespace PasPasPas.Api {
             if (options != null)
                 this.options = options;
             else
-                options = new TokenizerApiOptions();
+                this.options = new TokenizerApiOptions();
         }
 
         /// <summary>

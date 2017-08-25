@@ -3,12 +3,12 @@
 namespace PasPasPas.Parsing.Tokenizer {
 
     /// <summary>
-    ///     token group value
+    ///     a pattern continination is used as a base class to parse some type of token
     /// </summary>
     public abstract class PatternContinuation {
 
         /// <summary>
-        ///     generate a token
+        ///     generate the next token
         /// </summary>
         public abstract Token Tokenize(ITokenizerState state);
 

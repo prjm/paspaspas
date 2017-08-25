@@ -1,6 +1,7 @@
 ﻿namespace PasPasPas.Parsing.Tokenizer {
+
     /// <summary>
-    ///     matches whitespace
+    ///     charactre class to match whitespace
     /// </summary>
     public class WhiteSpaceCharacterClass : CharacterClass {
 
@@ -10,7 +11,7 @@
         /// <param name="input"></param>
         /// <returns></returns>
         public override bool Matches(char input)
-            => //
+            => // 
                 input == ' ' ||
                 input == '\t' ||
                 char.IsWhiteSpace(input);

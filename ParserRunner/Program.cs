@@ -2,6 +2,7 @@
 using PasPasPas.Api;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 namespace ParserRunner {
 
@@ -13,22 +14,23 @@ namespace ParserRunner {
             var tokenizerApi = new TokenizerApi(new StandardFileAccess());
             var tempPath = @"C:\temp\Testfiles\spring.pas";
             var tokenizer = tokenizerApi.CreateTokenizerForPath(tempPath);
-            var registry = new Dictionary<int, ulong>();
+            var registry = new Dictionary<int, Tuple<ulong, long>>();
 
             while (!tokenizer.AtEof) {
                 tokenizer.FetchNextToken();
 
                 var token = tokenizer.CurrentToken;
                 var kind = token.Kind;
+                int length = token.Value.Length;
 
-                if (registry.TryGetValue(kind, out ulong value))
-                    registry[kind] = 1 + value;
+                if (registry.TryGetValue(kind, out Tuple<ulong, long> value))
+                    registry[kind] = new Tuple<ulong, long>(1 + value.Item1, length + value.Item2);
                 else
-                    registry.Add(kind, 1);
+                    registry.Add(kind, Tuple.Create<ulong, long>(1, length));
             }
 
 
-            foreach (var entry in registry.OrderByDescending(t => t.Value))
+            foreach (var entry in registry.OrderByDescending(t => t.Value.Item2))
                 System.Console.WriteLine($"{entry.Key.ToString()} => {entry.Value.ToString()}");
 
 

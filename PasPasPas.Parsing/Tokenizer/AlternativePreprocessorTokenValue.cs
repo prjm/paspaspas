@@ -411,4 +411,34 @@ public class NumberTokenGroupValue : PatternContinuation {
 
         */
 
+    /*
+
+    /// <summary>
+    ///     token group for preprocessor commands
+    /// </summary>
+    public class PreprocessorTokenValue : CurlyBracedTokenValue {
+
+        /// <summary>
+        ///     token kind
+        /// </summary>
+        protected override int TokenId
+            => TokenKind.Preprocessor;
+    }
+
+    /// <summary>
+    ///     token group for preprocessor commands
+    /// </summary>
+    public class AlternativePreprocessorTokenValue : AlternativeCurlyBracedTokenValue {
+
+        /// <summary>
+        ///     token kind
+        /// </summary>
+        protected override int TokenId
+            => TokenKind.Preprocessor;
+    }
+
+    */
+
+
+
 }

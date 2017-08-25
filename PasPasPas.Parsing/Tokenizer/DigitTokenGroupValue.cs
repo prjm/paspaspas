@@ -7,10 +7,11 @@ namespace PasPasPas.Parsing.Tokenizer {
     public class DigitTokenGroupValue : CharacterClassTokenGroupValue {
 
         /// <summary>
-        ///     token id
+        ///     create a new digital token group value
         /// </summary>
-        protected override int TokenId
-            => TokenKind.Integer;
+        public DigitTokenGroupValue() : base(TokenKind.Integer, 0) {
+            //..
+        }
 
         /// <summary>
         ///     matches a digit

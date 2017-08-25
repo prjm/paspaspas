@@ -6,12 +6,13 @@ namespace PasPasPas.Parsing.Tokenizer {
     /// </summary>
     public class ControlTokenGroupValue : CharacterClassTokenGroupValue {
 
-        /// <summary>
-        ///     token id: ControlChar
-        /// </summary>
-        protected override int TokenId
-            => TokenKind.ControlChar;
 
+        /// <summary>
+        ///     token group value for control characters
+        /// </summary>
+        public ControlTokenGroupValue() : base(TokenKind.ControlChar, 0) {
+            //..
+        }
 
         /// <summary>
         ///     test if the charcater is a control char
