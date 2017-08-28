@@ -10,7 +10,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <summary>
         ///     generate the next token
         /// </summary>
-        public abstract Token Tokenize(ITokenizerState state);
+        public abstract Token Tokenize(TokenizerState state);
 
         /// <summary>
         ///     test if a given character can trigger a new line

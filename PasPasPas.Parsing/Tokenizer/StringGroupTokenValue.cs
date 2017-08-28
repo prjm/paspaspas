@@ -25,7 +25,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         ///     parse a string literal
         /// </summary>
         /// <param name="state">current tokenizer state</param>
-        public override Token Tokenize(ITokenizerState state) {
+        public override Token Tokenize(TokenizerState state) {
             state.PreviousChar();
             state.Clear();
 
@@ -56,7 +56,6 @@ namespace PasPasPas.Parsing.Tokenizer {
                     quotedString.Tokenize(state);
                 }
                 else {
-                    state.PreviousChar();
                     break;
                 }
             }

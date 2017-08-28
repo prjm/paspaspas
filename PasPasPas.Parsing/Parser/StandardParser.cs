@@ -4148,11 +4148,12 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private bool CurrentTokenIsAfterNewline() {
+            /*
             foreach (Token invalidToken in CurrentToken().InvalidTokensBefore) {
                 if (invalidToken.Kind == TokenKind.WhiteSpace && PatternContinuation.ContainsNewLineChar(invalidToken.Value))
                     return true;
             }
-
+            */
             return false;
         }
 

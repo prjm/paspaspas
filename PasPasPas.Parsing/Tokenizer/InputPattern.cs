@@ -140,7 +140,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="input">input</param>
         /// <param name="tokenLength">token length</param>
         /// <returns>matched token value</returns>
-        public PatternContinuation Match(ITokenizerState state, out int tokenLength) {
+        public PatternContinuation Match(TokenizerState state, out int tokenLength) {
             var subgroup = this;
             var index = 1;
 

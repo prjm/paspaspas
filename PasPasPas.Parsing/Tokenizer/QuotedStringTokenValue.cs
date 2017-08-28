@@ -95,7 +95,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         ///     parse a quoted string
         /// </summary>
         /// <param name="state">current tokenizer state</param>
-        public override Token Tokenize(ITokenizerState state) {
+        public override Token Tokenize(TokenizerState state) {
             var found = false;
             var quote = QuoteChar;
 
@@ -106,12 +106,10 @@ namespace PasPasPas.Parsing.Tokenizer {
                     var nextChar = state.NextChar(false);
                     found = nextChar != quote;
 
-                    if (found)
-                    {
+                    if (found) {
                         state.Append(quote);
                     }
-                    else
-                    {
+                    else {
                         state.Append(quote);
                         state.Append(nextChar);
                     }

@@ -11,39 +11,29 @@ namespace ParserRunner {
 
         static void Main(string[] args) {
 
-            var tokenizerApi = new TokenizerApi(new StandardFileAccess());
-            var tempPath = @"C:\temp\Testfiles\spring.pas";
-            var tokenizer = tokenizerApi.CreateTokenizerForPath(tempPath);
             var registry = new Dictionary<int, Tuple<ulong, long>>();
 
-            while (!tokenizer.AtEof) {
-                tokenizer.FetchNextToken();
+            for (int i = 0; i < 10; i++) {
+                var tokenizerApi = new TokenizerApi(new StandardFileAccess());
+                var tempPath = @"C:\temp\Testfiles\spring.pas";
+                var tokenizer = tokenizerApi.CreateTokenizerForPath(tempPath);
 
-                var token = tokenizer.CurrentToken;
-                var kind = token.Kind;
-                int length = token.Value.Length;
+                while (!tokenizer.AtEof) {
+                    tokenizer.FetchNextToken();
 
-                if (registry.TryGetValue(kind, out Tuple<ulong, long> value))
-                    registry[kind] = new Tuple<ulong, long>(1 + value.Item1, length + value.Item2);
-                else
-                    registry.Add(kind, Tuple.Create<ulong, long>(1, length));
+                    var token = tokenizer.CurrentToken;
+                    var kind = token.Kind;
+                    int length = token.Value.Length;
+
+                    if (registry.TryGetValue(kind, out Tuple<ulong, long> value))
+                        registry[kind] = new Tuple<ulong, long>(1 + value.Item1, length + value.Item2);
+                    else
+                        registry.Add(kind, Tuple.Create<ulong, long>(1, length));
+                }
             }
-
 
             foreach (var entry in registry.OrderByDescending(t => t.Value.Item2))
                 System.Console.WriteLine($"{entry.Key.ToString()} => {entry.Value.ToString()}");
-
-
-            /*
-            var tokenizer = new StandardTokenizer(services, reader);
-
-            while (tokenizer.HasNextToken()) {
-                tokenizer.FetchNextToken();
-            }
-
-            */
-
-
 
             return;
 

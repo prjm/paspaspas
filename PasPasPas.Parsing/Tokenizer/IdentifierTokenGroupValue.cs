@@ -59,7 +59,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         ///     parse the complete token
         /// </summary>
         /// <param name="state">current tokenizer state</param>
-        public override Token Tokenize(ITokenizerState state) {
+        public override Token Tokenize(TokenizerState state) {
             var hasAmpersand = state.GetBufferCharAt(0) == '&';
             var ignoreKeywords = AllowAmpersand && hasAmpersand;
 

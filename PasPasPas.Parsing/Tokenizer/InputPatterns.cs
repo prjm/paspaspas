@@ -99,7 +99,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         ///     fetch the next token from the input
         /// </summary>
         /// <returns></returns>
-        public Token FetchNextToken(ITokenizerState state) {
+        public Token FetchNextToken(TokenizerState state) {
 
             if (!state.PrepareNextToken()) {
                 return Token.Eof;
@@ -122,7 +122,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         ///     fetch a token for this group
         /// </summary>
         /// <returns></returns>
-        public Token FetchTokenByGroup(ITokenizerState state, InputPattern tokenGroup) {
+        public Token FetchTokenByGroup(TokenizerState state, InputPattern tokenGroup) {
 
             var position = state.CurrentPosition;
             var len = tokenGroup.Length;

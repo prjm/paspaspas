@@ -51,7 +51,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <summary>
         ///     parse the complete token
         /// </summary>
-        public override Token Tokenize(ITokenizerState state) {
+        public override Token Tokenize(TokenizerState state) {
 
             if (!state.AtEof) {
                 var currentChar = state.NextChar(false);

@@ -40,40 +40,9 @@ namespace PasPasPas.Parsing.SyntaxTree {
         public int Position { get; }
 
         /// <summary>
-        ///     invalid tokens before this token
+        ///     parsed token value (if any)
         /// </summary>
-        public IEnumerable<Token> InvalidTokensBefore {
-            get {
-                if (invalidTokensBefore != null) {
-                    foreach (var token in invalidTokensBefore)
-                        yield return token;
-                }
-            }
-        }
-
-        /// <summary>
-        ///     invalid tokens after this token
-        /// </summary>
-        public IEnumerable<Token> InvalidTokensAfter {
-            get {
-                if (invalidTokensAfter != null) {
-                    foreach (var token in invalidTokensAfter)
-                        yield return token;
-                }
-            }
-        }
-
-        public object ParsedValue { get; set; }
-
-        /// <summary>
-        ///     list of invalid tokens before this token
-        /// </summary>
-        private IList<Token> invalidTokensBefore;
-
-        /// <summary>
-        ///     list of invalid tokens after this token
-        /// </summary>
-        private IList<Token> invalidTokensAfter;
+        public object ParsedValue { get; }
 
         /// <summary>
         ///     create a new syntax token
@@ -105,36 +74,10 @@ namespace PasPasPas.Parsing.SyntaxTree {
             Value = buffer.ToString().Pool();
         }
 
-        public Token(int tokenId, ITokenizerState state) : this() {
+        public Token(int tokenId, TokenizerState state) : this() {
             Kind = tokenId;
             Position = -1;
             Value = state.GetBufferContent().Pool();
-        }
-
-
-        /// <summary>
-        ///     assign remaining tokens
-        /// </summary>
-        /// <param name="invalidTokens"></param>
-        /// <param name="afterwards">add tokens after this token</param>
-        public void AssignInvalidTokens(IndexedQueue<Token> invalidTokens, bool afterwards) {
-
-            if (invalidTokens.Count > 0) {
-
-                if (afterwards && invalidTokensAfter == null)
-                    invalidTokensAfter = new List<Token>(invalidTokens.Count);
-                else if (invalidTokensBefore == null)
-                    invalidTokensBefore = new List<Token>(invalidTokens.Count);
-
-
-                foreach (var token in invalidTokens)
-                    if (afterwards)
-                        invalidTokensAfter.Add(token);
-                    else
-                        invalidTokensBefore.Add(token);
-
-                invalidTokens.Clear();
-            }
         }
 
         /// <summary>

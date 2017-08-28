@@ -28,14 +28,17 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <param name="parameter"></param>
         public void StartVisit(Terminal syntaxPart) {
 
+            /*
             foreach (Token token in syntaxPart.Token.InvalidTokensBefore)
                 ResultBuilder.Append(token.Value);
+                */
 
             ResultBuilder.Append(syntaxPart.Token.Value);
 
+            /*
             foreach (Token token in syntaxPart.Token.InvalidTokensAfter)
                 ResultBuilder.Append(token.Value);
-
+            */
         }
 
         /// <summary>

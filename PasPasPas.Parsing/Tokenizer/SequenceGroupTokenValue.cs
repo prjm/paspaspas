@@ -33,7 +33,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         ///     parse the complete token
         /// </summary>
         /// <param name="state">current tokenizer state</param>
-        public override Token Tokenize(ITokenizerState state) {
+        public override Token Tokenize(TokenizerState state) {
             var found = false;
 
             while ((!found) && (!state.AtEof)) {

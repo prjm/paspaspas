@@ -8,7 +8,7 @@ namespace PasPasPas.Parsing.Tokenizer {
     /// </summary>
     public class EndOfLineCommentTokenGroupValue : PatternContinuation {
 
-        public override Token Tokenize(ITokenizerState state) {
+        public override Token Tokenize(TokenizerState state) {
             var found = false;
 
             while (!state.AtEof && !found) {

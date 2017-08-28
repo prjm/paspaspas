@@ -33,7 +33,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         public bool AllowIdents { get; set; }
             = false;
 
-        private static bool CurrentCharMatches(ITokenizerState state, CharacterClass c) {
+        private static bool CurrentCharMatches(TokenizerState state, CharacterClass c) {
             if (state.AtEof)
                 return false;
 
@@ -47,7 +47,7 @@ namespace PasPasPas.Parsing.Tokenizer {
             return false;
         }
 
-        public override Token Tokenize(ITokenizerState state) {
+        public override Token Tokenize(TokenizerState state) {
             var withDot = false;
             var withExponent = false;
 

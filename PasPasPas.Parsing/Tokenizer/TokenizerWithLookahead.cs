@@ -52,8 +52,10 @@ namespace PasPasPas.Parsing.Tokenizer {
             while (tokenList.Count == currentTokenCount || tokenList.Count < 2) {
 
                 if (BaseTokenizer.AtEof) {
+                    /*
                     if (tokenList.Count > 0)
                         tokenList.Last.AssignInvalidTokens(invalidTokens, true);
+                        */
                     return;
                 }
 
@@ -61,8 +63,8 @@ namespace PasPasPas.Parsing.Tokenizer {
                 var nextToken = BaseTokenizer.CurrentToken;
 
                 if (IsValidToken(nextToken)) {
-                    nextToken.AssignInvalidTokens(invalidTokens, false);
-                    tokenList.Enqueue(nextToken);
+                    //nextToken.AssignInvalidTokens(invalidTokens, false);
+                    //tokenList.Enqueue(nextToken);
                 }
                 else {
                     if (IsMacroToken(nextToken))
