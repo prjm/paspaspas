@@ -1,11 +1,9 @@
-﻿namespace PasPasPas.Parsing.Tokenizer
-{
+﻿namespace PasPasPas.Parsing.Tokenizer {
 
     /// <summary>
     ///     base class for a character class used by a tokenizer
     /// </summary>
-    public abstract class CharacterClass
-    {
+    public abstract class CharacterClass {
 
         /// <summary>
         ///     test if the character class matches

@@ -13,16 +13,17 @@ namespace PasPasPasTests.Tokenizer {
 
     internal class TestTokenizer : TokenizerBase {
 
-        private readonly InputPatterns puncts;
-
+        private static InputPatterns GetCharClasses() {
+            var puncts = new InputPatterns();
+            puncts.AddPattern(new WhiteSpaceCharacterClass(), new CharacterClassTokenGroupValue(TokenKind.WhiteSpace, new WhiteSpaceCharacterClass()));
+            return puncts;
+        }
         public TestTokenizer(ParserServices environment, StackedFileReader input)
-            : base(environment.Log, input) {
-            puncts = new InputPatterns();
-            puncts.AddPattern(new WhiteSpaceCharacterClass(), new WhiteSpaceTokenGroupValue());
+            : base(environment.Log, GetCharClasses(), input) {
+
         }
 
-        protected override InputPatterns CharacterClasses
-            => puncts;
+
     }
 
     public class TokenizerBaseTest {
@@ -77,7 +78,7 @@ namespace PasPasPasTests.Tokenizer {
 
         [Fact]
         public void TestNumberCharClass() {
-            var cc = new NumberCharacterClass();
+            var cc = new DigitCharClass(false);
             Assert.IsTrue(cc.Matches('0'));
             Assert.IsTrue(cc.Matches('1'));
             Assert.IsTrue(cc.Matches('2'));
@@ -253,7 +254,7 @@ namespace PasPasPasTests.Tokenizer {
         public void TestWhitespaceCharTokenValue() {
             var patterns = new InputPatterns();
             patterns.AddPattern('a', PatternA);
-            patterns.AddPattern(new WhiteSpaceCharacterClass(), new WhiteSpaceTokenGroupValue());
+            patterns.AddPattern(new WhiteSpaceCharacterClass(), new CharacterClassTokenGroupValue(TokenKind.WhiteSpace, new WhiteSpaceCharacterClass()));
             TestPattern(patterns, "");
             TestPattern(patterns, "a    a", PatternA, TokenKind.WhiteSpace, PatternA);
             TestPattern(patterns, "   ", TokenKind.WhiteSpace);
@@ -265,7 +266,7 @@ namespace PasPasPasTests.Tokenizer {
         public void TestDigitTokenValue() {
             var patterns = new InputPatterns();
             patterns.AddPattern('a', PatternA);
-            patterns.AddPattern(new NumberCharacterClass(), new DigitTokenGroupValue());
+            patterns.AddPattern(new DigitCharClass(false), new CharacterClassTokenGroupValue(TokenKind.Integer, new DigitCharClass(false)));
             TestPattern(patterns, "1", TokenKind.Integer);
             TestPattern(patterns, "1234567890", TokenKind.Integer);
             TestPattern(patterns, "000", TokenKind.Integer);
@@ -297,7 +298,7 @@ namespace PasPasPasTests.Tokenizer {
             var tgv = new IdentifierTokenGroupValue(tokens);
             patterns.AddPattern('b', PatternB);
             patterns.AddPattern(new IdentifierCharacterClass(), tgv);
-            patterns.AddPattern(new WhiteSpaceCharacterClass(), new WhiteSpaceTokenGroupValue());
+            patterns.AddPattern(new WhiteSpaceCharacterClass(), new CharacterClassTokenGroupValue(TokenKind.WhiteSpace, new WhiteSpaceCharacterClass()));
             tgv.AllowAmpersand = true;
             tgv.AllowDigits = false;
             TestPattern(patterns, "a", PatternA);
@@ -320,7 +321,7 @@ namespace PasPasPasTests.Tokenizer {
         public void TestEndOfLineCommentTokenValue() {
             var patterns = new InputPatterns();
             patterns.AddPattern('/', TokenKind.Slash).Add('/', new EndOfLineCommentTokenGroupValue());
-            patterns.AddPattern(new WhiteSpaceCharacterClass(), new WhiteSpaceTokenGroupValue());
+            patterns.AddPattern(new WhiteSpaceCharacterClass(), new CharacterClassTokenGroupValue(TokenKind.WhiteSpace, new WhiteSpaceCharacterClass()));
             TestPattern(patterns, "/", TokenKind.Slash);
             TestPattern(patterns, "//", TokenKind.Comment);
             TestPattern(patterns, "// / / /", TokenKind.Comment);
@@ -332,7 +333,7 @@ namespace PasPasPasTests.Tokenizer {
         [Fact]
         public void TestNumberTokenValue() {
             var patterns = new InputPatterns();
-            patterns.AddPattern(new NumberCharacterClass(), new NumberTokenGroupValue());
+            patterns.AddPattern(new DigitCharClass(false), new NumberTokenGroupValue());
             patterns.AddPattern(new IdentifierCharacterClass(), new IdentifierTokenGroupValue(new Dictionary<string, int>()));
             patterns.AddPattern('.', TokenKind.Dot).Add('.', TokenKind.DotDot);
             TestPattern(patterns, "9..", TokenKind.Integer, TokenKind.DotDot);

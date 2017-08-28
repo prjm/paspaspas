@@ -6,21 +6,28 @@ namespace PasPasPas.Parsing.Tokenizer {
     /// <summary>
     ///     tokenizer based on a character class
     /// </summary>
-    public abstract class CharacterClassTokenGroupValue : PatternContinuation {
+    public class CharacterClassTokenGroupValue : PatternContinuation {
 
         /// <summary>
         ///     create a new character class token group value
         /// </summary>
         /// <param name="tokenId"></param>
-        public CharacterClassTokenGroupValue(int tokenId, int minLength) {
+        /// <param name="charClass">character class</param>
+        public CharacterClassTokenGroupValue(int tokenId, CharacterClass charClass, int minLength = 0) {
             TokenId = tokenId;
             MinLength = minLength;
+            CharClass = charClass;
         }
 
         /// <summary>
         ///     token kind
         /// </summary>
         public int TokenId { get; }
+
+        /// <summary>
+        ///     matching character class
+        /// </summary>
+        public CharacterClass CharClass { get; }
 
         /// <summary>
         ///     minimal length
@@ -38,7 +45,8 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         /// <param name="input">char to test</param>
         /// <returns></returns>
-        protected abstract bool MatchesClass(char input);
+        protected bool MatchesClass(char input)
+            => CharClass.Matches(input);
 
         /// <summary>
         ///     parse the complete token

@@ -15,8 +15,8 @@ namespace PasPasPas.Parsing.Tokenizer {
         private QuotedStringTokenValue quotedString
             = new QuotedStringTokenValue(TokenKind.QuotedString, '\'');
 
-        private DigitTokenGroupValue digits
-            = new DigitTokenGroupValue();
+        private CharacterClassTokenGroupValue digitTokenizer
+            = new CharacterClassTokenGroupValue(TokenKind.Integer, new DigitCharClass(false));
 
         private HexNumberTokenValue hexDigits
             = new HexNumberTokenValue();
@@ -45,14 +45,14 @@ namespace PasPasPas.Parsing.Tokenizer {
                         }
                     }
                     else {
-                        var controlChar = digits.Tokenize(state);
+                        var controlChar = digitTokenizer.Tokenize(state);
                         if (controlChar.Kind != TokenKind.Integer) {
                             state.Error(TokenizerBase.UnexpectedCharacter);
                         }
                     }
                 }
                 else if (currentChar == '\'') {
-                    state.Append('\'');                    
+                    state.Append('\'');
                     quotedString.Tokenize(state);
                 }
                 else {

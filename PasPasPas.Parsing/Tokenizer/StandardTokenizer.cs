@@ -17,7 +17,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="log">log</param>
         /// <param name="input">input files</param>
         public StandardTokenizer(ILogManager log, StackedFileReader input) :
-            base(log, input) { }
+            base(log, new StandardPatterns(), input) { }
 
         /// <summary>
         ///     message id: incomplete hex number
@@ -35,12 +35,6 @@ namespace PasPasPas.Parsing.Tokenizer {
 
         private static Lazy<StandardPatterns> patterns
             = new Lazy<StandardPatterns>(() => new StandardPatterns());
-
-        /// <summary>
-        ///     get punctuators
-        /// </summary>
-        protected override InputPatterns CharacterClasses
-            => patterns.Value;
 
         /// <summary>
         ///     keywords

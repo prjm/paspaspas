@@ -9,11 +9,8 @@ namespace PasPasPas.Parsing.Tokenizer {
     /// </summary>
     public class NumberTokenGroupValue : PatternContinuation {
 
-        private DigitTokenGroupValue digitTokenizer
-            = new DigitTokenGroupValue();
-
-        private NumberCharacterClass numbers
-            = new NumberCharacterClass();
+        private CharacterClassTokenGroupValue digitTokenizer
+            = new CharacterClassTokenGroupValue(TokenKind.Integer, new DigitCharClass(false));
 
         private SingleCharClass dot
             = new SingleCharClass('.');
@@ -65,7 +62,7 @@ namespace PasPasPas.Parsing.Tokenizer {
                 state.NextChar(false);
                 withDot = true;
 
-                if (CurrentCharMatches(state, numbers)) {
+                if (CurrentCharMatches(state, digitTokenizer.CharClass)) {
                     digitTokenizer.Tokenize(state);
                 }
 
@@ -86,7 +83,7 @@ namespace PasPasPas.Parsing.Tokenizer {
                     if (CurrentCharMatches(state, plusminus))
                         state.NextChar(false);
 
-                    if (CurrentCharMatches(state, numbers)) {
+                    if (CurrentCharMatches(state, digitTokenizer.CharClass)) {
                         digitTokenizer.Tokenize(state);
                     }
                     else {

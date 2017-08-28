@@ -186,7 +186,7 @@ protected override bool MatchesClass(char input)
         /// <summary>
         ///     creates a new token group for hex numbers
         /// </summary>
-        public HexNumberTokenValue() : base(TokenKind.HexNumber, 2) {
+        public HexNumberTokenValue() : base(TokenKind.HexNumber, new DigitCharClass(true), 2) {
             //..
         }
 
@@ -196,15 +196,6 @@ protected override bool MatchesClass(char input)
         protected override Guid MinLengthMessage
             => StandardTokenizer.IncompleteHexNumber;
 
-        /// <summary>
-        ///     test if a char matches a hex number
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        protected override bool MatchesClass(char input)
-            => ('0' <= input) && (input <= '9') ||
-               ('a' <= input) && (input <= 'f') ||
-               ('A' <= input) && (input <= 'F');
 
     }
 

@@ -17,10 +17,8 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         /// <param name="services">environment</param>
         /// <param name="input">file to parse</param>
-        public CompilerDirectiveTokenizer(ParserServices services, StackedFileReader input) : base(services.Log, input) { }
-
-        private CompilerDirectivePatterns punctuators
-            = new CompilerDirectivePatterns();
+        public CompilerDirectiveTokenizer(ParserServices services, StackedFileReader input)
+            : base(services.Log, new CompilerDirectivePatterns(), input) { }
 
         /// <summary>
         ///     known keywords
@@ -157,12 +155,6 @@ namespace PasPasPas.Parsing.Tokenizer {
                 ["VCPUBLIC"] = TokenKind.VcPublic,
                 ["VCPUBLISHED"] = TokenKind.VcPublished,
             };
-
-        /// <summary>
-        ///     register token types
-        /// </summary>
-        protected override InputPatterns CharacterClasses
-            => punctuators;
 
         /// <summary>
         ///     unwrap a preprocessor command

@@ -130,10 +130,12 @@ namespace PasPasPas.Parsing.Tokenizer {
             = new Guid(new byte[] { 0x7d, 0xd3, 0xfc, 0xf2, 0x4a, 0x89, 0x71, 0x4e, 0x8a, 0xaa, 0x2f, 0x1a, 0x95, 0x6b, 0xdc, 0x49 });
         /* {f2fcd37d-894a-4e71-8aaa-2f1a956bdc49} */
 
+        private InputPatterns characterClasses;
+
         /// <summary>
         ///     create a new tokenizer
         /// </summary>
-        protected TokenizerBase(ILogManager log, StackedFileReader input) {
+        protected TokenizerBase(ILogManager log, InputPatterns charClasses, StackedFileReader input) {
 
             if (log == null)
                 ExceptionHelper.ArgumentIsNull(nameof(log));
@@ -141,8 +143,12 @@ namespace PasPasPas.Parsing.Tokenizer {
             if (input == null)
                 ExceptionHelper.ArgumentIsNull(nameof(input));
 
+            if (charClasses == null)
+                ExceptionHelper.ArgumentIsNull(nameof(charClasses));
+
             Input = input;
             Log = new LogSource(log, TokenizerLogMessage);
+            characterClasses = charClasses;
             state = new TokenizerState(this, input, Log);
         }
 
@@ -158,7 +164,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         ///     fetch the next token
         /// </summary>
         public void FetchNextToken()
-            => currentToken = CharacterClasses.FetchNextToken(state);
+            => currentToken = characterClasses.FetchNextToken(state);
 
         public char NextChar()
             => Input.NextChar();
@@ -192,11 +198,6 @@ namespace PasPasPas.Parsing.Tokenizer {
 
         private Token currentToken
             = new Token();
-
-        /// <summary>
-        ///     used char classes
-        /// </summary>
-        protected abstract InputPatterns CharacterClasses { get; }
 
         /// <summary>
         ///     log source
