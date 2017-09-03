@@ -4,12 +4,15 @@ using System.Collections.Generic;
 using A = Xunit.Assert;
 using PasPasPas.Api;
 using PasPasPas.DesktopPlatform;
+using System;
+using PasPasPas.Infrastructure.Environment;
 
 namespace PasPasPasTests {
 
     public static class TestHelper {
 
         public static IList<Token> RunTokenizer(string input, IList<ILogMessage> messages = null) {
+            StaticEnvironment.Clear();
 
             var result = new List<Token>();
             var messageHandler = new ListLogTarget();
@@ -50,6 +53,9 @@ namespace PasPasPasTests {
 
         public static void IsNull(object o)
             => A.Null(o);
+
+        public static void Throws<T>(Action testCode)
+            => A.Throws(typeof(T), testCode);
 
     }
 }

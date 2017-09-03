@@ -47,7 +47,7 @@ namespace PasPasPas.Parsing.Tokenizer {
             AddPattern(new IdentifierCharacterClass(), new IdentifierTokenGroupValue(StandardTokenizer.Keywords) { AllowAmpersand = true, ParseAsm = true });
 
             AddPattern(new DigitCharClass(false), new NumberTokenGroupValue());
-            AddPattern(new ControlCharacterClass(), new ControlTokenGroupValue());
+            AddPattern(new ControlCharacterClass(), new CharacterClassTokenGroupValue(TokenKind.ControlChar, new ControlCharacterClass()));
             AddPattern('\'', new StringGroupTokenValue());
             AddPattern('"', new QuotedStringTokenValue(TokenKind.DoubleQuotedString, '"'));
             AddPattern('#', new StringGroupTokenValue());

@@ -243,7 +243,7 @@ namespace PasPasPasTests.Tokenizer {
         public void TestControlCharTokenValue() {
             var patterns = new InputPatterns();
             patterns.AddPattern('a', PatternA);
-            patterns.AddPattern(new ControlCharacterClass(), new ControlTokenGroupValue());
+            patterns.AddPattern(new ControlCharacterClass(), new CharacterClassTokenGroupValue(TokenKind.ControlChar, new ControlCharacterClass()));
             TestPattern(patterns, "");
             TestPattern(patterns, "a\u0000\u0001\u0002\u0003\u0004", PatternA, TokenKind.ControlChar);
             TestPattern(patterns, TokenizerBase.UnexpectedCharacter, "\r", TokenKind.Undefined);

@@ -1,8 +1,9 @@
 ﻿namespace PasPasPas.Parsing.Tokenizer {
+
     /// <summary>
-    ///     character class for exponents
+    ///     character class to match <c>e</c> or <c>E</c> for exponents
     /// </summary>
-    public class ExponentCharacterClass : CharacterClass {
+    public sealed class ExponentCharacterClass : CharacterClass {
 
         /// <summary>
         ///     test if a character class matches

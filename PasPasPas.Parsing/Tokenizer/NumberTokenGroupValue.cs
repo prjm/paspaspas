@@ -1,13 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using PasPasPas.Infrastructure.Environment;
+using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree;
 
 namespace PasPasPas.Parsing.Tokenizer {
 
-
     /// <summary>
     ///     token group for numbers
     /// </summary>
-    public class NumberTokenGroupValue : PatternContinuation {
+    public sealed class NumberTokenGroupValue : PatternContinuation {
 
         private CharacterClassTokenGroupValue digitTokenizer
             = new CharacterClassTokenGroupValue(TokenKind.Integer, new DigitCharClass(false));
@@ -27,19 +29,33 @@ namespace PasPasPas.Parsing.Tokenizer {
         private IdentifierTokenGroupValue identTokenizer
             = new IdentifierTokenGroupValue(new Dictionary<string, int>());
 
+        public static readonly Guid ParsedIntegers =
+            new Guid(new byte[] { 0x85, 0x19, 0x39, 0xd3, 0x70, 0xa7, 0x98, 0x47, 0xa1, 0x83, 0x8b, 0xdf, 0xd5, 0x48, 0x2a, 0x90 });
+        /* {d3391985-a770-4798-a183-8bdfd5482a90} */
+
+        private readonly IIntegerParser parser
+            = StaticEnvironment.Require<IIntegerParser>(ParsedIntegers);
+
+
         /// <summary>
         ///     flag, if <c>true</c> idents are generated if possible
         /// </summary>
         public bool AllowIdents { get; set; }
             = false;
 
-        private static bool CurrentCharMatches(TokenizerState state, CharacterClass c) {
+        /// <summary>
+        ///     test if the current char matches a given char class
+        /// </summary>
+        /// <param name="state">current state</param>
+        /// <param name="charClass"></param>
+        /// <returns>character class to match</returns>
+        private static bool CurrentCharMatches(TokenizerState state, CharacterClass charClass) {
             if (state.AtEof)
                 return false;
 
             var currentChar = state.CurrentCharacter;
 
-            if (c.Matches(currentChar)) {
+            if (charClass.Matches(currentChar)) {
                 state.Append(currentChar);
                 return true;
             }
@@ -103,7 +119,8 @@ namespace PasPasPas.Parsing.Tokenizer {
                 return new Token(TokenKind.Real, state);
             }
             else {
-                return new Token(TokenKind.Integer, state);
+                var value = state.GetBufferContent().Pool();
+                return new Token(TokenKind.Integer, state.CurrentPosition, value, parser.Parse(value));
             }
 
         }

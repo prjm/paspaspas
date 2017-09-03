@@ -67,6 +67,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assert.cs" />
+    <Compile Include="Infra\StaticTest.cs" />
+    <Compile Include="Infra\TimerTest.cs" />
     <Compile Include="Misc\FileBufferTest.cs" />
     <Compile Include="ParserTestBase.cs" />
     <Compile Include="Parser\AstTest.cs" />

@@ -57,6 +57,9 @@ namespace PasPasPas.Parsing.Tokenizer {
             state = new TokenizerState(this, input, Log);
         }
 
+        /// <summary>
+        ///     test if the end of the current file is reached
+        /// </summary>
         public bool AtEof
             => Input.CurrentFile == null;
 
@@ -70,9 +73,6 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         public void FetchNextToken()
             => currentToken = characterClasses.FetchNextToken(state);
-
-        public char NextChar()
-            => Input.NextChar();
 
         public char PreviousChar()
             => Input.PreviousChar();

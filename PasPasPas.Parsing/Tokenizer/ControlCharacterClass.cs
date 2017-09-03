@@ -1,11 +1,9 @@
-﻿namespace PasPasPas.Parsing.Tokenizer
-{
+﻿namespace PasPasPas.Parsing.Tokenizer {
 
     /// <summary>
     ///     matches old control characters
     /// </summary>
-    public class ControlCharacterClass : CharacterClass
-    {
+    public sealed class ControlCharacterClass : CharacterClass {
 
         /// <summary>
         ///     test if the char is control characters
@@ -13,7 +11,9 @@
         /// <param name="input">input char</param>
         /// <returns><c>true</c> if the character is a control character</returns>
         public override bool Matches(char input)
-            => (!char.IsWhiteSpace(input)) && (char.IsControl(input));
+            => (input != 0x1A) && // soft eof
+               (!WhiteSpaceCharacterClass.IsAsciiWhitespace(input)) &&
+               (char.IsControl(input));
 
     }
 

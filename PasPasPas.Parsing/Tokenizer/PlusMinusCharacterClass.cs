@@ -1,17 +1,17 @@
 ﻿namespace PasPasPas.Parsing.Tokenizer {
+
     /// <summary>
-    ///     character class to match <c>+</c> and <c>-</c>
+    ///     character class to match <c>+</c> or <c>-</c>
     /// </summary>
-    public class PlusMinusCharacterClass : CharacterClass {
+    public sealed class PlusMinusCharacterClass : CharacterClass {
 
         /// <summary>
         ///     test if a character class matches
         /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        public override bool Matches(char input) =>
-            input == '+' ||
-            input == '-';
-    }
+        /// <param name="input">char to test</param>
+        /// <returns><c>true</c> if the char is <c>+</c> or <c>-</c></returns>
+        public override bool Matches(char input)
+            => input == '+' || input == '-';
 
+    }
 }

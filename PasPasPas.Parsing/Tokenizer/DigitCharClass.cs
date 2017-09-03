@@ -5,14 +5,14 @@
     /// </summary>
     public class DigitCharClass : CharacterClass {
 
-        private bool allowHexChars;
+        private readonly bool allowHexChars;
 
         /// <summary>
         ///     create a new hex character class
         /// </summary>
         /// <param name="allowsHex"></param>
         public DigitCharClass(bool allowsHex)
-            => this.allowHexChars = allowsHex;
+            => allowHexChars = allowsHex;
 
         /// <summary>
         ///     test if the character class matches 

@@ -24,9 +24,9 @@ namespace PasPasPasTests.Tokenizer {
 
         [Fact]
         public void TestIntegers() {
-            IsInteger("123");
-            IsInteger("0000");
-            IsInteger("10000");
+            IsInteger("123", 123);
+            IsInteger("0000", 0);
+            IsInteger("10000", 10000);
         }
 
         [Fact]
@@ -61,8 +61,37 @@ namespace PasPasPasTests.Tokenizer {
         }
 
         [Fact]
-        public void TestSimpleTokens()
-        {
+        public void TestControlChars() {
+            IsControlChar("\u0000");
+            IsControlChar("\u0001");
+            IsControlChar("\u0002");
+            IsControlChar("\u0003");
+            IsControlChar("\u0004");
+            IsControlChar("\u0005");
+            IsControlChar("\u0006");
+            IsControlChar("\u0007");
+            IsControlChar("\u0008");
+            IsControlChar("\u000E");
+            IsControlChar("\u000F");
+            IsControlChar("\u0010");
+            IsControlChar("\u0011");
+            IsControlChar("\u0012");
+            IsControlChar("\u0013");
+            IsControlChar("\u0014");
+            IsControlChar("\u0015");
+            IsControlChar("\u0016");
+            IsControlChar("\u0017");
+            IsControlChar("\u0018");
+            IsControlChar("\u0019");
+            IsControlChar("\u001B");
+            IsControlChar("\u001C");
+            IsControlChar("\u001D");
+            IsControlChar("\u001E");
+            IsControlChar("\u001F");
+        }
+
+        [Fact]
+        public void TestSimpleTokens() {
             IsToken(TokenKind.Comma, ",");
             IsToken(TokenKind.Dot, ".");
             IsToken(TokenKind.DotDot, "..");
@@ -122,8 +151,8 @@ namespace PasPasPasTests.Tokenizer {
         public static void IsQuotedString(string input)
             => IsToken(TokenKind.QuotedString, input, input);
 
-        public static void IsInteger(string input)
-            => IsToken(TokenKind.Integer, input, input);
+        public static void IsInteger(string input, object value)
+            => IsToken(TokenKind.Integer, input, input, value);
 
         public static void IsWhitespace(string input)
             => IsToken(TokenKind.WhiteSpace, input, input);
@@ -140,6 +169,9 @@ namespace PasPasPasTests.Tokenizer {
         public static void IsComment(string input)
             => IsToken(TokenKind.Comment, input, input);
 
+        public static void IsControlChar(string input)
+            => IsToken(TokenKind.ControlChar, input, input);
+
         public static void IsAssembler(string input)
             => IsToken(TokenKind.Asm, input, input);
 
@@ -153,11 +185,16 @@ namespace PasPasPasTests.Tokenizer {
             IsToken(TokenKind.Identifier, output, input);
         }
 
-        public static void IsToken(int tokenKind, string tokenValue, string input, params Tuple<int, string>[] tokens) {
+        public static void IsToken(int tokenKind, string tokenValue, string input, params Tuple<int, string>[] tokens)
+            => IsToken(tokenKind, tokenValue, input, null, tokens);
+
+
+        public static void IsToken(int tokenKind, string tokenValue, string input, object value, params Tuple<int, string>[] tokens) {
             var result = TestHelper.RunTokenizer(input);
             Assert.IsNotNull(result);
 
             if (tokens.Length < 1) {
+                Assert.AreEqual(value, result[0].ParsedValue);
                 Assert.AreEqual(2, result.Count);
                 Assert.AreEqual(tokenKind, result[0].Kind);
                 Assert.AreEqual(tokenValue, result[0].Value);

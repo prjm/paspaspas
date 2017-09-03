@@ -7,6 +7,9 @@
     <DebugType>pdbonly</DebugType>
     <DebugSymbols>True</DebugSymbols>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <LangVersion>7.1</LangVersion>
+  </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\PasPasPas.Api\PasPasPas.Api.csproj" />
     <ProjectReference Include="..\PasPasPas.Building\PasPasPas.Building.csproj" />

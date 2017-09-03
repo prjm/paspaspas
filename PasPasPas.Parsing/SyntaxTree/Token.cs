@@ -62,6 +62,21 @@ namespace PasPasPas.Parsing.SyntaxTree {
         /// <param name="tokenKind">token kind</param>
         /// <param name="tokenPosition">token position</param>
         /// <param name="value">token value</param>
+        public Token(int tokenKind, int tokenPosition, string value, object parsedValue) : this() {
+            Kind = tokenKind;
+            Position = tokenPosition;
+            Value = value;
+            ParsedValue = parsedValue;
+        }
+
+
+
+        /// <summary>
+        ///     create a new syntax token
+        /// </summary>
+        /// <param name="tokenKind">token kind</param>
+        /// <param name="tokenPosition">token position</param>
+        /// <param name="value">token value</param>
         public Token(int tokenKind, int tokenPosition, char value) : this() {
             Kind = tokenKind;
             Position = tokenPosition;

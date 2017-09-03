@@ -3,6 +3,7 @@ using PasPasPas.Api;
 using System.Collections.Generic;
 using System.Linq;
 using System;
+using PasPasPas.Infrastructure.Environment;
 
 namespace ParserRunner {
 
@@ -34,6 +35,14 @@ namespace ParserRunner {
 
             foreach (var entry in registry.OrderByDescending(t => t.Value.Item2))
                 System.Console.WriteLine($"{entry.Key.ToString()} => {entry.Value.ToString()}");
+
+            Console.WriteLine(new string('.', 80));
+
+
+            foreach (var entry in StaticEnvironment.Entries)
+                if (entry is ILookupFunction fn)
+                    Console.WriteLine(entry.GetType().FullName + ": " + fn.Table.Count);
+
 
             return;
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PasPasPas.Infrastructure.Environment;
 using PasPasPas.Infrastructure.Files;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Parsing.Tokenizer;
@@ -33,6 +34,12 @@ namespace PasPasPas.Api {
                 this.options = options;
             else
                 this.options = new TokenizerApiOptions();
+
+            RegisterStatics();
+        }
+
+        private void RegisterStatics() {
+            StaticEnvironment.Register(NumberTokenGroupValue.ParsedIntegers, () => new IntegerParser());
         }
 
         /// <summary>
