@@ -24,9 +24,13 @@ namespace PasPasPasTests.Tokenizer {
 
         [Fact]
         public void TestIntegers() {
-            IsInteger("123", 123);
-            IsInteger("0000", 0);
-            IsInteger("10000", 10000);
+            IsInteger("123", (byte)123);
+            IsInteger("0000", (byte)0);
+            IsInteger("10000", (ushort)10000);
+            IsInteger("1000000", (uint)1000000);
+            IsInteger("18446744073709551615", 18446744073709551615);
+            IsInteger("18446744073709551616", IntegerParser.IntegerOverflowInLiteral);
+            IsInteger("108446744073709551615", IntegerParser.IntegerOverflowInLiteral);
         }
 
         [Fact]
