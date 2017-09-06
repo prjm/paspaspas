@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using PasPasPas.Infrastructure.Environment;
 
 namespace PasPasPas.Parsing.Tokenizer {
@@ -10,7 +6,7 @@ namespace PasPasPas.Parsing.Tokenizer {
     /// <summary>
     ///     simple integer parser
     /// </summary>
-    public sealed class IntegerParser : IIntegerParser, ILookupFunction<string, object> {
+    public sealed class IntegerParser : IIntegerParser, IHexNumberParser, ILookupFunction<string, object> {
 
         private LookupTable<string, object> data
             = new LookupTable<string, object>(new Func<string, object>(DoParse), true);
@@ -21,11 +17,19 @@ namespace PasPasPas.Parsing.Tokenizer {
         LookupTable ILookupFunction.Table
             => data;
 
-        public static object IntegerOverflowInLiteral = new object();
+        public static object IntegerOverflowInLiteral
+            = new object();
 
-        public static object InvalidIntegerLiteral = new object();
+        public static object InvalidIntegerLiteral
+            = new object();
 
-        private static byte GetValueOfChar(char character) {
+        /// <summary>
+        ///     get the integral value of a char
+        /// </summary>
+        /// <param name="character">character</param>
+        /// <param name="allowHex">if <c>true</c> then hex chars are allowed</param>
+        /// <returns>integral value</returns>
+        private static byte GetValueOfChar(char character, bool allowHex) {
             switch (character) {
                 case '0':
                     return 0;
@@ -48,8 +52,51 @@ namespace PasPasPas.Parsing.Tokenizer {
                 case '9':
                     return 9;
             }
+
+            if (allowHex) {
+                switch (character) {
+                    case 'A':
+                    case 'a':
+                        return 10;
+                    case 'B':
+                    case 'b':
+                        return 11;
+                    case 'c':
+                    case 'C':
+                        return 12;
+                    case 'd':
+                    case 'D':
+                        return 13;
+                    case 'e':
+                    case 'E':
+                        return 14;
+                    case 'f':
+                    case 'F':
+                        return 15;
+                }
+            }
+
             return 255;
         }
+
+        private static readonly ulong[] hexFactors = {
+            1,
+            16,
+            256,
+            4096,
+            65536,
+            1048576,
+            16777216,
+            268435456,
+            4294967296,
+            68719476736,
+            1099511627776,
+            17592186044416,
+            281474976710656,
+            4503599627370496,
+            72057594037927936,
+            1152921504606846976,
+        };
 
         private static readonly ulong[] factors = {
             1,
@@ -81,11 +128,20 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <returns></returns>
         private static object DoParse(string input) {
             ulong result = 0;
+            ulong newresult;
+
+            if (input.Length < 1)
+                return InvalidIntegerLiteral;
+
+            var hex = input[0] == '$';
+
+            if (hex)
+                input = input.Substring(1);
 
             for (var i = 0; i < input.Length; i++) {
-                var value = GetValueOfChar(input[input.Length - 1 - i]);
+                var value = GetValueOfChar(input[input.Length - 1 - i], hex);
 
-                if (i > 19) {
+                if (i > 19 || (hex && i > 16)) {
                     return IntegerOverflowInLiteral;
                 }
 
@@ -93,7 +149,11 @@ namespace PasPasPas.Parsing.Tokenizer {
                     return InvalidIntegerLiteral;
                 }
 
-                var newresult = result + (value * factors[i]);
+                if (hex)
+                    newresult = result + (value * hexFactors[i]);
+                else
+                    newresult = result + (value * factors[i]);
+
                 if (newresult < result) {
                     return IntegerOverflowInLiteral;
                 }
@@ -114,9 +174,17 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <summary>
         ///     parse an input
         /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        public object Parse(string input)
+        /// <param name="input">string to parse</param>
+        /// <returns>parsed number</returns>
+        public object ParseInt(string input)
+            => data.GetValue(input);
+
+        /// <summary>
+        ///     parse a hex number
+        /// </summary>
+        /// <param name="input">string to parse</param>
+        /// <returns>parsed number</returns>
+        public object ParseHexNumber(string input)
             => data.GetValue(input);
     }
 }

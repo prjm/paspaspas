@@ -129,8 +129,9 @@ namespace PasPasPasTests.Tokenizer {
 
         [Fact]
         public void TestHexNumbers() {
-            IsHexNumber("$333F");
-            IsHexNumber("$000000");
+            IsHexNumber("$333F", (ushort)0x333F);
+            IsHexNumber("$000000", (byte)0);
+            IsHexNumber("$FFFFFFFFFFFFFFFF", 0xFFFFFFFFFFFFFFFF);
         }
 
         [Fact]
@@ -164,8 +165,8 @@ namespace PasPasPasTests.Tokenizer {
         public static void IsReal(string input, params Tuple<int, string>[] tokens)
             => IsToken(TokenKind.Real, input, input, tokens);
 
-        public static void IsHexNumber(string input)
-            => IsToken(TokenKind.HexNumber, input, input);
+        public static void IsHexNumber(string input, object value)
+            => IsToken(TokenKind.HexNumber, input, input, value);
 
         public static void IsPreprocessor(string input)
             => IsToken(TokenKind.Preprocessor, input, input);

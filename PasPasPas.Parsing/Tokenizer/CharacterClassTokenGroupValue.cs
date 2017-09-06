@@ -1,4 +1,6 @@
 ﻿using System;
+using PasPasPas.Infrastructure.Environment;
+using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree;
 
 namespace PasPasPas.Parsing.Tokenizer {
@@ -13,7 +15,16 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         /// <param name="tokenId"></param>
         /// <param name="charClass">character class</param>
-        public CharacterClassTokenGroupValue(int tokenId, CharacterClass charClass, int minLength = 0) {
+        public CharacterClassTokenGroupValue(int tokenId, CharacterClass charClass, int minLength = 0)
+            : this(tokenId, charClass, minLength, Guid.Empty) { }
+
+
+        /// <summary>
+        ///     create a new character class token group value
+        /// </summary>
+        /// <param name="tokenId"></param>
+        /// <param name="charClass">character class</param>
+        public CharacterClassTokenGroupValue(int tokenId, CharacterClass charClass, int minLength, Guid parser) {
             TokenId = tokenId;
             MinLength = minLength;
             CharClass = charClass;
@@ -71,7 +82,12 @@ namespace PasPasPas.Parsing.Tokenizer {
             if (MinLength > 0 && state.Length < MinLength)
                 state.Error(MinLengthMessage);
 
-            if (state.KeepTokenValue(TokenId))
+            if (TokenId == TokenKind.HexNumber) {
+                var value = state.GetBufferContent().Pool();
+                var parsedValue = StaticEnvironment.Require<IHexNumberParser>(NumberTokenGroupValue.ParsedHexNumbers);
+                return new Token(TokenId, state.CurrentPosition, value, parsedValue.ParseHexNumber(value));
+            }
+            else if (state.KeepTokenValue(TokenId))
                 return new Token(TokenId, state);
             else
                 return new Token(TokenId, state.CurrentPosition, string.Empty);

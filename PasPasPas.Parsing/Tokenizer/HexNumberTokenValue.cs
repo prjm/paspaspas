@@ -180,7 +180,7 @@ protected override bool MatchesClass(char input)
     /// <summary>
     ///     tokenizer for hex numbers
     /// </summary>
-    public class HexNumberTokenValue : CharacterClassTokenGroupValue {
+    public sealed class HexNumberTokenValue : CharacterClassTokenGroupValue {
 
 
         /// <summary>

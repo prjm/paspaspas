@@ -40,6 +40,7 @@ namespace PasPasPas.Api {
 
         private void RegisterStatics() {
             StaticEnvironment.Register(NumberTokenGroupValue.ParsedIntegers, () => new IntegerParser());
+            StaticEnvironment.Register(NumberTokenGroupValue.ParsedHexNumbers, () => new IntegerParser());
         }
 
         /// <summary>

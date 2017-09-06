@@ -4,6 +4,6 @@
     ///     simple integer parser
     /// </summary>
     public interface IIntegerParser {
-        object Parse(string input);
+        object ParseInt(string input);
     }
 }
