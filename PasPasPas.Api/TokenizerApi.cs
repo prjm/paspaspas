@@ -39,8 +39,8 @@ namespace PasPasPas.Api {
         }
 
         private void RegisterStatics() {
-            StaticEnvironment.Register(NumberTokenGroupValue.ParsedIntegers, () => new IntegerParser());
-            StaticEnvironment.Register(NumberTokenGroupValue.ParsedHexNumbers, () => new IntegerParser());
+            StaticEnvironment.Register(Literals.ParsedIntegers, () => new IntegerParser());
+            StaticEnvironment.Register(Literals.ParsedHexNumbers, () => new IntegerParser());
         }
 
         /// <summary>
@@ -58,11 +58,10 @@ namespace PasPasPas.Api {
         /// </summary>
         /// <param name="fileReader"></param>
         /// <returns></returns>
-        private ITokenizer CreateTokenizer(StackedFileReader fileReader) {
-            var tokenizer = new StandardTokenizer(log, fileReader);
-            tokenizer.KeepWhitspace = options.KeepWhitespace;
-            return tokenizer;
-        }
+        private ITokenizer CreateTokenizer(StackedFileReader fileReader)
+            => new StandardTokenizer(log, fileReader) {
+                KeepWhitspace = options.KeepWhitespace
+            };
 
         /// <summary>
         ///     create a tokenizer for a string

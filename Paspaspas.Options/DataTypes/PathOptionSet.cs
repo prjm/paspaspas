@@ -31,8 +31,6 @@ namespace PasPasPas.Options.DataTypes {
         /// <summary>
         ///     clear path options
         /// </summary>
-        public void Clear() {
-            SearchPaths.ResetToDefault();
-        }
+        public void Clear() => SearchPaths.ResetToDefault();
     }
 }

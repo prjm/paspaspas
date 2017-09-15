@@ -4147,15 +4147,14 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
-        private bool CurrentTokenIsAfterNewline() {
+        private bool CurrentTokenIsAfterNewline() =>
             /*
-            foreach (Token invalidToken in CurrentToken().InvalidTokensBefore) {
-                if (invalidToken.Kind == TokenKind.WhiteSpace && PatternContinuation.ContainsNewLineChar(invalidToken.Value))
-                    return true;
-            }
-            */
-            return false;
-        }
+foreach (Token invalidToken in CurrentToken().InvalidTokensBefore) {
+if (invalidToken.Kind == TokenKind.WhiteSpace && PatternContinuation.ContainsNewLineChar(invalidToken.Value))
+return true;
+}
+*/
+            false;
 
         private NamespaceName ParseNamespaceName(IExtendableSyntaxPart parent, bool allowIn = false) {
             var result = new NamespaceName();

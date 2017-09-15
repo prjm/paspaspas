@@ -84,8 +84,7 @@ namespace PasPasPas.Parsing.Tokenizer {
 
             if (TokenId == TokenKind.HexNumber) {
                 var value = state.GetBufferContent().Pool();
-                var parsedValue = StaticEnvironment.Require<IHexNumberParser>(NumberTokenGroupValue.ParsedHexNumbers);
-                return new Token(TokenId, state.CurrentPosition, value, parsedValue.ParseHexNumber(value));
+                return new Token(TokenId, state.CurrentPosition, value, Literals.ParseHexNumberLiteral(value));
             }
             else if (state.KeepTokenValue(TokenId))
                 return new Token(TokenId, state);

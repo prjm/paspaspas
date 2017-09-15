@@ -44,9 +44,7 @@ namespace PasPasPas.Options.DataTypes {
         /// <summary>
         ///     clear own values
         /// </summary>
-        public override void ResetToDefault() {
-            OwnValues.Clear();
-        }
+        public override void ResetToDefault() => OwnValues.Clear();
 
         /// <summary>
         ///     enumerate parent values then own values

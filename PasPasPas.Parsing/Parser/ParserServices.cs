@@ -7,7 +7,6 @@ namespace PasPasPas.Parsing.Parser {
     /// <summary>
     ///     parser services
     /// </summary>
-    [Obsolete]
     public class ParserServices {
 
         /// <summary>
@@ -24,9 +23,8 @@ namespace PasPasPas.Parsing.Parser {
         ///     create a new service class for a parser
         /// </summary>
         /// <param name="log">logging manager</param>
-        public ParserServices(ILogManager log) {
-            Log = log;
-        }
+        public ParserServices(ILogManager log)
+            => Log = log;
 
     }
 }

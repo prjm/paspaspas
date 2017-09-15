@@ -83,7 +83,7 @@
         /// <param name="input"></param>
         /// <returns></returns>
         public bool ProcessChar(char input) {
-            bool countLine = false;
+            var countLine = false;
 
             if (input == '\r') {
                 countLine = SetStyle(NewLineStyle.Cr);

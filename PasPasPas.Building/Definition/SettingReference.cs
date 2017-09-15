@@ -21,9 +21,7 @@ namespace PasPasPas.Building.Definition {
         /// <summary>
         ///     clear the resolved setting
         /// </summary>
-        public void Clear() {
-            ResolvedItem = null;
-        }
+        public void Clear() => ResolvedItem = null;
 
         /// <summary>
         ///     resolve the referenced setting

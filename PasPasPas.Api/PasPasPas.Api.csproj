@@ -13,7 +13,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <LangVersion>7</LangVersion>
+    <LangVersion>7.1</LangVersion>
     <DocumentationFile>bin\Debug\netstandard1.3\.xml</DocumentationFile>
   </PropertyGroup>
 

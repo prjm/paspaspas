@@ -13,9 +13,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         /// <param name="newDuplicate">duplicate</param>
         /// <param name="logSource"></param>
-        protected override void LogDuplicateSymbolError(CompilationUnit newDuplicate, LogSource logSource) {
-            logSource.Error(StructuralErrors.DuplicateUnitName, newDuplicate);
-        }
+        protected override void LogDuplicateSymbolError(CompilationUnit newDuplicate, LogSource logSource) => logSource.Error(StructuralErrors.DuplicateUnitName, newDuplicate);
 
         /// <summary>
         ///     accept visitor

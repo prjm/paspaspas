@@ -23,7 +23,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <LangVersion>7</LangVersion>
+    <LangVersion>7.1</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -67,6 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assert.cs" />
+    <Compile Include="Infra\PoolTest.cs" />
     <Compile Include="Infra\StaticTest.cs" />
     <Compile Include="Infra\TimerTest.cs" />
     <Compile Include="Misc\FileBufferTest.cs" />

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PasPasPas.Infrastructure.Environment;
+using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree;
 
 namespace PasPasPas.Parsing.Tokenizer {
@@ -26,6 +28,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         /// <param name="state">current tokenizer state</param>
         public override Token Tokenize(TokenizerState state) {
+            var resultBuilder = new StringBuilder();
             state.PreviousChar();
             state.Clear();
 
@@ -43,24 +46,33 @@ namespace PasPasPas.Parsing.Tokenizer {
                         if (controlChar.Kind != TokenKind.HexNumber) {
                             state.Error(TokenizerBase.UnexpectedCharacter);
                         }
+                        else {
+                            resultBuilder.Append(Convert.ToChar(Literals.ParseHexNumberLiteral(controlChar.Value)));
+                        }
                     }
                     else {
                         var controlChar = digitTokenizer.Tokenize(state);
                         if (controlChar.Kind != TokenKind.Integer) {
                             state.Error(TokenizerBase.UnexpectedCharacter);
                         }
+                        else {
+                            resultBuilder.Append(Convert.ToChar(Literals.ParseIntegerLiteral(controlChar.Value)));
+                        }
                     }
                 }
                 else if (currentChar == '\'') {
                     state.Append('\'');
-                    quotedString.Tokenize(state);
+                    var qs = quotedString.Tokenize(state);
+                    resultBuilder.Append(qs.ParsedValue);
                 }
                 else {
                     break;
                 }
             }
 
-            return new Token(TokenKind.QuotedString, state);
+            var value = state.GetBufferContent().Pool();
+            var data = resultBuilder.ToString().Pool();
+            return new Token(TokenKind.QuotedString, state.CurrentPosition, value, data);
         }
     }
 

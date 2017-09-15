@@ -3,29 +3,32 @@ using PasPasPas.Infrastructure.Log;
 using PasPasPas.Infrastructure.Files;
 using System.Text;
 using PasPasPas.Infrastructure.Utils;
+using PasPasPas.Infrastructure.Environment;
 
 namespace PasPasPas.Parsing.Tokenizer {
 
 
-    public class TokenizerState {
+    /// <summary>
+    ///     state management for a tokenizer
+    /// </summary>
+    public class TokenizerState : IDisposable {
 
+        private ObjectPool<StringBuilder>.PoolItem bufferHolder;
+        private StringBuilder buffer;
         private TokenizerBase tokenizer;
-
-        private readonly StringBuilder buffer
-            = new StringBuilder(100);
-
         private readonly StackedFileReader input;
-
         private readonly ILogSource log;
 
         /// <summary>
         ///     create a new tokenizer state
         /// </summary>
-        /// <param name="tokenizer"></param>
-        internal TokenizerState(TokenizerBase tokenizer, StackedFileReader input, ILogSource log) {
-            this.tokenizer = tokenizer;
-            this.log = log;
-            this.input = input;
+        /// <param name="parentTokenizer"></param>
+        internal TokenizerState(TokenizerBase parentTokenizer, StackedFileReader currentInput, ILogSource logSource) {
+            tokenizer = parentTokenizer;
+            log = logSource;
+            input = currentInput;
+            bufferHolder = PoolFactory.FetchStringBuilder();
+            buffer = bufferHolder.Data;
         }
 
         public int Length {
@@ -62,6 +65,12 @@ namespace PasPasPas.Parsing.Tokenizer {
 
         public void Clear()
             => buffer.Clear();
+
+        public void Dispose() {
+            buffer = null;
+            bufferHolder.Dispose();
+            bufferHolder = null;
+        }
 
         public void Error(Guid errorId)
             => log.Error(errorId);

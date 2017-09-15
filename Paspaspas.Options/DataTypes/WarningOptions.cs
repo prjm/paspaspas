@@ -128,9 +128,7 @@ namespace PasPasPas.Options.DataTypes {
         /// </summary>
         /// <param name="number"></param>
         /// <param name="ident"></param>
-        private void AddOption(string number, string ident) {
-            options.Add(new WarningKey(number, ident), new WarningOption(this, number, ident));
-        }
+        private void AddOption(string number, string ident) => options.Add(new WarningKey(number, ident), new WarningOption(this, number, ident));
 
         /// <summary>
         ///     parent options
@@ -175,9 +173,7 @@ namespace PasPasPas.Options.DataTypes {
         /// </summary>
         /// <param name="ident">warning identifier</param>
         /// <param name="mode">warnig mode</param>
-        public void SetModeByIdentifier(string ident, WarningMode mode) {
-            SetModeByKey(new WarningKey("", ident), mode);
-        }
+        public void SetModeByIdentifier(string ident, WarningMode mode) => SetModeByKey(new WarningKey("", ident), mode);
 
         /// <summary>
         ///     set the warning mode by key

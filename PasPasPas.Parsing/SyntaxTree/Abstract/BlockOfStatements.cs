@@ -24,9 +24,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     add a statement
         /// </summary>
         /// <param name="part">statement part to add</param>
-        public void Add(StatementBase part) {
-            Statements.Add(part);
-        }
+        public void Add(StatementBase part) => Statements.Add(part);
 
         /// <summary>
         ///     statement parts

@@ -3,8 +3,6 @@
     /// <summary>
     ///     interface for lookup functions
     /// </summary>
-    /// <typeparam name="Key">key type</typeparam>
-    /// <typeparam name="Value">value tpe</typeparam>
     public interface ILookupFunction {
 
         /// <summary>
@@ -24,6 +22,6 @@
         /// <summary>
         ///     access to lookup table
         /// </summary>
-        LookupTable<Key, Value> Table { get; }
+        new LookupTable<Key, Value> Table { get; }
     }
 }

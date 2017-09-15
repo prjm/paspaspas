@@ -60,9 +60,8 @@ namespace PasPasPas.Parsing.Parser {
         /// <summary>
         ///     tokenizer to use
         /// </summary>        
-        public ITokenizer BaseTokenizer {
-            get => tokenizer.BaseTokenizer;
-        }
+        public ITokenizer BaseTokenizer
+            => tokenizer.BaseTokenizer;
 
         /// <summary>
         ///     wrapper tokenizer
@@ -82,7 +81,7 @@ namespace PasPasPas.Parsing.Parser {
         /// </summary>
         /// <returns></returns>
         protected ISyntaxPart Unexpected() {
-            Token token = CurrentToken();
+            var token = CurrentToken();
             logSource.Error(UnexpectedToken, token.Kind, token.Value);
             return null;
         }
@@ -118,7 +117,7 @@ namespace PasPasPas.Parsing.Parser {
             if (!Match(tokenKind))
                 Unexpected();
 
-            Token result = CurrentToken();
+            var result = CurrentToken();
             FetchNextToken();
             return result;
         }
@@ -160,7 +159,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind">token kind to test for</param>
         /// <returns><c>true</c> if the token kind matches</returns>
         protected virtual bool LookAhead(int numberOfTokens, params int[] tokenKind) {
-            Token token = tokenizer.LookAhead(numberOfTokens);
+            var token = tokenizer.LookAhead(numberOfTokens);
 
             for (var i = 0; i < tokenKind.Length; i++) {
                 if (tokenKind[i] == token.Kind)
@@ -176,7 +175,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind"></param>
         /// <returns></returns>
         protected bool Match(int tokenKind) {
-            Token token = CurrentToken();
+            var token = CurrentToken();
             return token.Kind == tokenKind;
         }
 
@@ -187,7 +186,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind2"></param>
         /// <returns></returns>
         protected bool Match(int tokenKind1, int tokenKind2) {
-            Token token = CurrentToken();
+            var token = CurrentToken();
             return
                 (token.Kind == tokenKind1) ||
                 (token.Kind == tokenKind2);
@@ -201,7 +200,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind3">third token</param>
         /// <returns></returns>
         protected bool Match(int tokenKind1, int tokenKind2, int tokenKind3) {
-            Token token = CurrentToken();
+            var token = CurrentToken();
             return
                 (token.Kind == tokenKind1) ||
                 (token.Kind == tokenKind2) ||
@@ -217,7 +216,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind4">fourth token</param>
         /// <returns></returns>
         protected bool Match(int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4) {
-            Token token = CurrentToken();
+            var token = CurrentToken();
             return
                 (token.Kind == tokenKind1) ||
                 (token.Kind == tokenKind2) ||
@@ -235,7 +234,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind5">fifth token</param>
         /// <returns></returns>
         protected bool Match(int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5) {
-            Token token = CurrentToken();
+            var token = CurrentToken();
             return
                 (token.Kind == tokenKind1) ||
                 (token.Kind == tokenKind2) ||
@@ -255,7 +254,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind6">sixth token</param>
         /// <returns></returns>
         protected bool Match(int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5, int tokenKind6) {
-            Token token = CurrentToken();
+            var token = CurrentToken();
             return
                 (token.Kind == tokenKind1) ||
                 (token.Kind == tokenKind2) ||
@@ -277,7 +276,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind7">seventh token</param>
         /// <returns></returns>
         protected bool Match(int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5, int tokenKind6, int tokenKind7) {
-            Token token = CurrentToken();
+            var token = CurrentToken();
             return
                 (token.Kind == tokenKind1) ||
                 (token.Kind == tokenKind2) ||
@@ -302,7 +301,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind9">eigth token</param>
         /// <returns></returns>
         protected bool Match(int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5, int tokenKind6, int tokenKind7, int tokenKind8, int tokenKind9) {
-            Token token = CurrentToken();
+            var token = CurrentToken();
             return
                 (token.Kind == tokenKind1) ||
                 (token.Kind == tokenKind2) ||
@@ -330,7 +329,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind8">eigth token</param>
         /// <returns></returns>
         protected bool Match(int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5, int tokenKind6, int tokenKind7, int tokenKind8) {
-            Token token = CurrentToken();
+            var token = CurrentToken();
             return
                 (token.Kind == tokenKind1) ||
                 (token.Kind == tokenKind2) ||
@@ -356,9 +355,9 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="type">parser type</param>
         /// <param name="result">result</param>
         protected static void PrintGrammar(Type type, StringBuilder result) {
-            IList<RuleAttribute> rules = GetRules(type);
+            var rules = GetRules(type);
 
-            foreach (RuleAttribute rule in rules) {
+            foreach (var rule in rules) {
 
                 if (!rule.Incomplete)
                     continue;
@@ -402,7 +401,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <returns></returns>
         protected bool HasTokenBeforeToken(int tokenToSearch, params int[] tokenToStop) {
             var lookahead = 1;
-            int[] stopArray = tokenToStop.Concat(new[] { TokenKind.Eof, TokenKind.Undefined }).ToArray();
+            var stopArray = tokenToStop.Concat(new[] { TokenKind.Eof, TokenKind.Undefined }).ToArray();
             while (!LookAhead(lookahead, stopArray)) {
                 if (LookAhead(lookahead, tokenToSearch))
                     return true;
@@ -420,7 +419,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <returns></returns>
         protected Tuple<bool, int> HasTokenUntilToken(int[] tokenToStop, params int[] allowedTokens) {
             var lookahead = 1;
-            int[] stopArray = new[] { TokenKind.Eof, TokenKind.Undefined };
+            var stopArray = new[] { TokenKind.Eof, TokenKind.Undefined };
 
             while (!LookAhead(lookahead, tokenToStop) && !LookAhead(lookahead, stopArray)) {
                 if (!LookAhead(lookahead, allowedTokens))

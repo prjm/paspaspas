@@ -41,8 +41,6 @@ namespace PasPasPas.Infrastructure.Utils {
         ///     reset an entry
         /// </summary>
         /// <param name="index"></param>
-        public void Reset(TMapType index) {
-            values.Remove(index);
-        }
+        public void Reset(TMapType index) => values.Remove(index);
     }
 }

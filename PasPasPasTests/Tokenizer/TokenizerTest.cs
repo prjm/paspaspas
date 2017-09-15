@@ -136,14 +136,14 @@ namespace PasPasPasTests.Tokenizer {
 
         [Fact]
         public void TestQuotedString() {
-            IsQuotedString("''");
-            IsQuotedString("'sdfddfsd'");
-            IsQuotedString("'sdf''ddfsd'");
-            IsQuotedString("#45");
-            IsQuotedString("#45'xxx'#55");
-            IsQuotedString("'ddd'#45'xxx'");
-            IsQuotedString("#$F45");
-            IsQuotedString("'ddd'#$1245'xxx'");
+            IsQuotedString("''", string.Empty);
+            IsQuotedString("'sdfddfsd'", "sdfddfsd");
+            IsQuotedString("'sdf''ddfsd'", "sdf'ddfsd");
+            IsQuotedString("#45", "-");
+            IsQuotedString("#45'xxx'#55", "-xxx7");
+            IsQuotedString("'ddd'#45'ddd-xxx'", "ddd-xxx");
+            IsQuotedString("#$58D", "֍");
+            IsQuotedString("'ddd'#$58D'xxx'", "ddd֍xxx");
         }
 
         [Fact]
@@ -153,8 +153,8 @@ namespace PasPasPasTests.Tokenizer {
             TokenizerMessageIsGenerated(TokenizerBase.UnexpectedCharacter, "´");
         }
 
-        public static void IsQuotedString(string input)
-            => IsToken(TokenKind.QuotedString, input, input);
+        public static void IsQuotedString(string input, string value)
+            => IsToken(TokenKind.QuotedString, input, input, value);
 
         public static void IsInteger(string input, object value)
             => IsToken(TokenKind.Integer, input, input, value);

@@ -26,9 +26,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         private IStartEndVisitor visitor;
 
-        public IStartEndVisitor AsVisitor() {
-            return visitor;
-        }
+        public IStartEndVisitor AsVisitor() => visitor;
 
         /// <summary>
         ///     log manager

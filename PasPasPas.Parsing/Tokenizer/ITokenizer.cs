@@ -1,11 +1,12 @@
-﻿using PasPasPas.Parsing.SyntaxTree;
+﻿using System;
+using PasPasPas.Parsing.SyntaxTree;
 
 namespace PasPasPas.Parsing.Tokenizer {
 
     /// <summary>
     ///     interface for classes which tokenize source code
     /// </summary>
-    public interface ITokenizer {
+    public interface ITokenizer : IDisposable {
 
         /// <summary>
         ///     fetch then next token if possible

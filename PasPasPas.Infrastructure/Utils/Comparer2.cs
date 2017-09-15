@@ -4,16 +4,27 @@ using System.Linq;
 
 namespace PasPasPas.Infrastructure.Utils {
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class Comparer2<T> : Comparer<T> {
         private readonly Comparison<T> _compareFunction;
 
-        public Comparer2(Comparison<T> comparison) {
-            if (comparison == null) throw new ArgumentNullException("comparison");
-            _compareFunction = comparison;
-        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="comparison"></param>
+        public Comparer2(Comparison<T> comparison)
+            => _compareFunction = comparison ?? throw new ArgumentNullException("comparison");
 
-        public override int Compare(T arg1, T arg2) {
-            return _compareFunction(arg1, arg2);
-        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="arg1"></param>
+        /// <param name="arg2"></param>
+        /// <returns></returns>
+        public override int Compare(T arg1, T arg2)
+            => _compareFunction(arg1, arg2);
     }
 }

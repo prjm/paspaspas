@@ -9,7 +9,7 @@ namespace PasPasPas.Parsing.Tokenizer {
     /// <summary>
     ///     base class for tokenizers
     /// </summary>
-    public abstract class TokenizerBase : ITokenizer {
+    public abstract class TokenizerBase : ITokenizer, IDisposable {
 
         /// <summary>
         ///     message group for tokenizer logs
@@ -56,6 +56,12 @@ namespace PasPasPas.Parsing.Tokenizer {
             characterClasses = charClasses;
             state = new TokenizerState(this, input, Log);
         }
+
+        /// <summary>
+        ///     dispose the tokenizer
+        /// </summary>
+        public void Dispose()
+            => state.Dispose();
 
         /// <summary>
         ///     test if the end of the current file is reached

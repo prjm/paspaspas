@@ -86,9 +86,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     append a name part
         /// </summary>
         /// <param name="name"></param>
-        public void Append(string name) {
-            names.Add(name);
-        }
+        public void Append(string name) => names.Add(name);
     }
 
     /// <summary>

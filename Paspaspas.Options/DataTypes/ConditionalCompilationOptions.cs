@@ -77,9 +77,7 @@ namespace PasPasPas.Options.DataTypes {
         ///     define a symbol at compile time
         /// </summary>
         /// <param name="symbolName"></param>
-        public void DefineSymbol(string symbolName) {
-            ToggleSymbol(symbolName, true);
-        }
+        public void DefineSymbol(string symbolName) => ToggleSymbol(symbolName, true);
 
         /// <summary>
         ///     reset local conditionals
@@ -172,9 +170,7 @@ namespace PasPasPas.Options.DataTypes {
         ///     undefine a symbol at compile time
         /// </summary>
         /// <param name="symbolName">symbol name</param>
-        public void UndefineSymbol(string symbolName) {
-            ToggleSymbol(symbolName, false);
-        }
+        public void UndefineSymbol(string symbolName) => ToggleSymbol(symbolName, false);
 
         /// <summary>
         ///     add a <c>ifndef</c> condition

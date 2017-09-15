@@ -14,22 +14,23 @@ namespace ParserRunner {
 
             var registry = new Dictionary<int, Tuple<ulong, long>>();
 
-            for (int i = 0; i < 10; i++) {
+            for (var i = 0; i < 10; i++) {
                 var tokenizerApi = new TokenizerApi(new StandardFileAccess());
                 var tempPath = @"C:\temp\Testfiles\spring.pas";
-                var tokenizer = tokenizerApi.CreateTokenizerForPath(tempPath);
+                using (var tokenizer = tokenizerApi.CreateTokenizerForPath(tempPath)) {
 
-                while (!tokenizer.AtEof) {
-                    tokenizer.FetchNextToken();
+                    while (!tokenizer.AtEof) {
+                        tokenizer.FetchNextToken();
 
-                    var token = tokenizer.CurrentToken;
-                    var kind = token.Kind;
-                    int length = token.Value.Length;
+                        var token = tokenizer.CurrentToken;
+                        var kind = token.Kind;
+                        var length = token.Value.Length;
 
-                    if (registry.TryGetValue(kind, out Tuple<ulong, long> value))
-                        registry[kind] = new Tuple<ulong, long>(1 + value.Item1, length + value.Item2);
-                    else
-                        registry.Add(kind, Tuple.Create<ulong, long>(1, length));
+                        if (registry.TryGetValue(kind, out Tuple<ulong, long> value))
+                            registry[kind] = new Tuple<ulong, long>(1 + value.Item1, length + value.Item2);
+                        else
+                            registry.Add(kind, Tuple.Create<ulong, long>(1, length));
+                    }
                 }
             }
 
@@ -41,8 +42,9 @@ namespace ParserRunner {
 
             foreach (var entry in StaticEnvironment.Entries)
                 if (entry is ILookupFunction fn)
-                    Console.WriteLine(entry.GetType().FullName + ": " + fn.Table.Count);
-
+                    Console.WriteLine(entry.GetType().Name + ": " + fn.Table.Count);
+                else if (entry is ObjectPool pool)
+                    Console.WriteLine(entry.ToString() + ": " + pool.Count);
 
             return;
 

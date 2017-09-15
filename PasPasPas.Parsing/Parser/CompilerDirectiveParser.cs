@@ -417,7 +417,7 @@ namespace PasPasPas.Parsing.Parser {
                 return;
             }
 
-            string[] text = result.LastTerminalValue.Split(new[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
+            var text = result.LastTerminalValue.Split(new[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
 
             if (text.Length != 2) {
                 ErrorLastPart(result, CompilerDirectiveParserErrors.InvalidPEVersionDirective);
@@ -577,7 +577,7 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             var warningType = result.LastTerminalValue;
-            int[] warningModes = new[] { TokenKind.On, TokenKind.Off, TokenKind.Error, TokenKind.Default };
+            var warningModes = new[] { TokenKind.On, TokenKind.Off, TokenKind.Error, TokenKind.Default };
 
             if (!ContinueWith(result, TokenKind.On, TokenKind.Off, TokenKind.Error, TokenKind.Default)) {
                 ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidWarnDirective, warningModes);
@@ -585,7 +585,7 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             var warningMode = result.LastTerminalKind;
-            WarningMode parsedMode = WarningMode.Undefined;
+            var parsedMode = WarningMode.Undefined;
 
             switch (warningMode) {
                 case TokenKind.On:
@@ -729,7 +729,8 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         private void ParseEndIf(IExtendableSyntaxPart parent) {
-            var result = new EndIf(); new EndIf();
+            var result = new EndIf();
+            new EndIf();
             InitByTerminal(result, parent, TokenKind.EndIf);
         }
 

@@ -28,12 +28,8 @@ namespace PasPasPas.Infrastructure.Utils {
         /// </summary>
         /// <param name="key">The key associated with the value to get or set.</param>
         public TValue this[TKey key] {
-            get {
-                return GetValue(key);
-            }
-            set {
-                SetValue(key, value);
-            }
+            get => GetValue(key);
+            set => SetValue(key, value);
         }
 
         /// <summary>
@@ -41,39 +37,26 @@ namespace PasPasPas.Infrastructure.Utils {
         /// </summary>
         /// <param name="index">The index of the value to get or set.</param>
         public TValue this[int index] {
-            get {
-                return GetItem(index).Value;
-            }
-            set {
-                SetItem(index, value);
-            }
+            get => GetItem(index).Value;
+            set => SetItem(index, value);
         }
 
 
         /// <summary>
         /// Gets the number of items in the dictionary
         /// </summary>
-        public int Count {
-            get { return _keyedCollection.Count; }
-        }
+        public int Count => _keyedCollection.Count;
 
         /// <summary>
         /// Gets all the keys in the ordered dictionary in their proper order.
         /// </summary>
-        public ICollection<TKey> Keys {
-            get {
-                return _keyedCollection.Select(x => x.Key).ToList();
-            }
-        }
+        public ICollection<TKey> Keys
+            => _keyedCollection.Select(x => x.Key).ToList();
 
         /// <summary>
         /// Gets all the values in the ordered dictionary in their proper order.
         /// </summary>
-        public ICollection<TValue> Values {
-            get {
-                return _keyedCollection.Select(x => x.Value).ToList();
-            }
-        }
+        public ICollection<TValue> Values => _keyedCollection.Select(x => x.Value).ToList();
 
         /// <summary>
         /// Gets the key comparer for this dictionary
@@ -87,38 +70,60 @@ namespace PasPasPas.Infrastructure.Utils {
 
         #region Constructors
 
-        public OrderedDictionary() {
-            Initialize();
-        }
+        /// <summary>
+        /// 
+        /// </summary>
+        public OrderedDictionary() => Initialize();
 
-        public OrderedDictionary(IEqualityComparer<TKey> comparer) {
-            Initialize(comparer);
-        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="comparer"></param>
+        public OrderedDictionary(IEqualityComparer<TKey> comparer)
+            => Initialize(comparer);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dictionary"></param>
         public OrderedDictionary(IOrderedDictionary<TKey, TValue> dictionary) {
             Initialize();
-            foreach (KeyValuePair<TKey, TValue> pair in dictionary) {
+            foreach (var pair in dictionary) {
                 _keyedCollection.Add(pair);
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dictionary"></param>
+        /// <param name="comparer"></param>
         public OrderedDictionary(IOrderedDictionary<TKey, TValue> dictionary, IEqualityComparer<TKey> comparer) {
             Initialize(comparer);
-            foreach (KeyValuePair<TKey, TValue> pair in dictionary) {
+            foreach (var pair in dictionary) {
                 _keyedCollection.Add(pair);
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="items"></param>
         public OrderedDictionary(IEnumerable<KeyValuePair<TKey, TValue>> items) {
             Initialize();
-            foreach (KeyValuePair<TKey, TValue> pair in items) {
+            foreach (var pair in items) {
                 _keyedCollection.Add(pair);
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="items"></param>
+        /// <param name="comparer"></param>
         public OrderedDictionary(IEnumerable<KeyValuePair<TKey, TValue>> items, IEqualityComparer<TKey> comparer) {
             Initialize(comparer);
-            foreach (KeyValuePair<TKey, TValue> pair in items) {
+            foreach (var pair in items) {
                 _keyedCollection.Add(pair);
             }
         }
@@ -142,16 +147,12 @@ namespace PasPasPas.Infrastructure.Utils {
         /// </summary>
         /// <param name="key">The key of the element to add.</param>
         /// <param name="value">The value of the element to add.  The value can be null for reference types.</param>
-        public void Add(TKey key, TValue value) {
-            _keyedCollection.Add(new KeyValuePair<TKey, TValue>(key, value));
-        }
+        public void Add(TKey key, TValue value) => _keyedCollection.Add(new KeyValuePair<TKey, TValue>(key, value));
 
         /// <summary>
         /// Removes all keys and values from this object.
         /// </summary>
-        public void Clear() {
-            _keyedCollection.Clear();
-        }
+        public void Clear() => _keyedCollection.Clear();
 
         /// <summary>
         /// Inserts a new key-value pair at the index specified.
@@ -159,9 +160,7 @@ namespace PasPasPas.Infrastructure.Utils {
         /// <param name="index">The insertion index.  This value must be between 0 and the count of items in this object.</param>
         /// <param name="key">A unique key for the element to add</param>
         /// <param name="value">The value of the element to add.  Can be null for reference types.</param>
-        public void Insert(int index, TKey key, TValue value) {
-            _keyedCollection.Insert(index, new KeyValuePair<TKey, TValue>(key, value));
-        }
+        public void Insert(int index, TKey key, TValue value) => _keyedCollection.Insert(index, new KeyValuePair<TKey, TValue>(key, value));
 
         /// <summary>
         /// Gets the index of the key specified.
@@ -182,9 +181,7 @@ namespace PasPasPas.Infrastructure.Utils {
         /// </summary>
         /// <param name="value">The value to locate in this object.</param>
         /// <returns>True if the value is found.  False otherwise.</returns>
-        public bool ContainsValue(TValue value) {
-            return this.Values.Contains(value);
-        }
+        public bool ContainsValue(TValue value) => this.Values.Contains(value);
 
         /// <summary>
         /// Determines whether this object contains the specified value.
@@ -192,18 +189,14 @@ namespace PasPasPas.Infrastructure.Utils {
         /// <param name="value">The value to locate in this object.</param>
         /// <param name="comparer">The equality comparer used to locate the specified value in this object.</param>
         /// <returns>True if the value is found.  False otherwise.</returns>
-        public bool ContainsValue(TValue value, IEqualityComparer<TValue> comparer) {
-            return this.Values.Contains(value, comparer);
-        }
+        public bool ContainsValue(TValue value, IEqualityComparer<TValue> comparer) => this.Values.Contains(value, comparer);
 
         /// <summary>
         /// Determines whether this object contains the specified key.
         /// </summary>
         /// <param name="key">The key to locate in this object.</param>
         /// <returns>True if the key is found.  False otherwise.</returns>
-        public bool ContainsKey(TKey key) {
-            return _keyedCollection.Contains(key);
-        }
+        public bool ContainsKey(TKey key) => _keyedCollection.Contains(key);
 
         /// <summary>
         /// Returns the KeyValuePair at the index specified.
@@ -238,18 +231,14 @@ namespace PasPasPas.Infrastructure.Utils {
         /// <summary>
         /// Returns an enumerator that iterates through all the KeyValuePairs in this object.
         /// </summary>
-        public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator() {
-            return _keyedCollection.GetEnumerator();
-        }
+        public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator() => _keyedCollection.GetEnumerator();
 
         /// <summary>
         /// Removes the key-value pair for the specified key.
         /// </summary>
         /// <param name="key">The key to remove from the dictionary.</param>
         /// <returns>True if the item specified existed and the removal was successful.  False otherwise.</returns>
-        public bool Remove(TKey key) {
-            return _keyedCollection.Remove(key);
-        }
+        public bool Remove(TKey key) => _keyedCollection.Remove(key);
 
         /// <summary>
         /// Removes the key-value pair at the specified index.
@@ -307,7 +296,7 @@ namespace PasPasPas.Infrastructure.Utils {
                 return true;
             }
             else {
-                value = default(TValue);
+                value = default;
                 return false;
             }
         }
@@ -315,208 +304,147 @@ namespace PasPasPas.Infrastructure.Utils {
         #endregion
 
         #region Sorting
-        public void SortKeys() {
-            _keyedCollection.SortByKeys();
-        }
 
-        public void SortKeys(IComparer<TKey> comparer) {
-            _keyedCollection.SortByKeys(comparer);
-        }
+        /// <summary>
+        /// 
+        /// </summary>
+        public void SortKeys() => _keyedCollection.SortByKeys();
 
-        public void SortKeys(Comparison<TKey> comparison) {
-            _keyedCollection.SortByKeys(comparison);
-        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="comparer"></param>
+        public void SortKeys(IComparer<TKey> comparer) => _keyedCollection.SortByKeys(comparer);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="comparison"></param>
+        public void SortKeys(Comparison<TKey> comparison) => _keyedCollection.SortByKeys(comparison);
+
+        /// <summary>
+        /// 
+        /// </summary>
         public void SortValues() {
             var comparer = Comparer<TValue>.Default;
             SortValues(comparer);
         }
 
-        public void SortValues(IComparer<TValue> comparer) {
-            _keyedCollection.Sort((x, y) => comparer.Compare(x.Value, y.Value));
-        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="comparer"></param>
+        public void SortValues(IComparer<TValue> comparer) => _keyedCollection.Sort((x, y) => comparer.Compare(x.Value, y.Value));
 
-        public void SortValues(Comparison<TValue> comparison) {
-            _keyedCollection.Sort((x, y) => comparison(x.Value, y.Value));
-        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="comparison"></param>
+        public void SortValues(Comparison<TValue> comparison) => _keyedCollection.Sort((x, y) => comparison(x.Value, y.Value));
         #endregion
 
         #region IDictionary<TKey, TValue>
 
-        void IDictionary<TKey, TValue>.Add(TKey key, TValue value) {
-            Add(key, value);
-        }
+        void IDictionary<TKey, TValue>.Add(TKey key, TValue value) => Add(key, value);
 
-        bool IDictionary<TKey, TValue>.ContainsKey(TKey key) {
-            return ContainsKey(key);
-        }
+        bool IDictionary<TKey, TValue>.ContainsKey(TKey key) => ContainsKey(key);
 
-        ICollection<TKey> IDictionary<TKey, TValue>.Keys {
-            get { return Keys; }
-        }
+        ICollection<TKey> IDictionary<TKey, TValue>.Keys => Keys;
 
-        bool IDictionary<TKey, TValue>.Remove(TKey key) {
-            return Remove(key);
-        }
+        bool IDictionary<TKey, TValue>.Remove(TKey key) => Remove(key);
 
-        bool IDictionary<TKey, TValue>.TryGetValue(TKey key, out TValue value) {
-            return TryGetValue(key, out value);
-        }
+        bool IDictionary<TKey, TValue>.TryGetValue(TKey key, out TValue value) => TryGetValue(key, out value);
 
-        ICollection<TValue> IDictionary<TKey, TValue>.Values {
-            get { return Values; }
-        }
+        ICollection<TValue> IDictionary<TKey, TValue>.Values => Values;
 
         TValue IDictionary<TKey, TValue>.this[TKey key] {
-            get {
-                return this[key];
-            }
-            set {
-                this[key] = value;
-            }
+            get => this[key];
+            set => this[key] = value;
         }
 
         #endregion
 
         #region ICollection<KeyValuePair<TKey, TValue>>
 
-        void ICollection<KeyValuePair<TKey, TValue>>.Add(KeyValuePair<TKey, TValue> item) {
-            _keyedCollection.Add(item);
-        }
+        void ICollection<KeyValuePair<TKey, TValue>>.Add(KeyValuePair<TKey, TValue> item) => _keyedCollection.Add(item);
 
-        void ICollection<KeyValuePair<TKey, TValue>>.Clear() {
-            _keyedCollection.Clear();
-        }
+        void ICollection<KeyValuePair<TKey, TValue>>.Clear() => _keyedCollection.Clear();
 
-        bool ICollection<KeyValuePair<TKey, TValue>>.Contains(KeyValuePair<TKey, TValue> item) {
-            return _keyedCollection.Contains(item);
-        }
+        bool ICollection<KeyValuePair<TKey, TValue>>.Contains(KeyValuePair<TKey, TValue> item) => _keyedCollection.Contains(item);
 
-        void ICollection<KeyValuePair<TKey, TValue>>.CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex) {
-            _keyedCollection.CopyTo(array, arrayIndex);
-        }
+        void ICollection<KeyValuePair<TKey, TValue>>.CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex) => _keyedCollection.CopyTo(array, arrayIndex);
 
-        int ICollection<KeyValuePair<TKey, TValue>>.Count {
-            get { return _keyedCollection.Count; }
-        }
+        int ICollection<KeyValuePair<TKey, TValue>>.Count => _keyedCollection.Count;
 
-        bool ICollection<KeyValuePair<TKey, TValue>>.IsReadOnly {
-            get { return false; }
-        }
+        bool ICollection<KeyValuePair<TKey, TValue>>.IsReadOnly => false;
 
-        bool ICollection<KeyValuePair<TKey, TValue>>.Remove(KeyValuePair<TKey, TValue> item) {
-            return _keyedCollection.Remove(item);
-        }
+        bool ICollection<KeyValuePair<TKey, TValue>>.Remove(KeyValuePair<TKey, TValue> item) => _keyedCollection.Remove(item);
 
         #endregion
 
         #region IEnumerable<KeyValuePair<TKey, TValue>>
 
-        IEnumerator<KeyValuePair<TKey, TValue>> IEnumerable<KeyValuePair<TKey, TValue>>.GetEnumerator() {
-            return GetEnumerator();
-        }
+        IEnumerator<KeyValuePair<TKey, TValue>> IEnumerable<KeyValuePair<TKey, TValue>>.GetEnumerator() => GetEnumerator();
 
         #endregion
 
         #region IEnumerable
 
-        IEnumerator IEnumerable.GetEnumerator() {
-            return GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         #endregion
 
         #region IOrderedDictionary
 
-        IDictionaryEnumerator IOrderedDictionary.GetEnumerator() {
-            return new DictionaryEnumerator<TKey, TValue>(this);
-        }
+        IDictionaryEnumerator IOrderedDictionary.GetEnumerator() => new DictionaryEnumerator<TKey, TValue>(this);
 
-        void IOrderedDictionary.Insert(int index, object key, object value) {
-            Insert(index, (TKey)key, (TValue)value);
-        }
+        void IOrderedDictionary.Insert(int index, object key, object value) => Insert(index, (TKey)key, (TValue)value);
 
-        void IOrderedDictionary.RemoveAt(int index) {
-            RemoveAt(index);
-        }
+        void IOrderedDictionary.RemoveAt(int index) => RemoveAt(index);
 
         object IOrderedDictionary.this[int index] {
-            get {
-                return this[index];
-            }
-            set {
-                this[index] = (TValue)value;
-            }
+            get => this[index];
+            set => this[index] = (TValue)value;
         }
 
         #endregion
 
         #region IDictionary
 
-        void IDictionary.Add(object key, object value) {
-            Add((TKey)key, (TValue)value);
-        }
+        void IDictionary.Add(object key, object value) => Add((TKey)key, (TValue)value);
 
-        void IDictionary.Clear() {
-            Clear();
-        }
+        void IDictionary.Clear() => Clear();
 
-        bool IDictionary.Contains(object key) {
-            return _keyedCollection.Contains((TKey)key);
-        }
+        bool IDictionary.Contains(object key) => _keyedCollection.Contains((TKey)key);
 
-        IDictionaryEnumerator IDictionary.GetEnumerator() {
-            return new DictionaryEnumerator<TKey, TValue>(this);
-        }
+        IDictionaryEnumerator IDictionary.GetEnumerator() => new DictionaryEnumerator<TKey, TValue>(this);
 
-        bool IDictionary.IsFixedSize {
-            get { return false; }
-        }
+        bool IDictionary.IsFixedSize => false;
 
-        bool IDictionary.IsReadOnly {
-            get { return false; }
-        }
+        bool IDictionary.IsReadOnly => false;
 
-        ICollection IDictionary.Keys {
-            get { return (ICollection)this.Keys; }
-        }
+        ICollection IDictionary.Keys => (ICollection)this.Keys;
 
-        void IDictionary.Remove(object key) {
-            Remove((TKey)key);
-        }
+        void IDictionary.Remove(object key) => Remove((TKey)key);
 
-        ICollection IDictionary.Values {
-            get { return (ICollection)this.Values; }
-        }
+        ICollection IDictionary.Values => (ICollection)this.Values;
 
         object IDictionary.this[object key] {
-            get {
-                return this[(TKey)key];
-            }
-            set {
-                this[(TKey)key] = (TValue)value;
-            }
+            get => this[(TKey)key];
+            set => this[(TKey)key] = (TValue)value;
         }
 
         #endregion
 
         #region ICollection
 
-        void ICollection.CopyTo(Array array, int index) {
-            ((ICollection)_keyedCollection).CopyTo(array, index);
-        }
+        void ICollection.CopyTo(Array array, int index) => ((ICollection)_keyedCollection).CopyTo(array, index);
 
-        int ICollection.Count {
-            get { return ((ICollection)_keyedCollection).Count; }
-        }
+        int ICollection.Count => ((ICollection)_keyedCollection).Count;
 
-        bool ICollection.IsSynchronized {
-            get { return ((ICollection)_keyedCollection).IsSynchronized; }
-        }
+        bool ICollection.IsSynchronized => ((ICollection)_keyedCollection).IsSynchronized;
 
-        object ICollection.SyncRoot {
-            get { return ((ICollection)_keyedCollection).SyncRoot; }
-        }
+        object ICollection.SyncRoot => ((ICollection)_keyedCollection).SyncRoot;
 
         #endregion
     }

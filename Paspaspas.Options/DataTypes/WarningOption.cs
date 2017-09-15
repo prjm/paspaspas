@@ -70,8 +70,6 @@
         /// <summary>
         ///     reset warning mode
         /// </summary>
-        public override void ResetToDefault() {
-            Mode = WarningMode.Default;
-        }
+        public override void ResetToDefault() => Mode = WarningMode.Default;
     }
 }

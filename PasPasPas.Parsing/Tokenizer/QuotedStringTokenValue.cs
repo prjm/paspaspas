@@ -98,6 +98,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         public override Token Tokenize(TokenizerState state) {
             var found = false;
             var quote = QuoteChar;
+            var resultBuilder = new StringBuilder();
 
             while ((!found) && (!state.AtEof)) {
                 var currentChar = state.NextChar(false);
@@ -112,10 +113,12 @@ namespace PasPasPas.Parsing.Tokenizer {
                     else {
                         state.Append(quote);
                         state.Append(nextChar);
+                        resultBuilder.Append(quote);
                     }
                 }
                 else {
                     state.Append(currentChar);
+                    resultBuilder.Append(currentChar);
                 }
 
             }
@@ -129,7 +132,7 @@ namespace PasPasPas.Parsing.Tokenizer {
             if (!found)
                 state.Error(TokenizerBase.UnexpectedEndOfToken);
 
-            return new Token(TokenId, state);
+            return new Token(TokenId, state.CurrentPosition, state.GetBufferContent().Pool(), resultBuilder.ToString().Pool());
         }
 
     }

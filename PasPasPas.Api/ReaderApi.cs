@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Text;
+using PasPasPas.Infrastructure.Environment;
 using PasPasPas.Infrastructure.Files;
 using PasPasPas.Infrastructure.Input;
 
@@ -41,7 +43,11 @@ namespace PasPasPas.Api {
         public ReaderApi(IFileAccess access) {
             fileAccess = access;
             fileBuffer = new FileBuffer();
+            RegisterStatics();
         }
+
+        private void RegisterStatics()
+            => StaticEnvironment.Register(PoolFactory.StringBuilderPool, () => new ObjectPool<StringBuilder>());
 
 
         /// <summary>

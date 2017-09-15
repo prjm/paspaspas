@@ -46,9 +46,7 @@ namespace PasPasPas.Infrastructure.Log {
         ///     process a message
         /// </summary>
         /// <param name="message">message to process</param>
-        public virtual void HandleMessage(ILogMessage message) {
-            ProcessMessage?.Invoke(this, new LogMessageEvent(message));
-        }
+        public virtual void HandleMessage(ILogMessage message) => ProcessMessage?.Invoke(this, new LogMessageEvent(message));
 
         /// <summary>
         ///     log target was registered at manager
@@ -69,9 +67,7 @@ namespace PasPasPas.Infrastructure.Log {
         /// <summary>
         ///     clear  event handlers
         /// </summary>
-        public void ClearEventHandlers() {
-            ProcessMessage = null;
-        }
+        public void ClearEventHandlers() => ProcessMessage = null;
     }
 
     /// <summary>

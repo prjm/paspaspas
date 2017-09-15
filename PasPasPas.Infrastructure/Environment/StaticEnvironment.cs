@@ -37,7 +37,7 @@ namespace PasPasPas.Infrastructure.Environment {
             => environment.Clear();
 
         /// <summary>
-        ///     register a cached
+        ///     register a cached lookup function
         /// </summary>
         /// <param name="id"></param>
         /// <param name="data"></param>

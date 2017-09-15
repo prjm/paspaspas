@@ -198,52 +198,40 @@ namespace PasPasPas.Options.DataTypes {
         /// </summary>
         /// <param name="mode">emit mode</param>
         /// <param name="emitValue">emit value</param>
-        public void HeaderEmit(HppEmitMode mode, string emitValue) {
-            HeaderStrings.Add(new HeaderString() {
-                Mode = mode,
-                Value = emitValue
-            });
-        }
+        public void HeaderEmit(HppEmitMode mode, string emitValue) => HeaderStrings.Add(new HeaderString() {
+            Mode = mode,
+            Value = emitValue
+        });
 
         /// <summary>
         ///     add a resoure reference
         /// </summary>
         /// <param name="resourceReference"></param>
-        public void AddResourceReference(ResourceReference resourceReference) {
-            ResourceReferences.Add(resourceReference);
-        }
+        public void AddResourceReference(ResourceReference resourceReference) => ResourceReferences.Add(resourceReference);
 
         /// <summary>
         ///     start of region
         /// </summary>
         /// <param name="regionName">optional region AME</param>
-        public void StartRegion(string regionName) {
-            Regions.Push(regionName ?? string.Empty);
-        }
+        public void StartRegion(string regionName) => Regions.Push(regionName ?? string.Empty);
 
         /// <summary>
         ///     end of region
         /// </summary>
-        public void StopRegion() {
-            Regions.Pop();
-        }
+        public void StopRegion() => Regions.Pop();
 
         /// <summary>
         ///     add object file type name
         /// </summary>
         /// <param name="typeName">type name</param>
         /// <param name="aliasName">name wranglin alias</param>
-        public void AddObjectFileTypeName(string typeName, string aliasName) {
-            ObjectFileTypeNames.Add(new ObjectFileTypeName(typeName, aliasName));
-        }
+        public void AddObjectFileTypeName(string typeName, string aliasName) => ObjectFileTypeNames.Add(new ObjectFileTypeName(typeName, aliasName));
 
         /// <summary>
         ///     ignore a unit in header files in cpp
         /// </summary>
         /// <param name="unitName">unit name</param>
-        public void AddNoInclude(string unitName) {
-            NoIncludes.Add(unitName);
-        }
+        public void AddNoInclude(string unitName) => NoIncludes.Add(unitName);
 
         /// <summary>
         ///     add a type name which is excluded from the generated header file
@@ -251,16 +239,12 @@ namespace PasPasPas.Options.DataTypes {
         /// <param name="typeName">type name</param>
         /// <param name="nameInHpp">tpye name used in headers</param>
         /// <param name="typeNameInUnion">type name used in unions</param>
-        public void AddNoDefine(string typeName, string nameInHpp, string typeNameInUnion) {
-            NoDefines.Add(new DoNotDefineInHeader(typeName, nameInHpp, typeNameInUnion));
-        }
+        public void AddNoDefine(string typeName, string nameInHpp, string typeNameInUnion) => NoDefines.Add(new DoNotDefineInHeader(typeName, nameInHpp, typeNameInUnion));
 
         /// <summary>
         ///     a a linked file
         /// </summary>
         /// <param name="linkedFile"></param>
-        public void AddLinkedFile(LinkedFile linkedFile) {
-            LinkedFiles.Add(linkedFile);
-        }
+        public void AddLinkedFile(LinkedFile linkedFile) => LinkedFiles.Add(linkedFile);
     }
 }

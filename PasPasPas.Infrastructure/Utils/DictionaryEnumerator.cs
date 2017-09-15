@@ -5,22 +5,61 @@ using System.Linq;
 
 namespace PasPasPas.Infrastructure.Utils {
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <typeparam name="TKey"></typeparam>
+    /// <typeparam name="TValue"></typeparam>
     public class DictionaryEnumerator<TKey, TValue> : IDictionaryEnumerator, IDisposable {
         readonly IEnumerator<KeyValuePair<TKey, TValue>> _impl;
-        public void Dispose() { _impl.Dispose(); }
-        public DictionaryEnumerator(IDictionary<TKey, TValue> value) {
-            this._impl = value.GetEnumerator();
-        }
-        public void Reset() { _impl.Reset(); }
-        public bool MoveNext() { return _impl.MoveNext(); }
+        /// <summary>
+        /// 
+        /// </summary>
+        public void Dispose() => _impl.Dispose();
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value"></param>
+        public DictionaryEnumerator(IDictionary<TKey, TValue> value) => _impl = value.GetEnumerator();
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public void Reset() => _impl.Reset();
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public bool MoveNext() => _impl.MoveNext();
+
+        /// <summary>
+        /// 
+        /// </summary>
         public DictionaryEntry Entry {
             get {
                 var pair = _impl.Current;
                 return new DictionaryEntry(pair.Key, pair.Value);
             }
         }
-        public object Key { get { return _impl.Current.Key; } }
-        public object Value { get { return _impl.Current.Value; } }
-        public object Current { get { return Entry; } }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public object Key
+            => _impl.Current.Key;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public object Value
+            => _impl.Current.Value;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public object Current
+            => Entry;
     }
 }
