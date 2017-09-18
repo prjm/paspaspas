@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using PasPasPas.Infrastructure.Utils;
+using PasPasPas.Parsing.Tokenizer.CharClass;
+using PasPasPas.Parsing.Tokenizer.TokenGroups;
 
 namespace PasPasPas.Parsing.Tokenizer {
 
@@ -23,11 +25,10 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="template"></param>
         /// <param name="tokenKind"></param>
         public void Add(string template, int tokenKind) {
+            var group = this;
 
             if (string.IsNullOrEmpty(template))
-                throw new ArgumentNullException(nameof(template));
-
-            var group = this;
+                ExceptionHelper.ArgumentIsNull(nameof(template));
 
             for (var index = 0; index < template.Length; index++) {
                 var match = template[index];
@@ -43,7 +44,7 @@ namespace PasPasPas.Parsing.Tokenizer {
                 else if (lastChar) {
                     var tokenValue = group.TokenValue as SimpleTokenGroupValue;
                     if (tokenValue == null || tokenValue.TokenId != TokenKind.Undefined)
-                        throw new InvalidOperationException();
+                        ExceptionHelper.InvalidOperation();
                     else
                         tokenValue.TokenId = tokenKind;
                 }

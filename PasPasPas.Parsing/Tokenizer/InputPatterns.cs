@@ -4,6 +4,9 @@ using System;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Parsing.SyntaxTree;
 using PasPasPas.Infrastructure.Files;
+using PasPasPas.Parsing.Tokenizer.CharClass;
+using PasPasPas.Infrastructure.Utils;
+using PasPasPas.Parsing.Tokenizer.TokenGroups;
 
 namespace PasPasPas.Parsing.Tokenizer {
 
@@ -45,18 +48,18 @@ namespace PasPasPas.Parsing.Tokenizer {
         public InputPattern AddPattern(CharacterClass prefix, PatternContinuation tokenValue) {
 
             if (prefix == null)
-                throw new ArgumentNullException(nameof(prefix));
+                ExceptionHelper.ArgumentIsNull(nameof(prefix));
 
             if (tokenValue == null)
-                throw new ArgumentNullException(nameof(tokenValue));
+                ExceptionHelper.ArgumentIsNull(nameof(tokenValue));
 
             var result = new InputPattern(prefix, tokenValue, string.Empty);
-            var prefixedCharecterClass = prefix as PrefixedCharacterClass;
+            var prefixedCharecterClass = prefix as SingleCharClass;
 
             if (prefixedCharecterClass == null)
                 complexPatterns.Add(new InputPatternAndClass(prefix, result));
             else
-                simplePatterns.Add(prefixedCharecterClass.Prefix, result);
+                simplePatterns.Add(prefixedCharecterClass.Match, result);
 
             return result;
         }
@@ -102,7 +105,8 @@ namespace PasPasPas.Parsing.Tokenizer {
         public Token FetchNextToken(TokenizerState state) {
 
             if (!state.PrepareNextToken()) {
-                return Token.Eof;
+                return Token.Empty;
+                ;
             }
 
             var startValue = state.CurrentCharacter;

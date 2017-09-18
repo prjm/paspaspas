@@ -1,8 +1,9 @@
-﻿namespace PasPasPas.Parsing.Tokenizer {
+﻿namespace PasPasPas.Parsing.Tokenizer.CharClass {
+
     /// <summary>
     ///     character class for a single char
     /// </summary>
-    public class SingleCharClass : PrefixedCharacterClass {
+    public sealed class SingleCharClass : CharacterClass {
 
         private readonly char match;
 
@@ -14,18 +15,18 @@
             => match = forValue;
 
         /// <summary>
-        ///     getsthe single character
-        /// </summary>
-        public override char Prefix
-            => match;
-
-        /// <summary>
         ///     test if the char matches
         /// </summary>
         /// <param name="input">char to test</param>
         /// <returns></returns>
         public override bool Matches(char input) =>
             input == match;
+
+        /// <summary>
+        ///     char to match
+        /// </summary>
+        public char Match
+            => match;
     }
 
 }

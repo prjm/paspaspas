@@ -1,6 +1,6 @@
 ﻿using PasPasPas.Parsing.SyntaxTree;
 
-namespace PasPasPas.Parsing.Tokenizer {
+namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
 
     /// <summary>
     ///     token group which moves the input to eof
@@ -12,7 +12,7 @@ namespace PasPasPas.Parsing.Tokenizer {
             while (!state.AtEof)
                 state.NextChar(true);
 
-            return new Token(TokenKind.Eof, state);
+            return new Token(TokenKind.WhiteSpace, state);
         }
     }
 

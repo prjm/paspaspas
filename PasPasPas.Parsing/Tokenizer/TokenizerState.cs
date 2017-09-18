@@ -81,9 +81,6 @@ namespace PasPasPas.Parsing.Tokenizer {
         public string GetBufferContent()
             => buffer.ToString();
 
-        public bool KeepTokenValue(int tokenId)
-            => tokenizer.KeepTokenValue(tokenId);
-
         public char NextChar(bool append) {
             var result = input.NextChar();
             if (append)

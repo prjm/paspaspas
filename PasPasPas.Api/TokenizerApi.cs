@@ -7,6 +7,7 @@ using PasPasPas.Infrastructure.Environment;
 using PasPasPas.Infrastructure.Files;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Parsing.Tokenizer;
+using PasPasPas.Parsing.Tokenizer.LiteralValues;
 
 namespace PasPasPas.Api {
 
@@ -39,8 +40,8 @@ namespace PasPasPas.Api {
         }
 
         private void RegisterStatics() {
-            StaticEnvironment.Register(Literals.ParsedIntegers, () => new IntegerParser());
-            StaticEnvironment.Register(Literals.ParsedHexNumbers, () => new IntegerParser());
+            StaticEnvironment.Register(Literals.ParsedIntegers, () => new IntegerParser(false));
+            StaticEnvironment.Register(Literals.ParsedHexNumbers, () => new IntegerParser(true));
         }
 
         /// <summary>
@@ -60,7 +61,7 @@ namespace PasPasPas.Api {
         /// <returns></returns>
         private ITokenizer CreateTokenizer(StackedFileReader fileReader)
             => new StandardTokenizer(log, fileReader) {
-                KeepWhitspace = options.KeepWhitespace
+                // ..
             };
 
         /// <summary>

@@ -80,26 +80,6 @@ namespace PasPasPas.Parsing.Tokenizer {
         public void FetchNextToken()
             => currentToken = characterClasses.FetchNextToken(state);
 
-        public char PreviousChar()
-            => Input.PreviousChar();
-
-        /// <summary>
-        ///     keep whitspace literals
-        /// </summary>
-        public bool KeepWhitspace { get; set; }
-            = false;
-
-        /// <summary>
-        ///     check if a token value should be kept
-        /// </summary>
-        /// <param name="tokenId"></param>
-        /// <returns></returns>
-        public bool KeepTokenValue(int tokenId) {
-            if (tokenId == TokenKind.WhiteSpace)
-                return KeepWhitspace;
-            return true;
-        }
-
         /// <summary>
         ///     get the current token
         /// </summary>
@@ -108,7 +88,7 @@ namespace PasPasPas.Parsing.Tokenizer {
             => currentToken;
 
         private Token currentToken
-            = new Token();
+            = Token.Empty;
 
         /// <summary>
         ///     log source

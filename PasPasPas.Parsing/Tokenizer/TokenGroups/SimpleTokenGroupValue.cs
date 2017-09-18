@@ -2,13 +2,12 @@
 using System.Text;
 using PasPasPas.Parsing.SyntaxTree;
 
-namespace PasPasPas.Parsing.Tokenizer {
+namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
 
     /// <summary>
     ///     simple token group value: no more characters
     /// </summary>
     public class SimpleTokenGroupValue : PatternContinuation {
-
 
         /// <summary>
         ///     creates a new simple token without suffix

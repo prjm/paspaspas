@@ -3,7 +3,7 @@ using PasPasPas.Parsing.SyntaxTree;
 using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Infrastructure.Log;
 
-namespace PasPasPas.Parsing.Tokenizer {
+namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
     /// <summary>
     ///     token group value based on a sequence
     /// </summary>

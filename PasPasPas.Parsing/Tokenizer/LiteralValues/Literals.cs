@@ -1,7 +1,8 @@
 ﻿using System;
 using PasPasPas.Infrastructure.Environment;
+using PasPasPas.Infrastructure.Utils;
 
-namespace PasPasPas.Parsing.Tokenizer {
+namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
 
     /// <summary>
     ///     helper to parse literals
@@ -33,10 +34,26 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="value">hex number literal</param>
         /// <returns>parsed literal</returns>
         public static object ParseHexNumberLiteral(string value) {
-            var parser = StaticEnvironment.Require<IHexNumberParser>(ParsedIntegers);
+            var parser = StaticEnvironment.Require<IHexNumberParser>(ParsedHexNumbers);
             return parser.ParseHexNumber(value);
         }
 
+        /// <summary>
+        ///     parser an integer or hex numeric literal
+        /// </summary>
+        /// <param name="value">value to parse</param>
+        /// <param name="valueParser">parser id</param>
+        /// <returns></returns>
+        public static object NumberLiteral(string value, Guid valueParser) {
 
+            if (valueParser == ParsedHexNumbers)
+                return ParseHexNumberLiteral(value);
+
+            if (valueParser == ParsedIntegers)
+                return ParseIntegerLiteral(value);
+
+            ExceptionHelper.InvalidOperation();
+            return null;
+        }
     }
 }

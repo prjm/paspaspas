@@ -28,13 +28,14 @@ namespace PasPasPas.Infrastructure.Files {
         ///     <c>true</c> if the end of read file is reached (EOF)
         /// </summary>
         public bool AtEof
-            => offset >= length;
+            => offset >= length - 1;
 
         /// <summary>
         ///     fetch the next char
         /// </summary>
         public char NextChar() {
-            if (offset >= length) return '\0';
+            if (offset >= length)
+                return '\0';
             offset++;
             return Value;
         }
@@ -50,7 +51,8 @@ namespace PasPasPas.Infrastructure.Files {
         /// </summary>
         public char Value {
             get {
-                if (offset < 0 || offset >= length) return '\0';
+                if (offset < 0 || offset >= length)
+                    return '\0';
                 return input.CharAt(offset);
             }
         }
@@ -59,7 +61,8 @@ namespace PasPasPas.Infrastructure.Files {
         ///     navigate to the previous char
         /// </summary>
         public char PreviousChar() {
-            if (offset < 0) return '\0';
+            if (offset < 0)
+                return '\0';
             offset--;
             return Value;
         }

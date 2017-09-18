@@ -17,12 +17,6 @@ namespace PasPasPas.Parsing.SyntaxTree {
         public static readonly Token Empty
             = new Token();
 
-        /// <summary>
-        ///     empty token
-        /// </summary>
-        public static readonly Token Eof
-            = new Token(TokenKind.Eof, -1, string.Empty);
-
 
         /// <summary>
         ///     Token value

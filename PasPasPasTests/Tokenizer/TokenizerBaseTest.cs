@@ -7,6 +7,9 @@ using PasPasPas.Parsing.SyntaxTree;
 using Xunit;
 using PasPasPas.Infrastructure.Files;
 using PasPasPas.DesktopPlatform;
+using PasPasPas.Parsing.Tokenizer.CharClass;
+using PasPasPas.Parsing.Tokenizer.TokenGroups;
+using PasPasPas.Parsing.Tokenizer.LiteralValues;
 
 namespace PasPasPasTests.Tokenizer {
 
@@ -278,7 +281,7 @@ namespace PasPasPasTests.Tokenizer {
         public void TestHexNumberTokenValue() {
             var patterns = new InputPatterns();
             patterns.AddPattern('a', PatternA);
-            patterns.AddPattern('$', new HexNumberTokenValue());
+            patterns.AddPattern('$', new CharacterClassTokenGroupValue(TokenKind.HexNumber, new DigitCharClass(true), 2, Literals.ParsedHexNumbers, StandardTokenizer.IncompleteHexNumber));
             TestPattern(patterns, StandardTokenizer.IncompleteHexNumber, "$", TokenKind.HexNumber);
             TestPattern(patterns, "$1234567890", TokenKind.HexNumber);
             TestPattern(patterns, "$ABCDEF", TokenKind.HexNumber);

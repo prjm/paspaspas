@@ -1,4 +1,4 @@
-﻿namespace PasPasPas.Parsing.Tokenizer {
+﻿namespace PasPasPas.Parsing.Tokenizer.CharClass {
 
     /// <summary>
     ///     character class to match <c>e</c> or <c>E</c> for exponents
@@ -13,6 +13,7 @@
         public override bool Matches(char input) =>
             input == 'E' ||
             input == 'e';
+
     }
 
 }

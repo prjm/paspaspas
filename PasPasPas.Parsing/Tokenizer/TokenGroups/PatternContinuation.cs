@@ -1,6 +1,6 @@
 ﻿using PasPasPas.Parsing.SyntaxTree;
 
-namespace PasPasPas.Parsing.Tokenizer {
+namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
 
     /// <summary>
     ///     a pattern continination is used as a base class to parse some type of token

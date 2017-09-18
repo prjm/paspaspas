@@ -1,4 +1,4 @@
-﻿namespace PasPasPas.Parsing.Tokenizer {
+﻿namespace PasPasPas.Parsing.Tokenizer.CharClass {
 
     /// <summary>
     ///     matches old control characters

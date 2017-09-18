@@ -1,85 +1,22 @@
-﻿using System.Text;
+﻿using PasPasPas.Infrastructure.Environment;
 using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree;
 
-namespace PasPasPas.Parsing.Tokenizer {
-    /*
-
-
-            /// <summary>
-            ///     base class for string literal based token values
-            /// </summary>
-            public abstract class StringBasedTokenValue : PatternContinuation {
-
-                private StringBuilder parsedString = new StringBuilder();
-
-                /// <summary>
-                ///     create a literal result token
-                /// </summary>
-                /// <param name="path">token path</param>
-                /// <returns></returns>
-                protected override Token CreateResult(IFileReference path) {
-                    ResetParsedString();
-                    return Token.Empty;
-                    //return new StringLiteralToken() {
-                    //FilePath = path
-                    //};
-                }
-
-                /// <summary>
-                ///     reset the parsed string
-                /// </summary>
-                protected void ResetParsedString() {
-                    parsedString.Clear();
-                }
-
-                /// <summary>
-                ///     append char to buffer
-                /// </summary>
-                /// <param name="charToAppend"></param>
-                protected void AppendToBuffer(char charToAppend) {
-                    parsedString.Append(charToAppend);
-                }
-
-                /// <summary>
-                ///     append string to buffer
-                /// </summary>
-                /// <param name="stringToAppend"></param>
-                protected void AppendToBuffer(string stringToAppend) {
-                    parsedString.Append(stringToAppend);
-                }
-
-                /// <summary>
-                ///     finish result
-                /// </summary>
-                /// <param name="state"></param>
-                /// <param name="tokenKind"></param>
-                protected void FinishResult(ContinuationState state, int tokenKind) {
-                    var literal = ((Token)state.Result);
-
-                    /*
-
-                    if (literal.LiteralValue == null)
-                        literal.LiteralValue = parsedString.ToString();
-                    else
-                        literal.LiteralValue = literal.LiteralValue + parsedString.ToString();
-
-
-
-                    parsedString.Clear();
-                    state.Finish(tokenKind);
-                }
-
-            }
-            */
+namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
 
     /// <summary>
     ///     token group for quoted strings
     /// </summary>
     public class QuotedStringTokenValue : PatternContinuation {
 
+        /// <summary>
+        ///     quote char
+        /// </summary>
         public char QuoteChar { get; private set; }
 
+        /// <summary>
+        ///     token id
+        /// </summary>
         public int TokenId { get; private set; }
 
         /// <summary>
@@ -98,43 +35,43 @@ namespace PasPasPas.Parsing.Tokenizer {
         public override Token Tokenize(TokenizerState state) {
             var found = false;
             var quote = QuoteChar;
-            var resultBuilder = new StringBuilder();
+            using (var resultBuilder = PoolFactory.FetchStringBuilder()) {
 
-            while ((!found) && (!state.AtEof)) {
-                var currentChar = state.NextChar(false);
+                while ((!found) && (!state.AtEof)) {
+                    var currentChar = state.NextChar(false);
 
-                if (currentChar == quote) {
-                    var nextChar = state.NextChar(false);
-                    found = nextChar != quote;
+                    if (currentChar == quote) {
+                        var nextChar = state.NextChar(false);
+                        found = nextChar != quote;
 
-                    if (found) {
-                        state.Append(quote);
+                        if (found) {
+                            state.Append(quote);
+                        }
+                        else {
+                            state.Append(quote);
+                            state.Append(nextChar);
+                            resultBuilder.Data.Append(quote);
+                        }
                     }
                     else {
-                        state.Append(quote);
-                        state.Append(nextChar);
-                        resultBuilder.Append(quote);
+                        state.Append(currentChar);
+                        resultBuilder.Data.Append(currentChar);
                     }
-                }
-                else {
-                    state.Append(currentChar);
-                    resultBuilder.Append(currentChar);
+
                 }
 
+                if (!found) {
+                    state.Error(TokenizerBase.UnexpectedEndOfToken);
+                }
+
+                found = state.BufferEndsWith(QuoteChar);
+
+                if (!found)
+                    state.Error(TokenizerBase.UnexpectedEndOfToken);
+
+                return new Token(TokenId, state.CurrentPosition, state.GetBufferContent().Pool(), resultBuilder.Data.ToString().Pool());
             }
-
-            if (!found) {
-                state.Error(TokenizerBase.UnexpectedEndOfToken);
-            }
-
-            found = state.BufferEndsWith(QuoteChar);
-
-            if (!found)
-                state.Error(TokenizerBase.UnexpectedEndOfToken);
-
-            return new Token(TokenId, state.CurrentPosition, state.GetBufferContent().Pool(), resultBuilder.ToString().Pool());
         }
-
     }
 
     /*

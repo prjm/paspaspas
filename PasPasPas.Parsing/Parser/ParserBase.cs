@@ -401,7 +401,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <returns></returns>
         protected bool HasTokenBeforeToken(int tokenToSearch, params int[] tokenToStop) {
             var lookahead = 1;
-            var stopArray = tokenToStop.Concat(new[] { TokenKind.Eof, TokenKind.Undefined }).ToArray();
+            var stopArray = tokenToStop.Concat(new[] { TokenKind.Undefined }).ToArray();
             while (!LookAhead(lookahead, stopArray)) {
                 if (LookAhead(lookahead, tokenToSearch))
                     return true;
@@ -419,7 +419,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <returns></returns>
         protected Tuple<bool, int> HasTokenUntilToken(int[] tokenToStop, params int[] allowedTokens) {
             var lookahead = 1;
-            var stopArray = new[] { TokenKind.Eof, TokenKind.Undefined };
+            var stopArray = new[] { TokenKind.Undefined };
 
             while (!LookAhead(lookahead, tokenToStop) && !LookAhead(lookahead, stopArray)) {
                 if (!LookAhead(lookahead, allowedTokens))

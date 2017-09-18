@@ -1,9 +1,9 @@
-﻿namespace PasPasPas.Parsing.Tokenizer {
+﻿namespace PasPasPas.Parsing.Tokenizer.CharClass {
 
     /// <summary>
     ///     character class to match whitespace chars
     /// </summary>
-    public class WhiteSpaceCharacterClass : CharacterClass {
+    public sealed class WhiteSpaceCharacterClass : CharacterClass {
 
         /// <summary>
         ///     test if a given character is an ascii whitespace

@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using PasPasPas.Parsing.SyntaxTree;
+using PasPasPas.Parsing.Tokenizer.CharClass;
 
-namespace PasPasPas.Parsing.Tokenizer {
+namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
     /// <summary>
     ///     token group for identifiers
     /// </summary>
@@ -21,24 +22,24 @@ namespace PasPasPas.Parsing.Tokenizer {
         ///     allow dots in identifiers
         /// </summary>
         public bool AllowDots {
-            get { return identifierCharClass.AllowDots; }
-            set { identifierCharClass.AllowDots = value; }
+            get => identifierCharClass.AllowDots;
+            set => identifierCharClass.AllowDots = value;
         }
 
         /// <summary>
         ///     allow digits in identifiers
         /// </summary>
         public bool AllowDigits {
-            get { return identifierCharClass.AllowDigits; }
-            set { identifierCharClass.AllowDigits = value; }
+            get => identifierCharClass.AllowDigits;
+            set => identifierCharClass.AllowDigits = value;
         }
 
         /// <summary>
         ///     allow ampersand in identifiers
         /// </summary>
         public bool AllowAmpersand {
-            get { return identifierCharClass.AllowAmpersand; }
-            set { identifierCharClass.AllowAmpersand = value; }
+            get => identifierCharClass.AllowAmpersand;
+            set => identifierCharClass.AllowAmpersand = value;
         }
 
         private readonly IDictionary<string, int> knownKeywords;
@@ -47,13 +48,8 @@ namespace PasPasPas.Parsing.Tokenizer {
         ///     create a new token group for ids and keywords
         /// </summary>
         /// <param name="keywords"></param>
-        public IdentifierTokenGroupValue(IDictionary<string, int> keywords) {
-
-            if (keywords == null)
-                throw new ArgumentNullException(nameof(keywords));
-
-            knownKeywords = keywords;
-        }
+        public IdentifierTokenGroupValue(IDictionary<string, int> keywords)
+            => knownKeywords = keywords ?? throw new ArgumentNullException(nameof(keywords));
 
         /// <summary>
         ///     parse the complete token
@@ -73,14 +69,12 @@ namespace PasPasPas.Parsing.Tokenizer {
                 state.Append(currentChar);
             }
 
-            int tokenKind;
-
             if (hasAmpersand && state.Length < 2)
                 state.Error(StandardTokenizer.IncompleteIdentifier);
 
             var value = state.GetBufferContent();
 
-            if ((!ignoreKeywords) && (knownKeywords.TryGetValue(value, out tokenKind)))
+            if ((!ignoreKeywords) && (knownKeywords.TryGetValue(value, out var tokenKind)))
                 return new Token(tokenKind, state);
             else
                 return new Token(TokenKind.Identifier, state);

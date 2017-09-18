@@ -364,7 +364,7 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             if (Match(TokenKind.Deprecated, TokenKind.Library, TokenKind.Experimental, TokenKind.Platform)) {
-                HintingInformation result = ParseHint(parent);
+                var result = ParseHint(parent);
                 ContinueWithOrMissing(result, TokenKind.Semicolon);
                 return result;
             }
@@ -573,7 +573,7 @@ namespace PasPasPas.Parsing.Parser {
                 ContinueWithOrMissing(result, TokenKind.Colon);
             }
 
-            StatementPart part = ParseStatementPart(result);
+            var part = ParseStatementPart(result);
 
             if (label != null && part == null) {
                 Unexpected();
@@ -1503,7 +1503,7 @@ namespace PasPasPas.Parsing.Parser {
                         HasTokenBeforeToken(TokenKind.Dot, TokenKind.OpenParen, TokenKind.Colon, TokenKind.Semicolon, TokenKind.Begin, TokenKind.End, TokenKind.Comma));
 
                     if (useMethodDeclaration) {
-                        MethodDeclaration methodDecl = ParseMethodDecl(result);
+                        var methodDecl = ParseMethodDecl(result);
                         methodDecl.Class = useClass;
                         methodDecl.Attributes = attrs;
                         continue;
@@ -1586,7 +1586,7 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             if (Match(TokenKind.Deprecated, TokenKind.Library, TokenKind.Experimental, TokenKind.Platform)) {
-                HintingInformation result = ParseHint(parent);
+                var result = ParseHint(parent);
                 ContinueWithOrMissing(result, TokenKind.Semicolon);
                 return result;
             }
@@ -2053,7 +2053,7 @@ namespace PasPasPas.Parsing.Parser {
                     result.GenericPart = ParseGenericSuffix(result);
                 }
                 else if (LookAheadIdentifier(1, new[] { TokenKind.String, TokenKind.ShortString, TokenKind.WideString, TokenKind.UnicodeString, TokenKind.AnsiString, TokenKind.Pointer }, false)) {
-                    Tuple<bool, int> whereCloseBrackets = HasTokenUntilToken(new[] { TokenKind.AngleBracketsClose }, TokenKind.Identifier, TokenKind.Dot, TokenKind.Comma, TokenKind.AngleBracketsOpen, TokenKind.String, TokenKind.ShortString, TokenKind.WideString, TokenKind.UnicodeString, TokenKind.AnsiString, TokenKind.Pointer);
+                    var whereCloseBrackets = HasTokenUntilToken(new[] { TokenKind.AngleBracketsClose }, TokenKind.Identifier, TokenKind.Dot, TokenKind.Comma, TokenKind.AngleBracketsOpen, TokenKind.String, TokenKind.ShortString, TokenKind.WideString, TokenKind.UnicodeString, TokenKind.AnsiString, TokenKind.Pointer);
                     if (whereCloseBrackets.Item1 && (!LookAheadIdentifier(1 + whereCloseBrackets.Item2, new[] { TokenKind.HexNumber, TokenKind.Integer, TokenKind.Real }, false) || LookAhead(1 + whereCloseBrackets.Item2, TokenKind.Read, TokenKind.Write, TokenKind.ReadOnly, TokenKind.WriteOnly, TokenKind.Add, TokenKind.Remove, TokenKind.DispId))) {
                         result.GenericPart = ParseGenericSuffix(result);
                     }
@@ -2339,7 +2339,7 @@ namespace PasPasPas.Parsing.Parser {
             var result = new RecordItems();
             parent.Add(result);
 
-            RecordDeclarationMode mode = RecordDeclarationMode.Fields;
+            var mode = RecordDeclarationMode.Fields;
 
             while ((!Match(TokenKind.End)) && (mode != RecordDeclarationMode.Undefined)) {
                 ParseRecordItem(result, ref mode);
@@ -2454,7 +2454,7 @@ namespace PasPasPas.Parsing.Parser {
             result.TypeDeclaration = ParseTypeSpecification(result);
             ContinueWithOrMissing(result, TokenKind.Of);
 
-            while (!Match(TokenKind.Undefined, TokenKind.Eof, TokenKind.End)) {
+            while (!Match(TokenKind.Undefined, TokenKind.End)) {
                 ParseRecordVariant(result);
             }
 
@@ -2532,9 +2532,9 @@ namespace PasPasPas.Parsing.Parser {
         private RecordHelperItems ParseRecordHelperItems(IExtendableSyntaxPart parent) {
             var result = new RecordHelperItems();
             parent.Add(result);
-            RecordDeclarationMode mode = RecordDeclarationMode.Fields;
+            var mode = RecordDeclarationMode.Fields;
 
-            while ((!Match(TokenKind.End, TokenKind.Undefined, TokenKind.Eof)) && (mode != RecordDeclarationMode.Undefined)) {
+            while ((!Match(TokenKind.End, TokenKind.Undefined)) && (mode != RecordDeclarationMode.Undefined)) {
                 ParseRecordHelperItem(result, ref mode);
                 if (mode == RecordDeclarationMode.Undefined) {
                     Unexpected();
@@ -2638,7 +2638,7 @@ namespace PasPasPas.Parsing.Parser {
         private ObjectItems ParseObjectItems(IExtendableSyntaxPart parent) {
             var result = new ObjectItems();
             parent.Add(result);
-            ClassDeclarationMode mode = ClassDeclarationMode.Fields;
+            var mode = ClassDeclarationMode.Fields;
 
             while ((!Match(TokenKind.End)) && (mode != ClassDeclarationMode.Undefined)) {
                 ParseObjectItem(result, ref mode);
@@ -2810,9 +2810,9 @@ namespace PasPasPas.Parsing.Parser {
             var result = new ClassHelperItems();
             parent.Add(result);
 
-            ClassDeclarationMode mode = ClassDeclarationMode.Fields;
+            var mode = ClassDeclarationMode.Fields;
 
-            while (!Match(TokenKind.End, TokenKind.Undefined, TokenKind.Eof) && (mode != ClassDeclarationMode.Undefined)) {
+            while (!Match(TokenKind.End, TokenKind.Undefined) && (mode != ClassDeclarationMode.Undefined)) {
                 ParseClassHelperItem(result, ref mode);
                 if (mode == ClassDeclarationMode.Undefined) {
                     Unexpected();
@@ -2926,7 +2926,7 @@ namespace PasPasPas.Parsing.Parser {
             var result = new ClassDeclarationItems();
             parent.Add(result);
 
-            ClassDeclarationMode mode = ClassDeclarationMode.Fields;
+            var mode = ClassDeclarationMode.Fields;
 
             while ((!Match(TokenKind.End)) && (mode != ClassDeclarationMode.Undefined)) {
                 ParseClassDeclarationItem(result, ref mode);
@@ -3955,7 +3955,7 @@ namespace PasPasPas.Parsing.Parser {
 
                 if (Match(TokenKind.AngleBracketsOpen) &&
                     LookAheadIdentifier(1, new[] { TokenKind.String, TokenKind.ShortString, TokenKind.WideString, TokenKind.UnicodeString, TokenKind.AnsiString, TokenKind.Pointer }, false)) {
-                    Tuple<bool, int> whereCloseBrackets = HasTokenUntilToken(new[] { TokenKind.AngleBracketsClose }, TokenKind.Identifier, TokenKind.Dot, TokenKind.Comma, TokenKind.AngleBracketsOpen, TokenKind.String, TokenKind.ShortString, TokenKind.WideString, TokenKind.UnicodeString, TokenKind.AnsiString, TokenKind.Pointer);
+                    var whereCloseBrackets = HasTokenUntilToken(new[] { TokenKind.AngleBracketsClose }, TokenKind.Identifier, TokenKind.Dot, TokenKind.Comma, TokenKind.AngleBracketsOpen, TokenKind.String, TokenKind.ShortString, TokenKind.WideString, TokenKind.UnicodeString, TokenKind.AnsiString, TokenKind.Pointer);
                     if (whereCloseBrackets.Item1 && (!LookAheadIdentifier(1 + whereCloseBrackets.Item2, new[] { TokenKind.HexNumber, TokenKind.Integer, TokenKind.Real }, false) || LookAhead(1 + whereCloseBrackets.Item2, TokenKind.Read, TokenKind.Write, TokenKind.ReadOnly, TokenKind.WriteOnly, TokenKind.Add, TokenKind.Remove, TokenKind.DispId))) {
                         result.SubitemGenericType = ParseGenericSuffix(result);
                     }
@@ -3973,10 +3973,10 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             if (Match(TokenKind.OpenParen)) {
-                DesignatorItem prevDesignatorItem = parent.PartList.Count > 0 ? parent.PartList[parent.PartList.Count - 1] as DesignatorItem : null;
+                var prevDesignatorItem = parent.PartList.Count > 0 ? parent.PartList[parent.PartList.Count - 1] as DesignatorItem : null;
                 if (!hasIdentifier && ((prevDesignatorItem == null) || (prevDesignatorItem.Subitem == null))) {
                     ContinueWithOrMissing(parent, TokenKind.OpenParen);
-                    ConstantExpression children = ParseConstantExpression(parent, true);
+                    var children = ParseConstantExpression(parent, true);
                     ContinueWithOrMissing(parent, TokenKind.CloseParen);
                     return children;
                 }
@@ -4121,7 +4121,7 @@ namespace PasPasPas.Parsing.Parser {
                 return result;
             };
 
-            Token token = CurrentToken();
+            var token = CurrentToken();
 
             if (allowReserverdWords || !reservedWords.Contains(token.Kind)) {
                 var result = new Identifier();
@@ -4192,7 +4192,7 @@ return true;
             if (LookAhead(lookAhead, TokenKind.Identifier))
                 return true;
 
-            Token token = Tokenizer.LookAhead(lookAhead);
+            var token = Tokenizer.LookAhead(lookAhead);
 
             if (!allowReservedWords && reservedWords.Contains(token.Kind))
                 return false;

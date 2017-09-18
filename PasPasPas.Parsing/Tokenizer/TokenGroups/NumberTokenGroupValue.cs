@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using PasPasPas.Infrastructure.Environment;
+﻿using System.Collections.Generic;
 using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree;
+using PasPasPas.Parsing.Tokenizer.CharClass;
+using PasPasPas.Parsing.Tokenizer.LiteralValues;
 
-namespace PasPasPas.Parsing.Tokenizer {
+namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
 
     /// <summary>
     ///     token group for numbers

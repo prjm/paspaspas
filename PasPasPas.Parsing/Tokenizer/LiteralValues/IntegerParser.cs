@@ -1,15 +1,14 @@
 ﻿using System;
 using PasPasPas.Infrastructure.Environment;
 
-namespace PasPasPas.Parsing.Tokenizer {
+namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
 
     /// <summary>
     ///     simple integer parser
     /// </summary>
     public sealed class IntegerParser : IIntegerParser, IHexNumberParser, ILookupFunction<string, object> {
 
-        private LookupTable<string, object> data
-            = new LookupTable<string, object>(new Func<string, object>(DoParse), true);
+        private readonly LookupTable<string, object> data;
 
         public LookupTable<string, object> Table
             => data;
@@ -121,27 +120,29 @@ namespace PasPasPas.Parsing.Tokenizer {
             10000000000000000000
         };
 
+        private readonly bool allowHex;
+
+        public IntegerParser(bool allowHexNumbers) {
+            allowHex = allowHexNumbers;
+            data = new LookupTable<string, object>(new Func<string, object>(DoParse), true);
+        }
+
         /// <summary>
         ///     parse a string
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        private static object DoParse(string input) {
+        private object DoParse(string input) {
             ulong result = 0;
             ulong newresult;
 
             if (input.Length < 1)
                 return InvalidIntegerLiteral;
 
-            var hex = input[0] == '$';
-
-            if (hex)
-                input = input.Substring(1);
-
             for (var i = 0; i < input.Length; i++) {
-                var value = GetValueOfChar(input[input.Length - 1 - i], hex);
+                var value = GetValueOfChar(input[input.Length - 1 - i], allowHex);
 
-                if (i > 19 || (hex && i > 16)) {
+                if (i > 19 || (allowHex && i > 16)) {
                     return IntegerOverflowInLiteral;
                 }
 
@@ -149,7 +150,7 @@ namespace PasPasPas.Parsing.Tokenizer {
                     return InvalidIntegerLiteral;
                 }
 
-                if (hex)
+                if (allowHex)
                     newresult = result + (value * hexFactors[i]);
                 else
                     newresult = result + (value * factors[i]);

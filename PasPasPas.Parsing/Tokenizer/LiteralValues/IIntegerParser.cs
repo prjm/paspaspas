@@ -1,4 +1,4 @@
-﻿namespace PasPasPas.Parsing.Tokenizer {
+﻿namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
 
     /// <summary>
     ///     simple integer parser

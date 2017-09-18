@@ -1,9 +1,9 @@
-﻿namespace PasPasPas.Parsing.Tokenizer {
+﻿namespace PasPasPas.Parsing.Tokenizer.CharClass {
 
     /// <summary>
     ///     character class for numbers
     /// </summary>
-    public class DigitCharClass : CharacterClass {
+    public sealed class DigitCharClass : CharacterClass {
 
         private readonly bool allowHexChars;
 
