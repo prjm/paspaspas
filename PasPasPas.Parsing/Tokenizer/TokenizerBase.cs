@@ -77,8 +77,14 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <summary>
         ///     fetch the next token
         /// </summary>
-        public void FetchNextToken()
-            => currentToken = characterClasses.FetchNextToken(state);
+        public void FetchNextToken() {
+            currentToken = characterClasses.FetchNextToken(state);
+            var file = Input.CurrentFile;
+            if (file != null && file.AtEof && (currentToken.Value.Length < 1 || currentToken.Value.LastCharOrDefault() == Input.Value)) {
+                while (file != null && file.AtEof)
+                    file = Input.FinishCurrentFile();
+            }
+        }
 
         /// <summary>
         ///     get the current token

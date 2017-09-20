@@ -20,7 +20,6 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
         public CharacterClassTokenGroupValue(int tokenId, CharacterClass charClass, int minLength = 0)
             : this(tokenId, charClass, minLength, Guid.Empty, Guid.Empty) { }
 
-
         /// <summary>
         ///     create a new character class token group value
         /// </summary>
@@ -61,47 +60,33 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
             = Guid.Empty;
 
         /// <summary>
-        ///     test if a character matches the given class
-        /// </summary>
-        /// <param name="input">char to test</param>
-        /// <returns></returns>
-        private bool MatchesClass(char input)
-            => CharClass.Matches(input);
-
-        /// <summary>
         ///     parse the complete token for a character class
         /// </summary>
         public override Token Tokenize(TokenizerState state) {
-            using (var parsedValue = ValueParser != Guid.Empty ? PoolFactory.FetchStringBuilder() : null) {
+            var parseValue = ValueParser != Guid.Empty;
+
+            using (var parsedValue = parseValue ? PoolFactory.FetchStringBuilder() : null) {
 
                 if (!state.AtEof) {
                     var currentChar = state.NextChar(false);
-                    while (MatchesClass(currentChar)) {
+                    while (CharClass.Matches(currentChar)) {
                         state.Append(currentChar);
-
-                        if (parsedValue != null)
-                            parsedValue.Data.Append(currentChar);
+                        parsedValue?.Data.Append(currentChar);
 
                         if (state.AtEof)
                             break;
                         else
                             currentChar = state.NextChar(false);
                     }
-
-                    if (MatchesClass(currentChar)) {
-                        state.Append(currentChar);
-                        if (parsedValue != null)
-                            parsedValue.Data.Append(currentChar);
-                    }
                 }
 
                 if (MinLength > 0 && state.Length < MinLength)
                     state.Error(MinLengthMessage);
 
-                if (ValueParser != Guid.Empty) {
-                    var value = parsedValue.Data.ToString().Pool();
+                if (parseValue) {
+                    var value = parsedValue.Data.ToString().PoolString();
                     var parsed = Literals.NumberLiteral(value, ValueParser);
-                    return new Token(TokenId, state.CurrentPosition, state.GetBufferContent(), parsed);
+                    return new Token(TokenId, state, parsed);
                 }
                 else
                     return new Token(TokenId, state);

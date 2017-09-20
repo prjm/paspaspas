@@ -23,7 +23,7 @@ namespace PasPasPas.DesktopPlatform {
             if (string.IsNullOrWhiteSpace(path))
                 ExceptionHelper.StringEmpty(nameof(path));
 
-            filePath = path.Pool();
+            filePath = path.PoolString();
             hashcode = filePath.ToUpperInvariant().GetHashCode();
         }
 

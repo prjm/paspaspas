@@ -10,7 +10,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
     /// <summary>
     ///     token group for strings
     /// </summary>
-    public class StringGroupTokenValue : PatternContinuation {
+    public sealed class StringGroupTokenValue : PatternContinuation {
 
         private QuotedStringTokenValue quotedString
             = new QuotedStringTokenValue(TokenKind.QuotedString, '\'');
@@ -44,7 +44,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
                             if (controlChar.Kind != TokenKind.HexNumber)
                                 state.Error(TokenizerBase.UnexpectedCharacter);
                             else
-                                resultBuilder.Data.Append(Convert.ToChar(controlChar.ParsedValue));
+                                resultBuilder.Data.Append(Literals.ConvertCharLiteral(controlChar.ParsedValue));
                         }
                         else {
                             state.PreviousChar();
@@ -52,7 +52,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
                             if (controlChar.Kind != TokenKind.Integer)
                                 state.Error(TokenizerBase.UnexpectedCharacter);
                             else
-                                resultBuilder.Data.Append(Convert.ToChar(controlChar.ParsedValue));
+                                resultBuilder.Data.Append(Literals.ConvertCharLiteral(controlChar.ParsedValue));
                         }
                     }
                     else if (currentChar == '\'') {
@@ -65,9 +65,9 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
                     }
                 }
 
-                var value = state.GetBufferContent().Pool();
-                var data = resultBuilder.Data.ToString().Pool();
-                return new Token(TokenKind.QuotedString, state.CurrentPosition, value, data);
+                var value = state.GetBufferContent();
+                var data = resultBuilder.Data.ToString().PoolString();
+                return new Token(TokenKind.QuotedString, state, data);
             }
         }
     }

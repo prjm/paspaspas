@@ -33,7 +33,8 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
         ///     create a simple token
         /// </summary>
         public override Token Tokenize(TokenizerState state) {
-            state.NextChar(false);
+            if (!state.AtEof)
+                state.NextChar(false);
             return new Token(TokenId, state);
         }
 

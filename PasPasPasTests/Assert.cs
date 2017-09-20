@@ -40,6 +40,9 @@ namespace PasPasPasTests {
         public static void AreEqual(object expected, object actual, string message = "")
             => A.Equal(expected, actual);
 
+        public static void AreEqual(double expected, double actual, string message = "")
+                    => A.Equal(expected, actual, 10);
+
         public static void IsTrue(bool o)
             => A.True(o);
 

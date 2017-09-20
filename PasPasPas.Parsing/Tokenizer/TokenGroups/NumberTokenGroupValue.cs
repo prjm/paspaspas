@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using PasPasPas.Infrastructure.Environment;
 using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree;
 using PasPasPas.Parsing.Tokenizer.CharClass;
@@ -12,7 +14,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
     public sealed class NumberTokenGroupValue : PatternContinuation {
 
         private CharacterClassTokenGroupValue digitTokenizer
-            = new CharacterClassTokenGroupValue(TokenKind.Integer, new DigitCharClass(false));
+            = new CharacterClassTokenGroupValue(TokenKind.Integer, new DigitCharClass(false), 0, Literals.ParsedIntegers, Guid.Empty);
 
         private SingleCharClass dot
             = new SingleCharClass('.');
@@ -42,9 +44,6 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
         /// <param name="charClass"></param>
         /// <returns>character class to match</returns>
         private static bool CurrentCharMatches(TokenizerState state, CharacterClass charClass) {
-            if (state.AtEof)
-                return false;
-
             var currentChar = state.CurrentCharacter;
 
             if (charClass.Matches(currentChar)) {
@@ -60,26 +59,32 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
             var withExponent = false;
 
             if (state.AtEof) {
-                return new Token(TokenKind.Integer, state);
+                var number = Literals.ParseIntegerLiteral(state.GetBufferContent());
+                return new Token(TokenKind.Integer, state, number);
             }
-            else {
-                digitTokenizer.Tokenize(state);
-            }
+
+            state.Clear();
+            state.PreviousChar();
+            var digits = digitTokenizer.Tokenize(state).ParsedValue;
+            object decimals = null;
+            object exp = null;
+            var minus = false;
 
             if (CurrentCharMatches(state, dot)) {
-                state.NextChar(false);
                 withDot = true;
 
-                if (CurrentCharMatches(state, digitTokenizer.CharClass)) {
-                    digitTokenizer.Tokenize(state);
+                if (!state.AtEof)
+                    state.NextChar(false);
+
+                if (digitTokenizer.CharClass.Matches(state.CurrentCharacter)) {
+                    state.PreviousChar();
+                    decimals = digitTokenizer.Tokenize(state).ParsedValue;
                 }
 
                 if (state.BufferEndsWith(".")) {
-                    state.PreviousChar();
                     withDot = false;
                     state.Length -= 1;
                 }
-
             }
 
             if (CurrentCharMatches(state, exponent)) {
@@ -88,11 +93,13 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
                     state.Error(TokenizerBase.UnexpectedEndOfToken);
                 }
                 else {
+                    minus = state.CurrentCharacter == '-';
                     if (CurrentCharMatches(state, plusminus))
                         state.NextChar(false);
 
-                    if (CurrentCharMatches(state, digitTokenizer.CharClass)) {
-                        digitTokenizer.Tokenize(state);
+                    if (digitTokenizer.CharClass.Matches(state.CurrentCharacter)) {
+                        state.PreviousChar();
+                        exp = digitTokenizer.Tokenize(state).ParsedValue;
                     }
                     else {
                         state.Error(TokenizerBase.UnexpectedEndOfToken);
@@ -108,13 +115,11 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
             }
 
             if (withDot || withExponent) {
-                return new Token(TokenKind.Real, state);
+                return new Token(TokenKind.Real, state, Literals.ConvertRealLiteral(digits, decimals, minus, exp));
             }
             else {
-                var value = state.GetBufferContent().Pool();
-                return new Token(TokenKind.Integer, state.CurrentPosition, value, Literals.ParseIntegerLiteral(value));
+                return new Token(TokenKind.Integer, state, digits);
             }
-
         }
 
     }

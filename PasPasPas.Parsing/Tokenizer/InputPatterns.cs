@@ -1,9 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Text;
-using System;
-using PasPasPas.Infrastructure.Log;
 using PasPasPas.Parsing.SyntaxTree;
-using PasPasPas.Infrastructure.Files;
 using PasPasPas.Parsing.Tokenizer.CharClass;
 using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.Tokenizer.TokenGroups;
@@ -103,23 +99,16 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         /// <returns></returns>
         public Token FetchNextToken(TokenizerState state) {
-
-            if (!state.PrepareNextToken()) {
-                return Token.Empty;
-                ;
-            }
-
             var startValue = state.CurrentCharacter;
+            state.StartBufferWith(startValue);
 
             if (Match(startValue, out InputPattern tokenGroup)) {
-                state.StartBufferWith(startValue);
                 return FetchTokenByGroup(state, tokenGroup);
             }
 
-            var position = state.CurrentPosition;
             state.NextChar(false);
             state.Error(TokenizerBase.UnexpectedCharacter);
-            return new Token(TokenKind.Invalid, position, startValue);
+            return new Token(TokenKind.Invalid, state);
         }
 
         /// <summary>

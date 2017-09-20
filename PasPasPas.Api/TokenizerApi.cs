@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using PasPasPas.Infrastructure.Environment;
+﻿using PasPasPas.Infrastructure.Environment;
 using PasPasPas.Infrastructure.Files;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Parsing.Tokenizer;
@@ -42,6 +37,8 @@ namespace PasPasPas.Api {
         private void RegisterStatics() {
             StaticEnvironment.Register(Literals.ParsedIntegers, () => new IntegerParser(false));
             StaticEnvironment.Register(Literals.ParsedHexNumbers, () => new IntegerParser(true));
+            StaticEnvironment.Register(Literals.ConvertedCharLiterals, () => new CharLiteralConverter());
+            StaticEnvironment.Register(Literals.ConvertedRealLiterals, () => new RealLiteralConverter());
         }
 
         /// <summary>

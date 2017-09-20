@@ -10,6 +10,19 @@ namespace PasPasPas.Infrastructure.Utils {
     public static class StringBuilderHelper {
 
         /// <summary>
+        ///     get the last char or <c>0</c> from the string
+        /// </summary>
+        /// <param name="data">string</param>
+        /// <returns>last char</returns>
+        public static char LastCharOrDefault(this string data) {
+            var length = data.Length;
+            if (length < 1)
+                return default;
+            else
+                return data[length - 1];
+        }
+
+        /// <summary>
         ///     test if a string builder ends with a given string
         /// </summary>
         /// <param name="stringBuilder">string builder to look at</param>
@@ -81,13 +94,31 @@ namespace PasPasPas.Infrastructure.Utils {
         private static IEnumerable<T> InternalDropLast<T>(IEnumerable<T> source, int n) {
             var buffer = new Queue<T>(n + 1);
 
-            foreach (T x in source) {
+            foreach (var x in source) {
                 buffer.Enqueue(x);
 
                 if (buffer.Count == n + 1)
                     yield return buffer.Dequeue();
             }
         }
+
+        /// <summary>
+        ///     test if this object is a number
+        /// </summary>
+        /// <param name="value">object to test</param>
+        /// <returns></returns>
+        public static bool IsNumber(this object value) =>
+            value is sbyte
+                    || value is byte
+                    || value is short
+                    || value is ushort
+                    || value is int
+                    || value is uint
+                    || value is long
+                    || value is ulong
+                    || value is float
+                    || value is double
+                    || value is decimal;
 
     }
 }

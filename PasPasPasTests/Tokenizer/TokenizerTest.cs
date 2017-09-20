@@ -25,6 +25,7 @@ namespace PasPasPasTests.Tokenizer {
 
         [Fact]
         public void TestIntegers() {
+            IsInteger("2", (byte)2);
             IsInteger("123", (byte)123);
             IsInteger("0000", (byte)0);
             IsInteger("10000", (ushort)10000);
@@ -43,13 +44,13 @@ namespace PasPasPasTests.Tokenizer {
 
         [Fact]
         public void TestRealNumbers() {
-            IsReal("123E10");
-            IsReal("123.", Tuple.Create(TokenKind.Integer, "123"), Tuple.Create(TokenKind.Dot, "."));
-            IsReal("123.123");
-            IsReal("123E+10");
-            IsReal("123E-10");
-            IsReal("123.123E-10");
-            IsReal("123.123E+10");
+            IsReal("123E10", 123E10);
+            IsReal("123.", 123, Tuple.Create(TokenKind.Integer, "123"), Tuple.Create(TokenKind.Dot, "."));
+            IsReal("123.123", 123.123);
+            IsReal("123E+10", 123E10);
+            IsReal("123E-10", 123E-10);
+            IsReal("123.123E-10", 123.123E-10);
+            IsReal("123.123E+10", 123.123E+10);
         }
 
         [Fact]
@@ -125,7 +126,7 @@ namespace PasPasPasTests.Tokenizer {
             IsToken(TokenKind.Preprocessor, "{$ ddd }");
             IsToken(TokenKind.WhiteSpace, "  ");
             IsToken(TokenKind.HexNumber, "$0000", "$0000", (byte)0);
-            IsToken(TokenKind.DoubleQuotedString, "\"");
+            IsToken(TokenKind.DoubleQuotedString, "\"\"", "\"\"", string.Empty);
         }
 
         [Fact]
@@ -163,8 +164,8 @@ namespace PasPasPasTests.Tokenizer {
         public static void IsWhitespace(string input)
             => IsToken(TokenKind.WhiteSpace, input, input);
 
-        public static void IsReal(string input, params Tuple<int, string>[] tokens)
-            => IsToken(TokenKind.Real, input, input, tokens);
+        public static void IsReal(string input, object value, params Tuple<int, string>[] tokens)
+            => IsToken(TokenKind.Real, input, input, value, tokens);
 
         public static void IsHexNumber(string input, object value)
             => IsToken(TokenKind.HexNumber, input, input, value);
@@ -200,7 +201,12 @@ namespace PasPasPasTests.Tokenizer {
             Assert.IsNotNull(result);
 
             if (tokens.Length < 1) {
-                Assert.AreEqual(value, result[0].ParsedValue);
+
+                if (value is double)
+                    Assert.AreEqual((double)value, (double)result[0].ParsedValue);
+                else
+                    Assert.AreEqual(value, result[0].ParsedValue);
+
                 Assert.AreEqual(1, result.Count);
                 Assert.AreEqual(tokenKind, result[0].Kind);
                 Assert.AreEqual(tokenValue, result[0].Value);

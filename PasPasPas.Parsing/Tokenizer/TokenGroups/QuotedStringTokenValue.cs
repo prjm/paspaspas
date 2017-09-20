@@ -7,17 +7,17 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
     /// <summary>
     ///     token group for quoted strings
     /// </summary>
-    public class QuotedStringTokenValue : PatternContinuation {
+    public sealed class QuotedStringTokenValue : PatternContinuation {
 
         /// <summary>
         ///     quote char
         /// </summary>
-        public char QuoteChar { get; private set; }
+        public char QuoteChar { get; }
 
         /// <summary>
         ///     token id
         /// </summary>
-        public int TokenId { get; private set; }
+        public int TokenId { get; }
 
         /// <summary>
         ///     create a new quoted string token value
@@ -41,35 +41,41 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
                     var currentChar = state.NextChar(false);
 
                     if (currentChar == quote) {
-                        var nextChar = state.NextChar(false);
-                        found = nextChar != quote;
-
-                        if (found) {
+                        if (state.AtEof) {
                             state.Append(quote);
+                            found = true;
                         }
                         else {
-                            state.Append(quote);
-                            state.Append(nextChar);
-                            resultBuilder.Data.Append(quote);
+                            var nextChar = state.NextChar(false);
+                            found = nextChar != quote;
+
+                            if (found) {
+                                state.Append(quote);
+                            }
+                            else {
+                                state.Append(quote);
+                                state.Append(nextChar);
+                                resultBuilder.Data.Append(quote);
+                            }
                         }
                     }
                     else {
                         state.Append(currentChar);
                         resultBuilder.Data.Append(currentChar);
                     }
-
                 }
 
                 if (!found) {
                     state.Error(TokenizerBase.UnexpectedEndOfToken);
                 }
 
-                found = state.BufferEndsWith(QuoteChar);
+                if (!found)
+                    found = state.BufferEndsWith(QuoteChar);
 
                 if (!found)
                     state.Error(TokenizerBase.UnexpectedEndOfToken);
 
-                return new Token(TokenId, state.CurrentPosition, state.GetBufferContent().Pool(), resultBuilder.Data.ToString().Pool());
+                return new Token(TokenId, state, resultBuilder.Data.ToString().PoolString());
             }
         }
     }

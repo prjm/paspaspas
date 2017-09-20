@@ -16,7 +16,7 @@ namespace PasPasPas.Infrastructure.Utils {
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static string Pool(this char value) {
+        public static string PoolString(this char value) {
             string result;
 
             if (pool.TryGetValue(value, out var poolRef))
@@ -47,7 +47,7 @@ namespace PasPasPas.Infrastructure.Utils {
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static string Pool(this string value) {
+        public static string PoolString(this string value) {
             if (!string.IsNullOrEmpty(value) && value.Length <= MaxStringLength) {
 
                 if (pool.TryGetValue(value, out var poolRef))

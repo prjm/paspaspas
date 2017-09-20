@@ -79,7 +79,7 @@ namespace PasPasPas.Parsing.Tokenizer {
             => buffer[index];
 
         public string GetBufferContent()
-            => buffer.ToString();
+            => buffer.ToString().PoolString();
 
         public char NextChar(bool append) {
             var result = input.NextChar();
@@ -87,16 +87,6 @@ namespace PasPasPas.Parsing.Tokenizer {
                 buffer.Append(result);
             return result;
         }
-
-        public bool PrepareNextToken() {
-            var file = input.CurrentFile;
-
-            while (file != null && file.AtEof)
-                file = input.FinishCurrentFile();
-
-            return file != null;
-        }
-
 
         public char PreviousChar()
             => input.PreviousChar();

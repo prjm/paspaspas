@@ -69,7 +69,7 @@ namespace PasPasPas.Infrastructure.Files {
         ///     access the current file
         /// </summary>
         public FileBufferItemOffset CurrentFile
-            => input != null ? input.Input : null;
+            => input?.Input;
 
         /// <summary>
         ///     get the current character value

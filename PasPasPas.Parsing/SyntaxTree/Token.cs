@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using PasPasPas.Infrastructure.Utils;
 using System.Text;
 using PasPasPas.Parsing.Tokenizer;
@@ -16,7 +15,6 @@ namespace PasPasPas.Parsing.SyntaxTree {
         /// </summary>
         public static readonly Token Empty
             = new Token();
-
 
         /// <summary>
         ///     Token value
@@ -38,55 +36,11 @@ namespace PasPasPas.Parsing.SyntaxTree {
         /// </summary>
         public object ParsedValue { get; }
 
-        /// <summary>
-        ///     create a new syntax token
-        /// </summary>
-        /// <param name="tokenKind">token kind</param>
-        /// <param name="tokenPosition">token position</param>
-        /// <param name="value">token value</param>
-        public Token(int tokenKind, int tokenPosition, string value) : this() {
-            Kind = tokenKind;
-            Position = tokenPosition;
-            Value = value.Pool();
-        }
-
-        /// <summary>
-        ///     create a new syntax token
-        /// </summary>
-        /// <param name="tokenKind">token kind</param>
-        /// <param name="tokenPosition">token position</param>
-        /// <param name="value">token value</param>
-        public Token(int tokenKind, int tokenPosition, string value, object parsedValue) : this() {
-            Kind = tokenKind;
-            Position = tokenPosition;
-            Value = value;
-            ParsedValue = parsedValue;
-        }
-
-
-
-        /// <summary>
-        ///     create a new syntax token
-        /// </summary>
-        /// <param name="tokenKind">token kind</param>
-        /// <param name="tokenPosition">token position</param>
-        /// <param name="value">token value</param>
-        public Token(int tokenKind, int tokenPosition, char value) : this() {
-            Kind = tokenKind;
-            Position = tokenPosition;
-            Value = value.Pool();
-        }
-
-        public Token(int tokenKind, StringBuilder buffer) : this() {
-            Kind = tokenKind;
-            Position = -1;
-            Value = buffer.ToString().Pool();
-        }
-
-        public Token(int tokenId, TokenizerState state) : this() {
+        public Token(int tokenId, TokenizerState state, object parsedValue = null) : this() {
             Kind = tokenId;
             Position = -1;
-            Value = state.GetBufferContent().Pool();
+            Value = state.GetBufferContent();
+            ParsedValue = parsedValue;
         }
 
         /// <summary>
