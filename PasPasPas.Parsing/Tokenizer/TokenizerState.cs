@@ -31,6 +31,9 @@ namespace PasPasPas.Parsing.Tokenizer {
             buffer = bufferHolder.Data;
         }
 
+        /// <summary>
+        ///     current buffer length
+        /// </summary>
         public int Length {
             get => buffer.Length;
             set => buffer.Length = value;
@@ -72,6 +75,10 @@ namespace PasPasPas.Parsing.Tokenizer {
             bufferHolder = null;
         }
 
+        /// <summary>
+        ///     create an error message
+        /// </summary>
+        /// <param name="errorId">error id</param>
         public void Error(Guid errorId)
             => log.Error(errorId);
 

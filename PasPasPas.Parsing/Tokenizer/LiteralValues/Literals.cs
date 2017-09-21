@@ -56,6 +56,14 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
         }
 
         /// <summary>
+        ///     test if a parsed literal was a number
+        /// </summary>
+        /// <param name="parsedValue"></param>
+        /// <returns></returns>
+        public static bool IsValidInteger(object parsedValue)
+            => parsedValue.IsNumber();
+
+        /// <summary>
         ///     create a floating point literal value by the definind parts digits, decimals and exponent
         /// </summary>
         /// <param name="digits">digits</param>

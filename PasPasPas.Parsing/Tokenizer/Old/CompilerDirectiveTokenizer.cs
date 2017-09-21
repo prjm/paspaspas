@@ -4,6 +4,7 @@ using PasPasPas.Parsing.SyntaxTree;
 using System;
 using System.Collections.Generic;
 using PasPasPas.Infrastructure.Files;
+using PasPasPas.Parsing.Tokenizer.Patterns;
 
 namespace PasPasPas.Parsing.Tokenizer {
 

@@ -107,7 +107,7 @@ namespace PasPasPasTests {
 
             public void StartVisit<ISyntaxPart>(ISyntaxPart part) {
                 var data = SearchFunction(part);
-                if (EqualityComparer<T>.Default.Equals(default(T), Result))
+                if (EqualityComparer<T>.Default.Equals(default, Result))
                     Result = data;
             }
 

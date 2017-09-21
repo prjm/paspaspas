@@ -150,9 +150,16 @@ namespace PasPasPasTests.Tokenizer {
 
         [Fact]
         public void TestMessages() {
-            TokenizerMessageIsGenerated(StandardTokenizer.IncompleteHexNumber, "$");
-            TokenizerMessageIsGenerated(StandardTokenizer.IncompleteIdentifier, "&");
+            TokenizerMessageIsGenerated(TokenizerBase.IncompleteHexNumber, "$");
+            TokenizerMessageIsGenerated(TokenizerBase.IncompleteIdentifier, "&");
             TokenizerMessageIsGenerated(TokenizerBase.UnexpectedCharacter, "´");
+            TokenizerMessageIsGenerated(TokenizerBase.IncompleteString, "'");
+            TokenizerMessageIsGenerated(TokenizerBase.IncompleteString, "\"");
+            TokenizerMessageIsGenerated(TokenizerBase.IncompleteString, "  '");
+            TokenizerMessageIsGenerated(TokenizerBase.IncompleteString, "  '   ");
+            TokenizerMessageIsGenerated(TokenizerBase.IncompleteString, "#");
+            TokenizerMessageIsGenerated(TokenizerBase.UnexpectedCharacter, "#D");
+            TokenizerMessageIsGenerated(TokenizerBase.UnexpectedCharacter, "#$R");
         }
 
         public static void IsQuotedString(string input, string value)

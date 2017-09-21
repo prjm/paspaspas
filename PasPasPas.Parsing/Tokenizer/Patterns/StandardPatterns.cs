@@ -1,40 +1,15 @@
-﻿using PasPasPas.Parsing.SyntaxTree;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using PasPasPas.Infrastructure.Files;
-using PasPasPas.Infrastructure.Log;
+using PasPasPas.Parsing.SyntaxTree;
+using PasPasPas.Parsing.Tokenizer.CharClass;
+using PasPasPas.Parsing.Tokenizer.TokenGroups;
 
-namespace PasPasPas.Parsing.Tokenizer {
+namespace PasPasPas.Parsing.Tokenizer.Patterns {
 
     /// <summary>
-    ///     Standard tokenizer
+    ///     standard patterns for the tokenizer
     /// </summary>
-    public class StandardTokenizer : TokenizerBase, ITokenizer {
-
-        /// <summary>
-        ///     create a new tokenizer
-        /// </summary>
-        /// <param name="log">log</param>
-        /// <param name="input">input files</param>
-        public StandardTokenizer(ILogManager log, StackedFileReader input) :
-            base(log, new StandardPatterns(), input) { }
-
-        /// <summary>
-        ///     message id: incomplete hex number
-        /// </summary>
-        public static readonly Guid IncompleteHexNumber
-            = new Guid(new byte[] { 0xfc, 0x7b, 0x96, 0xb1, 0xaf, 0x9e, 0x7e, 0x4a, 0x88, 0x7c, 0xc9, 0xa9, 0xaa, 0xab, 0xa7, 0xa8 });
-        /* {b1967bfc-9eaf-4a7e-887c-c9a9aaaba7a8} */
-
-        /// <summary>
-        ///     message id: incomplete identifier
-        /// </summary>
-        public static readonly Guid IncompleteIdentifier
-            = new Guid(new byte[] { 0x68, 0x3f, 0x9c, 0x79, 0x2, 0xe0, 0xf3, 0x42, 0x98, 0x8a, 0xef, 0xa3, 0x59, 0x4f, 0xf9, 0x42 });
-        /* {799c3f68-e002-42f3-988a-efa3594ff942} */
-
-        private static Lazy<StandardPatterns> patterns
-            = new Lazy<StandardPatterns>(() => new StandardPatterns());
+    public class StandardPatterns : InputPatterns {
 
         /// <summary>
         ///     keywords
@@ -210,34 +185,53 @@ namespace PasPasPas.Parsing.Tokenizer {
             };
 
         /// <summary>
-        ///     toggle semicolons as asm connets
+        ///     register tokenizer patters
         /// </summary>
-        public bool AllowAsmComment {
-            get {
-                return false; // return patterns.Value.SemicolonOrAsmComment.AllowComment;
-            }
+        public StandardPatterns() {
+            AddPattern(',', TokenKind.Comma);
 
-            set {
-                // patterns.Value.SemicolonOrAsmComment.AllowComment = value;
-            }
+            var dot = AddPattern('.', TokenKind.Dot);
+            dot.Add('.', TokenKind.DotDot);
+            dot.Add(')', TokenKind.CloseBraces);
+
+            var lparen = AddPattern('(', TokenKind.OpenParen);
+            lparen.Add('.', TokenKind.OpenBraces);
+            lparen.Add('*', new SequenceGroupTokenValue(TokenKind.Comment, "*)")).Add('$', new SequenceGroupTokenValue(TokenKind.Preprocessor, "*)"));
+
+            AddPattern(')', TokenKind.CloseParen);
+            AddPattern(';', TokenKind.Semicolon);
+            AddPattern('=', TokenKind.EqualsSign);
+            AddPattern('[', TokenKind.OpenBraces);
+            AddPattern(']', TokenKind.CloseBraces);
+            AddPattern(':', TokenKind.Colon).Add('=', TokenKind.Assignment);
+            AddPattern('^', TokenKind.Circumflex);
+            AddPattern('+', TokenKind.Plus);
+            AddPattern('-', TokenKind.Minus);
+            AddPattern('*', TokenKind.Times);
+
+            AddPattern('/', TokenKind.Slash).Add('/', new EndOfLineCommentTokenGroupValue());
+
+            AddPattern('@', TokenKind.At);
+            AddPattern('>', TokenKind.GreaterThen).Add('=', TokenKind.GreaterThenEquals);
+
+            var lt = AddPattern('<', TokenKind.LessThen);
+            lt.Add('=', TokenKind.LessThenEquals);
+            lt.Add('>', TokenKind.NotEquals);
+
+            AddPattern('{', new SequenceGroupTokenValue(TokenKind.Comment, "}")).Add('$', new SequenceGroupTokenValue(TokenKind.Preprocessor, "}"));
+            AddPattern('$', new CharacterClassTokenGroupValue(TokenKind.HexNumber, new DigitCharClass(true), 2, LiteralValues.Literals.ParsedHexNumbers, TokenizerBase.IncompleteHexNumber));
+            AddPattern(new WhiteSpaceCharacterClass(), new CharacterClassTokenGroupValue(TokenKind.WhiteSpace, new WhiteSpaceCharacterClass()));
+            AddPattern(new IdentifierCharacterClass(), new IdentifierTokenGroupValue(Keywords) { AllowAmpersand = true, ParseAsm = true });
+
+            AddPattern(new DigitCharClass(false), new NumberTokenGroupValue());
+            AddPattern(new ControlCharacterClass(), new CharacterClassTokenGroupValue(TokenKind.ControlChar, new ControlCharacterClass()));
+            AddPattern('\'', new StringGroupTokenValue());
+            AddPattern('"', new QuotedStringTokenValue(TokenKind.DoubleQuotedString, '"'));
+            AddPattern('#', new StringGroupTokenValue());
+            AddPattern('\x001A', new SoftEofTokenValue());
+
         }
 
-        /// <summary>
-        ///     fetch next token
-        /// </summary>
-        /// <returns></returns>
-        /*
-        public override void FetchNextToken() {
-            base.FetchNextToken();
-            var token = CurrentToken;
 
-            if (token.Kind == TokenKind.Asm) {
-                AllowAsmComment = true;
-            }
-            else if (AllowAsmComment && (token.Kind == TokenKind.End)) {
-                AllowAsmComment = false;
-            }
-        }
-        */
     }
 }

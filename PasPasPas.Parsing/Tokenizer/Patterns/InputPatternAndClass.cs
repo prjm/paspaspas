@@ -2,7 +2,7 @@
 using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.Tokenizer.CharClass;
 
-namespace PasPasPas.Parsing.Tokenizer {
+namespace PasPasPas.Parsing.Tokenizer.Patterns {
 
     /// <summary>
     ///     manually group token group values and their character classes

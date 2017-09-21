@@ -4,7 +4,7 @@ using PasPasPas.Parsing.Tokenizer.CharClass;
 using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.Tokenizer.TokenGroups;
 
-namespace PasPasPas.Parsing.Tokenizer {
+namespace PasPasPas.Parsing.Tokenizer.Patterns {
 
     /// <summary>
     ///     storage for input patterns, used by the tokenizer

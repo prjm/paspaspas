@@ -3,13 +3,14 @@ using PasPasPas.Infrastructure.Log;
 using PasPasPas.Parsing.SyntaxTree;
 using PasPasPas.Infrastructure.Files;
 using PasPasPas.Infrastructure.Utils;
+using PasPasPas.Parsing.Tokenizer.Patterns;
 
 namespace PasPasPas.Parsing.Tokenizer {
 
     /// <summary>
     ///     base class for tokenizers
     /// </summary>
-    public abstract class TokenizerBase : ITokenizer, IDisposable {
+    public class TokenizerBase : ITokenizer, IDisposable {
 
         /// <summary>
         ///     message group for tokenizer logs
@@ -35,12 +36,37 @@ namespace PasPasPas.Parsing.Tokenizer {
             = new Guid(new byte[] { 0x7d, 0xd3, 0xfc, 0xf2, 0x4a, 0x89, 0x71, 0x4e, 0x8a, 0xaa, 0x2f, 0x1a, 0x95, 0x6b, 0xdc, 0x49 });
         /* {f2fcd37d-894a-4e71-8aaa-2f1a956bdc49} */
 
+
+        /// <summary>
+        ///     message id: incomplete hex number
+        /// </summary>
+        public static readonly Guid IncompleteHexNumber
+            = new Guid(new byte[] { 0xfc, 0x7b, 0x96, 0xb1, 0xaf, 0x9e, 0x7e, 0x4a, 0x88, 0x7c, 0xc9, 0xa9, 0xaa, 0xab, 0xa7, 0xa8 });
+        /* {b1967bfc-9eaf-4a7e-887c-c9a9aaaba7a8} */
+
+        /// <summary>
+        ///     message id: incomplete identifier
+        /// </summary>
+        public static readonly Guid IncompleteIdentifier
+            = new Guid(new byte[] { 0x68, 0x3f, 0x9c, 0x79, 0x2, 0xe0, 0xf3, 0x42, 0x98, 0x8a, 0xef, 0xa3, 0x59, 0x4f, 0xf9, 0x42 });
+        /* {799c3f68-e002-42f3-988a-efa3594ff942} */
+
+        /// <summary>
+        ///     message id: incomplete string
+        /// </summary>
+        public static readonly Guid IncompleteString
+            = new Guid(new byte[] { 0xc, 0x14, 0xd4, 0xaa, 0x13, 0x18, 0xcd, 0x4f, 0xa4, 0xae, 0x42, 0x7e, 0xc9, 0x2e, 0xd6, 0xab });
+        /* {aad4140c-1813-4fcd-a4ae-427ec92ed6ab} */
+
+        /// <summary>
+        ///     registered input patterns
+        /// </summary>        
         private InputPatterns characterClasses;
 
         /// <summary>
         ///     create a new tokenizer
         /// </summary>
-        protected TokenizerBase(ILogManager log, InputPatterns charClasses, StackedFileReader input) {
+        public TokenizerBase(ILogManager log, InputPatterns charClasses, StackedFileReader input) {
 
             if (log == null)
                 ExceptionHelper.ArgumentIsNull(nameof(log));

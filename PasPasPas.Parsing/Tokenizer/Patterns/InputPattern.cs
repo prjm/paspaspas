@@ -2,15 +2,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.Tokenizer.CharClass;
 using PasPasPas.Parsing.Tokenizer.TokenGroups;
 
-namespace PasPasPas.Parsing.Tokenizer {
+namespace PasPasPas.Parsing.Tokenizer.Patterns {
 
     /// <summary>
-    ///     group input patterns with the same prefix
+    ///     group input patterns with a common prefix
     /// </summary>
     public class InputPattern {
 

@@ -19,7 +19,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
             = new CharacterClassTokenGroupValue(TokenKind.Integer, new DigitCharClass(false), 0, Literals.ParsedIntegers, Guid.Empty);
 
         private CharacterClassTokenGroupValue hexDigits
-            = new CharacterClassTokenGroupValue(TokenKind.HexNumber, new DigitCharClass(true), 2, Literals.ParsedHexNumbers, StandardTokenizer.IncompleteHexNumber);
+            = new CharacterClassTokenGroupValue(TokenKind.HexNumber, new DigitCharClass(true), 2, Literals.ParsedHexNumbers, TokenizerBase.IncompleteHexNumber);
 
         /// <summary>
         ///     parse a string literal
@@ -29,30 +29,32 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
             using (var resultBuilder = PoolFactory.FetchStringBuilder()) {
                 state.PreviousChar();
                 state.Clear();
-
                 var currentChar = state.NextChar(false);
-                while (!state.AtEof) {
+
+                do {
                     currentChar = state.CurrentCharacter;
                     if (currentChar == '#') {
                         state.Append('#');
-                        var nextChar = state.NextChar(false);
                         if (state.AtEof)
-                            state.Error(TokenizerBase.UnexpectedEndOfToken);
-                        else if (nextChar == '$') {
-                            state.Append('$');
-                            var controlChar = hexDigits.Tokenize(state);
-                            if (controlChar.Kind != TokenKind.HexNumber)
-                                state.Error(TokenizerBase.UnexpectedCharacter);
-                            else
-                                resultBuilder.Data.Append(Literals.ConvertCharLiteral(controlChar.ParsedValue));
-                        }
+                            state.Error(TokenizerBase.IncompleteString);
                         else {
-                            state.PreviousChar();
-                            var controlChar = digitTokenizer.Tokenize(state);
-                            if (controlChar.Kind != TokenKind.Integer)
-                                state.Error(TokenizerBase.UnexpectedCharacter);
-                            else
-                                resultBuilder.Data.Append(Literals.ConvertCharLiteral(controlChar.ParsedValue));
+                            var nextChar = state.NextChar(false);
+                            if (nextChar == '$') {
+                                state.Append('$');
+                                var controlChar = hexDigits.Tokenize(state);
+                                if (controlChar.Kind != TokenKind.HexNumber || !Literals.IsValidInteger(controlChar.ParsedValue))
+                                    state.Error(TokenizerBase.UnexpectedCharacter);
+                                else
+                                    resultBuilder.Data.Append(Literals.ConvertCharLiteral(controlChar.ParsedValue));
+                            }
+                            else {
+                                state.PreviousChar();
+                                var controlChar = digitTokenizer.Tokenize(state);
+                                if (controlChar.Kind != TokenKind.Integer || !Literals.IsValidInteger(controlChar.ParsedValue))
+                                    state.Error(TokenizerBase.UnexpectedCharacter);
+                                else
+                                    resultBuilder.Data.Append(Literals.ConvertCharLiteral(controlChar.ParsedValue));
+                            }
                         }
                     }
                     else if (currentChar == '\'') {
@@ -63,7 +65,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
                     else {
                         break;
                     }
-                }
+                } while (!state.AtEof);
 
                 var value = state.GetBufferContent();
                 var data = resultBuilder.Data.ToString().PoolString();

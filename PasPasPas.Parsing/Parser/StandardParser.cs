@@ -5,6 +5,7 @@ using PasPasPas.Parsing.SyntaxTree;
 using PasPasPas.Parsing.SyntaxTree.Standard;
 using System;
 using PasPasPas.Parsing.SyntaxTree.Utils;
+using PasPasPas.Parsing.Tokenizer.Patterns;
 
 namespace PasPasPas.Parsing.Parser {
 
@@ -4197,7 +4198,7 @@ return true;
             if (!allowReservedWords && reservedWords.Contains(token.Kind))
                 return false;
 
-            return StandardTokenizer.Keywords.ContainsKey(token.Value);
+            return StandardPatterns.Keywords.ContainsKey(token.Value);
         }
 
 

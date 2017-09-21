@@ -3,6 +3,7 @@ using PasPasPas.Infrastructure.Files;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Parsing.Tokenizer;
 using PasPasPas.Parsing.Tokenizer.LiteralValues;
+using PasPasPas.Parsing.Tokenizer.Patterns;
 
 namespace PasPasPas.Api {
 
@@ -57,9 +58,7 @@ namespace PasPasPas.Api {
         /// <param name="fileReader"></param>
         /// <returns></returns>
         private ITokenizer CreateTokenizer(StackedFileReader fileReader)
-            => new StandardTokenizer(log, fileReader) {
-                // ..
-            };
+            => new TokenizerBase(log, new StandardPatterns(), fileReader);
 
         /// <summary>
         ///     create a tokenizer for a string

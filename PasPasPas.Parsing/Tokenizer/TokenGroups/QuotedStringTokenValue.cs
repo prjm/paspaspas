@@ -65,15 +65,10 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
                     }
                 }
 
-                if (!found) {
-                    state.Error(TokenizerBase.UnexpectedEndOfToken);
-                }
+                found = state.BufferEndsWith(QuoteChar) && state.Length > 1;
 
                 if (!found)
-                    found = state.BufferEndsWith(QuoteChar);
-
-                if (!found)
-                    state.Error(TokenizerBase.UnexpectedEndOfToken);
+                    state.Error(TokenizerBase.IncompleteString);
 
                 return new Token(TokenId, state, resultBuilder.Data.ToString().PoolString());
             }
