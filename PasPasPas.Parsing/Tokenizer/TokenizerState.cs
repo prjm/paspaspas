@@ -7,7 +7,6 @@ using PasPasPas.Infrastructure.Environment;
 
 namespace PasPasPas.Parsing.Tokenizer {
 
-
     /// <summary>
     ///     state management for a tokenizer
     /// </summary>
@@ -15,7 +14,7 @@ namespace PasPasPas.Parsing.Tokenizer {
 
         private ObjectPool<StringBuilder>.PoolItem bufferHolder;
         private StringBuilder buffer;
-        private TokenizerBase tokenizer;
+        private Tokenizer tokenizer;
         private readonly StackedFileReader input;
         private readonly ILogSource log;
 
@@ -23,7 +22,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         ///     create a new tokenizer state
         /// </summary>
         /// <param name="parentTokenizer"></param>
-        internal TokenizerState(TokenizerBase parentTokenizer, StackedFileReader currentInput, ILogSource logSource) {
+        internal TokenizerState(Tokenizer parentTokenizer, StackedFileReader currentInput, ILogSource logSource) {
             tokenizer = parentTokenizer;
             log = logSource;
             input = currentInput;

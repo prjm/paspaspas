@@ -19,7 +19,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
             = new CharacterClassTokenGroupValue(TokenKind.Integer, new DigitCharClass(false), 0, Literals.ParsedIntegers, Guid.Empty);
 
         private CharacterClassTokenGroupValue hexDigits
-            = new CharacterClassTokenGroupValue(TokenKind.HexNumber, new DigitCharClass(true), 2, Literals.ParsedHexNumbers, TokenizerBase.IncompleteHexNumber);
+            = new CharacterClassTokenGroupValue(TokenKind.HexNumber, new DigitCharClass(true), 2, Literals.ParsedHexNumbers, Tokenizer.IncompleteHexNumber);
 
         /// <summary>
         ///     parse a string literal
@@ -36,14 +36,14 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
                     if (currentChar == '#') {
                         state.Append('#');
                         if (state.AtEof)
-                            state.Error(TokenizerBase.IncompleteString);
+                            state.Error(Tokenizer.IncompleteString);
                         else {
                             var nextChar = state.NextChar(false);
                             if (nextChar == '$') {
                                 state.Append('$');
                                 var controlChar = hexDigits.Tokenize(state);
                                 if (controlChar.Kind != TokenKind.HexNumber || !Literals.IsValidInteger(controlChar.ParsedValue))
-                                    state.Error(TokenizerBase.UnexpectedCharacter);
+                                    state.Error(Tokenizer.UnexpectedCharacter);
                                 else
                                     resultBuilder.Data.Append(Literals.ConvertCharLiteral(controlChar.ParsedValue));
                             }
@@ -51,7 +51,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
                                 state.PreviousChar();
                                 var controlChar = digitTokenizer.Tokenize(state);
                                 if (controlChar.Kind != TokenKind.Integer || !Literals.IsValidInteger(controlChar.ParsedValue))
-                                    state.Error(TokenizerBase.UnexpectedCharacter);
+                                    state.Error(Tokenizer.UnexpectedCharacter);
                                 else
                                     resultBuilder.Data.Append(Literals.ConvertCharLiteral(controlChar.ParsedValue));
                             }

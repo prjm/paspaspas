@@ -90,7 +90,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
             if (CurrentCharMatches(state, exponent)) {
                 state.NextChar(false);
                 if (state.AtEof) {
-                    state.Error(TokenizerBase.UnexpectedEndOfToken);
+                    state.Error(Tokenizer.UnexpectedEndOfToken);
                 }
                 else {
                     minus = state.CurrentCharacter == '-';
@@ -102,7 +102,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
                         exp = digitTokenizer.Tokenize(state).ParsedValue;
                     }
                     else {
-                        state.Error(TokenizerBase.UnexpectedEndOfToken);
+                        state.Error(Tokenizer.UnexpectedEndOfToken);
                     }
                 }
 

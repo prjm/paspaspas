@@ -70,7 +70,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
             }
 
             if (hasAmpersand && state.Length < 2)
-                state.Error(TokenizerBase.IncompleteIdentifier);
+                state.Error(Tokenizer.IncompleteIdentifier);
 
             var value = state.GetBufferContent();
 

@@ -107,7 +107,7 @@ namespace PasPasPas.Parsing.Tokenizer.Patterns {
             }
 
             state.NextChar(false);
-            state.Error(TokenizerBase.UnexpectedCharacter);
+            state.Error(Tokenizer.UnexpectedCharacter);
             return new Token(TokenKind.Invalid, state);
         }
 

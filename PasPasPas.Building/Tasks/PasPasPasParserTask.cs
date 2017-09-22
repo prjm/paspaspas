@@ -63,9 +63,9 @@ namespace PasPasPas.Building.Tasks {
 
                 ISyntaxPart resultTree = null;
 
-                var parser = new StandardParser(environment);
                 var buffer = new FileBuffer();
                 var reader = new StackedFileReader(buffer);
+                var parser = new StandardParser(environment, reader);
 
                 buffer.Add(file, settings.FileSystemAccess.OpenFileForReading(file));
                 result.AppendLine("-----------------------<< " + file.Path + " (" + count + ")");

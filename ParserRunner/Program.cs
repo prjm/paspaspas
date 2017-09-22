@@ -1,19 +1,11 @@
-﻿using PasPasPas.DesktopPlatform;
-using PasPasPas.Api;
-using System.Collections.Generic;
-using System.Linq;
-using System;
-using PasPasPas.Infrastructure.Environment;
-
-namespace ParserRunner {
-
+﻿namespace ParserRunner {
 
     class Program {
 
         static void Main(string[] args) {
 
             var testPath = @"C:\temp\Testfiles\spring.pas";
-            Scenarios.TokenizeFile.Run(testPath, 5);
+            Scenarios.BufferedTokenizeFile.Run(testPath, 5);
             return;
 
             /*

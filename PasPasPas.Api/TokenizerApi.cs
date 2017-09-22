@@ -1,4 +1,5 @@
-﻿using PasPasPas.Infrastructure.Environment;
+﻿using System;
+using PasPasPas.Infrastructure.Environment;
 using PasPasPas.Infrastructure.Files;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Parsing.Tokenizer;
@@ -53,12 +54,22 @@ namespace PasPasPas.Api {
         }
 
         /// <summary>
+        ///     create a buffered tokenizer with lookahead symbols
+        /// </summary>
+        /// <param name="path">path to read</param>
+        /// <returns></returns>
+        public ITokenizer CreateBufferedTokenizerForPath(string path) {
+            var tokenizer = CreateTokenizerForPath(path);
+            return new TokenizerWithLookahead(tokenizer, TokenizerMode.Standard);
+        }
+
+        /// <summary>
         ///     create a tokenizer
         /// </summary>
         /// <param name="fileReader"></param>
         /// <returns></returns>
         private ITokenizer CreateTokenizer(StackedFileReader fileReader)
-            => new TokenizerBase(log, new StandardPatterns(), fileReader);
+            => new Tokenizer(log, new StandardPatterns(), fileReader);
 
         /// <summary>
         ///     create a tokenizer for a string

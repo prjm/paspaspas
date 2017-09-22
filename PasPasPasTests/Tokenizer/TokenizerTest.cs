@@ -150,16 +150,16 @@ namespace PasPasPasTests.Tokenizer {
 
         [Fact]
         public void TestMessages() {
-            TokenizerMessageIsGenerated(TokenizerBase.IncompleteHexNumber, "$");
-            TokenizerMessageIsGenerated(TokenizerBase.IncompleteIdentifier, "&");
-            TokenizerMessageIsGenerated(TokenizerBase.UnexpectedCharacter, "´");
-            TokenizerMessageIsGenerated(TokenizerBase.IncompleteString, "'");
-            TokenizerMessageIsGenerated(TokenizerBase.IncompleteString, "\"");
-            TokenizerMessageIsGenerated(TokenizerBase.IncompleteString, "  '");
-            TokenizerMessageIsGenerated(TokenizerBase.IncompleteString, "  '   ");
-            TokenizerMessageIsGenerated(TokenizerBase.IncompleteString, "#");
-            TokenizerMessageIsGenerated(TokenizerBase.UnexpectedCharacter, "#D");
-            TokenizerMessageIsGenerated(TokenizerBase.UnexpectedCharacter, "#$R");
+            TokenizerMessageIsGenerated(PasPasPas.Parsing.Tokenizer.Tokenizer.IncompleteHexNumber, "$");
+            TokenizerMessageIsGenerated(PasPasPas.Parsing.Tokenizer.Tokenizer.IncompleteIdentifier, "&");
+            TokenizerMessageIsGenerated(PasPasPas.Parsing.Tokenizer.Tokenizer.UnexpectedCharacter, "´");
+            TokenizerMessageIsGenerated(PasPasPas.Parsing.Tokenizer.Tokenizer.IncompleteString, "'");
+            TokenizerMessageIsGenerated(PasPasPas.Parsing.Tokenizer.Tokenizer.IncompleteString, "\"");
+            TokenizerMessageIsGenerated(PasPasPas.Parsing.Tokenizer.Tokenizer.IncompleteString, "  '");
+            TokenizerMessageIsGenerated(PasPasPas.Parsing.Tokenizer.Tokenizer.IncompleteString, "  '   ");
+            TokenizerMessageIsGenerated(PasPasPas.Parsing.Tokenizer.Tokenizer.IncompleteString, "#");
+            TokenizerMessageIsGenerated(PasPasPas.Parsing.Tokenizer.Tokenizer.UnexpectedCharacter, "#D");
+            TokenizerMessageIsGenerated(PasPasPas.Parsing.Tokenizer.Tokenizer.UnexpectedCharacter, "#$R");
         }
 
         public static void IsQuotedString(string input, string value)

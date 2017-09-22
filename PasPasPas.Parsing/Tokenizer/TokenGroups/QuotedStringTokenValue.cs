@@ -68,7 +68,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
                 found = state.BufferEndsWith(QuoteChar) && state.Length > 1;
 
                 if (!found)
-                    state.Error(TokenizerBase.IncompleteString);
+                    state.Error(Tokenizer.IncompleteString);
 
                 return new Token(TokenId, state, resultBuilder.Data.ToString().PoolString());
             }

@@ -1,24 +1,60 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using PasPasPas.Infrastructure.Files;
-using PasPasPas.Infrastructure.Input;
-using PasPasPas.Infrastructure.Log;
 using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree;
 
 namespace PasPasPas.Parsing.Tokenizer {
 
     /// <summary>
+    ///     tokenizer mode
+    /// </summary>
+    public enum TokenizerMode {
+        Undefined = 0,
+        Standard = 1,
+        CompilerDirective = 2
+    };
+
+    /// <summary>
     ///     base class for a tokenizer with a lookead list
     /// </summary>
-    public abstract class TokenizerWithLookahead {
+    public sealed class TokenizerWithLookahead : ITokenizer {
 
         /// <summary>
-        ///     protected constructor
+        ///     a sequence of fetched tokens
         /// </summary>
-        protected TokenizerWithLookahead(ITokenizer baseTokenizer) =>
+        private class TokenSequence {
+
+            private Lazy<LinkedList<Token>> prefix
+                = new Lazy<LinkedList<Token>>(false);
+
+            private Lazy<LinkedList<Token>> suffix
+                = new Lazy<LinkedList<Token>>(false);
+
+            public Token Value = default;
+
+            public void AssignPrefix(IEnumerable<Token> tokens) {
+                var p = prefix.Value;
+                foreach (var token in tokens)
+                    p.AddLast(token);
+            }
+
+            public void AssignSuffix(IEnumerable<Token> tokens) {
+                var p = suffix.Value;
+                foreach (var token in tokens)
+                    p.AddLast(token);
+            }
+        }
+
+        private TokenizerMode mode = TokenizerMode.Undefined;
+        private bool skip = false;
+
+        /// <summary>
+        ///     create a new tokenizer with lookahead
+        /// </summary>
+        public TokenizerWithLookahead(ITokenizer baseTokenizer, TokenizerMode tokenizerMode) {
+            mode = tokenizerMode;
             BaseTokenizer = baseTokenizer;
+        }
 
         /// <summary>
         ///     base tokenizer
@@ -28,14 +64,14 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <summary>
         ///     list of tokens
         /// </summary>
-        private IndexedQueue<Token> tokenList
-            = new IndexedQueue<Token>();
+        private IndexedQueue<TokenSequence> tokenList
+            = new IndexedQueue<TokenSequence>();
 
         /// <summary>
         ///     list of invalid tokens (e.g. whitespace)
         /// </summary>
-        private IndexedQueue<Token> invalidTokens
-            = new IndexedQueue<Token>();
+        private Queue<Token> invalidTokens
+            = new Queue<Token>();
 
         /// <summary>
         ///     check if a next token exists
@@ -52,22 +88,26 @@ namespace PasPasPas.Parsing.Tokenizer {
             while (tokenList.Count == currentTokenCount || tokenList.Count < 2) {
 
                 if (BaseTokenizer.AtEof) {
-                    /*
-                    if (tokenList.Count > 0)
-                        tokenList.Last.AssignInvalidTokens(invalidTokens, true);
-                        */
+                    if (tokenList.Count > 0) {
+                        tokenList.Last.AssignSuffix(invalidTokens);
+                        invalidTokens.Clear();
+                    }
                     return;
                 }
 
                 BaseTokenizer.FetchNextToken();
                 var nextToken = BaseTokenizer.CurrentToken;
 
-                if (IsValidToken(nextToken)) {
-                    //nextToken.AssignInvalidTokens(invalidTokens, false);
-                    //tokenList.Enqueue(nextToken);
+                if (IsValidToken(ref nextToken)) {
+                    var entry = new TokenSequence {
+                        Value = nextToken
+                    };
+                    entry.AssignPrefix(invalidTokens);
+                    invalidTokens.Clear();
+                    tokenList.Enqueue(entry);
                 }
                 else {
-                    if (IsMacroToken(nextToken))
+                    if (IsMacroToken(ref nextToken))
                         ProcessMacroToken(nextToken);
                     invalidTokens.Enqueue(nextToken);
                 }
@@ -75,24 +115,59 @@ namespace PasPasPas.Parsing.Tokenizer {
         }
 
         /// <summary>
-        ///     process a macro token
+        ///     check if a given token is a valid token
         /// </summary>
-        /// <param name="nextToken">token to process</param>
-        protected abstract void ProcessMacroToken(Token nextToken);
+        /// <param name="nextToken"></param>
+        /// <returns></returns>
+        private bool IsValidToken(ref Token nextToken) {
+
+            switch (mode) {
+
+                case TokenizerMode.Standard:
+                    return (nextToken.Kind != TokenKind.WhiteSpace) &&
+                        nextToken.Kind != TokenKind.ControlChar &&
+                        nextToken.Kind != TokenKind.Comment &&
+                        nextToken.Kind != TokenKind.Preprocessor &&
+                        (!skip);
+
+                case TokenizerMode.CompilerDirective:
+                    return nextToken.Kind != TokenKind.WhiteSpace &&
+                        nextToken.Kind != TokenKind.ControlChar;
+
+                default:
+                    return true;
+            }
+        }
 
         /// <summary>
         ///     test if a token is a macro token
         /// </summary>
         /// <param name="nextToken">token to test</param>
         /// <returns><c>true</c> if the token is a macro token</returns>
-        protected abstract bool IsMacroToken(Token nextToken);
+        private bool IsMacroToken(ref Token nextToken) {
+            if (mode == TokenizerMode.Standard)
+                return nextToken.Kind == TokenKind.Preprocessor;
+            return false;
+        }
 
         /// <summary>
-        ///     test if a token is relevant and valid
+        ///     do nothing
         /// </summary>
         /// <param name="nextToken"></param>
-        /// <returns></returns>
-        protected abstract bool IsValidToken(Token nextToken);
+        private void ProcessMacroToken(Token nextToken) {
+            /*
+            using (var input = new StringInput(CompilerDirectiveTokenizer.Unwrap(nextToken.Value), nextToken.FilePath))
+            using (var reader = new OldStackedFileReader()) {
+                var parser = new CompilerDirectiveParser(environment, reader);
+                var tokenizer = new CompilerDirectiveTokenizer(environment, reader);
+                reader.AddFile(input);
+                parser.BaseTokenizer = tokenizer;
+                ISyntaxPart result = parser.Parse();
+                var visitor = new CompilerDirectiveVisitor() { Environment = environment };
+                result.Accept(visitor.AsVisitor());
+            }
+            */
+        }
 
         /// <summary>
         ///     gets the current token
@@ -100,13 +175,8 @@ namespace PasPasPas.Parsing.Tokenizer {
         public Token CurrentToken
             => LookAhead(0);
 
-        public bool AtEof => throw new NotImplementedException();
-
-        public char CurrentCharacter => throw new NotImplementedException();
-
-        public int CurrentPosition => throw new NotImplementedException();
-
-        public ILogSource Log => throw new NotImplementedException();
+        public bool AtEof
+            => tokenList.Count < 1 && (BaseTokenizer == null || BaseTokenizer.AtEof);
 
         /// <summary>
         ///     get tokens and look ahader
@@ -124,7 +194,7 @@ namespace PasPasPas.Parsing.Tokenizer {
                 return Token.Empty;
             }
             else {
-                return tokenList[number];
+                return tokenList[number].Value;
             }
         }
 
@@ -139,8 +209,12 @@ namespace PasPasPas.Parsing.Tokenizer {
             }
         }
 
-        public char NextChar() => throw new NotImplementedException();
-        public char PreviousChar() => throw new NotImplementedException();
-        public bool PrepareNextToken() => throw new NotImplementedException();
+        /// <summary>
+        ///     dispose the basic tokenizer
+        /// </summary>
+        public void Dispose() {
+            BaseTokenizer.Dispose();
+            BaseTokenizer = null;
+        }
     }
 }

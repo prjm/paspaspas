@@ -48,7 +48,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
                 state.NextChar(false);
 
             if (!found)
-                state.Error(TokenizerBase.UnexpectedEndOfToken);
+                state.Error(Tokenizer.UnexpectedEndOfToken);
 
             return new Token(TokenId, state);
         }

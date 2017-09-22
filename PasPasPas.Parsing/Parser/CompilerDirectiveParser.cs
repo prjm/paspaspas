@@ -9,6 +9,7 @@ using PasPasPas.Parsing.SyntaxTree.CompilerDirectives;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Infrastructure.Files;
+using PasPasPas.Parsing.Tokenizer.Patterns;
 
 namespace PasPasPas.Parsing.Parser {
 
@@ -23,7 +24,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="environment">services</param>
         /// <param name="input">input file</param>
         public CompilerDirectiveParser(ParserServices environment, StackedFileReader input)
-            : base(environment, new CompilerDirectiveTokenizerWithLookahead(new CompilerDirectiveTokenizer(environment, input))) {
+            : base(environment, new TokenizerWithLookahead(new Tokenizer.Tokenizer(environment.Log, new CompilerDirectivePatterns(), input), TokenizerMode.CompilerDirective)) {
         }
 
         /// <summary>
@@ -424,10 +425,8 @@ namespace PasPasPas.Parsing.Parser {
                 return;
             }
 
-            int majorVersion;
-            int minorVersion;
 
-            if (!int.TryParse(text[0], out majorVersion) || !int.TryParse(text[1], out minorVersion)) {
+            if (!int.TryParse(text[0], out var majorVersion) || !int.TryParse(text[1], out var minorVersion)) {
                 ErrorLastPart(result, CompilerDirectiveParserErrors.InvalidPEVersionDirective);
                 return;
             }
@@ -779,8 +778,7 @@ namespace PasPasPas.Parsing.Parser {
             var result = new CodeAlignParameter();
             InitByTerminal(result, parent, TokenKind.CodeAlign);
 
-            int value;
-            if (ContinueWith(result, TokenKind.Integer) && int.TryParse(result.LastTerminalValue, out value)) {
+            if (ContinueWith(result, TokenKind.Integer) && int.TryParse(result.LastTerminalValue, out var value)) {
                 switch (value) {
                     case 1:
                         result.CodeAlign = CodeAlignment.OneByte;
@@ -1707,8 +1705,7 @@ namespace PasPasPas.Parsing.Parser {
                 return;
             }
 
-            int value;
-            if (ContinueWith(result, TokenKind.Integer) && int.TryParse(result.LastTerminalValue, out value)) {
+            if (ContinueWith(result, TokenKind.Integer) && int.TryParse(result.LastTerminalValue, out var value)) {
 
                 switch (value) {
                     case 1:
@@ -2347,7 +2344,7 @@ namespace PasPasPas.Parsing.Parser {
         /// </summary>
         /// <returns></returns>
         protected override bool AllowIdentifier()
-            => CompilerDirectiveTokenizer.Keywords.ContainsKey(CurrentToken().Value);
+            => CompilerDirectivePatterns.Keywords.ContainsKey(CurrentToken().Value);
 
     }
 

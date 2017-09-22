@@ -10,7 +10,7 @@ namespace PasPasPas.Parsing.Tokenizer {
     /// <summary>
     ///     base class for tokenizers
     /// </summary>
-    public class TokenizerBase : ITokenizer, IDisposable {
+    public sealed class Tokenizer : ITokenizer, IDisposable {
 
         /// <summary>
         ///     message group for tokenizer logs
@@ -66,7 +66,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <summary>
         ///     create a new tokenizer
         /// </summary>
-        public TokenizerBase(ILogManager log, InputPatterns charClasses, StackedFileReader input) {
+        public Tokenizer(ILogManager log, InputPatterns charClasses, StackedFileReader input) {
 
             if (log == null)
                 ExceptionHelper.ArgumentIsNull(nameof(log));
@@ -128,7 +128,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         public ILogSource Log { get; }
 
         /// <summary>
-        ///     inut
+        ///     tokenizer input
         /// </summary>
         public StackedFileReader Input { get; private set; }
 

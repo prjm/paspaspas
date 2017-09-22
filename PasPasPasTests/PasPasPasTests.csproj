@@ -80,7 +80,6 @@
     <Compile Include="Parser\StatementTest.cs" />
     <Compile Include="Parser\TestDeclarations.cs" />
     <Compile Include="Infra\StackedReaderTest.cs" />
-    <Compile Include="Tokenizer\LineCounterTest.cs" />
     <Compile Include="Tokenizer\TokenizerBaseTest.cs" />
     <Compile Include="Tokenizer\TokenizerTest.cs" />
   </ItemGroup>

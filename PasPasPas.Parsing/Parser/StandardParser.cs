@@ -6,6 +6,7 @@ using PasPasPas.Parsing.SyntaxTree.Standard;
 using System;
 using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.Tokenizer.Patterns;
+using PasPasPas.Infrastructure.Files;
 
 namespace PasPasPas.Parsing.Parser {
 
@@ -17,8 +18,8 @@ namespace PasPasPas.Parsing.Parser {
         /// <summary>
         ///     creates a new standard parser
         /// </summary>
-        public StandardParser(ParserServices environment) :
-            base(environment, new StandardTokenizerWithLookahead(environment)) { }
+        public StandardParser(ParserServices environment, StackedFileReader input) :
+            base(environment, new TokenizerWithLookahead(new Tokenizer.Tokenizer(environment.Log, new StandardPatterns(), input), TokenizerMode.Standard)) { }
 
         #region Reserved Words
 

@@ -219,7 +219,7 @@ namespace PasPasPas.Parsing.Tokenizer.Patterns {
             lt.Add('>', TokenKind.NotEquals);
 
             AddPattern('{', new SequenceGroupTokenValue(TokenKind.Comment, "}")).Add('$', new SequenceGroupTokenValue(TokenKind.Preprocessor, "}"));
-            AddPattern('$', new CharacterClassTokenGroupValue(TokenKind.HexNumber, new DigitCharClass(true), 2, LiteralValues.Literals.ParsedHexNumbers, TokenizerBase.IncompleteHexNumber));
+            AddPattern('$', new CharacterClassTokenGroupValue(TokenKind.HexNumber, new DigitCharClass(true), 2, LiteralValues.Literals.ParsedHexNumbers, Tokenizer.IncompleteHexNumber));
             AddPattern(new WhiteSpaceCharacterClass(), new CharacterClassTokenGroupValue(TokenKind.WhiteSpace, new WhiteSpaceCharacterClass()));
             AddPattern(new IdentifierCharacterClass(), new IdentifierTokenGroupValue(Keywords) { AllowAmpersand = true, ParseAsm = true });
 

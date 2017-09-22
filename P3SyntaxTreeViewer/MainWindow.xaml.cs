@@ -121,11 +121,11 @@ namespace P3SyntaxTreeViewer {
         }
 
         private ISyntaxPart Parse(ParserServices environment, string code) {
-            var parser = new StandardParser(environment);
             var inputFile = new StringBufferReadable(code);
             var path = new DesktopFileReference("z.x.pas");
             var buffer = new FileBuffer();
             var reader = new StackedFileReader(buffer);
+            var parser = new StandardParser(environment, reader);
             buffer.Add(path, inputFile);
             reader.AddFileToRead(path);
             return parser.Parse();
