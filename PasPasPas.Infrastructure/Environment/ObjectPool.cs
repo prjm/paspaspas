@@ -63,7 +63,6 @@ namespace PasPasPas.Infrastructure.Environment {
         private ConcurrentQueue<PoolItem> items
             = new ConcurrentQueue<PoolItem>();
 
-
         /// <summary>
         ///     get the pool ites
         /// </summary>
@@ -77,8 +76,6 @@ namespace PasPasPas.Infrastructure.Environment {
         public PoolItem Borrow() {
             if (!items.TryDequeue(out var result))
                 result = new PoolItem(new T(), this);
-
-            Prepare(result);
             return result;
         }
 
@@ -91,6 +88,10 @@ namespace PasPasPas.Infrastructure.Environment {
                 case StringBuilder builder:
                     builder.Clear();
                     break;
+
+                case IPoolItem poolItem:
+                    poolItem.Clear();
+                    break;
             }
         }
 
@@ -98,8 +99,10 @@ namespace PasPasPas.Infrastructure.Environment {
         ///     returns an object to the pool
         /// </summary>
         /// <param name="poolItem">item to pool</param>
-        private void ReturnToPool(PoolItem poolItem)
-            => items.Enqueue(poolItem);
+        private void ReturnToPool(PoolItem poolItem) {
+            Prepare(poolItem);
+            items.Enqueue(poolItem);
+        }
 
         /// <summary>
         /// 

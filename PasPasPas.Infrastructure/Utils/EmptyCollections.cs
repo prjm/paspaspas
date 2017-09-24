@@ -14,13 +14,13 @@ namespace PasPasPas.Infrastructure.Utils {
         ///     current element
         /// </summary>
         public T Current
-            => default(T);
+            => default;
 
         /// <summary>
         ///     current element
         /// </summary>
         object IEnumerator.Current
-            => default(T);
+            => default;
 
         /// <summary>
         ///     dispose the enumerator
@@ -78,7 +78,7 @@ namespace PasPasPas.Infrastructure.Utils {
         public T this[int index] {
             get {
                 ExceptionHelper.IndexOutOfRange(index);
-                return default(T);
+                return default;
             }
             set => ExceptionHelper.IndexOutOfRange(index);
         }

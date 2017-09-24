@@ -70,8 +70,10 @@ namespace PasPasPas.Parsing.Tokenizer {
 
         public void Dispose() {
             buffer = null;
-            bufferHolder.Dispose();
-            bufferHolder = null;
+            if (bufferHolder != null) {
+                bufferHolder.Dispose();
+                bufferHolder = null;
+            }
         }
 
         /// <summary>

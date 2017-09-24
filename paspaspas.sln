@@ -24,7 +24,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PasPasPasTests", "PasPasPas
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PasPasPas.Building", "PasPasPas.Building\PasPasPas.Building.csproj", "{EEB2B9DC-E131-46CF-AAC3-6AB662D67DBE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ParserRunner", "ParserRunner\ParserRunner.csproj", "{804E4A76-D32D-49C3-B8DD-9EB999933E00}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SampleRunner", "ParserRunner\SampleRunner.csproj", "{804E4A76-D32D-49C3-B8DD-9EB999933E00}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "P3SyntaxTreeViewer", "P3SyntaxTreeViewer\P3SyntaxTreeViewer.csproj", "{B3649E9A-4BCC-437B-B233-D4C71A175E66}"
 EndProject
@@ -49,6 +49,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PasPasPas.Api", "PasPasPas.Api\PasPasPas.Api.csproj", "{CF92A709-525F-450E-858F-A6AD8EDC16BA}"
 EndProject
 Global
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU

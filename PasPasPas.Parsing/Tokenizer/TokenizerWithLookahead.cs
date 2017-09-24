@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using PasPasPas.Infrastructure.Environment;
 using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree;
 
@@ -17,12 +18,21 @@ namespace PasPasPas.Parsing.Tokenizer {
     /// <summary>
     ///     base class for a tokenizer with a lookead list
     /// </summary>
-    public sealed class TokenizerWithLookahead : ITokenizer {
+    public sealed class TokenizerWithLookahead : ITokenizer, IDisposable {
+
+        private static Guid tokenSequencePool
+            = new Guid(new byte[] { 0x9b, 0xd7, 0xb5, 0x3a, 0xc2, 0xf6, 0x6a, 0x47, 0xb4, 0x29, 0x4a, 0xd8, 0x19, 0x73, 0x8e, 0x56 });
+        /* {3ab5d79b-f6c2-476a-b429-4ad819738e56} */
+
+        /// <summary>
+        ///     generic pool
+        /// </summary>
+        public static readonly Guid TokenSequencePool = tokenSequencePool;
 
         /// <summary>
         ///     a sequence of fetched tokens
         /// </summary>
-        private class TokenSequence {
+        public class TokenSequence : IPoolItem {
 
             private Lazy<LinkedList<Token>> prefix
                 = new Lazy<LinkedList<Token>>(false);
@@ -32,16 +42,24 @@ namespace PasPasPas.Parsing.Tokenizer {
 
             public Token Value = default;
 
-            public void AssignPrefix(IEnumerable<Token> tokens) {
+            public void AssignPrefix(Queue<Token> tokens) {
                 var p = prefix.Value;
-                foreach (var token in tokens)
-                    p.AddLast(token);
+                while (tokens.Count > 0)
+                    p.AddLast(tokens.Dequeue());
             }
 
-            public void AssignSuffix(IEnumerable<Token> tokens) {
+            public void AssignSuffix(Queue<Token> tokens) {
                 var p = suffix.Value;
-                foreach (var token in tokens)
-                    p.AddLast(token);
+                while (tokens.Count > 0)
+                    p.AddLast(tokens.Dequeue());
+            }
+
+            public void Clear() {
+                if (prefix.IsValueCreated)
+                    prefix.Value.Clear();
+                if (suffix.IsValueCreated)
+                    suffix.Value.Clear();
+                Value = Token.Empty;
             }
         }
 
@@ -64,8 +82,8 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <summary>
         ///     list of tokens
         /// </summary>
-        private IndexedQueue<TokenSequence> tokenList
-            = new IndexedQueue<TokenSequence>();
+        private IndexedQueue<ObjectPool<TokenSequence>.PoolItem> tokenList
+            = new IndexedQueue<ObjectPool<TokenSequence>.PoolItem>();
 
         /// <summary>
         ///     list of invalid tokens (e.g. whitespace)
@@ -89,8 +107,8 @@ namespace PasPasPas.Parsing.Tokenizer {
 
                 if (BaseTokenizer.AtEof) {
                     if (tokenList.Count > 0) {
-                        tokenList.Last.AssignSuffix(invalidTokens);
-                        invalidTokens.Clear();
+                        var item = tokenList.Last.Data;
+                        item.AssignSuffix(invalidTokens);
                     }
                     return;
                 }
@@ -99,11 +117,9 @@ namespace PasPasPas.Parsing.Tokenizer {
                 var nextToken = BaseTokenizer.CurrentToken;
 
                 if (IsValidToken(ref nextToken)) {
-                    var entry = new TokenSequence {
-                        Value = nextToken
-                    };
-                    entry.AssignPrefix(invalidTokens);
-                    invalidTokens.Clear();
+                    var entry = PoolFactory.FetchGenericItem<TokenSequence>(ref tokenSequencePool);
+                    entry.Data.Value = nextToken;
+                    entry.Data.AssignPrefix(invalidTokens);
                     tokenList.Enqueue(entry);
                 }
                 else {
@@ -194,7 +210,7 @@ namespace PasPasPas.Parsing.Tokenizer {
                 return Token.Empty;
             }
             else {
-                return tokenList[number].Value;
+                return tokenList[number].Data.Value;
             }
         }
 
@@ -205,7 +221,9 @@ namespace PasPasPas.Parsing.Tokenizer {
         public void FetchNextToken() {
             var result = LookAhead(0);
             if (tokenList.Count > 0) {
-                tokenList.Dequeue();
+                var data = tokenList.Dequeue();
+                data.Dispose();
+                data = null;
             }
         }
 
@@ -213,8 +231,16 @@ namespace PasPasPas.Parsing.Tokenizer {
         ///     dispose the basic tokenizer
         /// </summary>
         public void Dispose() {
-            BaseTokenizer.Dispose();
-            BaseTokenizer = null;
+            while (tokenList != null && tokenList.Count > 0) {
+                var data = tokenList.Dequeue();
+                data.Dispose();
+                data = null;
+            }
+
+            if (BaseTokenizer != null) {
+                BaseTokenizer.Dispose();
+                BaseTokenizer = null;
+            }
         }
     }
 }

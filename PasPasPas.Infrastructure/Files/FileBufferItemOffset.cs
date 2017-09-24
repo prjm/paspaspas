@@ -5,7 +5,7 @@ namespace PasPasPas.Infrastructure.Files {
     /// <summary>
     ///     offset in a file buffer item
     /// </summary>
-    public class FileBufferItemOffset {
+    public sealed class FileBufferItemOffset {
 
         private readonly FileBufferItem input;
         private readonly StackedFileReader reader;

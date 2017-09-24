@@ -1,7 +1,5 @@
-﻿using PasPasPas.Parsing.Tokenizer;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using PasPasPas.Parsing.Parser;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Parsing.SyntaxTree;
 using Xunit;
@@ -11,46 +9,25 @@ using PasPasPas.Parsing.Tokenizer.CharClass;
 using PasPasPas.Parsing.Tokenizer.TokenGroups;
 using PasPasPas.Parsing.Tokenizer.LiteralValues;
 using PasPasPas.Parsing.Tokenizer.Patterns;
+using PasPasPas.Api;
 
 namespace PasPasPasTests.Tokenizer {
-
-
-    internal class TestTokenizer : PasPasPas.Parsing.Tokenizer.Tokenizer {
-
-        private static InputPatterns GetCharClasses() {
-            var puncts = new InputPatterns();
-            puncts.AddPattern(new WhiteSpaceCharacterClass(), new CharacterClassTokenGroupValue(TokenKind.WhiteSpace, new WhiteSpaceCharacterClass()));
-            return puncts;
-        }
-        public TestTokenizer(ParserServices environment, StackedFileReader input)
-            : base(environment.Log, GetCharClasses(), input) {
-
-        }
-
-
-    }
 
     public class TokenizerBaseTest {
 
         private const string TestFileName = "test_file_name.pas";
 
         protected IList<Token> RunTestTokenizer(string input) {
+            var api = new TokenizerApi(new StandardFileAccess());
             var result = new List<Token>();
-            var log = new LogManager();
-            var environment = new ParserServices(log);
 
-            var inputFile = new StringBufferReadable(input);
-            var buffer = new FileBuffer();
-            var path = new DesktopFileReference(TestFileName);
-            buffer.Add(path, inputFile);
-            var reader = new StackedFileReader(buffer);
-            reader.AddFileToRead(path);
-            var tokenizer = new TestTokenizer(environment, reader);
-
-            while (!reader.CurrentFile.AtEof) {
-                var token = tokenizer.CurrentToken;
-                Assert.IsNotNull(token);
-                result.Add(token);
+            using (var tokenizer = api.CreateTokenizerForString(TestFileName, input)) {
+                while (!tokenizer.AtEof) {
+                    var token = tokenizer.CurrentToken;
+                    Assert.IsNotNull(token);
+                    result.Add(token);
+                    tokenizer.FetchNextToken();
+                }
             }
 
             return result;

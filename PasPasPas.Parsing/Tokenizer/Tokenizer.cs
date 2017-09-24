@@ -81,6 +81,7 @@ namespace PasPasPas.Parsing.Tokenizer {
             Log = new LogSource(log, TokenizerLogMessage);
             characterClasses = charClasses;
             state = new TokenizerState(this, input, Log);
+            FinishInput();
         }
 
         /// <summary>
@@ -105,8 +106,12 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         public void FetchNextToken() {
             currentToken = characterClasses.FetchNextToken(state);
+            FinishInput();
+        }
+
+        private void FinishInput() {
             var file = Input.CurrentFile;
-            if (file != null && file.AtEof && (currentToken.Value.Length < 1 || currentToken.Value.LastCharOrDefault() == Input.Value)) {
+            if (file != null && file.AtEof && (currentToken.Value == null || currentToken.Value.Length < 1 || currentToken.Value.LastCharOrDefault() == Input.Value)) {
                 while (file != null && file.AtEof)
                     file = Input.FinishCurrentFile();
             }

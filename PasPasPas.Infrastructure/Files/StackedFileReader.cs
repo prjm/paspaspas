@@ -3,17 +3,17 @@
 namespace PasPasPas.Infrastructure.Files {
 
     /// <summary>
-    ///     helper class for nested input
-    /// </summary>
-    internal class NestedInput {
-        internal FileBufferItemOffset Input;
-        internal NestedInput Parent;
-    }
-
-    /// <summary>
     ///     read from a combiniation of textfiles
     /// </summary>
-    public class StackedFileReader {
+    public sealed class StackedFileReader {
+
+        /// <summary>
+        ///     helper class for nested input
+        /// </summary>
+        private class NestedInput {
+            internal FileBufferItemOffset Input;
+            internal NestedInput Parent;
+        }
 
         private NestedInput input = null;
         private readonly FileBuffer buffer;

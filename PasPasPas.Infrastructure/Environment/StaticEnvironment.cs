@@ -58,7 +58,7 @@ namespace PasPasPas.Infrastructure.Environment {
         /// <typeparam name="T"></typeparam>
         /// <param name="id"></param>
         /// <returns></returns>
-        public static T Require<T>(Guid id) where T : class {
+        public static T Require<T>(ref Guid id) where T : class {
             var value = Optional<T>(id);
 
             if (value == null) {

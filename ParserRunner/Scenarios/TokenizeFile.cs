@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using PasPasPas.Api;
 using PasPasPas.DesktopPlatform;
 using PasPasPas.Infrastructure.Environment;
 
-namespace ParserRunner.Scenarios {
+namespace SampleRunner.Scenarios {
 
     public static class TokenizeFile {
 
-        public static void Run(string testPath, int reapeat) {
+        public static void Run(StringBuilder b, string testPath, int reapeat) {
             var registry = new Dictionary<int, Tuple<ulong, long>>();
 
             for (var i = 0; i < reapeat; i++) {
@@ -32,16 +33,15 @@ namespace ParserRunner.Scenarios {
             }
 
             foreach (var entry in registry.OrderByDescending(t => t.Value.Item2))
-                System.Console.WriteLine($"{entry.Key.ToString()} => {entry.Value.ToString()}");
+                b.AppendLine($"{entry.Key.ToString()} => {entry.Value.ToString()}");
 
-            Console.WriteLine(new string('.', 80));
-
+            b.AppendLine(new string('.', 80));
 
             foreach (var entry in StaticEnvironment.Entries)
                 if (entry is ILookupFunction fn)
-                    Console.WriteLine(entry.GetType().Name + ": " + fn.Table.Count);
+                    b.AppendLine(entry.GetType().Name + ": " + fn.Table.Count);
                 else if (entry is ObjectPool pool)
-                    Console.WriteLine(entry.ToString() + ": " + pool.Count);
+                    b.AppendLine(entry.ToString() + ": " + pool.Count);
 
         }
     }

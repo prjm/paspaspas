@@ -41,6 +41,7 @@ namespace PasPasPas.Api {
             StaticEnvironment.Register(Literals.ParsedHexNumbers, () => new IntegerParser(true));
             StaticEnvironment.Register(Literals.ConvertedCharLiterals, () => new CharLiteralConverter());
             StaticEnvironment.Register(Literals.ConvertedRealLiterals, () => new RealLiteralConverter());
+            StaticEnvironment.Register(TokenizerWithLookahead.TokenSequencePool, () => new ObjectPool<TokenizerWithLookahead.TokenSequence>());
         }
 
         /// <summary>
