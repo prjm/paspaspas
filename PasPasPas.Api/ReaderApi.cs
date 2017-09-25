@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using PasPasPas.Infrastructure.Environment;
 using PasPasPas.Infrastructure.Files;
+using PasPasPas.Infrastructure.Log;
 
 namespace PasPasPas.Api {
 
@@ -30,7 +31,6 @@ namespace PasPasPas.Api {
             var reader = new StackedFileReader(fileBuffer);
             fileBuffer.Add(localPath, new StringBufferReadable(content));
             reader.AddFileToRead(localPath);
-            reader.CurrentFile.NextChar();
             return reader;
         }
 
@@ -45,7 +45,7 @@ namespace PasPasPas.Api {
         }
 
         private void RegisterStatics()
-            => StaticEnvironment.Register(PoolFactory.StringBuilderPool, () => new ObjectPool<StringBuilder>());
+            => StaticEnvironment.Register(StaticDependency.StringBuilderPool, () => new ObjectPool<StringBuilder>());
 
 
         /// <summary>

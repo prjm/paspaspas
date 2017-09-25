@@ -18,18 +18,18 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
         /// <param name="tokenId"></param>
         /// <param name="charClass">character class</param>
         public CharacterClassTokenGroupValue(int tokenId, CharacterClass charClass, int minLength = 0)
-            : this(tokenId, charClass, minLength, Guid.Empty, Guid.Empty) { }
+            : this(tokenId, charClass, minLength, StaticDependency.Undefined, Guid.Empty) { }
 
         /// <summary>
         ///     create a new character class token group value
         /// </summary>
         /// <param name="tokenId"></param>
         /// <param name="charClass">character class</param>
-        public CharacterClassTokenGroupValue(int tokenId, CharacterClass charClass, int minLength, Guid parser, Guid minLengthMessageId) {
+        public CharacterClassTokenGroupValue(int tokenId, CharacterClass charClass, int minLength, int parserId, Guid minLengthMessageId) {
             TokenId = tokenId;
             MinLength = minLength;
             CharClass = charClass;
-            ValueParser = parser;
+            ValueParser = parserId;
 
             if (minLengthMessageId != Guid.Empty)
                 MinLengthMessage = minLengthMessageId;
@@ -56,14 +56,14 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
         private Guid MinLengthMessage { get; }
             = Tokenizer.UnexpectedEndOfToken;
 
-        private Guid ValueParser { get; }
-            = Guid.Empty;
+        private int ValueParser { get; }
+            = StaticDependency.Undefined;
 
         /// <summary>
         ///     parse the complete token for a character class
         /// </summary>
         public override Token Tokenize(TokenizerState state) {
-            var parseValue = ValueParser != Guid.Empty;
+            var parseValue = ValueParser != StaticDependency.Undefined;
 
             using (var parsedValue = parseValue ? PoolFactory.FetchStringBuilder() : null) {
 
@@ -78,6 +78,9 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
                         else
                             currentChar = state.NextChar(false);
                     }
+
+                    if (!CharClass.Matches(currentChar))
+                        state.PreviousChar();
                 }
 
                 if (MinLength > 0 && state.Length < MinLength)
@@ -85,7 +88,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
 
                 if (parseValue) {
                     var value = parsedValue.Data.ToString().PoolString();
-                    var parsed = Literals.NumberLiteral(value, ValueParser);
+                    var parsed = LiteralValues.Literals.NumberLiteral(value, ValueParser);
                     return new Token(TokenId, state, parsed);
                 }
                 else

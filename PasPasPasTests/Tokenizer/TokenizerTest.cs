@@ -159,7 +159,7 @@ namespace PasPasPasTests.Tokenizer {
             TokenizerMessageIsGenerated(PasPasPas.Parsing.Tokenizer.Tokenizer.IncompleteString, "  '   ");
             TokenizerMessageIsGenerated(PasPasPas.Parsing.Tokenizer.Tokenizer.IncompleteString, "#");
             TokenizerMessageIsGenerated(PasPasPas.Parsing.Tokenizer.Tokenizer.UnexpectedCharacter, "#D");
-            TokenizerMessageIsGenerated(PasPasPas.Parsing.Tokenizer.Tokenizer.UnexpectedCharacter, "#$R");
+            TokenizerMessageIsGenerated(PasPasPas.Parsing.Tokenizer.Tokenizer.IncompleteString, "#$R");
         }
 
         public static void IsQuotedString(string input, string value)

@@ -1,7 +1,4 @@
-﻿using System.Text;
-using PasPasPas.Parsing.SyntaxTree;
-using PasPasPas.Infrastructure.Utils;
-using PasPasPas.Infrastructure.Log;
+﻿using PasPasPas.Parsing.SyntaxTree;
 
 namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
     /// <summary>
@@ -43,9 +40,6 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
 
             if (!found)
                 found = state.BufferEndsWith(EndSequence);
-
-            if (!state.AtEof)
-                state.NextChar(false);
 
             if (!found)
                 state.Error(Tokenizer.UnexpectedEndOfToken);

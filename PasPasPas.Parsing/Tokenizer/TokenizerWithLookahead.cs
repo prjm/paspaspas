@@ -117,7 +117,7 @@ namespace PasPasPas.Parsing.Tokenizer {
                 var nextToken = BaseTokenizer.CurrentToken;
 
                 if (IsValidToken(ref nextToken)) {
-                    var entry = PoolFactory.FetchGenericItem<TokenSequence>(ref tokenSequencePool);
+                    var entry = PoolFactory.FetchGenericItem<TokenSequence>(StaticDependency.TokenSequencePool);
                     entry.Data.Value = nextToken;
                     entry.Data.AssignPrefix(invalidTokens);
                     tokenList.Enqueue(entry);

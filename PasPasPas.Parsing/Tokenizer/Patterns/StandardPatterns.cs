@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using PasPasPas.Infrastructure.Environment;
 using PasPasPas.Parsing.SyntaxTree;
 using PasPasPas.Parsing.Tokenizer.CharClass;
 using PasPasPas.Parsing.Tokenizer.TokenGroups;
@@ -219,7 +220,7 @@ namespace PasPasPas.Parsing.Tokenizer.Patterns {
             lt.Add('>', TokenKind.NotEquals);
 
             AddPattern('{', new SequenceGroupTokenValue(TokenKind.Comment, "}")).Add('$', new SequenceGroupTokenValue(TokenKind.Preprocessor, "}"));
-            AddPattern('$', new CharacterClassTokenGroupValue(TokenKind.HexNumber, new DigitCharClass(true), 2, LiteralValues.Literals.ParsedHexNumbers, Tokenizer.IncompleteHexNumber));
+            AddPattern('$', new CharacterClassTokenGroupValue(TokenKind.HexNumber, new DigitCharClass(true), 2, StaticDependency.ParsedHexNumbers, Tokenizer.IncompleteHexNumber));
             AddPattern(new WhiteSpaceCharacterClass(), new CharacterClassTokenGroupValue(TokenKind.WhiteSpace, new WhiteSpaceCharacterClass()));
             AddPattern(new IdentifierCharacterClass(), new IdentifierTokenGroupValue(Keywords) { AllowAmpersand = true, ParseAsm = true });
 

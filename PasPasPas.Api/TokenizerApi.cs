@@ -1,5 +1,4 @@
-﻿using System;
-using PasPasPas.Infrastructure.Environment;
+﻿using PasPasPas.Infrastructure.Environment;
 using PasPasPas.Infrastructure.Files;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Parsing.Tokenizer;
@@ -37,11 +36,11 @@ namespace PasPasPas.Api {
         }
 
         private void RegisterStatics() {
-            StaticEnvironment.Register(Literals.ParsedIntegers, () => new IntegerParser(false));
-            StaticEnvironment.Register(Literals.ParsedHexNumbers, () => new IntegerParser(true));
-            StaticEnvironment.Register(Literals.ConvertedCharLiterals, () => new CharLiteralConverter());
-            StaticEnvironment.Register(Literals.ConvertedRealLiterals, () => new RealLiteralConverter());
-            StaticEnvironment.Register(TokenizerWithLookahead.TokenSequencePool, () => new ObjectPool<TokenizerWithLookahead.TokenSequence>());
+            StaticEnvironment.Register(StaticDependency.ParsedIntegers, () => new IntegerParser(false));
+            StaticEnvironment.Register(StaticDependency.ParsedHexNumbers, () => new IntegerParser(true));
+            StaticEnvironment.Register(StaticDependency.ConvertedCharLiterals, () => new CharLiteralConverter());
+            StaticEnvironment.Register(StaticDependency.ConvertedRealLiterals, () => new RealLiteralConverter());
+            StaticEnvironment.Register(StaticDependency.TokenSequencePool, () => new ObjectPool<TokenizerWithLookahead.TokenSequence>());
         }
 
         /// <summary>
@@ -88,5 +87,11 @@ namespace PasPasPas.Api {
         /// </summary>
         public ILogManager Log
             => log;
+
+        /// <summary>
+        ///     access to reader api
+        /// </summary>
+        public ReaderApi Readers
+            => reader;
     }
 }

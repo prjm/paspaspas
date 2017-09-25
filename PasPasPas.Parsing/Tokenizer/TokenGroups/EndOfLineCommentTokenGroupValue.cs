@@ -10,18 +10,19 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
 
         public override Token Tokenize(TokenizerState state) {
             var found = false;
+            var currentChar = '\0';
 
             while (!state.AtEof && !found) {
 
-                var currentChar = state.NextChar(true);
+                currentChar = state.NextChar(false);
+                found = IsNewLineChar(currentChar);
 
-                while (IsNewLineChar(currentChar) && !state.AtEof) {
-                    currentChar = state.NextChar(false);
-                    if (IsNewLineChar(currentChar))
-                        state.Append(currentChar);
-                    found = true;
-                }
+                if (!found)
+                    state.Append(currentChar);
             }
+
+            if (IsNewLineChar(currentChar))
+                state.PreviousChar();
 
             return new Token(TokenKind.Comment, state);
         }

@@ -99,10 +99,6 @@ namespace PasPasPas.Parsing.Tokenizer {
         public char PreviousChar()
             => input.PreviousChar();
 
-        public void StartBufferWith(char startValue) {
-            buffer.Clear();
-            buffer.Append(startValue);
-        }
     }
 
 }

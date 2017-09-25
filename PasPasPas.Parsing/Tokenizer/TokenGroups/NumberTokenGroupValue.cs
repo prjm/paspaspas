@@ -14,7 +14,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
     public sealed class NumberTokenGroupValue : PatternContinuation {
 
         private CharacterClassTokenGroupValue digitTokenizer
-            = new CharacterClassTokenGroupValue(TokenKind.Integer, new DigitCharClass(false), 0, Literals.ParsedIntegers, Guid.Empty);
+            = new CharacterClassTokenGroupValue(TokenKind.Integer, new DigitCharClass(false), 0, StaticDependency.ParsedIntegers, Guid.Empty);
 
         private SingleCharClass dot
             = new SingleCharClass('.');
@@ -59,7 +59,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
             var withExponent = false;
 
             if (state.AtEof) {
-                var number = Literals.ParseIntegerLiteral(state.GetBufferContent());
+                var number = LiteralValues.Literals.ParseIntegerLiteral(state.GetBufferContent());
                 return new Token(TokenKind.Integer, state, number);
             }
 
@@ -70,6 +70,9 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
             object exp = null;
             var minus = false;
 
+            if (!state.AtEof)
+                state.NextChar(false);
+
             if (CurrentCharMatches(state, dot)) {
                 withDot = true;
 
@@ -79,9 +82,12 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
                 if (digitTokenizer.CharClass.Matches(state.CurrentCharacter)) {
                     state.PreviousChar();
                     decimals = digitTokenizer.Tokenize(state).ParsedValue;
+                    if (!state.AtEof)
+                        state.NextChar(false);
                 }
 
                 if (state.BufferEndsWith(".")) {
+                    state.PreviousChar();
                     withDot = false;
                     state.Length -= 1;
                 }
@@ -115,7 +121,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
             }
 
             if (withDot || withExponent) {
-                return new Token(TokenKind.Real, state, Literals.ConvertRealLiteral(digits, decimals, minus, exp));
+                return new Token(TokenKind.Real, state, LiteralValues.Literals.ConvertRealLiteral(digits, decimals, minus, exp));
             }
             else {
                 return new Token(TokenKind.Integer, state, digits);

@@ -51,6 +51,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
 
                             if (found) {
                                 state.Append(quote);
+                                state.PreviousChar();
                             }
                             else {
                                 state.Append(quote);

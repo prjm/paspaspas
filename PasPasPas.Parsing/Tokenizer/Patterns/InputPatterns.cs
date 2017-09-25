@@ -99,14 +99,13 @@ namespace PasPasPas.Parsing.Tokenizer.Patterns {
         /// </summary>
         /// <returns></returns>
         public Token FetchNextToken(TokenizerState state) {
-            var startValue = state.CurrentCharacter;
-            state.StartBufferWith(startValue);
+            state.Clear();
+            var startValue = state.NextChar(true);
 
             if (Match(startValue, out InputPattern tokenGroup)) {
                 return FetchTokenByGroup(state, tokenGroup);
             }
 
-            state.NextChar(false);
             state.Error(Tokenizer.UnexpectedCharacter);
             return new Token(TokenKind.Invalid, state);
         }

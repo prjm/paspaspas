@@ -111,7 +111,7 @@ namespace PasPasPas.Parsing.Tokenizer {
 
         private void FinishInput() {
             var file = Input.CurrentFile;
-            if (file != null && file.AtEof && (currentToken.Value == null || currentToken.Value.Length < 1 || currentToken.Value.LastCharOrDefault() == Input.Value)) {
+            if (file != null && file.AtEof) {
                 while (file != null && file.AtEof)
                     file = Input.FinishCurrentFile();
             }

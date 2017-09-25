@@ -8,6 +8,47 @@ using PasPasPas.Infrastructure.Utils;
 namespace PasPasPas.Infrastructure.Environment {
 
     /// <summary>
+    ///     a set of static dependencies
+    /// </summary>
+    public static class StaticDependency {
+
+        /// <summary>
+        ///     undefined dependency
+        /// </summary>
+        public const int Undefined = 0;
+
+        /// <summary>
+        ///     string builder pool
+        /// </summary>
+        public const int StringBuilderPool = 1;
+
+        /// <summary>
+        ///     integer parser
+        /// </summary>
+        public const int ParsedIntegers = 2;
+
+        /// <summary>
+        ///     hex number parser
+        /// </summary>
+        public const int ParsedHexNumbers = 3;
+
+        /// <summary>
+        ///     char literal converter
+        /// </summary>
+        public const int ConvertedCharLiterals = 4;
+
+        /// <summary>
+        ///     real literal converter
+        /// </summary>
+        public const int ConvertedRealLiterals = 5;
+
+        /// <summary>
+        ///     token sequence pool
+        /// </summary>
+        public const int TokenSequencePool = 6;
+    }
+
+    /// <summary>
     ///     static dependency manager
     /// </summary>
     public class StaticEnvironment {
@@ -16,13 +57,13 @@ namespace PasPasPas.Infrastructure.Environment {
         ///     internal class to manage entries
         /// </summary>
         private class EnvironmentEntry {
-            public Guid id;
+            public int id;
             public Lazy<object> creator;
             public int usage = 0;
         }
 
-        private static ConcurrentDictionary<Guid, EnvironmentEntry> environment
-            = new ConcurrentDictionary<Guid, EnvironmentEntry>();
+        private static ConcurrentDictionary<int, EnvironmentEntry> environment
+            = new ConcurrentDictionary<int, EnvironmentEntry>();
 
         /// <summary>
         ///     get a list of static entries
@@ -41,7 +82,7 @@ namespace PasPasPas.Infrastructure.Environment {
         /// </summary>
         /// <param name="id"></param>
         /// <param name="data"></param>
-        public static bool Register(Guid id, Func<object> data) {
+        public static bool Register(int id, Func<object> data) {
             if (environment.ContainsKey(id))
                 return false;
 
@@ -58,7 +99,7 @@ namespace PasPasPas.Infrastructure.Environment {
         /// <typeparam name="T"></typeparam>
         /// <param name="id"></param>
         /// <returns></returns>
-        public static T Require<T>(ref Guid id) where T : class {
+        public static T Require<T>(int id) where T : class {
             var value = Optional<T>(id);
 
             if (value == null) {
@@ -75,7 +116,7 @@ namespace PasPasPas.Infrastructure.Environment {
         /// <typeparam name="T">result type</typeparam>
         /// <param name="id">entry id</param>
         /// <returns>optional value</returns>
-        public static T Optional<T>(Guid id) where T : class {
+        public static T Optional<T>(int id) where T : class {
             if (environment.TryGetValue(id, out var entry)) {
                 if (entry.creator.Value is T result) {
                     Interlocked.Increment(ref entry.usage);
