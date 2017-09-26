@@ -45,7 +45,7 @@ namespace PasPasPas.Api {
         }
 
         private void RegisterStatics()
-            => StaticEnvironment.Register(StaticDependency.StringBuilderPool, () => new ObjectPool<StringBuilder>());
+            => StaticEnvironment.Register(StaticDependency.StringBuilderPool, new ObjectPool<StringBuilder>());
 
 
         /// <summary>

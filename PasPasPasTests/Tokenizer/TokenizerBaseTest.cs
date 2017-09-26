@@ -17,6 +17,7 @@ namespace PasPasPasTests.Tokenizer {
         private const string TestFileName = "test_file_name.pas";
 
         protected IList<Token> RunTestTokenizer(string input) {
+            StaticEnvironment.Clear();
             var api = new TokenizerApi(new StandardFileAccess());
             var result = new List<Token>();
 
@@ -287,11 +288,11 @@ namespace PasPasPasTests.Tokenizer {
             TestPattern(patterns, "画像", TokenKind.Identifier);
             TestPattern(patterns, "a b caaa", PatternA, TokenKind.WhiteSpace, PatternB, TokenKind.WhiteSpace, TokenKind.Identifier);
             tgv.AllowAmpersand = false;
-            TestPattern(patterns, PasPasPas.Parsing.Tokenizer.Tokenizer.UnexpectedCharacter, "&a", TokenKind.Undefined, PatternA);
-            TestPattern(patterns, PasPasPas.Parsing.Tokenizer.Tokenizer.UnexpectedCharacter, "a9", PatternA, TokenKind.Undefined);
+            TestPattern(patterns, PasPasPas.Parsing.Tokenizer.Tokenizer.UnexpectedCharacter, "&a", TokenKind.Invalid, PatternA);
+            TestPattern(patterns, PasPasPas.Parsing.Tokenizer.Tokenizer.UnexpectedCharacter, "a9", PatternA, TokenKind.Invalid);
             tgv.AllowDigits = true;
             TestPattern(patterns, "a9", TokenKind.Identifier);
-            TestPattern(patterns, PasPasPas.Parsing.Tokenizer.Tokenizer.UnexpectedCharacter, "a.a9", PatternA, TokenKind.Undefined, TokenKind.Identifier);
+            TestPattern(patterns, PasPasPas.Parsing.Tokenizer.Tokenizer.UnexpectedCharacter, "a.a9", PatternA, TokenKind.Invalid, TokenKind.Identifier);
             TestPattern(patterns, "_a_aaA123_33", TokenKind.Identifier);
             tgv.AllowDots = true;
             TestPattern(patterns, "a.9", TokenKind.Identifier);

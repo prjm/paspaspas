@@ -46,6 +46,16 @@ namespace PasPasPas.Infrastructure.Environment {
         ///     token sequence pool
         /// </summary>
         public const int TokenSequencePool = 6;
+
+        /// <summary>
+        ///     char string pool
+        /// </summary>
+        public const int CharStringPool = 7;
+
+        /// <summary>
+        ///     string pool
+        /// </summary>
+        public const int StringPool = 8;
     }
 
     /// <summary>
@@ -58,7 +68,7 @@ namespace PasPasPas.Infrastructure.Environment {
         /// </summary>
         private class EnvironmentEntry {
             public int id;
-            public Lazy<object> creator;
+            public object item;
             public int usage = 0;
         }
 
@@ -69,26 +79,37 @@ namespace PasPasPas.Infrastructure.Environment {
         ///     get a list of static entries
         /// </summary>
         public static IEnumerable<object> Entries
-            => environment.Values.Where(t => t.creator.IsValueCreated).Select(t => t.creator.Value).ToList();
+            => environment.Values.Select(t => t.item).ToList();
 
         /// <summary>
         ///     clears registry
         /// </summary>
-        public static void Clear()
-            => environment.Clear();
+        public static void Clear() {
+            var keysToRemove = new List<int>();
+
+            foreach (var entry in environment.Values) {
+                if (entry.item is IManualStaticCache cache)
+                    cache.Clear();
+                else
+                    keysToRemove.Add(entry.id);
+            }
+
+            foreach (var id in keysToRemove)
+                environment.TryRemove(id, out var _);
+        }
 
         /// <summary>
         ///     register a cached lookup function
         /// </summary>
         /// <param name="id"></param>
         /// <param name="data"></param>
-        public static bool Register(int id, Func<object> data) {
+        public static bool Register(int id, object data) {
             if (environment.ContainsKey(id))
                 return false;
 
             return environment.TryAdd(id, new EnvironmentEntry() {
                 id = id,
-                creator = new Lazy<object>(data, true)
+                item = data
             });
         }
 
@@ -118,7 +139,7 @@ namespace PasPasPas.Infrastructure.Environment {
         /// <returns>optional value</returns>
         public static T Optional<T>(int id) where T : class {
             if (environment.TryGetValue(id, out var entry)) {
-                if (entry.creator.Value is T result) {
+                if (entry.item is T result) {
                     Interlocked.Increment(ref entry.usage);
                     return result;
                 }
@@ -126,6 +147,18 @@ namespace PasPasPas.Infrastructure.Environment {
             return null;
         }
 
-
+        /// <summary>
+        ///     provide a manual instance
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="id"></param>
+        /// <param name="item"></param>
+        public static void Provide<T>(int id, T item) {
+            var entry = new EnvironmentEntry {
+                id = id,
+                item = item
+            };
+            environment.TryAdd(id, entry);
+        }
     }
 }

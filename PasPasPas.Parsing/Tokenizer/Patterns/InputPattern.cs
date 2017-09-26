@@ -5,6 +5,7 @@ using System.Linq;
 using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.Tokenizer.CharClass;
 using PasPasPas.Parsing.Tokenizer.TokenGroups;
+using PasPasPas.Infrastructure.Environment;
 
 namespace PasPasPas.Parsing.Tokenizer.Patterns {
 
@@ -58,7 +59,7 @@ namespace PasPasPas.Parsing.Tokenizer.Patterns {
         public InputPattern(CharacterClass prefix, PatternContinuation tokenValue, string completePrefix) {
             Prefix = prefix ?? throw new ArgumentNullException(nameof(prefix));
             TokenValue = tokenValue ?? throw new ArgumentNullException(nameof(tokenValue));
-            CompletePrefix = completePrefix.PoolString();
+            CompletePrefix = StringPool.PoolString(completePrefix);
         }
 
         /// <summary>

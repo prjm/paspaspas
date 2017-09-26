@@ -87,7 +87,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
                     state.Error(MinLengthMessage);
 
                 if (parseValue) {
-                    var value = parsedValue.Data.ToString().PoolString();
+                    var value = StringPool.PoolString(parsedValue.Data.ToString());
                     var parsed = LiteralValues.Literals.NumberLiteral(value, ValueParser);
                     return new Token(TokenId, state, parsed);
                 }

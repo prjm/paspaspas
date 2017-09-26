@@ -87,7 +87,7 @@ namespace PasPasPas.Parsing.Tokenizer {
             => buffer[index];
 
         public string GetBufferContent()
-            => buffer.ToString().PoolString();
+            => StringPool.PoolString(buffer.ToString());
 
         public char NextChar(bool append) {
             var result = input.NextChar();

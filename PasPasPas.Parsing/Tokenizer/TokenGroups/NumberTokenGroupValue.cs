@@ -75,30 +75,35 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
 
             if (CurrentCharMatches(state, dot)) {
                 withDot = true;
+                var skipBack = false;
 
-                if (!state.AtEof)
+                if (!state.AtEof) {
                     state.NextChar(false);
+                    skipBack = true;
+                }
 
                 if (digitTokenizer.CharClass.Matches(state.CurrentCharacter)) {
                     state.PreviousChar();
                     decimals = digitTokenizer.Tokenize(state).ParsedValue;
-                    if (!state.AtEof)
-                        state.NextChar(false);
                 }
+                else {
+                    if (skipBack)
+                        state.PreviousChar();
 
-                if (state.BufferEndsWith(".")) {
-                    state.PreviousChar();
-                    withDot = false;
-                    state.Length -= 1;
+                    if (state.BufferEndsWith(".")) {
+                        state.PreviousChar();
+                        withDot = false;
+                        state.Length -= 1;
+                    }
                 }
             }
 
             if (CurrentCharMatches(state, exponent)) {
-                state.NextChar(false);
                 if (state.AtEof) {
                     state.Error(Tokenizer.UnexpectedEndOfToken);
                 }
                 else {
+                    state.NextChar(false);
                     minus = state.CurrentCharacter == '-';
                     if (CurrentCharMatches(state, plusminus))
                         state.NextChar(false);

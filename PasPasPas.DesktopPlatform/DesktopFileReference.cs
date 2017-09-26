@@ -1,4 +1,5 @@
 ﻿using System;
+using PasPasPas.Infrastructure.Environment;
 using PasPasPas.Infrastructure.Files;
 using PasPasPas.Infrastructure.Utils;
 
@@ -23,7 +24,7 @@ namespace PasPasPas.DesktopPlatform {
             if (string.IsNullOrWhiteSpace(path))
                 ExceptionHelper.StringEmpty(nameof(path));
 
-            filePath = path.PoolString();
+            filePath = StringPool.PoolString(path);
             hashcode = filePath.ToUpperInvariant().GetHashCode();
         }
 

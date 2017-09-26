@@ -13,6 +13,7 @@ namespace PasPasPas.Infrastructure.Environment {
         private long tickCount = 0;
         private long startTickCount;
         private int stackCount = 0;
+        private TimeSpan duration = default;
         private string description = string.Empty;
         private ExecutionTimer parent = null;
         private Lazy<IList<ExecutionTimer>> children
@@ -35,6 +36,12 @@ namespace PasPasPas.Infrastructure.Environment {
         /// </summary>
         public bool IsRunning
             => stackCount > 0;
+
+        /// <summary>
+        ///     summed duration
+        /// </summary>
+        public TimeSpan Duration
+            => duration;
 
         /// <summary>
         ///     create a new execution timer
@@ -95,8 +102,10 @@ namespace PasPasPas.Infrastructure.Environment {
                 return false;
             }
 
-            tickCount += System.Environment.TickCount - startTickCount;
+            var ticks = System.Environment.TickCount - startTickCount;
+            tickCount += ticks;
             stackCount = 0;
+            duration = duration.Add(TimeSpan.FromTicks(ticks));
             return true;
         }
 

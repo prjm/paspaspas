@@ -16,7 +16,7 @@ namespace SampleRunner {
         static void Main(string[] args) {
 
             var testPath = @"C:\temp\Testfiles\spring.pas";
-            var mode = SampleMode.ReadFile;
+            var mode = SampleMode.TokenizerFile;
             var repeat = 5;
             var result = new StringBuilder();
             Action<StringBuilder> action;
@@ -94,8 +94,19 @@ namespace SampleRunner {
             action(result);
             timer.Stop();
             GC.Collect();
+
+            result.AppendLine(new string('.', 80));
+
+            foreach (var entry in StaticEnvironment.Entries)
+                if (entry is ILookupFunction fn)
+                    result.AppendLine(entry.GetType().Name + ": " + fn.Table.Count);
+                else if (entry is ObjectPool pool)
+                    result.AppendLine(entry.ToString() + ": " + pool.Count);
+                else if (entry is IManualStaticCache sc)
+                    result.AppendLine(entry.ToString() + ": " + sc.Count);
+
             result.AppendLine(new string('-', 80));
-            result.AppendLine($"{timer.TickCount} ticks required.");
+            result.AppendLine($"{timer.TickCount} ticks required ({timer.Duration.TotalMilliseconds}).");
             result.AppendLine($"{GC.CollectionCount(0)} collections level 0.");
             result.AppendLine($"{GC.CollectionCount(1)} collections level 1.");
             result.AppendLine($"{GC.CollectionCount(2)} collections level 2.");

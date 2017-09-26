@@ -35,10 +35,10 @@ namespace PasPasPas.Parsing.Tokenizer {
         public class TokenSequence : IPoolItem {
 
             private Lazy<LinkedList<Token>> prefix
-                = new Lazy<LinkedList<Token>>(false);
+                = new Lazy<LinkedList<Token>>(() => new LinkedList<Token>(), false);
 
             private Lazy<LinkedList<Token>> suffix
-                = new Lazy<LinkedList<Token>>(false);
+                = new Lazy<LinkedList<Token>>(() => new LinkedList<Token>(), false);
 
             public Token Value = default;
 

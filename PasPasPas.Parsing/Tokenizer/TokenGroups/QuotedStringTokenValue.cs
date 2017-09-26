@@ -71,7 +71,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
                 if (!found)
                     state.Error(Tokenizer.IncompleteString);
 
-                return new Token(TokenId, state, resultBuilder.Data.ToString().PoolString());
+                return new Token(TokenId, state, StringPool.PoolString(resultBuilder.Data.ToString()));
             }
         }
     }

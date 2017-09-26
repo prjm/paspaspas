@@ -35,15 +35,6 @@ namespace SampleRunner.Scenarios {
             foreach (var entry in registry.OrderByDescending(t => t.Value.Item2))
                 b.AppendLine($"{entry.Key.ToString()} => {entry.Value.ToString()}");
 
-            b.AppendLine(new string('.', 80));
-
-            foreach (var entry in StaticEnvironment.Entries)
-                if (entry is ILookupFunction fn)
-                    b.AppendLine(entry.GetType().Name + ": " + fn.Table.Count);
-                else if (entry is ObjectPool pool)
-                    b.AppendLine(entry.ToString() + ": " + pool.Count);
-
-
         }
     }
 }

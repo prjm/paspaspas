@@ -19,7 +19,7 @@ namespace PasPasPasTests.Infra {
         [Fact]
         public void TestOptional() {
             Assert.IsNull(StaticEnvironment.Optional<Demo>(DemoService));
-            StaticEnvironment.Register(DemoService, () => new Demo());
+            StaticEnvironment.Register(DemoService, new Demo());
             Assert.AreEqual(typeof(Demo), StaticEnvironment.Optional<Demo>(DemoService)?.GetType());
             Assert.AreEqual(typeof(Demo), StaticEnvironment.Optional<IDemo>(DemoService)?.GetType());
             Assert.AreEqual(null, StaticEnvironment.Optional<string>(DemoService)?.GetType());

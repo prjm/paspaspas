@@ -36,11 +36,11 @@ namespace PasPasPas.Api {
         }
 
         private void RegisterStatics() {
-            StaticEnvironment.Register(StaticDependency.ParsedIntegers, () => new IntegerParser(false));
-            StaticEnvironment.Register(StaticDependency.ParsedHexNumbers, () => new IntegerParser(true));
-            StaticEnvironment.Register(StaticDependency.ConvertedCharLiterals, () => new CharLiteralConverter());
-            StaticEnvironment.Register(StaticDependency.ConvertedRealLiterals, () => new RealLiteralConverter());
-            StaticEnvironment.Register(StaticDependency.TokenSequencePool, () => new ObjectPool<TokenizerWithLookahead.TokenSequence>());
+            StaticEnvironment.Register(StaticDependency.ParsedIntegers, new IntegerParser(false));
+            StaticEnvironment.Register(StaticDependency.ParsedHexNumbers, new IntegerParser(true));
+            StaticEnvironment.Register(StaticDependency.ConvertedCharLiterals, new CharLiteralConverter());
+            StaticEnvironment.Register(StaticDependency.ConvertedRealLiterals, new RealLiteralConverter());
+            StaticEnvironment.Register(StaticDependency.TokenSequencePool, new ObjectPool<TokenizerWithLookahead.TokenSequence>());
         }
 
         /// <summary>
