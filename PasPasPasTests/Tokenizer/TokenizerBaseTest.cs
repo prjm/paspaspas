@@ -328,6 +328,8 @@ namespace PasPasPasTests.Tokenizer {
             TestPattern(patterns, PasPasPas.Parsing.Tokenizer.Tokenizer.UnexpectedEndOfToken, "9.9e+", TokenKind.Real);
             TestPattern(patterns, PasPasPas.Parsing.Tokenizer.Tokenizer.UnexpectedEndOfToken, "9.9e-", TokenKind.Real);
             TestPattern(patterns, PasPasPas.Parsing.Tokenizer.Tokenizer.UnexpectedEndOfToken, "9.9e.", TokenKind.Real, TokenKind.Dot);
+            TestPattern(patterns, PasPasPas.Parsing.Tokenizer.Tokenizer.UnexpectedEndOfToken, "9.9e+.", TokenKind.Real, TokenKind.Dot);
+            TestPattern(patterns, PasPasPas.Parsing.Tokenizer.Tokenizer.UnexpectedEndOfToken, "9.9e-.", TokenKind.Real, TokenKind.Dot);
             TestPattern(patterns, "9999.9999E+3", TokenKind.Real);
             TestPattern(patterns, "9999.9999E-3", TokenKind.Real);
             TestPattern(patterns, "9999.9999E-3.", TokenKind.Real, TokenKind.Dot);
