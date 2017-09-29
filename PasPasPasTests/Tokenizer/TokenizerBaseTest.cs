@@ -74,24 +74,6 @@ namespace PasPasPasTests.Tokenizer {
         }
 
         [Fact]
-        public void TestExponentCharClass() {
-            var cc = new ExponentCharacterClass();
-            Assert.IsTrue(cc.Matches('E'));
-            Assert.IsTrue(cc.Matches('e'));
-            Assert.IsFalse(cc.Matches('A'));
-            Assert.IsFalse(cc.Matches(' '));
-        }
-
-        [Fact]
-        public void TestPlusMinusCharClass() {
-            var cc = new PlusMinusCharacterClass();
-            Assert.IsTrue(cc.Matches('+'));
-            Assert.IsTrue(cc.Matches('-'));
-            Assert.IsFalse(cc.Matches('A'));
-            Assert.IsFalse(cc.Matches(' '));
-        }
-
-        [Fact]
         public void TestIdentifierCharClass() {
             var cc = new IdentifierCharacterClass();
             Assert.IsTrue(cc.Matches('x'));

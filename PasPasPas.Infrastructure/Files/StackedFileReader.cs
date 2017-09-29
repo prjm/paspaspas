@@ -1,4 +1,5 @@
-﻿using PasPasPas.Infrastructure.Utils;
+﻿using System;
+using PasPasPas.Infrastructure.Utils;
 
 namespace PasPasPas.Infrastructure.Files {
 
@@ -96,6 +97,12 @@ namespace PasPasPas.Infrastructure.Files {
                 return false;
             }
         }
+
+        /// <summary>
+        ///     look ahead one character
+        /// </summary>
+        public char LookAhead(int number)
+            => input.Input.LookAhead(number);
 
         /// <summary>
         ///     move to the previous char

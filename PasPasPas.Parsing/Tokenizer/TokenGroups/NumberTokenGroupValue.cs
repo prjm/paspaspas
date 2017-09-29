@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using PasPasPas.Infrastructure.Environment;
-using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree;
 using PasPasPas.Parsing.Tokenizer.CharClass;
-using PasPasPas.Parsing.Tokenizer.LiteralValues;
 
 namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
 
@@ -15,15 +13,6 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
 
         private CharacterClassTokenGroupValue digitTokenizer
             = new CharacterClassTokenGroupValue(TokenKind.Integer, new DigitCharClass(false), 0, StaticDependency.ParsedIntegers, Guid.Empty);
-
-        private SingleCharClass dot
-            = new SingleCharClass('.');
-
-        private ExponentCharacterClass exponent
-            = new ExponentCharacterClass();
-
-        private PlusMinusCharacterClass plusminus
-            = new PlusMinusCharacterClass();
 
         private IdentifierCharacterClass allIdents
             = new IdentifierCharacterClass() { AllowAmpersand = true, AllowDigits = true, AllowDots = true, };
@@ -70,59 +59,30 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
             object exp = null;
             var minus = false;
 
-            if (!state.AtEof)
-                state.NextChar(false);
-
-            if (CurrentCharMatches(state, dot)) {
-                withDot = true;
-                var skipBack = false;
-
-                if (!state.AtEof) {
-                    state.NextChar(false);
-                    skipBack = true;
-                }
-
-                if (digitTokenizer.CharClass.Matches(state.CurrentCharacter)) {
-                    state.PreviousChar();
+            if (state.LookAhead(1) == '.') {
+                if (digitTokenizer.CharClass.Matches(state.LookAhead(2))) {
+                    state.NextChar(true);
+                    withDot = true;
                     decimals = digitTokenizer.Tokenize(state).ParsedValue;
                 }
-                else {
-                    if (state.BufferEndsWith(".")) {
-                        state.PreviousChar();
-                        withDot = false;
-                        state.Length -= 1;
-                    }
-
-                    if (skipBack)
-                        state.PreviousChar();
-                }
             }
 
-            var back = false;
-            if (!state.AtEof) {
-                state.NextChar(false);
-                back = true;
-            }
+            var nextChar = state.LookAhead();
 
-            if (CurrentCharMatches(state, exponent)) {
+            if (nextChar == 'E' || nextChar == 'e') {
+                state.NextChar(true);
                 if (state.AtEof) {
                     state.Error(Tokenizer.UnexpectedEndOfToken);
                 }
                 else {
-                    state.NextChar(false);
-                    minus = state.CurrentCharacter == '-';
-                    if (CurrentCharMatches(state, plusminus)) {
-                        if (!state.AtEof) {
-                            state.NextChar(false);
+                    nextChar = state.LookAhead();
+                    minus = nextChar == '-';
+                    if (nextChar == '-' || nextChar == '+')
+                        state.NextChar(true);
 
-                            if (digitTokenizer.CharClass.Matches(state.CurrentCharacter)) {
-                                state.PreviousChar();
-                                exp = digitTokenizer.Tokenize(state).ParsedValue;
-                            }
-                            else {
-                                state.PreviousChar();
-                                state.Error(Tokenizer.UnexpectedEndOfToken);
-                            }
+                    if (!state.AtEof) {
+                        if (digitTokenizer.CharClass.Matches(state.LookAhead())) {
+                            exp = digitTokenizer.Tokenize(state).ParsedValue;
                         }
                         else {
                             state.Error(Tokenizer.UnexpectedEndOfToken);
@@ -130,14 +90,11 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
                     }
                     else {
                         state.Error(Tokenizer.UnexpectedEndOfToken);
-                        state.PreviousChar();
                     }
                 }
 
                 withExponent = true;
             }
-            else if (back)
-                state.PreviousChar();
 
             if (AllowIdents && CurrentCharMatches(state, allIdents)) {
                 identTokenizer.Tokenize(state);

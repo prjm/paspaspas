@@ -78,5 +78,17 @@ namespace PasPasPas.Infrastructure.Files {
         /// </summary>
         public int Position
             => offset;
+
+        /// <summary>
+        ///     look ahead one character
+        /// </summary>
+        /// <returns></returns>
+        public char LookAhead(int number) {
+            var position = offset + number;
+            if (position < 0 || position >= length)
+                return '\0';
+            return input.CharAt(position);
+        }
+
     }
 }

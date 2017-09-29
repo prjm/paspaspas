@@ -68,19 +68,13 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
             using (var parsedValue = parseValue ? PoolFactory.FetchStringBuilder() : null) {
 
                 if (!state.AtEof) {
-                    var currentChar = state.NextChar(false);
-                    while (CharClass.Matches(currentChar)) {
-                        state.Append(currentChar);
+                    while (CharClass.Matches(state.LookAhead())) {
+                        var currentChar = state.NextChar(true);
                         parsedValue?.Data.Append(currentChar);
 
                         if (state.AtEof)
                             break;
-                        else
-                            currentChar = state.NextChar(false);
                     }
-
-                    if (!CharClass.Matches(currentChar))
-                        state.PreviousChar();
                 }
 
                 if (MinLength > 0 && state.Length < MinLength)

@@ -83,6 +83,9 @@ namespace PasPasPas.Parsing.Tokenizer {
         public void Error(Guid errorId)
             => log.Error(errorId);
 
+        public char LookAhead(int number = 1)
+            => input.LookAhead(number);
+
         public char GetBufferCharAt(int index)
             => buffer[index];
 

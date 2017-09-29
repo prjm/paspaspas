@@ -4,6 +4,7 @@ using PasPasPas.Parsing.SyntaxTree;
 using PasPasPas.Parsing.Tokenizer.CharClass;
 
 namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
+
     /// <summary>
     ///     token group for identifiers
     /// </summary>
@@ -65,12 +66,9 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
             }
 
             while (!state.AtEof) {
-                var currentChar = state.NextChar(false);
-                if (!identifierCharClass.Matches(currentChar)) {
-                    state.PreviousChar();
+                if (!identifierCharClass.Matches(state.LookAhead()))
                     break;
-                }
-                state.Append(currentChar);
+                state.NextChar(true);
             }
 
             if (hasAmpersand && state.Length < 2)

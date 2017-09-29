@@ -210,7 +210,7 @@ namespace PasPasPasTests.Tokenizer {
             if (tokens.Length < 1) {
 
                 if (value is double)
-                    Assert.AreEqual((double)value, (double)result[0].ParsedValue);
+                    Assert.AreEqual((double)value, Convert.ToDouble(result[0].ParsedValue));
                 else
                     Assert.AreEqual(value, result[0].ParsedValue);
 

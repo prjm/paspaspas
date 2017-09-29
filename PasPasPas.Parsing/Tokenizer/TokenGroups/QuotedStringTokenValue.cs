@@ -38,32 +38,19 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
             using (var resultBuilder = PoolFactory.FetchStringBuilder()) {
 
                 while ((!found) && (!state.AtEof)) {
-                    var currentChar = state.NextChar(false);
+                    var nextChar1 = state.LookAhead(1);
+                    var nextChar2 = state.LookAhead(2);
 
-                    if (currentChar == quote) {
-                        if (state.AtEof) {
-                            state.Append(quote);
-                            found = true;
-                        }
-                        else {
-                            var nextChar = state.NextChar(false);
-                            found = nextChar != quote;
+                    found = (nextChar1 == quote) && (nextChar2 != quote);
+                    var escapedQuote = (nextChar1 == quote) && (nextChar2 == quote);
 
-                            if (found) {
-                                state.Append(quote);
-                                state.PreviousChar();
-                            }
-                            else {
-                                state.Append(quote);
-                                state.Append(nextChar);
-                                resultBuilder.Data.Append(quote);
-                            }
-                        }
-                    }
-                    else {
-                        state.Append(currentChar);
-                        resultBuilder.Data.Append(currentChar);
-                    }
+                    if (!found)
+                        resultBuilder.Data.Append(state.NextChar(true));
+                    else
+                        state.NextChar(true);
+
+                    if (escapedQuote)
+                        state.NextChar(true);
                 }
 
                 found = state.BufferEndsWith(QuoteChar) && state.Length > 1;

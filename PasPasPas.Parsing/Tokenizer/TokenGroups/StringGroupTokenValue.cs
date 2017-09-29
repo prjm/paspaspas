@@ -31,15 +31,13 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
                 state.Clear();
 
                 do {
-                    var currentChar = state.NextChar(false);
-                    if (currentChar == '#') {
-                        state.Append('#');
+                    if (state.LookAhead() == '#') {
+                        state.NextChar(true);
                         if (state.AtEof)
                             state.Error(Tokenizer.IncompleteString);
                         else {
-                            var nextChar = state.NextChar(false);
-                            if (nextChar == '$') {
-                                state.Append('$');
+                            if (state.LookAhead() == '$') {
+                                state.NextChar(true);
                                 var controlChar = hexDigits.Tokenize(state);
                                 if (controlChar.Kind != TokenKind.HexNumber || !LiteralValues.Literals.IsValidInteger(controlChar.ParsedValue))
                                     state.Error(Tokenizer.IncompleteString);
@@ -47,7 +45,6 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
                                     resultBuilder.Data.Append(LiteralValues.Literals.ConvertCharLiteral(controlChar.ParsedValue));
                             }
                             else {
-                                state.PreviousChar();
                                 var controlChar = digitTokenizer.Tokenize(state);
                                 if (controlChar.Kind != TokenKind.Integer || !LiteralValues.Literals.IsValidInteger(controlChar.ParsedValue))
                                     state.Error(Tokenizer.UnexpectedCharacter);
@@ -56,8 +53,8 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
                             }
                         }
                     }
-                    else if (currentChar == '\'') {
-                        state.Append('\'');
+                    else if (state.LookAhead() == '\'') {
+                        state.NextChar(true);
                         var qs = quotedString.Tokenize(state);
                         resultBuilder.Data.Append(qs.ParsedValue);
                     }
