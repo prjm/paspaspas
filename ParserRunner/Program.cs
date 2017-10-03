@@ -16,8 +16,8 @@ namespace SampleRunner {
         static void Main(string[] args) {
 
             var testPath = @"C:\temp\Testfiles\spring.pas";
-            var mode = SampleMode.TokenizerFile;
-            var repeat = 5;
+            var mode = SampleMode.BufferedTokenizeFile;
+            var repeat = 1;
             var result = new StringBuilder();
             Action<StringBuilder> action;
 

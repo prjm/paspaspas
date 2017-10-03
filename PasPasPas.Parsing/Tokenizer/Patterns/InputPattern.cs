@@ -28,7 +28,7 @@ namespace PasPasPas.Parsing.Tokenizer.Patterns {
             var group = this;
 
             if (string.IsNullOrEmpty(template))
-                ExceptionHelper.ArgumentIsNull(nameof(template));
+                new ArgumentNullException(nameof(template));
 
             for (var index = 0; index < template.Length; index++) {
                 var match = template[index];
@@ -44,7 +44,7 @@ namespace PasPasPas.Parsing.Tokenizer.Patterns {
                 else if (lastChar) {
                     var tokenValue = group.TokenValue as SimpleTokenGroupValue;
                     if (tokenValue == null || tokenValue.TokenId != TokenKind.Undefined)
-                        ExceptionHelper.InvalidOperation();
+                        throw new InvalidOperationException();
                     else
                         tokenValue.TokenId = tokenKind;
                 }
@@ -129,6 +129,10 @@ namespace PasPasPas.Parsing.Tokenizer.Patterns {
         /// <param name="token"></param>
         /// <returns>new token</returns>
         public InputPattern Add(char nextPunct, PatternContinuation token) {
+
+            if (token == null)
+                throw new ArgumentNullException(nameof(token));
+
             var result = new InputPattern(new SingleCharClass(nextPunct), token, CompletePrefix + nextPunct);
             Tokens.Value.Add(nextPunct, result);
             length = -1;
@@ -136,7 +140,7 @@ namespace PasPasPas.Parsing.Tokenizer.Patterns {
         }
 
         /// <summary>
-        ///     match an input with this punctuator group
+        ///     match an input with this pattern group
         /// </summary>
         /// <param name="input">input</param>
         /// <param name="tokenLength">token length</param>

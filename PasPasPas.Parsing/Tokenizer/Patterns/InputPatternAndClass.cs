@@ -15,15 +15,11 @@ namespace PasPasPas.Parsing.Tokenizer.Patterns {
         /// <param name="chrClass">character class</param>
         /// <param name="value">group value (tokenizer)</param>
         public InputPatternAndClass(CharacterClass chrClass, InputPattern value) {
+            CharClass
+                = chrClass ?? throw new ArgumentNullException(nameof(chrClass));
 
-            if (chrClass == null)
-                ExceptionHelper.ArgumentIsNull(nameof(chrClass));
-
-            if (value == null)
-                ExceptionHelper.ArgumentIsNull(nameof(value));
-
-            CharClass = chrClass;
-            GroupValue = value;
+            GroupValue
+                = value ?? throw new ArgumentNullException(nameof(value));
         }
 
         /// <summary>

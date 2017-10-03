@@ -43,7 +43,7 @@ namespace PasPasPas.Infrastructure.Files {
         /// <returns>chat the offset</returns>
         public char CharAt(int offset) {
             if (offset < 0 || offset >= data.Length)
-                ExceptionHelper.IndexOutOfRange(offset);
+                throw new IndexOutOfRangeException($"Offset {offset} out of range.");
             return data[offset];
         }
 

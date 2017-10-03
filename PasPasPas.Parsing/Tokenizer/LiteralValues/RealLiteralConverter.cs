@@ -1,10 +1,13 @@
 ﻿using System;
 using PasPasPas.Infrastructure.Environment;
 using PasPasPas.Infrastructure.Utils;
+using Entry = System.ValueTuple<object, object, bool, object>;
 
 namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
 
-    public class RealLiteralConverter : IRealConverter, ILookupFunction<Tuple<object, object, bool, object>, object> {
+
+
+    public class RealLiteralConverter : IRealConverter, ILookupFunction<Entry, object> {
 
         /// <summary>
         ///     invalid real literal
@@ -12,23 +15,23 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
         public readonly object InvalidRealLiteral
             = new object();
 
-        private LookupTable<Tuple<object, object, bool, object>, object> data;
+        private LookupTable<Entry, object> data;
 
-        public LookupTable<Tuple<object, object, bool, object>, object> Table
+        public LookupTable<Entry, object> Table
             => data;
 
         LookupTable ILookupFunction.Table
             => data;
 
         public RealLiteralConverter()
-            => data = new LookupTable<Tuple<object, object, bool, object>, object>(ConvertLiterals);
+            => data = new LookupTable<Entry, object>(ConvertLiterals);
 
-        public object ConvertLiterals(Tuple<object, object, bool, object> data) {
-            var digits = data.Item1;
-            var decimals = data.Item2;
-            var minus = data.Item3;
+        public object ConvertLiterals((object digits, object decimals, bool minus, object exponent) data) {
+            var digits = data.digits;
+            var decimals = data.decimals;
+            var minus = data.minus;
             var e = minus ? -1 : 1;
-            var exponent = data.Item4;
+            var exponent = data.exponent;
 
             if (digits.IsNumber() && (decimals == null || decimals.IsNumber()) && (exponent == null || exponent.IsNumber())) {
                 var value = System.Convert.ToDouble(digits);
@@ -46,6 +49,6 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
         }
 
         public object Convert(object digits, object decimals, bool minus, object exponent)
-            => data.GetValue(new Tuple<object, object, bool, object>(digits, decimals, minus, exponent));
+            => data.GetValue((digits, decimals, minus, exponent));
     }
 };

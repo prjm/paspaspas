@@ -1,9 +1,7 @@
 ﻿using System;
 using PasPasPas.Infrastructure.Environment;
-using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree;
 using PasPasPas.Parsing.Tokenizer.CharClass;
-using PasPasPas.Parsing.Tokenizer.LiteralValues;
 
 namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
 

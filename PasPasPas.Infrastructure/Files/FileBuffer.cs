@@ -24,7 +24,7 @@ namespace PasPasPas.Infrastructure.Files {
         /// <param name="content">content</param>
         public void Add(IFileReference reference, IBufferReadable content) {
             if (items.ContainsKey(reference))
-                ExceptionHelper.DuplicateKeyInDictionary(reference, nameof(reference));
+                throw new ArgumentException($"Dupicate file {reference}", nameof(reference));
 
             var item = new FileBufferItem(reference);
             content.ToBufferItem(item);
@@ -39,7 +39,7 @@ namespace PasPasPas.Infrastructure.Files {
         public FileBufferItem this[IFileReference index] {
             get {
                 if (!items.TryGetValue(index, out var result))
-                    ExceptionHelper.ArgumetOutOfRange(index, nameof(index));
+                    throw new IndexOutOfRangeException($"File {index} undefined.");
                 return result;
             }
         }

@@ -31,7 +31,7 @@ namespace PasPasPas.Infrastructure.Input {
         public IBufferReadable OpenFileForReading(IFileReference path) {
 
             if (path == null)
-                ExceptionHelper.ArgumentIsNull(nameof(path));
+                throw new ArgumentNullException(nameof(path));
 
             if (mockupFiles.IsValueCreated && mockupFiles.Value.TryGetValue(path.FileName, out var result))
                 return result;

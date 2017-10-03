@@ -1,4 +1,5 @@
-﻿using PasPasPas.Infrastructure.Environment;
+﻿using System;
+using PasPasPas.Infrastructure.Environment;
 using PasPasPas.Infrastructure.Utils;
 
 namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
@@ -33,6 +34,9 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
         /// <param name="literal"></param>
         /// <returns></returns>
         public object ConvertCharLiteral(object literal) {
+            if (literal == null)
+                throw new ArgumentNullException(nameof(literal));
+
             if (literal.IsNumber())
                 return System.Convert.ToChar(literal);
             else
@@ -45,6 +49,6 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
         /// <param name="literal"></param>
         /// <returns></returns>
         public object Convert(object literal)
-            => data.GetValue(literal);
+            => data.GetValue(literal ?? throw new ArgumentNullException(nameof(literal)));
     }
 }

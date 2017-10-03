@@ -76,11 +76,8 @@ namespace PasPasPas.Infrastructure.Utils {
         /// <returns>element at index position</returns>
         /// <exception cref="System.IndexOutOfRangeException">always</exception>
         public T this[int index] {
-            get {
-                ExceptionHelper.IndexOutOfRange(index);
-                return default;
-            }
-            set => ExceptionHelper.IndexOutOfRange(index);
+            get => throw new IndexOutOfRangeException($"Index {index} out of range.");
+            set => throw new IndexOutOfRangeException($"Index {index} out of range.");
         }
 
         /// <summary>
@@ -101,14 +98,14 @@ namespace PasPasPas.Infrastructure.Utils {
         /// <param name="item">item to add</param>
         /// <exception cref="System.InvalidOperationException">always</exception>
         public void Add(T item)
-            => ExceptionHelper.InvalidOperation();
+            => throw new InvalidOperationException();
 
         /// <summary>
         ///     clear the list
         /// </summary>
         /// <exception cref="System.InvalidOperationException">always</exception>
         public void Clear()
-            => ExceptionHelper.InvalidOperation();
+            => throw new InvalidOperationException();
 
         /// <summary>
         ///     test if an element is contained in this list
@@ -141,7 +138,7 @@ namespace PasPasPas.Infrastructure.Utils {
         /// <param name="item">item to insert</param>
         /// <exception cref="System.InvalidOperationException">always</exception>
         public void Insert(int index, T item)
-            => ExceptionHelper.InvalidOperation();
+            => throw new InvalidOperationException();
 
         /// <summary>
         ///     remove an item
@@ -149,10 +146,8 @@ namespace PasPasPas.Infrastructure.Utils {
         /// <param name="item">item to remove</param>
         /// <returns></returns>
         /// <exception cref="System.InvalidOperationException">always</exception>
-        public bool Remove(T item) {
-            ExceptionHelper.InvalidOperation();
-            return false;
-        }
+        public bool Remove(T item)
+            => throw new InvalidOperationException();
 
         /// <summary>
         ///     remove element at an index
@@ -160,7 +155,7 @@ namespace PasPasPas.Infrastructure.Utils {
         /// <param name="index">element index</param>
         /// <exception cref="System.InvalidOperationException">always</exception>
         public void RemoveAt(int index)
-            => ExceptionHelper.InvalidOperation();
+            => throw new InvalidOperationException();
     }
 
 }

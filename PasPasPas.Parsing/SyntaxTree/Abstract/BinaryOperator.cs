@@ -50,7 +50,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
                 else if (RightOperand == null)
                     RightOperand = value;
                 else
-                    ExceptionHelper.InvalidOperation();
+                    throw new InvalidProgramException();
             }
         }
 

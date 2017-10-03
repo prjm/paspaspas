@@ -23,12 +23,8 @@ namespace PasPasPas.Infrastructure.Files {
         ///     create a new stacked file reader
         /// </summary>
         /// <param name="fileBuffer">file buffer</param>
-        public StackedFileReader(FileBuffer fileBuffer) {
-            if (fileBuffer == null)
-                ExceptionHelper.ArgumentIsNull(nameof(fileBuffer));
-
-            buffer = fileBuffer;
-        }
+        public StackedFileReader(FileBuffer fileBuffer)
+            => buffer = fileBuffer ?? throw new ArgumentNullException(nameof(fileBuffer));
 
         /// <summary>
         ///     adds a file to read
@@ -36,7 +32,7 @@ namespace PasPasPas.Infrastructure.Files {
         /// <param name="input">input to add</param>
         public void AddFileToRead(IFileReference input) {
             if (input == null)
-                ExceptionHelper.ArgumentIsNull(nameof(input));
+                throw new ArgumentNullException(nameof(input));
 
             this.input = new NestedInput() {
                 Input = new FileBufferItemOffset(this, buffer[input]),
@@ -50,7 +46,7 @@ namespace PasPasPas.Infrastructure.Files {
         public FileBufferItemOffset FinishCurrentFile() {
 
             if (input == null)
-                ExceptionHelper.InvalidOperation();
+                throw new InvalidOperationException("No input file.");
 
             input = input.Parent;
 
@@ -80,8 +76,7 @@ namespace PasPasPas.Infrastructure.Files {
                 if (input != null)
                     return input.Input.Value;
 
-                ExceptionHelper.InvalidOperation();
-                return '\0';
+                throw new InvalidOperationException("No input file.");
             }
         }
 
@@ -93,8 +88,7 @@ namespace PasPasPas.Infrastructure.Files {
                 if (input != null)
                     return input.Input.AtEof;
 
-                ExceptionHelper.InvalidOperation();
-                return false;
+                throw new InvalidOperationException("No input file");
             }
         }
 
@@ -109,7 +103,7 @@ namespace PasPasPas.Infrastructure.Files {
         /// </summary>
         public char PreviousChar() {
             if (input == null)
-                ExceptionHelper.InvalidOperation();
+                throw new InvalidOperationException("No input file.");
 
             return input.Input.PreviousChar();
         }
@@ -125,7 +119,8 @@ namespace PasPasPas.Infrastructure.Files {
         /// </summary>
         public char NextChar() {
             if (input == null)
-                ExceptionHelper.InvalidOperation();
+                throw new InvalidOperationException("No input file.");
+
             return input.Input.NextChar();
         }
     }

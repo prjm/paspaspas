@@ -8,16 +8,10 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
     /// <summary>
     ///     token group for identifiers
     /// </summary>
-    public class IdentifierTokenGroupValue : PatternContinuation {
+    public sealed class IdentifierTokenGroupValue : PatternContinuation {
 
         private IdentifierCharacterClass identifierCharClass
             = new IdentifierCharacterClass() { AllowAmpersand = false, AllowDigits = true };
-
-        /// <summary>
-        ///     if <c>true</c> asm blocks are parsed as a token
-        /// </summary>
-        public bool ParseAsm { get; set; }
-            = false;
 
         /// <summary>
         ///     allow dots in identifiers
@@ -82,8 +76,6 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
                 return new Token(TokenKind.Identifier, state);
 
         }
-
-
     }
 
 }

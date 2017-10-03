@@ -1,12 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard1.3</TargetFramework>
+    <TargetFramework>netstandard1.6</TargetFramework>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <LangVersion>7.1</LangVersion>
-    <DocumentationFile>bin\Release\netstandard1.3\.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\netstandard1.4\.xml</DocumentationFile>
     <DefineConstants>RELEASE;NETSTANDARD1_3</DefineConstants>
     <DebugType>pdbonly</DebugType>
     <DebugSymbols>True</DebugSymbols>
@@ -14,7 +14,7 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <LangVersion>7.1</LangVersion>
-    <DocumentationFile>bin\Debug\netstandard1.3\PasPasPas.Infrastructure.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\netstandard1.4\PasPasPas.Infrastructure.xml</DocumentationFile>
   </PropertyGroup>
 
 </Project>

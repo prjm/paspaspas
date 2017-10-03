@@ -3,7 +3,7 @@
     /// <summary>
     ///     character class to match identifiers
     /// </summary>
-    public class IdentifierCharacterClass : CharacterClass {
+    public sealed class IdentifierCharacterClass : CharacterClass {
 
         /// <summary>
         ///     allow &amp;   
@@ -29,13 +29,13 @@
         /// <param name="input">input</param>
         /// <returns><c>true</c> if the char can be part of an identifier</returns>
         public override bool Matches(char input) =>
-            (input > 127 && ((AllowDigits && char.IsLetterOrDigit(input)) || char.IsLetter(input))) ||
             (input >= 'A' && input <= 'Z') ||
             (input >= 'a' && input <= 'z') ||
             input == '_' ||
             (AllowAmpersand && input == '&') ||
             (AllowDigits && (input >= '0' && input <= '9')) ||
-            (AllowDots && input == '.');
+            (AllowDots && input == '.') ||
+            (input > 127 && ((AllowDigits && char.IsLetterOrDigit(input)) || char.IsLetter(input)));
     }
 
 }

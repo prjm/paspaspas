@@ -22,7 +22,7 @@ namespace PasPasPas.DesktopPlatform {
         public DesktopFileReference(string path) {
 
             if (string.IsNullOrWhiteSpace(path))
-                ExceptionHelper.StringEmpty(nameof(path));
+                throw new ArgumentNullException(nameof(path));
 
             filePath = StringPool.PoolString(path);
             hashcode = filePath.ToUpperInvariant().GetHashCode();

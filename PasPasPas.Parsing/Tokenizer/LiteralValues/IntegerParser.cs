@@ -178,7 +178,7 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
         /// <param name="input">string to parse</param>
         /// <returns>parsed number</returns>
         public object ParseInt(string input)
-            => data.GetValue(input);
+            => data.GetValue(input ?? throw new ArgumentNullException(nameof(input)));
 
         /// <summary>
         ///     parse a hex number
@@ -186,6 +186,6 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
         /// <param name="input">string to parse</param>
         /// <returns>parsed number</returns>
         public object ParseHexNumber(string input)
-            => data.GetValue(input);
+            => data.GetValue(input ?? throw new ArgumentNullException(nameof(input)));
     }
 }

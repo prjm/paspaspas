@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Parsing.SyntaxTree;
@@ -133,9 +134,15 @@ namespace PasPasPasTests.Tokenizer {
 
         public Token TestPattern(InputPatterns patterns, Guid expectedMessage, string input, params int[] tokenValues) {
             var result = RunTestPattern(patterns, expectedMessage, input);
+            var values = new List<string>();
+
             Assert.AreEqual(tokenValues.Length, result.Count);
-            for (var i = 0; i < result.Count; i++)
+            for (var i = 0; i < result.Count; i++) {
                 Assert.AreEqual(tokenValues[i], result[i].Kind);
+                values.Add(result[i].Value);
+            }
+
+            Assert.AreEqual(input, values.Count < 1 ? "" : values.Aggregate((a, b) => string.Concat(a, b)));
 
             if (result.Count > 0)
                 return result[0];

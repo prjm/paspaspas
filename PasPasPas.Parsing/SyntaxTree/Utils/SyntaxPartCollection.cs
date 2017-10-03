@@ -42,8 +42,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Utils {
                 if ((index >= 0) && (index < Count))
                     return internalList[index];
                 else {
-                    ExceptionHelper.IndexOutOfRange(index);
-                    return default(T);
+                    throw new IndexOutOfRangeException();
                 };
             }
 
@@ -51,7 +50,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Utils {
                 if ((index >= 0) && (index < Count))
                     internalList[index] = value;
                 else {
-                    ExceptionHelper.IndexOutOfRange(index);
+                    throw new IndexOutOfRangeException($"Invald index {index}");
                 };
 
             }
@@ -64,7 +63,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Utils {
         public void Add(T item) {
 
             if (item == default(T))
-                ExceptionHelper.ArgumentIsNull(nameof(item));
+                throw new ArgumentNullException(nameof(item));
 
             item.ParentItem = parent;
 
@@ -96,7 +95,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Utils {
         public bool Contains(T item) {
 
             if (item == null)
-                ExceptionHelper.ArgumentIsNull(nameof(item));
+                throw new ArgumentNullException(nameof(item));
 
             if (internalList == null)
                 return false;
@@ -112,7 +111,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Utils {
         public bool Remove(T item) {
 
             if (item == null)
-                ExceptionHelper.ArgumentIsNull(nameof(item));
+                throw new ArgumentNullException(nameof(item));
 
             if (internalList == null)
                 return false;
@@ -120,7 +119,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Utils {
             var index = internalList.IndexOf(item);
 
             if (index >= 0) {
-                T itemToRemove = internalList[index];
+                var itemToRemove = internalList[index];
                 itemToRemove.ParentItem = null;
                 internalList.RemoveAt(index);
                 return true;
@@ -137,7 +136,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Utils {
         public void CopyTo(T[] array, int arrayIndex) {
 
             if (array == null)
-                ExceptionHelper.ArgumentIsNull(nameof(array));
+                throw new ArgumentNullException(nameof(array));
 
             if (internalList == null)
                 return;
@@ -167,7 +166,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Utils {
         public int IndexOf(T item) {
 
             if (item == null)
-                ExceptionHelper.ArgumentIsNull(nameof(item));
+                throw new ArgumentNullException(nameof(item));
 
             if (internalList == null)
                 return -1;
@@ -186,7 +185,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Utils {
         /// <returns></returns>
         public T LastOrDefault() {
             var count = Count;
-            return count > 0 ? this[count - 1] : default(T);
+            return count > 0 ? this[count - 1] : default;
         }
     }
 }

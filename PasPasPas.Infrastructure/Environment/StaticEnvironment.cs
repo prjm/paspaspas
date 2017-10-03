@@ -120,16 +120,8 @@ namespace PasPasPas.Infrastructure.Environment {
         /// <typeparam name="T"></typeparam>
         /// <param name="id"></param>
         /// <returns></returns>
-        public static T Require<T>(int id) where T : class {
-            var value = Optional<T>(id);
-
-            if (value == null) {
-                ExceptionHelper.InvalidOperation();
-                return null;
-            }
-
-            return value;
-        }
+        public static T Require<T>(int id) where T : class
+            => Optional<T>(id) ?? throw new InvalidOperationException($"Unregistered id {id}");
 
         /// <summary>
         ///     resolve an optional static dependency

@@ -3,6 +3,7 @@ using PasPasPas.Parsing.SyntaxTree;
 using PasPasPas.Parsing.Tokenizer.CharClass;
 using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.Tokenizer.TokenGroups;
+using System;
 
 namespace PasPasPas.Parsing.Tokenizer.Patterns {
 
@@ -44,10 +45,10 @@ namespace PasPasPas.Parsing.Tokenizer.Patterns {
         public InputPattern AddPattern(CharacterClass prefix, PatternContinuation tokenValue) {
 
             if (prefix == null)
-                ExceptionHelper.ArgumentIsNull(nameof(prefix));
+                throw new ArgumentNullException(nameof(prefix));
 
             if (tokenValue == null)
-                ExceptionHelper.ArgumentIsNull(nameof(tokenValue));
+                throw new ArgumentNullException(nameof(tokenValue));
 
             var result = new InputPattern(prefix, tokenValue, string.Empty);
             var prefixedCharecterClass = prefix as SingleCharClass;
@@ -67,11 +68,14 @@ namespace PasPasPas.Parsing.Tokenizer.Patterns {
         /// <param name="tokenValue">pattern continuation</param>
         /// <returns>created pattern</returns>
         public InputPattern AddPattern(char prefix, PatternContinuation tokenValue) {
+
+            if (tokenValue == null)
+                throw new ArgumentNullException(nameof(tokenValue));
+
             var result = new InputPattern(new SingleCharClass(prefix), tokenValue, string.Empty);
             simplePatterns.Add(prefix, result);
             return result;
         }
-
 
         /// <summary>
         ///     test if a input pattern matches
@@ -80,6 +84,7 @@ namespace PasPasPas.Parsing.Tokenizer.Patterns {
         /// <param name="tokenGroup">pattern</param>
         /// <returns></returns>
         public bool Match(char valueToMatch, out InputPattern tokenGroup) {
+
             if (simplePatterns.TryGetValue(valueToMatch, out tokenGroup))
                 return true;
 

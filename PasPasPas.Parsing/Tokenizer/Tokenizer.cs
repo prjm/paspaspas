@@ -69,17 +69,11 @@ namespace PasPasPas.Parsing.Tokenizer {
         public Tokenizer(ILogManager log, InputPatterns charClasses, StackedFileReader input) {
 
             if (log == null)
-                ExceptionHelper.ArgumentIsNull(nameof(log));
+                throw new ArgumentNullException(nameof(log));
 
-            if (input == null)
-                ExceptionHelper.ArgumentIsNull(nameof(input));
-
-            if (charClasses == null)
-                ExceptionHelper.ArgumentIsNull(nameof(charClasses));
-
-            Input = input;
+            Input = input ?? throw new ArgumentNullException(nameof(input));
             Log = new LogSource(log, TokenizerLogMessage);
-            characterClasses = charClasses;
+            characterClasses = charClasses ?? throw new ArgumentNullException(nameof(charClasses));
             state = new TokenizerState(this, input, Log);
             FinishInput();
         }

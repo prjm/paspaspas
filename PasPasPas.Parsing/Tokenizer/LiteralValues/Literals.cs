@@ -74,13 +74,8 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
             if (valueParser == StaticDependency.ParsedIntegers)
                 return ParseIntegerLiteral(value);
 
-            ExceptionHelper.InvalidOperation();
-            return null;
+            throw new InvalidOperationException();
         }
 
-    }
-
-    internal interface IRealConverter {
-        object Convert(object digits, object decimals, bool minus, object exponent);
     }
 }

@@ -31,7 +31,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
                 else if (HasName && nameExpression == null)
                     nameExpression = value;
                 else
-                    ExceptionHelper.InvalidOperation();
+                    throw new InvalidOperationException();
             }
         }
 
@@ -50,7 +50,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         public override IEnumerable<ISyntaxPart> Parts {
             get {
-                foreach (ISyntaxPart part in base.Parts)
+                foreach (var part in base.Parts)
                     yield return part;
                 if (indexExpression != null)
                     yield return indexExpression;

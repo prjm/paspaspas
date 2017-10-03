@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using PasPasPas.Infrastructure.Environment;
 using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree;
@@ -34,32 +35,30 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         public class TokenSequence : IPoolItem {
 
-            private Lazy<LinkedList<Token>> prefix
-                = new Lazy<LinkedList<Token>>(() => new LinkedList<Token>(), false);
-
-            private Lazy<LinkedList<Token>> suffix
-                = new Lazy<LinkedList<Token>>(() => new LinkedList<Token>(), false);
-
+            private string prefix = null;
+            private string suffix = null;
             public Token Value = default;
 
             public void AssignPrefix(Queue<Token> tokens) {
-                var p = prefix.Value;
-                while (tokens.Count > 0)
-                    p.AddLast(tokens.Dequeue());
+                using (var sb = PoolFactory.FetchStringBuilder()) {
+                    while (tokens.Count > 0)
+                        sb.Data.Append(tokens.Dequeue().Value);
+                    prefix = sb.ToString();
+                }
             }
 
             public void AssignSuffix(Queue<Token> tokens) {
-                var p = suffix.Value;
-                while (tokens.Count > 0)
-                    p.AddLast(tokens.Dequeue());
+                using (var sb = PoolFactory.FetchStringBuilder()) {
+                    while (tokens.Count > 0)
+                        sb.Data.Append(tokens.Dequeue().Value);
+                    suffix = sb.ToString();
+                }
             }
 
             public void Clear() {
-                if (prefix.IsValueCreated)
-                    prefix.Value.Clear();
-                if (suffix.IsValueCreated)
-                    suffix.Value.Clear();
-                Value = Token.Empty;
+                prefix = null;
+                suffix = null;
+                Value = default;
             }
         }
 
