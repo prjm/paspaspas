@@ -10,41 +10,15 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
     /// </summary>
     public sealed class IdentifierTokenGroupValue : PatternContinuation {
 
-        private IdentifierCharacterClass identifierCharClass
-            = new IdentifierCharacterClass() { AllowAmpersand = false, AllowDigits = true };
-
-        /// <summary>
-        ///     allow dots in identifiers
-        /// </summary>
-        public bool AllowDots {
-            get => identifierCharClass.AllowDots;
-            set => identifierCharClass.AllowDots = value;
-        }
-
-        /// <summary>
-        ///     allow digits in identifiers
-        /// </summary>
-        public bool AllowDigits {
-            get => identifierCharClass.AllowDigits;
-            set => identifierCharClass.AllowDigits = value;
-        }
-
-        /// <summary>
-        ///     allow ampersand in identifiers
-        /// </summary>
-        public bool AllowAmpersand {
-            get => identifierCharClass.AllowAmpersand;
-            set => identifierCharClass.AllowAmpersand = value;
-        }
-
+        private readonly IdentifierCharacterClass identifierCharClass;
         private readonly IDictionary<string, int> knownKeywords;
+        private readonly bool allowAmpersands;
 
-        /// <summary>
-        ///     create a new token group for ids and keywords
-        /// </summary>
-        /// <param name="keywords"></param>
-        public IdentifierTokenGroupValue(IDictionary<string, int> keywords)
-            => knownKeywords = keywords ?? throw new ArgumentNullException(nameof(keywords));
+        public IdentifierTokenGroupValue(IDictionary<string, int> keywords, bool allowAmpersand = false, bool allowDigits = false, bool allowDots = false) {
+            allowAmpersands = allowAmpersand;
+            knownKeywords = keywords ?? throw new ArgumentNullException(nameof(keywords));
+            identifierCharClass = new IdentifierCharacterClass(allowAmpersand, allowDigits, allowDots);
+        }
 
         /// <summary>
         ///     parse the complete token
@@ -52,9 +26,9 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
         /// <param name="state">current tokenizer state</param>
         public override Token Tokenize(TokenizerState state) {
             var hasAmpersand = state.GetBufferCharAt(0) == '&';
-            var ignoreKeywords = AllowAmpersand && hasAmpersand;
+            var ignoreKeywords = allowAmpersands && hasAmpersand;
 
-            if (!AllowAmpersand && hasAmpersand) {
+            if (!allowAmpersands && hasAmpersand) {
                 state.Error(Tokenizer.UnexpectedCharacter);
                 return new Token(TokenKind.Invalid, state);
             }

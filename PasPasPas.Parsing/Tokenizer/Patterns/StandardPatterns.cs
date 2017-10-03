@@ -222,7 +222,7 @@ namespace PasPasPas.Parsing.Tokenizer.Patterns {
             AddPattern('{', new SequenceGroupTokenValue(TokenKind.Comment, "}")).Add('$', new SequenceGroupTokenValue(TokenKind.Preprocessor, "}"));
             AddPattern('$', new CharacterClassTokenGroupValue(TokenKind.HexNumber, new DigitCharClass(true), 2, StaticDependency.ParsedHexNumbers, Tokenizer.IncompleteHexNumber));
             AddPattern(new WhiteSpaceCharacterClass(), new CharacterClassTokenGroupValue(TokenKind.WhiteSpace, new WhiteSpaceCharacterClass()));
-            AddPattern(new IdentifierCharacterClass(), new IdentifierTokenGroupValue(Keywords) { AllowAmpersand = true });
+            AddPattern(new IdentifierCharacterClass(), new IdentifierTokenGroupValue(Keywords, allowAmpersand: true));
 
             AddPattern(new DigitCharClass(false), new NumberTokenGroupValue());
             AddPattern(new ControlCharacterClass(), new CharacterClassTokenGroupValue(TokenKind.ControlChar, new ControlCharacterClass()));

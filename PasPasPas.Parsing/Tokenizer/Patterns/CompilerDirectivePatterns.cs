@@ -162,7 +162,7 @@ namespace PasPasPas.Parsing.Tokenizer.Patterns {
             AddPattern(',', TokenKind.Comma);
             AddPattern('*', TokenKind.Times);
             AddPattern(new WhiteSpaceCharacterClass(), new CharacterClassTokenGroupValue(TokenKind.WhiteSpace, new WhiteSpaceCharacterClass()));
-            AddPattern(new IdentifierCharacterClass() { AllowDots = true }, new IdentifierTokenGroupValue(Keywords) { AllowDots = true });
+            AddPattern(new IdentifierCharacterClass(dots: true), new IdentifierTokenGroupValue(Keywords, allowDots: true));
             AddPattern(new DigitCharClass(false), new NumberTokenGroupValue() { AllowIdents = true });
             AddPattern('$', new CharacterClassTokenGroupValue(TokenKind.HexNumber, new DigitCharClass(true), 2, StaticDependency.ParsedHexNumbers, Tokenizer.IncompleteHexNumber));
             AddPattern(new ControlCharacterClass(), new CharacterClassTokenGroupValue(TokenKind.ControlChar, new ControlCharacterClass()));

@@ -8,20 +8,29 @@
         /// <summary>
         ///     allow &amp;   
         /// </summary>
-        public bool AllowAmpersand { get; set; }
-            = true;
+        private readonly bool allowAmpersand;
 
         /// <summary>
         ///     allow digits
         /// </summary>
-        public bool AllowDigits { get; set; }
-            = false;
+        private readonly bool allowDigits;
 
         /// <summary>
         ///     allow dots
         /// </summary>
-        public bool AllowDots { get; set; }
-            = false;
+        private readonly bool allowDot;
+
+        /// <summary>
+        ///     create a new identifer character class
+        /// </summary>
+        /// <param name="ampersands">allow ampersands</param>
+        /// <param name="digits">allow digits</param>
+        /// <param name="dots">allow dots</param>
+        public IdentifierCharacterClass(bool ampersands = true, bool digits = false, bool dots = false) {
+            allowAmpersand = ampersands;
+            allowDigits = digits;
+            allowDot = dots;
+        }
 
         /// <summary>
         ///     test if a char is acceptable for an identifier
@@ -32,10 +41,10 @@
             (input >= 'A' && input <= 'Z') ||
             (input >= 'a' && input <= 'z') ||
             input == '_' ||
-            (AllowAmpersand && input == '&') ||
-            (AllowDigits && (input >= '0' && input <= '9')) ||
-            (AllowDots && input == '.') ||
-            (input > 127 && ((AllowDigits && char.IsLetterOrDigit(input)) || char.IsLetter(input)));
+            (allowAmpersand && input == '&') ||
+            (allowDigits && (input >= '0' && input <= '9')) ||
+            (allowDot && input == '.') ||
+            (input > 127 && ((allowDigits && char.IsLetterOrDigit(input)) || char.IsLetter(input)));
     }
 
 }

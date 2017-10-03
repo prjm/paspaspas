@@ -80,17 +80,17 @@ namespace PasPasPasTests.Tokenizer {
             Assert.IsTrue(cc.Matches('x'));
             Assert.IsTrue(cc.Matches('X'));
             Assert.IsTrue(cc.Matches('&'));
-            cc.AllowAmpersand = false;
+            cc = new IdentifierCharacterClass(ampersands: false);
             Assert.IsTrue(cc.Matches('x'));
             Assert.IsTrue(cc.Matches('X'));
             Assert.IsFalse(cc.Matches('&'));
             Assert.IsFalse(cc.Matches('1'));
             Assert.IsFalse(cc.Matches('.'));
-            cc.AllowDots = true;
+            cc = new IdentifierCharacterClass(ampersands: false, dots: true);
             Assert.IsTrue(cc.Matches('X'));
             Assert.IsFalse(cc.Matches('&'));
             Assert.IsTrue(cc.Matches('.'));
-            cc.AllowDigits = true;
+            cc = new IdentifierCharacterClass(ampersands: false, digits: true);
             Assert.IsTrue(cc.Matches('0'));
             Assert.IsTrue(cc.Matches('9'));
             Assert.IsTrue(cc.Matches('A'));
@@ -259,31 +259,34 @@ namespace PasPasPasTests.Tokenizer {
             Assert.AreEqual((ushort)0x123F, TestPattern(patterns, "$123F", TokenKind.HexNumber).ParsedValue);
         }
 
-        [Fact]
-        public void TestIdentifierTokenValue() {
+        private InputPatterns CreatePatterns(bool allowAmpersand = true, bool allowDigits = false, bool allowDot = false) {
             var patterns = new InputPatterns();
             var tokens = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase) {
                 ["a"] = PatternA
             };
-            var tgv = new IdentifierTokenGroupValue(tokens);
+            var tgv = new IdentifierTokenGroupValue(tokens, allowAmpersand, allowDigits, allowDot);
             patterns.AddPattern('b', PatternB);
             patterns.AddPattern(new IdentifierCharacterClass(), tgv);
             patterns.AddPattern(new WhiteSpaceCharacterClass(), new CharacterClassTokenGroupValue(TokenKind.WhiteSpace, new WhiteSpaceCharacterClass()));
-            tgv.AllowAmpersand = true;
-            tgv.AllowDigits = false;
+            return patterns;
+        }
+
+        [Fact]
+        public void TestIdentifierTokenValue() {
+            var patterns = CreatePatterns();
             TestPattern(patterns, "a", PatternA);
             TestPattern(patterns, "&a", TokenKind.Identifier);
             TestPattern(patterns, "_a", TokenKind.Identifier);
             TestPattern(patterns, "画像", TokenKind.Identifier);
             TestPattern(patterns, "a b caaa", PatternA, TokenKind.WhiteSpace, PatternB, TokenKind.WhiteSpace, TokenKind.Identifier);
-            tgv.AllowAmpersand = false;
+            patterns = CreatePatterns(false);
             TestPattern(patterns, PasPasPas.Parsing.Tokenizer.Tokenizer.UnexpectedCharacter, "&a", TokenKind.Invalid, PatternA);
             TestPattern(patterns, PasPasPas.Parsing.Tokenizer.Tokenizer.UnexpectedCharacter, "a9", PatternA, TokenKind.Invalid);
-            tgv.AllowDigits = true;
+            patterns = CreatePatterns(false, true);
             TestPattern(patterns, "a9", TokenKind.Identifier);
             TestPattern(patterns, PasPasPas.Parsing.Tokenizer.Tokenizer.UnexpectedCharacter, "a.a9", PatternA, TokenKind.Invalid, TokenKind.Identifier);
             TestPattern(patterns, "_a_aaA123_33", TokenKind.Identifier);
-            tgv.AllowDots = true;
+            patterns = CreatePatterns(false, true, true);
             TestPattern(patterns, "a.9", TokenKind.Identifier);
         }
 

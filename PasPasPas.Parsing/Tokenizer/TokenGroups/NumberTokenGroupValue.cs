@@ -11,13 +11,13 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
     /// </summary>
     public sealed class NumberTokenGroupValue : PatternContinuation {
 
-        private CharacterClassTokenGroupValue digitTokenizer
+        private readonly CharacterClassTokenGroupValue digitTokenizer
             = new CharacterClassTokenGroupValue(TokenKind.Integer, new DigitCharClass(false), 0, StaticDependency.ParsedIntegers, Guid.Empty);
 
-        private IdentifierCharacterClass allIdents
-            = new IdentifierCharacterClass() { AllowAmpersand = true, AllowDigits = true, AllowDots = true, };
+        private readonly IdentifierCharacterClass allIdents
+            = new IdentifierCharacterClass(ampersands: true, digits: true, dots: true);
 
-        private IdentifierTokenGroupValue identTokenizer
+        private readonly IdentifierTokenGroupValue identTokenizer
             = new IdentifierTokenGroupValue(new Dictionary<string, int>());
 
         /// <summary>
