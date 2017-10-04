@@ -88,6 +88,13 @@ namespace SampleRunner {
               */
         }
 
+        private static string GetCacheName(object data) {
+            if (data is IStaticCacheItem item)
+                return $"[{item.Caption}]";
+            else
+                return string.Concat(data.ToString(), '*');
+        }
+
         private static void RunSample(StringBuilder result, Action<StringBuilder> action) {
             var timer = new ExecutionTimer();
             timer.Start();
@@ -97,13 +104,17 @@ namespace SampleRunner {
 
             result.AppendLine(new string('.', 80));
 
-            foreach (var entry in StaticEnvironment.Entries)
+            foreach (var entry in StaticEnvironment.Entries) {
+                var name = GetCacheName(entry);
                 if (entry is ILookupFunction fn)
-                    result.AppendLine(entry.GetType().Name + ": " + fn.Table.Count);
+                    result.AppendLine(name + ": " + fn.Table.Count);
                 else if (entry is ObjectPool pool)
-                    result.AppendLine(entry.ToString() + ": " + pool.Count);
+                    result.AppendLine(name + ": " + pool.Count);
                 else if (entry is IManualStaticCache sc)
-                    result.AppendLine(entry.ToString() + ": " + sc.Count);
+                    result.AppendLine(name + ": " + sc.Count);
+                else
+                    result.AppendLine(name);
+            }
 
             result.AppendLine(new string('-', 80));
             result.AppendLine($"{timer.TickCount} ticks required ({timer.Duration.TotalMilliseconds}).");

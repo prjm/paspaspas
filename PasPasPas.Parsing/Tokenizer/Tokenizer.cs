@@ -4,6 +4,7 @@ using PasPasPas.Parsing.SyntaxTree;
 using PasPasPas.Infrastructure.Files;
 using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.Tokenizer.Patterns;
+using System.Collections.Generic;
 
 namespace PasPasPas.Parsing.Tokenizer {
 
@@ -67,12 +68,8 @@ namespace PasPasPas.Parsing.Tokenizer {
         ///     create a new tokenizer
         /// </summary>
         public Tokenizer(ILogManager log, InputPatterns charClasses, StackedFileReader input) {
-
-            if (log == null)
-                throw new ArgumentNullException(nameof(log));
-
             Input = input ?? throw new ArgumentNullException(nameof(input));
-            Log = new LogSource(log, TokenizerLogMessage);
+            Log = new LogSource(log ?? throw new ArgumentNullException(nameof(log)), TokenizerLogMessage);
             characterClasses = charClasses ?? throw new ArgumentNullException(nameof(charClasses));
             state = new TokenizerState(this, input, Log);
             FinishInput();
@@ -103,6 +100,9 @@ namespace PasPasPas.Parsing.Tokenizer {
             FinishInput();
         }
 
+        /// <summary>
+        ///     remove all read files from the input
+        /// </summary>
         private void FinishInput() {
             var file = Input.CurrentFile;
             if (file != null && file.AtEof) {
@@ -129,7 +129,12 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <summary>
         ///     tokenizer input
         /// </summary>
-        public StackedFileReader Input { get; private set; }
+        public StackedFileReader Input { get; }
 
+        /// <summary>
+        ///     registered keywords
+        /// </summary>
+        public IDictionary<string, int> Keywords
+            => characterClasses.Keywords;
     }
 }

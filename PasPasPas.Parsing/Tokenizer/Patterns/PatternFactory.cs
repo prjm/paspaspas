@@ -8,15 +8,17 @@ using PasPasPas.Parsing.Tokenizer.TokenGroups;
 namespace PasPasPas.Parsing.Tokenizer.Patterns {
 
     /// <summary>
-    ///     standard patterns for the tokenizer
+    ///     helper class to create tokenizer patterns
     /// </summary>
-    public class StandardPatterns : InputPatterns {
+    public static class PatternFactory {
 
         /// <summary>
-        ///     keywords
+        ///     create a new set of standard pattersn
         /// </summary>
-        public static IDictionary<string, int> Keywords { get; }
-            = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase) {
+        /// <returns></returns>
+        public static InputPatterns CreateStandardPatterns() {
+
+            var keywords = new Dictionary<string, int>(170, StringComparer.OrdinalIgnoreCase) {
                 ["program"] = TokenKind.Program,
                 ["uses"] = TokenKind.Uses,
                 ["in"] = TokenKind.In,
@@ -182,57 +184,52 @@ namespace PasPasPas.Parsing.Tokenizer.Patterns {
                 ["at"] = TokenKind.AtWord,
                 ["on"] = TokenKind.On,
                 ["dependency"] = TokenKind.Dependency,
-                ["delayed"] = TokenKind.Delayed,
+                ["delayed"] = TokenKind.Delayed
             };
 
-        /// <summary>
-        ///     register tokenizer patters
-        /// </summary>
-        public StandardPatterns() {
-            AddPattern(',', TokenKind.Comma);
+            var result = new InputPatterns(keywords);
+            result.AddPattern(',', TokenKind.Comma);
 
-            var dot = AddPattern('.', TokenKind.Dot);
+            var dot = result.AddPattern('.', TokenKind.Dot);
             dot.Add('.', TokenKind.DotDot);
             dot.Add(')', TokenKind.CloseBraces);
 
-            var lparen = AddPattern('(', TokenKind.OpenParen);
+            var lparen = result.AddPattern('(', TokenKind.OpenParen);
             lparen.Add('.', TokenKind.OpenBraces);
             lparen.Add('*', new SequenceGroupTokenValue(TokenKind.Comment, "*)")).Add('$', new SequenceGroupTokenValue(TokenKind.Preprocessor, "*)"));
 
-            AddPattern(')', TokenKind.CloseParen);
-            AddPattern(';', TokenKind.Semicolon);
-            AddPattern('=', TokenKind.EqualsSign);
-            AddPattern('[', TokenKind.OpenBraces);
-            AddPattern(']', TokenKind.CloseBraces);
-            AddPattern(':', TokenKind.Colon).Add('=', TokenKind.Assignment);
-            AddPattern('^', TokenKind.Circumflex);
-            AddPattern('+', TokenKind.Plus);
-            AddPattern('-', TokenKind.Minus);
-            AddPattern('*', TokenKind.Times);
+            result.AddPattern(')', TokenKind.CloseParen);
+            result.AddPattern(';', TokenKind.Semicolon);
+            result.AddPattern('=', TokenKind.EqualsSign);
+            result.AddPattern('[', TokenKind.OpenBraces);
+            result.AddPattern(']', TokenKind.CloseBraces);
+            result.AddPattern(':', TokenKind.Colon).Add('=', TokenKind.Assignment);
+            result.AddPattern('^', TokenKind.Circumflex);
+            result.AddPattern('+', TokenKind.Plus);
+            result.AddPattern('-', TokenKind.Minus);
+            result.AddPattern('*', TokenKind.Times);
 
-            AddPattern('/', TokenKind.Slash).Add('/', new EndOfLineCommentTokenGroupValue());
+            result.AddPattern('/', TokenKind.Slash).Add('/', new EndOfLineCommentTokenGroupValue());
 
-            AddPattern('@', TokenKind.At);
-            AddPattern('>', TokenKind.GreaterThen).Add('=', TokenKind.GreaterThenEquals);
+            result.AddPattern('@', TokenKind.At);
+            result.AddPattern('>', TokenKind.GreaterThen).Add('=', TokenKind.GreaterThenEquals);
 
-            var lt = AddPattern('<', TokenKind.LessThen);
+            var lt = result.AddPattern('<', TokenKind.LessThen);
             lt.Add('=', TokenKind.LessThenEquals);
             lt.Add('>', TokenKind.NotEquals);
 
-            AddPattern('{', new SequenceGroupTokenValue(TokenKind.Comment, "}")).Add('$', new SequenceGroupTokenValue(TokenKind.Preprocessor, "}"));
-            AddPattern('$', new CharacterClassTokenGroupValue(TokenKind.HexNumber, new DigitCharClass(true), 2, StaticDependency.ParsedHexNumbers, Tokenizer.IncompleteHexNumber));
-            AddPattern(new WhiteSpaceCharacterClass(), new CharacterClassTokenGroupValue(TokenKind.WhiteSpace, new WhiteSpaceCharacterClass()));
-            AddPattern(new IdentifierCharacterClass(), new IdentifierTokenGroupValue(Keywords, allowAmpersand: true));
+            result.AddPattern('{', new SequenceGroupTokenValue(TokenKind.Comment, "}")).Add('$', new SequenceGroupTokenValue(TokenKind.Preprocessor, "}"));
+            result.AddPattern('$', new CharacterClassTokenGroupValue(TokenKind.HexNumber, new DigitCharClass(true), 2, StaticDependency.ParsedHexNumbers, Tokenizer.IncompleteHexNumber));
+            result.AddPattern(new WhiteSpaceCharacterClass(), new CharacterClassTokenGroupValue(TokenKind.WhiteSpace, new WhiteSpaceCharacterClass()));
+            result.AddPattern(new IdentifierCharacterClass(), new IdentifierTokenGroupValue(keywords, allowAmpersand: true));
 
-            AddPattern(new DigitCharClass(false), new NumberTokenGroupValue());
-            AddPattern(new ControlCharacterClass(), new CharacterClassTokenGroupValue(TokenKind.ControlChar, new ControlCharacterClass()));
-            AddPattern('\'', new StringGroupTokenValue());
-            AddPattern('"', new QuotedStringTokenValue(TokenKind.DoubleQuotedString, '"'));
-            AddPattern('#', new StringGroupTokenValue());
-            AddPattern('\x001A', new SoftEofTokenValue());
-
+            result.AddPattern(new DigitCharClass(false), new NumberTokenGroupValue());
+            result.AddPattern(new ControlCharacterClass(), new CharacterClassTokenGroupValue(TokenKind.ControlChar, new ControlCharacterClass()));
+            result.AddPattern('\'', new StringGroupTokenValue());
+            result.AddPattern('"', new QuotedStringTokenValue(TokenKind.DoubleQuotedString, '"'));
+            result.AddPattern('#', new StringGroupTokenValue());
+            result.AddPattern('\x001A', new SoftEofTokenValue());
+            return result;
         }
-
-
     }
 }

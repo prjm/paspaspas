@@ -194,6 +194,12 @@ namespace PasPasPas.Parsing.Tokenizer {
             => tokenList.Count < 1 && (BaseTokenizer == null || BaseTokenizer.AtEof);
 
         /// <summary>
+        ///     registered keywords
+        /// </summary>
+        public IDictionary<string, int> Keywords =>
+            BaseTokenizer.Keywords;
+
+        /// <summary>
         ///     get tokens and look ahader
         /// </summary>
         /// <param name="number">number of tokens to look ahead</param>

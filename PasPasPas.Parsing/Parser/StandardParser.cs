@@ -7,6 +7,7 @@ using System;
 using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.Tokenizer.Patterns;
 using PasPasPas.Infrastructure.Files;
+using PasPasPas.Infrastructure.Environment;
 
 namespace PasPasPas.Parsing.Parser {
 
@@ -19,7 +20,9 @@ namespace PasPasPas.Parsing.Parser {
         ///     creates a new standard parser
         /// </summary>
         public StandardParser(ParserServices environment, StackedFileReader input) :
-            base(environment, new TokenizerWithLookahead(new Tokenizer.Tokenizer(environment.Log, new StandardPatterns(), input), TokenizerMode.Standard)) { }
+            base(environment, new TokenizerWithLookahead(
+                new Tokenizer.Tokenizer(environment.Log, StaticEnvironment.Require<InputPatterns>(StaticDependency.StandardTokenizerPattern), input),
+                TokenizerMode.Standard)) { }
 
         #region Reserved Words
 
@@ -4199,7 +4202,7 @@ return true;
             if (!allowReservedWords && reservedWords.Contains(token.Kind))
                 return false;
 
-            return StandardPatterns.Keywords.ContainsKey(token.Value);
+            return Tokenizer.Keywords.ContainsKey(token.Value);
         }
 
 

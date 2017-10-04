@@ -6,7 +6,7 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
     /// <summary>
     ///     simple integer parser
     /// </summary>
-    public sealed class IntegerParser : IIntegerParser, IHexNumberParser, ILookupFunction<string, object> {
+    public sealed class IntegerParser : IStaticCacheItem, IIntegerParser, IHexNumberParser, ILookupFunction<string, object> {
 
         private readonly LookupTable<string, object> data;
 
@@ -15,6 +15,9 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
 
         LookupTable ILookupFunction.Table
             => data;
+
+        public string Caption
+            => allowHex ? "HexParser" : "IntegerParser";
 
         public static object IntegerOverflowInLiteral
             = new object();

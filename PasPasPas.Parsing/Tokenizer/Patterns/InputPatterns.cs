@@ -25,6 +25,18 @@ namespace PasPasPas.Parsing.Tokenizer.Patterns {
             new List<InputPatternAndClass>();
 
         /// <summary>
+        ///     keywords
+        /// </summary>
+        public IDictionary<string, int> Keywords { get; }
+
+        /// <summary>
+        ///     create a new set of input patterns
+        /// </summary>
+        /// <param name="keywords">supported keywords, if any</param>
+        public InputPatterns(IDictionary<string, int> keywords)
+            => Keywords = keywords ?? new Dictionary<string, int>();
+
+        /// <summary>
         ///     add a simple pattern based upon one character
         /// </summary>
         /// <param name="prefix">prefix</param>

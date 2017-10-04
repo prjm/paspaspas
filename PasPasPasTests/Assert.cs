@@ -58,8 +58,8 @@ namespace PasPasPasTests {
         public static void IsNull(object o)
             => A.Null(o);
 
-        public static void Throws<T>(Action testCode)
-            => A.Throws(typeof(T), testCode);
+        public static void Throws<T>(Action testCode) where T : Exception
+            => A.Throws<T>(testCode);
 
     }
 }

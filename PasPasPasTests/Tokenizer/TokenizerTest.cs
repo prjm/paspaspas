@@ -162,48 +162,47 @@ namespace PasPasPasTests.Tokenizer {
             TokenizerMessageIsGenerated(PasPasPas.Parsing.Tokenizer.Tokenizer.IncompleteString, "#$R");
         }
 
-        public static void IsQuotedString(string input, string value)
+        internal static void IsQuotedString(string input, string value)
             => IsToken(TokenKind.QuotedString, input, input, value);
 
-        public static void IsInteger(string input, object value)
+        internal static void IsInteger(string input, object value)
             => IsToken(TokenKind.Integer, input, input, value);
 
-        public static void IsWhitespace(string input)
+        internal static void IsWhitespace(string input)
             => IsToken(TokenKind.WhiteSpace, input, input);
 
-        public static void IsReal(string input, object value, params Tuple<int, string>[] tokens)
+        internal static void IsReal(string input, object value, params Tuple<int, string>[] tokens)
             => IsToken(TokenKind.Real, input, input, value, tokens);
 
-        public static void IsHexNumber(string input, object value)
+        internal static void IsHexNumber(string input, object value)
             => IsToken(TokenKind.HexNumber, input, input, value);
 
-        public static void IsPreprocessor(string input)
+        internal static void IsPreprocessor(string input)
             => IsToken(TokenKind.Preprocessor, input, input);
 
-        public static void IsComment(string input)
+        internal static void IsComment(string input)
             => IsToken(TokenKind.Comment, input, input);
 
-        public static void IsControlChar(string input)
+        internal static void IsControlChar(string input)
             => IsToken(TokenKind.ControlChar, input, input);
 
-        public static void IsAssembler(string input)
+        internal static void IsAssembler(string input)
             => IsToken(TokenKind.Asm, input, input);
 
-        public static void IsToken(int tokenKind, string input)
+        internal static void IsToken(int tokenKind, string input)
             => IsToken(tokenKind, input, input);
 
-        public static void IsIdentifier(string input, string output = null) {
+        internal static void IsIdentifier(string input, string output = null) {
             if (output == null)
                 output = input;
 
             IsToken(TokenKind.Identifier, output, input);
         }
 
-        public static void IsToken(int tokenKind, string tokenValue, string input, params Tuple<int, string>[] tokens)
+        internal static void IsToken(int tokenKind, string tokenValue, string input, params Tuple<int, string>[] tokens)
             => IsToken(tokenKind, tokenValue, input, null, tokens);
 
-
-        public static void IsToken(int tokenKind, string tokenValue, string input, object value, params Tuple<int, string>[] tokens) {
+        internal static void IsToken(int tokenKind, string tokenValue, string input, object value, params Tuple<int, string>[] tokens) {
             var result = TestHelper.RunTokenizer(input);
             Assert.IsNotNull(result);
 

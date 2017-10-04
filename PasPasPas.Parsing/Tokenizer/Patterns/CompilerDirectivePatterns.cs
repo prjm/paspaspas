@@ -151,7 +151,7 @@ namespace PasPasPas.Parsing.Tokenizer.Patterns {
         /// <summary>
         ///     create the preprocessor punctuators
         /// </summary>
-        public CompilerDirectivePatterns() {
+        public CompilerDirectivePatterns() : base(null) {
 
             AddPattern('+', TokenKind.Plus);
             AddPattern('-', TokenKind.Minus);

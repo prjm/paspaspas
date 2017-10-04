@@ -1,4 +1,5 @@
-﻿using PasPasPas.Infrastructure.Environment;
+﻿using System;
+using PasPasPas.Infrastructure.Environment;
 using PasPasPas.Infrastructure.Files;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Parsing.Tokenizer;
@@ -41,6 +42,7 @@ namespace PasPasPas.Api {
             StaticEnvironment.Register(StaticDependency.ConvertedCharLiterals, new CharLiteralConverter());
             StaticEnvironment.Register(StaticDependency.ConvertedRealLiterals, new RealLiteralConverter());
             StaticEnvironment.Register(StaticDependency.TokenSequencePool, new ObjectPool<TokenizerWithLookahead.TokenSequence>());
+            StaticEnvironment.Register(StaticDependency.StandardTokenizerPattern, PatternFactory.CreateStandardPatterns());
         }
 
         /// <summary>
@@ -69,7 +71,10 @@ namespace PasPasPas.Api {
         /// <param name="fileReader"></param>
         /// <returns></returns>
         private ITokenizer CreateTokenizer(StackedFileReader fileReader)
-            => new Tokenizer(log, new StandardPatterns(), fileReader);
+            => new Tokenizer(log, CreateStandardPatterns(), fileReader);
+
+        private InputPatterns CreateStandardPatterns()
+            => StaticEnvironment.Require<InputPatterns>(StaticDependency.StandardTokenizerPattern);
 
         /// <summary>
         ///     create a tokenizer for a string

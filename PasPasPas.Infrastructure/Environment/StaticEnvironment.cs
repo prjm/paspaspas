@@ -56,6 +56,11 @@ namespace PasPasPas.Infrastructure.Environment {
         ///     string pool
         /// </summary>
         public const int StringPool = 8;
+
+        /// <summary>
+        ///     tokenizer pattern for standard syntax
+        /// </summary>
+        public const int StandardTokenizerPattern = 9;
     }
 
     /// <summary>

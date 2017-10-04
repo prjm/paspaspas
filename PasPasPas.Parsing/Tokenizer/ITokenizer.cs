@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using PasPasPas.Parsing.SyntaxTree;
 
 namespace PasPasPas.Parsing.Tokenizer {
@@ -22,6 +23,11 @@ namespace PasPasPas.Parsing.Tokenizer {
         ///     current token
         /// </summary>
         Token CurrentToken { get; }
+
+        /// <summary>
+        ///     defined keywords
+        /// </summary>
+        IDictionary<string, int> Keywords { get; }
 
     }
 }

@@ -14,7 +14,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
         private readonly IDictionary<string, int> knownKeywords;
         private readonly bool allowAmpersands;
 
-        public IdentifierTokenGroupValue(IDictionary<string, int> keywords, bool allowAmpersand = false, bool allowDigits = false, bool allowDots = false) {
+        public IdentifierTokenGroupValue(IDictionary<string, int> keywords, bool allowAmpersand = false, bool allowDigits = true, bool allowDots = false) {
             allowAmpersands = allowAmpersand;
             knownKeywords = keywords ?? throw new ArgumentNullException(nameof(keywords));
             identifierCharClass = new IdentifierCharacterClass(allowAmpersand, allowDigits, allowDots);
