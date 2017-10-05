@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using PasPasPas.Infrastructure.Files;
+using PasPasPas.Infrastructure.Log;
 using PasPasPas.Parsing.SyntaxTree;
 
 namespace PasPasPas.Parsing.Tokenizer {
@@ -29,5 +31,14 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         IDictionary<string, int> Keywords { get; }
 
+        /// <summary>
+        ///     current input
+        /// </summary>
+        StackedFileReader Input { get; }
+
+        /// <summary>
+        ///     log manager
+        /// </summary>
+        ILogManager Log { get; }
     }
 }

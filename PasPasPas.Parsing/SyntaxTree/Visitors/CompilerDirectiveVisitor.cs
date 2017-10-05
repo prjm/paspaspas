@@ -1,7 +1,7 @@
 ﻿using System;
 using PasPasPas.Infrastructure.Files;
-using PasPasPas.Infrastructure.Input;
 using PasPasPas.Infrastructure.Log;
+using PasPasPas.Options.Bundles;
 using PasPasPas.Options.DataTypes;
 using PasPasPas.Parsing.Parser;
 using PasPasPas.Parsing.SyntaxTree.CompilerDirectives;
@@ -82,14 +82,18 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         IStartVisitor<WarnSwitch>,
         IStartVisitor<WeakLinkRtti> {
 
-        private ParserServices services;
-        private LogSource logSource;
         private readonly Visitor visitor;
+        private readonly ILogManager log;
+        private OptionSet Options { get; }
 
         /// <summary>
         ///     creates a new visitor
         /// </summary>
-        public CompilerDirectiveVisitor() => visitor = new Visitor(this);
+        public CompilerDirectiveVisitor(OptionSet options, ILogManager logMgr) {
+            Options = options;
+            visitor = new Visitor(this);
+            log = logMgr;
+        }
 
         private static readonly Guid messageSource
             = new Guid(new byte[] { 0xcc, 0x3b, 0xd8, 0xdd, 0xbf, 0x76, 0x5f, 0x40, 0xa2, 0xe8, 0x8a, 0xbd, 0x9f, 0xb6, 0x20, 0xc4 });
@@ -100,42 +104,25 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     file access
         /// </summary>
         public IFileAccess FileAccess
-            => Environment.Options.Files;
+            => Options.Files;
 
         /// <summary>
         ///     compile options
         /// </summary>
         public CompileOptions CompilerOptions
-            => Environment.Options.CompilerOptions;
+            => Options.CompilerOptions;
 
         /// <summary>
         ///     conditional compilation options
         /// </summary>
         public ConditionalCompilationOptions ConditionalCompilation
-            => Environment.Options.ConditionalCompilation;
+            => Options.ConditionalCompilation;
 
         /// <summary>
         ///     warnings
         /// </summary>
         public WarningOptions Warnings
-            => Environment.Options.Warnings;
-
-        /// <summary>
-        ///     parsing environemnt
-        /// </summary>
-        public ParserServices Environment {
-
-            get => services;
-
-            set {
-                logSource = null;
-                services = value;
-
-                if (services != null) {
-                    logSource = new LogSource(services.Log, messageSource);
-                }
-            }
-        }
+            => Options.Warnings;
 
         /// <summary>
         ///     log source
@@ -147,7 +134,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     meta information
         /// </summary>
         public MetaInformation Meta
-            => Environment.Options.Meta;
+            => Options.Meta;
 
         /// <summary>
         ///     include reader

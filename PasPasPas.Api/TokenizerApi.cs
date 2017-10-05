@@ -42,7 +42,7 @@ namespace PasPasPas.Api {
             StaticEnvironment.Register(StaticDependency.ConvertedCharLiterals, new CharLiteralConverter());
             StaticEnvironment.Register(StaticDependency.ConvertedRealLiterals, new RealLiteralConverter());
             StaticEnvironment.Register(StaticDependency.TokenSequencePool, new ObjectPool<TokenizerWithLookahead.TokenSequence>());
-            StaticEnvironment.Register(StaticDependency.StandardTokenizerPattern, PatternFactory.CreateStandardPatterns());
+            StaticEnvironment.Register(StaticDependency.TokenizerPatternFactory, new PatternFactory());
         }
 
         /// <summary>
@@ -74,7 +74,7 @@ namespace PasPasPas.Api {
             => new Tokenizer(log, CreateStandardPatterns(), fileReader);
 
         private InputPatterns CreateStandardPatterns()
-            => StaticEnvironment.Require<InputPatterns>(StaticDependency.StandardTokenizerPattern);
+            => StaticEnvironment.Require<PatternFactory>(StaticDependency.TokenizerPatternFactory).StandardPatterns;
 
         /// <summary>
         ///     create a tokenizer for a string

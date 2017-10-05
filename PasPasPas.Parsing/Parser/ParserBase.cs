@@ -7,6 +7,7 @@ using PasPasPas.Infrastructure.Log;
 using PasPasPas.Parsing.SyntaxTree;
 using System.Linq;
 using PasPasPas.Parsing.SyntaxTree.Utils;
+using PasPasPas.Options.Bundles;
 
 namespace PasPasPas.Parsing.Parser {
 
@@ -43,18 +44,19 @@ namespace PasPasPas.Parsing.Parser {
             = new Guid(new byte[] { 0x84, 0x1f, 0xb1, 0x9f, 0xe3, 0x2f, 0x9c, 0x48, 0xb7, 0x15, 0xdd, 0x29, 0x45, 0x8e, 0x43, 0x4e });
         /* {9fb11f84-2fe3-489c-b715-dd29458e434e} */
 
-        private readonly TokenizerWithLookahead tokenizer;
+        private TokenizerWithLookahead tokenizer;
         private readonly LogSource logSource;
+        private readonly OptionSet options;
 
         /// <summary>
         ///     creates a new parser
         /// </summary>
         /// <param name="tokenizerWithLookAhead"></param>
         /// <param name="environment">environment</param>
-        protected ParserBase(ParserServices environment, TokenizerWithLookahead tokenizerWithLookAhead) {
-            Environment = environment;
+        protected ParserBase(OptionSet parserOptions, ILogManager log, TokenizerWithLookahead tokenizerWithLookAhead) {
             tokenizer = tokenizerWithLookAhead;
-            logSource = new LogSource(environment.Log, ParserLogMessage);
+            logSource = new LogSource(log, ParserLogMessage);
+            options = parserOptions;
         }
 
         /// <summary>
@@ -73,7 +75,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <summary>
         ///     basic working environment
         /// </summary>
-        public ParserServices Environment { get; }
+        public OptionSet Options { get; }
 
 
         /// <summary>
@@ -1157,5 +1159,13 @@ namespace PasPasPas.Parsing.Parser {
         /// </summary>
         /// <returns>parsed input</returns>
         public abstract ISyntaxPart Parse();
+
+        public void Dispose() {
+            if (Tokenizer != null) {
+                tokenizer.Dispose();
+                tokenizer = null;
+            }
+        }
+
     }
 }

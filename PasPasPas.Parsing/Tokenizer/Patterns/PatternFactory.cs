@@ -10,13 +10,169 @@ namespace PasPasPas.Parsing.Tokenizer.Patterns {
     /// <summary>
     ///     helper class to create tokenizer patterns
     /// </summary>
-    public static class PatternFactory {
+    public class PatternFactory : IStaticCacheItem {
 
-        /// <summary>
-        ///     create a new set of standard pattersn
-        /// </summary>
-        /// <returns></returns>
-        public static InputPatterns CreateStandardPatterns() {
+        public InputPatterns StandardPatterns { get; }
+            = CreateStandardPatterns();
+
+        public InputPatterns CompilerDirectivePatterns { get; }
+            = CreateCompilerDirectivePatterns();
+
+        public string Caption
+            => "TokenizerPatternFactory";
+
+        private static InputPatterns CreateCompilerDirectivePatterns() {
+            var keywords = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase) {
+                ["A"] = TokenKind.AlignSwitch,
+                ["A1"] = TokenKind.AlignSwitch1,
+                ["A2"] = TokenKind.AlignSwitch2,
+                ["A4"] = TokenKind.AlignSwitch4,
+                ["A8"] = TokenKind.AlignSwitch8,
+                ["A16"] = TokenKind.AlignSwitch16,
+                ["ALIGN"] = TokenKind.AlignSwitchLong,
+                ["APPTYPE"] = TokenKind.Apptype,
+                ["C"] = TokenKind.AssertSwitch,
+                ["ASSERTIONS"] = TokenKind.AssertSwitchLong,
+                ["B"] = TokenKind.BoolEvalSwitch,
+                ["BOOLEVAL"] = TokenKind.BoolEvalSwitchLong,
+                ["CODEALIGN"] = TokenKind.CodeAlign,
+                ["IFDEF"] = TokenKind.IfDef,
+                ["IFNDEF"] = TokenKind.IfNDef,
+                ["IF"] = TokenKind.IfCd,
+                ["ELSEIF"] = TokenKind.ElseIf,
+                ["ELSE"] = TokenKind.ElseCd,
+                ["ENDIF"] = TokenKind.EndIf,
+                ["IFEND"] = TokenKind.IfEnd,
+                ["D"] = TokenKind.DebugInfoOrDescriptionSwitch,
+                ["DESCRIPTION"] = TokenKind.DescriptionSwitchLong,
+                ["DEBUGINFO"] = TokenKind.DebugInfoSwitchLong,
+                ["DEFINE"] = TokenKind.Define,
+                ["DEFAULT"] = TokenKind.Default,
+                ["DENYPACKAGEUNIT"] = TokenKind.DenyPackageUnit,
+                ["DESIGNONLY"] = TokenKind.DesignOnly,
+                ["E"] = TokenKind.ExtensionSwitch,
+                ["EXTENSION"] = TokenKind.ExtensionSwitchLong,
+                ["OBJEXPORTALL"] = TokenKind.ObjExportAll,
+                ["X"] = TokenKind.ExtendedSyntaxSwitch,
+                ["EXTENDEDSYNTAX"] = TokenKind.ExtendedSyntaxSwitchLong,
+                ["EXTENDEDCOMPATIBILITY"] = TokenKind.ExtendedCompatibility,
+                ["EXCESSPRECISION"] = TokenKind.ExcessPrecision,
+                ["EXTERNALSYM"] = TokenKind.ExternalSym,
+                ["HIGHCHARUNICODE"] = TokenKind.HighCharUnicode,
+                ["HINTS"] = TokenKind.Hints,
+                ["HPPEMIT"] = TokenKind.HppEmit,
+                ["IFOPT"] = TokenKind.IfOpt,
+                ["IMAGEBASE"] = TokenKind.ImageBase,
+                ["IMPLICITBUILD"] = TokenKind.ImplicitBuild,
+                ["G"] = TokenKind.ImportedDataSwitch,
+                ["IMPORTEDDATA"] = TokenKind.ImportedDataSwitchLong,
+                ["I"] = TokenKind.IncludeSwitch,
+                ["INCLUDE"] = TokenKind.IncludeSwitchLong,
+                ["IOCHECKS"] = TokenKind.IoChecks,
+                ["LIBPREFIX"] = TokenKind.LibPrefix,
+                ["LIBSUFFIX"] = TokenKind.LibSuffix,
+                ["LIBVERSION"] = TokenKind.LibVersion,
+                ["LEGACYIFEND"] = TokenKind.LegacyIfEnd,
+                ["L"] = TokenKind.LinkOrLocalSymbolSwitch,
+                ["LINK"] = TokenKind.LinkSwitchLong,
+                ["LOCALSYMBOLS"] = TokenKind.LocalSymbolSwithLong,
+                ["H"] = TokenKind.LongStringSwitch,
+                ["LONGSTRINGS"] = TokenKind.LongStringSwitchLong,
+                ["MINSTACKSIZE"] = TokenKind.MinMemStackSizeSwitchLong,
+                ["MAXSTACKSIZE"] = TokenKind.MaxMemStackSizeSwitchLong,
+                ["MESSAGE"] = TokenKind.MessageCd,
+                ["METHODINFO"] = TokenKind.MethodInfo,
+                ["Z"] = TokenKind.EnumSizeSwitch,
+                ["Z1"] = TokenKind.EnumSize1,
+                ["Z2"] = TokenKind.EnumSize2,
+                ["Z4"] = TokenKind.EnumSize4,
+                ["MINENUMSIZE"] = TokenKind.EnumSizeSwitchLong,
+                ["NODEFINE"] = TokenKind.NoDefine,
+                ["NOINCLUDE"] = TokenKind.NoInclude,
+                ["OBJTYPENAME"] = TokenKind.ObjTypeName,
+                ["OLDTYPELAYOUT"] = TokenKind.OldTypeLayout,
+                ["P"] = TokenKind.OpenStringSwitch,
+                ["OPENSTRINGS"] = TokenKind.OpenStringSwitchLong,
+                ["O"] = TokenKind.OptimizationSwitch,
+                ["OPTIMIZATION"] = TokenKind.OptimizationSwitchLong,
+                ["Q"] = TokenKind.OverflowSwitch,
+                ["OVERFLOWCHECKS"] = TokenKind.OverflowSwitchLong,
+                ["SETPEFLAGS"] = TokenKind.SetPEFlags,
+                ["SETPEOPTFLAGS"] = TokenKind.SetPEOptFlags,
+                ["SETPEOSVERSION"] = TokenKind.SetPEOsVersion,
+                ["SETPESUBSYSVERSION"] = TokenKind.SetPESubsystemVersion,
+                ["SETPEUSERVERSION"] = TokenKind.SetPEUserVersion,
+                ["U"] = TokenKind.SaveDivideSwitch,
+                ["SAFEDIVIDE"] = TokenKind.SafeDivideSwitchLong,
+                ["POINTERMATH"] = TokenKind.Pointermath,
+                ["R"] = TokenKind.IncludeRessource,
+                ["RANGECHECKS"] = TokenKind.RangeChecks,
+                ["REALCOMPATIBILITY"] = TokenKind.RealCompatibility,
+                ["REGION"] = TokenKind.Region,
+                ["ENDREGION"] = TokenKind.EndRegion,
+                ["RESOURCE"] = TokenKind.IncludeRessourceLong,
+                ["RTTI"] = TokenKind.Rtti,
+                ["RUNONLY"] = TokenKind.RunOnly,
+                ["M"] = TokenKind.TypeInfoSwitch,
+                ["TYPEINFO"] = TokenKind.TypeInfoSwitchLong,
+                ["SCOPEDENUMS"] = TokenKind.ScopedEnums,
+                ["W"] = TokenKind.StackFramesSwitch,
+                ["STACKFRAMES"] = TokenKind.StackFramesSwitchLong,
+                ["STRONGLINKTYPES"] = TokenKind.StrongLinkTypes,
+                ["Y"] = TokenKind.SymbolDeclarationSwitch,
+                ["REFERENCEINFO"] = TokenKind.ReferenceInfo,
+                ["DEFINITIONINFO"] = TokenKind.DefinitionInfo,
+                ["T"] = TokenKind.TypedPointersSwitch,
+                ["TYPEDADDRESS"] = TokenKind.TypedPointersSwitchLong,
+                ["UNDEF"] = TokenKind.Undef,
+                ["V"] = TokenKind.VarStringCheckSwitch,
+                ["VARSTRINGCHECKS"] = TokenKind.VarStringCheckSwitchLong,
+                ["WARN"] = TokenKind.Warn,
+                ["WARNINGS"] = TokenKind.Warnings,
+                ["WEAKPACKAGEUNIT"] = TokenKind.WeakPackageUnit,
+                ["WEAKLINKRTTI"] = TokenKind.WeakLinkRtti,
+                ["J"] = TokenKind.WritableConstSwitch,
+                ["WRITEABLECONST"] = TokenKind.WritableConstSwitchLong,
+                ["ZEROBASEDSTRINGS"] = TokenKind.ZeroBaseStrings,
+                ["ON"] = TokenKind.On,
+                ["OFF"] = TokenKind.Off,
+                ["LINKUNIT"] = TokenKind.LinkUnit,
+                ["OPENNAMESPACE"] = TokenKind.OpenNamespace,
+                ["CLOSENAMESPACE"] = TokenKind.CloseNamepsace,
+                ["NOUSINGNAMESPACE"] = TokenKind.NoUsingNamespace,
+                ["END"] = TokenKind.End,
+                ["ERROR"] = TokenKind.Error,
+                ["YD"] = TokenKind.SymbolDefinitionsOnlySwitch,
+                ["INHERIT"] = TokenKind.Inherit,
+                ["EXPLICIT"] = TokenKind.Explicit,
+                ["PROPERTIES"] = TokenKind.Properties,
+                ["METHODS"] = TokenKind.Methods,
+                ["FIELDS"] = TokenKind.Fields,
+                ["VCPRIVATE"] = TokenKind.VcPrivate,
+                ["VCPROTECTED"] = TokenKind.VcProtected,
+                ["VCPUBLIC"] = TokenKind.VcPublic,
+                ["VCPUBLISHED"] = TokenKind.VcPublished,
+            };
+
+            var result = new InputPatterns(keywords);
+            result.AddPattern('+', TokenKind.Plus);
+            result.AddPattern('-', TokenKind.Minus);
+            result.AddPattern('(', TokenKind.OpenParen);
+            result.AddPattern(')', TokenKind.CloseParen);
+            result.AddPattern('[', TokenKind.OpenBraces);
+            result.AddPattern(']', TokenKind.CloseBraces);
+            result.AddPattern(',', TokenKind.Comma);
+            result.AddPattern('*', TokenKind.Times);
+            result.AddPattern(new WhiteSpaceCharacterClass(), new CharacterClassTokenGroupValue(TokenKind.WhiteSpace, new WhiteSpaceCharacterClass()));
+            result.AddPattern(new IdentifierCharacterClass(dots: true), new IdentifierTokenGroupValue(keywords, allowDots: true));
+            result.AddPattern(new DigitCharClass(false), new NumberTokenGroupValue() { AllowIdents = true });
+            result.AddPattern('$', new CharacterClassTokenGroupValue(TokenKind.HexNumber, new DigitCharClass(true), 2, StaticDependency.ParsedHexNumbers, Tokenizer.IncompleteHexNumber));
+            result.AddPattern(new ControlCharacterClass(), new CharacterClassTokenGroupValue(TokenKind.ControlChar, new ControlCharacterClass()));
+            result.AddPattern('"', new QuotedStringTokenValue(TokenKind.QuotedString, '"'));
+            return result;
+        }
+
+        private static InputPatterns CreateStandardPatterns() {
 
             var keywords = new Dictionary<string, int>(170, StringComparer.OrdinalIgnoreCase) {
                 ["program"] = TokenKind.Program,

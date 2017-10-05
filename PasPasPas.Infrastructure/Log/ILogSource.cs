@@ -8,6 +8,11 @@ namespace PasPasPas.Infrastructure.Log {
     public interface ILogSource {
 
         /// <summary>
+        ///     log manager
+        /// </summary>
+        ILogManager Manager { get; }
+
+        /// <summary>
         ///     log an error message
         /// </summary>
         /// <param name="id"></param>

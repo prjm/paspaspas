@@ -10,6 +10,7 @@ using PasPasPas.Infrastructure.Log;
 using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Infrastructure.Files;
 using PasPasPas.Parsing.Tokenizer.Patterns;
+using PasPasPas.Infrastructure.Environment;
 
 namespace PasPasPas.Parsing.Parser {
 
@@ -18,20 +19,20 @@ namespace PasPasPas.Parsing.Parser {
     /// </summary>
     public class CompilerDirectiveParser : ParserBase {
 
+        private static InputPatterns GetPatternsFromFactory()
+            => StaticEnvironment.Require<PatternFactory>(StaticDependency.TokenizerPatternFactory).CompilerDirectivePatterns;
+
+        private static TokenizerWithLookahead CreateTokenizer(ILogManager log, StackedFileReader reader, OptionSet options)
+            => new TokenizerWithLookahead(new Tokenizer.Tokenizer(log, options, GetPatternsFromFactory(), reader), TokenizerMode.CompilerDirective);
+
         /// <summary>
-        ///     create a new compiler directive parser
+        ///     create a new compiler directive parser 
         /// </summary>
         /// <param name="environment">services</param>
         /// <param name="input">input file</param>
-        public CompilerDirectiveParser(ParserServices environment, StackedFileReader input)
-            : base(environment, new TokenizerWithLookahead(new Tokenizer.Tokenizer(environment.Log, new CompilerDirectivePatterns(), input), TokenizerMode.CompilerDirective)) {
+        public CompilerDirectiveParser(ILogManager log, OptionSet options, StackedFileReader input)
+            : base(options, log, CreateTokenizer(log, input, options)) {
         }
-
-        /// <summary>
-        ///     compiler opions
-        /// </summary>
-        public IOptionSet Options
-            => Environment.Options;
 
         /// <summary>
         ///     compiler options
@@ -2344,7 +2345,7 @@ namespace PasPasPas.Parsing.Parser {
         /// </summary>
         /// <returns></returns>
         protected override bool AllowIdentifier()
-            => CompilerDirectivePatterns.Keywords.ContainsKey(CurrentToken().Value);
+            => Tokenizer.Keywords.ContainsKey(CurrentToken().Value);
 
     }
 

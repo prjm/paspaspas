@@ -1,4 +1,5 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Utils;
+﻿using System;
+using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.Tokenizer;
 
 namespace PasPasPas.Parsing.Parser {
@@ -6,7 +7,7 @@ namespace PasPasPas.Parsing.Parser {
     /// <summary>
     ///     interface for a parser
     /// </summary>
-    public interface IParser {
+    public interface IParser : IDisposable {
 
         /// <summary>
         ///     tokenizer to use

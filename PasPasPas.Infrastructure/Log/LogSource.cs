@@ -11,19 +11,21 @@ namespace PasPasPas.Infrastructure.Log {
         private readonly Guid group;
 
         /// <summary>
+        ///     associated log manager
+        /// </summary>
+        public ILogManager Manager
+            => manager;
+
+        /// <summary>
         ///     create a new log source
         /// </summary>
         /// <param name="logManager">used log manager</param>
         /// <param name="groupId">message group id</param>
         public LogSource(ILogManager logManager, Guid groupId) {
-
-            if (logManager == null)
-                throw new ArgumentNullException(nameof(logManager));
-
-            if (groupId == default(Guid))
+            if (groupId == default)
                 throw new ArgumentOutOfRangeException(nameof(groupId));
 
-            manager = logManager;
+            manager = logManager ?? throw new ArgumentNullException(nameof(logManager));
             group = groupId;
         }
 

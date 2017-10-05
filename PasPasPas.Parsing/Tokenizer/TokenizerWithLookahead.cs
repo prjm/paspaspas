@@ -1,9 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using PasPasPas.Infrastructure.Environment;
+using PasPasPas.Infrastructure.Files;
+using PasPasPas.Infrastructure.Log;
 using PasPasPas.Infrastructure.Utils;
+using PasPasPas.Options.Bundles;
+using PasPasPas.Parsing.Parser;
 using PasPasPas.Parsing.SyntaxTree;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
+using PasPasPas.Parsing.Tokenizer.Patterns;
 
 namespace PasPasPas.Parsing.Tokenizer {
 
@@ -24,11 +29,6 @@ namespace PasPasPas.Parsing.Tokenizer {
         private static Guid tokenSequencePool
             = new Guid(new byte[] { 0x9b, 0xd7, 0xb5, 0x3a, 0xc2, 0xf6, 0x6a, 0x47, 0xb4, 0x29, 0x4a, 0xd8, 0x19, 0x73, 0x8e, 0x56 });
         /* {3ab5d79b-f6c2-476a-b429-4ad819738e56} */
-
-        /// <summary>
-        ///     generic pool
-        /// </summary>
-        public static readonly Guid TokenSequencePool = tokenSequencePool;
 
         /// <summary>
         ///     a sequence of fetched tokens
@@ -62,15 +62,17 @@ namespace PasPasPas.Parsing.Tokenizer {
             }
         }
 
+        private OptionSet options;
         private TokenizerMode mode = TokenizerMode.Undefined;
         private bool skip = false;
 
         /// <summary>
         ///     create a new tokenizer with lookahead
         /// </summary>
-        public TokenizerWithLookahead(ITokenizer baseTokenizer, TokenizerMode tokenizerMode) {
+        public TokenizerWithLookahead(OptionSet optionsSet, ITokenizer baseTokenizer, TokenizerMode tokenizerMode) {
             mode = tokenizerMode;
             BaseTokenizer = baseTokenizer;
+            options = optionsSet;
         }
 
         /// <summary>
@@ -112,6 +114,7 @@ namespace PasPasPas.Parsing.Tokenizer {
                     return;
                 }
 
+                var currentInput = BaseTokenizer.Input.CurrentFile.File;
                 BaseTokenizer.FetchNextToken();
                 var nextToken = BaseTokenizer.CurrentToken;
 
@@ -123,7 +126,7 @@ namespace PasPasPas.Parsing.Tokenizer {
                 }
                 else {
                     if (IsMacroToken(ref nextToken))
-                        ProcessMacroToken(nextToken);
+                        ProcessMacroToken(currentInput, ref nextToken);
                     invalidTokens.Enqueue(nextToken);
                 }
             }
@@ -169,19 +172,20 @@ namespace PasPasPas.Parsing.Tokenizer {
         ///     do nothing
         /// </summary>
         /// <param name="nextToken"></param>
-        private void ProcessMacroToken(Token nextToken) {
-            /*
-            using (var input = new StringInput(CompilerDirectiveTokenizer.Unwrap(nextToken.Value), nextToken.FilePath))
-            using (var reader = new OldStackedFileReader()) {
-                var parser = new CompilerDirectiveParser(environment, reader);
-                var tokenizer = new CompilerDirectiveTokenizer(environment, reader);
-                reader.AddFile(input);
-                parser.BaseTokenizer = tokenizer;
-                ISyntaxPart result = parser.Parse();
-                var visitor = new CompilerDirectiveVisitor() { Environment = environment };
+        private void ProcessMacroToken(IFileReference path, ref Token nextToken) {
+
+            var patterns = StaticEnvironment.Require<PatternFactory>(StaticDependency.TokenizerPatternFactory).CompilerDirectivePatterns;
+            var fragmentBuffer = new FileBuffer();
+            var reader = new StackedFileReader(fragmentBuffer);
+            var macroValue = "";
+            fragmentBuffer.Add(path, new StringBufferReadable(macroValue));
+            reader.AddFileToRead(path);
+
+            using (var parser = new CompilerDirectiveParser(Log, options, reader)) {
+                var result = parser.Parse();
+                var visitor = new CompilerDirectiveVisitor(options, Log);
                 result.Accept(visitor.AsVisitor());
             }
-            */
         }
 
         /// <summary>
@@ -198,6 +202,12 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         public IDictionary<string, int> Keywords =>
             BaseTokenizer.Keywords;
+
+        public StackedFileReader Input
+            => BaseTokenizer.Input;
+
+        public ILogManager Log
+            => BaseTokenizer.Log;
 
         /// <summary>
         ///     get tokens and look ahader

@@ -136,5 +136,11 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         public IDictionary<string, int> Keywords
             => characterClasses.Keywords;
+
+        /// <summary>
+        ///     log manager
+        /// </summary>
+        ILogManager ITokenizer.Log =>
+            Log.Manager;
     }
 }

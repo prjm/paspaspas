@@ -8,6 +8,8 @@ using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.Tokenizer.Patterns;
 using PasPasPas.Infrastructure.Files;
 using PasPasPas.Infrastructure.Environment;
+using PasPasPas.Infrastructure.Log;
+using PasPasPas.Options.Bundles;
 
 namespace PasPasPas.Parsing.Parser {
 
@@ -16,13 +18,17 @@ namespace PasPasPas.Parsing.Parser {
     /// </summary>
     public class StandardParser : ParserBase, IParser {
 
+        private static InputPatterns GetPatternsFromFactory()
+            => StaticEnvironment.Require<PatternFactory>(StaticDependency.TokenizerPatternFactory).StandardPatterns;
+
+        private static TokenizerWithLookahead CreateTokenizer(ILogManager log, StackedFileReader reader, OptionSet options)
+            => new TokenizerWithLookahead(options, new Tokenizer.Tokenizer(log, GetPatternsFromFactory(), reader), TokenizerMode.Standard);
+
         /// <summary>
         ///     creates a new standard parser
         /// </summary>
-        public StandardParser(ParserServices environment, StackedFileReader input) :
-            base(environment, new TokenizerWithLookahead(
-                new Tokenizer.Tokenizer(environment.Log, StaticEnvironment.Require<InputPatterns>(StaticDependency.StandardTokenizerPattern), input),
-                TokenizerMode.Standard)) { }
+        public StandardParser(OptionSet options, ILogManager log, OptionSet parserOptions, StackedFileReader input) :
+            base(options, log, CreateTokenizer(log, input, options)) { }
 
         #region Reserved Words
 

@@ -60,7 +60,7 @@ namespace PasPasPas.Infrastructure.Environment {
         /// <summary>
         ///     tokenizer pattern for standard syntax
         /// </summary>
-        public const int StandardTokenizerPattern = 9;
+        public const int TokenizerPatternFactory = 9;
     }
 
     /// <summary>
