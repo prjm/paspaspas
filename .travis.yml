@@ -2,3 +2,7 @@ language: chsharp
 solution: paspaspas.sln
 mono: none
 dotnet: 2.0.0
+script:
+ - dotnet restore
+ - cd PasPasPasTests
+ - dotnet xunit
