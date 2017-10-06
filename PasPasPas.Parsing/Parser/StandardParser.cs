@@ -139,11 +139,19 @@ namespace PasPasPas.Parsing.Parser {
         /// <returns></returns>
         [Rule("File", "Program | Library | Unit | Package")]
         public ISyntaxPart ParseFile() {
+
+            if (Tokenizer.AtEof)
+                throw new Exception();
+
+            var path = Tokenizer.Input.CurrentFile.File;
+
             if (Match(TokenKind.Library)) {
                 return ParseLibrary();
             }
             else if (Match(TokenKind.Unit)) {
-                return ParseUnit();
+                var result = ParseUnit();
+                result.FilePath = path;
+                return result;
             }
             else if (Match(TokenKind.Package)) {
                 return ParsePackage();

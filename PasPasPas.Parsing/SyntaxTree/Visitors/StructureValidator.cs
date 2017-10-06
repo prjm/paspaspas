@@ -12,9 +12,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
     /// </summary>
     public class StructureValidator : IStartVisitor<CompilationUnit> {
 
-        public StructureValidator() {
-            visitor = new Visitor(this);
-        }
+        public StructureValidator()
+            => visitor = new Visitor(this);
 
         public void StartVisit(CompilationUnit unit) {
 

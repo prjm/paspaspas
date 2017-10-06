@@ -8,7 +8,8 @@ namespace SampleRunner {
         Undefined,
         ReadFile,
         TokenizerFile,
-        BufferedTokenizeFile
+        BufferedTokenizeFile,
+        ParseFile
     }
 
     class Program {
@@ -16,7 +17,7 @@ namespace SampleRunner {
         static void Main(string[] args) {
 
             var testPath = @"C:\temp\Testfiles\spring.pas";
-            var mode = SampleMode.BufferedTokenizeFile;
+            var mode = SampleMode.ParseFile;
             var repeat = 1;
             var result = new StringBuilder();
             Action<StringBuilder> action;
@@ -76,6 +77,10 @@ namespace SampleRunner {
 
                 case SampleMode.BufferedTokenizeFile:
                     action = (b) => Scenarios.BufferedTokenizeFile.Run(b, testPath, repeat);
+                    break;
+
+                case SampleMode.ParseFile:
+                    action = (b) => Scenarios.ParseFile.Run(b, testPath, repeat);
                     break;
 
                 default:

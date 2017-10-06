@@ -42,6 +42,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
             => UnitHead?.UnitName;
 
         /// <summary>
+        ///     path of the unit
+        /// </summary>
+        public IFileReference FilePath { get; set; }
+
+        /// <summary>
         ///     accept visitor
         /// </summary>
         /// <param name="startVisitor">start visitor</param>

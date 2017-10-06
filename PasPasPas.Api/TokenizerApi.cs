@@ -27,7 +27,7 @@ namespace PasPasPas.Api {
         public TokenizerApi(IFileAccess access, TokenizerApiOptions options = null) {
             standardFileAccess = access;
             reader = new ReaderApi(access);
-            log = new LogManager();
+            log = options.Log ?? new LogManager();
 
             if (options != null)
                 this.options = options;

@@ -106,7 +106,7 @@ namespace PasPasPas.Building.Tasks {
                 log.ClearEventHandlers();
 
 #if DEBUG
-
+/*
                 var visitor = new TerminalVisitor();
                 resultTree.Accept(visitor.AsVisitor());
                 if (!string.Equals(result1.ToString(), visitor.ResultBuilder.ToString(), StringComparison.Ordinal)) {
@@ -133,7 +133,7 @@ namespace PasPasPas.Building.Tasks {
                     LogManager = environment.Log
                 };
                 resultTree.Accept(transformVisitor.AsVisitor());
-
+                */
 #endif
 
             }

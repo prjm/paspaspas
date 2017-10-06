@@ -149,6 +149,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             result.Hints = ExtractHints(unit.Hints);
             result.InterfaceSymbols = new DeclaredSymbols() { ParentItem = result };
             result.ImplementationSymbols = new DeclaredSymbols() { ParentItem = result };
+            result.FilePath = unit.FilePath;
             Project.Add(result, LogSource);
             CurrentUnit = result;
         }

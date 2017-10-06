@@ -14,6 +14,7 @@ using System.Text;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Infrastructure.Files;
+using PasPasPas.Api;
 
 namespace PasPasPasTests {
 
@@ -163,22 +164,17 @@ namespace PasPasPasTests {
 
         protected ISyntaxPart RunAstTest(string input, LogManager logManager, IList<ILogMessage> messages) {
             ClearOptions();
-            return null;
-            /*
 
-            var environment = new ParserServices(logManager) {
-                Options = TestOptions
+            var options = new ParserApiOptions() {
+                Log = logManager
             };
 
-            var parser = new StandardParser(environment);
-            using (var inputFile = new StringInput(input, new FileReference("z.x.pas")))
-            using (var reader = new OldStackedFileReader()) {
-                reader.AddFile(inputFile);
-                parser.BaseTokenizer = new StandardTokenizer(environment, reader);
+            var fileAccess = (StandardFileAccess)TestOptions.Files;
+            var api = new ParserApi(fileAccess, options);
+
+            using (var parser = api.CreateParserForString("z.x.pas", input)) {
                 return parser.Parse();
             }
-
-            */
         }
 
 

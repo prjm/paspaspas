@@ -1,4 +1,6 @@
-﻿namespace PasPasPas.Api {
+﻿using PasPasPas.Infrastructure.Log;
+
+namespace PasPasPas.Api {
 
     /// <summary>
     ///     options for tokenizers
@@ -12,5 +14,9 @@
         public bool KeepWhitespace { get; set; }
             = false;
 
+        /// <summary>
+        ///     log manager
+        /// </summary>
+        public ILogManager Log { get; set; }
     }
 }
