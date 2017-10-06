@@ -1,4 +1,4 @@
-language: chsharp
+language: csharp
 solution: paspaspas.sln
 mono: none
 dotnet: 2.0.0
