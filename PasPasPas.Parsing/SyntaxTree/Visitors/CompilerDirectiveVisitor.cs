@@ -85,6 +85,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         private readonly Visitor visitor;
         private readonly ILogManager log;
         private OptionSet Options { get; }
+        private readonly LogSource logSource;
+
+        private readonly Guid logSourceId
+             = new Guid(new byte[] { 0x67, 0x23, 0x1b, 0x2e, 0xf6, 0x4b, 0xdf, 0x40, 0xac, 0xf8, 0x2, 0xc3, 0x1d, 0x7c, 0x2e, 0xf2 });
+        /* {2e1b2367-4bf6-40df-acf8-02c31d7c2ef2} */
 
         /// <summary>
         ///     creates a new visitor
@@ -93,6 +98,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             Options = options;
             visitor = new Visitor(this);
             log = logMgr;
+            logSource = new LogSource(log, logSourceId);
         }
 
         private static readonly Guid messageSource

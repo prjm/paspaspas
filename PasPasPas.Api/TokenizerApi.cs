@@ -2,6 +2,7 @@
 using PasPasPas.Infrastructure.Environment;
 using PasPasPas.Infrastructure.Files;
 using PasPasPas.Infrastructure.Log;
+using PasPasPas.Options.Bundles;
 using PasPasPas.Parsing.Tokenizer;
 using PasPasPas.Parsing.Tokenizer.LiteralValues;
 using PasPasPas.Parsing.Tokenizer.Patterns;
@@ -62,7 +63,8 @@ namespace PasPasPas.Api {
         /// <returns></returns>
         public ITokenizer CreateBufferedTokenizerForPath(string path) {
             var tokenizer = CreateTokenizerForPath(path);
-            return new TokenizerWithLookahead(tokenizer, TokenizerMode.Standard);
+            var options = new OptionSet(standardFileAccess);
+            return new TokenizerWithLookahead(options, tokenizer, TokenizerMode.Standard);
         }
 
         /// <summary>

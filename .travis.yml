@@ -1,0 +1,4 @@
+language: chsharp
+solution: paspaspas.sln
+mono: none
+dotnet: 2.0.0

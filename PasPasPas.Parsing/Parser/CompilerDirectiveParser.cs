@@ -22,8 +22,11 @@ namespace PasPasPas.Parsing.Parser {
         private static InputPatterns GetPatternsFromFactory()
             => StaticEnvironment.Require<PatternFactory>(StaticDependency.TokenizerPatternFactory).CompilerDirectivePatterns;
 
+        private static Tokenizer.Tokenizer CreateTokenizer(ILogManager log, StackedFileReader reader)
+            => new Tokenizer.Tokenizer(log, GetPatternsFromFactory(), reader);
+
         private static TokenizerWithLookahead CreateTokenizer(ILogManager log, StackedFileReader reader, OptionSet options)
-            => new TokenizerWithLookahead(new Tokenizer.Tokenizer(log, options, GetPatternsFromFactory(), reader), TokenizerMode.CompilerDirective);
+            => new TokenizerWithLookahead(options, CreateTokenizer(log, reader), TokenizerMode.CompilerDirective);
 
         /// <summary>
         ///     create a new compiler directive parser 

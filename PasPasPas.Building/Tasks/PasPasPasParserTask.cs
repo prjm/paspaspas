@@ -57,15 +57,14 @@ namespace PasPasPas.Building.Tasks {
             foreach (var file in Path.AsFileList(settings.FileSystemAccess)) {
                 count++;
                 var logManager = new LogManager();
-                var environment = new ParserServices(logManager);
                 var log = new LogTarget();
-                environment.Options = new OptionSet(settings.FileSystemAccess);
+                var options = new OptionSet(settings.FileSystemAccess);
 
                 ISyntaxPart resultTree = null;
 
                 var buffer = new FileBuffer();
                 var reader = new StackedFileReader(buffer);
-                var parser = new StandardParser(environment, reader);
+                var parser = new StandardParser(logManager, options, reader);
 
                 buffer.Add(file, settings.FileSystemAccess.OpenFileForReading(file));
                 result.AppendLine("-----------------------<< " + file.Path + " (" + count + ")");

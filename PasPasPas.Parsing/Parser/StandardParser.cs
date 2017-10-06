@@ -27,7 +27,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <summary>
         ///     creates a new standard parser
         /// </summary>
-        public StandardParser(OptionSet options, ILogManager log, OptionSet parserOptions, StackedFileReader input) :
+        public StandardParser(ILogManager log, OptionSet options, StackedFileReader input) :
             base(options, log, CreateTokenizer(log, input, options)) { }
 
         #region Reserved Words
