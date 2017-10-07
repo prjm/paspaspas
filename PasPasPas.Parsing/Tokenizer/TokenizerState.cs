@@ -22,7 +22,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         ///     create a new tokenizer state
         /// </summary>
         /// <param name="parentTokenizer"></param>
-        internal TokenizerState(Tokenizer parentTokenizer, StackedFileReader currentInput, ILogSource logSource) {
+        public TokenizerState(Tokenizer parentTokenizer, StackedFileReader currentInput, ILogSource logSource) {
             tokenizer = parentTokenizer;
             log = logSource;
             input = currentInput;
@@ -55,6 +55,11 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         public int CurrentPosition
             => input.Position;
+
+        /// <summary>
+        ///     start position
+        /// </summary>
+        public int StartPosition { get; set; }
 
         public void Append(char currentChar)
             => buffer.Append(currentChar);

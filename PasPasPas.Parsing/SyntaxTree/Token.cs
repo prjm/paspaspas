@@ -38,7 +38,7 @@ namespace PasPasPas.Parsing.SyntaxTree {
 
         public Token(int tokenId, TokenizerState state, object parsedValue = null) : this() {
             Kind = tokenId;
-            Position = -1;
+            Position = state.StartPosition;
             Value = state.GetBufferContent();
             ParsedValue = parsedValue;
         }

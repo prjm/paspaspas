@@ -13,9 +13,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         public ConstantValueKind Kind { get; set; }
 
         /// <summary>
-        ///     integer value
+        ///     literal value
         /// </summary>
-        public int IntValue { get; internal set; }
+        public object LiteralValue { get; set; }
 
         /// <summary>
         ///     accept visitor

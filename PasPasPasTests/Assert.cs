@@ -9,32 +9,6 @@ using PasPasPas.Infrastructure.Environment;
 
 namespace PasPasPasTests {
 
-    public static class TestHelper {
-
-        public static IList<Token> RunTokenizer(string input, IList<ILogMessage> messages = null) {
-            StaticEnvironment.Clear();
-
-            var result = new List<Token>();
-            var messageHandler = new ListLogTarget();
-            var options = new TokenizerApiOptions() { KeepWhitespace = true };
-            var api = new TokenizerApi(new StandardFileAccess(), options);
-            using (var tokenizer = api.CreateTokenizerForString("test.pas", input)) {
-                api.Log.RegisterTarget(messageHandler);
-
-                while (!tokenizer.AtEof) {
-                    tokenizer.FetchNextToken();
-                    result.Add(tokenizer.CurrentToken);
-                }
-            }
-
-            if (messages != null)
-                foreach (var message in messageHandler.Messages)
-                    messages.Add(message);
-
-            return result;
-        }
-    }
-
     public static class Assert {
 
         public static void AreEqual(object expected, object actual, string message = "")

@@ -632,7 +632,7 @@ namespace PasPasPasTests.Parser {
 
             RunAstTest("unit z.x; interface implementation initialization finalization begin a : begin end; end; end.", t => (u(t)?.Statements[0] as BlockOfStatements)?.LabelName?.CompleteName, "a");
             RunAstTest("unit z.x; interface implementation initialization finalization begin 10 : begin end; end; end.", t => (u(t)?.Statements[0] as BlockOfStatements)?.LabelName?.CompleteName, "10");
-            RunAstTest("unit z.x; interface implementation initialization finalization begin $FF : begin end; end; end.", t => (u(t)?.Statements[0] as BlockOfStatements)?.LabelName?.CompleteName, "$FF");
+            RunAstTest("unit z.x; interface implementation initialization finalization begin $FF : begin end; end; end.", t => (u(t)?.Statements[0] as BlockOfStatements)?.LabelName?.CompleteName, "255");
         }
 
         [Fact]
@@ -747,7 +747,7 @@ namespace PasPasPasTests.Parser {
         public void TestProcedure() {
             Func<object, MethodImplementation> r = t => ((t as CompilationUnit)?.ImplementationSymbols["m"] as MethodImplementation);
             RunAstTest("unit z.x; interface implementation procedure m(); begin end; end.", t => r(t)?.Name.CompleteName, "m");
-            RunAstTest("unit z.x; interface implementation procedure m(var x: Integer = 5); begin end; end.", t => (r(t)?.Parameters?.Items[0]?.Value as ConstantValue)?.IntValue, 5);
+            RunAstTest("unit z.x; interface implementation procedure m(var x: Integer = 5); begin end; end.", t => (r(t)?.Parameters?.Items[0]?.Value as ConstantValue)?.LiteralValue, (byte)5);
         }
 
         [Fact]
@@ -840,7 +840,7 @@ namespace PasPasPasTests.Parser {
             RunAstTest("unit z.x; interface implementation procedure p; asm .savenv a end; end.", t => r(t)?.Kind, AssemblerStatementKind.SaveEnvOperation);
             RunAstTest("unit z.x; interface implementation procedure p; asm .savenv a end; end.", t => (r(t)?.Operands[0] as SymbolReference)?.Name?.CompleteName, "a");
             RunAstTest("unit z.x; interface implementation procedure p; asm .params 1 end; end.", t => r(t)?.Kind, AssemblerStatementKind.ParamsOperation);
-            RunAstTest("unit z.x; interface implementation procedure p; asm .params 1 end; end.", t => (r(t)?.Operands[0] as ConstantValue)?.IntValue, 1);
+            RunAstTest("unit z.x; interface implementation procedure p; asm .params 1 end; end.", t => (r(t)?.Operands[0] as ConstantValue)?.LiteralValue, (byte)1);
 
             RunAstTest("unit z.x; interface implementation procedure p; asm mov ax, 1 end; end.", t => r(t)?.OpCode?.CompleteName, "mov");
             RunAstTest("unit z.x; interface implementation procedure p; asm @1: mov ax, 1 end; end.", t => r(t)?.LabelName?.CompleteName, "@1");

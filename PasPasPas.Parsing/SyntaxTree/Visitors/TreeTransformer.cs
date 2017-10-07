@@ -166,6 +166,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             result.FileType = CompilationUnitType.Library;
             result.UnitName = ExtractSymbolName(library.LibraryName);
             result.Hints = ExtractHints(library.Hints);
+            result.FilePath = library.FilePath;
             if (library.MainBlock.Body.AssemblerBlock != null)
                 result.InitializationBlock = new BlockOfAssemblerStatements();
             else
@@ -196,6 +197,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             result.UnitName = ExtractSymbolName(program.ProgramName);
             result.InitializationBlock = new BlockOfStatements();
             result.Symbols = new DeclaredSymbols() { ParentItem = result };
+            result.FilePath = program.FilePath;
             CurrentUnitMode[result] = UnitMode.Program;
             Project.Add(result, LogSource);
             CurrentUnit = result;
@@ -212,6 +214,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         public void StartVisit(Package package) {
             var result = new CompilationUnit();
             InitNode(result, package, Project);
+            result.FilePath = package.FilePath;
             result.FileType = CompilationUnitType.Package;
             result.UnitName = ExtractSymbolName(package.PackageName);
             Project.Add(result, LogSource);
@@ -509,7 +512,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 var value = new ConstantValue();
                 InitNode(value, factor);
                 value.Kind = ConstantValueKind.Integer;
-                value.IntValue = 0; // DigitTokenGroupValue.Unwrap(factor.IntValue.FirstTerminalToken);
+                value.LiteralValue = factor.IntValue.FirstTerminalToken.ParsedValue;
                 lastExpression.Value = value;
                 return;
             }
@@ -519,6 +522,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 var value = new ConstantValue();
                 InitNode(value, factor);
                 value.Kind = ConstantValueKind.RealNumber;
+                value.LiteralValue = factor.RealValue.FirstTerminalToken.ParsedValue;
                 lastExpression.Value = value;
                 return;
             }
@@ -528,6 +532,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 var value = new ConstantValue();
                 InitNode(value, factor);
                 value.Kind = ConstantValueKind.QuotedString;
+                value.LiteralValue = factor.StringValue.FirstTerminalToken.ParsedValue;
                 lastExpression.Value = value;
                 return;
             }
@@ -537,6 +542,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 var value = new ConstantValue();
                 InitNode(value, factor);
                 value.Kind = ConstantValueKind.HexNumber;
+                value.LiteralValue = factor.HexValue.FirstTerminalToken.ParsedValue;
                 lastExpression.Value = value;
                 return;
             }
@@ -935,19 +941,15 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 name = ExtractSymbolName(standardLabel);
             }
 
-            /*
-
-            Token intLabel = (label.LabelName as StandardInteger).LastTerminalToken;
+            var intLabel = (label.LabelName as StandardInteger)?.LastTerminalToken;
             if (intLabel != null) {
-                name = new SimpleSymbolName(intLabel.Value);
+                name = new SimpleSymbolName(intLabel.Value.ParsedValue.ToString());
             }
 
-            Token hexLabel = (label.LabelName as HexNumber).LastTerminalToken;
+            var hexLabel = (label.LabelName as HexNumber)?.LastTerminalToken;
             if (hexLabel != null) {
-                name = new SimpleSymbolName(hexLabel.Value);
+                name = new SimpleSymbolName(hexLabel.Value.ParsedValue.ToString());
             }
-
-            */
 
             if (name == null)
                 return;
@@ -1669,7 +1671,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 structType.GuidName = ExtractSymbolName(interfaceGuid.IdIdentifier);
             }
             else if (interfaceGuid.Id != null) {
-                structType.GuidId = string.Empty; // QuotedStringTokenValue.Unwrap(interfaceGuid.Id.FirstTerminalToken);
+                structType.GuidId = interfaceGuid.Id.FirstTerminalToken.ParsedValue;
             }
 
 
@@ -2042,7 +2044,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 var operand = new ConstantValue();
                 InitNode(operand, op.NumberOfParams);
                 operand.Kind = ConstantValueKind.Integer;
-                operand.IntValue = 0; // DigitTokenGroupValue.Unwrap(op.NumberOfParams.FirstTerminalToken);
+                operand.LiteralValue = op.NumberOfParams.FirstTerminalToken.ParsedValue;
                 result.Operands.Add(operand);
             }
             else if (op.PushEnvOperation) {

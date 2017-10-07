@@ -146,30 +146,29 @@ namespace PasPasPas.Parsing.Parser {
             var path = Tokenizer.Input.CurrentFile.File;
 
             if (Match(TokenKind.Library)) {
-                return ParseLibrary();
+                return ParseLibrary(path);
             }
             else if (Match(TokenKind.Unit)) {
-                var result = ParseUnit();
-                result.FilePath = path;
-                return result;
+                return ParseUnit(path);
             }
             else if (Match(TokenKind.Package)) {
-                return ParsePackage();
+                return ParsePackage(path);
             }
 
-            return ParseProgram();
+            return ParseProgram(path);
         }
 
         #endregion
         #region ParseUnit
 
         [Rule("Unit", "UnitHead UnitInterface UnitImplementation UnitBlock '.' ")]
-        private Unit ParseUnit() {
+        private Unit ParseUnit(IFileReference path) {
             var result = new Unit();
             result.UnitHead = ParseUnitHead(result);
             result.UnitInterface = ParseUnitInterface(result);
             result.UnitImplementation = ParseUnitImplementation(result);
             result.UnitBlock = ParseUnitBlock(result);
+            result.FilePath = path;
             ContinueWithOrMissing(result, TokenKind.Dot);
             return result;
         }
@@ -964,8 +963,9 @@ namespace PasPasPas.Parsing.Parser {
         #region ParsePackage
 
         [Rule("Package", "PackageHead RequiresClause [ ContainsClause ] 'end' '.' ")]
-        private Package ParsePackage() {
+        private Package ParsePackage(IFileReference path) {
             var result = new Package();
+            result.FilePath = path;
             result.PackageHead = ParsePackageHead(result);
             result.RequiresClause = ParseRequiresClause(result);
 
@@ -1033,13 +1033,14 @@ namespace PasPasPas.Parsing.Parser {
         #region ParseLibrary
 
         [Rule("Library", "LibraryHead [UsesFileClause] Block '.' ")]
-        private Library ParseLibrary() {
+        private Library ParseLibrary(IFileReference path) {
             var result = new Library();
             result.LibraryHead = ParseLibraryHead(result);
 
             if (Match(TokenKind.Uses))
                 result.Uses = ParseUsesFileClause(result);
 
+            result.FilePath = path;
             result.MainBlock = ParseBlock(result);
             ContinueWithOrMissing(result, TokenKind.Dot);
             return result;
@@ -1062,7 +1063,7 @@ namespace PasPasPas.Parsing.Parser {
         #region ParseProgram
 
         [Rule("Program", "[ProgramHead] [UsesFileClause] Block '.'")]
-        private Program ParseProgram() {
+        private Program ParseProgram(IFileReference path) {
             var result = new Program();
 
             if (Match(TokenKind.Program))
@@ -1071,6 +1072,7 @@ namespace PasPasPas.Parsing.Parser {
             if (Match(TokenKind.Uses))
                 result.Uses = ParseUsesFileClause(result);
 
+            result.FilePath = path;
             result.MainBlock = ParseBlock(result);
             ContinueWithOrMissing(result, TokenKind.Dot);
             return result;
@@ -4155,7 +4157,7 @@ namespace PasPasPas.Parsing.Parser {
         private QuotedString RequireString(IExtendableSyntaxPart parent) {
             var result = new QuotedString();
             InitByTerminal(result, parent, TokenKind.QuotedString);
-            result.UnquotedValue = string.Empty; // QuotedStringTokenValue.Unwrap(result.LastTerminalToken);
+            result.UnquotedValue = result.LastTerminalToken.ParsedValue?.ToString();
             return result;
         }
 

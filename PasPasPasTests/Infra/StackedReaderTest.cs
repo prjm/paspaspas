@@ -25,8 +25,7 @@ namespace PasPasPasTests.Infra {
             var result = new StringBuilder();
 
             while (!reader.AtEof) {
-                result.Append(reader.Value);
-                reader.NextChar();
+                result.Append(reader.NextChar());
             }
 
             Assert.AreEqual(Content1, result.ToString());
@@ -43,8 +42,7 @@ namespace PasPasPasTests.Infra {
 
             try {
                 while (!reader.CurrentFile.AtEof) {
-                    result.Append(reader.CurrentFile.Value);
-                    reader.CurrentFile.NextChar();
+                    result.Append(reader.CurrentFile.NextChar());
                 }
                 Assert.AreEqual(Content1, result.ToString());
             }
@@ -65,14 +63,12 @@ namespace PasPasPasTests.Infra {
 
             try {
                 while (!reader.AtEof && result.Length < splitIndex) {
-                    result.Append(reader.Value);
-                    reader.NextChar();
+                    result.Append(reader.NextChar());
                 }
                 var len = splitIndex;
                 readerApi.SwitchToPath(reader, path2);
                 while (reader.CurrentFile != null && !reader.AtEof) {
-                    result.Append(reader.Value);
-                    reader.NextChar();
+                    result.Append(reader.NextChar());
                     len++;
 
                     if (len == (Content2.Length + splitIndex) || len == (Content1.Length + Content2.Length))

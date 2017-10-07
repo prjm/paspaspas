@@ -58,7 +58,6 @@ namespace PasPasPas.Api {
             var reader = new StackedFileReader(fileBuffer);
             fileBuffer.Add(localPath, fileAccess.OpenFileForReading(localPath));
             reader.AddFileToRead(localPath);
-            reader.CurrentFile.NextChar();
             return reader;
         }
 

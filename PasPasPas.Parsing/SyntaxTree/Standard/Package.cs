@@ -32,6 +32,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         public PackageRequires RequiresClause { get; set; }
 
         /// <summary>
+        ///     path
+        /// </summary>
+        public IFileReference FilePath { get; set; }
+
+        /// <summary>
         ///     accept visitor
         /// </summary>
         /// <param name="startVisitor">start visitor</param>

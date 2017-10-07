@@ -106,7 +106,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     guid id (for interfaces)
         /// </summary>
-        public string GuidId { get; set; }
+        public object GuidId { get; set; }
 
         /// <summary>
         ///     guid name (for interfaces)
