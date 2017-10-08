@@ -5,6 +5,5 @@ dotnet: 2.0.0
 dist: trusty
 script:
  - dotnet restore
- - cd PasPasPas-Tests
- - mkdir artifacts --parents
- - dotnet xunit -xml artifacts/PasPasPas.xml -html artifacts/PasPasPas.htm 
+ - cd PasPasPasTests
+ - dotnet xunit
