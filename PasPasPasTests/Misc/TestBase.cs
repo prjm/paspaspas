@@ -31,12 +31,12 @@ namespace PasPasPasTests.Misc {
         }
 
         public static IList<Token> RunTokenizer(string input, IList<ILogMessage> messages = null) {
-            StaticEnvironment.Clear();
-
             var result = new List<Token>();
             var messageHandler = new ListLogTarget();
-            var options = new TokenizerApiOptions() { KeepWhitespace = true };
-            var api = new TokenizerApi(new StandardFileAccess(), options);
+            var env = new StaticEnvironment();
+            env.Register(StaticDependency.FileAccess, new StandardFileAccess());
+            env.Register(StaticDependency.LogManager, new LogManager());
+            var api = new TokenizerApi(env);
             using (var tokenizer = api.CreateTokenizerForString("test.pas", input)) {
                 api.Log.RegisterTarget(messageHandler);
 

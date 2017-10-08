@@ -63,7 +63,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
         public override Token Tokenize(TokenizerState state) {
             var parseValue = ValueParser != StaticDependency.Undefined;
 
-            using (var parsedValue = parseValue ? PoolFactory.FetchStringBuilder() : null) {
+            using (var parsedValue = parseValue ? PoolFactory.FetchStringBuilder(state.Environment) : null) {
 
                 if (!state.AtEof) {
                     while (CharClass.Matches(state.LookAhead())) {
@@ -80,7 +80,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
 
                 if (parseValue) {
                     var value = StringPool.PoolString(parsedValue.Data.ToString());
-                    var parsed = LiteralValues.Literals.NumberLiteral(value, ValueParser);
+                    var parsed = LiteralValues.Literals.NumberLiteral(state.Environment, value, ValueParser);
                     return new Token(TokenId, state, parsed);
                 }
                 else

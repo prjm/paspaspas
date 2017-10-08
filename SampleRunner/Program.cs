@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Text;
+using PasPasPas.DesktopPlatform;
 using PasPasPas.Infrastructure.Environment;
+using PasPasPas.Infrastructure.Log;
 
 namespace SampleRunner {
 
@@ -20,10 +22,11 @@ namespace SampleRunner {
             var mode = SampleMode.ParseFile;
             var repeat = 1;
             var result = new StringBuilder();
+            var env = new StaticEnvironment();
             Action<StringBuilder> action;
 
-            action = PrepareSample(testPath, mode, repeat);
-            RunSample(result, action);
+            action = PrepareSample(env, testPath, mode, repeat);
+            RunSample(env, result, action);
             Console.WriteLine(result.ToString());
         }
 
@@ -34,7 +37,7 @@ namespace SampleRunner {
                 return string.Concat(data.ToString(), '*');
         }
 
-        private static void RunSample(StringBuilder result, Action<StringBuilder> action) {
+        private static void RunSample(StaticEnvironment env, StringBuilder result, Action<StringBuilder> action) {
             var timer = new ExecutionTimer();
             timer.Start();
             action(result);
@@ -43,7 +46,7 @@ namespace SampleRunner {
 
             result.AppendLine(new string('.', 80));
 
-            foreach (var entry in StaticEnvironment.Entries) {
+            foreach (var entry in env.Entries) {
                 var name = GetCacheName(entry);
                 if (entry is ILookupFunction fn)
                     result.AppendLine(name + ": " + fn.Table.Count);
@@ -62,25 +65,28 @@ namespace SampleRunner {
             result.AppendLine($"{GC.CollectionCount(2)} collections level 2.");
         }
 
-        private static Action<StringBuilder> PrepareSample(string testPath, SampleMode mode, int repeat) {
+        private static Action<StringBuilder> PrepareSample(StaticEnvironment env, string testPath, SampleMode mode, int repeat) {
             Action<StringBuilder> action;
+
+            env.Register(StaticDependency.FileAccess, new StandardFileAccess());
+            env.Register(StaticDependency.LogManager, new LogManager());
 
             switch (mode) {
 
                 case SampleMode.ReadFile:
-                    action = (b) => Scenarios.ReadFile.Run(b, testPath, repeat);
+                    action = (b) => Scenarios.ReadFile.Run(b, env, testPath, repeat);
                     break;
 
                 case SampleMode.TokenizerFile:
-                    action = (b) => Scenarios.TokenizeFile.Run(b, testPath, repeat);
+                    action = (b) => Scenarios.TokenizeFile.Run(b, env, testPath, repeat);
                     break;
 
                 case SampleMode.BufferedTokenizeFile:
-                    action = (b) => Scenarios.BufferedTokenizeFile.Run(b, testPath, repeat);
+                    action = (b) => Scenarios.BufferedTokenizeFile.Run(b, env, testPath, repeat);
                     break;
 
                 case SampleMode.ParseFile:
-                    action = (b) => Scenarios.ParseFile.Run(b, testPath, repeat);
+                    action = (b) => Scenarios.ParseFile.Run(b, env, testPath, repeat);
                     break;
 
                 default:

@@ -18,17 +18,17 @@ namespace PasPasPas.Parsing.Parser {
     /// </summary>
     public class StandardParser : ParserBase, IParser {
 
-        private static InputPatterns GetPatternsFromFactory()
-            => StaticEnvironment.Require<PatternFactory>(StaticDependency.TokenizerPatternFactory).StandardPatterns;
+        private static InputPatterns GetPatternsFromFactory(StaticEnvironment environment)
+            => environment.Require<PatternFactory>(StaticDependency.TokenizerPatternFactory).StandardPatterns;
 
-        private static TokenizerWithLookahead CreateTokenizer(ILogManager log, StackedFileReader reader, OptionSet options)
-            => new TokenizerWithLookahead(options, new Tokenizer.Tokenizer(log, GetPatternsFromFactory(), reader), TokenizerMode.Standard);
+        private static TokenizerWithLookahead CreateTokenizer(StaticEnvironment environment, StackedFileReader reader, OptionSet options)
+            => new TokenizerWithLookahead(environment, options, new Tokenizer.Tokenizer(environment, GetPatternsFromFactory(environment), reader), TokenizerMode.Standard);
 
         /// <summary>
         ///     creates a new standard parser
         /// </summary>
-        public StandardParser(ILogManager log, OptionSet options, StackedFileReader input) :
-            base(options, log, CreateTokenizer(log, input, options)) { }
+        public StandardParser(StaticEnvironment environment, OptionSet options, StackedFileReader input) :
+            base(environment, options, CreateTokenizer(environment, input, options)) { }
 
         #region Reserved Words
 
@@ -965,8 +965,8 @@ namespace PasPasPas.Parsing.Parser {
         [Rule("Package", "PackageHead RequiresClause [ ContainsClause ] 'end' '.' ")]
         private Package ParsePackage(IFileReference path) {
             var result = new Package();
-            result.FilePath = path;
             result.PackageHead = ParsePackageHead(result);
+            result.FilePath = path;
             result.RequiresClause = ParseRequiresClause(result);
 
             if (Match(TokenKind.Contains)) {

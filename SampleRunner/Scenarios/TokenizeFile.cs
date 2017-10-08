@@ -10,11 +10,11 @@ namespace SampleRunner.Scenarios {
 
     public static class TokenizeFile {
 
-        public static void Run(StringBuilder b, string testPath, int reapeat) {
+        public static void Run(StringBuilder b, StaticEnvironment env, string testPath, int reapeat) {
             var registry = new Dictionary<int, Tuple<ulong, long>>();
 
             for (var i = 0; i < reapeat; i++) {
-                var tokenizerApi = new TokenizerApi(new StandardFileAccess());
+                var tokenizerApi = new TokenizerApi(env);
                 using (var tokenizer = tokenizerApi.CreateTokenizerForPath(testPath)) {
 
                     while (!tokenizer.AtEof) {

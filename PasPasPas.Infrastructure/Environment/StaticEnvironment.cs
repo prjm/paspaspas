@@ -3,7 +3,7 @@ using System.Linq;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
-using PasPasPas.Infrastructure.Utils;
+using PasPasPas.Infrastructure.Files;
 
 namespace PasPasPas.Infrastructure.Environment {
 
@@ -61,6 +61,18 @@ namespace PasPasPas.Infrastructure.Environment {
         ///     tokenizer pattern for standard syntax
         /// </summary>
         public const int TokenizerPatternFactory = 9;
+
+        /// <summary>
+        ///     file access
+        /// </summary>
+        public const int FileAccess = 10;
+
+        /// <summary>
+        ///     log manager
+        /// </summary>
+        public const int LogManager = 11;
+
+
     }
 
     /// <summary>
@@ -77,19 +89,19 @@ namespace PasPasPas.Infrastructure.Environment {
             public int usage = 0;
         }
 
-        private static ConcurrentDictionary<int, EnvironmentEntry> environment
+        private ConcurrentDictionary<int, EnvironmentEntry> environment
             = new ConcurrentDictionary<int, EnvironmentEntry>();
 
         /// <summary>
         ///     get a list of static entries
         /// </summary>
-        public static IEnumerable<object> Entries
+        public IEnumerable<object> Entries
             => environment.Values.Select(t => t.item).ToList();
 
         /// <summary>
         ///     clears registry
         /// </summary>
-        public static void Clear() {
+        public void Clear() {
             var keysToRemove = new List<int>();
 
             foreach (var entry in environment.Values) {
@@ -108,7 +120,7 @@ namespace PasPasPas.Infrastructure.Environment {
         /// </summary>
         /// <param name="id"></param>
         /// <param name="data"></param>
-        public static bool Register(int id, object data) {
+        public bool Register(int id, object data) {
             if (environment.ContainsKey(id))
                 return false;
 
@@ -125,7 +137,7 @@ namespace PasPasPas.Infrastructure.Environment {
         /// <typeparam name="T"></typeparam>
         /// <param name="id"></param>
         /// <returns></returns>
-        public static T Require<T>(int id) where T : class
+        public T Require<T>(int id) where T : class
             => Optional<T>(id) ?? throw new InvalidOperationException($"Unregistered id {id}");
 
         /// <summary>
@@ -134,7 +146,7 @@ namespace PasPasPas.Infrastructure.Environment {
         /// <typeparam name="T">result type</typeparam>
         /// <param name="id">entry id</param>
         /// <returns>optional value</returns>
-        public static T Optional<T>(int id) where T : class {
+        public T Optional<T>(int id) where T : class {
             if (environment.TryGetValue(id, out var entry)) {
                 if (entry.item is T result) {
                     Interlocked.Increment(ref entry.usage);
@@ -150,12 +162,13 @@ namespace PasPasPas.Infrastructure.Environment {
         /// <typeparam name="T"></typeparam>
         /// <param name="id"></param>
         /// <param name="item"></param>
-        public static void Provide<T>(int id, T item) {
+        public void Provide<T>(int id, T item) {
             var entry = new EnvironmentEntry {
                 id = id,
                 item = item
             };
             environment.TryAdd(id, entry);
         }
+
     }
 }

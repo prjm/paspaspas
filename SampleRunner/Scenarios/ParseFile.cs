@@ -5,15 +5,16 @@ using System.Text;
 using System.Threading.Tasks;
 using PasPasPas.Api;
 using PasPasPas.DesktopPlatform;
+using PasPasPas.Infrastructure.Environment;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace SampleRunner.Scenarios {
     public class ParseFile {
 
 
-        public static void Run(StringBuilder b, string testPath, int reapeat) {
+        public static void Run(StringBuilder b, StaticEnvironment env, string testPath, int reapeat) {
             for (var i = 0; i < reapeat; i++) {
-                var parserApi = new ParserApi(new StandardFileAccess());
+                var parserApi = new ParserApi(env);
                 using (var parser = parserApi.CreateParserForPath(testPath)) {
                     var result = parser.Parse();
                     var visitor = new TerminalVisitor();

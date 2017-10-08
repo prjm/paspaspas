@@ -13,6 +13,7 @@ using PasPasPas.Parsing.SyntaxTree;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Infrastructure.Files;
+using PasPasPas.Infrastructure.Environment;
 
 namespace PasPasPas.Building.Tasks {
 
@@ -56,15 +57,18 @@ namespace PasPasPas.Building.Tasks {
 
             foreach (var file in Path.AsFileList(settings.FileSystemAccess)) {
                 count++;
+                var env = new StaticEnvironment();
                 var logManager = new LogManager();
                 var log = new LogTarget();
-                var options = new OptionSet(settings.FileSystemAccess);
+                var options = new OptionSet(env);
+                env.Register(StaticDependency.LogManager, log);
+                env.Register(StaticDependency.FileAccess, settings.FileSystemAccess);
 
                 ISyntaxPart resultTree = null;
 
                 var buffer = new FileBuffer();
                 var reader = new StackedFileReader(buffer);
-                var parser = new StandardParser(logManager, options, reader);
+                var parser = new StandardParser(env, options, reader);
 
                 buffer.Add(file, settings.FileSystemAccess.OpenFileForReading(file));
                 result.AppendLine("-----------------------<< " + file.Path + " (" + count + ")");
@@ -106,34 +110,34 @@ namespace PasPasPas.Building.Tasks {
                 log.ClearEventHandlers();
 
 #if DEBUG
-/*
-                var visitor = new TerminalVisitor();
-                resultTree.Accept(visitor.AsVisitor());
-                if (!string.Equals(result1.ToString(), visitor.ResultBuilder.ToString(), StringComparison.Ordinal)) {
-                    result.AppendLine("<<XXXX>> Different!");
-                    result.AppendLine(result1.ToString());
-                    result.AppendLine("<<XXXX>> Different!");
-                    result.AppendLine(visitor.ResultBuilder.ToString());
+                /*
+                                var visitor = new TerminalVisitor();
+                                resultTree.Accept(visitor.AsVisitor());
+                                if (!string.Equals(result1.ToString(), visitor.ResultBuilder.ToString(), StringComparison.Ordinal)) {
+                                    result.AppendLine("<<XXXX>> Different!");
+                                    result.AppendLine(result1.ToString());
+                                    result.AppendLine("<<XXXX>> Different!");
+                                    result.AppendLine(visitor.ResultBuilder.ToString());
 
-                    //var visitor1 = new StructureVisitor();
-                    //var options1 = new StructureVisitorOptions();
+                                    //var visitor1 = new StructureVisitor();
+                                    //var options1 = new StructureVisitorOptions();
 
-                    //result.AppendLine("<<XXXX>> Tree");
-                    //VisitorHelper.AcceptVisitor(resultTree, visitor1, options1);
-                    //result.AppendLine(options1.ResultBuilder.ToString());
-
-
-                    return result;
-                }
+                                    //result.AppendLine("<<XXXX>> Tree");
+                                    //VisitorHelper.AcceptVisitor(resultTree, visitor1, options1);
+                                    //result.AppendLine(options1.ResultBuilder.ToString());
 
 
+                                    return result;
+                                }
 
-                //return resultTree;
-                var transformVisitor = new TreeTransformer(new ProjectRoot()) {
-                    LogManager = environment.Log
-                };
-                resultTree.Accept(transformVisitor.AsVisitor());
-                */
+
+
+                                //return resultTree;
+                                var transformVisitor = new TreeTransformer(new ProjectRoot()) {
+                                    LogManager = environment.Log
+                                };
+                                resultTree.Accept(transformVisitor.AsVisitor());
+                                */
 #endif
 
             }

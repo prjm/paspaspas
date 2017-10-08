@@ -15,13 +15,14 @@ using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Infrastructure.Files;
 using PasPasPas.Api;
+using PasPasPas.Infrastructure.Environment;
 
 namespace PasPasPasTests {
 
     public class ParserTestBase {
 
         protected OptionSet TestOptions
-            = new OptionSet(new StandardFileAccess());
+            = null;
 
         protected CompileOptions CompilerOptions
             => TestOptions.CompilerOptions;
@@ -61,6 +62,11 @@ namespace PasPasPasTests {
             if (string.IsNullOrEmpty(output))
                 output = input;
 
+            var env = new StaticEnvironment();
+            var manager = new LogManager();
+            env.Register(StaticDependency.FileAccess, new StandardFileAccess());
+            env.Register(StaticDependency.LogManager, manager);
+            TestOptions = new OptionSet(env);
             ClearOptions();
             return;
 
@@ -163,14 +169,13 @@ namespace PasPasPasTests {
 
 
         protected ISyntaxPart RunAstTest(string input, LogManager logManager, IList<ILogMessage> messages) {
+            var env = new StaticEnvironment();
+            env.Register(StaticDependency.LogManager, logManager);
+            env.Register(StaticDependency.FileAccess, new StandardFileAccess());
+            TestOptions = new OptionSet(env);
+            var api = new ParserApi(env, TestOptions);
+
             ClearOptions();
-
-            var options = new ParserApiOptions() {
-                Log = logManager
-            };
-
-            var fileAccess = (StandardFileAccess)TestOptions.Files;
-            var api = new ParserApi(fileAccess, options);
 
             using (var parser = api.CreateParserForString("z.x.pas", input)) {
                 return parser.Parse();

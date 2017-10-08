@@ -18,6 +18,7 @@ using System.Collections.Generic;
 using System.Resources;
 using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Infrastructure.Files;
+using PasPasPas.Infrastructure.Environment;
 
 namespace P3SyntaxTreeViewer {
 
@@ -53,7 +54,7 @@ namespace P3SyntaxTreeViewer {
                 var listLog = new ListLogTarget();
                 env.log.RegisterTarget(listLog);
 
-                var cst = Parse(env.log, env.options, code);
+                var cst = Parse(env.env, env.options, code);
                 var visitor = new TreeTransformer(new ProjectRoot()) { LogManager = (LogManager)env.log };
 
                 cst.Accept(visitor.AsVisitor());
@@ -120,22 +121,25 @@ namespace P3SyntaxTreeViewer {
             treeViewItem.IsExpanded = true;
         }
 
-        private ISyntaxPart Parse(ILogManager log, OptionSet options, string code) {
+        private ISyntaxPart Parse(StaticEnvironment env, OptionSet options, string code) {
             var inputFile = new StringBufferReadable(code);
             var path = new DesktopFileReference("z.x.pas");
             var buffer = new FileBuffer();
             var reader = new StackedFileReader(buffer);
-            var parser = new StandardParser(log, options, reader);
+            var parser = new StandardParser(env, options, reader);
             buffer.Add(path, inputFile);
             reader.AddFileToRead(path);
             return parser.Parse();
         }
 
 
-        private (ILogManager log, OptionSet options) CreateEnvironment() {
-            var mgr = new LogManager();
-            var options = new OptionSet(new StandardFileAccess());
-            return (mgr, options);
+        private (StaticEnvironment env, LogManager log, OptionSet options) CreateEnvironment() {
+            var env = new StaticEnvironment();
+            var log = new LogManager();
+            env.Register(StaticDependency.LogManager, log);
+            env.Register(StaticDependency.FileAccess, new StandardFileAccess());
+            var options = new OptionSet(env);
+            return (env, log, options);
         }
 
         private void Code_TextChanged(object sender, TextChangedEventArgs e)

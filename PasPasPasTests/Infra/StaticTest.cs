@@ -18,19 +18,21 @@ namespace PasPasPasTests.Infra {
 
         [Fact]
         public void TestOptional() {
-            Assert.IsNull(StaticEnvironment.Optional<Demo>(DemoService));
-            StaticEnvironment.Register(DemoService, new Demo());
-            Assert.AreEqual(typeof(Demo), StaticEnvironment.Optional<Demo>(DemoService)?.GetType());
-            Assert.AreEqual(typeof(Demo), StaticEnvironment.Optional<IDemo>(DemoService)?.GetType());
-            Assert.AreEqual(null, StaticEnvironment.Optional<string>(DemoService)?.GetType());
-            StaticEnvironment.Clear();
-            Assert.IsNull(StaticEnvironment.Optional<Demo>(DemoService));
+            var env = new StaticEnvironment();
+            Assert.IsNull(env.Optional<Demo>(DemoService));
+            env.Register(DemoService, new Demo());
+            Assert.AreEqual(typeof(Demo), env.Optional<Demo>(DemoService)?.GetType());
+            Assert.AreEqual(typeof(Demo), env.Optional<IDemo>(DemoService)?.GetType());
+            Assert.AreEqual(null, env.Optional<string>(DemoService)?.GetType());
+            env.Clear();
+            Assert.IsNull(env.Optional<Demo>(DemoService));
         }
 
         [Fact]
         public void TestRequired() {
-            StaticEnvironment.Clear();
-            Assert.Throws<InvalidOperationException>(() => StaticEnvironment.Require<Demo>(DemoService));
+            var env = new StaticEnvironment();
+            env.Clear();
+            Assert.Throws<InvalidOperationException>(() => env.Require<Demo>(DemoService));
         }
 
     }

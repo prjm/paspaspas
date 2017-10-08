@@ -39,16 +39,16 @@ namespace PasPasPas.Parsing.Tokenizer {
             private string suffix = null;
             public Token Value = default;
 
-            public void AssignPrefix(Queue<Token> tokens) {
-                using (var sb = PoolFactory.FetchStringBuilder()) {
+            public void AssignPrefix(Queue<Token> tokens, StaticEnvironment environment) {
+                using (var sb = PoolFactory.FetchStringBuilder(environment)) {
                     while (tokens.Count > 0)
                         sb.Data.Append(tokens.Dequeue().Value);
                     prefix = sb.ToString();
                 }
             }
 
-            public void AssignSuffix(Queue<Token> tokens) {
-                using (var sb = PoolFactory.FetchStringBuilder()) {
+            public void AssignSuffix(Queue<Token> tokens, StaticEnvironment environment) {
+                using (var sb = PoolFactory.FetchStringBuilder(environment)) {
                     while (tokens.Count > 0)
                         sb.Data.Append(tokens.Dequeue().Value);
                     suffix = sb.ToString();
@@ -65,14 +65,16 @@ namespace PasPasPas.Parsing.Tokenizer {
         private OptionSet options;
         private TokenizerMode mode = TokenizerMode.Undefined;
         private bool skip = false;
+        private readonly StaticEnvironment environment;
 
         /// <summary>
         ///     create a new tokenizer with lookahead
         /// </summary>
-        public TokenizerWithLookahead(OptionSet optionsSet, ITokenizer baseTokenizer, TokenizerMode tokenizerMode) {
+        public TokenizerWithLookahead(StaticEnvironment staticEnvironment, OptionSet optionsSet, ITokenizer baseTokenizer, TokenizerMode tokenizerMode) {
             mode = tokenizerMode;
             BaseTokenizer = baseTokenizer;
             options = optionsSet;
+            environment = staticEnvironment;
         }
 
         /// <summary>
@@ -109,7 +111,7 @@ namespace PasPasPas.Parsing.Tokenizer {
                 if (BaseTokenizer.AtEof) {
                     if (tokenList.Count > 0) {
                         var item = tokenList.Last.Data;
-                        item.AssignSuffix(invalidTokens);
+                        item.AssignSuffix(invalidTokens, environment);
                     }
                     return;
                 }
@@ -119,9 +121,9 @@ namespace PasPasPas.Parsing.Tokenizer {
                 var nextToken = BaseTokenizer.CurrentToken;
 
                 if (IsValidToken(ref nextToken)) {
-                    var entry = PoolFactory.FetchGenericItem<TokenSequence>(StaticDependency.TokenSequencePool);
+                    var entry = PoolFactory.FetchGenericItem<TokenSequence>(environment, StaticDependency.TokenSequencePool);
                     entry.Data.Value = nextToken;
-                    entry.Data.AssignPrefix(invalidTokens);
+                    entry.Data.AssignPrefix(invalidTokens, environment);
                     tokenList.Enqueue(entry);
                 }
                 else {
@@ -174,14 +176,14 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="nextToken"></param>
         private void ProcessMacroToken(IFileReference path, ref Token nextToken) {
 
-            var patterns = StaticEnvironment.Require<PatternFactory>(StaticDependency.TokenizerPatternFactory).CompilerDirectivePatterns;
+            var patterns = environment.Require<PatternFactory>(StaticDependency.TokenizerPatternFactory).CompilerDirectivePatterns;
             var fragmentBuffer = new FileBuffer();
             var reader = new StackedFileReader(fragmentBuffer);
             var macroValue = "";
             fragmentBuffer.Add(path, new StringBufferReadable(macroValue));
             reader.AddFileToRead(path);
 
-            using (var parser = new CompilerDirectiveParser(Log, options, reader)) {
+            using (var parser = new CompilerDirectiveParser(environment, options, reader)) {
                 var result = parser.Parse();
                 var visitor = new CompilerDirectiveVisitor(options, Log);
                 result.Accept(visitor.AsVisitor());

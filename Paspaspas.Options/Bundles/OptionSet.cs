@@ -3,6 +3,7 @@ using PasPasPas.Options.DataTypes;
 using PasPasPas.Infrastructure.Input;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Infrastructure.Files;
+using PasPasPas.Infrastructure.Environment;
 
 namespace PasPasPas.Options.Bundles {
 
@@ -44,15 +45,13 @@ namespace PasPasPas.Options.Bundles {
         ///     creates a new option set
         /// </summary>
         /// <param name="fileAccess">file access</param>
-        public OptionSet(IFileAccess fileAccess) : this(null, fileAccess) { }
+        public OptionSet(StaticEnvironment environment) : this(null, environment) { }
 
         /// <summary>
         ///     create a new option set
         /// </summary>
-        /// <param name="baseOptions"></param>
-        /// <param name="fileAccess">file access</param>
-        public OptionSet(OptionSet baseOptions, IFileAccess fileAccess) {
-            Files = fileAccess;
+        public OptionSet(OptionSet baseOptions, StaticEnvironment environment) {
+            Files = environment.Require<IFileAccess>(StaticDependency.FileAccess);
             CompilerOptions = new CompileOptions(baseOptions?.CompilerOptions);
             ConditionalCompilation = new ConditionalCompilationOptions(baseOptions?.ConditionalCompilation);
             Meta = new MetaInformation(this, baseOptions?.Meta);
@@ -90,6 +89,7 @@ namespace PasPasPas.Options.Bundles {
         /// </summary>
         public IFileAccess Files { get; }
 
+        public StaticEnvironment Environment { get; private set; }
         /// <summary>
         ///     clear all option values
         /// </summary>

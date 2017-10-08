@@ -8,6 +8,7 @@ using PasPasPas.Parsing.SyntaxTree;
 using System.Linq;
 using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Options.Bundles;
+using PasPasPas.Infrastructure.Environment;
 
 namespace PasPasPas.Parsing.Parser {
 
@@ -53,7 +54,8 @@ namespace PasPasPas.Parsing.Parser {
         /// </summary>
         /// <param name="tokenizerWithLookAhead"></param>
         /// <param name="environment">environment</param>
-        protected ParserBase(OptionSet parserOptions, ILogManager log, TokenizerWithLookahead tokenizerWithLookAhead) {
+        protected ParserBase(StaticEnvironment environment, OptionSet parserOptions, TokenizerWithLookahead tokenizerWithLookAhead) {
+            var log = environment.Require<ILogManager>(StaticDependency.LogManager);
             tokenizer = tokenizerWithLookAhead;
             logSource = new LogSource(log, ParserLogMessage);
             options = parserOptions;

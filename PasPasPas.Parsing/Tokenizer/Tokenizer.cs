@@ -5,6 +5,7 @@ using PasPasPas.Infrastructure.Files;
 using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.Tokenizer.Patterns;
 using System.Collections.Generic;
+using PasPasPas.Infrastructure.Environment;
 
 namespace PasPasPas.Parsing.Tokenizer {
 
@@ -67,11 +68,12 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <summary>
         ///     create a new tokenizer
         /// </summary>
-        public Tokenizer(ILogManager log, InputPatterns charClasses, StackedFileReader input) {
+        public Tokenizer(StaticEnvironment staticEnvironment, InputPatterns charClasses, StackedFileReader input) {
+            var log = staticEnvironment.Require<ILogManager>(StaticDependency.LogManager);
             Input = input ?? throw new ArgumentNullException(nameof(input));
-            Log = new LogSource(log ?? throw new ArgumentNullException(nameof(log)), TokenizerLogMessage);
+            Log = new LogSource(log, TokenizerLogMessage);
             characterClasses = charClasses ?? throw new ArgumentNullException(nameof(charClasses));
-            state = new TokenizerState(this, input, Log);
+            state = new TokenizerState(staticEnvironment, this, input, Log);
             FinishInput();
         }
 

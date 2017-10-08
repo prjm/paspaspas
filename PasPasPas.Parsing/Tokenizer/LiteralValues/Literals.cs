@@ -14,8 +14,8 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
         /// </summary>
         /// <param name="value">integer literal</param>
         /// <returns>parsed literal</returns>
-        public static object ParseIntegerLiteral(string value) {
-            var parser = StaticEnvironment.Require<IIntegerParser>(StaticDependency.ParsedIntegers);
+        public static object ParseIntegerLiteral(StaticEnvironment environment, string value) {
+            var parser = environment.Require<IIntegerParser>(StaticDependency.ParsedIntegers);
             return parser.ParseInt(value);
         }
 
@@ -24,8 +24,8 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
         /// </summary>
         /// <param name="value">hex number literal</param>
         /// <returns>parsed literal</returns>
-        public static object ParseHexNumberLiteral(string value) {
-            var parser = StaticEnvironment.Require<IHexNumberParser>(StaticDependency.ParsedHexNumbers);
+        public static object ParseHexNumberLiteral(StaticEnvironment environment, string value) {
+            var parser = environment.Require<IHexNumberParser>(StaticDependency.ParsedHexNumbers);
             return parser.ParseHexNumber(value);
         }
 
@@ -34,8 +34,8 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static object ConvertCharLiteral(object value) {
-            var converter = StaticEnvironment.Require<ICharLiteralConverter>(StaticDependency.ConvertedCharLiterals);
+        public static object ConvertCharLiteral(StaticEnvironment environment, object value) {
+            var converter = environment.Require<ICharLiteralConverter>(StaticDependency.ConvertedCharLiterals);
             return converter.Convert(value);
         }
 
@@ -54,8 +54,8 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
         /// <param name="decimals">decimals</param>
         /// <param name="exponent">exponent</param>
         /// <returns></returns>
-        public static object ConvertRealLiteral(object digits, object decimals, bool minus, object exponent) {
-            var converter = StaticEnvironment.Require<IRealConverter>(StaticDependency.ConvertedRealLiterals);
+        public static object ConvertRealLiteral(StaticEnvironment environment, object digits, object decimals, bool minus, object exponent) {
+            var converter = environment.Require<IRealConverter>(StaticDependency.ConvertedRealLiterals);
             return converter.Convert(digits, decimals, minus, exponent);
 
         }
@@ -66,13 +66,13 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
         /// <param name="value">value to parse</param>
         /// <param name="valueParser">parser id</param>
         /// <returns></returns>
-        public static object NumberLiteral(string value, int valueParser) {
+        public static object NumberLiteral(StaticEnvironment environment, string value, int valueParser) {
 
             if (valueParser == StaticDependency.ParsedHexNumbers)
-                return ParseHexNumberLiteral(value);
+                return ParseHexNumberLiteral(environment, value);
 
             if (valueParser == StaticDependency.ParsedIntegers)
-                return ParseIntegerLiteral(value);
+                return ParseIntegerLiteral(environment, value);
 
             throw new InvalidOperationException();
         }

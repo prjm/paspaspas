@@ -17,16 +17,18 @@ namespace PasPasPas.Parsing.Tokenizer {
         private Tokenizer tokenizer;
         private readonly StackedFileReader input;
         private readonly ILogSource log;
+        private readonly StaticEnvironment environment;
 
         /// <summary>
         ///     create a new tokenizer state
         /// </summary>
         /// <param name="parentTokenizer"></param>
-        public TokenizerState(Tokenizer parentTokenizer, StackedFileReader currentInput, ILogSource logSource) {
+        public TokenizerState(StaticEnvironment staticEnvironment, Tokenizer parentTokenizer, StackedFileReader currentInput, ILogSource logSource) {
             tokenizer = parentTokenizer;
+            environment = staticEnvironment;
             log = logSource;
             input = currentInput;
-            bufferHolder = PoolFactory.FetchStringBuilder();
+            bufferHolder = PoolFactory.FetchStringBuilder(environment);
             buffer = bufferHolder.Data;
         }
 
@@ -60,6 +62,12 @@ namespace PasPasPas.Parsing.Tokenizer {
         ///     start position
         /// </summary>
         public int StartPosition { get; set; }
+
+        /// <summary>
+        ///     static environment
+        /// </summary>
+        public StaticEnvironment Environment
+        => environment;
 
         public void Append(char currentChar)
             => buffer.Append(currentChar);

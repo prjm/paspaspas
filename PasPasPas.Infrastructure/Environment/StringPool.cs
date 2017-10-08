@@ -11,27 +11,23 @@ namespace PasPasPas.Infrastructure.Environment {
         private Dictionary<char, string> pool
             = new Dictionary<char, string>();
 
-        private static Lazy<CharsAsString> instance
-            = new Lazy<CharsAsString>(() => new CharsAsString(), true);
-
         /// <summary>
         ///     get the number of items in the pool
         /// </summary>
         public int Count
             => pool.Count;
 
-        private CharsAsString()
-            => StaticEnvironment.Provide(StaticDependency.CharStringPool, this);
-
         /// <summary>
         ///     add this string to the string pool or get a reference to this item
         ///     out of the string pool
         /// </summary>
+        /// <param name="environment">environment</param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static string PoolString(char value) {
+        public static string PoolString(StaticEnvironment environment, char value) {
             string result;
-            var pool = instance.Value.pool;
+            var instance = environment.Require<CharsAsString>(StaticDependency.CharStringPool);
+            var pool = instance.pool;
 
             if (pool.TryGetValue(value, out var poolRef))
                 result = poolRef;
@@ -75,9 +71,6 @@ namespace PasPasPas.Infrastructure.Environment {
         public void Clear() =>
             pool.Clear();
 
-        private StringPool()
-            => StaticEnvironment.Provide(StaticDependency.StringPool, this);
-
         /// <summary>
         ///     add this string to the string pool or get a reference to this item
         ///     out of the string pool
@@ -91,7 +84,7 @@ namespace PasPasPas.Infrastructure.Environment {
                 if (pool.TryGetValue(value, out var poolRef))
                     value = poolRef;
                 else
-                    pool.Add(value, value);
+                    pool[value] = value;
             }
 
             return value;

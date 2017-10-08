@@ -18,8 +18,10 @@ namespace PasPasPasTests.Tokenizer {
         private const string TestFileName = "test_file_name.pas";
 
         protected IList<Token> RunTestTokenizer(string input) {
-            StaticEnvironment.Clear();
-            var api = new TokenizerApi(new StandardFileAccess());
+            var env = new StaticEnvironment();
+            env.Register(StaticDependency.FileAccess, new StandardFileAccess());
+            env.Register(StaticDependency.LogManager, new LogManager());
+            var api = new TokenizerApi(env);
             var result = new List<Token>();
 
             using (var tokenizer = api.CreateTokenizerForString(TestFileName, input)) {
@@ -104,14 +106,17 @@ namespace PasPasPasTests.Tokenizer {
 
         private IList<Token> RunTestPattern(InputPatterns patterns, Guid expectedMessage, string input) {
             var result = new List<Token>();
-            var api = new TokenizerApi(new StandardFileAccess());
-            var reader = api.Readers.CreateReaderForString(TestFileName, input);
+            var env = new StaticEnvironment();
             var manager = new LogManager();
+            env.Register(StaticDependency.FileAccess, new StandardFileAccess());
+            env.Register(StaticDependency.LogManager, manager);
+            var api = new TokenizerApi(env);
+            var reader = api.Readers.CreateReaderForString(TestFileName, input);
             var log = new LogSource(manager, LogGuid);
             var logTarget = new ListLogTarget();
             manager.RegisterTarget(logTarget);
 
-            using (var tokenizer = new PasPasPas.Parsing.Tokenizer.Tokenizer(manager, patterns, reader)) {
+            using (var tokenizer = new PasPasPas.Parsing.Tokenizer.Tokenizer(env, patterns, reader)) {
                 while (reader.CurrentFile != null && !reader.CurrentFile.AtEof) {
                     tokenizer.FetchNextToken();
                     result.Add(tokenizer.CurrentToken);

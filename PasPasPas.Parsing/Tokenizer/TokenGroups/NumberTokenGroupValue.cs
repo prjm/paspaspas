@@ -48,7 +48,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
             var withExponent = false;
 
             if (state.AtEof) {
-                var number = LiteralValues.Literals.ParseIntegerLiteral(state.GetBufferContent());
+                var number = LiteralValues.Literals.ParseIntegerLiteral(state.Environment, state.GetBufferContent());
                 return new Token(TokenKind.Integer, state, number);
             }
 
@@ -102,7 +102,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
             }
 
             if (withDot || withExponent) {
-                return new Token(TokenKind.Real, state, LiteralValues.Literals.ConvertRealLiteral(digits, decimals, minus, exp));
+                return new Token(TokenKind.Real, state, LiteralValues.Literals.ConvertRealLiteral(state.Environment, digits, decimals, minus, exp));
             }
             else {
                 return new Token(TokenKind.Integer, state, digits);

@@ -26,7 +26,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
         /// </summary>
         /// <param name="state">current tokenizer state</param>
         public override Token Tokenize(TokenizerState state) {
-            using (var resultBuilder = PoolFactory.FetchStringBuilder()) {
+            using (var resultBuilder = PoolFactory.FetchStringBuilder(state.Environment)) {
                 state.PreviousChar();
                 state.Clear();
 
@@ -42,14 +42,14 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
                                 if (controlChar.Kind != TokenKind.HexNumber || !LiteralValues.Literals.IsValidInteger(controlChar.ParsedValue))
                                     state.Error(Tokenizer.IncompleteString);
                                 else
-                                    resultBuilder.Data.Append(LiteralValues.Literals.ConvertCharLiteral(controlChar.ParsedValue));
+                                    resultBuilder.Data.Append(LiteralValues.Literals.ConvertCharLiteral(state.Environment, controlChar.ParsedValue));
                             }
                             else {
                                 var controlChar = digitTokenizer.Tokenize(state);
                                 if (controlChar.Kind != TokenKind.Integer || !LiteralValues.Literals.IsValidInteger(controlChar.ParsedValue))
                                     state.Error(Tokenizer.UnexpectedCharacter);
                                 else
-                                    resultBuilder.Data.Append(LiteralValues.Literals.ConvertCharLiteral(controlChar.ParsedValue));
+                                    resultBuilder.Data.Append(LiteralValues.Literals.ConvertCharLiteral(state.Environment, controlChar.ParsedValue));
                             }
                         }
                     }

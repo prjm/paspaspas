@@ -13,7 +13,7 @@ namespace PasPasPas.Api {
         /// <summary>
         ///     file access
         /// </summary>
-        private IFileAccess fileAccess;
+        private StaticEnvironment staticEnvironment;
 
         /// <summary>
         ///     file buffer
@@ -27,6 +27,7 @@ namespace PasPasPas.Api {
         /// <param name="content">file content</param>
         /// <returns>file reader</returns>
         public StackedFileReader CreateReaderForString(string path, string content) {
+            var fileAccess = staticEnvironment.Require<IFileAccess>(StaticDependency.FileAccess);
             var localPath = fileAccess.ReferenceToFile(path);
             var reader = new StackedFileReader(fileBuffer);
             fileBuffer.Add(localPath, new StringBufferReadable(content));
@@ -37,15 +38,15 @@ namespace PasPasPas.Api {
         /// <summary>
         ///     create a new file reader api
         /// </summary>
-        /// <param name="access">file access</param>
-        public ReaderApi(IFileAccess access) {
-            fileAccess = access;
+        /// <param name="environment">environment</param>
+        public ReaderApi(StaticEnvironment environment) {
+            staticEnvironment = environment;
             fileBuffer = new FileBuffer();
             RegisterStatics();
         }
 
         private void RegisterStatics()
-            => StaticEnvironment.Register(StaticDependency.StringBuilderPool, new ObjectPool<StringBuilder>());
+            => staticEnvironment.Register(StaticDependency.StringBuilderPool, new ObjectPool<StringBuilder>());
 
 
         /// <summary>
@@ -54,6 +55,7 @@ namespace PasPasPas.Api {
         /// <param name="path">path to resolve</param>
         /// <returns>file reader</returns>
         public StackedFileReader CreateReaderForPath(string path) {
+            var fileAccess = staticEnvironment.Require<IFileAccess>(StaticDependency.FileAccess);
             var localPath = fileAccess.ReferenceToFile(path);
             var reader = new StackedFileReader(fileBuffer);
             fileBuffer.Add(localPath, fileAccess.OpenFileForReading(localPath));
@@ -67,10 +69,10 @@ namespace PasPasPas.Api {
         /// <param name="reader">reader to switch</param>
         /// <param name="path">path to ope</param>
         public void SwitchToPath(StackedFileReader reader, string path) {
+            var fileAccess = staticEnvironment.Require<IFileAccess>(StaticDependency.FileAccess);
             var localPath = fileAccess.ReferenceToFile(path);
             fileBuffer.Add(localPath, fileAccess.OpenFileForReading(localPath));
             reader.AddFileToRead(localPath);
-            reader.CurrentFile.NextChar();
         }
     }
 }

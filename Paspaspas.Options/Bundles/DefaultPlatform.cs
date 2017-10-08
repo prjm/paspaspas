@@ -1,4 +1,5 @@
-﻿using PasPasPas.Infrastructure.Files;
+﻿using PasPasPas.Infrastructure.Environment;
+using PasPasPas.Infrastructure.Files;
 using PasPasPas.Infrastructure.Input;
 
 namespace PasPasPas.Options.Bundles {
@@ -17,8 +18,8 @@ namespace PasPasPas.Options.Bundles {
         /// <summary>
         ///     create a new platform
         /// </summary>
-        public DefaultPlatform(IFileAccess fileAccess) : base(PlatformKey.Default) {
-            DefaultOptions = new OptionSet(fileAccess);
+        public DefaultPlatform(StaticEnvironment environment) : base(PlatformKey.Default) {
+            DefaultOptions = new OptionSet(environment);
             Configurations.Add(DefaultConfigurationName, DefaultOptions);
         }
 

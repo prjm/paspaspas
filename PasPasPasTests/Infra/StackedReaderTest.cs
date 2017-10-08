@@ -3,6 +3,9 @@ using System.IO;
 using System.Text;
 using Xunit;
 using PasPasPas.Api;
+using PasPasPas.Infrastructure.Environment;
+using System;
+using PasPasPas.Infrastructure.Log;
 
 namespace PasPasPasTests.Infra {
 
@@ -19,8 +22,7 @@ namespace PasPasPasTests.Infra {
 
         [Fact]
         public void TestSimpleRead() {
-
-            var readerApi = new ReaderApi(new StandardFileAccess());
+            var readerApi = new ReaderApi(CreateEnvironment());
             var reader = readerApi.CreateReaderForString("test.pas", Content1);
             var result = new StringBuilder();
 
@@ -31,12 +33,18 @@ namespace PasPasPasTests.Infra {
             Assert.AreEqual(Content1, result.ToString());
         }
 
+        private StaticEnvironment CreateEnvironment() {
+            var env = new StaticEnvironment();
+            env.Register(StaticDependency.FileAccess, new StandardFileAccess());
+            env.Register(StaticDependency.LogManager, new LogManager());
+            return env;
+        }
 
         [Fact]
         public void TestSimpleFileRead() {
 
             var path = GenerateTempFile(Content1);
-            var readerApi = new ReaderApi(new StandardFileAccess());
+            var readerApi = new ReaderApi(CreateEnvironment());
             var reader = readerApi.CreateReaderForPath(path);
             var result = new StringBuilder();
 
@@ -58,7 +66,7 @@ namespace PasPasPasTests.Infra {
             var result = new StringBuilder();
             var path1 = GenerateTempFile(Content1);
             var path2 = GenerateTempFile(Content2);
-            var readerApi = new ReaderApi(new StandardFileAccess());
+            var readerApi = new ReaderApi(CreateEnvironment());
             var reader = readerApi.CreateReaderForPath(path1);
 
             try {
@@ -104,18 +112,16 @@ namespace PasPasPasTests.Infra {
             var result = new StringBuilder();
             var path1 = GenerateTempFile(Content1);
             var path2 = GenerateTempFile(Content2);
-            var readerApi = new ReaderApi(new StandardFileAccess());
+            var readerApi = new ReaderApi(CreateEnvironment());
             var reader = readerApi.CreateReaderForPath(path1);
 
             while (!reader.AtEof && result.Length < 5) {
-                result.Append(reader.Value);
-                reader.NextChar();
+                result.Append(reader.NextChar());
             }
 
             readerApi.SwitchToPath(reader, path2);
             while (reader.CurrentFile != null && !reader.AtEof) {
-                result.Append(reader.Value);
-                reader.NextChar();
+                result.Append(reader.NextChar());
 
                 if (reader.AtEof)
                     reader.FinishCurrentFile();
