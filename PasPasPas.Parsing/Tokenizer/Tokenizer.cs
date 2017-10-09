@@ -68,12 +68,11 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <summary>
         ///     create a new tokenizer
         /// </summary>
-        public Tokenizer(StaticEnvironment staticEnvironment, InputPatterns charClasses, StackedFileReader input) {
-            var log = staticEnvironment.Require<ILogManager>(StaticDependency.LogManager);
+        public Tokenizer(IParserEnvironment environment, InputPatterns charClasses, StackedFileReader input) {
             Input = input ?? throw new ArgumentNullException(nameof(input));
-            Log = new LogSource(log, TokenizerLogMessage);
+            Log = new LogSource(environment.Log, TokenizerLogMessage);
             characterClasses = charClasses ?? throw new ArgumentNullException(nameof(charClasses));
-            state = new TokenizerState(staticEnvironment, this, input, Log);
+            state = new TokenizerState(environment, this, input, Log);
             FinishInput();
         }
 

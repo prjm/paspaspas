@@ -24,9 +24,9 @@ namespace PasPasPas.Infrastructure.Environment {
         /// <param name="environment">environment</param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static string PoolString(StaticEnvironment environment, char value) {
+        public static string PoolString(IBasicEnvironment environment, char value) {
             string result;
-            var instance = environment.Require<CharsAsString>(StaticDependency.CharStringPool);
+            var instance = environment.CharStringPool;
             var pool = instance.pool;
 
             if (pool.TryGetValue(value, out var poolRef))

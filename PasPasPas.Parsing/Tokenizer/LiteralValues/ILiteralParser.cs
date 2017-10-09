@@ -3,7 +3,7 @@
     /// <summary>
     ///     simple integer parser
     /// </summary>
-    public interface IIntegerParser {
-        object ParseInt(string input);
+    public interface ILiteralParser {
+        object Parse(string input);
     }
 }

@@ -45,13 +45,13 @@ namespace PasPasPas.Options.Bundles {
         ///     creates a new option set
         /// </summary>
         /// <param name="fileAccess">file access</param>
-        public OptionSet(StaticEnvironment environment) : this(null, environment) { }
+        public OptionSet(IBasicEnvironment environment) : this(null, environment) { }
 
         /// <summary>
         ///     create a new option set
         /// </summary>
-        public OptionSet(OptionSet baseOptions, StaticEnvironment environment) {
-            Files = environment.Require<IFileAccess>(StaticDependency.FileAccess);
+        public OptionSet(OptionSet baseOptions, IBasicEnvironment environment) {
+            Files = environment.Files;
             CompilerOptions = new CompileOptions(baseOptions?.CompilerOptions);
             ConditionalCompilation = new ConditionalCompilationOptions(baseOptions?.ConditionalCompilation);
             Meta = new MetaInformation(this, baseOptions?.Meta);
@@ -89,7 +89,8 @@ namespace PasPasPas.Options.Bundles {
         /// </summary>
         public IFileAccess Files { get; }
 
-        public StaticEnvironment Environment { get; private set; }
+        public IBasicEnvironment Environment { get; private set; }
+
         /// <summary>
         ///     clear all option values
         /// </summary>

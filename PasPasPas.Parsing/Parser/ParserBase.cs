@@ -54,8 +54,7 @@ namespace PasPasPas.Parsing.Parser {
         /// </summary>
         /// <param name="tokenizerWithLookAhead"></param>
         /// <param name="environment">environment</param>
-        protected ParserBase(StaticEnvironment environment, OptionSet parserOptions, TokenizerWithLookahead tokenizerWithLookAhead) {
-            var log = environment.Require<ILogManager>(StaticDependency.LogManager);
+        protected ParserBase(ILogManager log, OptionSet parserOptions, TokenizerWithLookahead tokenizerWithLookAhead) {
             tokenizer = tokenizerWithLookAhead;
             logSource = new LogSource(log, ParserLogMessage);
             options = parserOptions;

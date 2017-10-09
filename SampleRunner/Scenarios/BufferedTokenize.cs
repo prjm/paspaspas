@@ -5,16 +5,17 @@ using System.Text;
 using PasPasPas.Api;
 using PasPasPas.DesktopPlatform;
 using PasPasPas.Infrastructure.Environment;
+using PasPasPas.Parsing;
 
 namespace SampleRunner.Scenarios {
 
     public static class BufferedTokenizeFile {
 
-        public static void Run(StringBuilder b, StaticEnvironment env, string testPath, int reapeat) {
+        public static void Run(StringBuilder b, IParserEnvironment environment, string testPath, int reapeat) {
             var registry = new Dictionary<int, Tuple<ulong, long>>();
 
             for (var i = 0; i < reapeat; i++) {
-                var tokenizerApi = new TokenizerApi(env);
+                var tokenizerApi = new TokenizerApi(environment);
                 using (var tokenizer = tokenizerApi.CreateBufferedTokenizerForPath(testPath)) {
 
                     while (!tokenizer.AtEof) {

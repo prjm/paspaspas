@@ -10,18 +10,16 @@ using PasPasPas.Parsing.Tokenizer.TokenGroups;
 using PasPasPas.Parsing.Tokenizer.Patterns;
 using PasPasPas.Api;
 using PasPasPas.Infrastructure.Environment;
+using PasPasPas.Parsing.Tokenizer.LiteralValues;
 
 namespace PasPasPasTests.Tokenizer {
 
-    public class TokenizerBaseTest {
+    public class TokenizerBaseTest : TestBase {
 
         private const string TestFileName = "test_file_name.pas";
 
         protected IList<Token> RunTestTokenizer(string input) {
-            var env = new StaticEnvironment();
-            env.Register(StaticDependency.FileAccess, new StandardFileAccess());
-            env.Register(StaticDependency.LogManager, new LogManager());
-            var api = new TokenizerApi(env);
+            var api = new TokenizerApi(CreateEnvironment(), null);
             var result = new List<Token>();
 
             using (var tokenizer = api.CreateTokenizerForString(TestFileName, input)) {
@@ -106,10 +104,8 @@ namespace PasPasPasTests.Tokenizer {
 
         private IList<Token> RunTestPattern(InputPatterns patterns, Guid expectedMessage, string input) {
             var result = new List<Token>();
-            var env = new StaticEnvironment();
+            var env = CreateEnvironment();
             var manager = new LogManager();
-            env.Register(StaticDependency.FileAccess, new StandardFileAccess());
-            env.Register(StaticDependency.LogManager, manager);
             var api = new TokenizerApi(env);
             var reader = api.Readers.CreateReaderForString(TestFileName, input);
             var log = new LogSource(manager, LogGuid);
@@ -253,7 +249,7 @@ namespace PasPasPasTests.Tokenizer {
         public void TestHexNumberTokenValue() {
             var patterns = new InputPatterns(null);
             patterns.AddPattern('a', PatternA);
-            patterns.AddPattern('$', new CharacterClassTokenGroupValue(TokenKind.HexNumber, new DigitCharClass(true), 2, StaticDependency.ParsedHexNumbers, PasPasPas.Parsing.Tokenizer.Tokenizer.IncompleteHexNumber));
+            patterns.AddPattern('$', new CharacterClassTokenGroupValue(TokenKind.HexNumber, new DigitCharClass(true), 2, LiteralParserKind.HexNumbers, PasPasPas.Parsing.Tokenizer.Tokenizer.IncompleteHexNumber));
             TestPattern(patterns, PasPasPas.Parsing.Tokenizer.Tokenizer.IncompleteHexNumber, "$", TokenKind.HexNumber);
             TestPattern(patterns, "$1234567890", TokenKind.HexNumber);
             TestPattern(patterns, "$ABCDEF", TokenKind.HexNumber);

@@ -27,7 +27,7 @@ namespace PasPasPas.Options.Bundles {
         ///     creates a new set of options
         /// </summary>
         /// <param name="environment">environment</param>
-        public CompilerOptions(StaticEnvironment environment) {
+        public CompilerOptions(IBasicEnvironment environment) {
             var platforms = new Dictionary<PlatformKey, Platform>();
             var optionRoot = new DefaultPlatform(environment);
             platforms.Add(PlatformKey.Default, optionRoot);

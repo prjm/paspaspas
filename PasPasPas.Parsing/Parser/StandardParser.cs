@@ -18,17 +18,17 @@ namespace PasPasPas.Parsing.Parser {
     /// </summary>
     public class StandardParser : ParserBase, IParser {
 
-        private static InputPatterns GetPatternsFromFactory(StaticEnvironment environment)
-            => environment.Require<PatternFactory>(StaticDependency.TokenizerPatternFactory).StandardPatterns;
+        private static InputPatterns GetPatternsFromFactory(IParserEnvironment environment)
+            => environment.Patterns.StandardPatterns;
 
-        private static TokenizerWithLookahead CreateTokenizer(StaticEnvironment environment, StackedFileReader reader, OptionSet options)
+        private static TokenizerWithLookahead CreateTokenizer(IParserEnvironment environment, StackedFileReader reader, OptionSet options)
             => new TokenizerWithLookahead(environment, options, new Tokenizer.Tokenizer(environment, GetPatternsFromFactory(environment), reader), TokenizerMode.Standard);
 
         /// <summary>
         ///     creates a new standard parser
         /// </summary>
-        public StandardParser(StaticEnvironment environment, OptionSet options, StackedFileReader input) :
-            base(environment, options, CreateTokenizer(environment, input, options)) { }
+        public StandardParser(IParserEnvironment env, OptionSet options, StackedFileReader input) :
+            base(env.Log, options, CreateTokenizer(env, input, options)) { }
 
         #region Reserved Words
 

@@ -6,7 +6,7 @@ using PasPasPasTests.Misc;
 
 namespace PasPasPasTests.Tokenizer {
 
-    public class TokenizerTest : TestBase {
+    public class TokenizerTest : PasPasPasTests.Misc.TestBase {
 
         [Fact]
         public void TestIdentifiers() {

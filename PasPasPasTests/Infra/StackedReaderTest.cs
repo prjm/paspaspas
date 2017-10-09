@@ -12,7 +12,7 @@ namespace PasPasPasTests.Infra {
     /// <summary>
     ///     test for stacked reader
     /// </summary>
-    public class StackedReaderTest {
+    public class StackedReaderTest : TestBase {
 
         private string Content1
             => "X1X1X1|||X1X1X1------------$";
@@ -31,13 +31,6 @@ namespace PasPasPasTests.Infra {
             }
 
             Assert.AreEqual(Content1, result.ToString());
-        }
-
-        private StaticEnvironment CreateEnvironment() {
-            var env = new StaticEnvironment();
-            env.Register(StaticDependency.FileAccess, new StandardFileAccess());
-            env.Register(StaticDependency.LogManager, new LogManager());
-            return env;
         }
 
         [Fact]

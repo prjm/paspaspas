@@ -2,6 +2,7 @@
 using PasPasPas.Infrastructure.Environment;
 using PasPasPas.Parsing.SyntaxTree;
 using PasPasPas.Parsing.Tokenizer.CharClass;
+using PasPasPas.Parsing.Tokenizer.LiteralValues;
 
 namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
 
@@ -16,18 +17,18 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
         /// <param name="tokenId"></param>
         /// <param name="charClass">character class</param>
         public CharacterClassTokenGroupValue(int tokenId, CharacterClass charClass, int minLength = 0)
-            : this(tokenId, charClass, minLength, StaticDependency.Undefined, Guid.Empty) { }
+            : this(tokenId, charClass, minLength, LiteralParserKind.Undefined, Guid.Empty) { }
 
         /// <summary>
         ///     create a new character class token group value
         /// </summary>
         /// <param name="tokenId"></param>
         /// <param name="charClass">character class</param>
-        public CharacterClassTokenGroupValue(int tokenId, CharacterClass charClass, int minLength, int parserId, Guid minLengthMessageId) {
+        public CharacterClassTokenGroupValue(int tokenId, CharacterClass charClass, int minLength, LiteralParserKind literalParserKind, Guid minLengthMessageId) {
             TokenId = tokenId;
             MinLength = minLength;
             CharClass = charClass;
-            ValueParser = parserId;
+            ValueParser = literalParserKind;
 
             if (minLengthMessageId != Guid.Empty)
                 MinLengthMessage = minLengthMessageId;
@@ -54,16 +55,16 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
         private Guid MinLengthMessage { get; }
             = Tokenizer.UnexpectedEndOfToken;
 
-        private int ValueParser { get; }
-            = StaticDependency.Undefined;
+        private LiteralParserKind ValueParser { get; }
+            = LiteralParserKind.Undefined;
 
         /// <summary>
         ///     parse the complete token for a character class
         /// </summary>
         public override Token Tokenize(TokenizerState state) {
-            var parseValue = ValueParser != StaticDependency.Undefined;
+            var parseValue = ValueParser != LiteralParserKind.Undefined;
 
-            using (var parsedValue = parseValue ? PoolFactory.FetchStringBuilder(state.Environment) : null) {
+            using (var parsedValue = parseValue ? state.FetchStringBuilder() : null) {
 
                 if (!state.AtEof) {
                     while (CharClass.Matches(state.LookAhead())) {
@@ -80,7 +81,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
 
                 if (parseValue) {
                     var value = StringPool.PoolString(parsedValue.Data.ToString());
-                    var parsed = LiteralValues.Literals.NumberLiteral(state.Environment, value, ValueParser);
+                    var parsed = state.ParserLiteral(value, ValueParser);
                     return new Token(TokenId, state, parsed);
                 }
                 else

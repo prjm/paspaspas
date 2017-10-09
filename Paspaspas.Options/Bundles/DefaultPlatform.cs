@@ -18,7 +18,7 @@ namespace PasPasPas.Options.Bundles {
         /// <summary>
         ///     create a new platform
         /// </summary>
-        public DefaultPlatform(StaticEnvironment environment) : base(PlatformKey.Default) {
+        public DefaultPlatform(IBasicEnvironment environment) : base(PlatformKey.Default) {
             DefaultOptions = new OptionSet(environment);
             Configurations.Add(DefaultConfigurationName, DefaultOptions);
         }

@@ -5,12 +5,7 @@ using PasPasPas.Building.Engine;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Parsing.Parser;
 using PasPasPas.Options.Bundles;
-using PasPasPas.Infrastructure.Input;
-using PasPasPas.Parsing.Tokenizer;
 using System.Text;
-using PasPasPas.Parsing.SyntaxTree.Visitors;
-using PasPasPas.Parsing.SyntaxTree;
-using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Infrastructure.Files;
 using PasPasPas.Infrastructure.Environment;
@@ -57,18 +52,15 @@ namespace PasPasPas.Building.Tasks {
 
             foreach (var file in Path.AsFileList(settings.FileSystemAccess)) {
                 count++;
-                var env = new StaticEnvironment();
                 var logManager = new LogManager();
                 var log = new LogTarget();
-                var options = new OptionSet(env);
-                env.Register(StaticDependency.LogManager, log);
-                env.Register(StaticDependency.FileAccess, settings.FileSystemAccess);
+                var options = new OptionSet(null);
 
                 ISyntaxPart resultTree = null;
 
                 var buffer = new FileBuffer();
                 var reader = new StackedFileReader(buffer);
-                var parser = new StandardParser(env, options, reader);
+                var parser = new StandardParser(null, options, reader);
 
                 buffer.Add(file, settings.FileSystemAccess.OpenFileForReading(file));
                 result.AppendLine("-----------------------<< " + file.Path + " (" + count + ")");

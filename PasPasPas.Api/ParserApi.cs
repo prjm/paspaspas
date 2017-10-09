@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using PasPasPas.Infrastructure.Environment;
-using PasPasPas.Infrastructure.Files;
+﻿using PasPasPas.Infrastructure.Environment;
 using PasPasPas.Options.Bundles;
+using PasPasPas.Parsing;
 using PasPasPas.Parsing.Parser;
 
 namespace PasPasPas.Api {
@@ -15,19 +10,19 @@ namespace PasPasPas.Api {
     /// </summary>
     public class ParserApi {
 
-
-        private readonly StaticEnvironment environment;
+        private readonly IParserEnvironment env;
         private readonly TokenizerApi tokenizerApi;
         private readonly OptionSet parseOptions;
+
         /// <summary>
         ///     create a new parser api
         /// </summary>
-        /// <param name="staticEnvironment">Static environment</param>
+        /// <param name="parserEnvironment"></param>
         /// <param name="options">options</param>
-        public ParserApi(StaticEnvironment staticEnvironment, OptionSet options = null) {
-            environment = staticEnvironment;
-            parseOptions = options ?? new OptionSet(environment);
-            tokenizerApi = new TokenizerApi(environment, options);
+        public ParserApi(IParserEnvironment parserEnvironment, OptionSet options = null) {
+            env = parserEnvironment;
+            parseOptions = options ?? new OptionSet(parserEnvironment);
+            tokenizerApi = new TokenizerApi(parserEnvironment, options);
             RegisterStatics();
         }
 
@@ -43,7 +38,7 @@ namespace PasPasPas.Api {
         /// <returns></returns>
         public IParser CreateParserForString(string path, string input) {
             var reader = tokenizerApi.Readers.CreateReaderForString(path, input);
-            var parser = new StandardParser(environment, parseOptions, reader);
+            var parser = new StandardParser(env, parseOptions, reader);
             return parser;
         }
         /// <summary>
@@ -53,7 +48,7 @@ namespace PasPasPas.Api {
         /// <returns></returns>
         public IParser CreateParserForPath(string path) {
             var reader = tokenizerApi.Readers.CreateReaderForPath(path);
-            var parser = new StandardParser(environment, parseOptions, reader);
+            var parser = new StandardParser(env, parseOptions, reader);
             return parser;
         }
 

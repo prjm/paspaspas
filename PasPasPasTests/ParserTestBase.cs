@@ -1,25 +1,20 @@
 ﻿using System.Linq;
 using PasPasPas.DesktopPlatform;
-using PasPasPas.Infrastructure.Input;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Options.Bundles;
 using PasPasPas.Options.DataTypes;
-using PasPasPas.Parsing.Parser;
-using PasPasPas.Parsing.SyntaxTree;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
-using PasPasPas.Parsing.Tokenizer;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Parsing.SyntaxTree.Utils;
-using PasPasPas.Infrastructure.Files;
 using PasPasPas.Api;
 using PasPasPas.Infrastructure.Environment;
 
 namespace PasPasPasTests {
 
-    public class ParserTestBase {
+    public class ParserTestBase : TestBase {
 
         protected OptionSet TestOptions
             = null;
@@ -62,11 +57,7 @@ namespace PasPasPasTests {
             if (string.IsNullOrEmpty(output))
                 output = input;
 
-            var env = new StaticEnvironment();
-            var manager = new LogManager();
-            env.Register(StaticDependency.FileAccess, new StandardFileAccess());
-            env.Register(StaticDependency.LogManager, manager);
-            TestOptions = new OptionSet(env);
+            TestOptions = new OptionSet(null);
             ClearOptions();
             return;
 
@@ -169,9 +160,7 @@ namespace PasPasPasTests {
 
 
         protected ISyntaxPart RunAstTest(string input, LogManager logManager, IList<ILogMessage> messages) {
-            var env = new StaticEnvironment();
-            env.Register(StaticDependency.LogManager, logManager);
-            env.Register(StaticDependency.FileAccess, new StandardFileAccess());
+            var env = CreateEnvironment();
             TestOptions = new OptionSet(env);
             var api = new ParserApi(env, TestOptions);
 

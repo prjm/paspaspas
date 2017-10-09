@@ -4,6 +4,7 @@ using PasPasPas.Infrastructure.Files;
 using System.Text;
 using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Infrastructure.Environment;
+using PasPasPas.Parsing.Tokenizer.LiteralValues;
 
 namespace PasPasPas.Parsing.Tokenizer {
 
@@ -17,18 +18,18 @@ namespace PasPasPas.Parsing.Tokenizer {
         private Tokenizer tokenizer;
         private readonly StackedFileReader input;
         private readonly ILogSource log;
-        private readonly StaticEnvironment environment;
+        private readonly IParserEnvironment environment;
 
         /// <summary>
         ///     create a new tokenizer state
         /// </summary>
         /// <param name="parentTokenizer"></param>
-        public TokenizerState(StaticEnvironment staticEnvironment, Tokenizer parentTokenizer, StackedFileReader currentInput, ILogSource logSource) {
+        public TokenizerState(IParserEnvironment parserEnvironment, Tokenizer parentTokenizer, StackedFileReader currentInput, ILogSource logSource) {
             tokenizer = parentTokenizer;
-            environment = staticEnvironment;
             log = logSource;
             input = currentInput;
-            bufferHolder = PoolFactory.FetchStringBuilder(environment);
+            environment = parserEnvironment;
+            bufferHolder = FetchStringBuilder();
             buffer = bufferHolder.Data;
         }
 
@@ -58,16 +59,16 @@ namespace PasPasPas.Parsing.Tokenizer {
         public int CurrentPosition
             => input.Position;
 
+        public object ConvertCharLiteral(object parsedValue)
+            => environment.CharLiteralConverter.Convert(parsedValue);
+
         /// <summary>
         ///     start position
         /// </summary>
         public int StartPosition { get; set; }
 
-        /// <summary>
-        ///     static environment
-        /// </summary>
-        public StaticEnvironment Environment
-        => environment;
+        public ObjectPool<StringBuilder>.PoolItem FetchStringBuilder()
+            => environment.StringBuilderPool.Borrow();
 
         public void Append(char currentChar)
             => buffer.Append(currentChar);
@@ -89,6 +90,20 @@ namespace PasPasPas.Parsing.Tokenizer {
             }
         }
 
+        public object ParserLiteral(string value, LiteralParserKind valueParser) {
+            switch (valueParser) {
+
+                case LiteralParserKind.HexNumbers:
+                    return environment.HexNumberParser.Parse(value);
+
+                case LiteralParserKind.IntegerNumbers:
+                    return environment.IntegerParser.Parse(value);
+
+                default:
+                    throw new InvalidOperationException();
+            }
+        }
+
         /// <summary>
         ///     create an error message
         /// </summary>
@@ -101,6 +116,9 @@ namespace PasPasPas.Parsing.Tokenizer {
 
         public char GetBufferCharAt(int index)
             => buffer[index];
+
+        public object ConvertRealLiteral(object digits, object decimals, bool minus, object exp)
+            => environment.RealLiteralConverter.Convert(digits, decimals, minus, exp);
 
         public string GetBufferContent()
             => StringPool.PoolString(buffer.ToString());

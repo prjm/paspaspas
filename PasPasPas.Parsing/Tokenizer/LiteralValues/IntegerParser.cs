@@ -6,7 +6,7 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
     /// <summary>
     ///     simple integer parser
     /// </summary>
-    public sealed class IntegerParser : IStaticCacheItem, IIntegerParser, IHexNumberParser, ILookupFunction<string, object> {
+    public sealed class IntegerParser : IStaticCacheItem, ILiteralParser, ILookupFunction<string, object> {
 
         private readonly LookupTable<string, object> data;
 
@@ -180,7 +180,7 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
         /// </summary>
         /// <param name="input">string to parse</param>
         /// <returns>parsed number</returns>
-        public object ParseInt(string input)
+        public object Parse(string input)
             => data.GetValue(input ?? throw new ArgumentNullException(nameof(input)));
 
         /// <summary>

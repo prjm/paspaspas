@@ -19,22 +19,22 @@ namespace PasPasPas.Parsing.Parser {
     /// </summary>
     public class CompilerDirectiveParser : ParserBase {
 
-        private static InputPatterns GetPatternsFromFactory(StaticEnvironment environment)
-            => environment.Require<PatternFactory>(StaticDependency.TokenizerPatternFactory).CompilerDirectivePatterns;
+        private static InputPatterns GetPatternsFromFactory(IParserEnvironment environment)
+            => environment.Patterns.CompilerDirectivePatterns;
 
-        private static Tokenizer.Tokenizer CreateTokenizer(StaticEnvironment environment, StackedFileReader reader)
-            => new Tokenizer.Tokenizer(environment, GetPatternsFromFactory(environment), reader);
+        private static Tokenizer.Tokenizer CreateTokenizer(IParserEnvironment env, StackedFileReader reader)
+            => new Tokenizer.Tokenizer(env, GetPatternsFromFactory(env), reader);
 
-        private static TokenizerWithLookahead CreateTokenizer(StaticEnvironment environment, StackedFileReader reader, OptionSet options)
-            => new TokenizerWithLookahead(environment, options, CreateTokenizer(environment, reader), TokenizerMode.CompilerDirective);
+        private static TokenizerWithLookahead CreateTokenizer(IParserEnvironment env, StackedFileReader reader, OptionSet options)
+            => new TokenizerWithLookahead(env, options, CreateTokenizer(env, reader), TokenizerMode.CompilerDirective);
 
         /// <summary>
         ///     create a new compiler directive parser 
         /// </summary>
         /// <param name="environment">services</param>
         /// <param name="input">input file</param>
-        public CompilerDirectiveParser(StaticEnvironment staticEnvironment, OptionSet options, StackedFileReader input)
-            : base(staticEnvironment, options, CreateTokenizer(staticEnvironment, input, options)) {
+        public CompilerDirectiveParser(IParserEnvironment env, OptionSet options, StackedFileReader input)
+            : base(env.Log, options, CreateTokenizer(env, input, options)) {
         }
 
         /// <summary>

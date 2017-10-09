@@ -35,7 +35,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
         public override Token Tokenize(TokenizerState state) {
             var found = false;
             var quote = QuoteChar;
-            using (var resultBuilder = PoolFactory.FetchStringBuilder(state.Environment)) {
+            using (var resultBuilder = state.FetchStringBuilder()) {
 
                 while ((!found) && (!state.AtEof)) {
                     var nextChar1 = state.LookAhead(1);

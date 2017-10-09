@@ -39,16 +39,16 @@ namespace PasPasPas.Parsing.Tokenizer {
             private string suffix = null;
             public Token Value = default;
 
-            public void AssignPrefix(Queue<Token> tokens, StaticEnvironment environment) {
-                using (var sb = PoolFactory.FetchStringBuilder(environment)) {
+            public void AssignPrefix(Queue<Token> tokens, IParserEnvironment environment) {
+                using (var sb = environment.StringBuilderPool.Borrow()) {
                     while (tokens.Count > 0)
                         sb.Data.Append(tokens.Dequeue().Value);
                     prefix = sb.ToString();
                 }
             }
 
-            public void AssignSuffix(Queue<Token> tokens, StaticEnvironment environment) {
-                using (var sb = PoolFactory.FetchStringBuilder(environment)) {
+            public void AssignSuffix(Queue<Token> tokens, IParserEnvironment environment) {
+                using (var sb = environment.StringBuilderPool.Borrow()) {
                     while (tokens.Count > 0)
                         sb.Data.Append(tokens.Dequeue().Value);
                     suffix = sb.ToString();
@@ -65,16 +65,16 @@ namespace PasPasPas.Parsing.Tokenizer {
         private OptionSet options;
         private TokenizerMode mode = TokenizerMode.Undefined;
         private bool skip = false;
-        private readonly StaticEnvironment environment;
+        private readonly IParserEnvironment environment;
 
         /// <summary>
         ///     create a new tokenizer with lookahead
         /// </summary>
-        public TokenizerWithLookahead(StaticEnvironment staticEnvironment, OptionSet optionsSet, ITokenizer baseTokenizer, TokenizerMode tokenizerMode) {
+        public TokenizerWithLookahead(IParserEnvironment env, OptionSet optionsSet, ITokenizer baseTokenizer, TokenizerMode tokenizerMode) {
             mode = tokenizerMode;
             BaseTokenizer = baseTokenizer;
             options = optionsSet;
-            environment = staticEnvironment;
+            environment = env;
         }
 
         /// <summary>
@@ -121,7 +121,7 @@ namespace PasPasPas.Parsing.Tokenizer {
                 var nextToken = BaseTokenizer.CurrentToken;
 
                 if (IsValidToken(ref nextToken)) {
-                    var entry = PoolFactory.FetchGenericItem<TokenSequence>(environment, StaticDependency.TokenSequencePool);
+                    var entry = environment.TokenSequencePool.Borrow();
                     entry.Data.Value = nextToken;
                     entry.Data.AssignPrefix(invalidTokens, environment);
                     tokenList.Enqueue(entry);
@@ -175,8 +175,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         /// <param name="nextToken"></param>
         private void ProcessMacroToken(IFileReference path, ref Token nextToken) {
-
-            var patterns = environment.Require<PatternFactory>(StaticDependency.TokenizerPatternFactory).CompilerDirectivePatterns;
+            var patterns = environment.Patterns.CompilerDirectivePatterns;
             var fragmentBuffer = new FileBuffer();
             var reader = new StackedFileReader(fragmentBuffer);
             var macroValue = "";

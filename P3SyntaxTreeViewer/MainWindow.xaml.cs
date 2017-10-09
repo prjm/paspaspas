@@ -19,6 +19,8 @@ using System.Resources;
 using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Infrastructure.Files;
 using PasPasPas.Infrastructure.Environment;
+using PasPasPas.Api;
+using PasPasPas.Parsing;
 
 namespace P3SyntaxTreeViewer {
 
@@ -52,10 +54,10 @@ namespace P3SyntaxTreeViewer {
             var task = new Task(() => {
                 var env = CreateEnvironment();
                 var listLog = new ListLogTarget();
-                env.log.RegisterTarget(listLog);
+                env.env.Log.RegisterTarget(listLog);
 
                 var cst = Parse(env.env, env.options, code);
-                var visitor = new TreeTransformer(new ProjectRoot()) { LogManager = (LogManager)env.log };
+                var visitor = new TreeTransformer(new ProjectRoot()) { LogManager = (LogManager)env.env.Log };
 
                 cst.Accept(visitor.AsVisitor());
 
@@ -121,26 +123,16 @@ namespace P3SyntaxTreeViewer {
             treeViewItem.IsExpanded = true;
         }
 
-        private ISyntaxPart Parse(StaticEnvironment env, OptionSet options, string code) {
-            var inputFile = new StringBufferReadable(code);
-            var path = new DesktopFileReference("z.x.pas");
-            var buffer = new FileBuffer();
-            var reader = new StackedFileReader(buffer);
-            var parser = new StandardParser(env, options, reader);
-            buffer.Add(path, inputFile);
-            reader.AddFileToRead(path);
-            return parser.Parse();
+        private ISyntaxPart Parse(IParserEnvironment env, OptionSet options, string code) {
+            var parserApi = new ParserApi(env, null);
+            using (var parser = parserApi.CreateParserForString("z.x.pas", code)) {
+                return parser.Parse();
+            }
         }
 
 
-        private (StaticEnvironment env, LogManager log, OptionSet options) CreateEnvironment() {
-            var env = new StaticEnvironment();
-            var log = new LogManager();
-            env.Register(StaticDependency.LogManager, log);
-            env.Register(StaticDependency.FileAccess, new StandardFileAccess());
-            var options = new OptionSet(env);
-            return (env, log, options);
-        }
+        private (IParserEnvironment env, OptionSet options) CreateEnvironment()
+            => (null, new OptionSet(null));
 
         private void Code_TextChanged(object sender, TextChangedEventArgs e)
             => UpdateTrees();
