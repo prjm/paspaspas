@@ -1,19 +1,13 @@
 ﻿using System;
 using System.Text;
+using PasPasPas.Api;
 using PasPasPas.DesktopPlatform;
 using PasPasPas.Infrastructure.Environment;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Parsing;
+using SampleRunner.Scenarios;
 
 namespace SampleRunner {
-
-    public enum SampleMode {
-        Undefined,
-        ReadFile,
-        TokenizerFile,
-        BufferedTokenizeFile,
-        ParseFile
-    }
 
     class Program {
 
@@ -23,11 +17,12 @@ namespace SampleRunner {
             var mode = SampleMode.ParseFile;
             var repeat = 1;
             var result = new StringBuilder();
-            IParserEnvironment environment = null;
+            var fileAccess = new StandardFileAccess();
+            IParserEnvironment environment = new DefaultEnvironment(fileAccess);
             Action<StringBuilder> action;
 
             action = PrepareSample(environment, testPath, mode, repeat);
-            RunSample(result, action);
+            RunSample(environment, result, action);
             Console.WriteLine(result.ToString());
         }
 
@@ -38,7 +33,7 @@ namespace SampleRunner {
                 return string.Concat(data.ToString(), '*');
         }
 
-        private static void RunSample(StringBuilder result, Action<StringBuilder> action) {
+        private static void RunSample(IParserEnvironment environment, StringBuilder result, Action<StringBuilder> action) {
             var timer = new ExecutionTimer();
             timer.Start();
             action(result);
@@ -47,8 +42,7 @@ namespace SampleRunner {
 
             result.AppendLine(new string('.', 80));
 
-            /*
-            foreach (var entry in env.Entries) {
+            foreach (var entry in environment.Entries) {
                 var name = GetCacheName(entry);
                 if (entry is ILookupFunction fn)
                     result.AppendLine(name + ": " + fn.Table.Count);
@@ -59,7 +53,7 @@ namespace SampleRunner {
                 else
                     result.AppendLine(name);
             }
-            */
+
             result.AppendLine(new string('-', 80));
             result.AppendLine($"{timer.TickCount} ticks required ({timer.Duration.TotalMilliseconds}).");
             result.AppendLine($"{GC.CollectionCount(0)} collections level 0.");

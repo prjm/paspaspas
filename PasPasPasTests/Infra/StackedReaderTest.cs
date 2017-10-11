@@ -6,13 +6,16 @@ using PasPasPas.Api;
 using PasPasPas.Infrastructure.Environment;
 using System;
 using PasPasPas.Infrastructure.Log;
+using PasPasPasTests.Common;
+using Assert = PasPasPasTests.Common.Assert;
+
 
 namespace PasPasPasTests.Infra {
 
     /// <summary>
     ///     test for stacked reader
     /// </summary>
-    public class StackedReaderTest : TestBase {
+    public class StackedReaderTest : CommonTest {
 
         private string Content1
             => "X1X1X1|||X1X1X1------------$";

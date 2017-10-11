@@ -1,13 +1,7 @@
-﻿using PasPasPas.Infrastructure.Log;
-using PasPasPas.Parsing.SyntaxTree;
-using System.Collections.Generic;
-using A = Xunit.Assert;
-using PasPasPas.Api;
-using PasPasPas.DesktopPlatform;
+﻿using A = Xunit.Assert;
 using System;
-using PasPasPas.Infrastructure.Environment;
 
-namespace PasPasPasTests {
+namespace PasPasPasTests.Common {
 
     public static class Assert {
 

@@ -1,8 +1,9 @@
 ﻿using PasPasPas.DesktopPlatform;
 using PasPasPas.Infrastructure.Files;
 using Xunit;
+using Assert = PasPasPasTests.Common.Assert;
 
-namespace PasPasPasTests.Misc {
+namespace PasPasPasTests.Infra {
 
     public class FileBufferTest {
 

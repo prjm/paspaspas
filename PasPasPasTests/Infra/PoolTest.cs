@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using PasPasPas.Infrastructure.Environment;
 using Xunit;
+using Assert = PasPasPasTests.Common.Assert;
 
 namespace PasPasPasTests.Infra {
 

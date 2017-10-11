@@ -30,7 +30,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     log manager
         /// </summary>
-        public LogManager Manager { get; set; }
+        public ILogManager Manager { get; set; }
 
         /// <summary>
         ///     log source

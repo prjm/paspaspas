@@ -52,7 +52,6 @@ namespace PasPasPas.Building.Tasks {
 
             foreach (var file in Path.AsFileList(settings.FileSystemAccess)) {
                 count++;
-                var logManager = new LogManager();
                 var log = new LogTarget();
                 var options = new OptionSet(null);
 

@@ -4,22 +4,23 @@ using System.Collections.Generic;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Parsing.SyntaxTree;
 using Xunit;
-using PasPasPas.DesktopPlatform;
 using PasPasPas.Parsing.Tokenizer.CharClass;
 using PasPasPas.Parsing.Tokenizer.TokenGroups;
 using PasPasPas.Parsing.Tokenizer.Patterns;
 using PasPasPas.Api;
-using PasPasPas.Infrastructure.Environment;
 using PasPasPas.Parsing.Tokenizer.LiteralValues;
+using PasPasPasTests.Common;
+using Assert = PasPasPasTests.Common.Assert;
+
 
 namespace PasPasPasTests.Tokenizer {
 
-    public class TokenizerBaseTest : TestBase {
+    public class TokenizerPatternTests : CommonTest {
 
         private const string TestFileName = "test_file_name.pas";
 
         protected IList<Token> RunTestTokenizer(string input) {
-            var api = new TokenizerApi(CreateEnvironment(), null);
+            var api = new TokenizerApi(CreateEnvironment());
             var result = new List<Token>();
 
             using (var tokenizer = api.CreateTokenizerForString(TestFileName, input)) {
@@ -105,12 +106,11 @@ namespace PasPasPasTests.Tokenizer {
         private IList<Token> RunTestPattern(InputPatterns patterns, Guid expectedMessage, string input) {
             var result = new List<Token>();
             var env = CreateEnvironment();
-            var manager = new LogManager();
             var api = new TokenizerApi(env);
             var reader = api.Readers.CreateReaderForString(TestFileName, input);
-            var log = new LogSource(manager, LogGuid);
+            var log = new LogSource(env.Log, LogGuid);
             var logTarget = new ListLogTarget();
-            manager.RegisterTarget(logTarget);
+            env.Log.RegisterTarget(logTarget);
 
             using (var tokenizer = new PasPasPas.Parsing.Tokenizer.Tokenizer(env, patterns, reader)) {
                 while (reader.CurrentFile != null && !reader.CurrentFile.AtEof) {

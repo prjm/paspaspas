@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Collections.Generic;
+using System.Text;
 using PasPasPas.Infrastructure.Files;
 using PasPasPas.Infrastructure.Log;
 
@@ -28,5 +29,10 @@ namespace PasPasPas.Infrastructure.Environment {
         ///     string pool for single chars
         /// </summary>
         CharsAsString CharStringPool { get; }
+
+        /// <summary>
+        ///     enumerated entries
+        /// </summary>
+        IEnumerable<object> Entries { get; }
     }
 }

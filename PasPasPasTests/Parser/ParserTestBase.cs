@@ -11,10 +11,12 @@ using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Api;
 using PasPasPas.Infrastructure.Environment;
+using PasPasPas.Parsing;
+using PasPasPasTests.Common;
 
-namespace PasPasPasTests {
+namespace PasPasPasTests.Parser {
 
-    public class ParserTestBase : TestBase {
+    public class ParserTestBase : CommonTest {
 
         protected OptionSet TestOptions
             = null;
@@ -57,13 +59,12 @@ namespace PasPasPasTests {
             if (string.IsNullOrEmpty(output))
                 output = input;
 
-            TestOptions = new OptionSet(null);
+            TestOptions = new OptionSet(CreateEnvironment());
             ClearOptions();
             return;
 
             /*
 
-            var logManager = new LogManager();
             var environment = new ParserServices(logManager);
             var log = new LogTarget();
             environment.Options = TestOptions;
@@ -112,10 +113,10 @@ namespace PasPasPasTests {
         }
 
         protected void RunAstTest<T>(string completeInput, Func<object, T> searchFunction, T expectedResult, params Guid[] errorMessages) {
+            var env = CreateEnvironment();
             var msgs = new List<ILogMessage>();
-            var logMgr = new LogManager();
             var log = new LogTarget();
-            logMgr.RegisterTarget(log);
+            env.Log.RegisterTarget(log);
 
             var hasError = false;
             var errorText = string.Empty;
@@ -132,18 +133,18 @@ namespace PasPasPasTests {
 
             foreach (var input in completeInput.Split('§')) {
 
-                var tree = RunAstTest(input, logMgr, msgs);
+                var tree = RunAstTest(input, env, msgs);
                 Assert.AreEqual(string.Empty, errorText);
                 Assert.IsFalse(hasError);
 
 
-                var visitor = new TreeTransformer(project) { LogManager = logMgr };
+                var visitor = new TreeTransformer(project) { LogManager = env.Log };
                 tree.Accept(visitor.AsVisitor());
 
                 var astVisitor = new AstVisitor<T>() { SearchFunction = searchFunction };
                 visitor.Project.Accept(astVisitor.AsVisitor());
 
-                var validator = new StructureValidator() { Manager = logMgr };
+                var validator = new StructureValidator() { Manager = env.Log };
                 visitor.Project.Accept(validator.AsVisitor());
 
                 Assert.AreEqual(expectedResult, astVisitor.Result);
@@ -159,8 +160,7 @@ namespace PasPasPasTests {
         }
 
 
-        protected ISyntaxPart RunAstTest(string input, LogManager logManager, IList<ILogMessage> messages) {
-            var env = CreateEnvironment();
+        protected ISyntaxPart RunAstTest(string input, IParserEnvironment env, IList<ILogMessage> messages) {
             TestOptions = new OptionSet(env);
             var api = new ParserApi(env, TestOptions);
 
@@ -187,7 +187,6 @@ namespace PasPasPasTests {
             fileAccess.AddOneTimeMockup(new StringInput("RES RES RES", resFile2));
             fileAccess.AddOneTimeMockup(new StringInput("MZE!", linkDll));
 
-            var log = new LogManager();
             var environment = new ParserServices(log) {
                 Options = TestOptions
             };
