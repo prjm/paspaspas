@@ -1,9 +1,9 @@
-﻿using PasPasPas.Parsing.Parser;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using PasPasPas.Parsing.SyntaxTree.Standard;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Infrastructure.Utils;
+using static PasPasPas.Parsing.Tokenizer.TokenizerWithLookahead;
 
 namespace PasPasPas.Parsing.SyntaxTree {
 
@@ -12,14 +12,18 @@ namespace PasPasPas.Parsing.SyntaxTree {
     /// </summary>
     public class Terminal : StandardSyntaxTreeBase {
 
-        private Token token;
+        private readonly Token token;
+        private readonly string prefix;
+        private readonly string suffix;
 
         /// <summary>
         ///     create a new terminal token
         /// </summary>
         /// <param name="baseToken"></param>
-        public Terminal(Token baseToken) {
-            token = baseToken;
+        public Terminal(TokenSequence baseToken) {
+            token = baseToken.Value;
+            prefix = baseToken.Prefix;
+            suffix = baseToken.Suffix;
         }
 
         /// <summary>
@@ -45,6 +49,12 @@ namespace PasPasPas.Parsing.SyntaxTree {
         /// </summary>
         public int Kind
             => Token.Kind;
+
+        public string Suffix
+            => suffix;
+
+        public string Prefix
+            => prefix;
 
         /// <summary>
         ///     accept visitor

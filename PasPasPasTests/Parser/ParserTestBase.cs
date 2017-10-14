@@ -61,19 +61,15 @@ namespace PasPasPasTests.Parser {
 
             TestOptions = new OptionSet(CreateEnvironment());
             ClearOptions();
-            return;
 
-            /*
-
-            var environment = new ParserServices(logManager);
             var log = new LogTarget();
-            environment.Options = TestOptions;
+            var fileAccess = new StandardFileAccess();
+            var env = new DefaultEnvironment(fileAccess);
+            var api = new ParserApi(env, TestOptions);
 
-            var parser = new StandardParser(environment);
-            using (var inputFile = new StringInput(input, new FileReference("test.pas")))
-            using (var reader = new OldStackedFileReader()) {
-                reader.AddFile(inputFile);
-                parser.BaseTokenizer = new StandardTokenizer(environment, reader);
+            env.Log.RegisterTarget(log);
+
+            using (var parser = api.CreateParserForString("test.pas", input)) {
                 var hasError = false;
                 var errorText = string.Empty;
 
@@ -84,16 +80,13 @@ namespace PasPasPasTests.Parser {
                     y.Message.Severity == MessageSeverity.FatalError;
                 };
 
-
-                ISyntaxPart result = parser.Parse();
+                var result = parser.Parse();
                 var visitor = new TerminalVisitor();
                 result.Accept(visitor.AsVisitor());
                 Assert.AreEqual(output, visitor.ResultBuilder.ToString());
                 Assert.AreEqual(string.Empty, errorText);
                 Assert.IsFalse(hasError);
             }
-
-            */
         }
 
         private class AstVisitor<T> : IStartEndVisitor {

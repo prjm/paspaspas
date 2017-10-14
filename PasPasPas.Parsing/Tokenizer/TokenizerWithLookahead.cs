@@ -35,22 +35,34 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         public class TokenSequence : IPoolItem {
 
-            private string prefix = null;
-            private string suffix = null;
-            public Token Value = default;
+            private string prefix
+                = string.Empty;
+
+            private string suffix
+                = string.Empty;
+
+            public Token Value { get; set; }
+
+            public string Prefix
+                => prefix;
+
+            public string Suffix
+                => suffix;
 
             public void AssignPrefix(Queue<Token> tokens, IParserEnvironment environment) {
-                using (var sb = environment.StringBuilderPool.Borrow()) {
+                using (var poolItem = environment.StringBuilderPool.Borrow()) {
+                    var sb = poolItem.Data;
                     while (tokens.Count > 0)
-                        sb.Data.Append(tokens.Dequeue().Value);
+                        sb.Append(tokens.Dequeue().Value);
                     prefix = sb.ToString();
                 }
             }
 
             public void AssignSuffix(Queue<Token> tokens, IParserEnvironment environment) {
-                using (var sb = environment.StringBuilderPool.Borrow()) {
+                using (var poolItem = environment.StringBuilderPool.Borrow()) {
+                    var sb = poolItem.Data;
                     while (tokens.Count > 0)
-                        sb.Data.Append(tokens.Dequeue().Value);
+                        sb.Append(tokens.Dequeue().Value);
                     suffix = sb.ToString();
                 }
             }
@@ -59,6 +71,16 @@ namespace PasPasPas.Parsing.Tokenizer {
                 prefix = null;
                 suffix = null;
                 Value = default;
+            }
+
+            public bool MatchesKind(int[] tokenKind) {
+
+                for (var i = 0; i < tokenKind.Length; i++) {
+                    if (tokenKind[i] == Value.Kind)
+                        return true;
+                }
+
+                return false;
             }
         }
 
@@ -193,6 +215,12 @@ namespace PasPasPas.Parsing.Tokenizer {
         ///     gets the current token
         /// </summary>
         public Token CurrentToken
+            => LookAhead(0).Value;
+
+        /// <summary>
+        ///     gets the current token
+        /// </summary>
+        public TokenSequence CurrentTokenSequence
             => LookAhead(0);
 
         public bool AtEof
@@ -215,7 +243,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         /// <param name="number">number of tokens to look ahead</param>
         /// <returns>token</returns>
-        public Token LookAhead(int number) {
+        public TokenSequence LookAhead(int number) {
             checked {
                 while (!BaseTokenizer.AtEof && (tokenList.Count < Math.Max(2, 1 + number))) {
                     InternalFetchNextToken();
@@ -223,10 +251,12 @@ namespace PasPasPas.Parsing.Tokenizer {
             }
 
             if (tokenList.Count <= number) {
-                return Token.Empty;
+                return new TokenSequence() {
+                    Value = Token.Empty
+                };
             }
             else {
-                return tokenList[number].Data.Value;
+                return tokenList[number].Data;
             }
         }
 

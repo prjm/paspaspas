@@ -2526,7 +2526,7 @@ namespace PasPasPas.Parsing.Parser {
             ContinueWithOrMissing(result, TokenKind.Colon);
             result.FieldType = ParseTypeSpecification(result);
             result.Hint = ParseHints(result, false);
-            if (requireSemicolon)
+            if (requireSemicolon && (!Match(TokenKind.End)))
                 ContinueWithOrMissing(result, TokenKind.Semicolon);
             return result;
         }
@@ -3614,12 +3614,13 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("Attributes", "{ '[' Attribute | AssemblyAttribue ']' }")]
         private UserAttributes ParseAttributes(IExtendableSyntaxPart parent, UserAttributes result = null) {
-            if (result == null) {
-                result = new UserAttributes();
-                parent.Add(result);
-            }
-
             while (Match(TokenKind.OpenBraces)) {
+
+                if (result == null) {
+                    result = new UserAttributes();
+                    parent.Add(result);
+                }
+
                 if (LookAhead(1, TokenKind.Assembly)) {
                     ParseAssemblyAttribute(result);
                 }
@@ -4215,10 +4216,10 @@ return true;
 
             var token = Tokenizer.LookAhead(lookAhead);
 
-            if (!allowReservedWords && reservedWords.Contains(token.Kind))
+            if (!allowReservedWords && reservedWords.Contains(token.Value.Kind))
                 return false;
 
-            return Tokenizer.Keywords.ContainsKey(token.Value);
+            return Tokenizer.Keywords.ContainsKey(token.Value.Value);
         }
 
 

@@ -2,9 +2,7 @@
 
 namespace PasPasPasTests.Parser {
 
-
     public class TestDeclarations : ParserTestBase {
-
 
         [Fact]
         public void TestConstants() {
@@ -109,7 +107,7 @@ namespace PasPasPasTests.Parser {
             ParseString("program test; type x = record helper for x const x=x; end; .");
             ParseString("program test; type x = record helper for x private class [Result: unsafe] function x:x; end; .");
             ParseString("program test; type x = record helper for x private class function x:x; end; .");
-            ParseString("program test; type x = record helper for x private function x:x; end; .");
+            ParseString("program test; type x = record helper for x private function z:z; end; .");
             ParseString("program test; type x = class property x : x<x,x>.x<x>.x read x; end; .");
             ParseString("program test; type x = type of TObject; begin end .");
             ParseString("program test; type x = record private [weak] x: x; private x:x end; .");
@@ -119,14 +117,14 @@ namespace PasPasPasTests.Parser {
             ParseString("program test; type x = record private x:x end; .");
             ParseString("program test; type x = class procedure x; assembler; end; .");
             ParseString("program test; type x = class procedure x; overload; deprecated 'x'; procedure x; end; .");
-            ParseString("program test; type x = class procedure x(x:x;x:x); ovrride; end; .");
+            ParseString("program test; type x = class procedure x(x:x;x:x); override; end; .");
             ParseString("program test; type x = class property k: y<x> read k write k default true; property x : y read x write x default 0; end; .");
             ParseString("program test; type x = class property k: y<x,x> read k write k default true; property x : y read x write x default 0; end; .");
             ParseString("program test; type x = class property k: y read k write k default true; property x : y read x write x default 0; end; .");
             ParseString("program test; type x = class property x : Integer read x default 0; end; .");
             ParseString("program test; type x = class function x : Reference; end; .");
             ParseString("program test; type x = dispinterface property x read x; default; end; .");
-            ParseString("program test; type x = dispinterface; .");
+            ParseString("program test; type x = dispinterface end; .");
             ParseString("program test; const x : procedure = 5; .");
             ParseString("program test; const x : procedure () = 5; .");
             ParseString("program test; const x : procedure (x : Pointer) = 5; .");

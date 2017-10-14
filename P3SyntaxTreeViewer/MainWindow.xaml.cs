@@ -54,10 +54,10 @@ namespace P3SyntaxTreeViewer {
             var task = new Task(() => {
                 var env = CreateEnvironment();
                 var listLog = new ListLogTarget();
-                env.env.Log.RegisterTarget(listLog);
+                env.Log.RegisterTarget(listLog);
 
-                var cst = Parse(env.env, env.options, code);
-                var visitor = new TreeTransformer(new ProjectRoot()) { LogManager = (LogManager)env.env.Log };
+                var cst = Parse(env, code);
+                var visitor = new TreeTransformer(new ProjectRoot()) { LogManager = (LogManager)env.Log };
 
                 cst.Accept(visitor.AsVisitor());
 
@@ -123,16 +123,16 @@ namespace P3SyntaxTreeViewer {
             treeViewItem.IsExpanded = true;
         }
 
-        private ISyntaxPart Parse(IParserEnvironment env, OptionSet options, string code) {
-            var parserApi = new ParserApi(env, null);
+        private ISyntaxPart Parse(IParserEnvironment env, string code) {
+            var parserApi = new ParserApi(env);
             using (var parser = parserApi.CreateParserForString("z.x.pas", code)) {
                 return parser.Parse();
             }
         }
 
 
-        private (IParserEnvironment env, OptionSet options) CreateEnvironment()
-            => (null, new OptionSet(null));
+        private IParserEnvironment CreateEnvironment()
+            => new DefaultEnvironment(new StandardFileAccess());
 
         private void Code_TextChanged(object sender, TextChangedEventArgs e)
             => UpdateTrees();

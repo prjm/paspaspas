@@ -163,13 +163,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <returns><c>true</c> if the token kind matches</returns>
         protected virtual bool LookAhead(int numberOfTokens, params int[] tokenKind) {
             var token = tokenizer.LookAhead(numberOfTokens);
-
-            for (var i = 0; i < tokenKind.Length; i++) {
-                if (tokenKind[i] == token.Kind)
-                    return true;
-            }
-
-            return false;
+            return token.MatchesKind(tokenKind);
         }
 
         /// <summary>
@@ -448,7 +442,7 @@ namespace PasPasPas.Parsing.Parser {
                 return false;
             }
 
-            var terminal = new Terminal(CurrentToken());
+            var terminal = new Terminal(tokenizer.CurrentTokenSequence);
             part.Add(terminal);
             FetchNextToken();
             return true;
@@ -474,7 +468,7 @@ namespace PasPasPas.Parsing.Parser {
                 return false;
             }
 
-            var terminal = new Terminal(CurrentToken());
+            var terminal = new Terminal(tokenizer.CurrentTokenSequence);
             part.Add(terminal);
             FetchNextToken();
             return true;
@@ -502,7 +496,7 @@ namespace PasPasPas.Parsing.Parser {
                 return false;
             }
 
-            var terminal = new Terminal(CurrentToken());
+            var terminal = new Terminal(tokenizer.CurrentTokenSequence);
             part.Add(terminal);
             FetchNextToken();
             return true;
@@ -534,7 +528,7 @@ namespace PasPasPas.Parsing.Parser {
                 return false;
             }
 
-            var terminal = new Terminal(CurrentToken());
+            var terminal = new Terminal(tokenizer.CurrentTokenSequence);
             part.Add(terminal);
             FetchNextToken();
             return true;
@@ -568,7 +562,7 @@ namespace PasPasPas.Parsing.Parser {
                 return false;
             }
 
-            var terminal = new Terminal(CurrentToken());
+            var terminal = new Terminal(tokenizer.CurrentTokenSequence);
             part.Add(terminal);
             FetchNextToken();
             return true;
@@ -604,7 +598,7 @@ namespace PasPasPas.Parsing.Parser {
                 return false;
             }
 
-            var terminal = new Terminal(CurrentToken());
+            var terminal = new Terminal(tokenizer.CurrentTokenSequence);
             part.Add(terminal);
             FetchNextToken();
             return true;
@@ -644,7 +638,7 @@ namespace PasPasPas.Parsing.Parser {
                 return false;
             }
 
-            var terminal = new Terminal(CurrentToken());
+            var terminal = new Terminal(tokenizer.CurrentTokenSequence);
             part.Add(terminal);
             FetchNextToken();
             return true;
@@ -683,7 +677,7 @@ namespace PasPasPas.Parsing.Parser {
                 return false;
             }
 
-            var terminal = new Terminal(CurrentToken());
+            var terminal = new Terminal(tokenizer.CurrentTokenSequence);
             part.Add(terminal);
             FetchNextToken();
             return true;
@@ -725,7 +719,7 @@ namespace PasPasPas.Parsing.Parser {
                 return false;
             }
 
-            var terminal = new Terminal(CurrentToken());
+            var terminal = new Terminal(tokenizer.CurrentTokenSequence);
             part.Add(terminal);
             FetchNextToken();
             return true;
@@ -735,7 +729,7 @@ namespace PasPasPas.Parsing.Parser {
             parent.Add(result);
 
             if (Match(tokenKind)) {
-                var terminal = new Terminal(CurrentToken());
+                var terminal = new Terminal(tokenizer.CurrentTokenSequence);
                 result.Add(terminal);
             }
             else {
@@ -749,7 +743,7 @@ namespace PasPasPas.Parsing.Parser {
             parent.Add(result);
 
             if (Match(tokenKind1, tokenKind2)) {
-                var terminal = new Terminal(CurrentToken());
+                var terminal = new Terminal(tokenizer.CurrentTokenSequence);
                 result.Add(terminal);
             }
             else {
@@ -763,7 +757,7 @@ namespace PasPasPas.Parsing.Parser {
             parent.Add(result);
 
             if (Match(tokenKind1, tokenKind2, tokenKind3)) {
-                var terminal = new Terminal(CurrentToken());
+                var terminal = new Terminal(tokenizer.CurrentTokenSequence);
                 result.Add(terminal);
             }
             else {
@@ -777,7 +771,7 @@ namespace PasPasPas.Parsing.Parser {
             parent.Add(result);
 
             if (Match(tokenKind1, tokenKind2, tokenKind3, tokenKind4)) {
-                var terminal = new Terminal(CurrentToken());
+                var terminal = new Terminal(tokenizer.CurrentTokenSequence);
                 result.Add(terminal);
             }
             else {
@@ -791,7 +785,7 @@ namespace PasPasPas.Parsing.Parser {
             parent.Add(result);
 
             if (Match(tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5)) {
-                var terminal = new Terminal(CurrentToken());
+                var terminal = new Terminal(tokenizer.CurrentTokenSequence);
                 result.Add(terminal);
             }
             else {
@@ -805,7 +799,7 @@ namespace PasPasPas.Parsing.Parser {
             parent.Add(result);
 
             if (Match(tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5, tokenKind6)) {
-                var terminal = new Terminal(CurrentToken());
+                var terminal = new Terminal(tokenizer.CurrentTokenSequence);
                 result.Add(terminal);
             }
             else {
@@ -834,7 +828,7 @@ namespace PasPasPas.Parsing.Parser {
         protected T CreateByTerminal<T>(T result, int tokenKind) where T : IExtendableSyntaxPart {
 
             if (Match(tokenKind)) {
-                var terminal = new Terminal(CurrentToken());
+                var terminal = new Terminal(tokenizer.CurrentTokenSequence);
                 result.Add(terminal);
             }
             else {
@@ -856,7 +850,7 @@ namespace PasPasPas.Parsing.Parser {
         protected T CreateByTerminal<T>(T result, int tokenKind1, int tokenKind2) where T : IExtendableSyntaxPart {
 
             if (Match(tokenKind1, tokenKind2)) {
-                var terminal = new Terminal(CurrentToken());
+                var terminal = new Terminal(tokenizer.CurrentTokenSequence);
                 result.Add(terminal);
             }
             else {
@@ -879,7 +873,7 @@ namespace PasPasPas.Parsing.Parser {
         protected T CreateByTerminal<T>(T result, int tokenKind1, int tokenKind2, int tokenKind3) where T : IExtendableSyntaxPart {
 
             if (Match(tokenKind1, tokenKind2, tokenKind3)) {
-                var terminal = new Terminal(CurrentToken());
+                var terminal = new Terminal(tokenizer.CurrentTokenSequence);
                 result.Add(terminal);
             }
             else {
@@ -903,7 +897,7 @@ namespace PasPasPas.Parsing.Parser {
         protected T CreateByTerminal<T>(T result, int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4) where T : IExtendableSyntaxPart {
 
             if (Match(tokenKind1, tokenKind2, tokenKind3, tokenKind4)) {
-                var terminal = new Terminal(CurrentToken());
+                var terminal = new Terminal(tokenizer.CurrentTokenSequence);
                 result.Add(terminal);
             }
             else {
@@ -929,7 +923,7 @@ namespace PasPasPas.Parsing.Parser {
         protected T CreateByTerminal<T>(T result, int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5) where T : IExtendableSyntaxPart {
 
             if (Match(tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5)) {
-                var terminal = new Terminal(CurrentToken());
+                var terminal = new Terminal(tokenizer.CurrentTokenSequence);
                 result.Add(terminal);
             }
             else {
@@ -956,7 +950,7 @@ namespace PasPasPas.Parsing.Parser {
         protected T CreateByTerminal<T>(T result, int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5, int tokenKind6) where T : IExtendableSyntaxPart {
 
             if (Match(tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5, tokenKind6)) {
-                var terminal = new Terminal(CurrentToken());
+                var terminal = new Terminal(tokenizer.CurrentTokenSequence);
                 result.Add(terminal);
             }
             else {
@@ -984,7 +978,7 @@ namespace PasPasPas.Parsing.Parser {
         protected T CreateByTerminal<T>(T result, int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5, int tokenKind6, int tokenKind7, int tokenKind8) where T : IExtendableSyntaxPart, new() {
 
             if (Match(tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5, tokenKind6, tokenKind7, tokenKind8)) {
-                var terminal = new Terminal(CurrentToken());
+                var terminal = new Terminal(tokenizer.CurrentTokenSequence);
                 result.Add(terminal);
             }
             else {
@@ -1002,7 +996,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="parent"></param>
         /// <returns></returns>
         protected Terminal CreateByError(IExtendableSyntaxPart parent) {
-            var invalid = new Terminal(CurrentToken()) {
+            var invalid = new Terminal(tokenizer.CurrentTokenSequence) {
                 ParentItem = parent
             };
             parent.Add(invalid);
