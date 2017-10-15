@@ -140,6 +140,8 @@ namespace PasPasPasTests.Parser {
             ParseString("program test; const x : ( x = 1 , y = 1 ) = 5; .");
             ParseString("program test; const x : a = 5; .");
             ParseString("program test; const x : 5..5 = 5; .");
+            ParseString("program test; const x : 5..5 = 5; .");
+            ParseString("program test; const x : 1 = 0..true = 1 = 1; .");
             ParseString("program test; type x = Pointer; .");
             ParseString("program test; type x<a> = Pointer; .");
             ParseString("program test; type x<a, b> = Pointer; .");

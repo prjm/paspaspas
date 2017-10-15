@@ -1928,7 +1928,7 @@ namespace PasPasPas.Parsing.Parser {
             result.Identifier = RequireIdentifier(result);
 
             if (ContinueWith(result, TokenKind.Colon)) {
-                result.TypeSpecification = ParseTypeSpecification(result);
+                result.TypeSpecification = ParseTypeSpecification(result, true);
             }
 
             ContinueWithOrMissing(result, TokenKind.EqualsSign);
@@ -1994,7 +1994,7 @@ namespace PasPasPas.Parsing.Parser {
         #region ParseTypeSpecification
 
         [Rule("TypeSpecification", "StructType | PointerType | StringType | ProcedureType | SimpleType ")]
-        private TypeSpecification ParseTypeSpecification(IExtendableSyntaxPart parent) {
+        private TypeSpecification ParseTypeSpecification(IExtendableSyntaxPart parent, bool constDeclaration = false) {
             var result = new TypeSpecification();
             parent.Add(result);
 
@@ -2024,7 +2024,7 @@ namespace PasPasPas.Parsing.Parser {
                 return result;
             }
 
-            result.SimpleType = ParseSimpleType(result);
+            result.SimpleType = ParseSimpleType(result, constDeclaration);
             return result;
         }
 
@@ -2032,7 +2032,7 @@ namespace PasPasPas.Parsing.Parser {
         #region ParseSimpleType
 
         [Rule("SimpleType", "EnumType | (ConstExpression [ '..' ConstExpression ]) | ([ 'type' ] GenericNamespaceName {'.' GenericNamespaceName })")]
-        private SimpleType ParseSimpleType(IExtendableSyntaxPart parent) {
+        private SimpleType ParseSimpleType(IExtendableSyntaxPart parent, bool constDeclaration = false) {
             var result = new SimpleType();
             parent.Add(result);
 
@@ -2053,9 +2053,9 @@ namespace PasPasPas.Parsing.Parser {
                 return result;
             }
 
-            result.SubrangeStart = ParseConstantExpression(result);
+            result.SubrangeStart = ParseConstantExpression(result, false, constDeclaration);
             if (ContinueWith(result, TokenKind.DotDot)) {
-                result.SubrangeEnd = ParseConstantExpression(result);
+                result.SubrangeEnd = ParseConstantExpression(result, false, constDeclaration);
             }
 
             return result;
@@ -3696,7 +3696,7 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         [Rule("ConstantExpression", " '(' ( RecordConstant | ConstantExpression ) ')' | Expression")]
-        private ConstantExpression ParseConstantExpression(IExtendableSyntaxPart parent, bool fromDesignator = false) {
+        private ConstantExpression ParseConstantExpression(IExtendableSyntaxPart parent, bool fromDesignator = false, bool fromTypeConstExpression = false) {
             var result = new ConstantExpression();
             parent.Add(result);
 
@@ -3725,7 +3725,7 @@ namespace PasPasPas.Parsing.Parser {
                 }
             }
             else {
-                result.Value = ParseExpression(result);
+                result.Value = ParseExpression(result, fromTypeConstExpression);
             }
 
             return result;
@@ -3748,7 +3748,7 @@ namespace PasPasPas.Parsing.Parser {
         #region ParseExpression
 
         [Rule("Expression", "SimpleExpression [ ('<'|'<='|'>'|'>='|'<>'|'='|'in'|'is') SimpleExpression ] | ClosureExpression")]
-        private Expression ParseExpression(IExtendableSyntaxPart parent) {
+        private Expression ParseExpression(IExtendableSyntaxPart parent, bool fromConstTypeDeclaration = false) {
             var result = new Expression();
             parent.Add(result);
 
@@ -3757,6 +3757,10 @@ namespace PasPasPas.Parsing.Parser {
             }
             else {
                 result.LeftOperand = ParseSimpleExpression(result);
+
+                if (fromConstTypeDeclaration && !HasTokenBeforeToken(TokenKind.EqualsSign, new[] { TokenKind.Semicolon }))
+                    return result;
+
                 if (ContinueWith(result, TokenKind.LessThen, TokenKind.LessThenEquals, TokenKind.GreaterThen, TokenKind.GreaterThenEquals, TokenKind.NotEquals, TokenKind.EqualsSign, TokenKind.In, TokenKind.Is)) {
                     result.Kind = result.LastTerminalKind;
                     result.RightOperand = ParseSimpleExpression(result);

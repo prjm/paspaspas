@@ -17,14 +17,6 @@ namespace PasPasPasTests.Parser {
             ParseString("program test; const x = function (const x : string ): integer begin end ; .");
         }
 
-        class x<Q> {
-
-        }
-
-        class t {
-
-        }
-
         [Fact]
         public void TestSimpleExpressions() {
             ParseString("program test; const x = a.b.c^.d[q].d(asd:d, asd:d:d, ad:d); .");
