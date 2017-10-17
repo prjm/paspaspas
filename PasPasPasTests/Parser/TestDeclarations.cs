@@ -51,7 +51,7 @@ namespace PasPasPasTests.Parser {
         public void TestTypeDeclarations() {
             ParseString("program test; var x : x = ((x:01;x:99;x:'x';x:(x,0,0,0,0,0,0))); .");
             ParseString("program test; type x = packed record x : array[0..(High(integer) div 4) - 4] of integer; end; .");
-            ParseString("program test; const x : type dummy = type string; .");
+            ParseString("program test; const x : dummy = '5'; .");
             ParseString("program test; const x : Pointer = 5; .");
             ParseString("program test; const x : array of const = 5; .");
             ParseString("program test; const x : array of Pointer = 5; .");

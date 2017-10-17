@@ -55,7 +55,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     parented expression
         /// </summary>
-        public Expression ParenExpression { get; set; }
+        public ConstantExpression ParenExpression { get; set; }
 
         /// <summary>
         ///     plus

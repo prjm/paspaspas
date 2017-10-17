@@ -3820,7 +3820,7 @@ namespace PasPasPas.Parsing.Parser {
                 counter = counter + 1;
             }
 
-            return LookAhead(counter, TokenKind.Dot);
+            return LookAhead(counter, TokenKind.Dot, TokenKind.Circumflex);
         }
 
         [Rule("Factor", "'@' Factor  | 'not' Factor | '+' Factor | '-' Factor | '^' Identifier | Integer | HexNumber | Real | 'true' | 'false' | 'nil' | '(' Expression ')' | String | SetSection | Designator | TypeCast")]
@@ -3933,7 +3933,7 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             if (ContinueWith(result, TokenKind.OpenParen)) {
-                result.ParenExpression = ParseExpression(result);
+                result.ParenExpression = ParseConstantExpression(result, false, false);
                 ContinueWithOrMissing(result, TokenKind.CloseParen);
                 return result;
             }
@@ -3999,8 +3999,9 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             if (Match(TokenKind.OpenParen)) {
+
                 var prevDesignatorItem = parent.PartList.Count > 0 ? parent.PartList[parent.PartList.Count - 1] as DesignatorItem : null;
-                if (!hasIdentifier && ((prevDesignatorItem == null) || (prevDesignatorItem.Subitem == null))) {
+                if (!hasIdentifier && (!IsDesignator()) && ((prevDesignatorItem == null) || (prevDesignatorItem.Subitem == null))) {
                     ContinueWithOrMissing(parent, TokenKind.OpenParen);
                     var children = ParseConstantExpression(parent, true);
                     ContinueWithOrMissing(parent, TokenKind.CloseParen);
