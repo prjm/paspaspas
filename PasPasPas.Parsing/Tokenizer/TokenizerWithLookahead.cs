@@ -86,7 +86,6 @@ namespace PasPasPas.Parsing.Tokenizer {
 
         private OptionSet options;
         private TokenizerMode mode = TokenizerMode.Undefined;
-        private bool skip = false;
         private readonly IParserEnvironment environment;
 
         /// <summary>
@@ -170,7 +169,7 @@ namespace PasPasPas.Parsing.Tokenizer {
                         nextToken.Kind != TokenKind.ControlChar &&
                         nextToken.Kind != TokenKind.Comment &&
                         nextToken.Kind != TokenKind.Preprocessor &&
-                        (!skip);
+                        (!options.ConditionalCompilation.Skip);
 
                 case TokenizerMode.CompilerDirective:
                     return nextToken.Kind != TokenKind.WhiteSpace &&
@@ -200,7 +199,7 @@ namespace PasPasPas.Parsing.Tokenizer {
             var patterns = environment.Patterns.CompilerDirectivePatterns;
             var fragmentBuffer = new FileBuffer();
             var reader = new StackedFileReader(fragmentBuffer);
-            var macroValue = "";
+            var macroValue = nextToken.ParsedValue as string;
             fragmentBuffer.Add(path, new StringBufferReadable(macroValue));
             reader.AddFileToRead(path);
 

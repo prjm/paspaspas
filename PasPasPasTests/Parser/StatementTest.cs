@@ -7,7 +7,7 @@ namespace PasPasPasTests.Parser {
         [Fact]
         public void TestMiscStatements() {
             ParseString("program test; const x: array[x] of Integer = (a, {$IFNDEF X} b {$ELSE} 0 {$ENDIF}, c); begin end.");
-            ParseString("program test; var x: x.x<x,x,x,x>.x.x begin end.");
+            ParseString("program test; var x: x.x<x,x,x,x>.x.x; begin end.");
             ParseString("program test; procedure x([ref] a, [ref] b: string); .");
             ParseString("program test; begin a := 5.ToString(); end .");
             ParseString("program test; begin a := 5.0.ToString(); end .");
@@ -28,10 +28,10 @@ namespace PasPasPasTests.Parser {
             ParseString("program test; begin a.goto(5); end .");
             ParseString("program test; begin a(x:=z,,y:=z); end .");
             ParseString("program test; begin a(z,,z); end .");
-            ParseString("unit test; interface implementation procedure x; type x = record case 0: (v: w); 1: (z: T); end ; begin end .");
+            ParseString("unit test; interface implementation procedure x; type x = record case integer of 0: (v: w); 1: (z: T); end ; end .");
             ParseString("program test; begin x := string(z); end .");
-            ParseString("program test; begin @x := z; end .");
-            ParseString("program test; label x; begin x: ; end .");
+            ParseString("program test; begin x := @@@@z; end .");
+            ParseString("program test; label x; begin x: z := 0; end .");
             ParseString("program test; begin (x as TB).z(); end .");
         }
 

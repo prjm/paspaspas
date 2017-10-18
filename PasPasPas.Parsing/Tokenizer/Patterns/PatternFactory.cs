@@ -353,7 +353,7 @@ namespace PasPasPas.Parsing.Tokenizer.Patterns {
 
             var lparen = result.AddPattern('(', TokenKind.OpenParen);
             lparen.Add('.', TokenKind.OpenBraces);
-            lparen.Add('*', new SequenceGroupTokenValue(TokenKind.Comment, "*)")).Add('$', new SequenceGroupTokenValue(TokenKind.Preprocessor, "*)"));
+            lparen.Add('*', new SequenceGroupTokenValue(TokenKind.Comment, "*)")).Add('$', new SequenceGroupTokenValue(TokenKind.Preprocessor, "*)", true));
 
             result.AddPattern(')', TokenKind.CloseParen);
             result.AddPattern(';', TokenKind.Semicolon);
@@ -375,7 +375,7 @@ namespace PasPasPas.Parsing.Tokenizer.Patterns {
             lt.Add('=', TokenKind.LessThenEquals);
             lt.Add('>', TokenKind.NotEquals);
 
-            result.AddPattern('{', new SequenceGroupTokenValue(TokenKind.Comment, "}")).Add('$', new SequenceGroupTokenValue(TokenKind.Preprocessor, "}"));
+            result.AddPattern('{', new SequenceGroupTokenValue(TokenKind.Comment, "}")).Add('$', new SequenceGroupTokenValue(TokenKind.Preprocessor, "}", true));
             result.AddPattern('$', new CharacterClassTokenGroupValue(TokenKind.HexNumber, new DigitCharClass(true), 2, LiteralParserKind.HexNumbers, Tokenizer.IncompleteHexNumber));
             result.AddPattern(new WhiteSpaceCharacterClass(), new CharacterClassTokenGroupValue(TokenKind.WhiteSpace, new WhiteSpaceCharacterClass()));
             result.AddPattern(new IdentifierCharacterClass(), new IdentifierTokenGroupValue(keywords, allowAmpersand: true));

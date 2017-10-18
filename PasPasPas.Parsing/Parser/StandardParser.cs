@@ -1243,7 +1243,7 @@ namespace PasPasPas.Parsing.Parser {
 
             if (Match(TokenKind.And, TokenKind.Or, TokenKind.Xor)) {
                 result.Kind = CurrentToken().Kind;
-                FetchNextToken();
+                ContinueWith(result, TokenKind.And, TokenKind.Or, TokenKind.Xor);
                 result.RightTerm = ParseAssemblyOperand(result);
             }
 
@@ -2477,6 +2477,7 @@ namespace PasPasPas.Parsing.Parser {
 
             while (!Match(TokenKind.Undefined, TokenKind.End)) {
                 ParseRecordVariant(result);
+                ContinueWith(result, TokenKind.Semicolon);
             }
 
             return result;
@@ -2498,7 +2499,6 @@ namespace PasPasPas.Parsing.Parser {
             ContinueWithOrMissing(result, TokenKind.OpenParen);
             result.FieldList = ParseRecordFieldList(result, false);
             ContinueWithOrMissing(result, TokenKind.CloseParen);
-            ContinueWithOrMissing(result, TokenKind.Semicolon);
             return result;
         }
 
@@ -2526,7 +2526,7 @@ namespace PasPasPas.Parsing.Parser {
             ContinueWithOrMissing(result, TokenKind.Colon);
             result.FieldType = ParseTypeSpecification(result);
             result.Hint = ParseHints(result, false);
-            if (requireSemicolon && (!Match(TokenKind.End)))
+            if (Match(TokenKind.Semicolon) || (requireSemicolon && (!Match(TokenKind.End))))
                 ContinueWithOrMissing(result, TokenKind.Semicolon);
             return result;
         }

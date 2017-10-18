@@ -65,8 +65,8 @@ namespace PasPasPasTests.Tokenizer {
         internal void IsHexNumber(string input, object value)
             => IsToken(TokenKind.HexNumber, input, input, value);
 
-        internal void IsPreprocessor(string input)
-            => IsToken(TokenKind.Preprocessor, input, input);
+        internal void IsPreprocessor(string input, string value)
+            => IsToken(TokenKind.Preprocessor, input, input, value);
 
         internal void IsComment(string input)
             => IsToken(TokenKind.Comment, input, input);

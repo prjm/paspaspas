@@ -52,8 +52,10 @@ namespace PasPasPasTests.Tokenizer {
 
         [Fact]
         public void TestIsPreprocessorCommand() {
-            IsPreprocessor("{$A}");
-            IsPreprocessor("(*$HPPEMIT '}'*)");
+            IsPreprocessor("{$}", "");
+            IsPreprocessor("{$ }", " ");
+            IsPreprocessor("{$A}", "A");
+            IsPreprocessor("(*$HPPEMIT '}'*)", "HPPEMIT '}'");
         }
 
         [Fact]
@@ -120,7 +122,7 @@ namespace PasPasPasTests.Tokenizer {
             IsToken(TokenKind.GreaterThenEquals, ">=");
             IsToken(TokenKind.NotEquals, "<>");
             IsToken(TokenKind.Comment, "{ ddd }");
-            IsToken(TokenKind.Preprocessor, "{$ ddd }");
+            IsToken(TokenKind.Preprocessor, "{$ ddd }", "{$ ddd }", " ddd ");
             IsToken(TokenKind.WhiteSpace, "  ");
             IsToken(TokenKind.HexNumber, "$0000", "$0000", (byte)0);
             IsToken(TokenKind.DoubleQuotedString, "\"\"", "\"\"", string.Empty);
