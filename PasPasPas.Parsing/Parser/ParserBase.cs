@@ -48,15 +48,17 @@ namespace PasPasPas.Parsing.Parser {
         private TokenizerWithLookahead tokenizer;
         private readonly LogSource logSource;
         private readonly OptionSet options;
+        private readonly IParserEnvironment environment;
 
         /// <summary>
         ///     creates a new parser
         /// </summary>
         /// <param name="tokenizerWithLookAhead"></param>
         /// <param name="environment">environment</param>
-        protected ParserBase(ILogManager log, OptionSet parserOptions, TokenizerWithLookahead tokenizerWithLookAhead) {
+        protected ParserBase(IParserEnvironment env, OptionSet parserOptions, TokenizerWithLookahead tokenizerWithLookAhead) {
+            environment = env;
             tokenizer = tokenizerWithLookAhead;
-            logSource = new LogSource(log, ParserLogMessage);
+            logSource = new LogSource(env.Log, ParserLogMessage);
             options = parserOptions;
         }
 
@@ -66,17 +68,17 @@ namespace PasPasPas.Parsing.Parser {
         public ITokenizer BaseTokenizer
             => tokenizer.BaseTokenizer;
 
+        public IParserEnvironment Environment
+            => environment;
+
+        public OptionSet Options
+            => options;
+
         /// <summary>
         ///     wrapper tokenizer
         /// </summary>
         public TokenizerWithLookahead Tokenizer
             => tokenizer;
-
-
-        /// <summary>
-        ///     basic working environment
-        /// </summary>
-        public OptionSet Options { get; }
 
 
         /// <summary>

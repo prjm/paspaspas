@@ -10,7 +10,7 @@ namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
         /// <summary>
         ///     image base adress
         /// </summary>
-        public int BaseValue { get; set; }
+        public ulong BaseValue { get; set; }
 
         /// <summary>
         ///     accept visitor

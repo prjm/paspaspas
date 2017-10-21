@@ -28,7 +28,7 @@ namespace PasPasPas.Parsing.Parser {
         ///     creates a new standard parser
         /// </summary>
         public StandardParser(IParserEnvironment env, OptionSet options, StackedFileReader input) :
-            base(env.Log, options, CreateTokenizer(env, input, options)) { }
+            base(env, options, CreateTokenizer(env, input, options)) { }
 
         #region Reserved Words
 

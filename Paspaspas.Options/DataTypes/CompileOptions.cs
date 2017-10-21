@@ -22,7 +22,7 @@
             ExcessPrecision = new DerivedValueOption<ExcessPrecisionForResult>(baseOptions?.ExcessPrecision);
             HighCharUnicode = new DerivedValueOption<HighCharsUnicode>(baseOptions?.HighCharUnicode);
             Hints = new DerivedValueOption<CompilerHint>(baseOptions?.Hints);
-            ImageBase = new DerivedValueOption<int>(baseOptions?.ImageBase);
+            ImageBase = new DerivedValueOption<ulong>(baseOptions?.ImageBase);
             ImplicitBuild = new DerivedValueOption<ImplicitBuildUnit>(baseOptions?.ImplicitBuild);
             ImportedData = new DerivedValueOption<ImportGlobalUnitData>(baseOptions?.ImportedData);
             IoChecks = new DerivedValueOption<IoCallCheck>(baseOptions?.IoChecks);
@@ -53,15 +53,15 @@
             OldTypeLayout = new DerivedValueOption<OldRecordTypes>(baseOptions?.OldTypeLayout);
             MinimumEnumSize = new DerivedValueOption<EnumSize>(baseOptions?.MinimumEnumSize);
             MethodInfo = new DerivedValueOption<MethodInfoRtti>(baseOptions?.MethodInfo);
-            MinimumStackMemorySize = new DerivedValueOption<long>(baseOptions?.MinimumStackMemorySize);
-            MaximumStackMemorySize = new DerivedValueOption<long>(baseOptions?.MaximumStackMemorySize);
+            MinimumStackMemorySize = new DerivedValueOption<ulong>(baseOptions?.MinimumStackMemorySize);
+            MaximumStackMemorySize = new DerivedValueOption<ulong>(baseOptions?.MaximumStackMemorySize);
             LegacyIfEnd = new DerivedValueOption<EndIfMode>(baseOptions?.LegacyIfEnd);
         }
 
         /// <summary>
         ///     image base address
         /// </summary>
-        public DerivedValueOption<int> ImageBase { get; }
+        public DerivedValueOption<ulong> ImageBase { get; }
 
         /// <summary>
         ///     value alignment
@@ -276,12 +276,12 @@
         /// <summary>
         ///     maximum stack memory size
         /// </summary>
-        public DerivedValueOption<long> MaximumStackMemorySize { get; }
+        public DerivedValueOption<ulong> MaximumStackMemorySize { get; }
 
         /// <summary>
         ///     mininun stack memory size
         /// </summary>
-        public DerivedValueOption<long> MinimumStackMemorySize { get; }
+        public DerivedValueOption<ulong> MinimumStackMemorySize { get; }
 
         /// <summary>
         ///     legacy if / endif mode

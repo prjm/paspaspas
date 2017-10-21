@@ -10,12 +10,12 @@ namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
         /// <summary>
         ///     maximum stack size
         /// </summary>
-        public int? MaxStackSize { get; set; }
+        public ulong? MaxStackSize { get; set; }
 
         /// <summary>
         ///     minimum stack size
         /// </summary>
-        public int? MinStackSize { get; set; }
+        public ulong? MinStackSize { get; set; }
 
         /// <summary>
         ///     accept visitor

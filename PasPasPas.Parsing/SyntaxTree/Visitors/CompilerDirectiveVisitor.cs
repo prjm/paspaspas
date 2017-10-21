@@ -86,6 +86,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         private readonly ILogManager log;
         private OptionSet Options { get; }
         private readonly LogSource logSource;
+        private IFileReference path;
 
         private readonly Guid logSourceId
              = new Guid(new byte[] { 0x67, 0x23, 0x1b, 0x2e, 0xf6, 0x4b, 0xdf, 0x40, 0xac, 0xf8, 0x2, 0xc3, 0x1d, 0x7c, 0x2e, 0xf2 });
@@ -94,10 +95,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     creates a new visitor
         /// </summary>
-        public CompilerDirectiveVisitor(OptionSet options, ILogManager logMgr) {
+        public CompilerDirectiveVisitor(OptionSet options, IFileReference filePath, ILogManager logMgr) {
             Options = options;
             visitor = new Visitor(this);
             log = logMgr;
+            path = filePath;
             logSource = new LogSource(log, logSourceId);
         }
 
@@ -1035,7 +1037,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
                 return;
 
-            IFileReference basePath = null;
+            var basePath = path;
             var fileName = syntaxPart?.FileName;
 
             if (basePath == null || string.IsNullOrWhiteSpace(basePath.Path))
@@ -1097,7 +1099,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (!CanVisit(syntaxPart))
                 return;
 
-            IFileReference basePath = null;
+            var basePath = path;
             var fileName = syntaxPart?.FileName;
 
             if (basePath == null || string.IsNullOrWhiteSpace(basePath.Path))
@@ -1105,7 +1107,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
             if (fileName == null || string.IsNullOrWhiteSpace(fileName))
                 return;
-
 
             var targetPath = Meta.IncludePathResolver.ResolvePath(basePath, Meta.IncludePathResolver.Files.ReferenceToFile(fileName)).TargetPath;
 

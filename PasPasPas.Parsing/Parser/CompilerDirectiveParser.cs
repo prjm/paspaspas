@@ -3,14 +3,12 @@ using System;
 using PasPasPas.Options.DataTypes;
 using PasPasPas.Options.Bundles;
 using PasPasPas.Parsing.Tokenizer;
-using PasPasPas.Infrastructure.Input;
 using PasPasPas.Parsing.SyntaxTree;
 using PasPasPas.Parsing.SyntaxTree.CompilerDirectives;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Infrastructure.Files;
 using PasPasPas.Parsing.Tokenizer.Patterns;
-using PasPasPas.Infrastructure.Environment;
 
 namespace PasPasPas.Parsing.Parser {
 
@@ -34,7 +32,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="environment">services</param>
         /// <param name="input">input file</param>
         public CompilerDirectiveParser(IParserEnvironment env, OptionSet options, StackedFileReader input)
-            : base(env.Log, options, CreateTokenizer(env, input, options)) {
+            : base(env, options, CreateTokenizer(env, input, options)) {
         }
 
         /// <summary>
@@ -306,7 +304,7 @@ namespace PasPasPas.Parsing.Parser {
                     return;
                 }
 
-                result.MinStackSize = 1; // DigitTokenGroupValue.Unwrap(result.LastTerminalToken);
+                result.MinStackSize = Environment.LiteralUnwrapper.UnwrapInteger(result.LastTerminalToken.ParsedValue);
             }
 
             if (mSwitch)
@@ -320,7 +318,7 @@ namespace PasPasPas.Parsing.Parser {
                     return;
                 }
 
-                result.MaxStackSize = 0; // DigitTokenGroupValue.Unwrap(result.LastTerminalToken);
+                result.MaxStackSize = Environment.LiteralUnwrapper.UnwrapInteger(result.LastTerminalToken.ParsedValue);
             }
         }
 
@@ -629,7 +627,7 @@ namespace PasPasPas.Parsing.Parser {
                 return;
             }
 
-            var libInfo = string.Empty; // QuotedStringTokenValue.Unwrap(result.LastTerminalToken);
+            var libInfo = Environment.LiteralUnwrapper.UnwrapString(result.LastTerminalToken.ParsedValue);
 
             switch (kind) {
                 case TokenKind.LibPrefix:
@@ -651,10 +649,10 @@ namespace PasPasPas.Parsing.Parser {
             InitByTerminal(result, parent, TokenKind.ImageBase);
 
             if (ContinueWith(result, TokenKind.Integer)) {
-                result.BaseValue = 0;// DigitTokenGroupValue.Unwrap(result.LastTerminalToken);
+                result.BaseValue = Environment.LiteralUnwrapper.UnwrapInteger(result.LastTerminalToken.ParsedValue);
             }
             else if (ContinueWith(result, TokenKind.HexNumber)) {
-                result.BaseValue = 0; // HexNumberTokenValue.Unwrap(result.LastTerminalToken);
+                result.BaseValue = Environment.LiteralUnwrapper.UnwrapHexnumber(result.LastTerminalToken.ParsedValue);
             }
             else {
                 ErrorAndSkip(parent, CompilerDirectiveParserErrors.InvalidImageBaseDirective, new[] { TokenKind.Integer, TokenKind.HexNumber });
@@ -810,8 +808,6 @@ namespace PasPasPas.Parsing.Parser {
 
         private void ParseApptypeParameter(IExtendableSyntaxPart parent) {
             var result = new AppTypeParameter();
-            InitByTerminal(result, parent, TokenKind.Apptype);
-            result = new AppTypeParameter();
             InitByTerminal(result, parent, TokenKind.Apptype);
 
             if (ContinueWith(result, TokenKind.Identifier)) {
@@ -1071,7 +1067,7 @@ namespace PasPasPas.Parsing.Parser {
                 return;
             }
 
-            var size = 99; // DigitTokenGroupValue.Unwrap(result.LastTerminalToken);
+            var size = Environment.LiteralUnwrapper.UnwrapInteger(result.LastTerminalToken.ParsedValue);
 
             switch (size) {
                 case 1:
@@ -1630,7 +1626,7 @@ namespace PasPasPas.Parsing.Parser {
             InitByTerminal(result, parent, TokenKind.DescriptionSwitchLong);
 
             if (ContinueWith(result, TokenKind.QuotedString)) {
-                result.DescriptionValue = string.Empty;// QuotedStringTokenValue.Unwrap(result.LastTerminalToken);
+                result.DescriptionValue = Environment.LiteralUnwrapper.UnwrapString(result.LastTerminalToken.ParsedValue);
             }
             else {
                 ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidDescriptionDirective, new[] { TokenKind.QuotedString });
@@ -1850,7 +1846,7 @@ namespace PasPasPas.Parsing.Parser {
             result.TypeName = result.LastTerminalValue;
 
             if (ContinueWith(result, TokenKind.QuotedString)) {
-                result.AliasName = string.Empty; // QuotedStringTokenValue.Unwrap(result.LastTerminalToken);
+                result.AliasName = Environment.LiteralUnwrapper.UnwrapString(result.LastTerminalToken.ParsedValue);
                 if (string.IsNullOrWhiteSpace(result.AliasName)) {
                     result.AliasName = null;
                     result.TypeName = null;
@@ -1998,7 +1994,7 @@ namespace PasPasPas.Parsing.Parser {
         private string ParseFileName(SyntaxPartBase parent, bool allowTimes) {
 
             if (ContinueWith(parent, TokenKind.QuotedString)) {
-                return string.Empty; // QuotedStringTokenValue.Unwrap(parent.LastTerminalToken);
+                return Environment.LiteralUnwrapper.UnwrapString(parent.LastTerminalToken.ParsedValue);
             }
 
             else if (ContinueWith(parent, TokenKind.Identifier)) {
@@ -2235,7 +2231,7 @@ namespace PasPasPas.Parsing.Parser {
                 var result = new Description();
                 InitByTerminal(result, parent, TokenKind.DebugInfoOrDescriptionSwitch);
                 ContinueWith(result, TokenKind.QuotedString);
-                result.DescriptionValue = string.Empty; // QuotedStringTokenValue.Unwrap(result.LastTerminalToken);
+                result.DescriptionValue = Environment.LiteralUnwrapper.UnwrapString(result.LastTerminalToken.ParsedValue);
             }
             else {
                 var result = new DebugInfoSwitch();
@@ -2347,8 +2343,10 @@ namespace PasPasPas.Parsing.Parser {
         ///     allow an identifier if it was tokenized as a keyword
         /// </summary>
         /// <returns></returns>
-        protected override bool AllowIdentifier()
-            => Tokenizer.Keywords.ContainsKey(CurrentToken().Value);
+        protected override bool AllowIdentifier() {
+            var token = CurrentToken().Value;
+            return (!string.IsNullOrEmpty(token)) && (Tokenizer.Keywords.ContainsKey(token));
+        }
 
     }
 

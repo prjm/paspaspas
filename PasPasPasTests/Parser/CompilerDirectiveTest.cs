@@ -63,18 +63,18 @@ namespace PasPasPasTests.Parser {
         public void TestMemStackSize() {
             Func<object> mi = () => CompilerOptions.MinimumStackMemorySize.Value;
             Func<object> ma = () => CompilerOptions.MaximumStackMemorySize.Value;
-            RunCompilerDirective("", 0L, ma);
-            RunCompilerDirective("", 0L, mi);
-            RunCompilerDirective("M 100, 200", 200L, ma);
-            RunCompilerDirective("M 100, 200", 100L, mi);
-            RunCompilerDirective("MINSTACKSIZE 300", 300L, mi);
-            RunCompilerDirective("MAXSTACKSIZE 400", 400L, ma);
-            RunCompilerDirective("MAXSTACKSIZE KAPUTT", 0L, ma, CompilerDirectiveParserErrors.InvalidStackMemorySizeDirective);
-            RunCompilerDirective("MAXSTACKSIZE ", 0L, ma, CompilerDirectiveParserErrors.InvalidStackMemorySizeDirective);
-            RunCompilerDirective("MINSTACKSIZE KAPUTT", 0L, ma, CompilerDirectiveParserErrors.InvalidStackMemorySizeDirective);
-            RunCompilerDirective("MINSTACKSIZE ", 0L, ma, CompilerDirectiveParserErrors.InvalidStackMemorySizeDirective);
-            RunCompilerDirective("M 1, KAPUTT ", 0L, ma, CompilerDirectiveParserErrors.InvalidStackMemorySizeDirective);
-            RunCompilerDirective("M 1 KAPUTT ", 0L, ma, CompilerDirectiveParserErrors.InvalidStackMemorySizeDirective);
+            RunCompilerDirective("", 0UL, ma);
+            RunCompilerDirective("", 0UL, mi);
+            RunCompilerDirective("M 100, 200", 200UL, ma);
+            RunCompilerDirective("M 100, 200", 100UL, mi);
+            RunCompilerDirective("MINSTACKSIZE 300", 300UL, mi);
+            RunCompilerDirective("MAXSTACKSIZE 400", 400UL, ma);
+            RunCompilerDirective("MAXSTACKSIZE KAPUTT", 0UL, ma, CompilerDirectiveParserErrors.InvalidStackMemorySizeDirective);
+            RunCompilerDirective("MAXSTACKSIZE ", 0UL, ma, CompilerDirectiveParserErrors.InvalidStackMemorySizeDirective);
+            RunCompilerDirective("MINSTACKSIZE KAPUTT", 0UL, ma, CompilerDirectiveParserErrors.InvalidStackMemorySizeDirective);
+            RunCompilerDirective("MINSTACKSIZE ", 0UL, ma, CompilerDirectiveParserErrors.InvalidStackMemorySizeDirective);
+            RunCompilerDirective("M 1, KAPUTT ", 0UL, ma, CompilerDirectiveParserErrors.InvalidStackMemorySizeDirective);
+            RunCompilerDirective("M 1 KAPUTT ", 0UL, ma, CompilerDirectiveParserErrors.InvalidStackMemorySizeDirective);
         }
 
         [Fact]
@@ -312,11 +312,11 @@ namespace PasPasPasTests.Parser {
         [Fact]
         public void TestImageBase() {
             Func<object> f = () => CompilerOptions.ImageBase.Value;
-            RunCompilerDirective("", 0, f);
-            RunCompilerDirective("IMAGEBASE $40000000 ", 0x40000000, f);
-            RunCompilerDirective("IMAGEBASE 40000000 ", 40000000, f);
-            RunCompilerDirective("IMAGEBASE KAPUTT ", 0, f, CompilerDirectiveParserErrors.InvalidImageBaseDirective);
-            RunCompilerDirective("IMAGEBASE ", 0, f, CompilerDirectiveParserErrors.InvalidImageBaseDirective);
+            RunCompilerDirective("", 0UL, f);
+            RunCompilerDirective("IMAGEBASE $40000000 ", 0x40000000UL, f);
+            RunCompilerDirective("IMAGEBASE 40000000 ", 40000000UL, f);
+            RunCompilerDirective("IMAGEBASE KAPUTT ", 0UL, f, CompilerDirectiveParserErrors.InvalidImageBaseDirective);
+            RunCompilerDirective("IMAGEBASE ", 0UL, f, CompilerDirectiveParserErrors.InvalidImageBaseDirective);
         }
 
         [Fact]

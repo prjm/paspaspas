@@ -13,6 +13,9 @@ using PasPasPas.Api;
 using PasPasPas.Infrastructure.Environment;
 using PasPasPas.Parsing;
 using PasPasPasTests.Common;
+using PasPasPas.Infrastructure.Files;
+using PasPasPas.Infrastructure.Input;
+using PasPasPas.Parsing.Parser;
 
 namespace PasPasPasTests.Parser {
 
@@ -166,84 +169,83 @@ namespace PasPasPasTests.Parser {
 
 
         protected void RunCompilerDirective(string directive, object expected, Func<object> actual, params Guid[] messages) {
-            /*
-            var fileAccess = (StandardFileAccess)TestOptions.Files;
+
+            var env = CreateEnvironment();
+            var fileAccess = env.Files as FileAccessBase;
             var fileCounter = 0;
-            var incFile = new FileReference("dummy.inc");
-            var resFile1 = new FileReference("res.res");
-            var resFile2 = new FileReference("test_0.res");
-            var linkDll = new FileReference("link.dll");
+            var incFile = new DesktopFileReference("dummy.inc");
+            var resFile1 = new DesktopFileReference("res.res");
+            var resFile2 = new DesktopFileReference("test_0.res");
+            var linkDll = new DesktopFileReference("link.dll");
+
+            TestOptions = new OptionSet(env);
 
             fileAccess.ClearMockups();
-            fileAccess.AddOneTimeMockup(new StringInput("DEFINE DUMMY_INC", incFile));
-            fileAccess.AddOneTimeMockup(new StringInput("RES RES RES", resFile1));
-            fileAccess.AddOneTimeMockup(new StringInput("RES RES RES", resFile2));
-            fileAccess.AddOneTimeMockup(new StringInput("MZE!", linkDll));
-
-            var environment = new ParserServices(log) {
-                Options = TestOptions
-            };
-            var visitor = new CompilerDirectiveVisitor() { Environment = environment };
-
-            var terminals = new TerminalVisitor();
+            fileAccess.AddOneTimeMockup(incFile, new StringBufferReadable("DEFINE DUMMY_INC"));
+            fileAccess.AddOneTimeMockup(resFile1, new StringBufferReadable("RES RES RES"));
+            fileAccess.AddOneTimeMockup(resFile2, new StringBufferReadable("RES RES RES"));
+            fileAccess.AddOneTimeMockup(linkDll, new StringBufferReadable("MZE!"));
 
             var msgs = new ListLogTarget();
-            log.RegisterTarget(msgs);
+            env.Log.RegisterTarget(msgs);
 
             ClearOptions();
-            return;
-              */
-            /*
 
-            string[] directives = directive.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+            var directives = directive.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
             foreach (var directivePart in directives) {
-                TestOptions.ResetOnNewUnit(environment.Log);
-                string[] subParts = directivePart.Split(new[] { '§' }, StringSplitOptions.RemoveEmptyEntries);
+                TestOptions.ResetOnNewUnit(env.Log);
+                var subParts = directivePart.Split(new[] { '§' }, StringSplitOptions.RemoveEmptyEntries);
+
                 foreach (var subPart in subParts) {
                     var hasFoundInput = false;
-                    using (var input = new StringInput(subPart, new FileReference("test_" + fileCounter.ToString() + ".pas")))
-                    using (var reader = new OldStackedFileReader()) {
-                        reader.AddFile(input);
-                        var parser = new CompilerDirectiveParser(environment, reader) {
-                            IncludeInput = reader
-                        };
-                        while (!reader.AtEof) {
-                            ISyntaxPart result = parser.Parse();
+                    var path = new DesktopFileReference("test_" + fileCounter.ToString() + ".pas");
+                    var input = new StringBufferReadable(subPart);
+                    var buffer = new FileBuffer();
+                    var reader = new StackedFileReader(buffer);
+                    var visitor = new CompilerDirectiveVisitor(TestOptions, path, env.Log);
+                    var terminals = new TerminalVisitor();
 
-                            if (!hasFoundInput) {
-                                terminals.ResultBuilder.Clear();
-                                if (result != null)
-                                    result.Accept(terminals.AsVisitor());
+                    buffer.Add(path, input);
 
-                                Assert.AreEqual(subPart, terminals.ResultBuilder.ToString());
-                            }
-                            hasFoundInput = reader.AtEof || hasFoundInput;
 
-                            visitor.IncludeInput = reader;
+                    reader.AddFileToRead(path);
+                    var parser = new CompilerDirectiveParser(env, TestOptions, reader) {
+                        IncludeInput = reader
+                    };
+
+                    while (reader.CurrentFile != null && !reader.AtEof) {
+                        var result = parser.Parse();
+
+                        if (!hasFoundInput) {
+                            terminals.ResultBuilder.Clear();
                             if (result != null)
-                                result.Accept(visitor.AsVisitor());
+                                result.Accept(terminals.AsVisitor());
 
+                            Assert.AreEqual(subPart, terminals.ResultBuilder.ToString());
                         }
-                        fileCounter++;
+                        hasFoundInput = (reader.CurrentFile == null || reader.AtEof) || hasFoundInput;
+
+                        visitor.IncludeInput = reader;
+                        if (result != null)
+                            result.Accept(visitor.AsVisitor());
+
                     }
+                    fileCounter++;
                 }
             }
 
             Assert.AreEqual(expected, actual());
-
-            log.UnregisterTarget(msgs);
-
+            env.Log.UnregisterTarget(msgs);
             Assert.AreEqual(messages.Length, msgs.Messages.Count);
 
             var m = new HashSet<Guid>(msgs.Messages.Select(t => t.MessageID));
-            foreach (Guid guid in messages)
+            foreach (var guid in messages)
                 Assert.IsTrue(m.Contains(guid));
 
             m = new HashSet<Guid>(messages);
-            foreach (Guid guid in msgs.Messages.Select(t => t.MessageID))
+            foreach (var guid in msgs.Messages.Select(t => t.MessageID))
                 Assert.IsTrue(m.Contains(guid));
 
-            */
         }
 
         private void ClearOptions() {

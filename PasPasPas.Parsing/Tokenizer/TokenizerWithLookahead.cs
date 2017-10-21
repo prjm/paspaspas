@@ -205,7 +205,7 @@ namespace PasPasPas.Parsing.Tokenizer {
 
             using (var parser = new CompilerDirectiveParser(environment, options, reader)) {
                 var result = parser.Parse();
-                var visitor = new CompilerDirectiveVisitor(options, Log);
+                var visitor = new CompilerDirectiveVisitor(options, path, Log);
                 result.Accept(visitor.AsVisitor());
             }
         }

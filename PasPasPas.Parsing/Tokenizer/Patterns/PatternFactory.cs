@@ -170,6 +170,7 @@ namespace PasPasPas.Parsing.Tokenizer.Patterns {
             result.AddPattern('$', new CharacterClassTokenGroupValue(TokenKind.HexNumber, new DigitCharClass(true), 2, LiteralParserKind.HexNumbers, Tokenizer.IncompleteHexNumber));
             result.AddPattern(new ControlCharacterClass(), new CharacterClassTokenGroupValue(TokenKind.ControlChar, new ControlCharacterClass()));
             result.AddPattern('"', new QuotedStringTokenValue(TokenKind.QuotedString, '"'));
+            result.AddPattern('\'', new QuotedStringTokenValue(TokenKind.QuotedString, '\''));
             return result;
         }
 

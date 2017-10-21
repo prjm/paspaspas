@@ -105,5 +105,11 @@ namespace PasPasPas.Api {
                 return data;
             }
         }
+
+        /// <summary>
+        ///     standard literal unwrapper
+        /// </summary>
+        public ILiteralUnwrapper LiteralUnwrapper { get; }
+            = new LiteralUnwrapper();
     }
 }

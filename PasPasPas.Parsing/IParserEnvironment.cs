@@ -15,5 +15,6 @@ namespace PasPasPas.Parsing {
         IRealConverter RealLiteralConverter { get; }
         ObjectPool<Tokenizer.TokenizerWithLookahead.TokenSequence> TokenSequencePool { get; }
         PatternFactory Patterns { get; }
+        ILiteralUnwrapper LiteralUnwrapper { get; }
     }
 }

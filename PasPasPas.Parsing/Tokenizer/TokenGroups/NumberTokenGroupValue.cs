@@ -27,23 +27,6 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
         public bool AllowIdents { get; set; }
             = false;
 
-        /// <summary>
-        ///     test if the current char matches a given char class
-        /// </summary>
-        /// <param name="state">current state</param>
-        /// <param name="charClass"></param>
-        /// <returns>character class to match</returns>
-        private static bool CurrentCharMatches(TokenizerState state, CharacterClass charClass) {
-            var currentChar = state.CurrentCharacter;
-
-            if (charClass.Matches(currentChar)) {
-                state.Append(currentChar);
-                return true;
-            }
-
-            return false;
-        }
-
         public override Token Tokenize(TokenizerState state) {
             var withDot = false;
             var withExponent = false;
@@ -97,7 +80,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
                 withExponent = true;
             }
 
-            if (AllowIdents && CurrentCharMatches(state, allIdents)) {
+            if (AllowIdents && allIdents.Matches(state.LookAhead())) {
                 identTokenizer.Tokenize(state);
                 return new Token(TokenKind.Identifier, state);
             }
