@@ -1,14 +1,13 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Text;
-using PasPasPas.Infrastructure.Files;
 
-namespace PasPasPas.DesktopPlatform {
+namespace PasPasPas.Infrastructure.Files {
+
 
     /// <summary>
     ///     file readable buffer
     /// </summary>
-    public class DesktopFileReadable : IBufferReadable {
+    public class FileBufferReadable : IBufferReadable {
 
         private readonly IFileReference file;
 
@@ -16,7 +15,7 @@ namespace PasPasPas.DesktopPlatform {
         ///     Create a new file readable by reference
         /// </summary>
         /// <param name="fileReference">file reference</param>
-        public DesktopFileReadable(IFileReference fileReference)
+        public FileBufferReadable(IFileReference fileReference)
             => file = fileReference;
 
         private const int DefaultFileStreamBufferSize = 4096;

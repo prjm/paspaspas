@@ -5,7 +5,6 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\PasPasPas.Building\PasPasPas.Building.csproj" />
-    <ProjectReference Include="..\PasPasPas.DesktopPlatform\PasPasPas.DesktopPlatform.csproj" />
     <ProjectReference Include="..\PasPasPas.Infrastructure\PasPasPas.Infrastructure.csproj" />
     <ProjectReference Include="..\Paspaspas.Options\PasPasPas.Options.csproj" />
     <ProjectReference Include="..\PasPasPas.Parsing\PasPasPas.Parsing.csproj" />

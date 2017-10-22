@@ -1,5 +1,5 @@
 ﻿using PasPasPas.Api;
-using PasPasPas.DesktopPlatform;
+using PasPasPas.Infrastructure.Files;
 using PasPasPas.Parsing;
 
 namespace PasPasPasTests.Common {

@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using PasPasPas.DesktopPlatform;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Options.Bundles;
 using PasPasPas.Options.DataTypes;
@@ -10,11 +9,9 @@ using System.Text;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Api;
-using PasPasPas.Infrastructure.Environment;
 using PasPasPas.Parsing;
 using PasPasPasTests.Common;
 using PasPasPas.Infrastructure.Files;
-using PasPasPas.Infrastructure.Input;
 using PasPasPas.Parsing.Parser;
 using System.IO;
 
@@ -174,10 +171,10 @@ namespace PasPasPasTests.Parser {
             var env = CreateEnvironment();
             var fileAccess = env.Files as FileAccessBase;
             var fileCounter = 0;
-            var incFile = new DesktopFileReference(Path.GetFullPath("dummy.inc"));
-            var resFile1 = new DesktopFileReference(Path.GetFullPath("res.res"));
-            var resFile2 = new DesktopFileReference(Path.GetFullPath("test_0.res"));
-            var linkDll = new DesktopFileReference(Path.GetFullPath("link.dll"));
+            var incFile = new FileReference(Path.GetFullPath("dummy.inc"));
+            var resFile1 = new FileReference(Path.GetFullPath("res.res"));
+            var resFile2 = new FileReference(Path.GetFullPath("test_0.res"));
+            var linkDll = new FileReference(Path.GetFullPath("link.dll"));
 
             fileAccess.AddMockupFile(incFile, new StringBufferReadable("DEFINE DUMMY_INC"));
             fileAccess.AddMockupFile(resFile1, new StringBufferReadable("RES RES RES"));
@@ -198,7 +195,7 @@ namespace PasPasPasTests.Parser {
 
                 foreach (var subPart in subParts) {
                     var hasFoundInput = false;
-                    var path = new DesktopFileReference("test_" + fileCounter.ToString() + ".pas");
+                    var path = new FileReference("test_" + fileCounter.ToString() + ".pas");
                     var input = new StringBufferReadable(subPart);
                     var buffer = new FileBuffer();
                     var reader = new StackedFileReader(buffer);

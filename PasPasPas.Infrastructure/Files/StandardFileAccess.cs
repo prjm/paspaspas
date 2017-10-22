@@ -1,16 +1,17 @@
-﻿using System;
-using PasPasPas.Infrastructure.Files;
-using PasPasPas.Infrastructure.Input;
-
-namespace PasPasPas.DesktopPlatform {
+﻿namespace PasPasPas.Infrastructure.Files {
 
     /// <summary>
     ///     standard file access
     /// </summary>
     public class StandardFileAccess : FileAccessBase {
 
+        /// <summary>
+        ///     create a new reference to a file
+        /// </summary>
+        /// <param name="path">file reference</param>
+        /// <returns></returns>
         public override IFileReference ReferenceToFile(string path)
-            => new DesktopFileReference(path);
+            => new FileReference(path);
 
         /// <summary>
         ///     check if a file exists
@@ -26,7 +27,7 @@ namespace PasPasPas.DesktopPlatform {
         /// <param name="path">path to the file</param>
         /// <returns>opened file</returns>
         protected override IBufferReadable DoOpenFileForReading(IFileReference path)
-            => new DesktopFileReadable(path);
+            => new FileBufferReadable(path);
 
 
     }

@@ -1,6 +1,5 @@
 ﻿using System.Text;
 using PasPasPas.Api;
-using PasPasPas.DesktopPlatform;
 using PasPasPas.Infrastructure.Environment;
 
 namespace SampleRunner.Scenarios {

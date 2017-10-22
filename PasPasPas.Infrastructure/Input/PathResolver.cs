@@ -38,7 +38,7 @@ namespace PasPasPas.Infrastructure.Input {
         /// </summary>
         /// <returns></returns>
         public override int GetHashCode() {
-            int result = 17;
+            var result = 17;
             result = result * 31 + BasePath.GetHashCode();
             result = result * 31 + PathToResolve.GetHashCode();
             return result;
@@ -64,13 +64,8 @@ namespace PasPasPas.Infrastructure.Input {
         ///     create a new path resolver
         /// </summary>
         /// <param name="fileAccess">file access</param>
-        protected PathResolver(IFileAccess fileAccess) {
-
-            if (fileAccess == null)
-                throw new ArgumentNullException(nameof(fileAccess));
-
-            Files = fileAccess;
-        }
+        protected PathResolver(IFileAccess fileAccess)
+            => Files = fileAccess ?? throw new ArgumentNullException(nameof(fileAccess));
 
         /// <summary>
         ///     resolves a path and caches the result
@@ -91,9 +86,7 @@ namespace PasPasPas.Infrastructure.Input {
                 PathToResolve = pathToResolve
             };
 
-            ResolvedFile result;
-
-            if (!resolvedPaths.TryGetValue(key, out result)) {
+            if (!resolvedPaths.TryGetValue(key, out var result)) {
                 result = DoResolvePath(basePath, pathToResolve);
                 resolvedPaths.Add(key, result);
             }
@@ -108,7 +101,7 @@ namespace PasPasPas.Infrastructure.Input {
         /// <param name="pathToResolve">path to resolve</param>
         /// <returns></returns>
         protected ResolvedFile ResolveInDirectory(IFileReference currentDirectory, IFileReference pathToResolve) {
-            IFileAccess fileAccess = Files;
+            var fileAccess = Files;
 
             if (currentDirectory == null)
                 throw new ArgumentNullException(nameof(currentDirectory));
@@ -116,8 +109,8 @@ namespace PasPasPas.Infrastructure.Input {
             if (pathToResolve == null)
                 throw new ArgumentNullException(nameof(pathToResolve));
 
-            IFileReference combinedPath = currentDirectory.Append(pathToResolve);
-            bool isResolved = fileAccess.FileExists(combinedPath);
+            var combinedPath = currentDirectory.Append(pathToResolve);
+            var isResolved = fileAccess.FileExists(combinedPath);
 
             return new ResolvedFile(currentDirectory, pathToResolve, combinedPath, isResolved);
         }

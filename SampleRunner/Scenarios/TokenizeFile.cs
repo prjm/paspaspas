@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using PasPasPas.Api;
-using PasPasPas.DesktopPlatform;
-using PasPasPas.Infrastructure.Environment;
 using PasPasPas.Parsing;
 
 namespace SampleRunner.Scenarios {

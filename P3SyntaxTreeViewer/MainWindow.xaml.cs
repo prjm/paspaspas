@@ -1,13 +1,7 @@
-﻿using PasPasPas.DesktopPlatform;
-using PasPasPas.Infrastructure.Input;
-using PasPasPas.Infrastructure.Log;
-using PasPasPas.Options.Bundles;
-using PasPasPas.Parsing.Parser;
+﻿using PasPasPas.Infrastructure.Log;
 using PasPasPas.Parsing.SyntaxTree;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
-using PasPasPas.Parsing.Tokenizer;
-using System;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,10 +9,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.ComponentModel;
 using System.Collections.Generic;
-using System.Resources;
 using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Infrastructure.Files;
-using PasPasPas.Infrastructure.Environment;
 using PasPasPas.Api;
 using PasPasPas.Parsing;
 

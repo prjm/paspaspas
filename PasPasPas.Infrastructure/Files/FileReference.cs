@@ -1,15 +1,13 @@
 ﻿using System;
 using PasPasPas.Infrastructure.Environment;
-using PasPasPas.Infrastructure.Files;
-using PasPasPas.Infrastructure.Utils;
 
-namespace PasPasPas.DesktopPlatform {
+namespace PasPasPas.Infrastructure.Files {
 
     /// <summary>
     ///     common way to reference files
     /// </summary>
     /// <remarks>immutable</remarks>
-    public class DesktopFileReference : IFileReference {
+    public class FileReference : IFileReference {
 
         private readonly string filePath;
         private int hashcode;
@@ -19,7 +17,7 @@ namespace PasPasPas.DesktopPlatform {
         /// </summary>
         /// <param name="path">path to fhe file</param>
         /// <exception cref="System.ArgumentException">Thrown if the path is empty</exception>
-        public DesktopFileReference(string path) {
+        public FileReference(string path) {
 
             if (string.IsNullOrWhiteSpace(path))
                 throw new ArgumentNullException(nameof(path));
@@ -46,7 +44,7 @@ namespace PasPasPas.DesktopPlatform {
         /// <param name="path">path to add</param>
         /// <returns>combined path</returns>
         public IFileReference Append(IFileReference path)
-            => new DesktopFileReference(System.IO.Path.Combine(filePath, path.Path));
+            => new FileReference(System.IO.Path.Combine(filePath, path.Path));
 
         /// <summary>
         ///     string representation of this file reference

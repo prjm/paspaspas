@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Text;
 using PasPasPas.Api;
-using PasPasPas.DesktopPlatform;
 using PasPasPas.Infrastructure.Environment;
-using PasPasPas.Infrastructure.Log;
+using PasPasPas.Infrastructure.Files;
 using PasPasPas.Parsing;
 using SampleRunner.Scenarios;
 

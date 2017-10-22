@@ -1,11 +1,7 @@
-﻿using PasPasPas.DesktopPlatform;
-using System.IO;
+﻿using System.IO;
 using System.Text;
 using Xunit;
 using PasPasPas.Api;
-using PasPasPas.Infrastructure.Environment;
-using System;
-using PasPasPas.Infrastructure.Log;
 using PasPasPasTests.Common;
 using Assert = PasPasPasTests.Common.Assert;
 

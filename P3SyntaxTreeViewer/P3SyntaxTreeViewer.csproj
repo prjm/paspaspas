@@ -113,10 +113,6 @@
       <Project>{CF92A709-525F-450E-858F-A6AD8EDC16BA}</Project>
       <Name>PasPasPas.Api</Name>
     </ProjectReference>
-    <ProjectReference Include="..\PasPasPas.DesktopPlatform\PasPasPas.DesktopPlatform.csproj">
-      <Project>{8adb6566-773f-4487-8611-2d8ad5337163}</Project>
-      <Name>PasPasPas.DesktopPlatform</Name>
-    </ProjectReference>
     <ProjectReference Include="..\PasPasPas.Infrastructure\PasPasPas.Infrastructure.csproj">
       <Project>{4cef569a-4ece-42ee-847b-5029958f757c}</Project>
       <Name>PasPasPas.Infrastructure</Name>
