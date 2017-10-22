@@ -16,13 +16,10 @@ namespace PasPasPas.Api {
     public class DefaultEnvironment : IParserEnvironment {
 
         /// <summary>
-        ///     create a new default environment
+        ///     default file access
         /// </summary>
-        /// <param name="fileAccess"></param>
-        public DefaultEnvironment(IFileAccess fileAccess)
-            => files = fileAccess;
-
-        private IFileAccess files;
+        private IFileAccess files
+            = new StandardFileAccess();
 
         /// <summary>
         ///     integer parser

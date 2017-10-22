@@ -124,7 +124,7 @@ namespace P3SyntaxTreeViewer {
 
 
         private IParserEnvironment CreateEnvironment()
-            => new DefaultEnvironment(new StandardFileAccess());
+            => new DefaultEnvironment();
 
         private void Code_TextChanged(object sender, TextChangedEventArgs e)
             => UpdateTrees();

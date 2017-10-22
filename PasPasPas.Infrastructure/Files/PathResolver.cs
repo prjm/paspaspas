@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using PasPasPas.Infrastructure.Files;
 
-namespace PasPasPas.Infrastructure.Input {
+namespace PasPasPas.Infrastructure.Files {
 
     internal class ResolvedPathKey {
 

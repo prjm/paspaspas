@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using System.Collections.Generic;
-using PasPasPas.Infrastructure.Input;
 using PasPasPas.Infrastructure.Files;
 
 namespace PasPasPas.Building.Definition {

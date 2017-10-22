@@ -1,16 +1,67 @@
-﻿namespace PasPasPas.Infrastructure.Files {
+﻿using System;
+using System.Collections.Generic;
+
+namespace PasPasPas.Infrastructure.Files {
 
     /// <summary>
     ///     standard file access
     /// </summary>
-    public class StandardFileAccess : FileAccessBase {
+    public class StandardFileAccess : IFileAccess {
+
+        private IDictionary<IFileReference, IBufferReadable> mockups =
+            new Dictionary<IFileReference, IBufferReadable>();
+
+        /// <summary>
+        ///     open a file for reading
+        /// </summary>
+        /// <param name="path">file path</param>
+        /// <returns>opened file</returns>
+        public IBufferReadable OpenFileForReading(IFileReference path) {
+            if (path == null)
+                throw new ArgumentNullException(nameof(path));
+
+            if (mockups.ContainsKey(path))
+                return mockups[path];
+
+            return DoOpenFileForReading(path ?? throw new ArgumentNullException(nameof(path)));
+        }
+
+        /// <summary>
+        ///     test if a given files exists
+        /// </summary>
+        /// <param name="filePath">file path</param>
+        /// <returns><c>true</c> if the file exists</returns>
+        public bool FileExists(IFileReference filePath) {
+            if (filePath == null)
+                throw new ArgumentNullException(nameof(filePath));
+
+            if (mockups.ContainsKey(filePath))
+                return true;
+
+            return DoCheckIfFileExists(filePath);
+        }
+
+        /// <summary>
+        ///     add a mockup file
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="content"></param>
+        public void AddMockupFile(IFileReference path, IBufferReadable content) {
+            if (path == null)
+                throw new ArgumentNullException(nameof(path));
+
+            if (content == null)
+                throw new ArgumentNullException(nameof(content));
+
+            mockups.Add(path, content);
+        }
 
         /// <summary>
         ///     create a new reference to a file
         /// </summary>
         /// <param name="path">file reference</param>
         /// <returns></returns>
-        public override IFileReference ReferenceToFile(string path)
+        public IFileReference ReferenceToFile(string path)
             => new FileReference(path);
 
         /// <summary>
@@ -18,7 +69,7 @@
         /// </summary>
         /// <param name="file">file to check</param>
         /// <returns><c>true</c> if the file exists</returns>
-        protected override bool DoCheckIfFileExists(IFileReference file)
+        protected bool DoCheckIfFileExists(IFileReference file)
             => System.IO.File.Exists(file.Path);
 
         /// <summary>
@@ -26,7 +77,7 @@
         /// </summary>
         /// <param name="path">path to the file</param>
         /// <returns>opened file</returns>
-        protected override IBufferReadable DoOpenFileForReading(IFileReference path)
+        protected IBufferReadable DoOpenFileForReading(IFileReference path)
             => new FileBufferReadable(path);
 
 

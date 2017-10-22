@@ -65,7 +65,7 @@ namespace PasPasPasTests.Parser {
 
             var log = new LogTarget();
             var fileAccess = new StandardFileAccess();
-            var env = new DefaultEnvironment(fileAccess);
+            var env = new DefaultEnvironment();
             var api = new ParserApi(env, TestOptions);
 
             env.Log.RegisterTarget(log);
@@ -169,7 +169,7 @@ namespace PasPasPasTests.Parser {
         protected void RunCompilerDirective(string directive, object expected, Func<object> actual, params Guid[] messages) {
 
             var env = CreateEnvironment();
-            var fileAccess = env.Files as FileAccessBase;
+            var fileAccess = env.Files;
             var fileCounter = 0;
             var incFile = new FileReference(Path.GetFullPath("dummy.inc"));
             var resFile1 = new FileReference(Path.GetFullPath("res.res"));

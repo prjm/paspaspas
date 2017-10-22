@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using PasPasPas.Infrastructure.Files;
-using PasPasPas.Infrastructure.Input;
 using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 
@@ -66,7 +65,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         public override IEnumerable<ISyntaxPart> Parts {
             get {
-                foreach (RequiredUnitName unit in RequiredUnits)
+                foreach (var unit in RequiredUnits)
                     yield return unit;
                 if (InterfaceSymbols != null)
                     yield return InterfaceSymbols;

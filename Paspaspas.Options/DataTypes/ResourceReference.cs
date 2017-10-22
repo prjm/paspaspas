@@ -1,5 +1,4 @@
 ﻿using PasPasPas.Infrastructure.Files;
-using PasPasPas.Infrastructure.Input;
 
 namespace PasPasPas.Options.DataTypes {
 

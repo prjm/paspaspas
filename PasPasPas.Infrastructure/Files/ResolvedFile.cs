@@ -1,7 +1,6 @@
 ﻿using System;
-using PasPasPas.Infrastructure.Files;
 
-namespace PasPasPas.Infrastructure.Input {
+namespace PasPasPas.Infrastructure.Files {
 
     /// <summary>
     ///     definition of a resolved file

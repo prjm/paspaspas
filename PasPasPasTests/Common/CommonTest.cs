@@ -11,6 +11,6 @@ namespace PasPasPasTests.Common {
         /// </summary>
         /// <returns></returns>
         protected IParserEnvironment CreateEnvironment()
-            => new DefaultEnvironment(new StandardFileAccess());
+            => new DefaultEnvironment();
     }
 }

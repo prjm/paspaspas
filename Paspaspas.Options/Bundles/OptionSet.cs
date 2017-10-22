@@ -1,6 +1,5 @@
 ﻿using System;
 using PasPasPas.Options.DataTypes;
-using PasPasPas.Infrastructure.Input;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Infrastructure.Files;
 using PasPasPas.Infrastructure.Environment;

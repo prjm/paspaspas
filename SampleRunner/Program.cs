@@ -16,8 +16,7 @@ namespace SampleRunner {
             var mode = SampleMode.ParseFile;
             var repeat = 1;
             var result = new StringBuilder();
-            var fileAccess = new StandardFileAccess();
-            IParserEnvironment environment = new DefaultEnvironment(fileAccess);
+            IParserEnvironment environment = new DefaultEnvironment();
             Action<StringBuilder> action;
 
             action = PrepareSample(environment, testPath, mode, repeat);
