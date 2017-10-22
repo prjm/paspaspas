@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace PasPasPas.Infrastructure.Files {
+﻿namespace PasPasPas.Infrastructure.Files {
 
     /// <summary>
     ///     offset in a file buffer item

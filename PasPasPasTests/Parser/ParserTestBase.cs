@@ -16,6 +16,7 @@ using PasPasPasTests.Common;
 using PasPasPas.Infrastructure.Files;
 using PasPasPas.Infrastructure.Input;
 using PasPasPas.Parsing.Parser;
+using System.IO;
 
 namespace PasPasPasTests.Parser {
 
@@ -173,18 +174,17 @@ namespace PasPasPasTests.Parser {
             var env = CreateEnvironment();
             var fileAccess = env.Files as FileAccessBase;
             var fileCounter = 0;
-            var incFile = new DesktopFileReference("dummy.inc");
-            var resFile1 = new DesktopFileReference("res.res");
-            var resFile2 = new DesktopFileReference("test_0.res");
-            var linkDll = new DesktopFileReference("link.dll");
+            var incFile = new DesktopFileReference(Path.GetFullPath("dummy.inc"));
+            var resFile1 = new DesktopFileReference(Path.GetFullPath("res.res"));
+            var resFile2 = new DesktopFileReference(Path.GetFullPath("test_0.res"));
+            var linkDll = new DesktopFileReference(Path.GetFullPath("link.dll"));
+
+            fileAccess.AddMockupFile(incFile, new StringBufferReadable("DEFINE DUMMY_INC"));
+            fileAccess.AddMockupFile(resFile1, new StringBufferReadable("RES RES RES"));
+            fileAccess.AddMockupFile(resFile2, new StringBufferReadable("RES RES RES"));
+            fileAccess.AddMockupFile(linkDll, new StringBufferReadable("MZE!"));
 
             TestOptions = new OptionSet(env);
-
-            fileAccess.ClearMockups();
-            fileAccess.AddOneTimeMockup(incFile, new StringBufferReadable("DEFINE DUMMY_INC"));
-            fileAccess.AddOneTimeMockup(resFile1, new StringBufferReadable("RES RES RES"));
-            fileAccess.AddOneTimeMockup(resFile2, new StringBufferReadable("RES RES RES"));
-            fileAccess.AddOneTimeMockup(linkDll, new StringBufferReadable("MZE!"));
 
             var msgs = new ListLogTarget();
             env.Log.RegisterTarget(msgs);
@@ -206,7 +206,6 @@ namespace PasPasPasTests.Parser {
                     var terminals = new TerminalVisitor();
 
                     buffer.Add(path, input);
-
 
                     reader.AddFileToRead(path);
                     var parser = new CompilerDirectiveParser(env, TestOptions, reader) {

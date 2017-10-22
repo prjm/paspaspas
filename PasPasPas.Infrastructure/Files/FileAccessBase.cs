@@ -1,27 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using PasPasPas.Infrastructure.Files;
-using PasPasPas.Infrastructure.Utils;
 
-namespace PasPasPas.Infrastructure.Input {
-
-    using FileDictionary = IDictionary<string, IBufferReadable>;
+namespace PasPasPas.Infrastructure.Files {
 
     /// <summary>
     ///    abstract base class for file access
     /// </summary>
     public abstract class FileAccessBase : IFileAccess {
 
-        private readonly Lazy<FileDictionary> mockupFiles;
-
-        private FileDictionary CreateFileDictionary()
-            => new Dictionary<string, IBufferReadable>(StringComparer.OrdinalIgnoreCase);
+        private IDictionary<IFileReference, IBufferReadable> mockups =
+            new Dictionary<IFileReference, IBufferReadable>();
 
         /// <summary>
         ///     create a new file access base clase
         /// </summary>
-        protected FileAccessBase()
-            => mockupFiles = new Lazy<FileDictionary>(CreateFileDictionary);
+        protected FileAccessBase() { }
 
         /// <summary>
         ///     open a file for reading
@@ -29,17 +22,14 @@ namespace PasPasPas.Infrastructure.Input {
         /// <param name="path">file path</param>
         /// <returns>opened file</returns>
         public IBufferReadable OpenFileForReading(IFileReference path) {
-
             if (path == null)
                 throw new ArgumentNullException(nameof(path));
 
-            if (mockupFiles.IsValueCreated && mockupFiles.Value.TryGetValue(path.FileName, out var result))
-                return result;
+            if (mockups.ContainsKey(path))
+                return mockups[path];
 
-            result = DoOpenFileForReading(path);
-            return result;
+            return DoOpenFileForReading(path ?? throw new ArgumentNullException(nameof(path)));
         }
-
 
         /// <summary>
         ///     open a text file for reading
@@ -49,38 +39,15 @@ namespace PasPasPas.Infrastructure.Input {
         protected abstract IBufferReadable DoOpenFileForReading(IFileReference path);
 
         /// <summary>
-        ///     add a one-time mockup-file
-        /// </summary>
-        /// <param name="input">file to add</param>
-        /// <param name="path">file path</param>
-        public void AddOneTimeMockup(IFileReference path, IBufferReadable input) {
-
-            if (input == null)
-                throw new ArgumentNullException(nameof(input));
-
-            var fileName = path.FileName;
-
-            if (string.IsNullOrEmpty(fileName))
-                throw new InvalidOperationException("Undefined filename");
-
-            if (mockupFiles.Value.ContainsKey(fileName))
-                throw new InvalidOperationException(StringUtils.Invariant($"Duplicate mockup file {path}"));
-
-            mockupFiles.Value.Add(fileName, input);
-        }
-
-        /// <summary>
         ///     test if a given files exists
         /// </summary>
         /// <param name="filePath">file path</param>
         /// <returns><c>true</c> if the file exists</returns>
         public bool FileExists(IFileReference filePath) {
-
             if (filePath == null)
                 throw new ArgumentNullException(nameof(filePath));
 
-            var fileNameWithoutPath = filePath.FileName;
-            if (mockupFiles.IsValueCreated && mockupFiles.Value.ContainsKey(fileNameWithoutPath))
+            if (mockups.ContainsKey(filePath))
                 return true;
 
             return DoCheckIfFileExists(filePath);
@@ -94,16 +61,25 @@ namespace PasPasPas.Infrastructure.Input {
         protected abstract bool DoCheckIfFileExists(IFileReference file);
 
         /// <summary>
-        ///     clear mockup files
-        /// </summary>
-        public void ClearMockups()
-            => mockupFiles.Value.Clear();
-
-        /// <summary>
         ///     create a new reference to a file
         /// </summary>
         /// <param name="path">file path</param>
         /// <returns>file reference</returns>
         public abstract IFileReference ReferenceToFile(string path);
+
+        /// <summary>
+        ///     add a mockup file
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="content"></param>
+        public void AddMockupFile(IFileReference path, IBufferReadable content) {
+            if (path == null)
+                throw new ArgumentNullException(nameof(path));
+
+            if (content == null)
+                throw new ArgumentNullException(nameof(content));
+
+            mockups.Add(path, content);
+        }
     }
 }

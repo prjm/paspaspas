@@ -868,7 +868,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (!CanVisit(syntaxPart))
                 return;
 
-
             if (!string.IsNullOrWhiteSpace(syntaxPart.RegionName))
                 Meta.StartRegion(syntaxPart.RegionName);
         }
@@ -1034,7 +1033,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <param name="parameter"></param>
         public void StartVisit(Link syntaxPart) {
             if (!CanVisit(syntaxPart))
-
                 return;
 
             var basePath = path;
@@ -1045,7 +1043,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
             if (fileName == null || string.IsNullOrWhiteSpace(fileName))
                 return;
-
 
             var resolvedFile = Meta.LinkedFileResolver.ResolvePath(basePath, Meta.LinkedFileResolver.Files.ReferenceToFile(fileName));
 
@@ -1068,7 +1065,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (!CanVisit(syntaxPart))
                 return;
 
-            IFileReference basePath = null;
+            var basePath = path;
             var fileName = syntaxPart?.FileName;
 
             if (basePath == null || string.IsNullOrWhiteSpace(basePath.Path))
@@ -1110,11 +1107,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
             var targetPath = Meta.IncludePathResolver.ResolvePath(basePath, Meta.IncludePathResolver.Files.ReferenceToFile(fileName)).TargetPath;
 
-            if (IncludeInput != null)
+            if (IncludeInput != null) {
+                IncludeInput.Buffer.Add(targetPath, Options.Files.OpenFileForReading(targetPath));
                 IncludeInput.AddFileToRead(targetPath);
-
+            }
         }
-
 
         public IStartEndVisitor AsVisitor()
             => visitor;

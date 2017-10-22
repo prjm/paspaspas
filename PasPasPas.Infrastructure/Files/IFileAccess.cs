@@ -1,12 +1,16 @@
-﻿using PasPasPas.Infrastructure.Files;
-
-namespace PasPasPas.Infrastructure.Files {
+﻿namespace PasPasPas.Infrastructure.Files {
 
     /// <summary>
     ///     service to access files
     /// </summary>
     public interface IFileAccess {
 
+        /// <summary>
+        ///    define a mockup / virtual file
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="content"></param>
+        void AddMockupFile(IFileReference path, IBufferReadable content);
 
         /// <summary>
         ///     open a file for reading

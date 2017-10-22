@@ -355,14 +355,12 @@ namespace PasPasPas.Parsing.Parser {
                 ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidMessageDirective, new[] { TokenKind.QuotedString });
             }
 
-            result.MessageText = string.Empty;// QuotedStringTokenValue.Unwrap(CurrentToken());
+            result.MessageText = Environment.LiteralUnwrapper.UnwrapString(result.LastTerminalToken.ParsedValue);
         }
 
         private void ParseNoDefine(IExtendableSyntaxPart parent) {
             var result = new NoDefine();
             InitByTerminal(result, parent, TokenKind.NoDefine);
-
-
 
             if (!ContinueWith(result, TokenKind.Identifier)) {
                 ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidNoDefineDirective, new[] { TokenKind.Identifier });
@@ -372,10 +370,10 @@ namespace PasPasPas.Parsing.Parser {
             result.TypeName = result.LastTerminalValue;
 
             if (ContinueWith(result, TokenKind.QuotedString)) {
-                result.TypeNameInHpp = string.Empty; // QuotedStringTokenValue.Unwrap(result.LastTerminalToken);
+                result.TypeNameInHpp = Environment.LiteralUnwrapper.UnwrapString(result.LastTerminalToken.ParsedValue);
 
                 if (ContinueWith(result, TokenKind.QuotedString)) {
-                    result.TypeNameInUnion = string.Empty; // QuotedStringTokenValue.Unwrap(result.LastTerminalToken);
+                    result.TypeNameInUnion = Environment.LiteralUnwrapper.UnwrapString(result.LastTerminalToken.ParsedValue);
                 }
             }
         }
@@ -452,7 +450,7 @@ namespace PasPasPas.Parsing.Parser {
                 return;
             }
 
-            result.RegionName = string.Empty; // QuotedStringTokenValue.Unwrap(result.LastTerminalToken);
+            result.RegionName = Environment.LiteralUnwrapper.UnwrapString(result.LastTerminalToken.ParsedValue);
         }
 
         /// <summary>
@@ -2038,7 +2036,7 @@ namespace PasPasPas.Parsing.Parser {
                 result.RcFile = result.LastTerminalValue;
             }
             else if (ContinueWith(result, TokenKind.QuotedString)) {
-                result.RcFile = string.Empty; // QuotedStringTokenValue.Unwrap(result.LastTerminalToken);
+                result.RcFile = Environment.LiteralUnwrapper.UnwrapString(result.LastTerminalToken.ParsedValue);
             }
         }
 
