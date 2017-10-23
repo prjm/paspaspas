@@ -2,7 +2,6 @@
 using System.Text;
 using PasPasPas.Api;
 using PasPasPas.Infrastructure.Environment;
-using PasPasPas.Infrastructure.Files;
 using PasPasPas.Parsing;
 using SampleRunner.Scenarios;
 
@@ -13,7 +12,7 @@ namespace SampleRunner {
         static void Main(string[] args) {
 
             var testPath = @"C:\temp\Testfiles\spring.pas";
-            var mode = SampleMode.ParseFile;
+            var mode = SampleMode.BufferedTokenizeFile;
             var repeat = 1;
             var result = new StringBuilder();
             IParserEnvironment environment = new DefaultEnvironment();
