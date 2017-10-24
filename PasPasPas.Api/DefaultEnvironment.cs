@@ -7,13 +7,14 @@ using PasPasPas.Parsing;
 using PasPasPas.Parsing.Tokenizer;
 using PasPasPas.Parsing.Tokenizer.LiteralValues;
 using PasPasPas.Parsing.Tokenizer.Patterns;
+using PasPasPas.Typings.Common;
 
 namespace PasPasPas.Api {
 
     /// <summary>
     ///     default environment
     /// </summary>
-    public class DefaultEnvironment : IParserEnvironment {
+    public class DefaultEnvironment : ITypedEnvironment {
 
         /// <summary>
         ///     default file access
@@ -108,5 +109,11 @@ namespace PasPasPas.Api {
         /// </summary>
         public ILiteralUnwrapper LiteralUnwrapper { get; }
             = new LiteralUnwrapper();
+
+        /// <summary>
+        ///     default type registry
+        /// </summary>
+        public RegisteredTypes TypeRegistry { get; }
+            = new RegisteredTypes();
     }
 }

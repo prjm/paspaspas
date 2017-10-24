@@ -51,7 +51,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
             get {
                 if (GenericType != null)
                     yield return GenericType;
-                foreach (IExpression expression in Expressions)
+                foreach (var expression in Expressions)
                     yield return expression;
             }
         }

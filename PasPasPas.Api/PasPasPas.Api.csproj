@@ -20,6 +20,7 @@
   <ItemGroup>
     <ProjectReference Include="..\PasPasPas.Infrastructure\PasPasPas.Infrastructure.csproj" />
     <ProjectReference Include="..\PasPasPas.Parsing\PasPasPas.Parsing.csproj" />
+    <ProjectReference Include="..\PasPasPas.Typings\PasPasPas.Typings.csproj" />
   </ItemGroup>
 
 

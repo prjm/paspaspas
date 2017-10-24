@@ -7,7 +7,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// <summary>
     ///     formatted expression
     /// </summary>
-    public class FormattedExpression : AbstractSyntaxPartBase, IExpressionTarget, IExpression {
+    public class FormattedExpression : ExpressionBase, IExpressionTarget, IExpression {
 
         /// <summary>
         ///     expressions
@@ -33,7 +33,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         public override IEnumerable<ISyntaxPart> Parts {
             get {
-                foreach (IExpression expression in Expressions)
+                foreach (var expression in Expressions)
                     yield return expression;
             }
         }

@@ -8,7 +8,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// <summary>
     ///     set expression
     /// </summary>
-    public class ArrayExpression : AbstractSyntaxPartBase, IExpression, IExpressionTarget {
+    public class ArrayExpression : ExpressionBase, IExpression, IExpressionTarget {
 
         /// <summary>
         ///     subexpressions
@@ -34,7 +34,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         public override IEnumerable<ISyntaxPart> Parts {
             get {
-                foreach (IExpression part in Expressions)
+                foreach (var part in Expressions)
                     yield return part;
 
             }

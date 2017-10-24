@@ -9,6 +9,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// </summary>
     public class MethodImplementation : DeclaredSymbol, IDeclaredSymbolTarget, IBlockTarget, IDirectiveTarget, IExpression, IParameterTarget, ITypeTarget {
 
+
+        /// <summary>
+        ///     calculated type value
+        /// </summary>
+        public ITypeDefinition TypeInfo { get; set; }
+
         /// <summary>
         ///     symbols
         /// </summary>
@@ -33,10 +39,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         public override IEnumerable<ISyntaxPart> Parts {
             get {
-                foreach (ParameterTypeDefinition parameter in Parameters.Items)
+                foreach (var parameter in Parameters.Items)
                     yield return parameter;
 
-                foreach (MethodDirective directive in Directives)
+                foreach (var directive in Directives)
                     yield return directive;
 
                 yield return Symbols;

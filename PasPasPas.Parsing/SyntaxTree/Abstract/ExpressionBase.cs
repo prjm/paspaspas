@@ -5,5 +5,10 @@
     /// </summary>
     public abstract class ExpressionBase : AbstractSyntaxPartBase, IExpression {
 
+        /// <summary>
+        ///     calculated type value
+        /// </summary>
+        public ITypeDefinition TypeInfo { get; set; }
+
     }
 }

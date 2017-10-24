@@ -6,5 +6,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     ///     interface for expressions
     /// </summary>
     public interface IExpression : ISyntaxPart {
+
+        /// <summary>
+        ///     type info
+        /// </summary>
+        ITypeDefinition TypeInfo { get; }
     }
 }

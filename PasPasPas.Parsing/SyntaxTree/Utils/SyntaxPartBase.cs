@@ -115,7 +115,7 @@ namespace PasPasPas.Parsing.SyntaxTree {
             if (symbol is Terminal)
                 yield return symbol as Terminal;
 
-            foreach (ISyntaxPart child in symbol.Parts)
+            foreach (var child in symbol.Parts)
                 FindAllTerminals(child);
         }
 
@@ -162,7 +162,7 @@ namespace PasPasPas.Parsing.SyntaxTree {
 
         public static void AcceptParts<T>(T element, IEnumerable<ISyntaxPart> parts, IStartEndVisitor visitor) {
             var childVisitor = visitor as IChildVisitor;
-            foreach (ISyntaxPart part in parts) {
+            foreach (var part in parts) {
                 childVisitor?.StartVisitChild<T>(element, part);
                 part.Accept(visitor);
                 childVisitor?.EndVisitChild<T>(element, part);

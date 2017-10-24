@@ -1,6 +1,7 @@
 ﻿using PasPasPas.Api;
 using PasPasPas.Infrastructure.Files;
 using PasPasPas.Parsing;
+using PasPasPas.Typings.Common;
 
 namespace PasPasPasTests.Common {
 
@@ -10,7 +11,7 @@ namespace PasPasPasTests.Common {
         ///     get the basic environment
         /// </summary>
         /// <returns></returns>
-        protected IParserEnvironment CreateEnvironment()
+        protected ITypedEnvironment CreateEnvironment()
             => new DefaultEnvironment();
     }
 }

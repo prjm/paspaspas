@@ -7,7 +7,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// <summary>
     ///     reference to a symbol
     /// </summary>
-    public class SymbolReference : AbstractSyntaxPartBase, IExpression, ILabelTarget, ITypeTarget, IExpressionTarget {
+    public class SymbolReference : ExpressionBase, IExpression, ILabelTarget, ITypeTarget, IExpressionTarget {
 
         /// <summary>
         ///     identifier name
@@ -69,7 +69,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
                     yield return TypeValue;
                 if (Value != null)
                     yield return Value;
-                foreach (ISyntaxPart part in SymbolParts)
+                foreach (var part in SymbolParts)
                     yield return part;
             }
         }

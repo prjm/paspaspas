@@ -125,6 +125,10 @@
       <Project>{efa1da73-0c34-4bfb-9006-dcffa12218ed}</Project>
       <Name>PasPasPas.Parsing</Name>
     </ProjectReference>
+    <ProjectReference Include="..\PasPasPas.Typings\PasPasPas.Typings.csproj">
+      <Project>{E22933E4-0571-4997-93DD-AAE65FF517F7}</Project>
+      <Name>PasPasPas.Typings</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

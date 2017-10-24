@@ -25,7 +25,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         public override IEnumerable<ISyntaxPart> Parts {
             get {
-                foreach (IExpression item in IndexItems)
+                foreach (var item in IndexItems)
                     yield return item;
                 if (TypeValue != null)
                     yield return TypeValue;
