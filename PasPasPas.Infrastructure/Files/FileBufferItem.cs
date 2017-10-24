@@ -40,10 +40,15 @@ namespace PasPasPas.Infrastructure.Files {
         ///     get a char at a given value
         /// </summary>
         /// <param name="offset"></param>
+        /// <param name="nullOnInvalidOffset">return <c>\0</c> on a invalid offset</param>
         /// <returns>chat the offset</returns>
-        public char CharAt(int offset) {
+        public char CharAt(int offset, bool nullOnInvalidOffset) {
             if (offset < 0 || offset >= data.Length)
-                throw new IndexOutOfRangeException($"Offset {offset} out of range.");
+                if (nullOnInvalidOffset)
+                    return '\0';
+                else
+                    throw new IndexOutOfRangeException($"Offset {offset} out of range.");
+
             return data[offset];
         }
 

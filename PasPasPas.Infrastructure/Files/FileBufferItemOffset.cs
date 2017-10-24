@@ -47,13 +47,8 @@
         /// <summary>
         ///     current reader value
         /// </summary>
-        public char Value {
-            get {
-                if (offset < 0 || offset >= length)
-                    return '\0';
-                return input.CharAt(offset);
-            }
-        }
+        public char Value
+            => input.CharAt(offset, true);
 
         /// <summary>
         ///     navigate to the previous char
@@ -83,9 +78,7 @@
         /// <returns></returns>
         public char LookAhead(int number) {
             var position = offset + number;
-            if (position < 0 || position >= length)
-                return '\0';
-            return input.CharAt(position);
+            return input.CharAt(position, true);
         }
 
     }

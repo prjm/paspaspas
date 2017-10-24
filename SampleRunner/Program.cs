@@ -12,7 +12,7 @@ namespace SampleRunner {
         static void Main(string[] args) {
 
             var testPath = @"C:\temp\Testfiles\spring.pas";
-            var mode = SampleMode.BufferedTokenizeFile;
+            var mode = SampleMode.ReadFile;
             var repeat = 1;
             var result = new StringBuilder();
             IParserEnvironment environment = new DefaultEnvironment();
