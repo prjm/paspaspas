@@ -1,17 +1,19 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+  <Import Project="../Common.targets" />
+
   <PropertyGroup>
-    <TargetFramework>netstandard1.6</TargetFramework>
+    <TargetFramework>$(PasPasPasTargetFramework)</TargetFramework>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <LangVersion>7.1</LangVersion>
-    <DebugType>pdbonly</DebugType>
-    <DebugSymbols>True</DebugSymbols>
+    <LangVersion>$(PasPasPasCsLanguageVersion)</LangVersion>
+    <DocumentationFile>bin\Release\$(PasPasPasTargetFramework)\typings.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <LangVersion>7.1</LangVersion>
+    <LangVersion>$(PasPasPasCsLanguageVersion)</LangVersion>
+    <DocumentationFile>bin\Release\$(PasPasPasTargetFramework)\typings.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

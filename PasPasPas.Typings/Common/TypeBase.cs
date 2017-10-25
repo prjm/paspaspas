@@ -9,6 +9,10 @@ namespace PasPasPas.Typings.Common {
 
         private int typeId;
 
+        /// <summary>
+        ///     create a new type definiton
+        /// </summary>
+        /// <param name="withId">type id</param>
         public TypeBase(int withId)
             => typeId = withId;
 

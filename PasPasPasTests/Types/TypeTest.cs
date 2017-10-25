@@ -29,7 +29,7 @@ namespace PasPasPasTests.Types {
             using (var reader = api.CreateParserForString($"{file}.dpr", program)) {
                 var tree = reader.Parse();
 
-                var visitor = new TreeTransformer(project) { LogManager = env.Log };
+                var visitor = new TreeTransformer(env, project);
                 tree.Accept(visitor.AsVisitor());
 
                 var typeVisitor = new TypeAnnotator(env);
@@ -39,12 +39,12 @@ namespace PasPasPasTests.Types {
                 visitor.Project.Accept(astVisitor.AsVisitor());
 
                 Assert.IsNotNull(astVisitor.Result);
-                Assert.AreEqual(astVisitor.Result.Expressions.Count, 1);
+                Assert.AreEqual(1, astVisitor.Result.Expressions.Count);
 
                 var firstParam = astVisitor.Result.Expressions[0];
 
                 Assert.IsNotNull(firstParam.TypeInfo);
-                Assert.AreEqual(firstParam.TypeInfo.TypeId, typeId);
+                Assert.AreEqual(typeId, firstParam.TypeInfo.TypeId);
             }
         }
 

@@ -20,5 +20,21 @@
         /// </summary>
         public const int WordType = 20;
 
+        /// <summary>
+        ///     cardinal type (4 byte unsigned integer)
+        /// </summary>
+        public const int CardinalType = 30;
+
+        /// <summary>
+        ///     unit64 type (8 byte unsigned integer)
+        /// </summary>
+        public const int Uint64Type = 40;
+
+        /// <summary>
+        ///     boolean type
+        /// </summary>
+        public const int BooleanType = 50;
+
+
     }
 }

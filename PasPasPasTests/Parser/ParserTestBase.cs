@@ -116,7 +116,7 @@ namespace PasPasPasTests.Parser {
                 Assert.IsFalse(hasError);
 
 
-                var visitor = new TreeTransformer(project) { LogManager = env.Log };
+                var visitor = new TreeTransformer(env, project);
                 tree.Accept(visitor.AsVisitor());
 
                 var astVisitor = new AstVisitor<T>() { SearchFunction = searchFunction };

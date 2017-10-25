@@ -14,6 +14,10 @@ namespace PasPasPas.Typings.Common {
         private readonly IStartEndVisitor visitor;
         private readonly ITypedEnvironment environment;
 
+        /// <summary>
+        ///     as common visitor
+        /// </summary>
+        /// <returns></returns>
         public IStartEndVisitor AsVisitor() =>
             visitor;
 

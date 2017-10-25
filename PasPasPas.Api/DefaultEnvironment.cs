@@ -115,5 +115,11 @@ namespace PasPasPas.Api {
         /// </summary>
         public RegisteredTypes TypeRegistry { get; }
             = new RegisteredTypes();
+
+        /// <summary>
+        ///     boolean literal provider
+        /// </summary>
+        public IBooleanLiteralProvider BooleanLiterals { get; }
+            = new BooleanLiteralProvider();
     }
 }

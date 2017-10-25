@@ -133,7 +133,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         IChildVisitor<TryStatement>,
         IChildVisitor<IfStatement> {
 
-        private Visitor visitor;
+        private readonly Visitor visitor;
+        private readonly IParserEnvironment environment;
 
         public IStartEndVisitor AsVisitor()
             => visitor;
@@ -493,6 +494,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 var value = new ConstantValue();
                 InitNode(value, factor);
                 value.Kind = ConstantValueKind.False;
+                value.LiteralValue = environment.BooleanLiterals.FalseValue;
                 lastExpression.Value = value;
                 return;
             }
@@ -502,6 +504,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 var value = new ConstantValue();
                 InitNode(value, factor);
                 value.Kind = ConstantValueKind.True;
+                value.LiteralValue = environment.BooleanLiterals.TrueValue;
+                value.LiteralValue = true;
                 lastExpression.Value = value;
                 return;
             }
@@ -2624,8 +2628,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 if (logSource != null)
                     return logSource;
 
-                if (LogManager != null) {
-                    logSource = new LogSource(LogManager, MessageGroupId);
+                if (environment.Log != null) {
+                    logSource = new LogSource(environment.Log, MessageGroupId);
                     return logSource;
                 }
 
@@ -2633,10 +2637,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             }
         }
 
-        /// <summary>
-        ///     log manager
-        /// </summary>
-        public ILogManager LogManager { get; set; }
 
         /// <summary>
         ///     project root
@@ -2679,8 +2679,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     create a new options set
         /// </summary>
-        public TreeTransformer(ProjectRoot projectRoot) {
+        public TreeTransformer(IParserEnvironment env, ProjectRoot projectRoot) {
             visitor = new ChildVisitor(this);
+            environment = env;
             Project = projectRoot;
             CurrentUnitMode = new DictionaryIndexHelper<AbstractSyntaxPartBase, UnitMode>(currentValues);
             CurrentMemberVisibility = new DictionaryIndexHelper<AbstractSyntaxPartBase, MemberVisibility>(currentValues);

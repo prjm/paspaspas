@@ -33,6 +33,9 @@ namespace PasPasPas.Typings.Common {
             RegisterType(new ErrorType(TypeIds.ErrorType));
             RegisterType(new IntegralType(TypeIds.ByteType));
             RegisterType(new IntegralType(TypeIds.WordType));
+            RegisterType(new IntegralType(TypeIds.CardinalType));
+            RegisterType(new IntegralType(TypeIds.Uint64Type));
+            RegisterType(new BooleanType(TypeIds.BooleanType));
         }
 
         /// <summary>
