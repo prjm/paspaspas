@@ -1,4 +1,5 @@
-﻿using PasPasPas.Typings.Common;
+﻿using PasPasPas.Infrastructure.Utils;
+using PasPasPas.Typings.Common;
 
 namespace PasPasPas.Typings.Simple {
 
@@ -11,7 +12,8 @@ namespace PasPasPas.Typings.Simple {
         ///     create a new type
         /// </summary>
         /// <param name="withId"></param>
-        public IntegralType(int withId) : base(withId) {
+        /// <param name="name"></param>
+        public IntegralType(int withId, ScopedName name = null) : base(withId, name) {
         }
     }
 }

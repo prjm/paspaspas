@@ -31,8 +31,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
                     yield break;
 
                 for (var i = 0; i <= PartList.Count - 2; i++) {
-                    ISyntaxPart part = PartList[i];
-                    if (!(part is Identifier)) continue;
+                    var part = PartList[i];
+                    if (!(part is Identifier))
+                        continue;
                     yield return IdentifierValue(part);
                 }
             }

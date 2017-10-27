@@ -1,4 +1,6 @@
-﻿namespace PasPasPas.Parsing.SyntaxTree.Abstract {
+﻿using PasPasPas.Infrastructure.Utils;
+
+namespace PasPasPas.Parsing.SyntaxTree.Abstract {
 
     /// <summary>
     ///     type definition
@@ -9,5 +11,11 @@
         ///     common type id
         /// </summary>
         int TypeId { get; }
+
+        /// <summary>
+        ///     type name (can be empty)
+        /// </summary>
+        ScopedName TypeName { get; }
+
     }
 }
