@@ -63,7 +63,11 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
                     }
                 } while (!state.AtEof);
 
-                var data = state.Environment.StringPool.PoolString(resultBuilder.Data.ToString());
+                object data;
+                if (resultBuilder.Data.Length == 1)
+                    data = resultBuilder.Data[0];
+                else
+                    data = state.Environment.StringPool.PoolString(resultBuilder.Data.ToString());
                 return new Token(TokenKind.QuotedString, state, data);
             }
         }

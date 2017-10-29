@@ -27,5 +27,11 @@ namespace PasPasPasTests.Types {
             AssertExprType("false", TypeIds.BooleanType);
         }
 
+        [Fact]
+        public void TestCharLiteralTypes() {
+            AssertExprType("'C'", TypeIds.CharType);
+            AssertExprType("#9", TypeIds.CharType);
+        }
+
     }
 }

@@ -4163,7 +4163,7 @@ namespace PasPasPas.Parsing.Parser {
         private QuotedString RequireString(IExtendableSyntaxPart parent) {
             var result = new QuotedString();
             InitByTerminal(result, parent, TokenKind.QuotedString);
-            result.UnquotedValue = result.LastTerminalToken.ParsedValue?.ToString();
+            result.UnquotedValue = result.LastTerminalToken.ParsedValue;
             return result;
         }
 

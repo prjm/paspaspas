@@ -589,7 +589,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 InitNode(unitName, part, CurrentUnit.RequiredUnits);
                 unitName.Name = ExtractSymbolName(name);
                 unitName.Mode = CurrentUnitMode[CurrentUnit];
-                unitName.FileName = name.QuotedFileName?.UnquotedValue;
+                unitName.FileName = environment.LiteralUnwrapper.UnwrapString(name.QuotedFileName?.UnquotedValue);
                 CurrentUnit.RequiredUnits.Add(unitName, LogSource);
             }
         }
@@ -637,7 +637,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 InitNode(unitName, name, CurrentUnit.RequiredUnits);
                 unitName.Name = ExtractSymbolName(name);
                 unitName.Mode = CurrentUnitMode[CurrentUnit];
-                unitName.FileName = name.QuotedFileName?.UnquotedValue;
+                unitName.FileName = environment.LiteralUnwrapper.UnwrapString(name.QuotedFileName);
                 CurrentUnit.RequiredUnits.Add(unitName, LogSource);
             }
         }

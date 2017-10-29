@@ -35,6 +35,9 @@
         /// </summary>
         public const int BooleanType = 50;
 
-
+        /// <summary>
+        ///     char type
+        /// </summary>
+        public const int CharType = 60;
     }
 }

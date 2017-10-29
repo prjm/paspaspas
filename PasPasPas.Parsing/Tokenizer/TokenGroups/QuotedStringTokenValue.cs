@@ -58,7 +58,13 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
                 if (!found)
                     state.Error(Tokenizer.IncompleteString);
 
-                return new Token(TokenId, state, state.Environment.StringPool.PoolString(resultBuilder.Data.ToString()));
+                object value;
+                if (resultBuilder.Data.Length == 1)
+                    value = resultBuilder.Data[0];
+                else
+                    value = state.Environment.StringPool.PoolString(resultBuilder.Data.ToString());
+
+                return new Token(TokenId, state, value);
             }
         }
     }

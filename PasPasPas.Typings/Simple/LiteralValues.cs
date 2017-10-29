@@ -24,6 +24,8 @@ namespace PasPasPas.Typings.Simple {
                 return TypeIds.Uint64Type;
             else if (literalValue is bool)
                 return TypeIds.BooleanType;
+            else if (literalValue is char)
+                return TypeIds.CharType;
 
             return TypeIds.ErrorType;
         }

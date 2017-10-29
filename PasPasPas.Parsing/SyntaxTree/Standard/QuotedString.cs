@@ -10,8 +10,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     unquoted value
         /// </summary>
-        public string UnquotedValue { get; set; }
-            = string.Empty;
+        public object UnquotedValue { get; set; }
+            = null;
 
         /// <summary>
         ///     accept visitor
