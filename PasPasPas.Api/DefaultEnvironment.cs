@@ -99,13 +99,18 @@ namespace PasPasPas.Api {
         ///     default type registry
         /// </summary>
         public RegisteredTypes TypeRegistry { get; }
-            = new RegisteredTypes();
 
         /// <summary>
         ///     boolean literal provider
         /// </summary>
         public IBooleanLiteralProvider BooleanLiterals { get; }
             = new BooleanLiteralProvider();
+
+        /// <summary>
+        ///     create a new default environment
+        /// </summary>
+        public DefaultEnvironment()
+            => TypeRegistry = new RegisteredTypes(StringPool);
 
         /// <summary>
         ///     all entries

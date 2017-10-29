@@ -44,23 +44,25 @@ namespace PasPasPas.Typings.Common {
         /// <summary>
         ///     create a new type registry
         /// </summary>
-        public RegisteredTypes()
-            => RegisterCommonTypes();
+        public RegisteredTypes(StringPool pool)
+            => RegisterCommonTypes(pool);
 
-        private ScopedName CreateSystemScopeName(ITypedEnvironment environment) {
-            return null;
+        private ScopedName CreateSystemScopeName(StringPool pool, string typeName) {
+            var system = pool.PoolString("System");
+            typeName = pool.PoolString(typeName);
+            return new ScopedName(system, typeName);
         }
 
         /// <summary>
         ///     register built-in types
         /// </summary>
-        private void RegisterCommonTypes() {
+        private void RegisterCommonTypes(StringPool pool) {
             RegisterType(new ErrorType(TypeIds.ErrorType));
-            RegisterType(new IntegralType(TypeIds.ByteType));
-            RegisterType(new IntegralType(TypeIds.WordType));
-            RegisterType(new IntegralType(TypeIds.CardinalType));
-            RegisterType(new IntegralType(TypeIds.Uint64Type));
-            RegisterType(new BooleanType(TypeIds.BooleanType));
+            RegisterType(new IntegralType(TypeIds.ByteType, CreateSystemScopeName(pool, "Byte")));
+            RegisterType(new IntegralType(TypeIds.WordType, CreateSystemScopeName(pool, "Word")));
+            RegisterType(new IntegralType(TypeIds.CardinalType, CreateSystemScopeName(pool, "Cardinal")));
+            RegisterType(new IntegralType(TypeIds.Uint64Type, CreateSystemScopeName(pool, "UInt64")));
+            RegisterType(new BooleanType(TypeIds.BooleanType, CreateSystemScopeName(pool, "Boolean")));
         }
 
         /// <summary>

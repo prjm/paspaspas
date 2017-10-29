@@ -1,4 +1,5 @@
-﻿using PasPasPas.Typings.Common;
+﻿using PasPasPas.Infrastructure.Utils;
+using PasPasPas.Typings.Common;
 
 namespace PasPasPas.Typings.Simple {
 
@@ -11,7 +12,8 @@ namespace PasPasPas.Typings.Simple {
         ///     create a new boolean type
         /// </summary>
         /// <param name="withId"></param>
-        public BooleanType(int withId) : base(withId) {
+        /// <param name="name">name (optional)</param>
+        public BooleanType(int withId, ScopedName name = null) : base(withId, name) {
         }
     }
 }
