@@ -1,18 +1,20 @@
 ﻿namespace PasPasPas.Infrastructure.Environment {
 
     /// <summary>
-    ///     a manual static cache
+    ///     maintenance interface for environment items
     /// </summary>
-    public interface IManualStaticCache {
+    public interface IEnvironmentItem {
 
         /// <summary>
-        ///     item count
+        ///     get item count
         /// </summary>
         int Count { get; }
 
         /// <summary>
-        ///     clear the manual cache
+        ///     item caption
         /// </summary>
-        void Clear();
+        string Caption { get; }
+
+
     }
 }

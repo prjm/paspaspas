@@ -11,13 +11,16 @@ namespace PasPasPas.Parsing.Tokenizer.Patterns {
     /// <summary>
     ///     helper class to create tokenizer patterns
     /// </summary>
-    public class PatternFactory : IStaticCacheItem {
+    public class PatternFactory : IEnvironmentItem {
 
         public InputPatterns StandardPatterns { get; }
             = CreateStandardPatterns();
 
         public InputPatterns CompilerDirectivePatterns { get; }
             = CreateCompilerDirectivePatterns();
+
+        public int Count
+            => -1;
 
         public string Caption
             => "TokenizerPatternFactory";

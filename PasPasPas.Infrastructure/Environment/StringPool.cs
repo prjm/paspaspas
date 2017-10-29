@@ -6,7 +6,7 @@ namespace PasPasPas.Infrastructure.Environment {
     /// <summary>
     ///     simple string pool for chars
     /// </summary>
-    public class CharsAsString : IManualStaticCache {
+    public class CharsAsString : IEnvironmentItem {
 
         private Dictionary<char, string> pool
             = new Dictionary<char, string>();
@@ -16,6 +16,12 @@ namespace PasPasPas.Infrastructure.Environment {
         /// </summary>
         public int Count
             => pool.Count;
+
+        /// <summary>
+        ///     caption
+        /// </summary>
+        public string Caption
+            => "CharPool";
 
         /// <summary>
         ///     add this string to the string pool or get a reference to this item
@@ -49,7 +55,7 @@ namespace PasPasPas.Infrastructure.Environment {
     /// <summary>
     ///     basic string pool
     /// </summary>
-    public class StringPool : IManualStaticCache {
+    public class StringPool : IEnvironmentItem {
 
         private Dictionary<string, string> pool
             = new Dictionary<string, string>();
@@ -58,10 +64,16 @@ namespace PasPasPas.Infrastructure.Environment {
             = 300;
 
         /// <summary>
-        ///     count strings
+        ///     number of pooled strings
         /// </summary>
-        public int Count =>
-            pool.Count;
+        public int Count
+            => pool.Count;
+
+        /// <summary>
+        ///     caption
+        /// </summary>
+        public string Caption
+            => "StringPool";
 
         /// <summary>
         ///     clear the buffer pool

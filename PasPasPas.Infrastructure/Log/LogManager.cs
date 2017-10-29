@@ -1,18 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
+using PasPasPas.Infrastructure.Environment;
 
 namespace PasPasPas.Infrastructure.Log {
 
     /// <summary>
     ///     route a message
     /// </summary>
-    public class LogManager : ILogManager {
+    public class LogManager : ILogManager, IEnvironmentItem {
 
         /// <summary>
         ///     log targets
         /// </summary>
         private IList<ILogTarget> targets
             = new List<ILogTarget>();
+
+        /// <summary>
+        ///     count
+        /// </summary>
+        public int Count
+            => targets.Count;
+
+        /// <summary>
+        ///     managr caption
+        /// </summary>
+        public string Caption
+            => "LogManager";
 
 
         /// <summary>
@@ -41,7 +54,7 @@ namespace PasPasPas.Infrastructure.Log {
             if (message == null)
                 throw new ArgumentNullException(nameof(message));
 
-            foreach (ILogTarget target in targets)
+            foreach (var target in targets)
                 target.HandleMessage(message);
         }
 
@@ -55,10 +68,10 @@ namespace PasPasPas.Infrastructure.Log {
             if (target == null)
                 throw new ArgumentNullException(nameof(target));
 
-            bool found = false;
+            var found = false;
 
-            for (int i = targets.Count - 1; i >= 0; i--) {
-                ILogTarget currentTarget = targets[i];
+            for (var i = targets.Count - 1; i >= 0; i--) {
+                var currentTarget = targets[i];
                 if (currentTarget == target) {
                     target.UnregisteredAt(this);
                     targets.RemoveAt(i);

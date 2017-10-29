@@ -7,7 +7,7 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
 
 
 
-    public class RealLiteralConverter : IRealConverter, ILookupFunction<Entry, object> {
+    public class RealLiteralConverter : IEnvironmentItem, IRealConverter, ILookupFunction<Entry, object> {
 
         /// <summary>
         ///     invalid real literal
@@ -22,6 +22,12 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
 
         LookupTable ILookupFunction.Table
             => data;
+
+        public int Count
+            => Table.Count;
+
+        public string Caption
+            => "RealParser";
 
         public RealLiteralConverter()
             => data = new LookupTable<Entry, object>(ConvertLiterals);

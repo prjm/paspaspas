@@ -7,10 +7,22 @@ namespace PasPasPas.Infrastructure.Files {
     /// <summary>
     ///     standard file access
     /// </summary>
-    public class StandardFileAccess : IFileAccess {
+    public class StandardFileAccess : IFileAccess, IEnvironmentItem {
 
         private IDictionary<IFileReference, IBufferReadable> mockups =
             new Dictionary<IFileReference, IBufferReadable>();
+
+        /// <summary>
+        ///     item count
+        /// </summary>
+        public int Count
+            => -1;
+
+        /// <summary>
+        ///     file access
+        /// </summary>
+        public string Caption
+            => "StandardFileAccess";
 
         /// <summary>
         ///     open a file for reading

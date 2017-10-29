@@ -1,7 +1,18 @@
 ﻿using System;
+using PasPasPas.Infrastructure.Environment;
 
 namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
-    public class LiteralUnwrapper : ILiteralUnwrapper {
+
+    public class LiteralUnwrapper : IEnvironmentItem, ILiteralUnwrapper {
+
+        /// <summary>
+        ///     number of items
+        /// </summary>
+        public int Count
+            => -1;
+
+        public string Caption
+            => "LiteralUnwrapper";
 
         /// <summary>
         ///     unwrap an hex

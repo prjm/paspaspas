@@ -20,6 +20,11 @@ namespace PasPasPas.Infrastructure.Environment {
         /// </summary>
         public int Count
             => Items.Count;
+
+        /// <summary>
+        ///     pool name
+        /// </summary>
+        public string PoolName { get; set; }
     }
 
     /// <summary>

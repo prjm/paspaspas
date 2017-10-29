@@ -24,10 +24,12 @@ namespace SampleRunner {
         }
 
         private static string GetCacheName(object data) {
-            if (data is IStaticCacheItem item)
+            if (data is IEnvironmentItem item)
                 return $"[{item.Caption}]";
+            else if (data is ObjectPool pool)
+                return $"[{pool.PoolName}]";
             else
-                return string.Concat(data.ToString(), '*');
+                return $"[{data.GetType().ToString()}]";
         }
 
         private static void RunSample(IParserEnvironment environment, StringBuilder result, Action<StringBuilder> action) {
@@ -45,8 +47,13 @@ namespace SampleRunner {
                     result.AppendLine(name + ": " + fn.Table.Count);
                 else if (entry is ObjectPool pool)
                     result.AppendLine(name + ": " + pool.Count);
-                else if (entry is IManualStaticCache sc)
-                    result.AppendLine(name + ": " + sc.Count);
+                else if (entry is IEnvironmentItem sc) {
+                    var count = sc.Count;
+                    if (count < 0)
+                        result.AppendLine(name);
+                    else
+                        result.AppendLine(name + ": " + sc.Count);
+                }
                 else
                     result.AppendLine(name);
             }

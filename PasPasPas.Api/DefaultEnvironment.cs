@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using PasPasPas.Infrastructure.Environment;
 using PasPasPas.Infrastructure.Files;
@@ -19,7 +20,7 @@ namespace PasPasPas.Api {
         /// <summary>
         ///     default file access
         /// </summary>
-        private IFileAccess files
+        private StandardFileAccess files
             = new StandardFileAccess();
 
         /// <summary>
@@ -50,7 +51,7 @@ namespace PasPasPas.Api {
         ///     token sequence pool
         /// </summary>
         public ObjectPool<TokenizerWithLookahead.TokenSequence> TokenSequencePool { get; }
-            = new ObjectPool<TokenizerWithLookahead.TokenSequence>();
+            = new ObjectPool<TokenizerWithLookahead.TokenSequence>() { PoolName = "TokenSequencePool" };
 
         /// <summary>
         ///     tokenizer patterbs
@@ -74,7 +75,7 @@ namespace PasPasPas.Api {
         ///     string builder pool
         /// </summary>
         public ObjectPool<StringBuilder> StringBuilderPool { get; }
-            = new ObjectPool<StringBuilder>();
+            = new ObjectPool<StringBuilder>() { PoolName = "StringBuilderPool" };
 
         /// <summary>
         ///     char pool
@@ -87,28 +88,6 @@ namespace PasPasPas.Api {
         /// </summary>
         public StringPool StringPool { get; }
             = new StringPool();
-
-        /// <summary>
-        ///     all entries
-        /// </summary>
-        public IEnumerable<object> Entries {
-            get {
-                var data = new object[] {
-                    files,
-                    IntegerParser,
-                    HexNumberParser,
-                    CharLiteralConverter,
-                    RealLiteralConverter,
-                    StringBuilderPool,
-                    CharStringPool,
-                    TokenSequencePool,
-                    Patterns,
-                    Log,
-                    Files
-                };
-                return data;
-            }
-        }
 
         /// <summary>
         ///     standard literal unwrapper
@@ -127,5 +106,31 @@ namespace PasPasPas.Api {
         /// </summary>
         public IBooleanLiteralProvider BooleanLiterals { get; }
             = new BooleanLiteralProvider();
+
+        /// <summary>
+        ///     all entries
+        /// </summary>
+        public IEnumerable<object> Entries {
+            get {
+                var data = new object[] {
+                    files,
+                    IntegerParser,
+                    HexNumberParser,
+                    CharLiteralConverter,
+                    RealLiteralConverter,
+                    StringBuilderPool,
+                    CharStringPool,
+                    TokenSequencePool,
+                    Patterns,
+                    Log,
+                    Files,
+                    LiteralUnwrapper,
+                    BooleanLiterals,
+                    TypeRegistry
+                };
+                return data;
+            }
+        }
+
     }
 }

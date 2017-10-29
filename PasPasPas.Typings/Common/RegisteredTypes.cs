@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PasPasPas.Infrastructure.Environment;
 using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Typings.Simple;
@@ -13,13 +14,25 @@ namespace PasPasPas.Typings.Common {
     /// <summary>
     ///     common type registry
     /// </summary>
-    public class RegisteredTypes {
+    public class RegisteredTypes : IEnvironmentItem {
 
         private readonly IDictionary<int, ITypeDefinition> types
             = new Dictionary<int, ITypeDefinition>();
 
         private readonly IDictionary<ScopedName, ITypeDefinition> typesByName
             = new Dictionary<ScopedName, ITypeDefinition>();
+
+        /// <summary>
+        ///     number of types
+        /// </summary>
+        public int Count
+            => types.Count;
+
+        /// <summary>
+        ///     caption
+        /// </summary>
+        public string Caption
+            => "TypeRegistry";
 
         private void RegisterType(ITypeDefinition type) {
             types.Add(type.TypeId, type);

@@ -6,7 +6,7 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
     /// <summary>
     ///     converts a literal integer to a char value
     /// </summary>
-    public class CharLiteralConverter : ICharLiteralConverter, ILookupFunction<object, object> {
+    public class CharLiteralConverter : IEnvironmentItem, ICharLiteralConverter, ILookupFunction<object, object> {
 
         private LookupTable<object, object> data;
 
@@ -21,6 +21,12 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
 
         LookupTable ILookupFunction.Table
             => data;
+
+        public int Count
+            => Table.Count;
+
+        public string Caption
+            => "CharParser";
 
         /// <summary>
         ///     create a new char literal converter
