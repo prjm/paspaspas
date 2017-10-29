@@ -25,11 +25,11 @@ namespace PasPasPas.Options.DataTypes {
         protected override ResolvedFile DoResolvePath(IFileReference basePath, IFileReference pathToResolve) {
 
             if (pathToResolve.Path.StartsWith("*", StringComparison.Ordinal)) {
-                pathToResolve = Files.ReferenceToFile(pathToResolve.Path.Replace("*", Path.GetFileNameWithoutExtension(basePath.Path)));
+                pathToResolve = Files.ReferenceToFile(StringPool, pathToResolve.Path.Replace("*", Path.GetFileNameWithoutExtension(basePath.Path)));
             }
 
             if (string.IsNullOrWhiteSpace(Path.GetExtension(pathToResolve.Path))) {
-                pathToResolve = Files.ReferenceToFile(Path.ChangeExtension(pathToResolve.Path, ".res"));
+                pathToResolve = Files.ReferenceToFile(StringPool, Path.ChangeExtension(pathToResolve.Path, ".res"));
             }
 
             return ResolveFromSearchPath(basePath, pathToResolve);

@@ -1,4 +1,6 @@
-﻿namespace PasPasPas.Infrastructure.Files {
+﻿using PasPasPas.Infrastructure.Environment;
+
+namespace PasPasPas.Infrastructure.Files {
 
     /// <summary>
     ///     service to access files
@@ -30,7 +32,8 @@
         ///     create a reference to a file
         /// </summary>
         /// <param name="path">file to reference</param>
+        /// <param name="pool">string pool to use</param>
         /// <returns>file reference</returns>
-        IFileReference ReferenceToFile(string path);
+        IFileReference ReferenceToFile(StringPool pool, string path);
     }
 }

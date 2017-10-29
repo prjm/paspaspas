@@ -16,13 +16,14 @@ namespace PasPasPas.Infrastructure.Files {
         ///     create a new file reference
         /// </summary>
         /// <param name="path">path to fhe file</param>
+        /// <param name="pool">string pool to use</param>
         /// <exception cref="System.ArgumentException">Thrown if the path is empty</exception>
-        public FileReference(string path) {
+        public FileReference(StringPool pool, string path) {
 
             if (string.IsNullOrWhiteSpace(path))
                 throw new ArgumentNullException(nameof(path));
 
-            filePath = StringPool.PoolString(path);
+            filePath = pool.PoolString(path);
             hashcode = filePath.ToUpperInvariant().GetHashCode();
         }
 
@@ -42,9 +43,10 @@ namespace PasPasPas.Infrastructure.Files {
         ///     add a subpath
         /// </summary>
         /// <param name="path">path to add</param>
+        /// <param name="pool">string pool to use</param>
         /// <returns>combined path</returns>
-        public IFileReference Append(IFileReference path)
-            => new FileReference(System.IO.Path.Combine(filePath, path.Path));
+        public IFileReference Append(StringPool pool, IFileReference path)
+            => new FileReference(pool, System.IO.Path.Combine(filePath, path.Path));
 
         /// <summary>
         ///     string representation of this file reference

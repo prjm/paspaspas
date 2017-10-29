@@ -21,7 +21,7 @@ namespace PasPasPas.Infrastructure.Environment {
         IFileAccess Files { get; }
 
         /// <summary>
-        ///     string builder pool
+        ///     string builder poolt
         /// </summary>
         ObjectPool<StringBuilder> StringBuilderPool { get; }
 
@@ -29,6 +29,11 @@ namespace PasPasPas.Infrastructure.Environment {
         ///     string pool for single chars
         /// </summary>
         CharsAsString CharStringPool { get; }
+
+        /// <summary>
+        ///     string pool
+        /// </summary>
+        StringPool StringPool { get; }
 
         /// <summary>
         ///     enumerated entries

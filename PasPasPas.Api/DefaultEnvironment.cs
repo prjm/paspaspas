@@ -83,6 +83,12 @@ namespace PasPasPas.Api {
             = new CharsAsString();
 
         /// <summary>
+        ///     string pool
+        /// </summary>
+        public StringPool StringPool { get; }
+            = new StringPool();
+
+        /// <summary>
         ///     all entries
         /// </summary>
         public IEnumerable<object> Entries {

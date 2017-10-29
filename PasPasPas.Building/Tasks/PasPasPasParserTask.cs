@@ -50,7 +50,7 @@ namespace PasPasPas.Building.Tasks {
             var result = new StringBuilder();
             var count = 0;
 
-            foreach (var file in Path.AsFileList(settings.FileSystemAccess)) {
+            foreach (var file in Path.AsFileList(null, settings.FileSystemAccess)) {
                 count++;
                 var log = new LogTarget();
                 var options = new OptionSet(null);

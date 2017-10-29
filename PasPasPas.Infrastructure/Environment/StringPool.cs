@@ -54,10 +54,8 @@ namespace PasPasPas.Infrastructure.Environment {
         private Dictionary<string, string> pool
             = new Dictionary<string, string>();
 
-        private static Lazy<StringPool> instance
-            = new Lazy<StringPool>(() => new StringPool(), true);
-
-        private const int MaxStringLength = 300;
+        private const int MaxStringLength
+            = 300;
 
         /// <summary>
         ///     count strings
@@ -75,12 +73,10 @@ namespace PasPasPas.Infrastructure.Environment {
         ///     add this string to the string pool or get a reference to this item
         ///     out of the string pool
         /// </summary>
-        /// <param name="value"></param>
+        /// <param name="value">string to pool</param>
         /// <returns></returns>
-        public static string PoolString(string value) {
+        public string PoolString(string value) {
             if (!string.IsNullOrEmpty(value) && value.Length <= MaxStringLength) {
-                var pool = instance.Value.pool;
-
                 if (pool.TryGetValue(value, out var poolRef))
                     value = poolRef;
                 else

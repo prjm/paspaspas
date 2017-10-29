@@ -18,7 +18,7 @@ namespace PasPasPas.Options.DataTypes {
         ///     Create a new search path resolve
         /// </summary>
         /// <param name="options"></param>
-        protected SearchPathResolver(OptionSet options) : base(options.Files)
+        protected SearchPathResolver(OptionSet options) : base(options.Files, options.Environment.StringPool)
             => optionSet = options;
 
         /// <summary>
@@ -37,13 +37,13 @@ namespace PasPasPas.Options.DataTypes {
                 currentDirectory = null;
             }
 
-            var result = ResolveInDirectory(Files.ReferenceToFile(currentDirectory), pathToResolve);
+            var result = ResolveInDirectory(StringPool, Files.ReferenceToFile(StringPool, currentDirectory), pathToResolve);
             if (result.IsResolved) {
                 return result;
             }
 
             foreach (var path in optionSet.PathOptions.SearchPaths) {
-                result = ResolveInDirectory(path, pathToResolve);
+                result = ResolveInDirectory(StringPool, path, pathToResolve);
                 if (result.IsResolved) {
                     return result;
                 }

@@ -121,7 +121,7 @@ namespace PasPasPas.Parsing.Tokenizer {
             => environment.RealLiteralConverter.Convert(digits, decimals, minus, exp);
 
         public string GetBufferContent()
-            => StringPool.PoolString(buffer.ToString());
+            => environment.StringPool.PoolString(buffer.ToString());
 
         public char NextChar(bool append) {
             var result = input.NextChar();
@@ -129,6 +129,9 @@ namespace PasPasPas.Parsing.Tokenizer {
                 buffer.Append(result);
             return result;
         }
+
+        public IParserEnvironment Environment
+            => environment;
 
         public char PreviousChar()
             => input.PreviousChar();

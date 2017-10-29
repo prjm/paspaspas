@@ -51,6 +51,7 @@ namespace PasPasPas.Options.Bundles {
         /// </summary>
         public OptionSet(OptionSet baseOptions, IBasicEnvironment environment) {
             Files = environment.Files;
+            Environment = environment;
             CompilerOptions = new CompileOptions(baseOptions?.CompilerOptions);
             ConditionalCompilation = new ConditionalCompilationOptions(baseOptions?.ConditionalCompilation);
             Meta = new MetaInformation(this, baseOptions?.Meta);

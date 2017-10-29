@@ -166,6 +166,6 @@ namespace PasPasPas.Infrastructure.Utils {
         public override string ToString()
             => stringCache;
 
-
     }
+
 }

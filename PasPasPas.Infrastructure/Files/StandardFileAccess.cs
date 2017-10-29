@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using PasPasPas.Infrastructure.Environment;
 
 namespace PasPasPas.Infrastructure.Files {
 
@@ -60,9 +61,10 @@ namespace PasPasPas.Infrastructure.Files {
         ///     create a new reference to a file
         /// </summary>
         /// <param name="path">file reference</param>
+        /// <param name="pool">string pool to use</param>
         /// <returns></returns>
-        public IFileReference ReferenceToFile(string path)
-            => new FileReference(path);
+        public IFileReference ReferenceToFile(StringPool pool, string path)
+            => new FileReference(pool, path);
 
         /// <summary>
         ///     check if a file exists

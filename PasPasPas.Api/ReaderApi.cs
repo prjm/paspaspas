@@ -26,7 +26,7 @@ namespace PasPasPas.Api {
         /// <returns>file reader</returns>
         public StackedFileReader CreateReaderForString(string path, string content) {
             var fileAccess = staticEnvironment.Files;
-            var localPath = fileAccess.ReferenceToFile(path);
+            var localPath = fileAccess.ReferenceToFile(staticEnvironment.StringPool, path);
             var reader = new StackedFileReader(fileBuffer);
             fileBuffer.Add(localPath, new StringBufferReadable(content));
             reader.AddFileToRead(localPath);
@@ -49,7 +49,7 @@ namespace PasPasPas.Api {
         /// <returns>file reader</returns>
         public StackedFileReader CreateReaderForPath(string path) {
             var fileAccess = staticEnvironment.Files;
-            var localPath = fileAccess.ReferenceToFile(path);
+            var localPath = fileAccess.ReferenceToFile(staticEnvironment.StringPool, path);
             var reader = new StackedFileReader(fileBuffer);
             fileBuffer.Add(localPath, fileAccess.OpenFileForReading(localPath));
             reader.AddFileToRead(localPath);
@@ -63,7 +63,7 @@ namespace PasPasPas.Api {
         /// <param name="path">path to ope</param>
         public void SwitchToPath(StackedFileReader reader, string path) {
             var fileAccess = staticEnvironment.Files;
-            var localPath = fileAccess.ReferenceToFile(path);
+            var localPath = fileAccess.ReferenceToFile(staticEnvironment.StringPool, path);
             fileBuffer.Add(localPath, fileAccess.OpenFileForReading(localPath));
             reader.AddFileToRead(localPath);
         }

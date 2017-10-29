@@ -34,6 +34,10 @@ namespace PasPasPas.Typings.Common {
         public RegisteredTypes()
             => RegisterCommonTypes();
 
+        private ScopedName CreateSystemScopeName(ITypedEnvironment environment) {
+            return null;
+        }
+
         /// <summary>
         ///     register built-in types
         /// </summary>

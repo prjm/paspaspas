@@ -1044,7 +1044,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (fileName == null || string.IsNullOrWhiteSpace(fileName))
                 return;
 
-            var resolvedFile = Meta.LinkedFileResolver.ResolvePath(basePath, Meta.LinkedFileResolver.Files.ReferenceToFile(fileName));
+            var resolvedFile = Meta.LinkedFileResolver.ResolvePath(
+                basePath,
+                Meta.LinkedFileResolver.Files.ReferenceToFile(Options.Environment.StringPool, fileName));
 
             if (resolvedFile.IsResolved) {
                 var linkedFile = new LinkedFile() {
@@ -1075,7 +1077,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 return;
 
 
-            var resolvedFile = Meta.ResourceFilePathResolver.ResolvePath(basePath, Meta.ResourceFilePathResolver.Files.ReferenceToFile(fileName));
+            var resolvedFile = Meta.ResourceFilePathResolver.ResolvePath(
+                basePath,
+                Meta.ResourceFilePathResolver.Files.ReferenceToFile(Options.Environment.StringPool, fileName));
 
             if (resolvedFile.IsResolved) {
                 var resourceReference = new ResourceReference() {
@@ -1105,7 +1109,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (fileName == null || string.IsNullOrWhiteSpace(fileName))
                 return;
 
-            var targetPath = Meta.IncludePathResolver.ResolvePath(basePath, Meta.IncludePathResolver.Files.ReferenceToFile(fileName)).TargetPath;
+            var targetPath = Meta.IncludePathResolver.ResolvePath(
+                basePath,
+                Meta.IncludePathResolver.Files.ReferenceToFile(Options.Environment.StringPool, fileName)).TargetPath;
 
             if (IncludeInput != null) {
                 IncludeInput.Buffer.Add(targetPath, Options.Files.OpenFileForReading(targetPath));

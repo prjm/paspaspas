@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using PasPasPas.Infrastructure.Environment;
 using PasPasPas.Infrastructure.Files;
 
 namespace PasPasPas.Infrastructure.Files {
@@ -59,13 +60,21 @@ namespace PasPasPas.Infrastructure.Files {
         /// </summary>
         public IFileAccess Files { get; }
 
+        /// <summary>
+        ///     used string pool
+        /// </summary>
+        public StringPool StringPool { get; }
+
 
         /// <summary>
         ///     create a new path resolver
         /// </summary>
         /// <param name="fileAccess">file access</param>
-        protected PathResolver(IFileAccess fileAccess)
-            => Files = fileAccess ?? throw new ArgumentNullException(nameof(fileAccess));
+        /// <param name="pool">used string pool</param>
+        protected PathResolver(IFileAccess fileAccess, StringPool pool) {
+            Files = fileAccess ?? throw new ArgumentNullException(nameof(fileAccess));
+            StringPool = pool ?? throw new ArgumentNullException(nameof(pool));
+        }
 
         /// <summary>
         ///     resolves a path and caches the result
@@ -97,10 +106,11 @@ namespace PasPasPas.Infrastructure.Files {
         /// <summary>
         ///     check if a given path exists in a directory
         /// </summary>
+        /// <param name="pool"></param>
         /// <param name="currentDirectory">current directoy</param>
         /// <param name="pathToResolve">path to resolve</param>
         /// <returns></returns>
-        protected ResolvedFile ResolveInDirectory(IFileReference currentDirectory, IFileReference pathToResolve) {
+        protected ResolvedFile ResolveInDirectory(StringPool pool, IFileReference currentDirectory, IFileReference pathToResolve) {
             var fileAccess = Files;
 
             if (currentDirectory == null)
@@ -109,7 +119,7 @@ namespace PasPasPas.Infrastructure.Files {
             if (pathToResolve == null)
                 throw new ArgumentNullException(nameof(pathToResolve));
 
-            var combinedPath = currentDirectory.Append(pathToResolve);
+            var combinedPath = currentDirectory.Append(pool, pathToResolve);
             var isResolved = fileAccess.FileExists(combinedPath);
 
             return new ResolvedFile(currentDirectory, pathToResolve, combinedPath, isResolved);

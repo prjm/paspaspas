@@ -59,7 +59,7 @@ namespace PasPasPas.Parsing.Tokenizer.Patterns {
         public InputPattern(CharacterClass prefix, PatternContinuation tokenValue, string completePrefix) {
             Prefix = prefix ?? throw new ArgumentNullException(nameof(prefix));
             TokenValue = tokenValue ?? throw new ArgumentNullException(nameof(tokenValue));
-            CompletePrefix = StringPool.PoolString(completePrefix);
+            CompletePrefix = completePrefix;
         }
 
         /// <summary>
