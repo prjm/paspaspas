@@ -1,22 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+  <Import Project="../Common.targets" />
+
   <PropertyGroup>
-    <TargetFramework>netstandard1.6</TargetFramework>
+    <TargetFramework>$(PasPasPasTargetFramework)</TargetFramework>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <LangVersion>7.1</LangVersion>
-    <DebugType>pdbonly</DebugType>
-    <DebugSymbols>True</DebugSymbols>
+    <LangVersion>$(PasPasPasCsLanguageVersion)</LangVersion>
+    <DocumentationFile>bin\Release\$(PasPasPasTargetFramework)\api.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <LangVersion>7.1</LangVersion>
+    <LangVersion>$(PasPasPasCsLanguageVersion)</LangVersion>
+    <DocumentationFile>bin\Release\$(PasPasPasTargetFramework)\api.xml</DocumentationFile>
   </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="System.ValueTuple" Version="4.4.0" />
-  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\PasPasPas.Infrastructure\PasPasPas.Infrastructure.csproj" />
