@@ -643,7 +643,7 @@ namespace PasPasPasTests.Parser {
             RunAstTest("unit z.x; interface type z = interface end; implementation end.", t => r(t)?.Kind, StructuredTypeKind.Interface);
             RunAstTest("unit z.x; interface type z = interface(q) end; implementation end.", t => (r(t)?.BaseTypes[0] as MetaType)?.Fragments[0]?.Name?.CompleteName, "q");
             RunAstTest("unit z.x; interface type z = interface(q) [s] end; implementation end.", t => r(t)?.GuidName?.CompleteName, "s");
-            RunAstTest("unit z.x; interface type z = interface(q) ['s'] end; implementation end.", t => r(t)?.GuidId, "s");
+            RunAstTest("unit z.x; interface type z = interface(q) ['s'] end; implementation end.", t => r(t)?.GuidId, 's');
 
             RunAstTest("unit z.x; interface type z = interface procedure m(q: integer); end; implementation end.", t => m(t)?.Kind, ProcedureKind.Procedure);
             RunAstTest("unit z.x; interface type z = interface function m(q: integer): string; end; implementation end.", t => m(t)?.Kind, ProcedureKind.Function);

@@ -53,6 +53,10 @@ namespace PasPasPasTests.Tokenizer {
         internal void IsQuotedString(string input, string value)
             => IsToken(TokenKind.QuotedString, input, input, value);
 
+        internal void IsQuotedString(string input, char value)
+            => IsToken(TokenKind.QuotedString, input, input, value);
+
+
         internal void IsInteger(string input, object value)
             => IsToken(TokenKind.Integer, input, input, value);
 

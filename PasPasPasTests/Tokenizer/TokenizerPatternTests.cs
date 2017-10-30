@@ -350,7 +350,7 @@ namespace PasPasPasTests.Tokenizer {
             TestPattern(patterns, "'aaa''''aaa'", TokenKind.QuotedString);
             TestPattern(patterns, PasPasPas.Parsing.Tokenizer.Tokenizer.IncompleteString, "'aaaaaa", TokenKind.QuotedString);
             TestPattern(patterns, PasPasPas.Parsing.Tokenizer.Tokenizer.IncompleteString, "'", TokenKind.QuotedString);
-            Assert.AreEqual("a", TestPattern(patterns, "'a'", TokenKind.QuotedString).ParsedValue);
+            Assert.AreEqual('a', TestPattern(patterns, "'a'", TokenKind.QuotedString).ParsedValue);
             Assert.AreEqual("a'", TestPattern(patterns, "'a'''", TokenKind.QuotedString).ParsedValue);
             Assert.AreEqual("a'aa", TestPattern(patterns, "'a''aa'", TokenKind.QuotedString).ParsedValue);
         }

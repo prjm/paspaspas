@@ -637,7 +637,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 InitNode(unitName, name, CurrentUnit.RequiredUnits);
                 unitName.Name = ExtractSymbolName(name);
                 unitName.Mode = CurrentUnitMode[CurrentUnit];
-                unitName.FileName = environment.LiteralUnwrapper.UnwrapString(name.QuotedFileName);
+                unitName.FileName = environment.LiteralUnwrapper.UnwrapString(name.QuotedFileName?.UnquotedValue);
                 CurrentUnit.RequiredUnits.Add(unitName, LogSource);
             }
         }

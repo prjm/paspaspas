@@ -140,10 +140,10 @@ namespace PasPasPasTests.Tokenizer {
             IsQuotedString("''", string.Empty);
             IsQuotedString("'sdfddfsd'", "sdfddfsd");
             IsQuotedString("'sdf''ddfsd'", "sdf'ddfsd");
-            IsQuotedString("#45", "-");
+            IsQuotedString("#45", '-');
             IsQuotedString("#45'xxx'#55", "-xxx7");
             IsQuotedString("'ddd'#45'ddd-xxx'", "ddd-ddd-xxx");
-            IsQuotedString("#$58D", "֍");
+            IsQuotedString("#$58D", '֍');
             IsQuotedString("'ddd'#$58D'xxx'", "ddd֍xxx");
         }
 
