@@ -14,6 +14,7 @@ using PasPasPasTests.Common;
 using PasPasPas.Infrastructure.Files;
 using PasPasPas.Parsing.Parser;
 using System.IO;
+using PasPasPas.Typings.Common;
 
 namespace PasPasPasTests.Parser {
 
@@ -138,7 +139,7 @@ namespace PasPasPasTests.Parser {
         }
 
 
-        protected ISyntaxPart RunAstTest(string input, IParserEnvironment env, IList<ILogMessage> messages) {
+        protected ISyntaxPart RunAstTest(string input, ITypedEnvironment env, IList<ILogMessage> messages) {
             TestOptions = new OptionSet(env);
             var api = new ParserApi(env, TestOptions);
 

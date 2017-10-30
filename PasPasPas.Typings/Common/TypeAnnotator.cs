@@ -34,7 +34,15 @@ namespace PasPasPas.Typings.Common {
         ///     determine the type of a constant value
         /// </summary>
         /// <param name="element"></param>
-        public void EndVisit(ConstantValue element) =>
-            element.TypeInfo = environment.TypeRegistry.GetTypeOrUndef(LiteralValues.GetTypeFor(element.LiteralValue));
+        public void EndVisit(ConstantValue element) {
+            if (element.Kind == ConstantValueKind.HexNumber ||
+                element.Kind == ConstantValueKind.Integer ||
+                element.Kind == ConstantValueKind.QuotedString ||
+                element.Kind == ConstantValueKind.RealNumber ||
+                element.Kind == ConstantValueKind.True ||
+                element.Kind == ConstantValueKind.False) {
+                element.TypeInfo = environment.TypeRegistry.GetTypeOrUndef(LiteralValues.GetTypeFor(element.LiteralValue));
+            }
+        }
     }
 }

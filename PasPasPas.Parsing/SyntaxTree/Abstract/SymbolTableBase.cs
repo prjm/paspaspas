@@ -52,7 +52,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
                 return false;
             }
 
-            T replacement = MergeDuplicates(this[name], entry);
+            var replacement = MergeDuplicates(this[name], entry);
 
             if (replacement == null)
                 return false;
@@ -68,7 +68,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <param name="entry">new entry</param>
         /// <returns></returns>
         protected virtual T MergeDuplicates(T existingEntry, T entry)
-            => default(T);
+            => default;
 
         /// <summary>
         ///     check if duplicates are allowd
@@ -90,7 +90,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         public override IEnumerable<ISyntaxPart> Parts {
             get {
                 if (symbols != null)
-                    foreach (T value in symbols.Values)
+                    foreach (var value in symbols.Values)
                         yield return value;
             }
         }

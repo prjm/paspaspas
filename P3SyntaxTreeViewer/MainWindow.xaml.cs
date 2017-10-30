@@ -13,6 +13,7 @@ using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Infrastructure.Files;
 using PasPasPas.Api;
 using PasPasPas.Parsing;
+using PasPasPas.Typings.Common;
 
 namespace P3SyntaxTreeViewer {
 
@@ -48,14 +49,11 @@ namespace P3SyntaxTreeViewer {
                 var listLog = new ListLogTarget();
                 env.Log.RegisterTarget(listLog);
 
-                var cst = Parse(env, code);
-                var visitor = new TreeTransformer(env, new ProjectRoot());
-
-                cst.Accept(visitor.AsVisitor());
+                (var bst, var ast) = Parse(env, code);
 
                 Dispatcher.Invoke(() => {
-                    DisplayTree(StandardTreeView, cst);
-                    DisplayTree(AbstractTreeView, visitor.Project);
+                    DisplayTree(StandardTreeView, bst);
+                    DisplayTree(AbstractTreeView, ast);
                     DisplayLog(listLog.Messages);
                 });
             });
@@ -90,6 +88,7 @@ namespace P3SyntaxTreeViewer {
             var treeViewItem = new TreeViewItem();
             var terminal = cst as Terminal;
             var symbol = cst as ISymbolTableEntry;
+            var typeInfo = cst as ITypedSyntaxNode;
 
             if (terminal != null) {
                 treeViewItem.Header = "'" + terminal.Token.Value + "'";
@@ -100,6 +99,13 @@ namespace P3SyntaxTreeViewer {
 
             if (symbol != null)
                 treeViewItem.Header += ": " + symbol.SymbolName;
+
+            if (typeInfo != null && typeInfo.TypeInfo != null) {
+                if (typeInfo.TypeInfo.TypeName != null)
+                    treeViewItem.Header += " [" + typeInfo.TypeInfo.TypeName + "]";
+                else
+                    treeViewItem.Header += " [" + typeInfo.TypeInfo.TypeId.ToString() + "]";
+            }
 
             if (parent != null) {
                 parent.Items.Add(treeViewItem);
@@ -115,15 +121,24 @@ namespace P3SyntaxTreeViewer {
             treeViewItem.IsExpanded = true;
         }
 
-        private ISyntaxPart Parse(IParserEnvironment env, string code) {
+        /// <summary>
+        ///     parse the source
+        /// </summary>
+        /// <param name="env"></param>
+        /// <param name="code"></param>
+        /// <returns></returns>
+        private (ISyntaxPart bst, ProjectRoot ast) Parse(ITypedEnvironment env, string code) {
             var parserApi = new ParserApi(env);
             using (var parser = parserApi.CreateParserForString("z.x.pas", code)) {
-                return parser.Parse();
+                var bst = parser.Parse();
+                var ast = parserApi.CreateAbstractSyntraxTree(bst);
+                parserApi.AnnotateWithTypes(ast);
+                return (bst, ast);
             }
         }
 
 
-        private IParserEnvironment CreateEnvironment()
+        private ITypedEnvironment CreateEnvironment()
             => new DefaultEnvironment();
 
         private void Code_TextChanged(object sender, TextChangedEventArgs e)

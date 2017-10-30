@@ -3,6 +3,7 @@ using System.Text;
 using PasPasPas.Api;
 using PasPasPas.Infrastructure.Environment;
 using PasPasPas.Parsing;
+using PasPasPas.Typings.Common;
 using SampleRunner.Scenarios;
 
 namespace SampleRunner {
@@ -15,7 +16,7 @@ namespace SampleRunner {
             var mode = SampleMode.ReadFile;
             var repeat = 1;
             var result = new StringBuilder();
-            IParserEnvironment environment = new DefaultEnvironment();
+            var environment = new DefaultEnvironment();
             Action<StringBuilder> action;
 
             action = PrepareSample(environment, testPath, mode, repeat);
@@ -65,7 +66,7 @@ namespace SampleRunner {
             result.AppendLine($"{GC.CollectionCount(2)} collections level 2.");
         }
 
-        private static Action<StringBuilder> PrepareSample(IParserEnvironment environment, string testPath, SampleMode mode, int repeat) {
+        private static Action<StringBuilder> PrepareSample(ITypedEnvironment environment, string testPath, SampleMode mode, int repeat) {
             Action<StringBuilder> action;
 
             switch (mode) {
