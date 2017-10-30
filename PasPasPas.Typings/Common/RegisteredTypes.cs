@@ -64,6 +64,8 @@ namespace PasPasPas.Typings.Common {
             RegisterType(new IntegralType(TypeIds.Uint64Type, CreateSystemScopeName(pool, "UInt64")));
             RegisterType(new BooleanType(TypeIds.BooleanType, CreateSystemScopeName(pool, "Boolean")));
             RegisterType(new CharType(TypeIds.CharType, CreateSystemScopeName(pool, "Char")));
+            RegisterType(new StringType(TypeIds.StringType, CreateSystemScopeName(pool, "String")));
+            RegisterType(new StringType(TypeIds.Extended, CreateSystemScopeName(pool, "Extended")));
         }
 
         /// <summary>

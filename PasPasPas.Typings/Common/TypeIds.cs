@@ -39,5 +39,16 @@
         ///     char type
         /// </summary>
         public const int CharType = 60;
+
+        /// <summary>
+        ///     string type
+        /// </summary>
+        public const int StringType = 70;
+
+        /// <summary>
+        ///     extended real type
+        /// </summary>
+        public const int Extended = 80;
+
     }
 }

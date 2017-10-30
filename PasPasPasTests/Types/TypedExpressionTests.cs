@@ -33,5 +33,17 @@ namespace PasPasPasTests.Types {
             AssertExprType("#9", TypeIds.CharType);
         }
 
+        [Fact]
+        public void TestStringLiteralTypes() {
+            AssertExprType("'CD'", TypeIds.StringType);
+            AssertExprType("#9#9", TypeIds.StringType);
+        }
+
+        [Fact]
+        public void TestExtendedLiteralTypes() {
+            AssertExprType("3.5", TypeIds.Extended);
+            AssertExprType("2.33434343", TypeIds.Extended);
+        }
+
     }
 }
