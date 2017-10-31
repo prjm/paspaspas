@@ -12,8 +12,5 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         RegisteredTypes TypeRegistry { get; }
 
-
-
-
     }
 }

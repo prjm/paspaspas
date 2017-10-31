@@ -9,6 +9,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// </summary>
     public class ArrayConstant : ExpressionBase, IExpressionTarget {
 
+        /// <summary>
+        ///     element items
+        /// </summary>
         public ISyntaxPartList<IExpression> Items { get; }
 
         /// <summary>
@@ -35,8 +38,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     accept visitor
         /// </summary>
-        /// <param name="startVisitor">start visitor</param>
-        /// <param name="endVisitor">end visitor</param>
+        /// <param name="visitor">visitor to accept</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
             AcceptParts(this, visitor);

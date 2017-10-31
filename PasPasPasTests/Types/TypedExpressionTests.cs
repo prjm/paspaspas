@@ -45,5 +45,11 @@ namespace PasPasPasTests.Types {
             AssertExprType("2.33434343", TypeIds.Extended);
         }
 
+        [Fact]
+        public void TestBooleanOperators() {
+            AssertExprType("not true", TypeIds.BooleanType);
+            AssertExprType("not false", TypeIds.BooleanType);
+        }
+
     }
 }

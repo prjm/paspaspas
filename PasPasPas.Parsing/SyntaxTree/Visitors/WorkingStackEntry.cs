@@ -26,6 +26,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// </summary>
         /// <param name="definingNode"></param>
         /// <param name="createdNote"></param>
+        /// <param name="childNode">child node</param>
         public WorkingStackEntry(object definingNode, ISyntaxPart createdNote, ISyntaxPart childNode) {
             node = definingNode;
             data = createdNote;

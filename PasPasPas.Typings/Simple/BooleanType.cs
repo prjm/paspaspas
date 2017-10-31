@@ -1,5 +1,6 @@
 ﻿using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Typings.Common;
+using PasPasPas.Typings.Operations;
 
 namespace PasPasPas.Typings.Simple {
 
@@ -14,6 +15,7 @@ namespace PasPasPas.Typings.Simple {
         /// <param name="withId"></param>
         /// <param name="name">name (optional)</param>
         public BooleanType(int withId, ScopedName name = null) : base(withId, name) {
+            RegisterOperation(new NotOperation());
         }
     }
 }

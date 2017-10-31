@@ -1,5 +1,7 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Abstract;
+﻿using System;
+using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
+using PasPasPas.Typings.Operations;
 using PasPasPas.Typings.Simple;
 
 namespace PasPasPas.Typings.Common {
@@ -9,7 +11,8 @@ namespace PasPasPas.Typings.Common {
     /// </summary>
     public class TypeAnnotator :
 
-        IEndVisitor<ConstantValue> {
+        IEndVisitor<ConstantValue>,
+        IEndVisitor<UnaryOperator> {
 
         private readonly IStartEndVisitor visitor;
         private readonly ITypedEnvironment environment;
@@ -43,6 +46,36 @@ namespace PasPasPas.Typings.Common {
                 element.Kind == ConstantValueKind.False) {
                 element.TypeInfo = environment.TypeRegistry.GetTypeOrUndef(LiteralValues.GetTypeFor(element.LiteralValue));
             }
+        }
+
+        /// <summary>
+        ///     determine the type of an unary operator
+        /// </summary>
+        /// <param name="element">operator to determine the type of</param>
+        public void EndVisit(UnaryOperator element) {
+            if (element.Kind == ExpressionKind.Not) {
+                element.TypeInfo = GetTypeOfOperation(DefinedOperations.NotOperation, element.Value?.TypeInfo);
+            }
+        }
+
+        /// <summary>
+        ///     gets the type of a given operation
+        /// </summary>
+        /// <param name="operationKind"></param>
+        /// <param name="typeInfo"></param>
+        /// <returns></returns>
+        private ITypeDefinition GetTypeOfOperation(int operationKind, ITypeDefinition typeInfo) {
+            if (typeInfo == null)
+                return null;
+
+            var operation = typeInfo.GetOperation(operationKind);
+
+            if (operation == null)
+                return null;
+
+            var signature = new Signature(typeInfo.TypeId);
+            var typeId = operation.GetOutputTypeForOperation(signature);
+            return environment.TypeRegistry.GetTypeOrUndef(typeId);
         }
     }
 }

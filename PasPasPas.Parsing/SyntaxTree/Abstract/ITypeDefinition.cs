@@ -17,5 +17,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         ScopedName TypeName { get; }
 
+        /// <summary>
+        ///     get an operation of this type
+        /// </summary>
+        /// <param name="operationKind"></param>
+        /// <returns></returns>
+        IOperation GetOperation(int operationKind);
     }
 }

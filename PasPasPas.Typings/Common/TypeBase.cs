@@ -1,4 +1,5 @@
-﻿using PasPasPas.Infrastructure.Utils;
+﻿using System.Collections.Generic;
+using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
 
 namespace PasPasPas.Typings.Common {
@@ -10,6 +11,8 @@ namespace PasPasPas.Typings.Common {
 
         private readonly int typeId;
         private readonly ScopedName typeName;
+        private IDictionary<int, IOperation>
+            operations = new Dictionary<int, IOperation>();
 
         /// <summary>
         ///     create a new type definiton
@@ -31,5 +34,23 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         public ScopedName TypeName
             => typeName;
+
+        /// <summary>
+        ///     gets a registered operation
+        /// </summary>
+        /// <param name="operationKind"></param>
+        /// <returns></returns>
+        public IOperation GetOperation(int operationKind) {
+            if (!operations.TryGetValue(operationKind, out var result))
+                return null;
+            return result;
+        }
+
+        /// <summary>
+        ///     register a operation
+        /// </summary>
+        /// <param name="operation">operation to register</param>
+        protected void RegisterOperation(IOperation operation)
+            => operations.Add(operation.Kind, operation);
     }
 }
