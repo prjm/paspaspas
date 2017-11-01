@@ -3,7 +3,7 @@
     /// <summary>
     ///     base interface for an operation
     /// </summary>
-    public interface IOperation {
+    public interface IOperator {
         /// <summary>
         ///     operation kind
         /// </summary>

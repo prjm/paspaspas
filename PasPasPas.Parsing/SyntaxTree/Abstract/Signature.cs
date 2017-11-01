@@ -66,6 +66,16 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         }
 
         /// <summary>
+        ///     check if this signature consinsts of a single type
+        ///     and compare its type id
+        /// </summary>
+        /// <param name="typeId1"> first type id to compare</param>
+        /// <param name="typeId2"> seoconed type id to compare</param>
+        /// <returns><c>true</c> if this signature only uses this types</returns>
+        public bool EqualsType(int typeId1, int typeId2)
+            => data.Length == 2 && data[0] == typeId1 && data[1] == typeId2;
+
+        /// <summary>
         ///     get the hash code for this signatur
         /// </summary>
         /// <returns></returns>

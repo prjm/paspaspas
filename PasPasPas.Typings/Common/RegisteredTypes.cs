@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using PasPasPas.Infrastructure.Environment;
 using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
+using PasPasPas.Typings.Operations;
 using PasPasPas.Typings.Simple;
 
 namespace PasPasPas.Typings.Common {
@@ -18,6 +19,9 @@ namespace PasPasPas.Typings.Common {
 
         private readonly IDictionary<int, ITypeDefinition> types
             = new Dictionary<int, ITypeDefinition>();
+
+        private readonly IDictionary<int, IOperator> operators
+            = new Dictionary<int, IOperator>();
 
         private readonly IDictionary<ScopedName, ITypeDefinition> typesByName
             = new Dictionary<ScopedName, ITypeDefinition>();
@@ -44,8 +48,20 @@ namespace PasPasPas.Typings.Common {
         /// <summary>
         ///     create a new type registry
         /// </summary>
-        public RegisteredTypes(StringPool pool)
-            => RegisterCommonTypes(pool);
+        public RegisteredTypes(StringPool pool) {
+            RegisterCommonTypes(pool);
+            RegisterCommonOperators();
+        }
+
+        private void RegisterCommonOperators() {
+            RegisterOperator(new LogicalOperators(DefinedOperators.NotOperation));
+            RegisterOperator(new LogicalOperators(DefinedOperators.AndOperation));
+            RegisterOperator(new LogicalOperators(DefinedOperators.XorOperation));
+            RegisterOperator(new LogicalOperators(DefinedOperators.OrOperation));
+        }
+
+        private void RegisterOperator(IOperator newOperator)
+            => operators.Add(newOperator.Kind, newOperator);
 
         private ScopedName CreateSystemScopeName(StringPool pool, string typeName) {
             var system = pool.PoolString("System");
@@ -66,6 +82,16 @@ namespace PasPasPas.Typings.Common {
             RegisterType(new CharType(TypeIds.CharType, CreateSystemScopeName(pool, "Char")));
             RegisterType(new StringType(TypeIds.StringType, CreateSystemScopeName(pool, "String")));
             RegisterType(new StringType(TypeIds.Extended, CreateSystemScopeName(pool, "Extended")));
+        }
+
+        /// <summary>
+        ///     gets an registered operator
+        /// </summary>
+        /// <param name="operatorKind">operator kind</param>
+        /// <returns></returns>
+        public IOperator GetOperator(int operatorKind) {
+            operators.TryGetValue(operatorKind, out var result);
+            return result;
         }
 
         /// <summary>
