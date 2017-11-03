@@ -1,13 +1,14 @@
 ﻿using System.Collections.Generic;
 using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
+using PasPasPas.Parsing.SyntaxTree.Types;
 
 namespace PasPasPas.Typings.Common {
 
     /// <summary>
     ///     basic type definition
     /// </summary>
-    public class TypeBase : ITypeDefinition {
+    public abstract class TypeBase : ITypeDefinition {
 
         private readonly int typeId;
         private readonly ScopedName typeName;
@@ -33,5 +34,14 @@ namespace PasPasPas.Typings.Common {
         public ScopedName TypeName
             => typeName;
 
+        /// <summary>
+        ///     get the type kind
+        /// </summary>
+        public abstract CommonTypeKind TypeKind { get; }
+
+        /// <summary>
+        ///     type registryB
+        /// </summary>
+        public ITypeRegistry TypeRegistry { get; set; }
     }
 }

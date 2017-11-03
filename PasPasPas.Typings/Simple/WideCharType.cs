@@ -10,22 +10,22 @@ using PasPasPas.Typings.Common;
 namespace PasPasPas.Typings.Simple {
 
     /// <summary>
-    ///     real type defnition
+    ///     wide char type
     /// </summary>
-    public class RealType : TypeBase {
+    public class WideCharType : TypeBase {
 
         /// <summary>
-        ///     real type
+        ///     wide char type
         /// </summary>
-        /// <param name="withId">type id</param>
-        /// <param name="withName">type name</param>
-        public RealType(int withId, ScopedName withName = null) : base(withId, withName) {
+        /// <param name="withId"></param>
+        /// <param name="withName"></param>
+        public WideCharType(int withId, ScopedName withName = null) : base(withId, withName) {
         }
 
         /// <summary>
-        ///     common type kind
+        ///     wide char type
         /// </summary>
         public override CommonTypeKind TypeKind
-            => CommonTypeKind.FloatType;
+            => CommonTypeKind.WideCharType;
     }
 }

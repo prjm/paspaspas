@@ -1,4 +1,4 @@
-﻿namespace PasPasPas.Parsing.SyntaxTree.Abstract {
+﻿namespace PasPasPas.Parsing.SyntaxTree.Types {
 
     /// <summary>
     ///     syntax node with type annotation

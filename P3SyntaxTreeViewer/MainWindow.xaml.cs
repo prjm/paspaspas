@@ -88,7 +88,7 @@ namespace P3SyntaxTreeViewer {
             var treeViewItem = new TreeViewItem();
             var terminal = cst as Terminal;
             var symbol = cst as ISymbolTableEntry;
-            var typeInfo = cst as ITypedSyntaxNode;
+            var typeInfo = cst as PasPasPas.Parsing.SyntaxTree.Types.ITypedSyntaxNode;
 
             if (terminal != null) {
                 treeViewItem.Header = "'" + terminal.Token.Value + "'";

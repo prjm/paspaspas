@@ -50,5 +50,19 @@
         /// </summary>
         public const int Extended = 80;
 
+        /// <summary>
+        ///     integer type
+        /// </summary>
+        public const int IntegerType = 90;
+
+        /// <summary>
+        ///     unicode string type
+        /// </summary>
+        public const int UnicodeStringType = 100;
+
+        /// <summary>
+        ///     ansi char type
+        /// </summary>
+        public const int AnsiCharType = 110;
     }
 }

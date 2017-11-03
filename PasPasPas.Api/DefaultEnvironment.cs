@@ -5,6 +5,7 @@ using PasPasPas.Infrastructure.Environment;
 using PasPasPas.Infrastructure.Files;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Parsing;
+using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Parsing.Tokenizer;
 using PasPasPas.Parsing.Tokenizer.LiteralValues;
 using PasPasPas.Parsing.Tokenizer.Patterns;
@@ -98,7 +99,7 @@ namespace PasPasPas.Api {
         /// <summary>
         ///     default type registry
         /// </summary>
-        public RegisteredTypes TypeRegistry { get; }
+        public ITypeRegistry TypeRegistry { get; }
 
         /// <summary>
         ///     boolean literal provider

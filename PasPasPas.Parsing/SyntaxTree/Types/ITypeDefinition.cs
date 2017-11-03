@@ -1,6 +1,6 @@
 ﻿using PasPasPas.Infrastructure.Utils;
 
-namespace PasPasPas.Parsing.SyntaxTree.Abstract {
+namespace PasPasPas.Parsing.SyntaxTree.Types {
 
     /// <summary>
     ///     type definition
@@ -16,6 +16,16 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     type name (can be empty)
         /// </summary>
         ScopedName TypeName { get; }
+
+        /// <summary>
+        ///     get the common type kind
+        /// </summary>
+        CommonTypeKind TypeKind { get; }
+
+        /// <summary>
+        ///     used type registry
+        /// </summary>
+        ITypeRegistry TypeRegistry { get; }
 
     }
 }

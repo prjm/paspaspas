@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace PasPasPas.Parsing.SyntaxTree.Abstract {
+namespace PasPasPas.Parsing.SyntaxTree.Types {
 
     /// <summary>
     ///     a type signature
@@ -12,6 +8,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     public struct Signature : IEquatable<Signature> {
 
         private int[] data;
+
+        /// <summary>
+        ///     get the number of type ids in this signaure
+        /// </summary>
+        public int Length
+            => data.Length;
 
         /// <summary>
         ///     create a new type signature
@@ -33,10 +35,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     check if this signature consinsts of a single type
         ///     and compare its type id
         /// </summary>
-        /// <param name="typeId">type id to compare</param>
+        /// <param name="registry">type registry</param>
+        /// <param name="typeKind">type id to compare</param>
         /// <returns><c>true</c> if this signature only uses this type</returns>
-        public bool EqualsType(int typeId)
-            => data.Length == 1 && data[0] == typeId;
+        public bool EqualsType(ITypeRegistry registry, CommonTypeKind typeKind)
+            => (data.Length == 1) && registry.GetTypeByIdOrUndefinedType(data[0]).TypeKind == typeKind;
 
 
         /// <summary>
@@ -69,11 +72,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     check if this signature consinsts of a single type
         ///     and compare its type id
         /// </summary>
-        /// <param name="typeId1"> first type id to compare</param>
-        /// <param name="typeId2"> seoconed type id to compare</param>
+        /// <param name="registry">type registry</param>
+        /// <param name="typeKind1"> first type id to compare</param>
+        /// <param name="typeKind2"> seoconed type id to compare</param>
         /// <returns><c>true</c> if this signature only uses this types</returns>
-        public bool EqualsType(int typeId1, int typeId2)
-            => data.Length == 2 && data[0] == typeId1 && data[1] == typeId2;
+        public bool EqualsType(ITypeRegistry registry, CommonTypeKind typeKind1, CommonTypeKind typeKind2)
+            => data.Length == 2 &&
+            registry.GetTypeByIdOrUndefinedType(data[0]).TypeKind == typeKind1 &&
+            registry.GetTypeByIdOrUndefinedType(data[1]).TypeKind == typeKind2;
 
         /// <summary>
         ///     get the hash code for this signatur

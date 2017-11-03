@@ -1,4 +1,5 @@
-﻿using PasPasPas.Typings.Common;
+﻿using PasPasPas.Parsing.SyntaxTree.Types;
+using PasPasPas.Typings.Common;
 
 namespace PasPasPas.Typings.Simple {
 
@@ -13,5 +14,11 @@ namespace PasPasPas.Typings.Simple {
         /// <param name="withId"></param>
         public ErrorType(int withId) : base(withId) {
         }
+
+        /// <summary>
+        ///     unknown type kind
+        /// </summary>
+        public override CommonTypeKind TypeKind
+            => CommonTypeKind.UnknownType;
     }
 }

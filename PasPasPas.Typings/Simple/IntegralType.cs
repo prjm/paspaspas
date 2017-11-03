@@ -1,4 +1,5 @@
 ﻿using PasPasPas.Infrastructure.Utils;
+using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Typings.Common;
 
 namespace PasPasPas.Typings.Simple {
@@ -15,5 +16,11 @@ namespace PasPasPas.Typings.Simple {
         /// <param name="name"></param>
         public IntegralType(int withId, ScopedName name = null) : base(withId, name) {
         }
+
+        /// <summary>
+        ///     integer type
+        /// </summary>
+        public override CommonTypeKind TypeKind
+            => CommonTypeKind.IntegerType;
     }
 }

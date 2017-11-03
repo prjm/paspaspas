@@ -1,4 +1,6 @@
-﻿namespace PasPasPas.Parsing.SyntaxTree.Abstract {
+﻿using PasPasPas.Parsing.SyntaxTree.Types;
+
+namespace PasPasPas.Parsing.SyntaxTree.Abstract {
 
     /// <summary>
     ///     base class for expression parts

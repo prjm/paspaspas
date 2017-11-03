@@ -54,5 +54,14 @@ namespace PasPasPasTests.Types {
             AssertExprType("true xor false", TypeIds.BooleanType);
         }
 
+        [Fact]
+        public void TestArithmetikOperatorsInteger() {
+            AssertExprType("1 + 1", TypeIds.IntegerType);
+            AssertExprType("1 - 1", TypeIds.IntegerType);
+            AssertExprType("1 * 1", TypeIds.IntegerType);
+            AssertExprType("1 div 1", TypeIds.IntegerType);
+            AssertExprType("1 mod 1", TypeIds.IntegerType);
+        }
+
     }
 }

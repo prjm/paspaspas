@@ -1,7 +1,7 @@
-﻿using System;
-using PasPasPas.Parsing.SyntaxTree.Abstract;
+﻿using PasPasPas.Parsing.SyntaxTree.Abstract;
+using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
-using PasPasPas.Typings.Operations;
+using PasPasPas.Typings.Operators;
 using PasPasPas.Typings.Simple;
 
 namespace PasPasPas.Typings.Common {
@@ -45,7 +45,8 @@ namespace PasPasPas.Typings.Common {
                 element.Kind == ConstantValueKind.RealNumber ||
                 element.Kind == ConstantValueKind.True ||
                 element.Kind == ConstantValueKind.False) {
-                element.TypeInfo = environment.TypeRegistry.GetTypeOrUndef(LiteralValues.GetTypeFor(element.LiteralValue));
+                var typeId = LiteralValues.GetTypeFor(element.LiteralValue);
+                element.TypeInfo = environment.TypeRegistry.GetTypeByIdOrUndefinedType(typeId);
             }
         }
 
@@ -62,6 +63,21 @@ namespace PasPasPas.Typings.Common {
             }
             else if (element.Kind == ExpressionKind.Xor) {
                 element.TypeInfo = GetTypeOfOperator(DefinedOperators.XorOperation, element.LeftOperand?.TypeInfo, element.RightOperand?.TypeInfo);
+            }
+            else if (element.Kind == ExpressionKind.Plus) {
+                element.TypeInfo = GetTypeOfOperator(DefinedOperators.PlusOperation, element.LeftOperand?.TypeInfo, element.RightOperand?.TypeInfo);
+            }
+            else if (element.Kind == ExpressionKind.Minus) {
+                element.TypeInfo = GetTypeOfOperator(DefinedOperators.MinusOperation, element.LeftOperand?.TypeInfo, element.RightOperand?.TypeInfo);
+            }
+            else if (element.Kind == ExpressionKind.Times) {
+                element.TypeInfo = GetTypeOfOperator(DefinedOperators.TimesOperation, element.LeftOperand?.TypeInfo, element.RightOperand?.TypeInfo);
+            }
+            else if (element.Kind == ExpressionKind.Div) {
+                element.TypeInfo = GetTypeOfOperator(DefinedOperators.DivOperation, element.LeftOperand?.TypeInfo, element.RightOperand?.TypeInfo);
+            }
+            else if (element.Kind == ExpressionKind.Mod) {
+                element.TypeInfo = GetTypeOfOperator(DefinedOperators.ModOperation, element.LeftOperand?.TypeInfo, element.RightOperand?.TypeInfo);
             }
         }
 
@@ -92,7 +108,7 @@ namespace PasPasPas.Typings.Common {
 
             var signature = new Signature(typeInfo.TypeId);
             var typeId = operation.GetOutputTypeForOperation(signature);
-            return environment.TypeRegistry.GetTypeOrUndef(typeId);
+            return environment.TypeRegistry.GetTypeByIdOrUndefinedType(typeId);
         }
 
         /// <summary>
@@ -117,11 +133,8 @@ namespace PasPasPas.Typings.Common {
 
             var signature = new Signature(typeInfo1.TypeId, typeInfo2.TypeId);
             var typeId = operation.GetOutputTypeForOperation(signature);
-            return environment.TypeRegistry.GetTypeOrUndef(typeId);
+            return environment.TypeRegistry.GetTypeByIdOrUndefinedType(typeId);
         }
-
-
-
 
     }
 }

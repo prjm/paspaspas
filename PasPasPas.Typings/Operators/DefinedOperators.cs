@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PasPasPas.Typings.Operations {
+﻿namespace PasPasPas.Typings.Operators {
 
     /// <summary>
     ///     standard operations
@@ -32,5 +26,29 @@ namespace PasPasPas.Typings.Operations {
         /// </summary>
         public const int OrOperation = 13;
 
+        /// <summary>
+        ///     add operator
+        /// </summary>
+        public const int PlusOperation = 14;
+
+        /// <summary>
+        ///     subtract operator
+        /// </summary>
+        public const int MinusOperation = 15;
+
+        /// <summary>
+        ///     multiply operator
+        /// </summary>
+        public const int TimesOperation = 16;
+
+        /// <summary>
+        ///     div operator
+        /// </summary>
+        public const int DivOperation = 17;
+
+        /// <summary>
+        ///     module operator
+        /// </summary>
+        public const int ModOperation = 18;
     }
 }
