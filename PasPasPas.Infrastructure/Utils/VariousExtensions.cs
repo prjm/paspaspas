@@ -56,6 +56,36 @@ namespace PasPasPas.Infrastructure.Utils {
     }
 
     /// <summary>
+    ///     integer helpers
+    /// </summary>
+    public static class RangeHelpers {
+
+        /// <summary>
+        ///     test if one integer equals another value
+        /// </summary>
+        /// <param name="value">value to compare</param>
+        /// <param name="t1">first item</param>
+        /// <param name="t2">second item</param>
+        /// <returns></returns>
+        public static bool In(this int value, int t1, int t2)
+            => (value == t1 || value == t2);
+
+
+        /// <summary>
+        ///     test if one integer equals another value
+        /// </summary>
+        /// <param name="value">value to compare</param>
+        /// <param name="t1">first item</param>
+        /// <param name="t2">second item</param>
+        /// <param name="t3">thirs item</param>
+        /// <returns></returns>
+        public static bool In(this int value, int t1, int t2, int t3)
+            => (value == t1 || value == t2 || value == t3);
+
+
+    }
+
+    /// <summary>
     ///     some linq extensions
     /// </summary>
     public static class VariousExtensions {

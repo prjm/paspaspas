@@ -79,11 +79,12 @@ namespace PasPasPas.Typings.Common {
             RegisterType(new IntegralType(TypeIds.WordType, CreateSystemScopeName(pool, "Word")));
             RegisterType(new IntegralType(TypeIds.CardinalType, CreateSystemScopeName(pool, "Cardinal")));
             RegisterType(new Integral64BitType(TypeIds.Uint64Type, CreateSystemScopeName(pool, "UInt64")));
+            RegisterType(new Integral64BitType(TypeIds.Int64Type, CreateSystemScopeName(pool, "Int64")));
             RegisterType(new IntegralType(TypeIds.IntegerType, CreateSystemScopeName(pool, "Integer")));
             RegisterType(new BooleanType(TypeIds.BooleanType, CreateSystemScopeName(pool, "Boolean")));
             RegisterType(new AnsiCharType(TypeIds.AnsiCharType, CreateSystemScopeName(pool, "AnsiChar")));
             RegisterType(new UnicodeStringType(TypeIds.UnicodeStringType, CreateSystemScopeName(pool, "UnicodeString")));
-            RegisterType(new UnicodeStringType(TypeIds.Extended, CreateSystemScopeName(pool, "Extended")));
+            RegisterType(new RealType(TypeIds.Extended, CreateSystemScopeName(pool, "Extended")));
 
             RegisterType(new TypeAlias(TypeIds.StringType, TypeIds.UnicodeStringType, CreateSystemScopeName(pool, "String")));
             RegisterType(new TypeAlias(TypeIds.CharType, TypeIds.AnsiCharType, CreateSystemScopeName(pool, "Char")));

@@ -64,5 +64,10 @@
         ///     ansi char type
         /// </summary>
         public const int AnsiCharType = 110;
+
+        /// <summary>
+        ///     signed int64 type
+        /// </summary>
+        public const int Int64Type = 120;
     }
 }

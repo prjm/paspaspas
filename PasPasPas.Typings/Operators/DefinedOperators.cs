@@ -50,5 +50,10 @@
         ///     module operator
         /// </summary>
         public const int ModOperation = 18;
+
+        /// <summary>
+        ///     division operator
+        /// </summary>
+        public const int SlashOperation = 19;
     }
 }

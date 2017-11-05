@@ -30,5 +30,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Types {
         /// </summary>
         /// <param name="newOperator">operator to register</param>
         void RegisterOperator(IOperator newOperator);
+
     }
 }

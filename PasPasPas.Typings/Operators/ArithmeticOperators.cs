@@ -1,5 +1,5 @@
 ﻿using System;
-using PasPasPas.Parsing.SyntaxTree.Abstract;
+using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Typings.Common;
 
@@ -48,43 +48,49 @@ namespace PasPasPas.Typings.Operators {
             if (input.Length != 2)
                 return TypeIds.ErrorType;
 
-            var left = TypeRegistry.GetTypeByIdOrUndefinedType(input[0]).TypeKind;
-            var right = TypeRegistry.GetTypeByIdOrUndefinedType(input[1]).TypeKind;
+            var left = TypeRegistry.GetTypeKind(input[0]);
+            var right = TypeRegistry.GetTypeKind(input[1]);
 
-            if (Kind == DefinedOperators.PlusOperation ||
-                Kind == DefinedOperators.MinusOperation ||
-                Kind == DefinedOperators.TimesOperation) {
+            if (Kind.In(DefinedOperators.PlusOperation,
+                        DefinedOperators.MinusOperation,
+                        DefinedOperators.TimesOperation)) {
 
-                if (left == CommonTypeKind.IntegerType && right == CommonTypeKind.IntegerType)
+                if (CommonTypeKind.FloatType.One(left, right))
+                    return TypeIds.Extended;
+
+                if (CommonTypeKind.Int64Type.One(left, right))
+                    return TypeIds.Int64Type;
+
+                if (CommonTypeKind.IntegerType.All(left, right))
                     return TypeIds.IntegerType;
 
             }
 
-            if (input.Length == 2 && (
-                Kind == DefinedOperators.DivOperation ||
-                Kind == DefinedOperators.ModOperation)) {
+            if (Kind.In(DefinedOperators.DivOperation,
+                        DefinedOperators.ModOperation)) {
 
-                if (left == CommonTypeKind.IntegerType && right == CommonTypeKind.IntegerType)
+                if (CommonTypeKind.Int64Type.One(left, right))
+                    return TypeIds.Int64Type;
+
+                if (CommonTypeKind.IntegerType.All(left, right))
                     return TypeIds.IntegerType;
 
             }
 
-            /*
-            if (Kind == DefinedOperators.PlusOperation && input.EqualsType(Def))
+            if (Kind == DefinedOperators.SlashOperation) {
 
-            switch (Kind) {
-                case DefinedOperators.PlusOperation:
-                    return "+";
-                case DefinedOperators.MinusOperation:
-                    return "-";
-                case DefinedOperators.TimesOperation:
-                    return "*";
-                case DefinedOperators.DivOperation:
-                    return "div";
-                case DefinedOperators.ModOperation:
-                    return "mod";
+                if (CommonTypeKind.FloatType.One(left, right))
+                    return TypeIds.Extended;
+
+                if (CommonTypeKind.Int64Type.One(left, right))
+                    return TypeIds.Extended;
+
+                if (CommonTypeKind.IntegerType.All(left, right))
+                    return TypeIds.Extended;
+
+
             }
-                        */
+
             return TypeIds.ErrorType;
         }
 
@@ -98,6 +104,7 @@ namespace PasPasPas.Typings.Operators {
             typeRegistry.RegisterOperator(new ArithmeticOperators(DefinedOperators.TimesOperation));
             typeRegistry.RegisterOperator(new ArithmeticOperators(DefinedOperators.DivOperation));
             typeRegistry.RegisterOperator(new ArithmeticOperators(DefinedOperators.ModOperation));
+            typeRegistry.RegisterOperator(new ArithmeticOperators(DefinedOperators.SlashOperation));
         }
     }
 }

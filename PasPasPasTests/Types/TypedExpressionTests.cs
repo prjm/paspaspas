@@ -61,6 +61,53 @@ namespace PasPasPasTests.Types {
             AssertExprType("1 * 1", TypeIds.IntegerType);
             AssertExprType("1 div 1", TypeIds.IntegerType);
             AssertExprType("1 mod 1", TypeIds.IntegerType);
+            AssertExprType("1 / 1", TypeIds.Extended);
+        }
+
+        [Fact]
+        public void TestArithmetikOperatorsInt64() {
+            AssertExprType("4294967296 + 1", TypeIds.Int64Type);
+            AssertExprType("4294967296 - 1", TypeIds.Int64Type);
+            AssertExprType("4294967296 * 1", TypeIds.Int64Type);
+            AssertExprType("4294967296 div 1", TypeIds.Int64Type);
+            AssertExprType("4294967296 mod 1", TypeIds.Int64Type);
+            AssertExprType("4294967296 / 1", TypeIds.Extended);
+            AssertExprType("1 + 4294967296", TypeIds.Int64Type);
+            AssertExprType("1 - 4294967296", TypeIds.Int64Type);
+            AssertExprType("1 * 4294967296", TypeIds.Int64Type);
+            AssertExprType("1 div 4294967296", TypeIds.Int64Type);
+            AssertExprType("1 mod 4294967296", TypeIds.Int64Type);
+            AssertExprType("1 / 4294967296", TypeIds.Extended);
+            AssertExprType("4294967296 + 4294967296", TypeIds.Int64Type);
+            AssertExprType("4294967296 - 4294967296", TypeIds.Int64Type);
+            AssertExprType("4294967296 * 4294967296", TypeIds.Int64Type);
+            AssertExprType("4294967296 div 4294967296", TypeIds.Int64Type);
+            AssertExprType("4294967296 mod 4294967296", TypeIds.Int64Type);
+            AssertExprType("4294967296 / 4294967296", TypeIds.Extended);
+        }
+
+        [Fact]
+        public void TestArithmetikOperatorsReal() {
+            AssertExprType("1.0 + 1", TypeIds.Extended);
+            AssertExprType("1.0 - 1", TypeIds.Extended);
+            AssertExprType("1.0 * 1", TypeIds.Extended);
+            AssertExprType("1.0 / 1", TypeIds.Extended);
+            AssertExprType("1 + 1.0", TypeIds.Extended);
+            AssertExprType("1 - 1.0", TypeIds.Extended);
+            AssertExprType("1 * 1.0", TypeIds.Extended);
+            AssertExprType("1 / 1.0", TypeIds.Extended);
+            AssertExprType("1.0 + 1.0", TypeIds.Extended);
+            AssertExprType("1.0 - 1.0", TypeIds.Extended);
+            AssertExprType("1.0 * 1.0", TypeIds.Extended);
+            AssertExprType("1.0 / 1.0", TypeIds.Extended);
+            AssertExprType("1.0 + 4294967296", TypeIds.Extended);
+            AssertExprType("1.0 - 4294967296", TypeIds.Extended);
+            AssertExprType("1.0 * 4294967296", TypeIds.Extended);
+            AssertExprType("1.0 / 4294967296", TypeIds.Extended);
+            AssertExprType("4294967296 + 1.0", TypeIds.Extended);
+            AssertExprType("4294967296 - 1.0", TypeIds.Extended);
+            AssertExprType("4294967296 * 1.0", TypeIds.Extended);
+            AssertExprType("4294967296 / 1.0", TypeIds.Extended);
         }
 
     }

@@ -79,6 +79,9 @@ namespace PasPasPas.Typings.Common {
             else if (element.Kind == ExpressionKind.Mod) {
                 element.TypeInfo = GetTypeOfOperator(DefinedOperators.ModOperation, element.LeftOperand?.TypeInfo, element.RightOperand?.TypeInfo);
             }
+            else if (element.Kind == ExpressionKind.Slash) {
+                element.TypeInfo = GetTypeOfOperator(DefinedOperators.SlashOperation, element.LeftOperand?.TypeInfo, element.RightOperand?.TypeInfo);
+            }
         }
 
         /// <summary>
