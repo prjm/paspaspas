@@ -37,11 +37,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     symbol name
         /// </summary>
-        protected override string InternalSymbolName {
-            get {
-                return Name?.CompleteName;
-            }
-        }
+        protected override string InternalSymbolName
+            => Name?.CompleteName;
 
         /// <summary>
         ///     hints
@@ -58,8 +55,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     accept visitor
         /// </summary>
-        /// <param name="startVisitor">start visitor</param>
-        /// <param name="endVisitor">end visitor</param>
+        /// <param name="visitor">node visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
             AcceptParts(this, visitor);

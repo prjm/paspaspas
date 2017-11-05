@@ -9,13 +9,45 @@ namespace PasPasPas.Parsing {
     ///     parser environment
     /// </summary>
     public interface IParserEnvironment : IBasicEnvironment {
+
+        /// <summary>
+        ///     integer literal parser
+        /// </summary>
         ILiteralParser IntegerParser { get; }
+
+        /// <summary>
+        ///     hex number literal parser
+        /// </summary>
         ILiteralParser HexNumberParser { get; }
+
+        /// <summary>
+        ///     char literal converter
+        /// </summary>
         ICharLiteralConverter CharLiteralConverter { get; }
+
+        /// <summary>
+        ///     real literal converter
+        /// </summary>
         IRealConverter RealLiteralConverter { get; }
+
+        /// <summary>
+        ///     object pool for token sequences
+        /// </summary>
         ObjectPool<Tokenizer.TokenizerWithLookahead.TokenSequence> TokenSequencePool { get; }
+
+        /// <summary>
+        ///     patters
+        /// </summary>
         PatternFactory Patterns { get; }
+
+        /// <summary>
+        ///     literal unwrapper
+        /// </summary>
         ILiteralUnwrapper LiteralUnwrapper { get; }
+
+        /// <summary>
+        ///     boolean literal serivices
+        /// </summary>
         IBooleanLiteralProvider BooleanLiterals { get; }
     }
 }

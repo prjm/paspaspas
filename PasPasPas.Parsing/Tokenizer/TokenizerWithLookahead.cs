@@ -231,9 +231,15 @@ namespace PasPasPas.Parsing.Tokenizer {
         public IDictionary<string, int> Keywords =>
             BaseTokenizer.Keywords;
 
+        /// <summary>
+        ///     file input
+        /// </summary>
         public StackedFileReader Input
             => BaseTokenizer.Input;
 
+        /// <summary>
+        ///     log manager
+        /// </summary>
         public ILogManager Log
             => BaseTokenizer.Log;
 

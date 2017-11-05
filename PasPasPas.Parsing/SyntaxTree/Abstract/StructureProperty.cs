@@ -41,13 +41,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         public override IEnumerable<ISyntaxPart> Parts {
             get {
-                foreach (ParameterTypeDefinition parameter in Parameters.Items)
+                foreach (var parameter in Parameters.Items)
                     yield return parameter;
                 if (TypeValue != null)
                     yield return TypeValue;
                 if (Value != null)
                     yield return Value;
-                foreach (StructurePropertyAccessor accessor in Accessors)
+                foreach (var accessor in Accessors)
                     yield return accessor;
             }
         }
@@ -78,8 +78,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     accept visitor
         /// </summary>
-        /// <param name="startVisitor">start visitor</param>
-        /// <param name="endVisitor">end visitor</param>
+        /// <param name="visitor">node visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
             AcceptParts(this, visitor);

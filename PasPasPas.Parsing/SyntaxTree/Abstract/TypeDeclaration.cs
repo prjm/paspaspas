@@ -30,7 +30,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         public override IEnumerable<ISyntaxPart> Parts {
             get {
                 if (Generics != null)
-                    foreach (GenericType generic in Generics)
+                    foreach (var generic in Generics)
                         yield return generic;
 
                 if (TypeValue != null)
@@ -48,8 +48,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         public DeclaredSymbols Symbols {
             get {
-                var delegatedValue = TypeValue as IDeclaredSymbolTarget;
-                if (delegatedValue != null)
+                if (TypeValue is IDeclaredSymbolTarget delegatedValue)
                     return delegatedValue.Symbols;
                 else
                     return null;
@@ -59,8 +58,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     accept visitor
         /// </summary>
-        /// <param name="startVisitor">start visitor</param>
-        /// <param name="endVisitor">end visitor</param>
+        /// <param name="visitor">node visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
             AcceptParts(this, visitor);

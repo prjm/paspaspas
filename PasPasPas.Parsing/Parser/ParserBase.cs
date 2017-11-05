@@ -53,8 +53,8 @@ namespace PasPasPas.Parsing.Parser {
         /// <summary>
         ///     creates a new parser
         /// </summary>
-        /// <param name="tokenizerWithLookAhead"></param>
-        /// <param name="environment">environment</param>
+        /// <param name="parserOptions">parser options</param>
+        /// <param name="env">environment</param>
         protected ParserBase(IParserEnvironment env, OptionSet parserOptions, TokenizerWithLookahead tokenizerWithLookAhead) {
             environment = env;
             tokenizer = tokenizerWithLookAhead;

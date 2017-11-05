@@ -205,7 +205,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         /// <param name="genericPart">part to add</param>
         public void AddGenericPart(string genericPart) {
-            GenericSymbolNamePart lastPart = parts.Last();
+            var lastPart = parts.Last();
             lastPart.AddParameter(genericPart);
         }
     }

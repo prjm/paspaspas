@@ -18,12 +18,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         public override IEnumerable<ISyntaxPart> Parts {
             get {
-                foreach (ISyntaxPart part in base.Parts)
+                foreach (var part in base.Parts)
                     yield return part;
                 if (Generics != null)
-                    foreach (ISyntaxPart genericType in Generics)
+                    foreach (var genericType in Generics)
                         yield return genericType;
-                foreach (MethodDirective directive in Directives)
+                foreach (var directive in Directives)
                     yield return directive;
                 if (Implementation != null)
                     yield return Implementation;

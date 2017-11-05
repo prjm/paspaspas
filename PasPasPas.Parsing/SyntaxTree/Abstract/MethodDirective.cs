@@ -37,7 +37,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
             get {
                 if (Value != null)
                     yield return Value;
-                foreach (MethodDirectiveSpecifier specifier in Specifiers)
+                foreach (var specifier in Specifiers)
                     yield return specifier;
             }
         }
@@ -45,8 +45,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     accept visitor
         /// </summary>
-        /// <param name="startVisitor">start visitor</param>
-        /// <param name="endVisitor">end visitor</param>
+        /// <param name="visitor">node visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
             AcceptParts(this, visitor);

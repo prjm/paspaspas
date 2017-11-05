@@ -36,9 +36,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         public override IEnumerable<ISyntaxPart> Parts {
             get {
-                foreach (AbstractSyntaxPartBase part in Items)
+                foreach (var part in Items)
                     yield return part;
-                foreach (DeclaredSymbol part in DirectItems)
+                foreach (var part in DirectItems)
                     yield return part;
             }
         }
@@ -66,10 +66,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <param name="name">symbol to find</param>
         /// <returns></returns>
         public DeclaredSymbol Find(IEnumerable<GenericSymbolNamePart> name) {
-            DeclaredSymbols symbols = this;
+            var symbols = this;
             DeclaredSymbol symbol = null;
 
-            foreach (GenericSymbolNamePart part in name) {
+            foreach (var part in name) {
 
                 if (symbols == null)
                     return null;
@@ -91,8 +91,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     accept visitor
         /// </summary>
-        /// <param name="startVisitor">start visitor</param>
-        /// <param name="endVisitor">end visitor</param>
+        /// <param name="visitor">node visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
             AcceptParts(this, visitor);

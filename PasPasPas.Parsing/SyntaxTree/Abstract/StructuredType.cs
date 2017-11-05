@@ -71,19 +71,19 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         public override IEnumerable<ISyntaxPart> Parts {
             get {
-                foreach (ITypeSpecification baseType in BaseTypes)
+                foreach (var baseType in BaseTypes)
                     yield return baseType;
-                foreach (StructureFields fields in Fields.Items)
+                foreach (var fields in Fields.Items)
                     yield return fields;
-                foreach (StructureMethod method in Methods)
+                foreach (var method in Methods)
                     yield return method;
-                foreach (StructureProperty property in Properties)
+                foreach (var property in Properties)
                     yield return property;
-                foreach (StructureMethodResolution resolution in MethodResolutions.Resolutions)
+                foreach (var resolution in MethodResolutions.Resolutions)
                     yield return resolution;
-                foreach (DeclaredSymbol symbol in Symbols)
+                foreach (var symbol in Symbols)
                     yield return symbol;
-                foreach (StructureVariantItem variant in Variants.Items)
+                foreach (var variant in Variants.Items)
                     yield return variant;
             }
         }
@@ -116,8 +116,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     accept visitor
         /// </summary>
-        /// <param name="startVisitor">start visitor</param>
-        /// <param name="endVisitor">end visitor</param>
+        /// <param name="visitor">node visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
             AcceptParts(this, visitor);

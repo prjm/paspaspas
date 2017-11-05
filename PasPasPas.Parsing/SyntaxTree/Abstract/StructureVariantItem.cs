@@ -37,7 +37,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
             get {
                 if (TypeValue != null)
                     yield return TypeValue;
-                foreach (StructureVariantFields field in Items)
+                foreach (var field in Items)
                     yield return field;
             }
         }
@@ -45,8 +45,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     accept visitor
         /// </summary>
-        /// <param name="startVisitor">start visitor</param>
-        /// <param name="endVisitor">end visitor</param>
+        /// <param name="visitor">node visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
             AcceptParts(this, visitor);
@@ -54,4 +53,5 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         }
 
     }
+
 }
