@@ -24,5 +24,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Types {
         /// <param name="operatorKind">operator id</param>
         /// <returns>operator definition</returns>
         IOperator GetOperator(int operatorKind);
+
+        /// <summary>
+        ///     register an operator
+        /// </summary>
+        /// <param name="newOperator">operator to register</param>
+        void RegisterOperator(IOperator newOperator);
     }
 }

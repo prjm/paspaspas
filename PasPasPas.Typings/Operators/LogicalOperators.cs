@@ -41,20 +41,43 @@ namespace PasPasPas.Typings.Operators {
         /// <param name="input">input signature</param>
         /// <returns>output type</returns>
         public override int GetOutputTypeForOperation(Signature input) {
-            if (Kind == DefinedOperators.NotOperation && input.EqualsType(TypeRegistry, CommonTypeKind.BooleanType))
-                return TypeIds.BooleanType;
 
-            if (Kind == DefinedOperators.AndOperation && input.EqualsType(TypeRegistry, CommonTypeKind.BooleanType, CommonTypeKind.BooleanType))
-                return TypeIds.BooleanType;
+            if (input.Length == 1) {
 
-            if (Kind == DefinedOperators.OrOperation && input.EqualsType(TypeRegistry, CommonTypeKind.BooleanType, CommonTypeKind.BooleanType))
-                return TypeIds.BooleanType;
+                var operand = TypeRegistry.GetTypeByIdOrUndefinedType(input[0]).TypeKind;
 
-            if (Kind == DefinedOperators.XorOperation && input.EqualsType(TypeRegistry, CommonTypeKind.BooleanType, CommonTypeKind.BooleanType))
-                return TypeIds.BooleanType;
+                if (Kind == DefinedOperators.NotOperation && operand == CommonTypeKind.BooleanType)
+                    return TypeIds.BooleanType;
 
+            }
+            else if (input.Length == 2) {
+
+                var left = TypeRegistry.GetTypeByIdOrUndefinedType(input[0]).TypeKind;
+                var right = TypeRegistry.GetTypeByIdOrUndefinedType(input[1]).TypeKind;
+
+                if (Kind == DefinedOperators.AndOperation && left == CommonTypeKind.BooleanType && right == CommonTypeKind.BooleanType)
+                    return TypeIds.BooleanType;
+
+                if (Kind == DefinedOperators.OrOperation && left == CommonTypeKind.BooleanType && right == CommonTypeKind.BooleanType)
+                    return TypeIds.BooleanType;
+
+                if (Kind == DefinedOperators.XorOperation && left == CommonTypeKind.BooleanType && right == CommonTypeKind.BooleanType)
+                    return TypeIds.BooleanType;
+
+            }
 
             return TypeIds.ErrorType;
+        }
+
+        /// <summary>
+        ///     register logical operators
+        /// </summary>
+        /// <param name="registry">type registry</param>
+        public static void RegisterOperators(ITypeRegistry registry) {
+            registry.RegisterOperator(new LogicalOperators(DefinedOperators.NotOperation));
+            registry.RegisterOperator(new LogicalOperators(DefinedOperators.AndOperation));
+            registry.RegisterOperator(new LogicalOperators(DefinedOperators.XorOperation));
+            registry.RegisterOperator(new LogicalOperators(DefinedOperators.OrOperation));
         }
     }
 }

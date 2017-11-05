@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using PasPasPas.Infrastructure.Environment;
 using PasPasPas.Infrastructure.Utils;
-using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Typings.Operators;
 using PasPasPas.Typings.Simple;
@@ -52,13 +51,15 @@ namespace PasPasPas.Typings.Common {
         }
 
         private void RegisterCommonOperators() {
-            RegisterOperator(new LogicalOperators(DefinedOperators.NotOperation));
-            RegisterOperator(new LogicalOperators(DefinedOperators.AndOperation));
-            RegisterOperator(new LogicalOperators(DefinedOperators.XorOperation));
-            RegisterOperator(new LogicalOperators(DefinedOperators.OrOperation));
+            LogicalOperators.RegisterOperators(this);
+            ArithmeticOperators.RegisterOperators(this);
         }
 
-        private void RegisterOperator(IOperator newOperator) {
+        /// <summary>
+        ///     register an operator
+        /// </summary>
+        /// <param name="newOperator">operator to register</param>
+        public void RegisterOperator(IOperator newOperator) {
             operators.Add(newOperator.Kind, newOperator);
             newOperator.TypeRegistry = this;
         }

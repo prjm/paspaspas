@@ -45,17 +45,27 @@ namespace PasPasPas.Typings.Operators {
         /// <returns></returns>
         public override int GetOutputTypeForOperation(Signature input) {
 
-            if (input.Length == 2 && (
-                Kind == DefinedOperators.PlusOperation ||
-                Kind == DefinedOperators.MinusOperation ||
-                Kind == DefinedOperators.TimesOperation)) {
+            if (input.Length != 2)
+                return TypeIds.ErrorType;
 
+            var left = TypeRegistry.GetTypeByIdOrUndefinedType(input[0]).TypeKind;
+            var right = TypeRegistry.GetTypeByIdOrUndefinedType(input[1]).TypeKind;
+
+            if (Kind == DefinedOperators.PlusOperation ||
+                Kind == DefinedOperators.MinusOperation ||
+                Kind == DefinedOperators.TimesOperation) {
+
+                if (left == CommonTypeKind.IntegerType && right == CommonTypeKind.IntegerType)
+                    return TypeIds.IntegerType;
 
             }
 
             if (input.Length == 2 && (
                 Kind == DefinedOperators.DivOperation ||
                 Kind == DefinedOperators.ModOperation)) {
+
+                if (left == CommonTypeKind.IntegerType && right == CommonTypeKind.IntegerType)
+                    return TypeIds.IntegerType;
 
             }
 
@@ -76,6 +86,18 @@ namespace PasPasPas.Typings.Operators {
             }
                         */
             return TypeIds.ErrorType;
+        }
+
+        /// <summary>
+        ///     register known 
+        /// </summary>
+        /// <param name="typeRegistry">type registry</param>
+        public static void RegisterOperators(ITypeRegistry typeRegistry) {
+            typeRegistry.RegisterOperator(new ArithmeticOperators(DefinedOperators.PlusOperation));
+            typeRegistry.RegisterOperator(new ArithmeticOperators(DefinedOperators.MinusOperation));
+            typeRegistry.RegisterOperator(new ArithmeticOperators(DefinedOperators.TimesOperation));
+            typeRegistry.RegisterOperator(new ArithmeticOperators(DefinedOperators.DivOperation));
+            typeRegistry.RegisterOperator(new ArithmeticOperators(DefinedOperators.ModOperation));
         }
     }
 }

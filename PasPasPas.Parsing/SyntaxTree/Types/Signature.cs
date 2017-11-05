@@ -32,17 +32,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Types {
             => data = new int[2] { type1, type2 };
 
         /// <summary>
-        ///     check if this signature consinsts of a single type
-        ///     and compare its type id
-        /// </summary>
-        /// <param name="registry">type registry</param>
-        /// <param name="typeKind">type id to compare</param>
-        /// <returns><c>true</c> if this signature only uses this type</returns>
-        public bool EqualsType(ITypeRegistry registry, CommonTypeKind typeKind)
-            => (data.Length == 1) && registry.GetTypeByIdOrUndefinedType(data[0]).TypeKind == typeKind;
-
-
-        /// <summary>
         ///     create a new type signature
         /// </summary>
         /// <param name="typeIds"></param>
@@ -69,19 +58,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Types {
         }
 
         /// <summary>
-        ///     check if this signature consinsts of a single type
-        ///     and compare its type id
-        /// </summary>
-        /// <param name="registry">type registry</param>
-        /// <param name="typeKind1"> first type id to compare</param>
-        /// <param name="typeKind2"> seoconed type id to compare</param>
-        /// <returns><c>true</c> if this signature only uses this types</returns>
-        public bool EqualsType(ITypeRegistry registry, CommonTypeKind typeKind1, CommonTypeKind typeKind2)
-            => data.Length == 2 &&
-            registry.GetTypeByIdOrUndefinedType(data[0]).TypeKind == typeKind1 &&
-            registry.GetTypeByIdOrUndefinedType(data[1]).TypeKind == typeKind2;
-
-        /// <summary>
         ///     get the hash code for this signatur
         /// </summary>
         /// <returns></returns>
@@ -91,5 +67,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Types {
                 result = result * 31 + data[i].GetHashCode();
             return result;
         }
+
+        /// <summary>
+        ///     get type id by index
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        public int this[int index]
+            => data[index];
+
     }
 }
