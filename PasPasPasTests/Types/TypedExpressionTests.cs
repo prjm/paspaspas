@@ -56,6 +56,8 @@ namespace PasPasPasTests.Types {
 
         [Fact]
         public void TestArithmetikOperatorsInteger() {
+            AssertExprType("+ 1", TypeIds.IntegerType);
+            AssertExprType("- 1", TypeIds.IntegerType);
             AssertExprType("1 + 1", TypeIds.IntegerType);
             AssertExprType("1 - 1", TypeIds.IntegerType);
             AssertExprType("1 * 1", TypeIds.IntegerType);
@@ -66,6 +68,8 @@ namespace PasPasPasTests.Types {
 
         [Fact]
         public void TestArithmetikOperatorsInt64() {
+            AssertExprType("+ 4294967296", TypeIds.Int64Type);
+            AssertExprType("- 4294967296", TypeIds.Int64Type);
             AssertExprType("4294967296 + 1", TypeIds.Int64Type);
             AssertExprType("4294967296 - 1", TypeIds.Int64Type);
             AssertExprType("4294967296 * 1", TypeIds.Int64Type);
@@ -88,6 +92,8 @@ namespace PasPasPasTests.Types {
 
         [Fact]
         public void TestArithmetikOperatorsReal() {
+            AssertExprType("+ 1.0", TypeIds.Extended);
+            AssertExprType("- 1.0", TypeIds.Extended);
             AssertExprType("1.0 + 1", TypeIds.Extended);
             AssertExprType("1.0 - 1", TypeIds.Extended);
             AssertExprType("1.0 * 1", TypeIds.Extended);

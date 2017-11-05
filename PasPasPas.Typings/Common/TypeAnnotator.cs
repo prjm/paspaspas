@@ -39,6 +39,7 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="element"></param>
         public void EndVisit(ConstantValue element) {
+
             if (element.Kind == ConstantValueKind.HexNumber ||
                 element.Kind == ConstantValueKind.Integer ||
                 element.Kind == ConstantValueKind.QuotedString ||
@@ -91,6 +92,12 @@ namespace PasPasPas.Typings.Common {
         public void EndVisit(UnaryOperator element) {
             if (element.Kind == ExpressionKind.Not) {
                 element.TypeInfo = GetTypeOfOperator(DefinedOperators.NotOperation, element.Value?.TypeInfo);
+            }
+            else if (element.Kind == ExpressionKind.UnaryMinus) {
+                element.TypeInfo = GetTypeOfOperator(DefinedOperators.UnaryMinus, element.Value?.TypeInfo);
+            }
+            else if (element.Kind == ExpressionKind.UnaryPlus) {
+                element.TypeInfo = GetTypeOfOperator(DefinedOperators.UnaryPlus, element.Value?.TypeInfo);
             }
         }
 

@@ -44,7 +44,7 @@ namespace PasPasPas.Typings.Operators {
 
             if (input.Length == 1) {
 
-                var operand = TypeRegistry.GetTypeByIdOrUndefinedType(input[0]).TypeKind;
+                var operand = TypeRegistry.GetTypeKind(input[0]);
 
                 if (Kind == DefinedOperators.NotOperation && operand == CommonTypeKind.BooleanType)
                     return TypeIds.BooleanType;
@@ -52,16 +52,16 @@ namespace PasPasPas.Typings.Operators {
             }
             else if (input.Length == 2) {
 
-                var left = TypeRegistry.GetTypeByIdOrUndefinedType(input[0]).TypeKind;
-                var right = TypeRegistry.GetTypeByIdOrUndefinedType(input[1]).TypeKind;
+                var left = TypeRegistry.GetTypeKind(input[0]);
+                var right = TypeRegistry.GetTypeKind(input[1]);
 
-                if (Kind == DefinedOperators.AndOperation && left == CommonTypeKind.BooleanType && right == CommonTypeKind.BooleanType)
+                if (Kind == DefinedOperators.AndOperation && CommonTypeKind.BooleanType.All(left, right))
                     return TypeIds.BooleanType;
 
-                if (Kind == DefinedOperators.OrOperation && left == CommonTypeKind.BooleanType && right == CommonTypeKind.BooleanType)
+                if (Kind == DefinedOperators.OrOperation && CommonTypeKind.BooleanType.All(left, right))
                     return TypeIds.BooleanType;
 
-                if (Kind == DefinedOperators.XorOperation && left == CommonTypeKind.BooleanType && right == CommonTypeKind.BooleanType)
+                if (Kind == DefinedOperators.XorOperation && CommonTypeKind.BooleanType.All(left, right))
                     return TypeIds.BooleanType;
 
             }

@@ -55,5 +55,15 @@
         ///     division operator
         /// </summary>
         public const int SlashOperation = 19;
+
+        /// <summary>
+        ///     unary minus
+        /// </summary>
+        public const int UnaryMinus = 20;
+
+        /// <summary>
+        ///     unary plus
+        /// </summary>
+        public const int UnaryPlus = 21;
     }
 }
