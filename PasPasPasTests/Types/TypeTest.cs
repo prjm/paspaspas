@@ -23,20 +23,16 @@ namespace PasPasPasTests.Types {
             var program = $"program {file}; begin Writeln({expression}); end. ";
             var env = CreateEnvironment();
             var api = new ParserApi(env);
-            var project = new ProjectRoot();
+
             Func<object, SymbolReferencePart> searchfunction = x => x as SymbolReferencePart;
 
             using (var reader = api.CreateParserForString($"{file}.dpr", program)) {
                 var tree = reader.Parse();
-
-                var visitor = new TreeTransformer(env, project);
-                tree.Accept(visitor.AsVisitor());
-
-                var typeVisitor = new TypeAnnotator(env);
-                project.Accept(typeVisitor.AsVisitor());
+                var project = api.CreateAbstractSyntraxTree(tree);
+                api.AnnotateWithTypes(project);
 
                 var astVisitor = new AstVisitor<SymbolReferencePart>() { SearchFunction = searchfunction };
-                visitor.Project.Accept(astVisitor.AsVisitor());
+                project.Accept(astVisitor.AsVisitor());
 
                 Assert.IsNotNull(astVisitor.Result);
                 Assert.AreEqual(1, astVisitor.Result.Expressions.Count);
