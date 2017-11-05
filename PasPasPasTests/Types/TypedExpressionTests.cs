@@ -11,14 +11,14 @@ namespace PasPasPasTests.Types {
 
         [Fact]
         public void TestIntegerLiteralTypes() {
-            AssertExprType("1", TypeIds.ByteType);
-            AssertExprType("255", TypeIds.ByteType);
-            AssertExprType("256", TypeIds.WordType);
-            AssertExprType("65535", TypeIds.WordType);
-            AssertExprType("65536", TypeIds.CardinalType);
-            AssertExprType("4294967295", TypeIds.CardinalType);
-            AssertExprType("4294967296", TypeIds.Uint64Type);
-            AssertExprType("18446744073709551615", TypeIds.Uint64Type);
+            AssertExprType("1", TypeIds.ShortInt);
+            AssertExprType("255", TypeIds.ShortInt);
+            AssertExprType("256", TypeIds.SmallInt);
+            AssertExprType("65535", TypeIds.SmallInt);
+            AssertExprType("65536", TypeIds.IntegerType);
+            AssertExprType("4294967295", TypeIds.IntegerType);
+            AssertExprType("4294967296", TypeIds.Int64Type);
+            AssertExprType("18446744073709551615", TypeIds.Int64Type);
         }
 
         [Fact]
@@ -114,6 +114,19 @@ namespace PasPasPasTests.Types {
             AssertExprType("4294967296 - 1.0", TypeIds.Extended);
             AssertExprType("4294967296 * 1.0", TypeIds.Extended);
             AssertExprType("4294967296 / 1.0", TypeIds.Extended);
+        }
+
+        [Fact]
+        public void TestBitwiseOperators() {
+            AssertExprType("not 1", TypeIds.ShortInt);
+            AssertExprType("not 256", TypeIds.SmallInt);
+            AssertExprType("not 4294967295", TypeIds.IntegerType);
+            AssertExprType("not 4294967296", TypeIds.Int64Type);
+
+            AssertExprType("1 and 1", TypeIds.ShortInt);
+            AssertExprType("1 and 256", TypeIds.SmallInt);
+            AssertExprType("1 and 65536", TypeIds.IntegerType);
+            AssertExprType("1 and 4294967296", TypeIds.Int64Type);
         }
 
     }

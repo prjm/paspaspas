@@ -49,6 +49,13 @@ namespace PasPasPas.Typings.Operators {
                 if (Kind == DefinedOperators.NotOperation && operand == CommonTypeKind.BooleanType)
                     return TypeIds.BooleanType;
 
+
+                if (Kind == DefinedOperators.NotOperation && operand == CommonTypeKind.Int64Type)
+                    return input[0];
+
+                if (Kind == DefinedOperators.NotOperation && operand == CommonTypeKind.IntegerType)
+                    return input[0];
+
             }
             else if (input.Length == 2) {
 
@@ -57,6 +64,9 @@ namespace PasPasPas.Typings.Operators {
 
                 if (Kind == DefinedOperators.AndOperation && CommonTypeKind.BooleanType.All(left, right))
                     return TypeIds.BooleanType;
+
+                if (Kind == DefinedOperators.AndOperation && left.Integral() && right.Integral())
+                    return TypeRegistry.GetSmallestIntegralTypeOrNext(input[0], input[1]);
 
                 if (Kind == DefinedOperators.OrOperation && CommonTypeKind.BooleanType.All(left, right))
                     return TypeIds.BooleanType;

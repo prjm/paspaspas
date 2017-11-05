@@ -7,14 +7,21 @@ namespace PasPasPas.Typings.Simple {
     /// <summary>
     ///     create a new integral type
     /// </summary>
-    public class IntegralType : TypeBase {
+    public class IntegralType : TypeBase, IIntegralType {
+
+        private readonly bool signed;
+        private readonly int bitSize;
 
         /// <summary>
         ///     create a new type
         /// </summary>
         /// <param name="withId"></param>
         /// <param name="name"></param>
-        public IntegralType(int withId, ScopedName name = null) : base(withId, name) {
+        /// <param name="isSigned"><c>true</c> if the type is signed</param>
+        /// <param name="withBitSize">bitsize of the type</param>
+        public IntegralType(int withId, bool isSigned, int withBitSize, ScopedName name = null) : base(withId, name) {
+            signed = isSigned;
+            bitSize = withBitSize;
         }
 
         /// <summary>
@@ -22,5 +29,17 @@ namespace PasPasPas.Typings.Simple {
         /// </summary>
         public override CommonTypeKind TypeKind
             => CommonTypeKind.IntegerType;
+
+        /// <summary>
+        ///     check if this type is signed
+        /// </summary>
+        public bool Signed
+            => signed;
+
+        /// <summary>
+        ///     get the size in bits
+        /// </summary>
+        public int BitSize
+            => bitSize;
     }
 }

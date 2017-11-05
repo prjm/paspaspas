@@ -75,12 +75,14 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         private void RegisterCommonTypes(StringPool pool) {
             RegisterType(new ErrorType(TypeIds.ErrorType));
-            RegisterType(new IntegralType(TypeIds.ByteType, CreateSystemScopeName(pool, "Byte")));
-            RegisterType(new IntegralType(TypeIds.WordType, CreateSystemScopeName(pool, "Word")));
-            RegisterType(new IntegralType(TypeIds.CardinalType, CreateSystemScopeName(pool, "Cardinal")));
-            RegisterType(new Integral64BitType(TypeIds.Uint64Type, CreateSystemScopeName(pool, "UInt64")));
-            RegisterType(new Integral64BitType(TypeIds.Int64Type, CreateSystemScopeName(pool, "Int64")));
-            RegisterType(new IntegralType(TypeIds.IntegerType, CreateSystemScopeName(pool, "Integer")));
+            RegisterType(new IntegralType(TypeIds.ByteType, false, 8, CreateSystemScopeName(pool, "Byte")));
+            RegisterType(new IntegralType(TypeIds.ShortInt, true, 8, CreateSystemScopeName(pool, "ShortInt")));
+            RegisterType(new IntegralType(TypeIds.WordType, false, 16, CreateSystemScopeName(pool, "Word")));
+            RegisterType(new IntegralType(TypeIds.SmallInt, true, 16, CreateSystemScopeName(pool, "SmallInt")));
+            RegisterType(new IntegralType(TypeIds.CardinalType, false, 32, CreateSystemScopeName(pool, "Cardinal")));
+            RegisterType(new IntegralType(TypeIds.IntegerType, true, 32, CreateSystemScopeName(pool, "Integer")));
+            RegisterType(new Integral64BitType(TypeIds.Uint64Type, false, CreateSystemScopeName(pool, "UInt64")));
+            RegisterType(new Integral64BitType(TypeIds.Int64Type, true, CreateSystemScopeName(pool, "Int64")));
             RegisterType(new BooleanType(TypeIds.BooleanType, CreateSystemScopeName(pool, "Boolean")));
             RegisterType(new AnsiCharType(TypeIds.AnsiCharType, CreateSystemScopeName(pool, "AnsiChar")));
             RegisterType(new UnicodeStringType(TypeIds.UnicodeStringType, CreateSystemScopeName(pool, "UnicodeString")));

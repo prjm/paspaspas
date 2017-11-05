@@ -69,5 +69,15 @@
         ///     signed int64 type
         /// </summary>
         public const int Int64Type = 120;
+
+        /// <summary>
+        ///     short integer type (1 byte signed)
+        /// </summary>
+        public static int ShortInt = 130;
+
+        /// <summary>
+        ///     small int type (2 byte signed)
+        /// </summary>
+        public static int SmallInt;
     }
 }

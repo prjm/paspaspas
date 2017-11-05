@@ -39,9 +39,9 @@ namespace PasPasPas.Typings.Operators {
         }
 
         /// <summary>
-        ///     get the
+        ///     get the output type for a given operator signature
         /// </summary>
-        /// <param name="input"></param>
+        /// <param name="input">operator signature</param>
         /// <returns></returns>
         public override int GetOutputTypeForOperation(Signature input) {
 
@@ -75,10 +75,10 @@ namespace PasPasPas.Typings.Operators {
                             DefinedOperators.MinusOperation,
                             DefinedOperators.TimesOperation)) {
 
-                    if (CommonTypeKind.FloatType.One(left, right))
+                    if (CommonTypeKind.FloatType.One(left, right) && left.Numerical() && right.Numerical())
                         return TypeIds.Extended;
 
-                    if (CommonTypeKind.Int64Type.One(left, right))
+                    if (CommonTypeKind.Int64Type.One(left, right) && left.Numerical() && right.Numerical())
                         return TypeIds.Int64Type;
 
                     if (CommonTypeKind.IntegerType.All(left, right))
@@ -89,7 +89,7 @@ namespace PasPasPas.Typings.Operators {
                 if (Kind.In(DefinedOperators.DivOperation,
                             DefinedOperators.ModOperation)) {
 
-                    if (CommonTypeKind.Int64Type.One(left, right))
+                    if (CommonTypeKind.Int64Type.One(left, right) && left.Numerical() && right.Numerical())
                         return TypeIds.Int64Type;
 
                     if (CommonTypeKind.IntegerType.All(left, right))
@@ -99,10 +99,10 @@ namespace PasPasPas.Typings.Operators {
 
                 if (Kind == DefinedOperators.SlashOperation) {
 
-                    if (CommonTypeKind.FloatType.One(left, right))
+                    if (CommonTypeKind.FloatType.One(left, right) && left.Numerical() && right.Numerical())
                         return TypeIds.Extended;
 
-                    if (CommonTypeKind.Int64Type.One(left, right))
+                    if (CommonTypeKind.Int64Type.One(left, right) && left.Numerical() && right.Numerical())
                         return TypeIds.Extended;
 
                     if (CommonTypeKind.IntegerType.All(left, right))

@@ -33,5 +33,22 @@ namespace PasPasPas.Typings.Common {
             => kind == type1 || kind == type2;
 
 
+        /// <summary>
+        ///     test if the type kind is numerical
+        /// </summary>
+        /// <param name="kind">kind</param>
+        /// <returns><c>true</c> if the type is integer, int64 or float</returns>
+        public static bool Numerical(this CommonTypeKind kind)
+            => kind == CommonTypeKind.IntegerType || kind == CommonTypeKind.FloatType || kind == CommonTypeKind.Int64Type;
+
+        /// <summary>
+        ///     test if the type kind is integral
+        /// </summary>
+        /// <param name="kind">kind</param>
+        /// <returns><c>true</c> if the type is integer, int64 or float</returns>
+        public static bool Integral(this CommonTypeKind kind)
+            => kind == CommonTypeKind.IntegerType || kind == CommonTypeKind.Int64Type;
+
+
     }
 }
