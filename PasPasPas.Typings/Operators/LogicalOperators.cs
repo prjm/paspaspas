@@ -71,8 +71,14 @@ namespace PasPasPas.Typings.Operators {
                 if (Kind == DefinedOperators.OrOperation && CommonTypeKind.BooleanType.All(left, right))
                     return TypeIds.BooleanType;
 
+                if (Kind == DefinedOperators.OrOperation && left.Integral() && right.Integral())
+                    return TypeRegistry.GetSmallestIntegralTypeOrNext(input[0], input[1]);
+
                 if (Kind == DefinedOperators.XorOperation && CommonTypeKind.BooleanType.All(left, right))
                     return TypeIds.BooleanType;
+
+                if (Kind == DefinedOperators.XorOperation && left.Integral() && right.Integral())
+                    return TypeRegistry.GetSmallestIntegralTypeOrNext(input[0], input[1]);
 
             }
 

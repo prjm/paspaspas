@@ -127,6 +127,33 @@ namespace PasPasPasTests.Types {
             AssertExprType("1 and 256", TypeIds.SmallInt);
             AssertExprType("1 and 65536", TypeIds.IntegerType);
             AssertExprType("1 and 4294967296", TypeIds.Int64Type);
+            AssertExprType("1 and 1", TypeIds.ShortInt);
+            AssertExprType("256 and 1", TypeIds.SmallInt);
+            AssertExprType("65536 and 1", TypeIds.IntegerType);
+            AssertExprType("4294967296 and 1", TypeIds.Int64Type);
+
+            AssertExprType("1 or 1", TypeIds.ShortInt);
+            AssertExprType("1 or 256", TypeIds.SmallInt);
+            AssertExprType("1 or 65536", TypeIds.IntegerType);
+            AssertExprType("1 or 4294967296", TypeIds.Int64Type);
+            AssertExprType("1 or 1", TypeIds.ShortInt);
+            AssertExprType("256 or 1", TypeIds.SmallInt);
+            AssertExprType("65536 or 1", TypeIds.IntegerType);
+            AssertExprType("4294967296 or 1", TypeIds.Int64Type);
+
+            AssertExprType("1 xor 1", TypeIds.ShortInt);
+            AssertExprType("1 xor 256", TypeIds.SmallInt);
+            AssertExprType("1 xor 65536", TypeIds.IntegerType);
+            AssertExprType("1 xor 4294967296", TypeIds.Int64Type);
+            AssertExprType("1 xor 1", TypeIds.ShortInt);
+            AssertExprType("256 xor 1", TypeIds.SmallInt);
+            AssertExprType("65536 xor 1", TypeIds.IntegerType);
+            AssertExprType("4294967296 xor 1", TypeIds.Int64Type);
+        }
+
+        [Fact]
+        public void TestShiftingOperators() {
+
         }
 
     }

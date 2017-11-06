@@ -29,8 +29,9 @@ namespace PasPasPas.Parsing.Parser {
         /// <summary>
         ///     create a new compiler directive parser 
         /// </summary>
-        /// <param name="environment">services</param>
+        /// <param name="env">services</param>
         /// <param name="input">input file</param>
+        /// <param name="options">options</param>
         public CompilerDirectiveParser(IParserEnvironment env, OptionSet options, StackedFileReader input)
             : base(env, options, CreateTokenizer(env, input, options)) {
         }

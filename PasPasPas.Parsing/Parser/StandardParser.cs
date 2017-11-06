@@ -135,7 +135,6 @@ namespace PasPasPas.Parsing.Parser {
         /// <summary>
         ///     parse a standard file
         /// </summary>
-        /// <param name="parent"></param>
         /// <returns></returns>
         [Rule("File", "Program | Library | Unit | Package")]
         public ISyntaxPart ParseFile() {

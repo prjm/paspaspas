@@ -43,7 +43,7 @@ namespace PasPasPas.Options.Bundles {
         /// <summary>
         ///     creates a new option set
         /// </summary>
-        /// <param name="fileAccess">file access</param>
+        /// <param name="environment">environment</param>
         public OptionSet(IBasicEnvironment environment) : this(null, environment) { }
 
         /// <summary>

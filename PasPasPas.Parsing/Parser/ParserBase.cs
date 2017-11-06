@@ -824,7 +824,7 @@ namespace PasPasPas.Parsing.Parser {
         ///     optionally continue a syntax part by a terminal symbol
         /// </summary>
         /// <typeparam name="T">parent object</typeparam>
-        /// <param name="parent">parent node</param>
+        /// <param name="result">result node</param>
         /// <param name="tokenKind">expected token kind</param>
         /// <returns>syntax tree node</returns>
         protected T CreateByTerminal<T>(T result, int tokenKind) where T : IExtendableSyntaxPart {
