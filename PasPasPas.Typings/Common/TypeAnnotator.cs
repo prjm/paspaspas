@@ -1,4 +1,6 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Abstract;
+﻿using System;
+using PasPasPas.Infrastructure.Utils;
+using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 using PasPasPas.Typings.Operators;
@@ -13,10 +15,17 @@ namespace PasPasPas.Typings.Common {
 
         IEndVisitor<ConstantValue>,
         IEndVisitor<UnaryOperator>,
-        IEndVisitor<BinaryOperator> {
+        IEndVisitor<BinaryOperator>,
+        IEndVisitor<VariableDeclaration>,
+        IEndVisitor<Parsing.SyntaxTree.Abstract.TypeAlias>,
+        IEndVisitor<MetaType>,
+        IEndVisitor<SymbolReference>,
+        IStartVisitor<CompilationUnit> {
 
         private readonly IStartEndVisitor visitor;
         private readonly ITypedEnvironment environment;
+
+        public CompilationUnit CurrentUnit { get; private set; }
 
         /// <summary>
         ///     as common visitor
@@ -83,6 +92,30 @@ namespace PasPasPas.Typings.Common {
             else if (element.Kind == ExpressionKind.Slash) {
                 element.TypeInfo = GetTypeOfOperator(DefinedOperators.SlashOperation, element.LeftOperand?.TypeInfo, element.RightOperand?.TypeInfo);
             }
+            else if (element.Kind == ExpressionKind.Shl) {
+                element.TypeInfo = GetTypeOfOperator(DefinedOperators.ShlOperation, element.LeftOperand?.TypeInfo, element.RightOperand?.TypeInfo);
+            }
+            else if (element.Kind == ExpressionKind.Shr) {
+                element.TypeInfo = GetTypeOfOperator(DefinedOperators.ShrOperation, element.LeftOperand?.TypeInfo, element.RightOperand?.TypeInfo);
+            }
+            else if (element.Kind == ExpressionKind.EqualsSign) {
+                element.TypeInfo = GetTypeOfOperator(DefinedOperators.EqualsOperator, element.LeftOperand?.TypeInfo, element.RightOperand?.TypeInfo);
+            }
+            else if (element.Kind == ExpressionKind.NotEquals) {
+                element.TypeInfo = GetTypeOfOperator(DefinedOperators.NotEqualsOperator, element.LeftOperand?.TypeInfo, element.RightOperand?.TypeInfo);
+            }
+            else if (element.Kind == ExpressionKind.GreaterThen) {
+                element.TypeInfo = GetTypeOfOperator(DefinedOperators.GreaterThen, element.LeftOperand?.TypeInfo, element.RightOperand?.TypeInfo);
+            }
+            else if (element.Kind == ExpressionKind.GreaterThenEquals) {
+                element.TypeInfo = GetTypeOfOperator(DefinedOperators.GreaterThenEqual, element.LeftOperand?.TypeInfo, element.RightOperand?.TypeInfo);
+            }
+            else if (element.Kind == ExpressionKind.LessThen) {
+                element.TypeInfo = GetTypeOfOperator(DefinedOperators.LessThen, element.LeftOperand?.TypeInfo, element.RightOperand?.TypeInfo);
+            }
+            else if (element.Kind == ExpressionKind.LessThenEquals) {
+                element.TypeInfo = GetTypeOfOperator(DefinedOperators.LessThenOrEqual, element.LeftOperand?.TypeInfo, element.RightOperand?.TypeInfo);
+            }
         }
 
         /// <summary>
@@ -135,7 +168,6 @@ namespace PasPasPas.Typings.Common {
             if (typeInfo2 == null)
                 return null;
 
-
             var operation = environment.TypeRegistry.GetOperator(operatorKind);
 
             if (operation == null)
@@ -146,5 +178,51 @@ namespace PasPasPas.Typings.Common {
             return environment.TypeRegistry.GetTypeByIdOrUndefinedType(typeId);
         }
 
+        /// <summary>
+        ///     visit a variable declaration
+        /// </summary>
+        /// <param name="element"></param>
+        public void EndVisit(VariableDeclaration element) {
+            var typeRef = element.TypeValue as ITypedSyntaxNode;
+            if (typeRef != null)
+                element.TypeInfo = typeRef.TypeInfo;
+        }
+
+        /// <summary>
+        ///     visit a variable declaration
+        /// </summary>
+        /// <param name="element"></param>
+        public void EndVisit(Parsing.SyntaxTree.Abstract.TypeAlias element) {
+            var typeName = element.CompleteTypeName;
+
+            if (typeName == default(ScopedName)) {
+                element.TypeInfo = environment.TypeRegistry.GetTypeByIdOrUndefinedType(TypeIds.ErrorType);
+                return;
+            }
+
+            element.TypeInfo = environment.TypeRegistry.GetTypeByNameOrUndefinedType(typeName);
+        }
+
+        public void EndVisit(MetaType element) {
+            if (element.Kind == MetaTypeKind.NamedType && element.Fragments.Count == 1) {
+                var name = element.Fragments[0].Name;
+                if (CurrentUnit.Symbols.Contains(name.CompleteName)) {
+                    var item = CurrentUnit.Symbols[name.CompleteName];
+                    var typeInfo = item.ParentItem as ITypedSyntaxNode;
+                    if (typeInfo != null) {
+                        element.TypeInfo = typeInfo.TypeInfo;
+                    }
+                }
+            }
+        }
+
+        public void StartVisit(CompilationUnit element)
+            => CurrentUnit = element;
+
+        public void EndVisit(SymbolReference element) {
+            var typeRef = element.TypeValue as ITypedSyntaxNode;
+            if (typeRef != null)
+                element.TypeInfo = typeRef.TypeInfo;
+        }
     }
 }

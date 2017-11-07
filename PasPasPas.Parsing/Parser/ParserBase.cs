@@ -68,9 +68,15 @@ namespace PasPasPas.Parsing.Parser {
         public ITokenizer BaseTokenizer
             => tokenizer.BaseTokenizer;
 
+        /// <summary>
+        ///     parser environment
+        /// </summary>
         public IParserEnvironment Environment
             => environment;
 
+        /// <summary>
+        ///     option set
+        /// </summary>
         public OptionSet Options
             => options;
 
@@ -80,15 +86,14 @@ namespace PasPasPas.Parsing.Parser {
         public TokenizerWithLookahead Tokenizer
             => tokenizer;
 
-
         /// <summary>
         ///     unexpected input token
         /// </summary>
         /// <returns></returns>
-        protected ISyntaxPart Unexpected() {
+        protected void Unexpected() {
             var token = CurrentToken();
             logSource.Error(UnexpectedToken, token.Kind, token.Value);
-            return null;
+            FetchNextToken();
         }
 
         /// <summary>

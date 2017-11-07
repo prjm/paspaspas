@@ -65,5 +65,45 @@
         ///     unary plus
         /// </summary>
         public const int UnaryPlus = 21;
+
+        /// <summary>
+        ///     shift right operation
+        /// </summary>
+        public const int ShrOperation = 22;
+
+        /// <summary>
+        ///     shift left operation
+        /// </summary>
+        public const int ShlOperation = 23;
+
+        /// <summary>
+        ///     equals operator
+        /// </summary>
+        public const int EqualsOperator = 24;
+
+        /// <summary>
+        ///     not equals operator
+        /// </summary>
+        public const int NotEqualsOperator = 25;
+
+        /// <summary>
+        ///     less then operator
+        /// </summary>
+        public const int LessThen = 26;
+
+        /// <summary>
+        ///     greater then operator
+        /// </summary>
+        public const int GreaterThen = 27;
+
+        /// <summary>
+        ///     less then or equals operator
+        /// </summary>
+        public const int LessThenOrEqual = 28;
+
+        /// <summary>
+        ///     greater then or equals operator
+        /// </summary>
+        public const int GreaterThenEqual = 29;
     }
 }

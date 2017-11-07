@@ -53,6 +53,7 @@ namespace PasPasPas.Typings.Common {
         private void RegisterCommonOperators() {
             LogicalOperators.RegisterOperators(this);
             ArithmeticOperators.RegisterOperators(this);
+            RelationalOperators.RegisterOperators(this);
         }
 
         /// <summary>
@@ -114,5 +115,16 @@ namespace PasPasPas.Typings.Common {
             return result;
         }
 
+        /// <summary>
+        ///     get a type by name
+        /// </summary>
+        /// <param name="typeName">type name</param>
+        /// <returns></returns>
+        public ITypeDefinition GetTypeByNameOrUndefinedType(ScopedName typeName) {
+            if (!typesByName.TryGetValue(typeName, out var result))
+                result = types[TypeIds.ErrorType];
+
+            return result;
+        }
     }
 }

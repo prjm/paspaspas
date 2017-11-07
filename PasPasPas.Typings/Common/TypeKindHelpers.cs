@@ -49,6 +49,15 @@ namespace PasPasPas.Typings.Common {
         public static bool Integral(this CommonTypeKind kind)
             => kind == CommonTypeKind.IntegerType || kind == CommonTypeKind.Int64Type;
 
+        /// <summary>
+        ///     test if the type kind is textual
+        /// </summary>
+        /// <param name="kind">type kind</param>
+        /// <returns><c>true</c> if the type kind is a char or string type kind</returns>
+        public static bool Textual(this CommonTypeKind kind)
+            => kind == CommonTypeKind.AnsiCharType || kind == CommonTypeKind.WideCharType ||
+                kind == CommonTypeKind.ShortStringType || kind == CommonTypeKind.LongStringType || kind == CommonTypeKind.UnicodeStringType ||
+                kind == CommonTypeKind.WideStringType;
 
     }
 }

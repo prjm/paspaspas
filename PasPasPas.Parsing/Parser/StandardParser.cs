@@ -1847,7 +1847,7 @@ namespace PasPasPas.Parsing.Parser {
             result.Attributes = ParseAttributes(result);
             result.Identifiers = ParseIdentList(result, false);
             ContinueWithOrMissing(result, TokenKind.Colon);
-            result.TypeDeclaration = ParseTypeSpecification(result);
+            result.TypeDeclaration = ParseTypeSpecification(result, false, true);
 
             if (Match(TokenKind.Absolute, TokenKind.EqualsSign)) {
                 result.ValueSpecification = ParseValueSpecification(result);
@@ -1993,7 +1993,7 @@ namespace PasPasPas.Parsing.Parser {
         #region ParseTypeSpecification
 
         [Rule("TypeSpecification", "StructType | PointerType | StringType | ProcedureType | SimpleType ")]
-        private TypeSpecification ParseTypeSpecification(IExtendableSyntaxPart parent, bool constDeclaration = false) {
+        private TypeSpecification ParseTypeSpecification(IExtendableSyntaxPart parent, bool constDeclaration = false, bool varDeclaration = false) {
             var result = new TypeSpecification();
             parent.Add(result);
 
@@ -2023,7 +2023,7 @@ namespace PasPasPas.Parsing.Parser {
                 return result;
             }
 
-            result.SimpleType = ParseSimpleType(result, constDeclaration);
+            result.SimpleType = ParseSimpleType(result, constDeclaration, varDeclaration);
             return result;
         }
 
@@ -2031,7 +2031,7 @@ namespace PasPasPas.Parsing.Parser {
         #region ParseSimpleType
 
         [Rule("SimpleType", "EnumType | (ConstExpression [ '..' ConstExpression ]) | ([ 'type' ] GenericNamespaceName {'.' GenericNamespaceName })")]
-        private SimpleType ParseSimpleType(IExtendableSyntaxPart parent, bool constDeclaration = false) {
+        private SimpleType ParseSimpleType(IExtendableSyntaxPart parent, bool constDeclaration = false, bool varDeclaration = false) {
             var result = new SimpleType();
             parent.Add(result);
 
@@ -2040,10 +2040,18 @@ namespace PasPasPas.Parsing.Parser {
                 return result;
             }
 
-            result.NewType = ContinueWith(result, TokenKind.TypeKeyword);
+            if (!varDeclaration) {
+                result.NewType = ContinueWith(result, TokenKind.TypeKeyword);
 
-            if (result.NewType)
-                result.TypeOf = ContinueWith(result, TokenKind.Of);
+                if (result.NewType)
+                    result.TypeOf = ContinueWith(result, TokenKind.Of);
+            }
+            else {
+                if (Match(TokenKind.TypeKeyword)) {
+                    Unexpected();
+                }
+                result.NewType = false;
+            }
 
             if (result.NewType || (MatchIdentifier(TokenKind.ShortString, TokenKind.String, TokenKind.WideString, TokenKind.UnicodeString, TokenKind.AnsiString) && (!LookAhead(1, TokenKind.DotDot)))) {
                 do {

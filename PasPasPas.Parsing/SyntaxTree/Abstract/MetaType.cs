@@ -42,7 +42,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     name fragements
         /// </summary>
-        public ISyntaxPartList<GenericNameFragment> Fragments;
+        public ISyntaxPartList<GenericNameFragment> Fragments { get; }
 
         /// <summary>
         ///     add a afragment

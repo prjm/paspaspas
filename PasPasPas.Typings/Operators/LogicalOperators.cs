@@ -80,6 +80,12 @@ namespace PasPasPas.Typings.Operators {
                 if (Kind == DefinedOperators.XorOperation && left.Integral() && right.Integral())
                     return TypeRegistry.GetSmallestIntegralTypeOrNext(input[0], input[1]);
 
+                if (Kind == DefinedOperators.ShlOperation && left.Integral() && right.Integral())
+                    return input[0];
+
+                if (Kind == DefinedOperators.ShrOperation && left.Integral() && right.Integral())
+                    return input[0];
+
             }
 
             return TypeIds.ErrorType;
@@ -94,6 +100,8 @@ namespace PasPasPas.Typings.Operators {
             registry.RegisterOperator(new LogicalOperators(DefinedOperators.AndOperation));
             registry.RegisterOperator(new LogicalOperators(DefinedOperators.XorOperation));
             registry.RegisterOperator(new LogicalOperators(DefinedOperators.OrOperation));
+            registry.RegisterOperator(new LogicalOperators(DefinedOperators.ShlOperation));
+            registry.RegisterOperator(new LogicalOperators(DefinedOperators.ShrOperation));
         }
     }
 }

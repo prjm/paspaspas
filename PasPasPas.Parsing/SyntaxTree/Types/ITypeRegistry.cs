@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PasPasPas.Infrastructure.Utils;
 
 namespace PasPasPas.Parsing.SyntaxTree.Types {
 
@@ -31,5 +32,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Types {
         /// <param name="newOperator">operator to register</param>
         void RegisterOperator(IOperator newOperator);
 
+        /// <summary>
+        ///     get a type by name
+        /// </summary>
+        /// <param name="typeName">type name</param>
+        /// <returns></returns>
+        ITypeDefinition GetTypeByNameOrUndefinedType(ScopedName typeName);
     }
 }

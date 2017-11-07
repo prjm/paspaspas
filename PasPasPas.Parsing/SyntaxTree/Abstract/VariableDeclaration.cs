@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 
@@ -7,7 +8,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// <summary>
     ///     variable declaration
     /// </summary>
-    public class VariableDeclaration : DeclaredSymbolGroup, ITypeTarget, IExpressionTarget {
+    public class VariableDeclaration : DeclaredSymbolGroup, ITypeTarget, IExpressionTarget, ITypedSyntaxNode {
 
         /// <summary>
         ///     declaration mode
@@ -42,6 +43,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
             get {
                 foreach (var name in Names)
                     yield return name;
+
+                if (TypeValue != null)
+                    yield return TypeValue;
             }
         }
 
@@ -60,6 +64,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     variable initialization value
         /// </summary>
         public IExpression Value { get; set; }
+
+        /// <summary>
+        ///     type defintion
+        /// </summary>
+        public ITypeDefinition TypeInfo { get; set; }
 
         /// <summary>
         ///     accept visitor

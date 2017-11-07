@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 
@@ -14,6 +15,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         public ISyntaxPartList<GenericNameFragment> Fragments { get; }
 
+        /// <summary>
+        ///     create a new type alias
+        /// </summary>
         public TypeAlias()
             => Fragments = new SyntaxPartCollection<GenericNameFragment>(this);
 
@@ -36,6 +40,23 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
             get {
                 foreach (var fragment in Fragments)
                     yield return fragment;
+            }
+        }
+
+        /// <summary>
+        ///     get the complete type name,
+        /// </summary>
+        public ScopedName CompleteTypeName {
+            get {
+
+                // argh ! this is just a workaround
+                if (Fragments.Count == 1 && !string.IsNullOrEmpty(Fragments[0].Name?.Name))
+                    if (!string.IsNullOrEmpty(Fragments[0].Name.NamespaceName))
+                        return new ScopedName(Fragments[0].Name.NamespaceName, Fragments[0].Name.Name);
+                    else
+                        return new ScopedName(Fragments[0].Name.Name);
+
+                return default;
             }
         }
 
