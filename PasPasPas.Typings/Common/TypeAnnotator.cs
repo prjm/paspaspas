@@ -25,6 +25,9 @@ namespace PasPasPas.Typings.Common {
         private readonly IStartEndVisitor visitor;
         private readonly ITypedEnvironment environment;
 
+        /// <summary>
+        ///     current unit
+        /// </summary>
         public CompilationUnit CurrentUnit { get; private set; }
 
         /// <summary>
@@ -183,8 +186,7 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="element"></param>
         public void EndVisit(VariableDeclaration element) {
-            var typeRef = element.TypeValue as ITypedSyntaxNode;
-            if (typeRef != null)
+            if (element.TypeValue is ITypedSyntaxNode typeRef)
                 element.TypeInfo = typeRef.TypeInfo;
         }
 
@@ -203,25 +205,35 @@ namespace PasPasPas.Typings.Common {
             element.TypeInfo = environment.TypeRegistry.GetTypeByNameOrUndefinedType(typeName);
         }
 
+        /// <summary>
+        ///     visit a meta type reference
+        /// </summary>
+        /// <param name="element"></param>
         public void EndVisit(MetaType element) {
             if (element.Kind == MetaTypeKind.NamedType && element.Fragments.Count == 1) {
                 var name = element.Fragments[0].Name;
                 if (CurrentUnit.Symbols.Contains(name.CompleteName)) {
                     var item = CurrentUnit.Symbols[name.CompleteName];
-                    var typeInfo = item.ParentItem as ITypedSyntaxNode;
-                    if (typeInfo != null) {
+                    if (item.ParentItem is ITypedSyntaxNode typeInfo) {
                         element.TypeInfo = typeInfo.TypeInfo;
                     }
                 }
             }
         }
 
+        /// <summary>
+        ///     begin visit a unit
+        /// </summary>
+        /// <param name="element"></param>
         public void StartVisit(CompilationUnit element)
             => CurrentUnit = element;
 
+        /// <summary>
+        ///     end visiting a symbol reference
+        /// </summary>
+        /// <param name="element"></param>
         public void EndVisit(SymbolReference element) {
-            var typeRef = element.TypeValue as ITypedSyntaxNode;
-            if (typeRef != null)
+            if (element.TypeValue is ITypedSyntaxNode typeRef)
                 element.TypeInfo = typeRef.TypeInfo;
         }
     }

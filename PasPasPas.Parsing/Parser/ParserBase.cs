@@ -54,6 +54,7 @@ namespace PasPasPas.Parsing.Parser {
         ///     creates a new parser
         /// </summary>
         /// <param name="parserOptions">parser options</param>
+        /// <param name="tokenizerWithLookAhead">used tokenizer</param>
         /// <param name="env">environment</param>
         protected ParserBase(IParserEnvironment env, OptionSet parserOptions, TokenizerWithLookahead tokenizerWithLookAhead) {
             environment = env;
@@ -732,6 +733,12 @@ namespace PasPasPas.Parsing.Parser {
             return true;
         }
 
+        /// <summary>
+        ///     create a syntax tree node by terminal
+        /// </summary>
+        /// <param name="result"></param>
+        /// <param name="parent"></param>
+        /// <param name="tokenKind"></param>
         protected void InitByTerminal(IExtendableSyntaxPart result, IExtendableSyntaxPart parent, int tokenKind) {
             parent.Add(result);
 
@@ -760,6 +767,14 @@ namespace PasPasPas.Parsing.Parser {
             FetchNextToken();
         }
 
+        /// <summary>
+        ///     create a syntax tree node based on a termina
+        /// </summary>
+        /// <param name="result"></param>
+        /// <param name="parent"></param>
+        /// <param name="tokenKind1"></param>
+        /// <param name="tokenKind2"></param>
+        /// <param name="tokenKind3"></param>
         protected void InitByTerminal(IExtendableSyntaxPart result, IExtendableSyntaxPart parent, int tokenKind1, int tokenKind2, int tokenKind3) {
             parent.Add(result);
 
@@ -788,6 +803,16 @@ namespace PasPasPas.Parsing.Parser {
             FetchNextToken();
         }
 
+        /// <summary>
+        ///     create a syntax tree node based on a termina
+        /// </summary>
+        /// <param name="result"></param>
+        /// <param name="parent"></param>
+        /// <param name="tokenKind1"></param>
+        /// <param name="tokenKind2"></param>
+        /// <param name="tokenKind3"></param>
+        /// <param name="tokenKind4"></param>
+        /// <param name="tokenKind5"></param>
         protected void InitByTerminal(IExtendableSyntaxPart result, IExtendableSyntaxPart parent, int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5) {
             parent.Add(result);
 
@@ -850,7 +875,7 @@ namespace PasPasPas.Parsing.Parser {
         ///     optionally continue a syntax part by a terminal symbol
         /// </summary>
         /// <typeparam name="T">parent object</typeparam>
-        /// <param name="parent">parent node</param>
+        /// <param name="result">result</param>
         /// <param name="tokenKind1">expected token kind</param>
         /// <param name="tokenKind2">expected token kind</param>/// 
         /// <returns>syntax tree node</returns>
@@ -895,7 +920,7 @@ namespace PasPasPas.Parsing.Parser {
         ///     optionally continue a syntax part by a terminal symbol
         /// </summary>
         /// <typeparam name="T">parent object</typeparam>
-        /// <param name="parent">parent node</param>
+        /// <param name="result">result</param>
         /// <param name="tokenKind1">expected token kind</param>
         /// <param name="tokenKind2">expected token kind</param>
         /// <param name="tokenKind3">expected token kind</param>
@@ -920,7 +945,7 @@ namespace PasPasPas.Parsing.Parser {
         ///     optionally continue a syntax part by a terminal symbol
         /// </summary>
         /// <typeparam name="T">parent object</typeparam>
-        /// <param name="parent">parent node</param>
+        /// <param name="result">result</param>
         /// <param name="tokenKind1">expected token kind</param>
         /// <param name="tokenKind2">expected token kind</param>
         /// <param name="tokenKind3">expected token kind</param>
@@ -946,7 +971,7 @@ namespace PasPasPas.Parsing.Parser {
         ///     optionally continue a syntax part by a terminal symbol
         /// </summary>
         /// <typeparam name="T">parent object</typeparam>
-        /// <param name="parent">parent node</param>
+        /// <param name="result">result</param>
         /// <param name="tokenKind1">expected token kind</param>
         /// <param name="tokenKind2">expected token kind</param>
         /// <param name="tokenKind3">expected token kind</param>
@@ -972,7 +997,7 @@ namespace PasPasPas.Parsing.Parser {
         ///     optionally continue a syntax part by a terminal symbol
         /// </summary>
         /// <typeparam name="T">parent object</typeparam>
-        /// <param name="parent">parent node</param>
+        /// <param name="result">result</param>
         /// <param name="tokenKind1">expected token kind</param>
         /// <param name="tokenKind2">expected token kind</param>
         /// <param name="tokenKind3">expected token kind</param>

@@ -136,11 +136,19 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         private readonly Visitor visitor;
         private readonly IParserEnvironment environment;
 
+        /// <summary>
+        ///     use as common visitor
+        /// </summary>
+        /// <returns></returns>
         public IStartEndVisitor AsVisitor()
             => visitor;
 
         #region Unit
 
+        /// <summary>
+        ///     visit a unit
+        /// </summary>
+        /// <param name="unit"></param>
         public void StartVisit(Unit unit) {
             var result = new CompilationUnit();
             InitNode(result, unit, Project);
@@ -160,6 +168,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region Library
 
+        /// <summary>
+        ///     visit a library
+        /// </summary>
+        /// <param name="library"></param>
         public void StartVisit(Library library) {
             var result = new CompilationUnit();
             InitNode(result, library, Project);
@@ -188,8 +200,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     visit a program
         /// </summary>
-        /// <param name="program"></param>
-        /// <param name="parameter"></param>
+        /// <param name="program">program to visit</param>
         public void StartVisit(Program program) {
             var result = new CompilationUnit();
             InitNode(result, program, Project);
@@ -203,6 +214,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             CurrentUnit = result;
         }
 
+        /// <summary>
+        ///     finish a program
+        /// </summary>
+        /// <param name="program"></param>
         public void EndVisit(Program program) {
             CurrentUnitMode.Reset(CurrentUnit);
             CurrentUnit = null;
@@ -221,6 +236,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             CurrentUnit = result;
         }
 
+        /// <summary>
+        ///     finish a package
+        /// </summary>
+        /// <param name="package"></param>
         public void EndVisit(Package package)
             => CurrentUnit = null;
 
@@ -233,7 +252,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             AddToStack(unitInterface, CurrentUnit.InterfaceSymbols);
         }
 
-
+        /// <summary>
+        ///     finish an interface
+        /// </summary>
+        /// <param name="unitInterface"></param>
         public void EndVisit(UnitInterface unitInterface) {
             CurrentUnitMode.Reset(CurrentUnit);
             CurrentUnit.Symbols = null;
@@ -248,6 +270,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             AddToStack(unitImplementation, CurrentUnit.ImplementationSymbols);
         }
 
+        /// <summary>
+        ///     finish the implementation part
+        /// </summary>
+        /// <param name="unit"></param>
         public void EndVisit(UnitImplementation unit) {
             CurrentUnit.Symbols = null;
             CurrentUnitMode.Reset(CurrentUnit);
@@ -266,6 +292,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             }
         }
 
+        /// <summary>
+        ///     finish visiting a constant section
+        /// </summary>
+        /// <param name="constSection"></param>
         public void EndVisit(ConstSection constSection)
             => CurrentDeclarationMode = DeclarationMode.Unknown;
 
@@ -275,6 +305,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         public void StartVisit(TypeSection typeSection)
             => CurrentDeclarationMode = DeclarationMode.Types;
 
+        /// <summary>
+        ///     finish visiting a type section
+        /// </summary>
+        /// <param name="typeSection"></param>
         public void EndVisit(TypeSection typeSection)
             => CurrentDeclarationMode = DeclarationMode.Unknown;
 
@@ -292,6 +326,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             symbols.Symbols.AddDirect(declaration, LogSource);
         }
 
+        /// <summary>
+        ///     finish visiting a type declaration
+        /// </summary>
+        /// <param name="typeDeclaration"></param>
         public void EndVisit(Standard.TypeDeclaration typeDeclaration) {
         }
 
@@ -313,6 +351,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         #region VarSection
 
+        /// <summary>
+        ///     finish visit a label declaration
+        /// </summary>
+        /// <param name="lblSection"></param>
         public void StartVisit(LabelDeclarationSection lblSection)
             => CurrentDeclarationMode = DeclarationMode.Label;
 
@@ -322,6 +364,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region VarSection
 
+        /// <summary>
+        ///     start visting a variable section
+        /// </summary>
+        /// <param name="varSection"></param>
         public void StartVisit(VarSection varSection) {
             if (varSection.Kind == TokenKind.Var)
                 CurrentDeclarationMode = DeclarationMode.Var;
@@ -338,6 +384,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region VarDeclaration
 
+        /// <summary>
+        ///     start visiting a variable declaration
+        /// </summary>
+        /// <param name="varDeclaration"></param>
         public void StartVisit(VarDeclaration varDeclaration) {
             var symbols = LastValue as IDeclaredSymbolTarget;
             var declaration = new VariableDeclaration();
@@ -372,6 +422,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 varDeclaration.ValueKind = VariableValueKind.InitialValue;
         }
 
+        /// <summary>
+        ///     end visiting a variable value specification
+        /// </summary>
+        /// <param name="varValue"></param>
         public void EndVisit(VarValueSpecification varValue) {
         }
 
@@ -399,6 +453,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region RecordConstantExpression
 
+        /// <summary>
+        ///     start visiting a constant expresion
+        /// </summary>
+        /// <param name="constExpression"></param>
         public void StartVisit(RecordConstantExpression constExpression) {
             var lastExpression = LastExpression;
             var expression = new RecordConstantItem();
@@ -423,6 +481,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region SimpleExpression
 
+        /// <summary>
+        ///     start visiting a simple expression
+        /// </summary>
+        /// <param name="simpleExpression"></param>
         public void StartVisit(SimpleExpression simpleExpression) {
             if (simpleExpression.LeftOperand != null && simpleExpression.RightOperand != null) {
                 var lastExpression = LastExpression;
@@ -449,6 +511,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region Factor
 
+        /// <summary>
+        ///     start visiting a  a factor
+        /// </summary>
+        /// <param name="factor"></param>
         public void StartVisit(Factor factor) {
 
             // unary operators
@@ -576,6 +642,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region UsesFileClause
 
+        /// <summary>
+        ///     start visiting a uses file clause
+        /// </summary>
+        /// <param name="unit"></param>
         public void StartVisit(UsesFileClause unit) {
             if (unit.Files == null)
                 return;
@@ -616,6 +686,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             }
         }
 
+        /// <summary>
+        ///     finish visiting a requires section
+        /// </summary>
+        /// <param name="requires"></param>
         public void EndVisit(PackageRequires requires)
             => CurrentUnitMode[CurrentUnit] = UnitMode.Interface;
 
@@ -642,6 +716,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             }
         }
 
+        /// <summary>
+        ///     finish visiting a package contains clause
+        /// </summary>
+        /// <param name="contains"></param>
         public void EndVisit(PackageContains contains)
             => CurrentUnitMode.Reset(CurrentUnit);
 
@@ -656,7 +734,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             ;
         }
 
-        public void EndVisit(StructType factor)
+        /// <summary>
+        ///     finish visting a struct type
+        /// </summary>
+        /// <param name="structType"></param>
+        public void EndVisit(StructType structType)
             => CurrentStructTypeMode = StructTypeMode.Undefined;
 
         #endregion
@@ -681,6 +763,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region SetDefinition
 
+        /// <summary>
+        ///     start visiting a set
+        /// </summary>
+        /// <param name="set"></param>
         public void StartVisit(SetDefinition set) {
             var typeTarget = LastTypeDeclaration;
             var value = new SetTypeDeclaration();
@@ -703,6 +789,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region ClassOf
 
+        /// <summary>
+        ///     start visit a class of declaration
+        /// </summary>
+        /// <param name="classOf"></param>
         public void StartVisit(ClassOfDeclaration classOf) {
             var typeTarget = LastTypeDeclaration;
             var value = new ClassOfTypeDeclaration();
@@ -722,6 +812,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             typeTarget.TypeValue = value;
         }
 
+        /// <summary>
+        ///     start visit a child of a type name
+        /// </summary>
+        /// <param name="typeName"></param>
+        /// <param name="part"></param>
         public void StartVisitChild(TypeName typeName, ISyntaxPart part) {
             var name = part as GenericNamespaceName;
             var value = LastValue as MetaType;
@@ -762,6 +857,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             typeTarget.TypeValue = value;
         }
 
+        /// <summary>
+        ///     start visit a child node of a simple type
+        /// </summary>
+        /// <param name="simpleType"></param>
+        /// <param name="part"></param>
         public void StartVisitChild(SimpleType simpleType, ISyntaxPart part) {
             var name = part as GenericNamespaceName;
             var value = LastValue as TypeAlias;
@@ -778,6 +878,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region EnumTypeDefinition
 
+        /// <summary>
+        ///     start visit an enum type definition
+        /// </summary>
+        /// <param name="type"></param>
         public void StartVisit(EnumTypeDefinition type) {
             var typeTarget = LastTypeDeclaration;
             var value = new EnumType();
@@ -800,6 +904,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region ArrayIndex
 
+        /// <summary>
+        ///     start visit an array index
+        /// </summary>
+        /// <param name="arrayIndex"></param>
         public void StartVisit(ArrayIndex arrayIndex) {
             if (arrayIndex.EndIndex != null) {
                 var lastExpression = LastExpression;
@@ -832,6 +940,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region StringType
 
+        /// <summary>
+        ///     start visit a string type
+        /// </summary>
+        /// <param name="stringType"></param>
         public void StartVisit(StringType stringType) {
             var typeTarget = LastTypeDeclaration;
             var result = new MetaType();
@@ -859,6 +971,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region FormalParameterDefinition
 
+        /// <summary>
+        ///     start visit a formal parameter declaration
+        /// </summary>
+        /// <param name="formalParameter"></param>
         public void StartVisit(FormalParameterDefinition formalParameter) {
             var paramterTarget = LastValue as IParameterTarget;
             var result = new ParameterTypeDefinition();
@@ -884,6 +1000,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion   
         #region UnitInitialization
 
+        /// <summary>
+        ///     start visit an unit initialization block
+        /// </summary>
+        /// <param name="unitBlock"></param>
         public void StartVisit(UnitInitialization unitBlock) {
             var result = new BlockOfStatements();
             InitNode(result, unitBlock, CurrentUnit);
@@ -903,6 +1023,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region CompoundStatement
 
+        /// <summary>
+        ///     start visiting a compound statement
+        /// </summary>
+        /// <param name="block"></param>
         public void StartVisit(CompoundStatement block) {
 
             if (block.AssemblerBlock != null) {
@@ -937,6 +1061,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region Label
 
+        /// <summary>
+        ///     start visiting a label
+        /// </summary>
+        /// <param name="label"></param>
         public void StartVisit(Label label) {
             SymbolName name = null;
 
@@ -980,6 +1108,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region ClassDeclaration
 
+        /// <summary>
+        ///     start visiting a class declaration
+        /// </summary>
+        /// <param name="classDeclaration"></param>
         public void StartVisit(ClassDeclaration classDeclaration) {
             var typeTarget = LastTypeDeclaration;
             var result = new StructuredType();
@@ -993,6 +1125,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         }
 
+        /// <summary>
+        ///     end visting a class declaration
+        /// </summary>
+        /// <param name="classDeclaration"></param>
         public void EndVisit(ClassDeclaration classDeclaration) {
             var parentType = LastValue as StructuredType;
             CurrentMemberVisibility.Reset(parentType);
@@ -1015,6 +1151,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region ClassField
 
+        /// <summary>
+        ///     start visiting a class field
+        /// </summary>
+        /// <param name="field"></param>
         public void StartVisit(ClassField field) {
             var structType = LastValue as StructuredType;
             var declItem = field.ParentItem as IStructuredTypeMember;
@@ -1071,6 +1211,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion    
         #region ClassPropertyReadWrite
 
+        /// <summary>
+        ///     start visting a class propertery/read definition
+        /// </summary>
+        /// <param name="property"></param>
         public void StartVisit(ClassPropertyReadWrite property) {
             var parent = LastValue as StructureProperty;
             var result = new StructurePropertyAccessor();
@@ -1109,6 +1253,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region ParseClassPropertyAccessSpecifier
 
+        /// <summary>
+        ///     start visting a class property specifier
+        /// </summary>
+        /// <param name="property"></param>
         public void StartVisit(ClassPropertySpecifier property) {
             if (property.PropertyReadWrite != null)
                 return;
@@ -1141,6 +1289,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region ClassMethod
 
+        /// <summary>
+        ///     start visiting a class method
+        /// </summary>
+        /// <param name="method"></param>
         public void StartVisit(ClassMethod method) {
             var parent = LastValue as StructuredType;
             var result = new StructureMethod();
@@ -1188,6 +1340,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region OverloadDirective
 
+        /// <summary>
+        ///     start visiting an overload directive
+        /// </summary>
+        /// <param name="directive"></param>
         public void StartVisit(OverloadDirective directive) {
             var parent = LastValue as IDirectiveTarget;
             var result = new MethodDirective();
@@ -1200,6 +1356,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region DispIdDirective
 
+        /// <summary>
+        ///     start visting a dispid directive
+        /// </summary>
+        /// <param name="directive"></param>
         public void StartVisit(DispIdDirective directive) {
             var parent = LastValue as IDirectiveTarget;
 
@@ -1235,6 +1395,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region AbstractDirective
 
+        /// <summary>
+        ///     start visit an abstract directive
+        /// </summary>
+        /// <param name="directive"></param>
         public void StartVisit(AbstractDirective directive) {
             var parent = LastValue as IDirectiveTarget;
             var result = new MethodDirective();
@@ -1278,6 +1442,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region ExternalDirective
 
+        /// <summary>
+        ///     start visit an external directive
+        /// </summary>
+        /// <param name="directive"></param>
         public void StartVisit(ExternalDirective directive) {
             var parent = LastValue as IDirectiveTarget;
             var result = new MethodDirective();
@@ -1310,6 +1478,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region CallConvention
 
+        /// <summary>
+        ///     start visit a calling convention directive
+        /// </summary>
+        /// <param name="directive"></param>
         public void StartVisit(CallConvention directive) {
             var parent = LastValue as IDirectiveTarget;
             var result = new MethodDirective();
@@ -1369,6 +1541,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region MethodDirectives
 
+        /// <summary>
+        ///     start visiting method directives
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="child"></param>
         public void StartVisitChild(MethodDirectives parent, ISyntaxPart child) {
             var hints = child as HintingInformation;
             var lastValue = LastValue as IDirectiveTarget;
@@ -1393,6 +1570,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region ExportedProcedureHeading
 
+        /// <summary>
+        ///     start visting exported procedure headings
+        /// </summary>
+        /// <param name="procHeading"></param>
         public void StartVisit(ExportedProcedureHeading procHeading) {
             var symbols = LastValue as IDeclaredSymbolTarget;
             var result = new GlobalMethod();
@@ -1420,6 +1601,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region ForwardDirective
 
+        /// <summary>
+        ///     start visiting a forward directive
+        /// </summary>
+        /// <param name="directive"></param>
         public void StartVisit(ForwardDirective directive) {
             var parent = LastValue as IDirectiveTarget;
             var result = new MethodDirective();
@@ -1447,6 +1632,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region ExportItem
 
+        /// <summary>
+        ///     start visiting an export section
+        /// </summary>
+        /// <param name="exportsSection"></param>
         public void StartVisit(ExportItem exportsSection) {
             var declarations = LastValue as IDeclaredSymbolTarget;
             var result = new ExportedMethodDeclaration();
@@ -1476,6 +1665,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region RecordDeclaration
 
+        /// <summary>
+        ///     start visiting a record declaration
+        /// </summary>
+        /// <param name="recordDeclaration"></param>
         public void StartVisit(RecordDeclaration recordDeclaration) {
             var typeTarget = LastTypeDeclaration;
             var result = new StructuredType();
@@ -1494,6 +1687,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region RecordField
 
+        /// <summary>
+        ///     start visting a field declaration
+        /// </summary>
+        /// <param name="fieldDeclaration"></param>
         public void StartVisit(RecordField fieldDeclaration) {
             StructuredType structType = null;
             StructureVariant varFields = null;
@@ -1568,6 +1765,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region RecordVariant
 
+        /// <summary>
+        ///     start visiting a record variant
+        /// </summary>
+        /// <param name="variantItem"></param>
         public void StartVisit(RecordVariant variantItem) {
             var structType = LastValue as StructureVariantItem;
             var result = new StructureVariantFields();
@@ -1589,6 +1790,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         }
 
+        /// <summary>
+        ///     end visiting a record helper declaration
+        /// </summary>
+        /// <param name="classDeclaration"></param>
         public void EndVisit(RecordHelperDefinition classDeclaration) {
             var parentType = LastValue as StructuredType;
             CurrentMemberVisibility.Reset(parentType);
@@ -1597,6 +1802,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region RecordHelperItem
 
+        /// <summary>
+        ///     start visiting a record declaration item
+        /// </summary>
+        /// <param name="recordDeclarationItem"></param>
         public void StartVisit(RecordHelperItem recordDeclarationItem) {
             var parentType = LastValue as StructuredType;
 
@@ -1621,6 +1830,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         }
 
+        /// <summary>
+        ///     end visiting an object declaration
+        /// </summary>
+        /// <param name="objectDeclaration"></param>
         public void EndVisit(ObjectDeclaration objectDeclaration) {
             var parentType = LastValue as StructuredType;
             CurrentMemberVisibility.Reset(parentType);
@@ -1644,6 +1857,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region InterfaceDefinition
 
+        /// <summary>
+        ///     end visiting an interface declaration
+        /// </summary>
+        /// <param name="interfaceDeclaration"></param>
         public void StartVisit(InterfaceDefinition interfaceDeclaration) {
             var typeTarget = LastTypeDeclaration;
             var result = new StructuredType();
@@ -1667,6 +1884,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region InterfaceGuid
 
+        /// <summary>
+        ///     start visiting an interface guid definiton
+        /// </summary>
+        /// <param name="interfaceGuid"></param>
         public void StartVisit(InterfaceGuid interfaceGuid) {
             var structType = LastValue as StructuredType;
 
@@ -1694,6 +1915,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         }
 
+        /// <summary>
+        ///     end visig a class helper definition
+        /// </summary>
+        /// <param name="classHelper"></param>
         public void EndVisit(ClassHelperDef classHelper) {
             var parentType = LastValue as StructuredType;
             CurrentMemberVisibility.Reset(parentType);
