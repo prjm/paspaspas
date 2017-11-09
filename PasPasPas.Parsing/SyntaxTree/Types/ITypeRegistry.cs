@@ -13,6 +13,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Types {
     public interface ITypeRegistry {
 
         /// <summary>
+        ///     all registered types
+        /// </summary>
+        IEnumerable<ITypeDefinition> RegisteredTypes { get; }
+
+        /// <summary>
         ///     get a type by type id
         /// </summary>
         /// <param name="typeId">given type id</param>

@@ -86,6 +86,12 @@ namespace PasPasPas.Infrastructure.Utils {
             return string.Empty;
         }
 
+        /// <summary>
+        ///     part vale
+        /// </summary>
+        public string Value
+            => value;
+
     }
 
     /// <summary>
@@ -158,6 +164,20 @@ namespace PasPasPas.Infrastructure.Utils {
                 result = result * 31 + parts[i].GetHashCode();
             return result;
         }
+
+        /// <summary>
+        ///     name length
+        /// </summary>
+        public int Length
+            => parts.Length;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        public string this[int index]
+            => parts[index].Value;
 
         /// <summary>
         ///     string cache

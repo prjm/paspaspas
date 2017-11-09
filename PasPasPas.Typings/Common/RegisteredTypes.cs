@@ -34,6 +34,12 @@ namespace PasPasPas.Typings.Common {
         public string Caption
             => "TypeRegistry";
 
+        /// <summary>
+        ///     registered types
+        /// </summary>
+        IEnumerable<ITypeDefinition> ITypeRegistry.RegisteredTypes
+            => types.Values;
+
         private void RegisterType(TypeBase type) {
             types.Add(type.TypeId, type);
             type.TypeRegistry = this;
@@ -76,6 +82,7 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         private void RegisterCommonTypes(StringPool pool) {
             RegisterType(new ErrorType(TypeIds.ErrorType));
+
             RegisterType(new IntegralType(TypeIds.ByteType, false, 8, CreateSystemScopeName(pool, "Byte")));
             RegisterType(new IntegralType(TypeIds.ShortInt, true, 8, CreateSystemScopeName(pool, "ShortInt")));
             RegisterType(new IntegralType(TypeIds.WordType, false, 16, CreateSystemScopeName(pool, "Word")));
@@ -84,13 +91,23 @@ namespace PasPasPas.Typings.Common {
             RegisterType(new IntegralType(TypeIds.IntegerType, true, 32, CreateSystemScopeName(pool, "Integer")));
             RegisterType(new Integral64BitType(TypeIds.Uint64Type, false, CreateSystemScopeName(pool, "UInt64")));
             RegisterType(new Integral64BitType(TypeIds.Int64Type, true, CreateSystemScopeName(pool, "Int64")));
-            RegisterType(new BooleanType(TypeIds.BooleanType, CreateSystemScopeName(pool, "Boolean")));
+
+            RegisterType(new BooleanType(TypeIds.BooleanType, 1, CreateSystemScopeName(pool, "Boolean")));
+            RegisterType(new BooleanType(TypeIds.ByteBoolType, 8, CreateSystemScopeName(pool, "ByteBool")));
+            RegisterType(new BooleanType(TypeIds.WordBoolType, 16, CreateSystemScopeName(pool, "WordBool")));
+            RegisterType(new BooleanType(TypeIds.LongBoolType, 32, CreateSystemScopeName(pool, "LongBool")));
+
             RegisterType(new AnsiCharType(TypeIds.AnsiCharType, CreateSystemScopeName(pool, "AnsiChar")));
+            RegisterType(new WideCharType(TypeIds.WideCharType, CreateSystemScopeName(pool, "WideChar")));
+
             RegisterType(new UnicodeStringType(TypeIds.UnicodeStringType, CreateSystemScopeName(pool, "UnicodeString")));
             RegisterType(new RealType(TypeIds.Extended, CreateSystemScopeName(pool, "Extended")));
 
+            RegisterType(new TypeAlias(TypeIds.CharType, TypeIds.WideCharType, CreateSystemScopeName(pool, "Char")));
+            RegisterType(new TypeAlias(TypeIds.Ucs2CharType, TypeIds.WideCharType, CreateSystemScopeName(pool, "UCS2Char")));
+            RegisterType(new TypeAlias(TypeIds.Ucs4CharType, TypeIds.CardinalType, CreateSystemScopeName(pool, "UCS4Char")));
             RegisterType(new TypeAlias(TypeIds.StringType, TypeIds.UnicodeStringType, CreateSystemScopeName(pool, "String")));
-            RegisterType(new TypeAlias(TypeIds.CharType, TypeIds.AnsiCharType, CreateSystemScopeName(pool, "Char")));
+
         }
 
         /// <summary>

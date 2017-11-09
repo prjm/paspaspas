@@ -36,9 +36,9 @@
         public const int BooleanType = 50;
 
         /// <summary>
-        ///     char type
+        ///     wide char type
         /// </summary>
-        public const int CharType = 60;
+        public const int WideCharType = 60;
 
         /// <summary>
         ///     string type
@@ -73,11 +73,42 @@
         /// <summary>
         ///     short integer type (1 byte signed)
         /// </summary>
-        public static int ShortInt = 130;
+        public const int ShortInt = 130;
 
         /// <summary>
         ///     small int type (2 byte signed)
         /// </summary>
-        public static int SmallInt;
+        public const int SmallInt = 140;
+
+        /// <summary>
+        ///     char type
+        /// </summary>
+        public const int CharType = 150;
+
+        /// <summary>
+        ///     ucs2 char type (type alias for widechar)
+        /// </summary>
+        public const int Ucs2CharType = 160;
+
+        /// <summary>
+        ///     ucs4 char type (type alias for integer)
+        /// </summary>
+        public const int Ucs4CharType = 170;
+
+        /// <summary>
+        ///     1 byte boolean
+        /// </summary>
+        public const int ByteBoolType = 180;
+
+        /// <summary>
+        ///     2 byte boolean
+        /// </summary>
+        public const int WordBoolType = 190;
+
+        /// <summary>
+        ///     4 byte boolean
+        /// </summary>
+        public const int LongBoolType = 200;
+
     }
 }

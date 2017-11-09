@@ -25,7 +25,7 @@ namespace PasPasPas.Typings.Simple {
             else if (literalValue is bool)
                 return TypeIds.BooleanType;
             else if (literalValue is char)
-                return TypeIds.CharType;
+                return TypeIds.WideCharType;
             else if (literalValue is string)
                 return TypeIds.StringType;
             else if (literalValue is double)

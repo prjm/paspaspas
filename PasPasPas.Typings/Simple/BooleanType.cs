@@ -8,14 +8,16 @@ namespace PasPasPas.Typings.Simple {
     ///     boolean type
     /// </summary>
     public class BooleanType : TypeBase {
+        private readonly int size;
 
         /// <summary>
         ///     create a new boolean type
         /// </summary>
         /// <param name="withId"></param>
+        /// <param name="bitSize">size in bits</param>
         /// <param name="name">name (optional)</param>
-        public BooleanType(int withId, ScopedName name = null) : base(withId, name) {
-        }
+        public BooleanType(int withId, int bitSize, ScopedName name = null) : base(withId, name)
+            => this.size = bitSize;
 
         /// <summary>
         ///     enumerated type

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Parsing.SyntaxTree.Types;
@@ -20,10 +21,12 @@ namespace PasPasPas.Typings.Common {
         IEndVisitor<Parsing.SyntaxTree.Abstract.TypeAlias>,
         IEndVisitor<MetaType>,
         IEndVisitor<SymbolReference>,
-        IStartVisitor<CompilationUnit> {
+        IStartVisitor<CompilationUnit>,
+        IEndVisitor<CompilationUnit> {
 
         private readonly IStartEndVisitor visitor;
         private readonly ITypedEnvironment environment;
+        private readonly IDictionary<string, int> localTypes;
 
         /// <summary>
         ///     current unit
@@ -44,6 +47,7 @@ namespace PasPasPas.Typings.Common {
         public TypeAnnotator(ITypedEnvironment env) {
             visitor = new Visitor(this);
             environment = env;
+            localTypes = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
         }
 
         /// <summary>
@@ -202,6 +206,11 @@ namespace PasPasPas.Typings.Common {
                 return;
             }
 
+            if (typeName.Length == 1 && localTypes.ContainsKey(typeName[0])) {
+                element.TypeInfo = environment.TypeRegistry.GetTypeByIdOrUndefinedType(localTypes[typeName[0]]);
+                return;
+            }
+
             element.TypeInfo = environment.TypeRegistry.GetTypeByNameOrUndefinedType(typeName);
         }
 
@@ -225,8 +234,22 @@ namespace PasPasPas.Typings.Common {
         ///     begin visit a unit
         /// </summary>
         /// <param name="element"></param>
-        public void StartVisit(CompilationUnit element)
-            => CurrentUnit = element;
+        public void StartVisit(CompilationUnit element) {
+            CurrentUnit = element;
+            localTypes.Clear();
+            foreach (var entry in environment.TypeRegistry.RegisteredTypes)
+                if (entry.TypeName != null)
+                    localTypes.Add(entry.TypeName[entry.TypeName.Length - 1], entry.TypeId);
+        }
+
+        /// <summary>
+        ///     end visiting a unit
+        /// </summary>
+        /// <param name="element"></param>
+        public void EndVisit(CompilationUnit element) {
+            localTypes.Clear();
+            CurrentUnit = null;
+        }
 
         /// <summary>
         ///     end visiting a symbol reference
@@ -236,5 +259,7 @@ namespace PasPasPas.Typings.Common {
             if (element.TypeValue is ITypedSyntaxNode typeRef)
                 element.TypeInfo = typeRef.TypeInfo;
         }
+
+
     }
 }
