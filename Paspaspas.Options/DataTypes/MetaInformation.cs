@@ -75,6 +75,7 @@ namespace PasPasPas.Options.DataTypes {
             PESubsystemVersion = new PEVersion(baseOption?.PESubsystemVersion);
             PEUserVersion = new PEVersion(baseOption?.PEUserVersion);
             LinkedFileResolver = new LinkedInputFileResolver(parentOptions);
+            NativeIntegerSize = new DerivedValueOption<NativeIntSize>(baseOption?.NativeIntegerSize);
         }
 
         /// <summary>
@@ -136,6 +137,11 @@ namespace PasPasPas.Options.DataTypes {
         ///     resolver for directly linked input files
         /// </summary>
         public LinkedInputFileResolver LinkedFileResolver { get; }
+
+        /// <summary>
+        ///     native integer size
+        /// </summary>
+        public DerivedValueOption<NativeIntSize> NativeIntegerSize { get; }
 
         /// <summary>
         ///     reset on new unit

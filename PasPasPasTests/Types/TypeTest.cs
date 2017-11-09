@@ -1,6 +1,8 @@
 ﻿using System;
 using PasPasPas.Api;
+using PasPasPas.Options.DataTypes;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
+using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 using PasPasPas.Typings.Common;
 using PasPasPasTests.Common;
@@ -24,7 +26,7 @@ namespace PasPasPasTests.Types {
             Func<object, SymbolReferencePart> searchfunction = x => x as SymbolReferencePart;
             IExpression firstParam = null;
 
-            firstParam = EvaluateExpressionType(file, program, searchfunction);
+            firstParam = EvaluateExpressionType(file, program, searchfunction, NativeIntSize.Undefined);
 
             Assert.IsNotNull(firstParam.TypeInfo);
             Assert.AreEqual(typeId, firstParam.TypeInfo.TypeId);
@@ -36,25 +38,39 @@ namespace PasPasPasTests.Types {
         /// </summary>
         /// <param name="declaration">declareation</param>
         /// <param name="typeId">type id to find</param>
-        protected void AssertDeclType(string declaration, int typeId) {
+        protected void AssertDeclType(string declaration, int typeId, NativeIntSize intSize = NativeIntSize.Undefined, int typeSize = -1) {
             var file = "SimpleExpr";
             var program = $"program {file}; var x : {declaration}; begin Writeln(x); end. ";
             Func<object, SymbolReferencePart> searchfunction = x => x as SymbolReferencePart;
             IExpression firstParam = null;
 
-            firstParam = EvaluateExpressionType(file, program, searchfunction);
+            firstParam = EvaluateExpressionType(file, program, searchfunction, intSize);
 
             Assert.IsNotNull(firstParam.TypeInfo);
             Assert.AreEqual(typeId, firstParam.TypeInfo.TypeId);
 
+            if (typeSize > 0) {
+                IFixedSizeType sizedType;
+                if (firstParam.TypeInfo is PasPasPas.Typings.Common.TypeAlias alias) {
+                    sizedType = alias.BaseType as IFixedSizeType;
+                }
+                else {
+                    sizedType = firstParam.TypeInfo as IFixedSizeType;
+                }
+                Assert.IsNotNull(sizedType);
+                Assert.AreEqual(typeSize, sizedType.BitSize);
+            }
         }
 
 
-        private IExpression EvaluateExpressionType(string file, string program, Func<object, SymbolReferencePart> searchfunction) {
+        private IExpression EvaluateExpressionType(string file, string program, Func<object, SymbolReferencePart> searchfunction, NativeIntSize intSize) {
             IExpression firstParam;
-            var env = CreateEnvironment();
+            var env = CreateEnvironment(intSize);
             var api = new ParserApi(env);
             using (var reader = api.CreateParserForString($"{file}.dpr", program)) {
+
+                api.Options.Meta.NativeIntegerSize.Value = intSize;
+
                 var tree = reader.Parse();
                 var project = api.CreateAbstractSyntraxTree(tree);
                 api.AnnotateWithTypes(project);

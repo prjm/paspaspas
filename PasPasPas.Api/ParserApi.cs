@@ -28,11 +28,6 @@ namespace PasPasPas.Api {
             env = parserEnvironment;
             parseOptions = options ?? new OptionSet(parserEnvironment);
             tokenizerApi = new TokenizerApi(parserEnvironment, options);
-            RegisterStatics();
-        }
-
-        private void RegisterStatics() {
-            //..
         }
 
         /// <summary>
@@ -68,6 +63,12 @@ namespace PasPasPas.Api {
             bst.Accept(visitor.AsVisitor());
             return root;
         }
+
+        /// <summary>
+        ///     used option sets
+        /// </summary>
+        public OptionSet Options
+            => parseOptions;
 
         /// <summary>
         ///     annotate an abstract syntax tree with types

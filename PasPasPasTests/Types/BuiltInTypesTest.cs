@@ -1,4 +1,5 @@
-﻿using PasPasPas.Typings.Common;
+﻿using PasPasPas.Options.DataTypes;
+using PasPasPas.Typings.Common;
 using Xunit;
 
 namespace PasPasPasTests.Types {
@@ -55,6 +56,38 @@ namespace PasPasPasTests.Types {
             AssertDeclType("System.ByteBool", TypeIds.ByteBoolType);
             AssertDeclType("System.WordBool", TypeIds.WordBoolType);
             AssertDeclType("System.LongBool", TypeIds.LongBoolType);
+        }
+
+        [Fact]
+        public void TestNativeIntTypes() {
+            AssertDeclType("System.NativeInt", TypeIds.NativeInt, NativeIntSize.All32bit, 32);
+            AssertDeclType("System.NativeUInt", TypeIds.NativeUInt, NativeIntSize.All32bit, 32);
+            AssertDeclType("System.LongInt", TypeIds.LongInt, NativeIntSize.All32bit, 32);
+            AssertDeclType("System.LongWord", TypeIds.LongWord, NativeIntSize.All32bit, 32);
+            AssertDeclType("NativeInt", TypeIds.NativeInt, NativeIntSize.All32bit, 32);
+            AssertDeclType("NativeUInt", TypeIds.NativeUInt, NativeIntSize.All32bit, 32);
+            AssertDeclType("LongInt", TypeIds.LongInt, NativeIntSize.All32bit, 32);
+            AssertDeclType("LongWord", TypeIds.LongWord, NativeIntSize.All32bit, 32);
+
+            AssertDeclType("System.NativeInt", TypeIds.NativeInt, NativeIntSize.All64bit, 64);
+            AssertDeclType("System.NativeUInt", TypeIds.NativeUInt, NativeIntSize.All64bit, 64);
+            AssertDeclType("System.LongInt", TypeIds.LongInt, NativeIntSize.All64bit, 64);
+            AssertDeclType("System.LongWord", TypeIds.LongWord, NativeIntSize.All64bit, 64);
+            AssertDeclType("NativeInt", TypeIds.NativeInt, NativeIntSize.All64bit, 64);
+            AssertDeclType("NativeUInt", TypeIds.NativeUInt, NativeIntSize.All64bit, 64);
+            AssertDeclType("LongInt", TypeIds.LongInt, NativeIntSize.All64bit, 64);
+            AssertDeclType("LongWord", TypeIds.LongWord, NativeIntSize.All64bit, 64);
+
+            AssertDeclType("System.NativeInt", TypeIds.NativeInt, NativeIntSize.Windows64bit, 64);
+            AssertDeclType("System.NativeUInt", TypeIds.NativeUInt, NativeIntSize.Windows64bit, 64);
+            AssertDeclType("System.LongInt", TypeIds.LongInt, NativeIntSize.Windows64bit, 32);
+            AssertDeclType("System.LongWord", TypeIds.LongWord, NativeIntSize.Windows64bit, 32);
+            AssertDeclType("NativeInt", TypeIds.NativeInt, NativeIntSize.Windows64bit, 64);
+            AssertDeclType("NativeUInt", TypeIds.NativeUInt, NativeIntSize.Windows64bit, 64);
+            AssertDeclType("LongInt", TypeIds.LongInt, NativeIntSize.Windows64bit, 32);
+            AssertDeclType("LongWord", TypeIds.LongWord, NativeIntSize.Windows64bit, 32);
+
+
         }
 
     }

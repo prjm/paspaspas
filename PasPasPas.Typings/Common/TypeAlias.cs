@@ -33,5 +33,10 @@ namespace PasPasPas.Typings.Common {
         public override CommonTypeKind TypeKind
             => TypeRegistry.GetTypeByIdOrUndefinedType(baseId).TypeKind;
 
+        /// <summary>
+        ///     base type / alias type
+        /// </summary>
+        public ITypeDefinition BaseType
+            => TypeRegistry.GetTypeByIdOrUndefinedType(baseId);
     }
 }

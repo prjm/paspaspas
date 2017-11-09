@@ -110,5 +110,24 @@
         /// </summary>
         public const int LongBoolType = 200;
 
+        /// <summary>
+        ///     native int
+        /// </summary>
+        public const int NativeInt = 210;
+
+        /// <summary>
+        ///     native uint
+        /// </summary>
+        public const int NativeUInt = 220;
+
+        /// <summary>
+        ///     native long int
+        /// </summary>
+        public const int LongInt = 230;
+
+        /// <summary>
+        ///     native long word
+        /// </summary>
+        public const int LongWord = 240;
     }
 }

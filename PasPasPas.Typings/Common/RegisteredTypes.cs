@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using PasPasPas.Infrastructure.Environment;
 using PasPasPas.Infrastructure.Utils;
+using PasPasPas.Options.DataTypes;
 using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Typings.Operators;
 using PasPasPas.Typings.Simple;
@@ -51,8 +52,10 @@ namespace PasPasPas.Typings.Common {
         /// <summary>
         ///     create a new type registry
         /// </summary>
-        public RegisteredTypes(StringPool pool) {
-            RegisterCommonTypes(pool);
+        /// <param name="intSize">integer size</param>
+        /// <param name="pool">string pool</param>
+        public RegisteredTypes(StringPool pool, NativeIntSize intSize) {
+            RegisterCommonTypes(pool, intSize);
             RegisterCommonOperators();
         }
 
@@ -80,7 +83,7 @@ namespace PasPasPas.Typings.Common {
         /// <summary>
         ///     register built-in types
         /// </summary>
-        private void RegisterCommonTypes(StringPool pool) {
+        private void RegisterCommonTypes(StringPool pool, NativeIntSize intSize) {
             RegisterType(new ErrorType(TypeIds.ErrorType));
 
             RegisterType(new IntegralType(TypeIds.ByteType, false, 8, CreateSystemScopeName(pool, "Byte")));
@@ -108,6 +111,24 @@ namespace PasPasPas.Typings.Common {
             RegisterType(new TypeAlias(TypeIds.Ucs4CharType, TypeIds.CardinalType, CreateSystemScopeName(pool, "UCS4Char")));
             RegisterType(new TypeAlias(TypeIds.StringType, TypeIds.UnicodeStringType, CreateSystemScopeName(pool, "String")));
 
+            if (intSize == NativeIntSize.Windows64bit) {
+                RegisterType(new TypeAlias(TypeIds.NativeInt, TypeIds.Int64Type, CreateSystemScopeName(pool, "NativeInt")));
+                RegisterType(new TypeAlias(TypeIds.NativeUInt, TypeIds.Uint64Type, CreateSystemScopeName(pool, "NativeUInt")));
+                RegisterType(new TypeAlias(TypeIds.LongInt, TypeIds.IntegerType, CreateSystemScopeName(pool, "LongInt")));
+                RegisterType(new TypeAlias(TypeIds.LongWord, TypeIds.CardinalType, CreateSystemScopeName(pool, "LongWord")));
+            }
+            else if (intSize == NativeIntSize.All64bit) {
+                RegisterType(new TypeAlias(TypeIds.NativeInt, TypeIds.Int64Type, CreateSystemScopeName(pool, "NativeInt")));
+                RegisterType(new TypeAlias(TypeIds.NativeUInt, TypeIds.Uint64Type, CreateSystemScopeName(pool, "NativeUInt")));
+                RegisterType(new TypeAlias(TypeIds.LongInt, TypeIds.Int64Type, CreateSystemScopeName(pool, "LongInt")));
+                RegisterType(new TypeAlias(TypeIds.LongWord, TypeIds.Uint64Type, CreateSystemScopeName(pool, "LongWord")));
+            }
+            else {
+                RegisterType(new TypeAlias(TypeIds.NativeInt, TypeIds.IntegerType, CreateSystemScopeName(pool, "NativeInt")));
+                RegisterType(new TypeAlias(TypeIds.NativeUInt, TypeIds.CardinalType, CreateSystemScopeName(pool, "NativeUInt")));
+                RegisterType(new TypeAlias(TypeIds.LongInt, TypeIds.IntegerType, CreateSystemScopeName(pool, "LongInt")));
+                RegisterType(new TypeAlias(TypeIds.LongWord, TypeIds.CardinalType, CreateSystemScopeName(pool, "LongWord")));
+            }
         }
 
         /// <summary>

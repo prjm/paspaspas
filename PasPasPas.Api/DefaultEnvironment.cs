@@ -4,6 +4,7 @@ using System.Text;
 using PasPasPas.Infrastructure.Environment;
 using PasPasPas.Infrastructure.Files;
 using PasPasPas.Infrastructure.Log;
+using PasPasPas.Options.DataTypes;
 using PasPasPas.Parsing;
 using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Parsing.Tokenizer;
@@ -110,8 +111,9 @@ namespace PasPasPas.Api {
         /// <summary>
         ///     create a new default environment
         /// </summary>
-        public DefaultEnvironment()
-            => TypeRegistry = new RegisteredTypes(StringPool);
+        /// <param name="intSize">integer size</param>
+        public DefaultEnvironment(NativeIntSize intSize = NativeIntSize.Undefined)
+            => TypeRegistry = new RegisteredTypes(StringPool, intSize);
 
         /// <summary>
         ///     all entries
