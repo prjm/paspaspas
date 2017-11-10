@@ -22,11 +22,15 @@ namespace PasPasPas.Typings.Common {
         IEndVisitor<MetaType>,
         IEndVisitor<SymbolReference>,
         IStartVisitor<CompilationUnit>,
-        IEndVisitor<CompilationUnit> {
+        IEndVisitor<CompilationUnit>,
+        IStartVisitor<EnumType>,
+        IEndVisitor<EnumType>,
+        IEndVisitor<EnumTypeValue> {
 
         private readonly IStartEndVisitor visitor;
         private readonly ITypedEnvironment environment;
         private readonly IDictionary<string, int> localTypes;
+        private readonly Stack<ITypeDefinition> currentTypeDefintion;
 
         /// <summary>
         ///     current unit
@@ -48,6 +52,7 @@ namespace PasPasPas.Typings.Common {
             visitor = new Visitor(this);
             environment = env;
             localTypes = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+            currentTypeDefintion = new Stack<ITypeDefinition>();
         }
 
         /// <summary>
@@ -260,6 +265,50 @@ namespace PasPasPas.Typings.Common {
                 element.TypeInfo = typeRef.TypeInfo;
         }
 
+        /// <summary>
+        ///     start visting an enumeration type
+        /// </summary>
+        /// <param name="element">enumeration type definition</param>
+        public void StartVisit(EnumType element) {
+            var typeId = RequireUserTypeId();
+            var typeDef = new EnumeratedType(typeId);
+            RegisterUserDefinedType(typeDef);
+            currentTypeDefintion.Push(typeDef);
+        }
 
+        /// <summary>
+        ///     register a new type definition
+        /// </summary>
+        /// <param name="typeDef"></param>
+        private void RegisterUserDefinedType(EnumeratedType typeDef)
+            => environment.TypeRegistry.RegisterType(typeDef);
+
+        /// <summary>
+        ///     require a new type id for a user defined type
+        /// </summary>
+        /// <returns></returns>
+        private int RequireUserTypeId()
+            => environment.TypeRegistry.RequireUserTypeId();
+
+        /// <summary>
+        ///     end visiting an enum type definition
+        /// </summary>
+        /// <param name="element"></param>
+        public void EndVisit(EnumType element) {
+            var typeDef = currentTypeDefintion.Pop();
+            element.TypeInfo = typeDef;
+        }
+
+        /// <summary>
+        ///     enum type value definition
+        /// </summary>
+        /// <param name="element"></param>
+        public void EndVisit(EnumTypeValue element) {
+            var typeDef = currentTypeDefintion.Peek() as EnumeratedType;
+            if (typeDef == null)
+                return;
+
+            typeDef.DefineEnumValue(element.SymbolName, false, -1);
+        }
     }
 }

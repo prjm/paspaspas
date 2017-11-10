@@ -43,5 +43,17 @@ namespace PasPasPas.Parsing.SyntaxTree.Types {
         /// <param name="typeName">type name</param>
         /// <returns></returns>
         ITypeDefinition GetTypeByNameOrUndefinedType(ScopedName typeName);
+
+        /// <summary>
+        ///     register a new type
+        /// </summary>
+        /// <param name="typeDef"></param>
+        void RegisterType(ITypeDefinition typeDef);
+
+        /// <summary>
+        ///     generate a new user type id
+        /// </summary>
+        /// <returns></returns>
+        int RequireUserTypeId();
     }
 }

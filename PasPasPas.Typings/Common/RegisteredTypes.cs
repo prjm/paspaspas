@@ -23,6 +23,9 @@ namespace PasPasPas.Typings.Common {
         private readonly IDictionary<ScopedName, ITypeDefinition> typesByName
             = new Dictionary<ScopedName, ITypeDefinition>();
 
+        private readonly object idLock = new object();
+        private int userTypeIds = 1000;
+
         /// <summary>
         ///     number of types
         /// </summary>
@@ -41,9 +44,16 @@ namespace PasPasPas.Typings.Common {
         IEnumerable<ITypeDefinition> ITypeRegistry.RegisteredTypes
             => types.Values;
 
-        private void RegisterType(TypeBase type) {
+        /// <summary>
+        ///     register a new type
+        /// </summary>
+        /// <param name="type">type to register</param>
+        public void RegisterType(ITypeDefinition type) {
             types.Add(type.TypeId, type);
-            type.TypeRegistry = this;
+
+            if (type is TypeBase baseType)
+                baseType.TypeRegistry = this;
+
             var name = type.TypeName;
             if (name != null)
                 typesByName.Add(name, type);
@@ -163,6 +173,15 @@ namespace PasPasPas.Typings.Common {
                 result = types[TypeIds.ErrorType];
 
             return result;
+        }
+
+        /// <summary>
+        ///     generate a new user type ids
+        /// </summary>
+        /// <returns></returns>
+        public int RequireUserTypeId() {
+            lock (idLock)
+                return userTypeIds++;
         }
     }
 }

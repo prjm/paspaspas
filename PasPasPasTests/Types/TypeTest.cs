@@ -38,7 +38,41 @@ namespace PasPasPasTests.Types {
         /// </summary>
         /// <param name="declaration">declareation</param>
         /// <param name="typeId">type id to find</param>
-        protected void AssertDeclType(string declaration, int typeId, NativeIntSize intSize = NativeIntSize.Undefined, int typeSize = -1) {
+        protected void AssertDeclType(string declaration, int typeId = TypeIds.UnspecifiedType, NativeIntSize intSize = NativeIntSize.Undefined, int typeSize = -1, CommonTypeKind typeKind = CommonTypeKind.UnknownType) {
+
+            Action<ITypeDefinition> tester = (ITypeDefinition def) => {
+
+                if (typeId != TypeIds.UnspecifiedType)
+                    Assert.AreEqual(typeId, def.TypeId);
+
+                if (typeKind != CommonTypeKind.UnknownType)
+                    Assert.AreEqual(typeKind, def.TypeKind);
+
+                if (typeSize > 0) {
+                    IFixedSizeType sizedType;
+                    if (def is PasPasPas.Typings.Common.TypeAlias alias) {
+                        sizedType = alias.BaseType as IFixedSizeType;
+                    }
+                    else {
+                        sizedType = def as IFixedSizeType;
+                    }
+                    Assert.IsNotNull(sizedType);
+                    Assert.AreEqual(typeSize, sizedType.BitSize);
+                }
+
+            };
+
+            AssertDeclType(declaration, tester, intSize);
+        }
+
+
+
+        /// <summary>
+        ///     test the type of a declared variable expressiom
+        /// </summary>
+        /// <param name="declaration">declareation</param>
+        /// <param name="typeId">type id to find</param>
+        protected void AssertDeclType(string declaration, Action<ITypeDefinition> test, NativeIntSize intSize = NativeIntSize.Undefined) {
             var file = "SimpleExpr";
             var program = $"program {file}; var x : {declaration}; begin Writeln(x); end. ";
             Func<object, SymbolReferencePart> searchfunction = x => x as SymbolReferencePart;
@@ -47,19 +81,7 @@ namespace PasPasPasTests.Types {
             firstParam = EvaluateExpressionType(file, program, searchfunction, intSize);
 
             Assert.IsNotNull(firstParam.TypeInfo);
-            Assert.AreEqual(typeId, firstParam.TypeInfo.TypeId);
-
-            if (typeSize > 0) {
-                IFixedSizeType sizedType;
-                if (firstParam.TypeInfo is PasPasPas.Typings.Common.TypeAlias alias) {
-                    sizedType = alias.BaseType as IFixedSizeType;
-                }
-                else {
-                    sizedType = firstParam.TypeInfo as IFixedSizeType;
-                }
-                Assert.IsNotNull(sizedType);
-                Assert.AreEqual(typeSize, sizedType.BitSize);
-            }
+            test(firstParam.TypeInfo);
         }
 
 

@@ -6,6 +6,11 @@
     public static class TypeIds {
 
         /// <summary>
+        ///     unspecified type
+        /// </summary>
+        public const int UnspecifiedType = -2;
+
+        /// <summary>
         ///     errornous type
         /// </summary>
         public const int ErrorType = -1;
@@ -129,5 +134,6 @@
         ///     native long word
         /// </summary>
         public const int LongWord = 240;
+
     }
 }
