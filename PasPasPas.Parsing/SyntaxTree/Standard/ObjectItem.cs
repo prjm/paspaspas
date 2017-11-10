@@ -56,8 +56,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     accept visitor
         /// </summary>
-        /// <param name="startVisitor">start visitor</param>
-        /// <param name="endVisitor">end visitor</param>
+        /// <param name="visitor">visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
             AcceptParts(this, visitor);
