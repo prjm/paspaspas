@@ -29,8 +29,8 @@ namespace PasPasPas.Typings.Common {
 
         private readonly IStartEndVisitor visitor;
         private readonly ITypedEnvironment environment;
-        private readonly IDictionary<string, int> localTypes;
         private readonly Stack<ITypeDefinition> currentTypeDefintion;
+        private Scope scope;
 
         /// <summary>
         ///     current unit
@@ -51,7 +51,7 @@ namespace PasPasPas.Typings.Common {
         public TypeAnnotator(ITypedEnvironment env) {
             visitor = new Visitor(this);
             environment = env;
-            localTypes = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+            scope = new Scope(null);
             currentTypeDefintion = new Stack<ITypeDefinition>();
         }
 
@@ -211,12 +211,11 @@ namespace PasPasPas.Typings.Common {
                 return;
             }
 
-            if (typeName.Length == 1 && localTypes.ContainsKey(typeName[0])) {
-                element.TypeInfo = environment.TypeRegistry.GetTypeByIdOrUndefinedType(localTypes[typeName[0]]);
-                return;
-            }
+            var entry = scope.ResolveName(typeName);
 
-            element.TypeInfo = environment.TypeRegistry.GetTypeByNameOrUndefinedType(typeName);
+            if (entry != null && entry.Kind == ScopeEntryKind.TypeName) {
+                element.TypeInfo = environment.TypeRegistry.GetTypeByIdOrUndefinedType(entry.TypeId);
+            }
         }
 
         /// <summary>
@@ -241,10 +240,12 @@ namespace PasPasPas.Typings.Common {
         /// <param name="element"></param>
         public void StartVisit(CompilationUnit element) {
             CurrentUnit = element;
-            localTypes.Clear();
+            scope = scope.Open(element.UnitName.CompleteName);
             foreach (var entry in environment.TypeRegistry.RegisteredTypes)
-                if (entry.TypeName != null)
-                    localTypes.Add(entry.TypeName[entry.TypeName.Length - 1], entry.TypeId);
+                if (entry.TypeName != null) {
+                    scope.AddEntry(entry.TypeName, new ScopeEntry(ScopeEntryKind.TypeName) { TypeId = entry.TypeId });
+                    scope.AddEntry(new ScopedName(entry.TypeName[entry.TypeName.Length - 1]), new ScopeEntry(ScopeEntryKind.TypeName) { TypeId = entry.TypeId });
+                }
         }
 
         /// <summary>
@@ -252,7 +253,7 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="element"></param>
         public void EndVisit(CompilationUnit element) {
-            localTypes.Clear();
+            scope = scope.Close(element.UnitName.CompleteName);
             CurrentUnit = null;
         }
 
