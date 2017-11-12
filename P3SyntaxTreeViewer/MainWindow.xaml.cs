@@ -1,7 +1,6 @@
 ﻿using PasPasPas.Infrastructure.Log;
 using PasPasPas.Parsing.SyntaxTree;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
-using PasPasPas.Parsing.SyntaxTree.Visitors;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,10 +9,10 @@ using System.Windows.Controls;
 using System.ComponentModel;
 using System.Collections.Generic;
 using PasPasPas.Parsing.SyntaxTree.Utils;
-using PasPasPas.Infrastructure.Files;
 using PasPasPas.Api;
-using PasPasPas.Parsing;
 using PasPasPas.Typings.Common;
+using System.Windows.Media;
+using System;
 
 namespace P3SyntaxTreeViewer {
 
@@ -24,6 +23,15 @@ namespace P3SyntaxTreeViewer {
 
         public MainWindow() {
             InitializeComponent();
+
+            foreach (var font in Fonts.SystemFontFamilies) {
+                if (string.Equals("hack", font.Source, StringComparison.OrdinalIgnoreCase)) {
+                    Code.FontFamily = font;
+                    Code.FontSize = 14;
+                }
+            }
+
+            WindowState = WindowState.Maximized;
 
             if (File.Exists(@"c:\temp\editor.pas"))
                 Code.Text = File.ReadAllText(@"c:\temp\editor.pas", Encoding.UTF8);
