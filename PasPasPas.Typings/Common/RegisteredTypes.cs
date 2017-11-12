@@ -100,15 +100,24 @@ namespace PasPasPas.Typings.Common {
             RegisterIntTypes(pool);
             RegisterBoolTypes(pool);
             RegisterStringTypes(pool);
-
-            RegisterType(new RealType(TypeIds.Extended, CreateSystemScopeName(pool, "Extended")));
+            RegisterRealTypes(pool);
 
             RegisterType(new TypeAlias(TypeIds.CharType, TypeIds.WideCharType, CreateSystemScopeName(pool, "Char")));
             RegisterType(new TypeAlias(TypeIds.Ucs2CharType, TypeIds.WideCharType, CreateSystemScopeName(pool, "UCS2Char")));
             RegisterType(new TypeAlias(TypeIds.Ucs4CharType, TypeIds.CardinalType, CreateSystemScopeName(pool, "UCS4Char")));
             RegisterType(new TypeAlias(TypeIds.StringType, TypeIds.UnicodeStringType, CreateSystemScopeName(pool, "String")));
+            RegisterType(new TypeAlias(TypeIds.Real, TypeIds.Double, CreateSystemScopeName(pool, "Real")));
 
             RegisterNativeIntTypes(pool, intSize);
+        }
+
+        private void RegisterRealTypes(StringPool pool) {
+            RegisterType(new RealType(TypeIds.Real48Type, CreateSystemScopeName(pool, "Real48")));
+            RegisterType(new RealType(TypeIds.SingleType, CreateSystemScopeName(pool, "Single")));
+            RegisterType(new RealType(TypeIds.Double, CreateSystemScopeName(pool, "Double")));
+            RegisterType(new RealType(TypeIds.Extended, CreateSystemScopeName(pool, "Extended")));
+            RegisterType(new RealType(TypeIds.Comp, CreateSystemScopeName(pool, "Comp")));
+            RegisterType(new RealType(TypeIds.Currency, CreateSystemScopeName(pool, "Currency")));
         }
 
         private void RegisterNativeIntTypes(StringPool pool, NativeIntSize intSize) {

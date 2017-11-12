@@ -102,5 +102,23 @@ namespace PasPasPasTests.Types {
             AssertDeclType("System.ShortString", TypeIds.ShortStringType);
         }
 
+        [Fact]
+        public void TestRealTypes() {
+            AssertDeclType("Real48", TypeIds.Real48Type);
+            AssertDeclType("Single", TypeIds.SingleType);
+            AssertDeclType("Double", TypeIds.Double);
+            AssertDeclType("Real", TypeIds.Real);
+            AssertDeclType("Extended", TypeIds.Extended);
+            AssertDeclType("Comp", TypeIds.Comp);
+            AssertDeclType("Currency", TypeIds.Currency);
+            AssertDeclType("System.Real48", TypeIds.Real48Type);
+            AssertDeclType("System.Single", TypeIds.SingleType);
+            AssertDeclType("System.Double", TypeIds.Double);
+            AssertDeclType("System.Real", TypeIds.Real);
+            AssertDeclType("System.Extended", TypeIds.Extended);
+            AssertDeclType("System.Comp", TypeIds.Comp);
+            AssertDeclType("System.Currency", TypeIds.Currency);
+        }
+
     }
 }
