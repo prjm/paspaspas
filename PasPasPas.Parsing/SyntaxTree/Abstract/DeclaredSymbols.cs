@@ -11,17 +11,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     public class DeclaredSymbols : CombinedSymbolTableBase<DeclaredSymbolGroup, DeclaredSymbol>, IDeclaredSymbolTarget {
 
         /// <summary>
-        ///     direct items
-        /// </summary>
-        public IList<DeclaredSymbol> DirectItems { get; }
-
-        /// <summary>
-        ///     create a new set of declared symbols
-        /// </summary>
-        public DeclaredSymbols() =>
-            DirectItems = new SyntaxPartCollection<DeclaredSymbol>(this);
-
-        /// <summary>
         ///     log duplicated unit name
         /// </summary>
         /// <param name="newDuplicate"></param>
@@ -38,8 +27,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
             get {
                 foreach (var part in Items)
                     yield return part;
-                foreach (var part in DirectItems)
-                    yield return part;
             }
         }
 
@@ -48,17 +35,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         public DeclaredSymbols Symbols
             => this;
-
-        /// <summary>
-        ///     add symbols
-        /// </summary>
-        /// <param name="entry"></param>
-        /// <param name="logSource"></param>
-        public void AddDirect(DeclaredSymbol entry, LogSource logSource) {
-            if (Add(entry, logSource)) {
-                DirectItems.Add(entry);
-            }
-        }
 
         /// <summary>
         ///     find a declared symbol

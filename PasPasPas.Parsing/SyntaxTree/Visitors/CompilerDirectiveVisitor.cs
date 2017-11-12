@@ -153,7 +153,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     test if an item can be visited
         /// </summary>
         /// <param name="syntaxPart">syntax part to test</param>
-        /// <param name="parameter">options</param>
         /// <returns></returns>
         private bool CanVisit(ISyntaxPart syntaxPart) {
             if (!ConditionalCompilation.Skip)

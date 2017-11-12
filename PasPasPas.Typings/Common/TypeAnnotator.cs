@@ -26,7 +26,8 @@ namespace PasPasPas.Typings.Common {
         IStartVisitor<EnumType>,
         IEndVisitor<EnumType>,
         IEndVisitor<EnumTypeValue>,
-        IEndVisitor<Parsing.SyntaxTree.Abstract.SubrangeType> {
+        IEndVisitor<Parsing.SyntaxTree.Abstract.SubrangeType>,
+        IEndVisitor<TypeDeclaration> {
 
         private readonly IStartEndVisitor visitor;
         private readonly ITypedEnvironment environment;
@@ -388,6 +389,17 @@ namespace PasPasPas.Typings.Common {
 
             element.TypeInfo = environment.TypeRegistry.GetTypeByIdOrUndefinedType(TypeIds.ErrorType);
 
+        }
+
+        /// <summary>
+        ///     declare a type
+        /// </summary>
+        /// <param name="element"></param>
+        public void EndVisit(TypeDeclaration element) {
+
+            if (element.TypeValue is ITypedSyntaxNode declaredType && declaredType.TypeInfo != null) {
+                scope.AddEntry(new ScopedName(element.Name.CompleteName), new ScopeEntry(ScopeEntryKind.TypeName) { TypeId = declaredType.TypeInfo.TypeId });
+            }
         }
     }
 }

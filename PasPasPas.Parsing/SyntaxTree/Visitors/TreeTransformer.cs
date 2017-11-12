@@ -323,7 +323,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             declaration.Generics = ExtractGenericDefinition(declaration, typeDeclaration, typeDeclaration.TypeId?.GenericDefinition);
             declaration.Attributes = ExtractAttributes(typeDeclaration.Attributes, CurrentUnit);
             declaration.Hints = ExtractHints(typeDeclaration.Hint);
-            symbols.Symbols.AddDirect(declaration, LogSource);
+            symbols.Symbols.Items.Add(new SingleDeclaredSymbol(declaration));
+            symbols.Symbols.Add(declaration, LogSource);
         }
 
         /// <summary>
@@ -344,7 +345,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             declaration.Mode = CurrentDeclarationMode;
             declaration.Attributes = ExtractAttributes(constDeclaration.Attributes, CurrentUnit);
             declaration.Hints = ExtractHints(constDeclaration.Hint);
-            symbols.Symbols.AddDirect(declaration, LogSource);
+            symbols.Symbols.Items.Add(new SingleDeclaredSymbol(declaration));
+            symbols.Symbols.Add(declaration, LogSource);
         }
 
         #endregion
@@ -1091,7 +1093,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 InitNode(declaration, label);
                 declaration.Name = name;
                 declaration.Mode = CurrentDeclarationMode;
-                symbols.Symbols.AddDirect(declaration, LogSource);
+                symbols.Symbols.Items.Add(new SingleDeclaredSymbol(declaration));
+                symbols.Symbols.Add(declaration, LogSource);
             }
 
             var parent = LastValue as ILabelTarget;
@@ -1582,8 +1585,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             result.Kind = TokenKindMapper.MapMethodKind(procHeading.Kind);
             result.Attributes = ExtractAttributes(procHeading.Attributes, CurrentUnit);
             result.ReturnAttributes = ExtractAttributes(procHeading.ResultAttributes, CurrentUnit);
-            symbols.Symbols.AddDirect(result, LogSource);
-
+            symbols.Symbols.Items.Add(new SingleDeclaredSymbol(result));
+            symbols.Symbols.Add(result, LogSource);
         }
 
         #endregion
@@ -1644,8 +1647,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             result.IsResident = exportsSection.Resident;
             result.HasIndex = exportsSection.IndexParameter != null;
             result.HasName = exportsSection.NameParameter != null;
-            declarations.Symbols.AddDirect(result, LogSource);
-
+            declarations.Symbols.Items.Add(new SingleDeclaredSymbol(result));
+            declarations.Symbols.Add(result, LogSource);
         }
 
         #endregion
@@ -1948,8 +1951,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             InitNode(result, procedure);
             result.Name = ExtractSymbolName(procedure.Heading.Name);
             result.Kind = TokenKindMapper.MapMethodKind(procedure.Heading.Kind);
-            symbolTarget.Symbols.AddDirect(result, LogSource);
-
+            symbolTarget.Symbols.Items.Add(new SingleDeclaredSymbol(result));
+            symbolTarget.Symbols.Add(result, LogSource);
         }
 
         #endregion

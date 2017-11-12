@@ -113,6 +113,8 @@ namespace P3SyntaxTreeViewer {
                     treeViewItem.Header += " [" + typeInfo.TypeInfo.TypeName + "]";
                 else
                     treeViewItem.Header += " [" + typeInfo.TypeInfo.TypeId.ToString() + "]";
+
+                treeViewItem.Header += " " + typeInfo.TypeInfo.TypeKind.ToString();
             }
 
             if (parent != null) {
