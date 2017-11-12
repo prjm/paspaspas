@@ -18,7 +18,7 @@ namespace PasPasPas.Typings.Operators {
         }
 
         /// <summary>
-        ///     get the operator nae
+        ///     get the operator name
         /// </summary>
         public override string Name {
             get {
@@ -117,7 +117,7 @@ namespace PasPasPas.Typings.Operators {
         }
 
         /// <summary>
-        ///     register known 
+        ///     register known operators
         /// </summary>
         /// <param name="typeRegistry">type registry</param>
         public static void RegisterOperators(ITypeRegistry typeRegistry) {

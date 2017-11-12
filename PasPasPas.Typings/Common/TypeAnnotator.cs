@@ -87,7 +87,16 @@ namespace PasPasPas.Typings.Common {
                 element.TypeInfo = GetTypeOfOperator(DefinedOperators.XorOperation, element.LeftOperand?.TypeInfo, element.RightOperand?.TypeInfo);
             }
             else if (element.Kind == ExpressionKind.Plus) {
-                element.TypeInfo = GetTypeOfOperator(DefinedOperators.PlusOperation, element.LeftOperand?.TypeInfo, element.RightOperand?.TypeInfo);
+
+                var left = element.LeftOperand?.TypeInfo?.TypeKind;
+                var right = element.RightOperand?.TypeInfo?.TypeKind;
+
+                if (left.HasValue && right.HasValue) {
+                    if (left.Value.Textual() && right.Value.Textual())
+                        element.TypeInfo = GetTypeOfOperator(DefinedOperators.ConcatOperation, element.LeftOperand?.TypeInfo, element.RightOperand?.TypeInfo);
+                    else if (left.Value.Numerical() && right.Value.Numerical())
+                        element.TypeInfo = GetTypeOfOperator(DefinedOperators.PlusOperation, element.LeftOperand?.TypeInfo, element.RightOperand?.TypeInfo);
+                }
             }
             else if (element.Kind == ExpressionKind.Minus) {
                 element.TypeInfo = GetTypeOfOperator(DefinedOperators.MinusOperation, element.LeftOperand?.TypeInfo, element.RightOperand?.TypeInfo);
@@ -232,6 +241,28 @@ namespace PasPasPas.Typings.Common {
                     }
                 }
             }
+
+            else if (element.Kind == MetaTypeKind.String) {
+                element.TypeInfo = environment.TypeRegistry.GetTypeByIdOrUndefinedType(TypeIds.StringType);
+            }
+
+            else if (element.Kind == MetaTypeKind.AnsiString) {
+                element.TypeInfo = environment.TypeRegistry.GetTypeByIdOrUndefinedType(TypeIds.AnsiStringType);
+            }
+
+            else if (element.Kind == MetaTypeKind.ShortString) {
+                element.TypeInfo = environment.TypeRegistry.GetTypeByIdOrUndefinedType(TypeIds.ShortStringType);
+            }
+
+            else if (element.Kind == MetaTypeKind.UnicodeString) {
+                element.TypeInfo = environment.TypeRegistry.GetTypeByIdOrUndefinedType(TypeIds.UnicodeStringType);
+            }
+
+
+            else if (element.Kind == MetaTypeKind.WideString) {
+                element.TypeInfo = environment.TypeRegistry.GetTypeByIdOrUndefinedType(TypeIds.WideStringType);
+            }
+
         }
 
         /// <summary>

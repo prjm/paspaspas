@@ -135,5 +135,19 @@
         /// </summary>
         public const int LongWord = 240;
 
+        /// <summary>
+        ///     wide string type
+        /// </summary>
+        public const int WideStringType = 250;
+
+        /// <summary>
+        ///     short string type
+        /// </summary>
+        public const int ShortStringType = 260;
+
+        /// <summary>
+        ///     ansi string type
+        /// </summary>
+        public const int AnsiStringType = 270;
     }
 }

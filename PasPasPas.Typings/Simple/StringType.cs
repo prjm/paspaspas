@@ -28,4 +28,67 @@ namespace PasPasPas.Typings.Simple {
         public override CommonTypeKind TypeKind
             => CommonTypeKind.UnicodeStringType;
     }
+
+
+    /// <summary>
+    ///     string type definition
+    /// </summary>
+    public class WideStringType : TypeBase {
+
+        /// <summary>
+        ///     create a new string type
+        /// </summary>
+        /// <param name="withId">type id</param>
+        /// <param name="withName">type name</param>
+        public WideStringType(int withId, ScopedName withName = null) : base(withId, withName) {
+        }
+
+        /// <summary>
+        ///     unicode string type
+        /// </summary>
+        public override CommonTypeKind TypeKind
+            => CommonTypeKind.WideStringType;
+    }
+
+    /// <summary>
+    ///     string type definition
+    /// </summary>
+    public class ShortStringType : TypeBase {
+
+        /// <summary>
+        ///     create a new string type
+        /// </summary>
+        /// <param name="withId">type id</param>
+        /// <param name="withName">type name</param>
+        public ShortStringType(int withId, ScopedName withName = null) : base(withId, withName) {
+        }
+
+        /// <summary>
+        ///     unicode string type
+        /// </summary>
+        public override CommonTypeKind TypeKind
+            => CommonTypeKind.ShortStringType;
+    }
+
+    /// <summary>
+    ///     string type definition
+    /// </summary>
+    public class AnsiStringType : TypeBase {
+
+        /// <summary>
+        ///     create a new string type
+        /// </summary>
+        /// <param name="withId">type id</param>
+        /// <param name="withName">type name</param>
+        public AnsiStringType(int withId, ScopedName withName = null) : base(withId, withName) {
+        }
+
+        /// <summary>
+        ///     unicode string type
+        /// </summary>
+        public override CommonTypeKind TypeKind
+            => CommonTypeKind.ShortStringType;
+    }
+
+
 }

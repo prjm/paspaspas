@@ -105,5 +105,11 @@
         ///     greater then or equals operator
         /// </summary>
         public const int GreaterThenEqual = 29;
+
+        /// <summary>
+        ///     string concat operator
+        /// </summary>
+        public const int ConcatOperation = 30;
+
     }
 }

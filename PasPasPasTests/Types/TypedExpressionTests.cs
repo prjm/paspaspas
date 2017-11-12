@@ -117,6 +117,14 @@ namespace PasPasPasTests.Types {
         }
 
         [Fact]
+        public void TestConcatOperator() {
+            AssertExprType("'a' + 'b'", TypeIds.UnicodeStringType);
+            AssertExprType("'ac' + 'b'", TypeIds.UnicodeStringType);
+            AssertExprType("'a' + 'bc'", TypeIds.UnicodeStringType);
+            AssertExprType("'ac' + 'bc'", TypeIds.UnicodeStringType);
+        }
+
+        [Fact]
         public void TestBitwiseOperators() {
             AssertExprType("not 1", TypeIds.ShortInt);
             AssertExprType("not 256", TypeIds.SmallInt);

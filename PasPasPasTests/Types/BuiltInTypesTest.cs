@@ -86,8 +86,20 @@ namespace PasPasPasTests.Types {
             AssertDeclType("NativeUInt", TypeIds.NativeUInt, NativeIntSize.Windows64bit, 64);
             AssertDeclType("LongInt", TypeIds.LongInt, NativeIntSize.Windows64bit, 32);
             AssertDeclType("LongWord", TypeIds.LongWord, NativeIntSize.Windows64bit, 32);
+        }
 
-
+        [Fact]
+        public void TestStringTypes() {
+            AssertDeclType("String", TypeIds.StringType);
+            AssertDeclType("AnsiString", TypeIds.AnsiStringType);
+            AssertDeclType("UnicodeString", TypeIds.UnicodeStringType);
+            AssertDeclType("WideString", TypeIds.WideStringType);
+            AssertDeclType("ShortString", TypeIds.ShortStringType);
+            AssertDeclType("System.String", TypeIds.StringType);
+            AssertDeclType("System.AnsiString", TypeIds.AnsiStringType);
+            AssertDeclType("System.UnicodeString", TypeIds.UnicodeStringType);
+            AssertDeclType("System.WideString", TypeIds.WideStringType);
+            AssertDeclType("System.ShortString", TypeIds.ShortStringType);
         }
 
     }
