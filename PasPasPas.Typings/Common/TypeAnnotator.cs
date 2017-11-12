@@ -25,7 +25,8 @@ namespace PasPasPas.Typings.Common {
         IEndVisitor<CompilationUnit>,
         IStartVisitor<EnumType>,
         IEndVisitor<EnumType>,
-        IEndVisitor<EnumTypeValue> {
+        IEndVisitor<EnumTypeValue>,
+        IEndVisitor<Parsing.SyntaxTree.Abstract.SubrangeType> {
 
         private readonly IStartEndVisitor visitor;
         private readonly ITypedEnvironment environment;
@@ -341,6 +342,52 @@ namespace PasPasPas.Typings.Common {
                 return;
 
             typeDef.DefineEnumValue(element.SymbolName, false, -1);
+        }
+
+        /// <summary>
+        ///     visit a subrange type
+        /// </summary>
+        /// <param name="element"></param>
+        public void EndVisit(Parsing.SyntaxTree.Abstract.SubrangeType element) {
+
+            var left = element.RangeStart?.TypeInfo?.TypeKind;
+            var right = element.RangeEnd?.TypeInfo?.TypeKind;
+            var typeId = RequireUserTypeId();
+
+            if (left.HasValue && element.RangeEnd == null) {
+                element.TypeInfo = new Simple.SubrangeType(typeId, element.RangeStart.TypeInfo.TypeId);
+                return;
+            }
+
+            if (left.HasValue && right.HasValue) {
+
+                if (left.Value.Integral() && right.Value.Integral()) {
+                    var baseTypeId = environment.TypeRegistry.GetSmallestIntegralTypeOrNext(element.RangeStart.TypeInfo.TypeId, element.RangeEnd.TypeInfo.TypeId);
+                    element.TypeInfo = new Simple.SubrangeType(typeId, baseTypeId);
+                    environment.TypeRegistry.RegisterType(element.TypeInfo);
+                    return;
+                }
+
+                if (left.Value == CommonTypeKind.WideCharType && right.Value == CommonTypeKind.WideCharType &&
+                    element.RangeStart.TypeInfo.TypeId == element.RangeEnd.TypeInfo.TypeId) {
+                    var baseTypeId = element.RangeStart.TypeInfo.TypeId;
+                    element.TypeInfo = new Simple.SubrangeType(typeId, baseTypeId);
+                    environment.TypeRegistry.RegisterType(element.TypeInfo);
+                    return;
+                }
+
+                if (left.Value == CommonTypeKind.EnumerationType && right.Value == CommonTypeKind.EnumerationType &&
+                    element.RangeStart.TypeInfo.TypeId == element.RangeEnd.TypeInfo.TypeId) {
+                    var baseTypeId = element.RangeStart.TypeInfo.TypeId;
+                    element.TypeInfo = new Simple.SubrangeType(typeId, baseTypeId);
+                    environment.TypeRegistry.RegisterType(element.TypeInfo);
+                    return;
+                }
+
+            }
+
+            element.TypeInfo = environment.TypeRegistry.GetTypeByIdOrUndefinedType(TypeIds.ErrorType);
+
         }
     }
 }

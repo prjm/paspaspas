@@ -119,6 +119,7 @@
         ///     boolean type
         /// </summary>
         /// <remarks>GetTypeKind(..) for booleans returns enumeration</remarks>
-        BooleanType
+        BooleanType,
+
     }
 }

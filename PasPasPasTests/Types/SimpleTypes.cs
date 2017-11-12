@@ -20,5 +20,11 @@ namespace PasPasPasTests.Types {
             AssertDeclType("(en1, en2)", (td) => Assert.Equal(2, (td as EnumeratedType).Values.Count));
         }
 
+        [Fact]
+        public void TestSubrangeTypes() {
+            AssertDeclType("3..5", typeKind: CommonTypeKind.IntegerType);
+            AssertDeclType("'a'..'z'", typeKind: CommonTypeKind.WideCharType);
+        }
+
     }
 }
