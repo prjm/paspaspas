@@ -7,7 +7,7 @@ namespace PasPasPas.Typings.Simple {
     /// <summary>
     ///     boolean type
     /// </summary>
-    public class BooleanType : TypeBase {
+    public class BooleanType : OrdinalTypeBase {
         private readonly int size;
 
         /// <summary>

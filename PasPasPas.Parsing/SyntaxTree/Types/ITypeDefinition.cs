@@ -15,6 +15,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Types {
         /// <summary>
         ///     type name (can be empty)
         /// </summary>
+        /// <remarks>used only for system defined types</remarks>
         ScopedName TypeName { get; }
 
         /// <summary>

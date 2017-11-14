@@ -7,7 +7,7 @@ namespace PasPasPas.Typings.Simple {
     /// <summary>
     ///     character based type
     /// </summary>
-    public class AnsiCharType : TypeBase {
+    public class AnsiCharType : OrdinalTypeBase {
 
         /// <summary>cccy
         ///     create a new char type

@@ -7,7 +7,7 @@ namespace PasPasPas.Typings.Simple {
     /// <summary>
     ///     int64 types
     /// </summary>
-    public class Integral64BitType : TypeBase, IIntegralType {
+    public class Integral64BitType : OrdinalTypeBase, IIntegralType {
 
         private readonly bool signed;
 

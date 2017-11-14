@@ -23,11 +23,11 @@ namespace PasPasPas.Typings.Common {
         IEndVisitor<SymbolReference>,
         IStartVisitor<CompilationUnit>,
         IEndVisitor<CompilationUnit>,
-        IStartVisitor<EnumType>,
-        IEndVisitor<EnumType>,
+        IStartVisitor<EnumType>, IEndVisitor<EnumType>,
         IEndVisitor<EnumTypeValue>,
         IEndVisitor<Parsing.SyntaxTree.Abstract.SubrangeType>,
-        IEndVisitor<TypeDeclaration> {
+        IEndVisitor<TypeDeclaration>,
+        IEndVisitor<SetTypeDeclaration> {
 
         private readonly IStartEndVisitor visitor;
         private readonly ITypedEnvironment environment;
@@ -314,7 +314,7 @@ namespace PasPasPas.Typings.Common {
         ///     register a new type definition
         /// </summary>
         /// <param name="typeDef"></param>
-        private void RegisterUserDefinedType(EnumeratedType typeDef)
+        private void RegisterUserDefinedType(ITypeDefinition typeDef)
             => environment.TypeRegistry.RegisterType(typeDef);
 
         /// <summary>
@@ -388,7 +388,6 @@ namespace PasPasPas.Typings.Common {
             }
 
             element.TypeInfo = environment.TypeRegistry.GetTypeByIdOrUndefinedType(TypeIds.ErrorType);
-
         }
 
         /// <summary>
@@ -401,5 +400,23 @@ namespace PasPasPas.Typings.Common {
                 scope.AddEntry(new ScopedName(element.Name.CompleteName), new ScopeEntry(ScopeEntryKind.TypeName) { TypeId = declaredType.TypeInfo.TypeId });
             }
         }
+
+        /// <summary>
+        ///     declare a set type
+        /// </summary>
+        /// <param name="element"></param>
+        public void EndVisit(SetTypeDeclaration element) {
+
+            if (element.TypeValue is ITypedSyntaxNode declaredEnum && declaredEnum.TypeInfo != null && declaredEnum.TypeInfo.TypeKind.Ordinal()) {
+                var typeId = RequireUserTypeId();
+                var setType = new SetType(typeId, declaredEnum.TypeInfo.TypeId);
+                RegisterUserDefinedType(setType);
+                element.TypeInfo = setType;
+                return;
+            }
+
+            element.TypeInfo = environment.TypeRegistry.GetTypeByIdOrUndefinedType(TypeIds.ErrorType);
+        }
+
     }
 }

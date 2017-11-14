@@ -59,5 +59,18 @@ namespace PasPasPas.Typings.Common {
                 kind == CommonTypeKind.ShortStringType || kind == CommonTypeKind.LongStringType || kind == CommonTypeKind.UnicodeStringType ||
                 kind == CommonTypeKind.WideStringType;
 
+        /// <summary>
+        ///     test if the type kind as an ordinal type
+        /// </summary>
+        /// <param name="kind">type kind</param>
+        /// <returns><c>true if this type kind is an ordinal type kind</c></returns>
+        public static bool Ordinal(this CommonTypeKind kind)
+            => kind == CommonTypeKind.AnsiCharType ||
+            kind == CommonTypeKind.WideCharType ||
+            kind == CommonTypeKind.BooleanType ||
+            kind == CommonTypeKind.EnumerationType ||
+            kind == CommonTypeKind.Int64Type ||
+            kind == CommonTypeKind.IntegerType;
+
     }
 }

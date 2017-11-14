@@ -26,13 +26,12 @@ namespace PasPasPasTests.Types {
             AssertDeclType("'a'..'z'", typeKind: CommonTypeKind.WideCharType);
         }
 
-        /*
         [Fact]
         public void TestSetTypes() {
-            AssertDeclType("(en1, en2)", typeKind: CommonTypeKind.EnumerationType);
-            AssertDeclType("(en1, en2)", (td) => Assert.Equal(2, (td as EnumeratedType).Values.Count));
+            AssertDeclType("set of (false, true)", typeKind: CommonTypeKind.SetType);
+            AssertDeclType("set of -3..3", typeKind: CommonTypeKind.SetType);
         }
-        */
+
 
 
     }

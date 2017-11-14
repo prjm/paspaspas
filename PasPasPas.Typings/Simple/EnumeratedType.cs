@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Typings.Common;
@@ -12,7 +9,7 @@ namespace PasPasPas.Typings.Simple {
     /// <summary>
     ///     enumerated type
     /// </summary>
-    public class EnumeratedType : TypeBase {
+    public class EnumeratedType : OrdinalTypeBase {
 
         /// <summary>
         ///     list of possible values

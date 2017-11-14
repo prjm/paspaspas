@@ -10,22 +10,24 @@ using PasPasPas.Typings.Common;
 namespace PasPasPas.Typings.Simple {
 
     /// <summary>
-    ///     wide char type
+    ///     set type declaration
     /// </summary>
-    public class WideCharType : OrdinalTypeBase {
+    public class SetType : TypeBase {
+        private readonly int baseTypeId;
 
         /// <summary>
-        ///     wide char type
+        ///     define a new set type
         /// </summary>
-        /// <param name="withId"></param>
+        /// <param name="withId">type id</param>
+        /// <param name="baseType">base type</param>
         /// <param name="withName"></param>
-        public WideCharType(int withId, ScopedName withName = null) : base(withId, withName) {
-        }
+        public SetType(int withId, int baseType, ScopedName withName = null) : base(withId, withName)
+            => baseTypeId = baseType;
 
         /// <summary>
-        ///     wide char type
+        ///     set type kind
         /// </summary>
         public override CommonTypeKind TypeKind
-            => CommonTypeKind.WideCharType;
+            => CommonTypeKind.SetType;
     }
 }
