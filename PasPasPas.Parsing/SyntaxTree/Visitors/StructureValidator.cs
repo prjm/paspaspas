@@ -11,9 +11,16 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
     /// </summary>
     public class StructureValidator : IStartVisitor<CompilationUnit> {
 
+        /// <summary>
+        ///     visit syntax part structure
+        /// </summary>
         public StructureValidator()
             => visitor = new Visitor(this);
 
+        /// <summary>
+        ///     visit a compilation unit
+        /// </summary>
+        /// <param name="unit">unit to visit</param>
         public void StartVisit(CompilationUnit unit) {
 
             if (!string.Equals(Path.GetFileNameWithoutExtension(unit.FilePath?.Path), unit.SymbolName, StringComparison.OrdinalIgnoreCase)) {

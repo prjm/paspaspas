@@ -175,9 +175,21 @@ namespace PasPasPas.Parsing.SyntaxTree.Utils {
 
 
         }
-        public void Insert(int index, T item) => throw new NotImplementedException();
 
-        public void RemoveAt(int index) => throw new NotImplementedException();
+        /// <summary>
+        ///     add a node
+        /// </summary>
+        /// <param name="index"></param>
+        /// <param name="item"></param>
+        public void Insert(int index, T item)
+            => throw new NotImplementedException();
+
+        /// <summary>
+        ///     remove a node
+        /// </summary>
+        /// <param name="index"></param>
+        public void RemoveAt(int index)
+            => throw new NotImplementedException();
 
         /// <summary>
         ///     last item or <c>null</c>

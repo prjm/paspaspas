@@ -56,6 +56,7 @@ namespace PasPasPas.Parsing.Tokenizer.Patterns {
         /// </summary>
         /// <param name="prefix">prefix</param>
         /// <param name="tokenValue">token value</param>
+        /// <param name="completePrefix">comple token prefix</param>
         public InputPattern(CharacterClass prefix, PatternContinuation tokenValue, string completePrefix) {
             Prefix = prefix ?? throw new ArgumentNullException(nameof(prefix));
             TokenValue = tokenValue ?? throw new ArgumentNullException(nameof(tokenValue));
@@ -67,6 +68,7 @@ namespace PasPasPas.Parsing.Tokenizer.Patterns {
         /// </summary>
         /// <param name="prefix">prefix</param>
         /// <param name="tokenValue">token value</param>
+        /// <param name="completePrefix">complete prefix</param>
         public InputPattern(char prefix, int tokenValue, string completePrefix)
             : this(new SingleCharClass(prefix), new SimpleTokenGroupValue(tokenValue, completePrefix), completePrefix) {
             //..
@@ -142,8 +144,8 @@ namespace PasPasPas.Parsing.Tokenizer.Patterns {
         /// <summary>
         ///     match an input with this pattern group
         /// </summary>
-        /// <param name="input">input</param>
         /// <param name="tokenLength">token length</param>
+        /// <param name="state">current state</param>
         /// <returns>matched token value</returns>
         public PatternContinuation Match(TokenizerState state, out int tokenLength) {
             var subgroup = this;

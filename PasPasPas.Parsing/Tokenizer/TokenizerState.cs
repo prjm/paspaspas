@@ -24,6 +24,9 @@ namespace PasPasPas.Parsing.Tokenizer {
         ///     create a new tokenizer state
         /// </summary>
         /// <param name="parentTokenizer"></param>
+        /// <param name="currentInput">current input file</param>
+        /// <param name="logSource">log source</param>
+        /// <param name="parserEnvironment">parser environment</param>
         public TokenizerState(IParserEnvironment parserEnvironment, Tokenizer parentTokenizer, StackedFileReader currentInput, ILogSource logSource) {
             tokenizer = parentTokenizer;
             log = logSource;

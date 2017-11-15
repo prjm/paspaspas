@@ -3,6 +3,9 @@ using PasPasPas.Infrastructure.Environment;
 
 namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
 
+    /// <summary>
+    ///     helper class to unwrap literals
+    /// </summary>
     public class LiteralUnwrapper : IEnvironmentItem, ILiteralUnwrapper {
 
         /// <summary>

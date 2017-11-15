@@ -89,6 +89,9 @@ namespace PasPasPas.Options.Bundles {
         /// </summary>
         public IFileAccess Files { get; }
 
+        /// <summary>
+        ///     used environment
+        /// </summary>
         public IBasicEnvironment Environment { get; private set; }
 
         /// <summary>

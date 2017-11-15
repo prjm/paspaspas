@@ -16,6 +16,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
         /// </summary>
         /// <param name="tokenId"></param>
         /// <param name="charClass">character class</param>
+        /// <param name="minLength">minimun token length</param>
         public CharacterClassTokenGroupValue(int tokenId, CharacterClass charClass, int minLength = 0)
             : this(tokenId, charClass, minLength, LiteralParserKind.Undefined, Guid.Empty) { }
 
@@ -24,6 +25,9 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
         /// </summary>
         /// <param name="tokenId"></param>
         /// <param name="charClass">character class</param>
+        /// <param name="literalParserKind">literal parser (optional)</param>
+        /// <param name="minLength">minimal length</param>
+        /// <param name="minLengthMessageId">error message id for too short tokens</param>
         public CharacterClassTokenGroupValue(int tokenId, CharacterClass charClass, int minLength, LiteralParserKind literalParserKind, Guid minLengthMessageId) {
             TokenId = tokenId;
             MinLength = minLength;

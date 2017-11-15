@@ -13,9 +13,15 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         private readonly Stack<WorkingStackEntry> stack
             = new Stack<WorkingStackEntry>();
 
+        /// <summary>
+        ///     visitor to use
+        /// </summary>
         public object SpecificVisitor
             => specificVisitor;
 
+        /// <summary>
+        ///     working stack
+        /// </summary>
         public Stack<WorkingStackEntry> WorkingStack
             => stack;
 

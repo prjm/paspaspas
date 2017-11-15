@@ -23,6 +23,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
         ///     create a new quoted string token value
         /// </summary>
         /// <param name="quoteChar"></param>
+        /// <param name="tokenId">token id</param>
         public QuotedStringTokenValue(int tokenId, char quoteChar) {
             QuoteChar = quoteChar;
             TokenId = tokenId;

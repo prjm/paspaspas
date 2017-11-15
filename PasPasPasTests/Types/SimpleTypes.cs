@@ -30,6 +30,8 @@ namespace PasPasPasTests.Types {
         public void TestSetTypes() {
             AssertDeclType("set of (false, true)", typeKind: CommonTypeKind.SetType);
             AssertDeclType("set of -3..3", typeKind: CommonTypeKind.SetType);
+            AssertDeclType("set of Boolean", typeKind: CommonTypeKind.SetType);
+            AssertDeclType("set of System.Byte", typeKind: CommonTypeKind.SetType);
         }
 
 

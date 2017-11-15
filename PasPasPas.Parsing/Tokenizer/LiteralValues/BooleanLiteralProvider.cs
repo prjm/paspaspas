@@ -12,9 +12,17 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
     /// </summary>
     public class BooleanLiteralProvider : IEnvironmentItem, IBooleanLiteralProvider {
 
-        public object TrueValue => true;
+        /// <summary>
+        ///     <c>true</c> value
+        /// </summary>
+        public object TrueValue
+            => true;
 
-        public object FalseValue => false;
+        /// <summary>
+        ///     <c>false</c> value
+        /// </summary>
+        public object FalseValue
+            => false;
 
         /// <summary>
         ///     item count (not applicable)

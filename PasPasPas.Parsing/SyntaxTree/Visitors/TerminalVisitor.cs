@@ -23,7 +23,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     get terminal string and append it to the result
         /// </summary>
         /// <param name="syntaxPart"></param>
-        /// <param name="parameter"></param>
         public void StartVisit(Terminal syntaxPart) {
             ResultBuilder.Append(syntaxPart.Prefix);
             ResultBuilder.Append(syntaxPart.Token.Value);

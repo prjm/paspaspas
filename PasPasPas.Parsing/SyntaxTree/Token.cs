@@ -36,6 +36,12 @@ namespace PasPasPas.Parsing.SyntaxTree {
         /// </summary>
         public object ParsedValue { get; }
 
+        /// <summary>
+        ///     create a new token
+        /// </summary>
+        /// <param name="tokenId">token id</param>
+        /// <param name="state">tokenizer state</param>
+        /// <param name="parsedValue">parser literal value (optional)</param>
         public Token(int tokenId, TokenizerState state, object parsedValue = null) : this() {
             Kind = tokenId;
             Position = state.StartPosition;

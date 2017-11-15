@@ -4,6 +4,12 @@
     ///     simple integer parser
     /// </summary>
     public interface ILiteralParser {
+
+        /// <summary>
+        ///     parse a given literal
+        /// </summary>
+        /// <param name="input">input</param>
+        /// <returns>parsed literal</returns>
         object Parse(string input);
     }
 }

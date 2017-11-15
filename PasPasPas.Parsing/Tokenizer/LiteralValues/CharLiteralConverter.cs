@@ -16,6 +16,9 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
         public static readonly object InvalidCharacterLiteral
             = new object();
 
+        /// <summary>
+        ///     lookup table
+        /// </summary>
         public LookupTable<object, object> Table
             => data;
 

@@ -45,9 +45,16 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         public ISyntaxPart Data
              => data;
 
+        /// <summary>
+        ///     child node
+        /// </summary>
         public ISyntaxPart ChildNode
             => child;
 
+        /// <summary>
+        ///     format node as string
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
             => string.Format("{0} / {1} / {2} ", DefiningNode, data, ChildNode);
     }

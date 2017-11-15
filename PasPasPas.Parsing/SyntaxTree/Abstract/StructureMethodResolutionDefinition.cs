@@ -9,6 +9,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// </summary>
     public class StructureMethodResolutionDefinition : AbstractSyntaxPartBase {
 
+        /// <summary>
+        ///     method resolutions
+        /// </summary>
         public ISyntaxPartList<StructureMethodResolution> Resolutions { get; }
 
         /// <summary>

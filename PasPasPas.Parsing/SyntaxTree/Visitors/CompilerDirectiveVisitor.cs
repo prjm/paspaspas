@@ -168,7 +168,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     align switch
         /// </summary>
-        /// <param name="alignSwitch">switch to visit</param>
+        /// <param name="syntaxPart">switch to visit</param>
         public void StartVisit(AlignSwitch syntaxPart) {
             if (!CanVisit(syntaxPart))
                 return;
@@ -181,7 +181,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     update application type
         /// </summary>
         /// <param name="syntaxPart"></param>
-        /// <param name="parameter"></param>
         public void StartVisit(AppTypeParameter syntaxPart) {
             if (!CanVisit(syntaxPart))
                 return;
@@ -193,7 +192,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     update assertion mode
         /// </summary>
         /// <param name="syntaxPart"></param>
-        /// <param name="parameter"></param>
         public void StartVisit(AssertSwitch syntaxPart) {
             if (!CanVisit(syntaxPart))
                 return;
@@ -205,7 +203,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     update assertion mode
         /// </summary>
         /// <param name="syntaxPart"></param>
-        /// <param name="parameter"></param>
         public void StartVisit(BooleanEvaluationSwitch syntaxPart) {
             if (!CanVisit(syntaxPart))
                 return;
@@ -217,7 +214,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     update code align
         /// </summary>
         /// <param name="syntaxPart"></param>
-        /// <param name="parameter"></param>
         public void StartVisit(CodeAlignParameter syntaxPart) {
             if (!CanVisit(syntaxPart))
                 return;
@@ -229,7 +225,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     update debug info mode
         /// </summary>
         /// <param name="syntaxPart"></param>
-        /// <param name="parameter"></param>
         public void StartVisit(DebugInfoSwitch syntaxPart) {
             if (!CanVisit(syntaxPart))
                 return;
@@ -241,7 +236,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     define symbol
         /// </summary>
         /// <param name="syntaxPart"></param>
-        /// <param name="parameter"></param>
         public void StartVisit(DefineSymbol syntaxPart) {
             if (!CanVisit(syntaxPart))
                 return;
@@ -253,7 +247,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     undefine symbol
         /// </summary>
         /// <param name="syntaxPart"></param>
-        /// <param name="parameter"></param>
         public void StartVisit(UnDefineSymbol syntaxPart) {
             if (!CanVisit(syntaxPart))
                 return;
@@ -265,7 +258,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     conditional compilation ("ifdef")
         /// </summary>
         /// <param name="syntaxPart"></param>
-        /// <param name="parameter"></param>
         public void StartVisit(IfDef syntaxPart) {
             if (!CanVisit(syntaxPart))
                 return;
@@ -280,7 +272,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     conditional compilation ("endif")
         /// </summary>
         /// <param name="syntaxPart"></param>
-        /// <param name="parameter"></param>
         public void StartVisit(EndIf syntaxPart) {
             if (!CanVisit(syntaxPart))
                 return;
@@ -298,7 +289,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     deny unit in package switch
         /// </summary>
         /// <param name="syntaxPart"></param>
-        /// <param name="parameter"></param>
         public void StartVisit(ParseDenyPackageUnit syntaxPart) {
             if (!CanVisit(syntaxPart))
                 return;
@@ -310,7 +300,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     description
         /// </summary>
         /// <param name="syntaxPart"></param>
-        /// <param name="parameter"></param>
         public void StartVisit(Description syntaxPart) {
             if (!CanVisit(syntaxPart))
                 return;
@@ -322,7 +311,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     <c>$if</c>
         /// </summary>
         /// <param name="syntaxPart"></param>
-        /// <param name="parameter"></param>
         public void StartVisit(IfDirective syntaxPart) {
             if (!CanVisit(syntaxPart))
                 return;
@@ -334,7 +322,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     conditional compilation ("else")
         /// </summary>
         /// <param name="syntaxPart"></param>
-        /// <param name="parameter"></param>
         public void StartVisit(ElseDirective syntaxPart) {
             if (!CanVisit(syntaxPart))
                 return;
@@ -351,7 +338,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     design time only
         /// </summary>
         /// <param name="syntaxPart"></param>
-        /// <param name="parameter"></param>
         public void StartVisit(DesignOnly syntaxPart) {
             if (!CanVisit(syntaxPart))
                 return;
@@ -363,7 +349,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     extension
         /// </summary>
         /// <param name="syntaxPart"></param>
-        /// <param name="parameter"></param>
         public void StartVisit(Extension syntaxPart) {
             if (!CanVisit(syntaxPart))
                 return;
@@ -376,7 +361,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     extended compatibility
         /// </summary>
         /// <param name="syntaxPart"></param>
-        /// <param name="parameter"></param>
         public void StartVisit(ExtendedCompatibility syntaxPart) {
             if (!CanVisit(syntaxPart))
                 return;
@@ -388,7 +372,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     extended syntax
         /// </summary>
         /// <param name="syntaxPart"></param>
-        /// <param name="parameter"></param>
         public void StartVisit(ExtSyntax syntaxPart) {
             if (!CanVisit(syntaxPart))
                 return;
@@ -400,7 +383,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     external symbol
         /// </summary>
         /// <param name="syntaxPart"></param>
-        /// <param name="parameter"></param>
         public void StartVisit(ExternalSymbolDeclaration syntaxPart) {
             if (!CanVisit(syntaxPart))
                 return;
@@ -413,7 +395,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     excess precision
         /// </summary>
         /// <param name="syntaxPart"></param>
-        /// <param name="parameter"></param>
         public void StartVisit(ExcessPrecision syntaxPart) {
             if (!CanVisit(syntaxPart))
                 return;
@@ -425,7 +406,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     high char unicode switch
         /// </summary>
         /// <param name="syntaxPart"></param>
-        /// <param name="parameter"></param>
         public void StartVisit(HighCharUnicodeSwitch syntaxPart) {
             if (!CanVisit(syntaxPart))
                 return;
@@ -437,7 +417,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     hint switch
         /// </summary>
         /// <param name="syntaxPart"></param>
-        /// <param name="parameter"></param>
         public void StartVisit(Hints syntaxPart) {
             if (!CanVisit(syntaxPart))
                 return;
@@ -450,7 +429,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     c++ header mit
         /// </summary>
         /// <param name="syntaxPart"></param>
-        /// <param name="parameter"></param>
         public void StartVisit(HppEmit syntaxPart) {
             if (!CanVisit(syntaxPart))
                 return;
@@ -466,7 +444,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     image base
         /// </summary>
         /// <param name="syntaxPart"></param>
-        /// <param name="parameter"></param>
         public void StartVisit(ImageBase syntaxPart) {
             if (!CanVisit(syntaxPart))
                 return;
@@ -478,7 +455,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     implicit build
         /// </summary>
         /// <param name="syntaxPart"></param>
-        /// <param name="parameter"></param>
         public void StartVisit(ImplicitBuild syntaxPart) {
             if (!CanVisit(syntaxPart))
                 return;
@@ -490,7 +466,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     io checks
         /// </summary>
         /// <param name="syntaxPart"></param>
-        /// <param name="parameter"></param>
         public void StartVisit(IoChecks syntaxPart) {
             if (!CanVisit(syntaxPart))
                 return;
@@ -502,7 +477,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     local symbols
         /// </summary>
         /// <param name="syntaxPart"></param>
-        /// <param name="parameter"></param>
         public void StartVisit(LocalSymbols syntaxPart) {
             if (!CanVisit(syntaxPart))
                 return;
@@ -515,7 +489,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     long strings
         /// </summary>
         /// <param name="syntaxPart"></param>
-        /// <param name="parameter"></param>
         public void StartVisit(LongStrings syntaxPart) {
             if (!CanVisit(syntaxPart))
                 return;
@@ -527,7 +500,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     open strings
         /// </summary>
         /// <param name="syntaxPart"></param>
-        /// <param name="parameter"></param>
         public void StartVisit(OpenStrings syntaxPart) {
             if (!CanVisit(syntaxPart))
                 return;
@@ -540,7 +512,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///        optimization
         /// </summary>
         /// <param name="syntaxPart"></param>
-        /// <param name="parameter"></param>
         public void StartVisit(Optimization syntaxPart) {
             if (!CanVisit(syntaxPart))
                 return;
@@ -553,7 +524,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///        overflow
         /// </summary>
         /// <param name="syntaxPart"></param>
-        /// <param name="parameter"></param>
         public void StartVisit(Overflow syntaxPart) {
             if (!CanVisit(syntaxPart))
                 return;
@@ -565,7 +535,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///         safe division
         /// </summary>
         /// <param name="syntaxPart"></param>
-        /// <param name="parameter"></param>
         public void StartVisit(SafeDivide syntaxPart) {
             if (!CanVisit(syntaxPart))
                 return;
@@ -577,7 +546,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///        range checks
         /// </summary>
         /// <param name="syntaxPart"></param>
-        /// <param name="parameter"></param>
         public void StartVisit(RangeChecks syntaxPart) {
             if (!CanVisit(syntaxPart))
                 return;
@@ -589,7 +557,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///        stack frames
         /// </summary>
         /// <param name="syntaxPart"></param>
-        /// <param name="parameter"></param>
         public void StartVisit(StackFrames syntaxPart) {
             if (!CanVisit(syntaxPart))
                 return;
@@ -601,7 +568,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///        zero based strings
         /// </summary>
         /// <param name="syntaxPart"></param>
-        /// <param name="parameter"></param>
         public void StartVisit(ZeroBasedStrings syntaxPart) {
             if (!CanVisit(syntaxPart))
                 return;
@@ -613,7 +579,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     writable consts
         /// </summary>
         /// <param name="syntaxPart"></param>
-        /// <param name="parameter"></param>
         public void StartVisit(WritableConsts syntaxPart) {
             if (!CanVisit(syntaxPart))
                 return;
@@ -625,7 +590,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     weak link rtti
         /// </summary>
         /// <param name="syntaxPart"></param>
-        /// <param name="parameter"></param>
         public void StartVisit(WeakLinkRtti syntaxPart) {
             if (!CanVisit(syntaxPart))
                 return;
@@ -637,7 +601,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     weak link rtti
         /// </summary>
         /// <param name="syntaxPart"></param>
-        /// <param name="parameter"></param>
         public void StartVisit(Warnings syntaxPart) {
             if (!CanVisit(syntaxPart))
                 return;
@@ -649,7 +612,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     warn switch
         /// </summary>
         /// <param name="syntaxPart"></param>
-        /// <param name="parameter"></param>
         public void StartVisit(WarnSwitch syntaxPart) {
             if (!CanVisit(syntaxPart))
                 return;
@@ -664,7 +626,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     var string checks
         /// </summary>
         /// <param name="syntaxPart"></param>
-        /// <param name="parameter"></param>
         public void StartVisit(VarStringChecks syntaxPart) {
             if (!CanVisit(syntaxPart))
                 return;
@@ -676,7 +637,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     type chedk pointers
         /// </summary>
         /// <param name="syntaxPart"></param>
-        /// <param name="parameter"></param>
         public void StartVisit(TypedPointers syntaxPart) {
             if (!CanVisit(syntaxPart))
                 return;
@@ -688,7 +648,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     type chedk pointers
         /// </summary>
         /// <param name="syntaxPart"></param>
-        /// <param name="parameter"></param>
         public void StartVisit(SymbolDefinitions syntaxPart) {
             if (!CanVisit(syntaxPart))
                 return;
@@ -706,7 +665,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     type chedk pointers
         /// </summary>
         /// <param name="syntaxPart"></param>
-        /// <param name="parameter"></param>
         public void StartVisit(StrongLinkTypes syntaxPart) {
             if (!CanVisit(syntaxPart))
                 return;
@@ -719,7 +677,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     scoped enums directive
         /// </summary>
         /// <param name="syntaxPart"></param>
-        /// <param name="parameter"></param>
         public void StartVisit(ScopedEnums syntaxPart) {
             if (!CanVisit(syntaxPart))
                 return;
@@ -731,7 +688,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     published rtti
         /// </summary>
         /// <param name="syntaxPart"></param>
-        /// <param name="parameter"></param>
         public void StartVisit(PublishedRtti syntaxPart) {
             if (!CanVisit(syntaxPart))
                 return;
@@ -743,7 +699,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///      runtime only
         /// </summary>
         /// <param name="syntaxPart"></param>
-        /// <param name="parameter"></param>
         public void StartVisit(RunOnly syntaxPart) {
             if (!CanVisit(syntaxPart))
                 return;
@@ -756,7 +711,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///      legacy if end
         /// </summary>
         /// <param name="syntaxPart"></param>
-        /// <param name="parameter"></param>
         public void StartVisit(LegacyIfEnd syntaxPart) {
             if (!CanVisit(syntaxPart))
                 return;
@@ -768,7 +722,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///      legacy if end
         /// </summary>
         /// <param name="syntaxPart"></param>
-        /// <param name="parameter"></param>
         public void StartVisit(RealCompatibility syntaxPart) {
             if (!CanVisit(syntaxPart))
                 return;
@@ -782,7 +735,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///      legacy if end
         /// </summary>
         /// <param name="syntaxPart"></param>
-        /// <param name="parameter"></param>
         public void StartVisit(PointerMath syntaxPart) {
             if (!CanVisit(syntaxPart))
                 return;
@@ -794,7 +746,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///      old type layout
         /// </summary>
         /// <param name="syntaxPart"></param>
-        /// <param name="parameter"></param>
         public void StartVisit(OldTypeLayout syntaxPart) {
             if (!CanVisit(syntaxPart))
                 return;
@@ -806,7 +757,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///      nodefine
         /// </summary>
         /// <param name="syntaxPart"></param>
-        /// <param name="parameter"></param>
         public void StartVisit(NoDefine syntaxPart) {
             if (!CanVisit(syntaxPart))
                 return;
@@ -819,7 +769,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///      obj type name
         /// </summary>
         /// <param name="syntaxPart"></param>
-        /// <param name="parameter"></param>
         public void StartVisit(ObjTypeName syntaxPart) {
 
             if (!CanVisit(syntaxPart))
@@ -835,7 +784,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///      nocinlude
         /// </summary>
         /// <param name="syntaxPart"></param>
-        /// <param name="parameter"></param>
         public void StartVisit(NoInclude syntaxPart) {
             if (!CanVisit(syntaxPart))
                 return;
@@ -849,7 +797,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///      min enum size
         /// </summary>
         /// <param name="syntaxPart"></param>
-        /// <param name="parameter"></param>
         public void StartVisit(MinEnumSize syntaxPart) {
             if (!CanVisit(syntaxPart))
                 return;
@@ -862,7 +809,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///      start region
         /// </summary>
         /// <param name="syntaxPart"></param>
-        /// <param name="parameter"></param>
         public void StartVisit(Region syntaxPart) {
             if (!CanVisit(syntaxPart))
                 return;
@@ -876,7 +822,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///      end region
         /// </summary>
         /// <param name="syntaxPart"></param>
-        /// <param name="parameter"></param>
         public void StartVisit(EndRegion syntaxPart) {
             if (!CanVisit(syntaxPart))
                 return;
@@ -893,7 +838,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///      method info
         /// </summary>
         /// <param name="syntaxPart"></param>
-        /// <param name="parameter"></param>
         public void StartVisit(MethodInfo syntaxPart) {
             if (!CanVisit(syntaxPart))
                 return;
@@ -905,7 +849,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///      libprefix / libsuffix / libversion
         /// </summary>
         /// <param name="syntaxPart"></param>
-        /// <param name="parameter"></param>
         public void StartVisit(LibInfo syntaxPart) {
             if (!CanVisit(syntaxPart))
                 return;
@@ -925,7 +868,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     pe version
         /// </summary>
         /// <param name="syntaxPart"></param>
-        /// <param name="parameter"></param>
         public void StartVisit(ParsedVersion syntaxPart) {
             if (!CanVisit(syntaxPart))
                 return;
@@ -952,7 +894,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///      weak package unit
         /// </summary>
         /// <param name="syntaxPart"></param>
-        /// <param name="parameter"></param>
         public void StartVisit(WeakPackageUnit syntaxPart) {
             if (!CanVisit(syntaxPart))
                 return;
@@ -964,7 +905,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///      weak package unit
         /// </summary>
         /// <param name="syntaxPart"></param>
-        /// <param name="parameter"></param>
         public void StartVisit(RttiControl syntaxPart) {
             if (!CanVisit(syntaxPart))
                 return;
@@ -978,7 +918,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///      if opt
         /// </summary>
         /// <param name="syntaxPart"></param>
-        /// <param name="parameter"></param>
         public void StartVisit(IfOpt syntaxPart) {
             if (!CanVisit(syntaxPart))
                 return;
@@ -990,7 +929,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///      imported data
         /// </summary>
         /// <param name="syntaxPart"></param>
-        /// <param name="parameter"></param>
         public void StartVisit(ImportedData syntaxPart) {
             if (!CanVisit(syntaxPart))
                 return;
@@ -1002,7 +940,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///      min / max stack size
         /// </summary>
         /// <param name="syntaxPart"></param>
-        /// <param name="parameter"></param>
         public void StartVisit(StackMemorySize syntaxPart) {
             if (!CanVisit(syntaxPart))
                 return;
@@ -1017,7 +954,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///      message
         /// </summary>
         /// <param name="syntaxPart"></param>
-        /// <param name="parameter"></param>
         public void StartVisit(Message syntaxPart) {
             if (syntaxPart.MessageType == MessageSeverity.Undefined)
                 return;
@@ -1029,7 +965,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     link
         /// </summary>
         /// <param name="syntaxPart"></param>
-        /// <param name="parameter"></param>
         public void StartVisit(Link syntaxPart) {
             if (!CanVisit(syntaxPart))
                 return;
@@ -1061,7 +996,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     resource
         /// </summary>
         /// <param name="syntaxPart"></param>
-        /// <param name="parameter"></param>
         public void StartVisit(Resource syntaxPart) {
             if (!CanVisit(syntaxPart))
                 return;
@@ -1094,7 +1028,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     include
         /// </summary>
         /// <param name="syntaxPart"></param>
-        /// <param name="parameter"></param>
         public void StartVisit(Include syntaxPart) {
             if (!CanVisit(syntaxPart))
                 return;

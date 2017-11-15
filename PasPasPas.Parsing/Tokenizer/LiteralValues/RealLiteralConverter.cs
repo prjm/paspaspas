@@ -6,7 +6,9 @@ using Entry = System.ValueTuple<object, object, bool, object>;
 namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
 
 
-
+    /// <summary>
+    ///     helper class to convert real literals
+    /// </summary>
     public class RealLiteralConverter : IEnvironmentItem, IRealConverter, ILookupFunction<Entry, object> {
 
         /// <summary>

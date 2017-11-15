@@ -195,6 +195,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         ///     do nothing
         /// </summary>
         /// <param name="nextToken"></param>
+        /// <param name="path">current path</param>
         private void ProcessMacroToken(IFileReference path, ref Token nextToken) {
             var patterns = environment.Patterns.CompilerDirectivePatterns;
             var fragmentBuffer = new FileBuffer();

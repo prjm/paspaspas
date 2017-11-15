@@ -162,6 +162,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             CurrentUnit = result;
         }
 
+        /// <summary>
+        ///     end visiting a compilation unit
+        /// </summary>
+        /// <param name="unit"></param>
         public void EndVisit(Unit unit)
             => CurrentUnit = null;
 
