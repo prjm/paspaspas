@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 
@@ -59,6 +61,19 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
             visitor.StartVisit(this);
             AcceptParts(this, visitor);
             visitor.EndVisit(this);
+        }
+
+        /// <summary>
+        ///     scoped referenced name
+        /// </summary>
+        /// <returns></returns>
+        public ScopedName AsScopedName {
+            get {
+                var parts = new string[Fragments.Count];
+                for (var i = 0; i < Fragments.Count; i++)
+                    parts[i] = Fragments[i].Name;
+                return new ScopedName(parts);
+            }
         }
     }
 }

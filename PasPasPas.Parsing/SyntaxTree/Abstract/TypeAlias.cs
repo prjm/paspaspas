@@ -46,17 +46,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     get the complete type name,
         /// </summary>
-        public ScopedName CompleteTypeName {
+        public ScopedName AsScopedName {
             get {
-
-                // argh ! this is just a workaround
-                if (Fragments.Count == 1 && !string.IsNullOrEmpty(Fragments[0].Name?.Name))
-                    if (!string.IsNullOrEmpty(Fragments[0].Name.NamespaceName))
-                        return new ScopedName(Fragments[0].Name.NamespaceName, Fragments[0].Name.Name);
-                    else
-                        return new ScopedName(Fragments[0].Name.Name);
-
-                return default;
+                var parts = new string[Fragments.Count];
+                for (var i = 0; i < Fragments.Count; i++)
+                    parts[i] = Fragments[i].Name;
+                return new ScopedName(parts);
             }
         }
 

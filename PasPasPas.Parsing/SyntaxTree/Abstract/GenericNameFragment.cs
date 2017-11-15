@@ -12,7 +12,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     symbol name
         /// </summary>
-        public SymbolName Name { get; set; }
+        public string Name { get; set; }
 
         /// <summary>
         ///     symbol type

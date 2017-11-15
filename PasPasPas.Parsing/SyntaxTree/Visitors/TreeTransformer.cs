@@ -750,6 +750,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region ArrayType
 
+        /// <summary>
+        ///    visit an array type declaration
+        /// </summary>
+        /// <param name="array"></param>
         public void StartVisit(ArrayType array) {
             var target = LastTypeDeclaration;
             var value = new ArrayTypeDeclaration();
@@ -784,6 +788,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region FileTypeDefinition
 
+        /// <summary>
+        ///     visit a file type
+        /// </summary>
+        /// <param name="fileType"></param>
         public void StartVisit(FileType fileType) {
             var typeTarget = LastTypeDeclaration;
             var value = new FileTypeDeclaration();
@@ -830,9 +838,16 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (name == null || value == null)
                 return;
 
+            foreach (var nspace in name.Name.Namespace) {
+                var nameFragment = new GenericNameFragment();
+                InitNode(nameFragment, name);
+                nameFragment.Name = nspace;
+                value.AddFragment(nameFragment);
+            }
+
             var fragment = new GenericNameFragment();
             InitNode(fragment, name);
-            fragment.Name = ExtractSymbolName(name.Name);
+            fragment.Name = name.Name.Name;
             value.AddFragment(fragment);
         }
 
@@ -875,9 +890,16 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (name == null || value == null)
                 return;
 
+            foreach (var nspace in name.Name.Namespace) {
+                var nameFragment = new GenericNameFragment();
+                InitNode(nameFragment, name);
+                nameFragment.Name = nspace;
+                value.AddFragment(nameFragment);
+            }
+
             var fragment = new GenericNameFragment();
-            InitNode(fragment, part);
-            fragment.Name = ExtractSymbolName(name.Name);
+            InitNode(fragment, name);
+            fragment.Name = name.Name.Name;
             value.AddFragment(fragment);
         }
 
@@ -927,6 +949,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region PointerType
 
+        /// <summary>
+        ///     visit a pointer type
+        /// </summary>
+        /// <param name="pointer"></param>
         public void StartVisit(PointerType pointer) {
             var typeTarget = LastTypeDeclaration;
 

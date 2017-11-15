@@ -102,6 +102,7 @@ namespace PasPasPas.Infrastructure.Utils {
         private readonly ScopedNamePart[] parts;
         private readonly string stringCache;
 
+
         /// <summary>
         ///     create a new simple scoped name
         /// </summary>
@@ -112,6 +113,23 @@ namespace PasPasPas.Infrastructure.Utils {
                 new ScopedNamePart(simpleName, ScopedNamePartKind.StartItem)
             };
         }
+
+        /// <summary>
+        ///     create a new scoped name
+        /// </summary>
+        /// <param name="parts1"></param>
+        public ScopedName(string[] parts1) {
+            stringCache = string.Empty;
+            parts = new ScopedNamePart[parts1.Length];
+            for (var i = 0; i < parts1.Length; i++) {
+                if (i > 0)
+                    stringCache += ".";
+                stringCache += parts1[i];
+                parts[i] = new ScopedNamePart(parts1[i], i < 1 ? ScopedNamePartKind.StartItem : ScopedNamePartKind.SubItem);
+            }
+        }
+
+
         /// <summary>
         ///     create a new simple scoped name with prefix
         /// </summary>
@@ -125,6 +143,7 @@ namespace PasPasPas.Infrastructure.Utils {
             };
 
         }
+
 
         /// <summary>
         ///     test for equlity

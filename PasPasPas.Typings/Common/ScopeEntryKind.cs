@@ -13,7 +13,11 @@
         /// <summary>
         ///     type name
         /// </summary>
-        TypeName
+        TypeName,
 
+        /// <summary>
+        ///     variable name
+        /// </summary>
+        VariableReference
     }
 }

@@ -12,7 +12,7 @@ namespace PasPasPasTests.Types {
     /// <summary>
     ///     test simple types
     /// </summary>
-    public class SimpleTypes : TypeTest {
+    public class SimpleTypesTest : TypeTest {
 
         [Fact]
         public void TestEnumTypes() {
@@ -34,6 +34,15 @@ namespace PasPasPasTests.Types {
             AssertDeclType("set of System.Byte", typeKind: CommonTypeKind.SetType);
         }
 
+        [Fact]
+        public void TestArrayTypes() {
+            AssertDeclType("array [1..4] of Integer", typeKind: CommonTypeKind.ArrayType);
+            AssertDeclType("array [1..4] of Integer", (td) => Assert.Equal(CommonTypeKind.IntegerType, (td as ArrayType)?.BaseType?.TypeKind));
+            AssertDeclType("array [1..4] of Integer", (td) => Assert.Equal(CommonTypeKind.IntegerType, (td as ArrayType)?.IndexTypes[0]?.TypeKind));
+            AssertDeclType("array [false..true] of Integer", (td) => Assert.Equal(CommonTypeKind.BooleanType, (td as ArrayType)?.IndexTypes[0]?.TypeKind));
+            AssertDeclType("array [Boolean] of Integer", (td) => Assert.Equal(CommonTypeKind.BooleanType, (td as ArrayType)?.IndexTypes[0]?.TypeKind));
+            AssertDeclType("array [System.Boolean] of Integer", (td) => Assert.Equal(CommonTypeKind.BooleanType, (td as ArrayType)?.IndexTypes[0]?.TypeKind));
+        }
 
 
     }

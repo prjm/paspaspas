@@ -60,7 +60,7 @@ namespace PasPasPas.Typings.Common {
                 kind == CommonTypeKind.WideStringType;
 
         /// <summary>
-        ///     test if the type kind as an ordinal type
+        ///     test if the type kind is an ordinal type
         /// </summary>
         /// <param name="kind">type kind</param>
         /// <returns><c>true if this type kind is an ordinal type kind</c></returns>
@@ -72,5 +72,20 @@ namespace PasPasPas.Typings.Common {
             kind == CommonTypeKind.Int64Type ||
             kind == CommonTypeKind.IntegerType;
 
+        /// <summary>
+        ///     test if the type kind is an ordinal type
+        /// </summary>
+        /// <param name="kind"></param>
+        /// <returns></returns>
+        public static bool Ordinal(this CommonTypeKind? kind)
+            => kind.HasValue && kind.Value.Ordinal();
+
+        /// <summary>
+        ///     test if the type kind is an integral type
+        /// </summary>
+        /// <param name="kind"></param>
+        /// <returns></returns>
+        public static bool Integral(this CommonTypeKind? kind)
+            => kind.HasValue && kind.Value.Integral();
     }
 }

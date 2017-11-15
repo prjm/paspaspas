@@ -7,7 +7,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// </summary>
     public class ArrayType : StandardSyntaxTreeBase {
 
-
         /// <summary>
         ///     true if the array is of type <c>array of const</c>
         /// </summary>

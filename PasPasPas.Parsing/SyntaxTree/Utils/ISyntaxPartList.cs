@@ -16,5 +16,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Utils {
         /// </summary>
         /// <returns>last or default item</returns>
         T LastOrDefault();
+
     }
 }

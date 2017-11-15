@@ -1,4 +1,5 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Visitors;
+﻿using PasPasPas.Parsing.SyntaxTree.Types;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
 
@@ -17,5 +18,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         public bool AllowAnonymousMethods { get; set; }
 
+        /// <summary>
+        ///     type information
+        /// </summary>
+        public ITypeDefinition TypeInfo { get; set; }
     }
 }

@@ -27,7 +27,8 @@ namespace PasPasPas.Typings.Common {
         IEndVisitor<EnumTypeValue>,
         IEndVisitor<Parsing.SyntaxTree.Abstract.SubrangeType>,
         IEndVisitor<TypeDeclaration>,
-        IEndVisitor<SetTypeDeclaration> {
+        IEndVisitor<SetTypeDeclaration>,
+        IEndVisitor<ArrayTypeDeclaration> {
 
         private readonly IStartEndVisitor visitor;
         private readonly ITypedEnvironment environment;
@@ -139,6 +140,19 @@ namespace PasPasPas.Typings.Common {
             else if (element.Kind == ExpressionKind.LessThenEquals) {
                 element.TypeInfo = GetTypeOfOperator(DefinedOperators.LessThenOrEqual, element.LeftOperand?.TypeInfo, element.RightOperand?.TypeInfo);
             }
+            else if (element.Kind == ExpressionKind.RangeOperator) {
+                var left = element.LeftOperand?.TypeInfo?.TypeKind;
+                var right = element.RightOperand?.TypeInfo?.TypeKind;
+                var leftId = element.LeftOperand?.TypeInfo?.TypeId;
+                var rightId = element.RightOperand?.TypeInfo?.TypeId;
+
+                if (left.Ordinal() && right.Ordinal()) {
+                    if (left.Integral() && right.Integral())
+                        element.TypeInfo = environment.TypeRegistry.GetTypeByIdOrUndefinedType(environment.TypeRegistry.GetSmallestIntegralTypeOrNext(leftId.Value, rightId.Value));
+                    else if (leftId.HasValue && rightId.HasValue && leftId.Value == rightId.Value)
+                        element.TypeInfo = environment.TypeRegistry.GetTypeByIdOrUndefinedType(leftId.Value);
+                }
+            }
         }
 
         /// <summary>
@@ -206,8 +220,15 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="element"></param>
         public void EndVisit(VariableDeclaration element) {
-            if (element.TypeValue is ITypedSyntaxNode typeRef)
+            if (element.TypeValue is ITypedSyntaxNode typeRef && typeRef.TypeInfo != null)
                 element.TypeInfo = typeRef.TypeInfo;
+            else
+                element.TypeInfo = environment.TypeRegistry.GetTypeByIdOrUndefinedType(TypeIds.ErrorType);
+
+            foreach (var vardef in element.Names) {
+                scope.AddEntry(new ScopedName(vardef.Name.CompleteName),
+                    new ScopeEntry(ScopeEntryKind.VariableReference) { TypeId = element.TypeInfo.TypeId });
+            }
         }
 
         /// <summary>
@@ -215,7 +236,7 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="element"></param>
         public void EndVisit(Parsing.SyntaxTree.Abstract.TypeAlias element) {
-            var typeName = element.CompleteTypeName;
+            var typeName = element.AsScopedName;
 
             if (typeName == default(ScopedName)) {
                 element.TypeInfo = environment.TypeRegistry.GetTypeByIdOrUndefinedType(TypeIds.ErrorType);
@@ -234,13 +255,11 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="element"></param>
         public void EndVisit(MetaType element) {
-            if (element.Kind == MetaTypeKind.NamedType && element.Fragments.Count == 1) {
-                var name = element.Fragments[0].Name;
-                if (CurrentUnit.Symbols.Contains(name.CompleteName)) {
-                    var item = CurrentUnit.Symbols[name.CompleteName];
-                    if (item.ParentItem is ITypedSyntaxNode typeInfo) {
-                        element.TypeInfo = typeInfo.TypeInfo;
-                    }
+            if (element.Kind == MetaTypeKind.NamedType) {
+                var name = element.AsScopedName;
+                var entry = scope.ResolveName(name);
+                if (entry != null && (entry.Kind == ScopeEntryKind.TypeName || entry.Kind == ScopeEntryKind.VariableReference)) {
+                    element.TypeInfo = environment.TypeRegistry.GetTypeByIdOrUndefinedType(entry.TypeId);
                 }
             }
 
@@ -259,7 +278,6 @@ namespace PasPasPas.Typings.Common {
             else if (element.Kind == MetaTypeKind.UnicodeString) {
                 element.TypeInfo = environment.TypeRegistry.GetTypeByIdOrUndefinedType(TypeIds.UnicodeStringType);
             }
-
 
             else if (element.Kind == MetaTypeKind.WideString) {
                 element.TypeInfo = environment.TypeRegistry.GetTypeByIdOrUndefinedType(TypeIds.WideStringType);
@@ -418,5 +436,28 @@ namespace PasPasPas.Typings.Common {
             element.TypeInfo = environment.TypeRegistry.GetTypeByIdOrUndefinedType(TypeIds.ErrorType);
         }
 
+        /// <summary>
+        ///     visit an array declaration
+        /// </summary>
+        /// <param name="element"></param>
+        public void EndVisit(ArrayTypeDeclaration element) {
+            var typeId = RequireUserTypeId();
+            var typeDef = new ArrayType(typeId);
+
+            if (element.TypeValue != null && element.TypeValue.TypeInfo != null)
+                typeDef.BaseType = element.TypeValue.TypeInfo;
+            else
+                typeDef.BaseType = environment.TypeRegistry.GetTypeByIdOrUndefinedType(TypeIds.ErrorType);
+
+            foreach (var indexDef in element.IndexItems) {
+                if (indexDef.TypeInfo != null)
+                    typeDef.IndexTypes.Add(indexDef.TypeInfo);
+                else
+                    typeDef.IndexTypes.Add(environment.TypeRegistry.GetTypeByIdOrUndefinedType(TypeIds.ErrorType));
+            }
+
+            RegisterUserDefinedType(typeDef);
+            element.TypeInfo = typeDef;
+        }
     }
 }

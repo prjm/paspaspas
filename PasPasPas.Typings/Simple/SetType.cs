@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using PasPasPas.Infrastructure.Utils;
+﻿using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Typings.Common;
 
@@ -12,7 +7,8 @@ namespace PasPasPas.Typings.Simple {
     /// <summary>
     ///     set type declaration
     /// </summary>
-    public class SetType : TypeBase {
+    public class SetType : StructuredTypeBase {
+
         private readonly int baseTypeId;
 
         /// <summary>

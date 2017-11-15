@@ -223,7 +223,7 @@ namespace PasPasPasTests.Parser {
             Func<object, ClassOfTypeDeclaration> u = t => (((t as CompilationUnit)?.InterfaceSymbols["x"]) as ConstantDeclaration)?.TypeValue as ClassOfTypeDeclaration;
 
             RunAstTest("unit z.x; interface const x : class of TFuzz = nil; implementation end.", t => (u(t)?.TypeValue as MetaType)?.Kind, MetaTypeKind.NamedType);
-            RunAstTest("unit z.x; interface const x : class of TFuzz = nil; implementation end.", t => (u(t)?.TypeValue as MetaType)?.Fragments[0]?.Name?.CompleteName, "TFuzz");
+            RunAstTest("unit z.x; interface const x : class of TFuzz = nil; implementation end.", t => (u(t)?.TypeValue as MetaType)?.Fragments[0]?.Name, "TFuzz");
         }
 
         [Fact]
@@ -264,9 +264,9 @@ namespace PasPasPasTests.Parser {
         public void TestTypeAlias() {
             Func<object, TypeAlias> u = t => (((t as CompilationUnit)?.InterfaceSymbols["x"]) as TypeDeclaration)?.TypeValue as TypeAlias;
 
-            RunAstTest("unit z.x; interface type x = z.q; implementation end.", t => u(t)?.Fragments[0].Name.CompleteName, "z.q");
+            RunAstTest("unit z.x; interface type x = z.q; implementation end.", t => u(t)?.AsScopedName?.ToString(), "z.q");
             RunAstTest("unit z.x; interface type x = z.q; implementation end.", t => u(t)?.IsNewType, false);
-            RunAstTest("unit z.x; interface type x = type z.q; implementation end.", t => u(t)?.Fragments[0].Name.CompleteName, "z.q");
+            RunAstTest("unit z.x; interface type x = type z.q; implementation end.", t => u(t)?.AsScopedName.ToString(), "z.q");
             RunAstTest("unit z.x; interface type x = type z.q; implementation end.", t => u(t)?.IsNewType, true);
 
             RunAstTest("unit z.x; interface type x = type z<r>.q; implementation end.", t => u(t)?.Fragments[0]?.TypeValue is TypeAlias, true);
@@ -486,13 +486,13 @@ namespace PasPasPasTests.Parser {
             RunAstTest("unit z.x; interface type x = class class var c: integer; var n: integer; end; implementation end.", t => f(t)?.ClassItem, false);
 
             RunAstTest("unit z.x; interface type x = class end; implementation end.", t => u(t)?.Kind, StructuredTypeKind.Class);
-            RunAstTest("unit z.x; interface type x = class(TObject) end; implementation end.", t => (u(t)?.BaseTypes[0] as MetaType)?.Fragments[0]?.Name?.CompleteName, "TObject");
+            RunAstTest("unit z.x; interface type x = class(TObject) end; implementation end.", t => (u(t)?.BaseTypes[0] as MetaType)?.AsScopedName?.ToString(), "TObject");
             RunAstTest("unit z.x; interface type x = class sealed end; implementation end.", t => u(t)?.SealedClass, true);
             RunAstTest("unit z.x; interface type x = class abstract end; implementation end.", t => u(t)?.AbstractClass, true);
             RunAstTest("unit z.x; interface type x = class end; implementation end.", t => u(t)?.ForwardDeclaration, false);
             RunAstTest("unit z.x; interface type x = class; implementation end.", t => u(t)?.ForwardDeclaration, true);
 
-            RunAstTest("unit z.x; interface type x = class n: integer; end; implementation end.", t => (u(t)?.Fields["n"]?.TypeValue as TypeAlias)?.Fragments[0]?.Name?.CompleteName, "integer");
+            RunAstTest("unit z.x; interface type x = class n: integer; end; implementation end.", t => (u(t)?.Fields["n"]?.TypeValue as TypeAlias)?.AsScopedName?.ToString(), "integer");
 
             // fields
 
@@ -641,7 +641,7 @@ namespace PasPasPasTests.Parser {
             Func<object, StructureMethod> m = t => r(t)?.Methods?["m"];
             Func<object, StructureProperty> p = t => r(t)?.Properties?["n"];
             RunAstTest("unit z.x; interface type z = interface end; implementation end.", t => r(t)?.Kind, StructuredTypeKind.Interface);
-            RunAstTest("unit z.x; interface type z = interface(q) end; implementation end.", t => (r(t)?.BaseTypes[0] as MetaType)?.Fragments[0]?.Name?.CompleteName, "q");
+            RunAstTest("unit z.x; interface type z = interface(q) end; implementation end.", t => (r(t)?.BaseTypes[0] as MetaType)?.AsScopedName?.ToString(), "q");
             RunAstTest("unit z.x; interface type z = interface(q) [s] end; implementation end.", t => r(t)?.GuidName?.CompleteName, "s");
             RunAstTest("unit z.x; interface type z = interface(q) ['s'] end; implementation end.", t => r(t)?.GuidId, 's');
 
@@ -934,7 +934,7 @@ namespace PasPasPasTests.Parser {
             RunAstTest("unit z.x; interface implementation procedure p; const n = l^.q; begin l: s; end; end.", t => q1(t)?.Kind, SymbolReferencePartKind.SubItem);
             RunAstTest("unit z.x; interface implementation procedure p; const n = l^.q; begin l: s; end; end.", t => q1(t)?.Name?.CompleteName, "q");
             RunAstTest("unit z.x; interface implementation procedure p; const n = l^.q<z>; begin l: s; end; end.", t => q1(t)?.GenericType?.TypeReference, true);
-            RunAstTest("unit z.x; interface implementation procedure p; const n = l^.q<z>; begin l: s; end; end.", t => (q1(t)?.GenericType?.TypeValue as TypeAlias)?.Fragments[0]?.Name?.CompleteName, "z");
+            RunAstTest("unit z.x; interface implementation procedure p; const n = l^.q<z>; begin l: s; end; end.", t => (q1(t)?.GenericType?.TypeValue as TypeAlias)?.AsScopedName?.ToString(), "z");
             RunAstTest("unit z.x; interface implementation procedure p; const n = l^[1]; begin l: s; end; end.", t => q1(t)?.Kind, SymbolReferencePartKind.ArrayIndex);
             RunAstTest("unit z.x; interface implementation procedure p; const n = l^[1]; begin l: s; end; end.", t => q1(t)?.Expressions[0]?.GetType(), typeof(ConstantValue));
             RunAstTest("unit z.x; interface implementation procedure p; const n = l^(1); begin l: s; end; end.", t => q1(t)?.Kind, SymbolReferencePartKind.CallParameters);
@@ -968,7 +968,7 @@ namespace PasPasPasTests.Parser {
 
             RunAstTest("unit z.x; interface implementation procedure p; const n = inherited; begin l: s; end; end.", t => r(t)?.Inherited, true);
             RunAstTest("unit z.x; interface implementation procedure p; const n = q; begin l: s; end; end.", t => r(t)?.Inherited, false);
-            RunAstTest("unit z.x; interface implementation procedure p; const n = q; begin l: s; end; end.", t => (r(t)?.TypeValue as MetaType)?.Fragments[0]?.Name?.CompleteName, "q");
+            RunAstTest("unit z.x; interface implementation procedure p; const n = q; begin l: s; end; end.", t => (r(t)?.TypeValue as MetaType)?.AsScopedName?.ToString(), "q");
             RunAstTest("unit z.x; interface implementation procedure p; const n = (q).a; begin l: s; end; end.", t => (r(t)?.Inherited), false);
         }
 
