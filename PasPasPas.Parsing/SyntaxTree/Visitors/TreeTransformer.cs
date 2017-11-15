@@ -193,6 +193,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             CurrentUnit = result;
         }
 
+        /// <summary>
+        ///     end visiting a library
+        /// </summary>
+        /// <param name="library"></param>
         public void EndVisit(Library library) {
             CurrentUnitMode.Reset(CurrentUnit);
             CurrentUnit = null;
@@ -230,6 +234,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region Package
 
+        /// <summary>
+        ///     statr visitin a package
+        /// </summary>
+        /// <param name="package"></param>
         public void StartVisit(Package package) {
             var result = new CompilationUnit();
             InitNode(result, package, Project);
@@ -250,6 +258,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region UnitInterface
 
+        /// <summary>
+        ///     start visiting an unit interface
+        /// </summary>
+        /// <param name="unitInterface"></param>
         public void StartVisit(UnitInterface unitInterface) {
             CurrentUnitMode[CurrentUnit] = UnitMode.Interface;
             CurrentUnit.Symbols = CurrentUnit.InterfaceSymbols;
@@ -268,6 +280,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region UnitImplementation
 
+        /// <summary>
+        ///     start visiting an implementation
+        /// </summary>
+        /// <param name="unitImplementation"></param>
         public void StartVisit(UnitImplementation unitImplementation) {
             CurrentUnitMode[CurrentUnit] = UnitMode.Implementation;
             CurrentUnit.Symbols = CurrentUnit.ImplementationSymbols;
@@ -287,6 +303,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region ConstSection
 
+        /// <summary>
+        ///     start visiting a const section
+        /// </summary>
+        /// <param name="constSection"></param>
         public void StartVisit(ConstSection constSection) {
             if (constSection.Kind == TokenKind.Const) {
                 CurrentDeclarationMode = DeclarationMode.Const;
@@ -306,6 +326,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region TypeSection
 
+        /// <summary>
+        ///     start visiting a type section
+        /// </summary>
+        /// <param name="typeSection"></param>
         public void StartVisit(TypeSection typeSection)
             => CurrentDeclarationMode = DeclarationMode.Types;
 
@@ -319,6 +343,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region TypeDeclaration
 
+        /// <summary>
+        ///     start visiting a type declaration
+        /// </summary>
+        /// <param name="typeDeclaration"></param>
         public void StartVisit(Standard.TypeDeclaration typeDeclaration) {
             var symbols = LastValue as IDeclaredSymbolTarget;
             var declaration = new Abstract.TypeDeclaration();
@@ -341,6 +369,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region ConstDeclaration
 
+        /// <summary>
+        ///     start visiting a const declaration
+        /// </summary>
+        /// <param name="constDeclaration"></param>
         public void StartVisit(ConstDeclaration constDeclaration) {
             var symbols = LastValue as IDeclaredSymbolTarget;
             var declaration = new ConstantDeclaration();
@@ -364,6 +396,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         public void StartVisit(LabelDeclarationSection lblSection)
             => CurrentDeclarationMode = DeclarationMode.Label;
 
+        /// <summary>
+        ///     end visiting a label
+        /// </summary>
+        /// <param name="lblSection"></param>
         public void EndVisit(LabelDeclarationSection lblSection)
             => CurrentDeclarationMode = DeclarationMode.Unknown;
 
@@ -383,6 +419,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 CurrentDeclarationMode = DeclarationMode.Unknown;
         }
 
+        /// <summary>
+        ///     end visiting a var section
+        /// </summary>
+        /// <param name="varSection"></param>
         public void EndVisit(VarSection varSection)
             => CurrentDeclarationMode = DeclarationMode.Unknown;
 
@@ -419,6 +459,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region VarValueSpecification
 
+        /// <summary>
+        ///     start visiting a variable value specification
+        /// </summary>
+        /// <param name="varValue"></param>
         public void StartVisit(VarValueSpecification varValue) {
             var varDeclaration = LastValue as VariableDeclaration;
 
@@ -438,6 +482,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region ConstantExpression
 
+        /// <summary>
+        ///     start visting a constant expression
+        /// </summary>
+        /// <param name="constExpression"></param>
         public void StartVisit(ConstantExpression constExpression) {
 
             if (constExpression.IsArrayConstant) {
@@ -474,6 +522,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region Expression
 
+        /// <summary>
+        ///     start vistigin a expression
+        /// </summary>
+        /// <param name="expression"></param>
         public void StartVisit(Expression expression) {
             if (expression.LeftOperand != null && expression.RightOperand != null) {
                 var lastExpression = LastExpression;
