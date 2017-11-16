@@ -354,5 +354,10 @@
         ///     pointer to a currency value
         /// </summary>
         public const int PCurrency = 68;
+
+        /// <summary>
+        ///     root object definition
+        /// </summary>
+        public const int TObject = 100;
     }
 }

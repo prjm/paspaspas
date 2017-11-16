@@ -64,11 +64,59 @@ namespace PasPasPasTests.Types {
 
             AssertDeclType(declaration, tester, intSize);
         }
+        /// <summary>
+        ///     test the type of a declared variable expressiom
+        /// </summary>
+        /// <param name="declaration">declareation</param>
+        /// <param name="typeId">type id to find</param>
+        protected void AssertDeclTypeDef(string declaration, int typeId = TypeIds.UnspecifiedType, NativeIntSize intSize = NativeIntSize.Undefined, int typeSize = -1, CommonTypeKind typeKind = CommonTypeKind.UnknownType) {
 
+            Func<ITypeDefinition, Boolean> tester = (ITypeDefinition def) => {
 
+                if (typeId != TypeIds.UnspecifiedType)
+                    Assert.AreEqual(typeId, def.TypeId);
+
+                if (typeKind != CommonTypeKind.UnknownType)
+                    Assert.AreEqual(typeKind, def.TypeKind);
+
+                if (typeSize > 0) {
+                    IFixedSizeType sizedType;
+                    if (def is PasPasPas.Typings.Common.TypeAlias alias) {
+                        sizedType = alias.BaseType as IFixedSizeType;
+                    }
+                    else {
+                        sizedType = def as IFixedSizeType;
+                    }
+                    Assert.IsNotNull(sizedType);
+                    Assert.AreEqual(typeSize, sizedType.BitSize);
+                }
+
+                return true;
+            };
+
+            AssertDeclTypeDef(declaration, tester, intSize);
+        }
 
         /// <summary>
         ///     test the type of a declared variable expressiom
+        /// </summary>
+        /// <param name="declaration">declareation</param>
+        /// <param name="typeId">type id to find</param>
+        protected void AssertDeclTypeDef<T>(string declaration, Func<T, Boolean> test, NativeIntSize intSize = NativeIntSize.Undefined) where T : class, ITypeDefinition {
+            var file = "SimpleExpr";
+            var program = $"program {file}; type t = {declaration}; var x : t; begin Writeln(x); end. ";
+            Func<object, SymbolReferencePart> searchfunction = x => x as SymbolReferencePart;
+            IExpression firstParam = null;
+
+            firstParam = EvaluateExpressionType(file, program, searchfunction, intSize);
+
+            var t = firstParam.TypeInfo as T;
+            Assert.IsNotNull(t);
+            Assert.IsTrue(test(t));
+        }
+
+        /// <summary>
+        ///     test the type of a declared types
         /// </summary>
         /// <param name="declaration">declareation</param>
         /// <param name="typeId">type id to find</param>

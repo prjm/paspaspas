@@ -121,5 +121,16 @@
         /// <remarks>GetTypeKind(..) for booleans returns enumeration</remarks>
         BooleanType,
 
+        /// <summary>
+        ///     class helper
+        /// </summary>
+        /// <remarks>GetTypeKind(..) for class helpers return class</remarks>
+        ClassHelperType,
+
+        /// <summary>
+        ///     record helper
+        /// </summary>
+        /// <remarks>GetTypeKind(..) for class helpers return class</remarks>
+        RecordHelperType,
     }
 }

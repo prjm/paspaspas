@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using PasPasPas.Infrastructure.Environment;
 using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Options.DataTypes;
+using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Typings.Operators;
 using PasPasPas.Typings.Simple;
@@ -12,6 +14,8 @@ namespace PasPasPas.Typings.Common {
     /// <summary>
     ///     common type registry
     /// </summary>
+    /// <remarks>this type registry defines all built-in types and functions
+    /// of the unit <c>System</c></remarks>
     public class RegisteredTypes : ITypeRegistry, IEnvironmentItem {
 
         private readonly IDictionary<int, ITypeDefinition> types
@@ -60,6 +64,7 @@ namespace PasPasPas.Typings.Common {
         public RegisteredTypes(StringPool pool, NativeIntSize intSize) {
             RegisterCommonTypes(pool, intSize);
             RegisterCommonOperators();
+            RegisterTObject(pool);
         }
 
         private void RegisterCommonOperators() {
@@ -234,5 +239,15 @@ namespace PasPasPas.Typings.Common {
             lock (idLock)
                 return userTypeIds++;
         }
+
+        /// <summary>
+        ///     register the global TObject class
+        /// </summary>
+        /// <param name="pool"></param>
+        private void RegisterTObject(StringPool pool) {
+            var def = new StructuredTypeDeclaration(TypeIds.TObject, StructuredTypeKind.Class, CreateSystemScopeName(pool, "TObject"));
+            RegisterType(def);
+        }
+
     }
 }

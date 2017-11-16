@@ -28,7 +28,9 @@ namespace PasPasPas.Typings.Common {
         IEndVisitor<Parsing.SyntaxTree.Abstract.SubrangeType>,
         IEndVisitor<TypeDeclaration>,
         IEndVisitor<SetTypeDeclaration>,
-        IEndVisitor<ArrayTypeDeclaration> {
+        IEndVisitor<ArrayTypeDeclaration>,
+        IStartVisitor<StructuredType>,
+        IEndVisitor<StructuredType> {
 
         private readonly IStartEndVisitor visitor;
         private readonly ITypedEnvironment environment;
@@ -461,6 +463,28 @@ namespace PasPasPas.Typings.Common {
             }
 
             RegisterUserDefinedType(typeDef);
+            element.TypeInfo = typeDef;
+        }
+
+        /// <summary>
+        ///     start visting a structured type
+        /// </summary>
+        /// <param name="element"></param>
+        public void StartVisit(StructuredType element) {
+            var typeId = RequireUserTypeId();
+            var typeDef = new StructuredTypeDeclaration(typeId, element.Kind);
+            RegisterUserDefinedType(typeDef);
+            typeDef.BaseClass = environment.TypeRegistry.GetTypeByIdOrUndefinedType(TypeIds.TObject);
+
+            currentTypeDefintion.Push(typeDef);
+        }
+
+        /// <summary>
+        ///     end visiting a structured type
+        /// </summary>
+        /// <param name="element"></param>
+        public void EndVisit(StructuredType element) {
+            var typeDef = currentTypeDefintion.Pop();
             element.TypeInfo = typeDef;
         }
     }
