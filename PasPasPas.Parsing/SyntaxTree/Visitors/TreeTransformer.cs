@@ -556,6 +556,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion       
         #region Term
 
+        /// <summary>
+        ///     visit a term
+        /// </summary>
+        /// <param name="term"></param>
         public void StartVisit(Term term) {
             if (term.LeftOperand != null && term.RightOperand != null) {
                 var lastExpression = LastExpression;
@@ -678,6 +682,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region UsesClause
 
+        /// <summary>
+        ///     visit a uses clause
+        /// </summary>
+        /// <param name="unit"></param>
         public void StartVisit(UsesClause unit) {
             if (unit.UsesList == null)
                 return;
@@ -725,6 +733,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region PackageRequires
 
+        /// <summary>
+        ///     visit a package requires list
+        /// </summary>
+        /// <param name="requires"></param>
         public void StartVisit(PackageRequires requires) {
             CurrentUnitMode[CurrentUnit] = UnitMode.Requires;
 
@@ -754,6 +766,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region PackageContains
 
+        /// <summary>
+        ///     visit a package contains list
+        /// </summary>
+        /// <param name="contains"></param>
         public void StartVisit(PackageContains contains) {
             CurrentUnitMode[CurrentUnit] = UnitMode.Contains;
 
@@ -784,6 +800,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region StructType
 
+        /// <summary>
+        ///     visit a structured type
+        /// </summary>
+        /// <param name="structType"></param>
         public void StartVisit(StructType structType) {
             if (structType.Packed)
                 CurrentStructTypeMode = StructTypeMode.Packed;
@@ -870,6 +890,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region TypeName                                       
 
+        /// <summary>
+        ///     visit a type name
+        /// </summary>
+        /// <param name="typeName"></param>
         public void StartVisit(TypeName typeName) {
             var typeTarget = LastTypeDeclaration;
             var value = new MetaType();
@@ -907,6 +931,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region SimpleType
 
+        /// <summary>
+        ///     visit a simple type
+        /// </summary>
+        /// <param name="simpleType"></param>
         public void StartVisit(SimpleType simpleType) {
             var typeTarget = LastTypeDeclaration;
 
@@ -972,6 +1000,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region EnumValue
 
+        /// <summary>
+        ///     visit an enum value
+        /// </summary>
+        /// <param name="enumValue"></param>
         public void StartVisit(EnumValue enumValue) {
             if (LastValue is EnumType enumDeclaration) {
                 var value = new EnumTypeValue();
@@ -1039,6 +1071,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region ProcedureTypeDefinition
 
+        /// <summary>
+        ///     visit a procedure type definition
+        /// </summary>
+        /// <param name="proceduralType"></param>
         public void StartVisit(ProcedureTypeDefinition proceduralType) {
             var typeTarget = LastTypeDeclaration;
             var result = new ProceduralType();
@@ -1069,6 +1105,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region FormalParameter
 
+        /// <summary>
+        ///     visit a formal parameter
+        /// </summary>
+        /// <param name="formalParameter"></param>
         public void StartVisit(FormalParameter formalParameter) {
             var typeDefinition = LastValue as ParameterTypeDefinition;
             var result = new ParameterDefinition();

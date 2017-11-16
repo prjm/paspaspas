@@ -16,8 +16,20 @@ namespace PasPasPas.Parsing.Tokenizer {
     ///     tokenizer mode
     /// </summary>
     public enum TokenizerMode {
+
+        /// <summary>
+        ///     undefined tokenizer mode
+        /// </summary>
         Undefined = 0,
+
+        /// <summary>
+        ///     standard tokenizer
+        /// </summary>
         Standard = 1,
+
+        /// <summary>
+        ///     compiler directive tokenizer
+        /// </summary>
         CompilerDirective = 2
     };
 

@@ -67,11 +67,23 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <param name="specificVisitor">specific visitor</param>
         public ChildVisitor(object specificVisitor) : base(specificVisitor) { }
 
+        /// <summary>
+        ///     start visiting a child
+        /// </summary>
+        /// <typeparam name="VisitorType"></typeparam>
+        /// <param name="element"></param>
+        /// <param name="child"></param>
         public void StartVisitChild<VisitorType>(VisitorType element, ISyntaxPart child) {
             var e = SpecificVisitor as IChildVisitor<VisitorType>;
             e?.StartVisitChild(element, child);
         }
 
+        /// <summary>
+        ///     stop visiting a child
+        /// </summary>
+        /// <typeparam name="VisitorType"></typeparam>
+        /// <param name="element"></param>
+        /// <param name="child"></param>
         public void EndVisitChild<VisitorType>(VisitorType element, ISyntaxPart child) {
             var e = SpecificVisitor as IChildVisitor<VisitorType>;
             e?.EndVisitChild(element, child);

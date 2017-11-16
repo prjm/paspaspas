@@ -19,6 +19,9 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
 
         private LookupTable<Entry, object> data;
 
+        /// <summary>
+        ///     table entries
+        /// </summary>
         public LookupTable<Entry, object> Table
             => data;
 

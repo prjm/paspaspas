@@ -7,6 +7,11 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
     /// </summary>
     public class SoftEofTokenValue : PatternContinuation {
 
+        /// <summary>
+        ///     create a token
+        /// </summary>
+        /// <param name="state">tokenizer state</param>
+        /// <returns></returns>
         public override Token Tokenize(TokenizerState state) {
 
             while (!state.AtEof)

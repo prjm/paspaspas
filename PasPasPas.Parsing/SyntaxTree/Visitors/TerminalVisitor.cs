@@ -10,6 +10,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         private readonly Visitor visitor;
 
+        /// <summary>
+        ///     get nongeneric visitor
+        /// </summary>
+        /// <returns></returns>
         public IStartEndVisitor AsVisitor()
             => visitor;
 

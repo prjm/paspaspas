@@ -25,6 +25,9 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
         LookupTable ILookupFunction.Table
             => data;
 
+        /// <summary>
+        ///     count entries
+        /// </summary>
         public int Count
             => Table.Count;
 

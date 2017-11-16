@@ -14,6 +14,9 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
         public int Count
             => -1;
 
+        /// <summary>
+        ///     caption
+        /// </summary>
         public string Caption
             => "LiteralUnwrapper";
 

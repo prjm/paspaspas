@@ -37,6 +37,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Utils {
         public bool IsReadOnly =>
             false;
 
+        /// <summary>
+        ///     acces an item of this collection
+        /// </summary>
+        /// <param name="index">item index</param>
+        /// <returns></returns>
         public T this[int index] {
             get {
                 if ((index >= 0) && (index < Count))

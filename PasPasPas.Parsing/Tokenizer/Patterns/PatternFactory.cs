@@ -13,6 +13,9 @@ namespace PasPasPas.Parsing.Tokenizer.Patterns {
     /// </summary>
     public class PatternFactory : IEnvironmentItem {
 
+        /// <summary>
+        ///     standard tokenizer patterns
+        /// </summary>
         public InputPatterns StandardPatterns { get; }
             = CreateStandardPatterns();
 

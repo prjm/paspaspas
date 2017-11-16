@@ -50,9 +50,15 @@ namespace PasPasPas.Parsing.SyntaxTree {
         public int Kind
             => Token.Kind;
 
+        /// <summary>
+        ///     suggif
+        /// </summary>
         public string Suffix
             => suffix;
 
+        /// <summary>
+        ///     prefix
+        /// </summary>
         public string Prefix
             => prefix;
 

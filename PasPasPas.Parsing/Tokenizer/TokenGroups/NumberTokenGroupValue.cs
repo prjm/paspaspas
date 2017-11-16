@@ -27,6 +27,11 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
         public bool AllowIdents { get; set; }
             = false;
 
+        /// <summary>
+        ///     tokenize a number
+        /// </summary>
+        /// <param name="state">tokenizer state</param>
+        /// <returns>created token</returns>
         public override Token Tokenize(TokenizerState state) {
             var withDot = false;
             var withExponent = false;

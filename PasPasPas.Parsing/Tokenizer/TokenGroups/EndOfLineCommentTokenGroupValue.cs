@@ -8,6 +8,11 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
     /// </summary>
     public sealed class EndOfLineCommentTokenGroupValue : PatternContinuation {
 
+        /// <summary>
+        ///     tokenizer
+        /// </summary>
+        /// <param name="state"></param>
+        /// <returns></returns>
         public override Token Tokenize(TokenizerState state) {
             var found = false;
 

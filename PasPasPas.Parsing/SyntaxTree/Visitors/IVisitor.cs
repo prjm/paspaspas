@@ -83,18 +83,47 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
     }
 
+    /// <summary>
+    ///     visit tree node children
+    /// </summary>
+    /// <typeparam name="VisitorType"></typeparam>
     public interface IChildVisitor<VisitorType> {
 
+        /// <summary>
+        ///     start visiting
+        /// </summary>
+        /// <param name="element"></param>
+        /// <param name="child"></param>
         void StartVisitChild(VisitorType element, ISyntaxPart child);
 
+        /// <summary>
+        ///     stop visiting
+        /// </summary>
+        /// <param name="element"></param>
+        /// <param name="child"></param>
         void EndVisitChild(VisitorType element, ISyntaxPart child);
 
     }
 
+    /// <summary>
+    ///     generic child visitor
+    /// </summary>
     public interface IChildVisitor {
 
+        /// <summary>
+        ///     start visiting a child
+        /// </summary>
+        /// <typeparam name="VisitorType"></typeparam>
+        /// <param name="element"></param>
+        /// <param name="child"></param>
         void StartVisitChild<VisitorType>(VisitorType element, ISyntaxPart child);
 
+        /// <summary>
+        ///     stop visiting a child
+        /// </summary>
+        /// <typeparam name="VisitorType"></typeparam>
+        /// <param name="element"></param>
+        /// <param name="child"></param>
         void EndVisitChild<VisitorType>(VisitorType element, ISyntaxPart child);
 
 
