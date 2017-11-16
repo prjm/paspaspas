@@ -283,6 +283,10 @@ namespace PasPasPas.Typings.Common {
                 element.TypeInfo = environment.TypeRegistry.GetTypeByIdOrUndefinedType(TypeIds.WideStringType);
             }
 
+            else if (element.Kind == MetaTypeKind.Pointer) {
+                element.TypeInfo = environment.TypeRegistry.GetTypeByIdOrUndefinedType(TypeIds.GenericPointer);
+            }
+
         }
 
         /// <summary>

@@ -20,9 +20,6 @@ namespace PasPasPas.Typings.Common {
         private readonly IDictionary<int, IOperator> operators
             = new Dictionary<int, IOperator>();
 
-        private readonly IDictionary<ScopedName, ITypeDefinition> typesByName
-            = new Dictionary<ScopedName, ITypeDefinition>();
-
         private readonly object idLock = new object();
         private int userTypeIds = 1000;
 
@@ -53,10 +50,6 @@ namespace PasPasPas.Typings.Common {
 
             if (type is TypeBase baseType)
                 baseType.TypeRegistry = this;
-
-            var name = type.TypeName;
-            if (name != null)
-                typesByName.Add(name, type);
         }
 
         /// <summary>
@@ -101,14 +94,50 @@ namespace PasPasPas.Typings.Common {
             RegisterBoolTypes(pool);
             RegisterStringTypes(pool);
             RegisterRealTypes(pool);
+            RegisterPointerTypes(pool);
 
             RegisterType(new TypeAlias(TypeIds.CharType, TypeIds.WideCharType, CreateSystemScopeName(pool, "Char")));
             RegisterType(new TypeAlias(TypeIds.Ucs2CharType, TypeIds.WideCharType, CreateSystemScopeName(pool, "UCS2Char")));
             RegisterType(new TypeAlias(TypeIds.Ucs4CharType, TypeIds.CardinalType, CreateSystemScopeName(pool, "UCS4Char")));
             RegisterType(new TypeAlias(TypeIds.StringType, TypeIds.UnicodeStringType, CreateSystemScopeName(pool, "String")));
             RegisterType(new TypeAlias(TypeIds.Real, TypeIds.Double, CreateSystemScopeName(pool, "Real")));
+            RegisterType(new TypeAlias(TypeIds.PChar, TypeIds.PAnsiChar, CreateSystemScopeName(pool, "PChar")));
+            RegisterType(new TypeAlias(TypeIds.PString, TypeIds.PUnicodeString, CreateSystemScopeName(pool, "PString")));
 
             RegisterNativeIntTypes(pool, intSize);
+        }
+
+        private void RegisterPointerTypes(StringPool pool) {
+            RegisterType(new PointerType(TypeIds.GenericPointer, TypeIds.UnspecifiedType, CreateSystemScopeName(pool, "Pointer")));
+            RegisterType(new PointerType(TypeIds.PByte, TypeIds.ByteType, CreateSystemScopeName(pool, "PByte")));
+            RegisterType(new PointerType(TypeIds.PShortInt, TypeIds.ShortInt, CreateSystemScopeName(pool, "PShortInt")));
+            RegisterType(new PointerType(TypeIds.PWord, TypeIds.WordType, CreateSystemScopeName(pool, "PWord")));
+            RegisterType(new PointerType(TypeIds.PSmallInt, TypeIds.SmallInt, CreateSystemScopeName(pool, "PSmallInt")));
+            RegisterType(new PointerType(TypeIds.PCardinal, TypeIds.CardinalType, CreateSystemScopeName(pool, "PCardinal")));
+            RegisterType(new PointerType(TypeIds.PLongword, TypeIds.LongWord, CreateSystemScopeName(pool, "PLongword")));
+            RegisterType(new PointerType(TypeIds.PFixedUint, TypeIds.FixedUInt, CreateSystemScopeName(pool, "PFixedUint")));
+            RegisterType(new PointerType(TypeIds.PInteger, TypeIds.IntegerType, CreateSystemScopeName(pool, "PInteger")));
+            RegisterType(new PointerType(TypeIds.PLongInt, TypeIds.LongInt, CreateSystemScopeName(pool, "PLongInt")));
+            RegisterType(new PointerType(TypeIds.PFixedInt, TypeIds.FixedInt, CreateSystemScopeName(pool, "PFixedInt")));
+            RegisterType(new PointerType(TypeIds.PUInt64, TypeIds.Uint64Type, CreateSystemScopeName(pool, "PUInt64")));
+            RegisterType(new PointerType(TypeIds.PInt64, TypeIds.CardinalType, CreateSystemScopeName(pool, "PInt64")));
+            RegisterType(new PointerType(TypeIds.PNativeUInt, TypeIds.NativeUInt, CreateSystemScopeName(pool, "PNativeUInt")));
+            RegisterType(new PointerType(TypeIds.PNativeInt, TypeIds.NativeInt, CreateSystemScopeName(pool, "PNativeInt")));
+            RegisterType(new PointerType(TypeIds.PSingle, TypeIds.SingleType, CreateSystemScopeName(pool, "PSingle")));
+            RegisterType(new PointerType(TypeIds.PDouble, TypeIds.Double, CreateSystemScopeName(pool, "PDouble")));
+            RegisterType(new PointerType(TypeIds.PExtended, TypeIds.Extended, CreateSystemScopeName(pool, "PExtended")));
+            RegisterType(new PointerType(TypeIds.PAnsiChar, TypeIds.AnsiCharType, CreateSystemScopeName(pool, "PAnsiChar")));
+            RegisterType(new PointerType(TypeIds.PWideChar, TypeIds.WideCharType, CreateSystemScopeName(pool, "PWideChar")));
+            RegisterType(new PointerType(TypeIds.PAnsiString, TypeIds.AnsiStringType, CreateSystemScopeName(pool, "PAnsiString")));
+            RegisterType(new PointerType(TypeIds.PRawByteString, TypeIds.RawByteString, CreateSystemScopeName(pool, "PRawByteString")));
+            RegisterType(new PointerType(TypeIds.PUnicodeString, TypeIds.UnicodeStringType, CreateSystemScopeName(pool, "PUnicodeString")));
+            RegisterType(new PointerType(TypeIds.PShortString, TypeIds.ShortStringType, CreateSystemScopeName(pool, "PShortString")));
+            RegisterType(new PointerType(TypeIds.PWideString, TypeIds.WideStringType, CreateSystemScopeName(pool, "PWideString")));
+            RegisterType(new PointerType(TypeIds.PBoolean, TypeIds.BooleanType, CreateSystemScopeName(pool, "PBoolean")));
+            RegisterType(new PointerType(TypeIds.PLongBool, TypeIds.LongBoolType, CreateSystemScopeName(pool, "PLongBool")));
+            RegisterType(new PointerType(TypeIds.PWordBool, TypeIds.WordBoolType, CreateSystemScopeName(pool, "PWordBool")));
+            RegisterType(new PointerType(TypeIds.PPointer, TypeIds.GenericPointer, CreateSystemScopeName(pool, "PPointer")));
+            RegisterType(new PointerType(TypeIds.PCurrency, TypeIds.Currency, CreateSystemScopeName(pool, "PCurrency")));
         }
 
         private void RegisterRealTypes(StringPool pool) {
@@ -121,6 +150,11 @@ namespace PasPasPas.Typings.Common {
         }
 
         private void RegisterNativeIntTypes(StringPool pool, NativeIntSize intSize) {
+
+            RegisterType(new TypeAlias(TypeIds.FixedInt, TypeIds.IntegerType, CreateSystemScopeName(pool, "FixedInt")));
+            RegisterType(new TypeAlias(TypeIds.FixedUInt, TypeIds.CardinalType, CreateSystemScopeName(pool, "FixedInt")));
+
+
             if (intSize == NativeIntSize.Windows64bit) {
                 RegisterType(new TypeAlias(TypeIds.NativeInt, TypeIds.Int64Type, CreateSystemScopeName(pool, "NativeInt")));
                 RegisterType(new TypeAlias(TypeIds.NativeUInt, TypeIds.Uint64Type, CreateSystemScopeName(pool, "NativeUInt")));
@@ -146,6 +180,7 @@ namespace PasPasPas.Typings.Common {
             RegisterType(new WideCharType(TypeIds.WideCharType, CreateSystemScopeName(pool, "WideChar")));
 
             RegisterType(new AnsiStringType(TypeIds.AnsiStringType, CreateSystemScopeName(pool, "AnsiString")));
+            RegisterType(new AnsiStringType(TypeIds.RawByteString, CreateSystemScopeName(pool, "RawByteString")));
             RegisterType(new ShortStringType(TypeIds.ShortStringType, CreateSystemScopeName(pool, "ShortString")));
             RegisterType(new UnicodeStringType(TypeIds.UnicodeStringType, CreateSystemScopeName(pool, "UnicodeString")));
             RegisterType(new WideStringType(TypeIds.WideStringType, CreateSystemScopeName(pool, "WideString")));
@@ -186,18 +221,6 @@ namespace PasPasPas.Typings.Common {
         /// <returns></returns>
         public ITypeDefinition GetTypeByIdOrUndefinedType(int typeId) {
             if (!types.TryGetValue(typeId, out var result))
-                result = types[TypeIds.ErrorType];
-
-            return result;
-        }
-
-        /// <summary>
-        ///     get a type by name
-        /// </summary>
-        /// <param name="typeName">type name</param>
-        /// <returns></returns>
-        public ITypeDefinition GetTypeByNameOrUndefinedType(ScopedName typeName) {
-            if (!typesByName.TryGetValue(typeName, out var result))
                 result = types[TypeIds.ErrorType];
 
             return result;

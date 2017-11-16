@@ -38,13 +38,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Types {
         void RegisterOperator(IOperator newOperator);
 
         /// <summary>
-        ///     get a type by name
-        /// </summary>
-        /// <param name="typeName">type name</param>
-        /// <returns></returns>
-        ITypeDefinition GetTypeByNameOrUndefinedType(ScopedName typeName);
-
-        /// <summary>
         ///     register a new type
         /// </summary>
         /// <param name="typeDef"></param>
