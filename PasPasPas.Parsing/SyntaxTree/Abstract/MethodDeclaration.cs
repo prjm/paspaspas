@@ -35,6 +35,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         public IList<SymbolAttribute> Attributes { get; set; }
 
         /// <summary>
+        ///     overloaded methods
+        /// </summary>
+        public IList<MethodDeclaration> Overloads { get; set; }
+
+        /// <summary>
         ///     creates a new method declaration
         /// </summary>
         public MethodDeclaration() {
@@ -51,8 +56,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
                     yield return parameter;
                 if (TypeValue != null)
                     yield return TypeValue;
-                foreach (var directive in Directives)
-                    yield return directive;
+                if (Overloads != null)
+                    foreach (var overload in Overloads)
+                        yield return overload;
             }
         }
 
@@ -65,6 +71,18 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     symbol hints
         /// </summary>
         public SymbolHints Hints { get; set; }
+
+        /// <summary>
+        ///     test if the method is overloaded (or not)
+        /// </summary>
+        public bool IsOverloaded {
+            get {
+                foreach (var directive in Directives)
+                    if (directive.Kind == MethodDirectiveKind.Overload)
+                        return true;
+                return false;
+            }
+        }
 
         /// <summary>
         ///     accept visitor

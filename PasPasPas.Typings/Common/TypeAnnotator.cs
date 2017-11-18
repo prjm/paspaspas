@@ -30,7 +30,8 @@ namespace PasPasPas.Typings.Common {
         IEndVisitor<SetTypeDeclaration>,
         IEndVisitor<ArrayTypeDeclaration>,
         IStartVisitor<StructuredType>,
-        IEndVisitor<StructuredType> {
+        IEndVisitor<StructuredType>,
+        IEndVisitor<MethodDeclaration> {
 
         private readonly IStartEndVisitor visitor;
         private readonly ITypedEnvironment environment;
@@ -486,6 +487,16 @@ namespace PasPasPas.Typings.Common {
         public void EndVisit(StructuredType element) {
             var typeDef = currentTypeDefintion.Pop();
             element.TypeInfo = typeDef;
+        }
+
+        /// <summary>
+        ///     end visting a method declaration
+        /// </summary>ele
+        /// <param name="element"></param>
+        public void EndVisit(MethodDeclaration element) {
+            var typeDef = currentTypeDefintion.Peek() as StructuredTypeDeclaration;
+            var method = typeDef.AddOrExtendMethod(element.Name.CompleteName);
+            var methodParams = method.AddParameterGroup();
         }
     }
 }

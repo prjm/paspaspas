@@ -1433,7 +1433,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             result.Kind = TokenKindMapper.MapMethodKind(method.MethodKind);
             result.Generics = ExtractGenericDefinition(result, method, method.GenericDefinition);
             parent.Methods.Add(result, LogSource);
-
         }
 
         #endregion
@@ -1453,6 +1452,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region ReintroduceDirective
 
+        /// <summary>
+        ///     visit a method directive
+        /// </summary>
+        /// <param name="directive"></param>
         public void StartVisit(ReintroduceDirective directive) {
             var parent = LastValue as IDirectiveTarget;
             var result = new MethodDirective();

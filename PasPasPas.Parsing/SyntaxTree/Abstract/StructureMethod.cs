@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using PasPasPas.Parsing.SyntaxTree.Utils;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
@@ -36,6 +37,16 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         public bool ClassItem { get; set; }
 
         /// <summary>
+        ///     add an overloaded methods
+        /// </summary>
+        /// <param name="entry"></param>
+        public void AddOverload(MethodDeclaration entry) {
+            if (Overloads == null)
+                Overloads = new List<MethodDeclaration>();
+            Overloads.Add(entry);
+        }
+
+        /// <summary>
         ///     visibility mode
         /// </summary>
         public MemberVisibility Visibility { get; set; }
@@ -44,5 +55,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     implementation
         /// </summary>
         public MethodImplementation Implementation { get; set; }
+
     }
 }

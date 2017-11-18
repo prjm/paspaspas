@@ -57,6 +57,15 @@ namespace P3SyntaxTreeViewer {
                 var listLog = new ListLogTarget();
                 env.Log.RegisterTarget(listLog);
 
+                if (string.IsNullOrWhiteSpace(code)) {
+                    Dispatcher.Invoke(() => {
+                        StandardTreeView.Items.Clear();
+                        AbstractTreeView.Items.Clear();
+                        Messages.Items.Clear();
+                    });
+                    return;
+                }
+
                 (var bst, var ast) = Parse(env, code);
 
                 Dispatcher.Invoke(() => {

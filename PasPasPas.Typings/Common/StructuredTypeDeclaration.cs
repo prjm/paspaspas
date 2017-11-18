@@ -60,5 +60,28 @@ namespace PasPasPas.Typings.Common {
         ///     base class
         /// </summary>
         public ITypeDefinition BaseClass { get; set; }
+
+        /// <summary>
+        ///     list of routines
+        /// </summary>
+        public IList<Routine> Methods { get; set; }
+            = new List<Routine>();
+
+        /// <summary>
+        ///     add a method definition
+        /// </summary>
+        /// <param name="completeName">method name</param>
+        public Routine AddOrExtendMethod(string completeName) {
+            foreach (var method in Methods)
+                if (string.Equals(method.Name, completeName, StringComparison.OrdinalIgnoreCase))
+                    return method;
+
+            var newMethod = new Routine {
+                Name = completeName
+            };
+
+            Methods.Add(newMethod);
+            return newMethod;
+        }
     }
 }
