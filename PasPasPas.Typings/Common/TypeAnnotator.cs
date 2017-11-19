@@ -230,8 +230,7 @@ namespace PasPasPas.Typings.Common {
                 element.TypeInfo = environment.TypeRegistry.GetTypeByIdOrUndefinedType(TypeIds.ErrorType);
 
             foreach (var vardef in element.Names) {
-                scope.AddEntry(new ScopedName(vardef.Name.CompleteName),
-                    new ScopeEntry(ScopeEntryKind.VariableReference) { TypeId = element.TypeInfo.TypeId });
+                element.TypeInfo.ProvideScope(vardef.Name.CompleteName, scope);
             }
         }
 

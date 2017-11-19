@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Parsing.SyntaxTree.Types;
@@ -12,7 +9,7 @@ namespace PasPasPas.Typings.Common {
     /// <summary>
     ///     structured type declaration
     /// </summary>
-    public class StructuredTypeDeclaration : StructuredTypeBase {
+    public class StructuredTypeDeclaration : StructuredTypeBase, IScope {
 
         private readonly StructuredTypeKind typeKind;
 
@@ -82,6 +79,23 @@ namespace PasPasPas.Typings.Common {
 
             Methods.Add(newMethod);
             return newMethod;
+        }
+
+        /// <summary>
+        ///     opening scopes is not supported on structured types
+        /// </summary>
+        /// <param name="completeName"></param>
+        /// <param name="scope"></param>
+        public void Open(string completeName, IScope scope)
+            => throw new NotImplementedException();
+
+        /// <summary>
+        ///     provides scope information
+        /// </summary>
+        /// <param name="completeName"></param>
+        /// <param name="scope"></param>
+        public override void ProvideScope(string completeName, IScope scope) {
+            scope.Open(completeName, this);
         }
     }
 }

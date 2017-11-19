@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using PasPasPas.Infrastructure.Utils;
-using PasPasPas.Parsing.SyntaxTree.Abstract;
+﻿using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree.Types;
 
 namespace PasPasPas.Typings.Common {
@@ -43,5 +41,12 @@ namespace PasPasPas.Typings.Common {
         ///     type registryB
         /// </summary>
         public ITypeRegistry TypeRegistry { get; set; }
+
+        /// <summary>
+        ///     provide a scope definition for a symbol
+        /// </summary>
+        /// <param name="completeName"></param>
+        /// <param name="scope"></param>
+        public abstract void ProvideScope(string completeName, IScope scope);
     }
 }

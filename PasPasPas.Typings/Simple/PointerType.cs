@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using PasPasPas.Infrastructure.Utils;
+﻿using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Typings.Common;
 
@@ -13,6 +8,7 @@ namespace PasPasPas.Typings.Simple {
     ///     pointer type definition
     /// </summary>
     public class PointerType : TypeBase {
+
         private readonly int baseTypeId;
 
         /// <summary>
@@ -29,5 +25,15 @@ namespace PasPasPas.Typings.Simple {
         /// </summary>
         public override CommonTypeKind TypeKind
             => CommonTypeKind.PointerType;
+
+        /// <summary>
+        ///     provides scope information
+        /// </summary>
+        /// <param name="completeName"></param>
+        /// <param name="scope"></param>
+        public override void ProvideScope(string completeName, IScope scope) {
+
+        }
+
     }
 }

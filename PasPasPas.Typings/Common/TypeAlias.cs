@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using PasPasPas.Infrastructure.Utils;
+﻿using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree.Types;
 
 namespace PasPasPas.Typings.Common {
@@ -38,5 +33,13 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         public ITypeDefinition BaseType
             => TypeRegistry.GetTypeByIdOrUndefinedType(baseId);
+
+        /// <summary>
+        ///     provide scope definition
+        /// </summary>
+        /// <param name="completeName"></param>
+        /// <param name="scope"></param>
+        public override void ProvideScope(string completeName, IScope scope)
+            => BaseType.ProvideScope(completeName, scope);
     }
 }

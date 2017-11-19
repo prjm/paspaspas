@@ -20,5 +20,9 @@ namespace PasPasPas.Typings.Simple {
         /// </summary>
         public override CommonTypeKind TypeKind
             => CommonTypeKind.UnknownType;
+
+        public override void ProvideScope(string completeName, IScope scope) {
+
+        }
     }
 }

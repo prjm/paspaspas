@@ -28,5 +28,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Types {
         /// </summary>
         ITypeRegistry TypeRegistry { get; }
 
+        /// <summary>
+        ///     provides scope information for a given scope entry
+        /// </summary>
+        /// <param name="completeName">scope entry name</param>
+        /// <param name="scope">scope</param>
+        void ProvideScope(string completeName, IScope scope);
     }
 }

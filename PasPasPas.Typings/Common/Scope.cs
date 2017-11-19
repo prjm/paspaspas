@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using PasPasPas.Infrastructure.Utils;
+using PasPasPas.Parsing.SyntaxTree.Types;
 
 namespace PasPasPas.Typings.Common {
 
     /// <summary>
     ///     scope for identifier validity
     /// </summary>
-    public class Scope {
+    public class Scope : IScope {
 
         private IDictionary<string, Scope> children
             = new Dictionary<string, Scope>(StringComparer.OrdinalIgnoreCase);
@@ -118,6 +116,12 @@ namespace PasPasPas.Typings.Common {
             scope.entries[name] = scopeEntry;
         }
 
-
+        /// <summary>
+        ///     open a new scope
+        /// </summary>
+        /// <param name="completeName"></param>
+        /// <param name="scope"></param>
+        public void Open(string completeName, IScope scope)
+            => Open(completeName);
     }
 }

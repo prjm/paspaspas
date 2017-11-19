@@ -34,5 +34,15 @@ namespace PasPasPas.Typings.Simple {
         ///     base type id
         /// </summary>
         public ITypeDefinition BaseType { get; set; }
+
+        /// <summary>
+        ///     provides scope information
+        /// </summary>
+        /// <param name="completeName"></param>
+        /// <param name="scope"></param>
+        public override void ProvideScope(string completeName, IScope scope) {
+
+        }
+
     }
 }

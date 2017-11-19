@@ -10,9 +10,32 @@ using PasPasPas.Typings.Common;
 namespace PasPasPas.Typings.Simple {
 
     /// <summary>
+    ///     base class for string types
+    /// </summary>
+    public abstract class StringTypeBase : TypeBase {
+
+        /// <summary>
+        ///     create a new string type declaration
+        /// </summary>
+        /// <param name="withId"></param>
+        /// <param name="withName"></param>
+        public StringTypeBase(int withId, ScopedName withName = null) : base(withId, withName) {
+        }
+
+        /// <summary>
+        ///     povide scope
+        /// </summary>
+        /// <param name="completeName"></param>
+        /// <param name="scope"></param>
+        public override void ProvideScope(string completeName, IScope scope) {
+            // (record helpers?)
+        }
+    }
+
+    /// <summary>
     ///     string type definition
     /// </summary>
-    public class UnicodeStringType : TypeBase {
+    public class UnicodeStringType : StringTypeBase {
 
         /// <summary>
         ///     create a new string type
@@ -33,7 +56,7 @@ namespace PasPasPas.Typings.Simple {
     /// <summary>
     ///     string type definition
     /// </summary>
-    public class WideStringType : TypeBase {
+    public class WideStringType : StringTypeBase {
 
         /// <summary>
         ///     create a new string type
@@ -53,7 +76,7 @@ namespace PasPasPas.Typings.Simple {
     /// <summary>
     ///     string type definition
     /// </summary>
-    public class ShortStringType : TypeBase {
+    public class ShortStringType : StringTypeBase {
 
         /// <summary>
         ///     create a new string type
@@ -73,7 +96,7 @@ namespace PasPasPas.Typings.Simple {
     /// <summary>
     ///     string type definition
     /// </summary>
-    public class AnsiStringType : TypeBase {
+    public class AnsiStringType : StringTypeBase {
 
         /// <summary>
         ///     create a new string type

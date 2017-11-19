@@ -30,5 +30,14 @@ namespace PasPasPas.Typings.Simple {
         /// </summary>
         public override CommonTypeKind TypeKind
             => TypeRegistry.GetTypeByIdOrUndefinedType(baseTypeId).TypeKind;
+
+        /// <summary>
+        ///     provides scope information
+        /// </summary>
+        /// <param name="completeName"></param>
+        /// <param name="scope"></param>
+        public override void ProvideScope(string completeName, IScope scope) {
+
+        }
     }
 }
