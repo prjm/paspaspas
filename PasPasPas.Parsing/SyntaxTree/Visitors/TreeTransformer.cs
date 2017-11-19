@@ -1137,6 +1137,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region UnitFinalization
 
+        /// <summary>
+        ///     visit a finalization section
+        /// </summary>
+        /// <param name="unitBlock"></param>
         public void StartVisit(UnitFinalization unitBlock) {
             var result = new BlockOfStatements();
             InitNode(result, unitBlock, CurrentUnit);
@@ -1178,6 +1182,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         }
 
+        /// <summary>
+        ///     end visiting a compund statement
+        /// </summary>
+        /// <param name="block"></param>
         public void EndVisit(CompoundStatement block) {
         }
 
@@ -1226,6 +1234,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             parent.LabelName = name;
         }
 
+        /// <summary>
+        ///     end visitg a label
+        /// </summary>
+        /// <param name="label"></param>
         public void EndVisit(Label label) {
         }
 
@@ -1262,6 +1274,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region ClassDeclarationItem
 
+        /// <summary>
+        ///     start visting a class declaration item
+        /// </summary>
+        /// <param name="classDeclarationItem"></param>
         public void StartVisit(ClassDeclarationItem classDeclarationItem) {
             var parentType = LastValue as StructuredType;
 

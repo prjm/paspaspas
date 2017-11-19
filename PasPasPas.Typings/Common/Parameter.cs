@@ -17,5 +17,9 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         public ITypeDefinition ParamType { get; set; }
 
+        /// <summary>
+        ///     parameter name
+        /// </summary>
+        public string Name { get; set; }
     }
 }

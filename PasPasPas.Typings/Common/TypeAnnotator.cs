@@ -31,7 +31,8 @@ namespace PasPasPas.Typings.Common {
         IEndVisitor<ArrayTypeDeclaration>,
         IStartVisitor<StructuredType>,
         IEndVisitor<StructuredType>,
-        IEndVisitor<MethodDeclaration> {
+        IStartVisitor<MethodDeclaration>, IEndVisitor<MethodDeclaration>,
+        IEndVisitor<ParameterTypeDefinition> {
 
         private readonly IStartEndVisitor visitor;
         private readonly ITypedEnvironment environment;
@@ -490,13 +491,47 @@ namespace PasPasPas.Typings.Common {
         }
 
         /// <summary>
+        ///     start visting a method declaration
+        /// </summary>ele
+        /// <param name="element"></param>
+        public void StartVisit(MethodDeclaration element) {
+            var typeDef = currentTypeDefintion.Peek() as StructuredTypeDeclaration;
+            var method = typeDef.AddOrExtendMethod(element.Name.CompleteName);
+            method.AddParameterGroup();
+        }
+
+        /// <summary>
         ///     end visting a method declaration
         /// </summary>ele
         /// <param name="element"></param>
         public void EndVisit(MethodDeclaration element) {
-            var typeDef = currentTypeDefintion.Peek() as StructuredTypeDeclaration;
-            var method = typeDef.AddOrExtendMethod(element.Name.CompleteName);
-            var methodParams = method.AddParameterGroup();
+            if (element.Kind == ProcedureKind.Function) {
+                var typeDef = currentTypeDefintion.Peek() as StructuredTypeDeclaration;
+                var method = typeDef.Methods[typeDef.Methods.Count - 1];
+                var methodParams = method.Parameters[method.Parameters.Count - 1];
+
+                if (element.TypeValue != null && element.TypeValue.TypeInfo != null)
+                    methodParams.ResultType = element.TypeValue.TypeInfo;
+                else
+                    methodParams.ResultType = environment.TypeRegistry.GetTypeByIdOrUndefinedType(TypeIds.ErrorType);
+            }
+        }
+
+        /// <summary>
+        ///     visit a paramer type definition
+        /// </summary>
+        /// <param name="element"></param>
+        public void EndVisit(ParameterTypeDefinition element) {
+            if (element.TypeValue != null && element.TypeValue.TypeInfo != null) {
+                var typeDef = currentTypeDefintion.Peek() as StructuredTypeDeclaration;
+                var method = typeDef.Methods[typeDef.Methods.Count - 1];
+                var parms = method.Parameters[method.Parameters.Count - 1];
+
+                foreach (var name in element.Parameters) {
+                    var param = parms.AddParameter(name.Name.CompleteName);
+                    param.ParamType = element.TypeValue.TypeInfo;
+                }
+            }
         }
     }
 }

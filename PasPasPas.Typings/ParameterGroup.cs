@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using PasPasPas.Parsing.SyntaxTree.Types;
 
 namespace PasPasPas.Typings.Common {
@@ -16,10 +17,23 @@ namespace PasPasPas.Typings.Common {
         /// <summary>
         ///     routine parameters
         /// </summary>
-        public IList<Parameter> Parameters { get; }
-            = new List<Parameter>();
+        public IList<Parameter> Parameters { get; private set; }
 
+        /// <summary>
+        ///     add a parameter definition
+        /// </summary>
+        /// <param name="completeName"></param>
+        /// <returns></returns>
+        public Parameter AddParameter(string completeName) {
+            if (Parameters == null)
+                Parameters = new List<Parameter>();
 
+            var result = new Parameter {
+                Name = completeName
+            };
 
+            Parameters.Add(result);
+            return result;
+        }
     }
 }
