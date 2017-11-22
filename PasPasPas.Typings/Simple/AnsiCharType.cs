@@ -13,8 +13,7 @@ namespace PasPasPas.Typings.Simple {
         ///     create a new char type
         /// </summary>
         /// <param name="withId">type id</param>
-        /// <param name="withName">type name</param>
-        public AnsiCharType(int withId, ScopedName withName = null) : base(withId, withName) {
+        public AnsiCharType(int withId) : base(withId) {
         }
 
         /// <summary>

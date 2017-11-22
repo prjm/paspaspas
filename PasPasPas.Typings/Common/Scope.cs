@@ -6,24 +6,33 @@ using PasPasPas.Parsing.SyntaxTree.Types;
 namespace PasPasPas.Typings.Common {
 
     /// <summary>
-    ///     scope for identifier validity
+    ///     scope for identifier visiblity
     /// </summary>
-    public class Scope : IScope {
+    public class Scope {
 
-        private IDictionary<string, Scope> children
-            = new Dictionary<string, Scope>(StringComparer.OrdinalIgnoreCase);
-
-        private IDictionary<string, ScopeEntry> entries
-            = new Dictionary<string, ScopeEntry>(StringComparer.OrdinalIgnoreCase);
+        private IOrderedDictionary<string, ScopeEntry> entries
+            = new OrderedDictionary<string, ScopeEntry>(StringComparer.OrdinalIgnoreCase);
 
         private readonly Scope parent;
+        private readonly ITypeRegistry typeRegistry;
+
+        /// <summary>
+        ///     create a new scope
+        /// </summary>
+        public Scope(ITypeRegistry types) {
+            typeRegistry = types;
+            parent = null;
+        }
+
 
         /// <summary>
         ///     create a new scope
         /// </summary>
         /// <param name="parentScope">parent scope</param>
-        public Scope(Scope parentScope)
-            => parent = parentScope;
+        public Scope(Scope parentScope) {
+            parent = parentScope;
+            typeRegistry = parentScope.typeRegistry;
+        }
 
         /// <summary>
         ///     gets the root of the scope
@@ -37,31 +46,23 @@ namespace PasPasPas.Typings.Common {
             }
         }
 
-        /// <summary>
-        ///     scope name
-        /// </summary>
-        public string Name { get; set; }
 
         /// <summary>
         ///     open a new child scope
         /// </summary>
         /// <param name="scopeName"></param>
         /// <returns>new child scope</returns>
-        public Scope Open(string scopeName)
-            => new Scope(this) { Name = scopeName };
+        public Scope Open()
+            => new Scope(this);
 
         /// <summary>
         ///     close this scope
         /// </summary>
         /// <param name="completeName"></param>
         /// <returns></returns>
-        public Scope Close(string completeName) {
+        public Scope Close() {
             if (parent == null)
                 throw new InvalidOperationException();
-
-            if (!string.Equals(completeName, Name, StringComparison.OrdinalIgnoreCase))
-                throw new InvalidOperationException();
-
             return parent;
         }
 
@@ -74,22 +75,22 @@ namespace PasPasPas.Typings.Common {
             var scope = this;
 
             while (scope != null) {
-                var part = name[0];
 
-                if (name.Length > 1) {
-                    var child = this;
-                    for (var i = 0; i < name.Length; i++) {
-                        part = name[i];
-                        if (i + 1 == name.Length && entries.TryGetValue(part, out var entry))
-                            return entry;
-                        if (scope.children.TryGetValue(part, out var nextChild))
-                            child = nextChild;
-                        else
-                            break;
+                if (entries.TryGetValue(name.FirstPart, out var entry)) {
+                    if (name.Length == 1)
+                        return entry;
+
+                    return ResolveNameByEntry(name.RemoveFirstPart(), entry.TypeId);
+                }
+
+                for (var i = scope.entries.Count - 1; i >= 0; i--) {
+                    entry = scope.entries[i];
+                    if (entry.Kind == ScopeEntryKind.UnitReference) {
+                        var importedEntry = ResolveNameByEntry(name, entry.TypeId);
+                        if (importedEntry != null)
+                            return importedEntry;
                     }
                 }
-                else if (entries.TryGetValue(part, out var entry))
-                    return entry;
 
                 scope = scope.parent;
             }
@@ -98,30 +99,38 @@ namespace PasPasPas.Typings.Common {
         }
 
         /// <summary>
-        ///     a a new entry to this scope
+        ///     resolve a name by entry
         /// </summary>
-        /// <param name="path">named path</param>
-        /// <param name="scopeEntry">scope entry</param>
-        public void AddEntry(ScopedName path, ScopeEntry scopeEntry) {
-            var scope = this;
-            for (var i = 0; i < path.Length - 1; i++) {
-                if (!scope.children.TryGetValue(path[i], out var childScope)) {
-                    childScope = new Scope(scope);
-                    scope.children.Add(path[i], childScope);
-                }
-                scope = childScope;
+        /// <param name="scopedName"></param>
+        /// <param name="typeId">given type id</param>
+        /// <returns></returns>
+        private ScopeEntry ResolveNameByEntry(ScopedName scopedName, int typeId) {
+            var type = typeRegistry.GetTypeByIdOrUndefinedType(typeId);
+            var kind = type.TypeKind;
+
+            if (kind == CommonTypeKind.Unit && type is UnitType unit)
+                return ResolveNameInUnit(unit, scopedName);
+
+            return null;
+        }
+
+        private ScopeEntry ResolveNameInUnit(UnitType unit, ScopedName scopedName) {
+
+            if (unit.TryToResolve(scopedName.FirstPart, out var entry)) {
+                if (scopedName.Length == 1)
+                    return entry;
             }
 
-            var name = path[path.Length - 1];
-            scope.entries[name] = scopeEntry;
+            return null;
         }
 
         /// <summary>
-        ///     open a new scope
+        ///     a a new entry to this scope
         /// </summary>
-        /// <param name="completeName"></param>
-        /// <param name="scope"></param>
-        public void Open(string completeName, IScope scope)
-            => Open(completeName);
+        /// <param name="name"></param>
+        /// <param name="scopeEntry">scope entry</param>
+        public void AddEntry(string name, ScopeEntry scopeEntry)
+            => entries[name] = scopeEntry;
+
     }
 }

@@ -18,18 +18,10 @@ namespace PasPasPas.Typings.Simple {
         ///     create a new string type declaration
         /// </summary>
         /// <param name="withId"></param>
-        /// <param name="withName"></param>
-        public StringTypeBase(int withId, ScopedName withName = null) : base(withId, withName) {
+        public StringTypeBase(int withId) : base(withId) {
         }
 
-        /// <summary>
-        ///     povide scope
-        /// </summary>
-        /// <param name="completeName"></param>
-        /// <param name="scope"></param>
-        public override void ProvideScope(string completeName, IScope scope) {
-            // (record helpers?)
-        }
+
     }
 
     /// <summary>
@@ -41,8 +33,7 @@ namespace PasPasPas.Typings.Simple {
         ///     create a new string type
         /// </summary>
         /// <param name="withId">type id</param>
-        /// <param name="withName">type name</param>
-        public UnicodeStringType(int withId, ScopedName withName = null) : base(withId, withName) {
+        public UnicodeStringType(int withId) : base(withId) {
         }
 
         /// <summary>
@@ -62,8 +53,7 @@ namespace PasPasPas.Typings.Simple {
         ///     create a new string type
         /// </summary>
         /// <param name="withId">type id</param>
-        /// <param name="withName">type name</param>
-        public WideStringType(int withId, ScopedName withName = null) : base(withId, withName) {
+        public WideStringType(int withId) : base(withId) {
         }
 
         /// <summary>
@@ -82,8 +72,7 @@ namespace PasPasPas.Typings.Simple {
         ///     create a new string type
         /// </summary>
         /// <param name="withId">type id</param>
-        /// <param name="withName">type name</param>
-        public ShortStringType(int withId, ScopedName withName = null) : base(withId, withName) {
+        public ShortStringType(int withId) : base(withId) {
         }
 
         /// <summary>
@@ -102,8 +91,7 @@ namespace PasPasPas.Typings.Simple {
         ///     create a new string type
         /// </summary>
         /// <param name="withId">type id</param>
-        /// <param name="withName">type name</param>
-        public AnsiStringType(int withId, ScopedName withName = null) : base(withId, withName) {
+        public AnsiStringType(int withId) : base(withId) {
         }
 
         /// <summary>

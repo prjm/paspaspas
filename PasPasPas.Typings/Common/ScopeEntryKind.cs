@@ -18,6 +18,11 @@
         /// <summary>
         ///     variable name
         /// </summary>
-        VariableReference
+        DeclaredVariable,
+
+        /// <summary>
+        ///     unit reference
+        /// </summary>
+        UnitReference
     }
 }

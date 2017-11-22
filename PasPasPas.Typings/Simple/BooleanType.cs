@@ -15,8 +15,7 @@ namespace PasPasPas.Typings.Simple {
         /// </summary>
         /// <param name="withId"></param>
         /// <param name="bitSize">size in bits</param>
-        /// <param name="name">name (optional)</param>
-        public BooleanType(int withId, int bitSize, ScopedName name = null) : base(withId, name)
+        public BooleanType(int withId, int bitSize) : base(withId)
             => this.size = bitSize;
 
         /// <summary>

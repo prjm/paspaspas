@@ -21,8 +21,7 @@ namespace PasPasPas.Typings.Simple {
         ///     create an enumerated type
         /// </summary>
         /// <param name="withId">type id</param>
-        /// <param name="withName">type name</param>
-        public EnumeratedType(int withId, ScopedName withName = null) : base(withId, withName) {
+        public EnumeratedType(int withId) : base(withId) {
         }
 
         /// <summary>

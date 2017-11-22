@@ -11,8 +11,7 @@ namespace PasPasPas.Typings.Common {
         ///     create a new structured type
         /// </summary>
         /// <param name="withId"></param>
-        /// <param name="withName"></param>
-        public StructuredTypeBase(int withId, ScopedName withName = null) : base(withId, withName) {
+        public StructuredTypeBase(int withId) : base(withId) {
         }
     }
 }

@@ -9,7 +9,7 @@ namespace PasPasPas.Typings.Common {
     /// <summary>
     ///     structured type declaration
     /// </summary>
-    public class StructuredTypeDeclaration : StructuredTypeBase, IScope {
+    public class StructuredTypeDeclaration : StructuredTypeBase {
 
         private readonly StructuredTypeKind typeKind;
 
@@ -18,8 +18,7 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="withId"></param>
         /// <param name="kind"></param>
-        /// <param name="withName"></param>
-        public StructuredTypeDeclaration(int withId, StructuredTypeKind kind, ScopedName withName = null) : base(withId, withName)
+        public StructuredTypeDeclaration(int withId, StructuredTypeKind kind) : base(withId)
             => typeKind = kind;
 
         /// <summary>
@@ -81,21 +80,5 @@ namespace PasPasPas.Typings.Common {
             return newMethod;
         }
 
-        /// <summary>
-        ///     opening scopes is not supported on structured types
-        /// </summary>
-        /// <param name="completeName"></param>
-        /// <param name="scope"></param>
-        public void Open(string completeName, IScope scope)
-            => throw new NotImplementedException();
-
-        /// <summary>
-        ///     provides scope information
-        /// </summary>
-        /// <param name="completeName"></param>
-        /// <param name="scope"></param>
-        public override void ProvideScope(string completeName, IScope scope) {
-            scope.Open(completeName, this);
-        }
     }
 }

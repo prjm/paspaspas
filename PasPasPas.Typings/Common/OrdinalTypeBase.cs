@@ -17,18 +17,9 @@ namespace PasPasPas.Typings.Common {
         ///     create a new ordinal type
         /// </summary>
         /// <param name="withId"></param>
-        /// <param name="withName"></param>
-        public OrdinalTypeBase(int withId, ScopedName withName = null) : base(withId, withName) {
+        public OrdinalTypeBase(int withId) : base(withId) {
         }
 
-        /// <summary>
-        ///     provide scope
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="scope"></param>
-        public override void ProvideScope(string name, IScope scope) {
-            //.. later record helpers
-        }
 
     }
 }

@@ -132,5 +132,10 @@
         /// </summary>
         /// <remarks>GetTypeKind(..) for class helpers return class</remarks>
         RecordHelperType,
+
+        /// <summary>
+        ///     unit type
+        /// </summary>
+        Unit,
     }
 }

@@ -18,8 +18,7 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="withId">own type id</param>
         /// <param name="withBaseId">base id</param>
-        /// <param name="withName">type name</param>
-        public TypeAlias(int withId, int withBaseId, ScopedName withName = null) : base(withId, withName)
+        public TypeAlias(int withId, int withBaseId) : base(withId)
             => baseId = withBaseId;
 
         /// <summary>
@@ -34,12 +33,5 @@ namespace PasPasPas.Typings.Common {
         public ITypeDefinition BaseType
             => TypeRegistry.GetTypeByIdOrUndefinedType(baseId);
 
-        /// <summary>
-        ///     provide scope definition
-        /// </summary>
-        /// <param name="completeName"></param>
-        /// <param name="scope"></param>
-        public override void ProvideScope(string completeName, IScope scope)
-            => BaseType.ProvideScope(completeName, scope);
     }
 }

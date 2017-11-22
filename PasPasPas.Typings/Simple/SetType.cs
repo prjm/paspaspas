@@ -16,8 +16,7 @@ namespace PasPasPas.Typings.Simple {
         /// </summary>
         /// <param name="withId">type id</param>
         /// <param name="baseType">base type</param>
-        /// <param name="withName"></param>
-        public SetType(int withId, int baseType, ScopedName withName = null) : base(withId, withName)
+        public SetType(int withId, int baseType) : base(withId)
             => baseTypeId = baseType;
 
         /// <summary>
@@ -26,14 +25,5 @@ namespace PasPasPas.Typings.Simple {
         public override CommonTypeKind TypeKind
             => CommonTypeKind.SetType;
 
-
-        /// <summary>
-        ///     provides scope information
-        /// </summary>
-        /// <param name="completeName"></param>
-        /// <param name="scope"></param>
-        public override void ProvideScope(string completeName, IScope scope) {
-
-        }
     }
 }

@@ -58,7 +58,7 @@ namespace PasPasPas.Typings.Common {
         public TypeAnnotator(ITypedEnvironment env) {
             visitor = new Visitor(this);
             environment = env;
-            scope = new Scope(null);
+            scope = new Scope(env.TypeRegistry);
             currentTypeDefintion = new Stack<ITypeDefinition>();
         }
 
@@ -230,7 +230,7 @@ namespace PasPasPas.Typings.Common {
                 element.TypeInfo = environment.TypeRegistry.GetTypeByIdOrUndefinedType(TypeIds.ErrorType);
 
             foreach (var vardef in element.Names) {
-                element.TypeInfo.ProvideScope(vardef.Name.CompleteName, scope);
+                scope.AddEntry(vardef.Name.CompleteName, new ScopeEntry(ScopeEntryKind.DeclaredVariable) { TypeId = element.TypeInfo.TypeId });
             }
         }
 
@@ -247,10 +247,13 @@ namespace PasPasPas.Typings.Common {
             }
 
             var entry = scope.ResolveName(typeName);
+            var typeId = TypeIds.ErrorType;
 
             if (entry != null && entry.Kind == ScopeEntryKind.TypeName) {
-                element.TypeInfo = environment.TypeRegistry.GetTypeByIdOrUndefinedType(entry.TypeId);
+                typeId = entry.TypeId;
             }
+
+            element.TypeInfo = environment.TypeRegistry.GetTypeByIdOrUndefinedType(typeId);
         }
 
         /// <summary>
@@ -260,10 +263,14 @@ namespace PasPasPas.Typings.Common {
         public void EndVisit(MetaType element) {
             if (element.Kind == MetaTypeKind.NamedType) {
                 var name = element.AsScopedName;
+                var typeId = TypeIds.ErrorType;
                 var entry = scope.ResolveName(name);
-                if (entry != null && (entry.Kind == ScopeEntryKind.TypeName || entry.Kind == ScopeEntryKind.VariableReference)) {
-                    element.TypeInfo = environment.TypeRegistry.GetTypeByIdOrUndefinedType(entry.TypeId);
+
+                if (entry != null && (entry.Kind == ScopeEntryKind.DeclaredVariable || entry.Kind == ScopeEntryKind.TypeName)) {
+                    typeId = entry.TypeId;
                 }
+
+                element.TypeInfo = environment.TypeRegistry.GetTypeByIdOrUndefinedType(typeId);
             }
 
             else if (element.Kind == MetaTypeKind.String) {
@@ -298,12 +305,8 @@ namespace PasPasPas.Typings.Common {
         /// <param name="element"></param>
         public void StartVisit(CompilationUnit element) {
             CurrentUnit = element;
-            scope = scope.Open(element.UnitName.CompleteName);
-            foreach (var entry in environment.TypeRegistry.RegisteredTypes)
-                if (entry.TypeName != null) {
-                    scope.AddEntry(entry.TypeName, new ScopeEntry(ScopeEntryKind.TypeName) { TypeId = entry.TypeId });
-                    scope.AddEntry(new ScopedName(entry.TypeName[entry.TypeName.Length - 1]), new ScopeEntry(ScopeEntryKind.TypeName) { TypeId = entry.TypeId });
-                }
+            scope = scope.Open();
+            scope.AddEntry("System", new ScopeEntry(ScopeEntryKind.UnitReference) { TypeId = TypeIds.SystemUnit });
         }
 
         /// <summary>
@@ -311,7 +314,7 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="element"></param>
         public void EndVisit(CompilationUnit element) {
-            scope = scope.Close(element.UnitName.CompleteName);
+            scope = scope.Close();
             CurrentUnit = null;
         }
 
@@ -422,7 +425,7 @@ namespace PasPasPas.Typings.Common {
         public void EndVisit(TypeDeclaration element) {
 
             if (element.TypeValue is ITypedSyntaxNode declaredType && declaredType.TypeInfo != null) {
-                scope.AddEntry(new ScopedName(element.Name.CompleteName), new ScopeEntry(ScopeEntryKind.TypeName) { TypeId = declaredType.TypeInfo.TypeId });
+                scope.AddEntry(element.Name.CompleteName, new ScopeEntry(ScopeEntryKind.TypeName) { TypeId = declaredType.TypeInfo.TypeId });
             }
         }
 

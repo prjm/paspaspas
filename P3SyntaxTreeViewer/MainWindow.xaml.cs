@@ -118,11 +118,7 @@ namespace P3SyntaxTreeViewer {
                 treeViewItem.Header += ": " + symbol.SymbolName;
 
             if (typeInfo != null && typeInfo.TypeInfo != null) {
-                if (typeInfo.TypeInfo.TypeName != null)
-                    treeViewItem.Header += " [" + typeInfo.TypeInfo.TypeName + "]";
-                else
-                    treeViewItem.Header += " [" + typeInfo.TypeInfo.TypeId.ToString() + "]";
-
+                treeViewItem.Header += " [" + typeInfo.TypeInfo.TypeId.ToString() + "]";
                 treeViewItem.Header += " " + typeInfo.TypeInfo.TypeKind.ToString();
             }
 

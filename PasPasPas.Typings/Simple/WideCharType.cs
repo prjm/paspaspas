@@ -18,8 +18,7 @@ namespace PasPasPas.Typings.Simple {
         ///     wide char type
         /// </summary>
         /// <param name="withId"></param>
-        /// <param name="withName"></param>
-        public WideCharType(int withId, ScopedName withName = null) : base(withId, withName) {
+        public WideCharType(int withId) : base(withId) {
         }
 
         /// <summary>

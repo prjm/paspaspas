@@ -16,8 +16,7 @@ namespace PasPasPas.Typings.Simple {
         /// </summary>
         /// <param name="withId">type id</param>
         /// <param name="baseType">base type id</param>
-        /// <param name="withName">type name</param>
-        public PointerType(int withId, int baseType, ScopedName withName = null) : base(withId, withName)
+        public PointerType(int withId, int baseType) : base(withId)
             => baseTypeId = baseType;
 
         /// <summary>
@@ -25,15 +24,6 @@ namespace PasPasPas.Typings.Simple {
         /// </summary>
         public override CommonTypeKind TypeKind
             => CommonTypeKind.PointerType;
-
-        /// <summary>
-        ///     provides scope information
-        /// </summary>
-        /// <param name="completeName"></param>
-        /// <param name="scope"></param>
-        public override void ProvideScope(string completeName, IScope scope) {
-
-        }
 
     }
 }

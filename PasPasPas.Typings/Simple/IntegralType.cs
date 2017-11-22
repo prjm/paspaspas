@@ -16,10 +16,9 @@ namespace PasPasPas.Typings.Simple {
         ///     create a new type
         /// </summary>
         /// <param name="withId"></param>
-        /// <param name="name"></param>
         /// <param name="isSigned"><c>true</c> if the type is signed</param>
         /// <param name="withBitSize">bitsize of the type</param>
-        public IntegralType(int withId, bool isSigned, int withBitSize, ScopedName name = null) : base(withId, name) {
+        public IntegralType(int withId, bool isSigned, int withBitSize) : base(withId) {
             signed = isSigned;
             bitSize = withBitSize;
         }

@@ -13,8 +13,7 @@ namespace PasPasPas.Typings.Simple {
         ///     real type
         /// </summary>
         /// <param name="withId">type id</param>
-        /// <param name="withName">type name</param>
-        public RealType(int withId, ScopedName withName = null) : base(withId, withName) {
+        public RealType(int withId) : base(withId) {
         }
 
         /// <summary>
@@ -23,14 +22,6 @@ namespace PasPasPas.Typings.Simple {
         public override CommonTypeKind TypeKind
             => CommonTypeKind.FloatType;
 
-        /// <summary>
-        ///     provides scope information
-        /// </summary>
-        /// <param name="completeName"></param>
-        /// <param name="scope"></param>
-        public override void ProvideScope(string completeName, IScope scope) {
-
-        }
 
     }
 }

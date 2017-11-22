@@ -14,8 +14,7 @@ namespace PasPasPas.Typings.Simple {
         ///     create a new array type
         /// </summary>
         /// <param name="withId"></param>
-        /// <param name="withName"></param>
-        public ArrayType(int withId, ScopedName withName = null) : base(withId, withName) {
+        public ArrayType(int withId) : base(withId) {
         }
 
         /// <summary>
@@ -34,15 +33,6 @@ namespace PasPasPas.Typings.Simple {
         ///     base type id
         /// </summary>
         public ITypeDefinition BaseType { get; set; }
-
-        /// <summary>
-        ///     provides scope information
-        /// </summary>
-        /// <param name="completeName"></param>
-        /// <param name="scope"></param>
-        public override void ProvideScope(string completeName, IScope scope) {
-
-        }
 
     }
 }

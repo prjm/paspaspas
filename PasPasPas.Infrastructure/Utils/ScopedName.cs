@@ -191,6 +191,12 @@ namespace PasPasPas.Infrastructure.Utils {
             => parts.Length;
 
         /// <summary>
+        ///     get the first part of this name
+        /// </summary>
+        public string FirstPart
+            => Length > 0 ? parts[0].Value : string.Empty;
+
+        /// <summary>
         /// 
         /// </summary>
         /// <param name="index"></param>
@@ -205,6 +211,18 @@ namespace PasPasPas.Infrastructure.Utils {
         public override string ToString()
             => stringCache;
 
+        /// <summary>
+        ///     remove the first part of this name
+        /// </summary>
+        /// <returns></returns>
+        public ScopedName RemoveFirstPart() {
+            var newParts = new string[Math.Max(0, parts.Length - 1)];
+
+            for (var i = 1; i < parts.Length; i++)
+                newParts[i - 1] = parts[i].Value;
+
+            return new ScopedName(newParts);
+        }
     }
 
 }

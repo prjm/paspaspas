@@ -6,6 +6,11 @@
     public static class TypeIds {
 
         /// <summary>
+        ///     system unit
+        /// </summary>
+        public const int SystemUnit = -3;
+
+        /// <summary>
         ///     unspecified type
         /// </summary>
         public const int UnspecifiedType = -2;
@@ -359,5 +364,6 @@
         ///     root object definition
         /// </summary>
         public const int TObject = 100;
+
     }
 }

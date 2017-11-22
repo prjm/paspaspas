@@ -16,8 +16,7 @@ namespace PasPasPas.Typings.Simple {
         /// </summary>
         /// <param name="withId">type id</param>
         /// <param name="isSigned"><c>true</c> if this type should be signed</param>
-        /// <param name="withName">type name (optional)</param>
-        public Integral64BitType(int withId, bool isSigned, ScopedName withName = null) : base(withId, withName)
+        public Integral64BitType(int withId, bool isSigned) : base(withId)
             => signed = isSigned;
 
         /// <summary>
