@@ -1,6 +1,7 @@
 ﻿using PasPasPas.Infrastructure.Utils;
+using PasPasPas.Typings.Common;
 
-namespace PasPasPas.Typings.Common {
+namespace PasPasPas.Typings.Structured {
 
     /// <summary>
     ///     base class for structured types

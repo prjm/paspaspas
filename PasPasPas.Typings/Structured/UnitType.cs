@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using PasPasPas.Parsing.SyntaxTree.Types;
+using PasPasPas.Typings.Common;
 
-namespace PasPasPas.Typings.Common {
+namespace PasPasPas.Typings.Structured {
 
     /// <summary>
     ///     unit type definition

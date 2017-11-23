@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using PasPasPas.Typings.Structured;
 using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Typings.Simple;
 using Xunit;

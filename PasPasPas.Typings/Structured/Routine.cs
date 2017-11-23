@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using PasPasPas.Parsing.SyntaxTree.Types;
 
-namespace PasPasPas.Typings.Common {
+namespace PasPasPas.Typings.Structured {
 
     /// <summary>
     ///     callable routine

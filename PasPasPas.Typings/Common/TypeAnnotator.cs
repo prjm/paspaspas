@@ -6,6 +6,7 @@ using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 using PasPasPas.Typings.Operators;
 using PasPasPas.Typings.Simple;
+using PasPasPas.Typings.Structured;
 
 namespace PasPasPas.Typings.Common {
 
@@ -32,7 +33,8 @@ namespace PasPasPas.Typings.Common {
         IStartVisitor<StructuredType>,
         IEndVisitor<StructuredType>,
         IStartVisitor<MethodDeclaration>, IEndVisitor<MethodDeclaration>,
-        IEndVisitor<ParameterTypeDefinition> {
+        IEndVisitor<ParameterTypeDefinition>,
+        IEndVisitor<StructureFields> {
 
         private readonly IStartEndVisitor visitor;
         private readonly ITypedEnvironment environment;
@@ -531,9 +533,27 @@ namespace PasPasPas.Typings.Common {
 
                 foreach (var name in element.Parameters) {
                     var param = parms.AddParameter(name.Name.CompleteName);
-                    param.ParamType = element.TypeValue.TypeInfo;
+                    param.SymbolType = element.TypeValue.TypeInfo;
                 }
             }
+        }
+
+        /// <summary>
+        ///     visit a structure field definition
+        /// </summary>
+        /// <param name="element">field definition</param>
+        public void EndVisit(StructureFields element) {
+            ITypeDefinition typeInfo;
+            if (element.TypeValue != null && element.TypeValue.TypeInfo != null)
+                typeInfo = element.TypeValue.TypeInfo;
+            else {
+                typeInfo = environment.TypeRegistry.GetTypeByIdOrUndefinedType(TypeIds.ErrorType);
+            }
+
+            var typeDef = currentTypeDefintion.Peek() as StructuredTypeDeclaration;
+
+            foreach (var field in element.Fields)
+                typeDef.AddField(field.Name.CompleteName, typeInfo);
         }
     }
 }

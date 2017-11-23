@@ -69,7 +69,7 @@ namespace PasPasPasTests.Types {
         /// </summary>
         /// <param name="declaration">declareation</param>
         /// <param name="typeId">type id to find</param>
-        protected void AssertDeclTypeDef(string declaration, int typeId = TypeIds.UnspecifiedType, NativeIntSize intSize = NativeIntSize.Undefined, int typeSize = -1, CommonTypeKind typeKind = CommonTypeKind.UnknownType) {
+        protected void AssertDeclTypeDef(string declaration, string expression = "x", int typeId = TypeIds.UnspecifiedType, NativeIntSize intSize = NativeIntSize.Undefined, int typeSize = -1, CommonTypeKind typeKind = CommonTypeKind.UnknownType) {
 
             Func<ITypeDefinition, Boolean> tester = (ITypeDefinition def) => {
 
@@ -94,7 +94,7 @@ namespace PasPasPasTests.Types {
                 return true;
             };
 
-            AssertDeclTypeDef(declaration, tester, intSize);
+            AssertDeclTypeDef(declaration, tester, intSize, expression);
         }
 
         /// <summary>
@@ -102,9 +102,9 @@ namespace PasPasPasTests.Types {
         /// </summary>
         /// <param name="declaration">declareation</param>
         /// <param name="typeId">type id to find</param>
-        protected void AssertDeclTypeDef<T>(string declaration, Func<T, Boolean> test, NativeIntSize intSize = NativeIntSize.Undefined) where T : class, ITypeDefinition {
+        protected void AssertDeclTypeDef<T>(string declaration, Func<T, Boolean> test, NativeIntSize intSize = NativeIntSize.Undefined, string expression = "x") where T : class, ITypeDefinition {
             var file = "SimpleExpr";
-            var program = $"program {file}; type t = {declaration}; var x : t; begin Writeln(x); end. ";
+            var program = $"program {file}; type t = {declaration}; var x : t; begin Writeln({expression}); end. ";
             Func<object, SymbolReferencePart> searchfunction = x => x as SymbolReferencePart;
             IExpression firstParam = null;
 

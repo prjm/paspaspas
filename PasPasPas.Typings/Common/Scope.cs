@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree.Types;
+using PasPasPas.Typings.Structured;
 
 namespace PasPasPas.Typings.Common {
 
@@ -110,6 +111,19 @@ namespace PasPasPas.Typings.Common {
 
             if (kind == CommonTypeKind.Unit && type is UnitType unit)
                 return ResolveNameInUnit(unit, scopedName);
+            else if (kind == CommonTypeKind.ClassType && type is StructuredTypeDeclaration structType)
+                return ResolveNameInStructuredType(structType, scopedName);
+
+            return null;
+        }
+
+
+        private ScopeEntry ResolveNameInStructuredType(StructuredTypeDeclaration structType, ScopedName scopedName) {
+
+            if (structType.TryToResolve(scopedName.FirstPart, out var entry)) {
+                if (scopedName.Length == 1)
+                    return entry;
+            }
 
             return null;
         }

@@ -6,6 +6,7 @@ using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Typings.Operators;
 using PasPasPas.Typings.Simple;
+using PasPasPas.Typings.Structured;
 
 namespace PasPasPas.Typings.Common {
 

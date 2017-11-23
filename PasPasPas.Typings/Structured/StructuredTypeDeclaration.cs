@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Parsing.SyntaxTree.Types;
+using PasPasPas.Typings.Common;
 
-namespace PasPasPas.Typings.Common {
+namespace PasPasPas.Typings.Structured {
 
     /// <summary>
     ///     structured type declaration
@@ -60,8 +61,14 @@ namespace PasPasPas.Typings.Common {
         /// <summary>
         ///     list of routines
         /// </summary>
-        public IList<Routine> Methods { get; set; }
+        public IList<Routine> Methods { get; }
             = new List<Routine>();
+
+        /// <summary>
+        ///     list of fieds
+        /// </summary>
+        public IList<Variable> Fields { get; }
+            = new List<Variable>();
 
         /// <summary>
         ///     add a method definition
@@ -80,5 +87,30 @@ namespace PasPasPas.Typings.Common {
             return newMethod;
         }
 
+        /// <summary>
+        ///     add a field definition
+        /// </summary>
+        /// <param name="completeName">complete name</param>
+        /// <param name="typeDef">type definition</param>
+        public void AddField(string completeName, ITypeDefinition typeDef)
+            => Fields.Add(new Variable() { Name = completeName, SymbolType = typeDef });
+
+        /// <summary>
+        ///     resolve a symbol
+        /// </summary>
+        /// <param name="symbolName"></param>
+        /// <param name="entry"></param>
+        /// <returns></returns>
+        public bool TryToResolve(string symbolName, out ScopeEntry entry) {
+
+            foreach (var field in Fields)
+                if (string.Equals(field.Name, symbolName, StringComparison.OrdinalIgnoreCase)) {
+                    entry = new ScopeEntry(ScopeEntryKind.DeclaredVariable) { TypeId = field.SymbolType.TypeId };
+                    return true;
+                }
+
+            entry = null;
+            return false;
+        }
     }
 }

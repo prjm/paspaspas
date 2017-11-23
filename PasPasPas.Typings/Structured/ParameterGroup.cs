@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using PasPasPas.Parsing.SyntaxTree.Types;
 
-namespace PasPasPas.Typings.Common {
+namespace PasPasPas.Typings.Structured {
 
     /// <summary>
     ///     class for a paramter group
@@ -17,18 +17,18 @@ namespace PasPasPas.Typings.Common {
         /// <summary>
         ///     routine parameters
         /// </summary>
-        public IList<Parameter> Parameters { get; private set; }
+        public IList<Variable> Parameters { get; private set; }
 
         /// <summary>
         ///     add a parameter definition
         /// </summary>
         /// <param name="completeName"></param>
         /// <returns></returns>
-        public Parameter AddParameter(string completeName) {
+        public Variable AddParameter(string completeName) {
             if (Parameters == null)
-                Parameters = new List<Parameter>();
+                Parameters = new List<Variable>();
 
-            var result = new Parameter {
+            var result = new Variable {
                 Name = completeName
             };
 
