@@ -1094,9 +1094,8 @@ namespace PasPasPas.Parsing.Parser {
         ///     report a missing token
         /// </summary>
         /// <param name="tokenKind"></param>
-        protected void ErrorMissingToken(int tokenKind) {
-            logSource.Error(MissingToken, tokenKind);
-        }
+        protected void ErrorMissingToken(int tokenKind)
+            => logSource.Error(MissingToken, tokenKind);
 
         /// <summary>
         ///     continue with a specific token and mark it as missing

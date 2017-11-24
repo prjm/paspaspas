@@ -25,12 +25,21 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
         public int Count
             => Table.Count;
 
+        /// <summary>
+        ///     caption
+        /// </summary>
         public string Caption
             => allowHex ? "HexParser" : "IntParser";
 
+        /// <summary>
+        ///     overflowed integer literal
+        /// </summary>
         public static object IntegerOverflowInLiteral
             = new object();
 
+        /// <summary>
+        ///     invalid integer literal
+        /// </summary>
         public static object InvalidIntegerLiteral
             = new object();
 
@@ -134,8 +143,12 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
 
         private readonly bool allowHex;
 
-        public IntegerParser(bool allowHexNumbers) {
-            allowHex = allowHexNumbers;
+        /// <summary>
+        ///     create a new integer parser
+        /// </summary>
+        /// <param name="hexFormat">if <c>true</c>, numbers a parsed in hex format</param>
+        public IntegerParser(bool hexFormat) {
+            allowHex = hexFormat;
             data = new LookupTable<string, object>(new Func<string, object>(DoParse), true);
         }
 

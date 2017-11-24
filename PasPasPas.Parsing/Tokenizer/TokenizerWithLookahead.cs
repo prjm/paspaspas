@@ -53,14 +53,28 @@ namespace PasPasPas.Parsing.Tokenizer {
             private string suffix
                 = string.Empty;
 
+            /// <summary>
+            ///     token value
+            /// </summary>
             public Token Value { get; set; }
 
+            /// <summary>
+            ///     token prefix
+            /// </summary>
             public string Prefix
                 => prefix;
 
+            /// <summary>
+            ///     token suffix (invalid to parser)
+            /// </summary>
             public string Suffix
                 => suffix;
 
+            /// <summary>
+            ///     gets the buffer current prefix of invalid tokens
+            /// </summary>
+            /// <param name="tokens"></param>
+            /// <param name="environment"></param>
             public void AssignPrefix(Queue<Token> tokens, IParserEnvironment environment) {
                 using (var poolItem = environment.StringBuilderPool.Borrow()) {
                     var sb = poolItem.Data;
@@ -70,6 +84,11 @@ namespace PasPasPas.Parsing.Tokenizer {
                 }
             }
 
+            /// <summary>
+            ///     get the current suffix of invalid tokens
+            /// </summary>
+            /// <param name="tokens"></param>
+            /// <param name="environment"></param>
             public void AssignSuffix(Queue<Token> tokens, IParserEnvironment environment) {
                 using (var poolItem = environment.StringBuilderPool.Borrow()) {
                     var sb = poolItem.Data;
@@ -79,12 +98,20 @@ namespace PasPasPas.Parsing.Tokenizer {
                 }
             }
 
+            /// <summary>
+            ///     clear the tokenizer
+            /// </summary>
             public void Clear() {
                 prefix = null;
                 suffix = null;
                 Value = default;
             }
 
+            /// <summary>
+            ///     test if one of the selected tokens matches
+            /// </summary>
+            /// <param name="tokenKind"></param>
+            /// <returns></returns>
             public bool MatchesKind(int[] tokenKind) {
 
                 for (var i = 0; i < tokenKind.Length; i++) {
@@ -235,6 +262,9 @@ namespace PasPasPas.Parsing.Tokenizer {
         public TokenSequence CurrentTokenSequence
             => LookAhead(0);
 
+        /// <summary>
+        ///     check if <c>eof</c> is reached
+        /// </summary>
         public bool AtEof
             => tokenList.Count < 1 && (BaseTokenizer == null || BaseTokenizer.AtEof);
 

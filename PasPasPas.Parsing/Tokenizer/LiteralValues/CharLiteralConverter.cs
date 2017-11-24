@@ -31,6 +31,9 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
         public int Count
             => Table.Count;
 
+        /// <summary>
+        ///     caption
+        /// </summary>
         public string Caption
             => "CharParser";
 

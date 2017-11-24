@@ -75,21 +75,45 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         public int StartPosition { get; set; }
 
+        /// <summary>
+        ///     get a pooled string buffer
+        /// </summary>
+        /// <returns></returns>
         public ObjectPool<StringBuilder>.PoolItem FetchStringBuilder()
             => environment.StringBuilderPool.Borrow();
 
+        /// <summary>
+        ///     append a char
+        /// </summary>
+        /// <param name="currentChar"></param>
         public void Append(char currentChar)
             => buffer.Append(currentChar);
 
+        /// <summary>
+        ///     tests if the buffer ends with a given char
+        /// </summary>
+        /// <param name="endSequence"></param>
+        /// <returns></returns>
         public bool BufferEndsWith(char endSequence)
             => buffer.EndsWith(endSequence);
 
+        /// <summary>
+        ///     tests if the buffer ends with a given string
+        /// </summary>
+        /// <param name="endSequence"></param>
+        /// <returns></returns>
         public bool BufferEndsWith(string endSequence)
             => buffer.EndsWith(endSequence);
 
+        /// <summary>
+        ///     clear buffer content
+        /// </summary>
         public void Clear()
             => buffer.Clear();
 
+        /// <summary>
+        ///     dispose this pooled object
+        /// </summary>
         public void Dispose() {
             buffer = null;
             if (bufferHolder != null) {
@@ -98,6 +122,12 @@ namespace PasPasPas.Parsing.Tokenizer {
             }
         }
 
+        /// <summary>
+        ///     parse an integer literal
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="valueParser"></param>
+        /// <returns></returns>
         public object ParserLiteral(string value, LiteralParserKind valueParser) {
             switch (valueParser) {
 
@@ -119,18 +149,45 @@ namespace PasPasPas.Parsing.Tokenizer {
         public void Error(Guid errorId)
             => log.Error(errorId);
 
+        /// <summary>
+        ///     lookahead for input char
+        /// </summary>
+        /// <param name="number"></param>
+        /// <returns></returns>
         public char LookAhead(int number = 1)
             => input.LookAhead(number);
 
+        /// <summary>
+        ///     gets a char out from the buffer
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
         public char GetBufferCharAt(int index)
             => buffer[index];
 
+        /// <summary>
+        ///     converts a real literal
+        /// </summary>
+        /// <param name="digits"></param>
+        /// <param name="decimals"></param>
+        /// <param name="minus"></param>
+        /// <param name="exp"></param>
+        /// <returns></returns>
         public object ConvertRealLiteral(object digits, object decimals, bool minus, object exp)
             => environment.RealLiteralConverter.Convert(digits, decimals, minus, exp);
 
+        /// <summary>
+        ///     get the buffer content as pooled string
+        /// </summary>
+        /// <returns></returns>
         public string GetBufferContent()
             => environment.StringPool.PoolString(buffer.ToString());
 
+        /// <summary>
+        ///     fetch the next char
+        /// </summary>
+        /// <param name="append">if <c>true</c>, the character is appended to the buffer</param>
+        /// <returns></returns>
         public char NextChar(bool append) {
             var result = input.NextChar();
             if (append)
@@ -138,9 +195,16 @@ namespace PasPasPas.Parsing.Tokenizer {
             return result;
         }
 
+        /// <summary>
+        ///     parsing environment
+        /// </summary>
         public IParserEnvironment Environment
             => environment;
 
+        /// <summary>
+        ///     move one char backwards
+        /// </summary>
+        /// <returns></returns>
         public char PreviousChar()
             => input.PreviousChar();
 

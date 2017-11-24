@@ -51,7 +51,6 @@ namespace PasPasPas.Typings.Common {
         /// <summary>
         ///     open a new child scope
         /// </summary>
-        /// <param name="scopeName"></param>
         /// <returns>new child scope</returns>
         public Scope Open()
             => new Scope(this);
@@ -59,8 +58,7 @@ namespace PasPasPas.Typings.Common {
         /// <summary>
         ///     close this scope
         /// </summary>
-        /// <param name="completeName"></param>
-        /// <returns></returns>
+        /// <returns>parent scope</returns>
         public Scope Close() {
             if (parent == null)
                 throw new InvalidOperationException();
@@ -102,6 +100,7 @@ namespace PasPasPas.Typings.Common {
         /// <summary>
         ///     resolve a name by entry
         /// </summary>
+        /// <param name="scopedName">name to resolve</param>
         /// <param name="entry">scope entry</param>
         /// <returns></returns>
         private ScopeEntry ResolveNameByEntry(ScopedName scopedName, ScopeEntry entry) {

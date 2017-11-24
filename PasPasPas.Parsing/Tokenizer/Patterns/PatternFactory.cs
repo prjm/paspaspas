@@ -19,12 +19,21 @@ namespace PasPasPas.Parsing.Tokenizer.Patterns {
         public InputPatterns StandardPatterns { get; }
             = CreateStandardPatterns();
 
+        /// <summary>
+        ///     input patters for compiler diretives
+        /// </summary>
         public InputPatterns CompilerDirectivePatterns { get; }
             = CreateCompilerDirectivePatterns();
 
+        /// <summary>
+        ///     dummy
+        /// </summary>
         public int Count
             => -1;
 
+        /// <summary>
+        ///     caption
+        /// </summary>
         public string Caption
             => "TokenizerPatternFactory";
 
