@@ -365,5 +365,9 @@
         /// </summary>
         public const int TObject = 100;
 
+        /// <summary>
+        ///     root object metaclass
+        /// </summary>
+        public const int TClass = 101;
     }
 }

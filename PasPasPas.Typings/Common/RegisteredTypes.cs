@@ -275,7 +275,11 @@ namespace PasPasPas.Typings.Common {
         /// <param name="pool"></param>
         private void RegisterTObject(StringPool pool) {
             var def = new StructuredTypeDeclaration(TypeIds.TObject, StructuredTypeKind.Class);
+            var meta = new MetaStructuredTypeDeclaration(TypeIds.TClass, TypeIds.TObject);
             RegisterSystemType(def, "TObject");
+            RegisterSystemType(meta, "TClass");
+            def.MetaType = meta;
+            def.Methods.Add(new Routine("Create", ProcedureKind.Constructor));
         }
 
     }

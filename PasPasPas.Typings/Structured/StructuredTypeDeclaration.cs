@@ -79,17 +79,27 @@ namespace PasPasPas.Typings.Structured {
         ///     add a method definition
         /// </summary>
         /// <param name="completeName">method name</param>
-        public Routine AddOrExtendMethod(string completeName) {
+        /// <param name="kind">method kind</param>
+        public Routine AddOrExtendMethod(string completeName, ProcedureKind kind) {
             foreach (var method in Methods)
                 if (string.Equals(method.Name, completeName, StringComparison.OrdinalIgnoreCase))
                     return method;
 
-            var newMethod = new Routine {
-                Name = completeName
-            };
-
+            var newMethod = new Routine(completeName, kind);
             Methods.Add(newMethod);
             return newMethod;
+        }
+
+        /// <summary>
+        ///     check if this type has a specific method
+        /// </summary>
+        /// <param name="methodName">methodName to find</param>
+        /// <returns></returns>
+        public bool HasMethod(string methodName) {
+            foreach (var method in Methods)
+                if (string.Equals(method.Name, methodName, StringComparison.OrdinalIgnoreCase))
+                    return true;
+            return false;
         }
 
         /// <summary>

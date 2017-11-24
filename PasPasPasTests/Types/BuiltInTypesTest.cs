@@ -1,5 +1,7 @@
-﻿using PasPasPas.Options.DataTypes;
+﻿using System;
+using PasPasPas.Options.DataTypes;
 using PasPasPas.Typings.Common;
+using PasPasPas.Typings.Structured;
 using Xunit;
 
 namespace PasPasPasTests.Types {
@@ -56,6 +58,15 @@ namespace PasPasPasTests.Types {
             AssertDeclType("System.ByteBool", TypeIds.ByteBoolType);
             AssertDeclType("System.WordBool", TypeIds.WordBoolType);
             AssertDeclType("System.LongBool", TypeIds.LongBoolType);
+        }
+
+        [Fact]
+        public void TestTObjectType() {
+            Func<string, Func<StructuredTypeDeclaration, bool>> hasMethod = q => (t => t?.HasMethod(q) ?? false);
+
+            AssertDeclType("TObject", TypeIds.TObject);
+            AssertDeclType("System.TObject", TypeIds.TObject);
+            AssertDeclTypeDef("TObject", hasMethod("Create"));
         }
 
         [Fact]

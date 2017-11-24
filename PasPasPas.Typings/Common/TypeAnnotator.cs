@@ -514,7 +514,7 @@ namespace PasPasPas.Typings.Common {
         /// <param name="element"></param>
         public void StartVisit(MethodDeclaration element) {
             var typeDef = currentTypeDefintion.Peek() as StructuredTypeDeclaration;
-            var method = typeDef.AddOrExtendMethod(element.Name.CompleteName);
+            var method = typeDef.AddOrExtendMethod(element.Name.CompleteName, element.Kind);
             method.AddParameterGroup();
         }
 

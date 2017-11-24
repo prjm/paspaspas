@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using PasPasPas.Parsing.SyntaxTree.Types;
+﻿using System.Collections.Generic;
+using PasPasPas.Parsing.SyntaxTree.Abstract;
 
 namespace PasPasPas.Typings.Structured {
 
@@ -11,6 +7,16 @@ namespace PasPasPas.Typings.Structured {
     ///     callable routine
     /// </summary>
     public class Routine {
+
+        /// <summary>
+        ///     create a new routine
+        /// </summary>
+        /// <param name="name">routine name</param>
+        /// <param name="kind">routine kind</param>
+        public Routine(string name, ProcedureKind kind) {
+            Name = name;
+            Kind = kind;
+        }
 
         /// <summary>
         ///     routine parameters
@@ -21,7 +27,12 @@ namespace PasPasPas.Typings.Structured {
         /// <summary>
         ///     routine name
         /// </summary>
-        public string Name { get; set; }
+        public string Name { get; }
+
+        /// <summary>
+        ///     procedure kind
+        /// </summary>
+        public ProcedureKind Kind { get; }
 
         /// <summary>
         ///     add a parameter group
