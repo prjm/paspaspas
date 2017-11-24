@@ -1086,8 +1086,16 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind"></param>
         protected void ContinueWithOrMissing(IExtendableSyntaxPart result, int tokenKind) {
             if (!ContinueWith(result, tokenKind)) {
-                logSource.Error(MissingToken, tokenKind);
+                ErrorMissingToken(tokenKind);
             }
+        }
+
+        /// <summary>
+        ///     report a missing token
+        /// </summary>
+        /// <param name="tokenKind"></param>
+        protected void ErrorMissingToken(int tokenKind) {
+            logSource.Error(MissingToken, tokenKind);
         }
 
         /// <summary>

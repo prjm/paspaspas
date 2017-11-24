@@ -497,6 +497,7 @@ namespace PasPasPasTests.Parser {
             // fields
 
             RunAstTest("unit z.x; interface type x = class n: integer; end; implementation end.", t => f(t)?.Visibility, MemberVisibility.Public);
+            RunAstTest("unit z.x; interface type x = class class var n: integer; end; implementation end.", t => f(t)?.ClassItem, true);
             RunAstTest("unit z.x; interface type x = class strict private n: integer; end; implementation end.", t => f(t)?.Visibility, MemberVisibility.StrictPrivate);
             RunAstTest("unit z.x; interface type x = class strict protected n: integer; end; implementation end.", t => f(t)?.Visibility, MemberVisibility.StrictProtected);
             RunAstTest("unit z.x; interface type x = class private n: integer; end; implementation end.", t => f(t)?.Visibility, MemberVisibility.Private);

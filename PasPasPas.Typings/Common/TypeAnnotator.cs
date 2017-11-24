@@ -231,8 +231,14 @@ namespace PasPasPas.Typings.Common {
             else
                 element.TypeInfo = environment.TypeRegistry.GetTypeByIdOrUndefinedType(TypeIds.ErrorType);
 
+            int typeId;
+            if (element.TypeInfo is MetaStructuredTypeDeclaration meta)
+                typeId = meta.BaseType;
+            else
+                typeId = element.TypeInfo.TypeId;
+
             foreach (var vardef in element.Names) {
-                scope.AddEntry(vardef.Name.CompleteName, new ScopeEntry(ScopeEntryKind.DeclaredVariable) { TypeId = element.TypeInfo.TypeId });
+                scope.AddEntry(vardef.Name.CompleteName, new ScopeEntry(ScopeEntryKind.DeclaredVariable) { TypeId = typeId });
             }
         }
 
@@ -427,7 +433,11 @@ namespace PasPasPas.Typings.Common {
         public void EndVisit(TypeDeclaration element) {
 
             if (element.TypeValue is ITypedSyntaxNode declaredType && declaredType.TypeInfo != null) {
-                scope.AddEntry(element.Name.CompleteName, new ScopeEntry(ScopeEntryKind.TypeName) { TypeId = declaredType.TypeInfo.TypeId });
+
+                if (declaredType.TypeInfo is StructuredTypeDeclaration structType)
+                    scope.AddEntry(element.Name.CompleteName, new ScopeEntry(ScopeEntryKind.TypeName) { TypeId = structType.MetaType.TypeId });
+                else
+                    scope.AddEntry(element.Name.CompleteName, new ScopeEntry(ScopeEntryKind.TypeName) { TypeId = declaredType.TypeInfo.TypeId });
             }
         }
 
@@ -478,9 +488,13 @@ namespace PasPasPas.Typings.Common {
         /// <param name="element"></param>
         public void StartVisit(StructuredType element) {
             var typeId = RequireUserTypeId();
+            var metaTypeId = RequireUserTypeId();
             var typeDef = new StructuredTypeDeclaration(typeId, element.Kind);
+            var metaType = new MetaStructuredTypeDeclaration(metaTypeId, typeId);
             RegisterUserDefinedType(typeDef);
+            RegisterUserDefinedType(metaType);
             typeDef.BaseClass = environment.TypeRegistry.GetTypeByIdOrUndefinedType(TypeIds.TObject);
+            typeDef.MetaType = metaType;
 
             currentTypeDefintion.Push(typeDef);
         }
@@ -552,8 +566,17 @@ namespace PasPasPas.Typings.Common {
 
             var typeDef = currentTypeDefintion.Peek() as StructuredTypeDeclaration;
 
-            foreach (var field in element.Fields)
-                typeDef.AddField(field.Name.CompleteName, typeInfo);
+            foreach (var field in element.Fields) {
+                var fieldDef = new Variable() {
+                    Name = field.Name.CompleteName,
+                    SymbolType = typeInfo
+                };
+
+                if (element.ClassItem)
+                    typeDef.MetaType.AddField(fieldDef);
+                else
+                    typeDef.AddField(fieldDef);
+            }
         }
     }
 }

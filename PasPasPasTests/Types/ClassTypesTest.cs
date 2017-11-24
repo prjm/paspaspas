@@ -29,6 +29,7 @@ namespace PasPasPasTests.Types {
         public void TestFieldDeclaration() {
             AssertDeclTypeDef("class x: integer; end", "x.x", typeKind: CommonTypeKind.IntegerType);
             AssertDeclTypeDef("class k, l, x: integer; end", "x.x", typeKind: CommonTypeKind.IntegerType);
+            AssertDeclTypeDef("class class var x: integer; end", "t.x", typeKind: CommonTypeKind.IntegerType);
         }
 
     }

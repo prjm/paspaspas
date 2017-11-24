@@ -71,6 +71,11 @@ namespace PasPasPas.Typings.Structured {
             = new List<Variable>();
 
         /// <summary>
+        ///     meta type
+        /// </summary>
+        public MetaStructuredTypeDeclaration MetaType { get; set; }
+
+        /// <summary>
         ///     add a method definition
         /// </summary>
         /// <param name="completeName">method name</param>
@@ -90,10 +95,9 @@ namespace PasPasPas.Typings.Structured {
         /// <summary>
         ///     add a field definition
         /// </summary>
-        /// <param name="completeName">complete name</param>
-        /// <param name="typeDef">type definition</param>
-        public void AddField(string completeName, ITypeDefinition typeDef)
-            => Fields.Add(new Variable() { Name = completeName, SymbolType = typeDef });
+        /// <param name="variable">variable name</param>
+        public void AddField(Variable variable)
+            => Fields.Add(variable);
 
         /// <summary>
         ///     resolve a symbol

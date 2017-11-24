@@ -81,13 +81,13 @@ namespace PasPasPas.Typings.Common {
                     if (name.Length == 1)
                         return entry;
 
-                    return ResolveNameByEntry(name.RemoveFirstPart(), entry.TypeId);
+                    return ResolveNameByEntry(name.RemoveFirstPart(), entry);
                 }
 
                 for (var i = scope.entries.Count - 1; i >= 0; i--) {
                     entry = scope.entries[i];
                     if (entry.Kind == ScopeEntryKind.UnitReference) {
-                        var importedEntry = ResolveNameByEntry(name, entry.TypeId);
+                        var importedEntry = ResolveNameByEntry(name, entry);
                         if (importedEntry != null)
                             return importedEntry;
                     }
@@ -102,21 +102,32 @@ namespace PasPasPas.Typings.Common {
         /// <summary>
         ///     resolve a name by entry
         /// </summary>
-        /// <param name="scopedName"></param>
-        /// <param name="typeId">given type id</param>
+        /// <param name="entry">scope entry</param>
         /// <returns></returns>
-        private ScopeEntry ResolveNameByEntry(ScopedName scopedName, int typeId) {
-            var type = typeRegistry.GetTypeByIdOrUndefinedType(typeId);
+        private ScopeEntry ResolveNameByEntry(ScopedName scopedName, ScopeEntry entry) {
+            var type = typeRegistry.GetTypeByIdOrUndefinedType(entry.TypeId);
             var kind = type.TypeKind;
 
             if (kind == CommonTypeKind.Unit && type is UnitType unit)
                 return ResolveNameInUnit(unit, scopedName);
             else if (kind == CommonTypeKind.ClassType && type is StructuredTypeDeclaration structType)
                 return ResolveNameInStructuredType(structType, scopedName);
+            else if (kind == CommonTypeKind.ClassReferenceType && type is MetaStructuredTypeDeclaration metaType)
+                return ResolveNameInMetaType(metaType, scopedName);
 
             return null;
         }
 
+        private ScopeEntry ResolveNameInMetaType(MetaStructuredTypeDeclaration metaType, ScopedName scopedName) {
+
+            if (metaType.TryToResolve(scopedName.FirstPart, out var entry)) {
+                if (scopedName.Length == 1)
+                    return entry;
+            }
+
+            return null;
+
+        }
 
         private ScopeEntry ResolveNameInStructuredType(StructuredTypeDeclaration structType, ScopedName scopedName) {
 

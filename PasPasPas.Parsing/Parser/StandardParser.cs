@@ -7,8 +7,6 @@ using System;
 using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.Tokenizer.Patterns;
 using PasPasPas.Infrastructure.Files;
-using PasPasPas.Infrastructure.Environment;
-using PasPasPas.Infrastructure.Log;
 using PasPasPas.Options.Bundles;
 
 namespace PasPasPas.Parsing.Parser {
@@ -3040,6 +3038,10 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             if (MatchIdentifier() && (!Match(TokenKind.Private, TokenKind.Protected, TokenKind.Public, TokenKind.Published, TokenKind.Automated, TokenKind.Strict))) {
+                if (mode == ClassDeclarationMode.Fields && result.ClassItem) {
+                    ErrorMissingToken(TokenKind.Var);
+                    mode = ClassDeclarationMode.ClassFields;
+                }
 
                 if (mode == ClassDeclarationMode.Fields || mode == ClassDeclarationMode.ClassFields) {
                     result.FieldDeclaration = ParseClassFieldDeclararation(result);

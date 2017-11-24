@@ -1657,6 +1657,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region BindingDirective
 
+        /// <summary>
+        ///     start visiting a binding directive
+        /// </summary>
+        /// <param name="directive"></param>
         public void StartVisit(BindingDirective directive) {
             var parent = LastValue as IDirectiveTarget;
             var result = new MethodDirective();
@@ -1823,6 +1827,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         }
 
+        /// <summary>
+        ///     end visting a record declaration
+        /// </summary>
+        /// <param name="recordDeclaration"></param>
         public void EndVisit(RecordDeclaration recordDeclaration) {
             var parentType = LastValue as StructuredType;
             CurrentMemberVisibility.Reset(parentType);
@@ -2020,6 +2028,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         }
 
+        /// <summary>
+        ///     end visiting an interface declaration
+        /// </summary>
+        /// <param name="interfaceDeclaration"></param>
         public void EndVisit(InterfaceDefinition interfaceDeclaration) {
             var parentType = LastValue as StructuredType;
             CurrentMemberVisibility.Reset(parentType);
@@ -2049,6 +2061,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region ClassHelper
 
+        /// <summary>
+        ///     start visiting a class helper definition
+        /// </summary>
+        /// <param name="classHelper"></param>
         public void StartVisit(ClassHelperDef classHelper) {
             var typeTarget = LastTypeDeclaration;
             var result = new StructuredType();
@@ -2072,6 +2088,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region ClassHelperItem
 
+        /// <summary>
+        ///     start visiting a class helper item
+        /// </summary>
+        /// <param name="classHelperItem"></param>
         public void StartVisit(ClassHelperItem classHelperItem) {
             var parentType = LastValue as StructuredType;
 
@@ -2297,6 +2317,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region CaseStatement
 
+        /// <summary>
+        ///     start visiting a case statement
+        /// </summary>
+        /// <param name="caseStatement"></param>
         public void StartVisit(CaseStatement caseStatement) {
             var target = LastValue as IStatementTarget;
             var result = new StructuredStatement();
@@ -2321,6 +2345,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region CaseItem
 
+        /// <summary>
+        ///     start visiting a case item
+        /// </summary>
+        /// <param name="caseItem"></param>
         public void StartVisit(CaseItem caseItem) {
             var target = LastValue as IStatementTarget;
             var result = new StructuredStatement();
@@ -2333,6 +2361,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region CaseLabel
 
+        /// <summary>
+        ///     start visiting a case label
+        /// </summary>
+        /// <param name="caseLabel"></param>
         public void StartVisit(CaseLabel caseLabel) {
             if (caseLabel.EndExpression != null) {
                 var lastExpression = LastExpression;
@@ -2391,6 +2423,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region AsmBlock
 
+        /// <summary>
+        ///     start visiting an assembler block
+        /// </summary>
+        /// <param name="block"></param>
         public void StartVisit(AsmBlock block) {
             var statementTarget = LastValue as IStatementTarget;
             var blockTarget = LastValue as IBlockTarget;
@@ -2406,6 +2442,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region AsmPseudoOp
 
+        /// <summary>
+        ///     start visiting an pseudo operator
+        /// </summary>
+        /// <param name="op"></param>
         public void StartVisit(AsmPseudoOp op) {
             var statementTarget = LastValue as BlockOfAssemblerStatements;
             var result = new AssemblerStatement();
@@ -2470,6 +2510,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region AsmStatement
 
+        /// <summary>
+        ///     start visiting an assembler statement
+        /// </summary>
+        /// <param name="statement"></param>
         public void StartVisit(AsmStatement statement) {
             var parent = LastValue as BlockOfAssemblerStatements;
             var result = new AssemblerStatement();
@@ -2485,6 +2529,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region ParseAssemblyOperand
 
+        /// <summary>
+        ///     start visting an assembly operand
+        /// </summary>
+        /// <param name="statement"></param>
         public void StartVisit(AsmOperand statement) {
 
             if (statement.LeftTerm != null && statement.RightTerm != null) {
@@ -2509,6 +2557,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region AsmExpression
 
+        /// <summary>
+        ///     start visting an assembler expression
+        /// </summary>
+        /// <param name="statement"></param>
         public void StartVisit(AsmExpression statement) {
 
             if (statement.Offset != null) {
@@ -2551,6 +2603,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #endregion
         #region AsmTerm
 
+        /// <summary>
+        ///     start visting an assembler term
+        /// </summary>
+        /// <param name="statement"></param>
         public void StartVisit(AsmTerm statement) {
 
             if (statement.Kind != TokenKind.Undefined) {
@@ -2695,6 +2751,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         #region AsmFactor
 
+        /// <summary>
+        ///     start visiting an asm factor
+        /// </summary>
+        /// <param name="factor"></param>
         public void StartVisit(AsmFactor factor) {
             var expression = LastExpression;
 
@@ -3089,24 +3149,59 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         private void AddToStack(object part, AbstractSyntaxPartBase result)
             => visitor.WorkingStack.Push(new WorkingStackEntry(part, result));
 
+        /// <summary>
+        ///     end visit a case statement
+        /// </summary>
+        /// <param name="element"></param>
+        /// <param name="child"></param>
         public void EndVisitChild(CaseStatement element, ISyntaxPart child) {
         }
 
+        /// <summary>
+        ///     end visiting a type name
+        /// </summary>
+        /// <param name="element"></param>
+        /// <param name="child"></param>
         public void EndVisitChild(TypeName element, ISyntaxPart child) {
         }
 
+        /// <summary>
+        ///     end visiting a simple element
+        /// </summary>
+        /// <param name="element"></param>
+        /// <param name="child"></param>
         public void EndVisitChild(SimpleType element, ISyntaxPart child) {
         }
 
+        /// <summary>
+        ///     end visiting a method directive
+        /// </summary>
+        /// <param name="element"></param>
+        /// <param name="child"></param>
         public void EndVisitChild(MethodDirectives element, ISyntaxPart child) {
         }
 
+        /// <summary>
+        ///     end visit a function directive
+        /// </summary>
+        /// <param name="element"></param>
+        /// <param name="child"></param>
         public void EndVisitChild(FunctionDirectives element, ISyntaxPart child) {
         }
 
+        /// <summary>
+        ///     end visiting a try statement
+        /// </summary>
+        /// <param name="element"></param>
+        /// <param name="child"></param>
         public void EndVisitChild(TryStatement element, ISyntaxPart child) {
         }
 
+        /// <summary>
+        ///     end visiting an if statement
+        /// </summary>
+        /// <param name="element"></param>
+        /// <param name="child"></param>
         public void EndVisitChild(IfStatement element, ISyntaxPart child) {
         }
     }
