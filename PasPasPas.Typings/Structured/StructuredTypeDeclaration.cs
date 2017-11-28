@@ -123,8 +123,54 @@ namespace PasPasPas.Typings.Structured {
                     return true;
                 }
 
+            foreach (var method in Methods)
+                if (string.Equals(method.Name, symbolName, StringComparison.OrdinalIgnoreCase)) {
+                    entry = new ScopeEntry(ScopeEntryKind.ObjectMethod) { TypeId = this.TypeId, SymbolName = symbolName };
+                    return true;
+                }
+
+            if (BaseClass != null && BaseClass is StructuredTypeDeclaration baseType)
+                return baseType.TryToResolve(symbolName, out entry);
+
             entry = null;
             return false;
+        }
+
+        /// <summary>
+        ///     resolve a method
+        /// </summary>
+        /// <param name="signature"></param>
+        /// <param name="symbolName">method name</param>
+        /// <returns></returns>
+        public ITypeDefinition ResolveMethod(string symbolName, Signature signature) {
+
+            foreach (var method in Methods)
+                if (string.Equals(method.Name, symbolName, StringComparison.OrdinalIgnoreCase)) {
+
+                    foreach (var paramGroup in method.Parameters) {
+
+                        var paramCount = paramGroup.Parameters == null ? 0 : paramGroup.Parameters.Count;
+
+                        if (paramCount != signature.Length)
+                            continue;
+
+                        var match = true;
+
+                        for (var i = 0; paramGroup.Parameters != null && i < paramGroup.Parameters.Count; i++) {
+                            match = match && paramGroup[i].SymbolType.TypeId == signature[i];
+                        }
+
+                        if (!match)
+                            continue;
+
+                        return paramGroup.ResultType;
+                    }
+                }
+
+            if (BaseClass != null && BaseClass is StructuredTypeDeclaration baseType)
+                return baseType.ResolveMethod(symbolName, signature);
+
+            return TypeRegistry.GetTypeByIdOrUndefinedType(TypeIds.ErrorType);
         }
     }
 }

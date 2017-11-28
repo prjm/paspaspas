@@ -23,6 +23,7 @@ namespace PasPasPasTests.Types {
             AssertDeclTypeDef<StructuredTypeDeclaration>("class procedure x(); end", (d) => d.Methods[0].Parameters[0].Parameters == null);
             AssertDeclTypeDef<StructuredTypeDeclaration>("class function x(): String; end", (d) => d.Methods[0].Parameters[0].ResultType?.TypeId == TypeIds.StringType);
             AssertDeclTypeDef<StructuredTypeDeclaration>("class procedure x(a: Integer): String; end", (d) => d.Methods[0].Parameters[0].Parameters[0]?.SymbolType.TypeId == TypeIds.IntegerType);
+            AssertDeclTypeDef("class function z(): integer; end", "x.z()", typeKind: CommonTypeKind.IntegerType);
         }
 
         [Fact]

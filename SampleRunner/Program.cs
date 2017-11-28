@@ -8,6 +8,10 @@ using SampleRunner.Scenarios;
 
 namespace SampleRunner {
 
+    /// <summary>
+    ///     the sample runner is used to test different feature sets 
+    ///     of the p3 library
+    /// </summary>
     class Program {
 
         static void Main(string[] args) {

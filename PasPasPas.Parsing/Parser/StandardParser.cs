@@ -2070,10 +2070,10 @@ namespace PasPasPas.Parsing.Parser {
         #region GenericNamespaceName
 
         [Rule("GenericNamespaceName", "NamespaceName [ GenericSuffix ]")]
-        private GenericNamespaceName ParseGenericNamespaceName(IExtendableSyntaxPart parent, bool advancedCheck = false) {
+        private GenericNamespaceName ParseGenericNamespaceName(IExtendableSyntaxPart parent, bool advancedCheck = false, bool inDesignator = false) {
             var result = new GenericNamespaceName();
             parent.Add(result);
-            result.Name = ParseNamespaceName(result);
+            result.Name = ParseNamespaceName(result, false, inDesignator);
             if (Match(TokenKind.AngleBracketsOpen)) {
                 if (!advancedCheck) {
                     result.GenericPart = ParseGenericSuffix(result);
@@ -3497,7 +3497,7 @@ namespace PasPasPas.Parsing.Parser {
         #region ParseTypeName
 
         [Rule("TypeName", "'string' | 'ansistring' | 'shortstring' | 'unicodestring' | 'widestring' | (NamespaceName [ GenericSuffix ]) ")]
-        private TypeName ParseTypeName(IExtendableSyntaxPart parent) {
+        private TypeName ParseTypeName(IExtendableSyntaxPart parent, bool inDesignator = false) {
             var result = new TypeName();
             parent.Add(result);
 
@@ -3507,10 +3507,53 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             do {
-                ParseGenericNamespaceName(result, true);
-            } while (ContinueWith(result, TokenKind.Dot));
+                ParseGenericNamespaceName(result, true, inDesignator);
+            } while ((!inDesignator || !IsLastDisignatorPart()) && ContinueWith(result, TokenKind.Dot));
 
             return result;
+        }
+
+        private bool IsLastDisignatorPart() {
+            var angleBracesCount = 0;
+            var lookaheadCount = 1;
+
+            while (!Tokenizer.BaseTokenizer.AtEof) {
+                var tokenKind = Tokenizer.LookAhead(lookaheadCount).Value.Kind;
+
+                if ((angleBracesCount == 0) && (tokenKind == TokenKind.Dot))
+                    return false;
+
+                if ((angleBracesCount == 0) && (tokenKind == TokenKind.OpenBraces))
+                    return true;
+
+                if ((angleBracesCount == 0) && (tokenKind == TokenKind.OpenParen))
+                    return true;
+
+                if (tokenKind == TokenKind.Semicolon)
+                    return false;
+
+                if (tokenKind == TokenKind.CloseBraces)
+                    return false;
+
+                if (tokenKind == TokenKind.CloseParen)
+                    return false;
+
+                if (tokenKind == TokenKind.End)
+                    return false;
+
+                if (tokenKind == TokenKind.LessThen)
+                    angleBracesCount++;
+
+                if (tokenKind == TokenKind.GreaterThen)
+                    angleBracesCount--;
+
+                if (angleBracesCount < 0)
+                    return false;
+
+                lookaheadCount++;
+            }
+
+            return true;
         }
 
         #endregion
@@ -3960,7 +4003,7 @@ namespace PasPasPas.Parsing.Parser {
             parent.Add(result);
             result.Inherited = ContinueWith(result, TokenKind.Inherited);
             if (MatchIdentifier(TokenKind.String, TokenKind.ShortString, TokenKind.AnsiString, TokenKind.WideString, TokenKind.String)) {
-                result.Name = ParseTypeName(result);
+                result.Name = ParseTypeName(result, true);
             }
 
             ISyntaxPart item;
@@ -3977,16 +4020,20 @@ namespace PasPasPas.Parsing.Parser {
         [Rule("DesignatorItem", "'^' | '.' Ident [GenericSuffix] | '[' ExpressionList ']' | '(' [ FormattedExpression  { ',' FormattedExpression } ] ')'")]
         private ISyntaxPart ParseDesignatorItem(SyntaxPartBase parent, bool hasIdentifier) {
             if (Match(TokenKind.Circumflex)) {
-                var result = new DesignatorItem();
-                InitByTerminal(result, parent, TokenKind.Circumflex);
-                result.Dereference = true;
-                return result;
+                var refResult = new DesignatorItem();
+                InitByTerminal(refResult, parent, TokenKind.Circumflex);
+                refResult.Dereference = true;
+                return refResult;
             }
 
+            DesignatorItem result = null;
+
             if (Match(TokenKind.Dot)) {
-                var result = new DesignatorItem();
-                InitByTerminal(result, parent, TokenKind.Dot);
-                result.Subitem = RequireIdentifier(result);
+                if (result == null) {
+                    result = new DesignatorItem();
+                    InitByTerminal(result, parent, TokenKind.Dot);
+                    result.Subitem = RequireIdentifier(result, true);
+                }
 
                 if (Match(TokenKind.AngleBracketsOpen) &&
                     LookAheadIdentifier(1, new[] { TokenKind.String, TokenKind.ShortString, TokenKind.WideString, TokenKind.UnicodeString, TokenKind.AnsiString, TokenKind.Pointer }, false)) {
@@ -3995,20 +4042,23 @@ namespace PasPasPas.Parsing.Parser {
                         result.SubitemGenericType = ParseGenericSuffix(result);
                     }
                 }
-
-                return result;
             }
 
             if (Match(TokenKind.OpenBraces)) {
-                var result = new DesignatorItem();
-                InitByTerminal(result, parent, TokenKind.OpenBraces);
+                if (result == null) {
+                    result = new DesignatorItem();
+                    InitByTerminal(result, parent, TokenKind.OpenBraces);
+                }
+                else {
+                    ContinueWith(result, TokenKind.OpenBraces);
+                }
+
                 result.IndexExpression = ParseExpressions(result);
                 ContinueWithOrMissing(result, TokenKind.CloseBraces);
                 return result;
             }
 
             if (Match(TokenKind.OpenParen)) {
-
                 var prevDesignatorItem = parent.PartList.Count > 0 ? parent.PartList[parent.PartList.Count - 1] as DesignatorItem : null;
                 if (!hasIdentifier && (!IsDesignator()) && ((prevDesignatorItem == null) || (prevDesignatorItem.Subitem == null))) {
                     ContinueWithOrMissing(parent, TokenKind.OpenParen);
@@ -4017,8 +4067,14 @@ namespace PasPasPas.Parsing.Parser {
                     return children;
                 }
 
-                var result = new DesignatorItem();
-                InitByTerminal(result, parent, TokenKind.OpenParen);
+                if (result == null) {
+                    result = new DesignatorItem();
+                    InitByTerminal(result, parent, TokenKind.OpenParen);
+                }
+                else {
+                    ContinueWith(result, TokenKind.OpenParen);
+                }
+
                 if (!Match(TokenKind.CloseParen)) {
                     do {
                         var parameter = new Parameter();
@@ -4039,7 +4095,7 @@ namespace PasPasPas.Parsing.Parser {
                 return result;
             }
 
-            return null;
+            return result;
         }
 
         #endregion
@@ -4192,7 +4248,7 @@ return true;
 */
             false;
 
-        private NamespaceName ParseNamespaceName(IExtendableSyntaxPart parent, bool allowIn = false) {
+        private NamespaceName ParseNamespaceName(IExtendableSyntaxPart parent, bool allowIn = false, bool inDesignator = false) {
             var result = new NamespaceName();
             parent.Add(result);
 
@@ -4200,7 +4256,7 @@ return true;
                 if (!allowIn || !ContinueWith(result, TokenKind.In))
                     RequireIdentifier(result);
 
-            while (LookAheadIdentifier(1, new int[0], true) && ContinueWith(result, TokenKind.Dot)) {
+            while (LookAheadIdentifier(1, new int[0], true) && (!inDesignator || LookAhead(2, new int[] { TokenKind.Dot })) && ContinueWith(result, TokenKind.Dot)) {
                 RequireIdentifier(result, true);
             }
 

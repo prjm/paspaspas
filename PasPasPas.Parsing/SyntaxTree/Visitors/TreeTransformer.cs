@@ -2801,7 +2801,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 part.Kind = SymbolReferencePartKind.SubItem;
                 part.Name = ExtractSymbolName(designator.Subitem);
                 part.GenericType = ExtractGenericDefinition(part, designator.SubitemGenericType);
-                //return (AbstractSyntaxPart)part.GenericType ?? part;
+
+                if (designator.IndexExpression != null)
+                    part.Kind = SymbolReferencePartKind.ArrayIndex;
+                else if (designator.ParameterList)
+                    part.Kind = SymbolReferencePartKind.CallParameters;
+
                 return;
             }
 

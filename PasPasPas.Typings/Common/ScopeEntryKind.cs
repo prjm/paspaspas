@@ -23,6 +23,11 @@
         /// <summary>
         ///     unit reference
         /// </summary>
-        UnitReference
+        UnitReference,
+
+        /// <summary>
+        ///     callable object method
+        /// </summary>
+        ObjectMethod
     }
 }

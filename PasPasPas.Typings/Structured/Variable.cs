@@ -21,5 +21,10 @@ namespace PasPasPas.Typings.Structured {
         ///     parameter name
         /// </summary>
         public string Name { get; set; }
+
+        /// <summary>
+        ///     constant function parameter
+        /// </summary>
+        public bool ConstantParam { get; set; }
     }
 }

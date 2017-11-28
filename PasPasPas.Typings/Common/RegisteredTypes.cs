@@ -279,7 +279,15 @@ namespace PasPasPas.Typings.Common {
             RegisterSystemType(def, "TObject");
             RegisterSystemType(meta, "TClass");
             def.MetaType = meta;
-            def.Methods.Add(new Routine("Create", ProcedureKind.Constructor));
+            def.AddOrExtendMethod("Create", ProcedureKind.Constructor).AddParameterGroup();
+            def.AddOrExtendMethod("Free", ProcedureKind.Procedure).AddParameterGroup();
+            def.AddOrExtendMethod("DisposeOf", ProcedureKind.Procedure).AddParameterGroup();
+            def.AddOrExtendMethod("CleanupInstance", ProcedureKind.Procedure).AddParameterGroup();
+            def.AddOrExtendMethod("ClassType", ProcedureKind.Function).AddParameterGroup(GetTypeByIdOrUndefinedType(TypeIds.TClass));
+            def.AddOrExtendMethod("FieldAddress", ProcedureKind.Function).AddParameterGroup(//
+                "Name",
+                GetTypeByIdOrUndefinedType(TypeIds.ShortStringType), //
+                GetTypeByIdOrUndefinedType(TypeIds.GenericPointer))[0].ConstantParam = true;
         }
 
     }

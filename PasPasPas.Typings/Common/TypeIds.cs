@@ -6,6 +6,11 @@
     public static class TypeIds {
 
         /// <summary>
+        ///     no type
+        /// </summary>
+        public const int NoType = -4;
+
+        /// <summary>
         ///     system unit
         /// </summary>
         public const int SystemUnit = -3;

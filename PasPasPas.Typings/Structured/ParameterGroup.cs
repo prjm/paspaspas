@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using PasPasPas.Parsing.SyntaxTree.Types;
+using PasPasPas.Typings.Common;
 
 namespace PasPasPas.Typings.Structured {
 
@@ -35,5 +36,13 @@ namespace PasPasPas.Typings.Structured {
             Parameters.Add(result);
             return result;
         }
+
+        /// <summary>
+        ///     get a paramter by index
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        public Variable this[int index]
+            => Parameters[index];
     }
 }

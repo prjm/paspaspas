@@ -32,5 +32,11 @@ namespace PasPasPas.Typings.Common {
         ///     referenced type id
         /// </summary>
         public int TypeId { get; set; }
+
+        /// <summary>
+        ///     referenced symbol name
+        /// </summary>
+        /// <remarks>for object methods: reference method name</remarks>
+        public string SymbolName { get; set; }
     }
 }
