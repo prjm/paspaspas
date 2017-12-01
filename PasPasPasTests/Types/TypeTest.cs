@@ -3,6 +3,7 @@ using PasPasPas.Api;
 using PasPasPas.Options.DataTypes;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Parsing.SyntaxTree.Types;
+using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 using PasPasPas.Typings.Common;
 using PasPasPasTests.Common;
@@ -26,8 +27,9 @@ namespace PasPasPasTests.Types {
             Func<object, SymbolReferencePart> searchfunction = x => x as SymbolReferencePart;
             IExpression firstParam = null;
 
-            firstParam = EvaluateExpressionType(file, program, searchfunction, NativeIntSize.Undefined);
+            firstParam = EvaluateExpressionType(file, program, searchfunction, NativeIntSize.Undefined) as IExpression;
 
+            Assert.IsNotNull(firstParam);
             Assert.IsNotNull(firstParam.TypeInfo);
             Assert.AreEqual(typeId, firstParam.TypeInfo.TypeId);
 
@@ -108,11 +110,46 @@ namespace PasPasPasTests.Types {
             Func<object, SymbolReferencePart> searchfunction = x => x as SymbolReferencePart;
             IExpression firstParam = null;
 
-            firstParam = EvaluateExpressionType(file, program, searchfunction, intSize);
+            firstParam = EvaluateExpressionType<SymbolReferencePart>(file, program, searchfunction, intSize) as IExpression;
 
             var t = firstParam.TypeInfo as T;
             Assert.IsNotNull(t);
             Assert.IsTrue(test(t));
+        }
+
+        protected void AssertAssignmentCompat(string assignTo, string assignFrom, bool compat = true) {
+            Func<ITypeDefinition, ITypeDefinition, bool> test = (l, r) => {
+                Assert.IsNotNull(l);
+                Assert.IsNotNull(r);
+                var canBeAssigned = l.CanBeAssignedFrom(r);
+                return (compat && canBeAssigned) || (!compat && !canBeAssigned);
+            };
+
+            AssertTestForAssignment(assignTo, assignFrom, test);
+        }
+
+        protected void AssertTestForAssignment(string assignTo, string assignFrom, Func<ITypeDefinition, ITypeDefinition, bool> test) {
+            var typdef = $"ta = {assignTo}; tb = {assignFrom}";
+            var declaration = "a: ta; b: tb";
+            var statement = "a := b";
+            AssertTestForGenericStatement(typdef, declaration, statement, test);
+        }
+
+        protected void AssertTestForGenericStatement(string typedef, string declaration, string statement, Func<ITypeDefinition, ITypeDefinition, bool> test) {
+            var file = "SimpleExpr";
+            var program = $"program {file}; type {typedef}; var {declaration}; begin {statement}; end. ";
+            Func<object, StructuredStatement> searchfunction = x => x as StructuredStatement;
+            ISyntaxPart firstParam = null;
+
+            firstParam = EvaluateExpressionType(file, program, searchfunction, NativeIntSize.All32bit);
+
+            Assert.IsNotNull(firstParam);
+            var t = firstParam as StructuredStatement;
+            var l = t != null && t.Expressions.Count > 0 ? t.Expressions[0].TypeInfo : null;
+            var r = t != null && t.Expressions.Count > 1 ? t.Expressions[1].TypeInfo : null;
+            Assert.IsNotNull(t);
+            Assert.IsTrue(test(l, r));
+
         }
 
         /// <summary>
@@ -126,14 +163,14 @@ namespace PasPasPasTests.Types {
             Func<object, SymbolReferencePart> searchfunction = x => x as SymbolReferencePart;
             IExpression firstParam = null;
 
-            firstParam = EvaluateExpressionType(file, program, searchfunction, intSize);
+            firstParam = EvaluateExpressionType(file, program, searchfunction, intSize) as IExpression;
 
             Assert.IsNotNull(firstParam.TypeInfo);
             test(firstParam.TypeInfo);
         }
 
 
-        private IExpression EvaluateExpressionType(string file, string program, Func<object, SymbolReferencePart> searchfunction, NativeIntSize intSize) {
+        private ISyntaxPart EvaluateExpressionType<T>(string file, string program, Func<object, T> searchfunction, NativeIntSize intSize) where T : ISyntaxPart {
             IExpression firstParam;
             var env = CreateEnvironment(intSize);
             var api = new ParserApi(env);
@@ -145,16 +182,19 @@ namespace PasPasPasTests.Types {
                 var project = api.CreateAbstractSyntraxTree(tree);
                 api.AnnotateWithTypes(project);
 
-                var astVisitor = new AstVisitor<SymbolReferencePart>() { SearchFunction = searchfunction };
+                var astVisitor = new AstVisitor<T>() { SearchFunction = searchfunction };
                 project.Accept(astVisitor.AsVisitor());
 
                 Assert.IsNotNull(astVisitor.Result);
-                Assert.AreEqual(1, astVisitor.Result.Expressions.Count);
 
-                firstParam = astVisitor.Result.Expressions[0];
+                if (astVisitor.Result is SymbolReferencePart srp) {
+                    Assert.AreEqual(1, srp.Expressions.Count);
+                    firstParam = srp.Expressions[0];
+                    return firstParam;
+                }
+
+                return astVisitor.Result;
             }
-
-            return firstParam;
         }
     }
 }

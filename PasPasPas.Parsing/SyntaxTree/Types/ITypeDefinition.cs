@@ -22,5 +22,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Types {
         /// </summary>
         ITypeRegistry TypeRegistry { get; }
 
+        /// <summary>
+        ///     check if this type can be assigned from another type
+        /// </summary>
+        /// <param name="otherType">type which will be assigned to this type</param>
+        /// <returns><c>true</c> if the types are assignment compatible</returns>
+        bool CanBeAssignedFrom(ITypeDefinition otherType);
     }
 }

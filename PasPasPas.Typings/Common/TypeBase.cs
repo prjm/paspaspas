@@ -32,5 +32,19 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         public ITypeRegistry TypeRegistry { get; set; }
 
+        /// <summary>
+        ///     test if this type can be assigned from another type
+        /// </summary>
+        /// <param name="otherType">other type</param>
+        /// <returns><c>true</c> if the type can be assigned from</returns>
+        public virtual bool CanBeAssignedFrom(ITypeDefinition otherType) {
+            if (otherType.TypeId.In(TypeIds.ErrorType, TypeIds.NoType, TypeIds.UnspecifiedType))
+                return false;
+
+            if (otherType.TypeId == TypeId)
+                return true;
+
+            return false;
+        }
     }
 }

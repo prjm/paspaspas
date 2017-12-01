@@ -34,7 +34,8 @@ namespace PasPasPas.Typings.Common {
         IEndVisitor<StructuredType>,
         IStartVisitor<MethodDeclaration>, IEndVisitor<MethodDeclaration>,
         IEndVisitor<ParameterTypeDefinition>,
-        IEndVisitor<StructureFields> {
+        IEndVisitor<StructureFields>,
+        IEndVisitor<StructuredStatement> {
 
         private readonly IStartEndVisitor visitor;
         private readonly ITypedEnvironment environment;
@@ -613,6 +614,18 @@ namespace PasPasPas.Typings.Common {
                 else
                     typeDef.AddField(fieldDef);
             }
+        }
+
+        /// <summary>
+        ///     visit a statement
+        /// </summary>
+        /// <param name="element">statement to check</param>
+        public void EndVisit(StructuredStatement element) {
+            if (element.Kind == StructuredStatementKind.Assignment)
+                CheckAssigment(element);
+        }
+
+        private void CheckAssigment(StructuredStatement element) {
         }
     }
 }
