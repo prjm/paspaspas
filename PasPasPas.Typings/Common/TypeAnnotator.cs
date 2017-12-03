@@ -269,6 +269,12 @@ namespace PasPasPas.Typings.Common {
                 typeId = entry.TypeId;
             }
 
+            if (element.IsNewType) {
+                var newTypeId = RequireUserTypeId();
+                RegisterUserDefinedType(new TypeAlias(newTypeId, typeId, true));
+                typeId = newTypeId;
+            }
+
             element.TypeInfo = GetTypeByIdOrUndefinedType(typeId);
         }
 

@@ -16,6 +16,16 @@ namespace PasPasPasTests.Types {
         public void TestTypeIdentity() {
             AssertAssignmentCompat("Integer", "System.Integer");
             AssertAssignmentCompat("System.Integer", "Integer");
+            AssertAssignmentCompat("Real", "Double");
+            AssertAssignmentCompat("TObject", "TObject");
+            AssertAssignmentCompat("type TObject", "type TObject", false);
+            AssertAssignmentCompat("type Integer", "type Int64");
+            AssertAssignmentCompat("type Int64", "type Integer");
+            AssertAssignmentCompat("type Single", "type Double");
+            AssertAssignmentCompat("type Real", "type Double");
+            AssertAssignmentCompat("type Real", "type Extended");
+            AssertAssignmentCompat("type Integer", "-3..3");
+            //AssertAssignmentCompat("type AnsiChar", "'b'..'r'");
         }
 
     }

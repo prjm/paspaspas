@@ -137,5 +137,10 @@
         ///     unit type
         /// </summary>
         Unit,
+
+        /// <summary>
+        ///     subrange type
+        /// </summary>
+        SubrangeType,
     }
 }

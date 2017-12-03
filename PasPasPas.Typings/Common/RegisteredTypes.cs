@@ -10,7 +10,6 @@ using PasPasPas.Typings.Structured;
 
 namespace PasPasPas.Typings.Common {
 
-
     /// <summary>
     ///     common type registry
     /// </summary>

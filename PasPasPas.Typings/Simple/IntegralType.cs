@@ -1,5 +1,4 @@
-﻿using PasPasPas.Infrastructure.Utils;
-using PasPasPas.Parsing.SyntaxTree.Types;
+﻿using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Typings.Common;
 
 namespace PasPasPas.Typings.Simple {
@@ -40,5 +39,26 @@ namespace PasPasPas.Typings.Simple {
         /// </summary>
         public int BitSize
             => bitSize;
+
+        /// <summary>
+        ///     test for assignment type compatibility
+        /// </summary>
+        /// <param name="otherType">other type to check</param>
+        /// <returns></returns>
+        public override bool CanBeAssignedFrom(ITypeDefinition otherType) {
+
+            if (otherType.TypeKind == CommonTypeKind.IntegerType)
+                return true;
+
+            if (otherType.TypeKind == CommonTypeKind.Int64Type)
+                return true;
+
+            if (otherType.TypeKind == CommonTypeKind.SubrangeType && otherType is SubrangeType subrange) {
+                var subrangeBase = subrange.BaseType;
+                return subrangeBase.TypeKind == CommonTypeKind.IntegerType || subrangeBase.TypeKind == CommonTypeKind.Int64Type;
+            }
+
+            return base.CanBeAssignedFrom(otherType);
+        }
     }
 }

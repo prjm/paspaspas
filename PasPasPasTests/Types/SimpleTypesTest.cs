@@ -18,8 +18,8 @@ namespace PasPasPasTests.Types {
 
         [Fact]
         public void TestSubrangeTypes() {
-            AssertDeclType("3..5", typeKind: CommonTypeKind.IntegerType);
-            AssertDeclType("'a'..'z'", typeKind: CommonTypeKind.WideCharType);
+            AssertDeclType("3..5", typeKind: CommonTypeKind.SubrangeType);
+            AssertDeclType("'a'..'z'", typeKind: CommonTypeKind.SubrangeType);
         }
 
         [Fact]

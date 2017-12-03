@@ -70,7 +70,8 @@ namespace PasPasPas.Typings.Common {
             kind == CommonTypeKind.BooleanType ||
             kind == CommonTypeKind.EnumerationType ||
             kind == CommonTypeKind.Int64Type ||
-            kind == CommonTypeKind.IntegerType;
+            kind == CommonTypeKind.IntegerType ||
+            kind == CommonTypeKind.SubrangeType;
 
         /// <summary>
         ///     test if the type kind is an ordinal type

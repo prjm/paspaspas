@@ -32,6 +32,28 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         public ITypeRegistry TypeRegistry { get; set; }
 
+        private bool CanBeAssignedFromAlias(TypeAlias alias) {
+
+            if (alias.TypeKind == CommonTypeKind.IntegerType)
+                return true;
+
+            if (alias.TypeKind == CommonTypeKind.Int64Type)
+                return true;
+
+            if (alias.TypeKind == CommonTypeKind.FloatType)
+                return true;
+
+            return !alias.IsNewType;
+        }
+
+        private ITypeDefinition ResolveAlias(ITypeDefinition typeDefinition) {
+            while (typeDefinition is TypeAlias alias && CanBeAssignedFromAlias(alias)) {
+                typeDefinition = alias.BaseType;
+            }
+
+            return typeDefinition;
+        }
+
         /// <summary>
         ///     test if this type can be assigned from another type
         /// </summary>
@@ -43,6 +65,13 @@ namespace PasPasPas.Typings.Common {
 
             if (otherType.TypeId == TypeId)
                 return true;
+
+            var baseType = ResolveAlias(this);
+            var anotherType = ResolveAlias(otherType);
+
+            if (baseType != this || anotherType != otherType) {
+                return baseType.CanBeAssignedFrom(anotherType);
+            }
 
             return false;
         }

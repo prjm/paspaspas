@@ -36,5 +36,22 @@ namespace PasPasPas.Typings.Simple {
         /// </summary>
         public int BitSize
             => 64;
+
+        /// <summary>
+        ///     test for assignment type compatibility
+        /// </summary>
+        /// <param name="otherType">other type to check</param>
+        /// <returns></returns>
+        public override bool CanBeAssignedFrom(ITypeDefinition otherType) {
+
+            if (otherType.TypeKind == CommonTypeKind.IntegerType)
+                return true;
+
+            if (otherType.TypeKind == CommonTypeKind.Int64Type)
+                return true;
+
+            return base.CanBeAssignedFrom(otherType);
+        }
+
     }
 }

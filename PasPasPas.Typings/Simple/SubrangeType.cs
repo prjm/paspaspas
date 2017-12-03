@@ -28,7 +28,32 @@ namespace PasPasPas.Typings.Simple {
         ///     get the type kind
         /// </summary>
         public override CommonTypeKind TypeKind
-            => TypeRegistry.GetTypeByIdOrUndefinedType(baseTypeId).TypeKind;
+            => CommonTypeKind.SubrangeType;
+
+        /// <summary>
+        ///     test for assignment type compatibility
+        /// </summary>
+        /// <param name="otherType">other type to check</param>
+        /// <returns></returns>
+        public override bool CanBeAssignedFrom(ITypeDefinition otherType) {
+
+            if (otherType.TypeKind == CommonTypeKind.SubrangeType && otherType is SubrangeType otherSubrange) {
+
+
+            }
+
+            if (BaseType.CanBeAssignedFrom(otherType)) {
+                return true;
+            }
+
+            return base.CanBeAssignedFrom(otherType);
+        }
+
+        /// <summary>
+        ///     base type
+        /// </summary>
+        public ITypeDefinition BaseType
+            => TypeRegistry.GetTypeByIdOrUndefinedType(baseTypeId);
 
     }
 }

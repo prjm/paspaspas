@@ -22,6 +22,19 @@ namespace PasPasPas.Typings.Simple {
         public override CommonTypeKind TypeKind
             => CommonTypeKind.FloatType;
 
+        /// <summary>
+        ///     test for assignment type compatibility
+        /// </summary>
+        /// <param name="otherType">other type to check</param>
+        /// <returns></returns>
+        public override bool CanBeAssignedFrom(ITypeDefinition otherType) {
+
+            if (otherType.TypeKind == CommonTypeKind.FloatType)
+                return true;
+
+            return base.CanBeAssignedFrom(otherType);
+        }
+
 
     }
 }
