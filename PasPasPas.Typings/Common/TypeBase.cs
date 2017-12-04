@@ -43,6 +43,12 @@ namespace PasPasPas.Typings.Common {
             if (alias.TypeKind == CommonTypeKind.FloatType)
                 return true;
 
+            if (alias.TypeKind == CommonTypeKind.AnsiCharType)
+                return true;
+
+            if (alias.TypeKind == CommonTypeKind.WideCharType)
+                return true;
+
             return !alias.IsNewType;
         }
 

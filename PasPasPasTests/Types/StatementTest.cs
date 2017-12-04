@@ -24,8 +24,10 @@ namespace PasPasPasTests.Types {
             AssertAssignmentCompat("type Single", "type Double");
             AssertAssignmentCompat("type Real", "type Double");
             AssertAssignmentCompat("type Real", "type Extended");
+            AssertAssignmentCompat("type AnsiChar", "AnsiChar");
+            AssertAssignmentCompat("WideChar", "type WideChar");
             AssertAssignmentCompat("type Integer", "-3..3");
-            //AssertAssignmentCompat("type AnsiChar", "'b'..'r'");
+            AssertAssignmentCompat("type Char", "'b'..'r'");
         }
 
     }
