@@ -23,5 +23,21 @@ namespace PasPasPas.Typings.Simple {
         /// </summary>
         public override CommonTypeKind TypeKind
             => CommonTypeKind.BooleanType;
+
+        /// <summary>
+        ///     test for assignment type compatibility
+        /// </summary>
+        /// <param name="otherType">other type to check</param>
+        /// <returns></returns>
+        public override bool CanBeAssignedFrom(ITypeDefinition otherType) {
+
+            if (otherType.TypeKind == CommonTypeKind.SubrangeType && otherType is SubrangeType subrange) {
+                var subrangeBase = subrange.BaseType;
+                return subrangeBase.TypeKind == CommonTypeKind.BooleanType;
+            }
+
+            return base.CanBeAssignedFrom(otherType);
+        }
+
     }
 }

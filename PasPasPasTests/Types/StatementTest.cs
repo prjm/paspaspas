@@ -28,6 +28,9 @@ namespace PasPasPasTests.Types {
             AssertAssignmentCompat("WideChar", "type WideChar");
             AssertAssignmentCompat("type Integer", "-3..3");
             AssertAssignmentCompat("type Char", "'b'..'r'");
+            AssertAssignmentCompat("type Boolean", "false..true");
+            AssertAssignmentCompat("(e1, e2, e3)", "e1..e3");
+            ;
         }
 
     }

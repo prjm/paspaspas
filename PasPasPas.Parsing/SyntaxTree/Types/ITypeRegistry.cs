@@ -41,7 +41,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Types {
         ///     register a new type
         /// </summary>
         /// <param name="typeDef"></param>
-        void RegisterType(ITypeDefinition typeDef);
+        ITypeDefinition RegisterType(ITypeDefinition typeDef);
 
         /// <summary>
         ///     generate a new user type id

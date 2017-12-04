@@ -54,5 +54,21 @@ namespace PasPasPas.Typings.Simple {
 
             values.Add(new EnumValue(symbolName, enumValue));
         }
+
+        /// <summary>
+        ///     test for assignment type compatibility
+        /// </summary>
+        /// <param name="otherType">other type to check</param>
+        /// <returns></returns>
+        public override bool CanBeAssignedFrom(ITypeDefinition otherType) {
+
+            if (otherType.TypeKind == CommonTypeKind.SubrangeType && otherType is SubrangeType subrange) {
+                var subrangeBase = subrange.BaseType;
+                return subrangeBase.TypeId == TypeId;
+            }
+
+            return base.CanBeAssignedFrom(otherType);
+        }
+
     }
 }

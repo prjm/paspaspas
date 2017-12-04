@@ -28,6 +28,11 @@
         /// <summary>
         ///     callable object method
         /// </summary>
-        ObjectMethod
+        ObjectMethod,
+
+        /// <summary>
+        ///     enum value
+        /// </summary>
+        EnumValue
     }
 }

@@ -49,6 +49,12 @@ namespace PasPasPas.Typings.Common {
             if (alias.TypeKind == CommonTypeKind.WideCharType)
                 return true;
 
+            if (alias.TypeKind == CommonTypeKind.BooleanType)
+                return true;
+
+            if (alias.TypeKind == CommonTypeKind.EnumerationType)
+                return true;
+
             return !alias.IsNewType;
         }
 

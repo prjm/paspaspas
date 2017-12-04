@@ -288,7 +288,7 @@ namespace PasPasPas.Typings.Common {
                 var typeId = TypeIds.ErrorType;
                 var entry = scope.ResolveName(name);
 
-                if (entry != null && (entry.Kind == ScopeEntryKind.DeclaredVariable || entry.Kind == ScopeEntryKind.TypeName)) {
+                if (entry != null && (entry.Kind == ScopeEntryKind.DeclaredVariable || entry.Kind == ScopeEntryKind.TypeName || entry.Kind == ScopeEntryKind.EnumValue)) {
                     typeId = entry.TypeId;
                 }
                 else if (entry != null && (entry.Kind == ScopeEntryKind.ObjectMethod)) {
@@ -393,7 +393,7 @@ namespace PasPasPas.Typings.Common {
         ///     register a new type definition
         /// </summary>
         /// <param name="typeDef"></param>
-        private void RegisterUserDefinedType(ITypeDefinition typeDef)
+        private ITypeDefinition RegisterUserDefinedType(ITypeDefinition typeDef)
             => environment.TypeRegistry.RegisterType(typeDef);
 
         /// <summary>
@@ -422,6 +422,7 @@ namespace PasPasPas.Typings.Common {
                 return;
 
             typeDef.DefineEnumValue(element.SymbolName, false, -1);
+            scope.AddEntry(element.SymbolName, new ScopeEntry(ScopeEntryKind.EnumValue) { TypeId = typeDef.TypeId });
         }
 
         /// <summary>
@@ -432,41 +433,32 @@ namespace PasPasPas.Typings.Common {
 
             var left = element.RangeStart?.TypeInfo?.TypeKind;
             var right = element.RangeEnd?.TypeInfo?.TypeKind;
-            var typeId = RequireUserTypeId();
+            var type = GetTypeByIdOrUndefinedType(TypeIds.ErrorType);
 
             if (left.HasValue && element.RangeEnd == null) {
-                element.TypeInfo = new Simple.SubrangeType(typeId, element.RangeStart.TypeInfo.TypeId);
-                return;
+                type = RegisterUserDefinedType(new Simple.SubrangeType(RequireUserTypeId(), element.RangeStart.TypeInfo.TypeId));
             }
-
-            if (left.HasValue && right.HasValue) {
+            else if (left.HasValue && right.HasValue) {
 
                 if (left.Value.Integral() && right.Value.Integral()) {
                     var baseTypeId = environment.TypeRegistry.GetSmallestIntegralTypeOrNext(element.RangeStart.TypeInfo.TypeId, element.RangeEnd.TypeInfo.TypeId);
-                    element.TypeInfo = new Simple.SubrangeType(typeId, baseTypeId);
-                    environment.TypeRegistry.RegisterType(element.TypeInfo);
-                    return;
+                    type = RegisterUserDefinedType(new Simple.SubrangeType(RequireUserTypeId(), baseTypeId));
                 }
-
-                if (left.Value == CommonTypeKind.WideCharType && right.Value == CommonTypeKind.WideCharType &&
+                else if (//
+                    CommonTypeKind.WideCharType.All(left.Value, right.Value) ||
+                    CommonTypeKind.AnsiCharType.All(left.Value, right.Value) ||
+                    CommonTypeKind.BooleanType.All(left.Value, right.Value)) {
+                    var baseTypeId = element.RangeStart.TypeInfo.TypeId;
+                    type = RegisterUserDefinedType(new Simple.SubrangeType(RequireUserTypeId(), baseTypeId));
+                }
+                else if (CommonTypeKind.EnumerationType.All(left.Value, right.Value) &&
                     element.RangeStart.TypeInfo.TypeId == element.RangeEnd.TypeInfo.TypeId) {
                     var baseTypeId = element.RangeStart.TypeInfo.TypeId;
-                    element.TypeInfo = new Simple.SubrangeType(typeId, baseTypeId);
-                    environment.TypeRegistry.RegisterType(element.TypeInfo);
-                    return;
+                    type = RegisterUserDefinedType(new Simple.SubrangeType(RequireUserTypeId(), baseTypeId));
                 }
-
-                if (left.Value == CommonTypeKind.EnumerationType && right.Value == CommonTypeKind.EnumerationType &&
-                    element.RangeStart.TypeInfo.TypeId == element.RangeEnd.TypeInfo.TypeId) {
-                    var baseTypeId = element.RangeStart.TypeInfo.TypeId;
-                    element.TypeInfo = new Simple.SubrangeType(typeId, baseTypeId);
-                    environment.TypeRegistry.RegisterType(element.TypeInfo);
-                    return;
-                }
-
             }
 
-            element.TypeInfo = GetTypeByIdOrUndefinedType(TypeIds.ErrorType);
+            element.TypeInfo = type;
         }
 
         /// <summary>
