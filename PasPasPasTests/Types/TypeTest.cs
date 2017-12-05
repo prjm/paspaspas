@@ -103,7 +103,6 @@ namespace PasPasPasTests.Types {
         ///     test the type of a declared variable expressiom
         /// </summary>
         /// <param name="declaration">declareation</param>
-        /// <param name="typeId">type id to find</param>
         protected void AssertDeclTypeDef<T>(string declaration, Func<T, Boolean> test, NativeIntSize intSize = NativeIntSize.Undefined, string expression = "x") where T : class, ITypeDefinition {
             var file = "SimpleExpr";
             var program = $"program {file}; type t = {declaration}; var x : t; begin Writeln({expression}); end. ";
@@ -156,7 +155,6 @@ namespace PasPasPasTests.Types {
         ///     test the type of a declared types
         /// </summary>
         /// <param name="declaration">declareation</param>
-        /// <param name="typeId">type id to find</param>
         protected void AssertDeclType(string declaration, Action<ITypeDefinition> test, NativeIntSize intSize = NativeIntSize.Undefined) {
             var file = "SimpleExpr";
             var program = $"program {file}; var x : {declaration}; begin Writeln(x); end. ";

@@ -1,17 +1,21 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="../Common.targets" />
+
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <RuntimeIdentifiers>win-x64;win-x86</RuntimeIdentifiers>
   </PropertyGroup>
+  
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DebugType>pdbonly</DebugType>
-    <DebugSymbols>True</DebugSymbols>
-    <LangVersion>7.1</LangVersion>
+    <LangVersion>$(PasPasPasCsLanguageVersion)</LangVersion>
   </PropertyGroup>
+
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <LangVersion>7.1</LangVersion>
+    <LangVersion>$(PasPasPasCsLanguageVersion)</LangVersion>
   </PropertyGroup>
+  
   <ItemGroup>
     <ProjectReference Include="..\PasPasPas.Api\PasPasPas.Api.csproj" />
     <ProjectReference Include="..\PasPasPas.Building\PasPasPas.Building.csproj" />
