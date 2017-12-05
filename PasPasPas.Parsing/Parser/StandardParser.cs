@@ -2743,7 +2743,7 @@ namespace PasPasPas.Parsing.Parser {
                 result.Guid = ParseInterfaceGuid(result);
             result.Items = ParseInterfaceItems(result);
 
-            if (result.Items != null && result.Items.PartList.Count > 0)
+            if (result.Items != null && result.Items.PartList != null && result.Items.PartList.Count > 0)
                 ContinueWithOrMissing(result, TokenKind.End);
             else
                 result.ForwardDeclaration = !ContinueWith(result, TokenKind.End);
@@ -2936,7 +2936,7 @@ namespace PasPasPas.Parsing.Parser {
             if (!Match(TokenKind.Semicolon))
                 result.ClassItems = ParseClassItems(result);
 
-            if (result.ClassItems != null && result.ClassItems.PartList.Count > 0)
+            if (result.ClassItems != null && result.ClassItems.PartList != null && result.ClassItems.PartList.Count > 0)
                 ContinueWithOrMissing(result, TokenKind.End);
             else
                 result.ForwardDeclaration = !ContinueWith(result, TokenKind.End);
@@ -4059,7 +4059,7 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             if (Match(TokenKind.OpenParen)) {
-                var prevDesignatorItem = parent.PartList.Count > 0 ? parent.PartList[parent.PartList.Count - 1] as DesignatorItem : null;
+                var prevDesignatorItem = parent.PartList != null && parent.PartList.Count > 0 ? parent.PartList[parent.PartList.Count - 1] as DesignatorItem : null;
                 if (!hasIdentifier && (!IsDesignator()) && ((prevDesignatorItem == null) || (prevDesignatorItem.Subitem == null))) {
                     ContinueWithOrMissing(parent, TokenKind.OpenParen);
                     var children = ParseConstantExpression(parent, true);

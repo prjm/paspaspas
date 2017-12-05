@@ -17,7 +17,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
                 if (Parts == null || PartList.Count < 1)
                     return null;
 
-
                 return IdentifierValue(PartList[PartList.Count - 1]);
             }
         }

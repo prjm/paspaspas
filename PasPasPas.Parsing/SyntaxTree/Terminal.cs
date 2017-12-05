@@ -33,12 +33,6 @@ namespace PasPasPas.Parsing.SyntaxTree {
             => token;
 
         /// <summary>
-        ///     empty part list
-        /// </summary>
-        public override IEnumerable<ISyntaxPart> Parts { get; }
-            = new EmptyEnumerable<ISyntaxPart>();
-
-        /// <summary>
         ///     token value
         /// </summary>
         public string Value

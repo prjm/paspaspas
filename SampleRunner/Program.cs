@@ -17,7 +17,7 @@ namespace SampleRunner {
         static void Main(string[] args) {
 
             var testPath = @"C:\temp\Testfiles\spring.pas";
-            var mode = SampleMode.ReadFile;
+            var mode = SampleMode.CreateAbstractSyntaxTree;
             var repeat = 1;
             var result = new StringBuilder();
             var environment = new DefaultEnvironment();
@@ -89,6 +89,14 @@ namespace SampleRunner {
 
                 case SampleMode.ParseFile:
                     action = (b) => Scenarios.ParseFile.Run(b, environment, testPath, repeat);
+                    break;
+
+                case SampleMode.CreateAbstractSyntaxTree:
+                    action = (b) => Scenarios.CreateAst.Run(b, environment, testPath, repeat);
+                    break;
+
+                case SampleMode.TypeAnnotateFile:
+                    action = (b) => Scenarios.TypeAnnotateFile.Run(b, environment, testPath, repeat);
                     break;
 
                 default:

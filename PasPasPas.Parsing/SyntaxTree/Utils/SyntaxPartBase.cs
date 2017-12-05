@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 using PasPasPas.Parsing.SyntaxTree.Utils;
+using PasPasPas.Infrastructure.Utils;
+using System.Linq;
+using System;
 
 namespace PasPasPas.Parsing.SyntaxTree {
 
@@ -13,8 +16,7 @@ namespace PasPasPas.Parsing.SyntaxTree {
         /// <summary>
         ///     create a new syntax part base
         /// </summary>
-        protected SyntaxPartBase() =>
-            parts = new SyntaxPartCollection<ISyntaxPart>(this);
+        protected SyntaxPartBase() { }
 
         /// <summary>
         ///     parent node
@@ -24,10 +26,16 @@ namespace PasPasPas.Parsing.SyntaxTree {
         /// <summary>
         ///     syntax parts
         /// </summary>
-        public virtual IEnumerable<ISyntaxPart> Parts
-            => parts;
+        public IEnumerable<ISyntaxPart> Parts {
+            get {
+                if (parts == null)
+                    return Enumerable.Empty<ISyntaxPart>();
+                else
+                    return parts;
+            }
+        }
 
-        private readonly ISyntaxPartList<ISyntaxPart> parts;
+        private ISyntaxPartList<ISyntaxPart> parts = null;
 
         /// <summary>
         ///     get the list of syntax parts
@@ -40,7 +48,7 @@ namespace PasPasPas.Parsing.SyntaxTree {
         /// </summary>
         public string LastTerminalValue {
             get {
-                if (parts.Count < 1)
+                if (parts == null || parts.Count < 1)
                     return string.Empty;
 
                 var terminal = parts[parts.Count - 1] as Terminal;
@@ -57,9 +65,8 @@ namespace PasPasPas.Parsing.SyntaxTree {
         /// </summary>
         public int LastTerminalKind {
             get {
-                if (parts.Count < 1)
+                if (parts == null || parts.Count < 1)
                     return TokenKind.Undefined;
-
 
                 var terminal = parts[parts.Count - 1] as Terminal;
 
@@ -75,9 +82,8 @@ namespace PasPasPas.Parsing.SyntaxTree {
         /// </summary>
         public Token FirstTerminalToken {
             get {
-                if (parts.Count < 1)
+                if (parts == null || parts.Count < 1)
                     return Token.Empty;
-
 
                 var terminal = parts[0] as Terminal;
 
@@ -93,9 +99,8 @@ namespace PasPasPas.Parsing.SyntaxTree {
         /// </summary>
         public Token LastTerminalToken {
             get {
-                if (parts.Count < 1)
+                if (parts == null || parts.Count < 1)
                     return Token.Empty;
-
 
                 var terminal = parts[parts.Count - 1] as Terminal;
 
@@ -123,15 +128,23 @@ namespace PasPasPas.Parsing.SyntaxTree {
         ///     add an iten
         /// </summary>
         /// <param name="newChildItem"></param>
-        public void Add(ISyntaxPart newChildItem)
-            => parts.Add(newChildItem);
+        public void Add(ISyntaxPart newChildItem) {
+            if (parts == null)
+                parts = new SyntaxPartCollection<ISyntaxPart>(this);
+
+            parts.Add(newChildItem);
+        }
 
         /// <summary>
         ///     remove an item
         /// </summary>
         /// <param name="lastSymbol"></param>
-        public void Remove(ISyntaxPart lastSymbol)
-            => parts.Remove(lastSymbol);
+        public void Remove(ISyntaxPart lastSymbol) {
+            if (parts != null)
+                parts.Remove(lastSymbol);
+            else
+                throw new InvalidOperationException();
+        }
 
         /// <summary>
         ///     value of a terminal
@@ -163,8 +176,10 @@ namespace PasPasPas.Parsing.SyntaxTree {
         /// <typeparam name="T">visitor type</typeparam>
         /// <param name="element">element to visit</param>
         /// <param name="visitor">visitor</param>
-        protected void AcceptParts<T>(T element, IStartEndVisitor visitor)
-            => AcceptParts<T>(element, Parts, visitor);
+        protected void AcceptParts<T>(T element, IStartEndVisitor visitor) {
+            if (parts != null)
+                AcceptParts(element, parts, visitor);
+        }
 
         /// <summary>
         ///     visit childs of a syntax part

@@ -26,8 +26,18 @@
         BufferedTokenizeFile,
 
         /// <summary>
-        ///     parser a file
+        ///     parse a file
         /// </summary>
-        ParseFile
+        ParseFile,
+
+        /// <summary>
+        ///     parse a file, create an abstract syntax tree
+        /// </summary>
+        CreateAbstractSyntaxTree,
+
+        /// <summary>
+        ///     parse a file, create an abstract syntax tree, add type annotations
+        /// </summary>
+        TypeAnnotateFile,
     }
 }

@@ -47,6 +47,9 @@
     <Compile Include="..\SampleRunner\Scenarios\BufferedTokenize.cs">
       <Link>Scenarios\BufferedTokenize.cs</Link>
     </Compile>
+    <Compile Include="..\SampleRunner\Scenarios\CreateAst.cs">
+      <Link>Scenarios\CreateAst.cs</Link>
+    </Compile>
     <Compile Include="..\SampleRunner\Scenarios\ParseFile.cs">
       <Link>Scenarios\ParseFile.cs</Link>
     </Compile>
@@ -58,6 +61,9 @@
     </Compile>
     <Compile Include="..\SampleRunner\Scenarios\TokenizeFile.cs">
       <Link>Scenarios\TokenizeFile.cs</Link>
+    </Compile>
+    <Compile Include="..\SampleRunner\Scenarios\TypeAnnotateFile.cs">
+      <Link>Scenarios\TypeAnnotateFile.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
