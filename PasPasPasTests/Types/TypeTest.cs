@@ -24,7 +24,7 @@ namespace PasPasPasTests.Types {
         protected void AssertExprType(string expression, int typeId) {
             var file = "SimpleExpr";
             var program = $"program {file}; begin Writeln({expression}); end. ";
-            Func<object, SymbolReferencePart> searchfunction = x => x as SymbolReferencePart;
+            SymbolReferencePart searchfunction(object x) => x as SymbolReferencePart;
             IExpression firstParam = null;
 
             firstParam = EvaluateExpressionType(file, program, searchfunction, NativeIntSize.Undefined) as IExpression;
@@ -42,7 +42,7 @@ namespace PasPasPasTests.Types {
         /// <param name="typeId">type id to find</param>
         protected void AssertDeclType(string declaration, int typeId = TypeIds.UnspecifiedType, NativeIntSize intSize = NativeIntSize.Undefined, int typeSize = -1, CommonTypeKind typeKind = CommonTypeKind.UnknownType) {
 
-            Action<ITypeDefinition> tester = (ITypeDefinition def) => {
+            void tester(ITypeDefinition def) {
 
                 if (typeId != TypeIds.UnspecifiedType)
                     Assert.AreEqual(typeId, def.TypeId);
@@ -62,7 +62,7 @@ namespace PasPasPasTests.Types {
                     Assert.AreEqual(typeSize, sizedType.BitSize);
                 }
 
-            };
+            }
 
             AssertDeclType(declaration, tester, intSize);
         }
@@ -73,7 +73,7 @@ namespace PasPasPasTests.Types {
         /// <param name="typeId">type id to find</param>
         protected void AssertDeclTypeDef(string declaration, string expression = "x", int typeId = TypeIds.UnspecifiedType, NativeIntSize intSize = NativeIntSize.Undefined, int typeSize = -1, CommonTypeKind typeKind = CommonTypeKind.UnknownType) {
 
-            Func<ITypeDefinition, Boolean> tester = (ITypeDefinition def) => {
+            bool tester(ITypeDefinition def) {
 
                 if (typeId != TypeIds.UnspecifiedType)
                     Assert.AreEqual(typeId, def.TypeId);
@@ -94,19 +94,19 @@ namespace PasPasPasTests.Types {
                 }
 
                 return true;
-            };
+            }
 
-            AssertDeclTypeDef(declaration, tester, intSize, expression);
+            AssertDeclTypeDef<ITypeDefinition>(declaration, tester, intSize, expression);
         }
 
         /// <summary>
         ///     test the type of a declared variable expressiom
         /// </summary>
         /// <param name="declaration">declareation</param>
-        protected void AssertDeclTypeDef<T>(string declaration, Func<T, Boolean> test, NativeIntSize intSize = NativeIntSize.Undefined, string expression = "x") where T : class, ITypeDefinition {
+        protected void AssertDeclTypeDef<T>(string declaration, Func<T, bool> test, NativeIntSize intSize = NativeIntSize.Undefined, string expression = "x") where T : class, ITypeDefinition {
             var file = "SimpleExpr";
             var program = $"program {file}; type t = {declaration}; var x : t; begin Writeln({expression}); end. ";
-            Func<object, SymbolReferencePart> searchfunction = x => x as SymbolReferencePart;
+            SymbolReferencePart searchfunction(object x) => x as SymbolReferencePart;
             IExpression firstParam = null;
 
             firstParam = EvaluateExpressionType<SymbolReferencePart>(file, program, searchfunction, intSize) as IExpression;
@@ -116,19 +116,19 @@ namespace PasPasPasTests.Types {
             Assert.IsTrue(test(t));
         }
 
-        protected void AssertAssignmentCompat(string assignTo, string assignFrom, bool compat = true) {
-            Func<ITypeDefinition, ITypeDefinition, bool> test = (l, r) => {
+        protected void AssertAssignmentCompat(string assignTo, string assignFrom, bool compat = true, string predeclaration = "") {
+            bool test(ITypeDefinition l, ITypeDefinition r) {
                 Assert.IsNotNull(l);
                 Assert.IsNotNull(r);
                 var canBeAssigned = l.CanBeAssignedFrom(r);
                 return (compat && canBeAssigned) || (!compat && !canBeAssigned);
-            };
+            }
 
-            AssertTestForAssignment(assignTo, assignFrom, test);
+            AssertTestForAssignment(assignTo, assignFrom, test, predeclaration);
         }
 
-        protected void AssertTestForAssignment(string assignTo, string assignFrom, Func<ITypeDefinition, ITypeDefinition, bool> test) {
-            var typdef = $"ta = {assignTo}; tb = {assignFrom}";
+        protected void AssertTestForAssignment(string assignTo, string assignFrom, Func<ITypeDefinition, ITypeDefinition, bool> test, string predeclaration = "") {
+            var typdef = $"{predeclaration} ta = {assignTo}; tb = {assignFrom}";
             var declaration = "a: ta; b: tb";
             var statement = "a := b";
             AssertTestForGenericStatement(typdef, declaration, statement, test);
@@ -137,7 +137,7 @@ namespace PasPasPasTests.Types {
         protected void AssertTestForGenericStatement(string typedef, string declaration, string statement, Func<ITypeDefinition, ITypeDefinition, bool> test) {
             var file = "SimpleExpr";
             var program = $"program {file}; type {typedef}; var {declaration}; begin {statement}; end. ";
-            Func<object, StructuredStatement> searchfunction = x => x as StructuredStatement;
+            StructuredStatement searchfunction(object x) => x as StructuredStatement;
             ISyntaxPart firstParam = null;
 
             firstParam = EvaluateExpressionType(file, program, searchfunction, NativeIntSize.All32bit);
@@ -158,7 +158,7 @@ namespace PasPasPasTests.Types {
         protected void AssertDeclType(string declaration, Action<ITypeDefinition> test, NativeIntSize intSize = NativeIntSize.Undefined) {
             var file = "SimpleExpr";
             var program = $"program {file}; var x : {declaration}; begin Writeln(x); end. ";
-            Func<object, SymbolReferencePart> searchfunction = x => x as SymbolReferencePart;
+            SymbolReferencePart searchfunction(object x) => x as SymbolReferencePart;
             IExpression firstParam = null;
 
             firstParam = EvaluateExpressionType(file, program, searchfunction, intSize) as IExpression;

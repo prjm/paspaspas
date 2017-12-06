@@ -25,5 +25,24 @@ namespace PasPasPas.Typings.Structured {
         public override CommonTypeKind TypeKind
             => CommonTypeKind.SetType;
 
+        /// <summary>
+        ///     base type
+        /// </summary>
+        public ITypeDefinition BaseType
+            => TypeRegistry.GetTypeByIdOrUndefinedType(baseTypeId);
+
+        /// <summary>
+        ///     check if this type can be assigned from another type
+        /// </summary>
+        /// <param name="otherType"></param>
+        /// <returns></returns>
+        public override bool CanBeAssignedFrom(ITypeDefinition otherType) {
+
+            if (otherType.TypeKind == CommonTypeKind.SetType && otherType is SetType set) {
+                return BaseType.CanBeAssignedFrom(set.BaseType);
+            }
+
+            return base.CanBeAssignedFrom(otherType);
+        }
     }
 }

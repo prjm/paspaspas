@@ -2767,6 +2767,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <param name="designator"></param>
         public void StartVisit(DesignatorStatement designator) {
             var lastExpression = LastExpression;
+
+            if (lastExpression == null)
+                return;
+
             var result = new SymbolReference();
             InitNode(result, designator);
             if (designator.Inherited)
@@ -2785,6 +2789,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <param name="designator"></param>
         public void StartVisit(DesignatorItem designator) {
             var parent = LastValue as SymbolReference;
+
+            if (parent == null)
+                return;
 
             if (designator.Dereference) {
                 var part = new SymbolReferencePart();

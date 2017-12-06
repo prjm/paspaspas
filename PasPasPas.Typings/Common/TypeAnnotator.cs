@@ -502,9 +502,9 @@ namespace PasPasPas.Typings.Common {
             var typeDef = new ArrayType(typeId);
 
             if (element.TypeValue != null && element.TypeValue.TypeInfo != null)
-                typeDef.BaseType = element.TypeValue.TypeInfo;
-            else
-                typeDef.BaseType = GetTypeByIdOrUndefinedType(TypeIds.ErrorType);
+                typeDef.BaseTypeId = element.TypeValue.TypeInfo.TypeId;
+
+            typeDef.Packed = element.PackedType;
 
             foreach (var indexDef in element.IndexItems) {
                 if (indexDef.TypeInfo != null)
@@ -624,6 +624,11 @@ namespace PasPasPas.Typings.Common {
         }
 
         private void CheckAssigment(StructuredStatement element) {
+            var left = element.Expressions[0]?.TypeInfo;
+            var right = element.Expressions[1]?.TypeInfo;
+            if (left != null && right != null) {
+                left.CanBeAssignedFrom(right);
+            }
         }
     }
 }

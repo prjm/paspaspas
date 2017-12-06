@@ -32,7 +32,34 @@ namespace PasPasPas.Typings.Structured {
         /// <summary>
         ///     base type id
         /// </summary>
-        public ITypeDefinition BaseType { get; set; }
+        public int BaseTypeId { get; set; }
+            = TypeIds.ErrorType;
 
+        /// <summary>
+        ///     base type id
+        /// </summary>
+        public ITypeDefinition BaseType
+            => TypeRegistry.GetTypeByIdOrUndefinedType(BaseTypeId);
+
+        /// <summary>
+        ///     <c>true</c> if packed array
+        /// </summary>
+        public bool Packed { get; set; }
+            = false;
+
+        /// <summary>
+        ///     check if the type can be assigned from another type
+        /// </summary>
+        /// <param name="otherType"></param>
+        /// <returns></returns>
+        public override bool CanBeAssignedFrom(ITypeDefinition otherType) {
+
+            if (otherType.TypeKind == CommonTypeKind.ArrayType && otherType is ArrayType array) {
+                var isPackedString = (BaseType.TypeKind.IsChar() && array.BaseType.TypeKind.IsChar()) && (Packed && array.Packed);
+                return isPackedString;
+            }
+
+            return base.CanBeAssignedFrom(otherType);
+        }
     }
 }
