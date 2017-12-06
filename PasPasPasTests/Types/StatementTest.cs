@@ -39,6 +39,7 @@ namespace PasPasPasTests.Types {
             AssertAssignmentCompat("false..true", "false..true");
             AssertAssignmentCompat("set of -4..4", "set of -3..3");
             AssertAssignmentCompat("packed array[0..3] of char", "packed array[0..3] of char");
+            AssertAssignmentCompat("string[5]", "string[1]");
         }
 
     }

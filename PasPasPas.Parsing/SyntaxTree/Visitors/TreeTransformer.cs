@@ -1065,6 +1065,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             var result = new MetaType();
             InitNode(result, stringType);
             result.Kind = TokenKindMapper.ForMetaType(stringType.Kind);
+
+            if (result.Kind == MetaTypeKind.ShortString && stringType.StringLength == null)
+                result.Kind = MetaTypeKind.ShortStringDefault;
+
             typeTarget.TypeValue = result;
         }
 

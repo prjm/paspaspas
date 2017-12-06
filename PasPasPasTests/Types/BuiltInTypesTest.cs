@@ -1,5 +1,6 @@
 ﻿using System;
 using PasPasPas.Options.DataTypes;
+using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Typings.Common;
 using PasPasPas.Typings.Structured;
 using Xunit;
@@ -163,6 +164,7 @@ namespace PasPasPasTests.Types {
         [Fact]
         public void TestStringTypes() {
             AssertDeclType("String", TypeIds.StringType);
+            AssertDeclType("String[324]", typeKind: CommonTypeKind.ShortStringType);
             AssertDeclType("AnsiString", TypeIds.AnsiStringType);
             AssertDeclType("UnicodeString", TypeIds.UnicodeStringType);
             AssertDeclType("WideString", TypeIds.WideStringType);

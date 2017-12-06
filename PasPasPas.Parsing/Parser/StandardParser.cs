@@ -2210,6 +2210,7 @@ namespace PasPasPas.Parsing.Parser {
             if (ContinueWith(result, TokenKind.String)) {
                 result.Kind = TokenKind.String;
                 if (ContinueWith(result, TokenKind.OpenBraces)) {
+                    result.Kind = TokenKind.ShortString;
                     result.StringLength = ParseExpression(result);
                     ContinueWithOrMissing(result, TokenKind.CloseBraces);
                 };
@@ -4287,6 +4288,9 @@ return true;
             var token = Tokenizer.LookAhead(lookAhead);
 
             if (!allowReservedWords && reservedWords.Contains(token.Value.Kind))
+                return false;
+
+            if (string.IsNullOrWhiteSpace(token.Value.Value))
                 return false;
 
             return Tokenizer.Keywords.ContainsKey(token.Value.Value);

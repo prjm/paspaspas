@@ -49,7 +49,7 @@ namespace PasPasPas.Typings.Operators {
 
             if (Kind == DefinedOperators.ConcatOperation) {
 
-                if ((!left.Textual()) || (!right.Textual()))
+                if ((!left.IsTextual()) || (!right.IsTextual()))
                     return TypeIds.ErrorType;
 
                 if (CommonTypeKind.WideStringType.One(left, right))

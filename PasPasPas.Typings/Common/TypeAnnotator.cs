@@ -108,7 +108,7 @@ namespace PasPasPas.Typings.Common {
                 var right = element.RightOperand?.TypeInfo?.TypeKind;
 
                 if (left.HasValue && right.HasValue) {
-                    if (left.Value.Textual() && right.Value.Textual())
+                    if (left.Value.IsTextual() && right.Value.IsTextual())
                         element.TypeInfo = GetTypeOfOperator(DefinedOperators.ConcatOperation, element.LeftOperand?.TypeInfo, element.RightOperand?.TypeInfo);
                     else if (left.Value.Numerical() && right.Value.Numerical())
                         element.TypeInfo = GetTypeOfOperator(DefinedOperators.PlusOperation, element.LeftOperand?.TypeInfo, element.RightOperand?.TypeInfo);
@@ -306,8 +306,15 @@ namespace PasPasPas.Typings.Common {
             }
 
             else if (element.Kind == MetaTypeKind.ShortString) {
+                var userTypeId = RequireUserTypeId();
+                var userType = RegisterUserDefinedType(new ShortStringType(userTypeId));
+                element.TypeInfo = GetTypeByIdOrUndefinedType(userTypeId);
+            }
+
+            else if (element.Kind == MetaTypeKind.ShortStringDefault) {
                 element.TypeInfo = GetTypeByIdOrUndefinedType(TypeIds.ShortStringType);
             }
+
 
             else if (element.Kind == MetaTypeKind.UnicodeString) {
                 element.TypeInfo = GetTypeByIdOrUndefinedType(TypeIds.UnicodeStringType);

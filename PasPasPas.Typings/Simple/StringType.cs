@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using PasPasPas.Infrastructure.Utils;
-using PasPasPas.Parsing.SyntaxTree.Types;
+﻿using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Typings.Common;
 
 namespace PasPasPas.Typings.Simple {
@@ -21,7 +15,19 @@ namespace PasPasPas.Typings.Simple {
         public StringTypeBase(int withId) : base(withId) {
         }
 
+        /// <summary>
+        ///     check if this type can be assigned from another type 
+        /// </summary>
+        /// <param name="otherType"></param>
+        /// <returns></returns>
+        public override bool CanBeAssignedFrom(ITypeDefinition otherType) {
 
+            if (otherType.TypeKind.IsString() && otherType is StringTypeBase stringType) {
+                return true;
+            }
+
+            return base.CanBeAssignedFrom(otherType);
+        }
     }
 
     /// <summary>

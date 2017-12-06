@@ -61,7 +61,7 @@ namespace PasPasPas.Typings.Operators {
             if (left.Numerical() && right.Numerical())
                 return TypeIds.BooleanType;
 
-            if (left.Textual() && right.Textual())
+            if (left.IsTextual() && right.IsTextual())
                 return TypeIds.BooleanType;
 
 

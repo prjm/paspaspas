@@ -49,6 +49,12 @@
         ///     generic pointer type
         /// </summary>
         Pointer = 8,
+
+        /// <summary>
+        ///     short string (System.ShortString) with length 255
+        /// </summary>
+        ShortStringDefault = 9,
+
     }
 
 
