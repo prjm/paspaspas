@@ -32,6 +32,12 @@ namespace PasPasPas.Typings.Simple {
             if (otherType.TypeKind == CommonTypeKind.FloatType)
                 return true;
 
+            if (otherType.TypeKind == CommonTypeKind.Int64Type)
+                return true;
+
+            if (otherType.TypeKind == CommonTypeKind.IntegerType)
+                return true;
+
             return base.CanBeAssignedFrom(otherType);
         }
 

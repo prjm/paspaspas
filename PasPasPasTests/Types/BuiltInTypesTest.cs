@@ -63,7 +63,7 @@ namespace PasPasPasTests.Types {
 
         [Fact]
         public void TestTObjectType() {
-            Func<string, Func<StructuredTypeDeclaration, bool>> hasMethod = q => (t => t?.HasMethod(q) ?? false);
+            Func<StructuredTypeDeclaration, bool> hasMethod(string q) => (t => t?.HasMethod(q) ?? false);
 
             AssertDeclType("TObject", TypeIds.TObject);
             AssertDeclType("System.TObject", TypeIds.TObject);

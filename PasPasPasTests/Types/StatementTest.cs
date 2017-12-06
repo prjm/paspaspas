@@ -40,6 +40,17 @@ namespace PasPasPasTests.Types {
             AssertAssignmentCompat("set of -4..4", "set of -3..3");
             AssertAssignmentCompat("packed array[0..3] of char", "packed array[0..3] of char");
             AssertAssignmentCompat("string[5]", "string[1]");
+            AssertAssignmentCompat("real", "integer");
+            AssertAssignmentCompat("extended", "byte");
+            AssertAssignmentCompat("integer", "real", false);
+            AssertAssignmentCompat("string", "AnsiChar");
+            AssertAssignmentCompat("string", "WideChar");
+            AssertAssignmentCompat("string", "string");
+            AssertAssignmentCompat("string", "WideString");
+            AssertAssignmentCompat("string", "UnicodeString");
+            AssertAssignmentCompat("string", "ShortString");
+            AssertAssignmentCompat("string", "RawByteString");
+            AssertAssignmentCompat("string", "string[23]");
         }
 
     }

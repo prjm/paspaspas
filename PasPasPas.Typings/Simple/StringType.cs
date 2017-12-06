@@ -22,7 +22,11 @@ namespace PasPasPas.Typings.Simple {
         /// <returns></returns>
         public override bool CanBeAssignedFrom(ITypeDefinition otherType) {
 
-            if (otherType.TypeKind.IsString() && otherType is StringTypeBase stringType) {
+            if (otherType.TypeKind.IsString()) {
+                return true;
+            }
+
+            if (otherType.TypeKind.IsChar()) {
                 return true;
             }
 
