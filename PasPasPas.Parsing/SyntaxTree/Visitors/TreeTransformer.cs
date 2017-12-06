@@ -1156,30 +1156,25 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// </summary>
         /// <param name="block"></param>
         public void StartVisit(CompoundStatement block) {
+            var lastValue = LastValue;
 
             if (block.AssemblerBlock != null) {
-                var statementTarget = LastValue as IStatementTarget;
-                var blockTarget = LastValue as IBlockTarget;
                 var result = new BlockOfAssemblerStatements();
-                InitNode(result, block, LastValue);
-                if (statementTarget != null)
-                    statementTarget.Statements.Add(result);
-                else if (blockTarget != null)
+                InitNode(result, block, lastValue);
+                if (lastValue is IStatementTarget statements)
+                    statements.Statements.Add(result);
+                else if (lastValue is IBlockTarget blockTarget)
                     blockTarget.Block = result;
 
             }
-
             else {
-                var statementTarget = LastValue as IStatementTarget;
-                var blockTarget = LastValue as IBlockTarget;
                 var result = new BlockOfStatements();
-                InitNode(result, block, LastValue);
-                if (statementTarget != null)
-                    statementTarget.Statements.Add(result);
-                else if (blockTarget != null)
+                InitNode(result, block, lastValue);
+                if (lastValue is IStatementTarget statements)
+                    statements.Statements.Add(result);
+                else if (lastValue is IBlockTarget blockTarget)
                     blockTarget.Block = result;
             }
-
         }
 
         /// <summary>
@@ -1341,12 +1336,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             var parent = LastValue as StructuredType;
             var result = new StructureProperty();
             InitNode(result, property);
-            var declItem = property.ParentItem as IStructuredTypeMember;
             result.Name = ExtractSymbolName(property.PropertyName);
             parent.Properties.Add(result, LogSource);
             result.Visibility = CurrentMemberVisibility[parent];
 
-            if (declItem != null) {
+            if (property.ParentItem is IStructuredTypeMember declItem) {
                 result.Attributes = ExtractAttributes(declItem.Attributes, CurrentUnit);
             }
 
@@ -1719,10 +1713,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <param name="parent"></param>
         /// <param name="child"></param>
         public void StartVisitChild(MethodDirectives parent, ISyntaxPart child) {
-            var hints = child as HintingInformation;
             var lastValue = LastValue as IDirectiveTarget;
 
-            if (hints != null && lastValue != null) {
+            if (child is HintingInformation hints && lastValue != null) {
                 lastValue.Hints = ExtractHints(hints, lastValue.Hints);
             }
         }
@@ -1736,10 +1729,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <param name="parent"></param>
         /// <param name="child"></param>
         public void StartVisitChild(FunctionDirectives parent, ISyntaxPart child) {
-            var hints = child as HintingInformation;
             var lastValue = LastValue as IDirectiveTarget;
 
-            if (hints != null && lastValue != null) {
+            if (child is HintingInformation hints && lastValue != null) {
                 lastValue.Hints = ExtractHints(hints, lastValue.Hints);
             }
         }
@@ -1899,7 +1891,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 fields = structType.Fields.Items;
             }
 
-            var declItem = fieldDeclaration.ParentItem as RecordItem;
             var result = new StructureFields();
             InitNode(result, fieldDeclaration);
             result.Visibility = CurrentMemberVisibility[structType];
@@ -1908,7 +1899,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 fields.Add(result);
 
             IList<SymbolAttribute> extractedAttributes = null;
-            if (declItem != null)
+            if (fieldDeclaration.ParentItem is RecordItem declItem)
                 extractedAttributes = ExtractAttributes(declItem.Attributes, CurrentUnit);
 
             foreach (var part in fieldDeclaration.Names.Parts) {
@@ -2556,11 +2547,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// </summary>
         /// <param name="block"></param>
         public void StartVisit(AsmBlock block) {
-            var statementTarget = LastValue as IStatementTarget;
             var blockTarget = LastValue as IBlockTarget;
             var result = new BlockOfAssemblerStatements();
             InitNode(result, block);
-            if (statementTarget != null)
+            if (blockTarget is IStatementTarget statementTarget)
                 statementTarget.Statements.Add(result);
             else if (blockTarget != null)
                 blockTarget.Block = result;
@@ -2619,17 +2609,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         public void StartVisit(LocalAsmLabel label) {
             var value = string.Empty;
             foreach (var token in label.Parts) {
-                var terminal = token as Terminal;
-                var integer = token as StandardInteger;
-                var ident = token as Identifier;
 
-                if (terminal != null)
+                if (token is Terminal terminal)
                     value = string.Concat(value, terminal.Value);
 
-                if (integer != null)
+                if (token is StandardInteger integer)
                     value = string.Concat(value, integer.FirstTerminalToken.Value);
 
-                if (ident != null)
+                if (token is Identifier ident)
                     value = string.Concat(value, ident.FirstTerminalToken.Value);
 
             }
