@@ -2878,7 +2878,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <param name="expr"></param>
         public void StartVisit(SetSection expr) {
             var lastExpression = LastExpression;
-            var result = new ArrayExpression();
+            var result = new SetExpression();
             InitNode(result, expr);
             lastExpression.Value = result;
         }
@@ -2891,7 +2891,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <param name="part"></param>
         public void StartVisit(SetSectnPart part) {
             if (part.Continuation != TokenKind.DotDot) {
-                var arrayExpression = LastExpression as ArrayExpression;
+                var arrayExpression = LastExpression as SetExpression;
 
                 if (arrayExpression == null)
                     return;

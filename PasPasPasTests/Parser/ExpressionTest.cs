@@ -82,6 +82,34 @@ namespace PasPasPasTests.Parser {
             TestConstant("'a'");
             TestConstant("'aa'");
             TestConstant("5; y = x", "y");
+            TestConstant("-3");
+            TestConstant("+3");
+            TestConstant("not 3");
+            TestConstant("3 or 4");
+            TestConstant("4 xor 3");
+            TestConstant("4 and 13");
+            TestConstant("4 - 34");
+            TestConstant("4 * 4");
+            TestConstant("12 div 4");
+            TestConstant("11 mod 4");
+            TestConstant("12 /  4");
+            TestConstant("12 shl  4");
+            TestConstant("12 shr  4");
+            TestConstant("12 =  4");
+            TestConstant("12 <>  4");
+            TestConstant("12 < 4");
+            TestConstant("12 > 4");
+            TestConstant("12 <= 4");
+            TestConstant("12 >= 4");
+            TestConstant("3 + 4");
+            TestConstant("3.0 + 4");
+            TestConstant("'a' + 'b'");
+            TestConstant("'as' + 'b'");
+            TestConstant("'a' + 'db'");
+            TestConstant("'ad' + 'db'");
+            TestConstant("[1,2,3,4]");
+            TestConstant("['a'..'z']");
+            TestConstant("(1,2,3)");
         }
 
     }

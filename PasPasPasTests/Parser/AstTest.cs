@@ -982,7 +982,7 @@ namespace PasPasPasTests.Parser {
 
         [Fact]
         public void TestSetExpressions() {
-            ArrayExpression r(object t) => (((t as CompilationUnit)?.ImplementationSymbols["p"] as MethodImplementation)?.Symbols["n"] as ConstantDeclaration)?.Value as ArrayExpression;
+            SetExpression r(object t) => (((t as CompilationUnit)?.ImplementationSymbols["p"] as MethodImplementation)?.Symbols["n"] as ConstantDeclaration)?.Value as SetExpression;
 
             RunAstTest("unit z.x; interface implementation procedure p; const n = [1,2,3]; begin l: s; end; end.", t => r(t)?.Expressions[0]?.GetType(), typeof(ConstantValue));
             RunAstTest("unit z.x; interface implementation procedure p; const n = [1..2,2,3]; begin l: s; end; end.", t => r(t)?.Expressions[0]?.GetType(), typeof(BinaryOperator));
@@ -1108,7 +1108,7 @@ namespace PasPasPasTests.Parser {
             RunAstTest("unit z.x; interface implementation procedure p; const n = 1 = 2; begin l: s; end; end.", t => r(t)?.Kind, ExpressionKind.EqualsSign);
             RunAstTest("unit z.x; interface implementation procedure p; const n = a is TObject; begin l: s; end; end.", t => r(t)?.Kind, ExpressionKind.Is);
             RunAstTest("unit z.x; interface implementation procedure p; const n = 1 in [1,2]; begin l: s; end; end.", t => r(t)?.Kind, ExpressionKind.In);
-            RunAstTest("unit z.x; interface implementation procedure p; const n = 1 in [1,2]; begin l: s; end; end.", t => r(t)?.RightOperand?.GetType(), typeof(ArrayExpression));
+            RunAstTest("unit z.x; interface implementation procedure p; const n = 1 in [1,2]; begin l: s; end; end.", t => r(t)?.RightOperand?.GetType(), typeof(SetExpression));
 
             RunAstTest("unit z.x; interface implementation procedure p; const n = 1 + 2; begin l: s; end; end.", t => r(t)?.Kind, ExpressionKind.Plus);
             RunAstTest("unit z.x; interface implementation procedure p; const n = 1 - 2; begin l: s; end; end.", t => r(t)?.Kind, ExpressionKind.Minus);

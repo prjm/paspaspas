@@ -13,6 +13,7 @@ using PasPasPas.Api;
 using PasPasPas.Typings.Common;
 using System.Windows.Media;
 using System;
+using PasPasPas.Typings.Structured;
 
 namespace P3SyntaxTreeViewer {
 
@@ -117,6 +118,16 @@ namespace P3SyntaxTreeViewer {
             if (cst is PasPasPas.Parsing.SyntaxTree.Types.ITypedSyntaxNode typeInfo && typeInfo.TypeInfo != null) {
                 treeViewItem.Header += " [" + typeInfo.TypeInfo.TypeId.ToString() + "]";
                 treeViewItem.Header += " " + typeInfo.TypeInfo.TypeKind.ToString();
+
+                if (typeInfo.TypeInfo is ArrayType array)
+                    treeViewItem.Header += " of " + array.BaseType?.TypeKind.ToString();
+
+                if (typeInfo.TypeInfo is PasPasPas.Typings.Simple.SubrangeType subrange)
+                    treeViewItem.Header += " of " + subrange.BaseType?.TypeKind.ToString();
+
+                if (typeInfo.TypeInfo is SetType set)
+                    treeViewItem.Header += " of " + set.BaseType?.TypeKind.ToString();
+
                 if (cst is IConstantValueNode constant && constant.IsConstant)
                     treeViewItem.Header += "*";
             }

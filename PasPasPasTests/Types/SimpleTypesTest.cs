@@ -34,8 +34,8 @@ namespace PasPasPasTests.Types {
         public void TestArrayTypes() {
             AssertDeclType("array [1..4] of Integer", typeKind: CommonTypeKind.ArrayType);
             AssertDeclType("array [1..4] of Integer", (td) => Assert.Equal(CommonTypeKind.IntegerType, (td as ArrayType)?.BaseType?.TypeKind));
-            AssertDeclType("array [1..4] of Integer", (td) => Assert.Equal(CommonTypeKind.IntegerType, (td as ArrayType)?.IndexTypes[0]?.TypeKind));
-            AssertDeclType("array [false..true] of Integer", (td) => Assert.Equal(CommonTypeKind.BooleanType, (td as ArrayType)?.IndexTypes[0]?.TypeKind));
+            AssertDeclType("array [1..4] of Integer", (td) => Assert.Equal(CommonTypeKind.IntegerType, ((td as ArrayType)?.IndexTypes[0] as SubrangeType)?.BaseType?.TypeKind));
+            AssertDeclType("array [false..true] of Integer", (td) => Assert.Equal(CommonTypeKind.BooleanType, ((td as ArrayType)?.IndexTypes[0] as SubrangeType)?.BaseType.TypeKind));
             AssertDeclType("array [Boolean] of Integer", (td) => Assert.Equal(CommonTypeKind.BooleanType, (td as ArrayType)?.IndexTypes[0]?.TypeKind));
             AssertDeclType("array [System.Boolean] of Integer", (td) => Assert.Equal(CommonTypeKind.BooleanType, (td as ArrayType)?.IndexTypes[0]?.TypeKind));
         }

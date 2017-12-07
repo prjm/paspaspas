@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Parsing.SyntaxTree.Types;
@@ -35,7 +36,9 @@ namespace PasPasPas.Typings.Common {
         IStartVisitor<MethodDeclaration>, IEndVisitor<MethodDeclaration>,
         IEndVisitor<ParameterTypeDefinition>,
         IEndVisitor<StructureFields>,
-        IEndVisitor<StructuredStatement> {
+        IEndVisitor<StructuredStatement>,
+        IEndVisitor<SetExpression>,
+        IEndVisitor<ArrayConstant> {
 
         private readonly IStartEndVisitor visitor;
         private readonly ITypedEnvironment environment;
@@ -94,95 +97,122 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="element"></param>
         public void EndVisit(BinaryOperator element) {
-            if (element.Kind == ExpressionKind.And) {
-                element.TypeInfo = GetTypeOfOperator(DefinedOperators.AndOperation, element.LeftOperand?.TypeInfo, element.RightOperand?.TypeInfo);
-            }
-            else if (element.Kind == ExpressionKind.Or) {
-                element.TypeInfo = GetTypeOfOperator(DefinedOperators.OrOperation, element.LeftOperand?.TypeInfo, element.RightOperand?.TypeInfo);
-            }
-            else if (element.Kind == ExpressionKind.Xor) {
-                element.TypeInfo = GetTypeOfOperator(DefinedOperators.XorOperation, element.LeftOperand?.TypeInfo, element.RightOperand?.TypeInfo);
-            }
+
+            ITypeDefinition leftType;
+            ITypeDefinition rightType;
+            var operatorId = -1;
+
+            if (element.LeftOperand != null && element.LeftOperand.TypeInfo != null)
+                leftType = element.LeftOperand.TypeInfo;
+            else
+                leftType = GetErrorType(element.LeftOperand);
+
+            if (element.RightOperand != null && element.RightOperand.TypeInfo != null)
+                rightType = element.RightOperand.TypeInfo;
+            else
+                rightType = GetErrorType(element.RightOperand);
+
+            if (element.Kind == ExpressionKind.And)
+                operatorId = DefinedOperators.AndOperation;
+            else if (element.Kind == ExpressionKind.Or)
+                operatorId = DefinedOperators.OrOperation;
+            else if (element.Kind == ExpressionKind.Xor)
+                operatorId = DefinedOperators.XorOperation;
+            else if (element.Kind == ExpressionKind.Minus)
+                operatorId = DefinedOperators.MinusOperation;
+            else if (element.Kind == ExpressionKind.Times)
+                operatorId = DefinedOperators.TimesOperation;
+            else if (element.Kind == ExpressionKind.Div)
+                operatorId = DefinedOperators.DivOperation;
+            else if (element.Kind == ExpressionKind.Mod)
+                operatorId = DefinedOperators.ModOperation;
+            else if (element.Kind == ExpressionKind.Slash)
+                operatorId = DefinedOperators.SlashOperation;
+            else if (element.Kind == ExpressionKind.Shl)
+                operatorId = DefinedOperators.ShlOperation;
+            else if (element.Kind == ExpressionKind.Shr)
+                operatorId = DefinedOperators.ShrOperation;
+            else if (element.Kind == ExpressionKind.EqualsSign)
+                operatorId = DefinedOperators.EqualsOperator;
+            else if (element.Kind == ExpressionKind.NotEquals)
+                operatorId = DefinedOperators.NotEqualsOperator;
+            else if (element.Kind == ExpressionKind.GreaterThen)
+                operatorId = DefinedOperators.GreaterThen;
+            else if (element.Kind == ExpressionKind.GreaterThenEquals)
+                operatorId = DefinedOperators.GreaterThenEqual;
+            else if (element.Kind == ExpressionKind.LessThen)
+                operatorId = DefinedOperators.LessThen;
+            else if (element.Kind == ExpressionKind.LessThenEquals)
+                operatorId = DefinedOperators.LessThenOrEqual;
+
             else if (element.Kind == ExpressionKind.Plus) {
 
-                var left = element.LeftOperand?.TypeInfo?.TypeKind;
-                var right = element.RightOperand?.TypeInfo?.TypeKind;
+                if (leftType.TypeKind.IsTextual() && leftType.TypeKind.IsTextual())
+                    operatorId = DefinedOperators.ConcatOperation;
+                else if (leftType.TypeKind.Numerical() && leftType.TypeKind.Numerical())
+                    operatorId = DefinedOperators.PlusOperation;
+            }
 
-                if (left.HasValue && right.HasValue) {
-                    if (left.Value.IsTextual() && right.Value.IsTextual())
-                        element.TypeInfo = GetTypeOfOperator(DefinedOperators.ConcatOperation, element.LeftOperand?.TypeInfo, element.RightOperand?.TypeInfo);
-                    else if (left.Value.Numerical() && right.Value.Numerical())
-                        element.TypeInfo = GetTypeOfOperator(DefinedOperators.PlusOperation, element.LeftOperand?.TypeInfo, element.RightOperand?.TypeInfo);
-                }
-            }
-            else if (element.Kind == ExpressionKind.Minus) {
-                element.TypeInfo = GetTypeOfOperator(DefinedOperators.MinusOperation, element.LeftOperand?.TypeInfo, element.RightOperand?.TypeInfo);
-            }
-            else if (element.Kind == ExpressionKind.Times) {
-                element.TypeInfo = GetTypeOfOperator(DefinedOperators.TimesOperation, element.LeftOperand?.TypeInfo, element.RightOperand?.TypeInfo);
-            }
-            else if (element.Kind == ExpressionKind.Div) {
-                element.TypeInfo = GetTypeOfOperator(DefinedOperators.DivOperation, element.LeftOperand?.TypeInfo, element.RightOperand?.TypeInfo);
-            }
-            else if (element.Kind == ExpressionKind.Mod) {
-                element.TypeInfo = GetTypeOfOperator(DefinedOperators.ModOperation, element.LeftOperand?.TypeInfo, element.RightOperand?.TypeInfo);
-            }
-            else if (element.Kind == ExpressionKind.Slash) {
-                element.TypeInfo = GetTypeOfOperator(DefinedOperators.SlashOperation, element.LeftOperand?.TypeInfo, element.RightOperand?.TypeInfo);
-            }
-            else if (element.Kind == ExpressionKind.Shl) {
-                element.TypeInfo = GetTypeOfOperator(DefinedOperators.ShlOperation, element.LeftOperand?.TypeInfo, element.RightOperand?.TypeInfo);
-            }
-            else if (element.Kind == ExpressionKind.Shr) {
-                element.TypeInfo = GetTypeOfOperator(DefinedOperators.ShrOperation, element.LeftOperand?.TypeInfo, element.RightOperand?.TypeInfo);
-            }
-            else if (element.Kind == ExpressionKind.EqualsSign) {
-                element.TypeInfo = GetTypeOfOperator(DefinedOperators.EqualsOperator, element.LeftOperand?.TypeInfo, element.RightOperand?.TypeInfo);
-            }
-            else if (element.Kind == ExpressionKind.NotEquals) {
-                element.TypeInfo = GetTypeOfOperator(DefinedOperators.NotEqualsOperator, element.LeftOperand?.TypeInfo, element.RightOperand?.TypeInfo);
-            }
-            else if (element.Kind == ExpressionKind.GreaterThen) {
-                element.TypeInfo = GetTypeOfOperator(DefinedOperators.GreaterThen, element.LeftOperand?.TypeInfo, element.RightOperand?.TypeInfo);
-            }
-            else if (element.Kind == ExpressionKind.GreaterThenEquals) {
-                element.TypeInfo = GetTypeOfOperator(DefinedOperators.GreaterThenEqual, element.LeftOperand?.TypeInfo, element.RightOperand?.TypeInfo);
-            }
-            else if (element.Kind == ExpressionKind.LessThen) {
-                element.TypeInfo = GetTypeOfOperator(DefinedOperators.LessThen, element.LeftOperand?.TypeInfo, element.RightOperand?.TypeInfo);
-            }
-            else if (element.Kind == ExpressionKind.LessThenEquals) {
-                element.TypeInfo = GetTypeOfOperator(DefinedOperators.LessThenOrEqual, element.LeftOperand?.TypeInfo, element.RightOperand?.TypeInfo);
-            }
             else if (element.Kind == ExpressionKind.RangeOperator) {
-                var left = element.LeftOperand?.TypeInfo?.TypeKind;
-                var right = element.RightOperand?.TypeInfo?.TypeKind;
-                var leftId = element.LeftOperand?.TypeInfo?.TypeId;
-                var rightId = element.RightOperand?.TypeInfo?.TypeId;
+                var left = leftType.TypeKind;
+                var right = rightType.TypeKind;
+                var leftId = leftType.TypeId;
+                var rightId = rightType.TypeId;
 
                 if (left.Ordinal() && right.Ordinal()) {
-                    if (left.Integral() && right.Integral())
-                        element.TypeInfo = GetTypeByIdOrUndefinedType(environment.TypeRegistry.GetSmallestIntegralTypeOrNext(leftId.Value, rightId.Value));
-                    else if (leftId.HasValue && rightId.HasValue && leftId.Value == rightId.Value)
-                        element.TypeInfo = GetTypeByIdOrUndefinedType(leftId.Value);
+                    if (left.Integral() && right.Integral()) {
+                        var baseType = GetTypeByIdOrUndefinedType(GetSmallestIntegralTypeOrNext(leftId, rightId));
+                        element.TypeInfo = RegisterUserDefinedType(new Simple.SubrangeType(RequireUserTypeId(), baseType.TypeId));
+                    }
+                    else if (leftId == rightId) {
+                        var baseType = GetTypeByIdOrUndefinedType(leftId);
+                        element.TypeInfo = RegisterUserDefinedType(new Simple.SubrangeType(RequireUserTypeId(), baseType.TypeId));
+                    }
+                    else
+                        element.TypeInfo = GetErrorType(element);
+
+                    element.IsConstant = element.LeftOperand.IsConstant && element.RightOperand.IsConstant;
                 }
             }
+
+            if (operatorId >= 0) {
+                element.TypeInfo = GetTypeOfOperator(operatorId, leftType, rightType);
+                element.IsConstant = element.LeftOperand.IsConstant && element.RightOperand.IsConstant;
+            }
         }
+
+        private int GetSmallestIntegralTypeOrNext(int leftId, int rightId)
+            => environment.TypeRegistry.GetSmallestIntegralTypeOrNext(leftId, rightId);
 
         /// <summary>
         ///     determine the type of an unary operator
         /// </summary>
         /// <param name="element">operator to determine the type of</param>
         public void EndVisit(UnaryOperator element) {
+
+            var operand = element.Value;
+
+            if (operand == null || operand.TypeInfo == null) {
+                element.TypeInfo = GetErrorType(element);
+                return;
+            }
+
             if (element.Kind == ExpressionKind.Not) {
-                element.TypeInfo = GetTypeOfOperator(DefinedOperators.NotOperation, element.Value?.TypeInfo);
+                element.TypeInfo = GetTypeOfOperator(DefinedOperators.NotOperation, operand.TypeInfo);
+                element.IsConstant = operand.IsConstant;
             }
             else if (element.Kind == ExpressionKind.UnaryMinus) {
-                element.TypeInfo = GetTypeOfOperator(DefinedOperators.UnaryMinus, element.Value?.TypeInfo);
+                element.TypeInfo = GetTypeOfOperator(DefinedOperators.UnaryMinus, operand.TypeInfo);
+                element.IsConstant = operand.IsConstant;
             }
             else if (element.Kind == ExpressionKind.UnaryPlus) {
-                element.TypeInfo = GetTypeOfOperator(DefinedOperators.UnaryPlus, element.Value?.TypeInfo);
+                element.TypeInfo = GetTypeOfOperator(DefinedOperators.UnaryPlus, operand.TypeInfo);
+                element.IsConstant = operand.IsConstant;
             }
+        }
+
+        private ITypeDefinition GetErrorType(ITypedSyntaxNode node) {
+            return GetTypeByIdOrUndefinedType(TypeIds.ErrorType);
         }
 
         /// <summary>
@@ -666,6 +696,74 @@ namespace PasPasPas.Typings.Common {
 
             element.TypeInfo = GetTypeByIdOrUndefinedType(typeId);
             scope.AddEntry(element.SymbolName, new ScopeEntry(ScopeEntryKind.DeclaredConstant) { TypeId = typeId });
+        }
+
+        /// <summary>
+        ///     visit a set expression
+        /// </summary>
+        /// <param name="element"></param>
+        public void EndVisit(SetExpression element) {
+            var typeId = RequireUserTypeId();
+            var isConstant = true;
+            ITypeDefinition baseType = null;
+
+            foreach (var part in element.Expressions) {
+
+                if (part.TypeInfo == null) {
+                    baseType = GetErrorType(part);
+                    break;
+                }
+
+                if (baseType == null)
+                    baseType = part.TypeInfo;
+                else if (baseType.TypeKind.Integral() && part.TypeInfo.TypeKind.Integral())
+                    baseType = GetTypeByIdOrUndefinedType(GetSmallestIntegralTypeOrNext(baseType.TypeId, part.TypeInfo.TypeId));
+                else if (baseType.TypeKind.Ordinal() && baseType.TypeId == part.TypeInfo.TypeId)
+                    baseType = part.TypeInfo;
+                else {
+                    baseType = GetErrorType(part);
+                    break;
+                }
+
+                isConstant = isConstant && part.IsConstant;
+            }
+
+            element.TypeInfo = RegisterUserDefinedType(new SetType(typeId, baseType.TypeId));
+            element.IsConstant = isConstant;
+        }
+
+        /// <summary>
+        ///     visit an array constant
+        /// </summary>
+        /// <param name="element"></param>
+        public void EndVisit(ArrayConstant element) {
+            var typeId = RequireUserTypeId();
+            var isConstant = true;
+            ITypeDefinition baseType = null;
+
+            foreach (var part in element.Items) {
+
+                if (part.TypeInfo == null) {
+                    baseType = GetErrorType(part);
+                    break;
+                }
+
+                if (baseType == null)
+                    baseType = part.TypeInfo;
+                else if (baseType.TypeKind.Integral() && part.TypeInfo.TypeKind.Integral())
+                    baseType = GetTypeByIdOrUndefinedType(GetSmallestIntegralTypeOrNext(baseType.TypeId, part.TypeInfo.TypeId));
+                else if (baseType.TypeKind.Ordinal() && baseType.TypeId == part.TypeInfo.TypeId)
+                    baseType = part.TypeInfo;
+                else {
+                    baseType = GetErrorType(part);
+                    break;
+                }
+
+                isConstant = isConstant && part.IsConstant;
+            }
+
+            element.TypeInfo = RegisterUserDefinedType(new ArrayType(typeId) { BaseTypeId = baseType.TypeId });
+            element.IsConstant = isConstant;
         }
     }
 }
