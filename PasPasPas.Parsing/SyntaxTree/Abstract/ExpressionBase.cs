@@ -12,5 +12,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         public ITypeDefinition TypeInfo { get; set; }
 
+        /// <summary>
+        ///     <c>true</c> for constant expressions
+        /// </summary>
+        public bool IsConstant { get; set; }
     }
 }

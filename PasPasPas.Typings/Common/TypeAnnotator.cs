@@ -10,7 +10,7 @@ using PasPasPas.Typings.Structured;
 namespace PasPasPas.Typings.Common {
 
     /// <summary>
-    ///     visitor to annotate typs
+    ///     visitor to annotate types in abstract syntax trees
     /// </summary>
     public class TypeAnnotator :
 
@@ -18,6 +18,7 @@ namespace PasPasPas.Typings.Common {
         IEndVisitor<UnaryOperator>,
         IEndVisitor<BinaryOperator>,
         IEndVisitor<VariableDeclaration>,
+        IEndVisitor<ConstantDeclaration>,
         IEndVisitor<Parsing.SyntaxTree.Abstract.TypeAlias>,
         IEndVisitor<MetaType>,
         IEndVisitor<SymbolReference>,
@@ -287,8 +288,9 @@ namespace PasPasPas.Typings.Common {
                 var typeId = TypeIds.ErrorType;
                 var entry = scope.ResolveName(name);
 
-                if (entry != null && (entry.Kind == ScopeEntryKind.DeclaredVariable || entry.Kind == ScopeEntryKind.TypeName || entry.Kind == ScopeEntryKind.EnumValue)) {
+                if (entry != null && (entry.Kind == ScopeEntryKind.DeclaredVariable || entry.Kind == ScopeEntryKind.TypeName || entry.Kind == ScopeEntryKind.EnumValue || entry.Kind == ScopeEntryKind.DeclaredConstant)) {
                     typeId = entry.TypeId;
+                    element.IsConstant = entry.Kind == ScopeEntryKind.DeclaredConstant;
                 }
                 else if (entry != null && (entry.Kind == ScopeEntryKind.ObjectMethod)) {
                     typeId = entry.TypeId;
@@ -355,9 +357,13 @@ namespace PasPasPas.Typings.Common {
         /// <param name="element"></param>
         public void EndVisit(SymbolReference element) {
             var baseTypeValue = GetTypeByIdOrUndefinedType(TypeIds.ErrorType);
+            var isConstant = false;
 
             if (element.TypeValue is ITypedSyntaxNode typeRef)
                 baseTypeValue = typeRef.TypeInfo;
+
+            if (element.TypeValue is IConstantValueNode constNode)
+                isConstant = constNode.IsConstant;
 
             foreach (var part in element.SymbolParts) {
 
@@ -382,6 +388,7 @@ namespace PasPasPas.Typings.Common {
             }
 
             element.TypeInfo = baseTypeValue;
+            element.IsConstant = isConstant;
         }
 
         /// <summary>
@@ -635,6 +642,30 @@ namespace PasPasPas.Typings.Common {
             if (left != null && right != null) {
                 left.CanBeAssignedFrom(right);
             }
+        }
+
+        /// <summary>
+        ///     visit a constant declaration
+        /// </summary>
+        /// <param name="element">item to visit</param>
+        public void EndVisit(ConstantDeclaration element) {
+            var typeId = TypeIds.ErrorType;
+            var autoTypeId = TypeIds.ErrorType;
+            var declaredTypeId = TypeIds.ErrorType;
+
+            if (element.TypeValue is ITypedSyntaxNode typeRef && typeRef.TypeInfo != null)
+                declaredTypeId = typeRef.TypeInfo.TypeId;
+
+            if (element.Value is ITypedSyntaxNode autType && autType.TypeInfo != null)
+                autoTypeId = autType.TypeInfo.TypeId;
+
+            if (declaredTypeId != TypeIds.ErrorType)
+                typeId = declaredTypeId;
+            else
+                typeId = autoTypeId;
+
+            element.TypeInfo = GetTypeByIdOrUndefinedType(typeId);
+            scope.AddEntry(element.SymbolName, new ScopeEntry(ScopeEntryKind.DeclaredConstant) { TypeId = typeId });
         }
     }
 }

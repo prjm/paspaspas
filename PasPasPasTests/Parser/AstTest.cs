@@ -35,10 +35,10 @@ namespace PasPasPasTests.Parser {
             RunAstTest("unit z.x experimental; interface implementation end.", t => u(t)?.Hints?.SymbolIsExperimental, true);
 
             RunAstTest("unit z.x; interface implementation end. § unit z.x; interface implementation end.",
-                t => (t as CompilationUnit)?.SymbolName, "z.x", StructuralErrors.DuplicateUnitName);
+                t => (t as CompilationUnit)?.SymbolName, "z.x", errorMessages: StructuralErrors.DuplicateUnitName);
 
             RunAstTest("unit z.x.q; interface implementation end.",
-                t => (t as CompilationUnit)?.SymbolName, "z.x.q", StructuralErrors.UnitNameDoesNotMatchFileName);
+                t => (t as CompilationUnit)?.SymbolName, "z.x.q", errorMessages: StructuralErrors.UnitNameDoesNotMatchFileName);
         }
 
         [Fact]
@@ -59,10 +59,10 @@ namespace PasPasPasTests.Parser {
             RunAstTest("library z.x experimental; begin end.", t => u(t)?.Hints?.SymbolIsExperimental, true);
 
             RunAstTest("library z.x; begin end. § unit z.x; interface implementation end.",
-                t => (t as CompilationUnit)?.SymbolName, "z.x", StructuralErrors.DuplicateUnitName);
+                t => (t as CompilationUnit)?.SymbolName, "z.x", errorMessages: StructuralErrors.DuplicateUnitName);
 
             RunAstTest("library z.x.q;  begin end.",
-                t => (t as CompilationUnit)?.SymbolName, "z.x.q", StructuralErrors.UnitNameDoesNotMatchFileName);
+                t => (t as CompilationUnit)?.SymbolName, "z.x.q", errorMessages: StructuralErrors.UnitNameDoesNotMatchFileName);
 
         }
 
@@ -83,10 +83,10 @@ namespace PasPasPasTests.Parser {
             RunAstTest("program z.x; uses a in 'a.pas'; begin end.", t => u(t)?.RequiredUnits?["a"]?.FileName, "a.pas");
 
             RunAstTest("program z.x; begin end. § unit z.x; interface implementation end.",
-                t => (t as CompilationUnit)?.SymbolName, "z.x", StructuralErrors.DuplicateUnitName);
+                t => (t as CompilationUnit)?.SymbolName, "z.x", errorMessages: StructuralErrors.DuplicateUnitName);
 
             RunAstTest("program z.x.q; begin end.",
-                t => (t as CompilationUnit)?.SymbolName, "z.x.q", StructuralErrors.UnitNameDoesNotMatchFileName);
+                t => (t as CompilationUnit)?.SymbolName, "z.x.q", errorMessages: StructuralErrors.UnitNameDoesNotMatchFileName);
 
 
         }
@@ -121,19 +121,19 @@ namespace PasPasPasTests.Parser {
             RunAstTest("unit z.x; interface implementation uses a; end.", t => u(t)?["a"].Mode, UnitMode.Implementation);
 
             RunAstTest("unit z.x; interface uses a, a; implementation end.", t => u(t)?.Contains("a"), true,
-                StructuralErrors.RedeclaredUnitNameInUsesList);
+                errorMessages: StructuralErrors.RedeclaredUnitNameInUsesList);
 
             RunAstTest("unit z.x; interface uses a; implementation uses a; end.", t => u(t)?.Contains("a"), true,
-                StructuralErrors.RedeclaredUnitNameInUsesList);
+                errorMessages: StructuralErrors.RedeclaredUnitNameInUsesList);
 
             RunAstTest("unit z.x; interface implementation uses a, a; end.", t => u(t)?.Contains("a"), true,
-                StructuralErrors.RedeclaredUnitNameInUsesList);
+                errorMessages: StructuralErrors.RedeclaredUnitNameInUsesList);
 
             RunAstTest("package z.x; requires x; contains a; end.", t => u(t)?.Contains("a"), true);
             RunAstTest("package z.x; requires x; contains a; end.", t => u(t)?["a"].Mode, UnitMode.Contains);
 
             RunAstTest("package z.x; requires x, x; end.", t => u(t)?.Contains("x"), true,
-                StructuralErrors.RedeclaredUnitNameInUsesList);
+                errorMessages: StructuralErrors.RedeclaredUnitNameInUsesList);
         }
 
         [Fact]
@@ -144,21 +144,21 @@ namespace PasPasPasTests.Parser {
             RunAstTest("program z.x; uses a in 'a\\a\\a.pas'; begin end.", t => u(t)?["a"].FileName, "a\\a\\a.pas");
 
             RunAstTest("program z.x; uses a, a; begin end.", t => u(t)?.Contains("a"), true,
-                StructuralErrors.RedeclaredUnitNameInUsesList);
+               errorMessages: StructuralErrors.RedeclaredUnitNameInUsesList);
 
             RunAstTest("library z.x; uses a; begin end.", t => u(t)?.Contains("a"), true);
             RunAstTest("library z.x; uses a; begin end.", t => u(t)?["a"].Mode, UnitMode.Library);
             RunAstTest("library z.x; uses a in 'a\\a\\a.pas'; begin end.", t => u(t)?["a"].FileName, "a\\a\\a.pas");
 
             RunAstTest("library z.x; uses a, a; begin end.", t => u(t)?.Contains("a"), true,
-                StructuralErrors.RedeclaredUnitNameInUsesList);
+                errorMessages: StructuralErrors.RedeclaredUnitNameInUsesList);
 
             RunAstTest("package z.x; requires x; contains a; end.", t => u(t)?.Contains("a"), true);
             RunAstTest("package z.x; requires x; contains a; end.", t => u(t)?["a"].Mode, UnitMode.Contains);
             RunAstTest("package z.x; requires x; contains a in 'a\\a\\a.pas'; end.", t => u(t)?["a"].FileName, "a\\a\\a.pas");
 
             RunAstTest("package z.x; requires x; contains a, a; end.", t => u(t)?.Contains("a"), true,
-                StructuralErrors.RedeclaredUnitNameInUsesList);
+               errorMessages: StructuralErrors.RedeclaredUnitNameInUsesList);
         }
 
         [Fact]
@@ -179,7 +179,7 @@ namespace PasPasPasTests.Parser {
             RunAstTest("unit z.x; interface implementation resourcestring x = 'a'; end.", t => v(t)?.Mode, DeclarationMode.ResourceString);
 
             RunAstTest("unit z.x; interface const x = 5; x = 6; implementation end.", t => u(t)?.Mode, DeclarationMode.Const,
-                StructuralErrors.RedeclaredSymbol);
+                errorMessages: StructuralErrors.RedeclaredSymbol);
         }
 
         [Fact]
@@ -234,7 +234,7 @@ namespace PasPasPasTests.Parser {
             RunAstTest("unit z.x; interface type x = (a, b); implementation end.", t => u(t)?["a"].Name.CompleteName, "a");
 
             RunAstTest("unit z.x; interface type x = (a, b, a); implementation end.", t => u(t)?["a"].Name.CompleteName, "a",
-                StructuralErrors.RedeclaredEnumName);
+                errorMessages: StructuralErrors.RedeclaredEnumName);
 
         }
 
@@ -276,7 +276,7 @@ namespace PasPasPasTests.Parser {
             RunAstTest("unit z.x; interface type x = type z<r>.q<t>; implementation end.", t => u(t)?.Fragments[1]?.TypeValue is TypeAlias, true);
 
             RunAstTest("unit z.x; interface type x = type of z.q; implementation end.", t => u(t)?.IsNewType, true,
-                StructuralErrors.UnsupportedTypeOfConstruct);
+                errorMessages: StructuralErrors.UnsupportedTypeOfConstruct);
         }
 
         [Fact]
@@ -312,10 +312,10 @@ namespace PasPasPasTests.Parser {
             RunAstTest("unit z.x; interface type x = procedure([n] out x, z: string); implementation end.", t => u(t)?.Parameters[1]?.ParameterKind, ParameterReferenceKind.Out);
 
             RunAstTest("unit z.x; interface type x = procedure(x, x: string); implementation end.", t => u(t)?.Parameters[0]?.Name.CompleteName, "x",
-                StructuralErrors.DuplicateParameterName);
+                errorMessages: StructuralErrors.DuplicateParameterName);
 
             RunAstTest("unit z.x; interface type x = procedure(x: string; x: string); implementation end.", t => u(t)?.Parameters[0]?.Name.CompleteName, "x",
-                StructuralErrors.DuplicateParameterName);
+                errorMessages: StructuralErrors.DuplicateParameterName);
         }
 
         [Fact]
@@ -401,12 +401,12 @@ namespace PasPasPasTests.Parser {
             RunAstTest("unit z.x; interface type z = class helper for T private function x: string; end; implementation end.", t => r(t)?.Methods["x"]?.Visibility, MemberVisibility.Private);
             RunAstTest("unit z.x; interface type z = class helper for T private function x: string; experimental; end; implementation end.", t => r(t)?.Methods["x"]?.Visibility, MemberVisibility.Private);
 
-            // properties                            
+            // properties
             RunAstTest("unit z.x; interface type z = class helper for T property x: string read q; end; implementation end.", t => r(t)?.Properties["x"]?.SymbolName, "x");
             RunAstTest("unit z.x; interface type z = class helper for T property x: string read q; end; implementation end.", t => r(t)?.Properties["x"]?.Accessors[0]?.Name?.CompleteName, "q");
             RunAstTest("unit z.x; interface type z = class helper for T property x: string read q; end; implementation end.", t => r(t)?.Properties["x"]?.Accessors[0]?.Kind, StructurePropertyAccessorKind.Read);
 
-            // symbols                               
+            // symbols
             RunAstTest("unit z.x; interface type z = class helper for T type t = string; end; implementation end.", t => (r(t)?.Symbols["t"] as TypeDeclaration)?.TypeValue?.GetType(), typeof(MetaType));
             RunAstTest("unit z.x; interface type z = class helper for T const c = nil; end; implementation end.", t => r(t)?.Symbols["c"]?.Name?.CompleteName, "c");
 
@@ -518,10 +518,10 @@ namespace PasPasPasTests.Parser {
             RunAstTest("unit z.x; interface type x = class n: integer deprecated; end; implementation end.", t => u(t)?.Fields["n"].Hints.SymbolIsDeprecated, true);
 
             RunAstTest("unit z.x; interface type x = class n, n: integer; end; implementation end.", t => f(t)?.Name?.CompleteName, "n",
-                StructuralErrors.DuplicateFieldName);
+                errorMessages: StructuralErrors.DuplicateFieldName);
 
             RunAstTest("unit z.x; interface type x = class n: integer; n: integer; end; implementation end.", t => f(t)?.Name?.CompleteName, "n",
-                StructuralErrors.DuplicateFieldName);
+                errorMessages: StructuralErrors.DuplicateFieldName);
 
             // properties
 

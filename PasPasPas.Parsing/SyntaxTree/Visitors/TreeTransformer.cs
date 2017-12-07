@@ -553,7 +553,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             }
         }
 
-        #endregion       
+        #endregion
         #region Term
 
         /// <summary>
@@ -603,6 +603,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 var value = new ConstantValue();
                 InitNode(value, factor);
                 value.Kind = ConstantValueKind.Nil;
+                value.IsConstant = true;
                 lastExpression.Value = value;
                 return;
             }
@@ -622,6 +623,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 var value = new ConstantValue();
                 InitNode(value, factor);
                 value.Kind = ConstantValueKind.False;
+                value.IsConstant = true;
                 value.LiteralValue = environment.BooleanLiterals.FalseValue;
                 lastExpression.Value = value;
                 return;
@@ -633,7 +635,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 InitNode(value, factor);
                 value.Kind = ConstantValueKind.True;
                 value.LiteralValue = environment.BooleanLiterals.TrueValue;
-                value.LiteralValue = true;
+                value.IsConstant = true;
                 lastExpression.Value = value;
                 return;
             }
@@ -644,6 +646,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 InitNode(value, factor);
                 value.Kind = ConstantValueKind.Integer;
                 value.LiteralValue = factor.IntValue.FirstTerminalToken.ParsedValue;
+                value.IsConstant = true;
                 lastExpression.Value = value;
                 return;
             }
@@ -652,6 +655,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 var lastExpression = LastExpression;
                 var value = new ConstantValue();
                 InitNode(value, factor);
+                value.IsConstant = true;
                 value.Kind = ConstantValueKind.RealNumber;
                 value.LiteralValue = factor.RealValue.FirstTerminalToken.ParsedValue;
                 lastExpression.Value = value;
@@ -662,6 +666,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 var lastExpression = LastExpression;
                 var value = new ConstantValue();
                 InitNode(value, factor);
+                value.IsConstant = true;
                 value.Kind = ConstantValueKind.QuotedString;
                 value.LiteralValue = factor.StringValue.FirstTerminalToken.ParsedValue;
                 lastExpression.Value = value;
@@ -673,6 +678,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 var value = new ConstantValue();
                 InitNode(value, factor);
                 value.Kind = ConstantValueKind.HexNumber;
+                value.IsConstant = true;
                 value.LiteralValue = factor.HexValue.FirstTerminalToken.ParsedValue;
                 lastExpression.Value = value;
                 return;
@@ -888,7 +894,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         }
 
         #endregion
-        #region TypeName                                       
+        #region TypeName
 
         /// <summary>
         ///     visit a type name
@@ -1125,7 +1131,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             allParams.Add(result, LogSource);
         }
 
-        #endregion   
+        #endregion
         #region UnitInitialization
 
         /// <summary>
@@ -1351,7 +1357,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         }
 
-        #endregion    
+        #endregion
         #region ClassPropertyReadWrite
 
         /// <summary>
@@ -1970,7 +1976,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         }
 
         #endregion
-        #region RecordHelperDefinition       
+        #region RecordHelperDefinition
 
         /// <summary>
         ///     start visiting a record helper definition
@@ -2014,7 +2020,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         }
 
         #endregion
-        #region ObjectDeclaration       
+        #region ObjectDeclaration
 
         /// <summary>
         ///     start visiting an object declaration

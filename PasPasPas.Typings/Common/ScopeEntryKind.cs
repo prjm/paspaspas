@@ -33,6 +33,11 @@
         /// <summary>
         ///     enum value
         /// </summary>
-        EnumValue
+        EnumValue,
+
+        /// <summary>
+        ///     declared constant
+        /// </summary>
+        DeclaredConstant
     }
 }

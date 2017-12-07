@@ -9,7 +9,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// <summary>
     ///     special type
     /// </summary>
-    public class MetaType : TypeSpecificationBase, IExpressionTarget {
+    public class MetaType : TypeSpecificationBase, IExpressionTarget, IConstantValueNode {
 
         /// <summary>
         ///     type kind
@@ -75,5 +75,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
                 return new ScopedName(parts);
             }
         }
+
+        /// <summary>
+        ///     <c>true</c> if this reference is constant
+        /// </summary>
+        public bool IsConstant { get; set; }
     }
 }

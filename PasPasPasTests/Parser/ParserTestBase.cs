@@ -91,7 +91,7 @@ namespace PasPasPasTests.Parser {
             }
         }
 
-        protected void RunAstTest<T>(string completeInput, Func<object, T> searchFunction, T expectedResult, params Guid[] errorMessages) {
+        protected ISyntaxPart RunAstTest<T>(string completeInput, Func<object, T> searchFunction, T expectedResult, bool withTypes = false, params Guid[] errorMessages) {
             var env = CreateEnvironment();
             var msgs = new List<ILogMessage>();
             var log = new LogTarget();
@@ -109,16 +109,22 @@ namespace PasPasPasTests.Parser {
             };
 
             var project = new ProjectRoot();
+            ISyntaxPart tree = null;
 
             foreach (var input in completeInput.Split('§')) {
 
-                var tree = RunAstTest(input, env, msgs);
+                tree = RunAstTest(input, env, msgs);
                 Assert.AreEqual(string.Empty, errorText);
                 Assert.IsFalse(hasError);
 
 
                 var visitor = new TreeTransformer(env, project);
                 tree.Accept(visitor.AsVisitor());
+
+                if (withTypes) {
+                    var ta = new TypeAnnotator(env);
+                    project.Accept(ta.AsVisitor());
+                }
 
                 var astVisitor = new AstVisitor<T>() { SearchFunction = searchFunction };
                 visitor.Project.Accept(astVisitor.AsVisitor());
@@ -136,6 +142,8 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(errorMessages.Length, msgs.Count);
             foreach (var guid in errorMessages)
                 Assert.IsTrue(msgs.Where(t => t.MessageID == guid).Any());
+
+            return tree;
         }
 
 
@@ -150,6 +158,19 @@ namespace PasPasPasTests.Parser {
             }
         }
 
+        protected void TestConstant(string expr, string constName = "x") {
+            var statement = $"program z.x; const x = {expr}; .";
+
+            bool? search(object t) {
+
+                if (t is ConstantDeclaration decl && string.Equals(constName, decl.Name.CompleteName))
+                    return decl.Value?.IsConstant;
+
+                return null;
+            }
+
+            RunAstTest<bool?>(statement, search, true, true);
+        }
 
         protected void RunCompilerDirective(string directive, object expected, Func<object> actual, params Guid[] messages) {
 

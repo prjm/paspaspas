@@ -4,9 +4,12 @@
     ///     syntax node with type annotation
     /// </summary>
     public interface ITypedSyntaxNode {
+
         /// <summary>
-        ///     type info
+        ///     type annotation for this syntax note
         /// </summary>
         ITypeDefinition TypeInfo { get; }
+
+
     }
 }

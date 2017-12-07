@@ -103,23 +103,22 @@ namespace P3SyntaxTreeViewer {
 
         private void AddNodes(TreeView tv, TreeViewItem parent, ISyntaxPart cst) {
             var treeViewItem = new TreeViewItem();
-            var terminal = cst as Terminal;
-            var symbol = cst as ISymbolTableEntry;
-            var typeInfo = cst as PasPasPas.Parsing.SyntaxTree.Types.ITypedSyntaxNode;
 
-            if (terminal != null) {
+            if (cst is Terminal terminal) {
                 treeViewItem.Header = "'" + terminal.Token.Value + "'";
             }
             else {
                 treeViewItem.Header = cst.GetType().Name;
             }
 
-            if (symbol != null)
+            if (cst is ISymbolTableEntry symbol)
                 treeViewItem.Header += ": " + symbol.SymbolName;
 
-            if (typeInfo != null && typeInfo.TypeInfo != null) {
+            if (cst is PasPasPas.Parsing.SyntaxTree.Types.ITypedSyntaxNode typeInfo && typeInfo.TypeInfo != null) {
                 treeViewItem.Header += " [" + typeInfo.TypeInfo.TypeId.ToString() + "]";
                 treeViewItem.Header += " " + typeInfo.TypeInfo.TypeKind.ToString();
+                if (cst is IConstantValueNode constant && constant.IsConstant)
+                    treeViewItem.Header += "*";
             }
 
             if (parent != null) {

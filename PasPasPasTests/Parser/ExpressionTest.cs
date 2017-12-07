@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Xunit;
+﻿using Xunit;
 
 namespace PasPasPasTests.Parser {
 
@@ -75,6 +70,18 @@ namespace PasPasPasTests.Parser {
             ParseString("program test; const x = 5 + 3 * nil; .");
             ParseString("program test; const x = 5 + 3 * (4); .");
             ParseString("program test; const x = 5 + 3 * 'x'; .");
+        }
+
+        [Fact]
+        public void TestConstValues() {
+            TestConstant("10");
+            TestConstant("10.1");
+            TestConstant("True");
+            TestConstant("False");
+            TestConstant("Nil");
+            TestConstant("'a'");
+            TestConstant("'aa'");
+            TestConstant("5; y = x", "y");
         }
 
     }

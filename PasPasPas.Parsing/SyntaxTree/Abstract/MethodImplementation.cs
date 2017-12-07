@@ -10,11 +10,15 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// </summary>
     public class MethodImplementation : DeclaredSymbol, IDeclaredSymbolTarget, IBlockTarget, IDirectiveTarget, IExpression, IParameterTarget, ITypeTarget {
 
-
         /// <summary>
         ///     calculated type value
         /// </summary>
         public ITypeDefinition TypeInfo { get; set; }
+
+        /// <summary>
+        ///     <c>true</c> for constant items
+        /// </summary>
+        public bool IsConstant { get; set; }
 
         /// <summary>
         ///     symbols
