@@ -1,9 +1,9 @@
 language: csharp
 solution: paspaspas.sln
 mono: none
-dotnet: 2.0.0
+dotnet: 2.0.3
 dist: trusty
 script:
  - dotnet restore
  - cd PasPasPasTests
- - dotnet xunit
+ - dotnet xunit --fx-version 2.0.3
