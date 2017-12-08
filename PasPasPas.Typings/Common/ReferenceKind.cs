@@ -49,5 +49,6 @@
         ///     reference to class variable
         /// </summary>
         RefToClassField = 8,
+
     }
 }

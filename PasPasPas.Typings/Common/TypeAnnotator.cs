@@ -269,6 +269,9 @@ namespace PasPasPas.Typings.Common {
             else
                 element.TypeInfo = GetTypeByIdOrUndefinedType(TypeIds.ErrorType);
 
+            if (element.TypeInfo is MetaStructuredTypeDeclaration metaType)
+                element.TypeInfo = GetTypeByIdOrUndefinedType(metaType.BaseType);
+
             foreach (var vardef in element.Names)
                 resolver.AddToScope(vardef.Name.CompleteName, ReferenceKind.RefToVariable, vardef);
         }
@@ -458,6 +461,7 @@ namespace PasPasPas.Typings.Common {
             if (typeDef == null)
                 return;
 
+            element.TypeInfo = typeDef;
             typeDef.DefineEnumValue(element.SymbolName, false, -1);
             resolver.AddToScope(element.SymbolName, ReferenceKind.RefToEnumMember, element);
         }
@@ -505,11 +509,8 @@ namespace PasPasPas.Typings.Common {
         public void EndVisit(TypeDeclaration element) {
 
             if (element.TypeValue is ITypedSyntaxNode declaredType && declaredType.TypeInfo != null) {
-
-                if (declaredType.TypeInfo is StructuredTypeDeclaration structType)
-                    resolver.AddToScope(element.Name.CompleteName, ReferenceKind.RefToType, element);
-                else
-                    resolver.AddToScope(element.Name.CompleteName, ReferenceKind.RefToType, element);
+                element.TypeInfo = element.TypeValue.TypeInfo;
+                resolver.AddToScope(element.Name.CompleteName, ReferenceKind.RefToType, element);
             }
         }
 
@@ -576,8 +577,8 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="element"></param>
         public void EndVisit(StructuredType element) {
-            var typeDef = currentTypeDefintion.Pop();
-            element.TypeInfo = typeDef;
+            var typeDef = currentTypeDefintion.Pop() as StructuredTypeDeclaration;
+            element.TypeInfo = typeDef.MetaType;
         }
 
         /// <summary>
