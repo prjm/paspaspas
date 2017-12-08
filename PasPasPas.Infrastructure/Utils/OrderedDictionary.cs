@@ -133,7 +133,7 @@ namespace PasPasPas.Infrastructure.Utils {
         #region Methods
 
         private void Initialize(IEqualityComparer<TKey> comparer = null) {
-            this.Comparer = comparer;
+            Comparer = comparer;
             if (comparer != null) {
                 _keyedCollection = new KeyedCollection2<TKey, KeyValuePair<TKey, TValue>>(x => x.Key, comparer);
             }
@@ -181,7 +181,8 @@ namespace PasPasPas.Infrastructure.Utils {
         /// </summary>
         /// <param name="value">The value to locate in this object.</param>
         /// <returns>True if the value is found.  False otherwise.</returns>
-        public bool ContainsValue(TValue value) => this.Values.Contains(value);
+        public bool ContainsValue(TValue value)
+            => Values.Contains(value);
 
         /// <summary>
         /// Determines whether this object contains the specified value.
@@ -189,7 +190,8 @@ namespace PasPasPas.Infrastructure.Utils {
         /// <param name="value">The value to locate in this object.</param>
         /// <param name="comparer">The equality comparer used to locate the specified value in this object.</param>
         /// <returns>True if the value is found.  False otherwise.</returns>
-        public bool ContainsValue(TValue value, IEqualityComparer<TValue> comparer) => this.Values.Contains(value, comparer);
+        public bool ContainsValue(TValue value, IEqualityComparer<TValue> comparer)
+            => Values.Contains(value, comparer);
 
         /// <summary>
         /// Determines whether this object contains the specified key.
@@ -423,11 +425,13 @@ namespace PasPasPas.Infrastructure.Utils {
 
         bool IDictionary.IsReadOnly => false;
 
-        ICollection IDictionary.Keys => (ICollection)this.Keys;
+        ICollection IDictionary.Keys
+            => (ICollection)Keys;
 
         void IDictionary.Remove(object key) => Remove((TKey)key);
 
-        ICollection IDictionary.Values => (ICollection)this.Values;
+        ICollection IDictionary.Values
+            => (ICollection)Values;
 
         object IDictionary.this[object key] {
             get => this[(TKey)key];
