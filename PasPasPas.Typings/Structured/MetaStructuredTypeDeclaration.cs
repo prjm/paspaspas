@@ -57,10 +57,10 @@ namespace PasPasPas.Typings.Structured {
         /// <param name="symbolName"></param>
         /// <param name="entry"></param>
         /// <returns></returns>
-        public bool TryToResolve(string symbolName, out ScopeEntry entry) {
+        public bool TryToResolve(string symbolName, out Reference entry) {
             foreach (var field in Fields)
                 if (string.Equals(field.Name, symbolName, StringComparison.OrdinalIgnoreCase)) {
-                    entry = new ScopeEntry(ScopeEntryKind.DeclaredVariable) { TypeId = field.SymbolType.TypeId };
+                    entry = new Reference(ReferenceKind.RefToClassField, field);
                     return true;
                 }
 

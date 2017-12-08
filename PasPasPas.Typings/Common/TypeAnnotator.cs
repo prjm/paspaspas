@@ -45,7 +45,7 @@ namespace PasPasPas.Typings.Common {
         private readonly Stack<ITypeDefinition> currentTypeDefintion;
         private readonly Stack<Routine> currentMethodDefinition;
         private readonly Stack<ParameterGroup> currentMethodParameters;
-        private Scope scope;
+        private readonly Resolver resolver;
 
         /// <summary>
         ///     current unit
@@ -66,7 +66,7 @@ namespace PasPasPas.Typings.Common {
         public TypeAnnotator(ITypedEnvironment env) {
             visitor = new Visitor(this);
             environment = env;
-            scope = new Scope(env.TypeRegistry);
+            resolver = new Resolver(new Scope(env.TypeRegistry));
             currentTypeDefintion = new Stack<ITypeDefinition>();
             currentMethodDefinition = new Stack<Routine>();
             currentMethodParameters = new Stack<ParameterGroup>();
@@ -269,15 +269,8 @@ namespace PasPasPas.Typings.Common {
             else
                 element.TypeInfo = GetTypeByIdOrUndefinedType(TypeIds.ErrorType);
 
-            int typeId;
-            if (element.TypeInfo is MetaStructuredTypeDeclaration meta)
-                typeId = meta.BaseType;
-            else
-                typeId = element.TypeInfo.TypeId;
-
-            foreach (var vardef in element.Names) {
-                scope.AddEntry(vardef.Name.CompleteName, new ScopeEntry(ScopeEntryKind.DeclaredVariable) { TypeId = typeId });
-            }
+            foreach (var vardef in element.Names)
+                resolver.AddToScope(vardef.Name.CompleteName, ReferenceKind.RefToVariable, vardef);
         }
 
         /// <summary>
@@ -292,12 +285,13 @@ namespace PasPasPas.Typings.Common {
                 return;
             }
 
-            var entry = scope.ResolveName(typeName);
-            var typeId = TypeIds.ErrorType;
+            var entry = resolver.ResolveByName(typeName);
+            int typeId;
 
-            if (entry != null && entry.Kind == ScopeEntryKind.TypeName) {
-                typeId = entry.TypeId;
-            }
+            if (entry != null && entry.Kind == ReferenceKind.RefToType)
+                typeId = entry.Symbol.TypeId;
+            else
+                typeId = GetErrorType(element).TypeId;
 
             if (element.IsNewType) {
                 var newTypeId = RequireUserTypeId();
@@ -315,15 +309,15 @@ namespace PasPasPas.Typings.Common {
         public void EndVisit(MetaType element) {
             if (element.Kind == MetaTypeKind.NamedType) {
                 var name = element.AsScopedName;
-                var typeId = TypeIds.ErrorType;
-                var entry = scope.ResolveName(name);
+                var entry = resolver.ResolveByName(name);
+                int typeId;
 
-                if (entry != null && (entry.Kind == ScopeEntryKind.DeclaredVariable || entry.Kind == ScopeEntryKind.TypeName || entry.Kind == ScopeEntryKind.EnumValue || entry.Kind == ScopeEntryKind.DeclaredConstant)) {
-                    typeId = entry.TypeId;
-                    element.IsConstant = entry.Kind == ScopeEntryKind.DeclaredConstant;
+                if (entry != null) {
+                    typeId = entry.Symbol.TypeId;
+                    element.IsConstant = entry.Kind == ReferenceKind.RefToConstant;
                 }
-                else if (entry != null && (entry.Kind == ScopeEntryKind.ObjectMethod)) {
-                    typeId = entry.TypeId;
+                else {
+                    typeId = GetErrorType(element).TypeId;
                 }
 
                 element.TypeInfo = GetTypeByIdOrUndefinedType(typeId);
@@ -368,8 +362,8 @@ namespace PasPasPas.Typings.Common {
         /// <param name="element"></param>
         public void StartVisit(CompilationUnit element) {
             CurrentUnit = element;
-            scope = scope.Open();
-            scope.AddEntry("System", new ScopeEntry(ScopeEntryKind.UnitReference) { TypeId = TypeIds.SystemUnit });
+            resolver.OpenScope();
+            resolver.AddToScope("System", ReferenceKind.RefToUnit, environment.TypeRegistry.SystemUnit);
         }
 
         /// <summary>
@@ -377,7 +371,7 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="element"></param>
         public void EndVisit(CompilationUnit element) {
-            scope = scope.Close();
+            resolver.CloseScope();
             CurrentUnit = null;
         }
 
@@ -465,7 +459,7 @@ namespace PasPasPas.Typings.Common {
                 return;
 
             typeDef.DefineEnumValue(element.SymbolName, false, -1);
-            scope.AddEntry(element.SymbolName, new ScopeEntry(ScopeEntryKind.EnumValue) { TypeId = typeDef.TypeId });
+            resolver.AddToScope(element.SymbolName, ReferenceKind.RefToEnumMember, element);
         }
 
         /// <summary>
@@ -513,9 +507,9 @@ namespace PasPasPas.Typings.Common {
             if (element.TypeValue is ITypedSyntaxNode declaredType && declaredType.TypeInfo != null) {
 
                 if (declaredType.TypeInfo is StructuredTypeDeclaration structType)
-                    scope.AddEntry(element.Name.CompleteName, new ScopeEntry(ScopeEntryKind.TypeName) { TypeId = structType.MetaType.TypeId });
+                    resolver.AddToScope(element.Name.CompleteName, ReferenceKind.RefToType, element);
                 else
-                    scope.AddEntry(element.Name.CompleteName, new ScopeEntry(ScopeEntryKind.TypeName) { TypeId = declaredType.TypeInfo.TypeId });
+                    resolver.AddToScope(element.Name.CompleteName, ReferenceKind.RefToType, element);
             }
         }
 
@@ -695,7 +689,7 @@ namespace PasPasPas.Typings.Common {
                 typeId = autoTypeId;
 
             element.TypeInfo = GetTypeByIdOrUndefinedType(typeId);
-            scope.AddEntry(element.SymbolName, new ScopeEntry(ScopeEntryKind.DeclaredConstant) { TypeId = typeId });
+            resolver.AddToScope(element.SymbolName, ReferenceKind.RefToConstant, element);
         }
 
         /// <summary>

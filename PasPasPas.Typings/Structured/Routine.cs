@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Parsing.SyntaxTree.Types;
+using PasPasPas.Typings.Common;
 
 namespace PasPasPas.Typings.Structured {
 
     /// <summary>
     ///     callable routine
     /// </summary>
-    public class Routine {
+    public class Routine : IRefSymbol {
 
         /// <summary>
         ///     create a new routine
@@ -35,6 +35,12 @@ namespace PasPasPas.Typings.Structured {
         ///     procedure kind
         /// </summary>
         public ProcedureKind Kind { get; }
+
+        /// <summary>
+        ///     type id
+        /// </summary>
+        public int TypeId
+            => TypeIds.UnspecifiedType;
 
         /// <summary>
         ///     add a parameter group

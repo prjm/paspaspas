@@ -18,6 +18,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Types {
         IEnumerable<ITypeDefinition> RegisteredTypes { get; }
 
         /// <summary>
+        ///     system unit
+        /// </summary>
+        IRefSymbol SystemUnit { get; }
+
+        /// <summary>
         ///     get a type by type id
         /// </summary>
         /// <param name="typeId">given type id</param>

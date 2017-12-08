@@ -8,7 +8,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// <summary>
     ///     declared constant
     /// </summary>
-    public class ConstantDeclaration : DeclaredSymbol, ITypedSyntaxNode, ISymbolWithAttributes, IExpressionTarget, ITypeTarget {
+    public class ConstantDeclaration : DeclaredSymbol, ITypedSyntaxNode, ISymbolWithAttributes, IExpressionTarget, ITypeTarget, IRefSymbol {
 
         /// <summary>
         ///     constant mode
@@ -58,6 +58,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         public ITypeDefinition TypeInfo {
             get; set;
         }
+
+        /// <summary>
+        ///     get the type info
+        /// </summary>
+        public int TypeId
+            => TypeInfo != null ? TypeInfo.TypeId : Signature.ErrorType;
 
         /// <summary>
         ///     accept visitor

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 
@@ -7,7 +8,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// <summary>
     ///     enum type value
     /// </summary>
-    public class EnumTypeValue : SymbolTableEntryBase, IExpressionTarget {
+    public class EnumTypeValue : SymbolTableEntryBase, IExpressionTarget, IRefSymbol, ITypedSyntaxNode {
 
         /// <summary>
         ///     enum name
@@ -34,6 +35,17 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
                     yield return Value;
             }
         }
+
+        /// <summary>
+        ///     type id
+        /// </summary>
+        public int TypeId
+            => TypeInfo != null ? TypeInfo.TypeId : Signature.ErrorType;
+
+        /// <summary>
+        ///     type information
+        /// </summary>
+        public ITypeDefinition TypeInfo { get; set; }
 
         /// <summary>
         ///     accept visitor

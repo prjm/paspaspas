@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 
@@ -7,7 +8,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// <summary>
     ///     abstract type declaration
     /// </summary>
-    public class TypeDeclaration : DeclaredSymbol, ISymbolWithAttributes, ITypeTarget, IDeclaredSymbolTarget {
+    public class TypeDeclaration : DeclaredSymbol, ISymbolWithAttributes, ITypeTarget, IDeclaredSymbolTarget, IRefSymbol, ITypedSyntaxNode {
 
         /// <summary>
         ///     attribues
@@ -15,7 +16,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         public IEnumerable<SymbolAttribute> Attributes { get; set; }
 
         /// <summary>
-        ///     declare type
+        ///     declared type
         /// </summary>
         public ITypeSpecification TypeValue { get; set; }
 
@@ -54,6 +55,17 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
                     return null;
             }
         }
+
+        /// <summary>
+        ///     type id
+        /// </summary>
+        public int TypeId
+            => TypeInfo != null ? TypeInfo.TypeId : Signature.ErrorType;
+
+        /// <summary>
+        ///     type info
+        /// </summary>
+        public ITypeDefinition TypeInfo { get; set; }
 
         /// <summary>
         ///     accept visitor

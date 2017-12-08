@@ -11,10 +11,8 @@ using PasPasPas.Typings.Structured;
 namespace PasPasPas.Typings.Common {
 
     /// <summary>
-    ///     common type registry
+    ///     common type registry - contains all system types
     /// </summary>
-    /// <remarks>this type registry defines all built-in types and functions
-    /// of the unit <c>System</c></remarks>
     public class RegisteredTypes : ITypeRegistry, IEnvironmentItem {
 
         private readonly IDictionary<int, ITypeDefinition> types
@@ -26,6 +24,12 @@ namespace PasPasPas.Typings.Common {
         private readonly UnitType systemUnit;
         private readonly object idLock = new object();
         private int userTypeIds = 1000;
+
+        /// <summary>
+        ///     system unit
+        /// </summary>
+        public IRefSymbol SystemUnit
+            => systemUnit;
 
         /// <summary>
         ///     number of types
@@ -98,7 +102,7 @@ namespace PasPasPas.Typings.Common {
         /// <param name="typeName">type name</param>
         private void RegisterSystemType(ITypeDefinition typeDef, string typeName) {
             RegisterType(typeDef);
-            systemUnit.RegisterSymbol(typeName, new ScopeEntry(ScopeEntryKind.TypeName) { TypeId = typeDef.TypeId });
+            systemUnit.RegisterSymbol(typeName, new Reference(ReferenceKind.RefToType, typeDef));
         }
 
         /// <summary>

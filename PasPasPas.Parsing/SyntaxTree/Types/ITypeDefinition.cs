@@ -5,12 +5,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Types {
     /// <summary>
     ///     type definition
     /// </summary>
-    public interface ITypeDefinition {
-
-        /// <summary>
-        ///     common type id
-        /// </summary>
-        int TypeId { get; }
+    public interface ITypeDefinition : IRefSymbol {
 
         /// <summary>
         ///     get the common type kind

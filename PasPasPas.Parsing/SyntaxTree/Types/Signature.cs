@@ -7,6 +7,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Types {
     /// </summary>
     public struct Signature : IEquatable<Signature> {
 
+        /// <summary>
+        ///     error type id
+        /// </summary>
+        public const int ErrorType = -1;
+
         private int[] data;
 
         /// <summary>

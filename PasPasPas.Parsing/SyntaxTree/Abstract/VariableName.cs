@@ -1,11 +1,25 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Visitors;
+﻿using PasPasPas.Parsing.SyntaxTree.Types;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
 
     /// <summary>
     ///     variable name
     /// </summary>
-    public class VariableName : DeclaredSymbol {
+    public class VariableName : DeclaredSymbol, IRefSymbol {
+
+        /// <summary>
+        ///     get the type id for this variable
+        /// </summary>
+        public int TypeId {
+            get {
+                if (ParentItem is VariableDeclaration varDeclaration && varDeclaration.TypeInfo != null)
+                    return varDeclaration.TypeInfo.TypeId;
+                else
+                    return Signature.ErrorType;
+            }
+        }
+
 
         /// <summary>
         ///     accept visitor

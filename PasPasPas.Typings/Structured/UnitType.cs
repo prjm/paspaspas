@@ -10,8 +10,11 @@ namespace PasPasPas.Typings.Structured {
     /// </summary>
     public class UnitType : TypeBase {
 
-        private IDictionary<string, ScopeEntry> symbols
-            = new Dictionary<string, ScopeEntry>(StringComparer.OrdinalIgnoreCase);
+        /// <summary>
+        ///     declared symbols
+        /// </summary>
+        private IDictionary<string, Reference> symbols
+            = new Dictionary<string, Reference>(StringComparer.OrdinalIgnoreCase);
 
         /// <summary>
         ///     unit type
@@ -31,7 +34,7 @@ namespace PasPasPas.Typings.Structured {
         /// </summary>
         /// <param name="symbolName">symbol name</param>
         /// <param name="entry">defined entry</param>
-        public void RegisterSymbol(string symbolName, ScopeEntry entry)
+        public void RegisterSymbol(string symbolName, Reference entry)
             => symbols.Add(symbolName, entry);
 
         /// <summary>
@@ -40,7 +43,7 @@ namespace PasPasPas.Typings.Structured {
         /// <param name="symbolName">symbol to resolve</param>
         /// <param name="entry">resolved symbol</param>
         /// <returns><c>true</c> if the symbol was resolved</returns>
-        public bool TryToResolve(string symbolName, out ScopeEntry entry)
+        public bool TryToResolve(string symbolName, out Reference entry)
             => symbols.TryGetValue(symbolName, out entry);
     }
 }
