@@ -142,5 +142,10 @@
         ///     subrange type
         /// </summary>
         SubrangeType,
+
+        /// <summary>
+        ///     hidden type
+        /// </summary>
+        HiddenType,
     }
 }

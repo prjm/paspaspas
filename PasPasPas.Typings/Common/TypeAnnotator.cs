@@ -149,7 +149,7 @@ namespace PasPasPas.Typings.Common {
 
                 if (leftType.TypeKind.IsTextual() && leftType.TypeKind.IsTextual())
                     operatorId = DefinedOperators.ConcatOperation;
-                else if (leftType.TypeKind.Numerical() && leftType.TypeKind.Numerical())
+                else if (leftType.TypeKind.IsNumerical() && leftType.TypeKind.IsNumerical())
                     operatorId = DefinedOperators.PlusOperation;
             }
 
@@ -383,7 +383,7 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="element"></param>
         public void EndVisit(SymbolReference element) {
-            var baseTypeValue = GetTypeByIdOrUndefinedType(TypeIds.ErrorType);
+            var baseTypeValue = GetTypeByIdOrUndefinedType(TypeIds.UnspecifiedType);
             var isConstant = false;
 
             if (element.TypeValue is ITypedSyntaxNode typeRef)
@@ -394,9 +394,25 @@ namespace PasPasPas.Typings.Common {
 
             foreach (var part in element.SymbolParts) {
 
+                if (part.Kind == SymbolReferencePartKind.SubItem) {
+
+                    if (baseTypeValue.TypeId == TypeIds.UnspecifiedType) {
+                        var reference = resolver.ResolveByName(new ScopedName(part.Name.Name));
+
+                        if (reference != null && reference.Symbol != null)
+                            baseTypeValue = GetTypeByIdOrUndefinedType(reference.Symbol.TypeId);
+                        else
+                            baseTypeValue = GetErrorType(element);
+                    }
+
+                }
+
                 if (part.Kind == SymbolReferencePartKind.CallParameters) {
 
-                    if (baseTypeValue.TypeKind == CommonTypeKind.ClassType && baseTypeValue is StructuredTypeDeclaration structType) {
+                    if (baseTypeValue.TypeId == TypeIds.UnspecifiedType) {
+                        //..
+                    }
+                    else if (baseTypeValue.TypeKind == CommonTypeKind.ClassType && baseTypeValue is StructuredTypeDeclaration structType) {
                         var signature = new int[part.Expressions.Count];
                         for (var i = 0; i < signature.Length; i++)
                             if (part.Expressions[i] != null && part.Expressions[i].TypeInfo != null)

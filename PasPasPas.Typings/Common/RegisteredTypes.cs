@@ -4,6 +4,7 @@ using PasPasPas.Infrastructure.Environment;
 using PasPasPas.Options.DataTypes;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Parsing.SyntaxTree.Types;
+using PasPasPas.Typings.Hidden;
 using PasPasPas.Typings.Operators;
 using PasPasPas.Typings.Simple;
 using PasPasPas.Typings.Structured;
@@ -74,6 +75,17 @@ namespace PasPasPas.Typings.Common {
             RegisterCommonTypes(intSize);
             RegisterCommonOperators();
             RegisterTObject(pool);
+            RegisterCommonFunctions();
+        }
+
+        /// <summary>
+        ///     register common functions
+        /// </summary>
+        private void RegisterCommonFunctions() {
+            var abs = new Routine("Abs", ProcedureKind.Function);
+            var genericNumericType = GetTypeByIdOrUndefinedType(TypeIds.NumericType);
+            abs.AddParameterGroup("AValue", genericNumericType, genericNumericType);
+            systemUnit.AddGlobal(abs);
         }
 
         /// <summary>
@@ -102,7 +114,8 @@ namespace PasPasPas.Typings.Common {
         /// <param name="typeName">type name</param>
         private void RegisterSystemType(ITypeDefinition typeDef, string typeName) {
             RegisterType(typeDef);
-            systemUnit.RegisterSymbol(typeName, new Reference(ReferenceKind.RefToType, typeDef));
+            if (!string.IsNullOrWhiteSpace(typeName))
+                systemUnit.RegisterSymbol(typeName, new Reference(ReferenceKind.RefToType, typeDef));
         }
 
         /// <summary>
@@ -118,6 +131,12 @@ namespace PasPasPas.Typings.Common {
             RegisterPointerTypes();
             RegisterAliasTypes();
             RegisterNativeIntTypes(intSize);
+            RegisterHiddenTypes();
+        }
+
+        private void RegisterHiddenTypes() {
+            RegisterSystemType(new NumericType(TypeIds.NumericType), null);
+            RegisterSystemType(new UnspecifiedType(TypeIds.UnspecifiedType), null);
         }
 
         /// <summary>
@@ -134,7 +153,7 @@ namespace PasPasPas.Typings.Common {
         }
 
         private void RegisterPointerTypes() {
-            RegisterSystemType(new PointerType(TypeIds.GenericPointer, TypeIds.UnspecifiedType), "Pointer");
+            RegisterSystemType(new PointerType(TypeIds.GenericPointer, TypeIds.UntypedPointer), "Pointer");
             RegisterSystemType(new PointerType(TypeIds.PByte, TypeIds.ByteType), "PByte");
             RegisterSystemType(new PointerType(TypeIds.PShortInt, TypeIds.ShortInt), "PShortInt");
             RegisterSystemType(new PointerType(TypeIds.PWord, TypeIds.WordType), "PWord");

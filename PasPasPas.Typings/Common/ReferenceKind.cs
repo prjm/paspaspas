@@ -50,5 +50,9 @@
         /// </summary>
         RefToClassField = 8,
 
+        /// <summary>
+        ///     reference to global routine
+        /// </summary>
+        RefToGlobalRoutine = 9,
     }
 }

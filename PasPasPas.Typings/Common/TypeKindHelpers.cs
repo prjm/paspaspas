@@ -38,7 +38,7 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="kind">kind</param>
         /// <returns><c>true</c> if the type is integer, int64 or float</returns>
-        public static bool Numerical(this CommonTypeKind kind)
+        public static bool IsNumerical(this CommonTypeKind kind)
             => kind == CommonTypeKind.IntegerType || kind == CommonTypeKind.FloatType || kind == CommonTypeKind.Int64Type;
 
         /// <summary>

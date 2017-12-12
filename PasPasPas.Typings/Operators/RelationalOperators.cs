@@ -58,7 +58,7 @@ namespace PasPasPas.Typings.Operators {
             if (CommonTypeKind.BooleanType.All(left, right))
                 return TypeIds.BooleanType;
 
-            if (left.Numerical() && right.Numerical())
+            if (left.IsNumerical() && right.IsNumerical())
                 return TypeIds.BooleanType;
 
             if (left.IsTextual() && right.IsTextual())

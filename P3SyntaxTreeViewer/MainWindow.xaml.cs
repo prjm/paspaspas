@@ -132,6 +132,10 @@ namespace P3SyntaxTreeViewer {
                     treeViewItem.Header += "*";
             }
 
+            if (cst is SymbolReferencePart srp) {
+                treeViewItem.Header += " " + srp.Kind.ToString();
+            }
+
             if (parent != null) {
                 parent.Items.Add(treeViewItem);
             }

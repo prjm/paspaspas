@@ -158,7 +158,7 @@ namespace PasPasPasTests.Types {
         protected void AssertDeclType(string declaration, Action<ITypeDefinition> test, NativeIntSize intSize = NativeIntSize.Undefined) {
             var file = "SimpleExpr";
             var program = $"program {file}; var x : {declaration}; begin Writeln(x); end. ";
-            SymbolReferencePart searchfunction(object x) => x as SymbolReferencePart;
+            SymbolReferencePart searchfunction(object x) => x is SymbolReferencePart srp && srp.Kind == SymbolReferencePartKind.CallParameters ? srp : null;
             IExpression firstParam = null;
 
             firstParam = EvaluateExpressionType(file, program, searchfunction, intSize) as IExpression;

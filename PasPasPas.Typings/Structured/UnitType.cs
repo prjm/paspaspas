@@ -17,6 +17,12 @@ namespace PasPasPas.Typings.Structured {
             = new Dictionary<string, Reference>(StringComparer.OrdinalIgnoreCase);
 
         /// <summary>
+        ///     global routines
+        /// </summary>
+        private IList<Routine> globalRoutines
+            = new List<Routine>();
+
+        /// <summary>
         ///     unit type
         /// </summary>
         /// <param name="withId"></param>
@@ -45,5 +51,14 @@ namespace PasPasPas.Typings.Structured {
         /// <returns><c>true</c> if the symbol was resolved</returns>
         public bool TryToResolve(string symbolName, out Reference entry)
             => symbols.TryGetValue(symbolName, out entry);
+
+        /// <summary>
+        ///     add a globale routine
+        /// </summary>
+        /// <param name="routine"></param>
+        public void AddGlobal(Routine routine) {
+            globalRoutines.Add(routine);
+            symbols.Add(routine.Name, new Reference(ReferenceKind.RefToGlobalRoutine, routine));
+        }
     }
 }
