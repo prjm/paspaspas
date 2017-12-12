@@ -399,8 +399,10 @@ namespace PasPasPas.Typings.Common {
                     if (baseTypeValue.TypeId == TypeIds.UnspecifiedType) {
                         var reference = resolver.ResolveByName(new ScopedName(part.Name.Name));
 
-                        if (reference != null && reference.Symbol != null)
+                        if (reference != null && reference.Symbol != null) {
                             baseTypeValue = GetTypeByIdOrUndefinedType(reference.Symbol.TypeId);
+                            isConstant = reference.Kind == ReferenceKind.RefToConstant;
+                        }
                         else
                             baseTypeValue = GetErrorType(element);
                     }
