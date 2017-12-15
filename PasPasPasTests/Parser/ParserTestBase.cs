@@ -9,7 +9,6 @@ using System.Text;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Api;
-using PasPasPas.Parsing;
 using PasPasPasTests.Common;
 using PasPasPas.Infrastructure.Files;
 using PasPasPas.Parsing.Parser;
@@ -158,14 +157,20 @@ namespace PasPasPasTests.Parser {
             }
         }
 
-        protected void TestConstant(string expr, string constName = "x") {
+        protected void TestConstant(string expr, string constName = "x", int typeId = -1) {
             var statement = $"program z.x; const x = {expr}; .";
 
             bool? search(object t) {
 
-                if (t is ConstantDeclaration decl && string.Equals(constName, decl.Name.CompleteName))
-                    return decl.Value?.IsConstant;
+                if (t is ConstantDeclaration decl && string.Equals(constName, decl.Name.CompleteName)) {
+                    if (decl == null || decl.Value == null)
+                        return null;
 
+                    if (typeId >= 0)
+                        Assert.AreEqual(typeId, decl.Value.TypeInfo.TypeId);
+
+                    return decl.Value.IsConstant;
+                }
                 return null;
             }
 

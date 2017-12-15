@@ -39,8 +39,9 @@ namespace PasPasPas.Typings.Operators {
         ///     compute the output type of this operation
         /// </summary>
         /// <param name="input">input signature</param>
+        /// <param name="values">current values</param>
         /// <returns>output type</returns>
-        public override int GetOutputTypeForOperation(Signature input) {
+        public override int GetOutputTypeForOperation(Signature input, object[] values) {
 
             if (input.Length == 1) {
 

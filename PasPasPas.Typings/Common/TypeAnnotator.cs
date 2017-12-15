@@ -176,7 +176,7 @@ namespace PasPasPas.Typings.Common {
             }
 
             if (operatorId >= 0) {
-                element.TypeInfo = GetTypeOfOperator(operatorId, leftType, rightType);
+                element.TypeInfo = GetTypeOfOperator(operatorId, leftType, rightType, element.LeftOperand.LiteralValue, element.RightOperand.LiteralValue);
                 element.IsConstant = element.LeftOperand.IsConstant && element.RightOperand.IsConstant;
             }
         }
@@ -198,15 +198,15 @@ namespace PasPasPas.Typings.Common {
             }
 
             if (element.Kind == ExpressionKind.Not) {
-                element.TypeInfo = GetTypeOfOperator(DefinedOperators.NotOperation, operand.TypeInfo);
+                element.TypeInfo = GetTypeOfOperator(DefinedOperators.NotOperation, operand.TypeInfo, operand.LiteralValue);
                 element.IsConstant = operand.IsConstant;
             }
             else if (element.Kind == ExpressionKind.UnaryMinus) {
-                element.TypeInfo = GetTypeOfOperator(DefinedOperators.UnaryMinus, operand.TypeInfo);
+                element.TypeInfo = GetTypeOfOperator(DefinedOperators.UnaryMinus, operand.TypeInfo, operand.LiteralValue);
                 element.IsConstant = operand.IsConstant;
             }
             else if (element.Kind == ExpressionKind.UnaryPlus) {
-                element.TypeInfo = GetTypeOfOperator(DefinedOperators.UnaryPlus, operand.TypeInfo);
+                element.TypeInfo = GetTypeOfOperator(DefinedOperators.UnaryPlus, operand.TypeInfo, operand.LiteralValue);
                 element.IsConstant = operand.IsConstant;
             }
         }
@@ -220,8 +220,9 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="operatorKind"></param>
         /// <param name="typeInfo"></param>
+        /// <param name="currentValues">current value</param>
         /// <returns></returns>
-        private ITypeDefinition GetTypeOfOperator(int operatorKind, ITypeDefinition typeInfo) {
+        private ITypeDefinition GetTypeOfOperator(int operatorKind, ITypeDefinition typeInfo, object currentValues) {
             if (typeInfo == null)
                 return null;
 
@@ -231,7 +232,7 @@ namespace PasPasPas.Typings.Common {
                 return null;
 
             var signature = new Signature(typeInfo.TypeId);
-            var typeId = operation.GetOutputTypeForOperation(signature);
+            var typeId = operation.GetOutputTypeForOperation(signature, new object[] { currentValues });
             return GetTypeByIdOrUndefinedType(typeId);
         }
 
@@ -241,8 +242,10 @@ namespace PasPasPas.Typings.Common {
         /// <param name="operatorKind"></param>
         /// <param name="typeInfo1"></param>
         /// <param name="typeInfo2"></param>
+        /// <param name="left">constant left value</param>
+        /// <param name="right">constant right value</param>
         /// <returns></returns>
-        private ITypeDefinition GetTypeOfOperator(int operatorKind, ITypeDefinition typeInfo1, ITypeDefinition typeInfo2) {
+        private ITypeDefinition GetTypeOfOperator(int operatorKind, ITypeDefinition typeInfo1, ITypeDefinition typeInfo2, object left, object right) {
             if (typeInfo1 == null)
                 return null;
 
@@ -255,7 +258,7 @@ namespace PasPasPas.Typings.Common {
                 return null;
 
             var signature = new Signature(typeInfo1.TypeId, typeInfo2.TypeId);
-            var typeId = operation.GetOutputTypeForOperation(signature);
+            var typeId = operation.GetOutputTypeForOperation(signature, new[] { left, right });
             return GetTypeByIdOrUndefinedType(typeId);
         }
 
@@ -394,6 +397,9 @@ namespace PasPasPas.Typings.Common {
 
             foreach (var part in element.SymbolParts) {
 
+                if (baseTypeValue.TypeId == TypeIds.ErrorType)
+                    break;
+
                 if (part.Kind == SymbolReferencePartKind.SubItem) {
 
                     if (baseTypeValue.TypeId == TypeIds.UnspecifiedType) {
@@ -406,28 +412,38 @@ namespace PasPasPas.Typings.Common {
                         else
                             baseTypeValue = GetErrorType(element);
                     }
-
                 }
+                else if (part.Kind == SymbolReferencePartKind.CallParameters) {
+                    IList<ParameterGroup> callableRoutines = new List<ParameterGroup>();
 
-                if (part.Kind == SymbolReferencePartKind.CallParameters) {
+                    var signature = new int[part.Expressions.Count];
+                    for (var i = 0; i < signature.Length; i++)
+                        if (part.Expressions[i] != null && part.Expressions[i].TypeInfo != null)
+                            signature[i] = part.Expressions[i].TypeInfo.TypeId;
+                        else
+                            signature[i] = TypeIds.ErrorType;
 
                     if (baseTypeValue.TypeId == TypeIds.UnspecifiedType) {
-                        //..
+                        var reference = resolver.ResolveByName(new ScopedName(part.Name.CompleteName), new Signature(signature));
+
+                        if (reference == null) {
+                            baseTypeValue = GetErrorType(element);
+                        }
+                        else if (reference.Kind == ReferenceKind.RefToGlobalRoutine) {
+                            if (reference.Symbol is IRoutine routine) {
+                                isConstant = routine.IsConstant;
+                                routine.ResolveCall(callableRoutines, new Signature(signature));
+                            }
+                        }
+
                     }
                     else if (baseTypeValue.TypeKind == CommonTypeKind.ClassType && baseTypeValue is StructuredTypeDeclaration structType) {
-                        var signature = new int[part.Expressions.Count];
-                        for (var i = 0; i < signature.Length; i++)
-                            if (part.Expressions[i] != null && part.Expressions[i].TypeInfo != null)
-                                signature[i] = part.Expressions[i].TypeInfo.TypeId;
-                            else
-                                signature[i] = TypeIds.ErrorType;
-
-                        if (part.Name != null)
-                            baseTypeValue = structType.ResolveMethod(part.Name.CompleteName, new Signature(signature));
-                        else
-                            baseTypeValue = GetTypeByIdOrUndefinedType(TypeIds.ErrorType);
+                        isConstant = false;
+                        structType.ResolveCall(part.Name.CompleteName, callableRoutines, new Signature(signature));
                     }
 
+                    if (callableRoutines.Count == 1)
+                        baseTypeValue = GetTypeByIdOrUndefinedType(callableRoutines[0].ResultType.TypeId);
                 }
 
             }

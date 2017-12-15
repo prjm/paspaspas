@@ -32,7 +32,7 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         public ITypeRegistry TypeRegistry { get; set; }
 
-        private bool CanBeAssignedFromAlias(TypeAlias alias) {
+        private static bool CanBeAssignedFromAlias(TypeAlias alias) {
 
             if (alias.TypeKind == CommonTypeKind.IntegerType)
                 return true;
@@ -58,7 +58,12 @@ namespace PasPasPas.Typings.Common {
             return !alias.IsNewType;
         }
 
-        private ITypeDefinition ResolveAlias(ITypeDefinition typeDefinition) {
+        /// <summary>
+        ///     resolve type alias
+        /// </summary>
+        /// <param name="typeDefinition"></param>
+        /// <returns></returns>
+        public static ITypeDefinition ResolveAlias(ITypeDefinition typeDefinition) {
             while (typeDefinition is TypeAlias alias && CanBeAssignedFromAlias(alias)) {
                 typeDefinition = alias.BaseType;
             }

@@ -1,5 +1,6 @@
 ﻿using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Parsing.SyntaxTree.Types;
+using PasPasPas.Typings.Common;
 
 namespace PasPasPas.Typings.Operators {
 
@@ -16,6 +17,16 @@ namespace PasPasPas.Typings.Operators {
         /// <param name="withKind">operation kind</param>
         public OperatorBase(int withKind)
             => kind = withKind;
+
+        /// <summary>
+        ///     resolve type aliases
+        /// </summary>
+        /// <param name="typeId"></param>
+        /// <returns></returns>
+        protected ITypeDefinition ResolveAlias(int typeId) {
+            var type = TypeRegistry.GetTypeByIdOrUndefinedType(typeId);
+            return TypeBase.ResolveAlias(type);
+        }
 
         /// <summary>
         ///     operation kind - <c>DefinedOperations.NotOperation</c>
@@ -38,6 +49,7 @@ namespace PasPasPas.Typings.Operators {
         /// </summary>
         /// <param name="input">input signature</param>
         /// <returns>output type id</returns>
-        public abstract int GetOutputTypeForOperation(Signature input);
+        /// <param name="currentValue">current values of the operands (if constant)</param>
+        public abstract int GetOutputTypeForOperation(Signature input, object[] currentValue);
     }
 }

@@ -22,11 +22,11 @@ namespace PasPasPasTests.Tokenizer {
 
         [Fact]
         public void TestIntegers() {
-            IsInteger("2", (byte)2);
-            IsInteger("123", (byte)123);
-            IsInteger("0000", (byte)0);
-            IsInteger("10000", (ushort)10000);
-            IsInteger("1000000", (uint)1000000);
+            IsInteger("2", (sbyte)2);
+            IsInteger("123", (sbyte)123);
+            IsInteger("0000", (sbyte)0);
+            IsInteger("10000", (short)10000);
+            IsInteger("1000000", (int)1000000);
             IsInteger("18446744073709551615", 18446744073709551615);
             IsInteger("18446744073709551616", IntegerParser.IntegerOverflowInLiteral);
             IsInteger("108446744073709551615", IntegerParser.IntegerOverflowInLiteral);
@@ -124,14 +124,14 @@ namespace PasPasPasTests.Tokenizer {
             IsToken(TokenKind.Comment, "{ ddd }");
             IsToken(TokenKind.Preprocessor, "{$ ddd }", "{$ ddd }", " ddd ");
             IsToken(TokenKind.WhiteSpace, "  ");
-            IsToken(TokenKind.HexNumber, "$0000", "$0000", (byte)0);
+            IsToken(TokenKind.HexNumber, "$0000", "$0000", (sbyte)0);
             IsToken(TokenKind.DoubleQuotedString, "\"\"", "\"\"", string.Empty);
         }
 
         [Fact]
         public void TestHexNumbers() {
-            IsHexNumber("$333F", (ushort)0x333F);
-            IsHexNumber("$000000", (byte)0);
+            IsHexNumber("$333F", (short)0x333F);
+            IsHexNumber("$000000", (sbyte)0);
             IsHexNumber("$FFFFFFFFFFFFFFFF", 0xFFFFFFFFFFFFFFFF);
         }
 

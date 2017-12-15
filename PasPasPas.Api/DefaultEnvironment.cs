@@ -113,7 +113,7 @@ namespace PasPasPas.Api {
         /// </summary>
         /// <param name="intSize">integer size</param>
         public DefaultEnvironment(NativeIntSize intSize = NativeIntSize.Undefined)
-            => TypeRegistry = new RegisteredTypes(StringPool, intSize);
+            => TypeRegistry = new RegisteredTypes(StringPool, LiteralUnwrapper, intSize);
 
         /// <summary>
         ///     all entries

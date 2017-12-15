@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿using PasPasPas.Typings.Common;
+using Xunit;
 
 namespace PasPasPasTests.Parser {
 
@@ -110,6 +111,8 @@ namespace PasPasPasTests.Parser {
             TestConstant("[1,2,3,4]");
             TestConstant("['a'..'z']");
             TestConstant("(1,2,3)");
+            TestConstant("Abs(5)", typeId: TypeIds.ShortInt);
+            TestConstant("Abs(-501)", typeId: TypeIds.SmallInt);
         }
 
     }

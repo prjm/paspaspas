@@ -4,8 +4,10 @@ using PasPasPas.Infrastructure.Environment;
 using PasPasPas.Options.DataTypes;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Parsing.SyntaxTree.Types;
+using PasPasPas.Parsing.Tokenizer.LiteralValues;
 using PasPasPas.Typings.Hidden;
 using PasPasPas.Typings.Operators;
+using PasPasPas.Typings.Routines;
 using PasPasPas.Typings.Simple;
 using PasPasPas.Typings.Structured;
 
@@ -68,12 +70,13 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="intSize">integer size</param>
         /// <param name="pool">string pool</param>
-        public RegisteredTypes(StringPool pool, NativeIntSize intSize) {
+        /// <param name="unwrapper">literal unwrapper</param>
+        public RegisteredTypes(StringPool pool, ILiteralUnwrapper unwrapper, NativeIntSize intSize) {
             systemUnit = new UnitType(TypeIds.SystemUnit);
             RegisterType(systemUnit);
 
             RegisterCommonTypes(intSize);
-            RegisterCommonOperators();
+            RegisterCommonOperators(unwrapper);
             RegisterTObject(pool);
             RegisterCommonFunctions();
         }
@@ -82,18 +85,15 @@ namespace PasPasPas.Typings.Common {
         ///     register common functions
         /// </summary>
         private void RegisterCommonFunctions() {
-            var abs = new Routine("Abs", ProcedureKind.Function);
-            var genericNumericType = GetTypeByIdOrUndefinedType(TypeIds.NumericType);
-            abs.AddParameterGroup("AValue", genericNumericType, genericNumericType);
-            systemUnit.AddGlobal(abs);
+            systemUnit.AddGlobal(new Abs(this));
         }
 
         /// <summary>
         ///     register common operators
         /// </summary>
-        private void RegisterCommonOperators() {
+        private void RegisterCommonOperators(ILiteralUnwrapper unwrapper) {
             LogicalOperators.RegisterOperators(this);
-            ArithmeticOperators.RegisterOperators(this);
+            ArithmeticOperators.RegisterOperators(unwrapper, this);
             RelationalOperators.RegisterOperators(this);
             StringOperators.RegisterOperators(this);
         }
@@ -135,7 +135,6 @@ namespace PasPasPas.Typings.Common {
         }
 
         private void RegisterHiddenTypes() {
-            RegisterSystemType(new NumericType(TypeIds.NumericType), null);
             RegisterSystemType(new UnspecifiedType(TypeIds.UnspecifiedType), null);
         }
 

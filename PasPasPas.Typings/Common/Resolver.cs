@@ -23,8 +23,9 @@ namespace PasPasPas.Typings.Common {
         ///     resolve a reference by name
         /// </summary>
         /// <param name="typeName">given name</param>
+        /// <param name="signature">signature</param>
         /// <returns>resolved reference</returns>
-        public Reference ResolveByName(ScopedName typeName) {
+        public Reference ResolveByName(ScopedName typeName, Signature signature = default) {
             var scope = this.scope;
 
             while (scope != null) {

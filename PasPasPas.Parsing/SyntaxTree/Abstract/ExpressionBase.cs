@@ -16,5 +16,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     <c>true</c> for constant expressions
         /// </summary>
         public bool IsConstant { get; set; }
+
+        /// <summary>
+        ///     literal value
+        /// </summary>
+        public object LiteralValue { get; set; }
+
     }
 }

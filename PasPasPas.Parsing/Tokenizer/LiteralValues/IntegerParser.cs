@@ -187,12 +187,20 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
                 result = newresult;
             }
 
-            if (result < 256)
+            if (result < 128)
+                return (sbyte)result;
+            else if (result < 256)
                 return (byte)result;
+            else if (result < 32768)
+                return (short)result;
             else if (result < 65536)
                 return (ushort)result;
+            else if (result < 2147483648)
+                return (int)result;
             else if (result < 4294967296)
                 return (uint)result;
+            else if (result < 9223372036854775808)
+                return (long)result;
 
             return result;
         }

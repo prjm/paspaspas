@@ -44,5 +44,31 @@ namespace PasPasPas.Typings.Structured {
         /// <returns></returns>
         public Variable this[int index]
             => Parameters[index];
+
+        /// <summary>
+        ///     check if this parameter group matches a signature
+        /// </summary>
+        /// <param name="signature"></param>
+        /// <param name="types">type registry</param>
+        /// <returns></returns>
+        public bool Matches(ITypeRegistry types, Signature signature) {
+            var paramCount = Parameters == null ? 0 : Parameters.Count;
+
+            if (paramCount != signature.Length)
+                return false;
+
+            var match = true;
+
+            for (var i = 0; Parameters != null && i < Parameters.Count; i++) {
+                var parameter = Parameters[i];
+                var sourceType = types.GetTypeByIdOrUndefinedType(signature[i]);
+                match = match && parameter.SymbolType.CanBeAssignedFrom(sourceType);
+
+                if (!match)
+                    return false;
+            }
+
+            return true;
+        }
     }
 }

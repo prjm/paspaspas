@@ -15,12 +15,20 @@ namespace PasPasPas.Typings.Simple {
         public static int GetTypeFor(object literalValue) {
 
             if (literalValue is byte)
+                return TypeIds.ByteType;
+            else if (literalValue is sbyte)
                 return TypeIds.ShortInt;
             else if (literalValue is ushort)
+                return TypeIds.WordType;
+            else if (literalValue is short)
                 return TypeIds.SmallInt;
-            else if (literalValue is uint)
+            else if (literalValue is int)
                 return TypeIds.IntegerType;
+            else if (literalValue is uint)
+                return TypeIds.CardinalType;
             else if (literalValue is ulong)
+                return TypeIds.Uint64Type;
+            else if (literalValue is long)
                 return TypeIds.Int64Type;
             else if (literalValue is bool)
                 return TypeIds.BooleanType;

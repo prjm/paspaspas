@@ -9,9 +9,6 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
     /// </summary>
     public static class Literals {
 
-
-
-
         /// <summary>
         ///     test if a parsed literal was a number
         /// </summary>

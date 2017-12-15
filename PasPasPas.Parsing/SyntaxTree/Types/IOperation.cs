@@ -25,7 +25,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Types {
         ///     compute a type signature
         /// </summary>
         /// <param name="input"></param>
+        /// <param name="currentValues">current value</param>
         /// <returns></returns>
-        int GetOutputTypeForOperation(Signature input);
+        int GetOutputTypeForOperation(Signature input, object[] currentValues);
     }
 }

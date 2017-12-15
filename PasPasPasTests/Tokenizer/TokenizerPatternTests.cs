@@ -257,7 +257,7 @@ namespace PasPasPasTests.Tokenizer {
             TestPattern(patterns, "$000000", TokenKind.HexNumber);
             TestPattern(patterns, "$1234FFFF", TokenKind.HexNumber);
             TestPattern(patterns, PasPasPas.Parsing.Tokenizer.Tokenizer.UnexpectedCharacter, "$CEFO", TokenKind.HexNumber, TokenKind.Invalid);
-            Assert.AreEqual((ushort)0x123F, TestPattern(patterns, "$123F", TokenKind.HexNumber).ParsedValue);
+            Assert.AreEqual((short)0x123F, TestPattern(patterns, "$123F", TokenKind.HexNumber).ParsedValue);
         }
 
         private InputPatterns CreatePatterns(bool allowAmpersand = true, bool allowDigits = false, bool allowDot = false) {

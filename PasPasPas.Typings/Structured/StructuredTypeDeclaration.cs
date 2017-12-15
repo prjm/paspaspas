@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Typings.Common;
@@ -85,7 +84,10 @@ namespace PasPasPas.Typings.Structured {
                 if (string.Equals(method.Name, completeName, StringComparison.OrdinalIgnoreCase))
                     return method;
 
-            var newMethod = new Routine(completeName, kind);
+            if (TypeRegistry == null)
+                throw new InvalidOperationException();
+
+            var newMethod = new Routine(TypeRegistry, completeName, kind);
             Methods.Add(newMethod);
             return newMethod;
         }
@@ -141,36 +143,17 @@ namespace PasPasPas.Typings.Structured {
         /// </summary>
         /// <param name="signature"></param>
         /// <param name="symbolName">method name</param>
+        /// <param name="callables">callables</param>
         /// <returns></returns>
-        public ITypeDefinition ResolveMethod(string symbolName, Signature signature) {
+        public void ResolveCall(string symbolName, IList<ParameterGroup> callables, Signature signature) {
 
             foreach (var method in Methods)
-                if (string.Equals(method.Name, symbolName, StringComparison.OrdinalIgnoreCase)) {
+                if (string.Equals(method.Name, symbolName, StringComparison.OrdinalIgnoreCase))
+                    method.ResolveCall(callables, signature);
 
-                    foreach (var paramGroup in method.Parameters) {
-
-                        var paramCount = paramGroup.Parameters == null ? 0 : paramGroup.Parameters.Count;
-
-                        if (paramCount != signature.Length)
-                            continue;
-
-                        var match = true;
-
-                        for (var i = 0; paramGroup.Parameters != null && i < paramGroup.Parameters.Count; i++) {
-                            match = match && paramGroup[i].SymbolType.TypeId == signature[i];
-                        }
-
-                        if (!match)
-                            continue;
-
-                        return paramGroup.ResultType;
-                    }
-                }
 
             if (BaseClass != null && BaseClass is StructuredTypeDeclaration baseType)
-                return baseType.ResolveMethod(symbolName, signature);
-
-            return TypeRegistry.GetTypeByIdOrUndefinedType(TypeIds.ErrorType);
+                baseType.ResolveCall(symbolName, callables, signature);
         }
     }
 }

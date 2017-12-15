@@ -19,8 +19,8 @@ namespace PasPasPas.Typings.Structured {
         /// <summary>
         ///     global routines
         /// </summary>
-        private IList<Routine> globalRoutines
-            = new List<Routine>();
+        private IList<IRoutine> globalRoutines
+            = new List<IRoutine>();
 
         /// <summary>
         ///     unit type
@@ -56,7 +56,7 @@ namespace PasPasPas.Typings.Structured {
         ///     add a globale routine
         /// </summary>
         /// <param name="routine"></param>
-        public void AddGlobal(Routine routine) {
+        public void AddGlobal(IRoutine routine) {
             globalRoutines.Add(routine);
             symbols.Add(routine.Name, new Reference(ReferenceKind.RefToGlobalRoutine, routine));
         }

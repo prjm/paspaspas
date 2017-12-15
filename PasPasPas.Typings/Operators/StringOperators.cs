@@ -38,8 +38,9 @@ namespace PasPasPas.Typings.Operators {
         ///     get the output type for a given operator signature
         /// </summary>
         /// <param name="input">operator signature</param>
+        /// <param name="values">current values (if constant)</param>
         /// <returns></returns>
-        public override int GetOutputTypeForOperation(Signature input) {
+        public override int GetOutputTypeForOperation(Signature input, object[] values) {
 
             if (input.Length != 2)
                 return TypeIds.ErrorType;

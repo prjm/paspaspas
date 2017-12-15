@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Typings.Common;
@@ -8,16 +9,18 @@ namespace PasPasPas.Typings.Structured {
     /// <summary>
     ///     callable routine
     /// </summary>
-    public class Routine : IRefSymbol {
+    public class Routine : IRoutine {
 
         /// <summary>
         ///     create a new routine
         /// </summary>
         /// <param name="name">routine name</param>
         /// <param name="kind">routine kind</param>
-        public Routine(string name, ProcedureKind kind) {
+        /// <param name="types">typ registry</param>
+        public Routine(ITypeRegistry types, string name, ProcedureKind kind) {
             Name = name;
             Kind = kind;
+            TypeRegistry = types;
         }
 
         /// <summary>
@@ -37,10 +40,21 @@ namespace PasPasPas.Typings.Structured {
         public ProcedureKind Kind { get; }
 
         /// <summary>
+        ///     used type registry
+        /// </summary>
+        public ITypeRegistry TypeRegistry { get; private set; }
+
+        /// <summary>
         ///     type id
         /// </summary>
         public int TypeId
             => TypeIds.UnspecifiedType;
+
+        /// <summary>
+        ///     <c>false</c>
+        /// </summary>
+        public bool IsConstant
+            => false;
 
         /// <summary>
         ///     add a parameter group
@@ -81,6 +95,21 @@ namespace PasPasPas.Typings.Structured {
 
             Parameters.Add(result);
             return result;
+        }
+
+        /// <summary>
+        ///     find a matching parameter group
+        /// </summary>
+        /// <param name="callables">list of callable routines</param>
+        /// <param name="signature">used signature</param>
+        public void ResolveCall(IList<ParameterGroup> callables, Signature signature) {
+            foreach (var paramGroup in Parameters) {
+
+                if (!paramGroup.Matches(TypeRegistry, signature))
+                    continue;
+
+                callables.Add(paramGroup);
+            }
         }
     }
 }

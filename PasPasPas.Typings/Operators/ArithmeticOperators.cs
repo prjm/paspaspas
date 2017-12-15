@@ -1,6 +1,7 @@
 ﻿using System;
 using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree.Types;
+using PasPasPas.Parsing.Tokenizer.LiteralValues;
 using PasPasPas.Typings.Common;
 
 namespace PasPasPas.Typings.Operators {
@@ -11,11 +12,17 @@ namespace PasPasPas.Typings.Operators {
     public class ArithmeticOperators : OperatorBase {
 
         /// <summary>
+        ///     litera unwrapper
+        /// </summary>
+        private readonly ILiteralUnwrapper literalUnwrapper;
+
+        /// <summary>
         ///     create a new arithmetic operator
         /// </summary>
         /// <param name="withKind">operator kind</param>
-        public ArithmeticOperators(int withKind) : base(withKind) {
-        }
+        /// <param name="unwrapper">unwrapper for litersl</param>
+        public ArithmeticOperators(ILiteralUnwrapper unwrapper, int withKind) : base(withKind)
+            => literalUnwrapper = unwrapper;
 
         /// <summary>
         ///     get the operator name
@@ -42,8 +49,9 @@ namespace PasPasPas.Typings.Operators {
         ///     get the output type for a given operator signature
         /// </summary>
         /// <param name="input">operator signature</param>
+        /// <param name="values">current value</param>
         /// <returns></returns>
-        public override int GetOutputTypeForOperation(Signature input) {
+        public override int GetOutputTypeForOperation(Signature input, object[] values) {
 
             if (!input.Length.In(1, 2))
                 return TypeIds.ErrorType;
@@ -52,7 +60,7 @@ namespace PasPasPas.Typings.Operators {
 
                 var operand = TypeRegistry.GetTypeKind(input[0]);
 
-                if (Kind.In(DefinedOperators.UnaryPlus, DefinedOperators.UnaryMinus)) {
+                if (Kind == DefinedOperators.UnaryPlus) {
 
                     if (operand == CommonTypeKind.FloatType)
                         return TypeIds.Extended;
@@ -61,10 +69,39 @@ namespace PasPasPas.Typings.Operators {
                         return TypeIds.Int64Type;
 
                     if (operand == CommonTypeKind.IntegerType)
-                        return TypeIds.IntegerType;
+                        return input[0];
 
                 }
+                if (Kind == DefinedOperators.UnaryMinus) {
 
+                    if (operand == CommonTypeKind.FloatType)
+                        return input[0];
+
+                    if (operand == CommonTypeKind.IntegerType || operand == CommonTypeKind.Int64Type) {
+
+                        var currentType = ResolveAlias(input[0]) as IIntegralType;
+
+                        if (currentType.Signed || values.Length == 0 || values[0] == null)
+                            return currentType.TypeId;
+                        else if (currentType.BitSize == 8)
+                            if (literalUnwrapper.UnwrapInteger(values[0]) <= 128)
+                                return TypeIds.ShortInt;
+                            else
+                                return TypeIds.SmallInt;
+                        else if (currentType.BitSize == 16)
+                            if (literalUnwrapper.UnwrapInteger(values[0]) <= 32768)
+                                return TypeIds.SmallInt;
+                            else
+                                return TypeIds.IntegerType;
+                        else if (currentType.BitSize == 32)
+                            if (literalUnwrapper.UnwrapInteger(values[0]) <= 2147483648)
+                                return TypeIds.IntegerType;
+                            else
+                                return TypeIds.Int64Type;
+                        else
+                            return TypeIds.Int64Type;
+                    }
+                }
             }
             else if (input.Length == 2) {
 
@@ -82,7 +119,7 @@ namespace PasPasPas.Typings.Operators {
                         return TypeIds.Int64Type;
 
                     if (CommonTypeKind.IntegerType.All(left, right))
-                        return TypeIds.IntegerType;
+                        return TypeRegistry.GetSmallestIntegralTypeOrNext(input[0], input[1]);
 
                 }
 
@@ -93,7 +130,7 @@ namespace PasPasPas.Typings.Operators {
                         return TypeIds.Int64Type;
 
                     if (CommonTypeKind.IntegerType.All(left, right))
-                        return TypeIds.IntegerType;
+                        return TypeRegistry.GetSmallestIntegralTypeOrNext(input[0], input[1]);
 
                 }
 
@@ -119,16 +156,17 @@ namespace PasPasPas.Typings.Operators {
         /// <summary>
         ///     register known operators
         /// </summary>
+        /// <param name="unwrapper">literal unwrapper</param>
         /// <param name="typeRegistry">type registry</param>
-        public static void RegisterOperators(ITypeRegistry typeRegistry) {
-            typeRegistry.RegisterOperator(new ArithmeticOperators(DefinedOperators.UnaryMinus));
-            typeRegistry.RegisterOperator(new ArithmeticOperators(DefinedOperators.UnaryPlus));
-            typeRegistry.RegisterOperator(new ArithmeticOperators(DefinedOperators.PlusOperation));
-            typeRegistry.RegisterOperator(new ArithmeticOperators(DefinedOperators.MinusOperation));
-            typeRegistry.RegisterOperator(new ArithmeticOperators(DefinedOperators.TimesOperation));
-            typeRegistry.RegisterOperator(new ArithmeticOperators(DefinedOperators.DivOperation));
-            typeRegistry.RegisterOperator(new ArithmeticOperators(DefinedOperators.ModOperation));
-            typeRegistry.RegisterOperator(new ArithmeticOperators(DefinedOperators.SlashOperation));
+        public static void RegisterOperators(ILiteralUnwrapper unwrapper, ITypeRegistry typeRegistry) {
+            typeRegistry.RegisterOperator(new ArithmeticOperators(unwrapper, DefinedOperators.UnaryMinus));
+            typeRegistry.RegisterOperator(new ArithmeticOperators(unwrapper, DefinedOperators.UnaryPlus));
+            typeRegistry.RegisterOperator(new ArithmeticOperators(unwrapper, DefinedOperators.PlusOperation));
+            typeRegistry.RegisterOperator(new ArithmeticOperators(unwrapper, DefinedOperators.MinusOperation));
+            typeRegistry.RegisterOperator(new ArithmeticOperators(unwrapper, DefinedOperators.TimesOperation));
+            typeRegistry.RegisterOperator(new ArithmeticOperators(unwrapper, DefinedOperators.DivOperation));
+            typeRegistry.RegisterOperator(new ArithmeticOperators(unwrapper, DefinedOperators.ModOperation));
+            typeRegistry.RegisterOperator(new ArithmeticOperators(unwrapper, DefinedOperators.SlashOperation));
         }
     }
 }

@@ -378,11 +378,6 @@ namespace PasPasPas.Typings.Common {
         public const int TClass = 101;
 
         /// <summary>
-        ///     hidden generic numeric type
-        /// </summary>
-        public const int NumericType = 102;
-
-        /// <summary>
         ///     untyped pointer
         /// </summary>
         public const int UntypedPointer = 103;

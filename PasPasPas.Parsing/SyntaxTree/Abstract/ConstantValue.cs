@@ -13,11 +13,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         public ConstantValueKind Kind { get; set; }
 
         /// <summary>
-        ///     literal value
-        /// </summary>
-        public object LiteralValue { get; set; }
-
-        /// <summary>
         ///     accept visitor
         /// </summary>
         /// <param name="visitor">node visitor</param>
