@@ -38,6 +38,17 @@ namespace PasPasPas.Typings.Simple {
             => 64;
 
         /// <summary>
+        ///     get the highes element of this ordinal type
+        /// </summary>
+        public ulong HighestElement {
+            get {
+                if (signed)
+                    return 9223372036854775807;
+                return 18446744073709551615;
+            }
+        }
+
+        /// <summary>
         ///     test for assignment type compatibility
         /// </summary>
         /// <param name="otherType">other type to check</param>

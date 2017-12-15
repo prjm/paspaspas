@@ -81,7 +81,7 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="kind">type kind</param>
         /// <returns><c>true if this type kind is an ordinal type kind</c></returns>
-        public static bool Ordinal(this CommonTypeKind kind)
+        public static bool IsOrdinal(this CommonTypeKind kind)
             => kind == CommonTypeKind.AnsiCharType ||
             kind == CommonTypeKind.WideCharType ||
             kind == CommonTypeKind.BooleanType ||
@@ -96,7 +96,7 @@ namespace PasPasPas.Typings.Common {
         /// <param name="kind"></param>
         /// <returns></returns>
         public static bool Ordinal(this CommonTypeKind? kind)
-            => kind.HasValue && kind.Value.Ordinal();
+            => kind.HasValue && kind.Value.IsOrdinal();
 
         /// <summary>
         ///     test if the type kind is an integral type

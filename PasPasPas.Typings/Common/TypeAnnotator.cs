@@ -159,7 +159,7 @@ namespace PasPasPas.Typings.Common {
                 var leftId = leftType.TypeId;
                 var rightId = rightType.TypeId;
 
-                if (left.Ordinal() && right.Ordinal()) {
+                if (left.IsOrdinal() && right.IsOrdinal()) {
                     if (left.Integral() && right.Integral()) {
                         var baseType = GetTypeByIdOrUndefinedType(GetSmallestIntegralTypeOrNext(leftId, rightId));
                         element.TypeInfo = RegisterUserDefinedType(new Simple.SubrangeType(RequireUserTypeId(), baseType.TypeId));
@@ -554,7 +554,7 @@ namespace PasPasPas.Typings.Common {
         /// <param name="element"></param>
         public void EndVisit(SetTypeDeclaration element) {
 
-            if (element.TypeValue is ITypedSyntaxNode declaredEnum && declaredEnum.TypeInfo != null && declaredEnum.TypeInfo.TypeKind.Ordinal()) {
+            if (element.TypeValue is ITypedSyntaxNode declaredEnum && declaredEnum.TypeInfo != null && declaredEnum.TypeInfo.TypeKind.IsOrdinal()) {
                 var typeId = RequireUserTypeId();
                 var setType = new SetType(typeId, declaredEnum.TypeInfo.TypeId);
                 RegisterUserDefinedType(setType);
@@ -747,7 +747,7 @@ namespace PasPasPas.Typings.Common {
                     baseType = part.TypeInfo;
                 else if (baseType.TypeKind.Integral() && part.TypeInfo.TypeKind.Integral())
                     baseType = GetTypeByIdOrUndefinedType(GetSmallestIntegralTypeOrNext(baseType.TypeId, part.TypeInfo.TypeId));
-                else if (baseType.TypeKind.Ordinal() && baseType.TypeId == part.TypeInfo.TypeId)
+                else if (baseType.TypeKind.IsOrdinal() && baseType.TypeId == part.TypeInfo.TypeId)
                     baseType = part.TypeInfo;
                 else {
                     baseType = GetErrorType(part);
@@ -781,7 +781,7 @@ namespace PasPasPas.Typings.Common {
                     baseType = part.TypeInfo;
                 else if (baseType.TypeKind.Integral() && part.TypeInfo.TypeKind.Integral())
                     baseType = GetTypeByIdOrUndefinedType(GetSmallestIntegralTypeOrNext(baseType.TypeId, part.TypeInfo.TypeId));
-                else if (baseType.TypeKind.Ordinal() && baseType.TypeId == part.TypeInfo.TypeId)
+                else if (baseType.TypeKind.IsOrdinal() && baseType.TypeId == part.TypeInfo.TypeId)
                     baseType = part.TypeInfo;
                 else {
                     baseType = GetErrorType(part);

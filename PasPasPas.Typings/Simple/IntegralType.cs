@@ -41,6 +41,30 @@ namespace PasPasPas.Typings.Simple {
             => bitSize;
 
         /// <summary>
+        ///     get the highes element
+        /// </summary>
+        public ulong HighestElement {
+            get {
+                if (signed) {
+                    if (BitSize == 8)
+                        return 127;
+                    else if (BitSize == 16)
+                        return 32767;
+
+                    return 2147483647;
+                }
+                else {
+                    if (BitSize == 8)
+                        return 255;
+                    else if (BitSize == 16)
+                        return 65535;
+
+                    return 4294967295;
+                }
+            }
+        }
+
+        /// <summary>
         ///     test for assignment type compatibility
         /// </summary>
         /// <param name="otherType">other type to check</param>

@@ -28,13 +28,13 @@ namespace PasPasPas.Api {
         /// <summary>
         ///     integer parser
         /// </summary>
-        public ILiteralParser IntegerParser { get; }
+        public IIntegerLiteralParser IntegerParser { get; }
             = new IntegerParser(false);
 
         /// <summary>
         ///     hex number parser
         /// </summary>
-        public ILiteralParser HexNumberParser { get; }
+        public IIntegerLiteralParser HexNumberParser { get; }
             = new IntegerParser(true);
 
         /// <summary>
@@ -113,7 +113,7 @@ namespace PasPasPas.Api {
         /// </summary>
         /// <param name="intSize">integer size</param>
         public DefaultEnvironment(NativeIntSize intSize = NativeIntSize.Undefined)
-            => TypeRegistry = new RegisteredTypes(StringPool, LiteralUnwrapper, intSize);
+            => TypeRegistry = new RegisteredTypes(StringPool, IntegerParser, LiteralUnwrapper, intSize);
 
         /// <summary>
         ///     all entries

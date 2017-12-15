@@ -6,7 +6,7 @@ using PasPasPas.Typings.Structured;
 namespace PasPasPas.Typings.Routines {
 
     /// <summary>
-    ///     type specification for the abs routine
+    ///     type specification for the <code>Abs</code> routine
     /// </summary>
     public class Abs : IRoutine {
 

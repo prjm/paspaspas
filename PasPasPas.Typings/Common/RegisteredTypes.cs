@@ -71,21 +71,23 @@ namespace PasPasPas.Typings.Common {
         /// <param name="intSize">integer size</param>
         /// <param name="pool">string pool</param>
         /// <param name="unwrapper">literal unwrapper</param>
-        public RegisteredTypes(StringPool pool, ILiteralUnwrapper unwrapper, NativeIntSize intSize) {
+        /// <param name="intParser">integer parser</param>
+        public RegisteredTypes(StringPool pool, IIntegerLiteralParser intParser, ILiteralUnwrapper unwrapper, NativeIntSize intSize) {
             systemUnit = new UnitType(TypeIds.SystemUnit);
             RegisterType(systemUnit);
 
             RegisterCommonTypes(intSize);
             RegisterCommonOperators(unwrapper);
             RegisterTObject(pool);
-            RegisterCommonFunctions();
+            RegisterCommonFunctions(intParser);
         }
 
         /// <summary>
         ///     register common functions
         /// </summary>
-        private void RegisterCommonFunctions() {
+        private void RegisterCommonFunctions(IIntegerLiteralParser intParser) {
             systemUnit.AddGlobal(new Abs(this));
+            systemUnit.AddGlobal(new High(this, intParser));
         }
 
         /// <summary>

@@ -6,7 +6,7 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
     /// <summary>
     ///     simple integer parser
     /// </summary>
-    public sealed class IntegerParser : IEnvironmentItem, ILiteralParser, ILookupFunction<string, object> {
+    public sealed class IntegerParser : IEnvironmentItem, IIntegerLiteralParser, ILookupFunction<string, object> {
 
         private readonly LookupTable<string, object> data;
 
@@ -99,6 +99,31 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
             return 255;
         }
 
+        /// <summary>
+        ///     convert an integral number to an internal literal
+        /// </summary>
+        /// <param name="result"></param>
+        /// <returns></returns>
+        public object ToLiteral(ulong result) {
+            if (result < 128)
+                return (sbyte)result;
+            else if (result < 256)
+                return (byte)result;
+            else if (result < 32768)
+                return (short)result;
+            else if (result < 65536)
+                return (ushort)result;
+            else if (result < 2147483648)
+                return (int)result;
+            else if (result < 4294967296)
+                return (uint)result;
+            else if (result < 9223372036854775808)
+                return (long)result;
+
+            return result;
+
+        }
+
         private static readonly ulong[] hexFactors = {
             1,
             16,
@@ -187,22 +212,7 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
                 result = newresult;
             }
 
-            if (result < 128)
-                return (sbyte)result;
-            else if (result < 256)
-                return (byte)result;
-            else if (result < 32768)
-                return (short)result;
-            else if (result < 65536)
-                return (ushort)result;
-            else if (result < 2147483648)
-                return (int)result;
-            else if (result < 4294967296)
-                return (uint)result;
-            else if (result < 9223372036854775808)
-                return (long)result;
-
-            return result;
+            return ToLiteral(result);
         }
 
         /// <summary>

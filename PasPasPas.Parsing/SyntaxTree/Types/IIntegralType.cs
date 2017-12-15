@@ -2,7 +2,7 @@
     /// <summary>
     ///     interface for integral types
     /// </summary>
-    public interface IIntegralType : IFixedSizeType {
+    public interface IIntegralType : IOrdinalType {
 
         /// <summary>
         ///     true if this type is signed

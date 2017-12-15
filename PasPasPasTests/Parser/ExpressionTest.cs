@@ -113,6 +113,7 @@ namespace PasPasPasTests.Parser {
             TestConstant("(1,2,3)");
             TestConstant("Abs(5)", typeId: TypeIds.ShortInt);
             TestConstant("Abs(-501)", typeId: TypeIds.SmallInt);
+            //TestConstant("High(-501)", typeId: TypeIds.SmallInt);
         }
 
     }

@@ -13,12 +13,12 @@ namespace PasPasPas.Parsing {
         /// <summary>
         ///     integer literal parser
         /// </summary>
-        ILiteralParser IntegerParser { get; }
+        IIntegerLiteralParser IntegerParser { get; }
 
         /// <summary>
         ///     hex number literal parser
         /// </summary>
-        ILiteralParser HexNumberParser { get; }
+        IIntegerLiteralParser HexNumberParser { get; }
 
         /// <summary>
         ///     char literal converter
