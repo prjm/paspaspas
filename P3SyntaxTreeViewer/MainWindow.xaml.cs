@@ -136,6 +136,10 @@ namespace P3SyntaxTreeViewer {
                 treeViewItem.Header += " " + srp.Kind.ToString();
             }
 
+            if (cst is IExpression expr && expr.LiteralValue != null) {
+                treeViewItem.Header += " = " + expr.LiteralValue.ToString();
+            }
+
             if (parent != null) {
                 parent.Items.Add(treeViewItem);
             }

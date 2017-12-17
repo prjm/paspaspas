@@ -36,6 +36,28 @@ namespace PasPasPasTests.Types {
         }
 
         /// <summary>
+        ///     test the value of a given expressiom
+        /// </summary>
+        /// <param name="expression">expression</param>
+        /// <param name="typeId">type id to find</param>
+        protected void AssertExprValue(string expression, object value) {
+            var file = "SimpleExpr";
+            var program = $"program {file}; begin Writeln({expression}); end. ";
+            SymbolReferencePart searchfunction(object x) => x as SymbolReferencePart;
+            IExpression firstParam = null;
+
+            firstParam = EvaluateExpressionType(file, program, searchfunction, NativeIntSize.Undefined) as IExpression;
+
+            Assert.IsNotNull(firstParam);
+            Assert.IsNotNull(firstParam.LiteralValue);
+            Assert.IsNotNull(firstParam.TypeInfo);
+            Assert.IsTrue(firstParam.IsConstant);
+            Assert.AreEqual(value, firstParam.LiteralValue);
+
+        }
+
+
+        /// <summary>
         ///     test the type of a declared variable expressiom
         /// </summary>
         /// <param name="declaration">declareation</param>

@@ -1,4 +1,5 @@
 ﻿using System;
+using PasPasPas.Infrastructure.Common;
 using PasPasPas.Infrastructure.Environment;
 
 namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
@@ -99,31 +100,6 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
             return 255;
         }
 
-        /// <summary>
-        ///     convert an integral number to an internal literal
-        /// </summary>
-        /// <param name="result"></param>
-        /// <returns></returns>
-        public object ToLiteral(ulong result) {
-            if (result < 128)
-                return (sbyte)result;
-            else if (result < 256)
-                return (byte)result;
-            else if (result < 32768)
-                return (short)result;
-            else if (result < 65536)
-                return (ushort)result;
-            else if (result < 2147483648)
-                return (int)result;
-            else if (result < 4294967296)
-                return (uint)result;
-            else if (result < 9223372036854775808)
-                return (long)result;
-
-            return result;
-
-        }
-
         private static readonly ulong[] hexFactors = {
             1,
             16,
@@ -167,13 +143,16 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
         };
 
         private readonly bool allowHex;
+        private readonly IConstantOperations constOps;
 
         /// <summary>
         ///     create a new integer parser
         /// </summary>
+        /// <param name="operations"></param>
         /// <param name="hexFormat">if <c>true</c>, numbers a parsed in hex format</param>
-        public IntegerParser(bool hexFormat) {
+        public IntegerParser(IConstantOperations operations, bool hexFormat) {
             allowHex = hexFormat;
+            constOps = operations;
             data = new LookupTable<string, object>(new Func<string, object>(DoParse), true);
         }
 
@@ -212,7 +191,9 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
                 result = newresult;
             }
 
-            return ToLiteral(result);
+            if (result > 9223372036854775807)
+                return result;
+            return constOps.ToConstantInt((long)result);
         }
 
         /// <summary>

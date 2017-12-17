@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using PasPasPas.Infrastructure.Common;
 using PasPasPas.Infrastructure.Environment;
 using PasPasPas.Options.DataTypes;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
@@ -71,23 +72,23 @@ namespace PasPasPas.Typings.Common {
         /// <param name="intSize">integer size</param>
         /// <param name="pool">string pool</param>
         /// <param name="unwrapper">literal unwrapper</param>
-        /// <param name="intParser">integer parser</param>
-        public RegisteredTypes(StringPool pool, IIntegerLiteralParser intParser, ILiteralUnwrapper unwrapper, NativeIntSize intSize) {
+        /// <param name="constOps">constant helper</param>
+        public RegisteredTypes(StringPool pool, IConstantOperations constOps, ILiteralUnwrapper unwrapper, NativeIntSize intSize) {
             systemUnit = new UnitType(TypeIds.SystemUnit);
             RegisterType(systemUnit);
 
             RegisterCommonTypes(intSize);
             RegisterCommonOperators(unwrapper);
             RegisterTObject(pool);
-            RegisterCommonFunctions(intParser);
+            RegisterCommonFunctions(constOps);
         }
 
         /// <summary>
         ///     register common functions
         /// </summary>
-        private void RegisterCommonFunctions(IIntegerLiteralParser intParser) {
+        private void RegisterCommonFunctions(IConstantOperations constOps) {
             systemUnit.AddGlobal(new Abs(this));
-            systemUnit.AddGlobal(new High(this, intParser));
+            systemUnit.AddGlobal(new High(this, constOps));
         }
 
         /// <summary>

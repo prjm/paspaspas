@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using PasPasPas.Infrastructure.Common;
 using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Parsing.Tokenizer.LiteralValues;
 using PasPasPas.Typings.Common;
@@ -18,10 +19,10 @@ namespace PasPasPas.Typings.Routines {
         ///     create a new type specifiction for the routine <c>abs</c>
         /// </summary>
         /// <param name="registry"></param>
-        /// <param name="intParser">integer parser</param>
-        public High(ITypeRegistry registry, IIntegerLiteralParser intParser) {
+        /// <param name="consOps">integer parser</param>
+        public High(ITypeRegistry registry, IConstantOperations consOps) {
             TypeRegistry = registry;
-            IntParser = intParser;
+            ConstOps = consOps;
         }
 
 
@@ -45,7 +46,7 @@ namespace PasPasPas.Typings.Routines {
         /// <summary>
         ///     integer parser
         /// </summary>
-        public IIntegerLiteralParser IntParser { get; }
+        public IConstantOperations ConstOps { get; }
 
         /// <summary>
         ///     type id
@@ -65,7 +66,7 @@ namespace PasPasPas.Typings.Routines {
             var param = TypeRegistry.GetTypeByIdOrUndefinedType(signature[0]);
             if (param.TypeKind.IsOrdinal()) {
                 var ordinalType = param as IOrdinalType;
-                var highValue = IntParser.ToLiteral(ordinalType.HighestElement);
+                var highValue = ConstOps.ToConstantInt((long)ordinalType.HighestElement);
                 var typeId = LiteralValues.GetTypeFor(highValue);
                 var result = new ParameterGroup();
                 result.AddParameter("AValue").SymbolType = param;

@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <Import Project="../Common.targets" />
 
@@ -8,20 +8,16 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <LangVersion>$(PasPasPasCsLanguageVersion)</LangVersion>
-    <DocumentationFile>bin\Release\$(PasPasPasTargetFramework)\api.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\$(PasPasPasTargetFramework)\runtime.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <LangVersion>$(PasPasPasCsLanguageVersion)</LangVersion>
-    <DocumentationFile>bin\Release\$(PasPasPasTargetFramework)\api.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\$(PasPasPasTargetFramework)\runtime.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\PasPasPas.Infrastructure\PasPasPas.Infrastructure.csproj" />
-    <ProjectReference Include="..\PasPasPas.Parsing\PasPasPas.Parsing.csproj" />
-    <ProjectReference Include="..\PasPasPas.Runtime\PasPasPas.Runtime.csproj" />
-    <ProjectReference Include="..\PasPasPas.Typings\PasPasPas.Typings.csproj" />
   </ItemGroup>
-
 
 </Project>

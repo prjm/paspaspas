@@ -202,13 +202,24 @@ namespace PasPasPas.Typings.Common {
                 element.IsConstant = operand.IsConstant;
             }
             else if (element.Kind == ExpressionKind.UnaryMinus) {
-                element.TypeInfo = GetTypeOfOperator(DefinedOperators.UnaryMinus, operand.TypeInfo, operand.LiteralValue);
+                //element.LiteralValue =
                 element.IsConstant = operand.IsConstant;
+                if (element.IsConstant) {
+                    element.LiteralValue = environment.Runtime.Constants.Negate(operand.LiteralValue);
+                    element.TypeInfo = GetTypeOfLiteral(element.LiteralValue);
+                }
+                else {
+                    element.TypeInfo = GetTypeOfOperator(DefinedOperators.UnaryMinus, operand.TypeInfo, operand.LiteralValue);
+                }
             }
             else if (element.Kind == ExpressionKind.UnaryPlus) {
                 element.TypeInfo = GetTypeOfOperator(DefinedOperators.UnaryPlus, operand.TypeInfo, operand.LiteralValue);
                 element.IsConstant = operand.IsConstant;
             }
+        }
+
+        private ITypeDefinition GetTypeOfLiteral(object value) {
+            return GetTypeByIdOrUndefinedType(LiteralValues.GetTypeFor(value));
         }
 
         private ITypeDefinition GetErrorType(ITypedSyntaxNode node) {

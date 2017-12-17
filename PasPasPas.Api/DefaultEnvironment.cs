@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Text;
+using PasPasPas.Infrastructure.Common;
 using PasPasPas.Infrastructure.Environment;
 using PasPasPas.Infrastructure.Files;
 using PasPasPas.Infrastructure.Log;
@@ -10,6 +10,7 @@ using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Parsing.Tokenizer;
 using PasPasPas.Parsing.Tokenizer.LiteralValues;
 using PasPasPas.Parsing.Tokenizer.Patterns;
+using PasPasPas.Runtime.Common;
 using PasPasPas.Typings.Common;
 
 namespace PasPasPas.Api {
@@ -29,13 +30,11 @@ namespace PasPasPas.Api {
         ///     integer parser
         /// </summary>
         public IIntegerLiteralParser IntegerParser { get; }
-            = new IntegerParser(false);
 
         /// <summary>
         ///     hex number parser
         /// </summary>
         public IIntegerLiteralParser HexNumberParser { get; }
-            = new IntegerParser(true);
 
         /// <summary>
         ///     char literal converter
@@ -112,8 +111,11 @@ namespace PasPasPas.Api {
         ///     create a new default environment
         /// </summary>
         /// <param name="intSize">integer size</param>
-        public DefaultEnvironment(NativeIntSize intSize = NativeIntSize.Undefined)
-            => TypeRegistry = new RegisteredTypes(StringPool, IntegerParser, LiteralUnwrapper, intSize);
+        public DefaultEnvironment(NativeIntSize intSize = NativeIntSize.Undefined) {
+            TypeRegistry = new RegisteredTypes(StringPool, Runtime.Constants, LiteralUnwrapper, intSize);
+            IntegerParser = new IntegerParser(Runtime.Constants, false);
+            HexNumberParser = new IntegerParser(Runtime.Constants, true);
+        }
 
         /// <summary>
         ///     all entries
@@ -134,11 +136,17 @@ namespace PasPasPas.Api {
                     Files,
                     LiteralUnwrapper,
                     BooleanLiterals,
-                    TypeRegistry
+                    TypeRegistry,
+                    Runtime
                 };
                 return data;
             }
         }
 
+        /// <summary>
+        ///     common runime
+        /// </summary>
+        public IRuntime Runtime { get; }
+            = new InternalRuntime();
     }
 }
