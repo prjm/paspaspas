@@ -748,9 +748,10 @@ namespace PasPasPasTests.Parser {
 
         [Fact]
         public void TestProcedure() {
+            var five = GetIntegerValue(5);
             MethodImplementation r(object t) => ((t as CompilationUnit)?.ImplementationSymbols["m"] as MethodImplementation);
             RunAstTest("unit z.x; interface implementation procedure m(); begin end; end.", t => r(t)?.Name.CompleteName, "m");
-            RunAstTest("unit z.x; interface implementation procedure m(var x: Integer = 5); begin end; end.", t => (r(t)?.Parameters?.Items[0]?.Value as ConstantValue)?.LiteralValue, (sbyte)5);
+            RunAstTest("unit z.x; interface implementation procedure m(var x: Integer = 5); begin end; end.", t => (r(t)?.Parameters?.Items[0]?.Value as ConstantValue)?.LiteralValue, five);
         }
 
         [Fact]
@@ -835,6 +836,7 @@ namespace PasPasPasTests.Parser {
 
         [Fact]
         public void TestAsmStatement() {
+            var one = GetIntegerValue(1);
             AssemblerStatement r(object t) => (((t as CompilationUnit)?.ImplementationSymbols["p"] as MethodImplementation)?.Block as BlockOfAssemblerStatements)?.Statements[0];
 
             RunAstTest("unit z.x; interface implementation procedure p; asm .noframe end; end.", t => r(t)?.Kind, AssemblerStatementKind.NoFrameOperation);
@@ -843,7 +845,7 @@ namespace PasPasPasTests.Parser {
             RunAstTest("unit z.x; interface implementation procedure p; asm .savenv a end; end.", t => r(t)?.Kind, AssemblerStatementKind.SaveEnvOperation);
             RunAstTest("unit z.x; interface implementation procedure p; asm .savenv a end; end.", t => (r(t)?.Operands[0] as SymbolReference)?.Name?.CompleteName, "a");
             RunAstTest("unit z.x; interface implementation procedure p; asm .params 1 end; end.", t => r(t)?.Kind, AssemblerStatementKind.ParamsOperation);
-            RunAstTest("unit z.x; interface implementation procedure p; asm .params 1 end; end.", t => (r(t)?.Operands[0] as ConstantValue)?.LiteralValue, (sbyte)1);
+            RunAstTest("unit z.x; interface implementation procedure p; asm .params 1 end; end.", t => (r(t)?.Operands[0] as ConstantValue)?.LiteralValue, one);
 
             RunAstTest("unit z.x; interface implementation procedure p; asm mov ax, 1 end; end.", t => r(t)?.OpCode?.CompleteName, "mov");
             RunAstTest("unit z.x; interface implementation procedure p; asm @1: mov ax, 1 end; end.", t => r(t)?.LabelName?.CompleteName, "@1");

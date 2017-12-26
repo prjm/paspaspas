@@ -73,7 +73,7 @@ namespace PasPasPas.Typings.Common {
         /// <param name="pool">string pool</param>
         /// <param name="unwrapper">literal unwrapper</param>
         /// <param name="constOps">constant helper</param>
-        public RegisteredTypes(StringPool pool, IConstantOperations constOps, ILiteralUnwrapper unwrapper, NativeIntSize intSize) {
+        public RegisteredTypes(StringPool pool, IRuntimeValues constOps, ILiteralUnwrapper unwrapper, NativeIntSize intSize) {
             systemUnit = new UnitType(TypeIds.SystemUnit);
             RegisterType(systemUnit);
 
@@ -86,7 +86,7 @@ namespace PasPasPas.Typings.Common {
         /// <summary>
         ///     register common functions
         /// </summary>
-        private void RegisterCommonFunctions(IConstantOperations constOps) {
+        private void RegisterCommonFunctions(IRuntimeValues constOps) {
             systemUnit.AddGlobal(new Abs(this));
             systemUnit.AddGlobal(new High(this, constOps));
         }

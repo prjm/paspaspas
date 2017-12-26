@@ -2,6 +2,7 @@
 using PasPasPas.Infrastructure.Utils;
 using System.Text;
 using PasPasPas.Parsing.Tokenizer;
+using PasPasPas.Infrastructure.Common;
 
 namespace PasPasPas.Parsing.SyntaxTree {
 
@@ -34,7 +35,7 @@ namespace PasPasPas.Parsing.SyntaxTree {
         /// <summary>
         ///     parsed token value (if any)
         /// </summary>
-        public object ParsedValue { get; }
+        public IValue ParsedValue { get; }
 
         /// <summary>
         ///     create a new token
@@ -42,7 +43,7 @@ namespace PasPasPas.Parsing.SyntaxTree {
         /// <param name="tokenId">token id</param>
         /// <param name="state">tokenizer state</param>
         /// <param name="parsedValue">parser literal value (optional)</param>
-        public Token(int tokenId, TokenizerState state, object parsedValue = null) : this() {
+        public Token(int tokenId, TokenizerState state, IValue parsedValue = null) : this() {
             Kind = tokenId;
             Position = state.StartPosition;
             Value = state.GetBufferContent();

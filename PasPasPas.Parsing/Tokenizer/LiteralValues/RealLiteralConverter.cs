@@ -1,4 +1,5 @@
 ﻿using System;
+using PasPasPas.Infrastructure.Common;
 using PasPasPas.Infrastructure.Environment;
 using PasPasPas.Infrastructure.Utils;
 using Entry = System.ValueTuple<object, object, bool, object>;
@@ -9,7 +10,7 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
     /// <summary>
     ///     helper class to convert real literals
     /// </summary>
-    public class RealLiteralConverter : IEnvironmentItem, IRealConverter, ILookupFunction<Entry, object> {
+    public class RealLiteralConverter : IEnvironmentItem, IRealConverter, ILookupFunction<Entry, IValue> {
 
         /// <summary>
         ///     invalid real literal
@@ -17,12 +18,13 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
         public readonly object InvalidRealLiteral
             = new object();
 
-        private LookupTable<Entry, object> data;
+        private readonly IRuntimeValues constantsValues;
+        private LookupTable<Entry, IValue> data;
 
         /// <summary>
         ///     table entries
         /// </summary>
-        public LookupTable<Entry, object> Table
+        public LookupTable<Entry, IValue> Table
             => data;
 
         LookupTable ILookupFunction.Table
@@ -43,15 +45,17 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
         /// <summary>
         ///     create a new real literal converter
         /// </summary>
-        public RealLiteralConverter()
-            => data = new LookupTable<Entry, object>(ConvertLiterals);
+        public RealLiteralConverter(IRuntimeValues constValues) {
+            data = new LookupTable<Entry, IValue>(ConvertLiterals);
+            constantsValues = constValues;
+        }
 
         /// <summary>
         ///     convert parsd literas to a real kliteral
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        public object ConvertLiterals((object digits, object decimals, bool minus, object exponent) data) {
+        public IValue ConvertLiterals((object digits, object decimals, bool minus, object exponent) data) {
             var digits = data.digits;
             var decimals = data.decimals;
             var minus = data.minus;
@@ -67,10 +71,10 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
                 if (exponent != null)
                     value = value * Math.Pow(10, e * System.Convert.ToDouble(exponent));
 
-                return value;
+                return constantsValues.ToRealValue(value);
             }
             else
-                return InvalidRealLiteral;
+                return constantsValues[SpecialConstantKind.InvalidReal];
         }
 
         /// <summary>
@@ -81,7 +85,7 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
         /// <param name="minus"></param>
         /// <param name="exponent"></param>
         /// <returns></returns>
-        public object Convert(object digits, object decimals, bool minus, object exponent)
+        public IValue Convert(object digits, object decimals, bool minus, object exponent)
             => data.GetValue((digits, decimals, minus, exponent));
     }
 };

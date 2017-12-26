@@ -1,4 +1,6 @@
-﻿namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
+﻿using PasPasPas.Infrastructure.Common;
+
+namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
 
     /// <summary>
     ///     interface to convert real values
@@ -13,6 +15,7 @@
         /// <param name="minus">minus sign</param>
         /// <param name="exponent">exponent</param>
         /// <returns>real literal value</returns>
-        object Convert(object digits, object decimals, bool minus, object exponent);
+        IValue Convert(object digits, object decimals, bool minus, object exponent);
+
     }
 }

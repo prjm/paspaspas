@@ -8,10 +8,5 @@ namespace PasPasPas.Runtime.Common {
     /// </summary>
     public class InternalRuntime : IRuntime {
 
-        /// <summary>
-        ///     constant helper
-        /// </summary>
-        public IConstantOperations Constants { get; }
-            = new OperatorsOnConstants();
     }
 }

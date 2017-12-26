@@ -5,6 +5,7 @@ using System.Text;
 using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Infrastructure.Environment;
 using PasPasPas.Parsing.Tokenizer.LiteralValues;
+using PasPasPas.Infrastructure.Common;
 
 namespace PasPasPas.Parsing.Tokenizer {
 
@@ -19,6 +20,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         private readonly StackedFileReader input;
         private readonly ILogSource log;
         private readonly IParserEnvironment environment;
+        private readonly IRuntimeValues constants;
 
         /// <summary>
         ///     create a new tokenizer state
@@ -34,6 +36,7 @@ namespace PasPasPas.Parsing.Tokenizer {
             environment = parserEnvironment;
             bufferHolder = FetchStringBuilder();
             buffer = bufferHolder.Data;
+            constants = environment.ConstantValues;
         }
 
         /// <summary>
@@ -128,7 +131,8 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="value"></param>
         /// <param name="valueParser"></param>
         /// <returns></returns>
-        public object ParserLiteral(string value, LiteralParserKind valueParser) {
+        public IValue ParserLiteral(string value, LiteralParserKind valueParser) {
+
             switch (valueParser) {
 
                 case LiteralParserKind.HexNumbers:
@@ -173,7 +177,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="minus"></param>
         /// <param name="exp"></param>
         /// <returns></returns>
-        public object ConvertRealLiteral(object digits, object decimals, bool minus, object exp)
+        public IValue ConvertRealLiteral(object digits, object decimals, bool minus, object exp)
             => environment.RealLiteralConverter.Convert(digits, decimals, minus, exp);
 
         /// <summary>
@@ -200,6 +204,12 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         public IParserEnvironment Environment
             => environment;
+
+        /// <summary>
+        ///     constant value provider
+        /// </summary>
+        public IRuntimeValues Constants
+            => constants;
 
         /// <summary>
         ///     move one char backwards

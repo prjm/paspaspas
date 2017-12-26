@@ -1,4 +1,5 @@
 ﻿using System;
+using PasPasPas.Infrastructure.Common;
 using PasPasPas.Infrastructure.Environment;
 using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree;
@@ -63,15 +64,14 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
                     }
                 } while (!state.AtEof);
 
-                object data;
+                IValue data;
                 if (resultBuilder.Data.Length == 1)
-                    data = resultBuilder.Data[0];
+                    data = state.Constants.ToValue(resultBuilder.Data[0]);
                 else
-                    data = state.Environment.StringPool.PoolString(resultBuilder.Data.ToString());
+                    data = state.Constants.ToValue(state.Environment.StringPool.PoolString(resultBuilder.Data.ToString()));
+
                 return new Token(TokenKind.QuotedString, state, data);
             }
         }
     }
-
-
 }

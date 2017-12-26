@@ -9,6 +9,7 @@ using PasPasPas.Infrastructure.Log;
 using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Infrastructure.Files;
 using PasPasPas.Parsing.Tokenizer.Patterns;
+using PasPasPas.Infrastructure.Common;
 
 namespace PasPasPas.Parsing.Parser {
 
@@ -27,7 +28,7 @@ namespace PasPasPas.Parsing.Parser {
             => new TokenizerWithLookahead(env, options, CreateTokenizer(env, reader), TokenizerMode.CompilerDirective);
 
         /// <summary>
-        ///     create a new compiler directive parser 
+        ///     create a new compiler directive parser
         /// </summary>
         /// <param name="env">services</param>
         /// <param name="input">input file</param>

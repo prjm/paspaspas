@@ -6,6 +6,7 @@ using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.Tokenizer.Patterns;
 using System.Collections.Generic;
 using PasPasPas.Infrastructure.Environment;
+using PasPasPas.Infrastructure.Common;
 
 namespace PasPasPas.Parsing.Tokenizer {
 
@@ -23,7 +24,7 @@ namespace PasPasPas.Parsing.Tokenizer {
 
         /// <summary>
         ///     message: unexpected token
-        /// </summary>    
+        /// </summary>
         public static readonly Guid UnexpectedCharacter
             = new Guid(new byte[] { 0xd0, 0x79, 0xa5, 0xd0, 0x34, 0xa6, 0xba, 0x4c, 0x9d, 0x6, 0xc, 0x69, 0xde, 0xa6, 0x9e, 0xb });
         /* {d0a579d0-a634-4cba-9d06-0c69dea69e0b} */
@@ -62,7 +63,7 @@ namespace PasPasPas.Parsing.Tokenizer {
 
         /// <summary>
         ///     registered input patterns
-        /// </summary>        
+        /// </summary>
         private InputPatterns characterClasses;
 
         /// <summary>

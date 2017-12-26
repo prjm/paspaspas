@@ -1,4 +1,5 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Types;
+﻿using PasPasPas.Infrastructure.Common;
+using PasPasPas.Parsing.SyntaxTree.Types;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
 
@@ -18,9 +19,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         public bool IsConstant { get; set; }
 
         /// <summary>
-        ///     literal value
+        ///     constant literal value of this expression
         /// </summary>
-        public object LiteralValue { get; set; }
+        public IValue LiteralValue { get; set; }
 
     }
 }

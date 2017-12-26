@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using PasPasPas.Infrastructure.Common;
 using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
@@ -85,7 +86,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     literal value
         /// </summary>
-        public object LiteralValue { get; set; }
+        public IValue LiteralValue { get; set; }
 
         /// <summary>
         ///     accept visitor

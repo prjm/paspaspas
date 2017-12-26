@@ -11,6 +11,7 @@ using PasPasPas.Parsing.Tokenizer;
 using PasPasPas.Parsing.Tokenizer.LiteralValues;
 using PasPasPas.Parsing.Tokenizer.Patterns;
 using PasPasPas.Runtime.Common;
+using PasPasPas.Runtime.Operators;
 using PasPasPas.Typings.Common;
 
 namespace PasPasPas.Api {
@@ -25,6 +26,12 @@ namespace PasPasPas.Api {
         /// </summary>
         private StandardFileAccess files
             = new StandardFileAccess();
+
+        /// <summary>
+        ///     constant values
+        /// </summary>
+        public IRuntimeValues ConstantValues { get; }
+            = new RuntimeValues();
 
         /// <summary>
         ///     integer parser
@@ -46,7 +53,6 @@ namespace PasPasPas.Api {
         ///     real literal converter
         /// </summary>
         public IRealConverter RealLiteralConverter { get; }
-            = new RealLiteralConverter();
 
         /// <summary>
         ///     token sequence pool
@@ -102,19 +108,14 @@ namespace PasPasPas.Api {
         public ITypeRegistry TypeRegistry { get; }
 
         /// <summary>
-        ///     boolean literal provider
-        /// </summary>
-        public IBooleanLiteralProvider BooleanLiterals { get; }
-            = new BooleanLiteralProvider();
-
-        /// <summary>
         ///     create a new default environment
         /// </summary>
         /// <param name="intSize">integer size</param>
         public DefaultEnvironment(NativeIntSize intSize = NativeIntSize.Undefined) {
-            TypeRegistry = new RegisteredTypes(StringPool, Runtime.Constants, LiteralUnwrapper, intSize);
-            IntegerParser = new IntegerParser(Runtime.Constants, false);
-            HexNumberParser = new IntegerParser(Runtime.Constants, true);
+            TypeRegistry = new RegisteredTypes(StringPool, ConstantValues, LiteralUnwrapper, intSize);
+            IntegerParser = new IntegerParser(ConstantValues, false);
+            HexNumberParser = new IntegerParser(ConstantValues, true);
+            RealLiteralConverter = new RealLiteralConverter(ConstantValues);
         }
 
         /// <summary>
@@ -135,7 +136,6 @@ namespace PasPasPas.Api {
                     Log,
                     Files,
                     LiteralUnwrapper,
-                    BooleanLiterals,
                     TypeRegistry,
                     Runtime
                 };

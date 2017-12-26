@@ -20,7 +20,7 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         /// <param name="registry"></param>
         /// <param name="consOps">integer parser</param>
-        public High(ITypeRegistry registry, IConstantOperations consOps) {
+        public High(ITypeRegistry registry, IRuntimeValues consOps) {
             TypeRegistry = registry;
             ConstOps = consOps;
         }
@@ -46,7 +46,7 @@ namespace PasPasPas.Typings.Routines {
         /// <summary>
         ///     integer parser
         /// </summary>
-        public IConstantOperations ConstOps { get; }
+        public IRuntimeValues ConstOps { get; }
 
         /// <summary>
         ///     type id

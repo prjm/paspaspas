@@ -7,14 +7,14 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
     /// <summary>
     ///     simple integer parser
     /// </summary>
-    public sealed class IntegerParser : IEnvironmentItem, IIntegerLiteralParser, ILookupFunction<string, object> {
+    public sealed class IntegerParser : IEnvironmentItem, IIntegerLiteralParser, ILookupFunction<string, IValue> {
 
-        private readonly LookupTable<string, object> data;
+        private readonly LookupTable<string, IValue> data;
 
         /// <summary>
         ///     lookup table
         /// </summary>
-        public LookupTable<string, object> Table
+        public LookupTable<string, IValue> Table
             => data;
 
         LookupTable ILookupFunction.Table
@@ -143,17 +143,17 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
         };
 
         private readonly bool allowHex;
-        private readonly IConstantOperations constOps;
+        private readonly IRuntimeValues constants;
 
         /// <summary>
         ///     create a new integer parser
         /// </summary>
-        /// <param name="operations"></param>
+        /// <param name="constOperations"></param>
         /// <param name="hexFormat">if <c>true</c>, numbers a parsed in hex format</param>
-        public IntegerParser(IConstantOperations operations, bool hexFormat) {
+        public IntegerParser(IRuntimeValues constOperations, bool hexFormat) {
             allowHex = hexFormat;
-            constOps = operations;
-            data = new LookupTable<string, object>(new Func<string, object>(DoParse), true);
+            constants = constOperations;
+            data = new LookupTable<string, IValue>(new Func<string, IValue>(DoParse), true);
         }
 
         /// <summary>
@@ -161,22 +161,22 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        private object DoParse(string input) {
+        private IValue DoParse(string input) {
             ulong result = 0;
             ulong newresult;
 
             if (input.Length < 1)
-                return InvalidIntegerLiteral;
+                return constants[SpecialConstantKind.InvalidInteger];
 
             for (var i = 0; i < input.Length; i++) {
                 var value = GetValueOfChar(input[input.Length - 1 - i], allowHex);
 
                 if (i > 19 || (allowHex && i > 16)) {
-                    return IntegerOverflowInLiteral;
+                    return constants[SpecialConstantKind.IntegerOverflow];
                 }
 
                 if (value == 255) {
-                    return InvalidIntegerLiteral;
+                    return constants[SpecialConstantKind.InvalidInteger];
                 }
 
                 if (allowHex)
@@ -184,16 +184,14 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
                 else
                     newresult = result + (value * factors[i]);
 
-                if (newresult < result) {
-                    return IntegerOverflowInLiteral;
-                }
+                if (newresult < result)
+                    return constants[SpecialConstantKind.IntegerOverflow];
 
                 result = newresult;
             }
 
-            if (result > 9223372036854775807)
-                return result;
-            return constOps.ToConstantInt((long)result);
+            return null;
+            //return constants.ToIntegerValue(result);
         }
 
         /// <summary>
@@ -201,7 +199,7 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
         /// </summary>
         /// <param name="input">string to parse</param>
         /// <returns>parsed number</returns>
-        public object Parse(string input)
+        public IValue Parse(string input)
             => data.GetValue(input ?? throw new ArgumentNullException(nameof(input)));
 
         /// <summary>

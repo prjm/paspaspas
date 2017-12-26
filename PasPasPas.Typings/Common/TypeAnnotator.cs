@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using PasPasPas.Infrastructure.Common;
 using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Parsing.SyntaxTree.Types;
@@ -13,7 +14,8 @@ namespace PasPasPas.Typings.Common {
     /// <summary>
     ///     visitor to annotate types in abstract syntax trees
     /// </summary>
-    public class TypeAnnotator :
+    public class TypeAnnotator
+        :
 
         IEndVisitor<ConstantValue>,
         IEndVisitor<UnaryOperator>,
@@ -81,12 +83,21 @@ namespace PasPasPas.Typings.Common {
         /// <param name="element"></param>
         public void EndVisit(ConstantValue element) {
 
+            if (element.Kind == ConstantValueKind.True) {
+                element.TypeInfo = GetTypeByIdOrUndefinedType(TypeIds.BooleanType);
+                element.IsConstant = true;
+                element.LiteralValue = environment.ConstantValues[SpecialConstantKind.TrueValue];
+            }
+            else if (element.Kind == ConstantValueKind.False) {
+                element.TypeInfo = GetTypeByIdOrUndefinedType(TypeIds.BooleanType);
+                element.IsConstant = true;
+                element.LiteralValue = environment.ConstantValues[SpecialConstantKind.FalseValue];
+            }
+
             if (element.Kind == ConstantValueKind.HexNumber ||
                 element.Kind == ConstantValueKind.Integer ||
                 element.Kind == ConstantValueKind.QuotedString ||
-                element.Kind == ConstantValueKind.RealNumber ||
-                element.Kind == ConstantValueKind.True ||
-                element.Kind == ConstantValueKind.False) {
+                element.Kind == ConstantValueKind.RealNumber) {
                 var typeId = LiteralValues.GetTypeFor(element.LiteralValue);
                 element.TypeInfo = GetTypeByIdOrUndefinedType(typeId);
             }
@@ -205,8 +216,8 @@ namespace PasPasPas.Typings.Common {
                 //element.LiteralValue =
                 element.IsConstant = operand.IsConstant;
                 if (element.IsConstant) {
-                    element.LiteralValue = environment.Runtime.Constants.Negate(operand.LiteralValue);
-                    element.TypeInfo = GetTypeOfLiteral(element.LiteralValue);
+                    //element.LiteralValue = environment.Runtime.Values.Negate(operand.LiteralValue);
+                    //element.TypeInfo = GetTypeOfLiteral(element.LiteralValue);
                 }
                 else {
                     element.TypeInfo = GetTypeOfOperator(DefinedOperators.UnaryMinus, operand.TypeInfo, operand.LiteralValue);

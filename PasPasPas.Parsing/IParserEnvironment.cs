@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using PasPasPas.Infrastructure.Common;
 using PasPasPas.Infrastructure.Environment;
 using PasPasPas.Parsing.Tokenizer.LiteralValues;
 using PasPasPas.Parsing.Tokenizer.Patterns;
@@ -9,6 +10,11 @@ namespace PasPasPas.Parsing {
     ///     parser environment
     /// </summary>
     public interface IParserEnvironment : IBasicEnvironment {
+
+        /// <summary>
+        ///     interface for constant operations
+        /// </summary>
+        IRuntimeValues ConstantValues { get; }
 
         /// <summary>
         ///     integer literal parser
@@ -45,9 +51,5 @@ namespace PasPasPas.Parsing {
         /// </summary>
         ILiteralUnwrapper LiteralUnwrapper { get; }
 
-        /// <summary>
-        ///     boolean literal serivices
-        /// </summary>
-        IBooleanLiteralProvider BooleanLiterals { get; }
     }
 }

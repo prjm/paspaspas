@@ -624,7 +624,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 InitNode(value, factor);
                 value.Kind = ConstantValueKind.False;
                 value.IsConstant = true;
-                value.LiteralValue = environment.BooleanLiterals.FalseValue;
                 lastExpression.Value = value;
                 return;
             }
@@ -634,7 +633,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 var value = new ConstantValue();
                 InitNode(value, factor);
                 value.Kind = ConstantValueKind.True;
-                value.LiteralValue = environment.BooleanLiterals.TrueValue;
                 value.IsConstant = true;
                 lastExpression.Value = value;
                 return;

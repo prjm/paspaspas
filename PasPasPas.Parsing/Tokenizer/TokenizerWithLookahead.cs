@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using PasPasPas.Infrastructure.Common;
 using PasPasPas.Infrastructure.Environment;
 using PasPasPas.Infrastructure.Files;
 using PasPasPas.Infrastructure.Log;
@@ -126,6 +127,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         private OptionSet options;
         private TokenizerMode mode = TokenizerMode.Undefined;
         private readonly IParserEnvironment environment;
+        private readonly IRuntimeValues constValues;
 
         /// <summary>
         ///     create a new tokenizer with lookahead
@@ -135,6 +137,7 @@ namespace PasPasPas.Parsing.Tokenizer {
             BaseTokenizer = baseTokenizer;
             options = optionsSet;
             environment = env;
+            constValues = env.ConstantValues;
         }
 
         /// <summary>
@@ -239,8 +242,8 @@ namespace PasPasPas.Parsing.Tokenizer {
             var patterns = environment.Patterns.CompilerDirectivePatterns;
             var fragmentBuffer = new FileBuffer();
             var reader = new StackedFileReader(fragmentBuffer);
-            var macroValue = nextToken.ParsedValue as string;
-            fragmentBuffer.Add(path, new StringBufferReadable(macroValue));
+            var macroValue = nextToken.ParsedValue as IStringValue;
+            fragmentBuffer.Add(path, new StringBufferReadable(macroValue.AsUnicodeString));
             reader.AddFileToRead(path);
 
             using (var parser = new CompilerDirectiveParser(environment, options, reader)) {

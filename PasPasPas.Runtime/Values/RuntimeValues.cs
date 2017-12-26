@@ -1,11 +1,12 @@
 ﻿using PasPasPas.Infrastructure.Common;
+using PasPasPas.Runtime.Values;
 
 namespace PasPasPas.Runtime.Operators {
 
     /// <summary>
     ///     constant operations helper
     /// </summary>
-    public class OperatorsOnConstants : IConstantOperations {
+    public class RuntimeValues : IRuntimeValues {
 
         /// <summary>
         ///     negate a value
@@ -62,5 +63,45 @@ namespace PasPasPas.Runtime.Operators {
 
             return result;
         }
+
+        /// <summary>1
+        ///     convert a to a constant value
+        /// </summary>
+        /// <param name="number">numerical value</param>
+        /// <returns></returns>
+        public IValue ToIntegerValue(sbyte number)
+            => new IntegerValue(number);
+
+        /// <summary>
+        ///     get a constant char value
+        /// </summary>
+        /// <param name="singleChar"></param>
+        /// <returns></returns>
+        public IValue ToValue(char singleChar)
+            => throw new System.NotImplementedException();
+
+        /// <summary>
+        ///     get a constant text value
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
+        public IValue ToValue(string text)
+            => throw new System.NotImplementedException();
+
+        /// <summary>
+        ///     get a constant real value
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public IValue ToRealValue(double value)
+            => throw new System.NotImplementedException();
+
+        /// <summary>
+        ///     get a special constant value
+        /// </summary>
+        /// <param name="index">kind of constant value</param>
+        /// <returns></returns>
+        public IValue this[SpecialConstantKind index]
+            => throw new System.NotImplementedException();
     }
 }
