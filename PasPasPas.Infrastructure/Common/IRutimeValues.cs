@@ -20,6 +20,55 @@
         IValue ToIntegerValue(sbyte number);
 
         /// <summary>
+        ///     get the value for a given number
+        /// </summary>
+        /// <param name="number">given number</param>
+        /// <returns>converted value</returns>
+        IValue ToIntegerValue(byte number);
+
+        /// <summary>
+        ///     get the value for a given number
+        /// </summary>
+        /// <param name="number">given number</param>
+        /// <returns>converted value</returns>
+        IValue ToIntegerValue(short number);
+
+        /// <summary>
+        ///     get the value for a given number
+        /// </summary>
+        /// <param name="number">given number</param>
+        /// <returns>converted value</returns>
+        IValue ToIntegerValue(ushort number);
+
+        /// <summary>
+        ///     get the value for a given number
+        /// </summary>
+        /// <param name="number">given number</param>
+        /// <returns>converted value</returns>
+        IValue ToIntegerValue(int number);
+
+        /// <summary>
+        ///     get the value for a given number
+        /// </summary>
+        /// <param name="number">given number</param>
+        /// <returns>converted value</returns>
+        IValue ToIntegerValue(uint number);
+
+        /// <summary>
+        ///     get the value for a given number
+        /// </summary>
+        /// <param name="number">given number</param>
+        /// <returns>converted value</returns>
+        IValue ToIntegerValue(long number);
+
+        /// <summary>
+        ///     get the value for a given number
+        /// </summary>
+        /// <param name="number">given number</param>
+        /// <returns>converted value</returns>
+        IValue ToIntegerValue(ulong number);
+
+        /// <summary>
         ///     convert a char to a runtime value object
         /// </summary>
         /// <param name="singleChar"></param>

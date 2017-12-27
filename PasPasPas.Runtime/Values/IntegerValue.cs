@@ -22,6 +22,69 @@ namespace PasPasPas.Runtime.Values {
         }
 
         /// <summary>
+        ///     create a new integer value for a given number
+        /// </summary>
+        /// <param name="number"></param>
+        public IntegerValue(byte number) {
+            data = new byte[] { number };
+            signed = false;
+        }
+
+        /// <summary>
+        ///     create a new integer value for a given number
+        /// </summary>
+        /// <param name="number"></param>
+        public IntegerValue(short number) {
+            data = BitConverter.GetBytes(number);
+            signed = true;
+        }
+
+        /// <summary>
+        ///     create a new integer value for a given number
+        /// </summary>
+        /// <param name="number"></param>
+        public IntegerValue(ushort number) {
+            data = BitConverter.GetBytes(number);
+            signed = false;
+        }
+
+        /// <summary>
+        ///     create a new integer value for a given number
+        /// </summary>
+        /// <param name="number"></param>
+        public IntegerValue(int number) {
+            data = BitConverter.GetBytes(number);
+            signed = true;
+        }
+
+        /// <summary>
+        ///     create a new integer value for a given number
+        /// </summary>
+        /// <param name="number"></param>
+        public IntegerValue(uint number) {
+            data = BitConverter.GetBytes(number);
+            signed = false;
+        }
+
+        /// <summary>
+        ///     create a new integer value for a given number
+        /// </summary>
+        /// <param name="number"></param>
+        public IntegerValue(long number) {
+            data = BitConverter.GetBytes(number);
+            signed = true;
+        }
+
+        /// <summary>
+        ///     create a new integer value for a given number
+        /// </summary>
+        /// <param name="number"></param>
+        public IntegerValue(ulong number) {
+            data = BitConverter.GetBytes(number);
+            signed = false;
+        }
+
+        /// <summary>
         ///     get the data of this value
         /// </summary>
         public override byte[] Data
@@ -46,6 +109,10 @@ namespace PasPasPas.Runtime.Values {
             }
         }
 
+        /// <summary>
+        ///     get the values of this value as string
+        /// </summary>
+        /// <returns></returns>
         public override string ToString() {
             string value;
             switch (TypeId) {

@@ -20,10 +20,70 @@ namespace PasPasPasTests.Common {
         /// </summary>
         /// <param name="number"></param>
         /// <returns></returns>
-        protected IValue GetIntegerValue(sbyte number) {
-            var consts = new RuntimeValues();
-            return consts.ToIntegerValue(number);
-        }
+        protected IValue GetIntegerValue(sbyte number)
+            => new RuntimeValues().ToIntegerValue(number);
+
+        /// <summary>
+        ///     convert a value
+        /// </summary>
+        /// <param name="number"></param>
+        /// <returns></returns>
+        protected IValue GetIntegerValue(byte number)
+            => new RuntimeValues().ToIntegerValue(number);
+
+        /// <summary>
+        ///     convert a value
+        /// </summary>
+        /// <param name="number"></param>
+        /// <returns></returns>
+        protected IValue GetIntegerValue(short number)
+            => new RuntimeValues().ToIntegerValue(number);
+
+
+        /// <summary>
+        ///     convert a value
+        /// </summary>
+        /// <param name="number"></param>
+        /// <returns></returns>
+        protected IValue GetIntegerValue(ushort number)
+            => new RuntimeValues().ToIntegerValue(number);
+
+
+
+        /// <summary>
+        ///     convert a value
+        /// </summary>
+        /// <param name="number"></param>
+        /// <returns></returns>
+        protected IValue GetIntegerValue(int number)
+            => new RuntimeValues().ToIntegerValue(number);
+
+
+        /// <summary>
+        ///     convert a value
+        /// </summary>
+        /// <param name="number"></param>
+        /// <returns></returns>
+        protected IValue GetIntegerValue(uint number)
+            => new RuntimeValues().ToIntegerValue(number);
+
+
+        /// <summary>
+        ///     convert a value
+        /// </summary>
+        /// <param name="number"></param>
+        /// <returns></returns>
+        protected IValue GetIntegerValue(long number)
+            => new RuntimeValues().ToIntegerValue(number);
+
+
+        /// <summary>
+        ///     convert a value
+        /// </summary>
+        /// <param name="number"></param>
+        /// <returns></returns>
+        protected IValue GetIntegerValue(ulong number)
+            => new RuntimeValues().ToIntegerValue(number);
 
     }
 }
