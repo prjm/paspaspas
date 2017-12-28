@@ -85,6 +85,16 @@ namespace PasPasPas.Runtime.Values {
         }
 
         /// <summary>
+        ///     create a new integer value for a given byte array
+        /// </summary>
+        /// <param name="number"></param>
+        /// <param name="isSigned"></param>
+        public IntegerValue(byte[] number, bool isSigned) {
+            data = number;
+            signed = isSigned;
+        }
+
+        /// <summary>
         ///     get the data of this value
         /// </summary>
         public override byte[] Data
@@ -144,6 +154,71 @@ namespace PasPasPas.Runtime.Values {
                     throw new InvalidOperationException();
             }
             return value;
+        }
+
+        /// <summary>
+        ///     negate this value
+        /// </summary>
+        /// <returns></returns>
+        public IntegerValue Negate() {
+            var currentlySigned = signed;
+            var length = data.Length;
+            var extend = 0;
+
+            if (signed && length == 1 && data[0] == 0x80)
+                currentlySigned = false;
+            else if (signed && length == 2 && data[0] == 0x00 && data[1] == 0x80)
+                currentlySigned = false;
+            else if (signed && length == 4 && data[0] == 0x00 && data[1] == 0x00 && data[2] == 0x00 && data[3] == 0x80)
+                currentlySigned = false;
+            else if (signed && length == 8 && data[0] == 0xFF && data[1] == 0xFF && data[2] == 0xFF && data[3] == 0xFF && data[4] == 0xFF && data[5] == 0xFF && data[6] == 0xFF && data[7] == 0x80)
+                currentlySigned = false;
+
+            if (signed && length == 2 && data[1] == 0xFF && data[0] <= 0x80) {
+                extend = -1;
+                currentlySigned = false;
+            }
+            else if (signed && length == 4 && data[3] == 0xFF && data[2] == 0xFF && data[1] <= 0x80) {
+                extend = -2;
+                currentlySigned = false;
+            }
+            else if (signed && length == 8 && data[7] == 0xFF && data[6] == 0xFF && data[5] == 0xFF && data[4] == 0xFF && data[3] <= 0x80) {
+                extend = -4;
+                currentlySigned = false;
+            }
+
+            if (!signed)
+                currentlySigned = true;
+
+            if (!signed && length == 1 && data[0] > 0x80)
+                extend = 1;
+            else if (!signed && length == 2 && data[0] == 0xFF && data[1] > 0x80)
+                extend = 2;
+            else if (!signed && length == 4 && data[0] == 0xFF && data[1] == 0xFF && data[2] == 0xFF && data[3] > 0x80)
+                extend = 4;
+
+            var result = new byte[data.Length + extend];
+
+            for (var i = 0; i < result.Length; i++) {
+                if (i >= data.Length)
+                    result[i] = 0xFF;
+                else
+                    result[i] = (byte)~data[i];
+            }
+
+            var carry = 0;
+            for (var j = 0; j < result.Length; j++) {
+                int sum;
+                if (j == 0)
+                    sum = result[j] + 1;
+                else
+                    sum = result[j] + carry;
+
+                result[j] = (byte)(sum & 0xFF);
+                carry = sum >> 8;
+            }
+
+            return new IntegerValue(result, currentlySigned);
         }
 
         /*

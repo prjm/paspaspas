@@ -36,7 +36,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DesktopSampleRunner", "DesktopSampleRunner\DesktopSampleRunner.csproj", "{C863FF01-4A90-4646-BAD2-292406CC6DA0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PasPasPas.Runtime", "PasPasPas.Runtime\PasPasPas.Runtime.csproj", "{3CE7B602-8AE0-43EC-9FC4-4D2AF3ED27B3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PasPasPas.Runtime", "PasPasPas.Runtime\PasPasPas.Runtime.csproj", "{3CE7B602-8AE0-43EC-9FC4-4D2AF3ED27B3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

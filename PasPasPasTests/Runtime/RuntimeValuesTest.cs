@@ -1,4 +1,7 @@
-﻿using PasPasPas.Typings.Common;
+﻿using System;
+using PasPasPas.Infrastructure.Common;
+using PasPasPas.Runtime.Values;
+using PasPasPas.Typings.Common;
 using PasPasPasTests.Common;
 
 namespace PasPasPasTests.Runtime {
@@ -71,6 +74,45 @@ namespace PasPasPasTests.Runtime {
             Assert.AreEqual(new byte[] { 255, 255, 255, 255, 255, 255, 255, 255 }, GetIntegerValue((ulong)18446744073709551615).Data);
             Assert.AreEqual("18446744073709551615", GetIntegerValue((ulong)18446744073709551615).ToString());
             Assert.AreEqual(TypeIds.Uint64Type, GetIntegerValue((ulong)18446744073709551615).TypeId);
+        }
+
+        [Xunit.Fact]
+        public void TestIntegerNegation() {
+            string n(IValue v, int typeKind) {
+                IValue vv = (v as IntegerValue).Negate();
+                Assert.AreEqual(typeKind, vv.TypeId);
+                return vv.ToString();
+            }
+
+            // 1 byte
+            Assert.AreEqual("0", n(GetIntegerValue((sbyte)0), TypeIds.ShortInt));
+            Assert.AreEqual("-127", n(GetIntegerValue((sbyte)127), TypeIds.ShortInt));
+            Assert.AreEqual("127", n(GetIntegerValue((sbyte)-127), TypeIds.ShortInt));
+            Assert.AreEqual("128", n(GetIntegerValue((sbyte)-128), TypeIds.ByteType));
+            Assert.AreEqual("-128", n(GetIntegerValue((byte)128), TypeIds.ShortInt));
+            Assert.AreEqual("-255", n(GetIntegerValue((byte)255), TypeIds.SmallInt));
+            Assert.AreEqual("255", n(GetIntegerValue((short)-255), TypeIds.ByteType));
+
+            // 2 byte
+            Assert.AreEqual("0", n(GetIntegerValue((short)0), TypeIds.SmallInt));
+            Assert.AreEqual("-32767", n(GetIntegerValue((short)32767), TypeIds.SmallInt));
+            Assert.AreEqual("32767", n(GetIntegerValue((short)-32767), TypeIds.SmallInt));
+            Assert.AreEqual("32768", n(GetIntegerValue((short)-32768), TypeIds.WordType));
+            Assert.AreEqual("-32768", n(GetIntegerValue((ushort)32768), TypeIds.SmallInt));
+            Assert.AreEqual("-65535", n(GetIntegerValue((ushort)65535), TypeIds.IntegerType));
+            Assert.AreEqual("65535", n(GetIntegerValue((int)-65535), TypeIds.WordType));
+            Assert.AreEqual("32769", n(GetIntegerValue((int)-32769), TypeIds.WordType));
+
+            // 4 byte
+            Assert.AreEqual("0", n(GetIntegerValue((int)0), TypeIds.IntegerType));
+            Assert.AreEqual("-2147483647", n(GetIntegerValue((int)2147483647), TypeIds.IntegerType));
+            Assert.AreEqual("2147483647", n(GetIntegerValue((int)-2147483647), TypeIds.IntegerType));
+            Assert.AreEqual("2147483648", n(GetIntegerValue((int)-2147483648), TypeIds.CardinalType));
+            Assert.AreEqual("-2147483648", n(GetIntegerValue((uint)2147483648), TypeIds.IntegerType));
+            Assert.AreEqual("-4294967295", n(GetIntegerValue((uint)4294967295), TypeIds.Int64Type));
+            Assert.AreEqual("4294967295", n(GetIntegerValue((long)-4294967295), TypeIds.CardinalType));
+            Assert.AreEqual("2147483649", n(GetIntegerValue((long)-2147483649), TypeIds.CardinalType));
+
         }
 
     }
