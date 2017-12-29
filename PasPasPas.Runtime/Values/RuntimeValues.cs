@@ -1,8 +1,7 @@
 ﻿using System;
 using PasPasPas.Infrastructure.Common;
-using PasPasPas.Runtime.Values;
 
-namespace PasPasPas.Runtime.Operators {
+namespace PasPasPas.Runtime.Values {
 
     /// <summary>
     ///     constant operations helper
@@ -76,65 +75,64 @@ namespace PasPasPas.Runtime.Operators {
         /// </summary>
         /// <param name="number">numerical value</param>
         /// <returns></returns>
-        public IValue ToIntegerValue(sbyte number)
-            => new IntegerValue(number);
+        public IValue ToScaledIntegerValue(sbyte number)
+            => new ScaledIntegerValue(number);
 
         /// <summary>
         ///     convert a byteto a constant value
         /// </summary>
         /// <param name="number">numerical value</param>
         /// <returns></returns>
-        public IValue ToIntegerValue(byte number)
-            => new IntegerValue(number);
+        public IValue ToScaledIntegerValue(byte number)
+            => new ScaledIntegerValue(number);
 
         /// <summary>
         ///     convert a signed byte to a constant value
         /// </summary>
         /// <param name="number">numerical value</param>
         /// <returns></returns>
-        public IValue ToIntegerValue(int number)
-            => new IntegerValue(number);
+        public IValue ToScaledIntegerValue(int number)
+            => new ScaledIntegerValue(number);
 
         /// <summary>
         ///     convert a byteto a constant value
         /// </summary>
         /// <param name="number">numerical value</param>
         /// <returns></returns>
-        public IValue ToIntegerValue(uint number)
-            => new IntegerValue(number);
+        public IValue ToScaledIntegerValue(uint number)
+            => new ScaledIntegerValue(number);
 
         /// <summary>
         ///     convert a signed byte to a constant value
         /// </summary>
         /// <param name="number">numerical value</param>
         /// <returns></returns>
-        public IValue ToIntegerValue(long number)
-            => new IntegerValue(number);
+        public IValue ToScaledIntegerValue(long number)
+            => new ScaledIntegerValue(number);
 
         /// <summary>
         ///     convert a byteto a constant value
         /// </summary>
         /// <param name="number">numerical value</param>
         /// <returns></returns>
-        public IValue ToIntegerValue(ulong number)
-            => new IntegerValue(number);
-
+        public IValue ToScaledIntegerValue(ulong number)
+            => new ScaledIntegerValue(number);
 
         /// <summary>
         ///     convert a signed byte to a constant value
         /// </summary>
         /// <param name="number">numerical value</param>
         /// <returns></returns>
-        public IValue ToIntegerValue(short number)
-            => new IntegerValue(number);
+        public IValue ToScaledIntegerValue(short number)
+            => new ScaledIntegerValue(number);
 
         /// <summary>
         ///     convert a byteto a constant value
         /// </summary>
         /// <param name="number">numerical value</param>
         /// <returns></returns>
-        public IValue ToIntegerValue(ushort number)
-            => new IntegerValue(number);
+        public IValue ToScaledIntegerValue(ushort number)
+            => new ScaledIntegerValue(number);
 
         /// <summary>
         ///     get a constant char value
@@ -172,6 +170,8 @@ namespace PasPasPas.Runtime.Operators {
                         return falseValue;
                     case SpecialConstantKind.TrueValue:
                         return trueValue;
+                    case SpecialConstantKind.IntegerOverflow:
+                        return new SpecialValue(SpecialConstantKind.IntegerOverflow);
                     default:
                         throw new IndexOutOfRangeException();
                 };

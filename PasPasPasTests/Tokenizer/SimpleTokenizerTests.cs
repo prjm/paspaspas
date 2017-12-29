@@ -3,6 +3,8 @@ using Xunit;
 using System;
 using PasPasPas.Parsing.Tokenizer.LiteralValues;
 using Assert = PasPasPasTests.Common.Assert;
+using PasPasPas.Runtime.Values;
+using PasPasPas.Infrastructure.Common;
 
 namespace PasPasPasTests.Tokenizer {
 
@@ -22,14 +24,14 @@ namespace PasPasPasTests.Tokenizer {
 
         [Fact]
         public void TestIntegers() {
-            IsInteger("2", (sbyte)2);
-            IsInteger("123", (sbyte)123);
-            IsInteger("0000", (sbyte)0);
-            IsInteger("10000", (short)10000);
-            IsInteger("1000000", (int)1000000);
+            IsInteger("2", 2);
+            IsInteger("123", 123);
+            IsInteger("0000", 0);
+            IsInteger("10000", 10000);
+            IsInteger("1000000", 1000000);
             IsInteger("18446744073709551615", 18446744073709551615);
-            IsInteger("18446744073709551616", IntegerParser.IntegerOverflowInLiteral);
-            IsInteger("108446744073709551615", IntegerParser.IntegerOverflowInLiteral);
+            IsInteger("18446744073709551616", new RuntimeValues()[SpecialConstantKind.IntegerOverflow]);
+            IsInteger("108446744073709551615", new RuntimeValues()[SpecialConstantKind.IntegerOverflow]);
         }
 
         [Fact]

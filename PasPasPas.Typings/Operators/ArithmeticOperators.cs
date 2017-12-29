@@ -78,28 +78,10 @@ namespace PasPasPas.Typings.Operators {
                         return input[0];
 
                     if (operand == CommonTypeKind.IntegerType || operand == CommonTypeKind.Int64Type) {
-
-                        var currentType = ResolveAlias(input[0]) as IIntegralType;
-
-                        if (currentType.Signed || values.Length == 0 || values[0] == null)
+                        if (ResolveAlias(input[0]) is IIntegralType currentType)
                             return currentType.TypeId;
-                        else if (currentType.BitSize == 8)
-                            if (literalUnwrapper.UnwrapInteger(values[0]) <= 128)
-                                return TypeIds.ShortInt;
-                            else
-                                return TypeIds.SmallInt;
-                        else if (currentType.BitSize == 16)
-                            if (literalUnwrapper.UnwrapInteger(values[0]) <= 32768)
-                                return TypeIds.SmallInt;
-                            else
-                                return TypeIds.IntegerType;
-                        else if (currentType.BitSize == 32)
-                            if (literalUnwrapper.UnwrapInteger(values[0]) <= 2147483648)
-                                return TypeIds.IntegerType;
-                            else
-                                return TypeIds.Int64Type;
                         else
-                            return TypeIds.Int64Type;
+                            return TypeIds.ErrorType;
                     }
                 }
             }

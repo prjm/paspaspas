@@ -306,7 +306,12 @@ namespace PasPasPas.Parsing.Parser {
                     return;
                 }
 
-                result.MinStackSize = Environment.LiteralUnwrapper.UnwrapInteger(result.LastTerminalToken.ParsedValue);
+                if (result.LastTerminalToken.ParsedValue is IIntegerValue intValue && !intValue.IsNegative) {
+                    result.MinStackSize = intValue.AsUnsignedLong;
+                }
+                else {
+                    ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidStackMemorySizeDirective, new[] { TokenKind.Integer });
+                }
             }
 
             if (mSwitch)
@@ -320,7 +325,12 @@ namespace PasPasPas.Parsing.Parser {
                     return;
                 }
 
-                result.MaxStackSize = Environment.LiteralUnwrapper.UnwrapInteger(result.LastTerminalToken.ParsedValue);
+                if (result.LastTerminalToken.ParsedValue is IIntegerValue intValue && !intValue.IsNegative) {
+                    result.MaxStackSize = intValue.AsUnsignedLong;
+                }
+                else {
+                    ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidStackMemorySizeDirective, new[] { TokenKind.Integer });
+                }
             }
         }
 
@@ -648,11 +658,11 @@ namespace PasPasPas.Parsing.Parser {
             var result = new ImageBase();
             InitByTerminal(result, parent, TokenKind.ImageBase);
 
-            if (ContinueWith(result, TokenKind.Integer)) {
-                result.BaseValue = Environment.LiteralUnwrapper.UnwrapInteger(result.LastTerminalToken.ParsedValue);
-            }
-            else if (ContinueWith(result, TokenKind.HexNumber)) {
-                result.BaseValue = Environment.LiteralUnwrapper.UnwrapHexnumber(result.LastTerminalToken.ParsedValue);
+            if (ContinueWith(result, TokenKind.Integer) || ContinueWith(result, TokenKind.HexNumber)) {
+                if (result.LastTerminalToken.ParsedValue is IIntegerValue hexValue && !hexValue.IsNegative)
+                    result.BaseValue = hexValue.AsUnsignedLong;
+                else
+                    ErrorLastPart(parent, CompilerDirectiveParserErrors.InvalidImageBaseDirective, new[] { TokenKind.Integer, TokenKind.HexNumber });
             }
             else {
                 ErrorAndSkip(parent, CompilerDirectiveParserErrors.InvalidImageBaseDirective, new[] { TokenKind.Integer, TokenKind.HexNumber });
@@ -1067,7 +1077,15 @@ namespace PasPasPas.Parsing.Parser {
                 return;
             }
 
-            var size = Environment.LiteralUnwrapper.UnwrapInteger(result.LastTerminalToken.ParsedValue);
+            ulong size;
+
+            if (result.LastTerminalToken.ParsedValue is IIntegerValue intValue && !intValue.IsNegative) {
+                size = intValue.AsUnsignedLong;
+            }
+            else {
+                ErrorLastPart(result, CompilerDirectiveParserErrors.InvalidMinEnumSizeDirective);
+                return;
+            }
 
             switch (size) {
                 case 1:

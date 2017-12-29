@@ -14,8 +14,7 @@ namespace PasPasPas.Typings.Common {
     /// <summary>
     ///     visitor to annotate types in abstract syntax trees
     /// </summary>
-    public class TypeAnnotator
-        :
+    public class TypeAnnotator :
 
         IEndVisitor<ConstantValue>,
         IEndVisitor<UnaryOperator>,
@@ -94,12 +93,12 @@ namespace PasPasPas.Typings.Common {
                 element.LiteralValue = environment.ConstantValues[SpecialConstantKind.FalseValue];
             }
 
-            if (element.Kind == ConstantValueKind.HexNumber ||
+            if ((element.Kind == ConstantValueKind.HexNumber ||
                 element.Kind == ConstantValueKind.Integer ||
                 element.Kind == ConstantValueKind.QuotedString ||
-                element.Kind == ConstantValueKind.RealNumber) {
-                var typeId = LiteralValues.GetTypeFor(element.LiteralValue);
-                element.TypeInfo = GetTypeByIdOrUndefinedType(typeId);
+                element.Kind == ConstantValueKind.RealNumber) &&
+                element.LiteralValue != null) {
+                element.TypeInfo = GetTypeByIdOrUndefinedType(element.LiteralValue.TypeId);
             }
         }
 
@@ -213,11 +212,10 @@ namespace PasPasPas.Typings.Common {
                 element.IsConstant = operand.IsConstant;
             }
             else if (element.Kind == ExpressionKind.UnaryMinus) {
-                //element.LiteralValue =
                 element.IsConstant = operand.IsConstant;
-                if (element.IsConstant) {
-                    //element.LiteralValue = environment.Runtime.Values.Negate(operand.LiteralValue);
-                    //element.TypeInfo = GetTypeOfLiteral(element.LiteralValue);
+                if (element.IsConstant && operand.LiteralValue is IIntegerValue intValue) {
+                    element.LiteralValue = intValue.Negate();
+                    element.TypeInfo = GetTypeByIdOrUndefinedType(element.LiteralValue.TypeId);
                 }
                 else {
                     element.TypeInfo = GetTypeOfOperator(DefinedOperators.UnaryMinus, operand.TypeInfo, operand.LiteralValue);
@@ -229,9 +227,7 @@ namespace PasPasPas.Typings.Common {
             }
         }
 
-        private ITypeDefinition GetTypeOfLiteral(object value) {
-            return GetTypeByIdOrUndefinedType(LiteralValues.GetTypeFor(value));
-        }
+
 
         private ITypeDefinition GetErrorType(ITypedSyntaxNode node) {
             return GetTypeByIdOrUndefinedType(TypeIds.ErrorType);
@@ -552,6 +548,9 @@ namespace PasPasPas.Typings.Common {
                     element.RangeStart.TypeInfo.TypeId == element.RangeEnd.TypeInfo.TypeId) {
                     var baseTypeId = element.RangeStart.TypeInfo.TypeId;
                     type = RegisterUserDefinedType(new Simple.SubrangeType(RequireUserTypeId(), baseTypeId));
+                }
+                else {
+                    type = GetErrorType(element);
                 }
             }
 

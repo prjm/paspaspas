@@ -17,56 +17,56 @@
         /// </summary>
         /// <param name="number">given number</param>
         /// <returns>converted value</returns>
-        IValue ToIntegerValue(sbyte number);
+        IValue ToScaledIntegerValue(sbyte number);
 
         /// <summary>
         ///     get the value for a given number
         /// </summary>
         /// <param name="number">given number</param>
         /// <returns>converted value</returns>
-        IValue ToIntegerValue(byte number);
+        IValue ToScaledIntegerValue(byte number);
 
         /// <summary>
         ///     get the value for a given number
         /// </summary>
         /// <param name="number">given number</param>
         /// <returns>converted value</returns>
-        IValue ToIntegerValue(short number);
+        IValue ToScaledIntegerValue(short number);
 
         /// <summary>
         ///     get the value for a given number
         /// </summary>
         /// <param name="number">given number</param>
         /// <returns>converted value</returns>
-        IValue ToIntegerValue(ushort number);
+        IValue ToScaledIntegerValue(ushort number);
 
         /// <summary>
         ///     get the value for a given number
         /// </summary>
         /// <param name="number">given number</param>
         /// <returns>converted value</returns>
-        IValue ToIntegerValue(int number);
+        IValue ToScaledIntegerValue(int number);
 
         /// <summary>
         ///     get the value for a given number
         /// </summary>
         /// <param name="number">given number</param>
         /// <returns>converted value</returns>
-        IValue ToIntegerValue(uint number);
+        IValue ToScaledIntegerValue(uint number);
 
         /// <summary>
         ///     get the value for a given number
         /// </summary>
         /// <param name="number">given number</param>
         /// <returns>converted value</returns>
-        IValue ToIntegerValue(long number);
+        IValue ToScaledIntegerValue(long number);
 
         /// <summary>
         ///     get the value for a given number
         /// </summary>
         /// <param name="number">given number</param>
         /// <returns>converted value</returns>
-        IValue ToIntegerValue(ulong number);
+        IValue ToScaledIntegerValue(ulong number);
 
         /// <summary>
         ///     convert a char to a runtime value object

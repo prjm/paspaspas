@@ -34,6 +34,11 @@ namespace PasPasPas.Runtime.Values {
         public override int TypeId
             => TypeIds.BooleanType;
 
+        /// <summary>
+        ///     test for equality
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public override bool Equals(object obj) {
             if (obj is BooleanValue b) {
                 return b.data[0] == data[0];
@@ -42,6 +47,10 @@ namespace PasPasPas.Runtime.Values {
             return false;
         }
 
+        /// <summary>
+        ///     compute hash code
+        /// </summary>
+        /// <returns></returns>
         public override int GetHashCode()
             => 17 + data[0];
 

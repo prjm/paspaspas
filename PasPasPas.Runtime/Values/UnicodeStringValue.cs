@@ -34,7 +34,7 @@ namespace PasPasPas.Runtime.Values {
         public override int TypeId
             => TypeIds.UnicodeStringType;
 
-        /// </summary>
+        /// <summary>test for equality</summary>
         /// <param name="obj"></param>
         /// <returns></returns>
         public override bool Equals(object obj) {

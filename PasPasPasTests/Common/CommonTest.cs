@@ -1,7 +1,7 @@
 ﻿using PasPasPas.Api;
 using PasPasPas.Infrastructure.Common;
 using PasPasPas.Options.DataTypes;
-using PasPasPas.Runtime.Operators;
+using PasPasPas.Runtime.Values;
 using PasPasPas.Typings.Common;
 
 namespace PasPasPasTests.Common {
@@ -21,7 +21,7 @@ namespace PasPasPasTests.Common {
         /// <param name="number"></param>
         /// <returns></returns>
         protected IValue GetIntegerValue(sbyte number)
-            => new RuntimeValues().ToIntegerValue(number);
+            => new RuntimeValues().ToScaledIntegerValue(number);
 
         /// <summary>
         ///     convert a value
@@ -29,7 +29,7 @@ namespace PasPasPasTests.Common {
         /// <param name="number"></param>
         /// <returns></returns>
         protected IValue GetIntegerValue(byte number)
-            => new RuntimeValues().ToIntegerValue(number);
+            => new RuntimeValues().ToScaledIntegerValue(number);
 
         /// <summary>
         ///     convert a value
@@ -37,7 +37,7 @@ namespace PasPasPasTests.Common {
         /// <param name="number"></param>
         /// <returns></returns>
         protected IValue GetIntegerValue(short number)
-            => new RuntimeValues().ToIntegerValue(number);
+            => new RuntimeValues().ToScaledIntegerValue(number);
 
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace PasPasPasTests.Common {
         /// <param name="number"></param>
         /// <returns></returns>
         protected IValue GetIntegerValue(ushort number)
-            => new RuntimeValues().ToIntegerValue(number);
+            => new RuntimeValues().ToScaledIntegerValue(number);
 
 
 
@@ -56,7 +56,7 @@ namespace PasPasPasTests.Common {
         /// <param name="number"></param>
         /// <returns></returns>
         protected IValue GetIntegerValue(int number)
-            => new RuntimeValues().ToIntegerValue(number);
+            => new RuntimeValues().ToScaledIntegerValue(number);
 
 
         /// <summary>
@@ -65,7 +65,7 @@ namespace PasPasPasTests.Common {
         /// <param name="number"></param>
         /// <returns></returns>
         protected IValue GetIntegerValue(uint number)
-            => new RuntimeValues().ToIntegerValue(number);
+            => new RuntimeValues().ToScaledIntegerValue(number);
 
 
         /// <summary>
@@ -74,7 +74,7 @@ namespace PasPasPasTests.Common {
         /// <param name="number"></param>
         /// <returns></returns>
         protected IValue GetIntegerValue(long number)
-            => new RuntimeValues().ToIntegerValue(number);
+            => new RuntimeValues().ToScaledIntegerValue(number);
 
 
         /// <summary>
@@ -83,7 +83,7 @@ namespace PasPasPasTests.Common {
         /// <param name="number"></param>
         /// <returns></returns>
         protected IValue GetIntegerValue(ulong number)
-            => new RuntimeValues().ToIntegerValue(number);
+            => new RuntimeValues().ToScaledIntegerValue(number);
 
     }
 }

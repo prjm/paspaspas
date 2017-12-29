@@ -9,16 +9,15 @@ namespace PasPasPasTests.Types {
 
         [Fact]
         public void TestIntegerConstants() {
-            AssertExprValue("0", (sbyte)0);
-            AssertExprValue("-128", (sbyte)-128);
-            AssertExprValue("127", (sbyte)127);
+            AssertExprValue("0", 0);
+            AssertExprValue("-128", -128);
+            AssertExprValue("127", 127);
 
-            AssertExprValue("128", (byte)128);
-            AssertExprValue("255", (byte)255);
+            AssertExprValue("128", 128);
+            AssertExprValue("255", 255);
 
-            AssertExprValue("256", (short)256);
-            AssertExprValue("-129", (short)-129);
-
+            AssertExprValue("256", 256);
+            AssertExprValue("-129", -129);
         }
 
     }

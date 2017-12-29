@@ -33,6 +33,11 @@ namespace PasPasPas.Runtime.Values {
         public override int TypeId
             => TypeIds.WideCharType;
 
+        /// <summary>
+        ///     test for equality
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public override bool Equals(object obj) {
             if (obj is WideCharValue w) {
                 return w.data[0] == data[0] && w.data[1] == data[1];
@@ -41,6 +46,10 @@ namespace PasPasPas.Runtime.Values {
             return false;
         }
 
+        /// <summary>
+        ///     compute hash code
+        /// </summary>
+        /// <returns></returns>
         public override int GetHashCode()
             => 17 + 31 * data[0] + 31 * data[1];
 
