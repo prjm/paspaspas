@@ -1,5 +1,5 @@
 ﻿using System;
-using PasPasPas.Infrastructure.Common;
+using System.Linq;
 using PasPasPas.Typings.Common;
 
 namespace PasPasPas.Runtime.Values {
@@ -221,25 +221,58 @@ namespace PasPasPas.Runtime.Values {
             return new IntegerValue(result, currentlySigned);
         }
 
+        /// <summary>
+        ///     check for equalisty
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(object obj) {
+            if (obj is IntegerValue v) {
+                return v.signed == signed &&
+                    data.SequenceEqual(v.data);
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        ///     hash code
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode() {
+            var result = 17;
+
+            if (signed)
+                result = result * 31 + 17;
+            else
+                result = result * 31 + 13;
+
+            for (var i = 0; i < data.Length; i++)
+                result = result * 31 + data[i];
+
+            return result;
+        }
+
+
         /*
-                private byte[] Encode(ulobjong result) {
-                    if (result < 128)
-                        return BitConverter.GetBytes((sbyte)result);
-                    else if (result < 256)
-                        return BitConverter.GetBytes((byte)result);
-                    else if (result < 32768)
-                        return BitConverter.GetBytes((short)result);
-                    else if (result < 65536)
-                        return BitConverter.GetBytes((ushort)result);
-                    else if (result < 2147483648)
-                        return BitConverter.GetBytes((int)result);
-                    else if (result < 4294967296)
-                        return BitConverter.GetBytes((uint)result);
-                    else if (result < 9223372036854775808)
-                        return BitConverter.GetBytes((long)result);
-                    else
-                        return BitConverter.GetBytes(result);
-                }
+        private byte[] Encode(ulong result) {
+            if (result < 128)
+                return BitConverter.GetBytes((sbyte)result);
+            else if (result < 256)
+                return BitConverter.GetBytes((byte)result);
+            else if (result < 32768)
+                return BitConverter.GetBytes((short)result);
+            else if (result < 65536)
+                return BitConverter.GetBytes((ushort)result);
+            else if (result < 2147483648)
+                return BitConverter.GetBytes((int)result);
+            else if (result < 4294967296)
+                return BitConverter.GetBytes((uint)result);
+            else if (result < 9223372036854775808)
+                return BitConverter.GetBytes((long)result);
+            else
+                return BitConverter.GetBytes(result);
+        }
 
           */
     }

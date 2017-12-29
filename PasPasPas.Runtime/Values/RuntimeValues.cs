@@ -1,4 +1,5 @@
-﻿using PasPasPas.Infrastructure.Common;
+﻿using System;
+using PasPasPas.Infrastructure.Common;
 using PasPasPas.Runtime.Values;
 
 namespace PasPasPas.Runtime.Operators {
@@ -7,6 +8,12 @@ namespace PasPasPas.Runtime.Operators {
     ///     constant operations helper
     /// </summary>
     public class RuntimeValues : IRuntimeValues {
+
+        private readonly IValue falseValue
+            = new BooleanValue(false);
+
+        private readonly IValue trueValue
+            = new BooleanValue(true);
 
         /// <summary>
         ///     negate a value
@@ -134,16 +141,16 @@ namespace PasPasPas.Runtime.Operators {
         /// </summary>
         /// <param name="singleChar"></param>
         /// <returns></returns>
-        public IValue ToValue(char singleChar)
-            => throw new System.NotImplementedException();
+        public IValue ToWideCharValue(char singleChar)
+            => new WideCharValue(singleChar);
 
         /// <summary>
         ///     get a constant text value
         /// </summary>
         /// <param name="text"></param>
         /// <returns></returns>
-        public IValue ToValue(string text)
-            => throw new System.NotImplementedException();
+        public IValue ToUnicodeString(string text)
+            => new UnicodeStringValue(text);
 
         /// <summary>
         ///     get a constant real value
@@ -158,7 +165,17 @@ namespace PasPasPas.Runtime.Operators {
         /// </summary>
         /// <param name="index">kind of constant value</param>
         /// <returns></returns>
-        public IValue this[SpecialConstantKind index]
-            => throw new System.NotImplementedException();
+        public IValue this[SpecialConstantKind index] {
+            get {
+                switch (index) {
+                    case SpecialConstantKind.FalseValue:
+                        return falseValue;
+                    case SpecialConstantKind.TrueValue:
+                        return trueValue;
+                    default:
+                        throw new IndexOutOfRangeException();
+                };
+            }
+        }
     }
 }

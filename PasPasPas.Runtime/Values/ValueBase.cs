@@ -22,5 +22,18 @@ namespace PasPasPas.Runtime.Values {
         ///     get the well known type id
         /// </summary>
         public abstract int TypeId { get; }
+
+        /// <summary>
+        ///     compare to equality
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public abstract override bool Equals(object obj);
+
+        /// <summary>
+        ///     get the hash code
+        /// </summary>
+        /// <returns></returns>
+        public abstract override int GetHashCode();
     }
 }

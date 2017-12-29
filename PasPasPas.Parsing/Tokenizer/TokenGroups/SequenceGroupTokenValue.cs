@@ -59,7 +59,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
                     state.Error(Tokenizer.UnexpectedEndOfToken);
 
                 if (StoreValue)
-                    return new Token(TokenId, state, state.Constants.ToValue(state.Environment.StringPool.PoolString(builder.Data.ToString(1, Math.Max(0, builder.Data.Length - EndSequence.Length)))));
+                    return new Token(TokenId, state, state.Constants.ToUnicodeString(state.Environment.StringPool.PoolString(builder.Data.ToString(1, Math.Max(0, builder.Data.Length - EndSequence.Length)))));
                 else
                     return new Token(TokenId, state);
             }

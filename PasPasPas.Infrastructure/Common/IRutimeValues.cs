@@ -73,14 +73,14 @@
         /// </summary>
         /// <param name="singleChar"></param>
         /// <returns></returns>
-        IValue ToValue(char singleChar);
+        IValue ToWideCharValue(char singleChar);
 
         /// <summary>
         ///     convert a string to a runtime value object
         /// </summary>
         /// <param name="text"></param>
         /// <returns></returns>
-        IValue ToValue(string text);
+        IValue ToUnicodeString(string text);
 
         /// <summary>
         ///     negate a value

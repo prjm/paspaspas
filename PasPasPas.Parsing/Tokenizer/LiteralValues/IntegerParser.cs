@@ -190,8 +190,7 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
                 result = newresult;
             }
 
-            return null;
-            //return constants.ToIntegerValue(result);
+            return constants.ToIntegerValue(result);
         }
 
         /// <summary>

@@ -130,9 +130,9 @@ namespace PasPasPasTests.Tokenizer {
 
         [Fact]
         public void TestHexNumbers() {
-            IsHexNumber("$333F", (short)0x333F);
-            IsHexNumber("$000000", (sbyte)0);
-            IsHexNumber("$FFFFFFFFFFFFFFFF", 0xFFFFFFFFFFFFFFFF);
+            IsHexNumber("$333F", GetIntegerValue((short)0x333F));
+            IsHexNumber("$000000", GetIntegerValue((sbyte)0));
+            IsHexNumber("$FFFFFFFFFFFFFFFF", GetIntegerValue(0xFFFFFFFFFFFFFFFF));
         }
 
         [Fact]
