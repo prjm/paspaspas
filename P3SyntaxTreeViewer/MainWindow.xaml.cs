@@ -14,6 +14,7 @@ using PasPasPas.Typings.Common;
 using System.Windows.Media;
 using System;
 using PasPasPas.Typings.Structured;
+using PasPasPas.Global.Runtime;
 
 namespace P3SyntaxTreeViewer {
 

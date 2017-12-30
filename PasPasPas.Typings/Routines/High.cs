@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using PasPasPas.Global.Constants;
+using PasPasPas.Global.Runtime;
 using PasPasPas.Infrastructure.Common;
 using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Parsing.Tokenizer.LiteralValues;

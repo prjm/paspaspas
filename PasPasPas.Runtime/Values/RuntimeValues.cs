@@ -1,5 +1,5 @@
 ﻿using System;
-using PasPasPas.Infrastructure.Common;
+using PasPasPas.Global.Runtime;
 
 namespace PasPasPas.Runtime.Values {
 

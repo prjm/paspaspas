@@ -9,7 +9,7 @@ using PasPasPas.Infrastructure.Log;
 using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Infrastructure.Files;
 using PasPasPas.Parsing.Tokenizer.Patterns;
-using PasPasPas.Infrastructure.Common;
+using PasPasPas.Global.Runtime;
 
 namespace PasPasPas.Parsing.Parser {
 

@@ -1,8 +1,11 @@
-﻿namespace PasPasPas.Infrastructure.Common {
+﻿namespace PasPasPas.Global.Runtime {
 
     /// <summary>
-    ///     interface for integer values
+    ///     global interface for integer values
     /// </summary>
+    /// <remarks>
+    ///     currently, integer values up to 8 byte length are supported
+    /// </remarks>
     public interface IIntegerValue {
 
         /// <summary>
@@ -18,7 +21,9 @@
         /// <summary>
         ///    negate this value
         /// </summary>
-        /// <returns></returns>
+        /// <remarks>can lead to integer overflow</remarks>
+        /// <returns>negated value</returns>
         IValue Negate();
+
     }
 }

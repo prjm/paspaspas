@@ -18,7 +18,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PasPasPas.Global\PasPasPas.Global.csproj" />
-    <ProjectReference Include="..\PasPasPas.Infrastructure\PasPasPas.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

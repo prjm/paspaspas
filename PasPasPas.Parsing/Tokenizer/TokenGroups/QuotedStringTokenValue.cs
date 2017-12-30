@@ -1,6 +1,4 @@
-﻿using PasPasPas.Infrastructure.Common;
-using PasPasPas.Infrastructure.Environment;
-using PasPasPas.Infrastructure.Utils;
+﻿using PasPasPas.Global.Runtime;
 using PasPasPas.Parsing.SyntaxTree;
 
 namespace PasPasPas.Parsing.Tokenizer.TokenGroups {

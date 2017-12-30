@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Text;
-using PasPasPas.Infrastructure.Common;
+using PasPasPas.Global.Runtime;
 using PasPasPas.Infrastructure.Environment;
 using PasPasPas.Infrastructure.Files;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Options.DataTypes;
+using PasPasPas.Parsing;
 using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Parsing.Tokenizer;
 using PasPasPas.Parsing.Tokenizer.LiteralValues;
@@ -147,5 +148,7 @@ namespace PasPasPas.Api {
         /// </summary>
         public IRuntime Runtime { get; }
             = new InternalRuntime();
+
+        IRuntimeValues IParserEnvironment.ConstantValues => throw new System.NotImplementedException();
     }
 }

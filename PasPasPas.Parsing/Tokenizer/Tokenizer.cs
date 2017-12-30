@@ -2,11 +2,8 @@
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Parsing.SyntaxTree;
 using PasPasPas.Infrastructure.Files;
-using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.Tokenizer.Patterns;
 using System.Collections.Generic;
-using PasPasPas.Infrastructure.Environment;
-using PasPasPas.Infrastructure.Common;
 
 namespace PasPasPas.Parsing.Tokenizer {
 

@@ -5,7 +5,7 @@ using System.Text;
 using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Infrastructure.Environment;
 using PasPasPas.Parsing.Tokenizer.LiteralValues;
-using PasPasPas.Infrastructure.Common;
+using PasPasPas.Global.Runtime;
 
 namespace PasPasPas.Parsing.Tokenizer {
 

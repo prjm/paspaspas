@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace PasPasPas.Infrastructure.Common {
-
+namespace PasPasPas.Global.Runtime {
     /// <summary>
     ///     exception on constant propagation
     /// </summary>

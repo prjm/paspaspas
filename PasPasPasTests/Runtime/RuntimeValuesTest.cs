@@ -1,8 +1,6 @@
-﻿using System;
-using PasPasPas.Global.Constants;
-using PasPasPas.Infrastructure.Common;
+﻿using PasPasPas.Global.Constants;
+using PasPasPas.Global.Runtime;
 using PasPasPas.Runtime.Values;
-using PasPasPas.Typings.Common;
 using PasPasPasTests.Common;
 
 namespace PasPasPasTests.Runtime {

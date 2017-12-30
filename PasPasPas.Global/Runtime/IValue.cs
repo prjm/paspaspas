@@ -1,4 +1,4 @@
-﻿namespace PasPasPas.Infrastructure.Common {
+﻿namespace PasPasPas.Global.Runtime {
 
     /// <summary>
     ///     common interface for value types

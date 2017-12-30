@@ -5,6 +5,7 @@ using PasPasPas.Parsing.Tokenizer.LiteralValues;
 using Assert = PasPasPasTests.Common.Assert;
 using PasPasPas.Runtime.Values;
 using PasPasPas.Infrastructure.Common;
+using PasPasPas.Global.Runtime;
 
 namespace PasPasPasTests.Tokenizer {
 

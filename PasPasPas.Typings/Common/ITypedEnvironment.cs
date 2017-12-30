@@ -1,4 +1,4 @@
-﻿using PasPasPas.Infrastructure.Common;
+﻿using PasPasPas.Global.Runtime;
 using PasPasPas.Parsing;
 using PasPasPas.Parsing.SyntaxTree.Types;
 
