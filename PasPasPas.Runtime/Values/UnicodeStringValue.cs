@@ -1,13 +1,14 @@
 ﻿using System.Linq;
 using System.Text;
 using PasPasPas.Global.Constants;
+using PasPasPas.Global.Runtime;
 
 namespace PasPasPas.Runtime.Values {
 
     /// <summary>
     ///     unicode string
     /// </summary>
-    public class UnicodeStringValue : ValueBase {
+    public class UnicodeStringValue : ValueBase, IStringValue {
 
         private byte[] data;
 
@@ -29,7 +30,13 @@ namespace PasPasPas.Runtime.Values {
         ///     get the type id
         /// </summary>
         public override int TypeId
-            => KnownTypeIds.UnicodeStringType;
+            => KnownTypeIds.StringType;
+
+        /// <summary>
+        ///     get the string values
+        /// </summary>
+        public string AsUnicodeString
+            => ToString();
 
         /// <summary>test for equality</summary>
         /// <param name="obj"></param>

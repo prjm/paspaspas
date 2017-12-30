@@ -120,7 +120,7 @@ namespace PasPasPas.Parsing.Tokenizer.Patterns {
             var startValue = state.NextChar(true);
             state.StartPosition = state.CurrentPosition;
 
-            if (Match(startValue, out InputPattern tokenGroup)) {
+            if (Match(startValue, out var tokenGroup)) {
                 return FetchTokenByGroup(state, tokenGroup);
             }
 

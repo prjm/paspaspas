@@ -8,7 +8,6 @@ using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.Tokenizer.Patterns;
 using PasPasPas.Infrastructure.Files;
 using PasPasPas.Options.Bundles;
-using PasPasPas.Infrastructure.Common;
 
 namespace PasPasPas.Parsing.Parser {
 

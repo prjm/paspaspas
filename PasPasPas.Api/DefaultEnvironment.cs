@@ -149,6 +149,5 @@ namespace PasPasPas.Api {
         public IRuntime Runtime { get; }
             = new InternalRuntime();
 
-        IRuntimeValues IParserEnvironment.ConstantValues => throw new System.NotImplementedException();
     }
 }

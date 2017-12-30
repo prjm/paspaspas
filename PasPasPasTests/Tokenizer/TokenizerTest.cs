@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using PasPasPas.Api;
+using PasPasPas.Global.Runtime;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Parsing.SyntaxTree;
 using PasPasPasTests.Common;
@@ -51,10 +52,10 @@ namespace PasPasPasTests.Tokenizer {
 
 
         internal void IsQuotedString(string input, string value)
-            => IsToken(TokenKind.QuotedString, input, input, value);
+            => IsToken(TokenKind.QuotedString, input, input, GetUnicodeStringValue(value));
 
         internal void IsQuotedString(string input, char value)
-            => IsToken(TokenKind.QuotedString, input, input, value);
+            => IsToken(TokenKind.QuotedString, input, input, GetWideCharValue(value));
 
 
         internal void IsInteger(string input, ulong value)
@@ -66,14 +67,14 @@ namespace PasPasPasTests.Tokenizer {
         internal void IsWhitespace(string input)
             => IsToken(TokenKind.WhiteSpace, input, input);
 
-        internal void IsReal(string input, object value, params Tuple<int, string>[] tokens)
-            => IsToken(TokenKind.Real, input, input, value, tokens);
+        internal void IsReal(string input, double value, params Tuple<int, string>[] tokens)
+            => IsToken(TokenKind.Real, input, input, GetExtendedValue(value), tokens);
 
         internal void IsHexNumber(string input, object value)
             => IsToken(TokenKind.HexNumber, input, input, value);
 
         internal void IsPreprocessor(string input, string value)
-            => IsToken(TokenKind.Preprocessor, input, input, value);
+            => IsToken(TokenKind.Preprocessor, input, input, GetUnicodeStringValue(value));
 
         internal void IsComment(string input)
             => IsToken(TokenKind.Comment, input, input);
@@ -104,7 +105,7 @@ namespace PasPasPasTests.Tokenizer {
             if (tokens.Length < 1) {
 
                 if (value is double)
-                    Assert.AreEqual((double)value, Convert.ToDouble(result[0].ParsedValue));
+                    Assert.AreEqual((double)value, (result[0].ParsedValue as IRealValue).AsDouble);
                 else
                     Assert.AreEqual(value, result[0].ParsedValue);
 

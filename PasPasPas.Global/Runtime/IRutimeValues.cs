@@ -101,6 +101,6 @@
         /// </summary>
         /// <param name="value">parsed value</param>
         /// <returns>constant value</returns>
-        IValue ToRealValue(double value);
+        IValue ToExtendedValue(double value);
     }
 }

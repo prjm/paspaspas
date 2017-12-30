@@ -66,6 +66,14 @@ namespace PasPasPas.Runtime.Values {
             switch (kind) {
                 case SpecialConstantKind.IntegerOverflow:
                     return "IO";
+                case SpecialConstantKind.FalseValue:
+                    return "False";
+                case SpecialConstantKind.InvalidInteger:
+                    return "II";
+                case SpecialConstantKind.InvalidReal:
+                    return "IR";
+                case SpecialConstantKind.TrueValue:
+                    return "True";
                 default:
                     throw new ArgumentOutOfRangeException(nameof(kind));
 

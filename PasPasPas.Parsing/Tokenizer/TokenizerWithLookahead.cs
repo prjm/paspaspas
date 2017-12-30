@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using PasPasPas.Global.Runtime;
-using PasPasPas.Infrastructure.Common;
 using PasPasPas.Infrastructure.Environment;
 using PasPasPas.Infrastructure.Files;
 using PasPasPas.Infrastructure.Log;
@@ -10,7 +9,6 @@ using PasPasPas.Options.Bundles;
 using PasPasPas.Parsing.Parser;
 using PasPasPas.Parsing.SyntaxTree;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
-using PasPasPas.Parsing.Tokenizer.Patterns;
 
 namespace PasPasPas.Parsing.Tokenizer {
 

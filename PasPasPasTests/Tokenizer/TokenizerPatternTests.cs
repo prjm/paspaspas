@@ -257,7 +257,7 @@ namespace PasPasPasTests.Tokenizer {
             TestPattern(patterns, "$000000", TokenKind.HexNumber);
             TestPattern(patterns, "$1234FFFF", TokenKind.HexNumber);
             TestPattern(patterns, PasPasPas.Parsing.Tokenizer.Tokenizer.UnexpectedCharacter, "$CEFO", TokenKind.HexNumber, TokenKind.Invalid);
-            Assert.AreEqual((short)0x123F, TestPattern(patterns, "$123F", TokenKind.HexNumber).ParsedValue);
+            Assert.AreEqual(GetIntegerValue(0x123F), TestPattern(patterns, "$123F", TokenKind.HexNumber).ParsedValue);
         }
 
         private InputPatterns CreatePatterns(bool allowAmpersand = true, bool allowDigits = false, bool allowDot = false) {
@@ -350,9 +350,9 @@ namespace PasPasPasTests.Tokenizer {
             TestPattern(patterns, "'aaa''''aaa'", TokenKind.QuotedString);
             TestPattern(patterns, PasPasPas.Parsing.Tokenizer.Tokenizer.IncompleteString, "'aaaaaa", TokenKind.QuotedString);
             TestPattern(patterns, PasPasPas.Parsing.Tokenizer.Tokenizer.IncompleteString, "'", TokenKind.QuotedString);
-            Assert.AreEqual('a', TestPattern(patterns, "'a'", TokenKind.QuotedString).ParsedValue);
-            Assert.AreEqual("a'", TestPattern(patterns, "'a'''", TokenKind.QuotedString).ParsedValue);
-            Assert.AreEqual("a'aa", TestPattern(patterns, "'a''aa'", TokenKind.QuotedString).ParsedValue);
+            Assert.AreEqual(GetWideCharValue('a'), TestPattern(patterns, "'a'", TokenKind.QuotedString).ParsedValue);
+            Assert.AreEqual(GetUnicodeStringValue("a'"), TestPattern(patterns, "'a'''", TokenKind.QuotedString).ParsedValue);
+            Assert.AreEqual(GetUnicodeStringValue("a'aa"), TestPattern(patterns, "'a''aa'", TokenKind.QuotedString).ParsedValue);
         }
 
         [Fact]
@@ -361,7 +361,7 @@ namespace PasPasPasTests.Tokenizer {
             patterns.AddPattern('.', TokenKind.Dot);
             patterns.AddPattern('#', new StringGroupTokenValue());
             patterns.AddPattern('\'', new StringGroupTokenValue());
-            Assert.AreEqual("a\nb", TestPattern(patterns, "'a'#$A'b'", TokenKind.QuotedString).ParsedValue);
+            Assert.AreEqual(GetUnicodeStringValue("a\nb"), TestPattern(patterns, "'a'#$A'b'", TokenKind.QuotedString).ParsedValue);
             TestPattern(patterns, "'aaa'", TokenKind.QuotedString);
             TestPattern(patterns, "#09", TokenKind.QuotedString);
             TestPattern(patterns, "#09'aaaa'", TokenKind.QuotedString);

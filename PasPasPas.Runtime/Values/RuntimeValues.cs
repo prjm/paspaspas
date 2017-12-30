@@ -155,8 +155,8 @@ namespace PasPasPas.Runtime.Values {
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public IValue ToRealValue(double value)
-            => throw new System.NotImplementedException();
+        public IValue ToExtendedValue(double value)
+            => new FloatingPointValue(FloatingPointValueKind.Extended, value);
 
         /// <summary>
         ///     get a special constant value
@@ -172,6 +172,10 @@ namespace PasPasPas.Runtime.Values {
                         return trueValue;
                     case SpecialConstantKind.IntegerOverflow:
                         return new SpecialValue(SpecialConstantKind.IntegerOverflow);
+                    case SpecialConstantKind.InvalidReal:
+                        return new SpecialValue(SpecialConstantKind.InvalidReal);
+                    case SpecialConstantKind.InvalidInteger:
+                        return new SpecialValue(SpecialConstantKind.InvalidInteger);
                     default:
                         throw new IndexOutOfRangeException();
                 };

@@ -1,11 +1,9 @@
-﻿using PasPasPas.Global.Runtime;
-
-namespace PasPasPas.Infrastructure.Common {
+﻿namespace PasPasPas.Global.Runtime {
 
     /// <summary>
     ///     string value
     /// </summary>
-    public interface IStringValue : IValue {
+    public interface IStringValue {
 
         /// <summary>
         ///     get string valu

@@ -1,6 +1,5 @@
 ﻿using System;
 using PasPasPas.Global.Runtime;
-using PasPasPas.Infrastructure.Common;
 using PasPasPas.Infrastructure.Environment;
 using PasPasPas.Infrastructure.Utils;
 using Entry = System.ValueTuple<object, object, bool, object>;
@@ -12,12 +11,6 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
     ///     helper class to convert real literals
     /// </summary>
     public class RealLiteralConverter : IEnvironmentItem, IRealConverter, ILookupFunction<Entry, IValue> {
-
-        /// <summary>
-        ///     invalid real literal
-        /// </summary>
-        public readonly object InvalidRealLiteral
-            = new object();
 
         private readonly IRuntimeValues constantsValues;
         private LookupTable<Entry, IValue> data;
@@ -57,6 +50,7 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
         /// <param name="data"></param>
         /// <returns></returns>
         public IValue ConvertLiterals((object digits, object decimals, bool minus, object exponent) data) {
+            return constantsValues.ToExtendedValue(0);
             var digits = data.digits;
             var decimals = data.decimals;
             var minus = data.minus;
@@ -72,7 +66,7 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
                 if (exponent != null)
                     value = value * Math.Pow(10, e * System.Convert.ToDouble(exponent));
 
-                return constantsValues.ToRealValue(value);
+                return constantsValues.ToExtendedValue(value);
             }
             else
                 return constantsValues[SpecialConstantKind.InvalidReal];

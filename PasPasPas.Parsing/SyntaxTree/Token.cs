@@ -1,8 +1,5 @@
 ﻿using System;
-using PasPasPas.Infrastructure.Utils;
-using System.Text;
 using PasPasPas.Parsing.Tokenizer;
-using PasPasPas.Infrastructure.Common;
 using PasPasPas.Global.Runtime;
 
 namespace PasPasPas.Parsing.SyntaxTree {

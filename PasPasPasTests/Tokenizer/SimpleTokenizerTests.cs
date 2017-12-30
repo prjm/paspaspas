@@ -1,10 +1,8 @@
 ﻿using PasPasPas.Parsing.SyntaxTree;
 using Xunit;
 using System;
-using PasPasPas.Parsing.Tokenizer.LiteralValues;
 using Assert = PasPasPasTests.Common.Assert;
 using PasPasPas.Runtime.Values;
-using PasPasPas.Infrastructure.Common;
 using PasPasPas.Global.Runtime;
 
 namespace PasPasPasTests.Tokenizer {
@@ -125,10 +123,10 @@ namespace PasPasPasTests.Tokenizer {
             IsToken(TokenKind.GreaterThenEquals, ">=");
             IsToken(TokenKind.NotEquals, "<>");
             IsToken(TokenKind.Comment, "{ ddd }");
-            IsToken(TokenKind.Preprocessor, "{$ ddd }", "{$ ddd }", " ddd ");
+            IsToken(TokenKind.Preprocessor, "{$ ddd }", "{$ ddd }", GetUnicodeStringValue(" ddd "));
             IsToken(TokenKind.WhiteSpace, "  ");
-            IsToken(TokenKind.HexNumber, "$0000", "$0000", (sbyte)0);
-            IsToken(TokenKind.DoubleQuotedString, "\"\"", "\"\"", string.Empty);
+            IsToken(TokenKind.HexNumber, "$0000", "$0000", GetIntegerValue((sbyte)0));
+            IsToken(TokenKind.DoubleQuotedString, "\"\"", "\"\"", GetUnicodeStringValue(string.Empty));
         }
 
         [Fact]

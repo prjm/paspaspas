@@ -1,6 +1,5 @@
 ﻿using PasPasPas.Api;
 using PasPasPas.Global.Runtime;
-using PasPasPas.Infrastructure.Common;
 using PasPasPas.Options.DataTypes;
 using PasPasPas.Runtime.Values;
 using PasPasPas.Typings.Common;
@@ -59,6 +58,22 @@ namespace PasPasPasTests.Common {
         protected IValue GetIntegerValue(int number)
             => new RuntimeValues().ToScaledIntegerValue(number);
 
+        /// <summary>
+        ///     get the unicode string value
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
+        protected IValue GetUnicodeStringValue(string text)
+            => new RuntimeValues().ToUnicodeString(text);
+
+        /// <summary>
+        ///     get a wide char value
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        protected IValue GetWideCharValue(char value)
+            => new RuntimeValues().ToWideCharValue(value);
+
 
         /// <summary>
         ///     convert a value
@@ -85,6 +100,9 @@ namespace PasPasPasTests.Common {
         /// <returns></returns>
         protected IValue GetIntegerValue(ulong number)
             => new RuntimeValues().ToScaledIntegerValue(number);
+
+        protected IValue GetExtendedValue(double number)
+            => new RuntimeValues().ToExtendedValue(number);
 
     }
 }
