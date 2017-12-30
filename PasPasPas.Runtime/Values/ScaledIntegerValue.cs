@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
+using PasPasPas.Global.Constants;
 using PasPasPas.Infrastructure.Common;
-using PasPasPas.Typings.Common;
 
 namespace PasPasPas.Runtime.Values {
 
@@ -144,19 +144,19 @@ namespace PasPasPas.Runtime.Values {
 
                 switch (length) {
                     case 0:
-                        return TypeIds.ShortInt;
+                        return KnownTypeIds.ShortInt;
                     case 1:
-                        return IsNegative || data[0] < 0x80 ? TypeIds.ShortInt : TypeIds.ByteType;
+                        return IsNegative || data[0] < 0x80 ? KnownTypeIds.ShortInt : KnownTypeIds.ByteType;
                     case 2:
-                        return IsNegative || data[1] < 0x80 ? TypeIds.SmallInt : TypeIds.WordType;
+                        return IsNegative || data[1] < 0x80 ? KnownTypeIds.SmallInt : KnownTypeIds.WordType;
                     case 3:
                     case 4:
-                        return IsNegative || data[3] < 0x80 ? TypeIds.IntegerType : TypeIds.CardinalType;
+                        return IsNegative || data[3] < 0x80 ? KnownTypeIds.IntegerType : KnownTypeIds.CardinalType;
                     case 5:
                     case 6:
                     case 7:
                     case 8:
-                        return IsNegative || data[7] < 0x80 ? TypeIds.Int64Type : TypeIds.Uint64Type;
+                        return IsNegative || data[7] < 0x80 ? KnownTypeIds.Int64Type : KnownTypeIds.Uint64Type;
                 }
                 throw new InvalidOperationException();
             }
@@ -205,28 +205,28 @@ namespace PasPasPas.Runtime.Values {
         public override string ToString() {
             string value;
             switch (TypeId) {
-                case TypeIds.ByteType:
+                case KnownTypeIds.ByteType:
                     value = data[0].ToString();
                     break;
-                case TypeIds.ShortInt:
+                case KnownTypeIds.ShortInt:
                     value = ((sbyte)data[0]).ToString();
                     break;
-                case TypeIds.WordType:
+                case KnownTypeIds.WordType:
                     value = BitConverter.ToUInt16(data, 0).ToString();
                     break;
-                case TypeIds.SmallInt:
+                case KnownTypeIds.SmallInt:
                     value = BitConverter.ToInt16(data, 0).ToString();
                     break;
-                case TypeIds.CardinalType:
+                case KnownTypeIds.CardinalType:
                     value = BitConverter.ToUInt32(data, 0).ToString();
                     break;
-                case TypeIds.IntegerType:
+                case KnownTypeIds.IntegerType:
                     value = BitConverter.ToInt32(data, 0).ToString();
                     break;
-                case TypeIds.Uint64Type:
+                case KnownTypeIds.Uint64Type:
                     value = BitConverter.ToUInt64(data, 0).ToString();
                     break;
-                case TypeIds.Int64Type:
+                case KnownTypeIds.Int64Type:
                     value = BitConverter.ToInt64(data, 0).ToString();
                     break;
                 default:

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using PasPasPas.Global.Constants;
 using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Typings.Common;
@@ -33,7 +34,7 @@ namespace PasPasPas.Typings.Structured {
         ///     base type id
         /// </summary>
         public int BaseTypeId { get; set; }
-            = TypeIds.ErrorType;
+            = KnownTypeIds.ErrorType;
 
         /// <summary>
         ///     base type id

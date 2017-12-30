@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using PasPasPas.Typings.Common;
+using PasPasPas.Global.Constants;
 
 namespace PasPasPas.Runtime.Values {
 
@@ -31,7 +27,7 @@ namespace PasPasPas.Runtime.Values {
         ///     common type id
         /// </summary>
         public override int TypeId
-            => TypeIds.WideCharType;
+            => KnownTypeIds.WideCharType;
 
         /// <summary>
         ///     test for equality

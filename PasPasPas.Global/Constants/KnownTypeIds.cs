@@ -1,11 +1,9 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Types;
-
-namespace PasPasPas.Typings.Common {
+﻿namespace PasPasPas.Global.Constants {
 
     /// <summary>
     ///     common type ids
     /// </summary>
-    public static class TypeIds {
+    public static class KnownTypeIds {
 
         /// <summary>
         ///     no type
@@ -25,7 +23,7 @@ namespace PasPasPas.Typings.Common {
         /// <summary>
         ///     errornous type
         /// </summary>
-        public const int ErrorType = Signature.ErrorType;
+        public const int ErrorType = -1;
 
         /// <summary>
         ///     byte type (1 byte unsigned integer)

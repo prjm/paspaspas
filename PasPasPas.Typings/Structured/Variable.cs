@@ -1,4 +1,5 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Types;
+﻿using PasPasPas.Global.Constants;
+using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Typings.Common;
 
 namespace PasPasPas.Typings.Structured {
@@ -27,6 +28,6 @@ namespace PasPasPas.Typings.Structured {
         ///     type id
         /// </summary>
         public int TypeId
-            => SymbolType != null ? SymbolType.TypeId : TypeIds.ErrorType;
+            => SymbolType != null ? SymbolType.TypeId : KnownTypeIds.ErrorType;
     }
 }

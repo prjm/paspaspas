@@ -1,4 +1,5 @@
 ﻿using System;
+using PasPasPas.Global.Constants;
 using PasPasPas.Options.DataTypes;
 using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Typings.Common;
@@ -14,59 +15,59 @@ namespace PasPasPasTests.Types {
 
         [Fact]
         public void TestIntTypes() {
-            AssertDeclType("System.Byte", TypeIds.ByteType);
-            AssertDeclType("System.Word", TypeIds.WordType);
-            AssertDeclType("System.Cardinal", TypeIds.CardinalType);
-            AssertDeclType("System.UInt64", TypeIds.Uint64Type);
-            AssertDeclType("System.ShortInt", TypeIds.ShortInt);
-            AssertDeclType("System.SmallInt", TypeIds.SmallInt);
-            AssertDeclType("System.Integer", TypeIds.IntegerType);
-            AssertDeclType("System.Int64", TypeIds.Int64Type);
+            AssertDeclType("System.Byte", KnownTypeIds.ByteType);
+            AssertDeclType("System.Word", KnownTypeIds.WordType);
+            AssertDeclType("System.Cardinal", KnownTypeIds.CardinalType);
+            AssertDeclType("System.UInt64", KnownTypeIds.Uint64Type);
+            AssertDeclType("System.ShortInt", KnownTypeIds.ShortInt);
+            AssertDeclType("System.SmallInt", KnownTypeIds.SmallInt);
+            AssertDeclType("System.Integer", KnownTypeIds.IntegerType);
+            AssertDeclType("System.Int64", KnownTypeIds.Int64Type);
 
-            AssertDeclType("Byte", TypeIds.ByteType);
-            AssertDeclType("Word", TypeIds.WordType);
-            AssertDeclType("Cardinal", TypeIds.CardinalType);
-            AssertDeclType("UInt64", TypeIds.Uint64Type);
-            AssertDeclType("ShortInt", TypeIds.ShortInt);
-            AssertDeclType("SmallInt", TypeIds.SmallInt);
-            AssertDeclType("Integer", TypeIds.IntegerType);
-            AssertDeclType("Int64", TypeIds.Int64Type);
+            AssertDeclType("Byte", KnownTypeIds.ByteType);
+            AssertDeclType("Word", KnownTypeIds.WordType);
+            AssertDeclType("Cardinal", KnownTypeIds.CardinalType);
+            AssertDeclType("UInt64", KnownTypeIds.Uint64Type);
+            AssertDeclType("ShortInt", KnownTypeIds.ShortInt);
+            AssertDeclType("SmallInt", KnownTypeIds.SmallInt);
+            AssertDeclType("Integer", KnownTypeIds.IntegerType);
+            AssertDeclType("Int64", KnownTypeIds.Int64Type);
         }
 
         [Fact]
         public void TestCharTypes() {
-            AssertDeclType("System.Char", TypeIds.CharType);
-            AssertDeclType("System.AnsiChar", TypeIds.AnsiCharType);
-            AssertDeclType("System.WideChar", TypeIds.WideCharType);
-            AssertDeclType("System.UCS2Char", TypeIds.Ucs2CharType);
-            AssertDeclType("System.UCS4Char", TypeIds.Ucs4CharType);
+            AssertDeclType("System.Char", KnownTypeIds.CharType);
+            AssertDeclType("System.AnsiChar", KnownTypeIds.AnsiCharType);
+            AssertDeclType("System.WideChar", KnownTypeIds.WideCharType);
+            AssertDeclType("System.UCS2Char", KnownTypeIds.Ucs2CharType);
+            AssertDeclType("System.UCS4Char", KnownTypeIds.Ucs4CharType);
 
-            AssertDeclType("Char", TypeIds.CharType);
-            AssertDeclType("AnsiChar", TypeIds.AnsiCharType);
-            AssertDeclType("WideChar", TypeIds.WideCharType);
-            AssertDeclType("UCS2Char", TypeIds.Ucs2CharType);
-            AssertDeclType("UCS4Char", TypeIds.Ucs4CharType);
+            AssertDeclType("Char", KnownTypeIds.CharType);
+            AssertDeclType("AnsiChar", KnownTypeIds.AnsiCharType);
+            AssertDeclType("WideChar", KnownTypeIds.WideCharType);
+            AssertDeclType("UCS2Char", KnownTypeIds.Ucs2CharType);
+            AssertDeclType("UCS4Char", KnownTypeIds.Ucs4CharType);
         }
 
         [Fact]
         public void TestBooleanTypes() {
-            AssertDeclType("Boolean", TypeIds.BooleanType);
-            AssertDeclType("ByteBool", TypeIds.ByteBoolType);
-            AssertDeclType("WordBool", TypeIds.WordBoolType);
-            AssertDeclType("LongBool", TypeIds.LongBoolType);
+            AssertDeclType("Boolean", KnownTypeIds.BooleanType);
+            AssertDeclType("ByteBool", KnownTypeIds.ByteBoolType);
+            AssertDeclType("WordBool", KnownTypeIds.WordBoolType);
+            AssertDeclType("LongBool", KnownTypeIds.LongBoolType);
 
-            AssertDeclType("System.Boolean", TypeIds.BooleanType);
-            AssertDeclType("System.ByteBool", TypeIds.ByteBoolType);
-            AssertDeclType("System.WordBool", TypeIds.WordBoolType);
-            AssertDeclType("System.LongBool", TypeIds.LongBoolType);
+            AssertDeclType("System.Boolean", KnownTypeIds.BooleanType);
+            AssertDeclType("System.ByteBool", KnownTypeIds.ByteBoolType);
+            AssertDeclType("System.WordBool", KnownTypeIds.WordBoolType);
+            AssertDeclType("System.LongBool", KnownTypeIds.LongBoolType);
         }
 
         [Fact]
         public void TestTObjectType() {
             Func<StructuredTypeDeclaration, bool> hasMethod(string q) => (t => t?.HasMethod(q) ?? false);
 
-            AssertDeclType("TObject", TypeIds.TObject);
-            AssertDeclType("System.TObject", TypeIds.TObject);
+            AssertDeclType("TObject", KnownTypeIds.TObject);
+            AssertDeclType("System.TObject", KnownTypeIds.TObject);
             AssertDeclTypeDef("TObject", hasMethod("Create"));
             AssertDeclTypeDef("TObject", hasMethod("Free"));
             AssertDeclTypeDef("TObject", hasMethod("DisposeOf"));
@@ -77,123 +78,123 @@ namespace PasPasPasTests.Types {
 
         [Fact]
         public void TestPointerTypes() {
-            AssertDeclType("Pointer", TypeIds.GenericPointer);
-            AssertDeclType("PByte", TypeIds.PByte);
-            AssertDeclType("PWord", TypeIds.PWord);
-            AssertDeclType("PCardinal", TypeIds.PCardinal);
-            AssertDeclType("PUInt64", TypeIds.PUInt64);
-            AssertDeclType("PShortInt", TypeIds.PShortInt);
-            AssertDeclType("PSmallInt", TypeIds.PSmallInt);
-            AssertDeclType("PInteger", TypeIds.PInteger);
-            AssertDeclType("PInt64", TypeIds.PInt64);
-            AssertDeclType("PSingle", TypeIds.PSingle);
-            AssertDeclType("PDouble", TypeIds.PDouble);
-            AssertDeclType("PExtended", TypeIds.PExtended);
-            AssertDeclType("PAnsiChar", TypeIds.PAnsiChar);
-            AssertDeclType("PWideChar", TypeIds.PWideChar);
-            AssertDeclType("PAnsiString", TypeIds.PAnsiString);
-            AssertDeclType("PRawByteString", TypeIds.PRawByteString);
-            AssertDeclType("PUnicodeString", TypeIds.PUnicodeString);
-            AssertDeclType("PShortString", TypeIds.PShortString);
-            AssertDeclType("PWideString", TypeIds.PWideString);
-            AssertDeclType("PChar", TypeIds.PChar);
-            AssertDeclType("PString", TypeIds.PString);
-            AssertDeclType("PBoolean", TypeIds.PBoolean);
-            AssertDeclType("PLongBool", TypeIds.PLongBool);
-            AssertDeclType("PWordBool", TypeIds.PWordBool);
-            AssertDeclType("PPointer", TypeIds.PPointer);
-            AssertDeclType("PCurrency", TypeIds.PCurrency);
-            AssertDeclType("System.Pointer", TypeIds.GenericPointer);
-            AssertDeclType("System.PByte", TypeIds.PByte);
-            AssertDeclType("System.PWord", TypeIds.PWord);
-            AssertDeclType("System.PCardinal", TypeIds.PCardinal);
-            AssertDeclType("System.PUInt64", TypeIds.PUInt64);
-            AssertDeclType("System.PShortInt", TypeIds.PShortInt);
-            AssertDeclType("System.PSmallInt", TypeIds.PSmallInt);
-            AssertDeclType("System.PInteger", TypeIds.PInteger);
-            AssertDeclType("System.PInt64", TypeIds.PInt64);
-            AssertDeclType("System.PSingle", TypeIds.PSingle);
-            AssertDeclType("System.PDouble", TypeIds.PDouble);
-            AssertDeclType("System.PExtended", TypeIds.PExtended);
-            AssertDeclType("System.PAnsiChar", TypeIds.PAnsiChar);
-            AssertDeclType("System.PWideChar", TypeIds.PWideChar);
-            AssertDeclType("System.PAnsiString", TypeIds.PAnsiString);
-            AssertDeclType("System.PRawByteString", TypeIds.PRawByteString);
-            AssertDeclType("System.PUnicodeString", TypeIds.PUnicodeString);
-            AssertDeclType("System.PShortString", TypeIds.PShortString);
-            AssertDeclType("System.PWideString", TypeIds.PWideString);
-            AssertDeclType("System.PChar", TypeIds.PChar);
-            AssertDeclType("System.PString", TypeIds.PString);
-            AssertDeclType("System.PBoolean", TypeIds.PBoolean);
-            AssertDeclType("System.PLongBool", TypeIds.PLongBool);
-            AssertDeclType("System.PWordBool", TypeIds.PWordBool);
-            AssertDeclType("System.PPointer", TypeIds.PPointer);
-            AssertDeclType("System.PCurrency", TypeIds.PCurrency);
+            AssertDeclType("Pointer", KnownTypeIds.GenericPointer);
+            AssertDeclType("PByte", KnownTypeIds.PByte);
+            AssertDeclType("PWord", KnownTypeIds.PWord);
+            AssertDeclType("PCardinal", KnownTypeIds.PCardinal);
+            AssertDeclType("PUInt64", KnownTypeIds.PUInt64);
+            AssertDeclType("PShortInt", KnownTypeIds.PShortInt);
+            AssertDeclType("PSmallInt", KnownTypeIds.PSmallInt);
+            AssertDeclType("PInteger", KnownTypeIds.PInteger);
+            AssertDeclType("PInt64", KnownTypeIds.PInt64);
+            AssertDeclType("PSingle", KnownTypeIds.PSingle);
+            AssertDeclType("PDouble", KnownTypeIds.PDouble);
+            AssertDeclType("PExtended", KnownTypeIds.PExtended);
+            AssertDeclType("PAnsiChar", KnownTypeIds.PAnsiChar);
+            AssertDeclType("PWideChar", KnownTypeIds.PWideChar);
+            AssertDeclType("PAnsiString", KnownTypeIds.PAnsiString);
+            AssertDeclType("PRawByteString", KnownTypeIds.PRawByteString);
+            AssertDeclType("PUnicodeString", KnownTypeIds.PUnicodeString);
+            AssertDeclType("PShortString", KnownTypeIds.PShortString);
+            AssertDeclType("PWideString", KnownTypeIds.PWideString);
+            AssertDeclType("PChar", KnownTypeIds.PChar);
+            AssertDeclType("PString", KnownTypeIds.PString);
+            AssertDeclType("PBoolean", KnownTypeIds.PBoolean);
+            AssertDeclType("PLongBool", KnownTypeIds.PLongBool);
+            AssertDeclType("PWordBool", KnownTypeIds.PWordBool);
+            AssertDeclType("PPointer", KnownTypeIds.PPointer);
+            AssertDeclType("PCurrency", KnownTypeIds.PCurrency);
+            AssertDeclType("System.Pointer", KnownTypeIds.GenericPointer);
+            AssertDeclType("System.PByte", KnownTypeIds.PByte);
+            AssertDeclType("System.PWord", KnownTypeIds.PWord);
+            AssertDeclType("System.PCardinal", KnownTypeIds.PCardinal);
+            AssertDeclType("System.PUInt64", KnownTypeIds.PUInt64);
+            AssertDeclType("System.PShortInt", KnownTypeIds.PShortInt);
+            AssertDeclType("System.PSmallInt", KnownTypeIds.PSmallInt);
+            AssertDeclType("System.PInteger", KnownTypeIds.PInteger);
+            AssertDeclType("System.PInt64", KnownTypeIds.PInt64);
+            AssertDeclType("System.PSingle", KnownTypeIds.PSingle);
+            AssertDeclType("System.PDouble", KnownTypeIds.PDouble);
+            AssertDeclType("System.PExtended", KnownTypeIds.PExtended);
+            AssertDeclType("System.PAnsiChar", KnownTypeIds.PAnsiChar);
+            AssertDeclType("System.PWideChar", KnownTypeIds.PWideChar);
+            AssertDeclType("System.PAnsiString", KnownTypeIds.PAnsiString);
+            AssertDeclType("System.PRawByteString", KnownTypeIds.PRawByteString);
+            AssertDeclType("System.PUnicodeString", KnownTypeIds.PUnicodeString);
+            AssertDeclType("System.PShortString", KnownTypeIds.PShortString);
+            AssertDeclType("System.PWideString", KnownTypeIds.PWideString);
+            AssertDeclType("System.PChar", KnownTypeIds.PChar);
+            AssertDeclType("System.PString", KnownTypeIds.PString);
+            AssertDeclType("System.PBoolean", KnownTypeIds.PBoolean);
+            AssertDeclType("System.PLongBool", KnownTypeIds.PLongBool);
+            AssertDeclType("System.PWordBool", KnownTypeIds.PWordBool);
+            AssertDeclType("System.PPointer", KnownTypeIds.PPointer);
+            AssertDeclType("System.PCurrency", KnownTypeIds.PCurrency);
         }
 
         [Fact]
         public void TestNativeIntTypes() {
-            AssertDeclType("System.NativeInt", TypeIds.NativeInt, NativeIntSize.All32bit, 32);
-            AssertDeclType("System.NativeUInt", TypeIds.NativeUInt, NativeIntSize.All32bit, 32);
-            AssertDeclType("System.LongInt", TypeIds.LongInt, NativeIntSize.All32bit, 32);
-            AssertDeclType("System.LongWord", TypeIds.LongWord, NativeIntSize.All32bit, 32);
-            AssertDeclType("NativeInt", TypeIds.NativeInt, NativeIntSize.All32bit, 32);
-            AssertDeclType("NativeUInt", TypeIds.NativeUInt, NativeIntSize.All32bit, 32);
-            AssertDeclType("LongInt", TypeIds.LongInt, NativeIntSize.All32bit, 32);
-            AssertDeclType("LongWord", TypeIds.LongWord, NativeIntSize.All32bit, 32);
+            AssertDeclType("System.NativeInt", KnownTypeIds.NativeInt, NativeIntSize.All32bit, 32);
+            AssertDeclType("System.NativeUInt", KnownTypeIds.NativeUInt, NativeIntSize.All32bit, 32);
+            AssertDeclType("System.LongInt", KnownTypeIds.LongInt, NativeIntSize.All32bit, 32);
+            AssertDeclType("System.LongWord", KnownTypeIds.LongWord, NativeIntSize.All32bit, 32);
+            AssertDeclType("NativeInt", KnownTypeIds.NativeInt, NativeIntSize.All32bit, 32);
+            AssertDeclType("NativeUInt", KnownTypeIds.NativeUInt, NativeIntSize.All32bit, 32);
+            AssertDeclType("LongInt", KnownTypeIds.LongInt, NativeIntSize.All32bit, 32);
+            AssertDeclType("LongWord", KnownTypeIds.LongWord, NativeIntSize.All32bit, 32);
 
-            AssertDeclType("System.NativeInt", TypeIds.NativeInt, NativeIntSize.All64bit, 64);
-            AssertDeclType("System.NativeUInt", TypeIds.NativeUInt, NativeIntSize.All64bit, 64);
-            AssertDeclType("System.LongInt", TypeIds.LongInt, NativeIntSize.All64bit, 64);
-            AssertDeclType("System.LongWord", TypeIds.LongWord, NativeIntSize.All64bit, 64);
-            AssertDeclType("NativeInt", TypeIds.NativeInt, NativeIntSize.All64bit, 64);
-            AssertDeclType("NativeUInt", TypeIds.NativeUInt, NativeIntSize.All64bit, 64);
-            AssertDeclType("LongInt", TypeIds.LongInt, NativeIntSize.All64bit, 64);
-            AssertDeclType("LongWord", TypeIds.LongWord, NativeIntSize.All64bit, 64);
+            AssertDeclType("System.NativeInt", KnownTypeIds.NativeInt, NativeIntSize.All64bit, 64);
+            AssertDeclType("System.NativeUInt", KnownTypeIds.NativeUInt, NativeIntSize.All64bit, 64);
+            AssertDeclType("System.LongInt", KnownTypeIds.LongInt, NativeIntSize.All64bit, 64);
+            AssertDeclType("System.LongWord", KnownTypeIds.LongWord, NativeIntSize.All64bit, 64);
+            AssertDeclType("NativeInt", KnownTypeIds.NativeInt, NativeIntSize.All64bit, 64);
+            AssertDeclType("NativeUInt", KnownTypeIds.NativeUInt, NativeIntSize.All64bit, 64);
+            AssertDeclType("LongInt", KnownTypeIds.LongInt, NativeIntSize.All64bit, 64);
+            AssertDeclType("LongWord", KnownTypeIds.LongWord, NativeIntSize.All64bit, 64);
 
-            AssertDeclType("System.NativeInt", TypeIds.NativeInt, NativeIntSize.Windows64bit, 64);
-            AssertDeclType("System.NativeUInt", TypeIds.NativeUInt, NativeIntSize.Windows64bit, 64);
-            AssertDeclType("System.LongInt", TypeIds.LongInt, NativeIntSize.Windows64bit, 32);
-            AssertDeclType("System.LongWord", TypeIds.LongWord, NativeIntSize.Windows64bit, 32);
-            AssertDeclType("NativeInt", TypeIds.NativeInt, NativeIntSize.Windows64bit, 64);
-            AssertDeclType("NativeUInt", TypeIds.NativeUInt, NativeIntSize.Windows64bit, 64);
-            AssertDeclType("LongInt", TypeIds.LongInt, NativeIntSize.Windows64bit, 32);
-            AssertDeclType("LongWord", TypeIds.LongWord, NativeIntSize.Windows64bit, 32);
+            AssertDeclType("System.NativeInt", KnownTypeIds.NativeInt, NativeIntSize.Windows64bit, 64);
+            AssertDeclType("System.NativeUInt", KnownTypeIds.NativeUInt, NativeIntSize.Windows64bit, 64);
+            AssertDeclType("System.LongInt", KnownTypeIds.LongInt, NativeIntSize.Windows64bit, 32);
+            AssertDeclType("System.LongWord", KnownTypeIds.LongWord, NativeIntSize.Windows64bit, 32);
+            AssertDeclType("NativeInt", KnownTypeIds.NativeInt, NativeIntSize.Windows64bit, 64);
+            AssertDeclType("NativeUInt", KnownTypeIds.NativeUInt, NativeIntSize.Windows64bit, 64);
+            AssertDeclType("LongInt", KnownTypeIds.LongInt, NativeIntSize.Windows64bit, 32);
+            AssertDeclType("LongWord", KnownTypeIds.LongWord, NativeIntSize.Windows64bit, 32);
         }
 
         [Fact]
         public void TestStringTypes() {
-            AssertDeclType("String", TypeIds.StringType);
+            AssertDeclType("String", KnownTypeIds.StringType);
             AssertDeclType("String[324]", typeKind: CommonTypeKind.ShortStringType);
-            AssertDeclType("AnsiString", TypeIds.AnsiStringType);
-            AssertDeclType("UnicodeString", TypeIds.UnicodeStringType);
-            AssertDeclType("WideString", TypeIds.WideStringType);
-            AssertDeclType("ShortString", TypeIds.ShortStringType);
-            AssertDeclType("RawByteString", TypeIds.RawByteString);
-            AssertDeclType("System.String", TypeIds.StringType);
-            AssertDeclType("System.AnsiString", TypeIds.AnsiStringType);
-            AssertDeclType("System.UnicodeString", TypeIds.UnicodeStringType);
-            AssertDeclType("System.WideString", TypeIds.WideStringType);
-            AssertDeclType("System.ShortString", TypeIds.ShortStringType);
-            AssertDeclType("System.RawByteString", TypeIds.RawByteString);
+            AssertDeclType("AnsiString", KnownTypeIds.AnsiStringType);
+            AssertDeclType("UnicodeString", KnownTypeIds.UnicodeStringType);
+            AssertDeclType("WideString", KnownTypeIds.WideStringType);
+            AssertDeclType("ShortString", KnownTypeIds.ShortStringType);
+            AssertDeclType("RawByteString", KnownTypeIds.RawByteString);
+            AssertDeclType("System.String", KnownTypeIds.StringType);
+            AssertDeclType("System.AnsiString", KnownTypeIds.AnsiStringType);
+            AssertDeclType("System.UnicodeString", KnownTypeIds.UnicodeStringType);
+            AssertDeclType("System.WideString", KnownTypeIds.WideStringType);
+            AssertDeclType("System.ShortString", KnownTypeIds.ShortStringType);
+            AssertDeclType("System.RawByteString", KnownTypeIds.RawByteString);
         }
 
         [Fact]
         public void TestRealTypes() {
-            AssertDeclType("Real48", TypeIds.Real48Type);
-            AssertDeclType("Single", TypeIds.SingleType);
-            AssertDeclType("Double", TypeIds.Double);
-            AssertDeclType("Real", TypeIds.Real);
-            AssertDeclType("Extended", TypeIds.Extended);
-            AssertDeclType("Comp", TypeIds.Comp);
-            AssertDeclType("Currency", TypeIds.Currency);
-            AssertDeclType("System.Real48", TypeIds.Real48Type);
-            AssertDeclType("System.Single", TypeIds.SingleType);
-            AssertDeclType("System.Double", TypeIds.Double);
-            AssertDeclType("System.Real", TypeIds.Real);
-            AssertDeclType("System.Extended", TypeIds.Extended);
-            AssertDeclType("System.Comp", TypeIds.Comp);
-            AssertDeclType("System.Currency", TypeIds.Currency);
+            AssertDeclType("Real48", KnownTypeIds.Real48Type);
+            AssertDeclType("Single", KnownTypeIds.SingleType);
+            AssertDeclType("Double", KnownTypeIds.Double);
+            AssertDeclType("Real", KnownTypeIds.Real);
+            AssertDeclType("Extended", KnownTypeIds.Extended);
+            AssertDeclType("Comp", KnownTypeIds.Comp);
+            AssertDeclType("Currency", KnownTypeIds.Currency);
+            AssertDeclType("System.Real48", KnownTypeIds.Real48Type);
+            AssertDeclType("System.Single", KnownTypeIds.SingleType);
+            AssertDeclType("System.Double", KnownTypeIds.Double);
+            AssertDeclType("System.Real", KnownTypeIds.Real);
+            AssertDeclType("System.Extended", KnownTypeIds.Extended);
+            AssertDeclType("System.Comp", KnownTypeIds.Comp);
+            AssertDeclType("System.Currency", KnownTypeIds.Currency);
         }
 
     }

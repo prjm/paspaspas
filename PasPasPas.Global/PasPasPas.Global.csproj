@@ -8,17 +8,12 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <LangVersion>$(PasPasPasCsLanguageVersion)</LangVersion>
-    <DocumentationFile>bin\Release\$(PasPasPasTargetFramework)\runtime.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\$(PasPasPasTargetFramework)\global.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <LangVersion>$(PasPasPasCsLanguageVersion)</LangVersion>
-    <DocumentationFile>bin\Release\$(PasPasPasTargetFramework)\runtime.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\$(PasPasPasTargetFramework)\global.xml</DocumentationFile>
   </PropertyGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\PasPasPas.Global\PasPasPas.Global.csproj" />
-    <ProjectReference Include="..\PasPasPas.Infrastructure\PasPasPas.Infrastructure.csproj" />
-  </ItemGroup>
 
 </Project>

@@ -1,6 +1,6 @@
 ﻿using System;
+using PasPasPas.Global.Constants;
 using PasPasPas.Infrastructure.Common;
-using PasPasPas.Typings.Common;
 
 namespace PasPasPas.Runtime.Values {
 
@@ -36,7 +36,7 @@ namespace PasPasPas.Runtime.Values {
         ///     error type
         /// </summary>
         public override int TypeId
-            => TypeIds.ErrorType;
+            => KnownTypeIds.ErrorType;
 
         /// <summary>
         ///     check for equality

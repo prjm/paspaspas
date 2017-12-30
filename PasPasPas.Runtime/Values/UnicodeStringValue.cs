@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using PasPasPas.Typings.Common;
+using PasPasPas.Global.Constants;
 
 namespace PasPasPas.Runtime.Values {
 
@@ -32,7 +29,7 @@ namespace PasPasPas.Runtime.Values {
         ///     get the type id
         /// </summary>
         public override int TypeId
-            => TypeIds.UnicodeStringType;
+            => KnownTypeIds.UnicodeStringType;
 
         /// <summary>test for equality</summary>
         /// <param name="obj"></param>

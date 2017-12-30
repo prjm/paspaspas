@@ -1,4 +1,5 @@
-﻿using PasPasPas.Typings.Common;
+﻿using PasPasPas.Global.Constants;
+using PasPasPas.Typings.Common;
 using PasPasPasTests.Common;
 using Xunit;
 
@@ -11,346 +12,346 @@ namespace PasPasPasTests.Types {
 
         [Fact]
         public void TestIntegerLiteralTypes() {
-            AssertExprType("-128", TypeIds.ShortInt);
-            AssertExprType("0", TypeIds.ShortInt);
-            AssertExprType("127", TypeIds.ShortInt);
-            AssertExprType("128", TypeIds.ByteType);
-            AssertExprType("255", TypeIds.ByteType);
-            AssertExprType("-129", TypeIds.SmallInt);
-            AssertExprType("256", TypeIds.SmallInt);
-            AssertExprType("-32768", TypeIds.SmallInt);
-            AssertExprType("-32769", TypeIds.IntegerType);
-            AssertExprType("32767", TypeIds.SmallInt);
-            AssertExprType("32768", TypeIds.WordType);
-            AssertExprType("65535", TypeIds.WordType);
-            AssertExprType("65536", TypeIds.IntegerType);
-            AssertExprType("2147483648", TypeIds.CardinalType);
-            AssertExprType("-2147483648", TypeIds.IntegerType);
-            AssertExprType("-2147483649", TypeIds.Int64Type);
-            AssertExprType("4294967295", TypeIds.CardinalType);
-            AssertExprType("4294967296", TypeIds.Int64Type);
-            AssertExprType("9223372036854775807", TypeIds.Int64Type);
-            AssertExprType("18446744073709551615", TypeIds.Uint64Type);
+            AssertExprType("-128", KnownTypeIds.ShortInt);
+            AssertExprType("0", KnownTypeIds.ShortInt);
+            AssertExprType("127", KnownTypeIds.ShortInt);
+            AssertExprType("128", KnownTypeIds.ByteType);
+            AssertExprType("255", KnownTypeIds.ByteType);
+            AssertExprType("-129", KnownTypeIds.SmallInt);
+            AssertExprType("256", KnownTypeIds.SmallInt);
+            AssertExprType("-32768", KnownTypeIds.SmallInt);
+            AssertExprType("-32769", KnownTypeIds.IntegerType);
+            AssertExprType("32767", KnownTypeIds.SmallInt);
+            AssertExprType("32768", KnownTypeIds.WordType);
+            AssertExprType("65535", KnownTypeIds.WordType);
+            AssertExprType("65536", KnownTypeIds.IntegerType);
+            AssertExprType("2147483648", KnownTypeIds.CardinalType);
+            AssertExprType("-2147483648", KnownTypeIds.IntegerType);
+            AssertExprType("-2147483649", KnownTypeIds.Int64Type);
+            AssertExprType("4294967295", KnownTypeIds.CardinalType);
+            AssertExprType("4294967296", KnownTypeIds.Int64Type);
+            AssertExprType("9223372036854775807", KnownTypeIds.Int64Type);
+            AssertExprType("18446744073709551615", KnownTypeIds.Uint64Type);
         }
 
         [Fact]
         public void TestBooleanLiteralTypes() {
-            AssertExprType("true", TypeIds.BooleanType);
-            AssertExprType("false", TypeIds.BooleanType);
+            AssertExprType("true", KnownTypeIds.BooleanType);
+            AssertExprType("false", KnownTypeIds.BooleanType);
         }
 
         [Fact]
         public void TestCharLiteralTypes() {
-            AssertExprType("'C'", TypeIds.WideCharType);
-            AssertExprType("#9", TypeIds.WideCharType);
+            AssertExprType("'C'", KnownTypeIds.WideCharType);
+            AssertExprType("#9", KnownTypeIds.WideCharType);
         }
 
         [Fact]
         public void TestStringLiteralTypes() {
-            AssertExprType("'CD'", TypeIds.StringType);
-            AssertExprType("#9#9", TypeIds.StringType);
+            AssertExprType("'CD'", KnownTypeIds.StringType);
+            AssertExprType("#9#9", KnownTypeIds.StringType);
         }
 
         [Fact]
         public void TestExtendedLiteralTypes() {
-            AssertExprType("3.5", TypeIds.Extended);
-            AssertExprType("2.33434343", TypeIds.Extended);
+            AssertExprType("3.5", KnownTypeIds.Extended);
+            AssertExprType("2.33434343", KnownTypeIds.Extended);
         }
 
         [Fact]
         public void TestBooleanOperators() {
-            AssertExprType("not true", TypeIds.BooleanType);
-            AssertExprType("not false", TypeIds.BooleanType);
-            AssertExprType("true and false", TypeIds.BooleanType);
-            AssertExprType("true or false", TypeIds.BooleanType);
-            AssertExprType("true xor false", TypeIds.BooleanType);
+            AssertExprType("not true", KnownTypeIds.BooleanType);
+            AssertExprType("not false", KnownTypeIds.BooleanType);
+            AssertExprType("true and false", KnownTypeIds.BooleanType);
+            AssertExprType("true or false", KnownTypeIds.BooleanType);
+            AssertExprType("true xor false", KnownTypeIds.BooleanType);
         }
 
         [Fact]
         public void TestArithmetikOperatorsInteger() {
-            AssertExprType("+ 1", TypeIds.ShortInt);
-            AssertExprType("- 1", TypeIds.ShortInt);
-            AssertExprType("1 + 1", TypeIds.ShortInt);
-            AssertExprType("1 - 1", TypeIds.ShortInt);
-            AssertExprType("1 * 1", TypeIds.ShortInt);
-            AssertExprType("1 div 1", TypeIds.ShortInt);
-            AssertExprType("1 mod 1", TypeIds.ShortInt);
-            AssertExprType("1 / 1", TypeIds.Extended);
+            AssertExprType("+ 1", KnownTypeIds.ShortInt);
+            AssertExprType("- 1", KnownTypeIds.ShortInt);
+            AssertExprType("1 + 1", KnownTypeIds.ShortInt);
+            AssertExprType("1 - 1", KnownTypeIds.ShortInt);
+            AssertExprType("1 * 1", KnownTypeIds.ShortInt);
+            AssertExprType("1 div 1", KnownTypeIds.ShortInt);
+            AssertExprType("1 mod 1", KnownTypeIds.ShortInt);
+            AssertExprType("1 / 1", KnownTypeIds.Extended);
         }
 
         [Fact]
         public void TestArithmetikOperatorsInt64() {
-            AssertExprType("+ 4294967296", TypeIds.Int64Type);
-            AssertExprType("- 4294967296", TypeIds.Int64Type);
-            AssertExprType("4294967296 + 1", TypeIds.Int64Type);
-            AssertExprType("4294967296 - 1", TypeIds.Int64Type);
-            AssertExprType("4294967296 * 1", TypeIds.Int64Type);
-            AssertExprType("4294967296 div 1", TypeIds.Int64Type);
-            AssertExprType("4294967296 mod 1", TypeIds.Int64Type);
-            AssertExprType("4294967296 / 1", TypeIds.Extended);
-            AssertExprType("1 + 4294967296", TypeIds.Int64Type);
-            AssertExprType("1 - 4294967296", TypeIds.Int64Type);
-            AssertExprType("1 * 4294967296", TypeIds.Int64Type);
-            AssertExprType("1 div 4294967296", TypeIds.Int64Type);
-            AssertExprType("1 mod 4294967296", TypeIds.Int64Type);
-            AssertExprType("1 / 4294967296", TypeIds.Extended);
-            AssertExprType("4294967296 + 4294967296", TypeIds.Int64Type);
-            AssertExprType("4294967296 - 4294967296", TypeIds.Int64Type);
-            AssertExprType("4294967296 * 4294967296", TypeIds.Int64Type);
-            AssertExprType("4294967296 div 4294967296", TypeIds.Int64Type);
-            AssertExprType("4294967296 mod 4294967296", TypeIds.Int64Type);
-            AssertExprType("4294967296 / 4294967296", TypeIds.Extended);
+            AssertExprType("+ 4294967296", KnownTypeIds.Int64Type);
+            AssertExprType("- 4294967296", KnownTypeIds.Int64Type);
+            AssertExprType("4294967296 + 1", KnownTypeIds.Int64Type);
+            AssertExprType("4294967296 - 1", KnownTypeIds.Int64Type);
+            AssertExprType("4294967296 * 1", KnownTypeIds.Int64Type);
+            AssertExprType("4294967296 div 1", KnownTypeIds.Int64Type);
+            AssertExprType("4294967296 mod 1", KnownTypeIds.Int64Type);
+            AssertExprType("4294967296 / 1", KnownTypeIds.Extended);
+            AssertExprType("1 + 4294967296", KnownTypeIds.Int64Type);
+            AssertExprType("1 - 4294967296", KnownTypeIds.Int64Type);
+            AssertExprType("1 * 4294967296", KnownTypeIds.Int64Type);
+            AssertExprType("1 div 4294967296", KnownTypeIds.Int64Type);
+            AssertExprType("1 mod 4294967296", KnownTypeIds.Int64Type);
+            AssertExprType("1 / 4294967296", KnownTypeIds.Extended);
+            AssertExprType("4294967296 + 4294967296", KnownTypeIds.Int64Type);
+            AssertExprType("4294967296 - 4294967296", KnownTypeIds.Int64Type);
+            AssertExprType("4294967296 * 4294967296", KnownTypeIds.Int64Type);
+            AssertExprType("4294967296 div 4294967296", KnownTypeIds.Int64Type);
+            AssertExprType("4294967296 mod 4294967296", KnownTypeIds.Int64Type);
+            AssertExprType("4294967296 / 4294967296", KnownTypeIds.Extended);
         }
 
         [Fact]
         public void TestArithmetikOperatorsReal() {
-            AssertExprType("+ 1.0", TypeIds.Extended);
-            AssertExprType("- 1.0", TypeIds.Extended);
-            AssertExprType("1.0 + 1", TypeIds.Extended);
-            AssertExprType("1.0 - 1", TypeIds.Extended);
-            AssertExprType("1.0 * 1", TypeIds.Extended);
-            AssertExprType("1.0 / 1", TypeIds.Extended);
-            AssertExprType("1 + 1.0", TypeIds.Extended);
-            AssertExprType("1 - 1.0", TypeIds.Extended);
-            AssertExprType("1 * 1.0", TypeIds.Extended);
-            AssertExprType("1 / 1.0", TypeIds.Extended);
-            AssertExprType("1.0 + 1.0", TypeIds.Extended);
-            AssertExprType("1.0 - 1.0", TypeIds.Extended);
-            AssertExprType("1.0 * 1.0", TypeIds.Extended);
-            AssertExprType("1.0 / 1.0", TypeIds.Extended);
-            AssertExprType("1.0 + 4294967296", TypeIds.Extended);
-            AssertExprType("1.0 - 4294967296", TypeIds.Extended);
-            AssertExprType("1.0 * 4294967296", TypeIds.Extended);
-            AssertExprType("1.0 / 4294967296", TypeIds.Extended);
-            AssertExprType("4294967296 + 1.0", TypeIds.Extended);
-            AssertExprType("4294967296 - 1.0", TypeIds.Extended);
-            AssertExprType("4294967296 * 1.0", TypeIds.Extended);
-            AssertExprType("4294967296 / 1.0", TypeIds.Extended);
+            AssertExprType("+ 1.0", KnownTypeIds.Extended);
+            AssertExprType("- 1.0", KnownTypeIds.Extended);
+            AssertExprType("1.0 + 1", KnownTypeIds.Extended);
+            AssertExprType("1.0 - 1", KnownTypeIds.Extended);
+            AssertExprType("1.0 * 1", KnownTypeIds.Extended);
+            AssertExprType("1.0 / 1", KnownTypeIds.Extended);
+            AssertExprType("1 + 1.0", KnownTypeIds.Extended);
+            AssertExprType("1 - 1.0", KnownTypeIds.Extended);
+            AssertExprType("1 * 1.0", KnownTypeIds.Extended);
+            AssertExprType("1 / 1.0", KnownTypeIds.Extended);
+            AssertExprType("1.0 + 1.0", KnownTypeIds.Extended);
+            AssertExprType("1.0 - 1.0", KnownTypeIds.Extended);
+            AssertExprType("1.0 * 1.0", KnownTypeIds.Extended);
+            AssertExprType("1.0 / 1.0", KnownTypeIds.Extended);
+            AssertExprType("1.0 + 4294967296", KnownTypeIds.Extended);
+            AssertExprType("1.0 - 4294967296", KnownTypeIds.Extended);
+            AssertExprType("1.0 * 4294967296", KnownTypeIds.Extended);
+            AssertExprType("1.0 / 4294967296", KnownTypeIds.Extended);
+            AssertExprType("4294967296 + 1.0", KnownTypeIds.Extended);
+            AssertExprType("4294967296 - 1.0", KnownTypeIds.Extended);
+            AssertExprType("4294967296 * 1.0", KnownTypeIds.Extended);
+            AssertExprType("4294967296 / 1.0", KnownTypeIds.Extended);
         }
 
         [Fact]
         public void TestConcatOperator() {
-            AssertExprType("'a' + 'b'", TypeIds.UnicodeStringType);
-            AssertExprType("'ac' + 'b'", TypeIds.UnicodeStringType);
-            AssertExprType("'a' + 'bc'", TypeIds.UnicodeStringType);
-            AssertExprType("'ac' + 'bc'", TypeIds.UnicodeStringType);
+            AssertExprType("'a' + 'b'", KnownTypeIds.UnicodeStringType);
+            AssertExprType("'ac' + 'b'", KnownTypeIds.UnicodeStringType);
+            AssertExprType("'a' + 'bc'", KnownTypeIds.UnicodeStringType);
+            AssertExprType("'ac' + 'bc'", KnownTypeIds.UnicodeStringType);
         }
 
         [Fact]
         public void TestBitwiseOperators() {
-            AssertExprType("not 1", TypeIds.ShortInt);
-            AssertExprType("not 256", TypeIds.SmallInt);
-            AssertExprType("not 4294967295", TypeIds.CardinalType);
-            AssertExprType("not 4294967296", TypeIds.Int64Type);
+            AssertExprType("not 1", KnownTypeIds.ShortInt);
+            AssertExprType("not 256", KnownTypeIds.SmallInt);
+            AssertExprType("not 4294967295", KnownTypeIds.CardinalType);
+            AssertExprType("not 4294967296", KnownTypeIds.Int64Type);
 
-            AssertExprType("1 and 1", TypeIds.ShortInt);
-            AssertExprType("1 and 256", TypeIds.SmallInt);
-            AssertExprType("1 and 65536", TypeIds.IntegerType);
-            AssertExprType("1 and 4294967296", TypeIds.Int64Type);
-            AssertExprType("1 and 1", TypeIds.ShortInt);
-            AssertExprType("256 and 1", TypeIds.SmallInt);
-            AssertExprType("65536 and 1", TypeIds.IntegerType);
-            AssertExprType("4294967296 and 1", TypeIds.Int64Type);
+            AssertExprType("1 and 1", KnownTypeIds.ShortInt);
+            AssertExprType("1 and 256", KnownTypeIds.SmallInt);
+            AssertExprType("1 and 65536", KnownTypeIds.IntegerType);
+            AssertExprType("1 and 4294967296", KnownTypeIds.Int64Type);
+            AssertExprType("1 and 1", KnownTypeIds.ShortInt);
+            AssertExprType("256 and 1", KnownTypeIds.SmallInt);
+            AssertExprType("65536 and 1", KnownTypeIds.IntegerType);
+            AssertExprType("4294967296 and 1", KnownTypeIds.Int64Type);
 
-            AssertExprType("1 or 1", TypeIds.ShortInt);
-            AssertExprType("1 or 256", TypeIds.SmallInt);
-            AssertExprType("1 or 65536", TypeIds.IntegerType);
-            AssertExprType("1 or 4294967296", TypeIds.Int64Type);
-            AssertExprType("1 or 1", TypeIds.ShortInt);
-            AssertExprType("256 or 1", TypeIds.SmallInt);
-            AssertExprType("65536 or 1", TypeIds.IntegerType);
-            AssertExprType("4294967296 or 1", TypeIds.Int64Type);
+            AssertExprType("1 or 1", KnownTypeIds.ShortInt);
+            AssertExprType("1 or 256", KnownTypeIds.SmallInt);
+            AssertExprType("1 or 65536", KnownTypeIds.IntegerType);
+            AssertExprType("1 or 4294967296", KnownTypeIds.Int64Type);
+            AssertExprType("1 or 1", KnownTypeIds.ShortInt);
+            AssertExprType("256 or 1", KnownTypeIds.SmallInt);
+            AssertExprType("65536 or 1", KnownTypeIds.IntegerType);
+            AssertExprType("4294967296 or 1", KnownTypeIds.Int64Type);
 
-            AssertExprType("1 xor 1", TypeIds.ShortInt);
-            AssertExprType("1 xor 256", TypeIds.SmallInt);
-            AssertExprType("1 xor 65536", TypeIds.IntegerType);
-            AssertExprType("1 xor 4294967296", TypeIds.Int64Type);
-            AssertExprType("1 xor 1", TypeIds.ShortInt);
-            AssertExprType("256 xor 1", TypeIds.SmallInt);
-            AssertExprType("65536 xor 1", TypeIds.IntegerType);
-            AssertExprType("4294967296 xor 1", TypeIds.Int64Type);
+            AssertExprType("1 xor 1", KnownTypeIds.ShortInt);
+            AssertExprType("1 xor 256", KnownTypeIds.SmallInt);
+            AssertExprType("1 xor 65536", KnownTypeIds.IntegerType);
+            AssertExprType("1 xor 4294967296", KnownTypeIds.Int64Type);
+            AssertExprType("1 xor 1", KnownTypeIds.ShortInt);
+            AssertExprType("256 xor 1", KnownTypeIds.SmallInt);
+            AssertExprType("65536 xor 1", KnownTypeIds.IntegerType);
+            AssertExprType("4294967296 xor 1", KnownTypeIds.Int64Type);
         }
 
         [Fact]
         public void TestShiftingOperators() {
-            AssertExprType("1 shr 1", TypeIds.ShortInt);
-            AssertExprType("1 shr 256", TypeIds.ShortInt);
-            AssertExprType("1 shr 65536", TypeIds.ShortInt);
-            AssertExprType("1 shr 4294967296", TypeIds.ShortInt);
-            AssertExprType("256 shr 1", TypeIds.SmallInt);
-            AssertExprType("256 shr 256", TypeIds.SmallInt);
-            AssertExprType("256 shr 65536", TypeIds.SmallInt);
-            AssertExprType("256 shr 4294967296", TypeIds.SmallInt);
-            AssertExprType("65536 shr 1", TypeIds.IntegerType);
-            AssertExprType("65536 shr 256", TypeIds.IntegerType);
-            AssertExprType("65536 shr 65536", TypeIds.IntegerType);
-            AssertExprType("65536 shr 4294967296", TypeIds.IntegerType);
-            AssertExprType("4294967296 shr 1", TypeIds.Int64Type);
-            AssertExprType("4294967296 shr 256", TypeIds.Int64Type);
-            AssertExprType("4294967296 shr 65536", TypeIds.Int64Type);
-            AssertExprType("4294967296 shr 4294967296", TypeIds.Int64Type);
+            AssertExprType("1 shr 1", KnownTypeIds.ShortInt);
+            AssertExprType("1 shr 256", KnownTypeIds.ShortInt);
+            AssertExprType("1 shr 65536", KnownTypeIds.ShortInt);
+            AssertExprType("1 shr 4294967296", KnownTypeIds.ShortInt);
+            AssertExprType("256 shr 1", KnownTypeIds.SmallInt);
+            AssertExprType("256 shr 256", KnownTypeIds.SmallInt);
+            AssertExprType("256 shr 65536", KnownTypeIds.SmallInt);
+            AssertExprType("256 shr 4294967296", KnownTypeIds.SmallInt);
+            AssertExprType("65536 shr 1", KnownTypeIds.IntegerType);
+            AssertExprType("65536 shr 256", KnownTypeIds.IntegerType);
+            AssertExprType("65536 shr 65536", KnownTypeIds.IntegerType);
+            AssertExprType("65536 shr 4294967296", KnownTypeIds.IntegerType);
+            AssertExprType("4294967296 shr 1", KnownTypeIds.Int64Type);
+            AssertExprType("4294967296 shr 256", KnownTypeIds.Int64Type);
+            AssertExprType("4294967296 shr 65536", KnownTypeIds.Int64Type);
+            AssertExprType("4294967296 shr 4294967296", KnownTypeIds.Int64Type);
 
-            AssertExprType("1 shl 1", TypeIds.ShortInt);
-            AssertExprType("1 shl 256", TypeIds.ShortInt);
-            AssertExprType("1 shl 65536", TypeIds.ShortInt);
-            AssertExprType("1 shl 4294967296", TypeIds.ShortInt);
-            AssertExprType("256 shl 1", TypeIds.SmallInt);
-            AssertExprType("256 shl 256", TypeIds.SmallInt);
-            AssertExprType("256 shl 65536", TypeIds.SmallInt);
-            AssertExprType("256 shl 4294967296", TypeIds.SmallInt);
-            AssertExprType("65536 shl 1", TypeIds.IntegerType);
-            AssertExprType("65536 shl 256", TypeIds.IntegerType);
-            AssertExprType("65536 shl 65536", TypeIds.IntegerType);
-            AssertExprType("65536 shl 4294967296", TypeIds.IntegerType);
-            AssertExprType("4294967296 shl 1", TypeIds.Int64Type);
-            AssertExprType("4294967296 shl 256", TypeIds.Int64Type);
-            AssertExprType("4294967296 shl 65536", TypeIds.Int64Type);
-            AssertExprType("4294967296 shl 4294967296", TypeIds.Int64Type);
+            AssertExprType("1 shl 1", KnownTypeIds.ShortInt);
+            AssertExprType("1 shl 256", KnownTypeIds.ShortInt);
+            AssertExprType("1 shl 65536", KnownTypeIds.ShortInt);
+            AssertExprType("1 shl 4294967296", KnownTypeIds.ShortInt);
+            AssertExprType("256 shl 1", KnownTypeIds.SmallInt);
+            AssertExprType("256 shl 256", KnownTypeIds.SmallInt);
+            AssertExprType("256 shl 65536", KnownTypeIds.SmallInt);
+            AssertExprType("256 shl 4294967296", KnownTypeIds.SmallInt);
+            AssertExprType("65536 shl 1", KnownTypeIds.IntegerType);
+            AssertExprType("65536 shl 256", KnownTypeIds.IntegerType);
+            AssertExprType("65536 shl 65536", KnownTypeIds.IntegerType);
+            AssertExprType("65536 shl 4294967296", KnownTypeIds.IntegerType);
+            AssertExprType("4294967296 shl 1", KnownTypeIds.Int64Type);
+            AssertExprType("4294967296 shl 256", KnownTypeIds.Int64Type);
+            AssertExprType("4294967296 shl 65536", KnownTypeIds.Int64Type);
+            AssertExprType("4294967296 shl 4294967296", KnownTypeIds.Int64Type);
         }
 
         [Fact]
         public void TestBooleanRelationalOperators() {
-            AssertExprType("true = true", TypeIds.BooleanType);
-            AssertExprType("true <> true", TypeIds.BooleanType);
-            AssertExprType("true < true", TypeIds.BooleanType);
-            AssertExprType("true > true", TypeIds.BooleanType);
-            AssertExprType("true <= true", TypeIds.BooleanType);
-            AssertExprType("true >= true", TypeIds.BooleanType);
+            AssertExprType("true = true", KnownTypeIds.BooleanType);
+            AssertExprType("true <> true", KnownTypeIds.BooleanType);
+            AssertExprType("true < true", KnownTypeIds.BooleanType);
+            AssertExprType("true > true", KnownTypeIds.BooleanType);
+            AssertExprType("true <= true", KnownTypeIds.BooleanType);
+            AssertExprType("true >= true", KnownTypeIds.BooleanType);
         }
 
         [Fact]
         public void TestIntegerRelationalOperators() {
-            AssertExprType("1 =  1", TypeIds.BooleanType);
-            AssertExprType("1 <> 1", TypeIds.BooleanType);
-            AssertExprType("1 <  1", TypeIds.BooleanType);
-            AssertExprType("1 >  1", TypeIds.BooleanType);
-            AssertExprType("1 <= 1", TypeIds.BooleanType);
-            AssertExprType("1 >= 1", TypeIds.BooleanType);
-            AssertExprType("256 =  1", TypeIds.BooleanType);
-            AssertExprType("256 <> 1", TypeIds.BooleanType);
-            AssertExprType("256 <  1", TypeIds.BooleanType);
-            AssertExprType("256 >  1", TypeIds.BooleanType);
-            AssertExprType("256 <= 1", TypeIds.BooleanType);
-            AssertExprType("256 >= 1", TypeIds.BooleanType);
-            AssertExprType("1 =  256", TypeIds.BooleanType);
-            AssertExprType("1 <> 256", TypeIds.BooleanType);
-            AssertExprType("1 <  256", TypeIds.BooleanType);
-            AssertExprType("1 >  256", TypeIds.BooleanType);
-            AssertExprType("1 <= 256", TypeIds.BooleanType);
-            AssertExprType("1 >= 256", TypeIds.BooleanType);
-            AssertExprType("65536 =  1", TypeIds.BooleanType);
-            AssertExprType("65536 <> 1", TypeIds.BooleanType);
-            AssertExprType("65536 <  1", TypeIds.BooleanType);
-            AssertExprType("65536 >  1", TypeIds.BooleanType);
-            AssertExprType("65536 <= 1", TypeIds.BooleanType);
-            AssertExprType("65536 >= 1", TypeIds.BooleanType);
-            AssertExprType("1 =  65536", TypeIds.BooleanType);
-            AssertExprType("1 <> 65536", TypeIds.BooleanType);
-            AssertExprType("1 <  65536", TypeIds.BooleanType);
-            AssertExprType("1 >  65536", TypeIds.BooleanType);
-            AssertExprType("1 <= 65536", TypeIds.BooleanType);
-            AssertExprType("1 >= 65536", TypeIds.BooleanType);
-            AssertExprType("4294967296 =  1", TypeIds.BooleanType);
-            AssertExprType("4294967296 <> 1", TypeIds.BooleanType);
-            AssertExprType("4294967296 <  1", TypeIds.BooleanType);
-            AssertExprType("4294967296 >  1", TypeIds.BooleanType);
-            AssertExprType("4294967296 <= 1", TypeIds.BooleanType);
-            AssertExprType("4294967296 >= 1", TypeIds.BooleanType);
-            AssertExprType("1 =  4294967296", TypeIds.BooleanType);
-            AssertExprType("1 <> 4294967296", TypeIds.BooleanType);
-            AssertExprType("1 <  4294967296", TypeIds.BooleanType);
-            AssertExprType("1 >  4294967296", TypeIds.BooleanType);
-            AssertExprType("1 <= 4294967296", TypeIds.BooleanType);
-            AssertExprType("1 >= 4294967296", TypeIds.BooleanType);
+            AssertExprType("1 =  1", KnownTypeIds.BooleanType);
+            AssertExprType("1 <> 1", KnownTypeIds.BooleanType);
+            AssertExprType("1 <  1", KnownTypeIds.BooleanType);
+            AssertExprType("1 >  1", KnownTypeIds.BooleanType);
+            AssertExprType("1 <= 1", KnownTypeIds.BooleanType);
+            AssertExprType("1 >= 1", KnownTypeIds.BooleanType);
+            AssertExprType("256 =  1", KnownTypeIds.BooleanType);
+            AssertExprType("256 <> 1", KnownTypeIds.BooleanType);
+            AssertExprType("256 <  1", KnownTypeIds.BooleanType);
+            AssertExprType("256 >  1", KnownTypeIds.BooleanType);
+            AssertExprType("256 <= 1", KnownTypeIds.BooleanType);
+            AssertExprType("256 >= 1", KnownTypeIds.BooleanType);
+            AssertExprType("1 =  256", KnownTypeIds.BooleanType);
+            AssertExprType("1 <> 256", KnownTypeIds.BooleanType);
+            AssertExprType("1 <  256", KnownTypeIds.BooleanType);
+            AssertExprType("1 >  256", KnownTypeIds.BooleanType);
+            AssertExprType("1 <= 256", KnownTypeIds.BooleanType);
+            AssertExprType("1 >= 256", KnownTypeIds.BooleanType);
+            AssertExprType("65536 =  1", KnownTypeIds.BooleanType);
+            AssertExprType("65536 <> 1", KnownTypeIds.BooleanType);
+            AssertExprType("65536 <  1", KnownTypeIds.BooleanType);
+            AssertExprType("65536 >  1", KnownTypeIds.BooleanType);
+            AssertExprType("65536 <= 1", KnownTypeIds.BooleanType);
+            AssertExprType("65536 >= 1", KnownTypeIds.BooleanType);
+            AssertExprType("1 =  65536", KnownTypeIds.BooleanType);
+            AssertExprType("1 <> 65536", KnownTypeIds.BooleanType);
+            AssertExprType("1 <  65536", KnownTypeIds.BooleanType);
+            AssertExprType("1 >  65536", KnownTypeIds.BooleanType);
+            AssertExprType("1 <= 65536", KnownTypeIds.BooleanType);
+            AssertExprType("1 >= 65536", KnownTypeIds.BooleanType);
+            AssertExprType("4294967296 =  1", KnownTypeIds.BooleanType);
+            AssertExprType("4294967296 <> 1", KnownTypeIds.BooleanType);
+            AssertExprType("4294967296 <  1", KnownTypeIds.BooleanType);
+            AssertExprType("4294967296 >  1", KnownTypeIds.BooleanType);
+            AssertExprType("4294967296 <= 1", KnownTypeIds.BooleanType);
+            AssertExprType("4294967296 >= 1", KnownTypeIds.BooleanType);
+            AssertExprType("1 =  4294967296", KnownTypeIds.BooleanType);
+            AssertExprType("1 <> 4294967296", KnownTypeIds.BooleanType);
+            AssertExprType("1 <  4294967296", KnownTypeIds.BooleanType);
+            AssertExprType("1 >  4294967296", KnownTypeIds.BooleanType);
+            AssertExprType("1 <= 4294967296", KnownTypeIds.BooleanType);
+            AssertExprType("1 >= 4294967296", KnownTypeIds.BooleanType);
         }
 
         [Fact]
         public void TestRealRelationalOperators() {
-            AssertExprType("1.0 =  1", TypeIds.BooleanType);
-            AssertExprType("1.0 <> 1", TypeIds.BooleanType);
-            AssertExprType("1.0 <  1", TypeIds.BooleanType);
-            AssertExprType("1.0 >  1", TypeIds.BooleanType);
-            AssertExprType("1.0 <= 1", TypeIds.BooleanType);
-            AssertExprType("1.0 >= 1", TypeIds.BooleanType);
-            AssertExprType("1 =  1.0", TypeIds.BooleanType);
-            AssertExprType("1 <> 1.0", TypeIds.BooleanType);
-            AssertExprType("1 <  1.0", TypeIds.BooleanType);
-            AssertExprType("1 >  1.0", TypeIds.BooleanType);
-            AssertExprType("1 <= 1.0", TypeIds.BooleanType);
-            AssertExprType("1 >= 1.0", TypeIds.BooleanType);
-            AssertExprType("1.0 =  1.0", TypeIds.BooleanType);
-            AssertExprType("1.0 <> 1.0", TypeIds.BooleanType);
-            AssertExprType("1.0 <  1.0", TypeIds.BooleanType);
-            AssertExprType("1.0 >  1.0", TypeIds.BooleanType);
-            AssertExprType("1.0 >= 1.0", TypeIds.BooleanType);
-            AssertExprType("1.0 <= 1.0", TypeIds.BooleanType);
+            AssertExprType("1.0 =  1", KnownTypeIds.BooleanType);
+            AssertExprType("1.0 <> 1", KnownTypeIds.BooleanType);
+            AssertExprType("1.0 <  1", KnownTypeIds.BooleanType);
+            AssertExprType("1.0 >  1", KnownTypeIds.BooleanType);
+            AssertExprType("1.0 <= 1", KnownTypeIds.BooleanType);
+            AssertExprType("1.0 >= 1", KnownTypeIds.BooleanType);
+            AssertExprType("1 =  1.0", KnownTypeIds.BooleanType);
+            AssertExprType("1 <> 1.0", KnownTypeIds.BooleanType);
+            AssertExprType("1 <  1.0", KnownTypeIds.BooleanType);
+            AssertExprType("1 >  1.0", KnownTypeIds.BooleanType);
+            AssertExprType("1 <= 1.0", KnownTypeIds.BooleanType);
+            AssertExprType("1 >= 1.0", KnownTypeIds.BooleanType);
+            AssertExprType("1.0 =  1.0", KnownTypeIds.BooleanType);
+            AssertExprType("1.0 <> 1.0", KnownTypeIds.BooleanType);
+            AssertExprType("1.0 <  1.0", KnownTypeIds.BooleanType);
+            AssertExprType("1.0 >  1.0", KnownTypeIds.BooleanType);
+            AssertExprType("1.0 >= 1.0", KnownTypeIds.BooleanType);
+            AssertExprType("1.0 <= 1.0", KnownTypeIds.BooleanType);
 
-            AssertExprType("1 =  1", TypeIds.BooleanType);
-            AssertExprType("1 <> 1", TypeIds.BooleanType);
-            AssertExprType("1 <  1", TypeIds.BooleanType);
-            AssertExprType("1 >  1", TypeIds.BooleanType);
-            AssertExprType("1 <= 1", TypeIds.BooleanType);
-            AssertExprType("1 >= 1", TypeIds.BooleanType);
-            AssertExprType("256 =  1", TypeIds.BooleanType);
-            AssertExprType("256 <> 1", TypeIds.BooleanType);
-            AssertExprType("256 <  1", TypeIds.BooleanType);
-            AssertExprType("256 >  1", TypeIds.BooleanType);
-            AssertExprType("256 <= 1", TypeIds.BooleanType);
-            AssertExprType("256 >= 1", TypeIds.BooleanType);
-            AssertExprType("1 =  256", TypeIds.BooleanType);
-            AssertExprType("1 <> 256", TypeIds.BooleanType);
-            AssertExprType("1 <  256", TypeIds.BooleanType);
-            AssertExprType("1 >  256", TypeIds.BooleanType);
-            AssertExprType("1 <= 256", TypeIds.BooleanType);
-            AssertExprType("1 >= 256", TypeIds.BooleanType);
-            AssertExprType("65536 =  1", TypeIds.BooleanType);
-            AssertExprType("65536 <> 1", TypeIds.BooleanType);
-            AssertExprType("65536 <  1", TypeIds.BooleanType);
-            AssertExprType("65536 >  1", TypeIds.BooleanType);
-            AssertExprType("65536 <= 1", TypeIds.BooleanType);
-            AssertExprType("65536 >= 1", TypeIds.BooleanType);
-            AssertExprType("1 =  65536", TypeIds.BooleanType);
-            AssertExprType("1 <> 65536", TypeIds.BooleanType);
-            AssertExprType("1 <  65536", TypeIds.BooleanType);
-            AssertExprType("1 >  65536", TypeIds.BooleanType);
-            AssertExprType("1 <= 65536", TypeIds.BooleanType);
-            AssertExprType("1 >= 65536", TypeIds.BooleanType);
-            AssertExprType("4294967296 =  1", TypeIds.BooleanType);
-            AssertExprType("4294967296 <> 1", TypeIds.BooleanType);
-            AssertExprType("4294967296 <  1", TypeIds.BooleanType);
-            AssertExprType("4294967296 >  1", TypeIds.BooleanType);
-            AssertExprType("4294967296 <= 1", TypeIds.BooleanType);
-            AssertExprType("4294967296 >= 1", TypeIds.BooleanType);
-            AssertExprType("1 =  4294967296", TypeIds.BooleanType);
-            AssertExprType("1 <> 4294967296", TypeIds.BooleanType);
-            AssertExprType("1 <  4294967296", TypeIds.BooleanType);
-            AssertExprType("1 >  4294967296", TypeIds.BooleanType);
-            AssertExprType("1 <= 4294967296", TypeIds.BooleanType);
-            AssertExprType("1 >= 4294967296", TypeIds.BooleanType);
+            AssertExprType("1 =  1", KnownTypeIds.BooleanType);
+            AssertExprType("1 <> 1", KnownTypeIds.BooleanType);
+            AssertExprType("1 <  1", KnownTypeIds.BooleanType);
+            AssertExprType("1 >  1", KnownTypeIds.BooleanType);
+            AssertExprType("1 <= 1", KnownTypeIds.BooleanType);
+            AssertExprType("1 >= 1", KnownTypeIds.BooleanType);
+            AssertExprType("256 =  1", KnownTypeIds.BooleanType);
+            AssertExprType("256 <> 1", KnownTypeIds.BooleanType);
+            AssertExprType("256 <  1", KnownTypeIds.BooleanType);
+            AssertExprType("256 >  1", KnownTypeIds.BooleanType);
+            AssertExprType("256 <= 1", KnownTypeIds.BooleanType);
+            AssertExprType("256 >= 1", KnownTypeIds.BooleanType);
+            AssertExprType("1 =  256", KnownTypeIds.BooleanType);
+            AssertExprType("1 <> 256", KnownTypeIds.BooleanType);
+            AssertExprType("1 <  256", KnownTypeIds.BooleanType);
+            AssertExprType("1 >  256", KnownTypeIds.BooleanType);
+            AssertExprType("1 <= 256", KnownTypeIds.BooleanType);
+            AssertExprType("1 >= 256", KnownTypeIds.BooleanType);
+            AssertExprType("65536 =  1", KnownTypeIds.BooleanType);
+            AssertExprType("65536 <> 1", KnownTypeIds.BooleanType);
+            AssertExprType("65536 <  1", KnownTypeIds.BooleanType);
+            AssertExprType("65536 >  1", KnownTypeIds.BooleanType);
+            AssertExprType("65536 <= 1", KnownTypeIds.BooleanType);
+            AssertExprType("65536 >= 1", KnownTypeIds.BooleanType);
+            AssertExprType("1 =  65536", KnownTypeIds.BooleanType);
+            AssertExprType("1 <> 65536", KnownTypeIds.BooleanType);
+            AssertExprType("1 <  65536", KnownTypeIds.BooleanType);
+            AssertExprType("1 >  65536", KnownTypeIds.BooleanType);
+            AssertExprType("1 <= 65536", KnownTypeIds.BooleanType);
+            AssertExprType("1 >= 65536", KnownTypeIds.BooleanType);
+            AssertExprType("4294967296 =  1", KnownTypeIds.BooleanType);
+            AssertExprType("4294967296 <> 1", KnownTypeIds.BooleanType);
+            AssertExprType("4294967296 <  1", KnownTypeIds.BooleanType);
+            AssertExprType("4294967296 >  1", KnownTypeIds.BooleanType);
+            AssertExprType("4294967296 <= 1", KnownTypeIds.BooleanType);
+            AssertExprType("4294967296 >= 1", KnownTypeIds.BooleanType);
+            AssertExprType("1 =  4294967296", KnownTypeIds.BooleanType);
+            AssertExprType("1 <> 4294967296", KnownTypeIds.BooleanType);
+            AssertExprType("1 <  4294967296", KnownTypeIds.BooleanType);
+            AssertExprType("1 >  4294967296", KnownTypeIds.BooleanType);
+            AssertExprType("1 <= 4294967296", KnownTypeIds.BooleanType);
+            AssertExprType("1 >= 4294967296", KnownTypeIds.BooleanType);
         }
 
         [Fact]
         public void TestStringRelationalOperators() {
-            AssertExprType("'a' =  'b'", TypeIds.BooleanType);
-            AssertExprType("'a' <> 'b'", TypeIds.BooleanType);
-            AssertExprType("'a' <  'b'", TypeIds.BooleanType);
-            AssertExprType("'a' >  'b'", TypeIds.BooleanType);
-            AssertExprType("'a' <= 'b'", TypeIds.BooleanType);
-            AssertExprType("'a' >= 'b'", TypeIds.BooleanType);
+            AssertExprType("'a' =  'b'", KnownTypeIds.BooleanType);
+            AssertExprType("'a' <> 'b'", KnownTypeIds.BooleanType);
+            AssertExprType("'a' <  'b'", KnownTypeIds.BooleanType);
+            AssertExprType("'a' >  'b'", KnownTypeIds.BooleanType);
+            AssertExprType("'a' <= 'b'", KnownTypeIds.BooleanType);
+            AssertExprType("'a' >= 'b'", KnownTypeIds.BooleanType);
 
-            AssertExprType("'a1' =  'b'", TypeIds.BooleanType);
-            AssertExprType("'a1' <> 'b'", TypeIds.BooleanType);
-            AssertExprType("'a1' <  'b'", TypeIds.BooleanType);
-            AssertExprType("'a1' >  'b'", TypeIds.BooleanType);
-            AssertExprType("'a1' <= 'b'", TypeIds.BooleanType);
-            AssertExprType("'a1' >= 'b'", TypeIds.BooleanType);
+            AssertExprType("'a1' =  'b'", KnownTypeIds.BooleanType);
+            AssertExprType("'a1' <> 'b'", KnownTypeIds.BooleanType);
+            AssertExprType("'a1' <  'b'", KnownTypeIds.BooleanType);
+            AssertExprType("'a1' >  'b'", KnownTypeIds.BooleanType);
+            AssertExprType("'a1' <= 'b'", KnownTypeIds.BooleanType);
+            AssertExprType("'a1' >= 'b'", KnownTypeIds.BooleanType);
 
-            AssertExprType("'a' =  'b1'", TypeIds.BooleanType);
-            AssertExprType("'a' <> 'b1'", TypeIds.BooleanType);
-            AssertExprType("'a' <  'b1'", TypeIds.BooleanType);
-            AssertExprType("'a' >  'b1'", TypeIds.BooleanType);
-            AssertExprType("'a' <= 'b1'", TypeIds.BooleanType);
-            AssertExprType("'a' >= 'b1'", TypeIds.BooleanType);
+            AssertExprType("'a' =  'b1'", KnownTypeIds.BooleanType);
+            AssertExprType("'a' <> 'b1'", KnownTypeIds.BooleanType);
+            AssertExprType("'a' <  'b1'", KnownTypeIds.BooleanType);
+            AssertExprType("'a' >  'b1'", KnownTypeIds.BooleanType);
+            AssertExprType("'a' <= 'b1'", KnownTypeIds.BooleanType);
+            AssertExprType("'a' >= 'b1'", KnownTypeIds.BooleanType);
         }
 
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PasPasPas.Global.Constants;
 using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Typings.Common;
 
@@ -43,7 +44,7 @@ namespace PasPasPas.Typings.Operators {
         public override int GetOutputTypeForOperation(Signature input, object[] values) {
 
             if (input.Length != 2)
-                return TypeIds.ErrorType;
+                return KnownTypeIds.ErrorType;
 
             var left = TypeRegistry.GetTypeKind(input[0]);
             var right = TypeRegistry.GetTypeKind(input[1]);
@@ -51,24 +52,24 @@ namespace PasPasPas.Typings.Operators {
             if (Kind == DefinedOperators.ConcatOperation) {
 
                 if ((!left.IsTextual()) || (!right.IsTextual()))
-                    return TypeIds.ErrorType;
+                    return KnownTypeIds.ErrorType;
 
                 if (CommonTypeKind.WideStringType.One(left, right))
-                    return TypeIds.WideStringType;
+                    return KnownTypeIds.WideStringType;
 
                 if (CommonTypeKind.AnsiCharType.One(left, right))
-                    return TypeIds.AnsiStringType;
+                    return KnownTypeIds.AnsiStringType;
 
                 if (CommonTypeKind.LongStringType.All(left, right))
-                    return TypeIds.AnsiStringType;
+                    return KnownTypeIds.AnsiStringType;
 
                 if (CommonTypeKind.ShortStringType.One(left, right))
-                    return TypeIds.AnsiStringType;
+                    return KnownTypeIds.AnsiStringType;
 
-                return TypeIds.UnicodeStringType;
+                return KnownTypeIds.UnicodeStringType;
             }
 
-            return TypeIds.ErrorType;
+            return KnownTypeIds.ErrorType;
         }
 
         /// <summary>

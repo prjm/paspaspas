@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PasPasPas.Global.Constants;
 using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Typings.Common;
 
@@ -51,22 +52,22 @@ namespace PasPasPas.Typings.Operators {
         /// <returns></returns>
         public override int GetOutputTypeForOperation(Signature input, object[] values) {
             if (input.Length != 2)
-                return TypeIds.ErrorType;
+                return KnownTypeIds.ErrorType;
 
             var left = TypeRegistry.GetTypeKind(input[0]);
             var right = TypeRegistry.GetTypeKind(input[1]);
 
             if (CommonTypeKind.BooleanType.All(left, right))
-                return TypeIds.BooleanType;
+                return KnownTypeIds.BooleanType;
 
             if (left.IsNumerical() && right.IsNumerical())
-                return TypeIds.BooleanType;
+                return KnownTypeIds.BooleanType;
 
             if (left.IsTextual() && right.IsTextual())
-                return TypeIds.BooleanType;
+                return KnownTypeIds.BooleanType;
 
 
-            return TypeIds.ErrorType;
+            return KnownTypeIds.ErrorType;
         }
 
 

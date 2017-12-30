@@ -8,13 +8,12 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <LangVersion>$(PasPasPasCsLanguageVersion)</LangVersion>
-    <DocumentationFile>bin\Release\$(PasPasPasTargetFramework)\infa.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\$(PasPasPasTargetFramework)\infra.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <LangVersion>$(PasPasPasCsLanguageVersion)</LangVersion>
-    <DocumentationFile>bin\Release\$(PasPasPasTargetFramework)\infa.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\$(PasPasPasTargetFramework)\infra.xml</DocumentationFile>
   </PropertyGroup>
-
 
 </Project>

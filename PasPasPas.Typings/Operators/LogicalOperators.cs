@@ -1,4 +1,5 @@
 ﻿using System;
+using PasPasPas.Global.Constants;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Typings.Common;
@@ -48,7 +49,7 @@ namespace PasPasPas.Typings.Operators {
                 var operand = TypeRegistry.GetTypeKind(input[0]);
 
                 if (Kind == DefinedOperators.NotOperation && operand == CommonTypeKind.BooleanType)
-                    return TypeIds.BooleanType;
+                    return KnownTypeIds.BooleanType;
 
 
                 if (Kind == DefinedOperators.NotOperation && operand == CommonTypeKind.Int64Type)
@@ -64,19 +65,19 @@ namespace PasPasPas.Typings.Operators {
                 var right = TypeRegistry.GetTypeKind(input[1]);
 
                 if (Kind == DefinedOperators.AndOperation && CommonTypeKind.BooleanType.All(left, right))
-                    return TypeIds.BooleanType;
+                    return KnownTypeIds.BooleanType;
 
                 if (Kind == DefinedOperators.AndOperation && left.Integral() && right.Integral())
                     return TypeRegistry.GetSmallestIntegralTypeOrNext(input[0], input[1]);
 
                 if (Kind == DefinedOperators.OrOperation && CommonTypeKind.BooleanType.All(left, right))
-                    return TypeIds.BooleanType;
+                    return KnownTypeIds.BooleanType;
 
                 if (Kind == DefinedOperators.OrOperation && left.Integral() && right.Integral())
                     return TypeRegistry.GetSmallestIntegralTypeOrNext(input[0], input[1]);
 
                 if (Kind == DefinedOperators.XorOperation && CommonTypeKind.BooleanType.All(left, right))
-                    return TypeIds.BooleanType;
+                    return KnownTypeIds.BooleanType;
 
                 if (Kind == DefinedOperators.XorOperation && left.Integral() && right.Integral())
                     return TypeRegistry.GetSmallestIntegralTypeOrNext(input[0], input[1]);
@@ -89,7 +90,7 @@ namespace PasPasPas.Typings.Operators {
 
             }
 
-            return TypeIds.ErrorType;
+            return KnownTypeIds.ErrorType;
         }
 
         /// <summary>

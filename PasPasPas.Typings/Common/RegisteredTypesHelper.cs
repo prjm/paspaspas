@@ -1,4 +1,5 @@
-﻿using PasPasPas.Infrastructure.Utils;
+﻿using PasPasPas.Global.Constants;
+using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree.Types;
 
 namespace PasPasPas.Typings.Common {
@@ -25,14 +26,14 @@ namespace PasPasPas.Typings.Common {
         /// <param name="typeId2">second type id</param>
         /// <returns>smalles type id</returns>
         public static int GetSmallestIntegralTypeOrNext(this ITypeRegistry registry, int typeId1, int typeId2) {
-            if (TypeIds.ErrorType.In(typeId1, typeId2))
-                return TypeIds.ErrorType;
+            if (KnownTypeIds.ErrorType.In(typeId1, typeId2))
+                return KnownTypeIds.ErrorType;
 
             var left = registry.GetTypeByIdOrUndefinedType(typeId1) as IIntegralType;
             var right = registry.GetTypeByIdOrUndefinedType(typeId2) as IIntegralType;
 
             if (left == null || right == null)
-                return TypeIds.ErrorType;
+                return KnownTypeIds.ErrorType;
 
             if (left.BitSize < right.BitSize)
                 return typeId2;
@@ -43,15 +44,15 @@ namespace PasPasPas.Typings.Common {
                 return left.TypeId;
 
             if (left.BitSize == 8)
-                return TypeIds.SmallInt;
+                return KnownTypeIds.SmallInt;
 
             if (left.BitSize == 16)
-                return TypeIds.IntegerType;
+                return KnownTypeIds.IntegerType;
 
             if (left.BitSize == 32)
-                return TypeIds.Int64Type;
+                return KnownTypeIds.Int64Type;
 
-            return TypeIds.ErrorType;
+            return KnownTypeIds.ErrorType;
         }
 
     }

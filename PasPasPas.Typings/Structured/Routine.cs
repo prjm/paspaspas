@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using PasPasPas.Global.Constants;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Typings.Common;
@@ -48,7 +49,7 @@ namespace PasPasPas.Typings.Structured {
         ///     type id
         /// </summary>
         public int TypeId
-            => TypeIds.UnspecifiedType;
+            => KnownTypeIds.UnspecifiedType;
 
         /// <summary>
         ///     <c>false</c>

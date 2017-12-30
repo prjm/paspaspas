@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using PasPasPas.Global.Constants;
 using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Typings.Common;
 using PasPasPas.Typings.Structured;
@@ -21,7 +22,7 @@ namespace PasPasPas.Typings.Routines {
         ///     type id
         /// </summary>
         public int TypeId
-            => TypeIds.UnspecifiedType;
+            => KnownTypeIds.UnspecifiedType;
 
         /// <summary>
         ///     type registry

@@ -1,4 +1,5 @@
-﻿using PasPasPas.Infrastructure.Utils;
+﻿using PasPasPas.Global.Constants;
+using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree.Types;
 
 namespace PasPasPas.Typings.Common {
@@ -77,7 +78,7 @@ namespace PasPasPas.Typings.Common {
         /// <param name="otherType">other type</param>
         /// <returns><c>true</c> if the type can be assigned from</returns>
         public virtual bool CanBeAssignedFrom(ITypeDefinition otherType) {
-            if (otherType.TypeId.In(TypeIds.ErrorType, TypeIds.NoType, TypeIds.UnspecifiedType))
+            if (otherType.TypeId.In(KnownTypeIds.ErrorType, KnownTypeIds.NoType, KnownTypeIds.UnspecifiedType))
                 return false;
 
             if (otherType.TypeId == TypeId)

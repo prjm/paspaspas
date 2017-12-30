@@ -1,4 +1,5 @@
 ﻿using System;
+using PasPasPas.Global.Constants;
 
 namespace PasPasPas.Parsing.SyntaxTree.Types {
 
@@ -10,7 +11,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Types {
         /// <summary>
         ///     error type id
         /// </summary>
-        public const int ErrorType = -1;
+        public const int ErrorType = KnownTypeIds.ErrorType;
 
         private int[] data;
 

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using PasPasPas.Typings.Common;
+﻿using PasPasPas.Global.Constants;
 
 namespace PasPasPas.Runtime.Values {
 
@@ -32,7 +27,7 @@ namespace PasPasPas.Runtime.Values {
         ///     boolean type id
         /// </summary>
         public override int TypeId
-            => TypeIds.BooleanType;
+            => KnownTypeIds.BooleanType;
 
         /// <summary>
         ///     test for equality

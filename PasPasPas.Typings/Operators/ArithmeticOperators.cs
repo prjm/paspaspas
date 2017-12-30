@@ -1,4 +1,5 @@
 ﻿using System;
+using PasPasPas.Global.Constants;
 using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Parsing.Tokenizer.LiteralValues;
@@ -54,7 +55,7 @@ namespace PasPasPas.Typings.Operators {
         public override int GetOutputTypeForOperation(Signature input, object[] values) {
 
             if (!input.Length.In(1, 2))
-                return TypeIds.ErrorType;
+                return KnownTypeIds.ErrorType;
 
             if (input.Length == 1) {
 
@@ -63,10 +64,10 @@ namespace PasPasPas.Typings.Operators {
                 if (Kind == DefinedOperators.UnaryPlus) {
 
                     if (operand == CommonTypeKind.FloatType)
-                        return TypeIds.Extended;
+                        return KnownTypeIds.Extended;
 
                     if (operand == CommonTypeKind.Int64Type)
-                        return TypeIds.Int64Type;
+                        return KnownTypeIds.Int64Type;
 
                     if (operand == CommonTypeKind.IntegerType)
                         return input[0];
@@ -81,7 +82,7 @@ namespace PasPasPas.Typings.Operators {
                         if (ResolveAlias(input[0]) is IIntegralType currentType)
                             return currentType.TypeId;
                         else
-                            return TypeIds.ErrorType;
+                            return KnownTypeIds.ErrorType;
                     }
                 }
             }
@@ -95,10 +96,10 @@ namespace PasPasPas.Typings.Operators {
                             DefinedOperators.TimesOperation)) {
 
                     if (CommonTypeKind.FloatType.One(left, right) && left.IsNumerical() && right.IsNumerical())
-                        return TypeIds.Extended;
+                        return KnownTypeIds.Extended;
 
                     if (CommonTypeKind.Int64Type.One(left, right) && left.IsNumerical() && right.IsNumerical())
-                        return TypeIds.Int64Type;
+                        return KnownTypeIds.Int64Type;
 
                     if (CommonTypeKind.IntegerType.All(left, right))
                         return TypeRegistry.GetSmallestIntegralTypeOrNext(input[0], input[1]);
@@ -109,7 +110,7 @@ namespace PasPasPas.Typings.Operators {
                             DefinedOperators.ModOperation)) {
 
                     if (CommonTypeKind.Int64Type.One(left, right) && left.IsNumerical() && right.IsNumerical())
-                        return TypeIds.Int64Type;
+                        return KnownTypeIds.Int64Type;
 
                     if (CommonTypeKind.IntegerType.All(left, right))
                         return TypeRegistry.GetSmallestIntegralTypeOrNext(input[0], input[1]);
@@ -119,20 +120,20 @@ namespace PasPasPas.Typings.Operators {
                 if (Kind == DefinedOperators.SlashOperation) {
 
                     if (CommonTypeKind.FloatType.One(left, right) && left.IsNumerical() && right.IsNumerical())
-                        return TypeIds.Extended;
+                        return KnownTypeIds.Extended;
 
                     if (CommonTypeKind.Int64Type.One(left, right) && left.IsNumerical() && right.IsNumerical())
-                        return TypeIds.Extended;
+                        return KnownTypeIds.Extended;
 
                     if (CommonTypeKind.IntegerType.All(left, right))
-                        return TypeIds.Extended;
+                        return KnownTypeIds.Extended;
 
 
                 }
 
             }
 
-            return TypeIds.ErrorType;
+            return KnownTypeIds.ErrorType;
         }
 
         /// <summary>

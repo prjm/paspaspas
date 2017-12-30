@@ -1,5 +1,6 @@
 ﻿using System;
 using PasPasPas.Api;
+using PasPasPas.Global.Constants;
 using PasPasPas.Options.DataTypes;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Parsing.SyntaxTree.Types;
@@ -62,11 +63,11 @@ namespace PasPasPasTests.Types {
         /// </summary>
         /// <param name="declaration">declareation</param>
         /// <param name="typeId">type id to find</param>
-        protected void AssertDeclType(string declaration, int typeId = TypeIds.UnspecifiedType, NativeIntSize intSize = NativeIntSize.Undefined, int typeSize = -1, CommonTypeKind typeKind = CommonTypeKind.UnknownType) {
+        protected void AssertDeclType(string declaration, int typeId = KnownTypeIds.UnspecifiedType, NativeIntSize intSize = NativeIntSize.Undefined, int typeSize = -1, CommonTypeKind typeKind = CommonTypeKind.UnknownType) {
 
             void tester(ITypeDefinition def) {
 
-                if (typeId != TypeIds.UnspecifiedType)
+                if (typeId != KnownTypeIds.UnspecifiedType)
                     Assert.AreEqual(typeId, def.TypeId);
 
                 if (typeKind != CommonTypeKind.UnknownType)
@@ -93,11 +94,11 @@ namespace PasPasPasTests.Types {
         /// </summary>
         /// <param name="declaration">declareation</param>
         /// <param name="typeId">type id to find</param>
-        protected void AssertDeclTypeDef(string declaration, string expression = "x", int typeId = TypeIds.UnspecifiedType, NativeIntSize intSize = NativeIntSize.Undefined, int typeSize = -1, CommonTypeKind typeKind = CommonTypeKind.UnknownType) {
+        protected void AssertDeclTypeDef(string declaration, string expression = "x", int typeId = KnownTypeIds.UnspecifiedType, NativeIntSize intSize = NativeIntSize.Undefined, int typeSize = -1, CommonTypeKind typeKind = CommonTypeKind.UnknownType) {
 
             bool tester(ITypeDefinition def) {
 
-                if (typeId != TypeIds.UnspecifiedType)
+                if (typeId != KnownTypeIds.UnspecifiedType)
                     Assert.AreEqual(typeId, def.TypeId);
 
                 if (typeKind != CommonTypeKind.UnknownType)
