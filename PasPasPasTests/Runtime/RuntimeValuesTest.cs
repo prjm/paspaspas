@@ -78,7 +78,7 @@ namespace PasPasPasTests.Runtime {
         [Xunit.Fact]
         public void TestIntegerNegation() {
             string n(IValue v, int typeKind) {
-                var vv = (v as ScaledIntegerValue).Negate();
+                var vv = (v as IIntegerValue).Negate();
                 Assert.AreEqual(typeKind, vv.TypeId);
                 return vv.ToString();
             }
@@ -120,6 +120,54 @@ namespace PasPasPasTests.Runtime {
             Assert.AreEqual("IO", n(GetIntegerValue((ulong)9223372036854775808), KnownTypeIds.ErrorType));
             Assert.AreEqual("IO", n(GetIntegerValue((ulong)18446744073709551615), KnownTypeIds.ErrorType));
 
+        }
+
+        [Xunit.Fact]
+        public void TestIntegerAddition() {
+            string a(IValue v1, IValue v2) {
+                var vv1 = (v1 as INumericalValue).Add(v2);
+                var vv2 = (v2 as INumericalValue).Add(v1);
+                Assert.AreEqual(vv1.TypeId, vv2.TypeId);
+                Assert.AreEqual(vv1.Data, vv2.Data);
+                Assert.AreEqual(vv1.ToString(), vv2.ToString());
+                return vv1.ToString();
+            }
+
+            Assert.AreEqual("25", a(GetIntegerValue(10), GetIntegerValue(15)));
+            Assert.AreEqual("-10", a(GetIntegerValue(-3), GetIntegerValue(-7)));
+            Assert.AreEqual("-5", a(GetIntegerValue(5), GetIntegerValue(-10)));
+            Assert.AreEqual("-8", a(GetIntegerValue(3), GetIntegerValue(-11)));
+            Assert.AreEqual("0", a(GetIntegerValue(-3), GetIntegerValue(3)));
+            Assert.AreEqual("0", a(GetIntegerValue(3), GetIntegerValue(-3)));
+
+            Assert.AreEqual("IO", a(GetIntegerValue(-9223372036854775808), GetIntegerValue(-4)));
+            Assert.AreEqual("IO", a(GetIntegerValue(9223372036854775807), GetIntegerValue(4)));
+            Assert.AreEqual("IO", a(GetIntegerValue(9223372036854775807), GetIntegerValue(9223372036854775807)));
+            Assert.AreEqual("IO", a(GetIntegerValue(-9223372036854775808), GetIntegerValue(-9223372036854775808)));
+            Assert.AreEqual("0", a(GetIntegerValue(-9223372036854775807), GetIntegerValue(9223372036854775807)));
+            Assert.AreEqual("0", a(GetIntegerValue(9223372036854775807), GetIntegerValue(-9223372036854775807)));
+        }
+
+        [Xunit.Fact]
+        public void TestIntegerSubtraction() {
+            string s(IValue v1, IValue v2) {
+                var vv1 = (v1 as INumericalValue).Subtract(v2);
+                return vv1.ToString();
+            }
+
+            Assert.AreEqual("5", s(GetIntegerValue(10), GetIntegerValue(5)));
+            Assert.AreEqual("-10", s(GetIntegerValue(-3), GetIntegerValue(7)));
+            Assert.AreEqual("5", s(GetIntegerValue(-5), GetIntegerValue(-10)));
+            Assert.AreEqual("14", s(GetIntegerValue(3), GetIntegerValue(-11)));
+            Assert.AreEqual("0", s(GetIntegerValue(-3), GetIntegerValue(-3)));
+            Assert.AreEqual("0", s(GetIntegerValue(3), GetIntegerValue(3)));
+
+            Assert.AreEqual("IO", s(GetIntegerValue(-9223372036854775808), GetIntegerValue(4)));
+            Assert.AreEqual("IO", s(GetIntegerValue(9223372036854775807), GetIntegerValue(-4)));
+            Assert.AreEqual("IO", s(GetIntegerValue(-9223372036854775807), GetIntegerValue(9223372036854775807)));
+            Assert.AreEqual("IO", s(GetIntegerValue(9223372036854775807), GetIntegerValue(-9223372036854775808)));
+            Assert.AreEqual("0", s(GetIntegerValue(9223372036854775807), GetIntegerValue(9223372036854775807)));
+            Assert.AreEqual("0", s(GetIntegerValue(-9223372036854775807), GetIntegerValue(-9223372036854775807)));
         }
 
     }

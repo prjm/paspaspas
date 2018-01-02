@@ -6,13 +6,14 @@ using PasPasPas.Global.Runtime;
 namespace PasPasPas.Runtime.Values {
 
     /// <summary>
-    ///     integer value
+    ///     integer value with variable byte length
     /// </summary>
+    /// <remarks>internally implemented as 9-byte integer values</remarks>
     public class ScaledIntegerValue : ValueBase, IIntegerValue {
 
         private byte[] data = new byte[9];
 
-        private static void Fill(byte[] data, byte value) {
+        private static void FillArray(byte[] data, byte value) {
             for (var i = 0; i < data.Length; i++)
                 data[i] = value;
         }
@@ -20,10 +21,10 @@ namespace PasPasPas.Runtime.Values {
         /// <summary>
         ///     create a new integer value for a given number
         /// </summary>
-        /// <param name="number"></param>
+        /// <param name="number">number value</param>
         public ScaledIntegerValue(sbyte number) {
             if (number < 0)
-                Fill(data, 0xFF);
+                FillArray(data, 0xFF);
 
             data[0] = (byte)number;
         }
@@ -31,17 +32,17 @@ namespace PasPasPas.Runtime.Values {
         /// <summary>
         ///     create a new integer value for a given number
         /// </summary>
-        /// <param name="number"></param>
+        /// <param name="number">number value</param>
         public ScaledIntegerValue(byte number)
             => data[0] = number;
 
         /// <summary>
         ///     create a new integer value for a given number
         /// </summary>
-        /// <param name="number"></param>
+        /// <param name="number">number value</param>
         public ScaledIntegerValue(short number) {
             if (number < 0)
-                Fill(data, 0xFF);
+                FillArray(data, 0xFF);
 
             data[0] = (byte)(number & 0xFF);
             data[1] = (byte)((number >> 8) & 0xFF);
@@ -62,7 +63,7 @@ namespace PasPasPas.Runtime.Values {
         /// <param name="number"></param>
         public ScaledIntegerValue(int number) {
             if (number < 0)
-                Fill(data, 0xFF);
+                FillArray(data, 0xFF);
 
             data[0] = (byte)(number & 0xFF);
             data[1] = (byte)((number >> 8) & 0xFF);
@@ -87,7 +88,7 @@ namespace PasPasPas.Runtime.Values {
         /// <param name="number"></param>
         public ScaledIntegerValue(long number) {
             if (number < 0)
-                Fill(data, 0xFF);
+                FillArray(data, 0xFF);
 
             data[0] = (byte)(number & 0xFF);
             data[1] = (byte)((number >> 8) & 0xFF);
@@ -149,12 +150,8 @@ namespace PasPasPas.Runtime.Values {
                         return IsNegative || data[0] < 0x80 ? KnownTypeIds.ShortInt : KnownTypeIds.ByteType;
                     case 2:
                         return IsNegative || data[1] < 0x80 ? KnownTypeIds.SmallInt : KnownTypeIds.WordType;
-                    case 3:
                     case 4:
                         return IsNegative || data[3] < 0x80 ? KnownTypeIds.IntegerType : KnownTypeIds.CardinalType;
-                    case 5:
-                    case 6:
-                    case 7:
                     case 8:
                         return IsNegative || data[7] < 0x80 ? KnownTypeIds.Int64Type : KnownTypeIds.Uint64Type;
                 }
@@ -265,9 +262,9 @@ namespace PasPasPas.Runtime.Values {
         }
 
         /// <summary>
-        ///     check for equalisty
+        ///     check for equality
         /// </summary>
-        /// <param name="obj"></param>
+        /// <param name="obj">other object to compare</param>
         /// <returns></returns>
         public override bool Equals(object obj) {
             if (obj is ScaledIntegerValue v) {
@@ -278,7 +275,7 @@ namespace PasPasPas.Runtime.Values {
         }
 
         /// <summary>
-        ///     hash code
+        ///     compute a hash code
         /// </summary>
         /// <returns></returns>
         public override int GetHashCode() {
@@ -290,5 +287,57 @@ namespace PasPasPas.Runtime.Values {
             return result;
         }
 
+        /// <summary>
+        ///     add another integer
+        /// </summary>
+        /// <param name="numberToAdd"></param>
+        /// <returns></returns>
+        public IValue Add(IValue numberToAdd) {
+            if (numberToAdd is SpecialValue specialValue && (specialValue.Kind == SpecialConstantKind.InvalidInteger || specialValue.Kind == SpecialConstantKind.IntegerOverflow)) {
+                return new SpecialValue(SpecialConstantKind.InvalidInteger);
+            }
+
+            var intValue = numberToAdd as ScaledIntegerValue;
+
+            if (intValue == null)
+                throw new ArgumentException();
+
+            var result = new byte[9];
+            var carry = 0;
+
+            for (var j = 0; j < result.Length; j++) {
+                var sum = data[j] + intValue.data[j] + carry;
+                result[j] = (byte)(sum & 0xFF);
+                carry = sum >> 8;
+            }
+
+            if ((result[8] & 1) != ((result[7] & 0x80) >> 7))
+                return new SpecialValue(SpecialConstantKind.IntegerOverflow);
+
+            return new ScaledIntegerValue(result);
+        }
+
+        /// <summary>
+        ///     subtract another integer
+        /// </summary>
+        /// <param name="numberToSubtract">number to subtract</param>
+        /// <returns></returns>
+        public IValue Subtract(IValue numberToSubtract) {
+            if (numberToSubtract is SpecialValue specialValue && (specialValue.Kind == SpecialConstantKind.InvalidInteger || specialValue.Kind == SpecialConstantKind.IntegerOverflow)) {
+                return new SpecialValue(SpecialConstantKind.InvalidInteger);
+            }
+
+            var intValue = numberToSubtract as ScaledIntegerValue;
+
+            if (intValue == null)
+                throw new ArgumentException();
+
+            var negative = intValue.Negate();
+
+            if (!(negative is ScaledIntegerValue))
+                return negative;
+
+            return Add(negative);
+        }
     }
 }

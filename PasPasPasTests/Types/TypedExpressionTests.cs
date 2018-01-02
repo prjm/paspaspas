@@ -84,7 +84,7 @@ namespace PasPasPasTests.Types {
             AssertExprType("+ 4294967296", KnownTypeIds.Int64Type);
             AssertExprType("- 4294967296", KnownTypeIds.Int64Type);
             AssertExprType("4294967296 + 1", KnownTypeIds.Int64Type);
-            AssertExprType("4294967296 - 1", KnownTypeIds.Int64Type);
+            AssertExprType("4294967296 - 1", KnownTypeIds.CardinalType);
             AssertExprType("4294967296 * 1", KnownTypeIds.Int64Type);
             AssertExprType("4294967296 div 1", KnownTypeIds.Int64Type);
             AssertExprType("4294967296 mod 1", KnownTypeIds.Int64Type);
@@ -96,7 +96,7 @@ namespace PasPasPasTests.Types {
             AssertExprType("1 mod 4294967296", KnownTypeIds.Int64Type);
             AssertExprType("1 / 4294967296", KnownTypeIds.Extended);
             AssertExprType("4294967296 + 4294967296", KnownTypeIds.Int64Type);
-            AssertExprType("4294967296 - 4294967296", KnownTypeIds.Int64Type);
+            AssertExprType("4294967296 - 4294967296", KnownTypeIds.ShortInt);
             AssertExprType("4294967296 * 4294967296", KnownTypeIds.Int64Type);
             AssertExprType("4294967296 div 4294967296", KnownTypeIds.Int64Type);
             AssertExprType("4294967296 mod 4294967296", KnownTypeIds.Int64Type);

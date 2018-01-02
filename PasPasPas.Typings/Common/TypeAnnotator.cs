@@ -186,6 +186,24 @@ namespace PasPasPas.Typings.Common {
             }
 
             if (operatorId >= 0) {
+
+                if (element.OperatesOnConstants()) {
+                    var leftValue = element.LeftOperand.LiteralValue;
+                    var rightValue = element.RightOperand.LiteralValue;
+
+                    if (leftValue is INumericalValue l && rightValue is INumericalValue r && operatorId.In(DefinedOperators.PlusOperation, DefinedOperators.MinusOperation)) {
+                        element.IsConstant = true;
+
+                        if (operatorId == DefinedOperators.PlusOperation)
+                            element.LiteralValue = l.Add(r);
+                        else if (operatorId == DefinedOperators.MinusOperation)
+                            element.LiteralValue = l.Subtract(r);
+
+                        element.TypeInfo = GetTypeByIdOrUndefinedType(element.LiteralValue.TypeId);
+                        return;
+                    }
+                }
+
                 element.TypeInfo = GetTypeOfOperator(operatorId, leftType, rightType, element.LeftOperand.LiteralValue, element.RightOperand.LiteralValue);
                 element.IsConstant = element.LeftOperand.IsConstant && element.RightOperand.IsConstant;
             }
@@ -213,7 +231,7 @@ namespace PasPasPas.Typings.Common {
             }
             else if (element.Kind == ExpressionKind.UnaryMinus) {
                 element.IsConstant = operand.IsConstant;
-                if (element.IsConstant && operand.LiteralValue is IIntegerValue intValue) {
+                if (element.IsConstant && operand.LiteralValue is INumericalValue intValue) {
                     element.LiteralValue = intValue.Negate();
                     element.TypeInfo = GetTypeByIdOrUndefinedType(element.LiteralValue.TypeId);
                 }

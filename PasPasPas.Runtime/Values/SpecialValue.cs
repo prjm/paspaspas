@@ -39,6 +39,12 @@ namespace PasPasPas.Runtime.Values {
             => KnownTypeIds.ErrorType;
 
         /// <summary>
+        ///     kind of this special value
+        /// </summary>
+        public SpecialConstantKind Kind
+            => kind;
+
+        /// <summary>
         ///     check for equality
         /// </summary>
         /// <param name="obj"></param>
