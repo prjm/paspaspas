@@ -32,13 +32,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 		.travis.yml = .travis.yml
 		Common.targets = Common.targets
+		paspaspas.sln.vsspell = paspaspas.sln.vsspell
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DesktopSampleRunner", "DesktopSampleRunner\DesktopSampleRunner.csproj", "{C863FF01-4A90-4646-BAD2-292406CC6DA0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PasPasPas.Runtime", "PasPasPas.Runtime\PasPasPas.Runtime.csproj", "{3CE7B602-8AE0-43EC-9FC4-4D2AF3ED27B3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PasPasPas.Global", "PasPasPas.Global\PasPasPas.Global.csproj", "{7A2FF93E-975A-4F2B-87B7-49C97FDA316F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PasPasPas.Global", "PasPasPas.Global\PasPasPas.Global.csproj", "{7A2FF93E-975A-4F2B-87B7-49C97FDA316F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

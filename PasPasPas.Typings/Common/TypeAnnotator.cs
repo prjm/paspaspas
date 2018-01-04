@@ -655,8 +655,8 @@ namespace PasPasPas.Typings.Common {
         }
 
         /// <summary>
-        ///     start visting a method declaration
-        /// </summary>ele
+        ///     start visiting a method declaration
+        /// </summary>
         /// <param name="element"></param>
         public void StartVisit(MethodDeclaration element) {
             var typeDef = currentTypeDefintion.Peek() as StructuredTypeDeclaration;

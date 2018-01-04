@@ -1,5 +1,6 @@
 ﻿using A = Xunit.Assert;
 using System;
+using System.Collections.Generic;
 
 namespace PasPasPasTests.Common {
 
@@ -29,5 +30,7 @@ namespace PasPasPasTests.Common {
         public static void Throws<T>(Action testCode) where T : Exception
             => A.Throws<T>(testCode);
 
+        internal static void AreEqualSequences<T>(IEnumerable<T> expected, IEnumerable<T> actual)
+            => A.Equal(expected, actual);
     }
 }
