@@ -1,13 +1,12 @@
 ﻿using PasPasPas.Global.Constants;
 using PasPasPas.Global.Runtime;
-using PasPasPas.Runtime.Values;
 using PasPasPasTests.Common;
 
 namespace PasPasPasTests.Runtime {
 
     public class RuntimeValuesTest : CommonTest {
 
-        [Xunit.Fact]
+        [TestCase]
         public void TestIntegers() {
 
             // 1 byte signed
@@ -75,7 +74,7 @@ namespace PasPasPasTests.Runtime {
             Assert.AreEqual(KnownTypeIds.Uint64Type, GetIntegerValue((ulong)18446744073709551615).TypeId);
         }
 
-        [Xunit.Fact]
+        [TestCase]
         public void TestIntegerNegation() {
             string n(IValue v, int typeKind) {
                 var vv = (v as IIntegerValue).Negate();
@@ -122,7 +121,7 @@ namespace PasPasPasTests.Runtime {
 
         }
 
-        [Xunit.Fact]
+        [TestCase]
         public void TestIntegerAddition() {
             string a(IValue v1, IValue v2) {
                 var vv1 = (v1 as INumericalValue).Add(v2);

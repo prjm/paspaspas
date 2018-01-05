@@ -104,8 +104,32 @@ namespace PasPasPasTests.Runtime {
             b2.Clear();
             Assert.IsFalse(b1.Equals(b2));
             Assert.AreNotEqual(b1.GetHashCode(), b2.GetHashCode());
-
         }
 
+        [TestCase]
+        public void AddTest() {
+            var b1 = new Bits(8);
+            var b2 = new Bits(8);
+
+            b1.LeastSignificantByte = 23;
+            b2.LeastSignificantByte = 44;
+            b1.Add(b2);
+            Assert.AreEqual(b1.LeastSignificantByte, 67);
+
+            b1 = new Bits(15);
+            b2 = new Bits(15);
+            b1[14] = true;
+            b2[14] = true;
+            b1.Add(b2);
+            Assert.AreEqual(new byte[] { 0, 0 }, b1.AsByteArray);
+
+
+            b1 = new Bits(72);
+            b2 = new Bits(72);
+            b1.Invert();
+            b2[0] = true;
+            b1.Add(b2);
+            Assert.AreEqual(new byte[] { 0, 0, 0, 0, 0, 0, 0, 0, 0 }, b1.AsByteArray);
+        }
     }
 }

@@ -98,8 +98,15 @@ namespace PasPasPas.Runtime.Values {
         /// <summary>
         ///     get the data of this value
         /// </summary>
-        public override byte[] Data
-            => data.AsByteArray;
+        public override byte[] Data {
+            get {
+                var len = InternalLength;
+                var internalData = data.AsByteArray;
+                var result = new byte[len];
+                Array.Copy(internalData, result, result.Length);
+                return result;
+            }
+        }
 
         /// <summary>
         ///     test if the number is negative
@@ -112,7 +119,7 @@ namespace PasPasPas.Runtime.Values {
         /// </summary>
         public override int TypeId {
             get {
-                var length = 1; // InternalLength;
+                var length = InternalLength;
 
                 switch (length) {
                     case 0:
@@ -136,9 +143,9 @@ namespace PasPasPas.Runtime.Values {
                 var bytes = data.AsByteArray;
 
                 for (length = bytes.Length - 1; length > 1; length--) {
-                    if (IsNegative && bytes[length] != 0xFF)
+                    if (IsNegative && bytes[length - 1] != 0xFF)
                         break;
-                    if (!IsNegative && bytes[length] != 0x00)
+                    if (!IsNegative && bytes[length - 1] != 0x00)
                         break;
                 }
 
@@ -167,7 +174,7 @@ namespace PasPasPas.Runtime.Values {
         /// <returns></returns>
         public override string ToString() {
             string value;
-            var array = data.AsByteArray;
+            var array = Data;
             switch (TypeId) {
                 case KnownTypeIds.ByteType:
                     value = array[0].ToString();
@@ -252,7 +259,7 @@ namespace PasPasPas.Runtime.Values {
                 throw new ArgumentException();
 
             var result = new Bits(data);
-            result.Add(data);
+            result.Add(intValue.data);
 
             if (result[64] != result[63])
                 return new SpecialValue(SpecialConstantKind.IntegerOverflow);

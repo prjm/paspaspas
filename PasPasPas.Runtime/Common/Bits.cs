@@ -241,7 +241,9 @@ namespace PasPasPas.Runtime.Common {
             var carry = 0UL;
             for (var j = 0; j < data.Length && j < value.Length; j++) {
 
-                ulong sum = ((ulong)GetBits(j)) + ((ulong)value.GetBits(j)) + carry;
+                var left = unchecked((ulong)GetBits(j) & 0xFFFFFFFF);
+                var right = unchecked((ulong)value.GetBits(j) & 0xFFFFFFFF);
+                var sum = unchecked(left + right + carry);
 
                 data[j] = unchecked((int)(sum & 0xFFFFFFFF));
                 data[j] = GetBits(j);
@@ -289,6 +291,19 @@ namespace PasPasPas.Runtime.Common {
 
                 data[index / intSize] = qword;
             }
+        }
+
+        /// <summary>
+        ///     format this number as hex string
+        /// </summary>
+        /// <returns>hex string</returns>
+        public override string ToString() {
+            var result = "";
+            for (var i = 0; i < data.Length; i++) {
+                var intNumber = GetBits(i);
+                result = intNumber.ToString("X8") + result;
+            }
+            return "0x" + result;
         }
     }
 }

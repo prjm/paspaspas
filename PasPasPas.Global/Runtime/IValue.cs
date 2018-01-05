@@ -1,7 +1,7 @@
 ﻿namespace PasPasPas.Global.Runtime {
 
     /// <summary>
-    ///     common interface for value types
+    ///     interface for value types
     /// </summary>
     public interface IValue {
 
@@ -11,7 +11,7 @@
         byte[] Data { get; }
 
         /// <summary>
-        ///     get the common type id of this vlue
+        ///     get the well-known type id of this value
         /// </summary>
         int TypeId { get; }
     }
