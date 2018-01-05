@@ -11,6 +11,7 @@ namespace PasPasPas.Runtime.Common {
 
         private int[] data;
         private int bitSize;
+
         private const int intSize = 8 * sizeof(int);
         private const int byteSize = 8 * sizeof(byte);
 
@@ -26,16 +27,16 @@ namespace PasPasPas.Runtime.Common {
         /// <summary>
         ///     create a new bit array
         /// </summary>
-        /// <param name="oldData">copied bit array</param>
-        public Bits(Bits oldData) : this(oldData.Length)
-            => Assign(oldData);
+        /// <param name="fromAnotherBitArray">copied bit array</param>
+        public Bits(Bits fromAnotherBitArray) : this(fromAnotherBitArray.Length)
+            => Assign(fromAnotherBitArray);
 
         /// <summary>
         ///     set all bits to <c>true</c>
         /// </summary>
         public void Fill() {
             for (var i = 0; i < data.Length; i++)
-                data[i] = unchecked((int)0xFFFFFFFF);
+                data[i] = GetBits(i, unchecked((int)0xFFFFFFFF));
         }
 
         /// <summary>
@@ -43,20 +44,24 @@ namespace PasPasPas.Runtime.Common {
         /// </summary>
         public void Clear() {
             for (var i = 0; i < data.Length; i++)
-                data[i] = 0;
+                data[i] = GetBits(i, 0);
         }
 
-        /// <summary>
-        ///     get the relevant bits
-        /// </summary>
-        /// <param name="index"></param>
-        /// <returns></returns>
-        private int GetBits(int index) {
-            if (index < data.Length - 1)
-                return data[index];
+        private int GetBits(int index)
+            => GetBits(index, data[index]);
 
-            var mask = unchecked(((uint)0xFFFFFFFF) >> (intSize - (bitSize % intSize)));
-            return unchecked((int)(data[index] & mask));
+        /// <summary>
+        ///     get the relevant bits (masked)
+        /// </summary>
+        /// <param name="index">array index</param>
+        /// <param name="value">array value</param>
+        /// <returns>masked value</returns>
+        private int GetBits(int index, int value) {
+            if (index < data.Length - 1)
+                return value;
+
+            var mask = unchecked(0xFFFFFFFF >> (intSize - (bitSize % intSize)));
+            return unchecked((int)(value & mask));
         }
 
         /// <summary>
@@ -64,7 +69,7 @@ namespace PasPasPas.Runtime.Common {
         /// </summary>
         public void Invert() {
             for (var i = 0; i < data.Length; i++)
-                data[i] = unchecked(~GetBits(i));
+                data[i] = GetBits(i, unchecked(~GetBits(i)));
         }
 
         /// <summary>
@@ -73,12 +78,12 @@ namespace PasPasPas.Runtime.Common {
         public byte LeastSignificantByte {
             get {
                 if (data.Length > 0)
-                    return (byte)(GetBits(0) & 0xFF);
+                    return unchecked((byte)(GetBits(0) & 0xFF));
                 return default;
             }
             set {
                 if (data.Length > 0)
-                    data[0] = unchecked((GetBits(0) & unchecked((int)0xFFFFFF00)) | value & 0xFF);
+                    data[0] = GetBits(0, unchecked((GetBits(0) & unchecked((int)0xFFFFFF00)) | value & 0xFF));
             }
         }
 
@@ -96,12 +101,12 @@ namespace PasPasPas.Runtime.Common {
         public ushort LeastSignificantWord {
             get {
                 if (data.Length > 0)
-                    return (ushort)(GetBits(0) & 0xFFFF);
+                    return unchecked((ushort)(GetBits(0) & 0xFFFF));
                 return default;
             }
             set {
                 if (data.Length > 0)
-                    data[0] = unchecked((GetBits(0) & unchecked((int)0xFFFF0000)) | (value & 0xFFFF));
+                    data[0] = GetBits(0, unchecked((GetBits(0) & unchecked((int)0xFFFF0000)) | (value & 0xFFFF)));
             }
         }
 
@@ -141,8 +146,7 @@ namespace PasPasPas.Runtime.Common {
             set {
                 if (data.Length < 1)
                     return;
-                data[0] = value;
-                data[0] = GetBits(0);
+                data[0] = GetBits(0, value);
             }
         }
 
@@ -157,24 +161,22 @@ namespace PasPasPas.Runtime.Common {
                 var result = unchecked((GetBits(0) & 0xFFFFFFFF));
 
                 if (data.Length < 2)
-                    return (ulong)result;
+                    return unchecked((ulong)result);
 
-                result = unchecked(result | (((long)GetBits(1)) << 32));
-                return (ulong)result;
+                result = unchecked(result | (((long)GetBits(1)) << intSize));
+                return unchecked((ulong)result);
             }
 
             set {
                 if (data.Length < 1)
                     return;
 
-                data[0] = unchecked((int)(value & 0xFFFFFFFF));
-                data[0] = GetBits(0);
+                data[0] = GetBits(0, unchecked((int)(value & 0xFFFFFFFF)));
 
                 if (data.Length < 2)
                     return;
 
-                data[1] = unchecked((int)((value >> 32) & 0xFFFFFFFF));
-                data[1] = GetBits(1);
+                data[1] = GetBits(1, unchecked((int)((value >> intSize) & 0xFFFFFFFF)));
             }
         }
 
@@ -185,10 +187,11 @@ namespace PasPasPas.Runtime.Common {
         public byte[] AsByteArray {
             get {
                 var result = new byte[(bitSize + byteSize - 1) / byteSize];
+                var slice = intSize / byteSize;
 
                 for (var index = 0; index < result.Length; index++) {
-                    var offset = 8 * (index % 4);
-                    result[index] = unchecked((byte)(((uint)GetBits(index / 4) >> offset) & 0xFF));
+                    var offset = 8 * (index % slice);
+                    result[index] = unchecked((byte)(((uint)GetBits(index / slice) >> offset) & 0xFF));
                 }
 
                 return result;
@@ -239,15 +242,15 @@ namespace PasPasPas.Runtime.Common {
         /// <param name="value">value to add</param>
         public void Add(Bits value) {
             var carry = 0UL;
+
             for (var j = 0; j < data.Length && j < value.Length; j++) {
 
                 var left = unchecked((ulong)GetBits(j) & 0xFFFFFFFF);
                 var right = unchecked((ulong)value.GetBits(j) & 0xFFFFFFFF);
                 var sum = unchecked(left + right + carry);
 
-                data[j] = unchecked((int)(sum & 0xFFFFFFFF));
-                data[j] = GetBits(j);
-                carry = sum >> 32;
+                data[j] = GetBits(j, unchecked((int)(sum & 0xFFFFFFFF)));
+                carry = sum >> intSize;
             }
         }
 
