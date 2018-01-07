@@ -1,6 +1,7 @@
 ﻿using System;
 using PasPasPas.Api;
 using PasPasPas.Global.Constants;
+using PasPasPas.Global.Runtime;
 using PasPasPas.Options.DataTypes;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Parsing.SyntaxTree.Types;
@@ -41,7 +42,7 @@ namespace PasPasPasTests.Types {
         /// </summary>
         /// <param name="expression">expression</param>
         /// <param name="typeId">type id to find</param>
-        protected void AssertExprValue(string expression, long value) {
+        protected void AssertExprValue(string expression, IValue value) {
             var file = "SimpleExpr";
             var program = $"program {file}; begin Writeln({expression}); end. ";
             SymbolReferencePart searchfunction(object x) => x as SymbolReferencePart;
@@ -53,7 +54,7 @@ namespace PasPasPasTests.Types {
             Assert.IsNotNull(firstParam.LiteralValue);
             Assert.IsNotNull(firstParam.TypeInfo);
             Assert.IsTrue(firstParam.IsConstant);
-            Assert.AreEqual(GetIntegerValue(value), firstParam.LiteralValue);
+            Assert.AreEqual(value, firstParam.LiteralValue);
 
         }
 

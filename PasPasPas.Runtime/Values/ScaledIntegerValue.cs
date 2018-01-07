@@ -38,45 +38,25 @@ namespace PasPasPas.Runtime.Values {
         /// <summary>
         ///     create a new integer value for a given number
         /// </summary>
-        /// <param name="number">number value</param>
+        /// <param name="number">value of this integer</param>
         public ScaledIntegerValue(sbyte number) {
             IsNegative = number < 0;
-            var bits = CreateBits(IsNegative);
-            bits.LeastSignificantSignedByte = number;
-            data = CreateByteArray(bits);
+            data = ByteArrayHelper.FromSignedByte(number);
         }
 
         /// <summary>
         ///     create a new integer value for a given number
         /// </summary>
-        /// <param name="number">number value</param>
-        public ScaledIntegerValue(byte number) {
-            var bits = CreateBits(false);
-            bits.LeastSignificantByte = number;
-            data = CreateByteArray(bits);
-        }
+        /// <param name="number">value of this integer</param>
+        public ScaledIntegerValue(byte number)
+            => data = ByteArrayHelper.FromByte(number);
 
         /// <summary>
         ///     create a new integer value for a given number
         /// </summary>
-        /// <param name="number"></param>
-        public ScaledIntegerValue(ushort number) {
-            var bits = CreateBits(false);
-            bits.LeastSignificantWord = number;
-            data = CreateByteArray(bits);
-        }
-
-        /// <summary>
-        ///     create a new integer value for a given number
-        /// </summary>
-        /// <param name="number"></param>
-        public ScaledIntegerValue(uint number) {
-            var bits = CreateBits(false);
-            bits.LeastSignificantDoubleWord = number;
-            data = CreateByteArray(bits);
-        }
-
-
+        /// <param name="number">value of this integer</param>
+        public ScaledIntegerValue(ushort number)
+            => data = ByteArrayHelper.FromUnsignedShort(number);
 
         /// <summary>
         ///     create a new integer value for a given number
@@ -84,10 +64,15 @@ namespace PasPasPas.Runtime.Values {
         /// <param name="number">number value</param>
         public ScaledIntegerValue(short number) {
             IsNegative = number < 0;
-            var bits = CreateBits(IsNegative);
-            bits.LeastSignificantSignedWord = number;
-            data = CreateByteArray(bits);
+            data = ByteArrayHelper.FromShort(number);
         }
+
+        /// <summary>
+        ///     create a new integer value for a given number
+        /// </summary>
+        /// <param name="number">value of this integer</param>
+        public ScaledIntegerValue(uint number)
+            => data = ByteArrayHelper.FromUnsignedInteger(number);
 
         /// <summary>
         ///     create a new integer value for a given number
@@ -95,9 +80,7 @@ namespace PasPasPas.Runtime.Values {
         /// <param name="number"></param>
         public ScaledIntegerValue(int number) {
             IsNegative = number < 0;
-            var bits = CreateBits(IsNegative);
-            bits.LeastSignificantSignedDoubleWord = number;
-            data = CreateByteArray(bits);
+            data = ByteArrayHelper.FromInteger(number);
         }
 
         /// <summary>
@@ -106,9 +89,7 @@ namespace PasPasPas.Runtime.Values {
         /// <param name="number"></param>
         public ScaledIntegerValue(long number) {
             IsNegative = number < 0;
-            var bits = CreateBits(IsNegative);
-            bits.LeastSignificantSignedQuadWord = number;
-            data = CreateByteArray(bits);
+            data = ByteArrayHelper.FromLong(number);
         }
 
         /// <summary>
