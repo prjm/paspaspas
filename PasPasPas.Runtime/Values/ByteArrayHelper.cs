@@ -87,14 +87,11 @@ namespace PasPasPas.Runtime.Values {
             var hi_lsb = unchecked((byte)(number >> 16));
             var hi_msb = unchecked((byte)(number >> 24));
 
-            if (hi_msb == 0)
-                if (hi_lsb == 0)
-                    if (lo_msb == 0)
-                        return new byte[] { lo_lsb };
-                    else
-                        return new byte[] { lo_lsb, lo_msb };
+            if (hi_msb == 0 && hi_lsb == 0)
+                if (lo_msb == 0)
+                    return new byte[] { lo_lsb };
                 else
-                    return new byte[] { lo_lsb, lo_msb, hi_lsb };
+                    return new byte[] { lo_lsb, lo_msb };
             else
                 return new byte[] { lo_lsb, lo_msb, hi_lsb, hi_msb };
         }
@@ -103,7 +100,7 @@ namespace PasPasPas.Runtime.Values {
         ///     create a byte array from a unsigned integer
         /// </summary>
         /// <param name="number">int value to convert</param>
-        private static byte[] FromUnsignedLong(ulong number) {
+        public static byte[] FromUnsignedLong(ulong number) {
             var lo_lo_lsb = unchecked((byte)(number >> 0));
             var lo_lo_msb = unchecked((byte)(number >> 8));
             var lo_hi_lsb = unchecked((byte)(number >> 16));
@@ -113,26 +110,14 @@ namespace PasPasPas.Runtime.Values {
             var hi_hi_lsb = unchecked((byte)(number >> 48));
             var hi_hi_msb = unchecked((byte)(number >> 56));
 
-            if (hi_hi_msb == 0)
-                if (hi_hi_lsb == 0)
-                    if (hi_lo_msb == 0)
-                        if (hi_lo_lsb == 0)
-                            if (lo_hi_msb == 0)
-                                if (lo_hi_lsb == 0)
-                                    if (lo_lo_msb == 0)
-                                        return new byte[] { lo_lo_lsb };
-                                    else
-                                        return new byte[] { lo_lo_lsb, lo_lo_msb };
-                                else
-                                    return new byte[] { lo_lo_lsb, lo_lo_msb, lo_hi_lsb };
-                            else
-                                return new byte[] { lo_lo_lsb, lo_lo_msb, lo_hi_lsb, lo_hi_msb };
-                        else
-                            return new byte[] { lo_lo_lsb, lo_lo_msb, lo_hi_lsb, lo_hi_msb, hi_lo_lsb };
+            if (hi_hi_msb == 0 && hi_hi_lsb == 0 && hi_lo_msb == 0 && hi_lo_lsb == 0)
+                if (lo_hi_msb == 0 && lo_hi_lsb == 0)
+                    if (lo_lo_msb == 0)
+                        return new byte[] { lo_lo_lsb };
                     else
-                        return new byte[] { lo_lo_lsb, lo_lo_msb, lo_hi_lsb, lo_hi_msb, hi_lo_lsb, hi_lo_msb };
+                        return new byte[] { lo_lo_lsb, lo_lo_msb };
                 else
-                    return new byte[] { lo_lo_lsb, lo_lo_msb, lo_hi_lsb, lo_hi_msb, hi_lo_lsb, hi_lo_msb, hi_hi_lsb };
+                    return new byte[] { lo_lo_lsb, lo_lo_msb, lo_hi_lsb, lo_hi_msb };
             else
                 return new byte[] { lo_lo_lsb, lo_lo_msb, lo_hi_lsb, lo_hi_msb, hi_lo_lsb, hi_lo_msb, hi_hi_lsb, hi_hi_msb };
         }
