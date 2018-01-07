@@ -1,7 +1,6 @@
 ﻿using System;
 using PasPasPas.Global.Constants;
 using PasPasPas.Global.Runtime;
-using PasPasPas.Runtime.Common;
 
 namespace PasPasPas.Runtime.Values {
 
@@ -11,29 +10,6 @@ namespace PasPasPas.Runtime.Values {
     public class ScaledIntegerValue : ValueBase, IIntegerValue {
 
         private byte[] data;
-
-        private Bits CreateBits(bool isNegative) {
-            var result = new Bits(72);
-            if (isNegative)
-                result.Invert();
-            return result;
-        }
-
-        private byte[] CreateByteArray(bool isNegative, Bits bits) {
-            var index = bits.LastIndexOf(!isNegative);
-            var numberOfElements = Math.Max(1, (index + 8 * sizeof(byte)) / (8 * sizeof(byte)));
-
-            if (isNegative && index % 8 == 7)
-                numberOfElements++;
-
-            if (numberOfElements == 3)
-                numberOfElements = 4;
-
-            if (numberOfElements > 4 && numberOfElements < 8)
-                numberOfElements = 8;
-
-            return bits.GetTrimmedByteArray(numberOfElements);
-        }
 
         /// <summary>
         ///     create a new integer value for a given number
@@ -96,9 +72,8 @@ namespace PasPasPas.Runtime.Values {
         ///     create a new integer value for a given number
         /// </summary>
         /// <param name="number"></param>
-        public ScaledIntegerValue(ulong number) {
-            data = ByteArrayHelper.FromUnsignedLong(number);
-        }
+        public ScaledIntegerValue(ulong number)
+            => data = ByteArrayHelper.FromUnsignedLong(number);
 
         /// <summary>
         ///     create a new integer value for a given byte array
@@ -123,12 +98,12 @@ namespace PasPasPas.Runtime.Values {
         }
 
         /// <summary>
-        ///     test if the number is negative
+        ///     check if the number is negative
         /// </summary>
         public bool IsNegative { get; private set; }
 
         /// <summary>
-        ///     get the matching type
+        ///     get the matching type for this integer type
         /// </summary>
         public override int TypeId {
             get {
@@ -151,25 +126,14 @@ namespace PasPasPas.Runtime.Values {
         /// <summary>
         ///     get the value as unsigned long
         /// </summary>
-        public ulong AsUnsignedLong {
-            get {
-                var result = new byte[8];
-                Array.Copy(data, result, data.Length);
-                return BitConverter.ToUInt64(result, 0);
-            }
-        }
+        public ulong AsUnsignedLong
+            => ByteArrayHelper.ToUnsignedLong(data);
 
         /// <summary>
         ///     get the value as signed long
         /// </summary>
-        public long AsSignedLong {
-            get {
-                var result = new byte[8];
-                Array.Copy(data, result, data.Length);
-                return BitConverter.ToInt64(result, 0);
-            }
-        }
-
+        public long AsSignedLong
+            => ByteArrayHelper.ToSignedLong(data);
 
         /// <summary>
         ///     get the values of this value as string
@@ -208,7 +172,6 @@ namespace PasPasPas.Runtime.Values {
             return value;
         }
 
-
         /// <summary>
         ///     negate this value
         /// </summary>
@@ -217,13 +180,8 @@ namespace PasPasPas.Runtime.Values {
             if (!IsNegative && data.Length > 7 && data[7] >= 0x80)
                 return new SpecialValue(SpecialConstantKind.IntegerOverflow);
 
-            var result = CreateBits(IsNegative);
-            var one = CreateBits(false);
-            result.AsByteArray = data;
-            result.Invert();
-            one[0] = true;
-            result.Add(one);
-            return new ScaledIntegerValue(result.MostSignificantBit, CreateByteArray(result.MostSignificantBit, result));
+            var (isNegative, bytes) = ByteArrayHelper.TwoComplement(IsNegative, data);
+            return new ScaledIntegerValue(isNegative, bytes);
         }
 
         /// <summary>
@@ -233,6 +191,9 @@ namespace PasPasPas.Runtime.Values {
         /// <returns></returns>
         public override bool Equals(object obj) {
             if (obj is ScaledIntegerValue v) {
+
+                if (v.IsNegative != IsNegative)
+                    return false;
 
                 if (v.data.Length != data.Length)
                     return false;
@@ -258,7 +219,7 @@ namespace PasPasPas.Runtime.Values {
         /// <summary>
         ///     add another integer
         /// </summary>
-        /// <param name="numberToAdd"></param>
+        /// <param name="numberToAdd">add two integer</param>
         /// <returns></returns>
         public IValue Add(IValue numberToAdd) {
             if (numberToAdd is SpecialValue specialValue && (specialValue.Kind == SpecialConstantKind.InvalidInteger || specialValue.Kind == SpecialConstantKind.IntegerOverflow)) {
@@ -270,23 +231,19 @@ namespace PasPasPas.Runtime.Values {
             if (intValue == null)
                 throw new ArgumentException();
 
-            var result = CreateBits(IsNegative);
-            var otherValues = CreateBits(intValue.IsNegative);
-            result.AsByteArray = data;
-            otherValues.AsByteArray = intValue.data;
-            result.Add(otherValues);
+            var (isNegative, bytes, overflow) = ByteArrayHelper.Add((IsNegative, data), (intValue.IsNegative, intValue.data));
 
-            if (result[64] != result[63])
+            if (overflow)
                 return new SpecialValue(SpecialConstantKind.IntegerOverflow);
 
-            return new ScaledIntegerValue(result.MostSignificantBit, CreateByteArray(result.MostSignificantBit, result));
+            return new ScaledIntegerValue(isNegative, bytes);
         }
 
         /// <summary>
         ///     subtract another integer
         /// </summary>
         /// <param name="numberToSubtract">number to subtract</param>
-        /// <returns></returns>
+        /// <returns>subtraction results</returns>
         public IValue Subtract(IValue numberToSubtract) {
             if (numberToSubtract is SpecialValue specialValue && (specialValue.Kind == SpecialConstantKind.InvalidInteger || specialValue.Kind == SpecialConstantKind.IntegerOverflow)) {
                 return new SpecialValue(SpecialConstantKind.InvalidInteger);

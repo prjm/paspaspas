@@ -1,4 +1,5 @@
 ﻿using System;
+using PasPasPas.Global.Runtime;
 using PasPasPas.Runtime.Common;
 
 namespace PasPasPas.Runtime.Values {
@@ -123,6 +124,28 @@ namespace PasPasPas.Runtime.Values {
         }
 
         /// <summary>
+        ///     converts a byte array to an unsigned long
+        /// </summary>
+        /// <param name="data">bytes to convert</param>
+        /// <returns>unsigned long value of the byte array</returns>
+        public static ulong ToUnsignedLong(byte[] data) {
+            var bits = CreateBits(false);
+            bits.AsByteArray = data;
+            return bits.LeastSignificantQuadWord;
+        }
+
+        /// <summary>
+        ///     converts a byte array to an signed long
+        /// </summary>
+        /// <param name="data">bytes to convert</param>
+        /// <returns>unsigned long value of the byte array</returns>
+        public static long ToSignedLong(byte[] data) {
+            var bits = CreateBits(false);
+            bits.AsByteArray = data;
+            return bits.LeastSignificantSignedQuadWord;
+        }
+
+        /// <summary>
         ///     create a byte array from a unsigned integer
         /// </summary>
         /// <param name="number">int value to convert</param>
@@ -136,6 +159,36 @@ namespace PasPasPas.Runtime.Values {
         public static byte[] FromLong(long number)
             => FromUnsignedLong(unchecked((ulong)number));
 
+        /// <summary>
+        ///     creates a two complement of a given byte array
+        /// </summary>
+        /// <param name="data">array to complement</param>
+        /// <param name="isNegative"><c>true</c> if the data displays a negative number</param>
+        /// <returns>negated number</returns>
+        public static (bool isNegative, byte[] data) TwoComplement(bool isNegative, byte[] data) {
+            var result = CreateBits(isNegative);
+            var one = CreateBits(false);
+            result.AsByteArray = data;
+            result.Invert();
+            one[0] = true;
+            result.Add(one);
+            return (result.MostSignificantBit, CreateByteArray(result, result.MostSignificantBit));
+        }
+
+        /// <summary>
+        ///     add two bytes arrays arithmetically
+        /// </summary>
+        /// <returns>sum of addition and overflow status</returns>
+        public static (bool isNegative, byte[] data, bool overflow) Add((bool isNegative, byte[] data) augend, (bool isNegative, byte[] data) addend) {
+            var result = CreateBits(augend.isNegative);
+            result.AsByteArray = augend.data;
+
+            var otherValues = CreateBits(addend.isNegative);
+            otherValues.AsByteArray = addend.data;
+
+            result.Add(otherValues);
+            return (result.MostSignificantBit, CreateByteArray(result, result.MostSignificantBit), result[64] != result[63]);
+        }
     }
 }
 
