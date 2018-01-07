@@ -45,7 +45,7 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
         }
 
         /// <summary>
-        ///     convert parsd literas to a real kliteral
+        ///     convert parsed literals to a real literal
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>

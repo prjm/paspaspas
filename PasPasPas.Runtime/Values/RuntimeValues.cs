@@ -79,7 +79,7 @@ namespace PasPasPas.Runtime.Values {
             => new ScaledIntegerValue(number);
 
         /// <summary>
-        ///     convert a byteto a constant value
+        ///     convert a byte to a constant value
         /// </summary>
         /// <param name="number">numerical value</param>
         /// <returns></returns>

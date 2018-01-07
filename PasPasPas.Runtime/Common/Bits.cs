@@ -25,6 +25,40 @@ namespace PasPasPas.Runtime.Common {
         }
 
         /// <summary>
+        ///     get a trimmed byte array
+        /// </summary>
+        /// <param name="maxLen"></param>
+        /// <returns></returns>
+        public byte[] GetTrimmedByteArray(int maxLen) {
+            var len = (bitSize + byteSize - 1) / byteSize;
+
+            if (maxLen >= 0)
+                len = Math.Min(len, maxLen);
+
+            var result = new byte[len];
+            var slice = intSize / byteSize;
+
+            for (var index = 0; index < result.Length; index++) {
+                var offset = 8 * (index % slice);
+                result[index] = unchecked((byte)(((uint)GetBits(index / slice) >> offset) & 0xFF));
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        ///     find the last index of a given bit value
+        /// </summary>
+        /// <param name="value">search value</param>
+        /// <returns>last index or <c>-1</c> if the value was not found</returns>
+        public int LastIndexOf(bool value) {
+            for (var index = bitSize - 1; index >= 0; index--)
+                if (this[index] == value)
+                    return index;
+            return -1;
+        }
+
+        /// <summary>
         ///     create a new bit array
         /// </summary>
         /// <param name="fromAnotherBitArray">copied bit array</param>
@@ -185,17 +219,26 @@ namespace PasPasPas.Runtime.Common {
         /// </summary>
         /// <returns></returns>
         public byte[] AsByteArray {
-            get {
-                var result = new byte[(bitSize + byteSize - 1) / byteSize];
+
+            get => GetTrimmedByteArray(-1);
+
+            set {
                 var slice = intSize / byteSize;
 
-                for (var index = 0; index < result.Length; index++) {
-                    var offset = 8 * (index % slice);
-                    result[index] = unchecked((byte)(((uint)GetBits(index / slice) >> offset) & 0xFF));
-                }
+                for (var index = 0; index < value.Length; index++) {
+                    var offset = index / slice;
 
-                return result;
+                    if (offset >= data.Length)
+                        break;
+
+                    var mask = unchecked(0xFF << 8 * (index % slice));
+
+                    data[offset] = GetBits(offset, unchecked(//
+                        (GetBits(offset) & ~mask) |
+                        (value[index] << (8 * (index % slice))) & mask));
+                }
             }
+
         }
 
         /// <summary>
@@ -215,6 +258,14 @@ namespace PasPasPas.Runtime.Common {
         /// </summary>
         public int Length
             => bitSize;
+
+        /// <summary>
+        ///     access the most significant bit
+        /// </summary>
+        public bool MostSignificantBit {
+            get => this[bitSize - 1];
+            set => this[bitSize - 1] = value;
+        }
 
         /// <summary>
         ///     check for equality

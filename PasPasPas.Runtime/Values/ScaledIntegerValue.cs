@@ -8,29 +8,85 @@ namespace PasPasPas.Runtime.Values {
     /// <summary>
     ///     integer value with variable byte length
     /// </summary>
-    /// <remarks>internally implemented as 9-byte integer values</remarks>
     public class ScaledIntegerValue : ValueBase, IIntegerValue {
 
-        private readonly Bits data = new Bits(72);
+        private byte[] data;
 
-        /// <summary>
-        ///     create a new integer value for a given number
-        /// </summary>
-        /// <param name="number">number value</param>
-        public ScaledIntegerValue(sbyte number) {
-            if (number < 0)
-                data.Invert();
-            data.LeastSignificantSignedByte = number;
+        private Bits CreateBits(bool isNegative) {
+            var result = new Bits(72);
+            if (isNegative)
+                result.Invert();
+            return result;
+        }
+
+        private byte[] CreateByteArray(Bits bits) {
+            var index = bits.LastIndexOf(!IsNegative);
+            var numberOfElements = Math.Max(1, (index + 8 * sizeof(byte)) / (8 * sizeof(byte)));
+
+            if (IsNegative && index % 8 == 7)
+                numberOfElements++;
+
+            if (numberOfElements == 3)
+                numberOfElements = 4;
+
+            if (numberOfElements > 4 && numberOfElements < 8)
+                numberOfElements = 8;
+
+            return bits.GetTrimmedByteArray(numberOfElements);
         }
 
         /// <summary>
         ///     create a new integer value for a given number
         /// </summary>
         /// <param name="number">number value</param>
+        public ScaledIntegerValue(sbyte number) {
+            IsNegative = number < 0;
+            var bits = CreateBits(IsNegative);
+            bits.LeastSignificantSignedByte = number;
+            data = CreateByteArray(bits);
+        }
+
+        /// <summary>
+        ///     create a new integer value for a given number
+        /// </summary>
+        /// <param name="number">number value</param>
+        public ScaledIntegerValue(byte number) {
+            var bits = CreateBits(false);
+            bits.LeastSignificantByte = number;
+            data = CreateByteArray(bits);
+        }
+
+        /// <summary>
+        ///     create a new integer value for a given number
+        /// </summary>
+        /// <param name="number"></param>
+        public ScaledIntegerValue(ushort number) {
+            var bits = CreateBits(false);
+            bits.LeastSignificantWord = number;
+            data = CreateByteArray(bits);
+        }
+
+        /// <summary>
+        ///     create a new integer value for a given number
+        /// </summary>
+        /// <param name="number"></param>
+        public ScaledIntegerValue(uint number) {
+            var bits = CreateBits(false);
+            bits.LeastSignificantDoubleWord = number;
+            data = CreateByteArray(bits);
+        }
+
+
+
+        /// <summary>
+        ///     create a new integer value for a given number
+        /// </summary>
+        /// <param name="number">number value</param>
         public ScaledIntegerValue(short number) {
-            if (number < 0)
-                data.Invert();
-            data.LeastSignificantSignedWord = number;
+            IsNegative = number < 0;
+            var bits = CreateBits(IsNegative);
+            bits.LeastSignificantSignedWord = number;
+            data = CreateByteArray(bits);
         }
 
         /// <summary>
@@ -38,9 +94,10 @@ namespace PasPasPas.Runtime.Values {
         /// </summary>
         /// <param name="number"></param>
         public ScaledIntegerValue(int number) {
-            if (number < 0)
-                data.Invert();
-            data.LeastSignificantSignedDoubleWord = number;
+            IsNegative = number < 0;
+            var bits = CreateBits(IsNegative);
+            bits.LeastSignificantSignedDoubleWord = number;
+            data = CreateByteArray(bits);
         }
 
         /// <summary>
@@ -48,39 +105,20 @@ namespace PasPasPas.Runtime.Values {
         /// </summary>
         /// <param name="number"></param>
         public ScaledIntegerValue(long number) {
-            if (number < 0)
-                data.Invert();
-            data.LeastSignificantSignedQuadWord = number;
+            IsNegative = number < 0;
+            var bits = CreateBits(IsNegative);
+            bits.LeastSignificantSignedQuadWord = number;
+            data = CreateByteArray(bits);
         }
-
-
-        /// <summary>
-        ///     create a new integer value for a given number
-        /// </summary>
-        /// <param name="number">number value</param>
-        public ScaledIntegerValue(byte number)
-            => data.LeastSignificantByte = number;
-
-        /// <summary>
-        ///     create a new integer value for a given number
-        /// </summary>
-        /// <param name="number"></param>
-        public ScaledIntegerValue(ushort number)
-            => data.LeastSignificantWord = number;
-
-        /// <summary>
-        ///     create a new integer value for a given number
-        /// </summary>
-        /// <param name="number"></param>
-        public ScaledIntegerValue(uint number)
-            => data.LeastSignificantDoubleWord = number;
 
         /// <summary>
         ///     create a new integer value for a given number
         /// </summary>
         /// <param name="number"></param>
         public ScaledIntegerValue(ulong number) {
-            data.LeastSignificantQuadWord = number;
+            var bits = CreateBits(false);
+            bits.LeastSignificantQuadWord = number;
+            data = CreateByteArray(bits);
         }
 
         /// <summary>
@@ -88,9 +126,10 @@ namespace PasPasPas.Runtime.Values {
         /// </summary>
         /// <param name="number"></param>
         public ScaledIntegerValue(Bits number) {
-            if (number.Length != data.Length)
-                throw new ArgumentOutOfRangeException(nameof(number));
-            data.Assign(number);
+            IsNegative = number.MostSignificantBit;
+            var bits = CreateBits(IsNegative);
+            bits.Assign(number);
+            data = CreateByteArray(bits);
         }
 
         /// <summary>
@@ -98,10 +137,8 @@ namespace PasPasPas.Runtime.Values {
         /// </summary>
         public override byte[] Data {
             get {
-                var len = InternalLength;
-                var internalData = data.AsByteArray;
-                var result = new byte[len];
-                Array.Copy(internalData, result, result.Length);
+                var result = new byte[data.Length];
+                Array.Copy(data, result, result.Length);
                 return result;
             }
         }
@@ -109,62 +146,51 @@ namespace PasPasPas.Runtime.Values {
         /// <summary>
         ///     test if the number is negative
         /// </summary>
-        public bool IsNegative
-            => data[71];
+        public bool IsNegative { get; private set; }
 
         /// <summary>
         ///     get the matching type
         /// </summary>
         public override int TypeId {
             get {
-                var length = InternalLength;
-
-                switch (length) {
+                switch (data.Length) {
                     case 0:
                         return KnownTypeIds.ShortInt;
                     case 1:
-                        return IsNegative || !data[7] ? KnownTypeIds.ShortInt : KnownTypeIds.ByteType;
+                        return IsNegative || data[0] < 0x80 ? KnownTypeIds.ShortInt : KnownTypeIds.ByteType;
                     case 2:
-                        return IsNegative || !data[15] ? KnownTypeIds.SmallInt : KnownTypeIds.WordType;
+                        return IsNegative || data[1] < 0x80 ? KnownTypeIds.SmallInt : KnownTypeIds.WordType;
                     case 4:
-                        return IsNegative || !data[31] ? KnownTypeIds.IntegerType : KnownTypeIds.CardinalType;
+                        return IsNegative || data[3] < 0x80 ? KnownTypeIds.IntegerType : KnownTypeIds.CardinalType;
                     case 8:
-                        return IsNegative || !data[63] ? KnownTypeIds.Int64Type : KnownTypeIds.Uint64Type;
+                        return IsNegative || data[7] < 0x80 ? KnownTypeIds.Int64Type : KnownTypeIds.Uint64Type;
                 }
                 throw new InvalidOperationException();
-            }
-        }
-
-        private int InternalLength {
-            get {
-                int length;
-                var bytes = data.AsByteArray;
-
-                for (length = bytes.Length - 1; length > 1; length--) {
-                    if (IsNegative && bytes[length - 1] != 0xFF)
-                        break;
-                    if (!IsNegative && bytes[length - 1] != 0x00)
-                        break;
-                }
-
-                if (IsNegative && bytes[length - 1] < 0x80)
-                    length++;
-
-                if (length > 4)
-                    return 8;
-
-                if (length > 2)
-                    return 4;
-
-                return length;
             }
         }
 
         /// <summary>
         ///     get the value as unsigned long
         /// </summary>
-        public ulong AsUnsignedLong
-            => data.LeastSignificantQuadWord;
+        public ulong AsUnsignedLong {
+            get {
+                var result = new byte[8];
+                Array.Copy(data, result, data.Length);
+                return BitConverter.ToUInt64(result, 0);
+            }
+        }
+
+        /// <summary>
+        ///     get the value as signed long
+        /// </summary>
+        public long AsSignedLong {
+            get {
+                var result = new byte[8];
+                Array.Copy(data, result, data.Length);
+                return BitConverter.ToInt64(result, 0);
+            }
+        }
+
 
         /// <summary>
         ///     get the values of this value as string
@@ -172,31 +198,30 @@ namespace PasPasPas.Runtime.Values {
         /// <returns></returns>
         public override string ToString() {
             string value;
-            var array = Data;
             switch (TypeId) {
                 case KnownTypeIds.ByteType:
-                    value = array[0].ToString();
+                    value = data[0].ToString();
                     break;
                 case KnownTypeIds.ShortInt:
-                    value = unchecked((sbyte)array[0]).ToString();
+                    value = ((sbyte)data[0]).ToString();
                     break;
                 case KnownTypeIds.WordType:
-                    value = BitConverter.ToUInt16(array, 0).ToString();
+                    value = BitConverter.ToUInt16(data, 0).ToString();
                     break;
                 case KnownTypeIds.SmallInt:
-                    value = BitConverter.ToInt16(array, 0).ToString();
+                    value = BitConverter.ToInt16(data, 0).ToString();
                     break;
                 case KnownTypeIds.CardinalType:
-                    value = BitConverter.ToUInt32(array, 0).ToString();
+                    value = BitConverter.ToUInt32(data, 0).ToString();
                     break;
                 case KnownTypeIds.IntegerType:
-                    value = BitConverter.ToInt32(array, 0).ToString();
+                    value = BitConverter.ToInt32(data, 0).ToString();
                     break;
                 case KnownTypeIds.Uint64Type:
-                    value = BitConverter.ToUInt64(array, 0).ToString();
+                    value = BitConverter.ToUInt64(data, 0).ToString();
                     break;
                 case KnownTypeIds.Int64Type:
-                    value = BitConverter.ToInt64(array, 0).ToString();
+                    value = BitConverter.ToInt64(data, 0).ToString();
                     break;
                 default:
                     throw new InvalidOperationException();
@@ -204,16 +229,18 @@ namespace PasPasPas.Runtime.Values {
             return value;
         }
 
+
         /// <summary>
         ///     negate this value
         /// </summary>
         /// <returns></returns>
         public IValue Negate() {
-            if (!IsNegative && data[63])
+            if (!IsNegative && data.Length > 7 && data[7] >= 0x80)
                 return new SpecialValue(SpecialConstantKind.IntegerOverflow);
 
-            var result = new Bits(data);
-            var one = new Bits(data.Length);
+            var result = CreateBits(IsNegative);
+            var one = CreateBits(false);
+            result.AsByteArray = data;
             result.Invert();
             one[0] = true;
             result.Add(one);
@@ -227,7 +254,15 @@ namespace PasPasPas.Runtime.Values {
         /// <returns></returns>
         public override bool Equals(object obj) {
             if (obj is ScaledIntegerValue v) {
-                return data.Equals(v.data);
+
+                if (v.data.Length != data.Length)
+                    return false;
+
+                for (var i = 0; i < data.Length; i++)
+                    if (data[i] != v.data[i])
+                        return false;
+
+                return true;
             }
 
             return false;
@@ -256,8 +291,11 @@ namespace PasPasPas.Runtime.Values {
             if (intValue == null)
                 throw new ArgumentException();
 
-            var result = new Bits(data);
-            result.Add(intValue.data);
+            var result = CreateBits(IsNegative);
+            var otherValues = CreateBits(intValue.IsNegative);
+            result.AsByteArray = data;
+            otherValues.AsByteArray = intValue.data;
+            result.Add(otherValues);
 
             if (result[64] != result[63])
                 return new SpecialValue(SpecialConstantKind.IntegerOverflow);
