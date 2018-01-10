@@ -103,7 +103,7 @@ namespace PasPasPas.Runtime.Values {
             => new ScaledIntegerValue(number);
 
         /// <summary>
-        ///     convert a signed byte to a constant value
+        ///     convert a long to a constant value
         /// </summary>
         /// <param name="number">numerical value</param>
         /// <returns></returns>
@@ -111,7 +111,7 @@ namespace PasPasPas.Runtime.Values {
             => new ScaledIntegerValue(number);
 
         /// <summary>
-        ///     convert a byteto a constant value
+        ///     convert a unsigned long to a constant value
         /// </summary>
         /// <param name="number">numerical value</param>
         /// <returns></returns>
@@ -127,7 +127,7 @@ namespace PasPasPas.Runtime.Values {
             => new ScaledIntegerValue(number);
 
         /// <summary>
-        ///     convert a byteto a constant value
+        ///     convert a byte to a constant value
         /// </summary>
         /// <param name="number">numerical value</param>
         /// <returns></returns>

@@ -1,6 +1,7 @@
 ﻿using System;
 using PasPasPas.Global.Constants;
 using PasPasPas.Global.Runtime;
+using PasPasPas.Runtime.Common;
 
 namespace PasPasPas.Runtime.Values {
 
@@ -180,7 +181,7 @@ namespace PasPasPas.Runtime.Values {
             if (!IsNegative && data.Length > 7 && data[7] >= 0x80)
                 return new SpecialValue(SpecialConstantKind.IntegerOverflow);
 
-            var (isNegative, bytes) = ByteArrayHelper.TwoComplement(IsNegative, data);
+            var (isNegative, bytes) = ByteArrayHelper.TwoComplement(9, IsNegative, data);
             return new ScaledIntegerValue(isNegative, bytes);
         }
 
@@ -231,7 +232,7 @@ namespace PasPasPas.Runtime.Values {
             if (intValue == null)
                 throw new ArgumentException();
 
-            var (isNegative, bytes, overflow) = ByteArrayHelper.Add((IsNegative, data), (intValue.IsNegative, intValue.data));
+            var (isNegative, bytes, overflow) = ByteArrayHelper.Add(9, (IsNegative, data), (intValue.IsNegative, intValue.data));
 
             if (overflow)
                 return new SpecialValue(SpecialConstantKind.IntegerOverflow);

@@ -131,5 +131,93 @@ namespace PasPasPasTests.Runtime {
             b1.Add(b2);
             Assert.AreEqual(new byte[] { 0, 0, 0, 0, 0, 0, 0, 0, 0 }, b1.AsByteArray);
         }
+
+        [TestCase]
+        public void FillTest() {
+            var b2 = new Bits(3);
+            var b1 = new Bits(9);
+
+            b2.LeastSignificantByte = 0x5;
+
+            b1.FillFromLeft(b2);
+            Assert.AreEqual(320, b1.LeastSignificantWord);
+            b1.Clear();
+
+            b1.FillFromRight(b2);
+            Assert.AreEqual(5, b1.LeastSignificantWord);
+            b1.Clear();
+        }
+
+        [TestCase]
+        public void TwoComplementTest() {
+            var b = new Bits(9);
+            b.TwoComplement();
+            Assert.AreEqual(0, b.LeastSignificantWord);
+
+            b = new Bits(8) {
+                LeastSignificantSignedByte = 1
+            };
+            b.TwoComplement();
+            Assert.AreEqual(-1, b.LeastSignificantSignedByte);
+
+            b = new Bits(8) {
+                LeastSignificantSignedByte = -128
+            };
+            b.TwoComplement();
+            Assert.AreEqual(-128, b.LeastSignificantSignedByte);
+
+        }
+
+        [TestCase]
+        public void TestNumbers() {
+            var b = new Bits(33) {
+                MostSignificantBit = true
+            };
+            Assert.IsTrue(b.IsMostNegative);
+            b.TwoComplement();
+            Assert.IsTrue(b.IsMostNegative);
+
+            b = new Bits(945) {
+                MostSignificantBit = true
+            };
+            Assert.IsTrue(b.IsMostNegative);
+            b.TwoComplement();
+            Assert.IsTrue(b.IsMostNegative);
+
+            b = new Bits(33);
+            b.Invert();
+            b.MostSignificantBit = false;
+            Assert.IsFalse(b.IsMostNegative);
+            Assert.IsTrue(b.IsMostPositive);
+            b.TwoComplement();
+            Assert.IsFalse(b.IsMostNegative);
+
+            b = new Bits(945);
+            b.Invert();
+            b.MostSignificantBit = false;
+            Assert.IsFalse(b.IsMostNegative);
+            Assert.IsTrue(b.IsMostPositive);
+            b.TwoComplement();
+            Assert.IsFalse(b.IsMostNegative);
+
+        }
+
+        [TestCase]
+        public void TestMultiply() {
+            var b1 = new Bits(4);
+            var b2 = new Bits(4);
+            Bits b3;
+
+            b1.LeastSignificantSignedByte = -8;
+            b2.LeastSignificantSignedByte = 2;
+            b3 = b1.Multiply(b2);
+            Assert.AreEqual(-16, b3.LeastSignificantSignedByte);
+
+            b1.LeastSignificantSignedByte = 3;
+            b2.LeastSignificantSignedByte = -4;
+            b3 = b1.Multiply(b2);
+            Assert.AreEqual(-12, b3.LeastSignificantSignedByte);
+        }
+
     }
 }

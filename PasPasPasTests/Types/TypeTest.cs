@@ -19,7 +19,7 @@ namespace PasPasPasTests.Types {
     public class TypeTest : CommonTest {
 
         /// <summary>
-        ///     test the type of a given expressiom
+        ///     test the type of a given expression
         /// </summary>
         /// <param name="expression">expression</param>
         /// <param name="typeId">type id to find</param>
