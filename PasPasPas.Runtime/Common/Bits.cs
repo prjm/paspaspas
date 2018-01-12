@@ -3,10 +3,12 @@
 namespace PasPasPas.Runtime.Common {
 
     /// <summary>
-    ///     own implementation of  bit array
+    ///     implementation of bit array and common operations
     /// </summary>
-    /// <remarks>replacement for framework class <c>BitArray</c> which doesn't provide
-    /// the required operations</remarks>
+    /// <remarks>
+    ///     replacement for framework class <c>BitArray</c> which doesn't provide
+    ///     the required operations
+    /// </remarks>
     public class Bits {
 
         private uint[] data;
@@ -19,15 +21,47 @@ namespace PasPasPas.Runtime.Common {
         ///     create a new bit array
         /// </summary>
         /// <param name="numberOfBits">number of bits</param>
+        /// <remarks>initially, all bits are unset</remarks>
         public Bits(int numberOfBits) {
             bitSize = numberOfBits;
             data = new uint[(numberOfBits + intSize - 1) / intSize];
         }
 
         /// <summary>
+        ///     create a new bit array
+        /// </summary>
+        /// <param name="fromAnotherBitArray">initial value for this bit array</param>
+        public Bits(Bits fromAnotherBitArray) : this(fromAnotherBitArray.Length)
+            => Assign(fromAnotherBitArray);
+
+        /// <summary>
+        ///     <c>true</c> if all bits are unset
+        /// </summary>
+        public bool IsCleared {
+            get {
+                for (var index = 0; index < data.Length; index++)
+                    if (GetBits(index) != GetBits(index, 0))
+                        return false;
+                return true;
+            }
+        }
+
+        /// <summary>
+        ///     <c>true</c> if all bits are set
+        /// </summary>
+        public bool IsFilled {
+            get {
+                for (var index = 0; index < data.Length; index++)
+                    if (GetBits(index) != GetBits(index, 0xFFFFFFFF))
+                        return false;
+                return true;
+            }
+        }
+
+        /// <summary>
         ///     get a trimmed byte array
         /// </summary>
-        /// <param name="customLength"></param>
+        /// <param name="customLength">number of bytes</param>
         /// <returns></returns>
         public byte[] GetTrimmedByteArray(int customLength) {
             var len = (bitSize + byteSize - 1) / byteSize;
@@ -59,11 +93,16 @@ namespace PasPasPas.Runtime.Common {
         }
 
         /// <summary>
-        ///     create a new bit array
+        ///     helper function: create a new bit array which is the two-complement of another bit array
         /// </summary>
-        /// <param name="fromAnotherBitArray">copied bit array</param>
-        public Bits(Bits fromAnotherBitArray) : this(fromAnotherBitArray.Length)
-            => Assign(fromAnotherBitArray);
+        /// <param name="bits"></param>
+        /// <returns></returns>
+        public static Bits CreateTwoComplement(Bits bits) {
+            var result = new Bits(bits);
+            bits.TwoComplement();
+            return result;
+        }
+
 
         /// <summary>
         ///     set all bits to <c>true</c>
@@ -295,8 +334,17 @@ namespace PasPasPas.Runtime.Common {
         /// <summary>
         ///     number of bits
         /// </summary>
-        public int Length
-            => bitSize;
+        public int Length {
+            get {
+                return bitSize;
+            }
+            set {
+                bitSize = value;
+                Array.Resize(ref data, (value + intSize - 1) / intSize);
+                for (var index = 0; index < data.Length; index++)
+                    data[index] = GetBits(index);
+            }
+        }
 
         /// <summary>
         ///     access the most significant bit
@@ -387,7 +435,111 @@ namespace PasPasPas.Runtime.Common {
 
         }
 
-        private void ArithmeticShiftRight(int numberOfBits) {
+        /// <summary>
+        ///     perform a binary division
+        /// </summary>
+        /// <param name="givenDivisor">divisor</param>
+        /// <returns>integer division result</returns>
+        /// <remarks>if divisor or dividend is zero, zero is returned</remarks>
+        public Bits Divide(Bits givenDivisor) {
+            var negate = false;
+            var length = Length + givenDivisor.Length;
+            Bits dividend;
+            Bits divisor;
+
+            if (givenDivisor.MostSignificantBit && MostSignificantBit) {
+                dividend = CreateTwoComplement(this);
+                divisor = CreateTwoComplement(givenDivisor);
+            }
+            else if (givenDivisor.MostSignificantBit) {
+                dividend = new Bits(this);
+                divisor = CreateTwoComplement(givenDivisor);
+                negate = true;
+            }
+            else if (MostSignificantBit) {
+                dividend = CreateTwoComplement(this);
+                divisor = new Bits(givenDivisor);
+                negate = true;
+            }
+            else {
+                dividend = new Bits(this);
+                divisor = new Bits(givenDivisor);
+            }
+
+            if (dividend.IsCleared || givenDivisor.IsCleared)
+                return new Bits(length);
+
+            dividend.Length = length;
+            divisor.Length = length;
+
+            var result = DivideInternal(dividend, divisor);
+
+            if (negate)
+                result.TwoComplement();
+
+            return result;
+        }
+
+        /// <summary>
+        ///     division of two
+        /// </summary>
+        /// <param name="dividend"></param>
+        /// <param name="divisor"></param>
+        /// <returns></returns>
+        private Bits DivideInternal(Bits dividend, Bits divisor) {
+            var alignPos = dividend.LastIndexOf(true);
+            var length = dividend.Length;
+            var numberOfShifts = alignPos - divisor.LastIndexOf(true);
+            var result = new Bits(length);
+
+            if (numberOfShifts < 0)
+                return result;
+
+            divisor.ArithmeticShiftLeft(numberOfShifts);
+
+            while (!dividend.IsCleared) {
+                var t = new Bits(dividend);
+                t.Subtract(divisor);
+
+                if (!t.MostSignificantBit) {
+                    result.LeastSignificantBit = true;
+                    dividend.Assign(t);
+                }
+
+                dividend.ArithmeticShiftLeft(1);
+                result.ArithmeticShiftLeft(1);
+            }
+
+            if (numberOfShifts > 0)
+                result.ArithmeticShiftRight(numberOfShifts - 1);
+            return result;
+        }
+
+        private void Subtract(Bits subtrahend) {
+            var s = new Bits(subtrahend);
+            s.TwoComplement();
+            Add(s);
+        }
+
+        private void ArithmeticShiftLeft(int numberOfBits) {
+            if (numberOfBits >= Length) {
+                Clear();
+                return;
+            }
+
+            for (var position = Length - 1; position >= 0; position--) {
+                if (position - numberOfBits >= 0)
+                    this[position] = this[position - numberOfBits];
+                else
+                    this[position] = false;
+            }
+        }
+
+        /// <summary>
+        ///     shift arithmetically right
+        /// </summary>
+        /// <param name="numberOfBits"></param>
+        public void ArithmeticShiftRight(int numberOfBits) {
             var one = MostSignificantBit;
 
             if (numberOfBits <= 0)
@@ -490,7 +642,16 @@ namespace PasPasPas.Runtime.Common {
         }
 
         /// <summary>
-        ///     format this number as hex string
+        ///     access the least significant bit
+        /// </summary>
+        public bool LeastSignificantBit {
+            get => this[0];
+            set => this[0] = value;
+        }
+
+
+        /// <summary>
+        ///     format this bit array as string
         /// </summary>
         /// <returns>hex string</returns>
         public override string ToString() {

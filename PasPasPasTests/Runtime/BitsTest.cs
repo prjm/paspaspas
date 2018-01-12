@@ -14,18 +14,33 @@ namespace PasPasPasTests.Runtime {
             Assert.AreEqual(9, b.Length);
             for (var i = 0; i < b.Length; i++)
                 Assert.IsFalse(b[i]);
+            Assert.IsFalse(b.IsFilled);
+            Assert.IsTrue(b.IsCleared);
+
             b.Invert();
             for (var i = 0; i < b.Length; i++)
                 Assert.IsTrue(b[i]);
+            Assert.IsFalse(b.IsCleared);
+            Assert.IsTrue(b.IsFilled);
+
             b.Invert();
             for (var i = 0; i < b.Length; i++)
                 Assert.IsFalse(b[i]);
+            Assert.IsFalse(b.IsFilled);
+            Assert.IsTrue(b.IsCleared);
+
             b.Fill();
             for (var i = 0; i < b.Length; i++)
                 Assert.IsTrue(b[i]);
+            Assert.IsFalse(b.IsCleared);
+            Assert.IsTrue(b.IsFilled);
+
             b.Clear();
             for (var i = 0; i < b.Length; i++)
                 Assert.IsFalse(b[i]);
+            Assert.IsFalse(b.IsFilled);
+            Assert.IsTrue(b.IsCleared);
+
         }
 
         /// <summary>
@@ -104,6 +119,25 @@ namespace PasPasPasTests.Runtime {
             b2.Clear();
             Assert.IsFalse(b1.Equals(b2));
             Assert.AreNotEqual(b1.GetHashCode(), b2.GetHashCode());
+        }
+
+        [TestCase]
+        public void DivideTest() {
+            var b1 = new Bits(8);
+            var b2 = new Bits(8);
+
+            b1.LeastSignificantByte = 10;
+            b2.LeastSignificantByte = 2;
+            var b3 = b1.Divide(b2);
+            Assert.AreEqual(5, b3.LeastSignificantByte);
+
+            b1 = new Bits(8);
+            b2 = new Bits(8);
+
+            b1.LeastSignificantSignedByte = 22;
+            b2.LeastSignificantSignedByte = 11;
+            b3 = b1.Divide(b2);
+            Assert.AreEqual(2, b3.LeastSignificantByte);
         }
 
         [TestCase]
@@ -217,6 +251,17 @@ namespace PasPasPasTests.Runtime {
             b2.LeastSignificantSignedByte = -4;
             b3 = b1.Multiply(b2);
             Assert.AreEqual(-12, b3.LeastSignificantSignedByte);
+        }
+
+        [TestCase]
+        public void TestResize() {
+            var b = new Bits(9) {
+                LeastSignificantByte = 0b0_1010_1010
+            };
+            b.Length = 4;
+            Assert.AreEqual(0b_1010, b.LeastSignificantByte);
+            b.Length = 9;
+            Assert.AreEqual(0b_0_0000_1010, b.LeastSignificantByte);
         }
 
     }
