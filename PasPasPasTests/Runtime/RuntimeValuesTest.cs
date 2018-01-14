@@ -147,7 +147,7 @@ namespace PasPasPasTests.Runtime {
             Assert.AreEqual("0", a(GetIntegerValue(9223372036854775807), GetIntegerValue(-9223372036854775807)));
         }
 
-        [Xunit.Fact]
+        [TestCase]
         public void TestIntegerSubtraction() {
             string s(IValue v1, IValue v2) {
                 var vv1 = (v1 as INumericalValue).Subtract(v2);
@@ -169,6 +169,18 @@ namespace PasPasPasTests.Runtime {
             Assert.AreEqual("0", s(GetIntegerValue(-9223372036854775807), GetIntegerValue(-9223372036854775807)));
         }
 
+        [TestCase]
+        public void TestIntegerMultiplication() {
+            string m(IValue v1, IValue v2) {
+                var vv1 = (v1 as INumericalValue).Multiply(v2);
+                return vv1.ToString();
+            }
+
+            Assert.AreEqual("50", m(GetIntegerValue(10), GetIntegerValue(5)));
+
+
+        }
     }
+
 }
 

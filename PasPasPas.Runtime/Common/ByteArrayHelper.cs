@@ -7,13 +7,25 @@ namespace PasPasPas.Runtime.Common {
     /// </summary>
     public static class ByteArrayHelper {
 
-        private static Bits CreateBits(int numberOfBits, bool invert) {
+        /// <summary>
+        ///     create a bit array
+        /// </summary>
+        /// <param name="numberOfBits">number of bits</param>
+        /// <param name="setAllBits">if <c>true</c>, all bits of the result value are set</param>
+        /// <returns></returns>
+        private static Bits CreateBits(int numberOfBits, bool setAllBits) {
             var result = new Bits(numberOfBits);
-            if (invert)
+            if (setAllBits)
                 result.Invert();
             return result;
         }
 
+        /// <summary>
+        ///     create an array of bits
+        /// </summary>
+        /// <param name="bits">bit array</param>
+        /// <param name="isNegative">if <c>true</c>the result has to be interpreted as negative number</param>
+        /// <returns></returns>
         private static byte[] CreateByteArray(Bits bits, bool isNegative) {
             var index = bits.LastIndexOf(!isNegative);
             var numberOfElements = Math.Max(1, (index + 8 * sizeof(byte)) / (8 * sizeof(byte)));
@@ -172,18 +184,33 @@ namespace PasPasPas.Runtime.Common {
         }
 
         /// <summary>
-        ///     add two bytes arrays arithmetically
+        ///     add two byte arrays arithmetically
         /// </summary>
         /// <returns>sum of addition and overflow status</returns>
-        public static (bool isNegative, byte[] data, bool overflow) Add(int byteSize, (bool isNegative, byte[] data) augend, (bool isNegative, byte[] data) addend) {
-            var result = CreateBits(8 * byteSize, augend.isNegative);
-            result.AsByteArray = augend.data;
+        public static ByteArrayCalculation Add(int byteSize, ByteArrayCalculation augend, ByteArrayCalculation addend) {
+            var result = CreateBits(8 * byteSize, augend.IsNegative);
+            result.AsByteArray = augend.Data;
 
-            var otherValues = CreateBits(8 * byteSize, addend.isNegative);
-            otherValues.AsByteArray = addend.data;
+            var otherValues = CreateBits(8 * byteSize, addend.IsNegative);
+            otherValues.AsByteArray = addend.Data;
 
             result.Add(otherValues);
-            return (result.MostSignificantBit, CreateByteArray(result, result.MostSignificantBit), result[64] != result[63]);
+            return new ByteArrayCalculation(result.MostSignificantBit, CreateByteArray(result, result.MostSignificantBit), result[64] != result[63]);
+        }
+
+        /// <summary>
+        ///     multiply two byte arrays arithmetically
+        /// </summary>
+        /// <returns>multiplication result and overflow status</returns>
+        public static ByteArrayCalculation Multiply(int byteSize, ByteArrayCalculation multplicand, ByteArrayCalculation multiplier) {
+            var left = CreateBits(8 * byteSize, multplicand.IsNegative);
+            left.AsByteArray = multplicand.Data;
+
+            var right = CreateBits(8 * byteSize, multiplier.IsNegative);
+            right.AsByteArray = multiplier.Data;
+
+            var result = left.Multiply(right);
+            return new ByteArrayCalculation(result.MostSignificantBit, CreateByteArray(result, result.MostSignificantBit), result[64] != result[63]);
         }
     }
 }

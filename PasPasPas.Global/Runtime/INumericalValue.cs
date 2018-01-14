@@ -20,15 +20,22 @@
         /// <summary>
         ///     add another number
         /// </summary>
-        /// <param name="numberToAdd">number to add</param>
+        /// <param name="append">number to add</param>
         /// <returns>result</returns>
-        IValue Add(IValue numberToAdd);
+        IValue Add(IValue append);
 
         /// <summary>
         ///     subtract another number
         /// </summary>
-        /// <param name="numberToSubtract">number to subtract</param>
+        /// <param name="subtrahend">number to subtract</param>
         /// <returns>result</returns>
-        IValue Subtract(IValue numberToSubtract);
+        IValue Subtract(IValue subtrahend);
+
+        /// <summary>
+        ///     multiply this number with another number
+        /// </summary>
+        /// <param name="multiplier">number to multiply with</param>
+        /// <returns>result</returns>
+        IValue Multiply(IValue multiplier);
     }
 }

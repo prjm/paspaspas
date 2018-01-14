@@ -232,12 +232,14 @@ namespace PasPasPas.Runtime.Values {
             if (intValue == null)
                 throw new ArgumentException();
 
-            var (isNegative, bytes, overflow) = ByteArrayHelper.Add(9, (IsNegative, data), (intValue.IsNegative, intValue.data));
+            var left = new ByteArrayCalculation(IsNegative, Data, false);
+            var right = new ByteArrayCalculation(intValue.IsNegative, intValue.Data, false);
+            var result = ByteArrayHelper.Add(9, left, right);
 
-            if (overflow)
+            if (result.Overflow)
                 return new SpecialValue(SpecialConstantKind.IntegerOverflow);
 
-            return new ScaledIntegerValue(isNegative, bytes);
+            return new ScaledIntegerValue(result.IsNegative, result.Data);
         }
 
         /// <summary>
@@ -261,6 +263,32 @@ namespace PasPasPas.Runtime.Values {
                 return negative;
 
             return Add(negative);
+        }
+
+        /// <summary>
+        ///     multiply another integer
+        /// </summary>
+        /// <param name="multiplier">number to multiply with</param>
+        /// <returns>subtraction results</returns>
+        public IValue Multiply(IValue multiplier) {
+            if (multiplier is SpecialValue specialValue && (specialValue.Kind == SpecialConstantKind.InvalidInteger || specialValue.Kind == SpecialConstantKind.IntegerOverflow)) {
+                return new SpecialValue(SpecialConstantKind.InvalidInteger);
+            }
+
+            var intValue = multiplier as ScaledIntegerValue;
+
+            if (intValue == null)
+                throw new ArgumentException();
+
+            var left = new ByteArrayCalculation(IsNegative, Data, false);
+            var right = new ByteArrayCalculation(intValue.IsNegative, intValue.Data, false);
+
+            var result = ByteArrayHelper.Multiply(9, left, right);
+
+            if (result.Overflow)
+                return new SpecialValue(SpecialConstantKind.IntegerOverflow);
+
+            return new ScaledIntegerValue(result.IsNegative, result.Data);
         }
     }
 }

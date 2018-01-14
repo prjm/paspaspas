@@ -33,15 +33,15 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="Syntax\Assignment.md" />
-    <None Include="Syntax\Block.md" />
-    <None Include="Syntax\Declarations.md" />
-    <None Include="Syntax\Expression.md" />
-    <None Include="Project.md" />
-    <None Include="Syntax\Program.md" />
-    <None Include="Syntax\ProgramHead.md" />
-    <None Include="Syntax\Statement.md" />
-    <None Include="Syntax\UsesFileClause.md" />
+    <None Include="Markdown\Syntax\Assignment.md" />
+    <None Include="Markdown\Syntax\Block.md" />
+    <None Include="Markdown\Syntax\Declarations.md" />
+    <None Include="Markdown\Syntax\Expression.md" />
+    <None Include="Markdown\Project.md" />
+    <None Include="Markdown\Syntax\Program.md" />
+    <None Include="Markdown\Syntax\ProgramHead.md" />
+    <None Include="Markdown\Syntax\Statement.md" />
+    <None Include="Markdown\Syntax\UsesFileClause.md" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Empty.cs" />
