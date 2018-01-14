@@ -120,8 +120,11 @@ namespace PasPasPas.Runtime.Common {
                 data[i] = GetBits(i, 0);
         }
 
-        private uint GetBits(int index)
-            => GetBits(index, data[index]);
+        private uint GetBits(int index) {
+            if (index >= data.Length)
+                return 0;
+            return GetBits(index, data[index]);
+        }
 
         /// <summary>
         ///     get the relevant bits (masked)
@@ -132,6 +135,8 @@ namespace PasPasPas.Runtime.Common {
         private uint GetBits(int index, uint value) {
             if (index < data.Length - 1)
                 return value;
+            else if (index >= data.Length)
+                return 0;
 
             var mask = unchecked(0xFFFFFFFF >> (intSize - (bitSize % intSize)));
             return unchecked(value & mask);
@@ -381,7 +386,7 @@ namespace PasPasPas.Runtime.Common {
         public void Add(Bits value) {
             var carry = 0UL;
 
-            for (var j = 0; j < data.Length && j < value.Length; j++) {
+            for (var j = 0; j < data.Length; j++) {
 
                 var left = unchecked((ulong)GetBits(j) & 0xFFFFFFFF);
                 var right = unchecked((ulong)value.GetBits(j) & 0xFFFFFFFF);
@@ -393,11 +398,24 @@ namespace PasPasPas.Runtime.Common {
         }
 
         /// <summary>
-        ///     multiply two binary values
+        ///     multiplication
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
         public Bits Multiply(Bits value) {
+
+            if (IsCleared || value.IsCleared)
+                return new Bits(Length);
+
+            return MultiplyInternal(value);
+        }
+
+        /// <summary>
+        ///     multiply two binary values
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public Bits MultiplyInternal(Bits value) {
             var size = Length + value.Length + 2;
             var a = new Bits(size);
             var s = new Bits(size);

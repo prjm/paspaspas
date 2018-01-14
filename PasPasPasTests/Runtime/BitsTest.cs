@@ -1,4 +1,5 @@
-﻿using PasPasPas.Runtime.Common;
+﻿using System;
+using PasPasPas.Runtime.Common;
 using PasPasPasTests.Common;
 
 namespace PasPasPasTests.Runtime {
@@ -251,6 +252,40 @@ namespace PasPasPasTests.Runtime {
             b2.LeastSignificantSignedByte = -4;
             b3 = b1.Multiply(b2);
             Assert.AreEqual(-12, b3.LeastSignificantSignedByte);
+        }
+
+        private void RunBinaryOpForByte(Func<sbyte, sbyte, int> desired, Func<Bits, Bits, Bits> toBeChecked) {
+            var b1 = new Bits(32);
+            var b2 = new Bits(32);
+
+            for (sbyte i = -128; i < 127; i++) {
+                for (sbyte j = -128; j < 127; j++) {
+                    b1.Clear();
+                    b2.Clear();
+
+                    var result = desired(i, j);
+
+                    if (i < 0)
+                        b1.Invert();
+                    b1.LeastSignificantSignedByte = i;
+
+                    if (j < 0)
+                        b2.Invert();
+                    b2.LeastSignificantSignedByte = j;
+                    var b3 = toBeChecked(b1, b2);
+
+                    Assert.AreEqual(result, b3.LeastSignificantSignedQuadWord);
+                }
+            }
+
+
+        }
+
+        [TestCase]
+        public void TestMultiplyByte() {
+            int desired(sbyte b1, sbyte b2) => b1 * b2;
+            Bits chkd(Bits b1, Bits b2) => b1.Multiply(b2);
+            RunBinaryOpForByte(desired, chkd);
         }
 
         [TestCase]

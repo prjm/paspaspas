@@ -282,7 +282,7 @@ __pycache__/
 build/
 
 # End of https://www.gitignore.io/api/visualstudio
-Documentation/
 *.vsps
 *.etl
 TODO.md
+Documentation/Markdown
