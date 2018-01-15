@@ -25,7 +25,7 @@ namespace PasPasPas.Infrastructure.Files {
         public override bool Equals(object obj) {
             var otherKey = obj as ResolvedPathKey;
 
-            if (ReferenceEquals(otherKey, null))
+            if (otherKey is null)
                 return false;
 
             var basePathEquals = BasePath.Equals(otherKey.BasePath);

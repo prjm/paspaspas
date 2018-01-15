@@ -25,8 +25,9 @@ namespace PasPasPas.Runtime.Common {
         /// </summary>
         /// <param name="bits">bit array</param>
         /// <param name="isNegative">if <c>true</c>the result has to be interpreted as negative number</param>
+        /// <param name="maxSize">max. number of bytes</param>
         /// <returns></returns>
-        private static byte[] CreateByteArray(Bits bits, bool isNegative) {
+        private static byte[] CreateByteArray(Bits bits, bool isNegative, int maxSize) {
             var index = bits.LastIndexOf(!isNegative);
             var numberOfElements = Math.Max(1, (index + 8 * sizeof(byte)) / (8 * sizeof(byte)));
 
@@ -36,8 +37,8 @@ namespace PasPasPas.Runtime.Common {
             if (numberOfElements == 3)
                 numberOfElements = 4;
 
-            if (numberOfElements > 4 && numberOfElements < 8)
-                numberOfElements = 8;
+            if (numberOfElements > 4)
+                numberOfElements = maxSize;
 
             return bits.GetTrimmedByteArray(numberOfElements);
         }
@@ -176,11 +177,11 @@ namespace PasPasPas.Runtime.Common {
         /// <param name="data">array to complement</param>
         /// <param name="isNegative"><c>true</c> if the data displays a negative number</param>
         /// <returns>negated number</returns>
-        public static (bool isNegative, byte[] data) TwoComplement(int byteSize, bool isNegative, byte[] data) {
-            var result = CreateBits(8 * byteSize, isNegative);
+        public static ByteArrayCalculation TwoComplement(int byteSize, bool isNegative, byte[] data) {
+            var result = CreateBits(8 * byteSize + 1, isNegative);
             result.AsByteArray = data;
             result.TwoComplement();
-            return (result.MostSignificantBit, CreateByteArray(result, result.MostSignificantBit));
+            return new ByteArrayCalculation(result.MostSignificantBit, CreateByteArray(result, result.MostSignificantBit, byteSize));
         }
 
         /// <summary>
@@ -188,14 +189,17 @@ namespace PasPasPas.Runtime.Common {
         /// </summary>
         /// <returns>sum of addition and overflow status</returns>
         public static ByteArrayCalculation Add(int byteSize, ByteArrayCalculation augend, ByteArrayCalculation addend) {
-            var result = CreateBits(8 * byteSize, augend.IsNegative);
+            var result = CreateBits(1 + 8 * byteSize, augend.IsNegative);
             result.AsByteArray = augend.Data;
 
-            var otherValues = CreateBits(8 * byteSize, addend.IsNegative);
-            otherValues.AsByteArray = addend.Data;
+            var otherValue = CreateBits(1 + 8 * byteSize, addend.IsNegative);
+            otherValue.AsByteArray = addend.Data;
+            result.Add(otherValue);
 
-            result.Add(otherValues);
-            return new ByteArrayCalculation(result.MostSignificantBit, CreateByteArray(result, result.MostSignificantBit), result[64] != result[63]);
+            if (result[8 * byteSize] != result[result.Length - 2])
+                return new ByteArrayCalculation(overflow: true);
+            else
+                return new ByteArrayCalculation(result.MostSignificantBit, CreateByteArray(result, result.MostSignificantBit, byteSize));
         }
 
         /// <summary>
@@ -210,7 +214,7 @@ namespace PasPasPas.Runtime.Common {
             right.AsByteArray = multiplier.Data;
 
             var result = left.Multiply(right);
-            return new ByteArrayCalculation(result.MostSignificantBit, CreateByteArray(result, result.MostSignificantBit), result[64] != result[63]);
+            return new ByteArrayCalculation(result.MostSignificantBit, CreateByteArray(result, result.MostSignificantBit, byteSize));
         }
     }
 }

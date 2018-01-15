@@ -2,5 +2,7 @@
     <PropertyGroup>
         <PasPasPasTargetFramework>netstandard2.0</PasPasPasTargetFramework>
         <PasPasPasCsLanguageVersion>7.2</PasPasPasCsLanguageVersion>
+        <PasPasPasCopyright>Copyright © 2016, 2017, 2018</PasPasPasCopyright>
+        <PasPasPasCompany>the pas³ project</PasPasPasCompany>
     </PropertyGroup>
 </Project>

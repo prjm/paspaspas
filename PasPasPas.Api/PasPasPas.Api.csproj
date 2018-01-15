@@ -4,6 +4,12 @@
 
   <PropertyGroup>
     <TargetFramework>$(PasPasPasTargetFramework)</TargetFramework>
+    <Description>Common application programming interface (API) layers for the pas³ project.</Description>
+    <VersionPrefix>1.0.0</VersionPrefix>
+    <VersionSuffix>0</VersionSuffix>
+    <Company>$(PasPasPasCompany)</Company>
+    <Copyright>$(PasPasPasCopyright)</Copyright>
+    <Product>PasPasPas.Api</Product>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

@@ -88,7 +88,15 @@ namespace PasPasPas.Runtime.Values {
         }
 
         /// <summary>
-        ///     get the data of this value
+        ///     create a new integer value for a given byte array calculation
+        /// </summary>
+        public ScaledIntegerValue(ByteArrayCalculation result) {
+            IsNegative = result.IsNegative;
+            data = result.Data;
+        }
+
+        /// <summary>
+        ///     get the binary data of this value
         /// </summary>
         public override byte[] Data {
             get {
@@ -141,48 +149,121 @@ namespace PasPasPas.Runtime.Values {
         /// </summary>
         /// <returns></returns>
         public override string ToString() {
-            string value;
+
             switch (TypeId) {
                 case KnownTypeIds.ByteType:
-                    value = data[0].ToString();
-                    break;
+                    return data[0].ToString();
+
                 case KnownTypeIds.ShortInt:
-                    value = ((sbyte)data[0]).ToString();
-                    break;
+                    return ((sbyte)data[0]).ToString();
+
                 case KnownTypeIds.WordType:
-                    value = BitConverter.ToUInt16(data, 0).ToString();
-                    break;
+                    return BitConverter.ToUInt16(data, 0).ToString();
+
                 case KnownTypeIds.SmallInt:
-                    value = BitConverter.ToInt16(data, 0).ToString();
-                    break;
+                    return BitConverter.ToInt16(data, 0).ToString();
+
                 case KnownTypeIds.CardinalType:
-                    value = BitConverter.ToUInt32(data, 0).ToString();
-                    break;
+                    return BitConverter.ToUInt32(data, 0).ToString();
+
                 case KnownTypeIds.IntegerType:
-                    value = BitConverter.ToInt32(data, 0).ToString();
-                    break;
+                    return BitConverter.ToInt32(data, 0).ToString();
+
                 case KnownTypeIds.Uint64Type:
-                    value = BitConverter.ToUInt64(data, 0).ToString();
-                    break;
+                    return BitConverter.ToUInt64(data, 0).ToString();
+
                 case KnownTypeIds.Int64Type:
-                    value = BitConverter.ToInt64(data, 0).ToString();
-                    break;
+                    return BitConverter.ToInt64(data, 0).ToString();
+
                 default:
                     throw new InvalidOperationException();
             }
-            return value;
         }
 
         /// <summary>
         ///     negate this value
         /// </summary>
-        /// <returns></returns>
+        /// <returns>two complement of this value</returns>
         public IValue Negate() {
             if (!IsNegative && data.Length > 7 && data[7] >= 0x80)
                 return new SpecialValue(SpecialConstantKind.IntegerOverflow);
 
-            var (isNegative, bytes) = ByteArrayHelper.TwoComplement(9, IsNegative, data);
-            return new ScaledIntegerValue(isNegative, bytes);
+            var result = ByteArrayHelper.TwoComplement(8, IsNegative, data);
+            return new ScaledIntegerValue(result);
+        }
+
+        private ScaledIntegerValue AsScaledInteger(IValue value) {
+            if (value is SpecialValue specialValue && (specialValue.Kind == SpecialConstantKind.InvalidInteger || specialValue.Kind == SpecialConstantKind.IntegerOverflow)) {
+                return null;
+            }
+
+            var intValue = value as ScaledIntegerValue;
+
+            if (intValue == null)
+                throw new ArgumentException();
+
+            return intValue;
+        }
+
+        /// <summary>
+        ///     add another integer to this integer value
+        /// </summary>
+        /// <param name="numberToAdd">add two integer</param>
+        /// <returns></returns>
+        public IValue Add(IValue numberToAdd) {
+            var addend = AsScaledInteger(numberToAdd);
+
+            if (addend == null)
+                return new SpecialValue(SpecialConstantKind.InvalidInteger);
+
+            var left = new ByteArrayCalculation(IsNegative, Data);
+            var right = new ByteArrayCalculation(addend.IsNegative, addend.Data);
+            var result = ByteArrayHelper.Add(8, left, right);
+
+            if (result.Overflow)
+                return new SpecialValue(SpecialConstantKind.IntegerOverflow);
+
+            return new ScaledIntegerValue(result.IsNegative, result.Data);
+        }
+
+        /// <summary>
+        ///     subtract another integer
+        /// </summary>
+        /// <param name="numberToSubtract">number to subtract</param>
+        /// <returns>subtraction results</returns>
+        public IValue Subtract(IValue numberToSubtract) {
+            var subtrahend = AsScaledInteger(numberToSubtract);
+            if (subtrahend == null)
+                return new SpecialValue(SpecialConstantKind.InvalidInteger);
+
+            var negative = subtrahend.Negate();
+
+            if (!(negative is ScaledIntegerValue))
+                return negative;
+
+            return Add(negative);
+        }
+
+        /// <summary>
+        ///     multiply another integer
+        /// </summary>
+        /// <param name="numberToMultiply">number to multiply with</param>
+        /// <returns>subtraction results</returns>
+        public IValue Multiply(IValue numberToMultiply) {
+            var multiplier = AsScaledInteger(numberToMultiply);
+            if (multiplier == null) {
+                return new SpecialValue(SpecialConstantKind.InvalidInteger);
+            }
+
+            var left = new ByteArrayCalculation(IsNegative, Data);
+            var right = new ByteArrayCalculation(multiplier.IsNegative, multiplier.Data);
+
+            var result = ByteArrayHelper.Multiply(9, left, right);
+
+            if (result.Overflow)
+                return new SpecialValue(SpecialConstantKind.IntegerOverflow);
+
+            return new ScaledIntegerValue(result.IsNegative, result.Data);
         }
 
         /// <summary>
@@ -213,82 +294,19 @@ namespace PasPasPas.Runtime.Values {
         ///     compute a hash code
         /// </summary>
         /// <returns></returns>
-        public override int GetHashCode()
-            => data.GetHashCode();
+        public override int GetHashCode() {
+            unchecked {
+                var result = 17;
 
+                if (IsNegative)
+                    result = result * 31 + 17;
 
-        /// <summary>
-        ///     add another integer
-        /// </summary>
-        /// <param name="numberToAdd">add two integer</param>
-        /// <returns></returns>
-        public IValue Add(IValue numberToAdd) {
-            if (numberToAdd is SpecialValue specialValue && (specialValue.Kind == SpecialConstantKind.InvalidInteger || specialValue.Kind == SpecialConstantKind.IntegerOverflow)) {
-                return new SpecialValue(SpecialConstantKind.InvalidInteger);
+                for (var i = 0; i < data.Length; i++)
+                    result = result * 31 + data[i];
+
+                return result;
             }
-
-            var intValue = numberToAdd as ScaledIntegerValue;
-
-            if (intValue == null)
-                throw new ArgumentException();
-
-            var left = new ByteArrayCalculation(IsNegative, Data, false);
-            var right = new ByteArrayCalculation(intValue.IsNegative, intValue.Data, false);
-            var result = ByteArrayHelper.Add(9, left, right);
-
-            if (result.Overflow)
-                return new SpecialValue(SpecialConstantKind.IntegerOverflow);
-
-            return new ScaledIntegerValue(result.IsNegative, result.Data);
         }
 
-        /// <summary>
-        ///     subtract another integer
-        /// </summary>
-        /// <param name="numberToSubtract">number to subtract</param>
-        /// <returns>subtraction results</returns>
-        public IValue Subtract(IValue numberToSubtract) {
-            if (numberToSubtract is SpecialValue specialValue && (specialValue.Kind == SpecialConstantKind.InvalidInteger || specialValue.Kind == SpecialConstantKind.IntegerOverflow)) {
-                return new SpecialValue(SpecialConstantKind.InvalidInteger);
-            }
-
-            var intValue = numberToSubtract as ScaledIntegerValue;
-
-            if (intValue == null)
-                throw new ArgumentException();
-
-            var negative = intValue.Negate();
-
-            if (!(negative is ScaledIntegerValue))
-                return negative;
-
-            return Add(negative);
-        }
-
-        /// <summary>
-        ///     multiply another integer
-        /// </summary>
-        /// <param name="multiplier">number to multiply with</param>
-        /// <returns>subtraction results</returns>
-        public IValue Multiply(IValue multiplier) {
-            if (multiplier is SpecialValue specialValue && (specialValue.Kind == SpecialConstantKind.InvalidInteger || specialValue.Kind == SpecialConstantKind.IntegerOverflow)) {
-                return new SpecialValue(SpecialConstantKind.InvalidInteger);
-            }
-
-            var intValue = multiplier as ScaledIntegerValue;
-
-            if (intValue == null)
-                throw new ArgumentException();
-
-            var left = new ByteArrayCalculation(IsNegative, Data, false);
-            var right = new ByteArrayCalculation(intValue.IsNegative, intValue.Data, false);
-
-            var result = ByteArrayHelper.Multiply(9, left, right);
-
-            if (result.Overflow)
-                return new SpecialValue(SpecialConstantKind.IntegerOverflow);
-
-            return new ScaledIntegerValue(result.IsNegative, result.Data);
-        }
     }
 }

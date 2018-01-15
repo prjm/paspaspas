@@ -25,7 +25,9 @@ namespace PasPasPas.Runtime.Values {
             get {
                 switch (kind) {
                     case SpecialConstantKind.IntegerOverflow:
+                    case SpecialConstantKind.InvalidInteger:
                         return new byte[0];
+
                     default:
                         throw new ArgumentOutOfRangeException(nameof(kind));
                 }
