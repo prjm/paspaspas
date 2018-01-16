@@ -7,7 +7,7 @@ namespace PasPasPasTests.Runtime {
     public class RuntimeValuesTest : CommonTest {
 
         [TestCase]
-        public void TestIntegers() {
+        public void TestIntegerValues() {
 
             // 1 byte signed
             Assert.AreEqual(new byte[] { 127 }, GetIntegerValue((sbyte)127).Data);
@@ -177,8 +177,13 @@ namespace PasPasPasTests.Runtime {
             }
 
             Assert.AreEqual("50", m(GetIntegerValue(10), GetIntegerValue(5)));
-
-
+            Assert.AreEqual("0", m(GetIntegerValue(10), GetIntegerValue(0)));
+            Assert.AreEqual("0", m(GetIntegerValue(0), GetIntegerValue(10)));
+            Assert.AreEqual("0", m(GetIntegerValue(0), GetIntegerValue(0)));
+            Assert.AreEqual("-1", m(GetIntegerValue(-1), GetIntegerValue(1)));
+            Assert.AreEqual("-1", m(GetIntegerValue(1), GetIntegerValue(-1)));
+            Assert.AreEqual("1", m(GetIntegerValue(-1), GetIntegerValue(-1)));
+            Assert.AreEqual("IO", m(GetIntegerValue(4867420397139656704), GetIntegerValue(4867420397139656704)));
         }
     }
 

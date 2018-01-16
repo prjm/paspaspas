@@ -281,12 +281,14 @@ namespace PasPasPasTests.Runtime {
 
         }
 
-        [TestCase]
+        /*
+        [TestCase(Skip = "Takes some time")]
         public void TestMultiplyByte() {
             int desired(sbyte b1, sbyte b2) => b1 * b2;
             Bits chkd(Bits b1, Bits b2) => b1.Multiply(b2);
             RunBinaryOpForByte(desired, chkd);
         }
+        */
 
         [TestCase]
         public void TestResize() {

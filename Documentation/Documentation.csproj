@@ -42,6 +42,7 @@
     <None Include="Markdown\Syntax\ProgramHead.md" />
     <None Include="Markdown\Syntax\Statement.md" />
     <None Include="Markdown\Syntax\UsesFileClause.md" />
+    <None Include="Markdown\Types\Integer.md" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Empty.cs" />

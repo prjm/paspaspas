@@ -407,6 +407,20 @@ namespace PasPasPas.Runtime.Common {
             if (IsCleared || value.IsCleared)
                 return new Bits(Length);
 
+            if (IsFilled && value.IsFilled)
+                return new Bits(Length) { LeastSignificantBit = true };
+
+            if (IsFilled && !value.IsFilled) {
+                value.TwoComplement();
+                return value;
+            }
+
+            if (!IsFilled && value.IsFilled) {
+                TwoComplement();
+                return this;
+            }
+
+
             return MultiplyInternal(value);
         }
 
@@ -674,17 +688,18 @@ namespace PasPasPas.Runtime.Common {
         /// <returns>hex string</returns>
         public override string ToString() {
             var result = "";
-            /*
+
             for (var i = 0; i < data.Length; i++) {
                 var intNumber = GetBits(i);
                 result = intNumber.ToString("X8") + result;
-            }*/
+            }
+            /*
             for (var i = 0; i < Length; i++) {
                 if (this[i])
                     result = "1" + result;
                 else
                     result = "0" + result;
-            }
+            }*/
             return "0x" + result;
         }
     }

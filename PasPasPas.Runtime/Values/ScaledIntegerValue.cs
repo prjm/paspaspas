@@ -245,7 +245,7 @@ namespace PasPasPas.Runtime.Values {
         }
 
         /// <summary>
-        ///     multiply another integer
+        ///     multiply with another integer value
         /// </summary>
         /// <param name="numberToMultiply">number to multiply with</param>
         /// <returns>subtraction results</returns>
@@ -258,7 +258,7 @@ namespace PasPasPas.Runtime.Values {
             var left = new ByteArrayCalculation(IsNegative, Data);
             var right = new ByteArrayCalculation(multiplier.IsNegative, multiplier.Data);
 
-            var result = ByteArrayHelper.Multiply(9, left, right);
+            var result = ByteArrayHelper.Multiply(8, left, right);
 
             if (result.Overflow)
                 return new SpecialValue(SpecialConstantKind.IntegerOverflow);

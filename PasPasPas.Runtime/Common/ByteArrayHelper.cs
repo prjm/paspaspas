@@ -214,7 +214,11 @@ namespace PasPasPas.Runtime.Common {
             right.AsByteArray = multiplier.Data;
 
             var result = left.Multiply(right);
-            return new ByteArrayCalculation(result.MostSignificantBit, CreateByteArray(result, result.MostSignificantBit, byteSize));
+
+            if (result.LastIndexOf(!result.MostSignificantBit) >= 8 * byteSize)
+                return new ByteArrayCalculation(overflow: true);
+            else
+                return new ByteArrayCalculation(result.MostSignificantBit, CreateByteArray(result, result.MostSignificantBit, byteSize));
         }
     }
 }
