@@ -80,6 +80,8 @@ namespace PasPasPas.Runtime.Values {
                     return "II";
                 case SpecialConstantKind.InvalidReal:
                     return "IR";
+                case SpecialConstantKind.DivisionByZero:
+                    return "DZ";
                 case SpecialConstantKind.TrueValue:
                     return "True";
                 default:

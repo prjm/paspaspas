@@ -99,7 +99,7 @@ namespace PasPasPas.Runtime.Common {
         /// <returns></returns>
         public static Bits CreateTwoComplement(Bits bits) {
             var result = new Bits(bits);
-            bits.TwoComplement();
+            result.TwoComplement();
             return result;
         }
 
@@ -519,31 +519,32 @@ namespace PasPasPas.Runtime.Common {
         /// <param name="divisor"></param>
         /// <returns></returns>
         private Bits DivideInternal(Bits dividend, Bits divisor) {
-            var alignPos = dividend.LastIndexOf(true);
-            var length = dividend.Length;
-            var numberOfShifts = alignPos - divisor.LastIndexOf(true);
-            var result = new Bits(length);
+            var numberOfShifts = -1;
+            var result = new Bits(divisor.Length);
 
-            if (numberOfShifts < 0)
-                return result;
+            var d = new Bits(divisor);
+            d.Subtract(dividend);
+            while (d.MostSignificantBit || d.IsCleared) {
+                divisor.ArithmeticShiftLeft(1);
+                numberOfShifts++;
+                d.Assign(divisor);
+                d.Subtract(dividend);
+            }
+            divisor.ArithmeticShiftRight(1);
 
-            divisor.ArithmeticShiftLeft(numberOfShifts);
-
-            while (!dividend.IsCleared) {
+            while (numberOfShifts >= 0) {
                 var t = new Bits(dividend);
                 t.Subtract(divisor);
 
                 if (!t.MostSignificantBit) {
-                    result.LeastSignificantBit = true;
+                    result[numberOfShifts] = true;
                     dividend.Assign(t);
                 }
 
-                dividend.ArithmeticShiftLeft(1);
-                result.ArithmeticShiftLeft(1);
+                divisor.ArithmeticShiftRight(1);
+                numberOfShifts--;
             }
 
-            if (numberOfShifts > 0)
-                result.ArithmeticShiftRight(numberOfShifts - 1);
             return result;
         }
 
@@ -554,6 +555,10 @@ namespace PasPasPas.Runtime.Common {
         }
 
         private void ArithmeticShiftLeft(int numberOfBits) {
+
+            if (numberOfBits <= 0)
+                return;
+
             if (numberOfBits >= Length) {
                 Clear();
                 return;

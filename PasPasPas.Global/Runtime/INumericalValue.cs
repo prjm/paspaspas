@@ -37,5 +37,12 @@
         /// <param name="multiplier">number to multiply with</param>
         /// <returns>result</returns>
         IValue Multiply(IValue multiplier);
+
+        /// <summary>
+        ///     divide this number through another number
+        /// </summary>
+        /// <param name="divisor">number to divide through</param>
+        /// <returns>division result</returns>
+        IValue Divide(IValue divisor);
     }
 }

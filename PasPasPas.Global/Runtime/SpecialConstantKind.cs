@@ -33,6 +33,11 @@
         /// <summary>
         ///     invalid read literal
         /// </summary>
-        InvalidReal = 5
+        InvalidReal = 5,
+
+        /// <summary>
+        ///     division by zero
+        /// </summary>
+        DivisionByZero = 6
     }
 }

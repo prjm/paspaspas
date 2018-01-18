@@ -267,6 +267,32 @@ namespace PasPasPas.Runtime.Values {
         }
 
         /// <summary>
+        ///     divide this number by another number
+        /// </summary>
+        /// <param name="numberToDivide"></param>
+        /// <returns></returns>
+        public IValue Divide(IValue numberToDivide) {
+            var divisor = AsScaledInteger(numberToDivide);
+            if (divisor == null) {
+                return new SpecialValue(SpecialConstantKind.InvalidInteger);
+            }
+
+            if (divisor.AsSignedLong == 0) {
+                return new SpecialValue(SpecialConstantKind.DivisionByZero);
+            }
+
+            var left = new ByteArrayCalculation(IsNegative, Data);
+            var right = new ByteArrayCalculation(divisor.IsNegative, divisor.Data);
+
+            var result = ByteArrayHelper.Divide(8, left, right);
+
+            if (result.Overflow)
+                return new SpecialValue(SpecialConstantKind.IntegerOverflow);
+
+            return new ScaledIntegerValue(result.IsNegative, result.Data);
+        }
+
+        /// <summary>
         ///     check for equality
         /// </summary>
         /// <param name="obj">other object to compare</param>

@@ -220,6 +220,28 @@ namespace PasPasPas.Runtime.Common {
             else
                 return new ByteArrayCalculation(result.MostSignificantBit, CreateByteArray(result, result.MostSignificantBit, byteSize));
         }
+
+        /// <summary>
+        ///     dive two byte arrays arithmetically
+        /// </summary>
+        /// <param name="numberOfBytes">number of bytes used</param>
+        /// <param name="dividend">dividend</param>
+        /// <param name="divisor">divisor</param>
+        /// <returns>division result</returns>
+        public static ByteArrayCalculation Divide(int numberOfBytes, ByteArrayCalculation dividend, ByteArrayCalculation divisor) {
+            var left = CreateBits(8 * numberOfBytes, dividend.IsNegative);
+            left.AsByteArray = dividend.Data;
+
+            var right = CreateBits(8 * numberOfBytes, divisor.IsNegative);
+            right.AsByteArray = divisor.Data;
+
+            var result = left.Divide(right);
+
+            //if (result.LastIndexOf(!result.MostSignificantBit) >= 8 * numberOfBytes)
+            //    return new ByteArrayCalculation(overflow: true);
+            //else
+            return new ByteArrayCalculation(result.MostSignificantBit, CreateByteArray(result, result.MostSignificantBit, numberOfBytes));
+        }
     }
 }
 
