@@ -39,10 +39,17 @@
         IValue Multiply(IValue multiplier);
 
         /// <summary>
-        ///     divide this number through another number
+        ///     divide this number by another number
         /// </summary>
         /// <param name="divisor">number to divide through</param>
         /// <returns>division result</returns>
         IValue Divide(IValue divisor);
+
+        /// <summary>
+        ///     divide this number by another number and compute the remainde
+        /// </summary>
+        /// <param name="divisor"></param>
+        /// <returns>remainder of division</returns>
+        IValue Modulo(IValue divisor);
     }
 }

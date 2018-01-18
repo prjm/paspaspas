@@ -222,7 +222,7 @@ namespace PasPasPas.Runtime.Common {
         }
 
         /// <summary>
-        ///     dive two byte arrays arithmetically
+        ///     divide two byte arrays arithmetically
         /// </summary>
         /// <param name="numberOfBytes">number of bytes used</param>
         /// <param name="dividend">dividend</param>
@@ -236,10 +236,24 @@ namespace PasPasPas.Runtime.Common {
             right.AsByteArray = divisor.Data;
 
             var result = left.Divide(right);
+            return new ByteArrayCalculation(result.MostSignificantBit, CreateByteArray(result, result.MostSignificantBit, numberOfBytes));
+        }
 
-            //if (result.LastIndexOf(!result.MostSignificantBit) >= 8 * numberOfBytes)
-            //    return new ByteArrayCalculation(overflow: true);
-            //else
+        /// <summary>
+        ///     divide two byte arrays arithmetically and get the remainder
+        /// </summary>
+        /// <param name="numberOfBytes">number of bytes used</param>
+        /// <param name="dividend">dividend</param>
+        /// <param name="divisor">divisor</param>
+        /// <returns>division result</returns>
+        public static ByteArrayCalculation Modulo(int numberOfBytes, ByteArrayCalculation dividend, ByteArrayCalculation divisor) {
+            var left = CreateBits(8 * numberOfBytes, dividend.IsNegative);
+            left.AsByteArray = dividend.Data;
+
+            var right = CreateBits(8 * numberOfBytes, divisor.IsNegative);
+            right.AsByteArray = divisor.Data;
+
+            var result = left.Modulo(right);
             return new ByteArrayCalculation(result.MostSignificantBit, CreateByteArray(result, result.MostSignificantBit, numberOfBytes));
         }
     }

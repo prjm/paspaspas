@@ -142,6 +142,37 @@ namespace PasPasPasTests.Runtime {
         }
 
         [TestCase]
+        public void ModTest() {
+            var b1 = new Bits(8);
+            var b2 = new Bits(8);
+            b1.LeastSignificantByte = 5;
+            b2.LeastSignificantByte = 3;
+            var b3 = b1.Modulo(b2);
+            Assert.AreEqual(2, b3.LeastSignificantByte);
+
+            b1 = new Bits(8);
+            b2 = new Bits(8);
+            b1.LeastSignificantByte = 5;
+            b2.LeastSignificantByte = 5;
+            b3 = b1.Modulo(b2);
+            Assert.AreEqual(0, b3.LeastSignificantByte);
+
+            b1 = new Bits(8);
+            b2 = new Bits(8);
+            b1.LeastSignificantSignedByte = -10;
+            b2.LeastSignificantByte = 1;
+            b3 = b1.Modulo(b2);
+            Assert.AreEqual(0, b3.LeastSignificantByte);
+
+            b1 = new Bits(8);
+            b2 = new Bits(8);
+            b1.LeastSignificantSignedByte = -10;
+            b2.LeastSignificantByte = 3;
+            b3 = b1.Modulo(b2);
+            Assert.AreEqual(-1, b3.LeastSignificantSignedByte);
+        }
+
+        [TestCase]
         public void AddTest() {
             var b1 = new Bits(8);
             var b2 = new Bits(8);

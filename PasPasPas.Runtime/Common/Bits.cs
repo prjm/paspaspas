@@ -165,6 +165,7 @@ namespace PasPasPas.Runtime.Common {
             }
         }
 
+
         /// <summary>
         ///     access the least significant signed byte
         /// </summary>
@@ -473,7 +474,10 @@ namespace PasPasPas.Runtime.Common {
         /// <param name="givenDivisor">divisor</param>
         /// <returns>integer division result</returns>
         /// <remarks>if divisor or dividend is zero, zero is returned</remarks>
-        public Bits Divide(Bits givenDivisor) {
+        public Bits Divide(Bits givenDivisor)
+            => DivideOrModulo(givenDivisor, false);
+
+        private Bits DivideOrModulo(Bits givenDivisor, bool modulo) {
             var negate = false;
             var length = Length + givenDivisor.Length;
             Bits dividend;
@@ -498,13 +502,13 @@ namespace PasPasPas.Runtime.Common {
                 divisor = new Bits(givenDivisor);
             }
 
-            if (dividend.IsCleared || givenDivisor.IsCleared)
+            if (dividend.IsCleared || divisor.IsCleared)
                 return new Bits(length);
 
             dividend.Length = length;
             divisor.Length = length;
 
-            var result = DivideInternal(dividend, divisor);
+            var result = DivideOrModuloInternal(dividend, divisor, modulo);
 
             if (negate)
                 result.TwoComplement();
@@ -512,13 +516,24 @@ namespace PasPasPas.Runtime.Common {
             return result;
         }
 
+
         /// <summary>
-        ///     division of two
+        ///     perform a binary modulo operation
+        /// </summary>
+        /// <param name="givenDivisor">divisor</param>
+        /// <returns>remainder</returns>
+        /// <remarks>if divisor or dividend is zero, zero is returned</remarks>
+        public Bits Modulo(Bits givenDivisor)
+            => DivideOrModulo(givenDivisor, true);
+
+        /// <summary>
+        ///     division / module of two numbers
         /// </summary>
         /// <param name="dividend"></param>
         /// <param name="divisor"></param>
+        /// <param name="modulo"></param>
         /// <returns></returns>
-        private Bits DivideInternal(Bits dividend, Bits divisor) {
+        private Bits DivideOrModuloInternal(Bits dividend, Bits divisor, bool modulo) {
             var numberOfShifts = -1;
             var result = new Bits(divisor.Length);
 
@@ -545,7 +560,10 @@ namespace PasPasPas.Runtime.Common {
                 numberOfShifts--;
             }
 
-            return result;
+            if (modulo)
+                return dividend;
+            else
+                return result;
         }
 
         private void Subtract(Bits subtrahend) {

@@ -201,6 +201,19 @@ namespace PasPasPasTests.Runtime {
             Assert.AreEqual("-10", d(GetIntegerValue(-30), GetIntegerValue(3)));
             Assert.AreEqual("10", d(GetIntegerValue(-30), GetIntegerValue(-3)));
         }
+
+
+        [TestCase]
+        public void TestIntegerModulo() {
+            string m(IValue v1, IValue v2) {
+                var vv1 = (v1 as INumericalValue).Modulo(v2);
+                return vv1.ToString();
+            }
+
+            Assert.AreEqual("1", m(GetIntegerValue(5), GetIntegerValue(4)));
+
+        }
+
     }
 
 }
