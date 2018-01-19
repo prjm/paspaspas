@@ -200,8 +200,8 @@ namespace PasPasPasTests.Runtime {
             Assert.AreEqual("-10", d(GetIntegerValue(30), GetIntegerValue(-3)));
             Assert.AreEqual("-10", d(GetIntegerValue(-30), GetIntegerValue(3)));
             Assert.AreEqual("10", d(GetIntegerValue(-30), GetIntegerValue(-3)));
+            Assert.AreEqual("9223372036854775808", d(GetIntegerValue(-9223372036854775808), GetIntegerValue(-1)));
         }
-
 
         [TestCase]
         public void TestIntegerModulo() {
@@ -211,7 +211,42 @@ namespace PasPasPasTests.Runtime {
             }
 
             Assert.AreEqual("1", m(GetIntegerValue(5), GetIntegerValue(4)));
+            Assert.AreEqual("2", m(GetIntegerValue(32), GetIntegerValue(3)));
+            Assert.AreEqual("DZ", m(GetIntegerValue(30), GetIntegerValue(0)));
+            Assert.AreEqual("0", m(GetIntegerValue(0), GetIntegerValue(3)));
+            Assert.AreEqual("1", m(GetIntegerValue(1), GetIntegerValue(3)));
+            Assert.AreEqual("-2", m(GetIntegerValue(32), GetIntegerValue(-3)));
+            Assert.AreEqual("-2", m(GetIntegerValue(-32), GetIntegerValue(3)));
+            Assert.AreEqual("2", m(GetIntegerValue(-32), GetIntegerValue(-3)));
+            Assert.AreEqual("1", m(GetIntegerValue(-9223372036854775808), GetIntegerValue(9223372036854775809)));
+        }
 
+        [TestCase]
+        public void TestIntegerNot() {
+            string m(IValue v, int typeKind) {
+                var vv1 = (v as IIntegerValue).Not();
+                Assert.AreEqual(typeKind, vv1.TypeId);
+                return vv1.ToString();
+            }
+
+            Assert.AreEqual("-128", m(GetIntegerValue(127), KnownTypeIds.ShortInt));
+            Assert.AreEqual("-129", m(GetIntegerValue(128), KnownTypeIds.SmallInt));
+            Assert.AreEqual("128", m(GetIntegerValue(-129), KnownTypeIds.ByteType));
+            Assert.AreEqual("-9223372036854775808", m(GetIntegerValue(9223372036854775807), KnownTypeIds.Int64Type));
+            Assert.AreEqual("9223372036854775807", m(GetIntegerValue(9223372036854775808), KnownTypeIds.Int64Type));
+            Assert.AreEqual("0", m(GetIntegerValue(18446744073709551615), KnownTypeIds.ShortInt));
+        }
+
+        [TestCase]
+        public void TestIntegerAnd() {
+            string a(IValue v1, IValue v2) {
+                var vv1 = (v1 as IIntegerValue).And(v2);
+                return vv1.ToString();
+            }
+
+            Assert.AreEqual("2", a(GetIntegerValue(127), GetIntegerValue(2)));
+            Assert.AreEqual("127", a(GetIntegerValue(127), GetIntegerValue(127)));
+            Assert.AreEqual("0", a(GetIntegerValue(0), GetIntegerValue(18446744073709551615)));
         }
 
     }

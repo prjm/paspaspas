@@ -33,6 +33,7 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Markdown\Index.md" />
     <None Include="Markdown\Syntax\Assignment.md" />
     <None Include="Markdown\Syntax\Block.md" />
     <None Include="Markdown\Syntax\Declarations.md" />
@@ -41,6 +42,7 @@
     <None Include="Markdown\Syntax\Program.md" />
     <None Include="Markdown\Syntax\ProgramHead.md" />
     <None Include="Markdown\Syntax\Statement.md" />
+    <None Include="Markdown\Syntax\SyntaxRules.md" />
     <None Include="Markdown\Syntax\UsesFileClause.md" />
     <None Include="Markdown\Types\Integer.md" />
   </ItemGroup>

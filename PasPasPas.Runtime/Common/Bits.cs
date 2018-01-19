@@ -380,6 +380,16 @@ namespace PasPasPas.Runtime.Common {
             return false;
         }
 
+
+        /// <summary>
+        ///     bitwise and
+        /// </summary>
+        /// <param name="operand"></param>
+        public void And(Bits operand) {
+            for (var i = 0; i < data.Length; i++)
+                data[i] = GetBits(i) & operand.GetBits(i);
+        }
+
         /// <summary>
         ///     add an value to this bit array
         /// </summary>

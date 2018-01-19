@@ -12,7 +12,7 @@ using PasPasPas.Options.Bundles;
 namespace PasPasPas.Parsing.Parser {
 
     /// <summary>
-    ///     standard, recursive descend paser
+    ///     standard, recursive descend parser
     /// </summary>
     public class StandardParser : ParserBase, IParser {
 
@@ -99,7 +99,7 @@ namespace PasPasPas.Parsing.Parser {
             };
 
         #endregion
-        #region Asm symbols
+        #region assembler symbols
 
         private HashSet<string> lockPrefixes =
             new HashSet<string>(StringComparer.OrdinalIgnoreCase) {

@@ -319,6 +319,33 @@ namespace PasPasPas.Runtime.Values {
         }
 
         /// <summary>
+        ///     invert all bits of this integer
+        /// </summary>
+        /// <returns></returns>
+        public IValue Not() {
+            var operand = new ByteArrayCalculation(IsNegative, Data);
+            var result = ByteArrayHelper.Not(8, operand);
+            return new ScaledIntegerValue(result.IsNegative, result.Data);
+        }
+
+        /// <summary>
+        ///     bitwie and
+        /// </summary>
+        /// <param name="valueToAnd"></param>
+        /// <returns></returns>
+        public IValue And(IValue valueToAnd) {
+            var operand = AsScaledInteger(valueToAnd);
+            if (operand == null) {
+                return new SpecialValue(SpecialConstantKind.InvalidInteger);
+            }
+
+            var left = new ByteArrayCalculation(IsNegative, Data);
+            var right = new ByteArrayCalculation(operand.IsNegative, operand.Data);
+            var result = ByteArrayHelper.And(8, left, right);
+            return new ScaledIntegerValue(result.IsNegative, result.Data);
+        }
+
+        /// <summary>
         ///     check for equality
         /// </summary>
         /// <param name="obj">other object to compare</param>
@@ -359,7 +386,5 @@ namespace PasPasPas.Runtime.Values {
                 return result;
             }
         }
-
-
     }
 }

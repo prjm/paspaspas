@@ -256,6 +256,37 @@ namespace PasPasPas.Runtime.Common {
             var result = left.Modulo(right);
             return new ByteArrayCalculation(result.MostSignificantBit, CreateByteArray(result, result.MostSignificantBit, numberOfBytes));
         }
+
+        /// <summary>
+        ///     invert all bits of the given byte array
+        /// </summary>
+        /// <param name="numberOfBytes">number of bytes used</param>
+        /// <param name="operand"></param>
+        /// <returns>inverse bytes</returns>
+        public static ByteArrayCalculation Not(int numberOfBytes, ByteArrayCalculation operand) {
+            var result = CreateBits(8 * numberOfBytes, operand.IsNegative);
+            result.AsByteArray = operand.Data;
+            result.Invert();
+            return new ByteArrayCalculation(result.MostSignificantBit, CreateByteArray(result, result.MostSignificantBit, numberOfBytes));
+        }
+
+        /// <summary>
+        ///     bitwise and
+        /// </summary>
+        /// <param name="numberOfBytes"></param>
+        /// <param name="leftOperand"></param>
+        /// <param name="rightOperand"></param>
+        /// <returns></returns>
+        public static ByteArrayCalculation And(int numberOfBytes, ByteArrayCalculation leftOperand, ByteArrayCalculation rightOperand) {
+            var left = CreateBits(8 * numberOfBytes, leftOperand.IsNegative);
+            left.AsByteArray = leftOperand.Data;
+
+            var right = CreateBits(8 * numberOfBytes, rightOperand.IsNegative);
+            right.AsByteArray = rightOperand.Data;
+
+            left.And(right);
+            return new ByteArrayCalculation(left.MostSignificantBit, CreateByteArray(left, left.MostSignificantBit, numberOfBytes));
+        }
     }
 }
 
