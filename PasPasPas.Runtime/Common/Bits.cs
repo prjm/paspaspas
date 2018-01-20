@@ -384,10 +384,28 @@ namespace PasPasPas.Runtime.Common {
         /// <summary>
         ///     bitwise and
         /// </summary>
-        /// <param name="operand"></param>
+        /// <param name="operand">operand</param>
         public void And(Bits operand) {
             for (var i = 0; i < data.Length; i++)
                 data[i] = GetBits(i) & operand.GetBits(i);
+        }
+
+        /// <summary>
+        ///     bitwise or
+        /// </summary>
+        /// <param name="operand">operand</param>
+        public void Or(Bits operand) {
+            for (var i = 0; i < data.Length; i++)
+                data[i] = GetBits(i) | operand.GetBits(i);
+        }
+
+        /// <summary>
+        ///     bitwise xor
+        /// </summary>
+        /// <param name="operand">operand</param>
+        public void Xor(Bits operand) {
+            for (var i = 0; i < data.Length; i++)
+                data[i] = GetBits(i) ^ operand.GetBits(i);
         }
 
         /// <summary>

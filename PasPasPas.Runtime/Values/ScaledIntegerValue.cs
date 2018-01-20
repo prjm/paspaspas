@@ -329,7 +329,7 @@ namespace PasPasPas.Runtime.Values {
         }
 
         /// <summary>
-        ///     bitwie and
+        ///     bitwise and
         /// </summary>
         /// <param name="valueToAnd"></param>
         /// <returns></returns>
@@ -342,6 +342,40 @@ namespace PasPasPas.Runtime.Values {
             var left = new ByteArrayCalculation(IsNegative, Data);
             var right = new ByteArrayCalculation(operand.IsNegative, operand.Data);
             var result = ByteArrayHelper.And(8, left, right);
+            return new ScaledIntegerValue(result.IsNegative, result.Data);
+        }
+
+        /// <summary>
+        ///     bitwise or
+        /// </summary>
+        /// <param name="valueToOr">operand</param>
+        /// <returns></returns>
+        public IValue Or(IValue valueToOr) {
+            var operand = AsScaledInteger(valueToOr);
+            if (operand == null) {
+                return new SpecialValue(SpecialConstantKind.InvalidInteger);
+            }
+
+            var left = new ByteArrayCalculation(IsNegative, Data);
+            var right = new ByteArrayCalculation(operand.IsNegative, operand.Data);
+            var result = ByteArrayHelper.Or(8, left, right);
+            return new ScaledIntegerValue(result.IsNegative, result.Data);
+        }
+
+        /// <summary>
+        ///     bitwise xor
+        /// </summary>
+        /// <param name="valueToXor">operand</param>
+        /// <returns></returns>
+        public IValue Xor(IValue valueToXor) {
+            var operand = AsScaledInteger(valueToXor);
+            if (operand == null) {
+                return new SpecialValue(SpecialConstantKind.InvalidInteger);
+            }
+
+            var left = new ByteArrayCalculation(IsNegative, Data);
+            var right = new ByteArrayCalculation(operand.IsNegative, operand.Data);
+            var result = ByteArrayHelper.Xor(8, left, right);
             return new ScaledIntegerValue(result.IsNegative, result.Data);
         }
 

@@ -287,6 +287,42 @@ namespace PasPasPas.Runtime.Common {
             left.And(right);
             return new ByteArrayCalculation(left.MostSignificantBit, CreateByteArray(left, left.MostSignificantBit, numberOfBytes));
         }
+
+        /// <summary>
+        ///     bitwise or
+        /// </summary>
+        /// <param name="numberOfBytes"></param>
+        /// <param name="leftOperand"></param>
+        /// <param name="rightOperand"></param>
+        /// <returns></returns>
+        public static ByteArrayCalculation Or(int numberOfBytes, ByteArrayCalculation leftOperand, ByteArrayCalculation rightOperand) {
+            var left = CreateBits(8 * numberOfBytes, leftOperand.IsNegative);
+            left.AsByteArray = leftOperand.Data;
+
+            var right = CreateBits(8 * numberOfBytes, rightOperand.IsNegative);
+            right.AsByteArray = rightOperand.Data;
+
+            left.Or(right);
+            return new ByteArrayCalculation(left.MostSignificantBit, CreateByteArray(left, left.MostSignificantBit, numberOfBytes));
+        }
+
+        /// <summary>
+        ///     bitwise xor
+        /// </summary>
+        /// <param name="numberOfBytes"></param>
+        /// <param name="leftOperand"></param>
+        /// <param name="rightOperand"></param>
+        /// <returns></returns>
+        public static ByteArrayCalculation Xor(int numberOfBytes, ByteArrayCalculation leftOperand, ByteArrayCalculation rightOperand) {
+            var left = CreateBits(8 * numberOfBytes, leftOperand.IsNegative);
+            left.AsByteArray = leftOperand.Data;
+
+            var right = CreateBits(8 * numberOfBytes, rightOperand.IsNegative);
+            right.AsByteArray = rightOperand.Data;
+
+            left.Xor(right);
+            return new ByteArrayCalculation(left.MostSignificantBit, CreateByteArray(left, left.MostSignificantBit, numberOfBytes));
+        }
     }
 }
 

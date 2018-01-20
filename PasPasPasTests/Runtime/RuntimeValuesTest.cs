@@ -247,6 +247,34 @@ namespace PasPasPasTests.Runtime {
             Assert.AreEqual("2", a(GetIntegerValue(127), GetIntegerValue(2)));
             Assert.AreEqual("127", a(GetIntegerValue(127), GetIntegerValue(127)));
             Assert.AreEqual("0", a(GetIntegerValue(0), GetIntegerValue(18446744073709551615)));
+            Assert.AreEqual("0", a(GetIntegerValue(18446744073709551615), GetIntegerValue(0)));
+            Assert.AreEqual("-1", a(GetIntegerValue(18446744073709551615), GetIntegerValue(18446744073709551615)));
+        }
+
+        [TestCase]
+        public void TestIntegerOr() {
+            string o(IValue v1, IValue v2) {
+                var vv1 = (v1 as IIntegerValue).Or(v2);
+                return vv1.ToString();
+            }
+
+            Assert.AreEqual("125", o(GetIntegerValue(124), GetIntegerValue(5)));
+            Assert.AreEqual("0", o(GetIntegerValue(0), GetIntegerValue(0)));
+            Assert.AreEqual("127", o(GetIntegerValue(127), GetIntegerValue(0)));
+            Assert.AreEqual("255", o(GetIntegerValue(240), GetIntegerValue(15)));
+        }
+
+        [TestCase]
+        public void TestIntegerXor() {
+            string x(IValue v1, IValue v2) {
+                var vv1 = (v1 as IIntegerValue).Xor(v2);
+                return vv1.ToString();
+            }
+
+            Assert.AreEqual("0", x(GetIntegerValue(240), GetIntegerValue(240)));
+            Assert.AreEqual("255", x(GetIntegerValue(240), GetIntegerValue(15)));
+            Assert.AreEqual("0", x(GetIntegerValue(0), GetIntegerValue(0)));
+            Assert.AreEqual("-2", x(GetIntegerValue(-127), GetIntegerValue(127)));
         }
 
     }
