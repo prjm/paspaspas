@@ -380,6 +380,45 @@ namespace PasPasPas.Runtime.Values {
         }
 
         /// <summary>
+        ///     shift left
+        /// </summary>
+        /// <param name="numberOfBits">operand</param>
+        /// <returns></returns>
+        public IValue Shl(IValue numberOfBits) {
+            var operand = AsScaledInteger(numberOfBits);
+            if (operand == null) {
+                return new SpecialValue(SpecialConstantKind.InvalidInteger);
+            }
+
+            var left = new ByteArrayCalculation(IsNegative, Data);
+            var right = new ByteArrayCalculation(operand.IsNegative, operand.Data);
+            var typeId = TypeId;
+            var numberOfBytes = (typeId == KnownTypeIds.Int64Type || typeId == KnownTypeIds.Uint64Type) ? 8 : 4;
+            var result = ByteArrayHelper.Shl(numberOfBytes, left, right);
+            return new ScaledIntegerValue(result.IsNegative, result.Data);
+        }
+
+        /// <summary>
+        ///     shift right
+        /// </summary>
+        /// <param name="numberOfBits">operand</param>
+        /// <returns></returns>
+        public IValue Shr(IValue numberOfBits) {
+            var operand = AsScaledInteger(numberOfBits);
+            if (operand == null) {
+                return new SpecialValue(SpecialConstantKind.InvalidInteger);
+            }
+
+            var left = new ByteArrayCalculation(IsNegative, Data);
+            var right = new ByteArrayCalculation(operand.IsNegative, operand.Data);
+            var typeId = TypeId;
+            var numberOfBytes = (typeId == KnownTypeIds.Int64Type || typeId == KnownTypeIds.Uint64Type) ? 8 : 4;
+            var result = ByteArrayHelper.Shr(numberOfBytes, left, right);
+            return new ScaledIntegerValue(result.IsNegative, result.Data);
+        }
+
+
+        /// <summary>
         ///     check for equality
         /// </summary>
         /// <param name="obj">other object to compare</param>
@@ -420,5 +459,6 @@ namespace PasPasPas.Runtime.Values {
                 return result;
             }
         }
+
     }
 }

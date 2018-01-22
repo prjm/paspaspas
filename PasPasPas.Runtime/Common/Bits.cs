@@ -619,6 +619,32 @@ namespace PasPasPas.Runtime.Common {
         }
 
         /// <summary>
+        ///     shift left a number of bits
+        /// </summary>
+        /// <param name="numberOfBits"></param>
+        public void ShiftLeft(int numberOfBits) {
+            for (var position = Length - 1; position >= 0; position--) {
+                if (position - numberOfBits >= 0)
+                    this[position] = this[position - numberOfBits];
+                else
+                    this[position] = false;
+            }
+        }
+
+        /// <summary>
+        ///     shift right a number of bits
+        /// </summary>
+        /// <param name="numberOfBits"></param>
+        public void ShiftRight(int numberOfBits) {
+            for (var position = 0; position < Length; position++) {
+                if (position + numberOfBits < Length)
+                    this[position] = this[position + numberOfBits];
+                else
+                    this[position] = false;
+            }
+        }
+
+        /// <summary>
         ///     shift arithmetically right
         /// </summary>
         /// <param name="numberOfBits"></param>

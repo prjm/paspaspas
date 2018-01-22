@@ -39,5 +39,19 @@
         /// <param name="valueToXor">operand</param>
         /// <returns>result of bitwise xor</returns>
         IValue Xor(IValue valueToXor);
+
+        /// <summary>
+        ///     bitwise shift left
+        /// </summary>
+        /// <param name="valueToShl">number of bits</param>
+        /// <returns></returns>
+        IValue Shl(IValue valueToShl);
+
+        /// <summary>
+        ///     bitwise shift right
+        /// </summary>
+        /// <param name="valueToShr">number of bits</param>
+        /// <returns></returns>
+        IValue Shr(IValue valueToShr);
     }
 }

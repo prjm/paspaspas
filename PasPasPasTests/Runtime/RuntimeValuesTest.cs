@@ -277,6 +277,29 @@ namespace PasPasPasTests.Runtime {
             Assert.AreEqual("-2", x(GetIntegerValue(-127), GetIntegerValue(127)));
         }
 
+        [TestCase]
+        public void TestIntegerShl() {
+            string sl(IValue v1, IValue v2) {
+                var vv1 = (v1 as IIntegerValue).Shl(v2);
+                return vv1.ToString();
+            }
+
+            Assert.AreEqual("-2", sl(GetIntegerValue(2147483647), GetIntegerValue(1)));
+            Assert.AreEqual("8", sl(GetIntegerValue(4), GetIntegerValue(-255)));
+            Assert.AreEqual("8", sl(GetIntegerValue(4), GetIntegerValue(1)));
+        }
+
+        [TestCase]
+        public void TestIntegerShr() {
+            string sr(IValue v1, IValue v2) {
+                var vv1 = (v1 as IIntegerValue).Shr(v2);
+                return vv1.ToString();
+            }
+
+            Assert.AreEqual("1", sr(GetIntegerValue(2), GetIntegerValue(1)));
+            Assert.AreEqual("2147483647", sr(GetIntegerValue(-1), GetIntegerValue(1)));
+        }
+
     }
 
 }

@@ -323,6 +323,55 @@ namespace PasPasPas.Runtime.Common {
             left.Xor(right);
             return new ByteArrayCalculation(left.MostSignificantBit, CreateByteArray(left, left.MostSignificantBit, numberOfBytes));
         }
+
+        /// <summary>
+        ///     shift left
+        /// </summary>
+        /// <param name="numberOfBytes"></param>
+        /// <param name="leftOperand"></param>
+        /// <param name="rightOperand"></param>
+        /// <returns></returns>
+        public static ByteArrayCalculation Shl(int numberOfBytes, ByteArrayCalculation leftOperand, ByteArrayCalculation rightOperand) {
+            var left = CreateBits(8 * numberOfBytes, leftOperand.IsNegative);
+            left.AsByteArray = leftOperand.Data;
+
+            var right = CreateBits(8 * numberOfBytes, rightOperand.IsNegative);
+            right.AsByteArray = rightOperand.Data;
+
+            int numberOfBits;
+
+            if (numberOfBytes == 4)
+                numberOfBits = right.LeastSignificantSignedByte & 63;
+            else
+                numberOfBits = right.LeastSignificantSignedByte & 127;
+
+            left.ShiftLeft(numberOfBits);
+            return new ByteArrayCalculation(left.MostSignificantBit, CreateByteArray(left, left.MostSignificantBit, numberOfBytes));
+        }
+
+        /// <summary>
+        ///     shift left
+        /// </summary>
+        /// <param name="numberOfBytes"></param>
+        /// <param name="leftOperand"></param>
+        /// <param name="rightOperand"></param>
+        /// <returns></returns>
+        public static ByteArrayCalculation Shr(int numberOfBytes, ByteArrayCalculation leftOperand, ByteArrayCalculation rightOperand) {
+            var left = CreateBits(8 * numberOfBytes, leftOperand.IsNegative);
+            left.AsByteArray = leftOperand.Data;
+
+            var right = CreateBits(8 * numberOfBytes, rightOperand.IsNegative);
+            right.AsByteArray = rightOperand.Data;
+
+            int numberOfBits;
+
+            if (numberOfBytes == 4)
+                numberOfBits = right.LeastSignificantSignedByte & 63;
+            else
+                numberOfBits = right.LeastSignificantSignedByte & 127;
+
+            left.ShiftRight(numberOfBits);
+            return new ByteArrayCalculation(left.MostSignificantBit, CreateByteArray(left, left.MostSignificantBit, numberOfBytes));
+        }
     }
 }
-
