@@ -6,6 +6,11 @@
     public static class DefinedOperators {
 
         /// <summary>
+        ///     undefined operator
+        /// </summary>
+        public const int Undefined = -1;
+
+        /// <summary>
         ///     not operator
         /// </summary>
         public const int NotOperation = 10;

@@ -189,7 +189,7 @@ namespace PasPasPasTests.Runtime {
         [TestCase]
         public void TestIntegerDivision() {
             string d(IValue v1, IValue v2) {
-                var vv1 = (v1 as INumericalValue).Divide(v2);
+                var vv1 = (v1 as IIntegerValue).Divide(v2);
                 return vv1.ToString();
             }
 
@@ -206,7 +206,7 @@ namespace PasPasPasTests.Runtime {
         [TestCase]
         public void TestIntegerModulo() {
             string m(IValue v1, IValue v2) {
-                var vv1 = (v1 as INumericalValue).Modulo(v2);
+                var vv1 = (v1 as IIntegerValue).Modulo(v2);
                 return vv1.ToString();
             }
 
@@ -298,6 +298,7 @@ namespace PasPasPasTests.Runtime {
 
             Assert.AreEqual("1", sr(GetIntegerValue(2), GetIntegerValue(1)));
             Assert.AreEqual("2147483647", sr(GetIntegerValue(-1), GetIntegerValue(1)));
+            Assert.AreEqual("1", sr(GetIntegerValue(1), GetIntegerValue(32)));
         }
 
     }

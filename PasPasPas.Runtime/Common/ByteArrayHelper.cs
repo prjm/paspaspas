@@ -341,9 +341,9 @@ namespace PasPasPas.Runtime.Common {
             int numberOfBits;
 
             if (numberOfBytes == 4)
-                numberOfBits = right.LeastSignificantSignedByte & 63;
+                numberOfBits = right.LeastSignificantSignedByte & 31;
             else
-                numberOfBits = right.LeastSignificantSignedByte & 127;
+                numberOfBits = right.LeastSignificantSignedByte & 63;
 
             left.ShiftLeft(numberOfBits);
             return new ByteArrayCalculation(left.MostSignificantBit, CreateByteArray(left, left.MostSignificantBit, numberOfBytes));
@@ -366,9 +366,9 @@ namespace PasPasPas.Runtime.Common {
             int numberOfBits;
 
             if (numberOfBytes == 4)
-                numberOfBits = right.LeastSignificantSignedByte & 63;
+                numberOfBits = right.LeastSignificantSignedByte & 31;
             else
-                numberOfBits = right.LeastSignificantSignedByte & 127;
+                numberOfBits = right.LeastSignificantSignedByte & 63;
 
             left.ShiftRight(numberOfBits);
             return new ByteArrayCalculation(left.MostSignificantBit, CreateByteArray(left, left.MostSignificantBit, numberOfBytes));

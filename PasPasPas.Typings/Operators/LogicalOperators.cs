@@ -1,5 +1,6 @@
 ﻿using System;
 using PasPasPas.Global.Constants;
+using PasPasPas.Global.Runtime;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Typings.Common;
@@ -104,6 +105,10 @@ namespace PasPasPas.Typings.Operators {
             registry.RegisterOperator(new LogicalOperators(DefinedOperators.OrOperation));
             registry.RegisterOperator(new LogicalOperators(DefinedOperators.ShlOperation));
             registry.RegisterOperator(new LogicalOperators(DefinedOperators.ShrOperation));
+        }
+
+        public override IValue ComputeValue(IValue[] inputs) {
+            throw new NotImplementedException();
         }
     }
 }

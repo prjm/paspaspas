@@ -107,7 +107,8 @@ namespace PasPasPas.Typings.Common {
         /// <param name="newOperator">operator to register</param>
         public void RegisterOperator(IOperator newOperator) {
             operators.Add(newOperator.Kind, newOperator);
-            newOperator.TypeRegistry = this;
+            if (newOperator is OperatorBase baseOperator)
+                baseOperator.TypeRegistry = this;
         }
 
         /// <summary>

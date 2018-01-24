@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using PasPasPas.Global.Constants;
+using PasPasPas.Global.Runtime;
 using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Typings.Common;
 
@@ -82,6 +83,10 @@ namespace PasPasPas.Typings.Operators {
             registry.RegisterOperator(new RelationalOperators(DefinedOperators.GreaterThen));
             registry.RegisterOperator(new RelationalOperators(DefinedOperators.LessThenOrEqual));
             registry.RegisterOperator(new RelationalOperators(DefinedOperators.GreaterThenEqual));
+        }
+
+        public override IValue ComputeValue(IValue[] inputs) {
+            throw new NotImplementedException();
         }
     }
 }

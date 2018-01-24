@@ -1,18 +1,18 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Abstract;
+﻿using PasPasPas.Global.Runtime;
 using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Typings.Common;
 
 namespace PasPasPas.Typings.Operators {
 
     /// <summary>
-    ///     base clas for operators
+    ///     base class for operators
     /// </summary>
     public abstract class OperatorBase : IOperator {
 
         private int kind;
 
         /// <summary>
-        ///     create a new opertor
+        ///     create a new operator definition
         /// </summary>
         /// <param name="withKind">operation kind</param>
         public OperatorBase(int withKind)
@@ -51,5 +51,12 @@ namespace PasPasPas.Typings.Operators {
         /// <returns>output type id</returns>
         /// <param name="currentValue">current values of the operands (if constant)</param>
         public abstract int GetOutputTypeForOperation(Signature input, object[] currentValue);
+
+        /// <summary>
+        ///     compute the operator value
+        /// </summary>
+        /// <param name="inputs">constant inputs</param>
+        /// <returns>operator valueB</returns>
+        public abstract IValue ComputeValue(IValue[] inputs);
     }
 }

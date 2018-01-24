@@ -1,4 +1,4 @@
-﻿using Xunit;
+﻿using PasPasPasTests.Common;
 
 namespace PasPasPasTests.Types {
 
@@ -7,7 +7,7 @@ namespace PasPasPasTests.Types {
     /// </summary>
     public class ConstantPropagationTest : TypeTest {
 
-        [Fact]
+        [TestCase]
         public void TestIntegerConstants() {
             AssertExprValue("0", GetIntegerValue(0));
             AssertExprValue("-128", GetIntegerValue((sbyte)-128));
@@ -18,6 +18,11 @@ namespace PasPasPasTests.Types {
 
             AssertExprValue("256", GetIntegerValue((short)256));
             AssertExprValue("-129", GetIntegerValue((short)-129));
+        }
+
+        [TestCase]
+        public void TestIntegerOperations() {
+            AssertExprValue("4 + 5", GetIntegerValue(9));
         }
 
     }

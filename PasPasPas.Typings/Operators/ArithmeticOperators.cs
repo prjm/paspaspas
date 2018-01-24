@@ -1,5 +1,6 @@
 ﻿using System;
 using PasPasPas.Global.Constants;
+using PasPasPas.Global.Runtime;
 using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Parsing.Tokenizer.LiteralValues;
@@ -13,7 +14,7 @@ namespace PasPasPas.Typings.Operators {
     public class ArithmeticOperators : OperatorBase {
 
         /// <summary>
-        ///     litera unwrapper
+        ///     unwrapper for literals
         /// </summary>
         private readonly ILiteralUnwrapper literalUnwrapper;
 
@@ -21,7 +22,7 @@ namespace PasPasPas.Typings.Operators {
         ///     create a new arithmetic operator
         /// </summary>
         /// <param name="withKind">operator kind</param>
-        /// <param name="unwrapper">unwrapper for litersl</param>
+        /// <param name="unwrapper">unwrapper for literal</param>
         public ArithmeticOperators(ILiteralUnwrapper unwrapper, int withKind) : base(withKind)
             => literalUnwrapper = unwrapper;
 
@@ -139,7 +140,7 @@ namespace PasPasPas.Typings.Operators {
         /// <summary>
         ///     register known operators
         /// </summary>
-        /// <param name="unwrapper">literal unwrapper</param>
+        /// <param name="unwrapper">unwrapper for literals</param>
         /// <param name="typeRegistry">type registry</param>
         public static void RegisterOperators(ILiteralUnwrapper unwrapper, ITypeRegistry typeRegistry) {
             typeRegistry.RegisterOperator(new ArithmeticOperators(unwrapper, DefinedOperators.UnaryMinus));
@@ -150,6 +151,63 @@ namespace PasPasPas.Typings.Operators {
             typeRegistry.RegisterOperator(new ArithmeticOperators(unwrapper, DefinedOperators.DivOperation));
             typeRegistry.RegisterOperator(new ArithmeticOperators(unwrapper, DefinedOperators.ModOperation));
             typeRegistry.RegisterOperator(new ArithmeticOperators(unwrapper, DefinedOperators.SlashOperation));
+        }
+
+        /// <summary>
+        ///     computer operator value
+        /// </summary>
+        /// <param name="inputs"></param>
+        /// <returns></returns>
+        public override IValue ComputeValue(IValue[] inputs) {
+            if (inputs.Length == 1)
+                return ComputeUnaryOperator(inputs[0]);
+
+            if (inputs.Length == 2)
+                return ComputeBinaryOperator(inputs[0], inputs[1]);
+
+            return null;
+        }
+
+        private IValue ComputeUnaryOperator(IValue value) {
+            var number = value as INumericalValue;
+
+            if (Kind == DefinedOperators.UnaryPlus)
+                return number;
+
+            if (Kind == DefinedOperators.UnaryMinus)
+                return number.Negate();
+
+            return null;
+        }
+
+        private IValue ComputeBinaryOperator(IValue value1, IValue value2) {
+
+            if (value1 is INumericalValue left && value2 as INumericalValue != null) {
+
+                if (Kind == DefinedOperators.PlusOperation)
+                    return left.Add(value2 as INumericalValue);
+
+                if (Kind == DefinedOperators.MinusOperation)
+                    return left.Subtract(value2 as INumericalValue);
+
+                if (Kind == DefinedOperators.TimesOperation)
+                    return left.Multiply(value2 as INumericalValue);
+
+            }
+
+            if (value1 is IIntegerValue leftInt && value2 is IIntegerValue rightInt) {
+
+                if (Kind == DefinedOperators.DivOperation)
+                    return leftInt.Divide(rightInt);
+
+                if (Kind == DefinedOperators.ModOperation)
+                    return leftInt.Modulo(rightInt);
+
+            }
+
+
+
+            return null;
         }
     }
 }

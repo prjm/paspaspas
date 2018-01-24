@@ -1,25 +1,26 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Abstract;
+﻿using PasPasPas.Global.Runtime;
 
 namespace PasPasPas.Parsing.SyntaxTree.Types {
 
     /// <summary>
-    ///     base interface for an operation
+    ///     base interface for an operator
     /// </summary>
     public interface IOperator {
+
         /// <summary>
-        ///     operation kind
+        ///     operator kind
         /// </summary>
         int Kind { get; }
 
         /// <summary>
-        ///     operation name
+        ///     operator name
         /// </summary>
         string Name { get; }
 
         /// <summary>
         ///     used type registry
         /// </summary>
-        ITypeRegistry TypeRegistry { get; set; }
+        ITypeRegistry TypeRegistry { get; }
 
         /// <summary>
         ///     compute a type signature
@@ -28,5 +29,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Types {
         /// <param name="currentValues">current value</param>
         /// <returns></returns>
         int GetOutputTypeForOperation(Signature input, object[] currentValues);
+
+        /// <summary>
+        ///     compute the value of this operator
+        /// </summary>
+        /// <param name="inputs"></param>
+        /// <returns></returns>
+        IValue ComputeValue(IValue[] inputs);
+
     }
 }

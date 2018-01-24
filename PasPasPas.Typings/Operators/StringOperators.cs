@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using PasPasPas.Global.Constants;
+using PasPasPas.Global.Runtime;
 using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Typings.Common;
 
@@ -78,5 +79,9 @@ namespace PasPasPas.Typings.Operators {
         /// <param name="typeRegistry">type registry</param>
         public static void RegisterOperators(ITypeRegistry typeRegistry)
             => typeRegistry.RegisterOperator(new StringOperators(DefinedOperators.ConcatOperation));
+
+        public override IValue ComputeValue(IValue[] inputs) {
+            throw new NotImplementedException();
+        }
     }
 }

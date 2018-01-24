@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using PasPasPas.Global.Constants;
 using PasPasPas.Global.Runtime;
 using PasPasPas.Infrastructure.Utils;
@@ -108,105 +109,117 @@ namespace PasPasPas.Typings.Common {
         /// <param name="element"></param>
         public void EndVisit(BinaryOperator element) {
 
-            ITypeDefinition leftType;
-            ITypeDefinition rightType;
-            var operatorId = -1;
+            var leftType = GetTypeDefinition(element.LeftOperand);
+            var rightType = GetTypeDefinition(element.RightOperand);
 
-            if (element.LeftOperand != null && element.LeftOperand.TypeInfo != null)
-                leftType = element.LeftOperand.TypeInfo;
-            else
-                leftType = GetErrorType(element.LeftOperand);
-
-            if (element.RightOperand != null && element.RightOperand.TypeInfo != null)
-                rightType = element.RightOperand.TypeInfo;
-            else
-                rightType = GetErrorType(element.RightOperand);
-
-            if (element.Kind == ExpressionKind.And)
-                operatorId = DefinedOperators.AndOperation;
-            else if (element.Kind == ExpressionKind.Or)
-                operatorId = DefinedOperators.OrOperation;
-            else if (element.Kind == ExpressionKind.Xor)
-                operatorId = DefinedOperators.XorOperation;
-            else if (element.Kind == ExpressionKind.Minus)
-                operatorId = DefinedOperators.MinusOperation;
-            else if (element.Kind == ExpressionKind.Times)
-                operatorId = DefinedOperators.TimesOperation;
-            else if (element.Kind == ExpressionKind.Div)
-                operatorId = DefinedOperators.DivOperation;
-            else if (element.Kind == ExpressionKind.Mod)
-                operatorId = DefinedOperators.ModOperation;
-            else if (element.Kind == ExpressionKind.Slash)
-                operatorId = DefinedOperators.SlashOperation;
-            else if (element.Kind == ExpressionKind.Shl)
-                operatorId = DefinedOperators.ShlOperation;
-            else if (element.Kind == ExpressionKind.Shr)
-                operatorId = DefinedOperators.ShrOperation;
-            else if (element.Kind == ExpressionKind.EqualsSign)
-                operatorId = DefinedOperators.EqualsOperator;
-            else if (element.Kind == ExpressionKind.NotEquals)
-                operatorId = DefinedOperators.NotEqualsOperator;
-            else if (element.Kind == ExpressionKind.GreaterThen)
-                operatorId = DefinedOperators.GreaterThen;
-            else if (element.Kind == ExpressionKind.GreaterThenEquals)
-                operatorId = DefinedOperators.GreaterThenEqual;
-            else if (element.Kind == ExpressionKind.LessThen)
-                operatorId = DefinedOperators.LessThen;
-            else if (element.Kind == ExpressionKind.LessThenEquals)
-                operatorId = DefinedOperators.LessThenOrEqual;
-
-            else if (element.Kind == ExpressionKind.Plus) {
-
-                if (leftType.TypeKind.IsTextual() && leftType.TypeKind.IsTextual())
-                    operatorId = DefinedOperators.ConcatOperation;
-                else if (leftType.TypeKind.IsNumerical() && leftType.TypeKind.IsNumerical())
-                    operatorId = DefinedOperators.PlusOperation;
+            if (element.Kind == ExpressionKind.RangeOperator) {
+                DefineSubrangeType(element, leftType, rightType);
+                return;
             }
 
-            else if (element.Kind == ExpressionKind.RangeOperator) {
-                var left = leftType.TypeKind;
-                var right = rightType.TypeKind;
-                var leftId = leftType.TypeId;
-                var rightId = rightType.TypeId;
+            var operatorId = GetOperatorId(element, leftType, rightType);
 
-                if (left.IsOrdinal() && right.IsOrdinal()) {
-                    if (left.Integral() && right.Integral()) {
-                        var baseType = GetTypeByIdOrUndefinedType(GetSmallestIntegralTypeOrNext(leftId, rightId));
-                        element.TypeInfo = RegisterUserDefinedType(new Simple.SubrangeType(RequireUserTypeId(), baseType.TypeId));
-                    }
-                    else if (leftId == rightId) {
-                        var baseType = GetTypeByIdOrUndefinedType(leftId);
-                        element.TypeInfo = RegisterUserDefinedType(new Simple.SubrangeType(RequireUserTypeId(), baseType.TypeId));
-                    }
-                    else
-                        element.TypeInfo = GetErrorType(element);
-
-                    element.IsConstant = element.LeftOperand.IsConstant && element.RightOperand.IsConstant;
-                }
-            }
-
-            if (operatorId >= 0) {
-
+            if (operatorId != DefinedOperators.Undefined) {
                 if (element.OperatesOnConstants()) {
-                    var leftValue = element.LeftOperand.LiteralValue;
-                    var rightValue = element.RightOperand.LiteralValue;
-
-                    if (leftValue is INumericalValue l && rightValue is INumericalValue r && operatorId.In(DefinedOperators.PlusOperation, DefinedOperators.MinusOperation)) {
-                        element.IsConstant = true;
-
-                        if (operatorId == DefinedOperators.PlusOperation)
-                            element.LiteralValue = l.Add(r);
-                        else if (operatorId == DefinedOperators.MinusOperation)
-                            element.LiteralValue = l.Subtract(r);
-
-                        element.TypeInfo = GetTypeByIdOrUndefinedType(element.LiteralValue.TypeId);
-                        return;
-                    }
+                    ComputeConstantBinaryOperator(element, operatorId);
+                    return;
                 }
 
                 element.TypeInfo = GetTypeOfOperator(operatorId, leftType, rightType, element.LeftOperand.LiteralValue, element.RightOperand.LiteralValue);
                 element.IsConstant = element.LeftOperand.IsConstant && element.RightOperand.IsConstant;
             }
+        }
+
+        private void ComputeConstantBinaryOperator(BinaryOperator element, int operatorId) {
+            var leftValue = element.LeftOperand.LiteralValue;
+            var rightValue = element.RightOperand.LiteralValue;
+            var operation = environment.TypeRegistry.GetOperator(operatorId);
+
+            element.LiteralValue = operation.ComputeValue(new IValue[] { leftValue, rightValue });
+            element.IsConstant = element.LiteralValue != null;
+            element.TypeInfo = element.IsConstant ? GetTypeByIdOrUndefinedType(element.LiteralValue.TypeId) : GetErrorType(element);
+        }
+
+        private ITypeDefinition GetTypeDefinition(IExpression expression) {
+            if (expression != null && expression.TypeInfo != null)
+                return expression.TypeInfo;
+
+            return GetErrorType(expression);
+        }
+
+        private void DefineSubrangeType(BinaryOperator element, ITypeDefinition leftType, ITypeDefinition rightType) {
+            var left = leftType.TypeKind;
+            var right = rightType.TypeKind;
+            var leftId = leftType.TypeId;
+            var rightId = rightType.TypeId;
+
+            if (left.IsOrdinal() && right.IsOrdinal()) {
+                if (left.Integral() && right.Integral()) {
+                    var baseType = GetTypeByIdOrUndefinedType(GetSmallestIntegralTypeOrNext(leftId, rightId));
+                    element.TypeInfo = RegisterUserDefinedType(new Simple.SubrangeType(RequireUserTypeId(), baseType.TypeId));
+                }
+                else if (leftId == rightId) {
+                    var baseType = GetTypeByIdOrUndefinedType(leftId);
+                    element.TypeInfo = RegisterUserDefinedType(new Simple.SubrangeType(RequireUserTypeId(), baseType.TypeId));
+                }
+                else
+                    element.TypeInfo = GetErrorType(element);
+
+                element.IsConstant = element.LeftOperand.IsConstant && element.RightOperand.IsConstant;
+            }
+        }
+
+        private int GetOperatorId(BinaryOperator element, ITypeDefinition leftType, ITypeDefinition rightType) {
+
+            switch (element.Kind) {
+                case ExpressionKind.LessThen:
+                    return DefinedOperators.LessThen;
+                case ExpressionKind.LessThenEquals:
+                    return DefinedOperators.LessThenOrEqual;
+                case ExpressionKind.GreaterThen:
+                    return DefinedOperators.GreaterThen;
+                case ExpressionKind.GreaterThenEquals:
+                    return DefinedOperators.GreaterThenEqual;
+                case ExpressionKind.NotEquals:
+                    return DefinedOperators.NotEqualsOperator;
+                case ExpressionKind.EqualsSign:
+                    return DefinedOperators.EqualsOperator;
+                case ExpressionKind.Xor:
+                    return DefinedOperators.XorOperation;
+                case ExpressionKind.Or:
+                    return DefinedOperators.OrOperation;
+                case ExpressionKind.Minus:
+                    return DefinedOperators.MinusOperation;
+                case ExpressionKind.Shr:
+                    return DefinedOperators.ShrOperation;
+                case ExpressionKind.Shl:
+                    return DefinedOperators.ShlOperation;
+                case ExpressionKind.And:
+                    return DefinedOperators.AndOperation;
+                case ExpressionKind.Mod:
+                    return DefinedOperators.ModOperation;
+                case ExpressionKind.Slash:
+                    return DefinedOperators.SlashOperation;
+                case ExpressionKind.Times:
+                    return DefinedOperators.TimesOperation;
+                case ExpressionKind.Div:
+                    return DefinedOperators.DivOperation;
+                case ExpressionKind.Not:
+                    return DefinedOperators.NotOperation;
+                case ExpressionKind.UnaryMinus:
+                    return DefinedOperators.UnaryMinus;
+                case ExpressionKind.UnaryPlus:
+                    return DefinedOperators.UnaryPlus;
+            };
+
+            if (element.Kind == ExpressionKind.Plus) {
+                if (leftType.TypeKind.IsTextual() && leftType.TypeKind.IsTextual())
+                    return DefinedOperators.ConcatOperation;
+                else if (leftType.TypeKind.IsNumerical() && leftType.TypeKind.IsNumerical())
+                    return DefinedOperators.PlusOperation;
+            }
+
+            return DefinedOperators.Undefined;
         }
 
         private int GetSmallestIntegralTypeOrNext(int leftId, int rightId)
@@ -489,7 +502,7 @@ namespace PasPasPas.Typings.Common {
         }
 
         /// <summary>
-        ///     start visting an enumeration type
+        ///     start visiting an enumeration type
         /// </summary>
         /// <param name="element">enumeration type definition</param>
         public void StartVisit(EnumType element) {
@@ -514,7 +527,7 @@ namespace PasPasPas.Typings.Common {
             => environment.TypeRegistry.RequireUserTypeId();
 
         /// <summary>
-        ///     end visiting an enum type definition
+        ///     end visiting an enumerated type definition
         /// </summary>
         /// <param name="element"></param>
         public void EndVisit(EnumType element) {
@@ -523,7 +536,7 @@ namespace PasPasPas.Typings.Common {
         }
 
         /// <summary>
-        ///     enum type value definition
+        ///     enumerated type value definition
         /// </summary>
         /// <param name="element"></param>
         public void EndVisit(EnumTypeValue element) {
@@ -629,7 +642,7 @@ namespace PasPasPas.Typings.Common {
         }
 
         /// <summary>
-        ///     start visting a structured type
+        ///     start visiting a structured type
         /// </summary>
         /// <param name="element"></param>
         public void StartVisit(StructuredType element) {
@@ -666,8 +679,8 @@ namespace PasPasPas.Typings.Common {
         }
 
         /// <summary>
-        ///     end visting a method declaration
-        /// </summary>ele
+        ///     end visiting a method declaration
+        /// </summary>
         /// <param name="element"></param>
         public void EndVisit(MethodDeclaration element) {
             if (element.Kind == ProcedureKind.Function) {
@@ -683,7 +696,7 @@ namespace PasPasPas.Typings.Common {
         }
 
         /// <summary>
-        ///     visit a paramer type definition
+        ///     visit a parameter type definition
         /// </summary>
         /// <param name="element"></param>
         public void EndVisit(ParameterTypeDefinition element) {

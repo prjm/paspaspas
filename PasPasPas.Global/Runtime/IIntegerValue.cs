@@ -53,5 +53,21 @@
         /// <param name="valueToShr">number of bits</param>
         /// <returns></returns>
         IValue Shr(IValue valueToShr);
+
+
+        /// <summary>
+        ///     divide this number by another number (integer division)
+        /// </summary>
+        /// <param name="divisor">number to divide through</param>
+        /// <returns>division result</returns>
+        IValue Divide(IValue divisor);
+
+        /// <summary>
+        ///     divide this number by another number and compute the remainder
+        /// </summary>
+        /// <param name="divisor"></param>
+        /// <returns>remainder of division</returns>
+        IValue Modulo(IValue divisor);
+
     }
 }
