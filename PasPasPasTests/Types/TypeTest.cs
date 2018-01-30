@@ -38,7 +38,7 @@ namespace PasPasPasTests.Types {
         }
 
         /// <summary>
-        ///     test the value of a given expressiom
+        ///     test the value of a given expression
         /// </summary>
         /// <param name="expression">expression</param>
         /// <param name="typeId">type id to find</param>

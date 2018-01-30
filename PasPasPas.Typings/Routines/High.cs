@@ -65,7 +65,7 @@ namespace PasPasPas.Typings.Routines {
             var param = TypeRegistry.GetTypeByIdOrUndefinedType(signature[0]);
             if (param.TypeKind.IsOrdinal()) {
                 var ordinalType = param as IOrdinalType;
-                var highValue = ConstOps.ToConstantInt((long)ordinalType.HighestElement);
+                var highValue = ConstOps.ToScaledIntegerValue(ordinalType.HighestElement);
                 var typeId = LiteralValues.GetTypeFor(highValue);
                 var result = new ParameterGroup();
                 result.AddParameter("AValue").SymbolType = param;

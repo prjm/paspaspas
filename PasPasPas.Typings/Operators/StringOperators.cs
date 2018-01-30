@@ -80,6 +80,11 @@ namespace PasPasPas.Typings.Operators {
         public static void RegisterOperators(ITypeRegistry typeRegistry)
             => typeRegistry.RegisterOperator(new StringOperators(DefinedOperators.ConcatOperation));
 
+        /// <summary>
+        ///     compute constant value
+        /// </summary>
+        /// <param name="inputs"></param>
+        /// <returns></returns>
         public override IValue ComputeValue(IValue[] inputs) {
             throw new NotImplementedException();
         }

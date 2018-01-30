@@ -137,6 +137,8 @@ namespace PasPasPas.Typings.Operators {
             return KnownTypeIds.ErrorType;
         }
 
+        internal static void RegisterOperators(IRuntimeValues runtime, ILiteralUnwrapper unwrapper, RegisteredTypes registeredTypes) => throw new NotImplementedException();
+
         /// <summary>
         ///     register known operators
         /// </summary>
@@ -195,17 +197,17 @@ namespace PasPasPas.Typings.Operators {
 
             }
 
+            var c = Runtime.IntegerCalculator;
+
             if (value1 is IIntegerValue leftInt && value2 is IIntegerValue rightInt) {
 
                 if (Kind == DefinedOperators.DivOperation)
-                    return leftInt.Divide(rightInt);
+                    return c.Divide(value1, value2);
 
                 if (Kind == DefinedOperators.ModOperation)
-                    return leftInt.Modulo(rightInt);
+                    return c.Modulo(value1, value2);
 
             }
-
-
 
             return null;
         }

@@ -45,6 +45,11 @@ namespace PasPasPas.Typings.Operators {
         public ITypeRegistry TypeRegistry { get; set; }
 
         /// <summary>
+        ///     runtime values
+        /// </summary>
+        public IRuntimeValues Runtime { get; set; }
+
+        /// <summary>
         ///     get the output type for an operation
         /// </summary>
         /// <param name="input">input signature</param>

@@ -25,6 +25,7 @@ namespace PasPasPas.Typings.Common {
         private readonly IDictionary<int, IOperator> operators
             = new Dictionary<int, IOperator>();
 
+        private IRuntimeValues runtime;
         private readonly UnitType systemUnit;
         private readonly object idLock = new object();
         private int userTypeIds = 1000;
@@ -74,6 +75,7 @@ namespace PasPasPas.Typings.Common {
         /// <param name="unwrapper">literal unwrapper</param>
         /// <param name="constOps">constant helper</param>
         public RegisteredTypes(StringPool pool, IRuntimeValues constOps, ILiteralUnwrapper unwrapper, NativeIntSize intSize) {
+            runtime = constOps;
             systemUnit = new UnitType(KnownTypeIds.SystemUnit);
             RegisterType(systemUnit);
 
@@ -107,8 +109,10 @@ namespace PasPasPas.Typings.Common {
         /// <param name="newOperator">operator to register</param>
         public void RegisterOperator(IOperator newOperator) {
             operators.Add(newOperator.Kind, newOperator);
-            if (newOperator is OperatorBase baseOperator)
+            if (newOperator is OperatorBase baseOperator) {
                 baseOperator.TypeRegistry = this;
+                baseOperator.Runtime = runtime;
+            }
         }
 
         /// <summary>

@@ -107,6 +107,11 @@ namespace PasPasPas.Typings.Operators {
             registry.RegisterOperator(new LogicalOperators(DefinedOperators.ShrOperation));
         }
 
+        /// <summary>
+        ///     compute the value
+        /// </summary>
+        /// <param name="inputs"></param>
+        /// <returns></returns>
         public override IValue ComputeValue(IValue[] inputs) {
             throw new NotImplementedException();
         }

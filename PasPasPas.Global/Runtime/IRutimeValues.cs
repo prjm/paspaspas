@@ -6,6 +6,11 @@
     public interface IRuntimeValues {
 
         /// <summary>
+        ///     integer calculator
+        /// </summary>
+        IIntegerCalculator IntegerCalculator { get; }
+
+        /// <summary>
         ///     get special constants
         /// </summary>
         /// <param name="index"></param>
@@ -81,20 +86,6 @@
         /// <param name="text"></param>
         /// <returns></returns>
         IValue ToUnicodeString(string text);
-
-        /// <summary>
-        ///     negate a value
-        /// </summary>
-        /// <param name="value">value to negage</param>
-        /// <returns></returns>
-        object Negate(object value);
-
-        /// <summary>
-        ///     convert an integer to the appropriate runtime constant
-        /// </summary>
-        /// <param name="result"></param>
-        /// <returns></returns>
-        object ToConstantInt(long result);
 
         /// <summary>
         ///     convert a double to the appropriate runtime constant

@@ -85,6 +85,11 @@ namespace PasPasPas.Typings.Operators {
             registry.RegisterOperator(new RelationalOperators(DefinedOperators.GreaterThenEqual));
         }
 
+        /// <summary>
+        ///     compute value
+        /// </summary>
+        /// <param name="inputs"></param>
+        /// <returns></returns>
         public override IValue ComputeValue(IValue[] inputs) {
             throw new NotImplementedException();
         }

@@ -59,7 +59,7 @@ namespace PasPasPasTests.Common {
             => new RuntimeValues().ToScaledIntegerValue(number);
 
         /// <summary>
-        ///     get the unicode string value
+        ///     get the Unicode string value
         /// </summary>
         /// <param name="text"></param>
         /// <returns></returns>

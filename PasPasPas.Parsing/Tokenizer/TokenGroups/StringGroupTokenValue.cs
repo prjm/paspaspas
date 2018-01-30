@@ -39,14 +39,14 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
                                 state.NextChar(true);
                                 var controlChar = hexDigits.Tokenize(state);
                                 if (controlChar.Kind == TokenKind.HexNumber && controlChar.ParsedValue is IIntegerValue hexValue && !hexValue.IsNegative)
-                                    resultBuilder.Data.Append(state.ConvertCharLiteral(hexValue.AsUnsignedLong));
+                                    resultBuilder.Data.Append(state.ConvertCharLiteral(hexValue.UnsignedValue));
                                 else
                                     state.Error(Tokenizer.IncompleteString);
                             }
                             else {
                                 var controlChar = digitTokenizer.Tokenize(state);
                                 if (controlChar.Kind == TokenKind.Integer && controlChar.ParsedValue is IIntegerValue intValue && !intValue.IsNegative)
-                                    resultBuilder.Data.Append(state.ConvertCharLiteral(intValue.AsUnsignedLong));
+                                    resultBuilder.Data.Append(state.ConvertCharLiteral(intValue.UnsignedValue));
                                 else
                                     state.Error(Tokenizer.UnexpectedCharacter);
                             }

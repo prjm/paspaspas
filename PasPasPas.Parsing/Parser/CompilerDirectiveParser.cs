@@ -307,7 +307,7 @@ namespace PasPasPas.Parsing.Parser {
                 }
 
                 if (result.LastTerminalToken.ParsedValue is IIntegerValue intValue && !intValue.IsNegative) {
-                    result.MinStackSize = intValue.AsUnsignedLong;
+                    result.MinStackSize = intValue.UnsignedValue;
                 }
                 else {
                     ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidStackMemorySizeDirective, new[] { TokenKind.Integer });
@@ -326,7 +326,7 @@ namespace PasPasPas.Parsing.Parser {
                 }
 
                 if (result.LastTerminalToken.ParsedValue is IIntegerValue intValue && !intValue.IsNegative) {
-                    result.MaxStackSize = intValue.AsUnsignedLong;
+                    result.MaxStackSize = intValue.UnsignedValue;
                 }
                 else {
                     ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidStackMemorySizeDirective, new[] { TokenKind.Integer });
@@ -660,7 +660,7 @@ namespace PasPasPas.Parsing.Parser {
 
             if (ContinueWith(result, TokenKind.Integer) || ContinueWith(result, TokenKind.HexNumber)) {
                 if (result.LastTerminalToken.ParsedValue is IIntegerValue hexValue && !hexValue.IsNegative)
-                    result.BaseValue = hexValue.AsUnsignedLong;
+                    result.BaseValue = hexValue.UnsignedValue;
                 else
                     ErrorLastPart(parent, CompilerDirectiveParserErrors.InvalidImageBaseDirective, new[] { TokenKind.Integer, TokenKind.HexNumber });
             }
@@ -1080,7 +1080,7 @@ namespace PasPasPas.Parsing.Parser {
             ulong size;
 
             if (result.LastTerminalToken.ParsedValue is IIntegerValue intValue && !intValue.IsNegative) {
-                size = intValue.AsUnsignedLong;
+                size = intValue.UnsignedValue;
             }
             else {
                 ErrorLastPart(result, CompilerDirectiveParserErrors.InvalidMinEnumSizeDirective);

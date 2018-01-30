@@ -51,6 +51,7 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
         /// <returns></returns>
         public IValue ConvertLiterals((object digits, object decimals, bool minus, object exponent) data) {
             return constantsValues.ToExtendedValue(0);
+            /*
             var digits = data.digits;
             var decimals = data.decimals;
             var minus = data.minus;
@@ -70,6 +71,7 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
             }
             else
                 return constantsValues[SpecialConstantKind.InvalidReal];
+                */
         }
 
         /// <summary>
