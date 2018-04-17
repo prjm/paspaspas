@@ -3,6 +3,7 @@ using PasPasPas.Global.Runtime;
 using PasPasPas.Options.DataTypes;
 using PasPasPas.Runtime.Values;
 using PasPasPas.Typings.Common;
+using SharpFloat.FloatingPoint;
 
 namespace PasPasPasTests.Common {
 
@@ -67,12 +68,13 @@ namespace PasPasPasTests.Common {
             => new RuntimeValues().ToUnicodeString(text);
 
         /// <summary>
-        ///     get a wide char value
+        ///     get the Unicode char value
         /// </summary>
-        /// <param name="value"></param>
+        /// <param name="text"></param>
         /// <returns></returns>
-        protected IValue GetWideCharValue(char value)
-            => new RuntimeValues().ToWideCharValue(value);
+        protected IValue GetWideCharValue(char text)
+            => new RuntimeValues().ToWideCharValue(text);
+
 
 
         /// <summary>
@@ -101,7 +103,7 @@ namespace PasPasPasTests.Common {
         protected IValue GetIntegerValue(ulong number)
             => new RuntimeValues().ToScaledIntegerValue(number);
 
-        protected IValue GetExtendedValue(double number)
+        protected IValue GetExtendedValue(ExtF80 number)
             => new RuntimeValues().ToExtendedValue(number);
 
     }

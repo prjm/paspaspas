@@ -2,6 +2,8 @@
 using System.Numerics;
 using PasPasPas.Global.Constants;
 using PasPasPas.Global.Runtime;
+using PasPasPas.Runtime.Values.Boolean;
+using SharpFloat.FloatingPoint;
 
 namespace PasPasPas.Runtime.Values.Int {
 
@@ -34,6 +36,18 @@ namespace PasPasPas.Runtime.Values.Int {
         ///     get the numerical value
         /// </summary>
         public abstract BigInteger AsBigInteger { get; }
+
+        /// <summary>
+        ///     get the value as extended value
+        /// </summary>
+        public ExtF80 AsExtended {
+            get {
+                if (TypeId == KnownTypeIds.Uint64Type)
+                    return UnsignedValue;
+
+                return SignedValue;
+            }
+        }
 
         /// <summary>
         ///     format this number as string
@@ -104,6 +118,7 @@ namespace PasPasPas.Runtime.Values.Int {
 
         }
 
+
         internal static IValue ModuloAndScale(IntegerValueBase dividend, IntegerValueBase divisor) {
             var s = dividend.AsBigInteger % divisor.AsBigInteger;
             return ToIntValue(ref s);
@@ -160,5 +175,27 @@ namespace PasPasPas.Runtime.Values.Int {
             return ToIntValue(ref s);
 
         }
+
+        internal static IValue GreaterThen(IntegerValueBase firstInt, IntegerValueBase secondInt)
+            => new BooleanValue(firstInt.AsBigInteger > secondInt.AsBigInteger);
+
+        internal static IValue GreaterThenEqual(IntegerValueBase firstInt, IntegerValueBase secondInt)
+            => new BooleanValue(firstInt.AsBigInteger >= secondInt.AsBigInteger);
+
+        internal static IValue Equal(IntegerValueBase firstInt, IntegerValueBase secondInt)
+            => new BooleanValue(firstInt.AsBigInteger == secondInt.AsBigInteger);
+
+        internal static IValue LessThenEqual(IntegerValueBase firstInt, IntegerValueBase secondInt)
+            => new BooleanValue(firstInt.AsBigInteger <= secondInt.AsBigInteger);
+
+        internal static IValue NotEqual(IntegerValueBase firstInt, IntegerValueBase secondInt)
+            => new BooleanValue(firstInt.AsBigInteger != secondInt.AsBigInteger);
+
+        internal static IValue LessThen(IntegerValueBase firstInt, IntegerValueBase secondInt)
+            => new BooleanValue(firstInt.AsBigInteger < secondInt.AsBigInteger);
+
+
+
+
     }
 }

@@ -3,10 +3,10 @@
     /// <summary>
     ///     string value
     /// </summary>
-    public interface IStringValue {
+    public interface IStringValue : IValue {
 
         /// <summary>
-        ///     get string valu
+        ///     get string value
         /// </summary>
         string AsUnicodeString { get; }
 

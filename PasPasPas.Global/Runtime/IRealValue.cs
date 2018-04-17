@@ -3,11 +3,7 @@
     /// <summary>
     ///     real value
     /// </summary>
-    public interface IRealValue {
+    public interface IRealValue : INumericalValue {
 
-        /// <summary>
-        ///     get the value as double
-        /// </summary>
-        double AsDouble { get; }
     }
 }

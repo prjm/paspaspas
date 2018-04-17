@@ -23,7 +23,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
 
         /// <summary>
         ///     flag, if <c>true</c> idents are generated if possible
-        /// </summary>
+        /// </summary>d
         public bool AllowIdents { get; set; }
             = false;
 
@@ -43,16 +43,18 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
 
             state.Clear();
             state.PreviousChar();
-            var digits = digitTokenizer.Tokenize(state).ParsedValue;
-            object decimals = null;
-            object exp = null;
+            var digitToken = digitTokenizer.Tokenize(state);
+            var digits = digitToken.Value;
+            var digitValue = digitToken.ParsedValue;
+            var decimals = "0";
+            var exp = "0";
             var minus = false;
 
             if (state.LookAhead(1) == '.') {
                 if (digitTokenizer.CharClass.Matches(state.LookAhead(2))) {
                     state.NextChar(true);
                     withDot = true;
-                    decimals = digitTokenizer.Tokenize(state).ParsedValue;
+                    decimals = digitTokenizer.Tokenize(state).ParsedValue.ToString();
                 }
             }
 
@@ -71,7 +73,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
 
                     if (!state.AtEof) {
                         if (digitTokenizer.CharClass.Matches(state.LookAhead())) {
-                            exp = digitTokenizer.Tokenize(state).ParsedValue;
+                            exp = digitTokenizer.Tokenize(state).ParsedValue.ToString();
                         }
                         else {
                             state.Error(Tokenizer.UnexpectedEndOfToken);
@@ -91,10 +93,11 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
             }
 
             if (withDot || withExponent) {
-                return new Token(TokenKind.Real, state, state.ConvertRealLiteral(digits, decimals, minus, exp));
+                var literalValue = string.Concat(digits, ".", decimals, "E", minus ? "-" : "+", exp);
+                return new Token(TokenKind.Real, state, state.ConvertRealLiteral(literalValue));
             }
             else {
-                return new Token(TokenKind.Integer, state, digits);
+                return new Token(TokenKind.Integer, state, digitValue);
             }
         }
 

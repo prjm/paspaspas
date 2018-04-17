@@ -5,7 +5,7 @@ using PasPasPas.Typings.Common;
 namespace PasPasPas.Typings.Simple {
 
     /// <summary>
-    ///     real type defnition
+    ///     real type definition
     /// </summary>
     public class RealType : TypeBase {
 

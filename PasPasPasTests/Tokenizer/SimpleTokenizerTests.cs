@@ -43,13 +43,13 @@ namespace PasPasPasTests.Tokenizer {
 
         [Fact]
         public void TestRealNumbers() {
-            IsReal("123E10", 123E10);
-            IsReal("123.", 123, Tuple.Create(TokenKind.Integer, "123"), Tuple.Create(TokenKind.Dot, "."));
-            IsReal("123.123", 123.123);
-            IsReal("123E+10", 123E10);
-            IsReal("123E-10", 123E-10);
-            IsReal("123.123E-10", 123.123E-10);
-            IsReal("123.123E+10", 123.123E+10);
+            IsReal("123E10", "123E10");
+            IsReal("123.", "123", Tuple.Create(TokenKind.Integer, "123"), Tuple.Create(TokenKind.Dot, "."));
+            IsReal("123.123", "123.123");
+            IsReal("123E+10", "123E10");
+            IsReal("123E-10", "123E-10");
+            IsReal("123.123E-10", "123.123E-10");
+            IsReal("123.123E+10", "123.123E+10");
         }
 
         [Fact]
@@ -142,10 +142,10 @@ namespace PasPasPasTests.Tokenizer {
             IsQuotedString("''", string.Empty);
             IsQuotedString("'sdfddfsd'", "sdfddfsd");
             IsQuotedString("'sdf''ddfsd'", "sdf'ddfsd");
-            IsQuotedString("#45", '-');
+            IsWideChar("#45", '-');
             IsQuotedString("#45'xxx'#55", "-xxx7");
             IsQuotedString("'ddd'#45'ddd-xxx'", "ddd-ddd-xxx");
-            IsQuotedString("#$58D", '֍');
+            IsWideChar("#$58D", '֍');
             IsQuotedString("'ddd'#$58D'xxx'", "ddd֍xxx");
         }
 

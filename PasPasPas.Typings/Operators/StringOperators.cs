@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using PasPasPas.Global.Constants;
 using PasPasPas.Global.Runtime;
 using PasPasPas.Parsing.SyntaxTree.Types;
@@ -86,7 +83,15 @@ namespace PasPasPas.Typings.Operators {
         /// <param name="inputs"></param>
         /// <returns></returns>
         public override IValue ComputeValue(IValue[] inputs) {
-            throw new NotImplementedException();
+            if (inputs.Length == 2) {
+
+                if (Kind == DefinedOperators.ConcatOperation) {
+                    return Runtime.StringCalculator.Concat(inputs[0], inputs[1]);
+                }
+
+            }
+
+            return null;
         }
     }
 }

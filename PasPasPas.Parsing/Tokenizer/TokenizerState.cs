@@ -172,13 +172,10 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <summary>
         ///     converts a real literal
         /// </summary>
-        /// <param name="digits"></param>
-        /// <param name="decimals"></param>
-        /// <param name="minus"></param>
-        /// <param name="exp"></param>
+        /// <param name="literal">literal value</param>
         /// <returns></returns>
-        public IValue ConvertRealLiteral(object digits, object decimals, bool minus, object exp)
-            => environment.RealLiteralConverter.Convert(digits, decimals, minus, exp);
+        public IValue ConvertRealLiteral(string literal)
+            => environment.RealLiteralConverter.Convert(literal);
 
         /// <summary>
         ///     get the buffer content as pooled string

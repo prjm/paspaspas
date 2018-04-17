@@ -48,8 +48,8 @@ namespace PasPasPasTests.Types {
 
         [Fact]
         public void TestStringLiteralTypes() {
-            AssertExprType("'CD'", KnownTypeIds.StringType);
-            AssertExprType("#9#9", KnownTypeIds.StringType);
+            AssertExprType("'CD'", KnownTypeIds.UnicodeStringType);
+            AssertExprType("#9#9", KnownTypeIds.UnicodeStringType);
         }
 
         [Fact]
@@ -92,14 +92,14 @@ namespace PasPasPasTests.Types {
             AssertExprType("1 + 4294967296", KnownTypeIds.Int64Type);
             AssertExprType("1 - 4294967296", KnownTypeIds.Int64Type);
             AssertExprType("1 * 4294967296", KnownTypeIds.Int64Type);
-            AssertExprType("1 div 4294967296", KnownTypeIds.Int64Type);
-            AssertExprType("1 mod 4294967296", KnownTypeIds.Int64Type);
+            AssertExprType("1 div 4294967296", KnownTypeIds.ShortInt);
+            AssertExprType("1 mod 4294967296", KnownTypeIds.ShortInt);
             AssertExprType("1 / 4294967296", KnownTypeIds.Extended);
             AssertExprType("4294967296 + 4294967296", KnownTypeIds.Int64Type);
             AssertExprType("4294967296 - 4294967296", KnownTypeIds.ShortInt);
-            AssertExprType("4294967296 * 4294967296", KnownTypeIds.Int64Type);
-            AssertExprType("4294967296 div 4294967296", KnownTypeIds.Int64Type);
-            AssertExprType("4294967296 mod 4294967296", KnownTypeIds.Int64Type);
+            AssertExprType("4294967296 * 3", KnownTypeIds.Int64Type);
+            AssertExprType("4294967296 div 4294967296", KnownTypeIds.ShortInt);
+            AssertExprType("4294967296 mod 4294967296", KnownTypeIds.ShortInt);
             AssertExprType("4294967296 / 4294967296", KnownTypeIds.Extended);
         }
 
@@ -145,13 +145,14 @@ namespace PasPasPasTests.Types {
             AssertExprType("not 4294967296", KnownTypeIds.Int64Type);
 
             AssertExprType("1 and 1", KnownTypeIds.ShortInt);
-            AssertExprType("1 and 256", KnownTypeIds.SmallInt);
-            AssertExprType("1 and 65536", KnownTypeIds.IntegerType);
-            AssertExprType("1 and 4294967296", KnownTypeIds.Int64Type);
+            AssertExprType("1 and 256", KnownTypeIds.ShortInt);
+            AssertExprType("277 and 256", KnownTypeIds.SmallInt);
+            AssertExprType("1 and 65536", KnownTypeIds.ShortInt);
+            AssertExprType("1 and 4294967296", KnownTypeIds.ShortInt);
             AssertExprType("1 and 1", KnownTypeIds.ShortInt);
-            AssertExprType("256 and 1", KnownTypeIds.SmallInt);
-            AssertExprType("65536 and 1", KnownTypeIds.IntegerType);
-            AssertExprType("4294967296 and 1", KnownTypeIds.Int64Type);
+            AssertExprType("256 and 1", KnownTypeIds.ShortInt);
+            AssertExprType("65536 and 1", KnownTypeIds.ShortInt);
+            AssertExprType("4294967296 and 1", KnownTypeIds.ShortInt);
 
             AssertExprType("1 or 1", KnownTypeIds.ShortInt);
             AssertExprType("1 or 256", KnownTypeIds.SmallInt);
@@ -178,15 +179,15 @@ namespace PasPasPasTests.Types {
             AssertExprType("1 shr 256", KnownTypeIds.ShortInt);
             AssertExprType("1 shr 65536", KnownTypeIds.ShortInt);
             AssertExprType("1 shr 4294967296", KnownTypeIds.ShortInt);
-            AssertExprType("256 shr 1", KnownTypeIds.SmallInt);
+            AssertExprType("256 shr 1", KnownTypeIds.ByteType);
             AssertExprType("256 shr 256", KnownTypeIds.SmallInt);
             AssertExprType("256 shr 65536", KnownTypeIds.SmallInt);
             AssertExprType("256 shr 4294967296", KnownTypeIds.SmallInt);
-            AssertExprType("65536 shr 1", KnownTypeIds.IntegerType);
+            AssertExprType("65536 shr 1", KnownTypeIds.WordType);
             AssertExprType("65536 shr 256", KnownTypeIds.IntegerType);
             AssertExprType("65536 shr 65536", KnownTypeIds.IntegerType);
             AssertExprType("65536 shr 4294967296", KnownTypeIds.IntegerType);
-            AssertExprType("4294967296 shr 1", KnownTypeIds.Int64Type);
+            AssertExprType("4294967296 shr 1", KnownTypeIds.CardinalType);
             AssertExprType("4294967296 shr 256", KnownTypeIds.Int64Type);
             AssertExprType("4294967296 shr 65536", KnownTypeIds.Int64Type);
             AssertExprType("4294967296 shr 4294967296", KnownTypeIds.Int64Type);

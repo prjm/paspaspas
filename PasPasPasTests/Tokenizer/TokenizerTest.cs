@@ -6,6 +6,7 @@ using PasPasPas.Global.Runtime;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Parsing.SyntaxTree;
 using PasPasPasTests.Common;
+using SharpFloat.FloatingPoint;
 
 namespace PasPasPasTests.Tokenizer {
 
@@ -54,7 +55,7 @@ namespace PasPasPasTests.Tokenizer {
         internal void IsQuotedString(string input, string value)
             => IsToken(TokenKind.QuotedString, input, input, GetUnicodeStringValue(value));
 
-        internal void IsQuotedString(string input, char value)
+        internal void IsWideChar(string input, char value)
             => IsToken(TokenKind.QuotedString, input, input, GetWideCharValue(value));
 
 
@@ -67,8 +68,10 @@ namespace PasPasPasTests.Tokenizer {
         internal void IsWhitespace(string input)
             => IsToken(TokenKind.WhiteSpace, input, input);
 
-        internal void IsReal(string input, double value, params Tuple<int, string>[] tokens)
-            => IsToken(TokenKind.Real, input, input, GetExtendedValue(value), tokens);
+        internal void IsReal(string input, string value, params Tuple<int, string>[] tokens) {
+            Assert.IsTrue(ExtF80.TryParse(value, out var v));
+            IsToken(TokenKind.Real, input, input, GetExtendedValue(v), tokens);
+        }
 
         internal void IsHexNumber(string input, object value)
             => IsToken(TokenKind.HexNumber, input, input, value);
@@ -104,11 +107,7 @@ namespace PasPasPasTests.Tokenizer {
 
             if (tokens.Length < 1) {
 
-                if (value is double)
-                    Assert.AreEqual((double)value, (result[0].ParsedValue as IRealValue).AsDouble);
-                else
-                    Assert.AreEqual(value, result[0].ParsedValue);
-
+                Assert.AreEqual(value, result[0].ParsedValue);
                 Assert.AreEqual(1, result.Count);
                 Assert.AreEqual(tokenKind, result[0].Kind);
                 Assert.AreEqual(tokenValue, result[0].Value);

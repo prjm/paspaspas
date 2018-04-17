@@ -38,6 +38,16 @@
         /// <summary>
         ///     division by zero
         /// </summary>
-        DivisionByZero = 6
+        DivisionByZero = 6,
+
+        /// <summary>
+        ///     invalid boolean
+        /// </summary>
+        InvalidBool = 7,
+
+        /// <summary>
+        ///     invalid string
+        /// </summary>
+        InvalidString = 8
     }
 }

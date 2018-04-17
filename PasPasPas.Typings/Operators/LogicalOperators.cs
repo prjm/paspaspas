@@ -52,7 +52,6 @@ namespace PasPasPas.Typings.Operators {
                 if (Kind == DefinedOperators.NotOperation && operand == CommonTypeKind.BooleanType)
                     return KnownTypeIds.BooleanType;
 
-
                 if (Kind == DefinedOperators.NotOperation && operand == CommonTypeKind.Int64Type)
                     return input[0];
 
@@ -113,7 +112,77 @@ namespace PasPasPas.Typings.Operators {
         /// <param name="inputs"></param>
         /// <returns></returns>
         public override IValue ComputeValue(IValue[] inputs) {
-            throw new NotImplementedException();
+            if (inputs.Length == 1) {
+                return ComputeUnaryOperator(inputs[0]);
+            }
+
+            if (inputs.Length == 2)
+                return ComputeBinaryOperator(inputs[0], inputs[1]);
+
+            return null;
+        }
+
+        private IValue ComputeUnaryOperator(IValue value) {
+
+            if (Kind == DefinedOperators.NotOperation) {
+
+                if (value is IIntegerValue intValue)
+                    return Runtime.ScaledIntegerCalculator.Not(value);
+
+                if (value is IBooleanValue boolValue)
+                    return Runtime.BooleanCalculator.Not(value);
+
+            }
+
+            return null;
+        }
+
+        private IValue ComputeBinaryOperator(IValue value1, IValue value2) {
+
+            if (value1 is IIntegerValue int1 && value2 is IIntegerValue int2) {
+
+                if (Kind == DefinedOperators.AndOperation) {
+                    return Runtime.ScaledIntegerCalculator.And(value1, value2);
+                }
+
+                if (Kind == DefinedOperators.OrOperation) {
+                    return Runtime.ScaledIntegerCalculator.Or(value1, value2);
+                }
+
+                if (Kind == DefinedOperators.XorOperation) {
+                    return Runtime.ScaledIntegerCalculator.Xor(value1, value2);
+                }
+
+                if (Kind == DefinedOperators.ShlOperation) {
+                    return Runtime.ScaledIntegerCalculator.Shl(value1, value2);
+                }
+
+                if (Kind == DefinedOperators.ShrOperation) {
+                    return Runtime.ScaledIntegerCalculator.Shr(value1, value2);
+                }
+
+
+            }
+
+            if (value1 is IBooleanValue bool1 && value2 is IBooleanValue bool2) {
+
+                if (Kind == DefinedOperators.AndOperation) {
+                    return Runtime.BooleanCalculator.And(value1, value2);
+                }
+
+                if (Kind == DefinedOperators.OrOperation) {
+                    return Runtime.BooleanCalculator.Or(value1, value2);
+                }
+
+                if (Kind == DefinedOperators.XorOperation) {
+                    return Runtime.BooleanCalculator.Xor(value1, value2);
+                }
+
+            }
+
+            return null;
+
+
         }
     }
 }

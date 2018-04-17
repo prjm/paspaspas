@@ -161,8 +161,10 @@ namespace PasPasPas.Typings.Operators {
         /// <param name="inputs"></param>
         /// <returns></returns>
         public override IValue ComputeValue(IValue[] inputs) {
-            if (inputs.Length == 1)
+
+            if (inputs.Length == 1) {
                 return ComputeUnaryOperator(inputs[0]);
+            }
 
             if (inputs.Length == 2)
                 return ComputeBinaryOperator(inputs[0], inputs[1]);
@@ -176,38 +178,51 @@ namespace PasPasPas.Typings.Operators {
             if (Kind == DefinedOperators.UnaryPlus)
                 return number;
 
-            if (Kind == DefinedOperators.UnaryMinus)
-                return number.Negate();
+            if (Kind == DefinedOperators.UnaryMinus && value is IIntegerValue)
+                return Runtime.ScaledIntegerCalculator.Negate(value);
+
+            if (Kind == DefinedOperators.UnaryMinus && value is IRealValue)
+                return Runtime.FloatCalculator.Negate(value);
 
             return null;
         }
 
         private IValue ComputeBinaryOperator(IValue value1, IValue value2) {
+            var ints = Runtime.ScaledIntegerCalculator;
+            var floats = Runtime.FloatCalculator;
 
-            if (value1 is INumericalValue left && value2 as INumericalValue != null) {
-
+            if (value1 is IRealValue || value2 is IRealValue) {
                 if (Kind == DefinedOperators.PlusOperation)
-                    return left.Add(value2 as INumericalValue);
+                    return floats.Add(value1, value2);
 
                 if (Kind == DefinedOperators.MinusOperation)
-                    return left.Subtract(value2 as INumericalValue);
+                    return floats.Subtract(value1, value2);
 
                 if (Kind == DefinedOperators.TimesOperation)
-                    return left.Multiply(value2 as INumericalValue);
+                    return floats.Multiply(value1, value2);
+
+                if (Kind == DefinedOperators.SlashOperation)
+                    return floats.Divide(value1, value2);
 
             }
 
-            var c = Runtime.IntegerCalculator;
+            if (Kind == DefinedOperators.PlusOperation)
+                return ints.Add(value1, value2);
 
-            if (value1 is IIntegerValue leftInt && value2 is IIntegerValue rightInt) {
+            if (Kind == DefinedOperators.MinusOperation)
+                return ints.Subtract(value1, value2);
 
-                if (Kind == DefinedOperators.DivOperation)
-                    return c.Divide(value1, value2);
+            if (Kind == DefinedOperators.TimesOperation)
+                return ints.Multiply(value1, value2);
 
-                if (Kind == DefinedOperators.ModOperation)
-                    return c.Modulo(value1, value2);
+            if (Kind == DefinedOperators.DivOperation)
+                return ints.Divide(value1, value2);
 
-            }
+            if (Kind == DefinedOperators.ModOperation)
+                return ints.Modulo(value1, value2);
+
+            if (Kind == DefinedOperators.SlashOperation)
+                return floats.Divide(value1, value2);
 
             return null;
         }

@@ -3,12 +3,7 @@
     /// <summary>
     ///     integer value
     /// </summary>
-    public interface IIntegerValue : IValue {
-
-        /// <summary>
-        ///     test if this value is negative
-        /// </summary>
-        bool IsNegative { get; }
+    public interface IIntegerValue : INumericalValue {
 
         /// <summary>
         ///     signed value

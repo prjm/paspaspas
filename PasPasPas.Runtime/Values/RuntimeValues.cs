@@ -1,6 +1,11 @@
 ﻿using System;
 using PasPasPas.Global.Runtime;
+using PasPasPas.Runtime.Values.Boolean;
+using PasPasPas.Runtime.Values.Char;
+using PasPasPas.Runtime.Values.Float;
 using PasPasPas.Runtime.Values.Int;
+using PasPasPas.Runtime.Values.String;
+using SharpFloat.FloatingPoint;
 
 namespace PasPasPas.Runtime.Values {
 
@@ -18,11 +23,38 @@ namespace PasPasPas.Runtime.Values {
         private readonly IntegerCalculator integerCalculator
             = new IntegerCalculator();
 
+        private readonly FloatCalculator extendedCalculator
+            = new FloatCalculator();
+
+        private readonly BooleanCalculator booleanCalculator
+            = new BooleanCalculator();
+
+        private readonly StringCalculator stringCalculator
+            = new StringCalculator();
+
         /// <summary>
         ///     integer calculator
         /// </summary>
-        public IIntegerCalculator IntegerCalculator
+        public IIntegerCalculator ScaledIntegerCalculator
             => integerCalculator;
+
+        /// <summary>
+        ///     calculator for extended values
+        /// </summary>
+        public IFloatCalculator FloatCalculator
+            => extendedCalculator;
+
+        /// <summary>
+        ///     get the boolean calculator
+        /// </summary>
+        public IBooleanCalculator BooleanCalculator
+            => booleanCalculator;
+
+        /// <summary>
+        ///     get the string calculator
+        /// </summary>
+        public IStringCalculator StringCalculator
+            => stringCalculator;
 
         /// <summary>
         ///     convert a signed byte to a constant value
@@ -171,14 +203,6 @@ namespace PasPasPas.Runtime.Values {
         }
 
         /// <summary>
-        ///     get a constant char value
-        /// </summary>
-        /// <param name="singleChar"></param>
-        /// <returns></returns>
-        public IValue ToWideCharValue(char singleChar)
-            => new WideCharValue(singleChar);
-
-        /// <summary>
         ///     get a constant text value
         /// </summary>
         /// <param name="text"></param>
@@ -191,8 +215,16 @@ namespace PasPasPas.Runtime.Values {
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public IValue ToExtendedValue(double value)
-            => new FloatingPointValue(FloatingPointValueKind.Extended, value);
+        public IValue ToExtendedValue(in ExtF80 value)
+            => new ExtendedValue(value);
+
+        /// <summary>
+        ///     get a constant wide char value
+        /// </summary>
+        /// <param name="character"></param>
+        /// <returns></returns>
+        public IValue ToWideCharValue(char character)
+            => new WideCharValue(character);
 
         /// <summary>
         ///     get a special constant value
@@ -211,6 +243,8 @@ namespace PasPasPas.Runtime.Values {
                     case SpecialConstantKind.InvalidReal:
                         return new SpecialValue(SpecialConstantKind.InvalidReal);
                     case SpecialConstantKind.InvalidInteger:
+                        return new SpecialValue(SpecialConstantKind.InvalidInteger);
+                    case SpecialConstantKind.InvalidBool:
                         return new SpecialValue(SpecialConstantKind.InvalidInteger);
                     default:
                         throw new IndexOutOfRangeException();

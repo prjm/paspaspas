@@ -55,6 +55,85 @@ namespace PasPasPas.Runtime.Values.Int {
         }
 
         /// <summary>
+        ///     <c>==</c>
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public IValue Equal(IValue left, IValue right) {
+            if (left is IntegerValueBase firstInt && right is IntegerValueBase secondInt)
+                return IntegerValueBase.Equal(firstInt, secondInt);
+            else
+                return invalidInteger;
+        }
+
+        /// <summary>
+        ///     <c>&gt;</c>
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public IValue GreaterThen(IValue left, IValue right) {
+            if (left is IntegerValueBase firstInt && right is IntegerValueBase secondInt)
+                return IntegerValueBase.GreaterThen(firstInt, secondInt);
+            else
+                return invalidInteger;
+        }
+
+        /// <summary>
+        ///     <c>&gt;=</c>
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public IValue GreaterThenEqual(IValue left, IValue right) {
+            if (left is IntegerValueBase firstInt && right is IntegerValueBase secondInt)
+                return IntegerValueBase.GreaterThenEqual(firstInt, secondInt);
+            else
+                return invalidInteger;
+        }
+
+        /// <summary>
+        ///     <c>&lt;</c>
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public IValue LessThen(IValue left, IValue right) {
+            if (left is IntegerValueBase firstInt && right is IntegerValueBase secondInt)
+                return IntegerValueBase.LessThen(firstInt, secondInt);
+            else
+                return invalidInteger;
+        }
+
+        /// <summary>
+        ///     <c>&lt;=</c>
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public IValue LessThenOrEqual(IValue left, IValue right) {
+            if (left is IntegerValueBase firstInt && right is IntegerValueBase secondInt)
+                return IntegerValueBase.LessThenEqual(firstInt, secondInt);
+            else
+                return invalidInteger;
+        }
+
+        /// <summary>
+        ///     <c>&lt;&gt;</c>
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public IValue NotEquals(IValue left, IValue right) {
+            if (left is IntegerValueBase firstInt && right is IntegerValueBase secondInt)
+                return IntegerValueBase.NotEqual(firstInt, secondInt);
+            else
+                return invalidInteger;
+
+        }
+
+        /// <summary>
         ///     calculate an integer remainder
         /// </summary>
         /// <param name="dividend"></param>
@@ -106,6 +185,8 @@ namespace PasPasPas.Runtime.Values.Int {
             else
                 return invalidInteger;
         }
+
+
 
         /// <summary>
         ///     compute a bitwise or

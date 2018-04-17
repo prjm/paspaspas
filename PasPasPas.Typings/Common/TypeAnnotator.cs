@@ -15,6 +15,7 @@ namespace PasPasPas.Typings.Common {
     /// <summary>
     ///     visitor to annotate types in abstract syntax trees
     /// </summary>
+    /// <remarks>also performs constant propagation</remarks>
     public class TypeAnnotator :
 
         IEndVisitor<ConstantValue>,
@@ -104,9 +105,9 @@ namespace PasPasPas.Typings.Common {
         }
 
         /// <summary>
-        ///     annotate binary operators
+        ///     annotate types at binary operators
         /// </summary>
-        /// <param name="element"></param>
+        /// <param name="element">operator to annotate</param>
         public void EndVisit(BinaryOperator element) {
 
             var leftType = GetTypeDefinition(element.LeftOperand);
@@ -129,6 +130,16 @@ namespace PasPasPas.Typings.Common {
                 element.IsConstant = element.LeftOperand.IsConstant && element.RightOperand.IsConstant;
             }
         }
+
+        private void ComputeConstantUnaryOperator(UnaryOperator element, int operatorId) {
+            var value = element.Value.LiteralValue;
+            var operation = environment.TypeRegistry.GetOperator(operatorId);
+
+            element.LiteralValue = operation.ComputeValue(new IValue[] { value });
+            element.IsConstant = element.LiteralValue != null;
+            element.TypeInfo = element.IsConstant ? GetTypeByIdOrUndefinedType(element.LiteralValue.TypeId) : GetErrorType(element);
+        }
+
 
         private void ComputeConstantBinaryOperator(BinaryOperator element, int operatorId) {
             var leftValue = element.LeftOperand.LiteralValue;
@@ -244,9 +255,8 @@ namespace PasPasPas.Typings.Common {
             }
             else if (element.Kind == ExpressionKind.UnaryMinus) {
                 element.IsConstant = operand.IsConstant;
-                if (element.IsConstant && operand.LiteralValue is INumericalValue intValue) {
-                    element.LiteralValue = intValue.Negate();
-                    element.TypeInfo = GetTypeByIdOrUndefinedType(element.LiteralValue.TypeId);
+                if (element.IsConstant) {
+                    ComputeConstantUnaryOperator(element, DefinedOperators.UnaryMinus);
                 }
                 else {
                     element.TypeInfo = GetTypeOfOperator(DefinedOperators.UnaryMinus, operand.TypeInfo, operand.LiteralValue);

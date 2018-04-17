@@ -1,4 +1,6 @@
-﻿namespace PasPasPas.Global.Runtime {
+﻿using SharpFloat.FloatingPoint;
+
+namespace PasPasPas.Global.Runtime {
 
     /// <summary>
     ///     helper for constant operations
@@ -6,9 +8,24 @@
     public interface IRuntimeValues {
 
         /// <summary>
-        ///     integer calculator
+        ///     integer calculator with type scaling
         /// </summary>
-        IIntegerCalculator IntegerCalculator { get; }
+        IIntegerCalculator ScaledIntegerCalculator { get; }
+
+        /// <summary>
+        ///     calculator for extended values
+        /// </summary>
+        IFloatCalculator FloatCalculator { get; }
+
+        /// <summary>
+        ///     calculator for boolean values
+        /// </summary>
+        IBooleanCalculator BooleanCalculator { get; }
+
+        /// <summary>
+        ///     calculator for sting value
+        /// </summary>
+        IStringCalculator StringCalculator { get; }
 
         /// <summary>
         ///     get special constants
@@ -74,13 +91,6 @@
         IValue ToScaledIntegerValue(ulong number);
 
         /// <summary>
-        ///     convert a char to a runtime value object
-        /// </summary>
-        /// <param name="singleChar"></param>
-        /// <returns></returns>
-        IValue ToWideCharValue(char singleChar);
-
-        /// <summary>
         ///     convert a string to a runtime value object
         /// </summary>
         /// <param name="text"></param>
@@ -88,10 +98,19 @@
         IValue ToUnicodeString(string text);
 
         /// <summary>
+        ///     convert a char to a runtime value object
+        /// </summary>
+        /// <param name="character"></param>
+        /// <returns></returns>
+        IValue ToWideCharValue(char character);
+
+
+
+        /// <summary>
         ///     convert a double to the appropriate runtime constant
         /// </summary>
         /// <param name="value">parsed value</param>
         /// <returns>constant value</returns>
-        IValue ToExtendedValue(double value);
+        IValue ToExtendedValue(in ExtF80 value);
     }
 }

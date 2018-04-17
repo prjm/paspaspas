@@ -22,4 +22,8 @@
     <DocumentationFile>bin\Release\$(PasPasPasTargetFramework)\global.xml</DocumentationFile>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="SharpFloatLibrary" Version="1.0.1" />
+  </ItemGroup>
+
 </Project>

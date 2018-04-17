@@ -10,12 +10,9 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
         /// <summary>
         ///     convert integer literals to one real literal
         /// </summary>
-        /// <param name="digits">digit</param>
-        /// <param name="decimals">decimal places</param>
-        /// <param name="minus">minus sign</param>
-        /// <param name="exponent">exponent</param>
+        /// <param name="value">real value</param>
         /// <returns>real literal value</returns>
-        IValue Convert(object digits, object decimals, bool minus, object exponent);
+        IValue Convert(string value);
 
     }
 }
