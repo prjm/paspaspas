@@ -19,7 +19,7 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         /// <param name="registry"></param>
         /// <param name="consOps">integer parser</param>
-        public High(ITypeRegistry registry, IRuntimeValues consOps) {
+        public High(ITypeRegistry registry, IRuntimeValueFactory consOps) {
             TypeRegistry = registry;
             ConstOps = consOps;
         }
@@ -45,7 +45,7 @@ namespace PasPasPas.Typings.Routines {
         /// <summary>
         ///     integer parser
         /// </summary>
-        public IRuntimeValues ConstOps { get; }
+        public IRuntimeValueFactory ConstOps { get; }
 
         /// <summary>
         ///     type id
@@ -65,7 +65,7 @@ namespace PasPasPas.Typings.Routines {
             var param = TypeRegistry.GetTypeByIdOrUndefinedType(signature[0]);
             if (param.TypeKind.IsOrdinal()) {
                 var ordinalType = param as IOrdinalType;
-                var highValue = ConstOps.ToScaledIntegerValue(ordinalType.HighestElement);
+                var highValue = ConstOps.Integers.ToScaledIntegerValue(ordinalType.HighestElement);
                 var typeId = LiteralValues.GetTypeFor(highValue);
                 var result = new ParameterGroup();
                 result.AddParameter("AValue").SymbolType = param;

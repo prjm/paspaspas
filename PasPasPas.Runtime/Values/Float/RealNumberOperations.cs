@@ -1,13 +1,26 @@
 ﻿using PasPasPas.Global.Runtime;
+using SharpFloat.FloatingPoint;
 
 namespace PasPasPas.Runtime.Values.Float {
 
     /// <summary>
     ///     calculations for extended numbers
     /// </summary>
-    public class FloatCalculator : IFloatCalculator {
+    public class RealNumberOperations : IRealNumberOperations {
 
-        private IValue invalidFloat
+        /// <summary>
+        ///     get a constant real value
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public IValue ToExtendedValue(in ExtF80 value)
+            => new ExtendedValue(value);
+
+
+        /// <summary>
+        ///     invalid real number
+        /// </summary>
+        public IValue Invalid { get; }
             = new SpecialValue(SpecialConstantKind.InvalidReal);
 
         /// <summary>
@@ -20,7 +33,7 @@ namespace PasPasPas.Runtime.Values.Float {
             if (value1 is INumericalValue first && value2 is INumericalValue second)
                 return FloatValueBase.Add(first, second);
 
-            return invalidFloat;
+            return Invalid;
         }
 
         /// <summary>
@@ -33,7 +46,7 @@ namespace PasPasPas.Runtime.Values.Float {
             if (value1 is INumericalValue first && value2 is INumericalValue second)
                 return FloatValueBase.Subtract(first, second);
 
-            return invalidFloat;
+            return Invalid;
         }
 
         /// <summary>
@@ -46,7 +59,7 @@ namespace PasPasPas.Runtime.Values.Float {
             if (value1 is INumericalValue first && value2 is INumericalValue second)
                 return FloatValueBase.Multiply(first, second);
 
-            return invalidFloat;
+            return Invalid;
         }
 
         /// <summary>
@@ -62,7 +75,7 @@ namespace PasPasPas.Runtime.Values.Float {
                 else
                     return FloatValueBase.Divide(numberDividend, numberDivisor);
 
-            return invalidFloat;
+            return Invalid;
         }
 
         /// <summary>
@@ -73,7 +86,7 @@ namespace PasPasPas.Runtime.Values.Float {
         public IValue Negate(IValue value) {
             if (value is INumericalValue floatValue)
                 return FloatValueBase.Negate(floatValue);
-            return invalidFloat;
+            return Invalid;
         }
 
         /// <summary>
@@ -86,7 +99,7 @@ namespace PasPasPas.Runtime.Values.Float {
             if (left is INumericalValue floatLeft && right is INumericalValue floatRight)
                 return FloatValueBase.Equal(floatLeft, floatRight);
             else
-                return invalidFloat;
+                return Invalid;
         }
 
         /// <summary>
@@ -99,7 +112,7 @@ namespace PasPasPas.Runtime.Values.Float {
             if (left is INumericalValue floatLeft && right is INumericalValue floatRight)
                 return FloatValueBase.NotEqual(floatLeft, floatRight);
             else
-                return invalidFloat;
+                return Invalid;
         }
 
         /// <summary>
@@ -112,7 +125,7 @@ namespace PasPasPas.Runtime.Values.Float {
             if (left is INumericalValue floatLeft && right is INumericalValue floatRight)
                 return FloatValueBase.LessThen(floatLeft, floatRight);
             else
-                return invalidFloat;
+                return Invalid;
         }
 
         /// <summary>
@@ -125,7 +138,7 @@ namespace PasPasPas.Runtime.Values.Float {
             if (left is INumericalValue floatLeft && right is INumericalValue floatRight)
                 return FloatValueBase.GreaterThenEqual(floatLeft, floatRight);
             else
-                return invalidFloat;
+                return Invalid;
         }
 
         /// <summary>
@@ -138,7 +151,7 @@ namespace PasPasPas.Runtime.Values.Float {
             if (left is INumericalValue floatLeft && right is INumericalValue floatRight)
                 return FloatValueBase.GreaterThen(floatLeft, floatRight);
             else
-                return invalidFloat;
+                return Invalid;
         }
 
         /// <summary>
@@ -151,7 +164,7 @@ namespace PasPasPas.Runtime.Values.Float {
             if (left is INumericalValue floatLeft && right is INumericalValue floatRight)
                 return FloatValueBase.LessThenOrEqual(floatLeft, floatRight);
             else
-                return invalidFloat;
+                return Invalid;
         }
     }
 }

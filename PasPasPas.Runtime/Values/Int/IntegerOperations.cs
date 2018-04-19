@@ -7,10 +7,19 @@ namespace PasPasPas.Runtime.Values.Int {
     /// <summary>
     ///     calculator helper for integers
     /// </summary>
-    public class IntegerCalculator : IIntegerCalculator {
+    public class IntegerOperations : IIntegerOperations {
 
-        private IValue invalidInteger
+        /// <summary>
+        ///     invalid integer
+        /// </summary>
+        public IValue Invalid { get; }
             = new SpecialValue(SpecialConstantKind.InvalidInteger);
+
+        /// <summary>
+        ///     integer overflow
+        /// </summary>
+        public IValue Overflow { get; }
+            = new SpecialValue(SpecialConstantKind.IntegerOverflow);
 
         /// <summary>
         ///     calculate the sum of two integers
@@ -22,7 +31,7 @@ namespace PasPasPas.Runtime.Values.Int {
             if (augend is IntegerValueBase intAugend && addend is IntegerValueBase intAddend)
                 return IntegerValueBase.AddAndScale(intAugend, intAddend);
             else
-                return invalidInteger;
+                return Invalid;
         }
 
         /// <summary>
@@ -35,7 +44,7 @@ namespace PasPasPas.Runtime.Values.Int {
             if (firstOperand is IntegerValueBase firstInt && secondOperand is IntegerValueBase secondInt)
                 return IntegerValueBase.AndAndScale(firstInt, secondInt);
             else
-                return invalidInteger;
+                return Invalid;
         }
 
         /// <summary>
@@ -51,7 +60,7 @@ namespace PasPasPas.Runtime.Values.Int {
                 else
                     return IntegerValueBase.DivideAndScale(intDividend, intDivisor);
             else
-                return invalidInteger;
+                return Invalid;
         }
 
         /// <summary>
@@ -64,7 +73,7 @@ namespace PasPasPas.Runtime.Values.Int {
             if (left is IntegerValueBase firstInt && right is IntegerValueBase secondInt)
                 return IntegerValueBase.Equal(firstInt, secondInt);
             else
-                return invalidInteger;
+                return Invalid;
         }
 
         /// <summary>
@@ -77,7 +86,7 @@ namespace PasPasPas.Runtime.Values.Int {
             if (left is IntegerValueBase firstInt && right is IntegerValueBase secondInt)
                 return IntegerValueBase.GreaterThen(firstInt, secondInt);
             else
-                return invalidInteger;
+                return Invalid;
         }
 
         /// <summary>
@@ -90,7 +99,7 @@ namespace PasPasPas.Runtime.Values.Int {
             if (left is IntegerValueBase firstInt && right is IntegerValueBase secondInt)
                 return IntegerValueBase.GreaterThenEqual(firstInt, secondInt);
             else
-                return invalidInteger;
+                return Invalid;
         }
 
         /// <summary>
@@ -103,7 +112,7 @@ namespace PasPasPas.Runtime.Values.Int {
             if (left is IntegerValueBase firstInt && right is IntegerValueBase secondInt)
                 return IntegerValueBase.LessThen(firstInt, secondInt);
             else
-                return invalidInteger;
+                return Invalid;
         }
 
         /// <summary>
@@ -116,7 +125,7 @@ namespace PasPasPas.Runtime.Values.Int {
             if (left is IntegerValueBase firstInt && right is IntegerValueBase secondInt)
                 return IntegerValueBase.LessThenEqual(firstInt, secondInt);
             else
-                return invalidInteger;
+                return Invalid;
         }
 
         /// <summary>
@@ -129,7 +138,7 @@ namespace PasPasPas.Runtime.Values.Int {
             if (left is IntegerValueBase firstInt && right is IntegerValueBase secondInt)
                 return IntegerValueBase.NotEqual(firstInt, secondInt);
             else
-                return invalidInteger;
+                return Invalid;
 
         }
 
@@ -146,7 +155,7 @@ namespace PasPasPas.Runtime.Values.Int {
                 else
                     return IntegerValueBase.ModuloAndScale(intDividend, intDivisor);
             else
-                return invalidInteger;
+                return Invalid;
         }
 
         /// <summary>
@@ -159,7 +168,7 @@ namespace PasPasPas.Runtime.Values.Int {
             if (multiplicand is IntegerValueBase intMultiplicand && intMultiplier is IntegerValueBase secondInt)
                 return IntegerValueBase.MultiplyAndScale(intMultiplicand, secondInt);
             else
-                return invalidInteger;
+                return Invalid;
         }
 
         /// <summary>
@@ -171,7 +180,7 @@ namespace PasPasPas.Runtime.Values.Int {
             if (number is IntegerValueBase intNumber)
                 return IntegerValueBase.Negate(intNumber);
             else
-                return invalidInteger;
+                return Invalid;
         }
 
         /// <summary>
@@ -183,7 +192,7 @@ namespace PasPasPas.Runtime.Values.Int {
             if (number is IntegerValueBase intNumber)
                 return IntegerValueBase.Not(intNumber);
             else
-                return invalidInteger;
+                return Invalid;
         }
 
 
@@ -198,7 +207,7 @@ namespace PasPasPas.Runtime.Values.Int {
             if (firstOperand is IntegerValueBase firstInt && secondOperand is IntegerValueBase secondInt)
                 return IntegerValueBase.OrAndScale(firstInt, secondInt);
             else
-                return invalidInteger;
+                return Invalid;
         }
 
         /// <summary>
@@ -211,7 +220,7 @@ namespace PasPasPas.Runtime.Values.Int {
             if (firstOperand is IntegerValueBase firstInt && secondOperand is IntegerValueBase secondInt)
                 return IntegerValueBase.ShlAndScale(firstInt, secondInt);
             else
-                return invalidInteger;
+                return Invalid;
         }
 
         /// <summary>
@@ -224,7 +233,7 @@ namespace PasPasPas.Runtime.Values.Int {
             if (firstOperand is IntegerValueBase firstInt && secondOperand is IntegerValueBase secondInt)
                 return IntegerValueBase.ShrAndScale(firstInt, secondInt);
             else
-                return invalidInteger;
+                return Invalid;
         }
 
         /// <summary>
@@ -237,7 +246,7 @@ namespace PasPasPas.Runtime.Values.Int {
             if (minuend is IntegerValueBase intMinuend && subtrahend is IntegerValueBase intSubtrahend)
                 return IntegerValueBase.SubtractAndScale(intMinuend, intSubtrahend);
             else
-                return invalidInteger;
+                return Invalid;
         }
 
         /// <summary>
@@ -250,7 +259,156 @@ namespace PasPasPas.Runtime.Values.Int {
             if (firstOperand is IntegerValueBase firstInt && secondOperand is IntegerValueBase secondInt)
                 return IntegerValueBase.XorAndScale(firstInt, secondInt);
             else
-                return invalidInteger;
+                return Invalid;
         }
+
+        /// <summary>
+        ///     convert a signed byte to a constant value
+        /// </summary>
+        /// <param name="number">numerical value</param>
+        /// <returns></returns>
+        public IValue ToScaledIntegerValue(sbyte number)
+            => new ShortIntValue(number);
+
+        /// <summary>
+        ///     convert a byte to a constant value
+        /// </summary>
+        /// <param name="number">numerical value</param>
+        /// <returns></returns>
+        public IValue ToScaledIntegerValue(byte number) {
+            if (number < 128)
+                return new ShortIntValue((sbyte)number);
+
+            return new ByteValue(number);
+        }
+
+        /// <summary>
+        ///     convert a signed byte to a constant value
+        /// </summary>
+        /// <param name="number">numerical value</param>
+        /// <returns></returns>
+        public IValue ToScaledIntegerValue(int number) {
+            if (number < -32768)
+                return new IntegerValue(number);
+            else if (number < -128)
+                return new SmallIntValue((short)number);
+            else if (number < 128)
+                return new ShortIntValue((sbyte)number);
+            else if (number < 256)
+                return new ByteValue((byte)number);
+            else if (number < 32768)
+                return new SmallIntValue((short)number);
+            else if (number < 65536)
+                return new WordValue((ushort)number);
+
+            return new IntegerValue(number);
+        }
+
+        /// <summary>
+        ///     convert a unsigned int a constant value
+        /// </summary>
+        /// <param name="number">numerical value</param>
+        /// <returns></returns>
+        public IValue ToScaledIntegerValue(uint number) {
+            if (number < 128)
+                return new ShortIntValue((sbyte)number);
+            else if (number < 256)
+                return new ByteValue((byte)number);
+            else if (number < 32768)
+                return new SmallIntValue((short)number);
+            else if (number < 65536)
+                return new WordValue((ushort)number);
+            else if (number < 2147483648)
+                return new IntegerValue((int)number);
+
+            return new CardinalValue(number);
+        }
+
+        /// <summary>
+        ///     convert a long to a constant value
+        /// </summary>
+        /// <param name="number">numerical value</param>
+        /// <returns></returns>
+        public IValue ToScaledIntegerValue(long number) {
+            if (number < -2147483648)
+                return new Int64Value(number);
+            else if (number < -32768)
+                return new IntegerValue((int)number);
+            else if (number < -128)
+                return new SmallIntValue((short)number);
+            else if (number < 128)
+                return new ShortIntValue((sbyte)number);
+            else if (number < 256)
+                return new ByteValue((byte)number);
+            else if (number < 32768)
+                return new SmallIntValue((short)number);
+            else if (number < 65536)
+                return new WordValue((ushort)number);
+            else if (number < 2147483648)
+                return new IntegerValue((int)number);
+            else if (number < 4294967296)
+                return new CardinalValue((uint)number);
+
+            return new Int64Value(number);
+        }
+
+        /// <summary>
+        ///     convert a unsigned long to a constant value
+        /// </summary>
+        /// <param name="number">numerical value</param>
+        /// <returns></returns>
+        public IValue ToScaledIntegerValue(ulong number) {
+            if (number < 128)
+                return new ShortIntValue((sbyte)number);
+            else if (number < 256)
+                return new ByteValue((byte)number);
+            else if (number < 32768)
+                return new SmallIntValue((short)number);
+            else if (number < 65536)
+                return new WordValue((ushort)number);
+            else if (number < 2147483648)
+                return new IntegerValue((int)number);
+            else if (number < 4294967296)
+                return new CardinalValue((uint)number);
+            else if (number < 9223372036854775808)
+                return new Int64Value((long)number);
+
+            return new UInt64Value(number);
+        }
+
+        /// <summary>
+        ///     convert a signed byte to a constant value
+        /// </summary>
+        /// <param name="number">numerical value</param>
+        /// <returns></returns>
+        public IValue ToScaledIntegerValue(short number) {
+            if (number < -128)
+                return new SmallIntValue(number);
+            else if (number < 128)
+                return new ShortIntValue((sbyte)number);
+            else if (number < 256)
+                return new ByteValue((byte)number);
+
+            return new SmallIntValue(number);
+        }
+
+        /// <summary>
+        ///     convert a byte to a constant value
+        /// </summary>
+        /// <param name="number">numerical value</param>
+        /// <returns></returns>
+        public IValue ToScaledIntegerValue(ushort number) {
+            if (number < 128)
+                return new ShortIntValue((sbyte)number);
+            else if (number < 256)
+                return new ByteValue((byte)number);
+            else if (number < 32768)
+                return new SmallIntValue((short)number);
+
+            return new WordValue(number);
+        }
+
+
+
     }
 }

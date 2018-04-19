@@ -143,14 +143,14 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
         };
 
         private readonly bool allowHex;
-        private readonly IRuntimeValues constants;
+        private readonly IRuntimeValueFactory constants;
 
         /// <summary>
         ///     create a new integer parser
         /// </summary>
         /// <param name="constOperations"></param>
         /// <param name="hexFormat">if <c>true</c>, numbers a parsed in hex format</param>
-        public IntegerParser(IRuntimeValues constOperations, bool hexFormat) {
+        public IntegerParser(IRuntimeValueFactory constOperations, bool hexFormat) {
             allowHex = hexFormat;
             constants = constOperations;
             data = new LookupTable<string, IValue>(new Func<string, IValue>(DoParse), true);
@@ -166,17 +166,17 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
             ulong newresult;
 
             if (input.Length < 1)
-                return constants[SpecialConstantKind.InvalidInteger];
+                return constants.Integers.Invalid;
 
             for (var i = 0; i < input.Length; i++) {
                 var value = GetValueOfChar(input[input.Length - 1 - i], allowHex);
 
                 if (i > 19 || (allowHex && i > 16)) {
-                    return constants[SpecialConstantKind.IntegerOverflow];
+                    return constants.Integers.Overflow;
                 }
 
                 if (value == 255) {
-                    return constants[SpecialConstantKind.InvalidInteger];
+                    return constants.Integers.Invalid;
                 }
 
                 if (allowHex)
@@ -185,12 +185,12 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
                     newresult = result + (value * factors[i]);
 
                 if (newresult < result)
-                    return constants[SpecialConstantKind.IntegerOverflow];
+                    return constants.Integers.Overflow;
 
                 result = newresult;
             }
 
-            return constants.ToScaledIntegerValue(result);
+            return constants.Integers.ToScaledIntegerValue(result);
         }
 
         /// <summary>

@@ -30,8 +30,8 @@ namespace PasPasPasTests.Tokenizer {
             IsInteger("300", 300);
             IsInteger("1000000", 1000000);
             IsInteger("18446744073709551615", 18446744073709551615);
-            IsInteger("18446744073709551616", new RuntimeValues()[SpecialConstantKind.IntegerOverflow]);
-            IsInteger("108446744073709551615", new RuntimeValues()[SpecialConstantKind.IntegerOverflow]);
+            IsInteger("18446744073709551616", new RuntimeValueFactory().Integers.Overflow);
+            IsInteger("108446744073709551615", new RuntimeValueFactory().Integers.Overflow);
         }
 
         [Fact]

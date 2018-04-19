@@ -20,7 +20,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         private readonly StackedFileReader input;
         private readonly ILogSource log;
         private readonly IParserEnvironment environment;
-        private readonly IRuntimeValues constants;
+        private readonly IRuntimeValueFactory constants;
 
         /// <summary>
         ///     create a new tokenizer state
@@ -205,7 +205,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <summary>
         ///     constant value provider
         /// </summary>
-        public IRuntimeValues Constants
+        public IRuntimeValueFactory Constants
             => constants;
 
         /// <summary>

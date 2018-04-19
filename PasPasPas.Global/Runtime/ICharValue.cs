@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PasPasPas.Global.Runtime {
+﻿namespace PasPasPas.Global.Runtime {
 
     /// <summary>
-    ///     widechar value (utf-16)
+    ///     widechar runtime value (utf-16)
     /// </summary>
     public interface ICharValue : IValue {
 

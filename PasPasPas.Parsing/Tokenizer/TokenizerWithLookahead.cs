@@ -126,7 +126,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         private OptionSet options;
         private TokenizerMode mode = TokenizerMode.Undefined;
         private readonly IParserEnvironment environment;
-        private readonly IRuntimeValues constValues;
+        private readonly IRuntimeValueFactory constValues;
 
         /// <summary>
         ///     create a new tokenizer with lookahead

@@ -1,48 +1,63 @@
-﻿using SharpFloat.FloatingPoint;
-
-namespace PasPasPas.Global.Runtime {
+﻿namespace PasPasPas.Global.Runtime {
 
     /// <summary>
-    ///     helper for constant operations
+    ///     integer calculator
     /// </summary>
-    public interface IRuntimeValues {
+    public interface IIntegerOperations :
+        IArithmeticOperations, ILogicalOperations, IRelationalOperations {
 
         /// <summary>
-        ///     integer calculator with type scaling
+        ///     invalid integer
         /// </summary>
-        IIntegerCalculator ScaledIntegerCalculator { get; }
+        IValue Invalid { get; }
 
         /// <summary>
-        ///     calculator for extended values
+        ///     integer overflow
         /// </summary>
-        IFloatCalculator FloatCalculator { get; }
+        IValue Overflow { get; }
 
         /// <summary>
-        ///     calculator for boolean values
+        ///     integer division
         /// </summary>
-        IBooleanCalculator BooleanCalculator { get; }
-
-        /// <summary>
-        ///     calculator for sting value
-        /// </summary>
-        IStringCalculator StringCalculator { get; }
-
-        /// <summary>
-        ///     get special constants
-        /// </summary>
-        /// <param name="index"></param>
+        /// <param name="dividend"></param>
+        /// <param name="divisor"></param>
         /// <returns></returns>
-        IValue this[SpecialConstantKind index] { get; }
+        IValue Divide(IValue dividend, IValue divisor);
 
         /// <summary>
-        ///     get the value for a given number
+        ///     integer remainder
+        /// </summary>
+        /// <param name="dividend"></param>
+        /// <param name="divisor"></param>
+        /// <returns></returns>
+        IValue Modulo(IValue dividend, IValue divisor);
+
+        /// <summary>
+        ///     shift left
+        /// </summary>
+        /// <param name="firstOperand"></param>
+        /// <param name="secondOperand"></param>
+        /// <returns></returns>
+        IValue Shl(IValue firstOperand, IValue secondOperand);
+
+        /// <summary>
+        ///     shift right
+        /// </summary>
+        /// <param name="firstOperand"></param>
+        /// <param name="secondOperand"></param>
+        /// <returns></returns>
+        IValue Shr(IValue firstOperand, IValue secondOperand);
+
+
+        /// <summary>
+        ///     get the value for a signed byte
         /// </summary>
         /// <param name="number">given number</param>
         /// <returns>converted value</returns>
         IValue ToScaledIntegerValue(sbyte number);
 
         /// <summary>
-        ///     get the value for a given number
+        ///     get the value for a byte
         /// </summary>
         /// <param name="number">given number</param>
         /// <returns>converted value</returns>
@@ -90,27 +105,5 @@ namespace PasPasPas.Global.Runtime {
         /// <returns>converted value</returns>
         IValue ToScaledIntegerValue(ulong number);
 
-        /// <summary>
-        ///     convert a string to a runtime value object
-        /// </summary>
-        /// <param name="text"></param>
-        /// <returns></returns>
-        IValue ToUnicodeString(string text);
-
-        /// <summary>
-        ///     convert a char to a runtime value object
-        /// </summary>
-        /// <param name="character"></param>
-        /// <returns></returns>
-        IValue ToWideCharValue(char character);
-
-
-
-        /// <summary>
-        ///     convert a double to the appropriate runtime constant
-        /// </summary>
-        /// <param name="value">parsed value</param>
-        /// <returns>constant value</returns>
-        IValue ToExtendedValue(in ExtF80 value);
     }
 }

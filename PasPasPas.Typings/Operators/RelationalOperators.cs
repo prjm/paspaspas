@@ -99,44 +99,44 @@ namespace PasPasPas.Typings.Operators {
             if (left is IBooleanValue && right is IBooleanValue) {
 
                 if (Kind == DefinedOperators.EqualsOperator)
-                    return Runtime.BooleanCalculator.Equal(left, right);
+                    return Runtime.Booleans.Equal(left, right);
 
                 if (Kind == DefinedOperators.NotEqualsOperator)
-                    return Runtime.BooleanCalculator.NotEquals(left, right);
+                    return Runtime.Booleans.NotEquals(left, right);
 
                 if (Kind == DefinedOperators.LessThen)
-                    return Runtime.BooleanCalculator.LessThen(left, right);
+                    return Runtime.Booleans.LessThen(left, right);
 
                 if (Kind == DefinedOperators.GreaterThen)
-                    return Runtime.BooleanCalculator.GreaterThen(left, right);
+                    return Runtime.Booleans.GreaterThen(left, right);
 
                 if (Kind == DefinedOperators.LessThenOrEqual)
-                    return Runtime.BooleanCalculator.LessThenOrEqual(left, right);
+                    return Runtime.Booleans.LessThenOrEqual(left, right);
 
                 if (Kind == DefinedOperators.GreaterThenEqual)
-                    return Runtime.BooleanCalculator.GreaterThenEqual(left, right);
+                    return Runtime.Booleans.GreaterThenEqual(left, right);
 
             }
 
-            if ((left is IRealValue && right is INumericalValue) || (left is INumericalValue && right is IRealValue)) {
+            if ((left is IRealNumberValue && right is INumericalValue) || (left is INumericalValue && right is IRealNumberValue)) {
 
                 if (Kind == DefinedOperators.EqualsOperator)
-                    return Runtime.FloatCalculator.Equal(left, right);
+                    return Runtime.RealNumbers.Equal(left, right);
 
                 if (Kind == DefinedOperators.NotEqualsOperator)
-                    return Runtime.FloatCalculator.NotEquals(left, right);
+                    return Runtime.RealNumbers.NotEquals(left, right);
 
                 if (Kind == DefinedOperators.LessThen)
-                    return Runtime.FloatCalculator.LessThen(left, right);
+                    return Runtime.RealNumbers.LessThen(left, right);
 
                 if (Kind == DefinedOperators.GreaterThen)
-                    return Runtime.FloatCalculator.GreaterThen(left, right);
+                    return Runtime.RealNumbers.GreaterThen(left, right);
 
                 if (Kind == DefinedOperators.LessThenOrEqual)
-                    return Runtime.FloatCalculator.LessThenOrEqual(left, right);
+                    return Runtime.RealNumbers.LessThenOrEqual(left, right);
 
                 if (Kind == DefinedOperators.GreaterThenEqual)
-                    return Runtime.FloatCalculator.GreaterThenEqual(left, right);
+                    return Runtime.RealNumbers.GreaterThenEqual(left, right);
 
             }
 
@@ -144,44 +144,44 @@ namespace PasPasPas.Typings.Operators {
             if (left is IIntegerValue && right is IIntegerValue) {
 
                 if (Kind == DefinedOperators.EqualsOperator)
-                    return Runtime.ScaledIntegerCalculator.Equal(left, right);
+                    return Runtime.Integers.Equal(left, right);
 
                 if (Kind == DefinedOperators.NotEqualsOperator)
-                    return Runtime.ScaledIntegerCalculator.NotEquals(left, right);
+                    return Runtime.Integers.NotEquals(left, right);
 
                 if (Kind == DefinedOperators.LessThen)
-                    return Runtime.ScaledIntegerCalculator.LessThen(left, right);
+                    return Runtime.Integers.LessThen(left, right);
 
                 if (Kind == DefinedOperators.GreaterThen)
-                    return Runtime.ScaledIntegerCalculator.GreaterThen(left, right);
+                    return Runtime.Integers.GreaterThen(left, right);
 
                 if (Kind == DefinedOperators.LessThenOrEqual)
-                    return Runtime.ScaledIntegerCalculator.LessThenOrEqual(left, right);
+                    return Runtime.Integers.LessThenOrEqual(left, right);
 
                 if (Kind == DefinedOperators.GreaterThenEqual)
-                    return Runtime.ScaledIntegerCalculator.GreaterThenEqual(left, right);
+                    return Runtime.Integers.GreaterThenEqual(left, right);
 
             }
 
             if (left is IStringValue && right is IStringValue) {
 
                 if (Kind == DefinedOperators.EqualsOperator)
-                    return Runtime.StringCalculator.Equal(left, right);
+                    return Runtime.Strings.Equal(left, right);
 
                 if (Kind == DefinedOperators.NotEqualsOperator)
-                    return Runtime.StringCalculator.NotEquals(left, right);
+                    return Runtime.Strings.NotEquals(left, right);
 
                 if (Kind == DefinedOperators.LessThen)
-                    return Runtime.StringCalculator.LessThen(left, right);
+                    return Runtime.Strings.LessThen(left, right);
 
                 if (Kind == DefinedOperators.GreaterThen)
-                    return Runtime.StringCalculator.GreaterThen(left, right);
+                    return Runtime.Strings.GreaterThen(left, right);
 
                 if (Kind == DefinedOperators.LessThenOrEqual)
-                    return Runtime.StringCalculator.LessThenOrEqual(left, right);
+                    return Runtime.Strings.LessThenOrEqual(left, right);
 
                 if (Kind == DefinedOperators.GreaterThenEqual)
-                    return Runtime.StringCalculator.GreaterThenEqual(left, right);
+                    return Runtime.Strings.GreaterThenEqual(left, right);
 
             }
 

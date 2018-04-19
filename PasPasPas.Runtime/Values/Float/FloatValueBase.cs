@@ -8,7 +8,7 @@ namespace PasPasPas.Runtime.Values.Float {
     /// <summary>
     ///     base class for float values
     /// </summary>
-    public abstract class FloatValueBase : IRealValue {
+    public abstract class FloatValueBase : IRealNumberValue {
 
         /// <summary>
         ///     test if the number is negative

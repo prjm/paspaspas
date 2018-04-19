@@ -1,7 +1,7 @@
 ﻿namespace PasPasPas.Global.Runtime {
 
     /// <summary>
-    ///     boolean values
+    ///     boolean runtime values
     /// </summary>
     public interface IBooleanValue : IValue {
 
@@ -9,5 +9,6 @@
         ///     get the boolean value
         /// </summary>
         bool AsBoolean { get; }
+
     }
 }

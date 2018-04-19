@@ -42,7 +42,7 @@ namespace PasPasPas.Runtime.Values.Float {
         /// <param name="obj"></param>
         /// <returns></returns>
         public override bool Equals(object obj) {
-            if (obj is IRealValue floatValue)
+            if (obj is IRealNumberValue floatValue)
                 return floatValue.AsExtended == value;
             return false;
         }

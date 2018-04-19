@@ -1,5 +1,4 @@
-﻿using PasPasPas.Global.Runtime;
-using PasPasPas.Parsing;
+﻿using PasPasPas.Parsing;
 using PasPasPas.Parsing.SyntaxTree.Types;
 
 namespace PasPasPas.Typings.Common {
@@ -14,9 +13,5 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         ITypeRegistry TypeRegistry { get; }
 
-        /// <summary>
-        ///     simple runtime
-        /// </summary>
-        IRuntime Runtime { get; }
     }
 }

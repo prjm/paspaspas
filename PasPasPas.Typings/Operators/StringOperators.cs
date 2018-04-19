@@ -86,7 +86,7 @@ namespace PasPasPas.Typings.Operators {
             if (inputs.Length == 2) {
 
                 if (Kind == DefinedOperators.ConcatOperation) {
-                    return Runtime.StringCalculator.Concat(inputs[0], inputs[1]);
+                    return Runtime.Strings.Concat(inputs[0], inputs[1]);
                 }
 
             }

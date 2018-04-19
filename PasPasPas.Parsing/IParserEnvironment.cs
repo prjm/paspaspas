@@ -13,7 +13,7 @@ namespace PasPasPas.Parsing {
         /// <summary>
         ///     interface for constant operations
         /// </summary>
-        IRuntimeValues ConstantValues { get; }
+        IRuntimeValueFactory ConstantValues { get; }
 
         /// <summary>
         ///     integer literal parser

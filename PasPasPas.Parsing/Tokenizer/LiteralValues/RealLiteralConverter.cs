@@ -12,7 +12,7 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
     /// </summary>
     public class RealLiteralConverter : IEnvironmentItem, IRealConverter, ILookupFunction<string, IValue> {
 
-        private readonly IRuntimeValues constantsValues;
+        private readonly IRuntimeValueFactory constantsValues;
         private LookupTable<string, IValue> data;
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
         /// <summary>
         ///     create a new real literal converter
         /// </summary>
-        public RealLiteralConverter(IRuntimeValues constValues) {
+        public RealLiteralConverter(IRuntimeValueFactory constValues) {
             data = new LookupTable<string, IValue>(ConvertLiterals);
             constantsValues = constValues;
         }
@@ -51,8 +51,8 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
         /// <returns></returns>
         public IValue ConvertLiterals(string value) {
             if (ExtF80.TryParse(value, out var realValue))
-                return constantsValues.ToExtendedValue(realValue);
-            return constantsValues[SpecialConstantKind.InvalidReal];
+                return constantsValues.RealNumbers.ToExtendedValue(realValue);
+            return constantsValues.RealNumbers.Invalid;
         }
 
         /// <summary>

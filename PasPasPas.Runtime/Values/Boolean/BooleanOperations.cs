@@ -5,10 +5,25 @@ namespace PasPasPas.Runtime.Values.Boolean {
     /// <summary>
     ///     boolean calculator
     /// </summary>
-    public class BooleanCalculator : IBooleanCalculator {
+    public class BooleanOperations : IBooleanOperations {
 
-        private IValue invalidBool
+        /// <summary>
+        ///     invalid boolean value
+        /// </summary>
+        public IValue Invalid { get; }
             = new SpecialValue(SpecialConstantKind.InvalidBool);
+
+        /// <summary>
+        ///     <c>true</c> value constant
+        /// </summary>
+        public IValue TrueValue { get; }
+            = new BooleanValue(true);
+
+        /// <summary>
+        ///     <c>false</c> value constant
+        /// </summary>
+        public IValue FalseValue { get; }
+            = new BooleanValue(false);
 
         /// <summary>
         ///     <c>and</c> operation
@@ -20,7 +35,7 @@ namespace PasPasPas.Runtime.Values.Boolean {
             if (value1 is IBooleanValue boolean1 && value2 is IBooleanValue boolean2)
                 return BooleanValueBase.And(boolean1, boolean2);
             else
-                return invalidBool;
+                return Invalid;
         }
 
         /// <summary>
@@ -33,7 +48,7 @@ namespace PasPasPas.Runtime.Values.Boolean {
             if (value1 is IBooleanValue boolean1 && value2 is IBooleanValue boolean2)
                 return BooleanValueBase.Equal(boolean1, boolean2);
             else
-                return invalidBool;
+                return Invalid;
         }
 
         /// <summary>
@@ -46,7 +61,7 @@ namespace PasPasPas.Runtime.Values.Boolean {
             if (value1 is IBooleanValue boolean1 && value2 is IBooleanValue boolean2)
                 return BooleanValueBase.GreaterThen(boolean1, boolean2);
             else
-                return invalidBool;
+                return Invalid;
         }
 
         /// <summary>
@@ -59,7 +74,7 @@ namespace PasPasPas.Runtime.Values.Boolean {
             if (value1 is IBooleanValue boolean1 && value2 is IBooleanValue boolean2)
                 return BooleanValueBase.GreaterThenEqual(boolean1, boolean2);
             else
-                return invalidBool;
+                return Invalid;
         }
 
         /// <summary>
@@ -72,7 +87,7 @@ namespace PasPasPas.Runtime.Values.Boolean {
             if (value1 is IBooleanValue boolean1 && value2 is IBooleanValue boolean2)
                 return BooleanValueBase.LessThen(boolean1, boolean2);
             else
-                return invalidBool;
+                return Invalid;
         }
 
         /// <summary>
@@ -85,7 +100,7 @@ namespace PasPasPas.Runtime.Values.Boolean {
             if (value1 is IBooleanValue boolean1 && value2 is IBooleanValue boolean2)
                 return BooleanValueBase.LessThenOrEqual(boolean1, boolean2);
             else
-                return invalidBool;
+                return Invalid;
         }
 
         /// <summary>
@@ -97,7 +112,7 @@ namespace PasPasPas.Runtime.Values.Boolean {
             if (value is IBooleanValue boolean)
                 return BooleanValueBase.Not(boolean);
             else
-                return invalidBool;
+                return Invalid;
         }
 
         /// <summary>
@@ -110,7 +125,7 @@ namespace PasPasPas.Runtime.Values.Boolean {
             if (value1 is IBooleanValue boolean1 && value2 is IBooleanValue boolean2)
                 return BooleanValueBase.NotEquals(boolean1, boolean2);
             else
-                return invalidBool;
+                return Invalid;
         }
 
         /// <summary>
@@ -123,7 +138,7 @@ namespace PasPasPas.Runtime.Values.Boolean {
             if (value1 is IBooleanValue boolean1 && value2 is IBooleanValue boolean2)
                 return BooleanValueBase.Or(boolean1, boolean2);
             else
-                return invalidBool;
+                return Invalid;
         }
 
         /// <summary>
@@ -136,7 +151,7 @@ namespace PasPasPas.Runtime.Values.Boolean {
             if (value1 is IBooleanValue boolean1 && value2 is IBooleanValue boolean2)
                 return BooleanValueBase.Xor(boolean1, boolean2);
             else
-                return invalidBool;
+                return Invalid;
 
         }
     }

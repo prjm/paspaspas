@@ -25,7 +25,7 @@ namespace PasPasPas.Typings.Common {
         private readonly IDictionary<int, IOperator> operators
             = new Dictionary<int, IOperator>();
 
-        private IRuntimeValues runtime;
+        private IRuntimeValueFactory runtime;
         private readonly UnitType systemUnit;
         private readonly object idLock = new object();
         private int userTypeIds = 1000;
@@ -74,7 +74,7 @@ namespace PasPasPas.Typings.Common {
         /// <param name="pool">string pool</param>
         /// <param name="unwrapper">literal unwrapper</param>
         /// <param name="constOps">constant helper</param>
-        public RegisteredTypes(StringPool pool, IRuntimeValues constOps, ILiteralUnwrapper unwrapper, NativeIntSize intSize) {
+        public RegisteredTypes(StringPool pool, IRuntimeValueFactory constOps, ILiteralUnwrapper unwrapper, NativeIntSize intSize) {
             runtime = constOps;
             systemUnit = new UnitType(KnownTypeIds.SystemUnit);
             RegisterType(systemUnit);
@@ -88,7 +88,7 @@ namespace PasPasPas.Typings.Common {
         /// <summary>
         ///     register common functions
         /// </summary>
-        private void RegisterCommonFunctions(IRuntimeValues constOps) {
+        private void RegisterCommonFunctions(IRuntimeValueFactory constOps) {
             systemUnit.AddGlobal(new Abs(this));
             systemUnit.AddGlobal(new High(this, constOps));
         }

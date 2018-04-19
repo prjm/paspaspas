@@ -5,12 +5,10 @@ using PasPasPas.Infrastructure.Environment;
 using PasPasPas.Infrastructure.Files;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Options.DataTypes;
-using PasPasPas.Parsing;
 using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Parsing.Tokenizer;
 using PasPasPas.Parsing.Tokenizer.LiteralValues;
 using PasPasPas.Parsing.Tokenizer.Patterns;
-using PasPasPas.Runtime.Common;
 using PasPasPas.Runtime.Values;
 using PasPasPas.Typings.Common;
 
@@ -30,8 +28,8 @@ namespace PasPasPas.Api {
         /// <summary>
         ///     constant values
         /// </summary>
-        public IRuntimeValues ConstantValues { get; }
-            = new RuntimeValues();
+        public IRuntimeValueFactory ConstantValues { get; }
+            = new RuntimeValueFactory();
 
         /// <summary>
         ///     integer parser
@@ -136,18 +134,12 @@ namespace PasPasPas.Api {
                     Log,
                     Files,
                     LiteralUnwrapper,
-                    TypeRegistry,
-                    Runtime
+                    TypeRegistry
                 };
                 return data;
             }
         }
 
-        /// <summary>
-        ///     common runime
-        /// </summary>
-        public IRuntime Runtime { get; }
-            = new InternalRuntime();
 
     }
 }

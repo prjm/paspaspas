@@ -22,7 +22,7 @@ namespace PasPasPasTests.Common {
         /// <param name="number"></param>
         /// <returns></returns>
         protected IValue GetIntegerValue(sbyte number)
-            => new RuntimeValues().ToScaledIntegerValue(number);
+            => new RuntimeValueFactory().Integers.ToScaledIntegerValue(number);
 
         /// <summary>
         ///     convert a value
@@ -30,7 +30,7 @@ namespace PasPasPasTests.Common {
         /// <param name="number"></param>
         /// <returns></returns>
         protected IValue GetIntegerValue(byte number)
-            => new RuntimeValues().ToScaledIntegerValue(number);
+            => new RuntimeValueFactory().Integers.ToScaledIntegerValue(number);
 
         /// <summary>
         ///     convert a value
@@ -38,7 +38,7 @@ namespace PasPasPasTests.Common {
         /// <param name="number"></param>
         /// <returns></returns>
         protected IValue GetIntegerValue(short number)
-            => new RuntimeValues().ToScaledIntegerValue(number);
+            => new RuntimeValueFactory().Integers.ToScaledIntegerValue(number);
 
 
         /// <summary>
@@ -47,9 +47,7 @@ namespace PasPasPasTests.Common {
         /// <param name="number"></param>
         /// <returns></returns>
         protected IValue GetIntegerValue(ushort number)
-            => new RuntimeValues().ToScaledIntegerValue(number);
-
-
+            => new RuntimeValueFactory().Integers.ToScaledIntegerValue(number);
 
         /// <summary>
         ///     convert a value
@@ -57,7 +55,7 @@ namespace PasPasPasTests.Common {
         /// <param name="number"></param>
         /// <returns></returns>
         protected IValue GetIntegerValue(int number)
-            => new RuntimeValues().ToScaledIntegerValue(number);
+            => new RuntimeValueFactory().Integers.ToScaledIntegerValue(number);
 
         /// <summary>
         ///     get the Unicode string value
@@ -65,7 +63,7 @@ namespace PasPasPasTests.Common {
         /// <param name="text"></param>
         /// <returns></returns>
         protected IValue GetUnicodeStringValue(string text)
-            => new RuntimeValues().ToUnicodeString(text);
+            => new RuntimeValueFactory().Strings.ToUnicodeString(text);
 
         /// <summary>
         ///     get the Unicode char value
@@ -73,7 +71,7 @@ namespace PasPasPasTests.Common {
         /// <param name="text"></param>
         /// <returns></returns>
         protected IValue GetWideCharValue(char text)
-            => new RuntimeValues().ToWideCharValue(text);
+            => new RuntimeValueFactory().Chars.ToWideCharValue(text);
 
 
 
@@ -83,7 +81,7 @@ namespace PasPasPasTests.Common {
         /// <param name="number"></param>
         /// <returns></returns>
         protected IValue GetIntegerValue(uint number)
-            => new RuntimeValues().ToScaledIntegerValue(number);
+            => new RuntimeValueFactory().Integers.ToScaledIntegerValue(number);
 
 
         /// <summary>
@@ -92,7 +90,7 @@ namespace PasPasPasTests.Common {
         /// <param name="number"></param>
         /// <returns></returns>
         protected IValue GetIntegerValue(long number)
-            => new RuntimeValues().ToScaledIntegerValue(number);
+            => new RuntimeValueFactory().Integers.ToScaledIntegerValue(number);
 
 
         /// <summary>
@@ -101,10 +99,10 @@ namespace PasPasPasTests.Common {
         /// <param name="number"></param>
         /// <returns></returns>
         protected IValue GetIntegerValue(ulong number)
-            => new RuntimeValues().ToScaledIntegerValue(number);
+            => new RuntimeValueFactory().Integers.ToScaledIntegerValue(number);
 
         protected IValue GetExtendedValue(ExtF80 number)
-            => new RuntimeValues().ToExtendedValue(number);
+            => new RuntimeValueFactory().RealNumbers.ToExtendedValue(number);
 
     }
 }

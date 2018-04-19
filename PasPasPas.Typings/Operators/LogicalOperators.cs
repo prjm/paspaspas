@@ -127,10 +127,10 @@ namespace PasPasPas.Typings.Operators {
             if (Kind == DefinedOperators.NotOperation) {
 
                 if (value is IIntegerValue intValue)
-                    return Runtime.ScaledIntegerCalculator.Not(value);
+                    return Runtime.Integers.Not(value);
 
                 if (value is IBooleanValue boolValue)
-                    return Runtime.BooleanCalculator.Not(value);
+                    return Runtime.Booleans.Not(value);
 
             }
 
@@ -142,23 +142,23 @@ namespace PasPasPas.Typings.Operators {
             if (value1 is IIntegerValue int1 && value2 is IIntegerValue int2) {
 
                 if (Kind == DefinedOperators.AndOperation) {
-                    return Runtime.ScaledIntegerCalculator.And(value1, value2);
+                    return Runtime.Integers.And(value1, value2);
                 }
 
                 if (Kind == DefinedOperators.OrOperation) {
-                    return Runtime.ScaledIntegerCalculator.Or(value1, value2);
+                    return Runtime.Integers.Or(value1, value2);
                 }
 
                 if (Kind == DefinedOperators.XorOperation) {
-                    return Runtime.ScaledIntegerCalculator.Xor(value1, value2);
+                    return Runtime.Integers.Xor(value1, value2);
                 }
 
                 if (Kind == DefinedOperators.ShlOperation) {
-                    return Runtime.ScaledIntegerCalculator.Shl(value1, value2);
+                    return Runtime.Integers.Shl(value1, value2);
                 }
 
                 if (Kind == DefinedOperators.ShrOperation) {
-                    return Runtime.ScaledIntegerCalculator.Shr(value1, value2);
+                    return Runtime.Integers.Shr(value1, value2);
                 }
 
 
@@ -167,15 +167,15 @@ namespace PasPasPas.Typings.Operators {
             if (value1 is IBooleanValue bool1 && value2 is IBooleanValue bool2) {
 
                 if (Kind == DefinedOperators.AndOperation) {
-                    return Runtime.BooleanCalculator.And(value1, value2);
+                    return Runtime.Booleans.And(value1, value2);
                 }
 
                 if (Kind == DefinedOperators.OrOperation) {
-                    return Runtime.BooleanCalculator.Or(value1, value2);
+                    return Runtime.Booleans.Or(value1, value2);
                 }
 
                 if (Kind == DefinedOperators.XorOperation) {
-                    return Runtime.BooleanCalculator.Xor(value1, value2);
+                    return Runtime.Booleans.Xor(value1, value2);
                 }
 
             }

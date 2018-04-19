@@ -1,7 +1,7 @@
 ﻿namespace PasPasPas.Global.Runtime {
 
     /// <summary>
-    ///     get a special constant
+    ///     kinds special constants
     /// </summary>
     public enum SpecialConstantKind {
 
@@ -9,16 +9,6 @@
         ///     unknown constant
         /// </summary>
         Unknown = 0,
-
-        /// <summary>
-        ///     true value
-        /// </summary>
-        TrueValue = 1,
-
-        /// <summary>
-        ///     false value
-        /// </summary>
-        FalseValue = 2,
 
         /// <summary>
         ///     integer overflow literal

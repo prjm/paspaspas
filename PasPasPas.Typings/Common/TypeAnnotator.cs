@@ -87,12 +87,12 @@ namespace PasPasPas.Typings.Common {
             if (element.Kind == ConstantValueKind.True) {
                 element.TypeInfo = GetTypeByIdOrUndefinedType(KnownTypeIds.BooleanType);
                 element.IsConstant = true;
-                element.LiteralValue = environment.ConstantValues[SpecialConstantKind.TrueValue];
+                element.LiteralValue = environment.ConstantValues.Booleans.TrueValue;
             }
             else if (element.Kind == ConstantValueKind.False) {
                 element.TypeInfo = GetTypeByIdOrUndefinedType(KnownTypeIds.BooleanType);
                 element.IsConstant = true;
-                element.LiteralValue = environment.ConstantValues[SpecialConstantKind.FalseValue];
+                element.LiteralValue = environment.ConstantValues.Booleans.FalseValue;
             }
 
             if ((element.Kind == ConstantValueKind.HexNumber ||

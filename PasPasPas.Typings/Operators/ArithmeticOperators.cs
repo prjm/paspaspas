@@ -137,7 +137,7 @@ namespace PasPasPas.Typings.Operators {
             return KnownTypeIds.ErrorType;
         }
 
-        internal static void RegisterOperators(IRuntimeValues runtime, ILiteralUnwrapper unwrapper, RegisteredTypes registeredTypes) => throw new NotImplementedException();
+        internal static void RegisterOperators(IRuntimeValueFactory runtime, ILiteralUnwrapper unwrapper, RegisteredTypes registeredTypes) => throw new NotImplementedException();
 
         /// <summary>
         ///     register known operators
@@ -179,19 +179,19 @@ namespace PasPasPas.Typings.Operators {
                 return number;
 
             if (Kind == DefinedOperators.UnaryMinus && value is IIntegerValue)
-                return Runtime.ScaledIntegerCalculator.Negate(value);
+                return Runtime.Integers.Negate(value);
 
-            if (Kind == DefinedOperators.UnaryMinus && value is IRealValue)
-                return Runtime.FloatCalculator.Negate(value);
+            if (Kind == DefinedOperators.UnaryMinus && value is IRealNumberValue)
+                return Runtime.RealNumbers.Negate(value);
 
             return null;
         }
 
         private IValue ComputeBinaryOperator(IValue value1, IValue value2) {
-            var ints = Runtime.ScaledIntegerCalculator;
-            var floats = Runtime.FloatCalculator;
+            var ints = Runtime.Integers;
+            var floats = Runtime.RealNumbers;
 
-            if (value1 is IRealValue || value2 is IRealValue) {
+            if (value1 is IRealNumberValue || value2 is IRealNumberValue) {
                 if (Kind == DefinedOperators.PlusOperation)
                     return floats.Add(value1, value2);
 

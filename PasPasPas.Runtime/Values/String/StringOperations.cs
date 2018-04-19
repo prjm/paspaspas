@@ -5,10 +5,18 @@ namespace PasPasPas.Runtime.Values.String {
     /// <summary>
     ///     string calculator
     /// </summary>
-    public class StringCalculator : IStringCalculator {
+    public class StringOperations : IStringOperations {
 
         private IValue invalidString
             = new SpecialValue(SpecialConstantKind.InvalidString);
+
+        /// <summary>
+        ///     get a constant text value
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
+        public IValue ToUnicodeString(string text)
+            => new UnicodeStringValue(text);
 
         /// <summary>
         ///     concatenate two strings

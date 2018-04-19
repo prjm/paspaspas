@@ -47,7 +47,7 @@ namespace PasPasPas.Typings.Operators {
         /// <summary>
         ///     runtime values
         /// </summary>
-        public IRuntimeValues Runtime { get; set; }
+        public IRuntimeValueFactory Runtime { get; set; }
 
         /// <summary>
         ///     get the output type for an operation
