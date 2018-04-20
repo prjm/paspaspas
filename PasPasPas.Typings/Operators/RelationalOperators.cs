@@ -58,33 +58,6 @@ namespace PasPasPas.Typings.Operators {
             }
         }
 
-        /// <summary>
-        ///     get output type for operations
-        /// </summary>
-        /// <param name="input"></param>
-        /// <param name="values">current values (if constant)</param>
-        /// <returns></returns>
-        public override int GetOutputTypeForOperation(Signature input, object[] values) {
-            if (input.Length != 2)
-                return KnownTypeIds.ErrorType;
-
-            var left = TypeRegistry.GetTypeKind(input[0]);
-            var right = TypeRegistry.GetTypeKind(input[1]);
-
-            if (CommonTypeKind.BooleanType.All(left, right))
-                return KnownTypeIds.BooleanType;
-
-            if (left.IsNumerical() && right.IsNumerical())
-                return KnownTypeIds.BooleanType;
-
-            if (left.IsTextual() && right.IsTextual())
-                return KnownTypeIds.BooleanType;
-
-
-            return KnownTypeIds.ErrorType;
-        }
-
-
 
         /// <summary>
         ///     compute value
@@ -190,6 +163,32 @@ namespace PasPasPas.Typings.Operators {
             }
 
             return null;
+        }
+
+        /// <summary>
+        ///     evaluate a binary operator
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        protected override int EvaluateBinaryOperator(Signature input) {
+            if (input.Length != 2)
+                return KnownTypeIds.ErrorType;
+
+            var left = TypeRegistry.GetTypeKind(input[0]);
+            var right = TypeRegistry.GetTypeKind(input[1]);
+
+            if (CommonTypeKind.BooleanType.All(left, right))
+                return KnownTypeIds.BooleanType;
+
+            if (left.IsNumerical() && right.IsNumerical())
+                return KnownTypeIds.BooleanType;
+
+            if (left.IsTextual() && right.IsTextual())
+                return KnownTypeIds.BooleanType;
+
+
+            return KnownTypeIds.ErrorType;
+
         }
     }
 }

@@ -65,96 +65,6 @@ namespace PasPasPas.Typings.Operators {
         }
 
         /// <summary>
-        ///     get the output type for a given operator signature
-        /// </summary>
-        /// <param name="input">operator signature</param>
-        /// <param name="values">current value</param>
-        /// <returns></returns>
-        public override int GetOutputTypeForOperation(Signature input, object[] values) {
-
-            if (!input.Length.In(1, 2))
-                return KnownTypeIds.ErrorType;
-
-            if (input.Length == 1) {
-
-                var operand = TypeRegistry.GetTypeKind(input[0]);
-
-                if (Kind == DefinedOperators.UnaryPlus) {
-
-                    if (operand == CommonTypeKind.FloatType)
-                        return KnownTypeIds.Extended;
-
-                    if (operand == CommonTypeKind.Int64Type)
-                        return KnownTypeIds.Int64Type;
-
-                    if (operand == CommonTypeKind.IntegerType)
-                        return input[0];
-
-                }
-                if (Kind == DefinedOperators.UnaryMinus) {
-
-                    if (operand == CommonTypeKind.FloatType)
-                        return input[0];
-
-                    if (operand == CommonTypeKind.IntegerType || operand == CommonTypeKind.Int64Type) {
-                        if (ResolveAlias(input[0]) is IIntegralType currentType)
-                            return currentType.TypeId;
-                        else
-                            return KnownTypeIds.ErrorType;
-                    }
-                }
-            }
-            else if (input.Length == 2) {
-
-                var left = TypeRegistry.GetTypeKind(input[0]);
-                var right = TypeRegistry.GetTypeKind(input[1]);
-
-                if (Kind.In(DefinedOperators.PlusOperation,
-                            DefinedOperators.MinusOperation,
-                            DefinedOperators.TimesOperation)) {
-
-                    if (CommonTypeKind.FloatType.One(left, right) && left.IsNumerical() && right.IsNumerical())
-                        return KnownTypeIds.Extended;
-
-                    if (CommonTypeKind.Int64Type.One(left, right) && left.IsNumerical() && right.IsNumerical())
-                        return KnownTypeIds.Int64Type;
-
-                    if (CommonTypeKind.IntegerType.All(left, right))
-                        return TypeRegistry.GetSmallestIntegralTypeOrNext(input[0], input[1]);
-
-                }
-
-                if (Kind.In(DefinedOperators.DivOperation,
-                            DefinedOperators.ModOperation)) {
-
-                    if (CommonTypeKind.Int64Type.One(left, right) && left.IsNumerical() && right.IsNumerical())
-                        return KnownTypeIds.Int64Type;
-
-                    if (CommonTypeKind.IntegerType.All(left, right))
-                        return TypeRegistry.GetSmallestIntegralTypeOrNext(input[0], input[1]);
-
-                }
-
-                if (Kind == DefinedOperators.SlashOperation) {
-
-                    if (CommonTypeKind.FloatType.One(left, right) && left.IsNumerical() && right.IsNumerical())
-                        return KnownTypeIds.Extended;
-
-                    if (CommonTypeKind.Int64Type.One(left, right) && left.IsNumerical() && right.IsNumerical())
-                        return KnownTypeIds.Extended;
-
-                    if (CommonTypeKind.IntegerType.All(left, right))
-                        return KnownTypeIds.Extended;
-
-
-                }
-
-            }
-
-            return KnownTypeIds.ErrorType;
-        }
-
-        /// <summary>
         ///     computer operator value
         /// </summary>
         /// <param name="inputs"></param>
@@ -224,6 +134,96 @@ namespace PasPasPas.Typings.Operators {
                 return floats.Divide(value1, value2);
 
             return null;
+        }
+
+        /// <summary>
+        ///     evaluate a unary operator
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        protected override int EvaluateUnaryOperator(Signature input) {
+
+            var operand = TypeRegistry.GetTypeKind(input[0]);
+
+            if (Kind == DefinedOperators.UnaryPlus) {
+
+                if (operand == CommonTypeKind.FloatType)
+                    return KnownTypeIds.Extended;
+
+                if (operand == CommonTypeKind.Int64Type)
+                    return KnownTypeIds.Int64Type;
+
+                if (operand == CommonTypeKind.IntegerType)
+                    return input[0];
+
+            }
+            if (Kind == DefinedOperators.UnaryMinus) {
+
+                if (operand == CommonTypeKind.FloatType)
+                    return input[0];
+
+                if (operand == CommonTypeKind.IntegerType || operand == CommonTypeKind.Int64Type) {
+                    if (ResolveAlias(input[0]) is IIntegralType currentType)
+                        return currentType.TypeId;
+                    else
+                        return KnownTypeIds.ErrorType;
+                }
+            }
+
+            return KnownTypeIds.ErrorType;
+        }
+
+        /// <summary>
+        ///     evaluate a binary operator
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        protected override int EvaluateBinaryOperator(Signature input) {
+
+            var left = TypeRegistry.GetTypeKind(input[0]);
+            var right = TypeRegistry.GetTypeKind(input[1]);
+
+            if (Kind.In(DefinedOperators.PlusOperation,
+                        DefinedOperators.MinusOperation,
+                        DefinedOperators.TimesOperation)) {
+
+                if (CommonTypeKind.FloatType.One(left, right) && left.IsNumerical() && right.IsNumerical())
+                    return KnownTypeIds.Extended;
+
+                if (CommonTypeKind.Int64Type.One(left, right) && left.IsNumerical() && right.IsNumerical())
+                    return KnownTypeIds.Int64Type;
+
+                if (CommonTypeKind.IntegerType.All(left, right))
+                    return TypeRegistry.GetSmallestIntegralTypeOrNext(input[0], input[1]);
+
+            }
+
+            if (Kind.In(DefinedOperators.DivOperation,
+                        DefinedOperators.ModOperation)) {
+
+                if (CommonTypeKind.Int64Type.One(left, right) && left.IsNumerical() && right.IsNumerical())
+                    return KnownTypeIds.Int64Type;
+
+                if (CommonTypeKind.IntegerType.All(left, right))
+                    return TypeRegistry.GetSmallestIntegralTypeOrNext(input[0], input[1]);
+
+            }
+
+            if (Kind == DefinedOperators.SlashOperation) {
+
+                if (CommonTypeKind.FloatType.One(left, right) && left.IsNumerical() && right.IsNumerical())
+                    return KnownTypeIds.Extended;
+
+                if (CommonTypeKind.Int64Type.One(left, right) && left.IsNumerical() && right.IsNumerical())
+                    return KnownTypeIds.Extended;
+
+                if (CommonTypeKind.IntegerType.All(left, right))
+                    return KnownTypeIds.Extended;
+
+
+            }
+
+            return KnownTypeIds.ErrorType;
         }
     }
 }

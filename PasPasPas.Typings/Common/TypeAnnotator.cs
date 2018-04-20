@@ -126,7 +126,7 @@ namespace PasPasPas.Typings.Common {
                     return;
                 }
 
-                element.TypeInfo = GetTypeOfOperator(operatorId, leftType, rightType, element.LeftOperand.LiteralValue, element.RightOperand.LiteralValue);
+                element.TypeInfo = GetTypeOfOperator(operatorId, leftType, rightType);
                 element.IsConstant = element.LeftOperand.IsConstant && element.RightOperand.IsConstant;
             }
         }
@@ -250,7 +250,7 @@ namespace PasPasPas.Typings.Common {
             }
 
             if (element.Kind == ExpressionKind.Not) {
-                element.TypeInfo = GetTypeOfOperator(DefinedOperators.NotOperation, operand.TypeInfo, operand.LiteralValue);
+                element.TypeInfo = GetTypeOfOperator(DefinedOperators.NotOperation, operand.TypeInfo);
                 element.IsConstant = operand.IsConstant;
             }
             else if (element.Kind == ExpressionKind.UnaryMinus) {
@@ -259,16 +259,14 @@ namespace PasPasPas.Typings.Common {
                     ComputeConstantUnaryOperator(element, DefinedOperators.UnaryMinus);
                 }
                 else {
-                    element.TypeInfo = GetTypeOfOperator(DefinedOperators.UnaryMinus, operand.TypeInfo, operand.LiteralValue);
+                    element.TypeInfo = GetTypeOfOperator(DefinedOperators.UnaryMinus, operand.TypeInfo);
                 }
             }
             else if (element.Kind == ExpressionKind.UnaryPlus) {
-                element.TypeInfo = GetTypeOfOperator(DefinedOperators.UnaryPlus, operand.TypeInfo, operand.LiteralValue);
+                element.TypeInfo = GetTypeOfOperator(DefinedOperators.UnaryPlus, operand.TypeInfo);
                 element.IsConstant = operand.IsConstant;
             }
         }
-
-
 
         private ITypeDefinition GetErrorType(ITypedSyntaxNode node) {
             return GetTypeByIdOrUndefinedType(KnownTypeIds.ErrorType);
@@ -279,9 +277,8 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="operatorKind"></param>
         /// <param name="typeInfo"></param>
-        /// <param name="currentValues">current value</param>
         /// <returns></returns>
-        private ITypeDefinition GetTypeOfOperator(int operatorKind, ITypeDefinition typeInfo, object currentValues) {
+        private ITypeDefinition GetTypeOfOperator(int operatorKind, ITypeDefinition typeInfo) {
             if (typeInfo == null)
                 return null;
 
@@ -291,7 +288,7 @@ namespace PasPasPas.Typings.Common {
                 return null;
 
             var signature = new Signature(typeInfo.TypeId);
-            var typeId = operation.GetOutputTypeForOperation(signature, new object[] { currentValues });
+            var typeId = operation.EvaluateOperator(signature);
             return GetTypeByIdOrUndefinedType(typeId);
         }
 
@@ -301,10 +298,8 @@ namespace PasPasPas.Typings.Common {
         /// <param name="operatorKind"></param>
         /// <param name="typeInfo1"></param>
         /// <param name="typeInfo2"></param>
-        /// <param name="left">constant left value</param>
-        /// <param name="right">constant right value</param>
         /// <returns></returns>
-        private ITypeDefinition GetTypeOfOperator(int operatorKind, ITypeDefinition typeInfo1, ITypeDefinition typeInfo2, object left, object right) {
+        private ITypeDefinition GetTypeOfOperator(int operatorKind, ITypeDefinition typeInfo1, ITypeDefinition typeInfo2) {
             if (typeInfo1 == null)
                 return null;
 
@@ -317,7 +312,7 @@ namespace PasPasPas.Typings.Common {
                 return null;
 
             var signature = new Signature(typeInfo1.TypeId, typeInfo2.TypeId);
-            var typeId = operation.GetOutputTypeForOperation(signature, new[] { left, right });
+            var typeId = operation.EvaluateOperator(signature);
             return GetTypeByIdOrUndefinedType(typeId);
         }
 

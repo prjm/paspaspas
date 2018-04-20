@@ -1,4 +1,5 @@
-﻿using PasPasPas.Global.Runtime;
+﻿using PasPasPas.Global.Constants;
+using PasPasPas.Global.Runtime;
 using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Typings.Common;
 
@@ -33,13 +34,14 @@ namespace PasPasPas.Typings.Operators {
         }
 
         /// <summary>
-        ///     operation kind - <c>DefinedOperations.NotOperation</c>
+        ///     operator kind
         /// </summary>
+        /// <see cref="DefinedOperators"/>
         public int Kind
             => kind;
 
         /// <summary>
-        ///     operator arity
+        ///     operator arity (number of operands)
         /// </summary>
         public int Arity
             => arity;
@@ -50,7 +52,7 @@ namespace PasPasPas.Typings.Operators {
         public abstract string Name { get; }
 
         /// <summary>
-        ///     used type registry
+        ///     type registry for type operation
         /// </summary>
         public ITypeRegistry TypeRegistry { get; set; }
 
@@ -64,8 +66,32 @@ namespace PasPasPas.Typings.Operators {
         /// </summary>
         /// <param name="input">input signature</param>
         /// <returns>output type id</returns>
-        /// <param name="currentValue">current values of the operands (if constant)</param>
-        public abstract int GetOutputTypeForOperation(Signature input, object[] currentValue);
+        public int EvaluateOperator(Signature input) {
+            switch (arity) {
+                case 1:
+                    return EvaluateUnaryOperator(input);
+                case 2:
+                    return EvaluateBinaryOperator(input);
+            }
+
+            return KnownTypeIds.ErrorType;
+        }
+
+        /// <summary>
+        ///     evaluate unary operator
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        protected virtual int EvaluateBinaryOperator(Signature input)
+            => KnownTypeIds.ErrorType;
+
+        /// <summary>
+        ///     evaluate binary operator
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        protected virtual int EvaluateUnaryOperator(Signature input)
+            => KnownTypeIds.ErrorType;
 
         /// <summary>
         ///     compute the operator value

@@ -30,10 +30,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Types {
         /// <summary>
         ///     compute a type signature
         /// </summary>
-        /// <param name="input"></param>
-        /// <param name="currentValues">current value</param>
+        /// <param name="input">operator input</param>
         /// <returns></returns>
-        int GetOutputTypeForOperation(Signature input, object[] currentValues);
+        int EvaluateOperator(Signature input);
 
         /// <summary>
         ///     compute the value of this operator

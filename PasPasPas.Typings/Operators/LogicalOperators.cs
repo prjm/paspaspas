@@ -54,62 +54,6 @@ namespace PasPasPas.Typings.Operators {
         }
 
         /// <summary>
-        ///     compute the output type of this operation
-        /// </summary>
-        /// <param name="input">input signature</param>
-        /// <param name="values">current values</param>
-        /// <returns>output type</returns>
-        public override int GetOutputTypeForOperation(Signature input, object[] values) {
-
-            if (input.Length == 1) {
-
-                var operand = TypeRegistry.GetTypeKind(input[0]);
-
-                if (Kind == DefinedOperators.NotOperation && operand == CommonTypeKind.BooleanType)
-                    return KnownTypeIds.BooleanType;
-
-                if (Kind == DefinedOperators.NotOperation && operand == CommonTypeKind.Int64Type)
-                    return input[0];
-
-                if (Kind == DefinedOperators.NotOperation && operand == CommonTypeKind.IntegerType)
-                    return input[0];
-
-            }
-            else if (input.Length == 2) {
-
-                var left = TypeRegistry.GetTypeKind(input[0]);
-                var right = TypeRegistry.GetTypeKind(input[1]);
-
-                if (Kind == DefinedOperators.AndOperation && CommonTypeKind.BooleanType.All(left, right))
-                    return KnownTypeIds.BooleanType;
-
-                if (Kind == DefinedOperators.AndOperation && left.Integral() && right.Integral())
-                    return TypeRegistry.GetSmallestIntegralTypeOrNext(input[0], input[1]);
-
-                if (Kind == DefinedOperators.OrOperation && CommonTypeKind.BooleanType.All(left, right))
-                    return KnownTypeIds.BooleanType;
-
-                if (Kind == DefinedOperators.OrOperation && left.Integral() && right.Integral())
-                    return TypeRegistry.GetSmallestIntegralTypeOrNext(input[0], input[1]);
-
-                if (Kind == DefinedOperators.XorOperation && CommonTypeKind.BooleanType.All(left, right))
-                    return KnownTypeIds.BooleanType;
-
-                if (Kind == DefinedOperators.XorOperation && left.Integral() && right.Integral())
-                    return TypeRegistry.GetSmallestIntegralTypeOrNext(input[0], input[1]);
-
-                if (Kind == DefinedOperators.ShlOperation && left.Integral() && right.Integral())
-                    return input[0];
-
-                if (Kind == DefinedOperators.ShrOperation && left.Integral() && right.Integral())
-                    return input[0];
-
-            }
-
-            return KnownTypeIds.ErrorType;
-        }
-
-        /// <summary>
         ///     compute the value
         /// </summary>
         /// <param name="inputs"></param>
@@ -186,6 +130,62 @@ namespace PasPasPas.Typings.Operators {
             return null;
 
 
+        }
+
+        /// <summary>
+        ///     unary operator
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        protected override int EvaluateUnaryOperator(Signature input) {
+            var operand = TypeRegistry.GetTypeKind(input[0]);
+
+            if (Kind == DefinedOperators.NotOperation && operand == CommonTypeKind.BooleanType)
+                return KnownTypeIds.BooleanType;
+
+            if (Kind == DefinedOperators.NotOperation && operand == CommonTypeKind.Int64Type)
+                return input[0];
+
+            if (Kind == DefinedOperators.NotOperation && operand == CommonTypeKind.IntegerType)
+                return input[0];
+
+            return KnownTypeIds.ErrorType;
+        }
+
+        /// <summary>
+        ///     binary operator
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        protected override int EvaluateBinaryOperator(Signature input) {
+            var left = TypeRegistry.GetTypeKind(input[0]);
+            var right = TypeRegistry.GetTypeKind(input[1]);
+
+            if (Kind == DefinedOperators.AndOperation && CommonTypeKind.BooleanType.All(left, right))
+                return KnownTypeIds.BooleanType;
+
+            if (Kind == DefinedOperators.AndOperation && left.Integral() && right.Integral())
+                return TypeRegistry.GetSmallestIntegralTypeOrNext(input[0], input[1]);
+
+            if (Kind == DefinedOperators.OrOperation && CommonTypeKind.BooleanType.All(left, right))
+                return KnownTypeIds.BooleanType;
+
+            if (Kind == DefinedOperators.OrOperation && left.Integral() && right.Integral())
+                return TypeRegistry.GetSmallestIntegralTypeOrNext(input[0], input[1]);
+
+            if (Kind == DefinedOperators.XorOperation && CommonTypeKind.BooleanType.All(left, right))
+                return KnownTypeIds.BooleanType;
+
+            if (Kind == DefinedOperators.XorOperation && left.Integral() && right.Integral())
+                return TypeRegistry.GetSmallestIntegralTypeOrNext(input[0], input[1]);
+
+            if (Kind == DefinedOperators.ShlOperation && left.Integral() && right.Integral())
+                return input[0];
+
+            if (Kind == DefinedOperators.ShrOperation && left.Integral() && right.Integral())
+                return input[0];
+
+            return KnownTypeIds.ErrorType;
         }
     }
 }

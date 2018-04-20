@@ -43,15 +43,29 @@ namespace PasPasPas.Typings.Operators {
             }
         }
 
+        /// <summary>
+        ///     compute constant value
+        /// </summary>
+        /// <param name="inputs"></param>
+        /// <returns></returns>
+        public override IValue ComputeValue(IValue[] inputs) {
+            if (inputs.Length == 2) {
+
+                if (Kind == DefinedOperators.ConcatOperator) {
+                    return Runtime.Strings.Concat(inputs[0], inputs[1]);
+                }
+
+            }
+
+            return null;
+        }
 
         /// <summary>
-        ///     get the output type for a given operator signature
+        ///     evaluate a binary operator
         /// </summary>
-        /// <param name="input">operator signature</param>
-        /// <param name="values">current values (if constant)</param>
+        /// <param name="input"></param>
         /// <returns></returns>
-        public override int GetOutputTypeForOperation(Signature input, object[] values) {
-
+        protected override int EvaluateBinaryOperator(Signature input) {
             if (input.Length != 2)
                 return KnownTypeIds.ErrorType;
 
@@ -79,23 +93,6 @@ namespace PasPasPas.Typings.Operators {
             }
 
             return KnownTypeIds.ErrorType;
-        }
-
-        /// <summary>
-        ///     compute constant value
-        /// </summary>
-        /// <param name="inputs"></param>
-        /// <returns></returns>
-        public override IValue ComputeValue(IValue[] inputs) {
-            if (inputs.Length == 2) {
-
-                if (Kind == DefinedOperators.ConcatOperator) {
-                    return Runtime.Strings.Concat(inputs[0], inputs[1]);
-                }
-
-            }
-
-            return null;
         }
     }
 }
