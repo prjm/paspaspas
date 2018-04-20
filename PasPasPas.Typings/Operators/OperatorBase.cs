@@ -9,14 +9,18 @@ namespace PasPasPas.Typings.Operators {
     /// </summary>
     public abstract class OperatorBase : IOperator {
 
-        private int kind;
+        private readonly int kind;
+        private readonly int arity;
 
         /// <summary>
         ///     create a new operator definition
         /// </summary>
-        /// <param name="withKind">operation kind</param>
-        public OperatorBase(int withKind)
-            => kind = withKind;
+        /// <param name="withKind">operator kind</param>
+        /// <param name="withArity">operator arity</param>
+        public OperatorBase(int withKind, int withArity) {
+            kind = withKind;
+            arity = withArity;
+        }
 
         /// <summary>
         ///     resolve type aliases
@@ -33,6 +37,12 @@ namespace PasPasPas.Typings.Operators {
         /// </summary>
         public int Kind
             => kind;
+
+        /// <summary>
+        ///     operator arity
+        /// </summary>
+        public int Arity
+            => arity;
 
         /// <summary>
         ///     operator name (optional)

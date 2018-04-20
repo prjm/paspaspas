@@ -16,7 +16,7 @@
         IntegerType,
 
         /// <summary>
-        ///     char type
+        ///     byte char type
         /// </summary>
         AnsiCharType,
 
@@ -66,7 +66,7 @@
         WideStringType,
 
         /// <summary>
-        ///     varian type
+        ///     variant record type
         /// </summary>
         VariantType,
 
@@ -96,7 +96,7 @@
         DynamicArrayType,
 
         /// <summary>
-        ///     unicode string type
+        ///     Unicode string type
         /// </summary>
         UnicodeStringType,
 
@@ -144,7 +144,7 @@
         SubrangeType,
 
         /// <summary>
-        ///     hidden type
+        ///     hidden / internal type
         /// </summary>
         HiddenType,
     }

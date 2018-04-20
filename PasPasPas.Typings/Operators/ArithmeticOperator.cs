@@ -3,7 +3,6 @@ using PasPasPas.Global.Constants;
 using PasPasPas.Global.Runtime;
 using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree.Types;
-using PasPasPas.Parsing.Tokenizer.LiteralValues;
 using PasPasPas.Typings.Common;
 
 namespace PasPasPas.Typings.Operators {
@@ -11,13 +10,32 @@ namespace PasPasPas.Typings.Operators {
     /// <summary>
     ///     arithmetic operators
     /// </summary>
-    public class ArithmeticOperators : OperatorBase {
+    public class ArithmeticOperator : OperatorBase {
+
+        private static void Register(ITypeRegistry registry, int kind, int arity = 2)
+            => registry.RegisterOperator(new ArithmeticOperator(kind, arity));
+
+        /// <summary>
+        ///     register known operators
+        /// </summary>
+        /// <param name="registry">type registry</param>
+        public static void RegisterOperators(ITypeRegistry registry) {
+            Register(registry, DefinedOperators.UnaryMinus, 1);
+            Register(registry, DefinedOperators.UnaryPlus, 1);
+            Register(registry, DefinedOperators.PlusOperation);
+            Register(registry, DefinedOperators.MinusOperation);
+            Register(registry, DefinedOperators.TimesOperation);
+            Register(registry, DefinedOperators.DivOperation);
+            Register(registry, DefinedOperators.ModOperation);
+            Register(registry, DefinedOperators.SlashOperation);
+        }
 
         /// <summary>
         ///     create a new arithmetic operator
         /// </summary>
         /// <param name="withKind">operator kind</param>
-        public ArithmeticOperators(int withKind) : base(withKind) { }
+        /// <param name="withArity">arity</param>
+        public ArithmeticOperator(int withKind, int withArity = 2) : base(withKind, withArity) { }
 
         /// <summary>
         ///     get the operator name
@@ -25,6 +43,10 @@ namespace PasPasPas.Typings.Operators {
         public override string Name {
             get {
                 switch (Kind) {
+                    case DefinedOperators.UnaryPlus:
+                        return "+";
+                    case DefinedOperators.UnaryMinus:
+                        return "-";
                     case DefinedOperators.PlusOperation:
                         return "+";
                     case DefinedOperators.MinusOperation:
@@ -35,6 +57,8 @@ namespace PasPasPas.Typings.Operators {
                         return "div";
                     case DefinedOperators.ModOperation:
                         return "mod";
+                    case DefinedOperators.SlashOperation:
+                        return "/";
                 }
                 throw new InvalidOperationException();
             }
@@ -128,24 +152,6 @@ namespace PasPasPas.Typings.Operators {
             }
 
             return KnownTypeIds.ErrorType;
-        }
-
-        internal static void RegisterOperators(IRuntimeValueFactory runtime, RegisteredTypes registeredTypes)
-            => throw new NotImplementedException();
-
-        /// <summary>
-        ///     register known operators
-        /// </summary>
-        /// <param name="typeRegistry">type registry</param>
-        public static void RegisterOperators(ITypeRegistry typeRegistry) {
-            typeRegistry.RegisterOperator(new ArithmeticOperators(DefinedOperators.UnaryMinus));
-            typeRegistry.RegisterOperator(new ArithmeticOperators(DefinedOperators.UnaryPlus));
-            typeRegistry.RegisterOperator(new ArithmeticOperators(DefinedOperators.PlusOperation));
-            typeRegistry.RegisterOperator(new ArithmeticOperators(DefinedOperators.MinusOperation));
-            typeRegistry.RegisterOperator(new ArithmeticOperators(DefinedOperators.TimesOperation));
-            typeRegistry.RegisterOperator(new ArithmeticOperators(DefinedOperators.DivOperation));
-            typeRegistry.RegisterOperator(new ArithmeticOperators(DefinedOperators.ModOperation));
-            typeRegistry.RegisterOperator(new ArithmeticOperators(DefinedOperators.SlashOperation));
         }
 
         /// <summary>

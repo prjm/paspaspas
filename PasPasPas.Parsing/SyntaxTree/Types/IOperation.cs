@@ -8,7 +8,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Types {
     public interface IOperator {
 
         /// <summary>
-        ///     operator kind
+        ///     operator kind (unique id)
         /// </summary>
         int Kind { get; }
 
@@ -16,6 +16,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Types {
         ///     operator name
         /// </summary>
         string Name { get; }
+
+        /// <summary>
+        ///     arity (number of operands)
+        /// </summary>
+        int Arity { get; }
 
         /// <summary>
         ///     used type registry

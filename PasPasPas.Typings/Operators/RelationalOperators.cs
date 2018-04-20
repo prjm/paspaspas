@@ -12,12 +12,28 @@ namespace PasPasPas.Typings.Operators {
     /// </summary>
     public class RelationalOperators : OperatorBase {
 
+        private static void Register(ITypeRegistry registry, int kind)
+            => registry.RegisterOperator(new RelationalOperators(kind, 2));
+
+        /// <summary>
+        ///     register relational operators
+        /// </summary>
+        /// <param name="registry">type registry</param>
+        public static void RegisterOperators(ITypeRegistry registry) {
+            Register(registry, DefinedOperators.EqualsOperator);
+            Register(registry, DefinedOperators.NotEqualsOperator);
+            Register(registry, DefinedOperators.LessThen);
+            Register(registry, DefinedOperators.GreaterThen);
+            Register(registry, DefinedOperators.LessThenOrEqual);
+            Register(registry, DefinedOperators.GreaterThenEqual);
+        }
+
         /// <summary>
         ///     create a new relational operator
         /// </summary>
-        /// <param name="withKind"></param>
-        public RelationalOperators(int withKind) : base(withKind) {
-        }
+        /// <param name="withKind">operator kind</param>
+        /// <param name="withArity">operator arity</param>
+        public RelationalOperators(int withKind, int withArity) : base(withKind, withArity) { }
 
         /// <summary>
         ///     get the operator name
@@ -69,18 +85,6 @@ namespace PasPasPas.Typings.Operators {
         }
 
 
-        /// <summary>
-        ///     register relational operators
-        /// </summary>
-        /// <param name="registry">type registry</param>
-        public static void RegisterOperators(ITypeRegistry registry) {
-            registry.RegisterOperator(new RelationalOperators(DefinedOperators.EqualsOperator));
-            registry.RegisterOperator(new RelationalOperators(DefinedOperators.NotEqualsOperator));
-            registry.RegisterOperator(new RelationalOperators(DefinedOperators.LessThen));
-            registry.RegisterOperator(new RelationalOperators(DefinedOperators.GreaterThen));
-            registry.RegisterOperator(new RelationalOperators(DefinedOperators.LessThenOrEqual));
-            registry.RegisterOperator(new RelationalOperators(DefinedOperators.GreaterThenEqual));
-        }
 
         /// <summary>
         ///     compute value

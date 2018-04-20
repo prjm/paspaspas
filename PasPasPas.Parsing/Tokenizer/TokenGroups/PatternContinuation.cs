@@ -32,6 +32,5 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
             }
             return false;
         }
-
     }
 }

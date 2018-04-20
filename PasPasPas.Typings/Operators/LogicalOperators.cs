@@ -1,7 +1,6 @@
 ﻿using System;
 using PasPasPas.Global.Constants;
 using PasPasPas.Global.Runtime;
-using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Typings.Common;
 
@@ -12,11 +11,28 @@ namespace PasPasPas.Typings.Operators {
     /// </summary>
     public class LogicalOperators : OperatorBase {
 
+        private static void Register(ITypeRegistry registry, int kind, int arity = 2)
+            => registry.RegisterOperator(new LogicalOperators(kind, arity));
+
+        /// <summary>
+        ///     register logical operators
+        /// </summary>
+        /// <param name="registry">type registry</param>
+        public static void RegisterOperators(ITypeRegistry registry) {
+            Register(registry, DefinedOperators.NotOperation, 1);
+            Register(registry, DefinedOperators.AndOperation);
+            Register(registry, DefinedOperators.XorOperation);
+            Register(registry, DefinedOperators.OrOperation);
+            Register(registry, DefinedOperators.ShlOperation);
+            Register(registry, DefinedOperators.ShrOperation);
+        }
+
         /// <summary>
         ///     create a new logical operation
         /// </summary>
-        /// <param name="withKind">operation kind</param>
-        public LogicalOperators(int withKind) : base(withKind) { }
+        /// <param name="withKind">operator kind</param>
+        /// <param name="withArity">operator arity</param>
+        public LogicalOperators(int withKind, int withArity) : base(withKind, withArity) { }
 
         /// <summary>
         ///     operation name
@@ -91,19 +107,6 @@ namespace PasPasPas.Typings.Operators {
             }
 
             return KnownTypeIds.ErrorType;
-        }
-
-        /// <summary>
-        ///     register logical operators
-        /// </summary>
-        /// <param name="registry">type registry</param>
-        public static void RegisterOperators(ITypeRegistry registry) {
-            registry.RegisterOperator(new LogicalOperators(DefinedOperators.NotOperation));
-            registry.RegisterOperator(new LogicalOperators(DefinedOperators.AndOperation));
-            registry.RegisterOperator(new LogicalOperators(DefinedOperators.XorOperation));
-            registry.RegisterOperator(new LogicalOperators(DefinedOperators.OrOperation));
-            registry.RegisterOperator(new LogicalOperators(DefinedOperators.ShlOperation));
-            registry.RegisterOperator(new LogicalOperators(DefinedOperators.ShrOperation));
         }
 
         /// <summary>

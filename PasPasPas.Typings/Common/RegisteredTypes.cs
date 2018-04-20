@@ -5,7 +5,6 @@ using PasPasPas.Infrastructure.Environment;
 using PasPasPas.Options.DataTypes;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Parsing.SyntaxTree.Types;
-using PasPasPas.Parsing.Tokenizer.LiteralValues;
 using PasPasPas.Typings.Hidden;
 using PasPasPas.Typings.Operators;
 using PasPasPas.Typings.Routines;
@@ -15,8 +14,13 @@ using PasPasPas.Typings.Structured;
 namespace PasPasPas.Typings.Common {
 
     /// <summary>
-    ///     common type registry - contains all system types
+    ///     common type registry - contains all system defined types
     /// </summary>
+    /// <remarks>
+    ///     <list type="bullet">
+    ///         <item>each registered type gets an unique id</item>
+    ///     </list>
+    /// </remarks>
     public class RegisteredTypes : ITypeRegistry, IEnvironmentItem {
 
         private readonly IDictionary<int, ITypeDefinition> types
@@ -87,9 +91,9 @@ namespace PasPasPas.Typings.Common {
         /// <summary>
         ///     register common functions
         /// </summary>
-        private void RegisterCommonFunctions(IRuntimeValueFactory constOps) {
+        private void RegisterCommonFunctions(IRuntimeValueFactory runtimeValues) {
             systemUnit.AddGlobal(new Abs(this));
-            systemUnit.AddGlobal(new High(this, constOps));
+            systemUnit.AddGlobal(new High(this, runtimeValues));
         }
 
         /// <summary>
@@ -97,7 +101,7 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         private void RegisterCommonOperators() {
             LogicalOperators.RegisterOperators(this);
-            ArithmeticOperators.RegisterOperators(this);
+            ArithmeticOperator.RegisterOperators(this);
             RelationalOperators.RegisterOperators(this);
             StringOperators.RegisterOperators(this);
         }

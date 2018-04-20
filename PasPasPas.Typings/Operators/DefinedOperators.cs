@@ -1,7 +1,7 @@
 ﻿namespace PasPasPas.Typings.Operators {
 
     /// <summary>
-    ///     standard operations
+    ///     standard operators
     /// </summary>
     public static class DefinedOperators {
 
@@ -112,9 +112,9 @@
         public const int GreaterThenEqual = 29;
 
         /// <summary>
-        ///     string concat operator
+        ///     string concatenate operator
         /// </summary>
-        public const int ConcatOperation = 30;
+        public const int ConcatOperator = 30;
 
     }
 }

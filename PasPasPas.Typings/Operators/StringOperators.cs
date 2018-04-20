@@ -12,12 +12,23 @@ namespace PasPasPas.Typings.Operators {
     /// </summary>
     public class StringOperators : OperatorBase {
 
+        private static void Register(ITypeRegistry registry, int kind)
+            => registry.RegisterOperator(new StringOperators(kind, 2));
+
+        /// <summary>
+        ///     register known operators
+        /// </summary>
+        /// <param name="typeRegistry">type registry</param>
+        public static void RegisterOperators(ITypeRegistry typeRegistry) {
+            Register(typeRegistry, DefinedOperators.ConcatOperator);
+        }
+
         /// <summary>
         ///     create a new string operator
         /// </summary>
-        /// <param name="withKind"></param>
-        public StringOperators(int withKind) : base(withKind) {
-        }
+        /// <param name="withKind">operator kind</param>
+        /// <param name="arity">operator arity</param>
+        public StringOperators(int withKind, int arity) : base(withKind, arity) { }
 
         /// <summary>
         ///     get the operator name
@@ -25,7 +36,7 @@ namespace PasPasPas.Typings.Operators {
         public override string Name {
             get {
                 switch (Kind) {
-                    case DefinedOperators.ConcatOperation:
+                    case DefinedOperators.ConcatOperator:
                         return "+";
                 }
                 throw new InvalidOperationException();
@@ -47,7 +58,7 @@ namespace PasPasPas.Typings.Operators {
             var left = TypeRegistry.GetTypeKind(input[0]);
             var right = TypeRegistry.GetTypeKind(input[1]);
 
-            if (Kind == DefinedOperators.ConcatOperation) {
+            if (Kind == DefinedOperators.ConcatOperator) {
 
                 if ((!left.IsTextual()) || (!right.IsTextual()))
                     return KnownTypeIds.ErrorType;
@@ -71,13 +82,6 @@ namespace PasPasPas.Typings.Operators {
         }
 
         /// <summary>
-        ///     register known operators
-        /// </summary>
-        /// <param name="typeRegistry">type registry</param>
-        public static void RegisterOperators(ITypeRegistry typeRegistry)
-            => typeRegistry.RegisterOperator(new StringOperators(DefinedOperators.ConcatOperation));
-
-        /// <summary>
         ///     compute constant value
         /// </summary>
         /// <param name="inputs"></param>
@@ -85,7 +89,7 @@ namespace PasPasPas.Typings.Operators {
         public override IValue ComputeValue(IValue[] inputs) {
             if (inputs.Length == 2) {
 
-                if (Kind == DefinedOperators.ConcatOperation) {
+                if (Kind == DefinedOperators.ConcatOperator) {
                     return Runtime.Strings.Concat(inputs[0], inputs[1]);
                 }
 

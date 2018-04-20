@@ -225,7 +225,7 @@ namespace PasPasPas.Typings.Common {
 
             if (element.Kind == ExpressionKind.Plus) {
                 if (leftType.TypeKind.IsTextual() && leftType.TypeKind.IsTextual())
-                    return DefinedOperators.ConcatOperation;
+                    return DefinedOperators.ConcatOperator;
                 else if (leftType.TypeKind.IsNumerical() && leftType.TypeKind.IsNumerical())
                     return DefinedOperators.PlusOperation;
             }
