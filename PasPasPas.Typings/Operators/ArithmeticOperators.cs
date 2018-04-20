@@ -14,17 +14,10 @@ namespace PasPasPas.Typings.Operators {
     public class ArithmeticOperators : OperatorBase {
 
         /// <summary>
-        ///     unwrapper for literals
-        /// </summary>
-        private readonly ILiteralUnwrapper literalUnwrapper;
-
-        /// <summary>
         ///     create a new arithmetic operator
         /// </summary>
         /// <param name="withKind">operator kind</param>
-        /// <param name="unwrapper">unwrapper for literal</param>
-        public ArithmeticOperators(ILiteralUnwrapper unwrapper, int withKind) : base(withKind)
-            => literalUnwrapper = unwrapper;
+        public ArithmeticOperators(int withKind) : base(withKind) { }
 
         /// <summary>
         ///     get the operator name
@@ -137,22 +130,22 @@ namespace PasPasPas.Typings.Operators {
             return KnownTypeIds.ErrorType;
         }
 
-        internal static void RegisterOperators(IRuntimeValueFactory runtime, ILiteralUnwrapper unwrapper, RegisteredTypes registeredTypes) => throw new NotImplementedException();
+        internal static void RegisterOperators(IRuntimeValueFactory runtime, RegisteredTypes registeredTypes)
+            => throw new NotImplementedException();
 
         /// <summary>
         ///     register known operators
         /// </summary>
-        /// <param name="unwrapper">unwrapper for literals</param>
         /// <param name="typeRegistry">type registry</param>
-        public static void RegisterOperators(ILiteralUnwrapper unwrapper, ITypeRegistry typeRegistry) {
-            typeRegistry.RegisterOperator(new ArithmeticOperators(unwrapper, DefinedOperators.UnaryMinus));
-            typeRegistry.RegisterOperator(new ArithmeticOperators(unwrapper, DefinedOperators.UnaryPlus));
-            typeRegistry.RegisterOperator(new ArithmeticOperators(unwrapper, DefinedOperators.PlusOperation));
-            typeRegistry.RegisterOperator(new ArithmeticOperators(unwrapper, DefinedOperators.MinusOperation));
-            typeRegistry.RegisterOperator(new ArithmeticOperators(unwrapper, DefinedOperators.TimesOperation));
-            typeRegistry.RegisterOperator(new ArithmeticOperators(unwrapper, DefinedOperators.DivOperation));
-            typeRegistry.RegisterOperator(new ArithmeticOperators(unwrapper, DefinedOperators.ModOperation));
-            typeRegistry.RegisterOperator(new ArithmeticOperators(unwrapper, DefinedOperators.SlashOperation));
+        public static void RegisterOperators(ITypeRegistry typeRegistry) {
+            typeRegistry.RegisterOperator(new ArithmeticOperators(DefinedOperators.UnaryMinus));
+            typeRegistry.RegisterOperator(new ArithmeticOperators(DefinedOperators.UnaryPlus));
+            typeRegistry.RegisterOperator(new ArithmeticOperators(DefinedOperators.PlusOperation));
+            typeRegistry.RegisterOperator(new ArithmeticOperators(DefinedOperators.MinusOperation));
+            typeRegistry.RegisterOperator(new ArithmeticOperators(DefinedOperators.TimesOperation));
+            typeRegistry.RegisterOperator(new ArithmeticOperators(DefinedOperators.DivOperation));
+            typeRegistry.RegisterOperator(new ArithmeticOperators(DefinedOperators.ModOperation));
+            typeRegistry.RegisterOperator(new ArithmeticOperators(DefinedOperators.SlashOperation));
         }
 
         /// <summary>

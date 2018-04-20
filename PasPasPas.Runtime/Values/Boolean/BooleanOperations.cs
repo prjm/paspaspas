@@ -3,7 +3,7 @@
 namespace PasPasPas.Runtime.Values.Boolean {
 
     /// <summary>
-    ///     boolean calculator
+    ///     boolean value factory and operations
     /// </summary>
     public class BooleanOperations : IBooleanOperations {
 

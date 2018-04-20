@@ -95,12 +95,6 @@ namespace PasPasPas.Api {
             = new StringPool();
 
         /// <summary>
-        ///     standard literal unwrapper
-        /// </summary>
-        public ILiteralUnwrapper LiteralUnwrapper { get; }
-            = new LiteralUnwrapper();
-
-        /// <summary>
         ///     default type registry
         /// </summary>
         public ITypeRegistry TypeRegistry { get; }
@@ -110,7 +104,7 @@ namespace PasPasPas.Api {
         /// </summary>
         /// <param name="intSize">integer size</param>
         public DefaultEnvironment(NativeIntSize intSize = NativeIntSize.Undefined) {
-            TypeRegistry = new RegisteredTypes(StringPool, ConstantValues, LiteralUnwrapper, intSize);
+            TypeRegistry = new RegisteredTypes(StringPool, ConstantValues, intSize);
             IntegerParser = new IntegerParser(ConstantValues, false);
             HexNumberParser = new IntegerParser(ConstantValues, true);
             RealLiteralConverter = new RealLiteralConverter(ConstantValues);
@@ -133,7 +127,6 @@ namespace PasPasPas.Api {
                     Patterns,
                     Log,
                     Files,
-                    LiteralUnwrapper,
                     TypeRegistry
                 };
                 return data;

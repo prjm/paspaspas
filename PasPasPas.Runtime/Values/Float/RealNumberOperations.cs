@@ -4,7 +4,7 @@ using SharpFloat.FloatingPoint;
 namespace PasPasPas.Runtime.Values.Float {
 
     /// <summary>
-    ///     calculations for extended numbers
+    ///     real number value factory and operations
     /// </summary>
     public class RealNumberOperations : IRealNumberOperations {
 

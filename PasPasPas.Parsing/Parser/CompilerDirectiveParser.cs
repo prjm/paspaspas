@@ -365,9 +365,15 @@ namespace PasPasPas.Parsing.Parser {
             if (!ContinueWith(result, TokenKind.QuotedString)) {
                 result.MessageType = MessageSeverity.Undefined;
                 ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidMessageDirective, new[] { TokenKind.QuotedString });
+                return;
             }
 
-            result.MessageText = Environment.LiteralUnwrapper.UnwrapString(result.LastTerminalToken.ParsedValue);
+            var value = result.LastTerminalToken.ParsedValue;
+
+            if (value is IStringValue stringValue)
+                result.MessageText = stringValue.AsUnicodeString;
+            else
+                ErrorLastPart(result, CompilerDirectiveParserErrors.InvalidMessageDirective);
         }
 
         private void ParseNoDefine(IExtendableSyntaxPart parent) {
@@ -381,11 +387,11 @@ namespace PasPasPas.Parsing.Parser {
 
             result.TypeName = result.LastTerminalValue;
 
-            if (ContinueWith(result, TokenKind.QuotedString)) {
-                result.TypeNameInHpp = Environment.LiteralUnwrapper.UnwrapString(result.LastTerminalToken.ParsedValue);
+            if (ContinueWith(result, TokenKind.QuotedString) && result.LastTerminalToken.ParsedValue is IStringValue typeName) {
+                result.TypeNameInHpp = typeName.AsUnicodeString;
 
-                if (ContinueWith(result, TokenKind.QuotedString)) {
-                    result.TypeNameInUnion = Environment.LiteralUnwrapper.UnwrapString(result.LastTerminalToken.ParsedValue);
+                if (ContinueWith(result, TokenKind.QuotedString) && result.LastTerminalToken.ParsedValue is IStringValue unionName) {
+                    result.TypeNameInUnion = unionName.AsUnicodeString;
                 }
             }
         }
@@ -457,12 +463,12 @@ namespace PasPasPas.Parsing.Parser {
             var result = new Region();
             InitByTerminal(result, parent, TokenKind.Region);
 
-            if (!ContinueWith(result, TokenKind.QuotedString)) {
+            if (!ContinueWith(result, TokenKind.QuotedString) || !(result.LastTerminalToken.ParsedValue is IStringValue regionName)) {
                 ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidRegionDirective, new[] { TokenKind.QuotedString });
                 return;
             }
 
-            result.RegionName = Environment.LiteralUnwrapper.UnwrapString(result.LastTerminalToken.ParsedValue);
+            result.RegionName = regionName.AsUnicodeString;
         }
 
         /// <summary>
@@ -632,12 +638,12 @@ namespace PasPasPas.Parsing.Parser {
             InitByTerminal(result, parent, TokenKind.LibPrefix, TokenKind.LibSuffix, TokenKind.LibVersion);
             var kind = result.LastTerminalKind;
 
-            if (!ContinueWith(result, TokenKind.QuotedString)) {
+            if (!ContinueWith(result, TokenKind.QuotedString) || !(result.LastTerminalToken.ParsedValue is IStringValue libInfoValue)) {
                 ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidLibDirective, new[] { TokenKind.QuotedString });
                 return;
             }
 
-            var libInfo = Environment.LiteralUnwrapper.UnwrapString(result.LastTerminalToken.ParsedValue);
+            var libInfo = libInfoValue.AsUnicodeString;
 
             switch (kind) {
                 case TokenKind.LibPrefix:
@@ -1643,8 +1649,8 @@ namespace PasPasPas.Parsing.Parser {
             var result = new Description();
             InitByTerminal(result, parent, TokenKind.DescriptionSwitchLong);
 
-            if (ContinueWith(result, TokenKind.QuotedString)) {
-                result.DescriptionValue = Environment.LiteralUnwrapper.UnwrapString(result.LastTerminalToken.ParsedValue);
+            if (ContinueWith(result, TokenKind.QuotedString) && result.LastTerminalToken.ParsedValue is IStringValue description) {
+                result.DescriptionValue = description.AsUnicodeString;
             }
             else {
                 ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidDescriptionDirective, new[] { TokenKind.QuotedString });
@@ -1863,8 +1869,8 @@ namespace PasPasPas.Parsing.Parser {
 
             result.TypeName = result.LastTerminalValue;
 
-            if (ContinueWith(result, TokenKind.QuotedString)) {
-                result.AliasName = Environment.LiteralUnwrapper.UnwrapString(result.LastTerminalToken.ParsedValue);
+            if (ContinueWith(result, TokenKind.QuotedString) && result.LastTerminalToken.ParsedValue is IStringValue alias) {
+                result.AliasName = alias.AsUnicodeString;
                 if (string.IsNullOrWhiteSpace(result.AliasName)) {
                     result.AliasName = null;
                     result.TypeName = null;
@@ -2011,8 +2017,8 @@ namespace PasPasPas.Parsing.Parser {
 
         private string ParseFileName(SyntaxPartBase parent, bool allowTimes) {
 
-            if (ContinueWith(parent, TokenKind.QuotedString)) {
-                return Environment.LiteralUnwrapper.UnwrapString(parent.LastTerminalToken.ParsedValue);
+            if (ContinueWith(parent, TokenKind.QuotedString) && parent.LastTerminalToken.ParsedValue is IStringValue fileName) {
+                return fileName.AsUnicodeString;
             }
 
             else if (ContinueWith(parent, TokenKind.Identifier)) {
@@ -2055,8 +2061,8 @@ namespace PasPasPas.Parsing.Parser {
             if (ContinueWith(result, TokenKind.Identifier)) {
                 result.RcFile = result.LastTerminalValue;
             }
-            else if (ContinueWith(result, TokenKind.QuotedString)) {
-                result.RcFile = Environment.LiteralUnwrapper.UnwrapString(result.LastTerminalToken.ParsedValue);
+            else if (ContinueWith(result, TokenKind.QuotedString) && result.LastTerminalToken.ParsedValue is IStringValue fileName) {
+                result.RcFile = fileName.AsUnicodeString;
             }
         }
 
@@ -2249,7 +2255,7 @@ namespace PasPasPas.Parsing.Parser {
                 var result = new Description();
                 InitByTerminal(result, parent, TokenKind.DebugInfoOrDescriptionSwitch);
                 ContinueWith(result, TokenKind.QuotedString);
-                result.DescriptionValue = Environment.LiteralUnwrapper.UnwrapString(result.LastTerminalToken.ParsedValue);
+                result.DescriptionValue = (result.LastTerminalToken.ParsedValue as IStringValue).AsUnicodeString;
             }
             else {
                 var result = new DebugInfoSwitch();

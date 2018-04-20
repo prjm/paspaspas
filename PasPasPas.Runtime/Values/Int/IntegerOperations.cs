@@ -1,11 +1,9 @@
-﻿using System;
-using PasPasPas.Global.Runtime;
+﻿using PasPasPas.Global.Runtime;
 
 namespace PasPasPas.Runtime.Values.Int {
 
-
     /// <summary>
-    ///     calculator helper for integers
+    ///     integer value factory and operations
     /// </summary>
     public class IntegerOperations : IIntegerOperations {
 

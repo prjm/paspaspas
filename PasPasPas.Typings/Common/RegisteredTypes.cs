@@ -72,15 +72,14 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="intSize">integer size</param>
         /// <param name="pool">string pool</param>
-        /// <param name="unwrapper">literal unwrapper</param>
         /// <param name="constOps">constant helper</param>
-        public RegisteredTypes(StringPool pool, IRuntimeValueFactory constOps, ILiteralUnwrapper unwrapper, NativeIntSize intSize) {
+        public RegisteredTypes(StringPool pool, IRuntimeValueFactory constOps, NativeIntSize intSize) {
             runtime = constOps;
             systemUnit = new UnitType(KnownTypeIds.SystemUnit);
             RegisterType(systemUnit);
 
             RegisterCommonTypes(intSize);
-            RegisterCommonOperators(unwrapper);
+            RegisterCommonOperators();
             RegisterTObject(pool);
             RegisterCommonFunctions(constOps);
         }
@@ -96,9 +95,9 @@ namespace PasPasPas.Typings.Common {
         /// <summary>
         ///     register common operators
         /// </summary>
-        private void RegisterCommonOperators(ILiteralUnwrapper unwrapper) {
+        private void RegisterCommonOperators() {
             LogicalOperators.RegisterOperators(this);
-            ArithmeticOperators.RegisterOperators(unwrapper, this);
+            ArithmeticOperators.RegisterOperators(this);
             RelationalOperators.RegisterOperators(this);
             StringOperators.RegisterOperators(this);
         }

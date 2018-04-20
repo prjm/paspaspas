@@ -45,10 +45,5 @@ namespace PasPasPas.Parsing {
         /// </summary>
         PatternFactory Patterns { get; }
 
-        /// <summary>
-        ///     literal unwrapper
-        /// </summary>
-        ILiteralUnwrapper LiteralUnwrapper { get; }
-
     }
 }

@@ -5,6 +5,7 @@ using System;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree.Utils;
+using PasPasPas.Global.Runtime;
 
 namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
@@ -729,7 +730,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 InitNode(unitName, part, CurrentUnit.RequiredUnits);
                 unitName.Name = ExtractSymbolName(name);
                 unitName.Mode = CurrentUnitMode[CurrentUnit];
-                unitName.FileName = environment.LiteralUnwrapper.UnwrapString(name.QuotedFileName?.UnquotedValue);
+
+                if (name.QuotedFileName != null && name.QuotedFileName.UnquotedValue is IStringValue fileName)
+                    unitName.FileName = fileName.AsUnicodeString;
+
                 CurrentUnit.RequiredUnits.Add(unitName, LogSource);
             }
         }
@@ -789,7 +793,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 InitNode(unitName, name, CurrentUnit.RequiredUnits);
                 unitName.Name = ExtractSymbolName(name);
                 unitName.Mode = CurrentUnitMode[CurrentUnit];
-                unitName.FileName = environment.LiteralUnwrapper.UnwrapString(name.QuotedFileName?.UnquotedValue);
+
+                if (name.QuotedFileName != null && name.QuotedFileName.UnquotedValue is IStringValue fileName)
+                    unitName.FileName = fileName.AsUnicodeString;
+
                 CurrentUnit.RequiredUnits.Add(unitName, LogSource);
             }
         }
