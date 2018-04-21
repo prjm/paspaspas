@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using PasPasPas.Global.Constants;
+using PasPasPas.Global.Runtime;
 using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
@@ -60,12 +62,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     type id
         /// </summary>
         public int TypeId
-            => TypeInfo != null ? TypeInfo.TypeId : Signature.ErrorType;
+            => TypeInfo != null ? TypeInfo.TypeId : KnownTypeIds.ErrorType;
 
         /// <summary>
         ///     type info
         /// </summary>
-        public ITypeDefinition TypeInfo { get; set; }
+        public IValue TypeInfo { get; set; }
 
         /// <summary>
         ///     accept visitor

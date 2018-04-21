@@ -29,7 +29,7 @@ namespace PasPasPasTests.Types {
             SymbolReferencePart searchfunction(object x) => x as SymbolReferencePart;
             IExpression firstParam = null;
 
-            firstParam = EvaluateExpressionType(file, program, searchfunction, NativeIntSize.Undefined) as IExpression;
+            firstParam = EvaluateExpressionType(file, program, searchfunction, NativeIntSize.Undefined, out var env) as IExpression;
 
             Assert.IsNotNull(firstParam);
             Assert.IsNotNull(firstParam.TypeInfo);
@@ -48,7 +48,7 @@ namespace PasPasPasTests.Types {
             SymbolReferencePart searchfunction(object x) => x as SymbolReferencePart;
             IExpression firstParam = null;
 
-            firstParam = EvaluateExpressionType(file, program, searchfunction, NativeIntSize.Undefined) as IExpression;
+            firstParam = EvaluateExpressionType(file, program, searchfunction, NativeIntSize.Undefined, out var env) as IExpression;
 
             Assert.IsNotNull(firstParam);
             Assert.IsNotNull(firstParam.LiteralValue);
@@ -124,18 +124,20 @@ namespace PasPasPasTests.Types {
         }
 
         /// <summary>
-        ///     test the type of a declared variable expressiom
+        ///     test the type of a declared variable expression
         /// </summary>
-        /// <param name="declaration">declareation</param>
+        /// <param name="declaration">declaration</param>
         protected void AssertDeclTypeDef<T>(string declaration, Func<T, bool> test, NativeIntSize intSize = NativeIntSize.Undefined, string expression = "x") where T : class, ITypeDefinition {
             var file = "SimpleExpr";
             var program = $"program {file}; type t = {declaration}; var x : t; begin Writeln({expression}); end. ";
             SymbolReferencePart searchfunction(object x) => x as SymbolReferencePart;
             IExpression firstParam = null;
 
-            firstParam = EvaluateExpressionType<SymbolReferencePart>(file, program, searchfunction, intSize) as IExpression;
+            firstParam = EvaluateExpressionType(file, program, searchfunction, intSize, out var env) as IExpression;
 
-            var t = firstParam.TypeInfo as T;
+            var v = firstParam.TypeInfo;
+            Assert.IsNotNull(v);
+            var t = env.TypeRegistry.GetTypeByIdOrUndefinedType(v.TypeId) as T;
             Assert.IsNotNull(t);
             Assert.IsTrue(test(t));
         }
@@ -164,14 +166,18 @@ namespace PasPasPasTests.Types {
             StructuredStatement searchfunction(object x) => x as StructuredStatement;
             ISyntaxPart firstParam = null;
 
-            firstParam = EvaluateExpressionType(file, program, searchfunction, NativeIntSize.All32bit);
+            firstParam = EvaluateExpressionType(file, program, searchfunction, NativeIntSize.All32bit, out var env);
 
             Assert.IsNotNull(firstParam);
             var t = firstParam as StructuredStatement;
             var l = t != null && t.Expressions.Count > 0 ? t.Expressions[0].TypeInfo : null;
             var r = t != null && t.Expressions.Count > 1 ? t.Expressions[1].TypeInfo : null;
             Assert.IsNotNull(t);
-            Assert.IsTrue(test(l, r));
+
+            var lt = env.TypeRegistry.GetTypeByIdOrUndefinedType(l.TypeId);
+            var rt = env.TypeRegistry.GetTypeByIdOrUndefinedType(r.TypeId);
+
+            Assert.IsTrue(test(lt, rt));
 
         }
 
@@ -185,16 +191,18 @@ namespace PasPasPasTests.Types {
             SymbolReferencePart searchfunction(object x) => x is SymbolReferencePart srp && srp.Kind == SymbolReferencePartKind.CallParameters ? srp : null;
             IExpression firstParam = null;
 
-            firstParam = EvaluateExpressionType(file, program, searchfunction, intSize) as IExpression;
+            firstParam = EvaluateExpressionType(file, program, searchfunction, intSize, out var env) as IExpression;
 
             Assert.IsNotNull(firstParam.TypeInfo);
-            test(firstParam.TypeInfo);
+            var ti = env.TypeRegistry.GetTypeByIdOrUndefinedType(firstParam.TypeInfo.TypeId);
+            test(ti);
         }
 
 
-        private ISyntaxPart EvaluateExpressionType<T>(string file, string program, Func<object, T> searchfunction, NativeIntSize intSize) where T : ISyntaxPart {
+        private ISyntaxPart EvaluateExpressionType<T>(string file, string program, Func<object, T> searchfunction, NativeIntSize intSize, out ITypedEnvironment env) where T : ISyntaxPart {
             IExpression firstParam;
-            var env = CreateEnvironment(intSize);
+
+            env = CreateEnvironment(intSize);
             var api = new ParserApi(env);
             using (var reader = api.CreateParserForString($"{file}.dpr", program)) {
 

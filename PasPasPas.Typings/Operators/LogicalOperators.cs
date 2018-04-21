@@ -138,16 +138,16 @@ namespace PasPasPas.Typings.Operators {
         /// <param name="input"></param>
         /// <returns></returns>
         protected override int EvaluateUnaryOperator(Signature input) {
-            var operand = TypeRegistry.GetTypeKind(input[0]);
+            var operand = TypeRegistry.GetTypeKind(input[0].TypeId);
 
             if (Kind == DefinedOperators.NotOperation && operand == CommonTypeKind.BooleanType)
                 return KnownTypeIds.BooleanType;
 
             if (Kind == DefinedOperators.NotOperation && operand == CommonTypeKind.Int64Type)
-                return input[0];
+                return input[0].TypeId;
 
             if (Kind == DefinedOperators.NotOperation && operand == CommonTypeKind.IntegerType)
-                return input[0];
+                return input[0].TypeId;
 
             return KnownTypeIds.ErrorType;
         }
@@ -158,32 +158,32 @@ namespace PasPasPas.Typings.Operators {
         /// <param name="input"></param>
         /// <returns></returns>
         protected override int EvaluateBinaryOperator(Signature input) {
-            var left = TypeRegistry.GetTypeKind(input[0]);
-            var right = TypeRegistry.GetTypeKind(input[1]);
+            var left = TypeRegistry.GetTypeKind(input[0].TypeId);
+            var right = TypeRegistry.GetTypeKind(input[1].TypeId);
 
             if (Kind == DefinedOperators.AndOperation && CommonTypeKind.BooleanType.All(left, right))
                 return KnownTypeIds.BooleanType;
 
             if (Kind == DefinedOperators.AndOperation && left.Integral() && right.Integral())
-                return TypeRegistry.GetSmallestIntegralTypeOrNext(input[0], input[1]);
+                return TypeRegistry.GetSmallestIntegralTypeOrNext(input[0].TypeId, input[1].TypeId);
 
             if (Kind == DefinedOperators.OrOperation && CommonTypeKind.BooleanType.All(left, right))
                 return KnownTypeIds.BooleanType;
 
             if (Kind == DefinedOperators.OrOperation && left.Integral() && right.Integral())
-                return TypeRegistry.GetSmallestIntegralTypeOrNext(input[0], input[1]);
+                return TypeRegistry.GetSmallestIntegralTypeOrNext(input[0].TypeId, input[1].TypeId);
 
             if (Kind == DefinedOperators.XorOperation && CommonTypeKind.BooleanType.All(left, right))
                 return KnownTypeIds.BooleanType;
 
             if (Kind == DefinedOperators.XorOperation && left.Integral() && right.Integral())
-                return TypeRegistry.GetSmallestIntegralTypeOrNext(input[0], input[1]);
+                return TypeRegistry.GetSmallestIntegralTypeOrNext(input[0].TypeId, input[1].TypeId);
 
             if (Kind == DefinedOperators.ShlOperation && left.Integral() && right.Integral())
-                return input[0];
+                return input[0].TypeId;
 
             if (Kind == DefinedOperators.ShrOperation && left.Integral() && right.Integral())
-                return input[0];
+                return input[0].TypeId;
 
             return KnownTypeIds.ErrorType;
         }

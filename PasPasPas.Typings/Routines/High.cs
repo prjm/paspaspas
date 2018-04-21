@@ -62,14 +62,14 @@ namespace PasPasPas.Typings.Routines {
             if (signature.Length != 1)
                 return;
 
-            var param = TypeRegistry.GetTypeByIdOrUndefinedType(signature[0]);
+            var param = TypeRegistry.GetTypeByIdOrUndefinedType(signature[0].TypeId);
             if (param.TypeKind.IsOrdinal()) {
                 var ordinalType = param as IOrdinalType;
                 var highValue = ConstOps.Integers.ToScaledIntegerValue(ordinalType.HighestElement);
                 var typeId = LiteralValues.GetTypeFor(highValue);
                 var result = new ParameterGroup();
-                result.AddParameter("AValue").SymbolType = param;
-                result.ResultType = TypeRegistry.GetTypeByIdOrUndefinedType(typeId);
+                result.AddParameter("AValue").SymbolType = signature[0];
+                result.ResultType = ConstOps.Indetermined.ByTypeId(typeId);
                 callableRoutines.Add(result);
             }
         }

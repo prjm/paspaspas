@@ -2198,7 +2198,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             result.Kind = TokenKindMapper.MapMethodKind(method.Heading.Kind);
             result.Name = name;
 
-            var type = unit.InterfaceSymbols.Find(name.NamespaceParts);
+            var type = default(DeclaredSymbol);
+
+            if (unit.InterfaceSymbols != null)
+                type = unit.InterfaceSymbols.Find(name.NamespaceParts);
 
             if (type == null)
                 type = unit.ImplementationSymbols.Find(name.NamespaceParts);

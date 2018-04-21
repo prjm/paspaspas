@@ -1,4 +1,5 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Types;
+﻿using PasPasPas.Global.Constants;
+using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
@@ -16,7 +17,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
                 if (ParentItem is VariableDeclaration varDeclaration && varDeclaration.TypeInfo != null)
                     return varDeclaration.TypeInfo.TypeId;
                 else
-                    return Signature.ErrorType;
+                    return KnownTypeIds.ErrorType;
             }
         }
 

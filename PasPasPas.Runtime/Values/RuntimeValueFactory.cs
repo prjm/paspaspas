@@ -44,5 +44,10 @@ namespace PasPasPas.Runtime.Values {
         public ICharOperations Chars { get; }
             = new CharOperations();
 
+        /// <summary>
+        ///     open tye operations
+        /// </summary>
+        public IOpenTypeOperations Indetermined { get; }
+            = new OpenTypeOperations();
     }
 }

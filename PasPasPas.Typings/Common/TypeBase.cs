@@ -12,7 +12,7 @@ namespace PasPasPas.Typings.Common {
         private readonly int typeId;
 
         /// <summary>
-        ///     create a new type definiton
+        ///     create a new type definition
         /// </summary>
         /// <param name="withId">type id</param>
         public TypeBase(int withId)

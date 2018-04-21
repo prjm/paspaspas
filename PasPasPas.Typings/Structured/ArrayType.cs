@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using PasPasPas.Global.Constants;
+using PasPasPas.Global.Runtime;
 using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Typings.Common;
@@ -19,10 +20,10 @@ namespace PasPasPas.Typings.Structured {
         }
 
         /// <summary>
-        ///     arary index types
+        ///     array index types
         /// </summary>
-        public IList<ITypeDefinition> IndexTypes { get; }
-            = new List<ITypeDefinition>();
+        public IList<IValue> IndexTypes { get; }
+            = new List<IValue>();
 
         /// <summary>
         ///     type kind

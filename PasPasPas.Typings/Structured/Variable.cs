@@ -1,4 +1,5 @@
 ﻿using PasPasPas.Global.Constants;
+using PasPasPas.Global.Runtime;
 using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Typings.Common;
 
@@ -12,7 +13,7 @@ namespace PasPasPas.Typings.Structured {
         /// <summary>
         ///     parameter type
         /// </summary>
-        public ITypeDefinition SymbolType { get; set; }
+        public IValue SymbolType { get; set; }
 
         /// <summary>
         ///     parameter name

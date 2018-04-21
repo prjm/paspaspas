@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using PasPasPas.Global.Runtime;
 using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
@@ -66,9 +67,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         public IExpression Value { get; set; }
 
         /// <summary>
-        ///     type defintion
+        ///     type definition
         /// </summary>
-        public ITypeDefinition TypeInfo { get; set; }
+        public IValue TypeInfo { get; set; }
 
         /// <summary>
         ///     accept visitor

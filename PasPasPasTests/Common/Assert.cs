@@ -13,9 +13,8 @@ namespace PasPasPasTests.Common {
         public static void AreEqual(ExtF80 expected, ExtF80 actual, string message = "")
             => A.Equal(expected, actual);
 
-
         public static void AreEqual(double expected, double actual, string message = "")
-                    => A.Equal(expected, actual, 10);
+            => A.Equal(expected, actual, 10);
 
         public static void IsTrue(bool o)
             => A.True(o);

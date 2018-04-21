@@ -50,11 +50,11 @@ namespace PasPasPas.Typings.Routines {
             if (signature.Length != 1)
                 return;
 
-            var param = TypeRegistry.GetTypeByIdOrUndefinedType(signature[0]);
+            var param = TypeRegistry.GetTypeByIdOrUndefinedType(signature[0].TypeId);
             if (param.TypeKind.IsNumerical()) {
                 var result = new ParameterGroup();
-                result.AddParameter("AValue").SymbolType = param;
-                result.ResultType = param;
+                result.AddParameter("AValue").SymbolType = signature[0];
+                result.ResultType = signature[0];
                 callableRoutines.Add(result);
             }
         }

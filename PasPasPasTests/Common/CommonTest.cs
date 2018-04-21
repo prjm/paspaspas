@@ -40,7 +40,6 @@ namespace PasPasPasTests.Common {
         protected IValue GetIntegerValue(short number)
             => new RuntimeValueFactory().Integers.ToScaledIntegerValue(number);
 
-
         /// <summary>
         ///     convert a value
         /// </summary>
@@ -101,6 +100,11 @@ namespace PasPasPasTests.Common {
         protected IValue GetIntegerValue(ulong number)
             => new RuntimeValueFactory().Integers.ToScaledIntegerValue(number);
 
+        /// <summary>
+        ///     get extended value
+        /// </summary>
+        /// <param name="number"></param>
+        /// <returns></returns>
         protected IValue GetExtendedValue(ExtF80 number)
             => new RuntimeValueFactory().RealNumbers.ToExtendedValue(number);
 

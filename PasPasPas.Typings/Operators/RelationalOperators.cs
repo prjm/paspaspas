@@ -174,8 +174,8 @@ namespace PasPasPas.Typings.Operators {
             if (input.Length != 2)
                 return KnownTypeIds.ErrorType;
 
-            var left = TypeRegistry.GetTypeKind(input[0]);
-            var right = TypeRegistry.GetTypeKind(input[1]);
+            var left = TypeRegistry.GetTypeKind(input[0].TypeId);
+            var right = TypeRegistry.GetTypeKind(input[1].TypeId);
 
             if (CommonTypeKind.BooleanType.All(left, right))
                 return KnownTypeIds.BooleanType;

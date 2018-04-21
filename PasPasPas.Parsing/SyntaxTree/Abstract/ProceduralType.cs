@@ -1,4 +1,5 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Types;
+﻿using PasPasPas.Global.Runtime;
+using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
@@ -21,6 +22,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     type information
         /// </summary>
-        public ITypeDefinition TypeInfo { get; set; }
+        public IValue TypeInfo { get; set; }
     }
 }

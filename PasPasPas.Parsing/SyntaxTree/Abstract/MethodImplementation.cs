@@ -14,7 +14,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     calculated type value
         /// </summary>
-        public ITypeDefinition TypeInfo { get; set; }
+        public IValue TypeInfo { get; set; }
 
         /// <summary>
         ///     <c>true</c> for constant items

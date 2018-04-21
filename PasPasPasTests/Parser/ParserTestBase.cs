@@ -19,21 +19,6 @@ namespace PasPasPasTests.Parser {
 
     public class ParserTestBase : CommonTest {
 
-        protected OptionSet TestOptions
-            = null;
-
-        protected CompileOptions CompilerOptions
-            => TestOptions.CompilerOptions;
-
-        protected WarningOptions Warnings
-            => TestOptions.Warnings;
-
-        protected ConditionalCompilationOptions ConditionalCompilation
-            => TestOptions.ConditionalCompilation;
-
-        protected MetaInformation Meta
-            => TestOptions.Meta;
-
         protected string CompactWhitespace(string input) {
             var result = new StringBuilder();
             var wasWhitespace = false;
@@ -60,13 +45,13 @@ namespace PasPasPasTests.Parser {
             if (string.IsNullOrEmpty(output))
                 output = input;
 
-            TestOptions = new OptionSet(CreateEnvironment());
-            ClearOptions();
+            var testOptions = new OptionSet(CreateEnvironment());
+            ClearOptions(testOptions);
 
             var log = new LogTarget();
             var fileAccess = new StandardFileAccess();
             var env = new DefaultEnvironment();
-            var api = new ParserApi(env, TestOptions);
+            var api = new ParserApi(env, testOptions);
 
             env.Log.RegisterTarget(log);
 
@@ -147,10 +132,10 @@ namespace PasPasPasTests.Parser {
 
 
         protected ISyntaxPart RunAstTest(string input, ITypedEnvironment env, IList<ILogMessage> messages) {
-            TestOptions = new OptionSet(env);
-            var api = new ParserApi(env, TestOptions);
+            var testOptions = new OptionSet(env);
+            var api = new ParserApi(env, testOptions);
 
-            ClearOptions();
+            ClearOptions(testOptions);
 
             using (var parser = api.CreateParserForString("z.x.pas", input)) {
                 return parser.Parse();
@@ -177,7 +162,7 @@ namespace PasPasPasTests.Parser {
             RunAstTest<bool?>(statement, search, true, true);
         }
 
-        protected void RunCompilerDirective(string directive, object expected, Func<object> actual, params Guid[] messages) {
+        protected void RunCompilerDirective(string directive, object expected, Func<OptionSet, object> actual, params Guid[] messages) {
 
             var env = CreateEnvironment();
             var fileAccess = env.Files;
@@ -193,16 +178,16 @@ namespace PasPasPasTests.Parser {
             fileAccess.AddMockupFile(resFile2, new StringBufferReadable("RES RES RES"));
             fileAccess.AddMockupFile(linkDll, new StringBufferReadable("MZE!"));
 
-            TestOptions = new OptionSet(env);
+            var testOptions = new OptionSet(env);
 
             var msgs = new ListLogTarget();
             env.Log.RegisterTarget(msgs);
 
-            ClearOptions();
+            ClearOptions(testOptions);
 
             var directives = directive.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
             foreach (var directivePart in directives) {
-                TestOptions.ResetOnNewUnit(env.Log);
+                testOptions.ResetOnNewUnit(env.Log);
                 var subParts = directivePart.Split(new[] { '§' }, StringSplitOptions.RemoveEmptyEntries);
 
                 foreach (var subPart in subParts) {
@@ -211,13 +196,13 @@ namespace PasPasPasTests.Parser {
                     var input = new StringBufferReadable(subPart);
                     var buffer = new FileBuffer();
                     var reader = new StackedFileReader(buffer);
-                    var visitor = new CompilerDirectiveVisitor(TestOptions, path, env.Log);
+                    var visitor = new CompilerDirectiveVisitor(testOptions, path, env.Log);
                     var terminals = new TerminalVisitor();
 
                     buffer.Add(path, input);
 
                     reader.AddFileToRead(path);
-                    var parser = new CompilerDirectiveParser(env, TestOptions, reader) {
+                    var parser = new CompilerDirectiveParser(env, testOptions, reader) {
                         IncludeInput = reader
                     };
 
@@ -242,7 +227,7 @@ namespace PasPasPasTests.Parser {
                 }
             }
 
-            Assert.AreEqual(expected, actual());
+            Assert.AreEqual(expected, actual(testOptions));
             env.Log.UnregisterTarget(msgs);
             Assert.AreEqual(messages.Length, msgs.Messages.Count);
 
@@ -256,9 +241,9 @@ namespace PasPasPasTests.Parser {
 
         }
 
-        private void ClearOptions() {
-            TestOptions.Clear();
-            TestOptions.ConditionalCompilation.Conditionals.OwnValues.Add(new ConditionalSymbol() {
+        private void ClearOptions(OptionSet testOptions) {
+            testOptions.Clear();
+            testOptions.ConditionalCompilation.Conditionals.OwnValues.Add(new ConditionalSymbol() {
                 Name = "PASPASPAS_TEST"
             });
         }

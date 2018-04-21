@@ -1,19 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using PasPasPas.Global.Runtime;
 using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Typings.Common;
 
 namespace PasPasPas.Typings.Structured {
 
     /// <summary>
-    ///     class for a paramter group
+    ///     class for a paramater group
     /// </summary>
     public class ParameterGroup {
 
         /// <summary>
         ///     result type
         /// </summary>
-        public ITypeDefinition ResultType { get; set; }
+        public IValue ResultType { get; set; }
 
         /// <summary>
         ///     routine parameters
@@ -61,8 +62,8 @@ namespace PasPasPas.Typings.Structured {
 
             for (var i = 0; Parameters != null && i < Parameters.Count; i++) {
                 var parameter = Parameters[i];
-                var sourceType = types.GetTypeByIdOrUndefinedType(signature[i]);
-                match = match && parameter.SymbolType.CanBeAssignedFrom(sourceType);
+                var sourceType = types.GetTypeByIdOrUndefinedType(signature[i].TypeId);
+                match = match && types.GetTypeByIdOrUndefinedType(parameter.SymbolType.TypeId).CanBeAssignedFrom(sourceType);
 
                 if (!match)
                     return false;

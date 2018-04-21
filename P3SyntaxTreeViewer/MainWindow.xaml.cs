@@ -118,7 +118,8 @@ namespace P3SyntaxTreeViewer {
 
             if (cst is PasPasPas.Parsing.SyntaxTree.Types.ITypedSyntaxNode typeInfo && typeInfo.TypeInfo != null) {
                 treeViewItem.Header += " [" + typeInfo.TypeInfo.TypeId.ToString() + "]";
-                treeViewItem.Header += " " + typeInfo.TypeInfo.TypeKind.ToString();
+
+                //treeViewItem.Header += " " + typeInfo.TypeInfo.TypeKind.ToString();
 
                 if (typeInfo.TypeInfo is ArrayType array)
                     treeViewItem.Header += " of " + array.BaseType?.TypeKind.ToString();

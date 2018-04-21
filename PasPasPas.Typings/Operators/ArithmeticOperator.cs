@@ -143,7 +143,7 @@ namespace PasPasPas.Typings.Operators {
         /// <returns></returns>
         protected override int EvaluateUnaryOperator(Signature input) {
 
-            var operand = TypeRegistry.GetTypeKind(input[0]);
+            var operand = TypeRegistry.GetTypeKind(input[0].TypeId);
 
             if (Kind == DefinedOperators.UnaryPlus) {
 
@@ -154,16 +154,16 @@ namespace PasPasPas.Typings.Operators {
                     return KnownTypeIds.Int64Type;
 
                 if (operand == CommonTypeKind.IntegerType)
-                    return input[0];
+                    return input[0].TypeId;
 
             }
             if (Kind == DefinedOperators.UnaryMinus) {
 
                 if (operand == CommonTypeKind.FloatType)
-                    return input[0];
+                    return input[0].TypeId;
 
                 if (operand == CommonTypeKind.IntegerType || operand == CommonTypeKind.Int64Type) {
-                    if (ResolveAlias(input[0]) is IIntegralType currentType)
+                    if (ResolveAlias(input[0].TypeId) is IIntegralType currentType)
                         return currentType.TypeId;
                     else
                         return KnownTypeIds.ErrorType;
@@ -180,8 +180,8 @@ namespace PasPasPas.Typings.Operators {
         /// <returns></returns>
         protected override int EvaluateBinaryOperator(Signature input) {
 
-            var left = TypeRegistry.GetTypeKind(input[0]);
-            var right = TypeRegistry.GetTypeKind(input[1]);
+            var left = TypeRegistry.GetTypeKind(input[0].TypeId);
+            var right = TypeRegistry.GetTypeKind(input[1].TypeId);
 
             if (Kind.In(DefinedOperators.PlusOperation,
                         DefinedOperators.MinusOperation,
@@ -194,7 +194,7 @@ namespace PasPasPas.Typings.Operators {
                     return KnownTypeIds.Int64Type;
 
                 if (CommonTypeKind.IntegerType.All(left, right))
-                    return TypeRegistry.GetSmallestIntegralTypeOrNext(input[0], input[1]);
+                    return TypeRegistry.GetSmallestIntegralTypeOrNext(input[0].TypeId, input[1].TypeId);
 
             }
 
@@ -205,7 +205,7 @@ namespace PasPasPas.Typings.Operators {
                     return KnownTypeIds.Int64Type;
 
                 if (CommonTypeKind.IntegerType.All(left, right))
-                    return TypeRegistry.GetSmallestIntegralTypeOrNext(input[0], input[1]);
+                    return TypeRegistry.GetSmallestIntegralTypeOrNext(input[0].TypeId, input[1].TypeId);
 
             }
 

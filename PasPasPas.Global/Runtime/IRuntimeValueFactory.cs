@@ -32,5 +32,10 @@ namespace PasPasPas.Global.Runtime {
         /// </summary>
         ICharOperations Chars { get; }
 
+        /// <summary>
+        ///     open type operations
+        /// </summary>
+        IOpenTypeOperations Indetermined { get; }
+
     }
 }

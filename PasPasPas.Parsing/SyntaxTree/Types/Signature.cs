@@ -1,49 +1,43 @@
 ﻿using System;
-using PasPasPas.Global.Constants;
+using PasPasPas.Global.Runtime;
 
 namespace PasPasPas.Parsing.SyntaxTree.Types {
 
     /// <summary>
     ///     a type signature
     /// </summary>
-    public struct Signature : IEquatable<Signature> {
+    public class Signature : IEquatable<Signature> {
+
+        private IValue[] data;
 
         /// <summary>
-        ///     error type id
-        /// </summary>
-        public const int ErrorType = KnownTypeIds.ErrorType;
-
-        private int[] data;
-
-        /// <summary>
-        ///     get the number of type ids in this signaure
+        ///     get the number of parameters in this signature
         /// </summary>
         public int Length
             => data.Length;
 
         /// <summary>
-        ///     create a new type signature
+        ///     create a new unary signature
         /// </summary>
-        /// <param name="type"></param>
-        public Signature(int type)
-            => data = new int[1] { type };
-
+        /// <param name="value"></param>
+        public Signature(IValue value)
+            => data = new IValue[] { value };
 
         /// <summary>
         ///     create a new signature
         /// </summary>
-        /// <param name="type1">first type</param>
-        /// <param name="type2">second type</param>
-        public Signature(int type1, int type2)
-            => data = new int[2] { type1, type2 };
+        /// <param name="value1">first type</param>
+        /// <param name="value2">second type</param>
+        public Signature(IValue value1, IValue value2)
+            => data = new IValue[] { value1, value2 };
 
         /// <summary>
         ///     create a new type signature
         /// </summary>
-        /// <param name="typeIds"></param>
-        public Signature(params int[] typeIds) {
-            data = new int[typeIds.Length];
-            Array.Copy(typeIds, data, typeIds.Length);
+        /// <param name="values">values</param>
+        public Signature(params IValue[] values) {
+            data = new IValue[values.Length];
+            Array.Copy(values, data, values.Length);
         }
 
         /// <summary>
@@ -75,11 +69,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Types {
         }
 
         /// <summary>
-        ///     get type id by index
+        ///     a value by index
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public int this[int index]
+        public IValue this[int index]
             => data[index];
 
     }

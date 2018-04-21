@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using PasPasPas.Global.Runtime;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Typings.Common;
@@ -55,7 +56,7 @@ namespace PasPasPas.Typings.Structured {
         /// <summary>
         ///     base class
         /// </summary>
-        public ITypeDefinition BaseClass { get; set; }
+        public IValue BaseClass { get; set; }
 
         /// <summary>
         ///     list of routines
