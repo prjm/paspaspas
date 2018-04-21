@@ -56,7 +56,7 @@ namespace PasPasPas.Typings.Structured {
         /// <summary>
         ///     base class
         /// </summary>
-        public IValue BaseClass { get; set; }
+        public ITypeReference BaseClass { get; set; }
 
         /// <summary>
         ///     list of routines

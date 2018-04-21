@@ -10,7 +10,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Types {
         /// <summary>
         ///     type annotation for this syntax note
         /// </summary>
-        IValue TypeInfo { get; }
+        ITypeReference TypeInfo { get; }
 
 
     }

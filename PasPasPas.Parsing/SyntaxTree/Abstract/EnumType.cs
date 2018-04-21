@@ -13,10 +13,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     type information
         /// </summary>
-        public IValue TypeInfo { get; set; }
+        public ITypeReference TypeInfo { get; set; }
 
         /// <summary>
-        ///     log duplicate enum
+        ///     log duplicate enumeration items
         /// </summary>
         /// <param name="newDuplicate"></param>
         /// <param name="logSource"></param>

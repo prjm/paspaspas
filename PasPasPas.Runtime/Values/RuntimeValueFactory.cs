@@ -47,7 +47,7 @@ namespace PasPasPas.Runtime.Values {
         /// <summary>
         ///     open tye operations
         /// </summary>
-        public IOpenTypeOperations Indetermined { get; }
+        public ITypeOperations Types { get; }
             = new OpenTypeOperations();
     }
 }

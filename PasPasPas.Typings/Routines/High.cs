@@ -69,7 +69,7 @@ namespace PasPasPas.Typings.Routines {
                 var typeId = LiteralValues.GetTypeFor(highValue);
                 var result = new ParameterGroup();
                 result.AddParameter("AValue").SymbolType = signature[0];
-                result.ResultType = ConstOps.Indetermined.ByTypeId(typeId);
+                result.ResultType = ConstOps.Types.MakeReference(typeId);
                 callableRoutines.Add(result);
             }
         }

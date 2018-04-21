@@ -6,7 +6,7 @@ namespace PasPasPas.Runtime.Values {
     /// <summary>
     ///     open type operations
     /// </summary>
-    public class OpenTypeOperations : IOpenTypeOperations {
+    public class OpenTypeOperations : ITypeOperations {
 
         private readonly LookupTable<int, IValue> values;
 
@@ -25,7 +25,7 @@ namespace PasPasPas.Runtime.Values {
         /// </summary>
         /// <param name="typeId"></param>
         /// <returns></returns>
-        public IValue ByTypeId(int typeId)
+        public ITypeReference MakeReference(int typeId)
             => values.GetValue(typeId);
     }
 }

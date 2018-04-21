@@ -11,7 +11,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     calculated type value
         /// </summary>
-        public IValue TypeInfo { get; set; }
+        public ITypeReference TypeInfo { get; set; }
 
         /// <summary>
         ///     <c>true</c> for constant expressions
@@ -21,7 +21,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     constant literal value of this expression
         /// </summary>
-        public IValue LiteralValue { get; set; }
+        public ITypeReference LiteralValue { get; set; }
 
     }
 }

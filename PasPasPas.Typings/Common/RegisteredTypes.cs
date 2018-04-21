@@ -317,11 +317,11 @@ namespace PasPasPas.Typings.Common {
             def.AddOrExtendMethod("Free", ProcedureKind.Procedure).AddParameterGroup();
             def.AddOrExtendMethod("DisposeOf", ProcedureKind.Procedure).AddParameterGroup();
             def.AddOrExtendMethod("CleanupInstance", ProcedureKind.Procedure).AddParameterGroup();
-            def.AddOrExtendMethod("ClassType", ProcedureKind.Function).AddParameterGroup(runtime.Indetermined.ByTypeId(KnownTypeIds.TClass));
+            def.AddOrExtendMethod("ClassType", ProcedureKind.Function).AddParameterGroup(runtime.Types.MakeReference(KnownTypeIds.TClass));
             def.AddOrExtendMethod("FieldAddress", ProcedureKind.Function).AddParameterGroup(//
                "Name",
-                runtime.Indetermined.ByTypeId(KnownTypeIds.ShortStringType), //
-                runtime.Indetermined.ByTypeId(KnownTypeIds.GenericPointer))[0].ConstantParam = true;
+                runtime.Types.MakeReference(KnownTypeIds.ShortStringType), //
+                runtime.Types.MakeReference(KnownTypeIds.GenericPointer))[0].ConstantParam = true;
         }
 
     }

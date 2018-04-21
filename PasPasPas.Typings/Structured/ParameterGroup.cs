@@ -14,7 +14,7 @@ namespace PasPasPas.Typings.Structured {
         /// <summary>
         ///     result type
         /// </summary>
-        public IValue ResultType { get; set; }
+        public ITypeReference ResultType { get; set; }
 
         /// <summary>
         ///     routine parameters

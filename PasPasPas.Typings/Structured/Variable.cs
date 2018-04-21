@@ -13,7 +13,7 @@ namespace PasPasPas.Typings.Structured {
         /// <summary>
         ///     parameter type
         /// </summary>
-        public IValue SymbolType { get; set; }
+        public ITypeReference SymbolType { get; set; }
 
         /// <summary>
         ///     parameter name

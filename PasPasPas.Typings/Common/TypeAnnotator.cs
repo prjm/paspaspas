@@ -45,7 +45,7 @@ namespace PasPasPas.Typings.Common {
 
         private readonly IStartEndVisitor visitor;
         private readonly ITypedEnvironment environment;
-        private readonly Stack<IValue> currentTypeDefintion;
+        private readonly Stack<ITypeReference> currentTypeDefintion;
         private readonly Stack<Routine> currentMethodDefinition;
         private readonly Stack<ParameterGroup> currentMethodParameters;
         private readonly Resolver resolver;
@@ -70,15 +70,15 @@ namespace PasPasPas.Typings.Common {
             visitor = new Visitor(this);
             environment = env;
             resolver = new Resolver(new Scope(env.TypeRegistry));
-            currentTypeDefintion = new Stack<IValue>();
+            currentTypeDefintion = new Stack<ITypeReference>();
             currentMethodDefinition = new Stack<Routine>();
             currentMethodParameters = new Stack<ParameterGroup>();
         }
 
-        private IValue GetTypeByIdOrUndefinedType(int typeId)
-            => environment.ConstantValues.Indetermined.ByTypeId(typeId);
+        private ITypeReference GetTypeByIdOrUndefinedType(int typeId)
+            => environment.ConstantValues.Types.MakeReference(typeId);
 
-        private CommonTypeKind GetTypeKind(IValue value)
+        private CommonTypeKind GetTypeKind(ITypeReference value)
             => environment.TypeRegistry.GetTypeKind(value.TypeId);
 
         /// <summary>
@@ -136,7 +136,7 @@ namespace PasPasPas.Typings.Common {
             var value = element.Value.LiteralValue;
             var operation = environment.TypeRegistry.GetOperator(operatorId);
 
-            element.LiteralValue = operation.ComputeValue(new IValue[] { value });
+            element.LiteralValue = operation.ComputeValue(new IValue[] { value as IValue });
             element.IsConstant = element.LiteralValue != null;
             element.TypeInfo = element.IsConstant ? GetTypeByIdOrUndefinedType(element.LiteralValue.TypeId) : GetErrorType(element);
         }
@@ -147,19 +147,19 @@ namespace PasPasPas.Typings.Common {
             var rightValue = element.RightOperand.TypeInfo;
             var operation = environment.TypeRegistry.GetOperator(operatorId);
 
-            element.LiteralValue = operation.ComputeValue(new IValue[] { leftValue, rightValue });
+            element.LiteralValue = operation.ComputeValue(new IValue[] { leftValue as IValue, rightValue as IValue });
             element.IsConstant = element.LiteralValue != null;
             element.TypeInfo = element.IsConstant ? element.LiteralValue : GetErrorType(element);
         }
 
-        private IValue GetTypeDefinition(IExpression expression) {
+        private ITypeReference GetTypeDefinition(IExpression expression) {
             if (expression != null && expression.TypeInfo != null)
                 return expression.TypeInfo;
 
             return GetErrorType(expression);
         }
 
-        private void DefineSubrangeType(BinaryOperator element, IValue leftType, IValue rightType) {
+        private void DefineSubrangeType(BinaryOperator element, ITypeReference leftType, ITypeReference rightType) {
             var left = GetTypeKind(leftType);
             var right = GetTypeKind(rightType);
             var leftId = leftType.TypeId;
@@ -183,7 +183,7 @@ namespace PasPasPas.Typings.Common {
             }
         }
 
-        private int GetOperatorId(BinaryOperator element, IValue leftType, IValue rightType) {
+        private int GetOperatorId(BinaryOperator element, ITypeReference leftType, ITypeReference rightType) {
 
             switch (element.Kind) {
                 case ExpressionKind.LessThen:
@@ -271,7 +271,7 @@ namespace PasPasPas.Typings.Common {
             }
         }
 
-        private IValue GetErrorType(ITypedSyntaxNode node) {
+        private ITypeReference GetErrorType(ITypedSyntaxNode node) {
             return GetTypeByIdOrUndefinedType(KnownTypeIds.ErrorType);
         }
 
@@ -281,7 +281,7 @@ namespace PasPasPas.Typings.Common {
         /// <param name="operatorKind"></param>
         /// <param name="typeInfo"></param>
         /// <returns></returns>
-        private IValue GetTypeOfOperator(int operatorKind, IValue typeInfo) {
+        private ITypeReference GetTypeOfOperator(int operatorKind, ITypeReference typeInfo) {
             if (typeInfo == null)
                 return null;
 
@@ -301,7 +301,7 @@ namespace PasPasPas.Typings.Common {
         /// <param name="typeInfo1"></param>
         /// <param name="typeInfo2"></param>
         /// <returns></returns>
-        private IValue GetTypeOfOperator(int operatorKind, IValue typeInfo1, IValue typeInfo2) {
+        private ITypeReference GetTypeOfOperator(int operatorKind, ITypeReference typeInfo1, ITypeReference typeInfo2) {
             if (typeInfo1 == null)
                 return null;
 
@@ -473,7 +473,7 @@ namespace PasPasPas.Typings.Common {
                 else if (part.Kind == SymbolReferencePartKind.CallParameters) {
                     IList<ParameterGroup> callableRoutines = new List<ParameterGroup>();
 
-                    var signature = new IValue[part.Expressions.Count];
+                    var signature = new ITypeReference[part.Expressions.Count];
                     for (var i = 0; i < signature.Length; i++)
                         if (part.Expressions[i] != null && part.Expressions[i].TypeInfo != null)
                             signature[i] = part.Expressions[i].TypeInfo;
@@ -729,7 +729,8 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="element">field definition</param>
         public void EndVisit(StructureFields element) {
-            IValue typeInfo;
+            var typeInfo = default(ITypeReference);
+
             if (element.TypeValue != null && element.TypeValue.TypeInfo != null)
                 typeInfo = element.TypeValue.TypeInfo;
             else {
@@ -801,7 +802,7 @@ namespace PasPasPas.Typings.Common {
         public void EndVisit(SetExpression element) {
             var typeId = RequireUserTypeId();
             var isConstant = true;
-            IValue baseType = null;
+            var baseType = default(ITypeReference);
 
             foreach (var part in element.Expressions) {
 
@@ -836,7 +837,7 @@ namespace PasPasPas.Typings.Common {
         public void EndVisit(ArrayConstant element) {
             var typeId = RequireUserTypeId();
             var isConstant = true;
-            IValue baseType = null;
+            var baseType = default(ITypeReference);
 
             foreach (var part in element.Items) {
 

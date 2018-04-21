@@ -72,7 +72,7 @@ namespace PasPasPas.Typings.Structured {
         ///     add a parameter group
         /// </summary>
         /// <param name="resultType">result type</param>
-        public ParameterGroup AddParameterGroup(IValue resultType) {
+        public ParameterGroup AddParameterGroup(ITypeReference resultType) {
             var result = new ParameterGroup {
                 ResultType = resultType
             };
@@ -88,7 +88,7 @@ namespace PasPasPas.Typings.Structured {
         /// <param name="resultType">result type</param>
         /// <param name="parameterName">parameter name</param>
         /// <returns></returns>
-        public ParameterGroup AddParameterGroup(string parameterName, IValue firstParam, IValue resultType) {
+        public ParameterGroup AddParameterGroup(string parameterName, ITypeReference firstParam, ITypeReference resultType) {
             var result = new ParameterGroup {
                 ResultType = resultType
             };

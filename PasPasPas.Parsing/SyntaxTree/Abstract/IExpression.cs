@@ -12,7 +12,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     constant literal value
         /// </summary>
-        IValue LiteralValue { get; }
+        ITypeReference LiteralValue { get; }
 
 
     }

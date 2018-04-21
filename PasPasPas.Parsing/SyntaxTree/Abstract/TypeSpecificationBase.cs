@@ -11,6 +11,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     type information
         /// </summary>
-        public IValue TypeInfo { get; set; }
+        public ITypeReference TypeInfo { get; set; }
     }
 }

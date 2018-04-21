@@ -3,13 +3,13 @@
     /// <summary>
     ///     value factory for undefined types
     /// </summary>
-    public interface IOpenTypeOperations {
+    public interface ITypeOperations {
 
         /// <summary>
-        ///     produce a compile-time undetermined type value
+        ///     produces a reference to a type with indeterminate compile-time value
         /// </summary>
         /// <param name="typeId">type id</param>
-        /// <returns>type value</returns>
-        IValue ByTypeId(int typeId);
+        /// <returns>reference to type</returns>
+        ITypeReference MakeReference(int typeId);
     }
 }

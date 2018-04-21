@@ -8,7 +8,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Types {
     /// </summary>
     public class Signature : IEquatable<Signature> {
 
-        private IValue[] data;
+        private ITypeReference[] data;
 
         /// <summary>
         ///     get the number of parameters in this signature
@@ -20,22 +20,22 @@ namespace PasPasPas.Parsing.SyntaxTree.Types {
         ///     create a new unary signature
         /// </summary>
         /// <param name="value"></param>
-        public Signature(IValue value)
-            => data = new IValue[] { value };
+        public Signature(ITypeReference value)
+            => data = new ITypeReference[] { value };
 
         /// <summary>
         ///     create a new signature
         /// </summary>
         /// <param name="value1">first type</param>
         /// <param name="value2">second type</param>
-        public Signature(IValue value1, IValue value2)
-            => data = new IValue[] { value1, value2 };
+        public Signature(ITypeReference value1, ITypeReference value2)
+            => data = new ITypeReference[] { value1, value2 };
 
         /// <summary>
         ///     create a new type signature
         /// </summary>
         /// <param name="values">values</param>
-        public Signature(params IValue[] values) {
+        public Signature(params ITypeReference[] values) {
             data = new IValue[values.Length];
             Array.Copy(values, data, values.Length);
         }
@@ -73,7 +73,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Types {
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public IValue this[int index]
+        public ITypeReference this[int index]
             => data[index];
 
     }

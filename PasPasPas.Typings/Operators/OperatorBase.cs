@@ -66,15 +66,15 @@ namespace PasPasPas.Typings.Operators {
         /// </summary>
         /// <param name="input">input signature</param>
         /// <returns>output type id</returns>
-        public IValue EvaluateOperator(Signature input) {
+        public ITypeReference EvaluateOperator(Signature input) {
             switch (arity) {
                 case 1:
-                    return Runtime.Indetermined.ByTypeId(EvaluateUnaryOperator(input));
+                    return Runtime.Types.MakeReference(EvaluateUnaryOperator(input));
                 case 2:
-                    return Runtime.Indetermined.ByTypeId(EvaluateBinaryOperator(input));
+                    return Runtime.Types.MakeReference(EvaluateBinaryOperator(input));
             }
 
-            return Runtime.Indetermined.ByTypeId(KnownTypeIds.ErrorType);
+            return Runtime.Types.MakeReference(KnownTypeIds.ErrorType);
         }
 
         /// <summary>

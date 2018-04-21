@@ -33,9 +33,9 @@ namespace PasPasPas.Global.Runtime {
         ICharOperations Chars { get; }
 
         /// <summary>
-        ///     open type operations
+        ///     type operations
         /// </summary>
-        IOpenTypeOperations Indetermined { get; }
+        ITypeOperations Types { get; }
 
     }
 }

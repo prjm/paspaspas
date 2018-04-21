@@ -32,7 +32,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Types {
         /// </summary>
         /// <param name="input">operator input</param>
         /// <returns></returns>
-        IValue EvaluateOperator(Signature input);
+        ITypeReference EvaluateOperator(Signature input);
 
         /// <summary>
         ///     compute the value of this operator

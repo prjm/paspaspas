@@ -22,8 +22,8 @@ namespace PasPasPas.Typings.Structured {
         /// <summary>
         ///     array index types
         /// </summary>
-        public IList<IValue> IndexTypes { get; }
-            = new List<IValue>();
+        public IList<ITypeReference> IndexTypes { get; }
+            = new List<ITypeReference>();
 
         /// <summary>
         ///     type kind
