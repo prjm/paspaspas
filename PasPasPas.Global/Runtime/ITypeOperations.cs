@@ -6,6 +6,11 @@
     public interface ITypeOperations {
 
         /// <summary>
+        ///     constant nil pointer
+        /// </summary>
+        IValue Nil { get; }
+
+        /// <summary>
         ///     produces a reference to a type with indeterminate compile-time value
         /// </summary>
         /// <param name="typeId">type id</param>

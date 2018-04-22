@@ -1,5 +1,4 @@
 ﻿using PasPasPas.Global.Runtime;
-using PasPasPas.Parsing.SyntaxTree.Types;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
 
@@ -14,14 +13,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         public ITypeReference TypeInfo { get; set; }
 
         /// <summary>
-        ///     <c>true</c> for constant expressions
+        ///     test if this expression value is constant at compile time
         /// </summary>
-        public bool IsConstant { get; set; }
+        public bool IsConstant
+            => TypeInfo is IValue;
 
-        /// <summary>
-        ///     constant literal value of this expression
-        /// </summary>
-        public ITypeReference LiteralValue { get; set; }
 
     }
 }

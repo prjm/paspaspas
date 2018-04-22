@@ -604,7 +604,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 var value = new ConstantValue();
                 InitNode(value, factor);
                 value.Kind = ConstantValueKind.Nil;
-                value.IsConstant = true;
                 lastExpression.Value = value;
                 return;
             }
@@ -624,7 +623,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 var value = new ConstantValue();
                 InitNode(value, factor);
                 value.Kind = ConstantValueKind.False;
-                value.IsConstant = true;
                 lastExpression.Value = value;
                 return;
             }
@@ -634,7 +632,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 var value = new ConstantValue();
                 InitNode(value, factor);
                 value.Kind = ConstantValueKind.True;
-                value.IsConstant = true;
                 lastExpression.Value = value;
                 return;
             }
@@ -644,8 +641,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 var value = new ConstantValue();
                 InitNode(value, factor);
                 value.Kind = ConstantValueKind.Integer;
-                value.LiteralValue = factor.IntValue.FirstTerminalToken.ParsedValue;
-                value.IsConstant = true;
+                value.TypeInfo = factor.IntValue.FirstTerminalToken.ParsedValue;
                 lastExpression.Value = value;
                 return;
             }
@@ -654,9 +650,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 var lastExpression = LastExpression;
                 var value = new ConstantValue();
                 InitNode(value, factor);
-                value.IsConstant = true;
                 value.Kind = ConstantValueKind.RealNumber;
-                value.LiteralValue = factor.RealValue.FirstTerminalToken.ParsedValue;
+                value.TypeInfo = factor.RealValue.FirstTerminalToken.ParsedValue;
                 lastExpression.Value = value;
                 return;
             }
@@ -665,9 +660,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 var lastExpression = LastExpression;
                 var value = new ConstantValue();
                 InitNode(value, factor);
-                value.IsConstant = true;
                 value.Kind = ConstantValueKind.QuotedString;
-                value.LiteralValue = factor.StringValue.FirstTerminalToken.ParsedValue;
+                value.TypeInfo = factor.StringValue.FirstTerminalToken.ParsedValue;
                 lastExpression.Value = value;
                 return;
             }
@@ -677,8 +671,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 var value = new ConstantValue();
                 InitNode(value, factor);
                 value.Kind = ConstantValueKind.HexNumber;
-                value.IsConstant = true;
-                value.LiteralValue = factor.HexValue.FirstTerminalToken.ParsedValue;
+                value.TypeInfo = factor.HexValue.FirstTerminalToken.ParsedValue;
                 lastExpression.Value = value;
                 return;
             }
@@ -2592,7 +2585,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 var operand = new ConstantValue();
                 InitNode(operand, op.NumberOfParams);
                 operand.Kind = ConstantValueKind.Integer;
-                operand.LiteralValue = op.NumberOfParams.FirstTerminalToken.ParsedValue;
+                operand.TypeInfo = op.NumberOfParams.FirstTerminalToken.ParsedValue;
                 result.Operands.Add(operand);
             }
             else if (op.PushEnvOperation) {

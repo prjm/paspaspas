@@ -9,20 +9,24 @@ namespace PasPasPas.Runtime.Values {
     /// </summary>
     public class SpecialValue : IValue {
 
-        private SpecialConstantKind kind;
+        private readonly SpecialConstantKind kind;
+        private readonly int typeIdentifier;
 
         /// <summary>
         ///     create a new special kind
         /// </summary>
-        /// <param name="constantKind"></param>
-        public SpecialValue(SpecialConstantKind constantKind)
-            => kind = constantKind;
+        /// <param name="constantKind">constant kind</param>
+        /// <param name="typeId">type id</param>
+        public SpecialValue(SpecialConstantKind constantKind, int typeId = KnownTypeIds.ErrorType) {
+            kind = constantKind;
+            typeIdentifier = typeId;
+        }
 
         /// <summary>
         ///     error type
         /// </summary>
         public int TypeId
-            => KnownTypeIds.ErrorType;
+            => typeIdentifier;
 
         /// <summary>
         ///     kind of this special value

@@ -48,6 +48,6 @@ namespace PasPasPas.Runtime.Values {
         ///     open tye operations
         /// </summary>
         public ITypeOperations Types { get; }
-            = new OpenTypeOperations();
+            = new TypeOperations();
     }
 }

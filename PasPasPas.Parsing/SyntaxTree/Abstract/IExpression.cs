@@ -9,11 +9,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// </summary>
     public interface IExpression : ISyntaxPart, ITypedSyntaxNode, IConstantValueNode {
 
-        /// <summary>
-        ///     constant literal value
-        /// </summary>
-        ITypeReference LiteralValue { get; }
-
 
     }
 }

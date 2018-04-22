@@ -51,18 +51,17 @@ namespace PasPasPasTests.Types {
             firstParam = EvaluateExpressionType(file, program, searchfunction, NativeIntSize.Undefined, out var env) as IExpression;
 
             Assert.IsNotNull(firstParam);
-            Assert.IsNotNull(firstParam.LiteralValue);
             Assert.IsNotNull(firstParam.TypeInfo);
             Assert.IsTrue(firstParam.IsConstant);
-            Assert.AreEqual(value, firstParam.LiteralValue);
+            Assert.AreEqual(value, firstParam.TypeInfo);
 
         }
 
 
         /// <summary>
-        ///     test the type of a declared variable expressiom
+        ///     test the type of a declared variable expression
         /// </summary>
-        /// <param name="declaration">declareation</param>
+        /// <param name="declaration">declaration</param>
         /// <param name="typeId">type id to find</param>
         protected void AssertDeclType(string declaration, int typeId = KnownTypeIds.UnspecifiedType, NativeIntSize intSize = NativeIntSize.Undefined, int typeSize = -1, CommonTypeKind typeKind = CommonTypeKind.UnknownType) {
 
@@ -91,9 +90,9 @@ namespace PasPasPasTests.Types {
             AssertDeclType(declaration, tester, intSize);
         }
         /// <summary>
-        ///     test the type of a declared variable expressiom
+        ///     test the type of a declared variable expression
         /// </summary>
-        /// <param name="declaration">declareation</param>
+        /// <param name="declaration">declaration</param>
         /// <param name="typeId">type id to find</param>
         protected void AssertDeclTypeDef(string declaration, string expression = "x", int typeId = KnownTypeIds.UnspecifiedType, NativeIntSize intSize = NativeIntSize.Undefined, int typeSize = -1, CommonTypeKind typeKind = CommonTypeKind.UnknownType) {
 
@@ -178,13 +177,12 @@ namespace PasPasPasTests.Types {
             var rt = env.TypeRegistry.GetTypeByIdOrUndefinedType(r.TypeId);
 
             Assert.IsTrue(test(lt, rt));
-
         }
 
         /// <summary>
         ///     test the type of a declared types
         /// </summary>
-        /// <param name="declaration">declareation</param>
+        /// <param name="declaration">declaration</param>
         protected void AssertDeclType(string declaration, Action<ITypeDefinition> test, NativeIntSize intSize = NativeIntSize.Undefined) {
             var file = "SimpleExpr";
             var program = $"program {file}; var x : {declaration}; begin Writeln(x); end. ";

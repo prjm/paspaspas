@@ -89,19 +89,22 @@ namespace PasPasPas.Typings.Common {
 
             if (element.Kind == ConstantValueKind.True) {
                 element.TypeInfo = environment.ConstantValues.Booleans.TrueValue;
-                element.IsConstant = true;
             }
             else if (element.Kind == ConstantValueKind.False) {
                 element.TypeInfo = environment.ConstantValues.Booleans.FalseValue;
-                element.IsConstant = true;
+            }
+            else if (element.Kind == ConstantValueKind.Nil) {
+                element.TypeInfo = environment.ConstantValues.Types.Nil;
             }
 
             if ((element.Kind == ConstantValueKind.HexNumber ||
                 element.Kind == ConstantValueKind.Integer ||
                 element.Kind == ConstantValueKind.QuotedString ||
                 element.Kind == ConstantValueKind.RealNumber) &&
-                element.LiteralValue != null) {
-                element.TypeInfo = element.LiteralValue;
+                element.TypeInfo == null) {
+                // constants are provided by the abstract syntax tree
+                // as type information
+                throw new InvalidOperationException();
             }
         }
 
@@ -128,17 +131,13 @@ namespace PasPasPas.Typings.Common {
                 }
 
                 element.TypeInfo = GetTypeOfOperator(operatorId, leftType, rightType);
-                element.IsConstant = element.LeftOperand.IsConstant && element.RightOperand.IsConstant;
             }
         }
 
         private void ComputeConstantUnaryOperator(UnaryOperator element, int operatorId) {
-            var value = element.Value.LiteralValue;
             var operation = environment.TypeRegistry.GetOperator(operatorId);
-
-            element.LiteralValue = operation.ComputeValue(new IValue[] { value as IValue });
-            element.IsConstant = element.LiteralValue != null;
-            element.TypeInfo = element.IsConstant ? GetTypeByIdOrUndefinedType(element.LiteralValue.TypeId) : GetErrorType(element);
+            var value = operation.ComputeValue(new IValue[] { element.Value.TypeInfo as IValue });
+            element.TypeInfo = value ?? GetErrorType(element);
         }
 
 
@@ -147,9 +146,8 @@ namespace PasPasPas.Typings.Common {
             var rightValue = element.RightOperand.TypeInfo;
             var operation = environment.TypeRegistry.GetOperator(operatorId);
 
-            element.LiteralValue = operation.ComputeValue(new IValue[] { leftValue as IValue, rightValue as IValue });
-            element.IsConstant = element.LiteralValue != null;
-            element.TypeInfo = element.IsConstant ? element.LiteralValue : GetErrorType(element);
+            var value = operation.ComputeValue(new IValue[] { leftValue as IValue, rightValue as IValue });
+            element.TypeInfo = value ?? GetErrorType(element);
         }
 
         private ITypeReference GetTypeDefinition(IExpression expression) {
@@ -178,8 +176,6 @@ namespace PasPasPas.Typings.Common {
                 }
                 else
                     element.TypeInfo = GetErrorType(element);
-
-                element.IsConstant = element.LeftOperand.IsConstant && element.RightOperand.IsConstant;
             }
         }
 
@@ -254,11 +250,9 @@ namespace PasPasPas.Typings.Common {
 
             if (element.Kind == ExpressionKind.Not) {
                 element.TypeInfo = GetTypeOfOperator(DefinedOperators.NotOperation, operand.TypeInfo);
-                element.IsConstant = operand.IsConstant;
             }
             else if (element.Kind == ExpressionKind.UnaryMinus) {
-                element.IsConstant = operand.IsConstant;
-                if (element.IsConstant) {
+                if (operand.IsConstant) {
                     ComputeConstantUnaryOperator(element, DefinedOperators.UnaryMinus);
                 }
                 else {
@@ -267,7 +261,6 @@ namespace PasPasPas.Typings.Common {
             }
             else if (element.Kind == ExpressionKind.UnaryPlus) {
                 element.TypeInfo = GetTypeOfOperator(DefinedOperators.UnaryPlus, operand.TypeInfo);
-                element.IsConstant = operand.IsConstant;
             }
         }
 
@@ -507,7 +500,6 @@ namespace PasPasPas.Typings.Common {
             }
 
             element.TypeInfo = baseTypeValue;
-            element.IsConstant = isConstant;
         }
 
         /// <summary>
@@ -776,22 +768,12 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="element">item to visit</param>
         public void EndVisit(ConstantDeclaration element) {
-            var typeId = KnownTypeIds.ErrorType;
-            var autoTypeId = KnownTypeIds.ErrorType;
-            var declaredTypeId = KnownTypeIds.ErrorType;
+            if (element.TypeValue is ITypedSyntaxNode typeRef && typeRef.TypeInfo != null && typeRef.TypeInfo.TypeId != KnownTypeIds.ErrorType)
+                element.TypeInfo = typeRef.TypeInfo;
 
-            if (element.TypeValue is ITypedSyntaxNode typeRef && typeRef.TypeInfo != null)
-                declaredTypeId = typeRef.TypeInfo.TypeId;
+            if (element.Value is ITypedSyntaxNode autType && autType.TypeInfo != null && autType.TypeInfo.TypeId != KnownTypeIds.ErrorType)
+                element.TypeInfo = autType.TypeInfo;
 
-            if (element.Value is ITypedSyntaxNode autType && autType.TypeInfo != null)
-                autoTypeId = autType.TypeInfo.TypeId;
-
-            if (declaredTypeId != KnownTypeIds.ErrorType)
-                typeId = declaredTypeId;
-            else
-                typeId = autoTypeId;
-
-            element.TypeInfo = GetTypeByIdOrUndefinedType(typeId);
             resolver.AddToScope(element.SymbolName, ReferenceKind.RefToConstant, element);
         }
 
@@ -827,7 +809,6 @@ namespace PasPasPas.Typings.Common {
 
             var typdef = RegisterUserDefinedType(new SetType(typeId, baseType.TypeId));
             element.TypeInfo = GetTypeByIdOrUndefinedType(typdef.TypeId);
-            element.IsConstant = isConstant;
         }
 
         /// <summary>
@@ -861,7 +842,6 @@ namespace PasPasPas.Typings.Common {
             }
 
             element.TypeInfo = GetTypeByIdOrUndefinedType(RegisterUserDefinedType(new ArrayType(typeId) { BaseTypeId = baseType.TypeId }).TypeId);
-            element.IsConstant = isConstant;
         }
     }
 }

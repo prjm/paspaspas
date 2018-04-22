@@ -38,6 +38,11 @@
         /// <summary>
         ///     invalid string
         /// </summary>
-        InvalidString = 8
+        InvalidString = 8,
+
+        /// <summary>
+        ///     nil pointer
+        /// </summary>
+        Nil = 9
     }
 }

@@ -71,8 +71,8 @@ namespace P3SyntaxTreeViewer {
                 (var bst, var ast) = Parse(env, code);
 
                 Dispatcher.Invoke(() => {
-                    DisplayTree(StandardTreeView, bst);
-                    DisplayTree(AbstractTreeView, ast);
+                    DisplayTree(StandardTreeView, env, bst);
+                    DisplayTree(AbstractTreeView, env, ast);
                     DisplayLog(listLog.Messages);
                 });
             });
@@ -98,12 +98,12 @@ namespace P3SyntaxTreeViewer {
             }
         }
 
-        private void DisplayTree(TreeView tv, ISyntaxPart cst) {
+        private void DisplayTree(TreeView tv, ITypedEnvironment env, ISyntaxPart cst) {
             tv.Items.Clear();
-            AddNodes(tv, null, cst);
+            AddNodes(tv, null, env, cst);
         }
 
-        private void AddNodes(TreeView tv, TreeViewItem parent, ISyntaxPart cst) {
+        private void AddNodes(TreeView tv, TreeViewItem parent, ITypedEnvironment env, ISyntaxPart cst) {
             var treeViewItem = new TreeViewItem();
 
             if (cst is Terminal terminal) {
@@ -117,29 +117,33 @@ namespace P3SyntaxTreeViewer {
                 treeViewItem.Header += ": " + symbol.SymbolName;
 
             if (cst is PasPasPas.Parsing.SyntaxTree.Types.ITypedSyntaxNode typeInfo && typeInfo.TypeInfo != null) {
-                treeViewItem.Header += " [" + typeInfo.TypeInfo.TypeId.ToString() + "]";
 
-                //treeViewItem.Header += " " + typeInfo.TypeInfo.TypeKind.ToString();
+                var t = env.TypeRegistry.GetTypeByIdOrUndefinedType(typeInfo.TypeInfo.TypeId);
 
-                if (typeInfo.TypeInfo is ArrayType array)
+                treeViewItem.Header += " [" + t.TypeId.ToString() + "]";
+
+                treeViewItem.Header += " " + t.TypeKind.ToString();
+
+                if (t is ArrayType array)
                     treeViewItem.Header += " of " + array.BaseType?.TypeKind.ToString();
 
-                if (typeInfo.TypeInfo is PasPasPas.Typings.Simple.SubrangeType subrange)
+                if (t is PasPasPas.Typings.Simple.SubrangeType subrange)
                     treeViewItem.Header += " of " + subrange.BaseType?.TypeKind.ToString();
 
-                if (typeInfo.TypeInfo is SetType set)
+                if (t is SetType set)
                     treeViewItem.Header += " of " + set.BaseType?.TypeKind.ToString();
 
                 if (cst is IConstantValueNode constant && constant.IsConstant)
                     treeViewItem.Header += "*";
+
+                if (typeInfo.TypeInfo is IValue value) {
+                    treeViewItem.Header += " = " + value.ToString();
+                }
+
             }
 
             if (cst is SymbolReferencePart srp) {
                 treeViewItem.Header += " " + srp.Kind.ToString();
-            }
-
-            if (cst is IExpression expr && expr.LiteralValue != null) {
-                treeViewItem.Header += " = " + expr.LiteralValue.ToString();
             }
 
             if (parent != null) {
@@ -150,7 +154,7 @@ namespace P3SyntaxTreeViewer {
             }
 
             foreach (var child in cst.Parts) {
-                AddNodes(tv, treeViewItem, child);
+                AddNodes(tv, treeViewItem, env, child);
             }
 
             treeViewItem.IsExpanded = true;
