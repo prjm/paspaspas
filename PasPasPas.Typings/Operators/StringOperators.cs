@@ -44,55 +44,22 @@ namespace PasPasPas.Typings.Operators {
         }
 
         /// <summary>
-        ///     compute constant value
-        /// </summary>
-        /// <param name="inputs"></param>
-        /// <returns></returns>
-        public override IValue ComputeValue(IValue[] inputs) {
-            if (inputs.Length == 2) {
-
-                if (Kind == DefinedOperators.ConcatOperator) {
-                    return Runtime.Strings.Concat(inputs[0], inputs[1]);
-                }
-
-            }
-
-            return null;
-        }
-
-        /// <summary>
         ///     evaluate a binary operator
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        protected override int EvaluateBinaryOperator(Signature input) {
-            if (input.Length != 2)
-                return KnownTypeIds.ErrorType;
+        protected override ITypeReference EvaluateBinaryOperator(Signature input) {
+            var left = input[0];
+            var right = input[1];
+            var operations = Runtime.GetStringOperators(GetTypeKind(left), GetTypeKind(right));
 
-            var left = TypeRegistry.GetTypeKind(input[0].TypeId);
-            var right = TypeRegistry.GetTypeKind(input[1].TypeId);
+            if (operations == null)
+                return GetErrorTypeReference();
 
-            if (Kind == DefinedOperators.ConcatOperator) {
+            if (Kind == DefinedOperators.ConcatOperator)
+                return operations.Concat(left, right);
 
-                if ((!left.IsTextual()) || (!right.IsTextual()))
-                    return KnownTypeIds.ErrorType;
-
-                if (CommonTypeKind.WideStringType.One(left, right))
-                    return KnownTypeIds.WideStringType;
-
-                if (CommonTypeKind.AnsiCharType.One(left, right))
-                    return KnownTypeIds.AnsiStringType;
-
-                if (CommonTypeKind.LongStringType.All(left, right))
-                    return KnownTypeIds.AnsiStringType;
-
-                if (CommonTypeKind.ShortStringType.One(left, right))
-                    return KnownTypeIds.AnsiStringType;
-
-                return KnownTypeIds.UnicodeStringType;
-            }
-
-            return KnownTypeIds.ErrorType;
+            return GetErrorTypeReference();
         }
     }
 }

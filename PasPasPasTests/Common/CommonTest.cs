@@ -2,6 +2,7 @@
 using PasPasPas.Global.Runtime;
 using PasPasPas.Options.DataTypes;
 using PasPasPas.Runtime.Values;
+using PasPasPas.Runtime.Values.Int;
 using PasPasPas.Typings.Common;
 using SharpFloat.FloatingPoint;
 
@@ -22,7 +23,7 @@ namespace PasPasPasTests.Common {
         /// <param name="number"></param>
         /// <returns></returns>
         protected IValue GetIntegerValue(sbyte number)
-            => new RuntimeValueFactory().Integers.ToScaledIntegerValue(number);
+            => IntegerValueBase.ToScaledIntegerValue(number);
 
         /// <summary>
         ///     convert a value
@@ -30,7 +31,7 @@ namespace PasPasPasTests.Common {
         /// <param name="number"></param>
         /// <returns></returns>
         protected IValue GetIntegerValue(byte number)
-            => new RuntimeValueFactory().Integers.ToScaledIntegerValue(number);
+            => IntegerValueBase.ToScaledIntegerValue(number);
 
         /// <summary>
         ///     convert a value
@@ -38,7 +39,7 @@ namespace PasPasPasTests.Common {
         /// <param name="number"></param>
         /// <returns></returns>
         protected IValue GetIntegerValue(short number)
-            => new RuntimeValueFactory().Integers.ToScaledIntegerValue(number);
+            => IntegerValueBase.ToScaledIntegerValue(number);
 
         /// <summary>
         ///     convert a value
@@ -46,7 +47,7 @@ namespace PasPasPasTests.Common {
         /// <param name="number"></param>
         /// <returns></returns>
         protected IValue GetIntegerValue(ushort number)
-            => new RuntimeValueFactory().Integers.ToScaledIntegerValue(number);
+            => IntegerValueBase.ToScaledIntegerValue(number);
 
         /// <summary>
         ///     convert a value
@@ -54,7 +55,7 @@ namespace PasPasPasTests.Common {
         /// <param name="number"></param>
         /// <returns></returns>
         protected IValue GetIntegerValue(int number)
-            => new RuntimeValueFactory().Integers.ToScaledIntegerValue(number);
+            => IntegerValueBase.ToScaledIntegerValue(number);
 
         /// <summary>
         ///     get the Unicode string value
@@ -80,7 +81,7 @@ namespace PasPasPasTests.Common {
         /// <param name="number"></param>
         /// <returns></returns>
         protected IValue GetIntegerValue(uint number)
-            => new RuntimeValueFactory().Integers.ToScaledIntegerValue(number);
+            => IntegerValueBase.ToScaledIntegerValue(number);
 
 
         /// <summary>
@@ -89,8 +90,7 @@ namespace PasPasPasTests.Common {
         /// <param name="number"></param>
         /// <returns></returns>
         protected IValue GetIntegerValue(long number)
-            => new RuntimeValueFactory().Integers.ToScaledIntegerValue(number);
-
+            => IntegerValueBase.ToScaledIntegerValue(number);
 
         /// <summary>
         ///     convert a value
@@ -98,7 +98,7 @@ namespace PasPasPasTests.Common {
         /// <param name="number"></param>
         /// <returns></returns>
         protected IValue GetIntegerValue(ulong number)
-            => new RuntimeValueFactory().Integers.ToScaledIntegerValue(number);
+            => IntegerValueBase.ToScaledIntegerValue(number);
 
         /// <summary>
         ///     get extended value

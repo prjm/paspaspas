@@ -141,7 +141,7 @@ namespace PasPasPasTests.Types {
         public void TestBitwiseOperators() {
             AssertExprType("not 1", KnownTypeIds.ShortInt);
             AssertExprType("not 256", KnownTypeIds.SmallInt);
-            AssertExprType("not 4294967295", KnownTypeIds.CardinalType);
+            AssertExprType("not 4294967295", KnownTypeIds.ShortInt);
             AssertExprType("not 4294967296", KnownTypeIds.Int64Type);
 
             AssertExprType("1 and 1", KnownTypeIds.ShortInt);

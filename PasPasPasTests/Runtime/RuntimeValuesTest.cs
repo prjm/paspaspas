@@ -225,8 +225,8 @@ namespace PasPasPasTests.Runtime {
             Assert.AreEqual("-129", m(GetIntegerValue(128), KnownTypeIds.SmallInt));
             Assert.AreEqual("128", m(GetIntegerValue(-129), KnownTypeIds.ByteType));
             Assert.AreEqual("-9223372036854775808", m(GetIntegerValue(9223372036854775807), KnownTypeIds.Int64Type));
-            Assert.AreEqual("IO", m(GetIntegerValue(9223372036854775808), KnownTypeIds.ErrorType));
-            Assert.AreEqual("IO", m(GetIntegerValue(18446744073709551615), KnownTypeIds.ErrorType));
+            Assert.AreEqual("9223372036854775807", m(GetIntegerValue(9223372036854775808), KnownTypeIds.Int64Type));
+            Assert.AreEqual("1", m(GetIntegerValue(18446744073709551614), KnownTypeIds.ShortInt));
         }
 
         [TestCase]

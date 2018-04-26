@@ -24,7 +24,7 @@ namespace PasPasPas.Typings.Common {
         /// <param name="registry">type registry</param>
         /// <param name="typeId1">first type id</param>
         /// <param name="typeId2">second type id</param>
-        /// <returns>smalles type id</returns>
+        /// <returns>smallest type id</returns>
         public static int GetSmallestIntegralTypeOrNext(this ITypeRegistry registry, int typeId1, int typeId2) {
             if (KnownTypeIds.ErrorType.In(typeId1, typeId2))
                 return KnownTypeIds.ErrorType;

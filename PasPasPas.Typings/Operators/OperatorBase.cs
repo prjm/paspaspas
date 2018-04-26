@@ -1,5 +1,7 @@
-﻿using PasPasPas.Global.Constants;
+﻿using System;
+using PasPasPas.Global.Constants;
 using PasPasPas.Global.Runtime;
+using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Typings.Common;
 
@@ -69,9 +71,9 @@ namespace PasPasPas.Typings.Operators {
         public ITypeReference EvaluateOperator(Signature input) {
             switch (arity) {
                 case 1:
-                    return Runtime.Types.MakeReference(EvaluateUnaryOperator(input));
+                    return EvaluateUnaryOperator(input);
                 case 2:
-                    return Runtime.Types.MakeReference(EvaluateBinaryOperator(input));
+                    return EvaluateBinaryOperator(input);
             }
 
             return Runtime.Types.MakeReference(KnownTypeIds.ErrorType);
@@ -82,22 +84,95 @@ namespace PasPasPas.Typings.Operators {
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        protected virtual int EvaluateBinaryOperator(Signature input)
-            => KnownTypeIds.ErrorType;
+        protected virtual ITypeReference EvaluateBinaryOperator(Signature input)
+            => Runtime.Types.MakeReference(KnownTypeIds.ErrorType);
 
         /// <summary>
         ///     evaluate binary operator
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        protected virtual int EvaluateUnaryOperator(Signature input)
-            => KnownTypeIds.ErrorType;
+        protected virtual ITypeReference EvaluateUnaryOperator(Signature input)
+            => Runtime.Types.MakeReference(KnownTypeIds.ErrorType);
 
         /// <summary>
-        ///     compute the operator value
+        ///     helper method: map an expression kind to an registered operator id
         /// </summary>
-        /// <param name="inputs">constant inputs</param>
-        /// <returns>operator valueB</returns>
-        public abstract IValue ComputeValue(IValue[] inputs);
+        /// <param name="kind">expression kind</param>
+        /// <param name="leftType">left operand</param>
+        /// <param name="rightType">right operand</param>
+        /// <returns>operator id</returns>
+        public static int GetOperatorId(ExpressionKind kind, CommonTypeKind leftType, CommonTypeKind rightType) {
+
+            if (leftType == CommonTypeKind.UnknownType || rightType == CommonTypeKind.UnknownType)
+                return DefinedOperators.Undefined;
+
+            switch (kind) {
+                case ExpressionKind.LessThen:
+                    return DefinedOperators.LessThen;
+                case ExpressionKind.LessThenEquals:
+                    return DefinedOperators.LessThenOrEqual;
+                case ExpressionKind.GreaterThen:
+                    return DefinedOperators.GreaterThen;
+                case ExpressionKind.GreaterThenEquals:
+                    return DefinedOperators.GreaterThenEqual;
+                case ExpressionKind.NotEquals:
+                    return DefinedOperators.NotEqualsOperator;
+                case ExpressionKind.EqualsSign:
+                    return DefinedOperators.EqualsOperator;
+                case ExpressionKind.Xor:
+                    return DefinedOperators.XorOperation;
+                case ExpressionKind.Or:
+                    return DefinedOperators.OrOperation;
+                case ExpressionKind.Minus:
+                    return DefinedOperators.MinusOperation;
+                case ExpressionKind.Shr:
+                    return DefinedOperators.ShrOperation;
+                case ExpressionKind.Shl:
+                    return DefinedOperators.ShlOperation;
+                case ExpressionKind.And:
+                    return DefinedOperators.AndOperation;
+                case ExpressionKind.Mod:
+                    return DefinedOperators.ModOperation;
+                case ExpressionKind.Slash:
+                    return DefinedOperators.SlashOperation;
+                case ExpressionKind.Times:
+                    return DefinedOperators.TimesOperation;
+                case ExpressionKind.Div:
+                    return DefinedOperators.DivOperation;
+                case ExpressionKind.Not:
+                    return DefinedOperators.NotOperation;
+                case ExpressionKind.UnaryMinus:
+                    return DefinedOperators.UnaryMinus;
+                case ExpressionKind.UnaryPlus:
+                    return DefinedOperators.UnaryPlus;
+            };
+
+            if (kind == ExpressionKind.Plus) {
+                if (leftType.IsTextual() && rightType.IsTextual())
+                    return DefinedOperators.ConcatOperator;
+
+                if (leftType.IsNumerical() && rightType.IsNumerical())
+                    return DefinedOperators.PlusOperation;
+            }
+
+            return DefinedOperators.Undefined;
+        }
+
+        /// <summary>
+        ///     get the type kind of a given type reference
+        /// </summary>
+        /// <param name="typeReference"></param>
+        /// <returns></returns>
+        protected CommonTypeKind GetTypeKind(ITypeReference typeReference)
+            => TypeRegistry.GetTypeKind(typeReference.TypeId);
+
+        /// <summary>
+        ///     get a reference to the error type
+        /// </summary>
+        /// <returns></returns>
+        protected ITypeReference GetErrorTypeReference()
+            => Runtime.Types.MakeReference(KnownTypeIds.ErrorType);
+
     }
 }

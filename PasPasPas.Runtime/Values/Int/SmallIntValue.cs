@@ -1,5 +1,6 @@
 ﻿using System.Numerics;
 using PasPasPas.Global.Constants;
+using PasPasPas.Global.Runtime;
 
 namespace PasPasPas.Runtime.Values.Int {
 
@@ -58,6 +59,13 @@ namespace PasPasPas.Runtime.Values.Int {
         /// <returns></returns>
         public override int GetHashCode()
             => value;
+
+        /// <summary>
+        ///     invert bits
+        /// </summary>
+        /// <returns></returns>
+        public override IValue InvertBits()
+            => ToScaledIntegerValue(~value);
 
         /// <summary>
         ///     check if this number is negative

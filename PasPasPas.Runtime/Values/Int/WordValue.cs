@@ -66,6 +66,13 @@ namespace PasPasPas.Runtime.Values.Int {
             => value;
 
         /// <summary>
+        ///     invert bits
+        /// </summary>
+        /// <returns></returns>
+        public override IValue InvertBits()
+            => ToScaledIntegerValue(~value);
+
+        /// <summary>
         ///     check if this number is negative
         /// </summary>
         public override bool IsNegative

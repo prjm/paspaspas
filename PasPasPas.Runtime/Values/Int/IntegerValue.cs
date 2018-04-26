@@ -5,6 +5,7 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using PasPasPas.Global.Constants;
+using PasPasPas.Global.Runtime;
 
 namespace PasPasPas.Runtime.Values.Int {
 
@@ -76,6 +77,12 @@ namespace PasPasPas.Runtime.Values.Int {
         public override int GetHashCode()
             => value;
 
+        /// <summary>
+        ///     invert bits
+        /// </summary>
+        /// <returns></returns>
+        public override IValue InvertBits()
+            => ToScaledIntegerValue(~value);
 
     }
 }

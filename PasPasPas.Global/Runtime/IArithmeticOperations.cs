@@ -8,9 +8,16 @@
         /// <summary>
         ///     negate a number
         /// </summary>
-        /// <param name="number"></param>
-        /// <returns></returns>
-        IValue Negate(IValue number);
+        /// <param name="number">input number</param>
+        /// <returns>negative number</returns>
+        ITypeReference Negate(ITypeReference number);
+
+        /// <summary>
+        ///     provide an identity function
+        /// </summary>
+        /// <param name="number">input number</param>
+        /// <returns>same number</returns>
+        ITypeReference Identity(ITypeReference number);
 
         /// <summary>
         ///     add two numbers
@@ -18,7 +25,7 @@
         /// <param name="augend">number</param>
         /// <param name="addend">number to add</param>
         /// <returns>sum</returns>
-        IValue Add(IValue augend, IValue addend);
+        ITypeReference Add(ITypeReference augend, ITypeReference addend);
 
         /// <summary>
         ///     subtract two numbers
@@ -26,7 +33,7 @@
         /// <param name="minuend"></param>
         /// <param name="subtrahend"></param>
         /// <returns></returns>
-        IValue Subtract(IValue minuend, IValue subtrahend);
+        ITypeReference Subtract(ITypeReference minuend, ITypeReference subtrahend);
 
         /// <summary>
         ///     multiply two numbers
@@ -34,8 +41,7 @@
         /// <param name="multiplicand"></param>
         /// <param name="intMultiplier"></param>
         /// <returns></returns>
-        IValue Multiply(IValue multiplicand, IValue intMultiplier);
-
+        ITypeReference Multiply(ITypeReference multiplicand, ITypeReference intMultiplier);
 
     }
 }

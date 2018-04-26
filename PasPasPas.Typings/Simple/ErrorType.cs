@@ -12,8 +12,7 @@ namespace PasPasPas.Typings.Simple {
         ///     creates a new errornous type
         /// </summary>
         /// <param name="withId"></param>
-        public ErrorType(int withId) : base(withId) {
-        }
+        public ErrorType(int withId) : base(withId) { }
 
         /// <summary>
         ///     unknown type kind

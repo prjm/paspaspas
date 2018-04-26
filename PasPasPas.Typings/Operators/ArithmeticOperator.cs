@@ -1,9 +1,6 @@
 ﻿using System;
-using PasPasPas.Global.Constants;
 using PasPasPas.Global.Runtime;
-using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree.Types;
-using PasPasPas.Typings.Common;
 
 namespace PasPasPas.Typings.Operators {
 
@@ -65,165 +62,59 @@ namespace PasPasPas.Typings.Operators {
         }
 
         /// <summary>
-        ///     computer operator value
+        ///     evaluate an unary operator
         /// </summary>
-        /// <param name="inputs"></param>
-        /// <returns></returns>
-        public override IValue ComputeValue(IValue[] inputs) {
+        /// <param name="input">operator input</param>
+        /// <returns>operator result</returns>
+        protected override ITypeReference EvaluateUnaryOperator(Signature input) {
+            var operand = input[0];
+            var operations = Runtime.GetArithmeticOperators(GetTypeKind(operand));
 
-            if (inputs.Length == 1) {
-                return ComputeUnaryOperator(inputs[0]);
-            }
-
-            if (inputs.Length == 2)
-                return ComputeBinaryOperator(inputs[0], inputs[1]);
-
-            return null;
-        }
-
-        private IValue ComputeUnaryOperator(IValue value) {
-            var number = value as INumericalValue;
+            if (operations == null)
+                return GetErrorTypeReference();
 
             if (Kind == DefinedOperators.UnaryPlus)
-                return number;
+                return operations.Identity(operand);
 
-            if (Kind == DefinedOperators.UnaryMinus && value is IIntegerValue)
-                return Runtime.Integers.Negate(value);
+            if (Kind == DefinedOperators.UnaryMinus)
+                return operations.Negate(operand);
 
-            if (Kind == DefinedOperators.UnaryMinus && value is IRealNumberValue)
-                return Runtime.RealNumbers.Negate(value);
-
-            return null;
-        }
-
-        private IValue ComputeBinaryOperator(IValue value1, IValue value2) {
-            var ints = Runtime.Integers;
-            var floats = Runtime.RealNumbers;
-
-            if (value1 is IRealNumberValue || value2 is IRealNumberValue) {
-                if (Kind == DefinedOperators.PlusOperation)
-                    return floats.Add(value1, value2);
-
-                if (Kind == DefinedOperators.MinusOperation)
-                    return floats.Subtract(value1, value2);
-
-                if (Kind == DefinedOperators.TimesOperation)
-                    return floats.Multiply(value1, value2);
-
-                if (Kind == DefinedOperators.SlashOperation)
-                    return floats.Divide(value1, value2);
-
-            }
-
-            if (Kind == DefinedOperators.PlusOperation)
-                return ints.Add(value1, value2);
-
-            if (Kind == DefinedOperators.MinusOperation)
-                return ints.Subtract(value1, value2);
-
-            if (Kind == DefinedOperators.TimesOperation)
-                return ints.Multiply(value1, value2);
-
-            if (Kind == DefinedOperators.DivOperation)
-                return ints.Divide(value1, value2);
-
-            if (Kind == DefinedOperators.ModOperation)
-                return ints.Modulo(value1, value2);
-
-            if (Kind == DefinedOperators.SlashOperation)
-                return floats.Divide(value1, value2);
-
-            return null;
-        }
-
-        /// <summary>
-        ///     evaluate a unary operator
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        protected override int EvaluateUnaryOperator(Signature input) {
-
-            var operand = TypeRegistry.GetTypeKind(input[0].TypeId);
-
-            if (Kind == DefinedOperators.UnaryPlus) {
-
-                if (operand == CommonTypeKind.FloatType)
-                    return KnownTypeIds.Extended;
-
-                if (operand == CommonTypeKind.Int64Type)
-                    return KnownTypeIds.Int64Type;
-
-                if (operand == CommonTypeKind.IntegerType)
-                    return input[0].TypeId;
-
-            }
-            if (Kind == DefinedOperators.UnaryMinus) {
-
-                if (operand == CommonTypeKind.FloatType)
-                    return input[0].TypeId;
-
-                if (operand == CommonTypeKind.IntegerType || operand == CommonTypeKind.Int64Type) {
-                    if (ResolveAlias(input[0].TypeId) is IIntegralType currentType)
-                        return currentType.TypeId;
-                    else
-                        return KnownTypeIds.ErrorType;
-                }
-            }
-
-            return KnownTypeIds.ErrorType;
+            return GetErrorTypeReference();
         }
 
         /// <summary>
         ///     evaluate a binary operator
         /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        protected override int EvaluateBinaryOperator(Signature input) {
+        /// <param name="input">input signature</param>
+        /// <returns>operator result</returns>
+        protected override ITypeReference EvaluateBinaryOperator(Signature input) {
+            var left = input[0];
+            var right = input[1];
 
-            var left = TypeRegistry.GetTypeKind(input[0].TypeId);
-            var right = TypeRegistry.GetTypeKind(input[1].TypeId);
+            if (Kind == DefinedOperators.DivOperation)
+                return Runtime.Integers.Divide(left, right);
 
-            if (Kind.In(DefinedOperators.PlusOperation,
-                        DefinedOperators.MinusOperation,
-                        DefinedOperators.TimesOperation)) {
+            if (Kind == DefinedOperators.ModOperation)
+                return Runtime.Integers.Modulo(left, right);
 
-                if (CommonTypeKind.FloatType.One(left, right) && left.IsNumerical() && right.IsNumerical())
-                    return KnownTypeIds.Extended;
+            if (Kind == DefinedOperators.SlashOperation)
+                return Runtime.RealNumbers.Divide(left, right);
 
-                if (CommonTypeKind.Int64Type.One(left, right) && left.IsNumerical() && right.IsNumerical())
-                    return KnownTypeIds.Int64Type;
+            var operations = Runtime.GetArithmeticOperators(GetTypeKind(left), GetTypeKind(right));
 
-                if (CommonTypeKind.IntegerType.All(left, right))
-                    return TypeRegistry.GetSmallestIntegralTypeOrNext(input[0].TypeId, input[1].TypeId);
+            if (operations == null)
+                return GetErrorTypeReference();
 
-            }
+            if (Kind == DefinedOperators.PlusOperation)
+                return operations.Add(left, right);
 
-            if (Kind.In(DefinedOperators.DivOperation,
-                        DefinedOperators.ModOperation)) {
+            if (Kind == DefinedOperators.MinusOperation)
+                return operations.Subtract(left, right);
 
-                if (CommonTypeKind.Int64Type.One(left, right) && left.IsNumerical() && right.IsNumerical())
-                    return KnownTypeIds.Int64Type;
+            if (Kind == DefinedOperators.TimesOperation)
+                return operations.Multiply(left, right);
 
-                if (CommonTypeKind.IntegerType.All(left, right))
-                    return TypeRegistry.GetSmallestIntegralTypeOrNext(input[0].TypeId, input[1].TypeId);
-
-            }
-
-            if (Kind == DefinedOperators.SlashOperation) {
-
-                if (CommonTypeKind.FloatType.One(left, right) && left.IsNumerical() && right.IsNumerical())
-                    return KnownTypeIds.Extended;
-
-                if (CommonTypeKind.Int64Type.One(left, right) && left.IsNumerical() && right.IsNumerical())
-                    return KnownTypeIds.Extended;
-
-                if (CommonTypeKind.IntegerType.All(left, right))
-                    return KnownTypeIds.Extended;
-
-
-            }
-
-            return KnownTypeIds.ErrorType;
+            return GetErrorTypeReference();
         }
     }
 }

@@ -26,7 +26,7 @@
         EnumerationType,
 
         /// <summary>
-        ///     float type
+        ///     floating point number
         /// </summary>
         FloatType,
 

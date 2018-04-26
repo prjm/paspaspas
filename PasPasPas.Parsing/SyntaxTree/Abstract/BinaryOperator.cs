@@ -64,18 +64,5 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
             visitor.EndVisit(this);
         }
 
-        /// <summary>
-        ///     test if this operator operates on constants
-        /// </summary>
-        /// <returns><c>true</c> if this operator operates on constants</returns>
-        public bool OperatesOnConstants() {
-            if (LeftOperand == null)
-                return false;
-
-            if (RightOperand == null)
-                return false;
-
-            return LeftOperand.IsConstant && RightOperand.IsConstant;
-        }
     }
 }

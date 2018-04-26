@@ -11,7 +11,7 @@
         /// <param name="value1">first string</param>
         /// <param name="value2">second string</param>
         /// <returns>concatenated string</returns>
-        IValue Concat(IValue value1, IValue value2);
+        ITypeReference Concat(ITypeReference value1, ITypeReference value2);
 
         /// <summary>
         ///     convert a string to a runtime value object

@@ -19,7 +19,7 @@ namespace PasPasPas.Global.Runtime {
         /// <param name="dividend"></param>
         /// <param name="divisor"></param>
         /// <returns></returns>
-        IValue Divide(IValue dividend, IValue divisor);
+        ITypeReference Divide(ITypeReference dividend, ITypeReference divisor);
 
 
         /// <summary>

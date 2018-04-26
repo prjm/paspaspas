@@ -24,7 +24,7 @@ namespace PasPasPas.Runtime.Values.String {
         /// <param name="value1"></param>
         /// <param name="value2"></param>
         /// <returns></returns>
-        public IValue Concat(IValue value1, IValue value2) {
+        public ITypeReference Concat(ITypeReference value1, ITypeReference value2) {
             if (value1 is IStringValue string1 && value2 is IStringValue string2)
                 return StringValueBase.Concat(string1, string2);
             else
@@ -37,7 +37,7 @@ namespace PasPasPas.Runtime.Values.String {
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public IValue Equal(IValue left, IValue right) {
+        public ITypeReference Equal(ITypeReference left, ITypeReference right) {
             if (left is IStringValue string1 && right is IStringValue string2)
                 return StringValueBase.Equal(string1, string2);
             else
@@ -50,7 +50,7 @@ namespace PasPasPas.Runtime.Values.String {
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public IValue GreaterThen(IValue left, IValue right) {
+        public ITypeReference GreaterThen(ITypeReference left, ITypeReference right) {
             if (left is IStringValue string1 && right is IStringValue string2)
                 return StringValueBase.GreaterThen(string1, string2);
             else
@@ -63,7 +63,7 @@ namespace PasPasPas.Runtime.Values.String {
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public IValue GreaterThenEqual(IValue left, IValue right) {
+        public ITypeReference GreaterThenEqual(ITypeReference left, ITypeReference right) {
             if (left is IStringValue string1 && right is IStringValue string2)
                 return StringValueBase.GreaterThenEqual(string1, string2);
             else
@@ -76,7 +76,7 @@ namespace PasPasPas.Runtime.Values.String {
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public IValue LessThen(IValue left, IValue right) {
+        public ITypeReference LessThen(ITypeReference left, ITypeReference right) {
             if (left is IStringValue string1 && right is IStringValue string2)
                 return StringValueBase.LessThen(string1, string2);
             else
@@ -89,7 +89,7 @@ namespace PasPasPas.Runtime.Values.String {
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public IValue LessThenOrEqual(IValue left, IValue right) {
+        public ITypeReference LessThenOrEqual(ITypeReference left, ITypeReference right) {
             if (left is IStringValue string1 && right is IStringValue string2)
                 return StringValueBase.LessThenOrEqual(string1, string2);
             else
@@ -103,7 +103,7 @@ namespace PasPasPas.Runtime.Values.String {
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public IValue NotEquals(IValue left, IValue right) {
+        public ITypeReference NotEquals(ITypeReference left, ITypeReference right) {
             if (left is IStringValue string1 && right is IStringValue string2)
                 return StringValueBase.NotEquals(string1, string2);
             else

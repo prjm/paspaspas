@@ -28,18 +28,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Types {
         ITypeRegistry TypeRegistry { get; }
 
         /// <summary>
-        ///     compute a type signature
+        ///     evaluate an operator and compute its results (if operands are constants)
         /// </summary>
-        /// <param name="input">operator input</param>
-        /// <returns></returns>
+        /// <param name="input">operator input - type reference or constant</param>
+        /// <returns>operator result - type reference or constant</returns>
         ITypeReference EvaluateOperator(Signature input);
-
-        /// <summary>
-        ///     compute the value of this operator
-        /// </summary>
-        /// <param name="inputs"></param>
-        /// <returns></returns>
-        IValue ComputeValue(IValue[] inputs);
 
     }
 }

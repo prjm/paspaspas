@@ -8,19 +8,19 @@ namespace PasPasPas.Runtime.Values.Boolean {
     public class BooleanOperations : IBooleanOperations {
 
         /// <summary>
-        ///     invalid boolean value
+        ///     constant value: invalid boolean value
         /// </summary>
         public IValue Invalid { get; }
             = new SpecialValue(SpecialConstantKind.InvalidBool);
 
         /// <summary>
-        ///     <c>true</c> value constant
+        ///     constant value: <c>true</c>
         /// </summary>
         public IValue TrueValue { get; }
             = new BooleanValue(true);
 
         /// <summary>
-        ///     <c>false</c> value constant
+        ///     constant value: <c>false</c>
         /// </summary>
         public IValue FalseValue { get; }
             = new BooleanValue(false);
@@ -31,7 +31,7 @@ namespace PasPasPas.Runtime.Values.Boolean {
         /// <param name="value1"></param>
         /// <param name="value2"></param>
         /// <returns></returns>
-        public IValue And(IValue value1, IValue value2) {
+        public ITypeReference And(ITypeReference value1, ITypeReference value2) {
             if (value1 is IBooleanValue boolean1 && value2 is IBooleanValue boolean2)
                 return BooleanValueBase.And(boolean1, boolean2);
             else
@@ -44,7 +44,7 @@ namespace PasPasPas.Runtime.Values.Boolean {
         /// <param name="value1"></param>
         /// <param name="value2"></param>
         /// <returns></returns>
-        public IValue Equal(IValue value1, IValue value2) {
+        public ITypeReference Equal(ITypeReference value1, ITypeReference value2) {
             if (value1 is IBooleanValue boolean1 && value2 is IBooleanValue boolean2)
                 return BooleanValueBase.Equal(boolean1, boolean2);
             else
@@ -57,7 +57,7 @@ namespace PasPasPas.Runtime.Values.Boolean {
         /// <param name="value1"></param>
         /// <param name="value2"></param>
         /// <returns></returns>
-        public IValue GreaterThen(IValue value1, IValue value2) {
+        public ITypeReference GreaterThen(ITypeReference value1, ITypeReference value2) {
             if (value1 is IBooleanValue boolean1 && value2 is IBooleanValue boolean2)
                 return BooleanValueBase.GreaterThen(boolean1, boolean2);
             else
@@ -70,7 +70,7 @@ namespace PasPasPas.Runtime.Values.Boolean {
         /// <param name="value1"></param>
         /// <param name="value2"></param>
         /// <returns></returns>
-        public IValue GreaterThenEqual(IValue value1, IValue value2) {
+        public ITypeReference GreaterThenEqual(ITypeReference value1, ITypeReference value2) {
             if (value1 is IBooleanValue boolean1 && value2 is IBooleanValue boolean2)
                 return BooleanValueBase.GreaterThenEqual(boolean1, boolean2);
             else
@@ -83,7 +83,7 @@ namespace PasPasPas.Runtime.Values.Boolean {
         /// <param name="value1"></param>
         /// <param name="value2"></param>
         /// <returns></returns>
-        public IValue LessThen(IValue value1, IValue value2) {
+        public ITypeReference LessThen(ITypeReference value1, ITypeReference value2) {
             if (value1 is IBooleanValue boolean1 && value2 is IBooleanValue boolean2)
                 return BooleanValueBase.LessThen(boolean1, boolean2);
             else
@@ -96,7 +96,7 @@ namespace PasPasPas.Runtime.Values.Boolean {
         /// <param name="value1"></param>
         /// <param name="value2"></param>
         /// <returns></returns>
-        public IValue LessThenOrEqual(IValue value1, IValue value2) {
+        public ITypeReference LessThenOrEqual(ITypeReference value1, ITypeReference value2) {
             if (value1 is IBooleanValue boolean1 && value2 is IBooleanValue boolean2)
                 return BooleanValueBase.LessThenOrEqual(boolean1, boolean2);
             else
@@ -108,7 +108,7 @@ namespace PasPasPas.Runtime.Values.Boolean {
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public IValue Not(IValue value) {
+        public ITypeReference Not(ITypeReference value) {
             if (value is IBooleanValue boolean)
                 return BooleanValueBase.Not(boolean);
             else
@@ -121,7 +121,7 @@ namespace PasPasPas.Runtime.Values.Boolean {
         /// <param name="value1"></param>
         /// <param name="value2"></param>
         /// <returns></returns>
-        public IValue NotEquals(IValue value1, IValue value2) {
+        public ITypeReference NotEquals(ITypeReference value1, ITypeReference value2) {
             if (value1 is IBooleanValue boolean1 && value2 is IBooleanValue boolean2)
                 return BooleanValueBase.NotEquals(boolean1, boolean2);
             else
@@ -134,7 +134,7 @@ namespace PasPasPas.Runtime.Values.Boolean {
         /// <param name="value1"></param>
         /// <param name="value2"></param>
         /// <returns></returns>
-        public IValue Or(IValue value1, IValue value2) {
+        public ITypeReference Or(ITypeReference value1, ITypeReference value2) {
             if (value1 is IBooleanValue boolean1 && value2 is IBooleanValue boolean2)
                 return BooleanValueBase.Or(boolean1, boolean2);
             else
@@ -147,7 +147,7 @@ namespace PasPasPas.Runtime.Values.Boolean {
         /// <param name="value1"></param>
         /// <param name="value2"></param>
         /// <returns></returns>
-        public IValue Xor(IValue value1, IValue value2) {
+        public ITypeReference Xor(ITypeReference value1, ITypeReference value2) {
             if (value1 is IBooleanValue boolean1 && value2 is IBooleanValue boolean2)
                 return BooleanValueBase.Xor(boolean1, boolean2);
             else

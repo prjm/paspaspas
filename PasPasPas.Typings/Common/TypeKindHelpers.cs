@@ -46,7 +46,7 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="kind">kind</param>
         /// <returns><c>true</c> if the type is integer, int64 or float</returns>
-        public static bool Integral(this CommonTypeKind kind)
+        public static bool IsIntegral(this CommonTypeKind kind)
             => kind == CommonTypeKind.IntegerType || kind == CommonTypeKind.Int64Type;
 
         /// <summary>
@@ -104,6 +104,6 @@ namespace PasPasPas.Typings.Common {
         /// <param name="kind"></param>
         /// <returns></returns>
         public static bool Integral(this CommonTypeKind? kind)
-            => kind.HasValue && kind.Value.Integral();
+            => kind.HasValue && kind.Value.IsIntegral();
     }
 }

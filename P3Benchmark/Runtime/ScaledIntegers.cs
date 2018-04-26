@@ -28,7 +28,7 @@ namespace P3Benchmark.Runtime {
             var d1 = new IntegerValue(a);
             var d2 = new IntegerValue(b);
             var r = d1.AsBigInteger + d2.AsBigInteger;
-            var d3 = IntegerValueBase.ToIntValue(ref r);
+            var d3 = IntegerValueBase.ToIntValue(r);
             var e = d3 as IntegerValueBase;
             var f = e.SignedValue;
             //if (c != f)

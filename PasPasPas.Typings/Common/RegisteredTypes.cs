@@ -278,8 +278,9 @@ namespace PasPasPas.Typings.Common {
         /// <param name="operatorKind">operator kind</param>
         /// <returns></returns>
         public IOperator GetOperator(int operatorKind) {
-            operators.TryGetValue(operatorKind, out var result);
-            return result;
+            if (operators.TryGetValue(operatorKind, out var result))
+                return result;
+            return null;
         }
 
         /// <summary>

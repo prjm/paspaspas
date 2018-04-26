@@ -48,108 +48,31 @@ namespace PasPasPas.Typings.Operators {
                         return "xor";
                     case DefinedOperators.NotOperation:
                         return "not";
+                    case DefinedOperators.ShlOperation:
+                        return "shl";
+                    case DefinedOperators.ShrOperation:
+                        return "shr";
                 }
                 throw new InvalidOperationException();
             }
         }
 
         /// <summary>
-        ///     compute the value
+        ///     evaluate an unary operator
         /// </summary>
-        /// <param name="inputs"></param>
+        /// <param name="input">input</param>
         /// <returns></returns>
-        public override IValue ComputeValue(IValue[] inputs) {
-            if (inputs.Length == 1) {
-                return ComputeUnaryOperator(inputs[0]);
-            }
+        protected override ITypeReference EvaluateUnaryOperator(Signature input) {
+            var operand = input[0];
+            var operations = Runtime.GetLogicalOperators(GetTypeKind(operand));
 
-            if (inputs.Length == 2)
-                return ComputeBinaryOperator(inputs[0], inputs[1]);
+            if (operations == null)
+                return GetErrorTypeReference();
 
-            return null;
-        }
+            if (Kind == DefinedOperators.NotOperation)
+                return operations.Not(operand);
 
-        private IValue ComputeUnaryOperator(IValue value) {
-
-            if (Kind == DefinedOperators.NotOperation) {
-
-                if (value is IIntegerValue intValue)
-                    return Runtime.Integers.Not(value);
-
-                if (value is IBooleanValue boolValue)
-                    return Runtime.Booleans.Not(value);
-
-            }
-
-            return null;
-        }
-
-        private IValue ComputeBinaryOperator(IValue value1, IValue value2) {
-
-            if (value1 is IIntegerValue int1 && value2 is IIntegerValue int2) {
-
-                if (Kind == DefinedOperators.AndOperation) {
-                    return Runtime.Integers.And(value1, value2);
-                }
-
-                if (Kind == DefinedOperators.OrOperation) {
-                    return Runtime.Integers.Or(value1, value2);
-                }
-
-                if (Kind == DefinedOperators.XorOperation) {
-                    return Runtime.Integers.Xor(value1, value2);
-                }
-
-                if (Kind == DefinedOperators.ShlOperation) {
-                    return Runtime.Integers.Shl(value1, value2);
-                }
-
-                if (Kind == DefinedOperators.ShrOperation) {
-                    return Runtime.Integers.Shr(value1, value2);
-                }
-
-
-            }
-
-            if (value1 is IBooleanValue bool1 && value2 is IBooleanValue bool2) {
-
-                if (Kind == DefinedOperators.AndOperation) {
-                    return Runtime.Booleans.And(value1, value2);
-                }
-
-                if (Kind == DefinedOperators.OrOperation) {
-                    return Runtime.Booleans.Or(value1, value2);
-                }
-
-                if (Kind == DefinedOperators.XorOperation) {
-                    return Runtime.Booleans.Xor(value1, value2);
-                }
-
-            }
-
-            return null;
-
-
-        }
-
-        /// <summary>
-        ///     unary operator
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        protected override int EvaluateUnaryOperator(Signature input) {
-            var operand = TypeRegistry.GetTypeKind(input[0].TypeId);
-
-            if (Kind == DefinedOperators.NotOperation && operand == CommonTypeKind.BooleanType)
-                return KnownTypeIds.BooleanType;
-
-            if (Kind == DefinedOperators.NotOperation && operand == CommonTypeKind.Int64Type)
-                return input[0].TypeId;
-
-            if (Kind == DefinedOperators.NotOperation && operand == CommonTypeKind.IntegerType)
-                return input[0].TypeId;
-
-            return KnownTypeIds.ErrorType;
+            return GetErrorTypeReference();
         }
 
         /// <summary>
@@ -157,35 +80,31 @@ namespace PasPasPas.Typings.Operators {
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        protected override int EvaluateBinaryOperator(Signature input) {
-            var left = TypeRegistry.GetTypeKind(input[0].TypeId);
-            var right = TypeRegistry.GetTypeKind(input[1].TypeId);
+        protected override ITypeReference EvaluateBinaryOperator(Signature input) {
+            var left = input[0];
+            var right = input[1];
 
-            if (Kind == DefinedOperators.AndOperation && CommonTypeKind.BooleanType.All(left, right))
-                return KnownTypeIds.BooleanType;
+            if (Kind == DefinedOperators.ShrOperation)
+                return Runtime.Integers.Shr(left, right);
 
-            if (Kind == DefinedOperators.AndOperation && left.Integral() && right.Integral())
-                return TypeRegistry.GetSmallestIntegralTypeOrNext(input[0].TypeId, input[1].TypeId);
+            if (Kind == DefinedOperators.ShlOperation)
+                return Runtime.Integers.Shl(left, right);
 
-            if (Kind == DefinedOperators.OrOperation && CommonTypeKind.BooleanType.All(left, right))
-                return KnownTypeIds.BooleanType;
+            var operations = Runtime.GetLogicalOperators(GetTypeKind(left), GetTypeKind(right));
 
-            if (Kind == DefinedOperators.OrOperation && left.Integral() && right.Integral())
-                return TypeRegistry.GetSmallestIntegralTypeOrNext(input[0].TypeId, input[1].TypeId);
+            if (operations == null)
+                return GetErrorTypeReference();
 
-            if (Kind == DefinedOperators.XorOperation && CommonTypeKind.BooleanType.All(left, right))
-                return KnownTypeIds.BooleanType;
+            if (Kind == DefinedOperators.AndOperation)
+                return operations.And(left, right);
 
-            if (Kind == DefinedOperators.XorOperation && left.Integral() && right.Integral())
-                return TypeRegistry.GetSmallestIntegralTypeOrNext(input[0].TypeId, input[1].TypeId);
+            if (Kind == DefinedOperators.OrOperation)
+                return operations.Or(left, right);
 
-            if (Kind == DefinedOperators.ShlOperation && left.Integral() && right.Integral())
-                return input[0].TypeId;
+            if (Kind == DefinedOperators.XorOperation)
+                return operations.Xor(left, right);
 
-            if (Kind == DefinedOperators.ShrOperation && left.Integral() && right.Integral())
-                return input[0].TypeId;
-
-            return KnownTypeIds.ErrorType;
+            return GetErrorTypeReference();
         }
     }
 }
