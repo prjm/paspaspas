@@ -19,6 +19,11 @@ namespace PasPasPas.Runtime.Values.String {
         /// </summary>
         public abstract string AsUnicodeString { get; }
 
+        /// <summary>
+        ///     always <c>true</c> for string constants
+        /// </summary>
+        public bool IsConstant
+            => true;
 
         internal static IValue Concat(IStringValue string1, IStringValue string2)
             => new UnicodeStringValue(string.Concat(string1, string2));

@@ -23,7 +23,7 @@ namespace PasPasPas.Runtime.Values {
         }
 
         /// <summary>
-        ///     error type
+        ///     type identifier
         /// </summary>
         public int TypeId
             => typeIdentifier;
@@ -33,6 +33,12 @@ namespace PasPasPas.Runtime.Values {
         /// </summary>
         public SpecialConstantKind Kind
             => kind;
+
+        /// <summary>
+        ///     always <c>true</c> for special kind constants
+        /// </summary>
+        public bool IsConstant
+            => true;
 
         /// <summary>
         ///     check for equality
@@ -68,6 +74,10 @@ namespace PasPasPas.Runtime.Values {
                     return "IR";
                 case SpecialConstantKind.DivisionByZero:
                     return "DZ";
+                case SpecialConstantKind.InvalidBool:
+                    return "IB";
+                case SpecialConstantKind.Nil:
+                    return "NIL";
                 default:
                     throw new ArgumentOutOfRangeException(nameof(kind));
 

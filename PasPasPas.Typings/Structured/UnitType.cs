@@ -6,7 +6,7 @@ using PasPasPas.Typings.Common;
 namespace PasPasPas.Typings.Structured {
 
     /// <summary>
-    ///     unit type definition
+    ///     virtual unit type definition
     /// </summary>
     public class UnitType : TypeBase {
 
@@ -53,7 +53,7 @@ namespace PasPasPas.Typings.Structured {
             => symbols.TryGetValue(symbolName, out entry);
 
         /// <summary>
-        ///     add a globale routine
+        ///     add a global routine
         /// </summary>
         /// <param name="routine"></param>
         public void AddGlobal(IRoutine routine) {

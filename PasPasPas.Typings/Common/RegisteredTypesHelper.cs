@@ -19,13 +19,14 @@ namespace PasPasPas.Typings.Common {
             => registry.GetTypeByIdOrUndefinedType(typeId).TypeKind;
 
         /// <summary>
-        ///     get the smallest possibe integral type to express two types
+        ///     get the smallest possible integral type to for two types
         /// </summary>
         /// <param name="registry">type registry</param>
         /// <param name="typeId1">first type id</param>
         /// <param name="typeId2">second type id</param>
+        /// <param name="minBitSize">minimal bit size</param>
         /// <returns>smallest type id</returns>
-        public static int GetSmallestIntegralTypeOrNext(this ITypeRegistry registry, int typeId1, int typeId2) {
+        public static int GetSmallestIntegralTypeOrNext(this ITypeRegistry registry, int typeId1, int typeId2, int minBitSize = 0) {
             if (KnownTypeIds.ErrorType.In(typeId1, typeId2))
                 return KnownTypeIds.ErrorType;
 
@@ -35,21 +36,22 @@ namespace PasPasPas.Typings.Common {
             if (left == null || right == null)
                 return KnownTypeIds.ErrorType;
 
-            if (left.BitSize < right.BitSize)
+            if (left.BitSize < right.BitSize && right.BitSize >= minBitSize)
                 return typeId2;
-            else if (left.BitSize > right.BitSize)
+
+            if (left.BitSize > right.BitSize && left.BitSize >= minBitSize)
                 return typeId1;
 
-            if (left.Signed == right.Signed)
+            if (left.Signed == right.Signed && left.BitSize == right.BitSize && left.BitSize >= minBitSize)
                 return left.TypeId;
 
-            if (left.BitSize == 8)
+            if (left.BitSize == 8 && 16 <= minBitSize)
                 return KnownTypeIds.SmallInt;
 
-            if (left.BitSize == 16)
+            if (left.BitSize == 16 && 32 <= minBitSize)
                 return KnownTypeIds.IntegerType;
 
-            if (left.BitSize == 32)
+            if (left.BitSize == 32 && 64 <= minBitSize)
                 return KnownTypeIds.Int64Type;
 
             return KnownTypeIds.ErrorType;

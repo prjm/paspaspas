@@ -26,6 +26,12 @@ namespace PasPasPas.Runtime.Values.Float {
         public abstract int TypeId { get; }
 
         /// <summary>
+        ///     always <c>true</c> for floating-point numbers
+        /// </summary>
+        public bool IsConstant
+            => true;
+
+        /// <summary>
         ///     check for equality
         /// </summary>
         /// <param name="obj"></param>

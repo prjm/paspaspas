@@ -24,6 +24,12 @@ namespace PasPasPas.Runtime.Values.Char {
             => new string(AsWideChar, 1);
 
         /// <summary>
+        ///     <c>true</c> for all constant char values
+        /// </summary>
+        public bool IsConstant
+            => true;
+
+        /// <summary>
         ///     check for equality
         /// </summary>
         /// <param name="obj"></param>

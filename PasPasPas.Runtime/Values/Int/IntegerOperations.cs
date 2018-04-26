@@ -1,4 +1,5 @@
-﻿using PasPasPas.Global.Runtime;
+﻿using PasPasPas.Global.Constants;
+using PasPasPas.Global.Runtime;
 
 namespace PasPasPas.Runtime.Values.Int {
 
@@ -11,13 +12,13 @@ namespace PasPasPas.Runtime.Values.Int {
         ///     invalid integer
         /// </summary>
         public IValue Invalid { get; }
-            = new SpecialValue(SpecialConstantKind.InvalidInteger);
+            = new SpecialValue(SpecialConstantKind.InvalidInteger, KnownTypeIds.ErrorType);
 
         /// <summary>
         ///     integer overflow
         /// </summary>
         public IValue Overflow { get; }
-            = new SpecialValue(SpecialConstantKind.IntegerOverflow);
+            = new SpecialValue(SpecialConstantKind.IntegerOverflow, KnownTypeIds.ErrorType);
 
         /// <summary>
         ///     calculate the sum of two integers

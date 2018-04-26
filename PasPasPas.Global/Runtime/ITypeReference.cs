@@ -11,6 +11,10 @@
         /// <see cref="Constants.KnownTypeIds"/>
         int TypeId { get; }
 
+        /// <summary>
+        ///     if <c>true</c> this value represents a compile-time constant typed value
+        /// </summary>
+        bool IsConstant { get; }
 
     }
 }

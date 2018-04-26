@@ -19,6 +19,12 @@ namespace PasPasPas.Runtime.Values.Boolean {
         public abstract bool AsBoolean { get; }
 
         /// <summary>
+        ///     always <c>true</c> for boolean constant values
+        /// </summary>
+        public bool IsConstant
+            => true;
+
+        /// <summary>
         ///     format this number as string
         /// </summary>
         /// <returns>number as string</returns>

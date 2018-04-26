@@ -174,5 +174,37 @@ namespace PasPasPas.Typings.Operators {
         protected ITypeReference GetErrorTypeReference()
             => Runtime.Types.MakeReference(KnownTypeIds.ErrorType);
 
+        /// <summary>
+        ///     create a type reference to the smallest integral type for two operands
+        /// </summary>
+        /// <param name="left">left operand</param>
+        /// <param name="right">right operand</param>
+        /// <returns>type reference</returns>
+        protected ITypeReference GetSmallestIntegralType(ITypeReference left, ITypeReference right, int minBitSize)
+            => Runtime.Types.MakeReference(TypeRegistry.GetSmallestIntegralTypeOrNext(left.TypeId, right.TypeId, minBitSize));
+
+        /// <summary>
+        ///     create a type reference to the smallest integral type for two operands
+        /// </summary>
+        /// <param name="left">left operand</param>
+        /// <param name="right">right operand</param>
+        /// <param name="minBitSize">minimal number of required bits</param>
+        /// <returns>type reference</returns>
+        protected ITypeReference GetSmallestRealOrIntegralType(ITypeReference left, ITypeReference right, int minBitSize) {
+            if (GetTypeKind(left) == CommonTypeKind.RealType || GetTypeKind(right) == CommonTypeKind.RealType)
+                return GetExtendedType();
+
+            return Runtime.Types.MakeReference(TypeRegistry.GetSmallestIntegralTypeOrNext(left.TypeId, right.TypeId, minBitSize));
+        }
+
+
+        /// <summary>
+        ///     get a reference to the extended type
+        /// </summary>
+        /// <returns>type reference</returns>
+        protected ITypeReference GetExtendedType()
+            => Runtime.Types.MakeReference(KnownTypeIds.Extended);
+
+
     }
 }

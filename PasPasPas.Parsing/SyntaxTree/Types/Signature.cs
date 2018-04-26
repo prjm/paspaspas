@@ -36,7 +36,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Types {
         /// </summary>
         /// <param name="values">values</param>
         public Signature(params ITypeReference[] values) {
-            data = new IValue[values.Length];
+            data = new ITypeReference[values.Length];
             Array.Copy(values, data, values.Length);
         }
 

@@ -20,7 +20,7 @@ namespace PasPasPas.Typings.Operators {
             if (typeKind.IsIntegral())
                 return runtime.Integers;
 
-            if (typeKind == CommonTypeKind.FloatType)
+            if (typeKind == CommonTypeKind.RealType)
                 return runtime.RealNumbers;
 
             return null;
@@ -52,10 +52,10 @@ namespace PasPasPas.Typings.Operators {
         /// <returns></returns>
         public static IArithmeticOperations GetArithmeticOperators(this IRuntimeValueFactory runtime, CommonTypeKind left, CommonTypeKind right) {
 
-            if (left == CommonTypeKind.FloatType && right.IsNumerical())
+            if (left == CommonTypeKind.RealType && right.IsNumerical())
                 return runtime.RealNumbers;
 
-            if (right == CommonTypeKind.FloatType && left.IsNumerical())
+            if (right == CommonTypeKind.RealType && left.IsNumerical())
                 return runtime.RealNumbers;
 
             if (right.IsNumerical() && left.IsNumerical())
@@ -91,10 +91,10 @@ namespace PasPasPas.Typings.Operators {
         /// <returns></returns>
         public static IRelationalOperations GetRelationalOperators(this IRuntimeValueFactory runtime, CommonTypeKind left, CommonTypeKind right) {
 
-            if (left == CommonTypeKind.FloatType && right.IsNumerical())
+            if (left == CommonTypeKind.RealType && right.IsNumerical())
                 return runtime.RealNumbers;
 
-            if (right == CommonTypeKind.FloatType && left.IsNumerical())
+            if (right == CommonTypeKind.RealType && left.IsNumerical())
                 return runtime.RealNumbers;
 
             if (right.IsNumerical() && left.IsNumerical())

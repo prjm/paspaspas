@@ -9,7 +9,7 @@ namespace PasPasPas.Runtime.Values {
     /// </summary>
     public class TypeOperations : ITypeOperations {
 
-        private readonly LookupTable<int, IValue> values;
+        private readonly LookupTable<int, ITypeReference> values;
 
         /// <summary>
         ///     nil pointer
@@ -21,10 +21,10 @@ namespace PasPasPas.Runtime.Values {
         ///     create new open type operations
         /// </summary>
         public TypeOperations()
-            => values = new LookupTable<int, IValue>(MakeIndeterminedValue);
+            => values = new LookupTable<int, ITypeReference>(MakeIndeterminedValue);
 
-        private IValue MakeIndeterminedValue(int typeId)
-            => new IndeterminedValue(typeId);
+        private ITypeReference MakeIndeterminedValue(int typeId)
+            => new IndeterminedRuntimeValue(typeId);
 
         /// <summary>
         ///     create a new type reference value

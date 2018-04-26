@@ -41,7 +41,7 @@ namespace PasPasPas.Typings.Common {
             if (alias.TypeKind == CommonTypeKind.Int64Type)
                 return true;
 
-            if (alias.TypeKind == CommonTypeKind.FloatType)
+            if (alias.TypeKind == CommonTypeKind.RealType)
                 return true;
 
             if (alias.TypeKind == CommonTypeKind.AnsiCharType)

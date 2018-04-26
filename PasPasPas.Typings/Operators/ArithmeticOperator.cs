@@ -90,15 +90,16 @@ namespace PasPasPas.Typings.Operators {
         protected override ITypeReference EvaluateBinaryOperator(Signature input) {
             var left = input[0];
             var right = input[1];
+            var isConstant = left.IsConstant && right.IsConstant;
 
             if (Kind == DefinedOperators.DivOperation)
-                return Runtime.Integers.Divide(left, right);
+                return EvaluateDivOperator(left, right, isConstant);
 
             if (Kind == DefinedOperators.ModOperation)
-                return Runtime.Integers.Modulo(left, right);
+                return EvaluateModOperator(left, right, isConstant);
 
             if (Kind == DefinedOperators.SlashOperation)
-                return Runtime.RealNumbers.Divide(left, right);
+                return EvaluateRealDivOperator(left, right, isConstant);
 
             var operations = Runtime.GetArithmeticOperators(GetTypeKind(left), GetTypeKind(right));
 
@@ -106,15 +107,57 @@ namespace PasPasPas.Typings.Operators {
                 return GetErrorTypeReference();
 
             if (Kind == DefinedOperators.PlusOperation)
-                return operations.Add(left, right);
+                return EvaluatePlusOperator(left, right, isConstant, operations);
 
             if (Kind == DefinedOperators.MinusOperation)
-                return operations.Subtract(left, right);
+                return EvaluateMinusOperator(left, right, isConstant, operations);
 
             if (Kind == DefinedOperators.TimesOperation)
-                return operations.Multiply(left, right);
+                return EvaluateMultiplicationOperator(left, right, isConstant, operations);
 
             return GetErrorTypeReference();
+        }
+
+        private ITypeReference EvaluateMultiplicationOperator(ITypeReference left, ITypeReference right, bool isConstant, IArithmeticOperations operations) {
+            if (isConstant)
+                return operations.Multiply(left, right);
+            else
+                return GetSmallestRealOrIntegralType(left, right, 32);
+        }
+
+        private ITypeReference EvaluateMinusOperator(ITypeReference left, ITypeReference right, bool isConstant, IArithmeticOperations operations) {
+            if (isConstant)
+                return operations.Subtract(left, right);
+            else
+                return GetSmallestRealOrIntegralType(left, right, 32);
+        }
+
+        private ITypeReference EvaluatePlusOperator(ITypeReference left, ITypeReference right, bool isConstant, IArithmeticOperations operations) {
+            if (isConstant)
+                return operations.Add(left, right);
+            else
+                return GetSmallestRealOrIntegralType(left, right, 32);
+        }
+
+        private ITypeReference EvaluateRealDivOperator(ITypeReference left, ITypeReference right, bool isConstant) {
+            if (isConstant)
+                return Runtime.RealNumbers.Divide(left, right);
+            else
+                return GetExtendedType();
+        }
+
+        private ITypeReference EvaluateModOperator(ITypeReference left, ITypeReference right, bool isConstant) {
+            if (isConstant)
+                return Runtime.Integers.Modulo(left, right);
+            else
+                return GetSmallestIntegralType(left, right, 32);
+        }
+
+        private ITypeReference EvaluateDivOperator(ITypeReference left, ITypeReference right, bool isConstant) {
+            if (isConstant)
+                return Runtime.Integers.Divide(left, right);
+            else
+                return GetSmallestIntegralType(left, right, 32);
         }
     }
 }

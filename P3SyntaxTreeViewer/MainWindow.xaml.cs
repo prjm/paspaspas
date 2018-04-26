@@ -15,6 +15,7 @@ using System.Windows.Media;
 using System;
 using PasPasPas.Typings.Structured;
 using PasPasPas.Global.Runtime;
+using PasPasPas.Global.Constants;
 
 namespace P3SyntaxTreeViewer {
 
@@ -68,11 +69,11 @@ namespace P3SyntaxTreeViewer {
                     return;
                 }
 
-                (var bst, var ast) = Parse(env, code);
+                (var bst, var ast, var typeNames) = Parse(env, code);
 
                 Dispatcher.Invoke(() => {
-                    DisplayTree(StandardTreeView, env, bst);
-                    DisplayTree(AbstractTreeView, env, ast);
+                    DisplayTree(StandardTreeView, env, bst, null);
+                    DisplayTree(AbstractTreeView, env, ast, typeNames);
                     DisplayLog(listLog.Messages);
                 });
             });
@@ -98,12 +99,12 @@ namespace P3SyntaxTreeViewer {
             }
         }
 
-        private void DisplayTree(TreeView tv, ITypedEnvironment env, ISyntaxPart cst) {
+        private void DisplayTree(TreeView tv, ITypedEnvironment env, ISyntaxPart cst, Dictionary<int, string> typeNames) {
             tv.Items.Clear();
-            AddNodes(tv, null, env, cst);
+            AddNodes(tv, null, env, cst, typeNames);
         }
 
-        private void AddNodes(TreeView tv, TreeViewItem parent, ITypedEnvironment env, ISyntaxPart cst) {
+        private void AddNodes(TreeView tv, TreeViewItem parent, ITypedEnvironment env, ISyntaxPart cst, Dictionary<int, string> typeNames) {
             var treeViewItem = new TreeViewItem();
 
             if (cst is Terminal terminal) {
@@ -120,9 +121,13 @@ namespace P3SyntaxTreeViewer {
 
                 var t = env.TypeRegistry.GetTypeByIdOrUndefinedType(typeInfo.TypeInfo.TypeId);
 
-                treeViewItem.Header += " [" + t.TypeId.ToString() + "]";
-
-                treeViewItem.Header += " " + t.TypeKind.ToString();
+                if (t.TypeId == KnownTypeIds.ErrorType) {
+                    treeViewItem.Header += " [Type Error]";
+                }
+                else {
+                    treeViewItem.Header += " [" + t.TypeId.ToString() + "]";
+                    treeViewItem.Header += " " + t.TypeKind.ToString();
+                }
 
                 if (t is ArrayType array)
                     treeViewItem.Header += " of " + array.BaseType?.TypeKind.ToString();
@@ -140,6 +145,9 @@ namespace P3SyntaxTreeViewer {
                     treeViewItem.Header += " = " + value.ToString();
                 }
 
+                if (typeInfo.TypeInfo != null && typeInfo.TypeInfo.TypeId == KnownTypeIds.ErrorType)
+                    treeViewItem.Foreground = new SolidColorBrush(Colors.Red);
+
             }
 
             if (cst is SymbolReferencePart srp) {
@@ -154,7 +162,7 @@ namespace P3SyntaxTreeViewer {
             }
 
             foreach (var child in cst.Parts) {
-                AddNodes(tv, treeViewItem, env, child);
+                AddNodes(tv, treeViewItem, env, child, typeNames);
             }
 
             treeViewItem.IsExpanded = true;
@@ -166,16 +174,17 @@ namespace P3SyntaxTreeViewer {
         /// <param name="env"></param>
         /// <param name="code"></param>
         /// <returns></returns>
-        private (ISyntaxPart bst, ProjectRoot ast) Parse(ITypedEnvironment env, string code) {
+        private (ISyntaxPart bst, ProjectRoot ast, Dictionary<int, string> typeNames) Parse(ITypedEnvironment env, string code) {
             var parserApi = new ParserApi(env);
             using (var parser = parserApi.CreateParserForString("z.x.pas", code)) {
                 var bst = parser.Parse();
                 var ast = parserApi.CreateAbstractSyntraxTree(bst);
                 parserApi.AnnotateWithTypes(ast);
-                return (bst, ast);
+
+                var tn = new Dictionary<int, string>();
+                return (bst, ast, tn);
             }
         }
-
 
         private ITypedEnvironment CreateEnvironment()
             => new DefaultEnvironment();

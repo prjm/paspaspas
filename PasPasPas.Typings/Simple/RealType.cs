@@ -20,7 +20,7 @@ namespace PasPasPas.Typings.Simple {
         ///     common type kind
         /// </summary>
         public override CommonTypeKind TypeKind
-            => CommonTypeKind.FloatType;
+            => CommonTypeKind.RealType;
 
         /// <summary>
         ///     test for assignment type compatibility
@@ -29,7 +29,7 @@ namespace PasPasPas.Typings.Simple {
         /// <returns></returns>
         public override bool CanBeAssignedFrom(ITypeDefinition otherType) {
 
-            if (otherType.TypeKind == CommonTypeKind.FloatType)
+            if (otherType.TypeKind == CommonTypeKind.RealType)
                 return true;
 
             if (otherType.TypeKind == CommonTypeKind.Int64Type)

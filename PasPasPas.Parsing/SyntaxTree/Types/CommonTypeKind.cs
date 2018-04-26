@@ -28,7 +28,7 @@
         /// <summary>
         ///     floating point number
         /// </summary>
-        FloatType,
+        RealType,
 
         /// <summary>
         ///     short string type

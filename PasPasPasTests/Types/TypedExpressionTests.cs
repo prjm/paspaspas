@@ -1,7 +1,6 @@
-﻿using PasPasPas.Global.Constants;
-using PasPasPas.Typings.Common;
+﻿using System;
+using PasPasPas.Global.Constants;
 using PasPasPasTests.Common;
-using Xunit;
 
 namespace PasPasPasTests.Types {
 
@@ -10,7 +9,7 @@ namespace PasPasPasTests.Types {
     /// </summary>
     public class TypedExpressionTest : TypeTest {
 
-        [Fact]
+        [TestCase]
         public void TestIntegerLiteralTypes() {
             AssertExprType("-128", KnownTypeIds.ShortInt);
             AssertExprType("0", KnownTypeIds.ShortInt);
@@ -34,31 +33,31 @@ namespace PasPasPasTests.Types {
             AssertExprType("18446744073709551615", KnownTypeIds.Uint64Type);
         }
 
-        [Fact]
+        [TestCase]
         public void TestBooleanLiteralTypes() {
             AssertExprType("true", KnownTypeIds.BooleanType);
             AssertExprType("false", KnownTypeIds.BooleanType);
         }
 
-        [Fact]
+        [TestCase]
         public void TestCharLiteralTypes() {
             AssertExprType("'C'", KnownTypeIds.WideCharType);
             AssertExprType("#9", KnownTypeIds.WideCharType);
         }
 
-        [Fact]
+        [TestCase]
         public void TestStringLiteralTypes() {
             AssertExprType("'CD'", KnownTypeIds.UnicodeStringType);
             AssertExprType("#9#9", KnownTypeIds.UnicodeStringType);
         }
 
-        [Fact]
+        [TestCase]
         public void TestExtendedLiteralTypes() {
             AssertExprType("3.5", KnownTypeIds.Extended);
             AssertExprType("2.33434343", KnownTypeIds.Extended);
         }
 
-        [Fact]
+        [TestCase]
         public void TestBooleanOperators() {
             AssertExprType("not true", KnownTypeIds.BooleanType);
             AssertExprType("not false", KnownTypeIds.BooleanType);
@@ -67,8 +66,8 @@ namespace PasPasPasTests.Types {
             AssertExprType("true xor false", KnownTypeIds.BooleanType);
         }
 
-        [Fact]
-        public void TestArithmetikOperatorsInteger() {
+        [TestCase]
+        public void TestArithmeticOperatorsInteger() {
             AssertExprType("+ 1", KnownTypeIds.ShortInt);
             AssertExprType("- 1", KnownTypeIds.ShortInt);
             AssertExprType("1 + 1", KnownTypeIds.ShortInt);
@@ -79,8 +78,8 @@ namespace PasPasPasTests.Types {
             AssertExprType("1 / 1", KnownTypeIds.Extended);
         }
 
-        [Fact]
-        public void TestArithmetikOperatorsInt64() {
+        [TestCase]
+        public void TestArithmeticOperatorsInt64() {
             AssertExprType("+ 4294967296", KnownTypeIds.Int64Type);
             AssertExprType("- 4294967296", KnownTypeIds.Int64Type);
             AssertExprType("4294967296 + 1", KnownTypeIds.Int64Type);
@@ -103,8 +102,8 @@ namespace PasPasPasTests.Types {
             AssertExprType("4294967296 / 4294967296", KnownTypeIds.Extended);
         }
 
-        [Fact]
-        public void TestArithmetikOperatorsReal() {
+        [TestCase]
+        public void TestArithmeticOperatorsReal() {
             AssertExprType("+ 1.0", KnownTypeIds.Extended);
             AssertExprType("- 1.0", KnownTypeIds.Extended);
             AssertExprType("1.0 + 1", KnownTypeIds.Extended);
@@ -129,7 +128,7 @@ namespace PasPasPasTests.Types {
             AssertExprType("4294967296 / 1.0", KnownTypeIds.Extended);
         }
 
-        [Fact]
+        [TestCase]
         public void TestConcatOperator() {
             AssertExprType("'a' + 'b'", KnownTypeIds.UnicodeStringType);
             AssertExprType("'ac' + 'b'", KnownTypeIds.UnicodeStringType);
@@ -137,7 +136,7 @@ namespace PasPasPasTests.Types {
             AssertExprType("'ac' + 'bc'", KnownTypeIds.UnicodeStringType);
         }
 
-        [Fact]
+        [TestCase]
         public void TestBitwiseOperators() {
             AssertExprType("not 1", KnownTypeIds.ShortInt);
             AssertExprType("not 256", KnownTypeIds.SmallInt);
@@ -173,7 +172,7 @@ namespace PasPasPasTests.Types {
             AssertExprType("4294967296 xor 1", KnownTypeIds.Int64Type);
         }
 
-        [Fact]
+        [TestCase]
         public void TestShiftingOperators() {
             AssertExprType("1 shr 1", KnownTypeIds.ShortInt);
             AssertExprType("1 shr 256", KnownTypeIds.ShortInt);
@@ -210,7 +209,7 @@ namespace PasPasPasTests.Types {
             AssertExprType("4294967296 shl 4294967296", KnownTypeIds.Int64Type);
         }
 
-        [Fact]
+        [TestCase]
         public void TestBooleanRelationalOperators() {
             AssertExprType("true = true", KnownTypeIds.BooleanType);
             AssertExprType("true <> true", KnownTypeIds.BooleanType);
@@ -220,7 +219,7 @@ namespace PasPasPasTests.Types {
             AssertExprType("true >= true", KnownTypeIds.BooleanType);
         }
 
-        [Fact]
+        [TestCase]
         public void TestIntegerRelationalOperators() {
             AssertExprType("1 =  1", KnownTypeIds.BooleanType);
             AssertExprType("1 <> 1", KnownTypeIds.BooleanType);
@@ -266,7 +265,7 @@ namespace PasPasPasTests.Types {
             AssertExprType("1 >= 4294967296", KnownTypeIds.BooleanType);
         }
 
-        [Fact]
+        [TestCase]
         public void TestRealRelationalOperators() {
             AssertExprType("1.0 =  1", KnownTypeIds.BooleanType);
             AssertExprType("1.0 <> 1", KnownTypeIds.BooleanType);
@@ -331,7 +330,7 @@ namespace PasPasPasTests.Types {
             AssertExprType("1 >= 4294967296", KnownTypeIds.BooleanType);
         }
 
-        [Fact]
+        [TestCase]
         public void TestStringRelationalOperators() {
             AssertExprType("'a' =  'b'", KnownTypeIds.BooleanType);
             AssertExprType("'a' <> 'b'", KnownTypeIds.BooleanType);
@@ -355,6 +354,28 @@ namespace PasPasPasTests.Types {
             AssertExprType("'a' >= 'b1'", KnownTypeIds.BooleanType);
         }
 
+        [TestCase]
+        public void TestArithmeticOperatorsIndirect() {
+            var d = new[] {
+                Tuple.Create("Byte", KnownTypeIds.IntegerType),
+                Tuple.Create("Word", KnownTypeIds.IntegerType),
+                Tuple.Create("Cardinal", KnownTypeIds.CardinalType),
+                Tuple.Create("UInt64", KnownTypeIds.Uint64Type),
+                Tuple.Create("SmallInt", KnownTypeIds.SmallInt),
+                Tuple.Create("ShortInt", KnownTypeIds.ShortInt),
+                Tuple.Create("Integer", KnownTypeIds.IntegerType),
+                Tuple.Create("Int64", KnownTypeIds.Int64Type),
+            };
+
+            foreach (var e in d) {
+                AssertExprTypeByVar(e.Item1, "a + b", e.Item2);
+                AssertExprTypeByVar(e.Item1, "a - b", e.Item2);
+                AssertExprTypeByVar(e.Item1, "a div b", e.Item2);
+                AssertExprTypeByVar(e.Item1, "a * b", e.Item2);
+                AssertExprTypeByVar(e.Item1, "a mod b", e.Item2);
+                AssertExprTypeByVar(e.Item1, "a / b", KnownTypeIds.Extended);
+            }
+        }
 
     }
 }

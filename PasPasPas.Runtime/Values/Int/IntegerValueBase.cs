@@ -49,6 +49,12 @@ namespace PasPasPas.Runtime.Values.Int {
         }
 
         /// <summary>
+        ///     always <c>true</c> for constant integer values
+        /// </summary>
+        public bool IsConstant
+            => true;
+
+        /// <summary>
         ///     format this number as string
         /// </summary>
         /// <returns>number as string</returns>

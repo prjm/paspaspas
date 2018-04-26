@@ -13,12 +13,11 @@ namespace PasPasPas.Runtime.Values.String {
         private readonly string data;
 
         /// <summary>
-        ///     get the unicode string value
+        ///     get the Unicode string value
         /// </summary>
         /// <param name="text"></param>
-        public UnicodeStringValue(string text) {
-            data = text;
-        }
+        public UnicodeStringValue(string text)
+            => data = text;
 
         /// <summary>
         ///     get the type id
