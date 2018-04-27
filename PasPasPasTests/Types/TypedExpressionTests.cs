@@ -361,8 +361,8 @@ namespace PasPasPasTests.Types {
                 Tuple.Create("Word", KnownTypeIds.IntegerType),
                 Tuple.Create("Cardinal", KnownTypeIds.CardinalType),
                 Tuple.Create("UInt64", KnownTypeIds.Uint64Type),
-                Tuple.Create("SmallInt", KnownTypeIds.SmallInt),
-                Tuple.Create("ShortInt", KnownTypeIds.ShortInt),
+                Tuple.Create("SmallInt", KnownTypeIds.IntegerType),
+                Tuple.Create("ShortInt", KnownTypeIds.IntegerType),
                 Tuple.Create("Integer", KnownTypeIds.IntegerType),
                 Tuple.Create("Int64", KnownTypeIds.Int64Type),
             };

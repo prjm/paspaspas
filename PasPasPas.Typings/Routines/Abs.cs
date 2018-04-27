@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using PasPasPas.Global.Constants;
+using PasPasPas.Global.Runtime;
 using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Typings.Common;
 using PasPasPas.Typings.Structured;
@@ -12,7 +13,7 @@ namespace PasPasPas.Typings.Routines {
     public class Abs : IRoutine {
 
         /// <summary>
-        ///     create a new type specifiction for the routine <c>abs</c>
+        ///     create a new type specification for the routine <c>abs</c>
         /// </summary>
         /// <param name="registry"></param>
         public Abs(ITypeRegistry registry)
@@ -21,8 +22,8 @@ namespace PasPasPas.Typings.Routines {
         /// <summary>
         ///     type id
         /// </summary>
-        public int TypeId
-            => KnownTypeIds.UnspecifiedType;
+        public ITypeReference TypeInfo
+            => null;
 
         /// <summary>
         ///     type registry
@@ -30,7 +31,7 @@ namespace PasPasPas.Typings.Routines {
         public ITypeRegistry TypeRegistry { get; private set; }
 
         /// <summary>
-        ///     routie name
+        ///     routine name
         /// </summary>
         public string Name
             => "Abs";

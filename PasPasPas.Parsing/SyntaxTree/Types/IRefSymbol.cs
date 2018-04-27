@@ -1,13 +1,16 @@
-﻿namespace PasPasPas.Parsing.SyntaxTree.Types {
+﻿using PasPasPas.Global.Runtime;
+
+namespace PasPasPas.Parsing.SyntaxTree.Types {
 
     /// <summary>
-    ///     referenceable symbol
+    ///     symbol by reference
     /// </summary>
     public interface IRefSymbol {
 
         /// <summary>
         ///     get the type of this symbol
         /// </summary>
-        int TypeId { get; }
+        ITypeReference TypeInfo { get; }
+
     }
 }

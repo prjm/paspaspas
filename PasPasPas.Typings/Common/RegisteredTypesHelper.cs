@@ -43,15 +43,15 @@ namespace PasPasPas.Typings.Common {
                 return typeId1;
 
             if (left.Signed == right.Signed && left.BitSize == right.BitSize && left.BitSize >= minBitSize)
-                return left.TypeId;
+                return left.TypeInfo.TypeId;
 
-            if (left.BitSize == 8 && 16 <= minBitSize)
+            if (left.BitSize <= 8 && 16 >= minBitSize)
                 return KnownTypeIds.SmallInt;
 
-            if (left.BitSize == 16 && 32 <= minBitSize)
+            if (left.BitSize <= 16 && 32 >= minBitSize)
                 return KnownTypeIds.IntegerType;
 
-            if (left.BitSize == 32 && 64 <= minBitSize)
+            if (left.BitSize <= 32 && 64 >= minBitSize)
                 return KnownTypeIds.Int64Type;
 
             return KnownTypeIds.ErrorType;

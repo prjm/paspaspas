@@ -325,5 +325,12 @@ namespace PasPasPas.Typings.Common {
                 runtime.Types.MakeReference(KnownTypeIds.GenericPointer))[0].ConstantParam = true;
         }
 
+        /// <summary>
+        ///     create a new type reference
+        /// </summary>
+        /// <param name="typeId"></param>
+        /// <returns></returns>
+        public ITypeReference MakeReference(int typeId)
+            => runtime.Types.MakeReference(typeId);
     }
 }

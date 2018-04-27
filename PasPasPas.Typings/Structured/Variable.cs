@@ -28,7 +28,7 @@ namespace PasPasPas.Typings.Structured {
         /// <summary>
         ///     type id
         /// </summary>
-        public int TypeId
-            => SymbolType != null ? SymbolType.TypeId : KnownTypeIds.ErrorType;
+        public ITypeReference TypeInfo
+            => SymbolType;
     }
 }

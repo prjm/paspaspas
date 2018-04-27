@@ -1,5 +1,4 @@
-﻿using PasPasPas.Infrastructure.Utils;
-using PasPasPas.Parsing.SyntaxTree.Types;
+﻿using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Typings.Common;
 
 namespace PasPasPas.Typings.Simple {
@@ -38,7 +37,7 @@ namespace PasPasPas.Typings.Simple {
             => 64;
 
         /// <summary>
-        ///     get the highes element of this ordinal type
+        ///     get the highest element of this ordinal type
         /// </summary>
         public ulong HighestElement {
             get {

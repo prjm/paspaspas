@@ -18,7 +18,7 @@ namespace PasPasPas.Typings.Structured {
         /// </summary>
         /// <param name="name">routine name</param>
         /// <param name="kind">routine kind</param>
-        /// <param name="types">typ registry</param>
+        /// <param name="types">type registry</param>
         public Routine(ITypeRegistry types, string name, ProcedureKind kind) {
             Name = name;
             Kind = kind;
@@ -49,8 +49,8 @@ namespace PasPasPas.Typings.Structured {
         /// <summary>
         ///     type id
         /// </summary>
-        public int TypeId
-            => KnownTypeIds.UnspecifiedType;
+        public ITypeReference TypeInfo
+            => null;
 
         /// <summary>
         ///     <c>false</c>

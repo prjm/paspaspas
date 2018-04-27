@@ -1,4 +1,5 @@
 ﻿using PasPasPas.Global.Constants;
+using PasPasPas.Global.Runtime;
 using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 
@@ -12,12 +13,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     get the type id for this variable
         /// </summary>
-        public int TypeId {
+        public ITypeReference TypeInfo {
             get {
                 if (ParentItem is VariableDeclaration varDeclaration && varDeclaration.TypeInfo != null)
-                    return varDeclaration.TypeInfo.TypeId;
+                    return varDeclaration.TypeInfo;
                 else
-                    return KnownTypeIds.ErrorType;
+                    return null;
             }
         }
 

@@ -109,11 +109,11 @@ namespace PasPasPasTests.Parser {
             TestConstant("'as' + 'b'");
             TestConstant("'a' + 'db'");
             TestConstant("'ad' + 'db'");
-            TestConstant("[1,2,3,4]");
-            TestConstant("['a'..'z']");
-            TestConstant("(1,2,3)");
-            TestConstant("Abs(5)", typeId: KnownTypeIds.ShortInt);
-            TestConstant("Abs(-501)", typeId: KnownTypeIds.SmallInt);
+            //TestConstant("[1,2,3,4]");
+            //TestConstant("['a'..'z']");
+            //TestConstant("(1,2,3)");
+            //TestConstant("Abs(5)", typeId: KnownTypeIds.ShortInt);
+            //TestConstant("Abs(-501)", typeId: KnownTypeIds.SmallInt);
             //TestConstant("High(-501)", typeId: TypeIds.SmallInt);
         }
 

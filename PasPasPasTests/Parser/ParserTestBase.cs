@@ -154,7 +154,7 @@ namespace PasPasPasTests.Parser {
                     if (typeId >= 0)
                         Assert.AreEqual(typeId, decl.Value.TypeInfo.TypeId);
 
-                    return decl.Value.IsConstant;
+                    return decl.Value.TypeInfo.IsConstant;
                 }
                 return null;
             }

@@ -31,7 +31,7 @@ namespace PasPasPas.Typings.Common {
             => refKind;
 
         /// <summary>
-        ///     referebced symbol
+        ///     referenced symbol
         /// </summary>
         public IRefSymbol Symbol
             => refSymbol;

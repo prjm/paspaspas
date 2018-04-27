@@ -50,8 +50,8 @@ namespace PasPasPas.Typings.Routines {
         /// <summary>
         ///     type id
         /// </summary>
-        public int TypeId
-            => KnownTypeIds.UnspecifiedType;
+        public ITypeReference TypeInfo
+            => null;
 
         /// <summary>
         ///     try to resolve a call

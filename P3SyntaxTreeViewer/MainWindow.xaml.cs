@@ -121,11 +121,11 @@ namespace P3SyntaxTreeViewer {
 
                 var t = env.TypeRegistry.GetTypeByIdOrUndefinedType(typeInfo.TypeInfo.TypeId);
 
-                if (t.TypeId == KnownTypeIds.ErrorType) {
+                if (t.TypeInfo.TypeId == KnownTypeIds.ErrorType) {
                     treeViewItem.Header += " [Type Error]";
                 }
                 else {
-                    treeViewItem.Header += " [" + t.TypeId.ToString() + "]";
+                    treeViewItem.Header += " [" + t.TypeInfo.ToString() + "]";
                     treeViewItem.Header += " " + t.TypeKind.ToString();
                 }
 
@@ -138,7 +138,7 @@ namespace P3SyntaxTreeViewer {
                 if (t is SetType set)
                     treeViewItem.Header += " of " + set.BaseType?.TypeKind.ToString();
 
-                if (cst is IConstantValueNode constant && constant.IsConstant)
+                if (t.TypeInfo.IsConstant)
                     treeViewItem.Header += "*";
 
                 if (typeInfo.TypeInfo is IValue value) {

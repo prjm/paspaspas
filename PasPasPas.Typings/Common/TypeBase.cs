@@ -1,4 +1,5 @@
 ﻿using PasPasPas.Global.Constants;
+using PasPasPas.Global.Runtime;
 using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree.Types;
 
@@ -21,7 +22,8 @@ namespace PasPasPas.Typings.Common {
         /// <summary>
         ///     get the type id
         /// </summary>
-        public int TypeId => typeId;
+        public ITypeReference TypeInfo
+            => TypeRegistry.MakeReference(typeId);
 
         /// <summary>
         ///     get the type kind
@@ -32,6 +34,12 @@ namespace PasPasPas.Typings.Common {
         ///     type registryB
         /// </summary>
         public ITypeRegistry TypeRegistry { get; set; }
+
+        /// <summary>
+        ///     registered type id
+        /// </summary>
+        public int TypeId
+            => typeId;
 
         private static bool CanBeAssignedFromAlias(TypeAlias alias) {
 
@@ -78,10 +86,10 @@ namespace PasPasPas.Typings.Common {
         /// <param name="otherType">other type</param>
         /// <returns><c>true</c> if the type can be assigned from</returns>
         public virtual bool CanBeAssignedFrom(ITypeDefinition otherType) {
-            if (otherType.TypeId.In(KnownTypeIds.ErrorType, KnownTypeIds.NoType, KnownTypeIds.UnspecifiedType))
+            if (otherType.TypeInfo.TypeId.In(KnownTypeIds.ErrorType, KnownTypeIds.NoType, KnownTypeIds.UnspecifiedType))
                 return false;
 
-            if (otherType.TypeId == TypeId)
+            if (otherType.TypeInfo.TypeId == TypeInfo.TypeId)
                 return true;
 
             var baseType = ResolveAlias(this);

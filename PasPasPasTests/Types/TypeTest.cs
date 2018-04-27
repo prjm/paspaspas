@@ -73,7 +73,7 @@ namespace PasPasPasTests.Types {
 
             Assert.IsNotNull(firstParam);
             Assert.IsNotNull(firstParam.TypeInfo);
-            Assert.IsTrue(firstParam.IsConstant);
+            Assert.IsTrue(firstParam.TypeInfo.IsConstant);
             Assert.AreEqual(value, firstParam.TypeInfo);
 
         }
@@ -120,7 +120,7 @@ namespace PasPasPasTests.Types {
             bool tester(ITypeDefinition def) {
 
                 if (typeId != KnownTypeIds.UnspecifiedType)
-                    Assert.AreEqual(typeId, def.TypeId);
+                    Assert.AreEqual(typeId, def.TypeInfo);
 
                 if (typeKind != CommonTypeKind.UnknownType)
                     Assert.AreEqual(typeKind, def.TypeKind);

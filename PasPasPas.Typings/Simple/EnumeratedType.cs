@@ -64,7 +64,7 @@ namespace PasPasPas.Typings.Simple {
 
             if (otherType.TypeKind == CommonTypeKind.SubrangeType && otherType is SubrangeType subrange) {
                 var subrangeBase = subrange.BaseType;
-                return subrangeBase.TypeId == TypeId;
+                return subrangeBase.TypeInfo.TypeId == TypeInfo.TypeId;
             }
 
             return base.CanBeAssignedFrom(otherType);

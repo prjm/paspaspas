@@ -58,7 +58,7 @@ namespace PasPasPas.Typings.Common {
         /// <param name="entry">scope entry</param>
         /// <returns></returns>
         private Reference ResolveNameByEntry(ScopedName scopedName, Reference entry) {
-            var type = scope.TypeRegistry.GetTypeByIdOrUndefinedType(entry.Symbol.TypeId);
+            var type = scope.TypeRegistry.GetTypeByIdOrUndefinedType(entry.Symbol.TypeInfo.TypeId);
             var kind = type.TypeKind;
 
             if (kind == CommonTypeKind.Unit && type is UnitType unit)

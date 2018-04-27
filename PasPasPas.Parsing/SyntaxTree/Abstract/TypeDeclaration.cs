@@ -13,7 +13,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     public class TypeDeclaration : DeclaredSymbol, ISymbolWithAttributes, ITypeTarget, IDeclaredSymbolTarget, IRefSymbol, ITypedSyntaxNode {
 
         /// <summary>
-        ///     attribues
+        ///     attributes
         /// </summary>
         public IEnumerable<SymbolAttribute> Attributes { get; set; }
 
@@ -57,12 +57,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
                     return null;
             }
         }
-
-        /// <summary>
-        ///     type id
-        /// </summary>
-        public int TypeId
-            => TypeInfo != null ? TypeInfo.TypeId : KnownTypeIds.ErrorType;
 
         /// <summary>
         ///     type info

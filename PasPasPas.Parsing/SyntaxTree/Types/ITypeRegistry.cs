@@ -54,5 +54,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Types {
         /// </summary>
         /// <returns></returns>
         int RequireUserTypeId();
+
+        /// <summary>
+        ///     make a type reference
+        /// </summary>
+        /// <param name="typeId"></param>
+        /// <returns></returns>
+        ITypeReference MakeReference(int typeId);
+
     }
 }
