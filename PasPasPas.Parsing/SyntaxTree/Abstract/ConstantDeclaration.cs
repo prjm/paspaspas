@@ -62,6 +62,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         }
 
         /// <summary>
+        ///     type id
+        /// </summary>
+        public int TypeId
+            => TypeInfo != null ? TypeInfo.TypeId : KnownTypeIds.ErrorType;
+
+        /// <summary>
         ///     accept visitor
         /// </summary>
         /// <param name="visitor">node visitor</param>

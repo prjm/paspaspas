@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using PasPasPas.Global.Runtime;
 using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Typings.Common;
@@ -64,7 +65,7 @@ namespace PasPasPas.Typings.Simple {
 
             if (otherType.TypeKind == CommonTypeKind.SubrangeType && otherType is SubrangeType subrange) {
                 var subrangeBase = subrange.BaseType;
-                return subrangeBase.TypeInfo.TypeId == TypeInfo.TypeId;
+                return subrangeBase.TypeId == TypeInfo.TypeId;
             }
 
             return base.CanBeAssignedFrom(otherType);

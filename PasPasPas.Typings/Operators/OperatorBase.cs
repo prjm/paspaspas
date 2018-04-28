@@ -1,5 +1,4 @@
-﻿using System;
-using PasPasPas.Global.Constants;
+﻿using PasPasPas.Global.Constants;
 using PasPasPas.Global.Runtime;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Parsing.SyntaxTree.Types;
@@ -61,7 +60,8 @@ namespace PasPasPas.Typings.Operators {
         /// <summary>
         ///     runtime values
         /// </summary>
-        public IRuntimeValueFactory Runtime { get; set; }
+        public IRuntimeValueFactory Runtime
+            => TypeRegistry?.Runtime;
 
         /// <summary>
         ///     get the output type for an operation
@@ -76,33 +76,35 @@ namespace PasPasPas.Typings.Operators {
                     return EvaluateBinaryOperator(input);
             }
 
-            return Runtime.Types.MakeReference(KnownTypeIds.ErrorType);
+            return GetErrorTypeReference();
         }
-
-        /// <summary>
-        ///     evaluate unary operator
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        protected virtual ITypeReference EvaluateBinaryOperator(Signature input)
-            => Runtime.Types.MakeReference(KnownTypeIds.ErrorType);
 
         /// <summary>
         ///     evaluate binary operator
         /// </summary>
-        /// <param name="input"></param>
+        /// <param name="input">input parameters</param>
+        /// <returns>operator result</returns>
+        protected virtual ITypeReference EvaluateBinaryOperator(Signature input)
+            => GetErrorTypeReference();
+
+        /// <summary>
+        ///     evaluate binary operator
+        /// </summary>
+        /// <param name="input">operator parameters</param>
         /// <returns></returns>
         protected virtual ITypeReference EvaluateUnaryOperator(Signature input)
-            => Runtime.Types.MakeReference(KnownTypeIds.ErrorType);
+            => GetErrorTypeReference();
 
         /// <summary>
         ///     helper method: map an expression kind to an registered operator id
         /// </summary>
         /// <param name="kind">expression kind</param>
-        /// <param name="leftType">left operand</param>
-        /// <param name="rightType">right operand</param>
+        /// <param name="left">left type reference</param>
+        /// <param name="right">right type reference</param>
         /// <returns>operator id</returns>
-        public static int GetOperatorId(ExpressionKind kind, CommonTypeKind leftType, CommonTypeKind rightType) {
+        public static int GetOperatorId(ExpressionKind kind, ITypeReference left, ITypeReference right) {
+            var leftType = left.TypeKind;
+            var rightType = right.TypeKind;
 
             if (leftType == CommonTypeKind.UnknownType || rightType == CommonTypeKind.UnknownType)
                 return DefinedOperators.Undefined;
@@ -149,6 +151,7 @@ namespace PasPasPas.Typings.Operators {
             };
 
             if (kind == ExpressionKind.Plus) {
+
                 if (leftType.IsTextual() && rightType.IsTextual())
                     return DefinedOperators.ConcatOperator;
 
@@ -172,13 +175,14 @@ namespace PasPasPas.Typings.Operators {
         /// </summary>
         /// <returns></returns>
         protected ITypeReference GetErrorTypeReference()
-            => Runtime.Types.MakeReference(KnownTypeIds.ErrorType);
+            => TypeRegistry.MakeReference(KnownTypeIds.ErrorType);
 
         /// <summary>
         ///     create a type reference to the smallest integral type for two operands
         /// </summary>
         /// <param name="left">left operand</param>
         /// <param name="right">right operand</param>
+        /// <param name="minBitSize">minimal operator size</param>
         /// <returns>type reference</returns>
         protected ITypeReference GetSmallestIntegralType(ITypeReference left, ITypeReference right, int minBitSize)
             => Runtime.Types.MakeReference(TypeRegistry.GetSmallestIntegralTypeOrNext(left.TypeId, right.TypeId, minBitSize));
@@ -204,7 +208,6 @@ namespace PasPasPas.Typings.Operators {
         /// <returns>type reference</returns>
         protected ITypeReference GetExtendedType()
             => Runtime.Types.MakeReference(KnownTypeIds.Extended);
-
 
     }
 }

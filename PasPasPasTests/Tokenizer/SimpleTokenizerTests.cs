@@ -4,6 +4,7 @@ using System;
 using Assert = PasPasPasTests.Common.Assert;
 using PasPasPas.Runtime.Values;
 using PasPasPas.Global.Runtime;
+using PasPasPas.Runtime.Values.Int;
 
 namespace PasPasPasTests.Tokenizer {
 
@@ -30,8 +31,8 @@ namespace PasPasPasTests.Tokenizer {
             IsInteger("300", 300);
             IsInteger("1000000", 1000000);
             IsInteger("18446744073709551615", 18446744073709551615);
-            IsInteger("18446744073709551616", new RuntimeValueFactory().Integers.Overflow);
-            IsInteger("108446744073709551615", new RuntimeValueFactory().Integers.Overflow);
+            IsInteger("18446744073709551616", new IntegerOperations().Overflow);
+            IsInteger("108446744073709551615", new IntegerOperations().Overflow);
         }
 
         [Fact]

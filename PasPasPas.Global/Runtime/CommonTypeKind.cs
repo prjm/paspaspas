@@ -1,7 +1,7 @@
-﻿namespace PasPasPas.Parsing.SyntaxTree.Types {
+﻿namespace PasPasPas.Global.Runtime {
 
     /// <summary>
-    ///     definition of type kinds
+    ///     definition of available type kinds
     /// </summary>
     public enum CommonTypeKind {
 

@@ -22,8 +22,8 @@ namespace PasPasPas.Typings.Routines {
         /// <summary>
         ///     type id
         /// </summary>
-        public ITypeReference TypeInfo
-            => null;
+        public int TypeId
+            => 0;
 
         /// <summary>
         ///     type registry
@@ -54,8 +54,8 @@ namespace PasPasPas.Typings.Routines {
             var param = TypeRegistry.GetTypeByIdOrUndefinedType(signature[0].TypeId);
             if (param.TypeKind.IsNumerical()) {
                 var result = new ParameterGroup();
-                result.AddParameter("AValue").SymbolType = signature[0];
-                result.ResultType = signature[0];
+                result.AddParameter("AValue").SymbolType = signature[0].TypeId;
+                result.ResultType = signature[0].TypeId;
                 callableRoutines.Add(result);
             }
         }

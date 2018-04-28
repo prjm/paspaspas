@@ -47,16 +47,16 @@ namespace PasPasPas.Typings.Structured {
         public ITypeRegistry TypeRegistry { get; private set; }
 
         /// <summary>
-        ///     type id
-        /// </summary>
-        public ITypeReference TypeInfo
-            => null;
-
-        /// <summary>
         ///     <c>false</c>
         /// </summary>
         public bool IsConstant
             => false;
+
+        /// <summary>
+        ///     type id
+        /// </summary>
+        public int TypeId
+            => 0;
 
         /// <summary>
         ///     add a parameter group
@@ -72,7 +72,7 @@ namespace PasPasPas.Typings.Structured {
         ///     add a parameter group
         /// </summary>
         /// <param name="resultType">result type</param>
-        public ParameterGroup AddParameterGroup(ITypeReference resultType) {
+        public ParameterGroup AddParameterGroup(int resultType) {
             var result = new ParameterGroup {
                 ResultType = resultType
             };
@@ -88,7 +88,7 @@ namespace PasPasPas.Typings.Structured {
         /// <param name="resultType">result type</param>
         /// <param name="parameterName">parameter name</param>
         /// <returns></returns>
-        public ParameterGroup AddParameterGroup(string parameterName, ITypeReference firstParam, ITypeReference resultType) {
+        public ParameterGroup AddParameterGroup(string parameterName, int firstParam, int resultType) {
             var result = new ParameterGroup {
                 ResultType = resultType
             };

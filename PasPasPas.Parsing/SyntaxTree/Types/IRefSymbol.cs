@@ -10,7 +10,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Types {
         /// <summary>
         ///     get the type of this symbol
         /// </summary>
-        ITypeReference TypeInfo { get; }
+        int TypeId { get; }
 
     }
 }

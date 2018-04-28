@@ -25,6 +25,12 @@ namespace PasPasPas.Runtime.Values.Boolean {
             => true;
 
         /// <summary>
+        ///     type kind
+        /// </summary>
+        public CommonTypeKind TypeKind
+            => CommonTypeKind.BooleanType;
+
+        /// <summary>
         ///     format this number as string
         /// </summary>
         /// <returns>number as string</returns>

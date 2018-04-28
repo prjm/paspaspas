@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using System.Text;
 using PasPasPas.Global.Constants;
 using PasPasPas.Global.Runtime;
 
@@ -30,6 +29,12 @@ namespace PasPasPas.Runtime.Values.String {
         /// </summary>
         public override string AsUnicodeString
             => data;
+
+        /// <summary>
+        ///     fixed type kind
+        /// </summary>
+        public override CommonTypeKind TypeKind
+            => CommonTypeKind.UnicodeStringType;
 
         /// <summary>test for equality</summary>
         /// <param name="obj"></param>

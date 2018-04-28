@@ -1,4 +1,5 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Types;
+﻿using PasPasPas.Global.Runtime;
+using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Typings.Common;
 
 namespace PasPasPas.Typings.Simple {
@@ -16,7 +17,7 @@ namespace PasPasPas.Typings.Simple {
         }
 
         /// <summary>
-        ///     check if this type can be assigned from another type 
+        ///     check if this type can be assigned from another type
         /// </summary>
         /// <param name="otherType"></param>
         /// <returns></returns>
@@ -47,7 +48,7 @@ namespace PasPasPas.Typings.Simple {
         }
 
         /// <summary>
-        ///     unicode string type
+        ///     Unicode string type
         /// </summary>
         public override CommonTypeKind TypeKind
             => CommonTypeKind.UnicodeStringType;

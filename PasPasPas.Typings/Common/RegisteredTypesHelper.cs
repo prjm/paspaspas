@@ -1,4 +1,5 @@
 ﻿using PasPasPas.Global.Constants;
+using PasPasPas.Global.Runtime;
 using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree.Types;
 
@@ -43,7 +44,7 @@ namespace PasPasPas.Typings.Common {
                 return typeId1;
 
             if (left.Signed == right.Signed && left.BitSize == right.BitSize && left.BitSize >= minBitSize)
-                return left.TypeInfo.TypeId;
+                return left.TypeId;
 
             if (left.BitSize <= 8 && 16 >= minBitSize)
                 return KnownTypeIds.SmallInt;

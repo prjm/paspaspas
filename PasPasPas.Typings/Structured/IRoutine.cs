@@ -14,7 +14,7 @@ namespace PasPasPas.Typings.Structured {
         string Name { get; }
 
         /// <summary>
-        ///     <c>true</c> for intrinsinc constant methods
+        ///     <c>true</c> for intrinsic constant methods
         /// </summary>
         bool IsConstant { get; }
 

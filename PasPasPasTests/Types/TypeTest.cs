@@ -6,7 +6,6 @@ using PasPasPas.Options.DataTypes;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Parsing.SyntaxTree.Utils;
-using PasPasPas.Parsing.SyntaxTree.Visitors;
 using PasPasPas.Typings.Common;
 using PasPasPasTests.Common;
 using PasPasPasTests.Parser;
@@ -120,7 +119,7 @@ namespace PasPasPasTests.Types {
             bool tester(ITypeDefinition def) {
 
                 if (typeId != KnownTypeIds.UnspecifiedType)
-                    Assert.AreEqual(typeId, def.TypeInfo);
+                    Assert.AreEqual(typeId, def.TypeId);
 
                 if (typeKind != CommonTypeKind.UnknownType)
                     Assert.AreEqual(typeKind, def.TypeKind);

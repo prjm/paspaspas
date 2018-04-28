@@ -79,5 +79,10 @@ namespace PasPasPas.Runtime.Values.Int {
         public override ulong UnsignedValue
             => (uint)value;
 
+        /// <summary>
+        ///     type kind: int64
+        /// </summary>
+        public override CommonTypeKind TypeKind
+            => CommonTypeKind.Int64Type;
     }
 }

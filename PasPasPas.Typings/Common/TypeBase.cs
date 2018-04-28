@@ -31,7 +31,7 @@ namespace PasPasPas.Typings.Common {
         public abstract CommonTypeKind TypeKind { get; }
 
         /// <summary>
-        ///     type registryB
+        ///     type registry
         /// </summary>
         public ITypeRegistry TypeRegistry { get; set; }
 
@@ -86,10 +86,10 @@ namespace PasPasPas.Typings.Common {
         /// <param name="otherType">other type</param>
         /// <returns><c>true</c> if the type can be assigned from</returns>
         public virtual bool CanBeAssignedFrom(ITypeDefinition otherType) {
-            if (otherType.TypeInfo.TypeId.In(KnownTypeIds.ErrorType, KnownTypeIds.NoType, KnownTypeIds.UnspecifiedType))
+            if (otherType.TypeId.In(KnownTypeIds.ErrorType, KnownTypeIds.NoType, KnownTypeIds.UnspecifiedType))
                 return false;
 
-            if (otherType.TypeInfo.TypeId == TypeInfo.TypeId)
+            if (otherType.TypeId == TypeInfo.TypeId)
                 return true;
 
             var baseType = ResolveAlias(this);

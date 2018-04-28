@@ -1,5 +1,6 @@
 ﻿using System;
 using PasPasPas.Global.Constants;
+using PasPasPas.Global.Runtime;
 using PasPasPas.Options.DataTypes;
 using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Typings.Common;

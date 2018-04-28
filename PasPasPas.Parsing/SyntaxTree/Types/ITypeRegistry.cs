@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using PasPasPas.Global.Runtime;
-using PasPasPas.Infrastructure.Utils;
 
 namespace PasPasPas.Parsing.SyntaxTree.Types {
 
     /// <summary>
     ///     type registry
     /// </summary>
-    public interface ITypeRegistry {
+    public interface ITypeRegistry : ITypeKindResolver {
 
         /// <summary>
         ///     all registered types
@@ -22,6 +17,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Types {
         ///     system unit
         /// </summary>
         IRefSymbol SystemUnit { get; }
+
+        /// <summary>
+        ///     make a type reference
+        /// </summary>
+        /// <param name="typeId">type id</param>
+        /// <returns>type reference</returns>
+        ITypeReference MakeReference(int typeId);
 
         /// <summary>
         ///     get a type by type id
@@ -50,17 +52,16 @@ namespace PasPasPas.Parsing.SyntaxTree.Types {
         ITypeDefinition RegisterType(ITypeDefinition typeDef);
 
         /// <summary>
+        ///     runtime values, used to enable to calculate the results
+        ///     of operators on constants
+        /// </summary>
+        IRuntimeValueFactory Runtime { get; set; }
+
+        /// <summary>
         ///     generate a new user type id
         /// </summary>
         /// <returns></returns>
         int RequireUserTypeId();
-
-        /// <summary>
-        ///     make a type reference
-        /// </summary>
-        /// <param name="typeId"></param>
-        /// <returns></returns>
-        ITypeReference MakeReference(int typeId);
 
     }
 }

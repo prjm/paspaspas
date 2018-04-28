@@ -1,4 +1,5 @@
-﻿using PasPasPas.Infrastructure.Utils;
+﻿using PasPasPas.Global.Runtime;
+using PasPasPas.Infrastructure.Utils;
 
 namespace PasPasPas.Parsing.SyntaxTree.Types {
 

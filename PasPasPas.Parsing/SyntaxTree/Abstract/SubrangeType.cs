@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 
@@ -64,6 +63,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
             visitor.StartVisit(this);
             AcceptParts(this, visitor);
             visitor.EndVisit(this);
+        }
+
+        /// <summary>
+        ///     format this subrange type
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString() {
+            return $"Subrange {RangeStart}..{RangeEnd}";
         }
     }
 }

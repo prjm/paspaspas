@@ -1,5 +1,4 @@
-﻿using System;
-using PasPasPas.Global.Runtime;
+﻿using PasPasPas.Global.Runtime;
 using PasPasPas.Runtime.Values.Boolean;
 
 namespace PasPasPas.Runtime.Values.String {
@@ -24,6 +23,11 @@ namespace PasPasPas.Runtime.Values.String {
         /// </summary>
         public bool IsConstant
             => true;
+
+        /// <summary>
+        ///     type kind
+        /// </summary>
+        public abstract CommonTypeKind TypeKind { get; }
 
         internal static IValue Concat(IStringValue string1, IStringValue string2)
             => new UnicodeStringValue(string.Concat(string1, string2));

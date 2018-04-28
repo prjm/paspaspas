@@ -1,4 +1,5 @@
-﻿using PasPasPas.Infrastructure.Utils;
+﻿using PasPasPas.Global.Runtime;
+using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Typings.Common;
 
@@ -16,7 +17,7 @@ namespace PasPasPas.Typings.Simple {
         /// <param name="withId"></param>
         /// <param name="bitSize">size in bits</param>
         public BooleanType(int withId, int bitSize) : base(withId)
-            => this.size = bitSize;
+            => size = bitSize;
 
         /// <summary>
         ///     enumerated type

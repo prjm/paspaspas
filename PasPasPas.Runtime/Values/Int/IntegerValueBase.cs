@@ -55,6 +55,11 @@ namespace PasPasPas.Runtime.Values.Int {
             => true;
 
         /// <summary>
+        ///     type kind
+        /// </summary>
+        public abstract CommonTypeKind TypeKind { get; }
+
+        /// <summary>
         ///     format this number as string
         /// </summary>
         /// <returns>number as string</returns>

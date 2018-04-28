@@ -29,7 +29,6 @@ namespace PasPasPas.Api {
         ///     constant values
         /// </summary>
         public IRuntimeValueFactory ConstantValues { get; }
-            = new RuntimeValueFactory();
 
         /// <summary>
         ///     integer parser
@@ -104,10 +103,12 @@ namespace PasPasPas.Api {
         /// </summary>
         /// <param name="intSize">integer size</param>
         public DefaultEnvironment(NativeIntSize intSize = NativeIntSize.Undefined) {
-            TypeRegistry = new RegisteredTypes(StringPool, ConstantValues, intSize);
+            TypeRegistry = new RegisteredTypes(StringPool, intSize);
+            ConstantValues = new RuntimeValueFactory(TypeRegistry);
             IntegerParser = new IntegerParser(ConstantValues, false);
             HexNumberParser = new IntegerParser(ConstantValues, true);
             RealLiteralConverter = new RealLiteralConverter(ConstantValues);
+            TypeRegistry.Runtime = ConstantValues;
         }
 
         /// <summary>

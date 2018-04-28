@@ -30,6 +30,11 @@ namespace PasPasPas.Runtime.Values.Char {
             => true;
 
         /// <summary>
+        ///     type kind
+        /// </summary>
+        public abstract CommonTypeKind TypeKind { get; }
+
+        /// <summary>
         ///     check for equality
         /// </summary>
         /// <param name="obj"></param>

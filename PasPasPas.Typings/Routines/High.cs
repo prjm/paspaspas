@@ -15,15 +15,12 @@ namespace PasPasPas.Typings.Routines {
     public class High : IRoutine {
 
         /// <summary>
-        ///     create a new type specifiction for the routine <c>abs</c>
+        ///     create a new type specification for the routine <c>high</c>
         /// </summary>
         /// <param name="registry"></param>
-        /// <param name="consOps">integer parser</param>
-        public High(ITypeRegistry registry, IRuntimeValueFactory consOps) {
+        public High(ITypeRegistry registry) {
             TypeRegistry = registry;
-            ConstOps = consOps;
         }
-
 
         /// <summary>
         ///     routine name
@@ -50,8 +47,8 @@ namespace PasPasPas.Typings.Routines {
         /// <summary>
         ///     type id
         /// </summary>
-        public ITypeReference TypeInfo
-            => null;
+        public int TypeId
+            => 0;
 
         /// <summary>
         ///     try to resolve a call
@@ -68,8 +65,8 @@ namespace PasPasPas.Typings.Routines {
                 var highValue = ConstOps.Integers.ToScaledIntegerValue(ordinalType.HighestElement);
                 var typeId = LiteralValues.GetTypeFor(highValue);
                 var result = new ParameterGroup();
-                result.AddParameter("AValue").SymbolType = signature[0];
-                result.ResultType = ConstOps.Types.MakeReference(typeId);
+                result.AddParameter("AValue").SymbolType = signature[0].TypeId;
+                result.ResultType = typeId;
                 callableRoutines.Add(result);
             }
         }

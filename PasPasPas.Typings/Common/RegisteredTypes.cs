@@ -29,7 +29,6 @@ namespace PasPasPas.Typings.Common {
         private readonly IDictionary<int, IOperator> operators
             = new Dictionary<int, IOperator>();
 
-        private IRuntimeValueFactory runtime;
         private readonly UnitType systemUnit;
         private readonly object idLock = new object();
         private int userTypeIds = 1000;
@@ -59,6 +58,11 @@ namespace PasPasPas.Typings.Common {
             => types.Values;
 
         /// <summary>
+        ///     runtime constant values
+        /// </summary>
+        public IRuntimeValueFactory Runtime { get; set; }
+
+        /// <summary>
         ///     register a new type
         /// </summary>
         /// <param name="type">type to register</param>
@@ -76,24 +80,22 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="intSize">integer size</param>
         /// <param name="pool">string pool</param>
-        /// <param name="constOps">constant helper</param>
-        public RegisteredTypes(StringPool pool, IRuntimeValueFactory constOps, NativeIntSize intSize) {
-            runtime = constOps;
+        public RegisteredTypes(StringPool pool, NativeIntSize intSize) {
             systemUnit = new UnitType(KnownTypeIds.SystemUnit);
             RegisterType(systemUnit);
 
             RegisterCommonTypes(intSize);
             RegisterCommonOperators();
             RegisterTObject(pool);
-            RegisterCommonFunctions(constOps);
+            RegisterCommonFunctions();
         }
 
         /// <summary>
         ///     register common functions
         /// </summary>
-        private void RegisterCommonFunctions(IRuntimeValueFactory runtimeValues) {
+        private void RegisterCommonFunctions() {
             systemUnit.AddGlobal(new Abs(this));
-            systemUnit.AddGlobal(new High(this, runtimeValues));
+            systemUnit.AddGlobal(new High(this));
         }
 
         /// <summary>
@@ -114,7 +116,6 @@ namespace PasPasPas.Typings.Common {
             operators.Add(newOperator.Kind, newOperator);
             if (newOperator is OperatorBase baseOperator) {
                 baseOperator.TypeRegistry = this;
-                baseOperator.Runtime = runtime;
             }
         }
 
@@ -284,9 +285,9 @@ namespace PasPasPas.Typings.Common {
         }
 
         /// <summary>
-        ///     get a type definition or the error fallback
+        ///     get a type definition or the error fall back
         /// </summary>
-        /// <param name="typeId"></param>
+        /// <param name="typeId">type id</param>
         /// <returns></returns>
         public ITypeDefinition GetTypeByIdOrUndefinedType(int typeId) {
             if (!types.TryGetValue(typeId, out var result))
@@ -318,19 +319,27 @@ namespace PasPasPas.Typings.Common {
             def.AddOrExtendMethod("Free", ProcedureKind.Procedure).AddParameterGroup();
             def.AddOrExtendMethod("DisposeOf", ProcedureKind.Procedure).AddParameterGroup();
             def.AddOrExtendMethod("CleanupInstance", ProcedureKind.Procedure).AddParameterGroup();
-            def.AddOrExtendMethod("ClassType", ProcedureKind.Function).AddParameterGroup(runtime.Types.MakeReference(KnownTypeIds.TClass));
+            def.AddOrExtendMethod("ClassType", ProcedureKind.Function).AddParameterGroup(KnownTypeIds.TClass);
             def.AddOrExtendMethod("FieldAddress", ProcedureKind.Function).AddParameterGroup(//
                "Name",
-                runtime.Types.MakeReference(KnownTypeIds.ShortStringType), //
-                runtime.Types.MakeReference(KnownTypeIds.GenericPointer))[0].ConstantParam = true;
+                KnownTypeIds.ShortStringType, //
+                KnownTypeIds.GenericPointer)[0].ConstantParam = true;
         }
 
         /// <summary>
-        ///     create a new type reference
+        ///     resolve a type kind
         /// </summary>
-        /// <param name="typeId"></param>
-        /// <returns></returns>
+        /// <param name="typeId">given type id</param>
+        /// <returns>common type kind</returns>
+        public CommonTypeKind GetTypeKindOf(int typeId)
+            => GetTypeByIdOrUndefinedType(typeId).TypeKind;
+
+        /// <summary>
+        ///     create a type reference
+        /// </summary>
+        /// <param name="typeId">type id</param>
+        /// <returns>type reference</returns>
         public ITypeReference MakeReference(int typeId)
-            => runtime.Types.MakeReference(typeId);
+            => Runtime.Types.MakeReference(typeId);
     }
 }

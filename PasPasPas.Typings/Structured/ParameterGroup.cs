@@ -7,14 +7,14 @@ using PasPasPas.Typings.Common;
 namespace PasPasPas.Typings.Structured {
 
     /// <summary>
-    ///     class for a paramater group
+    ///     class for a parameter group
     /// </summary>
     public class ParameterGroup {
 
         /// <summary>
         ///     result type
         /// </summary>
-        public ITypeReference ResultType { get; set; }
+        public int ResultType { get; set; }
 
         /// <summary>
         ///     routine parameters
@@ -63,7 +63,7 @@ namespace PasPasPas.Typings.Structured {
             for (var i = 0; Parameters != null && i < Parameters.Count; i++) {
                 var parameter = Parameters[i];
                 var sourceType = types.GetTypeByIdOrUndefinedType(signature[i].TypeId);
-                match = match && types.GetTypeByIdOrUndefinedType(parameter.SymbolType.TypeId).CanBeAssignedFrom(sourceType);
+                match = match && types.GetTypeByIdOrUndefinedType(parameter.SymbolType).CanBeAssignedFrom(sourceType);
 
                 if (!match)
                     return false;

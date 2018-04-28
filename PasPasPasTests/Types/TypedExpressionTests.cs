@@ -367,6 +367,25 @@ namespace PasPasPasTests.Types {
                 Tuple.Create("Int64", KnownTypeIds.Int64Type),
             };
 
+            AssertExprTypeByVar("Byte", "+ a", KnownTypeIds.ByteType);
+            AssertExprTypeByVar("Word", "+ a", KnownTypeIds.WordType);
+            AssertExprTypeByVar("Cardinal", "+ a", KnownTypeIds.CardinalType);
+            AssertExprTypeByVar("UInt64", "+ a", KnownTypeIds.Uint64Type);
+            AssertExprTypeByVar("ShortInt", "+ a", KnownTypeIds.ShortInt);
+            AssertExprTypeByVar("SmallInt", "+ a", KnownTypeIds.SmallInt);
+            AssertExprTypeByVar("Integer", "+ a", KnownTypeIds.IntegerType);
+            AssertExprTypeByVar("Int64", "+ a", KnownTypeIds.Int64Type);
+
+            AssertExprTypeByVar("Byte", "- a", KnownTypeIds.ByteType);
+            AssertExprTypeByVar("Word", "- a", KnownTypeIds.WordType);
+            AssertExprTypeByVar("Cardinal", "- a", KnownTypeIds.CardinalType);
+            AssertExprTypeByVar("UInt64", "- a", KnownTypeIds.Uint64Type);
+            AssertExprTypeByVar("ShortInt", "- a", KnownTypeIds.ShortInt);
+            AssertExprTypeByVar("SmallInt", "- a", KnownTypeIds.SmallInt);
+            AssertExprTypeByVar("Integer", "- a", KnownTypeIds.IntegerType);
+            AssertExprTypeByVar("Int64", "- a", KnownTypeIds.Int64Type);
+
+
             foreach (var e in d) {
                 AssertExprTypeByVar(e.Item1, "a + b", e.Item2);
                 AssertExprTypeByVar(e.Item1, "a - b", e.Item2);

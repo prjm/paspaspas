@@ -32,6 +32,11 @@ namespace PasPasPas.Runtime.Values.Float {
             => true;
 
         /// <summary>
+        ///     type kind
+        /// </summary>
+        public abstract CommonTypeKind TypeKind { get; }
+
+        /// <summary>
         ///     check for equality
         /// </summary>
         /// <param name="obj"></param>
@@ -82,5 +87,13 @@ namespace PasPasPas.Runtime.Values.Float {
 
         internal static IValue LessThen(INumericalValue floatLeft, INumericalValue floatRight)
             => new BooleanValue(floatLeft.AsExtended < floatRight.AsExtended);
+
+        /// <summary>
+        ///     get an extended value
+        /// </summary>
+        /// <param name="number">number</param>
+        /// <returns>number value</returns>
+        public static IValue ToExtendedValue(in ExtF80 number)
+            => new ExtendedValue(number);
     }
 }

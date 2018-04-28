@@ -5,7 +5,7 @@ using PasPasPas.Global.Runtime;
 namespace PasPasPas.Runtime.Values.Char {
 
     /// <summary>
-    ///     wide char value
+    ///     wide char (word) value
     /// </summary>
     public class WideCharValue : CharValueBase, IEquatable<WideCharValue> {
 
@@ -29,6 +29,12 @@ namespace PasPasPas.Runtime.Values.Char {
         /// </summary>
         public override char AsWideChar
             => value;
+
+        /// <summary>
+        ///     type kind
+        /// </summary>
+        public override CommonTypeKind TypeKind
+            => CommonTypeKind.WideCharType;
 
         /// <summary>
         ///     check for equality

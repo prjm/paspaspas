@@ -1,5 +1,4 @@
-﻿using System;
-using PasPasPas.Global.Runtime;
+﻿using PasPasPas.Global.Runtime;
 using PasPasPas.Runtime.Values.Boolean;
 using PasPasPas.Runtime.Values.Char;
 using PasPasPas.Runtime.Values.Float;
@@ -12,6 +11,14 @@ namespace PasPasPas.Runtime.Values {
     ///     runtime values: value creation and operations
     /// </summary>
     public class RuntimeValueFactory : IRuntimeValueFactory {
+
+        /// <summary>
+        ///     create a new runtime value factory
+        /// </summary>
+        /// <param name="typeKindResolver">type kind resolver</param>
+        public RuntimeValueFactory(ITypeKindResolver typeKindResolver)
+            => Types = new TypeOperations(typeKindResolver);
+
 
         /// <summary>
         ///     integer operations: value factory and arithmetics
@@ -31,7 +38,6 @@ namespace PasPasPas.Runtime.Values {
         public IBooleanOperations Booleans { get; }
             = new BooleanOperations();
 
-
         /// <summary>
         ///     string operations: value factory, concatenation
         /// </summary>
@@ -45,9 +51,9 @@ namespace PasPasPas.Runtime.Values {
             = new CharOperations();
 
         /// <summary>
-        ///     open tye operations
+        ///     open type operations
         /// </summary>
         public ITypeOperations Types { get; }
-            = new TypeOperations();
+
     }
 }

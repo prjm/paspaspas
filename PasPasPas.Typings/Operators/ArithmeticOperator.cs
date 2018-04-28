@@ -77,7 +77,10 @@ namespace PasPasPas.Typings.Operators {
                 return operations.Identity(operand);
 
             if (Kind == DefinedOperators.UnaryMinus)
-                return operations.Negate(operand);
+                if (operand.IsConstant)
+                    return operations.Negate(operand);
+                else
+                    return operand;
 
             return GetErrorTypeReference();
         }

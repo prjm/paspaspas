@@ -199,9 +199,8 @@ namespace PasPasPas.Runtime.Values.Int {
         /// </summary>
         /// <param name="number"></param>
         /// <returns></returns>
-        public ITypeReference Identity(ITypeReference number) {
-            return number;
-        }
+        public ITypeReference Identity(ITypeReference number)
+            => number;
 
         /// <summary>
         ///     compute a bitwise or

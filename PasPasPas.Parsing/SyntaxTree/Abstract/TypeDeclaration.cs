@@ -64,6 +64,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         public ITypeReference TypeInfo { get; set; }
 
         /// <summary>
+        ///     type id
+        /// </summary>
+        public int TypeId
+            => TypeInfo != null ? TypeInfo.TypeId : KnownTypeIds.ErrorType;
+
+        /// <summary>
         ///     accept visitor
         /// </summary>
         /// <param name="visitor">node visitor</param>

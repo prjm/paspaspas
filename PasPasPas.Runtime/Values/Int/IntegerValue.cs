@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Numerics;
 using PasPasPas.Global.Constants;
 using PasPasPas.Global.Runtime;
 
@@ -52,6 +47,12 @@ namespace PasPasPas.Runtime.Values.Int {
         /// </summary>
         public override ulong UnsignedValue
             => (uint)value;
+
+        /// <summary>
+        ///     type kind
+        /// </summary>
+        public override CommonTypeKind TypeKind
+            => CommonTypeKind.IntegerType;
 
         /// <summary>
         ///     format this number

@@ -16,5 +16,10 @@
         /// </summary>
         bool IsConstant { get; }
 
+        /// <summary>
+        ///     type kind
+        /// </summary>
+        CommonTypeKind TypeKind { get; }
+
     }
 }

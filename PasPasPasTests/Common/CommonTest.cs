@@ -2,6 +2,7 @@
 using PasPasPas.Global.Runtime;
 using PasPasPas.Options.DataTypes;
 using PasPasPas.Runtime.Values;
+using PasPasPas.Runtime.Values.Float;
 using PasPasPas.Runtime.Values.Int;
 using PasPasPas.Typings.Common;
 using SharpFloat.FloatingPoint;
@@ -63,7 +64,7 @@ namespace PasPasPasTests.Common {
         /// <param name="text"></param>
         /// <returns></returns>
         protected IValue GetUnicodeStringValue(string text)
-            => new RuntimeValueFactory().Strings.ToUnicodeString(text);
+            => new RuntimeValueFactory(null).Strings.ToUnicodeString(text);
 
         /// <summary>
         ///     get the Unicode char value
@@ -71,7 +72,7 @@ namespace PasPasPasTests.Common {
         /// <param name="text"></param>
         /// <returns></returns>
         protected IValue GetWideCharValue(char text)
-            => new RuntimeValueFactory().Chars.ToWideCharValue(text);
+            => new RuntimeValueFactory(null).Chars.ToWideCharValue(text);
 
 
 
@@ -103,10 +104,10 @@ namespace PasPasPasTests.Common {
         /// <summary>
         ///     get extended value
         /// </summary>
-        /// <param name="number"></param>
-        /// <returns></returns>
-        protected IValue GetExtendedValue(ExtF80 number)
-            => new RuntimeValueFactory().RealNumbers.ToExtendedValue(number);
+        /// <param name="number">number</param>
+        /// <returns>number value</returns>
+        protected IValue GetExtendedValue(in ExtF80 number)
+            => FloatValueBase.ToExtendedValue(number);
 
     }
 }

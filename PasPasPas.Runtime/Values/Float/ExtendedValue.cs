@@ -37,6 +37,12 @@ namespace PasPasPas.Runtime.Values.Float {
             => KnownTypeIds.Extended;
 
         /// <summary>
+        ///     common type kind: real type
+        /// </summary>
+        public override CommonTypeKind TypeKind
+            => CommonTypeKind.RealType;
+
+        /// <summary>
         ///     compare equality
         /// </summary>
         /// <param name="obj"></param>

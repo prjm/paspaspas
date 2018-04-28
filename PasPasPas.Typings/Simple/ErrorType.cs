@@ -1,15 +1,16 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Types;
+﻿using PasPasPas.Global.Runtime;
+using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Typings.Common;
 
 namespace PasPasPas.Typings.Simple {
 
     /// <summary>
-    ///     errornous type
+    ///     invalud / error type
     /// </summary>
     public class ErrorType : TypeBase {
 
         /// <summary>
-        ///     creates a new errornous type
+        ///     creates a new invalid / error type
         /// </summary>
         /// <param name="withId"></param>
         public ErrorType(int withId) : base(withId) { }
