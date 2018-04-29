@@ -10,7 +10,7 @@ namespace PasPasPas.Typings.Simple {
     public class IntegralType : OrdinalTypeBase, IIntegralType {
 
         private readonly bool signed;
-        private readonly int bitSize;
+        private readonly uint bitSize;
 
         /// <summary>
         ///     create a new type
@@ -18,7 +18,7 @@ namespace PasPasPas.Typings.Simple {
         /// <param name="withId"></param>
         /// <param name="isSigned"><c>true</c> if the type is signed</param>
         /// <param name="withBitSize">bit size of the type</param>
-        public IntegralType(int withId, bool isSigned, int withBitSize) : base(withId) {
+        public IntegralType(int withId, bool isSigned, uint withBitSize) : base(withId) {
             signed = isSigned;
             bitSize = withBitSize;
         }
@@ -38,7 +38,7 @@ namespace PasPasPas.Typings.Simple {
         /// <summary>
         ///     get the size in bits
         /// </summary>
-        public int BitSize
+        public uint BitSize
             => bitSize;
 
         /// <summary>

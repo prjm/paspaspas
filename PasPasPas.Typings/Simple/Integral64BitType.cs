@@ -34,7 +34,7 @@ namespace PasPasPas.Typings.Simple {
         /// <summary>
         ///     bis size of this type (64 bit)
         /// </summary>
-        public int BitSize
+        public uint BitSize
             => 64;
 
         /// <summary>

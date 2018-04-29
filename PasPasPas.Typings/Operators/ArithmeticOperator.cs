@@ -1,4 +1,5 @@
 ﻿using System;
+using PasPasPas.Global.Constants;
 using PasPasPas.Global.Runtime;
 using PasPasPas.Parsing.SyntaxTree.Types;
 
@@ -74,15 +75,33 @@ namespace PasPasPas.Typings.Operators {
                 return GetErrorTypeReference();
 
             if (Kind == DefinedOperators.UnaryPlus)
-                return operations.Identity(operand);
+                return EvaluateUnaryOperand(negate: false, operand, operations);
 
             if (Kind == DefinedOperators.UnaryMinus)
-                if (operand.IsConstant)
+                return EvaluateUnaryOperand(negate: true, operand, operations);
+
+            return GetErrorTypeReference();
+        }
+
+        private ITypeReference EvaluateUnaryOperand(bool negate, ITypeReference operand, IArithmeticOperations operations) {
+            if (operand.IsConstant)
+                if (negate)
                     return operations.Negate(operand);
                 else
                     return operand;
+            else {
+                if (operand.TypeKind != CommonTypeKind.SubrangeType)
+                    return operand;
 
-            return GetErrorTypeReference();
+                var baseType = TypeRegistry.GetTypeByIdOrUndefinedType(TypeRegistry.GetBaseTypeOfSubrangeType(operand.TypeId)) as IIntegralType;
+
+                if (baseType != null && baseType.BitSize < 32)
+                    return Runtime.Types.MakeReference(KnownTypeIds.IntegerType);
+                else if (baseType != null)
+                    return Runtime.Types.MakeReference(baseType.TypeId);
+
+                return GetErrorTypeReference();
+            }
         }
 
         /// <summary>

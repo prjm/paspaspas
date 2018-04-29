@@ -5,7 +5,7 @@
     public interface IIntegralType : IOrdinalType {
 
         /// <summary>
-        ///     true if this type is signed
+        ///     <c>true</c> if this type is signed
         /// </summary>
         bool Signed { get; }
     }

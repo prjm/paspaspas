@@ -134,6 +134,20 @@ namespace PasPasPas.Typings.Operators {
             return Runtime.Types.MakeReference(TypeRegistry.GetSmallestIntegralTypeOrNext(left.TypeId, right.TypeId, minBitSize));
         }
 
+        /// <summary>
+        ///     create a type reference to the smallest boolean or integral type for two operands
+        /// </summary>
+        /// <param name="left">left operand</param>
+        /// <param name="right">right operand</param>
+        /// <param name="minBitSize">minimal number of required bits</param>
+        /// <returns>type reference</returns>
+        protected ITypeReference GetSmallestBoolOrIntegralType(ITypeReference left, ITypeReference right, int minBitSize) {
+            if (GetTypeKind(left) == CommonTypeKind.BooleanType && GetTypeKind(right) == CommonTypeKind.BooleanType)
+                return Runtime.Types.MakeReference(TypeRegistry.GetSmallestBooleanTypeOrNext(left.TypeId, right.TypeId, minBitSize));
+
+            return Runtime.Types.MakeReference(TypeRegistry.GetSmallestIntegralTypeOrNext(left.TypeId, right.TypeId, minBitSize));
+        }
+
 
         /// <summary>
         ///     get a reference to the extended type

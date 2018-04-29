@@ -369,8 +369,8 @@ namespace PasPasPasTests.Types {
             };
 
             // subrange types
-            AssertExprTypeByVar("-1..1", "+ a", RegisteredTypes.SMALLEST_USER_TYPE_ID);
-            AssertExprTypeByVar("-1..1", "- a", RegisteredTypes.SMALLEST_USER_TYPE_ID);
+            AssertExprTypeByVar("-1..1", "+ a", KnownTypeIds.IntegerType);
+            AssertExprTypeByVar("-1..1", "- a", KnownTypeIds.IntegerType);
 
             AssertExprTypeByVar("Byte", "+ a", KnownTypeIds.ByteType);
             AssertExprTypeByVar("Word", "+ a", KnownTypeIds.WordType);
@@ -409,6 +409,45 @@ namespace PasPasPasTests.Types {
             AssertExprTypeByVar("-1..1", "a / b", KnownTypeIds.Extended);
 
         }
+
+        [TestCase]
+        public void TestLogicOperatorsIndirect() {
+            var d = new[] {
+                Tuple.Create("Byte", KnownTypeIds.ByteType),
+                Tuple.Create("Word", KnownTypeIds.WordType),
+                Tuple.Create("Cardinal", KnownTypeIds.CardinalType),
+                Tuple.Create("UInt64", KnownTypeIds.Uint64Type),
+                Tuple.Create("SmallInt", KnownTypeIds.SmallInt),
+                Tuple.Create("ShortInt", KnownTypeIds.ShortInt),
+                Tuple.Create("Integer", KnownTypeIds.IntegerType),
+                Tuple.Create("Int64", KnownTypeIds.Int64Type),
+            };
+
+            // subrange types
+            AssertExprTypeByVar("-1..1", "not a", RegisteredTypes.SMALLEST_USER_TYPE_ID);
+            AssertExprTypeByVar("-1..1", "not a", RegisteredTypes.SMALLEST_USER_TYPE_ID);
+
+            AssertExprTypeByVar("Byte", "not a", KnownTypeIds.ByteType);
+            AssertExprTypeByVar("Word", "not a", KnownTypeIds.WordType);
+            AssertExprTypeByVar("Cardinal", "not a", KnownTypeIds.CardinalType);
+            AssertExprTypeByVar("UInt64", "not a", KnownTypeIds.Uint64Type);
+            AssertExprTypeByVar("ShortInt", "not a", KnownTypeIds.ShortInt);
+            AssertExprTypeByVar("SmallInt", "not a", KnownTypeIds.SmallInt);
+            AssertExprTypeByVar("Integer", "not a", KnownTypeIds.IntegerType);
+            AssertExprTypeByVar("Int64", "not a", KnownTypeIds.Int64Type);
+
+            foreach (var e in d) {
+                AssertExprTypeByVar(e.Item1, "a or b", e.Item2);
+                AssertExprTypeByVar(e.Item1, "a and b", e.Item2);
+                AssertExprTypeByVar(e.Item1, "a xor b", e.Item2);
+            }
+
+            // subrange type
+            AssertExprTypeByVar("-1..1", "a or b", KnownTypeIds.ShortInt);
+            AssertExprTypeByVar("-1..1", "a xor b", KnownTypeIds.ShortInt);
+            AssertExprTypeByVar("-1..1", "a and b", KnownTypeIds.ShortInt);
+        }
+
 
     }
 }

@@ -1,5 +1,4 @@
 ﻿using PasPasPas.Global.Runtime;
-using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Typings.Common;
 
@@ -8,15 +7,15 @@ namespace PasPasPas.Typings.Simple {
     /// <summary>
     ///     boolean type
     /// </summary>
-    public class BooleanType : OrdinalTypeBase {
-        private readonly int size;
+    public class BooleanType : OrdinalTypeBase, IFixedSizeType {
+        private readonly uint size;
 
         /// <summary>
         ///     create a new boolean type
         /// </summary>
         /// <param name="withId"></param>
         /// <param name="bitSize">size in bits</param>
-        public BooleanType(int withId, int bitSize) : base(withId)
+        public BooleanType(int withId, uint bitSize) : base(withId)
             => size = bitSize;
 
         /// <summary>
@@ -24,6 +23,12 @@ namespace PasPasPas.Typings.Simple {
         /// </summary>
         public override CommonTypeKind TypeKind
             => CommonTypeKind.BooleanType;
+
+        /// <summary>
+        ///     bit size
+        /// </summary>
+        public uint BitSize
+            => size;
 
         /// <summary>
         ///     test for assignment type compatibility
@@ -40,5 +45,21 @@ namespace PasPasPas.Typings.Simple {
             return base.CanBeAssignedFrom(otherType);
         }
 
+        /// <summary>
+        ///     convert this type to string
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString() {
+            switch (size) {
+                case 1:
+                    return "Boolean";
+                case 8:
+                    return "ByteBool";
+                case 16:
+                    return "WordBool";
+                default:
+                    return $"Bool{size}";
+            }
+        }
     }
 }

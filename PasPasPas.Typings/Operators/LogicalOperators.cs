@@ -1,13 +1,11 @@
 ﻿using System;
-using PasPasPas.Global.Constants;
 using PasPasPas.Global.Runtime;
 using PasPasPas.Parsing.SyntaxTree.Types;
-using PasPasPas.Typings.Common;
 
 namespace PasPasPas.Typings.Operators {
 
     /// <summary>
-    ///     <c>not</c> operation
+    ///     logical operators
     /// </summary>
     public class LogicalOperators : OperatorBase {
 
@@ -64,13 +62,16 @@ namespace PasPasPas.Typings.Operators {
         /// <returns></returns>
         protected override ITypeReference EvaluateUnaryOperator(Signature input) {
             var operand = input[0];
-            var operations = Runtime.GetLogicalOperators(GetTypeKind(operand));
+            var operations = Runtime.GetLogicalOperators(operand);
 
             if (operations == null)
                 return GetErrorTypeReference();
 
             if (Kind == DefinedOperators.NotOperation)
-                return operations.Not(operand);
+                if (operand.IsConstant)
+                    return operations.Not(operand);
+                else
+                    return operand;
 
             return GetErrorTypeReference();
         }
@@ -90,21 +91,42 @@ namespace PasPasPas.Typings.Operators {
             if (Kind == DefinedOperators.ShlOperation)
                 return Runtime.Integers.Shl(left, right);
 
-            var operations = Runtime.GetLogicalOperators(GetTypeKind(left), GetTypeKind(right));
+            var operations = Runtime.GetLogicalOperators(left, right);
 
             if (operations == null)
                 return GetErrorTypeReference();
 
             if (Kind == DefinedOperators.AndOperation)
-                return operations.And(left, right);
+                return EvaluateAndOperator(left, right, operations);
 
             if (Kind == DefinedOperators.OrOperation)
-                return operations.Or(left, right);
+                return EvaluateOrOperator(left, right, operations);
 
             if (Kind == DefinedOperators.XorOperation)
-                return operations.Xor(left, right);
+                return EvaluateXorOperator(left, right, operations);
 
             return GetErrorTypeReference();
+        }
+
+        private ITypeReference EvaluateXorOperator(ITypeReference left, ITypeReference right, ILogicalOperations operations) {
+            if (left.IsConstant && right.IsConstant)
+                return operations.Xor(left, right);
+            else
+                return GetSmallestBoolOrIntegralType(left, right, 8);
+        }
+
+        private ITypeReference EvaluateOrOperator(ITypeReference left, ITypeReference right, ILogicalOperations operations) {
+            if (left.IsConstant && right.IsConstant)
+                return operations.Or(left, right);
+            else
+                return GetSmallestBoolOrIntegralType(left, right, 8);
+        }
+
+        private ITypeReference EvaluateAndOperator(ITypeReference left, ITypeReference right, ILogicalOperations operations) {
+            if (left.IsConstant && right.IsConstant)
+                return operations.And(left, right);
+            else
+                return GetSmallestBoolOrIntegralType(left, right, 8);
         }
     }
 }

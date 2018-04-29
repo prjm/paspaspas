@@ -1,5 +1,4 @@
-﻿using PasPasPas.Global.Constants;
-using PasPasPas.Global.Runtime;
+﻿using PasPasPas.Global.Runtime;
 using PasPasPas.Typings.Common;
 
 namespace PasPasPas.Typings.Operators {
@@ -37,15 +36,19 @@ namespace PasPasPas.Typings.Operators {
         ///     simple helper: get logical operations for an unary operator
         /// </summary>
         /// <param name="runtime">runtime to use</param>
-        /// <param name="typeKind">type kind of the logical operations interface</param>
+        /// <param name="type">operand type</param>
         /// <returns></returns>
-        public static ILogicalOperations GetLogicalOperators(this IRuntimeValueFactory runtime, CommonTypeKind typeKind) {
+        public static ILogicalOperations GetLogicalOperators(this IRuntimeValueFactory runtime, ITypeReference type) {
+            var typeKind = type.TypeKind;
 
             if (typeKind == CommonTypeKind.BooleanType)
                 return runtime.Booleans;
 
             if (typeKind.IsIntegral())
                 return runtime.Integers;
+
+            if (typeKind == CommonTypeKind.SubrangeType)
+                return runtime.GetLogicalOperators(runtime.GetBaseTypeOfSubrangeType(type.TypeId));
 
             return null;
         }
@@ -83,16 +86,25 @@ namespace PasPasPas.Typings.Operators {
         ///     simple helper: get logical operations for a binary operator
         /// </summary>
         /// <param name="runtime">runtime to use</param>
-        /// <param name="left">left operand</param>
-        /// <param name="right">right operand</param>
+        /// <param name="leftType">left operand</param>
+        /// <param name="rightType">right operand</param>
         /// <returns></returns>
-        public static ILogicalOperations GetLogicalOperators(this IRuntimeValueFactory runtime, CommonTypeKind left, CommonTypeKind right) {
+        public static ILogicalOperations GetLogicalOperators(this IRuntimeValueFactory runtime, ITypeReference leftType, ITypeReference rightType) {
+            var left = leftType.TypeKind;
+            var right = rightType.TypeKind;
 
             if (left == CommonTypeKind.BooleanType && right == CommonTypeKind.BooleanType)
                 return runtime.Booleans;
 
             if (left.IsIntegral() && right.IsIntegral())
                 return runtime.Integers;
+
+            if (left == CommonTypeKind.SubrangeType)
+                return GetLogicalOperators(runtime, runtime.GetBaseTypeOfSubrangeType(leftType.TypeId), rightType);
+
+            if (right == CommonTypeKind.SubrangeType)
+                return GetLogicalOperators(runtime, leftType, runtime.GetBaseTypeOfSubrangeType(rightType.TypeId));
+
 
             return null;
         }

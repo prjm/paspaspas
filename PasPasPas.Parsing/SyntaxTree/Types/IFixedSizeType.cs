@@ -8,7 +8,7 @@
         /// <summary>
         ///     type size in bits
         /// </summary>
-        int BitSize { get; }
+        uint BitSize { get; }
 
 
     }
