@@ -104,6 +104,8 @@ namespace PasPasPas.Typings.Common {
         private ITypeReference GetErrorTypeReference(ITypedSyntaxNode node)
             => environment.ConstantValues.Types.MakeReference(KnownTypeIds.ErrorType);
 
+        private ITypeRegistry TypeRegistry
+            => environment.TypeRegistry;
 
         /// <summary>
         ///     determine the type of a constant value
@@ -149,8 +151,8 @@ namespace PasPasPas.Typings.Common {
                 return;
             }
 
-            var operatorId = OperatorBase.GetOperatorId(element.Kind, left, right);
-            var binaryOperator = environment.TypeRegistry.GetOperator(operatorId);
+            var operatorId = TypeRegistry.GetOperatorId(element.Kind, left, right);
+            var binaryOperator = TypeRegistry.GetOperator(operatorId);
             if (operatorId == DefinedOperators.Undefined || binaryOperator == null) {
                 element.TypeInfo = GetErrorTypeReference(element);
                 return;

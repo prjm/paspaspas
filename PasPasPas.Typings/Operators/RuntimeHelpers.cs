@@ -1,5 +1,5 @@
-﻿using PasPasPas.Global.Runtime;
-using PasPasPas.Parsing.SyntaxTree.Types;
+﻿using PasPasPas.Global.Constants;
+using PasPasPas.Global.Runtime;
 using PasPasPas.Typings.Common;
 
 namespace PasPasPas.Typings.Operators {
@@ -9,19 +9,26 @@ namespace PasPasPas.Typings.Operators {
     /// </summary>
     public static class RuntimeHelpers {
 
+        private static ITypeReference GetBaseTypeOfSubrangeType(this IRuntimeValueFactory runtime, int typeId)
+            => runtime.Types.MakeReference(runtime.Types.Resolver.GetBaseTypeOfSubrangeType(typeId));
+
         /// <summary>
         ///     simple helper: get arithmetic operations for an unary operator
         /// </summary>
         /// <param name="runtime">runtime to use</param>
-        /// <param name="typeKind">type kind of the arithmetics interface</param>
+        /// <param name="type">type reference</param>
         /// <returns></returns>
-        public static IArithmeticOperations GetArithmeticOperators(this IRuntimeValueFactory runtime, CommonTypeKind typeKind) {
+        public static IArithmeticOperations GetArithmeticOperators(this IRuntimeValueFactory runtime, ITypeReference type) {
+            var typeKind = type.TypeKind;
 
             if (typeKind.IsIntegral())
                 return runtime.Integers;
 
             if (typeKind == CommonTypeKind.RealType)
                 return runtime.RealNumbers;
+
+            if (typeKind == CommonTypeKind.SubrangeType)
+                return runtime.GetArithmeticOperators(runtime.GetBaseTypeOfSubrangeType(type.TypeId));
 
             return null;
         }
@@ -47,10 +54,12 @@ namespace PasPasPas.Typings.Operators {
         ///     simple helper get arithmetic operation for a binary operator
         /// </summary>
         /// <param name="runtime">runtime to use</param>
-        /// <param name="left">left operand</param>
-        /// <param name="right">right operand</param>
+        /// <param name="leftType">left operand</param>
+        /// <param name="rightType">right operand</param>
         /// <returns></returns>
-        public static IArithmeticOperations GetArithmeticOperators(this IRuntimeValueFactory runtime, CommonTypeKind left, CommonTypeKind right) {
+        public static IArithmeticOperations GetArithmeticOperators(this IRuntimeValueFactory runtime, ITypeReference leftType, ITypeReference rightType) {
+            var left = leftType.TypeKind;
+            var right = rightType.TypeKind;
 
             if (left == CommonTypeKind.RealType && right.IsNumerical())
                 return runtime.RealNumbers;
@@ -60,6 +69,12 @@ namespace PasPasPas.Typings.Operators {
 
             if (right.IsNumerical() && left.IsNumerical())
                 return runtime.Integers;
+
+            if (left == CommonTypeKind.SubrangeType)
+                return GetArithmeticOperators(runtime, runtime.GetBaseTypeOfSubrangeType(leftType.TypeId), rightType);
+
+            if (right == CommonTypeKind.SubrangeType)
+                return GetArithmeticOperators(runtime, leftType, runtime.GetBaseTypeOfSubrangeType(rightType.TypeId));
 
             return null;
         }
@@ -86,10 +101,12 @@ namespace PasPasPas.Typings.Operators {
         ///     simple helper: get relational operations for a binary operator
         /// </summary>
         /// <param name="runtime">runtime to use</param>
-        /// <param name="left">left operand</param>
-        /// <param name="right">right operand</param>
+        /// <param name="leftType">left operand</param>
+        /// <param name="rightType">right operand</param>
         /// <returns></returns>
-        public static IRelationalOperations GetRelationalOperators(this IRuntimeValueFactory runtime, CommonTypeKind left, CommonTypeKind right) {
+        public static IRelationalOperations GetRelationalOperators(this IRuntimeValueFactory runtime, ITypeReference leftType, ITypeReference rightType) {
+            var left = leftType.TypeKind;
+            var right = rightType.TypeKind;
 
             if (left == CommonTypeKind.RealType && right.IsNumerical())
                 return runtime.RealNumbers;

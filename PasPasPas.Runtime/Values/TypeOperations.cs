@@ -29,6 +29,12 @@ namespace PasPasPas.Runtime.Values {
         public IValue Nil { get; }
             = new SpecialValue(SpecialConstantKind.Nil, KnownTypeIds.GenericPointer);
 
+        /// <summary>
+        ///     type resolver
+        /// </summary>
+        public ITypeKindResolver Resolver
+            => resolver;
+
         private ITypeReference MakeIndeterminedValue(int typeId)
             => new IndeterminedRuntimeValue(typeId, resolver.GetTypeKindOf(typeId));
 

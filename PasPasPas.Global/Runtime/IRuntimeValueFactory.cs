@@ -1,6 +1,4 @@
-﻿using SharpFloat.FloatingPoint;
-
-namespace PasPasPas.Global.Runtime {
+﻿namespace PasPasPas.Global.Runtime {
 
     /// <summary>
     ///     factory to create runtime values and to perform runtime operations

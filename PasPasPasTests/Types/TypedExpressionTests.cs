@@ -1,5 +1,6 @@
 ﻿using System;
 using PasPasPas.Global.Constants;
+using PasPasPas.Typings.Common;
 using PasPasPasTests.Common;
 
 namespace PasPasPasTests.Types {
@@ -367,6 +368,10 @@ namespace PasPasPasTests.Types {
                 Tuple.Create("Int64", KnownTypeIds.Int64Type),
             };
 
+            // subrange types
+            AssertExprTypeByVar("-1..1", "+ a", RegisteredTypes.SMALLEST_USER_TYPE_ID);
+            AssertExprTypeByVar("-1..1", "- a", RegisteredTypes.SMALLEST_USER_TYPE_ID);
+
             AssertExprTypeByVar("Byte", "+ a", KnownTypeIds.ByteType);
             AssertExprTypeByVar("Word", "+ a", KnownTypeIds.WordType);
             AssertExprTypeByVar("Cardinal", "+ a", KnownTypeIds.CardinalType);
@@ -394,6 +399,15 @@ namespace PasPasPasTests.Types {
                 AssertExprTypeByVar(e.Item1, "a mod b", e.Item2);
                 AssertExprTypeByVar(e.Item1, "a / b", KnownTypeIds.Extended);
             }
+
+            // subrange type
+            AssertExprTypeByVar("-1..1", "a + b", KnownTypeIds.IntegerType);
+            AssertExprTypeByVar("-1..1", "a - b", KnownTypeIds.IntegerType);
+            AssertExprTypeByVar("-1..1", "a div b", KnownTypeIds.IntegerType);
+            AssertExprTypeByVar("-1..1", "a * b", KnownTypeIds.IntegerType);
+            AssertExprTypeByVar("-1..1", "a mod b", KnownTypeIds.IntegerType);
+            AssertExprTypeByVar("-1..1", "a / b", KnownTypeIds.Extended);
+
         }
 
     }

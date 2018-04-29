@@ -68,7 +68,7 @@ namespace PasPasPas.Typings.Operators {
         /// <returns>operator result</returns>
         protected override ITypeReference EvaluateUnaryOperator(Signature input) {
             var operand = input[0];
-            var operations = Runtime.GetArithmeticOperators(GetTypeKind(operand));
+            var operations = Runtime.GetArithmeticOperators(operand);
 
             if (operations == null)
                 return GetErrorTypeReference();
@@ -103,7 +103,7 @@ namespace PasPasPas.Typings.Operators {
             if (Kind == DefinedOperators.SlashOperation)
                 return EvaluateRealDivOperator(left, right);
 
-            var operations = Runtime.GetArithmeticOperators(GetTypeKind(left), GetTypeKind(right));
+            var operations = Runtime.GetArithmeticOperators(left, right);
 
             if (operations == null)
                 return GetErrorTypeReference();

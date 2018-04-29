@@ -31,7 +31,12 @@ namespace PasPasPas.Typings.Common {
 
         private readonly UnitType systemUnit;
         private readonly object idLock = new object();
-        private int userTypeIds = 1000;
+
+        /// <summary>
+        ///     first use type id
+        /// </summary>
+        public const int SMALLEST_USER_TYPE_ID = 1000;
+        private int userTypeIds = SMALLEST_USER_TYPE_ID;
 
         /// <summary>
         ///     system unit
@@ -341,5 +346,16 @@ namespace PasPasPas.Typings.Common {
         /// <returns>type reference</returns>
         public ITypeReference MakeReference(int typeId)
             => Runtime.Types.MakeReference(typeId);
+
+        /// <summary>
+        ///     get the base type of a subrange type
+        /// </summary>
+        /// <param name="typeId"></param>
+        /// <returns></returns>
+        public int GetBaseTypeOfSubrangeType(int typeId) {
+            if (types.TryGetValue(typeId, out var typeDef) && typeDef is Simple.SubrangeType subrange)
+                return subrange.BaseType.TypeId;
+            return KnownTypeIds.ErrorType;
+        }
     }
 }

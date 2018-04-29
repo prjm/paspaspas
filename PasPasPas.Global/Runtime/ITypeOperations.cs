@@ -11,6 +11,11 @@
         IValue Nil { get; }
 
         /// <summary>
+        ///     type resolver
+        /// </summary>
+        ITypeKindResolver Resolver { get; }
+
+        /// <summary>
         ///     produces a reference to a type with indeterminate compile-time value
         /// </summary>
         /// <param name="typeId">type id</param>

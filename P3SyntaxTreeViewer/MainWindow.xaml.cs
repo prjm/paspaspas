@@ -126,17 +126,7 @@ namespace P3SyntaxTreeViewer {
                 }
                 else {
                     treeViewItem.Header += " [" + t.ToString() + "]";
-                    treeViewItem.Header += " " + t.TypeKind.ToString();
                 }
-
-                if (t is ArrayType array)
-                    treeViewItem.Header += " of " + array.BaseType?.TypeKind.ToString();
-
-                if (t is PasPasPas.Typings.Simple.SubrangeType subrange)
-                    treeViewItem.Header += " of " + subrange.BaseType?.TypeKind.ToString();
-
-                if (t is SetType set)
-                    treeViewItem.Header += " of " + set.BaseType?.TypeKind.ToString();
 
                 if (typeInfo.TypeInfo.IsConstant)
                     treeViewItem.Header += "*";

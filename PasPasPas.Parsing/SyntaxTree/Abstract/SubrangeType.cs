@@ -65,12 +65,5 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
             visitor.EndVisit(this);
         }
 
-        /// <summary>
-        ///     format this subrange type
-        /// </summary>
-        /// <returns></returns>
-        public override string ToString() {
-            return $"Subrange {RangeStart}..{RangeEnd}";
-        }
     }
 }

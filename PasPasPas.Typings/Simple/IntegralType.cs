@@ -42,7 +42,7 @@ namespace PasPasPas.Typings.Simple {
             => bitSize;
 
         /// <summary>
-        ///     get the highes element
+        ///     get the highest element
         /// </summary>
         public ulong HighestElement {
             get {
@@ -85,5 +85,13 @@ namespace PasPasPas.Typings.Simple {
 
             return base.CanBeAssignedFrom(otherType);
         }
+
+        /// <summary>
+        ///     short info
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+            => $"Int{BitSize}";
+
     }
 }
