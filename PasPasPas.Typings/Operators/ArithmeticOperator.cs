@@ -6,10 +6,16 @@ using PasPasPas.Parsing.SyntaxTree.Types;
 namespace PasPasPas.Typings.Operators {
 
     /// <summary>
-    ///     arithmetic operators
+    ///     provides arithmetic operators: type deduction and constant propagation
     /// </summary>
     public class ArithmeticOperator : OperatorBase {
 
+        /// <summary>
+        ///     helper function: register an operator
+        /// </summary>
+        /// <param name="registry">type registry</param>
+        /// <param name="kind">operator kind</param>
+        /// <param name="arity">operator arity</param>
         private static void Register(ITypeRegistry registry, int kind, int arity = 2)
             => registry.RegisterOperator(new ArithmeticOperator(kind, arity));
 
@@ -20,12 +26,12 @@ namespace PasPasPas.Typings.Operators {
         public static void RegisterOperators(ITypeRegistry registry) {
             Register(registry, DefinedOperators.UnaryMinus, 1);
             Register(registry, DefinedOperators.UnaryPlus, 1);
-            Register(registry, DefinedOperators.PlusOperation);
-            Register(registry, DefinedOperators.MinusOperation);
-            Register(registry, DefinedOperators.TimesOperation);
-            Register(registry, DefinedOperators.DivOperation);
-            Register(registry, DefinedOperators.ModOperation);
-            Register(registry, DefinedOperators.SlashOperation);
+            Register(registry, DefinedOperators.PlusOperator);
+            Register(registry, DefinedOperators.MinusOperator);
+            Register(registry, DefinedOperators.TimesOperator);
+            Register(registry, DefinedOperators.DivOperator);
+            Register(registry, DefinedOperators.ModOperator);
+            Register(registry, DefinedOperators.SlashOperator);
         }
 
         /// <summary>
@@ -33,7 +39,8 @@ namespace PasPasPas.Typings.Operators {
         /// </summary>
         /// <param name="withKind">operator kind</param>
         /// <param name="withArity">arity</param>
-        public ArithmeticOperator(int withKind, int withArity = 2) : base(withKind, withArity) { }
+        public ArithmeticOperator(int withKind, int withArity = 2)
+            : base(withKind, withArity) { }
 
         /// <summary>
         ///     get the operator name
@@ -45,17 +52,17 @@ namespace PasPasPas.Typings.Operators {
                         return "+";
                     case DefinedOperators.UnaryMinus:
                         return "-";
-                    case DefinedOperators.PlusOperation:
+                    case DefinedOperators.PlusOperator:
                         return "+";
-                    case DefinedOperators.MinusOperation:
+                    case DefinedOperators.MinusOperator:
                         return "-";
-                    case DefinedOperators.TimesOperation:
+                    case DefinedOperators.TimesOperator:
                         return "*";
-                    case DefinedOperators.DivOperation:
+                    case DefinedOperators.DivOperator:
                         return "div";
-                    case DefinedOperators.ModOperation:
+                    case DefinedOperators.ModOperator:
                         return "mod";
-                    case DefinedOperators.SlashOperation:
+                    case DefinedOperators.SlashOperator:
                         return "/";
                 }
                 throw new InvalidOperationException();
@@ -84,24 +91,25 @@ namespace PasPasPas.Typings.Operators {
         }
 
         private ITypeReference EvaluateUnaryOperand(bool negate, ITypeReference operand, IArithmeticOperations operations) {
-            if (operand.IsConstant)
+            if (operand.IsConstant) {
                 if (negate)
                     return operations.Negate(operand);
                 else
                     return operand;
-            else {
-                if (operand.TypeKind != CommonTypeKind.SubrangeType)
-                    return operand;
-
-                var baseType = TypeRegistry.GetTypeByIdOrUndefinedType(TypeRegistry.GetBaseTypeOfSubrangeType(operand.TypeId)) as IIntegralType;
-
-                if (baseType != null && baseType.BitSize < 32)
-                    return Runtime.Types.MakeReference(KnownTypeIds.IntegerType);
-                else if (baseType != null)
-                    return Runtime.Types.MakeReference(baseType.TypeId);
-
-                return GetErrorTypeReference();
             }
+
+            if (operand.TypeKind != CommonTypeKind.SubrangeType)
+                return operand;
+
+            var baseType = TypeRegistry.GetTypeByIdOrUndefinedType(TypeRegistry.GetBaseTypeOfSubrangeType(operand.TypeId)) as IIntegralType;
+
+            if (baseType != null && baseType.BitSize < 32)
+                return Runtime.Types.MakeReference(KnownTypeIds.IntegerType);
+
+            if (baseType != null)
+                return Runtime.Types.MakeReference(baseType.TypeId);
+
+            return GetErrorTypeReference();
         }
 
         /// <summary>
@@ -113,13 +121,13 @@ namespace PasPasPas.Typings.Operators {
             var left = input[0];
             var right = input[1];
 
-            if (Kind == DefinedOperators.DivOperation)
+            if (Kind == DefinedOperators.DivOperator)
                 return EvaluateDivOperator(left, right);
 
-            if (Kind == DefinedOperators.ModOperation)
+            if (Kind == DefinedOperators.ModOperator)
                 return EvaluateModOperator(left, right);
 
-            if (Kind == DefinedOperators.SlashOperation)
+            if (Kind == DefinedOperators.SlashOperator)
                 return EvaluateRealDivOperator(left, right);
 
             var operations = Runtime.GetArithmeticOperators(left, right);
@@ -127,13 +135,13 @@ namespace PasPasPas.Typings.Operators {
             if (operations == null)
                 return GetErrorTypeReference();
 
-            if (Kind == DefinedOperators.PlusOperation)
+            if (Kind == DefinedOperators.PlusOperator)
                 return EvaluatePlusOperator(left, right, operations);
 
-            if (Kind == DefinedOperators.MinusOperation)
+            if (Kind == DefinedOperators.MinusOperator)
                 return EvaluateMinusOperator(left, right, operations);
 
-            if (Kind == DefinedOperators.TimesOperation)
+            if (Kind == DefinedOperators.TimesOperator)
                 return EvaluateMultiplicationOperator(left, right, operations);
 
             return GetErrorTypeReference();

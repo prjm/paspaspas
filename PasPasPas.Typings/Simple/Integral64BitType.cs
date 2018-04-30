@@ -64,5 +64,11 @@ namespace PasPasPas.Typings.Simple {
             return base.CanBeAssignedFrom(otherType);
         }
 
+        /// <summary>
+        ///     format this type as string
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+            => $"{(signed ? string.Empty : "U")}Int64";
     }
 }

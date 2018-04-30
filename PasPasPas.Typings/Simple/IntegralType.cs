@@ -91,7 +91,7 @@ namespace PasPasPas.Typings.Simple {
         /// </summary>
         /// <returns></returns>
         public override string ToString()
-            => $"Int{BitSize}";
+            => $"{(signed ? string.Empty : "U")}Int{BitSize}";
 
     }
 }

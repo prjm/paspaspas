@@ -448,6 +448,41 @@ namespace PasPasPasTests.Types {
             AssertExprTypeByVar("-1..1", "a and b", KnownTypeIds.ShortInt);
         }
 
+        [TestCase]
+        public void TestShiftOperators() {
+            AssertExprTypeByVar("Byte", "a shl 33", KnownTypeIds.ErrorType);
+            AssertExprTypeByVar("Word", "a shl 33", KnownTypeIds.ErrorType);
+            AssertExprTypeByVar("Cardinal", "a shl 33", KnownTypeIds.ErrorType);
+            AssertExprTypeByVar("UInt64", "a shl 33", KnownTypeIds.Uint64Type);
+            AssertExprTypeByVar("ShortInt", "a shl 33", KnownTypeIds.ErrorType);
+            AssertExprTypeByVar("SmallInt", "a shl 33", KnownTypeIds.ErrorType);
+            AssertExprTypeByVar("Integer", "a shl 33", KnownTypeIds.ErrorType);
+            AssertExprTypeByVar("Int64", "a shl 33", KnownTypeIds.Int64Type);
+            AssertExprTypeByVar("Byte", "a shl 32", KnownTypeIds.IntegerType);
+            AssertExprTypeByVar("Word", "a shl 32", KnownTypeIds.IntegerType);
+            AssertExprTypeByVar("Cardinal", "a shl 32", KnownTypeIds.CardinalType);
+            AssertExprTypeByVar("UInt64", "a shl 32", KnownTypeIds.Uint64Type);
+            AssertExprTypeByVar("ShortInt", "a shl 32", KnownTypeIds.IntegerType);
+            AssertExprTypeByVar("SmallInt", "a shl 32", KnownTypeIds.IntegerType);
+            AssertExprTypeByVar("Integer", "a shl 32", KnownTypeIds.IntegerType);
+            AssertExprTypeByVar("Int64", "a shl 32", KnownTypeIds.Int64Type);
+            AssertExprTypeByVar("Byte", "a shr 33", KnownTypeIds.ErrorType);
+            AssertExprTypeByVar("Word", "a shr 33", KnownTypeIds.ErrorType);
+            AssertExprTypeByVar("Cardinal", "a shr 33", KnownTypeIds.ErrorType);
+            AssertExprTypeByVar("UInt64", "a shr 33", KnownTypeIds.Uint64Type);
+            AssertExprTypeByVar("ShortInt", "a shr 33", KnownTypeIds.ErrorType);
+            AssertExprTypeByVar("SmallInt", "a shr 33", KnownTypeIds.ErrorType);
+            AssertExprTypeByVar("Integer", "a shr 33", KnownTypeIds.ErrorType);
+            AssertExprTypeByVar("Int64", "a shr 33", KnownTypeIds.Int64Type);
+            AssertExprTypeByVar("Byte", "a shr 32", KnownTypeIds.IntegerType);
+            AssertExprTypeByVar("Word", "a shr 32", KnownTypeIds.IntegerType);
+            AssertExprTypeByVar("Cardinal", "a shr 32", KnownTypeIds.CardinalType);
+            AssertExprTypeByVar("UInt64", "a shr 32", KnownTypeIds.Uint64Type);
+            AssertExprTypeByVar("ShortInt", "a shr 32", KnownTypeIds.IntegerType);
+            AssertExprTypeByVar("SmallInt", "a shr 32", KnownTypeIds.IntegerType);
+            AssertExprTypeByVar("Integer", "a shr 32", KnownTypeIds.IntegerType);
+            AssertExprTypeByVar("Int64", "a shr 32", KnownTypeIds.Int64Type);
+        }
 
     }
 }

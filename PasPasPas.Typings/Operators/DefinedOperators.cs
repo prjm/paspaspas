@@ -11,108 +11,107 @@
         public const int Undefined = -1;
 
         /// <summary>
-        ///     not operator
+        ///     operator id: <c>not</c> operator
         /// </summary>
-        public const int NotOperation = 10;
+        public const int NotOperator = 10;
 
         /// <summary>
-        ///     and operator
+        ///     operator id: <c>and</c> operator
         /// </summary>
-        public const int AndOperation = 11;
+        public const int AndOperator = 11;
 
         /// <summary>
-        ///     xor operator
+        ///     <c>xor</c> operator
         /// </summary>
-        public const int XorOperation = 12;
-
+        public const int XorOperator = 12;
 
         /// <summary>
-        ///     or operator
+        ///     operator id: <c>or</c> operator
         /// </summary>
-        public const int OrOperation = 13;
+        public const int OrOperator = 13;
 
         /// <summary>
-        ///     add operator
+        ///     operator id: <c>+</c> operator
         /// </summary>
-        public const int PlusOperation = 14;
+        public const int PlusOperator = 14;
 
         /// <summary>
-        ///     subtract operator
+        ///     operator id: <c>-</c> operator
         /// </summary>
-        public const int MinusOperation = 15;
+        public const int MinusOperator = 15;
 
         /// <summary>
-        ///     multiply operator
+        ///     operator id: <c>*</c> operator
         /// </summary>
-        public const int TimesOperation = 16;
+        public const int TimesOperator = 16;
 
         /// <summary>
-        ///     div operator
+        ///     operator id: <c>div</c> operator (integer division)
         /// </summary>
-        public const int DivOperation = 17;
+        public const int DivOperator = 17;
 
         /// <summary>
-        ///     module operator
+        ///     operator id: <c>mod</c> operator (integer modulo)
         /// </summary>
-        public const int ModOperation = 18;
+        public const int ModOperator = 18;
 
         /// <summary>
-        ///     division operator
+        ///     operator id: <c>/</c> operator (floating point division)
         /// </summary>
-        public const int SlashOperation = 19;
+        public const int SlashOperator = 19;
 
         /// <summary>
-        ///     unary minus
+        ///     operator id: unary minus
         /// </summary>
         public const int UnaryMinus = 20;
 
         /// <summary>
-        ///     unary plus
+        ///     operator id: unary plus
         /// </summary>
         public const int UnaryPlus = 21;
 
         /// <summary>
-        ///     shift right operation
+        ///     operator id: <c>shr</c> operator
         /// </summary>
-        public const int ShrOperation = 22;
+        public const int ShrOperator = 22;
 
         /// <summary>
-        ///     shift left operation
+        ///     operator id: <c>shl</c> operator
         /// </summary>
-        public const int ShlOperation = 23;
+        public const int ShlOperator = 23;
 
         /// <summary>
-        ///     equals operator
+        ///     operator id: equals operator
         /// </summary>
         public const int EqualsOperator = 24;
 
         /// <summary>
-        ///     not equals operator
+        ///     operator id: not equals operator
         /// </summary>
         public const int NotEqualsOperator = 25;
 
         /// <summary>
-        ///     less then operator
+        ///     operator id: less then operator
         /// </summary>
         public const int LessThen = 26;
 
         /// <summary>
-        ///     greater then operator
+        ///     operator id: greater then operator
         /// </summary>
         public const int GreaterThen = 27;
 
         /// <summary>
-        ///     less then or equals operator
+        ///     operator id: less then or equals operator
         /// </summary>
         public const int LessThenOrEqual = 28;
 
         /// <summary>
-        ///     greater then or equals operator
+        ///     operator id: greater then or equals operator
         /// </summary>
         public const int GreaterThenEqual = 29;
 
         /// <summary>
-        ///     string concatenate operator
+        ///     operator id: string concatenate operator
         /// </summary>
         public const int ConcatOperator = 30;
 

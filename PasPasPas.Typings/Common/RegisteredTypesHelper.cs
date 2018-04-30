@@ -117,7 +117,6 @@ namespace PasPasPas.Typings.Common {
             return KnownTypeIds.ErrorType;
         }
 
-
         /// <summary>
         ///     helper method: map an expression kind to an registered operator id
         /// </summary>
@@ -146,27 +145,27 @@ namespace PasPasPas.Typings.Common {
                 case ExpressionKind.EqualsSign:
                     return DefinedOperators.EqualsOperator;
                 case ExpressionKind.Xor:
-                    return DefinedOperators.XorOperation;
+                    return DefinedOperators.XorOperator;
                 case ExpressionKind.Or:
-                    return DefinedOperators.OrOperation;
+                    return DefinedOperators.OrOperator;
                 case ExpressionKind.Minus:
-                    return DefinedOperators.MinusOperation;
+                    return DefinedOperators.MinusOperator;
                 case ExpressionKind.Shr:
-                    return DefinedOperators.ShrOperation;
+                    return DefinedOperators.ShrOperator;
                 case ExpressionKind.Shl:
-                    return DefinedOperators.ShlOperation;
+                    return DefinedOperators.ShlOperator;
                 case ExpressionKind.And:
-                    return DefinedOperators.AndOperation;
+                    return DefinedOperators.AndOperator;
                 case ExpressionKind.Mod:
-                    return DefinedOperators.ModOperation;
+                    return DefinedOperators.ModOperator;
                 case ExpressionKind.Slash:
-                    return DefinedOperators.SlashOperation;
+                    return DefinedOperators.SlashOperator;
                 case ExpressionKind.Times:
-                    return DefinedOperators.TimesOperation;
+                    return DefinedOperators.TimesOperator;
                 case ExpressionKind.Div:
-                    return DefinedOperators.DivOperation;
+                    return DefinedOperators.DivOperator;
                 case ExpressionKind.Not:
-                    return DefinedOperators.NotOperation;
+                    return DefinedOperators.NotOperator;
                 case ExpressionKind.UnaryMinus:
                     return DefinedOperators.UnaryMinus;
                 case ExpressionKind.UnaryPlus:
@@ -179,7 +178,7 @@ namespace PasPasPas.Typings.Common {
                     return DefinedOperators.ConcatOperator;
 
                 if (leftType.IsNumerical() && rightType.IsNumerical())
-                    return DefinedOperators.PlusOperation;
+                    return DefinedOperators.PlusOperator;
 
                 if (leftType == CommonTypeKind.SubrangeType)
                     return typeRegistry.GetOperatorId(kind, typeRegistry.MakeReference(typeRegistry.GetBaseTypeOfSubrangeType(left.TypeId)), right);

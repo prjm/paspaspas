@@ -204,7 +204,7 @@ namespace PasPasPas.Typings.Common {
             }
 
             if (element.Kind == ExpressionKind.Not) {
-                element.TypeInfo = GetTypeOfOperator(DefinedOperators.NotOperation, GetTypeDefinition(operand));
+                element.TypeInfo = GetTypeOfOperator(DefinedOperators.NotOperator, GetTypeDefinition(operand));
             }
             else if (element.Kind == ExpressionKind.UnaryMinus) {
                 element.TypeInfo = GetTypeOfOperator(DefinedOperators.UnaryMinus, GetTypeDefinition(operand));

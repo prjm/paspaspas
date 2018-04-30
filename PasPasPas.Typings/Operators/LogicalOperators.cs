@@ -1,54 +1,56 @@
 ﻿using System;
+using PasPasPas.Global.Constants;
 using PasPasPas.Global.Runtime;
 using PasPasPas.Parsing.SyntaxTree.Types;
 
 namespace PasPasPas.Typings.Operators {
 
     /// <summary>
-    ///     logical operators
+    ///     logical operators: type deduction and constant propagation
     /// </summary>
-    public class LogicalOperators : OperatorBase {
+    public class LogicalOperator : OperatorBase {
 
         private static void Register(ITypeRegistry registry, int kind, int arity = 2)
-            => registry.RegisterOperator(new LogicalOperators(kind, arity));
+            => registry.RegisterOperator(new LogicalOperator(kind, arity));
 
         /// <summary>
         ///     register logical operators
         /// </summary>
         /// <param name="registry">type registry</param>
         public static void RegisterOperators(ITypeRegistry registry) {
-            Register(registry, DefinedOperators.NotOperation, 1);
-            Register(registry, DefinedOperators.AndOperation);
-            Register(registry, DefinedOperators.XorOperation);
-            Register(registry, DefinedOperators.OrOperation);
-            Register(registry, DefinedOperators.ShlOperation);
-            Register(registry, DefinedOperators.ShrOperation);
+            Register(registry, DefinedOperators.NotOperator, 1);
+            Register(registry, DefinedOperators.AndOperator);
+            Register(registry, DefinedOperators.XorOperator);
+            Register(registry, DefinedOperators.OrOperator);
+            Register(registry, DefinedOperators.ShlOperator);
+            Register(registry, DefinedOperators.ShrOperator);
         }
 
         /// <summary>
-        ///     create a new logical operation
+        ///     create a new logical operator
         /// </summary>
         /// <param name="withKind">operator kind</param>
         /// <param name="withArity">operator arity</param>
-        public LogicalOperators(int withKind, int withArity) : base(withKind, withArity) { }
+        public LogicalOperator(int withKind, int withArity)
+            : base(withKind, withArity) { }
 
         /// <summary>
-        ///     operation name
+        ///     operator name
         /// </summary>
         public override string Name {
             get {
                 switch (Kind) {
-                    case DefinedOperators.AndOperation:
+                    case DefinedOperators.AndOperator:
                         return "and";
-                    case DefinedOperators.OrOperation:
+                    case DefinedOperators.OrOperator:
                         return "or";
-                    case DefinedOperators.XorOperation:
+                    case DefinedOperators.XorOperator:
                         return "xor";
-                    case DefinedOperators.NotOperation:
+                    case DefinedOperators.NotOperator:
                         return "not";
-                    case DefinedOperators.ShlOperation:
+                    case DefinedOperators.ShlOperator:
                         return "shl";
-                    case DefinedOperators.ShrOperation:
+                    case DefinedOperators.ShrOperator:
                         return "shr";
                 }
                 throw new InvalidOperationException();
@@ -67,7 +69,7 @@ namespace PasPasPas.Typings.Operators {
             if (operations == null)
                 return GetErrorTypeReference();
 
-            if (Kind == DefinedOperators.NotOperation)
+            if (Kind == DefinedOperators.NotOperator)
                 if (operand.IsConstant)
                     return operations.Not(operand);
                 else
@@ -85,27 +87,63 @@ namespace PasPasPas.Typings.Operators {
             var left = input[0];
             var right = input[1];
 
-            if (Kind == DefinedOperators.ShrOperation)
-                return Runtime.Integers.Shr(left, right);
+            if (Kind == DefinedOperators.ShrOperator)
+                return EvaluateShiftOperator(toLeft: false, left, right);
 
-            if (Kind == DefinedOperators.ShlOperation)
-                return Runtime.Integers.Shl(left, right);
+            if (Kind == DefinedOperators.ShlOperator)
+                return EvaluateShiftOperator(toLeft: true, left, right);
 
             var operations = Runtime.GetLogicalOperators(left, right);
 
             if (operations == null)
                 return GetErrorTypeReference();
 
-            if (Kind == DefinedOperators.AndOperation)
+            if (Kind == DefinedOperators.AndOperator)
                 return EvaluateAndOperator(left, right, operations);
 
-            if (Kind == DefinedOperators.OrOperation)
+            if (Kind == DefinedOperators.OrOperator)
                 return EvaluateOrOperator(left, right, operations);
 
-            if (Kind == DefinedOperators.XorOperation)
+            if (Kind == DefinedOperators.XorOperator)
                 return EvaluateXorOperator(left, right, operations);
 
             return GetErrorTypeReference();
+        }
+
+        private ITypeReference EvaluateShiftOperator(bool toLeft, ITypeReference left, ITypeReference right) {
+            if (left.IsConstant && right.IsConstant)
+                if (toLeft)
+                    return Runtime.Integers.Shl(left, right);
+                else
+                    return Runtime.Integers.Shr(left, right);
+
+            var baseType = TypeRegistry.GetTypeByIdOrUndefinedType(left.TypeId);
+
+            if (baseType.TypeKind == CommonTypeKind.SubrangeType)
+                baseType = TypeRegistry.GetTypeByIdOrUndefinedType(TypeRegistry.GetBaseTypeOfSubrangeType(baseType.TypeId));
+
+            var intType = baseType as IIntegralType;
+
+            if (intType == null)
+                return GetErrorTypeReference();
+
+            if (right.IsConstant) {
+                if (right is IIntegerValue intValue && intValue.SignedValue >= 0) {
+                    if (intValue.SignedValue <= 32 && intType.BitSize < 32)
+                        return Runtime.Types.MakeReference(KnownTypeIds.IntegerType);
+                    if (intValue.SignedValue <= 32 && intType.BitSize == 32)
+                        return Runtime.Types.MakeReference(baseType.TypeId);
+                    if (intType.BitSize == 64)
+                        return Runtime.Types.MakeReference(baseType.TypeId);
+
+                }
+                return GetErrorTypeReference();
+            }
+
+            if (intType.BitSize < 32)
+                return TypeRegistry.MakeReference(KnownTypeIds.IntegerType);
+
+            return TypeRegistry.MakeReference(intType.TypeId);
         }
 
         private ITypeReference EvaluateXorOperator(ITypeReference left, ITypeReference right, ILogicalOperations operations) {

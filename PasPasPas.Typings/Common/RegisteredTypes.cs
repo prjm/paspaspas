@@ -107,7 +107,7 @@ namespace PasPasPas.Typings.Common {
         ///     register common operators
         /// </summary>
         private void RegisterCommonOperators() {
-            LogicalOperators.RegisterOperators(this);
+            LogicalOperator.RegisterOperators(this);
             ArithmeticOperator.RegisterOperators(this);
             RelationalOperators.RegisterOperators(this);
             StringOperators.RegisterOperators(this);
