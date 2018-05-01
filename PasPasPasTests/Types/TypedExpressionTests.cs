@@ -484,5 +484,82 @@ namespace PasPasPasTests.Types {
             AssertExprTypeByVar("Int64", "a shr 32", KnownTypeIds.Int64Type);
         }
 
+        [TestCase]
+        public void TestRelationalOperatorsStringIndirect() {
+            AssertExprTypeByVar("String", "a = b", KnownTypeIds.BooleanType);
+            AssertExprTypeByVar("String", "a <> b", KnownTypeIds.BooleanType);
+            AssertExprTypeByVar("String", "a < b", KnownTypeIds.BooleanType);
+            AssertExprTypeByVar("String", "a > b", KnownTypeIds.BooleanType);
+            AssertExprTypeByVar("String", "a <= b", KnownTypeIds.BooleanType);
+            AssertExprTypeByVar("String", "a >= b", KnownTypeIds.BooleanType);
+            AssertExprTypeByVar("Char", "a = b", KnownTypeIds.BooleanType);
+            AssertExprTypeByVar("Char", "a <> b", KnownTypeIds.BooleanType);
+            AssertExprTypeByVar("Char", "a < b", KnownTypeIds.BooleanType);
+            AssertExprTypeByVar("Char", "a > b", KnownTypeIds.BooleanType);
+            AssertExprTypeByVar("Char", "a <= b", KnownTypeIds.BooleanType);
+            AssertExprTypeByVar("Char", "a >= b", KnownTypeIds.BooleanType);
+            AssertExprTypeByVar("AnsiChar", "a = b", KnownTypeIds.BooleanType);
+            AssertExprTypeByVar("AnsiChar", "a <> b", KnownTypeIds.BooleanType);
+            AssertExprTypeByVar("AnsiChar", "a < b", KnownTypeIds.BooleanType);
+            AssertExprTypeByVar("AnsiChar", "a > b", KnownTypeIds.BooleanType);
+            AssertExprTypeByVar("AnsiChar", "a <= b", KnownTypeIds.BooleanType);
+            AssertExprTypeByVar("AnsiChar", "a >= b", KnownTypeIds.BooleanType);
+
+
+        }
+
+        [TestCase]
+        public void TestRelationalOperatorsIntIndirect() {
+            var d = new[] {
+                Tuple.Create("Byte", KnownTypeIds.ByteType),
+                Tuple.Create("Word", KnownTypeIds.WordType),
+                Tuple.Create("Cardinal", KnownTypeIds.CardinalType),
+                Tuple.Create("UInt64", KnownTypeIds.Uint64Type),
+                Tuple.Create("SmallInt", KnownTypeIds.SmallInt),
+                Tuple.Create("ShortInt", KnownTypeIds.ShortInt),
+                Tuple.Create("Integer", KnownTypeIds.IntegerType),
+                Tuple.Create("Int64", KnownTypeIds.Int64Type),
+            };
+
+            foreach (var dd in d) {
+                AssertExprTypeByVar(dd.Item1, "a = b", KnownTypeIds.BooleanType);
+                AssertExprTypeByVar(dd.Item1, "a <> b", KnownTypeIds.BooleanType);
+                AssertExprTypeByVar(dd.Item1, "a < b", KnownTypeIds.BooleanType);
+                AssertExprTypeByVar(dd.Item1, "a > b", KnownTypeIds.BooleanType);
+                AssertExprTypeByVar(dd.Item1, "a <= b", KnownTypeIds.BooleanType);
+                AssertExprTypeByVar(dd.Item1, "a >= b", KnownTypeIds.BooleanType);
+            }
+        }
+
+        [TestCase]
+        public void TestRelationalOperatorsBoolIndirect() {
+            AssertExprTypeByVar("Boolean", "a = b", KnownTypeIds.BooleanType);
+            AssertExprTypeByVar("Boolean", "a <> b", KnownTypeIds.BooleanType);
+            AssertExprTypeByVar("Boolean", "a < b", KnownTypeIds.BooleanType);
+            AssertExprTypeByVar("Boolean", "a > b", KnownTypeIds.BooleanType);
+            AssertExprTypeByVar("Boolean", "a <= b", KnownTypeIds.BooleanType);
+            AssertExprTypeByVar("Boolean", "a >= b", KnownTypeIds.BooleanType);
+
+            AssertExprTypeByVar("ByteBool", "a = b", KnownTypeIds.BooleanType);
+            AssertExprTypeByVar("ByteBool", "a <> b", KnownTypeIds.BooleanType);
+            AssertExprTypeByVar("ByteBool", "a < b", KnownTypeIds.BooleanType);
+            AssertExprTypeByVar("ByteBool", "a > b", KnownTypeIds.BooleanType);
+            AssertExprTypeByVar("ByteBool", "a <= b", KnownTypeIds.BooleanType);
+            AssertExprTypeByVar("ByteBool", "a >= b", KnownTypeIds.BooleanType);
+
+            AssertExprTypeByVar("WordBool", "a = b", KnownTypeIds.BooleanType);
+            AssertExprTypeByVar("WordBool", "a <> b", KnownTypeIds.BooleanType);
+            AssertExprTypeByVar("WordBool", "a < b", KnownTypeIds.BooleanType);
+            AssertExprTypeByVar("WordBool", "a > b", KnownTypeIds.BooleanType);
+            AssertExprTypeByVar("WordBool", "a <= b", KnownTypeIds.BooleanType);
+            AssertExprTypeByVar("WordBool", "a >= b", KnownTypeIds.BooleanType);
+        }
+
+        [TestCase]
+        public void TestConcatOperatorIndirect() {
+            AssertExprTypeByVar("UnicodeString", "a + b", KnownTypeIds.UnicodeStringType);
+            AssertExprTypeByVar("AnsiString", "a + b", KnownTypeIds.AnsiStringType);
+        }
+
     }
 }

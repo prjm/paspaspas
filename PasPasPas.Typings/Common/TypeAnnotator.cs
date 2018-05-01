@@ -138,14 +138,14 @@ namespace PasPasPas.Typings.Common {
         }
 
         /// <summary>
-        ///     annotate types at binary operators
+        ///     annotate types for binary operators
         /// </summary>
         /// <param name="element">operator to annotate</param>
         public void EndVisit(BinaryOperator element) {
             var left = GetTypeDefinition(element.LeftOperand);
             var right = GetTypeDefinition(element.RightOperand);
 
-            // special case range operator: this operator is
+            // special case range operator: the range operator is
             // part of a type definition and references types, not values
             if (element.Kind == ExpressionKind.RangeOperator) {
                 DefineSubrangeType(element, left, right);

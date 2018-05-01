@@ -117,7 +117,7 @@ namespace PasPasPas.Typings.Operators {
         /// <param name="minBitSize">minimal operator size</param>
         /// <returns>type reference</returns>
         protected ITypeReference GetSmallestIntegralType(ITypeReference left, ITypeReference right, int minBitSize)
-            => Runtime.Types.MakeReference(TypeRegistry.GetSmallestIntegralTypeOrNext(left.TypeId, right.TypeId, minBitSize));
+            => TypeRegistry.MakeReference(TypeRegistry.GetSmallestIntegralTypeOrNext(left.TypeId, right.TypeId, minBitSize));
 
         /// <summary>
         ///     create a type reference to the smallest integral type for two operands
@@ -130,7 +130,7 @@ namespace PasPasPas.Typings.Operators {
             if (GetTypeKind(left) == CommonTypeKind.RealType || GetTypeKind(right) == CommonTypeKind.RealType)
                 return GetExtendedType();
 
-            return Runtime.Types.MakeReference(TypeRegistry.GetSmallestIntegralTypeOrNext(left.TypeId, right.TypeId, minBitSize));
+            return TypeRegistry.MakeReference(TypeRegistry.GetSmallestIntegralTypeOrNext(left.TypeId, right.TypeId, minBitSize));
         }
 
         /// <summary>
@@ -142,9 +142,9 @@ namespace PasPasPas.Typings.Operators {
         /// <returns>type reference</returns>
         protected ITypeReference GetSmallestBoolOrIntegralType(ITypeReference left, ITypeReference right, int minBitSize) {
             if (GetTypeKind(left) == CommonTypeKind.BooleanType && GetTypeKind(right) == CommonTypeKind.BooleanType)
-                return Runtime.Types.MakeReference(TypeRegistry.GetSmallestBooleanTypeOrNext(left.TypeId, right.TypeId, minBitSize));
+                return TypeRegistry.MakeReference(TypeRegistry.GetSmallestBooleanTypeOrNext(left.TypeId, right.TypeId, minBitSize));
 
-            return Runtime.Types.MakeReference(TypeRegistry.GetSmallestIntegralTypeOrNext(left.TypeId, right.TypeId, minBitSize));
+            return TypeRegistry.MakeReference(TypeRegistry.GetSmallestIntegralTypeOrNext(left.TypeId, right.TypeId, minBitSize));
         }
 
 
@@ -153,7 +153,7 @@ namespace PasPasPas.Typings.Operators {
         /// </summary>
         /// <returns>type reference</returns>
         protected ITypeReference GetExtendedType()
-            => Runtime.Types.MakeReference(KnownTypeIds.Extended);
+            => TypeRegistry.MakeReference(KnownTypeIds.Extended);
 
     }
 }

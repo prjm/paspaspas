@@ -53,6 +53,13 @@ namespace PasPasPas.Typings.Simple {
         /// </summary>
         public override CommonTypeKind TypeKind
             => CommonTypeKind.UnicodeStringType;
+
+        /// <summary>
+        ///     format this type as string
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+            => "UnicodeString";
     }
 
 

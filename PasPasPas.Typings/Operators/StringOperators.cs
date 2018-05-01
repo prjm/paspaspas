@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Linq;
 using PasPasPas.Global.Constants;
 using PasPasPas.Global.Runtime;
 using PasPasPas.Global.Types;
-using PasPasPas.Parsing.SyntaxTree.Types;
-using PasPasPas.Typings.Common;
 
 namespace PasPasPas.Typings.Operators {
 
@@ -58,9 +55,25 @@ namespace PasPasPas.Typings.Operators {
                 return GetErrorTypeReference();
 
             if (Kind == DefinedOperators.ConcatOperator)
-                return operations.Concat(left, right);
+                return EvaluateConcatOperator(left, right, operations);
 
             return GetErrorTypeReference();
+        }
+
+        private ITypeReference EvaluateConcatOperator(ITypeReference left, ITypeReference right, IStringOperations operations) {
+            if (left.IsConstant && right.IsConstant)
+                return operations.Concat(left, right);
+
+            var leftType = TypeRegistry.GetTypeByIdOrUndefinedType(left.TypeId);
+            var rightType = TypeRegistry.GetTypeByIdOrUndefinedType(right.TypeId);
+
+            if (leftType.TypeKind == CommonTypeKind.UnicodeStringType || right.TypeKind == CommonTypeKind.UnicodeStringType)
+                return TypeRegistry.MakeReference(KnownTypeIds.UnicodeStringType);
+
+            if (leftType.TypeKind == CommonTypeKind.WideCharType || rightType.TypeKind == CommonTypeKind.WideCharType)
+                return TypeRegistry.MakeReference(KnownTypeIds.UnicodeStringType);
+
+            return TypeRegistry.MakeReference(KnownTypeIds.AnsiStringType);
         }
     }
 }

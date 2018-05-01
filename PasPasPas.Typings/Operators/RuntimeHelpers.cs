@@ -106,7 +106,7 @@ namespace PasPasPas.Typings.Operators {
                 return GetLogicalOperators(runtime, leftType, runtime.GetBaseTypeOfSubrangeType(rightType.TypeId));
 
 
-            return null;
+            return default;
         }
 
         /// <summary>

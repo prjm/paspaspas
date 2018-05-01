@@ -1,7 +1,7 @@
 ﻿using System;
+using PasPasPas.Global.Constants;
 using PasPasPas.Global.Runtime;
 using PasPasPas.Global.Types;
-using PasPasPas.Parsing.SyntaxTree.Types;
 
 namespace PasPasPas.Typings.Operators {
 
@@ -10,6 +10,11 @@ namespace PasPasPas.Typings.Operators {
     /// </summary>
     public class RelationalOperators : OperatorBase {
 
+        /// <summary>
+        ///     helper function: register an relational operator
+        /// </summary>
+        /// <param name="registry">type registry</param>
+        /// <param name="kind">operator kind to register</param>
         private static void Register(ITypeRegistry registry, int kind)
             => registry.RegisterOperator(new RelationalOperators(kind, 2));
 
@@ -31,7 +36,8 @@ namespace PasPasPas.Typings.Operators {
         /// </summary>
         /// <param name="withKind">operator kind</param>
         /// <param name="withArity">operator arity</param>
-        public RelationalOperators(int withKind, int withArity) : base(withKind, withArity) { }
+        public RelationalOperators(int withKind, int withArity)
+            : base(withKind, withArity) { }
 
         /// <summary>
         ///     get the operator name
@@ -56,12 +62,11 @@ namespace PasPasPas.Typings.Operators {
             }
         }
 
-
         /// <summary>
         ///     evaluate a binary relational operator
         /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
+        /// <param name="input">operator input</param>
+        /// <returns>operator result - constant value or types</returns>
         protected override ITypeReference EvaluateBinaryOperator(Signature input) {
             var left = input[0];
             var right = input[1];
@@ -71,25 +76,66 @@ namespace PasPasPas.Typings.Operators {
                 return GetErrorTypeReference();
 
             if (Kind == DefinedOperators.EqualsOperator)
-                return operations.Equal(left, right);
+                return EvaluateEqualsOperator(left, right, operations);
 
             if (Kind == DefinedOperators.NotEqualsOperator)
-                return operations.NotEquals(left, right);
+                return EvaluateNotEqualsOperator(left, right, operations);
 
             if (Kind == DefinedOperators.LessThen)
-                return operations.LessThen(left, right);
+                return EvaluateLessThenOperator(left, right, operations);
 
             if (Kind == DefinedOperators.GreaterThen)
-                return operations.GreaterThen(left, right);
+                return EvaluateGreaterThenOperator(left, right, operations);
 
             if (Kind == DefinedOperators.LessThenOrEqual)
-                return operations.LessThenOrEqual(left, right);
+                return EvaluateLessThenOrEqualOperator(left, right, operations);
 
             if (Kind == DefinedOperators.GreaterThenEqual)
-                return operations.GreaterThenEqual(left, right);
-
+                return EvaluteGreaterThenOrEqualOperator(left, right, operations);
 
             return GetErrorTypeReference();
+        }
+
+        private ITypeReference EvaluteGreaterThenOrEqualOperator(ITypeReference left, ITypeReference right, IRelationalOperations operations) {
+            if (left.IsConstant && right.IsConstant)
+                return operations.GreaterThenEqual(left, right);
+            else
+                return TypeRegistry.MakeReference(KnownTypeIds.BooleanType);
+        }
+
+        private ITypeReference EvaluateLessThenOrEqualOperator(ITypeReference left, ITypeReference right, IRelationalOperations operations) {
+            if (left.IsConstant && right.IsConstant)
+                return operations.LessThenOrEqual(left, right);
+            else
+                return TypeRegistry.MakeReference(KnownTypeIds.BooleanType);
+        }
+
+        private ITypeReference EvaluateGreaterThenOperator(ITypeReference left, ITypeReference right, IRelationalOperations operations) {
+            if (left.IsConstant && right.IsConstant)
+                return operations.GreaterThen(left, right);
+            else
+                return TypeRegistry.MakeReference(KnownTypeIds.BooleanType);
+        }
+
+        private ITypeReference EvaluateLessThenOperator(ITypeReference left, ITypeReference right, IRelationalOperations operations) {
+            if (left.IsConstant && right.IsConstant)
+                return operations.LessThen(left, right);
+            else
+                return TypeRegistry.MakeReference(KnownTypeIds.BooleanType);
+        }
+
+        private ITypeReference EvaluateNotEqualsOperator(ITypeReference left, ITypeReference right, IRelationalOperations operations) {
+            if (left.IsConstant && right.IsConstant)
+                return operations.NotEquals(left, right);
+            else
+                return TypeRegistry.MakeReference(KnownTypeIds.BooleanType);
+        }
+
+        private ITypeReference EvaluateEqualsOperator(ITypeReference left, ITypeReference right, IRelationalOperations operations) {
+            if (left.IsConstant && right.IsConstant)
+                return operations.Equal(left, right);
+            else
+                return TypeRegistry.MakeReference(KnownTypeIds.BooleanType);
         }
     }
 }
