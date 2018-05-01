@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using PasPasPas.Global.Runtime;
+using PasPasPas.Global.Types;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Typings.Common;
@@ -144,7 +145,7 @@ namespace PasPasPas.Typings.Structured {
         /// </summary>
         /// <param name="signature"></param>
         /// <param name="symbolName">method name</param>
-        /// <param name="callables">callables</param>
+        /// <param name="callables">callable methods</param>
         /// <returns></returns>
         public void ResolveCall(string symbolName, IList<ParameterGroup> callables, Signature signature) {
 

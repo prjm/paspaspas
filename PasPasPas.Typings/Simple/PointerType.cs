@@ -1,6 +1,4 @@
 ﻿using PasPasPas.Global.Runtime;
-using PasPasPas.Infrastructure.Utils;
-using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Typings.Common;
 
 namespace PasPasPas.Typings.Simple {

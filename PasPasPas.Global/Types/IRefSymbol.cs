@@ -1,6 +1,6 @@
 ﻿using PasPasPas.Global.Runtime;
 
-namespace PasPasPas.Parsing.SyntaxTree.Types {
+namespace PasPasPas.Global.Types {
 
     /// <summary>
     ///     symbol by reference

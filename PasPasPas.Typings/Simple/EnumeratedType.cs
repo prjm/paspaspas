@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using PasPasPas.Global.Runtime;
-using PasPasPas.Infrastructure.Utils;
-using PasPasPas.Parsing.SyntaxTree.Types;
+using PasPasPas.Global.Types;
 using PasPasPas.Typings.Common;
 
 namespace PasPasPas.Typings.Simple {

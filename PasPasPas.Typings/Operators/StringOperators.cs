@@ -2,6 +2,7 @@
 using System.Linq;
 using PasPasPas.Global.Constants;
 using PasPasPas.Global.Runtime;
+using PasPasPas.Global.Types;
 using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Typings.Common;
 

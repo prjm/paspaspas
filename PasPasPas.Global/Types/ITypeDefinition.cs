@@ -1,7 +1,6 @@
 ﻿using PasPasPas.Global.Runtime;
-using PasPasPas.Infrastructure.Utils;
 
-namespace PasPasPas.Parsing.SyntaxTree.Types {
+namespace PasPasPas.Global.Types {
 
     /// <summary>
     ///     type definition

@@ -1,4 +1,5 @@
 ﻿using PasPasPas.Global.Runtime;
+using PasPasPas.Global.Types;
 using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree.Types;
 
@@ -43,7 +44,7 @@ namespace PasPasPas.Typings.Common {
             => TypeRegistry.GetTypeByIdOrUndefinedType(baseId);
 
         /// <summary>
-        ///     <c>true</c> if this is new, seperate type
+        ///     <c>true</c> if this is new, separate type
         /// </summary>
         public bool IsNewType
             => isNewType;

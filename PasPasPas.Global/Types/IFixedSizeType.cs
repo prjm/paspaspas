@@ -1,4 +1,4 @@
-﻿namespace PasPasPas.Parsing.SyntaxTree.Types {
+﻿namespace PasPasPas.Global.Types {
 
     /// <summary>
     ///     types with a fixed size

@@ -3,6 +3,7 @@ using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Typings.Simple;
 using Xunit;
 using PasPasPas.Global.Runtime;
+using PasPasPas.Global.Types;
 
 namespace PasPasPasTests.Types {
 

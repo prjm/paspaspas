@@ -1,7 +1,7 @@
 ﻿using System;
 using PasPasPas.Global.Constants;
 using PasPasPas.Global.Runtime;
-using PasPasPas.Parsing.SyntaxTree.Types;
+using PasPasPas.Global.Types;
 
 namespace PasPasPas.Typings.Operators {
 

@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using PasPasPas.Infrastructure.Utils;
-using PasPasPas.Parsing.SyntaxTree.Types;
-
-namespace PasPasPas.Typings.Common {
+﻿namespace PasPasPas.Typings.Common {
 
     /// <summary>
     ///     base class for ordinal types

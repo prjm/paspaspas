@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
-using PasPasPas.Global.Constants;
-using PasPasPas.Global.Runtime;
-using PasPasPas.Parsing.SyntaxTree.Types;
+using PasPasPas.Global.Types;
 using PasPasPas.Typings.Common;
 using PasPasPas.Typings.Structured;
 
@@ -37,7 +35,7 @@ namespace PasPasPas.Typings.Routines {
             => "Abs";
 
         /// <summary>
-        ///     constant intrinsinc function
+        ///     constant intrinsic function
         /// </summary>
         public bool IsConstant
             => true;
@@ -59,5 +57,6 @@ namespace PasPasPas.Typings.Routines {
                 callableRoutines.Add(result);
             }
         }
+
     }
 }

@@ -1,8 +1,8 @@
 ﻿using PasPasPas.Global.Constants;
 using PasPasPas.Global.Runtime;
+using PasPasPas.Global.Types;
 using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
-using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Typings.Operators;
 
 namespace PasPasPas.Typings.Common {

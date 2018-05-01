@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text;
 using PasPasPas.Global.Runtime;
+using PasPasPas.Global.Types;
 using PasPasPas.Infrastructure.Environment;
 using PasPasPas.Infrastructure.Files;
 using PasPasPas.Infrastructure.Log;
@@ -58,7 +59,7 @@ namespace PasPasPas.Api {
             = new ObjectPool<TokenizerWithLookahead.TokenSequence>() { PoolName = "TokenSequencePool" };
 
         /// <summary>
-        ///     tokenizer patterbs
+        ///     tokenizer patterns
         /// </summary>
         public PatternFactory Patterns { get; }
             = new PatternFactory();

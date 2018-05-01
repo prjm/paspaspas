@@ -1,5 +1,5 @@
-﻿using PasPasPas.Parsing;
-using PasPasPas.Parsing.SyntaxTree.Types;
+﻿using PasPasPas.Global.Types;
+using PasPasPas.Parsing;
 
 namespace PasPasPas.Typings.Common {
 

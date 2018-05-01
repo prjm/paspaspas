@@ -1,4 +1,5 @@
-﻿namespace PasPasPas.Parsing.SyntaxTree.Types {
+﻿namespace PasPasPas.Global.Types {
+
     /// <summary>
     ///     interface for integral types
     /// </summary>

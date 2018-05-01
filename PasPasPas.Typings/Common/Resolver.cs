@@ -1,5 +1,6 @@
 ﻿using System;
 using PasPasPas.Global.Runtime;
+using PasPasPas.Global.Types;
 using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Typings.Structured;
@@ -118,7 +119,7 @@ namespace PasPasPas.Typings.Common {
             => scope = scope.Close();
 
         /// <summary>
-        ///     add a symbol to the curret scope
+        ///     add a symbol to the current scope
         /// </summary>
         /// <param name="symbolName">name of the symbol</param>
         /// <param name="kind">scope kind</param>
