@@ -191,5 +191,35 @@ namespace PasPasPas.Typings.Common {
             return DefinedOperators.Undefined;
         }
 
+        /// <summary>
+        ///     determine the resulting type for a subrange type
+        /// </summary>
+        /// <param name="types">used type registry</param>
+        /// <param name="lowerBound">lower bound of the subrange</param>
+        /// <param name="upperBound">upper bound of the subrange type</param>
+        /// <returns></returns>
+        public static int GetTypeForSubrangeType(this ITypeRegistry types, ITypeReference lowerBound, ITypeReference upperBound) {
+            var left = lowerBound.TypeKind;
+            var right = upperBound.TypeKind;
+
+            if (!lowerBound.IsConstant || !upperBound.IsConstant)
+                return KnownTypeIds.ErrorType;
+
+            if (left.IsOrdinal() && right.IsOrdinal()) {
+                if (left.IsIntegral() && right.IsIntegral()) {
+                    var baseType = types.GetTypeByIdOrUndefinedType(types.GetSmallestIntegralTypeOrNext(lowerBound.TypeId, upperBound.TypeId));
+                    var typeDef = types.RegisterType(new Simple.SubrangeType(types.RequireUserTypeId(), baseType.TypeId));
+                    return typeDef.TypeId;
+                }
+
+                if (lowerBound.TypeId == upperBound.TypeId) {
+                    var baseType = types.GetTypeByIdOrUndefinedType(upperBound.TypeId);
+                    var typeDef = types.RegisterType(new Simple.SubrangeType(types.RequireUserTypeId(), baseType.TypeId));
+                    return typeDef.TypeId;
+                }
+            }
+
+            return KnownTypeIds.ErrorType;
+        }
     }
 }

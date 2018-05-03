@@ -2884,10 +2884,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             lastExpression.Value = result;
         }
 
+
         #endregion
+        #region SetSectionPart
 
         /// <summary>
-        ///     start visiting a set setcion
+        ///     start visiting a set section
         /// </summary>
         /// <param name="part"></param>
         public void StartVisit(SetSectnPart part) {
@@ -2897,10 +2899,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 if (arrayExpression == null)
                     return;
 
-                var binOp = arrayExpression.Expressions.LastOrDefault() as BinaryOperator;
-
-                // if (binOp != null && binOp.RightOperand == null)
-                //     return binOp;
+                if (arrayExpression.Expressions.LastOrDefault() is BinaryOperator binOp && binOp.RightOperand == null) {
+                    visitor.WorkingStack.Push(new WorkingStackEntry(part, binOp));
+                }
 
                 return;
             }
@@ -2910,9 +2911,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             InitNode(result, part);
             result.Kind = ExpressionKind.RangeOperator;
             lastExpression.Value = result;
-
         }
 
+        #endregion
         #region AsmFactor
 
         /// <summary>
@@ -3248,7 +3249,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         public DictionaryIndexHelper<AbstractSyntaxPartBase, UnitMode> CurrentUnitMode { get; }
 
         /// <summary>
-        ///     currennt member visibility
+        ///     current member visibility
         /// </summary>
         public DictionaryIndexHelper<AbstractSyntaxPartBase, MemberVisibility> CurrentMemberVisibility { get; }
 

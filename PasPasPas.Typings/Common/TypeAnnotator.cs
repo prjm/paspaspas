@@ -148,7 +148,8 @@ namespace PasPasPas.Typings.Common {
             // special case range operator: the range operator is
             // part of a type definition and references types, not values
             if (element.Kind == ExpressionKind.RangeOperator) {
-                DefineSubrangeType(element, left, right);
+                var resultType = TypeRegistry.GetTypeForSubrangeType(left, right);
+                element.TypeInfo = GetTypeByIdOrUndefinedType(resultType);
                 return;
             }
 
@@ -162,31 +163,6 @@ namespace PasPasPas.Typings.Common {
             element.TypeInfo = binaryOperator.EvaluateOperator(new Signature(left, right));
         }
 
-        /// <summary>
-        ///     helper function: define a subrange type
-        /// </summary>
-        /// <param name="element"></param>
-        /// <param name="leftType">lower bound of the subrange</param>
-        /// <param name="rightType">higher bound of the subrange</param>
-        private void DefineSubrangeType(BinaryOperator element, ITypeReference leftType, ITypeReference rightType) {
-            var left = leftType.TypeKind;
-            var right = rightType.TypeKind;
-
-            if (left.IsOrdinal() && right.IsOrdinal()) {
-                if (left.IsIntegral() && right.IsIntegral()) {
-                    var baseType = GetTypeByIdOrUndefinedType(GetSmallestIntegralTypeOrNext(leftType.TypeId, rightType.TypeId));
-                    var typeDef = RegisterUserDefinedType(new Simple.SubrangeType(RequireUserTypeId(), baseType.TypeId));
-                    element.TypeInfo = GetTypeByIdOrUndefinedType(typeDef.TypeId);
-                }
-                else if (leftType.TypeId == rightType.TypeId) {
-                    var baseType = GetTypeByIdOrUndefinedType(leftType.TypeId);
-                    var typeDef = RegisterUserDefinedType(new Simple.SubrangeType(RequireUserTypeId(), baseType.TypeId));
-                    element.TypeInfo = GetTypeByIdOrUndefinedType(typeDef.TypeId);
-                }
-                else
-                    element.TypeInfo = GetErrorTypeReference(element);
-            }
-        }
 
         private int GetSmallestIntegralTypeOrNext(int leftId, int rightId)
             => environment.TypeRegistry.GetSmallestIntegralTypeOrNext(leftId, rightId);
