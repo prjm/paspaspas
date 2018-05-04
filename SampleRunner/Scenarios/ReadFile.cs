@@ -4,7 +4,7 @@ using PasPasPas.Infrastructure.Environment;
 
 namespace SampleRunner.Scenarios {
 
-    public class ReadFile {
+    public static class ReadFile {
 
         public static void Run(StringBuilder b, IBasicEnvironment environment, string file, int repeat) {
             var count = 0L;

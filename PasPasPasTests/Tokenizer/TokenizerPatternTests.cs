@@ -99,7 +99,6 @@ namespace PasPasPasTests.Tokenizer {
         }
 
         private const int PatternA = 1;
-        private const int PatternAA = 2;
         private const int PatternB = 3;
         private readonly Guid LogGuid = new Guid("{7FD95F57-A165-4736-A2BF-BC3EE2C30F5F}");
 

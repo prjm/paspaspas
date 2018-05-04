@@ -13,10 +13,10 @@ namespace PasPasPasTests.Infra {
     /// </summary>
     public class StackedReaderTest : CommonTest {
 
-        private string Content1
+        private static string Content1
             => "X1X1X1|||X1X1X1------------$";
 
-        private string Content2
+        private static string Content2
             => "ZZZ$44345845784875DSDFDDFDS";
 
         [Fact]

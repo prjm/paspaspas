@@ -9,12 +9,12 @@ using SampleRunner.Scenarios;
 namespace SampleRunner {
 
     /// <summary>
-    ///     the sample runner is used to test different feature sets 
+    ///     the sample runner is used to test different feature sets
     ///     of the p3 library
     /// </summary>
     class Program {
 
-        static void Main(string[] args) {
+        static void Main() {
 
             var testPath = @"C:\temp\Testfiles\spring.pas";
             var mode = SampleMode.CreateAbstractSyntaxTree;

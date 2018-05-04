@@ -253,7 +253,7 @@ namespace PasPasPasTests.Parser {
         [Fact]
         public void TestExternalSymbol() {
             object c(OptionSet o) => o.Meta.ExternalSymbols.Count;
-            object f(OptionSet o) => o.Meta.ExternalSymbols.Any(t => string.Equals(t.IdentifierName, "dummy"));
+            object f(OptionSet o) => o.Meta.ExternalSymbols.Any(t => string.Equals(t.IdentifierName, "dummy", StringComparison.Ordinal));
             RunCompilerDirective("", 0, c);
             RunCompilerDirective("EXTERNALSYM dummy", true, f);
             RunCompilerDirective("EXTERNALSYM dummy 'a'", true, f);
@@ -295,7 +295,7 @@ namespace PasPasPasTests.Parser {
         [Fact]
         public void TestHppEmit() {
             object c(OptionSet o) => o.Meta.HeaderStrings.Count;
-            object f(OptionSet o) => o.Meta.HeaderStrings.Any(t => string.Equals(t.Value, "'dummy'"));
+            object f(OptionSet o) => o.Meta.HeaderStrings.Any(t => string.Equals(t.Value, "'dummy'", StringComparison.InvariantCulture));
             Func<OptionSet, object> g(HppEmitMode x) => (OptionSet o) => o.Meta.HeaderStrings.Any(t => t.Mode == x);
             RunCompilerDirective("", 0, c);
             RunCompilerDirective("HPPEMIT 'dummy'", true, f);

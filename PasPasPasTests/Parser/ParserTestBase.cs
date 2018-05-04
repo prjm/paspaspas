@@ -14,6 +14,7 @@ using PasPasPas.Infrastructure.Files;
 using PasPasPas.Parsing.Parser;
 using System.IO;
 using PasPasPas.Typings.Common;
+using System.Globalization;
 
 namespace PasPasPasTests.Parser {
 
@@ -147,7 +148,7 @@ namespace PasPasPasTests.Parser {
 
             bool? search(object t) {
 
-                if (t is ConstantDeclaration decl && string.Equals(constName, decl.Name.CompleteName)) {
+                if (t is ConstantDeclaration decl && string.Equals(constName, decl.Name.CompleteName, StringComparison.Ordinal)) {
                     if (decl == null || decl.Value == null)
                         return null;
 
@@ -192,7 +193,7 @@ namespace PasPasPasTests.Parser {
 
                 foreach (var subPart in subParts) {
                     var hasFoundInput = false;
-                    var path = new FileReference(env.StringPool, "test_" + fileCounter.ToString() + ".pas");
+                    var path = new FileReference(env.StringPool, "test_" + fileCounter.ToString(CultureInfo.InvariantCulture) + ".pas");
                     var input = new StringBufferReadable(subPart);
                     var buffer = new FileBuffer();
                     var reader = new StackedFileReader(buffer);

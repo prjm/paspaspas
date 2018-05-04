@@ -6,9 +6,10 @@ using Assert = PasPasPasTests.Common.Assert;
 namespace PasPasPasTests.Infra {
 
     /// <summary>
-    ///     test object poolin
+    ///     test object pooling
     /// </summary>
     public class PoolTest {
+
         [Fact]
         public void TestStringBuilderBool() {
             var pool = new ObjectPool<StringBuilder>();

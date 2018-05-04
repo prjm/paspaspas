@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 using PasPasPas.Api;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 using PasPasPas.Typings.Common;
 
 namespace SampleRunner.Scenarios {
-    public class TypeAnnotateFile {
+
+    public static class TypeAnnotateFile {
+
         public static void Run(StringBuilder b, ITypedEnvironment environment, string testPath, int reapeat) {
             for (var i = 0; i < reapeat; i++) {
                 var parserApi = new ParserApi(environment);

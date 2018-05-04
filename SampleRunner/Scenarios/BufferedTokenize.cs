@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using PasPasPas.Api;
@@ -21,7 +22,7 @@ namespace SampleRunner.Scenarios {
                         var kind = token.Kind;
                         var length = token.Value.Length;
 
-                        if (registry.TryGetValue(kind, out Tuple<ulong, long> value))
+                        if (registry.TryGetValue(kind, out var value))
                             registry[kind] = new Tuple<ulong, long>(1 + value.Item1, length + value.Item2);
                         else
                             registry.Add(kind, Tuple.Create<ulong, long>(1, length));
@@ -32,7 +33,7 @@ namespace SampleRunner.Scenarios {
             }
 
             foreach (var entry in registry.OrderByDescending(t => t.Value.Item2))
-                b.AppendLine($"{entry.Key.ToString()} => {entry.Value.ToString()}");
+                b.AppendLine($"{entry.Key.ToString(CultureInfo.InvariantCulture)} => {entry.Value.ToString()}");
 
         }
     }

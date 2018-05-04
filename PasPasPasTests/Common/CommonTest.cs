@@ -15,7 +15,7 @@ namespace PasPasPasTests.Common {
         ///     get the basic environment
         /// </summary>
         /// <returns></returns>
-        protected ITypedEnvironment CreateEnvironment(NativeIntSize intSize = NativeIntSize.Undefined)
+        protected static ITypedEnvironment CreateEnvironment(NativeIntSize intSize = NativeIntSize.Undefined)
             => new DefaultEnvironment(intSize);
 
         /// <summary>
@@ -23,7 +23,7 @@ namespace PasPasPasTests.Common {
         /// </summary>
         /// <param name="number"></param>
         /// <returns></returns>
-        protected IValue GetIntegerValue(sbyte number)
+        protected static IValue GetIntegerValue(sbyte number)
             => IntegerValueBase.ToScaledIntegerValue(number);
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace PasPasPasTests.Common {
         /// </summary>
         /// <param name="number"></param>
         /// <returns></returns>
-        protected IValue GetIntegerValue(byte number)
+        protected static IValue GetIntegerValue(byte number)
             => IntegerValueBase.ToScaledIntegerValue(number);
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace PasPasPasTests.Common {
         /// </summary>
         /// <param name="number"></param>
         /// <returns></returns>
-        protected IValue GetIntegerValue(short number)
+        protected static IValue GetIntegerValue(short number)
             => IntegerValueBase.ToScaledIntegerValue(number);
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace PasPasPasTests.Common {
         /// </summary>
         /// <param name="number"></param>
         /// <returns></returns>
-        protected IValue GetIntegerValue(ushort number)
+        protected static IValue GetIntegerValue(ushort number)
             => IntegerValueBase.ToScaledIntegerValue(number);
 
         /// <summary>
@@ -55,7 +55,7 @@ namespace PasPasPasTests.Common {
         /// </summary>
         /// <param name="number"></param>
         /// <returns></returns>
-        protected IValue GetIntegerValue(int number)
+        protected static IValue GetIntegerValue(int number)
             => IntegerValueBase.ToScaledIntegerValue(number);
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace PasPasPasTests.Common {
         /// </summary>
         /// <param name="text"></param>
         /// <returns></returns>
-        protected IValue GetUnicodeStringValue(string text)
+        protected static IValue GetUnicodeStringValue(string text)
             => new RuntimeValueFactory(null).Strings.ToUnicodeString(text);
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace PasPasPasTests.Common {
         /// </summary>
         /// <param name="text"></param>
         /// <returns></returns>
-        protected IValue GetWideCharValue(char text)
+        protected static IValue GetWideCharValue(char text)
             => new RuntimeValueFactory(null).Chars.ToWideCharValue(text);
 
 
@@ -81,7 +81,7 @@ namespace PasPasPasTests.Common {
         /// </summary>
         /// <param name="number"></param>
         /// <returns></returns>
-        protected IValue GetIntegerValue(uint number)
+        protected static IValue GetIntegerValue(uint number)
             => IntegerValueBase.ToScaledIntegerValue(number);
 
 
@@ -90,7 +90,7 @@ namespace PasPasPasTests.Common {
         /// </summary>
         /// <param name="number"></param>
         /// <returns></returns>
-        protected IValue GetIntegerValue(long number)
+        protected static IValue GetIntegerValue(long number)
             => IntegerValueBase.ToScaledIntegerValue(number);
 
         /// <summary>
@@ -98,7 +98,7 @@ namespace PasPasPasTests.Common {
         /// </summary>
         /// <param name="number"></param>
         /// <returns></returns>
-        protected IValue GetIntegerValue(ulong number)
+        protected static IValue GetIntegerValue(ulong number)
             => IntegerValueBase.ToScaledIntegerValue(number);
 
         /// <summary>
@@ -106,7 +106,7 @@ namespace PasPasPasTests.Common {
         /// </summary>
         /// <param name="number">number</param>
         /// <returns>number value</returns>
-        protected IValue GetExtendedValue(in ExtF80 number)
+        protected static IValue GetExtendedValue(in ExtF80 number)
             => FloatValueBase.ToExtendedValue(number);
 
     }

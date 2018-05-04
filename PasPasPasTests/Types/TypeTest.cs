@@ -24,7 +24,7 @@ namespace PasPasPasTests.Types {
         /// <param name="commonType">common type</param>
         /// <param name="expression">expression</param>
         /// <param name="typeId">type id to find</param>
-        protected void AssertExprTypeByVar(string commonType, string expression, int typeId) {
+        protected void AssertExprTypeByVar(string commonType, string expression, int typeId, bool resolveSubrange = false) {
             var file = "SimpleExpr";
             var program = $"program {file}; var a,b: {commonType}; begin WriteLn({expression}); end. ";
             SymbolReferencePart searchfunction(object x) => x as SymbolReferencePart;
@@ -34,7 +34,16 @@ namespace PasPasPasTests.Types {
 
             Assert.IsNotNull(firstParam);
             Assert.IsNotNull(firstParam.TypeInfo);
-            Assert.AreEqual(typeId, firstParam.TypeInfo.TypeId);
+            var foundTypeId = default(int);
+
+            if (resolveSubrange && env.TypeRegistry.GetTypeByIdOrUndefinedType(firstParam.TypeInfo.TypeId) is PasPasPas.Typings.Simple.SubrangeType sr) {
+                foundTypeId = sr.BaseType.TypeId;
+            }
+            else {
+                foundTypeId = firstParam.TypeInfo.TypeId;
+            }
+
+            Assert.AreEqual(typeId, foundTypeId);
 
         }
 

@@ -7,13 +7,13 @@ namespace PasPasPasTests.Common {
 
     public static class Assert {
 
-        public static void AreEqual(object expected, object actual, string message = "")
+        public static void AreEqual(object expected, object actual)
             => A.Equal(expected, actual);
 
-        public static void AreEqual(ExtF80 expected, ExtF80 actual, string message = "")
+        public static void AreEqual(in ExtF80 expected, in ExtF80 actual)
             => A.Equal(expected, actual);
 
-        public static void AreEqual(double expected, double actual, string message = "")
+        public static void AreEqual(double expected, double actual)
             => A.Equal(expected, actual, 10);
 
         public static void IsTrue(bool o)

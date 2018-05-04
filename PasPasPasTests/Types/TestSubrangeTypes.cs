@@ -10,7 +10,7 @@ namespace PasPasPasTests.Types {
 
         [TestCase]
         public void TestSubrangeTypeDefs() {
-            AssertExprTypeByVar("2..126", "e", KnownTypeIds.ShortInt);
+            AssertExprTypeByVar("2..126", "a", KnownTypeIds.ShortInt, true);
         }
 
     }
