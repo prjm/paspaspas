@@ -21,7 +21,7 @@
         public const int UnspecifiedType = -2;
 
         /// <summary>
-        ///     errornous type
+        ///      type error / invalid type
         /// </summary>
         public const int ErrorType = -1;
 
@@ -71,12 +71,12 @@
         public const int IntegerType = 9;
 
         /// <summary>
-        ///     unicode string type
+        ///     Unicode string type
         /// </summary>
         public const int UnicodeStringType = 10;
 
         /// <summary>
-        ///     ansi char type
+        ///     ANSI char type
         /// </summary>
         public const int AnsiCharType = 11;
 
@@ -91,7 +91,7 @@
         public const int ShortInt = 13;
 
         /// <summary>
-        ///     small int type (2 byte signed)
+        ///     small int type (2 byte signed integer)
         /// </summary>
         public const int SmallInt = 14;
 
@@ -131,7 +131,7 @@
         public const int NativeInt = 21;
 
         /// <summary>
-        ///     native uint
+        ///     native unsigned integer
         /// </summary>
         public const int NativeUInt = 22;
 
@@ -156,7 +156,7 @@
         public const int ShortStringType = 26;
 
         /// <summary>
-        ///     ansi string type
+        ///     ANSI string type
         /// </summary>
         public const int AnsiStringType = 27;
 
@@ -171,7 +171,7 @@
         public const int SingleType = 29;
 
         /// <summary>
-        ///     double precisision type
+        ///     double precision type
         /// </summary>
         public const int Double = 30;
 
@@ -196,7 +196,7 @@
         public const int FixedInt = 34;
 
         /// <summary>
-        ///     fixed uint
+        ///     fixed unsigned int
         /// </summary>
         public const int FixedUInt = 35;
 
@@ -236,7 +236,7 @@
         public const int PLongword = 42;
 
         /// <summary>
-        ///     pointer to fixed uint
+        ///     pointer to fixed unsigned
         /// </summary>
         public const int PFixedUint = 43;
 
@@ -266,7 +266,7 @@
         public const int PInt64 = 48;
 
         /// <summary>
-        ///     pointer to native uint
+        ///     pointer to native unsigned int
         /// </summary>
         public const int PNativeUInt = 49;
 
@@ -296,17 +296,17 @@
         public const int RawByteString = 54;
 
         /// <summary>
-        ///     pointer to ansi char
+        ///     pointer to ANSI char
         /// </summary>
         public const int PAnsiChar = 55;
 
         /// <summary>
-        ///     ponter to wide char
+        ///     pointer to wide char
         /// </summary>
         public const int PWideChar = 56;
 
         /// <summary>
-        ///     pointer to ansi string
+        ///     pointer to ANSI string
         /// </summary>
         public const int PAnsiString = 57;
 
@@ -316,7 +316,7 @@
         public const int PRawByteString = 58;
 
         /// <summary>
-        ///     pointer to unicode string
+        ///     pointer to Unicode string
         /// </summary>
         public const int PUnicodeString = 59;
 
@@ -371,7 +371,7 @@
         public const int TObject = 100;
 
         /// <summary>
-        ///     root object metaclass
+        ///     root object meta class
         /// </summary>
         public const int TClass = 101;
 

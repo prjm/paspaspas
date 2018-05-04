@@ -330,23 +330,23 @@ namespace PasPasPas.Runtime.Values.Int {
             return new WordValue(number);
         }
 
-        internal static IValue GreaterThen(IntegerValueBase firstInt, IntegerValueBase secondInt)
-            => new BooleanValue(firstInt.AsBigInteger > secondInt.AsBigInteger);
+        internal static bool GreaterThen(IntegerValueBase firstInt, IntegerValueBase secondInt)
+            => firstInt.AsBigInteger > secondInt.AsBigInteger;
 
-        internal static IValue GreaterThenEqual(IntegerValueBase firstInt, IntegerValueBase secondInt)
-            => new BooleanValue(firstInt.AsBigInteger >= secondInt.AsBigInteger);
+        internal static bool GreaterThenEqual(IntegerValueBase firstInt, IntegerValueBase secondInt)
+            => firstInt.AsBigInteger >= secondInt.AsBigInteger;
 
-        internal static IValue Equal(IntegerValueBase firstInt, IntegerValueBase secondInt)
-            => new BooleanValue(firstInt.AsBigInteger == secondInt.AsBigInteger);
+        internal static bool Equal(IntegerValueBase firstInt, IntegerValueBase secondInt)
+            => firstInt.AsBigInteger == secondInt.AsBigInteger;
 
-        internal static IValue LessThenEqual(IntegerValueBase firstInt, IntegerValueBase secondInt)
-            => new BooleanValue(firstInt.AsBigInteger <= secondInt.AsBigInteger);
+        internal static bool LessThenEqual(IntegerValueBase firstInt, IntegerValueBase secondInt)
+            => firstInt.AsBigInteger <= secondInt.AsBigInteger;
 
-        internal static IValue NotEqual(IntegerValueBase firstInt, IntegerValueBase secondInt)
-            => new BooleanValue(firstInt.AsBigInteger != secondInt.AsBigInteger);
+        internal static bool NotEqual(IntegerValueBase firstInt, IntegerValueBase secondInt)
+            => firstInt.AsBigInteger != secondInt.AsBigInteger;
 
-        internal static IValue LessThen(IntegerValueBase firstInt, IntegerValueBase secondInt)
-            => new BooleanValue(firstInt.AsBigInteger < secondInt.AsBigInteger);
+        internal static bool LessThen(IntegerValueBase firstInt, IntegerValueBase secondInt)
+            => firstInt.AsBigInteger < secondInt.AsBigInteger;
 
         /// <summary>
         ///     invert all bits of this integer

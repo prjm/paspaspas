@@ -11,6 +11,7 @@ namespace PasPasPasTests.Types {
         [TestCase]
         public void TestSubrangeTypeDefs() {
             AssertExprTypeByVar("2..126", "a", KnownTypeIds.ShortInt, true);
+            AssertExprTypeByVar("2..1", "a", KnownTypeIds.ErrorType, true);
         }
 
     }

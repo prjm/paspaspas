@@ -6,6 +6,11 @@
     public interface IRelationalOperations {
 
         /// <summary>
+        ///     used boolean operations
+        /// </summary>
+        IBooleanOperations Booleans { get; }
+
+        /// <summary>
         ///     <c>==</c>
         /// </summary>
         /// <param name="left"></param>

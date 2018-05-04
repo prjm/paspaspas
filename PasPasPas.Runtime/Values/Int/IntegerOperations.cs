@@ -21,6 +21,18 @@ namespace PasPasPas.Runtime.Values.Int {
             = new SpecialValue(SpecialConstantKind.IntegerOverflow, KnownTypeIds.ErrorType);
 
         /// <summary>
+        ///     boolean operations
+        /// </summary>
+        public IBooleanOperations Booleans { get; }
+
+        /// <summary>
+        ///     create a new integer operations helper
+        /// </summary>
+        /// <param name="booleans"></param>
+        public IntegerOperations(IBooleanOperations booleans)
+            => Booleans = booleans;
+
+        /// <summary>1
         ///     calculate the sum of two integers
         /// </summary>
         /// <param name="augend">first operand</param>
@@ -70,7 +82,7 @@ namespace PasPasPas.Runtime.Values.Int {
         /// <returns></returns>
         public ITypeReference Equal(ITypeReference left, ITypeReference right) {
             if (left is IntegerValueBase firstInt && right is IntegerValueBase secondInt)
-                return IntegerValueBase.Equal(firstInt, secondInt);
+                return Booleans.AsBoolean(IntegerValueBase.Equal(firstInt, secondInt));
             else
                 return Invalid;
         }
@@ -83,7 +95,7 @@ namespace PasPasPas.Runtime.Values.Int {
         /// <returns></returns>
         public ITypeReference GreaterThen(ITypeReference left, ITypeReference right) {
             if (left is IntegerValueBase firstInt && right is IntegerValueBase secondInt)
-                return IntegerValueBase.GreaterThen(firstInt, secondInt);
+                return Booleans.AsBoolean(IntegerValueBase.GreaterThen(firstInt, secondInt));
             else
                 return Invalid;
         }
@@ -96,7 +108,7 @@ namespace PasPasPas.Runtime.Values.Int {
         /// <returns></returns>
         public ITypeReference GreaterThenEqual(ITypeReference left, ITypeReference right) {
             if (left is IntegerValueBase firstInt && right is IntegerValueBase secondInt)
-                return IntegerValueBase.GreaterThenEqual(firstInt, secondInt);
+                return Booleans.AsBoolean(IntegerValueBase.GreaterThenEqual(firstInt, secondInt));
             else
                 return Invalid;
         }
@@ -109,7 +121,7 @@ namespace PasPasPas.Runtime.Values.Int {
         /// <returns></returns>
         public ITypeReference LessThen(ITypeReference left, ITypeReference right) {
             if (left is IntegerValueBase firstInt && right is IntegerValueBase secondInt)
-                return IntegerValueBase.LessThen(firstInt, secondInt);
+                return Booleans.AsBoolean(IntegerValueBase.LessThen(firstInt, secondInt));
             else
                 return Invalid;
         }
@@ -122,7 +134,7 @@ namespace PasPasPas.Runtime.Values.Int {
         /// <returns></returns>
         public ITypeReference LessThenOrEqual(ITypeReference left, ITypeReference right) {
             if (left is IntegerValueBase firstInt && right is IntegerValueBase secondInt)
-                return IntegerValueBase.LessThenEqual(firstInt, secondInt);
+                return Booleans.AsBoolean(IntegerValueBase.LessThenEqual(firstInt, secondInt));
             else
                 return Invalid;
         }
@@ -135,7 +147,7 @@ namespace PasPasPas.Runtime.Values.Int {
         /// <returns></returns>
         public ITypeReference NotEquals(ITypeReference left, ITypeReference right) {
             if (left is IntegerValueBase firstInt && right is IntegerValueBase secondInt)
-                return IntegerValueBase.NotEqual(firstInt, secondInt);
+                return Booleans.AsBoolean(IntegerValueBase.NotEqual(firstInt, secondInt));
             else
                 return Invalid;
 

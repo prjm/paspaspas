@@ -36,34 +36,34 @@ namespace PasPasPas.Runtime.Values.Boolean {
         /// <returns>number as string</returns>
         public abstract override string ToString();
 
-        internal static IValue And(IBooleanValue boolean1, IBooleanValue boolean2)
-            => new BooleanValue(boolean1.AsBoolean && boolean2.AsBoolean);
+        internal static bool And(IBooleanValue boolean1, IBooleanValue boolean2)
+            => boolean1.AsBoolean && boolean2.AsBoolean;
 
-        internal static IValue Not(IBooleanValue boolean)
-            => new BooleanValue(!boolean.AsBoolean);
+        internal static bool Not(IBooleanValue boolean)
+            => !boolean.AsBoolean;
 
-        internal static IValue Or(IBooleanValue boolean1, IBooleanValue boolean2)
-            => new BooleanValue(boolean1.AsBoolean || boolean2.AsBoolean);
+        internal static bool Or(IBooleanValue boolean1, IBooleanValue boolean2)
+            => boolean1.AsBoolean || boolean2.AsBoolean;
 
-        internal static IValue Xor(IBooleanValue boolean1, IBooleanValue boolean2)
-            => new BooleanValue(boolean1.AsBoolean ^ boolean2.AsBoolean);
+        internal static bool Xor(IBooleanValue boolean1, IBooleanValue boolean2)
+            => boolean1.AsBoolean ^ boolean2.AsBoolean;
 
-        internal static IValue Equal(IBooleanValue boolean1, IBooleanValue boolean2)
-            => new BooleanValue(boolean1.AsBoolean == boolean2.AsBoolean);
+        internal static bool Equal(IBooleanValue boolean1, IBooleanValue boolean2)
+            => boolean1.AsBoolean == boolean2.AsBoolean;
 
-        internal static IValue GreaterThen(IBooleanValue boolean1, IBooleanValue boolean2)
-            => new BooleanValue(boolean1.AsBoolean && (!boolean2.AsBoolean));
+        internal static bool GreaterThen(IBooleanValue boolean1, IBooleanValue boolean2)
+            => boolean1.AsBoolean && (!boolean2.AsBoolean);
 
-        internal static IValue LessThenOrEqual(IBooleanValue boolean1, IBooleanValue boolean2)
-            => new BooleanValue(((!boolean1.AsBoolean) && boolean2.AsBoolean) || (boolean1.AsBoolean == boolean2.AsBoolean));
+        internal static bool LessThenOrEqual(IBooleanValue boolean1, IBooleanValue boolean2)
+            => ((!boolean1.AsBoolean) && boolean2.AsBoolean) || (boolean1.AsBoolean == boolean2.AsBoolean);
 
-        internal static IValue NotEquals(IBooleanValue boolean1, IBooleanValue boolean2)
-            => new BooleanValue(boolean1.AsBoolean != boolean2.AsBoolean);
+        internal static bool NotEquals(IBooleanValue boolean1, IBooleanValue boolean2)
+            => boolean1.AsBoolean != boolean2.AsBoolean;
 
-        internal static IValue GreaterThenEqual(IBooleanValue boolean1, IBooleanValue boolean2)
-            => new BooleanValue((boolean1.AsBoolean && (!boolean2.AsBoolean)) || (boolean1.AsBoolean == boolean2.AsBoolean));
+        internal static bool GreaterThenEqual(IBooleanValue boolean1, IBooleanValue boolean2)
+            => (boolean1.AsBoolean && (!boolean2.AsBoolean)) || (boolean1.AsBoolean == boolean2.AsBoolean);
 
-        internal static IValue LessThen(IBooleanValue boolean1, IBooleanValue boolean2)
-            => new BooleanValue((!boolean1.AsBoolean) && boolean2.AsBoolean);
+        internal static bool LessThen(IBooleanValue boolean1, IBooleanValue boolean2)
+            => (!boolean1.AsBoolean) && boolean2.AsBoolean;
     }
 }

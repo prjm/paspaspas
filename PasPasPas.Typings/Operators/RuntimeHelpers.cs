@@ -153,5 +153,31 @@ namespace PasPasPas.Typings.Operators {
             return default;
         }
 
+        /// <summary>
+        ///     helper function: check if one value is greater then another
+        /// </summary>
+        /// <param name="runtime">used runtime</param>
+        /// <param name="left">first operand</param>
+        /// <param name="right">second operand</param>
+        /// <returns><c>true</c> if the first operand is greater then the second operand</returns>
+        public static bool IsValueGreaterThen(this IRuntimeValueFactory runtime, ITypeReference left, ITypeReference right) {
+
+            if (!left.IsConstant)
+                return false;
+
+            if (!right.IsConstant)
+                return false;
+
+            if (left is IIntegerValue && right is IIntegerValue) {
+                var result = runtime.Integers.GreaterThen(left, right) as IBooleanValue;
+
+                if (result == null)
+                    return false;
+
+                return result.AsBoolean;
+            }
+
+            return false;
+        }
     }
 }

@@ -32,22 +32,22 @@ namespace PasPasPas.Runtime.Values.String {
         internal static IValue Concat(IStringValue string1, IStringValue string2)
             => new UnicodeStringValue(string.Concat(string1, string2));
 
-        internal static IValue Equal(IStringValue string1, IStringValue string2)
-            => new BooleanValue(string.CompareOrdinal(string1.AsUnicodeString, string2.AsUnicodeString) == 0);
+        internal static bool Equal(IStringValue string1, IStringValue string2)
+            => string.CompareOrdinal(string1.AsUnicodeString, string2.AsUnicodeString) == 0;
 
-        internal static IValue GreaterThen(IStringValue string1, IStringValue string2)
-            => new BooleanValue(string.CompareOrdinal(string1.AsUnicodeString, string2.AsUnicodeString) > 0);
+        internal static bool GreaterThen(IStringValue string1, IStringValue string2)
+            => string.CompareOrdinal(string1.AsUnicodeString, string2.AsUnicodeString) > 0;
 
-        internal static IValue GreaterThenEqual(IStringValue string1, IStringValue string2)
-            => new BooleanValue(string.CompareOrdinal(string1.AsUnicodeString, string2.AsUnicodeString) >= 0);
+        internal static bool GreaterThenEqual(IStringValue string1, IStringValue string2)
+            => string.CompareOrdinal(string1.AsUnicodeString, string2.AsUnicodeString) >= 0;
 
-        internal static IValue LessThen(IStringValue string1, IStringValue string2)
-            => new BooleanValue(string.CompareOrdinal(string1.AsUnicodeString, string2.AsUnicodeString) < 0);
+        internal static bool LessThen(IStringValue string1, IStringValue string2)
+            => string.CompareOrdinal(string1.AsUnicodeString, string2.AsUnicodeString) < 0;
 
-        internal static IValue LessThenOrEqual(IStringValue string1, IStringValue string2)
-            => new BooleanValue(string.CompareOrdinal(string1.AsUnicodeString, string2.AsUnicodeString) < 0);
+        internal static bool LessThenOrEqual(IStringValue string1, IStringValue string2)
+            => string.CompareOrdinal(string1.AsUnicodeString, string2.AsUnicodeString) < 0;
 
-        internal static IValue NotEquals(IStringValue string1, IStringValue string2)
-            => new BooleanValue(string.CompareOrdinal(string1.AsUnicodeString, string2.AsUnicodeString) != 0);
+        internal static bool NotEquals(IStringValue string1, IStringValue string2)
+            => string.CompareOrdinal(string1.AsUnicodeString, string2.AsUnicodeString) != 0;
     }
 }

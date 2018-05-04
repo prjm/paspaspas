@@ -70,23 +70,23 @@ namespace PasPasPas.Runtime.Values.Float {
         internal static IValue Negate(INumericalValue value)
             => new ExtendedValue(-value.AsExtended);
 
-        internal static IValue Equal(INumericalValue floatLeft, INumericalValue floatRight)
-            => new BooleanValue(floatLeft == floatRight);
+        internal static bool Equal(INumericalValue floatLeft, INumericalValue floatRight)
+            => floatLeft == floatRight;
 
-        internal static IValue NotEqual(INumericalValue floatLeft, INumericalValue floatRight)
-            => new BooleanValue(floatLeft != floatRight);
+        internal static bool NotEqual(INumericalValue floatLeft, INumericalValue floatRight)
+            => floatLeft != floatRight;
 
-        internal static IValue GreaterThenEqual(INumericalValue floatLeft, INumericalValue floatRight)
-            => new BooleanValue(floatLeft.AsExtended >= floatRight.AsExtended);
+        internal static bool GreaterThenEqual(INumericalValue floatLeft, INumericalValue floatRight)
+            => floatLeft.AsExtended >= floatRight.AsExtended;
 
-        internal static IValue GreaterThen(INumericalValue floatLeft, INumericalValue floatRight)
-            => new BooleanValue(floatLeft.AsExtended > floatRight.AsExtended);
+        internal static bool GreaterThen(INumericalValue floatLeft, INumericalValue floatRight)
+            => floatLeft.AsExtended > floatRight.AsExtended;
 
-        internal static IValue LessThenOrEqual(INumericalValue floatLeft, INumericalValue floatRight)
-            => new BooleanValue(floatLeft.AsExtended <= floatRight.AsExtended);
+        internal static bool LessThenOrEqual(INumericalValue floatLeft, INumericalValue floatRight)
+            => floatLeft.AsExtended <= floatRight.AsExtended;
 
-        internal static IValue LessThen(INumericalValue floatLeft, INumericalValue floatRight)
-            => new BooleanValue(floatLeft.AsExtended < floatRight.AsExtended);
+        internal static bool LessThen(INumericalValue floatLeft, INumericalValue floatRight)
+            => floatLeft.AsExtended < floatRight.AsExtended;
 
         /// <summary>
         ///     get an extended value

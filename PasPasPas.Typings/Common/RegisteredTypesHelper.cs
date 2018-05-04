@@ -120,6 +120,7 @@ namespace PasPasPas.Typings.Common {
         /// <summary>
         ///     helper method: map an expression kind to an registered operator id
         /// </summary>
+        /// <param name="typeRegistry">type registry</param>
         /// <param name="kind">expression kind</param>
         /// <param name="left">left type reference</param>
         /// <param name="right">right type reference</param>
@@ -207,6 +208,10 @@ namespace PasPasPas.Typings.Common {
 
             if (left.IsOrdinal() && right.IsOrdinal()) {
                 if (left.IsIntegral() && right.IsIntegral()) {
+
+                    if (types.Runtime.IsValueGreaterThen(lowerBound, upperBound)) // lower bound > upper bound?
+                        return KnownTypeIds.ErrorType;
+
                     var baseType = types.GetTypeByIdOrUndefinedType(types.GetSmallestIntegralTypeOrNext(lowerBound.TypeId, upperBound.TypeId));
                     var typeDef = types.RegisterType(new Simple.SubrangeType(types.RequireUserTypeId(), baseType.TypeId));
                     return typeDef.TypeId;

@@ -30,7 +30,8 @@ namespace PasPasPas.Runtime.Values.Boolean {
         /// <summary>
         ///     get the boolean value
         /// </summary>
-        public override bool AsBoolean { get; }
+        public override bool AsBoolean
+            => value;
 
         /// <summary>
         ///     format this boolean as string

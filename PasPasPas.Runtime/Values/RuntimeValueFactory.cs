@@ -16,21 +16,24 @@ namespace PasPasPas.Runtime.Values {
         ///     create a new runtime value factory
         /// </summary>
         /// <param name="typeKindResolver">type kind resolver</param>
-        public RuntimeValueFactory(ITypeKindResolver typeKindResolver)
-            => Types = new TypeOperations(typeKindResolver);
+        public RuntimeValueFactory(ITypeKindResolver typeKindResolver) {
+            Booleans = new BooleanOperations();
+            Integers = new IntegerOperations(Booleans);
+            RealNumbers = new RealNumberOperations(Booleans);
+            Strings = new StringOperations(Booleans);
+            Types = new TypeOperations(typeKindResolver);
+        }
 
 
         /// <summary>
         ///     integer operations: value factory and arithmetics
         /// </summary>
         public IIntegerOperations Integers { get; }
-            = new IntegerOperations();
 
         /// <summary>
         ///     real number operations: value factory and arithmetics
         /// </summary>
         public IRealNumberOperations RealNumbers { get; }
-            = new RealNumberOperations();
 
         /// <summary>
         ///     boolean operations: constants, value factory and arithmetics
@@ -42,7 +45,6 @@ namespace PasPasPas.Runtime.Values {
         ///     string operations: value factory, concatenation
         /// </summary>
         public IStringOperations Strings { get; }
-            = new StringOperations();
 
         /// <summary>
         ///     operations on characters
