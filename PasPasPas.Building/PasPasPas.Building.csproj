@@ -10,6 +10,7 @@
     <Company>$(PasPasPasCompany)</Company>
     <Copyright>$(PasPasPasCopyright)</Copyright>
     <Product>PasPasPas.Building</Product>
+    <CodeAnalysisRuleSet>../PasPasPas.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -26,6 +27,12 @@
     <ProjectReference Include="..\PasPasPas.Infrastructure\PasPasPas.Infrastructure.csproj" />
     <ProjectReference Include="..\Paspaspas.Options\PasPasPas.Options.csproj" />
     <ProjectReference Include="..\PasPasPas.Parsing\PasPasPas.Parsing.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ErrorProne.NET" Version="0.1.5898.41180" />
+    <PackageReference Include="ErrorProne.NET.Structs" Version="0.1.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.6.0" />
   </ItemGroup>
 
 </Project>
