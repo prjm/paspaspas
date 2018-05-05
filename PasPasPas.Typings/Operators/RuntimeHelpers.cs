@@ -177,7 +177,50 @@ namespace PasPasPas.Typings.Operators {
                 return result.AsBoolean;
             }
 
+            if (left is ICharValue && right is ICharValue) {
+                var result = runtime.Strings.GreaterThen(left, right) as IBooleanValue;
+
+                if (result == null)
+                    return false;
+
+                return result.AsBoolean;
+            }
+
+            if (left is IBooleanValue && right is IBooleanValue) {
+                var result = runtime.Booleans.GreaterThen(left, right) as IBooleanValue;
+
+                if (result == null)
+                    return false;
+
+                return result.AsBoolean;
+            }
+
             return false;
         }
+
+
+        /// <summary>
+        ///     test if two values are unsigned
+        /// </summary>
+        /// <param name="runtime">used runtime</param>
+        /// <param name="left">first operand</param>
+        /// <param name="right">second operand</param>
+        /// <returns></returns>
+        public static bool AreValuesUnsigned(this IRuntimeValueFactory runtime, ITypeReference left, ITypeReference right) {
+            if (!left.IsConstant)
+                return false;
+
+            if (!right.IsConstant)
+                return false;
+
+            if (!(left is IIntegerValue leftInt))
+                return false;
+
+            if (!(right is IIntegerValue rightInt))
+                return false;
+
+            return !leftInt.IsNegative && !rightInt.IsNegative;
+        }
+
     }
 }

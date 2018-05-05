@@ -70,5 +70,12 @@ namespace PasPasPas.Typings.Simple {
             return base.CanBeAssignedFrom(otherType);
         }
 
+        /// <summary>
+        ///     readable type name
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+            => "Enum";
+
     }
 }

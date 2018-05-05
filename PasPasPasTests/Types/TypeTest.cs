@@ -24,9 +24,9 @@ namespace PasPasPasTests.Types {
         /// <param name="commonType">common type</param>
         /// <param name="expression">expression</param>
         /// <param name="typeId">type id to find</param>
-        protected void AssertExprTypeByVar(string commonType, string expression, int typeId, bool resolveSubrange = false) {
+        protected void AssertExprTypeByVar(string commonType, string expression, int typeId, bool resolveSubrange = false, string decls = "") {
             var file = "SimpleExpr";
-            var program = $"program {file}; var a,b: {commonType}; begin WriteLn({expression}); end. ";
+            var program = $"program {file};{decls} var a,b: {commonType}; begin WriteLn({expression}); end. ";
             SymbolReferencePart searchfunction(object x) => x as SymbolReferencePart;
             IExpression firstParam = null;
 

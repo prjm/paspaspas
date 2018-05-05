@@ -1,14 +1,13 @@
 ﻿using PasPasPas.Global.Runtime;
 using PasPasPas.Global.Types;
-using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Typings.Common;
 
 namespace PasPasPas.Typings.Simple {
 
     /// <summary>
-    ///     ansi char type (1 byte)
+    ///     ANSI char type (1 byte)
     /// </summary>
-    public class AnsiCharType : OrdinalTypeBase {
+    public class AnsiCharType : OrdinalTypeBase, ICharType {
 
         /// <summary>
         ///     create a new char type
@@ -24,6 +23,18 @@ namespace PasPasPas.Typings.Simple {
             => CommonTypeKind.AnsiCharType;
 
         /// <summary>
+        ///     highest element
+        /// </summary>
+        public ulong HighestElement
+            => byte.MaxValue;
+
+        /// <summary>
+        ///     bit size
+        /// </summary>
+        public uint BitSize
+            => 8;
+
+        /// <summary>
         ///     test for assignment type compatibility
         /// </summary>
         /// <param name="otherType">other type to check</param>
@@ -37,5 +48,13 @@ namespace PasPasPas.Typings.Simple {
 
             return base.CanBeAssignedFrom(otherType);
         }
+
+        /// <summary>
+        ///     readable type name
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+            => "AnsiChar";
+
     }
 }

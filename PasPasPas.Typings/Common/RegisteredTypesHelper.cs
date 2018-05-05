@@ -22,6 +22,41 @@ namespace PasPasPas.Typings.Common {
             => registry.GetTypeByIdOrUndefinedType(typeId).TypeKind;
 
         /// <summary>
+        ///     get the smallest matching type of two char types
+        /// </summary>
+        /// <param name="registry">type registry</param>
+        /// <param name="typeId1">first type</param>
+        /// <param name="typeId2">second type</param>
+        /// <returns></returns>
+        public static int GetSmallestCharTypeOrNext(this ITypeRegistry registry, int typeId1, int typeId2) {
+            if (KnownTypeIds.ErrorType.In(typeId1, typeId2))
+                return KnownTypeIds.ErrorType;
+
+            var leftType = registry.GetTypeByIdOrUndefinedType(typeId1);
+            var rightType = registry.GetTypeByIdOrUndefinedType(typeId2);
+
+            if (leftType.TypeKind == CommonTypeKind.SubrangeType)
+                leftType = registry.GetTypeByIdOrUndefinedType(registry.GetBaseTypeOfSubrangeType(leftType.TypeId));
+
+            if (rightType.TypeKind == CommonTypeKind.SubrangeType)
+                rightType = registry.GetTypeByIdOrUndefinedType(registry.GetBaseTypeOfSubrangeType(rightType.TypeId));
+
+            if ((!leftType.TypeKind.IsChar()) || (!rightType.TypeKind.IsChar()))
+                return KnownTypeIds.ErrorType;
+
+            var left = leftType as ICharType;
+            var right = rightType as ICharType;
+
+            if (left == null || right == null)
+                return KnownTypeIds.ErrorType;
+
+            if (left.BitSize < right.BitSize)
+                return typeId2;
+
+            return typeId1;
+        }
+
+        /// <summary>
         ///     get the smallest possible boolean type for two types
         /// </summary>
         /// <param name="registry">type registry</param>
@@ -36,14 +71,14 @@ namespace PasPasPas.Typings.Common {
             var leftType = registry.GetTypeByIdOrUndefinedType(typeId1);
             var rightType = registry.GetTypeByIdOrUndefinedType(typeId2);
 
-            if (!CommonTypeKind.BooleanType.All(leftType.TypeKind, rightType.TypeKind))
-                return KnownTypeIds.ErrorType;
-
             if (leftType.TypeKind == CommonTypeKind.SubrangeType)
                 leftType = registry.GetTypeByIdOrUndefinedType(registry.GetBaseTypeOfSubrangeType(leftType.TypeId));
 
             if (rightType.TypeKind == CommonTypeKind.SubrangeType)
                 rightType = registry.GetTypeByIdOrUndefinedType(registry.GetBaseTypeOfSubrangeType(rightType.TypeId));
+
+            if (!CommonTypeKind.BooleanType.All(leftType.TypeKind, rightType.TypeKind))
+                return KnownTypeIds.ErrorType;
 
             var left = leftType as IFixedSizeType;
             var right = rightType as IFixedSizeType;
@@ -76,8 +111,9 @@ namespace PasPasPas.Typings.Common {
         /// <param name="typeId1">first type id</param>
         /// <param name="typeId2">second type id</param>
         /// <param name="minBitSize">minimal bit size</param>
+        /// <param name="bothAreUnsigned">if <c>true</c> both types reference unsigned values</param>
         /// <returns>smallest type id</returns>
-        public static int GetSmallestIntegralTypeOrNext(this ITypeRegistry registry, int typeId1, int typeId2, int minBitSize = 0) {
+        public static int GetSmallestIntegralTypeOrNext(this ITypeRegistry registry, int typeId1, int typeId2, int minBitSize = 0, bool bothAreUnsigned = false) {
             if (KnownTypeIds.ErrorType.In(typeId1, typeId2))
                 return KnownTypeIds.ErrorType;
 
@@ -96,25 +132,43 @@ namespace PasPasPas.Typings.Common {
             if (left == null || right == null)
                 return KnownTypeIds.ErrorType;
 
-            if (left.BitSize < right.BitSize && right.BitSize >= minBitSize)
-                return typeId2;
+            var result = default(IIntegralType);
 
-            if (left.BitSize > right.BitSize && left.BitSize >= minBitSize)
-                return typeId1;
+            if (left.BitSize > right.BitSize) {
+                result = left;
+            }
+            else if (left.BitSize == right.BitSize) {
+                if (left.Signed == right.Signed)
+                    result = left;
+                else if (!left.Signed && right.Signed && bothAreUnsigned)
+                    result = left;
+                else if (left.Signed && !right.Signed && bothAreUnsigned)
+                    result = right;
+                else if (left.BitSize == 8)
+                    result = registry.GetTypeByIdOrUndefinedType(KnownTypeIds.SmallInt) as IIntegralType;
+                else if (left.BitSize == 16)
+                    result = registry.GetTypeByIdOrUndefinedType(KnownTypeIds.IntegerType) as IIntegralType;
+                else if (left.BitSize == 32 || left.BitSize == 64)
+                    result = registry.GetTypeByIdOrUndefinedType(KnownTypeIds.Int64Type) as IIntegralType;
+                else
+                    return KnownTypeIds.ErrorType;
+            }
+            else {
+                result = right;
+            }
 
-            if (left.Signed == right.Signed && left.BitSize == right.BitSize && left.BitSize >= minBitSize)
-                return left.TypeId;
+            if (minBitSize > result.BitSize) {
+                if (result.BitSize <= 8 && 16 >= minBitSize)
+                    return KnownTypeIds.SmallInt;
 
-            if (left.BitSize <= 8 && 16 >= minBitSize)
-                return KnownTypeIds.SmallInt;
+                if (result.BitSize <= 16 && 32 >= minBitSize)
+                    return KnownTypeIds.IntegerType;
 
-            if (left.BitSize <= 16 && 32 >= minBitSize)
-                return KnownTypeIds.IntegerType;
+                if (result.BitSize <= 32 && 64 >= minBitSize)
+                    return KnownTypeIds.Int64Type;
+            }
 
-            if (left.BitSize <= 32 && 64 >= minBitSize)
-                return KnownTypeIds.Int64Type;
-
-            return KnownTypeIds.ErrorType;
+            return result.TypeId;
         }
 
         /// <summary>
@@ -207,13 +261,28 @@ namespace PasPasPas.Typings.Common {
                 return KnownTypeIds.ErrorType;
 
             if (left.IsOrdinal() && right.IsOrdinal()) {
-                if (left.IsIntegral() && right.IsIntegral()) {
+
+                var isIntegral = left.IsIntegral() && right.IsIntegral();
+                var isChar = left.IsChar() && right.IsChar();
+                var isBoolean = left == CommonTypeKind.BooleanType && right == CommonTypeKind.BooleanType;
+                var isEnum = left == CommonTypeKind.EnumerationType && right == CommonTypeKind.EnumerationType;
+
+                if (isIntegral || isChar || isBoolean || isEnum) {
 
                     if (types.Runtime.IsValueGreaterThen(lowerBound, upperBound)) // lower bound > upper bound?
                         return KnownTypeIds.ErrorType;
 
-                    var baseType = types.GetTypeByIdOrUndefinedType(types.GetSmallestIntegralTypeOrNext(lowerBound.TypeId, upperBound.TypeId));
-                    var typeDef = types.RegisterType(new Simple.SubrangeType(types.RequireUserTypeId(), baseType.TypeId));
+                    var bothUnsinged = types.Runtime.AreValuesUnsigned(lowerBound, upperBound);
+                    var baseType = KnownTypeIds.ErrorType;
+
+                    if (isIntegral)
+                        baseType = types.GetSmallestIntegralTypeOrNext(lowerBound.TypeId, upperBound.TypeId, 8, bothUnsinged);
+                    else if (isChar)
+                        baseType = types.GetSmallestCharTypeOrNext(lowerBound.TypeId, upperBound.TypeId);
+                    else if (isBoolean)
+                        baseType = types.GetSmallestBooleanTypeOrNext(lowerBound.TypeId, upperBound.TypeId);
+
+                    var typeDef = types.RegisterType(new Simple.SubrangeType(types.RequireUserTypeId(), baseType));
                     return typeDef.TypeId;
                 }
 

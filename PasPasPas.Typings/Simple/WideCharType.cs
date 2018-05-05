@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using PasPasPas.Global.Runtime;
+﻿using PasPasPas.Global.Runtime;
 using PasPasPas.Global.Types;
-using PasPasPas.Infrastructure.Utils;
-using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Typings.Common;
 
 namespace PasPasPas.Typings.Simple {
@@ -14,7 +7,7 @@ namespace PasPasPas.Typings.Simple {
     /// <summary>
     ///     wide char type
     /// </summary>
-    public class WideCharType : OrdinalTypeBase {
+    public class WideCharType : OrdinalTypeBase, ICharType {
 
         /// <summary>
         ///     wide char type
@@ -30,6 +23,18 @@ namespace PasPasPas.Typings.Simple {
             => CommonTypeKind.WideCharType;
 
         /// <summary>
+        ///     highest element
+        /// </summary>
+        public ulong HighestElement
+            => ushort.MaxValue;
+
+        /// <summary>
+        ///     bit size
+        /// </summary>
+        public uint BitSize
+            => 16;
+
+        /// <summary>
         ///     test for assignment type compatibility
         /// </summary>
         /// <param name="otherType">other type to check</param>
@@ -43,5 +48,13 @@ namespace PasPasPas.Typings.Simple {
 
             return base.CanBeAssignedFrom(otherType);
         }
+
+        /// <summary>
+        ///     readable type name
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+            => "WideChar";
+
     }
 }

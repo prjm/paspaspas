@@ -163,7 +163,6 @@ namespace PasPasPas.Typings.Common {
             element.TypeInfo = binaryOperator.EvaluateOperator(new Signature(left, right));
         }
 
-
         private int GetSmallestIntegralTypeOrNext(int leftId, int rightId)
             => environment.TypeRegistry.GetSmallestIntegralTypeOrNext(leftId, rightId);
 
@@ -182,16 +181,20 @@ namespace PasPasPas.Typings.Common {
 
             if (element.Kind == ExpressionKind.Not) {
                 element.TypeInfo = GetTypeOfOperator(DefinedOperators.NotOperator, GetTypeDefinition(operand));
+                return;
             }
-            else if (element.Kind == ExpressionKind.UnaryMinus) {
+
+            if (element.Kind == ExpressionKind.UnaryMinus) {
                 element.TypeInfo = GetTypeOfOperator(DefinedOperators.UnaryMinus, GetTypeDefinition(operand));
+                return;
             }
-            else if (element.Kind == ExpressionKind.UnaryPlus) {
+
+            if (element.Kind == ExpressionKind.UnaryPlus) {
                 element.TypeInfo = GetTypeOfOperator(DefinedOperators.UnaryPlus, GetTypeDefinition(operand));
+                return;
             }
-            else {
-                element.TypeInfo = GetErrorTypeReference(element);
-            }
+
+            element.TypeInfo = GetErrorTypeReference(element);
         }
 
         /// <summary>
