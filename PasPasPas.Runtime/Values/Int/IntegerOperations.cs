@@ -24,13 +24,22 @@ namespace PasPasPas.Runtime.Values.Int {
         ///     boolean operations
         /// </summary>
         public IBooleanOperations Booleans { get; }
+        public ITypeOperations Types { get; }
+
+        /// <summary>
+        ///     zero / default value
+        /// </summary>
+        public IValue Zero
+            => new ShortIntValue(0);
 
         /// <summary>
         ///     create a new integer operations helper
         /// </summary>
         /// <param name="booleans"></param>
-        public IntegerOperations(IBooleanOperations booleans)
-            => Booleans = booleans;
+        public IntegerOperations(IBooleanOperations booleans, ITypeOperations types) {
+            Booleans = booleans;
+            Types = types;
+        }
 
         /// <summary>1
         ///     calculate the sum of two integers
@@ -40,7 +49,7 @@ namespace PasPasPas.Runtime.Values.Int {
         /// <returns>sum</returns>
         public ITypeReference Add(ITypeReference augend, ITypeReference addend) {
             if (augend is IntegerValueBase intAugend && addend is IntegerValueBase intAddend)
-                return IntegerValueBase.AddAndScale(intAugend, intAddend);
+                return IntegerValueBase.AddAndScale(Overflow, intAugend, intAddend);
             else
                 return Invalid;
         }
@@ -53,7 +62,7 @@ namespace PasPasPas.Runtime.Values.Int {
         /// <returns>bitwise and</returns>
         public ITypeReference And(ITypeReference firstOperand, ITypeReference secondOperand) {
             if (firstOperand is IntegerValueBase firstInt && secondOperand is IntegerValueBase secondInt)
-                return IntegerValueBase.AndAndScale(firstInt, secondInt);
+                return IntegerValueBase.AndAndScale(Overflow, firstInt, secondInt);
             else
                 return Invalid;
         }
@@ -69,7 +78,7 @@ namespace PasPasPas.Runtime.Values.Int {
                 if (intDivisor.SignedValue == 0)
                     return new SpecialValue(SpecialConstantKind.DivisionByZero);
                 else
-                    return IntegerValueBase.DivideAndScale(intDividend, intDivisor);
+                    return IntegerValueBase.DivideAndScale(Overflow, intDividend, intDivisor);
             else
                 return Invalid;
         }
@@ -164,7 +173,7 @@ namespace PasPasPas.Runtime.Values.Int {
                 if (intDivisor.SignedValue == 0)
                     return new SpecialValue(SpecialConstantKind.DivisionByZero);
                 else
-                    return IntegerValueBase.ModuloAndScale(intDividend, intDivisor);
+                    return IntegerValueBase.ModuloAndScale(Overflow, intDividend, intDivisor);
             else
                 return Invalid;
         }
@@ -177,7 +186,7 @@ namespace PasPasPas.Runtime.Values.Int {
         /// <returns></returns>
         public ITypeReference Multiply(ITypeReference multiplicand, ITypeReference intMultiplier) {
             if (multiplicand is IntegerValueBase intMultiplicand && intMultiplier is IntegerValueBase secondInt)
-                return IntegerValueBase.MultiplyAndScale(intMultiplicand, secondInt);
+                return IntegerValueBase.MultiplyAndScale(Overflow, intMultiplicand, secondInt);
             else
                 return Invalid;
         }
@@ -189,7 +198,7 @@ namespace PasPasPas.Runtime.Values.Int {
         /// <returns></returns>
         public ITypeReference Negate(ITypeReference number) {
             if (number is IntegerValueBase intNumber)
-                return IntegerValueBase.Negate(intNumber);
+                return IntegerValueBase.Negate(Overflow, intNumber);
             else
                 return Invalid;
         }
@@ -222,7 +231,7 @@ namespace PasPasPas.Runtime.Values.Int {
         /// <returns></returns>
         public ITypeReference Or(ITypeReference firstOperand, ITypeReference secondOperand) {
             if (firstOperand is IntegerValueBase firstInt && secondOperand is IntegerValueBase secondInt)
-                return IntegerValueBase.OrAndScale(firstInt, secondInt);
+                return IntegerValueBase.OrAndScale(Overflow, firstInt, secondInt);
             else
                 return Invalid;
         }
@@ -235,7 +244,7 @@ namespace PasPasPas.Runtime.Values.Int {
         /// <returns></returns>
         public ITypeReference Shl(ITypeReference firstOperand, ITypeReference secondOperand) {
             if (firstOperand is IntegerValueBase firstInt && secondOperand is IntegerValueBase secondInt)
-                return IntegerValueBase.ShlAndScale(firstInt, secondInt);
+                return IntegerValueBase.ShlAndScale(Overflow, firstInt, secondInt);
             else
                 return Invalid;
         }
@@ -248,7 +257,7 @@ namespace PasPasPas.Runtime.Values.Int {
         /// <returns></returns>
         public ITypeReference Shr(ITypeReference firstOperand, ITypeReference secondOperand) {
             if (firstOperand is IntegerValueBase firstInt && secondOperand is IntegerValueBase secondInt)
-                return IntegerValueBase.ShrAndScale(firstInt, secondInt);
+                return IntegerValueBase.ShrAndScale(Overflow, firstInt, secondInt);
             else
                 return Invalid;
         }
@@ -261,7 +270,7 @@ namespace PasPasPas.Runtime.Values.Int {
         /// <returns></returns>
         public ITypeReference Subtract(ITypeReference minuend, ITypeReference subtrahend) {
             if (minuend is IntegerValueBase intMinuend && subtrahend is IntegerValueBase intSubtrahend)
-                return IntegerValueBase.SubtractAndScale(intMinuend, intSubtrahend);
+                return IntegerValueBase.SubtractAndScale(Overflow, intMinuend, intSubtrahend);
             else
                 return Invalid;
         }
@@ -274,7 +283,7 @@ namespace PasPasPas.Runtime.Values.Int {
         /// <returns></returns>
         public ITypeReference Xor(ITypeReference firstOperand, ITypeReference secondOperand) {
             if (firstOperand is IntegerValueBase firstInt && secondOperand is IntegerValueBase secondInt)
-                return IntegerValueBase.XorAndScale(firstInt, secondInt);
+                return IntegerValueBase.XorAndScale(Overflow, firstInt, secondInt);
             else
                 return Invalid;
         }
@@ -343,5 +352,44 @@ namespace PasPasPas.Runtime.Values.Int {
         public IValue ToScaledIntegerValue(ulong number)
             => IntegerValueBase.ToScaledIntegerValue(number);
 
+        /// <summary>
+        ///     increment an integer value
+        /// </summary>
+        /// <param name="value">value to increment</param>
+        /// <returns></returns>
+        public ITypeReference Increment(ITypeReference value) {
+            if (value is IntegerValueBase integerValue)
+                return IntegerValueBase.Increment(Overflow, integerValue);
+            else
+                return Invalid;
+
+        }
+
+        public ITypeReference Cast(ITypeReference value, int typeId) {
+
+            if (!(value is IIntegerValue integer))
+                return Types.MakeReference(KnownTypeIds.ErrorType);
+
+            switch (typeId) {
+                case KnownTypeIds.ShortInt:
+                    return new ShortIntValue((sbyte)integer.SignedValue);
+                case KnownTypeIds.ByteType:
+                    return new ByteValue((byte)integer.UnsignedValue);
+                case KnownTypeIds.SmallInt:
+                    return new SmallIntValue((short)integer.SignedValue);
+                case KnownTypeIds.WordType:
+                    return new WordValue((ushort)integer.UnsignedValue);
+                case KnownTypeIds.IntegerType:
+                    return new IntegerValue((int)integer.SignedValue);
+                case KnownTypeIds.CardinalType:
+                    return new CardinalValue((uint)integer.UnsignedValue);
+                case KnownTypeIds.Int64Type:
+                    return new Int64Value(integer.SignedValue);
+                case KnownTypeIds.Uint64Type:
+                    return new UInt64Value(integer.UnsignedValue);
+            }
+
+            return Types.MakeReference(KnownTypeIds.ErrorType);
+        }
     }
 }

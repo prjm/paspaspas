@@ -17,11 +17,11 @@ namespace PasPasPas.Runtime.Values {
         /// </summary>
         /// <param name="typeKindResolver">type kind resolver</param>
         public RuntimeValueFactory(ITypeKindResolver typeKindResolver) {
+            Types = new TypeOperations(typeKindResolver);
             Booleans = new BooleanOperations();
-            Integers = new IntegerOperations(Booleans);
+            Integers = new IntegerOperations(Booleans, Types);
             RealNumbers = new RealNumberOperations(Booleans);
             Strings = new StringOperations(Booleans);
-            Types = new TypeOperations(typeKindResolver);
         }
 
 

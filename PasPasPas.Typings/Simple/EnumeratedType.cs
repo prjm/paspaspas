@@ -1,8 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using PasPasPas.Global.Constants;
 using PasPasPas.Global.Runtime;
 using PasPasPas.Global.Types;
 using PasPasPas.Typings.Common;
+using PasPasPas.Typings.Operators;
 
 namespace PasPasPas.Typings.Simple {
 
@@ -31,28 +34,51 @@ namespace PasPasPas.Typings.Simple {
             => CommonTypeKind.EnumerationType;
 
         /// <summary>
-        ///     get enum values
+        ///     get enumeration values
         /// </summary>
         public IList<EnumValue> Values
             => values;
 
         /// <summary>
-        ///     define an enum value
+        ///     get the required type id for this enumerated type
         /// </summary>
+        public int CommonTypeId {
+            get {
+                var result = KnownTypeIds.ShortInt;
+                var unsigned = true;
+
+                foreach (var value in Values) {
+                    unsigned = unsigned && TypeRegistry.Runtime.AreValuesUnsigned(value.Value, value.Value);
+                    result = TypeRegistry.GetSmallestIntegralTypeOrNext(result, value.Value.TypeId, 8, unsigned);
+                }
+
+                return result;
+            }
+        }
+
+        /// <summary>
+        ///     define a new enumeration value
+        /// </summary>
+        /// <param name="runtimeValues">runtime values</param>
         /// <param name="symbolName">symbol name</param>
         /// <param name="withValue">if <c>true</c> a value definition is used</param>
         /// <param name="enumValue">optional value definition</param>
-        public void DefineEnumValue(string symbolName, bool withValue, int enumValue) {
-            int newValue;
+        public IRefSymbol DefineEnumValue(IRuntimeValueFactory runtimeValues, string symbolName, bool withValue, IValue enumValue) {
+            ITypeReference newValue;
 
             if (withValue)
                 newValue = enumValue;
             else if (values.Count > 0)
-                newValue = 1 + values.Last().Value;
+                newValue = runtimeValues.Integers.Increment(values.Last().Value);
             else
-                newValue = 0;
+                newValue = runtimeValues.Integers.Zero;
 
-            values.Add(new EnumValue(symbolName, enumValue));
+            if ((!newValue.IsConstant) || (!(newValue is IValue constValue)))
+                return null;
+
+            var enumValueDefinition = new EnumValue(symbolName, constValue);
+            values.Add(enumValueDefinition);
+            return enumValueDefinition;
         }
 
         /// <summary>

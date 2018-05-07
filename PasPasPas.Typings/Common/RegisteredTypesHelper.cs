@@ -44,10 +44,9 @@ namespace PasPasPas.Typings.Common {
             if ((!leftType.TypeKind.IsChar()) || (!rightType.TypeKind.IsChar()))
                 return KnownTypeIds.ErrorType;
 
-            var left = leftType as ICharType;
             var right = rightType as ICharType;
 
-            if (left == null || right == null)
+            if (!(leftType is ICharType left) || right == null)
                 return KnownTypeIds.ErrorType;
 
             if (left.BitSize < right.BitSize)
@@ -80,10 +79,9 @@ namespace PasPasPas.Typings.Common {
             if (!CommonTypeKind.BooleanType.All(leftType.TypeKind, rightType.TypeKind))
                 return KnownTypeIds.ErrorType;
 
-            var left = leftType as IFixedSizeType;
             var right = rightType as IFixedSizeType;
 
-            if (left == null || right == null)
+            if (!(leftType is IFixedSizeType left) || right == null)
                 return KnownTypeIds.ErrorType;
 
             if (left.BitSize < right.BitSize && right.BitSize >= minBitSize)
@@ -126,10 +124,9 @@ namespace PasPasPas.Typings.Common {
             if (rightType.TypeKind == CommonTypeKind.SubrangeType)
                 rightType = registry.GetTypeByIdOrUndefinedType(registry.GetBaseTypeOfSubrangeType(rightType.TypeId));
 
-            var left = leftType as IIntegralType;
             var right = rightType as IIntegralType;
 
-            if (left == null || right == null)
+            if (!(leftType is IIntegralType left) || right == null)
                 return KnownTypeIds.ErrorType;
 
             var result = default(IIntegralType);
@@ -281,6 +278,8 @@ namespace PasPasPas.Typings.Common {
                         baseType = types.GetSmallestCharTypeOrNext(lowerBound.TypeId, upperBound.TypeId);
                     else if (isBoolean)
                         baseType = types.GetSmallestBooleanTypeOrNext(lowerBound.TypeId, upperBound.TypeId);
+                    else if (isEnum && lowerBound.TypeId == upperBound.TypeId)
+                        baseType = lowerBound.TypeId;
 
                     var typeDef = types.RegisterType(new Simple.SubrangeType(types.RequireUserTypeId(), baseType));
                     return typeDef.TypeId;

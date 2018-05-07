@@ -45,5 +45,14 @@ namespace PasPasPas.Runtime.Values {
         /// <returns>type reference</returns>
         public ITypeReference MakeReference(int typeId)
             => values.GetValue(typeId);
+
+        /// <summary>
+        ///     create a new enumerated type value
+        /// </summary>
+        /// <param name="enumTypeId">enumerated type id</param>
+        /// <param name="value">type value</param>
+        /// <returns></returns>
+        public ITypeReference MakeEnumValue(int enumTypeId, ITypeReference value)
+            => new EnumeratedValue(enumTypeId, value);
     }
 }

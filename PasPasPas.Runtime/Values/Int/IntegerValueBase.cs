@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Numerics;
 using PasPasPas.Global.Constants;
 using PasPasPas.Global.Runtime;
 using PasPasPas.Runtime.Values.Boolean;
@@ -83,9 +84,9 @@ namespace PasPasPas.Runtime.Values.Int {
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static IValue ToIntValue(in BigInteger value) {
+        public static IValue ToIntValue(IValue overflow, in BigInteger value) {
             if (value < -9223372036854775808)
-                return new SpecialValue(SpecialConstantKind.IntegerOverflow);
+                return overflow;
             else if (value < -2147483648)
                 return new Int64Value((long)value);
             else if (value < -32768)
@@ -109,79 +110,79 @@ namespace PasPasPas.Runtime.Values.Int {
             else if (value <= 18446744073709551615)
                 return new UInt64Value((ulong)value);
 
-            return new SpecialValue(SpecialConstantKind.IntegerOverflow);
+            return overflow;
         }
 
-        internal static IValue AddAndScale(IntegerValueBase intAugend, IntegerValueBase intAddend) {
+        internal static IValue AddAndScale(IValue overflow, IntegerValueBase intAugend, IntegerValueBase intAddend) {
             var s = intAugend.AsBigInteger + intAddend.AsBigInteger;
-            return ToIntValue(s);
+            return ToIntValue(overflow, s);
         }
 
-        internal static IValue AndAndScale(IntegerValueBase firstOperator, IntegerValueBase secondOperator) {
+        internal static IValue AndAndScale(IValue overflow, IntegerValueBase firstOperator, IntegerValueBase secondOperator) {
             var s = firstOperator.AsBigInteger & secondOperator.AsBigInteger;
-            return ToIntValue(s);
+            return ToIntValue(overflow, s);
         }
 
-        internal static IValue DivideAndScale(IntegerValueBase dividend, IntegerValueBase divisor) {
+        internal static IValue DivideAndScale(IValue overflow, IntegerValueBase dividend, IntegerValueBase divisor) {
             var s = dividend.AsBigInteger / divisor.AsBigInteger;
-            return ToIntValue(s);
+            return ToIntValue(overflow, s);
 
         }
 
 
-        internal static IValue ModuloAndScale(IntegerValueBase dividend, IntegerValueBase divisor) {
+        internal static IValue ModuloAndScale(IValue overflow, IntegerValueBase dividend, IntegerValueBase divisor) {
             var s = dividend.AsBigInteger % divisor.AsBigInteger;
-            return ToIntValue(s);
+            return ToIntValue(overflow, s);
         }
 
-        internal static IValue MultiplyAndScale(IntegerValueBase multiplicand, IntegerValueBase multiplier) {
+        internal static IValue MultiplyAndScale(IValue overflow, IntegerValueBase multiplicand, IntegerValueBase multiplier) {
             var s = multiplicand.AsBigInteger * multiplier.AsBigInteger;
-            return ToIntValue(s);
+            return ToIntValue(overflow, s);
         }
 
-        internal static IValue Negate(IntegerValueBase intNumber) {
+        internal static IValue Negate(IValue overflow, IntegerValueBase intNumber) {
             var s = -intNumber.AsBigInteger;
-            return ToIntValue(s);
+            return ToIntValue(overflow, s);
         }
 
         internal static IValue Not(IntegerValueBase intNumber) {
             return intNumber.InvertBits();
         }
 
-        internal static IValue OrAndScale(IntegerValueBase firstOperator, IntegerValueBase secondOperator) {
+        internal static IValue OrAndScale(IValue overflow, IntegerValueBase firstOperator, IntegerValueBase secondOperator) {
             var s = firstOperator.AsBigInteger | secondOperator.AsBigInteger;
-            return ToIntValue(s);
+            return ToIntValue(overflow, s);
 
         }
 
-        internal static IValue ShlAndScale(IntegerValueBase firstOperator, IntegerValueBase secondOperator) {
+        internal static IValue ShlAndScale(IValue overflow, IntegerValueBase firstOperator, IntegerValueBase secondOperator) {
             BigInteger s;
             if (firstOperator.TypeId == KnownTypeIds.Int64Type || firstOperator.TypeId == KnownTypeIds.Uint64Type)
                 s = new BigInteger(firstOperator.SignedValue << (int)secondOperator.SignedValue);
             else
                 s = new BigInteger((int)firstOperator.SignedValue << (int)secondOperator.SignedValue);
 
-            return ToIntValue(s);
+            return ToIntValue(overflow, s);
         }
 
-        internal static IValue ShrAndScale(IntegerValueBase firstOperator, IntegerValueBase secondOperator) {
+        internal static IValue ShrAndScale(IValue overflow, IntegerValueBase firstOperator, IntegerValueBase secondOperator) {
             BigInteger s;
             if (firstOperator.TypeId == KnownTypeIds.Int64Type || firstOperator.TypeId == KnownTypeIds.Uint64Type)
                 s = new BigInteger((ulong)firstOperator.SignedValue >> (int)secondOperator.SignedValue);
             else
                 s = new BigInteger((uint)firstOperator.SignedValue >> (int)secondOperator.SignedValue);
 
-            return ToIntValue(s);
+            return ToIntValue(overflow, s);
         }
 
-        internal static IValue SubtractAndScale(IntegerValueBase intMinuend, IntegerValueBase intSubtrahend) {
+        internal static IValue SubtractAndScale(IValue overflow, IntegerValueBase intMinuend, IntegerValueBase intSubtrahend) {
             var s = intMinuend.AsBigInteger - intSubtrahend.AsBigInteger;
-            return ToIntValue(s);
+            return ToIntValue(overflow, s);
         }
 
-        internal static IValue XorAndScale(IntegerValueBase firstInt, IntegerValueBase secondInt) {
+        internal static IValue XorAndScale(IValue overflow, IntegerValueBase firstInt, IntegerValueBase secondInt) {
             var s = firstInt.AsBigInteger ^ secondInt.AsBigInteger;
-            return ToIntValue(s);
+            return ToIntValue(overflow, s);
         }
 
         /// <summary>
@@ -352,5 +353,9 @@ namespace PasPasPas.Runtime.Values.Int {
         ///     invert all bits of this integer
         /// </summary>
         public abstract IValue InvertBits();
+
+
+        internal static ITypeReference Increment(IValue overflow, IntegerValueBase value)
+            => ToIntValue(overflow, value.AsBigInteger + BigInteger.One);
     }
 }

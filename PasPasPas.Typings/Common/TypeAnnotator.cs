@@ -62,8 +62,8 @@ namespace PasPasPas.Typings.Common {
         ///     as common visitor
         /// </summary>
         /// <returns></returns>
-        public IStartEndVisitor AsVisitor() =>
-            visitor;
+        public IStartEndVisitor AsVisitor()
+            => visitor;
 
         /// <summary>
         ///     create a new type annotator
@@ -343,13 +343,9 @@ namespace PasPasPas.Typings.Common {
         /// <param name="element"></param>
         public void EndVisit(SymbolReference element) {
             var baseTypeValue = GetTypeByIdOrUndefinedType(KnownTypeIds.UnspecifiedType);
-            var isConstant = false;
 
             if (element.TypeValue is ITypedSyntaxNode typeRef)
                 baseTypeValue = typeRef.TypeInfo;
-
-            if (element.TypeValue != null && element.TypeValue.TypeInfo != null)
-                isConstant = element.TypeValue.TypeInfo.IsConstant;
 
             foreach (var part in element.SymbolParts) {
 
@@ -363,9 +359,14 @@ namespace PasPasPas.Typings.Common {
 
                         if (reference != null && reference.Symbol != null) {
                             baseTypeValue = GetTypeByIdOrUndefinedType(reference.Symbol.TypeId);
-                            isConstant = reference.Kind == ReferenceKind.RefToConstant;
-                            if (isConstant)
+
+                            if (reference.Kind == ReferenceKind.RefToConstant)
                                 baseTypeValue = (reference.Symbol as ITypedSyntaxNode)?.TypeInfo;
+
+                            if (reference.Kind == ReferenceKind.RefToEnumMember) {
+                                baseTypeValue = (reference.Symbol as EnumValue)?.Value;
+                            }
+
                         }
                         else
                             baseTypeValue = GetErrorTypeReference(element);
@@ -389,7 +390,6 @@ namespace PasPasPas.Typings.Common {
                         }
                         else if (reference.Kind == ReferenceKind.RefToGlobalRoutine) {
                             if (reference.Symbol is IRoutine routine) {
-                                isConstant = routine.IsConstant;
                                 routine.ResolveCall(callableRoutines, new Signature(signature));
                             }
                         }
@@ -397,7 +397,6 @@ namespace PasPasPas.Typings.Common {
                     }
 
                     else if (GetTypeKind(baseTypeValue) == CommonTypeKind.ClassType && environment.TypeRegistry.GetTypeByIdOrUndefinedType(baseTypeValue.TypeId) is StructuredTypeDeclaration structType) {
-                        isConstant = false;
                         structType.ResolveCall(part.Name.CompleteName, callableRoutines, new Signature(signature));
                     }
 
@@ -440,8 +439,17 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="element"></param>
         public void EndVisit(EnumType element) {
-            var typeDef = currentTypeDefintion.Pop();
-            element.TypeInfo = typeDef;
+            var typeReference = currentTypeDefintion.Pop();
+            var typeDef = TypeRegistry.GetTypeByIdOrUndefinedType(typeReference.TypeId);
+
+            if (typeDef is EnumeratedType enumType) {
+                var typeID = enumType.CommonTypeId;
+                foreach (var enumValue in enumType.Values) {
+                    enumValue.MakeEnumValue(environment.ConstantValues, typeID, enumType.TypeId);
+                }
+            }
+
+            element.TypeInfo = typeReference;
         }
 
         /// <summary>
@@ -451,12 +459,20 @@ namespace PasPasPas.Typings.Common {
         public void EndVisit(EnumTypeValue element) {
             var value = currentTypeDefintion.Peek();
             var typeDef = value != null ? environment.TypeRegistry.GetTypeByIdOrUndefinedType(value.TypeId) as EnumeratedType : null;
-            if (typeDef == null)
+            if (typeDef == null) {
+                element.TypeInfo = GetErrorTypeReference(element);
                 return;
+            }
 
-            element.TypeInfo = GetTypeByIdOrUndefinedType(typeDef.TypeInfo.TypeId);
-            typeDef.DefineEnumValue(element.SymbolName, false, -1);
-            resolver.AddToScope(element.SymbolName, ReferenceKind.RefToEnumMember, element);
+            var enumRef = typeDef.DefineEnumValue(environment.ConstantValues, element.SymbolName, false, null);
+
+            if (enumRef == null) {
+                element.TypeInfo = GetErrorTypeReference(element);
+                return;
+            }
+
+            element.TypeInfo = GetTypeByIdOrUndefinedType(typeDef.TypeId);
+            resolver.AddToScope(element.SymbolName, ReferenceKind.RefToEnumMember, enumRef);
         }
 
         /// <summary>

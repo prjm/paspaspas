@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using BenchmarkDotNet.Attributes;
+using PasPasPas.Global.Constants;
+using PasPasPas.Global.Runtime;
 using PasPasPas.Runtime.Values;
 using PasPasPas.Runtime.Values.Int;
 
@@ -28,7 +26,7 @@ namespace P3Benchmark.Runtime {
             var d1 = new IntegerValue(a);
             var d2 = new IntegerValue(b);
             var r = d1.AsBigInteger + d2.AsBigInteger;
-            var d3 = IntegerValueBase.ToIntValue(r);
+            var d3 = IntegerValueBase.ToIntValue(new SpecialValue(SpecialConstantKind.IntegerOverflow, KnownTypeIds.ErrorType), r);
             var e = d3 as IntegerValueBase;
             var f = e.SignedValue;
             //if (c != f)
