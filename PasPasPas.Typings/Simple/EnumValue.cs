@@ -8,36 +8,31 @@ namespace PasPasPas.Typings.Simple {
     /// </summary>
     public class EnumValue : IRefSymbol {
 
-        private readonly string symbolName;
-        private ITypeReference enumValue;
-
         /// <summary>
         ///     create a new enumeration value
         /// </summary>
         /// <param name="name">symbol name</param>
         /// <param name="value">symbol value</param>
         public EnumValue(string name, ITypeReference value) {
-            symbolName = name;
-            enumValue = value;
+            Name = name;
+            Value = value;
         }
 
         /// <summary>
         ///     name of the enumeration item
         /// </summary>
-        public string Name
-            => symbolName;
+        public string Name { get; }
 
         /// <summary>
         ///     value of the enumerated item
         /// </summary>
-        public ITypeReference Value
-            => enumValue;
+        public ITypeReference Value { get; private set; }
 
         /// <summary>
         ///     type id
         /// </summary>
         public int TypeId
-            => enumValue.TypeId;
+            => Value.TypeId;
 
         /// <summary>
         ///     convert the value of this enumeration to an enumerated value
@@ -45,7 +40,7 @@ namespace PasPasPas.Typings.Simple {
         /// <param name="runtime">runtime values</param>
         /// <param name="typeId">given type id</param>
         public void MakeEnumValue(IRuntimeValueFactory runtime, int typeId, int enumTypeId) {
-            enumValue = runtime.Types.MakeEnumValue(enumTypeId, runtime.Integers.Cast(enumValue, typeId));
+            Value = runtime.Types.MakeEnumValue(enumTypeId, runtime.Integers.Cast(Value, typeId));
         }
     }
 }

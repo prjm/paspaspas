@@ -1,4 +1,5 @@
 ﻿using PasPasPas.Global.Types;
+using PasPasPas.Typings.Common;
 using PasPasPasTests.Common;
 
 namespace PasPasPasTests.Types {
@@ -16,9 +17,15 @@ namespace PasPasPasTests.Types {
 
             AssertExprTypeByVar("'a'..'z'", "a", KnownTypeIds.WideCharType, true);
             AssertExprTypeByVar("'z'..'a'", "a", KnownTypeIds.ErrorType, true);
+            AssertExprTypeByVar("'z'..''", "a", KnownTypeIds.ErrorType, true);
+            AssertExprTypeByVar("''..'a'", "a", KnownTypeIds.ErrorType, true);
 
             AssertExprTypeByVar("false..true", "a", KnownTypeIds.BooleanType, true);
             AssertExprTypeByVar("true..false", "a", KnownTypeIds.ErrorType, true);
+
+            AssertExprTypeByVar("x..z", "a", RegisteredTypes.SMALLEST_USER_TYPE_ID, true, "type v = (x,y,z);");
+            AssertExprTypeByVar("z..y", "a", KnownTypeIds.ErrorType, true, "type v = (x,y,z);");
+
         }
 
     }

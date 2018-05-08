@@ -5,9 +5,7 @@ namespace PasPasPas.Runtime.Values {
     /// <summary>
     ///     constant enumerated value
     /// </summary>
-    public class EnumeratedValue : ITypeReference {
-
-        private readonly ITypeReference value;
+    public class EnumeratedValue : IEnumeratedValue {
 
         /// <summary>
         ///     create a new enumerated value
@@ -16,7 +14,7 @@ namespace PasPasPas.Runtime.Values {
         /// <param name="value">constant value</param>
         public EnumeratedValue(int enumTypeId, ITypeReference value) {
             TypeId = enumTypeId;
-            this.value = value;
+            Value = value;
         }
 
         /// <summary>
@@ -37,11 +35,16 @@ namespace PasPasPas.Runtime.Values {
             => CommonTypeKind.EnumerationType;
 
         /// <summary>
+        ///     enumerated value
+        /// </summary>
+        public ITypeReference Value { get; }
+
+        /// <summary>
         ///     convert this type to a short string
         /// </summary>
         /// <returns></returns>
         public override string ToString()
-            => "Enum$" + value.ToString();
+            => "Enum$" + Value.ToString();
 
     }
 }

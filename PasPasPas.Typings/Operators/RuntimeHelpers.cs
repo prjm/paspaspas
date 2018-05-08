@@ -169,30 +169,37 @@ namespace PasPasPas.Typings.Operators {
                 return false;
 
             if (left is IIntegerValue && right is IIntegerValue) {
-                var result = runtime.Integers.GreaterThen(left, right) as IBooleanValue;
 
-                if (result == null)
+                if (!(runtime.Integers.GreaterThen(left, right) is IBooleanValue result))
                     return false;
 
                 return result.AsBoolean;
             }
 
             if (left is ICharValue && right is ICharValue) {
-                var result = runtime.Strings.GreaterThen(left, right) as IBooleanValue;
 
-                if (result == null)
+                if (!(runtime.Strings.GreaterThen(left, right) is IBooleanValue result))
                     return false;
 
                 return result.AsBoolean;
             }
 
             if (left is IBooleanValue && right is IBooleanValue) {
-                var result = runtime.Booleans.GreaterThen(left, right) as IBooleanValue;
 
-                if (result == null)
+                if (!(runtime.Booleans.GreaterThen(left, right) is IBooleanValue result))
                     return false;
 
                 return result.AsBoolean;
+            }
+
+            if (left is IEnumeratedValue leftEnum && right is IEnumeratedValue rightEnum) {
+
+                if (!(runtime.Integers.GreaterThen(leftEnum.Value, rightEnum.Value) is IBooleanValue result))
+                    return false;
+
+                return result.AsBoolean;
+
+
             }
 
             return false;

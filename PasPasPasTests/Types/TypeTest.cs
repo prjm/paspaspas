@@ -25,7 +25,11 @@ namespace PasPasPasTests.Types {
         protected void AssertExprTypeByVar(string commonType, string expression, int typeId, bool resolveSubrange = false, string decls = "") {
             var file = "SimpleExpr";
             var program = $"program {file};{decls} var a,b: {commonType}; begin WriteLn({expression}); end. ";
-            SymbolReferencePart searchfunction(object x) => x as SymbolReferencePart;
+
+            SymbolReferencePart searchfunction(object x)
+                => (x is SymbolReferencePart srp) && srp.Kind == SymbolReferencePartKind.CallParameters ? x as SymbolReferencePart : null;
+            ;
+
             IExpression firstParam = null;
 
             firstParam = EvaluateExpressionType(file, program, searchfunction, NativeIntSize.Undefined, out var env) as IExpression;
