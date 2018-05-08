@@ -2,10 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.Tokenizer.CharClass;
 using PasPasPas.Parsing.Tokenizer.TokenGroups;
-using PasPasPas.Infrastructure.Environment;
 
 namespace PasPasPas.Parsing.Tokenizer.Patterns {
 

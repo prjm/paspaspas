@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
+﻿namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
 
     /// <summary>
     ///     integer literal parser kind

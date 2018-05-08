@@ -1,6 +1,6 @@
 ﻿using System;
-using PasPasPas.Global.Constants;
 using PasPasPas.Global.Runtime;
+using PasPasPas.Global.Types;
 
 namespace PasPasPas.Runtime.Values {
 

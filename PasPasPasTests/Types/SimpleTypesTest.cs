@@ -1,5 +1,4 @@
 ﻿using PasPasPas.Typings.Structured;
-using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Typings.Simple;
 using Xunit;
 using PasPasPas.Global.Runtime;

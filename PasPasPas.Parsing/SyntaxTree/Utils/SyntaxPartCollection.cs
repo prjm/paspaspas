@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using PasPasPas.Infrastructure.Utils;
-using PasPasPas.Parsing.SyntaxTree.Abstract;
 
 namespace PasPasPas.Parsing.SyntaxTree.Utils {
 

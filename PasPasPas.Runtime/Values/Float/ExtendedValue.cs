@@ -1,5 +1,5 @@
-﻿using PasPasPas.Global.Constants;
-using PasPasPas.Global.Runtime;
+﻿using PasPasPas.Global.Runtime;
+using PasPasPas.Global.Types;
 using SharpFloat.FloatingPoint;
 
 namespace PasPasPas.Runtime.Values.Float {

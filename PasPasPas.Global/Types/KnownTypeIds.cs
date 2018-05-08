@@ -1,7 +1,7 @@
-﻿namespace PasPasPas.Global.Constants {
+﻿namespace PasPasPas.Global.Types {
 
     /// <summary>
-    ///     common type ids
+    ///     common type ids, used for system types
     /// </summary>
     public static class KnownTypeIds {
 

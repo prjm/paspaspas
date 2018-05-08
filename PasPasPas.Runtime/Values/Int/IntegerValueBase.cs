@@ -1,8 +1,6 @@
-﻿using System;
-using System.Numerics;
-using PasPasPas.Global.Constants;
+﻿using System.Numerics;
 using PasPasPas.Global.Runtime;
-using PasPasPas.Runtime.Values.Boolean;
+using PasPasPas.Global.Types;
 using SharpFloat.FloatingPoint;
 
 namespace PasPasPas.Runtime.Values.Int {

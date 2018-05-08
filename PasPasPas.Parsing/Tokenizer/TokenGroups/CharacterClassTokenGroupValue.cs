@@ -1,5 +1,4 @@
 ﻿using System;
-using PasPasPas.Infrastructure.Environment;
 using PasPasPas.Parsing.SyntaxTree;
 using PasPasPas.Parsing.Tokenizer.CharClass;
 using PasPasPas.Parsing.Tokenizer.LiteralValues;

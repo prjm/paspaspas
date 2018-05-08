@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using PasPasPas.Global.Types;
-using PasPasPas.Parsing.SyntaxTree.Types;
+﻿using PasPasPas.Global.Types;
 
 namespace PasPasPas.Typings.Common {
 

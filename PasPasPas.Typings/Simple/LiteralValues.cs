@@ -1,5 +1,4 @@
-﻿using PasPasPas.Global.Constants;
-using PasPasPas.Typings.Common;
+﻿using PasPasPas.Global.Types;
 
 namespace PasPasPas.Typings.Simple {
 

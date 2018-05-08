@@ -1,7 +1,5 @@
-﻿using System;
-using PasPasPas.Global.Runtime;
+﻿using PasPasPas.Global.Runtime;
 using PasPasPas.Infrastructure.Environment;
-using PasPasPas.Infrastructure.Utils;
 using SharpFloat.FloatingPoint;
 
 namespace PasPasPas.Parsing.Tokenizer.LiteralValues {

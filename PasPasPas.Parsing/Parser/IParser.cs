@@ -1,5 +1,4 @@
 ﻿using System;
-using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.Tokenizer;
 

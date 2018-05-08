@@ -1,4 +1,4 @@
-﻿using PasPasPas.Global.Constants;
+﻿using PasPasPas.Global.Types;
 using PasPasPasTests.Common;
 
 namespace PasPasPasTests.Types {

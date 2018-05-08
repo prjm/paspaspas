@@ -1,6 +1,4 @@
-﻿using System;
-using PasPasPas.Global.Runtime;
-using PasPasPas.Runtime.Values.Boolean;
+﻿using PasPasPas.Global.Runtime;
 using SharpFloat.FloatingPoint;
 
 namespace PasPasPas.Runtime.Values.Float {

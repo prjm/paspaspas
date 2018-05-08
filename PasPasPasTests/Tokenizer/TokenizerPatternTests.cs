@@ -11,7 +11,6 @@ using PasPasPas.Api;
 using PasPasPas.Parsing.Tokenizer.LiteralValues;
 using PasPasPasTests.Common;
 using Assert = PasPasPasTests.Common.Assert;
-using PasPasPas.Global.Runtime;
 
 namespace PasPasPasTests.Tokenizer {
 

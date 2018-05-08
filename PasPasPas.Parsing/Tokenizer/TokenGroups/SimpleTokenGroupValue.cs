@@ -1,6 +1,4 @@
-﻿using System;
-using System.Text;
-using PasPasPas.Parsing.SyntaxTree;
+﻿using PasPasPas.Parsing.SyntaxTree;
 
 namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
 

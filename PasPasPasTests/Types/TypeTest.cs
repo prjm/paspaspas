@@ -1,11 +1,9 @@
 ﻿using System;
 using PasPasPas.Api;
-using PasPasPas.Global.Constants;
 using PasPasPas.Global.Runtime;
 using PasPasPas.Global.Types;
 using PasPasPas.Options.DataTypes;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
-using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Typings.Common;
 using PasPasPasTests.Common;

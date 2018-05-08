@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using PasPasPas.Global.Constants;
 using PasPasPas.Global.Runtime;
 using PasPasPas.Global.Types;
 using PasPasPas.Typings.Common;

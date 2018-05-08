@@ -1,5 +1,4 @@
-﻿using PasPasPas.Infrastructure.Utils;
-using PasPasPas.Typings.Common;
+﻿using PasPasPas.Typings.Common;
 
 namespace PasPasPas.Typings.Structured {
 

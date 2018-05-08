@@ -1,6 +1,5 @@
 ﻿using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
-using System;
 using System.Linq;
 using Xunit;
 

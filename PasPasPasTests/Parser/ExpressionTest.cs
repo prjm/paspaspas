@@ -1,6 +1,4 @@
-﻿using PasPasPas.Global.Constants;
-using PasPasPas.Typings.Common;
-using Xunit;
+﻿using Xunit;
 
 namespace PasPasPasTests.Parser {
 

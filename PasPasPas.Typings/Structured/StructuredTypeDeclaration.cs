@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using PasPasPas.Global.Runtime;
 using PasPasPas.Global.Types;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
-using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Typings.Common;
 
 namespace PasPasPas.Typings.Structured {

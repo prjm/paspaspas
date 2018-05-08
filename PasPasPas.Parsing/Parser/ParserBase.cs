@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
 using System.Text;
 using PasPasPas.Parsing.Tokenizer;
 using PasPasPas.Infrastructure.Log;
@@ -8,7 +7,6 @@ using PasPasPas.Parsing.SyntaxTree;
 using System.Linq;
 using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Options.Bundles;
-using PasPasPas.Infrastructure.Environment;
 
 namespace PasPasPas.Parsing.Parser {
 

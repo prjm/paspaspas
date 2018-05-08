@@ -1,6 +1,4 @@
 ﻿using PasPasPas.Global.Runtime;
-using PasPasPas.Parsing.SyntaxTree.Types;
-using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
 

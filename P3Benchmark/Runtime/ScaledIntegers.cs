@@ -1,7 +1,7 @@
 ﻿using System;
 using BenchmarkDotNet.Attributes;
-using PasPasPas.Global.Constants;
 using PasPasPas.Global.Runtime;
+using PasPasPas.Global.Types;
 using PasPasPas.Runtime.Values;
 using PasPasPas.Runtime.Values.Int;
 

@@ -1,8 +1,5 @@
-﻿using System.Collections.Generic;
-using PasPasPas.Parsing.SyntaxTree.Standard;
+﻿using PasPasPas.Parsing.SyntaxTree.Standard;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
-using PasPasPas.Parsing.SyntaxTree.Utils;
-using PasPasPas.Infrastructure.Utils;
 using static PasPasPas.Parsing.Tokenizer.TokenizerWithLookahead;
 
 namespace PasPasPas.Parsing.SyntaxTree {
