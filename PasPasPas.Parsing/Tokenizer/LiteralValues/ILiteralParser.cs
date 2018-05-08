@@ -12,7 +12,7 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
         /// </summary>
         /// <param name="input">input</param>
         /// <returns>parsed literal value</returns>
-        IValue Parse(string input);
+        ITypeReference Parse(string input);
 
     }
 }

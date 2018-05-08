@@ -18,7 +18,7 @@
         /// </summary>
         /// <param name="text"></param>
         /// <returns></returns>
-        IValue ToUnicodeString(string text);
+        ITypeReference ToUnicodeString(string text);
 
     }
 }

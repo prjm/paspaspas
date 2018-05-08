@@ -25,14 +25,14 @@ namespace PasPasPas.Runtime.Values.Float {
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public IValue ToExtendedValue(in ExtF80 value)
+        public ITypeReference ToExtendedValue(in ExtF80 value)
             => new ExtendedValue(value);
 
 
         /// <summary>
         ///     invalid real number
         /// </summary>
-        public IValue Invalid { get; }
+        public ITypeReference Invalid { get; }
             = new SpecialValue(SpecialConstantKind.InvalidReal);
 
         /// <summary>

@@ -19,7 +19,7 @@
         /// <summary>
         ///     invalid <c>boolean</c> value
         /// </summary>
-        IValue Invalid { get; }
+        ITypeReference Invalid { get; }
 
         /// <summary>
         ///     convert a boolean constant value to a value object

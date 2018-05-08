@@ -5,9 +5,8 @@ namespace PasPasPas.Runtime.Values {
     /// <summary>
     ///     constant enumerated value
     /// </summary>
-    public class EnumeratedValue : IValue {
+    public class EnumeratedValue : ITypeReference {
 
-        private readonly int enumTypeId;
         private readonly ITypeReference value;
 
         /// <summary>
@@ -16,15 +15,14 @@ namespace PasPasPas.Runtime.Values {
         /// <param name="enumTypeId">base type id</param>
         /// <param name="value">constant value</param>
         public EnumeratedValue(int enumTypeId, ITypeReference value) {
-            this.enumTypeId = enumTypeId;
+            TypeId = enumTypeId;
             this.value = value;
         }
 
         /// <summary>
         ///     enumerated type id
         /// </summary>
-        public int TypeId
-            => enumTypeId;
+        public int TypeId { get; }
 
         /// <summary>
         ///     <c>true</c> for this enumerated value

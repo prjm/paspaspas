@@ -55,19 +55,19 @@ namespace PasPasPas.Runtime.Values.Float {
         /// <returns>number as string</returns>
         public abstract override string ToString();
 
-        internal static IValue Multiply(INumericalValue first, INumericalValue second)
+        internal static ITypeReference Multiply(INumericalValue first, INumericalValue second)
             => new ExtendedValue(first.AsExtended * second.AsExtended);
 
-        internal static IValue Divide(INumericalValue numberDividend, INumericalValue numberDivisor)
+        internal static ITypeReference Divide(INumericalValue numberDividend, INumericalValue numberDivisor)
             => new ExtendedValue(numberDividend.AsExtended / numberDivisor.AsExtended);
 
-        internal static IValue Add(INumericalValue first, INumericalValue second)
+        internal static ITypeReference Add(INumericalValue first, INumericalValue second)
             => new ExtendedValue(first.AsExtended + second.AsExtended);
 
-        internal static IValue Subtract(INumericalValue first, INumericalValue second)
+        internal static ITypeReference Subtract(INumericalValue first, INumericalValue second)
             => new ExtendedValue(first.AsExtended - second.AsExtended);
 
-        internal static IValue Negate(INumericalValue value)
+        internal static ITypeReference Negate(INumericalValue value)
             => new ExtendedValue(-value.AsExtended);
 
         internal static bool Equal(INumericalValue floatLeft, INumericalValue floatRight)
@@ -93,7 +93,7 @@ namespace PasPasPas.Runtime.Values.Float {
         /// </summary>
         /// <param name="number">number</param>
         /// <returns>number value</returns>
-        public static IValue ToExtendedValue(in ExtF80 number)
+        public static ITypeReference ToExtendedValue(in ExtF80 number)
             => new ExtendedValue(number);
     }
 }

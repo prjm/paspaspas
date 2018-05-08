@@ -11,25 +11,29 @@ namespace PasPasPas.Runtime.Values.Int {
         /// <summary>
         ///     invalid integer
         /// </summary>
-        public IValue Invalid { get; }
+        public ITypeReference Invalid { get; }
             = new SpecialValue(SpecialConstantKind.InvalidInteger, KnownTypeIds.ErrorType);
 
         /// <summary>
         ///     integer overflow
         /// </summary>
-        public IValue Overflow { get; }
+        public ITypeReference Overflow { get; }
             = new SpecialValue(SpecialConstantKind.IntegerOverflow, KnownTypeIds.ErrorType);
 
         /// <summary>
         ///     boolean operations
         /// </summary>
         public IBooleanOperations Booleans { get; }
+
+        /// <summary>
+        ///     registered types
+        /// </summary>
         public ITypeOperations Types { get; }
 
         /// <summary>
         ///     zero / default value
         /// </summary>
-        public IValue Zero
+        public ITypeReference Zero
             => new ShortIntValue(0);
 
         /// <summary>
@@ -293,7 +297,7 @@ namespace PasPasPas.Runtime.Values.Int {
         /// </summary>
         /// <param name="number"></param>
         /// <returns></returns>
-        public IValue ToScaledIntegerValue(sbyte number)
+        public ITypeReference ToScaledIntegerValue(sbyte number)
             => IntegerValueBase.ToScaledIntegerValue(number);
 
         /// <summary>
@@ -301,7 +305,7 @@ namespace PasPasPas.Runtime.Values.Int {
         /// </summary>
         /// <param name="number"></param>
         /// <returns></returns>
-        public IValue ToScaledIntegerValue(byte number)
+        public ITypeReference ToScaledIntegerValue(byte number)
             => IntegerValueBase.ToScaledIntegerValue(number);
 
         /// <summary>
@@ -309,7 +313,7 @@ namespace PasPasPas.Runtime.Values.Int {
         /// </summary>
         /// <param name="number"></param>
         /// <returns></returns>
-        public IValue ToScaledIntegerValue(short number)
+        public ITypeReference ToScaledIntegerValue(short number)
             => IntegerValueBase.ToScaledIntegerValue(number);
 
         /// <summary>
@@ -317,7 +321,7 @@ namespace PasPasPas.Runtime.Values.Int {
         /// </summary>
         /// <param name="number"></param>
         /// <returns></returns>
-        public IValue ToScaledIntegerValue(ushort number)
+        public ITypeReference ToScaledIntegerValue(ushort number)
             => IntegerValueBase.ToScaledIntegerValue(number);
 
         /// <summary>
@@ -325,7 +329,7 @@ namespace PasPasPas.Runtime.Values.Int {
         /// </summary>
         /// <param name="number"></param>
         /// <returns></returns>
-        public IValue ToScaledIntegerValue(int number)
+        public ITypeReference ToScaledIntegerValue(int number)
             => IntegerValueBase.ToScaledIntegerValue(number);
 
         /// <summary>
@@ -333,7 +337,7 @@ namespace PasPasPas.Runtime.Values.Int {
         /// </summary>
         /// <param name="number"></param>
         /// <returns></returns>
-        public IValue ToScaledIntegerValue(uint number)
+        public ITypeReference ToScaledIntegerValue(uint number)
             => IntegerValueBase.ToScaledIntegerValue(number);
 
         /// <summary>
@@ -341,7 +345,7 @@ namespace PasPasPas.Runtime.Values.Int {
         /// </summary>
         /// <param name="number"></param>
         /// <returns></returns>
-        public IValue ToScaledIntegerValue(long number)
+        public ITypeReference ToScaledIntegerValue(long number)
             => IntegerValueBase.ToScaledIntegerValue(number);
 
         /// <summary>
@@ -349,7 +353,7 @@ namespace PasPasPas.Runtime.Values.Int {
         /// </summary>
         /// <param name="number"></param>
         /// <returns></returns>
-        public IValue ToScaledIntegerValue(ulong number)
+        public ITypeReference ToScaledIntegerValue(ulong number)
             => IntegerValueBase.ToScaledIntegerValue(number);
 
         /// <summary>

@@ -63,7 +63,7 @@ namespace PasPasPasTests.Runtime {
 
         [TestCase]
         public void TestIntegerNegation() {
-            string n(IValue v, int typeKind) {
+            string n(ITypeReference v, int typeKind) {
                 var c = new IntegerOperations(new BooleanOperations(), null);
                 var vv = c.Negate(v);
                 Assert.AreEqual(typeKind, vv.TypeId);
@@ -111,7 +111,7 @@ namespace PasPasPasTests.Runtime {
 
         [TestCase]
         public void TestIntegerAddition() {
-            string a(IValue v1, IValue v2) {
+            string a(ITypeReference v1, ITypeReference v2) {
                 var c = new IntegerOperations(new BooleanOperations(), null);
                 var vv1 = c.Add(v1, v2);
                 var vv2 = c.Add(v2, v1);
@@ -137,7 +137,7 @@ namespace PasPasPasTests.Runtime {
 
         [TestCase]
         public void TestIntegerSubtraction() {
-            string s(IValue v1, IValue v2) {
+            string s(ITypeReference v1, ITypeReference v2) {
                 var c = new IntegerOperations(new BooleanOperations(), null);
                 var vv1 = c.Subtract(v1, v2);
                 return vv1.ToString();
@@ -160,7 +160,7 @@ namespace PasPasPasTests.Runtime {
 
         [TestCase]
         public void TestIntegerMultiplication() {
-            string m(IValue v1, IValue v2) {
+            string m(ITypeReference v1, ITypeReference v2) {
                 var c = new IntegerOperations(new BooleanOperations(), null);
                 var vv1 = c.Multiply(v1, v2);
                 return vv1.ToString();
@@ -178,7 +178,7 @@ namespace PasPasPasTests.Runtime {
 
         [TestCase]
         public void TestIntegerDivision() {
-            string d(IValue v1, IValue v2) {
+            string d(ITypeReference v1, ITypeReference v2) {
                 var c = new IntegerOperations(new BooleanOperations(), null);
                 var vv1 = c.Divide(v1, v2);
                 return vv1.ToString();
@@ -196,7 +196,7 @@ namespace PasPasPasTests.Runtime {
 
         [TestCase]
         public void TestIntegerModulo() {
-            string m(IValue v1, IValue v2) {
+            string m(ITypeReference v1, ITypeReference v2) {
                 var c = new IntegerOperations(new BooleanOperations(), null);
                 var vv1 = c.Modulo(v1, v2);
                 return vv1.ToString();
@@ -215,7 +215,7 @@ namespace PasPasPasTests.Runtime {
 
         [TestCase]
         public void TestIntegerNot() {
-            string m(IValue v, int typeKind) {
+            string m(ITypeReference v, int typeKind) {
                 var c = new IntegerOperations(new BooleanOperations(), null);
                 var vv1 = c.Not(v);
                 Assert.AreEqual(typeKind, vv1.TypeId);
@@ -232,7 +232,7 @@ namespace PasPasPasTests.Runtime {
 
         [TestCase]
         public void TestIntegerAnd() {
-            string a(IValue v1, IValue v2) {
+            string a(ITypeReference v1, ITypeReference v2) {
                 var c = new IntegerOperations(new BooleanOperations(), null);
                 var vv1 = c.And(v1, v2);
                 return vv1.ToString();
@@ -247,7 +247,7 @@ namespace PasPasPasTests.Runtime {
 
         [TestCase]
         public void TestIntegerOr() {
-            string o(IValue v1, IValue v2) {
+            string o(ITypeReference v1, ITypeReference v2) {
                 var c = new IntegerOperations(new BooleanOperations(), null);
                 var vv1 = c.Or(v1, v2);
                 return vv1.ToString();
@@ -261,7 +261,7 @@ namespace PasPasPasTests.Runtime {
 
         [TestCase]
         public void TestIntegerXor() {
-            string x(IValue v1, IValue v2) {
+            string x(ITypeReference v1, ITypeReference v2) {
                 var c = new IntegerOperations(new BooleanOperations(), null);
                 var vv1 = c.Xor(v1, v2);
                 return vv1.ToString();
@@ -275,7 +275,7 @@ namespace PasPasPasTests.Runtime {
 
         [TestCase]
         public void TestIntegerShl() {
-            string sl(IValue v1, IValue v2) {
+            string sl(ITypeReference v1, ITypeReference v2) {
                 var c = new IntegerOperations(new BooleanOperations(), null);
                 var vv1 = c.Shl(v1, v2);
                 return vv1.ToString();
@@ -288,7 +288,7 @@ namespace PasPasPasTests.Runtime {
 
         [TestCase]
         public void TestIntegerShr() {
-            string sr(IValue v1, IValue v2) {
+            string sr(ITypeReference v1, ITypeReference v2) {
                 var c = new IntegerOperations(new BooleanOperations(), null);
                 var vv1 = c.Shr(v1, v2);
                 return vv1.ToString();

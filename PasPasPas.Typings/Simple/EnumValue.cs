@@ -16,7 +16,7 @@ namespace PasPasPas.Typings.Simple {
         /// </summary>
         /// <param name="name">symbol name</param>
         /// <param name="value">symbol value</param>
-        public EnumValue(string name, IValue value) {
+        public EnumValue(string name, ITypeReference value) {
             symbolName = name;
             enumValue = value;
         }

@@ -3,7 +3,7 @@
     /// <summary>
     ///     string value
     /// </summary>
-    public interface IStringValue : IValue {
+    public interface IStringValue : ITypeReference {
 
         /// <summary>
         ///     get string value

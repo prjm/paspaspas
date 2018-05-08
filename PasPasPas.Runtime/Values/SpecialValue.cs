@@ -7,7 +7,7 @@ namespace PasPasPas.Runtime.Values {
     /// <summary>
     ///     special constant values
     /// </summary>
-    public class SpecialValue : IValue {
+    public class SpecialValue : ITypeReference {
 
         private readonly SpecialConstantKind kind;
         private readonly int typeIdentifier;

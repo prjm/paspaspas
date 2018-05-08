@@ -12,7 +12,7 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
         /// </summary>
         /// <param name="value">real value</param>
         /// <returns>real literal value</returns>
-        IValue Convert(string value);
+        ITypeReference Convert(string value);
 
     }
 }

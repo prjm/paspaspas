@@ -13,7 +13,7 @@ namespace PasPasPas.Runtime.Values.Char {
         /// </summary>
         /// <param name="character"></param>
         /// <returns></returns>
-        public IValue ToWideCharValue(char character)
+        public ITypeReference ToWideCharValue(char character)
             => new WideCharValue(character);
 
     }

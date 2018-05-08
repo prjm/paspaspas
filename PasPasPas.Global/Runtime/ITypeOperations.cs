@@ -8,7 +8,7 @@
         /// <summary>
         ///     constant nil pointer
         /// </summary>
-        IValue Nil { get; }
+        ITypeReference Nil { get; }
 
         /// <summary>
         ///     type resolver

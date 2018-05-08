@@ -11,56 +11,56 @@
         /// </summary>
         /// <param name="number">given number</param>
         /// <returns>converted value</returns>
-        IValue ToScaledIntegerValue(sbyte number);
+        ITypeReference ToScaledIntegerValue(sbyte number);
 
         /// <summary>
         ///     get the value for a byte
         /// </summary>
         /// <param name="number">given number</param>
         /// <returns>converted value</returns>
-        IValue ToScaledIntegerValue(byte number);
+        ITypeReference ToScaledIntegerValue(byte number);
 
         /// <summary>
         ///     get the value for a given number
         /// </summary>
         /// <param name="number">given number</param>
         /// <returns>converted value</returns>
-        IValue ToScaledIntegerValue(short number);
+        ITypeReference ToScaledIntegerValue(short number);
 
         /// <summary>
         ///     get the value for a given number
         /// </summary>
         /// <param name="number">given number</param>
         /// <returns>converted value</returns>
-        IValue ToScaledIntegerValue(ushort number);
+        ITypeReference ToScaledIntegerValue(ushort number);
 
         /// <summary>
         ///     get the value for a given number
         /// </summary>
         /// <param name="number">given number</param>
         /// <returns>converted value</returns>
-        IValue ToScaledIntegerValue(int number);
+        ITypeReference ToScaledIntegerValue(int number);
 
         /// <summary>
         ///     get the value for a given number
         /// </summary>
         /// <param name="number">given number</param>
         /// <returns>converted value</returns>
-        IValue ToScaledIntegerValue(uint number);
+        ITypeReference ToScaledIntegerValue(uint number);
 
         /// <summary>
         ///     get the value for a given number
         /// </summary>
         /// <param name="number">given number</param>
         /// <returns>converted value</returns>
-        IValue ToScaledIntegerValue(long number);
+        ITypeReference ToScaledIntegerValue(long number);
 
         /// <summary>
         ///     get the value for a given number
         /// </summary>
         /// <param name="number">given number</param>
         /// <returns>converted value</returns>
-        IValue ToScaledIntegerValue(ulong number);
+        ITypeReference ToScaledIntegerValue(ulong number);
 
 
     }

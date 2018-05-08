@@ -48,6 +48,10 @@ namespace PasPasPas.Typings.Simple {
                 var unsigned = true;
 
                 foreach (var value in Values) {
+
+                    if (value.Value is IEnumeratedValue enumValue)
+                        return enumValue.Value.TypeId;
+
                     unsigned = unsigned && TypeRegistry.Runtime.AreValuesUnsigned(value.Value, value.Value);
                     result = TypeRegistry.GetSmallestIntegralTypeOrNext(result, value.Value.TypeId, 8, unsigned);
                 }
@@ -63,7 +67,7 @@ namespace PasPasPas.Typings.Simple {
         /// <param name="symbolName">symbol name</param>
         /// <param name="withValue">if <c>true</c> a value definition is used</param>
         /// <param name="enumValue">optional value definition</param>
-        public IRefSymbol DefineEnumValue(IRuntimeValueFactory runtimeValues, string symbolName, bool withValue, IValue enumValue) {
+        public IRefSymbol DefineEnumValue(IRuntimeValueFactory runtimeValues, string symbolName, bool withValue, ITypeReference enumValue) {
             ITypeReference newValue;
 
             if (withValue)
@@ -73,10 +77,10 @@ namespace PasPasPas.Typings.Simple {
             else
                 newValue = runtimeValues.Integers.Zero;
 
-            if ((!newValue.IsConstant) || (!(newValue is IValue constValue)))
+            if (!newValue.IsConstant)
                 return null;
 
-            var enumValueDefinition = new EnumValue(symbolName, constValue);
+            var enumValueDefinition = new EnumValue(symbolName, newValue);
             values.Add(enumValueDefinition);
             return enumValueDefinition;
         }
@@ -100,8 +104,8 @@ namespace PasPasPas.Typings.Simple {
         ///     readable type name
         /// </summary>
         /// <returns></returns>
-        public override string ToString()
-            => "Enum";
-
+        public override string ToString() {
+            return $"Enum {TypeRegistry.GetTypeByIdOrUndefinedType(CommonTypeId)}";
+        }
     }
 }

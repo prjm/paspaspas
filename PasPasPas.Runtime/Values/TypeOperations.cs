@@ -26,7 +26,7 @@ namespace PasPasPas.Runtime.Values {
         /// <summary>
         ///     nil pointer constant
         /// </summary>
-        public IValue Nil { get; }
+        public ITypeReference Nil { get; }
             = new SpecialValue(SpecialConstantKind.Nil, KnownTypeIds.GenericPointer);
 
         /// <summary>

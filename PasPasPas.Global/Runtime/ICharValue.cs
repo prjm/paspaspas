@@ -3,7 +3,7 @@
     /// <summary>
     ///     widechar runtime value (utf-16)
     /// </summary>
-    public interface ICharValue : IValue {
+    public interface ICharValue : ITypeReference {
 
         /// <summary>
         ///     get the wide char value

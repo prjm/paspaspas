@@ -62,7 +62,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
                     }
                 } while (!state.AtEof);
 
-                IValue data;
+                ITypeReference data;
                 if (resultBuilder.Data.Length == 1)
                     data = state.Constants.Chars.ToWideCharValue(resultBuilder.Data[0]);
                 else

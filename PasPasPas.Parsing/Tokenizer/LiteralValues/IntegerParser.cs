@@ -7,14 +7,14 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
     /// <summary>
     ///     simple integer parser
     /// </summary>
-    public sealed class IntegerParser : IEnvironmentItem, IIntegerLiteralParser, ILookupFunction<string, IValue> {
+    public sealed class IntegerParser : IEnvironmentItem, IIntegerLiteralParser, ILookupFunction<string, ITypeReference> {
 
-        private readonly LookupTable<string, IValue> data;
+        private readonly LookupTable<string, ITypeReference> data;
 
         /// <summary>
         ///     lookup table
         /// </summary>
-        public LookupTable<string, IValue> Table
+        public LookupTable<string, ITypeReference> Table
             => data;
 
         LookupTable ILookupFunction.Table
@@ -153,7 +153,7 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
         public IntegerParser(IRuntimeValueFactory constOperations, bool hexFormat) {
             allowHex = hexFormat;
             constants = constOperations;
-            data = new LookupTable<string, IValue>(new Func<string, IValue>(DoParse), true);
+            data = new LookupTable<string, ITypeReference>(new Func<string, ITypeReference>(DoParse), true);
         }
 
         /// <summary>
@@ -161,7 +161,7 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        private IValue DoParse(string input) {
+        private ITypeReference DoParse(string input) {
             ulong result = 0;
             ulong newresult;
 
@@ -198,7 +198,7 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
         /// </summary>
         /// <param name="input">string to parse</param>
         /// <returns>parsed number</returns>
-        public IValue Parse(string input)
+        public ITypeReference Parse(string input)
             => data.GetValue(input ?? throw new ArgumentNullException(nameof(input)));
 
         /// <summary>

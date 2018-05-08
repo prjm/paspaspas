@@ -131,7 +131,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="value"></param>
         /// <param name="valueParser"></param>
         /// <returns></returns>
-        public IValue ParserLiteral(string value, LiteralParserKind valueParser) {
+        public ITypeReference ParserLiteral(string value, LiteralParserKind valueParser) {
 
             switch (valueParser) {
 
@@ -174,7 +174,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         /// <param name="literal">literal value</param>
         /// <returns></returns>
-        public IValue ConvertRealLiteral(string literal)
+        public ITypeReference ConvertRealLiteral(string literal)
             => environment.RealLiteralConverter.Convert(literal);
 
         /// <summary>

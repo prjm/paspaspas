@@ -84,7 +84,7 @@ namespace PasPasPas.Runtime.Values.Int {
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static IValue ToIntValue(IValue overflow, in BigInteger value) {
+        public static ITypeReference ToIntValue(ITypeReference overflow, in BigInteger value) {
             if (value < -9223372036854775808)
                 return overflow;
             else if (value < -2147483648)
@@ -113,49 +113,49 @@ namespace PasPasPas.Runtime.Values.Int {
             return overflow;
         }
 
-        internal static IValue AddAndScale(IValue overflow, IntegerValueBase intAugend, IntegerValueBase intAddend) {
+        internal static ITypeReference AddAndScale(ITypeReference overflow, IntegerValueBase intAugend, IntegerValueBase intAddend) {
             var s = intAugend.AsBigInteger + intAddend.AsBigInteger;
             return ToIntValue(overflow, s);
         }
 
-        internal static IValue AndAndScale(IValue overflow, IntegerValueBase firstOperator, IntegerValueBase secondOperator) {
+        internal static ITypeReference AndAndScale(ITypeReference overflow, IntegerValueBase firstOperator, IntegerValueBase secondOperator) {
             var s = firstOperator.AsBigInteger & secondOperator.AsBigInteger;
             return ToIntValue(overflow, s);
         }
 
-        internal static IValue DivideAndScale(IValue overflow, IntegerValueBase dividend, IntegerValueBase divisor) {
+        internal static ITypeReference DivideAndScale(ITypeReference overflow, IntegerValueBase dividend, IntegerValueBase divisor) {
             var s = dividend.AsBigInteger / divisor.AsBigInteger;
             return ToIntValue(overflow, s);
 
         }
 
 
-        internal static IValue ModuloAndScale(IValue overflow, IntegerValueBase dividend, IntegerValueBase divisor) {
+        internal static ITypeReference ModuloAndScale(ITypeReference overflow, IntegerValueBase dividend, IntegerValueBase divisor) {
             var s = dividend.AsBigInteger % divisor.AsBigInteger;
             return ToIntValue(overflow, s);
         }
 
-        internal static IValue MultiplyAndScale(IValue overflow, IntegerValueBase multiplicand, IntegerValueBase multiplier) {
+        internal static ITypeReference MultiplyAndScale(ITypeReference overflow, IntegerValueBase multiplicand, IntegerValueBase multiplier) {
             var s = multiplicand.AsBigInteger * multiplier.AsBigInteger;
             return ToIntValue(overflow, s);
         }
 
-        internal static IValue Negate(IValue overflow, IntegerValueBase intNumber) {
+        internal static ITypeReference Negate(ITypeReference overflow, IntegerValueBase intNumber) {
             var s = -intNumber.AsBigInteger;
             return ToIntValue(overflow, s);
         }
 
-        internal static IValue Not(IntegerValueBase intNumber) {
+        internal static ITypeReference Not(IntegerValueBase intNumber) {
             return intNumber.InvertBits();
         }
 
-        internal static IValue OrAndScale(IValue overflow, IntegerValueBase firstOperator, IntegerValueBase secondOperator) {
+        internal static ITypeReference OrAndScale(ITypeReference overflow, IntegerValueBase firstOperator, IntegerValueBase secondOperator) {
             var s = firstOperator.AsBigInteger | secondOperator.AsBigInteger;
             return ToIntValue(overflow, s);
 
         }
 
-        internal static IValue ShlAndScale(IValue overflow, IntegerValueBase firstOperator, IntegerValueBase secondOperator) {
+        internal static ITypeReference ShlAndScale(ITypeReference overflow, IntegerValueBase firstOperator, IntegerValueBase secondOperator) {
             BigInteger s;
             if (firstOperator.TypeId == KnownTypeIds.Int64Type || firstOperator.TypeId == KnownTypeIds.Uint64Type)
                 s = new BigInteger(firstOperator.SignedValue << (int)secondOperator.SignedValue);
@@ -165,7 +165,7 @@ namespace PasPasPas.Runtime.Values.Int {
             return ToIntValue(overflow, s);
         }
 
-        internal static IValue ShrAndScale(IValue overflow, IntegerValueBase firstOperator, IntegerValueBase secondOperator) {
+        internal static ITypeReference ShrAndScale(ITypeReference overflow, IntegerValueBase firstOperator, IntegerValueBase secondOperator) {
             BigInteger s;
             if (firstOperator.TypeId == KnownTypeIds.Int64Type || firstOperator.TypeId == KnownTypeIds.Uint64Type)
                 s = new BigInteger((ulong)firstOperator.SignedValue >> (int)secondOperator.SignedValue);
@@ -175,12 +175,12 @@ namespace PasPasPas.Runtime.Values.Int {
             return ToIntValue(overflow, s);
         }
 
-        internal static IValue SubtractAndScale(IValue overflow, IntegerValueBase intMinuend, IntegerValueBase intSubtrahend) {
+        internal static ITypeReference SubtractAndScale(ITypeReference overflow, IntegerValueBase intMinuend, IntegerValueBase intSubtrahend) {
             var s = intMinuend.AsBigInteger - intSubtrahend.AsBigInteger;
             return ToIntValue(overflow, s);
         }
 
-        internal static IValue XorAndScale(IValue overflow, IntegerValueBase firstInt, IntegerValueBase secondInt) {
+        internal static ITypeReference XorAndScale(ITypeReference overflow, IntegerValueBase firstInt, IntegerValueBase secondInt) {
             var s = firstInt.AsBigInteger ^ secondInt.AsBigInteger;
             return ToIntValue(overflow, s);
         }
@@ -190,7 +190,7 @@ namespace PasPasPas.Runtime.Values.Int {
         /// </summary>
         /// <param name="number">numerical value</param>
         /// <returns></returns>
-        public static IValue ToScaledIntegerValue(sbyte number)
+        public static ITypeReference ToScaledIntegerValue(sbyte number)
             => new ShortIntValue(number);
 
         /// <summary>
@@ -198,7 +198,7 @@ namespace PasPasPas.Runtime.Values.Int {
         /// </summary>
         /// <param name="number">numerical value</param>
         /// <returns></returns>
-        public static IValue ToScaledIntegerValue(byte number) {
+        public static ITypeReference ToScaledIntegerValue(byte number) {
             if (number < 128)
                 return new ShortIntValue((sbyte)number);
 
@@ -210,7 +210,7 @@ namespace PasPasPas.Runtime.Values.Int {
         /// </summary>
         /// <param name="number">numerical value</param>
         /// <returns></returns>
-        public static IValue ToScaledIntegerValue(int number) {
+        public static ITypeReference ToScaledIntegerValue(int number) {
             if (number < -32768)
                 return new IntegerValue(number);
             else if (number < -128)
@@ -232,7 +232,7 @@ namespace PasPasPas.Runtime.Values.Int {
         /// </summary>
         /// <param name="number">numerical value</param>
         /// <returns></returns>
-        public static IValue ToScaledIntegerValue(uint number) {
+        public static ITypeReference ToScaledIntegerValue(uint number) {
             if (number < 128)
                 return new ShortIntValue((sbyte)number);
             else if (number < 256)
@@ -252,7 +252,7 @@ namespace PasPasPas.Runtime.Values.Int {
         /// </summary>
         /// <param name="number">numerical value</param>
         /// <returns></returns>
-        public static IValue ToScaledIntegerValue(long number) {
+        public static ITypeReference ToScaledIntegerValue(long number) {
             if (number < -2147483648)
                 return new Int64Value(number);
             else if (number < -32768)
@@ -280,7 +280,7 @@ namespace PasPasPas.Runtime.Values.Int {
         /// </summary>
         /// <param name="number">numerical value</param>
         /// <returns></returns>
-        public static IValue ToScaledIntegerValue(ulong number) {
+        public static ITypeReference ToScaledIntegerValue(ulong number) {
             if (number < 128)
                 return new ShortIntValue((sbyte)number);
             else if (number < 256)
@@ -304,7 +304,7 @@ namespace PasPasPas.Runtime.Values.Int {
         /// </summary>
         /// <param name="number">numerical value</param>
         /// <returns></returns>
-        public static IValue ToScaledIntegerValue(short number) {
+        public static ITypeReference ToScaledIntegerValue(short number) {
             if (number < -128)
                 return new SmallIntValue(number);
             else if (number < 128)
@@ -320,7 +320,7 @@ namespace PasPasPas.Runtime.Values.Int {
         /// </summary>
         /// <param name="number">numerical value</param>
         /// <returns></returns>
-        public static IValue ToScaledIntegerValue(ushort number) {
+        public static ITypeReference ToScaledIntegerValue(ushort number) {
             if (number < 128)
                 return new ShortIntValue((sbyte)number);
             else if (number < 256)
@@ -352,10 +352,10 @@ namespace PasPasPas.Runtime.Values.Int {
         /// <summary>
         ///     invert all bits of this integer
         /// </summary>
-        public abstract IValue InvertBits();
+        public abstract ITypeReference InvertBits();
 
 
-        internal static ITypeReference Increment(IValue overflow, IntegerValueBase value)
+        internal static ITypeReference Increment(ITypeReference overflow, IntegerValueBase value)
             => ToIntValue(overflow, value.AsBigInteger + BigInteger.One);
     }
 }

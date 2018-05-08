@@ -10,17 +10,17 @@
         /// <summary>
         ///     invalid integer
         /// </summary>
-        IValue Invalid { get; }
+        ITypeReference Invalid { get; }
 
         /// <summary>
         ///     integer overflow
         /// </summary>
-        IValue Overflow { get; }
+        ITypeReference Overflow { get; }
 
         /// <summary>
         ///     zero value
         /// </summary>
-        IValue Zero { get; }
+        ITypeReference Zero { get; }
 
         /// <summary>
         ///     integer division

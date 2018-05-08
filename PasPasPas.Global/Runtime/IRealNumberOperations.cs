@@ -11,7 +11,7 @@ namespace PasPasPas.Global.Runtime {
         /// <summary>
         ///     invalid real number
         /// </summary>
-        IValue Invalid { get; }
+        ITypeReference Invalid { get; }
 
         /// <summary>
         ///     floating point division
@@ -27,8 +27,7 @@ namespace PasPasPas.Global.Runtime {
         /// </summary>
         /// <param name="value">parsed value</param>
         /// <returns>constant value</returns>
-        IValue ToExtendedValue(in ExtF80 value);
-
+        ITypeReference ToExtendedValue(in ExtF80 value);
 
     }
 }

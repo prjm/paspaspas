@@ -29,7 +29,7 @@ namespace PasPasPas.Runtime.Values.String {
         /// </summary>
         public abstract CommonTypeKind TypeKind { get; }
 
-        internal static IValue Concat(IStringValue string1, IStringValue string2)
+        internal static ITypeReference Concat(IStringValue string1, IStringValue string2)
             => new UnicodeStringValue(string.Concat(string1, string2));
 
         internal static bool Equal(IStringValue string1, IStringValue string2)

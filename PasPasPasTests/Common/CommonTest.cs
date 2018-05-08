@@ -23,7 +23,7 @@ namespace PasPasPasTests.Common {
         /// </summary>
         /// <param name="number"></param>
         /// <returns></returns>
-        protected static IValue GetIntegerValue(sbyte number)
+        protected static ITypeReference GetIntegerValue(sbyte number)
             => IntegerValueBase.ToScaledIntegerValue(number);
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace PasPasPasTests.Common {
         /// </summary>
         /// <param name="number"></param>
         /// <returns></returns>
-        protected static IValue GetIntegerValue(byte number)
+        protected static ITypeReference GetIntegerValue(byte number)
             => IntegerValueBase.ToScaledIntegerValue(number);
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace PasPasPasTests.Common {
         /// </summary>
         /// <param name="number"></param>
         /// <returns></returns>
-        protected static IValue GetIntegerValue(short number)
+        protected static ITypeReference GetIntegerValue(short number)
             => IntegerValueBase.ToScaledIntegerValue(number);
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace PasPasPasTests.Common {
         /// </summary>
         /// <param name="number"></param>
         /// <returns></returns>
-        protected static IValue GetIntegerValue(ushort number)
+        protected static ITypeReference GetIntegerValue(ushort number)
             => IntegerValueBase.ToScaledIntegerValue(number);
 
         /// <summary>
@@ -55,7 +55,7 @@ namespace PasPasPasTests.Common {
         /// </summary>
         /// <param name="number"></param>
         /// <returns></returns>
-        protected static IValue GetIntegerValue(int number)
+        protected static ITypeReference GetIntegerValue(int number)
             => IntegerValueBase.ToScaledIntegerValue(number);
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace PasPasPasTests.Common {
         /// </summary>
         /// <param name="text"></param>
         /// <returns></returns>
-        protected static IValue GetUnicodeStringValue(string text)
+        protected static ITypeReference GetUnicodeStringValue(string text)
             => new RuntimeValueFactory(null).Strings.ToUnicodeString(text);
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace PasPasPasTests.Common {
         /// </summary>
         /// <param name="text"></param>
         /// <returns></returns>
-        protected static IValue GetWideCharValue(char text)
+        protected static ITypeReference GetWideCharValue(char text)
             => new RuntimeValueFactory(null).Chars.ToWideCharValue(text);
 
 
@@ -81,7 +81,7 @@ namespace PasPasPasTests.Common {
         /// </summary>
         /// <param name="number"></param>
         /// <returns></returns>
-        protected static IValue GetIntegerValue(uint number)
+        protected static ITypeReference GetIntegerValue(uint number)
             => IntegerValueBase.ToScaledIntegerValue(number);
 
 
@@ -90,7 +90,7 @@ namespace PasPasPasTests.Common {
         /// </summary>
         /// <param name="number"></param>
         /// <returns></returns>
-        protected static IValue GetIntegerValue(long number)
+        protected static ITypeReference GetIntegerValue(long number)
             => IntegerValueBase.ToScaledIntegerValue(number);
 
         /// <summary>
@@ -98,7 +98,7 @@ namespace PasPasPasTests.Common {
         /// </summary>
         /// <param name="number"></param>
         /// <returns></returns>
-        protected static IValue GetIntegerValue(ulong number)
+        protected static ITypeReference GetIntegerValue(ulong number)
             => IntegerValueBase.ToScaledIntegerValue(number);
 
         /// <summary>
@@ -106,7 +106,7 @@ namespace PasPasPasTests.Common {
         /// </summary>
         /// <param name="number">number</param>
         /// <returns>number value</returns>
-        protected static IValue GetExtendedValue(in ExtF80 number)
+        protected static ITypeReference GetExtendedValue(in ExtF80 number)
             => FloatValueBase.ToExtendedValue(number);
 
     }

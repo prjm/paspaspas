@@ -58,7 +58,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
                 if (!found)
                     state.Error(Tokenizer.IncompleteString);
 
-                IValue value;
+                ITypeReference value;
                 if (resultBuilder.Data.Length == 1)
                     value = state.Constants.Chars.ToWideCharValue(resultBuilder.Data[0]);
                 else

@@ -33,7 +33,7 @@ namespace PasPasPas.Parsing.SyntaxTree {
         /// <summary>
         ///     parsed token value (if any)
         /// </summary>
-        public IValue ParsedValue { get; }
+        public ITypeReference ParsedValue { get; }
 
         /// <summary>
         ///     create a new token
@@ -41,7 +41,7 @@ namespace PasPasPas.Parsing.SyntaxTree {
         /// <param name="tokenId">token id</param>
         /// <param name="state">tokenizer state</param>
         /// <param name="parsedValue">parser literal value (optional)</param>
-        public Token(int tokenId, TokenizerState state, IValue parsedValue = null) : this() {
+        public Token(int tokenId, TokenizerState state, ITypeReference parsedValue = null) : this() {
             Kind = tokenId;
             Position = state.StartPosition;
             Value = state.GetBufferContent();

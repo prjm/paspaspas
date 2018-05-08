@@ -128,11 +128,8 @@ namespace P3SyntaxTreeViewer {
                     treeViewItem.Header += " [" + t.ToString() + "]";
                 }
 
-                if (typeInfo.TypeInfo.IsConstant)
-                    treeViewItem.Header += "*";
-
-                if (typeInfo.TypeInfo is IValue value) {
-                    treeViewItem.Header += " = " + value.ToString();
+                if (typeInfo.TypeInfo.IsConstant) {
+                    treeViewItem.Header += "*" + typeInfo.TypeInfo.ToString();
                 }
 
                 if (typeInfo.TypeInfo != null && typeInfo.TypeInfo.TypeId == KnownTypeIds.ErrorType)

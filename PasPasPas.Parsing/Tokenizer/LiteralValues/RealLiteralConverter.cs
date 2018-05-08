@@ -10,15 +10,15 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
     /// <summary>
     ///     helper class to convert real literals
     /// </summary>
-    public class RealLiteralConverter : IEnvironmentItem, IRealConverter, ILookupFunction<string, IValue> {
+    public class RealLiteralConverter : IEnvironmentItem, IRealConverter, ILookupFunction<string, ITypeReference> {
 
         private readonly IRuntimeValueFactory constantsValues;
-        private LookupTable<string, IValue> data;
+        private LookupTable<string, ITypeReference> data;
 
         /// <summary>
         ///     table entries
         /// </summary>
-        public LookupTable<string, IValue> Table
+        public LookupTable<string, ITypeReference> Table
             => data;
 
         LookupTable ILookupFunction.Table
@@ -40,7 +40,7 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
         ///     create a new real literal converter
         /// </summary>
         public RealLiteralConverter(IRuntimeValueFactory constValues) {
-            data = new LookupTable<string, IValue>(ConvertLiterals);
+            data = new LookupTable<string, ITypeReference>(ConvertLiterals);
             constantsValues = constValues;
         }
 
@@ -49,7 +49,7 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public IValue ConvertLiterals(string value) {
+        public ITypeReference ConvertLiterals(string value) {
             if (ExtF80.TryParse(value, out var realValue))
                 return constantsValues.RealNumbers.ToExtendedValue(realValue);
             return constantsValues.RealNumbers.Invalid;
@@ -59,7 +59,7 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
         ///     convert a parsed real number to a real literal
         /// </summary>
         /// <returns></returns>
-        public IValue Convert(string value)
+        public ITypeReference Convert(string value)
             => data.GetValue(value);
     }
 };

@@ -82,7 +82,7 @@ namespace PasPasPas.Runtime.Values.Int {
         ///     invert bits
         /// </summary>
         /// <returns></returns>
-        public override IValue InvertBits()
+        public override ITypeReference InvertBits()
             => ToScaledIntegerValue(~value);
 
     }

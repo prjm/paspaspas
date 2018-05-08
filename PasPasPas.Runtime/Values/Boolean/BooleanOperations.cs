@@ -11,7 +11,7 @@ namespace PasPasPas.Runtime.Values.Boolean {
         /// <summary>
         ///     constant value: invalid boolean value
         /// </summary>
-        public IValue Invalid { get; }
+        public ITypeReference Invalid { get; }
             = new SpecialValue(SpecialConstantKind.InvalidBool);
 
         /// <summary>

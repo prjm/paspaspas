@@ -7,7 +7,7 @@ namespace PasPasPas.Runtime.Values.String {
     /// </summary>
     public class StringOperations : IStringOperations {
 
-        private IValue invalidString
+        private readonly ITypeReference invalidString
             = new SpecialValue(SpecialConstantKind.InvalidString);
 
         /// <summary>
@@ -22,7 +22,7 @@ namespace PasPasPas.Runtime.Values.String {
         /// </summary>
         /// <param name="text"></param>
         /// <returns></returns>
-        public IValue ToUnicodeString(string text)
+        public ITypeReference ToUnicodeString(string text)
             => new UnicodeStringValue(text);
 
         /// <summary>

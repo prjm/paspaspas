@@ -10,7 +10,7 @@
         /// </summary>
         /// <param name="character"></param>
         /// <returns></returns>
-        IValue ToWideCharValue(char character);
+        ITypeReference ToWideCharValue(char character);
 
 
     }
