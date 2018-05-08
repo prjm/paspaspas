@@ -1,6 +1,4 @@
-﻿using PasPasPas.Global.Runtime;
-
-namespace PasPasPas.Global.Types {
+﻿namespace PasPasPas.Global.Types {
 
     /// <summary>
     ///     symbol by reference

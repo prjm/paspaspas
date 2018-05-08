@@ -9,7 +9,7 @@ namespace PasPasPas.Typings.Operators {
     public static class RuntimeHelpers {
 
         private static ITypeReference GetBaseTypeOfSubrangeType(this IRuntimeValueFactory runtime, int typeId)
-            => runtime.Types.MakeReference(runtime.Types.Resolver.GetBaseTypeOfSubrangeType(typeId));
+            => runtime.Types.MakeReference(runtime.Types.TypeRegistry.GetBaseTypeOfSubrangeType(typeId));
 
         /// <summary>
         ///     simple helper: get arithmetic operations for an unary operator

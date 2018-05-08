@@ -10,14 +10,13 @@ namespace PasPasPas.Runtime.Values {
     public class TypeOperations : ITypeOperations {
 
         private readonly LookupTable<int, ITypeReference> values;
-        private readonly ITypeKindResolver resolver;
 
         /// <summary>
         ///     create a new type operations class
         /// </summary>
         /// <param name="typeKindResolver">resolver for type kinds</param>
-        public TypeOperations(ITypeKindResolver typeKindResolver) {
-            resolver = typeKindResolver;
+        public TypeOperations(ITypeRegistry typeKindResolver) {
+            TypeRegistry = typeKindResolver;
             values = new LookupTable<int, ITypeReference>(MakeIndeterminedValue);
         }
 
@@ -29,13 +28,12 @@ namespace PasPasPas.Runtime.Values {
             = new SpecialValue(SpecialConstantKind.Nil, KnownTypeIds.GenericPointer);
 
         /// <summary>
-        ///     type resolver
+        ///     type registry
         /// </summary>
-        public ITypeKindResolver Resolver
-            => resolver;
+        public ITypeRegistry TypeRegistry { get; }
 
         private ITypeReference MakeIndeterminedValue(int typeId)
-            => new IndeterminedRuntimeValue(typeId, resolver.GetTypeKindOf(typeId));
+            => new IndeterminedRuntimeValue(typeId, TypeRegistry.GetTypeKindOf(typeId));
 
         /// <summary>
         ///     create a new type reference value

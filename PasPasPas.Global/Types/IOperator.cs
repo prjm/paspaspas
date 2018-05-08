@@ -28,7 +28,7 @@ namespace PasPasPas.Global.Types {
         ITypeRegistry TypeRegistry { get; }
 
         /// <summary>
-        ///     evaluate an operator and compute its results (if operands are constants)
+        ///     evaluate an operator and compute its results
         /// </summary>
         /// <param name="input">operator input - type reference or constant</param>
         /// <returns>operator result - type reference or constant</returns>

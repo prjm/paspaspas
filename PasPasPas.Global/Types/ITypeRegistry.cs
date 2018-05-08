@@ -6,7 +6,7 @@ namespace PasPasPas.Global.Types {
     /// <summary>
     ///     type registry
     /// </summary>
-    public interface ITypeRegistry : ITypeKindResolver {
+    public interface ITypeRegistry {
 
         /// <summary>
         ///     all registered types
@@ -62,6 +62,20 @@ namespace PasPasPas.Global.Types {
         /// </summary>
         /// <returns></returns>
         int RequireUserTypeId();
+
+        /// <summary>
+        ///     get the type kind of a type id
+        /// </summary>
+        /// <param name="typeId">given type id</param>
+        /// <returns>type kind</returns>
+        CommonTypeKind GetTypeKindOf(int typeId);
+
+        /// <summary>
+        ///     gets the base type of a subrange rype
+        /// </summary>
+        /// <param name="typeId"></param>
+        /// <returns></returns>
+        int GetBaseTypeOfSubrangeType(int typeId);
 
     }
 }

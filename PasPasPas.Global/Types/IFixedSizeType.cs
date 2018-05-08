@@ -1,7 +1,7 @@
 ﻿namespace PasPasPas.Global.Types {
 
     /// <summary>
-    ///     types with a fixed size
+    ///     interface types with a fixed size
     /// </summary>
     public interface IFixedSizeType : ITypeDefinition {
 
@@ -9,7 +9,6 @@
         ///     type size in bits
         /// </summary>
         uint BitSize { get; }
-
 
     }
 }

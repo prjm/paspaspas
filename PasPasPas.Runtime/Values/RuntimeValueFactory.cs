@@ -1,4 +1,5 @@
 ﻿using PasPasPas.Global.Runtime;
+using PasPasPas.Global.Types;
 using PasPasPas.Runtime.Values.Boolean;
 using PasPasPas.Runtime.Values.Char;
 using PasPasPas.Runtime.Values.Float;
@@ -16,7 +17,7 @@ namespace PasPasPas.Runtime.Values {
         ///     create a new runtime value factory
         /// </summary>
         /// <param name="typeKindResolver">type kind resolver</param>
-        public RuntimeValueFactory(ITypeKindResolver typeKindResolver) {
+        public RuntimeValueFactory(ITypeRegistry typeKindResolver) {
             Types = new TypeOperations(typeKindResolver);
             Booleans = new BooleanOperations();
             Integers = new IntegerOperations(Booleans, Types);

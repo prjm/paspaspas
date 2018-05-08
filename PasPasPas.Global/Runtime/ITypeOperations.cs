@@ -1,4 +1,6 @@
-﻿namespace PasPasPas.Global.Runtime {
+﻿using PasPasPas.Global.Types;
+
+namespace PasPasPas.Global.Runtime {
 
     /// <summary>
     ///     value factory for undefined types
@@ -13,7 +15,7 @@
         /// <summary>
         ///     type resolver
         /// </summary>
-        ITypeKindResolver Resolver { get; }
+        ITypeRegistry TypeRegistry { get; }
 
         /// <summary>
         ///     produces a reference to a type with indeterminate compile-time value

@@ -1,14 +1,16 @@
-﻿namespace PasPasPas.Global.Runtime {
+﻿using PasPasPas.Global.Types;
+
+namespace PasPasPas.Global.Runtime {
 
     /// <summary>
-    ///     type reference
+    ///     type reference: reference to a type or to a constant value
     /// </summary>
     public interface ITypeReference {
 
         /// <summary>
         ///     get the well-known type id of this value
         /// </summary>
-        /// <see cref="Constants.KnownTypeIds"/>
+        /// <see cref="KnownTypeIds"/>
         int TypeId { get; }
 
         /// <summary>
