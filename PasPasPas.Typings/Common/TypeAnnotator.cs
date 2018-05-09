@@ -395,7 +395,7 @@ namespace PasPasPas.Typings.Common {
 
                     }
 
-                    else if (GetTypeKind(baseTypeValue) == CommonTypeKind.ClassType && environment.TypeRegistry.GetTypeByIdOrUndefinedType(baseTypeValue.TypeId) is StructuredTypeDeclaration structType) {
+                    else if (baseTypeValue.TypeKind == CommonTypeKind.ClassType && environment.TypeRegistry.GetTypeByIdOrUndefinedType(baseTypeValue.TypeId) is StructuredTypeDeclaration structType) {
                         structType.ResolveCall(part.Name.CompleteName, callableRoutines, new Signature(signature));
                     }
 
@@ -514,7 +514,7 @@ namespace PasPasPas.Typings.Common {
         /// <param name="element"></param>
         public void EndVisit(SetTypeDeclaration element) {
 
-            if (element.TypeValue is ITypedSyntaxNode declaredEnum && declaredEnum.TypeInfo != null && GetTypeKind(declaredEnum.TypeInfo).IsOrdinal()) {
+            if (element.TypeValue is ITypedSyntaxNode declaredEnum && declaredEnum.TypeInfo != null && declaredEnum.TypeInfo.TypeKind.IsOrdinal()) {
                 var typeId = RequireUserTypeId();
                 var setType = new SetType(typeId, declaredEnum.TypeInfo.TypeId);
                 RegisterUserDefinedType(setType);
@@ -701,9 +701,9 @@ namespace PasPasPas.Typings.Common {
 
                 if (baseType == null)
                     baseType = part.TypeInfo;
-                else if (GetTypeKind(baseType).IsIntegral() && GetTypeKind(part.TypeInfo).IsIntegral())
+                else if (baseType.TypeKind.IsIntegral() && part.TypeInfo.TypeKind.IsIntegral())
                     baseType = GetTypeByIdOrUndefinedType(GetSmallestIntegralTypeOrNext(baseType.TypeId, part.TypeInfo.TypeId));
-                else if (GetTypeKind(baseType).IsOrdinal() && baseType.TypeId == part.TypeInfo.TypeId)
+                else if (baseType.TypeKind.IsOrdinal() && baseType.TypeId == part.TypeInfo.TypeId)
                     baseType = part.TypeInfo;
                 else {
                     baseType = GetErrorTypeReference(part);
@@ -735,9 +735,9 @@ namespace PasPasPas.Typings.Common {
 
                 if (baseType == null)
                     baseType = part.TypeInfo;
-                else if (GetTypeKind(baseType).IsIntegral() && GetTypeKind(part.TypeInfo).IsIntegral())
+                else if (baseType.TypeKind.IsIntegral() && part.TypeInfo.TypeKind.IsIntegral())
                     baseType = GetTypeByIdOrUndefinedType(GetSmallestIntegralTypeOrNext(baseType.TypeId, part.TypeInfo.TypeId));
-                else if (GetTypeKind(baseType).IsOrdinal() && baseType.TypeId == part.TypeInfo.TypeId)
+                else if (baseType.TypeKind.IsOrdinal() && baseType.TypeId == part.TypeInfo.TypeId)
                     baseType = part.TypeInfo;
                 else {
                     baseType = GetErrorTypeReference(part);

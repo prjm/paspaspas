@@ -424,8 +424,8 @@ namespace PasPasPasTests.Types {
             };
 
             // subrange types
-            AssertExprTypeByVar("-1..1", "not a", RegisteredTypes.SMALLEST_USER_TYPE_ID);
-            AssertExprTypeByVar("-1..1", "not a", RegisteredTypes.SMALLEST_USER_TYPE_ID);
+            AssertExprTypeByVar("-1..1", "not a", RegisteredTypes.SmallestUserTypeId);
+            AssertExprTypeByVar("-1..1", "not a", RegisteredTypes.SmallestUserTypeId);
 
             AssertExprTypeByVar("Byte", "not a", KnownTypeIds.ByteType);
             AssertExprTypeByVar("Word", "not a", KnownTypeIds.WordType);
@@ -457,8 +457,8 @@ namespace PasPasPasTests.Types {
             };
 
             // subrange types
-            AssertExprTypeByVar("-1..1", "not a", RegisteredTypes.SMALLEST_USER_TYPE_ID);
-            AssertExprTypeByVar("-1..1", "not a", RegisteredTypes.SMALLEST_USER_TYPE_ID);
+            AssertExprTypeByVar("-1..1", "not a", RegisteredTypes.SmallestUserTypeId);
+            AssertExprTypeByVar("-1..1", "not a", RegisteredTypes.SmallestUserTypeId);
 
             AssertExprTypeByVar("Boolean", "not a", KnownTypeIds.BooleanType);
             AssertExprTypeByVar("ByteBool", "not a", KnownTypeIds.ByteBoolType);
@@ -557,6 +557,15 @@ namespace PasPasPasTests.Types {
                 AssertExprTypeByVar(dd.Item1, "a <= b", KnownTypeIds.BooleanType);
                 AssertExprTypeByVar(dd.Item1, "a >= b", KnownTypeIds.BooleanType);
             }
+
+            // subrange
+            AssertExprTypeByVar("-1..1", "a = b", KnownTypeIds.BooleanType);
+            AssertExprTypeByVar("-1..1", "a <> b", KnownTypeIds.BooleanType);
+            AssertExprTypeByVar("-1..1", "a < b", KnownTypeIds.BooleanType);
+            AssertExprTypeByVar("-1..1", "a > b", KnownTypeIds.BooleanType);
+            AssertExprTypeByVar("-1..1", "a <= b", KnownTypeIds.BooleanType);
+            AssertExprTypeByVar("-1..1", "a >= b", KnownTypeIds.BooleanType);
+
         }
 
         [TestCase]

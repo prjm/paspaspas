@@ -23,7 +23,7 @@ namespace PasPasPasTests.Types {
             AssertExprTypeByVar("false..true", "a", KnownTypeIds.BooleanType, true);
             AssertExprTypeByVar("true..false", "a", KnownTypeIds.ErrorType, true);
 
-            AssertExprTypeByVar("x..z", "a", RegisteredTypes.SMALLEST_USER_TYPE_ID, true, "type v = (x,y,z);");
+            AssertExprTypeByVar("x..z", "a", RegisteredTypes.SmallestUserTypeId, true, "type v = (x,y,z);");
             AssertExprTypeByVar("z..y", "a", KnownTypeIds.ErrorType, true, "type v = (x,y,z);");
 
         }

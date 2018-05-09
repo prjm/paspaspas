@@ -39,7 +39,8 @@ namespace PasPasPas.Runtime.Values.IntValues {
         /// <summary>
         ///     create a new integer operations helper
         /// </summary>
-        /// <param name="booleans"></param>
+        /// <param name="booleans">boolean operations</param>
+        /// <param name="types">runtime types</param>
         public IntegerOperations(IBooleanOperations booleans, ITypeOperations types) {
             Booleans = booleans;
             Types = types;
@@ -369,6 +370,12 @@ namespace PasPasPas.Runtime.Values.IntValues {
 
         }
 
+        /// <summary>
+        ///     cast a alue to another type
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="typeId"></param>
+        /// <returns></returns>
         public ITypeReference Cast(ITypeReference value, int typeId) {
 
             if (!(value is IIntegerValue integer))

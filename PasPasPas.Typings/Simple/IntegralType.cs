@@ -32,7 +32,7 @@ namespace PasPasPas.Typings.Simple {
         /// <summary>
         ///     check if this type is signed
         /// </summary>
-        public bool Signed
+        public bool IsSigned
             => signed;
 
         /// <summary>

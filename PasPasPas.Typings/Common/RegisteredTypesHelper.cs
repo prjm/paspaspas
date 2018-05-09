@@ -134,11 +134,11 @@ namespace PasPasPas.Typings.Common {
                 result = left;
             }
             else if (left.BitSize == right.BitSize) {
-                if (left.Signed == right.Signed)
+                if (left.IsSigned == right.IsSigned)
                     result = left;
-                else if (!left.Signed && right.Signed && bothAreUnsigned)
+                else if (!left.IsSigned && right.IsSigned && bothAreUnsigned)
                     result = left;
-                else if (left.Signed && !right.Signed && bothAreUnsigned)
+                else if (left.IsSigned && !right.IsSigned && bothAreUnsigned)
                     result = right;
                 else if (left.BitSize == 8)
                     result = registry.GetTypeByIdOrUndefinedType(KnownTypeIds.SmallInt) as IIntegralType;

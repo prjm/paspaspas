@@ -135,6 +135,12 @@ namespace PasPasPas.Typings.Operators {
             if (left.IsTextual() && right.IsTextual())
                 return runtime.Strings;
 
+            if (left == CommonTypeKind.SubrangeType)
+                return GetRelationalOperators(runtime, runtime.GetBaseTypeOfSubrangeType(leftType.TypeId), rightType);
+
+            if (right == CommonTypeKind.SubrangeType)
+                return GetRelationalOperators(runtime, leftType, runtime.GetBaseTypeOfSubrangeType(rightType.TypeId));
+
             return default;
         }
 

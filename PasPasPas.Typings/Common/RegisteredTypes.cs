@@ -34,8 +34,8 @@ namespace PasPasPas.Typings.Common {
         /// <summary>
         ///     first use type id
         /// </summary>
-        public const int SMALLEST_USER_TYPE_ID = 1000;
-        private int userTypeIds = SMALLEST_USER_TYPE_ID;
+        public const int SmallestUserTypeId = 1000;
+        private int userTypeIds = SmallestUserTypeId;
 
         /// <summary>
         ///     system unit
@@ -58,7 +58,7 @@ namespace PasPasPas.Typings.Common {
         /// <summary>
         ///     registered types
         /// </summary>
-        IEnumerable<ITypeDefinition> ITypeRegistry.RegisteredTypes
+        public IEnumerable<ITypeDefinition> RegisteredTypeDefinitios
             => types.Values;
 
         /// <summary>

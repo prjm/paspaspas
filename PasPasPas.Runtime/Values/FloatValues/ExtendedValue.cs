@@ -9,7 +9,7 @@ namespace PasPasPas.Runtime.Values.FloatValues {
     /// </summary>
     public class ExtendedValue : FloatValueBase {
 
-        private readonly ExtF80 value;
+        private ExtF80 value;
 
         /// <summary>
         ///     create a new extend value

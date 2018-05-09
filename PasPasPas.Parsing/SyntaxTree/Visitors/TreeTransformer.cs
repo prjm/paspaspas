@@ -3012,7 +3012,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             return result;
         }
 
-        private GenericSymbolName ExtractSymbolName(IList<MethodDeclarationName> qualifiers) {
+        private static GenericSymbolName ExtractSymbolName(IList<MethodDeclarationName> qualifiers) {
             var result = new GenericSymbolName();
 
             foreach (var name in qualifiers) {

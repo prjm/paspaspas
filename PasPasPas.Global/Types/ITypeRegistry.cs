@@ -11,7 +11,7 @@ namespace PasPasPas.Global.Types {
         /// <summary>
         ///     all registered types
         /// </summary>
-        IEnumerable<ITypeDefinition> RegisteredTypes { get; }
+        IEnumerable<ITypeDefinition> RegisteredTypeDefinitios { get; }
 
         /// <summary>
         ///     system unit

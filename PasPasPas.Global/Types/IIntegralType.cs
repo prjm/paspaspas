@@ -8,6 +8,6 @@
         /// <summary>
         ///     <c>true</c> if this type is signed
         /// </summary>
-        bool Signed { get; }
+        bool IsSigned { get; }
     }
 }
