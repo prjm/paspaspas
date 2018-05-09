@@ -94,14 +94,6 @@ namespace PasPasPas.Typings.Operators {
             => GetErrorTypeReference();
 
         /// <summary>
-        ///     get the type kind of a given type reference
-        /// </summary>
-        /// <param name="typeReference"></param>
-        /// <returns></returns>
-        protected CommonTypeKind GetTypeKind(ITypeReference typeReference)
-            => TypeRegistry.GetTypeKind(typeReference.TypeId);
-
-        /// <summary>
         ///     get a reference to the error type
         /// </summary>
         /// <returns></returns>
@@ -126,7 +118,7 @@ namespace PasPasPas.Typings.Operators {
         /// <param name="minBitSize">minimal number of required bits</param>
         /// <returns>type reference</returns>
         protected ITypeReference GetSmallestRealOrIntegralType(ITypeReference left, ITypeReference right, int minBitSize) {
-            if (GetTypeKind(left) == CommonTypeKind.RealType || GetTypeKind(right) == CommonTypeKind.RealType)
+            if (left.TypeKind == CommonTypeKind.RealType || right.TypeKind == CommonTypeKind.RealType)
                 return GetExtendedType();
 
             return TypeRegistry.MakeReference(TypeRegistry.GetSmallestIntegralTypeOrNext(left.TypeId, right.TypeId, minBitSize));
@@ -140,7 +132,15 @@ namespace PasPasPas.Typings.Operators {
         /// <param name="minBitSize">minimal number of required bits</param>
         /// <returns>type reference</returns>
         protected ITypeReference GetSmallestBoolOrIntegralType(ITypeReference left, ITypeReference right, int minBitSize) {
-            if (GetTypeKind(left) == CommonTypeKind.BooleanType && GetTypeKind(right) == CommonTypeKind.BooleanType)
+
+            if (left.TypeKind == CommonTypeKind.SubrangeType)
+                return GetSmallestBoolOrIntegralType(TypeRegistry.MakeReference(TypeRegistry.GetBaseTypeOfSubrangeType(left.TypeId)), right, minBitSize);
+
+            if (right.TypeKind == CommonTypeKind.SubrangeType)
+                return GetSmallestBoolOrIntegralType(left, TypeRegistry.MakeReference(TypeRegistry.GetBaseTypeOfSubrangeType(right.TypeId)), minBitSize);
+
+
+            if (left.TypeKind == CommonTypeKind.BooleanType && right.TypeKind == CommonTypeKind.BooleanType)
                 return TypeRegistry.MakeReference(TypeRegistry.GetSmallestBooleanTypeOrNext(left.TypeId, right.TypeId, minBitSize));
 
             return TypeRegistry.MakeReference(TypeRegistry.GetSmallestIntegralTypeOrNext(left.TypeId, right.TypeId, minBitSize));

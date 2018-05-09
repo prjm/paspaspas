@@ -411,7 +411,7 @@ namespace PasPasPasTests.Types {
         }
 
         [TestCase]
-        public void TestLogicOperatorsIndirect() {
+        public void TestLogicOperatorsIntIndirect() {
             var d = new[] {
                 Tuple.Create("Byte", KnownTypeIds.ByteType),
                 Tuple.Create("Word", KnownTypeIds.WordType),
@@ -446,6 +446,34 @@ namespace PasPasPasTests.Types {
             AssertExprTypeByVar("-1..1", "a or b", KnownTypeIds.ShortInt);
             AssertExprTypeByVar("-1..1", "a xor b", KnownTypeIds.ShortInt);
             AssertExprTypeByVar("-1..1", "a and b", KnownTypeIds.ShortInt);
+        }
+
+        [TestCase]
+        public void TestLogicOperatorsBoolIndirect() {
+            var d = new[] {
+                Tuple.Create("Boolean", KnownTypeIds.BooleanType),
+                Tuple.Create("ByteBool", KnownTypeIds.ByteBoolType),
+                Tuple.Create("WordBool", KnownTypeIds.WordBoolType),
+            };
+
+            // subrange types
+            AssertExprTypeByVar("-1..1", "not a", RegisteredTypes.SMALLEST_USER_TYPE_ID);
+            AssertExprTypeByVar("-1..1", "not a", RegisteredTypes.SMALLEST_USER_TYPE_ID);
+
+            AssertExprTypeByVar("Boolean", "not a", KnownTypeIds.BooleanType);
+            AssertExprTypeByVar("ByteBool", "not a", KnownTypeIds.ByteBoolType);
+            AssertExprTypeByVar("WordBool", "not a", KnownTypeIds.WordBoolType);
+
+            foreach (var e in d) {
+                AssertExprTypeByVar(e.Item1, "a or b", e.Item2);
+                AssertExprTypeByVar(e.Item1, "a and b", e.Item2);
+                AssertExprTypeByVar(e.Item1, "a xor b", e.Item2);
+            }
+
+            // subrange type
+            AssertExprTypeByVar("false..true", "a or b", KnownTypeIds.BooleanType);
+            AssertExprTypeByVar("false..true", "a xor b", KnownTypeIds.BooleanType);
+            AssertExprTypeByVar("false..true", "a and b", KnownTypeIds.BooleanType);
         }
 
         [TestCase]

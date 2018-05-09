@@ -121,9 +121,7 @@ namespace PasPasPas.Typings.Operators {
             if (baseType.TypeKind == CommonTypeKind.SubrangeType)
                 baseType = TypeRegistry.GetTypeByIdOrUndefinedType(TypeRegistry.GetBaseTypeOfSubrangeType(baseType.TypeId));
 
-            var intType = baseType as IIntegralType;
-
-            if (intType == null)
+            if (!(baseType is IIntegralType intType))
                 return GetErrorTypeReference();
 
             if (right.IsConstant) {
@@ -149,21 +147,21 @@ namespace PasPasPas.Typings.Operators {
             if (left.IsConstant && right.IsConstant)
                 return operations.Xor(left, right);
             else
-                return GetSmallestBoolOrIntegralType(left, right, 8);
+                return GetSmallestBoolOrIntegralType(left, right, 1);
         }
 
         private ITypeReference EvaluateOrOperator(ITypeReference left, ITypeReference right, ILogicalOperations operations) {
             if (left.IsConstant && right.IsConstant)
                 return operations.Or(left, right);
             else
-                return GetSmallestBoolOrIntegralType(left, right, 8);
+                return GetSmallestBoolOrIntegralType(left, right, 1);
         }
 
         private ITypeReference EvaluateAndOperator(ITypeReference left, ITypeReference right, ILogicalOperations operations) {
             if (left.IsConstant && right.IsConstant)
                 return operations.And(left, right);
             else
-                return GetSmallestBoolOrIntegralType(left, right, 8);
+                return GetSmallestBoolOrIntegralType(left, right, 1);
         }
     }
 }

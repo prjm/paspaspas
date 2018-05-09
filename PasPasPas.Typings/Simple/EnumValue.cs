@@ -39,6 +39,7 @@ namespace PasPasPas.Typings.Simple {
         /// </summary>
         /// <param name="runtime">runtime values</param>
         /// <param name="typeId">given type id</param>
+        /// <param name="enumTypeId"></param>
         public void MakeEnumValue(IRuntimeValueFactory runtime, int typeId, int enumTypeId) {
             Value = runtime.Types.MakeEnumValue(enumTypeId, runtime.Integers.Cast(Value, typeId));
         }
