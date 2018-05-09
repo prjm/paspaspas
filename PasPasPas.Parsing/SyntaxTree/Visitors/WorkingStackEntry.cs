@@ -1,4 +1,5 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Utils;
+﻿using PasPasPas.Infrastructure.Utils;
+using PasPasPas.Parsing.SyntaxTree.Utils;
 
 namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
@@ -6,9 +7,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
     ///     stack entry
     /// </summary>
     public class WorkingStackEntry {
-        private ISyntaxPart data;
-        private object node;
-        private ISyntaxPart child;
 
         /// <summary>
         ///     create a new entry
@@ -16,8 +14,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <param name="definingNode"></param>
         /// <param name="createdNote"></param>
         public WorkingStackEntry(object definingNode, ISyntaxPart createdNote) {
-            node = definingNode;
-            data = createdNote;
+            DefiningNode = definingNode;
+            Data = createdNote;
         }
 
         /// <summary>
@@ -27,35 +25,32 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <param name="createdNote"></param>
         /// <param name="childNode">child node</param>
         public WorkingStackEntry(object definingNode, ISyntaxPart createdNote, ISyntaxPart childNode) {
-            node = definingNode;
-            data = createdNote;
-            child = childNode;
+            DefiningNode = definingNode;
+            Data = createdNote;
+            ChildNode = childNode;
         }
 
         /// <summary>
         ///     defining node
         /// </summary>
-        public object DefiningNode
-            => node;
+        public object DefiningNode { get; }
 
         /// <summary>
         ///     defining child node
         /// </summary>
-        public ISyntaxPart Data
-             => data;
+        public ISyntaxPart Data { get; }
 
         /// <summary>
         ///     child node
         /// </summary>
-        public ISyntaxPart ChildNode
-            => child;
+        public ISyntaxPart ChildNode { get; }
 
         /// <summary>
         ///     format node as string
         /// </summary>
         /// <returns></returns>
         public override string ToString()
-            => string.Format("{0} / {1} / {2} ", DefiningNode, data, ChildNode);
+            => StringUtils.Invariant($"{DefiningNode} / {Data} / {ChildNode}");
     }
 
 

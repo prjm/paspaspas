@@ -1,7 +1,7 @@
 ﻿using PasPasPas.Global.Runtime;
 using SharpFloat.FloatingPoint;
 
-namespace PasPasPas.Runtime.Values.Float {
+namespace PasPasPas.Runtime.Values.FloatValues {
 
     /// <summary>
     ///     base class for float values

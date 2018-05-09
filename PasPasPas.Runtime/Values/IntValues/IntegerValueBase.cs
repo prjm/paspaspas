@@ -3,7 +3,7 @@ using PasPasPas.Global.Runtime;
 using PasPasPas.Global.Types;
 using SharpFloat.FloatingPoint;
 
-namespace PasPasPas.Runtime.Values.Int {
+namespace PasPasPas.Runtime.Values.IntValues {
 
     /// <summary>
     ///     base class for integer values

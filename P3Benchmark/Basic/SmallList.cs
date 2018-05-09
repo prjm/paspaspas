@@ -65,10 +65,10 @@ namespace PasPasPas.Infrastructure.Utils {
                 mode = SmallListMode.SingleElement;
             }
             else if (mode == SmallListMode.SingleElement) {
-                var standardList = new List<T>();
-                standardList.Add((T)data);
-                standardList.Add(item);
-                data = standardList;
+                data = new List<T> {
+                    (T)data,
+                    item
+                };
                 mode = SmallListMode.MoreElements;
             }
             else if (mode == SmallListMode.MoreElements) {

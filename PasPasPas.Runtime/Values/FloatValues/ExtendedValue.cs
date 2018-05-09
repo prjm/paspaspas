@@ -2,7 +2,7 @@
 using PasPasPas.Global.Types;
 using SharpFloat.FloatingPoint;
 
-namespace PasPasPas.Runtime.Values.Float {
+namespace PasPasPas.Runtime.Values.FloatValues {
 
     /// <summary>
     ///     extended value

@@ -429,15 +429,15 @@ namespace PasPasPasTests.Parser {
         [Fact]
         public void TestOverflow() {
             object f(OptionSet o) => o.CompilerOptions.CheckOverflows.Value;
-            RunCompilerDirective("", RuntimeOverflowChecks.Undefined, f);
-            RunCompilerDirective("Q+", RuntimeOverflowChecks.EnableChecks, f);
-            RunCompilerDirective("Q-", RuntimeOverflowChecks.DisableChecks, f);
-            RunCompilerDirective("Q 4", RuntimeOverflowChecks.Undefined, f, CompilerDirectiveParserErrors.InvalidOverflowCheckDirective);
-            RunCompilerDirective("Q ", RuntimeOverflowChecks.Undefined, f, CompilerDirectiveParserErrors.InvalidOverflowCheckDirective);
-            RunCompilerDirective("OVERFLOWCHECKS ON", RuntimeOverflowChecks.EnableChecks, f);
-            RunCompilerDirective("OVERFLOWCHECKS OFF", RuntimeOverflowChecks.DisableChecks, f);
-            RunCompilerDirective("OVERFLOWCHECKS KAPUTT", RuntimeOverflowChecks.Undefined, f, CompilerDirectiveParserErrors.InvalidOverflowCheckDirective);
-            RunCompilerDirective("OVERFLOWCHECKS ", RuntimeOverflowChecks.Undefined, f, CompilerDirectiveParserErrors.InvalidOverflowCheckDirective);
+            RunCompilerDirective("", RuntimeOverflowCheck.Undefined, f);
+            RunCompilerDirective("Q+", RuntimeOverflowCheck.EnableChecks, f);
+            RunCompilerDirective("Q-", RuntimeOverflowCheck.DisableChecks, f);
+            RunCompilerDirective("Q 4", RuntimeOverflowCheck.Undefined, f, CompilerDirectiveParserErrors.InvalidOverflowCheckDirective);
+            RunCompilerDirective("Q ", RuntimeOverflowCheck.Undefined, f, CompilerDirectiveParserErrors.InvalidOverflowCheckDirective);
+            RunCompilerDirective("OVERFLOWCHECKS ON", RuntimeOverflowCheck.EnableChecks, f);
+            RunCompilerDirective("OVERFLOWCHECKS OFF", RuntimeOverflowCheck.DisableChecks, f);
+            RunCompilerDirective("OVERFLOWCHECKS KAPUTT", RuntimeOverflowCheck.Undefined, f, CompilerDirectiveParserErrors.InvalidOverflowCheckDirective);
+            RunCompilerDirective("OVERFLOWCHECKS ", RuntimeOverflowCheck.Undefined, f, CompilerDirectiveParserErrors.InvalidOverflowCheckDirective);
         }
 
         [Fact]
@@ -553,29 +553,29 @@ namespace PasPasPasTests.Parser {
         [Fact]
         public void TestVarStringChecks() {
             object f(OptionSet o) => o.CompilerOptions.VarStringChecks.Value;
-            RunCompilerDirective("", ShortVarStringChecks.Undefined, f);
-            RunCompilerDirective("V+", ShortVarStringChecks.EnableChecks, f);
-            RunCompilerDirective("V-", ShortVarStringChecks.DisableChecks, f);
-            RunCompilerDirective("V 3", ShortVarStringChecks.Undefined, f, CompilerDirectiveParserErrors.InvalidStringCheckDirective);
-            RunCompilerDirective("V", ShortVarStringChecks.Undefined, f, CompilerDirectiveParserErrors.InvalidStringCheckDirective);
-            RunCompilerDirective("VARSTRINGCHECKS ON", ShortVarStringChecks.EnableChecks, f);
-            RunCompilerDirective("VARSTRINGCHECKS  OFF", ShortVarStringChecks.DisableChecks, f);
-            RunCompilerDirective("VARSTRINGCHECKS  KAPUTT", ShortVarStringChecks.Undefined, f, CompilerDirectiveParserErrors.InvalidStringCheckDirective);
-            RunCompilerDirective("VARSTRINGCHECKS  ", ShortVarStringChecks.Undefined, f, CompilerDirectiveParserErrors.InvalidStringCheckDirective);
+            RunCompilerDirective("", ShortVarStringCheck.Undefined, f);
+            RunCompilerDirective("V+", ShortVarStringCheck.EnableChecks, f);
+            RunCompilerDirective("V-", ShortVarStringCheck.DisableChecks, f);
+            RunCompilerDirective("V 3", ShortVarStringCheck.Undefined, f, CompilerDirectiveParserErrors.InvalidStringCheckDirective);
+            RunCompilerDirective("V", ShortVarStringCheck.Undefined, f, CompilerDirectiveParserErrors.InvalidStringCheckDirective);
+            RunCompilerDirective("VARSTRINGCHECKS ON", ShortVarStringCheck.EnableChecks, f);
+            RunCompilerDirective("VARSTRINGCHECKS  OFF", ShortVarStringCheck.DisableChecks, f);
+            RunCompilerDirective("VARSTRINGCHECKS  KAPUTT", ShortVarStringCheck.Undefined, f, CompilerDirectiveParserErrors.InvalidStringCheckDirective);
+            RunCompilerDirective("VARSTRINGCHECKS  ", ShortVarStringCheck.Undefined, f, CompilerDirectiveParserErrors.InvalidStringCheckDirective);
         }
 
         [Fact]
         public void TestTypeCheckedPointers() {
             object f(OptionSet o) => o.CompilerOptions.TypedPointers.Value;
-            RunCompilerDirective("", TypeCheckedPointers.Undefined, f);
-            RunCompilerDirective("T+", TypeCheckedPointers.Enable, f);
-            RunCompilerDirective("T-", TypeCheckedPointers.Disable, f);
-            RunCompilerDirective("T 3", TypeCheckedPointers.Undefined, f, CompilerDirectiveParserErrors.InvalidTypeCheckedPointersDirective);
-            RunCompilerDirective("T", TypeCheckedPointers.Undefined, f, CompilerDirectiveParserErrors.InvalidTypeCheckedPointersDirective);
-            RunCompilerDirective("TYPEDADDRESS ON", TypeCheckedPointers.Enable, f);
-            RunCompilerDirective("TYPEDADDRESS OFF", TypeCheckedPointers.Disable, f);
-            RunCompilerDirective("TYPEDADDRESS KAPUTT", TypeCheckedPointers.Undefined, f, CompilerDirectiveParserErrors.InvalidTypeCheckedPointersDirective);
-            RunCompilerDirective("TYPEDADDRESS ", TypeCheckedPointers.Undefined, f, CompilerDirectiveParserErrors.InvalidTypeCheckedPointersDirective);
+            RunCompilerDirective("", UsePointersWithTypeChecking.Undefined, f);
+            RunCompilerDirective("T+", UsePointersWithTypeChecking.Enable, f);
+            RunCompilerDirective("T-", UsePointersWithTypeChecking.Disable, f);
+            RunCompilerDirective("T 3", UsePointersWithTypeChecking.Undefined, f, CompilerDirectiveParserErrors.InvalidTypeCheckedPointersDirective);
+            RunCompilerDirective("T", UsePointersWithTypeChecking.Undefined, f, CompilerDirectiveParserErrors.InvalidTypeCheckedPointersDirective);
+            RunCompilerDirective("TYPEDADDRESS ON", UsePointersWithTypeChecking.Enable, f);
+            RunCompilerDirective("TYPEDADDRESS OFF", UsePointersWithTypeChecking.Disable, f);
+            RunCompilerDirective("TYPEDADDRESS KAPUTT", UsePointersWithTypeChecking.Undefined, f, CompilerDirectiveParserErrors.InvalidTypeCheckedPointersDirective);
+            RunCompilerDirective("TYPEDADDRESS ", UsePointersWithTypeChecking.Undefined, f, CompilerDirectiveParserErrors.InvalidTypeCheckedPointersDirective);
         }
 
         [Fact]

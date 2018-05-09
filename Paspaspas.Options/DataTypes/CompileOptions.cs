@@ -30,7 +30,7 @@
             LongStrings = new DerivedValueOption<LongStringTypes>(baseOptions?.LongStrings);
             OpenStrings = new DerivedValueOption<OpenStringTypes>(baseOptions?.OpenStrings);
             Optimization = new DerivedValueOption<CompilerOptimization>(baseOptions?.Optimization);
-            CheckOverflows = new DerivedValueOption<RuntimeOverflowChecks>(baseOptions?.CheckOverflows);
+            CheckOverflows = new DerivedValueOption<RuntimeOverflowCheck>(baseOptions?.CheckOverflows);
             SafeDivide = new DerivedValueOption<FDivSafeDivide>(baseOptions?.SafeDivide);
             RangeChecks = new DerivedValueOption<RuntimeRangeChecks>(baseOptions?.RangeChecks);
             StackFrames = new DerivedValueOption<StackFrameGeneration>(baseOptions?.StackFrames);
@@ -39,8 +39,8 @@
             WeakLinkRtti = new DerivedValueOption<RttiLinkMode>(baseOptions?.WeakLinkRtti);
             WeakPackageUnit = new DerivedValueOption<WeakPackaging>(baseOptions?.WeakPackageUnit);
             Warnings = new DerivedValueOption<CompilerWarning>(baseOptions?.Warnings);
-            VarStringChecks = new DerivedValueOption<ShortVarStringChecks>(baseOptions?.VarStringChecks);
-            TypedPointers = new DerivedValueOption<TypeCheckedPointers>(baseOptions?.TypedPointers);
+            VarStringChecks = new DerivedValueOption<ShortVarStringCheck>(baseOptions?.VarStringChecks);
+            TypedPointers = new DerivedValueOption<UsePointersWithTypeChecking>(baseOptions?.TypedPointers);
             SymbolDefinitions = new DerivedValueOption<SymbolDefinitionInfo>(baseOptions?.SymbolDefinitions);
             SymbolReferences = new DerivedValueOption<SymbolReferenceInfo>(baseOptions?.SymbolReferences);
             LinkAllTypes = new DerivedValueOption<StrongTypeLinking>(baseOptions?.LinkAllTypes);
@@ -161,7 +161,7 @@
         /// <summary>
         ///     flag to enable overflow checks
         /// </summary>
-        public DerivedValueOption<RuntimeOverflowChecks> CheckOverflows { get; }
+        public DerivedValueOption<RuntimeOverflowCheck> CheckOverflows { get; }
 
         /// <summary>
         ///     save divide option
@@ -206,12 +206,12 @@
         /// <summary>
         ///     var string checks
         /// </summary>
-        public DerivedValueOption<ShortVarStringChecks> VarStringChecks { get; }
+        public DerivedValueOption<ShortVarStringCheck> VarStringChecks { get; }
 
         /// <summary>
         ///     pointers with types
         /// </summary>
-        public DerivedValueOption<TypeCheckedPointers> TypedPointers { get; }
+        public DerivedValueOption<UsePointersWithTypeChecking> TypedPointers { get; }
 
         /// <summary>
         ///     flag go generate symbol reference information

@@ -1,35 +1,35 @@
 ﻿using System.Numerics;
 using PasPasPas.Global.Runtime;
 using PasPasPas.Global.Types;
+using PasPasPas.Infrastructure.Utils;
 
-namespace PasPasPas.Runtime.Values.Int {
+namespace PasPasPas.Runtime.Values.IntValues {
 
     /// <summary>
-    ///     unsigned int64 value
+    ///     byte value
     /// </summary>
-    public class UInt64Value : IntegerValueBase {
+    public class ByteValue : IntegerValueBase {
 
-        private readonly ulong value;
+        private readonly byte value;
 
         /// <summary>
-        ///     create a new unsigned long value
+        ///     create a new byte value
         /// </summary>
         /// <param name="value"></param>
-        public UInt64Value(ulong value)
+        public ByteValue(byte value)
             => this.value = value;
 
         /// <summary>
-        ///     type id: uint64
+        ///     type id
         /// </summary>
         public override int TypeId
-            => KnownTypeIds.Uint64Type;
+            => KnownTypeIds.ByteType;
 
         /// <summary>
-        ///     value
+        ///     byte value
         /// </summary>
         public override long SignedValue
-            => (long)value;
-
+            => value;
 
         /// <summary>
         ///     get this value as big integer value
@@ -42,7 +42,8 @@ namespace PasPasPas.Runtime.Values.Int {
         /// </summary>
         /// <returns></returns>
         public override string ToString()
-            => value.ToString();
+            => StringUtils.Invariant($"{value}");
+
 
         /// <summary>
         ///     check for equality
@@ -50,7 +51,7 @@ namespace PasPasPas.Runtime.Values.Int {
         /// <param name="obj"></param>
         /// <returns></returns>
         public override bool Equals(object obj) {
-            if (obj is UInt64Value v)
+            if (obj is ByteValue v)
                 return v.value == value;
             return false;
         }
@@ -59,10 +60,10 @@ namespace PasPasPas.Runtime.Values.Int {
         /// </summary>
         /// <returns></returns>
         public override int GetHashCode()
-            => ((int)value) ^ (int)(value >> 32);
+            => value;
 
         /// <summary>
-        ///     invert bits
+        ///     invert all bits
         /// </summary>
         /// <returns></returns>
         public override ITypeReference InvertBits()
@@ -81,9 +82,9 @@ namespace PasPasPas.Runtime.Values.Int {
             => value;
 
         /// <summary>
-        ///     type kind
+        ///     common type kind: integer
         /// </summary>
         public override CommonTypeKind TypeKind
-            => CommonTypeKind.Int64Type;
+            => CommonTypeKind.IntegerType;
     }
 }

@@ -3,7 +3,7 @@ using BenchmarkDotNet.Attributes;
 using PasPasPas.Global.Runtime;
 using PasPasPas.Global.Types;
 using PasPasPas.Runtime.Values;
-using PasPasPas.Runtime.Values.Int;
+using PasPasPas.Runtime.Values.IntValues;
 
 namespace P3Benchmark.Runtime {
 

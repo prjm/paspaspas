@@ -3,7 +3,7 @@
     /// <summary>
     ///     flag for overflow checks
     /// </summary>
-    public enum RuntimeOverflowChecks {
+    public enum RuntimeOverflowCheck {
 
 
         /// <summary>

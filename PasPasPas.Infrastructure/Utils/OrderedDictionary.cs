@@ -71,19 +71,19 @@ namespace PasPasPas.Infrastructure.Utils {
         #region Constructors
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public OrderedDictionary() => Initialize();
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="comparer"></param>
         public OrderedDictionary(IEqualityComparer<TKey> comparer)
             => Initialize(comparer);
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="dictionary"></param>
         public OrderedDictionary(IOrderedDictionary<TKey, TValue> dictionary) {
@@ -94,7 +94,7 @@ namespace PasPasPas.Infrastructure.Utils {
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="dictionary"></param>
         /// <param name="comparer"></param>
@@ -106,7 +106,7 @@ namespace PasPasPas.Infrastructure.Utils {
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="items"></param>
         public OrderedDictionary(IEnumerable<KeyValuePair<TKey, TValue>> items) {
@@ -117,7 +117,7 @@ namespace PasPasPas.Infrastructure.Utils {
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="items"></param>
         /// <param name="comparer"></param>
@@ -209,7 +209,7 @@ namespace PasPasPas.Infrastructure.Utils {
         /// </exception>
         public KeyValuePair<TKey, TValue> GetItem(int index) {
             if (index < 0 || index >= _keyedCollection.Count) {
-                throw new ArgumentException(string.Format("The index was outside the bounds of the dictionary: {0}", index));
+                throw new ArgumentException(StringUtils.Invariant($"The index was outside the bounds of the dictionary: {index}"));
             }
             return _keyedCollection[index];
         }
@@ -224,7 +224,7 @@ namespace PasPasPas.Infrastructure.Utils {
         /// </exception>
         public void SetItem(int index, TValue value) {
             if (index < 0 || index >= _keyedCollection.Count) {
-                throw new ArgumentException(string.Format("The index is outside the bounds of the dictionary: {0}", index));
+                throw new ArgumentException(StringUtils.Invariant($"The index is outside the bounds of the dictionary: {index}"));
             }
             var kvp = new KeyValuePair<TKey, TValue>(_keyedCollection[index].Key, value);
             _keyedCollection[index] = kvp;
@@ -248,7 +248,7 @@ namespace PasPasPas.Infrastructure.Utils {
         /// <param name="index">The index of the key-value pair to remove from the dictionary.</param>
         public void RemoveAt(int index) {
             if (index < 0 || index >= _keyedCollection.Count) {
-                throw new ArgumentException(string.Format("The index was outside the bounds of the dictionary: {0}", index));
+                throw new ArgumentException(StringUtils.Invariant($"The index was outside the bounds of the dictionary: {index}"));
             }
             _keyedCollection.RemoveAt(index);
         }
@@ -259,7 +259,7 @@ namespace PasPasPas.Infrastructure.Utils {
         /// <param name="key">The key associated with the value to get.</param>
         public TValue GetValue(TKey key) {
             if (_keyedCollection.Contains(key) == false) {
-                throw new ArgumentException(string.Format("The given key is not present in the dictionary: {0}", key));
+                throw new ArgumentException(StringUtils.Invariant($"The given key is not present in the dictionary: {key}"));
             }
             var kvp = _keyedCollection[key];
             return kvp.Value;
@@ -308,24 +308,24 @@ namespace PasPasPas.Infrastructure.Utils {
         #region Sorting
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public void SortKeys() => _keyedCollection.SortByKeys();
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="comparer"></param>
         public void SortKeys(IComparer<TKey> comparer) => _keyedCollection.SortByKeys(comparer);
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="comparison"></param>
         public void SortKeys(Comparison<TKey> comparison) => _keyedCollection.SortByKeys(comparison);
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public void SortValues() {
             var comparer = Comparer<TValue>.Default;
@@ -333,13 +333,13 @@ namespace PasPasPas.Infrastructure.Utils {
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="comparer"></param>
         public void SortValues(IComparer<TValue> comparer) => _keyedCollection.Sort((x, y) => comparer.Compare(x.Value, y.Value));
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="comparison"></param>
         public void SortValues(Comparison<TValue> comparison) => _keyedCollection.Sort((x, y) => comparison(x.Value, y.Value));

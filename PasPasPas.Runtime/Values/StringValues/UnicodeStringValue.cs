@@ -2,7 +2,7 @@
 using PasPasPas.Global.Runtime;
 using PasPasPas.Global.Types;
 
-namespace PasPasPas.Runtime.Values.String {
+namespace PasPasPas.Runtime.Values.StringValues {
 
     /// <summary>
     ///     Unicode string

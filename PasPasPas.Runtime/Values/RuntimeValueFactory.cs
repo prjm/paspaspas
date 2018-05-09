@@ -1,10 +1,10 @@
 ﻿using PasPasPas.Global.Runtime;
 using PasPasPas.Global.Types;
-using PasPasPas.Runtime.Values.Boolean;
-using PasPasPas.Runtime.Values.Char;
-using PasPasPas.Runtime.Values.Float;
-using PasPasPas.Runtime.Values.Int;
-using PasPasPas.Runtime.Values.String;
+using PasPasPas.Runtime.Values.BooleanValues;
+using PasPasPas.Runtime.Values.CharValues;
+using PasPasPas.Runtime.Values.FloatValues;
+using PasPasPas.Runtime.Values.IntValues;
+using PasPasPas.Runtime.Values.StringValues;
 
 namespace PasPasPas.Runtime.Values {
 

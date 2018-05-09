@@ -1,8 +1,9 @@
 ﻿using System.Numerics;
 using PasPasPas.Global.Runtime;
 using PasPasPas.Global.Types;
+using PasPasPas.Infrastructure.Utils;
 
-namespace PasPasPas.Runtime.Values.Int {
+namespace PasPasPas.Runtime.Values.IntValues {
 
     /// <summary>
     ///     small int value
@@ -41,7 +42,7 @@ namespace PasPasPas.Runtime.Values.Int {
         /// </summary>
         /// <returns></returns>
         public override string ToString()
-            => value.ToString();
+            => StringUtils.Invariant($"{value}");
 
         /// <summary>
         ///     check for equality

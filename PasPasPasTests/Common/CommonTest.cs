@@ -2,8 +2,8 @@
 using PasPasPas.Global.Runtime;
 using PasPasPas.Options.DataTypes;
 using PasPasPas.Runtime.Values;
-using PasPasPas.Runtime.Values.Float;
-using PasPasPas.Runtime.Values.Int;
+using PasPasPas.Runtime.Values.FloatValues;
+using PasPasPas.Runtime.Values.IntValues;
 using PasPasPas.Typings.Common;
 using SharpFloat.FloatingPoint;
 

@@ -1,7 +1,7 @@
 ﻿using PasPasPas.Global.Runtime;
 using PasPasPas.Global.Types;
 
-namespace PasPasPas.Runtime.Values.Int {
+namespace PasPasPas.Runtime.Values.IntValues {
 
     /// <summary>
     ///     integer value factory and operations

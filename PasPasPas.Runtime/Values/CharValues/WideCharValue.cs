@@ -1,8 +1,9 @@
 ﻿using System;
 using PasPasPas.Global.Runtime;
 using PasPasPas.Global.Types;
+using PasPasPas.Infrastructure.Utils;
 
-namespace PasPasPas.Runtime.Values.Char {
+namespace PasPasPas.Runtime.Values.CharValues {
 
     /// <summary>
     ///     wide char (word) value
@@ -64,6 +65,6 @@ namespace PasPasPas.Runtime.Values.Char {
         /// </summary>
         /// <returns></returns>
         public override string ToString()
-            => value.ToString();
+            => StringUtils.Invariant($"{value}");
     }
 }

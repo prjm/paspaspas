@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace PasPasPas.Infrastructure.Environment {
 
@@ -38,7 +39,7 @@ namespace PasPasPas.Infrastructure.Environment {
             if (pool.TryGetValue(value, out var poolRef))
                 result = poolRef;
             else {
-                result = value.ToString();
+                result = value.ToString(CultureInfo.InvariantCulture);
                 pool.Add(value, result);
             }
 

@@ -1,28 +1,29 @@
 ﻿using System.Numerics;
 using PasPasPas.Global.Runtime;
 using PasPasPas.Global.Types;
+using PasPasPas.Infrastructure.Utils;
 
-namespace PasPasPas.Runtime.Values.Int {
+namespace PasPasPas.Runtime.Values.IntValues {
 
     /// <summary>
-    ///     cardinal value
+    ///     short int value
     /// </summary>
-    public class CardinalValue : IntegerValueBase {
+    public class ShortIntValue : IntegerValueBase {
 
-        private readonly uint value;
+        private readonly sbyte value;
 
         /// <summary>
-        ///     create a new cardinal value
+        ///     create a new short int value
         /// </summary>
         /// <param name="value"></param>
-        public CardinalValue(uint value)
+        public ShortIntValue(sbyte value)
             => this.value = value;
 
         /// <summary>
-        ///     type id
+        ///     type id: short int
         /// </summary>
         public override int TypeId
-            => KnownTypeIds.CardinalType;
+            => KnownTypeIds.ShortInt;
 
         /// <summary>
         ///     value
@@ -41,8 +42,7 @@ namespace PasPasPas.Runtime.Values.Int {
         /// </summary>
         /// <returns></returns>
         public override string ToString()
-            => value.ToString();
-
+            => StringUtils.Invariant($"{value}");
 
         /// <summary>
         ///     check for equality
@@ -50,7 +50,7 @@ namespace PasPasPas.Runtime.Values.Int {
         /// <param name="obj"></param>
         /// <returns></returns>
         public override bool Equals(object obj) {
-            if (obj is CardinalValue v)
+            if (obj is ShortIntValue v)
                 return v.value == value;
             return false;
         }
@@ -59,7 +59,7 @@ namespace PasPasPas.Runtime.Values.Int {
         /// </summary>
         /// <returns></returns>
         public override int GetHashCode()
-            => (int)value;
+            => value;
 
         /// <summary>
         ///     invert bits
@@ -78,13 +78,12 @@ namespace PasPasPas.Runtime.Values.Int {
         ///     unsigned value
         /// </summary>
         public override ulong UnsignedValue
-            => value;
+            => (ulong)value;
 
         /// <summary>
-        ///     common type kind: integer
+        ///     type kind
         /// </summary>
         public override CommonTypeKind TypeKind
             => CommonTypeKind.IntegerType;
-
     }
 }

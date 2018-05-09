@@ -499,7 +499,7 @@ namespace PasPasPas.Parsing.Parser {
                 if (ContinueWith(result, TokenKind.Methods)) {
                     if (result.Methods != null) {
                         result.Mode = RttiGenerationMode.Undefined;
-                        ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidRttiDirective, new int[0]);
+                        ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidRttiDirective, Array.Empty<int>());
                         return;
                     }
                     result.Methods = ParseRttiVisibility(result);
@@ -508,7 +508,7 @@ namespace PasPasPas.Parsing.Parser {
                 else if (ContinueWith(result, TokenKind.Properties)) {
                     if (result.Properties != null) {
                         result.Mode = RttiGenerationMode.Undefined;
-                        ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidRttiDirective, new int[0]);
+                        ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidRttiDirective, Array.Empty<int>());
                         return;
                     }
                     result.Properties = ParseRttiVisibility(result);
@@ -517,7 +517,7 @@ namespace PasPasPas.Parsing.Parser {
                 else if (ContinueWith(result, TokenKind.Fields)) {
                     if (result.Fields != null) {
                         result.Mode = RttiGenerationMode.Undefined;
-                        ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidRttiDirective, new int[0]);
+                        ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidRttiDirective, Array.Empty<int>());
                         return;
                     }
                     result.Fields = ParseRttiVisibility(result);
@@ -562,7 +562,7 @@ namespace PasPasPas.Parsing.Parser {
                         visibility.ForPublished = true;
                         break;
                     default: {
-                            ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidRttiDirective, new int[0]);
+                            ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidRttiDirective, Array.Empty<int>());
                             result.Mode = RttiGenerationMode.Undefined;
                             return null;
                         }
@@ -629,7 +629,7 @@ namespace PasPasPas.Parsing.Parser {
             else {
                 result.WarningType = null;
                 result.Mode = WarningMode.Undefined;
-                ErrorLastPart(result, CompilerDirectiveParserErrors.InvalidWarnDirective, new object[] { });
+                ErrorLastPart(result, CompilerDirectiveParserErrors.InvalidWarnDirective, Array.Empty<object>());
             }
         }
 
@@ -747,7 +747,6 @@ namespace PasPasPas.Parsing.Parser {
 
         private void ParseEndIf(IExtendableSyntaxPart parent) {
             var result = new EndIf();
-            new EndIf();
             InitByTerminal(result, parent, TokenKind.EndIf);
         }
 
@@ -1256,10 +1255,10 @@ namespace PasPasPas.Parsing.Parser {
             InitByTerminal(result, parent, TokenKind.TypedPointersSwitchLong);
 
             if (ContinueWith(result, TokenKind.On)) {
-                result.Mode = TypeCheckedPointers.Enable;
+                result.Mode = UsePointersWithTypeChecking.Enable;
             }
             else if (ContinueWith(result, TokenKind.Off)) {
-                result.Mode = TypeCheckedPointers.Disable;
+                result.Mode = UsePointersWithTypeChecking.Disable;
             }
             else {
                 ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidTypeCheckedPointersDirective, new[] { TokenKind.On, TokenKind.Off });
@@ -1271,10 +1270,10 @@ namespace PasPasPas.Parsing.Parser {
             InitByTerminal(result, parent, TokenKind.VarStringCheckSwitchLong);
 
             if (ContinueWith(result, TokenKind.On)) {
-                result.Mode = ShortVarStringChecks.EnableChecks;
+                result.Mode = ShortVarStringCheck.EnableChecks;
             }
             else if (ContinueWith(result, TokenKind.Off)) {
-                result.Mode = ShortVarStringChecks.DisableChecks;
+                result.Mode = ShortVarStringCheck.DisableChecks;
             }
             else {
                 ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidStringCheckDirective, new[] { TokenKind.On, TokenKind.Off });
@@ -1406,10 +1405,10 @@ namespace PasPasPas.Parsing.Parser {
             InitByTerminal(result, parent, TokenKind.OverflowSwitchLong);
 
             if (ContinueWith(result, TokenKind.On)) {
-                result.Mode = RuntimeOverflowChecks.EnableChecks;
+                result.Mode = RuntimeOverflowCheck.EnableChecks;
             }
             else if (ContinueWith(result, TokenKind.Off)) {
-                result.Mode = RuntimeOverflowChecks.DisableChecks;
+                result.Mode = RuntimeOverflowCheck.DisableChecks;
             }
             else {
                 ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidOverflowCheckDirective, new[] { TokenKind.On, TokenKind.Off });
@@ -1940,10 +1939,10 @@ namespace PasPasPas.Parsing.Parser {
             InitByTerminal(result, parent, TokenKind.TypedPointersSwitch);
 
             if (ContinueWith(result, TokenKind.Plus)) {
-                result.Mode = TypeCheckedPointers.Enable;
+                result.Mode = UsePointersWithTypeChecking.Enable;
             }
             else if (ContinueWith(result, TokenKind.Minus)) {
-                result.Mode = TypeCheckedPointers.Disable;
+                result.Mode = UsePointersWithTypeChecking.Disable;
             }
             else {
                 ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidTypeCheckedPointersDirective, new[] { TokenKind.Minus, TokenKind.Platform });
@@ -1955,10 +1954,10 @@ namespace PasPasPas.Parsing.Parser {
             InitByTerminal(result, parent, TokenKind.VarStringCheckSwitch);
 
             if (ContinueWith(result, TokenKind.Plus)) {
-                result.Mode = ShortVarStringChecks.EnableChecks;
+                result.Mode = ShortVarStringCheck.EnableChecks;
             }
             else if (ContinueWith(result, TokenKind.Minus)) {
-                result.Mode = ShortVarStringChecks.DisableChecks;
+                result.Mode = ShortVarStringCheck.DisableChecks;
             }
             else {
                 ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidStringCheckDirective, new[] { TokenKind.Plus, TokenKind.Minus });
@@ -2086,10 +2085,10 @@ namespace PasPasPas.Parsing.Parser {
             InitByTerminal(result, parent, TokenKind.OverflowSwitch);
 
             if (ContinueWith(result, TokenKind.Plus)) {
-                result.Mode = RuntimeOverflowChecks.EnableChecks;
+                result.Mode = RuntimeOverflowCheck.EnableChecks;
             }
             else if (ContinueWith(result, TokenKind.Minus)) {
-                result.Mode = RuntimeOverflowChecks.DisableChecks;
+                result.Mode = RuntimeOverflowCheck.DisableChecks;
             }
             else {
                 ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidOverflowCheckDirective, new[] { TokenKind.Plus, TokenKind.Minus });

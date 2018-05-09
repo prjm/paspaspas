@@ -11,7 +11,7 @@ namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
         /// <summary>
         ///     switch mode
         /// </summary>
-        public RuntimeOverflowChecks Mode { get; set; }
+        public RuntimeOverflowCheck Mode { get; set; }
 
         /// <summary>
         ///     accept visitor

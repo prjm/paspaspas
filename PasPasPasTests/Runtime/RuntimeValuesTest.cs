@@ -1,7 +1,7 @@
 ﻿using PasPasPas.Global.Runtime;
 using PasPasPas.Global.Types;
-using PasPasPas.Runtime.Values.Boolean;
-using PasPasPas.Runtime.Values.Int;
+using PasPasPas.Runtime.Values.BooleanValues;
+using PasPasPas.Runtime.Values.IntValues;
 using PasPasPasTests.Common;
 
 namespace PasPasPasTests.Runtime {

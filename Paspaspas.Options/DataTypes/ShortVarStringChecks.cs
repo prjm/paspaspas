@@ -3,7 +3,7 @@
     /// <summary>
     ///     flag for short var strings
     /// </summary>
-    public enum ShortVarStringChecks {
+    public enum ShortVarStringCheck {
 
         /// <summary>
         ///     undefined flag state

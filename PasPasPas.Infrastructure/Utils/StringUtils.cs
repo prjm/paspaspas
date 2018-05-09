@@ -1,13 +1,11 @@
 ﻿using System;
 
-namespace PasPasPas.Infrastructure.Utils
-{
+namespace PasPasPas.Infrastructure.Utils {
 
     /// <summary>
     ///     string helpers
     /// </summary>
-    public static class StringUtils
-    {
+    public static class StringUtils {
 
 
         /// <summary>
@@ -15,40 +13,22 @@ namespace PasPasPas.Infrastructure.Utils
         /// </summary>
         /// <param name="formattable"></param>
         /// <returns></returns>
-        public static string Invariant(FormattableString formattable)
-        {
-            if (formattable == null) {
+        public static string Invariant(FormattableString formattable) {
+            if (formattable == null)
                 throw new ArgumentNullException(nameof(formattable));
-            }
             return formattable.ToString(System.Globalization.CultureInfo.CurrentCulture);
         }
-
 
         /// <summary>
         ///     format a string to current culture
         /// </summary>
         /// <param name="formattable"></param>
         /// <returns></returns>
-        public static string Current(FormattableString formattable)
-        {
+        public static string Current(FormattableString formattable) {
             if (formattable == null) {
                 throw new ArgumentNullException(nameof(formattable));
             }
             return formattable.ToString(System.Globalization.CultureInfo.CurrentCulture);
         }
-
-        /// <summary>
-        ///     format a string to current ui culture
-        /// </summary>
-        /// <param name="formattable"></param>
-        /// <returns></returns>
-        public static string CurrentUI(FormattableString formattable)
-        {
-            if (formattable == null) {
-                throw new ArgumentNullException(nameof(formattable));
-            }
-            return formattable.ToString(System.Globalization.CultureInfo.CurrentUICulture);
-        }
-
     }
-}               
+}

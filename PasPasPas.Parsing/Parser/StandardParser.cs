@@ -4266,7 +4266,7 @@ namespace PasPasPas.Parsing.Parser {
                 if (!allowIn || !ContinueWith(result, TokenKind.In))
                     RequireIdentifier(result);
 
-            while (LookAheadIdentifier(1, new int[0], true) && (!inDesignator || LookAhead(2, new int[] { TokenKind.Dot })) && ContinueWith(result, TokenKind.Dot)) {
+            while (LookAheadIdentifier(1, Array.Empty<int>(), true) && (!inDesignator || LookAhead(2, new int[] { TokenKind.Dot })) && ContinueWith(result, TokenKind.Dot)) {
                 RequireIdentifier(result, true);
             }
 
@@ -4284,7 +4284,7 @@ namespace PasPasPas.Parsing.Parser {
             => LookAheadIdentifier(0, otherTokens, false);
 
         private bool MatchIdentifier(bool allowReservedWords)
-            => LookAheadIdentifier(0, new int[0], allowReservedWords);
+            => LookAheadIdentifier(0, Array.Empty<int>(), allowReservedWords);
 
         private bool LookAheadIdentifier(int lookAhead, int[] otherTokens, bool allowReservedWords) {
             if (LookAhead(lookAhead, otherTokens))

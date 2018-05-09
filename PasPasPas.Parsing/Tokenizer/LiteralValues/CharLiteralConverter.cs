@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using PasPasPas.Infrastructure.Environment;
 using PasPasPas.Infrastructure.Utils;
 
@@ -48,12 +49,12 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
         /// </summary>
         /// <param name="literal"></param>
         /// <returns></returns>
-        public object ConvertCharLiteral(object literal) {
+        public static object ConvertCharLiteral(object literal) {
             if (literal == null)
                 throw new ArgumentNullException(nameof(literal));
 
             if (literal.IsNumber())
-                return System.Convert.ToChar(literal);
+                return System.Convert.ToChar(literal, CultureInfo.InvariantCulture);
             else
                 return InvalidCharacterLiteral;
         }

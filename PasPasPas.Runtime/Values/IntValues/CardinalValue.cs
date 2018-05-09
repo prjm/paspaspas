@@ -1,28 +1,29 @@
 ﻿using System.Numerics;
 using PasPasPas.Global.Runtime;
 using PasPasPas.Global.Types;
+using PasPasPas.Infrastructure.Utils;
 
-namespace PasPasPas.Runtime.Values.Int {
+namespace PasPasPas.Runtime.Values.IntValues {
 
     /// <summary>
-    ///     integer value
+    ///     cardinal value
     /// </summary>
-    public class IntegerValue : IntegerValueBase {
+    public class CardinalValue : IntegerValueBase {
 
-        private readonly int value;
+        private readonly uint value;
 
         /// <summary>
-        ///     new int value
+        ///     create a new cardinal value
         /// </summary>
         /// <param name="value"></param>
-        public IntegerValue(int value)
+        public CardinalValue(uint value)
             => this.value = value;
 
         /// <summary>
-        ///     type id: integer
+        ///     type id
         /// </summary>
         public override int TypeId
-            => KnownTypeIds.IntegerType;
+            => KnownTypeIds.CardinalType;
 
         /// <summary>
         ///     value
@@ -37,6 +38,38 @@ namespace PasPasPas.Runtime.Values.Int {
             => new BigInteger(value);
 
         /// <summary>
+        ///     format this number
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+            => StringUtils.Invariant($"{value}");
+
+
+        /// <summary>
+        ///     check for equality
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(object obj) {
+            if (obj is CardinalValue v)
+                return v.value == value;
+            return false;
+        }
+        /// <summary>
+        ///     compute a hash code
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+            => (int)value;
+
+        /// <summary>
+        ///     invert bits
+        /// </summary>
+        /// <returns></returns>
+        public override ITypeReference InvertBits()
+            => ToScaledIntegerValue(~value);
+
+        /// <summary>
         ///     check if this number is negative
         /// </summary>
         public override bool IsNegative
@@ -46,44 +79,13 @@ namespace PasPasPas.Runtime.Values.Int {
         ///     unsigned value
         /// </summary>
         public override ulong UnsignedValue
-            => (uint)value;
-
-        /// <summary>
-        ///     type kind
-        /// </summary>
-        public override CommonTypeKind TypeKind
-            => CommonTypeKind.IntegerType;
-
-        /// <summary>
-        ///     format this number
-        /// </summary>
-        /// <returns></returns>
-        public override string ToString()
-            => value.ToString();
-
-        /// <summary>
-        ///     check for equality
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        public override bool Equals(object obj) {
-            if (obj is IntegerValue v)
-                return v.value == value;
-            return false;
-        }
-        /// <summary>
-        ///     compute a hash code
-        /// </summary>
-        /// <returns></returns>
-        public override int GetHashCode()
             => value;
 
         /// <summary>
-        ///     invert bits
+        ///     common type kind: integer
         /// </summary>
-        /// <returns></returns>
-        public override ITypeReference InvertBits()
-            => ToScaledIntegerValue(~value);
+        public override CommonTypeKind TypeKind
+            => CommonTypeKind.IntegerType;
 
     }
 }

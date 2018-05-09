@@ -1,6 +1,7 @@
 ﻿using System;
 using PasPasPas.Global.Runtime;
 using PasPasPas.Global.Types;
+using PasPasPas.Infrastructure.Utils;
 
 namespace PasPasPas.Runtime.Values {
 
@@ -88,7 +89,7 @@ namespace PasPasPas.Runtime.Values {
                 case SpecialConstantKind.Nil:
                     return "NIL";
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(kind));
+                    return StringUtils.Invariant($"{kind}");
 
             }
         }

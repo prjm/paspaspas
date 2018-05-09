@@ -1,6 +1,7 @@
 ﻿using PasPasPas.Global.Types;
+using PasPasPas.Infrastructure.Utils;
 
-namespace PasPasPas.Runtime.Values.Boolean {
+namespace PasPasPas.Runtime.Values.BooleanValues {
 
     /// <summary>
     ///     boolean value
@@ -33,6 +34,6 @@ namespace PasPasPas.Runtime.Values.Boolean {
         /// </summary>
         /// <returns></returns>
         public override string ToString()
-            => value.ToString();
+            => StringUtils.Invariant($"{value}");
     }
 }

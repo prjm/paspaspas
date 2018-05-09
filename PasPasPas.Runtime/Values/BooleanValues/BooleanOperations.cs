@@ -1,6 +1,6 @@
 ﻿using PasPasPas.Global.Runtime;
 
-namespace PasPasPas.Runtime.Values.Boolean {
+namespace PasPasPas.Runtime.Values.BooleanValues {
 
     /// <summary>
     ///     boolean value factory and operations

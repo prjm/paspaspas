@@ -1,31 +1,32 @@
 ﻿using System.Numerics;
 using PasPasPas.Global.Runtime;
 using PasPasPas.Global.Types;
+using PasPasPas.Infrastructure.Utils;
 
-namespace PasPasPas.Runtime.Values.Int {
+namespace PasPasPas.Runtime.Values.IntValues {
 
     /// <summary>
-    ///     word value
+    ///     integer value
     /// </summary>
-    public class WordValue : IntegerValueBase {
+    public class IntegerValue : IntegerValueBase {
 
-        private readonly ushort value;
+        private readonly int value;
 
         /// <summary>
-        ///     create a new word value
+        ///     new int value
         /// </summary>
         /// <param name="value"></param>
-        public WordValue(ushort value)
+        public IntegerValue(int value)
             => this.value = value;
 
         /// <summary>
-        ///     type id: word
+        ///     type id: integer
         /// </summary>
         public override int TypeId
-            => KnownTypeIds.WordType;
+            => KnownTypeIds.IntegerType;
 
         /// <summary>
-        ///     word value
+        ///     value
         /// </summary>
         public override long SignedValue
             => value;
@@ -37,11 +38,29 @@ namespace PasPasPas.Runtime.Values.Int {
             => new BigInteger(value);
 
         /// <summary>
+        ///     check if this number is negative
+        /// </summary>
+        public override bool IsNegative
+            => value < 0;
+
+        /// <summary>
+        ///     unsigned value
+        /// </summary>
+        public override ulong UnsignedValue
+            => (uint)value;
+
+        /// <summary>
+        ///     type kind
+        /// </summary>
+        public override CommonTypeKind TypeKind
+            => CommonTypeKind.IntegerType;
+
+        /// <summary>
         ///     format this number
         /// </summary>
         /// <returns></returns>
         public override string ToString()
-            => value.ToString();
+            => StringUtils.Invariant($"{value}");
 
         /// <summary>
         ///     check for equality
@@ -49,7 +68,7 @@ namespace PasPasPas.Runtime.Values.Int {
         /// <param name="obj"></param>
         /// <returns></returns>
         public override bool Equals(object obj) {
-            if (obj is WordValue v)
+            if (obj is IntegerValue v)
                 return v.value == value;
             return false;
         }
@@ -67,22 +86,5 @@ namespace PasPasPas.Runtime.Values.Int {
         public override ITypeReference InvertBits()
             => ToScaledIntegerValue(~value);
 
-        /// <summary>
-        ///     check if this number is negative
-        /// </summary>
-        public override bool IsNegative
-            => value < 0;
-
-        /// <summary>
-        ///     unsigned value
-        /// </summary>
-        public override ulong UnsignedValue
-            => value;
-
-        /// <summary>
-        ///     type kind
-        /// </summary>
-        public override CommonTypeKind TypeKind
-            => CommonTypeKind.IntegerType;
     }
 }

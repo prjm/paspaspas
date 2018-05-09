@@ -2,8 +2,8 @@
 using Xunit;
 using System;
 using Assert = PasPasPasTests.Common.Assert;
-using PasPasPas.Runtime.Values.Int;
-using PasPasPas.Runtime.Values.Boolean;
+using PasPasPas.Runtime.Values.IntValues;
+using PasPasPas.Runtime.Values.BooleanValues;
 
 namespace PasPasPasTests.Tokenizer {
 

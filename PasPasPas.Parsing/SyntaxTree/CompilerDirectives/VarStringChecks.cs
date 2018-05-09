@@ -11,7 +11,7 @@ namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
         /// <summary>
         ///     switch mode
         /// </summary>
-        public ShortVarStringChecks Mode { get; set; }
+        public ShortVarStringCheck Mode { get; set; }
 
         /// <summary>
         ///     accept visitor

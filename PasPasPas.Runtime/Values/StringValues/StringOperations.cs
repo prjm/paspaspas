@@ -1,6 +1,6 @@
 ﻿using PasPasPas.Global.Runtime;
 
-namespace PasPasPas.Runtime.Values.String {
+namespace PasPasPas.Runtime.Values.StringValues {
 
     /// <summary>
     ///     string calculator

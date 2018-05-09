@@ -165,15 +165,15 @@ namespace PasPasPas.Options.Bundles {
                 case 'P':
                     return GetSwitchInfo(CompilerOptions.OpenStrings, OpenStringTypes.EnableOpenStrings, OpenStringTypes.DisableOpenStrings);
                 case 'Q':
-                    return GetSwitchInfo(CompilerOptions.CheckOverflows, RuntimeOverflowChecks.EnableChecks, RuntimeOverflowChecks.DisableChecks);
+                    return GetSwitchInfo(CompilerOptions.CheckOverflows, RuntimeOverflowCheck.EnableChecks, RuntimeOverflowCheck.DisableChecks);
                 case 'R':
                     return GetSwitchInfo(CompilerOptions.RangeChecks, RuntimeRangeChecks.EnableRangeChecks, RuntimeRangeChecks.DisableRangeChecks);
                 case 'T':
-                    return GetSwitchInfo(CompilerOptions.TypedPointers, TypeCheckedPointers.Enable, TypeCheckedPointers.Disable);
+                    return GetSwitchInfo(CompilerOptions.TypedPointers, UsePointersWithTypeChecking.Enable, UsePointersWithTypeChecking.Disable);
                 case 'U':
                     return GetSwitchInfo(CompilerOptions.SafeDivide, FDivSafeDivide.EnableSafeDivide, FDivSafeDivide.DisableSafeDivide);
                 case 'V':
-                    return GetSwitchInfo(CompilerOptions.VarStringChecks, ShortVarStringChecks.EnableChecks, ShortVarStringChecks.DisableChecks);
+                    return GetSwitchInfo(CompilerOptions.VarStringChecks, ShortVarStringCheck.EnableChecks, ShortVarStringCheck.DisableChecks);
                 case 'W':
                     return GetSwitchInfo(CompilerOptions.StackFrames, StackFrameGeneration.EnableFrames, StackFrameGeneration.DisableFrames);
                 case 'X':

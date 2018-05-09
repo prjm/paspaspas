@@ -3,15 +3,15 @@
     /// <summary>
     ///     pointers with types
     /// </summary>
-    public enum TypeCheckedPointers {
+    public enum UsePointersWithTypeChecking {
 
         /// <summary>
         ///     undefined flag state
-        /// </summary>                
+        /// </summary>
         Undefined = 0,
 
         /// <summary>
-        ///     enaböe
+        ///     enabled
         /// </summary>
         Enable = 1,
 

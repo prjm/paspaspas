@@ -11,7 +11,7 @@ namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
         /// <summary>
         ///     switch mode
         /// </summary>
-        public TypeCheckedPointers Mode { get; set; }
+        public UsePointersWithTypeChecking Mode { get; set; }
 
         /// <summary>
         ///     accept visitor

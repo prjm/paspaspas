@@ -1,34 +1,36 @@
 ﻿using System.Numerics;
 using PasPasPas.Global.Runtime;
 using PasPasPas.Global.Types;
+using PasPasPas.Infrastructure.Utils;
 
-namespace PasPasPas.Runtime.Values.Int {
+namespace PasPasPas.Runtime.Values.IntValues {
 
     /// <summary>
-    ///     short int value
+    ///     unsigned int64 value
     /// </summary>
-    public class ShortIntValue : IntegerValueBase {
+    public class UInt64Value : IntegerValueBase {
 
-        private readonly sbyte value;
+        private readonly ulong value;
 
         /// <summary>
-        ///     create a new short int value
+        ///     create a new unsigned long value
         /// </summary>
         /// <param name="value"></param>
-        public ShortIntValue(sbyte value)
+        public UInt64Value(ulong value)
             => this.value = value;
 
         /// <summary>
-        ///     type id: short int
+        ///     type id: uint64
         /// </summary>
         public override int TypeId
-            => KnownTypeIds.ShortInt;
+            => KnownTypeIds.Uint64Type;
 
         /// <summary>
         ///     value
         /// </summary>
         public override long SignedValue
-            => value;
+            => (long)value;
+
 
         /// <summary>
         ///     get this value as big integer value
@@ -41,7 +43,7 @@ namespace PasPasPas.Runtime.Values.Int {
         /// </summary>
         /// <returns></returns>
         public override string ToString()
-            => value.ToString();
+            => StringUtils.Invariant($"{value}");
 
         /// <summary>
         ///     check for equality
@@ -49,7 +51,7 @@ namespace PasPasPas.Runtime.Values.Int {
         /// <param name="obj"></param>
         /// <returns></returns>
         public override bool Equals(object obj) {
-            if (obj is ShortIntValue v)
+            if (obj is UInt64Value v)
                 return v.value == value;
             return false;
         }
@@ -58,7 +60,7 @@ namespace PasPasPas.Runtime.Values.Int {
         /// </summary>
         /// <returns></returns>
         public override int GetHashCode()
-            => value;
+            => ((int)value) ^ (int)(value >> 32);
 
         /// <summary>
         ///     invert bits
@@ -77,12 +79,12 @@ namespace PasPasPas.Runtime.Values.Int {
         ///     unsigned value
         /// </summary>
         public override ulong UnsignedValue
-            => (ulong)value;
+            => value;
 
         /// <summary>
         ///     type kind
         /// </summary>
         public override CommonTypeKind TypeKind
-            => CommonTypeKind.IntegerType;
+            => CommonTypeKind.Int64Type;
     }
 }

@@ -23,10 +23,11 @@ namespace PasPasPas.Parsing.Tokenizer.Patterns {
         /// <param name="template"></param>
         /// <param name="tokenKind"></param>
         public void Add(string template, int tokenKind) {
-            var group = this;
 
             if (string.IsNullOrEmpty(template))
-                new ArgumentNullException(nameof(template));
+                throw new ArgumentNullException(nameof(template));
+
+            var group = this;
 
             for (var index = 0; index < template.Length; index++) {
                 var match = template[index];
@@ -40,8 +41,7 @@ namespace PasPasPas.Parsing.Tokenizer.Patterns {
                     }
                 }
                 else if (lastChar) {
-                    var tokenValue = group.TokenValue as SimpleTokenGroupValue;
-                    if (tokenValue == null || tokenValue.TokenId != TokenKind.Undefined)
+                    if (!(group.TokenValue is SimpleTokenGroupValue tokenValue) || tokenValue.TokenId != TokenKind.Undefined)
                         throw new InvalidOperationException();
                     else
                         tokenValue.TokenId = tokenKind;

@@ -1,6 +1,6 @@
 ﻿using PasPasPas.Global.Runtime;
 
-namespace PasPasPas.Runtime.Values.Char {
+namespace PasPasPas.Runtime.Values.CharValues {
 
     /// <summary>
     ///     base class for char values
