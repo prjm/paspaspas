@@ -9,15 +9,13 @@ namespace PasPasPas.Typings.Simple {
     /// </summary>
     public class Integral64BitType : OrdinalTypeBase, IIntegralType {
 
-        private readonly bool signed;
-
         /// <summary>
         ///     create a new int64 type
         /// </summary>
         /// <param name="withId">type id</param>
         /// <param name="isSigned"><c>true</c> if this type should be signed</param>
         public Integral64BitType(int withId, bool isSigned) : base(withId)
-            => signed = isSigned;
+            => IsSigned = isSigned;
 
         /// <summary>
         ///     common type kind
@@ -28,8 +26,7 @@ namespace PasPasPas.Typings.Simple {
         /// <summary>
         ///     check if this type is signed
         /// </summary>
-        public bool IsSigned
-            => signed;
+        public bool IsSigned { get; }
 
         /// <summary>
         ///     bis size of this type (64 bit)
@@ -42,7 +39,7 @@ namespace PasPasPas.Typings.Simple {
         /// </summary>
         public ulong HighestElement {
             get {
-                if (signed)
+                if (IsSigned)
                     return 9223372036854775807;
                 return 18446744073709551615;
             }
@@ -69,6 +66,6 @@ namespace PasPasPas.Typings.Simple {
         /// </summary>
         /// <returns></returns>
         public override string ToString()
-            => $"{(signed ? string.Empty : "U")}Int64";
+            => $"{(IsSigned ? string.Empty : "U")}Int64";
     }
 }

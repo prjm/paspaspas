@@ -2,6 +2,7 @@
 using PasPasPas.Global.Runtime;
 using PasPasPas.Options.DataTypes;
 using PasPasPas.Runtime.Values;
+using PasPasPas.Runtime.Values.BooleanValues;
 using PasPasPas.Runtime.Values.FloatValues;
 using PasPasPas.Runtime.Values.IntValues;
 using PasPasPas.Typings.Common;
@@ -108,6 +109,16 @@ namespace PasPasPasTests.Common {
         /// <returns>number value</returns>
         protected static ITypeReference GetExtendedValue(in ExtF80 number)
             => FloatValueBase.ToExtendedValue(number);
+
+        /// <summary>
+        ///     get a boolean value
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        protected static ITypeReference GetBooleanValue(bool value)
+            => value ?
+            new RuntimeValueFactory(null).Booleans.TrueValue :
+            new RuntimeValueFactory(null).Booleans.FalseValue;
 
     }
 }

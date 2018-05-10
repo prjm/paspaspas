@@ -25,5 +25,27 @@ namespace PasPasPasTests.Types {
             AssertExprValue("4 + 5", GetIntegerValue(9));
         }
 
+        [TestCase]
+        public void TestBooleanOperations() {
+            AssertExprValue("false and false", GetBooleanValue(false));
+            AssertExprValue("false and true", GetBooleanValue(false));
+            AssertExprValue("true and false", GetBooleanValue(false));
+            AssertExprValue("true and true", GetBooleanValue(true));
+
+            AssertExprValue("false or false", GetBooleanValue(false));
+            AssertExprValue("false or true", GetBooleanValue(true));
+            AssertExprValue("true or false", GetBooleanValue(true));
+            AssertExprValue("true or true", GetBooleanValue(true));
+
+            AssertExprValue("false xor false", GetBooleanValue(false));
+            AssertExprValue("false xor true", GetBooleanValue(true));
+            AssertExprValue("true xor false", GetBooleanValue(true));
+            AssertExprValue("true xor true", GetBooleanValue(false));
+
+
+            AssertExprValue("false and a", GetBooleanValue(false), "var a: Boolean");
+            AssertExprValue("true or a", GetBooleanValue(true), "var a: Boolean");
+        }
+
     }
 }

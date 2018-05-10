@@ -197,21 +197,21 @@ namespace PasPasPas.Typings.Common {
         }
 
         /// <summary>
-        ///     gets the type of a given operator
+        ///     gets the type of a given unary operator
         /// </summary>
         /// <param name="operatorKind"></param>
-        /// <param name="typeInfo"></param>
+        /// <param name="operand"></param>
         /// <returns></returns>
-        private ITypeReference GetTypeOfOperator(int operatorKind, ITypeReference typeInfo) {
-            if (typeInfo == null)
-                return null;
+        private ITypeReference GetTypeOfOperator(int operatorKind, ITypeReference operand) {
+            if (operand == null)
+                return GetErrorTypeReference(null);
 
             var operation = environment.TypeRegistry.GetOperator(operatorKind);
 
             if (operation == null)
-                return null;
+                return GetErrorTypeReference(null);
 
-            var signature = new Signature(typeInfo);
+            var signature = new Signature(operand);
             return operation.EvaluateOperator(signature);
         }
 

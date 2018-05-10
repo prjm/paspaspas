@@ -30,6 +30,26 @@ namespace PasPasPas.Runtime.Values.BooleanValues {
             => CommonTypeKind.BooleanType;
 
         /// <summary>
+        ///     compare to another boolean value
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(object obj) {
+            if (!(obj is IBooleanValue boolean))
+                return false;
+
+            return boolean.AsBoolean == AsBoolean;
+        }
+
+        /// <summary>
+        ///     compute a simple hash code
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode() {
+            return AsBoolean ? 1 : 0;
+        }
+
+        /// <summary>
         ///     format this number as string
         /// </summary>
         /// <returns>number as string</returns>

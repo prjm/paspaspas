@@ -74,9 +74,10 @@ namespace PasPasPasTests.Types {
         /// </summary>
         /// <param name="expression">expression</param>
         /// <param name="typeId">type id to find</param>
-        protected void AssertExprValue(string expression, ITypeReference value) {
+        /// <param name="decls">addition declarations</param>
+        protected void AssertExprValue(string expression, ITypeReference value, string decls = "") {
             var file = "SimpleExpr";
-            var program = $"program {file}; begin Writeln({expression}); end. ";
+            var program = $"program {file};{decls} begin Writeln({expression}); end. ";
             SymbolReferencePart searchfunction(object x) => x as SymbolReferencePart;
             IExpression firstParam = null;
 

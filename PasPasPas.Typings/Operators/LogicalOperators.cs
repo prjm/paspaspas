@@ -153,6 +153,10 @@ namespace PasPasPas.Typings.Operators {
         private ITypeReference EvaluateOrOperator(ITypeReference left, ITypeReference right, ILogicalOperations operations) {
             if (left.IsConstant && right.IsConstant)
                 return operations.Or(left, right);
+            else if (left.IsConstant && Runtime.Booleans.TrueValue.Equals(left))
+                return Runtime.Booleans.TrueValue;
+            else if (left.IsConstant && Runtime.Booleans.FalseValue.Equals(false))
+                return right;
             else
                 return GetSmallestBoolOrIntegralType(left, right, 1);
         }
@@ -160,6 +164,10 @@ namespace PasPasPas.Typings.Operators {
         private ITypeReference EvaluateAndOperator(ITypeReference left, ITypeReference right, ILogicalOperations operations) {
             if (left.IsConstant && right.IsConstant)
                 return operations.And(left, right);
+            else if (left.IsConstant && Runtime.Booleans.FalseValue.Equals(left))
+                return Runtime.Booleans.FalseValue;
+            else if (left.IsConstant && Runtime.Booleans.TrueValue.Equals(left))
+                return right;
             else
                 return GetSmallestBoolOrIntegralType(left, right, 1);
         }
