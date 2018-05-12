@@ -45,7 +45,7 @@ namespace PasPasPas.Runtime.Values.BooleanValues {
         /// <param name="value1"></param>
         /// <param name="value2"></param>
         /// <returns></returns>
-        public ITypeReference And(ITypeReference value1, ITypeReference value2) {
+        public ITypeReference AndOperator(ITypeReference value1, ITypeReference value2) {
             if (value1 is IBooleanValue boolean1 && value2 is IBooleanValue boolean2)
                 return AsBoolean(BooleanValueBase.And(boolean1, boolean2));
             else
@@ -161,7 +161,7 @@ namespace PasPasPas.Runtime.Values.BooleanValues {
         /// <param name="value1"></param>
         /// <param name="value2"></param>
         /// <returns></returns>
-        public ITypeReference Xor(ITypeReference value1, ITypeReference value2) {
+        public ITypeReference XorOperator(ITypeReference value1, ITypeReference value2) {
             if (value1 is IBooleanValue boolean1 && value2 is IBooleanValue boolean2)
                 return AsBoolean(BooleanValueBase.Xor(boolean1, boolean2));
             else

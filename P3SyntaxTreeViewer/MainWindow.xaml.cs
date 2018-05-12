@@ -127,7 +127,7 @@ namespace P3SyntaxTreeViewer {
                 }
 
                 if (typeInfo.TypeInfo.IsConstant) {
-                    treeViewItem.Header += "*" + typeInfo.TypeInfo.ToString();
+                    treeViewItem.Header += "* " + typeInfo.TypeInfo.ToString();
                 }
 
                 if (typeInfo.TypeInfo != null && typeInfo.TypeInfo.TypeId == KnownTypeIds.ErrorType)

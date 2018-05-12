@@ -24,7 +24,7 @@ namespace PasPasPas.Parsing.Parser {
 
         /// <summary>
         ///     message: unexpected token
-        /// </summary>    
+        /// </summary>
         public static readonly Guid UnexpectedToken
             = new Guid(new byte[] { 0xe0, 0xbb, 0xd3, 0x5, 0xe2, 0x32, 0xeb, 0x43, 0x85, 0xb, 0xeb, 0xdb, 0x2b, 0x7e, 0xf2, 0x72 });
         /* {05d3bbe0-32e2-43eb-850b-ebdb2b7ef272} */
@@ -63,7 +63,7 @@ namespace PasPasPas.Parsing.Parser {
 
         /// <summary>
         ///     tokenizer to use
-        /// </summary>        
+        /// </summary>
         public ITokenizer BaseTokenizer
             => tokenizer.BaseTokenizer;
 
@@ -120,7 +120,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <summary>
         ///     Require a token kind
         /// </summary>
-        /// <param name="tokenKind">required kind of tokem</param>
+        /// <param name="tokenKind">required kind of token</param>
         /// <returns>parser token</returns>
         protected Token Require(int tokenKind) {
             if (!Match(tokenKind))
@@ -902,7 +902,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <typeparam name="T">parent object</typeparam>
         /// <param name="result">result</param>
         /// <param name="tokenKind1">expected token kind</param>
-        /// <param name="tokenKind2">expected token kind</param>/// 
+        /// <param name="tokenKind2">expected token kind</param>///
         /// <returns>syntax tree node</returns>
         protected T CreateByTerminal<T>(T result, int tokenKind1, int tokenKind2) where T : IExtendableSyntaxPart {
 

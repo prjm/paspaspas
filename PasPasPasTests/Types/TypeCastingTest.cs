@@ -1,4 +1,5 @@
 ﻿using PasPasPas.Globals.Types;
+using PasPasPas.Runtime.Values.CharValues;
 using PasPasPas.Runtime.Values.IntValues;
 using PasPasPasTests.Common;
 
@@ -19,6 +20,8 @@ namespace PasPasPasTests.Types {
             AssertExprValue("Cardinal(384)", new CardinalValue(384), "", KnownTypeIds.CardinalType);
             AssertExprValue("Int64(384)", new Int64Value(384), "", KnownTypeIds.Int64Type);
             AssertExprValue("UInt64(384)", new UInt64Value(384), "", KnownTypeIds.Uint64Type);
+
+            AssertExprValue("WideChar(384)", new WideCharValue((char)384), "", KnownTypeIds.WideCharType);
         }
 
         [TestCase]

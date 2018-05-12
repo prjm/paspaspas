@@ -7,7 +7,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// </summary>
     /// <typeparam name="TItems"></typeparam>
     /// <typeparam name="TSymbol"></typeparam>
-    public abstract class CombinedSymbolTableBase<TItems, TSymbol> : SymbolTableBase<TSymbol>
+    public abstract class CombinedSymbolTableBaseCollection<TItems, TSymbol> : SymbolTableBase<TSymbol>
         where TItems : AbstractSyntaxPartBase
         where TSymbol : AbstractSyntaxPartBase, ISymbolTableEntry {
 
@@ -19,7 +19,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     creates a new combined symbol table
         /// </summary>
-        public CombinedSymbolTableBase()
+        public CombinedSymbolTableBaseCollection()
             => Items = new SyntaxPartCollection<TItems>(this);
 
     }

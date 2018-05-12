@@ -6,7 +6,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// <summary>
     ///     field definitions
     /// </summary>
-    public class StructureFieldDefinition : CombinedSymbolTableBase<StructureFields, StructureField> {
+    public class StructureFieldDefinition : CombinedSymbolTableBaseCollection<StructureFields, StructureField> {
 
         /// <summary>
         ///     log duplicate field

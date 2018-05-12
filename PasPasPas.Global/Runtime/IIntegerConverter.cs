@@ -5,7 +5,6 @@
     /// </summary>
     public interface IIntegerConverter {
 
-
         /// <summary>
         ///     get the value for a signed byte
         /// </summary>
@@ -61,6 +60,63 @@
         /// <param name="number">given number</param>
         /// <returns>converted value</returns>
         ITypeReference ToScaledIntegerValue(ulong number);
+
+        /// <summary>
+        ///     get the fixed value type for a give number
+        /// </summary>
+        /// <param name="number"></param>
+        /// <returns></returns>
+        ITypeReference ToIntegerValue(sbyte number);
+
+        /// <summary>
+        ///     get the fixed value type for a give number
+        /// </summary>
+        /// <param name="number"></param>
+        /// <returns></returns>
+        ITypeReference ToIntegerValue(byte number);
+
+        /// <summary>
+        ///     get the fixed value type for a give number
+        /// </summary>
+        /// <param name="number"></param>
+        /// <returns></returns>
+        ITypeReference ToIntegerValue(short number);
+
+        /// <summary>
+        ///     get the fixed value type for a give number
+        /// </summary>
+        /// <param name="number"></param>
+        /// <returns></returns>
+        ITypeReference ToIntegerValue(ushort number);
+
+        /// <summary>
+        ///     get the fixed value type for a give number
+        /// </summary>
+        /// <param name="number"></param>
+        /// <returns></returns>
+        ITypeReference ToIntegerValue(int number);
+
+        /// <summary>
+        ///     get the fixed value type for a give number
+        /// </summary>
+        /// <param name="number"></param>
+        /// <returns></returns>
+        ITypeReference ToIntegerValue(uint number);
+
+        /// <summary>
+        ///     get the fixed value type for a give number
+        /// </summary>
+        /// <param name="number"></param>
+        /// <returns></returns>
+        ITypeReference ToIntegerValue(long number);
+
+        /// <summary>
+        ///     get the fixed value type for a give number
+        /// </summary>
+        /// <param name="number"></param>
+        /// <returns></returns>
+        ITypeReference ToIntegerValue(ulong number);
+
 
 
     }

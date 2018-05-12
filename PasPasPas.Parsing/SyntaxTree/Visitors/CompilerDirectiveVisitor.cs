@@ -86,7 +86,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         private readonly ILogManager log;
         private OptionSet Options { get; }
         private readonly LogSource logSource;
-        private IFileReference path;
+        private readonly IFileReference path;
 
         private readonly Guid logSourceId
              = new Guid(new byte[] { 0x67, 0x23, 0x1b, 0x2e, 0xf6, 0x4b, 0xdf, 0x40, 0xac, 0xf8, 0x2, 0xc3, 0x1d, 0x7c, 0x2e, 0xf2 });

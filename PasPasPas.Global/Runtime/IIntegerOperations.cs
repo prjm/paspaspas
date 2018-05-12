@@ -61,12 +61,6 @@
         /// <returns>incremented value</returns>
         ITypeReference Increment(ITypeReference value);
 
-        /// <summary>
-        ///     cast an integer value to another value
-        /// </summary>
-        /// <param name="value">integer to cast</param>
-        /// <param name="typeId">target type</param>
-        /// <returns>casted value or error</returns>
-        ITypeReference Cast(ITypeReference value, int typeId);
+
     }
 }

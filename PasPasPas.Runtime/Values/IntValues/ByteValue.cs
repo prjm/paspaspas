@@ -6,7 +6,7 @@ using PasPasPas.Infrastructure.Utils;
 namespace PasPasPas.Runtime.Values.IntValues {
 
     /// <summary>
-    ///     byte value
+    ///     byte value (8 bit integer, unsigned)
     /// </summary>
     public class ByteValue : IntegerValueBase {
 
@@ -44,17 +44,6 @@ namespace PasPasPas.Runtime.Values.IntValues {
         public override string ToString()
             => StringUtils.Invariant($"{value}");
 
-
-        /// <summary>
-        ///     check for equality
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        public override bool Equals(object obj) {
-            if (obj is ByteValue v)
-                return v.value == value;
-            return false;
-        }
         /// <summary>
         ///     compute a hash code
         /// </summary>

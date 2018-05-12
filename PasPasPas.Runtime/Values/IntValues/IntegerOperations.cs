@@ -65,7 +65,7 @@ namespace PasPasPas.Runtime.Values.IntValues {
         /// <param name="firstOperand">first operand</param>
         /// <param name="secondOperand">second operand</param>
         /// <returns>bitwise and</returns>
-        public ITypeReference And(ITypeReference firstOperand, ITypeReference secondOperand) {
+        public ITypeReference AndOperator(ITypeReference firstOperand, ITypeReference secondOperand) {
             if (firstOperand is IntegerValueBase firstInt && secondOperand is IntegerValueBase secondInt)
                 return IntegerValueBase.AndAndScale(Overflow, firstInt, secondInt);
             else
@@ -286,7 +286,7 @@ namespace PasPasPas.Runtime.Values.IntValues {
         /// <param name="firstOperand"></param>
         /// <param name="secondOperand"></param>
         /// <returns></returns>
-        public ITypeReference Xor(ITypeReference firstOperand, ITypeReference secondOperand) {
+        public ITypeReference XorOperator(ITypeReference firstOperand, ITypeReference secondOperand) {
             if (firstOperand is IntegerValueBase firstInt && secondOperand is IntegerValueBase secondInt)
                 return IntegerValueBase.XorAndScale(Overflow, firstInt, secondInt);
             else
@@ -371,36 +371,68 @@ namespace PasPasPas.Runtime.Values.IntValues {
         }
 
         /// <summary>
-        ///     cast a value to another type
+        ///     get a fixed value for a number
         /// </summary>
-        /// <param name="value"></param>
-        /// <param name="typeId"></param>
+        /// <param name="number"></param>
         /// <returns></returns>
-        public ITypeReference Cast(ITypeReference value, int typeId) {
+        public ITypeReference ToIntegerValue(sbyte number)
+            => new ShortIntValue(number);
 
-            if (!(value is IIntegerValue integer))
-                return Types.MakeReference(KnownTypeIds.ErrorType);
+        /// <summary>
+        ///     get a fixed value for a number
+        /// </summary>
+        /// <param name="number"></param>
+        /// <returns></returns>
+        public ITypeReference ToIntegerValue(byte number)
+            => new ByteValue(number);
 
-            switch (typeId) {
-                case KnownTypeIds.ShortInt:
-                    return new ShortIntValue((sbyte)integer.SignedValue);
-                case KnownTypeIds.ByteType:
-                    return new ByteValue((byte)integer.UnsignedValue);
-                case KnownTypeIds.SmallInt:
-                    return new SmallIntValue((short)integer.SignedValue);
-                case KnownTypeIds.WordType:
-                    return new WordValue((ushort)integer.UnsignedValue);
-                case KnownTypeIds.IntegerType:
-                    return new IntegerValue((int)integer.SignedValue);
-                case KnownTypeIds.CardinalType:
-                    return new CardinalValue((uint)integer.UnsignedValue);
-                case KnownTypeIds.Int64Type:
-                    return new Int64Value(integer.SignedValue);
-                case KnownTypeIds.Uint64Type:
-                    return new UInt64Value(integer.UnsignedValue);
-            }
+        /// <summary>
+        ///     get a fixed value for a number
+        /// </summary>
+        /// <param name="number"></param>
+        /// <returns></returns>
+        public ITypeReference ToIntegerValue(short number)
+            => new SmallIntValue(number);
 
-            return Types.MakeReference(KnownTypeIds.ErrorType);
-        }
+        /// <summary>
+        ///     get a fixed value for a number
+        /// </summary>
+        /// <param name="number"></param>
+        /// <returns></returns>
+        public ITypeReference ToIntegerValue(ushort number)
+            => new WordValue(number);
+
+        /// <summary>
+        ///     get a fixed value for a number
+        /// </summary>
+        /// <param name="number"></param>
+        /// <returns></returns>
+        public ITypeReference ToIntegerValue(int number)
+            => new IntegerValue(number);
+
+        /// <summary>
+        ///     get a fixed value for a number
+        /// </summary>
+        /// <param name="number"></param>
+        /// <returns></returns>
+        public ITypeReference ToIntegerValue(uint number)
+            => new CardinalValue(number);
+
+        /// <summary>
+        ///     get a fixed value for a number
+        /// </summary>
+        /// <param name="number"></param>
+        /// <returns></returns>
+        public ITypeReference ToIntegerValue(long number)
+            => new Int64Value(number);
+
+        /// <summary>
+        ///     get a
+        /// </summary>
+        /// <param name="number"></param>
+        /// <returns></returns>
+        public ITypeReference ToIntegerValue(ulong number)
+            => new UInt64Value(number);
+
     }
 }

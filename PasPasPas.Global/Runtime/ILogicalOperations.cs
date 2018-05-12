@@ -11,7 +11,7 @@
         /// <param name="firstOperand"></param>
         /// <param name="secondOperand"></param>
         /// <returns></returns>
-        ITypeReference And(ITypeReference firstOperand, ITypeReference secondOperand);
+        ITypeReference AndOperator(ITypeReference firstOperand, ITypeReference secondOperand);
 
         /// <summary>
         ///     <c>or</c> operation
@@ -27,7 +27,7 @@
         /// <param name="value1"></param>
         /// <param name="value2"></param>
         /// <returns></returns>
-        ITypeReference Xor(ITypeReference value1, ITypeReference value2);
+        ITypeReference XorOperator(ITypeReference value1, ITypeReference value2);
 
         /// <summary>
         ///     <c>not</c> operation

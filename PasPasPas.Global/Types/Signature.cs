@@ -58,7 +58,19 @@ namespace PasPasPas.Globals.Types {
         }
 
         /// <summary>
-        ///     get the hash code for this signatur
+        ///     compare to another signature
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(object obj) {
+            if (obj is Signature signature)
+                return Equals(signature);
+
+            return false;
+        }
+
+        /// <summary>
+        ///     get the hash code for this signature
         /// </summary>
         /// <returns></returns>
         public override int GetHashCode() {

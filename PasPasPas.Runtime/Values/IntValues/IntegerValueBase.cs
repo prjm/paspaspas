@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Numerics;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using SharpFloat.FloatingPoint;
@@ -8,7 +9,7 @@ namespace PasPasPas.Runtime.Values.IntValues {
     /// <summary>
     ///     base class for integer values
     /// </summary>
-    public abstract class IntegerValueBase : IIntegerValue {
+    public abstract class IntegerValueBase : IIntegerValue, IEquatable<IIntegerValue> {
 
         /// <summary>
         ///     get the type id
@@ -69,7 +70,12 @@ namespace PasPasPas.Runtime.Values.IntValues {
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public abstract override bool Equals(object obj);
+        public override bool Equals(object obj) {
+            if (obj is IIntegerValue integer)
+                return Equals(integer);
+
+            return false;
+        }
 
         /// <summary>
         ///     compute a hash code
@@ -78,11 +84,12 @@ namespace PasPasPas.Runtime.Values.IntValues {
         public abstract override int GetHashCode();
 
         /// <summary>
-        ///     convert a big integer value to a int value
+        ///     convert a big integer value to an integer value
         /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        public static ITypeReference ToIntValue(ITypeReference overflow, in BigInteger value) {
+        /// <param name="overflow">value used for overflow</param>
+        /// <param name="value">value to convert</param>
+        /// <returns>converted value</returns>
+        public static ITypeReference ToIntValue(ITypeReference overflow, BigInteger value) {
             if (value < -9223372036854775808)
                 return overflow;
             else if (value < -2147483648)
@@ -355,5 +362,13 @@ namespace PasPasPas.Runtime.Values.IntValues {
 
         internal static ITypeReference Increment(ITypeReference overflow, IntegerValueBase value)
             => ToIntValue(overflow, value.AsBigInteger + BigInteger.One);
+
+        /// <summary>
+        ///     compare to another integer value
+        /// </summary>
+        /// <param name="other">other value</param>
+        /// <returns></returns>
+        public bool Equals(IIntegerValue other)
+            => other.UnsignedValue == UnsignedValue;
     }
 }

@@ -145,7 +145,7 @@ namespace PasPasPas.Typings.Operators {
 
         private ITypeReference EvaluateXorOperator(ITypeReference left, ITypeReference right, ILogicalOperations operations) {
             if (left.IsConstant && right.IsConstant)
-                return operations.Xor(left, right);
+                return operations.XorOperator(left, right);
             else
                 return GetSmallestBoolOrIntegralType(left, right, 1);
         }
@@ -163,7 +163,7 @@ namespace PasPasPas.Typings.Operators {
 
         private ITypeReference EvaluateAndOperator(ITypeReference left, ITypeReference right, ILogicalOperations operations) {
             if (left.IsConstant && right.IsConstant)
-                return operations.And(left, right);
+                return operations.AndOperator(left, right);
             else if (left.IsConstant && Runtime.Booleans.FalseValue.Equals(left))
                 return Runtime.Booleans.FalseValue;
             else if (left.IsConstant && Runtime.Booleans.TrueValue.Equals(left))

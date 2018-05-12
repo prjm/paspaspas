@@ -26,7 +26,6 @@ namespace PasPasPas.Runtime.Values {
             Strings = new StringOperations(Booleans);
         }
 
-
         /// <summary>
         ///     integer operations: value factory and arithmetics
         /// </summary>
@@ -69,10 +68,40 @@ namespace PasPasPas.Runtime.Values {
             var typeKind = value.TypeKind;
 
             if (typeKind.IsIntegral())
-                return Integers.Cast(value, typeId);
+                return CastInteger(value, typeId);
 
             return Types.MakeReference(KnownTypeIds.ErrorType);
         }
+
+        private ITypeReference CastInteger(ITypeReference value, int typeId) {
+
+            if (!(value is IIntegerValue integer))
+                return Types.MakeReference(KnownTypeIds.ErrorType);
+
+            switch (typeId) {
+                case KnownTypeIds.ShortInt:
+                    return Integers.ToIntegerValue((sbyte)integer.SignedValue);
+                case KnownTypeIds.ByteType:
+                    return Integers.ToIntegerValue((byte)integer.UnsignedValue);
+                case KnownTypeIds.SmallInt:
+                    return Integers.ToIntegerValue((short)integer.SignedValue);
+                case KnownTypeIds.WordType:
+                    return Integers.ToIntegerValue((ushort)integer.UnsignedValue);
+                case KnownTypeIds.IntegerType:
+                    return Integers.ToIntegerValue((int)integer.SignedValue);
+                case KnownTypeIds.CardinalType:
+                    return Integers.ToIntegerValue((uint)integer.UnsignedValue);
+                case KnownTypeIds.Int64Type:
+                    return Integers.ToIntegerValue(integer.SignedValue);
+                case KnownTypeIds.Uint64Type:
+                    return Integers.ToIntegerValue(integer.UnsignedValue);
+                case KnownTypeIds.WideCharType:
+                    return Chars.ToWideCharValue((char)integer.UnsignedValue);
+            }
+
+            return Types.MakeReference(KnownTypeIds.ErrorType);
+        }
+
 
     }
 }

@@ -233,7 +233,7 @@ namespace PasPasPasTests.Runtime {
         public void TestIntegerAnd() {
             string a(ITypeReference v1, ITypeReference v2) {
                 var c = new IntegerOperations(new BooleanOperations(), null);
-                var vv1 = c.And(v1, v2);
+                var vv1 = c.AndOperator(v1, v2);
                 return vv1.ToString();
             }
 
@@ -262,7 +262,7 @@ namespace PasPasPasTests.Runtime {
         public void TestIntegerXor() {
             string x(ITypeReference v1, ITypeReference v2) {
                 var c = new IntegerOperations(new BooleanOperations(), null);
-                var vv1 = c.Xor(v1, v2);
+                var vv1 = c.XorOperator(v1, v2);
                 return vv1.ToString();
             }
 
