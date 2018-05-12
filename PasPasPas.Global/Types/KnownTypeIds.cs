@@ -1,4 +1,4 @@
-﻿namespace PasPasPas.Global.Types {
+﻿namespace PasPasPas.Globals.Types {
 
     /// <summary>
     ///     common type ids, used for system types

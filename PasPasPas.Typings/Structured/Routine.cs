@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using PasPasPas.Global.Types;
+using PasPasPas.Globals.Types;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
 
 namespace PasPasPas.Typings.Structured {

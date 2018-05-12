@@ -13,7 +13,7 @@ using PasPasPas.Api;
 using PasPasPas.Typings.Common;
 using System.Windows.Media;
 using System;
-using PasPasPas.Global.Types;
+using PasPasPas.Globals.Types;
 
 namespace P3SyntaxTreeViewer {
 

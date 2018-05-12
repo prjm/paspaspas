@@ -1,8 +1,8 @@
 ﻿using PasPasPas.Typings.Structured;
 using PasPasPas.Typings.Simple;
 using Xunit;
-using PasPasPas.Global.Runtime;
-using PasPasPas.Global.Types;
+using PasPasPas.Globals.Runtime;
+using PasPasPas.Globals.Types;
 
 namespace PasPasPasTests.Types {
 

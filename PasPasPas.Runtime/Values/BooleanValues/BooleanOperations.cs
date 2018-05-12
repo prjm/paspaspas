@@ -1,4 +1,4 @@
-﻿using PasPasPas.Global.Runtime;
+﻿using PasPasPas.Globals.Runtime;
 
 namespace PasPasPas.Runtime.Values.BooleanValues {
 

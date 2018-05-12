@@ -17,7 +17,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\PasPasPas.Global\PasPasPas.Global.csproj" />
+    <ProjectReference Include="..\PasPasPas.Global\PasPasPas.Globals.csproj" />
     <ProjectReference Include="..\PasPasPas.Infrastructure\PasPasPas.Infrastructure.csproj" />
     <ProjectReference Include="..\PasPasPas.Parsing\PasPasPas.Parsing.csproj" />
   </ItemGroup>

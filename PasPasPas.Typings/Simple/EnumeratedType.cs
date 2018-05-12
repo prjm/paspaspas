@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using PasPasPas.Global.Runtime;
-using PasPasPas.Global.Types;
+using PasPasPas.Globals.Runtime;
+using PasPasPas.Globals.Types;
 using PasPasPas.Typings.Common;
 using PasPasPas.Typings.Operators;
 

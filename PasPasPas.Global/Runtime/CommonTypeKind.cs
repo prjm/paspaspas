@@ -1,4 +1,4 @@
-﻿namespace PasPasPas.Global.Runtime {
+﻿namespace PasPasPas.Globals.Runtime {
 
     /// <summary>
     ///     definition of available type kinds

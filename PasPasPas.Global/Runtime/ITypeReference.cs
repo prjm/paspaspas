@@ -1,6 +1,6 @@
-﻿using PasPasPas.Global.Types;
+﻿using PasPasPas.Globals.Types;
 
-namespace PasPasPas.Global.Runtime {
+namespace PasPasPas.Globals.Runtime {
 
     /// <summary>
     ///     type reference: reference to a type or to a constant value

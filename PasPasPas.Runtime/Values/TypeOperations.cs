@@ -1,5 +1,5 @@
-﻿using PasPasPas.Global.Runtime;
-using PasPasPas.Global.Types;
+﻿using PasPasPas.Globals.Runtime;
+using PasPasPas.Globals.Types;
 using PasPasPas.Infrastructure.Environment;
 
 namespace PasPasPas.Runtime.Values {

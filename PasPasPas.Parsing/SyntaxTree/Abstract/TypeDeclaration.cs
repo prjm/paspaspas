@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using PasPasPas.Global.Runtime;
-using PasPasPas.Global.Types;
+using PasPasPas.Globals.Runtime;
+using PasPasPas.Globals.Types;
 using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.SyntaxTree.Visitors;

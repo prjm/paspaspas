@@ -1,4 +1,4 @@
-﻿using PasPasPas.Global.Runtime;
+﻿using PasPasPas.Globals.Runtime;
 using PasPasPas.Parsing.SyntaxTree;
 
 namespace PasPasPas.Parsing.Tokenizer.TokenGroups {

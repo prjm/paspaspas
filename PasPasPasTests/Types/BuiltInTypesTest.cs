@@ -1,6 +1,6 @@
 ﻿using System;
-using PasPasPas.Global.Runtime;
-using PasPasPas.Global.Types;
+using PasPasPas.Globals.Runtime;
+using PasPasPas.Globals.Types;
 using PasPasPas.Options.DataTypes;
 using PasPasPas.Typings.Structured;
 using Xunit;

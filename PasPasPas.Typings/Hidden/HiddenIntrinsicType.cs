@@ -1,4 +1,4 @@
-﻿using PasPasPas.Global.Runtime;
+﻿using PasPasPas.Globals.Runtime;
 using PasPasPas.Typings.Common;
 
 namespace PasPasPas.Typings.Hidden {

@@ -1,4 +1,4 @@
-﻿namespace PasPasPas.Global.Runtime {
+﻿namespace PasPasPas.Globals.Runtime {
 
     /// <summary>
     ///     factory to create runtime values and to perform runtime operations

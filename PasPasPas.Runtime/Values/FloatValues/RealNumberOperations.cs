@@ -1,4 +1,4 @@
-﻿using PasPasPas.Global.Runtime;
+﻿using PasPasPas.Globals.Runtime;
 using SharpFloat.FloatingPoint;
 
 namespace PasPasPas.Runtime.Values.FloatValues {

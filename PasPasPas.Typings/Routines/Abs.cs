@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using PasPasPas.Global.Types;
+using PasPasPas.Globals.Types;
 using PasPasPas.Typings.Common;
 using PasPasPas.Typings.Structured;
 

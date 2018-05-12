@@ -5,7 +5,7 @@ using System;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree.Utils;
-using PasPasPas.Global.Runtime;
+using PasPasPas.Globals.Runtime;
 
 namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 

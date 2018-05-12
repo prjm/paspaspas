@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using PasPasPas.Global.Types;
+using PasPasPas.Globals.Types;
 using PasPasPas.Infrastructure.Utils;
 
 namespace PasPasPas.Typings.Common {

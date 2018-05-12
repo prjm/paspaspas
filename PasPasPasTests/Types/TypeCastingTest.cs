@@ -1,4 +1,4 @@
-﻿using PasPasPas.Global.Types;
+﻿using PasPasPas.Globals.Types;
 using PasPasPas.Runtime.Values.IntValues;
 using PasPasPasTests.Common;
 

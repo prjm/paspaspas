@@ -1,4 +1,4 @@
-﻿namespace PasPasPas.Global.Types {
+﻿namespace PasPasPas.Globals.Types {
 
     /// <summary>
     ///     interface types with a fixed size

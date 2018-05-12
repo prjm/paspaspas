@@ -1,5 +1,5 @@
 ﻿using PasPasPas.Api;
-using PasPasPas.Global.Runtime;
+using PasPasPas.Globals.Runtime;
 using PasPasPas.Options.DataTypes;
 using PasPasPas.Runtime.Values;
 using PasPasPas.Runtime.Values.BooleanValues;

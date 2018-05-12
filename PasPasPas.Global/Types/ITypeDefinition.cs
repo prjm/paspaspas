@@ -1,6 +1,6 @@
-﻿using PasPasPas.Global.Runtime;
+﻿using PasPasPas.Globals.Runtime;
 
-namespace PasPasPas.Global.Types {
+namespace PasPasPas.Globals.Types {
 
     /// <summary>
     ///     type definition

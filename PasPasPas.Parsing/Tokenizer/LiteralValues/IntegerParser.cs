@@ -1,5 +1,5 @@
 ﻿using System;
-using PasPasPas.Global.Runtime;
+using PasPasPas.Globals.Runtime;
 using PasPasPas.Infrastructure.Environment;
 
 namespace PasPasPas.Parsing.Tokenizer.LiteralValues {

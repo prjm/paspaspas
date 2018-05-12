@@ -1,6 +1,6 @@
 ﻿using System;
 using PasPasPas.Parsing.Tokenizer;
-using PasPasPas.Global.Runtime;
+using PasPasPas.Globals.Runtime;
 
 namespace PasPasPas.Parsing.SyntaxTree {
 

@@ -1,6 +1,6 @@
 ﻿using SharpFloat.FloatingPoint;
 
-namespace PasPasPas.Global.Runtime {
+namespace PasPasPas.Globals.Runtime {
 
     /// <summary>
     ///     calculator for extended value

@@ -39,9 +39,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DesktopSampleRunner", "Desk
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PasPasPas.Runtime", "PasPasPas.Runtime\PasPasPas.Runtime.csproj", "{3CE7B602-8AE0-43EC-9FC4-4D2AF3ED27B3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PasPasPas.Global", "PasPasPas.Global\PasPasPas.Global.csproj", "{7A2FF93E-975A-4F2B-87B7-49C97FDA316F}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Documentation", "Documentation\Documentation.csproj", "{B52F4398-C2C8-4497-A14D-FB718DA22059}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PasPasPas.Globals", "PasPasPas.Global\PasPasPas.Globals.csproj", "{7A2FF93E-975A-4F2B-87B7-49C97FDA316F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -101,10 +99,6 @@ Global
 		{7A2FF93E-975A-4F2B-87B7-49C97FDA316F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7A2FF93E-975A-4F2B-87B7-49C97FDA316F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7A2FF93E-975A-4F2B-87B7-49C97FDA316F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B52F4398-C2C8-4497-A14D-FB718DA22059}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B52F4398-C2C8-4497-A14D-FB718DA22059}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B52F4398-C2C8-4497-A14D-FB718DA22059}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B52F4398-C2C8-4497-A14D-FB718DA22059}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -123,7 +117,6 @@ Global
 		{C863FF01-4A90-4646-BAD2-292406CC6DA0} = {F28AC463-2553-4704-AE77-B9A356E953BC}
 		{3CE7B602-8AE0-43EC-9FC4-4D2AF3ED27B3} = {AC53D98C-87A1-42D9-859E-4182316C25AB}
 		{7A2FF93E-975A-4F2B-87B7-49C97FDA316F} = {AC53D98C-87A1-42D9-859E-4182316C25AB}
-		{B52F4398-C2C8-4497-A14D-FB718DA22059} = {6B6D4165-F97B-4E5D-A14B-ABEEB0C8FC9F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B2F698BE-CFC6-42C3-B03D-0E3F638C62A0}
