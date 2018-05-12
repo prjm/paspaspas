@@ -75,7 +75,7 @@ namespace PasPasPasTests.Types {
         /// <param name="expression">expression</param>
         /// <param name="typeId">type id to find</param>
         /// <param name="decls">addition declarations</param>
-        protected void AssertExprValue(string expression, ITypeReference value, string decls = "") {
+        protected void AssertExprValue(string expression, ITypeReference value, string decls = "", int typeId = KnownTypeIds.UnspecifiedType) {
             var file = "SimpleExpr";
             var program = $"program {file};{decls} begin Writeln({expression}); end. ";
             SymbolReferencePart searchfunction(object x) => x as SymbolReferencePart;
@@ -88,6 +88,8 @@ namespace PasPasPasTests.Types {
             Assert.IsTrue(firstParam.TypeInfo.IsConstant);
             Assert.AreEqual(value, firstParam.TypeInfo);
 
+            if (typeId != KnownTypeIds.UnspecifiedType)
+                Assert.AreEqual(typeId, firstParam.TypeInfo.TypeId);
         }
 
 

@@ -5,6 +5,7 @@ using PasPasPas.Runtime.Values.CharValues;
 using PasPasPas.Runtime.Values.FloatValues;
 using PasPasPas.Runtime.Values.IntValues;
 using PasPasPas.Runtime.Values.StringValues;
+using PasPasPas.Typings.Common;
 
 namespace PasPasPas.Runtime.Values {
 
@@ -57,6 +58,21 @@ namespace PasPasPas.Runtime.Values {
         ///     open type operations
         /// </summary>
         public ITypeOperations Types { get; }
+
+        /// <summary>
+        ///     cast values
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="typeId"></param>
+        /// <returns></returns>
+        public ITypeReference Cast(ITypeReference value, int typeId) {
+            var typeKind = value.TypeKind;
+
+            if (typeKind.IsIntegral())
+                return Integers.Cast(value, typeId);
+
+            return Types.MakeReference(KnownTypeIds.ErrorType);
+        }
 
     }
 }

@@ -35,5 +35,14 @@
         /// </summary>
         ITypeOperations Types { get; }
 
+        /// <summary>
+        ///     cast a constant value to another type
+        /// </summary>
+        /// <param name="value">value to cast</param>
+        /// <param name="typeId">target type id</param>
+        /// <returns></returns>
+        ITypeReference Cast(ITypeReference value, int typeId);
+
+
     }
 }

@@ -39,14 +39,6 @@
         ITypeReference Modulo(ITypeReference dividend, ITypeReference divisor);
 
         /// <summary>
-        ///     cast an integral constant value to another type
-        /// </summary>
-        /// <param name="value">value to cast</param>
-        /// <param name="typeId">target type id</param>
-        /// <returns>casted value</returns>
-        ITypeReference Cast(ITypeReference value, int typeId);
-
-        /// <summary>
         ///     shift left
         /// </summary>
         /// <param name="firstOperand"></param>
@@ -68,5 +60,13 @@
         /// <param name="value">value to increment</param>
         /// <returns>incremented value</returns>
         ITypeReference Increment(ITypeReference value);
+
+        /// <summary>
+        ///     cast an integer value to another value
+        /// </summary>
+        /// <param name="value">integer to cast</param>
+        /// <param name="typeId">target type</param>
+        /// <returns>casted value or error</returns>
+        ITypeReference Cast(ITypeReference value, int typeId);
     }
 }

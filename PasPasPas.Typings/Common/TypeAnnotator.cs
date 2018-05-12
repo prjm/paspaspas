@@ -84,10 +84,6 @@ namespace PasPasPas.Typings.Common {
             return GetTypeByIdOrUndefinedType(KnownTypeIds.ErrorType);
         }
 
-        [System.Obsolete]
-        private CommonTypeKind GetTypeKind(ITypeReference value)
-            => value == null ? CommonTypeKind.UnknownType : environment.TypeRegistry.GetTypeKind(value.TypeId);
-
         private ITypeDefinition GetRegisteredType(ITypedSyntaxNode syntaxNode) {
             if (syntaxNode != null && syntaxNode.TypeInfo != null)
                 return environment.TypeRegistry.GetTypeByIdOrUndefinedType(syntaxNode.TypeInfo.TypeId);
@@ -103,6 +99,9 @@ namespace PasPasPas.Typings.Common {
 
         private ITypeReference GetErrorTypeReference(ITypedSyntaxNode node)
             => environment.ConstantValues.Types.MakeReference(KnownTypeIds.ErrorType);
+
+        private int GetSmallestIntegralTypeOrNext(int leftId, int rightId)
+            => environment.TypeRegistry.GetSmallestIntegralTypeOrNext(leftId, rightId);
 
         private ITypeRegistry TypeRegistry
             => environment.TypeRegistry;
@@ -162,9 +161,6 @@ namespace PasPasPas.Typings.Common {
             element.TypeInfo = binaryOperator.EvaluateOperator(new Signature(left, right));
         }
 
-        private int GetSmallestIntegralTypeOrNext(int leftId, int rightId)
-            => environment.TypeRegistry.GetSmallestIntegralTypeOrNext(leftId, rightId);
-
         /// <summary>
         ///     determine the type of an unary operator
         /// </summary>
@@ -206,13 +202,12 @@ namespace PasPasPas.Typings.Common {
             if (operand == null)
                 return GetErrorTypeReference(null);
 
-            var operation = environment.TypeRegistry.GetOperator(operatorKind);
+            var unaryOperator = environment.TypeRegistry.GetOperator(operatorKind);
 
-            if (operation == null)
+            if (unaryOperator == null)
                 return GetErrorTypeReference(null);
 
-            var signature = new Signature(operand);
-            return operation.EvaluateOperator(signature);
+            return unaryOperator.EvaluateOperator(new Signature(operand));
         }
 
         /// <summary>
@@ -223,7 +218,7 @@ namespace PasPasPas.Typings.Common {
             if (element.TypeValue is ITypedSyntaxNode typeRef && typeRef.TypeInfo != null)
                 element.TypeInfo = typeRef.TypeInfo;
             else
-                element.TypeInfo = GetTypeByIdOrUndefinedType(KnownTypeIds.ErrorType);
+                element.TypeInfo = GetErrorTypeReference(element);
 
             var t = environment.TypeRegistry.GetTypeByIdOrUndefinedType(element.TypeInfo.TypeId);
 
@@ -242,7 +237,7 @@ namespace PasPasPas.Typings.Common {
             var typeName = element.AsScopedName;
 
             if (typeName == default(ScopedName)) {
-                element.TypeInfo = GetTypeByIdOrUndefinedType(KnownTypeIds.ErrorType);
+                element.TypeInfo = GetErrorTypeReference(element);
                 return;
             }
 
@@ -336,10 +331,22 @@ namespace PasPasPas.Typings.Common {
             CurrentUnit = null;
         }
 
+        private Signature CreateSignatureFromSymbolPart(SymbolReferencePart part) {
+            var signature = new ITypeReference[part.Expressions.Count];
+
+            for (var i = 0; i < signature.Length; i++)
+                if (part.Expressions[i] != null && part.Expressions[i].TypeInfo != null)
+                    signature[i] = part.Expressions[i].TypeInfo;
+                else
+                    signature[i] = GetErrorTypeReference(part.Expressions[i]);
+
+            return new Signature(signature);
+        }
+
         /// <summary>
         ///     end visiting a symbol reference
         /// </summary>
-        /// <param name="element"></param>
+        /// <param name="element">symbol reference</param>
         public void EndVisit(SymbolReference element) {
             var baseTypeValue = GetTypeByIdOrUndefinedType(KnownTypeIds.UnspecifiedType);
 
@@ -372,31 +379,34 @@ namespace PasPasPas.Typings.Common {
                     }
                 }
                 else if (part.Kind == SymbolReferencePartKind.CallParameters) {
-                    IList<ParameterGroup> callableRoutines = new List<ParameterGroup>();
-
-                    var signature = new ITypeReference[part.Expressions.Count];
-                    for (var i = 0; i < signature.Length; i++)
-                        if (part.Expressions[i] != null && part.Expressions[i].TypeInfo != null)
-                            signature[i] = part.Expressions[i].TypeInfo;
-                        else
-                            signature[i] = GetTypeByIdOrUndefinedType(KnownTypeIds.ErrorType);
+                    var callableRoutines = new List<ParameterGroup>();
+                    var signature = CreateSignatureFromSymbolPart(part);
 
                     if (baseTypeValue.TypeId == KnownTypeIds.UnspecifiedType) {
-                        var reference = resolver.ResolveByName(new ScopedName(part.Name.CompleteName), new Signature(signature));
+                        var reference = resolver.ResolveByName(new ScopedName(part.Name.CompleteName), signature);
 
                         if (reference == null) {
                             baseTypeValue = GetErrorTypeReference(element);
                         }
                         else if (reference.Kind == ReferenceKind.RefToGlobalRoutine) {
                             if (reference.Symbol is IRoutine routine) {
-                                routine.ResolveCall(callableRoutines, new Signature(signature));
+                                routine.ResolveCall(callableRoutines, signature);
+                            }
+                        }
+                        else if (reference.Kind == ReferenceKind.RefToType && signature.Length == 1) {
+                            if (signature[0].IsConstant) {
+                                baseTypeValue = environment.ConstantValues.Cast(signature[0], ((ITypeDefinition)reference.Symbol).TypeId);
+                            }
+                            else {
+                                var resultType = environment.TypeRegistry.Cast(signature[0].TypeId, ((ITypeDefinition)reference.Symbol).TypeId);
+                                baseTypeValue = GetTypeByIdOrUndefinedType(resultType);
                             }
                         }
 
                     }
 
                     else if (baseTypeValue.TypeKind == CommonTypeKind.ClassType && environment.TypeRegistry.GetTypeByIdOrUndefinedType(baseTypeValue.TypeId) is StructuredTypeDeclaration structType) {
-                        structType.ResolveCall(part.Name.CompleteName, callableRoutines, new Signature(signature));
+                        structType.ResolveCall(part.Name.CompleteName, callableRoutines, signature);
                     }
 
                     if (callableRoutines.Count == 1)
@@ -504,7 +514,7 @@ namespace PasPasPas.Typings.Common {
 
             if (element.TypeValue is ITypedSyntaxNode declaredType && declaredType.TypeInfo != null) {
                 element.TypeInfo = element.TypeValue.TypeInfo;
-                resolver.AddToScope(element.Name.CompleteName, ReferenceKind.RefToType, element);
+                resolver.AddToScope(element.Name.CompleteName, ReferenceKind.RefToType, TypeRegistry.GetTypeByIdOrUndefinedType(element.TypeInfo.TypeId));
             }
         }
 

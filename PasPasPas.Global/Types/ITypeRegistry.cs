@@ -71,11 +71,18 @@ namespace PasPasPas.Global.Types {
         CommonTypeKind GetTypeKindOf(int typeId);
 
         /// <summary>
-        ///     gets the base type of a subrange rype
+        ///     gets the base type of a subrange type
         /// </summary>
         /// <param name="typeId"></param>
         /// <returns></returns>
         int GetBaseTypeOfSubrangeType(int typeId);
 
+        /// <summary>
+        ///     cast a type into a another type, if possible
+        /// </summary>
+        /// <param name="sourceType"></param>
+        /// <param name="targetType"></param>
+        /// <returns></returns>
+        int Cast(int sourceType, int targetType);
     }
 }

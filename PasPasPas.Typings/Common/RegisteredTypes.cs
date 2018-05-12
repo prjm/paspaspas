@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using PasPasPas.Global.Runtime;
 using PasPasPas.Global.Types;
 using PasPasPas.Infrastructure.Environment;
@@ -354,6 +355,27 @@ namespace PasPasPas.Typings.Common {
         public int GetBaseTypeOfSubrangeType(int typeId) {
             if (types.TryGetValue(typeId, out var typeDef) && typeDef is Simple.SubrangeType subrange)
                 return subrange.BaseType.TypeId;
+            return KnownTypeIds.ErrorType;
+        }
+
+        /// <summary>
+        ///     cast one type to another type
+        /// </summary>
+        /// <param name="sourceType">source type</param>
+        /// <param name="targetType">target type</param>
+        /// <returns></returns>
+        public int Cast(int sourceType, int targetType) {
+            if (GetTypeKindOf(sourceType).IsIntegral())
+                return CastIntTo(sourceType, targetType);
+
+
+            return KnownTypeIds.ErrorType;
+        }
+
+        private int CastIntTo(int sourceType, int targetType) {
+            if (GetTypeKindOf(targetType).IsIntegral())
+                return targetType;
+
             return KnownTypeIds.ErrorType;
         }
     }

@@ -371,7 +371,7 @@ namespace PasPasPas.Runtime.Values.IntValues {
         }
 
         /// <summary>
-        ///     cast a alue to another type
+        ///     cast a value to another type
         /// </summary>
         /// <param name="value"></param>
         /// <param name="typeId"></param>

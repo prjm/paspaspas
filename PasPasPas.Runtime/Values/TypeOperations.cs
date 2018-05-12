@@ -14,12 +14,11 @@ namespace PasPasPas.Runtime.Values {
         /// <summary>
         ///     create a new type operations class
         /// </summary>
-        /// <param name="typeKindResolver">resolver for type kinds</param>
-        public TypeOperations(ITypeRegistry typeKindResolver) {
-            TypeRegistry = typeKindResolver;
+        /// <param name="types">resolver for type kinds</param>
+        public TypeOperations(ITypeRegistry types) {
+            TypeRegistry = types;
             values = new LookupTable<int, ITypeReference>(MakeIndeterminedValue);
         }
-
 
         /// <summary>
         ///     nil pointer constant
@@ -31,6 +30,7 @@ namespace PasPasPas.Runtime.Values {
         ///     type registry
         /// </summary>
         public ITypeRegistry TypeRegistry { get; }
+
 
         private ITypeReference MakeIndeterminedValue(int typeId)
             => new IndeterminedRuntimeValue(typeId, TypeRegistry.GetTypeKindOf(typeId));
@@ -51,5 +51,6 @@ namespace PasPasPas.Runtime.Values {
         /// <returns></returns>
         public ITypeReference MakeEnumValue(int enumTypeId, ITypeReference value)
             => new EnumeratedValue(enumTypeId, value);
+
     }
 }
