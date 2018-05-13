@@ -51,7 +51,7 @@ namespace PasPasPas.Runtime.Values.StringValues {
         /// <returns></returns>
         public ITypeReference Equal(ITypeReference left, ITypeReference right) {
             if (left is IStringValue string1 && right is IStringValue string2)
-                return Booleans.AsBoolean(StringValueBase.Equal(string1, string2));
+                return Booleans.ToBoolean(StringValueBase.Equal(string1, string2));
             else
                 return invalidString;
         }
@@ -64,7 +64,7 @@ namespace PasPasPas.Runtime.Values.StringValues {
         /// <returns></returns>
         public ITypeReference GreaterThen(ITypeReference left, ITypeReference right) {
             if (left is IStringValue string1 && right is IStringValue string2)
-                return Booleans.AsBoolean(StringValueBase.GreaterThen(string1, string2));
+                return Booleans.ToBoolean(StringValueBase.GreaterThen(string1, string2));
             else
                 return invalidString;
         }
@@ -77,7 +77,7 @@ namespace PasPasPas.Runtime.Values.StringValues {
         /// <returns></returns>
         public ITypeReference GreaterThenEqual(ITypeReference left, ITypeReference right) {
             if (left is IStringValue string1 && right is IStringValue string2)
-                return Booleans.AsBoolean(StringValueBase.GreaterThenEqual(string1, string2));
+                return Booleans.ToBoolean(StringValueBase.GreaterThenEqual(string1, string2));
             else
                 return invalidString;
         }
@@ -90,7 +90,7 @@ namespace PasPasPas.Runtime.Values.StringValues {
         /// <returns></returns>
         public ITypeReference LessThen(ITypeReference left, ITypeReference right) {
             if (left is IStringValue string1 && right is IStringValue string2)
-                return Booleans.AsBoolean(StringValueBase.LessThen(string1, string2));
+                return Booleans.ToBoolean(StringValueBase.LessThen(string1, string2));
             else
                 return invalidString;
         }
@@ -103,7 +103,7 @@ namespace PasPasPas.Runtime.Values.StringValues {
         /// <returns></returns>
         public ITypeReference LessThenOrEqual(ITypeReference left, ITypeReference right) {
             if (left is IStringValue string1 && right is IStringValue string2)
-                return Booleans.AsBoolean(StringValueBase.LessThenOrEqual(string1, string2));
+                return Booleans.ToBoolean(StringValueBase.LessThenOrEqual(string1, string2));
             else
                 return invalidString;
 
@@ -117,7 +117,7 @@ namespace PasPasPas.Runtime.Values.StringValues {
         /// <returns></returns>
         public ITypeReference NotEquals(ITypeReference left, ITypeReference right) {
             if (left is IStringValue string1 && right is IStringValue string2)
-                return Booleans.AsBoolean(StringValueBase.NotEquals(string1, string2));
+                return Booleans.ToBoolean(StringValueBase.NotEquals(string1, string2));
             else
                 return invalidString;
         }

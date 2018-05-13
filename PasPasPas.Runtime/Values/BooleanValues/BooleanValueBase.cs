@@ -1,11 +1,12 @@
-﻿using PasPasPas.Globals.Runtime;
+﻿using System;
+using PasPasPas.Globals.Runtime;
 
 namespace PasPasPas.Runtime.Values.BooleanValues {
 
     /// <summary>
     ///     base class for boolean values
     /// </summary>
-    public abstract class BooleanValueBase : IBooleanValue {
+    public abstract class BooleanValueBase : IBooleanValue, IEquatable<IBooleanValue> {
 
         /// <summary>
         ///     get the type id
@@ -35,19 +36,18 @@ namespace PasPasPas.Runtime.Values.BooleanValues {
         /// <param name="obj"></param>
         /// <returns></returns>
         public override bool Equals(object obj) {
-            if (!(obj is IBooleanValue boolean))
-                return false;
+            if (obj is IBooleanValue boolean)
+                return Equals(boolean);
 
-            return boolean.AsBoolean == AsBoolean;
+            return false;
         }
 
         /// <summary>
         ///     compute a simple hash code
         /// </summary>
         /// <returns></returns>
-        public override int GetHashCode() {
-            return AsBoolean ? 1 : 0;
-        }
+        public override int GetHashCode()
+            => AsBoolean ? 1 : 0;
 
         /// <summary>
         ///     format this number as string
@@ -84,5 +84,13 @@ namespace PasPasPas.Runtime.Values.BooleanValues {
 
         internal static bool LessThen(IBooleanValue boolean1, IBooleanValue boolean2)
             => (!boolean1.AsBoolean) && boolean2.AsBoolean;
+
+        /// <summary>
+        ///     compare this value to another boolean value
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public bool Equals(IBooleanValue other)
+            => AsBoolean == other.AsBoolean;
     }
 }

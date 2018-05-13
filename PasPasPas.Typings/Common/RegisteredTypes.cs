@@ -381,6 +381,9 @@ namespace PasPasPas.Typings.Common {
             if (targetTypeKind.IsChar())
                 return targetType;
 
+            if (targetTypeKind == CommonTypeKind.BooleanType)
+                return targetType;
+
             return KnownTypeIds.ErrorType;
         }
     }

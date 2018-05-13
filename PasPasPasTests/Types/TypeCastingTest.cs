@@ -1,4 +1,5 @@
 ﻿using PasPasPas.Globals.Types;
+using PasPasPas.Runtime.Values.BooleanValues;
 using PasPasPas.Runtime.Values.CharValues;
 using PasPasPas.Runtime.Values.IntValues;
 using PasPasPasTests.Common;
@@ -24,6 +25,11 @@ namespace PasPasPasTests.Types {
             AssertExprValue("WideChar(384)", new WideCharValue((char)384), "", KnownTypeIds.WideCharType);
             AssertExprValue("Char(384)", new WideCharValue((char)384), "", KnownTypeIds.WideCharType);
             AssertExprValue("AnsiChar(384)", new AnsiCharValue(unchecked((byte)384)), "", KnownTypeIds.AnsiCharType);
+
+            AssertExprValue("Boolean(384)", new BooleanValue(true), "", KnownTypeIds.BooleanType);
+            AssertExprValue("ByteBool(384)", new ByteBooleanValue(unchecked((byte)384)), "", KnownTypeIds.ByteBoolType);
+            AssertExprValue("WordBool(384)", new WordBooleanValue(unchecked((ushort)384)), "", KnownTypeIds.WordBoolType);
+
         }
 
         [TestCase]
@@ -40,6 +46,10 @@ namespace PasPasPasTests.Types {
             AssertExprTypeByVar("Byte", "WideChar(a)", KnownTypeIds.WideCharType);
             AssertExprTypeByVar("Byte", "Char(a)", KnownTypeIds.CharType);
             AssertExprTypeByVar("Byte", "AnsiChar(a)", KnownTypeIds.AnsiCharType);
+
+            AssertExprTypeByVar("Integer", "Boolean(a)", KnownTypeIds.BooleanType);
+            AssertExprTypeByVar("Integer", "ByteBool(a)", KnownTypeIds.ByteBoolType);
+            AssertExprTypeByVar("Integer", "WordBool(a)", KnownTypeIds.WordBoolType);
 
         }
 

@@ -26,6 +26,20 @@
         /// </summary>
         /// <param name="value">boolean value</param>
         /// <returns><c>TrueValue</c> or <c>FalseValue</c></returns>
-        IBooleanValue AsBoolean(bool value);
+        IBooleanValue ToBoolean(bool value);
+
+        /// <summary>
+        ///     convert a byte constant value to a byte bool object
+        /// </summary>
+        /// <param name="value">byte value</param>
+        /// <returns><c>TrueValue</c> or <c>FalseValue</c></returns>
+        IBooleanValue ToByteBool(byte value);
+
+        /// <summary>
+        ///     convert a word constant value to a word bool object
+        /// </summary>
+        /// <param name="value">word value</param>
+        /// <returns><c>TrueValue</c> or <c>FalseValue</c></returns>
+        IBooleanValue ToWordBool(ushort value);
     }
 }

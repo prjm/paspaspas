@@ -1,5 +1,4 @@
-﻿using System;
-using PasPasPas.Globals.Runtime;
+﻿using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Infrastructure.Utils;
 

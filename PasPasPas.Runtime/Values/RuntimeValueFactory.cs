@@ -102,6 +102,12 @@ namespace PasPasPas.Runtime.Values {
                     return Chars.ToWideCharValue((char)integer.UnsignedValue);
                 case KnownTypeIds.AnsiCharType:
                     return Chars.ToAnsiCharValue((byte)integer.UnsignedValue);
+                case KnownTypeIds.BooleanType:
+                    return Booleans.ToBoolean(integer.UnsignedValue != 0);
+                case KnownTypeIds.ByteBoolType:
+                    return Booleans.ToByteBool((byte)integer.UnsignedValue);
+                case KnownTypeIds.WordBoolType:
+                    return Booleans.ToWordBool((ushort)integer.UnsignedValue);
             }
 
             return Types.MakeReference(KnownTypeIds.ErrorType);
