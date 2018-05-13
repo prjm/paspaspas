@@ -368,7 +368,6 @@ namespace PasPasPas.Typings.Common {
             if (GetTypeKindOf(sourceType).IsIntegral())
                 return CastIntTo(sourceType, targetType);
 
-
             return KnownTypeIds.ErrorType;
         }
 
@@ -382,6 +381,9 @@ namespace PasPasPas.Typings.Common {
                 return targetType;
 
             if (targetTypeKind == CommonTypeKind.BooleanType)
+                return targetType;
+
+            if (targetTypeKind == CommonTypeKind.EnumerationType)
                 return targetType;
 
             return KnownTypeIds.ErrorType;

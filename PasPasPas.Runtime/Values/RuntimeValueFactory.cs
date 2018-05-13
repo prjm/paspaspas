@@ -6,6 +6,7 @@ using PasPasPas.Runtime.Values.FloatValues;
 using PasPasPas.Runtime.Values.IntValues;
 using PasPasPas.Runtime.Values.StringValues;
 using PasPasPas.Typings.Common;
+using PasPasPas.Typings.Simple;
 
 namespace PasPasPas.Runtime.Values {
 
@@ -80,6 +81,10 @@ namespace PasPasPas.Runtime.Values {
 
             if (!(value is IIntegerValue integer))
                 return Types.MakeReference(KnownTypeIds.ErrorType);
+
+            if (typeDef is EnumeratedType enumType) {
+                return new EnumeratedValue(enumType.TypeId, CastInteger(value, enumType.CommonTypeId));
+            };
 
             switch (typeDef.TypeId) {
                 case KnownTypeIds.ShortInt:

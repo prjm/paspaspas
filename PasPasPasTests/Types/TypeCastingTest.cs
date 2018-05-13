@@ -1,7 +1,9 @@
 ﻿using PasPasPas.Globals.Types;
+using PasPasPas.Runtime.Values;
 using PasPasPas.Runtime.Values.BooleanValues;
 using PasPasPas.Runtime.Values.CharValues;
 using PasPasPas.Runtime.Values.IntValues;
+using PasPasPas.Typings.Common;
 using PasPasPasTests.Common;
 
 namespace PasPasPasTests.Types {
@@ -30,6 +32,9 @@ namespace PasPasPasTests.Types {
             AssertExprValue("ByteBool(384)", new ByteBooleanValue(unchecked((byte)384)), "", KnownTypeIds.ByteBoolType);
             AssertExprValue("WordBool(384)", new WordBooleanValue(unchecked((ushort)384)), "", KnownTypeIds.WordBoolType);
 
+            AssertExprValue("e(384)",
+                new EnumeratedValue(RegisteredTypes.SmallestUserTypeId, new ShortIntValue(unchecked((sbyte)384))),
+                "type e = (e1, e2);", RegisteredTypes.SmallestUserTypeId);
         }
 
         [TestCase]
@@ -51,6 +56,7 @@ namespace PasPasPasTests.Types {
             AssertExprTypeByVar("Integer", "ByteBool(a)", KnownTypeIds.ByteBoolType);
             AssertExprTypeByVar("Integer", "WordBool(a)", KnownTypeIds.WordBoolType);
 
+            AssertExprTypeByVar("Integer", "e(a)", RegisteredTypes.SmallestUserTypeId, false, "type e = (e1, e2);");
         }
 
     }

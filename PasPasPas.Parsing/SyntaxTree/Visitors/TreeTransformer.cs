@@ -689,8 +689,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 return;
 
             foreach (var part in unit.UsesList.Parts) {
-                var name = part as NamespaceName;
-                if (name == null)
+                if (!(part is NamespaceName name))
                     continue;
 
                 var unitName = new RequiredUnitName();
@@ -745,8 +744,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 return;
 
             foreach (var part in requires.RequiresList.Parts) {
-                var name = part as NamespaceName;
-                if (name == null)
+                if (!(part is NamespaceName name))
                     continue;
 
                 var unitName = new RequiredUnitName();
@@ -778,8 +776,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 return;
 
             foreach (var part in contains.ContainsList.Parts) {
-                var name = part as NamespaceFileName;
-                if (name == null)
+                if (!(part is NamespaceFileName name))
                     continue;
 
                 var unitName = new RequiredUnitName();
@@ -912,10 +909,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <param name="typeName"></param>
         /// <param name="part"></param>
         public void StartVisitChild(TypeName typeName, ISyntaxPart part) {
-            var name = part as GenericNamespaceName;
             var value = LastValue as MetaType;
 
-            if (name == null || value == null)
+            if (!(part is GenericNamespaceName name) || value == null)
                 return;
 
             foreach (var nspace in name.Name.Namespace) {
@@ -968,10 +964,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <param name="simpleType"></param>
         /// <param name="part"></param>
         public void StartVisitChild(SimpleType simpleType, ISyntaxPart part) {
-            var name = part as GenericNamespaceName;
             var value = LastValue as TypeAlias;
 
-            if (name == null || value == null)
+            if (!(part is GenericNamespaceName name) || value == null)
                 return;
 
             foreach (var nspace in name.Name.Namespace) {
@@ -1230,15 +1225,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 symbols.Symbols.Add(declaration, LogSource);
             }
 
-            var parent = LastValue as ILabelTarget;
-            if (parent == null)
+            if (!(LastValue is ILabelTarget parent))
                 return;
 
             parent.LabelName = name;
         }
 
         /// <summary>
-        ///     end visitg a label
+        ///     end visiting a label
         /// </summary>
         /// <param name="label"></param>
         public void EndVisit(Label label) {
@@ -1278,13 +1272,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #region ClassDeclarationItem
 
         /// <summary>
-        ///     start visting a class declaration item
+        ///     start visiting a class declaration item
         /// </summary>
         /// <param name="classDeclarationItem"></param>
         public void StartVisit(ClassDeclarationItem classDeclarationItem) {
-            var parentType = LastValue as StructuredType;
 
-            if (parentType == null)
+            if (!(LastValue is StructuredType parentType))
                 return;
 
             if (classDeclarationItem.Visibility != TokenKind.Undefined) {
