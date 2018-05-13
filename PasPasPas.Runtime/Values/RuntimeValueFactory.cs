@@ -75,10 +75,13 @@ namespace PasPasPas.Runtime.Values {
 
         private ITypeReference CastInteger(ITypeReference value, int typeId) {
 
+            var typeDef = Types.TypeRegistry.GetTypeByIdOrUndefinedType(typeId);
+            typeDef = TypeBase.ResolveAlias(typeDef);
+
             if (!(value is IIntegerValue integer))
                 return Types.MakeReference(KnownTypeIds.ErrorType);
 
-            switch (typeId) {
+            switch (typeDef.TypeId) {
                 case KnownTypeIds.ShortInt:
                     return Integers.ToIntegerValue((sbyte)integer.SignedValue);
                 case KnownTypeIds.ByteType:
@@ -97,6 +100,8 @@ namespace PasPasPas.Runtime.Values {
                     return Integers.ToIntegerValue(integer.UnsignedValue);
                 case KnownTypeIds.WideCharType:
                     return Chars.ToWideCharValue((char)integer.UnsignedValue);
+                case KnownTypeIds.AnsiCharType:
+                    return Chars.ToAnsiCharValue((byte)integer.UnsignedValue);
             }
 
             return Types.MakeReference(KnownTypeIds.ErrorType);

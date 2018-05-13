@@ -36,7 +36,7 @@ namespace P3Benchmark.Basic {
 
         [Benchmark]
         public long TestSmallList()
-            => TestListOperations(new SmallList<object>(), TestCount);
+            => TestListOperations(new SmallListCollection<object>(), TestCount);
 
 
     }

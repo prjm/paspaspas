@@ -373,7 +373,12 @@ namespace PasPasPas.Typings.Common {
         }
 
         private int CastIntTo(int sourceType, int targetType) {
-            if (GetTypeKindOf(targetType).IsIntegral())
+            var targetTypeKind = GetTypeKindOf(targetType);
+
+            if (targetTypeKind.IsIntegral())
+                return targetType;
+
+            if (targetTypeKind.IsChar())
                 return targetType;
 
             return KnownTypeIds.ErrorType;

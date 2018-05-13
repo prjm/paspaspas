@@ -11,7 +11,7 @@ namespace PasPasPas.Infrastructure.Utils {
         MoreElements = 3
     }
 
-    public class SmallList<T> : IList<T> where T : class {
+    public class SmallListCollection<T> : IList<T> where T : class {
 
         private object data;
         private SmallListMode mode = SmallListMode.Empty;
@@ -24,7 +24,7 @@ namespace PasPasPas.Infrastructure.Utils {
                     case SmallListMode.MoreElements:
                         return ((IList<T>)data)[index];
                 }
-                throw new IndexOutOfRangeException();
+                throw new ArgumentException(StringUtils.Invariant($"Index out of range: {index}."), nameof(index));
             }
             set {
                 if (mode == SmallListMode.SingleElement && index == 0) {
@@ -175,9 +175,10 @@ namespace PasPasPas.Infrastructure.Utils {
                 return;
             }
             else if (mode == SmallListMode.SingleElement && index < 2) {
-                var standardList = new List<T>();
-                standardList.Add((T)data);
-                standardList.Add(item);
+                var standardList = new List<T> {
+                    (T)data,
+                    item
+                };
                 data = standardList;
                 mode = SmallListMode.MoreElements;
                 return;

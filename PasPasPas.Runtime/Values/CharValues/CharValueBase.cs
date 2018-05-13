@@ -1,11 +1,12 @@
-﻿using PasPasPas.Globals.Runtime;
+﻿using System;
+using PasPasPas.Globals.Runtime;
 
 namespace PasPasPas.Runtime.Values.CharValues {
 
     /// <summary>
     ///     base class for char values
     /// </summary>
-    public abstract class CharValueBase : ICharValue, IStringValue {
+    public abstract class CharValueBase : ICharValue, IStringValue, IEquatable<ICharValue>, IEquatable<IStringValue> {
 
         /// <summary>
         ///     get the type id
@@ -35,11 +36,36 @@ namespace PasPasPas.Runtime.Values.CharValues {
         public abstract CommonTypeKind TypeKind { get; }
 
         /// <summary>
-        ///     check for equality
+        ///     test for equality
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public abstract override bool Equals(object obj);
+        public override bool Equals(object obj) {
+            if (obj is ICharValue charValue)
+                return Equals(charValue);
+
+            if (obj is IStringValue stringValue)
+                return Equals(stringValue);
+
+
+            return false;
+        }
+
+        /// <summary>
+        ///     test for equality
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public bool Equals(ICharValue other)
+            => other.AsWideChar == AsWideChar;
+
+        /// <summary>
+        ///     test for equality
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public bool Equals(IStringValue other)
+            => string.Equals(other.AsUnicodeString, AsUnicodeString, StringComparison.Ordinal);
 
         /// <summary>
         ///     compute a hash code

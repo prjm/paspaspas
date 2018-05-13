@@ -22,6 +22,8 @@ namespace PasPasPasTests.Types {
             AssertExprValue("UInt64(384)", new UInt64Value(384), "", KnownTypeIds.Uint64Type);
 
             AssertExprValue("WideChar(384)", new WideCharValue((char)384), "", KnownTypeIds.WideCharType);
+            AssertExprValue("Char(384)", new WideCharValue((char)384), "", KnownTypeIds.WideCharType);
+            AssertExprValue("AnsiChar(384)", new AnsiCharValue(unchecked((byte)384)), "", KnownTypeIds.AnsiCharType);
         }
 
         [TestCase]
@@ -34,6 +36,11 @@ namespace PasPasPasTests.Types {
             AssertExprTypeByVar("Byte", "Cardinal(a)", KnownTypeIds.CardinalType);
             AssertExprTypeByVar("Byte", "Int64(a)", KnownTypeIds.Int64Type);
             AssertExprTypeByVar("Byte", "UInt64(a)", KnownTypeIds.Uint64Type);
+
+            AssertExprTypeByVar("Byte", "WideChar(a)", KnownTypeIds.WideCharType);
+            AssertExprTypeByVar("Byte", "Char(a)", KnownTypeIds.CharType);
+            AssertExprTypeByVar("Byte", "AnsiChar(a)", KnownTypeIds.AnsiCharType);
+
         }
 
     }

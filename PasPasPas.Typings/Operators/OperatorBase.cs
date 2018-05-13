@@ -23,16 +23,6 @@ namespace PasPasPas.Typings.Operators {
         }
 
         /// <summary>
-        ///     resolve type aliases
-        /// </summary>
-        /// <param name="typeId"></param>
-        /// <returns></returns>
-        protected ITypeDefinition ResolveAlias(int typeId) {
-            var type = TypeRegistry.GetTypeByIdOrUndefinedType(typeId);
-            return TypeBase.ResolveAlias(type);
-        }
-
-        /// <summary>
         ///     operator kind
         /// </summary>
         /// <see cref="DefinedOperators"/>

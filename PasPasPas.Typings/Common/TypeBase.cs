@@ -71,13 +71,27 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="typeDefinition"></param>
         /// <returns></returns>
-        public static ITypeDefinition ResolveAlias(ITypeDefinition typeDefinition) {
+        public static ITypeDefinition ResolveAliasForAssignment(ITypeDefinition typeDefinition) {
             while (typeDefinition is TypeAlias alias && CanBeAssignedFromAlias(alias)) {
                 typeDefinition = alias.BaseType;
             }
 
             return typeDefinition;
         }
+
+        /// <summary>
+        ///     resolve type alias
+        /// </summary>
+        /// <param name="typeDefinition"></param>
+        /// <returns></returns>
+        public static ITypeDefinition ResolveAlias(ITypeDefinition typeDefinition) {
+            while (typeDefinition is TypeAlias alias) {
+                typeDefinition = alias.BaseType;
+            }
+
+            return typeDefinition;
+        }
+
 
         /// <summary>
         ///     test if this type can be assigned from another type
@@ -91,8 +105,8 @@ namespace PasPasPas.Typings.Common {
             if (otherType.TypeId == TypeInfo.TypeId)
                 return true;
 
-            var baseType = ResolveAlias(this);
-            var anotherType = ResolveAlias(otherType);
+            var baseType = ResolveAliasForAssignment(this);
+            var anotherType = ResolveAliasForAssignment(otherType);
 
             if (baseType != this || anotherType != otherType) {
                 return baseType.CanBeAssignedFrom(anotherType);
