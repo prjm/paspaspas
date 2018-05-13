@@ -71,6 +71,9 @@ namespace PasPasPas.Runtime.Values {
             if (typeKind.IsIntegral())
                 return CastInteger(value, typeId);
 
+            if (typeKind.IsChar())
+                return CastChar(value, typeId);
+
             return Types.MakeReference(KnownTypeIds.ErrorType);
         }
 
@@ -120,6 +123,52 @@ namespace PasPasPas.Runtime.Values {
             return Types.MakeReference(KnownTypeIds.ErrorType);
         }
 
+        private ITypeReference CastChar(ITypeReference value, int typeId) {
+
+            var typeDef = Types.TypeRegistry.GetTypeByIdOrUndefinedType(typeId);
+            typeDef = TypeBase.ResolveAlias(typeDef);
+
+            if (!(value is ICharValue charValue))
+                return Types.MakeReference(KnownTypeIds.ErrorType);
+
+            if (typeDef is EnumeratedType enumType)
+                return new EnumeratedValue(enumType.TypeId, CastChar(value, enumType.CommonTypeId));
+
+            if (typeDef is SubrangeType subrangeType)
+                return CastChar(value, subrangeType.BaseType.TypeId);
+
+            switch (typeDef.TypeId) {
+                case KnownTypeIds.ShortInt:
+                    return Integers.ToIntegerValue((sbyte)charValue.AsWideChar);
+                case KnownTypeIds.ByteType:
+                    return Integers.ToIntegerValue((byte)charValue.AsWideChar);
+                case KnownTypeIds.SmallInt:
+                    return Integers.ToIntegerValue((short)charValue.AsWideChar);
+                case KnownTypeIds.WordType:
+                    return Integers.ToIntegerValue(charValue.AsWideChar);
+                case KnownTypeIds.IntegerType:
+                    return Integers.ToIntegerValue((int)charValue.AsWideChar);
+                case KnownTypeIds.CardinalType:
+                    return Integers.ToIntegerValue((uint)charValue.AsWideChar);
+                case KnownTypeIds.Int64Type:
+                    return Integers.ToIntegerValue((long)charValue.AsWideChar);
+                case KnownTypeIds.Uint64Type:
+                    return Integers.ToIntegerValue((ulong)charValue.AsWideChar);
+                case KnownTypeIds.WideCharType:
+                    return Chars.ToWideCharValue(charValue.AsWideChar);
+                case KnownTypeIds.AnsiCharType:
+                    return Chars.ToAnsiCharValue((byte)charValue.AsWideChar);
+                case KnownTypeIds.BooleanType:
+                    return Booleans.ToBoolean(charValue.AsWideChar != 0);
+                case KnownTypeIds.ByteBoolType:
+                    return Booleans.ToByteBool((byte)charValue.AsWideChar);
+                case KnownTypeIds.WordBoolType:
+                    return Booleans.ToWordBool(charValue.AsWideChar);
+
+            }
+
+            return Types.MakeReference(KnownTypeIds.ErrorType);
+        }
 
     }
 }

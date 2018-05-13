@@ -365,8 +365,14 @@ namespace PasPasPas.Typings.Common {
         /// <param name="targetType">target type</param>
         /// <returns></returns>
         public int Cast(int sourceType, int targetType) {
-            if (GetTypeKindOf(sourceType).IsIntegral())
+            var sourceTypeKind = GetTypeKindOf(sourceType);
+
+            if (sourceTypeKind.IsIntegral())
                 return CastIntTo(sourceType, targetType);
+
+            if (sourceTypeKind.IsChar())
+                return CastCharTo(sourceType, targetType);
+
 
             return KnownTypeIds.ErrorType;
         }
@@ -375,6 +381,30 @@ namespace PasPasPas.Typings.Common {
             var targetTypeKind = GetTypeKindOf(targetType);
 
             if (targetTypeKind.IsIntegral())
+                return targetType;
+
+            if (targetTypeKind.IsChar())
+                return targetType;
+
+            if (targetTypeKind == CommonTypeKind.BooleanType)
+                return targetType;
+
+            if (targetTypeKind == CommonTypeKind.EnumerationType)
+                return targetType;
+
+            if (targetTypeKind == CommonTypeKind.SubrangeType)
+                return targetType;
+
+            return KnownTypeIds.ErrorType;
+        }
+
+        private int CastCharTo(int sourceType, int targetType) {
+            var targetTypeKind = GetTypeKindOf(targetType);
+
+            if (targetTypeKind.IsIntegral())
+                return targetType;
+
+            if (targetTypeKind.IsChar())
                 return targetType;
 
             if (targetTypeKind.IsChar())

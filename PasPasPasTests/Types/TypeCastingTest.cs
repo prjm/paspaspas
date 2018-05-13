@@ -63,5 +63,62 @@ namespace PasPasPasTests.Types {
             AssertExprTypeByVar("Integer", "e(a)", RegisteredTypes.SmallestUserTypeId, false, "type e = -2..2;");
         }
 
+        [TestCase]
+        public void TestCharCastingDirect() {
+            AssertExprValue("ShortInt('a')", new ShortIntValue(97), "", KnownTypeIds.ShortInt);
+            AssertExprValue("Byte('a')", new ByteValue(97), "", KnownTypeIds.ByteType);
+            AssertExprValue("SmallInt('a')", new SmallIntValue(97), "", KnownTypeIds.SmallInt);
+            AssertExprValue("Word('a')", new WordValue(97), "", KnownTypeIds.WordType);
+            AssertExprValue("Integer('a')", new IntegerValue(97), "", KnownTypeIds.IntegerType);
+            AssertExprValue("Cardinal('a')", new CardinalValue(97), "", KnownTypeIds.CardinalType);
+            AssertExprValue("Int64('a')", new Int64Value(97), "", KnownTypeIds.Int64Type);
+            AssertExprValue("UInt64('a')", new UInt64Value(97), "", KnownTypeIds.Uint64Type);
+
+            AssertExprValue("WideChar('a')", new WideCharValue('a'), "", KnownTypeIds.WideCharType);
+            AssertExprValue("Char('a')", new WideCharValue('a'), "", KnownTypeIds.WideCharType);
+            AssertExprValue("AnsiChar('a')", new AnsiCharValue(unchecked((byte)'a')), "", KnownTypeIds.AnsiCharType);
+
+            AssertExprValue("Boolean('a')", new BooleanValue(true), "", KnownTypeIds.BooleanType);
+            AssertExprValue("ByteBool('a')", new ByteBooleanValue(unchecked((byte)384)), "", KnownTypeIds.ByteBoolType);
+            AssertExprValue("WordBool('a')", new WordBooleanValue(unchecked(384)), "", KnownTypeIds.WordBoolType);
+
+            AssertExprValue("e('a')",
+                new EnumeratedValue(RegisteredTypes.SmallestUserTypeId, new ShortIntValue(unchecked(97))),
+                "type e = (e1, e2);", RegisteredTypes.SmallestUserTypeId);
+
+            AssertExprValue("e('a')",
+                new ShortIntValue(97), "type e = -2..2;", KnownTypeIds.ShortInt);
+
+
+        }
+
+        [TestCase]
+        public void TestCharCastingIndirectDirect() {
+            AssertExprTypeByVar("WideChar", "ShortInt(a)", KnownTypeIds.ShortInt);
+            AssertExprTypeByVar("WideChar", "Byte(a)", KnownTypeIds.ByteType);
+            AssertExprTypeByVar("WideChar", "SmallInt(a)", KnownTypeIds.SmallInt);
+            AssertExprTypeByVar("WideChar", "Word(a)", KnownTypeIds.WordType);
+            AssertExprTypeByVar("WideChar", "Integer(a)", KnownTypeIds.IntegerType);
+            AssertExprTypeByVar("WideChar", "Cardinal(a)", KnownTypeIds.CardinalType);
+            AssertExprTypeByVar("WideChar", "Int64(a)", KnownTypeIds.Int64Type);
+            AssertExprTypeByVar("WideChar", "UInt64(a)", KnownTypeIds.Uint64Type);
+
+            AssertExprTypeByVar("WideChar", "WideChar(a)", KnownTypeIds.WideCharType);
+            AssertExprTypeByVar("WideChar", "Char(a)", KnownTypeIds.CharType);
+            AssertExprTypeByVar("WideChar", "AnsiChar(a)", KnownTypeIds.AnsiCharType);
+
+            AssertExprTypeByVar("WideChar", "WideChar(a)", KnownTypeIds.WideCharType);
+            AssertExprTypeByVar("WideChar", "Char(a)", KnownTypeIds.CharType);
+            AssertExprTypeByVar("WideChar", "AnsiChar(a)", KnownTypeIds.AnsiCharType);
+
+            AssertExprTypeByVar("WideChar", "Boolean(a)", KnownTypeIds.BooleanType);
+            AssertExprTypeByVar("WideChar", "ByteBool(a)", KnownTypeIds.ByteBoolType);
+            AssertExprTypeByVar("WideChar", "WordBool(a)", KnownTypeIds.WordBoolType);
+
+            AssertExprTypeByVar("WideChar", "e(a)", RegisteredTypes.SmallestUserTypeId, false, "type e = (e1, e2);");
+            AssertExprTypeByVar("WideChar", "e(a)", RegisteredTypes.SmallestUserTypeId, false, "type e = -2..2;");
+
+        }
+
     }
 }
