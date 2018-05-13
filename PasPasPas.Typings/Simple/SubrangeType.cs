@@ -1,5 +1,6 @@
 ﻿using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
+using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Typings.Common;
 
 namespace PasPasPas.Typings.Simple {
@@ -55,7 +56,8 @@ namespace PasPasPas.Typings.Simple {
         ///     format this subrange type
         /// </summary>
         /// <returns></returns>
-        public override string ToString() => $"Subrange {BaseType}";
+        public override string ToString()
+            => StringUtils.Invariant($"Subrange {BaseType}");
 
     }
 }

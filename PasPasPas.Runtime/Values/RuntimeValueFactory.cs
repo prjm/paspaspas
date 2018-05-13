@@ -82,9 +82,11 @@ namespace PasPasPas.Runtime.Values {
             if (!(value is IIntegerValue integer))
                 return Types.MakeReference(KnownTypeIds.ErrorType);
 
-            if (typeDef is EnumeratedType enumType) {
+            if (typeDef is EnumeratedType enumType)
                 return new EnumeratedValue(enumType.TypeId, CastInteger(value, enumType.CommonTypeId));
-            };
+
+            if (typeDef is SubrangeType subrangeType)
+                return CastInteger(value, subrangeType.BaseType.TypeId);
 
             switch (typeDef.TypeId) {
                 case KnownTypeIds.ShortInt:

@@ -35,6 +35,9 @@ namespace PasPasPasTests.Types {
             AssertExprValue("e(384)",
                 new EnumeratedValue(RegisteredTypes.SmallestUserTypeId, new ShortIntValue(unchecked((sbyte)384))),
                 "type e = (e1, e2);", RegisteredTypes.SmallestUserTypeId);
+
+            AssertExprValue("e(257)",
+                new ShortIntValue(1), "type e = -2..2;", KnownTypeIds.ShortInt);
         }
 
         [TestCase]
@@ -57,6 +60,7 @@ namespace PasPasPasTests.Types {
             AssertExprTypeByVar("Integer", "WordBool(a)", KnownTypeIds.WordBoolType);
 
             AssertExprTypeByVar("Integer", "e(a)", RegisteredTypes.SmallestUserTypeId, false, "type e = (e1, e2);");
+            AssertExprTypeByVar("Integer", "e(a)", RegisteredTypes.SmallestUserTypeId, false, "type e = -2..2;");
         }
 
     }

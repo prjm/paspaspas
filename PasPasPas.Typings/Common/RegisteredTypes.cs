@@ -386,6 +386,9 @@ namespace PasPasPas.Typings.Common {
             if (targetTypeKind == CommonTypeKind.EnumerationType)
                 return targetType;
 
+            if (targetTypeKind == CommonTypeKind.SubrangeType)
+                return targetType;
+
             return KnownTypeIds.ErrorType;
         }
     }
