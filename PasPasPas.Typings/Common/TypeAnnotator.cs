@@ -132,7 +132,7 @@ namespace PasPasPas.Typings.Common {
                 return;
             }
 
-            throw new TypeAnnotationException($"Invalid type information for constant: {element.Kind}", element);
+            element.TypeInfo = GetErrorTypeReference(element);
         }
 
         /// <summary>
@@ -378,7 +378,7 @@ namespace PasPasPas.Typings.Common {
                             baseTypeValue = GetErrorTypeReference(element);
                     }
                 }
-                else if (part.Kind == SymbolReferencePartKind.CallParameters) {
+                else if (part.Kind == SymbolReferencePartKind.CallParameters && part.Name != null) {
                     var callableRoutines = new List<ParameterGroup>();
                     var signature = CreateSignatureFromSymbolPart(part);
 
@@ -591,6 +591,12 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="element"></param>
         public void StartVisit(MethodDeclaration element) {
+            if (currentTypeDefintion.Count < 1)
+                return;
+
+            if (element.Name == null)
+                return;
+
             var v = currentTypeDefintion.Peek();
             var typeDef = v != null ? environment.TypeRegistry.GetTypeByIdOrUndefinedType(v.TypeId) as StructuredTypeDeclaration : null;
             var method = typeDef.AddOrExtendMethod(element.Name.CompleteName, element.Kind);
@@ -604,6 +610,10 @@ namespace PasPasPas.Typings.Common {
         /// <param name="element"></param>
         public void EndVisit(MethodDeclaration element) {
             if (element.Kind == ProcedureKind.Function) {
+
+                if (currentTypeDefintion.Count < 1)
+                    return;
+
                 var v = currentTypeDefintion.Peek();
                 var typeDef = v != null ? environment.TypeRegistry.GetTypeByIdOrUndefinedType(v.TypeId) as StructuredTypeDeclaration : null;
                 var method = currentMethodDefinition.Pop();
@@ -622,6 +632,10 @@ namespace PasPasPas.Typings.Common {
         /// <param name="element"></param>
         public void EndVisit(ParameterTypeDefinition element) {
             if (element.TypeValue != null && element.TypeValue.TypeInfo != null) {
+
+                if (currentTypeDefintion.Count < 1)
+                    return;
+
                 var typeDef = currentTypeDefintion.Peek() as StructuredTypeDeclaration;
                 var parms = currentMethodParameters.Peek();
 

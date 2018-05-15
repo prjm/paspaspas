@@ -6,7 +6,7 @@ using PasPasPas.Infrastructure.Utils;
 namespace PasPasPas.Typings.Common {
 
     /// <summary>
-    ///     scope for identifier visiblity
+    ///     scope for identifier visibility
     /// </summary>
     public class Scope {
 
@@ -61,8 +61,8 @@ namespace PasPasPas.Typings.Common {
         /// <summary>
         ///     list of entries
         /// </summary>
-        public ICollection<Reference> Entries
-            => entries.Values;
+        public IEnumerable<KeyValuePair<string, Reference>> AllEntriesInOrder
+            => entries;
 
         /// <summary>
         ///     open a new child scope

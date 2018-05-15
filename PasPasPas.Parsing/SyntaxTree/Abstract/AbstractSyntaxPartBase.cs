@@ -2,6 +2,7 @@
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Infrastructure.Utils;
+using System;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
 
@@ -18,8 +19,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     child parts
         /// </summary>
-        public virtual IEnumerable<ISyntaxPart> Parts { get; }
-            = new EmptyEnumerable<ISyntaxPart>();
+        public virtual IEnumerable<ISyntaxPart> Parts
+            => Array.Empty<ISyntaxPart>();
 
         /// <summary>
         ///     accept visitors
@@ -30,9 +31,15 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     accept parts
         /// </summary>
         /// <param name="element">element to visit</param>
-        /// <param name="visitor">visituor to use</param>
-        protected void AcceptParts<T>(T element, IStartEndVisitor visitor)
-            => SyntaxPartBase.AcceptParts<T>(element, Parts, visitor);
+        /// <param name="visitor">visitor to use</param>
+        protected void AcceptParts<T>(T element, IStartEndVisitor visitor) {
+            var childVisitor = visitor as IChildVisitor;
+            foreach (var part in Parts) {
+                childVisitor?.StartVisitChild<T>(element, part);
+                part.Accept(visitor);
+                childVisitor?.EndVisitChild<T>(element, part);
+            }
+        }
 
     }
 }

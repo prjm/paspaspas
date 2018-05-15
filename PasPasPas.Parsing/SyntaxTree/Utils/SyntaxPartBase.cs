@@ -170,7 +170,7 @@ namespace PasPasPas.Parsing.SyntaxTree {
         }
 
         /// <summary>
-        ///     acceot visitor for subparts
+        ///     accept visitor for subparts
         /// </summary>
         /// <typeparam name="T">visitor type</typeparam>
         /// <param name="element">element to visit</param>
@@ -181,15 +181,16 @@ namespace PasPasPas.Parsing.SyntaxTree {
         }
 
         /// <summary>
-        ///     visit childs of a syntax part
+        ///     visit children of a syntax part
         /// </summary>
         /// <typeparam name="T">visitor type</typeparam>
         /// <param name="element"></param>
         /// <param name="parts"></param>
         /// <param name="visitor"></param>
-        public static void AcceptParts<T>(T element, IEnumerable<ISyntaxPart> parts, IStartEndVisitor visitor) {
+        public static void AcceptParts<T>(T element, IList<ISyntaxPart> parts, IStartEndVisitor visitor) {
             var childVisitor = visitor as IChildVisitor;
-            foreach (var part in parts) {
+            for (var i = 0; i < parts.Count; i++) {
+                var part = parts[i];
                 childVisitor?.StartVisitChild<T>(element, part);
                 part.Accept(visitor);
                 childVisitor?.EndVisitChild<T>(element, part);

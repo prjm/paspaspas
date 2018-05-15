@@ -17,7 +17,7 @@ namespace SampleRunner {
         static void Main() {
 
             var testPath = @"C:\temp\Testfiles\spring.pas";
-            var mode = SampleMode.CreateAbstractSyntaxTree;
+            var mode = SampleMode.TypeAnnotateFile;
             var repeat = 1;
             var result = new StringBuilder();
             var environment = new DefaultEnvironment();

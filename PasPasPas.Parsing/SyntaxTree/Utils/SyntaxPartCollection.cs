@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using PasPasPas.Infrastructure.Utils;
 
 namespace PasPasPas.Parsing.SyntaxTree.Utils {
@@ -153,14 +154,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Utils {
         /// </summary>
         /// <returns>enumerator</returns>
         public IEnumerator<T> GetEnumerator()
-            => internalList == null ? new EmptyEnumerator<T>() : internalList.GetEnumerator();
+            => internalList == null ? Enumerable.Empty<T>().GetEnumerator() : internalList.GetEnumerator();
 
         /// <summary>
         ///     get the enumerator for all syntax parts
         /// </summary>
         /// <returns>enumerator</returns>
         IEnumerator IEnumerable.GetEnumerator()
-            => internalList == null ? new EmptyEnumerator<T>() : internalList.GetEnumerator();
+            => internalList == null ? Enumerable.Empty<T>().GetEnumerator() : internalList.GetEnumerator();
 
         /// <summary>
         ///     get the index of an item

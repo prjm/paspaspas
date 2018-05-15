@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree.Utils;
@@ -124,7 +125,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         public IEnumerator<T> GetEnumerator()
             => symbols != null ?
                 symbols.Values.GetEnumerator() :
-                new EmptyEnumerable<T>().GetEnumerator();
+                Enumerable.Empty<T>().GetEnumerator();
 
         /// <summary>
         ///     simple wrapper
@@ -133,7 +134,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         IEnumerator IEnumerable.GetEnumerator()
             => symbols != null ?
                 symbols.Values.GetEnumerator() :
-                new EmptyEnumerable<T>().GetEnumerator();
+                Enumerable.Empty<object>().GetEnumerator();
 
         /// <summary>
         ///     remove an entry

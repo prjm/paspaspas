@@ -6,6 +6,7 @@ using PasPasPas.Infrastructure.Log;
 using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Globals.Runtime;
+using System.Linq;
 
 namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
@@ -3141,7 +3142,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         private IList<SymbolAttribute> ExtractAttributes(UserAttributes attributes, CompilationUnit parentUnit, IList<SymbolAttribute> result = null) {
             if (attributes == null || attributes.PartList.Count < 1)
-                return new EmptyList<SymbolAttribute>();
+                return Array.Empty<SymbolAttribute>();
 
             if (result == null)
                 result = new List<SymbolAttribute>();

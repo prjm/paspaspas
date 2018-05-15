@@ -58,6 +58,9 @@ namespace PasPasPas.Typings.Routines {
             if (signature.Length != 1)
                 return;
 
+            if (ConstOps == null)
+                return;
+
             var param = TypeRegistry.GetTypeByIdOrUndefinedType(signature[0].TypeId);
             if (param.TypeKind.IsOrdinal()) {
                 var ordinalType = param as IOrdinalType;

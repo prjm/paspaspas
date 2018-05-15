@@ -37,12 +37,13 @@ namespace PasPasPas.Typings.Common {
                     return ResolveNameByEntry(typeName.RemoveFirstPart(), entry);
                 }
 
-                foreach (var scopeEntry in scope.Entries) {
-                    if (scopeEntry.Kind == ReferenceKind.RefToUnit) {
-                        var importedEntry = ResolveNameByEntry(typeName, scopeEntry);
+                foreach (var scopeEntry in scope.AllEntriesInOrder) {
+                    if (scopeEntry.Value.Kind == ReferenceKind.RefToUnit) {
+                        var importedEntry = ResolveNameByEntry(typeName, scopeEntry.Value);
                         if (importedEntry != null)
                             return importedEntry;
                     }
+
                 }
 
                 scope = scope.Parent;

@@ -7,24 +7,22 @@ using System.Linq;
 namespace PasPasPas.Infrastructure.Utils {
 
     /// <summary>
-    /// A dictionary object that allows rapid hash lookups using keys, but also
-    /// maintains the key insertion order so that values can be retrieved by
-    /// key index.
+    ///     A dictionary object that allows rapid hash lookups using keys, but also
+    ///     maintains the key insertion order so that values can be retrieved by
+    ///     key index.
     /// </summary>
     /// <remarks>
-    /// Similar to the way a DataColumn is indexed by column position and by column name, this
-    /// advanced dictionary construct allows for a very natural and robust handling of indexed
-    /// structured data.
+    ///     Similar to the way a DataColumn is indexed by column position and by column name, this
+    ///     advanced dictionary construct allows for a very natural and robust handling of indexed
+    ///     structured data.
     /// </remarks>
     [DebuggerDisplay("Count = {Count}")]
     public class OrderedDictionary<TKey, TValue> : IOrderedDictionary<TKey, TValue> {
 
-        #region Fields/Properties
-
-        private KeyedCollection2<TKey, KeyValuePair<TKey, TValue>> _keyedCollection;
+        private DelegateKeyedCollection<TKey, KeyValuePair<TKey, TValue>> _keyedCollection;
 
         /// <summary>
-        /// Gets or sets the value associated with the specified key.
+        ///     Gets or sets the value associated with the specified key.
         /// </summary>
         /// <param name="key">The key associated with the value to get or set.</param>
         public TValue this[TKey key] {
@@ -33,7 +31,7 @@ namespace PasPasPas.Infrastructure.Utils {
         }
 
         /// <summary>
-        /// Gets or sets the value at the specified index.
+        ///     Gets or sets the value at the specified index.
         /// </summary>
         /// <param name="index">The index of the value to get or set.</param>
         public TValue this[int index] {
@@ -41,22 +39,26 @@ namespace PasPasPas.Infrastructure.Utils {
             set => SetItem(index, value);
         }
 
-
         /// <summary>
-        /// Gets the number of items in the dictionary
+        ///     Gets the number of items in the dictionary
         /// </summary>
-        public int Count => _keyedCollection.Count;
+        public int Count
+            => _keyedCollection.Count;
 
         /// <summary>
-        /// Gets all the keys in the ordered dictionary in their proper order.
+        ///     Gets all the keys in the ordered dictionary in their proper order.
         /// </summary>
         public ICollection<TKey> Keys
             => _keyedCollection.Select(x => x.Key).ToList();
 
         /// <summary>
-        /// Gets all the values in the ordered dictionary in their proper order.
+        ///     Gets all the values in the ordered dictionary in their proper order.
         /// </summary>
-        public ICollection<TValue> Values => _keyedCollection.Select(x => x.Value).ToList();
+        public ICollection<TValue> Values {
+            get {
+                return _keyedCollection.Select(x => x.Value).ToList();
+            }
+        }
 
         /// <summary>
         /// Gets the key comparer for this dictionary
@@ -66,14 +68,12 @@ namespace PasPasPas.Infrastructure.Utils {
             private set;
         }
 
-        #endregion
-
-        #region Constructors
 
         /// <summary>
-        ///
+        ///     create a new ordered dictionary
         /// </summary>
-        public OrderedDictionary() => Initialize();
+        public OrderedDictionary()
+            => Initialize();
 
         /// <summary>
         ///
@@ -128,31 +128,29 @@ namespace PasPasPas.Infrastructure.Utils {
             }
         }
 
-        #endregion
-
-        #region Methods
-
         private void Initialize(IEqualityComparer<TKey> comparer = null) {
             Comparer = comparer;
             if (comparer != null) {
-                _keyedCollection = new KeyedCollection2<TKey, KeyValuePair<TKey, TValue>>(x => x.Key, comparer);
+                _keyedCollection = new DelegateKeyedCollection<TKey, KeyValuePair<TKey, TValue>>(x => x.Key, comparer);
             }
             else {
-                _keyedCollection = new KeyedCollection2<TKey, KeyValuePair<TKey, TValue>>(x => x.Key);
+                _keyedCollection = new DelegateKeyedCollection<TKey, KeyValuePair<TKey, TValue>>(x => x.Key);
             }
         }
 
         /// <summary>
-        /// Adds the specified key and value to the dictionary.
+        ///     Adds the specified key and value to the dictionary.
         /// </summary>
         /// <param name="key">The key of the element to add.</param>
         /// <param name="value">The value of the element to add.  The value can be null for reference types.</param>
-        public void Add(TKey key, TValue value) => _keyedCollection.Add(new KeyValuePair<TKey, TValue>(key, value));
+        public void Add(TKey key, TValue value)
+            => _keyedCollection.Add(new KeyValuePair<TKey, TValue>(key, value));
 
         /// <summary>
         /// Removes all keys and values from this object.
         /// </summary>
-        public void Clear() => _keyedCollection.Clear();
+        public void Clear()
+            => _keyedCollection.Clear();
 
         /// <summary>
         /// Inserts a new key-value pair at the index specified.
@@ -303,10 +301,6 @@ namespace PasPasPas.Infrastructure.Utils {
             }
         }
 
-        #endregion
-
-        #region Sorting
-
         /// <summary>
         ///
         /// </summary>
@@ -343,9 +337,6 @@ namespace PasPasPas.Infrastructure.Utils {
         /// </summary>
         /// <param name="comparison"></param>
         public void SortValues(Comparison<TValue> comparison) => _keyedCollection.Sort((x, y) => comparison(x.Value, y.Value));
-        #endregion
-
-        #region IDictionary<TKey, TValue>
 
         void IDictionary<TKey, TValue>.Add(TKey key, TValue value) => Add(key, value);
 
@@ -364,9 +355,6 @@ namespace PasPasPas.Infrastructure.Utils {
             set => this[key] = value;
         }
 
-        #endregion
-
-        #region ICollection<KeyValuePair<TKey, TValue>>
 
         void ICollection<KeyValuePair<TKey, TValue>>.Add(KeyValuePair<TKey, TValue> item) => _keyedCollection.Add(item);
 
@@ -382,21 +370,12 @@ namespace PasPasPas.Infrastructure.Utils {
 
         bool ICollection<KeyValuePair<TKey, TValue>>.Remove(KeyValuePair<TKey, TValue> item) => _keyedCollection.Remove(item);
 
-        #endregion
-
-        #region IEnumerable<KeyValuePair<TKey, TValue>>
 
         IEnumerator<KeyValuePair<TKey, TValue>> IEnumerable<KeyValuePair<TKey, TValue>>.GetEnumerator() => GetEnumerator();
 
-        #endregion
 
-        #region IEnumerable
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-
-        #endregion
-
-        #region IOrderedDictionary
 
         IDictionaryEnumerator IOrderedDictionary.GetEnumerator() => new DictionaryEnumerator<TKey, TValue>(this);
 
@@ -408,10 +387,6 @@ namespace PasPasPas.Infrastructure.Utils {
             get => this[index];
             set => this[index] = (TValue)value;
         }
-
-        #endregion
-
-        #region IDictionary
 
         void IDictionary.Add(object key, object value) => Add((TKey)key, (TValue)value);
 
@@ -438,9 +413,6 @@ namespace PasPasPas.Infrastructure.Utils {
             set => this[(TKey)key] = (TValue)value;
         }
 
-        #endregion
-
-        #region ICollection
 
         void ICollection.CopyTo(Array array, int index) => ((ICollection)_keyedCollection).CopyTo(array, index);
 
@@ -450,6 +422,5 @@ namespace PasPasPas.Infrastructure.Utils {
 
         object ICollection.SyncRoot => ((ICollection)_keyedCollection).SyncRoot;
 
-        #endregion
     }
 }
