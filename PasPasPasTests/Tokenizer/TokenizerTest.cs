@@ -57,7 +57,6 @@ namespace PasPasPasTests.Tokenizer {
         internal static void IsWideChar(string input, char value)
             => IsToken(TokenKind.QuotedString, input, input, GetWideCharValue(value));
 
-
         internal static void IsInteger(string input, ulong value)
             => IsToken(TokenKind.Integer, input, input, GetIntegerValue(value));
 
