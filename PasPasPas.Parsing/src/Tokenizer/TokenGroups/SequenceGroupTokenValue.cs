@@ -46,7 +46,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
 
                 while ((!found) && (!state.AtEof)) {
                     if (StoreValue)
-                        builder.Data.Add(state.CurrentCharacter);
+                        builder.Item.Append(state.CurrentCharacter);
 
                     state.NextChar(true);
                     found = state.BufferEndsWith(EndSequence);
@@ -59,10 +59,10 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
                     state.Error(Tokenizer.UnexpectedEndOfToken);
 
                 if (StoreValue) {
-                    builder.Data.RemoveAt(0);
-                    for (int i = 0; i < EndSequence.Length - 1 && builder.Data.Count > 0; i++)
-                        builder.Data.RemoveAt(builder.Data.Count - 1);
-                    var stringValue = state.Constants.Strings.ToUnicodeString(state.Environment.StringPool.PoolString(builder.Data));
+                    builder.Item.Remove(0, 1);
+                    for (int i = 0; i < EndSequence.Length - 1 && builder.Item.Length > 0; i++)
+                        builder.Item.Remove(builder.Item.Length - 1, 1);
+                    var stringValue = state.Constants.Strings.ToUnicodeString(state.Environment.StringPool.PoolString(builder.Item));
                     return new Token(TokenId, state, stringValue);
                 }
                 else

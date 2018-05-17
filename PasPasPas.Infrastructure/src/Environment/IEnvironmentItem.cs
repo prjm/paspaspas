@@ -10,11 +10,6 @@
         /// </summary>
         int Count { get; }
 
-        /// <summary>
-        ///     item caption
-        /// </summary>
-        string Caption { get; }
-
 
     }
 }

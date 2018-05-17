@@ -2,6 +2,7 @@
 using System.Text;
 using PasPasPas.Infrastructure.Files;
 using PasPasPas.Infrastructure.Log;
+using PasPasPas.Infrastructure.ObjectPooling;
 
 namespace PasPasPas.Infrastructure.Environment {
 
@@ -11,7 +12,7 @@ namespace PasPasPas.Infrastructure.Environment {
     public interface IBasicEnvironment {
 
         /// <summary>
-        ///     log manager
+        ///     logging
         /// </summary>
         ILogManager Log { get; }
 
@@ -23,17 +24,7 @@ namespace PasPasPas.Infrastructure.Environment {
         /// <summary>
         ///     string builder pool
         /// </summary>
-        ObjectPool<StringBuilder> StringBuilderPool { get; }
-
-        /// <summary>
-        ///     pool of char lists
-        /// </summary>
-        ObjectPool<List<char>> CharListPool { get; }
-
-        /// <summary>
-        ///     string pool for single chars
-        /// </summary>
-        CharsAsString CharStringPool { get; }
+        StringBuilderPool StringBuilderPool { get; }
 
         /// <summary>
         ///     string pool
@@ -44,5 +35,6 @@ namespace PasPasPas.Infrastructure.Environment {
         ///     enumerated entries
         /// </summary>
         IEnumerable<object> Entries { get; }
+
     }
 }

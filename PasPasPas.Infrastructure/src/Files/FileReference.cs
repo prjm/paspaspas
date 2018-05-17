@@ -1,5 +1,4 @@
 ﻿using System;
-using PasPasPas.Infrastructure.Environment;
 
 namespace PasPasPas.Infrastructure.Files {
 
@@ -9,51 +8,47 @@ namespace PasPasPas.Infrastructure.Files {
     /// <remarks>immutable</remarks>
     public class FileReference : IFileReference {
 
-        private readonly string filePath;
-        private int hashcode;
+        private readonly int hashcode;
 
         /// <summary>
         ///     create a new file reference
         /// </summary>
-        /// <param name="path">path to fhe file</param>
-        /// <param name="pool">string pool to use</param>
+        /// <param name="filePath">path to the file</param>
         /// <exception cref="System.ArgumentException">Thrown if the path is empty</exception>
-        public FileReference(StringPool pool, string path) {
+        public FileReference(string filePath) {
+            Path = filePath;
 
-            if (string.IsNullOrWhiteSpace(path))
-                throw new ArgumentNullException(nameof(path));
+            if (string.IsNullOrWhiteSpace(filePath))
+                throw new ArgumentNullException(nameof(filePath), "Invalid path.");
 
-            filePath = pool.PoolString(path);
             hashcode = filePath.ToUpperInvariant().GetHashCode();
         }
 
         /// <summary>
         ///     get the path to the file
         /// </summary>
-        public string Path
-            => filePath;
+        public string Path { get; }
 
         /// <summary>
         ///     name of the file (without path)
         /// </summary>
         public string FileName
-            => System.IO.Path.GetFileName(filePath);
+            => System.IO.Path.GetFileName(Path);
 
         /// <summary>
-        ///     add a subpath
+        ///     add a child path
         /// </summary>
         /// <param name="path">path to add</param>
-        /// <param name="pool">string pool to use</param>
         /// <returns>combined path</returns>
-        public IFileReference Append(StringPool pool, IFileReference path)
-            => new FileReference(pool, System.IO.Path.Combine(filePath, path.Path));
+        public IFileReference Append(IFileReference path)
+            => new FileReference(System.IO.Path.Combine(Path, path.Path));
 
         /// <summary>
         ///     string representation of this file reference
         /// </summary>
         /// <returns>path</returns>
         public override string ToString()
-            => filePath;
+            => Path;
 
         /// <summary>
         ///     get the hashcode
@@ -73,7 +68,7 @@ namespace PasPasPas.Infrastructure.Files {
             if (ReferenceEquals(other, null))
                 return false;
 
-            return string.Equals(filePath, other.Path, StringComparison.OrdinalIgnoreCase);
+            return string.Equals(Path, other.Path, StringComparison.OrdinalIgnoreCase);
         }
     }
 }

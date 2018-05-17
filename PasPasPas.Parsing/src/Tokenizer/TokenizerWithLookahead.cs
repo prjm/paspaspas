@@ -4,6 +4,7 @@ using PasPasPas.Globals.Runtime;
 using PasPasPas.Infrastructure.Environment;
 using PasPasPas.Infrastructure.Files;
 using PasPasPas.Infrastructure.Log;
+using PasPasPas.Infrastructure.ObjectPooling;
 using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Options.Bundles;
 using PasPasPas.Parsing.Parser;
@@ -34,7 +35,21 @@ namespace PasPasPas.Parsing.Tokenizer {
     };
 
     /// <summary>
-    ///     base class for a tokenizer with a lookead list
+    ///     pool of token sequences
+    /// </summary>
+    public class TokenSequences : ObjectPool<TokenizerWithLookahead.TokenSequence> {
+
+        /// <summary>
+        ///     prepare a token sequence
+        /// </summary>
+        /// <param name="entry"></param>
+        protected override void Prepare(TokenizerWithLookahead.TokenSequence entry)
+            => entry.Clear();
+
+    }
+
+    /// <summary>
+    ///     base class for a tokenizer with a lookahead list
     /// </summary>
     public sealed class TokenizerWithLookahead : ITokenizer, IDisposable {
 
@@ -45,7 +60,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <summary>
         ///     a sequence of fetched tokens
         /// </summary>
-        public class TokenSequence : IPoolItem {
+        public class TokenSequence {
 
             private string prefix
                 = string.Empty;
@@ -76,8 +91,7 @@ namespace PasPasPas.Parsing.Tokenizer {
             /// <param name="tokens"></param>
             /// <param name="environment"></param>
             public void AssignPrefix(Queue<Token> tokens, IParserEnvironment environment) {
-                using (var poolItem = environment.StringBuilderPool.Borrow()) {
-                    var sb = poolItem.Data;
+                using (var poolItem = environment.StringBuilderPool.Borrow(out var sb)) {
                     while (tokens.Count > 0)
                         sb.Append(tokens.Dequeue().Value);
                     prefix = sb.ToString();
@@ -90,8 +104,7 @@ namespace PasPasPas.Parsing.Tokenizer {
             /// <param name="tokens"></param>
             /// <param name="environment"></param>
             public void AssignSuffix(Queue<Token> tokens, IParserEnvironment environment) {
-                using (var poolItem = environment.StringBuilderPool.Borrow()) {
-                    var sb = poolItem.Data;
+                using (var poolItem = environment.StringBuilderPool.Borrow(out var sb)) {
                     while (tokens.Count > 0)
                         sb.Append(tokens.Dequeue().Value);
                     suffix = sb.ToString();
@@ -136,7 +149,7 @@ namespace PasPasPas.Parsing.Tokenizer {
             BaseTokenizer = baseTokenizer;
             options = optionsSet;
             environment = env;
-            constValues = env.ConstantValues;
+            constValues = env.Runtime;
         }
 
         /// <summary>
@@ -147,8 +160,8 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <summary>
         ///     list of tokens
         /// </summary>
-        private IndexedQueue<ObjectPool<TokenSequence>.PoolItem> tokenList
-            = new IndexedQueue<ObjectPool<TokenSequence>.PoolItem>();
+        private IndexedQueue<PoolItem<TokenSequence>> tokenList
+            = new IndexedQueue<PoolItem<TokenSequence>>();
 
         /// <summary>
         ///     list of invalid tokens (e.g. whitespace)
@@ -172,7 +185,7 @@ namespace PasPasPas.Parsing.Tokenizer {
 
                 if (BaseTokenizer.AtEof) {
                     if (tokenList.Count > 0) {
-                        var item = tokenList.Last.Data;
+                        var item = tokenList.Last.Item;
                         item.AssignSuffix(invalidTokens, environment);
                     }
                     return;
@@ -184,8 +197,8 @@ namespace PasPasPas.Parsing.Tokenizer {
 
                 if (IsValidToken(ref nextToken)) {
                     var entry = environment.TokenSequencePool.Borrow();
-                    entry.Data.Value = nextToken;
-                    entry.Data.AssignPrefix(invalidTokens, environment);
+                    entry.Item.Value = nextToken;
+                    entry.Item.AssignPrefix(invalidTokens, environment);
                     tokenList.Enqueue(entry);
                 }
                 else {
@@ -307,7 +320,7 @@ namespace PasPasPas.Parsing.Tokenizer {
                 };
             }
             else {
-                return tokenList[number].Data;
+                return tokenList[number].Item;
             }
         }
 

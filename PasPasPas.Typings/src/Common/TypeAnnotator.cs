@@ -92,13 +92,13 @@ namespace PasPasPas.Typings.Common {
         }
 
         private ITypeReference GetTypeByIdOrUndefinedType(int typeId)
-            => environment.ConstantValues.Types.MakeReference(typeId);
+            => environment.Runtime.Types.MakeReference(typeId);
 
         private ITypeDefinition GetErrorType(ITypedSyntaxNode node)
             => environment.TypeRegistry.GetTypeByIdOrUndefinedType(KnownTypeIds.ErrorType);
 
         private ITypeReference GetErrorTypeReference(ITypedSyntaxNode node)
-            => environment.ConstantValues.Types.MakeReference(KnownTypeIds.ErrorType);
+            => environment.Runtime.Types.MakeReference(KnownTypeIds.ErrorType);
 
         private int GetSmallestIntegralTypeOrNext(int leftId, int rightId)
             => environment.TypeRegistry.GetSmallestIntegralTypeOrNext(leftId, rightId);
@@ -118,17 +118,17 @@ namespace PasPasPas.Typings.Common {
                 return;
 
             if (element.Kind == ConstantValueKind.True) {
-                element.TypeInfo = environment.ConstantValues.Booleans.TrueValue;
+                element.TypeInfo = environment.Runtime.Booleans.TrueValue;
                 return;
             }
 
             if (element.Kind == ConstantValueKind.False) {
-                element.TypeInfo = environment.ConstantValues.Booleans.FalseValue;
+                element.TypeInfo = environment.Runtime.Booleans.FalseValue;
                 return;
             }
 
             if (element.Kind == ConstantValueKind.Nil) {
-                element.TypeInfo = environment.ConstantValues.Types.Nil;
+                element.TypeInfo = environment.Runtime.Types.Nil;
                 return;
             }
 
@@ -395,7 +395,7 @@ namespace PasPasPas.Typings.Common {
                         }
                         else if (reference.Kind == ReferenceKind.RefToType && signature.Length == 1) {
                             if (signature[0].IsConstant) {
-                                baseTypeValue = environment.ConstantValues.Cast(signature[0], ((ITypeDefinition)reference.Symbol).TypeId);
+                                baseTypeValue = environment.Runtime.Cast(signature[0], ((ITypeDefinition)reference.Symbol).TypeId);
                             }
                             else {
                                 var resultType = environment.TypeRegistry.Cast(signature[0].TypeId, ((ITypeDefinition)reference.Symbol).TypeId);
@@ -454,7 +454,7 @@ namespace PasPasPas.Typings.Common {
             if (typeDef is EnumeratedType enumType) {
                 var typeID = enumType.CommonTypeId;
                 foreach (var enumValue in enumType.Values) {
-                    enumValue.MakeEnumValue(environment.ConstantValues, typeID, enumType.TypeId);
+                    enumValue.MakeEnumValue(environment.Runtime, typeID, enumType.TypeId);
                 }
             }
 
@@ -473,7 +473,7 @@ namespace PasPasPas.Typings.Common {
                 return;
             }
 
-            var enumRef = typeDef.DefineEnumValue(environment.ConstantValues, element.SymbolName, false, null);
+            var enumRef = typeDef.DefineEnumValue(environment.Runtime, element.SymbolName, false, null);
 
             if (enumRef == null) {
                 element.TypeInfo = GetErrorTypeReference(element);

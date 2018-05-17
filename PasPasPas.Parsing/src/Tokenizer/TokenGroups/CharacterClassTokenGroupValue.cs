@@ -72,7 +72,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
                 if (!state.AtEof) {
                     while (CharClass.Matches(state.LookAhead())) {
                         var currentChar = state.NextChar(true);
-                        parsedValue?.Data.Add(currentChar);
+                        parsedValue?.Item.Append(currentChar);
 
                         if (state.AtEof)
                             break;
@@ -83,7 +83,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
                     state.Error(MinLengthMessage);
 
                 if (parseValue) {
-                    var value = state.Environment.StringPool.PoolString(parsedValue.Data);
+                    var value = state.Environment.StringPool.PoolString(parsedValue.Item);
                     var parsed = state.ParserLiteral(value, ValueParser);
                     return new Token(TokenId, state, parsed);
                 }

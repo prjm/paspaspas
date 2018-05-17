@@ -5,8 +5,8 @@ using PasPasPas.Globals.Types;
 using PasPasPas.Infrastructure.Environment;
 using PasPasPas.Infrastructure.Files;
 using PasPasPas.Infrastructure.Log;
+using PasPasPas.Infrastructure.ObjectPooling;
 using PasPasPas.Options.DataTypes;
-using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Parsing.Tokenizer;
 using PasPasPas.Parsing.Tokenizer.LiteralValues;
 using PasPasPas.Parsing.Tokenizer.Patterns;
@@ -16,20 +16,21 @@ using PasPasPas.Typings.Common;
 namespace PasPasPas.Api {
 
     /// <summary>
-    ///     default environment
+    ///     default environment: contains all registries and
+    ///     factories needed
     /// </summary>
     public class DefaultEnvironment : ITypedEnvironment {
 
         /// <summary>
-        ///     default file access
+        ///     access to files
         /// </summary>
-        private StandardFileAccess files
+        private readonly StandardFileAccess files
             = new StandardFileAccess();
 
         /// <summary>
-        ///     constant values
+        ///     runtime values: constants and type references
         /// </summary>
-        public IRuntimeValueFactory ConstantValues { get; }
+        public IRuntimeValueFactory Runtime { get; }
 
         /// <summary>
         ///     integer parser
@@ -55,8 +56,8 @@ namespace PasPasPas.Api {
         /// <summary>
         ///     token sequence pool
         /// </summary>
-        public ObjectPool<TokenizerWithLookahead.TokenSequence> TokenSequencePool { get; }
-            = new ObjectPool<TokenizerWithLookahead.TokenSequence>() { PoolName = "TokenSequencePool" };
+        public TokenSequences TokenSequencePool { get; }
+            = new TokenSequences();
 
         /// <summary>
         ///     tokenizer patterns
@@ -79,23 +80,14 @@ namespace PasPasPas.Api {
         /// <summary>
         ///     string builder pool
         /// </summary>
-        public ObjectPool<StringBuilder> StringBuilderPool { get; }
-            = new ObjectPool<StringBuilder>() { PoolName = "StringBuilderPool" };
-
-        /// <summary>
-        ///     char pool
-        /// </summary>
-        public CharsAsString CharStringPool { get; }
-            = new CharsAsString();
+        public StringBuilderPool StringBuilderPool { get; }
+            = new StringBuilderPool();
 
         /// <summary>
         ///     string pool
         /// </summary>
         public StringPool StringPool { get; }
             = new StringPool();
-
-        public ObjectPool<List<char>> CharListPool { get; }
-            = new ObjectPool<List<char>>() { PoolName = "CharListPool" };
 
         /// <summary>
         ///     default type registry
@@ -108,11 +100,11 @@ namespace PasPasPas.Api {
         /// <param name="intSize">integer size</param>
         public DefaultEnvironment(NativeIntSize intSize = NativeIntSize.Undefined) {
             TypeRegistry = new RegisteredTypes(StringPool, intSize);
-            ConstantValues = new RuntimeValueFactory(TypeRegistry);
-            IntegerParser = new IntegerParser(ConstantValues, false);
-            HexNumberParser = new IntegerParser(ConstantValues, true);
-            RealLiteralConverter = new RealLiteralConverter(ConstantValues);
-            TypeRegistry.Runtime = ConstantValues;
+            Runtime = new RuntimeValueFactory(TypeRegistry);
+            IntegerParser = new IntegerParser(Runtime, false);
+            HexNumberParser = new IntegerParser(Runtime, true);
+            RealLiteralConverter = new RealLiteralConverter(Runtime);
+            TypeRegistry.Runtime = Runtime;
         }
 
         /// <summary>
@@ -127,7 +119,8 @@ namespace PasPasPas.Api {
                     CharLiteralConverter,
                     RealLiteralConverter,
                     StringBuilderPool,
-                    CharStringPool,
+                    StringPool,
+                    StringPool.Entries,
                     TokenSequencePool,
                     Patterns,
                     Log,

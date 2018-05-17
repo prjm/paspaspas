@@ -1,12 +1,11 @@
 ﻿using System;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Infrastructure.Files;
-using System.Text;
-using PasPasPas.Infrastructure.Utils;
-using PasPasPas.Infrastructure.Environment;
+using PasPasPas.Infrastructure.ObjectPooling;
 using PasPasPas.Parsing.Tokenizer.LiteralValues;
 using PasPasPas.Globals.Runtime;
-using System.Collections.Generic;
+using System.Text;
+using PasPasPas.Infrastructure.Utils;
 
 namespace PasPasPas.Parsing.Tokenizer {
 
@@ -15,8 +14,9 @@ namespace PasPasPas.Parsing.Tokenizer {
     /// </summary>
     public class TokenizerState : IDisposable {
 
-        private ObjectPool<List<char>>.PoolItem bufferHolder;
-        private IList<char> buffer;
+        private PoolItem<StringBuilder> bufferHolder;
+
+        private StringBuilder buffer;
         private Tokenizer tokenizer;
         private readonly StackedFileReader input;
         private readonly ILogSource log;
@@ -36,19 +36,16 @@ namespace PasPasPas.Parsing.Tokenizer {
             input = currentInput;
             environment = parserEnvironment;
             bufferHolder = FetchStringBuilder();
-            buffer = bufferHolder.Data;
-            constants = environment.ConstantValues;
+            buffer = bufferHolder.Item;
+            constants = environment.Runtime;
         }
 
         /// <summary>
         ///     current buffer length
         /// </summary>
         public int Length {
-            get => buffer.Count;
-            set {
-                while (buffer.Count > value && buffer.Count > 0)
-                    buffer.RemoveAt(buffer.Count - 1);
-            }
+            get => buffer.Length;
+            set => buffer.Length = value;
         }
 
         /// <summary>
@@ -85,16 +82,16 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <summary>
         ///     get a pooled string buffer
         /// </summary>
-        /// <returns></returns>
-        public ObjectPool<List<char>>.PoolItem FetchStringBuilder()
-            => environment.CharListPool.Borrow();
+        /// <returns>an item of the string builder pool</returns>
+        public PoolItem<StringBuilder> FetchStringBuilder()
+            => environment.StringBuilderPool.Borrow();
 
         /// <summary>
         ///     append a char
         /// </summary>
         /// <param name="currentChar"></param>
         public void Append(char currentChar)
-            => buffer.Add(currentChar);
+            => buffer.Append(currentChar);
 
         /// <summary>
         ///     tests if the buffer ends with a given char
@@ -102,26 +99,15 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="endSequence"></param>
         /// <returns></returns>
         public bool BufferEndsWith(char endSequence)
-            => buffer.Count > 0 && buffer[buffer.Count - 1] == endSequence;
+            => buffer.EndsWith(endSequence);
 
         /// <summary>
         ///     tests if the buffer ends with a given string
         /// </summary>
         /// <param name="endSequence"></param>
         /// <returns></returns>
-        public bool BufferEndsWith(string endSequence) {
-
-            if (buffer.Count < endSequence.Length)
-                return false;
-
-            var offset = buffer.Count - endSequence.Length;
-
-            for (var i = 0; i < endSequence.Length; i++)
-                if (buffer[offset + i] != endSequence[i])
-                    return false;
-
-            return true;
-        }
+        public bool BufferEndsWith(string endSequence)
+           => buffer.EndsWith(endSequence);
 
         /// <summary>
         ///     clear buffer content
@@ -207,7 +193,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         public char NextChar(bool append) {
             var result = input.NextChar();
             if (append)
-                buffer.Add(result);
+                buffer.Append(result);
             return result;
         }
 

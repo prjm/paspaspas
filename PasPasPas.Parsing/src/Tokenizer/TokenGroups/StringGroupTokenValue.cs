@@ -39,14 +39,14 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
                                 state.NextChar(true);
                                 var controlChar = hexDigits.Tokenize(state);
                                 if (controlChar.Kind == TokenKind.HexNumber && controlChar.ParsedValue is IIntegerValue hexValue && !hexValue.IsNegative)
-                                    resultBuilder.Data.Add(state.ConvertCharLiteral(hexValue.UnsignedValue).ToString()[0]);
+                                    resultBuilder.Item.Append(state.ConvertCharLiteral(hexValue.UnsignedValue).ToString()[0]);
                                 else
                                     state.Error(Tokenizer.IncompleteString);
                             }
                             else {
                                 var controlChar = digitTokenizer.Tokenize(state);
                                 if (controlChar.Kind == TokenKind.Integer && controlChar.ParsedValue is IIntegerValue intValue && !intValue.IsNegative)
-                                    resultBuilder.Data.Add(state.ConvertCharLiteral(intValue.UnsignedValue).ToString()[0]);
+                                    resultBuilder.Item.Append(state.ConvertCharLiteral(intValue.UnsignedValue).ToString()[0]);
                                 else
                                     state.Error(Tokenizer.UnexpectedCharacter);
                             }
@@ -56,7 +56,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
                         state.NextChar(true);
                         var qs = quotedString.Tokenize(state);
                         foreach (var c in qs.ParsedValue.ToString())
-                            resultBuilder.Data.Add(c);
+                            resultBuilder.Item.Append(c);
                     }
                     else {
                         break;
@@ -64,10 +64,10 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
                 } while (!state.AtEof);
 
                 ITypeReference data;
-                if (resultBuilder.Data.Count == 1)
-                    data = state.Constants.Chars.ToWideCharValue(resultBuilder.Data[0]);
+                if (resultBuilder.Item.Length == 1)
+                    data = state.Constants.Chars.ToWideCharValue(resultBuilder.Item[0]);
                 else
-                    data = state.Constants.Strings.ToUnicodeString(state.Environment.StringPool.PoolString(resultBuilder.Data));
+                    data = state.Constants.Strings.ToUnicodeString(state.Environment.StringPool.PoolString(resultBuilder.Item));
 
                 return new Token(TokenKind.QuotedString, state, data);
             }

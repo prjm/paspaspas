@@ -1,5 +1,6 @@
 ﻿using PasPasPas.Globals.Runtime;
 using PasPasPas.Infrastructure.Environment;
+using PasPasPas.Parsing.Tokenizer;
 using PasPasPas.Parsing.Tokenizer.LiteralValues;
 using PasPasPas.Parsing.Tokenizer.Patterns;
 
@@ -13,7 +14,7 @@ namespace PasPasPas.Parsing {
         /// <summary>
         ///     interface for constant operations
         /// </summary>
-        IRuntimeValueFactory ConstantValues { get; }
+        IRuntimeValueFactory Runtime { get; }
 
         /// <summary>
         ///     integer literal parser
@@ -38,7 +39,7 @@ namespace PasPasPas.Parsing {
         /// <summary>
         ///     object pool for token sequences
         /// </summary>
-        ObjectPool<Tokenizer.TokenizerWithLookahead.TokenSequence> TokenSequencePool { get; }
+        TokenSequences TokenSequencePool { get; }
 
         /// <summary>
         ///     patters

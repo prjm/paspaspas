@@ -7,7 +7,6 @@ namespace PasPasPas.Infrastructure.Utils {
     /// </summary>
     public static class StringUtils {
 
-
         /// <summary>
         ///     format a string to invariant culture
         /// </summary>

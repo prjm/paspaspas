@@ -119,7 +119,7 @@ namespace PasPasPas.Infrastructure.Files {
             if (pathToResolve == null)
                 throw new ArgumentNullException(nameof(pathToResolve));
 
-            var combinedPath = currentDirectory.Append(pool, pathToResolve);
+            var combinedPath = currentDirectory.Append(pathToResolve);
             var isResolved = fileAccess.FileExists(combinedPath);
 
             return new ResolvedFile(currentDirectory, pathToResolve, combinedPath, isResolved);

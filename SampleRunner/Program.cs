@@ -2,6 +2,7 @@
 using System.Text;
 using PasPasPas.Api;
 using PasPasPas.Infrastructure.Environment;
+using PasPasPas.Infrastructure.ObjectPooling;
 using PasPasPas.Parsing;
 using PasPasPas.Typings.Common;
 using SampleRunner.Scenarios;
@@ -29,12 +30,7 @@ namespace SampleRunner {
         }
 
         private static string GetCacheName(object data) {
-            if (data is IEnvironmentItem item)
-                return $"[{item.Caption}]";
-            else if (data is ObjectPool pool)
-                return $"[{pool.PoolName}]";
-            else
-                return $"[{data.GetType().ToString()}]";
+            return $"[{data.GetType().ToString()}]";
         }
 
         private static void RunSample(IParserEnvironment environment, StringBuilder result, Action<StringBuilder> action) {

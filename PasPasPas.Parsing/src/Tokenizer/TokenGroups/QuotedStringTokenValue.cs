@@ -45,7 +45,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
                     var escapedQuote = (nextChar1 == quote) && (nextChar2 == quote);
 
                     if (!found)
-                        resultBuilder.Data.Add(state.NextChar(true));
+                        resultBuilder.Item.Append(state.NextChar(true));
                     else
                         state.NextChar(true);
 
@@ -59,10 +59,10 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
                     state.Error(Tokenizer.IncompleteString);
 
                 ITypeReference value;
-                if (resultBuilder.Data.Count == 1)
-                    value = state.Constants.Chars.ToWideCharValue(resultBuilder.Data[0]);
+                if (resultBuilder.Item.Length == 1)
+                    value = state.Constants.Chars.ToWideCharValue(resultBuilder.Item[0]);
                 else
-                    value = state.Constants.Strings.ToUnicodeString(state.Environment.StringPool.PoolString(resultBuilder.Data));
+                    value = state.Constants.Strings.ToUnicodeString(state.Environment.StringPool.PoolString(resultBuilder.Item));
 
                 return new Token(TokenId, state, value);
             }

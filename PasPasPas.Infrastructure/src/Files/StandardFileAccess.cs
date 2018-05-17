@@ -76,7 +76,7 @@ namespace PasPasPas.Infrastructure.Files {
         /// <param name="pool">string pool to use</param>
         /// <returns></returns>
         public IFileReference ReferenceToFile(StringPool pool, string path)
-            => new FileReference(pool, path);
+            => new FileReference(path);
 
         /// <summary>
         ///     check if a file exists

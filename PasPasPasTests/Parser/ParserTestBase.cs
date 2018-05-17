@@ -167,12 +167,11 @@ namespace PasPasPasTests.Parser {
 
             var env = CreateEnvironment();
             var fileAccess = env.Files;
-            var pool = env.StringPool;
             var fileCounter = 0;
-            var incFile = new FileReference(pool, Path.GetFullPath("dummy.inc"));
-            var resFile1 = new FileReference(pool, Path.GetFullPath("res.res"));
-            var resFile2 = new FileReference(pool, Path.GetFullPath("test_0.res"));
-            var linkDll = new FileReference(pool, Path.GetFullPath("link.dll"));
+            var incFile = new FileReference(Path.GetFullPath("dummy.inc"));
+            var resFile1 = new FileReference(Path.GetFullPath("res.res"));
+            var resFile2 = new FileReference(Path.GetFullPath("test_0.res"));
+            var linkDll = new FileReference(Path.GetFullPath("link.dll"));
 
             fileAccess.AddMockupFile(incFile, new StringBufferReadable("DEFINE DUMMY_INC"));
             fileAccess.AddMockupFile(resFile1, new StringBufferReadable("RES RES RES"));
@@ -193,7 +192,7 @@ namespace PasPasPasTests.Parser {
 
                 foreach (var subPart in subParts) {
                     var hasFoundInput = false;
-                    var path = new FileReference(env.StringPool, "test_" + fileCounter.ToString(CultureInfo.InvariantCulture) + ".pas");
+                    var path = new FileReference("test_" + fileCounter.ToString(CultureInfo.InvariantCulture) + ".pas");
                     var input = new StringBufferReadable(subPart);
                     var buffer = new FileBuffer();
                     var reader = new StackedFileReader(buffer);
