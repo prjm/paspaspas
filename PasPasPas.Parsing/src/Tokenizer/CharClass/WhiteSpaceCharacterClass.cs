@@ -6,7 +6,7 @@
     public sealed class WhiteSpaceCharacterClass : CharacterClass {
 
         /// <summary>
-        ///     test if a given character is an ascii whitespace
+        ///     test if a given character is an ASCII whitespace
         /// </summary>
         /// <param name="input">input char</param>
         /// <returns><c>true</c> if the passed character is 9, 10, 11, 12, or 13</returns>

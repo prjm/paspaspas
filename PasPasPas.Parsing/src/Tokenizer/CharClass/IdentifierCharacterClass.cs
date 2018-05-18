@@ -6,7 +6,7 @@
     public sealed class IdentifierCharacterClass : CharacterClass {
 
         /// <summary>
-        ///     allow &amp;   
+        ///     allow &amp;
         /// </summary>
         private readonly bool allowAmpersand;
 
@@ -21,7 +21,7 @@
         private readonly bool allowDot;
 
         /// <summary>
-        ///     create a new identifer character class
+        ///     create a new identifier character class
         /// </summary>
         /// <param name="ampersands">allow ampersands</param>
         /// <param name="digits">allow digits</param>

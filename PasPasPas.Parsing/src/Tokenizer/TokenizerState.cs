@@ -12,16 +12,14 @@ namespace PasPasPas.Parsing.Tokenizer {
     /// <summary>
     ///     state management for a tokenizer
     /// </summary>
-    public class TokenizerState : IDisposable {
+    public sealed class TokenizerState : IDisposable {
 
         private PoolItem<StringBuilder> bufferHolder;
 
         private StringBuilder buffer;
-        private Tokenizer tokenizer;
+        private readonly Tokenizer tokenizer;
         private readonly StackedFileReader input;
         private readonly ILogSource log;
-        private readonly IParserEnvironment environment;
-        private readonly IRuntimeValueFactory constants;
 
         /// <summary>
         ///     create a new tokenizer state
@@ -34,10 +32,10 @@ namespace PasPasPas.Parsing.Tokenizer {
             tokenizer = parentTokenizer;
             log = logSource;
             input = currentInput;
-            environment = parserEnvironment;
+            Environment = parserEnvironment;
             bufferHolder = FetchStringBuilder();
             buffer = bufferHolder.Item;
-            constants = environment.Runtime;
+            RuntimeValues = Environment.Runtime;
         }
 
         /// <summary>
@@ -72,7 +70,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="parsedValue"></param>
         /// <returns></returns>
         public object ConvertCharLiteral(object parsedValue)
-            => environment.CharLiteralConverter.Convert(parsedValue);
+            => Environment.CharLiteralConverter.Convert(parsedValue);
 
         /// <summary>
         ///     start position
@@ -84,7 +82,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         /// <returns>an item of the string builder pool</returns>
         public PoolItem<StringBuilder> FetchStringBuilder()
-            => environment.StringBuilderPool.Borrow();
+            => Environment.StringBuilderPool.Borrow();
 
         /// <summary>
         ///     append a char
@@ -137,14 +135,14 @@ namespace PasPasPas.Parsing.Tokenizer {
             switch (valueParser) {
 
                 case LiteralParserKind.HexNumbers:
-                    return environment.HexNumberParser.Parse(value);
+                    return Environment.HexNumberParser.Parse(value);
 
                 case LiteralParserKind.IntegerNumbers:
-                    return environment.IntegerParser.Parse(value);
+                    return Environment.IntegerParser.Parse(value);
 
-                default:
-                    throw new InvalidOperationException();
             }
+
+            throw new InvalidOperationException();
         }
 
         /// <summary>
@@ -176,14 +174,14 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="literal">literal value</param>
         /// <returns></returns>
         public ITypeReference ConvertRealLiteral(string literal)
-            => environment.RealLiteralConverter.Convert(literal);
+            => Environment.RealLiteralConverter.Convert(literal);
 
         /// <summary>
         ///     get the buffer content as pooled string
         /// </summary>
         /// <returns></returns>
         public string GetBufferContent()
-            => environment.StringPool.PoolString(buffer);
+            => Environment.StringPool.PoolString(buffer);
 
         /// <summary>
         ///     fetch the next char
@@ -200,14 +198,12 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <summary>
         ///     parsing environment
         /// </summary>
-        public IParserEnvironment Environment
-            => environment;
+        public IParserEnvironment Environment { get; }
 
         /// <summary>
         ///     constant value provider
         /// </summary>
-        public IRuntimeValueFactory Constants
-            => constants;
+        public IRuntimeValueFactory RuntimeValues { get; }
 
         /// <summary>
         ///     move one char backwards

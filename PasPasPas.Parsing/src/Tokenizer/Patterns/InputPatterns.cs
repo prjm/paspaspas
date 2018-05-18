@@ -62,9 +62,8 @@ namespace PasPasPas.Parsing.Tokenizer.Patterns {
                 throw new ArgumentNullException(nameof(tokenValue));
 
             var result = new InputPattern(prefix, tokenValue, string.Empty);
-            var prefixedCharecterClass = prefix as SingleCharClass;
 
-            if (prefixedCharecterClass == null)
+            if (!(prefix is SingleCharClass prefixedCharecterClass))
                 complexPatterns.Add(new InputPatternAndClass(prefix, result));
             else
                 simplePatterns.Add(prefixedCharecterClass.Match, result);
@@ -131,9 +130,8 @@ namespace PasPasPas.Parsing.Tokenizer.Patterns {
         ///     fetch a token for this group
         /// </summary>
         /// <returns></returns>
-        public Token FetchTokenByGroup(TokenizerState state, InputPattern tokenGroup) {
+        public static Token FetchTokenByGroup(TokenizerState state, InputPattern tokenGroup) {
 
-            var position = state.CurrentPosition;
             var len = tokenGroup.Length;
 
             while (state.Length < len && (!state.AtEof)) {

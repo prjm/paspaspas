@@ -131,7 +131,6 @@ namespace PasPasPasTests.Parser {
             return tree;
         }
 
-
         protected ISyntaxPart RunAstTest(string input, ITypedEnvironment env, IList<ILogMessage> messages) {
             var testOptions = new OptionSet(env);
             var api = new ParserApi(env, testOptions);

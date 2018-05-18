@@ -94,7 +94,7 @@ namespace PasPasPas.Parsing.Tokenizer {
                 using (var poolItem = environment.StringBuilderPool.Borrow(out var sb)) {
                     while (tokens.Count > 0)
                         sb.Append(tokens.Dequeue().Value);
-                    prefix = sb.ToString();
+                    prefix = environment.StringPool.PoolString(sb);
                 }
             }
 

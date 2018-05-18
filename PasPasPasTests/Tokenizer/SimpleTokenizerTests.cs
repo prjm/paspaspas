@@ -163,13 +163,5 @@ namespace PasPasPasTests.Tokenizer {
             TokenizerMessageIsGenerated(PasPasPas.Parsing.Tokenizer.Tokenizer.IncompleteString, "#$R");
         }
 
-        [Fact]
-        public void TestPosition() {
-            Assert.AreEqual(0, GetToken(0, "if 1 = 3 then begin").Position);
-            Assert.AreEqual(2, GetToken(1, "if 1 = 3 then begin").Position);
-            Assert.AreEqual(3, GetToken(2, "if #45'X' = 3 then begin //").Position);
-            Assert.AreEqual(9, GetToken(3, "if #45'X' = 3 then begin //").Position);
-        }
-
     }
 }

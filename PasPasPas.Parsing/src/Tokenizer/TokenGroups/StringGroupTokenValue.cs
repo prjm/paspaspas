@@ -65,9 +65,9 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
 
                 ITypeReference data;
                 if (resultBuilder.Item.Length == 1)
-                    data = state.Constants.Chars.ToWideCharValue(resultBuilder.Item[0]);
+                    data = state.RuntimeValues.Chars.ToWideCharValue(resultBuilder.Item[0]);
                 else
-                    data = state.Constants.Strings.ToUnicodeString(state.Environment.StringPool.PoolString(resultBuilder.Item));
+                    data = state.RuntimeValues.Strings.ToUnicodeString(state.Environment.StringPool.PoolString(resultBuilder.Item));
 
                 return new Token(TokenKind.QuotedString, state, data);
             }

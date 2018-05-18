@@ -111,7 +111,7 @@ namespace PasPasPas.Parsing.SyntaxTree {
         }
 
         /// <summary>
-        ///     find all terminals in a syntax gtree
+        ///     find all terminals in a syntax tree
         /// </summary>
         /// <param name="symbol">symbol to search</param>
         /// <returns></returns>
@@ -124,7 +124,7 @@ namespace PasPasPas.Parsing.SyntaxTree {
         }
 
         /// <summary>
-        ///     add an iten
+        ///     add an item
         /// </summary>
         /// <param name="newChildItem"></param>
         public void Add(ISyntaxPart newChildItem) {

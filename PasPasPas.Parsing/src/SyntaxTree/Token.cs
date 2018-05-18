@@ -1,13 +1,14 @@
 ﻿using System;
 using PasPasPas.Parsing.Tokenizer;
 using PasPasPas.Globals.Runtime;
+using PasPasPas.Infrastructure.Utils;
 
 namespace PasPasPas.Parsing.SyntaxTree {
 
     /// <summary>
-    ///     token definition
+    ///     basic structure for a syntax token
     /// </summary>
-    public struct Token : IEquatable<Token> {
+    public readonly struct Token : IEquatable<Token> {
 
         /// <summary>
         ///     empty token
@@ -26,11 +27,6 @@ namespace PasPasPas.Parsing.SyntaxTree {
         public int Kind { get; }
 
         /// <summary>
-        ///     token position
-        /// </summary>
-        public int Position { get; }
-
-        /// <summary>
         ///     parsed token value (if any)
         /// </summary>
         public ITypeReference ParsedValue { get; }
@@ -43,7 +39,6 @@ namespace PasPasPas.Parsing.SyntaxTree {
         /// <param name="parsedValue">parser literal value (optional)</param>
         public Token(int tokenId, TokenizerState state, ITypeReference parsedValue = null) : this() {
             Kind = tokenId;
-            Position = state.StartPosition;
             Value = state.GetBufferContent();
             ParsedValue = parsedValue;
         }
@@ -53,7 +48,7 @@ namespace PasPasPas.Parsing.SyntaxTree {
         /// </summary>
         /// <returns></returns>
         public override string ToString()
-            => $"{Kind}: {Value} [{Position}]";
+            => StringUtils.Invariant($"{Kind}: {Value}");
 
         /// <summary>
         ///     compare to another token
@@ -61,7 +56,45 @@ namespace PasPasPas.Parsing.SyntaxTree {
         /// <param name="other"></param>
         /// <returns></returns>
         public bool Equals(Token other)
-            => (Kind == other.Kind) && (string.Equals(Value, other.Value));
+            => (Kind == other.Kind) && (string.Equals(Value, other.Value, StringComparison.OrdinalIgnoreCase));
+
+        /// <summary>
+        ///     compare tokens
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(object obj) {
+            if (obj is Token token)
+                return Equals(token);
+            return false;
+        }
+
+        /// <summary>
+        ///     compute a hash code
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+            => 17 + 23 * Kind + 11 * Value.GetHashCode();
+
+        /// <summary>
+        ///     compare two tokens
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public static bool operator ==(Token left, Token right) {
+            return left.Equals(right);
+        }
+
+        /// <summary>
+        ///     compare two token
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public static bool operator !=(Token left, Token right) {
+            return !(left == right);
+        }
     }
 
 }

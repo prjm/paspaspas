@@ -8,7 +8,7 @@ using System.Collections.Generic;
 namespace PasPasPas.Parsing.Tokenizer {
 
     /// <summary>
-    ///     base class for tokenizers
+    ///     base class for a tokenizer
     /// </summary>
     public sealed class Tokenizer : ITokenizer, IDisposable {
 
@@ -27,7 +27,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /* {d0a579d0-a634-4cba-9d06-0c69dea69e0b} */
 
         /// <summary>
-        ///     message: unexptected end of token
+        ///     message: unexpected end of token
         /// </summary>
         /// <remarks>
         ///     data: expected-token-end sequence
@@ -87,7 +87,7 @@ namespace PasPasPas.Parsing.Tokenizer {
             => Input.CurrentFile == null;
 
         /// <summary>
-        ///     interalstate
+        ///     internal tokenizer state
         /// </summary>
         private readonly TokenizerState state;
 
@@ -95,7 +95,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         ///     fetch the next token
         /// </summary>
         public void FetchNextToken() {
-            currentToken = characterClasses.FetchNextToken(state);
+            CurrentToken = characterClasses.FetchNextToken(state);
             FinishInput();
         }
 
@@ -114,10 +114,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         ///     get the current token
         /// </summary>
         /// <returns></returns>
-        public Token CurrentToken
-            => currentToken;
-
-        private Token currentToken
+        public Token CurrentToken { get; private set; }
             = Token.Empty;
 
         /// <summary>

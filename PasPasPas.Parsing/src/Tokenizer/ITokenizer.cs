@@ -7,7 +7,7 @@ using PasPasPas.Parsing.SyntaxTree;
 namespace PasPasPas.Parsing.Tokenizer {
 
     /// <summary>
-    ///     interface for classes which tokenize source code
+    ///     interface for a tokenizer
     /// </summary>
     public interface ITokenizer : IDisposable {
 
@@ -40,5 +40,6 @@ namespace PasPasPas.Parsing.Tokenizer {
         ///     log manager
         /// </summary>
         ILogManager Log { get; }
+
     }
 }

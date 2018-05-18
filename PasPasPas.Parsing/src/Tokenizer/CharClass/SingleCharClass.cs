@@ -5,14 +5,12 @@
     /// </summary>
     public sealed class SingleCharClass : CharacterClass {
 
-        private readonly char match;
-
         /// <summary>
         ///     char to match
         /// </summary>
         /// <param name="forValue">char to match</param>
         public SingleCharClass(char forValue)
-            => match = forValue;
+            => Match = forValue;
 
         /// <summary>
         ///     test if the char matches
@@ -20,13 +18,12 @@
         /// <param name="input">char to test</param>
         /// <returns></returns>
         public override bool Matches(char input) =>
-            input == match;
+            input == Match;
 
         /// <summary>
         ///     char to match
         /// </summary>
-        public char Match
-            => match;
+        public char Match { get; }
     }
 
 }
