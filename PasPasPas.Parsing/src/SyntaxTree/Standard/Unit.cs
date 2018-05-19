@@ -4,9 +4,9 @@ using PasPasPas.Parsing.SyntaxTree.Visitors;
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
     /// <summary>
-    ///     pascal unit
+    ///     definition of a unit
     /// </summary>
-    public class Unit : StandardSyntaxTreeBase {
+    public class UnitSymbol : StandardSyntaxTreeBase {
 
         /// <summary>
         ///     hints
@@ -22,7 +22,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     unit head section
         /// </summary>
-        public UnitHead UnitHead { get; set; }
+        public UnitHeadSymbol UnitHead { get; set; }
 
         /// <summary>
         ///     unit implementation section
@@ -46,12 +46,21 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         public IFileReference FilePath { get; set; }
 
         /// <summary>
-        ///     accept visitor
+        ///     dot syntax element
+        /// </summary>
+        public Terminal DotSymbol { get; set; }
+
+        /// <summary>
+        ///     accept a visitor
         /// </summary>
         /// <param name="visitor">visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
-            AcceptParts(this, visitor);
+            AcceptPart(this, UnitHead, visitor);
+            AcceptPart(this, UnitInterface, visitor);
+            AcceptPart(this, UnitImplementation, visitor);
+            AcceptPart(this, UnitBlock, visitor);
+            AcceptPart(this, DotSymbol, visitor);
             visitor.EndVisit(this);
         }
 

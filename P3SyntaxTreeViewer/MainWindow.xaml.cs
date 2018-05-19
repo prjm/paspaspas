@@ -14,8 +14,77 @@ using PasPasPas.Typings.Common;
 using System.Windows.Media;
 using System;
 using PasPasPas.Globals.Types;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace P3SyntaxTreeViewer {
+
+    internal class NodeVisitor : IStartEndVisitor {
+
+        private Stack<TreeViewItem> items = new Stack<TreeViewItem>();
+        private ITypedEnvironment env;
+        private TreeView tv;
+
+        public NodeVisitor(TreeView tv, ITypedEnvironment env) {
+            this.tv = tv;
+            this.env = env;
+        }
+
+
+        public void StartVisit<VisitorType>(VisitorType cst) {
+            var parent = items.Count != 0 ? items.Peek() : null;
+
+            var treeViewItem = new TreeViewItem();
+
+            if (cst is Terminal terminal) {
+                treeViewItem.Header = "'" + terminal.Token.Value + "'";
+            }
+            else {
+                treeViewItem.Header = cst.GetType().Name;
+            }
+
+            if (cst is ISymbolTableEntry symbol)
+                treeViewItem.Header += ": " + symbol.SymbolName;
+
+            if (cst is PasPasPas.Parsing.SyntaxTree.Types.ITypedSyntaxNode typeInfo && typeInfo.TypeInfo != null) {
+
+                var t = env.TypeRegistry.GetTypeByIdOrUndefinedType(typeInfo.TypeInfo.TypeId);
+
+                if (t.TypeId == KnownTypeIds.ErrorType) {
+                    treeViewItem.Header += " [Type Error]";
+                }
+                else {
+                    treeViewItem.Header += " [" + t.ToString() + "]";
+                }
+
+                if (typeInfo.TypeInfo.IsConstant) {
+                    treeViewItem.Header += "* " + typeInfo.TypeInfo.ToString();
+                }
+
+                if (typeInfo.TypeInfo != null && typeInfo.TypeInfo.TypeId == KnownTypeIds.ErrorType)
+                    treeViewItem.Foreground = new SolidColorBrush(Colors.Red);
+
+            }
+
+            if (cst is SymbolReferencePart srp) {
+                treeViewItem.Header += " " + srp.Kind.ToString();
+            }
+
+            if (parent != null) {
+                parent.Items.Add(treeViewItem);
+            }
+            else {
+                tv.Items.Add(treeViewItem);
+            }
+
+            treeViewItem.IsExpanded = true;
+            items.Push(treeViewItem);
+        }
+
+        public void EndVisit<VisitorType>(VisitorType element) {
+            items.Pop();
+        }
+
+    }
 
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -99,7 +168,8 @@ namespace P3SyntaxTreeViewer {
 
         private void DisplayTree(TreeView tv, ITypedEnvironment env, ISyntaxPart cst, Dictionary<int, string> typeNames) {
             tv.Items.Clear();
-            AddNodes(tv, null, env, cst, typeNames);
+            //AddNodes(tv, null, env, cst, typeNames);
+            cst.Accept(new NodeVisitor(tv, env));
         }
 
         private void AddNodes(TreeView tv, TreeViewItem parent, ITypedEnvironment env, ISyntaxPart cst, Dictionary<int, string> typeNames) {

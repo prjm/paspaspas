@@ -197,6 +197,24 @@ namespace PasPasPas.Parsing.SyntaxTree {
             }
         }
 
+
+        /// <summary>
+        ///     visit a child node
+        /// </summary>
+        /// <typeparam name="T">visitor type</typeparam>
+        /// <param name="element"></param>
+        /// <param name="part"></param>
+        /// <param name="visitor"></param>
+        protected static void AcceptPart<T>(T element, ISyntaxPart part, IStartEndVisitor visitor) {
+
+            if (part == null)
+                return;
+
+            var childVisitor = visitor as IChildVisitor;
+            childVisitor?.StartVisitChild<T>(element, part);
+            part.Accept(visitor);
+            childVisitor?.EndVisitChild<T>(element, part);
+        }
         /// <summary>
         ///     accept visitors
         /// </summary>

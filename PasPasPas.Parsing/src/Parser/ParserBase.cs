@@ -437,8 +437,28 @@ namespace PasPasPas.Parsing.Parser {
         ///     continue syntax part
         /// </summary>
         /// <param name="tokenKind"></param>
+        /// <returns></returns>
+        protected Terminal ContinueWith(int tokenKind) {
+            var requiresIdentifier = tokenKind == TokenKind.Identifier;
+
+            if (!Match(tokenKind) &&
+                (!requiresIdentifier ||
+                (requiresIdentifier && !AllowIdentifier()))) {
+                return null;
+            }
+
+            var terminal = new Terminal(tokenizer.CurrentTokenSequence);
+            FetchNextToken();
+            return terminal;
+        }
+
+        /// <summary>
+        ///     continue syntax part
+        /// </summary>
+        /// <param name="tokenKind"></param>
         /// <param name="part"></param>
         /// <returns></returns>
+        [Obsolete("Changed syntax tree")]
         protected bool ContinueWith(IExtendableSyntaxPart part, int tokenKind) {
             var requiresIdentifier = tokenKind == TokenKind.Identifier;
 
@@ -738,7 +758,9 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="parent"></param>
         /// <param name="tokenKind"></param>
         protected void InitByTerminal(IExtendableSyntaxPart result, IExtendableSyntaxPart parent, int tokenKind) {
-            parent.Add(result);
+
+            if (parent != null)
+                parent.Add(result);
 
             if (Match(tokenKind)) {
                 var terminal = new Terminal(tokenizer.CurrentTokenSequence);
@@ -1082,10 +1104,24 @@ namespace PasPasPas.Parsing.Parser {
         /// </summary>
         /// <param name="result"></param>
         /// <param name="tokenKind"></param>
+        [Obsolete]
         protected void ContinueWithOrMissing(IExtendableSyntaxPart result, int tokenKind) {
             if (!ContinueWith(result, tokenKind)) {
                 ErrorMissingToken(tokenKind);
             }
+        }
+
+        /// <summary>
+        ///     continue with a specific token and mark it as missing
+        /// </summary>
+        /// <param name="tokenKind"></param>
+        protected Terminal ContinueWithOrMissing(int tokenKind) {
+            var terminal = ContinueWith(tokenKind);
+
+            if (terminal == null) {
+                ErrorMissingToken(tokenKind);
+            }
+            return terminal;
         }
 
         /// <summary>

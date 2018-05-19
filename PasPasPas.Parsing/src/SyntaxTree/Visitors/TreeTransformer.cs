@@ -16,7 +16,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
     /// </summary>
     public class TreeTransformer :
 
-        IStartVisitor<Unit>, IEndVisitor<Unit>,
+        IStartVisitor<UnitSymbol>, IEndVisitor<UnitSymbol>,
         IStartVisitor<Library>, IEndVisitor<Library>,
         IStartVisitor<Program>, IEndVisitor<Program>,
         IStartVisitor<Package>, IEndVisitor<Package>,
@@ -151,7 +151,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     visit a unit
         /// </summary>
         /// <param name="unit"></param>
-        public void StartVisit(Unit unit) {
+        public void StartVisit(UnitSymbol unit) {
             var result = new CompilationUnit();
             InitNode(result, unit, Project);
             result.FileType = CompilationUnitType.Unit;
@@ -168,7 +168,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     end visiting a compilation unit
         /// </summary>
         /// <param name="unit"></param>
-        public void EndVisit(Unit unit)
+        public void EndVisit(UnitSymbol unit)
             => CurrentUnit = null;
 
         #endregion

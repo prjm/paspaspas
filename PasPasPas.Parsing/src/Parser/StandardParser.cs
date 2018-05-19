@@ -142,15 +142,14 @@ namespace PasPasPas.Parsing.Parser {
 
             var path = Tokenizer.Input.CurrentFile.File;
 
-            if (Match(TokenKind.Library)) {
+            if (Match(TokenKind.Library))
                 return ParseLibrary(path);
-            }
-            else if (Match(TokenKind.Unit)) {
+
+            if (Match(TokenKind.Unit))
                 return ParseUnit(path);
-            }
-            else if (Match(TokenKind.Package)) {
+
+            if (Match(TokenKind.Package))
                 return ParsePackage(path);
-            }
 
             return ParseProgram(path);
         }
@@ -159,24 +158,24 @@ namespace PasPasPas.Parsing.Parser {
         #region ParseUnit
 
         [Rule("Unit", "UnitHead UnitInterface UnitImplementation UnitBlock '.' ")]
-        private Unit ParseUnit(IFileReference path) {
-            var result = new Unit();
-            result.UnitHead = ParseUnitHead(result);
-            result.UnitInterface = ParseUnitInterface(result);
-            result.UnitImplementation = ParseUnitImplementation(result);
-            result.UnitBlock = ParseUnitBlock(result);
-            result.FilePath = path;
-            ContinueWithOrMissing(result, TokenKind.Dot);
-            return result;
+        private UnitSymbol ParseUnit(IFileReference path) {
+            return new UnitSymbol() {
+                UnitHead = ParseUnitHead(),
+                UnitInterface = ParseUnitInterface(),
+                UnitImplementation = ParseUnitImplementation(),
+                UnitBlock = ParseUnitBlock(),
+                DotSymbol = ContinueWithOrMissing(TokenKind.Dot),
+                FilePath = path,
+            };
         }
 
         #endregion
         #region ParseUnitInterface
 
         [Rule("UnitInterface", "'interface' [ UsesClause ] InterfaceDeclaration ")]
-        private UnitInterface ParseUnitInterface(IExtendableSyntaxPart parent) {
+        private UnitInterface ParseUnitInterface() {
             var result = new UnitInterface();
-            InitByTerminal(result, parent, TokenKind.Interface);
+            InitByTerminal(result, null, TokenKind.Interface);
 
             if (Match(TokenKind.Uses)) {
                 result.UsesClause = ParseUsesClause(result);
@@ -190,9 +189,9 @@ namespace PasPasPas.Parsing.Parser {
         #region ParseUnitImplementation
 
         [Rule("UnitImplementation", "'implementation' [ UsesClause ] DeclarationSections", true)]
-        private UnitImplementation ParseUnitImplementation(IExtendableSyntaxPart parent) {
+        private UnitImplementation ParseUnitImplementation() {
             var result = new UnitImplementation();
-            InitByTerminal(result, parent, TokenKind.Implementation);
+            InitByTerminal(result, null, TokenKind.Implementation);
 
             if (Match(TokenKind.Uses)) {
                 result.UsesClause = ParseUsesClause(result);
@@ -486,9 +485,8 @@ namespace PasPasPas.Parsing.Parser {
         #region ParseUnitBlock
 
         [Rule("UnitBlock", "( UnitInitilization 'end' ) | CompoundStatement | 'end' ")]
-        private UnitBlock ParseUnitBlock(IExtendableSyntaxPart parent) {
+        private UnitBlock ParseUnitBlock() {
             var result = new UnitBlock();
-            parent.Add(result);
 
             if (ContinueWith(result, TokenKind.End))
                 return result;
@@ -947,13 +945,13 @@ namespace PasPasPas.Parsing.Parser {
         #region ParseUnitHead
 
         [Rule("UnitHead", "'unit' NamespaceName { Hint } ';' ")]
-        private UnitHead ParseUnitHead(IExtendableSyntaxPart parent) {
-            var result = new UnitHead();
-            InitByTerminal(result, parent, TokenKind.Unit);
-            result.UnitName = ParseNamespaceName(result);
-            result.Hint = ParseHints(result, false);
-            ContinueWithOrMissing(result, TokenKind.Semicolon);
-            return result;
+        private UnitHeadSymbol ParseUnitHead() {
+            return new UnitHeadSymbol {
+                Unit = ContinueWithOrMissing(TokenKind.Unit),
+                UnitName = ParseNamespaceName(null),
+                Hint = ParseHints(null, false),
+                Semicolon = ContinueWithOrMissing(TokenKind.Semicolon)
+            };
         }
 
         #endregion
@@ -1941,7 +1939,9 @@ namespace PasPasPas.Parsing.Parser {
         [Rule("Hints", " { Hint ';' }")]
         private HintingInformationList ParseHints(IExtendableSyntaxPart parent, bool requireSemicolon) {
             var result = new HintingInformationList();
-            parent.Add(result);
+
+            if (parent != null)
+                parent.Add(result);
 
             HintingInformation hint;
             do {
@@ -4260,7 +4260,9 @@ namespace PasPasPas.Parsing.Parser {
 
         private NamespaceName ParseNamespaceName(IExtendableSyntaxPart parent, bool allowIn = false, bool inDesignator = false) {
             var result = new NamespaceName();
-            parent.Add(result);
+
+            if (parent != null)
+                parent.Add(result);
 
             if (!ContinueWith(result, TokenKind.AnsiString, TokenKind.String, TokenKind.WideString, TokenKind.ShortString, TokenKind.UnicodeString))
                 if (!allowIn || !ContinueWith(result, TokenKind.In))
