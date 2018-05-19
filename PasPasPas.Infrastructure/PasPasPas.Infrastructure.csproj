@@ -10,7 +10,7 @@
         <Company>$(PasPasPasCompany)</Company>
         <Copyright>$(PasPasPasCopyright)</Copyright>
         <Product>PasPasPas.Infrastructure</Product>
-        <CodeAnalysisRuleSet>../PasPasPas.ruleset</CodeAnalysisRuleSet>
+        <CodeAnalysisRuleSet>../PasPasPas.Ruleset</CodeAnalysisRuleSet>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

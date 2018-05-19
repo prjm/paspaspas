@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Text;
 using PasPasPas.Infrastructure.Files;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Infrastructure.ObjectPooling;
