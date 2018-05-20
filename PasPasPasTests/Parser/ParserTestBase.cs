@@ -12,13 +12,15 @@ using PasPasPas.Api;
 using PasPasPasTests.Common;
 using PasPasPas.Infrastructure.Files;
 using PasPasPas.Parsing.Parser;
-using System.IO;
 using PasPasPas.Typings.Common;
 using System.Globalization;
+using System.IO;
 
 namespace PasPasPasTests.Parser {
 
     public class ParserTestBase : CommonTest {
+
+        protected const string CstPath = "z.x.pas";
 
         protected string CompactWhitespace(string input) {
             var result = new StringBuilder();
@@ -129,6 +131,36 @@ namespace PasPasPasTests.Parser {
                 Assert.IsTrue(msgs.Where(t => t.MessageID == guid).Any());
 
             return tree;
+        }
+
+        protected T RunEmptyCstTest<T>(Func<StandardParser, T> tester) {
+            var env = CreateEnvironment();
+            var msgs = new List<ILogMessage>();
+            var log = new LogTarget();
+            env.Log.RegisterTarget(log);
+
+            var hasError = false;
+            var errorText = string.Empty;
+
+            log.ProcessMessage += (x, y) => {
+                msgs.Add(y.Message);
+                errorText += y.Message.MessageID.ToString() + Environment.NewLine;
+                hasError = hasError ||
+                y.Message.Severity == MessageSeverity.Error ||
+                y.Message.Severity == MessageSeverity.FatalError;
+            };
+
+            var testOptions = new OptionSet(env);
+            var api = new ParserApi(env, testOptions);
+
+            ClearOptions(testOptions);
+            using (var parser = api.CreateParserForString(CstPath, string.Empty)) {
+                var standard = parser as StandardParser;
+                Assert.IsNotNull(standard);
+                var value = tester(standard);
+                Assert.IsNotNull(value);
+                return value;
+            }
         }
 
         protected ISyntaxPart RunAstTest(string input, ITypedEnvironment env, IList<ILogMessage> messages) {

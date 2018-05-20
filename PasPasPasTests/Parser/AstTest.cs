@@ -10,15 +10,6 @@ namespace PasPasPasTests.Parser {
     /// </summary>
     public class AstTest : ParserTestBase {
 
-        /*
-        [Fact]
-        public void TestMisc() {
-            Func<object, CompilationUnit> u = t => (t as CompilationUnit);
-            RunAstTest("unit z.x; interface type class x implementation end.", t => u(t)?.SymbolName, "z.x",
-                ParserBase.UnexpectedToken);
-        }
-        */
-
         [Fact]
         public void TestUnit() {
             CompilationUnit u(object t) => (t as CompilationUnit);

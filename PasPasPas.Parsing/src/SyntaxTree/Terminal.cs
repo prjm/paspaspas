@@ -18,9 +18,16 @@ namespace PasPasPas.Parsing.SyntaxTree {
         /// </summary>
         /// <param name="baseToken"></param>
         public Terminal(TokenSequence baseToken) {
-            token = baseToken.Value;
-            prefix = baseToken.Prefix;
-            suffix = baseToken.Suffix;
+            if (baseToken == null) {
+                token = Token.Empty;
+                prefix = string.Empty;
+                suffix = string.Empty;
+            }
+            else {
+                token = baseToken.Value;
+                prefix = baseToken.Prefix;
+                suffix = baseToken.Suffix;
+            }
         }
 
         /// <summary>

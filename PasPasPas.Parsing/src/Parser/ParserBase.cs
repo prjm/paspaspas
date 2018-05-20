@@ -1119,7 +1119,7 @@ namespace PasPasPas.Parsing.Parser {
             var terminal = ContinueWith(tokenKind);
 
             if (terminal == null) {
-                ErrorMissingToken(tokenKind);
+                return ErrorMissingToken(tokenKind);
             }
             return terminal;
         }
@@ -1128,8 +1128,10 @@ namespace PasPasPas.Parsing.Parser {
         ///     report a missing token
         /// </summary>
         /// <param name="tokenKind"></param>
-        protected void ErrorMissingToken(int tokenKind)
-            => logSource.Error(MissingToken, tokenKind);
+        protected Terminal ErrorMissingToken(int tokenKind) {
+            logSource.Error(MissingToken, tokenKind);
+            return new Terminal(default);
+        }
 
         /// <summary>
         ///     continue with a specific token and mark it as missing

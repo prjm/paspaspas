@@ -65,7 +65,7 @@ namespace PasPasPas.Infrastructure.Files {
         public override bool Equals(object obj) {
             var other = obj as IFileReference;
 
-            if (ReferenceEquals(other, null))
+            if (other is null)
                 return false;
 
             return string.Equals(Path, other.Path, StringComparison.OrdinalIgnoreCase);

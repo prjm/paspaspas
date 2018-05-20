@@ -157,8 +157,14 @@ namespace PasPasPas.Parsing.Parser {
         #endregion
         #region ParseUnit
 
+        /// <summary>
+        ///     parse a unit declaration
+        /// </summary>
+        /// <param name="path">unit path</param>
+        /// <returns>parsed unit</returns>
+
         [Rule("Unit", "UnitHead UnitInterface UnitImplementation UnitBlock '.' ")]
-        private UnitSymbol ParseUnit(IFileReference path) {
+        public UnitSymbol ParseUnit(IFileReference path) {
             return new UnitSymbol() {
                 UnitHead = ParseUnitHead(),
                 UnitInterface = ParseUnitInterface(),
