@@ -32,7 +32,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     unit interface
         /// </summary>
-        public UnitInterface UnitInterface { get; set; }
+        public UnitInterfaceSymbol UnitInterface { get; set; }
 
         /// <summary>
         ///     unit name

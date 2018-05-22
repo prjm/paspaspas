@@ -10,7 +10,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     array type
         /// </summary>
-        public ArrayType ArrayType { get; set; }
+        public ArrayTypeSymbol ArrayType { get; set; }
 
         /// <summary>
         ///     class type declaration

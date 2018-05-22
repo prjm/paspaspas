@@ -20,7 +20,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         IStartVisitor<LibrarySymbol>, IEndVisitor<LibrarySymbol>,
         IStartVisitor<Program>, IEndVisitor<Program>,
         IStartVisitor<Package>, IEndVisitor<Package>,
-        IStartVisitor<UnitInterface>, IEndVisitor<UnitInterface>,
+        IStartVisitor<UnitInterfaceSymbol>, IEndVisitor<UnitInterfaceSymbol>,
         IStartVisitor<UnitImplementation>, IEndVisitor<UnitImplementation>,
         IStartVisitor<ConstSection>, IEndVisitor<ConstSection>,
         IStartVisitor<TypeSection>, IEndVisitor<TypeSection>,
@@ -41,7 +41,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         IStartVisitor<PackageRequires>, IEndVisitor<PackageRequires>,
         IStartVisitor<PackageContains>, IEndVisitor<PackageContains>,
         IStartVisitor<StructType>, IEndVisitor<StructType>,
-        IStartVisitor<ArrayType>,
+        IStartVisitor<ArrayTypeSymbol>,
         IStartVisitor<SetDefinition>,
         IStartVisitor<FileType>,
         IStartVisitor<ClassOfDeclaration>,
@@ -49,7 +49,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         IStartVisitor<SimpleType>,
         IStartVisitor<EnumTypeDefinition>,
         IStartVisitor<EnumValue>,
-        IStartVisitor<ArrayIndex>,
+        IStartVisitor<ArrayIndexSymbol>,
         IStartVisitor<PointerType>,
         IStartVisitor<StringType>,
         IStartVisitor<ProcedureTypeDefinition>,
@@ -264,7 +264,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     start visiting an unit interface
         /// </summary>
         /// <param name="unitInterface"></param>
-        public void StartVisit(UnitInterface unitInterface) {
+        public void StartVisit(UnitInterfaceSymbol unitInterface) {
             CurrentUnitMode[CurrentUnit] = UnitMode.Interface;
             CurrentUnit.Symbols = CurrentUnit.InterfaceSymbols;
             AddToStack(unitInterface, CurrentUnit.InterfaceSymbols);
@@ -274,7 +274,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     finish an interface
         /// </summary>
         /// <param name="unitInterface"></param>
-        public void EndVisit(UnitInterface unitInterface) {
+        public void EndVisit(UnitInterfaceSymbol unitInterface) {
             CurrentUnitMode.Reset(CurrentUnit);
             CurrentUnit.Symbols = null;
         }
@@ -828,7 +828,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///    visit an array type declaration
         /// </summary>
         /// <param name="array"></param>
-        public void StartVisit(ArrayType array) {
+        public void StartVisit(ArrayTypeSymbol array) {
             var target = LastTypeDeclaration;
             var value = new ArrayTypeDeclaration();
             InitNode(value, array);
@@ -1020,7 +1020,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     start visit an array index
         /// </summary>
         /// <param name="arrayIndex"></param>
-        public void StartVisit(ArrayIndex arrayIndex) {
+        public void StartVisit(ArrayIndexSymbol arrayIndex) {
             if (arrayIndex.EndIndex != null) {
                 var lastExpression = LastExpression;
                 var binOp = new BinaryOperator();
@@ -3115,7 +3115,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         private static SymbolHints ExtractHints(HintingInformationList hints) {
             var result = new SymbolHints();
 
-            if (hints == null || hints.PartList.Count < 1)
+            if (hints == null || hints.PartList == null || hints.PartList.Count < 1)
                 return null;
 
             foreach (var part in hints.Parts) {

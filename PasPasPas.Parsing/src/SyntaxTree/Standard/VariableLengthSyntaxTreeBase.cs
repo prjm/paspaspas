@@ -29,7 +29,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     count the length of the items
         /// </summary>
-        public int Length {
+        protected int ItemLength {
             get {
                 var result = 0;
                 for (var i = 0; items != null && i < items.Count; i++)

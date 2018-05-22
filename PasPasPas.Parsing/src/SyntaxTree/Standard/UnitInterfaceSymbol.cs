@@ -1,11 +1,12 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Visitors;
+﻿using PasPasPas.Parsing.SyntaxTree.Utils;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
     /// <summary>
     ///     interface part of a unit
     /// </summary>
-    public class UnitInterface : StandardSyntaxTreeBase {
+    public class UnitInterfaceSymbol : StandardSyntaxTreeBase {
 
         /// <summary>
         ///     interface declaration
@@ -15,13 +16,18 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     uses clause
         /// </summary>
-        public UsesClause UsesClause { get; set; }
+        public ISyntaxPart UsesClause { get; set; }
 
         /// <summary>
         ///     symbol length
         /// </summary>
         public int Length
-            => 0;
+            => InterfaceSymbol.Length + UsesClause.Length + InterfaceDeclaration.Length;
+
+        /// <summary>
+        ///     interface symbol
+        /// </summary>
+        public Terminal InterfaceSymbol { get; set; }
 
         /// <summary>
         ///     accept visitor
@@ -29,7 +35,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="visitor">visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
-            AcceptParts(this, visitor);
+            AcceptPart(this, InterfaceSymbol, visitor);
+            AcceptPart(this, UsesClause, visitor);
+            AcceptPart(this, InterfaceDeclaration, visitor);
             visitor.EndVisit(this);
         }
 

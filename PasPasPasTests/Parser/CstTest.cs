@@ -114,6 +114,37 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(0, s.Length);
         }
 
+        [TestCase]
+        public void TestArrayIndex() {
+            var s = RunEmptyCstTest(p => p.ParseArrayIndex());
+            Assert.IsNotNull(s.StartIndex);
+            Assert.IsNotNull(s.DotDot);
+            Assert.IsNotNull(s.EndIndex);
+            Assert.IsNotNull(s.Comma);
+            Assert.AreEqual(0, s.Length);
+        }
+
+        [TestCase]
+        public void TestArrayType() {
+            var s = RunEmptyCstTest(p => p.ParseArrayType());
+            Assert.IsNotNull(s.Array);
+            Assert.IsNotNull(s.OpenBraces);
+            Assert.IsNotNull(s.CloseBraces);
+            Assert.IsNotNull(s.OfSymbol);
+            Assert.IsNotNull(s.ConstSymbol);
+            Assert.IsNotNull(s.TypeSpecification);
+            Assert.AreEqual(0, s.Length);
+        }
+
+
+        [TestCase]
+        public void TestInterfaceSection() {
+            var s = RunEmptyCstTest(p => p.ParseUnitInterface());
+            Assert.IsNotNull(s.InterfaceSymbol);
+            Assert.IsNotNull(s.UsesClause);
+            Assert.IsNotNull(s.InterfaceDeclaration);
+            Assert.AreEqual(0, s.Length);
+        }
 
         [TestCase]
         public void TestUnit() {

@@ -178,17 +178,18 @@ namespace PasPasPas.Parsing.Parser {
         #endregion
         #region ParseUnitInterface
 
+        /// <summary>
+        ///     parse a unit interface
+        /// </summary>
+        /// <returns></returns>
+
         [Rule("UnitInterface", "'interface' [ UsesClause ] InterfaceDeclaration ")]
-        private UnitInterface ParseUnitInterface() {
-            var result = new UnitInterface();
-            InitByTerminal(result, null, TokenKind.Interface);
-
-            if (Match(TokenKind.Uses)) {
-                result.UsesClause = ParseUsesClause(result);
-            }
-
-            result.InterfaceDeclaration = ParseInterfaceDeclaration(result);
-            return result;
+        public UnitInterfaceSymbol ParseUnitInterface() {
+            return new UnitInterfaceSymbol() {
+                InterfaceSymbol = ContinueWithOrMissing(TokenKind.Interface),
+                UsesClause = Match(TokenKind.Uses) ? (ISyntaxPart)ParseUsesClause(null) : EmptyTerminal(),
+                InterfaceDeclaration = ParseInterfaceDeclaration(null)
+            };
         }
 
         #endregion
@@ -267,7 +268,9 @@ namespace PasPasPas.Parsing.Parser {
         [Rule("InterfaceDeclaration", "{ InterfaceDeclarationItem }")]
         private InterfaceDeclaration ParseInterfaceDeclaration(IExtendableSyntaxPart parent) {
             var result = new InterfaceDeclaration();
-            parent.Add(result);
+
+            if (parent != null)
+                parent.Add(result);
 
             SyntaxPartBase item;
 
@@ -2341,7 +2344,7 @@ namespace PasPasPas.Parsing.Parser {
             parent.Add(result);
 
             if (Match(TokenKind.Array)) {
-                result.ArrayType = ParseArrayType(result);
+                result.ArrayType = ParseArrayType();
                 return result;
             }
 
@@ -3683,28 +3686,40 @@ namespace PasPasPas.Parsing.Parser {
         #endregion
         #region ParseArrayType
 
+        /// <summary>
+        ///     parse an array type
+        /// </summary>
+        /// <returns></returns>
+
         [Rule("ArrayType", " 'array' [ '[' ArrayIndex { ',' ArrayIndex } ']']  'of' ( 'const' | TypeDefinition ) ")]
-        private ArrayType ParseArrayType(IExtendableSyntaxPart parent) {
-            var result = new ArrayType();
-            InitByTerminal(result, parent, TokenKind.Array);
+        public ArrayTypeSymbol ParseArrayType() {
+            var result = new ArrayTypeSymbol() {
+                Array = ContinueWithOrMissing(TokenKind.Array),
+                OpenBraces = ContinueWith(TokenKind.OpenBraces)
+            };
 
-            if (ContinueWith(result, TokenKind.OpenBraces)) {
-
-                do {
-                    ParseArrayIndex(result);
-                } while (ContinueWith(result, TokenKind.Comma));
-
-                ContinueWithOrMissing(result, TokenKind.CloseBraces);
-            }
-
-            ContinueWithOrMissing(result, TokenKind.Of);
-
-            if (ContinueWith(result, TokenKind.Const)) {
-                result.ArrayOfConst = true;
+            if (result.OpenBraces == null) {
+                result.OpenBraces = EmptyTerminal();
+                result.CloseBraces = EmptyTerminal();
             }
             else {
-                result.TypeSpecification = ParseTypeSpecification(result);
+                var index = default(ArrayIndexSymbol);
+                do {
+                    index = ParseArrayIndex();
+                    index.Comma = ContinueWith(TokenKind.Comma) ?? index.Comma;
+                    result.AddItem(index);
+                } while (index.Comma.Kind == TokenKind.Comma);
+
+                result.CloseBraces = ContinueWithOrMissing(TokenKind.CloseBraces);
             }
+
+            result.OfSymbol = ContinueWithOrMissing(TokenKind.Of);
+            result.ConstSymbol = ContinueWith(TokenKind.Const) ?? EmptyTerminal();
+
+            if (!result.ArrayOfConst)
+                result.TypeSpecification = ParseTypeSpecification(result);
+            else
+                result.TypeSpecification = EmptyTerminal();
 
             return result;
         }
@@ -3712,15 +3727,25 @@ namespace PasPasPas.Parsing.Parser {
         #endregion
         #region ParseArrayIndex
 
-        [Rule("ArrayIndex", "ConstantExpression [ '..' ConstantExpression ] ")]
-        private ArrayIndex ParseArrayIndex(IExtendableSyntaxPart parent) {
-            var result = new ArrayIndex();
-            parent.Add(result);
+        /// <summary>
+        ///     parse an array index
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <returns></returns>
 
-            result.StartIndex = ParseConstantExpression(result);
-            if (ContinueWith(result, TokenKind.DotDot)) {
-                result.EndIndex = ParseConstantExpression(result);
-            }
+        [Rule("ArrayIndex", "ConstantExpression [ '..' ConstantExpression ] ")]
+        public ArrayIndexSymbol ParseArrayIndex() {
+            var result = new ArrayIndexSymbol() {
+                StartIndex = ParseConstantExpression(null),
+                DotDot = ContinueWith(TokenKind.DotDot) ?? EmptyTerminal(),
+                Comma = EmptyTerminal()
+            };
+
+            if (result.DotDot.Kind == TokenKind.DotDot)
+                result.EndIndex = ParseConstantExpression(null);
+            else
+                result.EndIndex = EmptyTerminal();
+
             return result;
         }
 
@@ -3831,7 +3856,9 @@ namespace PasPasPas.Parsing.Parser {
         [Rule("ConstantExpression", " '(' ( RecordConstant | ConstantExpression ) ')' | Expression")]
         private ConstantExpression ParseConstantExpression(IExtendableSyntaxPart parent, bool fromDesignator = false, bool fromTypeConstExpression = false) {
             var result = new ConstantExpression();
-            parent.Add(result);
+
+            if (parent != null)
+                parent.Add(result);
 
             if (Match(TokenKind.OpenParen)) {
 
