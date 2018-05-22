@@ -12,7 +12,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         ///     hints
         /// </summary>
         public HintingInformationList Hints
-            => UnitHead?.Hint;
+            => (UnitHead?.Hint) as HintingInformationList;
 
         /// <summary>
         ///     unit block
@@ -49,6 +49,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         ///     dot syntax element
         /// </summary>
         public Terminal DotSymbol { get; set; }
+
+        /// <summary>
+        ///     symbol length
+        /// </summary>
+        public object Length
+            => UnitHead.Length + UnitInterface.Length + UnitImplementation.Length + UnitBlock.Length + DotSymbol.Length;
 
         /// <summary>
         ///     accept a visitor

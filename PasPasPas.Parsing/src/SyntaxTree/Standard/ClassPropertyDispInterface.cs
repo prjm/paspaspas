@@ -10,7 +10,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     Disp id directive
         /// </summary>
-        public DispIdDirective DispId { get; set; }
+        public DispIdSymbol DispId { get; set; }
 
         /// <summary>
         ///     readonly

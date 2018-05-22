@@ -3,19 +3,25 @@
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
     /// <summary>
-    ///     program header
+    ///     overload directive
     /// </summary>
-    public class ProgramHead : StandardSyntaxTreeBase {
+    public class OverloadSymbol : StandardSyntaxTreeBase {
 
         /// <summary>
-        ///     name of the program
+        ///     directive
         /// </summary>
-        public NamespaceName Name { get; set; }
+        public Terminal Directive { get; set; }
 
         /// <summary>
-        ///     program parameters
+        ///     semicolon
         /// </summary>
-        public ProgramParameterList Parameters { get; set; }
+        public Terminal Semicolon { get; set; }
+
+        /// <summary>
+        ///     symbol length
+        /// </summary>
+        public object Length
+            => Directive.Length + Semicolon.Length;
 
         /// <summary>
         ///     accept visitor
@@ -23,10 +29,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="visitor">visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
-            AcceptParts(this, visitor);
+            AcceptPart(this, Directive, visitor);
+            AcceptPart(this, Semicolon, visitor);
             visitor.EndVisit(this);
         }
-
 
     }
 }

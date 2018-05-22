@@ -367,25 +367,23 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("FunctionDirective", "OverloadDirective | InlineDirective | CallConvention | OldCallConvention | Hint | ExternalDirective | UnsafeDirective")]
         private SyntaxPartBase ParseFunctionDirective(IExtendableSyntaxPart parent) {
-            if (Match(TokenKind.Overload)) {
-                return ParseOverloadDirective(parent);
-            }
 
-            if (Match(TokenKind.Inline, TokenKind.Assembler)) {
-                return ParseInlineDirective(parent);
-            }
+            if (Match(TokenKind.Overload))
+                return ParseOverloadDirective();
 
-            if (Match(TokenKind.Cdecl, TokenKind.Pascal, TokenKind.Register, TokenKind.Safecall, TokenKind.Stdcall, TokenKind.Export)) {
-                return ParseCallConvention(parent);
-            }
+            if (Match(TokenKind.Inline, TokenKind.Assembler))
+                return ParseInlineDirective();
+
+            if (Match(TokenKind.Cdecl, TokenKind.Pascal, TokenKind.Register, TokenKind.Safecall, TokenKind.Stdcall, TokenKind.Export))
+                return ParseCallConvention();
 
             if (Match(TokenKind.Far, TokenKind.Local, TokenKind.Near)) {
                 return ParseOldCallConvention(parent);
             }
 
             if (Match(TokenKind.Deprecated, TokenKind.Library, TokenKind.Experimental, TokenKind.Platform)) {
-                var result = ParseHint(parent);
-                ContinueWithOrMissing(result, TokenKind.Semicolon);
+                var result = ParseHint();
+                result.Semicolon = ContinueWithOrMissing(TokenKind.Semicolon);
                 return result;
             }
 
@@ -478,7 +476,7 @@ namespace PasPasPas.Parsing.Parser {
         #endregion
         #region ParseOldCallConvention
 
-        [Rule("OrdCallConvention", "'Near' | 'Far' | 'Local'")]
+        [Rule("OldCallConvention", "'Near' | 'Far' | 'Local'")]
         private SyntaxPartBase ParseOldCallConvention(IExtendableSyntaxPart parent) {
             var result = new OldCallConvention();
             InitByTerminal(result, parent, TokenKind.Near, TokenKind.Far, TokenKind.Local);
@@ -1033,63 +1031,78 @@ namespace PasPasPas.Parsing.Parser {
         #endregion
         #region ParseLibrary
 
+        /// <summary>
+        ///     parse a library declaration
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+
         [Rule("Library", "LibraryHead [UsesFileClause] Block '.' ")]
-        private Library ParseLibrary(IFileReference path) {
-            var result = new Library();
-            result.LibraryHead = ParseLibraryHead(result);
-
-            if (Match(TokenKind.Uses))
-                result.Uses = ParseUsesFileClause(result);
-
-            result.FilePath = path;
-            result.MainBlock = ParseBlock(result);
-            ContinueWithOrMissing(result, TokenKind.Dot);
-            return result;
+        public LibrarySymbol ParseLibrary(IFileReference path) {
+            return new LibrarySymbol() {
+                LibraryHead = ParseLibraryHead(),
+                Uses = Match(TokenKind.Uses) ? (ISyntaxPart)ParseUsesFileClause(null) : EmptyTerminal(),
+                MainBlock = ParseBlock(null),
+                Dot = ContinueWithOrMissing(TokenKind.Dot),
+                FilePath = path
+            };
         }
 
         #endregion
         #region ParseLibraryHead
 
+        /// <summary>
+        ///     parse a library head
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <returns></returns>
+
         [Rule("LibraryHead", "'library' NamespaceName Hints ';'")]
-        private LibraryHead ParseLibraryHead(IExtendableSyntaxPart parent) {
-            var result = new LibraryHead();
-            InitByTerminal(result, parent, TokenKind.Library);
-            result.LibraryName = ParseNamespaceName(result);
-            result.Hints = ParseHints(result, false);
-            ContinueWithOrMissing(result, TokenKind.Semicolon);
-            return result;
+        public LibraryHeadSymbol ParseLibraryHead() {
+            return new LibraryHeadSymbol() {
+                LibrarySymbol = ContinueWithOrMissing(TokenKind.Library),
+                LibraryName = ParseNamespaceName(null),
+                Hints = ParseHints(null, false),
+                Semicolon = ContinueWithOrMissing(TokenKind.Semicolon)
+            };
         }
 
         #endregion
         #region ParseProgram
 
+        /// <summary>
+        ///     parse a program definition
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+
         [Rule("Program", "[ProgramHead] [UsesFileClause] Block '.'")]
-        private Program ParseProgram(IFileReference path) {
-            var result = new Program();
-
-            if (Match(TokenKind.Program))
-                result.ProgramHead = ParseProgramHead(result);
-
-            if (Match(TokenKind.Uses))
-                result.Uses = ParseUsesFileClause(result);
-
-            result.FilePath = path;
-            result.MainBlock = ParseBlock(result);
-            ContinueWithOrMissing(result, TokenKind.Dot);
-            return result;
+        public Program ParseProgram(IFileReference path) {
+            return new Program() {
+                ProgramHead = Match(TokenKind.Program) ? ParseProgramHead() as ISyntaxPart : EmptyTerminal(),
+                Uses = Match(TokenKind.Uses) ? ParseUsesFileClause(null) as ISyntaxPart : EmptyTerminal(),
+                MainBlock = ParseBlock(null),
+                Dot = ContinueWithOrMissing(TokenKind.Dot),
+                FilePath = path
+            };
         }
 
         #endregion
         #region ParseProgramHead
 
+        /// <summary>
+        ///     parse a program head
+        /// </summary>
+        /// <returns></returns>
+
         [Rule("ProgramHead", "'program' NamespaceName [ProgramParams] ';'")]
-        private ProgramHead ParseProgramHead(IExtendableSyntaxPart parent) {
-            var result = new ProgramHead();
-            InitByTerminal(result, parent, TokenKind.Program);
-            result.Name = ParseNamespaceName(result);
-            result.Parameters = ParseProgramParams(result);
-            ContinueWithOrMissing(result, TokenKind.Semicolon);
-            return result;
+        public ProgramHeadSymbol ParseProgramHead() {
+            return new ProgramHeadSymbol() {
+                ProgramSymbol = ContinueWithOrMissing(TokenKind.Program),
+                Name = ParseNamespaceName(null),
+                Parameters = ParseProgramParams(null),
+                Semicolon = ContinueWithOrMissing(TokenKind.Semicolon)
+            };
         }
 
         #endregion
@@ -1098,7 +1111,9 @@ namespace PasPasPas.Parsing.Parser {
         [Rule("ProgramParams", "'(' [ Identifier { ',' Identifier } ] ')'")]
         private ProgramParameterList ParseProgramParams(IExtendableSyntaxPart parent) {
             var result = new ProgramParameterList();
-            parent.Add(result);
+
+            if (parent != null)
+                parent.Add(result);
 
             if (ContinueWith(result, TokenKind.OpenParen)) {
 
@@ -1121,7 +1136,8 @@ namespace PasPasPas.Parsing.Parser {
         [Rule("Block", "DeclarationSections [ BlockBody ] ")]
         private Block ParseBlock(IExtendableSyntaxPart parent) {
             var result = new Block();
-            parent.Add(result);
+            if (parent != null)
+                parent.Add(result);
             result.DeclarationSections = ParseDeclarationSections(result);
             if (Match(TokenKind.Asm, TokenKind.Begin)) {
                 result.Body = ParseBlockBody(result);
@@ -1583,39 +1599,32 @@ namespace PasPasPas.Parsing.Parser {
         [Rule("MethodDirective", "ReintroduceDirective | OverloadDirective | InlineDirective | BindingDirective | AbstractDirective | InlineDirective | CallConvention | HintingDirective | DispIdDirective")]
         private SyntaxPartBase ParseMethodDirective(IExtendableSyntaxPart parent) {
 
-            if (Match(TokenKind.Reintroduce)) {
-                return ParseReintroduceDirective(parent);
-            }
+            if (Match(TokenKind.Reintroduce))
+                return ParseReintroduceDirective();
 
-            if (Match(TokenKind.Overload)) {
-                return ParseOverloadDirective(parent);
-            }
+            if (Match(TokenKind.Overload))
+                return ParseOverloadDirective();
 
-            if (Match(TokenKind.Inline, TokenKind.Assembler)) {
-                return ParseInlineDirective(parent);
-            }
+            if (Match(TokenKind.Inline, TokenKind.Assembler))
+                return ParseInlineDirective();
 
-            if (Match(TokenKind.Message, TokenKind.Static, TokenKind.Dynamic, TokenKind.Override, TokenKind.Virtual)) {
-                return ParseBindingDirective(parent);
-            }
+            if (Match(TokenKind.Message, TokenKind.Static, TokenKind.Dynamic, TokenKind.Override, TokenKind.Virtual))
+                return ParseBindingDirective();
 
-            if (Match(TokenKind.Abstract, TokenKind.Final)) {
-                return ParseAbstractDirective(parent);
-            }
+            if (Match(TokenKind.Abstract, TokenKind.Final))
+                return ParseAbstractDirective();
 
-            if (Match(TokenKind.Cdecl, TokenKind.Pascal, TokenKind.Register, TokenKind.Safecall, TokenKind.Stdcall, TokenKind.Export)) {
-                return ParseCallConvention(parent);
-            }
+            if (Match(TokenKind.Cdecl, TokenKind.Pascal, TokenKind.Register, TokenKind.Safecall, TokenKind.Stdcall, TokenKind.Export))
+                return ParseCallConvention();
 
             if (Match(TokenKind.Deprecated, TokenKind.Library, TokenKind.Experimental, TokenKind.Platform)) {
-                var result = ParseHint(parent);
-                ContinueWithOrMissing(result, TokenKind.Semicolon);
+                var result = ParseHint();
+                result.Semicolon = ContinueWithOrMissing(TokenKind.Semicolon);
                 return result;
             }
 
-            if (Match(TokenKind.DispId)) {
-                return ParseDispIdDirective(parent);
-            }
+            if (Match(TokenKind.DispId))
+                return ParseDispIdDirective();
 
             return null;
         }
@@ -1623,74 +1632,104 @@ namespace PasPasPas.Parsing.Parser {
         #endregion
         #region ParseInlineDirective
 
+        /// <summary>
+        ///     parse an inline function directive
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <returns></returns>
+
         [Rule("InlineDirective", "('inline' | 'assembler' ) ';'")]
-        private SyntaxPartBase ParseInlineDirective(IExtendableSyntaxPart parent) {
-            var result = new InlineDirective();
-            InitByTerminal(result, parent, TokenKind.Inline, TokenKind.Assembler);
-            result.Kind = result.LastTerminalKind;
-            ContinueWithOrMissing(result, TokenKind.Semicolon);
-            return result;
+        public InlineSymbol ParseInlineDirective() {
+            return new InlineSymbol() {
+                Directive = ContinueWithOrMissing(TokenKind.Inline, TokenKind.Assembler),
+                Semicolon = ContinueWithOrMissing(TokenKind.Semicolon)
+            };
         }
 
         #endregion
         #region ParseCallConvention
 
+        /// <summary>
+        ///     parse a calling convention
+        /// </summary>
+        /// <returns></returns>
+
         [Rule("CallConvention", "('cdecl' | 'pascal' | 'register' | 'safecall' | 'stdcall' | 'export') ';' ")]
-        private SyntaxPartBase ParseCallConvention(IExtendableSyntaxPart parent) {
-            var result = new CallConvention();
-            InitByTerminal(result, parent, TokenKind.Cdecl, TokenKind.Pascal, TokenKind.Register, TokenKind.Safecall, TokenKind.Stdcall, TokenKind.Export);
-            result.Kind = result.LastTerminalKind;
-            ContinueWithOrMissing(result, TokenKind.Semicolon);
-            return result;
+        public CallConventionSymbol ParseCallConvention() {
+            return new CallConventionSymbol() {
+                Directive = ContinueWithOrMissing(TokenKind.Cdecl, TokenKind.Pascal, TokenKind.Register, TokenKind.Safecall, TokenKind.Stdcall, TokenKind.Export),
+                Semicolon = ContinueWithOrMissing(TokenKind.Semicolon)
+            };
         }
 
         #endregion
         #region ParseAbstractDirective
 
+        /// <summary>
+        ///     parse an abstract directive
+        /// </summary>
+        /// <returns></returns>
+
         [Rule("AbstractDirective", "('abstract' | 'final' ) ';' ")]
-        private SyntaxPartBase ParseAbstractDirective(IExtendableSyntaxPart parent) {
-            var result = new AbstractDirective();
-            InitByTerminal(result, parent, TokenKind.Abstract, TokenKind.Final);
-            result.Kind = result.LastTerminalKind;
-            ContinueWithOrMissing(result, TokenKind.Semicolon);
-            return result;
+        public AbstractSymbol ParseAbstractDirective() {
+            return new AbstractSymbol() {
+                Directive = ContinueWithOrMissing(TokenKind.Abstract, TokenKind.Final),
+                Semicolon = ContinueWithOrMissing(TokenKind.Semicolon)
+            };
         }
 
         #endregion
         #region ParseBindingDirective
 
+        /// <summary>
+        ///     parse a binding directive
+        /// </summary>
+        /// <returns></returns>
+
         [Rule("BindingDirective", " ('message' Expression ) | 'static' | 'dynamic' | 'override' | 'virtual' ")]
-        private SyntaxPartBase ParseBindingDirective(IExtendableSyntaxPart parent) {
-            var result = new BindingDirective();
-            InitByTerminal(result, parent, TokenKind.Message, TokenKind.Static, TokenKind.Dynamic, TokenKind.Override, TokenKind.Virtual);
-            result.Kind = result.LastTerminalKind;
-            if (result.Kind == TokenKind.Message) {
-                result.MessageExpression = ParseExpression(result);
-            }
-            ContinueWithOrMissing(result, TokenKind.Semicolon);
-            return result;
+        public BindingSymbol ParseBindingDirective() {
+            var directive = ContinueWithOrMissing(TokenKind.Message, TokenKind.Static, TokenKind.Dynamic, TokenKind.Override, TokenKind.Virtual);
+            return new BindingSymbol() {
+                Directive = directive,
+
+                MessageExpression = directive.Kind == TokenKind.Message ?
+                    (SyntaxPartBase)ParseExpression(null) :
+                    EmptyTerminal(),
+
+                Semicolon = ContinueWithOrMissing(TokenKind.Semicolon),
+            };
         }
 
         #endregion
         #region ParseOverloadDirective
 
+        /// <summary>
+        ///     parse an overload directive
+        /// </summary>
+        /// <returns></returns>
+
         [Rule("OverloadDirective", "'overload' ';' ")]
-        private SyntaxPartBase ParseOverloadDirective(IExtendableSyntaxPart parent) {
-            var result = new OverloadDirective();
-            InitByTerminal(result, parent, TokenKind.Overload);
-            ContinueWithOrMissing(result, TokenKind.Semicolon);
-            return result;
+        public OverloadSymbol ParseOverloadDirective() {
+            return new OverloadSymbol() {
+                Directive = ContinueWithOrMissing(TokenKind.Overload),
+                Semicolon = ContinueWithOrMissing(TokenKind.Semicolon)
+            };
         }
 
         #endregion
         #region ParseReintroduceDirective
 
+        /// <summary>
+        ///     parse a reintroduce directive
+        /// </summary>
+        /// <returns></returns>
+
         [Rule("ReintroduceDirective", "'reintroduce' ';' ")]
-        private SyntaxPartBase ParseReintroduceDirective(IExtendableSyntaxPart parent) {
-            var result = new ReintroduceDirective();
-            InitByTerminal(result, parent, TokenKind.Reintroduce);
-            ContinueWithOrMissing(result, TokenKind.Semicolon);
-            return result;
+        public ReintroduceSymbol ParseReintroduceDirective() {
+            return new ReintroduceSymbol() {
+                Directive = ContinueWithOrMissing(TokenKind.Reintroduce),
+                Semicolon = ContinueWithOrMissing(TokenKind.Semicolon)
+            };
         }
 
         #endregion
@@ -1942,50 +1981,80 @@ namespace PasPasPas.Parsing.Parser {
         #endregion
         #region ParseHints
 
+        /// <summary>
+        ///     parse hints
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="requireSemicolon"></param>
+        /// <returns></returns>
+
         [Rule("Hints", " { Hint ';' }")]
-        private HintingInformationList ParseHints(IExtendableSyntaxPart parent, bool requireSemicolon) {
-            var result = new HintingInformationList();
+        public ISyntaxPart ParseHints(IExtendableSyntaxPart parent, bool requireSemicolon) {
+            var result = default(HintingInformationList);
 
-            if (parent != null)
-                parent.Add(result);
-
-            HintingInformation hint;
+            HintSymbol hint;
             do {
-                hint = ParseHint(result);
+                hint = ParseHint();
                 if (hint != null && requireSemicolon) {
-                    ContinueWithOrMissing(result, TokenKind.Semicolon);
+                    hint.Semicolon = ContinueWithOrMissing(TokenKind.Semicolon);
                 }
+                else if (hint != null) {
+                    hint.Semicolon = EmptyTerminal();
+                }
+
+                if (hint != null) {
+                    if (result == null)
+                        result = new HintingInformationList();
+                    result.AddItem(hint);
+                }
+
             } while (hint != null);
 
-            return result;
+            return (ISyntaxPart)result ?? EmptyTerminal();
         }
 
         #endregion
         #region ParseHint
-        [Rule("Hint", " ('deprecated' [QuotedString] | 'experimental' | 'platform' | 'library' ) ")]
-        private HintingInformation ParseHint(IExtendableSyntaxPart parent) {
-            var result = new HintingInformation();
-            parent.Add(result);
 
-            if (ContinueWith(result, TokenKind.Deprecated)) {
+        /// <summary>
+        ///     parse a hint symbol
+        /// </summary>
+        /// <returns></returns>
+
+        [Rule("Hint", " ('deprecated' [QuotedString] | 'experimental' | 'platform' | 'library' ) ")]
+        public HintSymbol ParseHint() {
+            var result = new HintSymbol {
+                Symbol = ContinueWith(TokenKind.Deprecated),
+                Semicolon = EmptyTerminal()
+            };
+
+            if (result.Symbol != null) {
                 result.Deprecated = true;
                 if (Match(TokenKind.QuotedString))
                     result.DeprecatedComment = RequireString(result);
+                else
+                    result.DeprecatedComment = EmptyTerminal();
 
                 return result;
             }
+            else {
+                result.DeprecatedComment = EmptyTerminal();
+            }
 
-            if (ContinueWith(result, TokenKind.Experimental)) {
+            result.Symbol = ContinueWith(TokenKind.Experimental);
+            if (result.Symbol != null) {
                 result.Experimental = true;
                 return result;
             }
 
-            if (ContinueWith(result, TokenKind.Platform)) {
+            result.Symbol = ContinueWith(TokenKind.Platform);
+            if (result.Symbol != null) {
                 result.Platform = true;
                 return result;
             }
 
-            if (ContinueWith(result, TokenKind.Library)) {
+            result.Symbol = ContinueWith(TokenKind.Library);
+            if (result.Symbol != null) {
                 result.Library = true;
                 return result;
             }
@@ -3179,21 +3248,26 @@ namespace PasPasPas.Parsing.Parser {
                 return result;
             }
 
-            result.DispId = ParseDispIdDirective(parent, false);
+            result.DispId = ParseDispIdDirective(false);
             return result;
         }
 
         #endregion
         #region ParseDispIdDirective
 
+        /// <summary>
+        ///     parse a dispid directive
+        /// </summary>
+        /// <param name="requireSemi"></param>
+        /// <returns></returns>
+
         [Rule("DispIdDirective", "'dispid' Expression ';'")]
-        private DispIdDirective ParseDispIdDirective(IExtendableSyntaxPart parent, bool requireSemi = true) {
-            var result = new DispIdDirective();
-            InitByTerminal(result, parent, TokenKind.DispId);
-            result.DispExpression = ParseExpression(result);
-            if (requireSemi)
-                ContinueWithOrMissing(result, TokenKind.Semicolon);
-            return result;
+        public DispIdSymbol ParseDispIdDirective(bool requireSemi = true) {
+            return new DispIdSymbol() {
+                DispId = ContinueWithOrMissing(TokenKind.DispId),
+                DispExpression = ParseExpression(null),
+                Semicolon = requireSemi ? ContinueWithOrMissing(TokenKind.Semicolon) : EmptyTerminal()
+            };
         }
 
         #endregion
@@ -3809,7 +3883,9 @@ namespace PasPasPas.Parsing.Parser {
         [Rule("Expression", "SimpleExpression [ ('<'|'<='|'>'|'>='|'<>'|'='|'in'|'is') SimpleExpression ] | ClosureExpression")]
         private Expression ParseExpression(IExtendableSyntaxPart parent, bool fromConstTypeDeclaration = false) {
             var result = new Expression();
-            parent.Add(result);
+
+            if (parent != null)
+                parent.Add(result);
 
             if (Match(TokenKind.Function, TokenKind.Procedure)) {
                 result.ClosureExpression = ParseClosureExpression(result);

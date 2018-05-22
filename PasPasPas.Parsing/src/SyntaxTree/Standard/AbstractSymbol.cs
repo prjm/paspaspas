@@ -2,35 +2,33 @@
 
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
+
     /// <summary>
-    ///     additinal hinting information
+    ///     abstract directive
     /// </summary>
-    public class HintingInformation : StandardSyntaxTreeBase {
+    public class AbstractSymbol : StandardSyntaxTreeBase {
 
         /// <summary>
-        ///     hint for deprecation
+        ///     directive
         /// </summary>
-        public bool Deprecated { get; set; }
+        public Terminal Directive { get; set; }
 
         /// <summary>
-        ///     comment for deprecation
+        ///     final or abstract
         /// </summary>
-        public QuotedString DeprecatedComment { get; set; }
+        public int Kind
+            => Directive.Kind;
 
         /// <summary>
-        ///     hint for experimental
+        ///     semicolon
         /// </summary>
-        public bool Experimental { get; set; }
+        public Terminal Semicolon { get; set; }
 
         /// <summary>
-        ///     hint for library
+        ///     symbol length
         /// </summary>
-        public bool Library { get; set; }
-
-        /// <summary>
-        ///     hint for platform
-        /// </summary>
-        public bool Platform { get; set; }
+        public int Length
+            => Directive.Length + Semicolon.Length;
 
         /// <summary>
         ///     accept visitor
@@ -38,10 +36,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="visitor">visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
-            AcceptParts(this, visitor);
+            AcceptPart(this, Directive, visitor);
+            AcceptPart(this, Semicolon, visitor);
             visitor.EndVisit(this);
         }
-
 
     }
 }

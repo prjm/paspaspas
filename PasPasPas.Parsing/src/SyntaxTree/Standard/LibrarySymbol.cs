@@ -1,4 +1,5 @@
 ﻿using PasPasPas.Infrastructure.Files;
+using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
@@ -6,18 +7,18 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// <summary>
     ///     library definition
     /// </summary>
-    public class Library : StandardSyntaxTreeBase {
+    public class LibrarySymbol : StandardSyntaxTreeBase {
 
         /// <summary>
         ///     hints
         /// </summary>
         public HintingInformationList Hints
-            => LibraryHead?.Hints;
+            => LibraryHead?.Hints as HintingInformationList;
 
         /// <summary>
         ///     library head
         /// </summary>
-        public LibraryHead LibraryHead { get; set; }
+        public LibraryHeadSymbol LibraryHead { get; set; }
 
         /// <summary>
         ///     library name
@@ -33,7 +34,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     uses clause
         /// </summary>
-        public UsesFileClause Uses { get; set; }
+        public ISyntaxPart Uses { get; set; }
 
         /// <summary>
         ///     file path
@@ -41,14 +42,28 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         public IFileReference FilePath { get; set; }
 
         /// <summary>
+        ///     dot symbol
+        /// </summary>
+        public Terminal Dot { get; set; }
+
+        /// <summary>
         ///     accept visitor
         /// </summary>
         /// <param name="visitor">visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
-            AcceptParts(this, visitor);
+            AcceptPart(this, LibraryHead, visitor);
+            AcceptPart(this, Uses, visitor);
+            AcceptPart(this, MainBlock, visitor);
+            AcceptPart(this, Dot, visitor);
             visitor.EndVisit(this);
         }
+
+        /// <summary>
+        ///     symbol length
+        /// </summary>
+        public int Length
+            => LibraryHead.Length + Uses.Length + MainBlock.Length + Dot.Length;
 
 
     }

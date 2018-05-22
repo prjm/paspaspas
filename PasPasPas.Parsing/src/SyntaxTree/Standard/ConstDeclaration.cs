@@ -1,4 +1,5 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Visitors;
+﻿using PasPasPas.Parsing.SyntaxTree.Utils;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
@@ -15,7 +16,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     additional hint for that constant
         /// </summary>
-        public HintingInformationList Hint { get; set; }
+        public ISyntaxPart Hint { get; set; }
 
         /// <summary>
         ///     identifier

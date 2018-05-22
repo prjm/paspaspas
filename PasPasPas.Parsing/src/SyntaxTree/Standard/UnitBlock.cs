@@ -8,7 +8,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     public class UnitBlock : StandardSyntaxTreeBase {
 
         /// <summary>
-        ///     initializarion
+        ///     initialization
         /// </summary>
         public UnitInitialization Initialization { get; set; }
 
@@ -16,6 +16,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         ///     main block
         /// </summary>
         public CompoundStatement MainBlock { get; set; }
+
+        /// <summary>
+        ///     symbol length
+        /// </summary>
+        public int Length
+            => 0;
 
         /// <summary>
         ///     accept visitor

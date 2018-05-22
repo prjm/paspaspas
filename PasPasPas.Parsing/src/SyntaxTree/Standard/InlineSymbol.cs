@@ -1,27 +1,22 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Utils;
-using PasPasPas.Parsing.SyntaxTree.Visitors;
+﻿using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
     /// <summary>
-    ///     unit head
+    ///     inlining directive
     /// </summary>
-    public class UnitHeadSymbol : StandardSyntaxTreeBase {
+    public class InlineSymbol : StandardSyntaxTreeBase {
 
         /// <summary>
-        ///     hinting directives
+        ///     inline or assembler
         /// </summary>
-        public ISyntaxPart Hint { get; set; }
+        public int Kind
+            => Directive.Kind;
 
         /// <summary>
-        ///     unit name
+        ///     directive
         /// </summary>
-        public NamespaceName UnitName { get; set; }
-
-        /// <summary>
-        ///     unit symbol
-        /// </summary>
-        public Terminal Unit { get; set; }
+        public Terminal Directive { get; set; }
 
         /// <summary>
         ///     semicolon
@@ -31,8 +26,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     symbol length
         /// </summary>
-        public int Length
-            => Unit.Length + UnitName.Length + Hint.Length + Semicolon.Length;
+        public object Length
+            => Directive.Length + Semicolon.Length;
 
         /// <summary>
         ///     accept visitor
@@ -40,9 +35,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="visitor">visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
-            AcceptPart(this, Unit, visitor);
-            AcceptPart(this, UnitName, visitor);
-            AcceptPart(this, Hint, visitor);
+            AcceptPart(this, Directive, visitor);
             AcceptPart(this, Semicolon, visitor);
             visitor.EndVisit(this);
         }

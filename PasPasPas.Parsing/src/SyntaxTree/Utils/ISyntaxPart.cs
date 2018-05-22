@@ -19,6 +19,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Utils {
         ISyntaxPart ParentItem { get; set; }
 
         /// <summary>
+        ///     length (number of characters) of a syntax item
+        /// </summary>
+        int Length { get; }
+
+        /// <summary>
         ///     accept a visitor object
         /// </summary>
         /// <param name="visitor">visitor</param>

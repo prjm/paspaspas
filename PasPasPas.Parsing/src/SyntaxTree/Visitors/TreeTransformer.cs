@@ -17,7 +17,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
     public class TreeTransformer :
 
         IStartVisitor<UnitSymbol>, IEndVisitor<UnitSymbol>,
-        IStartVisitor<Library>, IEndVisitor<Library>,
+        IStartVisitor<LibrarySymbol>, IEndVisitor<LibrarySymbol>,
         IStartVisitor<Program>, IEndVisitor<Program>,
         IStartVisitor<Package>, IEndVisitor<Package>,
         IStartVisitor<UnitInterface>, IEndVisitor<UnitInterface>,
@@ -68,16 +68,16 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         IStartVisitor<ClassPropertySpecifier>,
         IStartVisitor<ClassMethod>,
         IStartVisitor<MethodResolution>,
-        IStartVisitor<ReintroduceDirective>,
-        IStartVisitor<OverloadDirective>,
-        IStartVisitor<DispIdDirective>,
-        IStartVisitor<InlineDirective>,
-        IStartVisitor<AbstractDirective>,
+        IStartVisitor<ReintroduceSymbol>,
+        IStartVisitor<OverloadSymbol>,
+        IStartVisitor<DispIdSymbol>,
+        IStartVisitor<InlineSymbol>,
+        IStartVisitor<AbstractSymbol>,
         IStartVisitor<OldCallConvention>,
         IStartVisitor<ExternalDirective>,
         IStartVisitor<ExternalSpecifier>,
-        IStartVisitor<CallConvention>,
-        IStartVisitor<BindingDirective>,
+        IStartVisitor<CallConventionSymbol>,
+        IStartVisitor<BindingSymbol>,
         IStartVisitor<ExportedProcedureHeading>,
         IStartVisitor<UnsafeDirective>,
         IStartVisitor<ForwardDirective>,
@@ -178,7 +178,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     visit a library
         /// </summary>
         /// <param name="library"></param>
-        public void StartVisit(Library library) {
+        public void StartVisit(LibrarySymbol library) {
             var result = new CompilationUnit();
             InitNode(result, library, Project);
             result.FileType = CompilationUnitType.Library;
@@ -199,7 +199,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     end visiting a library
         /// </summary>
         /// <param name="library"></param>
-        public void EndVisit(Library library) {
+        public void EndVisit(LibrarySymbol library) {
             CurrentUnitMode.Reset(CurrentUnit);
             CurrentUnit = null;
         }
@@ -356,7 +356,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             declaration.Name = ExtractSymbolName(typeDeclaration.TypeId?.Identifier);
             declaration.Generics = ExtractGenericDefinition(declaration, typeDeclaration, typeDeclaration.TypeId?.GenericDefinition);
             declaration.Attributes = ExtractAttributes(typeDeclaration.Attributes, CurrentUnit);
-            declaration.Hints = ExtractHints(typeDeclaration.Hint);
+            declaration.Hints = ExtractHints(typeDeclaration.Hint as HintingInformationList);
             symbols.Symbols.Items.Add(new SingleDeclaredSymbol(declaration));
             symbols.Symbols.Add(declaration, LogSource);
         }
@@ -382,7 +382,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             declaration.Name = ExtractSymbolName(constDeclaration.Identifier);
             declaration.Mode = CurrentDeclarationMode;
             declaration.Attributes = ExtractAttributes(constDeclaration.Attributes, CurrentUnit);
-            declaration.Hints = ExtractHints(constDeclaration.Hint);
+            declaration.Hints = ExtractHints(constDeclaration.Hint as HintingInformationList);
             symbols.Symbols.Items.Add(new SingleDeclaredSymbol(declaration));
             symbols.Symbols.Add(declaration, LogSource);
         }
@@ -441,7 +441,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             var declaration = new VariableDeclaration();
             InitNode(declaration, varDeclaration);
             declaration.Mode = CurrentDeclarationMode;
-            declaration.Hints = ExtractHints(varDeclaration.Hints);
+            declaration.Hints = ExtractHints(varDeclaration.Hints as HintingInformationList);
 
             foreach (var child in varDeclaration.Identifiers.Parts) {
                 if (child is Identifier ident) {
@@ -1324,7 +1324,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 visitor.WorkingStack.Pop();
             }
 
-            result.Hints = ExtractHints(field.Hint);
+            result.Hints = ExtractHints(field.Hint as HintingInformationList);
         }
 
         #endregion
@@ -1480,7 +1480,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     visit a method directive
         /// </summary>
         /// <param name="directive"></param>
-        public void StartVisit(ReintroduceDirective directive) {
+        public void StartVisit(ReintroduceSymbol directive) {
             var parent = LastValue as IDirectiveTarget;
             var result = new MethodDirective();
             InitNode(result, directive);
@@ -1496,7 +1496,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     start visiting an overload directive
         /// </summary>
         /// <param name="directive"></param>
-        public void StartVisit(OverloadDirective directive) {
+        public void StartVisit(OverloadSymbol directive) {
             var parent = LastValue as IDirectiveTarget;
             var result = new MethodDirective();
             InitNode(result, directive);
@@ -1512,7 +1512,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     start visting a dispid directive
         /// </summary>
         /// <param name="directive"></param>
-        public void StartVisit(DispIdDirective directive) {
+        public void StartVisit(DispIdSymbol directive) {
             var parent = LastValue as IDirectiveTarget;
 
             if (parent == null)
@@ -1532,7 +1532,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     start visitng a directive
         /// </summary>
         /// <param name="directive"></param>
-        public void StartVisit(InlineDirective directive) {
+        public void StartVisit(InlineSymbol directive) {
             var parent = LastValue as IDirectiveTarget;
             var result = new MethodDirective();
             InitNode(result, directive);
@@ -1555,7 +1555,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     start visit an abstract directive
         /// </summary>
         /// <param name="directive"></param>
-        public void StartVisit(AbstractDirective directive) {
+        public void StartVisit(AbstractSymbol directive) {
             var parent = LastValue as IDirectiveTarget;
             var result = new MethodDirective();
             InitNode(result, directive);
@@ -1646,7 +1646,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     start visit a calling convention directive
         /// </summary>
         /// <param name="directive"></param>
-        public void StartVisit(CallConvention directive) {
+        public void StartVisit(CallConventionSymbol directive) {
             var parent = LastValue as IDirectiveTarget;
             var result = new MethodDirective();
             InitNode(result, directive);
@@ -1681,7 +1681,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     start visiting a binding directive
         /// </summary>
         /// <param name="directive"></param>
-        public void StartVisit(BindingDirective directive) {
+        public void StartVisit(BindingSymbol directive) {
             var parent = LastValue as IDirectiveTarget;
             var result = new MethodDirective();
             InitNode(result, directive);
@@ -1717,7 +1717,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         public void StartVisitChild(MethodDirectives parent, ISyntaxPart child) {
             var lastValue = LastValue as IDirectiveTarget;
 
-            if (child is HintingInformation hints && lastValue != null) {
+            if (child is HintSymbol hints && lastValue != null) {
                 lastValue.Hints = ExtractHints(hints, lastValue.Hints);
             }
         }
@@ -1733,7 +1733,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         public void StartVisitChild(FunctionDirectives parent, ISyntaxPart child) {
             var lastValue = LastValue as IDirectiveTarget;
 
-            if (child is HintingInformation hints && lastValue != null) {
+            if (child is HintSymbol hints && lastValue != null) {
                 lastValue.Hints = ExtractHints(hints, lastValue.Hints);
             }
         }
@@ -1931,7 +1931,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
             }
 
-            result.Hints = ExtractHints(fieldDeclaration.Hint);
+            result.Hints = ExtractHints(fieldDeclaration.Hint as HintingInformationList);
 
         }
 
@@ -3119,7 +3119,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 return null;
 
             foreach (var part in hints.Parts) {
-                var hint = part as HintingInformation;
+                var hint = part as HintSymbol;
                 if (hint == null)
                     continue;
                 ExtractHints(hint, result);
@@ -3128,12 +3128,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             return result;
         }
 
-        private static SymbolHints ExtractHints(HintingInformation hint, SymbolHints result = null) {
+        private static SymbolHints ExtractHints(HintSymbol hint, SymbolHints result = null) {
             if (result == null)
                 result = new SymbolHints();
 
             result.SymbolIsDeprecated = result.SymbolIsDeprecated || hint.Deprecated;
-            result.DeprecatedInformation = (result.DeprecatedInformation ?? string.Empty) + hint.DeprecatedComment?.UnquotedValue;
+            result.DeprecatedInformation = (result.DeprecatedInformation ?? string.Empty) + (hint.DeprecatedComment as QuotedString)?.UnquotedValue;
             result.SymbolInLibrary = result.SymbolInLibrary || hint.Library;
             result.SymbolIsPlatformSpecific = result.SymbolIsPlatformSpecific || hint.Platform;
             result.SymbolIsExperimental = result.SymbolIsExperimental || hint.Experimental;

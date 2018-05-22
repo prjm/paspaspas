@@ -36,5 +36,6 @@ namespace PasPasPasTests.Common {
 
         internal static void AreEqualSequences<T>(IEnumerable<T> expected, IEnumerable<T> actual)
             => A.Equal(expected, actual);
+
     }
 }

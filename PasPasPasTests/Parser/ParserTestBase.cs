@@ -133,7 +133,7 @@ namespace PasPasPasTests.Parser {
             return tree;
         }
 
-        protected T RunEmptyCstTest<T>(Func<StandardParser, T> tester) {
+        protected T RunEmptyCstTest<T>(Func<StandardParser, T> tester, string tokens = "") {
             var env = CreateEnvironment();
             var msgs = new List<ILogMessage>();
             var log = new LogTarget();
@@ -154,7 +154,7 @@ namespace PasPasPasTests.Parser {
             var api = new ParserApi(env, testOptions);
 
             ClearOptions(testOptions);
-            using (var parser = api.CreateParserForString(CstPath, string.Empty)) {
+            using (var parser = api.CreateParserForString(CstPath, tokens)) {
                 var standard = parser as StandardParser;
                 Assert.IsNotNull(standard);
                 var value = tester(standard);

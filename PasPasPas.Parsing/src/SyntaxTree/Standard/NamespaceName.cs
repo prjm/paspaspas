@@ -38,6 +38,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         }
 
         /// <summary>
+        ///     symbol length
+        /// </summary>
+        public int Length
+            => 0;
+
+        /// <summary>
         ///     accept visitor
         /// </summary>
         /// <param name="visitor">visitor</param>

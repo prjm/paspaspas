@@ -3,25 +3,30 @@
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
     /// <summary>
-    ///     interface part of a unit
+    ///     disp id directive
     /// </summary>
-    public class UnitInterface : StandardSyntaxTreeBase {
+    public class DispIdSymbol : StandardSyntaxTreeBase {
 
         /// <summary>
-        ///     interface declaration
+        ///     disp id expression
         /// </summary>
-        public InterfaceDeclaration InterfaceDeclaration { get; set; }
+        public Expression DispExpression { get; set; }
 
         /// <summary>
-        ///     uses clause
+        ///     disp id
         /// </summary>
-        public UsesClause UsesClause { get; set; }
+        public Terminal DispId { get; set; }
 
         /// <summary>
         ///     symbol length
         /// </summary>
         public int Length
-            => 0;
+            => DispId.Length + DispExpression.Length + Semicolon.Length;
+
+        /// <summary>
+        ///     semicolon
+        /// </summary>
+        public Terminal Semicolon { get; set; }
 
         /// <summary>
         ///     accept visitor
@@ -29,7 +34,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="visitor">visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
-            AcceptParts(this, visitor);
+            AcceptPart(this, DispId, visitor);
+            AcceptPart(this, DispExpression, visitor);
+            AcceptPart(this, Semicolon, visitor);
             visitor.EndVisit(this);
         }
 

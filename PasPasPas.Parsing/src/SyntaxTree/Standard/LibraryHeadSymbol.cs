@@ -4,24 +4,19 @@ using PasPasPas.Parsing.SyntaxTree.Visitors;
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
     /// <summary>
-    ///     unit head
+    ///     library head
     /// </summary>
-    public class UnitHeadSymbol : StandardSyntaxTreeBase {
+    public class LibraryHeadSymbol : StandardSyntaxTreeBase {
 
         /// <summary>
-        ///     hinting directives
+        ///     hints
         /// </summary>
-        public ISyntaxPart Hint { get; set; }
+        public ISyntaxPart Hints { get; set; }
 
         /// <summary>
-        ///     unit name
+        ///     library name
         /// </summary>
-        public NamespaceName UnitName { get; set; }
-
-        /// <summary>
-        ///     unit symbol
-        /// </summary>
-        public Terminal Unit { get; set; }
+        public NamespaceName LibraryName { get; set; }
 
         /// <summary>
         ///     semicolon
@@ -29,10 +24,15 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         public Terminal Semicolon { get; set; }
 
         /// <summary>
+        ///     library
+        /// </summary>
+        public Terminal LibrarySymbol { get; set; }
+
+        /// <summary>
         ///     symbol length
         /// </summary>
         public int Length
-            => Unit.Length + UnitName.Length + Hint.Length + Semicolon.Length;
+            => LibrarySymbol.Length + LibraryName.Length + Hints.Length + Semicolon.Length;
 
         /// <summary>
         ///     accept visitor
@@ -40,9 +40,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="visitor">visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
-            AcceptPart(this, Unit, visitor);
-            AcceptPart(this, UnitName, visitor);
-            AcceptPart(this, Hint, visitor);
+            AcceptPart(this, LibrarySymbol, visitor);
+            AcceptPart(this, LibraryName, visitor);
+            AcceptPart(this, Hints, visitor);
             AcceptPart(this, Semicolon, visitor);
             visitor.EndVisit(this);
         }

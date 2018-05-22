@@ -3,19 +3,25 @@
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
     /// <summary>
-    ///     binding directive
+    ///     reintroduce directive
     /// </summary>
-    public class BindingDirective : StandardSyntaxTreeBase {
+    public class ReintroduceSymbol : StandardSyntaxTreeBase {
 
         /// <summary>
-        ///     directive kind
+        ///     directive
         /// </summary>
-        public int Kind { get; internal set; }
+        public Terminal Directive { get; set; }
 
         /// <summary>
-        ///     message expression
+        ///     semicolon
         /// </summary>
-        public Expression MessageExpression { get; internal set; }
+        public Terminal Semicolon { get; set; }
+
+        /// <summary>
+        ///     symbol length
+        /// </summary>
+        public int Length
+            => Directive.Length + Semicolon.Length;
 
         /// <summary>
         ///     accept visitor
@@ -23,9 +29,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="visitor">visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
-            AcceptParts(this, visitor);
+            AcceptPart(this, Directive, visitor);
+            AcceptPart(this, Semicolon, visitor);
             visitor.EndVisit(this);
         }
+
 
     }
 }

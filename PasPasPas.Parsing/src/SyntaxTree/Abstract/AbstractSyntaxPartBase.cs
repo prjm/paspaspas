@@ -23,6 +23,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
             => Array.Empty<ISyntaxPart>();
 
         /// <summary>
+        ///     symbol length
+        /// </summary>
+        public int Length
+            => 0;
+
+        /// <summary>
         ///     accept visitors
         /// </summary>
         public abstract void Accept(IStartEndVisitor visitor);

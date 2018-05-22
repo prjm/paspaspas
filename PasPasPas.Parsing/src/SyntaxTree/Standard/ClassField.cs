@@ -1,4 +1,5 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Visitors;
+﻿using PasPasPas.Parsing.SyntaxTree.Utils;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
@@ -6,10 +7,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     simple field declaration
     /// </summary>
     public class ClassField : StandardSyntaxTreeBase {
+
         /// <summary>
         ///     hints
         /// </summary>
-        public HintingInformationList Hint { get; set; }
+        public ISyntaxPart Hint { get; set; }
 
         /// <summary>
         ///     names

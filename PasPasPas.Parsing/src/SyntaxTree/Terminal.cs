@@ -61,6 +61,14 @@ namespace PasPasPas.Parsing.SyntaxTree {
             => prefix;
 
         /// <summary>
+        ///     symbol length
+        /// </summary>
+        public int Length
+            => (prefix ?? string.Empty).Length +
+               (suffix ?? string.Empty).Length +
+               (token.Value ?? string.Empty).Length;
+
+        /// <summary>
         ///     accept visitor
         /// </summary>
         /// <param name="visitor">visitor to use</param>
