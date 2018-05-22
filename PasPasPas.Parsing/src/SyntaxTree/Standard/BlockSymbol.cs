@@ -5,12 +5,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// <summary>
     ///     file block
     /// </summary>
-    public class Block : StandardSyntaxTreeBase {
+    public class BlockSymbol : StandardSyntaxTreeBase {
 
         /// <summary>
         ///     block body
         /// </summary>
-        public BlockBody Body { get; set; }
+        public SyntaxPartBase Body { get; set; }
 
         /// <summary>
         ///     declarations
@@ -23,11 +23,16 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="visitor">node visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
-            AcceptParts(this, visitor);
+            AcceptPart(this, DeclarationSections, visitor);
+            AcceptPart(this, Body, visitor);
             visitor.EndVisit(this);
         }
 
-
+        /// <summary>
+        ///     symbol length
+        /// </summary>
+        public int Length
+            => DeclarationSections.Length + Body.Length;
 
     }
 }

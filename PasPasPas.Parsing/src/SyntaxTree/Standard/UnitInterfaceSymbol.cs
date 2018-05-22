@@ -11,7 +11,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     interface declaration
         /// </summary>
-        public InterfaceDeclaration InterfaceDeclaration { get; set; }
+        public InterfaceDeclarationSymbol InterfaceDeclaration { get; set; }
 
         /// <summary>
         ///     uses clause

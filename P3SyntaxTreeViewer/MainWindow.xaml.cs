@@ -29,14 +29,15 @@ namespace P3SyntaxTreeViewer {
             this.env = env;
         }
 
-
         public void StartVisit<VisitorType>(VisitorType cst) {
             var parent = items.Count != 0 ? items.Peek() : null;
 
             var treeViewItem = new TreeViewItem();
 
             if (cst is Terminal terminal) {
-                treeViewItem.Header = "'" + terminal.Token.Value + "'";
+                treeViewItem.Header = terminal.Token.Value;
+                treeViewItem.Background = MainWindow.Black;
+                treeViewItem.Foreground = MainWindow.Green;
             }
             else {
                 treeViewItem.Header = cst.GetType().Name;
@@ -167,61 +168,15 @@ namespace P3SyntaxTreeViewer {
         }
 
         private void DisplayTree(TreeView tv, ITypedEnvironment env, ISyntaxPart cst, Dictionary<int, string> typeNames) {
+            tv.FontFamily = Code.FontFamily;
+            tv.FontSize = Code.FontSize;
             tv.Items.Clear();
-            //AddNodes(tv, null, env, cst, typeNames);
             cst.Accept(new NodeVisitor(tv, env));
         }
 
-        private void AddNodes(TreeView tv, TreeViewItem parent, ITypedEnvironment env, ISyntaxPart cst, Dictionary<int, string> typeNames) {
-            var treeViewItem = new TreeViewItem();
-
-            if (cst is Terminal terminal) {
-                treeViewItem.Header = "'" + terminal.Token.Value + "'";
-            }
-            else {
-                treeViewItem.Header = cst.GetType().Name;
-            }
-
-            if (cst is ISymbolTableEntry symbol)
-                treeViewItem.Header += ": " + symbol.SymbolName;
-
-            if (cst is PasPasPas.Parsing.SyntaxTree.Types.ITypedSyntaxNode typeInfo && typeInfo.TypeInfo != null) {
-
-                var t = env.TypeRegistry.GetTypeByIdOrUndefinedType(typeInfo.TypeInfo.TypeId);
-
-                if (t.TypeId == KnownTypeIds.ErrorType) {
-                    treeViewItem.Header += " [Type Error]";
-                }
-                else {
-                    treeViewItem.Header += " [" + t.ToString() + "]";
-                }
-
-                if (typeInfo.TypeInfo.IsConstant) {
-                    treeViewItem.Header += "* " + typeInfo.TypeInfo.ToString();
-                }
-
-                if (typeInfo.TypeInfo != null && typeInfo.TypeInfo.TypeId == KnownTypeIds.ErrorType)
-                    treeViewItem.Foreground = new SolidColorBrush(Colors.Red);
-
-            }
-
-            if (cst is SymbolReferencePart srp) {
-                treeViewItem.Header += " " + srp.Kind.ToString();
-            }
-
-            if (parent != null) {
-                parent.Items.Add(treeViewItem);
-            }
-            else {
-                tv.Items.Add(treeViewItem);
-            }
-
-            foreach (var child in cst.Parts) {
-                AddNodes(tv, treeViewItem, env, child, typeNames);
-            }
-
-            treeViewItem.IsExpanded = true;
-        }
+        internal static Brush Red = new SolidColorBrush(Colors.Red);
+        internal static Brush Black = new SolidColorBrush(Colors.Black);
+        internal static Brush Green = new SolidColorBrush(Colors.LightGreen);
 
         /// <summary>
         ///     parse the source

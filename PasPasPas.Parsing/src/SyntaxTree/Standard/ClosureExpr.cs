@@ -10,7 +10,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         /// block
         /// </summary>
-        public Block Block { get; set; }
+        public BlockSymbol Block { get; set; }
 
         /// <summary>
         ///     closue kind

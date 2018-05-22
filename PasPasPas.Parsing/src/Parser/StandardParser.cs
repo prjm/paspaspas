@@ -188,7 +188,7 @@ namespace PasPasPas.Parsing.Parser {
             return new UnitInterfaceSymbol() {
                 InterfaceSymbol = ContinueWithOrMissing(TokenKind.Interface),
                 UsesClause = Match(TokenKind.Uses) ? (ISyntaxPart)ParseUsesClause(null) : EmptyTerminal(),
-                InterfaceDeclaration = ParseInterfaceDeclaration(null)
+                InterfaceDeclaration = ParseInterfaceDeclaration()
             };
         }
 
@@ -265,17 +265,20 @@ namespace PasPasPas.Parsing.Parser {
         #endregion
         #region ParseInterfaceDeclaration
 
+        /// <summary>
+        ///     parse unit interface: declarations
+        /// </summary>
+        /// <returns></returns>
+
         [Rule("InterfaceDeclaration", "{ InterfaceDeclarationItem }")]
-        private InterfaceDeclaration ParseInterfaceDeclaration(IExtendableSyntaxPart parent) {
-            var result = new InterfaceDeclaration();
-
-            if (parent != null)
-                parent.Add(result);
-
-            SyntaxPartBase item;
+        public InterfaceDeclarationSymbol ParseInterfaceDeclaration() {
+            var result = new InterfaceDeclarationSymbol();
+            var item = default(SyntaxPartBase);
 
             do {
-                item = ParseInterfaceDeclarationItem(result);
+                item = ParseInterfaceDeclarationItem(null);
+                if (item != null)
+                    result.AddItem(item);
             } while (item != null);
 
             return result;
@@ -550,7 +553,7 @@ namespace PasPasPas.Parsing.Parser {
             if (Match(TokenKind.Asm)) {
                 var result = new CompoundStatement();
                 parent.Add(result);
-                result.AssemblerBlock = ParseAsmBlock(result);
+                result.AssemblerBlock = ParseAsmBlock();
                 return result;
             }
             else {
@@ -1045,7 +1048,7 @@ namespace PasPasPas.Parsing.Parser {
             return new LibrarySymbol() {
                 LibraryHead = ParseLibraryHead(),
                 Uses = Match(TokenKind.Uses) ? (ISyntaxPart)ParseUsesFileClause(null) : EmptyTerminal(),
-                MainBlock = ParseBlock(null),
+                MainBlock = ParseBlock(),
                 Dot = ContinueWithOrMissing(TokenKind.Dot),
                 FilePath = path
             };
@@ -1084,7 +1087,7 @@ namespace PasPasPas.Parsing.Parser {
             return new Program() {
                 ProgramHead = Match(TokenKind.Program) ? ParseProgramHead() as ISyntaxPart : EmptyTerminal(),
                 Uses = Match(TokenKind.Uses) ? ParseUsesFileClause(null) as ISyntaxPart : EmptyTerminal(),
-                MainBlock = ParseBlock(null),
+                MainBlock = ParseBlock(),
                 Dot = ContinueWithOrMissing(TokenKind.Dot),
                 FilePath = path
             };
@@ -1136,15 +1139,24 @@ namespace PasPasPas.Parsing.Parser {
         #endregion
         #region ParseBlock
 
+        /// <summary>
+        ///     parse a block symbol
+        /// </summary>
+        /// <returns></returns>
+
         [Rule("Block", "DeclarationSections [ BlockBody ] ")]
-        private Block ParseBlock(IExtendableSyntaxPart parent) {
-            var result = new Block();
-            if (parent != null)
-                parent.Add(result);
+        public BlockSymbol ParseBlock() {
+            var result = new BlockSymbol();
+
             result.DeclarationSections = ParseDeclarationSections(result);
+
             if (Match(TokenKind.Asm, TokenKind.Begin)) {
                 result.Body = ParseBlockBody(result);
             }
+            else {
+                result.Body = EmptyTerminal();
+            }
+
             return result;
         }
 
@@ -1157,7 +1169,7 @@ namespace PasPasPas.Parsing.Parser {
             parent.Add(result);
 
             if (Match(TokenKind.Asm)) {
-                result.AssemblerBlock = ParseAsmBlock(result);
+                result.AssemblerBlock = ParseAsmBlock();
             }
 
             if (Match(TokenKind.Begin)) {
@@ -1170,17 +1182,30 @@ namespace PasPasPas.Parsing.Parser {
         #endregion
         #region ParseAsmBlock
 
-        [Rule("AsmBlock", "'asm' { AssemblyStatement | PseudoOp } 'end'")]
-        private AsmBlock ParseAsmBlock(IExtendableSyntaxPart parent) {
-            var result = new AsmBlock();
-            InitByTerminal(result, parent, TokenKind.Asm);
+        /// <summary>
+        ///     parse an assembler block
+        /// </summary>
+        /// <returns></returns>
 
-            while (Tokenizer.HasNextToken && (!ContinueWith(result, TokenKind.End))) {
+        [Rule("AsmBlock", "'asm' { AssemblyStatement | PseudoOp } 'end'")]
+        public AsmBlockSymbol ParseAsmBlock() {
+            var result = new AsmBlockSymbol() {
+                AsmSymbol = ContinueWithOrMissing(TokenKind.Asm),
+                EndSymbol = EmptyTerminal()
+            };
+
+            while (Tokenizer.HasNextToken) {
+
+                if (Match(TokenKind.End)) {
+                    result.EndSymbol = ContinueWithOrMissing(TokenKind.End);
+                    break;
+                }
+
                 if (Match(TokenKind.Dot)) {
-                    ParseAsmPseudoOp(result);
+                    result.AddItem(ParseAsmPseudoOp(result));
                 }
                 else {
-                    ParseAsmStatement(result);
+                    result.AddItem(ParseAsmStatement(result));
                 }
             }
 
@@ -1191,7 +1216,7 @@ namespace PasPasPas.Parsing.Parser {
         #region ParseAsmPseudoOp
 
         [Rule("PseudoOp", "( '.PARAMS ' Integer | '.PUSHNV' Register | '.SAVNENV' Register | '.NOFRAME'.")]
-        private AsmPseudoOp ParseAsmPseudoOp(AsmBlock parent) {
+        private AsmPseudoOp ParseAsmPseudoOp(AsmBlockSymbol parent) {
             var result = new AsmPseudoOp();
             InitByTerminal(result, parent, TokenKind.Dot);
             var kind = CurrentToken().Value;
@@ -1259,7 +1284,7 @@ namespace PasPasPas.Parsing.Parser {
                 return result;
             }
 
-            result.LeftTerm = ParseAssemblyExpression(result);
+            result.LeftTerm = ParseAssemblyExpression();
 
             if (Match(TokenKind.And, TokenKind.Or, TokenKind.Xor)) {
                 result.Kind = CurrentToken().Kind;
@@ -1273,16 +1298,29 @@ namespace PasPasPas.Parsing.Parser {
         #endregion
         #region ParseAssemblyExpression
 
-        [Rule("AssemblyExpression", " ('OFFSET' AssemblyOperand ) | ('TYPE' AssemblyOperand) | (('BYTE' | 'WORD' | 'DWORD' | 'QWORD' | 'TBYTE' ) PTR AssemblyOperand) | AssemblyTerm ('+' | '-' ) AssemblyOperand ")]
-        private AsmExpression ParseAssemblyExpression(AsmOperand parent) {
-            var result = new AsmExpression();
-            parent.Add(result);
-            var tokenValue = CurrentToken().Value;
+        /// <summary>
+        ///     parse an assembly expression
+        /// </summary>
+        /// <returns></returns>
 
+        [Rule("AssemblyExpression", " ('OFFSET' AssemblyOperand ) | ('TYPE' AssemblyOperand) | (('BYTE' | 'WORD' | 'DWORD' | 'QWORD' | 'TBYTE' ) PTR AssemblyOperand) | AssemblyTerm ('+' | '-' ) AssemblyOperand ")]
+        public AsmExpressionSymbol ParseAssemblyExpression() {
+            var result = new AsmExpressionSymbol() {
+                Offset = EmptyTerminal(),
+                OffsetSymbol = EmptyTerminal(),
+                BytePtr = EmptyTerminal(),
+                BytePtrKind = EmptyTerminal(),
+                TypeSymbol = EmptyTerminal(),
+                TypeExpression = EmptyTerminal(),
+                LeftOperand = EmptyTerminal(),
+                RightOperand = EmptyTerminal()
+            };
+
+            var tokenValue = CurrentToken().Value;
             if (MatchIdentifier()) {
 
                 if (string.Equals(tokenValue, "OFFSET", StringComparison.OrdinalIgnoreCase)) {
-                    ContinueWith(result, TokenKind.Identifier);
+                    result.OffsetSymbol = ContinueWith(TokenKind.Identifier);
                     result.Offset = ParseAssemblyOperand(result);
                     return result;
                 }
@@ -1292,10 +1330,10 @@ namespace PasPasPas.Parsing.Parser {
                     result.BytePtr = ParseAssemblyOperand(result);
                     return result;
                 }
-
             }
 
-            if (ContinueWith(result, TokenKind.TypeKeyword)) {
+            if (Match(TokenKind.TypeKeyword)) {
+                result.TypeSymbol = ContinueWithOrMissing(TokenKind.TypeKeyword);
                 result.TypeExpression = ParseAssemblyOperand(result);
                 return result;
             }
@@ -1572,7 +1610,7 @@ namespace PasPasPas.Parsing.Parser {
             ContinueWithOrMissing(result, TokenKind.Semicolon);
 
             result.Directives = ParseMethodDirectives(result);
-            result.MethodBody = ParseBlock(result);
+            result.MethodBody = ParseBlock();
 
             if ((result.MethodBody != null) && (result.MethodBody.Body != null))
                 ContinueWithOrMissing(result, TokenKind.Semicolon);
@@ -1780,7 +1818,7 @@ namespace PasPasPas.Parsing.Parser {
             result.Heading = ParseProcedureDeclarationHeading(result);
             ContinueWithOrMissing(result, TokenKind.Semicolon);
             result.Directives = ParseFunctionDirectives(result);
-            result.ProcedureBody = ParseBlock(result);
+            result.ProcedureBody = ParseBlock();
             if ((result.ProcedureBody != null) && (result.ProcedureBody.Body != null))
                 ContinueWithOrMissing(result, TokenKind.Semicolon);
             return result;
@@ -4295,7 +4333,7 @@ namespace PasPasPas.Parsing.Parser {
                 ContinueWithOrMissing(result, TokenKind.Colon);
                 result.ReturnType = ParseTypeSpecification(result);
             }
-            result.Block = ParseBlock(result);
+            result.Block = ParseBlock();
             return result;
         }
 

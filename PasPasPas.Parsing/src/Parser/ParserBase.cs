@@ -1265,7 +1265,9 @@ namespace PasPasPas.Parsing.Parser {
         /// </summary>
         /// <returns></returns>
         protected static Terminal EmptyTerminal()
-            => new Terminal(default);
+            => new Terminal(new TokenizerWithLookahead.TokenSequence() {
+                Value = new Token(TokenKind.Empty, null)
+            });
 
         /// <summary>
         ///     continue with a specific token and mark it as missing

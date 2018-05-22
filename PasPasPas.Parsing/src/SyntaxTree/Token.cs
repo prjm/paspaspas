@@ -39,7 +39,7 @@ namespace PasPasPas.Parsing.SyntaxTree {
         /// <param name="parsedValue">parser literal value (optional)</param>
         public Token(int tokenId, TokenizerState state, ITypeReference parsedValue = null) : this() {
             Kind = tokenId;
-            Value = state.GetBufferContent();
+            Value = state == null ? string.Empty : state.GetBufferContent();
             ParsedValue = parsedValue;
         }
 

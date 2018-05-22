@@ -29,7 +29,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     main block
         /// </summary>
-        public Block MainBlock { get; set; }
+        public BlockSymbol MainBlock { get; set; }
 
         /// <summary>
         ///     uses clause

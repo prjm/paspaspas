@@ -147,6 +147,44 @@ namespace PasPasPasTests.Parser {
         }
 
         [TestCase]
+        public void TestInterfaceDeclaration() {
+            var s = RunEmptyCstTest(p => p.ParseInterfaceDeclaration());
+            Assert.AreEqual(0, s.Length);
+        }
+
+        [TestCase]
+        public void TestAsmBlock() {
+            var s = RunEmptyCstTest(p => p.ParseAsmBlock());
+            Assert.IsNotNull(s.AsmSymbol);
+            Assert.IsNotNull(s.EndSymbol);
+            Assert.AreEqual(0, s.Length);
+        }
+
+        [TestCase]
+        public void TestBlock() {
+            var s = RunEmptyCstTest(p => p.ParseBlock());
+            Assert.IsNotNull(s.DeclarationSections);
+            Assert.IsNotNull(s.Body);
+            Assert.AreEqual(0, s.Length);
+        }
+
+
+        [TestCase]
+        public void TestAsmExpression() {
+            var s = RunEmptyCstTest(p => p.ParseAssemblyExpression());
+            Assert.IsNotNull(s.OffsetSymbol);
+            Assert.IsNotNull(s.Offset);
+            Assert.IsNotNull(s.BytePtrKind);
+            Assert.IsNotNull(s.BytePtr);
+            Assert.IsNotNull(s.TypeSymbol);
+            Assert.IsNotNull(s.TypeExpression);
+            Assert.IsNotNull(s.LeftOperand);
+            Assert.IsNotNull(s.RightOperand);
+            Assert.AreEqual(0, s.Length);
+        }
+
+
+        [TestCase]
         public void TestUnit() {
             var s = RunEmptyCstTest(p => p.ParseUnit(new FileReference(CstPath)));
             Assert.IsNotNull(s.UnitHead);

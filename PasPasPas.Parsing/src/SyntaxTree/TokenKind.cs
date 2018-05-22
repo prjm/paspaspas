@@ -11,6 +11,11 @@
         public const int Undefined = 1;
 
         /// <summary>
+        ///     empty tokens
+        /// </summary>
+        public const int Empty = 2;
+
+        /// <summary>
         ///     preprocessor token
         /// </summary>
         public const int Preprocessor = 5;

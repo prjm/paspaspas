@@ -210,7 +210,7 @@ namespace PasPasPas.Parsing.SyntaxTree {
         /// <param name="visitor"></param>
         protected static void AcceptPart<T>(T element, ISyntaxPart part, IStartEndVisitor visitor) {
 
-            if (part == null)
+            if (part == null || (part is Terminal t && t.Kind == TokenKind.Empty))
                 return;
 
             var childVisitor = visitor as IChildVisitor;

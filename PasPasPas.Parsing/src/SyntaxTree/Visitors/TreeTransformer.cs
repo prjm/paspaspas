@@ -113,12 +113,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         IStartVisitor<CaseLabel>,
         IStartVisitor<IfStatement>,
         IStartVisitor<GoToStatement>,
-        IStartVisitor<AsmBlock>,
+        IStartVisitor<AsmBlockSymbol>,
         IStartVisitor<AsmPseudoOp>,
         IStartVisitor<LocalAsmLabel>,
         IStartVisitor<AsmStatement>,
         IStartVisitor<AsmOperand>,
-        IStartVisitor<AsmExpression>,
+        IStartVisitor<AsmExpressionSymbol>,
         IStartVisitor<AsmTerm>,
         IStartVisitor<DesignatorStatement>,
         IStartVisitor<DesignatorItem>,
@@ -185,7 +185,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             result.UnitName = ExtractSymbolName(library.LibraryName);
             result.Hints = ExtractHints(library.Hints);
             result.FilePath = library.FilePath;
-            if (library.MainBlock.Body.AssemblerBlock != null)
+            if ((library.MainBlock.Body as BlockBody)?.AssemblerBlock != null)
                 result.InitializationBlock = new BlockOfAssemblerStatements();
             else
                 result.InitializationBlock = new BlockOfStatements();
@@ -2551,7 +2551,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     start visiting an assembler block
         /// </summary>
         /// <param name="block"></param>
-        public void StartVisit(AsmBlock block) {
+        public void StartVisit(AsmBlockSymbol block) {
             var blockTarget = LastValue as IBlockTarget;
             var result = new BlockOfAssemblerStatements();
             InitNode(result, block);
@@ -2685,7 +2685,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     start visting an assembler expression
         /// </summary>
         /// <param name="statement"></param>
-        public void StartVisit(AsmExpression statement) {
+        public void StartVisit(AsmExpressionSymbol statement) {
 
             if (statement.Offset != null) {
                 var lastExpression = LastExpression;
@@ -2700,7 +2700,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 var currentExpression = new UnaryOperator();
                 InitNode(currentExpression, statement);
                 lastExpression.Value = currentExpression;
-                currentExpression.Kind = TokenKindMapper.ForAsmBytePointerKind(ExtractSymbolName(statement.BytePtrKind)?.CompleteName);
+                currentExpression.Kind = TokenKindMapper.ForAsmBytePointerKind(ExtractSymbolName(statement.BytePtrKind as Identifier)?.CompleteName);
             }
 
             if (statement.TypeExpression != null) {

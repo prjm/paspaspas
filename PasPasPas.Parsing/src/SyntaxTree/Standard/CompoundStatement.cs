@@ -10,7 +10,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     assembler block
         /// </summary>
-        public AsmBlock AssemblerBlock { get; set; }
+        public AsmBlockSymbol AssemblerBlock { get; set; }
 
         /// <summary>
         ///     statement list

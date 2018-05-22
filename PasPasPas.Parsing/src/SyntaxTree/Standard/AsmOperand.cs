@@ -10,7 +10,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     left term
         /// </summary>
-        public AsmExpression LeftTerm { get; internal set; }
+        public AsmExpressionSymbol LeftTerm { get; internal set; }
 
         /// <summary>
         ///     not expression

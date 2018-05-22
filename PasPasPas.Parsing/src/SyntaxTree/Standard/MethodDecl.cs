@@ -40,7 +40,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     method implementation
         /// </summary>
-        public Block MethodBody { get; set; }
+        public BlockSymbol MethodBody { get; set; }
 
     }
 }

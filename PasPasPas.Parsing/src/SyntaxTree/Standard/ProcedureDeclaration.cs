@@ -25,7 +25,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     procedure body
         /// </summary>
-        public Block ProcedureBody { get; set; }
+        public BlockSymbol ProcedureBody { get; set; }
 
         /// <summary>
         ///     accept visitor
