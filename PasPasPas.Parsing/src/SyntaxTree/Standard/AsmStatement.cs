@@ -10,7 +10,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     opcode
         /// </summary>
-        public AsmOpCode OpCode { get; set; }
+        public AsmOpCodeSymbol OpCode { get; set; }
 
         /// <summary>
         ///     lock / segment prefix
@@ -20,7 +20,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     label
         /// </summary>
-        public AsmLabel Label { get; set; }
+        public AsmLabelSymbol Label { get; set; }
 
         /// <summary>
         ///     accept visitor

@@ -3,30 +3,25 @@
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
     /// <summary>
-    ///     assembly term   
+    ///     label in <c>asm</c>
     /// </summary>
-    public class AsmTerm : StandardSyntaxTreeBase {
+    public class AsmLabelSymbol : StandardSyntaxTreeBase {
 
         /// <summary>
-        ///     left operand
+        ///     asm label
         /// </summary>
-        public AsmFactorSymbol LeftOperand { get; set; }
+        public SyntaxPartBase LocalLabel { get; set; }
 
         /// <summary>
-        ///     right operand
+        ///     generic label
         /// </summary>
-        public AsmOperandSymbol RightOperand { get; set; }
+        public SyntaxPartBase Label { get; set; }
 
         /// <summary>
-        ///     subtype
+        ///     symbol length
         /// </summary>
-        public AsmOperandSymbol Subtype { get; set; }
-
-        /// <summary>
-        ///     term kind
-        /// </summary>
-        public int Kind { get; set; }
-            = TokenKind.Undefined;
+        public int Length
+            => LocalLabel.Length + Label.Length;
 
         /// <summary>
         ///     accept visitor
@@ -34,7 +29,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="visitor">node visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
-            AcceptParts(this, visitor);
+            AcceptPart(this, LocalLabel, visitor);
+            AcceptPart(this, Label, visitor);
             visitor.EndVisit(this);
         }
     }

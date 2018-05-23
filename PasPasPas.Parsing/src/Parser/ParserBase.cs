@@ -525,6 +525,36 @@ namespace PasPasPas.Parsing.Parser {
             return null;
         }
 
+
+        /// <summary>
+        ///     continue syntax part
+        /// </summary>
+        /// <param name="tokenKind1"></param>
+        /// <param name="tokenKind2"></param>
+        /// <param name="tokenKind3"></param>
+        /// <returns></returns>
+        protected Terminal ContinueWith(int tokenKind1, int tokenKind2, int tokenKind3) {
+            var requiresIdentifier =
+                (tokenKind1 == TokenKind.Identifier) ||
+                (tokenKind2 == TokenKind.Identifier) ||
+                (tokenKind3 == TokenKind.Identifier);
+
+            if (!Tokenizer.HasNextToken) {
+                return null;
+            }
+
+            if (!Match(tokenKind1, tokenKind2, tokenKind3) &&
+                (!requiresIdentifier ||
+                (requiresIdentifier && !AllowIdentifier()))) {
+                return null;
+            }
+
+            var terminal = new Terminal(tokenizer.CurrentTokenSequence);
+            FetchNextToken();
+            return terminal;
+        }
+
+
         /// <summary>
         ///     continue syntax part
         /// </summary>
@@ -1233,6 +1263,18 @@ namespace PasPasPas.Parsing.Parser {
             return EmptyTerminal();
         }
 
+
+        /// <summary>
+        ///     report a missing token
+        /// </summary>
+        /// <param name="tokenKind1"></param>
+        /// <param name="tokenKind2"></param>
+        /// <param name="tokenKind3"></param>
+        protected Terminal ErrorMissingToken(int tokenKind1, int tokenKind2, int tokenKind3) {
+            logSource.Error(MissingToken, tokenKind1, tokenKind2, tokenKind3);
+            return EmptyTerminal();
+        }
+
         /// <summary>
         ///     report a missing token
         /// </summary>
@@ -1309,6 +1351,21 @@ namespace PasPasPas.Parsing.Parser {
 
             if (terminal == null)
                 return ErrorMissingToken(tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5);
+
+            return terminal;
+        }
+
+        /// <summary>
+        ///     continue with a specific token and mark it as missing
+        /// </summary>
+        /// <param name="tokenKind1"></param>
+        /// <param name="tokenKind2"></param>
+        /// <param name="tokenKind3"></param>
+        protected Terminal ContinueWithOrMissing(int tokenKind1, int tokenKind2, int tokenKind3) {
+            var terminal = ContinueWith(tokenKind1, tokenKind2, tokenKind3);
+
+            if (terminal == null)
+                return ErrorMissingToken(tokenKind1, tokenKind2, tokenKind3);
 
             return terminal;
         }

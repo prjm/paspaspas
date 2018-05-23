@@ -117,7 +117,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         IStartVisitor<AsmPseudoOp>,
         IStartVisitor<LocalAsmLabel>,
         IStartVisitor<AsmStatement>,
-        IStartVisitor<AsmOperand>,
+        IStartVisitor<AsmOperandSymbol>,
         IStartVisitor<AsmExpressionSymbol>,
         IStartVisitor<AsmTerm>,
         IStartVisitor<DesignatorStatement>,
@@ -126,7 +126,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         IStartVisitor<Standard.FormattedExpression>,
         IStartVisitor<SetSection>,
         IStartVisitor<SetSectnPart>,
-        IStartVisitor<AsmFactor>,
+        IStartVisitor<AsmFactorSymbol>,
         IChildVisitor<CaseStatement>,
         IChildVisitor<TypeName>,
         IChildVisitor<SimpleType>,
@@ -2657,7 +2657,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     start visting an assembly operand
         /// </summary>
         /// <param name="statement"></param>
-        public void StartVisit(AsmOperand statement) {
+        public void StartVisit(AsmOperandSymbol statement) {
 
             if (statement.LeftTerm != null && statement.RightTerm != null) {
                 var lastExpression = LastExpression;
@@ -2914,7 +2914,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     start visiting an asm factor
         /// </summary>
         /// <param name="factor"></param>
-        public void StartVisit(AsmFactor factor) {
+        public void StartVisit(AsmFactorSymbol factor) {
             var expression = LastExpression;
 
             if (factor.Number != null) {
@@ -2952,7 +2952,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (factor.Identifier != null) {
                 var value = new SymbolReference();
                 InitNode(value, factor);
-                value.Name = ExtractSymbolName(factor.Identifier);
+                value.Name = ExtractSymbolName(factor.Identifier as Identifier);
                 expression.Value = value;
                 return;
             }
@@ -2964,7 +2964,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 currentExpression.Kind = ExpressionKind.AsmSegmentPrefix;
                 var reference = new SymbolReference();
                 InitNode(reference, factor.SegmentPrefix, currentExpression);
-                reference.Name = ExtractSymbolName(factor.SegmentPrefix);
+                reference.Name = ExtractSymbolName(factor.SegmentPrefix as Identifier);
                 currentExpression.LeftOperand = reference;
                 return;
             }
