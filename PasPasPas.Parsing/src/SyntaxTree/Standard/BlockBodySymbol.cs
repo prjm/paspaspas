@@ -3,31 +3,36 @@
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
     /// <summary>
-    ///     case statement
+    ///     block body
     /// </summary>
-    public class CaseStatement : StandardSyntaxTreeBase {
+    public class BlockBodySymbol : StandardSyntaxTreeBase {
 
         /// <summary>
-        ///     case expression
+        ///    assembler block
         /// </summary>
-        public Expression CaseExpression { get; set; }
+        public SyntaxPartBase AssemblerBlock { get; set; }
 
         /// <summary>
-        ///     else part
+        ///     block bode
         /// </summary>
-        public StatementList Else { get; set; }
+        public SyntaxPartBase Body { get; set; }
+
+        /// <summary>
+        ///     symbol length
+        /// </summary>
+        public int Length
+            => AssemblerBlock.Length + Body.Length;
 
 
         /// <summary>
         ///     accept visitor
         /// </summary>
-        /// <param name="visitor">visitor</param>
+        /// <param name="visitor">node visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
             AcceptParts(this, visitor);
             visitor.EndVisit(this);
         }
-
 
     }
 }

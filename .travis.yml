@@ -6,4 +6,4 @@ dist: trusty
 script:
  - dotnet restore
  - cd PasPasPasTests
- - dotnet xunit --fx-version 2.0.6
+ - dotnet test

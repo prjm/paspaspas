@@ -406,8 +406,13 @@ namespace PasPasPas.Parsing.Parser {
             var lookahead = 1;
             var stopArray = tokenToStop.Concat(new[] { TokenKind.Undefined }).ToArray();
             while (!LookAhead(lookahead, stopArray)) {
+
                 if (LookAhead(lookahead, tokenToSearch))
                     return true;
+
+                if (Tokenizer.BaseTokenizer.AtEof)
+                    return false;
+
                 lookahead++;
             }
 

@@ -15,7 +15,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     case statement
         /// </summary>
-        public CaseStatement Case { get; set; }
+        public CaseStatementSymbol Case { get; set; }
 
         /// <summary>
         ///     compunt statement

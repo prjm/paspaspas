@@ -5,7 +5,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// <summary>
     ///     asm prefix
     /// </summary>
-    public class AsmPrefix : StandardSyntaxTreeBase {
+    public class AsmPrefixSymbol : StandardSyntaxTreeBase {
 
         /// <summary>
         ///     lock prefix
@@ -15,7 +15,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     segment prefix
         /// </summary>
-        public Identifier SegmentPrefix { get; set; }
+        public SyntaxPartBase SegmentPrefix { get; set; }
 
         /// <summary>
         ///     accept visitor
@@ -23,8 +23,16 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="visitor">node visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
-            AcceptParts(this, visitor);
+            AcceptPart(this, LockPrefix, visitor);
+            AcceptPart(this, SegmentPrefix, visitor);
             visitor.EndVisit(this);
         }
+
+        /// <summary>
+        ///     symbol length
+        /// </summary>
+        public int Length
+            => LockPrefix.Length + SegmentPrefix.Length;
+
     }
 }

@@ -5,7 +5,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// <summary>
     ///     pseudo x64 operation
     /// </summary>
-    public class AsmPseudoOp : StandardSyntaxTreeBase {
+    public class AsmPseudoOpSymbol : StandardSyntaxTreeBase {
 
         /// <summary>
         ///     operation kind
@@ -20,7 +20,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     number of parameters
         /// </summary>
-        public StandardInteger NumberOfParams { get; set; }
+        public SyntaxPartBase NumberOfParams { get; set; }
 
         /// <summary>
         ///     params pseudo op
@@ -35,7 +35,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     register name
         /// </summary>
-        public Identifier Register { get; set; }
+        public SyntaxPartBase Register { get; set; }
 
         /// <summary>
         ///     savenv pseudo op
@@ -43,13 +43,27 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         public bool SaveEnvOperation { get; set; }
 
         /// <summary>
+        ///     dot symbol
+        /// </summary>
+        public Terminal DotSymbol { get; set; }
+
+        /// <summary>
         ///     accept visitor
         /// </summary>
         /// <param name="visitor">node visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
-            AcceptParts(this, visitor);
+            AcceptPart(this, DotSymbol, visitor);
+            AcceptPart(this, Kind, visitor);
+            AcceptPart(this, Register, visitor);
+            AcceptPart(this, NumberOfParams, visitor);
             visitor.EndVisit(this);
         }
+
+        /// <summary>
+        ///     symbol name length
+        /// </summary>
+        public int Length
+            => DotSymbol.Length + Kind.Length + Register.Length + NumberOfParams.Length;
     }
 }

@@ -10,12 +10,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     label
         /// </summary>
-        public Label Label { get; set; }
+        public SyntaxPartBase Label { get; set; }
 
         /// <summary>
         ///     statement part
         /// </summary>
-        public StatementPart Part { get; set; }
+        public SyntaxPartBase Part { get; set; }
 
         /// <summary>
         ///     accept visitor
@@ -23,10 +23,20 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="visitor">visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
-            AcceptParts(this, visitor);
+            AcceptPart(this, Label, visitor);
+            AcceptPart(this, Part, visitor);
             visitor.EndVisit(this);
         }
 
+        /// <summary>
+        ///     symbol length
+        /// </summary>
+        public int Length
+            => Label.Length + ColonSymbol.Length + Part.Length;
 
+        /// <summary>
+        ///     colon symbol
+        /// </summary>
+        public Terminal ColonSymbol { get; set; }
     }
 }

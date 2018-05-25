@@ -108,18 +108,18 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         IStartVisitor<ForStatement>,
         IStartVisitor<WhileStatement>,
         IStartVisitor<RepeatStatement>,
-        IStartVisitor<CaseStatement>,
-        IStartVisitor<CaseItem>,
-        IStartVisitor<CaseLabel>,
+        IStartVisitor<CaseStatementSymbol>,
+        IStartVisitor<CaseItemSymbol>,
+        IStartVisitor<CaseLabelSymbol>,
         IStartVisitor<IfStatement>,
         IStartVisitor<GoToStatement>,
         IStartVisitor<AsmBlockSymbol>,
-        IStartVisitor<AsmPseudoOp>,
+        IStartVisitor<AsmPseudoOpSymbol>,
         IStartVisitor<LocalAsmLabel>,
-        IStartVisitor<AsmStatement>,
+        IStartVisitor<AsmStatementSymbolx>,
         IStartVisitor<AsmOperandSymbol>,
         IStartVisitor<AsmExpressionSymbol>,
-        IStartVisitor<AsmTerm>,
+        IStartVisitor<AsmTermSymbol>,
         IStartVisitor<DesignatorStatement>,
         IStartVisitor<DesignatorItem>,
         IStartVisitor<Parameter>,
@@ -127,7 +127,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         IStartVisitor<SetSection>,
         IStartVisitor<SetSectnPart>,
         IStartVisitor<AsmFactorSymbol>,
-        IChildVisitor<CaseStatement>,
+        IChildVisitor<CaseStatementSymbol>,
         IChildVisitor<TypeName>,
         IChildVisitor<SimpleType>,
         IChildVisitor<MethodDirectives>,
@@ -185,7 +185,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             result.UnitName = ExtractSymbolName(library.LibraryName);
             result.Hints = ExtractHints(library.Hints);
             result.FilePath = library.FilePath;
-            if ((library.MainBlock.Body as BlockBody)?.AssemblerBlock != null)
+            if ((library.MainBlock.Body as BlockBodySymbol)?.AssemblerBlock != null)
                 result.InitializationBlock = new BlockOfAssemblerStatements();
             else
                 result.InitializationBlock = new BlockOfStatements();
@@ -2427,7 +2427,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     start visiting a case statement
         /// </summary>
         /// <param name="caseStatement"></param>
-        public void StartVisit(CaseStatement caseStatement) {
+        public void StartVisit(CaseStatementSymbol caseStatement) {
             var target = LastValue as IStatementTarget;
             var result = new StructuredStatement();
             InitNode(result, caseStatement);
@@ -2441,7 +2441,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// </summary>
         /// <param name="caseStatement"></param>
         /// <param name="child"></param>
-        public void StartVisitChild(CaseStatement caseStatement, ISyntaxPart child) {
+        public void StartVisitChild(CaseStatementSymbol caseStatement, ISyntaxPart child) {
 
             if (caseStatement.Else != child)
                 return;
@@ -2460,7 +2460,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     start visiting a case item
         /// </summary>
         /// <param name="caseItem"></param>
-        public void StartVisit(CaseItem caseItem) {
+        public void StartVisit(CaseItemSymbol caseItem) {
             var target = LastValue as IStatementTarget;
             var result = new StructuredStatement();
             InitNode(result, caseItem);
@@ -2476,7 +2476,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     start visiting a case label
         /// </summary>
         /// <param name="caseLabel"></param>
-        public void StartVisit(CaseLabel caseLabel) {
+        public void StartVisit(CaseLabelSymbol caseLabel) {
             if (caseLabel.EndExpression != null) {
                 var lastExpression = LastExpression;
                 var binOp = new BinaryOperator();
@@ -2569,7 +2569,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     start visiting an pseudo operator
         /// </summary>
         /// <param name="op"></param>
-        public void StartVisit(AsmPseudoOp op) {
+        public void StartVisit(AsmPseudoOpSymbol op) {
             var statementTarget = LastValue as BlockOfAssemblerStatements;
             var result = new AssemblerStatement();
             InitNode(result, op);
@@ -2586,14 +2586,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 result.Kind = AssemblerStatementKind.PushEnvOperation;
                 var operand = new SymbolReference();
                 InitNode(operand, op.Register);
-                operand.Name = ExtractSymbolName(op.Register);
+                operand.Name = ExtractSymbolName(op.Register as Identifier);
                 result.Operands.Add(operand);
             }
             else if (op.SaveEnvOperation) {
                 result.Kind = AssemblerStatementKind.SaveEnvOperation;
                 var operand = new SymbolReference();
                 InitNode(operand, op.Register);
-                operand.Name = ExtractSymbolName(op.Register);
+                operand.Name = ExtractSymbolName(op.Register as Identifier);
                 result.Operands.Add(operand);
             }
             else if (op.NoFrame) {
@@ -2638,14 +2638,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     start visiting an assembler statement
         /// </summary>
         /// <param name="statement"></param>
-        public void StartVisit(AsmStatement statement) {
+        public void StartVisit(AsmStatementSymbolx statement) {
             var parent = LastValue as BlockOfAssemblerStatements;
             var result = new AssemblerStatement();
             InitNode(result, statement);
             parent.Statements.Add(result);
-            result.OpCode = ExtractSymbolName(statement.OpCode?.OpCode);
-            result.SegmentPrefix = ExtractSymbolName(statement.Prefix?.SegmentPrefix);
-            result.LockPrefix = ExtractSymbolName(statement.Prefix?.LockPrefix);
+            result.OpCode = ExtractSymbolName((statement.OpCode as AsmOpCodeSymbol)?.OpCode);
+            result.SegmentPrefix = ExtractSymbolName((statement.Prefix as AsmPrefixSymbol)?.SegmentPrefix as Identifier);
+            result.LockPrefix = ExtractSymbolName((statement.Prefix as AsmPrefixSymbol)?.LockPrefix);
 
 
         }
@@ -2731,7 +2731,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     start visting an assembler term
         /// </summary>
         /// <param name="statement"></param>
-        public void StartVisit(AsmTerm statement) {
+        public void StartVisit(AsmTermSymbol statement) {
 
             if (statement.Kind != TokenKind.Undefined) {
                 var lastExpression = LastExpression;
@@ -3313,7 +3313,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// </summary>
         /// <param name="element"></param>
         /// <param name="child"></param>
-        public void EndVisitChild(CaseStatement element, ISyntaxPart child) {
+        public void EndVisitChild(CaseStatementSymbol element, ISyntaxPart child) {
         }
 
         /// <summary>

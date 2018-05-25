@@ -56,7 +56,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         ///     symbol length
         /// </summary>
         public int Length
-            => NotSymbol.Length + NotExpression.Length + LeftTerm.Length + Operand.Length + RightTerm.Length;
+            => NotSymbol.Length + NotExpression.Length + LeftTerm.Length + Operand.Length + RightTerm.Length + Comma.Length;
 
+        /// <summary>
+        ///     comma
+        /// </summary>
+        public Terminal Comma { get; set; }
     }
 }

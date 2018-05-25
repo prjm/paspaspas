@@ -199,8 +199,97 @@ namespace PasPasPasTests.Parser {
 
         [TestCase]
         public void TestAsmOpCodeSymbol() {
-            var s = RunEmptyCstTest(p => p.ParseAssemblyOpcode());
+            var s = RunEmptyCstTest(p => p.ParseAssemblyOpcode() as AsmOpCodeSymbol);
             Assert.IsNotNull(s.OpCode);
+            Assert.AreEqual(0, s.Length);
+        }
+
+        [TestCase]
+        public void TestAsmPrefixymbol() {
+            var s = RunEmptyCstTest(p => p.ParseAssemblyPrefix() as AsmPrefixSymbol, "lock");
+            Assert.IsNotNull(s.LockPrefix);
+            Assert.IsNotNull(s.SegmentPrefix);
+            Assert.AreEqual(0, s.Length);
+        }
+
+        [TestCase]
+        public void TestCaseStatement() {
+            var s = RunEmptyCstTest(p => p.ParseCaseStatement(), "");
+            Assert.IsNotNull(s.CaseSymbol);
+            Assert.IsNotNull(s.CaseExpression);
+            Assert.IsNotNull(s.OfSymbol);
+            Assert.IsNotNull(s.ElseSymbol);
+            Assert.IsNotNull(s.Else);
+            Assert.IsNotNull(s.Semicolon);
+            Assert.IsNotNull(s.EndSymbol);
+            Assert.AreEqual(0, s.Length);
+        }
+
+        [TestCase]
+        public void TestCaseItem() {
+            var s = RunEmptyCstTest(p => p.ParseCaseItem(), "5: ;");
+            Assert.IsNotNull(s.ColonSymbol);
+            Assert.IsNotNull(s.CaseStatement);
+            Assert.IsNotNull(s.Semicolon);
+            Assert.AreEqual(3, s.Length);
+        }
+
+        [TestCase]
+        public void TestCaseLabel() {
+            var s = RunEmptyCstTest(p => p.ParseCaseLabel(), "");
+            Assert.IsNotNull(s.StartExpression);
+            Assert.IsNotNull(s.Dots);
+            Assert.IsNotNull(s.EndExpression);
+            Assert.AreEqual(0, s.Length);
+        }
+
+        [TestCase]
+        public void TestBlockBody() {
+            var s = RunEmptyCstTest(p => p.ParseBlockBody() as BlockBodySymbol, "");
+            Assert.IsNotNull(s.AssemblerBlock);
+            Assert.IsNotNull(s.Body);
+            Assert.AreEqual(0, s.Length);
+        }
+
+        [TestCase]
+        public void TestAsmPseudoOpSymbol() {
+            var s = RunEmptyCstTest(p => p.ParseAsmPseudoOp(), "");
+            Assert.IsNotNull(s.DotSymbol);
+            Assert.IsNotNull(s.Kind);
+            Assert.IsNotNull(s.NumberOfParams);
+            Assert.IsNotNull(s.Register);
+            Assert.AreEqual(0, s.Length);
+        }
+
+        [TestCase]
+        public void TestAsmStatement() {
+            var s = RunEmptyCstTest(p => p.ParseAsmStatement(), "");
+            Assert.IsNotNull(s.Label);
+            Assert.IsNotNull(s.ColonSymbol);
+            Assert.IsNotNull(s.OpCode);
+            Assert.IsNotNull(s.Prefix);
+            Assert.AreEqual(0, s.Length);
+        }
+
+        [TestCase]
+        public void TestAsmTerm() {
+            var s = RunEmptyCstTest(p => p.ParseAssemblyTerm(), "");
+            Assert.IsNotNull(s.DotSymbol);
+            Assert.IsNotNull(s.Subtype);
+            Assert.IsNotNull(s.LeftOperand);
+            Assert.IsNotNull(s.Operator);
+            Assert.IsNotNull(s.RightOperand);
+            Assert.AreEqual(0, s.Length);
+        }
+
+        [TestCase]
+        public void TestAssemblySymbol() {
+            var s = RunEmptyCstTest(p => p.ParseAssemblyAttribute(), "");
+            Assert.IsNotNull(s.OpenBraces);
+            Assert.IsNotNull(s.AssemblySymbol);
+            Assert.IsNotNull(s.ColonSymbol);
+            Assert.IsNotNull(s.Attribute);
+            Assert.IsNotNull(s.CloseBraces);
             Assert.AreEqual(0, s.Length);
         }
 
@@ -212,6 +301,7 @@ namespace PasPasPasTests.Parser {
             Assert.IsNotNull(s.Operand);
             Assert.IsNotNull(s.LeftTerm);
             Assert.IsNotNull(s.RightTerm);
+            Assert.IsNotNull(s.Comma);
             Assert.AreEqual(0, s.Length);
         }
 
