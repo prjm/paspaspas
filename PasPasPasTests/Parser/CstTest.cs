@@ -362,5 +362,60 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(0, s.Length);
         }
 
+        [TestCase]
+        public void TestClassField() {
+            var s = RunEmptyCstTest(p => p.ParseClassFieldDeclararation(), "");
+            Assert.IsNotNull(s.Names);
+            Assert.IsNotNull(s.ColonSymbol);
+            Assert.IsNotNull(s.TypeDecl);
+            Assert.IsNotNull(s.Hint);
+            Assert.IsNotNull(s.Semicolon);
+            Assert.AreEqual(0, s.Length);
+        }
+
+        [TestCase]
+        public void TestClassHelperDef() {
+            var s = RunEmptyCstTest(p => p.ParseClassHelper());
+            Assert.IsNotNull(s.ClassSymbol);
+            Assert.IsNotNull(s.HelperSymbol);
+            Assert.IsNotNull(s.ClassParent);
+            Assert.IsNotNull(s.ForSymbol);
+            Assert.IsNotNull(s.HelperName);
+            Assert.IsNotNull(s.HelperItems);
+            Assert.IsNotNull(s.EndSymbol);
+            Assert.AreEqual(0, s.Length);
+        }
+
+
+        [TestCase]
+        public void TestClassHelperItem() {
+            var mode = ClassDeclarationMode.Other;
+            var s = RunEmptyCstTest(p => p.ParseClassHelperItem(ref mode));
+            Assert.IsNotNull(s.Attributes1);
+            Assert.IsNotNull(s.ClassSymbol);
+            Assert.IsNotNull(s.Attributes2);
+            Assert.IsNotNull(s.VarSymbol);
+            Assert.IsNotNull(s.StrictSymbol);
+            Assert.IsNotNull(s.MethodDeclaration);
+            Assert.IsNotNull(s.PropertyDeclaration);
+            Assert.IsNotNull(s.ConstDeclaration);
+            Assert.IsNotNull(s.TypeSection);
+            Assert.IsNotNull(s.FieldDeclaration);
+            Assert.AreEqual(0, s.Length);
+        }
+
+        [TestCase]
+        public void TestClassHelperItems() {
+            var s = RunEmptyCstTest(p => p.ParseClassHelperItems(), "");
+            Assert.AreEqual(0, s.Length);
+        }
+
+        [TestCase]
+        public void TestClassMethod() {
+            var s = RunEmptyCstTest(p => p.ParseMethodDeclaration(), "");
+            Assert.AreEqual(0, s.Length);
+        }
+
+
     }
 }

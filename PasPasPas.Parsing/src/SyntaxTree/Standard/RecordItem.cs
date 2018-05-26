@@ -25,7 +25,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     method
         /// </summary>
-        public ClassMethod MethodDeclaration { get; set; }
+        public ClassMethodSymbol MethodDeclaration { get; set; }
 
         /// <summary>
         ///     property

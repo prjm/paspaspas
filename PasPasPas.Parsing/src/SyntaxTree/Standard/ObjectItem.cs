@@ -10,12 +10,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     field declaration
         /// </summary>
-        public ClassField FieldDeclaration { get; set; }
+        public ClassFieldSymbol FieldDeclaration { get; set; }
 
         /// <summary>
         ///     method declaration
         /// </summary>
-        public ClassMethod MethodDeclaration { get; set; }
+        public ClassMethodSymbol MethodDeclaration { get; set; }
 
         /// <summary>
         ///     strict modifier

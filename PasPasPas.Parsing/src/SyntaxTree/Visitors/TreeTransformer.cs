@@ -60,13 +60,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         IStartVisitor<CompoundStatement>, IEndVisitor<CompoundStatement>,
         IStartVisitor<Label>, IEndVisitor<Label>,
         IStartVisitor<ClassDeclarationSymbol>, IEndVisitor<ClassDeclarationSymbol>,
-        IStartVisitor<ClassDeclarationItem>,
-        IStartVisitor<ClassField>,
+        IStartVisitor<ClassDeclarationItemSymbol>,
+        IStartVisitor<ClassFieldSymbol>,
         IStartVisitor<ClassProperty>,
         IStartVisitor<ClassPropertyReadWrite>,
         IStartVisitor<ClassPropertyDispInterface>,
         IStartVisitor<ClassPropertySpecifier>,
-        IStartVisitor<ClassMethod>,
+        IStartVisitor<ClassMethodSymbol>,
         IStartVisitor<MethodResolution>,
         IStartVisitor<ReintroduceSymbol>,
         IStartVisitor<OverloadSymbol>,
@@ -94,8 +94,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         IStartVisitor<ObjectItem>,
         IStartVisitor<InterfaceDefinition>,
         IStartVisitor<InterfaceGuid>,
-        IStartVisitor<ClassHelperDef>,
-        IStartVisitor<ClassHelperItem>,
+        IStartVisitor<ClassHelperDefSymbol>,
+        IStartVisitor<ClassHelperItemSymbol>,
         IStartVisitor<ProcedureDeclaration>,
         IStartVisitor<Standard.MethodDeclaration>,
         IStartVisitor<StatementPart>,
@@ -1277,7 +1277,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     start visiting a class declaration item
         /// </summary>
         /// <param name="classDeclarationItem"></param>
-        public void StartVisit(ClassDeclarationItem classDeclarationItem) {
+        public void StartVisit(ClassDeclarationItemSymbol classDeclarationItem) {
 
             if (!(LastValue is StructuredType parentType))
                 return;
@@ -1294,7 +1294,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     start visiting a class field
         /// </summary>
         /// <param name="field"></param>
-        public void StartVisit(ClassField field) {
+        public void StartVisit(ClassFieldSymbol field) {
             var structType = LastValue as StructuredType;
             var declItem = field.ParentItem as IStructuredTypeMember;
             var result = new StructureFields();
@@ -1441,7 +1441,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     start visiting a class method
         /// </summary>
         /// <param name="method"></param>
-        public void StartVisit(ClassMethod method) {
+        public void StartVisit(ClassMethodSymbol method) {
             var parent = LastValue as StructuredType;
             var result = new StructureMethod();
             InitNode(result, method);
@@ -1470,8 +1470,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             var parent = LastValue as StructuredType;
             var result = new StructureMethodResolution();
             InitNode(result, methodResolution);
-            result.Attributes = ExtractAttributes(((ClassDeclarationItem)methodResolution.ParentItem).Attributes1 as UserAttributes, CurrentUnit);
-            result.Attributes = ExtractAttributes(((ClassDeclarationItem)methodResolution.ParentItem).Attributes1 as UserAttributes, CurrentUnit, result.Attributes);
+            result.Attributes = ExtractAttributes(((ClassDeclarationItemSymbol)methodResolution.ParentItem).Attributes1 as UserAttributes, CurrentUnit);
+            result.Attributes = ExtractAttributes(((ClassDeclarationItemSymbol)methodResolution.ParentItem).Attributes1 as UserAttributes, CurrentUnit, result.Attributes);
             result.Kind = TokenKindMapper.ForMethodResolutionKind(methodResolution.Kind);
             result.Target = ExtractSymbolName(methodResolution.ResolveIdentifier);
             parent.MethodResolutions.Add(result);
@@ -2122,7 +2122,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     start visiting a class helper definition
         /// </summary>
         /// <param name="classHelper"></param>
-        public void StartVisit(ClassHelperDef classHelper) {
+        public void StartVisit(ClassHelperDefSymbol classHelper) {
             var typeTarget = LastTypeDeclaration;
             var result = new StructuredType();
             InitNode(result, classHelper);
@@ -2136,7 +2136,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     end visig a class helper definition
         /// </summary>
         /// <param name="classHelper"></param>
-        public void EndVisit(ClassHelperDef classHelper) {
+        public void EndVisit(ClassHelperDefSymbol classHelper) {
             var parentType = LastValue as StructuredType;
             CurrentMemberVisibility.Reset(parentType);
         }
@@ -2149,7 +2149,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     start visiting a class helper item
         /// </summary>
         /// <param name="classHelperItem"></param>
-        public void StartVisit(ClassHelperItem classHelperItem) {
+        public void StartVisit(ClassHelperItemSymbol classHelperItem) {
             var parentType = LastValue as StructuredType;
 
             if (parentType == null)

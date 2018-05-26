@@ -6,7 +6,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// <summary>
     ///     simple field declaration
     /// </summary>
-    public class ClassField : StandardSyntaxTreeBase {
+    public class ClassFieldSymbol : StandardSyntaxTreeBase {
 
         /// <summary>
         ///     hints
@@ -23,6 +23,16 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// </summary>
         public TypeSpecification TypeDecl { get; set; }
 
+        /// <summary>
+        ///     semicolon
+        /// </summary>
+        public Terminal Semicolon { get; set; }
+
+        /// <summary>
+        ///     colon
+        /// </summary>
+        public Terminal ColonSymbol { get; set; }
+
 
         /// <summary>
         ///     accept visitor
@@ -30,9 +40,19 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="visitor">node visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
-            AcceptParts(this, visitor);
+            AcceptPart(this, Names, visitor);
+            AcceptPart(this, ColonSymbol, visitor);
+            AcceptPart(this, TypeDecl, visitor);
+            AcceptPart(this, Hint, visitor);
+            AcceptPart(this, Semicolon, visitor);
             visitor.EndVisit(this);
         }
+
+        /// <summary>
+        ///     symbol length
+        /// </summary>
+        public int Length
+            => Names.Length + ColonSymbol.Length + TypeDecl.Length + Hint.Length + Semicolon.Length;
 
     }
 }

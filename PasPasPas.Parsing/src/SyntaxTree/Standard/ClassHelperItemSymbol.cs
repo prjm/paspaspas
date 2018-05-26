@@ -3,9 +3,9 @@
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
     /// <summary>
-    ///     class declaration item
+    ///     class helper item
     /// </summary>
-    public class ClassDeclarationItem : StandardSyntaxTreeBase, IStructuredTypeMember {
+    public class ClassHelperItemSymbol : StandardSyntaxTreeBase, IStructuredTypeMember {
 
         /// <summary>
         ///     attributes
@@ -18,24 +18,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         public SyntaxPartBase Attributes2 { get; set; }
 
         /// <summary>
-        ///     class symbol
-        /// </summary>
-        public Terminal ClassSymbol { get; set; }
-
-        /// <summary>
-        ///     class-wide declaration
+        ///     marker for class properties
         /// </summary>
         public bool ClassItem { get; set; }
-
-        /// <summary>
-        ///     constant class section
-        /// </summary>
-        public SyntaxPartBase ConstSection { get; set; }
-
-        /// <summary>
-        ///     field declaration
-        /// </summary>
-        public SyntaxPartBase FieldDeclaration { get; set; }
 
         /// <summary>
         ///     method declaration
@@ -43,31 +28,45 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         public SyntaxPartBase MethodDeclaration { get; set; }
 
         /// <summary>
-        ///     method resolution
-        /// </summary>
-        public SyntaxPartBase MethodResolution { get; set; }
-
-        /// <summary>
         ///     property declaration
         /// </summary>
         public SyntaxPartBase PropertyDeclaration { get; set; }
 
         /// <summary>
-        ///     strict declaration
+        ///     strict
         /// </summary>
-        public bool Strict
-            => StrictSymbol.Kind == TokenKind.Strict;
+        public bool Strict { get; set; }
 
         /// <summary>
-        ///     type section
+        ///     variable section
+        /// </summary>
+        public SyntaxPartBase VarSection { get; set; }
+
+        /// <summary>
+        ///     visibility
+        /// </summary>
+        public int Visibility { get; set; }
+            = TokenKind.Undefined;
+
+        /// <summary>
+        ///     constants
+        /// </summary>
+        public SyntaxPartBase ConstDeclaration { get; set; }
+
+        /// <summary>
+        ///     types
         /// </summary>
         public SyntaxPartBase TypeSection { get; set; }
 
         /// <summary>
-        ///     visibility declaration
+        ///     fields
         /// </summary>
-        public int Visibility { get; set; }
-            = TokenKind.Undefined;
+        public SyntaxPartBase FieldDeclaration { get; set; }
+
+        /// <summary>
+        ///     class symbol
+        /// </summary>
+        public Terminal ClassSymbol { get; set; }
 
         /// <summary>
         ///     var symbol
@@ -82,7 +81,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     accept visitor
         /// </summary>
-        /// <param name="visitor">node visitor</param>
+        /// <param name="visitor">visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
             AcceptPart(this, Attributes1, visitor);
@@ -90,14 +89,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
             AcceptPart(this, Attributes2, visitor);
             AcceptPart(this, VarSymbol, visitor);
             AcceptPart(this, StrictSymbol, visitor);
-            AcceptPart(this, MethodResolution, visitor);
             AcceptPart(this, MethodDeclaration, visitor);
             AcceptPart(this, PropertyDeclaration, visitor);
-            AcceptPart(this, ConstSection, visitor);
+            AcceptPart(this, ConstDeclaration, visitor);
             AcceptPart(this, TypeSection, visitor);
             AcceptPart(this, FieldDeclaration, visitor);
             visitor.EndVisit(this);
         }
+
 
         /// <summary>
         ///     symbol length
@@ -108,12 +107,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
             + Attributes2.Length
             + VarSymbol.Length
             + StrictSymbol.Length
-            + MethodResolution.Length
             + MethodDeclaration.Length
             + PropertyDeclaration.Length
-            + ConstSection.Length
+            + ConstDeclaration.Length
             + TypeSection.Length
             + FieldDeclaration.Length;
-
     }
 }

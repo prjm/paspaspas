@@ -10,7 +10,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     method declaration
         /// </summary>
-        public ClassMethod Method { get; set; }
+        public ClassMethodSymbol Method { get; set; }
 
         /// <summary>
         ///     property declaration

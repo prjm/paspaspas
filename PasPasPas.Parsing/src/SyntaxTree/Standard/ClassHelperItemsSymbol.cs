@@ -5,7 +5,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// <summary>
     ///     format class helper items
     /// </summary>
-    public class ClassHelperItems : StandardSyntaxTreeBase {
+    public class ClassHelperItemsSymbol : VariableLengthSyntaxTreeBase<ClassHelperItemSymbol> {
 
         /// <summary>
         ///     accept visitor
@@ -13,9 +13,15 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="visitor">node visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
-            AcceptParts(this, visitor);
+            AcceptPart(this, visitor);
             visitor.EndVisit(this);
         }
+
+        /// <summary>
+        ///     symbol length
+        /// </summary>
+        public int Length
+            => ItemLength;
 
     }
 }

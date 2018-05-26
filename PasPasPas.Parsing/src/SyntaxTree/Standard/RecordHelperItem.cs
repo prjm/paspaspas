@@ -20,7 +20,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     method
         /// </summary>
-        public ClassMethod MethodDeclaration { get; set; }
+        public ClassMethodSymbol MethodDeclaration { get; set; }
 
         /// <summary>
         ///     property
@@ -57,7 +57,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     field
         /// </summary>
-        public ClassField FieldDeclaration { get; internal set; }
+        public ClassFieldSymbol FieldDeclaration { get; internal set; }
 
         /// <summary>
         ///     accept visitor
