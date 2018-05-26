@@ -2,46 +2,45 @@
 
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
-
     /// <summary>
-    ///     class type declarataion
+    ///     class type declaration
     /// </summary>
     public class ClassTypeDeclaration : StandardSyntaxTreeBase {
 
         /// <summary>
         ///     class declaration
         /// </summary>
-        public ClassDeclaration ClassDef { get; internal set; }
+        public SyntaxPartBase ClassDef { get; set; }
 
         /// <summary>
         ///     class helper
         /// </summary>
-        public ClassHelperDef ClassHelper { get; internal set; }
+        public SyntaxPartBase ClassHelper { get; set; }
 
         /// <summary>
         ///     class of declaration
         /// </summary>
-        public ClassOfDeclaration ClassOf { get; internal set; }
+        public SyntaxPartBase ClassOf { get; set; }
 
         /// <summary>
         ///     interface definition
         /// </summary>
-        public InterfaceDefinition InterfaceDef { get; internal set; }
+        public SyntaxPartBase InterfaceDef { get; set; }
 
         /// <summary>
         ///     object declaration
         /// </summary>
-        public ObjectDeclaration ObjectDecl { get; internal set; }
+        public SyntaxPartBase ObjectDecl { get; set; }
 
         /// <summary>
         ///     record declaration
         /// </summary>
-        public RecordDeclaration RecordDecl { get; internal set; }
+        public SyntaxPartBase RecordDecl { get; set; }
 
         /// <summary>
         ///     record helper
         /// </summary>
-        public RecordHelperDefinition RecordHelper { get; internal set; }
+        public SyntaxPartBase RecordHelper { get; set; }
 
         /// <summary>
         ///     accept visitor
@@ -49,10 +48,27 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="visitor">visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
-            AcceptParts(this, visitor);
+            AcceptPart(this, ClassOf, visitor);
+            AcceptPart(this, ClassHelper, visitor);
+            AcceptPart(this, ClassDef, visitor);
+            AcceptPart(this, InterfaceDef, visitor);
+            AcceptPart(this, ObjectDecl, visitor);
+            AcceptPart(this, RecordDecl, visitor);
+            AcceptPart(this, RecordHelper, visitor);
             visitor.EndVisit(this);
         }
 
+        /// <summary>
+        ///     symbol length
+        /// </summary>
+        public int Length
+            => ClassOf.Length +
+                ClassHelper.Length +
+                ClassDef.Length +
+                InterfaceDef.Length +
+                ObjectDecl.Length +
+                RecordDecl.Length +
+                RecordHelper.Length;
 
     }
 }

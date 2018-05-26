@@ -30,7 +30,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     result attributes
         /// </summary>
-        public UserAttributes ResultAttributes { get; set; }
+        public SyntaxPartBase ResultAttributes { get; set; }
 
         /// <summary>
         ///     result attributes

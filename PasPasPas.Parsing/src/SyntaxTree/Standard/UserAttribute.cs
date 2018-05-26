@@ -8,7 +8,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     public class UserAttributeDefinition : StandardSyntaxTreeBase {
 
         /// <summary>
-        ///     üaraparameter expressions
+        ///     parameter expressions
         /// </summary>
         public ExpressionList Expressions { get; set; }
 

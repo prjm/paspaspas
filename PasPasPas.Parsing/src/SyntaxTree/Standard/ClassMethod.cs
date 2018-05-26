@@ -35,7 +35,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     Result type attributes
         /// </summary>
-        public UserAttributes ResultAttributes { get; set; }
+        public SyntaxPartBase ResultAttributes { get; set; }
 
         /// <summary>
         ///     parse a type specification

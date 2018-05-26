@@ -11,7 +11,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     user attributes
         /// </summary>
-        public UserAttributes Attributes { get; set; }
+        public SyntaxPartBase Attributes { get; set; }
 
         /// <summary>
         ///     hinting directives

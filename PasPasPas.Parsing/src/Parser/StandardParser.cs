@@ -1675,7 +1675,7 @@ namespace PasPasPas.Parsing.Parser {
                     continue;
                 }
 
-                UserAttributes attrs = null;
+                SyntaxPartBase attrs = null;
                 if (Match(TokenKind.OpenBraces)) {
                     if (LookAhead(1, TokenKind.Assembly)) {
                         ParseAssemblyAttribute();
@@ -1698,11 +1698,11 @@ namespace PasPasPas.Parsing.Parser {
                     if (useMethodDeclaration) {
                         var methodDecl = ParseMethodDecl(result);
                         methodDecl.Class = useClass;
-                        methodDecl.Attributes = attrs;
+                        methodDecl.Attributes = attrs as UserAttributes;
                         continue;
                     }
 
-                    ParseProcedureDeclaration(result, attrs);
+                    ParseProcedureDeclaration(result, attrs as UserAttributes);
                     continue;
                 }
 
@@ -2516,7 +2516,7 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             if (Match(TokenKind.Class, TokenKind.Interface, TokenKind.Record, TokenKind.Object, TokenKind.DispInterface)) {
-                result.ClassDeclaration = ParseClassDeclaration(result);
+                result.ClassDeclaration = ParseClassDeclaration();
                 return result;
             }
 
@@ -2526,10 +2526,22 @@ namespace PasPasPas.Parsing.Parser {
         #endregion
         #region ParseClassDeclaration
 
+        /// <summary>
+        ///     parse a class declaration
+        /// </summary>
+        /// <returns></returns>
+
         [Rule("ClassDeclaration", "ClassOfDeclaration | ClassDefinition | ClassHelper | InterfaceDef | ObjectDecl | RecordDecl | RecordHelperDecl ")]
-        private ClassTypeDeclaration ParseClassDeclaration(IExtendableSyntaxPart parent) {
-            var result = new ClassTypeDeclaration();
-            parent.Add(result);
+        public ClassTypeDeclaration ParseClassDeclaration() {
+            var result = new ClassTypeDeclaration() {
+                ClassOf = EmptyTerminal(),
+                ClassHelper = EmptyTerminal(),
+                ClassDef = EmptyTerminal(),
+                InterfaceDef = EmptyTerminal(),
+                ObjectDecl = EmptyTerminal(),
+                RecordDecl = EmptyTerminal(),
+                RecordHelper = EmptyTerminal()
+            };
 
             if (Match(TokenKind.Class) && LookAhead(1, TokenKind.Of)) {
                 result.ClassOf = ParseClassOfDeclaration(result);
@@ -2637,13 +2649,13 @@ namespace PasPasPas.Parsing.Parser {
             parent.Add(result);
 
             if (Match(TokenKind.OpenBraces)) {
-                result.Attributes = ParseAttributes(result);
+                result.Attributes1 = ParseAttributes(result);
             }
 
             result.ClassItem = ContinueWith(result, TokenKind.Class);
 
             if (Match(TokenKind.OpenBraces)) {
-                result.Attributes = ParseAttributes(result, result.Attributes);
+                result.Attributes2 = ParseAttributes(result);
             }
 
             if (Match(TokenKind.Public, TokenKind.Protected, TokenKind.Private, TokenKind.Strict, TokenKind.Published, TokenKind.Automated)) {
@@ -2828,9 +2840,9 @@ namespace PasPasPas.Parsing.Parser {
             var result = new RecordHelperItem();
             parent.Add(result);
 
-            result.Attributes = ParseAttributes(result);
+            result.Attributes1 = ParseAttributes(result);
             result.ClassItem = ContinueWith(result, TokenKind.Class);
-            result.Attributes = ParseAttributes(result, result.Attributes);
+            result.Attributes2 = ParseAttributes(result);
 
             if (Match(TokenKind.Const)) {
                 result.ConstDeclaration = ParseConstSection(result, true);
@@ -3104,9 +3116,9 @@ namespace PasPasPas.Parsing.Parser {
                 return null;
             }
 
-            result.Attributes = ParseAttributes(result);
-            result.Class = ContinueWith(result, TokenKind.Class);
-            result.Attributes = ParseAttributes(result, result.Attributes);
+            result.Attributes1 = ParseAttributes(result);
+            result.ClassItem = ContinueWith(result, TokenKind.Class);
+            result.Attributes2 = ParseAttributes(result);
 
             if (Match(TokenKind.Const)) {
                 result.ConstDeclaration = ParseConstSection(result, true);
@@ -3114,7 +3126,7 @@ namespace PasPasPas.Parsing.Parser {
                 return result;
             }
 
-            if (!result.Class && Match(TokenKind.TypeKeyword)) {
+            if (!result.ClassItem && Match(TokenKind.TypeKeyword)) {
                 result.TypeSection = ParseTypeSection(result, true);
                 mode = ClassDeclarationMode.Other;
                 return result;
@@ -3144,7 +3156,7 @@ namespace PasPasPas.Parsing.Parser {
 
                 if (mode == ClassDeclarationMode.Fields || mode == ClassDeclarationMode.ClassFields) {
                     result.FieldDeclaration = ParseClassFieldDeclararation(result);
-                    result.Class = mode == ClassDeclarationMode.ClassFields;
+                    result.ClassItem = mode == ClassDeclarationMode.ClassFields;
                     return result;
                 }
                 else {
@@ -3160,8 +3172,8 @@ namespace PasPasPas.Parsing.Parser {
         #region ParseClassDefinition
 
         [Rule("ClassDefinition", "'class' [( 'sealed' | 'abstract' )] [ClassParent] ClassItems 'end' ")]
-        private ClassDeclaration ParseClassDefinition(IExtendableSyntaxPart parent) {
-            var result = new ClassDeclaration();
+        private ClassDeclarationSymbol ParseClassDefinition(IExtendableSyntaxPart parent) {
+            var result = new ClassDeclarationSymbol();
             InitByTerminal(result, parent, TokenKind.Class);
 
             result.Sealed = ContinueWith(result, TokenKind.Sealed);
@@ -3191,7 +3203,7 @@ namespace PasPasPas.Parsing.Parser {
             var mode = ClassDeclarationMode.Fields;
 
             while ((!Match(TokenKind.End)) && (mode != ClassDeclarationMode.Undefined)) {
-                ParseClassDeclarationItem(result, ref mode);
+                ParseClassDeclarationItem(ref mode);
 
                 if (mode == ClassDeclarationMode.Undefined && result.PartList.Count > 0) {
                     Unexpected();
@@ -3205,34 +3217,55 @@ namespace PasPasPas.Parsing.Parser {
         #endregion
         #region ParseClassDeclarationItem
 
-        [Rule("ClassItem", "Visibility | MethodResolution | MethodDeclaration | ConstSection | TypeSection | PropertyDeclaration | [ 'class'] VarSection | FieldDeclarations ")]
-        private ClassDeclarationItem ParseClassDeclarationItem(IExtendableSyntaxPart parent, ref ClassDeclarationMode mode) {
+        /// <summary>
+        ///     parse a class declaration item
+        /// </summary>
 
-            if (ContinueWith(parent, TokenKind.Var)) {
+        /// <param name="mode"></param>
+        /// <returns></returns>
+
+        [Rule("ClassItem", "Visibility | MethodResolution | MethodDeclaration | ConstSection | TypeSection | PropertyDeclaration | [ 'class'] VarSection | FieldDeclarations ")]
+        public ClassDeclarationItem ParseClassDeclarationItem(ref ClassDeclarationMode mode) {
+
+            var result = new ClassDeclarationItem() {
+                VarSymbol = EmptyTerminal(),
+                ClassSymbol = EmptyTerminal(),
+                Attributes1 = EmptyTerminal(),
+                Attributes2 = EmptyTerminal(),
+                StrictSymbol = EmptyTerminal(),
+                MethodResolution = EmptyTerminal(),
+                MethodDeclaration = EmptyTerminal(),
+                PropertyDeclaration = EmptyTerminal(),
+                ConstSection = EmptyTerminal(),
+                TypeSection = EmptyTerminal(),
+                FieldDeclaration = EmptyTerminal(),
+            };
+
+            if (Match(TokenKind.Var)) {
+                result.VarSymbol = ContinueWith(TokenKind.Var);
                 mode = ClassDeclarationMode.Fields;
-                return null;
+                return result;
             }
 
             if (Match(TokenKind.Class) && LookAhead(1, TokenKind.Var)) {
-                ContinueWith(parent, TokenKind.Class);
-                ContinueWith(parent, TokenKind.Var);
+                result.ClassSymbol = ContinueWith(TokenKind.Class);
+                result.VarSymbol = ContinueWith(TokenKind.Var);
+                result.ClassItem = true;
                 mode = ClassDeclarationMode.ClassFields;
-                return null;
+                return result;
             }
 
-            var result = new ClassDeclarationItem();
-            parent.Add(result);
-
-            result.Attributes = ParseAttributes(result);
-            result.ClassItem = ContinueWith(result, TokenKind.Class);
-            result.Attributes = ParseAttributes(result, result.Attributes);
+            result.Attributes1 = ParseAttributes(result);
+            result.ClassSymbol = ContinueWith(TokenKind.Class) ?? EmptyTerminal();
+            result.ClassItem = result.ClassSymbol.Kind == TokenKind.Class;
+            result.Attributes2 = ParseAttributes(result);
 
             if (Match(TokenKind.Public, TokenKind.Protected, TokenKind.Private, TokenKind.Strict, TokenKind.Published, TokenKind.Automated)) {
                 if (result.ClassItem) {
                     Unexpected();
                 }
                 else {
-                    result.Strict = ContinueWith(result, TokenKind.Strict);
+                    result.StrictSymbol = ContinueWith(TokenKind.Strict);
                     ContinueWith(result, TokenKind.Public, TokenKind.Protected, TokenKind.Private, TokenKind.Published, TokenKind.Automated);
                     result.Visibility = result.LastTerminalKind;
                 }
@@ -3564,7 +3597,7 @@ namespace PasPasPas.Parsing.Parser {
                 parentDefinition.Add(result);
 
                 if (Match(TokenKind.OpenBraces)) {
-                    result.Attributes = ParseAttributes(result);
+                    result.Attributes1 = ParseAttributes(result);
                 }
 
                 if (kind < TokenKind.Undefined && ContinueWith(result, TokenKind.Const, TokenKind.Var, TokenKind.Out)) {
@@ -3579,7 +3612,7 @@ namespace PasPasPas.Parsing.Parser {
                 }
 
                 if (Match(TokenKind.OpenBraces)) {
-                    result.Attributes = ParseAttributes(result, result.Attributes);
+                    result.Attributes2 = ParseAttributes(result);
                 }
 
                 result.ParameterName = RequireIdentifier(result, true);
@@ -3928,7 +3961,7 @@ namespace PasPasPas.Parsing.Parser {
         #region ParseAttributes
 
         [Rule("Attributes", "{ '[' Attribute | AssemblyAttribue ']' }")]
-        private UserAttributes ParseAttributes(IExtendableSyntaxPart parent, UserAttributes result = null) {
+        private SyntaxPartBase ParseAttributes(IExtendableSyntaxPart parent, UserAttributes result = null) {
             while (Match(TokenKind.OpenBraces)) {
 
                 if (result == null) {
@@ -3947,7 +3980,7 @@ namespace PasPasPas.Parsing.Parser {
                     ContinueWithOrMissing(result, TokenKind.CloseBraces);
                 }
             }
-            return result;
+            return (SyntaxPartBase)result ?? EmptyTerminal();
         }
 
         #endregion

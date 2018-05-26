@@ -26,7 +26,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     result type attributes
         /// </summary>
-        public UserAttributes ResultTypeAttributes { get; set; }
+        public SyntaxPartBase ResultTypeAttributes { get; set; }
 
         /// <summary>
         ///     method qualifier

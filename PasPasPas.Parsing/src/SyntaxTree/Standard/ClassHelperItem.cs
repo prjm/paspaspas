@@ -5,17 +5,22 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// <summary>
     ///     class helper item
     /// </summary>
-    public class ClassHelperItem : StandardSyntaxTreeBase {
+    public class ClassHelperItem : StandardSyntaxTreeBase, IStructuredTypeMember {
 
         /// <summary>
         ///     attributes
         /// </summary>
-        public UserAttributes Attributes { get; set; }
+        public SyntaxPartBase Attributes1 { get; set; }
+
+        /// <summary>
+        ///     attributes
+        /// </summary>
+        public SyntaxPartBase Attributes2 { get; set; }
 
         /// <summary>
         ///     marker for class properties
         /// </summary>
-        public bool Class { get; set; }
+        public bool ClassItem { get; set; }
 
         /// <summary>
         ///     method declaration

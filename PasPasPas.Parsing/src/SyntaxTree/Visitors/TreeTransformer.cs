@@ -59,7 +59,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         IStartVisitor<UnitFinalization>,
         IStartVisitor<CompoundStatement>, IEndVisitor<CompoundStatement>,
         IStartVisitor<Label>, IEndVisitor<Label>,
-        IStartVisitor<ClassDeclaration>, IEndVisitor<ClassDeclaration>,
+        IStartVisitor<ClassDeclarationSymbol>, IEndVisitor<ClassDeclarationSymbol>,
         IStartVisitor<ClassDeclarationItem>,
         IStartVisitor<ClassField>,
         IStartVisitor<ClassProperty>,
@@ -355,7 +355,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             InitNode(declaration, typeDeclaration);
             declaration.Name = ExtractSymbolName(typeDeclaration.TypeId?.Identifier);
             declaration.Generics = ExtractGenericDefinition(declaration, typeDeclaration, typeDeclaration.TypeId?.GenericDefinition);
-            declaration.Attributes = ExtractAttributes(typeDeclaration.Attributes, CurrentUnit);
+            declaration.Attributes = ExtractAttributes(typeDeclaration.Attributes as UserAttributes, CurrentUnit);
             declaration.Hints = ExtractHints(typeDeclaration.Hint as HintingInformationList);
             symbols.Symbols.Items.Add(new SingleDeclaredSymbol(declaration));
             symbols.Symbols.Add(declaration, LogSource);
@@ -381,7 +381,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             InitNode(declaration, constDeclaration);
             declaration.Name = ExtractSymbolName(constDeclaration.Identifier);
             declaration.Mode = CurrentDeclarationMode;
-            declaration.Attributes = ExtractAttributes(constDeclaration.Attributes, CurrentUnit);
+            declaration.Attributes = ExtractAttributes(constDeclaration.Attributes as UserAttributes, CurrentUnit);
             declaration.Hints = ExtractHints(constDeclaration.Hint as HintingInformationList);
             symbols.Symbols.Items.Add(new SingleDeclaredSymbol(declaration));
             symbols.Symbols.Add(declaration, LogSource);
@@ -454,7 +454,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 }
             }
 
-            declaration.Attributes = ExtractAttributes(varDeclaration.Attributes, CurrentUnit);
+            declaration.Attributes = ExtractAttributes(varDeclaration.Attributes as UserAttributes, CurrentUnit);
             symbols.Symbols.Items.Add(declaration);
         }
 
@@ -1089,7 +1089,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             result.AllowAnonymousMethods = proceduralType.AllowAnonymousMethods;
 
             if (proceduralType.ReturnTypeAttributes != null)
-                result.ReturnAttributes = ExtractAttributes(proceduralType.ReturnTypeAttributes, CurrentUnit);
+                result.ReturnAttributes = ExtractAttributes(proceduralType.ReturnTypeAttributes as UserAttributes, CurrentUnit);
         }
 
         #endregion
@@ -1119,7 +1119,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             InitNode(result, formalParameter);
             var allParams = typeDefinition.ParentItem as ParameterDefinitions;
             result.Name = ExtractSymbolName(formalParameter.ParameterName);
-            result.Attributes = ExtractAttributes(formalParameter.Attributes, CurrentUnit);
+            result.Attributes = ExtractAttributes(formalParameter.Attributes1 as UserAttributes, CurrentUnit);
+            result.Attributes = ExtractAttributes(formalParameter.Attributes2 as UserAttributes, CurrentUnit, result.Attributes);
             result.ParameterKind = TokenKindMapper.ForParameterReferenceKind(formalParameter.ParameterType);
             typeDefinition.Parameters.Add(result);
             allParams.Add(result, LogSource);
@@ -1247,7 +1248,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     start visiting a class declaration
         /// </summary>
         /// <param name="classDeclaration"></param>
-        public void StartVisit(ClassDeclaration classDeclaration) {
+        public void StartVisit(ClassDeclarationSymbol classDeclaration) {
             var typeTarget = LastTypeDeclaration;
             var result = new StructuredType();
             InitNode(result, classDeclaration);
@@ -1261,10 +1262,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         }
 
         /// <summary>
-        ///     end visting a class declaration
+        ///     end visiting a class declaration
         /// </summary>
         /// <param name="classDeclaration"></param>
-        public void EndVisit(ClassDeclaration classDeclaration) {
+        public void EndVisit(ClassDeclarationSymbol classDeclaration) {
             var parentType = LastValue as StructuredType;
             CurrentMemberVisibility.Reset(parentType);
         }
@@ -1300,7 +1301,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             InitNode(result, field);
             result.Visibility = CurrentMemberVisibility[structType];
             structType.Fields.Items.Add(result);
-            var extractedAttributes = ExtractAttributes(declItem.Attributes, CurrentUnit);
+            var extractedAttributes = ExtractAttributes(declItem.Attributes1 as UserAttributes, CurrentUnit);
+            extractedAttributes = ExtractAttributes(declItem.Attributes2 as UserAttributes, CurrentUnit);
             result.ClassItem = declItem.ClassItem;
 
             foreach (var part in field.Names.Parts) {
@@ -1343,7 +1345,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             result.Visibility = CurrentMemberVisibility[parent];
 
             if (property.ParentItem is IStructuredTypeMember declItem) {
-                result.Attributes = ExtractAttributes(declItem.Attributes, CurrentUnit);
+                result.Attributes = ExtractAttributes(declItem.Attributes1 as UserAttributes, CurrentUnit);
+                result.Attributes = ExtractAttributes(declItem.Attributes2 as UserAttributes, CurrentUnit, result.Attributes);
             }
 
 
@@ -1446,7 +1449,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
             if (method.ParentItem is IStructuredTypeMember declItem) {
                 result.ClassItem = declItem.ClassItem;
-                result.Attributes = ExtractAttributes(declItem.Attributes, CurrentUnit);
+                result.Attributes = ExtractAttributes(declItem.Attributes1 as UserAttributes, CurrentUnit);
+                result.Attributes = ExtractAttributes(declItem.Attributes2 as UserAttributes, CurrentUnit, result.Attributes);
             }
 
             result.Name = ExtractSymbolName(method.Identifier);
@@ -1466,7 +1470,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             var parent = LastValue as StructuredType;
             var result = new StructureMethodResolution();
             InitNode(result, methodResolution);
-            result.Attributes = ExtractAttributes(((ClassDeclarationItem)methodResolution.ParentItem).Attributes, CurrentUnit);
+            result.Attributes = ExtractAttributes(((ClassDeclarationItem)methodResolution.ParentItem).Attributes1 as UserAttributes, CurrentUnit);
+            result.Attributes = ExtractAttributes(((ClassDeclarationItem)methodResolution.ParentItem).Attributes1 as UserAttributes, CurrentUnit, result.Attributes);
             result.Kind = TokenKindMapper.ForMethodResolutionKind(methodResolution.Kind);
             result.Target = ExtractSymbolName(methodResolution.ResolveIdentifier);
             parent.MethodResolutions.Add(result);
@@ -1752,7 +1757,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             result.Name = ExtractSymbolName(procHeading.Name);
             result.Kind = TokenKindMapper.MapMethodKind(procHeading.Kind);
             result.Attributes = ExtractAttributes(procHeading.Attributes, CurrentUnit);
-            result.ReturnAttributes = ExtractAttributes(procHeading.ResultAttributes, CurrentUnit);
+            result.ReturnAttributes = ExtractAttributes(procHeading.ResultAttributes as UserAttributes, CurrentUnit);
             symbols.Symbols.Items.Add(new SingleDeclaredSymbol(result));
             symbols.Symbols.Add(result, LogSource);
         }
@@ -1901,8 +1906,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 fields.Add(result);
 
             IList<SymbolAttribute> extractedAttributes = null;
-            if (fieldDeclaration.ParentItem is RecordItem declItem)
-                extractedAttributes = ExtractAttributes(declItem.Attributes, CurrentUnit);
+            if (fieldDeclaration.ParentItem is RecordItem declItem) {
+                extractedAttributes = ExtractAttributes(declItem.Attributes1 as UserAttributes, CurrentUnit);
+                extractedAttributes = ExtractAttributes(declItem.Attributes2 as UserAttributes, CurrentUnit, extractedAttributes);
+            }
 
             foreach (var part in fieldDeclaration.Names.Parts) {
 

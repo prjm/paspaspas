@@ -13,6 +13,12 @@
         /// <summary>
         ///     member attributes
         /// </summary>
-        UserAttributes Attributes { get; set; }
+        SyntaxPartBase Attributes1 { get; set; }
+
+        /// <summary>
+        ///     member attributes
+        /// </summary>
+        SyntaxPartBase Attributes2 { get; set; }
+
     }
 }

@@ -10,7 +10,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     parameter attributes
         /// </summary>
-        public UserAttributes Attributes { get; set; }
+        public SyntaxPartBase Attributes1 { get; set; }
+
+        /// <summary>
+        ///     parameter attributes
+        /// </summary>
+        public SyntaxPartBase Attributes2 { get; set; }
 
         /// <summary>
         ///     parameter name

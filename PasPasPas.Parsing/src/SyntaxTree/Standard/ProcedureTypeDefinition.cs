@@ -36,7 +36,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     attributes of return types
         /// </summary>
-        public UserAttributes ReturnTypeAttributes { get; set; }
+        public SyntaxPartBase ReturnTypeAttributes { get; set; }
 
         /// <summary>
         ///     accept visitor

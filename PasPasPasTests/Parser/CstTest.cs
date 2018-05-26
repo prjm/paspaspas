@@ -235,6 +235,19 @@ namespace PasPasPasTests.Parser {
         }
 
         [TestCase]
+        public void TestClassDeclaration() {
+            var s = RunEmptyCstTest(p => p.ParseClassDeclaration(), "5: ;");
+            Assert.IsNotNull(s.ClassOf);
+            Assert.IsNotNull(s.ClassHelper);
+            Assert.IsNotNull(s.ClassDef);
+            Assert.IsNotNull(s.InterfaceDef);
+            Assert.IsNotNull(s.ObjectDecl);
+            Assert.IsNotNull(s.RecordDecl);
+            Assert.IsNotNull(s.RecordHelper);
+            Assert.AreEqual(0, s.Length);
+        }
+
+        [TestCase]
         public void TestCaseLabel() {
             var s = RunEmptyCstTest(p => p.ParseCaseLabel(), "");
             Assert.IsNotNull(s.StartExpression);
@@ -328,6 +341,24 @@ namespace PasPasPasTests.Parser {
             Assert.IsNotNull(s.UnitImplementation);
             Assert.IsNotNull(s.UnitBlock);
             Assert.IsNotNull(s.DotSymbol);
+            Assert.AreEqual(0, s.Length);
+        }
+
+        [TestCase]
+        public void TestClassDeclarationItem() {
+            var mode = ClassDeclarationMode.Other;
+            var s = RunEmptyCstTest(p => p.ParseClassDeclarationItem(ref mode));
+            Assert.IsNotNull(s.Attributes1);
+            Assert.IsNotNull(s.ClassSymbol);
+            Assert.IsNotNull(s.Attributes2);
+            Assert.IsNotNull(s.VarSymbol);
+            Assert.IsNotNull(s.StrictSymbol);
+            Assert.IsNotNull(s.MethodResolution);
+            Assert.IsNotNull(s.MethodDeclaration);
+            Assert.IsNotNull(s.PropertyDeclaration);
+            Assert.IsNotNull(s.ConstSection);
+            Assert.IsNotNull(s.TypeSection);
+            Assert.IsNotNull(s.FieldDeclaration);
             Assert.AreEqual(0, s.Length);
         }
 
