@@ -15,7 +15,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     property declaration
         /// </summary>
-        public ClassProperty Property { get; set; }
+        public ClassPropertySymbol Property { get; set; }
 
         /// <summary>
         ///     accept visitor

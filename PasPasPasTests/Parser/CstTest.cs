@@ -413,6 +413,46 @@ namespace PasPasPasTests.Parser {
         [TestCase]
         public void TestClassMethod() {
             var s = RunEmptyCstTest(p => p.ParseMethodDeclaration(), "");
+            Assert.IsNotNull(s.MethodSymbol);
+            Assert.IsNotNull(s.Identifier);
+            Assert.IsNotNull(s.GenericDefinition);
+            Assert.IsNotNull(s.OpenParen);
+            Assert.IsNotNull(s.Parameters);
+            Assert.IsNotNull(s.CloseParen);
+            Assert.IsNotNull(s.ColonSymbol);
+            Assert.IsNotNull(s.ResultAttributes);
+            Assert.IsNotNull(s.ResultType);
+            Assert.IsNotNull(s.Semicolon);
+            Assert.IsNotNull(s.Directives);
+            Assert.AreEqual(0, s.Length);
+        }
+
+
+        [TestCase]
+        public void TestClassOfDeclaration() {
+            var s = RunEmptyCstTest(p => p.ParseClassOfDeclaration(), "");
+            Assert.IsNotNull(s.ClassSymbol);
+            Assert.IsNotNull(s.OfSymbol);
+            Assert.IsNotNull(s.TypeRef);
+            Assert.AreEqual(0, s.Length);
+        }
+
+
+        [TestCase]
+        public void TestClassProperty() {
+            var s = RunEmptyCstTest(p => p.ParsePropertyDeclaration(), "");
+            Assert.IsNotNull(s.PropertySymbol);
+            Assert.IsNotNull(s.PropertyName);
+            Assert.IsNotNull(s.OpenBraces);
+            Assert.IsNotNull(s.ArrayIndex);
+            Assert.IsNotNull(s.CloseBraces);
+            Assert.IsNotNull(s.ColonSymbol);
+            Assert.IsNotNull(s.TypeName);
+            Assert.IsNotNull(s.IndexSymbol);
+            Assert.IsNotNull(s.PropertyIndex);
+            Assert.IsNotNull(s.Semicolon);
+            Assert.IsNotNull(s.DefaultSymbol);
+            Assert.IsNotNull(s.Semicolon2);
             Assert.AreEqual(0, s.Length);
         }
 

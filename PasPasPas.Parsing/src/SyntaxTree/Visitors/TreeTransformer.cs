@@ -44,7 +44,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         IStartVisitor<ArrayTypeSymbol>,
         IStartVisitor<SetDefinition>,
         IStartVisitor<FileType>,
-        IStartVisitor<ClassOfDeclaration>,
+        IStartVisitor<ClassOfDeclarationSymbol>,
         IStartVisitor<TypeName>,
         IStartVisitor<SimpleType>,
         IStartVisitor<EnumTypeDefinition>,
@@ -62,7 +62,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         IStartVisitor<ClassDeclarationSymbol>, IEndVisitor<ClassDeclarationSymbol>,
         IStartVisitor<ClassDeclarationItemSymbol>,
         IStartVisitor<ClassFieldSymbol>,
-        IStartVisitor<ClassProperty>,
+        IStartVisitor<ClassPropertySymbol>,
         IStartVisitor<ClassPropertyReadWrite>,
         IStartVisitor<ClassPropertyDispInterface>,
         IStartVisitor<ClassPropertySpecifier>,
@@ -881,7 +881,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     start visit a class of declaration
         /// </summary>
         /// <param name="classOf"></param>
-        public void StartVisit(ClassOfDeclaration classOf) {
+        public void StartVisit(ClassOfDeclarationSymbol classOf) {
             var typeTarget = LastTypeDeclaration;
             var value = new ClassOfTypeDeclaration();
             InitNode(value, classOf);
@@ -1336,7 +1336,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     start visiting a property declaration
         /// </summary>
         /// <param name="property"></param>
-        public void StartVisit(ClassProperty property) {
+        public void StartVisit(ClassPropertySymbol property) {
             var parent = LastValue as StructuredType;
             var result = new StructureProperty();
             InitNode(result, property);
@@ -1455,7 +1455,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
             result.Name = ExtractSymbolName(method.Identifier);
             result.Kind = TokenKindMapper.MapMethodKind(method.MethodKind);
-            result.Generics = ExtractGenericDefinition(result, method, method.GenericDefinition);
+            result.Generics = ExtractGenericDefinition(result, method, method.GenericDefinition as GenericDefinition);
             parent.Methods.Add(result, LogSource);
         }
 

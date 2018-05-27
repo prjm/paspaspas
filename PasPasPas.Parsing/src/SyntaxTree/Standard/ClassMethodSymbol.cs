@@ -84,8 +84,25 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
             AcceptPart(this, ResultAttributes, visitor);
             AcceptPart(this, ResultType, visitor);
             AcceptPart(this, Semicolon, visitor);
+            AcceptPart(this, Directives, visitor);
             visitor.EndVisit(this);
         }
+
+        /// <summary>
+        ///     symbol length
+        /// </summary>
+        public int Length
+            => MethodSymbol.Length
+            + Identifier.Length
+            + GenericDefinition.Length
+            + OpenParen.Length
+            + Parameters.Length
+            + CloseParen.Length
+            + ColonSymbol.Length
+            + ResultAttributes.Length
+            + ResultType.Length
+            + Semicolon.Length
+            + Directives.Length;
 
     }
 }

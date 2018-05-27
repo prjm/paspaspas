@@ -2544,7 +2544,7 @@ namespace PasPasPas.Parsing.Parser {
             };
 
             if (Match(TokenKind.Class) && LookAhead(1, TokenKind.Of)) {
-                result.ClassOf = ParseClassOfDeclaration(result);
+                result.ClassOf = ParseClassOfDeclaration();
                 return result;
             }
 
@@ -2678,7 +2678,7 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             if (Match(TokenKind.Property)) {
-                result.PropertyDeclaration = ParsePropertyDeclaration(result);
+                result.PropertyDeclaration = ParsePropertyDeclaration();
                 mode = RecordDeclarationMode.Other;
                 return result;
             }
@@ -2863,7 +2863,7 @@ namespace PasPasPas.Parsing.Parser {
 
             if (Match(TokenKind.Property)) {
                 mode = RecordDeclarationMode.Other;
-                result.PropertyDeclaration = ParsePropertyDeclaration(result);
+                result.PropertyDeclaration = ParsePropertyDeclaration();
                 return result;
             }
 
@@ -2949,7 +2949,7 @@ namespace PasPasPas.Parsing.Parser {
 
             if (Match(TokenKind.Property)) {
                 mode = ClassDeclarationMode.Other;
-                result.Property = ParsePropertyDeclaration(result);
+                result.Property = ParsePropertyDeclaration();
                 return result;
             }
 
@@ -3036,7 +3036,7 @@ namespace PasPasPas.Parsing.Parser {
 
             if (Match(TokenKind.Property)) {
                 unexpected = false;
-                result.Property = ParsePropertyDeclaration(result);
+                result.Property = ParsePropertyDeclaration();
                 return result;
             }
 
@@ -3166,7 +3166,7 @@ namespace PasPasPas.Parsing.Parser {
 
             if (Match(TokenKind.Property)) {
                 mode = ClassDeclarationMode.Other;
-                result.PropertyDeclaration = ParsePropertyDeclaration(result);
+                result.PropertyDeclaration = ParsePropertyDeclaration();
                 return result;
             }
 
@@ -3319,7 +3319,7 @@ namespace PasPasPas.Parsing.Parser {
 
             if (Match(TokenKind.Property)) {
                 mode = ClassDeclarationMode.Other;
-                result.PropertyDeclaration = ParsePropertyDeclaration(result);
+                result.PropertyDeclaration = ParsePropertyDeclaration();
                 return result;
             }
 
@@ -3375,34 +3375,62 @@ namespace PasPasPas.Parsing.Parser {
         #endregion
         #region PropertyDeclaration
 
+        /// <summary>
+        ///     class property
+        /// </summary>
+        /// <returns></returns>
+
         [Rule("PropertyDeclaration", "'property' Identifier [ '[' FormalParameters  ']' ] [ ':' TypeName ] [ 'index' Expression ]  { ClassPropertySpecifier } ';' [ 'default' ';' ]  ")]
-        private ClassProperty ParsePropertyDeclaration(IExtendableSyntaxPart parent) {
-            var result = new ClassProperty();
-            InitByTerminal(result, parent, TokenKind.Property);
-            result.PropertyName = RequireIdentifier(result);
-            if (ContinueWith(result, TokenKind.OpenBraces)) {
+        public ClassPropertySymbol ParsePropertyDeclaration() {
+            var result = new ClassPropertySymbol {
+                PropertySymbol = ContinueWithOrMissing(TokenKind.Property),
+                PropertyName = RequireIdentifier(null)
+            };
+
+            if (Match(TokenKind.OpenBraces)) {
+                result.OpenBraces = ContinueWith(TokenKind.OpenBraces);
                 result.ArrayIndex = ParseFormalParameters(result);
-                ContinueWithOrMissing(result, TokenKind.CloseBraces);
+                result.CloseBraces = ContinueWithOrMissing(TokenKind.CloseBraces);
+            }
+            else {
+                result.OpenBraces = EmptyTerminal();
+                result.ArrayIndex = EmptyTerminal();
+                result.CloseBraces = EmptyTerminal();
             }
 
-            if (ContinueWith(result, TokenKind.Colon)) {
+            if (Match(TokenKind.Colon)) {
+                result.ColonSymbol = ContinueWith(TokenKind.Colon);
                 result.TypeName = ParseTypeName(result);
             }
+            else {
+                result.ColonSymbol = EmptyTerminal();
+                result.TypeName = EmptyTerminal();
+            }
 
-            if (ContinueWith(result, TokenKind.Index)) {
+            if (Match(TokenKind.Index)) {
+                result.IndexSymbol = ContinueWith(TokenKind.Index);
                 result.PropertyIndex = ParseExpression(result);
+            }
+            else {
+                result.IndexSymbol = EmptyTerminal();
+                result.PropertyIndex = EmptyTerminal();
             }
 
             while (Match(TokenKind.Read, TokenKind.Write, TokenKind.Add, TokenKind.Remove, TokenKind.ReadOnly, TokenKind.WriteOnly, TokenKind.DispId) ||
                 Match(TokenKind.Default, TokenKind.Stored, TokenKind.Implements, TokenKind.NoDefault)) {
-                ParseClassPropertyAccessSpecifier(result);
+                result.AddItem(ParseClassPropertyAccessSpecifier(result));
             }
 
-            ContinueWithOrMissing(result, TokenKind.Semicolon);
+            result.Semicolon = ContinueWithOrMissing(TokenKind.Semicolon);
 
-            if (ContinueWith(result, TokenKind.Default)) {
+            if (Match(TokenKind.Default)) {
+                result.DefaultSymbol = ContinueWith(TokenKind.Default);
                 result.IsDefault = true;
-                ContinueWithOrMissing(result, TokenKind.Semicolon);
+                result.Semicolon2 = ContinueWithOrMissing(TokenKind.Semicolon);
+            }
+            else {
+                result.DefaultSymbol = EmptyTerminal();
+                result.Semicolon2 = EmptyTerminal();
             }
 
             return result;
@@ -3414,7 +3442,9 @@ namespace PasPasPas.Parsing.Parser {
         [Rule("ClassPropertySpecifier", "ClassPropertyReadWrite | ClassPropertyDispInterface | ('stored' Expression ';') | ('default' [ Expression ] ';' ) | ('nodefault' ';') | ('implements' NamespaceName) ")]
         private ClassPropertySpecifier ParseClassPropertyAccessSpecifier(IExtendableSyntaxPart parent) {
             var result = new ClassPropertySpecifier();
-            parent.Add(result);
+
+            if (parent != null)
+                parent.Add(result);
 
             if (Match(TokenKind.Read, TokenKind.Write, TokenKind.Add, TokenKind.Remove)) {
                 result.PropertyReadWrite = ParseClassPropertyReadWrite(result);
@@ -3812,13 +3842,18 @@ namespace PasPasPas.Parsing.Parser {
         #endregion
         #region ParseClassOfDeclaration
 
+        /// <summary>
+        ///     class of declaration
+        /// </summary>
+        /// <returns></returns>
+
         [Rule("ClassOfDeclaration", "'class' 'of' TypeName")]
-        private ClassOfDeclaration ParseClassOfDeclaration(IExtendableSyntaxPart parent) {
-            var result = new ClassOfDeclaration();
-            InitByTerminal(result, parent, TokenKind.Class);
-            ContinueWithOrMissing(result, TokenKind.Of);
-            result.TypeRef = ParseTypeName(result);
-            return result;
+        public ClassOfDeclarationSymbol ParseClassOfDeclaration() {
+            return new ClassOfDeclarationSymbol {
+                ClassSymbol = ContinueWithOrMissing(TokenKind.Class),
+                OfSymbol = ContinueWithOrMissing(TokenKind.Of),
+                TypeRef = ParseTypeName(null)
+            };
         }
 
         #endregion
