@@ -456,6 +456,61 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(0, s.Length);
         }
 
+        [TestCase]
+        public void TestClassPropertySpecifier() {
+            var s = RunEmptyCstTest(p => p.ParseClassPropertyAccessSpecifier(), "");
+            Assert.IsNotNull(s.PropertyReadWrite);
+            Assert.IsNotNull(s.PropertyDispInterface);
+            Assert.IsNotNull(s.StoredSymbol);
+            Assert.IsNotNull(s.StoredProperty);
+            Assert.IsNotNull(s.DefaultSymbol);
+            Assert.IsNotNull(s.DefaultProperty);
+            Assert.IsNotNull(s.NoDefaultSymbol);
+            Assert.IsNotNull(s.ImplentsSymbol);
+            Assert.IsNotNull(s.ImplementsTypeId);
+            Assert.AreEqual(0, s.Length);
+        }
+
+
+        [TestCase]
+        public void TestClassPropertyReadWrite() {
+            var s = RunEmptyCstTest(p => p.ParseClassPropertyReadWrite(), "");
+            Assert.IsNotNull(s.Modifier);
+            Assert.IsNotNull(s.Member);
+            Assert.AreEqual(0, s.Length);
+        }
+
+
+        [TestCase]
+        public void TestClassPropertyDispIntf() {
+            var s = RunEmptyCstTest(p => p.ParseClassPropertyDispInterface(), "");
+            Assert.IsNotNull(s.Modifier);
+            Assert.IsNotNull(s.DispId);
+            Assert.AreEqual(0, s.Length);
+        }
+
+        [TestCase]
+        public void TestClosureExpression() {
+            var s = RunEmptyCstTest(p => p.ParseClosureExpression(), "");
+            Assert.IsNotNull(s.ProcSymbol);
+            Assert.IsNotNull(s.Parameters);
+            Assert.IsNotNull(s.ColonSymbol);
+            Assert.IsNotNull(s.ReturnType);
+            Assert.IsNotNull(s.Block);
+            Assert.AreEqual(0, s.Length);
+        }
+
+        [TestCase]
+        public void TestCompoundStatement() {
+            var s = RunEmptyCstTest(p => p.ParseCompoundStatement(), "");
+            Assert.IsNotNull(s.AssemblerBlock);
+            Assert.IsNotNull(s.BeginSymbol);
+            Assert.IsNotNull(s.Statements);
+            Assert.IsNotNull(s.EndSymbol);
+            Assert.AreEqual(0, s.Length);
+        }
+
+
 
     }
 }

@@ -5,7 +5,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// <summary>
     ///     property declaration
     /// </summary>
-    public class ClassPropertySymbol : VariableLengthSyntaxTreeBase<ClassPropertySpecifier> {
+    public class ClassPropertySymbol : VariableLengthSyntaxTreeBase<ClassPropertySpecifierSymbol> {
 
         /// <summary>
         ///     property access index

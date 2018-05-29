@@ -502,7 +502,7 @@ namespace PasPasPas.Parsing.Parser {
                 return result;
 
             if (Match(TokenKind.Begin, TokenKind.Asm)) {
-                result.MainBlock = ParseCompoundStatement(result);
+                result.MainBlock = ParseCompoundStatement();
                 return result;
             }
 
@@ -547,23 +547,35 @@ namespace PasPasPas.Parsing.Parser {
         #endregion
         #region ParseCompoundStatement
 
+        /// <summary>
+        ///     parse a compound statement
+        /// </summary>
+        /// <returns></returns>
+
         [Rule("CompoundStatement", "(('begin' [ StatementList ] 'end' ) | AsmBlock )")]
-        private CompoundStatement ParseCompoundStatement(IExtendableSyntaxPart parent) {
+        public CompoundStatement ParseCompoundStatement() {
 
             if (Match(TokenKind.Asm)) {
-                var result = new CompoundStatement();
-                parent.Add(result);
-                result.AssemblerBlock = ParseAsmBlock();
-                return result;
+                return new CompoundStatement {
+                    BeginSymbol = EmptyTerminal(),
+                    AssemblerBlock = ParseAsmBlock(),
+                    Statements = EmptyTerminal(),
+                    EndSymbol = EmptyTerminal()
+                };
+
             }
             else {
                 var result = new CompoundStatement();
-                InitByTerminal(result, parent, TokenKind.Begin);
+                result.BeginSymbol = ContinueWithOrMissing(TokenKind.Begin);
+                result.AssemblerBlock = EmptyTerminal();
 
                 if (!Match(TokenKind.End))
                     result.Statements = ParseStatementList(result);
+                else
+                    result.Statements = EmptyTerminal();
+                
 
-                ContinueWithOrMissing(result, TokenKind.End);
+                result.EndSymbol = ContinueWithOrMissing(TokenKind.End);
                 return result;
             }
         }
@@ -651,7 +663,7 @@ namespace PasPasPas.Parsing.Parser {
                 return result;
             }
             if (Match(TokenKind.Begin, TokenKind.Asm)) {
-                result.CompoundStatement = ParseCompoundStatement(result);
+                result.CompoundStatement = ParseCompoundStatement();
                 return result;
             }
 
@@ -1203,7 +1215,7 @@ namespace PasPasPas.Parsing.Parser {
         public BlockBodySymbol ParseBlockBody() {
             return new BlockBodySymbol() {
                 AssemblerBlock = Match(TokenKind.Asm) ? (SyntaxPartBase)ParseAsmBlock() : EmptyTerminal(),
-                Body = Match(TokenKind.Begin) ? (SyntaxPartBase)ParseCompoundStatement(null) : EmptyTerminal(),
+                Body = Match(TokenKind.Begin) ? (SyntaxPartBase)ParseCompoundStatement() : EmptyTerminal(),
             };
         }
 
@@ -2532,8 +2544,8 @@ namespace PasPasPas.Parsing.Parser {
         /// <returns></returns>
 
         [Rule("ClassDeclaration", "ClassOfDeclaration | ClassDefinition | ClassHelper | InterfaceDef | ObjectDecl | RecordDecl | RecordHelperDecl ")]
-        public ClassTypeDeclaration ParseClassDeclaration() {
-            var result = new ClassTypeDeclaration() {
+        public ClassTypeDeclarationSymbol ParseClassDeclaration() {
+            var result = new ClassTypeDeclarationSymbol() {
                 ClassOf = EmptyTerminal(),
                 ClassHelper = EmptyTerminal(),
                 ClassDef = EmptyTerminal(),
@@ -3418,7 +3430,7 @@ namespace PasPasPas.Parsing.Parser {
 
             while (Match(TokenKind.Read, TokenKind.Write, TokenKind.Add, TokenKind.Remove, TokenKind.ReadOnly, TokenKind.WriteOnly, TokenKind.DispId) ||
                 Match(TokenKind.Default, TokenKind.Stored, TokenKind.Implements, TokenKind.NoDefault)) {
-                result.AddItem(ParseClassPropertyAccessSpecifier(result));
+                result.AddItem(ParseClassPropertyAccessSpecifier());
             }
 
             result.Semicolon = ContinueWithOrMissing(TokenKind.Semicolon);
@@ -3439,43 +3451,59 @@ namespace PasPasPas.Parsing.Parser {
         #endregion
         #region ParseClassPropertyAccessSpecifier
 
-        [Rule("ClassPropertySpecifier", "ClassPropertyReadWrite | ClassPropertyDispInterface | ('stored' Expression ';') | ('default' [ Expression ] ';' ) | ('nodefault' ';') | ('implements' NamespaceName) ")]
-        private ClassPropertySpecifier ParseClassPropertyAccessSpecifier(IExtendableSyntaxPart parent) {
-            var result = new ClassPropertySpecifier();
+        /// <summary>
+        ///     parse a class property access specifier
+        /// </summary>
+        /// <returns></returns>
 
-            if (parent != null)
-                parent.Add(result);
+        [Rule("ClassPropertySpecifier", "ClassPropertyReadWrite | ClassPropertyDispInterface | ('stored' Expression ';') | ('default' [ Expression ] ';' ) | ('nodefault' ';') | ('implements' NamespaceName) ")]
+        public ClassPropertySpecifierSymbol ParseClassPropertyAccessSpecifier() {
+            var result = new ClassPropertySpecifierSymbol() {
+                PropertyReadWrite = EmptyTerminal(),
+                PropertyDispInterface = EmptyTerminal(),
+                StoredSymbol = EmptyTerminal(),
+                StoredProperty = EmptyTerminal(),
+                DefaultSymbol = EmptyTerminal(),
+                DefaultProperty = EmptyTerminal(),
+                NoDefaultSymbol = EmptyTerminal(),
+                ImplentsSymbol = EmptyTerminal(),
+                ImplementsTypeId = EmptyTerminal(),
+            };
 
             if (Match(TokenKind.Read, TokenKind.Write, TokenKind.Add, TokenKind.Remove)) {
-                result.PropertyReadWrite = ParseClassPropertyReadWrite(result);
+                result.PropertyReadWrite = ParseClassPropertyReadWrite();
                 return result;
             }
 
             if (Match(TokenKind.ReadOnly, TokenKind.WriteOnly, TokenKind.DispId)) {
-                result.PropertyDispInterface = ParseClassPropertyDispInterface(result);
+                result.PropertyDispInterface = ParseClassPropertyDispInterface();
                 return result;
             }
 
-            if (ContinueWith(result, TokenKind.Stored)) {
+            if (Match(TokenKind.Stored)) {
+                result.StoredSymbol = ContinueWith(TokenKind.Stored);
                 result.IsStored = true;
                 result.StoredProperty = ParseExpression(result);
                 return result;
             }
 
-            if (ContinueWith(result, TokenKind.Default)) {
+            if (Match(TokenKind.Default)) {
+                result.DefaultSymbol = ContinueWith(TokenKind.Default);
                 result.IsDefault = true;
-                if (!ContinueWith(result, TokenKind.Semicolon)) {
+                if (!Match(TokenKind.Semicolon)) {
                     result.DefaultProperty = ParseExpression(result);
                 }
                 return result;
             }
 
-            if (ContinueWith(result, TokenKind.NoDefault)) {
+            if (Match(TokenKind.NoDefault)) {
+                result.NoDefaultSymbol = ContinueWith(TokenKind.NoDefault);
                 result.NoDefault = true;
                 return result;
             }
 
-            if (ContinueWith(result, TokenKind.Implements)) {
+            if (Match(TokenKind.Implements)) {
+                result.ImplentsSymbol = ContinueWith(TokenKind.Implements);
                 result.ImplementsTypeId = ParseNamespaceName(result);
                 return result;
             }
@@ -3487,17 +3515,26 @@ namespace PasPasPas.Parsing.Parser {
         #endregion
         #region ParseClassPropertyDispInterface
 
-        [Rule("ClassPropertyDispInterface", "( 'readonly' ';')  | ( 'writeonly' ';' ) | DispIdDirective ")]
-        private ClassPropertyDispInterface ParseClassPropertyDispInterface(IExtendableSyntaxPart parent) {
-            var result = new ClassPropertyDispInterface();
-            parent.Add(result);
+        /// <summary>
+        ///     parse a disp interface section
+        /// </summary>
+        /// <returns></returns>
 
-            if (ContinueWith(result, TokenKind.ReadOnly)) {
+        [Rule("ClassPropertyDispInterface", "( 'readonly' ';')  | ( 'writeonly' ';' ) | DispIdDirective ")]
+        public ClassPropertyDispInterfaceSymbols ParseClassPropertyDispInterface() {
+            var result = new ClassPropertyDispInterfaceSymbols() {
+                DispId = EmptyTerminal(),
+                Modifier = EmptyTerminal()
+            };
+
+            if (Match(TokenKind.ReadOnly)) {
+                result.Modifier = ContinueWith(TokenKind.ReadOnly);
                 result.ReadOnly = true;
                 return result;
             }
 
-            if (ContinueWith(result, TokenKind.WriteOnly)) {
+            if (Match(TokenKind.WriteOnly)) {
+                result.Modifier = ContinueWith(TokenKind.WriteOnly);
                 result.WriteOnly = true;
                 return result;
             }
@@ -3527,15 +3564,17 @@ namespace PasPasPas.Parsing.Parser {
         #endregion
         #region ParseClassPropertyReadWrite
 
+        /// <summary>
+        ///     parse a property read write modifier
+        /// </summary>
+        /// <returns></returns>
+
         [Rule("ClassPropertyReadWrite", "('read' | 'write' | 'add' | 'remove' ) NamespaceName ")]
-        private ClassPropertyReadWrite ParseClassPropertyReadWrite(IExtendableSyntaxPart parent) {
-            var result = new ClassPropertyReadWrite();
-            InitByTerminal(result, parent, TokenKind.Read, TokenKind.Write, TokenKind.Add, TokenKind.Remove);
-
-            result.Kind = result.LastTerminalKind;
-            result.Member = ParseNamespaceName(result);
-
-            return result;
+        public ClassPropertyReadWriteSymbol ParseClassPropertyReadWrite() {
+            return new ClassPropertyReadWriteSymbol {
+                Modifier = ContinueWithOrMissing(TokenKind.Read, TokenKind.Write, TokenKind.Add, TokenKind.Remove),
+                Member = ParseNamespaceName(null)
+            };
         }
 
         #endregion
@@ -4198,7 +4237,7 @@ namespace PasPasPas.Parsing.Parser {
                 parent.Add(result);
 
             if (Match(TokenKind.Function, TokenKind.Procedure)) {
-                result.ClosureExpression = ParseClosureExpression(result);
+                result.ClosureExpression = ParseClosureExpression();
             }
             else {
                 result.LeftOperand = ParseSimpleExpression(result);
@@ -4564,20 +4603,32 @@ namespace PasPasPas.Parsing.Parser {
         #endregion
         #region ParseClosureExpression
 
+        /// <summary>
+        ///     closure expression (anonymous method)
+        /// </summary>
+        /// <returns></returns>
+
         [Rule("ClosureExpr", "('function'|'procedure') [ FormalParameterSection ] [ ':' TypeSpecification ] Block ")]
-        private ClosureExpression ParseClosureExpression(IExtendableSyntaxPart parent) {
-            var result = new ClosureExpression();
-            InitByTerminal(result, parent, TokenKind.Function, TokenKind.Procedure);
-            result.Kind = result.LastTerminalKind;
+        public ClosureExpressionSymbol ParseClosureExpression() {
+            var result = new ClosureExpressionSymbol();
+            result.ProcSymbol = ContinueWithOrMissing(TokenKind.Function, TokenKind.Procedure);
 
             if (Match(TokenKind.OpenParen)) {
                 result.Parameters = ParseFormalParameterSection(result);
             }
+            else {
+                result.Parameters = EmptyTerminal();
+            }
 
             if (result.Kind == TokenKind.Function) {
-                ContinueWithOrMissing(result, TokenKind.Colon);
+                result.ColonSymbol = ContinueWithOrMissing(TokenKind.Colon);
                 result.ReturnType = ParseTypeSpecification(result);
             }
+            else {
+                result.ColonSymbol = EmptyTerminal();
+                result.ReturnType = EmptyTerminal();
+            }
+
             result.Block = ParseBlock();
             return result;
         }

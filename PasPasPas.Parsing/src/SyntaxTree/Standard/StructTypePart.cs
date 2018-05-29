@@ -15,7 +15,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     class type declaration
         /// </summary>
-        public ClassTypeDeclaration ClassDeclaration { get; set; }
+        public ClassTypeDeclarationSymbol ClassDeclaration { get; set; }
 
         /// <summary>
         ///     file type declaration

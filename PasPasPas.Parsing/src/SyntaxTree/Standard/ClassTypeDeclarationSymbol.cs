@@ -5,7 +5,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// <summary>
     ///     class type declaration
     /// </summary>
-    public class ClassTypeDeclaration : StandardSyntaxTreeBase {
+    public class ClassTypeDeclarationSymbol : StandardSyntaxTreeBase {
 
         /// <summary>
         ///     class declaration

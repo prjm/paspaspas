@@ -63,9 +63,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         IStartVisitor<ClassDeclarationItemSymbol>,
         IStartVisitor<ClassFieldSymbol>,
         IStartVisitor<ClassPropertySymbol>,
-        IStartVisitor<ClassPropertyReadWrite>,
-        IStartVisitor<ClassPropertyDispInterface>,
-        IStartVisitor<ClassPropertySpecifier>,
+        IStartVisitor<ClassPropertyReadWriteSymbol>,
+        IStartVisitor<ClassPropertyDispInterfaceSymbols>,
+        IStartVisitor<ClassPropertySpecifierSymbol>,
         IStartVisitor<ClassMethodSymbol>,
         IStartVisitor<MethodResolution>,
         IStartVisitor<ReintroduceSymbol>,
@@ -99,7 +99,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         IStartVisitor<ProcedureDeclaration>,
         IStartVisitor<Standard.MethodDeclaration>,
         IStartVisitor<StatementPart>,
-        IStartVisitor<ClosureExpression>,
+        IStartVisitor<ClosureExpressionSymbol>,
         IStartVisitor<RaiseStatement>,
         IStartVisitor<TryStatement>,
         IStartVisitor<ExceptHandlers>,
@@ -237,7 +237,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #region Package
 
         /// <summary>
-        ///     statr visitin a package
+        ///     start visiting a package
         /// </summary>
         /// <param name="package"></param>
         public void StartVisit(Package package) {
@@ -409,7 +409,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #region VarSection
 
         /// <summary>
-        ///     start visting a variable section
+        ///     start visiting a variable section
         /// </summary>
         /// <param name="varSection"></param>
         public void StartVisit(VarSection varSection) {
@@ -485,7 +485,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #region ConstantExpression
 
         /// <summary>
-        ///     start visting a constant expression
+        ///     start visiting a constant expression
         /// </summary>
         /// <param name="constExpression"></param>
         public void StartVisit(ConstantExpression constExpression) {
@@ -815,7 +815,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         }
 
         /// <summary>
-        ///     finish visting a struct type
+        ///     finish visiting a struct type
         /// </summary>
         /// <param name="structType"></param>
         public void EndVisit(StructType structType)
@@ -1356,10 +1356,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #region ClassPropertyReadWrite
 
         /// <summary>
-        ///     start visting a class propertery/read definition
+        ///     start visiting a class propertery/read definition
         /// </summary>
         /// <param name="property"></param>
-        public void StartVisit(ClassPropertyReadWrite property) {
+        public void StartVisit(ClassPropertyReadWriteSymbol property) {
             var parent = LastValue as StructureProperty;
             var result = new StructurePropertyAccessor();
             InitNode(result, property);
@@ -1376,7 +1376,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     start visiting a class property
         /// </summary>
         /// <param name="property"></param>
-        public void StartVisit(ClassPropertyDispInterface property) {
+        public void StartVisit(ClassPropertyDispInterfaceSymbols property) {
             var parent = LastValue as StructureProperty;
             var result = new StructurePropertyAccessor();
             InitNode(result, property);
@@ -1402,10 +1402,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #region ParseClassPropertyAccessSpecifier
 
         /// <summary>
-        ///     start visting a class property specifier
+        ///     start visiting a class property specifier
         /// </summary>
         /// <param name="property"></param>
-        public void StartVisit(ClassPropertySpecifier property) {
+        public void StartVisit(ClassPropertySpecifierSymbol property) {
             if (property.PropertyReadWrite != null)
                 return;
 
@@ -1427,7 +1427,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             }
             else if (property.ImplementsTypeId != null) {
                 result.Kind = StructurePropertyAccessorKind.Implements;
-                result.Name = ExtractSymbolName(property.ImplementsTypeId);
+                result.Name = ExtractSymbolName(property.ImplementsTypeId as NamespaceName);
             }
 
             parent.Accessors.Add(result);
@@ -1514,7 +1514,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #region DispIdDirective
 
         /// <summary>
-        ///     start visting a dispid directive
+        ///     start visiting a dispid directive
         /// </summary>
         /// <param name="directive"></param>
         public void StartVisit(DispIdSymbol directive) {
@@ -1868,7 +1868,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         }
 
         /// <summary>
-        ///     end visting a record declaration
+        ///     end visiting a record declaration
         /// </summary>
         /// <param name="recordDeclaration"></param>
         public void EndVisit(RecordDeclaration recordDeclaration) {
@@ -1880,7 +1880,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #region RecordField
 
         /// <summary>
-        ///     start visting a field declaration
+        ///     start visiting a field declaration
         /// </summary>
         /// <param name="fieldDeclaration"></param>
         public void StartVisit(RecordField fieldDeclaration) {
@@ -2244,7 +2244,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     start visiting a closue expression
         /// </summary>
         /// <param name="closure"></param>
-        public void StartVisit(ClosureExpression closure) {
+        public void StartVisit(ClosureExpressionSymbol closure) {
             var expression = LastExpression;
             var result = new MethodImplementation();
             InitNode(result, closure);
@@ -2661,7 +2661,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #region ParseAssemblyOperand
 
         /// <summary>
-        ///     start visting an assembly operand
+        ///     start visiting an assembly operand
         /// </summary>
         /// <param name="statement"></param>
         public void StartVisit(AsmOperandSymbol statement) {
@@ -2689,7 +2689,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #region AsmExpression
 
         /// <summary>
-        ///     start visting an assembler expression
+        ///     start visiting an assembler expression
         /// </summary>
         /// <param name="statement"></param>
         public void StartVisit(AsmExpressionSymbol statement) {
@@ -2735,7 +2735,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #region AsmTerm
 
         /// <summary>
-        ///     start visting an assembler term
+        ///     start visiting an assembler term
         /// </summary>
         /// <param name="statement"></param>
         public void StartVisit(AsmTermSymbol statement) {

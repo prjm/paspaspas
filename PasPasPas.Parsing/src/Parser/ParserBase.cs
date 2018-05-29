@@ -560,6 +560,38 @@ namespace PasPasPas.Parsing.Parser {
         }
 
 
+
+        /// <summary>
+        ///     continue syntax part
+        /// </summary>
+        /// <param name="tokenKind1"></param>
+        /// <param name="tokenKind2"></param>
+        /// <param name="tokenKind3"></param>
+        /// <param name="tokenKind4"></param>
+        /// <param name="tokenKind5"></param>
+        /// <returns></returns>
+        protected Terminal ContinueWith(int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4) {
+            var requiresIdentifier =
+                (tokenKind1 == TokenKind.Identifier) ||
+                (tokenKind2 == TokenKind.Identifier) ||
+                (tokenKind3 == TokenKind.Identifier) ||
+                (tokenKind4 == TokenKind.Identifier);
+
+            if (!Tokenizer.HasNextToken) {
+                return null;
+            }
+
+            if (!Match(tokenKind1, tokenKind2, tokenKind3, tokenKind4) &&
+                (!requiresIdentifier ||
+                (requiresIdentifier && !AllowIdentifier()))) {
+                return null;
+            }
+
+            var terminal = new Terminal(tokenizer.CurrentTokenSequence);
+            FetchNextToken();
+            return terminal;
+        }
+
         /// <summary>
         ///     continue syntax part
         /// </summary>
@@ -1287,6 +1319,18 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind2"></param>
         /// <param name="tokenKind3"></param>
         /// <param name="tokenKind4"></param>
+        protected Terminal ErrorMissingToken(int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4) {
+            logSource.Error(MissingToken, tokenKind1, tokenKind2, tokenKind3, tokenKind4);
+            return EmptyTerminal();
+        }
+
+        /// <summary>
+        ///     report a missing token
+        /// </summary>
+        /// <param name="tokenKind1"></param>
+        /// <param name="tokenKind2"></param>
+        /// <param name="tokenKind3"></param>
+        /// <param name="tokenKind4"></param>
         /// <param name="tokenKind5"></param>
         protected Terminal ErrorMissingToken(int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5) {
             logSource.Error(MissingToken, tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5);
@@ -1339,6 +1383,22 @@ namespace PasPasPas.Parsing.Parser {
 
             if (terminal == null)
                 return ErrorMissingToken(tokenKind1, tokenKind2);
+
+            return terminal;
+        }
+
+        /// <summary>
+        ///     continue with a specific token and mark it as missing
+        /// </summary>
+        /// <param name="tokenKind1"></param>
+        /// <param name="tokenKind2"></param>
+        /// <param name="tokenKind3"></param>
+        /// <param name="tokenKind4"></param>
+        protected Terminal ContinueWithOrMissing(int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4) {
+            var terminal = ContinueWith(tokenKind1, tokenKind2, tokenKind3, tokenKind4);
+
+            if (terminal == null)
+                return ErrorMissingToken(tokenKind1, tokenKind2, tokenKind3, tokenKind4);
 
             return terminal;
         }

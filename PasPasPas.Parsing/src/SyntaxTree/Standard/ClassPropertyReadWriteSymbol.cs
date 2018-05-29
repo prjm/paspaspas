@@ -3,14 +3,15 @@
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
     /// <summary>
-    ///     property accessor
+    ///     property accessors
     /// </summary>
-    public class ClassPropertyReadWrite : StandardSyntaxTreeBase {
+    public class ClassPropertyReadWriteSymbol : StandardSyntaxTreeBase {
 
         /// <summary>
-        ///     accessor kind
+        ///     kind
         /// </summary>
-        public int Kind { get; set; }
+        public int Kind
+            => Modifier.Kind;
 
         /// <summary>
         ///     member name
@@ -18,14 +19,26 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         public NamespaceName Member { get; set; }
 
         /// <summary>
+        ///     property modifier
+        /// </summary>
+        public Terminal Modifier { get; set; }
+
+        /// <summary>
         ///     accept visitor
         /// </summary>
         /// <param name="visitor">visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
-            AcceptParts(this, visitor);
+            AcceptPart(this, Modifier, visitor);
+            AcceptPart(this, Member, visitor);
             visitor.EndVisit(this);
         }
+
+        /// <summary>
+        ///     symbol length
+        /// </summary>
+        public int Length
+            => Modifier.Length + Member.Length;
 
 
     }

@@ -3,17 +3,17 @@
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
     /// <summary>
-    ///     property accessor for disp interfaces
+    ///     property accessors for disp interfaces
     /// </summary>
-    public class ClassPropertyDispInterface : StandardSyntaxTreeBase {
+    public class ClassPropertyDispInterfaceSymbols : StandardSyntaxTreeBase {
 
         /// <summary>
         ///     Disp id directive
         /// </summary>
-        public DispIdSymbol DispId { get; set; }
+        public SyntaxPartBase DispId { get; set; }
 
         /// <summary>
-        ///     readonly
+        ///     read only flag
         /// </summary>
         public bool ReadOnly { get; set; }
 
@@ -23,15 +23,26 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         public bool WriteOnly { get; set; }
 
         /// <summary>
+        ///     modifier
+        /// </summary>
+        public Terminal Modifier { get; set; }
+
+        /// <summary>
         ///     accept visitor
         /// </summary>
         /// <param name="visitor">node visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
-            AcceptParts(this, visitor);
+            AcceptPart(this, Modifier, visitor);
+            AcceptPart(this, DispId, visitor);
             visitor.EndVisit(this);
         }
 
+        /// <summary>
+        ///     symbol length
+        /// </summary>
+        public int Length
+            => Modifier.Length + DispId.Length;
 
     }
 }

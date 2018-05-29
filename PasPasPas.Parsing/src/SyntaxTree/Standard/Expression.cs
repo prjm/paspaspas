@@ -10,7 +10,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     closue expression
         /// </summary>
-        public ClosureExpression ClosureExpression { get; set; }
+        public ClosureExpressionSymbol ClosureExpression { get; set; }
 
         /// <summary>
         ///     relational operator kind
