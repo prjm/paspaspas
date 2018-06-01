@@ -11,7 +11,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     external expression
         /// </summary>
-        public ConstantExpression ExternalExpression { get; set; }
+        public ConstantExpressionSymbol ExternalExpression { get; set; }
 
         /// <summary>
         ///     kind

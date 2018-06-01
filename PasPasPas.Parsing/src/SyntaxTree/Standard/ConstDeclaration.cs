@@ -31,7 +31,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     expression
         /// </summary>
-        public ConstantExpression Value { get; set; }
+        public ConstantExpressionSymbol Value { get; set; }
 
         /// <summary>
         ///     accept visitor

@@ -11,7 +11,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     start index
         /// </summary>
-        public ConstantExpression StartIndex { get; set; }
+        public ConstantExpressionSymbol StartIndex { get; set; }
 
         /// <summary>
         ///     end index

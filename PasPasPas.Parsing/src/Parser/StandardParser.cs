@@ -440,7 +440,7 @@ namespace PasPasPas.Parsing.Parser {
             result.Kind = result.LastTerminalKind;
 
             if ((result.Kind == TokenKind.External) && (!Match(TokenKind.Semicolon))) {
-                result.ExternalExpression = ParseConstantExpression(result);
+                result.ExternalExpression = ParseConstantExpression();
                 ExternalSpecifier specifier;
                 do {
                     specifier = ParseExternalSpecifier(result);
@@ -468,11 +468,11 @@ namespace PasPasPas.Parsing.Parser {
                 return result;
 
             if (result.Kind != TokenKind.Dependency) {
-                result.Expression = ParseConstantExpression(result);
+                result.Expression = ParseConstantExpression();
             }
             else {
                 do {
-                    ParseConstantExpression(result);
+                    ParseConstantExpression();
                 } while (ContinueWith(result, TokenKind.Comma));
             }
 
@@ -553,10 +553,10 @@ namespace PasPasPas.Parsing.Parser {
         /// <returns></returns>
 
         [Rule("CompoundStatement", "(('begin' [ StatementList ] 'end' ) | AsmBlock )")]
-        public CompoundStatement ParseCompoundStatement() {
+        public CompoundStatementSymbol ParseCompoundStatement() {
 
             if (Match(TokenKind.Asm)) {
-                return new CompoundStatement {
+                return new CompoundStatementSymbol {
                     BeginSymbol = EmptyTerminal(),
                     AssemblerBlock = ParseAsmBlock(),
                     Statements = EmptyTerminal(),
@@ -565,7 +565,7 @@ namespace PasPasPas.Parsing.Parser {
 
             }
             else {
-                var result = new CompoundStatement();
+                var result = new CompoundStatementSymbol();
                 result.BeginSymbol = ContinueWithOrMissing(TokenKind.Begin);
                 result.AssemblerBlock = EmptyTerminal();
 
@@ -573,7 +573,7 @@ namespace PasPasPas.Parsing.Parser {
                     result.Statements = ParseStatementList(result);
                 else
                     result.Statements = EmptyTerminal();
-                
+
 
                 result.EndSymbol = ContinueWithOrMissing(TokenKind.End);
                 return result;
@@ -2080,12 +2080,12 @@ namespace PasPasPas.Parsing.Parser {
             parent.Add(result);
 
             if (ContinueWith(result, TokenKind.Absolute)) {
-                result.Absolute = ParseConstantExpression(result);
+                result.Absolute = ParseConstantExpression();
                 return result;
             }
 
             ContinueWithOrMissing(result, TokenKind.EqualsSign);
-            result.InitialValue = ParseConstantExpression(result);
+            result.InitialValue = ParseConstantExpression();
             return result;
         }
 
@@ -2144,7 +2144,7 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             ContinueWithOrMissing(result, TokenKind.EqualsSign);
-            result.Value = ParseConstantExpression(result);
+            result.Value = ParseConstantExpression();
             result.Hint = ParseHints(result, false);
             ContinueWithOrMissing(result, TokenKind.Semicolon);
             return result;
@@ -2305,9 +2305,9 @@ namespace PasPasPas.Parsing.Parser {
                 return result;
             }
 
-            result.SubrangeStart = ParseConstantExpression(result, false, constDeclaration);
+            result.SubrangeStart = ParseConstantExpression(false, constDeclaration);
             if (ContinueWith(result, TokenKind.DotDot)) {
-                result.SubrangeEnd = ParseConstantExpression(result, false, constDeclaration);
+                result.SubrangeEnd = ParseConstantExpression(false, constDeclaration);
             }
 
             return result;
@@ -2467,7 +2467,7 @@ namespace PasPasPas.Parsing.Parser {
             if (ContinueWith(result, TokenKind.AnsiString)) {
                 result.Kind = TokenKind.AnsiString;
                 if (ContinueWith(result, TokenKind.OpenParen)) {
-                    result.CodePage = ParseConstantExpression(result);
+                    result.CodePage = ParseConstantExpression();
                     ContinueWithOrMissing(result, TokenKind.CloseParen);
                 }
                 return result;
@@ -2757,7 +2757,7 @@ namespace PasPasPas.Parsing.Parser {
             parent.Add(result);
 
             do {
-                ParseConstantExpression(result);
+                ParseConstantExpression();
             } while (ContinueWith(result, TokenKind.Comma));
 
             ContinueWithOrMissing(result, TokenKind.Colon);
@@ -4056,13 +4056,13 @@ namespace PasPasPas.Parsing.Parser {
         [Rule("ArrayIndex", "ConstantExpression [ '..' ConstantExpression ] ")]
         public ArrayIndexSymbol ParseArrayIndex() {
             var result = new ArrayIndexSymbol() {
-                StartIndex = ParseConstantExpression(null),
+                StartIndex = ParseConstantExpression(),
                 DotDot = ContinueWith(TokenKind.DotDot) ?? EmptyTerminal(),
                 Comma = EmptyTerminal()
             };
 
             if (result.DotDot.Kind == TokenKind.DotDot)
-                result.EndIndex = ParseConstantExpression(null);
+                result.EndIndex = ParseConstantExpression();
             else
                 result.EndIndex = EmptyTerminal();
 
@@ -4175,41 +4175,69 @@ namespace PasPasPas.Parsing.Parser {
             return false;
         }
 
-        [Rule("ConstantExpression", " '(' ( RecordConstant | ConstantExpression ) ')' | Expression")]
-        private ConstantExpression ParseConstantExpression(IExtendableSyntaxPart parent, bool fromDesignator = false, bool fromTypeConstExpression = false) {
-            var result = new ConstantExpression();
+        /// <summary>
+        ///     parse a constant expression
+        /// </summary>
+        /// <param name="fromDesignator"></param>
+        /// <param name="fromTypeConstExpression"></param>
+        /// <returns></returns>
 
-            if (parent != null)
-                parent.Add(result);
+        [Rule("ConstantExpression", " '(' ( RecordConstant | ConstantExpression ) ')' | Expression")]
+        public ConstantExpressionSymbol ParseConstantExpression(bool fromDesignator = false, bool fromTypeConstExpression = false) {
+            var result = new ConstantExpressionSymbol() {
+                OpenParen = EmptyTerminal(),
+                CloseParen = EmptyTerminal(),
+                Value = EmptyTerminal(),
+            };
 
             if (Match(TokenKind.OpenParen)) {
 
                 if (LookAhead(1, TokenKind.CloseParen) || (LookAheadIdentifier(1, new int[0], true) && (LookAhead(2, TokenKind.Colon)))) {
                     result.IsRecordConstant = true;
-                    ContinueWithOrMissing(result, TokenKind.OpenParen);
+                    result.OpenParen = ContinueWithOrMissing(TokenKind.OpenParen);
+                    var record = default(RecordConstantExpression);
                     do {
-                        if (!Match(TokenKind.CloseParen))
-                            ParseRecordConstant(result);
-                    } while (ContinueWith(result, TokenKind.Semicolon));
-                    ContinueWithOrMissing(result, TokenKind.CloseParen);
+                        if (!Match(TokenKind.CloseParen)) {
+                            record = ParseRecordConstant(result);
+                            record.Separator = ContinueWith(TokenKind.Semicolon) ?? EmptyTerminal();
+                            result.AddItem(record);
+                        }
+                        else {
+                            record = default;
+                        }
+                    } while (record != default && record.Separator.Kind == TokenKind.Semicolon && Tokenizer.HasNextToken);
+                    result.CloseParen = ContinueWithOrMissing(TokenKind.CloseParen);
+                    return result;
                 }
-                else if (IsArrayConstant() || fromDesignator) {
+
+                if (IsArrayConstant() || fromDesignator) {
                     result.IsArrayConstant = true;
-                    ContinueWithOrMissing(result, TokenKind.OpenParen);
+                    result.OpenParen = ContinueWithOrMissing(TokenKind.OpenParen);
+                    var expr = default(ConstantExpressionSymbol);
                     do {
-                        if (!Match(TokenKind.CloseParen))
-                            ParseConstantExpression(result);
-                    } while (ContinueWith(result, TokenKind.Comma));
-                    ContinueWithOrMissing(result, TokenKind.CloseParen);
+                        if (!Match(TokenKind.CloseParen)) {
+                            expr = ParseConstantExpression();
+                            expr.Separator = ContinueWith(TokenKind.Comma) ?? EmptyTerminal();
+                            result.AddItem(expr);
+                        }
+                        else {
+                            expr = default;
+                        }
+                    } while (expr != default && expr.Separator.Kind == TokenKind.Comma && Tokenizer.HasNextToken);
+                    result.CloseParen = ContinueWithOrMissing(TokenKind.CloseParen);
+                    return result;
                 }
-                else if (!fromDesignator) {
+
+                if (!fromDesignator) {
                     result.Value = ParseExpression(result);
+                    return result;
                 }
-            }
-            else {
-                result.Value = ParseExpression(result, fromTypeConstExpression);
+
+                Unexpected();
+                return result;
             }
 
+            result.Value = ParseExpression(result, fromTypeConstExpression);
             return result;
         }
 
@@ -4222,7 +4250,7 @@ namespace PasPasPas.Parsing.Parser {
             parent.Add(result);
             result.Name = RequireIdentifier(result);
             ContinueWithOrMissing(result, TokenKind.Colon);
-            result.Value = ParseConstantExpression(result);
+            result.Value = ParseConstantExpression();
             return result;
         }
 
@@ -4417,7 +4445,7 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             if (ContinueWith(result, TokenKind.OpenParen)) {
-                result.ParenExpression = ParseConstantExpression(result, false, false);
+                result.ParenExpression = ParseConstantExpression(false, false);
                 ContinueWithOrMissing(result, TokenKind.CloseParen);
                 return result;
             }
@@ -4503,7 +4531,7 @@ namespace PasPasPas.Parsing.Parser {
                 var prevDesignatorItem = parent.PartList != null && parent.PartList.Count > 0 ? parent.PartList[parent.PartList.Count - 1] as DesignatorItem : null;
                 if (!hasIdentifier && (!IsDesignator()) && ((prevDesignatorItem == null) || (prevDesignatorItem.Subitem == null))) {
                     ContinueWithOrMissing(parent, TokenKind.OpenParen);
-                    var children = ParseConstantExpression(parent, true);
+                    var children = ParseConstantExpression(true);
                     ContinueWithOrMissing(parent, TokenKind.CloseParen);
                     return children;
                 }

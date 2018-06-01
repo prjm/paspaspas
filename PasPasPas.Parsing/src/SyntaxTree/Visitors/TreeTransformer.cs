@@ -30,7 +30,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         IStartVisitor<VarSection>, IEndVisitor<VarSection>,
         IStartVisitor<VarDeclaration>,
         IStartVisitor<VarValueSpecification>, IEndVisitor<VarValueSpecification>,
-        IStartVisitor<ConstantExpression>,
+        IStartVisitor<ConstantExpressionSymbol>,
         IStartVisitor<RecordConstantExpression>,
         IStartVisitor<Expression>,
         IStartVisitor<SimpleExpression>,
@@ -57,7 +57,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         IStartVisitor<FormalParameter>,
         IStartVisitor<UnitInitialization>,
         IStartVisitor<UnitFinalization>,
-        IStartVisitor<CompoundStatement>, IEndVisitor<CompoundStatement>,
+        IStartVisitor<CompoundStatementSymbol>, IEndVisitor<CompoundStatementSymbol>,
         IStartVisitor<Label>, IEndVisitor<Label>,
         IStartVisitor<ClassDeclarationSymbol>, IEndVisitor<ClassDeclarationSymbol>,
         IStartVisitor<ClassDeclarationItemSymbol>,
@@ -488,7 +488,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     start visiting a constant expression
         /// </summary>
         /// <param name="constExpression"></param>
-        public void StartVisit(ConstantExpression constExpression) {
+        public void StartVisit(ConstantExpressionSymbol constExpression) {
 
             if (constExpression.IsArrayConstant) {
                 var lastExpression = LastExpression;
@@ -1160,7 +1160,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     start visiting a compound statement
         /// </summary>
         /// <param name="block"></param>
-        public void StartVisit(CompoundStatement block) {
+        public void StartVisit(CompoundStatementSymbol block) {
             var lastValue = LastValue;
 
             if (block.AssemblerBlock != null) {
@@ -1186,7 +1186,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     end visiting a compund statement
         /// </summary>
         /// <param name="block"></param>
-        public void EndVisit(CompoundStatement block) {
+        public void EndVisit(CompoundStatementSymbol block) {
         }
 
 

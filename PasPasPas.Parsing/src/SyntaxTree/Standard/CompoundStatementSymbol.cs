@@ -5,7 +5,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// <summary>
     ///     compound statement
     /// </summary>
-    public class CompoundStatement : StandardSyntaxTreeBase {
+    public class CompoundStatementSymbol : StandardSyntaxTreeBase {
 
         /// <summary>
         ///     assembler block

@@ -16,7 +16,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     field value
         /// </summary>
-        public ConstantExpression Value { get; set; }
+        public ConstantExpressionSymbol Value { get; set; }
+
+        /// <summary>
+        ///     separator
+        /// </summary>
+        public Terminal Separator { get; set; }
 
         /// <summary>
         ///     accept visitor

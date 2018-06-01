@@ -10,7 +10,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     external expression
         /// </summary>
-        public ConstantExpression Expression { get; set; }
+        public ConstantExpressionSymbol Expression { get; set; }
 
         /// <summary>
         ///     external specifier kind

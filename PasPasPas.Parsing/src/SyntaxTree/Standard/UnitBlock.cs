@@ -15,7 +15,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     main block
         /// </summary>
-        public CompoundStatement MainBlock { get; set; }
+        public CompoundStatementSymbol MainBlock { get; set; }
 
         /// <summary>
         ///     symbol length

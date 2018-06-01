@@ -20,12 +20,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     subrange start
         /// </summary>
-        public ConstantExpression SubrangeEnd { get; set; }
+        public ConstantExpressionSymbol SubrangeEnd { get; set; }
 
         /// <summary>
         ///     subrange end
         /// </summary>
-        public ConstantExpression SubrangeStart { get; set; }
+        public ConstantExpressionSymbol SubrangeStart { get; set; }
 
         /// <summary>
         ///     <c>type of</c> declaration

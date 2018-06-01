@@ -511,6 +511,14 @@ namespace PasPasPasTests.Parser {
         }
 
 
+        [TestCase]
+        public void TestConstantExpression() {
+            var s = RunEmptyCstTest(p => p.ParseConstantExpression(), "");
+            Assert.IsNotNull(s.OpenParen);
+            Assert.IsNotNull(s.CloseParen);
+            Assert.IsNotNull(s.Value);
+            Assert.AreEqual(0, s.Length);
+        }
 
     }
 }

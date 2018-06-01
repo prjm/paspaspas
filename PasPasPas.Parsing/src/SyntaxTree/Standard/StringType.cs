@@ -10,7 +10,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     code page
         /// </summary>
-        public ConstantExpression CodePage { get; set; }
+        public ConstantExpressionSymbol CodePage { get; set; }
 
         /// <summary>
         ///     kind of the string

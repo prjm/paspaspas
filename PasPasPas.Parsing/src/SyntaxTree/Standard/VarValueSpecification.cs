@@ -10,12 +10,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     absolute index
         /// </summary>
-        public ConstantExpression Absolute { get; set; }
+        public ConstantExpressionSymbol Absolute { get; set; }
 
         /// <summary>
         ///     initial value
         /// </summary>
-        public ConstantExpression InitialValue { get; set; }
+        public ConstantExpressionSymbol InitialValue { get; set; }
 
         /// <summary>
         ///     accept visitor

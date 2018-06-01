@@ -20,7 +20,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     compunt statement
         /// </summary>
-        public CompoundStatement CompoundStatement { get; set; }
+        public CompoundStatementSymbol CompoundStatement { get; set; }
 
         /// <summary>
         ///     deisgnator part
