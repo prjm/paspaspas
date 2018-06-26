@@ -1,5 +1,4 @@
 ﻿using System.Text;
-using PasPasPas.Infrastructure.Environment;
 
 namespace PasPasPas.Infrastructure.ObjectPooling {
 

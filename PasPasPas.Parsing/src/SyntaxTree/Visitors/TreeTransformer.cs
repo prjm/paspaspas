@@ -2203,7 +2203,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (type != null) {
                 var typeDecl = type as Abstract.TypeDeclaration;
                 var typeStruct = typeDecl.TypeValue as StructuredType;
-                if (typeStruct.Methods.Contains(name.Name)) {
+                if (typeStruct != null && typeStruct.Methods.Contains(name.Name)) {
                     var declaration = typeStruct.Methods[name.Name];
                     declaration.Implementation = result;
                 }

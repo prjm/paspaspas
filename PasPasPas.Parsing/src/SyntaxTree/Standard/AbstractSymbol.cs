@@ -1,4 +1,5 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Visitors;
+﻿using PasPasPas.Parsing.SyntaxTree.Utils;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
@@ -9,9 +10,24 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     public class AbstractSymbol : StandardSyntaxTreeBase {
 
         /// <summary>
-        ///     directive
+        ///     create a new abstract symbol
         /// </summary>
-        public Terminal Directive { get; set; }
+        /// <param name="directive"></param>
+        /// <param name="semicolon"></param>
+        public AbstractSymbol(Terminal directive, Terminal semicolon) {
+            Directive = directive;
+            Semicolon = semicolon;
+        }
+
+        /// <summary>
+        ///     directive (<c>final</c> or <c>abstract</c>)
+        /// </summary>
+        public Terminal Directive { get; }
+
+        /// <summary>
+        ///     semicolon
+        /// </summary>
+        public Terminal Semicolon { get; }
 
         /// <summary>
         ///     final or abstract
@@ -20,15 +36,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
             => Directive.Kind;
 
         /// <summary>
-        ///     semicolon
-        /// </summary>
-        public Terminal Semicolon { get; set; }
-
-        /// <summary>
         ///     symbol length
         /// </summary>
-        public int Length
-            => Directive.Length + Semicolon.Length;
+        public override int Length
+            => Directive.GetSymbolLength() + Semicolon.GetSymbolLength();
 
         /// <summary>
         ///     accept visitor

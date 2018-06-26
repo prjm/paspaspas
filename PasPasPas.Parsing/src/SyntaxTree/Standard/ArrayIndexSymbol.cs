@@ -9,30 +9,47 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     public class ArrayIndexSymbol : StandardSyntaxTreeBase {
 
         /// <summary>
+        ///     create a new array index
+        /// </summary>
+        /// <param name="startIndex"></param>
+        /// <param name="dotDot"></param>
+        /// <param name="comma"></param>
+        /// <param name="endIndex"></param>
+        public ArrayIndexSymbol(ConstantExpressionSymbol startIndex, Terminal dotDot, ConstantExpressionSymbol endIndex, Terminal comma) {
+            StartIndex = startIndex;
+            DotDot = dotDot;
+            Comma = comma;
+            EndIndex = endIndex;
+        }
+
+        /// <summary>
         ///     start index
         /// </summary>
-        public ConstantExpressionSymbol StartIndex { get; set; }
+        public ConstantExpressionSymbol StartIndex { get; }
 
         /// <summary>
         ///     end index
         /// </summary>
-        public ISyntaxPart EndIndex { get; set; }
+        public ConstantExpressionSymbol EndIndex { get; }
 
         /// <summary>
         ///     dot-dot symbol
         /// </summary>
-        public Terminal DotDot { get; set; }
+        public Terminal DotDot { get; }
 
         /// <summary>
         ///     symbol length
         /// </summary>
-        public int Length
-            => StartIndex.Length + DotDot.Length + EndIndex.Length + Comma.Length;
+        public override int Length
+            => StartIndex.GetSymbolLength() +
+               DotDot.GetSymbolLength() +
+               EndIndex.GetSymbolLength() +
+               Comma.GetSymbolLength();
 
         /// <summary>
         ///     comma
         /// </summary>
-        public Terminal Comma { get; set; }
+        public Terminal Comma { get; }
 
         /// <summary>
         ///     accept visitor

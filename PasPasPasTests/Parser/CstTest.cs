@@ -8,10 +8,15 @@ namespace PasPasPasTests.Parser {
 
         [TestCase]
         public void TestAbstract() {
-            var s = RunEmptyCstTest(p => p.ParseAbstractDirective());
+            var s = RunEmptyCstTest(p => p.ParseAbstractDirective(), "abstract ;");
             Assert.IsNotNull(s.Directive);
             Assert.IsNotNull(s.Semicolon);
-            Assert.AreEqual(0, s.Length);
+            Assert.AreEqual(10, s.Length);
+
+            s = RunEmptyCstTest(p => p.ParseAbstractDirective(), "final ;");
+            Assert.IsNotNull(s.Directive);
+            Assert.IsNotNull(s.Semicolon);
+            Assert.AreEqual(7, s.Length);
         }
 
         [TestCase]
@@ -116,24 +121,50 @@ namespace PasPasPasTests.Parser {
 
         [TestCase]
         public void TestArrayIndex() {
-            var s = RunEmptyCstTest(p => p.ParseArrayIndex());
+            var s = RunEmptyCstTest(p => p.ParseArrayIndex(), "1");
+            Assert.IsNotNull(s.StartIndex);
+            Assert.AreEqual(1, s.Length);
+
+            s = RunEmptyCstTest(p => p.ParseArrayIndex(), "1..2");
+            Assert.IsNotNull(s.StartIndex);
+            Assert.IsNotNull(s.DotDot);
+            Assert.IsNotNull(s.EndIndex);
+            Assert.AreEqual(4, s.Length);
+
+            s = RunEmptyCstTest(p => p.ParseArrayIndex(), "1..2,");
             Assert.IsNotNull(s.StartIndex);
             Assert.IsNotNull(s.DotDot);
             Assert.IsNotNull(s.EndIndex);
             Assert.IsNotNull(s.Comma);
-            Assert.AreEqual(0, s.Length);
+            Assert.AreEqual(5, s.Length);
         }
 
         [TestCase]
         public void TestArrayType() {
-            var s = RunEmptyCstTest(p => p.ParseArrayType());
+            var s = RunEmptyCstTest(p => p.ParseArrayType(), "array of const");
+            Assert.IsNotNull(s.Array);
+            Assert.IsNotNull(s.OfSymbol);
+            Assert.IsNotNull(s.ConstSymbol);
+            Assert.AreEqual(14, s.Length);
+
+            s = RunEmptyCstTest(p => p.ParseArrayType(), "array [1] of const");
             Assert.IsNotNull(s.Array);
             Assert.IsNotNull(s.OpenBraces);
+            Assert.IsTrue(s.Items.Length == 1);
             Assert.IsNotNull(s.CloseBraces);
             Assert.IsNotNull(s.OfSymbol);
             Assert.IsNotNull(s.ConstSymbol);
+            Assert.AreEqual(18, s.Length);
+
+            s = RunEmptyCstTest(p => p.ParseArrayType(), "array [1,1] of Integer");
+            Assert.IsNotNull(s.Array);
+            Assert.IsNotNull(s.OpenBraces);
+            Assert.IsTrue(s.Items.Length == 2);
+            Assert.IsNotNull(s.CloseBraces);
+            Assert.IsNotNull(s.OfSymbol);
             Assert.IsNotNull(s.TypeSpecification);
-            Assert.AreEqual(0, s.Length);
+            Assert.AreEqual(14, s.Length);
+
         }
 
 

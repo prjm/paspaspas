@@ -1,4 +1,5 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Visitors;
+﻿using System.Collections.Immutable;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
@@ -6,6 +7,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     asm statement
     /// </summary>
     public class AsmStatementSymbolx : VariableLengthSyntaxTreeBase<AsmOperandSymbol> {
+
+        public AsmStatementSymbolx(ImmutableArray<AsmOperandSymbol> items) : base(items) {
+
+        }
 
         /// <summary>
         ///     opcode

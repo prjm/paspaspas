@@ -1,4 +1,5 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Visitors;
+﻿using System.Collections.Immutable;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
@@ -6,6 +7,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     case statement
     /// </summary>
     public class CaseStatementSymbol : VariableLengthSyntaxTreeBase<CaseItemSymbol> {
+
+        /// <summary>
+        ///     case item symbol
+        /// </summary>
+        /// <param name="items"></param>
+        public CaseStatementSymbol(ImmutableArray<CaseItemSymbol> items) : base(items) {
+
+        }
 
         /// <summary>
         ///     case expression

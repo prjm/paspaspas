@@ -1,4 +1,5 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Visitors;
+﻿using System;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
@@ -6,10 +7,18 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     constant integer
     /// </summary>
     public class StandardInteger : StandardSyntaxTreeBase {
+
+        /// <summary>
+        ///     create a new integer value
+        /// </summary>
+        /// <param name="value"></param>
+        public StandardInteger(Terminal value)
+            => Value = value;
+
         /// <summary>
         ///     integer value
         /// </summary>
-        public int Value { get; }
+        public Terminal Value { get; }
 
         /// <summary>
         ///     accept visitor
@@ -21,6 +30,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
             visitor.EndVisit(this);
         }
 
+        /// <summary>
+        ///     symbol length
+        /// </summary>
+        public override int Length
+            => Value.Length;
 
     }
 }

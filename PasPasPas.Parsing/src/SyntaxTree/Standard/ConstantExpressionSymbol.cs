@@ -1,4 +1,6 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Visitors;
+﻿using System.Collections.Immutable;
+using PasPasPas.Parsing.SyntaxTree.Utils;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
@@ -6,6 +8,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     constant expression
     /// </summary>
     public class ConstantExpressionSymbol : VariableLengthSyntaxTreeBase<SyntaxPartBase> {
+
+        /// <summary>
+        ///     create a new constant expression symbol
+        /// </summary>
+        /// <param name="items"></param>
+        public ConstantExpressionSymbol(ImmutableArray<SyntaxPartBase> items) : base(items) {
+        }
 
         /// <summary>
         ///     <c>true</c> if this is an array constant
@@ -20,7 +29,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     value of the expression
         /// </summary>
-        public SyntaxPartBase Value { get; set; }
+        public Expression Value { get; set; }
 
         /// <summary>
         ///     open parenthesis
@@ -53,8 +62,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     token length
         /// </summary>
-        public int Length
-            => OpenParen.Length + ItemLength + CloseParen.Length + Value.Length;
+        public override int Length
+            => OpenParen.GetSymbolLength() +
+               ItemLength +
+               CloseParen.GetSymbolLength() +
+               Value.GetSymbolLength();
+
 
     }
 }

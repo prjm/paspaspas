@@ -31,6 +31,11 @@ namespace PasPasPas.Infrastructure.Environment {
         StringPool StringPool { get; }
 
         /// <summary>
+        ///     list pools
+        /// </summary>
+        ListPools ListPools { get; }
+
+        /// <summary>
         ///     enumerated entries
         /// </summary>
         IEnumerable<object> Entries { get; }

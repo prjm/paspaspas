@@ -27,6 +27,7 @@ namespace SampleRunner {
             action = PrepareSample(environment, testPath, mode, repeat);
             RunSample(environment, result, action);
             Console.WriteLine(result.ToString());
+            Console.ReadLine();
         }
 
         private static string GetCacheName(object data) {

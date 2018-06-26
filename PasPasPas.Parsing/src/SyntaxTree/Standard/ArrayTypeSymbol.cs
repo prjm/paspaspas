@@ -1,4 +1,5 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Utils;
+﻿using System.Collections.Immutable;
+using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
@@ -9,15 +10,33 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     public class ArrayTypeSymbol : VariableLengthSyntaxTreeBase<ArrayIndexSymbol> {
 
         /// <summary>
+        ///     create a new array type symbol
+        /// </summary>
+        /// <param name="array"></param>
+        /// <param name="openBraces"></param>
+        /// <param name="closeBraces"></param>
+        /// <param name="ofSymbol"></param>
+        /// <param name="constSymbol"></param>
+        /// <param name="typeSpecification"></param>
+        public ArrayTypeSymbol(Terminal array, Terminal openBraces, ImmutableArray<ArrayIndexSymbol> items, Terminal closeBraces, Terminal ofSymbol, Terminal constSymbol, TypeSpecification typeSpecification) : base(items) {
+            Array = array;
+            OpenBraces = openBraces;
+            CloseBraces = closeBraces;
+            OfSymbol = ofSymbol;
+            ConstSymbol = constSymbol;
+            TypeSpecification = typeSpecification;
+        }
+
+        /// <summary>
         ///     true if the array is of type <c>array of const</c>
         /// </summary>
         public bool ArrayOfConst
-            => ConstSymbol.Kind == TokenKind.Const;
+            => ConstSymbol != null;
 
         /// <summary>
         ///     array type specification
         /// </summary>
-        public ISyntaxPart TypeSpecification { get; set; }
+        public TypeSpecification TypeSpecification { get; set; }
 
         /// <summary>
         ///     array symbol
@@ -44,9 +63,17 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// </summary>
         public Terminal ConstSymbol { get; set; }
 
-        public int Length
-            => Array.Length + OpenBraces.Length + ItemLength + CloseBraces.Length +
-                OfSymbol.Length + ConstSymbol.Length + TypeSpecification.Length;
+        /// <summary>
+        ///     symbol length
+        /// </summary>
+        public override int Length
+            => Array.GetSymbolLength() +
+               OpenBraces.GetSymbolLength() +
+               ItemLength +
+               CloseBraces.GetSymbolLength() +
+               OfSymbol.GetSymbolLength() +
+               ConstSymbol.GetSymbolLength() +
+               TypeSpecification.GetSymbolLength();
 
         /// <summary>
         ///     accept visitor

@@ -1,4 +1,5 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Visitors;
+﻿using System.Collections.Immutable;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
@@ -6,6 +7,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     hint list
     /// </summary>
     public class HintingInformationList : VariableLengthSyntaxTreeBase<HintSymbol> {
+
+        /// <summary>
+        ///     create a new hinting information list
+        /// </summary>
+        /// <param name="items"></param>
+        public HintingInformationList(ImmutableArray<HintSymbol> items) : base(items) {
+
+        }
 
         /// <summary>
         ///     accept visitor

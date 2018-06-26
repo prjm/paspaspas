@@ -439,6 +439,18 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         /// <summary>
+        ///     continue with syntax part
+        /// </summary>
+        /// <param name="tokenKind"></param>
+        /// <param name="hasSymbol"></param>
+        /// <returns></returns>
+        protected Terminal ContinueWith(int tokenKind, out bool hasSymbol) {
+            var result = ContinueWith(tokenKind);
+            hasSymbol = result != null;
+            return result;
+        }
+
+        /// <summary>
         ///     continue syntax part
         /// </summary>
         /// <param name="tokenKind"></param>
@@ -527,7 +539,7 @@ namespace PasPasPas.Parsing.Parser {
 
             var terminal = new Terminal(tokenizer.CurrentTokenSequence);
             FetchNextToken();
-            return null;
+            return terminal;
         }
 
 
@@ -938,7 +950,8 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind1">token kind 1</param>
         /// <param name="tokenKind2">token kind 2</param>
         protected void InitByTerminal(IExtendableSyntaxPart result, IExtendableSyntaxPart parent, int tokenKind1, int tokenKind2) {
-            parent.Add(result);
+            if (parent != null)
+                parent.Add(result);
 
             if (Match(tokenKind1, tokenKind2)) {
                 var terminal = new Terminal(tokenizer.CurrentTokenSequence);

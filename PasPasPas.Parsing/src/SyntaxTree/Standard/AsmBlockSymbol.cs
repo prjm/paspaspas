@@ -1,4 +1,5 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Visitors;
+﻿using System.Collections.Immutable;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
@@ -6,6 +7,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     assembler block
     /// </summary>
     public class AsmBlockSymbol : VariableLengthSyntaxTreeBase<SyntaxPartBase> {
+
+        /// <summary>
+        ///     create a new asm block symbol
+        /// </summary>
+        /// <param name="items"></param>
+        public AsmBlockSymbol(ImmutableArray<SyntaxPartBase> items) : base(items) {
+
+        }
 
         /// <summary>
         ///     asm terminal

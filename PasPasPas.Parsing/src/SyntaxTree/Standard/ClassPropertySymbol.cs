@@ -1,4 +1,5 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Visitors;
+﻿using System.Collections.Immutable;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
@@ -6,6 +7,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     property declaration
     /// </summary>
     public class ClassPropertySymbol : VariableLengthSyntaxTreeBase<ClassPropertySpecifierSymbol> {
+
+        /// <summary>
+        ///     create a new class property symbol
+        /// </summary>
+        /// <param name="items"></param>
+        public ClassPropertySymbol(ImmutableArray<ClassPropertySpecifierSymbol> items) : base(items) {
+
+        }
 
         /// <summary>
         ///     property access index

@@ -90,6 +90,12 @@ namespace PasPasPas.Api {
             = new StringPool();
 
         /// <summary>
+        ///     list pools
+        /// </summary>
+        public ListPools ListPools { get; }
+            = new ListPools();
+
+        /// <summary>
         ///     default type registry
         /// </summary>
         public ITypeRegistry TypeRegistry { get; }
@@ -120,10 +126,10 @@ namespace PasPasPas.Api {
                     RealLiteralConverter,
                     StringBuilderPool,
                     StringPool,
-                    StringPool.Entries,
                     TokenSequencePool,
                     Patterns,
                     Log,
+                    ListPools,
                     Files,
                     TypeRegistry
                 };

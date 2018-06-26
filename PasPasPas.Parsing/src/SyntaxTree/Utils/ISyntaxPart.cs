@@ -32,4 +32,20 @@ namespace PasPasPas.Parsing.SyntaxTree.Utils {
     }
 
 
+    /// <summary>
+    ///     helper for syntax parts
+    /// </summary>
+    public static class SyntaxPartHelper {
+
+        /// <summary>
+        ///     get the symbol length
+        /// </summary>
+        /// <param name="part">part length</param>
+        /// <returns>length or <c>0</c></returns>
+        public static int GetSymbolLength(this ISyntaxPart part)
+            => part == null ? 0 : part.Length;
+
+    }
+
+
 }

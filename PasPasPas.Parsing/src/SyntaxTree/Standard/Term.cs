@@ -1,4 +1,5 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Visitors;
+﻿using PasPasPas.Parsing.SyntaxTree.Utils;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
@@ -18,7 +19,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         public Factor LeftOperand { get; set; }
 
         /// <summary>
-        ///     rihgt operand
+        ///     right operand
         /// </summary>
         public Term RightOperand { get; set; }
 
@@ -32,6 +33,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
             visitor.EndVisit(this);
         }
 
+        /// <summary>
+        ///     symbol length
+        /// </summary>
+        public override int Length
+            => LeftOperand.GetSymbolLength() +
+               RightOperand.GetSymbolLength();
 
     }
 }

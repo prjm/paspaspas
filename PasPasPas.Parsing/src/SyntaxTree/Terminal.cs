@@ -49,7 +49,7 @@ namespace PasPasPas.Parsing.SyntaxTree {
             => Token.Kind;
 
         /// <summary>
-        ///     suggif
+        ///     suffix
         /// </summary>
         public string Suffix
             => suffix;
@@ -63,7 +63,7 @@ namespace PasPasPas.Parsing.SyntaxTree {
         /// <summary>
         ///     symbol length
         /// </summary>
-        public int Length
+        public override int Length
             => (prefix ?? string.Empty).Length +
                (suffix ?? string.Empty).Length +
                (token.Value ?? string.Empty).Length;

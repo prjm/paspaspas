@@ -1,4 +1,5 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Visitors;
+﻿using System.Collections.Immutable;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
@@ -6,6 +7,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     format class helper items
     /// </summary>
     public class ClassHelperItemsSymbol : VariableLengthSyntaxTreeBase<ClassHelperItemSymbol> {
+
+        /// <summary>
+        ///     create a new class helper items symbol
+        /// </summary>
+        /// <param name="items"></param>
+        public ClassHelperItemsSymbol(ImmutableArray<ClassHelperItemSymbol> items) : base(items) {
+
+        }
 
         /// <summary>
         ///     accept visitor

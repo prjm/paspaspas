@@ -110,8 +110,10 @@ namespace PasPasPas.Parsing.SyntaxTree {
             }
         }
 
-        [Obsolete]
-        public int Length { get; set; }
+        /// <summary>
+        ///     symbol length
+        /// </summary>
+        public virtual int Length { get; }
 
         /// <summary>
         ///     find all terminals in a syntax tree

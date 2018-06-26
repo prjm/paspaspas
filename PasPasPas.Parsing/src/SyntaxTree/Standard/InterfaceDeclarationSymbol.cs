@@ -1,4 +1,5 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Visitors;
+﻿using System.Collections.Immutable;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
@@ -6,6 +7,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     interface declaration
     /// </summary>
     public class InterfaceDeclarationSymbol : VariableLengthSyntaxTreeBase<SyntaxPartBase> {
+
+        /// <summary>
+        ///     create a new interface declaration symbol
+        /// </summary>
+        /// <param name="items"></param>
+        public InterfaceDeclarationSymbol(ImmutableArray<SyntaxPartBase> items) : base(items) {
+
+        }
 
         /// <summary>
         ///     accept visitor
