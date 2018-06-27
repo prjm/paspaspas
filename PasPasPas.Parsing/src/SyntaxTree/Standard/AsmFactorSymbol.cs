@@ -1,4 +1,5 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Visitors;
+﻿using PasPasPas.Parsing.SyntaxTree.Utils;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
@@ -109,22 +110,22 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     symbol length
         /// </summary>
-        public int Length
-            => SegmentPrefix.Length +
-                ColonSymbol.Length +
-                SegmentExpression.Length +
-                OpenParen.Length +
-                Subexpression.Length +
-                CloseParen.Length +
-                OpenBraces.Length +
-                MemorySubexpression.Length +
-                CloseBraces.Length +
-                Identifier.Length +
-                Number.Length +
-                RealNumber.Length +
-                HexNumber.Length +
-                QuotedString.Length +
-                Label.Length;
+        public override int Length
+            => SegmentPrefix.GetSymbolLength() +
+                ColonSymbol.GetSymbolLength() +
+                SegmentExpression.GetSymbolLength() +
+                OpenParen.GetSymbolLength() +
+                Subexpression.GetSymbolLength() +
+                CloseParen.GetSymbolLength() +
+                OpenBraces.GetSymbolLength() +
+                MemorySubexpression.GetSymbolLength() +
+                CloseBraces.GetSymbolLength() +
+                Identifier.GetSymbolLength() +
+                Number.GetSymbolLength() +
+                RealNumber.GetSymbolLength() +
+                HexNumber.GetSymbolLength() +
+                QuotedString.GetSymbolLength() +
+                Label.GetSymbolLength();
 
     }
 }

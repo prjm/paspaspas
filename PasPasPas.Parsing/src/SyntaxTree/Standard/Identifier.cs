@@ -1,4 +1,5 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Visitors;
+﻿using PasPasPas.Parsing.SyntaxTree.Utils;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
@@ -8,9 +9,22 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     public class Identifier : StandardSyntaxTreeBase {
 
         /// <summary>
+        ///     identifier symbol
+        /// </summary>
+        /// <param name="identifierSymbol"></param>
+        public Identifier(Terminal identifierSymbol)
+            => Symbol = identifierSymbol;
+
+        /// <summary>
+        /// symbol
+        /// </summary>
+        public Terminal Symbol { get; }
+
+        /// <summary>
         ///     identifier value
         /// </summary>
-        public string Value { get; }
+        public string Value
+            => Symbol.Value;
 
         /// <summary>
         ///     accept visitor
@@ -18,9 +32,15 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="visitor">visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
-            AcceptParts(this, visitor);
+            AcceptPart(this, Symbol, visitor);
             visitor.EndVisit(this);
         }
+
+        /// <summary>
+        ///     symbol length
+        /// </summary>
+        public override int Length
+            => Symbol.GetSymbolLength();
 
     }
 }

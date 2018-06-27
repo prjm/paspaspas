@@ -1,4 +1,5 @@
 ﻿using System.Collections.Immutable;
+using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
@@ -11,20 +12,23 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     create a new asm block symbol
         /// </summary>
+        /// <param name="asmSymbol"></param>
+        /// <param name="endSymbol"></param>
         /// <param name="items"></param>
-        public AsmBlockSymbol(ImmutableArray<SyntaxPartBase> items) : base(items) {
-
+        public AsmBlockSymbol(Terminal asmSymbol, Terminal endSymbol, ImmutableArray<SyntaxPartBase> items) : base(items) {
+            AsmSymbol = asmSymbol;
+            EndSymbol = endSymbol;
         }
 
         /// <summary>
         ///     asm terminal
         /// </summary>
-        public Terminal AsmSymbol { get; set; }
+        public Terminal AsmSymbol { get; }
 
         /// <summary>
         ///     end symbol
         /// </summary>
-        public Terminal EndSymbol { get; set; }
+        public Terminal EndSymbol { get; }
 
         /// <summary>
         ///     accept visitor
@@ -41,8 +45,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     symbol length
         /// </summary>
-        public int Length
-            => AsmSymbol.Length + ItemLength + EndSymbol.Length;
+        public override int Length
+            => AsmSymbol.GetSymbolLength() +
+               ItemLength +
+               EndSymbol.GetSymbolLength();
 
     }
 }

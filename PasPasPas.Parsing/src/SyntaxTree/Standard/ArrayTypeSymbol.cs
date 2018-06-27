@@ -36,32 +36,32 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     array type specification
         /// </summary>
-        public TypeSpecification TypeSpecification { get; set; }
+        public TypeSpecification TypeSpecification { get; }
 
         /// <summary>
         ///     array symbol
         /// </summary>
-        public Terminal Array { get; set; }
+        public Terminal Array { get; }
 
         /// <summary>
         ///     open braces
         /// </summary>
-        public Terminal OpenBraces { get; set; }
+        public Terminal OpenBraces { get; }
 
         /// <summary>
         ///     close braces
         /// </summary>
-        public Terminal CloseBraces { get; set; }
+        public Terminal CloseBraces { get; }
 
         /// <summary>
         ///     of symbol
         /// </summary>
-        public Terminal OfSymbol { get; set; }
+        public Terminal OfSymbol { get; }
 
         /// <summary>
         ///     const symbol
         /// </summary>
-        public Terminal ConstSymbol { get; set; }
+        public Terminal ConstSymbol { get; }
 
         /// <summary>
         ///     symbol length

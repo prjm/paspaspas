@@ -343,7 +343,7 @@ namespace PasPasPas.Parsing.Parser {
             var result = new ExportedProcedureHeading();
             InitByTerminal(result, parent, TokenKind.Function, TokenKind.Procedure);
             result.Kind = result.LastTerminalKind;
-            result.Name = RequireIdentifier(result);
+            result.Name = RequireIdentifier();
 
             if (Match(TokenKind.OpenParen)) {
                 result.Parameters = ParseFormalParameterSection(result);
@@ -748,7 +748,7 @@ namespace PasPasPas.Parsing.Parser {
         private ExceptHandler ParseExceptHandler(IExtendableSyntaxPart parent) {
             var result = new ExceptHandler();
             InitByTerminal(result, parent, TokenKind.On);
-            result.Name = RequireIdentifier(result);
+            result.Name = RequireIdentifier();
             ContinueWithOrMissing(result, TokenKind.Colon);
             result.HandlerType = ParseTypeName(result);
             ContinueWithOrMissing(result, TokenKind.Do);
@@ -783,7 +783,7 @@ namespace PasPasPas.Parsing.Parser {
             var result = new ForStatement();
             InitByTerminal(result, parent, TokenKind.For);
 
-            result.Variable = RequireIdentifier(result);
+            result.Variable = RequireIdentifier();
             if (ContinueWith(result, TokenKind.Assignment)) {
                 result.StartExpression = ParseExpression(result);
                 ContinueWithOrMissing(result, TokenKind.To, TokenKind.DownTo);
@@ -1177,10 +1177,10 @@ namespace PasPasPas.Parsing.Parser {
             if (ContinueWith(result, TokenKind.OpenParen)) {
 
                 if (MatchIdentifier()) {
-                    RequireIdentifier(result);
+                    RequireIdentifier();
 
                     while (ContinueWith(result, TokenKind.Comma))
-                        RequireIdentifier(result);
+                        RequireIdentifier();
                 }
 
                 ContinueWithOrMissing(result, TokenKind.CloseParen);
@@ -1237,27 +1237,25 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("AsmBlock", "'asm' { AssemblyStatement | PseudoOp } 'end'")]
         public AsmBlockSymbol ParseAsmBlock() {
-            var result = new AsmBlockSymbol(default) {
-                AsmSymbol = ContinueWithOrMissing(TokenKind.Asm),
-                EndSymbol = EmptyTerminal()
-            };
+            var asmSymbol = ContinueWithOrMissing(TokenKind.Asm);
+            var endSymbol = default(Terminal);
 
-            while (Tokenizer.HasNextToken) {
+            using (var list = GetList<SyntaxPartBase>()) {
+                while (Tokenizer.HasNextToken) {
 
-                if (Match(TokenKind.End)) {
-                    result.EndSymbol = ContinueWithOrMissing(TokenKind.End);
-                    break;
-                }
+                    if (Match(TokenKind.End)) {
+                        endSymbol = ContinueWithOrMissing(TokenKind.End);
+                        break;
+                    }
 
-                using (var list = GetList<SyntaxPartBase>()) {
                     if (Match(TokenKind.Dot))
                         list.Item.Add(ParseAsmPseudoOp());
                     else
                         list.Item.Add(ParseAsmStatement());
                 }
-            }
 
-            return result;
+                return new AsmBlockSymbol(asmSymbol, endSymbol, list.Item.ToImmutableArray());
+            }
         }
 
         #endregion
@@ -1275,21 +1273,21 @@ namespace PasPasPas.Parsing.Parser {
             };
 
             var kind = CurrentToken().Value;
-            result.Kind = RequireIdentifier(result);
+            result.Kind = RequireIdentifier();
             result.NumberOfParams = EmptyTerminal();
             result.Register = EmptyTerminal();
 
             if (string.Equals(kind, "params", StringComparison.OrdinalIgnoreCase)) {
                 result.ParamsOperation = true;
-                result.NumberOfParams = RequireInteger(null);
+                result.NumberOfParams = RequireInteger();
             }
             else if (string.Equals(kind, "pushenv", StringComparison.OrdinalIgnoreCase)) {
                 result.PushEnvOperation = true;
-                result.Register = RequireIdentifier(result);
+                result.Register = RequireIdentifier();
             }
             else if (string.Equals(kind, "savenv", StringComparison.OrdinalIgnoreCase)) {
                 result.SaveEnvOperation = true;
-                result.Register = RequireIdentifier(result);
+                result.Register = RequireIdentifier();
             }
             else if (string.Equals(kind, "noframe", StringComparison.OrdinalIgnoreCase)) {
                 result.NoFrame = true;
@@ -1310,36 +1308,32 @@ namespace PasPasPas.Parsing.Parser {
         /// <returns></returns>
 
         [Rule("AssemblyStatement", "[AssemblyLabel ':'] [AssemblyPrefix] AssemblyOpcode [AssemblyOperand {','  AssemblyOperand}]")]
-        public AsmStatementSymbolx ParseAsmStatement() {
-            var result = new AsmStatementSymbolx(default);
+        public AsmStatementSymbol ParseAsmStatement() {
+            var label = default(AsmLabelSymbol);
+            var colonSymbol = default(Terminal);
 
             if (Match(TokenKind.At) || LookAhead(1, TokenKind.Colon)) {
-                result.Label = ParseAssemblyLabel();
-                result.ColonSymbol = ContinueWithOrMissing(TokenKind.Colon);
-            }
-            else {
-                result.Label = EmptyTerminal();
-                result.ColonSymbol = EmptyTerminal();
-            }
-
-            if (Match(TokenKind.End)) {
-                result.Prefix = EmptyTerminal();
-                result.OpCode = EmptyTerminal();
-                return result;
-            }
-
-            result.Prefix = ParseAssemblyPrefix();
-            result.OpCode = ParseAssemblyOpcode();
+                label = ParseAssemblyLabel();
+                colonSymbol = ContinueWithOrMissing(TokenKind.Colon);
+            };
 
             using (var list = GetList<AsmOperandSymbol>()) {
-                while (Tokenizer.HasNextToken && !Match(TokenKind.End) && !Match(TokenKind.Semicolon) && Tokenizer.HasNextToken && !CurrentTokenIsAfterNewline()) {
-                    var operand = ParseAssemblyOperand();
-                    list.Item.Add(operand);
-                    operand.Comma = ContinueWith(TokenKind.Comma) ?? EmptyTerminal();
-                }
-            }
+                var prefix = default(AsmPrefixSymbol);
+                var opCode = default(AsmOpCodeSymbol);
 
-            return result;
+
+                if (!Match(TokenKind.End)) {
+                    prefix = ParseAssemblyPrefix();
+                    opCode = ParseAssemblyOpcode();
+
+                    while (Tokenizer.HasNextToken && !Match(TokenKind.End) && !Match(TokenKind.Semicolon) && Tokenizer.HasNextToken && !CurrentTokenIsAfterNewline()) {
+                        var operand = ParseAssemblyOperand();
+                        list.Item.Add(operand);
+                        operand.Comma = ContinueWith(TokenKind.Comma) ?? EmptyTerminal();
+                    }
+                }
+                return new AsmStatementSymbol(opCode, prefix, label, colonSymbol, list.Item.ToImmutableArray());
+            }
         }
 
         #endregion
@@ -1412,7 +1406,7 @@ namespace PasPasPas.Parsing.Parser {
                 }
 
                 if (asmPtr.Contains(tokenValue)) {
-                    result.BytePtrKind = RequireIdentifier(result);
+                    result.BytePtrKind = RequireIdentifier();
                     result.BytePtr = ParseAssemblyOperand();
                     return result;
                 }
@@ -1499,7 +1493,7 @@ namespace PasPasPas.Parsing.Parser {
             };
 
             if (MatchIdentifier() && segmentPrefixes.Contains(CurrentToken().Value) && LookAhead(1, TokenKind.Colon)) {
-                result.SegmentPrefix = RequireIdentifier(result);
+                result.SegmentPrefix = RequireIdentifier();
                 result.ColonSymbol = ContinueWithOrMissing(TokenKind.Colon);
                 result.SegmentExpression = ParseAssemblyOperand();
                 return result;
@@ -1520,10 +1514,10 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             if (MatchIdentifier(true)) {
-                result.Identifier = RequireIdentifier(result, true);
+                result.Identifier = RequireIdentifier(true);
             }
             else if (Match(TokenKind.Integer)) {
-                result.Number = RequireInteger(result);
+                result.Number = RequireInteger();
             }
             else if (Match(TokenKind.Real)) {
                 result.RealNumber = RequireRealValue(result);
@@ -1555,12 +1549,12 @@ namespace PasPasPas.Parsing.Parser {
         /// <returns></returns>
 
         [Rule("AssemblyOpCode", "Identifier [AssemblyDirective] ")]
-        public SyntaxPartBase ParseAssemblyOpcode() {
+        public AsmOpCodeSymbol ParseAssemblyOpcode() {
             if (Match(TokenKind.End))
-                return EmptyTerminal();
+                return null;
 
             return new AsmOpCodeSymbol() {
-                OpCode = RequireIdentifier(null, true)
+                OpCode = RequireIdentifier(true)
             };
         }
 
@@ -1573,18 +1567,18 @@ namespace PasPasPas.Parsing.Parser {
         /// <returns></returns>
 
         [Rule("AssemblyPrefix", "(LockPrefix | [SegmentPrefix]) | (SegmentPrefix [LockPrefix])")]
-        public SyntaxPartBase ParseAssemblyPrefix() {
+        public AsmPrefixSymbol ParseAssemblyPrefix() {
 
             if (!MatchIdentifier())
-                return EmptyTerminal();
+                return null;
 
             if (lockPrefixes.Contains(CurrentToken().Value)) {
                 var result = new AsmPrefixSymbol();
 
-                result.LockPrefix = RequireIdentifier(result);
+                result.LockPrefix = RequireIdentifier();
 
                 if (MatchIdentifier() && segmentPrefixes.Contains(CurrentToken().Value))
-                    result.SegmentPrefix = RequireIdentifier(result);
+                    result.SegmentPrefix = RequireIdentifier();
                 else
                     result.SegmentPrefix = EmptyTerminal();
 
@@ -1594,17 +1588,17 @@ namespace PasPasPas.Parsing.Parser {
             if (segmentPrefixes.Contains(CurrentToken().Value)) {
                 var result = new AsmPrefixSymbol();
 
-                result.SegmentPrefix = RequireIdentifier(result);
+                result.SegmentPrefix = RequireIdentifier();
 
                 if (MatchIdentifier() && lockPrefixes.Contains(CurrentToken().Value))
-                    result.LockPrefix = RequireIdentifier(result);
+                    result.LockPrefix = RequireIdentifier();
                 else
                     result.SegmentPrefix = EmptyTerminal();
 
                 return result;
             }
 
-            return EmptyTerminal();
+            return null;
         }
 
         #endregion
@@ -1643,10 +1637,10 @@ namespace PasPasPas.Parsing.Parser {
 
             do {
                 if (Match(TokenKind.Integer)) {
-                    RequireInteger(result);
+                    RequireInteger();
                 }
                 else if (MatchIdentifier(true)) {
-                    RequireIdentifier(result);
+                    RequireIdentifier();
                 }
                 else if (Match(TokenKind.HexNumber)) {
                     RequireHexValue(result);
@@ -1970,7 +1964,7 @@ namespace PasPasPas.Parsing.Parser {
             var result = new ProcedureDeclarationHeading();
             InitByTerminal(result, parent, TokenKind.Function, TokenKind.Procedure);
             result.Kind = result.LastTerminalKind;
-            result.Name = RequireIdentifier(result);
+            result.Name = RequireIdentifier();
 
             if (Match(TokenKind.OpenParen)) {
                 result.Parameters = ParseFormalParameterSection(result);
@@ -2026,7 +2020,7 @@ namespace PasPasPas.Parsing.Parser {
             var result = new ExportItem();
             parent.Add(result);
 
-            result.ExportName = RequireIdentifier(result);
+            result.ExportName = RequireIdentifier();
 
             if (ContinueWith(result, TokenKind.OpenParen)) {
                 result.Parameters = ParseFormalParameters(result);
@@ -2126,10 +2120,10 @@ namespace PasPasPas.Parsing.Parser {
             parent.Add(result);
 
             if (MatchIdentifier()) {
-                result.LabelName = RequireIdentifier(result);
+                result.LabelName = RequireIdentifier();
             }
             else if (Match(TokenKind.Integer)) {
-                result.LabelName = RequireInteger(result);
+                result.LabelName = RequireInteger();
             }
             else if (Match(TokenKind.HexNumber)) {
                 result.LabelName = RequireHexValue(result);
@@ -2149,7 +2143,7 @@ namespace PasPasPas.Parsing.Parser {
             var result = new ConstDeclaration();
             parent.Add(result);
             result.Attributes = ParseAttributes(result);
-            result.Identifier = RequireIdentifier(result);
+            result.Identifier = RequireIdentifier();
 
             if (ContinueWith(result, TokenKind.Colon)) {
                 result.TypeSpecification = ParseTypeSpecification(result, true);
@@ -2376,7 +2370,7 @@ namespace PasPasPas.Parsing.Parser {
             var result = new EnumValue();
             parent.Add(result);
 
-            result.EnumName = RequireIdentifier(result);
+            result.EnumName = RequireIdentifier();
             if (ContinueWith(result, TokenKind.EqualsSign)) {
                 result.Value = ParseExpression(result);
             }
@@ -2751,7 +2745,7 @@ namespace PasPasPas.Parsing.Parser {
             InitByTerminal(result, parent, TokenKind.Case);
 
             if (MatchIdentifier() && LookAhead(1, TokenKind.Colon)) {
-                result.Name = RequireIdentifier(result);
+                result.Name = RequireIdentifier();
                 ContinueWithOrMissing(result, TokenKind.Colon);
             }
             result.TypeDeclaration = ParseTypeSpecification(result);
@@ -3081,7 +3075,7 @@ namespace PasPasPas.Parsing.Parser {
             InitByTerminal(result, parent, TokenKind.OpenBraces);
 
             if (Match(TokenKind.Identifier))
-                result.IdIdentifier = RequireIdentifier(result);
+                result.IdIdentifier = RequireIdentifier();
             else
                 result.Id = RequireString(result);
 
@@ -3415,7 +3409,7 @@ namespace PasPasPas.Parsing.Parser {
         public ClassPropertySymbol ParsePropertyDeclaration() {
             var result = new ClassPropertySymbol(default) {
                 PropertySymbol = ContinueWithOrMissing(TokenKind.Property),
-                PropertyName = RequireIdentifier(null)
+                PropertyName = RequireIdentifier()
             };
 
             if (Match(TokenKind.OpenBraces)) {
@@ -3636,7 +3630,7 @@ namespace PasPasPas.Parsing.Parser {
         private GenericTypeIdentifier ParseGenericTypeIdent(IExtendableSyntaxPart parent) {
             var result = new GenericTypeIdentifier();
             parent.Add(result);
-            result.Identifier = RequireIdentifier(result);
+            result.Identifier = RequireIdentifier();
             if (Match(TokenKind.AngleBracketsOpen)) {
                 result.GenericDefinition = ParseGenericDefinition(result);
             }
@@ -3653,7 +3647,7 @@ namespace PasPasPas.Parsing.Parser {
             result.Kind = result.LastTerminalKind;
             result.Name = ParseTypeName(result);
             ContinueWithOrMissing(result, TokenKind.EqualsSign);
-            result.ResolveIdentifier = RequireIdentifier(result);
+            result.ResolveIdentifier = RequireIdentifier();
             ContinueWithOrMissing(result, TokenKind.Semicolon);
             return result;
         }
@@ -3673,7 +3667,7 @@ namespace PasPasPas.Parsing.Parser {
             };
 
             var isInOperator = result.MethodKind == TokenKind.Operator && Match(TokenKind.In);
-            result.Identifier = RequireIdentifier(result, isInOperator);
+            result.Identifier = RequireIdentifier(isInOperator);
 
             if (Match(TokenKind.AngleBracketsOpen)) {
                 result.GenericDefinition = ParseGenericDefinition(result);
@@ -3757,7 +3751,7 @@ namespace PasPasPas.Parsing.Parser {
                     result.Attributes2 = ParseAttributes(result);
                 }
 
-                result.ParameterName = RequireIdentifier(result, true);
+                result.ParameterName = RequireIdentifier(true);
 
 
             } while (ContinueWith(parentDefinition, TokenKind.Comma));
@@ -3783,7 +3777,7 @@ namespace PasPasPas.Parsing.Parser {
             do {
                 if (allowAttributes && Match(TokenKind.OpenBraces))
                     ParseAttributes(result);
-                RequireIdentifier(result);
+                RequireIdentifier();
             } while (ContinueWith(result, TokenKind.Comma));
 
             return result;
@@ -3812,7 +3806,7 @@ namespace PasPasPas.Parsing.Parser {
             do {
                 var part = new GenericDefinitionPart();
                 result.Add(part);
-                part.Identifier = RequireIdentifier(result);
+                part.Identifier = RequireIdentifier();
             } while (ContinueWith(result, TokenKind.Comma));
 
             ContinueWithOrMissing(result, TokenKind.AngleBracketsClose);
@@ -3843,7 +3837,7 @@ namespace PasPasPas.Parsing.Parser {
         private GenericDefinitionPart ParseGenericDefinitionPart(IExtendableSyntaxPart parent) {
 
             var result = new GenericDefinitionPart();
-            result.Identifier = RequireIdentifier(result);
+            result.Identifier = RequireIdentifier();
             parent.Add(result);
 
             if (ContinueWith(result, TokenKind.Colon)) {
@@ -3873,7 +3867,7 @@ namespace PasPasPas.Parsing.Parser {
                 result.ConstructorConstraint = true;
             }
             else {
-                result.ConstraintIdentifier = RequireIdentifier(result);
+                result.ConstraintIdentifier = RequireIdentifier();
             }
 
             return result;
@@ -4144,7 +4138,7 @@ namespace PasPasPas.Parsing.Parser {
                 parent.Add(result);
 
             if (LookAhead(1, TokenKind.Colon)) {
-                result.Prefix = RequireIdentifier(result, true);
+                result.Prefix = RequireIdentifier(true);
                 ContinueWith(result, TokenKind.Colon);
             }
 
@@ -4272,7 +4266,7 @@ namespace PasPasPas.Parsing.Parser {
         private RecordConstantExpression ParseRecordConstant(IExtendableSyntaxPart parent) {
             var result = new RecordConstantExpression();
             parent.Add(result);
-            result.Name = RequireIdentifier(result);
+            result.Name = RequireIdentifier();
             ContinueWithOrMissing(result, TokenKind.Colon);
             result.Value = ParseConstantExpression();
             return result;
@@ -4385,12 +4379,12 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             if (ContinueWith(result, TokenKind.Circumflex)) {
-                result.PointerTo = RequireIdentifier(result);
+                result.PointerTo = RequireIdentifier();
                 return result;
             }
 
             if (Match(TokenKind.Integer)) {
-                result.IntValue = RequireInteger(result);
+                result.IntValue = RequireInteger();
 
                 if (Match(TokenKind.Dot))
                     result.RecordHelper = ParseDesignator(result);
@@ -4517,14 +4511,14 @@ namespace PasPasPas.Parsing.Parser {
             if (!hasIdentifier && MatchIdentifier(TokenKind.String, TokenKind.ShortString, TokenKind.AnsiString, TokenKind.UnicodeString)) {
                 result = new DesignatorItem();
                 parent.Add(result);
-                result.Subitem = RequireIdentifier(result, true);
+                result.Subitem = RequireIdentifier(true);
             }
 
             if (Match(TokenKind.Dot)) {
                 if (result == null) {
                     result = new DesignatorItem();
                     InitByTerminal(result, parent, TokenKind.Dot);
-                    result.Subitem = RequireIdentifier(result, true);
+                    result.Subitem = RequireIdentifier(true);
                 }
             }
 
@@ -4574,7 +4568,7 @@ namespace PasPasPas.Parsing.Parser {
                         result.Add(parameter);
 
                         if (MatchIdentifier(true) && LookAhead(1, TokenKind.Assignment)) {
-                            parameter.ParameterName = RequireIdentifier(parameter, true);
+                            parameter.ParameterName = RequireIdentifier(true);
                             ContinueWithOrMissing(parameter, TokenKind.Assignment);
                         }
 
@@ -4689,9 +4683,8 @@ namespace PasPasPas.Parsing.Parser {
 
         #region Helper Functions
 
-        private StandardInteger RequireInteger(IExtendableSyntaxPart parent) {
-            return new StandardInteger(ContinueWithOrMissing(TokenKind.Integer));
-        }
+        private StandardInteger RequireInteger()
+            => new StandardInteger(ContinueWithOrMissing(TokenKind.Integer));
 
         private HexNumber RequireHexValue(IExtendableSyntaxPart parent) {
             var result = new HexNumber();
@@ -4705,26 +4698,19 @@ namespace PasPasPas.Parsing.Parser {
             return result;
         }
 
-        private Identifier RequireIdentifier(IExtendableSyntaxPart parent, bool allowReserverdWords = false) {
-
-            //if (CurrentToken().Value == "SQLITE_OPEN_SHAREDCACHE")
-            //    System.Diagnostics.Debugger.Break();
+        private Identifier RequireIdentifier(bool allowReserverdWords = false) {
 
             if (Match(TokenKind.Identifier)) {
-                var result = new Identifier();
-                InitByTerminal(result, parent, TokenKind.Identifier);
-                return result;
+                return new Identifier(ContinueWithOrMissing(TokenKind.Identifier));
             };
 
             var token = CurrentToken();
 
             if (allowReserverdWords || !reservedWords.Contains(token.Kind)) {
-                var result = new Identifier();
-                InitByTerminal(result, parent, token.Kind);
-                return result;
+                return new Identifier(ContinueWithOrMissing(token.Kind));
             }
 
-            ContinueWithOrMissing(parent, TokenKind.Identifier);
+            ErrorMissingToken(TokenKind.Identifier);
             return null;
         }
 
@@ -4759,10 +4745,10 @@ namespace PasPasPas.Parsing.Parser {
 
             if (!ContinueWith(result, TokenKind.AnsiString, TokenKind.String, TokenKind.WideString, TokenKind.ShortString, TokenKind.UnicodeString))
                 if (!allowIn || !ContinueWith(result, TokenKind.In))
-                    RequireIdentifier(result);
+                    RequireIdentifier();
 
             while (LookAheadIdentifier(1, Array.Empty<int>(), true) && (!inDesignator || LookAhead(2, new int[] { TokenKind.Dot })) && ContinueWith(result, TokenKind.Dot)) {
-                RequireIdentifier(result, true);
+                RequireIdentifier(true);
             }
 
             return result;

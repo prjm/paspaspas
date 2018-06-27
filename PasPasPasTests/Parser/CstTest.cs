@@ -185,10 +185,22 @@ namespace PasPasPasTests.Parser {
 
         [TestCase]
         public void TestAsmBlock() {
-            var s = RunEmptyCstTest(p => p.ParseAsmBlock());
+            var s = RunEmptyCstTest(p => p.ParseAsmBlock(), "asm end");
             Assert.IsNotNull(s.AsmSymbol);
             Assert.IsNotNull(s.EndSymbol);
-            Assert.AreEqual(0, s.Length);
+            Assert.AreEqual(7, s.Length);
+
+            s = RunEmptyCstTest(p => p.ParseAsmBlock(), "asm int 3 end");
+            Assert.IsNotNull(s.AsmSymbol);
+            Assert.IsNotNull(s.EndSymbol);
+            Assert.IsTrue(s.Items.Length == 1);
+            Assert.AreEqual(13, s.Length);
+
+            s = RunEmptyCstTest(p => p.ParseAsmBlock(), "asm .noframe end");
+            Assert.IsNotNull(s.AsmSymbol);
+            Assert.IsNotNull(s.EndSymbol);
+            Assert.IsTrue(s.Items.Length == 1);
+            Assert.AreEqual(16, s.Length);
         }
 
         [TestCase]
@@ -240,7 +252,7 @@ namespace PasPasPasTests.Parser {
             var s = RunEmptyCstTest(p => p.ParseAssemblyPrefix() as AsmPrefixSymbol, "lock");
             Assert.IsNotNull(s.LockPrefix);
             Assert.IsNotNull(s.SegmentPrefix);
-            Assert.AreEqual(0, s.Length);
+            Assert.AreEqual(4, s.Length);
         }
 
         [TestCase]
@@ -307,12 +319,12 @@ namespace PasPasPasTests.Parser {
 
         [TestCase]
         public void TestAsmStatement() {
-            var s = RunEmptyCstTest(p => p.ParseAsmStatement(), "");
+            var s = RunEmptyCstTest(p => p.ParseAsmStatement(), "x: lock int 3");
             Assert.IsNotNull(s.Label);
             Assert.IsNotNull(s.ColonSymbol);
             Assert.IsNotNull(s.OpCode);
             Assert.IsNotNull(s.Prefix);
-            Assert.AreEqual(0, s.Length);
+            Assert.AreEqual(7, s.Length);
         }
 
         [TestCase]

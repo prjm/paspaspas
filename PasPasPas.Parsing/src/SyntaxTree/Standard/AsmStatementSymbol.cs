@@ -1,4 +1,5 @@
 ﻿using System.Collections.Immutable;
+using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
@@ -6,37 +7,58 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// <summary>
     ///     asm statement
     /// </summary>
-    public class AsmStatementSymbolx : VariableLengthSyntaxTreeBase<AsmOperandSymbol> {
+    public class AsmStatementSymbol : VariableLengthSyntaxTreeBase<AsmOperandSymbol> {
 
-        public AsmStatementSymbolx(ImmutableArray<AsmOperandSymbol> items) : base(items) {
+        /// <summary>
+        ///     create a new asm statement symbol
+        /// </summary>
+        /// <param name="opCode"></param>
+        /// <param name="prefix"></param>
+        /// <param name="label"></param>
+        /// <param name="colonSymbol"></param>
+        /// <param name="items"></param>
+        public AsmStatementSymbol(
+            AsmOpCodeSymbol opCode,
+            AsmPrefixSymbol prefix,
+            AsmLabelSymbol label,
+            Terminal colonSymbol,
+            ImmutableArray<AsmOperandSymbol> items) : base(items) {
 
+            OpCode = opCode;
+            Prefix = prefix;
+            Label = label;
+            ColonSymbol = colonSymbol;
         }
 
         /// <summary>
         ///     opcode
         /// </summary>
-        public SyntaxPartBase OpCode { get; set; }
+        public AsmOpCodeSymbol OpCode { get; }
 
         /// <summary>
         ///     lock / segment prefix
         /// </summary>
-        public SyntaxPartBase Prefix { get; set; }
+        public AsmPrefixSymbol Prefix { get; }
 
         /// <summary>
         ///     label
         /// </summary>
-        public SyntaxPartBase Label { get; set; }
+        public AsmLabelSymbol Label { get; }
 
         /// <summary>
         ///     colon symbol
         /// </summary>
-        public Terminal ColonSymbol { get; set; }
+        public Terminal ColonSymbol { get; }
 
         /// <summary>
         ///     symbol length
         /// </summary>
-        public int Length
-            => Label.Length + ColonSymbol.Length + Prefix.Length + OpCode.Length + ItemLength;
+        public override int Length
+            => Label.GetSymbolLength() +
+                ColonSymbol.GetSymbolLength() +
+                Prefix.GetSymbolLength() +
+                OpCode.GetSymbolLength() +
+                ItemLength;
 
         /// <summary>
         ///     accept visitor

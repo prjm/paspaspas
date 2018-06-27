@@ -116,7 +116,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         IStartVisitor<AsmBlockSymbol>,
         IStartVisitor<AsmPseudoOpSymbol>,
         IStartVisitor<LocalAsmLabel>,
-        IStartVisitor<AsmStatementSymbolx>,
+        IStartVisitor<AsmStatementSymbol>,
         IStartVisitor<AsmOperandSymbol>,
         IStartVisitor<AsmExpressionSymbol>,
         IStartVisitor<AsmTermSymbol>,
@@ -2645,7 +2645,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     start visiting an assembler statement
         /// </summary>
         /// <param name="statement"></param>
-        public void StartVisit(AsmStatementSymbolx statement) {
+        public void StartVisit(AsmStatementSymbol statement) {
             var parent = LastValue as BlockOfAssemblerStatements;
             var result = new AssemblerStatement();
             InitNode(result, statement);
