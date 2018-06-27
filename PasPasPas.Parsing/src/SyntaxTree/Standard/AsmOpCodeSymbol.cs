@@ -9,9 +9,16 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     public class AsmOpCodeSymbol : StandardSyntaxTreeBase {
 
         /// <summary>
+        ///     generate a new opcode symbol
+        /// </summary>
+        /// <param name="opCode"></param>
+        public AsmOpCodeSymbol(Identifier opCode)
+            => OpCode = opCode;
+
+        /// <summary>
         ///     op code
         /// </summary>
-        public Identifier OpCode { get; set; }
+        public Identifier OpCode { get; }
 
         /// <summary>
         ///     accept visitor

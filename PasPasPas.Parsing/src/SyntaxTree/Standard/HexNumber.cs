@@ -1,4 +1,5 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Visitors;
+﻿using PasPasPas.Parsing.SyntaxTree.Utils;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
@@ -8,9 +9,16 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     public class HexNumber : StandardSyntaxTreeBase {
 
         /// <summary>
-        ///     number value
+        ///     hex number
         /// </summary>
-        public string Value { get; }
+        /// <param name="symbol"></param>
+        public HexNumber(Terminal symbol)
+            => Symbol = symbol;
+
+        /// <summary>
+        ///     symbol
+        /// </summary>
+        public Terminal Symbol { get; }
 
         /// <summary>
         ///     accept visitor
@@ -18,10 +26,15 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="visitor">visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
-            AcceptParts(this, visitor);
+            AcceptPart(this, Symbol, visitor);
             visitor.EndVisit(this);
         }
 
+        /// <summary>
+        ///     length
+        /// </summary>
+        public override int Length
+            => Symbol.GetSymbolLength();
 
     }
 }

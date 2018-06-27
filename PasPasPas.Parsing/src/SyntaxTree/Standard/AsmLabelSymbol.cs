@@ -1,4 +1,6 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Visitors;
+﻿using System.Collections.Immutable;
+using PasPasPas.Parsing.SyntaxTree.Utils;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
@@ -8,20 +10,34 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     public class AsmLabelSymbol : StandardSyntaxTreeBase {
 
         /// <summary>
+        ///     local asm label
+        /// </summary>
+        /// <param name="localAsmLabel"></param>
+        public AsmLabelSymbol(LocalAsmLabel localAsmLabel)
+            => LocalLabel = localAsmLabel;
+
+        /// <summary>
+        ///     standard label
+        /// </summary>
+        /// <param name="label"></param>
+        public AsmLabelSymbol(Label label)
+            => Label = label;
+
+        /// <summary>
         ///     asm label
         /// </summary>
-        public SyntaxPartBase LocalLabel { get; set; }
+        public LocalAsmLabel LocalLabel { get; }
 
         /// <summary>
         ///     generic label
         /// </summary>
-        public SyntaxPartBase Label { get; set; }
+        public Label Label { get; }
 
         /// <summary>
         ///     symbol length
         /// </summary>
-        public int Length
-            => LocalLabel.Length + Label.Length;
+        public override int Length
+            => LocalLabel.GetSymbolLength() + Label.GetSymbolLength();
 
         /// <summary>
         ///     accept visitor

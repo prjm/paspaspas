@@ -71,7 +71,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     real value
         /// </summary>
-        public RealNumber RealValue { get; set; }
+        public RealNumberSymbol RealValue { get; set; }
 
         /// <summary>
         ///     record helper calls

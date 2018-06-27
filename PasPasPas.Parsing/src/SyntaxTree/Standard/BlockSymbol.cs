@@ -1,4 +1,5 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Visitors;
+﻿using PasPasPas.Parsing.SyntaxTree.Utils;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
@@ -8,14 +9,24 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     public class BlockSymbol : StandardSyntaxTreeBase {
 
         /// <summary>
+        ///     create a new block symbol
+        /// </summary>
+        /// <param name="body"></param>
+        /// <param name="declarationSections"></param>
+        public BlockSymbol(SyntaxPartBase body, Declarations declarationSections) {
+            Body = body;
+            DeclarationSections = declarationSections;
+        }
+
+        /// <summary>
         ///     block body
         /// </summary>
-        public SyntaxPartBase Body { get; set; }
+        public SyntaxPartBase Body { get; }
 
         /// <summary>
         ///     declarations
         /// </summary>
-        public Declarations DeclarationSections { get; set; }
+        public Declarations DeclarationSections { get; }
 
         /// <summary>
         ///     accept visitor
@@ -31,8 +42,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     symbol length
         /// </summary>
-        public int Length
-            => DeclarationSections.Length + Body.Length;
+        public override int Length
+            => DeclarationSections.GetSymbolLength() +
+               Body.GetSymbolLength();
 
     }
 }

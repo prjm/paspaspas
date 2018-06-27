@@ -13,7 +13,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// </summary>
         public string Name {
             get {
-                if (Parts == null || PartList.Count < 1)
+                if (Parts == null || PartList == null || PartList.Count < 1)
                     return null;
 
                 return IdentifierValue(PartList[PartList.Count - 1]);
@@ -25,7 +25,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// </summary>
         public IEnumerable<string> Namespace {
             get {
-                if (Parts == null || PartList.Count < 2)
+                if (Parts == null || PartList == null || PartList.Count < 2)
                     yield break;
 
                 for (var i = 0; i <= PartList.Count - 2; i++) {

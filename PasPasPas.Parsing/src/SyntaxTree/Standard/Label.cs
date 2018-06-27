@@ -1,4 +1,5 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Visitors;
+﻿using PasPasPas.Parsing.SyntaxTree.Utils;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
@@ -8,9 +9,16 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     public class Label : StandardSyntaxTreeBase {
 
         /// <summary>
+        ///     create a new label
+        /// </summary>
+        /// <param name="name"></param>
+        public Label(SyntaxPartBase name)
+            => LabelName = name;
+
+        /// <summary>
         ///     label name
         /// </summary>
-        public SyntaxPartBase LabelName { get; set; }
+        public SyntaxPartBase LabelName { get; }
 
         /// <summary>
         ///     accept visitor
@@ -18,9 +26,15 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="visitor">visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
-            AcceptParts(this, visitor);
+            AcceptPart(this, LabelName, visitor);
             visitor.EndVisit(this);
         }
+
+        /// <summary>
+        ///     symbol length
+        /// </summary>
+        public override int Length
+            => LabelName.GetSymbolLength();
 
     }
 }

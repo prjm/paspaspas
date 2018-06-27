@@ -54,10 +54,10 @@ namespace PasPasPasTests.Parser {
 
         [TestCase]
         public void TestCallConvention() {
-            var s = RunEmptyCstTest(p => p.ParseCallConvention());
+            var s = RunEmptyCstTest(p => p.ParseCallConvention(), "cdecl;");
             Assert.IsNotNull(s.Directive);
             Assert.IsNotNull(s.Semicolon);
-            Assert.AreEqual(0, s.Length);
+            Assert.AreEqual(6, s.Length);
         }
 
         [TestCase]
@@ -205,7 +205,11 @@ namespace PasPasPasTests.Parser {
 
         [TestCase]
         public void TestBlock() {
-            var s = RunEmptyCstTest(p => p.ParseBlock());
+            var s = RunEmptyCstTest(p => p.ParseBlock(), "const x = 5");
+            Assert.IsNotNull(s.DeclarationSections);
+            Assert.AreEqual(0, s.Length);
+
+            s = RunEmptyCstTest(p => p.ParseBlock(), "const x = 5; begin end");
             Assert.IsNotNull(s.DeclarationSections);
             Assert.IsNotNull(s.Body);
             Assert.AreEqual(0, s.Length);
@@ -213,42 +217,77 @@ namespace PasPasPasTests.Parser {
 
         [TestCase]
         public void TestAsmFactor() {
-            var s = RunEmptyCstTest(p => p.ParseAssemblyFactor());
+            var s = RunEmptyCstTest(p => p.ParseAssemblyFactor(), "cs:3");
             Assert.IsNotNull(s.SegmentPrefix);
             Assert.IsNotNull(s.ColonSymbol);
             Assert.IsNotNull(s.SegmentExpression);
+            Assert.AreEqual(4, s.Length);
+
+            s = RunEmptyCstTest(p => p.ParseAssemblyFactor(), "(3)");
             Assert.IsNotNull(s.OpenParen);
             Assert.IsNotNull(s.Subexpression);
             Assert.IsNotNull(s.CloseParen);
+            Assert.AreEqual(3, s.Length);
+
+            s = RunEmptyCstTest(p => p.ParseAssemblyFactor(), "[3]");
             Assert.IsNotNull(s.OpenBraces);
             Assert.IsNotNull(s.MemorySubexpression);
             Assert.IsNotNull(s.CloseBraces);
-            Assert.IsNotNull(s.Identifier);
-            Assert.IsNotNull(s.Number);
-            Assert.IsNotNull(s.RealNumber);
-            Assert.IsNotNull(s.HexNumber);
-            Assert.IsNotNull(s.QuotedString);
+            Assert.AreEqual(3, s.Length);
+
+            s = RunEmptyCstTest(p => p.ParseAssemblyFactor(), "@x");
             Assert.IsNotNull(s.Label);
-            Assert.AreEqual(0, s.Length);
+            Assert.AreEqual(2, s.Length);
+
+            s = RunEmptyCstTest(p => p.ParseAssemblyFactor(), "'a'");
+            Assert.IsNotNull(s.QuotedString);
+            Assert.AreEqual(3, s.Length);
+
+            s = RunEmptyCstTest(p => p.ParseAssemblyFactor(), "\"a\"");
+            Assert.IsNotNull(s.QuotedString);
+            Assert.AreEqual(3, s.Length);
+
+            s = RunEmptyCstTest(p => p.ParseAssemblyFactor(), "$3");
+            Assert.IsNotNull(s.HexNumber);
+            Assert.AreEqual(2, s.Length);
+
+            s = RunEmptyCstTest(p => p.ParseAssemblyFactor(), "3");
+            Assert.IsNotNull(s.Number);
+            Assert.AreEqual(1, s.Length);
+
+            s = RunEmptyCstTest(p => p.ParseAssemblyFactor(), "3.1");
+            Assert.IsNotNull(s.RealNumber);
+            Assert.AreEqual(3, s.Length);
         }
 
         [TestCase]
         public void TestAsmLabel() {
-            var s = RunEmptyCstTest(p => p.ParseAssemblyLabel());
+            var s = RunEmptyCstTest(p => p.ParseAssemblyLabel(), "a");
             Assert.IsNotNull(s.Label);
+            Assert.AreEqual(1, s.Length);
+
+            s = RunEmptyCstTest(p => p.ParseAssemblyLabel(), "@a");
             Assert.IsNotNull(s.LocalLabel);
-            Assert.AreEqual(0, s.Length);
+            Assert.AreEqual(2, s.Length);
+        }
+
+
+        [TestCase]
+        public void TestRealNumberSymobl() {
+            var s = RunEmptyCstTest(p => p.RequireRealValue(), "2.5");
+            Assert.IsNotNull(s.Symbol);
+            Assert.AreEqual(3, s.Length);
         }
 
         [TestCase]
         public void TestAsmOpCodeSymbol() {
-            var s = RunEmptyCstTest(p => p.ParseAssemblyOpcode() as AsmOpCodeSymbol);
+            var s = RunEmptyCstTest(p => p.ParseAssemblyOpcode() as AsmOpCodeSymbol, "int");
             Assert.IsNotNull(s.OpCode);
-            Assert.AreEqual(0, s.Length);
+            Assert.AreEqual(3, s.Length);
         }
 
         [TestCase]
-        public void TestAsmPrefixymbol() {
+        public void TestAsmPrefixSymbol() {
             var s = RunEmptyCstTest(p => p.ParseAssemblyPrefix() as AsmPrefixSymbol, "lock");
             Assert.IsNotNull(s.LockPrefix);
             Assert.IsNotNull(s.SegmentPrefix);
@@ -363,18 +402,31 @@ namespace PasPasPasTests.Parser {
 
         [TestCase]
         public void TestAsmExpression() {
-            var s = RunEmptyCstTest(p => p.ParseAssemblyExpression());
+            var s = RunEmptyCstTest(p => p.ParseAssemblyExpression(), "offset 3");
             Assert.IsNotNull(s.OffsetSymbol);
             Assert.IsNotNull(s.Offset);
+            Assert.AreEqual(8, s.Length);
+
+            s = RunEmptyCstTest(p => p.ParseAssemblyExpression(), "byte 3");
             Assert.IsNotNull(s.BytePtrKind);
             Assert.IsNotNull(s.BytePtr);
+            Assert.AreEqual(6, s.Length);
+
+            s = RunEmptyCstTest(p => p.ParseAssemblyExpression(), "type 3");
             Assert.IsNotNull(s.TypeSymbol);
             Assert.IsNotNull(s.TypeExpression);
-            Assert.IsNotNull(s.LeftOperand);
-            Assert.IsNotNull(s.RightOperand);
-            Assert.AreEqual(0, s.Length);
-        }
+            Assert.AreEqual(6, s.Length);
 
+            s = RunEmptyCstTest(p => p.ParseAssemblyExpression(), "3");
+            Assert.IsNotNull(s.LeftOperand);
+            Assert.AreEqual(1, s.Length);
+
+            s = RunEmptyCstTest(p => p.ParseAssemblyExpression(), "3 + 4");
+            Assert.IsNotNull(s.LeftOperand);
+            Assert.IsNotNull(s.Operator);
+            Assert.IsNotNull(s.RightOperand);
+            Assert.AreEqual(5, s.Length);
+        }
 
         [TestCase]
         public void TestUnit() {

@@ -206,7 +206,7 @@ namespace PasPasPas.Parsing.Parser {
                 result.UsesClause = ParseUsesClause(result);
             }
 
-            result.DeclarationSections = ParseDeclarationSections(result);
+            result.DeclarationSections = ParseDeclarationSections();
             return result;
         }
 
@@ -259,7 +259,7 @@ namespace PasPasPas.Parsing.Parser {
 
             result.NamespaceName = ParseNamespaceName(result);
             if (ContinueWith(result, TokenKind.In))
-                result.QuotedFileName = RequireString(result);
+                result.QuotedFileName = RequireString();
 
             return result;
         }
@@ -611,7 +611,7 @@ namespace PasPasPas.Parsing.Parser {
 
             Label label = null;
             if (MatchIdentifier(TokenKind.Integer, TokenKind.HexNumber) && LookAhead(1, TokenKind.Colon)) {
-                label = ParseLabel(result);
+                label = ParseLabel();
                 result.ColonSymbol = ContinueWithOrMissing(TokenKind.Colon);
             }
 
@@ -980,7 +980,7 @@ namespace PasPasPas.Parsing.Parser {
             parent.Add(result);
 
             if (ContinueWith(result, TokenKind.GoToKeyword)) {
-                result.GoToLabel = ParseLabel(result);
+                result.GoToLabel = ParseLabel();
                 return result;
             }
             if (ContinueWith(result, TokenKind.Break)) {
@@ -1199,16 +1199,10 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("Block", "DeclarationSections [ BlockBody ] ")]
         public BlockSymbol ParseBlock() {
-            var result = new BlockSymbol();
-
-            result.DeclarationSections = ParseDeclarationSections(result);
-
-            if (Match(TokenKind.Asm, TokenKind.Begin))
-                result.Body = ParseBlockBody();
-            else
-                result.Body = EmptyTerminal();
-
-            return result;
+            return new BlockSymbol(
+                declarationSections: ParseDeclarationSections(),
+                body: Match(TokenKind.Asm, TokenKind.Begin) ? ParseBlockBody() : null
+            );
         }
 
         #endregion
@@ -1385,48 +1379,39 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("AssemblyExpression", " ('OFFSET' AssemblyOperand ) | ('TYPE' AssemblyOperand) | (('BYTE' | 'WORD' | 'DWORD' | 'QWORD' | 'TBYTE' ) PTR AssemblyOperand) | AssemblyTerm ('+' | '-' ) AssemblyOperand ")]
         public AsmExpressionSymbol ParseAssemblyExpression() {
-            var result = new AsmExpressionSymbol() {
-                Offset = EmptyTerminal(),
-                OffsetSymbol = EmptyTerminal(),
-                BytePtr = EmptyTerminal(),
-                BytePtrKind = EmptyTerminal(),
-                TypeSymbol = EmptyTerminal(),
-                TypeExpression = EmptyTerminal(),
-                LeftOperand = EmptyTerminal(),
-                RightOperand = EmptyTerminal()
-            };
-
             var tokenValue = CurrentToken().Value;
             if (MatchIdentifier()) {
 
                 if (string.Equals(tokenValue, "OFFSET", StringComparison.OrdinalIgnoreCase)) {
-                    result.OffsetSymbol = ContinueWith(TokenKind.Identifier);
-                    result.Offset = ParseAssemblyOperand();
-                    return result;
+                    var offsetSymbol = ContinueWith(TokenKind.Identifier);
+                    var offset = ParseAssemblyOperand();
+                    return new AsmExpressionSymbol(offsetSymbol, offset, false);
                 }
 
                 if (asmPtr.Contains(tokenValue)) {
-                    result.BytePtrKind = RequireIdentifier();
-                    result.BytePtr = ParseAssemblyOperand();
-                    return result;
+                    var bytePtrKind = RequireIdentifier();
+                    var bytePtr = ParseAssemblyOperand();
+                    return new AsmExpressionSymbol(bytePtrKind, bytePtr);
                 }
             }
 
             if (Match(TokenKind.TypeKeyword)) {
-                result.TypeSymbol = ContinueWithOrMissing(TokenKind.TypeKeyword);
-                result.TypeExpression = ParseAssemblyOperand();
-                return result;
+                var typeSymbol = ContinueWithOrMissing(TokenKind.TypeKeyword);
+                var typeExpression = ParseAssemblyOperand();
+                return new AsmExpressionSymbol(typeSymbol, typeExpression, true);
             }
 
-            result.LeftOperand = ParseAssemblyTerm();
+            var leftOperand = ParseAssemblyTerm();
+            var rightOperand = default(AsmOperandSymbol);
+            var kind = TokenKind.Undefined;
+            var operand = ContinueWith(TokenKind.Plus, TokenKind.Minus);
 
-            if (Match(TokenKind.Plus, TokenKind.Minus)) {
-                result.BinaryOperatorKind = CurrentToken().Kind;
-                FetchNextToken();
-                result.RightOperand = ParseAssemblyOperand();
+            if (operand != null) {
+                kind = CurrentToken().Kind;
+                rightOperand = ParseAssemblyOperand();
             }
 
-            return result;
+            return new AsmExpressionSymbol(leftOperand, operand, rightOperand, kind);
         }
 
         #endregion
@@ -1474,70 +1459,51 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("AssemblyFactor", "(SegmentPrefix ':' AssemblyOperand) | '(' AssemblyOperand ')' | '[' AssemblyOperand ']' | Identifier | QuotedString | DoubleQuotedString | Integer | HexNumber ")]
         public AsmFactorSymbol ParseAssemblyFactor() {
-            var result = new AsmFactorSymbol() {
-                SegmentPrefix = EmptyTerminal(),
-                ColonSymbol = EmptyTerminal(),
-                SegmentExpression = EmptyTerminal(),
-                OpenParen = EmptyTerminal(),
-                Subexpression = EmptyTerminal(),
-                CloseParen = EmptyTerminal(),
-                OpenBraces = EmptyTerminal(),
-                MemorySubexpression = EmptyTerminal(),
-                CloseBraces = EmptyTerminal(),
-                Identifier = EmptyTerminal(),
-                Number = EmptyTerminal(),
-                RealNumber = EmptyTerminal(),
-                HexNumber = EmptyTerminal(),
-                QuotedString = EmptyTerminal(),
-                Label = EmptyTerminal(),
-            };
 
             if (MatchIdentifier() && segmentPrefixes.Contains(CurrentToken().Value) && LookAhead(1, TokenKind.Colon)) {
-                result.SegmentPrefix = RequireIdentifier();
-                result.ColonSymbol = ContinueWithOrMissing(TokenKind.Colon);
-                result.SegmentExpression = ParseAssemblyOperand();
-                return result;
+                var segmentPrefix = RequireIdentifier();
+                var colonSymbol = ContinueWithOrMissing(TokenKind.Colon);
+                var segmentExpression = ParseAssemblyOperand();
+                return new AsmFactorSymbol(segmentPrefix, colonSymbol, segmentExpression);
             }
 
             if (Match(TokenKind.OpenParen)) {
-                result.OpenParen = ContinueWithOrMissing(TokenKind.OpenParen);
-                result.Subexpression = ParseAssemblyOperand();
-                result.CloseParen = ContinueWithOrMissing(TokenKind.CloseParen);
-                return result;
+                var openParen = ContinueWithOrMissing(TokenKind.OpenParen);
+                var subexpression = ParseAssemblyOperand();
+                var closeParen = ContinueWithOrMissing(TokenKind.CloseParen);
+                return new AsmFactorSymbol(openParen, subexpression, closeParen);
             }
 
             if (Match(TokenKind.OpenBraces)) {
-                result.OpenBraces = ContinueWithOrMissing(TokenKind.OpenBraces);
-                result.MemorySubexpression = ParseAssemblyOperand();
-                result.CloseBraces = ContinueWithOrMissing(TokenKind.CloseBraces);
-                return result;
+                var openBraces = ContinueWithOrMissing(TokenKind.OpenBraces);
+                var memorySubexpression = ParseAssemblyOperand();
+                var closeBraces = ContinueWithOrMissing(TokenKind.CloseBraces);
+                return new AsmFactorSymbol(openBraces, closeBraces, memorySubexpression);
             }
 
-            if (MatchIdentifier(true)) {
-                result.Identifier = RequireIdentifier(true);
-            }
-            else if (Match(TokenKind.Integer)) {
-                result.Number = RequireInteger();
-            }
-            else if (Match(TokenKind.Real)) {
-                result.RealNumber = RequireRealValue(result);
-            }
-            else if (Match(TokenKind.HexNumber)) {
-                result.HexNumber = RequireHexValue(result);
-            }
-            else if (Match(TokenKind.QuotedString)) {
-                result.QuotedString = RequireString(result);
-            }
-            else if (Match(TokenKind.DoubleQuotedString)) {
-                result.QuotedString = RequireDoubleQuotedString(result);
-            }
-            else if (Match(TokenKind.At)) {
-                result.Label = ParseLocalAsmLabel(result);
-            }
-            else {
-                Unexpected();
-            }
-            return result;
+            if (MatchIdentifier(true))
+                return new AsmFactorSymbol(RequireIdentifier(true));
+
+            if (Match(TokenKind.Integer))
+                return new AsmFactorSymbol(RequireInteger());
+
+            if (Match(TokenKind.Real))
+                return new AsmFactorSymbol(RequireRealValue());
+
+            if (Match(TokenKind.HexNumber))
+                return new AsmFactorSymbol(RequireHexValue());
+
+            if (Match(TokenKind.QuotedString))
+                return new AsmFactorSymbol(RequireString());
+
+            if (Match(TokenKind.DoubleQuotedString))
+                return new AsmFactorSymbol(RequireDoubleQuotedString());
+
+            if (Match(TokenKind.At))
+                return new AsmFactorSymbol(ParseLocalAsmLabel());
+
+            Unexpected();
+            return null;
         }
 
         #endregion
@@ -1553,9 +1519,7 @@ namespace PasPasPas.Parsing.Parser {
             if (Match(TokenKind.End))
                 return null;
 
-            return new AsmOpCodeSymbol() {
-                OpCode = RequireIdentifier(true)
-            };
+            return new AsmOpCodeSymbol(RequireIdentifier(true));
         }
 
         #endregion
@@ -1611,59 +1575,51 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("AsmLabel", "(Label | LocalAsmLabel { LocalAsmLabel } )")]
         public AsmLabelSymbol ParseAssemblyLabel() {
-            var result = new AsmLabelSymbol();
+            if (Match(TokenKind.At))
+                return new AsmLabelSymbol(ParseLocalAsmLabel());
 
-            if (Match(TokenKind.At)) {
-                result.LocalLabel = ParseLocalAsmLabel(result);
-                result.Label = EmptyTerminal();
-            }
-            else {
-                result.Label = ParseLabel(result);
-                result.LocalLabel = EmptyTerminal();
-            }
-
-            return result;
+            return new AsmLabelSymbol(ParseLabel());
         }
 
         #endregion
         #region ParseLocalAsmLabel
 
         [Rule("LocalAsmLabel", "'@' { '@' | Integer | Identifier | HexNumber }")]
-        private LocalAsmLabel ParseLocalAsmLabel(IExtendableSyntaxPart parent) {
-            var result = new LocalAsmLabel();
-            parent.Add(result);
+        private LocalAsmLabel ParseLocalAsmLabel() {
+            var at = ContinueWithOrMissing(TokenKind.At);
+            var wasAt = false;
+            using (var list = GetList<SyntaxPartBase>()) {
+                do {
+                    wasAt = false;
+                    if (Match(TokenKind.Integer)) {
+                        list.Item.Add(RequireInteger());
+                    }
+                    else if (MatchIdentifier(true)) {
+                        list.Item.Add(RequireIdentifier());
+                    }
+                    else if (Match(TokenKind.HexNumber)) {
+                        list.Item.Add(RequireHexValue());
+                    }
+                    else if (Match(TokenKind.At)) {
+                        list.Item.Add(ContinueWith(TokenKind.At));
+                        wasAt = true;
+                    }
+                    else {
+                        Unexpected();
+                    }
+                }
+                while ((!CurrentTokenIsAfterNewline()) && wasAt);
 
-            ContinueWithOrMissing(result, TokenKind.At);
-
-            do {
-                if (Match(TokenKind.Integer)) {
-                    RequireInteger();
-                }
-                else if (MatchIdentifier(true)) {
-                    RequireIdentifier();
-                }
-                else if (Match(TokenKind.HexNumber)) {
-                    RequireHexValue(result);
-                }
-                else if (Match(TokenKind.At)) {
-                    //..
-                }
-                else {
-                    Unexpected();
-                }
+                return new LocalAsmLabel(at, list.Item.ToImmutableArray());
             }
-            while ((!CurrentTokenIsAfterNewline()) && ContinueWith(result, TokenKind.At));
-            return result;
         }
 
         #endregion
         #region ParseDeclarationSections
 
         [Rule("DeclarationSection", "{ LabelDeclarationSection | ConstSection | TypeSection | VarSection | ExportsSection | AssemblyAttribute | MethodDecl | ProcedureDeclaration }", true)]
-        private Declarations ParseDeclarationSections(IExtendableSyntaxPart parent) {
+        private Declarations ParseDeclarationSections() {
             var result = new Declarations();
-            parent.Add(result);
-
             var stop = false;
 
             while (!stop) {
@@ -1689,7 +1645,7 @@ namespace PasPasPas.Parsing.Parser {
                 }
 
                 if (Match(TokenKind.Exports)) {
-                    ParseExportsSection(parent);
+                    ParseExportsSection(null);
                     continue;
                 }
 
@@ -1829,10 +1785,10 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("CallConvention", "('cdecl' | 'pascal' | 'register' | 'safecall' | 'stdcall' | 'export') ';' ")]
         public CallConventionSymbol ParseCallConvention() {
-            return new CallConventionSymbol() {
-                Directive = ContinueWithOrMissing(TokenKind.Cdecl, TokenKind.Pascal, TokenKind.Register, TokenKind.Safecall, TokenKind.Stdcall, TokenKind.Export),
-                Semicolon = ContinueWithOrMissing(TokenKind.Semicolon)
-            };
+            return new CallConventionSymbol(
+                directive: ContinueWithOrMissing(TokenKind.Cdecl, TokenKind.Pascal, TokenKind.Register, TokenKind.Safecall, TokenKind.Stdcall, TokenKind.Export),
+                semicolon: ContinueWithOrMissing(TokenKind.Semicolon)
+            );
         }
 
         #endregion
@@ -1883,10 +1839,10 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("OverloadDirective", "'overload' ';' ")]
         public OverloadSymbol ParseOverloadDirective() {
-            return new OverloadSymbol() {
-                Directive = ContinueWithOrMissing(TokenKind.Overload),
-                Semicolon = ContinueWithOrMissing(TokenKind.Semicolon)
-            };
+            return new OverloadSymbol(
+                directive: ContinueWithOrMissing(TokenKind.Overload),
+                semicolon: ContinueWithOrMissing(TokenKind.Semicolon)
+            );
         }
 
         #endregion
@@ -2104,7 +2060,7 @@ namespace PasPasPas.Parsing.Parser {
             InitByTerminal(result, parent, TokenKind.Label);
 
             do {
-                ParseLabel(result);
+                ParseLabel();
             } while (ContinueWith(result, TokenKind.Comma));
 
             ContinueWithOrMissing(result, TokenKind.Semicolon);
@@ -2115,24 +2071,19 @@ namespace PasPasPas.Parsing.Parser {
         #region ParseLabel
 
         [Rule("Label", "Identifier | Integer")]
-        private Label ParseLabel(IExtendableSyntaxPart parent) {
-            var result = new Label();
-            parent.Add(result);
+        private Label ParseLabel() {
 
-            if (MatchIdentifier()) {
-                result.LabelName = RequireIdentifier();
-            }
-            else if (Match(TokenKind.Integer)) {
-                result.LabelName = RequireInteger();
-            }
-            else if (Match(TokenKind.HexNumber)) {
-                result.LabelName = RequireHexValue(result);
-            }
-            else {
-                Unexpected();
-            }
+            if (MatchIdentifier())
+                return new Label(RequireIdentifier());
 
-            return result;
+            if (Match(TokenKind.Integer))
+                return new Label(RequireInteger());
+
+            if (Match(TokenKind.HexNumber))
+                return new Label(RequireHexValue());
+
+            Unexpected();
+            return null;
         }
 
         #endregion
@@ -2212,7 +2163,7 @@ namespace PasPasPas.Parsing.Parser {
             if (result.Symbol != null) {
                 result.Deprecated = true;
                 if (Match(TokenKind.QuotedString))
-                    result.DeprecatedComment = RequireString(result);
+                    result.DeprecatedComment = RequireString();
                 else
                     result.DeprecatedComment = EmptyTerminal();
 
@@ -3077,7 +3028,7 @@ namespace PasPasPas.Parsing.Parser {
             if (Match(TokenKind.Identifier))
                 result.IdIdentifier = RequireIdentifier();
             else
-                result.Id = RequireString(result);
+                result.Id = RequireString();
 
             ContinueWithOrMissing(result, TokenKind.CloseBraces);
             return result;
@@ -4393,7 +4344,7 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             if (Match(TokenKind.HexNumber)) {
-                result.HexValue = RequireHexValue(result);
+                result.HexValue = RequireHexValue();
 
                 if (Match(TokenKind.Dot))
                     result.RecordHelper = ParseDesignator(result);
@@ -4402,7 +4353,7 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             if (Match(TokenKind.Real)) {
-                result.RealValue = RequireRealValue(result);
+                result.RealValue = RequireRealValue();
 
                 if (Match(TokenKind.Dot))
                     result.RecordHelper = ParseDesignator(result);
@@ -4411,7 +4362,7 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             if (Match(TokenKind.QuotedString)) {
-                result.StringValue = RequireString(result);
+                result.StringValue = RequireString();
 
                 if (Match(TokenKind.Dot))
                     result.RecordHelper = ParseDesignator(result);
@@ -4686,17 +4637,15 @@ namespace PasPasPas.Parsing.Parser {
         private StandardInteger RequireInteger()
             => new StandardInteger(ContinueWithOrMissing(TokenKind.Integer));
 
-        private HexNumber RequireHexValue(IExtendableSyntaxPart parent) {
-            var result = new HexNumber();
-            InitByTerminal(result, parent, TokenKind.HexNumber);
-            return result;
-        }
+        private HexNumber RequireHexValue()
+            => new HexNumber(ContinueWithOrMissing(TokenKind.HexNumber));
 
-        private RealNumber RequireRealValue(IExtendableSyntaxPart parent) {
-            var result = new RealNumber();
-            InitByTerminal(result, parent, TokenKind.Real);
-            return result;
-        }
+        /// <summary>
+        ///     parse a real number
+        /// </summary>
+        /// <returns></returns>
+        public RealNumberSymbol RequireRealValue()
+            => new RealNumberSymbol(ContinueWithOrMissing(TokenKind.Real));
 
         private Identifier RequireIdentifier(bool allowReserverdWords = false) {
 
@@ -4714,19 +4663,11 @@ namespace PasPasPas.Parsing.Parser {
             return null;
         }
 
-        private QuotedString RequireString(IExtendableSyntaxPart parent) {
-            var result = new QuotedString();
-            InitByTerminal(result, parent, TokenKind.QuotedString);
-            result.UnquotedValue = result.LastTerminalToken.ParsedValue;
-            return result;
-        }
+        private QuotedString RequireString()
+            => new QuotedString(ContinueWithOrMissing(TokenKind.QuotedString));
 
-        private QuotedString RequireDoubleQuotedString(IExtendableSyntaxPart parent) {
-            var result = new QuotedString();
-            InitByTerminal(result, parent, TokenKind.DoubleQuotedString);
-            result.UnquotedValue = result.LastTerminalValue;
-            return result;
-        }
+        private QuotedString RequireDoubleQuotedString()
+            => new QuotedString(ContinueWithOrMissing(TokenKind.DoubleQuotedString));
 
         private bool CurrentTokenIsAfterNewline() =>
             /*

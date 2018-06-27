@@ -724,8 +724,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 unitName.Name = ExtractSymbolName(name);
                 unitName.Mode = CurrentUnitMode[CurrentUnit];
 
+                /*
+
                 if (name.QuotedFileName != null && name.QuotedFileName.UnquotedValue is IStringValue fileName)
                     unitName.FileName = fileName.AsUnicodeString;
+
+            */
 
                 CurrentUnit.RequiredUnits.Add(unitName, LogSource);
             }
@@ -785,8 +789,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 unitName.Name = ExtractSymbolName(name);
                 unitName.Mode = CurrentUnitMode[CurrentUnit];
 
+                /*
+
                 if (name.QuotedFileName != null && name.QuotedFileName.UnquotedValue is IStringValue fileName)
                     unitName.FileName = fileName.AsUnicodeString;
+
+            */
 
                 CurrentUnit.RequiredUnits.Add(unitName, LogSource);
             }
@@ -3140,7 +3148,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 result = new SymbolHints();
 
             result.SymbolIsDeprecated = result.SymbolIsDeprecated || hint.Deprecated;
-            result.DeprecatedInformation = (result.DeprecatedInformation ?? string.Empty) + (hint.DeprecatedComment as QuotedString)?.UnquotedValue;
+            //result.DeprecatedInformation = (result.DeprecatedInformation ?? string.Empty) + (hint.DeprecatedComment as QuotedString)?.UnquotedValue;
             result.SymbolInLibrary = result.SymbolInLibrary || hint.Library;
             result.SymbolIsPlatformSpecific = result.SymbolIsPlatformSpecific || hint.Platform;
             result.SymbolIsExperimental = result.SymbolIsExperimental || hint.Experimental;

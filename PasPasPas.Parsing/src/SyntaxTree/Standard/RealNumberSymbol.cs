@@ -4,28 +4,21 @@ using PasPasPas.Parsing.SyntaxTree.Visitors;
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
     /// <summary>
-    ///     Quoted string
+    ///     real literal
     /// </summary>
-    public class QuotedString : StandardSyntaxTreeBase {
+    public class RealNumberSymbol : StandardSyntaxTreeBase {
 
         /// <summary>
-        ///     quoted string
+        ///     create a new real number
         /// </summary>
-        /// <param name="stringSymbol"></param>
-        public QuotedString(Terminal stringSymbol)
-            => Symbol = stringSymbol;
+        /// <param name="symbol"></param>
+        public RealNumberSymbol(Terminal symbol)
+            => Symbol = symbol;
 
         /// <summary>
-        ///     symbol
+        ///     terminal
         /// </summary>
         public Terminal Symbol { get; }
-
-
-        /// <summary>
-        ///     symbol length
-        /// </summary>
-        public override int Length
-            => Symbol.GetSymbolLength();
 
         /// <summary>
         ///     accept visitor
@@ -36,6 +29,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
             AcceptPart(this, Symbol, visitor);
             visitor.EndVisit(this);
         }
+
+        /// <summary>
+        ///     length
+        /// </summary>
+        public override int Length
+            => Symbol.GetSymbolLength();
 
 
     }

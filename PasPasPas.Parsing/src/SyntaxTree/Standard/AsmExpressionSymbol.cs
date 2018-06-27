@@ -9,49 +9,94 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     public class AsmExpressionSymbol : StandardSyntaxTreeBase {
 
         /// <summary>
+        ///     create a new expression symbol
+        /// </summary>
+        /// <param name="offsetSymbol"></param>
+        /// <param name="offset"></param>
+        public AsmExpressionSymbol(Terminal offsetSymbol, AsmOperandSymbol offset, bool typeSymbol) {
+            if (typeSymbol) {
+                TypeSymbol = offsetSymbol;
+                TypeExpression = offset;
+            }
+            else {
+                OffsetSymbol = offsetSymbol;
+                Offset = offset;
+            }
+        }
+
+        /// <summary>
+        ///     create a new expression symbol
+        /// </summary>
+        /// <param name="bytePtrKind"></param>
+        /// <param name="bytePtr"></param>
+        public AsmExpressionSymbol(Identifier bytePtrKind, AsmOperandSymbol bytePtr) {
+            BytePtrKind = bytePtrKind;
+            BytePtr = bytePtr;
+        }
+
+        /// <summary>
+        ///     create a new assembly expression
+        /// </summary>
+        /// <param name="leftOperand"></param>
+        /// <param name="rightOperand"></param>
+        /// <param name="asmOp"></param>
+        /// <param name="kind"></param>
+        public AsmExpressionSymbol(AsmTermSymbol leftOperand, Terminal asmOp, AsmOperandSymbol rightOperand, int kind) {
+            LeftOperand = leftOperand;
+            Operator = asmOp;
+            RightOperand = rightOperand;
+            BinaryOperatorKind = kind;
+        }
+
+        /// <summary>
         ///     byte pointer
         /// </summary>
-        public SyntaxPartBase BytePtr { get; set; }
+        public SyntaxPartBase BytePtr { get; }
 
         /// <summary>
         ///     left operand
         /// </summary>
-        public SyntaxPartBase LeftOperand { get; set; }
+        public SyntaxPartBase LeftOperand { get; }
+
+        /// <summary>
+        ///     operator
+        /// </summary>
+        public Terminal Operator { get; }
 
         /// <summary>
         ///     offset expression
         /// </summary>
-        public SyntaxPartBase Offset { get; set; }
+        public AsmOperandSymbol Offset { get; }
 
         /// <summary>
         ///     right operand
         /// </summary>
-        public SyntaxPartBase RightOperand { get; set; }
+        public SyntaxPartBase RightOperand { get; }
 
         /// <summary>
         ///     type expression
         /// </summary>
-        public SyntaxPartBase TypeExpression { get; set; }
+        public AsmOperandSymbol TypeExpression { get; }
 
         /// <summary>
         ///     byte pointer kind
         /// </summary>
-        public SyntaxPartBase BytePtrKind { get; set; }
+        public SyntaxPartBase BytePtrKind { get; }
 
         /// <summary>
         ///     token kind
         /// </summary>
-        public int BinaryOperatorKind { get; set; } = TokenKind.Undefined;
+        public int BinaryOperatorKind { get; }
 
         /// <summary>
         ///     offset symbol
         /// </summary>
-        public Terminal OffsetSymbol { get; set; }
+        public Terminal OffsetSymbol { get; }
 
         /// <summary>
         ///     type symbol
         /// </summary>
-        public Terminal TypeSymbol { get; set; }
+        public Terminal TypeSymbol { get; }
 
         /// <summary>
         ///     accept visitor
@@ -66,6 +111,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
             AcceptPart(this, TypeSymbol, visitor);
             AcceptPart(this, TypeExpression, visitor);
             AcceptPart(this, LeftOperand, visitor);
+            AcceptPart(this, Operator, visitor);
             AcceptPart(this, RightOperand, visitor);
             visitor.EndVisit(this);
         }
@@ -81,6 +127,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
                 TypeSymbol.GetSymbolLength() +
                 TypeExpression.GetSymbolLength() +
                 LeftOperand.GetSymbolLength() +
+                Operator.GetSymbolLength() +
                 RightOperand.GetSymbolLength();
 
 

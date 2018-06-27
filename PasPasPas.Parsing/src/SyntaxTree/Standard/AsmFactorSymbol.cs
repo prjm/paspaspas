@@ -9,79 +9,157 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     public class AsmFactorSymbol : StandardSyntaxTreeBase {
 
         /// <summary>
+        ///     create new asm factor
+        /// </summary>
+        /// <param name="openParen"></param>
+        /// <param name="subexpression"></param>
+        /// <param name="closeParen"></param>
+        public AsmFactorSymbol(Terminal openParen, AsmOperandSymbol subexpression, Terminal closeParen) {
+            OpenParen = openParen;
+            Subexpression = subexpression;
+            CloseParen = closeParen;
+        }
+
+        /// <summary>
+        ///     create a new asm factor symbol
+        /// </summary>
+        /// <param name="segmentPrefix"></param>
+        /// <param name="colonSymbol"></param>
+        /// <param name="segmentExpression"></param>
+        public AsmFactorSymbol(Identifier segmentPrefix, Terminal colonSymbol, AsmOperandSymbol segmentExpression) {
+            SegmentPrefix = segmentPrefix;
+            ColonSymbol = colonSymbol;
+            SegmentExpression = segmentExpression;
+        }
+
+        /// <summary>
+        ///     asm label
+        /// </summary>
+        /// <param name="localAsmLabel"></param>
+        public AsmFactorSymbol(LocalAsmLabel localAsmLabel)
+            => Label = localAsmLabel;
+
+        /// <summary>
+        ///     asm quoted string
+        /// </summary>
+        /// <param name="quotedString"></param>
+        public AsmFactorSymbol(QuotedString quotedString)
+            => QuotedString = quotedString;
+
+        /// <summary>
+        ///     asm hex number
+        /// </summary>
+        /// <param name="hexNumber"></param>
+        public AsmFactorSymbol(HexNumber hexNumber)
+            => HexNumber = hexNumber;
+
+        /// <summary>
+        ///     asm real number
+        /// </summary>
+        /// <param name="realNumber"></param>
+        public AsmFactorSymbol(RealNumberSymbol realNumber)
+            => RealNumber = realNumber;
+
+        /// <summary>
+        ///     asm integer
+        /// </summary>
+        /// <param name="standardInteger"></param>
+        public AsmFactorSymbol(StandardInteger standardInteger) =>
+            Number = standardInteger;
+
+        /// <summary>
+        ///     asm identifier
+        /// </summary>
+        /// <param name="identifier"></param>
+        public AsmFactorSymbol(Identifier identifier)
+            => Identifier = identifier;
+
+        /// <summary>
+        ///     asm subexpression
+        /// </summary>
+        /// <param name="openBraces"></param>
+        /// <param name="closeBraces"></param>
+        /// <param name="memorySubexpression"></param>
+        public AsmFactorSymbol(Terminal openBraces, Terminal closeBraces, AsmOperandSymbol memorySubexpression) {
+            OpenBraces = openBraces;
+            CloseBraces = closeBraces;
+            MemorySubexpression = memorySubexpression;
+        }
+
+        /// <summary>
         ///     hex number
         /// </summary>
-        public SyntaxPartBase HexNumber { get; internal set; }
+        public HexNumber HexNumber { get; }
 
         /// <summary>
         ///     identifier
         /// </summary>
-        public SyntaxPartBase Identifier { get; internal set; }
+        public Identifier Identifier { get; }
 
         /// <summary>
         ///     memory subexpression
         /// </summary>
-        public SyntaxPartBase MemorySubexpression { get; set; }
+        public AsmOperandSymbol MemorySubexpression { get; }
 
         /// <summary>
         ///     number
         /// </summary>
-        public SyntaxPartBase Number { get; internal set; }
+        public StandardInteger Number { get; }
 
         /// <summary>
         ///     quoted string
         /// </summary>
-        public SyntaxPartBase QuotedString { get; internal set; }
+        public QuotedString QuotedString { get; }
 
         /// <summary>
         ///     segment subexpression
         /// </summary>
-        public SyntaxPartBase SegmentExpression { get; set; }
+        public AsmOperandSymbol SegmentExpression { get; }
 
         /// <summary>
         ///     segment prefix
         /// </summary>
-        public SyntaxPartBase SegmentPrefix { get; set; }
+        public Identifier SegmentPrefix { get; }
 
         /// <summary>
         ///     subexpression
         /// </summary>
-        public SyntaxPartBase Subexpression { get; set; }
+        public AsmOperandSymbol Subexpression { get; }
 
         /// <summary>
         ///     real number
         /// </summary>
-        public SyntaxPartBase RealNumber { get; set; }
+        public RealNumberSymbol RealNumber { get; }
 
         /// <summary>
         ///     referenced label
         /// </summary>
-        public SyntaxPartBase Label { get; internal set; }
+        public LocalAsmLabel Label { get; }
 
         /// <summary>
         ///     colon symbol
         /// </summary>
-        public Terminal ColonSymbol { get; set; }
+        public Terminal ColonSymbol { get; }
 
         /// <summary>
         ///     open parenthesis
         /// </summary>
-        public Terminal OpenParen { get; set; }
+        public Terminal OpenParen { get; }
 
         /// <summary>
         ///     close parenthesis
         /// </summary>
-        public Terminal CloseParen { get; set; }
+        public Terminal CloseParen { get; }
 
         /// <summary>
         ///     open braces
         /// </summary>
-        public Terminal OpenBraces { get; set; }
+        public Terminal OpenBraces { get; }
 
         /// <summary>
         ///     close braces
         /// </summary>
-        public Terminal CloseBraces { get; set; }
+        public Terminal CloseBraces { get; }
 
         /// <summary>
         ///     accept visitor
