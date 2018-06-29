@@ -271,7 +271,6 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(2, s.Length);
         }
 
-
         [TestCase]
         public void TestRealNumberSymobl() {
             var s = RunEmptyCstTest(p => p.RequireRealValue(), "2.5");
@@ -288,10 +287,15 @@ namespace PasPasPasTests.Parser {
 
         [TestCase]
         public void TestAsmPrefixSymbol() {
-            var s = RunEmptyCstTest(p => p.ParseAssemblyPrefix() as AsmPrefixSymbol, "lock");
+            var s = RunEmptyCstTest(p => p.ParseAssemblyPrefix() as AsmPrefixSymbol, "lock cs");
             Assert.IsNotNull(s.LockPrefix);
             Assert.IsNotNull(s.SegmentPrefix);
-            Assert.AreEqual(4, s.Length);
+            Assert.AreEqual(7, s.Length);
+
+            s = RunEmptyCstTest(p => p.ParseAssemblyPrefix() as AsmPrefixSymbol, "cs lock");
+            Assert.IsNotNull(s.LockPrefix);
+            Assert.IsNotNull(s.SegmentPrefix);
+            Assert.AreEqual(7, s.Length);
         }
 
         [TestCase]
@@ -348,12 +352,24 @@ namespace PasPasPasTests.Parser {
 
         [TestCase]
         public void TestAsmPseudoOpSymbol() {
-            var s = RunEmptyCstTest(p => p.ParseAsmPseudoOp(), "");
+            var s = RunEmptyCstTest(p => p.ParseAsmPseudoOp(), ".PARAMS 3");
             Assert.IsNotNull(s.DotSymbol);
-            Assert.IsNotNull(s.Kind);
+            Assert.IsTrue(s.Mode == AsmPrefixSymbolKind.ParamsOperation);
             Assert.IsNotNull(s.NumberOfParams);
+            Assert.AreEqual(9, s.Length);
+
+            s = RunEmptyCstTest(p => p.ParseAsmPseudoOp(), ".PUSHENV EAX");
+            Assert.IsNotNull(s.DotSymbol);
+            Assert.IsTrue(s.Mode == AsmPrefixSymbolKind.PushEnvOperation);
+            Assert.IsNotNull(s.Kind);
             Assert.IsNotNull(s.Register);
-            Assert.AreEqual(0, s.Length);
+            Assert.AreEqual(12, s.Length);
+
+            s = RunEmptyCstTest(p => p.ParseAsmPseudoOp(), ".NOFRAME");
+            Assert.IsNotNull(s.DotSymbol);
+            Assert.IsTrue(s.Mode == AsmPrefixSymbolKind.NoFrame);
+            Assert.IsNotNull(s.Kind);
+            Assert.AreEqual(8, s.Length);
         }
 
         [TestCase]
@@ -363,41 +379,47 @@ namespace PasPasPasTests.Parser {
             Assert.IsNotNull(s.ColonSymbol);
             Assert.IsNotNull(s.OpCode);
             Assert.IsNotNull(s.Prefix);
-            Assert.AreEqual(7, s.Length);
+            Assert.AreEqual(13, s.Length);
         }
 
         [TestCase]
         public void TestAsmTerm() {
-            var s = RunEmptyCstTest(p => p.ParseAssemblyTerm(), "");
-            Assert.IsNotNull(s.DotSymbol);
-            Assert.IsNotNull(s.Subtype);
+            var s = RunEmptyCstTest(p => p.ParseAssemblyTerm(), "3 / 3");
             Assert.IsNotNull(s.LeftOperand);
             Assert.IsNotNull(s.Operator);
             Assert.IsNotNull(s.RightOperand);
-            Assert.AreEqual(0, s.Length);
+            Assert.AreEqual(5, s.Length);
+
+            s = RunEmptyCstTest(p => p.ParseAssemblyTerm(), "EAX.4");
+            Assert.IsNotNull(s.DotSymbol);
+            Assert.IsNotNull(s.Subtype);
+            Assert.AreEqual(5, s.Length);
         }
 
         [TestCase]
-        public void TestAssemblySymbol() {
-            var s = RunEmptyCstTest(p => p.ParseAssemblyAttribute(), "");
+        public void TestAssemblyAttribute() {
+            var s = RunEmptyCstTest(p => p.ParseAssemblyAttribute(), "[assembly:Foo()]");
             Assert.IsNotNull(s.OpenBraces);
             Assert.IsNotNull(s.AssemblySymbol);
             Assert.IsNotNull(s.ColonSymbol);
             Assert.IsNotNull(s.Attribute);
             Assert.IsNotNull(s.CloseBraces);
-            Assert.AreEqual(0, s.Length);
+            Assert.AreEqual(11, s.Length);
         }
 
         [TestCase]
         public void TestAsmOperand() {
-            var s = RunEmptyCstTest(p => p.ParseAssemblyOperand());
+            var s = RunEmptyCstTest(p => p.ParseAssemblyOperand(), "not x");
             Assert.IsNotNull(s.NotSymbol);
             Assert.IsNotNull(s.NotExpression);
+            Assert.AreEqual(5, s.Length);
+
+            s = RunEmptyCstTest(p => p.ParseAssemblyOperand(true), "a and b, ");
             Assert.IsNotNull(s.Operand);
             Assert.IsNotNull(s.LeftTerm);
             Assert.IsNotNull(s.RightTerm);
             Assert.IsNotNull(s.Comma);
-            Assert.AreEqual(0, s.Length);
+            Assert.AreEqual(9, s.Length);
         }
 
         [TestCase]

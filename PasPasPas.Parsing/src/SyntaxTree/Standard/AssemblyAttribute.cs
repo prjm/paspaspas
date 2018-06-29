@@ -1,4 +1,5 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Visitors;
+﻿using PasPasPas.Parsing.SyntaxTree.Utils;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
@@ -8,29 +9,45 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     public class AssemblyAttributeDeclaration : StandardSyntaxTreeBase {
 
         /// <summary>
+        ///
+        /// </summary>
+        /// <param name="terminal1"></param>
+        /// <param name="terminal2"></param>
+        /// <param name="terminal3"></param>
+        /// <param name="userAttributeDefinition"></param>
+        /// <param name="terminal4"></param>
+        public AssemblyAttributeDeclaration(Terminal terminal1, Terminal terminal2, Terminal terminal3, UserAttributeDefinition userAttributeDefinition, Terminal terminal4) {
+            OpenBraces = terminal1;
+            AssemblySymbol = terminal2;
+            ColonSymbol = terminal3;
+            Attribute = userAttributeDefinition;
+            CloseBraces = terminal4;
+        }
+
+        /// <summary>
         ///     attribute definition
         /// </summary>
-        public UserAttributeDefinition Attribute { get; set; }
+        public UserAttributeDefinition Attribute { get; }
 
         /// <summary>
         ///     open braces
         /// </summary>
-        public Terminal OpenBraces { get; set; }
+        public Terminal OpenBraces { get; }
 
         /// <summary>
         ///     colon symbol
         /// </summary>
-        public Terminal ColonSymbol { get; set; }
+        public Terminal ColonSymbol { get; }
 
         /// <summary>
         ///     assembly symbol
         /// </summary>
-        public Terminal AssemblySymbol { get; set; }
+        public Terminal AssemblySymbol { get; }
 
         /// <summary>
         ///     close braces
         /// </summary>
-        public Terminal CloseBraces { get; set; }
+        public Terminal CloseBraces { get; }
 
         /// <summary>
         ///     accept visitor
@@ -49,8 +66,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     symbol length
         /// </summary>
-        public int Length
-            => OpenBraces.Length + AssemblySymbol.Length + ColonSymbol.Length + Attribute.Length + CloseBraces.Length;
+        public override int Length
+            => OpenBraces.GetSymbolLength() +
+                AssemblySymbol.GetSymbolLength() +
+                ColonSymbol.GetSymbolLength() +
+                Attribute.GetSymbolLength() +
+                CloseBraces.GetSymbolLength();
 
     }
 }

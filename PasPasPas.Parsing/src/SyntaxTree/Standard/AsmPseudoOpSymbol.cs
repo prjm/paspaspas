@@ -9,44 +9,46 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     public class AsmPseudoOpSymbol : StandardSyntaxTreeBase {
 
         /// <summary>
-        ///     operation kind
+        ///     create a new asm pseudo op symbol
         /// </summary>
-        public Identifier Kind { get; set; }
+        /// <param name="dot"></param>
+        /// <param name="kindSymbol"></param>
+        /// <param name="mode"></param>
+        /// <param name="numberOfParams"></param>
+        /// <param name="register"></param>
+        public AsmPseudoOpSymbol(Terminal dot, Identifier kindSymbol, AsmPrefixSymbolKind mode, StandardInteger numberOfParams, Identifier register) {
+            NumberOfParams = numberOfParams;
+            Register = register;
+            Mode = mode;
+            DotSymbol = dot;
+            Kind = kindSymbol;
+            NumberOfParams = numberOfParams;
+        }
 
         /// <summary>
-        ///     skip stack frames
+        ///     operation kind
         /// </summary>
-        public bool NoFrame { get; set; }
+        public Identifier Kind { get; }
 
         /// <summary>
         ///     number of parameters
         /// </summary>
-        public SyntaxPartBase NumberOfParams { get; set; }
-
-        /// <summary>
-        ///     params pseudo op
-        /// </summary>
-        public bool ParamsOperation { get; set; }
-
-        /// <summary>
-        ///     pushenv pseudo op
-        /// </summary>
-        public bool PushEnvOperation { get; set; }
+        public StandardInteger NumberOfParams { get; }
 
         /// <summary>
         ///     register name
         /// </summary>
-        public SyntaxPartBase Register { get; set; }
+        public Identifier Register { get; }
 
         /// <summary>
-        ///     savenv pseudo op
+        ///     mode
         /// </summary>
-        public bool SaveEnvOperation { get; set; }
+        public AsmPrefixSymbolKind Mode { get; }
 
         /// <summary>
         ///     dot symbol
         /// </summary>
-        public Terminal DotSymbol { get; set; }
+        public Terminal DotSymbol { get; }
 
         /// <summary>
         ///     accept visitor

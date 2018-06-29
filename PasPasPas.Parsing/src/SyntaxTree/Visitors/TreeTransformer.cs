@@ -2589,7 +2589,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             var result = new AssemblerStatement();
             InitNode(result, op);
 
-            if (op.ParamsOperation) {
+            if (op.Mode == AsmPrefixSymbolKind.ParamsOperation) {
                 result.Kind = AssemblerStatementKind.ParamsOperation;
                 var operand = new ConstantValue();
                 InitNode(operand, op.NumberOfParams);
@@ -2597,21 +2597,21 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 operand.TypeInfo = op.NumberOfParams.FirstTerminalToken.ParsedValue;
                 result.Operands.Add(operand);
             }
-            else if (op.PushEnvOperation) {
+            else if (op.Mode == AsmPrefixSymbolKind.PushEnvOperation) {
                 result.Kind = AssemblerStatementKind.PushEnvOperation;
                 var operand = new SymbolReference();
                 InitNode(operand, op.Register);
                 operand.Name = ExtractSymbolName(op.Register as Identifier);
                 result.Operands.Add(operand);
             }
-            else if (op.SaveEnvOperation) {
+            else if (op.Mode == AsmPrefixSymbolKind.SaveEnvOperation) {
                 result.Kind = AssemblerStatementKind.SaveEnvOperation;
                 var operand = new SymbolReference();
                 InitNode(operand, op.Register);
                 operand.Name = ExtractSymbolName(op.Register as Identifier);
                 result.Operands.Add(operand);
             }
-            else if (op.NoFrame) {
+            else if (op.Mode == AsmPrefixSymbolKind.NoFrame) {
                 result.Kind = AssemblerStatementKind.NoFrameOperation;
             }
 

@@ -1,4 +1,5 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Visitors;
+﻿using PasPasPas.Parsing.SyntaxTree.Utils;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
@@ -8,14 +9,24 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     public class AsmPrefixSymbol : StandardSyntaxTreeBase {
 
         /// <summary>
+        ///     create a new asm prefix symbol
+        /// </summary>
+        /// <param name="lockPrefix"></param>
+        /// <param name="segmentPrefix"></param>
+        public AsmPrefixSymbol(Identifier lockPrefix, Identifier segmentPrefix) {
+            LockPrefix = lockPrefix;
+            SegmentPrefix = segmentPrefix;
+        }
+
+        /// <summary>
         ///     lock prefix
         /// </summary>
-        public Identifier LockPrefix { get; set; }
+        public Identifier LockPrefix { get; }
 
         /// <summary>
         ///     segment prefix
         /// </summary>
-        public SyntaxPartBase SegmentPrefix { get; set; }
+        public SyntaxPartBase SegmentPrefix { get; }
 
         /// <summary>
         ///     accept visitor
@@ -31,8 +42,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     symbol length
         /// </summary>
-        public int Length
-            => LockPrefix.Length + SegmentPrefix.Length;
+        public override int Length
+            => LockPrefix.GetSymbolLength() + SegmentPrefix.GetSymbolLength();
 
     }
 }

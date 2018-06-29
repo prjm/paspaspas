@@ -1260,37 +1260,35 @@ namespace PasPasPas.Parsing.Parser {
         /// </summary>
         /// <returns></returns>
 
-        [Rule("PseudoOp", "( '.PARAMS ' Integer | '.PUSHNV' Register | '.SAVNENV' Register | '.NOFRAME'.")]
+        [Rule("PseudoOp", "( '.PARAMS ' Integer | '.PUSHENV' Register | '.SAVNENV' Register | '.NOFRAME'.")]
         public AsmPseudoOpSymbol ParseAsmPseudoOp() {
-            var result = new AsmPseudoOpSymbol {
-                DotSymbol = ContinueWithOrMissing(TokenKind.Dot)
-            };
-
+            var dot = ContinueWithOrMissing(TokenKind.Dot);
             var kind = CurrentToken().Value;
-            result.Kind = RequireIdentifier();
-            result.NumberOfParams = EmptyTerminal();
-            result.Register = EmptyTerminal();
+            var kindSymbol = RequireIdentifier();
+            var mode = AsmPrefixSymbolKind.Unknown;
+            var numberOfParams = default(StandardInteger);
+            var register = default(Identifier);
 
             if (string.Equals(kind, "params", StringComparison.OrdinalIgnoreCase)) {
-                result.ParamsOperation = true;
-                result.NumberOfParams = RequireInteger();
+                mode = AsmPrefixSymbolKind.ParamsOperation;
+                numberOfParams = RequireInteger();
             }
             else if (string.Equals(kind, "pushenv", StringComparison.OrdinalIgnoreCase)) {
-                result.PushEnvOperation = true;
-                result.Register = RequireIdentifier();
+                mode = AsmPrefixSymbolKind.PushEnvOperation;
+                register = RequireIdentifier();
             }
             else if (string.Equals(kind, "savenv", StringComparison.OrdinalIgnoreCase)) {
-                result.SaveEnvOperation = true;
-                result.Register = RequireIdentifier();
+                mode = AsmPrefixSymbolKind.SaveEnvOperation;
+                register = RequireIdentifier();
             }
             else if (string.Equals(kind, "noframe", StringComparison.OrdinalIgnoreCase)) {
-                result.NoFrame = true;
+                mode = AsmPrefixSymbolKind.NoFrame;
             }
             else {
                 Unexpected();
             }
 
-            return result;
+            return new AsmPseudoOpSymbol(dot, kindSymbol, mode, numberOfParams, register);
         }
 
         #endregion
@@ -1321,11 +1319,11 @@ namespace PasPasPas.Parsing.Parser {
                     opCode = ParseAssemblyOpcode();
 
                     while (Tokenizer.HasNextToken && !Match(TokenKind.End) && !Match(TokenKind.Semicolon) && Tokenizer.HasNextToken && !CurrentTokenIsAfterNewline()) {
-                        var operand = ParseAssemblyOperand();
+                        var operand = ParseAssemblyOperand(true);
                         list.Item.Add(operand);
-                        operand.Comma = ContinueWith(TokenKind.Comma) ?? EmptyTerminal();
                     }
                 }
+
                 return new AsmStatementSymbol(opCode, prefix, label, colonSymbol, list.Item.ToImmutableArray());
             }
         }
@@ -1339,34 +1337,24 @@ namespace PasPasPas.Parsing.Parser {
         /// <returns></returns>
 
         [Rule("AssemblyOperand", " AssemblyExpression ('and' | 'or' | 'xor') AssemblyOperand | ( 'not' AssemblyOperand ']' )")]
-        public AsmOperandSymbol ParseAssemblyOperand() {
-            var result = new AsmOperandSymbol() {
-                Comma = EmptyTerminal()
-            };
+        public AsmOperandSymbol ParseAssemblyOperand(bool allowComma = false) {
 
-            if (Match(TokenKind.Not)) {
-                result.NotSymbol = ContinueWithOrMissing(TokenKind.Not);
-                result.NotExpression = ParseAssemblyOperand();
-                result.LeftTerm = EmptyTerminal();
-                result.Operand = EmptyTerminal();
-                result.RightTerm = EmptyTerminal();
-                return result;
-            }
+            if (Match(TokenKind.Not))
+                return new AsmOperandSymbol(
+                    notSymbol: ContinueWithOrMissing(TokenKind.Not),
+                    notExpression: ParseAssemblyOperand(),
+                    comma: allowComma ? ContinueWith(TokenKind.Comma) : null);
 
-            result.NotSymbol = EmptyTerminal();
-            result.NotExpression = EmptyTerminal();
-            result.LeftTerm = ParseAssemblyExpression();
+            var leftTerm = ParseAssemblyExpression();
+            var operand = default(Terminal);
+            var rightTerm = default(AsmOperandSymbol);
 
             if (Match(TokenKind.And, TokenKind.Or, TokenKind.Xor)) {
-                result.Operand = ContinueWithOrMissing(TokenKind.And, TokenKind.Or, TokenKind.Xor);
-                result.RightTerm = ParseAssemblyOperand();
-            }
-            else {
-                result.Operand = EmptyTerminal();
-                result.RightTerm = EmptyTerminal();
+                operand = ContinueWithOrMissing(TokenKind.And, TokenKind.Or, TokenKind.Xor);
+                rightTerm = ParseAssemblyOperand();
             }
 
-            return result;
+            return new AsmOperandSymbol(leftTerm, operand, rightTerm, allowComma ? ContinueWith(TokenKind.Comma) : null);
         }
 
         #endregion
@@ -1424,29 +1412,22 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("AssemblyTerm", "AssemblyFactor [( '*' | '/' | 'mod' | 'shl' | 'shr' | '.' ) AssemblyOperand ]")]
         public AsmTermSymbol ParseAssemblyTerm() {
-            var result = new AsmTermSymbol {
-                LeftOperand = ParseAssemblyFactor(),
-                DotSymbol = ContinueWith(TokenKind.Dot)
-            };
 
-            if (result.DotSymbol != null) {
-                result.Subtype = ParseAssemblyOperand();
-            }
-            else {
-                result.DotSymbol = EmptyTerminal();
-                result.Subtype = EmptyTerminal();
-            }
+            var leftOperand = ParseAssemblyFactor();
+            var dotSymbol = ContinueWith(TokenKind.Dot);
+            var subtype = default(AsmOperandSymbol);
+            var oprator = default(Terminal);
+            var rightOperand = default(AsmOperandSymbol);
 
-            if (Match(TokenKind.Times, TokenKind.Slash, TokenKind.Mod, TokenKind.Shl, TokenKind.Shr)) {
-                result.Operator = ContinueWithOrMissing(TokenKind.Times, TokenKind.Slash, TokenKind.Mod, TokenKind.Shl, TokenKind.Shr);
-                result.RightOperand = ParseAssemblyOperand();
+            if (dotSymbol != null) {
+                subtype = ParseAssemblyOperand();
             }
-            else {
-                result.Operator = EmptyTerminal();
-                result.RightOperand = EmptyTerminal();
+            else if (Match(TokenKind.Times, TokenKind.Slash, TokenKind.Mod, TokenKind.Shl, TokenKind.Shr)) {
+                oprator = ContinueWithOrMissing(TokenKind.Times, TokenKind.Slash, TokenKind.Mod, TokenKind.Shl, TokenKind.Shr);
+                rightOperand = ParseAssemblyOperand();
             }
 
-            return result;
+            return new AsmTermSymbol(leftOperand, dotSymbol, subtype, oprator, rightOperand);
         }
 
         #endregion
@@ -1536,30 +1517,26 @@ namespace PasPasPas.Parsing.Parser {
             if (!MatchIdentifier())
                 return null;
 
-            if (lockPrefixes.Contains(CurrentToken().Value)) {
-                var result = new AsmPrefixSymbol();
+            var segmentPrefix = default(Identifier);
+            var lockPrefix = default(Identifier);
 
-                result.LockPrefix = RequireIdentifier();
+            if (lockPrefixes.Contains(CurrentToken().Value)) {
+
+                lockPrefix = RequireIdentifier();
 
                 if (MatchIdentifier() && segmentPrefixes.Contains(CurrentToken().Value))
-                    result.SegmentPrefix = RequireIdentifier();
-                else
-                    result.SegmentPrefix = EmptyTerminal();
+                    segmentPrefix = RequireIdentifier();
 
-                return result;
+                return new AsmPrefixSymbol(lockPrefix, segmentPrefix);
             }
 
             if (segmentPrefixes.Contains(CurrentToken().Value)) {
-                var result = new AsmPrefixSymbol();
-
-                result.SegmentPrefix = RequireIdentifier();
+                segmentPrefix = RequireIdentifier();
 
                 if (MatchIdentifier() && lockPrefixes.Contains(CurrentToken().Value))
-                    result.LockPrefix = RequireIdentifier();
-                else
-                    result.SegmentPrefix = EmptyTerminal();
+                    lockPrefix = RequireIdentifier();
 
-                return result;
+                return new AsmPrefixSymbol(lockPrefix, segmentPrefix);
             }
 
             return null;
@@ -1941,15 +1918,15 @@ namespace PasPasPas.Parsing.Parser {
         /// </summary>
         /// <returns></returns>
 
-        [Rule("AssemblyAttribute", "'[' 'assembly' ':' ']'")]
+        [Rule("AssemblyAttribute", "'[' 'assembly' ':' Attribute ']'")]
         public AssemblyAttributeDeclaration ParseAssemblyAttribute() {
-            return new AssemblyAttributeDeclaration() {
-                OpenBraces = ContinueWithOrMissing(TokenKind.OpenBraces),
-                AssemblySymbol = ContinueWithOrMissing(TokenKind.Assembly),
-                ColonSymbol = ContinueWithOrMissing(TokenKind.Colon),
-                Attribute = ParseAttribute(null),
-                CloseBraces = ContinueWithOrMissing(TokenKind.CloseBraces)
-            };
+            return new AssemblyAttributeDeclaration(
+                ContinueWithOrMissing(TokenKind.OpenBraces),
+                ContinueWithOrMissing(TokenKind.Assembly),
+                ContinueWithOrMissing(TokenKind.Colon),
+                ParseAttribute(null),
+                ContinueWithOrMissing(TokenKind.CloseBraces)
+            );
         }
 
         #endregion

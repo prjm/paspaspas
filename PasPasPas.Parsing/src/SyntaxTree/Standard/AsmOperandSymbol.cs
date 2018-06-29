@@ -9,19 +9,45 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     public class AsmOperandSymbol : StandardSyntaxTreeBase {
 
         /// <summary>
+        ///     create a new operand symbol
+        /// </summary>
+        /// <param name="notSymbol"></param>
+        /// <param name="notExpression"></param>
+        /// <param name="comma">comma</param>
+        public AsmOperandSymbol(Terminal notSymbol, AsmOperandSymbol notExpression, Terminal comma) {
+            NotSymbol = notSymbol;
+            NotExpression = notExpression;
+            Comma = comma;
+        }
+
+        /// <summary>
+        ///     create a new operand symbol
+        /// </summary>
+        /// <param name="leftTerm"></param>
+        /// <param name="operand"></param>
+        /// <param name="rightTerm"></param>
+        /// <param name="comma"></param>
+        public AsmOperandSymbol(AsmExpressionSymbol leftTerm, Terminal operand, AsmOperandSymbol rightTerm, Terminal comma) {
+            LeftTerm = leftTerm;
+            Operand = operand;
+            RightTerm = rightTerm;
+            Comma = comma;
+        }
+
+        /// <summary>
         ///     left term
         /// </summary>
-        public SyntaxPartBase LeftTerm { get; set; }
+        public SyntaxPartBase LeftTerm { get; }
 
         /// <summary>
         ///     not expression
         /// </summary>
-        public SyntaxPartBase NotExpression { get; set; }
+        public SyntaxPartBase NotExpression { get; }
 
         /// <summary>
         ///     right term
         /// </summary>
-        public SyntaxPartBase RightTerm { get; set; }
+        public SyntaxPartBase RightTerm { get; }
 
         /// <summary>
         ///     operand kind
@@ -32,12 +58,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     not symbol
         /// </summary>
-        public Terminal NotSymbol { get; set; }
+        public Terminal NotSymbol { get; }
 
         /// <summary>
         ///     operand
         /// </summary>
-        public Terminal Operand { get; set; }
+        public Terminal Operand { get; }
 
         /// <summary>
         ///     accept visitor
@@ -67,6 +93,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     comma
         /// </summary>
-        public Terminal Comma { get; set; }
+        public Terminal Comma { get; }
     }
 }

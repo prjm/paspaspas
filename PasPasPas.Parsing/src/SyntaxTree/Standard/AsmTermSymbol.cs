@@ -9,19 +9,35 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     public class AsmTermSymbol : StandardSyntaxTreeBase {
 
         /// <summary>
+        ///     create a new term symbol
+        /// </summary>
+        /// <param name="leftOperand"></param>
+        /// <param name="dotSymbol"></param>
+        /// <param name="subtype"></param>
+        /// <param name="oprator"></param>
+        /// <param name="rightOperand"></param>
+        public AsmTermSymbol(AsmFactorSymbol leftOperand, Terminal dotSymbol, AsmOperandSymbol subtype, Terminal oprator, AsmOperandSymbol rightOperand) {
+            LeftOperand = leftOperand;
+            DotSymbol = dotSymbol;
+            Subtype = subtype;
+            RightOperand = rightOperand;
+            Operator = oprator;
+        }
+
+        /// <summary>
         ///     left operand
         /// </summary>
-        public AsmFactorSymbol LeftOperand { get; set; }
+        public AsmFactorSymbol LeftOperand { get; }
 
         /// <summary>
         ///     right operand
         /// </summary>
-        public SyntaxPartBase RightOperand { get; set; }
+        public AsmOperandSymbol RightOperand { get; }
 
         /// <summary>
         ///     subtype
         /// </summary>
-        public SyntaxPartBase Subtype { get; set; }
+        public AsmOperandSymbol Subtype { get; }
 
         /// <summary>
         ///     term kind
@@ -32,12 +48,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     dot symbol
         /// </summary>
-        public Terminal DotSymbol { get; set; }
+        public Terminal DotSymbol { get; }
 
         /// <summary>
         ///     operator
         /// </summary>
-        public Terminal Operator { get; set; }
+        public Terminal Operator { get; }
 
         /// <summary>
         ///     accept visitor
