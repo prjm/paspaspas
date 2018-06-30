@@ -1,4 +1,5 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Visitors;
+﻿using PasPasPas.Parsing.SyntaxTree.Utils;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
@@ -8,31 +9,45 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     public class BindingSymbol : StandardSyntaxTreeBase {
 
         /// <summary>
+        ///     create a new binding symbol
+        /// </summary>
+        /// <param name="directive"></param>
+        /// <param name="messageExpression"></param>
+        /// <param name="semicolon"></param>
+        public BindingSymbol(Terminal directive, Expression messageExpression, Terminal semicolon) {
+            Directive = directive;
+            MessageExpression = messageExpression;
+            Semicolon = semicolon;
+        }
+
+        /// <summary>
         ///     directive kind
         /// </summary>
         public int Kind
-            => Directive.Kind;
+            => Directive.GetSymbolKind();
 
         /// <summary>
         ///     message expression
         /// </summary>
-        public SyntaxPartBase MessageExpression { get; set; }
+        public Expression MessageExpression { get; }
 
         /// <summary>
         ///     directive
         /// </summary>
-        public Terminal Directive { get; set; }
+        public Terminal Directive { get; }
 
         /// <summary>
         ///     semicolon
         /// </summary>
-        public Terminal Semicolon { get; set; }
+        public Terminal Semicolon { get; }
 
         /// <summary>
         ///     symbol length
         /// </summary>
-        public object Length
-            => Directive.Length + MessageExpression.Length + Semicolon.Length;
+        public override int Length
+            => Directive.GetSymbolLength() +
+                MessageExpression.GetSymbolLength() +
+                Semicolon.GetSymbolLength();
 
         /// <summary>
         ///     accept visitor

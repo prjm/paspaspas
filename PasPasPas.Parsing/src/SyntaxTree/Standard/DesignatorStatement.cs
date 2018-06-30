@@ -1,21 +1,34 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Visitors;
+﻿using System.Collections.Immutable;
+using PasPasPas.Parsing.SyntaxTree.Utils;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
     /// <summary>
     ///     designator
     /// </summary>
-    public class DesignatorStatement : StandardSyntaxTreeBase {
+    public class DesignatorStatement : VariableLengthSyntaxTreeBase<SyntaxPartBase> {
+
+        /// <summary>
+        ///     create a new designator statement
+        /// </summary>
+        /// <param name="inherited"></param>
+        /// <param name="name"></param>
+        /// <param name="immutableArray"></param>
+        public DesignatorStatement(Terminal inherited, TypeName name, ImmutableArray<SyntaxPartBase> immutableArray) : base(immutableArray) {
+            Name = name;
+            Inherited = inherited;
+        }
 
         /// <summary>
         ///     inherited
         /// </summary>
-        public bool Inherited { get; set; }
+        public Terminal Inherited { get; }
 
         /// <summary>
         ///     name
         /// </summary>
-        public TypeName Name { get; set; }
+        public TypeName Name { get; }
 
         /// <summary>
         ///     accept visitor
@@ -26,6 +39,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
             AcceptParts(this, visitor);
             visitor.EndVisit(this);
         }
+
+        /// <summary>
+        ///     symbol length
+        /// </summary>
+        public override int Length
+            => Inherited.GetSymbolLength() +
+                Name.GetSymbolLength() +
+                ItemLength;
 
 
     }

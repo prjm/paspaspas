@@ -47,5 +47,4 @@ namespace PasPasPas.Parsing.SyntaxTree.Utils {
 
     }
 
-
 }

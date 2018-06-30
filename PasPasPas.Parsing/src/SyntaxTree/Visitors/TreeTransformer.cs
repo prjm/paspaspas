@@ -2780,7 +2780,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
             var result = new SymbolReference();
             InitNode(result, designator);
-            if (designator.Inherited)
+            if (designator.Inherited != default)
                 result.Inherited = true;
 
             lastExpression.Value = result;
@@ -2800,7 +2800,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (parent == null)
                 return;
 
-            if (designator.Dereference) {
+            if (designator.Dereference != default) {
                 var part = new SymbolReferencePart();
                 InitNode(part, designator);
                 parent.AddPart(part);

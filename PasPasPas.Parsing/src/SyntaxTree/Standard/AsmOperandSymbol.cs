@@ -53,7 +53,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         ///     operand kind
         /// </summary>
         public int Kind
-            => Operand.Kind;
+            => Operand.GetSymbolKind();
 
         /// <summary>
         ///     not symbol

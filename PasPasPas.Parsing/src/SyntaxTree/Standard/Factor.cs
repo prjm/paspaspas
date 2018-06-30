@@ -102,7 +102,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         ///     symbol length
         /// </summary>
         public override int Length
-            => IntValue.GetSymbolLength();
+            => IntValue.GetSymbolLength() +
+                Designator.GetSymbolLength();
 
 
     }

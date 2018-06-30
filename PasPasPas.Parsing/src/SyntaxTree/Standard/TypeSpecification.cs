@@ -33,6 +33,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         public StructType StructuredType { get; set; }
 
         /// <summary>
+        ///     comma
+        /// </summary>
+        public Terminal Comma { get; set; }
+
+        /// <summary>
         ///     accept visitor
         /// </summary>
         /// <param name="visitor">visitor</param>

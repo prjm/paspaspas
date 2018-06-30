@@ -78,4 +78,21 @@ namespace PasPasPas.Parsing.SyntaxTree {
             visitor.EndVisit(this);
         }
     }
+
+    /// <summary>
+    ///     helper for terminals
+    /// </summary>
+    public static class TerminalHelper {
+
+        /// <summary>
+        ///     get the terminal kind
+        /// </summary>
+        /// <param name="terminal"></param>
+        /// <returns></returns>
+        public static int GetSymbolKind(this Terminal terminal) {
+            return terminal == null ? TokenKind.Undefined : terminal.Kind;
+        }
+
+    }
+
 }

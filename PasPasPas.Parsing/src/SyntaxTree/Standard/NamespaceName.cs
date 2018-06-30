@@ -1,12 +1,20 @@
 ﻿using System.Collections.Generic;
+using System.Collections.Immutable;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
     /// <summary>
-    ///     namespaced name
+    ///     namespace name
     /// </summary>
-    public class NamespaceName : StandardSyntaxTreeBase {
+    public class NamespaceName : VariableLengthSyntaxTreeBase<SyntaxPartBase> {
+
+        /// <summary>
+        ///     create a new namespace name
+        /// </summary>
+        /// <param name="items"></param>
+        public NamespaceName(ImmutableArray<SyntaxPartBase> items) : base(items) {
+        }
 
         /// <summary>
         ///     unit name
@@ -40,8 +48,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     symbol length
         /// </summary>
-        public int Length
-            => 0;
+        public override int Length
+            => ItemLength;
 
         /// <summary>
         ///     accept visitor
@@ -49,7 +57,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="visitor">visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
-            AcceptParts(this, visitor);
+            AcceptPart(this, visitor);
             visitor.EndVisit(this);
         }
 

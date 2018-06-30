@@ -33,7 +33,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         ///     final or abstract
         /// </summary>
         public int Kind
-            => Directive.Kind;
+            => Directive.GetSymbolKind();
 
         /// <summary>
         ///     symbol length

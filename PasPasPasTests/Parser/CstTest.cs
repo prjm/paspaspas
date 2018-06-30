@@ -45,11 +45,11 @@ namespace PasPasPasTests.Parser {
 
         [TestCase]
         public void TestBinding() {
-            var s = RunEmptyCstTest(p => p.ParseBindingDirective());
+            var s = RunEmptyCstTest(p => p.ParseBindingDirective(), "message WM_TEXT;");
             Assert.IsNotNull(s.Directive);
             Assert.IsNotNull(s.MessageExpression);
             Assert.IsNotNull(s.Semicolon);
-            Assert.AreEqual(0, s.Length);
+            Assert.AreEqual(16, s.Length);
         }
 
         [TestCase]
