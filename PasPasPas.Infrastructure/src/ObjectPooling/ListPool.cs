@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using PasPasPas.Infrastructure.Environment;
 
 namespace PasPasPas.Infrastructure.ObjectPooling {
@@ -60,6 +61,15 @@ namespace PasPasPas.Infrastructure.ObjectPooling {
         public PoolItem<List<T>> GetList<T>() where T : class {
             return GetPool<T>().Borrow();
         }
+
+        /// <summary>
+        ///     get an immutable array builder
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="list"></param>
+        /// <returns></returns>
+        public static ImmutableArray<T>.Builder GetImmutableArrayBuilder<T>(PoolItem<List<T>> list) where T : class
+            => ImmutableArray.CreateBuilder<T>(list.Item.Count);
 
     }
 

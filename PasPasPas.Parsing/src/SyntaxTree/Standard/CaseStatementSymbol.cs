@@ -1,4 +1,5 @@
 ﻿using System.Collections.Immutable;
+using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
@@ -9,47 +10,74 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     public class CaseStatementSymbol : VariableLengthSyntaxTreeBase<CaseItemSymbol> {
 
         /// <summary>
-        ///     case item symbol
+        ///     create a new case statement
         /// </summary>
+        /// <param name="caseSymbol"></param>
+        /// <param name="caseExpression"></param>
+        /// <param name="ofSymbol"></param>
         /// <param name="items"></param>
-        public CaseStatementSymbol(ImmutableArray<CaseItemSymbol> items) : base(items) {
+        /// <param name="endSymbol"></param>
+        public CaseStatementSymbol(Terminal caseSymbol, Expression caseExpression, Terminal ofSymbol, ImmutableArray<CaseItemSymbol> items, Terminal endSymbol) : base(items) {
+            CaseSymbol = caseSymbol;
+            CaseExpression = caseExpression;
+            OfSymbol = ofSymbol;
+            EndSymbol = endSymbol;
+        }
 
+        /// <summary>
+        ///     create a new case statement
+        /// </summary>
+        /// <param name="caseSymbol"></param>
+        /// <param name="caseExpression"></param>
+        /// <param name="ofSymbol"></param>
+        /// <param name="items"></param>
+        /// <param name="endSymbol"></param>
+        /// <param name="elsePart"></param>
+        /// <param name="semicolon"></param>
+        public CaseStatementSymbol(Terminal caseSymbol, Expression caseExpression, Terminal ofSymbol, ImmutableArray<CaseItemSymbol> items, Terminal elseSymbol, StatementList elsePart, Terminal semicolon, Terminal endSymbol) : base(items) {
+            CaseSymbol = caseSymbol;
+            CaseExpression = caseExpression;
+            OfSymbol = ofSymbol;
+            ElseSymbol = elseSymbol;
+            Else = elsePart;
+            Semicolon = semicolon;
+            EndSymbol = endSymbol;
         }
 
         /// <summary>
         ///     case expression
         /// </summary>
-        public Expression CaseExpression { get; set; }
+        public Expression CaseExpression { get; }
 
         /// <summary>
         ///     else part
         /// </summary>
-        public SyntaxPartBase Else { get; set; }
+        public StatementList Else { get; }
 
         /// <summary>
         ///     case symbol
         /// </summary>
-        public Terminal CaseSymbol { get; set; }
+        public Terminal CaseSymbol { get; }
 
         /// <summary>
         ///     of symbol
         /// </summary>
-        public Terminal OfSymbol { get; set; }
+        public Terminal OfSymbol { get; }
 
         /// <summary>
         ///     semicolon
         /// </summary>
-        public Terminal Semicolon { get; set; }
+        public Terminal Semicolon { get; }
 
         /// <summary>
         ///     else symbol
         /// </summary>
-        public Terminal ElseSymbol { get; set; }
+        public Terminal ElseSymbol { get; }
 
         /// <summary>
         ///     end symbol
         /// </summary>
-        public Terminal EndSymbol { get; set; }
+        public Terminal EndSymbol { get; }
 
         /// <summary>
         ///     accept visitor
@@ -71,7 +99,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     symbol length
         /// </summary>
-        public int Length
-            => CaseSymbol.Length + CaseExpression.Length + OfSymbol.Length + ItemLength + ElseSymbol.Length + Else.Length + Semicolon.Length + EndSymbol.Length;
+        public override int Length
+            => CaseSymbol.GetSymbolLength() +
+               CaseExpression.GetSymbolLength() +
+               OfSymbol.GetSymbolLength() +
+               ItemLength +
+               ElseSymbol.GetSymbolLength() +
+               Else.GetSymbolLength() +
+               Semicolon.GetSymbolLength() +
+               EndSymbol.GetSymbolLength();
     }
 }

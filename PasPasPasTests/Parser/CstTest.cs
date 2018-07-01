@@ -300,15 +300,21 @@ namespace PasPasPasTests.Parser {
 
         [TestCase]
         public void TestCaseStatement() {
-            var s = RunEmptyCstTest(p => p.ParseCaseStatement(), "");
+            var s = RunEmptyCstTest(p => p.ParseCaseStatement(), "case a of 1: x; end");
+            Assert.IsNotNull(s.CaseSymbol);
+            Assert.IsNotNull(s.CaseExpression);
+            Assert.IsNotNull(s.OfSymbol);
+            Assert.IsNotNull(s.EndSymbol);
+            Assert.AreEqual(19, s.Length);
+
+            s = RunEmptyCstTest(p => p.ParseCaseStatement(), "case a of 1: x; else y; end");
             Assert.IsNotNull(s.CaseSymbol);
             Assert.IsNotNull(s.CaseExpression);
             Assert.IsNotNull(s.OfSymbol);
             Assert.IsNotNull(s.ElseSymbol);
             Assert.IsNotNull(s.Else);
-            Assert.IsNotNull(s.Semicolon);
             Assert.IsNotNull(s.EndSymbol);
-            Assert.AreEqual(0, s.Length);
+            Assert.AreEqual(27, s.Length);
         }
 
         [TestCase]
@@ -335,11 +341,22 @@ namespace PasPasPasTests.Parser {
 
         [TestCase]
         public void TestCaseLabel() {
-            var s = RunEmptyCstTest(p => p.ParseCaseLabel(), "");
+            var s = RunEmptyCstTest(p => p.ParseCaseLabel(), "5");
+            Assert.IsNotNull(s.StartExpression);
+            Assert.AreEqual(1, s.Length);
+
+            s = RunEmptyCstTest(p => p.ParseCaseLabel(), "5..7");
             Assert.IsNotNull(s.StartExpression);
             Assert.IsNotNull(s.Dots);
             Assert.IsNotNull(s.EndExpression);
-            Assert.AreEqual(0, s.Length);
+            Assert.AreEqual(4, s.Length);
+
+            s = RunEmptyCstTest(p => p.ParseCaseLabel(), "5..7,");
+            Assert.IsNotNull(s.StartExpression);
+            Assert.IsNotNull(s.Dots);
+            Assert.IsNotNull(s.EndExpression);
+            Assert.AreEqual(5, s.Length);
+
         }
 
         [TestCase]

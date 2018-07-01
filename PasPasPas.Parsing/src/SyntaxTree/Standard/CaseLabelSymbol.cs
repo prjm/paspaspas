@@ -9,24 +9,38 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     public class CaseLabelSymbol : StandardSyntaxTreeBase {
 
         /// <summary>
+        ///     create a new case label symbol
+        /// </summary>
+        /// <param name="startExpression"></param>
+        /// <param name="dots"></param>
+        /// <param name="endExpression"></param>
+        /// <param name="comma"></param>
+        public CaseLabelSymbol(Expression startExpression, Terminal dots, Expression endExpression, Terminal comma) {
+            StartExpression = startExpression;
+            Dots = dots;
+            EndExpression = endExpression;
+            Comma = comma;
+        }
+
+        /// <summary>
         ///     end expression
         /// </summary>
-        public SyntaxPartBase EndExpression { get; set; }
+        public Expression EndExpression { get; }
 
         /// <summary>
         ///     start expression
         /// </summary>
-        public Expression StartExpression { get; set; }
+        public Expression StartExpression { get; }
 
         /// <summary>
         ///     comma
         /// </summary>
-        public Terminal Comma { get; set; }
+        public Terminal Comma { get; }
 
         /// <summary>
         ///     dot symbol
         /// </summary>
-        public Terminal Dots { get; set; }
+        public Terminal Dots { get; }
 
 
         /// <summary>
@@ -38,6 +52,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
             AcceptPart(this, StartExpression, visitor);
             AcceptPart(this, Dots, visitor);
             AcceptPart(this, EndExpression, visitor);
+            AcceptPart(this, Comma, visitor);
             visitor.EndVisit(this);
         }
 
