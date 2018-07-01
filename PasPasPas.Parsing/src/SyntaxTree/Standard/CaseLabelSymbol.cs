@@ -1,4 +1,5 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Visitors;
+﻿using PasPasPas.Parsing.SyntaxTree.Utils;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
@@ -43,8 +44,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     symbol length
         /// </summary>
-        public int Length
-            => StartExpression.Length + Dots.Length + EndExpression.Length;
+        public override int Length
+            => StartExpression.GetSymbolLength() +
+               Dots.GetSymbolLength() +
+               EndExpression.GetSymbolLength() +
+               Comma.GetSymbolLength();
 
     }
 }

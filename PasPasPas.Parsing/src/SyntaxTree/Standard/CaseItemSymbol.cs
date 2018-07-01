@@ -1,4 +1,5 @@
 ﻿using System.Collections.Immutable;
+using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
@@ -12,24 +13,29 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         ///     case item
         /// </summary>
         /// <param name="items"></param>
-        public CaseItemSymbol(ImmutableArray<CaseLabelSymbol> items) : base(items) {
-
+        /// <param name="colon"></param>
+        /// <param name="semicolon"></param>
+        /// <param name="statement"></param>
+        public CaseItemSymbol(ImmutableArray<CaseLabelSymbol> items, Terminal colon, Statement statement, Terminal semicolon) : base(items) {
+            ColonSymbol = colon;
+            CaseStatement = statement;
+            Semicolon = semicolon;
         }
 
         /// <summary>
         ///     case statement
         /// </summary>
-        public Statement CaseStatement { get; set; }
+        public Statement CaseStatement { get; }
 
         /// <summary>
         ///     semicolon
         /// </summary>
-        public Terminal Semicolon { get; set; }
+        public Terminal Semicolon { get; }
 
         /// <summary>
         ///     colon symbol
         /// </summary>
-        public Terminal ColonSymbol { get; set; }
+        public Terminal ColonSymbol { get; }
 
         /// <summary>
         ///     accept visitor
@@ -47,8 +53,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     symbol length
         /// </summary>
-        public int Length
-            => ItemLength + ColonSymbol.Length + CaseStatement.Length + Semicolon.Length;
+        public override int Length
+            => ItemLength +
+               ColonSymbol.GetSymbolLength() +
+               CaseStatement.GetSymbolLength() +
+               Semicolon.GetSymbolLength();
 
     }
 }

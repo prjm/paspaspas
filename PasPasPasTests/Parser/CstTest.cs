@@ -313,11 +313,11 @@ namespace PasPasPasTests.Parser {
 
         [TestCase]
         public void TestCaseItem() {
-            var s = RunEmptyCstTest(p => p.ParseCaseItem(), "5: ;");
+            var s = RunEmptyCstTest(p => p.ParseCaseItem(), "5: x;");
             Assert.IsNotNull(s.ColonSymbol);
             Assert.IsNotNull(s.CaseStatement);
             Assert.IsNotNull(s.Semicolon);
-            Assert.AreEqual(3, s.Length);
+            Assert.AreEqual(5, s.Length);
         }
 
         [TestCase]
@@ -344,8 +344,11 @@ namespace PasPasPasTests.Parser {
 
         [TestCase]
         public void TestBlockBody() {
-            var s = RunEmptyCstTest(p => p.ParseBlockBody() as BlockBodySymbol, "");
+            var s = RunEmptyCstTest(p => p.ParseBlockBody() as BlockBodySymbol, "asm end");
             Assert.IsNotNull(s.AssemblerBlock);
+            Assert.AreEqual(7, s.Length);
+
+            s = RunEmptyCstTest(p => p.ParseBlockBody() as BlockBodySymbol, "begin end");
             Assert.IsNotNull(s.Body);
             Assert.AreEqual(0, s.Length);
         }

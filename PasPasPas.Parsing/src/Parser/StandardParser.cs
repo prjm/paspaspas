@@ -881,25 +881,26 @@ namespace PasPasPas.Parsing.Parser {
         public CaseItemSymbol ParseCaseItem() {
 
             if (Match(TokenKind.Else, TokenKind.End))
-                return null;
+                return default;
 
             if (!HasTokenBeforeToken(TokenKind.Colon, TokenKind.Semicolon, TokenKind.End, TokenKind.Begin))
-                return null;
+                return default;
 
-            var result = new CaseItemSymbol(default);
             var label = default(CaseLabelSymbol);
             using (var list = GetList<CaseLabelSymbol>()) {
                 do {
                     label = ParseCaseLabel();
                     list.Item.Add(label);
-                    label.Comma = ContinueWith(TokenKind.Comma) ?? EmptyTerminal();
-                } while (label.Comma.Kind == TokenKind.Comma);
-            }
+                    label.Comma = ContinueWith(TokenKind.Comma);
+                } while (label.Comma != default);
 
-            result.ColonSymbol = ContinueWithOrMissing(TokenKind.Colon);
-            result.CaseStatement = ParseStatement();
-            result.Semicolon = ContinueWith(TokenKind.Semicolon);
-            return result;
+                return new CaseItemSymbol(
+                    list.Item.ToImmutableArray(),
+                    ContinueWithOrMissing(TokenKind.Colon),
+                    ParseStatement(),
+                    ContinueWith(TokenKind.Semicolon)
+                );
+            }
         }
 
         #endregion
@@ -1215,10 +1216,10 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("BlockBody", "AssemblerBlock | CompoundStatement")]
         public BlockBodySymbol ParseBlockBody() {
-            return new BlockBodySymbol() {
-                AssemblerBlock = Match(TokenKind.Asm) ? (SyntaxPartBase)ParseAsmBlock() : EmptyTerminal(),
-                Body = Match(TokenKind.Begin) ? (SyntaxPartBase)ParseCompoundStatement() : EmptyTerminal(),
-            };
+            return new BlockBodySymbol(
+                assemblerBlock: Match(TokenKind.Asm) ? ParseAsmBlock() : default,
+                body: Match(TokenKind.Begin) ? ParseCompoundStatement() : default
+            );
         }
 
         #endregion

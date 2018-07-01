@@ -1,4 +1,5 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Visitors;
+﻿using PasPasPas.Parsing.SyntaxTree.Utils;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
@@ -8,21 +9,30 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     public class BlockBodySymbol : StandardSyntaxTreeBase {
 
         /// <summary>
+        ///     create a new block body
+        /// </summary>
+        /// <param name="assemblerBlock"></param>
+        /// <param name="body"></param>
+        public BlockBodySymbol(AsmBlockSymbol assemblerBlock, CompoundStatementSymbol body) {
+            AssemblerBlock = assemblerBlock;
+            Body = body;
+        }
+
+        /// <summary>
         ///    assembler block
         /// </summary>
-        public SyntaxPartBase AssemblerBlock { get; set; }
+        public AsmBlockSymbol AssemblerBlock { get; }
 
         /// <summary>
         ///     block bode
         /// </summary>
-        public SyntaxPartBase Body { get; set; }
+        public CompoundStatementSymbol Body { get; }
 
         /// <summary>
         ///     symbol length
         /// </summary>
-        public int Length
-            => AssemblerBlock.Length + Body.Length;
-
+        public override int Length
+            => AssemblerBlock.GetSymbolLength() + Body.GetSymbolLength();
 
         /// <summary>
         ///     accept visitor
@@ -30,7 +40,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="visitor">node visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
-            AcceptParts(this, visitor);
+            AcceptPart(this, Body, visitor);
+            AcceptPart(this, AssemblerBlock, visitor);
             visitor.EndVisit(this);
         }
 
