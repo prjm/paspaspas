@@ -9,29 +9,45 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     public class ClassFieldSymbol : StandardSyntaxTreeBase {
 
         /// <summary>
+        ///     create a new class field symbol
+        /// </summary>
+        /// <param name="names"></param>
+        /// <param name="colonSymbol"></param>
+        /// <param name="typeDecl"></param>
+        /// <param name="hint"></param>
+        /// <param name="semicolon"></param>
+        public ClassFieldSymbol(IdentifierList names, Terminal colonSymbol, TypeSpecification typeDecl, ISyntaxPart hint, Terminal semicolon) {
+            Names = names;
+            ColonSymbol = colonSymbol;
+            TypeDecl = typeDecl;
+            Hint = hint;
+            Semicolon = semicolon;
+        }
+
+        /// <summary>
         ///     hints
         /// </summary>
-        public ISyntaxPart Hint { get; set; }
+        public ISyntaxPart Hint { get; }
 
         /// <summary>
         ///     names
         /// </summary>
-        public IdentifierList Names { get; set; }
+        public IdentifierList Names { get; }
 
         /// <summary>
         ///     type declaration
         /// </summary>
-        public TypeSpecification TypeDecl { get; set; }
+        public TypeSpecification TypeDecl { get; }
 
         /// <summary>
         ///     semicolon
         /// </summary>
-        public Terminal Semicolon { get; set; }
+        public Terminal Semicolon { get; }
 
         /// <summary>
         ///     colon
         /// </summary>
-        public Terminal ColonSymbol { get; set; }
+        public Terminal ColonSymbol { get; }
 
 
         /// <summary>
@@ -51,8 +67,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     symbol length
         /// </summary>
-        public int Length
-            => Names.Length + ColonSymbol.Length + TypeDecl.Length + Hint.Length + Semicolon.Length;
+        public override int Length
+            => Names.GetSymbolLength() +
+               ColonSymbol.GetSymbolLength() +
+               TypeDecl.GetSymbolLength() +
+               Hint.GetSymbolLength() +
+               Semicolon.GetSymbolLength();
 
     }
 }

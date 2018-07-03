@@ -36,12 +36,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     attributes
         /// </summary>
-        public SyntaxPartBase Attributes1 { get; set; }
+        public UserAttributes Attributes1 { get; set; }
 
         /// <summary>
         ///     attributes
         /// </summary>
-        public SyntaxPartBase Attributes2 { get; set; }
+        public UserAttributes Attributes2 { get; set; }
 
         /// <summary>
         ///     properties

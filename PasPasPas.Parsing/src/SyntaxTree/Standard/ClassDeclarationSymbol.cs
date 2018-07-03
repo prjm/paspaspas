@@ -15,7 +15,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     items of a class declaration
         /// </summary>
-        public ClassDeclarationItems ClassItems { get; set; }
+        public ClassDeclarationItemsSymbol ClassItems { get; set; }
 
         /// <summary>
         ///     parent class

@@ -4,15 +4,15 @@ using PasPasPas.Parsing.SyntaxTree.Visitors;
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
     /// <summary>
-    ///     comma separated list of identifiers
+    ///     class declaration items
     /// </summary>
-    public class IdentifierList : VariableLengthSyntaxTreeBase<IdentifierListItem> {
+    public class ClassDeclarationItemsSymbol : VariableLengthSyntaxTreeBase<ClassDeclarationItemSymbol> {
 
         /// <summary>
-        ///     create a new identifier list
+        ///     create a new set of class declaration items
         /// </summary>
         /// <param name="items"></param>
-        public IdentifierList(ImmutableArray<IdentifierListItem> items) : base(items) {
+        public ClassDeclarationItemsSymbol(ImmutableArray<ClassDeclarationItemSymbol> items) : base(items) {
         }
 
         /// <summary>

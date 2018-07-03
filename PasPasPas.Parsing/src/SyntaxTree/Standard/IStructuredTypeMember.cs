@@ -8,17 +8,17 @@
         /// <summary>
         ///     static member
         /// </summary>
-        bool ClassItem { get; set; }
+        bool ClassItem { get; }
 
         /// <summary>
         ///     member attributes
         /// </summary>
-        SyntaxPartBase Attributes1 { get; set; }
+        UserAttributes Attributes1 { get; }
 
         /// <summary>
         ///     member attributes
         /// </summary>
-        SyntaxPartBase Attributes2 { get; set; }
+        UserAttributes Attributes2 { get; }
 
     }
 }

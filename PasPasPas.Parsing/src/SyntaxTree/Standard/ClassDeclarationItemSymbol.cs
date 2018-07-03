@@ -1,4 +1,5 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Visitors;
+﻿using PasPasPas.Parsing.SyntaxTree.Utils;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
@@ -8,49 +9,140 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     public class ClassDeclarationItemSymbol : StandardSyntaxTreeBase, IStructuredTypeMember {
 
         /// <summary>
-        ///     attributes
+        ///     create a new class declaration item
         /// </summary>
-        public SyntaxPartBase Attributes1 { get; set; }
+        /// <param name="varSymbol"></param>
+        public ClassDeclarationItemSymbol(Terminal varSymbol) {
+            VarSymbol = varSymbol;
+        }
+
+        /// <summary>
+        ///     create a new class declaration item
+        /// </summary>
+        /// <param name="classSymbol"></param>
+        /// <param name="varSymbol"></param>
+        public ClassDeclarationItemSymbol(Terminal classSymbol, Terminal varSymbol) {
+            ClassSymbol = classSymbol;
+            VarSymbol = varSymbol;
+        }
+
+        /// <summary>
+        ///     create a new class declaration symbol
+        /// </summary>
+        /// <param name="attributes1"></param>
+        /// <param name="classSymbol"></param>
+        /// <param name="attributes2"></param>
+        /// <param name="strictSymbol"></param>
+        /// <param name="visibility"></param>
+        public ClassDeclarationItemSymbol(UserAttributes attributes1, Terminal classSymbol, UserAttributes attributes2, Terminal strictSymbol, Terminal visibility) {
+            Attributes1 = attributes1;
+            ClassSymbol = classSymbol;
+            Attributes2 = attributes2;
+            StrictSymbol = strictSymbol;
+            VisibilitySymbol = visibility;
+        }
+
+        /// <summary>
+        ///     create a new method declaration
+        /// </summary>
+        /// <param name="classMethodSymbol"></param>
+        /// <param name="attributes1"></param>
+        /// <param name="attributes2"></param>
+        /// <param name="classSymbol"></param>
+        public ClassDeclarationItemSymbol(ClassMethodSymbol classMethodSymbol, UserAttributes attributes1, UserAttributes attributes2, Terminal classSymbol) {
+            MethodDeclaration = classMethodSymbol;
+            Attributes1 = attributes1;
+            Attributes2 = attributes2;
+            ClassSymbol = classSymbol;
+        }
+
+        /// <summary>
+        ///     create a new class property symbol
+        /// </summary>
+        /// <param name="classPropertySymbol"></param>
+        /// <param name="attributes1"></param>
+        /// <param name="attributes2"></param>
+        /// <param name="classSymbol"></param>
+        public ClassDeclarationItemSymbol(ClassPropertySymbol classPropertySymbol, UserAttributes attributes1, UserAttributes attributes2, Terminal classSymbol) {
+            PropertyDeclaration = classPropertySymbol;
+            Attributes1 = attributes1;
+            Attributes2 = attributes2;
+            ClassSymbol = classSymbol;
+        }
+
+        /// <summary>
+        ///     create a new class declaration item symbol
+        /// </summary>
+        /// <param name="constSection"></param>
+        public ClassDeclarationItemSymbol(ConstSection constSection)
+            => ConstSection = constSection;
+
+        /// <summary>
+        ///     create a new class type section
+        /// </summary>
+        /// <param name="typeSection"></param>
+        public ClassDeclarationItemSymbol(TypeSection typeSection)
+            => TypeSection = typeSection;
+
+        /// <summary>
+        ///     create a new method resolution
+        /// </summary>
+        /// <param name="methodResolution"></param>
+        public ClassDeclarationItemSymbol(MethodResolution methodResolution)
+            => MethodResolution = methodResolution;
+
+        /// <summary>
+        ///     create a new class field declaration
+        /// </summary>
+        /// <param name="classFieldSymbol"></param>
+        public ClassDeclarationItemSymbol(ClassFieldSymbol classFieldSymbol)
+            => FieldDeclaration = classFieldSymbol;
 
         /// <summary>
         ///     attributes
         /// </summary>
-        public SyntaxPartBase Attributes2 { get; set; }
+        public UserAttributes Attributes1 { get; }
+
+        /// <summary>
+        ///     attributes
+        /// </summary>
+        public UserAttributes Attributes2 { get; }
 
         /// <summary>
         ///     class symbol
         /// </summary>
-        public Terminal ClassSymbol { get; set; }
+        public Terminal ClassSymbol { get; }
 
         /// <summary>
         ///     class-wide declaration
         /// </summary>
-        public bool ClassItem { get; set; }
+        public bool ClassItem
+            => ClassSymbol != null;
 
         /// <summary>
         ///     constant class section
         /// </summary>
-        public SyntaxPartBase ConstSection { get; set; }
+        public ConstSection ConstSection { get; }
 
         /// <summary>
         ///     field declaration
         /// </summary>
-        public SyntaxPartBase FieldDeclaration { get; set; }
+        public ClassFieldSymbol FieldDeclaration { get; }
 
         /// <summary>
         ///     method declaration
         /// </summary>
-        public SyntaxPartBase MethodDeclaration { get; set; }
+        public ClassMethodSymbol MethodDeclaration { get; }
 
         /// <summary>
         ///     method resolution
         /// </summary>
-        public SyntaxPartBase MethodResolution { get; set; }
+        public MethodResolution MethodResolution { get; }
 
         /// <summary>
         ///     property declaration
         /// </summary>
-        public SyntaxPartBase PropertyDeclaration { get; set; }
+        public ClassPropertySymbol PropertyDeclaration { get; }
 
         /// <summary>
         ///     strict declaration
@@ -61,23 +153,28 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     type section
         /// </summary>
-        public SyntaxPartBase TypeSection { get; set; }
+        public TypeSection TypeSection { get; }
 
         /// <summary>
         ///     visibility declaration
         /// </summary>
-        public int Visibility { get; set; }
-            = TokenKind.Undefined;
+        public int Visibility
+            => VisibilitySymbol == default ? TokenKind.Undefined : VisibilitySymbol.Kind;
 
         /// <summary>
         ///     var symbol
         /// </summary>
-        public Terminal VarSymbol { get; set; }
+        public Terminal VarSymbol { get; }
 
         /// <summary>
         ///     strict symbol
         /// </summary>
-        public Terminal StrictSymbol { get; set; }
+        public Terminal StrictSymbol { get; }
+
+        /// <summary>
+        ///     visibility
+        /// </summary>
+        public Terminal VisibilitySymbol { get; }
 
         /// <summary>
         ///     accept visitor
@@ -90,6 +187,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
             AcceptPart(this, Attributes2, visitor);
             AcceptPart(this, VarSymbol, visitor);
             AcceptPart(this, StrictSymbol, visitor);
+            AcceptPart(this, VisibilitySymbol, visitor);
             AcceptPart(this, MethodResolution, visitor);
             AcceptPart(this, MethodDeclaration, visitor);
             AcceptPart(this, PropertyDeclaration, visitor);
@@ -102,18 +200,19 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     symbol length
         /// </summary>
-        public int Length
-            => Attributes1.Length
-            + ClassSymbol.Length
-            + Attributes2.Length
-            + VarSymbol.Length
-            + StrictSymbol.Length
-            + MethodResolution.Length
-            + MethodDeclaration.Length
-            + PropertyDeclaration.Length
-            + ConstSection.Length
-            + TypeSection.Length
-            + FieldDeclaration.Length;
+        public override int Length
+            => Attributes1.GetSymbolLength()
+            + ClassSymbol.GetSymbolLength()
+            + Attributes2.GetSymbolLength()
+            + VarSymbol.GetSymbolLength()
+            + StrictSymbol.GetSymbolLength()
+            + VisibilitySymbol.GetSymbolLength()
+            + MethodResolution.GetSymbolLength()
+            + MethodDeclaration.GetSymbolLength()
+            + PropertyDeclaration.GetSymbolLength()
+            + ConstSection.GetSymbolLength()
+            + TypeSection.GetSymbolLength()
+            + FieldDeclaration.GetSymbolLength();
 
     }
 }
