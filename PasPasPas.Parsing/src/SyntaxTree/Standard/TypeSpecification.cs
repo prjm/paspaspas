@@ -1,4 +1,5 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Visitors;
+﻿using PasPasPas.Parsing.SyntaxTree.Utils;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
@@ -8,34 +9,84 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     public class TypeSpecification : StandardSyntaxTreeBase {
 
         /// <summary>
+        ///     create a new type specification
+        /// </summary>
+        /// <param name="structuredType"></param>
+        /// <param name="comma"></param>
+        public TypeSpecification(StructType structuredType, Terminal comma) {
+            StructuredType = structuredType;
+            Comma = comma;
+        }
+
+        /// <summary>
+        ///     create a new type specification
+        /// </summary>
+        /// <param name="pointerType"></param>
+        /// <param name="comma"></param>
+        public TypeSpecification(PointerType pointerType, Terminal comma) {
+            PointerType = pointerType;
+            Comma = comma;
+        }
+
+        /// <summary>
+        ///     create a new type specification
+        /// </summary>
+        /// <param name="stringType"></param>
+        /// <param name="comma"></param>
+        public TypeSpecification(StringType stringType, Terminal comma) {
+            StringType = stringType;
+            Comma = comma;
+        }
+
+        /// <summary>
+        ///     create a new type specification
+        /// </summary>
+        /// <param name="procedureType"></param>
+        /// <param name="comma"></param>
+        public TypeSpecification(ProcedureType procedureType, Terminal comma) {
+            ProcedureType = procedureType;
+            Comma = comma;
+        }
+
+        /// <summary>
+        ///     create a new type specification
+        /// </summary>
+        /// <param name="simpleType"></param>
+        /// <param name="comma"></param>
+        public TypeSpecification(SimpleType simpleType, Terminal comma) {
+            SimpleType = simpleType;
+            Comma = comma;
+        }
+
+        /// <summary>
         ///     pointer type
         /// </summary>
-        public PointerType PointerType { get; set; }
+        public PointerType PointerType { get; }
 
         /// <summary>
         ///     procedure type
         /// </summary>
-        public ProcedureType ProcedureType { get; set; }
+        public ProcedureType ProcedureType { get; }
 
         /// <summary>
         ///     simple type
         /// </summary>
-        public SimpleType SimpleType { get; set; }
+        public SimpleType SimpleType { get; }
 
         /// <summary>
         ///     string type
         /// </summary>
-        public StringType StringType { get; set; }
+        public StringType StringType { get; }
 
         /// <summary>
         ///     structured type
         /// </summary>
-        public StructType StructuredType { get; set; }
+        public StructType StructuredType { get; }
 
         /// <summary>
         ///     comma
         /// </summary>
-        public Terminal Comma { get; set; }
+        public Terminal Comma { get; }
 
         /// <summary>
         ///     accept visitor
@@ -43,10 +94,25 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="visitor">visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
-            AcceptParts(this, visitor);
+            AcceptPart(this, PointerType, visitor);
+            AcceptPart(this, ProcedureType, visitor);
+            AcceptPart(this, SimpleType, visitor);
+            AcceptPart(this, StringType, visitor);
+            AcceptPart(this, StructuredType, visitor);
+            AcceptPart(this, Comma, visitor);
             visitor.EndVisit(this);
         }
 
+        /// <summary>
+        ///     symbol length
+        /// </summary>
+        public override int Length =>
+            PointerType.GetSymbolLength() +
+            ProcedureType.GetSymbolLength() +
+            SimpleType.GetSymbolLength() +
+            StringType.GetSymbolLength() +
+            StructuredType.GetSymbolLength() +
+            Comma.GetSymbolLength();
 
     }
 }

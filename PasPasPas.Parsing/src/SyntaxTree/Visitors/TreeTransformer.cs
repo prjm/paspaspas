@@ -959,9 +959,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
             var value = new TypeAlias();
             InitNode(value, simpleType);
-            value.IsNewType = simpleType.NewType;
+            value.IsNewType = simpleType.NewType != default;
 
-            if (simpleType.TypeOf)
+            if (simpleType.TypeOf != default)
                 LogSource.Warning(StructuralErrors.UnsupportedTypeOfConstruct, simpleType);
 
             typeTarget.TypeValue = value;

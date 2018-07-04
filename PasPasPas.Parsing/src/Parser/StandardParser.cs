@@ -2177,90 +2177,97 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("TypeSpecification", "StructType | PointerType | StringType | ProcedureType | SimpleType ")]
         private TypeSpecification ParseTypeSpecification(bool constDeclaration = false, bool varDeclaration = false, bool allowComma = false) {
-            var result = new TypeSpecification();
+            var comma = default(Terminal);
 
             if (Match(TokenKind.Packed, TokenKind.Array, TokenKind.Set, TokenKind.File, //
                 TokenKind.Class, TokenKind.Interface, TokenKind.Record, TokenKind.Object, TokenKind.DispInterface)) {
-                result.StructuredType = ParseStructType(result);
+                var structuredType = ParseStructType();
                 if (allowComma)
-                    result.Comma = ContinueWith(TokenKind.Comma);
-                return result;
+                    comma = ContinueWith(TokenKind.Comma);
+                return new TypeSpecification(structuredType, comma);
             }
 
             if (Match(TokenKind.Pointer, TokenKind.Circumflex)) {
-                result.PointerType = ParsePointerType(result);
+                var pointerType = ParsePointerType();
                 if (allowComma)
-                    result.Comma = ContinueWith(TokenKind.Comma);
-                return result;
+                    comma = ContinueWith(TokenKind.Comma);
+                return new TypeSpecification(pointerType, comma);
             }
 
             if (Match(TokenKind.String, TokenKind.ShortString, TokenKind.AnsiString, TokenKind.UnicodeString, TokenKind.WideString)) {
-                result.StringType = ParseStringType(result);
+                var stringType = ParseStringType();
                 if (allowComma)
-                    result.Comma = ContinueWith(TokenKind.Comma);
-                return result;
+                    comma = ContinueWith(TokenKind.Comma);
+                return new TypeSpecification(stringType, comma);
             }
 
             if (Match(TokenKind.Function, TokenKind.Procedure)) {
-                result.ProcedureType = ParseProcedureType(result);
+                var procedureType = ParseProcedureType();
                 if (allowComma)
-                    result.Comma = ContinueWith(TokenKind.Comma);
-                return result;
+                    comma = ContinueWith(TokenKind.Comma);
+                return new TypeSpecification(procedureType, comma);
             }
 
             if (Match(TokenKind.Reference) && LookAhead(1, TokenKind.To)) {
-                result.ProcedureType = ParseProcedureType(result);
+                var procedureType = ParseProcedureType();
                 if (allowComma)
-                    result.Comma = ContinueWith(TokenKind.Comma);
-                return result;
+                    comma = ContinueWith(TokenKind.Comma);
+                return new TypeSpecification(procedureType, comma);
             }
 
-            result.SimpleType = ParseSimpleType(result, constDeclaration, varDeclaration);
+            var simpleType = ParseSimpleType(constDeclaration, varDeclaration);
             if (allowComma)
-                result.Comma = ContinueWith(TokenKind.Comma);
+                comma = ContinueWith(TokenKind.Comma);
 
-            return result;
+            return new TypeSpecification(simpleType, comma);
         }
 
         #endregion
         #region ParseSimpleType
 
         [Rule("SimpleType", "EnumType | (ConstExpression [ '..' ConstExpression ]) | ([ 'type' ] GenericNamespaceName {'.' GenericNamespaceName })")]
-        private SimpleType ParseSimpleType(IExtendableSyntaxPart parent, bool constDeclaration = false, bool varDeclaration = false) {
-            var result = new SimpleType();
-            parent.Add(result);
+        private SimpleType ParseSimpleType(bool constDeclaration = false, bool varDeclaration = false) {
 
             if (Match(TokenKind.OpenParen)) {
-                result.EnumType = ParseEnumType(result);
-                return result;
+                return new SimpleType(ParseEnumType());
             }
 
-            if (!varDeclaration) {
-                result.NewType = ContinueWith(result, TokenKind.TypeKeyword);
+            var newType = default(Terminal);
+            var typeOf = default(Terminal);
 
-                if (result.NewType)
-                    result.TypeOf = ContinueWith(result, TokenKind.Of);
+            if (!varDeclaration) {
+                newType = ContinueWith(TokenKind.TypeKeyword);
+
+                if (newType != default)
+                    typeOf = ContinueWith(TokenKind.Of);
             }
             else {
                 if (Match(TokenKind.TypeKeyword)) {
                     Unexpected();
                 }
-                result.NewType = false;
             }
 
-            if (result.NewType || (MatchIdentifier(TokenKind.ShortString, TokenKind.String, TokenKind.WideString, TokenKind.UnicodeString, TokenKind.AnsiString) && (!LookAhead(1, TokenKind.DotDot)))) {
-                do {
-                    ParseGenericNamespaceName();
-                } while (ContinueWith(result, TokenKind.Dot));
-                return result;
+            if (newType != default || (MatchIdentifier(TokenKind.ShortString, TokenKind.String, TokenKind.WideString, TokenKind.UnicodeString, TokenKind.AnsiString) && (!LookAhead(1, TokenKind.DotDot)))) {
+                using (var list = GetList<GenericNamespaceName>()) {
+                    var item = default(GenericNamespaceName);
+
+                    do {
+                        item = ParseGenericNamespaceName(false, false, true);
+                        list.Item.Add(item);
+                    } while (item != default && item.Dot != default);
+
+                    return new SimpleType(newType, typeOf, GetFixedArray(list));
+                }
             }
 
-            result.SubrangeStart = ParseConstantExpression(false, constDeclaration);
-            if (ContinueWith(result, TokenKind.DotDot)) {
-                result.SubrangeEnd = ParseConstantExpression(false, constDeclaration);
+            var subrangeStart = ParseConstantExpression(false, constDeclaration);
+            var subrangeEnd = default(ConstantExpressionSymbol);
+            var dotDot = ContinueWith(TokenKind.DotDot);
+            if (dotDot != default) {
+                subrangeEnd = ParseConstantExpression(false, constDeclaration);
             }
 
-            return result;
+            return new SimpleType(newType, typeOf, subrangeStart, dotDot, subrangeEnd);
         }
 
         #endregion
@@ -2289,9 +2296,9 @@ namespace PasPasPas.Parsing.Parser {
         #region EnumType
 
         [Rule("EnumType", "'(' EnumTypeValue { ',' EnumTypeValue } ')'")]
-        private EnumTypeDefinition ParseEnumType(IExtendableSyntaxPart parent) {
+        private EnumTypeDefinition ParseEnumType() {
             var result = new EnumTypeDefinition();
-            InitByTerminal(result, parent, TokenKind.OpenParen);
+            InitByTerminal(result, null, TokenKind.OpenParen);
 
             do {
                 ParseEnumTypeValue(result);
@@ -2320,9 +2327,8 @@ namespace PasPasPas.Parsing.Parser {
         #region ParseProcedureType
 
         [Rule("ProcedureType", "(ProcedureRefType [ 'of' 'object' ] ( | ProcedureReference")]
-        private ProcedureType ParseProcedureType(IExtendableSyntaxPart parent) {
+        private ProcedureType ParseProcedureType() {
             var result = new ProcedureType();
-            parent.Add(result);
 
             if (Match(TokenKind.Procedure, TokenKind.Function)) {
                 result.ProcedureRefType = ParseProcedureRefType(result);
@@ -2400,9 +2406,8 @@ namespace PasPasPas.Parsing.Parser {
         #region ParseStringType
 
         [Rule("StringType", "ShortString | WideString | UnicodeString |('string' [ '[' Expression ']'  ]) | ('AnsiString' '(' ConstExpression ')') ")]
-        private StringType ParseStringType(IExtendableSyntaxPart parent) {
+        private StringType ParseStringType() {
             var result = new StringType();
-            parent.Add(result);
 
             if (ContinueWith(result, TokenKind.String)) {
                 result.Kind = TokenKind.String;
@@ -2446,9 +2451,8 @@ namespace PasPasPas.Parsing.Parser {
         #region ParseStructType
 
         [Rule("StructType", "[ 'packed' ] StructTypePart")]
-        private StructType ParseStructType(IExtendableSyntaxPart parent) {
+        private StructType ParseStructType() {
             var result = new StructType();
-            parent.Add(result);
             result.Packed = ContinueWith(result, TokenKind.Packed);
             result.Part = ParseStructTypePart(result);
             return result;
@@ -4016,9 +4020,8 @@ namespace PasPasPas.Parsing.Parser {
         #region ParsePointerType
 
         [Rule("PointerType", "( 'pointer' | '^' TypeSpecification )")]
-        private PointerType ParsePointerType(IExtendableSyntaxPart parent) {
+        private PointerType ParsePointerType() {
             var result = new PointerType();
-            parent.Add(result);
 
             if (ContinueWith(result, TokenKind.Pointer)) {
                 result.GenericPointer = true;
