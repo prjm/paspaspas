@@ -164,8 +164,7 @@ namespace PasPasPasTests.Parser {
             Assert.IsNotNull(s.CloseBraces);
             Assert.IsNotNull(s.OfSymbol);
             Assert.IsNotNull(s.TypeSpecification);
-            Assert.AreEqual(14, s.Length);
-
+            Assert.AreEqual(22, s.Length);
         }
 
 
@@ -487,7 +486,6 @@ namespace PasPasPasTests.Parser {
         public void TestClassDeclarationItems() {
             var s = RunEmptyCstTest(p => p.ParseClassDeclartionItems(), "var a,b: integer;");
             Assert.AreEqual(17, s.Length);
-
         }
 
         [TestCase]
@@ -497,51 +495,59 @@ namespace PasPasPasTests.Parser {
             var s = RunEmptyCstTest(p => p.ParseClassDeclarationItem(ref mode), "var");
             Assert.AreEqual(mode, ClassDeclarationMode.Fields);
             Assert.IsNotNull(s.VarSymbol);
+            Assert.AreEqual(3, s.Length);
 
             s = RunEmptyCstTest(p => p.ParseClassDeclarationItem(ref mode), "class var");
             Assert.AreEqual(mode, ClassDeclarationMode.ClassFields);
             Assert.IsNotNull(s.VarSymbol);
             Assert.IsNotNull(s.ClassSymbol);
+            Assert.AreEqual(9, s.Length);
 
             s = RunEmptyCstTest(p => p.ParseClassDeclarationItem(ref mode), "protected");
             Assert.AreEqual(mode, ClassDeclarationMode.Fields);
             Assert.AreEqual(s.Visibility, TokenKind.Protected);
             Assert.IsNotNull(s.VisibilitySymbol);
+            Assert.AreEqual(9, s.Length);
 
             s = RunEmptyCstTest(p => p.ParseClassDeclarationItem(ref mode), "strict private");
             Assert.AreEqual(mode, ClassDeclarationMode.Fields);
             Assert.AreEqual(s.Visibility, TokenKind.Private);
             Assert.IsNotNull(s.StrictSymbol);
             Assert.IsNotNull(s.VisibilitySymbol);
+            Assert.AreEqual(14, s.Length);
 
             s = RunEmptyCstTest(p => p.ParseClassDeclarationItem(ref mode), "function x: integer;");
             Assert.AreEqual(mode, ClassDeclarationMode.Other);
             Assert.IsNotNull(s.MethodDeclaration);
+            Assert.AreEqual(20, s.Length);
 
             s = RunEmptyCstTest(p => p.ParseClassDeclarationItem(ref mode), "class function x: integer;");
             Assert.AreEqual(mode, ClassDeclarationMode.Other);
             Assert.IsNotNull(s.MethodDeclaration);
             Assert.IsNotNull(s.ClassSymbol);
+            Assert.AreEqual(26, s.Length);
 
             s = RunEmptyCstTest(p => p.ParseClassDeclarationItem(ref mode), "class property x: integer read p write p;");
             Assert.AreEqual(mode, ClassDeclarationMode.Other);
             Assert.IsNotNull(s.PropertyDeclaration);
             Assert.IsNotNull(s.ClassSymbol);
+            Assert.AreEqual(41, s.Length);
 
             s = RunEmptyCstTest(p => p.ParseClassDeclarationItem(ref mode), "const x = 4;");
             Assert.AreEqual(mode, ClassDeclarationMode.Other);
             Assert.IsNotNull(s.ConstSection);
+            Assert.AreEqual(12, s.Length);
 
             s = RunEmptyCstTest(p => p.ParseClassDeclarationItem(ref mode), "type x = string;");
             Assert.AreEqual(mode, ClassDeclarationMode.Other);
             Assert.IsNotNull(s.TypeSection);
+            Assert.AreEqual(14, s.Length);
 
             mode = ClassDeclarationMode.Fields;
             s = RunEmptyCstTest(p => p.ParseClassDeclarationItem(ref mode), "x: string;");
             Assert.AreEqual(mode, ClassDeclarationMode.Fields);
             Assert.IsNotNull(s.FieldDeclaration);
-
-            return;
+            Assert.AreEqual(10, s.Length);
         }
 
         [TestCase]

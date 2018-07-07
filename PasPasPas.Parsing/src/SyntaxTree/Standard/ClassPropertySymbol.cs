@@ -1,4 +1,5 @@
 ﻿using System.Collections.Immutable;
+using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
@@ -9,77 +10,98 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     public class ClassPropertySymbol : VariableLengthSyntaxTreeBase<ClassPropertySpecifierSymbol> {
 
         /// <summary>
-        ///     create a new class property symbol
+        ///     class property symbol
         /// </summary>
+        /// <param name="propertySymbol"></param>
+        /// <param name="propertyName"></param>
+        /// <param name="openBraces"></param>
+        /// <param name="arrayIndex"></param>
+        /// <param name="closeBraces"></param>
+        /// <param name="colonSymbol"></param>
+        /// <param name="typeName"></param>
+        /// <param name="indexSymbol"></param>
         /// <param name="items"></param>
-        public ClassPropertySymbol(ImmutableArray<ClassPropertySpecifierSymbol> items) : base(items) {
-
+        /// <param name="semicolon"></param>
+        /// <param name="defaultSymbol"></param>
+        /// <param name="semicolon2"></param>
+        public ClassPropertySymbol(Terminal propertySymbol, Identifier propertyName, Terminal openBraces, FormalParameters arrayIndex, Terminal closeBraces, Terminal colonSymbol, TypeName typeName, Terminal indexSymbol, ImmutableArray<ClassPropertySpecifierSymbol> items, Terminal semicolon, Terminal defaultSymbol, Terminal semicolon2) : base(items) {
+            PropertySymbol = propertySymbol;
+            PropertyName = propertyName;
+            OpenBraces = openBraces;
+            ArrayIndex = arrayIndex;
+            CloseBraces = closeBraces;
+            ColonSymbol = colonSymbol;
+            TypeName = typeName;
+            IndexSymbol = indexSymbol;
+            Semicolon = semicolon;
+            DefaultSymbol = defaultSymbol;
+            Semicolon2 = semicolon2;
         }
 
         /// <summary>
         ///     property access index
         /// </summary>
-        public SyntaxPartBase ArrayIndex { get; set; }
+        public FormalParameters ArrayIndex { get; }
 
         /// <summary>
         ///     default flag (for disp interface)
         /// </summary>
-        public bool IsDefault { get; internal set; }
+        public bool IsDefault { get; }
 
         /// <summary>
         ///     index of the property
         /// </summary>
-        public SyntaxPartBase PropertyIndex { get; set; }
+        public SyntaxPartBase PropertyIndex { get; }
 
         /// <summary>
         ///     property name
         /// </summary>
-        public Identifier PropertyName { get; set; }
+        public Identifier PropertyName { get; }
 
         /// <summary>
         ///     property type
         /// </summary>
-        public SyntaxPartBase TypeName { get; set; }
+        public TypeName TypeName { get; }
 
         /// <summary>
         ///     property symbol
         /// </summary>
-        public Terminal PropertySymbol { get; set; }
+        public Terminal PropertySymbol { get; }
 
         /// <summary>
         ///     open braces
         /// </summary>
-        public Terminal OpenBraces { get; set; }
+        public Terminal OpenBraces { get; }
 
         /// <summary>
         ///     close braces
         /// </summary>
-        public Terminal CloseBraces { get; set; }
+        public Terminal CloseBraces { get; }
 
         /// <summary>
         ///     colon symbol
         /// </summary>
-        public Terminal ColonSymbol { get; set; }
+        public Terminal ColonSymbol { get; }
 
         /// <summary>
         ///     index symbol
         /// </summary>
-        public Terminal IndexSymbol { get; set; }
+        public Terminal IndexSymbol { get; }
 
         /// <summary>
         ///     semicolon
         /// </summary>
-        public Terminal Semicolon { get; set; }
+        public Terminal Semicolon { get; }
 
         /// <summary>
         ///     default symbol
         /// </summary>
-        public Terminal DefaultSymbol { get; set; }
+        public Terminal DefaultSymbol { get; }
 
         /// <summary>
         ///     semicolon2
         /// </summary>
-        public Terminal Semicolon2 { get; set; }
+        public Terminal Semicolon2 { get; }
 
         /// <summary>
         ///     accept visitor
@@ -106,21 +128,20 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     symbol length
         /// </summary>
-        public int Length
-            => PropertySymbol.Length
-            + PropertyName.Length
-            + OpenBraces.Length
-            + ArrayIndex.Length
-            + CloseBraces.Length
-            + ColonSymbol.Length
-            + TypeName.Length
-            + IndexSymbol.Length
-            + PropertyIndex.Length
+        public override int Length
+            => PropertySymbol.GetSymbolLength()
+            + PropertyName.GetSymbolLength()
+            + OpenBraces.GetSymbolLength()
+            + ArrayIndex.GetSymbolLength()
+            + CloseBraces.GetSymbolLength()
+            + ColonSymbol.GetSymbolLength()
+            + TypeName.GetSymbolLength()
+            + IndexSymbol.GetSymbolLength()
+            + PropertyIndex.GetSymbolLength()
             + ItemLength
-            + Semicolon.Length
-            + DefaultSymbol.Length
-            + Semicolon2.Length;
-
+            + Semicolon.GetSymbolLength()
+            + DefaultSymbol.GetSymbolLength()
+            + Semicolon2.GetSymbolLength();
 
     }
 }

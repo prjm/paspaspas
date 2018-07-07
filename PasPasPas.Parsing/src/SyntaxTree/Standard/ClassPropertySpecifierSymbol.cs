@@ -1,4 +1,5 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Visitors;
+﻿using PasPasPas.Parsing.SyntaxTree.Utils;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
@@ -8,64 +9,121 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     public class ClassPropertySpecifierSymbol : StandardSyntaxTreeBase {
 
         /// <summary>
+        ///     create a new property specifier
+        /// </summary>
+        /// <param name="classPropertyReadWriteSymbol"></param>
+        public ClassPropertySpecifierSymbol(ClassPropertyReadWriteSymbol classPropertyReadWriteSymbol) {
+            PropertyReadWrite = classPropertyReadWriteSymbol;
+        }
+
+        /// <summary>
+        ///     create a new property specifier
+        /// </summary>
+        /// <param name="classPropertyDispInterfaceSymbols"></param>
+        public ClassPropertySpecifierSymbol(ClassPropertyDispInterfaceSymbols classPropertyDispInterfaceSymbols) {
+            PropertyDispInterface = classPropertyDispInterfaceSymbols;
+        }
+
+        /// <summary>
+        ///     create a new class property specifier symbol
+        /// </summary>
+        /// <param name="terminal"></param>
+        /// <param name="expression"></param>
+        public ClassPropertySpecifierSymbol(Terminal terminal, Expression expression) {
+            StoredSymbol = terminal;
+            StoredProperty = expression;
+        }
+
+        /// <summary>
+        ///     create a new class property specifier symbol
+        /// </summary>
+        /// <param name="defaultProperty"></param>
+        /// <param name="defaultSymbol"></param>
+        public ClassPropertySpecifierSymbol(Expression defaultProperty, Terminal defaultSymbol) {
+            DefaultProperty = defaultProperty;
+            DefaultSymbol = defaultSymbol;
+        }
+
+        /// <summary>
+        ///     no default symbol
+        /// </summary>
+        /// <param name="noDefaultSymbol"></param>
+        public ClassPropertySpecifierSymbol(Terminal noDefaultSymbol) {
+            NoDefaultSymbol = noDefaultSymbol;
+        }
+
+        /// <summary>
+        ///     create a new class property specifier symbol
+        /// </summary>
+        /// <param name="implementsSymbol"></param>
+        /// <param name="namespaceName"></param>
+        public ClassPropertySpecifierSymbol(Terminal implementsSymbol, NamespaceName namespaceName) {
+            ImplentsSymbol = implementsSymbol;
+            ImplementsTypeId = namespaceName;
+        }
+
+        /// <summary>
         ///     default property
         /// </summary>
-        public bool IsDefault { get; set; }
+        public bool IsDefault
+            => DefaultSymbol != default;
 
         /// <summary>
         ///     default property expression
         /// </summary>
-        public SyntaxPartBase DefaultProperty { get; set; }
+        public SyntaxPartBase DefaultProperty { get; }
 
         /// <summary>
         ///     disp interface
         /// </summary>
-        public SyntaxPartBase PropertyDispInterface { get; set; }
+        public ClassPropertyDispInterfaceSymbols PropertyDispInterface { get; }
 
         /// <summary>
         ///     read write accessors
         /// </summary>
-        public SyntaxPartBase PropertyReadWrite { get; set; }
+        public ClassPropertyReadWriteSymbol PropertyReadWrite { get; }
 
         /// <summary>
         ///     stored property
         /// </summary>
-        public bool IsStored { get; set; }
+        public bool IsStored
+            => StoredSymbol != default;
 
         /// <summary>
         ///     stored property expression
         /// </summary>
-        public SyntaxPartBase StoredProperty { get; set; }
+        public Expression StoredProperty { get; }
 
         /// <summary>
         ///     no default
         /// </summary>
-        public bool NoDefault { get; set; }
+        public bool NoDefault
+            => NoDefaultSymbol != default;
 
         /// <summary>
         ///     implementing type name
         /// </summary>
-        public SyntaxPartBase ImplementsTypeId { get; set; }
+        public NamespaceName ImplementsTypeId { get; }
 
         /// <summary>
         ///     stored symbol
         /// </summary>
-        public Terminal StoredSymbol { get; set; }
+        public Terminal StoredSymbol { get; }
 
         /// <summary>
         ///     default symbol
         /// </summary>
-        public Terminal DefaultSymbol { get; set; }
+        public Terminal DefaultSymbol { get; }
 
         /// <summary>
         ///     no default
         /// </summary>
-        public Terminal NoDefaultSymbol { get; set; }
+        public Terminal NoDefaultSymbol { get; }
 
         /// <summary>
         ///     implements
         /// </summary>
-        public Terminal ImplentsSymbol { get; set; }
+        public Terminal ImplentsSymbol { get; }
 
         /// <summary>
         ///     accept visitor
@@ -88,16 +146,16 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     symbol length
         /// </summary>
-        public int Length
-               => PropertyReadWrite.Length
-                + PropertyDispInterface.Length
-                + StoredSymbol.Length
-                + StoredProperty.Length
-                + DefaultSymbol.Length
-                + DefaultProperty.Length
-                + NoDefaultSymbol.Length
-                + ImplentsSymbol.Length
-                + ImplementsTypeId.Length;
+        public override int Length
+               => PropertyReadWrite.GetSymbolLength()
+                + PropertyDispInterface.GetSymbolLength()
+                + StoredSymbol.GetSymbolLength()
+                + StoredProperty.GetSymbolLength()
+                + DefaultSymbol.GetSymbolLength()
+                + DefaultProperty.GetSymbolLength()
+                + NoDefaultSymbol.GetSymbolLength()
+                + ImplentsSymbol.GetSymbolLength()
+                + ImplementsTypeId.GetSymbolLength();
 
     }
 }

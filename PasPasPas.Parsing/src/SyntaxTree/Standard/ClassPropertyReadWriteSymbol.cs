@@ -1,4 +1,5 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Visitors;
+﻿using PasPasPas.Parsing.SyntaxTree.Utils;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
@@ -6,6 +7,16 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     property accessors
     /// </summary>
     public class ClassPropertyReadWriteSymbol : StandardSyntaxTreeBase {
+
+        /// <summary>
+        ///     create a new class property read write symbol
+        /// </summary>
+        /// <param name="terminal"></param>
+        /// <param name="namespaceName"></param>
+        public ClassPropertyReadWriteSymbol(Terminal terminal, NamespaceName namespaceName) {
+            Modifier = terminal;
+            Member = namespaceName;
+        }
 
         /// <summary>
         ///     kind
@@ -16,12 +27,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     member name
         /// </summary>
-        public NamespaceName Member { get; set; }
+        public NamespaceName Member { get; }
 
         /// <summary>
         ///     property modifier
         /// </summary>
-        public Terminal Modifier { get; set; }
+        public Terminal Modifier { get; }
 
         /// <summary>
         ///     accept visitor
@@ -37,8 +48,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     symbol length
         /// </summary>
-        public int Length
-            => Modifier.Length + Member.Length;
+        public override int Length
+            => Modifier.GetSymbolLength() + Member.GetSymbolLength();
 
 
     }
