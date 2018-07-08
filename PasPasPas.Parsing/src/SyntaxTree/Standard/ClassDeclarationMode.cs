@@ -22,7 +22,7 @@
         ClassFields = 2,
 
         /// <summary>
-        ///     declaring other things (methods, properties, consts, etc.)
+        ///     declaring other things (methods, properties, constants, etc.)
         /// </summary>
         Other = 3,
 

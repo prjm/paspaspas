@@ -14,14 +14,17 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         ///     create a new string type name
         /// </summary>
         /// <param name="stringType"></param>
-        public TypeName(Terminal stringType) : base(ImmutableArray<GenericNamespaceName>.Empty)
-            => StringTypeSymbol = stringType;
+        public TypeName(Terminal stringType, Terminal comma) : base(ImmutableArray<GenericNamespaceName>.Empty) {
+            StringTypeSymbol = stringType;
+            Comma = comma;
+        }
 
         /// <summary>
         ///     generate a new combined generic names
         /// </summary>
         /// <param name="names"></param>
-        public TypeName(ImmutableArray<GenericNamespaceName> names) : base(names) {
+        public TypeName(ImmutableArray<GenericNamespaceName> names, Terminal comma) : base(names) {
+            Comma = comma;
         }
 
         /// <summary>
@@ -34,6 +37,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         ///     string type symbol
         /// </summary>
         public Terminal StringTypeSymbol { get; }
+
+        /// <summary>
+        ///     comma
+        /// </summary>
+        public Terminal Comma { get; }
 
         /// <summary>
         ///     map type name kind

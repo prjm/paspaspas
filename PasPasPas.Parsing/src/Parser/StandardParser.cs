@@ -2094,7 +2094,6 @@ namespace PasPasPas.Parsing.Parser {
             var hint = default(HintSymbol);
 
             using (var list = GetList<HintSymbol>()) {
-
                 do {
                     hint = ParseHint();
                     if (hint != null && requireSemicolon) {
@@ -2105,15 +2104,16 @@ namespace PasPasPas.Parsing.Parser {
                     }
 
                     if (hint != null) {
-                        if (result == null)
-                            result = new HintingInformationList(default);
                         AddToList(list, hint);
                     }
 
                 } while (hint != default);
+
+                if (list.Item.Count > 0)
+                    return new HintingInformationList(GetFixedArray(list));
             }
 
-            return result;
+            return null;
         }
 
         #endregion
@@ -2507,7 +2507,7 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             if (Match(TokenKind.Class)) {
-                result.ClassDef = ParseClassDefinition(result);
+                result.ClassDef = ParseClassDefinition();
                 return result;
             }
 
@@ -2851,7 +2851,7 @@ namespace PasPasPas.Parsing.Parser {
         private ObjectDeclaration ParseObjectDecl(IExtendableSyntaxPart parent) {
             var result = new ObjectDeclaration();
             InitByTerminal(result, parent, TokenKind.Object);
-            result.ClassParent = ParseClassParent(result);
+            result.ClassParent = ParseClassParent();
             result.Items = ParseObjectItems(result);
 
             ContinueWithOrMissing(result, TokenKind.End);
@@ -2939,7 +2939,7 @@ namespace PasPasPas.Parsing.Parser {
                 ContinueWithOrMissing(result, TokenKind.DispInterface);
                 result.DisplayInterface = true;
             }
-            result.ParentInterface = ParseClassParent(result);
+            result.ParentInterface = ParseClassParent();
             if (Match(TokenKind.OpenBraces))
                 result.Guid = ParseInterfaceGuid(result);
             result.Items = ParseInterfaceItems(result);
@@ -3022,17 +3022,15 @@ namespace PasPasPas.Parsing.Parser {
         /// <returns></returns>
 
         [Rule("ClassHelper", "'class' 'helper' ClassParent 'for' TypeName ClassHelperItems 'end'")]
-        public ClassHelperDefSymbol ParseClassHelper() {
-            return new ClassHelperDefSymbol {
-                ClassSymbol = ContinueWithOrMissing(TokenKind.Class),
-                HelperSymbol = ContinueWithOrMissing(TokenKind.Helper),
-                ClassParent = ParseClassParent(null),
-                ForSymbol = ContinueWithOrMissing(TokenKind.For),
-                HelperName = ParseTypeName(),
-                HelperItems = ParseClassHelperItems(),
-                EndSymbol = ContinueWithOrMissing(TokenKind.End)
-            };
-        }
+        public ClassHelperDefSymbol ParseClassHelper()
+            => new ClassHelperDefSymbol(
+                classSymbol: ContinueWithOrMissing(TokenKind.Class),
+                helperSymbol: ContinueWithOrMissing(TokenKind.Helper),
+                classParent: ParseClassParent(),
+                forSymbol: ContinueWithOrMissing(TokenKind.For),
+                helperName: ParseTypeName(),
+                helperItems: ParseClassHelperItems(),
+                endSymbol: ContinueWithOrMissing(TokenKind.End));
 
         #endregion
         #region ClassHelperItems
@@ -3070,76 +3068,58 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("ClassHelperItem", "Visibility | MethodDeclaration | PropertyDeclaration | [ 'class' ] VarSection")]
         public ClassHelperItemSymbol ParseClassHelperItem(ref ClassDeclarationMode mode) {
-            var result = new ClassHelperItemSymbol() {
-                VarSymbol = EmptyTerminal(),
-                ClassSymbol = EmptyTerminal(),
-                Attributes1 = null,
-                Attributes2 = null,
-                StrictSymbol = EmptyTerminal(),
-                MethodDeclaration = EmptyTerminal(),
-                PropertyDeclaration = EmptyTerminal(),
-                ConstDeclaration = EmptyTerminal(),
-                TypeSection = EmptyTerminal(),
-                FieldDeclaration = EmptyTerminal(),
-            };
 
             if (Match(TokenKind.Var)) {
-                result.VarSymbol = ContinueWith(TokenKind.Var);
                 mode = ClassDeclarationMode.Fields;
-                return result;
+                return new ClassHelperItemSymbol(ContinueWith(TokenKind.Var));
             }
 
             if (Match(TokenKind.Class) && LookAhead(1, TokenKind.Var)) {
-                result.ClassSymbol = ContinueWith(TokenKind.Var);
-                result.VarSymbol = ContinueWith(TokenKind.Class);
                 mode = ClassDeclarationMode.ClassFields;
-                return result;
+                return new ClassHelperItemSymbol(ContinueWith(TokenKind.Class), ContinueWith(TokenKind.Var));
             }
 
-            result.Attributes1 = ParseAttributes();
-            result.ClassSymbol = ContinueWith(TokenKind.Class) ?? EmptyTerminal();
-            result.ClassItem = result.ClassSymbol.Kind == TokenKind.Class;
-            result.Attributes2 = ParseAttributes();
+            var attributes1 = ParseAttributes();
+            var classSymbol = ContinueWith(TokenKind.Class);
+            var attributes2 = ParseAttributes();
+            var strictSymbol = default(Terminal);
+            var visibility = default(Terminal);
 
-            if (Match(TokenKind.Const)) {
-                result.ConstDeclaration = ParseConstSection(true);
+            if (classSymbol == default && Match(TokenKind.Const)) {
                 mode = ClassDeclarationMode.Other;
-                return result;
+                return new ClassHelperItemSymbol(ParseConstSection(true));
             }
 
-            if (!result.ClassItem && Match(TokenKind.TypeKeyword)) {
-                result.TypeSection = ParseTypeSection(true);
+            if (classSymbol == default && Match(TokenKind.TypeKeyword)) {
                 mode = ClassDeclarationMode.Other;
-                return result;
+                return new ClassHelperItemSymbol(ParseTypeSection(true));
             }
 
             if (Match(TokenKind.Procedure, TokenKind.Function, TokenKind.Constructor, TokenKind.Destructor)) {
-                result.MethodDeclaration = ParseMethodDeclaration();
                 mode = ClassDeclarationMode.Other;
-                return result;
+                return new ClassHelperItemSymbol(ParseMethodDeclaration());
             }
 
             if (Match(TokenKind.Property)) {
                 mode = ClassDeclarationMode.Other;
-                result.PropertyDeclaration = ParsePropertyDeclaration();
-                return result;
+                return new ClassHelperItemSymbol(ParsePropertyDeclaration());
             }
 
             if (Match(TokenKind.Public, TokenKind.Protected, TokenKind.Private, TokenKind.Strict, TokenKind.Published)) {
-                result.StrictSymbol = ContinueWith(TokenKind.Strict);
-                result.Strict = result.StrictSymbol != null;
-                ContinueWith(result, TokenKind.Public, TokenKind.Protected, TokenKind.Private, TokenKind.Published);
-                result.Visibility = result.LastTerminalKind;
-                mode = ClassDeclarationMode.Other;
-                return result;
+                if (classSymbol != default) {
+                    Unexpected();
+                }
+
+                strictSymbol = ContinueWith(TokenKind.Strict);
+                visibility = ContinueWith(TokenKind.Public, TokenKind.Protected, TokenKind.Private, TokenKind.Published);
+                mode = ClassDeclarationMode.Fields;
+                return new ClassHelperItemSymbol(attributes1, classSymbol, attributes2, strictSymbol, visibility);
             }
 
             if (MatchIdentifier() && (!Match(TokenKind.Private, TokenKind.Protected, TokenKind.Public, TokenKind.Published, TokenKind.Automated, TokenKind.Strict))) {
 
                 if (mode == ClassDeclarationMode.Fields || mode == ClassDeclarationMode.ClassFields) {
-                    result.FieldDeclaration = ParseClassFieldDeclararation();
-                    result.ClassItem = mode == ClassDeclarationMode.ClassFields;
-                    return result;
+                    return new ClassHelperItemSymbol(ParseClassFieldDeclararation());
                 }
                 else {
                     Unexpected();
@@ -3147,31 +3127,38 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             mode = ClassDeclarationMode.Undefined;
-            return result;
+            return null;
         }
 
         #endregion
         #region ParseClassDefinition
 
+        /// <summary>
+        ///     parse a class definition
+        /// </summary>
+        /// <returns></returns>
+
         [Rule("ClassDefinition", "'class' [( 'sealed' | 'abstract' )] [ClassParent] ClassItems 'end' ")]
-        private ClassDeclarationSymbol ParseClassDefinition(IExtendableSyntaxPart parent) {
-            var result = new ClassDeclarationSymbol();
-            InitByTerminal(result, parent, TokenKind.Class);
-
-            result.Sealed = ContinueWith(result, TokenKind.Sealed);
-            result.Abstract = ContinueWith(result, TokenKind.Abstract);
-
-            result.ClassParent = ParseClassParent(result);
+        public ClassDeclarationSymbol ParseClassDefinition() {
+            var classSymbol = ContinueWith(TokenKind.Class);
+            var sealedSymbol = ContinueWith(TokenKind.Sealed);
+            var abstractSymbol = ContinueWith(TokenKind.Abstract);
+            var classParent = ParseClassParent();
+            var classItems = default(ClassDeclarationItemsSymbol);
+            var endSymbol = default(Terminal);
+            var forwardDeclaration = false;
 
             if (!Match(TokenKind.Semicolon))
-                result.ClassItems = ParseClassDeclartionItems();
+                classItems = ParseClassDeclartionItems();
 
-            if (result.ClassItems != null && result.ClassItems.PartList != null && result.ClassItems.PartList.Count > 0)
-                ContinueWithOrMissing(result, TokenKind.End);
-            else
-                result.ForwardDeclaration = !ContinueWith(result, TokenKind.End);
+            if (classItems != default && classItems.Items != default && classItems.Items.Length > 0)
+                endSymbol = ContinueWithOrMissing(TokenKind.End);
+            else {
+                endSymbol = ContinueWith(TokenKind.End);
+                forwardDeclaration = endSymbol == default;
+            }
 
-            return result;
+            return new ClassDeclarationSymbol(classSymbol, sealedSymbol, abstractSymbol, classParent, classItems, forwardDeclaration, endSymbol);
         }
 
         #endregion
@@ -3750,20 +3737,21 @@ namespace PasPasPas.Parsing.Parser {
         #region ParseClassParent
 
         [Rule("ClassParent", " [ '(' TypeName { ',' TypeName } ')' ]")]
-        private ParentClass ParseClassParent(IExtendableSyntaxPart parent) {
-            var result = new ParentClass();
+        private ParentClass ParseClassParent() {
+            if (Match(TokenKind.OpenParen)) {
+                using (var list = GetList<TypeName>()) {
+                    var openParen = ContinueWith(TokenKind.OpenParen);
+                    var item = default(TypeName);
+                    do {
+                        item = AddToList(list, ParseTypeName(false, true));
+                    } while (item != default && item.Comma != default);
 
-            if (parent != default)
-                parent.Add(result);
-
-            if (ContinueWith(result, TokenKind.OpenParen)) {
-                do {
-                    ParseTypeName();
-                } while (ContinueWith(result, TokenKind.Comma));
-                ContinueWithOrMissing(result, TokenKind.CloseParen);
+                    var closeParen = ContinueWithOrMissing(TokenKind.CloseParen);
+                    return new ParentClass(openParen, GetFixedArray(list), closeParen);
+                }
             }
 
-            return result;
+            return null;
         }
 
         #endregion
@@ -3787,11 +3775,11 @@ namespace PasPasPas.Parsing.Parser {
         #region ParseTypeName
 
         [Rule("TypeName", "'string' | 'ansistring' | 'shortstring' | 'unicodestring' | 'widestring' | (NamespaceName [ GenericSuffix ]) ")]
-        private TypeName ParseTypeName(bool inDesignator = false) {
+        private TypeName ParseTypeName(bool inDesignator = false, bool allowComma = false) {
             var stringType = ContinueWith(TokenKind.String, TokenKind.AnsiString, TokenKind.ShortString, TokenKind.UnicodeString, TokenKind.WideString);
 
             if (stringType != default)
-                return new TypeName(stringType);
+                return new TypeName(stringType, allowComma ? ContinueWith(TokenKind.Comma) : default(Terminal));
 
             using (var list = GetList<GenericNamespaceName>()) {
                 var name = default(GenericNamespaceName);
@@ -3799,7 +3787,7 @@ namespace PasPasPas.Parsing.Parser {
                     name = AddToList(list, ParseGenericNamespaceName(true, inDesignator, true));
                 } while ((!inDesignator || !IsLastDisignatorPart()) && name?.Dot != default);
 
-                return new TypeName(GetFixedArray(list));
+                return new TypeName(GetFixedArray(list), allowComma ? ContinueWith(TokenKind.Comma) : default(Terminal));
             }
         }
 

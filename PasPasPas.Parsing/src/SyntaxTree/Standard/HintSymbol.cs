@@ -1,4 +1,5 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Visitors;
+﻿using PasPasPas.Parsing.SyntaxTree.Utils;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
@@ -42,11 +43,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// </summary>
         public Terminal Symbol { get; set; }
 
-        /// <summary>
-        ///     symbol length
-        /// </summary>
-        public int Length
-            => Symbol.Length + DeprecatedComment.Length + Semicolon.Length;
 
         /// <summary>
         ///     accept visitor
@@ -60,6 +56,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
             visitor.EndVisit(this);
         }
 
+        /// <summary>
+        ///     symbol length
+        /// </summary>
+        public override int Length
+            => Symbol.GetSymbolLength() +
+               DeprecatedComment.GetSymbolLength() +
+               Semicolon.GetSymbolLength();
 
     }
 }

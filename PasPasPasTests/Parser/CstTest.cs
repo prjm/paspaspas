@@ -551,19 +551,55 @@ namespace PasPasPasTests.Parser {
         }
 
         [TestCase]
+        public void TestClassDeclarationSymbol() {
+            var s = RunEmptyCstTest(p => p.ParseClassDefinition(), "class");
+            Assert.IsTrue(s.ForwardDeclaration);
+            Assert.IsNotNull(s.ClassSymbol);
+            Assert.AreEqual(5, s.Length);
+
+            s = RunEmptyCstTest(p => p.ParseClassDefinition(), "class sealed end");
+            Assert.IsFalse(s.ForwardDeclaration);
+            Assert.IsNotNull(s.ClassSymbol);
+            Assert.IsNotNull(s.SealedSymbol);
+            Assert.IsNotNull(s.EndSymbol);
+            Assert.AreEqual(16, s.Length);
+
+            s = RunEmptyCstTest(p => p.ParseClassDefinition(), "class abstract end");
+            Assert.IsFalse(s.ForwardDeclaration);
+            Assert.IsNotNull(s.ClassSymbol);
+            Assert.IsNotNull(s.AbstractSymbol);
+            Assert.IsNotNull(s.EndSymbol);
+            Assert.AreEqual(18, s.Length);
+
+            s = RunEmptyCstTest(p => p.ParseClassDefinition(), "class (TDummy) end");
+            Assert.IsFalse(s.ForwardDeclaration);
+            Assert.IsNotNull(s.ClassSymbol);
+            Assert.IsNotNull(s.ClassParent);
+            Assert.IsNotNull(s.EndSymbol);
+            Assert.AreEqual(18, s.Length);
+
+            s = RunEmptyCstTest(p => p.ParseClassDefinition(), "class x: Integer; end");
+            Assert.IsFalse(s.ForwardDeclaration);
+            Assert.IsNotNull(s.ClassSymbol);
+            Assert.IsNotNull(s.ClassItems);
+            Assert.IsNotNull(s.EndSymbol);
+            Assert.AreEqual(21, s.Length);
+        }
+
+        [TestCase]
         public void TestClassField() {
-            var s = RunEmptyCstTest(p => p.ParseClassFieldDeclararation(), "");
+            var s = RunEmptyCstTest(p => p.ParseClassFieldDeclararation(), "s: string deprecated;");
             Assert.IsNotNull(s.Names);
             Assert.IsNotNull(s.ColonSymbol);
             Assert.IsNotNull(s.TypeDecl);
             Assert.IsNotNull(s.Hint);
             Assert.IsNotNull(s.Semicolon);
-            Assert.AreEqual(0, s.Length);
+            Assert.AreEqual(21, s.Length);
         }
 
         [TestCase]
         public void TestClassHelperDef() {
-            var s = RunEmptyCstTest(p => p.ParseClassHelper());
+            var s = RunEmptyCstTest(p => p.ParseClassHelper(), "class helper (TQ) for TObject; procedure x; end");
             Assert.IsNotNull(s.ClassSymbol);
             Assert.IsNotNull(s.HelperSymbol);
             Assert.IsNotNull(s.ClassParent);
@@ -571,7 +607,7 @@ namespace PasPasPasTests.Parser {
             Assert.IsNotNull(s.HelperName);
             Assert.IsNotNull(s.HelperItems);
             Assert.IsNotNull(s.EndSymbol);
-            Assert.AreEqual(0, s.Length);
+            Assert.AreEqual(29, s.Length);
         }
 
 

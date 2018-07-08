@@ -1,4 +1,5 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Visitors;
+﻿using PasPasPas.Parsing.SyntaxTree.Utils;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
@@ -8,30 +9,59 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     public class ClassDeclarationSymbol : StandardSyntaxTreeBase {
 
         /// <summary>
-        ///     sealed class
+        ///     class declaration symbol
         /// </summary>
-        public bool Abstract { get; set; }
+        /// <param name="classSymbol"></param>
+        /// <param name="sealedSymbol"></param>
+        /// <param name="abstractSymbol"></param>
+        /// <param name="classParent"></param>
+        /// <param name="classItems"></param>
+        /// <param name="forwardDeclaration"></param>
+        /// <param name="endSymbol"></param>
+        public ClassDeclarationSymbol(Terminal classSymbol, Terminal sealedSymbol, Terminal abstractSymbol, ParentClass classParent, ClassDeclarationItemsSymbol classItems, bool forwardDeclaration, Terminal endSymbol) {
+            ClassSymbol = classSymbol;
+            SealedSymbol = sealedSymbol;
+            AbstractSymbol = abstractSymbol;
+            ClassParent = classParent;
+            ClassItems = classItems;
+            ForwardDeclaration = forwardDeclaration;
+            EndSymbol = endSymbol;
+        }
 
         /// <summary>
         ///     items of a class declaration
         /// </summary>
-        public ClassDeclarationItemsSymbol ClassItems { get; set; }
+        public ClassDeclarationItemsSymbol ClassItems { get; }
+
+        /// <summary>
+        ///     <c>true</c> if this is a forward declaration
+        /// </summary>
+        public bool ForwardDeclaration { get; }
 
         /// <summary>
         ///     parent class
         /// </summary>
-        public ParentClass ClassParent { get; set; }
+        public ParentClass ClassParent { get; }
 
         /// <summary>
-        ///     forward declaration
+        ///     end symbol
         /// </summary>
-        public bool ForwardDeclaration { get; set; }
+        public Terminal EndSymbol { get; }
 
         /// <summary>
-        ///     abstract class
+        ///     abstract symbol
         /// </summary>
-        public bool Sealed { get; set; }
+        public Terminal AbstractSymbol { get; }
 
+        /// <summary>
+        ///     sealed symbol
+        /// </summary>
+        public Terminal SealedSymbol { get; }
+
+        /// <summary>
+        ///     class symbol
+        /// </summary>
+        public Terminal ClassSymbol { get; }
 
         /// <summary>
         ///     accept visitor
@@ -39,9 +69,25 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="visitor">node visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
-            AcceptParts(this, visitor);
+            AcceptPart(this, ClassSymbol, visitor);
+            AcceptPart(this, SealedSymbol, visitor);
+            AcceptPart(this, AbstractSymbol, visitor);
+            AcceptPart(this, ClassParent, visitor);
+            AcceptPart(this, ClassItems, visitor);
+            AcceptPart(this, EndSymbol, visitor);
             visitor.EndVisit(this);
         }
+
+        /// <summary>
+        ///     symbol length
+        /// </summary>
+        public override int Length
+            => ClassSymbol.GetSymbolLength() +
+               SealedSymbol.GetSymbolLength() +
+               AbstractSymbol.GetSymbolLength() +
+               ClassParent.GetSymbolLength() +
+               ClassItems.GetSymbolLength() +
+               EndSymbol.GetSymbolLength();
 
     }
 }

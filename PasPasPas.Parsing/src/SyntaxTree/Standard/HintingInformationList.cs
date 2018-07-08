@@ -26,5 +26,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
             visitor.EndVisit(this);
         }
 
+        /// <summary>
+        ///     symbol length
+        /// </summary>
+        public override int Length => ItemLength;
+
     }
 }

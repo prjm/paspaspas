@@ -1,4 +1,5 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Visitors;
+﻿using PasPasPas.Parsing.SyntaxTree.Utils;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
@@ -6,40 +7,61 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     class helper declaration
     /// </summary>
     public class ClassHelperDefSymbol : StandardSyntaxTreeBase {
+
+        /// <summary>
+        ///     create a new class helper def symbol
+        /// </summary>
+        /// <param name="classSymbol"></param>
+        /// <param name="helperSymbol"></param>
+        /// <param name="classParent"></param>
+        /// <param name="forSymbol"></param>
+        /// <param name="helperName"></param>
+        /// <param name="helperItems"></param>
+        /// <param name="endSymbol"></param>
+        public ClassHelperDefSymbol(Terminal classSymbol, Terminal helperSymbol, ParentClass classParent, Terminal forSymbol, TypeName helperName, ClassHelperItemsSymbol helperItems, Terminal endSymbol) {
+            HelperItems = helperItems;
+            ClassParent = classParent;
+            HelperName = helperName;
+            ClassSymbol = classSymbol;
+            HelperSymbol = helperSymbol;
+            ForSymbol = forSymbol;
+            EndSymbol = endSymbol;
+        }
+
         /// <summary>
         ///     items
         /// </summary>
-        public ClassHelperItemsSymbol HelperItems { get; set; }
+        public ClassHelperItemsSymbol HelperItems { get; }
 
         /// <summary>
         ///     class parent
         /// </summary>
-        public ParentClass ClassParent { get; set; }
+        public ParentClass ClassParent { get; }
 
         /// <summary>
         ///     class helper name
         /// </summary>
-        public TypeName HelperName { get; set; }
+        public TypeName HelperName { get; }
 
         /// <summary>
         ///     class symbol
         /// </summary>
-        public Terminal ClassSymbol { get; set; }
+        public Terminal ClassSymbol { get; }
 
         /// <summary>
         ///     helper symbol
         /// </summary>
-        public Terminal HelperSymbol { get; set; }
+        public Terminal HelperSymbol { get; }
 
         /// <summary>
         ///     for symbol
         /// </summary>
-        public Terminal ForSymbol { get; set; }
+        public Terminal ForSymbol { get; }
 
         /// <summary>
         ///     end symbol
         /// </summary>
-        public Terminal EndSymbol { get; set; }
+        public Terminal EndSymbol { get; }
 
 
         /// <summary>
@@ -61,9 +83,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     symbol length
         /// </summary>
-        public int Length
-            => ClassSymbol.Length + HelperSymbol.Length + ClassParent.Length + ForSymbol.Length
-            + HelperName.Length + HelperItems.Length + EndSymbol.Length;
+        public override int Length
+            => ClassSymbol.GetSymbolLength() +
+               HelperSymbol.GetSymbolLength() +
+               ClassParent.GetSymbolLength() +
+               ForSymbol.GetSymbolLength() +
+               HelperName.GetSymbolLength() +
+               HelperItems.GetSymbolLength() +
+               EndSymbol.GetSymbolLength();
 
     }
 }

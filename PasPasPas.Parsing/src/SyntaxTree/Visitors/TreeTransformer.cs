@@ -1261,8 +1261,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             var result = new StructuredType();
             InitNode(result, classDeclaration);
             result.Kind = StructuredTypeKind.Class;
-            result.SealedClass = classDeclaration.Sealed;
-            result.AbstractClass = classDeclaration.Abstract;
+            result.SealedClass = classDeclaration.SealedSymbol != default;
+            result.AbstractClass = classDeclaration.AbstractSymbol != default;
             result.ForwardDeclaration = classDeclaration.ForwardDeclaration;
             typeTarget.TypeValue = result;
             CurrentMemberVisibility[result] = MemberVisibility.Public;
