@@ -3042,7 +3042,6 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("ClassHelperItems", " { ClassHelperItem }")]
         public ClassHelperItemsSymbol ParseClassHelperItems() {
-            var result = new ClassHelperItemsSymbol(default);
             var mode = ClassDeclarationMode.Fields;
 
             using (var list = GetList<ClassHelperItemSymbol>()) {
@@ -3050,11 +3049,12 @@ namespace PasPasPas.Parsing.Parser {
                     AddToList(list, ParseClassHelperItem(ref mode));
                     if (mode == ClassDeclarationMode.Undefined) {
                         Unexpected();
-                        return result;
+                        break;
                     }
                 }
+
+                return new ClassHelperItemsSymbol(GetFixedArray(list));
             }
-            return result;
         }
 
         #endregion
@@ -3658,19 +3658,24 @@ namespace PasPasPas.Parsing.Parser {
         #endregion
         #region SimpleGenericDefinition
 
+        /// <summary>
+        ///     parse a generic definition
+        /// </summary>
+        /// <returns></returns>
+
         [Rule("SimpleGenericDefinition", "'<' Identifier { ',' Identifier } '>'")]
-        private GenericDefinition ParseSimpleGenericDefinition() {
-            var result = new GenericDefinition();
-            InitByTerminal(result, null, TokenKind.AngleBracketsOpen);
+        public GenericDefinition ParseSimpleGenericDefinition() {
+            var openBrackets = ContinueWith(TokenKind.AngleBracketsOpen);
+            using (var list = GetList<GenericDefinitionPart>()) {
+                var item = default(GenericDefinitionPart);
 
-            do {
-                var part = new GenericDefinitionPart();
-                result.Add(part);
-                part.Identifier = RequireIdentifier();
-            } while (ContinueWith(result, TokenKind.Comma));
+                do {
+                    item = AddToList(list, new GenericDefinitionPart(RequireIdentifier(), ContinueWith(TokenKind.Comma)));
+                } while (item != default && item.CommaOrSemicolon != default);
 
-            ContinueWithOrMissing(result, TokenKind.AngleBracketsClose);
-            return result;
+                var closeBrackets = ContinueWithOrMissing(TokenKind.AngleBracketsClose);
+                return new GenericDefinition(openBrackets, GetFixedArray(list), closeBrackets);
+            }
         }
 
         #endregion
@@ -3678,44 +3683,48 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("ConstrainedGenericDefinition", "'<' GenericDefinitionPart { ';' GenericDefinitionPart } '>'")]
         private GenericDefinition ParseConstrainedGenericDefinition() {
-            var result = new GenericDefinition();
-            InitByTerminal(result, null, TokenKind.AngleBracketsOpen);
+            var openBrackets = ContinueWith(TokenKind.AngleBracketsOpen);
+            using (var list = GetList<GenericDefinitionPart>()) {
+                var item = default(GenericDefinitionPart);
 
-            do {
-                ParseGenericDefinitionPart(result);
-            } while (ContinueWith(result, TokenKind.Semicolon));
+                do {
+                    item = AddToList(list, new GenericDefinitionPart(ParseGenericDefinitionPart(), ContinueWith(TokenKind.Semicolon)));
+                } while (item != default && item.CommaOrSemicolon != default);
 
-            ContinueWithOrMissing(result, TokenKind.AngleBracketsClose);
-            return result;
-
+                var closeBrackets = ContinueWithOrMissing(TokenKind.AngleBracketsClose);
+                return new GenericDefinition(openBrackets, GetFixedArray(list), closeBrackets);
+            }
         }
 
         #endregion
         #region ParseGenericDefinitionPart
 
         [Rule("GenericDefinitionPart", "Identifier [ ':' GenericConstraint { ',' GenericConstraint } ]")]
-        private GenericDefinitionPart ParseGenericDefinitionPart(IExtendableSyntaxPart parent) {
+        private GenericDefinitionPart ParseGenericDefinitionPart() {
+            var identifier = RequireIdentifier();
+            var colon = ContinueWith(TokenKind.Colon);
 
-            var result = new GenericDefinitionPart();
-            result.Identifier = RequireIdentifier();
-            parent.Add(result);
+            if (colon != default) {
+                using (var list = GetList<ConstrainedGeneric>()) {
+                    var item = default(ConstrainedGeneric);
 
-            if (ContinueWith(result, TokenKind.Colon)) {
-                do {
-                    ParseGenericConstraint(result);
-                } while (ContinueWith(result, TokenKind.Comma));
+                    do {
+                        item = AddToList(list, ParseGenericConstraint(true));
+                    } while (item != default && item.Comma != default);
+
+                    return new GenericDefinitionPart(identifier, colon, GetFixedArray(list));
+                };
             }
 
-            return result;
+            return new GenericDefinitionPart(identifier);
         }
 
         #endregion
         #region ParseGenericConstraint
 
         [Rule("GenericConstraint", " 'record' | 'class' | 'constructor' | Identifier ")]
-        private ConstrainedGeneric ParseGenericConstraint(IExtendableSyntaxPart parent) {
+        private ConstrainedGeneric ParseGenericConstraint(bool allowComma) {
             var result = new ConstrainedGeneric();
-            parent.Add(result);
 
             if (ContinueWith(result, TokenKind.Record)) {
                 result.RecordConstraint = true;
@@ -3729,6 +3738,9 @@ namespace PasPasPas.Parsing.Parser {
             else {
                 result.ConstraintIdentifier = RequireIdentifier();
             }
+
+            if (allowComma)
+                result.Comma = ContinueWith(TokenKind.Comma);
 
             return result;
         }

@@ -28,6 +28,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         public bool RecordConstraint { get; set; }
 
         /// <summary>
+        ///     comma
+        /// </summary>
+        public Terminal Comma { get; internal set; }
+
+        /// <summary>
         ///     accept visitor
         /// </summary>
         /// <param name="visitor">visitor</param>

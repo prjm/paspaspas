@@ -1,16 +1,67 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Visitors;
+﻿using System.Collections.Immutable;
+using PasPasPas.Parsing.SyntaxTree.Utils;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
     /// <summary>
-    ///     generic defnition part
+    ///     generic definition part
     /// </summary>
-    public class GenericDefinitionPart : StandardSyntaxTreeBase {
+    public class GenericDefinitionPart : VariableLengthSyntaxTreeBase<ConstrainedGeneric> {
 
         /// <summary>
-        ///     parse identifiert
+        ///     create a new generic definition part
         /// </summary>
-        public Identifier Identifier { get; set; }
+        /// <param name="identifier"></param>
+        /// <param name="terminal"></param>
+        public GenericDefinitionPart(Identifier identifier, Terminal terminal) : base(ImmutableArray<ConstrainedGeneric>.Empty) {
+            Identifier = identifier;
+            CommaOrSemicolon = terminal;
+        }
+
+        /// <summary>
+        ///     create a new generic definition part
+        /// </summary>
+        /// <param name="genericDefinitionPart"></param>
+        /// <param name="terminal"></param>
+        public GenericDefinitionPart(GenericDefinitionPart genericDefinitionPart, Terminal terminal) : base(ImmutableArray<ConstrainedGeneric>.Empty) {
+            DefinitionPart = genericDefinitionPart;
+            CommaOrSemicolon = terminal;
+
+        }
+
+        /// <summary>
+        ///     create a new generic definition part
+        /// </summary>
+        /// <param name="identifier"></param>
+        public GenericDefinitionPart(Identifier identifier) : base(ImmutableArray<ConstrainedGeneric>.Empty)
+            => Identifier = identifier;
+
+        /// <summary>
+        ///     create a new generic definition part
+        /// </summary>
+        /// <param name="identifier"></param>
+        /// <param name="terminal"></param>
+        /// <param name="items"></param>
+        public GenericDefinitionPart(Identifier identifier, Terminal terminal, ImmutableArray<ConstrainedGeneric> items) : base(items) {
+            Identifier = identifier;
+            CommaOrSemicolon = terminal;
+        }
+
+        /// <summary>
+        ///     parse identifier
+        /// </summary>
+        public Identifier Identifier { get; }
+
+        /// <summary>
+        ///     generic definition part
+        /// </summary>
+        public GenericDefinitionPart DefinitionPart { get; }
+
+        /// <summary>
+        ///     comma
+        /// </summary>
+        public Terminal CommaOrSemicolon { get; }
 
         /// <summary>
         ///     accept visitor
@@ -18,10 +69,19 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="visitor">visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
-            AcceptParts(this, visitor);
+            AcceptPart(this, Identifier, visitor);
+            AcceptPart(this, DefinitionPart, visitor);
+            AcceptPart(this, CommaOrSemicolon, visitor);
             visitor.EndVisit(this);
         }
 
-
+        /// <summary>
+        ///     symbol length
+        /// </summary>
+        public override int Length
+            => Identifier.GetSymbolLength() +
+               DefinitionPart.GetSymbolLength() +
+               CommaOrSemicolon.GetSymbolLength() +
+               ItemLength;
     }
 }

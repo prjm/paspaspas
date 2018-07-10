@@ -599,7 +599,7 @@ namespace PasPasPasTests.Parser {
 
         [TestCase]
         public void TestClassHelperDef() {
-            var s = RunEmptyCstTest(p => p.ParseClassHelper(), "class helper (TQ) for TObject; procedure x; end");
+            var s = RunEmptyCstTest(p => p.ParseClassHelper(), "class helper (TQ) for TObject procedure x; end");
             Assert.IsNotNull(s.ClassSymbol);
             Assert.IsNotNull(s.HelperSymbol);
             Assert.IsNotNull(s.ClassParent);
@@ -607,7 +607,7 @@ namespace PasPasPasTests.Parser {
             Assert.IsNotNull(s.HelperName);
             Assert.IsNotNull(s.HelperItems);
             Assert.IsNotNull(s.EndSymbol);
-            Assert.AreEqual(29, s.Length);
+            Assert.AreEqual(46, s.Length);
         }
 
 
@@ -630,13 +630,27 @@ namespace PasPasPasTests.Parser {
 
         [TestCase]
         public void TestClassHelperItems() {
-            var s = RunEmptyCstTest(p => p.ParseClassHelperItems(), "");
-            Assert.AreEqual(0, s.Length);
+            var s = RunEmptyCstTest(p => p.ParseClassHelperItems(), "const x = 5");
+            Assert.AreEqual(1, s.Items.Length);
+            Assert.AreEqual(11, s.Length);
         }
 
         [TestCase]
         public void TestClassMethod() {
-            var s = RunEmptyCstTest(p => p.ParseMethodDeclaration(), "");
+            var s = RunEmptyCstTest(p => p.ParseMethodDeclaration(), "procedure x;");
+            Assert.IsNotNull(s.MethodSymbol);
+            Assert.IsNotNull(s.Identifier);
+            Assert.IsNotNull(s.Semicolon);
+            Assert.AreEqual(12, s.Length);
+
+            s = RunEmptyCstTest(p => p.ParseMethodDeclaration(), "procedure x<T>;");
+            Assert.IsNotNull(s.MethodSymbol);
+            Assert.IsNotNull(s.Identifier);
+            Assert.IsNotNull(s.GenericDefinition);
+            Assert.IsNotNull(s.Semicolon);
+            Assert.AreEqual(15, s.Length);
+
+            s = RunEmptyCstTest(p => p.ParseMethodDeclaration(), "function x<T>(): [x] T; overload;");
             Assert.IsNotNull(s.MethodSymbol);
             Assert.IsNotNull(s.Identifier);
             Assert.IsNotNull(s.GenericDefinition);
@@ -648,9 +662,8 @@ namespace PasPasPasTests.Parser {
             Assert.IsNotNull(s.ResultType);
             Assert.IsNotNull(s.Semicolon);
             Assert.IsNotNull(s.Directives);
-            Assert.AreEqual(0, s.Length);
+            Assert.AreEqual(33, s.Length);
         }
-
 
         [TestCase]
         public void TestClassOfDeclaration() {

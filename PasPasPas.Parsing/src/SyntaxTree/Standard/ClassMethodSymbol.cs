@@ -39,17 +39,17 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     method directives
         /// </summary>
-        public MethodDirectives Directives { get; set; }
+        public MethodDirectives Directives { get; }
 
         /// <summary>
         ///     generic definition
         /// </summary>
-        public GenericDefinition GenericDefinition { get; set; }
+        public GenericDefinition GenericDefinition { get; }
 
         /// <summary>
         ///     method identifier
         /// </summary>
-        public Identifier Identifier { get; set; }
+        public Identifier Identifier { get; }
 
         /// <summary>
         ///     method kind
@@ -60,42 +60,42 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     formal parameters
         /// </summary>
-        public FormalParameters Parameters { get; set; }
+        public FormalParameters Parameters { get; }
 
         /// <summary>
         ///     Result type attributes
         /// </summary>
-        public UserAttributes ResultAttributes { get; set; }
+        public UserAttributes ResultAttributes { get; }
 
         /// <summary>
         ///     parse a type specification
         /// </summary>
-        public TypeSpecification ResultType { get; set; }
+        public TypeSpecification ResultType { get; }
 
         /// <summary>
         ///     method symbol
         /// </summary>
-        public Terminal MethodSymbol { get; set; }
+        public Terminal MethodSymbol { get; }
 
         /// <summary>
         ///     opening parenthesis
         /// </summary>
-        public Terminal OpenParen { get; set; }
+        public Terminal OpenParen { get; }
 
         /// <summary>
         ///     closing parenthesis
         /// </summary>
-        public Terminal CloseParen { get; set; }
+        public Terminal CloseParen { get; }
 
         /// <summary>
         ///     colon symbol
         /// </summary>
-        public Terminal ColonSymbol { get; set; }
+        public Terminal ColonSymbol { get; }
 
         /// <summary>
         ///     semicolon
         /// </summary>
-        public Terminal Semicolon { get; set; }
+        public Terminal Semicolon { get; }
 
         /// <summary>
         ///     accept visitor
