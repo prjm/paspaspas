@@ -3166,15 +3166,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 var attribute = part as UserAttributeDefinition;
                 var isAssemblyAttribute = false;
 
-                if (attribute == null) {
-                    var assemblyAttribute = part as AssemblyAttributeDeclaration;
-                    if (assemblyAttribute == null)
-                        continue;
-
-                    attribute = assemblyAttribute.Attribute;
-                    isAssemblyAttribute = true;
-                }
-
                 var userAttribute = new SymbolAttribute() {
                     Name = ExtractSymbolName(attribute.Name)
                 };

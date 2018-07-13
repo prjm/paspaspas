@@ -1,4 +1,5 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Visitors;
+﻿using PasPasPas.Parsing.SyntaxTree.Utils;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
@@ -8,19 +9,59 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     public class UserAttributeDefinition : StandardSyntaxTreeBase {
 
         /// <summary>
+        ///     create a new user attribute definition
+        /// </summary>
+        /// <param name="prefix"></param>
+        /// <param name="colon"></param>
+        /// <param name="name"></param>
+        /// <param name="openParen"></param>
+        /// <param name="expressions"></param>
+        /// <param name="closeParen"></param>
+        /// <param name="comma"></param>
+        public UserAttributeDefinition(Identifier prefix, Terminal colon, NamespaceName name, Terminal openParen, ExpressionList expressions, Terminal closeParen, Terminal comma) {
+            Prefix = prefix;
+            Colon = colon;
+            Name = name;
+            OpenParen = openParen;
+            Expressions = expressions;
+            CloseParen = closeParen;
+            Comma = comma;
+        }
+
+        /// <summary>
         ///     parameter expressions
         /// </summary>
-        public ExpressionList Expressions { get; set; }
+        public ExpressionList Expressions { get; }
 
         /// <summary>
         ///     name of the attribute
         /// </summary>
-        public NamespaceName Name { get; set; }
+        public NamespaceName Name { get; }
 
         /// <summary>
         ///     attribute prefix
         /// </summary>
-        public Identifier Prefix { get; set; }
+        public Identifier Prefix { get; }
+
+        /// <summary>
+        ///     colon symbol
+        /// </summary>
+        public Terminal Colon { get; }
+
+        /// <summary>
+        ///     open paren
+        /// </summary>
+        public Terminal OpenParen { get; }
+
+        /// <summary>
+        ///     close paren
+        /// </summary>
+        public Terminal CloseParen { get; }
+
+        /// <summary>
+        ///     comma symbol
+        /// </summary>
+        public Terminal Comma { get; }
 
         /// <summary>
         ///     accept visitor
@@ -28,9 +69,26 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="visitor">visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
-            AcceptParts(this, visitor);
+            AcceptPart(this, Prefix, visitor);
+            AcceptPart(this, Colon, visitor);
+            AcceptPart(this, Name, visitor);
+            AcceptPart(this, OpenParen, visitor);
+            AcceptPart(this, Expressions, visitor);
+            AcceptPart(this, CloseParen, visitor);
+            AcceptPart(this, Comma, visitor);
             visitor.EndVisit(this);
         }
 
+        /// <summary>
+        ///     symbol length
+        /// </summary>
+        public override int Length
+            => Prefix.GetSymbolLength() +
+               Colon.GetSymbolLength() +
+               Name.GetSymbolLength() +
+               OpenParen.GetSymbolLength() +
+               Expressions.GetSymbolLength() +
+               CloseParen.GetSymbolLength() +
+               Comma.GetSymbolLength();
     }
 }

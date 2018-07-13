@@ -417,17 +417,6 @@ namespace PasPasPasTests.Parser {
         }
 
         [TestCase]
-        public void TestAssemblyAttribute() {
-            var s = RunEmptyCstTest(p => p.ParseAssemblyAttribute(), "[assembly:Foo()]");
-            Assert.IsNotNull(s.OpenBraces);
-            Assert.IsNotNull(s.AssemblySymbol);
-            Assert.IsNotNull(s.ColonSymbol);
-            Assert.IsNotNull(s.Attribute);
-            Assert.IsNotNull(s.CloseBraces);
-            Assert.AreEqual(11, s.Length);
-        }
-
-        [TestCase]
         public void TestAsmOperand() {
             var s = RunEmptyCstTest(p => p.ParseAssemblyOperand(), "not x");
             Assert.IsNotNull(s.NotSymbol);

@@ -309,7 +309,7 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             if (Match(TokenKind.OpenBraces) && LookAhead(1, TokenKind.Assembly)) {
-                return ParseAssemblyAttribute();
+                return ParseAttributes();
             }
 
             if (Match(TokenKind.Procedure, TokenKind.Function)) {
@@ -1623,14 +1623,9 @@ namespace PasPasPas.Parsing.Parser {
 
                 SyntaxPartBase attrs = null;
                 if (Match(TokenKind.OpenBraces)) {
-                    if (LookAhead(1, TokenKind.Assembly)) {
-                        ParseAssemblyAttribute();
-                        continue;
-                    }
-                    else {
-                        attrs = ParseAttributes();
-                    }
+                    attrs = ParseAttributes();
                 }
+
                 var useClass = ContinueWith(result, TokenKind.Class);
 
                 if (Match(TokenKind.Function, TokenKind.Procedure, TokenKind.Constructor, TokenKind.Destructor, TokenKind.Operator)) {
@@ -1683,21 +1678,21 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("MethodDirectives", "{ MethodDirective }")]
         private MethodDirectives ParseMethodDirectives() {
-            var result = new MethodDirectives();
+            using (var list = GetList<SyntaxPartBase>()) {
+                SyntaxPartBase directive;
+                do {
+                    directive = AddToList(list, ParseMethodDirective());
+                } while (directive != null);
 
-            SyntaxPartBase directive;
-            do {
-                directive = ParseMethodDirective(result);
-            } while (directive != null);
-
-            return result;
+                return new MethodDirectives(GetFixedArray(list));
+            }
         }
 
         #endregion
         #region ParseMethodDirective
 
         [Rule("MethodDirective", "ReintroduceDirective | OverloadDirective | InlineDirective | BindingDirective | AbstractDirective | InlineDirective | CallConvention | HintingDirective | DispIdDirective")]
-        private SyntaxPartBase ParseMethodDirective(IExtendableSyntaxPart parent) {
+        private SyntaxPartBase ParseMethodDirective() {
 
             if (Match(TokenKind.Reintroduce))
                 return ParseReintroduceDirective();
@@ -1902,25 +1897,6 @@ namespace PasPasPas.Parsing.Parser {
                 result.ResultType = ParseTypeSpecification();
             }
             return result;
-        }
-
-        #endregion
-        #region ParseAssemblyAttribute
-
-        /// <summary>
-        ///     parse assembly attribute
-        /// </summary>
-        /// <returns></returns>
-
-        [Rule("AssemblyAttribute", "'[' 'assembly' ':' Attribute ']'")]
-        public AssemblyAttributeDeclaration ParseAssemblyAttribute() {
-            return new AssemblyAttributeDeclaration(
-                ContinueWithOrMissing(TokenKind.OpenBraces),
-                ContinueWithOrMissing(TokenKind.Assembly),
-                ContinueWithOrMissing(TokenKind.Colon),
-                ParseAttribute(null),
-                ContinueWithOrMissing(TokenKind.CloseBraces)
-            );
         }
 
         #endregion
@@ -3976,62 +3952,71 @@ namespace PasPasPas.Parsing.Parser {
         #endregion
         #region ParseAttributes
 
-        [Rule("Attributes", "{ '[' Attribute | AssemblyAttribue ']' }")]
-        private UserAttributes ParseAttributes(UserAttributes result = null) {
-            while (Match(TokenKind.OpenBraces)) {
-
-                if (result == null) {
-                    result = new UserAttributes();
+        [Rule("Attributes", "{ '[' AttributeSet | AssemblyAttribue ']' }")]
+        private UserAttributes ParseAttributes() {
+            using (var list = GetList<SyntaxPartBase>()) {
+                while (Match(TokenKind.OpenBraces)) {
+                    AddToList(list, ParseAttributeSet());
                 }
 
-                if (LookAhead(1, TokenKind.Assembly)) {
-                    ParseAssemblyAttribute();
-                }
-                else {
-                    ContinueWithOrMissing(result, TokenKind.OpenBraces);
-                    do {
-                        ParseAttribute(result);
-                    } while (ContinueWith(result, TokenKind.Comma));
-                    ContinueWithOrMissing(result, TokenKind.CloseBraces);
-                }
+                return new UserAttributes(GetFixedArray(list));
             }
-            return default;
         }
 
         #endregion
-        #region ParseAttribute
+        #region ParseAttributeSet
+
+        [Rule("AttributeSet", " '[' Attribute { ',' Attribute } ']' ")]
+        public UserAttributeSet ParseAttributeSet() {
+            var openBraces = ContinueWith(TokenKind.OpenBraces);
+            using (var list = GetList<UserAttributeDefinition>()) {
+                var item = default(UserAttributeDefinition);
+
+                do {
+                    item = AddToList(list, ParseAttribute(true));
+                } while (item != default && item.Comma != default);
+
+                var closeBraces = ContinueWith(TokenKind.CloseBraces);
+
+                return new UserAttributeSet(openBraces, GetFixedArray(list), closeBraces);
+            }
+        }
 
         [Rule("Attribute", " [ 'Result' ':' ] NamespaceName [ '(' Expressions ')' ]")]
-        private UserAttributeDefinition ParseAttribute(IExtendableSyntaxPart parent) {
-            var result = new UserAttributeDefinition();
+        private UserAttributeDefinition ParseAttribute(bool allowComma) {
 
-            if (parent != null)
-                parent.Add(result);
+            var prefix = default(Identifier);
+            var colon = default(Terminal);
+
 
             if (LookAhead(1, TokenKind.Colon)) {
-                result.Prefix = RequireIdentifier(true);
-                ContinueWith(result, TokenKind.Colon);
+                prefix = RequireIdentifier(true);
+                colon = ContinueWith(TokenKind.Colon);
             }
 
-            result.Name = ParseNamespaceName();
+            var name = ParseNamespaceName();
+            var openParen = ContinueWith(TokenKind.OpenParen);
+            var closeParen = default(Terminal);
+            var expressions = default(ExpressionList);
+            var comma = default(Terminal);
 
-            if (ContinueWith(result, TokenKind.OpenParen)) {
-                while (!Match(TokenKind.CloseParen)) {
-                    result.Expressions = ParseExpressions(result);
-                }
-                ContinueWithOrMissing(result, TokenKind.CloseParen);
+            if (openParen != default) {
+                expressions = ParseExpressions();
+                closeParen = ContinueWithOrMissing(TokenKind.CloseParen);
             }
 
-            return result;
+            if (allowComma)
+                comma = ContinueWith(TokenKind.Comma);
+
+            return new UserAttributeDefinition(prefix, colon, name, openParen, expressions, closeParen, comma);
         }
 
         #endregion
         #region Expressions
 
         [Rule("Expressions", "Expression { ',' Expression }")]
-        private ExpressionList ParseExpressions(IExtendableSyntaxPart parent) {
+        private ExpressionList ParseExpressions() {
             var result = new ExpressionList();
-            parent.Add(result);
 
             do {
                 ParseExpression();
@@ -4404,7 +4389,7 @@ namespace PasPasPas.Parsing.Parser {
 
             if (Match(TokenKind.OpenBraces)) {
                 openBraces = ContinueWith(TokenKind.OpenBraces);
-                indexExpression = ParseExpressions(null);
+                indexExpression = ParseExpressions();
                 closeBraces = ContinueWithOrMissing(TokenKind.CloseBraces);
                 return new DesignatorItem(dot, subitem, genericSuffix, openBraces, indexExpression, closeBraces);
             }
