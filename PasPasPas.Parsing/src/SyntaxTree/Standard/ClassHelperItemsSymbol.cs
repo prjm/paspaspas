@@ -13,7 +13,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// </summary>
         /// <param name="items"></param>
         public ClassHelperItemsSymbol(ImmutableArray<ClassHelperItemSymbol> items) : base(items) {
-
         }
 
         /// <summary>

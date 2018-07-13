@@ -6,6 +6,18 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     ///     class of declaration
     /// </summary>
     public class ClassOfDeclarationSymbol : StandardSyntaxTreeBase {
+
+        /// <summary>
+        ///     create a new class of symbol
+        /// </summary>
+        /// <param name="classSymbol"></param>
+        /// <param name="ofSymbol"></param>
+        /// <param name="typeName"></param>
+        public ClassOfDeclarationSymbol(Terminal classSymbol, Terminal ofSymbol, TypeName typeName) {
+            ClassSymbol = classSymbol;
+            OfSymbol = ofSymbol;
+            TypeRef = typeName;
+        }
         /// <summary>
         ///     type name
         /// </summary>

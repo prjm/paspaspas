@@ -1,4 +1,5 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Visitors;
+﻿using PasPasPas.Parsing.SyntaxTree.Utils;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
@@ -8,25 +9,39 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     public class DispIdSymbol : StandardSyntaxTreeBase {
 
         /// <summary>
+        ///     create a new dispid symbol
+        /// </summary>
+        /// <param name="dispId"></param>
+        /// <param name="expression"></param>
+        /// <param name="semicolon"></param>
+        public DispIdSymbol(Terminal dispId, Expression expression, Terminal semicolon) {
+            DispId = dispId;
+            DispExpression = expression;
+            Semicolon = semicolon;
+        }
+
+        /// <summary>
         ///     disp id expression
         /// </summary>
-        public Expression DispExpression { get; set; }
+        public Expression DispExpression { get; }
 
         /// <summary>
         ///     disp id
         /// </summary>
-        public Terminal DispId { get; set; }
+        public Terminal DispId { get; }
 
         /// <summary>
         ///     symbol length
         /// </summary>
-        public int Length
-            => DispId.Length + DispExpression.Length + Semicolon.Length;
+        public override int Length
+            => DispId.GetSymbolLength() +
+               DispExpression.GetSymbolLength() +
+               Semicolon.GetSymbolLength();
 
         /// <summary>
         ///     semicolon
         /// </summary>
-        public Terminal Semicolon { get; set; }
+        public Terminal Semicolon { get; }
 
         /// <summary>
         ///     accept visitor

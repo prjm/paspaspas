@@ -44,15 +44,30 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         ///     create a new class helper symbol
         /// </summary>
         /// <param name="classMethodSymbol"></param>
-        public ClassHelperItemSymbol(ClassMethodSymbol classMethodSymbol)
-            => MethodDeclaration = classMethodSymbol;
+        /// <param name=""></param>
+        /// <param name="attributes1"></param>
+        /// <param name="attributes2"></param>
+        /// <param name="classSymbol"></param>
+        public ClassHelperItemSymbol(ClassMethodSymbol classMethodSymbol, UserAttributes attributes1, UserAttributes attributes2, Terminal classSymbol) {
+            MethodDeclaration = classMethodSymbol;
+            Attributes1 = attributes1;
+            Attributes2 = Attributes2;
+            ClassSymbol = classSymbol;
+        }
 
         /// <summary>
         ///     create a new class helper symbol
         /// </summary>
         /// <param name="classPropertySymbol"></param>
-        public ClassHelperItemSymbol(ClassPropertySymbol classPropertySymbol)
-            => PropertyDeclaration = classPropertySymbol;
+        /// <param name="attributes1"></param>
+        /// <param name="attributes2"></param>
+        /// <param name="classSymbol"></param>
+        public ClassHelperItemSymbol(ClassPropertySymbol classPropertySymbol, UserAttributes attributes1, UserAttributes attributes2, Terminal classSymbol) {
+            PropertyDeclaration = classPropertySymbol;
+            Attributes1 = attributes1;
+            Attributes2 = Attributes2;
+            ClassSymbol = classSymbol;
+        }
 
         /// <summary>
         ///     create a new class helper item symbol
@@ -67,6 +82,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
             ClassSymbol = classSymbol;
             Attributes2 = attributes2;
             StrictSymbol = strictSymbol;
+            VisibilitySymbol = visibility;
         }
 
         /// <summary>
@@ -114,8 +130,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     visibility
         /// </summary>
-        public int Visibility { get; }
-            = TokenKind.Undefined;
+        public int Visibility
+            => VisibilitySymbol.GetSymbolKind();
 
         /// <summary>
         ///     constants
@@ -148,6 +164,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         public Terminal StrictSymbol { get; }
 
         /// <summary>
+        ///     visibility symbol
+        /// </summary>
+        public Terminal VisibilitySymbol { get; }
+
+        /// <summary>
         ///     accept visitor
         /// </summary>
         /// <param name="visitor">visitor</param>
@@ -158,6 +179,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
             AcceptPart(this, Attributes2, visitor);
             AcceptPart(this, VarSymbol, visitor);
             AcceptPart(this, StrictSymbol, visitor);
+            AcceptPart(this, VisibilitySymbol, visitor);
             AcceptPart(this, MethodDeclaration, visitor);
             AcceptPart(this, PropertyDeclaration, visitor);
             AcceptPart(this, ConstDeclaration, visitor);
@@ -176,6 +198,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
             + Attributes2.GetSymbolLength()
             + VarSymbol.GetSymbolLength()
             + StrictSymbol.GetSymbolLength()
+            + VisibilitySymbol.GetSymbolLength()
             + MethodDeclaration.GetSymbolLength()
             + PropertyDeclaration.GetSymbolLength()
             + ConstDeclaration.GetSymbolLength()

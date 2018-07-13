@@ -3073,12 +3073,12 @@ namespace PasPasPas.Parsing.Parser {
 
             if (Match(TokenKind.Procedure, TokenKind.Function, TokenKind.Constructor, TokenKind.Destructor)) {
                 mode = ClassDeclarationMode.Other;
-                return new ClassHelperItemSymbol(ParseMethodDeclaration());
+                return new ClassHelperItemSymbol(ParseMethodDeclaration(), attributes1, attributes2, classSymbol);
             }
 
             if (Match(TokenKind.Property)) {
                 mode = ClassDeclarationMode.Other;
-                return new ClassHelperItemSymbol(ParsePropertyDeclaration());
+                return new ClassHelperItemSymbol(ParsePropertyDeclaration(), attributes1, attributes2, classSymbol);
             }
 
             if (Match(TokenKind.Public, TokenKind.Protected, TokenKind.Private, TokenKind.Strict, TokenKind.Published)) {
@@ -3379,25 +3379,16 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("ClassPropertyDispInterface", "( 'readonly' ';')  | ( 'writeonly' ';' ) | DispIdDirective ")]
         public ClassPropertyDispInterfaceSymbols ParseClassPropertyDispInterface() {
-            var result = new ClassPropertyDispInterfaceSymbols() {
-                DispId = EmptyTerminal(),
-                Modifier = EmptyTerminal()
-            };
 
             if (Match(TokenKind.ReadOnly)) {
-                result.Modifier = ContinueWith(TokenKind.ReadOnly);
-                result.ReadOnly = true;
-                return result;
+                return new ClassPropertyDispInterfaceSymbols(ContinueWith(TokenKind.ReadOnly));
             }
 
             if (Match(TokenKind.WriteOnly)) {
-                result.Modifier = ContinueWith(TokenKind.WriteOnly);
-                result.WriteOnly = true;
-                return result;
+                return new ClassPropertyDispInterfaceSymbols(ContinueWith(TokenKind.WriteOnly));
             }
 
-            result.DispId = ParseDispIdDirective(false);
-            return result;
+            return new ClassPropertyDispInterfaceSymbols(ParseDispIdDirective(false));
         }
 
         #endregion
@@ -3411,11 +3402,11 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("DispIdDirective", "'dispid' Expression ';'")]
         public DispIdSymbol ParseDispIdDirective(bool requireSemi = true) {
-            return new DispIdSymbol() {
-                DispId = ContinueWithOrMissing(TokenKind.DispId),
-                DispExpression = ParseExpression(),
-                Semicolon = requireSemi ? ContinueWithOrMissing(TokenKind.Semicolon) : EmptyTerminal()
-            };
+            return new DispIdSymbol(
+                ContinueWithOrMissing(TokenKind.DispId),
+                ParseExpression(),
+                requireSemi ? ContinueWithOrMissing(TokenKind.Semicolon) : default
+            );
         }
 
         #endregion
@@ -3752,11 +3743,10 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("ClassOfDeclaration", "'class' 'of' TypeName")]
         public ClassOfDeclarationSymbol ParseClassOfDeclaration() {
-            return new ClassOfDeclarationSymbol {
-                ClassSymbol = ContinueWithOrMissing(TokenKind.Class),
-                OfSymbol = ContinueWithOrMissing(TokenKind.Of),
-                TypeRef = ParseTypeName()
-            };
+            return new ClassOfDeclarationSymbol(
+                classSymbol: ContinueWithOrMissing(TokenKind.Class),
+                ofSymbol: ContinueWithOrMissing(TokenKind.Of),
+                typeName: ParseTypeName());
         }
 
         #endregion

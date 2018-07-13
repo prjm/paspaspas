@@ -603,18 +603,63 @@ namespace PasPasPasTests.Parser {
         [TestCase]
         public void TestClassHelperItem() {
             var mode = ClassDeclarationMode.Other;
-            var s = RunEmptyCstTest(p => p.ParseClassHelperItem(ref mode));
-            Assert.IsNotNull(s.Attributes1);
-            Assert.IsNotNull(s.ClassSymbol);
-            Assert.IsNotNull(s.Attributes2);
+
+            var s = RunEmptyCstTest(p => p.ParseClassHelperItem(ref mode), "var");
+            Assert.AreEqual(mode, ClassDeclarationMode.Fields);
             Assert.IsNotNull(s.VarSymbol);
+            Assert.AreEqual(3, s.Length);
+
+            s = RunEmptyCstTest(p => p.ParseClassHelperItem(ref mode), "class var");
+            Assert.AreEqual(mode, ClassDeclarationMode.ClassFields);
+            Assert.IsNotNull(s.VarSymbol);
+            Assert.IsNotNull(s.ClassSymbol);
+            Assert.AreEqual(9, s.Length);
+
+            s = RunEmptyCstTest(p => p.ParseClassHelperItem(ref mode), "protected");
+            Assert.AreEqual(mode, ClassDeclarationMode.Fields);
+            Assert.AreEqual(s.Visibility, TokenKind.Protected);
+            Assert.IsNotNull(s.Visibility);
+            Assert.AreEqual(9, s.Length);
+
+            s = RunEmptyCstTest(p => p.ParseClassHelperItem(ref mode), "strict private");
+            Assert.AreEqual(mode, ClassDeclarationMode.Fields);
+            Assert.AreEqual(s.Visibility, TokenKind.Private);
             Assert.IsNotNull(s.StrictSymbol);
+            Assert.IsNotNull(s.Visibility);
+            Assert.AreEqual(14, s.Length);
+
+            s = RunEmptyCstTest(p => p.ParseClassHelperItem(ref mode), "function x: integer;");
+            Assert.AreEqual(mode, ClassDeclarationMode.Other);
             Assert.IsNotNull(s.MethodDeclaration);
+            Assert.AreEqual(20, s.Length);
+
+            s = RunEmptyCstTest(p => p.ParseClassHelperItem(ref mode), "class function x: integer;");
+            Assert.AreEqual(mode, ClassDeclarationMode.Other);
+            Assert.IsNotNull(s.MethodDeclaration);
+            Assert.IsNotNull(s.ClassSymbol);
+            Assert.AreEqual(26, s.Length);
+
+            s = RunEmptyCstTest(p => p.ParseClassHelperItem(ref mode), "class property x: integer read p write p;");
+            Assert.AreEqual(mode, ClassDeclarationMode.Other);
             Assert.IsNotNull(s.PropertyDeclaration);
+            Assert.IsNotNull(s.ClassSymbol);
+            Assert.AreEqual(41, s.Length);
+
+            s = RunEmptyCstTest(p => p.ParseClassHelperItem(ref mode), "const x = 4;");
+            Assert.AreEqual(mode, ClassDeclarationMode.Other);
             Assert.IsNotNull(s.ConstDeclaration);
+            Assert.AreEqual(12, s.Length);
+
+            s = RunEmptyCstTest(p => p.ParseClassHelperItem(ref mode), "type x = string;");
+            Assert.AreEqual(mode, ClassDeclarationMode.Other);
             Assert.IsNotNull(s.TypeSection);
+            Assert.AreEqual(14, s.Length);
+
+            mode = ClassDeclarationMode.Fields;
+            s = RunEmptyCstTest(p => p.ParseClassHelperItem(ref mode), "x: string;");
+            Assert.AreEqual(mode, ClassDeclarationMode.Fields);
             Assert.IsNotNull(s.FieldDeclaration);
-            Assert.AreEqual(0, s.Length);
+            Assert.AreEqual(10, s.Length);
         }
 
         [TestCase]
@@ -656,11 +701,11 @@ namespace PasPasPasTests.Parser {
 
         [TestCase]
         public void TestClassOfDeclaration() {
-            var s = RunEmptyCstTest(p => p.ParseClassOfDeclaration(), "");
+            var s = RunEmptyCstTest(p => p.ParseClassOfDeclaration(), "class of tzing");
             Assert.IsNotNull(s.ClassSymbol);
             Assert.IsNotNull(s.OfSymbol);
             Assert.IsNotNull(s.TypeRef);
-            Assert.AreEqual(0, s.Length);
+            Assert.AreEqual(14, s.Length);
         }
 
 
@@ -709,10 +754,17 @@ namespace PasPasPasTests.Parser {
 
         [TestCase]
         public void TestClassPropertyDispIntf() {
-            var s = RunEmptyCstTest(p => p.ParseClassPropertyDispInterface(), "");
+            var s = RunEmptyCstTest(p => p.ParseClassPropertyDispInterface(), "readonly");
             Assert.IsNotNull(s.Modifier);
+            Assert.AreEqual(8, s.Length);
+
+            s = RunEmptyCstTest(p => p.ParseClassPropertyDispInterface(), "writeonly");
+            Assert.IsNotNull(s.Modifier);
+            Assert.AreEqual(9, s.Length);
+
+            s = RunEmptyCstTest(p => p.ParseClassPropertyDispInterface(), "dispid 5");
             Assert.IsNotNull(s.DispId);
-            Assert.AreEqual(0, s.Length);
+            Assert.AreEqual(8, s.Length);
         }
 
         [TestCase]
