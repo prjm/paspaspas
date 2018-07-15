@@ -22,7 +22,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         ///     kind
         /// </summary>
         public int Kind
-            => Modifier.Kind;
+            => Modifier.GetSymbolKind();
 
         /// <summary>
         ///     member name

@@ -729,26 +729,56 @@ namespace PasPasPasTests.Parser {
 
         [TestCase]
         public void TestClassPropertySpecifier() {
-            var s = RunEmptyCstTest(p => p.ParseClassPropertyAccessSpecifier(), "");
+            var s = RunEmptyCstTest(p => p.ParseClassPropertyAccessSpecifier(), "read x");
             Assert.IsNotNull(s.PropertyReadWrite);
+            Assert.AreEqual(6, s.Length);
+
+            s = RunEmptyCstTest(p => p.ParseClassPropertyAccessSpecifier(), "dispid 5");
             Assert.IsNotNull(s.PropertyDispInterface);
+            Assert.AreEqual(8, s.Length);
+
+            s = RunEmptyCstTest(p => p.ParseClassPropertyAccessSpecifier(), "stored true");
             Assert.IsNotNull(s.StoredSymbol);
             Assert.IsNotNull(s.StoredProperty);
+            Assert.AreEqual(11, s.Length);
+
+            s = RunEmptyCstTest(p => p.ParseClassPropertyAccessSpecifier(), "default 4");
             Assert.IsNotNull(s.DefaultSymbol);
             Assert.IsNotNull(s.DefaultProperty);
+            Assert.AreEqual(9, s.Length);
+
+            s = RunEmptyCstTest(p => p.ParseClassPropertyAccessSpecifier(), "nodefault");
             Assert.IsNotNull(s.NoDefaultSymbol);
+            Assert.AreEqual(9, s.Length);
+
+            s = RunEmptyCstTest(p => p.ParseClassPropertyAccessSpecifier(), "implements a");
             Assert.IsNotNull(s.ImplentsSymbol);
             Assert.IsNotNull(s.ImplementsTypeId);
-            Assert.AreEqual(0, s.Length);
+            Assert.AreEqual(12, s.Length);
         }
 
 
         [TestCase]
         public void TestClassPropertyReadWrite() {
-            var s = RunEmptyCstTest(p => p.ParseClassPropertyReadWrite(), "");
+            var s = RunEmptyCstTest(p => p.ParseClassPropertyReadWrite(), "read x");
             Assert.IsNotNull(s.Modifier);
             Assert.IsNotNull(s.Member);
-            Assert.AreEqual(0, s.Length);
+            Assert.AreEqual(6, s.Length);
+
+            s = RunEmptyCstTest(p => p.ParseClassPropertyReadWrite(), "write x");
+            Assert.IsNotNull(s.Modifier);
+            Assert.IsNotNull(s.Member);
+            Assert.AreEqual(7, s.Length);
+
+            s = RunEmptyCstTest(p => p.ParseClassPropertyReadWrite(), "add x");
+            Assert.IsNotNull(s.Modifier);
+            Assert.IsNotNull(s.Member);
+            Assert.AreEqual(5, s.Length);
+
+            s = RunEmptyCstTest(p => p.ParseClassPropertyReadWrite(), "remove x");
+            Assert.IsNotNull(s.Modifier);
+            Assert.IsNotNull(s.Member);
+            Assert.AreEqual(8, s.Length);
         }
 
 

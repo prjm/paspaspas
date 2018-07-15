@@ -103,8 +103,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// </summary>
         public override int Length
             => IntValue.GetSymbolLength() +
-                Designator.GetSymbolLength();
+               Designator.GetSymbolLength() +
+               BooleanValue.GetSymbolLength();
 
-
+        /// <summary>
+        ///     boolean value
+        /// </summary>
+        public Terminal BooleanValue { get; set; }
     }
 }

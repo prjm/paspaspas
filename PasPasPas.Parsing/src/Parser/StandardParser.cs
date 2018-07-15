@@ -4262,7 +4262,8 @@ namespace PasPasPas.Parsing.Parser {
                 return result;
             }
 
-            if (ContinueWith(result, TokenKind.True)) {
+            if (Match(TokenKind.True)) {
+                result.BooleanValue = ContinueWith(TokenKind.True);
                 result.IsTrue = true;
 
                 if (Match(TokenKind.Dot))
@@ -4271,7 +4272,8 @@ namespace PasPasPas.Parsing.Parser {
                 return result;
             }
 
-            if (ContinueWith(result, TokenKind.False)) {
+            if (Match(TokenKind.False)) {
+                result.BooleanValue = ContinueWith(TokenKind.False);
                 result.IsFalse = true;
 
                 if (Match(TokenKind.Dot))

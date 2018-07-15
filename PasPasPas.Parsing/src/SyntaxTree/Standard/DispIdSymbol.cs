@@ -9,7 +9,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     public class DispIdSymbol : StandardSyntaxTreeBase {
 
         /// <summary>
-        ///     create a new dispid symbol
+        ///     create a new dispid  symbol
         /// </summary>
         /// <param name="dispId"></param>
         /// <param name="expression"></param>
