@@ -1,4 +1,5 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Visitors;
+﻿using PasPasPas.Parsing.SyntaxTree.Utils;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
@@ -8,14 +9,38 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     public class ObjectDeclaration : StandardSyntaxTreeBase {
 
         /// <summary>
+        ///     create a new object declaration symbol
+        /// </summary>
+        /// <param name="objectSymbol"></param>
+        /// <param name="classParent"></param>
+        /// <param name="items"></param>
+        /// <param name="endSymbol"></param>
+        public ObjectDeclaration(Terminal objectSymbol, ParentClass classParent, ObjectItems items, Terminal endSymbol) {
+            ObjectSymbol = objectSymbol;
+            ClassParent = classParent;
+            Items = items;
+            EndSymbol = endSymbol;
+        }
+
+        /// <summary>
         ///     parent class
         /// </summary>
-        public ParentClass ClassParent { get; set; }
+        public ParentClass ClassParent { get; }
 
         /// <summary>
         ///     object items
         /// </summary>
-        public ObjectItems Items { get; set; }
+        public ObjectItems Items { get; }
+
+        /// <summary>
+        ///     end symbol
+        /// </summary>
+        public Terminal EndSymbol { get; }
+
+        /// <summary>
+        ///     object symbol
+        /// </summary>
+        public Terminal ObjectSymbol { get; }
 
         /// <summary>
         ///     accept visitor
@@ -23,10 +48,20 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="visitor">visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
-            AcceptParts(this, visitor);
+            AcceptPart(this, ObjectSymbol, visitor);
+            AcceptPart(this, ClassParent, visitor);
+            AcceptPart(this, Items, visitor);
+            AcceptPart(this, EndSymbol, visitor);
             visitor.EndVisit(this);
         }
 
-
+        /// <summary>
+        ///     symbol length
+        /// </summary>
+        public override int Length
+            => ObjectSymbol.GetSymbolLength() +
+                ClassParent.GetSymbolLength() +
+                Items.GetSymbolLength() +
+                EndSymbol.GetSymbolLength();
     }
 }

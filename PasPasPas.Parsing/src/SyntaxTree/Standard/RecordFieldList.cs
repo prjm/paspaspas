@@ -1,11 +1,19 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Visitors;
+﻿using System.Collections.Immutable;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
     /// <summary>
     ///     record field list
     /// </summary>
-    public class RecordFieldList : StandardSyntaxTreeBase {
+    public class RecordFieldList : VariableLengthSyntaxTreeBase<RecordField> {
+
+        /// <summary>
+        ///     create a new record field list
+        /// </summary>
+        /// <param name="items"></param>
+        public RecordFieldList(ImmutableArray<RecordField> items) : base(items) {
+        }
 
         /// <summary>
         ///     accept visitor
@@ -13,10 +21,15 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="visitor">visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
-            AcceptParts(this, visitor);
+            AcceptPart(this, visitor);
             visitor.EndVisit(this);
         }
 
+        /// <summary>
+        ///     symbol length
+        /// </summary>
+        public override int Length
+            => ItemLength;
 
     }
 }

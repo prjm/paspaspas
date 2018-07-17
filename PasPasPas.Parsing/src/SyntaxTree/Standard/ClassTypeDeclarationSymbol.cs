@@ -1,4 +1,5 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Visitors;
+﻿using PasPasPas.Parsing.SyntaxTree.Utils;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
@@ -8,39 +9,88 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     public class ClassTypeDeclarationSymbol : StandardSyntaxTreeBase {
 
         /// <summary>
+        ///     create a new class type declaration symbol
+        /// </summary>
+        /// <param name="classOfDeclarationSymbol"></param>
+        public ClassTypeDeclarationSymbol(ClassOfDeclarationSymbol classOfDeclarationSymbol)
+            => ClassOf = classOfDeclarationSymbol;
+
+        /// <summary>
+        ///     create a new class type declaration symbol
+        /// </summary>
+        /// <param name="classHelperDefSymbol"></param>
+        public ClassTypeDeclarationSymbol(ClassHelperDefSymbol classHelperDefSymbol)
+            => ClassHelper = classHelperDefSymbol;
+
+        /// <summary>
+        ///     create a new class type declaration symbol
+        /// </summary>
+        /// <param name="classDeclarationSymbol"></param>
+        public ClassTypeDeclarationSymbol(ClassDeclarationSymbol classDeclarationSymbol)
+            => ClassDef = classDeclarationSymbol;
+
+        /// <summary>
+        ///     create a new class type declaration symbol
+        /// </summary>
+        /// <param name="interfaceDefinition"></param>
+        public ClassTypeDeclarationSymbol(InterfaceDefinition interfaceDefinition)
+            => InterfaceDef = interfaceDefinition;
+
+        /// <summary>
+        ///     create a new class type declaration symbol
+        /// </summary>
+        /// <param name="objectDeclaration"></param>
+        public ClassTypeDeclarationSymbol(ObjectDeclaration objectDeclaration)
+            => ObjectDecl = objectDeclaration;
+
+        /// <summary>
+        ///     create a new class type declaration symbol
+        /// </summary>
+        /// <param name="recordHelperDefinition"></param>
+        public ClassTypeDeclarationSymbol(RecordHelperDefinition recordHelperDefinition)
+            => RecordHelper = recordHelperDefinition;
+
+        /// <summary>
+        ///     create a new class declaration symbol
+        /// </summary>
+        /// <param name="recordDeclaration"></param>
+        public ClassTypeDeclarationSymbol(RecordDeclaration recordDeclaration)
+            => RecordDecl = recordDeclaration;
+
+        /// <summary>
         ///     class declaration
         /// </summary>
-        public SyntaxPartBase ClassDef { get; set; }
+        public ClassDeclarationSymbol ClassDef { get; }
 
         /// <summary>
         ///     class helper
         /// </summary>
-        public SyntaxPartBase ClassHelper { get; set; }
+        public ClassHelperDefSymbol ClassHelper { get; }
 
         /// <summary>
         ///     class of declaration
         /// </summary>
-        public SyntaxPartBase ClassOf { get; set; }
+        public ClassOfDeclarationSymbol ClassOf { get; }
 
         /// <summary>
         ///     interface definition
         /// </summary>
-        public SyntaxPartBase InterfaceDef { get; set; }
+        public InterfaceDefinition InterfaceDef { get; }
 
         /// <summary>
         ///     object declaration
         /// </summary>
-        public SyntaxPartBase ObjectDecl { get; set; }
+        public ObjectDeclaration ObjectDecl { get; }
 
         /// <summary>
         ///     record declaration
         /// </summary>
-        public SyntaxPartBase RecordDecl { get; set; }
+        public RecordDeclaration RecordDecl { get; }
 
         /// <summary>
         ///     record helper
         /// </summary>
-        public SyntaxPartBase RecordHelper { get; set; }
+        public RecordHelperDefinition RecordHelper { get; }
 
         /// <summary>
         ///     accept visitor
@@ -61,14 +111,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     symbol length
         /// </summary>
-        public int Length
-            => ClassOf.Length +
-                ClassHelper.Length +
-                ClassDef.Length +
-                InterfaceDef.Length +
-                ObjectDecl.Length +
-                RecordDecl.Length +
-                RecordHelper.Length;
+        public override int Length
+            => ClassOf.GetSymbolLength() +
+                ClassHelper.GetSymbolLength() +
+                ClassDef.GetSymbolLength() +
+                InterfaceDef.GetSymbolLength() +
+                ObjectDecl.GetSymbolLength() +
+                RecordDecl.GetSymbolLength() +
+                RecordHelper.GetSymbolLength();
 
     }
 }

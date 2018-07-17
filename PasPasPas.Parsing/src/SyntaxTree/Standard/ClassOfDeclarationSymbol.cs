@@ -1,4 +1,5 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Visitors;
+﻿using PasPasPas.Parsing.SyntaxTree.Utils;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
@@ -21,17 +22,17 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     type name
         /// </summary>
-        public TypeName TypeRef { get; set; }
+        public TypeName TypeRef { get; }
 
         /// <summary>
         ///     class symbol
         /// </summary>
-        public Terminal ClassSymbol { get; set; }
+        public Terminal ClassSymbol { get; }
 
         /// <summary>
         ///     of symbol
         /// </summary>
-        public Terminal OfSymbol { get; set; }
+        public Terminal OfSymbol { get; }
 
 
         /// <summary>
@@ -49,8 +50,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     symbol length
         /// </summary>
-        public int Length
-            => ClassSymbol.Length + OfSymbol.Length + TypeRef.Length;
+        public override int Length
+            => ClassSymbol.GetSymbolLength() +
+                OfSymbol.GetSymbolLength() +
+                TypeRef.GetSymbolLength();
 
     }
 }

@@ -24,7 +24,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="semicolon"></param>
         /// <param name="defaultSymbol"></param>
         /// <param name="semicolon2"></param>
-        public ClassPropertySymbol(Terminal propertySymbol, Identifier propertyName, Terminal openBraces, FormalParameters arrayIndex, Terminal closeBraces, Terminal colonSymbol, TypeName typeName, Terminal indexSymbol, ImmutableArray<ClassPropertySpecifierSymbol> items, Terminal semicolon, Terminal defaultSymbol, Terminal semicolon2) : base(items) {
+        public ClassPropertySymbol(Terminal propertySymbol, Identifier propertyName, Terminal openBraces, FormalParameters arrayIndex, Terminal closeBraces, Terminal colonSymbol, TypeName typeName, Terminal indexSymbol, Expression propertyIndex, ImmutableArray<ClassPropertySpecifierSymbol> items, Terminal semicolon, Terminal defaultSymbol, Terminal semicolon2) : base(items) {
             PropertySymbol = propertySymbol;
             PropertyName = propertyName;
             OpenBraces = openBraces;
@@ -33,6 +33,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
             ColonSymbol = colonSymbol;
             TypeName = typeName;
             IndexSymbol = indexSymbol;
+            PropertyIndex = propertyIndex;
             Semicolon = semicolon;
             DefaultSymbol = defaultSymbol;
             Semicolon2 = semicolon2;
@@ -51,7 +52,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     index of the property
         /// </summary>
-        public SyntaxPartBase PropertyIndex { get; }
+        public Expression PropertyIndex { get; }
 
         /// <summary>
         ///     property name
@@ -137,6 +138,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
             + ColonSymbol.GetSymbolLength()
             + TypeName.GetSymbolLength()
             + IndexSymbol.GetSymbolLength()
+            + PropertyIndex.GetSymbolLength()
             + PropertyIndex.GetSymbolLength()
             + ItemLength
             + Semicolon.GetSymbolLength()

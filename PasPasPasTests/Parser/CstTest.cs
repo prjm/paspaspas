@@ -328,15 +328,33 @@ namespace PasPasPasTests.Parser {
 
         [TestCase]
         public void TestClassDeclaration() {
-            var s = RunEmptyCstTest(p => p.ParseClassDeclaration(), "5: ;");
+            var s = RunEmptyCstTest(p => p.ParseClassDeclaration(), "class of TAbc");
             Assert.IsNotNull(s.ClassOf);
-            Assert.IsNotNull(s.ClassHelper);
+            Assert.AreEqual(13, s.Length);
+
+            s = RunEmptyCstTest(p => p.ParseClassDeclaration(), "class (TObject) end");
             Assert.IsNotNull(s.ClassDef);
+            Assert.AreEqual(19, s.Length);
+
+            s = RunEmptyCstTest(p => p.ParseClassDeclaration(), "class helper for TObject end");
+            Assert.IsNotNull(s.ClassHelper);
+            Assert.AreEqual(28, s.Length);
+
+            s = RunEmptyCstTest(p => p.ParseClassDeclaration(), "interface end");
             Assert.IsNotNull(s.InterfaceDef);
+            Assert.AreEqual(13, s.Length);
+
+            s = RunEmptyCstTest(p => p.ParseClassDeclaration(), "object end");
             Assert.IsNotNull(s.ObjectDecl);
+            Assert.AreEqual(10, s.Length);
+
+            s = RunEmptyCstTest(p => p.ParseClassDeclaration(), "record a,b,c: Integer; end");
             Assert.IsNotNull(s.RecordDecl);
+            Assert.AreEqual(26, s.Length);
+
+            s = RunEmptyCstTest(p => p.ParseClassDeclaration(), "record helper for Tabc end");
             Assert.IsNotNull(s.RecordHelper);
-            Assert.AreEqual(0, s.Length);
+            Assert.AreEqual(26, s.Length);
         }
 
         [TestCase]
@@ -711,7 +729,7 @@ namespace PasPasPasTests.Parser {
 
         [TestCase]
         public void TestClassProperty() {
-            var s = RunEmptyCstTest(p => p.ParsePropertyDeclaration(), "");
+            var s = RunEmptyCstTest(p => p.ParsePropertyDeclaration(), "property x [a: string]: string index 4 read q; default;");
             Assert.IsNotNull(s.PropertySymbol);
             Assert.IsNotNull(s.PropertyName);
             Assert.IsNotNull(s.OpenBraces);
@@ -724,7 +742,7 @@ namespace PasPasPasTests.Parser {
             Assert.IsNotNull(s.Semicolon);
             Assert.IsNotNull(s.DefaultSymbol);
             Assert.IsNotNull(s.Semicolon2);
-            Assert.AreEqual(0, s.Length);
+            Assert.AreEqual(48, s.Length);
         }
 
         [TestCase]
