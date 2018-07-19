@@ -1,4 +1,5 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Visitors;
+﻿using PasPasPas.Parsing.SyntaxTree.Utils;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
@@ -8,35 +9,51 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     public class ClosureExpressionSymbol : StandardSyntaxTreeBase {
 
         /// <summary>
+        ///     create a new closure expression
+        /// </summary>
+        /// <param name="procSymbol"></param>
+        /// <param name="parameters"></param>
+        /// <param name="colonSymbol"></param>
+        /// <param name="returnType"></param>
+        /// <param name="block"></param>
+        public ClosureExpressionSymbol(Terminal procSymbol, FormalParameterSection parameters, Terminal colonSymbol, TypeSpecification returnType, BlockSymbol block) {
+            ProcSymbol = procSymbol;
+            Parameters = parameters;
+            ColonSymbol = colonSymbol;
+            ReturnType = returnType;
+            Block = block;
+        }
+
+        /// <summary>
         /// block
         /// </summary>
-        public BlockSymbol Block { get; set; }
+        public BlockSymbol Block { get; }
 
         /// <summary>
         ///     closure kind
         /// </summary>
         public int Kind
-            => ProcSymbol.Kind;
+            => ProcSymbol.GetSymbolKind();
 
         /// <summary>
         ///     closure parameters
         /// </summary>
-        public SyntaxPartBase Parameters { get; set; }
+        public FormalParameterSection Parameters { get; }
 
         /// <summary>
         ///     closure return type
         /// </summary>
-        public SyntaxPartBase ReturnType { get; set; }
+        public TypeSpecification ReturnType { get; }
 
         /// <summary>
         ///     <c>function</c> or <c>procedure</c>
         /// </summary>
-        public Terminal ProcSymbol { get; set; }
+        public Terminal ProcSymbol { get; }
 
         /// <summary>
         ///     colon symbol
         /// </summary>
-        public Terminal ColonSymbol { get; set; }
+        public Terminal ColonSymbol { get; }
 
         /// <summary>
         ///     accept visitor
@@ -55,8 +72,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     symbol length
         /// </summary>
-        public int Length
-            => ProcSymbol.Length + Parameters.Length + ColonSymbol.Length + ReturnType.Length + Block.Length;
+        public override int Length
+            => ProcSymbol.GetSymbolLength() +
+                Parameters.GetSymbolLength() +
+                ColonSymbol.GetSymbolLength() +
+                ReturnType.GetSymbolLength() +
+                Block.GetSymbolLength();
 
     }
 }

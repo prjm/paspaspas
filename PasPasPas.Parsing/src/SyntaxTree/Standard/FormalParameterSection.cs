@@ -1,4 +1,5 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Visitors;
+﻿using PasPasPas.Parsing.SyntaxTree.Utils;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
@@ -8,9 +9,31 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     public class FormalParameterSection : StandardSyntaxTreeBase {
 
         /// <summary>
+        ///     create a new formal parameter section
+        /// </summary>
+        /// <param name="openParen"></param>
+        /// <param name="parameters"></param>
+        /// <param name="closeParen"></param>
+        public FormalParameterSection(Terminal openParen, FormalParameters parameters, Terminal closeParen) {
+            OpenParen = openParen;
+            ParameterList = parameters;
+            CloseParen = closeParen;
+        }
+
+        /// <summary>
         ///     parameter list
         /// </summary>
-        public FormalParameters ParameterList { get; set; }
+        public FormalParameters ParameterList { get; }
+
+        /// <summary>
+        ///     close paren
+        /// </summary>
+        public Terminal CloseParen { get; }
+
+        /// <summary>
+        ///     open paren
+        /// </summary>
+        public Terminal OpenParen { get; }
 
         /// <summary>
         ///     accept visitor
@@ -18,10 +41,19 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="visitor">visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
-            AcceptParts(this, visitor);
+            AcceptPart(this, OpenParen, visitor);
+            AcceptPart(this, ParameterList, visitor);
+            AcceptPart(this, CloseParen, visitor);
             visitor.EndVisit(this);
         }
 
+        /// <summary>
+        ///     symbol length
+        /// </summary>
+        public override int Length
+            => OpenParen.GetSymbolLength() +
+                ParameterList.GetSymbolLength() +
+                CloseParen.GetSymbolLength();
 
     }
 }

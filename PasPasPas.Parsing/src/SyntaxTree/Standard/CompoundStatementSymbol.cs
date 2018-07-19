@@ -1,4 +1,5 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Visitors;
+﻿using PasPasPas.Parsing.SyntaxTree.Utils;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
@@ -8,24 +9,43 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     public class CompoundStatementSymbol : StandardSyntaxTreeBase {
 
         /// <summary>
+        ///     create a new compound statement
+        /// </summary>
+        /// <param name="asmBlockSymbol"></param>
+        public CompoundStatementSymbol(AsmBlockSymbol asmBlockSymbol)
+            => AssemblerBlock = asmBlockSymbol;
+
+        /// <summary>
+        ///     create a new compound statement
+        /// </summary>
+        /// <param name="beginSymbol"></param>
+        /// <param name="statements"></param>
+        /// <param name="endSymbol"></param>
+        public CompoundStatementSymbol(Terminal beginSymbol, StatementList statements, Terminal endSymbol) {
+            BeginSymbol = beginSymbol;
+            Statements = statements;
+            EndSymbol = endSymbol;
+        }
+
+        /// <summary>
         ///     assembler block
         /// </summary>
-        public SyntaxPartBase AssemblerBlock { get; set; }
+        public AsmBlockSymbol AssemblerBlock { get; }
 
         /// <summary>
         ///     statement list
         /// </summary>
-        public SyntaxPartBase Statements { get; set; }
+        public StatementList Statements { get; }
 
         /// <summary>
         ///     begin symbol
         /// </summary>
-        public Terminal BeginSymbol { get; set; }
+        public Terminal BeginSymbol { get; }
 
         /// <summary>
         ///     end symbol
         /// </summary>
-        public Terminal EndSymbol { get; set; }
+        public Terminal EndSymbol { get; }
 
         /// <summary>
         ///     accept visitor
@@ -43,7 +63,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     symbol length
         /// </summary>
-        public int Length
-            => AssemblerBlock.Length + BeginSymbol.Length + Statements.Length + EndSymbol.Length;
+        public override int Length
+            => AssemblerBlock.GetSymbolLength() +
+                BeginSymbol.GetSymbolLength() +
+                Statements.GetSymbolLength() +
+                EndSymbol.GetSymbolLength();
     }
 }

@@ -32,7 +32,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         ///     symbol length
         /// </summary>
         public override int Length
-            => AssemblerBlock.GetSymbolLength() + Body.GetSymbolLength();
+            => AssemblerBlock.GetSymbolLength() +
+                Body.GetSymbolLength();
+
 
         /// <summary>
         ///     accept visitor

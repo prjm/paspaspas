@@ -345,7 +345,7 @@ namespace PasPasPas.Parsing.Parser {
             result.Name = RequireIdentifier();
 
             if (Match(TokenKind.OpenParen)) {
-                result.Parameters = ParseFormalParameterSection(result);
+                result.Parameters = ParseFormalParameterSection();
             }
             if (ContinueWith(result, TokenKind.Colon)) {
                 result.ResultAttributes = ParseAttributes();
@@ -558,29 +558,17 @@ namespace PasPasPas.Parsing.Parser {
         [Rule("CompoundStatement", "(('begin' [ StatementList ] 'end' ) | AsmBlock )")]
         public CompoundStatementSymbol ParseCompoundStatement() {
 
-            if (Match(TokenKind.Asm)) {
-                return new CompoundStatementSymbol {
-                    BeginSymbol = EmptyTerminal(),
-                    AssemblerBlock = ParseAsmBlock(),
-                    Statements = EmptyTerminal(),
-                    EndSymbol = EmptyTerminal()
-                };
+            if (Match(TokenKind.Asm))
+                return new CompoundStatementSymbol(ParseAsmBlock());
 
-            }
-            else {
-                var result = new CompoundStatementSymbol();
-                result.BeginSymbol = ContinueWithOrMissing(TokenKind.Begin);
-                result.AssemblerBlock = EmptyTerminal();
+            var beginSymbol = ContinueWithOrMissing(TokenKind.Begin);
+            var statements = default(StatementList);
 
-                if (!Match(TokenKind.End))
-                    result.Statements = ParseStatementList();
-                else
-                    result.Statements = EmptyTerminal();
+            if (!Match(TokenKind.End))
+                statements = ParseStatementList();
 
-
-                result.EndSymbol = ContinueWithOrMissing(TokenKind.End);
-                return result;
-            }
+            var endSymbol = ContinueWithOrMissing(TokenKind.End);
+            return new CompoundStatementSymbol(beginSymbol, statements, endSymbol);
         }
 
         #endregion
@@ -1852,7 +1840,7 @@ namespace PasPasPas.Parsing.Parser {
 
 
             if (Match(TokenKind.OpenParen)) {
-                result.Parameters = ParseFormalParameterSection(result);
+                result.Parameters = ParseFormalParameterSection();
             }
             if (ContinueWith(result, TokenKind.Colon)) {
                 result.ResultTypeAttributes = ParseAttributes();
@@ -1889,7 +1877,7 @@ namespace PasPasPas.Parsing.Parser {
             result.Name = RequireIdentifier();
 
             if (Match(TokenKind.OpenParen)) {
-                result.Parameters = ParseFormalParameterSection(result);
+                result.Parameters = ParseFormalParameterSection();
             }
 
             if (ContinueWith(result, TokenKind.Colon)) {
@@ -2342,7 +2330,7 @@ namespace PasPasPas.Parsing.Parser {
             result.Kind = result.LastTerminalKind;
 
             if (Match(TokenKind.OpenParen)) {
-                result.Parameters = ParseFormalParameterSection(result);
+                result.Parameters = ParseFormalParameterSection();
             }
 
             if (result.Kind == TokenKind.Function) {
@@ -2358,16 +2346,16 @@ namespace PasPasPas.Parsing.Parser {
         #region FormalParameterSecion
 
         [Rule("FormalParameterSection", "'(' [ FormalParameters ] ')'")]
-        private FormalParameterSection ParseFormalParameterSection(IExtendableSyntaxPart parent) {
-            var result = new FormalParameterSection();
-            InitByTerminal(result, parent, TokenKind.OpenParen);
+        private FormalParameterSection ParseFormalParameterSection() {
+            var openParen = ContinueWithOrMissing(TokenKind.OpenParen);
+            var parameters = default(FormalParameters);
 
             if (!Match(TokenKind.CloseParen)) {
-                result.ParameterList = ParseFormalParameters();
+                parameters = ParseFormalParameters();
             }
 
-            ContinueWithOrMissing(result, TokenKind.CloseParen);
-            return result;
+            var closeParen = ContinueWithOrMissing(TokenKind.CloseParen);
+            return new FormalParameterSection(openParen, parameters, closeParen);
         }
 
         #endregion
@@ -3501,61 +3489,84 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("FormalParameters", "FormalParameter { ';' FormalParameter }")]
         private FormalParameters ParseFormalParameters() {
-            var result = new FormalParameters();
 
-            do {
-                if (!Match(TokenKind.CloseParen))
-                    ParseFormalParameter(result);
-            } while (ContinueWith(result, TokenKind.Semicolon));
+            using (var list = GetList<FormalParameterDefinition>()) {
+                var item = default(FormalParameterDefinition);
 
-            return result;
+                do {
+                    if (!Match(TokenKind.CloseParen))
+                        item = AddToList(list, ParseFormalParameterDefinition(true));
+                } while (item != default && item.Semicolon != default);
+
+                return new FormalParameters(GetFixedArray(list));
+            }
         }
 
         #endregion
         #region FormalParameter
 
+        private FormalParameter ParseFormalParameter(bool allowComma, ref int kind) {
+
+            var attributes1 = default(UserAttributes);
+            var attributes2 = default(UserAttributes);
+            var parameterKind = default(Terminal);
+
+            if (Match(TokenKind.OpenBraces)) {
+                attributes1 = ParseAttributes();
+            }
+
+            if (kind < TokenKind.Undefined && Match(TokenKind.Const, TokenKind.Var, TokenKind.Out)) {
+                parameterKind = ContinueWith(TokenKind.Const, TokenKind.Var, TokenKind.Out);
+                kind = parameterKind.GetSymbolKind();
+            }
+            else if (kind < TokenKind.Undefined) {
+                kind = TokenKind.Undefined;
+            }
+
+            if (Match(TokenKind.OpenBraces)) {
+                attributes2 = ParseAttributes();
+            }
+
+            var parameterName = RequireIdentifier(true);
+            var comma = default(Terminal);
+
+            if (allowComma)
+                comma = ContinueWith(TokenKind.Comma);
+
+            return new FormalParameter(attributes1, parameterKind, attributes2, parameterName, comma);
+        }
+
         [Rule("FormalParameter", "[Attributes] [( 'const' | 'var' | 'out' )] [Attributes] IdentList [ ':' TypeDeclaration ] [ '=' Expression ]")]
-        private void ParseFormalParameter(IExtendableSyntaxPart parent) {
-            var kind = TokenKind.Undefined - 1;
-            var parentDefinition = new FormalParameterDefinition();
-            parent.Add(parentDefinition);
+        private FormalParameterDefinition ParseFormalParameterDefinition(bool allowSemicolon) {
 
-            do {
-                var result = new FormalParameter();
-                parentDefinition.Add(result);
+            using (var list = GetList<FormalParameter>()) {
+                var item = default(FormalParameter);
+                var typeDef = default(TypeSpecification);
+                var colon = default(Terminal);
+                var equals = default(Terminal);
+                var defaultValue = default(Expression);
+                var semicolon = default(Terminal);
+                var kind = TokenKind.Undefined - 1;
 
-                if (Match(TokenKind.OpenBraces)) {
-                    result.Attributes1 = ParseAttributes();
+                do {
+                    item = AddToList(list, ParseFormalParameter(true, ref kind));
+                } while (item != default && item.Comma != default);
+
+                if (Match(TokenKind.Colon)) {
+                    colon = ContinueWith(TokenKind.Colon);
+                    typeDef = ParseTypeSpecification();
                 }
 
-                if (kind < TokenKind.Undefined && ContinueWith(result, TokenKind.Const, TokenKind.Var, TokenKind.Out)) {
-                    kind = result.LastTerminalKind;
-                }
-                else if (kind < TokenKind.Undefined - 1) {
-                    kind = TokenKind.Undefined;
+                if (Match(TokenKind.EqualsSign)) {
+                    equals = ContinueWith(TokenKind.EqualsSign);
+                    defaultValue = ParseExpression();
                 }
 
-                if (kind > TokenKind.Undefined) {
-                    result.ParameterType = kind;
-                }
+                if (allowSemicolon)
+                    semicolon = ContinueWith(TokenKind.Semicolon);
 
-                if (Match(TokenKind.OpenBraces)) {
-                    result.Attributes2 = ParseAttributes();
-                }
-
-                result.ParameterName = RequireIdentifier(true);
-
-
-            } while (ContinueWith(parentDefinition, TokenKind.Comma));
-
-            if (ContinueWith(parentDefinition, TokenKind.Colon)) {
-                parentDefinition.TypeDeclaration = ParseTypeSpecification();
+                return new FormalParameterDefinition(GetFixedArray(list), colon, typeDef, equals, defaultValue, semicolon);
             }
-
-            if (ContinueWith(parentDefinition, TokenKind.EqualsSign)) {
-                parentDefinition.DefaultValue = ParseExpression();
-            }
-
         }
 
         #endregion
@@ -4468,27 +4479,22 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("ClosureExpr", "('function'|'procedure') [ FormalParameterSection ] [ ':' TypeSpecification ] Block ")]
         public ClosureExpressionSymbol ParseClosureExpression() {
-            var result = new ClosureExpressionSymbol();
-            result.ProcSymbol = ContinueWithOrMissing(TokenKind.Function, TokenKind.Procedure);
 
-            if (Match(TokenKind.OpenParen)) {
-                result.Parameters = ParseFormalParameterSection(result);
-            }
-            else {
-                result.Parameters = EmptyTerminal();
-            }
+            var procSymbol = ContinueWithOrMissing(TokenKind.Function, TokenKind.Procedure);
+            var parameters = default(FormalParameterSection);
+            var colonSymbol = default(Terminal);
+            var returnType = default(TypeSpecification);
 
-            if (result.Kind == TokenKind.Function) {
-                result.ColonSymbol = ContinueWithOrMissing(TokenKind.Colon);
-                result.ReturnType = ParseTypeSpecification();
-            }
-            else {
-                result.ColonSymbol = EmptyTerminal();
-                result.ReturnType = EmptyTerminal();
+            if (Match(TokenKind.OpenParen))
+                parameters = ParseFormalParameterSection();
+
+            if (procSymbol.GetSymbolKind() == TokenKind.Function) {
+                colonSymbol = ContinueWithOrMissing(TokenKind.Colon);
+                returnType = ParseTypeSpecification();
             }
 
-            result.Block = ParseBlock();
-            return result;
+            var block = ParseBlock();
+            return new ClosureExpressionSymbol(procSymbol, parameters, colonSymbol, returnType, block);
         }
 
         #endregion

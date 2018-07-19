@@ -817,23 +817,26 @@ namespace PasPasPasTests.Parser {
 
         [TestCase]
         public void TestClosureExpression() {
-            var s = RunEmptyCstTest(p => p.ParseClosureExpression(), "");
+            var s = RunEmptyCstTest(p => p.ParseClosureExpression(), "function (p: Integer): Boolean begin end");
             Assert.IsNotNull(s.ProcSymbol);
             Assert.IsNotNull(s.Parameters);
             Assert.IsNotNull(s.ColonSymbol);
             Assert.IsNotNull(s.ReturnType);
             Assert.IsNotNull(s.Block);
-            Assert.AreEqual(0, s.Length);
+            Assert.AreEqual(40, s.Length);
         }
 
         [TestCase]
         public void TestCompoundStatement() {
-            var s = RunEmptyCstTest(p => p.ParseCompoundStatement(), "");
+            var s = RunEmptyCstTest(p => p.ParseCompoundStatement(), "asm end");
             Assert.IsNotNull(s.AssemblerBlock);
+            Assert.AreEqual(7, s.Length);
+
+            s = RunEmptyCstTest(p => p.ParseCompoundStatement(), "begin x; end");
             Assert.IsNotNull(s.BeginSymbol);
             Assert.IsNotNull(s.Statements);
             Assert.IsNotNull(s.EndSymbol);
-            Assert.AreEqual(0, s.Length);
+            Assert.AreEqual(12, s.Length);
         }
 
 
