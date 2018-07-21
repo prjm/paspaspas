@@ -138,7 +138,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     map a constraint kind
         /// </summary>
         /// <returns></returns>
-        public static GenericConstraintKind ForGenericConstraint(ConstrainedGeneric constraint) {
+        public static GenericConstraintKind ForGenericConstraint(ConstrainedGenericSymbol constraint) {
 
             if (constraint.RecordConstraint)
                 return GenericConstraintKind.Record;

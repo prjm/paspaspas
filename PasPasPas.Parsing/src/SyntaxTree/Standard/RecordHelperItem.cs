@@ -10,7 +10,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     constant declaration
         /// </summary>
-        public ConstSection ConstDeclaration { get; set; }
+        public ConstSectionSymbol ConstDeclaration { get; set; }
 
         /// <summary>
         ///     class flag

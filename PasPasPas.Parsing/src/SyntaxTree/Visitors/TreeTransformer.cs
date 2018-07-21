@@ -22,10 +22,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         IStartVisitor<Package>, IEndVisitor<Package>,
         IStartVisitor<UnitInterfaceSymbol>, IEndVisitor<UnitInterfaceSymbol>,
         IStartVisitor<UnitImplementation>, IEndVisitor<UnitImplementation>,
-        IStartVisitor<ConstSection>, IEndVisitor<ConstSection>,
+        IStartVisitor<ConstSectionSymbol>, IEndVisitor<ConstSectionSymbol>,
         IStartVisitor<TypeSection>, IEndVisitor<TypeSection>,
         IStartVisitor<Standard.TypeDeclaration>, IEndVisitor<Standard.TypeDeclaration>,
-        IStartVisitor<ConstDeclaration>,
+        IStartVisitor<ConstDeclarationSymbol>,
         IStartVisitor<LabelDeclarationSection>, IEndVisitor<LabelDeclarationSection>,
         IStartVisitor<VarSection>, IEndVisitor<VarSection>,
         IStartVisitor<VarDeclaration>,
@@ -309,7 +309,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     start visiting a const section
         /// </summary>
         /// <param name="constSection"></param>
-        public void StartVisit(ConstSection constSection) {
+        public void StartVisit(ConstSectionSymbol constSection) {
             if (constSection.Kind == TokenKind.Const) {
                 CurrentDeclarationMode = DeclarationMode.Const;
             }
@@ -322,7 +322,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     finish visiting a constant section
         /// </summary>
         /// <param name="constSection"></param>
-        public void EndVisit(ConstSection constSection)
+        public void EndVisit(ConstSectionSymbol constSection)
             => CurrentDeclarationMode = DeclarationMode.Unknown;
 
         #endregion
@@ -375,7 +375,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     start visiting a const declaration
         /// </summary>
         /// <param name="constDeclaration"></param>
-        public void StartVisit(ConstDeclaration constDeclaration) {
+        public void StartVisit(ConstDeclarationSymbol constDeclaration) {
             var symbols = LastValue as IDeclaredSymbolTarget;
             var declaration = new ConstantDeclaration();
             InitNode(declaration, constDeclaration);
@@ -3107,7 +3107,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                     result.Add(generic, LogSource);
 
                     foreach (var constraintPart in genericPart.Parts) {
-                        if (constraintPart is Standard.ConstrainedGeneric constraint) {
+                        if (constraintPart is Standard.ConstrainedGenericSymbol constraint) {
                             var cr = new GenericConstraint();
                             InitNode(cr, node, generic);
                             cr.Kind = TokenKindMapper.ForGenericConstraint(constraint);

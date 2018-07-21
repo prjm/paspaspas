@@ -74,7 +74,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         ///     create a new class declaration item symbol
         /// </summary>
         /// <param name="constSection"></param>
-        public ClassDeclarationItemSymbol(ConstSection constSection)
+        public ClassDeclarationItemSymbol(ConstSectionSymbol constSection)
             => ConstSection = constSection;
 
         /// <summary>
@@ -122,7 +122,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     constant class section
         /// </summary>
-        public ConstSection ConstSection { get; }
+        public ConstSectionSymbol ConstSection { get; }
 
         /// <summary>
         ///     field declaration

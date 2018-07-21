@@ -842,12 +842,58 @@ namespace PasPasPasTests.Parser {
 
         [TestCase]
         public void TestConstantExpression() {
-            var s = RunEmptyCstTest(p => p.ParseConstantExpression(), "");
-            Assert.IsNotNull(s.OpenParen);
-            Assert.IsNotNull(s.CloseParen);
+            var s = RunEmptyCstTest(p => p.ParseConstantExpression(), "5");
             Assert.IsNotNull(s.Value);
-            Assert.AreEqual(0, s.Length);
+            Assert.AreEqual(1, s.Length);
+
+            s = RunEmptyCstTest(p => p.ParseConstantExpression(), "(1,3,5)");
+            Assert.IsNotNull(s.OpenParen);
+            Assert.IsNotNull(s.Items);
+            Assert.IsNotNull(s.CloseParen);
+            Assert.IsTrue(s.IsArrayConstant);
+            Assert.AreEqual(7, s.Length);
+
+            s = RunEmptyCstTest(p => p.ParseConstantExpression(), "(a: 5)");
+            Assert.IsNotNull(s.OpenParen);
+            Assert.IsNotNull(s.Items);
+            Assert.IsNotNull(s.CloseParen);
+            Assert.IsTrue(s.IsRecordConstant);
+            Assert.AreEqual(6, s.Length);
         }
 
+        [TestCase]
+        public void TestConstDeclaration() {
+            var s = RunEmptyCstTest(p => p.ParseConstDeclaration(), "[a,b] a: TA = 5 library;");
+            Assert.IsNotNull(s.Attributes);
+            Assert.IsNotNull(s.Identifier);
+            Assert.IsNotNull(s.Colon);
+            Assert.IsNotNull(s.TypeSpecification);
+            Assert.IsNotNull(s.EqualsSign);
+            Assert.IsNotNull(s.Value);
+            Assert.IsNotNull(s.Hint);
+            Assert.IsNotNull(s.Semicolon);
+            Assert.AreEqual(24, s.Length);
+        }
+
+        [TestCase]
+        public void TestConstSection() {
+            var s = RunEmptyCstTest(p => p.ParseConstSection(true), "const a = 5;");
+            Assert.IsNotNull(s.ConstSymbol);
+            Assert.IsNotNull(s.Items);
+            Assert.AreEqual(12, s.Length);
+        }
+
+        [TestCase]
+        public void TestConstrainedGeneric() {
+            var s = RunEmptyCstTest(p => p.ParseGenericConstraint(true), "constructor, ");
+            Assert.IsNotNull(s.ConstraintSymbol);
+            Assert.IsNotNull(s.Comma);
+            Assert.AreEqual(13, s.Length);
+
+            s = RunEmptyCstTest(p => p.ParseGenericConstraint(true), "fonstructor, ");
+            Assert.IsNotNull(s.ConstraintIdentifier);
+            Assert.IsNotNull(s.Comma);
+            Assert.AreEqual(13, s.Length);
+        }
     }
 }

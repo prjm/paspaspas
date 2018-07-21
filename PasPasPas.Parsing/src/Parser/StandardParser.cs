@@ -322,15 +322,21 @@ namespace PasPasPas.Parsing.Parser {
         #endregion
         #region ParseConstSection
 
+        /// <summary>
+        ///     parse a constant section
+        /// </summary>
+        /// <param name="inClassDeclaration"></param>
+        /// <returns></returns>
+
         [Rule("ConstSection", "('const' | 'resourcestring') ConstDeclaration { ConstDeclaration }")]
-        private ConstSection ParseConstSection(bool inClassDeclaration) {
+        public ConstSectionSymbol ParseConstSection(bool inClassDeclaration) {
             var symbol = ContinueWith(TokenKind.Const, TokenKind.Resourcestring);
 
-            using (var list = GetList<ConstDeclaration>()) {
+            using (var list = GetList<ConstDeclarationSymbol>()) {
                 while ((!inClassDeclaration || !(Match(TokenKind.Private, TokenKind.Protected, TokenKind.Public, TokenKind.Published, TokenKind.Automated, TokenKind.Strict))) && MatchIdentifier(TokenKind.OpenBraces)) {
                     AddToList(list, ParseConstDeclaration());
                 }
-                return new ConstSection(symbol, GetFixedArray(list));
+                return new ConstSectionSymbol(symbol, GetFixedArray(list));
             }
         }
 
@@ -2024,8 +2030,13 @@ namespace PasPasPas.Parsing.Parser {
         #endregion
         #region ParseConstDeclaration
 
+        /// <summary>
+        ///     parse a constant declaration
+        /// </summary>
+        /// <returns></returns>
+
         [Rule("ConstDeclaration", "[Attributes] Identifier [ ':' TypeSpecification ] = ConstantExpression Hints';'")]
-        private ConstDeclaration ParseConstDeclaration() {
+        public ConstDeclarationSymbol ParseConstDeclaration() {
             var attributes = ParseAttributes();
             var identifier = RequireIdentifier();
             var colon = ContinueWith(TokenKind.Colon);
@@ -2040,7 +2051,7 @@ namespace PasPasPas.Parsing.Parser {
             var hint = ParseHints(false);
             var semicolon = ContinueWithOrMissing(TokenKind.Semicolon);
 
-            return new ConstDeclaration(attributes, identifier, colon, typeSpecification, equalsSign, value, hint, semicolon);
+            return new ConstDeclarationSymbol(attributes, identifier, colon, typeSpecification, equalsSign, value, hint, semicolon);
         }
 
         #endregion
@@ -3655,8 +3666,8 @@ namespace PasPasPas.Parsing.Parser {
             var colon = ContinueWith(TokenKind.Colon);
 
             if (colon != default) {
-                using (var list = GetList<ConstrainedGeneric>()) {
-                    var item = default(ConstrainedGeneric);
+                using (var list = GetList<ConstrainedGenericSymbol>()) {
+                    var item = default(ConstrainedGenericSymbol);
 
                     do {
                         item = AddToList(list, ParseGenericConstraint(true));
@@ -3672,27 +3683,25 @@ namespace PasPasPas.Parsing.Parser {
         #endregion
         #region ParseGenericConstraint
 
-        [Rule("GenericConstraint", " 'record' | 'class' | 'constructor' | Identifier ")]
-        private ConstrainedGeneric ParseGenericConstraint(bool allowComma) {
-            var result = new ConstrainedGeneric();
+        /// <summary>
+        ///     parse a generic constraint
+        /// </summary>
+        /// <param name="allowComma"></param>
+        /// <returns></returns>
 
-            if (ContinueWith(result, TokenKind.Record)) {
-                result.RecordConstraint = true;
-            }
-            else if (ContinueWith(result, TokenKind.Class)) {
-                result.ClassConstraint = true;
-            }
-            else if (ContinueWith(result, TokenKind.Constructor)) {
-                result.ConstructorConstraint = true;
-            }
-            else {
-                result.ConstraintIdentifier = RequireIdentifier();
-            }
+        [Rule("GenericConstraint", " 'record' | 'class' | 'constructor' | Identifier ")]
+        public ConstrainedGenericSymbol ParseGenericConstraint(bool allowComma) {
+            var constraintSymbol = ContinueWith(TokenKind.Record, TokenKind.Class, TokenKind.Constructor);
+            var comma = default(Terminal);
+            var identifier = default(Identifier);
+
+            if (constraintSymbol == null)
+                identifier = RequireIdentifier();
 
             if (allowComma)
-                result.Comma = ContinueWith(TokenKind.Comma);
+                comma = ContinueWith(TokenKind.Comma);
 
-            return result;
+            return new ConstrainedGenericSymbol(constraintSymbol, identifier, comma);
         }
 
         #endregion
@@ -3740,7 +3749,7 @@ namespace PasPasPas.Parsing.Parser {
             var stringType = ContinueWith(TokenKind.String, TokenKind.AnsiString, TokenKind.ShortString, TokenKind.UnicodeString, TokenKind.WideString);
 
             if (stringType != default)
-                return new TypeName(stringType, allowComma ? ContinueWith(TokenKind.Comma) : default(Terminal));
+                return new TypeName(stringType, allowComma ? ContinueWith(TokenKind.Comma) : default);
 
             using (var list = GetList<GenericNamespaceName>()) {
                 var name = default(GenericNamespaceName);
@@ -3748,7 +3757,7 @@ namespace PasPasPas.Parsing.Parser {
                     name = AddToList(list, ParseGenericNamespaceName(true, inDesignator, true));
                 } while ((!inDesignator || !IsLastDisignatorPart()) && name?.Dot != default);
 
-                return new TypeName(GetFixedArray(list), allowComma ? ContinueWith(TokenKind.Comma) : default(Terminal));
+                return new TypeName(GetFixedArray(list), allowComma ? ContinueWith(TokenKind.Comma) : default);
             }
         }
 
@@ -4023,82 +4032,85 @@ namespace PasPasPas.Parsing.Parser {
         /// </summary>
         /// <param name="fromDesignator"></param>
         /// <param name="fromTypeConstExpression"></param>
+        /// <param name="allowComma"></param>
         /// <returns></returns>
 
         [Rule("ConstantExpression", " '(' ( RecordConstant | ConstantExpression ) ')' | Expression")]
-        public ConstantExpressionSymbol ParseConstantExpression(bool fromDesignator = false, bool fromTypeConstExpression = false) {
-            var result = new ConstantExpressionSymbol(default) {
-                OpenParen = EmptyTerminal(),
-                CloseParen = EmptyTerminal(),
-                Value = null,
-            };
+        public ConstantExpressionSymbol ParseConstantExpression(bool fromDesignator = false, bool fromTypeConstExpression = false, bool allowComma = false) {
+            var expr = default(Expression);
+            var openParen = default(Terminal);
+            var closeParen = default(Terminal);
+            var comma = default(Terminal);
 
             if (Match(TokenKind.OpenParen)) {
 
-                if (LookAhead(1, TokenKind.CloseParen) || (LookAheadIdentifier(1, new int[0], true) && (LookAhead(2, TokenKind.Colon)))) {
-                    result.IsRecordConstant = true;
-                    result.OpenParen = ContinueWithOrMissing(TokenKind.OpenParen);
+                if (LookAhead(1, TokenKind.CloseParen) || (LookAheadIdentifier(1, Array.Empty<int>(), true) && (LookAhead(2, TokenKind.Colon)))) {
+                    openParen = ContinueWithOrMissing(TokenKind.OpenParen);
                     var record = default(RecordConstantExpression);
-                    using (var list = GetList<RecordConstantExpression>()) {
+                    using (var list = GetList<SyntaxPartBase>()) {
                         do {
                             if (!Match(TokenKind.CloseParen)) {
-                                record = ParseRecordConstant(result);
-                                record.Separator = ContinueWith(TokenKind.Semicolon) ?? EmptyTerminal();
-                                AddToList(list, record);
+                                record = AddToList(list, ParseRecordConstant(true));
                             }
                             else {
                                 record = default;
                             }
-                        } while (record != default && record.Separator.Kind == TokenKind.Semicolon && Tokenizer.HasNextToken);
+                        } while (record != default && record.Separator.GetSymbolKind() == TokenKind.Semicolon && Tokenizer.HasNextToken);
+
+                        closeParen = ContinueWithOrMissing(TokenKind.CloseParen);
+                        if (allowComma)
+                            comma = ContinueWith(TokenKind.Comma);
+                        return new ConstantExpressionSymbol(openParen, GetFixedArray(list), closeParen, comma);
                     }
-                    result.CloseParen = ContinueWithOrMissing(TokenKind.CloseParen);
-                    return result;
                 }
 
                 if (IsArrayConstant() || fromDesignator) {
-                    result.IsArrayConstant = true;
-                    result.OpenParen = ContinueWithOrMissing(TokenKind.OpenParen);
-                    var expr = default(ConstantExpressionSymbol);
-                    using (var list = GetList<ConstantExpressionSymbol>()) {
+                    openParen = ContinueWithOrMissing(TokenKind.OpenParen);
+                    var constExpr = default(ConstantExpressionSymbol);
+                    using (var list = GetList<SyntaxPartBase>()) {
                         do {
                             if (!Match(TokenKind.CloseParen)) {
-                                expr = ParseConstantExpression();
-                                expr.Separator = ContinueWith(TokenKind.Comma) ?? EmptyTerminal();
-                                AddToList(list, expr);
+                                constExpr = AddToList(list, ParseConstantExpression(allowComma: true));
                             }
                             else {
-                                expr = default;
+                                constExpr = default;
                             }
-                        } while (expr != default && expr.Separator.Kind == TokenKind.Comma && Tokenizer.HasNextToken);
+                        } while (constExpr != default && constExpr.Comma.GetSymbolKind() == TokenKind.Comma && Tokenizer.HasNextToken);
+
+                        closeParen = ContinueWithOrMissing(TokenKind.CloseParen);
+                        if (allowComma)
+                            comma = ContinueWith(TokenKind.Comma);
+                        return new ConstantExpressionSymbol(openParen, closeParen, GetFixedArray(list), comma);
                     }
-                    result.CloseParen = ContinueWithOrMissing(TokenKind.CloseParen);
-                    return result;
                 }
 
                 if (!fromDesignator) {
-                    result.Value = ParseExpression();
-                    return result;
+                    expr = ParseExpression();
+                    if (allowComma)
+                        comma = ContinueWith(TokenKind.Comma);
+                    return new ConstantExpressionSymbol(expr, comma);
                 }
 
                 Unexpected();
-                return result;
+                return null;
             }
 
-            result.Value = ParseExpression(fromTypeConstExpression);
-            return result;
+            expr = ParseExpression(fromTypeConstExpression);
+            if (allowComma)
+                comma = ContinueWith(TokenKind.Comma);
+            return new ConstantExpressionSymbol(expr, comma);
         }
 
         #endregion
         #region ParseRecordConstant
 
         [Rule("RecordConstantExpression", "Identifier ':' ConstantExpression")]
-        private RecordConstantExpression ParseRecordConstant(IExtendableSyntaxPart parent) {
-            var result = new RecordConstantExpression();
-            parent.Add(result);
-            result.Name = RequireIdentifier();
-            ContinueWithOrMissing(result, TokenKind.Colon);
-            result.Value = ParseConstantExpression();
-            return result;
+        private RecordConstantExpression ParseRecordConstant(bool allowSemicolon) {
+            var name = RequireIdentifier();
+            var colon = ContinueWithOrMissing(TokenKind.Colon);
+            var value = ParseConstantExpression();
+            var semicolon = allowSemicolon ? ContinueWith(TokenKind.Semicolon) : default;
+            return new RecordConstantExpression(name, colon, value, semicolon);
         }
 
         #endregion
@@ -4579,7 +4591,7 @@ namespace PasPasPas.Parsing.Parser {
         private PoolItem<List<T>> GetList<T>() where T : class
             => Environment.ListPools.GetList<T>();
 
-        private static T AddToList<T>(PoolItem<List<T>> list, T item) where T : class {
+        private static Q AddToList<T, Q>(PoolItem<List<T>> list, Q item) where T : class where Q : T {
             if (item != default)
                 list.Item.Add(item);
             return item;

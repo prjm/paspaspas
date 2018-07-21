@@ -6,7 +6,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// <summary>
     ///     constant declaration
     /// </summary>
-    public class ConstDeclaration : StandardSyntaxTreeBase {
+    public class ConstDeclarationSymbol : StandardSyntaxTreeBase {
 
         /// <summary>
         ///     create a new const declaration
@@ -19,7 +19,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="value"></param>
         /// <param name="hint"></param>
         /// <param name="semicolon"></param>
-        public ConstDeclaration(UserAttributes attributes, Identifier identifier, Terminal colon, TypeSpecification typeSpecification, Terminal equalsSign, ConstantExpressionSymbol value, ISyntaxPart hint, Terminal semicolon) {
+        public ConstDeclarationSymbol(UserAttributes attributes, Identifier identifier, Terminal colon, TypeSpecification typeSpecification, Terminal equalsSign, ConstantExpressionSymbol value, ISyntaxPart hint, Terminal semicolon) {
             Attributes = attributes;
             Identifier = identifier;
             Colon = colon;

@@ -56,7 +56,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     const section
         /// </summary>
-        public ConstSection ConstSection { get; set; }
+        public ConstSectionSymbol ConstSection { get; set; }
 
         /// <summary>
         ///     accept visitor

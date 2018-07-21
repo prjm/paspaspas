@@ -7,14 +7,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// <summary>
     ///     section for constants
     /// </summary>
-    public class ConstSection : VariableLengthSyntaxTreeBase<ConstDeclaration> {
+    public class ConstSectionSymbol : VariableLengthSyntaxTreeBase<ConstDeclarationSymbol> {
 
         /// <summary>
         ///     create a new const section
         /// </summary>
         /// <param name="symbol"></param>
         /// <param name="items"></param>
-        public ConstSection(Terminal symbol, ImmutableArray<ConstDeclaration> items) : base(items) {
+        public ConstSectionSymbol(Terminal symbol, ImmutableArray<ConstDeclarationSymbol> items) : base(items) {
             ConstSymbol = symbol;
         }
 

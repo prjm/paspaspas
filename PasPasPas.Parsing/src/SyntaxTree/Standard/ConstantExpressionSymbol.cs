@@ -12,39 +12,69 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     create a new constant expression symbol
         /// </summary>
+        /// <param name="closeParen"></param>
         /// <param name="items"></param>
-        public ConstantExpressionSymbol(ImmutableArray<SyntaxPartBase> items) : base(items) {
+        /// <param name="openParen"></param>
+        /// <param name="comma"></param>
+        public ConstantExpressionSymbol(Terminal openParen, ImmutableArray<SyntaxPartBase> items, Terminal closeParen, Terminal comma) : base(items) {
+            IsRecordConstant = true;
+            OpenParen = openParen;
+            CloseParen = closeParen;
+            Comma = comma;
+        }
+
+        /// <summary>
+        ///     create a new constant expression symbol
+        /// </summary>
+        /// <param name="expression"></param>
+        public ConstantExpressionSymbol(Expression expression, Terminal comma) : base(ImmutableArray<SyntaxPartBase>.Empty) {
+            Value = expression;
+            Comma = comma;
+        }
+
+        /// <summary>
+        ///     create a new constant expression
+        /// </summary>
+        /// <param name="openParen"></param>
+        /// <param name="closeParen"></param>
+        /// <param name="items"></param>
+        /// <param name="comma"></param>
+        public ConstantExpressionSymbol(Terminal openParen, Terminal closeParen, ImmutableArray<SyntaxPartBase> items, Terminal comma) : base(items) {
+            IsArrayConstant = true;
+            OpenParen = openParen;
+            CloseParen = closeParen;
+            Comma = comma;
         }
 
         /// <summary>
         ///     <c>true</c> if this is an array constant
         /// </summary>
-        public bool IsArrayConstant { get; set; }
+        public bool IsArrayConstant { get; }
 
         /// <summary>
         ///     <c>true</c> if this in an record constant
         /// </summary>
-        public bool IsRecordConstant { get; set; }
+        public bool IsRecordConstant { get; }
 
         /// <summary>
         ///     value of the expression
         /// </summary>
-        public Expression Value { get; set; }
+        public Expression Value { get; }
 
         /// <summary>
         ///     open parenthesis
         /// </summary>
-        public Terminal OpenParen { get; set; }
+        public Terminal OpenParen { get; }
 
         /// <summary>
         ///     close parenthesis
         /// </summary>
-        public Terminal CloseParen { get; set; }
+        public Terminal CloseParen { get; }
 
         /// <summary>
-        ///     separator
+        ///     comma
         /// </summary>
-        public Terminal Separator { get; set; }
+        public Terminal Comma { get; }
 
         /// <summary>
         ///     accept visitor
@@ -56,6 +86,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
             AcceptPart(this, visitor);
             AcceptPart(this, CloseParen, visitor);
             AcceptPart(this, Value, visitor);
+            AcceptPart(this, Comma, visitor);
             visitor.EndVisit(this);
         }
 
@@ -66,7 +97,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
             => OpenParen.GetSymbolLength() +
                ItemLength +
                CloseParen.GetSymbolLength() +
-               Value.GetSymbolLength();
+               Value.GetSymbolLength() +
+               Comma.GetSymbolLength();
 
 
     }

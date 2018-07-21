@@ -7,14 +7,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// <summary>
     ///     generic definition part
     /// </summary>
-    public class GenericDefinitionPart : VariableLengthSyntaxTreeBase<ConstrainedGeneric> {
+    public class GenericDefinitionPart : VariableLengthSyntaxTreeBase<ConstrainedGenericSymbol> {
 
         /// <summary>
         ///     create a new generic definition part
         /// </summary>
         /// <param name="identifier"></param>
         /// <param name="terminal"></param>
-        public GenericDefinitionPart(Identifier identifier, Terminal terminal) : base(ImmutableArray<ConstrainedGeneric>.Empty) {
+        public GenericDefinitionPart(Identifier identifier, Terminal terminal) : base(ImmutableArray<ConstrainedGenericSymbol>.Empty) {
             Identifier = identifier;
             CommaOrSemicolon = terminal;
         }
@@ -24,7 +24,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// </summary>
         /// <param name="genericDefinitionPart"></param>
         /// <param name="terminal"></param>
-        public GenericDefinitionPart(GenericDefinitionPart genericDefinitionPart, Terminal terminal) : base(ImmutableArray<ConstrainedGeneric>.Empty) {
+        public GenericDefinitionPart(GenericDefinitionPart genericDefinitionPart, Terminal terminal) : base(ImmutableArray<ConstrainedGenericSymbol>.Empty) {
             DefinitionPart = genericDefinitionPart;
             CommaOrSemicolon = terminal;
 
@@ -34,7 +34,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         ///     create a new generic definition part
         /// </summary>
         /// <param name="identifier"></param>
-        public GenericDefinitionPart(Identifier identifier) : base(ImmutableArray<ConstrainedGeneric>.Empty)
+        public GenericDefinitionPart(Identifier identifier) : base(ImmutableArray<ConstrainedGenericSymbol>.Empty)
             => Identifier = identifier;
 
         /// <summary>
@@ -43,7 +43,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="identifier"></param>
         /// <param name="terminal"></param>
         /// <param name="items"></param>
-        public GenericDefinitionPart(Identifier identifier, Terminal terminal, ImmutableArray<ConstrainedGeneric> items) : base(items) {
+        public GenericDefinitionPart(Identifier identifier, Terminal terminal, ImmutableArray<ConstrainedGenericSymbol> items) : base(items) {
             Identifier = identifier;
             CommaOrSemicolon = terminal;
         }

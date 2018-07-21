@@ -30,7 +30,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         ///     create a new class helper symbol
         /// </summary>
         /// <param name="constSection"></param>
-        public ClassHelperItemSymbol(ConstSection constSection)
+        public ClassHelperItemSymbol(ConstSectionSymbol constSection)
             => ConstDeclaration = constSection;
 
         /// <summary>
