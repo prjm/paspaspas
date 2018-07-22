@@ -468,9 +468,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         public void StartVisit(VarValueSpecification varValue) {
             var varDeclaration = LastValue as VariableDeclaration;
 
-            if (varValue.Absolute != null)
+            if (varValue.ValueSymbol.GetSymbolKind() == TokenKind.Absolute)
                 varDeclaration.ValueKind = VariableValueKind.Absolute;
-            else if (varValue.InitialValue != null)
+            else if (varValue.ValueSymbol.GetSymbolKind() == TokenKind.EqualsSign)
                 varDeclaration.ValueKind = VariableValueKind.InitialValue;
         }
 
@@ -1833,7 +1833,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             var result = new ExportedMethodDeclaration();
             InitNode(result, exportsSection);
             result.Name = ExtractSymbolName(exportsSection.ExportName);
-            result.IsResident = exportsSection.Resident;
+            result.IsResident = exportsSection.Resident.GetSymbolKind() == TokenKind.Resident;
             result.HasIndex = exportsSection.IndexParameter != null;
             result.HasName = exportsSection.NameParameter != null;
             declarations.Symbols.Items.Add(new SingleDeclaredSymbol(result));

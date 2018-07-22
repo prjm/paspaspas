@@ -13,7 +13,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// </summary>
         /// <param name="body"></param>
         /// <param name="declarationSections"></param>
-        public BlockSymbol(BlockBodySymbol body, Declarations declarationSections) {
+        public BlockSymbol(BlockBodySymbol body, DeclarationsSymbol declarationSections) {
             Body = body;
             DeclarationSections = declarationSections;
         }
@@ -26,7 +26,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     declarations
         /// </summary>
-        public Declarations DeclarationSections { get; }
+        public DeclarationsSymbol DeclarationSections { get; }
 
         /// <summary>
         ///     accept visitor

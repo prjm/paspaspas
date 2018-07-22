@@ -1,21 +1,32 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Visitors;
+﻿using PasPasPas.Parsing.SyntaxTree.Utils;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
     /// <summary>
-    ///     generic type ident
+    ///     generic type identifier
     /// </summary>
     public class GenericTypeIdentifier : StandardSyntaxTreeBase {
 
         /// <summary>
+        ///     create a new generic type identifier
+        /// </summary>
+        /// <param name="identifier"></param>
+        /// <param name="genericDefinition"></param>
+        public GenericTypeIdentifier(Identifier identifier, GenericDefinition genericDefinition) {
+            Identifier = identifier;
+            GenericDefinition = genericDefinition;
+        }
+
+        /// <summary>
         ///     generic definition
         /// </summary>
-        public GenericDefinition GenericDefinition { get; set; }
+        public GenericDefinition GenericDefinition { get; }
 
         /// <summary>
         ///     type name
         /// </summary>
-        public Identifier Identifier { get; set; }
+        public Identifier Identifier { get; }
 
         /// <summary>
         ///     accept visitor
@@ -23,10 +34,16 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="visitor">visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
-            AcceptParts(this, visitor);
+            AcceptPart(this, Identifier, visitor);
+            AcceptPart(this, GenericDefinition, visitor);
             visitor.EndVisit(this);
         }
 
+        /// <summary>
+        ///     symbol length
+        /// </summary>
+        public override int Length
+            => Identifier.GetSymbolLength() + GenericDefinition.GetSymbolLength();
 
     }
 }

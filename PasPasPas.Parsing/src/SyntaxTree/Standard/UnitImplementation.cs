@@ -10,7 +10,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     declaration section
         /// </summary>
-        public Declarations DeclarationSections { get; set; }
+        public DeclarationsSymbol DeclarationSections { get; set; }
 
         /// <summary>
         ///     uses clause

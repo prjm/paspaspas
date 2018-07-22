@@ -895,5 +895,29 @@ namespace PasPasPasTests.Parser {
             Assert.IsNotNull(s.Comma);
             Assert.AreEqual(13, s.Length);
         }
+
+        [TestCase]
+        public void TestDeclarations() {
+            var s = RunEmptyCstTest(p => p.ParseDeclarationSections(), "label x;");
+            Assert.IsNotNull(s.Items[0]);
+            Assert.AreEqual(8, s.Length);
+
+            s = RunEmptyCstTest(p => p.ParseDeclarationSections(), "const x = 5;");
+            Assert.IsNotNull(s.Items[0]);
+            Assert.AreEqual(12, s.Length);
+
+            s = RunEmptyCstTest(p => p.ParseDeclarationSections(), "type TA = string;");
+            Assert.IsNotNull(s.Items[0]);
+            Assert.AreEqual(17, s.Length);
+
+            s = RunEmptyCstTest(p => p.ParseDeclarationSections(), "var a: Integer = 5;");
+            Assert.IsNotNull(s.Items[0]);
+            Assert.AreEqual(19, s.Length);
+
+            s = RunEmptyCstTest(p => p.ParseDeclarationSections(), "exports a(x: string);");
+            Assert.IsNotNull(s.Items[0]);
+            Assert.AreEqual(21, s.Length);
+
+        }
     }
 }

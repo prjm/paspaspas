@@ -1,4 +1,5 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Visitors;
+﻿using PasPasPas.Parsing.SyntaxTree.Utils;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
@@ -8,14 +9,24 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     public class VarValueSpecification : StandardSyntaxTreeBase {
 
         /// <summary>
-        ///     absolute index
+        ///     create a new variable value specification
         /// </summary>
-        public ConstantExpressionSymbol Absolute { get; set; }
+        /// <param name="symbol"></param>
+        /// <param name="expression"></param>
+        public VarValueSpecification(Terminal symbol, ConstantExpressionSymbol expression) {
+            ValueSymbol = symbol;
+            Value = expression;
+        }
 
         /// <summary>
-        ///     initial value
+        ///     value symbol
         /// </summary>
-        public ConstantExpressionSymbol InitialValue { get; set; }
+        public Terminal ValueSymbol { get; }
+
+        /// <summary>
+        ///     variable value
+        /// </summary>
+        public ConstantExpressionSymbol Value { get; }
 
         /// <summary>
         ///     accept visitor
@@ -23,11 +34,16 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="visitor">visitor to use</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
-            AcceptParts(this, visitor);
+            AcceptPart(this, ValueSymbol, visitor);
+            AcceptPart(this, Value, visitor);
             visitor.EndVisit(this);
         }
 
-
+        /// <summary>
+        ///     symbol length
+        /// </summary>
+        public override int Length
+            => ValueSymbol.GetSymbolLength() + Value.GetSymbolLength();
 
     }
 }

@@ -12,13 +12,21 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         ///     create a new label
         /// </summary>
         /// <param name="name"></param>
-        public Label(SyntaxPartBase name)
-            => LabelName = name;
+        /// <param name="comma"></param>
+        public Label(SyntaxPartBase name, Terminal comma) {
+            LabelName = name;
+            Comma = comma;
+        }
 
         /// <summary>
         ///     label name
         /// </summary>
         public SyntaxPartBase LabelName { get; }
+
+        /// <summary>
+        ///     comma
+        /// </summary>
+        public Terminal Comma { get; }
 
         /// <summary>
         ///     accept visitor
@@ -27,6 +35,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
             AcceptPart(this, LabelName, visitor);
+            AcceptPart(this, Comma, visitor);
             visitor.EndVisit(this);
         }
 
@@ -34,7 +43,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         ///     symbol length
         /// </summary>
         public override int Length
-            => LabelName.GetSymbolLength();
+            => LabelName.GetSymbolLength() + Comma.GetSymbolLength();
 
     }
 }

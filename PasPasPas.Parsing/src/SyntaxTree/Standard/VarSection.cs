@@ -1,16 +1,32 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Visitors;
+﻿using System.Collections.Immutable;
+using PasPasPas.Parsing.SyntaxTree.Utils;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
     /// <summary>
     ///     var section
     /// </summary>
-    public class VarSection : StandardSyntaxTreeBase {
+    public class VarSection : VariableLengthSyntaxTreeBase<VarDeclaration> {
+
+        /// <summary>
+        ///     create a new var section
+        /// </summary>
+        /// <param name="varSymbol"></param>
+        /// <param name="items"></param>
+        public VarSection(Terminal varSymbol, ImmutableArray<VarDeclaration> items) : base(items)
+            => VarSymbol = varSymbol;
 
         /// <summary>
         ///     section kind: var or threadvar
         /// </summary>
-        public int Kind { get; set; }
+        public int Kind
+            => VarSymbol.GetSymbolKind();
+
+        /// <summary>
+        ///     var symbol
+        /// </summary>
+        public Terminal VarSymbol { get; }
 
         /// <summary>
         ///     accept visitor
@@ -18,10 +34,16 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="visitor">visitor to use</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
-            AcceptParts(this, visitor);
+            AcceptPart(this, VarSymbol, visitor);
+            AcceptPart(this, visitor);
             visitor.EndVisit(this);
         }
 
+        /// <summary>
+        ///     symbol length
+        /// </summary>
+        public override int Length
+            => VarSymbol.GetSymbolLength() + ItemLength;
 
     }
 }
