@@ -7,13 +7,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// <summary>
     ///     designator item
     /// </summary>
-    public class DesignatorItem : VariableLengthSyntaxTreeBase<Parameter> {
+    public class DesignatorItemSymbol : VariableLengthSyntaxTreeBase<Parameter> {
 
         /// <summary>
         ///     dereference symbol
         /// </summary>
         /// <param name="dereference"></param>
-        public DesignatorItem(Terminal dereference) : base(ImmutableArray<Parameter>.Empty)
+        public DesignatorItemSymbol(Terminal dereference) : base(ImmutableArray<Parameter>.Empty)
             => Dereference = dereference;
 
         /// <summary>
@@ -25,7 +25,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="openBraces"></param>
         /// <param name="indexExpression"></param>
         /// <param name="closeBraces"></param>
-        public DesignatorItem(Terminal dotSymbol, Identifier subitem, GenericSuffix genericSuffix, Terminal openBraces, ExpressionList indexExpression, Terminal closeBraces) : base(ImmutableArray<Parameter>.Empty) {
+        public DesignatorItemSymbol(Terminal dotSymbol, Identifier subitem, GenericSuffix genericSuffix, Terminal openBraces, ExpressionList indexExpression, Terminal closeBraces) : base(ImmutableArray<Parameter>.Empty) {
             DotSymbol = dotSymbol;
             Subitem = subitem;
             SubitemGenericType = genericSuffix;
@@ -43,7 +43,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="openParen"></param>
         /// <param name="immutableArray"></param>
         /// <param name="closeParen"></param>
-        public DesignatorItem(Terminal dotSymbol, Identifier subitem, GenericSuffix genericSuffix, Terminal openParen, ImmutableArray<Parameter> immutableArray, Terminal closeParen) : base(immutableArray) {
+        public DesignatorItemSymbol(Terminal dotSymbol, Identifier subitem, GenericSuffix genericSuffix, Terminal openParen, ImmutableArray<Parameter> immutableArray, Terminal closeParen) : base(immutableArray) {
             DotSymbol = dotSymbol;
             Subitem = subitem;
             SubitemGenericType = genericSuffix;
@@ -107,7 +107,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="visitor">visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
-
+            AcceptPart(this, Dereference, visitor);
             visitor.EndVisit(this);
         }
 
@@ -115,7 +115,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         ///     symbol length
         /// </summary>
         public override int Length
-            => DotSymbol.GetSymbolLength() +
+            => Dereference.GetSymbolLength() +
+                DotSymbol.GetSymbolLength() +
                 Subitem.GetSymbolLength() +
                 SubitemGenericType.GetSymbolLength() +
                 OpenBraces.GetSymbolLength() +

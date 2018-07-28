@@ -121,7 +121,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         IStartVisitor<AsmExpressionSymbol>,
         IStartVisitor<AsmTermSymbol>,
         IStartVisitor<DesignatorStatement>,
-        IStartVisitor<DesignatorItem>,
+        IStartVisitor<DesignatorItemSymbol>,
         IStartVisitor<Parameter>,
         IStartVisitor<Standard.FormattedExpression>,
         IStartVisitor<SetSection>,
@@ -582,19 +582,20 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         public void StartVisit(Factor factor) {
 
             // unary operators
-            if (factor.AddressOf != null || factor.Not != null || factor.Plus != null || factor.Minus != null) {
+            if (factor.UnaryOperand != default) {
                 var lastExpression = LastExpression;
                 var value = new UnaryOperator();
+                var kind = factor.UnaryOperator.GetSymbolKind();
                 InitNode(value, factor);
                 lastExpression.Value = value;
 
-                if (factor.AddressOf != null)
+                if (kind == TokenKind.At)
                     value.Kind = ExpressionKind.AddressOf;
-                else if (factor.Not != null)
+                else if (kind == TokenKind.Not)
                     value.Kind = ExpressionKind.Not;
-                else if (factor.Plus != null)
+                else if (kind == TokenKind.Plus)
                     value.Kind = ExpressionKind.UnaryPlus;
-                else if (factor.Minus != null)
+                else if (kind == TokenKind.Minus)
                     value.Kind = ExpressionKind.UnaryMinus;
                 return;
             }
@@ -2189,12 +2190,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #region MethodDeclaration
 
         /// <summary>
-        ///     start visitin a method declaration
+        ///     start visiting a method declaration
         /// </summary>
         /// <param name="method"></param>
         public void StartVisit(Standard.MethodDeclaration method) {
             var unit = CurrentUnit;
-            var name = ExtractSymbolName(method.Heading.Qualifiers);
+            var name = ExtractSymbolName(method.Heading.Items);
             var result = new MethodImplementation();
             InitNode(result, method);
             result.Kind = TokenKindMapper.MapMethodKind(method.Heading.Kind);
@@ -2794,7 +2795,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     start visiting a designator item
         /// </summary>
         /// <param name="designator"></param>
-        public void StartVisit(DesignatorItem designator) {
+        public void StartVisit(DesignatorItemSymbol designator) {
             var parent = LastValue as SymbolReference;
 
             if (parent == null)

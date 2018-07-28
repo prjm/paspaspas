@@ -9,30 +9,47 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     public class UnitHeadSymbol : StandardSyntaxTreeBase {
 
         /// <summary>
+        ///     create a new unit head symbol
+        /// </summary>
+        /// <param name="terminal1"></param>
+        /// <param name="namespaceName"></param>
+        /// <param name="hintingInformationList"></param>
+        /// <param name="terminal2"></param>
+        public UnitHeadSymbol(Terminal terminal1, NamespaceName namespaceName, HintingInformationList hintingInformationList, Terminal terminal2) {
+            Unit = terminal1;
+            UnitName = namespaceName;
+            Hint = hintingInformationList;
+            Semicolon = terminal2;
+        }
+
+        /// <summary>
         ///     hinting directives
         /// </summary>
-        public ISyntaxPart Hint { get; set; }
+        public ISyntaxPart Hint { get; }
 
         /// <summary>
         ///     unit name
         /// </summary>
-        public NamespaceName UnitName { get; set; }
+        public NamespaceName UnitName { get; }
 
         /// <summary>
         ///     unit symbol
         /// </summary>
-        public Terminal Unit { get; set; }
+        public Terminal Unit { get; }
 
         /// <summary>
         ///     semicolon
         /// </summary>
-        public Terminal Semicolon { get; set; }
+        public Terminal Semicolon { get; }
 
         /// <summary>
         ///     symbol length
         /// </summary>
-        public int Length
-            => Unit.Length + UnitName.Length + Hint.Length + Semicolon.Length;
+        public override int Length
+            => Unit.GetSymbolLength() +
+                UnitName.GetSymbolLength() +
+                Hint.GetSymbolLength() +
+                Semicolon.GetSymbolLength();
 
         /// <summary>
         ///     accept visitor

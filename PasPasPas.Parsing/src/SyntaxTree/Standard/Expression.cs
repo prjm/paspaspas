@@ -9,25 +9,55 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     public class Expression : StandardSyntaxTreeBase {
 
         /// <summary>
+        ///     create a new expression object
+        /// </summary>
+        /// <param name="closureExpression"></param>
+        /// <param name="comma"></param>
+        public Expression(ClosureExpressionSymbol closureExpression, Terminal comma) {
+            ClosureExpression = closureExpression;
+            Comma = comma;
+        }
+
+        /// <summary>
+        ///     create a new expression
+        /// </summary>
+        /// <param name="leftOperand"></param>
+        public Expression(SimpleExpression leftOperand)
+            => LeftOperand = leftOperand;
+
+        /// <summary>
+        ///     create a new expression
+        /// </summary>
+        /// <param name="leftOperand"></param>
+        /// <param name="operator"></param>
+        /// <param name="rightOperand"></param>
+        /// <param name="comma"></param>
+        public Expression(SimpleExpression leftOperand, Terminal @operator, SimpleExpression rightOperand, Terminal comma) : this(leftOperand) {
+            Operator = @operator;
+            RightOperand = rightOperand;
+            Comma = comma;
+        }
+
+        /// <summary>
         ///     closure expression
         /// </summary>
-        public ClosureExpressionSymbol ClosureExpression { get; set; }
+        public ClosureExpressionSymbol ClosureExpression { get; }
 
         /// <summary>
         ///     relational operator kind
         /// </summary>
-        public int Kind { get; set; }
-            = TokenKind.Undefined;
+        public int Kind
+            => Operator.GetSymbolKind();
 
         /// <summary>
         ///     simple expression
         /// </summary>
-        public SimpleExpression LeftOperand { get; set; }
+        public SimpleExpression LeftOperand { get; }
 
         /// <summary>
         ///     right operand
         /// </summary>
-        public SimpleExpression RightOperand { get; set; }
+        public SimpleExpression RightOperand { get; }
 
         /// <summary>
         ///     accept visitor
@@ -35,17 +65,34 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="visitor">visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
-            AcceptParts(this, visitor);
+            AcceptPart(this, ClosureExpression, visitor);
+            AcceptPart(this, LeftOperand, visitor);
+            AcceptPart(this, Operator, visitor);
+            AcceptPart(this, RightOperand, visitor);
+            AcceptPart(this, Comma, visitor);
             visitor.EndVisit(this);
         }
+
+        /// <summary>
+        ///     comma
+        /// </summary>
+        public Terminal Comma { get; }
+
+        /// <summary>
+        ///     operator
+        /// </summary>
+        public Terminal Operator { get; }
 
         /// <summary>
         ///     symbol length
         /// </summary>
         public override int Length
             => ClosureExpression.GetSymbolLength() +
-               LeftOperand.GetSymbolLength() +
-               RightOperand.GetSymbolLength();
+                Comma.GetSymbolLength() +
+                LeftOperand.GetSymbolLength() +
+                Operator.GetSymbolLength() +
+                RightOperand.GetSymbolLength();
+
 
 
     }

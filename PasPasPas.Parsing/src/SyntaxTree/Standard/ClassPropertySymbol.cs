@@ -139,7 +139,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
             + TypeName.GetSymbolLength()
             + IndexSymbol.GetSymbolLength()
             + PropertyIndex.GetSymbolLength()
-            + PropertyIndex.GetSymbolLength()
             + ItemLength
             + Semicolon.GetSymbolLength()
             + DefaultSymbol.GetSymbolLength()

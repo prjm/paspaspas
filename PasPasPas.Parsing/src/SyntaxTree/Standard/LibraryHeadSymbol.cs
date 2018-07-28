@@ -31,8 +31,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     symbol length
         /// </summary>
-        public int Length
-            => LibrarySymbol.Length + LibraryName.Length + Hints.Length + Semicolon.Length;
+        public override int Length
+            => LibrarySymbol.GetSymbolLength() +
+                LibraryName.GetSymbolLength() +
+                Hints.GetSymbolLength() +
+                Semicolon.GetSymbolLength();
 
         /// <summary>
         ///     accept visitor

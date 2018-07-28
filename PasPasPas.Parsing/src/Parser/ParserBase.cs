@@ -644,6 +644,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind3"></param>
         /// <param name="tokenKind4"></param>
         /// <param name="tokenKind5"></param>
+        /// <param name="tokenKind6"></param>
         /// <returns></returns>
         protected Terminal ContinueWith(int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5, int tokenKind6) {
             var requiresIdentifier =
@@ -654,11 +655,47 @@ namespace PasPasPas.Parsing.Parser {
                 (tokenKind5 == TokenKind.Identifier) ||
                 (tokenKind6 == TokenKind.Identifier);
 
-            if (!Tokenizer.HasNextToken) {
+            if (!Tokenizer.HasNextToken)
+                return null;
+
+            if (!Match(tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5, tokenKind6) &&
+                (!requiresIdentifier ||
+                (requiresIdentifier && !AllowIdentifier()))) {
                 return null;
             }
 
-            if (!Match(tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5, tokenKind6) &&
+            var terminal = new Terminal(tokenizer.CurrentTokenSequence);
+            FetchNextToken();
+            return terminal;
+        }
+
+        /// <summary>
+        ///     continue syntax part
+        /// </summary>
+        /// <param name="tokenKind1"></param>
+        /// <param name="tokenKind2"></param>
+        /// <param name="tokenKind3"></param>
+        /// <param name="tokenKind4"></param>
+        /// <param name="tokenKind5"></param>
+        /// <param name="tokenKind6"></param>
+        /// <param name="tokenKind7"></param>
+        /// <param name="tokenKind8"></param>
+        /// <returns></returns>
+        protected Terminal ContinueWith(int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5, int tokenKind6, int tokenKind7, int tokenKind8) {
+            var requiresIdentifier =
+                (tokenKind1 == TokenKind.Identifier) ||
+                (tokenKind2 == TokenKind.Identifier) ||
+                (tokenKind3 == TokenKind.Identifier) ||
+                (tokenKind4 == TokenKind.Identifier) ||
+                (tokenKind5 == TokenKind.Identifier) ||
+                (tokenKind6 == TokenKind.Identifier) ||
+                (tokenKind7 == TokenKind.Identifier) ||
+                (tokenKind8 == TokenKind.Identifier);
+
+            if (!Tokenizer.HasNextToken)
+                return null;
+
+            if (!Match(tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5, tokenKind6, tokenKind7, tokenKind8) &&
                 (!requiresIdentifier ||
                 (requiresIdentifier && !AllowIdentifier()))) {
                 return null;

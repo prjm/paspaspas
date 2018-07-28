@@ -105,7 +105,7 @@ namespace PasPasPasTests.Parser {
             var s = RunEmptyCstTest(p => p.ParseLibraryHead());
             Assert.IsNotNull(s.LibrarySymbol);
             Assert.IsNotNull(s.LibraryName);
-            Assert.IsNotNull(s.Hints);
+            //Assert.IsNotNull(s.Hints);
             Assert.IsNotNull(s.Semicolon);
             Assert.AreEqual(0, s.Length);
         }
@@ -207,12 +207,12 @@ namespace PasPasPasTests.Parser {
         public void TestBlock() {
             var s = RunEmptyCstTest(p => p.ParseBlock(), "const x = 5");
             Assert.IsNotNull(s.DeclarationSections);
-            Assert.AreEqual(0, s.Length);
+            Assert.AreEqual(11, s.Length);
 
             s = RunEmptyCstTest(p => p.ParseBlock(), "const x = 5; begin end");
             Assert.IsNotNull(s.DeclarationSections);
             Assert.IsNotNull(s.Body);
-            Assert.AreEqual(0, s.Length);
+            Assert.AreEqual(22, s.Length);
         }
 
         [TestCase]
@@ -385,7 +385,7 @@ namespace PasPasPasTests.Parser {
 
             s = RunEmptyCstTest(p => p.ParseBlockBody() as BlockBodySymbol, "begin end");
             Assert.IsNotNull(s.Body);
-            Assert.AreEqual(0, s.Length);
+            Assert.AreEqual(9, s.Length);
         }
 
         [TestCase]
@@ -548,7 +548,7 @@ namespace PasPasPasTests.Parser {
             s = RunEmptyCstTest(p => p.ParseClassDeclarationItem(ref mode), "type x = string;");
             Assert.AreEqual(mode, ClassDeclarationMode.Other);
             Assert.IsNotNull(s.TypeSection);
-            Assert.AreEqual(14, s.Length);
+            Assert.AreEqual(16, s.Length);
 
             mode = ClassDeclarationMode.Fields;
             s = RunEmptyCstTest(p => p.ParseClassDeclarationItem(ref mode), "x: string;");
@@ -671,7 +671,7 @@ namespace PasPasPasTests.Parser {
             s = RunEmptyCstTest(p => p.ParseClassHelperItem(ref mode), "type x = string;");
             Assert.AreEqual(mode, ClassDeclarationMode.Other);
             Assert.IsNotNull(s.TypeSection);
-            Assert.AreEqual(14, s.Length);
+            Assert.AreEqual(16, s.Length);
 
             mode = ClassDeclarationMode.Fields;
             s = RunEmptyCstTest(p => p.ParseClassHelperItem(ref mode), "x: string;");
@@ -742,7 +742,7 @@ namespace PasPasPasTests.Parser {
             Assert.IsNotNull(s.Semicolon);
             Assert.IsNotNull(s.DefaultSymbol);
             Assert.IsNotNull(s.Semicolon2);
-            Assert.AreEqual(48, s.Length);
+            Assert.AreEqual(55, s.Length);
         }
 
         [TestCase]
@@ -918,6 +918,26 @@ namespace PasPasPasTests.Parser {
             Assert.IsNotNull(s.Items[0]);
             Assert.AreEqual(21, s.Length);
 
+            s = RunEmptyCstTest(p => p.ParseDeclarationSections(), "procedure TA<B>.C(const A: STRING): Integer; begin end;");
+            Assert.IsNotNull(s.Items[0]);
+            Assert.AreEqual(55, s.Length);
+
+            s = RunEmptyCstTest(p => p.ParseDeclarationSections(), "function a(const A: TA<A>): Integer; begin end;");
+            Assert.IsNotNull(s.Items[0]);
+            Assert.AreEqual(47, s.Length);
         }
+
+        [TestCase]
+        public void TestDesignatorItem() {
+            var s = RunEmptyCstTest(p => p.ParseDesignatorItem(true), "^");
+            Assert.AreEqual(1, s.Length);
+
+            s = RunEmptyCstTest(p => p.ParseDesignatorItem(true), ".a[x]");
+            Assert.AreEqual(5, s.Length);
+
+            s = RunEmptyCstTest(p => p.ParseDesignatorItem(true), ".a<b>[x]");
+            Assert.AreEqual(8, s.Length);
+        }
+
     }
 }
