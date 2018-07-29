@@ -3388,13 +3388,11 @@ namespace PasPasPas.Parsing.Parser {
         /// <returns></returns>
 
         [Rule("DispIdDirective", "'dispid' Expression ';'")]
-        public DispIdSymbol ParseDispIdDirective(bool requireSemi = true) {
-            return new DispIdSymbol(
+        public DispIdSymbol ParseDispIdDirective(bool requireSemi = true)
+            => new DispIdSymbol(
                 ContinueWithOrMissing(TokenKind.DispId),
                 ParseExpression(),
-                requireSemi ? ContinueWithOrMissing(TokenKind.Semicolon) : default
-            );
-        }
+                requireSemi ? ContinueWithOrMissing(TokenKind.Semicolon) : default);
 
         #endregion
         #region ParseClassPropertyReadWrite
@@ -4213,7 +4211,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("Factor", "'@' Factor  | 'not' Factor | '+' Factor | '-' Factor | '^' Identifier | Integer | HexNumber | Real | 'true' | 'false' | 'nil' | '(' Expression ')' | String | SetSection | Designator | TypeCast")]
         private Factor ParseFactor() {
-            var designator = default(DesignatorStatement);
+            var designator = default(DesignatorStatementSymbol);
             var unaryOperator = ContinueWith(TokenKind.At, TokenKind.Not, TokenKind.Plus, TokenKind.Minus);
 
             if (unaryOperator != default)
@@ -4295,8 +4293,13 @@ namespace PasPasPas.Parsing.Parser {
         #endregion
         #region ParseDesignator
 
+        /// <summary>
+        ///     parse a designator statement
+        /// </summary>
+        /// <returns></returns>
+
         [Rule("Designator", "[ 'inherited' ] [ NamespaceName ] { DesignatorItem }")]
-        private DesignatorStatement ParseDesignator() {
+        public DesignatorStatementSymbol ParseDesignator() {
             var inherited = ContinueWith(TokenKind.Inherited);
             var name = default(TypeName);
             var item = default(SyntaxPartBase);
@@ -4306,13 +4309,11 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             using (var list = GetList<SyntaxPartBase>()) {
-                var hasId = name != default;
                 do {
-                    item = AddToList(list, ParseDesignatorItem(hasId));
-                    hasId = hasId || (item is DesignatorItemSymbol di && di.Subitem != null);
+                    item = AddToList(list, ParseDesignatorItem());
                 } while (item != default);
 
-                return new DesignatorStatement(inherited, name, GetFixedArray(list));
+                return new DesignatorStatementSymbol(inherited, name, GetFixedArray(list));
             }
         }
 
@@ -4322,11 +4323,10 @@ namespace PasPasPas.Parsing.Parser {
         /// <summary>
         ///     parse a designator item
         /// </summary>
-        /// <param name="hasIdentifier"></param>
         /// <returns></returns>
 
         [Rule("DesignatorItem", "'^' | '.' Ident [GenericSuffix] | '[' ExpressionList ']' | '(' [ FormattedExpression  { ',' FormattedExpression } ] ')'")]
-        public SyntaxPartBase ParseDesignatorItem(bool hasIdentifier) {
+        public SyntaxPartBase ParseDesignatorItem() {
 
             if (Match(TokenKind.Circumflex))
                 return new DesignatorItemSymbol(ContinueWithOrMissing(TokenKind.Circumflex));
@@ -4340,16 +4340,9 @@ namespace PasPasPas.Parsing.Parser {
             var openParen = default(Terminal);
             var closeParen = default(Terminal);
 
-            if (!hasIdentifier && MatchIdentifier(TokenKind.String, TokenKind.ShortString, TokenKind.AnsiString, TokenKind.UnicodeString)) {
+            if (MatchIdentifier(TokenKind.String, TokenKind.ShortString, TokenKind.AnsiString, TokenKind.UnicodeString)) {
                 subitem = RequireIdentifier(true);
-            }
-
-            if (Match(TokenKind.Dot)) {
-                if (subitem == null) {
-                    dot = ContinueWithOrMissing(TokenKind.Dot);
-                    subitem = RequireIdentifier(true);
-                }
-            }
+            };
 
             if (Match(TokenKind.AngleBracketsOpen) &&
                 LookAheadIdentifier(1, new[] { TokenKind.String, TokenKind.ShortString, TokenKind.WideString, TokenKind.UnicodeString, TokenKind.AnsiString, TokenKind.Pointer }, false)) {
@@ -4369,7 +4362,7 @@ namespace PasPasPas.Parsing.Parser {
             if (Match(TokenKind.OpenParen)) {
                 //var prevDesignatorItem = parent.PartList != null && parent.PartList.Count > 0 ? parent.PartList[parent.PartList.Count - 1] as DesignatorItem : null;
                 var prevDesignatorItem = default(DesignatorItemSymbol);
-                if (!hasIdentifier && (!IsDesignator()) && ((prevDesignatorItem == null) || (prevDesignatorItem.Subitem == null))) {
+                if (!IsDesignator() && ((prevDesignatorItem == null) || (prevDesignatorItem.Subitem == null))) {
                     ContinueWithOrMissing(TokenKind.OpenParen);
                     var children = ParseConstantExpression(true);
                     ContinueWithOrMissing(TokenKind.CloseParen);
@@ -4398,6 +4391,8 @@ namespace PasPasPas.Parsing.Parser {
                     return new DesignatorItemSymbol(dot, subitem, genericSuffix, openParen, GetFixedArray(list), closeParen);
                 }
             }
+
+            dot = ContinueWith(TokenKind.Dot);
 
             if (dot != null || subitem != null || genericSuffix != null)
                 return new DesignatorItemSymbol(dot, subitem, genericSuffix, openParen, ImmutableArray<Parameter>.Empty, closeParen);
@@ -4557,8 +4552,10 @@ namespace PasPasPas.Parsing.Parser {
 
                 AddToList(list, name);
 
-                dot = ContinueWith(TokenKind.Dot);
-                AddToList(list, dot);
+                if (!inDesignator || LookAhead(2, new int[] { TokenKind.Dot })) {
+                    dot = ContinueWith(TokenKind.Dot);
+                    AddToList(list, dot);
+                }
 
                 while (name != default && LookAheadIdentifier(1, Array.Empty<int>(), true) && (!inDesignator || LookAhead(2, new int[] { TokenKind.Dot })) && dot != default) {
                     name = RequireIdentifier(true);

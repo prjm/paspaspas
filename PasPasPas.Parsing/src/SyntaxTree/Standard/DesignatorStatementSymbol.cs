@@ -7,7 +7,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// <summary>
     ///     designator
     /// </summary>
-    public class DesignatorStatement : VariableLengthSyntaxTreeBase<SyntaxPartBase> {
+    public class DesignatorStatementSymbol : VariableLengthSyntaxTreeBase<SyntaxPartBase> {
 
         /// <summary>
         ///     create a new designator statement
@@ -15,7 +15,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="inherited"></param>
         /// <param name="name"></param>
         /// <param name="immutableArray"></param>
-        public DesignatorStatement(Terminal inherited, TypeName name, ImmutableArray<SyntaxPartBase> immutableArray) : base(immutableArray) {
+        public DesignatorStatementSymbol(Terminal inherited, TypeName name, ImmutableArray<SyntaxPartBase> immutableArray) : base(immutableArray) {
             Name = name;
             Inherited = inherited;
         }

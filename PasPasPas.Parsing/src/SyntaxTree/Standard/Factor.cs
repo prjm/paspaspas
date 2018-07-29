@@ -33,7 +33,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// </summary>
         /// <param name="intValue"></param>
         /// <param name="designator"></param>
-        public Factor(StandardInteger intValue, DesignatorStatement designator) {
+        public Factor(StandardInteger intValue, DesignatorStatementSymbol designator) {
             IntValue = intValue;
             Designator = designator;
         }
@@ -43,7 +43,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// </summary>
         /// <param name="hexValue"></param>
         /// <param name="designator"></param>
-        public Factor(HexNumber hexValue, DesignatorStatement designator) {
+        public Factor(HexNumber hexValue, DesignatorStatementSymbol designator) {
             HexValue = hexValue;
             Designator = designator;
         }
@@ -53,7 +53,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// </summary>
         /// <param name="realValue"></param>
         /// <param name="designator"></param>
-        public Factor(RealNumberSymbol realValue, DesignatorStatement designator) {
+        public Factor(RealNumberSymbol realValue, DesignatorStatementSymbol designator) {
             RealValue = realValue;
             Designator = designator;
         }
@@ -63,7 +63,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// </summary>
         /// <param name="stringValue"></param>
         /// <param name="designator"></param>
-        public Factor(QuotedString stringValue, DesignatorStatement designator) {
+        public Factor(QuotedString stringValue, DesignatorStatementSymbol designator) {
             StringValue = stringValue;
             Designator = designator;
         }
@@ -73,7 +73,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// </summary>
         /// <param name="booleanValue"></param>
         /// <param name="designator"></param>
-        public Factor(Terminal booleanValue, DesignatorStatement designator) {
+        public Factor(Terminal booleanValue, DesignatorStatementSymbol designator) {
             UnaryOperator = booleanValue;
             Designator = designator;
         }
@@ -89,7 +89,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         ///     create a new factor
         /// </summary>
         /// <param name="designatorStatement"></param>
-        public Factor(DesignatorStatement designatorStatement)
+        public Factor(DesignatorStatementSymbol designatorStatement)
             => Designator = designatorStatement;
 
         /// <summary>
@@ -134,7 +134,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     designator (inherited)
         /// </summary>
-        public DesignatorStatement Designator { get; }
+        public DesignatorStatementSymbol Designator { get; }
 
         /// <summary>
         ///     hex number

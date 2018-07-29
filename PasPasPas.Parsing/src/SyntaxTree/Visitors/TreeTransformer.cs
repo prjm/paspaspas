@@ -120,7 +120,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         IStartVisitor<AsmOperandSymbol>,
         IStartVisitor<AsmExpressionSymbol>,
         IStartVisitor<AsmTermSymbol>,
-        IStartVisitor<DesignatorStatement>,
+        IStartVisitor<DesignatorStatementSymbol>,
         IStartVisitor<DesignatorItemSymbol>,
         IStartVisitor<Parameter>,
         IStartVisitor<Standard.FormattedExpression>,
@@ -2773,7 +2773,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     start visiting a designator statmenet
         /// </summary>
         /// <param name="designator"></param>
-        public void StartVisit(DesignatorStatement designator) {
+        public void StartVisit(DesignatorStatementSymbol designator) {
             var lastExpression = LastExpression;
 
             if (lastExpression == null)

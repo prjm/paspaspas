@@ -133,7 +133,7 @@ namespace PasPasPasTests.Parser {
             return tree;
         }
 
-        protected T RunEmptyCstTest<T>(Func<StandardParser, T> tester, string tokens = "") {
+        protected T RunCstTest<T>(Func<StandardParser, T> tester, string tokens = "") {
             var env = CreateEnvironment();
             var msgs = new List<ILogMessage>();
             var log = new LogTarget();

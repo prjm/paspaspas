@@ -26,7 +26,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     deisgnator part
         /// </summary>
-        public DesignatorStatement DesignatorPart { get; set; }
+        public DesignatorStatementSymbol DesignatorPart { get; set; }
 
         /// <summary>
         ///     for statement
