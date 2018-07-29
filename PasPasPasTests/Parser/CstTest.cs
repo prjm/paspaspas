@@ -70,7 +70,6 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual("library".Length, s.Length);
         }
 
-
         [TestCase]
         public void TestProgram() {
             var s = RunCstTest(p => p.ParseProgram(new FileReference(CstPath)));
@@ -960,6 +959,50 @@ namespace PasPasPasTests.Parser {
             Assert.IsNotNull(s.DispId);
             Assert.IsNotNull(s.DispExpression);
             Assert.AreEqual(8, s.Length);
+        }
+
+        [TestCase]
+        public void TestEnumValue() {
+            var s = RunCstTest(p => p.ParseEnumTypeValue(), "a");
+            Assert.IsNotNull(s.EnumName);
+            Assert.AreEqual(1, s.Length);
+
+            s = RunCstTest(p => p.ParseEnumTypeValue(), "a = 5");
+            Assert.IsNotNull(s.EnumName);
+            Assert.IsNotNull(s.EqualsSymbol);
+            Assert.IsNotNull(s.Value);
+            Assert.AreEqual(5, s.Length);
+
+            s = RunCstTest(p => p.ParseEnumTypeValue(), "a = 5,");
+            Assert.IsNotNull(s.EnumName);
+            Assert.IsNotNull(s.EqualsSymbol);
+            Assert.IsNotNull(s.Value);
+            Assert.IsNotNull(s.Comma);
+            Assert.AreEqual(6, s.Length);
+        }
+
+        [TestCase]
+        public void TestEnumTypeDef() {
+            var s = RunCstTest(p => p.ParseEnumType(), "(a,b,c)");
+            Assert.IsNotNull(s.OpenParen);
+            Assert.IsNotNull(s.Items[0]);
+            Assert.IsNotNull(s.Items[1]);
+            Assert.IsNotNull(s.Items[2]);
+            Assert.IsNotNull(s.CloseParen);
+            Assert.AreEqual(7, s.Length);
+        }
+
+        [TestCase]
+        public void TestExceptHandler() {
+            var s = RunCstTest(p => p.ParseExceptHandler(), "on e: Exception do begin end;");
+            Assert.IsNotNull(s.On);
+            Assert.IsNotNull(s.Name);
+            Assert.IsNotNull(s.Colon);
+            Assert.IsNotNull(s.HandlerType);
+            Assert.IsNotNull(s.DoSymbol);
+            Assert.IsNotNull(s.Statement);
+            Assert.IsNotNull(s.Semicolon);
+            Assert.AreEqual(29, s.Length);
         }
     }
 }

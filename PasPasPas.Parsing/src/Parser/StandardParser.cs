@@ -720,7 +720,7 @@ namespace PasPasPas.Parsing.Parser {
 
             if (Match(TokenKind.On, TokenKind.Else)) {
                 while (Match(TokenKind.On)) {
-                    ParseExceptHandler(result);
+                    ParseExceptHandler();
                 }
                 if (ContinueWith(result, TokenKind.Else)) {
                     result.ElseStatements = ParseStatementList();
@@ -737,16 +737,15 @@ namespace PasPasPas.Parsing.Parser {
         #region ParseExceptHandler
 
         [Rule("ExceptHandler", "'on' Identifier ':' NamespaceName 'do' Statement ';'")]
-        private ExceptHandler ParseExceptHandler(IExtendableSyntaxPart parent) {
-            var result = new ExceptHandler();
-            InitByTerminal(result, parent, TokenKind.On);
-            result.Name = RequireIdentifier();
-            ContinueWithOrMissing(result, TokenKind.Colon);
-            result.HandlerType = ParseTypeName();
-            ContinueWithOrMissing(result, TokenKind.Do);
-            result.Statement = ParseStatement();
-            ContinueWithOrMissing(result, TokenKind.Semicolon);
-            return result;
+        public ExceptHandlerSymbol ParseExceptHandler() {
+            var on = ContinueWithOrMissing(TokenKind.On);
+            var name = RequireIdentifier();
+            var colon = ContinueWithOrMissing(TokenKind.Colon);
+            var type = ParseTypeName();
+            var doSymbol = ContinueWithOrMissing(TokenKind.Do);
+            var statement = ParseStatement();
+            var semicolon = ContinueWithOrMissing(TokenKind.Semicolon);
+            return new ExceptHandlerSymbol(on, name, colon, type, doSymbol, statement, semicolon);
         }
 
         #endregion
@@ -994,6 +993,11 @@ namespace PasPasPas.Parsing.Parser {
 
         #endregion
         #region ParseUnitHead
+
+        /// <summary>
+        ///     parse an exception handler
+        /// </summary>
+        /// <returns></returns>
 
         [Rule("UnitHead", "'unit' NamespaceName { Hint } ';' ")]
         private UnitHeadSymbol ParseUnitHead() {
@@ -2278,32 +2282,44 @@ namespace PasPasPas.Parsing.Parser {
         #endregion
         #region EnumType
 
+        /// <summary>
+        ///     parse an enumeration type
+        /// </summary>
+        /// <returns></returns>
+
         [Rule("EnumType", "'(' EnumTypeValue { ',' EnumTypeValue } ')'")]
-        private EnumTypeDefinition ParseEnumType() {
-            var result = new EnumTypeDefinition();
-            InitByTerminal(result, null, TokenKind.OpenParen);
+        public EnumTypeDefinitionSymbol ParseEnumType() {
+            using (var list = GetList<EnumValueSymbol>()) {
+                var openParen = ContinueWithOrMissing(TokenKind.OpenParen);
+                var item = default(EnumValueSymbol);
+                do {
+                    item = AddToList(list, ParseEnumTypeValue());
+                } while (item != default && item.Comma != default);
 
-            do {
-                ParseEnumTypeValue(result);
-            } while (ContinueWith(result, TokenKind.Comma));
-
-            ContinueWithOrMissing(result, TokenKind.CloseParen);
-            return result;
+                var closeParen = ContinueWithOrMissing(TokenKind.CloseParen);
+                return new EnumTypeDefinitionSymbol(openParen, GetFixedArray(list), closeParen);
+            }
         }
 
         #endregion
         #region ParseEnumTypeValue
 
-        [Rule("EnumTypeValue", "Identifier [ '=' Expression ]")]
-        private EnumValue ParseEnumTypeValue(IExtendableSyntaxPart parent) {
-            var result = new EnumValue();
-            parent.Add(result);
+        /// <summary>
+        ///     parse an enumeration value
+        /// </summary>
+        /// <returns></returns>
 
-            result.EnumName = RequireIdentifier();
-            if (ContinueWith(result, TokenKind.EqualsSign)) {
-                result.Value = ParseExpression();
-            }
-            return result;
+        [Rule("EnumTypeValue", "Identifier [ '=' Expression ]")]
+        public EnumValueSymbol ParseEnumTypeValue() {
+            var enumName = RequireIdentifier();
+            var equals = ContinueWith(TokenKind.EqualsSign);
+            var value = default(Expression);
+
+            if (equals != default)
+                value = ParseExpression();
+
+            var comma = ContinueWith(TokenKind.Comma);
+            return new EnumValueSymbol(enumName, equals, value, comma);
         }
 
         #endregion

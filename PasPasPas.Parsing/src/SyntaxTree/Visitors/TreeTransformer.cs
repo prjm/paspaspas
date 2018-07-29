@@ -47,8 +47,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         IStartVisitor<ClassOfDeclarationSymbol>,
         IStartVisitor<TypeName>,
         IStartVisitor<SimpleType>,
-        IStartVisitor<EnumTypeDefinition>,
-        IStartVisitor<EnumValue>,
+        IStartVisitor<EnumTypeDefinitionSymbol>,
+        IStartVisitor<EnumValueSymbol>,
         IStartVisitor<ArrayIndexSymbol>,
         IStartVisitor<PointerType>,
         IStartVisitor<StringType>,
@@ -103,7 +103,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         IStartVisitor<RaiseStatement>,
         IStartVisitor<TryStatement>,
         IStartVisitor<ExceptHandlers>,
-        IStartVisitor<ExceptHandler>,
+        IStartVisitor<ExceptHandlerSymbol>,
         IStartVisitor<WithStatement>,
         IStartVisitor<ForStatement>,
         IStartVisitor<WhileStatement>,
@@ -999,7 +999,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     start visit an enum type definition
         /// </summary>
         /// <param name="type"></param>
-        public void StartVisit(EnumTypeDefinition type) {
+        public void StartVisit(EnumTypeDefinitionSymbol type) {
             var typeTarget = LastTypeDeclaration;
             var value = new EnumType();
             InitNode(value, type);
@@ -1013,7 +1013,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     visit an enum value
         /// </summary>
         /// <param name="enumValue"></param>
-        public void StartVisit(EnumValue enumValue) {
+        public void StartVisit(EnumValueSymbol enumValue) {
             if (LastValue is EnumType enumDeclaration) {
                 var value = new EnumTypeValue();
                 InitNode(value, enumValue);
@@ -2349,7 +2349,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     start visiting an exception handler
         /// </summary>
         /// <param name="exceptHandler"></param>
-        public void StartVisit(ExceptHandler exceptHandler) {
+        public void StartVisit(ExceptHandlerSymbol exceptHandler) {
             var target = LastValue as IStatementTarget;
             var result = new StructuredStatement();
             InitNode(result, exceptHandler);

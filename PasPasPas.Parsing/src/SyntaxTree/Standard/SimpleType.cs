@@ -13,7 +13,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         ///     create a new simple type
         /// </summary>
         /// <param name="enumTypeDefinition"></param>
-        public SimpleType(EnumTypeDefinition enumTypeDefinition) : base(ImmutableArray<GenericNamespaceName>.Empty)
+        public SimpleType(EnumTypeDefinitionSymbol enumTypeDefinition) : base(ImmutableArray<GenericNamespaceName>.Empty)
             => EnumType = enumTypeDefinition;
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     enumeration
         /// </summary>
-        public EnumTypeDefinition EnumType { get; }
+        public EnumTypeDefinitionSymbol EnumType { get; }
 
         /// <summary>
         ///     <c>true</c> for a new type definition
