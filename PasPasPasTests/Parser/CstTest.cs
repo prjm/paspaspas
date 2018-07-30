@@ -1004,5 +1004,31 @@ namespace PasPasPasTests.Parser {
             Assert.IsNotNull(s.Semicolon);
             Assert.AreEqual(29, s.Length);
         }
+
+        [TestCase]
+        public void TestExportedProcHeading() {
+            var s = RunCstTest(p => p.ParseExportedProcedureHeading(), "function a(var x: string): tobject; inline;");
+            Assert.IsNotNull(s.ProcSymbol);
+            Assert.IsNotNull(s.Name);
+            Assert.IsNotNull(s.Parameters);
+            Assert.IsNotNull(s.ColonSymbol);
+            Assert.IsNotNull(s.ResultType);
+            Assert.IsNotNull(s.Semicolon);
+            Assert.IsNotNull(s.Directives);
+            Assert.AreEqual(43, s.Length);
+        }
+
+        [TestCase]
+        public void TestExportItem() {
+            var s = RunCstTest(p => p.ParseExportItem(false), "a(var x: string) index 3 name '3'");
+            Assert.IsNotNull(s.ExportName);
+            Assert.IsNotNull(s.Parameters);
+            Assert.IsNotNull(s.IndexSymbol);
+            Assert.IsNotNull(s.IndexParameter);
+            Assert.IsNotNull(s.NameSymbol);
+            Assert.IsNotNull(s.NameParameter);
+            Assert.AreEqual(33, s.Length);
+        }
+
     }
 }

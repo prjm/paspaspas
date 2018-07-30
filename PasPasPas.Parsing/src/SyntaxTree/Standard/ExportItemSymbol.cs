@@ -6,7 +6,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// <summary>
     ///     exported item
     /// </summary>
-    public class ExportItem : StandardSyntaxTreeBase {
+    public class ExportItemSymbol : StandardSyntaxTreeBase {
 
         /// <summary>
         ///     create a new export item
@@ -21,7 +21,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="nameParameter"></param>
         /// <param name="resident"></param>
         /// <param name="comma"></param>
-        public ExportItem(Identifier exportName, Terminal openParen, FormalParameters parameters, Terminal closeParen, Terminal indexSymbol, Expression indexParameter, Terminal nameSymbol, Expression nameParameter, Terminal resident, Terminal comma) {
+        public ExportItemSymbol(Identifier exportName, Terminal openParen, FormalParameters parameters, Terminal closeParen, Terminal indexSymbol, Expression indexParameter, Terminal nameSymbol, Expression nameParameter, Terminal resident, Terminal comma) {
             ExportName = exportName;
             OpenParen = openParen;
             Parameters = parameters;

@@ -313,7 +313,7 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             if (Match(TokenKind.Procedure, TokenKind.Function)) {
-                return ParseExportedProcedureHeading(parent);
+                return ParseExportedProcedureHeading();
             }
 
             return null;
@@ -343,23 +343,36 @@ namespace PasPasPas.Parsing.Parser {
         #endregion
         #region ParseExportedProcedureHeading
 
-        [Rule("ExportedProcedureHeading", "")]
-        private ExportedProcedureHeading ParseExportedProcedureHeading(IExtendableSyntaxPart parent) {
-            var result = new ExportedProcedureHeading();
-            InitByTerminal(result, parent, TokenKind.Function, TokenKind.Procedure);
-            result.Kind = result.LastTerminalKind;
-            result.Name = RequireIdentifier();
+        /// <summary>
+        ///     parse an exported procedure heading
+        /// </summary>
+        /// <returns></returns>
 
-            if (Match(TokenKind.OpenParen)) {
-                result.Parameters = ParseFormalParameterSection();
+        [Rule("ExportedProcedureHeading", "")]
+        public ExportedProcedureHeadingSymbol ParseExportedProcedureHeading() {
+            var procSymbol = ContinueWith(TokenKind.Function, TokenKind.Procedure);
+            var name = RequireIdentifier();
+            var parameters = default(FormalParameterSection);
+            var colonSymbol = default(Terminal);
+            var resultAttributes = default(UserAttributes);
+            var resultType = default(TypeSpecification);
+            var semicolon = default(Terminal);
+            var directives = default(FunctionDirectives);
+
+            if (Match(TokenKind.OpenParen))
+                parameters = ParseFormalParameterSection();
+
+            colonSymbol = ContinueWith(TokenKind.Colon);
+
+            if (colonSymbol != default) {
+                resultAttributes = ParseAttributes();
+                resultType = ParseTypeSpecification();
             }
-            if (ContinueWith(result, TokenKind.Colon)) {
-                result.ResultAttributes = ParseAttributes();
-                result.ResultType = ParseTypeSpecification();
-            }
-            ContinueWithOrMissing(result, TokenKind.Semicolon);
-            result.Directives = ParseFunctionDirectives();
-            return result;
+
+            semicolon = ContinueWithOrMissing(TokenKind.Semicolon);
+            directives = ParseFunctionDirectives();
+
+            return new ExportedProcedureHeadingSymbol(procSymbol, name, parameters, colonSymbol, resultAttributes, resultType, semicolon, directives);
         }
 
         #endregion
@@ -367,19 +380,21 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("FunctionDirectives", "{ FunctionDirective } ")]
         private FunctionDirectives ParseFunctionDirectives() {
-            var result = new FunctionDirectives();
-            SyntaxPartBase directive;
-            do {
-                directive = ParseFunctionDirective(result);
-            } while (directive != null);
-            return result;
+
+            using (var list = GetList<SyntaxPartBase>()) {
+                var directive = default(SyntaxPartBase);
+                do {
+                    directive = AddToList(list, ParseFunctionDirective());
+                } while (directive != default);
+                return new FunctionDirectives(GetFixedArray(list));
+            }
         }
 
         #endregion
         #region ParseFunctionDirective
 
         [Rule("FunctionDirective", "OverloadDirective | InlineDirective | CallConvention | OldCallConvention | Hint | ExternalDirective | UnsafeDirective")]
-        private SyntaxPartBase ParseFunctionDirective(IExtendableSyntaxPart parent) {
+        private SyntaxPartBase ParseFunctionDirective() {
 
             if (Match(TokenKind.Overload))
                 return ParseOverloadDirective();
@@ -391,7 +406,7 @@ namespace PasPasPas.Parsing.Parser {
                 return ParseCallConvention();
 
             if (Match(TokenKind.Far, TokenKind.Local, TokenKind.Near)) {
-                return ParseOldCallConvention(parent);
+                return ParseOldCallConvention(null);
             }
 
             if (Match(TokenKind.Deprecated, TokenKind.Library, TokenKind.Experimental, TokenKind.Platform)) {
@@ -401,15 +416,15 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             if (Match(TokenKind.VarArgs, TokenKind.External)) {
-                return ParseExternalDirective(parent);
+                return ParseExternalDirective(null);
             }
 
             if (Match(TokenKind.Unsafe)) {
-                return ParseUnsafeDirective(parent);
+                return ParseUnsafeDirective(null);
             }
 
             if (Match(TokenKind.Forward)) {
-                return ParseForwardDirective(parent);
+                return ParseForwardDirective(null);
             }
 
             return null;
@@ -1727,15 +1742,14 @@ namespace PasPasPas.Parsing.Parser {
         /// <summary>
         ///     parse an inline function directive
         /// </summary>
-        /// <param name="parent"></param>
         /// <returns></returns>
 
         [Rule("InlineDirective", "('inline' | 'assembler' ) ';'")]
         public InlineSymbol ParseInlineDirective() {
-            return new InlineSymbol() {
-                Directive = ContinueWithOrMissing(TokenKind.Inline, TokenKind.Assembler),
-                Semicolon = ContinueWithOrMissing(TokenKind.Semicolon)
-            };
+            return new InlineSymbol(
+                directive: ContinueWithOrMissing(TokenKind.Inline, TokenKind.Assembler),
+                semicolon: ContinueWithOrMissing(TokenKind.Semicolon)
+            );
         }
 
         #endregion
@@ -1916,8 +1930,8 @@ namespace PasPasPas.Parsing.Parser {
         [Rule("ExportsSection", "'exports' ExportItem { ',' ExportItem } ';' ")]
         private ExportsSection ParseExportsSection() {
             var exports = ContinueWith(TokenKind.Exports);
-            using (var list = GetList<ExportItem>()) {
-                var item = default(ExportItem);
+            using (var list = GetList<ExportItemSymbol>()) {
+                var item = default(ExportItemSymbol);
                 do {
                     item = AddToList(list, ParseExportItem(true));
                 } while (item != default && item.Comma.GetSymbolKind() == TokenKind.Comma);
@@ -1930,8 +1944,14 @@ namespace PasPasPas.Parsing.Parser {
         #endregion
         #region ParseExportItem
 
+        /// <summary>
+        ///     parse an export item
+        /// </summary>
+        /// <param name="allowComma"></param>
+        /// <returns></returns>
+
         [Rule("ExportItem", " Identifier [ '(' FormalParameters ')' ] [ 'index' Expression ] [ 'name' Expression ]")]
-        private ExportItem ParseExportItem(bool allowComma) {
+        public ExportItemSymbol ParseExportItem(bool allowComma) {
             var exportName = RequireIdentifier();
             var openParen = default(Terminal);
             var parameters = default(FormalParameters);
@@ -1964,7 +1984,7 @@ namespace PasPasPas.Parsing.Parser {
             if (allowComma)
                 comma = ContinueWith(TokenKind.Comma);
 
-            return new ExportItem(exportName, openParen, parameters, closeParen, indexSymbol, indexParameter, nameSymbol, nameParameter, resident, comma);
+            return new ExportItemSymbol(exportName, openParen, parameters, closeParen, indexSymbol, indexParameter, nameSymbol, nameParameter, resident, comma);
         }
 
         #endregion

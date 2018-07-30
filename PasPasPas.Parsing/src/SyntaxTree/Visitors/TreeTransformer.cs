@@ -78,11 +78,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         IStartVisitor<ExternalSpecifier>,
         IStartVisitor<CallConventionSymbol>,
         IStartVisitor<BindingSymbol>,
-        IStartVisitor<ExportedProcedureHeading>,
+        IStartVisitor<ExportedProcedureHeadingSymbol>,
         IStartVisitor<UnsafeDirective>,
         IStartVisitor<ForwardDirective>,
         IStartVisitor<ExportsSection>,
-        IStartVisitor<ExportItem>,
+        IStartVisitor<ExportItemSymbol>,
         IStartVisitor<RecordItem>,
         IStartVisitor<RecordDeclaration>,
         IStartVisitor<RecordField>,
@@ -1759,7 +1759,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     start visting exported procedure headings
         /// </summary>
         /// <param name="procHeading"></param>
-        public void StartVisit(ExportedProcedureHeading procHeading) {
+        public void StartVisit(ExportedProcedureHeadingSymbol procHeading) {
             var symbols = LastValue as IDeclaredSymbolTarget;
             var result = new GlobalMethod();
             InitNode(result, procHeading);
@@ -1829,7 +1829,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     start visiting an export section
         /// </summary>
         /// <param name="exportsSection"></param>
-        public void StartVisit(ExportItem exportsSection) {
+        public void StartVisit(ExportItemSymbol exportsSection) {
             var declarations = LastValue as IDeclaredSymbolTarget;
             var result = new ExportedMethodDeclaration();
             InitNode(result, exportsSection);
