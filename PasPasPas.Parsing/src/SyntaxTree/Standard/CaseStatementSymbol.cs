@@ -17,7 +17,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="ofSymbol"></param>
         /// <param name="items"></param>
         /// <param name="endSymbol"></param>
-        public CaseStatementSymbol(Terminal caseSymbol, Expression caseExpression, Terminal ofSymbol, ImmutableArray<CaseItemSymbol> items, Terminal endSymbol) : base(items) {
+        public CaseStatementSymbol(Terminal caseSymbol, ExpressionSymbol caseExpression, Terminal ofSymbol, ImmutableArray<CaseItemSymbol> items, Terminal endSymbol) : base(items) {
             CaseSymbol = caseSymbol;
             CaseExpression = caseExpression;
             OfSymbol = ofSymbol;
@@ -34,7 +34,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="endSymbol"></param>
         /// <param name="elsePart"></param>
         /// <param name="semicolon"></param>
-        public CaseStatementSymbol(Terminal caseSymbol, Expression caseExpression, Terminal ofSymbol, ImmutableArray<CaseItemSymbol> items, Terminal elseSymbol, StatementList elsePart, Terminal semicolon, Terminal endSymbol) : base(items) {
+        public CaseStatementSymbol(Terminal caseSymbol, ExpressionSymbol caseExpression, Terminal ofSymbol, ImmutableArray<CaseItemSymbol> items, Terminal elseSymbol, StatementList elsePart, Terminal semicolon, Terminal endSymbol) : base(items) {
             CaseSymbol = caseSymbol;
             CaseExpression = caseExpression;
             OfSymbol = ofSymbol;
@@ -47,7 +47,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     case expression
         /// </summary>
-        public Expression CaseExpression { get; }
+        public ExpressionSymbol CaseExpression { get; }
 
         /// <summary>
         ///     else part

@@ -14,7 +14,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="dispId"></param>
         /// <param name="expression"></param>
         /// <param name="semicolon"></param>
-        public DispIdSymbol(Terminal dispId, Expression expression, Terminal semicolon) {
+        public DispIdSymbol(Terminal dispId, ExpressionSymbol expression, Terminal semicolon) {
             DispId = dispId;
             DispExpression = expression;
             Semicolon = semicolon;
@@ -23,7 +23,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     disp id expression
         /// </summary>
-        public Expression DispExpression { get; }
+        public ExpressionSymbol DispExpression { get; }
 
         /// <summary>
         ///     disp id

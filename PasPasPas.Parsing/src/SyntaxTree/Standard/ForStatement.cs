@@ -10,7 +10,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     iteration end
         /// </summary>
-        public Expression EndExpression { get; set; }
+        public ExpressionSymbol EndExpression { get; set; }
 
         /// <summary>
         ///     iteration kind
@@ -20,7 +20,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     iteration start
         /// </summary>
-        public Expression StartExpression { get; set; }
+        public ExpressionSymbol StartExpression { get; set; }
 
         /// <summary>
         ///     iteration statement

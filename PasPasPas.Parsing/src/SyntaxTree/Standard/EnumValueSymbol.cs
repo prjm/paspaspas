@@ -14,7 +14,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="enumName"></param>
         /// <param name="equals"></param>
         /// <param name="value"></param>
-        public EnumValueSymbol(Identifier enumName, Terminal equals, Expression value, Terminal comma) {
+        public EnumValueSymbol(Identifier enumName, Terminal equals, ExpressionSymbol value, Terminal comma) {
             EnumName = enumName;
             EqualsSymbol = equals;
             Value = value;
@@ -34,7 +34,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     value
         /// </summary>
-        public Expression Value { get; }
+        public ExpressionSymbol Value { get; }
 
         /// <summary>
         ///     comma

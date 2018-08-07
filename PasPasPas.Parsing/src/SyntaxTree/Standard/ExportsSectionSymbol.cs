@@ -7,15 +7,15 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// <summary>
     ///     exports section
     /// </summary>
-    public class ExportsSection : VariableLengthSyntaxTreeBase<ExportItemSymbol> {
+    public class ExportsSectionSymbol : VariableLengthSyntaxTreeBase<ExportItemSymbol> {
 
         /// <summary>
         ///     create a new export section
         /// </summary>
         /// <param name="exports"></param>
-        /// <param name="immutableArray"></param>
+        /// <param name="items"></param>
         /// <param name="semicolon"></param>
-        public ExportsSection(Terminal exports, ImmutableArray<ExportItemSymbol> immutableArray, Terminal semicolon) : base(immutableArray) {
+        public ExportsSectionSymbol(Terminal exports, ImmutableArray<ExportItemSymbol> items, Terminal semicolon) : base(items) {
             Exports = exports;
             Semicolon = semicolon;
         }

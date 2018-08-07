@@ -6,14 +6,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// <summary>
     ///     expression
     /// </summary>
-    public class Expression : StandardSyntaxTreeBase {
+    public class ExpressionSymbol : StandardSyntaxTreeBase {
 
         /// <summary>
         ///     create a new expression object
         /// </summary>
         /// <param name="closureExpression"></param>
         /// <param name="comma"></param>
-        public Expression(ClosureExpressionSymbol closureExpression, Terminal comma) {
+        public ExpressionSymbol(ClosureExpressionSymbol closureExpression, Terminal comma) {
             ClosureExpression = closureExpression;
             Comma = comma;
         }
@@ -22,7 +22,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         ///     create a new expression
         /// </summary>
         /// <param name="leftOperand"></param>
-        public Expression(SimpleExpression leftOperand)
+        public ExpressionSymbol(SimpleExpression leftOperand)
             => LeftOperand = leftOperand;
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="operator"></param>
         /// <param name="rightOperand"></param>
         /// <param name="comma"></param>
-        public Expression(SimpleExpression leftOperand, Terminal @operator, SimpleExpression rightOperand, Terminal comma) : this(leftOperand) {
+        public ExpressionSymbol(SimpleExpression leftOperand, Terminal @operator, SimpleExpression rightOperand, Terminal comma) : this(leftOperand) {
             Operator = @operator;
             RightOperand = rightOperand;
             Comma = comma;
@@ -92,8 +92,5 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
                 LeftOperand.GetSymbolLength() +
                 Operator.GetSymbolLength() +
                 RightOperand.GetSymbolLength();
-
-
-
     }
 }

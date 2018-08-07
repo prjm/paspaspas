@@ -7,13 +7,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// <summary>
     ///     a list of expressions
     /// </summary>
-    public class ExpressionList : VariableLengthSyntaxTreeBase<Expression> {
+    public class ExpressionList : VariableLengthSyntaxTreeBase<ExpressionSymbol> {
 
         /// <summary>
         ///     create a new expression list
         /// </summary>
         /// <param name="items"></param>
-        public ExpressionList(ImmutableArray<Expression> items) : base(items) {
+        public ExpressionList(ImmutableArray<ExpressionSymbol> items) : base(items) {
         }
 
         /// <summary>

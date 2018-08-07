@@ -415,9 +415,8 @@ namespace PasPasPas.Parsing.Parser {
                 return result;
             }
 
-            if (Match(TokenKind.VarArgs, TokenKind.External)) {
-                return ParseExternalDirective(null);
-            }
+            if (Match(TokenKind.VarArgs, TokenKind.External))
+                return ParseExternalDirective();
 
             if (Match(TokenKind.Unsafe)) {
                 return ParseUnsafeDirective(null);
@@ -455,50 +454,64 @@ namespace PasPasPas.Parsing.Parser {
         #endregion
         #region ParseExternalDirective
 
+        /// <summary>
+        ///     parse a external directive
+        /// </summary>
+        /// <returns></returns>
+
         [Rule("ExternalDirective", "(varargs | external [ ConstExpression { ExternalSpecifier } ]) ';' ")]
-        private ExternalDirective ParseExternalDirective(IExtendableSyntaxPart parent) {
-            var result = new ExternalDirective();
-            InitByTerminal(result, parent, TokenKind.VarArgs, TokenKind.External);
-            result.Kind = result.LastTerminalKind;
+        public ExternalDirectiveSymbol ParseExternalDirective() {
+            var directive = ContinueWithOrMissing(TokenKind.VarArgs, TokenKind.External);
+            var externalExpression = default(ConstantExpressionSymbol);
 
-            if ((result.Kind == TokenKind.External) && (!Match(TokenKind.Semicolon))) {
-                result.ExternalExpression = ParseConstantExpression();
-                ExternalSpecifier specifier;
-                do {
-                    specifier = ParseExternalSpecifier(result);
-                } while (specifier != null);
+            using (var list = GetList<ExternalSpecifierSymbol>()) {
+                if ((directive.GetSymbolKind() == TokenKind.External) && (!Match(TokenKind.Semicolon))) {
+                    externalExpression = ParseConstantExpression();
+                    var specifier = default(ExternalSpecifierSymbol);
+                    do {
+                        specifier = AddToList(list, ParseExternalSpecifier());
+                    } while (specifier != default);
+                }
+
+                var semicolon = ContinueWithOrMissing(TokenKind.Semicolon);
+                return new ExternalDirectiveSymbol(directive, externalExpression, GetFixedArray(list), semicolon);
             }
-
-            ContinueWithOrMissing(result, TokenKind.Semicolon);
-            return result;
         }
 
         #endregion
         #region ParseExternalSpecifier
 
-        [Rule("ExternalSpecifier", "(('Name' | 'Index' ) ConstExpression) |  'Dependency' ConstExpression { ', ' ConstExpression } ) | delayed ")]
-        private ExternalSpecifier ParseExternalSpecifier(IExtendableSyntaxPart parent) {
+        /// <summary>
+        ///     parse an external specifier
+        /// </summary>
+        /// <returns></returns>
 
-            if (!Match(TokenKind.Name, TokenKind.Index, TokenKind.Dependency, TokenKind.Delayed))
-                return null;
+        [Rule("ExternalSpecifier", "(('Name' | 'Index' ) ConstExpression) |  'dependency' ConstExpression { ', ' ConstExpression } ) | delayed ")]
+        public ExternalSpecifierSymbol ParseExternalSpecifier() {
 
-            var result = new ExternalSpecifier();
-            InitByTerminal(result, parent, TokenKind.Name, TokenKind.Index, TokenKind.Dependency, TokenKind.Delayed);
-            result.Kind = result.LastTerminalKind;
+            var specifier = ContinueWith(TokenKind.Name, TokenKind.Index, TokenKind.Dependency, TokenKind.Delayed);
 
-            if (result.Kind == TokenKind.Delayed)
-                return result;
+            if (specifier == default)
+                return default;
 
-            if (result.Kind != TokenKind.Dependency) {
-                result.Expression = ParseConstantExpression();
-            }
-            else {
+            if (specifier.GetSymbolKind() == TokenKind.Delayed)
+                return new ExternalSpecifierSymbol(specifier);
+
+            using (var list = GetList<ConstantExpressionSymbol>()) {
+
+                if (specifier.GetSymbolKind() != TokenKind.Dependency) {
+                    AddToList(list, ParseConstantExpression());
+                    return new ExternalSpecifierSymbol(specifier, GetFixedArray(list));
+                }
+
+                var expression = default(ConstantExpressionSymbol);
                 do {
-                    ParseConstantExpression();
-                } while (ContinueWith(result, TokenKind.Comma));
-            }
+                    expression = AddToList(list, ParseConstantExpression(false, false, true));
+                } while (expression != default && expression.Comma.GetSymbolKind() == TokenKind.Comma);
 
-            return result;
+
+                return new ExternalSpecifierSymbol(specifier, GetFixedArray(list));
+            }
         }
 
         #endregion
@@ -916,7 +929,7 @@ namespace PasPasPas.Parsing.Parser {
         public CaseLabelSymbol ParseCaseLabel(bool allowComma = true) {
             var startExpression = ParseExpression();
             var dots = default(Terminal);
-            var endExpression = default(Expression);
+            var endExpression = default(ExpressionSymbol);
             var comma = default(Terminal);
 
             if (Match(TokenKind.DotDot)) {
@@ -1927,8 +1940,13 @@ namespace PasPasPas.Parsing.Parser {
         #endregion
         #region ParseExportsSection
 
+        /// <summary>
+        ///     parse a exports section
+        /// </summary>
+        /// <returns></returns>
+
         [Rule("ExportsSection", "'exports' ExportItem { ',' ExportItem } ';' ")]
-        private ExportsSection ParseExportsSection() {
+        public ExportsSectionSymbol ParseExportsSection() {
             var exports = ContinueWith(TokenKind.Exports);
             using (var list = GetList<ExportItemSymbol>()) {
                 var item = default(ExportItemSymbol);
@@ -1937,7 +1955,7 @@ namespace PasPasPas.Parsing.Parser {
                 } while (item != default && item.Comma.GetSymbolKind() == TokenKind.Comma);
 
                 var semicolon = ContinueWithOrMissing(TokenKind.Semicolon);
-                return new ExportsSection(exports, GetFixedArray(list), semicolon);
+                return new ExportsSectionSymbol(exports, GetFixedArray(list), semicolon);
             }
         }
 
@@ -1957,9 +1975,9 @@ namespace PasPasPas.Parsing.Parser {
             var parameters = default(FormalParameters);
             var closeParen = default(Terminal);
             var indexSymbol = default(Terminal);
-            var indexParameter = default(Expression);
+            var indexParameter = default(ExpressionSymbol);
             var nameSymbol = default(Terminal);
-            var nameParameter = default(Expression);
+            var nameParameter = default(ExpressionSymbol);
             var resident = default(Terminal);
             var comma = default(Terminal);
 
@@ -2333,7 +2351,7 @@ namespace PasPasPas.Parsing.Parser {
         public EnumValueSymbol ParseEnumTypeValue() {
             var enumName = RequireIdentifier();
             var equals = ContinueWith(TokenKind.EqualsSign);
-            var value = default(Expression);
+            var value = default(ExpressionSymbol);
 
             if (equals != default)
                 value = ParseExpression();
@@ -3309,7 +3327,7 @@ namespace PasPasPas.Parsing.Parser {
             var colonSymbol = default(Terminal);
             var typeName = default(TypeName);
             var indexSymbol = default(Terminal);
-            var propertyIndex = default(Expression);
+            var propertyIndex = default(ExpressionSymbol);
 
             if (Match(TokenKind.OpenBraces)) {
                 openBraces = ContinueWith(TokenKind.OpenBraces);
@@ -3372,7 +3390,7 @@ namespace PasPasPas.Parsing.Parser {
 
             if (Match(TokenKind.Default)) {
                 var defaultSymbol = ContinueWith(TokenKind.Default);
-                var defaultProperty = default(Expression);
+                var defaultProperty = default(ExpressionSymbol);
 
                 if (!Match(TokenKind.Semicolon)) {
                     defaultProperty = ParseExpression();
@@ -3607,7 +3625,7 @@ namespace PasPasPas.Parsing.Parser {
                 var typeDef = default(TypeSpecification);
                 var colon = default(Terminal);
                 var equals = default(Terminal);
-                var defaultValue = default(Expression);
+                var defaultValue = default(ExpressionSymbol);
                 var semicolon = default(Terminal);
                 var kind = TokenKind.Undefined - 1;
 
@@ -4049,8 +4067,8 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("Expressions", "Expression { ',' Expression }")]
         private ExpressionList ParseExpressions() {
-            using (var list = GetList<Expression>()) {
-                var item = default(Expression);
+            using (var list = GetList<ExpressionSymbol>()) {
+                var item = default(ExpressionSymbol);
 
                 do {
                     item = AddToList(list, ParseExpression());
@@ -4090,7 +4108,7 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("ConstantExpression", " '(' ( RecordConstant | ConstantExpression ) ')' | Expression")]
         public ConstantExpressionSymbol ParseConstantExpression(bool fromDesignator = false, bool fromTypeConstExpression = false, bool allowComma = false) {
-            var expr = default(Expression);
+            var expr = default(ExpressionSymbol);
             var openParen = default(Terminal);
             var closeParen = default(Terminal);
             var comma = default(Terminal);
@@ -4169,22 +4187,29 @@ namespace PasPasPas.Parsing.Parser {
         #endregion
         #region ParseExpression
 
+        /// <summary>
+        ///     parse a expression
+        /// </summary>
+        /// <param name="fromConstTypeDeclaration"></param>
+        /// <param name="allowComma"></param>
+        /// <returns></returns>
+
         [Rule("Expression", "SimpleExpression [ ('<'|'<='|'>'|'>='|'<>'|'='|'in'|'is') SimpleExpression ] | ClosureExpression")]
-        private Expression ParseExpression(bool fromConstTypeDeclaration = false, bool allowComma = false) {
+        public ExpressionSymbol ParseExpression(bool fromConstTypeDeclaration = false, bool allowComma = false) {
             var comma = default(Terminal);
 
             if (Match(TokenKind.Function, TokenKind.Procedure)) {
                 var closureExpression = ParseClosureExpression();
                 if (allowComma)
                     comma = ContinueWith(TokenKind.Comma);
-                return new Expression(closureExpression, comma);
+                return new ExpressionSymbol(closureExpression, comma);
             }
 
             var leftOperand = ParseSimpleExpression();
             var rightOperand = default(SimpleExpression);
 
             if (fromConstTypeDeclaration && !HasTokenBeforeToken(TokenKind.EqualsSign, new[] { TokenKind.Semicolon }))
-                return new Expression(leftOperand);
+                return new ExpressionSymbol(leftOperand);
 
             var @operator = ContinueWith(TokenKind.LessThen, TokenKind.LessThenEquals, TokenKind.GreaterThen, TokenKind.GreaterThenEquals, TokenKind.NotEquals, TokenKind.EqualsSign, TokenKind.In, TokenKind.Is);
 
@@ -4194,7 +4219,7 @@ namespace PasPasPas.Parsing.Parser {
             if (allowComma)
                 comma = ContinueWith(TokenKind.Comma);
 
-            return new Expression(leftOperand, @operator, rightOperand, comma);
+            return new ExpressionSymbol(leftOperand, @operator, rightOperand, comma);
         }
 
         #endregion
@@ -4245,18 +4270,23 @@ namespace PasPasPas.Parsing.Parser {
             return LookAhead(counter, TokenKind.Dot, TokenKind.Circumflex);
         }
 
+        /// <summary>
+        ///     parse a factor
+        /// </summary>
+        /// <returns></returns>
+
         [Rule("Factor", "'@' Factor  | 'not' Factor | '+' Factor | '-' Factor | '^' Identifier | Integer | HexNumber | Real | 'true' | 'false' | 'nil' | '(' Expression ')' | String | SetSection | Designator | TypeCast")]
-        private Factor ParseFactor() {
+        public FactorSymbol ParseFactor() {
             var designator = default(DesignatorStatementSymbol);
             var unaryOperator = ContinueWith(TokenKind.At, TokenKind.Not, TokenKind.Plus, TokenKind.Minus);
 
             if (unaryOperator != default)
-                return new Factor(unaryOperator, ParseFactor());
+                return new FactorSymbol(unaryOperator, ParseFactor());
 
             unaryOperator = ContinueWith(TokenKind.Circumflex);
 
             if (unaryOperator != default)
-                return new Factor(unaryOperator, RequireIdentifier());
+                return new FactorSymbol(unaryOperator, RequireIdentifier());
 
             if (Match(TokenKind.Integer)) {
                 var intValue = RequireInteger();
@@ -4264,7 +4294,7 @@ namespace PasPasPas.Parsing.Parser {
                 if (Match(TokenKind.Dot))
                     designator = ParseDesignator();
 
-                return new Factor(intValue, designator);
+                return new FactorSymbol(intValue, designator);
             }
 
             if (Match(TokenKind.HexNumber)) {
@@ -4273,7 +4303,7 @@ namespace PasPasPas.Parsing.Parser {
                 if (Match(TokenKind.Dot))
                     designator = ParseDesignator();
 
-                return new Factor(hexValue, designator);
+                return new FactorSymbol(hexValue, designator);
             }
 
             if (Match(TokenKind.Real)) {
@@ -4282,7 +4312,7 @@ namespace PasPasPas.Parsing.Parser {
                 if (Match(TokenKind.Dot))
                     designator = ParseDesignator();
 
-                return new Factor(realValue, designator);
+                return new FactorSymbol(realValue, designator);
             }
 
             if (Match(TokenKind.QuotedString)) {
@@ -4291,7 +4321,7 @@ namespace PasPasPas.Parsing.Parser {
                 if (Match(TokenKind.Dot))
                     designator = ParseDesignator();
 
-                return new Factor(stringValue, designator);
+                return new FactorSymbol(stringValue, designator);
             }
 
             if (Match(TokenKind.True) || Match(TokenKind.False)) {
@@ -4300,26 +4330,26 @@ namespace PasPasPas.Parsing.Parser {
                 if (Match(TokenKind.Dot))
                     designator = ParseDesignator();
 
-                return new Factor(booleanValue, designator);
+                return new FactorSymbol(booleanValue, designator);
             }
 
             if (Match(TokenKind.Nil))
-                return new Factor(ContinueWith(TokenKind.Nil));
+                return new FactorSymbol(ContinueWith(TokenKind.Nil));
 
             if (Match(TokenKind.OpenBraces))
-                return new Factor(ParseSetSection());
+                return new FactorSymbol(ParseSetSection());
 
             if (MatchIdentifier(TokenKind.Inherited, TokenKind.ShortString, TokenKind.String, TokenKind.WideString, TokenKind.UnicodeString, TokenKind.AnsiString, TokenKind.Dot, TokenKind.OpenBraces))
-                return new Factor(ParseDesignator());
+                return new FactorSymbol(ParseDesignator());
 
             if (Match(TokenKind.OpenParen) && IsDesignator())
-                return new Factor(ParseDesignator());
+                return new FactorSymbol(ParseDesignator());
 
             if (Match(TokenKind.OpenParen)) {
                 var openParen = ContinueWith(TokenKind.OpenParen);
                 var parenExpression = ParseConstantExpression(false, false);
                 var closeParen = ContinueWithOrMissing(TokenKind.CloseParen);
-                return new Factor(openParen, parenExpression, closeParen);
+                return new FactorSymbol(openParen, parenExpression, closeParen);
             }
 
             Unexpected();

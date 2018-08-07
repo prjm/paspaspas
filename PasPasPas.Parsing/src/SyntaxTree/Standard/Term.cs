@@ -14,7 +14,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="leftOperand"></param>
         /// <param name="operator"></param>
         /// <param name="rightOperand"></param>
-        public Term(Factor leftOperand, Terminal @operator, Term rightOperand) {
+        public Term(FactorSymbol leftOperand, Terminal @operator, Term rightOperand) {
             LeftOperand = leftOperand;
             Operator = @operator;
             RightOperand = rightOperand;
@@ -35,7 +35,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     left operand
         /// </summary>
-        public Factor LeftOperand { get; }
+        public FactorSymbol LeftOperand { get; }
 
         /// <summary>
         ///     right operand

@@ -10,17 +10,17 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     decimals subexpression
         /// </summary>
-        public Expression Decimals { get; set; }
+        public ExpressionSymbol Decimals { get; set; }
 
         /// <summary>
         ///     width subexpression
         /// </summary>
-        public Expression Width { get; set; }
+        public ExpressionSymbol Width { get; set; }
 
         /// <summary>
         ///     base expression
         /// </summary>
-        public Expression Expression { get; set; }
+        public ExpressionSymbol Expression { get; set; }
 
         /// <summary>
         ///     accept visitor

@@ -32,10 +32,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         IStartVisitor<VarValueSpecification>, IEndVisitor<VarValueSpecification>,
         IStartVisitor<ConstantExpressionSymbol>,
         IStartVisitor<RecordConstantExpression>,
-        IStartVisitor<Expression>,
+        IStartVisitor<ExpressionSymbol>,
         IStartVisitor<SimpleExpression>,
         IStartVisitor<Term>,
-        IStartVisitor<Factor>,
+        IStartVisitor<FactorSymbol>,
         IStartVisitor<UsesClause>,
         IStartVisitor<UsesFileClause>,
         IStartVisitor<PackageRequires>, IEndVisitor<PackageRequires>,
@@ -74,14 +74,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         IStartVisitor<InlineSymbol>,
         IStartVisitor<AbstractSymbol>,
         IStartVisitor<OldCallConvention>,
-        IStartVisitor<ExternalDirective>,
-        IStartVisitor<ExternalSpecifier>,
+        IStartVisitor<ExternalDirectiveSymbol>,
+        IStartVisitor<ExternalSpecifierSymbol>,
         IStartVisitor<CallConventionSymbol>,
         IStartVisitor<BindingSymbol>,
         IStartVisitor<ExportedProcedureHeadingSymbol>,
         IStartVisitor<UnsafeDirective>,
         IStartVisitor<ForwardDirective>,
-        IStartVisitor<ExportsSection>,
+        IStartVisitor<ExportsSectionSymbol>,
         IStartVisitor<ExportItemSymbol>,
         IStartVisitor<RecordItem>,
         IStartVisitor<RecordDeclaration>,
@@ -528,7 +528,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     start vistigin a expression
         /// </summary>
         /// <param name="expression"></param>
-        public void StartVisit(Expression expression) {
+        public void StartVisit(ExpressionSymbol expression) {
             if (expression.LeftOperand != null && expression.RightOperand != null) {
                 var lastExpression = LastExpression;
                 var currentExpression = new BinaryOperator();
@@ -579,7 +579,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     start visiting a  a factor
         /// </summary>
         /// <param name="factor"></param>
-        public void StartVisit(Factor factor) {
+        public void StartVisit(FactorSymbol factor) {
 
             // unary operators
             if (factor.UnaryOperand != default) {
@@ -1620,7 +1620,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     start visit an external directive
         /// </summary>
         /// <param name="directive"></param>
-        public void StartVisit(ExternalDirective directive) {
+        public void StartVisit(ExternalDirectiveSymbol directive) {
             var parent = LastValue as IDirectiveTarget;
             var result = new MethodDirective();
             InitNode(result, directive);
@@ -1644,7 +1644,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     start visiting a external specifier
         /// </summary>
         /// <param name="directive"></param>
-        public void StartVisit(ExternalSpecifier directive) {
+        public void StartVisit(ExternalSpecifierSymbol directive) {
             var parent = LastValue as MethodDirective;
             var result = new MethodDirectiveSpecifier();
             InitNode(result, directive);
@@ -1810,12 +1810,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     start visiting an exports section
         /// </summary>
         /// <param name="exportsSection"></param>
-        public void StartVisit(ExportsSection exportsSection) {
+        public void StartVisit(ExportsSectionSymbol exportsSection) {
             CurrentDeclarationMode = DeclarationMode.Exports;
             ;
         }
 
-        private AbstractSyntaxPartBase EndVisitItem(ExportsSection exportsSection) {
+        private AbstractSyntaxPartBase EndVisitItem(ExportsSectionSymbol exportsSection) {
             CurrentDeclarationMode = DeclarationMode.Unknown;
             return null;
             ;

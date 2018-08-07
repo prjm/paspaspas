@@ -11,7 +11,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     assignment
         /// </summary>
-        public Expression Assignment { get; set; }
+        public ExpressionSymbol Assignment { get; set; }
 
         /// <summary>
         ///     case statement

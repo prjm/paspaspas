@@ -43,7 +43,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     string length
         /// </summary>
-        public Expression StringLength { get; }
+        public ExpressionSymbol StringLength { get; }
 
         /// <summary>
         ///     string type

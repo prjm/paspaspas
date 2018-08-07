@@ -29,7 +29,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// </summary>
         /// <param name="terminal"></param>
         /// <param name="expression"></param>
-        public ClassPropertySpecifierSymbol(Terminal terminal, Expression expression) {
+        public ClassPropertySpecifierSymbol(Terminal terminal, ExpressionSymbol expression) {
             StoredSymbol = terminal;
             StoredProperty = expression;
         }
@@ -39,7 +39,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// </summary>
         /// <param name="defaultProperty"></param>
         /// <param name="defaultSymbol"></param>
-        public ClassPropertySpecifierSymbol(Expression defaultProperty, Terminal defaultSymbol) {
+        public ClassPropertySpecifierSymbol(ExpressionSymbol defaultProperty, Terminal defaultSymbol) {
             DefaultProperty = defaultProperty;
             DefaultSymbol = defaultSymbol;
         }
@@ -92,7 +92,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     stored property expression
         /// </summary>
-        public Expression StoredProperty { get; }
+        public ExpressionSymbol StoredProperty { get; }
 
         /// <summary>
         ///     no default

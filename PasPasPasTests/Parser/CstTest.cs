@@ -1030,5 +1030,146 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(33, s.Length);
         }
 
+        [TestCase]
+        public void TestExportsSection() {
+            var s = RunCstTest(p => p.ParseExportsSection(), "exports a(x: string) name '3', b() name '4' ;");
+            Assert.IsNotNull(s.Exports);
+            Assert.IsNotNull(s.Items[0]);
+            Assert.IsNotNull(s.Items[0].Comma);
+            Assert.IsNotNull(s.Items[1]);
+            Assert.IsNotNull(s.Semicolon);
+            Assert.AreEqual(45, s.Length);
+        }
+
+        [TestCase]
+        public void TestExpression() {
+            var s = RunCstTest(p => p.ParseExpression(), "procedure () begin end");
+            Assert.IsNotNull(s.ClosureExpression);
+            Assert.AreEqual(22, s.Length);
+
+            s = RunCstTest(p => p.ParseExpression(), "5");
+            Assert.IsNotNull(s.LeftOperand);
+            Assert.AreEqual(1, s.Length);
+
+            s = RunCstTest(p => p.ParseExpression(), "5 < 6");
+            Assert.IsNotNull(s.LeftOperand);
+            Assert.IsNotNull(s.Operator);
+            Assert.IsNotNull(s.RightOperand);
+            Assert.AreEqual(5, s.Length);
+
+            s = RunCstTest(p => p.ParseExpression(), "5 <= 6");
+            Assert.IsNotNull(s.LeftOperand);
+            Assert.IsNotNull(s.Operator);
+            Assert.IsNotNull(s.RightOperand);
+            Assert.AreEqual(6, s.Length);
+
+            s = RunCstTest(p => p.ParseExpression(), "5 > 6");
+            Assert.IsNotNull(s.LeftOperand);
+            Assert.IsNotNull(s.Operator);
+            Assert.IsNotNull(s.RightOperand);
+            Assert.AreEqual(5, s.Length);
+
+            s = RunCstTest(p => p.ParseExpression(), "5 >= 6");
+            Assert.IsNotNull(s.LeftOperand);
+            Assert.IsNotNull(s.Operator);
+            Assert.IsNotNull(s.RightOperand);
+            Assert.AreEqual(6, s.Length);
+
+            s = RunCstTest(p => p.ParseExpression(), "5 = 6");
+            Assert.IsNotNull(s.LeftOperand);
+            Assert.IsNotNull(s.Operator);
+            Assert.IsNotNull(s.RightOperand);
+            Assert.AreEqual(5, s.Length);
+
+            s = RunCstTest(p => p.ParseExpression(), "5 <> 6");
+            Assert.IsNotNull(s.LeftOperand);
+            Assert.IsNotNull(s.Operator);
+            Assert.IsNotNull(s.RightOperand);
+            Assert.AreEqual(6, s.Length);
+
+            s = RunCstTest(p => p.ParseExpression(), "5 in a");
+            Assert.IsNotNull(s.LeftOperand);
+            Assert.IsNotNull(s.Operator);
+            Assert.IsNotNull(s.RightOperand);
+            Assert.AreEqual(6, s.Length);
+
+            s = RunCstTest(p => p.ParseExpression(), "5 is a");
+            Assert.IsNotNull(s.LeftOperand);
+            Assert.IsNotNull(s.Operator);
+            Assert.IsNotNull(s.RightOperand);
+            Assert.AreEqual(6, s.Length);
+        }
+
+        [TestCase]
+        public void TestExternalDirective() {
+            var s = RunCstTest(p => p.ParseExternalDirective(), "varargs;");
+            Assert.IsNotNull(s.Directive);
+            Assert.IsNotNull(s.Semicolon);
+            Assert.AreEqual(8, s.Length);
+
+            s = RunCstTest(p => p.ParseExternalDirective(), "external '5';");
+            Assert.IsNotNull(s.Directive);
+            Assert.IsNotNull(s.Semicolon);
+            Assert.AreEqual(13, s.Length);
+
+            s = RunCstTest(p => p.ParseExternalDirective(), "external '5' name 'a';");
+            Assert.IsNotNull(s.Directive);
+            Assert.IsNotNull(s.Semicolon);
+            Assert.AreEqual(22, s.Length);
+        }
+
+        [TestCase]
+        public void TestExternalDirectiveSpecifier() {
+            var s = RunCstTest(p => p.ParseExternalSpecifier(), "name 5");
+            Assert.IsNotNull(s.Specifier);
+            Assert.IsNotNull(s.Items[0]);
+            Assert.AreEqual(6, s.Length);
+
+            s = RunCstTest(p => p.ParseExternalSpecifier(), "index 5");
+            Assert.IsNotNull(s.Specifier);
+            Assert.IsNotNull(s.Items[0]);
+            Assert.AreEqual(7, s.Length);
+
+            s = RunCstTest(p => p.ParseExternalSpecifier(), "dependency 5,2");
+            Assert.IsNotNull(s.Specifier);
+            Assert.IsNotNull(s.Items[0]);
+            Assert.IsNotNull(s.Items[0].Comma);
+            Assert.IsNotNull(s.Items[1]);
+            Assert.AreEqual(14, s.Length);
+
+            s = RunCstTest(p => p.ParseExternalSpecifier(), "delayed");
+            Assert.IsNotNull(s.Specifier);
+            Assert.AreEqual(7, s.Length);
+        }
+
+        [TestCase]
+        public void TestFactor() {
+            var s = RunCstTest(p => p.ParseFactor(), "@x");
+            Assert.IsNotNull(s.UnaryOperator);
+            Assert.IsNotNull(s.UnaryOperand);
+            Assert.AreEqual(2, s.Length);
+
+            s = RunCstTest(p => p.ParseFactor(), "not x");
+            Assert.IsNotNull(s.UnaryOperator);
+            Assert.IsNotNull(s.UnaryOperand);
+            Assert.AreEqual(5, s.Length);
+
+            s = RunCstTest(p => p.ParseFactor(), "+x");
+            Assert.IsNotNull(s.UnaryOperator);
+            Assert.IsNotNull(s.UnaryOperand);
+            Assert.AreEqual(2, s.Length);
+
+            s = RunCstTest(p => p.ParseFactor(), "-x");
+            Assert.IsNotNull(s.UnaryOperator);
+            Assert.IsNotNull(s.UnaryOperand);
+            Assert.AreEqual(2, s.Length);
+
+            s = RunCstTest(p => p.ParseFactor(), "^x");
+            Assert.IsNotNull(s.UnaryOperator);
+            Assert.IsNotNull(s.PointerTo);
+            Assert.AreEqual(2, s.Length);
+
+        }
+
     }
 }

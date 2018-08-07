@@ -6,14 +6,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// <summary>
     ///     factor
     /// </summary>
-    public class Factor : StandardSyntaxTreeBase {
+    public class FactorSymbol : StandardSyntaxTreeBase {
 
         /// <summary>
         ///     create a new factory with an unary operator
         /// </summary>
         /// <param name="unaryOperator"></param>
         /// <param name="factor"></param>
-        public Factor(Terminal unaryOperator, Factor factor) {
+        public FactorSymbol(Terminal unaryOperator, FactorSymbol factor) {
             UnaryOperator = unaryOperator;
             UnaryOperand = factor;
         }
@@ -23,7 +23,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// </summary>
         /// <param name="unaryOperator"></param>
         /// <param name="identifier"></param>
-        public Factor(Terminal unaryOperator, Identifier identifier) {
+        public FactorSymbol(Terminal unaryOperator, Identifier identifier) {
             UnaryOperator = unaryOperator;
             PointerTo = identifier;
         }
@@ -33,7 +33,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// </summary>
         /// <param name="intValue"></param>
         /// <param name="designator"></param>
-        public Factor(StandardInteger intValue, DesignatorStatementSymbol designator) {
+        public FactorSymbol(StandardInteger intValue, DesignatorStatementSymbol designator) {
             IntValue = intValue;
             Designator = designator;
         }
@@ -43,7 +43,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// </summary>
         /// <param name="hexValue"></param>
         /// <param name="designator"></param>
-        public Factor(HexNumber hexValue, DesignatorStatementSymbol designator) {
+        public FactorSymbol(HexNumber hexValue, DesignatorStatementSymbol designator) {
             HexValue = hexValue;
             Designator = designator;
         }
@@ -53,7 +53,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// </summary>
         /// <param name="realValue"></param>
         /// <param name="designator"></param>
-        public Factor(RealNumberSymbol realValue, DesignatorStatementSymbol designator) {
+        public FactorSymbol(RealNumberSymbol realValue, DesignatorStatementSymbol designator) {
             RealValue = realValue;
             Designator = designator;
         }
@@ -63,7 +63,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// </summary>
         /// <param name="stringValue"></param>
         /// <param name="designator"></param>
-        public Factor(QuotedString stringValue, DesignatorStatementSymbol designator) {
+        public FactorSymbol(QuotedString stringValue, DesignatorStatementSymbol designator) {
             StringValue = stringValue;
             Designator = designator;
         }
@@ -73,7 +73,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// </summary>
         /// <param name="booleanValue"></param>
         /// <param name="designator"></param>
-        public Factor(Terminal booleanValue, DesignatorStatementSymbol designator) {
+        public FactorSymbol(Terminal booleanValue, DesignatorStatementSymbol designator) {
             UnaryOperator = booleanValue;
             Designator = designator;
         }
@@ -82,14 +82,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         ///     create a new factory
         /// </summary>
         /// <param name="nilSymbol"></param>
-        public Factor(Terminal nilSymbol)
+        public FactorSymbol(Terminal nilSymbol)
             => UnaryOperator = nilSymbol;
 
         /// <summary>
         ///     create a new factor
         /// </summary>
         /// <param name="designatorStatement"></param>
-        public Factor(DesignatorStatementSymbol designatorStatement)
+        public FactorSymbol(DesignatorStatementSymbol designatorStatement)
             => Designator = designatorStatement;
 
         /// <summary>
@@ -98,7 +98,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="openParen"></param>
         /// <param name="parenExpression"></param>
         /// <param name="closeParen"></param>
-        public Factor(Terminal openParen, ConstantExpressionSymbol parenExpression, Terminal closeParen) : this(openParen) {
+        public FactorSymbol(Terminal openParen, ConstantExpressionSymbol parenExpression, Terminal closeParen) : this(openParen) {
             OpenParen = openParen;
             ParenExpression = parenExpression;
             CloseParen = closeParen;
@@ -108,7 +108,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         ///     create a new factor
         /// </summary>
         /// <param name="setSection"></param>
-        public Factor(SetSection setSection)
+        public FactorSymbol(SetSection setSection)
             => SetSection = setSection;
 
         /// <summary>
@@ -129,7 +129,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     address of operator
         /// </summary>
-        public Factor UnaryOperand { get; }
+        public FactorSymbol UnaryOperand { get; }
 
         /// <summary>
         ///     designator (inherited)

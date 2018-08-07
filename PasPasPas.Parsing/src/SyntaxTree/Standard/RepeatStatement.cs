@@ -10,7 +10,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     condition
         /// </summary>
-        public Expression Condition { get; set; }
+        public ExpressionSymbol Condition { get; set; }
 
         /// <summary>
         ///     statement list

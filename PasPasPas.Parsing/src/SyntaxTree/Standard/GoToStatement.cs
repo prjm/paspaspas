@@ -25,7 +25,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     exit expression
         /// </summary>
-        public Expression ExitExpression { get; set; }
+        public ExpressionSymbol ExitExpression { get; set; }
 
         /// <summary>
         ///     goto label

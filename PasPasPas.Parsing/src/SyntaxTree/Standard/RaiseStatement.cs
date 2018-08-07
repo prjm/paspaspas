@@ -10,12 +10,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     at part
         /// </summary>
-        public Expression At { get; set; }
+        public ExpressionSymbol At { get; set; }
 
         /// <summary>
         ///     raise part
         /// </summary>
-        public Expression Raise { get; set; }
+        public ExpressionSymbol Raise { get; set; }
 
         /// <summary>
         ///     accept visitor

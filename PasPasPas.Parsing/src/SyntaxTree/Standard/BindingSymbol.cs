@@ -14,7 +14,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="directive"></param>
         /// <param name="messageExpression"></param>
         /// <param name="semicolon"></param>
-        public BindingSymbol(Terminal directive, Expression messageExpression, Terminal semicolon) {
+        public BindingSymbol(Terminal directive, ExpressionSymbol messageExpression, Terminal semicolon) {
             Directive = directive;
             MessageExpression = messageExpression;
             Semicolon = semicolon;
@@ -29,7 +29,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     message expression
         /// </summary>
-        public Expression MessageExpression { get; }
+        public ExpressionSymbol MessageExpression { get; }
 
         /// <summary>
         ///     directive

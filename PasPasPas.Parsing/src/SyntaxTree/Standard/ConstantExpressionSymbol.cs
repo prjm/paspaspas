@@ -27,7 +27,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         ///     create a new constant expression symbol
         /// </summary>
         /// <param name="expression"></param>
-        public ConstantExpressionSymbol(Expression expression, Terminal comma) : base(ImmutableArray<SyntaxPartBase>.Empty) {
+        public ConstantExpressionSymbol(ExpressionSymbol expression, Terminal comma) : base(ImmutableArray<SyntaxPartBase>.Empty) {
             Value = expression;
             Comma = comma;
         }
@@ -59,7 +59,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     value of the expression
         /// </summary>
-        public Expression Value { get; }
+        public ExpressionSymbol Value { get; }
 
         /// <summary>
         ///     open parenthesis

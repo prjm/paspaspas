@@ -15,7 +15,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="dots"></param>
         /// <param name="endExpression"></param>
         /// <param name="comma"></param>
-        public CaseLabelSymbol(Expression startExpression, Terminal dots, Expression endExpression, Terminal comma) {
+        public CaseLabelSymbol(ExpressionSymbol startExpression, Terminal dots, ExpressionSymbol endExpression, Terminal comma) {
             StartExpression = startExpression;
             Dots = dots;
             EndExpression = endExpression;
@@ -25,12 +25,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     end expression
         /// </summary>
-        public Expression EndExpression { get; }
+        public ExpressionSymbol EndExpression { get; }
 
         /// <summary>
         ///     start expression
         /// </summary>
-        public Expression StartExpression { get; }
+        public ExpressionSymbol StartExpression { get; }
 
         /// <summary>
         ///     comma

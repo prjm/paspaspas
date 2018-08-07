@@ -15,7 +15,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     set expression
         /// </summary>
-        public Expression SetExpression { get; set; }
+        public ExpressionSymbol SetExpression { get; set; }
 
         /// <summary>
         ///     accept visitor
