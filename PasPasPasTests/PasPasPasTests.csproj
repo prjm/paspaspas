@@ -1,40 +1,39 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <Import Project="../Common.targets" />
+    <Import Project="../Common.targets" />
 
-  <PropertyGroup>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>netcoreapp2.1</TargetFramework>
+    </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <LangVersion>$(PasPasPasCsLanguageVersion)</LangVersion>
-  </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+        <LangVersion>$(PasPasPasCsLanguageVersion)</LangVersion>
+    </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <LangVersion>$(PasPasPasCsLanguageVersion)</LangVersion>
-  </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+        <LangVersion>$(PasPasPasCsLanguageVersion)</LangVersion>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="xunit" Version="2.4.0" />
-    <PackageReference Include="xunit.runner.console" Version="2.4.0" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.0" />
-    <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />	
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="xunit" Version="2.4.0" />
+        <PackageReference Include="xunit.runner.console" Version="2.4.0" />
+        <PackageReference Include="xunit.runner.visualstudio" Version="2.4.0" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\PasPasPas.Api\PasPasPas.Api.csproj" />
-    <ProjectReference Include="..\PasPasPas.Global\PasPasPas.Globals.csproj" />
-    <ProjectReference Include="..\PasPasPas.Infrastructure\PasPasPas.Infrastructure.csproj" />
-    <ProjectReference Include="..\Paspaspas.Options\PasPasPas.Options.csproj" />
-    <ProjectReference Include="..\PasPasPas.Parsing\PasPasPas.Parsing.csproj" />
-    <ProjectReference Include="..\PasPasPas.Runtime\PasPasPas.Runtime.csproj" />
-    <ProjectReference Include="..\PasPasPas.Typings\PasPasPas.Typings.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\PasPasPas.Api\PasPasPas.Api.csproj" />
+        <ProjectReference Include="..\PasPasPas.Global\PasPasPas.Globals.csproj" />
+        <ProjectReference Include="..\PasPasPas.Infrastructure\PasPasPas.Infrastructure.csproj" />
+        <ProjectReference Include="..\Paspaspas.Options\PasPasPas.Options.csproj" />
+        <ProjectReference Include="..\PasPasPas.Parsing\PasPasPas.Parsing.csproj" />
+        <ProjectReference Include="..\PasPasPas.Runtime\PasPasPas.Runtime.csproj" />
+        <ProjectReference Include="..\PasPasPas.Typings\PasPasPas.Typings.csproj" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <None Update="xunit.runner.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
+    <ItemGroup>
+        <None Update="xunit.runner.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
 
 </Project>
