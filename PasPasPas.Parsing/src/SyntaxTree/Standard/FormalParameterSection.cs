@@ -14,7 +14,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="openParen"></param>
         /// <param name="parameters"></param>
         /// <param name="closeParen"></param>
-        public FormalParameterSection(Terminal openParen, FormalParameters parameters, Terminal closeParen) {
+        public FormalParameterSection(Terminal openParen, FormalParametersSymbol parameters, Terminal closeParen) {
             OpenParen = openParen;
             ParameterList = parameters;
             CloseParen = closeParen;
@@ -23,7 +23,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     parameter list
         /// </summary>
-        public FormalParameters ParameterList { get; }
+        public FormalParametersSymbol ParameterList { get; }
 
         /// <summary>
         ///     close paren

@@ -1169,7 +1169,159 @@ namespace PasPasPasTests.Parser {
             Assert.IsNotNull(s.PointerTo);
             Assert.AreEqual(2, s.Length);
 
+            s = RunCstTest(p => p.ParseFactor(), "5");
+            Assert.IsNotNull(s.IntValue);
+            Assert.AreEqual(1, s.Length);
+
+            s = RunCstTest(p => p.ParseFactor(), "5.a");
+            Assert.IsNotNull(s.IntValue);
+            Assert.IsNotNull(s.Designator);
+            Assert.AreEqual(3, s.Length);
+
+            s = RunCstTest(p => p.ParseFactor(), "$5");
+            Assert.IsNotNull(s.HexValue);
+            Assert.AreEqual(2, s.Length);
+
+            s = RunCstTest(p => p.ParseFactor(), "$5.a");
+            Assert.IsNotNull(s.HexValue);
+            Assert.IsNotNull(s.Designator);
+            Assert.AreEqual(4, s.Length);
+
+            s = RunCstTest(p => p.ParseFactor(), "5.4");
+            Assert.IsNotNull(s.RealValue);
+            Assert.AreEqual(3, s.Length);
+
+            s = RunCstTest(p => p.ParseFactor(), "3.4.a");
+            Assert.IsNotNull(s.RealValue);
+            Assert.IsNotNull(s.Designator);
+            Assert.AreEqual(5, s.Length);
+
+            s = RunCstTest(p => p.ParseFactor(), "'a'");
+            Assert.IsNotNull(s.StringValue);
+            Assert.AreEqual(3, s.Length);
+
+            s = RunCstTest(p => p.ParseFactor(), "'a'.a");
+            Assert.IsNotNull(s.StringValue);
+            Assert.IsNotNull(s.Designator);
+            Assert.AreEqual(5, s.Length);
+
+            s = RunCstTest(p => p.ParseFactor(), "true");
+            Assert.IsNotNull(s.UnaryOperator);
+            Assert.AreEqual(4, s.Length);
+
+            s = RunCstTest(p => p.ParseFactor(), "true.a");
+            Assert.IsNotNull(s.UnaryOperator);
+            Assert.IsNotNull(s.Designator);
+            Assert.AreEqual(6, s.Length);
+
+            s = RunCstTest(p => p.ParseFactor(), "false");
+            Assert.IsNotNull(s.UnaryOperator);
+            Assert.AreEqual(5, s.Length);
+
+            s = RunCstTest(p => p.ParseFactor(), "false.a");
+            Assert.IsNotNull(s.UnaryOperator);
+            Assert.IsNotNull(s.Designator);
+            Assert.AreEqual(7, s.Length);
+
+            s = RunCstTest(p => p.ParseFactor(), "nil");
+            Assert.IsNotNull(s.UnaryOperator);
+            Assert.AreEqual(3, s.Length);
+
+            s = RunCstTest(p => p.ParseFactor(), "[a]");
+            Assert.IsNotNull(s.SetSection);
+            Assert.AreEqual(3, s.Length);
+
+            s = RunCstTest(p => p.ParseFactor(), "ShortString");
+            Assert.IsNotNull(s.Designator);
+            Assert.AreEqual(11, s.Length);
+
+            s = RunCstTest(p => p.ParseFactor(), "string");
+            Assert.IsNotNull(s.Designator);
+            Assert.AreEqual(6, s.Length);
+
+            s = RunCstTest(p => p.ParseFactor(), "WideString");
+            Assert.IsNotNull(s.Designator);
+            Assert.AreEqual(10, s.Length);
+
+            s = RunCstTest(p => p.ParseFactor(), "UnicodeString");
+            Assert.IsNotNull(s.Designator);
+            Assert.AreEqual(13, s.Length);
+
+            s = RunCstTest(p => p.ParseFactor(), "AnsiString");
+            Assert.IsNotNull(s.Designator);
+            Assert.AreEqual(10, s.Length);
+
+            s = RunCstTest(p => p.ParseFactor(), ".a");
+            Assert.IsNotNull(s.Designator);
+            Assert.AreEqual(2, s.Length);
+
+            s = RunCstTest(p => p.ParseFactor(), "inherited a");
+            Assert.IsNotNull(s.Designator);
+            Assert.AreEqual(11, s.Length);
+
+            s = RunCstTest(p => p.ParseFactor(), "(a)");
+            Assert.IsNotNull(s.OpenParen);
+            Assert.IsNotNull(s.ParenExpression);
+            Assert.IsNotNull(s.CloseParen);
+            Assert.AreEqual(3, s.Length);
         }
 
+        [TestCase]
+        public void TestFileType() {
+            var s = RunCstTest(p => p.ParseFileType(), "file");
+            Assert.IsNotNull(s.FileSymbol);
+            Assert.AreEqual(4, s.Length);
+
+            s = RunCstTest(p => p.ParseFileType(), "file of ta");
+            Assert.IsNotNull(s.FileSymbol);
+            Assert.IsNotNull(s.OfSymbol);
+            Assert.IsNotNull(s.TypeDefinition);
+            Assert.AreEqual(10, s.Length);
+        }
+
+        [TestCase]
+        public void TestFormalParameter() {
+            var dummy = TokenKind.Undefined - 1;
+            var s = RunCstTest(p => p.ParseFormalParameter(true, ref dummy), "[a] const [b] a,");
+            Assert.IsNotNull(s.Attributes1);
+            Assert.IsNotNull(s.ParameterKind);
+            Assert.IsNotNull(s.Attributes2);
+            Assert.IsNotNull(s.ParameterName);
+            Assert.IsNotNull(s.Comma);
+            Assert.AreEqual(16, s.Length);
+        }
+
+        [TestCase]
+        public void TestFormalParameterDefinition() {
+            var s = RunCstTest(p => p.ParseFormalParameterDefinition(true), "a: integer = 5;");
+            Assert.IsNotNull(s.Items[0]);
+            Assert.IsNotNull(s.ColonSymbol);
+            Assert.IsNotNull(s.TypeDeclaration);
+            Assert.IsNotNull(s.EqualsSign);
+            Assert.IsNotNull(s.DefaultValue);
+            Assert.IsNotNull(s.Semicolon);
+            Assert.AreEqual(15, s.Length);
+        }
+
+        [TestCase]
+        public void TestFormalParameters() {
+            var s = RunCstTest(p => p.ParseFormalParameters(), "a: string; b: string; d: integer");
+            Assert.IsNotNull(s.Items[0]);
+            Assert.IsNotNull(s.Items[1]);
+            Assert.IsNotNull(s.Items[2]);
+            Assert.AreEqual(32, s.Length);
+        }
+
+        [TestCase]
+        public void TestFormattedExpression() {
+            var s = RunCstTest(p => p.ParseFormattedExpression(), "a:2:1");
+            Assert.IsNotNull(s.Expression);
+            Assert.IsNotNull(s.Colon1);
+            Assert.IsNotNull(s.Width);
+            Assert.IsNotNull(s.Colon2);
+            Assert.IsNotNull(s.Decimals);
+            Assert.AreEqual(5, s.Length);
+
+        }
     }
 }

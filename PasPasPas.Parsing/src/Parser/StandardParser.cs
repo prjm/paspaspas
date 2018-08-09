@@ -1972,7 +1972,7 @@ namespace PasPasPas.Parsing.Parser {
         public ExportItemSymbol ParseExportItem(bool allowComma) {
             var exportName = RequireIdentifier();
             var openParen = default(Terminal);
-            var parameters = default(FormalParameters);
+            var parameters = default(FormalParametersSymbol);
             var closeParen = default(Terminal);
             var indexSymbol = default(Terminal);
             var indexParameter = default(ExpressionSymbol);
@@ -2429,11 +2429,10 @@ namespace PasPasPas.Parsing.Parser {
         [Rule("FormalParameterSection", "'(' [ FormalParameters ] ')'")]
         private FormalParameterSection ParseFormalParameterSection() {
             var openParen = ContinueWithOrMissing(TokenKind.OpenParen);
-            var parameters = default(FormalParameters);
+            var parameters = default(FormalParametersSymbol);
 
-            if (!Match(TokenKind.CloseParen)) {
+            if (!Match(TokenKind.CloseParen))
                 parameters = ParseFormalParameters();
-            }
 
             var closeParen = ContinueWithOrMissing(TokenKind.CloseParen);
             return new FormalParameterSection(openParen, parameters, closeParen);
@@ -2509,7 +2508,7 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             if (Match(TokenKind.File)) {
-                result.FileType = ParseFileType(result);
+                result.FileType = ParseFileType();
                 return result;
             }
 
@@ -3322,7 +3321,7 @@ namespace PasPasPas.Parsing.Parser {
             var propertySymbol = ContinueWithOrMissing(TokenKind.Property);
             var propertyName = RequireIdentifier();
             var openBraces = default(Terminal);
-            var arrayIndex = default(FormalParameters);
+            var arrayIndex = default(FormalParametersSymbol);
             var closeBraces = default(Terminal);
             var colonSymbol = default(Terminal);
             var typeName = default(TypeName);
@@ -3536,7 +3535,7 @@ namespace PasPasPas.Parsing.Parser {
             var identifier = RequireIdentifier(isInOperator);
             var genericDefinition = default(GenericDefinition);
             var openParen = default(Terminal);
-            var parameters = default(FormalParameters);
+            var parameters = default(FormalParametersSymbol);
             var closeParen = default(Terminal);
             var colonSymbol = default(Terminal);
             var resultAttributes = default(UserAttributes);
@@ -3568,25 +3567,36 @@ namespace PasPasPas.Parsing.Parser {
         #endregion
         #region FormalParameters
 
-        [Rule("FormalParameters", "FormalParameter { ';' FormalParameter }")]
-        private FormalParameters ParseFormalParameters() {
+        /// <summary>
+        ///     parse formal parameters
+        /// </summary>
+        /// <returns></returns>
 
-            using (var list = GetList<FormalParameterDefinition>()) {
-                var item = default(FormalParameterDefinition);
+        [Rule("FormalParameters", "FormalParameter { ';' FormalParameter }")]
+        public FormalParametersSymbol ParseFormalParameters() {
+
+            using (var list = GetList<FormalParameterDefinitionSymbol>()) {
+                var item = default(FormalParameterDefinitionSymbol);
 
                 do {
                     if (!Match(TokenKind.CloseParen))
                         item = AddToList(list, ParseFormalParameterDefinition(true));
                 } while (item != default && item.Semicolon != default);
 
-                return new FormalParameters(GetFixedArray(list));
+                return new FormalParametersSymbol(GetFixedArray(list));
             }
         }
 
         #endregion
         #region FormalParameter
 
-        private FormalParameter ParseFormalParameter(bool allowComma, ref int kind) {
+        /// <summary>
+        ///     parse a formal parameter
+        /// </summary>
+        /// <param name="allowComma"></param>
+        /// <param name="kind"></param>
+        /// <returns></returns>
+        public FormalParameterSymbol ParseFormalParameter(bool allowComma, ref int kind) {
 
             var attributes1 = default(UserAttributes);
             var attributes2 = default(UserAttributes);
@@ -3614,14 +3624,20 @@ namespace PasPasPas.Parsing.Parser {
             if (allowComma)
                 comma = ContinueWith(TokenKind.Comma);
 
-            return new FormalParameter(attributes1, parameterKind, attributes2, parameterName, comma);
+            return new FormalParameterSymbol(attributes1, parameterKind, attributes2, parameterName, comma);
         }
 
-        [Rule("FormalParameter", "[Attributes] [( 'const' | 'var' | 'out' )] [Attributes] IdentList [ ':' TypeDeclaration ] [ '=' Expression ]")]
-        private FormalParameterDefinition ParseFormalParameterDefinition(bool allowSemicolon) {
+        /// <summary>
+        ///     test a formal parameter definition symbol
+        /// </summary>
+        /// <param name="allowSemicolon"></param>
+        /// <returns></returns>
 
-            using (var list = GetList<FormalParameter>()) {
-                var item = default(FormalParameter);
+        [Rule("FormalParameter", "[Attributes] [( 'const' | 'var' | 'out' )] [Attributes] IdentList [ ':' TypeDeclaration ] [ '=' Expression ]")]
+        public FormalParameterDefinitionSymbol ParseFormalParameterDefinition(bool allowSemicolon) {
+
+            using (var list = GetList<FormalParameterSymbol>()) {
+                var item = default(FormalParameterSymbol);
                 var typeDef = default(TypeSpecification);
                 var colon = default(Terminal);
                 var equals = default(Terminal);
@@ -3646,7 +3662,7 @@ namespace PasPasPas.Parsing.Parser {
                 if (allowSemicolon)
                     semicolon = ContinueWith(TokenKind.Semicolon);
 
-                return new FormalParameterDefinition(GetFixedArray(list), colon, typeDef, equals, defaultValue, semicolon);
+                return new FormalParameterDefinitionSymbol(GetFixedArray(list), colon, typeDef, equals, defaultValue, semicolon);
             }
         }
 
@@ -3877,16 +3893,21 @@ namespace PasPasPas.Parsing.Parser {
         #endregion
         #region ParseFileType
 
+        /// <summary>
+        ///     parse a file type
+        /// </summary>
+        /// <returns></returns>
+
         [Rule("FileType", "'file' [ 'of' TypeSpecification ]")]
-        private FileType ParseFileType(IExtendableSyntaxPart parent) {
-            var result = new FileType();
-            InitByTerminal(result, parent, TokenKind.File);
+        public FileTypeSymbol ParseFileType() {
+            var fileSymbol = ContinueWithOrMissing(TokenKind.File);
+            var ofSymbol = ContinueWith(TokenKind.Of);
+            var typeDefinition = default(TypeSpecification);
 
-            if (ContinueWith(result, TokenKind.Of)) {
-                result.TypeDefinition = ParseTypeSpecification();
-            }
+            if (ofSymbol != default)
+                typeDefinition = ParseTypeSpecification();
 
-            return result;
+            return new FileTypeSymbol(fileSymbol, ofSymbol, typeDefinition);
         }
 
         #endregion
@@ -4339,7 +4360,7 @@ namespace PasPasPas.Parsing.Parser {
             if (Match(TokenKind.OpenBraces))
                 return new FactorSymbol(ParseSetSection());
 
-            if (MatchIdentifier(TokenKind.Inherited, TokenKind.ShortString, TokenKind.String, TokenKind.WideString, TokenKind.UnicodeString, TokenKind.AnsiString, TokenKind.Dot, TokenKind.OpenBraces))
+            if (MatchIdentifier(TokenKind.Inherited, TokenKind.ShortString, TokenKind.String, TokenKind.WideString, TokenKind.UnicodeString, TokenKind.AnsiString, TokenKind.Dot))
                 return new FactorSymbol(ParseDesignator());
 
             if (Match(TokenKind.OpenParen) && IsDesignator())
@@ -4448,7 +4469,7 @@ namespace PasPasPas.Parsing.Parser {
                             }
 
                             if (!Match(TokenKind.Comma))
-                                parameter.Expression = ParseFormattedExpression(parameter);
+                                parameter.Expression = ParseFormattedExpression();
 
                         } while (ContinueWith(TokenKind.Comma) != null);
                     }
@@ -4470,18 +4491,22 @@ namespace PasPasPas.Parsing.Parser {
         #region ParseFormattedExpression
 
         [Rule("FormattedExpression", "Expression [ ':' Expression [ ':' Expression ] ]")]
-        private FormattedExpression ParseFormattedExpression(IExtendableSyntaxPart parent) {
-            var result = new FormattedExpression();
-            parent.Add(result);
-            result.Expression = ParseExpression();
+        public FormattedExpressionSymbol ParseFormattedExpression() {
+            var expression = ParseExpression();
+            var colon1 = ContinueWith(TokenKind.Colon);
+            var colon2 = default(Terminal);
+            var width = default(ExpressionSymbol);
+            var decimals = default(ExpressionSymbol);
 
-            if (ContinueWith(result, TokenKind.Colon)) {
-                result.Width = ParseExpression();
-                if (ContinueWith(result, TokenKind.Colon)) {
-                    result.Decimals = ParseExpression();
-                }
+            if (colon1 != default) {
+                width = ParseExpression();
+                colon2 = ContinueWith(TokenKind.Colon);
+
+                if (colon2 != default)
+                    decimals = ParseExpression();
             }
-            return result;
+
+            return new FormattedExpressionSymbol(expression, colon1, width, colon2, decimals);
         }
 
         #endregion
@@ -4489,42 +4514,36 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("SetSection", "'[' [ Expression ] { (',' | '..') Expression } ']'")]
         private SetSection ParseSetSection() {
-            var result = new SetSection();
-            InitByTerminal(result, null, TokenKind.OpenBraces);
-            SetSectnPart lastPart = null;
+            var openBraces = ContinueWithOrMissing(TokenKind.OpenBraces);
+            var items = ImmutableArray<SetSectnPart>.Empty;
 
             if (!Match(TokenKind.CloseBraces)) {
-                SetSectnPart part;
-                do {
+                var part = default(SetSectnPart);
+                using (var list = GetList<SetSectnPart>()) {
+                    do {
+                        var setExpression = ParseExpression();
+                        var continuation = ContinueWith(TokenKind.Comma);
 
-                    if (ContinueWith(result, TokenKind.Comma)) {
-                        if (lastPart != null)
-                            lastPart.Continuation = TokenKind.Comma;
-                        else
+                        if (continuation != default && part == default) {
                             Unexpected();
-                    }
-                    else if (ContinueWith(result, TokenKind.DotDot)) {
-                        if (lastPart != null && lastPart.Continuation == TokenKind.Undefined)
-                            lastPart.Continuation = TokenKind.DotDot;
-                        else
-                            Unexpected();
-                    }
-                    else {
-                        if (lastPart != null)
-                            Unexpected();
-                    }
+                        }
+                        else {
+                            continuation = ContinueWith(TokenKind.DotDot);
+                            if (continuation != default && part == default)
+                                Unexpected();
+                            else if (continuation == default && part != default)
+                                Unexpected();
+                        };
 
-                    part = new SetSectnPart();
-                    result.Add(part);
-                    part.Continuation = TokenKind.Undefined;
-                    part.SetExpression = ParseExpression();
-                    lastPart = part;
+                        part = AddToList(list, new SetSectnPart(setExpression, continuation));
+                    } while (part != default && part.Continuation != default);
 
-                } while (Match(TokenKind.Comma, TokenKind.DotDot));
+                    items = GetFixedArray(list);
+                }
             }
 
-            ContinueWithOrMissing(result, TokenKind.CloseBraces);
-            return result;
+            var closeBraces = ContinueWithOrMissing(TokenKind.CloseBraces);
+            return new SetSection(openBraces, items, closeBraces);
         }
 
         #endregion

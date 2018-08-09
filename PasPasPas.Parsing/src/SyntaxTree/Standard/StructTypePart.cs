@@ -20,7 +20,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     file type declaration
         /// </summary>
-        public FileType FileType { get; set; }
+        public FileTypeSymbol FileType { get; set; }
 
         /// <summary>
         ///     set type declaration

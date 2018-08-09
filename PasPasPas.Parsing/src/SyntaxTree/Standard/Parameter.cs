@@ -10,7 +10,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     parameter expression
         /// </summary>
-        public FormattedExpression Expression { get; internal set; }
+        public FormattedExpressionSymbol Expression { get; internal set; }
 
         /// <summary>
         ///     parameter name

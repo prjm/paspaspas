@@ -43,7 +43,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         IStartVisitor<StructType>, IEndVisitor<StructType>,
         IStartVisitor<ArrayTypeSymbol>,
         IStartVisitor<SetDefinition>,
-        IStartVisitor<FileType>,
+        IStartVisitor<FileTypeSymbol>,
         IStartVisitor<ClassOfDeclarationSymbol>,
         IStartVisitor<TypeName>,
         IStartVisitor<SimpleType>,
@@ -53,8 +53,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         IStartVisitor<PointerType>,
         IStartVisitor<StringType>,
         IStartVisitor<ProcedureTypeDefinition>,
-        IStartVisitor<FormalParameterDefinition>,
-        IStartVisitor<FormalParameter>,
+        IStartVisitor<FormalParameterDefinitionSymbol>,
+        IStartVisitor<FormalParameterSymbol>,
         IStartVisitor<UnitInitialization>,
         IStartVisitor<UnitFinalization>,
         IStartVisitor<CompoundStatementSymbol>, IEndVisitor<CompoundStatementSymbol>,
@@ -123,7 +123,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         IStartVisitor<DesignatorStatementSymbol>,
         IStartVisitor<DesignatorItemSymbol>,
         IStartVisitor<Parameter>,
-        IStartVisitor<Standard.FormattedExpression>,
+        IStartVisitor<Standard.FormattedExpressionSymbol>,
         IStartVisitor<SetSection>,
         IStartVisitor<SetSectnPart>,
         IStartVisitor<AsmFactorSymbol>,
@@ -875,7 +875,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     visit a file type
         /// </summary>
         /// <param name="fileType"></param>
-        public void StartVisit(FileType fileType) {
+        public void StartVisit(FileTypeSymbol fileType) {
             var typeTarget = LastTypeDeclaration;
             var value = new FileTypeDeclaration();
             InitNode(value, fileType);
@@ -1108,7 +1108,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     start visit a formal parameter declaration
         /// </summary>
         /// <param name="formalParameter"></param>
-        public void StartVisit(FormalParameterDefinition formalParameter) {
+        public void StartVisit(FormalParameterDefinitionSymbol formalParameter) {
             var paramterTarget = LastValue as IParameterTarget;
             var result = new ParameterTypeDefinition();
             InitNode(result, formalParameter, paramterTarget.Parameters);
@@ -1122,7 +1122,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     visit a formal parameter
         /// </summary>
         /// <param name="formalParameter"></param>
-        public void StartVisit(FormalParameter formalParameter) {
+        public void StartVisit(FormalParameterSymbol formalParameter) {
             var typeDefinition = LastValue as ParameterTypeDefinition;
             var result = new ParameterDefinition();
             InitNode(result, formalParameter);
@@ -2869,7 +2869,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     start visiting an formatted expression
         /// </summary>
         /// <param name="expr"></param>
-        public void StartVisit(Standard.FormattedExpression expr) {
+        public void StartVisit(Standard.FormattedExpressionSymbol expr) {
             if (expr.Width == null && expr.Decimals == null)
                 return;
 
@@ -2903,7 +2903,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// </summary>
         /// <param name="part"></param>
         public void StartVisit(SetSectnPart part) {
-            if (part.Continuation != TokenKind.DotDot) {
+            if (part.Continuation.GetSymbolKind() != TokenKind.DotDot) {
                 var arrayExpression = LastExpression as SetExpression;
 
                 if (arrayExpression == null)

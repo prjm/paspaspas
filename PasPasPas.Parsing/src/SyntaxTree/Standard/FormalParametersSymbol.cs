@@ -6,13 +6,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// <summary>
     ///     parameter list
     /// </summary>
-    public class FormalParameters : VariableLengthSyntaxTreeBase<FormalParameterDefinition> {
+    public class FormalParametersSymbol : VariableLengthSyntaxTreeBase<FormalParameterDefinitionSymbol> {
 
         /// <summary>
         ///     create a new set of formal parameters
         /// </summary>
         /// <param name="items"></param>
-        public FormalParameters(ImmutableArray<FormalParameterDefinition> items) : base(items) {
+        public FormalParametersSymbol(ImmutableArray<FormalParameterDefinitionSymbol> items) : base(items) {
         }
 
         /// <summary>

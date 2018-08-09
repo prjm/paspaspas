@@ -1,4 +1,5 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Visitors;
+﻿using PasPasPas.Parsing.SyntaxTree.Utils;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
@@ -8,14 +9,24 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     public class SetSectnPart : StandardSyntaxTreeBase {
 
         /// <summary>
+        ///     create a new set section
+        /// </summary>
+        /// <param name="setExpression"></param>
+        /// <param name="continuation"></param>
+        public SetSectnPart(ExpressionSymbol setExpression, Terminal continuation) {
+            SetExpression = setExpression;
+            Continuation = continuation;
+        }
+
+        /// <summary>
         ///     continuation
         /// </summary>
-        public int Continuation { get; set; }
+        public Terminal Continuation { get; }
 
         /// <summary>
         ///     set expression
         /// </summary>
-        public ExpressionSymbol SetExpression { get; set; }
+        public ExpressionSymbol SetExpression { get; }
 
         /// <summary>
         ///     accept visitor
@@ -23,9 +34,16 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="visitor">visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
-            AcceptParts(this, visitor);
+            AcceptPart(this, SetExpression, visitor);
+            AcceptPart(this, Continuation, visitor);
             visitor.EndVisit(this);
         }
+
+        /// <summary>
+        ///     symbol length
+        /// </summary>
+        public override int Length
+            => SetExpression.GetSymbolLength() + Continuation.GetSymbolLength();
 
 
     }

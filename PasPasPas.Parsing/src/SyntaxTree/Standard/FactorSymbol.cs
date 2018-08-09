@@ -98,7 +98,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="openParen"></param>
         /// <param name="parenExpression"></param>
         /// <param name="closeParen"></param>
-        public FactorSymbol(Terminal openParen, ConstantExpressionSymbol parenExpression, Terminal closeParen) : this(openParen) {
+        public FactorSymbol(Terminal openParen, ConstantExpressionSymbol parenExpression, Terminal closeParen) {
             OpenParen = openParen;
             ParenExpression = parenExpression;
             CloseParen = closeParen;

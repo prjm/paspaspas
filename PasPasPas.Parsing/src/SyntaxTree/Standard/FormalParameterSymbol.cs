@@ -6,7 +6,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// <summary>
     ///     formal parameter
     /// </summary>
-    public class FormalParameter : StandardSyntaxTreeBase {
+    public class FormalParameterSymbol : StandardSyntaxTreeBase {
 
         /// <summary>
         ///     create a new formal parameter
@@ -16,7 +16,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="attributes2"></param>
         /// <param name="parameterName"></param>
         /// <param name="comma"></param>
-        public FormalParameter(UserAttributes attributes1, Terminal parameterKind, UserAttributes attributes2, Identifier parameterName, Terminal comma) {
+        public FormalParameterSymbol(UserAttributes attributes1, Terminal parameterKind, UserAttributes attributes2, Identifier parameterName, Terminal comma) {
             Attributes1 = attributes1;
             ParameterKind = parameterKind;
             Attributes2 = attributes2;
@@ -38,17 +38,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         ///     parameter name
         /// </summary>
         public Identifier ParameterName { get; }
-
-        /// <summary>
-        ///     parameter type (var, const, out)
-        /// </summary>
-        public int ParameterType { get; }
-            = TokenKind.Undefined;
-
-        /// <summary>
-        ///     semicolon
-        /// </summary>
-        public Terminal Semicolon { get; }
 
         /// <summary>
         ///     comma
@@ -83,5 +72,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
                 Attributes2.GetSymbolLength() +
                 ParameterName.GetSymbolLength() +
                 Comma.GetSymbolLength();
+
+        /// <summary>
+        ///     parameter kind
+        /// </summary>
+        public int ParameterType
+            => ParameterKind.GetSymbolKind();
     }
 }

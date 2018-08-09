@@ -24,7 +24,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="semicolon"></param>
         /// <param name="defaultSymbol"></param>
         /// <param name="semicolon2"></param>
-        public ClassPropertySymbol(Terminal propertySymbol, Identifier propertyName, Terminal openBraces, FormalParameters arrayIndex, Terminal closeBraces, Terminal colonSymbol, TypeName typeName, Terminal indexSymbol, ExpressionSymbol propertyIndex, ImmutableArray<ClassPropertySpecifierSymbol> items, Terminal semicolon, Terminal defaultSymbol, Terminal semicolon2) : base(items) {
+        public ClassPropertySymbol(Terminal propertySymbol, Identifier propertyName, Terminal openBraces, FormalParametersSymbol arrayIndex, Terminal closeBraces, Terminal colonSymbol, TypeName typeName, Terminal indexSymbol, ExpressionSymbol propertyIndex, ImmutableArray<ClassPropertySpecifierSymbol> items, Terminal semicolon, Terminal defaultSymbol, Terminal semicolon2) : base(items) {
             PropertySymbol = propertySymbol;
             PropertyName = propertyName;
             OpenBraces = openBraces;
@@ -42,7 +42,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     property access index
         /// </summary>
-        public FormalParameters ArrayIndex { get; }
+        public FormalParametersSymbol ArrayIndex { get; }
 
         /// <summary>
         ///     default flag (for disp interface)
