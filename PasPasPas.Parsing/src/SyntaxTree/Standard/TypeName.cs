@@ -8,13 +8,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// <summary>
     ///     type name / reference to a type
     /// </summary>
-    public class TypeName : VariableLengthSyntaxTreeBase<GenericNamespaceName> {
+    public class TypeName : VariableLengthSyntaxTreeBase<GenericNamespaceNameSymbol> {
 
         /// <summary>
         ///     create a new string type name
         /// </summary>
         /// <param name="stringType"></param>
-        public TypeName(Terminal stringType, Terminal comma) : base(ImmutableArray<GenericNamespaceName>.Empty) {
+        public TypeName(Terminal stringType, Terminal comma) : base(ImmutableArray<GenericNamespaceNameSymbol>.Empty) {
             StringTypeSymbol = stringType;
             Comma = comma;
         }
@@ -23,7 +23,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         ///     generate a new combined generic names
         /// </summary>
         /// <param name="names"></param>
-        public TypeName(ImmutableArray<GenericNamespaceName> names, Terminal comma) : base(names) {
+        public TypeName(ImmutableArray<GenericNamespaceNameSymbol> names, Terminal comma) : base(names) {
             Comma = comma;
         }
 

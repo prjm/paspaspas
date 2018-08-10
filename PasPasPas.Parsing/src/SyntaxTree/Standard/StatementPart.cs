@@ -31,7 +31,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     for statement
         /// </summary>
-        public ForStatement For { get; set; }
+        public ForStatementSymbol For { get; set; }
 
         /// <summary>
         ///     goto statement

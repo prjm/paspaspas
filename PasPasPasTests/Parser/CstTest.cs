@@ -1321,7 +1321,97 @@ namespace PasPasPasTests.Parser {
             Assert.IsNotNull(s.Colon2);
             Assert.IsNotNull(s.Decimals);
             Assert.AreEqual(5, s.Length);
-
         }
+
+        [TestCase]
+        public void TestForStatement() {
+            var s = RunCstTest(p => p.ParseForStatement(), "for I := 0 to 9 do begin a; end");
+            Assert.IsNotNull(s.ForKeyword);
+            Assert.IsNotNull(s.Variable);
+            Assert.IsNotNull(s.Assignment);
+            Assert.IsNotNull(s.StartExpression);
+            Assert.IsNotNull(s.LoopOperator);
+            Assert.IsNotNull(s.EndExpression);
+            Assert.IsNotNull(s.DoKeyword);
+            Assert.IsNotNull(s.Statement);
+            Assert.AreEqual(31, s.Length);
+
+            s = RunCstTest(p => p.ParseForStatement(), "for I := 9 downto 0 do begin a; end");
+            Assert.IsNotNull(s.ForKeyword);
+            Assert.IsNotNull(s.Variable);
+            Assert.IsNotNull(s.Assignment);
+            Assert.IsNotNull(s.StartExpression);
+            Assert.IsNotNull(s.LoopOperator);
+            Assert.IsNotNull(s.EndExpression);
+            Assert.IsNotNull(s.DoKeyword);
+            Assert.IsNotNull(s.Statement);
+            Assert.AreEqual(35, s.Length);
+
+            s = RunCstTest(p => p.ParseForStatement(), "for a in b do begin a; end");
+            Assert.IsNotNull(s.ForKeyword);
+            Assert.IsNotNull(s.Variable);
+            Assert.IsNotNull(s.StartExpression);
+            Assert.IsNotNull(s.LoopOperator);
+            Assert.IsNotNull(s.DoKeyword);
+            Assert.IsNotNull(s.Statement);
+            Assert.AreEqual(26, s.Length);
+        }
+
+        [TestCase]
+        public void TestForwardDirective() {
+            var s = RunCstTest(p => p.ParseForwardDirective(), "forward;");
+            Assert.IsNotNull(s.Directive);
+            Assert.IsNotNull(s.Semicolon);
+            Assert.AreEqual(8, s.Length);
+        }
+
+        [TestCase]
+        public void TestParseFunctionDirectives() {
+            var s = RunCstTest(p => p.ParseFunctionDirectives(), "overload; inline;");
+            Assert.IsNotNull(s.Items[0]);
+            Assert.IsNotNull(s.Items[1]);
+            Assert.AreEqual(17, s.Length);
+        }
+
+        [TestCase]
+        public void TestParseGenericDefinition() {
+            var s = RunCstTest(p => p.ParseGenericDefinition(), "<a>");
+            Assert.IsNotNull(s.OpenBrackets);
+            Assert.IsNotNull(s.Items[0]);
+            Assert.IsNotNull(s.CloseBrackets);
+            Assert.AreEqual(3, s.Length);
+
+            s = RunCstTest(p => p.ParseGenericDefinition(), "<a, b>");
+            Assert.IsNotNull(s.OpenBrackets);
+            Assert.IsNotNull(s.Items[0]);
+            Assert.IsNotNull(s.Items[1]);
+            Assert.IsNotNull(s.CloseBrackets);
+            Assert.AreEqual(6, s.Length);
+
+            s = RunCstTest(p => p.ParseGenericDefinition(), "<a: a, b; b: c>");
+            Assert.IsNotNull(s.OpenBrackets);
+            Assert.IsNotNull(s.Items[0]);
+            Assert.IsNotNull(s.Items[1]);
+            Assert.IsNotNull(s.CloseBrackets);
+            Assert.AreEqual(15, s.Length);
+        }
+
+        [TestCase]
+        public void TestGenericDefinitionPart() {
+            var s = RunCstTest(p => p.ParseGenericDefinitionPart(), "a: b, c");
+            Assert.IsNotNull(s.Identifier);
+            Assert.IsNotNull(s.Items[0]);
+            Assert.IsNotNull(s.Items[1]);
+            Assert.AreEqual(7, s.Length);
+        }
+
+        [TestCase]
+        public void TestGenericNamespaceName() {
+            var s = RunCstTest(p => p.ParseGenericNamespaceName(), "a<b>.c");
+            Assert.IsNotNull(s.Name);
+            Assert.IsNotNull(s.GenericPart);
+            Assert.AreEqual(4, s.Length);
+        }
+
     }
 }

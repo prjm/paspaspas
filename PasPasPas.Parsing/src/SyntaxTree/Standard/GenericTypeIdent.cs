@@ -13,7 +13,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// </summary>
         /// <param name="identifier"></param>
         /// <param name="genericDefinition"></param>
-        public GenericTypeIdentifier(Identifier identifier, GenericDefinition genericDefinition) {
+        public GenericTypeIdentifier(Identifier identifier, GenericDefinitionSymbol genericDefinition) {
             Identifier = identifier;
             GenericDefinition = genericDefinition;
         }
@@ -21,7 +21,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     generic definition
         /// </summary>
-        public GenericDefinition GenericDefinition { get; }
+        public GenericDefinitionSymbol GenericDefinition { get; }
 
         /// <summary>
         ///     type name

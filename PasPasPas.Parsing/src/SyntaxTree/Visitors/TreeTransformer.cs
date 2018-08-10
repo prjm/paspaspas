@@ -80,7 +80,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         IStartVisitor<BindingSymbol>,
         IStartVisitor<ExportedProcedureHeadingSymbol>,
         IStartVisitor<UnsafeDirective>,
-        IStartVisitor<ForwardDirective>,
+        IStartVisitor<ForwardDirectiveSymbol>,
         IStartVisitor<ExportsSectionSymbol>,
         IStartVisitor<ExportItemSymbol>,
         IStartVisitor<RecordItem>,
@@ -105,7 +105,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         IStartVisitor<ExceptHandlers>,
         IStartVisitor<ExceptHandlerSymbol>,
         IStartVisitor<WithStatement>,
-        IStartVisitor<ForStatement>,
+        IStartVisitor<ForStatementSymbol>,
         IStartVisitor<WhileStatement>,
         IStartVisitor<RepeatStatement>,
         IStartVisitor<CaseStatementSymbol>,
@@ -131,7 +131,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         IChildVisitor<TypeName>,
         IChildVisitor<SimpleType>,
         IChildVisitor<MethodDirectives>,
-        IChildVisitor<FunctionDirectives>,
+        IChildVisitor<FunctionDirectivesSymbol>,
         IChildVisitor<TryStatement>,
         IChildVisitor<IfStatement> {
 
@@ -921,7 +921,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         public void StartVisitChild(TypeName typeName, ISyntaxPart part) {
             var value = LastValue as MetaType;
 
-            if (!(part is GenericNamespaceName name) || value == null)
+            if (!(part is GenericNamespaceNameSymbol name) || value == null)
                 return;
 
             foreach (var nspace in name.Name.Namespace) {
@@ -976,7 +976,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         public void StartVisitChild(SimpleType simpleType, ISyntaxPart part) {
             var value = LastValue as TypeAlias;
 
-            if (!(part is GenericNamespaceName name) || value == null)
+            if (!(part is GenericNamespaceNameSymbol name) || value == null)
                 return;
 
             foreach (var nspace in name.Name.Namespace) {
@@ -1464,7 +1464,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
             result.Name = ExtractSymbolName(method.Identifier);
             result.Kind = TokenKindMapper.MapMethodKind(method.MethodKind);
-            result.Generics = ExtractGenericDefinition(result, method, method.GenericDefinition as GenericDefinition);
+            result.Generics = ExtractGenericDefinition(result, method, method.GenericDefinition as GenericDefinitionSymbol);
             parent.Methods.Add(result, LogSource);
         }
 
@@ -1744,7 +1744,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// </summary>
         /// <param name="parent"></param>
         /// <param name="child"></param>
-        public void StartVisitChild(FunctionDirectives parent, ISyntaxPart child) {
+        public void StartVisitChild(FunctionDirectivesSymbol parent, ISyntaxPart child) {
             var lastValue = LastValue as IDirectiveTarget;
 
             if (child is HintSymbol hints && lastValue != null) {
@@ -1794,7 +1794,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     start visiting a forward directive
         /// </summary>
         /// <param name="directive"></param>
-        public void StartVisit(ForwardDirective directive) {
+        public void StartVisit(ForwardDirectiveSymbol directive) {
             var parent = LastValue as IDirectiveTarget;
             var result = new MethodDirective();
             InitNode(result, directive);
@@ -2382,7 +2382,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     start visiting a for statement
         /// </summary>
         /// <param name="forStatement"></param>
-        public void StartVisit(ForStatement forStatement) {
+        public void StartVisit(ForStatementSymbol forStatement) {
             var target = LastValue as IStatementTarget;
             var result = new StructuredStatement();
             InitNode(result, forStatement);
@@ -3040,7 +3040,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                                 continue;
                             }
 
-                            if (part is GenericDefinitionPart genericPart) {
+                            if (part is GenericDefinitionPartSymbol genericPart) {
                                 result.AddGenericPart(SyntaxPartBase.IdentifierValue(genericPart.Identifier));
                             }
                         }
@@ -3083,7 +3083,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             return result;
         }
 
-        private GenericTypes ExtractGenericDefinition(AbstractSyntaxPartBase parent, ISyntaxPart node, GenericDefinition genericDefinition) {
+        private GenericTypes ExtractGenericDefinition(AbstractSyntaxPartBase parent, ISyntaxPart node, GenericDefinitionSymbol genericDefinition) {
             if (genericDefinition == null)
                 return null;
 
@@ -3101,7 +3101,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                     continue;
                 }
 
-                if (part is GenericDefinitionPart genericPart) {
+                if (part is GenericDefinitionPartSymbol genericPart) {
                     var generic = new GenericType();
                     InitNode(generic, node, result);
                     generic.Name = ExtractSymbolName(genericPart.Identifier);
@@ -3352,7 +3352,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// </summary>
         /// <param name="element"></param>
         /// <param name="child"></param>
-        public void EndVisitChild(FunctionDirectives element, ISyntaxPart child) {
+        public void EndVisitChild(FunctionDirectivesSymbol element, ISyntaxPart child) {
         }
 
         /// <summary>

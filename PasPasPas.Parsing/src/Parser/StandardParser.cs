@@ -357,7 +357,7 @@ namespace PasPasPas.Parsing.Parser {
             var resultAttributes = default(UserAttributes);
             var resultType = default(TypeSpecification);
             var semicolon = default(Terminal);
-            var directives = default(FunctionDirectives);
+            var directives = default(FunctionDirectivesSymbol);
 
             if (Match(TokenKind.OpenParen))
                 parameters = ParseFormalParameterSection();
@@ -378,15 +378,19 @@ namespace PasPasPas.Parsing.Parser {
         #endregion
         #region ParseFunctionDirectives
 
-        [Rule("FunctionDirectives", "{ FunctionDirective } ")]
-        private FunctionDirectives ParseFunctionDirectives() {
+        /// <summary>
+        ///     parse function directives
+        /// </summary>
+        /// <returns></returns>
 
+        [Rule("FunctionDirectives", "{ FunctionDirective } ")]
+        public FunctionDirectivesSymbol ParseFunctionDirectives() {
             using (var list = GetList<SyntaxPartBase>()) {
                 var directive = default(SyntaxPartBase);
                 do {
                     directive = AddToList(list, ParseFunctionDirective());
                 } while (directive != default);
-                return new FunctionDirectives(GetFixedArray(list));
+                return new FunctionDirectivesSymbol(GetFixedArray(list));
             }
         }
 
@@ -422,9 +426,8 @@ namespace PasPasPas.Parsing.Parser {
                 return ParseUnsafeDirective(null);
             }
 
-            if (Match(TokenKind.Forward)) {
-                return ParseForwardDirective(null);
-            }
+            if (Match(TokenKind.Forward))
+                return ParseForwardDirective();
 
             return null;
         }
@@ -432,13 +435,16 @@ namespace PasPasPas.Parsing.Parser {
         #endregion
         #region ParseForwardDirective
 
+        /// <summary>
+        ///     parse a forward directive
+        /// </summary>
+        /// <returns></returns>
+
         [Rule("ForwardDirective", "'forward' ';' ")]
-        private ForwardDirective ParseForwardDirective(IExtendableSyntaxPart parent) {
-            var result = new ForwardDirective();
-            InitByTerminal(result, parent, TokenKind.Forward);
-            ContinueWithOrMissing(result, TokenKind.Semicolon);
-            return result;
-        }
+        public ForwardDirectiveSymbol ParseForwardDirective()
+            => new ForwardDirectiveSymbol(
+                ContinueWithOrMissing(TokenKind.Forward),
+                ContinueWithOrMissing(TokenKind.Semicolon));
 
         #endregion
         #region ParseUnsafeDirective
@@ -671,7 +677,7 @@ namespace PasPasPas.Parsing.Parser {
                 return result;
             }
             if (Match(TokenKind.For)) {
-                result.For = ParseForStatement(result);
+                result.For = ParseForStatement();
                 return result;
             }
             if (Match(TokenKind.With)) {
@@ -797,26 +803,36 @@ namespace PasPasPas.Parsing.Parser {
         #endregion
         #region ParseForStatement
 
-        [Rule("ForStatement", "('for' Designator ':=' Expression ('to' | 'downto' )  Expression 'do' Statement) | ('for' Designator 'in' Expression  'do' Statement)")]
-        private ForStatement ParseForStatement(IExtendableSyntaxPart parent) {
-            var result = new ForStatement();
-            InitByTerminal(result, parent, TokenKind.For);
+        /// <summary>
+        ///     parse a for statement
+        /// </summary>
+        /// <returns></returns>
 
-            result.Variable = RequireIdentifier();
-            if (ContinueWith(result, TokenKind.Assignment)) {
-                result.StartExpression = ParseExpression();
-                ContinueWithOrMissing(result, TokenKind.To, TokenKind.DownTo);
-                result.Kind = result.LastTerminalKind;
-                result.EndExpression = ParseExpression();
+        [Rule("ForStatement", "('for' Designator ':=' Expression ('to' | 'downto' )  Expression 'do' Statement) | ('for' Designator 'in' Expression  'do' Statement)")]
+        public ForStatementSymbol ParseForStatement() {
+            var forKeyword = ContinueWithOrMissing(TokenKind.For);
+            var loopVariable = RequireIdentifier();
+            var assignment = ContinueWith(TokenKind.Assignment);
+            var startExpression = default(ExpressionSymbol);
+            var loopOperator = default(Terminal);
+            var endExpression = default(ExpressionSymbol);
+            var doKeyword = default(Terminal);
+            var loopStatement = default(Statement);
+
+            if (assignment != default) {
+                startExpression = ParseExpression();
+                loopOperator = ContinueWithOrMissing(TokenKind.To, TokenKind.DownTo);
+                endExpression = ParseExpression();
             }
             else {
-                ContinueWithOrMissing(result, TokenKind.In);
-                result.Kind = result.LastTerminalKind;
-                result.StartExpression = ParseExpression();
+                loopOperator = ContinueWithOrMissing(TokenKind.In);
+                startExpression = ParseExpression();
             }
-            ContinueWithOrMissing(result, TokenKind.Do);
-            result.Statement = ParseStatement();
-            return result;
+
+            doKeyword = ContinueWithOrMissing(TokenKind.Do);
+            loopStatement = ParseStatement();
+
+            return new ForStatementSymbol(forKeyword, loopVariable, assignment, startExpression, loopOperator, endExpression, doKeyword, loopStatement);
         }
 
         #endregion
@@ -1867,7 +1883,7 @@ namespace PasPasPas.Parsing.Parser {
             using (var list = GetList<MethodDeclarationName>()) {
                 do {
                     var namePart = ParseNamespaceName(allowIn);
-                    var genericPart = default(GenericDefinition);
+                    var genericPart = default(GenericDefinitionSymbol);
                     var dot = default(Terminal);
 
                     if (Match(TokenKind.AngleBracketsOpen)) {
@@ -2274,8 +2290,8 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             if (newType != default || (MatchIdentifier(TokenKind.ShortString, TokenKind.String, TokenKind.WideString, TokenKind.UnicodeString, TokenKind.AnsiString) && (!LookAhead(1, TokenKind.DotDot)))) {
-                using (var list = GetList<GenericNamespaceName>()) {
-                    var item = default(GenericNamespaceName);
+                using (var list = GetList<GenericNamespaceNameSymbol>()) {
+                    var item = default(GenericNamespaceNameSymbol);
 
                     do {
                         item = AddToList(list, ParseGenericNamespaceName(false, false, true));
@@ -2298,8 +2314,16 @@ namespace PasPasPas.Parsing.Parser {
         #endregion
         #region GenericNamespaceName
 
+        /// <summary>
+        ///     parse a generic namespace name
+        /// </summary>
+        /// <param name="advancedCheck"></param>
+        /// <param name="inDesignator"></param>
+        /// <param name="allowDot"></param>
+        /// <returns></returns>
+
         [Rule("GenericNamespaceName", "NamespaceName [ GenericSuffix ]")]
-        private GenericNamespaceName ParseGenericNamespaceName(bool advancedCheck = false, bool inDesignator = false, bool allowDot = false) {
+        public GenericNamespaceNameSymbol ParseGenericNamespaceName(bool advancedCheck = false, bool inDesignator = false, bool allowDot = false) {
             var name = ParseNamespaceName(false, inDesignator);
             var genericPart = default(GenericSuffix);
 
@@ -2314,7 +2338,7 @@ namespace PasPasPas.Parsing.Parser {
                     }
                 }
             }
-            return new GenericNamespaceName(name, genericPart, allowDot ? ContinueWith(TokenKind.Dot) : null);
+            return new GenericNamespaceNameSymbol(name, genericPart, allowDot ? ContinueWith(TokenKind.Dot) : null);
         }
 
         #endregion
@@ -3496,7 +3520,7 @@ namespace PasPasPas.Parsing.Parser {
         [Rule("GenericTypeIdent", "Ident [ GenericDefintion ] ")]
         private GenericTypeIdentifier ParseGenericTypeIdent() {
             var identifier = RequireIdentifier();
-            var genericDefinition = default(GenericDefinition);
+            var genericDefinition = default(GenericDefinitionSymbol);
 
             if (Match(TokenKind.AngleBracketsOpen)) {
                 genericDefinition = ParseGenericDefinition();
@@ -3533,7 +3557,7 @@ namespace PasPasPas.Parsing.Parser {
             var methodSymbol = ContinueWithOrMissing(TokenKind.Constructor, TokenKind.Destructor, TokenKind.Procedure, TokenKind.Function, TokenKind.Operator);
             var isInOperator = methodSymbol.Kind == TokenKind.Operator && Match(TokenKind.In);
             var identifier = RequireIdentifier(isInOperator);
-            var genericDefinition = default(GenericDefinition);
+            var genericDefinition = default(GenericDefinitionSymbol);
             var openParen = default(Terminal);
             var parameters = default(FormalParametersSymbol);
             var closeParen = default(Terminal);
@@ -3693,8 +3717,13 @@ namespace PasPasPas.Parsing.Parser {
         #endregion
         #region ParseGenericDefinition
 
+        /// <summary>
+        ///     parse a generic definition
+        /// </summary>
+        /// <returns></returns>
+
         [Rule("GenericDefinition", "SimpleGenericDefinition | ConstrainedGenericDefinition")]
-        private GenericDefinition ParseGenericDefinition() {
+        public GenericDefinitionSymbol ParseGenericDefinition() {
             if (!LookAhead(2, TokenKind.Comma, TokenKind.AngleBracketsClose)) {
                 return ParseConstrainedGenericDefinition();
             }
@@ -3711,17 +3740,17 @@ namespace PasPasPas.Parsing.Parser {
         /// <returns></returns>
 
         [Rule("SimpleGenericDefinition", "'<' Identifier { ',' Identifier } '>'")]
-        public GenericDefinition ParseSimpleGenericDefinition() {
+        public GenericDefinitionSymbol ParseSimpleGenericDefinition() {
             var openBrackets = ContinueWith(TokenKind.AngleBracketsOpen);
-            using (var list = GetList<GenericDefinitionPart>()) {
-                var item = default(GenericDefinitionPart);
+            using (var list = GetList<GenericDefinitionPartSymbol>()) {
+                var item = default(GenericDefinitionPartSymbol);
 
                 do {
-                    item = AddToList(list, new GenericDefinitionPart(RequireIdentifier(), ContinueWith(TokenKind.Comma)));
+                    item = AddToList(list, new GenericDefinitionPartSymbol(RequireIdentifier(), ContinueWith(TokenKind.Comma)));
                 } while (item != default && item.CommaOrSemicolon != default);
 
                 var closeBrackets = ContinueWithOrMissing(TokenKind.AngleBracketsClose);
-                return new GenericDefinition(openBrackets, GetFixedArray(list), closeBrackets);
+                return new GenericDefinitionSymbol(openBrackets, GetFixedArray(list), closeBrackets);
             }
         }
 
@@ -3729,25 +3758,30 @@ namespace PasPasPas.Parsing.Parser {
         #region ParseConstrainedGenericDefinition
 
         [Rule("ConstrainedGenericDefinition", "'<' GenericDefinitionPart { ';' GenericDefinitionPart } '>'")]
-        private GenericDefinition ParseConstrainedGenericDefinition() {
+        private GenericDefinitionSymbol ParseConstrainedGenericDefinition() {
             var openBrackets = ContinueWith(TokenKind.AngleBracketsOpen);
-            using (var list = GetList<GenericDefinitionPart>()) {
-                var item = default(GenericDefinitionPart);
+            using (var list = GetList<GenericDefinitionPartSymbol>()) {
+                var item = default(GenericDefinitionPartSymbol);
 
                 do {
-                    item = AddToList(list, new GenericDefinitionPart(ParseGenericDefinitionPart(), ContinueWith(TokenKind.Semicolon)));
+                    item = AddToList(list, new GenericDefinitionPartSymbol(ParseGenericDefinitionPart(), ContinueWith(TokenKind.Semicolon)));
                 } while (item != default && item.CommaOrSemicolon != default);
 
                 var closeBrackets = ContinueWithOrMissing(TokenKind.AngleBracketsClose);
-                return new GenericDefinition(openBrackets, GetFixedArray(list), closeBrackets);
+                return new GenericDefinitionSymbol(openBrackets, GetFixedArray(list), closeBrackets);
             }
         }
 
         #endregion
         #region ParseGenericDefinitionPart
 
+        /// <summary>
+        ///     parse generic symbol part
+        /// </summary>
+        /// <returns></returns>
+
         [Rule("GenericDefinitionPart", "Identifier [ ':' GenericConstraint { ',' GenericConstraint } ]")]
-        private GenericDefinitionPart ParseGenericDefinitionPart() {
+        public GenericDefinitionPartSymbol ParseGenericDefinitionPart() {
             var identifier = RequireIdentifier();
             var colon = ContinueWith(TokenKind.Colon);
 
@@ -3759,11 +3793,11 @@ namespace PasPasPas.Parsing.Parser {
                         item = AddToList(list, ParseGenericConstraint(true));
                     } while (item != default && item.Comma != default);
 
-                    return new GenericDefinitionPart(identifier, colon, GetFixedArray(list));
+                    return new GenericDefinitionPartSymbol(identifier, colon, GetFixedArray(list));
                 };
             }
 
-            return new GenericDefinitionPart(identifier);
+            return new GenericDefinitionPartSymbol(identifier);
         }
 
         #endregion
@@ -3837,8 +3871,8 @@ namespace PasPasPas.Parsing.Parser {
             if (stringType != default)
                 return new TypeName(stringType, allowComma ? ContinueWith(TokenKind.Comma) : default);
 
-            using (var list = GetList<GenericNamespaceName>()) {
-                var name = default(GenericNamespaceName);
+            using (var list = GetList<GenericNamespaceNameSymbol>()) {
+                var name = default(GenericNamespaceNameSymbol);
                 do {
                     name = AddToList(list, ParseGenericNamespaceName(true, inDesignator, true));
                 } while ((!inDesignator || !IsLastDisignatorPart()) && name?.Dot != default);
