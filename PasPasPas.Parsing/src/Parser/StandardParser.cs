@@ -984,7 +984,7 @@ namespace PasPasPas.Parsing.Parser {
         private StatementPart ParseSimpleStatement() {
             if (!(LookAhead(1, TokenKind.Assignment, TokenKind.OpenBraces, TokenKind.OpenParen)) && Match(TokenKind.GoToKeyword, TokenKind.Exit, TokenKind.Break, TokenKind.Continue)) {
                 var result = new StatementPart();
-                result.GoTo = ParseGoToStatement(result);
+                result.GoTo = ParseGoToStatement();
                 return result;
             }
 
@@ -1005,30 +1005,32 @@ namespace PasPasPas.Parsing.Parser {
         #endregion
         #region ParseGoToStatement
 
-        [Rule("GoToStatement", "('goto' Label) | 'break' | 'continue' | 'exit' '(' Expression ')' ")]
-        private GoToStatement ParseGoToStatement(IExtendableSyntaxPart parent) {
-            var result = new GoToStatement();
-            parent.Add(result);
+        /// <summary>
+        ///     parse a goto statement
+        /// </summary>
+        /// <returns></returns>
 
-            if (ContinueWith(result, TokenKind.GoToKeyword)) {
-                result.GoToLabel = ParseLabel();
-                return result;
-            }
-            if (ContinueWith(result, TokenKind.Break)) {
-                result.Break = true;
-                return result;
-            }
-            if (ContinueWith(result, TokenKind.Continue)) {
-                result.Continue = true;
-                return result;
-            }
-            if (ContinueWith(result, TokenKind.Exit)) {
-                result.Exit = true;
-                if (ContinueWith(result, TokenKind.OpenParen)) {
-                    result.ExitExpression = ParseExpression();
-                    ContinueWithOrMissing(result, TokenKind.CloseParen);
+        [Rule("GoToStatement", "('goto' Label) | 'break' | 'continue' | 'exit' '(' Expression ')' ")]
+        public GoToStatementSymbol ParseGoToStatement() {
+
+            if (Match(TokenKind.GoToKeyword))
+                return new GoToStatementSymbol(ContinueWith(TokenKind.GoToKeyword), ParseLabel());
+
+            if (Match(TokenKind.Break, TokenKind.Continue))
+                return new GoToStatementSymbol(ContinueWith(TokenKind.Break, TokenKind.Continue));
+
+            if (Match(TokenKind.Exit)) {
+                var terminal = ContinueWith(TokenKind.Exit);
+                var openParen = ContinueWith(TokenKind.OpenParen);
+                var exitExpression = default(ExpressionSymbol);
+                var closeParen = default(Terminal);
+
+                if (openParen != default) {
+                    exitExpression = ParseExpression();
+                    closeParen = ContinueWithOrMissing(TokenKind.CloseParen);
                 }
-                return result;
+
+                return new GoToStatementSymbol(terminal, openParen, exitExpression, closeParen);
             }
 
             Unexpected();
@@ -2325,7 +2327,7 @@ namespace PasPasPas.Parsing.Parser {
         [Rule("GenericNamespaceName", "NamespaceName [ GenericSuffix ]")]
         public GenericNamespaceNameSymbol ParseGenericNamespaceName(bool advancedCheck = false, bool inDesignator = false, bool allowDot = false) {
             var name = ParseNamespaceName(false, inDesignator);
-            var genericPart = default(GenericSuffix);
+            var genericPart = default(GenericSuffixSymbol);
 
             if (Match(TokenKind.AngleBracketsOpen)) {
                 if (!advancedCheck) {
@@ -3517,8 +3519,13 @@ namespace PasPasPas.Parsing.Parser {
         #endregion
         #region ParseGenericTypeIdent
 
+        /// <summary>
+        ///     parse a generic type identifier
+        /// </summary>
+        /// <returns></returns>
+
         [Rule("GenericTypeIdent", "Ident [ GenericDefintion ] ")]
-        private GenericTypeIdentifier ParseGenericTypeIdent() {
+        public GenericTypeIdentifierSymbol ParseGenericTypeIdent() {
             var identifier = RequireIdentifier();
             var genericDefinition = default(GenericDefinitionSymbol);
 
@@ -3526,7 +3533,7 @@ namespace PasPasPas.Parsing.Parser {
                 genericDefinition = ParseGenericDefinition();
             }
 
-            return new GenericTypeIdentifier(identifier, genericDefinition);
+            return new GenericTypeIdentifierSymbol(identifier, genericDefinition);
         }
 
         #endregion
@@ -3959,8 +3966,13 @@ namespace PasPasPas.Parsing.Parser {
         #endregion
         #region ParseGenericSuffix
 
+        /// <summary>
+        ///     parse a generic suffix symbol
+        /// </summary>
+        /// <returns></returns>
+
         [Rule("GenericSuffix", "'<' TypeDefinition { ',' TypeDefinition '}' '>'")]
-        private GenericSuffix ParseGenericSuffix() {
+        public GenericSuffixSymbol ParseGenericSuffix() {
             var openBracket = ContinueWithOrMissing(TokenKind.AngleBracketsOpen);
 
             using (var list = GetList<TypeSpecification>()) {
@@ -3970,7 +3982,7 @@ namespace PasPasPas.Parsing.Parser {
                 } while ((!Tokenizer.AtEof) && typeSpecification?.Comma != default);
 
                 var closeBracket = ContinueWithOrMissing(TokenKind.AngleBracketsClose);
-                return new GenericSuffix(openBracket, GetFixedArray(list), closeBracket);
+                return new GenericSuffixSymbol(openBracket, GetFixedArray(list), closeBracket);
             }
         }
 
@@ -4454,7 +4466,7 @@ namespace PasPasPas.Parsing.Parser {
 
             var subitem = default(Identifier);
             var dot = default(Terminal);
-            var genericSuffix = default(GenericSuffix);
+            var genericSuffix = default(GenericSuffixSymbol);
             var openBraces = default(Terminal);
             var closeBraces = default(Terminal);
             var indexExpression = default(ExpressionList);

@@ -36,7 +36,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     goto statement
         /// </summary>
-        public GoToStatement GoTo { get; set; }
+        public GoToStatementSymbol GoTo { get; set; }
 
         /// <summary>
         ///     if statement

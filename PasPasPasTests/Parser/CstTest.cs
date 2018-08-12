@@ -1411,6 +1411,66 @@ namespace PasPasPasTests.Parser {
             Assert.IsNotNull(s.Name);
             Assert.IsNotNull(s.GenericPart);
             Assert.AreEqual(4, s.Length);
+
+            s = RunCstTest(p => p.ParseGenericNamespaceName(), "a");
+            Assert.IsNotNull(s.Name);
+            Assert.AreEqual(1, s.Length);
+        }
+
+        [TestCase]
+        public void TestGenericTypeIdent() {
+            var s = RunCstTest(p => p.ParseGenericTypeIdent(), "a<b>");
+            Assert.IsNotNull(s.Identifier);
+            Assert.IsNotNull(s.GenericDefinition);
+            Assert.AreEqual(4, s.Length);
+
+            s = RunCstTest(p => p.ParseGenericTypeIdent(), "a");
+            Assert.IsNotNull(s.Identifier);
+            Assert.AreEqual(1, s.Length);
+        }
+
+        [TestCase]
+        public void TestGenericSuffix() {
+            var s = RunCstTest(p => p.ParseGenericSuffix(), "<a>");
+            Assert.IsNotNull(s.OpenBracket);
+            Assert.IsNotNull(s.Items[0]);
+            Assert.IsNotNull(s.CloseBracket);
+            Assert.AreEqual(3, s.Length);
+
+            s = RunCstTest(p => p.ParseGenericSuffix(), "<a,b>");
+            Assert.IsNotNull(s.OpenBracket);
+            Assert.IsNotNull(s.Items[0]);
+            Assert.IsNotNull(s.Items[0].Comma);
+            Assert.IsNotNull(s.Items[1]);
+            Assert.IsNotNull(s.CloseBracket);
+            Assert.AreEqual(5, s.Length);
+        }
+
+        [TestCase]
+        public void TestGotoStatement() {
+            var s = RunCstTest(p => p.ParseGoToStatement(), "goto a");
+            Assert.IsNotNull(s.GotoSymbol);
+            Assert.IsNotNull(s.GoToLabel);
+            Assert.AreEqual(6, s.Length);
+
+            s = RunCstTest(p => p.ParseGoToStatement(), "break");
+            Assert.IsNotNull(s.GotoSymbol);
+            Assert.AreEqual(5, s.Length);
+
+            s = RunCstTest(p => p.ParseGoToStatement(), "continue");
+            Assert.IsNotNull(s.GotoSymbol);
+            Assert.AreEqual(8, s.Length);
+
+            s = RunCstTest(p => p.ParseGoToStatement(), "exit");
+            Assert.IsNotNull(s.GotoSymbol);
+            Assert.AreEqual(4, s.Length);
+
+            s = RunCstTest(p => p.ParseGoToStatement(), "exit(5)");
+            Assert.IsNotNull(s.GotoSymbol);
+            Assert.IsNotNull(s.OpenParen);
+            Assert.IsNotNull(s.ExitExpression);
+            Assert.IsNotNull(s.CloseParen);
+            Assert.AreEqual(7, s.Length);
         }
 
     }

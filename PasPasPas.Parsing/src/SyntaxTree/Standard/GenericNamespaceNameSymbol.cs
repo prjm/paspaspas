@@ -13,7 +13,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// </summary>
         /// <param name="name"></param>
         /// <param name="genericPart"></param>
-        public GenericNamespaceNameSymbol(NamespaceName name, GenericSuffix genericPart, Terminal dot) {
+        public GenericNamespaceNameSymbol(NamespaceName name, GenericSuffixSymbol genericPart, Terminal dot) {
             Name = name;
             GenericPart = genericPart;
             Dot = dot;
@@ -27,7 +27,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     generic part
         /// </summary>
-        public GenericSuffix GenericPart { get; }
+        public GenericSuffixSymbol GenericPart { get; }
 
         /// <summary>
         ///     namespace name

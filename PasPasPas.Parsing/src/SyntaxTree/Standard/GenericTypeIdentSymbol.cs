@@ -6,14 +6,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// <summary>
     ///     generic type identifier
     /// </summary>
-    public class GenericTypeIdentifier : StandardSyntaxTreeBase {
+    public class GenericTypeIdentifierSymbol : StandardSyntaxTreeBase {
 
         /// <summary>
         ///     create a new generic type identifier
         /// </summary>
         /// <param name="identifier"></param>
         /// <param name="genericDefinition"></param>
-        public GenericTypeIdentifier(Identifier identifier, GenericDefinitionSymbol genericDefinition) {
+        public GenericTypeIdentifierSymbol(Identifier identifier, GenericDefinitionSymbol genericDefinition) {
             Identifier = identifier;
             GenericDefinition = genericDefinition;
         }
@@ -43,7 +43,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         ///     symbol length
         /// </summary>
         public override int Length
-            => Identifier.GetSymbolLength() + GenericDefinition.GetSymbolLength();
+            => Identifier.GetSymbolLength() +
+                GenericDefinition.GetSymbolLength();
 
     }
 }

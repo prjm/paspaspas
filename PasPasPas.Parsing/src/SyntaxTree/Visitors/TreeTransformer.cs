@@ -112,7 +112,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         IStartVisitor<CaseItemSymbol>,
         IStartVisitor<CaseLabelSymbol>,
         IStartVisitor<IfStatement>,
-        IStartVisitor<GoToStatement>,
+        IStartVisitor<GoToStatementSymbol>,
         IStartVisitor<AsmBlockSymbol>,
         IStartVisitor<AsmPseudoOpSymbol>,
         IStartVisitor<LocalAsmLabel>,
@@ -2542,7 +2542,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     start visiting a gotot statement
         /// </summary>
         /// <param name="gotoStatement"></param>
-        public void StartVisit(GoToStatement gotoStatement) {
+        public void StartVisit(GoToStatementSymbol gotoStatement) {
             var target = LastValue as IStatementTarget;
             var result = new StructuredStatement();
             InitNode(result, gotoStatement);
@@ -3072,7 +3072,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             return result;
         }
 
-        private GenericTypes ExtractGenericDefinition(AbstractSyntaxPartBase parent, GenericSuffix genericDefinition) {
+        private GenericTypes ExtractGenericDefinition(AbstractSyntaxPartBase parent, GenericSuffixSymbol genericDefinition) {
             if (genericDefinition == null)
                 return null;
 

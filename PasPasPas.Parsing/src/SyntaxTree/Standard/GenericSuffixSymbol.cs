@@ -7,7 +7,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// <summary>
     ///    generic type suffix
     /// </summary>
-    public class GenericSuffix : VariableLengthSyntaxTreeBase<TypeSpecification> {
+    public class GenericSuffixSymbol : VariableLengthSyntaxTreeBase<TypeSpecification> {
 
         /// <summary>
         ///     create a new generic suffix
@@ -15,7 +15,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="openBracket"></param>
         /// <param name="items"></param>
         /// <param name="closeBracket"></param>
-        public GenericSuffix(Terminal openBracket, ImmutableArray<TypeSpecification> items, Terminal closeBracket) : base(items) {
+        public GenericSuffixSymbol(Terminal openBracket, ImmutableArray<TypeSpecification> items, Terminal closeBracket) : base(items) {
             OpenBracket = openBracket;
             CloseBracket = closeBracket;
         }
