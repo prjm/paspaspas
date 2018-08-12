@@ -356,7 +356,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             declaration.Name = ExtractSymbolName(typeDeclaration.TypeId?.Identifier);
             declaration.Generics = ExtractGenericDefinition(declaration, typeDeclaration, typeDeclaration.TypeId?.GenericDefinition);
             declaration.Attributes = ExtractAttributes(typeDeclaration.Attributes as UserAttributes, CurrentUnit);
-            declaration.Hints = ExtractHints(typeDeclaration.Hint as HintingInformationList);
+            declaration.Hints = ExtractHints(typeDeclaration.Hint as HintingInformationListSymbol);
             symbols.Symbols.Items.Add(new SingleDeclaredSymbol(declaration));
             symbols.Symbols.Add(declaration, LogSource);
         }
@@ -382,7 +382,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             declaration.Name = ExtractSymbolName(constDeclaration.Identifier);
             declaration.Mode = CurrentDeclarationMode;
             declaration.Attributes = ExtractAttributes(constDeclaration.Attributes as UserAttributes, CurrentUnit);
-            declaration.Hints = ExtractHints(constDeclaration.Hint as HintingInformationList);
+            declaration.Hints = ExtractHints(constDeclaration.Hint as HintingInformationListSymbol);
             symbols.Symbols.Items.Add(new SingleDeclaredSymbol(declaration));
             symbols.Symbols.Add(declaration, LogSource);
         }
@@ -441,7 +441,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             var declaration = new VariableDeclaration();
             InitNode(declaration, varDeclaration);
             declaration.Mode = CurrentDeclarationMode;
-            declaration.Hints = ExtractHints(varDeclaration.Hints as HintingInformationList);
+            declaration.Hints = ExtractHints(varDeclaration.Hints as HintingInformationListSymbol);
 
             foreach (var child in varDeclaration.Identifiers.Parts) {
                 if (child is Identifier ident) {
@@ -1218,7 +1218,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 name = new SimpleSymbolName(intLabel.Value.ParsedValue.ToString());
             }
 
-            var hexLabel = (label.LabelName as HexNumber)?.LastTerminalToken;
+            var hexLabel = (label.LabelName as HexNumberSymbol)?.LastTerminalToken;
             if (hexLabel != null) {
                 name = new SimpleSymbolName(hexLabel.Value.ParsedValue.ToString());
             }
@@ -1335,7 +1335,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 visitor.WorkingStack.Pop();
             }
 
-            result.Hints = ExtractHints(field.Hint as HintingInformationList);
+            result.Hints = ExtractHints(field.Hint as HintingInformationListSymbol);
         }
 
         #endregion
@@ -1947,7 +1947,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
             }
 
-            result.Hints = ExtractHints(fieldDeclaration.Hint as HintingInformationList);
+            result.Hints = ExtractHints(fieldDeclaration.Hint as HintingInformationListSymbol);
 
         }
 
@@ -3128,7 +3128,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             return result;
         }
 
-        private static SymbolHints ExtractHints(HintingInformationList hints) {
+        private static SymbolHints ExtractHints(HintingInformationListSymbol hints) {
             var result = new SymbolHints();
 
             if (hints == null || hints.PartList == null || hints.PartList.Count < 1)

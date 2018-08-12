@@ -17,7 +17,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="typeSpecification"></param>
         /// <param name="hints"></param>
         /// <param name="semicolon"></param>
-        public TypeDeclaration(UserAttributes attributes, GenericTypeIdentifierSymbol genericTypeIdent, Terminal equalsSign, TypeSpecification typeSpecification, HintingInformationList hints, Terminal semicolon) {
+        public TypeDeclaration(UserAttributes attributes, GenericTypeIdentifierSymbol genericTypeIdent, Terminal equalsSign, TypeSpecification typeSpecification, HintingInformationListSymbol hints, Terminal semicolon) {
             Attributes = attributes;
             TypeId = genericTypeIdent;
             EqualsSign = equalsSign;
@@ -34,7 +34,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     hinting directives
         /// </summary>
-        public HintingInformationList Hint { get; }
+        public HintingInformationListSymbol Hint { get; }
 
         /// <summary>
         ///     equals sign

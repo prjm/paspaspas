@@ -6,13 +6,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// <summary>
     ///     hex number literal
     /// </summary>
-    public class HexNumber : StandardSyntaxTreeBase {
+    public class HexNumberSymbol : StandardSyntaxTreeBase {
 
         /// <summary>
         ///     hex number
         /// </summary>
         /// <param name="symbol"></param>
-        public HexNumber(Terminal symbol)
+        public HexNumberSymbol(Terminal symbol)
             => Symbol = symbol;
 
         /// <summary>

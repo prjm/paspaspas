@@ -6,13 +6,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// <summary>
     ///     hint list
     /// </summary>
-    public class HintingInformationList : VariableLengthSyntaxTreeBase<HintSymbol> {
+    public class HintingInformationListSymbol : VariableLengthSyntaxTreeBase<HintSymbol> {
 
         /// <summary>
         ///     create a new hinting information list
         /// </summary>
         /// <param name="items"></param>
-        public HintingInformationList(ImmutableArray<HintSymbol> items) : base(items) {
+        public HintingInformationListSymbol(ImmutableArray<HintSymbol> items) : base(items) {
 
         }
 

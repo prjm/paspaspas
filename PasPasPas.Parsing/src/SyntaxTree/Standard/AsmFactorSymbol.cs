@@ -50,7 +50,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         ///     asm hex number
         /// </summary>
         /// <param name="hexNumber"></param>
-        public AsmFactorSymbol(HexNumber hexNumber)
+        public AsmFactorSymbol(HexNumberSymbol hexNumber)
             => HexNumber = hexNumber;
 
         /// <summary>
@@ -89,7 +89,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     hex number
         /// </summary>
-        public HexNumber HexNumber { get; }
+        public HexNumberSymbol HexNumber { get; }
 
         /// <summary>
         ///     identifier

@@ -12,8 +12,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     hints
         /// </summary>
-        public HintingInformationList Hints
-            => LibraryHead?.Hints as HintingInformationList;
+        public HintingInformationListSymbol Hints
+            => LibraryHead?.Hints as HintingInformationListSymbol;
 
         /// <summary>
         ///     library head

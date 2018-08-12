@@ -9,39 +9,65 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     public class HintSymbol : StandardSyntaxTreeBase {
 
         /// <summary>
+        ///     create a new hint symbol
+        /// </summary>
+        /// <param name="symbol"></param>
+        /// <param name="semicolon"></param>
+        public HintSymbol(Terminal symbol, Terminal semicolon) {
+            Symbol = symbol;
+            Semicolon = semicolon;
+        }
+
+        /// <summary>
+        ///     create a new hint symbol
+        /// </summary>
+        /// <param name="symbol"></param>
+        /// <param name="deprecatedComment"></param>
+        /// <param name="semicolon"></param>
+        public HintSymbol(Terminal symbol, QuotedString deprecatedComment, Terminal semicolon) {
+            Symbol = symbol;
+            DeprecatedComment = deprecatedComment;
+            Semicolon = semicolon;
+        }
+
+        /// <summary>
         ///     hint for deprecation
         /// </summary>
-        public bool Deprecated { get; set; }
+        public bool Deprecated
+            => Symbol.GetSymbolKind() == TokenKind.Deprecated;
 
         /// <summary>
         ///     comment for deprecation
         /// </summary>
-        public SyntaxPartBase DeprecatedComment { get; set; }
+        public SyntaxPartBase DeprecatedComment { get; }
 
         /// <summary>
         ///     hint for experimental
         /// </summary>
-        public bool Experimental { get; set; }
+        public bool Experimental
+                        => Symbol.GetSymbolKind() == TokenKind.Experimental;
 
         /// <summary>
         ///     hint for library
         /// </summary>
-        public bool Library { get; set; }
+        public bool Library
+            => Symbol.GetSymbolKind() == TokenKind.Library;
 
         /// <summary>
         ///     hint for platform
         /// </summary>
-        public bool Platform { get; set; }
+        public bool Platform
+            => Symbol.GetSymbolKind() == TokenKind.Platform;
 
         /// <summary>
         ///     semicolon
         /// </summary>
-        public Terminal Semicolon { get; set; }
+        public Terminal Semicolon { get; }
 
         /// <summary>
         ///    hint symbol
         /// </summary>
-        public Terminal Symbol { get; set; }
+        public Terminal Symbol { get; }
 
 
         /// <summary>

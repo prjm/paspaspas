@@ -413,11 +413,8 @@ namespace PasPasPas.Parsing.Parser {
                 return ParseOldCallConvention(null);
             }
 
-            if (Match(TokenKind.Deprecated, TokenKind.Library, TokenKind.Experimental, TokenKind.Platform)) {
-                var result = ParseHint();
-                result.Semicolon = ContinueWithOrMissing(TokenKind.Semicolon);
-                return result;
-            }
+            if (Match(TokenKind.Deprecated, TokenKind.Library, TokenKind.Experimental, TokenKind.Platform))
+                return ParseHint(true);
 
             if (Match(TokenKind.VarArgs, TokenKind.External))
                 return ParseExternalDirective();
@@ -1755,11 +1752,8 @@ namespace PasPasPas.Parsing.Parser {
             if (Match(TokenKind.Cdecl, TokenKind.Pascal, TokenKind.Register, TokenKind.Safecall, TokenKind.Stdcall, TokenKind.Export))
                 return ParseCallConvention();
 
-            if (Match(TokenKind.Deprecated, TokenKind.Library, TokenKind.Experimental, TokenKind.Platform)) {
-                var result = ParseHint();
-                result.Semicolon = ContinueWithOrMissing(TokenKind.Semicolon);
-                return result;
-            }
+            if (Match(TokenKind.Deprecated, TokenKind.Library, TokenKind.Experimental, TokenKind.Platform))
+                return ParseHint(true);
 
             if (Match(TokenKind.DispId))
                 return ParseDispIdDirective();
@@ -2140,28 +2134,16 @@ namespace PasPasPas.Parsing.Parser {
         /// <returns></returns>
 
         [Rule("Hints", " { Hint ';' }")]
-        public HintingInformationList ParseHints(bool requireSemicolon) {
-            var result = default(HintingInformationList);
-            var hint = default(HintSymbol);
-
+        public HintingInformationListSymbol ParseHints(bool requireSemicolon) {
             using (var list = GetList<HintSymbol>()) {
+                var hint = default(HintSymbol);
+
                 do {
-                    hint = ParseHint();
-                    if (hint != null && requireSemicolon) {
-                        hint.Semicolon = ContinueWithOrMissing(TokenKind.Semicolon);
-                    }
-                    else if (hint != null) {
-                        hint.Semicolon = EmptyTerminal();
-                    }
-
-                    if (hint != null) {
-                        AddToList(list, hint);
-                    }
-
+                    hint = AddToList(list, ParseHint(requireSemicolon));
                 } while (hint != default);
 
                 if (list.Item.Count > 0)
-                    return new HintingInformationList(GetFixedArray(list));
+                    return new HintingInformationListSymbol(GetFixedArray(list));
             }
 
             return null;
@@ -2176,41 +2158,28 @@ namespace PasPasPas.Parsing.Parser {
         /// <returns></returns>
 
         [Rule("Hint", " ('deprecated' [QuotedString] | 'experimental' | 'platform' | 'library' ) ")]
-        public HintSymbol ParseHint() {
-            var result = new HintSymbol {
-                Symbol = ContinueWith(TokenKind.Deprecated),
-                Semicolon = EmptyTerminal()
-            };
+        public HintSymbol ParseHint(bool requireSemicolon) {
+            var symbol = ContinueWith(TokenKind.Deprecated);
+            var semicolon = default(Terminal);
 
-            if (result.Symbol != null) {
-                result.Deprecated = true;
+            if (symbol != default) {
+                var deprecatedComment = default(QuotedString);
+
                 if (Match(TokenKind.QuotedString))
-                    result.DeprecatedComment = RequireString();
-                else
-                    result.DeprecatedComment = EmptyTerminal();
+                    deprecatedComment = RequireString();
 
-                return result;
-            }
-            else {
-                result.DeprecatedComment = EmptyTerminal();
+                if (requireSemicolon)
+                    semicolon = ContinueWithOrMissing(TokenKind.Semicolon);
+
+                return new HintSymbol(symbol, deprecatedComment, semicolon);
             }
 
-            result.Symbol = ContinueWith(TokenKind.Experimental);
-            if (result.Symbol != null) {
-                result.Experimental = true;
-                return result;
-            }
+            symbol = ContinueWith(TokenKind.Experimental, TokenKind.Platform, TokenKind.Library);
+            if (symbol != default) {
+                if (requireSemicolon)
+                    semicolon = ContinueWithOrMissing(TokenKind.Semicolon);
 
-            result.Symbol = ContinueWith(TokenKind.Platform);
-            if (result.Symbol != null) {
-                result.Platform = true;
-                return result;
-            }
-
-            result.Symbol = ContinueWith(TokenKind.Library);
-            if (result.Symbol != null) {
-                result.Library = true;
-                return result;
+                return new HintSymbol(symbol, semicolon);
             }
 
             return null;
@@ -4627,8 +4596,12 @@ namespace PasPasPas.Parsing.Parser {
         private StandardInteger RequireInteger()
             => new StandardInteger(ContinueWithOrMissing(TokenKind.Integer));
 
-        private HexNumber RequireHexValue()
-            => new HexNumber(ContinueWithOrMissing(TokenKind.HexNumber));
+        /// <summary>
+        ///     parse a hex number
+        /// </summary>
+        /// <returns></returns>
+        public HexNumberSymbol RequireHexValue()
+            => new HexNumberSymbol(ContinueWithOrMissing(TokenKind.HexNumber));
 
         /// <summary>
         ///     parse a real number

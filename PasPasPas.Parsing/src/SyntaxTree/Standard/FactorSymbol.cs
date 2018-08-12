@@ -43,7 +43,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// </summary>
         /// <param name="hexValue"></param>
         /// <param name="designator"></param>
-        public FactorSymbol(HexNumber hexValue, DesignatorStatementSymbol designator) {
+        public FactorSymbol(HexNumberSymbol hexValue, DesignatorStatementSymbol designator) {
             HexValue = hexValue;
             Designator = designator;
         }
@@ -139,7 +139,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     hex number
         /// </summary>
-        public HexNumber HexValue { get; }
+        public HexNumberSymbol HexValue { get; }
 
         /// <summary>
         ///     int value

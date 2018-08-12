@@ -15,7 +15,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="namespaceName"></param>
         /// <param name="hintingInformationList"></param>
         /// <param name="terminal2"></param>
-        public UnitHeadSymbol(Terminal terminal1, NamespaceName namespaceName, HintingInformationList hintingInformationList, Terminal terminal2) {
+        public UnitHeadSymbol(Terminal terminal1, NamespaceName namespaceName, HintingInformationListSymbol hintingInformationList, Terminal terminal2) {
             Unit = terminal1;
             UnitName = namespaceName;
             Hint = hintingInformationList;

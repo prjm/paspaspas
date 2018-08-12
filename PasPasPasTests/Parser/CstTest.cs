@@ -63,11 +63,25 @@ namespace PasPasPasTests.Parser {
 
         [TestCase]
         public void TestHintDirective() {
-            var s = RunCstTest(p => p.ParseHint(), "library");
+            var s = RunCstTest(p => p.ParseHint(false), "library");
+            Assert.IsNotNull(s.Symbol);
+            Assert.AreEqual(7, s.Length);
+
+            s = RunCstTest(p => p.ParseHint(false), "deprecated 'a'");
             Assert.IsNotNull(s.Symbol);
             Assert.IsNotNull(s.DeprecatedComment);
-            Assert.IsNotNull(s.Semicolon);
-            Assert.AreEqual("library".Length, s.Length);
+            Assert.AreEqual(14, s.Length);
+        }
+
+        [TestCase]
+        public void TestHintList() {
+            var s = RunCstTest(p => p.ParseHints(true), "library; deprecated;");
+            Assert.IsNotNull(s.Items[0]);
+            Assert.IsNotNull(s.Items[0].Semicolon);
+            Assert.IsNotNull(s.Items[1]);
+            Assert.IsNotNull(s.Items[1].Semicolon);
+            Assert.AreEqual(20, s.Length);
+
         }
 
         [TestCase]
@@ -1471,6 +1485,13 @@ namespace PasPasPasTests.Parser {
             Assert.IsNotNull(s.ExitExpression);
             Assert.IsNotNull(s.CloseParen);
             Assert.AreEqual(7, s.Length);
+        }
+
+        [TestCase]
+        public void TestHexNumber() {
+            var s = RunCstTest(p => p.RequireHexValue(), "$33");
+            Assert.IsNotNull(s.Symbol);
+            Assert.AreEqual(3, s.Length);
         }
 
     }
