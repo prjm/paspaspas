@@ -14,7 +14,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="constraintSymbol"></param>
         /// <param name="identifier"></param>
         /// <param name="comma"></param>
-        public ConstrainedGenericSymbol(Terminal constraintSymbol, Identifier identifier, Terminal comma) {
+        public ConstrainedGenericSymbol(Terminal constraintSymbol, IdentifierSymbol identifier, Terminal comma) {
             ConstraintSymbol = constraintSymbol;
             ConstraintIdentifier = identifier;
             Comma = comma;
@@ -29,7 +29,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     constraint identifier
         /// </summary>
-        public Identifier ConstraintIdentifier { get; }
+        public IdentifierSymbol ConstraintIdentifier { get; }
 
         /// <summary>
         ///     constructor constraint

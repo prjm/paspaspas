@@ -15,7 +15,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     parameter name
         /// </summary>
-        public Identifier ParameterName { get; internal set; }
+        public IdentifierSymbol ParameterName { get; internal set; }
 
         /// <summary>
         ///     accept visitor

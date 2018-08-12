@@ -15,7 +15,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     named guid for this interface
         /// </summary>
-        public Identifier IdIdentifier { get; set; }
+        public IdentifierSymbol IdIdentifier { get; set; }
 
         /// <summary>
         ///     accept visitor

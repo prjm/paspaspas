@@ -16,7 +16,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="typeDecl"></param>
         /// <param name="hint"></param>
         /// <param name="semicolon"></param>
-        public ClassFieldSymbol(IdentifierList names, Terminal colonSymbol, TypeSpecification typeDecl, HintingInformationListSymbol hint, Terminal semicolon) {
+        public ClassFieldSymbol(IdentifierListSymbol names, Terminal colonSymbol, TypeSpecification typeDecl, HintingInformationListSymbol hint, Terminal semicolon) {
             Names = names;
             ColonSymbol = colonSymbol;
             TypeDecl = typeDecl;
@@ -32,7 +32,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     names
         /// </summary>
-        public IdentifierList Names { get; }
+        public IdentifierListSymbol Names { get; }
 
         /// <summary>
         ///     type declaration

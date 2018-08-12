@@ -29,7 +29,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// </summary>
         /// <param name="bytePtrKind"></param>
         /// <param name="bytePtr"></param>
-        public AsmExpressionSymbol(Identifier bytePtrKind, AsmOperandSymbol bytePtr) {
+        public AsmExpressionSymbol(IdentifierSymbol bytePtrKind, AsmOperandSymbol bytePtr) {
             BytePtrKind = bytePtrKind;
             BytePtr = bytePtr;
         }

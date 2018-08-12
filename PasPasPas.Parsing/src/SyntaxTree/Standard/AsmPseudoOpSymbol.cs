@@ -16,7 +16,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="mode"></param>
         /// <param name="numberOfParams"></param>
         /// <param name="register"></param>
-        public AsmPseudoOpSymbol(Terminal dot, Identifier kindSymbol, AsmPrefixSymbolKind mode, StandardInteger numberOfParams, Identifier register) {
+        public AsmPseudoOpSymbol(Terminal dot, IdentifierSymbol kindSymbol, AsmPrefixSymbolKind mode, StandardInteger numberOfParams, IdentifierSymbol register) {
             NumberOfParams = numberOfParams;
             Register = register;
             Mode = mode;
@@ -28,7 +28,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     operation kind
         /// </summary>
-        public Identifier Kind { get; }
+        public IdentifierSymbol Kind { get; }
 
         /// <summary>
         ///     number of parameters
@@ -38,7 +38,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     register name
         /// </summary>
-        public Identifier Register { get; }
+        public IdentifierSymbol Register { get; }
 
         /// <summary>
         ///     mode

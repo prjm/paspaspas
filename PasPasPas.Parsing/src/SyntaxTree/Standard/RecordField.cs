@@ -16,7 +16,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="fieldType"></param>
         /// <param name="hint"></param>
         /// <param name="semicolon"></param>
-        public RecordField(IdentifierList names, Terminal colonSymbol, TypeSpecification fieldType, HintingInformationListSymbol hint, Terminal semicolon) {
+        public RecordField(IdentifierListSymbol names, Terminal colonSymbol, TypeSpecification fieldType, HintingInformationListSymbol hint, Terminal semicolon) {
             Names = names;
             ColonSymbol = colonSymbol;
             FieldType = fieldType;
@@ -37,7 +37,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     field names
         /// </summary>
-        public IdentifierList Names { get; }
+        public IdentifierListSymbol Names { get; }
 
         /// <summary>
         ///     semicolon

@@ -25,7 +25,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="openBraces"></param>
         /// <param name="indexExpression"></param>
         /// <param name="closeBraces"></param>
-        public DesignatorItemSymbol(Terminal dotSymbol, Identifier subitem, GenericSuffixSymbol genericSuffix, Terminal openBraces, ExpressionList indexExpression, Terminal closeBraces) : base(ImmutableArray<Parameter>.Empty) {
+        public DesignatorItemSymbol(Terminal dotSymbol, IdentifierSymbol subitem, GenericSuffixSymbol genericSuffix, Terminal openBraces, ExpressionList indexExpression, Terminal closeBraces) : base(ImmutableArray<Parameter>.Empty) {
             DotSymbol = dotSymbol;
             Subitem = subitem;
             SubitemGenericType = genericSuffix;
@@ -43,7 +43,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="openParen"></param>
         /// <param name="immutableArray"></param>
         /// <param name="closeParen"></param>
-        public DesignatorItemSymbol(Terminal dotSymbol, Identifier subitem, GenericSuffixSymbol genericSuffix, Terminal openParen, ImmutableArray<Parameter> immutableArray, Terminal closeParen) : base(immutableArray) {
+        public DesignatorItemSymbol(Terminal dotSymbol, IdentifierSymbol subitem, GenericSuffixSymbol genericSuffix, Terminal openParen, ImmutableArray<Parameter> immutableArray, Terminal closeParen) : base(immutableArray) {
             DotSymbol = dotSymbol;
             Subitem = subitem;
             SubitemGenericType = genericSuffix;
@@ -74,7 +74,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     subitem
         /// </summary>
-        public Identifier Subitem { get; }
+        public IdentifierSymbol Subitem { get; }
 
         /// <summary>
         ///     generic type of the subitem

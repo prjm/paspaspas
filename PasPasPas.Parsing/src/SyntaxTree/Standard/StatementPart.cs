@@ -41,7 +41,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     if statement
         /// </summary>
-        public IfStatement If { get; set; }
+        public IfStatementSymbol If { get; set; }
 
         /// <summary>
         ///     raise statement

@@ -111,7 +111,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         IStartVisitor<CaseStatementSymbol>,
         IStartVisitor<CaseItemSymbol>,
         IStartVisitor<CaseLabelSymbol>,
-        IStartVisitor<IfStatement>,
+        IStartVisitor<IfStatementSymbol>,
         IStartVisitor<GoToStatementSymbol>,
         IStartVisitor<AsmBlockSymbol>,
         IStartVisitor<AsmPseudoOpSymbol>,
@@ -133,7 +133,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         IChildVisitor<MethodDirectives>,
         IChildVisitor<FunctionDirectivesSymbol>,
         IChildVisitor<TryStatement>,
-        IChildVisitor<IfStatement> {
+        IChildVisitor<IfStatementSymbol> {
 
         private readonly Visitor visitor;
         private readonly IParserEnvironment environment;
@@ -444,7 +444,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             declaration.Hints = ExtractHints(varDeclaration.Hints as HintingInformationListSymbol);
 
             foreach (var child in varDeclaration.Identifiers.Parts) {
-                if (child is Identifier ident) {
+                if (child is IdentifierSymbol ident) {
                     var name = new VariableName();
                     InitNode(name, child, declaration);
                     name.Name = ExtractSymbolName(ident);
@@ -1209,7 +1209,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         public void StartVisit(Label label) {
             SymbolName name = null;
 
-            if (label.LabelName is Identifier standardLabel) {
+            if (label.LabelName is IdentifierSymbol standardLabel) {
                 name = ExtractSymbolName(standardLabel);
             }
 
@@ -1321,7 +1321,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                     continue;
                 }
 
-                var partName = part as Identifier;
+                var partName = part as IdentifierSymbol;
                 if (partName == null)
                     continue;
 
@@ -1927,7 +1927,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                     continue;
                 }
 
-                var partName = part as Identifier;
+                var partName = part as IdentifierSymbol;
                 if (partName == null)
                     continue;
 
@@ -2509,7 +2509,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     start visiting an if statement
         /// </summary>
         /// <param name="ifStatement"></param>
-        public void StartVisit(IfStatement ifStatement) {
+        public void StartVisit(IfStatementSymbol ifStatement) {
             var target = LastValue as IStatementTarget;
             var result = new StructuredStatement();
             InitNode(result, ifStatement);
@@ -2523,7 +2523,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// </summary>
         /// <param name="ifStatement"></param>
         /// <param name="child"></param>
-        public void StartVisitChild(IfStatement ifStatement, ISyntaxPart child) {
+        public void StartVisitChild(IfStatementSymbol ifStatement, ISyntaxPart child) {
 
             if (ifStatement.ElsePart != child)
                 return;
@@ -2602,14 +2602,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 result.Kind = AssemblerStatementKind.PushEnvOperation;
                 var operand = new SymbolReference();
                 InitNode(operand, op.Register);
-                operand.Name = ExtractSymbolName(op.Register as Identifier);
+                operand.Name = ExtractSymbolName(op.Register as IdentifierSymbol);
                 result.Operands.Add(operand);
             }
             else if (op.Mode == AsmPrefixSymbolKind.SaveEnvOperation) {
                 result.Kind = AssemblerStatementKind.SaveEnvOperation;
                 var operand = new SymbolReference();
                 InitNode(operand, op.Register);
-                operand.Name = ExtractSymbolName(op.Register as Identifier);
+                operand.Name = ExtractSymbolName(op.Register as IdentifierSymbol);
                 result.Operands.Add(operand);
             }
             else if (op.Mode == AsmPrefixSymbolKind.NoFrame) {
@@ -2637,7 +2637,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 if (token is StandardInteger integer)
                     value = string.Concat(value, integer.FirstTerminalToken.Value);
 
-                if (token is Identifier ident)
+                if (token is IdentifierSymbol ident)
                     value = string.Concat(value, ident.FirstTerminalToken.Value);
 
             }
@@ -2660,7 +2660,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             InitNode(result, statement);
             parent.Statements.Add(result);
             result.OpCode = ExtractSymbolName((statement.OpCode as AsmOpCodeSymbol)?.OpCode);
-            result.SegmentPrefix = ExtractSymbolName((statement.Prefix as AsmPrefixSymbol)?.SegmentPrefix as Identifier);
+            result.SegmentPrefix = ExtractSymbolName((statement.Prefix as AsmPrefixSymbol)?.SegmentPrefix as IdentifierSymbol);
             result.LockPrefix = ExtractSymbolName((statement.Prefix as AsmPrefixSymbol)?.LockPrefix);
 
 
@@ -2716,7 +2716,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 var currentExpression = new UnaryOperator();
                 InitNode(currentExpression, statement);
                 lastExpression.Value = currentExpression;
-                currentExpression.Kind = TokenKindMapper.ForAsmBytePointerKind(ExtractSymbolName(statement.BytePtrKind as Identifier)?.CompleteName);
+                currentExpression.Kind = TokenKindMapper.ForAsmBytePointerKind(ExtractSymbolName(statement.BytePtrKind as IdentifierSymbol)?.CompleteName);
             }
 
             if (statement.TypeExpression != null) {
@@ -2968,7 +2968,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (factor.Identifier != null) {
                 var value = new SymbolReference();
                 InitNode(value, factor);
-                value.Name = ExtractSymbolName(factor.Identifier as Identifier);
+                value.Name = ExtractSymbolName(factor.Identifier as IdentifierSymbol);
                 expression.Value = value;
                 return;
             }
@@ -2980,7 +2980,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 currentExpression.Kind = ExpressionKind.AsmSegmentPrefix;
                 var reference = new SymbolReference();
                 InitNode(reference, factor.SegmentPrefix, currentExpression);
-                reference.Name = ExtractSymbolName(factor.SegmentPrefix as Identifier);
+                reference.Name = ExtractSymbolName(factor.SegmentPrefix as IdentifierSymbol);
                 currentExpression.LeftOperand = reference;
                 return;
             }
@@ -3035,7 +3035,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                     if (name.GenericDefinition != null) {
                         foreach (var part in name.GenericDefinition.Parts) {
 
-                            if (part is Identifier idPart) {
+                            if (part is IdentifierSymbol idPart) {
                                 result.AddGenericPart(SyntaxPartBase.IdentifierValue(idPart));
                                 continue;
                             }
@@ -3051,7 +3051,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             return result;
         }
 
-        private static SymbolName ExtractSymbolName(Identifier name) {
+        private static SymbolName ExtractSymbolName(IdentifierSymbol name) {
             var result = new SimpleSymbolName(name?.FirstTerminalToken.Value);
             return result;
         }
@@ -3092,7 +3092,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
             foreach (var part in genericDefinition.Parts) {
 
-                if (part is Identifier idPart) {
+                if (part is IdentifierSymbol idPart) {
                     var generic = new GenericType();
                     InitNode(generic, node, parent);
                     generic.Name = ExtractSymbolName(idPart);
@@ -3368,7 +3368,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// </summary>
         /// <param name="element"></param>
         /// <param name="child"></param>
-        public void EndVisitChild(IfStatement element, ISyntaxPart child) {
+        public void EndVisitChild(IfStatementSymbol element, ISyntaxPart child) {
         }
     }
 }

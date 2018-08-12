@@ -23,7 +23,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// </summary>
         /// <param name="unaryOperator"></param>
         /// <param name="identifier"></param>
-        public FactorSymbol(Terminal unaryOperator, Identifier identifier) {
+        public FactorSymbol(Terminal unaryOperator, IdentifierSymbol identifier) {
             UnaryOperator = unaryOperator;
             PointerTo = identifier;
         }
@@ -172,7 +172,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     pointer to
         /// </summary>
-        public Identifier PointerTo { get; }
+        public IdentifierSymbol PointerTo { get; }
 
         /// <summary>
         ///     real value

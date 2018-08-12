@@ -10,7 +10,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     name of the variant
         /// </summary>
-        public Identifier Name { get; set; }
+        public IdentifierSymbol Name { get; set; }
 
         /// <summary>
         ///     type declaration

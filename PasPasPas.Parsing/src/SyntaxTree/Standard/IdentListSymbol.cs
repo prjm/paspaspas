@@ -6,13 +6,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// <summary>
     ///     comma separated list of identifiers
     /// </summary>
-    public class IdentifierList : VariableLengthSyntaxTreeBase<IdentifierListItem> {
+    public class IdentifierListSymbol : VariableLengthSyntaxTreeBase<IdentifierListItem> {
 
         /// <summary>
         ///     create a new identifier list
         /// </summary>
         /// <param name="items"></param>
-        public IdentifierList(ImmutableArray<IdentifierListItem> items) : base(items) {
+        public IdentifierListSymbol(ImmutableArray<IdentifierListItem> items) : base(items) {
         }
 
         /// <summary>

@@ -38,7 +38,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
                 for (var i = 0; i <= PartList.Count - 2; i++) {
                     var part = PartList[i];
-                    if (!(part is Identifier))
+                    if (!(part is IdentifierSymbol))
                         continue;
                     yield return IdentifierValue(part);
                 }

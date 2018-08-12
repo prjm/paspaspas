@@ -18,7 +18,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="expressions"></param>
         /// <param name="closeParen"></param>
         /// <param name="comma"></param>
-        public UserAttributeDefinition(Identifier prefix, Terminal colon, NamespaceName name, Terminal openParen, ExpressionList expressions, Terminal closeParen, Terminal comma) {
+        public UserAttributeDefinition(IdentifierSymbol prefix, Terminal colon, NamespaceName name, Terminal openParen, ExpressionList expressions, Terminal closeParen, Terminal comma) {
             Prefix = prefix;
             Colon = colon;
             Name = name;
@@ -41,7 +41,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     attribute prefix
         /// </summary>
-        public Identifier Prefix { get; }
+        public IdentifierSymbol Prefix { get; }
 
         /// <summary>
         ///     colon symbol

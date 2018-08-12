@@ -15,7 +15,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     resolve identifier
         /// </summary>
-        public Identifier ResolveIdentifier { get; set; }
+        public IdentifierSymbol ResolveIdentifier { get; set; }
 
         /// <summary>
         ///     identifier to be resolved

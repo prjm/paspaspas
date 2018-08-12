@@ -12,13 +12,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         ///     generate a new opcode symbol
         /// </summary>
         /// <param name="opCode"></param>
-        public AsmOpCodeSymbol(Identifier opCode)
+        public AsmOpCodeSymbol(IdentifierSymbol opCode)
             => OpCode = opCode;
 
         /// <summary>
         ///     op code
         /// </summary>
-        public Identifier OpCode { get; }
+        public IdentifierSymbol OpCode { get; }
 
         /// <summary>
         ///     accept visitor

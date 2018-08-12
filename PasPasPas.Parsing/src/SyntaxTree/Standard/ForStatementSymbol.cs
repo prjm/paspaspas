@@ -19,7 +19,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="endExpression"></param>
         /// <param name="doKeyword"></param>
         /// <param name="loopStatement"></param>
-        public ForStatementSymbol(Terminal forKeyword, Identifier loopVariable, Terminal assignment, ExpressionSymbol startExpression, Terminal loopOperator, ExpressionSymbol endExpression, Terminal doKeyword, Statement loopStatement) {
+        public ForStatementSymbol(Terminal forKeyword, IdentifierSymbol loopVariable, Terminal assignment, ExpressionSymbol startExpression, Terminal loopOperator, ExpressionSymbol endExpression, Terminal doKeyword, Statement loopStatement) {
             ForKeyword = forKeyword;
             Variable = loopVariable;
             Assignment = assignment;
@@ -54,7 +54,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     iteration variable
         /// </summary>
-        public Identifier Variable { get; }
+        public IdentifierSymbol Variable { get; }
 
         /// <summary>
         ///     do keyword

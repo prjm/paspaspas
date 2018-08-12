@@ -18,7 +18,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="value"></param>
         /// <param name="hints"></param>
         /// <param name="semicolon"></param>
-        public VarDeclaration(UserAttributes attributes, IdentifierList identifiers, Terminal colonSymbol, TypeSpecification typeDeclaration, VarValueSpecification value, HintingInformationListSymbol hints, Terminal semicolon) {
+        public VarDeclaration(UserAttributes attributes, IdentifierListSymbol identifiers, Terminal colonSymbol, TypeSpecification typeDeclaration, VarValueSpecification value, HintingInformationListSymbol hints, Terminal semicolon) {
             Attributes = attributes;
             Identifiers = identifiers;
             ColonSymbol = colonSymbol;
@@ -41,7 +41,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     var names
         /// </summary>
-        public IdentifierList Identifiers { get; }
+        public IdentifierListSymbol Identifiers { get; }
 
         /// <summary>
         ///     var types

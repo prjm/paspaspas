@@ -22,7 +22,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="resultType"></param>
         /// <param name="semicolon"></param>
         /// <param name="directives"></param>
-        public ClassMethodSymbol(Terminal methodSymbol, Identifier identifier, GenericDefinitionSymbol genericDefinition, Terminal openParen, FormalParametersSymbol parameters, Terminal closeParen, Terminal colonSymbol, UserAttributes resultAttributes, TypeSpecification resultType, Terminal semicolon, MethodDirectives directives) {
+        public ClassMethodSymbol(Terminal methodSymbol, IdentifierSymbol identifier, GenericDefinitionSymbol genericDefinition, Terminal openParen, FormalParametersSymbol parameters, Terminal closeParen, Terminal colonSymbol, UserAttributes resultAttributes, TypeSpecification resultType, Terminal semicolon, MethodDirectives directives) {
             MethodSymbol = methodSymbol;
             Identifier = identifier;
             GenericDefinition = genericDefinition;
@@ -49,7 +49,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     method identifier
         /// </summary>
-        public Identifier Identifier { get; }
+        public IdentifierSymbol Identifier { get; }
 
         /// <summary>
         ///     method kind

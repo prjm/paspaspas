@@ -13,7 +13,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// </summary>
         /// <param name="lockPrefix"></param>
         /// <param name="segmentPrefix"></param>
-        public AsmPrefixSymbol(Identifier lockPrefix, Identifier segmentPrefix) {
+        public AsmPrefixSymbol(IdentifierSymbol lockPrefix, IdentifierSymbol segmentPrefix) {
             LockPrefix = lockPrefix;
             SegmentPrefix = segmentPrefix;
         }
@@ -21,7 +21,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     lock prefix
         /// </summary>
-        public Identifier LockPrefix { get; }
+        public IdentifierSymbol LockPrefix { get; }
 
         /// <summary>
         ///     segment prefix

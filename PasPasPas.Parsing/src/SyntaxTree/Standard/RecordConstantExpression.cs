@@ -15,7 +15,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="colon"></param>
         /// <param name="value"></param>
         /// <param name="semicolon"></param>
-        public RecordConstantExpression(Identifier name, Terminal colon, ConstantExpressionSymbol value, Terminal semicolon) {
+        public RecordConstantExpression(IdentifierSymbol name, Terminal colon, ConstantExpressionSymbol value, Terminal semicolon) {
             Name = name;
             ColonSymbol = colon;
             Value = value;
@@ -25,7 +25,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     field name
         /// </summary>
-        public Identifier Name { get; }
+        public IdentifierSymbol Name { get; }
 
         /// <summary>
         ///     field value

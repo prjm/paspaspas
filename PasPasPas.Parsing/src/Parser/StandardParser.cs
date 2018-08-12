@@ -658,7 +658,7 @@ namespace PasPasPas.Parsing.Parser {
             var result = new StatementPart();
 
             if (Match(TokenKind.If)) {
-                result.If = ParseIfStatement(result);
+                result.If = ParseIfStatement();
                 return result;
             }
             if (Match(TokenKind.Case)) {
@@ -959,19 +959,24 @@ namespace PasPasPas.Parsing.Parser {
         #endregion
         #region IfStatement
 
+        /// <summary>
+        ///     parse an if statement
+        /// </summary>
+        /// <returns></returns>
+
         [Rule("IfStatement", "'if' Expression 'then' Statement [ 'else' Statement ]")]
-        private IfStatement ParseIfStatement(IExtendableSyntaxPart parent) {
-            var result = new IfStatement();
-            InitByTerminal(result, parent, TokenKind.If);
+        public IfStatementSymbol ParseIfStatement() {
+            var ifSymbol = ContinueWithOrMissing(TokenKind.If);
+            var condition = ParseExpression();
+            var thenSymbol = ContinueWithOrMissing(TokenKind.Then);
+            var thenPart = ParseStatement();
+            var elseSymbol = ContinueWith(TokenKind.Else);
+            var elsePart = default(Statement);
 
-            result.Condition = ParseExpression();
-            ContinueWithOrMissing(result, TokenKind.Then);
-            result.ThenPart = ParseStatement();
-            if (ContinueWith(result, TokenKind.Else)) {
-                result.ElsePart = ParseStatement();
-            }
+            if (elseSymbol != default)
+                elsePart = ParseStatement();
 
-            return result;
+            return new IfStatementSymbol(ifSymbol, condition, thenSymbol, thenPart, elseSymbol, elsePart);
         }
 
         #endregion
@@ -1301,7 +1306,7 @@ namespace PasPasPas.Parsing.Parser {
             var kindSymbol = RequireIdentifier();
             var mode = AsmPrefixSymbolKind.Unknown;
             var numberOfParams = default(StandardInteger);
-            var register = default(Identifier);
+            var register = default(IdentifierSymbol);
 
             if (string.Equals(kind, "params", StringComparison.OrdinalIgnoreCase)) {
                 mode = AsmPrefixSymbolKind.ParamsOperation;
@@ -1550,8 +1555,8 @@ namespace PasPasPas.Parsing.Parser {
             if (!MatchIdentifier())
                 return null;
 
-            var segmentPrefix = default(Identifier);
-            var lockPrefix = default(Identifier);
+            var segmentPrefix = default(IdentifierSymbol);
+            var lockPrefix = default(IdentifierSymbol);
 
             if (lockPrefixes.Contains(CurrentToken().Value)) {
 
@@ -3669,8 +3674,14 @@ namespace PasPasPas.Parsing.Parser {
         #endregion
         #region ParseIdentList
 
+        /// <summary>
+        ///     parse a identifier list
+        /// </summary>
+        /// <param name="allowAttributes"></param>
+        /// <returns></returns>
+
         [Rule("IdentList", "Identifier { ',' Identifier }")]
-        private IdentifierList ParseIdentList(bool allowAttributes) {
+        public IdentifierListSymbol ParseIdentList(bool allowAttributes) {
             var item = default(IdentifierListItem);
 
             using (var list = GetList<IdentifierListItem>()) {
@@ -3686,7 +3697,7 @@ namespace PasPasPas.Parsing.Parser {
 
                 } while (item != default && item.Comma != default);
 
-                return new IdentifierList(GetFixedArray(list));
+                return new IdentifierListSymbol(GetFixedArray(list));
             }
         }
 
@@ -3789,7 +3800,7 @@ namespace PasPasPas.Parsing.Parser {
         public ConstrainedGenericSymbol ParseGenericConstraint(bool allowComma) {
             var constraintSymbol = ContinueWith(TokenKind.Record, TokenKind.Class, TokenKind.Constructor);
             var comma = default(Terminal);
-            var identifier = default(Identifier);
+            var identifier = default(IdentifierSymbol);
 
             if (constraintSymbol == null)
                 identifier = RequireIdentifier();
@@ -4072,7 +4083,7 @@ namespace PasPasPas.Parsing.Parser {
         [Rule("Attribute", " [ 'Result' ':' ] NamespaceName [ '(' Expressions ')' ]")]
         private UserAttributeDefinition ParseAttribute(bool allowComma) {
 
-            var prefix = default(Identifier);
+            var prefix = default(IdentifierSymbol);
             var colon = default(Terminal);
 
 
@@ -4433,7 +4444,7 @@ namespace PasPasPas.Parsing.Parser {
             if (Match(TokenKind.Circumflex))
                 return new DesignatorItemSymbol(ContinueWithOrMissing(TokenKind.Circumflex));
 
-            var subitem = default(Identifier);
+            var subitem = default(IdentifierSymbol);
             var dot = default(Terminal);
             var genericSuffix = default(GenericSuffixSymbol);
             var openBraces = default(Terminal);
@@ -4610,16 +4621,22 @@ namespace PasPasPas.Parsing.Parser {
         public RealNumberSymbol RequireRealValue()
             => new RealNumberSymbol(ContinueWithOrMissing(TokenKind.Real));
 
-        private Identifier RequireIdentifier(bool allowReserverdWords = false) {
+
+        /// <summary>
+        ///     parse an identifier
+        /// </summary>
+        /// <param name="allowReserverdWords"></param>
+        /// <returns></returns>
+        public IdentifierSymbol RequireIdentifier(bool allowReserverdWords = false) {
 
             if (Match(TokenKind.Identifier)) {
-                return new Identifier(ContinueWithOrMissing(TokenKind.Identifier));
+                return new IdentifierSymbol(ContinueWithOrMissing(TokenKind.Identifier));
             };
 
             var token = CurrentToken();
 
             if (allowReserverdWords || !reservedWords.Contains(token.Kind)) {
-                return new Identifier(ContinueWithOrMissing(token.Kind));
+                return new IdentifierSymbol(ContinueWithOrMissing(token.Kind));
             }
 
             ErrorMissingToken(TokenKind.Identifier);

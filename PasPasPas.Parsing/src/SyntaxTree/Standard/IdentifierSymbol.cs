@@ -6,13 +6,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// <summary>
     ///     simple pascal identifier
     /// </summary>
-    public class Identifier : StandardSyntaxTreeBase {
+    public class IdentifierSymbol : StandardSyntaxTreeBase {
 
         /// <summary>
         ///     identifier symbol
         /// </summary>
         /// <param name="identifierSymbol"></param>
-        public Identifier(Terminal identifierSymbol)
+        public IdentifierSymbol(Terminal identifierSymbol)
             => Symbol = identifierSymbol;
 
         /// <summary>

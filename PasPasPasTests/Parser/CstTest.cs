@@ -1494,5 +1494,43 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(3, s.Length);
         }
 
+        [TestCase]
+        public void TestIdentifier() {
+            var s = RunCstTest(p => p.RequireIdentifier(), "rr");
+            Assert.IsNotNull(s.Symbol);
+            Assert.AreEqual(2, s.Length);
+
+            s = RunCstTest(p => p.RequireIdentifier(true), "if");
+            Assert.IsNotNull(s.Symbol);
+            Assert.AreEqual(2, s.Length);
+        }
+
+        [TestCase]
+        public void TestIdentList() {
+            var s = RunCstTest(p => p.ParseIdentList(true), "a,[a] b");
+            Assert.IsNotNull(s.Items[0]);
+            Assert.IsNotNull(s.Items[1]);
+            Assert.AreEqual(7, s.Length);
+        }
+
+        [TestCase]
+        public void TestParseIfStatement() {
+            var s = RunCstTest(p => p.ParseIfStatement(), "if a then b");
+            Assert.IsNotNull(s.IfSymbol);
+            Assert.IsNotNull(s.Condition);
+            Assert.IsNotNull(s.ThenPart);
+            Assert.IsNotNull(s.ThenSymbol);
+            Assert.AreEqual(11, s.Length);
+
+            s = RunCstTest(p => p.ParseIfStatement(), "if a then b else c");
+            Assert.IsNotNull(s.IfSymbol);
+            Assert.IsNotNull(s.Condition);
+            Assert.IsNotNull(s.ThenPart);
+            Assert.IsNotNull(s.ThenSymbol);
+            Assert.IsNotNull(s.ElseSymbol);
+            Assert.IsNotNull(s.ElsePart);
+            Assert.AreEqual(18, s.Length);
+        }
+
     }
 }

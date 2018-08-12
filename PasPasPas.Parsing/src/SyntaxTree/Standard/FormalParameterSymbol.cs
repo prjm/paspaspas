@@ -16,7 +16,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="attributes2"></param>
         /// <param name="parameterName"></param>
         /// <param name="comma"></param>
-        public FormalParameterSymbol(UserAttributes attributes1, Terminal parameterKind, UserAttributes attributes2, Identifier parameterName, Terminal comma) {
+        public FormalParameterSymbol(UserAttributes attributes1, Terminal parameterKind, UserAttributes attributes2, IdentifierSymbol parameterName, Terminal comma) {
             Attributes1 = attributes1;
             ParameterKind = parameterKind;
             Attributes2 = attributes2;
@@ -37,7 +37,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     parameter name
         /// </summary>
-        public Identifier ParameterName { get; }
+        public IdentifierSymbol ParameterName { get; }
 
         /// <summary>
         ///     comma

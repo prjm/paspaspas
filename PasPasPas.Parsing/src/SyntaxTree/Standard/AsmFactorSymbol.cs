@@ -26,7 +26,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="segmentPrefix"></param>
         /// <param name="colonSymbol"></param>
         /// <param name="segmentExpression"></param>
-        public AsmFactorSymbol(Identifier segmentPrefix, Terminal colonSymbol, AsmOperandSymbol segmentExpression) {
+        public AsmFactorSymbol(IdentifierSymbol segmentPrefix, Terminal colonSymbol, AsmOperandSymbol segmentExpression) {
             SegmentPrefix = segmentPrefix;
             ColonSymbol = colonSymbol;
             SegmentExpression = segmentExpression;
@@ -71,7 +71,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         ///     asm identifier
         /// </summary>
         /// <param name="identifier"></param>
-        public AsmFactorSymbol(Identifier identifier)
+        public AsmFactorSymbol(IdentifierSymbol identifier)
             => Identifier = identifier;
 
         /// <summary>
@@ -94,7 +94,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     identifier
         /// </summary>
-        public Identifier Identifier { get; }
+        public IdentifierSymbol Identifier { get; }
 
         /// <summary>
         ///     memory subexpression
@@ -119,7 +119,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     segment prefix
         /// </summary>
-        public Identifier SegmentPrefix { get; }
+        public IdentifierSymbol SegmentPrefix { get; }
 
         /// <summary>
         ///     subexpression

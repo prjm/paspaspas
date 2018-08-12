@@ -168,7 +168,7 @@ namespace PasPasPas.Parsing.SyntaxTree {
         /// <param name="part"></param>
         /// <returns></returns>
         public static string IdentifierValue(ISyntaxPart part) {
-            if (part is Identifier result && result.parts.Count > 0)
+            if (part is IdentifierSymbol result && result.parts.Count > 0)
                 return TerminalValue(result.parts[0]);
             else
                 return null;

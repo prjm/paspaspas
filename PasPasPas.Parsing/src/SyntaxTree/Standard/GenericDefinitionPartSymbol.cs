@@ -14,7 +14,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// </summary>
         /// <param name="identifier"></param>
         /// <param name="terminal"></param>
-        public GenericDefinitionPartSymbol(Identifier identifier, Terminal terminal) : base(ImmutableArray<ConstrainedGenericSymbol>.Empty) {
+        public GenericDefinitionPartSymbol(IdentifierSymbol identifier, Terminal terminal) : base(ImmutableArray<ConstrainedGenericSymbol>.Empty) {
             Identifier = identifier;
             CommaOrSemicolon = terminal;
         }
@@ -34,7 +34,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         ///     create a new generic definition part
         /// </summary>
         /// <param name="identifier"></param>
-        public GenericDefinitionPartSymbol(Identifier identifier) : base(ImmutableArray<ConstrainedGenericSymbol>.Empty)
+        public GenericDefinitionPartSymbol(IdentifierSymbol identifier) : base(ImmutableArray<ConstrainedGenericSymbol>.Empty)
             => Identifier = identifier;
 
         /// <summary>
@@ -43,7 +43,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="identifier"></param>
         /// <param name="terminal"></param>
         /// <param name="items"></param>
-        public GenericDefinitionPartSymbol(Identifier identifier, Terminal terminal, ImmutableArray<ConstrainedGenericSymbol> items) : base(items) {
+        public GenericDefinitionPartSymbol(IdentifierSymbol identifier, Terminal terminal, ImmutableArray<ConstrainedGenericSymbol> items) : base(items) {
             Identifier = identifier;
             CommaOrSemicolon = terminal;
         }
@@ -51,7 +51,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     parse identifier
         /// </summary>
-        public Identifier Identifier { get; }
+        public IdentifierSymbol Identifier { get; }
 
         /// <summary>
         ///     generic definition part

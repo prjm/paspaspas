@@ -17,7 +17,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="colonSymbol"></param>
         /// <param name="resultTypeAttributes"></param>
         /// <param name="resultType"></param>
-        public ProcedureDeclarationHeading(Terminal kindSymbol, Identifier name, FormalParameterSection parameters, Terminal colonSymbol, UserAttributes resultTypeAttributes, TypeSpecification resultType) {
+        public ProcedureDeclarationHeading(Terminal kindSymbol, IdentifierSymbol name, FormalParameterSection parameters, Terminal colonSymbol, UserAttributes resultTypeAttributes, TypeSpecification resultType) {
             KindSymbol = kindSymbol;
             Name = name;
             Parameters = parameters;
@@ -35,7 +35,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     procedure name
         /// </summary>
-        public Identifier Name { get; }
+        public IdentifierSymbol Name { get; }
 
         /// <summary>
         ///     parameters
