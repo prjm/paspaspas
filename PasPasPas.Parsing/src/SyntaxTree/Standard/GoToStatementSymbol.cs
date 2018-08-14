@@ -20,7 +20,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// </summary>
         /// <param name="gotoSymbol"></param>
         /// <param name="label"></param>
-        public GoToStatementSymbol(Terminal gotoSymbol, Label label) {
+        public GoToStatementSymbol(Terminal gotoSymbol, LabelSymbol label) {
             GotoSymbol = gotoSymbol;
             GoToLabel = label;
         }
@@ -66,7 +66,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     goto label
         /// </summary>
-        public Label GoToLabel { get; }
+        public LabelSymbol GoToLabel { get; }
 
         /// <summary>
         ///     goto symbol

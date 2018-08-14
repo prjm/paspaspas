@@ -7,21 +7,20 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// <summary>
     ///     local asm label
     /// </summary>
-    public class LocalAsmLabel : VariableLengthSyntaxTreeBase<SyntaxPartBase> {
+    public class LocalAsmLabelSymbol : VariableLengthSyntaxTreeBase<SyntaxPartBase> {
 
         /// <summary>
         ///     at symbol
         /// </summary>
-        private Terminal AtSymbol { get; }
+        public Terminal AtSymbol { get; }
 
         /// <summary>
         ///     create a new local symbol
         /// </summary>
         /// <param name="at"></param>
         /// <param name="labels"></param>
-        public LocalAsmLabel(Terminal at, ImmutableArray<SyntaxPartBase> labels) : base(labels) {
-            AtSymbol = at;
-        }
+        public LocalAsmLabelSymbol(Terminal at, ImmutableArray<SyntaxPartBase> labels) : base(labels)
+            => AtSymbol = at;
 
         /// <summary>
         ///     accept visitor

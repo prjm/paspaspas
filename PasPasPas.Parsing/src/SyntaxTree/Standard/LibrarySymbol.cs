@@ -10,6 +10,22 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     public class LibrarySymbol : StandardSyntaxTreeBase {
 
         /// <summary>
+        ///     library symbol
+        /// </summary>
+        /// <param name="libraryHead"></param>
+        /// <param name="uses"></param>
+        /// <param name="mainBlock"></param>
+        /// <param name="dot"></param>
+        /// <param name="filePath"></param>
+        public LibrarySymbol(LibraryHeadSymbol libraryHead, UsesFileClause uses, BlockSymbol mainBlock, Terminal dot, IFileReference filePath) {
+            LibraryHead = libraryHead;
+            Uses = uses;
+            MainBlock = mainBlock;
+            Dot = dot;
+            FilePath = filePath;
+        }
+
+        /// <summary>
         ///     hints
         /// </summary>
         public HintingInformationListSymbol Hints
@@ -18,7 +34,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     library head
         /// </summary>
-        public LibraryHeadSymbol LibraryHead { get; set; }
+        public LibraryHeadSymbol LibraryHead { get; }
 
         /// <summary>
         ///     library name
@@ -29,22 +45,22 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     main block
         /// </summary>
-        public BlockSymbol MainBlock { get; set; }
+        public BlockSymbol MainBlock { get; }
 
         /// <summary>
         ///     uses clause
         /// </summary>
-        public ISyntaxPart Uses { get; set; }
+        public UsesFileClause Uses { get; }
 
         /// <summary>
         ///     file path
         /// </summary>
-        public IFileReference FilePath { get; set; }
+        public IFileReference FilePath { get; }
 
         /// <summary>
         ///     dot symbol
         /// </summary>
-        public Terminal Dot { get; set; }
+        public Terminal Dot { get; }
 
         /// <summary>
         ///     accept visitor
@@ -62,8 +78,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     symbol length
         /// </summary>
-        public int Length
-            => LibraryHead.Length + Uses.Length + MainBlock.Length + Dot.Length;
+        public override int Length
+            => LibraryHead.GetSymbolLength() +
+                Uses.GetSymbolLength() +
+                MainBlock.GetSymbolLength() +
+                Dot.GetSymbolLength();
 
 
     }

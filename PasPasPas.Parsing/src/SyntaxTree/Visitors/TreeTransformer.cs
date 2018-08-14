@@ -58,7 +58,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         IStartVisitor<UnitInitialization>,
         IStartVisitor<UnitFinalization>,
         IStartVisitor<CompoundStatementSymbol>, IEndVisitor<CompoundStatementSymbol>,
-        IStartVisitor<Label>, IEndVisitor<Label>,
+        IStartVisitor<LabelSymbol>, IEndVisitor<LabelSymbol>,
         IStartVisitor<ClassDeclarationSymbol>, IEndVisitor<ClassDeclarationSymbol>,
         IStartVisitor<ClassDeclarationItemSymbol>,
         IStartVisitor<ClassFieldSymbol>,
@@ -115,7 +115,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         IStartVisitor<GoToStatementSymbol>,
         IStartVisitor<AsmBlockSymbol>,
         IStartVisitor<AsmPseudoOpSymbol>,
-        IStartVisitor<LocalAsmLabel>,
+        IStartVisitor<LocalAsmLabelSymbol>,
         IStartVisitor<AsmStatementSymbol>,
         IStartVisitor<AsmOperandSymbol>,
         IStartVisitor<AsmExpressionSymbol>,
@@ -1206,7 +1206,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     start visiting a label
         /// </summary>
         /// <param name="label"></param>
-        public void StartVisit(Label label) {
+        public void StartVisit(LabelSymbol label) {
             SymbolName name = null;
 
             if (label.LabelName is IdentifierSymbol standardLabel) {
@@ -1246,7 +1246,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     end visiting a label
         /// </summary>
         /// <param name="label"></param>
-        public void EndVisit(Label label) {
+        public void EndVisit(LabelSymbol label) {
         }
 
 
@@ -2627,7 +2627,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     start visiting an assembly label
         /// </summary>
         /// <param name="label"></param>
-        public void StartVisit(LocalAsmLabel label) {
+        public void StartVisit(LocalAsmLabelSymbol label) {
             var value = string.Empty;
             foreach (var token in label.Parts) {
 

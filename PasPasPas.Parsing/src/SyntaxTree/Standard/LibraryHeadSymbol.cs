@@ -9,24 +9,38 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     public class LibraryHeadSymbol : StandardSyntaxTreeBase {
 
         /// <summary>
+        ///     library head symbol
+        /// </summary>
+        /// <param name="librarySymbol"></param>
+        /// <param name="libraryName"></param>
+        /// <param name="hints"></param>
+        /// <param name="semicolon"></param>
+        public LibraryHeadSymbol(Terminal librarySymbol, NamespaceName libraryName, HintingInformationListSymbol hints, Terminal semicolon) {
+            LibrarySymbol = librarySymbol;
+            LibraryName = libraryName;
+            Hints = hints;
+            Semicolon = semicolon;
+        }
+
+        /// <summary>
         ///     hints
         /// </summary>
-        public ISyntaxPart Hints { get; set; }
+        public ISyntaxPart Hints { get; }
 
         /// <summary>
         ///     library name
         /// </summary>
-        public NamespaceName LibraryName { get; set; }
+        public NamespaceName LibraryName { get; }
 
         /// <summary>
         ///     semicolon
         /// </summary>
-        public Terminal Semicolon { get; set; }
+        public Terminal Semicolon { get; }
 
         /// <summary>
         ///     library
         /// </summary>
-        public Terminal LibrarySymbol { get; set; }
+        public Terminal LibrarySymbol { get; }
 
         /// <summary>
         ///     symbol length

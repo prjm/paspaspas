@@ -1,20 +1,20 @@
-﻿using PasPasPas.Infrastructure.Log;
-using PasPasPas.Parsing.SyntaxTree;
-using PasPasPas.Parsing.SyntaxTree.Abstract;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.ComponentModel;
-using System.Collections.Generic;
-using PasPasPas.Parsing.SyntaxTree.Utils;
-using PasPasPas.Api;
-using PasPasPas.Typings.Common;
 using System.Windows.Media;
-using System;
+using PasPasPas.Api;
 using PasPasPas.Globals.Types;
+using PasPasPas.Infrastructure.Log;
+using PasPasPas.Parsing.SyntaxTree;
+using PasPasPas.Parsing.SyntaxTree.Abstract;
+using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
+using PasPasPas.Typings.Common;
 
 namespace P3SyntaxTreeViewer {
 
@@ -81,9 +81,7 @@ namespace P3SyntaxTreeViewer {
             items.Push(treeViewItem);
         }
 
-        public void EndVisit<VisitorType>(VisitorType element) {
-            items.Pop();
-        }
+        public void EndVisit<VisitorType>(VisitorType element) => items.Pop();
 
     }
 
@@ -99,6 +97,7 @@ namespace P3SyntaxTreeViewer {
                 if (string.Equals("hack", font.Source, StringComparison.OrdinalIgnoreCase)) {
                     Code.FontFamily = font;
                     Code.FontSize = 14;
+                    break;
                 }
             }
 

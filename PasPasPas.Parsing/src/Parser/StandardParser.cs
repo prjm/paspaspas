@@ -221,43 +221,48 @@ namespace PasPasPas.Parsing.Parser {
         #region ParseUsesFileClause
 
         [Rule("UsesFileClause", "'uses' NamespaceFileNameList")]
-        private UsesFileClause ParseUsesFileClause(IExtendableSyntaxPart parent) {
-            var result = new UsesFileClause();
-            InitByTerminal(result, parent, TokenKind.Uses);
-            result.Files = ParseNamespaceFileNameList(result);
-            return result;
-        }
+        private UsesFileClause ParseUsesFileClause(IExtendableSyntaxPart parent)
+            => new UsesFileClause(ContinueWithOrMissing(TokenKind.Uses), ParseNamespaceFileNameList());
 
         #endregion
         #region ParseNamespaceFileNameList
 
+        /// <summary>
+        ///     parse a namespace file name list
+        /// </summary>
+        /// <returns></returns>
+
         [Rule("NamespaceFileNameList", "NamespaceFileName { ',' NamespaceFileName }")]
-        private NamespaceFileNameList ParseNamespaceFileNameList(IExtendableSyntaxPart parent) {
-            var result = new NamespaceFileNameList();
-            parent.Add(result);
+        public NamespaceFileNameList ParseNamespaceFileNameList() {
+            using (var list = GetList<NamespaceFileName>()) {
+                var item = default(NamespaceFileName);
 
-            do {
-                ParseNamespaceFileName(result);
-            } while (ContinueWith(result, TokenKind.Comma));
+                do {
+                    item = AddToList(list, ParseNamespaceFileName(true));
+                } while (item != default && item.Comma != default);
 
-            ContinueWithOrMissing(result, TokenKind.Semicolon);
-
-            return result;
+                var semicolon = ContinueWithOrMissing(TokenKind.Semicolon);
+                return new NamespaceFileNameList(GetFixedArray(list), semicolon);
+            }
         }
 
         #endregion
         #region ParseNamespaceFileName
 
         [Rule("NamespaceFileName", "NamespaceName [ 'in' QuotedString ]")]
-        private NamespaceFileName ParseNamespaceFileName(IExtendableSyntaxPart parent) {
-            var result = new NamespaceFileName();
-            parent.Add(result);
+        private NamespaceFileName ParseNamespaceFileName(bool allowComma) {
+            var name = ParseNamespaceName();
+            var inSymbol = ContinueWith(TokenKind.In);
+            var fileName = default(QuotedString);
+            var comma = default(Terminal);
 
-            result.NamespaceName = ParseNamespaceName();
-            if (ContinueWith(result, TokenKind.In))
-                result.QuotedFileName = RequireString();
+            if (inSymbol != default)
+                fileName = RequireString();
 
-            return result;
+            if (allowComma)
+                comma = ContinueWith(TokenKind.Comma);
+
+            return new NamespaceFileName(name, inSymbol, fileName, comma);
         }
 
         #endregion
@@ -619,12 +624,17 @@ namespace PasPasPas.Parsing.Parser {
 
         #endregion
         #region ParseStatement
+
+        /// <summary>
+        ///     parse a statement
+        /// </summary>
+        /// <param name="allowSemicolon"></param>
+        /// <returns></returns>
+
         [Rule("Statement", "[ Label ':' ] StatementPart")]
-
-
         public Statement ParseStatement(bool allowSemicolon = false) {
 
-            var label = default(Label);
+            var label = default(LabelSymbol);
             var colonSymbol = default(Terminal);
             var semicolon = default(Terminal);
 
@@ -1079,7 +1089,7 @@ namespace PasPasPas.Parsing.Parser {
         private PackageContains ParseContainsClause(IExtendableSyntaxPart parent) {
             var result = new PackageContains();
             InitByTerminal(result, parent, TokenKind.Contains);
-            result.ContainsList = ParseNamespaceFileNameList(result);
+            result.ContainsList = ParseNamespaceFileNameList();
             return result;
         }
 
@@ -1132,13 +1142,13 @@ namespace PasPasPas.Parsing.Parser {
         /// <returns></returns>
 
         [Rule("Library", "LibraryHead [UsesFileClause] Block '.' ")]
-        public LibrarySymbol ParseLibrary(IFileReference path) => new LibrarySymbol() {
-            LibraryHead = ParseLibraryHead(),
-            Uses = Match(TokenKind.Uses) ? (ISyntaxPart)ParseUsesFileClause(null) : EmptyTerminal(),
-            MainBlock = ParseBlock(),
-            Dot = ContinueWithOrMissing(TokenKind.Dot),
-            FilePath = path
-        };
+        public LibrarySymbol ParseLibrary(IFileReference path)
+            => new LibrarySymbol(
+                libraryHead: ParseLibraryHead(),
+                uses: Match(TokenKind.Uses) ? ParseUsesFileClause(null) : null,
+                mainBlock: ParseBlock(),
+                dot: ContinueWithOrMissing(TokenKind.Dot),
+                filePath: path);
 
         #endregion
         #region ParseLibraryHead
@@ -1146,16 +1156,15 @@ namespace PasPasPas.Parsing.Parser {
         /// <summary>
         ///     parse a library head
         /// </summary>
-        /// <param name="parent"></param>
         /// <returns></returns>
 
         [Rule("LibraryHead", "'library' NamespaceName Hints ';'")]
-        public LibraryHeadSymbol ParseLibraryHead() => new LibraryHeadSymbol() {
-            LibrarySymbol = ContinueWithOrMissing(TokenKind.Library),
-            LibraryName = ParseNamespaceName(),
-            Hints = ParseHints(false),
-            Semicolon = ContinueWithOrMissing(TokenKind.Semicolon)
-        };
+        public LibraryHeadSymbol ParseLibraryHead()
+            => new LibraryHeadSymbol(
+                librarySymbol: ContinueWithOrMissing(TokenKind.Library),
+                libraryName: ParseNamespaceName(),
+                hints: ParseHints(false),
+                semicolon: ContinueWithOrMissing(TokenKind.Semicolon));
 
         #endregion
         #region ParseProgram
@@ -1583,8 +1592,13 @@ namespace PasPasPas.Parsing.Parser {
         #endregion
         #region ParseLocalAsmLabel
 
+        /// <summary>
+        ///     parse a local asm label
+        /// </summary>
+        /// <returns></returns>
+
         [Rule("LocalAsmLabel", "'@' { '@' | Integer | Identifier | HexNumber }")]
-        private LocalAsmLabel ParseLocalAsmLabel() {
+        public LocalAsmLabelSymbol ParseLocalAsmLabel() {
             var at = ContinueWithOrMissing(TokenKind.At);
             var wasAt = false;
             using (var list = GetList<SyntaxPartBase>()) {
@@ -1609,7 +1623,7 @@ namespace PasPasPas.Parsing.Parser {
                 }
                 while ((!CurrentTokenIsAfterNewline()) && wasAt);
 
-                return new LocalAsmLabel(at, GetFixedArray(list));
+                return new LocalAsmLabelSymbol(at, GetFixedArray(list));
             }
         }
 
@@ -2046,9 +2060,9 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("LabelSection", "'label' Label { ',' Label } ';' ")]
         private LabelDeclarationSection ParseLabelDeclarationSection() {
-            using (var list = GetList<Label>()) {
+            using (var list = GetList<LabelSymbol>()) {
                 var labelSymbol = ContinueWithOrMissing(TokenKind.Label);
-                var label = default(Label);
+                var label = default(LabelSymbol);
                 do {
                     label = AddToList(list, ParseLabel(true));
                 } while (label != default && label.Comma.GetSymbolKind() == TokenKind.Comma);
@@ -2060,17 +2074,23 @@ namespace PasPasPas.Parsing.Parser {
         #endregion
         #region ParseLabel
 
+        /// <summary>
+        ///     parse a label symbol
+        /// </summary>
+        /// <param name="allowComma"></param>
+        /// <returns></returns>
+
         [Rule("Label", "Identifier | Integer | HexNumber")]
-        private Label ParseLabel(bool allowComma = false) {
+        public LabelSymbol ParseLabel(bool allowComma = false) {
 
             if (MatchIdentifier())
-                return new Label(RequireIdentifier(), allowComma ? ContinueWith(TokenKind.Comma) : default);
+                return new LabelSymbol(RequireIdentifier(), allowComma ? ContinueWith(TokenKind.Comma) : default);
 
             if (Match(TokenKind.Integer))
-                return new Label(RequireInteger(), allowComma ? ContinueWith(TokenKind.Comma) : default);
+                return new LabelSymbol(RequireInteger(), allowComma ? ContinueWith(TokenKind.Comma) : default);
 
             if (Match(TokenKind.HexNumber))
-                return new Label(RequireHexValue(), allowComma ? ContinueWith(TokenKind.Comma) : default);
+                return new LabelSymbol(RequireHexValue(), allowComma ? ContinueWith(TokenKind.Comma) : default);
 
             Unexpected();
             return null;

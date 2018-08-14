@@ -13,25 +13,25 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         ///     local asm label
         /// </summary>
         /// <param name="localAsmLabel"></param>
-        public AsmLabelSymbol(LocalAsmLabel localAsmLabel)
+        public AsmLabelSymbol(LocalAsmLabelSymbol localAsmLabel)
             => LocalLabel = localAsmLabel;
 
         /// <summary>
         ///     standard label
         /// </summary>
         /// <param name="label"></param>
-        public AsmLabelSymbol(Label label)
+        public AsmLabelSymbol(LabelSymbol label)
             => Label = label;
 
         /// <summary>
         ///     asm label
         /// </summary>
-        public LocalAsmLabel LocalLabel { get; }
+        public LocalAsmLabelSymbol LocalLabel { get; }
 
         /// <summary>
         ///     generic label
         /// </summary>
-        public Label Label { get; }
+        public LabelSymbol Label { get; }
 
         /// <summary>
         ///     symbol length

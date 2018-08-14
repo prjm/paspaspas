@@ -6,14 +6,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// <summary>
     ///     label declaration
     /// </summary>
-    public class Label : StandardSyntaxTreeBase {
+    public class LabelSymbol : StandardSyntaxTreeBase {
 
         /// <summary>
         ///     create a new label
         /// </summary>
         /// <param name="name"></param>
         /// <param name="comma"></param>
-        public Label(SyntaxPartBase name, Terminal comma) {
+        public LabelSymbol(SyntaxPartBase name, Terminal comma) {
             LabelName = name;
             Comma = comma;
         }

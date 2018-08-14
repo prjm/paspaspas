@@ -96,22 +96,22 @@ namespace PasPasPasTests.Parser {
 
         [TestCase]
         public void TestLibrary() {
-            var s = RunCstTest(p => p.ParseLibrary(new FileReference(CstPath)));
+            var s = RunCstTest(p => p.ParseLibrary(new FileReference(CstPath)), "library a; uses x in 'x'; begin end.");
             Assert.IsNotNull(s.LibraryHead);
             Assert.IsNotNull(s.Uses);
             Assert.IsNotNull(s.MainBlock);
             Assert.IsNotNull(s.Dot);
-            Assert.AreEqual(0, s.Length);
+            Assert.AreEqual(36, s.Length);
         }
 
         [TestCase]
         public void TestLibraryHead() {
-            var s = RunCstTest(p => p.ParseLibraryHead());
+            var s = RunCstTest(p => p.ParseLibraryHead(), "library a.b deprecated;");
             Assert.IsNotNull(s.LibrarySymbol);
             Assert.IsNotNull(s.LibraryName);
-            //Assert.IsNotNull(s.Hints);
+            Assert.IsNotNull(s.Hints);
             Assert.IsNotNull(s.Semicolon);
-            Assert.AreEqual(0, s.Length);
+            Assert.AreEqual(23, s.Length);
         }
 
         [TestCase]
@@ -1568,6 +1568,44 @@ namespace PasPasPasTests.Parser {
             s = RunCstTest(p => p.ParseInterfaceItem(out var x), "property x: string read; GetX");
             Assert.IsNotNull(s.Property);
             Assert.AreEqual(24, s.Length);
+        }
+
+        [TestCase]
+        public void TestLabel() {
+            var s = RunCstTest(p => p.ParseLabel(), "a");
+            Assert.IsNotNull(s.LabelName);
+            Assert.AreEqual(1, s.Length);
+
+            s = RunCstTest(p => p.ParseLabel(), "$F");
+            Assert.IsNotNull(s.LabelName);
+            Assert.AreEqual(2, s.Length);
+
+            s = RunCstTest(p => p.ParseLabel(), "3");
+            Assert.IsNotNull(s.LabelName);
+            Assert.AreEqual(1, s.Length);
+        }
+
+        [TestCase]
+        public void TestLocalAsmLabel() {
+            var s = RunCstTest(p => p.ParseLocalAsmLabel(), "@a");
+            Assert.IsNotNull(s.AtSymbol);
+            Assert.IsNotNull(s.Items[0]);
+            Assert.AreEqual(2, s.Length);
+
+            s = RunCstTest(p => p.ParseLocalAsmLabel(), "@3");
+            Assert.IsNotNull(s.AtSymbol);
+            Assert.IsNotNull(s.Items[0]);
+            Assert.AreEqual(2, s.Length);
+
+            s = RunCstTest(p => p.ParseLocalAsmLabel(), "@$F");
+            Assert.IsNotNull(s.AtSymbol);
+            Assert.IsNotNull(s.Items[0]);
+            Assert.AreEqual(3, s.Length);
+
+            s = RunCstTest(p => p.ParseLocalAsmLabel(), "@@4");
+            Assert.IsNotNull(s.AtSymbol);
+            Assert.IsNotNull(s.Items[0]);
+            Assert.AreEqual(3, s.Length);
 
         }
 

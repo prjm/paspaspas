@@ -36,7 +36,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         ///     asm label
         /// </summary>
         /// <param name="localAsmLabel"></param>
-        public AsmFactorSymbol(LocalAsmLabel localAsmLabel)
+        public AsmFactorSymbol(LocalAsmLabelSymbol localAsmLabel)
             => Label = localAsmLabel;
 
         /// <summary>
@@ -134,7 +134,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     referenced label
         /// </summary>
-        public LocalAsmLabel Label { get; }
+        public LocalAsmLabelSymbol Label { get; }
 
         /// <summary>
         ///     colon symbol

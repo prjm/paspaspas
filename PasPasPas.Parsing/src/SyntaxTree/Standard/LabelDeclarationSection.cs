@@ -7,7 +7,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// <summary>
     ///     label section
     /// </summary>
-    public class LabelDeclarationSection : VariableLengthSyntaxTreeBase<Label> {
+    public class LabelDeclarationSection : VariableLengthSyntaxTreeBase<LabelSymbol> {
 
         /// <summary>
         ///     create a new label declaration section
@@ -15,7 +15,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="labelSymbol"></param>
         /// <param name="items"></param>
         /// <param name="semicolon"></param>
-        public LabelDeclarationSection(Terminal labelSymbol, ImmutableArray<Label> items, Terminal semicolon) : base(items) {
+        public LabelDeclarationSection(Terminal labelSymbol, ImmutableArray<LabelSymbol> items, Terminal semicolon) : base(items) {
             Label = labelSymbol;
             Semicolon = semicolon;
         }

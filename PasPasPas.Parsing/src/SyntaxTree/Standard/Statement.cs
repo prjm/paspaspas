@@ -15,7 +15,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="colonSymbol"></param>
         /// <param name="part"></param>
         /// <param name="semicolon"></param>
-        public Statement(Label label, Terminal colonSymbol, StatementPart part, Terminal semicolon) {
+        public Statement(LabelSymbol label, Terminal colonSymbol, StatementPart part, Terminal semicolon) {
             Label = label;
             ColonSymbol = colonSymbol;
             Part = part;
