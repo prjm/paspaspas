@@ -33,7 +33,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         ///     create a new class type declaration symbol
         /// </summary>
         /// <param name="interfaceDefinition"></param>
-        public ClassTypeDeclarationSymbol(InterfaceDefinition interfaceDefinition)
+        public ClassTypeDeclarationSymbol(InterfaceDefinitionSymbol interfaceDefinition)
             => InterfaceDef = interfaceDefinition;
 
         /// <summary>
@@ -75,7 +75,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     interface definition
         /// </summary>
-        public InterfaceDefinition InterfaceDef { get; }
+        public InterfaceDefinitionSymbol InterfaceDef { get; }
 
         /// <summary>
         ///     object declaration

@@ -6,13 +6,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// <summary>
     ///     items of an interface declaration
     /// </summary>
-    public class InterfaceItems : VariableLengthSyntaxTreeBase<InterfaceItem> {
+    public class InterfaceItems : VariableLengthSyntaxTreeBase<InterfaceItemSymbol> {
 
         /// <summary>
         ///     create a new list of interface items
         /// </summary>
         /// <param name="items"></param>
-        public InterfaceItems(ImmutableArray<InterfaceItem> items) : base(items) {
+        public InterfaceItems(ImmutableArray<InterfaceItemSymbol> items) : base(items) {
         }
 
         /// <summary>
@@ -21,10 +21,15 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="visitor">visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
-            AcceptParts(this, visitor);
+            AcceptPart(this, visitor);
             visitor.EndVisit(this);
         }
 
+        /// <summary>
+        ///     symbol length
+        /// </summary>
+        public override int Length
+            => ItemLength;
 
     }
 }

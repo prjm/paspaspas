@@ -12,9 +12,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         ///     create a new interface declaration symbol
         /// </summary>
         /// <param name="items"></param>
-        public InterfaceDeclarationSymbol(ImmutableArray<SyntaxPartBase> items) : base(items) {
-
-        }
+        public InterfaceDeclarationSymbol(ImmutableArray<SyntaxPartBase> items) : base(items) { }
 
         /// <summary>
         ///     accept visitor
@@ -29,7 +27,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     symbol length
         /// </summary>
-        public int Length
+        public override int Length
             => ItemLength;
 
     }

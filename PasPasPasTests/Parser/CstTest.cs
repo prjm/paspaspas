@@ -183,8 +183,20 @@ namespace PasPasPasTests.Parser {
 
         [TestCase]
         public void TestInterfaceDeclaration() {
-            var s = RunCstTest(p => p.ParseInterfaceDeclaration());
-            Assert.AreEqual(0, s.Length);
+            var s = RunCstTest(p => p.ParseInterfaceDeclaration(), "const a = 5");
+            Assert.IsNotNull(s.Items[0]);
+            Assert.AreEqual(11, s.Length);
+        }
+
+        [TestCase]
+        public void TestInterfaceDefinition() {
+            var s = RunCstTest(p => p.ParseInterfaceDef(), "interface(a) ['a'] function a:x; end");
+            Assert.IsNotNull(s.InterfaceSymbol);
+            Assert.IsNotNull(s.ParentInterface);
+            Assert.IsNotNull(s.GuidSymbol);
+            Assert.IsNotNull(s.Items);
+            Assert.IsNotNull(s.EndSymbol);
+            Assert.AreEqual(36, s.Length);
         }
 
         [TestCase]
@@ -1530,6 +1542,33 @@ namespace PasPasPasTests.Parser {
             Assert.IsNotNull(s.ElseSymbol);
             Assert.IsNotNull(s.ElsePart);
             Assert.AreEqual(18, s.Length);
+        }
+
+        [TestCase]
+        public void TestInterfaceGuid() {
+            var s = RunCstTest(p => p.ParseInterfaceGuid(), "['a']");
+            Assert.IsNotNull(s.OpenBraces);
+            Assert.IsNotNull(s.Id);
+            Assert.IsNotNull(s.CloseBraces);
+            Assert.AreEqual(5, s.Length);
+
+            s = RunCstTest(p => p.ParseInterfaceGuid(), "[a]");
+            Assert.IsNotNull(s.OpenBraces);
+            Assert.IsNotNull(s.IdIdentifier);
+            Assert.IsNotNull(s.CloseBraces);
+            Assert.AreEqual(3, s.Length);
+        }
+
+        [TestCase]
+        public void TestInterfaceItem() {
+            var s = RunCstTest(p => p.ParseInterfaceItem(out var x), "function x: string;");
+            Assert.IsNotNull(s.Method);
+            Assert.AreEqual(19, s.Length);
+
+            s = RunCstTest(p => p.ParseInterfaceItem(out var x), "property x: string read; GetX");
+            Assert.IsNotNull(s.Property);
+            Assert.AreEqual(24, s.Length);
+
         }
 
     }

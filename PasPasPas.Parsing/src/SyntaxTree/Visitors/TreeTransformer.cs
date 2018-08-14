@@ -92,8 +92,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         IStartVisitor<RecordHelperItem>,
         IStartVisitor<ObjectDeclaration>,
         IStartVisitor<ObjectItem>,
-        IStartVisitor<InterfaceDefinition>,
-        IStartVisitor<InterfaceGuid>,
+        IStartVisitor<InterfaceDefinitionSymbol>,
+        IStartVisitor<InterfaceGuidSymbol>,
         IStartVisitor<ClassHelperDefSymbol>,
         IStartVisitor<ClassHelperItemSymbol>,
         IStartVisitor<ProcedureDeclaration>,
@@ -2079,7 +2079,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     end visiting an interface declaration
         /// </summary>
         /// <param name="interfaceDeclaration"></param>
-        public void StartVisit(InterfaceDefinition interfaceDeclaration) {
+        public void StartVisit(InterfaceDefinitionSymbol interfaceDeclaration) {
             var typeTarget = LastTypeDeclaration;
             var result = new StructuredType();
             InitNode(result, interfaceDeclaration);
@@ -2098,7 +2098,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     end visiting an interface declaration
         /// </summary>
         /// <param name="interfaceDeclaration"></param>
-        public void EndVisit(InterfaceDefinition interfaceDeclaration) {
+        public void EndVisit(InterfaceDefinitionSymbol interfaceDeclaration) {
             var parentType = LastValue as StructuredType;
             CurrentMemberVisibility.Reset(parentType);
         }
@@ -2110,7 +2110,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     start visiting an interface guid definiton
         /// </summary>
         /// <param name="interfaceGuid"></param>
-        public void StartVisit(InterfaceGuid interfaceGuid) {
+        public void StartVisit(InterfaceGuidSymbol interfaceGuid) {
             var structType = LastValue as StructuredType;
 
             if (interfaceGuid.IdIdentifier != null) {

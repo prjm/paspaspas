@@ -1,15 +1,15 @@
-﻿using System.Text;
+﻿using System;
 using System.Collections.Generic;
-using PasPasPas.Parsing.Tokenizer;
+using System.Collections.Immutable;
+using System.Text;
+using PasPasPas.Infrastructure.Files;
+using PasPasPas.Infrastructure.ObjectPooling;
+using PasPasPas.Options.Bundles;
 using PasPasPas.Parsing.SyntaxTree;
 using PasPasPas.Parsing.SyntaxTree.Standard;
-using System;
 using PasPasPas.Parsing.SyntaxTree.Utils;
+using PasPasPas.Parsing.Tokenizer;
 using PasPasPas.Parsing.Tokenizer.Patterns;
-using PasPasPas.Infrastructure.Files;
-using PasPasPas.Options.Bundles;
-using PasPasPas.Infrastructure.ObjectPooling;
-using System.Collections.Immutable;
 
 namespace PasPasPas.Parsing.Parser {
 
@@ -166,16 +166,14 @@ namespace PasPasPas.Parsing.Parser {
         /// <returns>parsed unit</returns>
 
         [Rule("Unit", "UnitHead UnitInterface UnitImplementation UnitBlock '.' ")]
-        public UnitSymbol ParseUnit(IFileReference path) {
-            return new UnitSymbol() {
-                UnitHead = ParseUnitHead(),
-                UnitInterface = ParseUnitInterface(),
-                UnitImplementation = ParseUnitImplementation(),
-                UnitBlock = ParseUnitBlock(),
-                DotSymbol = ContinueWithOrMissing(TokenKind.Dot),
-                FilePath = path,
-            };
-        }
+        public UnitSymbol ParseUnit(IFileReference path) => new UnitSymbol() {
+            UnitHead = ParseUnitHead(),
+            UnitInterface = ParseUnitInterface(),
+            UnitImplementation = ParseUnitImplementation(),
+            UnitBlock = ParseUnitBlock(),
+            DotSymbol = ContinueWithOrMissing(TokenKind.Dot),
+            FilePath = path,
+        };
 
         #endregion
         #region ParseUnitInterface
@@ -186,13 +184,11 @@ namespace PasPasPas.Parsing.Parser {
         /// <returns></returns>
 
         [Rule("UnitInterface", "'interface' [ UsesClause ] InterfaceDeclaration ")]
-        public UnitInterfaceSymbol ParseUnitInterface() {
-            return new UnitInterfaceSymbol() {
-                InterfaceSymbol = ContinueWithOrMissing(TokenKind.Interface),
-                UsesClause = Match(TokenKind.Uses) ? (ISyntaxPart)ParseUsesClause(null) : EmptyTerminal(),
-                InterfaceDeclaration = ParseInterfaceDeclaration()
-            };
-        }
+        public UnitInterfaceSymbol ParseUnitInterface() => new UnitInterfaceSymbol() {
+            InterfaceSymbol = ContinueWithOrMissing(TokenKind.Interface),
+            UsesClause = Match(TokenKind.Uses) ? (ISyntaxPart)ParseUsesClause(null) : EmptyTerminal(),
+            InterfaceDeclaration = ParseInterfaceDeclaration()
+        };
 
         #endregion
         #region ParseUnitImplementation
@@ -281,9 +277,9 @@ namespace PasPasPas.Parsing.Parser {
                 do {
                     item = AddToList(list, ParseInterfaceDeclarationItem(null));
                 } while (item != null);
-            }
 
-            return result;
+                return new InterfaceDeclarationSymbol(GetFixedArray(list));
+            }
         }
 
         #endregion
@@ -985,14 +981,16 @@ namespace PasPasPas.Parsing.Parser {
         [Rule("SimpleStatement", "GoToStatement | Designator [ ':=' (Expression  | NewStatement) ] ")]
         private StatementPart ParseSimpleStatement() {
             if (!(LookAhead(1, TokenKind.Assignment, TokenKind.OpenBraces, TokenKind.OpenParen)) && Match(TokenKind.GoToKeyword, TokenKind.Exit, TokenKind.Break, TokenKind.Continue)) {
-                var result = new StatementPart();
-                result.GoTo = ParseGoToStatement();
+                var result = new StatementPart {
+                    GoTo = ParseGoToStatement()
+                };
                 return result;
             }
 
             if (MatchIdentifier(TokenKind.Inherited, TokenKind.Circumflex, TokenKind.OpenParen, TokenKind.At, TokenKind.AnsiString, TokenKind.UnicodeString, TokenKind.String, TokenKind.WideString, TokenKind.ShortString)) {
-                var result = new StatementPart();
-                result.DesignatorPart = ParseDesignator();
+                var result = new StatementPart {
+                    DesignatorPart = ParseDesignator()
+                };
 
                 if (ContinueWith(result, TokenKind.Assignment)) {
                     result.Assignment = ParseExpression();
@@ -1048,13 +1046,11 @@ namespace PasPasPas.Parsing.Parser {
         /// <returns></returns>
 
         [Rule("UnitHead", "'unit' NamespaceName { Hint } ';' ")]
-        private UnitHeadSymbol ParseUnitHead() {
-            return new UnitHeadSymbol(
+        private UnitHeadSymbol ParseUnitHead() => new UnitHeadSymbol(
                 ContinueWithOrMissing(TokenKind.Unit),
                 ParseNamespaceName(),
                 ParseHints(false),
                 ContinueWithOrMissing(TokenKind.Semicolon));
-        }
 
         #endregion
         #region ParsePackage
@@ -1136,15 +1132,13 @@ namespace PasPasPas.Parsing.Parser {
         /// <returns></returns>
 
         [Rule("Library", "LibraryHead [UsesFileClause] Block '.' ")]
-        public LibrarySymbol ParseLibrary(IFileReference path) {
-            return new LibrarySymbol() {
-                LibraryHead = ParseLibraryHead(),
-                Uses = Match(TokenKind.Uses) ? (ISyntaxPart)ParseUsesFileClause(null) : EmptyTerminal(),
-                MainBlock = ParseBlock(),
-                Dot = ContinueWithOrMissing(TokenKind.Dot),
-                FilePath = path
-            };
-        }
+        public LibrarySymbol ParseLibrary(IFileReference path) => new LibrarySymbol() {
+            LibraryHead = ParseLibraryHead(),
+            Uses = Match(TokenKind.Uses) ? (ISyntaxPart)ParseUsesFileClause(null) : EmptyTerminal(),
+            MainBlock = ParseBlock(),
+            Dot = ContinueWithOrMissing(TokenKind.Dot),
+            FilePath = path
+        };
 
         #endregion
         #region ParseLibraryHead
@@ -1156,14 +1150,12 @@ namespace PasPasPas.Parsing.Parser {
         /// <returns></returns>
 
         [Rule("LibraryHead", "'library' NamespaceName Hints ';'")]
-        public LibraryHeadSymbol ParseLibraryHead() {
-            return new LibraryHeadSymbol() {
-                LibrarySymbol = ContinueWithOrMissing(TokenKind.Library),
-                LibraryName = ParseNamespaceName(),
-                Hints = ParseHints(false),
-                Semicolon = ContinueWithOrMissing(TokenKind.Semicolon)
-            };
-        }
+        public LibraryHeadSymbol ParseLibraryHead() => new LibraryHeadSymbol() {
+            LibrarySymbol = ContinueWithOrMissing(TokenKind.Library),
+            LibraryName = ParseNamespaceName(),
+            Hints = ParseHints(false),
+            Semicolon = ContinueWithOrMissing(TokenKind.Semicolon)
+        };
 
         #endregion
         #region ParseProgram
@@ -1175,15 +1167,13 @@ namespace PasPasPas.Parsing.Parser {
         /// <returns></returns>
 
         [Rule("Program", "[ProgramHead] [UsesFileClause] Block '.'")]
-        public Program ParseProgram(IFileReference path) {
-            return new Program() {
-                ProgramHead = Match(TokenKind.Program) ? ParseProgramHead() as ISyntaxPart : EmptyTerminal(),
-                Uses = Match(TokenKind.Uses) ? ParseUsesFileClause(null) as ISyntaxPart : EmptyTerminal(),
-                MainBlock = ParseBlock(),
-                Dot = ContinueWithOrMissing(TokenKind.Dot),
-                FilePath = path
-            };
-        }
+        public Program ParseProgram(IFileReference path) => new Program() {
+            ProgramHead = Match(TokenKind.Program) ? ParseProgramHead() as ISyntaxPart : EmptyTerminal(),
+            Uses = Match(TokenKind.Uses) ? ParseUsesFileClause(null) as ISyntaxPart : EmptyTerminal(),
+            MainBlock = ParseBlock(),
+            Dot = ContinueWithOrMissing(TokenKind.Dot),
+            FilePath = path
+        };
 
         #endregion
         #region ParseProgramHead
@@ -1194,14 +1184,12 @@ namespace PasPasPas.Parsing.Parser {
         /// <returns></returns>
 
         [Rule("ProgramHead", "'program' NamespaceName [ProgramParams] ';'")]
-        public ProgramHeadSymbol ParseProgramHead() {
-            return new ProgramHeadSymbol() {
-                ProgramSymbol = ContinueWithOrMissing(TokenKind.Program),
-                Name = ParseNamespaceName(),
-                Parameters = ParseProgramParams(null),
-                Semicolon = ContinueWithOrMissing(TokenKind.Semicolon)
-            };
-        }
+        public ProgramHeadSymbol ParseProgramHead() => new ProgramHeadSymbol() {
+            ProgramSymbol = ContinueWithOrMissing(TokenKind.Program),
+            Name = ParseNamespaceName(),
+            Parameters = ParseProgramParams(null),
+            Semicolon = ContinueWithOrMissing(TokenKind.Semicolon)
+        };
 
         #endregion
         #region ParseProgramParams
@@ -1237,12 +1225,10 @@ namespace PasPasPas.Parsing.Parser {
         /// <returns></returns>
 
         [Rule("Block", "DeclarationSections [ BlockBody ] ")]
-        public BlockSymbol ParseBlock() {
-            return new BlockSymbol(
+        public BlockSymbol ParseBlock() => new BlockSymbol(
                 declarationSections: ParseDeclarationSections(),
                 body: Match(TokenKind.Asm, TokenKind.Begin) ? ParseBlockBody() : null
             );
-        }
 
         #endregion
         #region ParseBlockBody
@@ -1253,12 +1239,10 @@ namespace PasPasPas.Parsing.Parser {
         /// <returns></returns>
 
         [Rule("BlockBody", "AssemblerBlock | CompoundStatement")]
-        public BlockBodySymbol ParseBlockBody() {
-            return new BlockBodySymbol(
+        public BlockBodySymbol ParseBlockBody() => new BlockBodySymbol(
                 assemblerBlock: Match(TokenKind.Asm) ? ParseAsmBlock() : default,
                 body: Match(TokenKind.Begin) ? ParseCompoundStatement() : default
             );
-        }
 
         #endregion
         #region ParseAsmBlock
@@ -1775,12 +1759,10 @@ namespace PasPasPas.Parsing.Parser {
         /// <returns></returns>
 
         [Rule("InlineDirective", "('inline' | 'assembler' ) ';'")]
-        public InlineSymbol ParseInlineDirective() {
-            return new InlineSymbol(
+        public InlineSymbol ParseInlineDirective() => new InlineSymbol(
                 directive: ContinueWithOrMissing(TokenKind.Inline, TokenKind.Assembler),
                 semicolon: ContinueWithOrMissing(TokenKind.Semicolon)
             );
-        }
 
         #endregion
         #region ParseCallConvention
@@ -1791,12 +1773,10 @@ namespace PasPasPas.Parsing.Parser {
         /// <returns></returns>
 
         [Rule("CallConvention", "('cdecl' | 'pascal' | 'register' | 'safecall' | 'stdcall' | 'export') ';' ")]
-        public CallConventionSymbol ParseCallConvention() {
-            return new CallConventionSymbol(
+        public CallConventionSymbol ParseCallConvention() => new CallConventionSymbol(
                 directive: ContinueWithOrMissing(TokenKind.Cdecl, TokenKind.Pascal, TokenKind.Register, TokenKind.Safecall, TokenKind.Stdcall, TokenKind.Export),
                 semicolon: ContinueWithOrMissing(TokenKind.Semicolon)
             );
-        }
 
         #endregion
         #region ParseAbstractDirective
@@ -1807,12 +1787,10 @@ namespace PasPasPas.Parsing.Parser {
         /// <returns></returns>
 
         [Rule("AbstractDirective", "('abstract' | 'final' ) ';' ")]
-        public AbstractSymbol ParseAbstractDirective() {
-            return new AbstractSymbol(
+        public AbstractSymbol ParseAbstractDirective() => new AbstractSymbol(
                 directive: ContinueWithOrMissing(TokenKind.Abstract, TokenKind.Final),
                 semicolon: ContinueWithOrMissing(TokenKind.Semicolon)
             );
-        }
 
         #endregion
         #region ParseBindingDirective
@@ -1845,12 +1823,10 @@ namespace PasPasPas.Parsing.Parser {
         /// <returns></returns>
 
         [Rule("OverloadDirective", "'overload' ';' ")]
-        public OverloadSymbol ParseOverloadDirective() {
-            return new OverloadSymbol(
+        public OverloadSymbol ParseOverloadDirective() => new OverloadSymbol(
                 directive: ContinueWithOrMissing(TokenKind.Overload),
                 semicolon: ContinueWithOrMissing(TokenKind.Semicolon)
             );
-        }
 
         #endregion
         #region ParseReintroduceDirective
@@ -1861,12 +1837,10 @@ namespace PasPasPas.Parsing.Parser {
         /// <returns></returns>
 
         [Rule("ReintroduceDirective", "'reintroduce' ';' ")]
-        public ReintroduceSymbol ParseReintroduceDirective() {
-            return new ReintroduceSymbol() {
-                Directive = ContinueWithOrMissing(TokenKind.Reintroduce),
-                Semicolon = ContinueWithOrMissing(TokenKind.Semicolon)
-            };
-        }
+        public ReintroduceSymbol ParseReintroduceDirective() => new ReintroduceSymbol() {
+            Directive = ContinueWithOrMissing(TokenKind.Reintroduce),
+            Semicolon = ContinueWithOrMissing(TokenKind.Semicolon)
+        };
 
         #endregion
         #region MethodDeclarationHeading
@@ -2948,11 +2922,16 @@ namespace PasPasPas.Parsing.Parser {
         #endregion
         #region ParseInterfaceDef
 
+        /// <summary>
+        ///     parse an interface definition
+        /// </summary>
+        /// <returns></returns>
+
         [Rule("InterfaceDef", "('interface' | 'dispinterface') ClassParent [InterfaceGuid] InterfaceDefItems 'end'")]
-        private InterfaceDefinition ParseInterfaceDef() {
+        public InterfaceDefinitionSymbol ParseInterfaceDef() {
             var interfaceSymbol = ContinueWithOrMissing(TokenKind.Interface, TokenKind.DispInterface);
             var parentInterface = ParseClassParent();
-            var guid = default(InterfaceGuid);
+            var guid = default(InterfaceGuidSymbol);
 
             if (Match(TokenKind.OpenBraces))
                 guid = ParseInterfaceGuid();
@@ -2965,7 +2944,7 @@ namespace PasPasPas.Parsing.Parser {
             else
                 end = ContinueWith(TokenKind.End);
 
-            return new InterfaceDefinition(interfaceSymbol, parentInterface, guid, items, end);
+            return new InterfaceDefinitionSymbol(interfaceSymbol, parentInterface, guid, items, end);
         }
 
         #endregion
@@ -2975,7 +2954,7 @@ namespace PasPasPas.Parsing.Parser {
         private InterfaceItems ParseInterfaceItems() {
             var unexpected = false;
 
-            using (var list = GetList<InterfaceItem>()) {
+            using (var list = GetList<InterfaceItemSymbol>()) {
 
                 while ((!Match(TokenKind.End)) && (!unexpected)) {
                     AddToList(list, ParseInterfaceItem(out unexpected));
@@ -2992,41 +2971,51 @@ namespace PasPasPas.Parsing.Parser {
         #endregion
         #region ParseInterfaceItem
 
+        /// <summary>
+        ///     parse an interface item
+        /// </summary>
+        /// <param name="unexpected"></param>
+        /// <returns></returns>
+
         [Rule("InterfaceItem", "MethodDeclaration | PropertyDeclaration")]
-        private InterfaceItem ParseInterfaceItem(out bool unexpected) {
-            var result = new InterfaceItem();
+        public InterfaceItemSymbol ParseInterfaceItem(out bool unexpected) {
             unexpected = true;
 
             if (Match(TokenKind.Procedure, TokenKind.Function)) {
                 unexpected = false;
-                result.Method = ParseMethodDeclaration();
-                return result;
+                return new InterfaceItemSymbol(ParseMethodDeclaration());
             }
 
             if (Match(TokenKind.Property)) {
                 unexpected = false;
-                result.Property = ParsePropertyDeclaration();
-                return result;
+                return new InterfaceItemSymbol(ParsePropertyDeclaration());
             }
 
-            return result;
+            return null;
         }
 
         #endregion
         #region ParseInterfaceGuid
 
+        /// <summary>
+        ///     parse an interface guid identifier
+        /// </summary>
+        /// <returns></returns>
+
         [Rule("InterfaceGuid", "'[' ( QuotedString ) | Identifier ']'")]
-        private InterfaceGuid ParseInterfaceGuid() {
-            var result = new InterfaceGuid();
-            InitByTerminal(result, null, TokenKind.OpenBraces);
+        public InterfaceGuidSymbol ParseInterfaceGuid() {
+            var openBraces = ContinueWith(TokenKind.OpenBraces);
+            var idIdentifier = default(IdentifierSymbol);
+            var stringIdentifier = default(QuotedString);
 
             if (Match(TokenKind.Identifier))
-                result.IdIdentifier = RequireIdentifier();
+                idIdentifier = RequireIdentifier();
             else
-                result.Id = RequireString();
+                stringIdentifier = RequireString();
 
-            ContinueWithOrMissing(result, TokenKind.CloseBraces);
-            return result;
+            var closeBraces = ContinueWithOrMissing(TokenKind.CloseBraces);
+
+            return new InterfaceGuidSymbol(openBraces, idIdentifier, stringIdentifier, closeBraces);
         }
 
         #endregion
@@ -3841,12 +3830,10 @@ namespace PasPasPas.Parsing.Parser {
         /// <returns></returns>
 
         [Rule("ClassOfDeclaration", "'class' 'of' TypeName")]
-        public ClassOfDeclarationSymbol ParseClassOfDeclaration() {
-            return new ClassOfDeclarationSymbol(
+        public ClassOfDeclarationSymbol ParseClassOfDeclaration() => new ClassOfDeclarationSymbol(
                 classSymbol: ContinueWithOrMissing(TokenKind.Class),
                 ofSymbol: ContinueWithOrMissing(TokenKind.Of),
                 typeName: ParseTypeName());
-        }
 
         #endregion
         #region ParseTypeName
@@ -4021,14 +4008,12 @@ namespace PasPasPas.Parsing.Parser {
         /// <returns></returns>
 
         [Rule("ArrayIndex", "ConstantExpression [ '..' ConstantExpression ] ")]
-        public ArrayIndexSymbol ParseArrayIndex() {
-            return new ArrayIndexSymbol(
+        public ArrayIndexSymbol ParseArrayIndex() => new ArrayIndexSymbol(
                 startIndex: ParseConstantExpression(),
                 dotDot: ContinueWith(TokenKind.DotDot, out var hasDots),
                 endIndex: hasDots ? ParseConstantExpression() : null,
                 comma: ContinueWith(TokenKind.Comma)
             );
-        }
 
         #endregion
         #region ParsePointerType

@@ -6,7 +6,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// <summary>
     ///     interface definition
     /// </summary>
-    public class InterfaceDefinition : StandardSyntaxTreeBase {
+    public class InterfaceDefinitionSymbol : StandardSyntaxTreeBase {
 
         /// <summary>
         ///     create a new interface definition
@@ -16,7 +16,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="guidSymbol"></param>
         /// <param name="items"></param>
         /// <param name="end"></param>
-        public InterfaceDefinition(Terminal interfaceSymbol, ParentClass parentInterface, InterfaceGuid guidSymbol, InterfaceItems items, Terminal end) {
+        public InterfaceDefinitionSymbol(Terminal interfaceSymbol, ParentClass parentInterface, InterfaceGuidSymbol guidSymbol, InterfaceItems items, Terminal end) {
             InterfaceSymbol = interfaceSymbol;
             ParentInterface = parentInterface;
             GuidSymbol = guidSymbol;
@@ -33,7 +33,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     guid declaration
         /// </summary>
-        public InterfaceGuid GuidSymbol { get; }
+        public InterfaceGuidSymbol GuidSymbol { get; }
 
         /// <summary>
         ///     interface items
@@ -68,6 +68,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
             AcceptPart(this, InterfaceSymbol, visitor);
+            AcceptPart(this, ParentInterface, visitor);
             AcceptPart(this, GuidSymbol, visitor);
             AcceptPart(this, Items, visitor);
             AcceptPart(this, EndSymbol, visitor);
@@ -79,6 +80,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// </summary>
         public override int Length
             => InterfaceSymbol.GetSymbolLength() +
+                ParentInterface.GetSymbolLength() +
                 GuidSymbol.GetSymbolLength() +
                 Items.GetSymbolLength() +
                 EndSymbol.GetSymbolLength();
