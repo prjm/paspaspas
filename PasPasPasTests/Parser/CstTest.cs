@@ -1609,5 +1609,16 @@ namespace PasPasPasTests.Parser {
 
         }
 
+        [TestCase]
+        public void TestMethodDecl() {
+            var s = RunCstTest(p => p.ParseMethodDecl(default, default), "function a.b.c(a: string): string; inline; begin end;");
+            Assert.IsNotNull(s.Heading);
+            Assert.IsNotNull(s.Semicolon);
+            Assert.IsNotNull(s.Directives);
+            Assert.IsNotNull(s.MethodBody);
+            Assert.IsNotNull(s.Semicolon2);
+            Assert.AreEqual(53, s.Length);
+        }
+
     }
 }

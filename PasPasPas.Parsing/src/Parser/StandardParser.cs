@@ -1702,8 +1702,15 @@ namespace PasPasPas.Parsing.Parser {
         #endregion
         #region ParseMethodDecl
 
+        /// <summary>
+        ///     parse a method declaration
+        /// </summary>
+        /// <param name="classSymbol"></param>
+        /// <param name="attributes"></param>
+        /// <returns></returns>
+
         [Rule("MethodDecl", "MethodDeclHeading ';' MethodDirectives [ Block ';' ]")]
-        private MethodDeclaration ParseMethodDecl(Terminal classSymbol, UserAttributes attributes) {
+        public MethodDeclarationSymbol ParseMethodDecl(Terminal classSymbol, UserAttributes attributes) {
             var heading = ParseMethodDeclHeading();
             var semicolon = ContinueWithOrMissing(TokenKind.Semicolon);
             var directives = ParseMethodDirectives();
@@ -1713,7 +1720,7 @@ namespace PasPasPas.Parsing.Parser {
             if ((methodBody != default) && (methodBody.Body != default))
                 semicolon2 = ContinueWithOrMissing(TokenKind.Semicolon);
 
-            return new MethodDeclaration(classSymbol, attributes, heading, semicolon, directives, methodBody, semicolon2);
+            return new MethodDeclarationSymbol(classSymbol, attributes, heading, semicolon, directives, methodBody, semicolon2);
         }
 
         #endregion
@@ -4683,7 +4690,7 @@ namespace PasPasPas.Parsing.Parser {
                     AddToList(list, dot);
                 }
 
-                while (name != default && LookAheadIdentifier(1, Array.Empty<int>(), true) && (!inDesignator || LookAhead(2, new int[] { TokenKind.Dot })) && dot != default) {
+                while (name != default && dot != default && MatchIdentifier(true) && (!inDesignator || LookAhead(2, new int[] { TokenKind.Dot }))) {
                     name = RequireIdentifier(true);
                     AddToList(list, name);
 

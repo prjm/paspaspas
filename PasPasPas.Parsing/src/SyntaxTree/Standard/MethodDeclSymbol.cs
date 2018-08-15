@@ -6,7 +6,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// <summary>
     ///     method declaration
     /// </summary>
-    public class MethodDeclaration : StandardSyntaxTreeBase {
+    public class MethodDeclarationSymbol : StandardSyntaxTreeBase {
 
         /// <summary>
         ///     create a new method declaration
@@ -18,7 +18,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="methodBody"></param>
         /// <param name="semicolon2"></param>
         /// <param name="attribues"></param>
-        public MethodDeclaration(Terminal classSymbol, UserAttributes attribues, MethodDeclarationHeading heading, Terminal semicolon, MethodDirectives directives, BlockSymbol methodBody, Terminal semicolon2) {
+        public MethodDeclarationSymbol(Terminal classSymbol, UserAttributes attribues, MethodDeclarationHeading heading, Terminal semicolon, MethodDirectives directives, BlockSymbol methodBody, Terminal semicolon2) {
             ClassSymbol = classSymbol;
             Attributes = attribues;
             Heading = heading;

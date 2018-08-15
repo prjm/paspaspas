@@ -97,7 +97,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         IStartVisitor<ClassHelperDefSymbol>,
         IStartVisitor<ClassHelperItemSymbol>,
         IStartVisitor<ProcedureDeclaration>,
-        IStartVisitor<Standard.MethodDeclaration>,
+        IStartVisitor<Standard.MethodDeclarationSymbol>,
         IStartVisitor<StatementPart>,
         IStartVisitor<ClosureExpressionSymbol>,
         IStartVisitor<RaiseStatement>,
@@ -2193,7 +2193,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     start visiting a method declaration
         /// </summary>
         /// <param name="method"></param>
-        public void StartVisit(Standard.MethodDeclaration method) {
+        public void StartVisit(Standard.MethodDeclarationSymbol method) {
             var unit = CurrentUnit;
             var name = ExtractSymbolName(method.Heading.Items);
             var result = new MethodImplementation();
