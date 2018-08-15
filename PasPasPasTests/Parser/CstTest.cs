@@ -1620,5 +1620,155 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(53, s.Length);
         }
 
+        [TestCase]
+        public void TestMethodDeclarationName() {
+            var s = RunCstTest(p => p.ParseMethodDeclarationName(false), "a.b.c<d>.");
+            Assert.IsNotNull(s.Name);
+            Assert.IsNotNull(s.GenericDefinition);
+            Assert.IsNotNull(s.Dot);
+            Assert.AreEqual(9, s.Length);
+        }
+
+        [TestCase]
+        public void TestMethodDeclarationHeading() {
+            var s = RunCstTest(p => p.ParseMethodDeclHeading(), "function x(a: string): [a] string");
+            Assert.IsNotNull(s.KindSymbol);
+            Assert.IsNotNull(s.Items[0]);
+            Assert.IsNotNull(s.Parameters);
+            Assert.IsNotNull(s.ResultTypeAttributes);
+            Assert.IsNotNull(s.ResultType);
+            Assert.AreEqual(33, s.Length);
+        }
+
+        [TestCase]
+        public void TestMethodDirectives() {
+            var s = RunCstTest(p => p.ParseMethodDirectives(), "overload; reintroduce;");
+            Assert.IsNotNull(s.Items[0]);
+            Assert.IsNotNull(s.Items[1]);
+            Assert.AreEqual(22, s.Length);
+        }
+
+        [TestCase]
+        public void TestMethodResolution() {
+            var s = RunCstTest(p => p.ParseMethodResolution(), "function a.c = d;");
+            Assert.IsNotNull(s.KindSymbol);
+            Assert.IsNotNull(s.Name);
+            Assert.IsNotNull(s.EqualsSign);
+            Assert.IsNotNull(s.ResolveIdentifier);
+            Assert.IsNotNull(s.Semicolon);
+            Assert.AreEqual(17, s.Length);
+        }
+
+        [TestCase]
+        public void TestNamespaceFileName() {
+            var s = RunCstTest(p => p.ParseNamespaceFileName(true), "a.b.c");
+            Assert.IsNotNull(s.NamespaceName);
+            Assert.AreEqual(5, s.Length);
+
+            s = RunCstTest(p => p.ParseNamespaceFileName(true), "a.b.c in 'a'");
+            Assert.IsNotNull(s.NamespaceName);
+            Assert.IsNotNull(s.InSymbol);
+            Assert.IsNotNull(s.QuotedFileName);
+            Assert.AreEqual(12, s.Length);
+
+            s = RunCstTest(p => p.ParseNamespaceFileName(true), "a.b.c in 'a',");
+            Assert.IsNotNull(s.NamespaceName);
+            Assert.IsNotNull(s.InSymbol);
+            Assert.IsNotNull(s.QuotedFileName);
+            Assert.IsNotNull(s.Comma);
+            Assert.AreEqual(13, s.Length);
+        }
+
+        [TestCase]
+        public void TestNamespaceFileNameList() {
+            var s = RunCstTest(p => p.ParseNamespaceFileNameList(), "a,b,c;");
+            Assert.IsNotNull(s.Items[0]);
+            Assert.IsNotNull(s.Items[1]);
+            Assert.IsNotNull(s.Items[2]);
+            Assert.IsNotNull(s.Semicolon);
+            Assert.AreEqual(6, s.Length);
+
+            s = RunCstTest(p => p.ParseNamespaceFileNameList(), "a in 'a',b in 'b',c in 'c';");
+            Assert.IsNotNull(s.Items[0]);
+            Assert.IsNotNull(s.Items[1]);
+            Assert.IsNotNull(s.Items[2]);
+            Assert.IsNotNull(s.Semicolon);
+            Assert.AreEqual(27, s.Length);
+        }
+
+        [TestCase]
+        public void TestNamespaceName() {
+            var s = RunCstTest(p => p.ParseNamespaceName(), "a.b.c");
+            Assert.IsNotNull(s.Items[0]);
+            Assert.IsNotNull(s.Items[1]);
+            Assert.IsNotNull(s.Items[2]);
+            Assert.AreEqual(5, s.Length);
+        }
+
+        [TestCase]
+        public void TestObjectDeclaration() {
+            var s = RunCstTest(p => p.ParseObjectDecl(), "object(a) procedure x; end");
+            Assert.IsNotNull(s.ObjectSymbol);
+            Assert.IsNotNull(s.ClassParent);
+            Assert.IsNotNull(s.Items);
+            Assert.IsNotNull(s.EndSymbol);
+            Assert.AreEqual(26, s.Length);
+        }
+
+        [TestCase]
+        public void TestObjectItem() {
+            var mode = ClassDeclarationMode.Other;
+
+            var s = RunCstTest(p => p.ParseObjectItem(ref mode), "var");
+            Assert.AreEqual(mode, ClassDeclarationMode.Fields);
+            Assert.IsNotNull(s.VarSymbol);
+            Assert.AreEqual(3, s.Length);
+
+            s = RunCstTest(p => p.ParseObjectItem(ref mode), "protected");
+            Assert.AreEqual(mode, ClassDeclarationMode.Fields);
+            Assert.AreEqual(s.Visibility.GetSymbolKind(), TokenKind.Protected);
+            Assert.AreEqual(9, s.Length);
+
+            s = RunCstTest(p => p.ParseObjectItem(ref mode), "strict private");
+            Assert.AreEqual(mode, ClassDeclarationMode.Fields);
+            Assert.AreEqual(s.Visibility.GetSymbolKind(), TokenKind.Private);
+            Assert.IsNotNull(s.Strict);
+            Assert.AreEqual(14, s.Length);
+
+            s = RunCstTest(p => p.ParseObjectItem(ref mode), "function x: integer;");
+            Assert.AreEqual(mode, ClassDeclarationMode.Other);
+            Assert.IsNotNull(s.MethodDeclaration);
+            Assert.AreEqual(20, s.Length);
+
+            s = RunCstTest(p => p.ParseObjectItem(ref mode), "property x: integer read p write p;");
+            Assert.AreEqual(mode, ClassDeclarationMode.Other);
+            Assert.IsNotNull(s.Property);
+            Assert.AreEqual(35, s.Length);
+
+            s = RunCstTest(p => p.ParseObjectItem(ref mode), "const x = 4;");
+            Assert.AreEqual(mode, ClassDeclarationMode.Other);
+            Assert.IsNotNull(s.ConstSection);
+            Assert.AreEqual(12, s.Length);
+
+            s = RunCstTest(p => p.ParseObjectItem(ref mode), "type x = string;");
+            Assert.AreEqual(mode, ClassDeclarationMode.Other);
+            Assert.IsNotNull(s.TypeSection);
+            Assert.AreEqual(16, s.Length);
+
+            mode = ClassDeclarationMode.Fields;
+            s = RunCstTest(p => p.ParseObjectItem(ref mode), "x: string;");
+            Assert.AreEqual(mode, ClassDeclarationMode.Fields);
+            Assert.IsNotNull(s.FieldDeclaration);
+            Assert.AreEqual(10, s.Length);
+        }
+
+        [TestCase]
+        public void TestObjectItems() {
+            var s = RunCstTest(p => p.ParseObjectItems(), "procedure x;");
+            Assert.IsNotNull(s.Items[0]);
+            Assert.AreEqual(12, s.Length);
+
+        }
+
     }
 }

@@ -233,24 +233,30 @@ namespace PasPasPas.Parsing.Parser {
         /// <returns></returns>
 
         [Rule("NamespaceFileNameList", "NamespaceFileName { ',' NamespaceFileName }")]
-        public NamespaceFileNameList ParseNamespaceFileNameList() {
-            using (var list = GetList<NamespaceFileName>()) {
-                var item = default(NamespaceFileName);
+        public NamespaceFileNameListSymbol ParseNamespaceFileNameList() {
+            using (var list = GetList<NamespaceFileNameSymbol>()) {
+                var item = default(NamespaceFileNameSymbol);
 
                 do {
                     item = AddToList(list, ParseNamespaceFileName(true));
                 } while (item != default && item.Comma != default);
 
                 var semicolon = ContinueWithOrMissing(TokenKind.Semicolon);
-                return new NamespaceFileNameList(GetFixedArray(list), semicolon);
+                return new NamespaceFileNameListSymbol(GetFixedArray(list), semicolon);
             }
         }
 
         #endregion
         #region ParseNamespaceFileName
 
+        /// <summary>
+        ///     parse a namespace file name
+        /// </summary>
+        /// <param name="allowComma"></param>
+        /// <returns></returns>
+
         [Rule("NamespaceFileName", "NamespaceName [ 'in' QuotedString ]")]
-        private NamespaceFileName ParseNamespaceFileName(bool allowComma) {
+        public NamespaceFileNameSymbol ParseNamespaceFileName(bool allowComma) {
             var name = ParseNamespaceName();
             var inSymbol = ContinueWith(TokenKind.In);
             var fileName = default(QuotedString);
@@ -262,7 +268,7 @@ namespace PasPasPas.Parsing.Parser {
             if (allowComma)
                 comma = ContinueWith(TokenKind.Comma);
 
-            return new NamespaceFileName(name, inSymbol, fileName, comma);
+            return new NamespaceFileNameSymbol(name, inSymbol, fileName, comma);
         }
 
         #endregion
@@ -1726,15 +1732,20 @@ namespace PasPasPas.Parsing.Parser {
         #endregion
         #region ParseMethodDirectives
 
+        /// <summary>
+        ///     parse method directives
+        /// </summary>
+        /// <returns></returns>
+
         [Rule("MethodDirectives", "{ MethodDirective }")]
-        private MethodDirectives ParseMethodDirectives() {
+        public MethodDirectivesSymbol ParseMethodDirectives() {
             using (var list = GetList<SyntaxPartBase>()) {
                 SyntaxPartBase directive;
                 do {
                     directive = AddToList(list, ParseMethodDirective());
                 } while (directive != null);
 
-                return new MethodDirectives(GetFixedArray(list));
+                return new MethodDirectivesSymbol(GetFixedArray(list));
             }
         }
 
@@ -1858,42 +1869,56 @@ namespace PasPasPas.Parsing.Parser {
         /// <returns></returns>
 
         [Rule("ReintroduceDirective", "'reintroduce' ';' ")]
-        public ReintroduceSymbol ParseReintroduceDirective() => new ReintroduceSymbol() {
-            Directive = ContinueWithOrMissing(TokenKind.Reintroduce),
-            Semicolon = ContinueWithOrMissing(TokenKind.Semicolon)
-        };
+        public ReintroduceSymbol ParseReintroduceDirective()
+            => new ReintroduceSymbol(
+                directive: ContinueWithOrMissing(TokenKind.Reintroduce),
+                semicolon: ContinueWithOrMissing(TokenKind.Semicolon));
+
 
         #endregion
         #region MethodDeclarationHeading
 
+        /// <summary>
+        ///     parse a method declaration name
+        /// </summary>
+        /// <param name="allowIn"></param>
+        /// <returns></returns>
+
+        public MethodDeclarationNameSymbol ParseMethodDeclarationName(bool allowIn) {
+            var namePart = ParseNamespaceName(allowIn);
+            var genericPart = default(GenericDefinitionSymbol);
+            var dot = default(Terminal);
+
+            if (Match(TokenKind.AngleBracketsOpen)) {
+                genericPart = ParseGenericDefinition();
+            }
+
+            dot = ContinueWith(TokenKind.Dot);
+            return new MethodDeclarationNameSymbol(namePart, genericPart, dot);
+        }
+
+        /// <summary>
+        ///     parse a method declaration heading
+        /// </summary>
+        /// <returns></returns>
+
         [Rule("MethodDeclHeading", " ('constructor' | 'destructor' | 'function' | 'procedure' | 'operator') NamespaceName [GenericDefinition] [FormalParameterSection] [':' Attributes TypeSpecification ]")]
-        private MethodDeclarationHeading ParseMethodDeclHeading() {
+        public MethodDeclarationHeadingSymbol ParseMethodDeclHeading() {
             var kindSymbol = ContinueWithOrMissing(TokenKind.Constructor, TokenKind.Destructor, TokenKind.Function, TokenKind.Procedure, TokenKind.Operator);
             var allowIn = kindSymbol.GetSymbolKind() == TokenKind.Operator;
-            var name = default(MethodDeclarationName);
+            var name = default(MethodDeclarationNameSymbol);
             var parameters = default(FormalParameterSection);
             var colonSymbol = default(Terminal);
             var resultTypeAttributes = default(UserAttributes);
             var resultType = default(TypeSpecification);
 
-            using (var list = GetList<MethodDeclarationName>()) {
+            using (var list = GetList<MethodDeclarationNameSymbol>()) {
                 do {
-                    var namePart = ParseNamespaceName(allowIn);
-                    var genericPart = default(GenericDefinitionSymbol);
-                    var dot = default(Terminal);
-
-                    if (Match(TokenKind.AngleBracketsOpen)) {
-                        genericPart = ParseGenericDefinition();
-                    }
-
-                    dot = ContinueWith(TokenKind.Dot);
-                    name = AddToList(list, new MethodDeclarationName(namePart, genericPart, dot));
-
+                    name = AddToList(list, ParseMethodDeclarationName(allowIn));
                 } while (name != default && name.Dot.GetSymbolKind() == TokenKind.Dot);
 
-                if (Match(TokenKind.OpenParen)) {
+                if (Match(TokenKind.OpenParen))
                     parameters = ParseFormalParameterSection();
-                }
 
                 colonSymbol = ContinueWith(TokenKind.Colon);
 
@@ -1902,7 +1927,7 @@ namespace PasPasPas.Parsing.Parser {
                     resultType = ParseTypeSpecification();
                 }
 
-                return new MethodDeclarationHeading(kindSymbol, GetFixedArray(list), parameters, colonSymbol, resultTypeAttributes, resultType);
+                return new MethodDeclarationHeadingSymbol(kindSymbol, GetFixedArray(list), parameters, colonSymbol, resultTypeAttributes, resultType);
             }
         }
 
@@ -2869,81 +2894,103 @@ namespace PasPasPas.Parsing.Parser {
         #endregion
         #region ParseObjectDecl
 
+        /// <summary>
+        ///     parse a object declaration
+        /// </summary>
+        /// <returns></returns>
+
         [Rule("ObjectDecl", "'object' ClassParent ObjectItems 'end' ")]
-        private ObjectDeclaration ParseObjectDecl() {
+        public ObjectDeclarationSymbol ParseObjectDecl() {
             var objectSymbol = ContinueWith(TokenKind.Object);
             var classParent = ParseClassParent();
             var items = ParseObjectItems();
             var endSymbol = ContinueWithOrMissing(TokenKind.End);
-            return new ObjectDeclaration(objectSymbol, classParent, items, endSymbol);
+            return new ObjectDeclarationSymbol(objectSymbol, classParent, items, endSymbol);
         }
 
         #endregion
         #region ParseObjectItems
 
+        /// <summary>
+        ///     parse object items
+        /// </summary>
+        /// <returns></returns>
+
         [Rule("ObjectItems", " { ObjectItem } ")]
-        private ObjectItems ParseObjectItems() {
-            var result = new ObjectItems();
-            var mode = ClassDeclarationMode.Fields;
+        public ObjectItems ParseObjectItems() {
+            using (var list = GetList<ObjectItem>()) {
+                var mode = ClassDeclarationMode.Fields;
+                var item = default(ObjectItem);
 
-            while ((!Match(TokenKind.End)) && (mode != ClassDeclarationMode.Undefined)) {
-                ParseObjectItem(result, ref mode);
-                if (mode == ClassDeclarationMode.Undefined) {
-                    Unexpected();
-                    return result;
+                while ((!Match(TokenKind.End)) && (mode != ClassDeclarationMode.Undefined)) {
+                    item = AddToList(list, ParseObjectItem(ref mode));
+                    if (mode == ClassDeclarationMode.Undefined) {
+                        Unexpected();
+                        break;
+                    }
                 }
-            }
 
-            return result;
+                return new ObjectItems(GetFixedArray(list));
+            }
         }
 
         #endregion
         #region ParseObjectItem
 
+        /// <summary>
+        ///     parse an object item
+        /// </summary>
+        /// <param name="mode"></param>
+        /// <returns></returns>
+
         [Rule("ObjectItem", "Visibility | MethodDeclaration | ClassFieldDeclaration | PropertyDeclaration ")]
-        private ObjectItem ParseObjectItem(IExtendableSyntaxPart parent, ref ClassDeclarationMode mode) {
-            var result = new ObjectItem();
-            parent.Add(result);
+        public ObjectItem ParseObjectItem(ref ClassDeclarationMode mode) {
+            var strictSymbol = default(Terminal);
+            var visibility = default(Terminal);
+
+            if (Match(TokenKind.Var)) {
+                mode = ClassDeclarationMode.Fields;
+                return new ObjectItem(ContinueWith(TokenKind.Var));
+            }
 
             if (Match(TokenKind.Public, TokenKind.Protected, TokenKind.Private, TokenKind.Strict, TokenKind.Published, TokenKind.Automated)) {
-                result.Strict = ContinueWith(result, TokenKind.Strict);
-                ContinueWith(result, TokenKind.Public, TokenKind.Protected, TokenKind.Private, TokenKind.Published, TokenKind.Automated);
-                result.Visibility = result.LastTerminalKind;
-                mode = ClassDeclarationMode.Other;
-                return result;
+                strictSymbol = ContinueWith(TokenKind.Strict);
+                visibility = ContinueWith(TokenKind.Public, TokenKind.Protected, TokenKind.Private, TokenKind.Published, TokenKind.Automated);
+                mode = ClassDeclarationMode.Fields;
+                return new ObjectItem(strictSymbol, visibility);
             }
 
             if (Match(TokenKind.Procedure, TokenKind.Function, TokenKind.Constructor, TokenKind.Destructor)) {
-                result.MethodDeclaration = ParseMethodDeclaration();
                 mode = ClassDeclarationMode.Other;
-                return result;
+                return new ObjectItem(ParseMethodDeclaration());
             }
 
             if (Match(TokenKind.Property)) {
                 mode = ClassDeclarationMode.Other;
-                result.Property = ParsePropertyDeclaration();
-                return result;
+                return new ObjectItem(ParsePropertyDeclaration());
             }
 
-            if (!result.ClassItem && Match(TokenKind.Const)) {
-                result.ConstSection = ParseConstSection(true);
-                return result;
+            if (Match(TokenKind.Const)) {
+                mode = ClassDeclarationMode.Other;
+                return new ObjectItem(ParseConstSection(true));
             }
 
-            if (!result.ClassItem && Match(TokenKind.TypeKeyword)) {
-                result.TypeSection = ParseTypeSection(true);
-                return result;
+            if (Match(TokenKind.TypeKeyword)) {
+                mode = ClassDeclarationMode.Other;
+                return new ObjectItem(ParseTypeSection(true));
             }
 
-            if (MatchIdentifier()) {
-                result.FieldDeclaration = ParseClassFieldDeclararation();
-                mode = ClassDeclarationMode.Fields;
-                return result;
+            if (MatchIdentifier() && (!Match(TokenKind.Private, TokenKind.Protected, TokenKind.Public, TokenKind.Published, TokenKind.Automated, TokenKind.Strict))) {
+                if (mode == ClassDeclarationMode.Fields || mode == ClassDeclarationMode.ClassFields) {
+                    return new ObjectItem(ParseClassFieldDeclararation());
+                }
+                else {
+                    Unexpected();
+                }
             }
-
 
             mode = ClassDeclarationMode.Undefined;
-            return result;
+            return null;
         }
 
         #endregion
@@ -3529,16 +3576,19 @@ namespace PasPasPas.Parsing.Parser {
         #endregion
         #region ParseMethodResolution
 
+        /// <summary>
+        ///     parse a method resolution
+        /// </summary>
+        /// <returns></returns>
+
         [Rule("MethodResolution", "( 'function' | 'procedure' ) NamespaceName '=' Identifier ';' ")]
-        private MethodResolution ParseMethodResolution() {
-            var result = new MethodResolution();
-            InitByTerminal(result, null, TokenKind.Function, TokenKind.Procedure);
-            result.Kind = result.LastTerminalKind;
-            result.Name = ParseTypeName();
-            ContinueWithOrMissing(result, TokenKind.EqualsSign);
-            result.ResolveIdentifier = RequireIdentifier();
-            ContinueWithOrMissing(result, TokenKind.Semicolon);
-            return result;
+        public MethodResolutionSymbol ParseMethodResolution() {
+            var kindSymbol = ContinueWithOrMissing(TokenKind.Function, TokenKind.Procedure);
+            var name = ParseTypeName();
+            var equalsSign = ContinueWithOrMissing(TokenKind.EqualsSign);
+            var resolveIdentifier = RequireIdentifier();
+            var semicolon = ContinueWithOrMissing(TokenKind.Semicolon);
+            return new MethodResolutionSymbol(kindSymbol, name, equalsSign, resolveIdentifier, semicolon);
         }
 
         #endregion
@@ -3562,7 +3612,7 @@ namespace PasPasPas.Parsing.Parser {
             var resultAttributes = default(UserAttributes);
             var resultType = default(TypeSpecification);
             var semicolon = default(Terminal);
-            var directives = default(MethodDirectives);
+            var directives = default(MethodDirectivesSymbol);
 
             if (Match(TokenKind.AngleBracketsOpen)) {
                 genericDefinition = ParseGenericDefinition();
@@ -4670,7 +4720,13 @@ namespace PasPasPas.Parsing.Parser {
         */
             false;
 
-        private NamespaceName ParseNamespaceName(bool allowIn = false, bool inDesignator = false) {
+        /// <summary>
+        ///     parse a namespace name
+        /// </summary>
+        /// <param name="allowIn"></param>
+        /// <param name="inDesignator"></param>
+        /// <returns></returns>
+        public NamespaceNameSymbol ParseNamespaceName(bool allowIn = false, bool inDesignator = false) {
             using (var list = GetList<SyntaxPartBase>()) {
                 var name = default(SyntaxPartBase);
                 var dot = default(Terminal);
@@ -4698,7 +4754,7 @@ namespace PasPasPas.Parsing.Parser {
                     AddToList(list, dot);
                 }
 
-                return new NamespaceName(GetFixedArray(list));
+                return new NamespaceNameSymbol(GetFixedArray(list));
             }
         }
 

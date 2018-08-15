@@ -15,7 +15,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="libraryName"></param>
         /// <param name="hints"></param>
         /// <param name="semicolon"></param>
-        public LibraryHeadSymbol(Terminal librarySymbol, NamespaceName libraryName, HintingInformationListSymbol hints, Terminal semicolon) {
+        public LibraryHeadSymbol(Terminal librarySymbol, NamespaceNameSymbol libraryName, HintingInformationListSymbol hints, Terminal semicolon) {
             LibrarySymbol = librarySymbol;
             LibraryName = libraryName;
             Hints = hints;
@@ -30,7 +30,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     library name
         /// </summary>
-        public NamespaceName LibraryName { get; }
+        public NamespaceNameSymbol LibraryName { get; }
 
         /// <summary>
         ///     semicolon

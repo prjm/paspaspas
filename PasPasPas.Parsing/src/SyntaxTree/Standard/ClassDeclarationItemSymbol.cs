@@ -88,7 +88,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         ///     create a new method resolution
         /// </summary>
         /// <param name="methodResolution"></param>
-        public ClassDeclarationItemSymbol(MethodResolution methodResolution)
+        public ClassDeclarationItemSymbol(MethodResolutionSymbol methodResolution)
             => MethodResolution = methodResolution;
 
         /// <summary>
@@ -137,7 +137,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     method resolution
         /// </summary>
-        public MethodResolution MethodResolution { get; }
+        public MethodResolutionSymbol MethodResolution { get; }
 
         /// <summary>
         ///     property declaration

@@ -6,13 +6,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// <summary>
     ///     method directives
     /// </summary>
-    public class MethodDirectives : VariableLengthSyntaxTreeBase<SyntaxPartBase> {
+    public class MethodDirectivesSymbol : VariableLengthSyntaxTreeBase<SyntaxPartBase> {
 
         /// <summary>
         ///     create a new set of method directives
         /// </summary>
         /// <param name="items"></param>
-        public MethodDirectives(ImmutableArray<SyntaxPartBase> items) : base(items) {
+        public MethodDirectivesSymbol(ImmutableArray<SyntaxPartBase> items) : base(items) {
         }
 
         /// <summary>

@@ -1,4 +1,5 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Visitors;
+﻿using PasPasPas.Parsing.SyntaxTree.Utils;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
@@ -8,20 +9,30 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     public class ReintroduceSymbol : StandardSyntaxTreeBase {
 
         /// <summary>
+        ///     create a new reintroduce symbol
+        /// </summary>
+        /// <param name="directive"></param>
+        /// <param name="semicolon"></param>
+        public ReintroduceSymbol(Terminal directive, Terminal semicolon) {
+            Directive = directive;
+            Semicolon = semicolon;
+        }
+
+        /// <summary>
         ///     directive
         /// </summary>
-        public Terminal Directive { get; set; }
+        public Terminal Directive { get;  }
 
         /// <summary>
         ///     semicolon
         /// </summary>
-        public Terminal Semicolon { get; set; }
+        public Terminal Semicolon { get;  }
 
         /// <summary>
         ///     symbol length
         /// </summary>
-        public int Length
-            => Directive.Length + Semicolon.Length;
+        public override int Length
+            => Directive.GetSymbolLength() + Semicolon.GetSymbolLength();
 
         /// <summary>
         ///     accept visitor

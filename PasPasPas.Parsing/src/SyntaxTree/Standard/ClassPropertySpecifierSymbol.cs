@@ -57,7 +57,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// </summary>
         /// <param name="implementsSymbol"></param>
         /// <param name="namespaceName"></param>
-        public ClassPropertySpecifierSymbol(Terminal implementsSymbol, NamespaceName namespaceName) {
+        public ClassPropertySpecifierSymbol(Terminal implementsSymbol, NamespaceNameSymbol namespaceName) {
             ImplentsSymbol = implementsSymbol;
             ImplementsTypeId = namespaceName;
         }
@@ -103,7 +103,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     implementing type name
         /// </summary>
-        public NamespaceName ImplementsTypeId { get; }
+        public NamespaceNameSymbol ImplementsTypeId { get; }
 
         /// <summary>
         ///     stored symbol

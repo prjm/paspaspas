@@ -7,26 +7,19 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// <summary>
     ///     namespace name
     /// </summary>
-    public class NamespaceName : VariableLengthSyntaxTreeBase<SyntaxPartBase> {
+    public class NamespaceNameSymbol : VariableLengthSyntaxTreeBase<SyntaxPartBase> {
 
         /// <summary>
         ///     create a new namespace name
         /// </summary>
         /// <param name="items"></param>
-        public NamespaceName(ImmutableArray<SyntaxPartBase> items) : base(items) {
+        public NamespaceNameSymbol(ImmutableArray<SyntaxPartBase> items) : base(items) {
         }
 
         /// <summary>
         ///     unit name
         /// </summary>
-        public string Name {
-            get {
-                if (Parts == null || PartList == null || PartList.Count < 1)
-                    return null;
-
-                return IdentifierValue(PartList[PartList.Count - 1]);
-            }
-        }
+        public string Name => Parts == null || PartList == null || PartList.Count < 1 ? null : IdentifierValue(PartList[PartList.Count - 1]);
 
         /// <summary>
         ///     namespace name

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
 using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 
@@ -8,7 +7,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// <summary>
     ///     method declaration heading
     /// </summary>
-    public class MethodDeclarationHeading : VariableLengthSyntaxTreeBase<MethodDeclarationName> {
+    public class MethodDeclarationHeadingSymbol : VariableLengthSyntaxTreeBase<MethodDeclarationNameSymbol> {
 
         /// <summary>
         ///     create a new method declaration heading
@@ -19,7 +18,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="colonSymbol"></param>
         /// <param name="resultTypeAttributes"></param>
         /// <param name="resultType"></param>
-        public MethodDeclarationHeading(Terminal kindSymbol, ImmutableArray<MethodDeclarationName> items, FormalParameterSection parameters, Terminal colonSymbol, UserAttributes resultTypeAttributes, TypeSpecification resultType) : base(items) {
+        public MethodDeclarationHeadingSymbol(Terminal kindSymbol, ImmutableArray<MethodDeclarationNameSymbol> items, FormalParameterSection parameters, Terminal colonSymbol, UserAttributes resultTypeAttributes, TypeSpecification resultType) : base(items) {
             KindSymbol = kindSymbol;
             Parameters = parameters;
             ColonSymbol = colonSymbol;

@@ -10,7 +10,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     contained units
         /// </summary>
-        public NamespaceFileNameList ContainsList { get; set; }
+        public NamespaceFileNameListSymbol ContainsList { get; set; }
 
         /// <summary>
         ///     accept visitor

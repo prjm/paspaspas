@@ -10,7 +10,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     package name
         /// </summary>
-        public NamespaceName PackageName { get; set; }
+        public NamespaceNameSymbol PackageName { get; set; }
 
         /// <summary>
         ///     accept visitor

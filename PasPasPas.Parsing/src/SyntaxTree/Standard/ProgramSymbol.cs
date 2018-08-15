@@ -22,7 +22,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     program name
         /// </summary>
-        public NamespaceName ProgramName
+        public NamespaceNameSymbol ProgramName
             => (ProgramHead as ProgramHeadSymbol)?.Name;
 
         /// <summary>

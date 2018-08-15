@@ -6,16 +6,16 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// <summary>
     ///     namespace identifier with file name
     /// </summary>
-    public class NamespaceFileName : StandardSyntaxTreeBase {
+    public class NamespaceFileNameSymbol : StandardSyntaxTreeBase {
 
         /// <summary>
-        ///     create a new namespaced file name
+        ///     create a new namespace file name
         /// </summary>
         /// <param name="name"></param>
         /// <param name="inSymbol"></param>
         /// <param name="fileName"></param>
         /// <param name="comma"></param>
-        public NamespaceFileName(NamespaceName name, Terminal inSymbol, QuotedString fileName, Terminal comma) {
+        public NamespaceFileNameSymbol(NamespaceNameSymbol name, Terminal inSymbol, QuotedString fileName, Terminal comma) {
             NamespaceName = name;
             InSymbol = inSymbol;
             QuotedFileName = fileName;
@@ -25,7 +25,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     Namespace name
         /// </summary>
-        public NamespaceName NamespaceName { get; }
+        public NamespaceNameSymbol NamespaceName { get; }
 
         /// <summary>
         ///     filename

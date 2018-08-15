@@ -40,7 +40,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         ///     create a new class type declaration symbol
         /// </summary>
         /// <param name="objectDeclaration"></param>
-        public ClassTypeDeclarationSymbol(ObjectDeclaration objectDeclaration)
+        public ClassTypeDeclarationSymbol(ObjectDeclarationSymbol objectDeclaration)
             => ObjectDecl = objectDeclaration;
 
         /// <summary>
@@ -80,7 +80,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     object declaration
         /// </summary>
-        public ObjectDeclaration ObjectDecl { get; }
+        public ObjectDeclarationSymbol ObjectDecl { get; }
 
         /// <summary>
         ///     record declaration

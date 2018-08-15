@@ -7,14 +7,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// <summary>
     ///     namespace file name list
     /// </summary>
-    public class NamespaceFileNameList : VariableLengthSyntaxTreeBase<NamespaceFileName> {
+    public class NamespaceFileNameListSymbol : VariableLengthSyntaxTreeBase<NamespaceFileNameSymbol> {
 
         /// <summary>
         ///     create a new namespace file name list
         /// </summary>
         /// <param name="items"></param>
         /// <param name="semicolon"></param>
-        public NamespaceFileNameList(ImmutableArray<NamespaceFileName> items, Terminal semicolon) : base(items)
+        public NamespaceFileNameListSymbol(ImmutableArray<NamespaceFileNameSymbol> items, Terminal semicolon) : base(items)
             => Semicolon = semicolon;
 
         /// <summary>

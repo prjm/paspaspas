@@ -1,12 +1,10 @@
-﻿using System.Collections.Generic;
-using PasPasPas.Parsing.SyntaxTree.Abstract;
-using PasPasPas.Parsing.SyntaxTree.Standard;
-using System;
+﻿using System;
+using System.Collections.Generic;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Infrastructure.Utils;
+using PasPasPas.Parsing.SyntaxTree.Abstract;
+using PasPasPas.Parsing.SyntaxTree.Standard;
 using PasPasPas.Parsing.SyntaxTree.Utils;
-using PasPasPas.Globals.Runtime;
-using System.Linq;
 
 namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
@@ -67,7 +65,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         IStartVisitor<ClassPropertyDispInterfaceSymbols>,
         IStartVisitor<ClassPropertySpecifierSymbol>,
         IStartVisitor<ClassMethodSymbol>,
-        IStartVisitor<MethodResolution>,
+        IStartVisitor<MethodResolutionSymbol>,
         IStartVisitor<ReintroduceSymbol>,
         IStartVisitor<OverloadSymbol>,
         IStartVisitor<DispIdSymbol>,
@@ -90,7 +88,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         IStartVisitor<RecordVariant>,
         IStartVisitor<RecordHelperDefinition>,
         IStartVisitor<RecordHelperItem>,
-        IStartVisitor<ObjectDeclaration>,
+        IStartVisitor<ObjectDeclarationSymbol>,
         IStartVisitor<ObjectItem>,
         IStartVisitor<InterfaceDefinitionSymbol>,
         IStartVisitor<InterfaceGuidSymbol>,
@@ -130,7 +128,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         IChildVisitor<CaseStatementSymbol>,
         IChildVisitor<TypeName>,
         IChildVisitor<SimpleType>,
-        IChildVisitor<MethodDirectives>,
+        IChildVisitor<MethodDirectivesSymbol>,
         IChildVisitor<FunctionDirectivesSymbol>,
         IChildVisitor<TryStatement>,
         IChildVisitor<IfStatementSymbol> {
@@ -691,7 +689,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 return;
 
             foreach (var part in unit.UsesList.Parts) {
-                if (!(part is NamespaceName name))
+                if (!(part is NamespaceNameSymbol name))
                     continue;
 
                 var unitName = new RequiredUnitName();
@@ -716,7 +714,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 return;
 
             foreach (var part in unit.Files.Parts) {
-                var name = part as NamespaceFileName;
+                var name = part as NamespaceFileNameSymbol;
                 if (name == null)
                     continue;
 
@@ -750,7 +748,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 return;
 
             foreach (var part in requires.RequiresList.Parts) {
-                if (!(part is NamespaceName name))
+                if (!(part is NamespaceNameSymbol name))
                     continue;
 
                 var unitName = new RequiredUnitName();
@@ -782,7 +780,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 return;
 
             foreach (var part in contains.ContainsList.Parts) {
-                if (!(part is NamespaceFileName name))
+                if (!(part is NamespaceFileNameSymbol name))
                     continue;
 
                 var unitName = new RequiredUnitName();
@@ -1436,7 +1434,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             }
             else if (property.ImplementsTypeId != null) {
                 result.Kind = StructurePropertyAccessorKind.Implements;
-                result.Name = ExtractSymbolName(property.ImplementsTypeId as NamespaceName);
+                result.Name = ExtractSymbolName(property.ImplementsTypeId as NamespaceNameSymbol);
             }
 
             parent.Accessors.Add(result);
@@ -1475,7 +1473,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     start visiting a method resolution
         /// </summary>
         /// <param name="methodResolution"></param>
-        public void StartVisit(MethodResolution methodResolution) {
+        public void StartVisit(MethodResolutionSymbol methodResolution) {
             var parent = LastValue as StructuredType;
             var result = new StructureMethodResolution();
             InitNode(result, methodResolution);
@@ -1728,7 +1726,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// </summary>
         /// <param name="parent"></param>
         /// <param name="child"></param>
-        public void StartVisitChild(MethodDirectives parent, ISyntaxPart child) {
+        public void StartVisitChild(MethodDirectivesSymbol parent, ISyntaxPart child) {
             var lastValue = LastValue as IDirectiveTarget;
 
             if (child is HintSymbol hints && lastValue != null) {
@@ -2034,7 +2032,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     start visiting an object declaration
         /// </summary>
         /// <param name="objectDeclaration"></param>
-        public void StartVisit(ObjectDeclaration objectDeclaration) {
+        public void StartVisit(ObjectDeclarationSymbol objectDeclaration) {
             var typeTarget = LastTypeDeclaration;
             var result = new StructuredType();
             InitNode(result, objectDeclaration);
@@ -2048,7 +2046,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     end visiting an object declaration
         /// </summary>
         /// <param name="objectDeclaration"></param>
-        public void EndVisit(ObjectDeclaration objectDeclaration) {
+        public void EndVisit(ObjectDeclarationSymbol objectDeclaration) {
             var parentType = LastValue as StructuredType;
             CurrentMemberVisibility.Reset(parentType);
         }
@@ -2067,8 +2065,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (parentType == null)
                 return;
 
-            if (objectItem.Visibility != TokenKind.Undefined) {
-                CurrentMemberVisibility[parentType] = TokenKindMapper.ForVisibility(objectItem.Visibility, objectItem.Strict);
+            if (objectItem.Visibility.GetSymbolKind() != TokenKind.Undefined) {
+                CurrentMemberVisibility[parentType] = TokenKindMapper.ForVisibility(objectItem.Visibility.GetSymbolKind(), objectItem.Strict.GetSymbolKind() == TokenKind.Strict);
             };
         }
 
@@ -3005,7 +3003,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         #region Extractors
 
-        private static SymbolName ExtractSymbolName(NamespaceName name) {
+        private static SymbolName ExtractSymbolName(NamespaceNameSymbol name) {
             if (name == null)
                 throw new ArgumentNullException(nameof(name));
 
@@ -3022,7 +3020,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             return result;
         }
 
-        private static GenericSymbolName ExtractSymbolName(IList<MethodDeclarationName> qualifiers) {
+        private static GenericSymbolName ExtractSymbolName(IList<MethodDeclarationNameSymbol> qualifiers) {
             var result = new GenericSymbolName();
 
             foreach (var name in qualifiers) {
@@ -3056,7 +3054,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             return result;
         }
 
-        private static SymbolName ExtractSymbolName(NamespaceFileName name) {
+        private static SymbolName ExtractSymbolName(NamespaceFileNameSymbol name) {
             if (name == null)
                 throw new ArgumentNullException(nameof(name));
 
@@ -3212,7 +3210,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     tree states
         /// </summary>
-        private IDictionary<AbstractSyntaxPartBase, object> currentValues
+        private readonly IDictionary<AbstractSyntaxPartBase, object> currentValues
             = new Dictionary<AbstractSyntaxPartBase, object>();
 
         /// <summary>
@@ -3344,7 +3342,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// </summary>
         /// <param name="element"></param>
         /// <param name="child"></param>
-        public void EndVisitChild(MethodDirectives element, ISyntaxPart child) {
+        public void EndVisitChild(MethodDirectivesSymbol element, ISyntaxPart child) {
         }
 
         /// <summary>

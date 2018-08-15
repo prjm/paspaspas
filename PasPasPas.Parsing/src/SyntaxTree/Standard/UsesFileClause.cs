@@ -13,7 +13,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// </summary>
         /// <param name="terminal"></param>
         /// <param name="namespaceFileNameList"></param>
-        public UsesFileClause(Terminal terminal, NamespaceFileNameList namespaceFileNameList) {
+        public UsesFileClause(Terminal terminal, NamespaceFileNameListSymbol namespaceFileNameList) {
             UsesSymbol = terminal;
             Files = namespaceFileNameList;
         }
@@ -21,7 +21,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     Namespace files
         /// </summary>
-        public NamespaceFileNameList Files { get; }
+        public NamespaceFileNameListSymbol Files { get; }
 
         /// <summary>
         ///     uses symbol

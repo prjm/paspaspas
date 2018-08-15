@@ -39,7 +39,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     library name
         /// </summary>
-        public NamespaceName LibraryName
+        public NamespaceNameSymbol LibraryName
             => LibraryHead?.LibraryName;
 
         /// <summary>

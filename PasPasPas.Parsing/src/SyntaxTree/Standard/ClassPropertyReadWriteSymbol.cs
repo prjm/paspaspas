@@ -13,7 +13,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// </summary>
         /// <param name="terminal"></param>
         /// <param name="namespaceName"></param>
-        public ClassPropertyReadWriteSymbol(Terminal terminal, NamespaceName namespaceName) {
+        public ClassPropertyReadWriteSymbol(Terminal terminal, NamespaceNameSymbol namespaceName) {
             Modifier = terminal;
             Member = namespaceName;
         }
@@ -27,7 +27,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     member name
         /// </summary>
-        public NamespaceName Member { get; }
+        public NamespaceNameSymbol Member { get; }
 
         /// <summary>
         ///     property modifier

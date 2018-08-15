@@ -37,7 +37,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     unit name
         /// </summary>
-        public NamespaceName UnitName
+        public NamespaceNameSymbol UnitName
             => UnitHead?.UnitName;
 
         /// <summary>

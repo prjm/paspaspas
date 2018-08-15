@@ -6,7 +6,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// <summary>
     ///    method declaration names
     /// </summary>
-    public class MethodDeclarationName : StandardSyntaxTreeBase {
+    public class MethodDeclarationNameSymbol : StandardSyntaxTreeBase {
 
         /// <summary>
         ///     create a new method declaration name
@@ -14,7 +14,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="namePart"></param>
         /// <param name="genericPart"></param>
         /// <param name="dot"></param>
-        public MethodDeclarationName(NamespaceName namePart, GenericDefinitionSymbol genericPart, Terminal dot) {
+        public MethodDeclarationNameSymbol(NamespaceNameSymbol namePart, GenericDefinitionSymbol genericPart, Terminal dot) {
             Name = namePart;
             GenericDefinition = genericPart;
             Dot = dot;
@@ -23,7 +23,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     namespace name
         /// </summary>
-        public NamespaceName Name { get; }
+        public NamespaceNameSymbol Name { get; }
 
         /// <summary>
         ///     generic parameters

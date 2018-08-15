@@ -22,7 +22,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     package name
         /// </summary>
-        public NamespaceName PackageName
+        public NamespaceNameSymbol PackageName
             => PackageHead?.PackageName;
 
         /// <summary>
