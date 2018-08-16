@@ -30,10 +30,10 @@ namespace PasPasPasTests.Parser {
 
         [TestCase]
         public void TestOverload() {
-            var s = RunCstTest(p => p.ParseOverloadDirective());
+            var s = RunCstTest(p => p.ParseOverloadDirective(), "overload;");
             Assert.IsNotNull(s.Directive);
             Assert.IsNotNull(s.Semicolon);
-            Assert.AreEqual(0, s.Length);
+            Assert.AreEqual(9, s.Length);
         }
 
         [TestCase]
@@ -1706,6 +1706,16 @@ namespace PasPasPasTests.Parser {
         }
 
         [TestCase]
+        public void TestNamespaceNameList() {
+            var s = RunCstTest(p => p.ParseNamespaceNameList(), "a.b.c, d");
+            Assert.IsNotNull(s.Items[0]);
+            Assert.IsNotNull(s.Items[0].Comma);
+            Assert.IsNotNull(s.Items[1]);
+            Assert.AreEqual(8, s.Length);
+        }
+
+
+        [TestCase]
         public void TestObjectDeclaration() {
             var s = RunCstTest(p => p.ParseObjectDecl(), "object(a) procedure x; end");
             Assert.IsNotNull(s.ObjectSymbol);
@@ -1767,7 +1777,129 @@ namespace PasPasPasTests.Parser {
             var s = RunCstTest(p => p.ParseObjectItems(), "procedure x;");
             Assert.IsNotNull(s.Items[0]);
             Assert.AreEqual(12, s.Length);
+        }
 
+        [TestCase]
+        public void TestOldCallConvention() {
+            var s = RunCstTest(p => p.ParseOldCallConvention(), "far ;");
+            Assert.IsNotNull(s.Directive);
+            Assert.IsNotNull(s.Semicolon);
+            Assert.AreEqual(5, s.Length);
+
+            s = RunCstTest(p => p.ParseOldCallConvention(), "near ;");
+            Assert.IsNotNull(s.Directive);
+            Assert.IsNotNull(s.Semicolon);
+            Assert.AreEqual(6, s.Length);
+
+            s = RunCstTest(p => p.ParseOldCallConvention(), "local ;");
+            Assert.IsNotNull(s.Directive);
+            Assert.IsNotNull(s.Semicolon);
+            Assert.AreEqual(7, s.Length);
+        }
+
+        [TestCase]
+        public void TestPackageContains() {
+            var s = RunCstTest(p => p.ParseContainsClause(), "contains a in 'a';");
+            Assert.IsNotNull(s.ContainsSymbol);
+            Assert.IsNotNull(s.ContainsList);
+            Assert.IsNotNull(s.ContainsList.Items[0].InSymbol);
+            Assert.IsNotNull(s.Semicolon);
+            Assert.AreEqual(18, s.Length);
+        }
+
+        [TestCase]
+        public void TestPackageHead() {
+            var s = RunCstTest(p => p.ParsePackageHead(), "package a.b.c.d;");
+            Assert.IsNotNull(s.PackageSymbol);
+            Assert.IsNotNull(s.PackageName);
+            Assert.IsNotNull(s.Semicolon);
+            Assert.AreEqual(16, s.Length);
+        }
+
+        [TestCase]
+        public void TestPackageRequires() {
+            var s = RunCstTest(p => p.ParseRequiresClause(), "requires a;");
+            Assert.IsNotNull(s.RequiresSymbol);
+            Assert.IsNotNull(s.RequiresList);
+            Assert.IsNotNull(s.RequiresList.Items[0]);
+            Assert.IsNotNull(s.Semicolon);
+            Assert.AreEqual(11, s.Length);
+        }
+
+        [TestCase]
+        public void TestPackage() {
+            var s = RunCstTest(p => p.ParsePackage(new FileReference(CstPath)), "package z.x; requires a; contains b in 'b'; end. ");
+            Assert.IsNotNull(s.PackageHead);
+            Assert.IsNotNull(s.RequiresClause);
+            Assert.IsNotNull(s.ContainsClause);
+            Assert.IsNotNull(s.EndSymbol);
+            Assert.IsNotNull(s.DotSymbol);
+            Assert.AreEqual(49, s.Length);
+        }
+
+        [TestCase]
+        public void TestParameter() {
+            var s = RunCstTest(p => p.ParseParameter(), "5");
+            Assert.IsNotNull(s.Expression);
+            Assert.AreEqual(1, s.Length);
+
+            s = RunCstTest(p => p.ParseParameter(), "a := 5");
+            Assert.IsNotNull(s.Expression);
+            Assert.IsNotNull(s.ParameterName);
+            Assert.IsNotNull(s.AssignmentSymbol);
+            Assert.AreEqual(6, s.Length);
+
+            s = RunCstTest(p => p.ParseParameter(), ",");
+            Assert.IsNotNull(s.Comma);
+            Assert.AreEqual(1, s.Length);
+        }
+
+        [TestCase]
+        public void TestParentClass() {
+            var s = RunCstTest(p => p.ParseClassParent(), "(a,b,c)");
+            Assert.IsNotNull(s.OpenParen);
+            Assert.IsNotNull(s.Items[0]);
+            Assert.IsNotNull(s.Items[0].Comma);
+            Assert.IsNotNull(s.Items[1]);
+            Assert.IsNotNull(s.Items[1].Comma);
+            Assert.IsNotNull(s.Items[2]);
+            Assert.IsNotNull(s.CloseParen);
+            Assert.AreEqual(7, s.Length);
+        }
+
+        [TestCase]
+        public void TestPointerType() {
+            var s = RunCstTest(p => p.ParsePointerType(), "Pointer");
+            Assert.IsNotNull(s.PointerSymbol);
+            Assert.AreEqual(7, s.Length);
+
+            s = RunCstTest(p => p.ParsePointerType(), "^aaaa");
+            Assert.IsNotNull(s.PointerSymbol);
+            Assert.IsNotNull(s.TypeSpecification);
+            Assert.AreEqual(5, s.Length);
+        }
+
+        [TestCase]
+        public void TestProcedureDeclarationHeading() {
+            var s = RunCstTest(p => p.ParseProcedureDeclarationHeading(), "function a(const a: string): [a] string");
+            Assert.IsNotNull(s.KindSymbol);
+            Assert.IsNotNull(s.Name);
+            Assert.IsNotNull(s.Parameters);
+            Assert.IsNotNull(s.ColonSymbol);
+            Assert.IsNotNull(s.ResultTypeAttributes);
+            Assert.IsNotNull(s.ResultType);
+            Assert.AreEqual(39, s.Length);
+        }
+
+        [TestCase]
+        public void TestProcedureDeclaration() {
+            var s = RunCstTest(p => p.ParseProcedureDeclaration(null), "function a(const a: string): [a] string; inline; begin end;");
+            Assert.IsNotNull(s.Heading);
+            Assert.IsNotNull(s.Semicolon);
+            Assert.IsNotNull(s.Directives);
+            Assert.IsNotNull(s.Body);
+            Assert.IsNotNull(s.Semicolon2);
+            Assert.AreEqual(59, s.Length);
         }
 
     }

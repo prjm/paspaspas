@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
+using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
@@ -13,8 +14,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         ///     create a new namespace name
         /// </summary>
         /// <param name="items"></param>
-        public NamespaceNameSymbol(ImmutableArray<SyntaxPartBase> items) : base(items) {
-        }
+        public NamespaceNameSymbol(ImmutableArray<SyntaxPartBase> items, Terminal comma) : base(items)
+            => Comma = comma;
 
         /// <summary>
         ///     unit name
@@ -42,7 +43,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         ///     symbol length
         /// </summary>
         public override int Length
-            => ItemLength;
+            => ItemLength + Comma.GetSymbolLength();
 
         /// <summary>
         ///     accept visitor
@@ -51,8 +52,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
             AcceptPart(this, visitor);
+            AcceptPart(this, Comma, visitor);
             visitor.EndVisit(this);
         }
+
+        /// <summary>
+        ///     comma
+        /// </summary>
+        public Terminal Comma { get; }
 
     }
 

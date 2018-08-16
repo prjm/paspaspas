@@ -15,7 +15,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="classParent"></param>
         /// <param name="items"></param>
         /// <param name="endSymbol"></param>
-        public ObjectDeclarationSymbol(Terminal objectSymbol, ParentClass classParent, ObjectItems items, Terminal endSymbol) {
+        public ObjectDeclarationSymbol(Terminal objectSymbol, ParentClassSymbol classParent, ObjectItems items, Terminal endSymbol) {
             ObjectSymbol = objectSymbol;
             ClassParent = classParent;
             Items = items;
@@ -25,7 +25,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     parent class
         /// </summary>
-        public ParentClass ClassParent { get; }
+        public ParentClassSymbol ClassParent { get; }
 
         /// <summary>
         ///     object items

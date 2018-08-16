@@ -6,7 +6,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// <summary>
     ///     procedure declaration heading
     /// </summary>
-    public class ProcedureDeclarationHeading : StandardSyntaxTreeBase {
+    public class ProcedureDeclarationHeadingSymbol : StandardSyntaxTreeBase {
 
         /// <summary>
         ///     create a new procedure declaration heading
@@ -17,7 +17,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="colonSymbol"></param>
         /// <param name="resultTypeAttributes"></param>
         /// <param name="resultType"></param>
-        public ProcedureDeclarationHeading(Terminal kindSymbol, IdentifierSymbol name, FormalParameterSection parameters, Terminal colonSymbol, UserAttributes resultTypeAttributes, TypeSpecification resultType) {
+        public ProcedureDeclarationHeadingSymbol(Terminal kindSymbol, IdentifierSymbol name, FormalParameterSection parameters, Terminal colonSymbol, UserAttributes resultTypeAttributes, TypeSpecification resultType) {
             KindSymbol = kindSymbol;
             Name = name;
             Parameters = parameters;

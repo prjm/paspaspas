@@ -23,9 +23,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         ///     generate a new combined generic names
         /// </summary>
         /// <param name="names"></param>
-        public TypeName(ImmutableArray<GenericNamespaceNameSymbol> names, Terminal comma) : base(names) {
-            Comma = comma;
-        }
+        public TypeName(ImmutableArray<GenericNamespaceNameSymbol> names, Terminal comma) : base(names)
+            => Comma = comma;
 
         /// <summary>
         ///     string type
@@ -76,6 +75,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
             visitor.StartVisit(this);
             AcceptPart(this, StringTypeSymbol, visitor);
             AcceptPart(this, visitor);
+            AcceptPart(this, Comma, visitor);
             visitor.EndVisit(this);
         }
 
@@ -83,7 +83,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         ///     symbol length
         /// </summary>
         public override int Length =>
-            StringTypeSymbol.GetSymbolLength() + ItemLength;
+            StringTypeSymbol.GetSymbolLength() +
+                ItemLength +
+                Comma.GetSymbolLength();
 
     }
 }

@@ -10,7 +10,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     names of the units to use
         /// </summary>
-        public NamespaceNameList UsesList { get; set; }
+        public NamespaceNameListSymbol UsesList { get; set; }
 
         /// <summary>
         ///     accept visitor

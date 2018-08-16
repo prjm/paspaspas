@@ -18,7 +18,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="classItems"></param>
         /// <param name="forwardDeclaration"></param>
         /// <param name="endSymbol"></param>
-        public ClassDeclarationSymbol(Terminal classSymbol, Terminal sealedSymbol, Terminal abstractSymbol, ParentClass classParent, ClassDeclarationItemsSymbol classItems, bool forwardDeclaration, Terminal endSymbol) {
+        public ClassDeclarationSymbol(Terminal classSymbol, Terminal sealedSymbol, Terminal abstractSymbol, ParentClassSymbol classParent, ClassDeclarationItemsSymbol classItems, bool forwardDeclaration, Terminal endSymbol) {
             ClassSymbol = classSymbol;
             SealedSymbol = sealedSymbol;
             AbstractSymbol = abstractSymbol;
@@ -41,7 +41,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     parent class
         /// </summary>
-        public ParentClass ClassParent { get; }
+        public ParentClassSymbol ClassParent { get; }
 
         /// <summary>
         ///     end symbol

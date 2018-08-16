@@ -16,7 +16,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="guidSymbol"></param>
         /// <param name="items"></param>
         /// <param name="end"></param>
-        public InterfaceDefinitionSymbol(Terminal interfaceSymbol, ParentClass parentInterface, InterfaceGuidSymbol guidSymbol, InterfaceItems items, Terminal end) {
+        public InterfaceDefinitionSymbol(Terminal interfaceSymbol, ParentClassSymbol parentInterface, InterfaceGuidSymbol guidSymbol, InterfaceItems items, Terminal end) {
             InterfaceSymbol = interfaceSymbol;
             ParentInterface = parentInterface;
             GuidSymbol = guidSymbol;
@@ -53,7 +53,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     parent interface
         /// </summary>
-        public ParentClass ParentInterface { get; }
+        public ParentClassSymbol ParentInterface { get; }
 
         /// <summary>
         ///     <c>true</c> for forward declarations

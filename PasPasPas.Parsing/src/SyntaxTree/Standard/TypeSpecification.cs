@@ -23,7 +23,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// </summary>
         /// <param name="pointerType"></param>
         /// <param name="comma"></param>
-        public TypeSpecification(PointerType pointerType, Terminal comma) {
+        public TypeSpecification(PointerTypeSymbol pointerType, Terminal comma) {
             PointerType = pointerType;
             Comma = comma;
         }
@@ -61,7 +61,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     pointer type
         /// </summary>
-        public PointerType PointerType { get; }
+        public PointerTypeSymbol PointerType { get; }
 
         /// <summary>
         ///     procedure type
