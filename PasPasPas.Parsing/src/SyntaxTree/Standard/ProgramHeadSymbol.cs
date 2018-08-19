@@ -1,4 +1,5 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Visitors;
+﻿using PasPasPas.Parsing.SyntaxTree.Utils;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
@@ -8,24 +9,38 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     public class ProgramHeadSymbol : StandardSyntaxTreeBase {
 
         /// <summary>
+        ///     create a new program head symbol
+        /// </summary>
+        /// <param name="programSymbol"></param>
+        /// <param name="name"></param>
+        /// <param name="parameters"></param>
+        /// <param name="semicolon"></param>
+        public ProgramHeadSymbol(Terminal programSymbol, NamespaceNameSymbol name, ProgramParameterListSymbol parameters, Terminal semicolon) {
+            ProgramSymbol = programSymbol;
+            Name = name;
+            Parameters = parameters;
+            Semicolon = semicolon;
+        }
+
+        /// <summary>
         ///     name of the program
         /// </summary>
-        public NamespaceNameSymbol Name { get; set; }
+        public NamespaceNameSymbol Name { get; }
 
         /// <summary>
         ///     program parameters
         /// </summary>
-        public ProgramParameterList Parameters { get; set; }
+        public ProgramParameterListSymbol Parameters { get; }
 
         /// <summary>
         ///     program symbol
         /// </summary>
-        public Terminal ProgramSymbol { get; set; }
+        public Terminal ProgramSymbol { get; }
 
         /// <summary>
         ///     semicolon
         /// </summary>
-        public Terminal Semicolon { get; set; }
+        public Terminal Semicolon { get; }
 
         /// <summary>
         ///     accept visitor
@@ -43,9 +58,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     item length
         /// </summary>
-        public int Length
-            => ProgramSymbol.Length + Name.Length + Parameters.Length + Semicolon.Length;
-
+        public override int Length
+            => ProgramSymbol.GetSymbolLength() +
+                Name.GetSymbolLength() +
+                Parameters.GetSymbolLength() +
+                Semicolon.GetSymbolLength();
 
     }
 }

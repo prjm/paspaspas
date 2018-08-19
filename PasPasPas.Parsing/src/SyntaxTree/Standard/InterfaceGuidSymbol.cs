@@ -15,7 +15,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="idIdentifier"></param>
         /// <param name="stringIdentifier"></param>
         /// <param name="closeBraces"></param>
-        public InterfaceGuidSymbol(Terminal openBraces, IdentifierSymbol idIdentifier, QuotedString stringIdentifier, Terminal closeBraces) {
+        public InterfaceGuidSymbol(Terminal openBraces, IdentifierSymbol idIdentifier, QuotedStringSymbol stringIdentifier, Terminal closeBraces) {
             OpenBraces = openBraces;
             IdIdentifier = idIdentifier;
             Id = stringIdentifier;
@@ -25,7 +25,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     guid for this interface
         /// </summary>
-        public QuotedString Id { get; }
+        public QuotedStringSymbol Id { get; }
 
         /// <summary>
         ///     named guid for this interface

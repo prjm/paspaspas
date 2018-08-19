@@ -221,7 +221,7 @@ namespace PasPasPas.Parsing.Parser {
         #region ParseUsesFileClause
 
         [Rule("UsesFileClause", "'uses' NamespaceFileNameList")]
-        private UsesFileClause ParseUsesFileClause(IExtendableSyntaxPart parent)
+        private UsesFileClause ParseUsesFileClause()
             => new UsesFileClause(ContinueWithOrMissing(TokenKind.Uses), ParseNamespaceFileNameList());
 
         #endregion
@@ -259,7 +259,7 @@ namespace PasPasPas.Parsing.Parser {
         public NamespaceFileNameSymbol ParseNamespaceFileName(bool allowComma) {
             var name = ParseNamespaceName();
             var inSymbol = ContinueWith(TokenKind.In);
-            var fileName = default(QuotedString);
+            var fileName = default(QuotedStringSymbol);
             var comma = default(Terminal);
 
             if (inSymbol != default)
@@ -700,7 +700,7 @@ namespace PasPasPas.Parsing.Parser {
                 return result;
             }
             if (Match(TokenKind.Raise)) {
-                result.Raise = ParseRaiseStatement(result);
+                result.Raise = ParseRaiseStatement();
                 return result;
             }
             if (Match(TokenKind.Begin, TokenKind.Asm)) {
@@ -714,20 +714,28 @@ namespace PasPasPas.Parsing.Parser {
         #endregion
         #region ParseRaiseStatement
 
+        /// <summary>
+        ///     parse a raise statement
+        /// </summary>
+        /// <returns></returns>
+
         [Rule("RaiseStatement", "'raise' [ Expression ] [ 'at' Expression ]")]
-        private RaiseStatement ParseRaiseStatement(IExtendableSyntaxPart parent) {
-            var result = new RaiseStatement();
-            InitByTerminal(result, parent, TokenKind.Raise);
+        public RaiseStatementSymbol ParseRaiseStatement() {
+            var raiseSymbol = ContinueWith(TokenKind.Raise);
+            var raiseExpression = default(ExpressionSymbol);
+            var atExpression = default(ExpressionSymbol);
+            var atSymbol = default(Terminal);
 
             if ((!Match(TokenKind.AtWord)) && MatchIdentifier(TokenKind.Inherited)) {
-                result.Raise = ParseExpression();
+                raiseExpression = ParseExpression();
             }
 
-            if (ContinueWith(result, TokenKind.AtWord)) {
-                result.At = ParseExpression();
+            if (Match(TokenKind.AtWord)) {
+                atSymbol = ContinueWith(TokenKind.AtWord);
+                atExpression = ParseExpression();
             }
 
-            return result;
+            return new RaiseStatementSymbol(raiseSymbol, atSymbol, raiseExpression, atExpression);
         }
 
         #endregion
@@ -1174,7 +1182,7 @@ namespace PasPasPas.Parsing.Parser {
         public LibrarySymbol ParseLibrary(IFileReference path)
             => new LibrarySymbol(
                 libraryHead: ParseLibraryHead(),
-                uses: Match(TokenKind.Uses) ? ParseUsesFileClause(null) : null,
+                uses: Match(TokenKind.Uses) ? ParseUsesFileClause() : null,
                 mainBlock: ParseBlock(),
                 dot: ContinueWithOrMissing(TokenKind.Dot),
                 filePath: path);
@@ -1205,13 +1213,13 @@ namespace PasPasPas.Parsing.Parser {
         /// <returns></returns>
 
         [Rule("Program", "[ProgramHead] [UsesFileClause] Block '.'")]
-        public Program ParseProgram(IFileReference path) => new Program() {
-            ProgramHead = Match(TokenKind.Program) ? ParseProgramHead() as ISyntaxPart : EmptyTerminal(),
-            Uses = Match(TokenKind.Uses) ? ParseUsesFileClause(null) as ISyntaxPart : EmptyTerminal(),
-            MainBlock = ParseBlock(),
-            Dot = ContinueWithOrMissing(TokenKind.Dot),
-            FilePath = path
-        };
+        public ProgramSymbol ParseProgram(IFileReference path)
+            => new ProgramSymbol(
+                programHead: Match(TokenKind.Program) ? ParseProgramHead() : null,
+                uses: Match(TokenKind.Uses) ? ParseUsesFileClause() : null,
+                mainBlock: ParseBlock(),
+                dot: ContinueWithOrMissing(TokenKind.Dot),
+                filePath: path);
 
         #endregion
         #region ParseProgramHead
@@ -1222,36 +1230,43 @@ namespace PasPasPas.Parsing.Parser {
         /// <returns></returns>
 
         [Rule("ProgramHead", "'program' NamespaceName [ProgramParams] ';'")]
-        public ProgramHeadSymbol ParseProgramHead() => new ProgramHeadSymbol() {
-            ProgramSymbol = ContinueWithOrMissing(TokenKind.Program),
-            Name = ParseNamespaceName(),
-            Parameters = ParseProgramParams(null),
-            Semicolon = ContinueWithOrMissing(TokenKind.Semicolon)
-        };
+        public ProgramHeadSymbol ParseProgramHead()
+            => new ProgramHeadSymbol(
+                programSymbol: ContinueWithOrMissing(TokenKind.Program),
+                name: ParseNamespaceName(),
+                parameters: ParseProgramParams(),
+                semicolon: ContinueWithOrMissing(TokenKind.Semicolon));
+
 
         #endregion
         #region ParseProgramParams
 
+        /// <summary>
+        ///     parse program parameters
+        /// </summary>
+        /// <returns></returns>
+
         [Rule("ProgramParams", "'(' [ Identifier { ',' Identifier } ] ')'")]
-        private ProgramParameterList ParseProgramParams(IExtendableSyntaxPart parent) {
-            var result = new ProgramParameterList();
+        public ProgramParameterListSymbol ParseProgramParams() {
+            var openParen = ContinueWith(TokenKind.OpenParen);
 
-            if (parent != null)
-                parent.Add(result);
+            if (openParen == default)
+                return null;
 
-            if (ContinueWith(result, TokenKind.OpenParen)) {
-
+            using (var list = GetList<ProgramParameterSymbol>()) {
                 if (MatchIdentifier()) {
-                    RequireIdentifier();
+                    var param = default(ProgramParameterSymbol);
 
-                    while (ContinueWith(result, TokenKind.Comma))
-                        RequireIdentifier();
+                    do {
+                        var id = RequireIdentifier();
+                        var comma = ContinueWith(TokenKind.Comma);
+                        param = AddToList(list, new ProgramParameterSymbol(id, comma));
+                    } while (param != default && param.Comma != default);
                 }
 
-                ContinueWithOrMissing(result, TokenKind.CloseParen);
+                var closeParen = ContinueWithOrMissing(TokenKind.CloseParen);
+                return new ProgramParameterListSymbol(openParen, GetFixedArray(list), closeParen);
             }
-
-            return result;
         }
 
         #endregion
@@ -2227,7 +2242,7 @@ namespace PasPasPas.Parsing.Parser {
             var semicolon = default(Terminal);
 
             if (symbol != default) {
-                var deprecatedComment = default(QuotedString);
+                var deprecatedComment = default(QuotedStringSymbol);
 
                 if (Match(TokenKind.QuotedString))
                     deprecatedComment = RequireString();
@@ -2422,64 +2437,75 @@ namespace PasPasPas.Parsing.Parser {
         #endregion
         #region ParseProcedureType
 
+        /// <summary>
+        ///     parse a procedural type
+        /// </summary>
+        /// <returns></returns>
+
         [Rule("ProcedureType", "(ProcedureRefType [ 'of' 'object' ] ( | ProcedureReference")]
-        private ProcedureType ParseProcedureType() {
-            var result = new ProcedureType();
+        public ProcedureTypeSymbol ParseProcedureType() {
 
             if (Match(TokenKind.Procedure, TokenKind.Function)) {
-                result.ProcedureRefType = ParseProcedureRefType(result);
-                result.ProcedureRefType.AllowAnonymousMethods = false;
+                var refType = ParseProcedureRefType(false);
+                var ofSymbol = ContinueWith(TokenKind.Of);
+                var objectSymbol = default(Terminal);
 
-                if (ContinueWith(result, TokenKind.Of)) {
-                    ContinueWithOrMissing(result, TokenKind.Object);
-                    result.ProcedureRefType.MethodDeclaration = true;
-                }
+                if (ofSymbol != default)
+                    objectSymbol = ContinueWithOrMissing(TokenKind.Object);
 
-                return result;
+                return new ProcedureTypeSymbol(refType, ofSymbol, objectSymbol);
             }
 
-            if (Match(TokenKind.Reference)) {
-                result.ProcedureReference = ParseProcedureReference(result);
-                return result;
-            }
+            if (Match(TokenKind.Reference))
+                return new ProcedureTypeSymbol(ParseProcedureReference());
 
             Unexpected();
-            return result;
+            return null;
         }
 
         #endregion
         #region  ParseProcedureReference
 
+        /// <summary>
+        ///     parse a procedure reference
+        /// </summary>
+        /// <returns></returns>
+
         [Rule("ProcedureReference", "'reference' 'to' ProcedureTypeDefinition ")]
-        private ProcedureReference ParseProcedureReference(IExtendableSyntaxPart parent) {
-            var result = new ProcedureReference();
-            InitByTerminal(result, parent, TokenKind.Reference);
-            ContinueWithOrMissing(result, TokenKind.To);
-            result.ProcedureType = ParseProcedureRefType(result);
-            result.ProcedureType.AllowAnonymousMethods = true;
-            return result;
+        public ProcedureReferenceSymbol ParseProcedureReference() {
+            var reference = ContinueWithOrMissing(TokenKind.Reference);
+            var toSymbol = ContinueWithOrMissing(TokenKind.To);
+            var proceduralType = ParseProcedureRefType(true);
+            return new ProcedureReferenceSymbol(reference, toSymbol, proceduralType);
         }
 
         #endregion
         #region ParseProcedureRefType
 
+        /// <summary>
+        ///     parse a procedure reference type
+        /// </summary>
+        /// <param name="allowAnonymousMethods"></param>
+        /// <returns></returns>
+
         [Rule("ProcedureTypeDefinition", "('function' | 'procedure') [ '(' FormalParameters ')' ] [ ':' TypeSpecification ] [ 'of' 'object']")]
-        private ProcedureTypeDefinition ParseProcedureRefType(IExtendableSyntaxPart parent) {
-            var result = new ProcedureTypeDefinition();
-            InitByTerminal(result, parent, TokenKind.Function, TokenKind.Procedure);
-            result.Kind = result.LastTerminalKind;
+        public ProcedureTypeDefinitionSymbol ParseProcedureRefType(bool allowAnonymousMethods) {
+            var kindSymbol = ContinueWithOrMissing(TokenKind.Function, TokenKind.Procedure);
+            var parameters = default(FormalParameterSection);
+            var colonSymbol = default(Terminal);
+            var attributes = default(UserAttributes);
+            var returnType = default(TypeSpecification);
 
-            if (Match(TokenKind.OpenParen)) {
-                result.Parameters = ParseFormalParameterSection();
+            if (Match(TokenKind.OpenParen))
+                parameters = ParseFormalParameterSection();
+
+            if (Match(TokenKind.Colon)) {
+                colonSymbol = ContinueWithOrMissing(TokenKind.Colon);
+                attributes = ParseAttributes();
+                returnType = ParseTypeSpecification();
             }
 
-            if (result.Kind == TokenKind.Function) {
-                ContinueWithOrMissing(result, TokenKind.Colon);
-                result.ReturnTypeAttributes = ParseAttributes();
-                result.ReturnType = ParseTypeSpecification();
-            }
-
-            return result;
+            return new ProcedureTypeDefinitionSymbol(kindSymbol, parameters, colonSymbol, attributes, returnType, allowAnonymousMethods);
         }
 
         #endregion
@@ -3113,7 +3139,7 @@ namespace PasPasPas.Parsing.Parser {
         public InterfaceGuidSymbol ParseInterfaceGuid() {
             var openBraces = ContinueWith(TokenKind.OpenBraces);
             var idIdentifier = default(IdentifierSymbol);
-            var stringIdentifier = default(QuotedString);
+            var stringIdentifier = default(QuotedStringSymbol);
 
             if (Match(TokenKind.Identifier))
                 idIdentifier = RequireIdentifier();
@@ -4758,11 +4784,15 @@ namespace PasPasPas.Parsing.Parser {
             return null;
         }
 
-        private QuotedString RequireString()
-            => new QuotedString(ContinueWithOrMissing(TokenKind.QuotedString));
+        /// <summary>
+        ///     parse a quoted string symbol
+        /// </summary>
+        /// <returns></returns>
+        public QuotedStringSymbol RequireString()
+            => new QuotedStringSymbol(ContinueWithOrMissing(TokenKind.QuotedString));
 
-        private QuotedString RequireDoubleQuotedString()
-            => new QuotedString(ContinueWithOrMissing(TokenKind.DoubleQuotedString));
+        private QuotedStringSymbol RequireDoubleQuotedString()
+            => new QuotedStringSymbol(ContinueWithOrMissing(TokenKind.DoubleQuotedString));
 
         private bool CurrentTokenIsAfterNewline() =>
             /*

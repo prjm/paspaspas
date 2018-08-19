@@ -46,7 +46,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     raise statement
         /// </summary>
-        public RaiseStatement Raise { get; set; }
+        public RaiseStatementSymbol Raise { get; set; }
 
         /// <summary>
         ///     repeat statement

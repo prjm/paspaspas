@@ -86,12 +86,12 @@ namespace PasPasPasTests.Parser {
 
         [TestCase]
         public void TestProgram() {
-            var s = RunCstTest(p => p.ParseProgram(new FileReference(CstPath)));
+            var s = RunCstTest(p => p.ParseProgram(new FileReference(CstPath)), "program z.x; uses a in 'a'; begin x; end.");
             Assert.IsNotNull(s.ProgramHead);
             Assert.IsNotNull(s.Uses);
             Assert.IsNotNull(s.MainBlock);
             Assert.IsNotNull(s.Dot);
-            Assert.AreEqual(0, s.Length);
+            Assert.AreEqual(41, s.Length);
         }
 
         [TestCase]
@@ -116,12 +116,12 @@ namespace PasPasPasTests.Parser {
 
         [TestCase]
         public void TestProgramHeader() {
-            var s = RunCstTest(p => p.ParseProgramHead());
+            var s = RunCstTest(p => p.ParseProgramHead(), "program a.b(x,y);");
             Assert.IsNotNull(s.ProgramSymbol);
             Assert.IsNotNull(s.Name);
             Assert.IsNotNull(s.Parameters);
             Assert.IsNotNull(s.Semicolon);
-            Assert.AreEqual(0, s.Length);
+            Assert.AreEqual(17, s.Length);
         }
 
         [TestCase]
@@ -1900,6 +1900,70 @@ namespace PasPasPasTests.Parser {
             Assert.IsNotNull(s.Body);
             Assert.IsNotNull(s.Semicolon2);
             Assert.AreEqual(59, s.Length);
+        }
+
+        [TestCase]
+        public void TestProcedureReference() {
+            var s = RunCstTest(p => p.ParseProcedureReference(), "reference to procedure (a: integer)");
+            Assert.IsNotNull(s.Reference);
+            Assert.IsNotNull(s.ToSymbol);
+            Assert.IsNotNull(s.ProcedureType);
+            Assert.AreEqual(35, s.Length);
+        }
+
+        [TestCase]
+        public void TestProcedureType() {
+            var s = RunCstTest(p => p.ParseProcedureType(), "function (a: integer): [a] string of object");
+            Assert.IsNotNull(s.ProcedureRefType);
+            Assert.IsNotNull(s.OfSymbol);
+            Assert.IsNotNull(s.ObjectSymbol);
+            Assert.AreEqual(43, s.Length);
+        }
+
+        [TestCase]
+        public void TestProcedureTypeDefinition() {
+            var s = RunCstTest(p => p.ParseProcedureRefType(false), "function (a: integer): [a] string");
+            Assert.IsNotNull(s.KindSymbol);
+            Assert.IsNotNull(s.Parameters);
+            Assert.IsNotNull(s.ColonSymbol);
+            Assert.IsNotNull(s.ReturnTypeAttributes);
+            Assert.IsNotNull(s.ReturnType);
+            Assert.AreEqual(33, s.Length);
+        }
+
+
+        [TestCase]
+        public void TestProgramParameters() {
+            var s = RunCstTest(p => p.ParseProgramParams(), "(a,b,z)");
+            Assert.IsNotNull(s.OpenParen);
+            Assert.IsNotNull(s.Items[0]);
+            Assert.IsNotNull(s.Items[0].Comma);
+            Assert.IsNotNull(s.Items[1]);
+            Assert.IsNotNull(s.Items[1].Comma);
+            Assert.IsNotNull(s.Items[2]);
+            Assert.AreEqual(7, s.Length);
+        }
+
+        [TestCase]
+        public void TestQuotedString() {
+            var s = RunCstTest(p => p.RequireString(), "'aa'");
+            Assert.IsNotNull(s.Symbol);
+            Assert.AreEqual(4, s.Length);
+        }
+
+        [TestCase]
+        public void TestRaiseStatement() {
+            var s = RunCstTest(p => p.ParseRaiseStatement(), "raise a");
+            Assert.IsNotNull(s.RaiseSymbol);
+            Assert.IsNotNull(s.RaiseExpression);
+            Assert.AreEqual(7, s.Length);
+
+            s = RunCstTest(p => p.ParseRaiseStatement(), "raise a at 4");
+            Assert.IsNotNull(s.RaiseSymbol);
+            Assert.IsNotNull(s.RaiseExpression);
+            Assert.IsNotNull(s.AtSymbol);
+            Assert.IsNotNull(s.AtExpression);
+            Assert.AreEqual(12, s.Length);
         }
 
     }

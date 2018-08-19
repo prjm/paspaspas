@@ -24,7 +24,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="symbol"></param>
         /// <param name="deprecatedComment"></param>
         /// <param name="semicolon"></param>
-        public HintSymbol(Terminal symbol, QuotedString deprecatedComment, Terminal semicolon) {
+        public HintSymbol(Terminal symbol, QuotedStringSymbol deprecatedComment, Terminal semicolon) {
             Symbol = symbol;
             DeprecatedComment = deprecatedComment;
             Semicolon = semicolon;

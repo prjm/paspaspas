@@ -16,7 +16,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         IStartVisitor<UnitSymbol>, IEndVisitor<UnitSymbol>,
         IStartVisitor<LibrarySymbol>, IEndVisitor<LibrarySymbol>,
-        IStartVisitor<Program>, IEndVisitor<Program>,
+        IStartVisitor<ProgramSymbol>, IEndVisitor<ProgramSymbol>,
         IStartVisitor<PackageSymbol>, IEndVisitor<PackageSymbol>,
         IStartVisitor<UnitInterfaceSymbol>, IEndVisitor<UnitInterfaceSymbol>,
         IStartVisitor<UnitImplementation>, IEndVisitor<UnitImplementation>,
@@ -50,7 +50,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         IStartVisitor<ArrayIndexSymbol>,
         IStartVisitor<PointerTypeSymbol>,
         IStartVisitor<StringType>,
-        IStartVisitor<ProcedureTypeDefinition>,
+        IStartVisitor<ProcedureTypeDefinitionSymbol>,
         IStartVisitor<FormalParameterDefinitionSymbol>,
         IStartVisitor<FormalParameterSymbol>,
         IStartVisitor<UnitInitialization>,
@@ -98,7 +98,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         IStartVisitor<Standard.MethodDeclarationSymbol>,
         IStartVisitor<StatementPart>,
         IStartVisitor<ClosureExpressionSymbol>,
-        IStartVisitor<RaiseStatement>,
+        IStartVisitor<RaiseStatementSymbol>,
         IStartVisitor<TryStatement>,
         IStartVisitor<ExceptHandlers>,
         IStartVisitor<ExceptHandlerSymbol>,
@@ -209,7 +209,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     visit a program
         /// </summary>
         /// <param name="program">program to visit</param>
-        public void StartVisit(Program program) {
+        public void StartVisit(ProgramSymbol program) {
             var result = new CompilationUnit();
             InitNode(result, program, Project);
             result.FileType = CompilationUnitType.Program;
@@ -226,7 +226,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     finish a program
         /// </summary>
         /// <param name="program"></param>
-        public void EndVisit(Program program) {
+        public void EndVisit(ProgramSymbol program) {
             CurrentUnitMode.Reset(CurrentUnit);
             CurrentUnit = null;
         }
@@ -1086,13 +1086,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     visit a procedure type definition
         /// </summary>
         /// <param name="proceduralType"></param>
-        public void StartVisit(ProcedureTypeDefinition proceduralType) {
+        public void StartVisit(ProcedureTypeDefinitionSymbol proceduralType) {
             var typeTarget = LastTypeDeclaration;
             var result = new ProceduralType();
             InitNode(result, proceduralType);
             typeTarget.TypeValue = result;
             result.Kind = TokenKindMapper.MapMethodKind(proceduralType.Kind);
-            result.MethodDeclaration = proceduralType.MethodDeclaration;
             result.AllowAnonymousMethods = proceduralType.AllowAnonymousMethods;
 
             if (proceduralType.ReturnTypeAttributes != null)
@@ -2266,19 +2265,19 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     start visiting a raise statement
         /// </summary>
         /// <param name="raise"></param>
-        public void StartVisit(RaiseStatement raise) {
+        public void StartVisit(RaiseStatementSymbol raise) {
             var target = LastValue as IStatementTarget;
             var result = new StructuredStatement();
             InitNode(result, raise);
             target.Statements.Add(result);
 
-            if (raise.Raise != null && raise.At == null) {
+            if (raise.RaiseExpression != null && raise.AtExpression == null) {
                 result.Kind = StructuredStatementKind.Raise;
             }
-            else if (raise.Raise != null && raise.At != null) {
+            else if (raise.RaiseExpression != null && raise.AtExpression != null) {
                 result.Kind = StructuredStatementKind.RaiseAt;
             }
-            else if (raise.Raise == null && raise.At != null) {
+            else if (raise.RaiseExpression == null && raise.AtExpression != null) {
                 result.Kind = StructuredStatementKind.RaiseAtOnly;
             }
 

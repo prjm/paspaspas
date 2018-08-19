@@ -63,7 +63,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// </summary>
         /// <param name="stringValue"></param>
         /// <param name="designator"></param>
-        public FactorSymbol(QuotedString stringValue, DesignatorStatementSymbol designator) {
+        public FactorSymbol(QuotedStringSymbol stringValue, DesignatorStatementSymbol designator) {
             StringValue = stringValue;
             Designator = designator;
         }
@@ -187,7 +187,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     string factor
         /// </summary>
-        public QuotedString StringValue { get; }
+        public QuotedStringSymbol StringValue { get; }
 
         /// <summary>
         ///     accept visitor

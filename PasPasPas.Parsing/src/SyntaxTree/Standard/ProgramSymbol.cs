@@ -7,17 +7,33 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// <summary>
     ///     syntax tree for a program
     /// </summary>
-    public class Program : StandardSyntaxTreeBase {
+    public class ProgramSymbol : StandardSyntaxTreeBase {
+
+        /// <summary>
+        ///     create a new program head
+        /// </summary>
+        /// <param name="programHead"></param>
+        /// <param name="uses"></param>
+        /// <param name="mainBlock"></param>
+        /// <param name="dot"></param>
+        /// <param name="filePath"></param>
+        public ProgramSymbol(ProgramHeadSymbol programHead, UsesFileClause uses, BlockSymbol mainBlock, Terminal dot, IFileReference filePath) {
+            ProgramHead = programHead;
+            Uses = uses;
+            MainBlock = mainBlock;
+            Dot = dot;
+            FilePath = filePath;
+        }
 
         /// <summary>
         ///     main block
         /// </summary>
-        public BlockSymbol MainBlock { get; set; }
+        public BlockSymbol MainBlock { get; }
 
         /// <summary>
         ///     program header
         /// </summary>
-        public ISyntaxPart ProgramHead { get; set; }
+        public ProgramHeadSymbol ProgramHead { get; }
 
         /// <summary>
         ///     program name
@@ -28,23 +44,26 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     uses list
         /// </summary>
-        public ISyntaxPart Uses { get; set; }
+        public UsesFileClause Uses { get; }
 
         /// <summary>
         ///     file path
         /// </summary>
-        public IFileReference FilePath { get; set; }
+        public IFileReference FilePath { get; }
 
         /// <summary>
         ///     dot symbol
         /// </summary>
-        public Terminal Dot { get; set; }
+        public Terminal Dot { get; }
 
         /// <summary>
         ///     symbol length
         /// </summary>
-        public int Length
-            => ProgramHead.Length + Uses.Length + MainBlock.Length + Dot.Length;
+        public override int Length
+            => ProgramHead.GetSymbolLength() +
+                Uses.GetSymbolLength() +
+                MainBlock.GetSymbolLength() +
+                Dot.GetSymbolLength();
 
         /// <summary>
         ///     accept visitor

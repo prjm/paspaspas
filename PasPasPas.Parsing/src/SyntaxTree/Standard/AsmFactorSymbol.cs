@@ -43,7 +43,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         ///     asm quoted string
         /// </summary>
         /// <param name="quotedString"></param>
-        public AsmFactorSymbol(QuotedString quotedString)
+        public AsmFactorSymbol(QuotedStringSymbol quotedString)
             => QuotedString = quotedString;
 
         /// <summary>
@@ -109,7 +109,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     quoted string
         /// </summary>
-        public QuotedString QuotedString { get; }
+        public QuotedStringSymbol QuotedString { get; }
 
         /// <summary>
         ///     segment subexpression

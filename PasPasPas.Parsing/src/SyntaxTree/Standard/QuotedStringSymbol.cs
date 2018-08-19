@@ -6,13 +6,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// <summary>
     ///     Quoted string
     /// </summary>
-    public class QuotedString : StandardSyntaxTreeBase {
+    public class QuotedStringSymbol : StandardSyntaxTreeBase {
 
         /// <summary>
         ///     quoted string
         /// </summary>
         /// <param name="stringSymbol"></param>
-        public QuotedString(Terminal stringSymbol)
+        public QuotedStringSymbol(Terminal stringSymbol)
             => Symbol = stringSymbol;
 
         /// <summary>

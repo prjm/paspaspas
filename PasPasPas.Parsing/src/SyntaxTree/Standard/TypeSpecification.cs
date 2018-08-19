@@ -43,7 +43,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// </summary>
         /// <param name="procedureType"></param>
         /// <param name="comma"></param>
-        public TypeSpecification(ProcedureType procedureType, Terminal comma) {
+        public TypeSpecification(ProcedureTypeSymbol procedureType, Terminal comma) {
             ProcedureType = procedureType;
             Comma = comma;
         }
@@ -66,7 +66,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     procedure type
         /// </summary>
-        public ProcedureType ProcedureType { get; }
+        public ProcedureTypeSymbol ProcedureType { get; }
 
         /// <summary>
         ///     simple type

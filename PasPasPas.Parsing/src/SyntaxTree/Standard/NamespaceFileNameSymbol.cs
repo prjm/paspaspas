@@ -15,7 +15,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="inSymbol"></param>
         /// <param name="fileName"></param>
         /// <param name="comma"></param>
-        public NamespaceFileNameSymbol(NamespaceNameSymbol name, Terminal inSymbol, QuotedString fileName, Terminal comma) {
+        public NamespaceFileNameSymbol(NamespaceNameSymbol name, Terminal inSymbol, QuotedStringSymbol fileName, Terminal comma) {
             NamespaceName = name;
             InSymbol = inSymbol;
             QuotedFileName = fileName;
@@ -30,7 +30,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     filename
         /// </summary>
-        public QuotedString QuotedFileName { get; }
+        public QuotedStringSymbol QuotedFileName { get; }
 
         /// <summary>
         ///     comma symbol
