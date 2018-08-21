@@ -6,7 +6,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// <summary>
     ///     record field
     /// </summary>
-    public class RecordField : StandardSyntaxTreeBase {
+    public class RecordFieldSymbol : StandardSyntaxTreeBase {
 
         /// <summary>
         ///     create a new record field definition
@@ -16,7 +16,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="fieldType"></param>
         /// <param name="hint"></param>
         /// <param name="semicolon"></param>
-        public RecordField(IdentifierListSymbol names, Terminal colonSymbol, TypeSpecification fieldType, HintingInformationListSymbol hint, Terminal semicolon) {
+        public RecordFieldSymbol(IdentifierListSymbol names, Terminal colonSymbol, TypeSpecification fieldType, HintingInformationListSymbol hint, Terminal semicolon) {
             Names = names;
             ColonSymbol = colonSymbol;
             FieldType = fieldType;

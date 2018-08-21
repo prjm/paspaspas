@@ -47,7 +47,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         ///     create a new class type declaration symbol
         /// </summary>
         /// <param name="recordHelperDefinition"></param>
-        public ClassTypeDeclarationSymbol(RecordHelperDefinition recordHelperDefinition)
+        public ClassTypeDeclarationSymbol(RecordHelperDefinitionSymbol recordHelperDefinition)
             => RecordHelper = recordHelperDefinition;
 
         /// <summary>
@@ -90,7 +90,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     record helper
         /// </summary>
-        public RecordHelperDefinition RecordHelper { get; }
+        public RecordHelperDefinitionSymbol RecordHelper { get; }
 
         /// <summary>
         ///     accept visitor

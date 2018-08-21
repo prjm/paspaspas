@@ -4,15 +4,15 @@ using PasPasPas.Parsing.SyntaxTree.Visitors;
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
     /// <summary>
-    ///     record items
+    ///     record field list
     /// </summary>
-    public class RecordItems : VariableLengthSyntaxTreeBase<RecordItem> {
+    public class RecordFieldListSymbol : VariableLengthSyntaxTreeBase<RecordFieldSymbol> {
 
         /// <summary>
-        ///     create a new record items list
+        ///     create a new record field list
         /// </summary>
         /// <param name="items"></param>
-        public RecordItems(ImmutableArray<RecordItem> items) : base(items) {
+        public RecordFieldListSymbol(ImmutableArray<RecordFieldSymbol> items) : base(items) {
         }
 
         /// <summary>
@@ -30,8 +30,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// </summary>
         public override int Length
             => ItemLength;
-
-
 
     }
 }

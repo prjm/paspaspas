@@ -16,7 +16,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="variantSection"></param>
         /// <param name="items"></param>
         /// <param name="endSymbol"></param>
-        public RecordDeclarationSymbol(Terminal recordSymbol, RecordFieldList fieldList, RecordVariantSection variantSection, RecordItems items, Terminal endSymbol) {
+        public RecordDeclarationSymbol(Terminal recordSymbol, RecordFieldListSymbol fieldList, RecordVariantSectionSymbol variantSection, RecordItemsSymbol items, Terminal endSymbol) {
             RecordSymbol = recordSymbol;
             FieldList = fieldList;
             VariantSection = variantSection;
@@ -27,17 +27,17 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     field list
         /// </summary>
-        public RecordFieldList FieldList { get; }
+        public RecordFieldListSymbol FieldList { get; }
 
         /// <summary>
         ///     record items
         /// </summary>
-        public RecordItems Items { get; }
+        public RecordItemsSymbol Items { get; }
 
         /// <summary>
         ///     variant section
         /// </summary>
-        public RecordVariantSection VariantSection { get; }
+        public RecordVariantSectionSymbol VariantSection { get; }
 
         /// <summary>
         ///     end symbol

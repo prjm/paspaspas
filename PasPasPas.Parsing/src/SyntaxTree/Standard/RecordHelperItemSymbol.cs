@@ -4,80 +4,72 @@ using PasPasPas.Parsing.SyntaxTree.Visitors;
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
     /// <summary>
-    ///     record item
+    ///     record helper item
     /// </summary>
-    public class RecordItem : StandardSyntaxTreeBase, IStructuredTypeMember {
+    public class RecordHelperItemSymbol : StandardSyntaxTreeBase, IStructuredTypeMember {
 
         /// <summary>
-        ///     create a new record item
+        ///     create a new record helper item
         /// </summary>
         /// <param name="varSymbol"></param>
-        public RecordItem(Terminal varSymbol)
+        public RecordHelperItemSymbol(Terminal varSymbol)
             => VarSymbol = varSymbol;
 
         /// <summary>
-        ///     create a new method symbol
+        ///     create a new record helper item
         /// </summary>
-        /// <param name="classMethodSymbol"></param>
-        public RecordItem(ClassMethodSymbol classMethodSymbol)
-            => MethodDeclaration = classMethodSymbol;
+        /// <param name="constSectionSymbol"></param>
+        public RecordHelperItemSymbol(ConstSectionSymbol constSectionSymbol)
+            => ConstDeclaration = constSectionSymbol;
 
         /// <summary>
-        ///     create a new record property
+        ///     create a new record helper item
+        /// </summary>
+        /// <param name="typeSection"></param>
+        public RecordHelperItemSymbol(TypeSection typeSection)
+            => TypeSection = typeSection;
+
+        /// <summary>
+        ///     create a new record helper item
         /// </summary>
         /// <param name="classPropertySymbol"></param>
-        public RecordItem(ClassPropertySymbol classPropertySymbol)
+        public RecordHelperItemSymbol(ClassPropertySymbol classPropertySymbol)
             => PropertyDeclaration = classPropertySymbol;
 
         /// <summary>
-        ///     create a new record variant section
+        ///     create new record helper item
         /// </summary>
-        /// <param name="recordVariantSection"></param>
-        public RecordItem(RecordVariantSection recordVariantSection)
-            => VariantSection = recordVariantSection;
+        /// <param name="classFieldSymbol"></param>
+        public RecordHelperItemSymbol(ClassFieldSymbol classFieldSymbol)
+            => FieldDeclaration = classFieldSymbol;
 
         /// <summary>
-        ///     create a new record constant
-        /// </summary>
-        /// <param name="constSectionSymbol"></param>
-        public RecordItem(ConstSectionSymbol constSectionSymbol)
-            => ConstSection = constSectionSymbol;
-
-        /// <summary>
-        ///     create a new record section
-        /// </summary>
-        /// <param name="typeSection"></param>
-        public RecordItem(TypeSection typeSection) => TypeSection = typeSection;
-
-        /// <summary>
-        ///     create a new record field item
-        /// </summary>
-        /// <param name="recordFieldList"></param>
-        public RecordItem(RecordFieldList recordFieldList)
-            => Fields = recordFieldList;
-
-        /// <summary>
-        ///     create a new record item
+        ///     create a new record helper item
         /// </summary>
         /// <param name="classSymbol"></param>
         /// <param name="varSymbol"></param>
-        public RecordItem(Terminal classSymbol, Terminal varSymbol) : this(varSymbol)
-            => ClassSymbol = varSymbol;
+        public RecordHelperItemSymbol(Terminal classSymbol, Terminal varSymbol) : this(varSymbol)
+            => ClassSymbol = classSymbol;
 
         /// <summary>
-        ///     class item
+        ///     create a new record helper item
+        /// </summary>
+        /// <param name="classMethodSymbol"></param>
+        /// <param name="classSymbol"></param>
+        public RecordHelperItemSymbol(ClassMethodSymbol classMethodSymbol, Terminal classSymbol) {
+            ClassSymbol = classSymbol;
+            MethodDeclaration = classMethodSymbol;
+        }
+
+        /// <summary>
+        ///     constant declaration
+        /// </summary>
+        public ConstSectionSymbol ConstDeclaration { get; }
+
+        /// <summary>
+        ///     class flag
         /// </summary>
         public bool ClassItem { get; }
-
-        /// <summary>
-        ///     const section
-        /// </summary>
-        public ConstSectionSymbol ConstSection { get; }
-
-        /// <summary>
-        ///     record fields
-        /// </summary>
-        public RecordFieldList Fields { get; }
 
         /// <summary>
         ///     method
@@ -96,21 +88,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
             => ClassSymbol.GetSymbolKind() == TokenKind.Strict;
 
         /// <summary>
-        ///     type
-        /// </summary>
-        public TypeSection TypeSection { get; }
-
-        /// <summary>
-        ///     record variant section
-        /// </summary>
-        public RecordVariantSection VariantSection { get; }
-
-        /// <summary>
-        ///     visibility declaration
+        ///     visibility definition
         /// </summary>
         public int Visibility
             => VarSymbol.GetSymbolKind();
-
 
         /// <summary>
         ///     attributes
@@ -122,15 +103,26 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// </summary>
         public UserAttributes Attributes2 { get; }
 
+
         /// <summary>
-        ///     var symbol
+        ///     report helper types
         /// </summary>
-        public Terminal VarSymbol { get; }
+        public TypeSection TypeSection { get; }
+
+        /// <summary>
+        ///     field
+        /// </summary>
+        public ClassFieldSymbol FieldDeclaration { get; }
 
         /// <summary>
         ///     class symbol
         /// </summary>
         public Terminal ClassSymbol { get; }
+
+        /// <summary>
+        ///     var symbol
+        /// </summary>
+        public Terminal VarSymbol { get; }
 
         /// <summary>
         ///     accept visitor
@@ -142,12 +134,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
             AcceptPart(this, ClassSymbol, visitor);
             AcceptPart(this, Attributes2, visitor);
             AcceptPart(this, VarSymbol, visitor);
-            AcceptPart(this, VariantSection, visitor);
             AcceptPart(this, MethodDeclaration, visitor);
             AcceptPart(this, PropertyDeclaration, visitor);
-            AcceptPart(this, ConstSection, visitor);
+            AcceptPart(this, ConstDeclaration, visitor);
             AcceptPart(this, TypeSection, visitor);
-            AcceptPart(this, Fields, visitor);
+            AcceptPart(this, FieldDeclaration, visitor);
             visitor.EndVisit(this);
         }
 
@@ -159,13 +150,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
             + ClassSymbol.GetSymbolLength()
             + Attributes2.GetSymbolLength()
             + VarSymbol.GetSymbolLength()
-            + VariantSection.GetSymbolLength()
             + MethodDeclaration.GetSymbolLength()
             + PropertyDeclaration.GetSymbolLength()
-            + ConstSection.GetSymbolLength()
+            + ConstDeclaration.GetSymbolLength()
             + TypeSection.GetSymbolLength()
-            + Fields.GetSymbolLength();
-
+            + FieldDeclaration.GetSymbolLength();
 
     }
 }

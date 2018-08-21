@@ -1,21 +1,38 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Visitors;
+﻿using PasPasPas.Parsing.SyntaxTree.Utils;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
     /// <summary>
-    ///     struct type
+    ///     structured type
     /// </summary>
     public class StructType : StandardSyntaxTreeBase {
 
         /// <summary>
-        ///     Packed struct type
+        ///     create a new structured type symbol
         /// </summary>
-        public bool Packed { get; set; }
+        /// <param name="packed"></param>
+        /// <param name="part"></param>
+        public StructType(Terminal packed, StructTypePart part) {
+            PackedSymbol = packed;
+            Part = part;
+        }
+
+        /// <summary>
+        ///     Packed structured type
+        /// </summary>
+        public bool Packed
+            => PackedSymbol.GetSymbolKind() == TokenKind.Packed;
 
         /// <summary>
         ///     part
         /// </summary>
-        public StructTypePart Part { get; set; }
+        public StructTypePart Part { get; }
+
+        /// <summary>
+        ///     packed symbol
+        /// </summary>
+        public Terminal PackedSymbol { get; }
 
         /// <summary>
         ///     accept visitor
@@ -23,10 +40,15 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="visitor">visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
-            AcceptParts(this, visitor);
+            AcceptPart(this, PackedSymbol, visitor);
+            AcceptPart(this, Part, visitor);
             visitor.EndVisit(this);
         }
 
-
+        /// <summary>
+        ///     symbol length
+        /// </summary>
+        public override int Length
+            => PackedSymbol.GetSymbolLength() + Part.GetSymbolLength();
     }
 }

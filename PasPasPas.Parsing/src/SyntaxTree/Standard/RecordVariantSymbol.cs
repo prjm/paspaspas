@@ -7,7 +7,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// <summary>
     ///     one part of a variant part of a record
     /// </summary>
-    public class RecordVariant : VariableLengthSyntaxTreeBase<ConstantExpressionSymbol> {
+    public class RecordVariantSymbol : VariableLengthSyntaxTreeBase<ConstantExpressionSymbol> {
 
         /// <summary>
         ///     create a new record variant symbol
@@ -19,7 +19,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="variantSection"></param>
         /// <param name="closeParen"></param>
         /// <param name="semicolon"></param>
-        public RecordVariant(ImmutableArray<ConstantExpressionSymbol> items, Terminal colonSymbol, Terminal openParen, RecordFieldList fieldList, RecordVariantSection variantSection, Terminal closeParen, Terminal semicolon) : base(items) {
+        public RecordVariantSymbol(ImmutableArray<ConstantExpressionSymbol> items, Terminal colonSymbol, Terminal openParen, RecordFieldListSymbol fieldList, RecordVariantSectionSymbol variantSection, Terminal closeParen, Terminal semicolon) : base(items) {
             ColonSymbol = colonSymbol;
             OpenParen = openParen;
             FieldList = fieldList;
@@ -31,7 +31,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     field list
         /// </summary>
-        public RecordFieldList FieldList { get; }
+        public RecordFieldListSymbol FieldList { get; }
 
         /// <summary>
         ///     colon symbol
@@ -46,7 +46,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     variant section
         /// </summary>
-        public RecordVariantSection VariantSection { get; }
+        public RecordVariantSectionSymbol VariantSection { get; }
 
         /// <summary>
         ///     close paren

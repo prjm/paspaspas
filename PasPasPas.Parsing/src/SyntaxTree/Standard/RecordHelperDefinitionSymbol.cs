@@ -6,7 +6,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// <summary>
     ///     record helper
     /// </summary>
-    public class RecordHelperDefinition : StandardSyntaxTreeBase {
+    public class RecordHelperDefinitionSymbol : StandardSyntaxTreeBase {
 
         /// <summary>
         ///     create a new record helper symbol
@@ -17,7 +17,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="name"></param>
         /// <param name="items"></param>
         /// <param name="endSymbol"></param>
-        public RecordHelperDefinition(Terminal recordSymbol, Terminal helperSymbol, Terminal forSymbol, TypeName name, RecordHelperItems items, Terminal endSymbol) {
+        public RecordHelperDefinitionSymbol(Terminal recordSymbol, Terminal helperSymbol, Terminal forSymbol, TypeName name, RecordHelperItemsSymbol items, Terminal endSymbol) {
             RecordSymbol = recordSymbol;
             HelperSymbol = helperSymbol;
             ForSymbol = forSymbol;
@@ -29,7 +29,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     record helper items
         /// </summary>
-        public RecordHelperItems Items { get; }
+        public RecordHelperItemsSymbol Items { get; }
 
         /// <summary>
         ///     record helper name

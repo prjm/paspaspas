@@ -22,10 +22,10 @@ namespace PasPasPasTests.Parser {
 
         [TestCase]
         public void TestReintroduce() {
-            var s = RunCstTest(p => p.ParseReintroduceDirective());
+            var s = RunCstTest(p => p.ParseReintroduceDirective(), "reintroduce");
             Assert.IsNotNull(s.Directive);
             Assert.IsNotNull(s.Semicolon);
-            Assert.AreEqual(0, s.Length);
+            Assert.AreEqual(11, s.Length);
         }
 
         [TestCase]
@@ -2001,7 +2001,183 @@ namespace PasPasPasTests.Parser {
             s = RunCstTest(p => p.ParseRecordDecl(), "record var a: string; end");
             Assert.IsNotNull(s.Items);
             Assert.AreEqual(25, s.Length);
+        }
 
+        [TestCase]
+        public void TestRecordField() {
+            var s = RunCstTest(p => p.ParseRecordField(true), "a, b, c: integer library;");
+            Assert.IsNotNull(s.Names);
+            Assert.IsNotNull(s.ColonSymbol);
+            Assert.IsNotNull(s.FieldType);
+            Assert.IsNotNull(s.Hint);
+            Assert.IsNotNull(s.Semicolon);
+            Assert.AreEqual(25, s.Length);
+        }
+
+        [TestCase]
+        public void TestRecordFieldList() {
+            var s = RunCstTest(p => p.ParseRecordFieldList(true), "a: integer; b: cardinal;");
+            Assert.IsNotNull(s.Items[0]);
+            Assert.IsNotNull(s.Items[1]);
+            Assert.AreEqual(24, s.Length);
+        }
+
+        [TestCase]
+        public void TestRecordHelper() {
+            var s = RunCstTest(p => p.ParseRecordHelper(), "record helper for TA public function x(): integer; end");
+            Assert.IsNotNull(s.RecordSymbol);
+            Assert.IsNotNull(s.HelperSymbol);
+            Assert.IsNotNull(s.ForSymbol);
+            Assert.IsNotNull(s.Name);
+            Assert.IsNotNull(s.Items);
+            Assert.IsNotNull(s.EndSymbol);
+            Assert.AreEqual(54, s.Length);
+        }
+
+        [TestCase]
+        public void TestRecordItem() {
+            var m = RecordDeclarationMode.Fields;
+            var s = RunCstTest(p => p.ParseRecordItem(ref m), "a: integer;");
+            Assert.IsNotNull(s.Fields);
+            Assert.AreEqual(11, s.Length);
+
+            m = RecordDeclarationMode.Other;
+            s = RunCstTest(p => p.ParseRecordItem(ref m), "var");
+            Assert.IsNotNull(s.VarSymbol);
+            Assert.AreEqual(3, s.Length);
+
+            m = RecordDeclarationMode.Other;
+            s = RunCstTest(p => p.ParseRecordItem(ref m), "class var");
+            Assert.IsNotNull(s.VarSymbol);
+            Assert.IsNotNull(s.ClassSymbol);
+            Assert.AreEqual(9, s.Length);
+
+            m = RecordDeclarationMode.Other;
+            s = RunCstTest(p => p.ParseRecordItem(ref m), "strict protected");
+            Assert.IsNotNull(s.VarSymbol);
+            Assert.IsNotNull(s.ClassSymbol);
+            Assert.AreEqual(16, s.Length);
+
+            m = RecordDeclarationMode.Other;
+            s = RunCstTest(p => p.ParseRecordItem(ref m), "property x: string read z write z;");
+            Assert.IsNotNull(s.PropertyDeclaration);
+            Assert.AreEqual(34, s.Length);
+
+            m = RecordDeclarationMode.Other;
+            s = RunCstTest(p => p.ParseRecordItem(ref m), "function ip(): integer;");
+            Assert.IsNotNull(s.MethodDeclaration);
+            Assert.AreEqual(23, s.Length);
+
+            m = RecordDeclarationMode.Other;
+            s = RunCstTest(p => p.ParseRecordItem(ref m), "const x = 5;");
+            Assert.IsNotNull(s.ConstSection);
+            Assert.AreEqual(12, s.Length);
+
+            m = RecordDeclarationMode.Other;
+            s = RunCstTest(p => p.ParseRecordItem(ref m), "type a = class end;");
+            Assert.IsNotNull(s.TypeSection);
+            Assert.AreEqual(19, s.Length);
+
+            m = RecordDeclarationMode.Other;
+            s = RunCstTest(p => p.ParseRecordItem(ref m), "case byte of 1: (a: string);");
+            Assert.IsNotNull(s.VariantSection);
+            Assert.AreEqual(28, s.Length);
+        }
+
+        [TestCase]
+        public void TestRecordItems() {
+            var s = RunCstTest(p => p.ParseRecordItems(), "procedure a; procedure b;");
+            Assert.IsNotNull(s.Items[0]);
+            Assert.IsNotNull(s.Items[1]);
+            Assert.AreEqual(25, s.Length);
+        }
+
+        [TestCase]
+        public void TestRecordHelperItems() {
+            var s = RunCstTest(p => p.ParseRecordHelperItems(), "procedure a; procedure b;");
+            Assert.IsNotNull(s.Items[0]);
+            Assert.IsNotNull(s.Items[1]);
+            Assert.AreEqual(25, s.Length);
+        }
+
+        [TestCase]
+        public void TestRecordHelperItem() {
+            var m = RecordDeclarationMode.Fields;
+            var s = RunCstTest(p => p.ParseRecordHelperItem(ref m), "a: integer;");
+            Assert.IsNotNull(s.FieldDeclaration);
+            Assert.AreEqual(11, s.Length);
+
+            m = RecordDeclarationMode.Other;
+            s = RunCstTest(p => p.ParseRecordHelperItem(ref m), "var");
+            Assert.IsNotNull(s.VarSymbol);
+            Assert.AreEqual(3, s.Length);
+
+            m = RecordDeclarationMode.Other;
+            s = RunCstTest(p => p.ParseRecordHelperItem(ref m), "class var");
+            Assert.IsNotNull(s.VarSymbol);
+            Assert.IsNotNull(s.ClassSymbol);
+            Assert.AreEqual(9, s.Length);
+
+            m = RecordDeclarationMode.Other;
+            s = RunCstTest(p => p.ParseRecordHelperItem(ref m), "strict protected");
+            Assert.IsNotNull(s.VarSymbol);
+            Assert.IsNotNull(s.ClassSymbol);
+            Assert.AreEqual(16, s.Length);
+
+            m = RecordDeclarationMode.Other;
+            s = RunCstTest(p => p.ParseRecordHelperItem(ref m), "property x: string read z write z;");
+            Assert.IsNotNull(s.PropertyDeclaration);
+            Assert.AreEqual(34, s.Length);
+
+            m = RecordDeclarationMode.Other;
+            s = RunCstTest(p => p.ParseRecordHelperItem(ref m), "function ip(): integer;");
+            Assert.IsNotNull(s.MethodDeclaration);
+            Assert.AreEqual(23, s.Length);
+
+            m = RecordDeclarationMode.Other;
+            s = RunCstTest(p => p.ParseRecordHelperItem(ref m), "const x = 5;");
+            Assert.IsNotNull(s.ConstDeclaration);
+            Assert.AreEqual(12, s.Length);
+
+            m = RecordDeclarationMode.Other;
+            s = RunCstTest(p => p.ParseRecordHelperItem(ref m), "type a = class end;");
+            Assert.IsNotNull(s.TypeSection);
+            Assert.AreEqual(19, s.Length);
+        }
+
+        [TestCase]
+        public void TestRecordVariant() {
+            var s = RunCstTest(p => p.ParseRecordVariant(), "1,7,99: (a: byte; b:byte);");
+            Assert.IsNotNull(s.Items[0]);
+            Assert.IsNotNull(s.Items[1]);
+            Assert.IsNotNull(s.Items[2]);
+            Assert.IsNotNull(s.ColonSymbol);
+            Assert.IsNotNull(s.OpenParen);
+            Assert.IsNotNull(s.FieldList);
+            Assert.IsNotNull(s.CloseParen);
+            Assert.IsNotNull(s.Semicolon);
+            Assert.AreEqual(26, s.Length);
+        }
+
+        [TestCase]
+        public void TestRecordVariantSection() {
+            var s = RunCstTest(p => p.ParseRecordVariantSection(), "case byte of 1: (a: byte); 2: (a: byte)");
+            Assert.IsNotNull(s.CaseSymbol);
+            Assert.IsNotNull(s.TypeDeclaration);
+            Assert.IsNotNull(s.OfSymbol);
+            Assert.IsNotNull(s.Items[0]);
+            Assert.IsNotNull(s.Items[1]);
+            Assert.AreEqual(39, s.Length);
+        }
+
+        [TestCase]
+        public void TestRepeat() {
+            var s = RunCstTest(p => p.ParseRepeatStatement(), "repeat a; b; until c > 5");
+            Assert.IsNotNull(s.Repeat);
+            Assert.IsNotNull(s.Statements);
+            Assert.IsNotNull(s.Until);
+            Assert.IsNotNull(s.Condition); ;
+            Assert.AreEqual(24, s.Length);
         }
 
     }

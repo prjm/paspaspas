@@ -680,7 +680,7 @@ namespace PasPasPas.Parsing.Parser {
                 return result;
             }
             if (Match(TokenKind.Repeat)) {
-                result.Repeat = ParseRepeatStatement(result);
+                result.Repeat = ParseRepeatStatement();
                 return result;
             }
             if (Match(TokenKind.While)) {
@@ -870,17 +870,23 @@ namespace PasPasPas.Parsing.Parser {
         #endregion
         #region ParseRepeatStatement
 
+        /// <summary>
+        ///     parse a repeat statement
+        /// </summary>
+        /// <returns></returns>
+
         [Rule("RepeatStatement", "'repeat' [ StatementList ] 'until' Expression")]
-        private RepeatStatement ParseRepeatStatement(IExtendableSyntaxPart parent) {
-            var result = new RepeatStatement();
-            InitByTerminal(result, parent, TokenKind.Repeat);
+        public RepeatStatement ParseRepeatStatement() {
+            var repeat = ContinueWithOrMissing(TokenKind.Repeat);
+            var statements = default(StatementList);
 
             if (!Match(TokenKind.Until)) {
-                result.Statements = ParseStatementList();
+                statements = ParseStatementList();
             }
-            ContinueWithOrMissing(result, TokenKind.Until);
-            result.Condition = ParseExpression();
-            return result;
+
+            var until = ContinueWithOrMissing(TokenKind.Until);
+            var condition = ParseExpression();
+            return new RepeatStatement(repeat, statements, until, condition);
         }
 
         #endregion
@@ -2574,41 +2580,30 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("StructType", "[ 'packed' ] StructTypePart")]
         private StructType ParseStructType() {
-            var result = new StructType();
-            result.Packed = ContinueWith(result, TokenKind.Packed);
-            result.Part = ParseStructTypePart(result);
-            return result;
+            var packed = ContinueWith(TokenKind.Packed);
+            var part = ParseStructTypePart();
+            return new StructType(packed, part);
         }
 
         #endregion
         #region ParseStructTypePart
 
         [Rule("StructTypePart", "ArrayType | SetType | FileType | ClassDecl")]
-        private StructTypePart ParseStructTypePart(IExtendableSyntaxPart parent) {
-            var result = new StructTypePart();
-            parent.Add(result);
+        private StructTypePart ParseStructTypePart() {
 
-            if (Match(TokenKind.Array)) {
-                result.ArrayType = ParseArrayType();
-                return result;
-            }
+            if (Match(TokenKind.Array))
+                return new StructTypePart(ParseArrayType());
 
-            if (Match(TokenKind.Set)) {
-                result.SetType = ParseSetDefinition(result);
-                return result;
-            }
+            if (Match(TokenKind.Set))
+                return new StructTypePart(ParseSetDefinition());
 
-            if (Match(TokenKind.File)) {
-                result.FileType = ParseFileType();
-                return result;
-            }
+            if (Match(TokenKind.File))
+                return new StructTypePart(ParseFileType());
 
-            if (Match(TokenKind.Class, TokenKind.Interface, TokenKind.Record, TokenKind.Object, TokenKind.DispInterface)) {
-                result.ClassDeclaration = ParseClassDeclaration();
-                return result;
-            }
+            if (Match(TokenKind.Class, TokenKind.Interface, TokenKind.Record, TokenKind.Object, TokenKind.DispInterface))
+                return new StructTypePart(ParseClassDeclaration());
 
-            return result;
+            return null;
         }
 
         #endregion
@@ -2658,9 +2653,9 @@ namespace PasPasPas.Parsing.Parser {
         [Rule("RecordDecl", "'record' RecordFieldList (RecordVariantSection | RecordItems ) 'end' ")]
         public RecordDeclarationSymbol ParseRecordDecl() {
             var recordSymbol = ContinueWithOrMissing(TokenKind.Record);
-            var fieldList = default(RecordFieldList);
-            var variantSection = default(RecordVariantSection);
-            var items = default(RecordItems);
+            var fieldList = default(RecordFieldListSymbol);
+            var variantSection = default(RecordVariantSectionSymbol);
+            var items = default(RecordItemsSymbol);
 
             if (MatchIdentifier() && !Match(TokenKind.Strict, TokenKind.Protected, TokenKind.Private, TokenKind.Public, TokenKind.Published, TokenKind.Automated)) {
                 fieldList = ParseRecordFieldList(true);
@@ -2680,9 +2675,14 @@ namespace PasPasPas.Parsing.Parser {
         #endregion
         #region ParseRecordItems
 
+        /// <summary>
+        ///     parse record items
+        /// </summary>
+        /// <returns></returns>
+
         [Rule("RecordItems", "{ RecordItem }")]
-        private RecordItems ParseRecordItems() {
-            using (var list = GetList<RecordItem>()) {
+        public RecordItemsSymbol ParseRecordItems() {
+            using (var list = GetList<RecordItemSymbol>()) {
                 var mode = RecordDeclarationMode.Fields;
 
                 while ((!Match(TokenKind.End)) && (mode != RecordDeclarationMode.Undefined)) {
@@ -2694,24 +2694,30 @@ namespace PasPasPas.Parsing.Parser {
                     }
                 }
 
-                return new RecordItems(GetFixedArray(list));
+                return new RecordItemsSymbol(GetFixedArray(list));
             }
         }
 
         #endregion
         #region ParseRecordItem
 
+        /// <summary>
+        ///     parse a record item
+        /// </summary>
+        /// <param name="mode"></param>
+        /// <returns></returns>
+
         [Rule("RecordItem", "MethodDeclaration | PropertyDeclaration | ConstSection | TypeSection | RecordField | ( ['class'] VarSection) | Visibility ")]
-        private RecordItem ParseRecordItem(ref RecordDeclarationMode mode) {
+        public RecordItemSymbol ParseRecordItem(ref RecordDeclarationMode mode) {
 
             if (Match(TokenKind.Var)) {
                 mode = RecordDeclarationMode.Fields;
-                return new RecordItem(ContinueWith(TokenKind.Var));
+                return new RecordItemSymbol(ContinueWith(TokenKind.Var));
             }
 
             if (Match(TokenKind.Class) && LookAhead(1, TokenKind.Var)) {
                 mode = RecordDeclarationMode.ClassFields;
-                return new RecordItem(ContinueWith(TokenKind.Class), ContinueWith(TokenKind.Var));
+                return new RecordItemSymbol(ContinueWith(TokenKind.Class), ContinueWith(TokenKind.Var));
             }
 
             var attributes1 = default(UserAttributes);
@@ -2736,31 +2742,31 @@ namespace PasPasPas.Parsing.Parser {
                 var strict = ContinueWith(TokenKind.Strict);
                 var visibility = ContinueWith(TokenKind.Public, TokenKind.Protected, TokenKind.Private, TokenKind.Published, TokenKind.Automated);
                 mode = RecordDeclarationMode.Fields;
-                return new RecordItem(strict, visibility);
+                return new RecordItemSymbol(strict, visibility);
             }
 
             if (Match(TokenKind.Procedure, TokenKind.Function, TokenKind.Constructor, TokenKind.Destructor, TokenKind.Operator)) {
                 mode = RecordDeclarationMode.Other;
-                return new RecordItem(ParseMethodDeclaration());
+                return new RecordItemSymbol(ParseMethodDeclaration());
             }
 
             if (Match(TokenKind.Property)) {
                 mode = RecordDeclarationMode.Other;
-                return new RecordItem(ParsePropertyDeclaration());
+                return new RecordItemSymbol(ParsePropertyDeclaration());
             }
 
             if (classItem == default && Match(TokenKind.Case))
-                return new RecordItem(ParseRecordVariantSection());
+                return new RecordItemSymbol(ParseRecordVariantSection());
 
             if (classItem == default && Match(TokenKind.Const))
-                return new RecordItem(ParseConstSection(true));
+                return new RecordItemSymbol(ParseConstSection(true));
 
             if (classItem == default && Match(TokenKind.TypeKeyword))
-                return new RecordItem(ParseTypeSection(true));
+                return new RecordItemSymbol(ParseTypeSection(true));
 
             if (MatchIdentifier() && (!Match(TokenKind.Private, TokenKind.Protected, TokenKind.Public, TokenKind.Published, TokenKind.Automated, TokenKind.Strict))) {
                 if (mode == RecordDeclarationMode.Fields || mode == RecordDeclarationMode.ClassFields) {
-                    return new RecordItem(ParseRecordFieldList(true));
+                    return new RecordItemSymbol(ParseRecordFieldList(true));
                 }
 
                 Unexpected();
@@ -2779,8 +2785,8 @@ namespace PasPasPas.Parsing.Parser {
         /// <returns></returns>
 
         [Rule("RecordVariantSection", "'case' [ Identifier ': ' ] TypeDeclaration 'of' { RecordVariant } ")]
-        public RecordVariantSection ParseRecordVariantSection() {
-            using (var list = GetList<RecordVariant>()) {
+        public RecordVariantSectionSymbol ParseRecordVariantSection() {
+            using (var list = GetList<RecordVariantSymbol>()) {
                 var caseSymbol = ContinueWith(TokenKind.Case);
                 var variantName = default(IdentifierSymbol);
                 var colonSymbol = default(Terminal);
@@ -2791,7 +2797,7 @@ namespace PasPasPas.Parsing.Parser {
                 }
                 var typeDeclaration = ParseTypeSpecification();
                 var ofSymbol = ContinueWithOrMissing(TokenKind.Of);
-                var item = default(RecordVariant);
+                var item = default(RecordVariantSymbol);
 
                 do {
                     if (Match(TokenKind.End, TokenKind.Undefined))
@@ -2801,7 +2807,7 @@ namespace PasPasPas.Parsing.Parser {
 
                 } while (item != default && item.Semicolon != default);
 
-                return new RecordVariantSection(caseSymbol, variantName, colonSymbol, typeDeclaration, ofSymbol, GetFixedArray(list));
+                return new RecordVariantSectionSymbol(caseSymbol, variantName, colonSymbol, typeDeclaration, ofSymbol, GetFixedArray(list));
             }
         }
 
@@ -2814,7 +2820,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <returns></returns>
 
         [Rule("RecordVariant", "ConstantExpression { , ConstantExpression } : '(' FieldList ')' ';' ")]
-        public RecordVariant ParseRecordVariant() {
+        public RecordVariantSymbol ParseRecordVariant() {
             using (var list = GetList<ConstantExpressionSymbol>()) {
                 var item = default(ConstantExpressionSymbol);
 
@@ -2825,7 +2831,7 @@ namespace PasPasPas.Parsing.Parser {
                 var colonSymbol = ContinueWithOrMissing(TokenKind.Colon);
                 var openParen = ContinueWithOrMissing(TokenKind.OpenParen);
                 var fieldList = ParseRecordFieldList(false);
-                var variantSection = default(RecordVariantSection);
+                var variantSection = default(RecordVariantSectionSymbol);
 
                 if (Match(TokenKind.Case)) {
                     variantSection = ParseRecordVariantSection();
@@ -2834,28 +2840,40 @@ namespace PasPasPas.Parsing.Parser {
                 var closeParen = ContinueWithOrMissing(TokenKind.CloseParen);
                 var semicolon = ContinueWith(TokenKind.Semicolon);
 
-                return new RecordVariant(GetFixedArray(list), colonSymbol, openParen, fieldList, variantSection, closeParen, semicolon);
+                return new RecordVariantSymbol(GetFixedArray(list), colonSymbol, openParen, fieldList, variantSection, closeParen, semicolon);
             }
         }
 
         #endregion
         #region ParseRecordFieldList
 
+        /// <summary>
+        ///     parse record field list
+        /// </summary>
+        /// <param name="requireSemicolon"></param>
+        /// <returns></returns>
+
         [Rule("RecordFieldList", " { RecordField } ")]
-        private RecordFieldList ParseRecordFieldList(bool requireSemicolon) {
-            using (var list = GetList<RecordField>()) {
+        public RecordFieldListSymbol ParseRecordFieldList(bool requireSemicolon) {
+            using (var list = GetList<RecordFieldSymbol>()) {
                 while (MatchIdentifier() && (!Match(TokenKind.Private, TokenKind.Protected, TokenKind.Public, TokenKind.Published, TokenKind.Strict))) {
                     AddToList(list, ParseRecordField(requireSemicolon));
                 }
-                return new RecordFieldList(GetFixedArray(list));
+                return new RecordFieldListSymbol(GetFixedArray(list));
             }
         }
 
         #endregion
         #region ParseRecordField
 
+        /// <summary>
+        ///     parse a record field
+        /// </summary>
+        /// <param name="requireSemicolon"></param>
+        /// <returns></returns>
+
         [Rule("RecordField", "IdentList ':' TypeSpecification Hints ';'")]
-        private RecordField ParseRecordField(bool requireSemicolon) {
+        public RecordFieldSymbol ParseRecordField(bool requireSemicolon) {
             var names = ParseIdentList(true);
             var colonSymbol = ContinueWithOrMissing(TokenKind.Colon);
             var fieldType = ParseTypeSpecification();
@@ -2865,14 +2883,19 @@ namespace PasPasPas.Parsing.Parser {
             if (Match(TokenKind.Semicolon) || (requireSemicolon && (!Match(TokenKind.End))))
                 semicolon = ContinueWithOrMissing(TokenKind.Semicolon);
 
-            return new RecordField(names, colonSymbol, fieldType, hint, semicolon);
+            return new RecordFieldSymbol(names, colonSymbol, fieldType, hint, semicolon);
         }
 
         #endregion
         #region ParseRecordHelper
 
+        /// <summary>
+        ///     parse a record helper symbol
+        /// </summary>
+        /// <returns></returns>
+
         [Rule("RecordHelperDecl", "'record' 'helper' 'for' TypeName RecordHelperItems 'end'")]
-        private RecordHelperDefinition ParseRecordHelper() {
+        public RecordHelperDefinitionSymbol ParseRecordHelper() {
             var recordSymbol = ContinueWithOrMissing(TokenKind.Record);
             var helperSymbol = ContinueWithOrMissing(TokenKind.Helper);
             var forSymbol = ContinueWithOrMissing(TokenKind.For);
@@ -2880,98 +2903,119 @@ namespace PasPasPas.Parsing.Parser {
             var items = ParseRecordHelperItems();
             var endSymbol = ContinueWithOrMissing(TokenKind.End);
 
-            return new RecordHelperDefinition(recordSymbol, helperSymbol, forSymbol, name, items, endSymbol);
+            return new RecordHelperDefinitionSymbol(recordSymbol, helperSymbol, forSymbol, name, items, endSymbol);
         }
 
         #endregion
         #region ParseRecordHelperItems
 
+        /// <summary>
+        ///     parse record helper items
+        /// </summary>
+        /// <returns></returns>
+
         [Rule("RecordHelperItems", " { RecordHelperItem }")]
-        private RecordHelperItems ParseRecordHelperItems() {
-            var result = new RecordHelperItems();
-            var mode = RecordDeclarationMode.Fields;
+        public RecordHelperItemsSymbol ParseRecordHelperItems() {
+            using (var list = GetList<RecordHelperItemSymbol>()) {
+                var mode = RecordDeclarationMode.Fields;
 
-            while ((!Match(TokenKind.End, TokenKind.Undefined)) && (mode != RecordDeclarationMode.Undefined)) {
-                ParseRecordHelperItem(result, ref mode);
-                if (mode == RecordDeclarationMode.Undefined) {
-                    Unexpected();
-                    return result;
+                while ((!Match(TokenKind.End, TokenKind.Undefined)) && (mode != RecordDeclarationMode.Undefined)) {
+                    AddToList(list, ParseRecordHelperItem(ref mode));
+                    if (mode == RecordDeclarationMode.Undefined) {
+                        Unexpected();
+                        break;
+                    }
                 }
-            }
 
-            return result;
+                return new RecordHelperItemsSymbol(GetFixedArray(list));
+            }
         }
 
         #endregion
         #region ParseRecordHelperItem
 
-        [Rule("RecordHelperItem", "MethodDeclaration | PropertyDeclaration | ConstSection | TypeSection | Visibility ")]
-        private RecordHelperItem ParseRecordHelperItem(IExtendableSyntaxPart parent, ref RecordDeclarationMode mode) {
+        /// <summary>
+        ///     parse record helper items
+        /// </summary>
+        /// <param name="mode"></param>
+        /// <returns></returns>
 
-            if (ContinueWith(parent, TokenKind.Var)) {
+        [Rule("RecordHelperItem", "MethodDeclaration | PropertyDeclaration | ConstSection | TypeSection | Visibility ")]
+        public RecordHelperItemSymbol ParseRecordHelperItem(ref RecordDeclarationMode mode) {
+            var attributes1 = default(UserAttributes);
+            var attributes2 = default(UserAttributes);
+            var classSymbol = default(Terminal);
+            var varSymbol = ContinueWith(TokenKind.Var);
+
+            if (varSymbol != default) {
                 mode = RecordDeclarationMode.Fields;
-                return null;
+                return new RecordHelperItemSymbol(varSymbol);
             }
 
             if (Match(TokenKind.Class) && LookAhead(1, TokenKind.Var)) {
-                ContinueWith(parent, TokenKind.Class);
-                ContinueWith(parent, TokenKind.Var);
+                classSymbol = ContinueWith(TokenKind.Class);
+                varSymbol = ContinueWith(TokenKind.Var);
                 mode = RecordDeclarationMode.ClassFields;
-                return null;
+                return new RecordHelperItemSymbol(classSymbol, varSymbol);
             }
 
-            var result = new RecordHelperItem();
-            parent.Add(result);
+            attributes1 = ParseAttributes();
+            classSymbol = ContinueWith(TokenKind.Class);
+            attributes2 = ParseAttributes();
 
-            result.Attributes1 = ParseAttributes();
-            result.ClassItem = ContinueWith(result, TokenKind.Class);
-            result.Attributes2 = ParseAttributes();
-
-            if (Match(TokenKind.Const)) {
-                result.ConstDeclaration = ParseConstSection(true);
+            if (classSymbol != default && Match(TokenKind.Const)) {
                 mode = RecordDeclarationMode.Other;
-                return result;
+                return new RecordHelperItemSymbol(ParseConstSection(true));
             }
 
-            if (!result.ClassItem && Match(TokenKind.TypeKeyword)) {
-                result.TypeSection = ParseTypeSection(true);
-                return result;
+            if (classSymbol != default && Match(TokenKind.TypeKeyword)) {
+                mode = RecordDeclarationMode.Other;
+                return new RecordHelperItemSymbol(ParseTypeSection(true));
             }
 
             if (Match(TokenKind.Procedure, TokenKind.Function, TokenKind.Constructor, TokenKind.Destructor)) {
-                result.MethodDeclaration = ParseMethodDeclaration();
                 mode = RecordDeclarationMode.Other;
-                return result;
+                return new RecordHelperItemSymbol(ParseMethodDeclaration(), classSymbol);
             }
 
             if (Match(TokenKind.Property)) {
                 mode = RecordDeclarationMode.Other;
-                result.PropertyDeclaration = ParsePropertyDeclaration();
-                return result;
+                return new RecordHelperItemSymbol(ParsePropertyDeclaration());
             }
 
-            if (Match(TokenKind.Public, TokenKind.Protected, TokenKind.Private, TokenKind.Strict, TokenKind.Published)) {
-                result.Strict = ContinueWith(result, TokenKind.Strict);
-                ContinueWith(result, TokenKind.Public, TokenKind.Protected, TokenKind.Private, TokenKind.Published);
-                result.Visibility = result.LastTerminalKind;
+            if (Match(TokenKind.TypeKeyword)) {
                 mode = RecordDeclarationMode.Other;
-                return result;
+                return new RecordHelperItemSymbol(ParseTypeSection(true));
+            }
+
+            if (Match(TokenKind.Const)) {
+                mode = RecordDeclarationMode.Other;
+                return new RecordHelperItemSymbol(ParseConstSection(true));
+            }
+
+
+            if (Match(TokenKind.Public, TokenKind.Protected, TokenKind.Private, TokenKind.Strict, TokenKind.Published, TokenKind.Automated)) {
+                if (classSymbol != default) {
+                    Unexpected();
+                }
+
+                var strict = ContinueWith(TokenKind.Strict);
+                var visibility = ContinueWith(TokenKind.Public, TokenKind.Protected, TokenKind.Private, TokenKind.Published, TokenKind.Automated);
+                mode = RecordDeclarationMode.Fields;
+                return new RecordHelperItemSymbol(strict, visibility);
             }
 
             if (MatchIdentifier() && (!Match(TokenKind.Private, TokenKind.Protected, TokenKind.Public, TokenKind.Published, TokenKind.Automated, TokenKind.Strict))) {
 
                 if (mode == RecordDeclarationMode.Fields || mode == RecordDeclarationMode.ClassFields) {
-                    result.FieldDeclaration = ParseClassFieldDeclararation();
-                    result.ClassItem = mode == RecordDeclarationMode.ClassFields;
-                    return result;
+                    return new RecordHelperItemSymbol(ParseClassFieldDeclararation());
                 }
-                else {
-                    Unexpected();
-                }
+
+                Unexpected();
             }
 
             mode = RecordDeclarationMode.Undefined;
-            return result;
+            return null;
         }
 
         #endregion
@@ -4086,9 +4130,9 @@ namespace PasPasPas.Parsing.Parser {
         #region SetDefinition
 
         [Rule("SetDef", "'set' 'of' TypeSpecification")]
-        private SetDefinition ParseSetDefinition(IExtendableSyntaxPart parent) {
+        private SetDefinition ParseSetDefinition() {
             var result = new SetDefinition();
-            InitByTerminal(result, parent, TokenKind.Set);
+            InitByTerminal(result, null, TokenKind.Set);
             ContinueWithOrMissing(result, TokenKind.Of);
             result.TypeDefinition = ParseTypeSpecification();
             return result;

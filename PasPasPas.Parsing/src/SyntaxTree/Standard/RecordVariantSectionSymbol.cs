@@ -7,7 +7,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// <summary>
     ///     variant section
     /// </summary>
-    public class RecordVariantSection : VariableLengthSyntaxTreeBase<RecordVariant> {
+    public class RecordVariantSectionSymbol : VariableLengthSyntaxTreeBase<RecordVariantSymbol> {
 
         /// <summary>
         ///     create a new record variant section
@@ -18,7 +18,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="typeDeclaration"></param>
         /// <param name="ofSymbol"></param>
         /// <param name="items"></param>
-        public RecordVariantSection(Terminal caseSymbol, IdentifierSymbol variantName, Terminal colonSymbol, TypeSpecification typeDeclaration, Terminal ofSymbol, ImmutableArray<RecordVariant> items) : base(items) {
+        public RecordVariantSectionSymbol(Terminal caseSymbol, IdentifierSymbol variantName, Terminal colonSymbol, TypeSpecification typeDeclaration, Terminal ofSymbol, ImmutableArray<RecordVariantSymbol> items) : base(items) {
             CaseSymbol = caseSymbol;
             Name = variantName;
             ColonSymbol = colonSymbol;

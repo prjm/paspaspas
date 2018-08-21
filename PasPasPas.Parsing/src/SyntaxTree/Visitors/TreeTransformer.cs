@@ -81,13 +81,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         IStartVisitor<ForwardDirectiveSymbol>,
         IStartVisitor<ExportsSectionSymbol>,
         IStartVisitor<ExportItemSymbol>,
-        IStartVisitor<RecordItem>,
+        IStartVisitor<RecordItemSymbol>,
         IStartVisitor<RecordDeclarationSymbol>,
-        IStartVisitor<RecordField>,
-        IStartVisitor<RecordVariantSection>,
-        IStartVisitor<RecordVariant>,
-        IStartVisitor<RecordHelperDefinition>,
-        IStartVisitor<RecordHelperItem>,
+        IStartVisitor<RecordFieldSymbol>,
+        IStartVisitor<RecordVariantSectionSymbol>,
+        IStartVisitor<RecordVariantSymbol>,
+        IStartVisitor<RecordHelperDefinitionSymbol>,
+        IStartVisitor<RecordHelperItemSymbol>,
         IStartVisitor<ObjectDeclarationSymbol>,
         IStartVisitor<ObjectItem>,
         IStartVisitor<InterfaceDefinitionSymbol>,
@@ -1845,7 +1845,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     start visiting a record declaration item
         /// </summary>
         /// <param name="recordDeclarationItem"></param>
-        public void StartVisit(RecordItem recordDeclarationItem) {
+        public void StartVisit(RecordItemSymbol recordDeclarationItem) {
             var parentType = LastValue as StructuredType;
 
             if (parentType == null)
@@ -1889,7 +1889,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     start visiting a field declaration
         /// </summary>
         /// <param name="fieldDeclaration"></param>
-        public void StartVisit(RecordField fieldDeclaration) {
+        public void StartVisit(RecordFieldSymbol fieldDeclaration) {
             StructuredType structType = null;
             StructureVariant varFields = null;
             IList<StructureFields> fields = null;
@@ -1912,7 +1912,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 fields.Add(result);
 
             IList<SymbolAttribute> extractedAttributes = null;
-            if (fieldDeclaration.ParentItem is RecordItem declItem) {
+            if (fieldDeclaration.ParentItem is RecordItemSymbol declItem) {
                 extractedAttributes = ExtractAttributes(declItem.Attributes1 as UserAttributes, CurrentUnit);
                 extractedAttributes = ExtractAttributes(declItem.Attributes2 as UserAttributes, CurrentUnit, extractedAttributes);
             }
@@ -1956,7 +1956,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     start visiting a variant section of a record definition
         /// </summary>
         /// <param name="variantSection"></param>
-        public void StartVisit(RecordVariantSection variantSection) {
+        public void StartVisit(RecordVariantSectionSymbol variantSection) {
             var structType = LastValue as StructuredType;
             var result = new StructureVariantItem();
             InitNode(result, variantSection);
@@ -1972,7 +1972,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     start visiting a record variant
         /// </summary>
         /// <param name="variantItem"></param>
-        public void StartVisit(RecordVariant variantItem) {
+        public void StartVisit(RecordVariantSymbol variantItem) {
             var structType = LastValue as StructureVariantItem;
             var result = new StructureVariantFields();
             InitNode(result, variantItem);
@@ -1987,7 +1987,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     start visiting a record helper definition
         /// </summary>
         /// <param name="recordHelper"></param>
-        public void StartVisit(RecordHelperDefinition recordHelper) {
+        public void StartVisit(RecordHelperDefinitionSymbol recordHelper) {
             var typeTarget = LastTypeDeclaration;
             var result = new StructuredType();
             InitNode(result, recordHelper);
@@ -2001,7 +2001,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     end visiting a record helper declaration
         /// </summary>
         /// <param name="classDeclaration"></param>
-        public void EndVisit(RecordHelperDefinition classDeclaration) {
+        public void EndVisit(RecordHelperDefinitionSymbol classDeclaration) {
             var parentType = LastValue as StructuredType;
             CurrentMemberVisibility.Reset(parentType);
         }
@@ -2013,7 +2013,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     start visiting a record declaration item
         /// </summary>
         /// <param name="recordDeclarationItem"></param>
-        public void StartVisit(RecordHelperItem recordDeclarationItem) {
+        public void StartVisit(RecordHelperItemSymbol recordDeclarationItem) {
             var parentType = LastValue as StructuredType;
 
             if (parentType == null)
