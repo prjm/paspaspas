@@ -12,9 +12,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         ///     create a new class declaration item
         /// </summary>
         /// <param name="varSymbol"></param>
-        public ClassDeclarationItemSymbol(Terminal varSymbol) {
-            VarSymbol = varSymbol;
-        }
+        public ClassDeclarationItemSymbol(Terminal varSymbol) => VarSymbol = varSymbol;
 
         /// <summary>
         ///     create a new class declaration item

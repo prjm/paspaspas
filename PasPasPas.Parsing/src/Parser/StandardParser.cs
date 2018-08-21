@@ -2388,7 +2388,13 @@ namespace PasPasPas.Parsing.Parser {
                     }
                 }
             }
-            return new GenericNamespaceNameSymbol(name, genericPart, allowDot ? ContinueWith(TokenKind.Dot) : null);
+
+            var dot = default(Terminal);
+
+            if (allowDot && (!inDesignator || !IsLastDisignatorPart()))
+                dot = ContinueWith(TokenKind.Dot);
+
+            return new GenericNamespaceNameSymbol(name, genericPart, dot);
         }
 
         #endregion
@@ -2644,8 +2650,13 @@ namespace PasPasPas.Parsing.Parser {
         #endregion
         #region ParseRecordDecl
 
+        /// <summary>
+        ///     parse a record declaration
+        /// </summary>
+        /// <returns></returns>
+
         [Rule("RecordDecl", "'record' RecordFieldList (RecordVariantSection | RecordItems ) 'end' ")]
-        private RecordDeclaration ParseRecordDecl() {
+        public RecordDeclarationSymbol ParseRecordDecl() {
             var recordSymbol = ContinueWithOrMissing(TokenKind.Record);
             var fieldList = default(RecordFieldList);
             var variantSection = default(RecordVariantSection);
@@ -2663,7 +2674,7 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             var endSymbol = ContinueWithOrMissing(TokenKind.End);
-            return new RecordDeclaration(recordSymbol, fieldList, variantSection, items, endSymbol);
+            return new RecordDeclarationSymbol(recordSymbol, fieldList, variantSection, items, endSymbol);
         }
 
         #endregion
@@ -2671,147 +2682,160 @@ namespace PasPasPas.Parsing.Parser {
 
         [Rule("RecordItems", "{ RecordItem }")]
         private RecordItems ParseRecordItems() {
-            var result = new RecordItems();
-            var mode = RecordDeclarationMode.Fields;
+            using (var list = GetList<RecordItem>()) {
+                var mode = RecordDeclarationMode.Fields;
 
-            while ((!Match(TokenKind.End)) && (mode != RecordDeclarationMode.Undefined)) {
-                ParseRecordItem(result, ref mode);
+                while ((!Match(TokenKind.End)) && (mode != RecordDeclarationMode.Undefined)) {
+                    AddToList(list, ParseRecordItem(ref mode));
 
-                if (mode == RecordDeclarationMode.Undefined && result.PartList.Count > 0) {
-                    Unexpected();
-                    return result;
+                    if (mode == RecordDeclarationMode.Undefined && list.Item.Count > 0) {
+                        Unexpected();
+                        break;
+                    }
                 }
-            }
 
-            return result;
+                return new RecordItems(GetFixedArray(list));
+            }
         }
 
         #endregion
         #region ParseRecordItem
 
         [Rule("RecordItem", "MethodDeclaration | PropertyDeclaration | ConstSection | TypeSection | RecordField | ( ['class'] VarSection) | Visibility ")]
-        private RecordItem ParseRecordItem(IExtendableSyntaxPart parent, ref RecordDeclarationMode mode) {
+        private RecordItem ParseRecordItem(ref RecordDeclarationMode mode) {
 
-            if (ContinueWith(parent, TokenKind.Var)) {
+            if (Match(TokenKind.Var)) {
                 mode = RecordDeclarationMode.Fields;
-                return null;
+                return new RecordItem(ContinueWith(TokenKind.Var));
             }
 
             if (Match(TokenKind.Class) && LookAhead(1, TokenKind.Var)) {
-                ContinueWith(parent, TokenKind.Class);
-                ContinueWith(parent, TokenKind.Var);
                 mode = RecordDeclarationMode.ClassFields;
-                return null;
+                return new RecordItem(ContinueWith(TokenKind.Class), ContinueWith(TokenKind.Var));
             }
 
-            var result = new RecordItem();
-            parent.Add(result);
+            var attributes1 = default(UserAttributes);
+            var attributes2 = default(UserAttributes);
+            var classItem = default(Terminal);
 
             if (Match(TokenKind.OpenBraces)) {
-                result.Attributes1 = ParseAttributes();
+                attributes1 = ParseAttributes();
             }
 
-            result.ClassItem = ContinueWith(result, TokenKind.Class);
+            classItem = ContinueWith(TokenKind.Class);
 
             if (Match(TokenKind.OpenBraces)) {
-                result.Attributes2 = ParseAttributes();
+                attributes2 = ParseAttributes();
             }
 
             if (Match(TokenKind.Public, TokenKind.Protected, TokenKind.Private, TokenKind.Strict, TokenKind.Published, TokenKind.Automated)) {
-                if (result.ClassItem) {
+                if (classItem != default) {
                     Unexpected();
                 }
-                else {
-                    result.Strict = ContinueWith(result, TokenKind.Strict);
-                    ContinueWith(result, TokenKind.Public, TokenKind.Protected, TokenKind.Private, TokenKind.Published, TokenKind.Automated);
-                    result.Visibility = result.LastTerminalKind;
-                }
+
+                var strict = ContinueWith(TokenKind.Strict);
+                var visibility = ContinueWith(TokenKind.Public, TokenKind.Protected, TokenKind.Private, TokenKind.Published, TokenKind.Automated);
                 mode = RecordDeclarationMode.Fields;
-                return result;
+                return new RecordItem(strict, visibility);
             }
 
             if (Match(TokenKind.Procedure, TokenKind.Function, TokenKind.Constructor, TokenKind.Destructor, TokenKind.Operator)) {
-                result.MethodDeclaration = ParseMethodDeclaration();
                 mode = RecordDeclarationMode.Other;
-                return result;
+                return new RecordItem(ParseMethodDeclaration());
             }
 
             if (Match(TokenKind.Property)) {
-                result.PropertyDeclaration = ParsePropertyDeclaration();
                 mode = RecordDeclarationMode.Other;
-                return result;
+                return new RecordItem(ParsePropertyDeclaration());
             }
 
-            if (Match(TokenKind.Case)) {
-                result.VariantSection = ParseRecordVariantSection();
-                return result;
-            }
+            if (classItem == default && Match(TokenKind.Case))
+                return new RecordItem(ParseRecordVariantSection());
 
-            if (!result.ClassItem && Match(TokenKind.Const)) {
-                result.ConstSection = ParseConstSection(true);
-                return result;
-            }
+            if (classItem == default && Match(TokenKind.Const))
+                return new RecordItem(ParseConstSection(true));
 
-            if (!result.ClassItem && Match(TokenKind.TypeKeyword)) {
-                result.TypeSection = ParseTypeSection(true);
-                return result;
-            }
+            if (classItem == default && Match(TokenKind.TypeKeyword))
+                return new RecordItem(ParseTypeSection(true));
 
             if (MatchIdentifier() && (!Match(TokenKind.Private, TokenKind.Protected, TokenKind.Public, TokenKind.Published, TokenKind.Automated, TokenKind.Strict))) {
                 if (mode == RecordDeclarationMode.Fields || mode == RecordDeclarationMode.ClassFields) {
-                    result.ClassItem = mode == RecordDeclarationMode.ClassFields;
-                    result.Fields = ParseRecordFieldList(true);
-                    return result;
+                    return new RecordItem(ParseRecordFieldList(true));
                 }
-                else {
-                    Unexpected();
-                }
+
+                Unexpected();
             }
 
             mode = RecordDeclarationMode.Undefined;
-            return result;
+            return null;
         }
 
         #endregion
         #region ParseRecordVariantSection
 
+        /// <summary>
+        ///     parse a record variant section
+        /// </summary>
+        /// <returns></returns>
+
         [Rule("RecordVariantSection", "'case' [ Identifier ': ' ] TypeDeclaration 'of' { RecordVariant } ")]
-        private RecordVariantSection ParseRecordVariantSection() {
-            var result = new RecordVariantSection();
-            InitByTerminal(result, null, TokenKind.Case);
+        public RecordVariantSection ParseRecordVariantSection() {
+            using (var list = GetList<RecordVariant>()) {
+                var caseSymbol = ContinueWith(TokenKind.Case);
+                var variantName = default(IdentifierSymbol);
+                var colonSymbol = default(Terminal);
 
-            if (MatchIdentifier() && LookAhead(1, TokenKind.Colon)) {
-                result.Name = RequireIdentifier();
-                ContinueWithOrMissing(result, TokenKind.Colon);
+                if (MatchIdentifier() && LookAhead(1, TokenKind.Colon)) {
+                    variantName = RequireIdentifier();
+                    colonSymbol = ContinueWithOrMissing(TokenKind.Colon);
+                }
+                var typeDeclaration = ParseTypeSpecification();
+                var ofSymbol = ContinueWithOrMissing(TokenKind.Of);
+                var item = default(RecordVariant);
+
+                do {
+                    if (Match(TokenKind.End, TokenKind.Undefined))
+                        item = default;
+                    else
+                        item = AddToList(list, ParseRecordVariant());
+
+                } while (item != default && item.Semicolon != default);
+
+                return new RecordVariantSection(caseSymbol, variantName, colonSymbol, typeDeclaration, ofSymbol, GetFixedArray(list));
             }
-            result.TypeDeclaration = ParseTypeSpecification();
-            ContinueWithOrMissing(result, TokenKind.Of);
-
-            while (!Match(TokenKind.Undefined, TokenKind.End)) {
-                ParseRecordVariant(result);
-                ContinueWith(result, TokenKind.Semicolon);
-            }
-
-            return result;
         }
 
         #endregion
         #region ParseRecordVariant
 
+        /// <summary>
+        ///     parse a record variant
+        /// </summary>
+        /// <returns></returns>
+
         [Rule("RecordVariant", "ConstantExpression { , ConstantExpression } : '(' FieldList ')' ';' ")]
-        private RecordVariant ParseRecordVariant(IExtendableSyntaxPart parent) {
-            var result = new RecordVariant();
-            parent.Add(result);
+        public RecordVariant ParseRecordVariant() {
+            using (var list = GetList<ConstantExpressionSymbol>()) {
+                var item = default(ConstantExpressionSymbol);
 
-            do {
-                ParseConstantExpression();
-            } while (ContinueWith(result, TokenKind.Comma));
+                do {
+                    item = AddToList(list, ParseConstantExpression(false, false, true));
+                } while (item != default && item.Comma != default);
 
-            ContinueWithOrMissing(result, TokenKind.Colon);
-            ContinueWithOrMissing(result, TokenKind.OpenParen);
-            result.FieldList = ParseRecordFieldList(false);
-            ContinueWithOrMissing(result, TokenKind.CloseParen);
-            return result;
+                var colonSymbol = ContinueWithOrMissing(TokenKind.Colon);
+                var openParen = ContinueWithOrMissing(TokenKind.OpenParen);
+                var fieldList = ParseRecordFieldList(false);
+                var variantSection = default(RecordVariantSection);
+
+                if (Match(TokenKind.Case)) {
+                    variantSection = ParseRecordVariantSection();
+                }
+
+                var closeParen = ContinueWithOrMissing(TokenKind.CloseParen);
+                var semicolon = ContinueWith(TokenKind.Semicolon);
+
+                return new RecordVariant(GetFixedArray(list), colonSymbol, openParen, fieldList, variantSection, closeParen, semicolon);
+            }
         }
 
         #endregion
@@ -4291,7 +4315,7 @@ namespace PasPasPas.Parsing.Parser {
 
                 if (LookAhead(1, TokenKind.CloseParen) || (LookAheadIdentifier(1, Array.Empty<int>(), true) && (LookAhead(2, TokenKind.Colon)))) {
                     openParen = ContinueWithOrMissing(TokenKind.OpenParen);
-                    var record = default(RecordConstantExpression);
+                    var record = default(RecordConstantExpressionSymbol);
                     using (var list = GetList<SyntaxPartBase>()) {
                         do {
                             if (!Match(TokenKind.CloseParen)) {
@@ -4349,13 +4373,19 @@ namespace PasPasPas.Parsing.Parser {
         #endregion
         #region ParseRecordConstant
 
+        /// <summary>
+        ///     parse a record constant expression
+        /// </summary>
+        /// <param name="allowSemicolon"></param>
+        /// <returns></returns>
+
         [Rule("RecordConstantExpression", "Identifier ':' ConstantExpression")]
-        private RecordConstantExpression ParseRecordConstant(bool allowSemicolon) {
+        public RecordConstantExpressionSymbol ParseRecordConstant(bool allowSemicolon) {
             var name = RequireIdentifier();
             var colon = ContinueWithOrMissing(TokenKind.Colon);
             var value = ParseConstantExpression();
             var semicolon = allowSemicolon ? ContinueWith(TokenKind.Semicolon) : default;
-            return new RecordConstantExpression(name, colon, value, semicolon);
+            return new RecordConstantExpressionSymbol(name, colon, value, semicolon);
         }
 
         #endregion
@@ -4543,14 +4573,18 @@ namespace PasPasPas.Parsing.Parser {
             var inherited = ContinueWith(TokenKind.Inherited);
             var name = default(TypeName);
             var item = default(SyntaxPartBase);
+            var hasIdentifier = false;
 
             if (MatchIdentifier(TokenKind.String, TokenKind.ShortString, TokenKind.AnsiString, TokenKind.WideString, TokenKind.String) && LookAhead(1, TokenKind.Dot, TokenKind.AngleBracketsOpen)) {
                 name = ParseTypeName(true);
+                hasIdentifier = name != default;
             }
 
             using (var list = GetList<SyntaxPartBase>()) {
                 do {
-                    item = AddToList(list, ParseDesignatorItem());
+                    item = AddToList(list, ParseDesignatorItem(hasIdentifier));
+                    var di = item as DesignatorItemSymbol;
+                    hasIdentifier = hasIdentifier || (di != default && di.Subitem != default);
                 } while (item != default);
 
                 return new DesignatorStatementSymbol(inherited, name, GetFixedArray(list));
@@ -4589,7 +4623,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <returns></returns>
 
         [Rule("DesignatorItem", "'^' | '.' Ident [GenericSuffix] | '[' ExpressionList ']' | '(' [ FormattedExpression  { ',' FormattedExpression } ] ')'")]
-        public SyntaxPartBase ParseDesignatorItem() {
+        public SyntaxPartBase ParseDesignatorItem(bool hasIdentifier) {
 
             if (Match(TokenKind.Circumflex))
                 return new DesignatorItemSymbol(ContinueWithOrMissing(TokenKind.Circumflex));
@@ -4603,7 +4637,9 @@ namespace PasPasPas.Parsing.Parser {
             var openParen = default(Terminal);
             var closeParen = default(Terminal);
 
-            if (MatchIdentifier(TokenKind.String, TokenKind.ShortString, TokenKind.AnsiString, TokenKind.UnicodeString)) {
+            if (Match(TokenKind.Dot) ||
+                (!hasIdentifier && MatchIdentifier(TokenKind.String, TokenKind.AnsiString, TokenKind.ShortString, TokenKind.WideString, TokenKind.UnicodeString))) {
+                dot = ContinueWith(TokenKind.Dot);
                 subitem = RequireIdentifier(true);
             };
 
@@ -4646,16 +4682,19 @@ namespace PasPasPas.Parsing.Parser {
                 }
             }
 
-            dot = ContinueWith(TokenKind.Dot);
-
             if (dot != null || subitem != null || genericSuffix != null)
                 return new DesignatorItemSymbol(dot, subitem, genericSuffix, openParen, ImmutableArray<ParameterSymbol>.Empty, closeParen);
-            else
-                return default;
+
+            return default;
         }
 
         #endregion
         #region ParseFormattedExpression
+
+        /// <summary>
+        ///     parse a formatted expression
+        /// </summary>
+        /// <returns></returns>
 
         [Rule("FormattedExpression", "Expression [ ':' Expression [ ':' Expression ] ]")]
         public FormattedExpressionSymbol ParseFormattedExpression() {

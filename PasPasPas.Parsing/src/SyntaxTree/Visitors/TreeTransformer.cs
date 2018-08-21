@@ -29,7 +29,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         IStartVisitor<VarDeclaration>,
         IStartVisitor<VarValueSpecification>, IEndVisitor<VarValueSpecification>,
         IStartVisitor<ConstantExpressionSymbol>,
-        IStartVisitor<RecordConstantExpression>,
+        IStartVisitor<RecordConstantExpressionSymbol>,
         IStartVisitor<ExpressionSymbol>,
         IStartVisitor<SimpleExpression>,
         IStartVisitor<Term>,
@@ -82,7 +82,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         IStartVisitor<ExportsSectionSymbol>,
         IStartVisitor<ExportItemSymbol>,
         IStartVisitor<RecordItem>,
-        IStartVisitor<RecordDeclaration>,
+        IStartVisitor<RecordDeclarationSymbol>,
         IStartVisitor<RecordField>,
         IStartVisitor<RecordVariantSection>,
         IStartVisitor<RecordVariant>,
@@ -511,7 +511,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     start visiting a constant expresion
         /// </summary>
         /// <param name="constExpression"></param>
-        public void StartVisit(RecordConstantExpression constExpression) {
+        public void StartVisit(RecordConstantExpressionSymbol constExpression) {
             var lastExpression = LastExpression;
             var expression = new RecordConstantItem();
             InitNode(expression, constExpression);
@@ -1863,7 +1863,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     start visiting a record declaration
         /// </summary>
         /// <param name="recordDeclaration"></param>
-        public void StartVisit(RecordDeclaration recordDeclaration) {
+        public void StartVisit(RecordDeclarationSymbol recordDeclaration) {
             var typeTarget = LastTypeDeclaration;
             var result = new StructuredType();
             InitNode(result, recordDeclaration);
@@ -1877,7 +1877,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     end visiting a record declaration
         /// </summary>
         /// <param name="recordDeclaration"></param>
-        public void EndVisit(RecordDeclaration recordDeclaration) {
+        public void EndVisit(RecordDeclarationSymbol recordDeclaration) {
             var parentType = LastValue as StructuredType;
             CurrentMemberVisibility.Reset(parentType);
         }

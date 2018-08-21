@@ -6,7 +6,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// <summary>
     ///     class for a record constant expression
     /// </summary>
-    public class RecordConstantExpression : StandardSyntaxTreeBase {
+    public class RecordConstantExpressionSymbol : StandardSyntaxTreeBase {
 
         /// <summary>
         ///     create a new record constant expression
@@ -15,7 +15,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="colon"></param>
         /// <param name="value"></param>
         /// <param name="semicolon"></param>
-        public RecordConstantExpression(IdentifierSymbol name, Terminal colon, ConstantExpressionSymbol value, Terminal semicolon) {
+        public RecordConstantExpressionSymbol(IdentifierSymbol name, Terminal colon, ConstantExpressionSymbol value, Terminal semicolon) {
             Name = name;
             ColonSymbol = colon;
             Value = value;

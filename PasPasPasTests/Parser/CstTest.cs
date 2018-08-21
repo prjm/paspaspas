@@ -945,13 +945,13 @@ namespace PasPasPasTests.Parser {
 
         [TestCase]
         public void TestDesignatorItem() {
-            var s = RunCstTest(p => p.ParseDesignatorItem(), "^");
+            var s = RunCstTest(p => p.ParseDesignatorItem(false), "^");
             Assert.AreEqual(1, s.Length);
 
-            s = RunCstTest(p => p.ParseDesignatorItem(), "a[x]");
+            s = RunCstTest(p => p.ParseDesignatorItem(false), "a[x]");
             Assert.AreEqual(4, s.Length);
 
-            s = RunCstTest(p => p.ParseDesignatorItem(), "a<b>[x]");
+            s = RunCstTest(p => p.ParseDesignatorItem(false), "a<b>[x]");
             Assert.AreEqual(7, s.Length);
         }
 
@@ -1964,6 +1964,44 @@ namespace PasPasPasTests.Parser {
             Assert.IsNotNull(s.AtSymbol);
             Assert.IsNotNull(s.AtExpression);
             Assert.AreEqual(12, s.Length);
+        }
+
+        [TestCase]
+        public void TetRealNumber() {
+            var s = RunCstTest(p => p.RequireRealValue(), "3.4443");
+            Assert.IsNotNull(s.Symbol);
+            Assert.AreEqual(6, s.Length);
+        }
+
+        [TestCase]
+        public void TestRecordConstantExpression() {
+            var s = RunCstTest(p => p.ParseRecordConstant(true), "a: 5;");
+            Assert.IsNotNull(s.Name);
+            Assert.IsNotNull(s.ColonSymbol);
+            Assert.IsNotNull(s.Value);
+            Assert.IsNotNull(s.Separator);
+            Assert.AreEqual(5, s.Length);
+        }
+
+        [TestCase]
+        public void TestRecordDeclaration() {
+            var s = RunCstTest(p => p.ParseRecordDecl(), "record a: string end");
+            Assert.IsNotNull(s.RecordSymbol);
+            Assert.IsNotNull(s.FieldList);
+            Assert.IsNotNull(s.EndSymbol);
+            Assert.AreEqual(20, s.Length);
+
+            s = RunCstTest(p => p.ParseRecordDecl(), "record a: string; case byte of 1: (x: integer); 2: (z: integer); end");
+            Assert.IsNotNull(s.RecordSymbol);
+            Assert.IsNotNull(s.FieldList);
+            Assert.IsNotNull(s.VariantSection);
+            Assert.IsNotNull(s.EndSymbol);
+            Assert.AreEqual(68, s.Length);
+
+            s = RunCstTest(p => p.ParseRecordDecl(), "record var a: string; end");
+            Assert.IsNotNull(s.Items);
+            Assert.AreEqual(25, s.Length);
+
         }
 
     }

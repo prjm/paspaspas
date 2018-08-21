@@ -6,7 +6,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// <summary>
     ///     record declaration
     /// </summary>
-    public class RecordDeclaration : StandardSyntaxTreeBase {
+    public class RecordDeclarationSymbol : StandardSyntaxTreeBase {
 
         /// <summary>
         ///     create  new record declaration
@@ -16,7 +16,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="variantSection"></param>
         /// <param name="items"></param>
         /// <param name="endSymbol"></param>
-        public RecordDeclaration(Terminal recordSymbol, RecordFieldList fieldList, RecordVariantSection variantSection, RecordItems items, Terminal endSymbol) {
+        public RecordDeclarationSymbol(Terminal recordSymbol, RecordFieldList fieldList, RecordVariantSection variantSection, RecordItems items, Terminal endSymbol) {
             RecordSymbol = recordSymbol;
             FieldList = fieldList;
             VariantSection = variantSection;

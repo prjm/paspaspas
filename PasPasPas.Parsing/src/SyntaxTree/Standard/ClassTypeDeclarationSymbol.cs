@@ -54,7 +54,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         ///     create a new class declaration symbol
         /// </summary>
         /// <param name="recordDeclaration"></param>
-        public ClassTypeDeclarationSymbol(RecordDeclaration recordDeclaration)
+        public ClassTypeDeclarationSymbol(RecordDeclarationSymbol recordDeclaration)
             => RecordDecl = recordDeclaration;
 
         /// <summary>
@@ -85,7 +85,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     record declaration
         /// </summary>
-        public RecordDeclaration RecordDecl { get; }
+        public RecordDeclarationSymbol RecordDecl { get; }
 
         /// <summary>
         ///     record helper
