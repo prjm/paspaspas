@@ -33,7 +33,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// </summary>
         /// <param name="stringType"></param>
         /// <param name="comma"></param>
-        public TypeSpecification(StringType stringType, Terminal comma) {
+        public TypeSpecification(StringTypeSymbol stringType, Terminal comma) {
             StringType = stringType;
             Comma = comma;
         }
@@ -53,7 +53,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// </summary>
         /// <param name="simpleType"></param>
         /// <param name="comma"></param>
-        public TypeSpecification(SimpleType simpleType, Terminal comma) {
+        public TypeSpecification(SimpleTypeSymbol simpleType, Terminal comma) {
             SimpleType = simpleType;
             Comma = comma;
         }
@@ -71,12 +71,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     simple type
         /// </summary>
-        public SimpleType SimpleType { get; }
+        public SimpleTypeSymbol SimpleType { get; }
 
         /// <summary>
         ///     string type
         /// </summary>
-        public StringType StringType { get; }
+        public StringTypeSymbol StringType { get; }
 
         /// <summary>
         ///     structured type

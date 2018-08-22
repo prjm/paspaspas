@@ -40,16 +40,16 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         IStartVisitor<PackageContainsSymbol>, IEndVisitor<PackageContainsSymbol>,
         IStartVisitor<StructType>, IEndVisitor<StructType>,
         IStartVisitor<ArrayTypeSymbol>,
-        IStartVisitor<SetDefinition>,
+        IStartVisitor<SetDefinitionSymbol>,
         IStartVisitor<FileTypeSymbol>,
         IStartVisitor<ClassOfDeclarationSymbol>,
         IStartVisitor<TypeName>,
-        IStartVisitor<SimpleType>,
+        IStartVisitor<SimpleTypeSymbol>,
         IStartVisitor<EnumTypeDefinitionSymbol>,
         IStartVisitor<EnumValueSymbol>,
         IStartVisitor<ArrayIndexSymbol>,
         IStartVisitor<PointerTypeSymbol>,
-        IStartVisitor<StringType>,
+        IStartVisitor<StringTypeSymbol>,
         IStartVisitor<ProcedureTypeDefinitionSymbol>,
         IStartVisitor<FormalParameterDefinitionSymbol>,
         IStartVisitor<FormalParameterSymbol>,
@@ -122,12 +122,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         IStartVisitor<DesignatorItemSymbol>,
         IStartVisitor<ParameterSymbol>,
         IStartVisitor<Standard.FormattedExpressionSymbol>,
-        IStartVisitor<SetSection>,
-        IStartVisitor<SetSectnPart>,
+        IStartVisitor<SetSectionSymbol>,
+        IStartVisitor<SetSectionPartSymbol>,
         IStartVisitor<AsmFactorSymbol>,
         IChildVisitor<CaseStatementSymbol>,
         IChildVisitor<TypeName>,
-        IChildVisitor<SimpleType>,
+        IChildVisitor<SimpleTypeSymbol>,
         IChildVisitor<MethodDirectivesSymbol>,
         IChildVisitor<FunctionDirectivesSymbol>,
         IChildVisitor<TryStatement>,
@@ -858,7 +858,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     start visiting a set
         /// </summary>
         /// <param name="set"></param>
-        public void StartVisit(SetDefinition set) {
+        public void StartVisit(SetDefinitionSymbol set) {
             var typeTarget = LastTypeDeclaration;
             var value = new SetTypeDeclaration();
             InitNode(value, set);
@@ -943,7 +943,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     visit a simple type
         /// </summary>
         /// <param name="simpleType"></param>
-        public void StartVisit(SimpleType simpleType) {
+        public void StartVisit(SimpleTypeSymbol simpleType) {
             var typeTarget = LastTypeDeclaration;
 
             if (simpleType.SubrangeStart != null) {
@@ -971,7 +971,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// </summary>
         /// <param name="simpleType"></param>
         /// <param name="part"></param>
-        public void StartVisitChild(SimpleType simpleType, ISyntaxPart part) {
+        public void StartVisitChild(SimpleTypeSymbol simpleType, ISyntaxPart part) {
             var value = LastValue as TypeAlias;
 
             if (!(part is GenericNamespaceNameSymbol name) || value == null)
@@ -1067,13 +1067,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     start visit a string type
         /// </summary>
         /// <param name="stringType"></param>
-        public void StartVisit(StringType stringType) {
+        public void StartVisit(StringTypeSymbol stringType) {
             var typeTarget = LastTypeDeclaration;
             var result = new MetaType();
             InitNode(result, stringType);
             result.Kind = TokenKindMapper.ForMetaType(stringType.Kind);
 
-            if (result.Kind == MetaTypeKind.ShortString && stringType.StringLength == null)
+            if (result.Kind == MetaTypeKind.ShortString && stringType.CodePageOrStringLength == null)
                 result.Kind = MetaTypeKind.ShortStringDefault;
 
             typeTarget.TypeValue = result;
@@ -2884,7 +2884,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     start visiting a set expression
         /// </summary>
         /// <param name="expr"></param>
-        public void StartVisit(SetSection expr) {
+        public void StartVisit(SetSectionSymbol expr) {
             var lastExpression = LastExpression;
             var result = new SetExpression();
             InitNode(result, expr);
@@ -2899,7 +2899,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     start visiting a set section
         /// </summary>
         /// <param name="part"></param>
-        public void StartVisit(SetSectnPart part) {
+        public void StartVisit(SetSectionPartSymbol part) {
             if (part.Continuation.GetSymbolKind() != TokenKind.DotDot) {
                 var arrayExpression = LastExpression as SetExpression;
 
@@ -3333,7 +3333,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// </summary>
         /// <param name="element"></param>
         /// <param name="child"></param>
-        public void EndVisitChild(SimpleType element, ISyntaxPart child) {
+        public void EndVisitChild(SimpleTypeSymbol element, ISyntaxPart child) {
         }
 
         /// <summary>

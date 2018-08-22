@@ -1,20 +1,21 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Text;
+using PasPasPas.Api;
+using PasPasPas.Infrastructure.Files;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Options.Bundles;
 using PasPasPas.Options.DataTypes;
-using PasPasPas.Parsing.SyntaxTree.Visitors;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using PasPasPas.Parsing.Parser;
+using PasPasPas.Parsing.Parser.Standard;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Parsing.SyntaxTree.Utils;
-using PasPasPas.Api;
-using PasPasPasTests.Common;
-using PasPasPas.Infrastructure.Files;
-using PasPasPas.Parsing.Parser;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 using PasPasPas.Typings.Common;
-using System.Globalization;
-using System.IO;
+using PasPasPasTests.Common;
 
 namespace PasPasPasTests.Parser {
 

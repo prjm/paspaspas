@@ -10,7 +10,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     statement
         /// </summary>
-        public Statement Statement { get; set; }
+        public StatementSymbol Statement { get; set; }
 
         /// <summary>
         ///     accept visitor

@@ -6,13 +6,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// <summary>
     ///     string type
     /// </summary>
-    public class StringType : StandardSyntaxTreeBase {
+    public class StringTypeSymbol : StandardSyntaxTreeBase {
 
         /// <summary>
         ///     create a new string type
         /// </summary>
         /// <param name="stringType"></param>
-        public StringType(Terminal stringType)
+        public StringTypeSymbol(Terminal stringType)
             => StringSymbol = stringType;
 
         /// <summary>
@@ -22,28 +22,23 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="openParen"></param>
         /// <param name="codePage"></param>
         /// <param name="closeParen"></param>
-        public StringType(Terminal stringSymbol, Terminal openParen, ConstantExpressionSymbol codePage, Terminal closeParen) {
+        public StringTypeSymbol(Terminal stringSymbol, Terminal openParen, ConstantExpressionSymbol codePage, Terminal closeParen) {
             StringSymbol = stringSymbol;
             OpenParen = openParen;
-            CodePage = codePage;
+            CodePageOrStringLength = codePage;
             CloseParen = closeParen;
         }
 
         /// <summary>
         ///     code page
         /// </summary>
-        public ConstantExpressionSymbol CodePage { get; }
+        public ConstantExpressionSymbol CodePageOrStringLength { get; }
 
         /// <summary>
         ///     kind of the string
         /// </summary>
         public int Kind
             => StringSymbol.GetSymbolKind();
-
-        /// <summary>
-        ///     string length
-        /// </summary>
-        public ExpressionSymbol StringLength { get; }
 
         /// <summary>
         ///     string type
@@ -68,7 +63,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
             visitor.StartVisit(this);
             AcceptPart(this, StringSymbol, visitor);
             AcceptPart(OpenParen, StringSymbol, visitor);
-            AcceptPart(CodePage, StringSymbol, visitor);
+            AcceptPart(CodePageOrStringLength, StringSymbol, visitor);
             AcceptPart(CloseParen, StringSymbol, visitor);
             visitor.EndVisit(this);
         }
@@ -79,7 +74,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         public override int Length
             => StringSymbol.GetSymbolLength() +
                OpenParen.GetSymbolLength() +
-               CodePage.GetSymbolLength() +
+               CodePageOrStringLength.GetSymbolLength() +
                CloseParen.GetSymbolLength();
 
 

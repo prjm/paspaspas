@@ -7,13 +7,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// <summary>
     ///     simple type definition
     /// </summary>
-    public class SimpleType : VariableLengthSyntaxTreeBase<GenericNamespaceNameSymbol> {
+    public class SimpleTypeSymbol : VariableLengthSyntaxTreeBase<GenericNamespaceNameSymbol> {
 
         /// <summary>
         ///     create a new simple type
         /// </summary>
         /// <param name="enumTypeDefinition"></param>
-        public SimpleType(EnumTypeDefinitionSymbol enumTypeDefinition) : base(ImmutableArray<GenericNamespaceNameSymbol>.Empty)
+        public SimpleTypeSymbol(EnumTypeDefinitionSymbol enumTypeDefinition) : base(ImmutableArray<GenericNamespaceNameSymbol>.Empty)
             => EnumType = enumTypeDefinition;
 
         /// <summary>
@@ -22,7 +22,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="newType"></param>
         /// <param name="typeOf"></param>
         /// <param name="items"></param>
-        public SimpleType(Terminal newType, Terminal typeOf, ImmutableArray<GenericNamespaceNameSymbol> items) : base(items) {
+        public SimpleTypeSymbol(Terminal newType, Terminal typeOf, ImmutableArray<GenericNamespaceNameSymbol> items) : base(items) {
             NewType = newType;
             TypeOf = typeOf;
         }
@@ -35,7 +35,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="subrangeStart"></param>
         /// <param name="dotDot"></param>
         /// <param name="subrangeEnd"></param>
-        public SimpleType(Terminal newType, Terminal typeOf, ConstantExpressionSymbol subrangeStart, Terminal dotDot, ConstantExpressionSymbol subrangeEnd) : base(ImmutableArray<GenericNamespaceNameSymbol>.Empty) {
+        public SimpleTypeSymbol(Terminal newType, Terminal typeOf, ConstantExpressionSymbol subrangeStart, Terminal dotDot, ConstantExpressionSymbol subrangeEnd) : base(ImmutableArray<GenericNamespaceNameSymbol>.Empty) {
             NewType = newType;
             TypeOf = typeOf;
             SubrangeStart = subrangeStart;

@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using PasPasPas.Building.Definition;
 using PasPasPas.Building.Engine;
-using PasPasPas.Infrastructure.Log;
-using PasPasPas.Parsing.Parser;
-using PasPasPas.Options.Bundles;
-using System.Text;
-using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Infrastructure.Files;
-using PasPasPas.Infrastructure.Environment;
+using PasPasPas.Infrastructure.Log;
+using PasPasPas.Options.Bundles;
+using PasPasPas.Parsing.Parser.Standard;
+using PasPasPas.Parsing.SyntaxTree.Utils;
 
 namespace PasPasPas.Building.Tasks {
 

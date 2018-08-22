@@ -18,7 +18,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="doSymbol"></param>
         /// <param name="statement"></param>
         /// <param name="semicolon"></param>
-        public ExceptHandlerSymbol(Terminal on, IdentifierSymbol name, Terminal colon, TypeName type, Terminal doSymbol, Statement statement, Terminal semicolon) {
+        public ExceptHandlerSymbol(Terminal on, IdentifierSymbol name, Terminal colon, TypeName type, Terminal doSymbol, StatementSymbol statement, Terminal semicolon) {
             On = on;
             Name = name;
             Colon = colon;
@@ -41,7 +41,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     statement
         /// </summary>
-        public Statement Statement { get; }
+        public StatementSymbol Statement { get; }
 
         /// <summary>
         ///     on terminal

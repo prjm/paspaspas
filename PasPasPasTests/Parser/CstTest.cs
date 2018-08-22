@@ -2180,5 +2180,96 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(24, s.Length);
         }
 
+        [TestCase]
+        public void TestSetDefinition() {
+            var s = RunCstTest(p => p.ParseSetDefinition(), "set of tenum");
+            Assert.IsNotNull(s.SetSymbol);
+            Assert.IsNotNull(s.OfSymbol);
+            Assert.IsNotNull(s.TypeDefinition);
+            Assert.AreEqual(12, s.Length);
+        }
+
+        [TestCase]
+        public void TestSetSection() {
+            var s = RunCstTest(p => p.ParseSetSection(), "[a,b]");
+            Assert.IsNotNull(s.OpenBraces);
+            Assert.IsNotNull(s.Items[0]);
+            Assert.IsNotNull(s.Items[0].Continuation);
+            Assert.IsNotNull(s.Items[1]);
+            Assert.IsNotNull(s.CloseBraces);
+            Assert.AreEqual(5, s.Length);
+        }
+
+        [TestCase]
+        public void TestSetSectionPart() {
+            var s = RunCstTest(p => p.ParseSetSectionPart(), "a,");
+            Assert.IsNotNull(s.SetExpression);
+            Assert.IsNotNull(s.Continuation);
+            Assert.AreEqual(2, s.Length);
+
+            s = RunCstTest(p => p.ParseSetSectionPart(), "a..");
+            Assert.IsNotNull(s.SetExpression);
+            Assert.IsNotNull(s.Continuation);
+            Assert.AreEqual(3, s.Length);
+        }
+
+        [TestCase]
+        public void TestSimpleType() {
+            var s = RunCstTest(p => p.ParseSimpleType(), "(a,b)");
+            Assert.IsNotNull(s.EnumType);
+            Assert.AreEqual(5, s.Length);
+
+            s = RunCstTest(p => p.ParseSimpleType(), "type a");
+            Assert.IsNotNull(s.NewType);
+            Assert.AreEqual(6, s.Length);
+
+            s = RunCstTest(p => p.ParseSimpleType(), "type of a");
+            Assert.IsNotNull(s.NewType);
+            Assert.IsNotNull(s.TypeOf);
+            Assert.AreEqual(9, s.Length);
+
+            s = RunCstTest(p => p.ParseSimpleType(), "1..3");
+            Assert.IsNotNull(s.SubrangeStart);
+            Assert.IsNotNull(s.DotDot);
+            Assert.IsNotNull(s.SubrangeEnd);
+            Assert.AreEqual(4, s.Length);
+        }
+
+        [TestCase]
+        public void TestSimpleExpression() {
+            var s = RunCstTest(p => p.ParseSimpleExpression(), "a+b");
+            Assert.IsNotNull(s.LeftOperand);
+            Assert.IsNotNull(s.Operator);
+            Assert.IsNotNull(s.RightOperand);
+            Assert.AreEqual(3, s.Length);
+        }
+
+        [TestCase]
+        public void TestInteger() {
+            var s = RunCstTest(p => p.RequireInteger(), "3364");
+            Assert.IsNotNull(s.Value);
+            Assert.AreEqual(4, s.Length);
+        }
+
+        [TestCase]
+        public void TestStatement() {
+            var s = RunCstTest(p => p.ParseStatement(true), "a: x;");
+            Assert.IsNotNull(s.Label);
+            Assert.IsNotNull(s.ColonSymbol);
+            Assert.IsNotNull(s.Part);
+            Assert.IsNotNull(s.Semicolon);
+            Assert.AreEqual(5, s.Length);
+        }
+
+        [TestCase]
+        public void TestStringType() {
+            var s = RunCstTest(p => p.ParseStringType(), "string[23]");
+            Assert.IsNotNull(s.StringSymbol);
+            Assert.IsNotNull(s.OpenParen);
+            Assert.IsNotNull(s.CodePageOrStringLength);
+            Assert.IsNotNull(s.CloseParen);
+            Assert.AreEqual(10, s.Length);
+        }
+
     }
 }

@@ -6,7 +6,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// <summary>
     ///     single statement
     /// </summary>
-    public class Statement : StandardSyntaxTreeBase {
+    public class StatementSymbol : StandardSyntaxTreeBase {
 
         /// <summary>
         ///     create a new statement
@@ -15,7 +15,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="colonSymbol"></param>
         /// <param name="part"></param>
         /// <param name="semicolon"></param>
-        public Statement(LabelSymbol label, Terminal colonSymbol, StatementPart part, Terminal semicolon) {
+        public StatementSymbol(LabelSymbol label, Terminal colonSymbol, StatementPart part, Terminal semicolon) {
             Label = label;
             ColonSymbol = colonSymbol;
             Part = part;

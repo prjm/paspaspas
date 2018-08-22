@@ -16,7 +16,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="colon"></param>
         /// <param name="semicolon"></param>
         /// <param name="statement"></param>
-        public CaseItemSymbol(ImmutableArray<CaseLabelSymbol> items, Terminal colon, Statement statement, Terminal semicolon) : base(items) {
+        public CaseItemSymbol(ImmutableArray<CaseLabelSymbol> items, Terminal colon, StatementSymbol statement, Terminal semicolon) : base(items) {
             ColonSymbol = colon;
             CaseStatement = statement;
             Semicolon = semicolon;
@@ -25,7 +25,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     case statement
         /// </summary>
-        public Statement CaseStatement { get; }
+        public StatementSymbol CaseStatement { get; }
 
         /// <summary>
         ///     semicolon

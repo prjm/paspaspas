@@ -17,7 +17,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="thenPart"></param>
         /// <param name="elseSymbol"></param>
         /// <param name="elsePart"></param>
-        public IfStatementSymbol(Terminal ifSymbol, ExpressionSymbol condition, Terminal thenSymbol, Statement thenPart, Terminal elseSymbol, Statement elsePart) {
+        public IfStatementSymbol(Terminal ifSymbol, ExpressionSymbol condition, Terminal thenSymbol, StatementSymbol thenPart, Terminal elseSymbol, StatementSymbol elsePart) {
             IfSymbol = ifSymbol;
             Condition = condition;
             ThenSymbol = thenSymbol;
@@ -34,12 +34,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     else part
         /// </summary>
-        public Statement ElsePart { get; }
+        public StatementSymbol ElsePart { get; }
 
         /// <summary>
         ///     then part
         /// </summary>
-        public Statement ThenPart { get; }
+        public StatementSymbol ThenPart { get; }
         public Terminal IfSymbol { get; set; }
         public Terminal ThenSymbol { get; set; }
         public Terminal ElseSymbol { get; set; }

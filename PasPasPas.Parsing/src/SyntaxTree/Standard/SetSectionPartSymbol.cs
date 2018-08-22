@@ -6,14 +6,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// <summary>
     ///     set section part
     /// </summary>
-    public class SetSectnPart : StandardSyntaxTreeBase {
+    public class SetSectionPartSymbol : StandardSyntaxTreeBase {
 
         /// <summary>
         ///     create a new set section
         /// </summary>
         /// <param name="setExpression"></param>
         /// <param name="continuation"></param>
-        public SetSectnPart(ExpressionSymbol setExpression, Terminal continuation) {
+        public SetSectionPartSymbol(ExpressionSymbol setExpression, Terminal continuation) {
             SetExpression = setExpression;
             Continuation = continuation;
         }
@@ -43,7 +43,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         ///     symbol length
         /// </summary>
         public override int Length
-            => SetExpression.GetSymbolLength() + Continuation.GetSymbolLength();
+            => SetExpression.GetSymbolLength() +
+                Continuation.GetSymbolLength();
 
 
     }

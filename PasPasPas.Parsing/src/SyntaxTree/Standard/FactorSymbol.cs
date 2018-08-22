@@ -108,7 +108,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         ///     create a new factor
         /// </summary>
         /// <param name="setSection"></param>
-        public FactorSymbol(SetSection setSection)
+        public FactorSymbol(SetSectionSymbol setSection)
             => SetSection = setSection;
 
         /// <summary>
@@ -182,7 +182,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     set section
         /// </summary>
-        public SetSection SetSection { get; }
+        public SetSectionSymbol SetSection { get; }
 
         /// <summary>
         ///     string factor

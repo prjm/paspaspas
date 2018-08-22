@@ -7,7 +7,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// <summary>
     ///     set expression
     /// </summary>
-    public class SetSection : VariableLengthSyntaxTreeBase<SetSectnPart> {
+    public class SetSectionSymbol : VariableLengthSyntaxTreeBase<SetSectionPartSymbol> {
 
         /// <summary>
         ///     create a new set section
@@ -15,7 +15,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="openBraces"></param>
         /// <param name="items"></param>
         /// <param name="closeBraces"></param>
-        public SetSection(Terminal openBraces, ImmutableArray<SetSectnPart> items, Terminal closeBraces) : base(items) {
+        public SetSectionSymbol(Terminal openBraces, ImmutableArray<SetSectionPartSymbol> items, Terminal closeBraces) : base(items) {
             OpenBraces = openBraces;
             CloseBraces = closeBraces;
         }

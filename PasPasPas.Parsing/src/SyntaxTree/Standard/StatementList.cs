@@ -6,13 +6,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// <summary>
     ///     statement list
     /// </summary>
-    public class StatementList : VariableLengthSyntaxTreeBase<Statement> {
+    public class StatementList : VariableLengthSyntaxTreeBase<StatementSymbol> {
 
         /// <summary>
         ///     create a new statement list
         /// </summary>
         /// <param name="items"></param>
-        public StatementList(ImmutableArray<Statement> items) : base(items) {
+        public StatementList(ImmutableArray<StatementSymbol> items) : base(items) {
         }
 
         /// <summary>

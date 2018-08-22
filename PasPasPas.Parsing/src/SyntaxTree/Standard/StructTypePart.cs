@@ -19,7 +19,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         ///     create a new structured type part
         /// </summary>
         /// <param name="setDefinition"></param>
-        public StructTypePart(SetDefinition setDefinition)
+        public StructTypePart(SetDefinitionSymbol setDefinition)
             => SetType = setDefinition;
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     set type declaration
         /// </summary>
-        public SetDefinition SetType { get; }
+        public SetDefinitionSymbol SetType { get; }
 
         /// <summary>
         ///     accept visitor
