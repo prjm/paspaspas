@@ -6,14 +6,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// <summary>
     ///     structured type
     /// </summary>
-    public class StructType : StandardSyntaxTreeBase {
+    public class StructTypeSymbol : StandardSyntaxTreeBase {
 
         /// <summary>
         ///     create a new structured type symbol
         /// </summary>
         /// <param name="packed"></param>
         /// <param name="part"></param>
-        public StructType(Terminal packed, StructTypePart part) {
+        public StructTypeSymbol(Terminal packed, StructTypePart part) {
             PackedSymbol = packed;
             Part = part;
         }

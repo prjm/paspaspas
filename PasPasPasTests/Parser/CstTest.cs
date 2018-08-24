@@ -1967,7 +1967,7 @@ namespace PasPasPasTests.Parser {
         }
 
         [TestCase]
-        public void TetRealNumber() {
+        public void TestRealNumber() {
             var s = RunCstTest(p => p.RequireRealValue(), "3.4443");
             Assert.IsNotNull(s.Symbol);
             Assert.AreEqual(6, s.Length);
@@ -2269,6 +2269,195 @@ namespace PasPasPasTests.Parser {
             Assert.IsNotNull(s.CodePageOrStringLength);
             Assert.IsNotNull(s.CloseParen);
             Assert.AreEqual(10, s.Length);
+        }
+
+        [TestCase]
+        public void TestStructType() {
+            var s = RunCstTest(p => p.ParseStructType(), "packed record end");
+            Assert.IsNotNull(s.PackedSymbol);
+            Assert.IsNotNull(s.Part);
+            Assert.AreEqual(17, s.Length);
+        }
+
+        [TestCase]
+        public void TestTerm() {
+            var s = RunCstTest(p => p.ParseTerm(), "5*4");
+            Assert.IsNotNull(s.LeftOperand);
+            Assert.IsNotNull(s.Operator);
+            Assert.IsNotNull(s.RightOperand);
+            Assert.AreEqual(3, s.Length);
+        }
+
+        [TestCase]
+        public void TestTry() {
+            var s = RunCstTest(p => p.ParseTryStatement(), "try a; except b; end");
+            Assert.IsNotNull(s.TrySymbol);
+            Assert.IsNotNull(s.Try);
+            Assert.IsNotNull(s.ExceptSymbol);
+            Assert.IsNotNull(s.Handlers.Statements);
+            Assert.IsNotNull(s.EndSymbol);
+            Assert.AreEqual(20, s.Length);
+
+            s = RunCstTest(p => p.ParseTryStatement(), "try a; finally b; end");
+            Assert.IsNotNull(s.TrySymbol);
+            Assert.IsNotNull(s.Try);
+            Assert.IsNotNull(s.FinallySymbol);
+            Assert.IsNotNull(s.Finally);
+            Assert.IsNotNull(s.EndSymbol);
+            Assert.AreEqual(21, s.Length);
+        }
+
+        [TestCase]
+        public void TestExceptHandlers() {
+            var s = RunCstTest(p => p.ParseExceptHandlers(), "a;");
+            Assert.IsNotNull(s.Statements);
+            Assert.AreEqual(2, s.Length);
+
+            s = RunCstTest(p => p.ParseExceptHandlers(), "on a: x; on b: x; else x;");
+            Assert.IsNotNull(s.Items[0]);
+            Assert.IsNotNull(s.Items[1]);
+            Assert.IsNotNull(s.ElseSymbol);
+            Assert.IsNotNull(s.Statements);
+            Assert.AreEqual(25, s.Length);
+        }
+
+        [TestCase]
+        public void TestTypeDeclaration() {
+            var s = RunCstTest(p => p.ParseTypeDeclaration(), "[a] ta = record end;");
+            Assert.IsNotNull(s.Attributes);
+            Assert.IsNotNull(s.TypeId);
+            Assert.IsNotNull(s.EqualsSign);
+            Assert.IsNotNull(s.TypeSpecification);
+            Assert.IsNotNull(s.Semicolon);
+            Assert.AreEqual(20, s.Length);
+        }
+
+        [TestCase]
+        public void TestTypeName() {
+            var s = RunCstTest(p => p.ParseTypeName(), "a.b.c");
+            Assert.IsNotNull(s.Items[0]);
+            Assert.AreEqual(5, s.Length);
+
+            s = RunCstTest(p => p.ParseTypeName(), "string");
+            Assert.IsNotNull(s.StringTypeSymbol);
+            Assert.AreEqual(6, s.Length);
+        }
+
+        [TestCase]
+        public void TestTypeSection() {
+            var s = RunCstTest(p => p.ParseTypeSection(false), "type a = class end;");
+            Assert.IsNotNull(s.TypeKeyword);
+            Assert.IsNotNull(s.Items[0]);
+            Assert.AreEqual(19, s.Length);
+        }
+
+        [TestCase]
+        public void TestTypeSpecification() {
+            var s = RunCstTest(p => p.ParseTypeSpecification(), "array of string");
+            Assert.IsNotNull(s.StructuredType);
+            Assert.AreEqual(15, s.Length);
+
+            s = RunCstTest(p => p.ParseTypeSpecification(), "pointer");
+            Assert.IsNotNull(s.PointerType);
+            Assert.AreEqual(7, s.Length);
+
+            s = RunCstTest(p => p.ParseTypeSpecification(), "string");
+            Assert.IsNotNull(s.StringType);
+            Assert.AreEqual(6, s.Length);
+
+            s = RunCstTest(p => p.ParseTypeSpecification(), "procedure of object");
+            Assert.IsNotNull(s.ProcedureType);
+            Assert.AreEqual(19, s.Length);
+
+            s = RunCstTest(p => p.ParseTypeSpecification(), "reference to procedure");
+            Assert.IsNotNull(s.ProcedureType);
+            Assert.AreEqual(22, s.Length);
+
+            s = RunCstTest(p => p.ParseTypeSpecification(), "(a,b)");
+            Assert.IsNotNull(s.SimpleType);
+            Assert.AreEqual(5, s.Length);
+        }
+
+        [TestCase]
+        public void TestUnitBlock() {
+            var s = RunCstTest(p => p.ParseUnitBlock(), "end");
+            Assert.IsNotNull(s.EndSymbol);
+            Assert.AreEqual(3, s.Length);
+
+            s = RunCstTest(p => p.ParseUnitBlock(), "begin a; end");
+            Assert.IsNotNull(s.MainBlock);
+            Assert.AreEqual(12, s.Length);
+
+            s = RunCstTest(p => p.ParseUnitBlock(), "initialization end");
+            Assert.IsNotNull(s.Initialization);
+            Assert.AreEqual(18, s.Length);
+        }
+
+        [TestCase]
+        public void TestUnitFinalization() {
+            var s = RunCstTest(p => p.ParseUnitFinalization(), "finalization a;");
+            Assert.IsNotNull(s.FinalizationSymbol);
+            Assert.IsNotNull(s.Statements);
+            Assert.IsNotNull(s.Statements.Items[0]);
+            Assert.AreEqual(15, s.Length);
+        }
+
+        [TestCase]
+        public void TestUnitHead() {
+            var s = RunCstTest(p => p.ParseUnitHead(), "unit a.b.c library;");
+            Assert.IsNotNull(s.Unit);
+            Assert.IsNotNull(s.UnitName);
+            Assert.IsNotNull(s.Hint);
+            Assert.IsNotNull(s.Semicolon);
+            Assert.AreEqual(19, s.Length);
+        }
+
+        [TestCase]
+        public void TestUnitImplementation() {
+            var s = RunCstTest(p => p.ParseUnitImplementation(), "implementation uses a; type t = class end;");
+            Assert.IsNotNull(s.Implementation);
+            Assert.IsNotNull(s.UsesClause);
+            Assert.IsNotNull(s.DeclarationSections);
+            Assert.AreEqual(42, s.Length);
+        }
+
+        [TestCase]
+        public void TestUnitInitialization() {
+            var s = RunCstTest(p => p.ParseUnitInitialization(), "initialization a; finalization b;");
+            Assert.IsNotNull(s.InitSymbol);
+            Assert.IsNotNull(s.Statements);
+            Assert.IsNotNull(s.Finalization);
+            Assert.AreEqual(33, s.Length);
+        }
+
+        [TestCase]
+        public void TestUnitInterface() {
+            var s = RunCstTest(p => p.ParseUnitInterface(), "interface uses a; type t = class end;");
+            Assert.IsNotNull(s.InterfaceSymbol);
+            Assert.IsNotNull(s.UsesClause);
+            Assert.IsNotNull(s.InterfaceDeclaration);
+            Assert.AreEqual(37, s.Length);
+        }
+
+        [TestCase]
+        public void TestUnsafeDirective() {
+            var s = RunCstTest(p => p.ParseUnsafeDirective(), "unsafe;");
+            Assert.IsNotNull(s.Directive);
+            Assert.IsNotNull(s.Semicolon);
+            Assert.AreEqual(7, s.Length);
+        }
+
+        [TestCase]
+        public void TestUserAttribute() {
+            var s = RunCstTest(p => p.ParseAttribute(true), "a:b(1,2),");
+            Assert.IsNotNull(s.Prefix);
+            Assert.IsNotNull(s.Colon);
+            Assert.IsNotNull(s.Name);
+            Assert.IsNotNull(s.Expressions);
+            Assert.IsNotNull(s.Expressions.Items[0]);
+            Assert.IsNotNull(s.CloseParen);
+            Assert.IsNotNull(s.Comma);
+            Assert.AreEqual(9, s.Length);
         }
 
     }

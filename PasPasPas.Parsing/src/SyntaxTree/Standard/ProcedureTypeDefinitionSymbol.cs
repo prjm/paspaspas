@@ -16,7 +16,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="colonSymbol"></param>
         /// <param name="attributes"></param>
         /// <param name="returnType"></param>
-        public ProcedureTypeDefinitionSymbol(Terminal kindSymbol, FormalParameterSection parameters, Terminal colonSymbol, UserAttributes attributes, TypeSpecification returnType, bool allowAnonymousMethods) {
+        public ProcedureTypeDefinitionSymbol(Terminal kindSymbol, FormalParameterSection parameters, Terminal colonSymbol, UserAttributes attributes, TypeSpecificationSymbol returnType, bool allowAnonymousMethods) {
             KindSymbol = kindSymbol;
             Parameters = parameters;
             ColonSymbol = colonSymbol;
@@ -44,7 +44,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     return types
         /// </summary>
-        public TypeSpecification ReturnType { get; }
+        public TypeSpecificationSymbol ReturnType { get; }
 
         /// <summary>
         ///     attributes of return types

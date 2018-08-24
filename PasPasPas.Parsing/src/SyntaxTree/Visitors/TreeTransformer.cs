@@ -19,10 +19,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         IStartVisitor<ProgramSymbol>, IEndVisitor<ProgramSymbol>,
         IStartVisitor<PackageSymbol>, IEndVisitor<PackageSymbol>,
         IStartVisitor<UnitInterfaceSymbol>, IEndVisitor<UnitInterfaceSymbol>,
-        IStartVisitor<UnitImplementation>, IEndVisitor<UnitImplementation>,
+        IStartVisitor<UnitImplementationSymbol>, IEndVisitor<UnitImplementationSymbol>,
         IStartVisitor<ConstSectionSymbol>, IEndVisitor<ConstSectionSymbol>,
-        IStartVisitor<TypeSection>, IEndVisitor<TypeSection>,
-        IStartVisitor<Standard.TypeDeclaration>, IEndVisitor<Standard.TypeDeclaration>,
+        IStartVisitor<TypeSectionSymbol>, IEndVisitor<TypeSectionSymbol>,
+        IStartVisitor<Standard.TypeDeclarationSymbol>, IEndVisitor<Standard.TypeDeclarationSymbol>,
         IStartVisitor<ConstDeclarationSymbol>,
         IStartVisitor<LabelDeclarationSection>, IEndVisitor<LabelDeclarationSection>,
         IStartVisitor<VarSection>, IEndVisitor<VarSection>,
@@ -32,18 +32,18 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         IStartVisitor<RecordConstantExpressionSymbol>,
         IStartVisitor<ExpressionSymbol>,
         IStartVisitor<SimpleExpression>,
-        IStartVisitor<Term>,
+        IStartVisitor<TermSymbol>,
         IStartVisitor<FactorSymbol>,
         IStartVisitor<UsesClause>,
         IStartVisitor<UsesFileClause>,
         IStartVisitor<PackageRequiresSymbol>, IEndVisitor<PackageRequiresSymbol>,
         IStartVisitor<PackageContainsSymbol>, IEndVisitor<PackageContainsSymbol>,
-        IStartVisitor<StructType>, IEndVisitor<StructType>,
+        IStartVisitor<StructTypeSymbol>, IEndVisitor<StructTypeSymbol>,
         IStartVisitor<ArrayTypeSymbol>,
         IStartVisitor<SetDefinitionSymbol>,
         IStartVisitor<FileTypeSymbol>,
         IStartVisitor<ClassOfDeclarationSymbol>,
-        IStartVisitor<TypeName>,
+        IStartVisitor<TypeNameSymbol>,
         IStartVisitor<SimpleTypeSymbol>,
         IStartVisitor<EnumTypeDefinitionSymbol>,
         IStartVisitor<EnumValueSymbol>,
@@ -53,8 +53,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         IStartVisitor<ProcedureTypeDefinitionSymbol>,
         IStartVisitor<FormalParameterDefinitionSymbol>,
         IStartVisitor<FormalParameterSymbol>,
-        IStartVisitor<UnitInitialization>,
-        IStartVisitor<UnitFinalization>,
+        IStartVisitor<UnitInitializationSymbol>,
+        IStartVisitor<UnitFinalizationSymbol>,
         IStartVisitor<CompoundStatementSymbol>, IEndVisitor<CompoundStatementSymbol>,
         IStartVisitor<LabelSymbol>, IEndVisitor<LabelSymbol>,
         IStartVisitor<ClassDeclarationSymbol>, IEndVisitor<ClassDeclarationSymbol>,
@@ -77,7 +77,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         IStartVisitor<CallConventionSymbol>,
         IStartVisitor<BindingSymbol>,
         IStartVisitor<ExportedProcedureHeadingSymbol>,
-        IStartVisitor<UnsafeDirective>,
+        IStartVisitor<UnsafeDirectiveSymbol>,
         IStartVisitor<ForwardDirectiveSymbol>,
         IStartVisitor<ExportsSectionSymbol>,
         IStartVisitor<ExportItemSymbol>,
@@ -99,8 +99,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         IStartVisitor<StatementPart>,
         IStartVisitor<ClosureExpressionSymbol>,
         IStartVisitor<RaiseStatementSymbol>,
-        IStartVisitor<TryStatement>,
-        IStartVisitor<ExceptHandlers>,
+        IStartVisitor<TryStatementSymbol>,
+        IStartVisitor<ExceptHandlersSymbol>,
         IStartVisitor<ExceptHandlerSymbol>,
         IStartVisitor<WithStatement>,
         IStartVisitor<ForStatementSymbol>,
@@ -126,11 +126,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         IStartVisitor<SetSectionPartSymbol>,
         IStartVisitor<AsmFactorSymbol>,
         IChildVisitor<CaseStatementSymbol>,
-        IChildVisitor<TypeName>,
+        IChildVisitor<TypeNameSymbol>,
         IChildVisitor<SimpleTypeSymbol>,
         IChildVisitor<MethodDirectivesSymbol>,
         IChildVisitor<FunctionDirectivesSymbol>,
-        IChildVisitor<TryStatement>,
+        IChildVisitor<TryStatementSymbol>,
         IChildVisitor<IfStatementSymbol> {
 
         private readonly Visitor visitor;
@@ -284,7 +284,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     start visiting an implementation
         /// </summary>
         /// <param name="unitImplementation"></param>
-        public void StartVisit(UnitImplementation unitImplementation) {
+        public void StartVisit(UnitImplementationSymbol unitImplementation) {
             CurrentUnitMode[CurrentUnit] = UnitMode.Implementation;
             CurrentUnit.Symbols = CurrentUnit.ImplementationSymbols;
             AddToStack(unitImplementation, CurrentUnit.ImplementationSymbols);
@@ -294,7 +294,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     finish the implementation part
         /// </summary>
         /// <param name="unit"></param>
-        public void EndVisit(UnitImplementation unit) {
+        public void EndVisit(UnitImplementationSymbol unit) {
             CurrentUnit.Symbols = null;
             CurrentUnitMode.Reset(CurrentUnit);
         }
@@ -330,14 +330,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     start visiting a type section
         /// </summary>
         /// <param name="typeSection"></param>
-        public void StartVisit(TypeSection typeSection)
+        public void StartVisit(TypeSectionSymbol typeSection)
             => CurrentDeclarationMode = DeclarationMode.Types;
 
         /// <summary>
         ///     finish visiting a type section
         /// </summary>
         /// <param name="typeSection"></param>
-        public void EndVisit(TypeSection typeSection)
+        public void EndVisit(TypeSectionSymbol typeSection)
             => CurrentDeclarationMode = DeclarationMode.Unknown;
 
         #endregion
@@ -347,7 +347,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     start visiting a type declaration
         /// </summary>
         /// <param name="typeDeclaration"></param>
-        public void StartVisit(Standard.TypeDeclaration typeDeclaration) {
+        public void StartVisit(Standard.TypeDeclarationSymbol typeDeclaration) {
             var symbols = LastValue as IDeclaredSymbolTarget;
             var declaration = new Abstract.TypeDeclaration();
             InitNode(declaration, typeDeclaration);
@@ -363,7 +363,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     finish visiting a type declaration
         /// </summary>
         /// <param name="typeDeclaration"></param>
-        public void EndVisit(Standard.TypeDeclaration typeDeclaration) {
+        public void EndVisit(Standard.TypeDeclarationSymbol typeDeclaration) {
         }
 
         #endregion
@@ -560,7 +560,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     visit a term
         /// </summary>
         /// <param name="term"></param>
-        public void StartVisit(Term term) {
+        public void StartVisit(TermSymbol term) {
             if (term.LeftOperand != null && term.RightOperand != null) {
                 var lastExpression = LastExpression;
                 var currentExpression = new BinaryOperator();
@@ -813,7 +813,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     visit a structured type
         /// </summary>
         /// <param name="structType"></param>
-        public void StartVisit(StructType structType) {
+        public void StartVisit(StructTypeSymbol structType) {
             if (structType.Packed)
                 CurrentStructTypeMode = StructTypeMode.Packed;
             else
@@ -825,7 +825,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     finish visiting a struct type
         /// </summary>
         /// <param name="structType"></param>
-        public void EndVisit(StructType structType)
+        public void EndVisit(StructTypeSymbol structType)
             => CurrentStructTypeMode = StructTypeMode.Undefined;
 
         #endregion
@@ -903,7 +903,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     visit a type name
         /// </summary>
         /// <param name="typeName"></param>
-        public void StartVisit(TypeName typeName) {
+        public void StartVisit(TypeNameSymbol typeName) {
             var typeTarget = LastTypeDeclaration;
             var value = new MetaType();
             InitNode(value, typeName);
@@ -916,7 +916,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// </summary>
         /// <param name="typeName"></param>
         /// <param name="part"></param>
-        public void StartVisitChild(TypeName typeName, ISyntaxPart part) {
+        public void StartVisitChild(TypeNameSymbol typeName, ISyntaxPart part) {
             var value = LastValue as MetaType;
 
             if (!(part is GenericNamespaceNameSymbol name) || value == null)
@@ -1139,7 +1139,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     start visit an unit initialization block
         /// </summary>
         /// <param name="unitBlock"></param>
-        public void StartVisit(UnitInitialization unitBlock) {
+        public void StartVisit(UnitInitializationSymbol unitBlock) {
             var result = new BlockOfStatements();
             InitNode(result, unitBlock, CurrentUnit);
             CurrentUnit.InitializationBlock = result;
@@ -1152,7 +1152,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     visit a finalization section
         /// </summary>
         /// <param name="unitBlock"></param>
-        public void StartVisit(UnitFinalization unitBlock) {
+        public void StartVisit(UnitFinalizationSymbol unitBlock) {
             var result = new BlockOfStatements();
             InitNode(result, unitBlock, CurrentUnit);
             CurrentUnit.FinalizationBlock = result;
@@ -1775,7 +1775,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     start visiting an unsafe directive
         /// </summary>
         /// <param name="directive"></param>
-        public void StartVisit(UnsafeDirective directive) {
+        public void StartVisit(UnsafeDirectiveSymbol directive) {
             var parent = LastValue as IDirectiveTarget;
             var result = new MethodDirective();
             InitNode(result, directive);
@@ -2290,7 +2290,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     start visiting a try statement
         /// </summary>
         /// <param name="tryStatement"></param>
-        public void StartVisit(TryStatement tryStatement) {
+        public void StartVisit(TryStatementSymbol tryStatement) {
             var target = LastValue as IStatementTarget;
             var result = new StructuredStatement();
             InitNode(result, tryStatement);
@@ -2311,7 +2311,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// </summary>
         /// <param name="tryStatement"></param>
         /// <param name="child"></param>
-        public void StartVisitChild(TryStatement tryStatement, ISyntaxPart child) {
+        public void StartVisitChild(TryStatementSymbol tryStatement, ISyntaxPart child) {
             var statements = child as StatementList;
 
             if (statements == null)
@@ -2330,7 +2330,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     start visiting exception handlers
         /// </summary>
         /// <param name="exceptHandlers"></param>
-        public void StartVisit(ExceptHandlers exceptHandlers) {
+        public void StartVisit(ExceptHandlersSymbol exceptHandlers) {
             var target = LastValue as IStatementTarget;
             var result = new StructuredStatement();
             InitNode(result, exceptHandlers);
@@ -3161,7 +3161,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 result = new List<SymbolAttribute>();
 
             foreach (var part in attributes.Parts) {
-                var attribute = part as UserAttributeDefinition;
+                var attribute = part as UserAttributeDefinitionSymbol;
                 var isAssemblyAttribute = false;
 
                 var userAttribute = new SymbolAttribute() {
@@ -3325,7 +3325,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// </summary>
         /// <param name="element"></param>
         /// <param name="child"></param>
-        public void EndVisitChild(TypeName element, ISyntaxPart child) {
+        public void EndVisitChild(TypeNameSymbol element, ISyntaxPart child) {
         }
 
         /// <summary>
@@ -3357,7 +3357,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// </summary>
         /// <param name="element"></param>
         /// <param name="child"></param>
-        public void EndVisitChild(TryStatement element, ISyntaxPart child) {
+        public void EndVisitChild(TryStatementSymbol element, ISyntaxPart child) {
         }
 
         /// <summary>

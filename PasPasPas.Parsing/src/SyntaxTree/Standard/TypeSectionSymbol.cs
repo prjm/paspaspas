@@ -7,14 +7,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// <summary>
     ///     type section
     /// </summary>
-    public class TypeSection : VariableLengthSyntaxTreeBase<TypeDeclaration> {
+    public class TypeSectionSymbol : VariableLengthSyntaxTreeBase<TypeDeclarationSymbol> {
 
         /// <summary>
         ///     create a new type section
         /// </summary>
         /// <param name="typeKeyword"></param>
         /// <param name="items"></param>
-        public TypeSection(Terminal typeKeyword, ImmutableArray<TypeDeclaration> items) : base(items)
+        public TypeSectionSymbol(Terminal typeKeyword, ImmutableArray<TypeDeclarationSymbol> items) : base(items)
             => TypeKeyword = typeKeyword;
 
         /// <summary>

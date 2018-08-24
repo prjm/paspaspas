@@ -6,11 +6,15 @@ namespace PasPasPas.Parsing.Parser.Standard {
 
         #region ParseStructType
 
+        /// <summary>
+        ///     parse a structured type
+        /// </summary>
+        /// <returns></returns>
         [Rule("StructType", "[ 'packed' ] StructTypePart")]
-        private StructType ParseStructType() {
+        public StructTypeSymbol ParseStructType() {
             var packed = ContinueWith(TokenKind.Packed);
             var part = ParseStructTypePart();
-            return new StructType(packed, part);
+            return new StructTypeSymbol(packed, part);
         }
 
         #endregion

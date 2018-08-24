@@ -18,7 +18,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="typeDeclaration"></param>
         /// <param name="ofSymbol"></param>
         /// <param name="items"></param>
-        public RecordVariantSectionSymbol(Terminal caseSymbol, IdentifierSymbol variantName, Terminal colonSymbol, TypeSpecification typeDeclaration, Terminal ofSymbol, ImmutableArray<RecordVariantSymbol> items) : base(items) {
+        public RecordVariantSectionSymbol(Terminal caseSymbol, IdentifierSymbol variantName, Terminal colonSymbol, TypeSpecificationSymbol typeDeclaration, Terminal ofSymbol, ImmutableArray<RecordVariantSymbol> items) : base(items) {
             CaseSymbol = caseSymbol;
             Name = variantName;
             ColonSymbol = colonSymbol;
@@ -34,7 +34,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     type declaration
         /// </summary>
-        public TypeSpecification TypeDeclaration { get; }
+        public TypeSpecificationSymbol TypeDeclaration { get; }
 
         /// <summary>
         ///     case symbol

@@ -20,7 +20,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// </summary>
         /// <param name="pointerSymbol"></param>
         /// <param name="typeSpecification"></param>
-        public PointerTypeSymbol(Terminal pointerSymbol, TypeSpecification typeSpecification) : this(pointerSymbol)
+        public PointerTypeSymbol(Terminal pointerSymbol, TypeSpecificationSymbol typeSpecification) : this(pointerSymbol)
             => TypeSpecification = typeSpecification;
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     type specification for non generic pointers
         /// </summary>
-        public TypeSpecification TypeSpecification { get; }
+        public TypeSpecificationSymbol TypeSpecification { get; }
 
         /// <summary>
         ///     pointer symbol

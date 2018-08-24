@@ -14,7 +14,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="classSymbol"></param>
         /// <param name="ofSymbol"></param>
         /// <param name="typeName"></param>
-        public ClassOfDeclarationSymbol(Terminal classSymbol, Terminal ofSymbol, TypeName typeName) {
+        public ClassOfDeclarationSymbol(Terminal classSymbol, Terminal ofSymbol, TypeNameSymbol typeName) {
             ClassSymbol = classSymbol;
             OfSymbol = ofSymbol;
             TypeRef = typeName;
@@ -22,7 +22,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     type name
         /// </summary>
-        public TypeName TypeRef { get; }
+        public TypeNameSymbol TypeRef { get; }
 
         /// <summary>
         ///     class symbol

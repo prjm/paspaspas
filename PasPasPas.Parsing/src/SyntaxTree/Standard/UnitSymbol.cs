@@ -17,7 +17,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     unit block
         /// </summary>
-        public UnitBlock UnitBlock { get; set; }
+        public UnitBlockSymbol UnitBlock { get; set; }
 
         /// <summary>
         ///     unit head section
@@ -27,7 +27,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     unit implementation section
         /// </summary>
-        public UnitImplementation UnitImplementation { get; set; }
+        public UnitImplementationSymbol UnitImplementation { get; set; }
 
         /// <summary>
         ///     unit interface

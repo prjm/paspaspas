@@ -37,7 +37,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         ///     create a new class helper symbol
         /// </summary>
         /// <param name="typeSection"></param>
-        public ClassHelperItemSymbol(TypeSection typeSection)
+        public ClassHelperItemSymbol(TypeSectionSymbol typeSection)
             => TypeSection = typeSection;
 
         /// <summary>

@@ -18,7 +18,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="equals"></param>
         /// <param name="defaultValue"></param>
         /// <param name="semicolon"></param>
-        public FormalParameterDefinitionSymbol(ImmutableArray<FormalParameterSymbol> items, Terminal colon, TypeSpecification typeDef, Terminal equals, ExpressionSymbol defaultValue, Terminal semicolon) : base(items) {
+        public FormalParameterDefinitionSymbol(ImmutableArray<FormalParameterSymbol> items, Terminal colon, TypeSpecificationSymbol typeDef, Terminal equals, ExpressionSymbol defaultValue, Terminal semicolon) : base(items) {
             ColonSymbol = colon;
             TypeDeclaration = typeDef;
             EqualsSign = equals;
@@ -39,7 +39,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     type declaration
         /// </summary>
-        public TypeSpecification TypeDeclaration { get; }
+        public TypeSpecificationSymbol TypeDeclaration { get; }
 
         /// <summary>
         ///     equals sign

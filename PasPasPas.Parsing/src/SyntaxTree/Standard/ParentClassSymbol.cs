@@ -7,7 +7,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// <summary>
     ///     parent class definition
     /// </summary>
-    public class ParentClassSymbol : VariableLengthSyntaxTreeBase<TypeName> {
+    public class ParentClassSymbol : VariableLengthSyntaxTreeBase<TypeNameSymbol> {
 
         /// <summary>
         ///     create a new parent class definition
@@ -15,7 +15,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="openParen"></param>
         /// <param name="typeNames"></param>
         /// <param name="closeParen"></param>
-        public ParentClassSymbol(Terminal openParen, ImmutableArray<TypeName> typeNames, Terminal closeParen) : base(typeNames) {
+        public ParentClassSymbol(Terminal openParen, ImmutableArray<TypeNameSymbol> typeNames, Terminal closeParen) : base(typeNames) {
             OpenParen = openParen;
             CloseParen = closeParen;
         }

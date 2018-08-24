@@ -14,7 +14,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="setSymbol"></param>
         /// <param name="ofSymbol"></param>
         /// <param name="typeDefinition"></param>
-        public SetDefinitionSymbol(Terminal setSymbol, Terminal ofSymbol, TypeSpecification typeDefinition) {
+        public SetDefinitionSymbol(Terminal setSymbol, Terminal ofSymbol, TypeSpecificationSymbol typeDefinition) {
             SetSymbol = setSymbol;
             OfSymbol = ofSymbol;
             TypeDefinition = typeDefinition;
@@ -23,7 +23,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     inner type reference
         /// </summary>
-        public TypeSpecification TypeDefinition { get; }
+        public TypeSpecificationSymbol TypeDefinition { get; }
 
         /// <summary>
         ///     of symbol

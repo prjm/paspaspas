@@ -26,7 +26,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         ///     create a new record helper item
         /// </summary>
         /// <param name="typeSection"></param>
-        public RecordHelperItemSymbol(TypeSection typeSection)
+        public RecordHelperItemSymbol(TypeSectionSymbol typeSection)
             => TypeSection = typeSection;
 
         /// <summary>
@@ -107,7 +107,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     report helper types
         /// </summary>
-        public TypeSection TypeSection { get; }
+        public TypeSectionSymbol TypeSection { get; }
 
         /// <summary>
         ///     field

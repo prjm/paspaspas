@@ -166,37 +166,40 @@ namespace PasPasPas.Parsing.Parser.Standard {
         /// <returns></returns>
 
         [Rule("UnitInterface", "'interface' [ UsesClause ] InterfaceDeclaration ")]
-        public UnitInterfaceSymbol ParseUnitInterface() => new UnitInterfaceSymbol() {
-            InterfaceSymbol = ContinueWithOrMissing(TokenKind.Interface),
-            UsesClause = Match(TokenKind.Uses) ? (ISyntaxPart)ParseUsesClause(null) : EmptyTerminal(),
-            InterfaceDeclaration = ParseInterfaceDeclaration()
-        };
+        public UnitInterfaceSymbol ParseUnitInterface()
+            => new UnitInterfaceSymbol(
+                interfaceSymbol: ContinueWithOrMissing(TokenKind.Interface),
+                usesClause: Match(TokenKind.Uses) ? ParseUsesClause() : default,
+                interfaceDeclaration: ParseInterfaceDeclaration());
 
         #endregion
         #region ParseUnitImplementation
 
+        /// <summary>
+        ///     parse a unit implementation symbol
+        /// </summary>
+        /// <returns></returns>
+
         [Rule("UnitImplementation", "'implementation' [ UsesClause ] DeclarationSections", true)]
-        private UnitImplementation ParseUnitImplementation() {
-            var result = new UnitImplementation();
-            InitByTerminal(result, null, TokenKind.Implementation);
+        public UnitImplementationSymbol ParseUnitImplementation() {
+            var implementation = ContinueWithOrMissing(TokenKind.Implementation);
+            var usesClause = default(UsesClause);
 
-            if (Match(TokenKind.Uses)) {
-                result.UsesClause = ParseUsesClause(result);
-            }
+            if (Match(TokenKind.Uses))
+                usesClause = ParseUsesClause();
 
-            result.DeclarationSections = ParseDeclarationSections();
-            return result;
+            var declarationSections = ParseDeclarationSections();
+            return new UnitImplementationSymbol(implementation, usesClause, declarationSections);
         }
 
         #endregion
         #region ParseUsesClause
 
         [Rule("UsesClause", "'uses' NamespaceNameList")]
-        private UsesClause ParseUsesClause(IExtendableSyntaxPart parent) {
-            var result = new UsesClause();
-            InitByTerminal(result, parent, TokenKind.Uses);
-            result.UsesList = ParseNamespaceNameList();
-            return result;
+        private UsesClause ParseUsesClause() {
+            var usesSymbol = ContinueWithOrMissing(TokenKind.Uses);
+            var usesList = ParseNamespaceNameList();
+            return new UsesClause(usesSymbol, usesList);
         }
 
         #endregion
@@ -281,29 +284,23 @@ namespace PasPasPas.Parsing.Parser.Standard {
         [Rule("InterfaceDeclarationItem", "ConstSection | TypeSection | VarSection | ExportsSection | AssemblyAttribute | ExportedProcedureHeading")]
         private SyntaxPartBase ParseInterfaceDeclarationItem(IExtendableSyntaxPart parent) {
 
-            if (Match(TokenKind.Const) || Match(TokenKind.Resourcestring)) {
+            if (Match(TokenKind.Const) || Match(TokenKind.Resourcestring))
                 return ParseConstSection(false);
-            }
 
-            if (Match(TokenKind.TypeKeyword)) {
+            if (Match(TokenKind.TypeKeyword))
                 return ParseTypeSection(false);
-            }
 
-            if (Match(TokenKind.Var)) {
+            if (Match(TokenKind.Var))
                 return ParseVarSection(false);
-            }
 
-            if (Match(TokenKind.Exports)) {
+            if (Match(TokenKind.Exports))
                 return ParseExportsSection();
-            }
 
-            if (Match(TokenKind.OpenBraces) && LookAhead(1, TokenKind.Assembly)) {
+            if (Match(TokenKind.OpenBraces) && LookAhead(1, TokenKind.Assembly))
                 return ParseAttributes();
-            }
 
-            if (Match(TokenKind.Procedure, TokenKind.Function)) {
+            if (Match(TokenKind.Procedure, TokenKind.Function))
                 return ParseExportedProcedureHeading();
-            }
 
             return null;
         }
@@ -344,7 +341,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
             var parameters = default(FormalParameterSection);
             var colonSymbol = default(Terminal);
             var resultAttributes = default(UserAttributes);
-            var resultType = default(TypeSpecification);
+            var resultType = default(TypeSpecificationSymbol);
             var semicolon = default(Terminal);
             var directives = default(FunctionDirectivesSymbol);
 
@@ -407,9 +404,8 @@ namespace PasPasPas.Parsing.Parser.Standard {
             if (Match(TokenKind.VarArgs, TokenKind.External))
                 return ParseExternalDirective();
 
-            if (Match(TokenKind.Unsafe)) {
-                return ParseUnsafeDirective(null);
-            }
+            if (Match(TokenKind.Unsafe))
+                return ParseUnsafeDirective();
 
             if (Match(TokenKind.Forward))
                 return ParseForwardDirective();
@@ -434,13 +430,16 @@ namespace PasPasPas.Parsing.Parser.Standard {
         #endregion
         #region ParseUnsafeDirective
 
+        /// <summary>
+        ///     parse a unsafe directive
+        /// </summary>
+        /// <returns></returns>
+
         [Rule("UnsafeDirective", "'unsafe' ';' ")]
-        private UnsafeDirective ParseUnsafeDirective(IExtendableSyntaxPart parent) {
-            var result = new UnsafeDirective();
-            InitByTerminal(result, parent, TokenKind.Unsafe);
-            ContinueWithOrMissing(result, TokenKind.Semicolon);
-            return result;
-        }
+        public UnsafeDirectiveSymbol ParseUnsafeDirective()
+            => new UnsafeDirectiveSymbol(
+                ContinueWithOrMissing(TokenKind.Unsafe),
+                ContinueWithOrMissing(TokenKind.Semicolon));
 
         #endregion
         #region ParseExternalDirective
@@ -523,54 +522,69 @@ namespace PasPasPas.Parsing.Parser.Standard {
         #endregion
         #region ParseUnitBlock
 
-        [Rule("UnitBlock", "( UnitInitilization 'end' ) | CompoundStatement | 'end' ")]
-        private UnitBlock ParseUnitBlock() {
-            var result = new UnitBlock();
+        /// <summary>
+        ///     parse a unit block
+        /// </summary>
+        /// <returns></returns>
 
-            if (ContinueWith(result, TokenKind.End))
-                return result;
+        [Rule("UnitBlock", "( UnitInitilization 'end' ) | CompoundStatement | 'end' ")]
+        public UnitBlockSymbol ParseUnitBlock() {
+            var initialization = default(UnitInitializationSymbol);
+            var mainBlock = default(CompoundStatementSymbol);
+            var endSymbol = ContinueWith(TokenKind.End);
+
+            if (endSymbol != default)
+                return new UnitBlockSymbol(endSymbol);
 
             if (Match(TokenKind.Begin, TokenKind.Asm)) {
-                result.MainBlock = ParseCompoundStatement();
-                return result;
+                mainBlock = ParseCompoundStatement();
+                return new UnitBlockSymbol(mainBlock);
             }
 
             if (Match(TokenKind.Initialization)) {
-                result.Initialization = ParseUnitInitialization(result);
-                ContinueWithOrMissing(result, TokenKind.End);
-                return result;
+                initialization = ParseUnitInitialization();
+                endSymbol = ContinueWithOrMissing(TokenKind.End);
+                return new UnitBlockSymbol(initialization, endSymbol);
             }
 
             Unexpected();
-            return result;
+            return null;
         }
 
         #endregion
         #region ParseInitialiParseUnitInitialization
 
-        [Rule("UnitInitialization", "'initialization' StatementList [ UnitFinalization ]", true)]
-        private UnitInitialization ParseUnitInitialization(IExtendableSyntaxPart parent) {
-            var result = new UnitInitialization();
-            InitByTerminal(result, parent, TokenKind.Initialization);
+        /// <summary>
+        ///     parse unit initialization
+        /// </summary>
+        /// <returns></returns>
 
-            result.Statements = ParseStatementList();
+        [Rule("UnitInitialization", "'initialization' StatementList [ UnitFinalization ]", true)]
+        public UnitInitializationSymbol ParseUnitInitialization() {
+            var initSymbol = ContinueWithOrMissing(TokenKind.Initialization);
+            var statements = ParseStatementList();
+            var finalization = default(UnitFinalizationSymbol);
 
             if (Match(TokenKind.Finalization)) {
-                result.Finalization = ParseUnitFinalization(result);
+                finalization = ParseUnitFinalization();
             }
 
-            return result;
+            return new UnitInitializationSymbol(initSymbol, statements, finalization);
         }
 
         #endregion
         #region ParseUnitFinalization
 
+        /// <summary>
+        ///     parse unit finalization
+        /// </summary>
+        /// <returns></returns>
+
         [Rule("UnitFinalization", "'finalization' StatementList", true)]
-        private UnitFinalization ParseUnitFinalization(IExtendableSyntaxPart parent) {
-            var result = new UnitFinalization();
-            InitByTerminal(result, parent, TokenKind.Finalization);
-            result.Statements = ParseStatementList();
-            return result;
+        public UnitFinalizationSymbol ParseUnitFinalization() {
+            var finalizationSymbol = ContinueWithOrMissing(TokenKind.Finalization);
+            var statements = ParseStatementList();
+            return new UnitFinalizationSymbol(finalizationSymbol, statements);
         }
 
         #endregion
@@ -678,7 +692,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
                 return result;
             }
             if (Match(TokenKind.Try)) {
-                result.Try = ParseTryStatement(result);
+                result.Try = ParseTryStatement();
                 return result;
             }
             if (Match(TokenKind.Raise)) {
@@ -723,53 +737,79 @@ namespace PasPasPas.Parsing.Parser.Standard {
         #endregion
         #region ParseTryStatement
 
+        /// <summary>
+        ///     parse a try statement
+        /// </summary>
+        /// <returns></returns>
+
         [Rule("TryStatement", "'try' StatementList  ('except' HandlerList | 'finally' StatementList) 'end'")]
-        private TryStatement ParseTryStatement(IExtendableSyntaxPart parent) {
-            var result = new TryStatement();
-            InitByTerminal(result, parent, TokenKind.Try);
+        public TryStatementSymbol ParseTryStatement() {
+            var trySymbol = ContinueWithOrMissing(TokenKind.Try);
+            var statements = ParseStatementList();
+            var exceptSymbol = default(Terminal);
+            var handlers = default(ExceptHandlersSymbol);
+            var finallySymbol = default(Terminal);
+            var finallyStatements = default(StatementList);
+            var endSymbol = default(Terminal);
 
-            result.Try = ParseStatementList();
+            exceptSymbol = ContinueWith(TokenKind.Except);
+            finallySymbol = ContinueWith(TokenKind.Finally);
 
-            if (ContinueWith(result, TokenKind.Except)) {
-                result.Handlers = ParseExceptHandlers(result);
-                ContinueWithOrMissing(result, TokenKind.End);
+            if (exceptSymbol != default && finallySymbol == default) {
+                handlers = ParseExceptHandlers();
+                endSymbol = ContinueWithOrMissing(TokenKind.End);
             }
-            else if (ContinueWith(result, TokenKind.Finally)) {
-                result.Finally = ParseStatementList();
-                ContinueWithOrMissing(result, TokenKind.End);
+            else if (finallySymbol != default && exceptSymbol == default) {
+                finallyStatements = ParseStatementList();
+                endSymbol = ContinueWithOrMissing(TokenKind.End);
             }
             else {
                 Unexpected();
             }
 
-            return result;
+            return new TryStatementSymbol(trySymbol, statements, exceptSymbol, handlers, finallySymbol, finallyStatements, endSymbol);
         }
 
         #endregion
         #region ParseExceptHandlers
 
+        /// <summary>
+        ///     parse except handlers
+        /// </summary>
+        /// <returns></returns>
+
         [Rule("ExceptHandlers", "({ Handler } [ 'else' StatementList ]) | StatementList")]
-        private ExceptHandlers ParseExceptHandlers(IExtendableSyntaxPart parent) {
-            var result = new ExceptHandlers();
-            parent.Add(result);
+        public ExceptHandlersSymbol ParseExceptHandlers() {
+            using (var list = GetList<ExceptHandlerSymbol>()) {
+                var elseSymbol = default(Terminal);
+                var statements = default(StatementList);
 
-            if (Match(TokenKind.On, TokenKind.Else)) {
-                while (Match(TokenKind.On)) {
-                    ParseExceptHandler();
-                }
-                if (ContinueWith(result, TokenKind.Else)) {
-                    result.ElseStatements = ParseStatementList();
-                }
-            }
-            else {
-                result.Statements = ParseStatementList();
-            }
+                if (Match(TokenKind.On, TokenKind.Else)) {
+                    while (Match(TokenKind.On)) {
+                        AddToList(list, ParseExceptHandler());
+                    }
 
-            return result;
+                    elseSymbol = ContinueWith(TokenKind.Else);
+
+                    if (elseSymbol != default) {
+                        statements = ParseStatementList();
+                    }
+                }
+                else {
+                    statements = ParseStatementList();
+                }
+
+                return new ExceptHandlersSymbol(GetFixedArray(list), elseSymbol, statements);
+            }
         }
 
         #endregion
         #region ParseExceptHandler
+
+        /// <summary>
+        ///     parse an except handler
+        /// </summary>
+        /// <returns></returns>
 
         [Rule("ExceptHandler", "'on' Identifier ':' NamespaceName 'do' Statement ';'")]
         public ExceptHandlerSymbol ParseExceptHandler() {
@@ -1060,7 +1100,8 @@ namespace PasPasPas.Parsing.Parser.Standard {
         /// <returns></returns>
 
         [Rule("UnitHead", "'unit' NamespaceName { Hint } ';' ")]
-        private UnitHeadSymbol ParseUnitHead() => new UnitHeadSymbol(
+        public UnitHeadSymbol ParseUnitHead()
+            => new UnitHeadSymbol(
                 ContinueWithOrMissing(TokenKind.Unit),
                 ParseNamespaceName(),
                 ParseHints(false),
@@ -1935,7 +1976,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
             var parameters = default(FormalParameterSection);
             var colonSymbol = default(Terminal);
             var resultTypeAttributes = default(UserAttributes);
-            var resultType = default(TypeSpecification);
+            var resultType = default(TypeSpecificationSymbol);
 
             using (var list = GetList<MethodDeclarationNameSymbol>()) {
                 do {
@@ -1994,7 +2035,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
             var parameters = default(FormalParameterSection);
             var colonSymbol = default(Terminal);
             var resultTypeAttributes = default(UserAttributes);
-            var resultType = default(TypeSpecification);
+            var resultType = default(TypeSpecificationSymbol);
 
             if (Match(TokenKind.OpenParen)) {
                 parameters = ParseFormalParameterSection();
@@ -2177,7 +2218,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
             var attributes = ParseAttributes();
             var identifier = RequireIdentifier();
             var colon = ContinueWith(TokenKind.Colon);
-            var typeSpecification = default(TypeSpecification);
+            var typeSpecification = default(TypeSpecificationSymbol);
 
             if (colon != default) {
                 typeSpecification = ParseTypeSpecification(true);
@@ -2255,8 +2296,16 @@ namespace PasPasPas.Parsing.Parser.Standard {
         #endregion
         #region ParseTypeSpecification
 
+        /// <summary>
+        ///     parse a type specification
+        /// </summary>
+        /// <param name="constDeclaration"></param>
+        /// <param name="varDeclaration"></param>
+        /// <param name="allowComma"></param>
+        /// <returns></returns>
+
         [Rule("TypeSpecification", "StructType | PointerType | StringType | ProcedureType | SimpleType ")]
-        private TypeSpecification ParseTypeSpecification(bool constDeclaration = false, bool varDeclaration = false, bool allowComma = false) {
+        public TypeSpecificationSymbol ParseTypeSpecification(bool constDeclaration = false, bool varDeclaration = false, bool allowComma = false) {
             var comma = default(Terminal);
 
             if (Match(TokenKind.Packed, TokenKind.Array, TokenKind.Set, TokenKind.File, //
@@ -2264,42 +2313,42 @@ namespace PasPasPas.Parsing.Parser.Standard {
                 var structuredType = ParseStructType();
                 if (allowComma)
                     comma = ContinueWith(TokenKind.Comma);
-                return new TypeSpecification(structuredType, comma);
+                return new TypeSpecificationSymbol(structuredType, comma);
             }
 
             if (Match(TokenKind.Pointer, TokenKind.Circumflex)) {
                 var pointerType = ParsePointerType();
                 if (allowComma)
                     comma = ContinueWith(TokenKind.Comma);
-                return new TypeSpecification(pointerType, comma);
+                return new TypeSpecificationSymbol(pointerType, comma);
             }
 
             if (Match(TokenKind.String, TokenKind.ShortString, TokenKind.AnsiString, TokenKind.UnicodeString, TokenKind.WideString)) {
                 var stringType = ParseStringType();
                 if (allowComma)
                     comma = ContinueWith(TokenKind.Comma);
-                return new TypeSpecification(stringType, comma);
+                return new TypeSpecificationSymbol(stringType, comma);
             }
 
             if (Match(TokenKind.Function, TokenKind.Procedure)) {
                 var procedureType = ParseProcedureType();
                 if (allowComma)
                     comma = ContinueWith(TokenKind.Comma);
-                return new TypeSpecification(procedureType, comma);
+                return new TypeSpecificationSymbol(procedureType, comma);
             }
 
             if (Match(TokenKind.Reference) && LookAhead(1, TokenKind.To)) {
                 var procedureType = ParseProcedureType();
                 if (allowComma)
                     comma = ContinueWith(TokenKind.Comma);
-                return new TypeSpecification(procedureType, comma);
+                return new TypeSpecificationSymbol(procedureType, comma);
             }
 
             var simpleType = ParseSimpleType(constDeclaration, varDeclaration);
             if (allowComma)
                 comma = ContinueWith(TokenKind.Comma);
 
-            return new TypeSpecification(simpleType, comma);
+            return new TypeSpecificationSymbol(simpleType, comma);
         }
 
         #endregion
@@ -2441,7 +2490,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
             var parameters = default(FormalParameterSection);
             var colonSymbol = default(Terminal);
             var attributes = default(UserAttributes);
-            var returnType = default(TypeSpecification);
+            var returnType = default(TypeSpecificationSymbol);
 
             if (Match(TokenKind.OpenParen))
                 parameters = ParseFormalParameterSection();
@@ -3424,7 +3473,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
             var arrayIndex = default(FormalParametersSymbol);
             var closeBraces = default(Terminal);
             var colonSymbol = default(Terminal);
-            var typeName = default(TypeName);
+            var typeName = default(TypeNameSymbol);
             var indexSymbol = default(Terminal);
             var propertyIndex = default(ExpressionSymbol);
 
@@ -3564,25 +3613,36 @@ namespace PasPasPas.Parsing.Parser.Standard {
         #endregion
         #region ParseTypeSection
 
+        /// <summary>
+        ///     parse a type section
+        /// </summary>
+        /// <param name="inClassDeclaration"></param>
+        /// <returns></returns>
+
         [Rule("TypeSection", "'type' TypeDeclaration { TypeDeclaration }")]
-        private TypeSection ParseTypeSection(bool inClassDeclaration) {
+        public TypeSectionSymbol ParseTypeSection(bool inClassDeclaration) {
             var typeKeyword = ContinueWithOrMissing(TokenKind.TypeKeyword);
 
-            using (var list = GetList<TypeDeclaration>()) {
+            using (var list = GetList<TypeDeclarationSymbol>()) {
                 while ((!inClassDeclaration || !Match(TokenKind.Private, TokenKind.Protected, TokenKind.Public, TokenKind.Published, TokenKind.Automated, TokenKind.Strict)) && MatchIdentifier(TokenKind.OpenBraces)) {
                     AddToList(list, ParseTypeDeclaration());
                 };
 
-                return new TypeSection(typeKeyword, GetFixedArray(list));
+                return new TypeSectionSymbol(typeKeyword, GetFixedArray(list));
             }
         }
 
         #endregion
         #region ParseTypeDeclaration
 
+        /// <summary>
+        ///     parse a type declaration
+        /// </summary>
+        /// <returns></returns>
+
         [Rule("TypeDeclaration", "[ Attributes ] GenericTypeIdent '=' TypeDeclaration Hints ';' ")]
-        private TypeDeclaration ParseTypeDeclaration()
-            => new TypeDeclaration(
+        public TypeDeclarationSymbol ParseTypeDeclaration()
+            => new TypeDeclarationSymbol(
                 attributes: ParseAttributes(),
                 genericTypeIdent: ParseGenericTypeIdent(),
                 equalsSign: ContinueWithOrMissing(TokenKind.EqualsSign),
@@ -3647,7 +3707,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
             var closeParen = default(Terminal);
             var colonSymbol = default(Terminal);
             var resultAttributes = default(UserAttributes);
-            var resultType = default(TypeSpecification);
+            var resultType = default(TypeSpecificationSymbol);
             var semicolon = default(Terminal);
             var directives = default(MethodDirectivesSymbol);
 
@@ -3746,7 +3806,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
 
             using (var list = GetList<FormalParameterSymbol>()) {
                 var item = default(FormalParameterSymbol);
-                var typeDef = default(TypeSpecification);
+                var typeDef = default(TypeSpecificationSymbol);
                 var colon = default(Terminal);
                 var equals = default(Terminal);
                 var defaultValue = default(ExpressionSymbol);
@@ -3927,9 +3987,9 @@ namespace PasPasPas.Parsing.Parser.Standard {
             if (!Match(TokenKind.OpenParen))
                 return null;
 
-            using (var list = GetList<TypeName>()) {
+            using (var list = GetList<TypeNameSymbol>()) {
                 var openParen = ContinueWith(TokenKind.OpenParen);
-                var item = default(TypeName);
+                var item = default(TypeNameSymbol);
                 do {
                     item = AddToList(list, ParseTypeName(false, true));
                 } while (item != default && item.Comma != default);
@@ -3956,12 +4016,18 @@ namespace PasPasPas.Parsing.Parser.Standard {
         #endregion
         #region ParseTypeName
 
+        /// <summary>
+        ///     pare a type name
+        /// </summary>
+        /// <param name="inDesignator"></param>
+        /// <param name="allowComma"></param>
+        /// <returns></returns>
         [Rule("TypeName", "'string' | 'ansistring' | 'shortstring' | 'unicodestring' | 'widestring' | (NamespaceName [ GenericSuffix ]) ")]
-        private TypeName ParseTypeName(bool inDesignator = false, bool allowComma = false) {
+        public TypeNameSymbol ParseTypeName(bool inDesignator = false, bool allowComma = false) {
             var stringType = ContinueWith(TokenKind.String, TokenKind.AnsiString, TokenKind.ShortString, TokenKind.UnicodeString, TokenKind.WideString);
 
             if (stringType != default)
-                return new TypeName(stringType, allowComma ? ContinueWith(TokenKind.Comma) : default);
+                return new TypeNameSymbol(stringType, allowComma ? ContinueWith(TokenKind.Comma) : default);
 
             using (var list = GetList<GenericNamespaceNameSymbol>()) {
                 var name = default(GenericNamespaceNameSymbol);
@@ -3969,7 +4035,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
                     name = AddToList(list, ParseGenericNamespaceName(true, inDesignator, true));
                 } while ((!inDesignator || !IsLastDisignatorPart()) && name?.Dot != default);
 
-                return new TypeName(GetFixedArray(list), allowComma ? ContinueWith(TokenKind.Comma) : default);
+                return new TypeNameSymbol(GetFixedArray(list), allowComma ? ContinueWith(TokenKind.Comma) : default);
             }
         }
 
@@ -4028,7 +4094,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
         public FileTypeSymbol ParseFileType() {
             var fileSymbol = ContinueWithOrMissing(TokenKind.File);
             var ofSymbol = ContinueWith(TokenKind.Of);
-            var typeDefinition = default(TypeSpecification);
+            var typeDefinition = default(TypeSpecificationSymbol);
 
             if (ofSymbol != default)
                 typeDefinition = ParseTypeSpecification();
@@ -4048,8 +4114,8 @@ namespace PasPasPas.Parsing.Parser.Standard {
         public GenericSuffixSymbol ParseGenericSuffix() {
             var openBracket = ContinueWithOrMissing(TokenKind.AngleBracketsOpen);
 
-            using (var list = GetList<TypeSpecification>()) {
-                var typeSpecification = default(TypeSpecification);
+            using (var list = GetList<TypeSpecificationSymbol>()) {
+                var typeSpecification = default(TypeSpecificationSymbol);
                 do {
                     typeSpecification = AddToList(list, ParseTypeSpecification(false, false, true));
                 } while ((!Tokenizer.AtEof) && typeSpecification?.Comma != default);
@@ -4089,7 +4155,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
 
             var ofSymbol = ContinueWithOrMissing(TokenKind.Of);
             var constSymbol = ContinueWith(TokenKind.Const);
-            var typeSpecification = default(TypeSpecification);
+            var typeSpecification = default(TypeSpecificationSymbol);
 
             if (constSymbol == null)
                 typeSpecification = ParseTypeSpecification();
@@ -4143,8 +4209,13 @@ namespace PasPasPas.Parsing.Parser.Standard {
         #endregion
         #region ParseAttributes
 
+        /// <summary>
+        ///     parse user attributes
+        /// </summary>
+        /// <returns></returns>
+
         [Rule("Attributes", "{ '[' AttributeSet | AssemblyAttribue ']' }")]
-        private UserAttributes ParseAttributes() {
+        public UserAttributes ParseAttributes() {
             using (var list = GetList<SyntaxPartBase>()) {
                 while (Match(TokenKind.OpenBraces)) {
                     AddToList(list, ParseAttributeSet());
@@ -4160,8 +4231,8 @@ namespace PasPasPas.Parsing.Parser.Standard {
         [Rule("AttributeSet", " '[' Attribute { ',' Attribute } ']' ")]
         public UserAttributeSet ParseAttributeSet() {
             var openBraces = ContinueWith(TokenKind.OpenBraces);
-            using (var list = GetList<UserAttributeDefinition>()) {
-                var item = default(UserAttributeDefinition);
+            using (var list = GetList<UserAttributeDefinitionSymbol>()) {
+                var item = default(UserAttributeDefinitionSymbol);
 
                 do {
                     item = AddToList(list, ParseAttribute(true));
@@ -4173,12 +4244,17 @@ namespace PasPasPas.Parsing.Parser.Standard {
             }
         }
 
+        /// <summary>
+        ///     parse a user attribute
+        /// </summary>
+        /// <param name="allowComma"></param>
+        /// <returns></returns>
+
         [Rule("Attribute", " [ 'Result' ':' ] NamespaceName [ '(' Expressions ')' ]")]
-        private UserAttributeDefinition ParseAttribute(bool allowComma) {
+        public UserAttributeDefinitionSymbol ParseAttribute(bool allowComma) {
 
             var prefix = default(IdentifierSymbol);
             var colon = default(Terminal);
-
 
             if (LookAhead(1, TokenKind.Colon)) {
                 prefix = RequireIdentifier(true);
@@ -4199,7 +4275,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
             if (allowComma)
                 comma = ContinueWith(TokenKind.Comma);
 
-            return new UserAttributeDefinition(prefix, colon, name, openParen, expressions, closeParen, comma);
+            return new UserAttributeDefinitionSymbol(prefix, colon, name, openParen, expressions, closeParen, comma);
         }
 
         #endregion
@@ -4211,7 +4287,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
                 var item = default(ExpressionSymbol);
 
                 do {
-                    item = AddToList(list, ParseExpression());
+                    item = AddToList(list, ParseExpression(false, true));
                 } while (item != default && item.Comma.GetSymbolKind() == TokenKind.Comma);
 
                 return new ExpressionList(GetFixedArray(list));
@@ -4371,16 +4447,20 @@ namespace PasPasPas.Parsing.Parser.Standard {
         #endregion
         #region ParseTerm
 
+        /// <summary>
+        ///     parse a term
+        /// </summary>
+        /// <returns></returns>
         [Rule("Term", "Factor [ ('*'|'/'|'div'|'mod'|'and'|'shl'|'shr'|'as') Term ]")]
-        private Term ParseTerm() {
+        public TermSymbol ParseTerm() {
             var leftOperand = ParseFactor();
             var @operator = ContinueWith(TokenKind.Times, TokenKind.Slash, TokenKind.Div, TokenKind.Mod, TokenKind.And, TokenKind.Shl, TokenKind.Shr, TokenKind.As);
-            var rightOperand = default(Term);
+            var rightOperand = default(TermSymbol);
 
             if (@operator != default)
                 rightOperand = ParseTerm();
 
-            return new Term(leftOperand, @operator, rightOperand);
+            return new TermSymbol(leftOperand, @operator, rightOperand);
         }
 
         #endregion
@@ -4498,7 +4578,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
         [Rule("Designator", "[ 'inherited' ] [ NamespaceName ] { DesignatorItem }")]
         public DesignatorStatementSymbol ParseDesignator() {
             var inherited = ContinueWith(TokenKind.Inherited);
-            var name = default(TypeName);
+            var name = default(TypeNameSymbol);
             var item = default(SyntaxPartBase);
             var hasIdentifier = false;
 
@@ -4656,7 +4736,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
             var procSymbol = ContinueWithOrMissing(TokenKind.Function, TokenKind.Procedure);
             var parameters = default(FormalParameterSection);
             var colonSymbol = default(Terminal);
-            var returnType = default(TypeSpecification);
+            var returnType = default(TypeSpecificationSymbol);
 
             if (Match(TokenKind.OpenParen))
                 parameters = ParseFormalParameterSection();

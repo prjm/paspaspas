@@ -15,7 +15,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="inherited"></param>
         /// <param name="name"></param>
         /// <param name="immutableArray"></param>
-        public DesignatorStatementSymbol(Terminal inherited, TypeName name, ImmutableArray<SyntaxPartBase> immutableArray) : base(immutableArray) {
+        public DesignatorStatementSymbol(Terminal inherited, TypeNameSymbol name, ImmutableArray<SyntaxPartBase> immutableArray) : base(immutableArray) {
             Name = name;
             Inherited = inherited;
         }
@@ -28,7 +28,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     name
         /// </summary>
-        public TypeName Name { get; }
+        public TypeNameSymbol Name { get; }
 
         /// <summary>
         ///     accept visitor

@@ -18,7 +18,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="helperName"></param>
         /// <param name="helperItems"></param>
         /// <param name="endSymbol"></param>
-        public ClassHelperDefSymbol(Terminal classSymbol, Terminal helperSymbol, ParentClassSymbol classParent, Terminal forSymbol, TypeName helperName, ClassHelperItemsSymbol helperItems, Terminal endSymbol) {
+        public ClassHelperDefSymbol(Terminal classSymbol, Terminal helperSymbol, ParentClassSymbol classParent, Terminal forSymbol, TypeNameSymbol helperName, ClassHelperItemsSymbol helperItems, Terminal endSymbol) {
             HelperItems = helperItems;
             ClassParent = classParent;
             HelperName = helperName;
@@ -41,7 +41,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     class helper name
         /// </summary>
-        public TypeName HelperName { get; }
+        public TypeNameSymbol HelperName { get; }
 
         /// <summary>
         ///     class symbol

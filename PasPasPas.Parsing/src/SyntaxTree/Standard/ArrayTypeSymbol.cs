@@ -18,7 +18,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="ofSymbol"></param>
         /// <param name="constSymbol"></param>
         /// <param name="typeSpecification"></param>
-        public ArrayTypeSymbol(Terminal array, Terminal openBraces, ImmutableArray<ArrayIndexSymbol> items, Terminal closeBraces, Terminal ofSymbol, Terminal constSymbol, TypeSpecification typeSpecification) : base(items) {
+        public ArrayTypeSymbol(Terminal array, Terminal openBraces, ImmutableArray<ArrayIndexSymbol> items, Terminal closeBraces, Terminal ofSymbol, Terminal constSymbol, TypeSpecificationSymbol typeSpecification) : base(items) {
             Array = array;
             OpenBraces = openBraces;
             CloseBraces = closeBraces;
@@ -36,7 +36,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     array type specification
         /// </summary>
-        public TypeSpecification TypeSpecification { get; }
+        public TypeSpecificationSymbol TypeSpecification { get; }
 
         /// <summary>
         ///     array symbol

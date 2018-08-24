@@ -6,7 +6,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// <summary>
     ///     term
     /// </summary>
-    public class Term : StandardSyntaxTreeBase {
+    public class TermSymbol : StandardSyntaxTreeBase {
 
         /// <summary>
         ///     create a new term
@@ -14,7 +14,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="leftOperand"></param>
         /// <param name="operator"></param>
         /// <param name="rightOperand"></param>
-        public Term(FactorSymbol leftOperand, Terminal @operator, Term rightOperand) {
+        public TermSymbol(FactorSymbol leftOperand, Terminal @operator, TermSymbol rightOperand) {
             LeftOperand = leftOperand;
             Operator = @operator;
             RightOperand = rightOperand;
@@ -40,7 +40,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     right operand
         /// </summary>
-        public Term RightOperand { get; }
+        public TermSymbol RightOperand { get; }
 
         /// <summary>
         ///     accept visitor

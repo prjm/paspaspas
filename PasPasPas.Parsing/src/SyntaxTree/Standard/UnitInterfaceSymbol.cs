@@ -9,25 +9,39 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     public class UnitInterfaceSymbol : StandardSyntaxTreeBase {
 
         /// <summary>
+        ///     create a new unit interface symbol
+        /// </summary>
+        /// <param name="interfaceSymbol"></param>
+        /// <param name="usesClause"></param>
+        /// <param name="interfaceDeclaration"></param>
+        public UnitInterfaceSymbol(Terminal interfaceSymbol, UsesClause usesClause, InterfaceDeclarationSymbol interfaceDeclaration) {
+            InterfaceSymbol = interfaceSymbol;
+            UsesClause = usesClause;
+            InterfaceDeclaration = interfaceDeclaration;
+        }
+
+        /// <summary>
         ///     interface declaration
         /// </summary>
-        public InterfaceDeclarationSymbol InterfaceDeclaration { get; set; }
+        public InterfaceDeclarationSymbol InterfaceDeclaration { get; }
 
         /// <summary>
         ///     uses clause
         /// </summary>
-        public ISyntaxPart UsesClause { get; set; }
+        public UsesClause UsesClause { get; }
 
         /// <summary>
         ///     symbol length
         /// </summary>
-        public int Length
-            => InterfaceSymbol.Length + UsesClause.Length + InterfaceDeclaration.Length;
+        public override int Length
+            => InterfaceSymbol.GetSymbolLength() +
+                UsesClause.Length +
+                InterfaceDeclaration.Length;
 
         /// <summary>
         ///     interface symbol
         /// </summary>
-        public Terminal InterfaceSymbol { get; set; }
+        public Terminal InterfaceSymbol { get; }
 
         /// <summary>
         ///     accept visitor

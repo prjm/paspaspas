@@ -6,7 +6,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// <summary>
     ///     user defined attribute (rtti)
     /// </summary>
-    public class UserAttributeDefinition : StandardSyntaxTreeBase {
+    public class UserAttributeDefinitionSymbol : StandardSyntaxTreeBase {
 
         /// <summary>
         ///     create a new user attribute definition
@@ -18,7 +18,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="expressions"></param>
         /// <param name="closeParen"></param>
         /// <param name="comma"></param>
-        public UserAttributeDefinition(IdentifierSymbol prefix, Terminal colon, NamespaceNameSymbol name, Terminal openParen, ExpressionList expressions, Terminal closeParen, Terminal comma) {
+        public UserAttributeDefinitionSymbol(IdentifierSymbol prefix, Terminal colon, NamespaceNameSymbol name, Terminal openParen, ExpressionList expressions, Terminal closeParen, Terminal comma) {
             Prefix = prefix;
             Colon = colon;
             Name = name;

@@ -16,7 +16,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="equalsSign"></param>
         /// <param name="resolveIdentifier"></param>
         /// <param name="semicolon"></param>
-        public MethodResolutionSymbol(Terminal kindSymbol, TypeName name, Terminal equalsSign, IdentifierSymbol resolveIdentifier, Terminal semicolon) {
+        public MethodResolutionSymbol(Terminal kindSymbol, TypeNameSymbol name, Terminal equalsSign, IdentifierSymbol resolveIdentifier, Terminal semicolon) {
             KindSymbol = kindSymbol;
             Name = name;
             EqualsSign = equalsSign;
@@ -37,7 +37,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     identifier to be resolved
         /// </summary>
-        public TypeName Name { get; }
+        public TypeNameSymbol Name { get; }
 
         /// <summary>
         ///     semicolon

@@ -16,7 +16,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="colonSymbol"></param>
         /// <param name="returnType"></param>
         /// <param name="block"></param>
-        public ClosureExpressionSymbol(Terminal procSymbol, FormalParameterSection parameters, Terminal colonSymbol, TypeSpecification returnType, BlockSymbol block) {
+        public ClosureExpressionSymbol(Terminal procSymbol, FormalParameterSection parameters, Terminal colonSymbol, TypeSpecificationSymbol returnType, BlockSymbol block) {
             ProcSymbol = procSymbol;
             Parameters = parameters;
             ColonSymbol = colonSymbol;
@@ -43,7 +43,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     closure return type
         /// </summary>
-        public TypeSpecification ReturnType { get; }
+        public TypeSpecificationSymbol ReturnType { get; }
 
         /// <summary>
         ///     <c>function</c> or <c>procedure</c>

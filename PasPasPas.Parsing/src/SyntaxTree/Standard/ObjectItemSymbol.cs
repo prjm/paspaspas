@@ -33,7 +33,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         ///     create a new object item
         /// </summary>
         /// <param name="typeSection"></param>
-        public ObjectItem(TypeSection typeSection)
+        public ObjectItem(TypeSectionSymbol typeSection)
             => TypeSection = typeSection;
 
         /// <summary>
@@ -104,7 +104,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     type section
         /// </summary>
-        public TypeSection TypeSection { get; }
+        public TypeSectionSymbol TypeSection { get; }
 
         /// <summary>
         ///     const section

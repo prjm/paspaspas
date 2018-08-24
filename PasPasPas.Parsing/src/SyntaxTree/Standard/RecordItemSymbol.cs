@@ -47,7 +47,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         ///     create a new record section
         /// </summary>
         /// <param name="typeSection"></param>
-        public RecordItemSymbol(TypeSection typeSection) => TypeSection = typeSection;
+        public RecordItemSymbol(TypeSectionSymbol typeSection) => TypeSection = typeSection;
 
         /// <summary>
         ///     create a new record field item
@@ -98,7 +98,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     type
         /// </summary>
-        public TypeSection TypeSection { get; }
+        public TypeSectionSymbol TypeSection { get; }
 
         /// <summary>
         ///     record variant section

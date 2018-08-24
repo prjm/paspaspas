@@ -56,7 +56,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     try statement
         /// </summary>
-        public TryStatement Try { get; set; }
+        public TryStatementSymbol Try { get; set; }
 
         /// <summary>
         ///     while statement

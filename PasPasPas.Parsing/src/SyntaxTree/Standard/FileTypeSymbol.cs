@@ -14,7 +14,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="fileSymbol"></param>
         /// <param name="ofSymbol"></param>
         /// <param name="typeDefinition"></param>
-        public FileTypeSymbol(Terminal fileSymbol, Terminal ofSymbol, TypeSpecification typeDefinition) {
+        public FileTypeSymbol(Terminal fileSymbol, Terminal ofSymbol, TypeSpecificationSymbol typeDefinition) {
             FileSymbol = fileSymbol;
             OfSymbol = ofSymbol;
             TypeDefinition = typeDefinition;
@@ -23,7 +23,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     optional subtype
         /// </summary>
-        public TypeSpecification TypeDefinition { get; }
+        public TypeSpecificationSymbol TypeDefinition { get; }
 
         /// <summary>
         ///     file symbol

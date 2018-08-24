@@ -6,14 +6,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// <summary>
     ///     a type specification
     /// </summary>
-    public class TypeSpecification : StandardSyntaxTreeBase {
+    public class TypeSpecificationSymbol : StandardSyntaxTreeBase {
 
         /// <summary>
         ///     create a new type specification
         /// </summary>
         /// <param name="structuredType"></param>
         /// <param name="comma"></param>
-        public TypeSpecification(StructType structuredType, Terminal comma) {
+        public TypeSpecificationSymbol(StructTypeSymbol structuredType, Terminal comma) {
             StructuredType = structuredType;
             Comma = comma;
         }
@@ -23,7 +23,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// </summary>
         /// <param name="pointerType"></param>
         /// <param name="comma"></param>
-        public TypeSpecification(PointerTypeSymbol pointerType, Terminal comma) {
+        public TypeSpecificationSymbol(PointerTypeSymbol pointerType, Terminal comma) {
             PointerType = pointerType;
             Comma = comma;
         }
@@ -33,7 +33,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// </summary>
         /// <param name="stringType"></param>
         /// <param name="comma"></param>
-        public TypeSpecification(StringTypeSymbol stringType, Terminal comma) {
+        public TypeSpecificationSymbol(StringTypeSymbol stringType, Terminal comma) {
             StringType = stringType;
             Comma = comma;
         }
@@ -43,7 +43,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// </summary>
         /// <param name="procedureType"></param>
         /// <param name="comma"></param>
-        public TypeSpecification(ProcedureTypeSymbol procedureType, Terminal comma) {
+        public TypeSpecificationSymbol(ProcedureTypeSymbol procedureType, Terminal comma) {
             ProcedureType = procedureType;
             Comma = comma;
         }
@@ -53,7 +53,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// </summary>
         /// <param name="simpleType"></param>
         /// <param name="comma"></param>
-        public TypeSpecification(SimpleTypeSymbol simpleType, Terminal comma) {
+        public TypeSpecificationSymbol(SimpleTypeSymbol simpleType, Terminal comma) {
             SimpleType = simpleType;
             Comma = comma;
         }
@@ -81,7 +81,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     structured type
         /// </summary>
-        public StructType StructuredType { get; }
+        public StructTypeSymbol StructuredType { get; }
 
         /// <summary>
         ///     comma

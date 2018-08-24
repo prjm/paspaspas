@@ -19,7 +19,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="value"></param>
         /// <param name="hint"></param>
         /// <param name="semicolon"></param>
-        public ConstDeclarationSymbol(UserAttributes attributes, IdentifierSymbol identifier, Terminal colon, TypeSpecification typeSpecification, Terminal equalsSign, ConstantExpressionSymbol value, ISyntaxPart hint, Terminal semicolon) {
+        public ConstDeclarationSymbol(UserAttributes attributes, IdentifierSymbol identifier, Terminal colon, TypeSpecificationSymbol typeSpecification, Terminal equalsSign, ConstantExpressionSymbol value, ISyntaxPart hint, Terminal semicolon) {
             Attributes = attributes;
             Identifier = identifier;
             Colon = colon;
@@ -48,7 +48,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     type specification
         /// </summary>
-        public TypeSpecification TypeSpecification { get; }
+        public TypeSpecificationSymbol TypeSpecification { get; }
 
         /// <summary>
         ///     expression
