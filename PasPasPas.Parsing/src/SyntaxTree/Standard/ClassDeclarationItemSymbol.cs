@@ -32,7 +32,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="attributes2"></param>
         /// <param name="strictSymbol"></param>
         /// <param name="visibility"></param>
-        public ClassDeclarationItemSymbol(UserAttributes attributes1, Terminal classSymbol, UserAttributes attributes2, Terminal strictSymbol, Terminal visibility) {
+        public ClassDeclarationItemSymbol(UserAttributesSymbol attributes1, Terminal classSymbol, UserAttributesSymbol attributes2, Terminal strictSymbol, Terminal visibility) {
             Attributes1 = attributes1;
             ClassSymbol = classSymbol;
             Attributes2 = attributes2;
@@ -47,7 +47,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="attributes1"></param>
         /// <param name="attributes2"></param>
         /// <param name="classSymbol"></param>
-        public ClassDeclarationItemSymbol(ClassMethodSymbol classMethodSymbol, UserAttributes attributes1, UserAttributes attributes2, Terminal classSymbol) {
+        public ClassDeclarationItemSymbol(ClassMethodSymbol classMethodSymbol, UserAttributesSymbol attributes1, UserAttributesSymbol attributes2, Terminal classSymbol) {
             MethodDeclaration = classMethodSymbol;
             Attributes1 = attributes1;
             Attributes2 = attributes2;
@@ -61,7 +61,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="attributes1"></param>
         /// <param name="attributes2"></param>
         /// <param name="classSymbol"></param>
-        public ClassDeclarationItemSymbol(ClassPropertySymbol classPropertySymbol, UserAttributes attributes1, UserAttributes attributes2, Terminal classSymbol) {
+        public ClassDeclarationItemSymbol(ClassPropertySymbol classPropertySymbol, UserAttributesSymbol attributes1, UserAttributesSymbol attributes2, Terminal classSymbol) {
             PropertyDeclaration = classPropertySymbol;
             Attributes1 = attributes1;
             Attributes2 = attributes2;
@@ -99,12 +99,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     attributes
         /// </summary>
-        public UserAttributes Attributes1 { get; }
+        public UserAttributesSymbol Attributes1 { get; }
 
         /// <summary>
         ///     attributes
         /// </summary>
-        public UserAttributes Attributes2 { get; }
+        public UserAttributesSymbol Attributes2 { get; }
 
         /// <summary>
         ///     class symbol

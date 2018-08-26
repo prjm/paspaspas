@@ -19,7 +19,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="resultType"></param>
         /// <param name="semicolon"></param>
         /// <param name="directives"></param>
-        public ExportedProcedureHeadingSymbol(Terminal procSymbol, IdentifierSymbol name, FormalParameterSection parameters, Terminal colonSymbol, UserAttributes resultAttributes, TypeSpecificationSymbol resultType, Terminal semicolon, FunctionDirectivesSymbol directives) {
+        public ExportedProcedureHeadingSymbol(Terminal procSymbol, IdentifierSymbol name, FormalParameterSection parameters, Terminal colonSymbol, UserAttributesSymbol resultAttributes, TypeSpecificationSymbol resultType, Terminal semicolon, FunctionDirectivesSymbol directives) {
             ProcSymbol = procSymbol;
             Name = name;
             Parameters = parameters;
@@ -59,7 +59,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     result attributes
         /// </summary>
-        public UserAttributes Attributes { get; }
+        public UserAttributesSymbol Attributes { get; }
 
         /// <summary>
         ///     result types

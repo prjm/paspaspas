@@ -6,13 +6,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// <summary>
     ///     a list of user attributes
     /// </summary>
-    public class UserAttributes : VariableLengthSyntaxTreeBase<SyntaxPartBase> {
+    public class UserAttributesSymbol : VariableLengthSyntaxTreeBase<SyntaxPartBase> {
 
         /// <summary>
         ///     create a new attribute list
         /// </summary>
         /// <param name="items"></param>
-        public UserAttributes(ImmutableArray<SyntaxPartBase> items) : base(items) {
+        public UserAttributesSymbol(ImmutableArray<SyntaxPartBase> items) : base(items) {
         }
 
         /// <summary>

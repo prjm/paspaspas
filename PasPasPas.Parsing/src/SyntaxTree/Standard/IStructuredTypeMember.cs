@@ -13,12 +13,12 @@
         /// <summary>
         ///     member attributes
         /// </summary>
-        UserAttributes Attributes1 { get; }
+        UserAttributesSymbol Attributes1 { get; }
 
         /// <summary>
         ///     member attributes
         /// </summary>
-        UserAttributes Attributes2 { get; }
+        UserAttributesSymbol Attributes2 { get; }
 
     }
 }

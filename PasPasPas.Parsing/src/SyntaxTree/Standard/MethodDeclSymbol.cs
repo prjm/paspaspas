@@ -18,7 +18,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="methodBody"></param>
         /// <param name="semicolon2"></param>
         /// <param name="attribues"></param>
-        public MethodDeclarationSymbol(Terminal classSymbol, UserAttributes attribues, MethodDeclarationHeadingSymbol heading, Terminal semicolon, MethodDirectivesSymbol directives, BlockSymbol methodBody, Terminal semicolon2) {
+        public MethodDeclarationSymbol(Terminal classSymbol, UserAttributesSymbol attribues, MethodDeclarationHeadingSymbol heading, Terminal semicolon, MethodDirectivesSymbol directives, BlockSymbol methodBody, Terminal semicolon2) {
             ClassSymbol = classSymbol;
             Attributes = attribues;
             Heading = heading;
@@ -36,7 +36,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     user attributes
         /// </summary>
-        public UserAttributes Attributes { get; }
+        public UserAttributesSymbol Attributes { get; }
 
         /// <summary>
         ///     accept visitor

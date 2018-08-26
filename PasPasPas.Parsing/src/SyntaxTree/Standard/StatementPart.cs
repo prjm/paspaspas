@@ -61,12 +61,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     while statement
         /// </summary>
-        public WhileStatement While { get; set; }
+        public WhileStatementSymbol While { get; set; }
 
         /// <summary>
         ///     with statement
         /// </summary>
-        public WithStatement With { get; set; }
+        public WithStatementSymbol With { get; set; }
 
         /// <summary>
         ///     accept visitor

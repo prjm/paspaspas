@@ -174,11 +174,11 @@ namespace PasPasPasTests.Parser {
 
         [TestCase]
         public void TestInterfaceSection() {
-            var s = RunCstTest(p => p.ParseUnitInterface());
+            var s = RunCstTest(p => p.ParseUnitInterface(), "interface uses a; type x = class;");
             Assert.IsNotNull(s.InterfaceSymbol);
             Assert.IsNotNull(s.UsesClause);
             Assert.IsNotNull(s.InterfaceDeclaration);
-            Assert.AreEqual(0, s.Length);
+            Assert.AreEqual(33, s.Length);
         }
 
         [TestCase]
@@ -495,13 +495,13 @@ namespace PasPasPasTests.Parser {
 
         [TestCase]
         public void TestUnit() {
-            var s = RunCstTest(p => p.ParseUnit(new FileReference(CstPath)));
+            var s = RunCstTest(p => p.ParseUnit(new FileReference(CstPath)), "unit z.x; interface implementation initialization finalization end.");
             Assert.IsNotNull(s.UnitHead);
             Assert.IsNotNull(s.UnitInterface);
             Assert.IsNotNull(s.UnitImplementation);
             Assert.IsNotNull(s.UnitBlock);
             Assert.IsNotNull(s.DotSymbol);
-            Assert.AreEqual(0, s.Length);
+            Assert.AreEqual(67, s.Length);
         }
 
 
@@ -2460,5 +2460,60 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(9, s.Length);
         }
 
+        [TestCase]
+        public void TestUserAttributes() {
+            var s = RunCstTest(p => p.ParseAttributes(), "[a][b]");
+            Assert.IsNotNull(s.Items[0]);
+            Assert.IsNotNull(s.Items[1]);
+            Assert.AreEqual(6, s.Length);
+        }
+
+
+        [TestCase]
+        public void TestUserAttributeSet() {
+            var s = RunCstTest(p => p.ParseAttributeSet(), "[a,b]");
+            Assert.IsNotNull(s.OpenBraces);
+            Assert.IsNotNull(s.Items[0]);
+            Assert.IsNotNull(s.Items[1]);
+            Assert.IsNotNull(s.CloseBraces);
+            Assert.AreEqual(5, s.Length);
+        }
+
+
+        [TestCase]
+        public void TestUseClauseSymbol() {
+            var s = RunCstTest(p => p.ParseUsesClause(), "uses a,b");
+            Assert.IsNotNull(s.UsesSymbol);
+            Assert.IsNotNull(s.UsesList.Items[0]);
+            Assert.IsNotNull(s.UsesList.Items[1]);
+            Assert.AreEqual(8, s.Length);
+        }
+
+        [TestCase]
+        public void TestUseFileClauseSymbol() {
+            var s = RunCstTest(p => p.ParseUsesFileClause(), "uses a in 'a', b in 'b'");
+            Assert.IsNotNull(s.UsesSymbol);
+            Assert.IsNotNull(s.Files.Items[0]);
+            Assert.IsNotNull(s.Files.Items[1]);
+            Assert.AreEqual(23, s.Length);
+        }
+
+        [TestCase]
+        public void TestWith() {
+            var s = RunCstTest(p => p.ParseWithStatement(), "with a,b do c");
+            Assert.IsNotNull(s.Items[0]);
+            Assert.IsNotNull(s.Items[1]);
+            Assert.AreEqual(13, s.Length);
+        }
+
+        [TestCase]
+        public void TestWhile() {
+            var s = RunCstTest(p => p.ParseWhileStatement(), "while a < b do c");
+            Assert.IsNotNull(s.WhileSymbol);
+            Assert.IsNotNull(s.Condition);
+            Assert.IsNotNull(s.DoSymbol);
+            Assert.IsNotNull(s.Statement);
+            Assert.AreEqual(16, s.Length);
+        }
     }
 }

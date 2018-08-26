@@ -18,7 +18,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="colonSymbol"></param>
         /// <param name="resultTypeAttributes"></param>
         /// <param name="resultType"></param>
-        public MethodDeclarationHeadingSymbol(Terminal kindSymbol, ImmutableArray<MethodDeclarationNameSymbol> items, FormalParameterSection parameters, Terminal colonSymbol, UserAttributes resultTypeAttributes, TypeSpecificationSymbol resultType) : base(items) {
+        public MethodDeclarationHeadingSymbol(Terminal kindSymbol, ImmutableArray<MethodDeclarationNameSymbol> items, FormalParameterSection parameters, Terminal colonSymbol, UserAttributesSymbol resultTypeAttributes, TypeSpecificationSymbol resultType) : base(items) {
             KindSymbol = kindSymbol;
             Parameters = parameters;
             ColonSymbol = colonSymbol;

@@ -14,7 +14,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="attributes"></param>
         /// <param name="identifier"></param>
         /// <param name="comma"></param>
-        public IdentifierListItem(UserAttributes attributes, IdentifierSymbol identifier, Terminal comma) {
+        public IdentifierListItem(UserAttributesSymbol attributes, IdentifierSymbol identifier, Terminal comma) {
             Attributes = attributes;
             Identifier = identifier;
             Comma = comma;
@@ -33,7 +33,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     attributes
         /// </summary>
-        public UserAttributes Attributes { get; }
+        public UserAttributesSymbol Attributes { get; }
 
         /// <summary>
         ///     accept visitor

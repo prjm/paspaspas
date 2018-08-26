@@ -7,7 +7,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// <summary>
     ///     a set of user defined attributes
     /// </summary>
-    public class UserAttributeSet : VariableLengthSyntaxTreeBase<UserAttributeDefinitionSymbol> {
+    public class UserAttributeSetSymbol : VariableLengthSyntaxTreeBase<UserAttributeDefinitionSymbol> {
 
         /// <summary>
         ///     create a new attribute set
@@ -15,7 +15,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="openBraces"></param>
         /// <param name="items"></param>
         /// <param name="closeBraces"></param>
-        public UserAttributeSet(Terminal openBraces, ImmutableArray<UserAttributeDefinitionSymbol> items, Terminal closeBraces) : base(items) {
+        public UserAttributeSetSymbol(Terminal openBraces, ImmutableArray<UserAttributeDefinitionSymbol> items, Terminal closeBraces) : base(items) {
             OpenBraces = openBraces;
             CloseBraces = closeBraces;
         }

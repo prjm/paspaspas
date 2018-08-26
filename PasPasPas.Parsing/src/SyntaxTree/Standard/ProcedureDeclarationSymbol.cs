@@ -17,7 +17,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="directives"></param>
         /// <param name="body"></param>
         /// <param name="semicolon2"></param>
-        public ProcedureDeclarationSymbol(UserAttributes attributes, ProcedureDeclarationHeadingSymbol heading, Terminal semicolon, FunctionDirectivesSymbol directives, BlockSymbol body, Terminal semicolon2) {
+        public ProcedureDeclarationSymbol(UserAttributesSymbol attributes, ProcedureDeclarationHeadingSymbol heading, Terminal semicolon, FunctionDirectivesSymbol directives, BlockSymbol body, Terminal semicolon2) {
             Attributes = attributes;
             Heading = heading;
             Semicolon = semicolon;
@@ -29,7 +29,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     attributes
         /// </summary>
-        public UserAttributes Attributes { get; }
+        public UserAttributesSymbol Attributes { get; }
 
         /// <summary>
         ///     function directives

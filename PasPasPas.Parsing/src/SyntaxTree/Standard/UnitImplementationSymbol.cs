@@ -14,7 +14,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="implementation"></param>
         /// <param name="usesClause"></param>
         /// <param name="declarationSections"></param>
-        public UnitImplementationSymbol(Terminal implementation, UsesClause usesClause, DeclarationsSymbol declarationSections) {
+        public UnitImplementationSymbol(Terminal implementation, UsesClauseSymbol usesClause, DeclarationsSymbol declarationSections) {
             Implementation = implementation;
             UsesClause = usesClause;
             DeclarationSections = declarationSections;
@@ -28,7 +28,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     uses clause
         /// </summary>
-        public UsesClause UsesClause { get; }
+        public UsesClauseSymbol UsesClause { get; }
 
         /// <summary>
         ///     symbol length

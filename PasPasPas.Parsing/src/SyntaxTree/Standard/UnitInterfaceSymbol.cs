@@ -14,7 +14,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="interfaceSymbol"></param>
         /// <param name="usesClause"></param>
         /// <param name="interfaceDeclaration"></param>
-        public UnitInterfaceSymbol(Terminal interfaceSymbol, UsesClause usesClause, InterfaceDeclarationSymbol interfaceDeclaration) {
+        public UnitInterfaceSymbol(Terminal interfaceSymbol, UsesClauseSymbol usesClause, InterfaceDeclarationSymbol interfaceDeclaration) {
             InterfaceSymbol = interfaceSymbol;
             UsesClause = usesClause;
             InterfaceDeclaration = interfaceDeclaration;
@@ -28,15 +28,15 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     uses clause
         /// </summary>
-        public UsesClause UsesClause { get; }
+        public UsesClauseSymbol UsesClause { get; }
 
         /// <summary>
         ///     symbol length
         /// </summary>
         public override int Length
             => InterfaceSymbol.GetSymbolLength() +
-                UsesClause.Length +
-                InterfaceDeclaration.Length;
+                UsesClause.GetSymbolLength() +
+                InterfaceDeclaration.GetSymbolLength();
 
         /// <summary>
         ///     interface symbol

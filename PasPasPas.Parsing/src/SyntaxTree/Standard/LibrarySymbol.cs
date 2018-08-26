@@ -17,7 +17,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="mainBlock"></param>
         /// <param name="dot"></param>
         /// <param name="filePath"></param>
-        public LibrarySymbol(LibraryHeadSymbol libraryHead, UsesFileClause uses, BlockSymbol mainBlock, Terminal dot, IFileReference filePath) {
+        public LibrarySymbol(LibraryHeadSymbol libraryHead, UsesFileClauseSymbol uses, BlockSymbol mainBlock, Terminal dot, IFileReference filePath) {
             LibraryHead = libraryHead;
             Uses = uses;
             MainBlock = mainBlock;
@@ -50,7 +50,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     uses clause
         /// </summary>
-        public UsesFileClause Uses { get; }
+        public UsesFileClauseSymbol Uses { get; }
 
         /// <summary>
         ///     file path

@@ -115,12 +115,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     attributes
         /// </summary>
-        public UserAttributes Attributes1 { get; }
+        public UserAttributesSymbol Attributes1 { get; }
 
         /// <summary>
         ///     attributes
         /// </summary>
-        public UserAttributes Attributes2 { get; }
+        public UserAttributesSymbol Attributes2 { get; }
 
         /// <summary>
         ///     var symbol

@@ -4,24 +4,24 @@ using PasPasPas.Parsing.SyntaxTree.Visitors;
 namespace PasPasPas.Parsing.SyntaxTree.Standard {
 
     /// <summary>
-    ///     uses clause with file names
+    ///     uses clause
     /// </summary>
-    public class UsesFileClause : StandardSyntaxTreeBase {
+    public class UsesClauseSymbol : StandardSyntaxTreeBase {
 
         /// <summary>
-        ///     generate a new uses file clause
+        ///     create a new uses clause
         /// </summary>
-        /// <param name="terminal"></param>
-        /// <param name="namespaceFileNameList"></param>
-        public UsesFileClause(Terminal terminal, NamespaceFileNameListSymbol namespaceFileNameList) {
-            UsesSymbol = terminal;
-            Files = namespaceFileNameList;
+        /// <param name="usesSymbol"></param>
+        /// <param name="usesList"></param>
+        public UsesClauseSymbol(Terminal usesSymbol, NamespaceNameListSymbol usesList) {
+            UsesSymbol = usesSymbol;
+            UsesList = usesList;
         }
 
         /// <summary>
-        ///     Namespace files
+        ///     names of the units to use
         /// </summary>
-        public NamespaceFileNameListSymbol Files { get; }
+        public NamespaceNameListSymbol UsesList { get; }
 
         /// <summary>
         ///     uses symbol
@@ -31,11 +31,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     accept visitor
         /// </summary>
-        /// <param name="visitor">visitor</param>
+        /// <param name="visitor">visitor to use</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
             AcceptPart(this, UsesSymbol, visitor);
-            AcceptPart(this, Files, visitor);
+            AcceptPart(this, UsesList, visitor);
             visitor.EndVisit(this);
         }
 
@@ -44,7 +44,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// </summary>
         public override int Length
             => UsesSymbol.GetSymbolLength() +
-                Files.GetSymbolLength();
+                UsesList.GetSymbolLength();
 
     }
 }
