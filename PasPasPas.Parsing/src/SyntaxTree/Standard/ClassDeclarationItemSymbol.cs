@@ -146,7 +146,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         ///     strict declaration
         /// </summary>
         public bool Strict
-            => StrictSymbol.Kind == TokenKind.Strict;
+            => StrictSymbol.GetSymbolKind() == TokenKind.Strict;
 
         /// <summary>
         ///     type section

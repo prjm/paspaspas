@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using PasPasPas.Parsing.Tokenizer;
-using PasPasPas.Infrastructure.Log;
-using PasPasPas.Parsing.SyntaxTree;
 using System.Linq;
-using PasPasPas.Parsing.SyntaxTree.Utils;
+using System.Text;
+using PasPasPas.Infrastructure.Log;
 using PasPasPas.Options.Bundles;
+using PasPasPas.Parsing.SyntaxTree;
+using PasPasPas.Parsing.SyntaxTree.Utils;
+using PasPasPas.Parsing.Tokenizer;
 
 namespace PasPasPas.Parsing.Parser {
 
@@ -1337,7 +1337,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind"></param>
         protected Terminal ErrorMissingToken(int tokenKind) {
             logSource.Error(MissingToken, tokenKind);
-            return EmptyTerminal();
+            return null;
         }
 
         /// <summary>
@@ -1347,7 +1347,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind2"></param>
         protected Terminal ErrorMissingToken(int tokenKind1, int tokenKind2) {
             logSource.Error(MissingToken, tokenKind1, tokenKind2);
-            return EmptyTerminal();
+            return null;
         }
 
 
@@ -1359,7 +1359,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind3"></param>
         protected Terminal ErrorMissingToken(int tokenKind1, int tokenKind2, int tokenKind3) {
             logSource.Error(MissingToken, tokenKind1, tokenKind2, tokenKind3);
-            return EmptyTerminal();
+            return null;
         }
 
         /// <summary>
@@ -1371,7 +1371,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind4"></param>
         protected Terminal ErrorMissingToken(int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4) {
             logSource.Error(MissingToken, tokenKind1, tokenKind2, tokenKind3, tokenKind4);
-            return EmptyTerminal();
+            return null;
         }
 
         /// <summary>
@@ -1384,7 +1384,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind5"></param>
         protected Terminal ErrorMissingToken(int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5) {
             logSource.Error(MissingToken, tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5);
-            return EmptyTerminal();
+            return null;
         }
 
         /// <summary>
@@ -1398,17 +1398,8 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind6"></param>
         protected Terminal ErrorMissingToken(int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5, int tokenKind6) {
             logSource.Error(MissingToken, tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5);
-            return EmptyTerminal();
+            return null;
         }
-
-        /// <summary>
-        ///     empty terminal
-        /// </summary>
-        /// <returns></returns>
-        protected static Terminal EmptyTerminal()
-            => new Terminal(new TokenizerWithLookahead.TokenSequence() {
-                Value = new Token(TokenKind.Empty, null)
-            });
 
         /// <summary>
         ///     continue with a specific token and mark it as missing

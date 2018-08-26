@@ -676,44 +676,33 @@ namespace PasPasPas.Parsing.Parser.Standard {
 
         [Rule("StatementPart", "IfStatement | CaseStatement | ReapeatStatement | WhileStatment | ForStatement | WithStatement | TryStatement | RaiseStatement | AsmStatement | CompoundStatement | SimpleStatement ")]
         private StatementPart ParseStatementPart() {
-            var result = new StatementPart();
 
-            if (Match(TokenKind.If)) {
-                result.If = ParseIfStatement();
-                return result;
-            }
-            if (Match(TokenKind.Case)) {
-                result.Case = ParseCaseStatement();
-                return result;
-            }
-            if (Match(TokenKind.Repeat)) {
-                result.Repeat = ParseRepeatStatement();
-                return result;
-            }
-            if (Match(TokenKind.While)) {
-                result.While = ParseWhileStatement();
-                return result;
-            }
-            if (Match(TokenKind.For)) {
-                result.For = ParseForStatement();
-                return result;
-            }
-            if (Match(TokenKind.With)) {
-                result.With = ParseWithStatement();
-                return result;
-            }
-            if (Match(TokenKind.Try)) {
-                result.Try = ParseTryStatement();
-                return result;
-            }
-            if (Match(TokenKind.Raise)) {
-                result.Raise = ParseRaiseStatement();
-                return result;
-            }
-            if (Match(TokenKind.Begin, TokenKind.Asm)) {
-                result.CompoundStatement = ParseCompoundStatement();
-                return result;
-            }
+            if (Match(TokenKind.If))
+                return new StatementPart(ParseIfStatement());
+
+            if (Match(TokenKind.Case))
+                return new StatementPart(ParseCaseStatement());
+
+            if (Match(TokenKind.Repeat))
+                return new StatementPart(ParseRepeatStatement());
+
+            if (Match(TokenKind.While))
+                return new StatementPart(ParseWhileStatement());
+
+            if (Match(TokenKind.For))
+                return new StatementPart(ParseForStatement());
+
+            if (Match(TokenKind.With))
+                return new StatementPart(ParseWithStatement());
+
+            if (Match(TokenKind.Try))
+                return new StatementPart(ParseTryStatement());
+
+            if (Match(TokenKind.Raise))
+                return new StatementPart(ParseRaiseStatement());
+
+            if (Match(TokenKind.Begin, TokenKind.Asm))
+                return new StatementPart(ParseCompoundStatement());
 
             return ParseSimpleStatement();
         }
@@ -1054,23 +1043,18 @@ namespace PasPasPas.Parsing.Parser.Standard {
 
         [Rule("SimpleStatement", "GoToStatement | Designator [ ':=' (Expression  | NewStatement) ] ")]
         private StatementPart ParseSimpleStatement() {
-            if (!(LookAhead(1, TokenKind.Assignment, TokenKind.OpenBraces, TokenKind.OpenParen)) && Match(TokenKind.GoToKeyword, TokenKind.Exit, TokenKind.Break, TokenKind.Continue)) {
-                var result = new StatementPart {
-                    GoTo = ParseGoToStatement()
-                };
-                return result;
-            }
+            if (!(LookAhead(1, TokenKind.Assignment, TokenKind.OpenBraces, TokenKind.OpenParen)) && Match(TokenKind.GoToKeyword, TokenKind.Exit, TokenKind.Break, TokenKind.Continue))
+                return new StatementPart(ParseGoToStatement());
 
             if (MatchIdentifier(TokenKind.Inherited, TokenKind.Circumflex, TokenKind.OpenParen, TokenKind.At, TokenKind.AnsiString, TokenKind.UnicodeString, TokenKind.String, TokenKind.WideString, TokenKind.ShortString)) {
-                var result = new StatementPart {
-                    DesignatorPart = ParseDesignator()
-                };
+                var designator = ParseDesignator();
+                var assignmentSymbol = ContinueWith(TokenKind.Assignment);
+                var assignmentValue = default(ExpressionSymbol);
 
-                if (ContinueWith(result, TokenKind.Assignment)) {
-                    result.Assignment = ParseExpression();
-                }
+                if (assignmentSymbol != default)
+                    assignmentValue = ParseExpression();
 
-                return result;
+                return new StatementPart(designator, assignmentSymbol, assignmentValue);
             }
 
             return null;

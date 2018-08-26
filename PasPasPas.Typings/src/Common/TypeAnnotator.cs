@@ -514,7 +514,8 @@ namespace PasPasPas.Typings.Common {
 
             if (element.TypeValue is ITypedSyntaxNode declaredType && declaredType.TypeInfo != null) {
                 element.TypeInfo = element.TypeValue.TypeInfo;
-                resolver.AddToScope(element.Name.CompleteName, ReferenceKind.RefToType, TypeRegistry.GetTypeByIdOrUndefinedType(element.TypeInfo.TypeId));
+                if (element.Name.CompleteName != default)
+                    resolver.AddToScope(element.Name.CompleteName, ReferenceKind.RefToType, TypeRegistry.GetTypeByIdOrUndefinedType(element.TypeInfo.TypeId));
             }
         }
 

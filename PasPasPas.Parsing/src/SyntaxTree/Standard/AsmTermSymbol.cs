@@ -43,7 +43,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         ///     term kind
         /// </summary>
         public int Kind
-            => Operator.Kind;
+            => Operator.GetSymbolKind();
 
         /// <summary>
         ///     dot symbol

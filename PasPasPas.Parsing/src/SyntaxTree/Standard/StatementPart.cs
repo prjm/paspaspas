@@ -9,64 +9,151 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     public class StatementPart : StandardSyntaxTreeBase {
 
         /// <summary>
+        ///     create a new statement part
+        /// </summary>
+        /// <param name="ifStatementSymbol"></param>
+        public StatementPart(IfStatementSymbol ifStatementSymbol)
+            => If = ifStatementSymbol;
+
+        /// <summary>
+        ///     create a new statement part
+        /// </summary>
+        /// <param name="caseStatementSymbol"></param>
+        public StatementPart(CaseStatementSymbol caseStatementSymbol)
+            => Case = caseStatementSymbol;
+
+        /// <summary>
+        ///     create a new statement part
+        /// </summary>
+        /// <param name="repeatStatement"></param>
+        public StatementPart(RepeatStatement repeatStatement)
+            => Repeat = repeatStatement;
+
+        /// <summary>
+        ///     create a new statement part
+        /// </summary>
+        /// <param name="whileStatementSymbol"></param>
+        public StatementPart(WhileStatementSymbol whileStatementSymbol)
+            => While = whileStatementSymbol;
+
+        /// <summary>
+        ///     create a new statement part
+        /// </summary>
+        /// <param name="forStatementSymbol"></param>
+        public StatementPart(ForStatementSymbol forStatementSymbol)
+            => For = forStatementSymbol;
+
+        /// <summary>
+        ///     create a new statement part
+        /// </summary>
+        /// <param name="withStatementSymbol"></param>
+        public StatementPart(WithStatementSymbol withStatementSymbol)
+            => With = withStatementSymbol;
+
+        /// <summary>
+        ///     create a new statement part
+        /// </summary>
+        /// <param name="tryStatementSymbol"></param>
+        public StatementPart(TryStatementSymbol tryStatementSymbol)
+            => Try = tryStatementSymbol;
+
+        /// <summary>
+        ///     create a new statement part
+        /// </summary>
+        /// <param name="raiseStatementSymbol"></param>
+        public StatementPart(RaiseStatementSymbol raiseStatementSymbol)
+            => Raise = raiseStatementSymbol;
+
+        /// <summary>
+        ///     create a new statement part
+        /// </summary>
+        /// <param name="compoundStatementSymbol"></param>
+        public StatementPart(CompoundStatementSymbol compoundStatementSymbol)
+            => CompoundStatement = compoundStatementSymbol;
+
+        /// <summary>
+        ///     create a new statement part
+        /// </summary>
+        /// <param name="goToStatementSymbol"></param>
+        public StatementPart(GoToStatementSymbol goToStatementSymbol)
+            => GoTo = goToStatementSymbol;
+
+        /// <summary>
+        ///     create a new statement part
+        /// </summary>
+        /// <param name="designator"></param>
+        /// <param name="assignmentSymbol"></param>
+        /// <param name="assignmentValue"></param>
+        public StatementPart(DesignatorStatementSymbol designator, Terminal assignmentSymbol, ExpressionSymbol assignmentValue) {
+            DesignatorPart = designator;
+            AssignmentSymbol = assignmentSymbol;
+            Assignment = assignmentValue;
+        }
+
+        /// <summary>
+        ///     assignment symbol
+        /// </summary>
+        public Terminal AssignmentSymbol { get; }
+
+        /// <summary>
         ///     assignment
         /// </summary>
-        public ExpressionSymbol Assignment { get; set; }
+        public ExpressionSymbol Assignment { get; }
 
         /// <summary>
         ///     case statement
         /// </summary>
-        public CaseStatementSymbol Case { get; set; }
+        public CaseStatementSymbol Case { get; }
 
         /// <summary>
         ///     compunt statement
         /// </summary>
-        public CompoundStatementSymbol CompoundStatement { get; set; }
+        public CompoundStatementSymbol CompoundStatement { get; }
 
         /// <summary>
-        ///     deisgnator part
+        ///     designator part
         /// </summary>
-        public DesignatorStatementSymbol DesignatorPart { get; set; }
+        public DesignatorStatementSymbol DesignatorPart { get; }
 
         /// <summary>
         ///     for statement
         /// </summary>
-        public ForStatementSymbol For { get; set; }
+        public ForStatementSymbol For { get; }
 
         /// <summary>
         ///     goto statement
         /// </summary>
-        public GoToStatementSymbol GoTo { get; set; }
+        public GoToStatementSymbol GoTo { get; }
 
         /// <summary>
         ///     if statement
         /// </summary>
-        public IfStatementSymbol If { get; set; }
+        public IfStatementSymbol If { get; }
 
         /// <summary>
         ///     raise statement
         /// </summary>
-        public RaiseStatementSymbol Raise { get; set; }
+        public RaiseStatementSymbol Raise { get; }
 
         /// <summary>
         ///     repeat statement
         /// </summary>
-        public RepeatStatement Repeat { get; set; }
+        public RepeatStatement Repeat { get; }
 
         /// <summary>
         ///     try statement
         /// </summary>
-        public TryStatementSymbol Try { get; set; }
+        public TryStatementSymbol Try { get; }
 
         /// <summary>
         ///     while statement
         /// </summary>
-        public WhileStatementSymbol While { get; set; }
+        public WhileStatementSymbol While { get; }
 
         /// <summary>
         ///     with statement
         /// </summary>
-        public WithStatementSymbol With { get; set; }
+        public WithStatementSymbol With { get; }
 
         /// <summary>
         ///     accept visitor
@@ -94,6 +181,5 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
             Try.GetSymbolLength() +
             While.GetSymbolLength() +
             With.GetSymbolLength();
-
     }
 }

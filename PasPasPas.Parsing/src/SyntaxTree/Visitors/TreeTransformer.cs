@@ -1307,9 +1307,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             InitNode(result, field);
             result.Visibility = CurrentMemberVisibility[structType];
             structType.Fields.Items.Add(result);
-            var extractedAttributes = ExtractAttributes(declItem.Attributes1 as UserAttributesSymbol, CurrentUnit);
-            extractedAttributes = ExtractAttributes(declItem.Attributes2 as UserAttributesSymbol, CurrentUnit);
-            result.ClassItem = declItem.ClassItem;
+
+            var extractedAttributes = default(IList<SymbolAttribute>);
+
+            if (declItem != null) {
+                ExtractAttributes(declItem.Attributes1 as UserAttributesSymbol, CurrentUnit);
+                extractedAttributes = ExtractAttributes(declItem.Attributes2 as UserAttributesSymbol, CurrentUnit);
+                result.ClassItem = declItem.ClassItem;
+            }
 
             foreach (var part in field.Names.Parts) {
 
@@ -1476,8 +1481,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             var parent = LastValue as StructuredType;
             var result = new StructureMethodResolution();
             InitNode(result, methodResolution);
-            result.Attributes = ExtractAttributes(((ClassDeclarationItemSymbol)methodResolution.ParentItem).Attributes1 as UserAttributesSymbol, CurrentUnit);
-            result.Attributes = ExtractAttributes(((ClassDeclarationItemSymbol)methodResolution.ParentItem).Attributes1 as UserAttributesSymbol, CurrentUnit, result.Attributes);
+            result.Attributes = ExtractAttributes(((ClassDeclarationItemSymbol)methodResolution?.ParentItem)?.Attributes1 as UserAttributesSymbol, CurrentUnit);
+            result.Attributes = ExtractAttributes(((ClassDeclarationItemSymbol)methodResolution?.ParentItem)?.Attributes1 as UserAttributesSymbol, CurrentUnit, result.Attributes);
             result.Kind = TokenKindMapper.ForMethodResolutionKind(methodResolution.Kind);
             result.Target = ExtractSymbolName(methodResolution.ResolveIdentifier);
             parent.MethodResolutions.Add(result);
@@ -3154,7 +3159,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         }
 
         private IList<SymbolAttribute> ExtractAttributes(UserAttributesSymbol attributes, CompilationUnit parentUnit, IList<SymbolAttribute> result = null) {
-            if (attributes == null || attributes.PartList.Count < 1)
+            if (attributes == null || attributes.PartList == null || attributes.PartList.Count < 1)
                 return Array.Empty<SymbolAttribute>();
 
             if (result == null)

@@ -28,6 +28,9 @@ namespace PasPasPas.Typings.Common {
         public Reference ResolveByName(ScopedName typeName, Signature signature = default) {
             var scope = this.scope;
 
+            if (typeName.FirstPart == null)
+                return null;
+
             while (scope != null) {
 
                 if (scope.TryToResolve(typeName.FirstPart, out var entry)) {
