@@ -102,9 +102,9 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="parent">parent syntax tree node</param>
         /// <param name="expectedTokens">expected tokens (or)</param>
         /// <returns></returns>
-        protected void ErrorAndSkip(IExtendableSyntaxPart parent, Guid message, int[] expectedTokens) {
+        protected Terminal ErrorAndSkip(IExtendableSyntaxPart parent, Guid message, int[] expectedTokens) {
             logSource.Error(message);
-            CreateByError(parent);
+            return CreateByError(parent);
         }
 
         /// <summary>
@@ -1285,7 +1285,8 @@ namespace PasPasPas.Parsing.Parser {
             var invalid = new Terminal(tokenizer.CurrentTokenSequence) {
                 ParentItem = parent
             };
-            parent.Add(invalid);
+            if (parent != null)
+                parent.Add(invalid);
             FetchNextToken();
             return invalid;
         }

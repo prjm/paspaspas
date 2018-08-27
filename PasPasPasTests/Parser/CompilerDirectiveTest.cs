@@ -1,8 +1,8 @@
-﻿using PasPasPas.Options.Bundles;
+﻿using System;
+using System.Linq;
+using PasPasPas.Options.Bundles;
 using PasPasPas.Options.DataTypes;
 using PasPasPas.Parsing.Parser;
-using System;
-using System.Linq;
 using Xunit;
 
 namespace PasPasPasTests.Parser {

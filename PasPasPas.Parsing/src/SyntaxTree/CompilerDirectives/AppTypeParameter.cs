@@ -9,9 +9,31 @@ namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
     public class AppTypeParameter : CompilerDirectiveBase {
 
         /// <summary>
+        ///     create a new application type parameter
+        /// </summary>
+        /// <param name="appTypeSymbol"></param>
+        /// <param name="appTypeInfo"></param>
+        /// <param name="appType"></param>
+        public AppTypeParameter(Terminal appTypeSymbol, Terminal appTypeInfo, AppType appType) {
+            AppTypeSymbol = appTypeSymbol;
+            AppTypeInfo = appTypeInfo;
+            ApplicationType = appType;
+        }
+
+        /// <summary>
         ///     application type
         /// </summary>
-        public AppType ApplicationType { get; set; }
+        public AppType ApplicationType { get; }
+
+        /// <summary>
+        ///     app type constant
+        /// </summary>
+        public Terminal AppTypeInfo { get; }
+
+        /// <summary>
+        ///     apptype symbol
+        /// </summary>
+        public Terminal AppTypeSymbol { get; }
 
         /// <summary>
         ///     accept visitor
@@ -19,7 +41,8 @@ namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
         /// <param name="visitor">node visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
-            AcceptParts(this, visitor);
+            AcceptPart(this, AppTypeSymbol, visitor);
+            AcceptPart(this, AppTypeInfo, visitor);
             visitor.EndVisit(this);
         }
 

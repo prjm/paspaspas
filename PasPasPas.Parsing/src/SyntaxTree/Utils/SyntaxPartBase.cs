@@ -1,9 +1,8 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Standard;
-using System.Collections.Generic;
-using PasPasPas.Parsing.SyntaxTree.Visitors;
-using PasPasPas.Parsing.SyntaxTree.Utils;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System;
+using PasPasPas.Parsing.SyntaxTree.Standard;
+using PasPasPas.Parsing.SyntaxTree.Utils;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree {
 
@@ -140,17 +139,6 @@ namespace PasPasPas.Parsing.SyntaxTree {
         }
 
         /// <summary>
-        ///     remove an item
-        /// </summary>
-        /// <param name="lastSymbol"></param>
-        public void Remove(ISyntaxPart lastSymbol) {
-            if (parts != null)
-                parts.Remove(lastSymbol);
-            else
-                throw new InvalidOperationException();
-        }
-
-        /// <summary>
         ///     value of a terminal
         /// </summary>
         /// <param name="syntaxPart"></param>
@@ -220,6 +208,7 @@ namespace PasPasPas.Parsing.SyntaxTree {
             part.Accept(visitor);
             childVisitor?.EndVisitChild<T>(element, part);
         }
+
         /// <summary>
         ///     accept visitors
         /// </summary>

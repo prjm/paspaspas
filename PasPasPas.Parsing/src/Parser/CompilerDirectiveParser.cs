@@ -1,15 +1,15 @@
-﻿using System.Collections.Generic;
-using System;
-using PasPasPas.Options.DataTypes;
+﻿using System;
+using System.Collections.Generic;
+using PasPasPas.Globals.Runtime;
+using PasPasPas.Infrastructure.Files;
+using PasPasPas.Infrastructure.Log;
 using PasPasPas.Options.Bundles;
-using PasPasPas.Parsing.Tokenizer;
+using PasPasPas.Options.DataTypes;
 using PasPasPas.Parsing.SyntaxTree;
 using PasPasPas.Parsing.SyntaxTree.CompilerDirectives;
-using PasPasPas.Infrastructure.Log;
 using PasPasPas.Parsing.SyntaxTree.Utils;
-using PasPasPas.Infrastructure.Files;
+using PasPasPas.Parsing.Tokenizer;
 using PasPasPas.Parsing.Tokenizer.Patterns;
-using PasPasPas.Globals.Runtime;
 
 namespace PasPasPas.Parsing.Parser {
 
@@ -50,7 +50,7 @@ namespace PasPasPas.Parsing.Parser {
             => Options.ConditionalCompilation;
 
         /// <summary>
-        ///     metainformation
+        ///     meta information
         /// </summary>
         protected MetaInformation Meta
             => Options.Meta;
@@ -184,7 +184,8 @@ namespace PasPasPas.Parsing.Parser {
                 TokenKind.IfEnd,
             };
 
-        private void ParseParameter(IExtendableSyntaxPart parent) {
+        private ISyntaxPart ParseParameter() {
+            IExtendableSyntaxPart parent = new CompilerDirective();
 
             if (Match(TokenKind.IfDef)) {
                 ParseIfDef(parent);
@@ -207,9 +208,10 @@ namespace PasPasPas.Parsing.Parser {
             else if (Match(TokenKind.IfCd)) {
                 ParseIf(parent);
             }
-            else if (Match(TokenKind.Apptype)) {
-                ParseApptypeParameter(parent);
-            }
+
+            if (Match(TokenKind.Apptype))
+                return ParseApptypeParameter();
+
             else if (Match(TokenKind.CodeAlign)) {
                 ParseCodeAlignParameter(parent);
             }
@@ -267,6 +269,8 @@ namespace PasPasPas.Parsing.Parser {
             else if (Match(TokenKind.MinMemStackSizeSwitchLong, TokenKind.MaxMemStackSizeSwitchLong)) {
                 ParseStackSizeSwitch(parent, false);
             }
+
+            return parent;
         }
 
         private void ParseIfOpt(IExtendableSyntaxPart parent) {
@@ -821,39 +825,46 @@ namespace PasPasPas.Parsing.Parser {
             ErrorAndSkip(parent, CompilerDirectiveParserErrors.InvalidCodeAlignDirective, new[] { TokenKind.Integer });
         }
 
-        private void ParseApptypeParameter(IExtendableSyntaxPart parent) {
-            var result = new AppTypeParameter();
-            InitByTerminal(result, parent, TokenKind.Apptype);
+        /// <summary>
+        ///     parse an application type parameter
+        /// </summary>
+        /// <returns></returns>
+        public AppTypeParameter ParseApptypeParameter() {
+            var appTypeSymbol = ContinueWithOrMissing(TokenKind.Apptype);
+            var appTypeInfo = ContinueWith(TokenKind.Identifier);
+            var appType = AppType.Undefined;
 
-            if (ContinueWith(result, TokenKind.Identifier)) {
+            if (appTypeInfo != default && appTypeInfo.Token.Value != default) {
 
-                var value = result.LastTerminalValue;
+                var value = appTypeInfo.Token.Value;
 
                 if (string.Equals(value, "CONSOLE", StringComparison.OrdinalIgnoreCase)) {
-                    result.ApplicationType = AppType.Console;
-                    return;
+                    appType = AppType.Console;
                 }
                 else if (string.Equals(value, "GUI", StringComparison.OrdinalIgnoreCase)) {
-                    result.ApplicationType = AppType.Gui;
-                    return;
+                    appType = AppType.Gui;
                 }
-
-                ErrorLastPart(result, CompilerDirectiveParserErrors.InvalidApplicationType, result.LastTerminalValue);
-                return;
+                else {
+                    ErrorLastPart(null, CompilerDirectiveParserErrors.InvalidApplicationType, null);
+                }
+            }
+            else {
+                appTypeInfo = ErrorAndSkip(null, CompilerDirectiveParserErrors.InvalidApplicationType, new[] { TokenKind.Identifier });
             }
 
-            ErrorAndSkip(parent, CompilerDirectiveParserErrors.InvalidApplicationType, new[] { TokenKind.Identifier });
+            return new AppTypeParameter(appTypeSymbol, appTypeInfo, appType); ;
         }
 
         /// <summary>
         ///     parse a long switch
         /// </summary>
-        private void ParseLongSwitch(IExtendableSyntaxPart parent) {
+        private ISyntaxPart ParseLongSwitch() {
+            var parent = new CompilerDirective();
 
-            if (Match(TokenKind.AlignSwitchLong)) {
-                ParseLongAlignSwitch(parent);
-            }
-            else if (Match(TokenKind.BoolEvalSwitchLong)) {
+            if (Match(TokenKind.AlignSwitchLong))
+                return ParseLongAlignSwitch();
+
+            if (Match(TokenKind.BoolEvalSwitchLong)) {
                 ParseLongBoolEvalSwitch(parent);
             }
             else if (Match(TokenKind.AssertSwitchLong)) {
@@ -1035,6 +1046,7 @@ namespace PasPasPas.Parsing.Parser {
                 ParseLongLinkSwitch(parent);
             }
 
+            return parent;
         }
 
         private void ParseLongLinkSwitch(IExtendableSyntaxPart parent) {
@@ -1715,55 +1727,57 @@ namespace PasPasPas.Parsing.Parser {
             }
         }
 
-        private void ParseLongAlignSwitch(IExtendableSyntaxPart parent) {
-            var result = new AlignSwitch();
-            InitByTerminal(result, parent, TokenKind.AlignSwitchLong);
+        private AlignSwitch ParseLongAlignSwitch() {
+            var alignSymbol = ContinueWithOrMissing(TokenKind.AlignSwitchLong);
+            var alignSwitch = ContinueWith(TokenKind.On, TokenKind.Off);
 
-            if (ContinueWith(result, TokenKind.On)) {
-                result.AlignValue = Alignment.QuadWord;
-                return;
-            }
-            else if (ContinueWith(result, TokenKind.Off)) {
-                result.AlignValue = Alignment.Unaligned;
-                return;
-            }
+            if (alignSwitch.GetSymbolKind() == TokenKind.On)
+                return new AlignSwitch(alignSymbol, alignSwitch, Alignment.QuadWord);
 
-            if (ContinueWith(result, TokenKind.Integer) && int.TryParse(result.LastTerminalValue, out var value)) {
+            if (alignSwitch.GetSymbolKind() == TokenKind.Off)
+                return new AlignSwitch(alignSymbol, alignSwitch, Alignment.Unaligned);
 
-                switch (value) {
+            alignSwitch = ContinueWith(TokenKind.Integer);
+
+            if (alignSwitch != default && alignSwitch.Token.ParsedValue is IIntegerValue intValue) {
+
+                switch (intValue.UnsignedValue) {
+
                     case 1:
-                        result.AlignValue = Alignment.Unaligned;
-                        return;
+                        return new AlignSwitch(alignSymbol, alignSwitch, Alignment.Unaligned);
+
                     case 2:
-                        result.AlignValue = Alignment.Word;
-                        return;
+                        return new AlignSwitch(alignSymbol, alignSwitch, Alignment.Word);
+
                     case 4:
-                        result.AlignValue = Alignment.DoubleWord;
-                        return;
+                        return new AlignSwitch(alignSymbol, alignSwitch, Alignment.DoubleWord);
+
                     case 8:
-                        result.AlignValue = Alignment.QuadWord;
-                        return;
+                        return new AlignSwitch(alignSymbol, alignSwitch, Alignment.QuadWord);
+
                     case 16:
-                        result.AlignValue = Alignment.DoubleQuadWord;
-                        return;
+                        return new AlignSwitch(alignSymbol, alignSwitch, Alignment.DoubleQuadWord);
+
                 }
 
-                ErrorLastPart(result, CompilerDirectiveParserErrors.InvalidAlignDirective, result.LastTerminalValue);
-                return;
+                ErrorLastPart(null, CompilerDirectiveParserErrors.InvalidAlignDirective);
+                return new AlignSwitch(alignSymbol, alignSwitch, Alignment.Undefined);
             }
 
-            ErrorAndSkip(parent, CompilerDirectiveParserErrors.InvalidAlignDirective, new[] { TokenKind.Integer });
+            alignSwitch = ErrorAndSkip(null, CompilerDirectiveParserErrors.InvalidAlignDirective, new[] { TokenKind.Integer });
+            return new AlignSwitch(alignSymbol, alignSwitch, Alignment.Undefined);
         }
 
         /// <summary>
         ///     parse a switch
         /// </summary>
-        private void ParseSwitch(IExtendableSyntaxPart parent) {
+        private ISyntaxPart ParseSwitch() {
+            IExtendableSyntaxPart parent = new CompilerDirective();
 
-            if (Match(TokenKind.AlignSwitch, TokenKind.AlignSwitch1, TokenKind.AlignSwitch2, TokenKind.AlignSwitch4, TokenKind.AlignSwitch8, TokenKind.AlignSwitch16)) {
-                ParseAlignSwitch(parent);
-            }
-            else if (Match(TokenKind.BoolEvalSwitch)) {
+            if (Match(TokenKind.AlignSwitch, TokenKind.AlignSwitch1, TokenKind.AlignSwitch2, TokenKind.AlignSwitch4, TokenKind.AlignSwitch8, TokenKind.AlignSwitch16))
+                return ParseAlignSwitch();
+
+            if (Match(TokenKind.BoolEvalSwitch)) {
                 ParseBoolEvalSwitch(parent);
             }
             else if (Match(TokenKind.AssertSwitch)) {
@@ -1830,6 +1844,7 @@ namespace PasPasPas.Parsing.Parser {
                 ParseEnumSizeSwitch(parent);
             }
 
+            return parent;
         }
 
         private void ParseEnumSizeSwitch(IExtendableSyntaxPart parent) {
@@ -2293,44 +2308,51 @@ namespace PasPasPas.Parsing.Parser {
             }
         }
 
-        private ISyntaxPart ParseAlignSwitch(IExtendableSyntaxPart parent) {
-            var result = new AlignSwitch();
+        /// <summary>
+        ///     parse an align switch
+        /// </summary>
+        /// <returns></returns>
+        public AlignSwitch ParseAlignSwitch() {
+            var alignSymbol = default(Terminal);
+            var alignSwitch = default(Terminal);
+            var alignValue = Alignment.Undefined;
 
             if (Match(TokenKind.AlignSwitch1)) {
-                InitByTerminal(result, parent, TokenKind.AlignSwitch1);
-                result.AlignValue = Alignment.Unaligned;
+                alignSymbol = ContinueWith(TokenKind.AlignSwitch1);
+                alignValue = Alignment.Unaligned;
             }
             else if (Match(TokenKind.AlignSwitch2)) {
-                InitByTerminal(result, parent, TokenKind.AlignSwitch2);
-                result.AlignValue = Alignment.Word;
+                alignSymbol = ContinueWith(TokenKind.AlignSwitch2);
+                alignValue = Alignment.Word;
             }
             else if (Match(TokenKind.AlignSwitch4)) {
-                InitByTerminal(result, parent, TokenKind.AlignSwitch4);
-                result.AlignValue = Alignment.DoubleWord;
+                alignSymbol = ContinueWith(TokenKind.AlignSwitch4);
+                alignValue = Alignment.DoubleWord;
             }
             else if (Match(TokenKind.AlignSwitch8)) {
-                InitByTerminal(result, parent, TokenKind.AlignSwitch8);
-                result.AlignValue = Alignment.QuadWord;
+                alignSymbol = ContinueWith(TokenKind.AlignSwitch8);
+                alignValue = Alignment.QuadWord;
             }
             else if (Match(TokenKind.AlignSwitch16)) {
-                InitByTerminal(result, parent, TokenKind.AlignSwitch16);
-                result.AlignValue = Alignment.DoubleQuadWord;
+                alignSymbol = ContinueWith(TokenKind.AlignSwitch16);
+                alignValue = Alignment.DoubleQuadWord;
             }
             else {
-                InitByTerminal(result, parent, TokenKind.AlignSwitch);
+                alignSymbol = ContinueWithOrMissing(TokenKind.AlignSwitch);
+                alignSwitch = ContinueWith(TokenKind.Plus, TokenKind.Minus);
 
-                if (ContinueWith(result, TokenKind.Plus)) {
-                    result.AlignValue = Alignment.QuadWord;
+                if (alignSwitch.GetSymbolKind() == TokenKind.Plus) {
+                    alignValue = Alignment.QuadWord;
                 }
-                else if (ContinueWith(result, TokenKind.Minus)) {
-                    result.AlignValue = Alignment.Unaligned;
+                else if (alignSwitch.GetSymbolKind() == TokenKind.Minus) {
+                    alignValue = Alignment.Unaligned;
                 }
                 else {
-                    ErrorAndSkip(parent, CompilerDirectiveParserErrors.InvalidAlignDirective, new[] { TokenKind.Plus, TokenKind.Minus });
+                    alignSwitch = ErrorAndSkip(null, CompilerDirectiveParserErrors.InvalidAlignDirective, new[] { TokenKind.Plus, TokenKind.Minus });
                 }
             }
 
-            return result;
+            return new AlignSwitch(alignSymbol, alignSwitch, alignValue);
         }
 
         /// <summary>
@@ -2339,27 +2361,21 @@ namespace PasPasPas.Parsing.Parser {
         /// <returns>parsed syntax tree</returns>
         public override ISyntaxPart Parse() {
             var kind = CurrentToken().Kind;
-            IExtendableSyntaxPart result = new CompilerDirective();
 
-            if (switches.Contains(kind)) {
-                ParseSwitch(result);
-            }
-            else if (longSwitches.Contains(kind)) {
-                ParseLongSwitch(result);
-            }
-            else if (parameters.Contains(kind)) {
-                ParseParameter(result);
-            }
+            if (switches.Contains(kind))
+                return ParseSwitch();
 
-            if (result == null) {
-                // TODO
-                // if (!ConditionalCompilation.Skip)
-                // log error
-                FetchNextToken();
-            }
+            if (longSwitches.Contains(kind))
+                return ParseLongSwitch();
 
-            return result;
+            if (parameters.Contains(kind))
+                return ParseParameter();
 
+            // TODO
+            // if (!ConditionalCompilation.Skip)
+            // log error
+            FetchNextToken();
+            return null;
         }
 
         /// <summary>

@@ -12,11 +12,6 @@ namespace PasPasPas.Parsing.SyntaxTree {
         /// <param name="result"></param>
         void Add(ISyntaxPart result);
 
-        /// <summary>
-        ///     remove an part
-        /// </summary>
-        /// <param name="lastSymbol"></param>
-        void Remove(ISyntaxPart lastSymbol);
     }
 
 }
