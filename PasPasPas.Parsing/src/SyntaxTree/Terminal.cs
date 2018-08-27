@@ -9,32 +9,27 @@ namespace PasPasPas.Parsing.SyntaxTree {
     /// </summary>
     public class Terminal : StandardSyntaxTreeBase {
 
-        private readonly Token token;
-        private readonly string prefix;
-        private readonly string suffix;
-
         /// <summary>
         ///     create a new terminal token
         /// </summary>
         /// <param name="baseToken"></param>
         public Terminal(TokenSequence baseToken) {
             if (baseToken == null) {
-                token = Token.Empty;
-                prefix = string.Empty;
-                suffix = string.Empty;
+                Token = Token.Empty;
+                Prefix = string.Empty;
+                Suffix = string.Empty;
             }
             else {
-                token = baseToken.Value;
-                prefix = baseToken.Prefix;
-                suffix = baseToken.Suffix;
+                Token = baseToken.Value;
+                Prefix = baseToken.Prefix;
+                Suffix = baseToken.Suffix;
             }
         }
 
         /// <summary>
         ///     token
         /// </summary>
-        public Token Token
-            => token;
+        public Token Token { get; }
 
         /// <summary>
         ///     token value
@@ -51,22 +46,20 @@ namespace PasPasPas.Parsing.SyntaxTree {
         /// <summary>
         ///     suffix
         /// </summary>
-        public string Suffix
-            => suffix;
+        public string Suffix { get; }
 
         /// <summary>
         ///     prefix
         /// </summary>
-        public string Prefix
-            => prefix;
+        public string Prefix { get; }
 
         /// <summary>
         ///     symbol length
         /// </summary>
         public override int Length
-            => (prefix ?? string.Empty).Length +
-               (suffix ?? string.Empty).Length +
-               (token.Value ?? string.Empty).Length;
+            => (Prefix ?? string.Empty).Length +
+               (Suffix ?? string.Empty).Length +
+               (Token.Value ?? string.Empty).Length;
 
         /// <summary>
         ///     accept visitor
@@ -89,9 +82,7 @@ namespace PasPasPas.Parsing.SyntaxTree {
         /// </summary>
         /// <param name="terminal"></param>
         /// <returns></returns>
-        public static int GetSymbolKind(this Terminal terminal) {
-            return terminal == null ? TokenKind.Undefined : terminal.Kind;
-        }
+        public static int GetSymbolKind(this Terminal terminal) => terminal == null ? TokenKind.Undefined : terminal.Kind;
 
     }
 

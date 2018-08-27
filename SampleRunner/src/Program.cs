@@ -10,15 +10,15 @@ using SampleRunner.Scenarios;
 namespace SampleRunner {
 
     /// <summary>
-    ///     the sample runner is used to test different feature sets
-    ///     of the p3 library
+    ///     This sample runner is used to test different feature sets
+    ///     of the p3 library.
     /// </summary>
-    class Program {
+    internal class Program {
 
-        static void Main() {
+        private static void Main() {
 
             var testPath = @"C:\temp\Testfiles\spring.pas";
-            var mode = SampleMode.TypeAnnotateFile;
+            var mode = SampleMode.ReadFile;
             var repeat = 1;
             var result = new StringBuilder();
             var environment = new DefaultEnvironment();
@@ -30,9 +30,8 @@ namespace SampleRunner {
             Console.ReadLine();
         }
 
-        private static string GetCacheName(object data) {
-            return $"[{data.GetType().ToString()}]";
-        }
+        private static string GetCacheName(object data)
+            => $"[{data.GetType().ToString()}]";
 
         private static void RunSample(IParserEnvironment environment, StringBuilder result, Action<StringBuilder> action) {
             var timer = new ExecutionTimer();
