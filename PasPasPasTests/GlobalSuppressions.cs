@@ -45,3 +45,5 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "<Pending>", Scope = "member", Target = "~M:PasPasPasTests.Tokenizer.SimpleTokenizerTests.TestSimpleTokens")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "<Pending>", Scope = "member", Target = "~M:PasPasPasTests.Tokenizer.SimpleTokenizerTests.TestWhitespace")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "<Pending>", Scope = "member", Target = "~M:PasPasPasTests.Tokenizer.TokenizerPatternTests.RunTestTokenizer(System.String)~System.Collections.Generic.IList{PasPasPas.Parsing.SyntaxTree.Token}")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("CodeSmell", "ERP022:Catching everything considered harmful.", Justification = "<Pending>", Scope = "member", Target = "~M:PasPasPasTests.Infra.TempFilelper.Dispose(System.Boolean)")]
+
