@@ -1,21 +1,27 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
 
 namespace PasPasPas.Infrastructure.Files {
 
+    [DebuggerDisplay("{Position}:{StartIndex}-{Length} {string.Join(\", \", Content)}")]
     internal class StreamData {
+        internal int StartIndex;
         internal int Length;
+        internal long Position;
         internal byte[] Content;
 
         public StreamData(int bufferSize)
             => Content = new byte[bufferSize];
     }
 
+    /// <summary>
+    ///     a buffered utf-8 stream source
+    /// </summary>
     public class Utf8StreamBufferSource : IBufferSource, IDisposable {
 
         private readonly Stream input;
-        private long position;
         private long charPosition;
         private int bufferIndex;
         private StreamData prev;
@@ -35,7 +41,6 @@ namespace PasPasPas.Infrastructure.Files {
             prev = new StreamData(bufferSize);
             current = new StreamData(bufferSize);
             next = new StreamData(bufferSize);
-            position = 0L;
             charPosition = 0L;
             bufferIndex = 0;
             length = long.MaxValue;
@@ -45,16 +50,29 @@ namespace PasPasPas.Infrastructure.Files {
         }
 
         private void GetBytes(StreamData data, long offset) {
-            if (offset >= 0 && offset < input.Length) {
-                input.Seek(offset, SeekOrigin.Begin);
-                data.Length = input.Read(data.Content, 0, data.Content.Length);
-                if (data.Length < data.Content.Length)
-                    Array.Clear(data.Content, data.Length, data.Content.Length - data.Length);
-            }
-            else {
-                data.Length = 0;
-                Array.Clear(data.Content, 0, data.Length);
-            }
+            var index = (int)Math.Max(0, 0 - offset);
+            input.Seek(offset + index, SeekOrigin.Begin);
+            data.StartIndex = index;
+            data.Position = offset;
+            data.Length = input.Read(data.Content, index, data.Content.Length - index);
+
+            index = data.Length - 1;
+            while (index >= 0 && (data.Content[index] & 0xC0) == 0x80)
+                index--;
+
+            if (index >= 0 && (data.Content[index] & 0xF0) == 0xF0 && index + 4 > data.Length)
+                data.Length = index;
+            else if (index >= 0 && (data.Content[index] & 0xE0) == 0xE0 && index + 3 > data.Length)
+                data.Length = index;
+            else if (index >= 0 && (data.Content[index] & 0xC0) == 0xC0 && index + 2 > data.Length)
+                data.Length = index;
+
+            index = 0;
+            while ((data.Content[index] & 0xC0) == 0x80 && index <= data.Length)
+                index++;
+
+            data.StartIndex += index;
+            data.Length -= index;
         }
 
         private void MoveToPreviousPart() {
@@ -62,8 +80,7 @@ namespace PasPasPas.Infrastructure.Files {
             next = current;
             current = prev;
             prev = dataToDiscard;
-            GetBytes(prev, position - current.Length);
-
+            GetBytes(prev, current.Position + current.StartIndex - current.Content.Length);
             bufferIndex = current.Length - 1;
         }
 
@@ -75,8 +92,8 @@ namespace PasPasPas.Infrastructure.Files {
             prev = current;
             current = next;
             next = dataToDiscard;
-            GetBytes(next, position + current.Length);
-            bufferIndex = 0;
+            GetBytes(next, current.Position + current.StartIndex + current.Length);
+            bufferIndex = current.StartIndex;
         }
 
         public long Length
@@ -84,37 +101,35 @@ namespace PasPasPas.Infrastructure.Files {
 
         public int GetContent(char[] target, long offset) {
             MoveToCharOffset(offset);
-
-            if (charPosition != offset && position < input.Length)
-                throw new InvalidOperationException();
-
-            return Encoding.UTF8.GetChars(current.Content, 0, current.Length, target, 0);
+            return Encoding.UTF8.GetChars(current.Content, current.StartIndex, current.Length, target, 0);
         }
 
         private void MoveToCharOffset(long offset) {
             var step = Math.Sign(offset - charPosition);
+            offset = Math.Max(0, Math.Min(Length, offset));
 
-            while (charPosition != offset || (step < 0 && current.Content[bufferIndex] > 127)) {
-                position += step;
+            while (charPosition != offset) {
+
+                if (bufferIndex + 1 >= current.Length && current.Position + current.Length >= input.Length) {
+                    length = charPosition + 1;
+                    break;
+                }
+
                 bufferIndex += step;
 
                 if (step > 0 && bufferIndex >= current.Length)
                     MoveToNextPart();
 
-                else if (step < 0 && bufferIndex < 0)
+                else if (step < 0 && bufferIndex < current.StartIndex)
                     MoveToPreviousPart();
 
-                if (current.Content[bufferIndex] <= 127)
-                    charPosition += step;
-
-                if (position >= input.Length) {
-                    length = charPosition;
+                if (current.Length < 1)
                     break;
-                }
+
+                if ((current.Content[bufferIndex] & 0xC0) != 0x80)
+                    charPosition += step;
             }
         }
-
-
 
         protected virtual void Dispose(bool disposing) {
             if (!disposedValue) {

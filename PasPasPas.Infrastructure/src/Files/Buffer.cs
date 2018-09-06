@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Diagnostics;
 
 namespace PasPasPas.Infrastructure.Files {
 
+    [DebuggerDisplay("{Length}:{string.Join(\",\", Content)}")]
     internal class BufferData {
         internal int Length;
+        internal long Position;
         internal char[] Content;
 
         public BufferData(int bufferSize)
@@ -38,14 +41,14 @@ namespace PasPasPas.Infrastructure.Files {
             if (bufferSize < 1)
                 throw new ArgumentException($"Invalid buffer size ${bufferSize}", nameof(bufferSize));
 
-            position = 0L;
             bufferIndex = 0;
             prev = new BufferData(bufferSize);
             current = new BufferData(bufferSize);
             next = new BufferData(bufferSize);
 
             current.Length = source.GetContent(current.Content, 0);
-            next.Length = source.GetContent(next.Content, current.Length);
+            next.Position = current.Length;
+            next.Length = source.GetContent(next.Content, next.Position);
 
             Content = current.Content;
         }
@@ -94,7 +97,8 @@ namespace PasPasPas.Infrastructure.Files {
             next = current;
             current = prev;
             prev = dataToDiscard;
-            prev.Length = source.GetContent(prev.Content, position - current.Length + 1);
+            prev.Position = current.Position - prev.Content.Length;
+            prev.Length = source.GetContent(prev.Content, prev.Position);
 
             bufferIndex = current.Length - 1;
             Content = current.Content;
@@ -108,7 +112,8 @@ namespace PasPasPas.Infrastructure.Files {
             prev = current;
             current = next;
             next = dataToDiscard;
-            next.Length = source.GetContent(next.Content, position + current.Length);
+            next.Position = current.Position + current.Length;
+            next.Length = source.GetContent(next.Content, next.Position);
 
             bufferIndex = 0;
             Content = current.Content;
