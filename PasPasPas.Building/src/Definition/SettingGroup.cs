@@ -1,7 +1,7 @@
-﻿using System.Linq;
-using System.Collections.Generic;
-using PasPasPas.Infrastructure.Files;
+﻿using System.Collections.Generic;
+using System.Linq;
 using PasPasPas.Infrastructure.Environment;
+using PasPasPas.Infrastructure.Files;
 
 namespace PasPasPas.Building.Definition {
 
@@ -37,21 +37,20 @@ namespace PasPasPas.Building.Definition {
         ///     get file references from this setting
         /// </summary>
         /// <returns>file references</returns>
-        public IList<IFileReference> AsFileList(StringPool pool, IFileAccess fileAccess) {
-            var result = new List<IFileReference>();
+        public IList<FileReference> AsFileList(StringPool pool) {
+            var result = new List<FileReference>();
 
             foreach (var item in Items) {
-                var reference = item as IResolvableSetting;
                 Setting setting;
 
-                if (reference == null)
+                if (!(item is IResolvableSetting reference))
                     setting = item;
                 else
                     setting = reference.ResolvedItem;
 
 
                 var fileBasedSettings = setting as IFileReferenceSetting;
-                foreach (var path in fileBasedSettings.GetReferencedFiles(pool, fileAccess))
+                foreach (var path in fileBasedSettings.GetReferencedFiles(pool))
                     result.Add(path);
 
             }

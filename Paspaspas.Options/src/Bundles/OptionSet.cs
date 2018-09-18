@@ -1,8 +1,7 @@
 ﻿using System;
-using PasPasPas.Options.DataTypes;
-using PasPasPas.Infrastructure.Log;
-using PasPasPas.Infrastructure.Files;
 using PasPasPas.Infrastructure.Environment;
+using PasPasPas.Infrastructure.Log;
+using PasPasPas.Options.DataTypes;
 
 namespace PasPasPas.Options.Bundles {
 
@@ -50,7 +49,6 @@ namespace PasPasPas.Options.Bundles {
         ///     create a new option set
         /// </summary>
         public OptionSet(OptionSet baseOptions, IBasicEnvironment environment) {
-            Files = environment.Files;
             Environment = environment;
             CompilerOptions = new CompileOptions(baseOptions?.CompilerOptions);
             ConditionalCompilation = new ConditionalCompilationOptions(baseOptions?.ConditionalCompilation);
@@ -80,14 +78,9 @@ namespace PasPasPas.Options.Bundles {
         public PathOptionSet PathOptions { get; }
 
         /// <summary>
-        ///     warning optiosn
+        ///     warning options
         /// </summary>
         public WarningOptions Warnings { get; }
-
-        /// <summary>
-        ///     file access
-        /// </summary>
-        public IFileAccess Files { get; }
 
         /// <summary>
         ///     used environment

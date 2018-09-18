@@ -15,6 +15,6 @@ namespace PasPasPas.Options.DataTypes {
         /// <summary>
         ///     file to link
         /// </summary>
-        public IFileReference TargetPath { get; set; }
+        public FileReference TargetPath { get; set; }
     }
 }

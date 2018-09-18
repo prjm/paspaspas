@@ -20,6 +20,6 @@ namespace PasPasPas.Options.DataTypes {
         /// <summary>
         ///     target path
         /// </summary>
-        public IFileReference TargetPath { get; set; }
+        public FileReference TargetPath { get; set; }
     }
 }

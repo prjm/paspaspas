@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Text;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Infrastructure.Environment;
@@ -20,12 +19,6 @@ namespace PasPasPas.Api {
     ///     factories needed
     /// </summary>
     public class DefaultEnvironment : ITypedEnvironment {
-
-        /// <summary>
-        ///     access to files
-        /// </summary>
-        private readonly StandardFileAccess files
-            = new StandardFileAccess();
 
         /// <summary>
         ///     runtime values: constants and type references
@@ -72,12 +65,6 @@ namespace PasPasPas.Api {
             = new LogManager();
 
         /// <summary>
-        ///     file access
-        /// </summary>
-        public IFileAccess Files
-            => files;
-
-        /// <summary>
         ///     string builder pool
         /// </summary>
         public StringBuilderPool StringBuilderPool { get; }
@@ -119,7 +106,6 @@ namespace PasPasPas.Api {
         public IEnumerable<object> Entries {
             get {
                 var data = new object[] {
-                    files,
                     IntegerParser,
                     HexNumberParser,
                     CharLiteralConverter,
@@ -130,13 +116,12 @@ namespace PasPasPas.Api {
                     Patterns,
                     Log,
                     ListPools,
-                    Files,
                     TypeRegistry
                 };
                 return data;
             }
         }
 
-
+        public void AddMockupFile(FileReference inputFile, string content) => throw new System.NotImplementedException();
     }
 }

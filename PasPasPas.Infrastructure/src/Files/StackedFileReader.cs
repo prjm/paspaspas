@@ -1,11 +1,12 @@
 ﻿using System;
+using System.IO;
 
 namespace PasPasPas.Infrastructure.Files {
 
     /// <summary>
-    ///     read from a combiniation of textfiles
+    ///     read from a combination of text files
     /// </summary>
-    public sealed class StackedFileReader {
+    public class StackedFileReader : IDisposable {
 
         /// <summary>
         ///     helper class for nested input
@@ -16,27 +17,38 @@ namespace PasPasPas.Infrastructure.Files {
         }
 
         private NestedInput input = null;
-        private readonly FileBuffer buffer;
-
-        /// <summary>
-        ///     create a new stacked file reader
-        /// </summary>
-        /// <param name="fileBuffer">file buffer</param>
-        public StackedFileReader(FileBuffer fileBuffer)
-            => buffer = fileBuffer ?? throw new ArgumentNullException(nameof(fileBuffer));
 
         /// <summary>
         ///     adds a file to read
         /// </summary>
         /// <param name="input">input to add</param>
-        public void AddFileToRead(IFileReference input) {
+        public void AddFileToRead(FileReference input) {
             if (input == null)
                 throw new ArgumentNullException(nameof(input));
 
+            var bufferSize = 1024;
+            var stream = new FileStream(input.Path, FileMode.Open, FileAccess.Read, FileShare.Read);
+
             this.input = new NestedInput() {
-                Input = new FileBufferItemOffset(this, buffer[input]),
+                Input = new FileBufferItemOffset(this, input, new Utf8StreamBufferSource(stream, bufferSize, bufferSize)),
                 Parent = this.input
             };
+        }
+
+        /// <summary>
+        ///     add a string to read
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="source"></param>
+        public void AddStringToRead(FileReference path, string source) {
+            if (input == null)
+                throw new ArgumentNullException(nameof(path));
+
+            input = new NestedInput() {
+                Input = new FileBufferItemOffset(this, path, new StringBufferSource(source)),
+                Parent = input
+            };
+
         }
 
         /// <summary>
@@ -54,12 +66,6 @@ namespace PasPasPas.Infrastructure.Files {
             else
                 return input.Input;
         }
-
-        /// <summary>
-        ///     file buffer
-        /// </summary>
-        public FileBuffer Buffer
-            => buffer;
 
         /// <summary>
         ///     access the current file
@@ -110,7 +116,7 @@ namespace PasPasPas.Infrastructure.Files {
         /// <summary>
         ///     current position
         /// </summary>
-        public int Position
+        public long Position
             => input != null ? input.Input.Position : -1;
 
         /// <summary>
@@ -122,5 +128,34 @@ namespace PasPasPas.Infrastructure.Files {
 
             return input.Input.NextChar();
         }
+
+        #region IDisposable Support
+        private bool disposedValue = false; // To detect redundant calls
+
+        protected virtual void Dispose(bool disposing) {
+            if (!disposedValue) {
+                if (disposing) {
+                    // TODO: dispose managed state (managed objects).
+                }
+
+                // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
+                // TODO: set large fields to null.
+
+                disposedValue = true;
+            }
+        }
+
+        // TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
+        // ~StackedFileReader() {
+        //   // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+        //   Dispose(false);
+        // }
+
+        // This code added to correctly implement the disposable pattern.
+        public void Dispose() =>
+            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+            Dispose(true);// TODO: uncomment the following line if the finalizer is overridden above.// GC.SuppressFinalize(this);
+
+        #endregion
     }
 }

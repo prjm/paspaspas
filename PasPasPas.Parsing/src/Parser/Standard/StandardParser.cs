@@ -1121,7 +1121,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
         /// <returns></returns>
 
         [Rule("Package", "PackageHead RequiresClause [ ContainsClause ] 'end' '.' ")]
-        public PackageSymbol ParsePackage(IFileReference path) {
+        public PackageSymbol ParsePackage(FileReference path) {
             var packageHead = ParsePackageHead();
             var requiresClause = ParseRequiresClause();
             var containsClause = default(PackageContainsSymbol);
@@ -1212,7 +1212,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
         /// <returns></returns>
 
         [Rule("Library", "LibraryHead [UsesFileClause] Block '.' ")]
-        public LibrarySymbol ParseLibrary(IFileReference path)
+        public LibrarySymbol ParseLibrary(FileReference path)
             => new LibrarySymbol(
                 libraryHead: ParseLibraryHead(),
                 uses: Match(TokenKind.Uses) ? ParseUsesFileClause() : null,
@@ -1246,7 +1246,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
         /// <returns></returns>
 
         [Rule("Program", "[ProgramHead] [UsesFileClause] Block '.'")]
-        public ProgramSymbol ParseProgram(IFileReference path)
+        public ProgramSymbol ParseProgram(FileReference path)
             => new ProgramSymbol(
                 programHead: Match(TokenKind.Program) ? ParseProgramHead() : null,
                 uses: Match(TokenKind.Uses) ? ParseUsesFileClause() : null,

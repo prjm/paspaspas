@@ -14,7 +14,7 @@ namespace PasPasPas.Infrastructure.Files {
         /// <param name="pathToResolve">path to resolve</param>
         /// <param name="target">target directory</param>
         /// <param name="isResolved"><c>true</c> if the file is resolved</param>
-        public ResolvedFile(IFileReference currentDirectory, IFileReference pathToResolve, IFileReference target, bool isResolved) {
+        public ResolvedFile(FileReference currentDirectory, FileReference pathToResolve, FileReference target, bool isResolved) {
             CurrentDirectory = currentDirectory ?? throw new ArgumentNullException(nameof(currentDirectory));
             PathToResolve = pathToResolve ?? throw new ArgumentNullException(nameof(pathToResolve));
             TargetPath = target ?? throw new ArgumentNullException(nameof(target));
@@ -24,7 +24,7 @@ namespace PasPasPas.Infrastructure.Files {
         /// <summary>
         ///     current directory
         /// </summary>
-        public IFileReference CurrentDirectory { get; }
+        public FileReference CurrentDirectory { get; }
 
         /// <summary>
         ///     flag, <c>true</c> if the file exists
@@ -34,11 +34,11 @@ namespace PasPasPas.Infrastructure.Files {
         /// <summary>
         ///     path to resolve
         /// </summary>
-        public IFileReference PathToResolve { get; }
+        public FileReference PathToResolve { get; }
 
         /// <summary>
         ///     target path
         /// </summary>
-        public IFileReference TargetPath { get; }
+        public FileReference TargetPath { get; }
     }
 }

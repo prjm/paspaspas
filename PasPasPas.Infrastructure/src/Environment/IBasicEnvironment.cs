@@ -11,14 +11,9 @@ namespace PasPasPas.Infrastructure.Environment {
     public interface IBasicEnvironment {
 
         /// <summary>
-        ///     logging
+        ///     logging / error reporting
         /// </summary>
         ILogManager Log { get; }
-
-        /// <summary>
-        ///     file access
-        /// </summary>
-        IFileAccess Files { get; }
 
         /// <summary>
         ///     string builder pool
@@ -39,6 +34,13 @@ namespace PasPasPas.Infrastructure.Environment {
         ///     enumerated entries
         /// </summary>
         IEnumerable<object> Entries { get; }
+
+        /// <summary>
+        ///     add a mockup file
+        /// </summary>
+        /// <param name="inputFile"></param>
+        /// <param name="content"></param>
+        void AddMockupFile(FileReference inputFile, string content);
 
     }
 }

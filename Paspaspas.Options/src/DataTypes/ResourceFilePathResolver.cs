@@ -1,7 +1,7 @@
-﻿using PasPasPas.Options.Bundles;
-using System;
+﻿using System;
 using System.IO;
 using PasPasPas.Infrastructure.Files;
+using PasPasPas.Options.Bundles;
 
 namespace PasPasPas.Options.DataTypes {
 
@@ -22,14 +22,14 @@ namespace PasPasPas.Options.DataTypes {
         /// <param name="basePath"></param>
         /// <param name="pathToResolve"></param>
         /// <returns></returns>
-        protected override ResolvedFile DoResolvePath(IFileReference basePath, IFileReference pathToResolve) {
+        protected override ResolvedFile DoResolvePath(FileReference basePath, FileReference pathToResolve) {
 
             if (pathToResolve.Path.StartsWith("*", StringComparison.Ordinal)) {
-                pathToResolve = Files.ReferenceToFile(StringPool, pathToResolve.Path.Replace("*", Path.GetFileNameWithoutExtension(basePath.Path)));
+                pathToResolve = new FileReference(pathToResolve.Path.Replace("*", Path.GetFileNameWithoutExtension(basePath.Path)));
             }
 
             if (string.IsNullOrWhiteSpace(Path.GetExtension(pathToResolve.Path))) {
-                pathToResolve = Files.ReferenceToFile(StringPool, Path.ChangeExtension(pathToResolve.Path, ".res"));
+                pathToResolve = new FileReference(Path.ChangeExtension(pathToResolve.Path, ".res"));
             }
 
             return ResolveFromSearchPath(basePath, pathToResolve);

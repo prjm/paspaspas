@@ -1,8 +1,7 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Abstract;
-using System;
+﻿using System;
 using System.IO;
 using PasPasPas.Infrastructure.Log;
-using PasPasPas.Infrastructure.Files;
+using PasPasPas.Parsing.SyntaxTree.Abstract;
 
 namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
@@ -29,7 +28,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         }
 
-        private IStartEndVisitor visitor;
+        private readonly IStartEndVisitor visitor;
 
         /// <summary>
         ///     common visitor
@@ -55,12 +54,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         public static readonly Guid StructureValidatorGroupId
              = new Guid(new byte[] { 0xcf, 0x1b, 0x1a, 0xa4, 0x41, 0x79, 0xd7, 0x47, 0xb4, 0xc0, 0x53, 0xed, 0xa7, 0xb8, 0x39, 0x37 });
         /* {a41a1bcf-7941-47d7-b4c0-53eda7b83937} */
-
-
-        /// <summary>
-        ///     file access
-        /// </summary>
-        public IFileAccess FileAccess { get; set; }
 
         /// <summary>
         ///     log source

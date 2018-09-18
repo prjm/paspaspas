@@ -5,34 +5,35 @@
     /// </summary>
     public sealed class FileBufferItemOffset {
 
-        private readonly FileBufferItem input;
+        private readonly Buffer input;
         private readonly StackedFileReader reader;
-        private readonly int length;
-        private int offset;
+        private long offset;
+        private readonly FileReference fileReference;
 
         /// <summary>
         ///     creates a new file buffer item offset
         /// </summary>
         /// <param name="inputFile">input file</param>
+        /// <param name="file"></param>
         /// <param name="owner">owner reader</param>
-        public FileBufferItemOffset(StackedFileReader owner, FileBufferItem inputFile) {
-            input = inputFile;
-            length = input.Length;
+        public FileBufferItemOffset(StackedFileReader owner, FileReference file, IBufferSource inputFile) {
+            input = new Buffer(inputFile, 1024);
             reader = owner;
             offset = -1;
+            fileReference = file;
         }
 
         /// <summary>
         ///     <c>true</c> if the end of read file is reached (EOF)
         /// </summary>
         public bool AtEof
-            => offset >= length - 1;
+            => offset >= input.Length - 1;
 
         /// <summary>
         ///     fetch the next char
         /// </summary>
         public char NextChar() {
-            if (offset >= length)
+            if (offset >= input.Length)
                 return '\0';
             offset++;
             return Value;
@@ -48,7 +49,7 @@
         ///     current reader value
         /// </summary>
         public char Value
-            => input.CharAt(offset, true);
+            => input.Content[input.BufferIndex];
 
         /// <summary>
         ///     navigate to the previous char
@@ -63,13 +64,13 @@
         /// <summary>
         ///     file name
         /// </summary>
-        public IFileReference File
-            => input.File;
+        public FileReference File
+            => fileReference;
 
         /// <summary>
         ///     current position
         /// </summary>
-        public int Position
+        public long Position
             => offset;
 
         /// <summary>
@@ -77,8 +78,10 @@
         /// </summary>
         /// <returns></returns>
         public char LookAhead(int number) {
-            var position = offset + number;
-            return input.CharAt(position, true);
+            input.Position += number;
+            var result = input.Content[input.BufferIndex];
+            input.Position -= number;
+            return result;
         }
 
     }

@@ -3,7 +3,7 @@ using System.Diagnostics;
 
 namespace PasPasPas.Infrastructure.Files {
 
-    [DebuggerDisplay("{Length}:{string.Join(\",\", Content)}")]
+    [DebuggerDisplay("{Position}|->{Length}:{string.Join(\",\", Content)}")]
     internal class BufferData {
         internal int Length;
         internal long Position;
@@ -97,8 +97,8 @@ namespace PasPasPas.Infrastructure.Files {
             next = current;
             current = prev;
             prev = dataToDiscard;
-            prev.Position = current.Position - prev.Content.Length;
-            prev.Length = source.GetContent(prev.Content, prev.Position);
+            prev.Length = source.GetContent(prev.Content, current.Position - current.Content.Length);
+            prev.Position = current.Position - prev.Length;
 
             bufferIndex = current.Length - 1;
             Content = current.Content;
@@ -136,5 +136,11 @@ namespace PasPasPas.Infrastructure.Files {
         /// </summary>
         public int BufferIndex
             => bufferIndex;
+
+        /// <summary>
+        ///     file length
+        /// </summary>
+        public long Length
+            => source.Length;
     }
 }

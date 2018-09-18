@@ -1,6 +1,6 @@
 ﻿using System.IO;
-using PasPasPas.Options.Bundles;
 using PasPasPas.Infrastructure.Files;
+using PasPasPas.Options.Bundles;
 
 namespace PasPasPas.Options.DataTypes {
 
@@ -18,7 +18,7 @@ namespace PasPasPas.Options.DataTypes {
         ///     Create a new search path resolve
         /// </summary>
         /// <param name="options"></param>
-        protected SearchPathResolver(OptionSet options) : base(options.Files, options.Environment.StringPool)
+        protected SearchPathResolver(OptionSet options) : base(options.Environment.StringPool)
             => optionSet = options;
 
         /// <summary>
@@ -27,7 +27,7 @@ namespace PasPasPas.Options.DataTypes {
         /// <param name="basePath">base path</param>
         /// <param name="pathToResolve">path to resolve</param>
         /// <returns>resolved file</returns>
-        protected ResolvedFile ResolveFromSearchPath(IFileReference basePath, IFileReference pathToResolve) {
+        protected ResolvedFile ResolveFromSearchPath(FileReference basePath, FileReference pathToResolve) {
             string currentDirectory;
 
             if (basePath != null && !string.IsNullOrEmpty(basePath.Path)) {
@@ -37,7 +37,7 @@ namespace PasPasPas.Options.DataTypes {
                 currentDirectory = null;
             }
 
-            var result = ResolveInDirectory(StringPool, Files.ReferenceToFile(StringPool, currentDirectory), pathToResolve);
+            var result = ResolveInDirectory(StringPool, new FileReference(currentDirectory), pathToResolve);
             if (result.IsResolved) {
                 return result;
             }

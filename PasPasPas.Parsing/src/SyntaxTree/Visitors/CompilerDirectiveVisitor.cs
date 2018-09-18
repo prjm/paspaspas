@@ -86,7 +86,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         private readonly ILogManager log;
         private OptionSet Options { get; }
         private readonly LogSource logSource;
-        private readonly IFileReference path;
+        private readonly FileReference path;
 
         private readonly Guid logSourceId
              = new Guid(new byte[] { 0x67, 0x23, 0x1b, 0x2e, 0xf6, 0x4b, 0xdf, 0x40, 0xac, 0xf8, 0x2, 0xc3, 0x1d, 0x7c, 0x2e, 0xf2 });
@@ -95,7 +95,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     creates a new visitor
         /// </summary>
-        public CompilerDirectiveVisitor(OptionSet options, IFileReference filePath, ILogManager logMgr) {
+        public CompilerDirectiveVisitor(OptionSet options, FileReference filePath, ILogManager logMgr) {
             Options = options;
             visitor = new Visitor(this);
             log = logMgr;
@@ -106,13 +106,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         private static readonly Guid messageSource
             = new Guid(new byte[] { 0xcc, 0x3b, 0xd8, 0xdd, 0xbf, 0x76, 0x5f, 0x40, 0xa2, 0xe8, 0x8a, 0xbd, 0x9f, 0xb6, 0x20, 0xc4 });
         /* {ddd83bcc-76bf-405f-a2e8-8abd9fb620c4} */
-
-
-        /// <summary>
-        ///     file access
-        /// </summary>
-        public IFileAccess FileAccess
-            => Options.Files;
 
         /// <summary>
         ///     compile options
@@ -978,9 +971,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (fileName == null || string.IsNullOrWhiteSpace(fileName))
                 return;
 
-            var resolvedFile = Meta.LinkedFileResolver.ResolvePath(
-                basePath,
-                Meta.LinkedFileResolver.Files.ReferenceToFile(Options.Environment.StringPool, fileName));
+            var resolvedFile = Meta.LinkedFileResolver.ResolvePath(basePath, new FileReference(fileName));
 
             if (resolvedFile.IsResolved) {
                 var linkedFile = new LinkedFile() {
@@ -1010,9 +1001,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 return;
 
 
-            var resolvedFile = Meta.ResourceFilePathResolver.ResolvePath(
-                basePath,
-                Meta.ResourceFilePathResolver.Files.ReferenceToFile(Options.Environment.StringPool, fileName));
+            var resolvedFile = Meta.ResourceFilePathResolver.ResolvePath(basePath, new FileReference(fileName));
 
             if (resolvedFile.IsResolved) {
                 var resourceReference = new ResourceReference() {
@@ -1042,11 +1031,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 return;
 
             var targetPath = Meta.IncludePathResolver.ResolvePath(
-                basePath,
-                Meta.IncludePathResolver.Files.ReferenceToFile(Options.Environment.StringPool, fileName)).TargetPath;
+                basePath, new FileReference(fileName)).TargetPath;
 
             if (IncludeInput != null) {
-                IncludeInput.Buffer.Add(targetPath, Options.Files.OpenFileForReading(targetPath));
                 IncludeInput.AddFileToRead(targetPath);
             }
         }

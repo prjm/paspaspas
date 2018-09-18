@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using PasPasPas.Globals.Runtime;
-using PasPasPas.Infrastructure.Environment;
 using PasPasPas.Infrastructure.Files;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Infrastructure.ObjectPooling;
@@ -53,7 +52,7 @@ namespace PasPasPas.Parsing.Tokenizer {
     /// </summary>
     public sealed class TokenizerWithLookahead : ITokenizer, IDisposable {
 
-        private static Guid tokenSequencePool
+        private static readonly Guid tokenSequencePool
             = new Guid(new byte[] { 0x9b, 0xd7, 0xb5, 0x3a, 0xc2, 0xf6, 0x6a, 0x47, 0xb4, 0x29, 0x4a, 0xd8, 0x19, 0x73, 0x8e, 0x56 });
         /* {3ab5d79b-f6c2-476a-b429-4ad819738e56} */
 
@@ -137,7 +136,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         }
 
         private OptionSet options;
-        private TokenizerMode mode = TokenizerMode.Undefined;
+        private readonly TokenizerMode mode = TokenizerMode.Undefined;
         private readonly IParserEnvironment environment;
         private readonly IRuntimeValueFactory constValues;
 
@@ -250,19 +249,17 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         /// <param name="nextToken"></param>
         /// <param name="path">current path</param>
-        private void ProcessMacroToken(IFileReference path, ref Token nextToken) {
+        private void ProcessMacroToken(FileReference path, ref Token nextToken) {
             var patterns = environment.Patterns.CompilerDirectivePatterns;
-            var fragmentBuffer = new FileBuffer();
-            var reader = new StackedFileReader(fragmentBuffer);
-            var macroValue = nextToken.ParsedValue as IStringValue;
+            using (var reader = new StackedFileReader()) {
+                var macroValue = nextToken.ParsedValue as IStringValue;
+                reader.AddStringToRead(path, macroValue.AsUnicodeString);
 
-            fragmentBuffer.Add(path, new StringBufferReadable(macroValue.AsUnicodeString));
-            reader.AddFileToRead(path);
-
-            using (var parser = new CompilerDirectiveParser(environment, options, reader)) {
-                var result = parser.Parse();
-                var visitor = new CompilerDirectiveVisitor(options, path, Log);
-                result.Accept(visitor.AsVisitor());
+                using (var parser = new CompilerDirectiveParser(environment, options, reader)) {
+                    var result = parser.Parse();
+                    var visitor = new CompilerDirectiveVisitor(options, path, Log);
+                    result.Accept(visitor.AsVisitor());
+                }
             }
         }
 

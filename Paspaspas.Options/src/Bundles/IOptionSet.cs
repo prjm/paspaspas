@@ -1,5 +1,4 @@
-﻿using PasPasPas.Infrastructure.Files;
-using PasPasPas.Infrastructure.Log;
+﻿using PasPasPas.Infrastructure.Log;
 using PasPasPas.Options.DataTypes;
 
 namespace PasPasPas.Options.Bundles {
@@ -44,13 +43,9 @@ namespace PasPasPas.Options.Bundles {
         ///     get information for a switch
         /// </summary>
         /// <param name="switchKind">switch kind</param>
-        /// <returns>switch infi</returns>
+        /// <returns>switch info</returns>
         SwitchInfo GetSwitchInfo(string switchKind);
 
-        /// <summary>
-        ///     file access
-        /// </summary>
-        IFileAccess Files { get; }
 
     }
 }

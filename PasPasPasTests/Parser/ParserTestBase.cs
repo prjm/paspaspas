@@ -53,7 +53,6 @@ namespace PasPasPasTests.Parser {
             ClearOptions(testOptions);
 
             var log = new LogTarget();
-            var fileAccess = new StandardFileAccess();
             var env = new DefaultEnvironment();
             var api = new ParserApi(env, testOptions);
 
@@ -198,17 +197,16 @@ namespace PasPasPasTests.Parser {
         protected void RunCompilerDirective(string directive, object expected, Func<OptionSet, object> actual, params Guid[] messages) {
 
             var env = CreateEnvironment();
-            var fileAccess = env.Files;
             var fileCounter = 0;
             var incFile = new FileReference(Path.GetFullPath("dummy.inc"));
             var resFile1 = new FileReference(Path.GetFullPath("res.res"));
             var resFile2 = new FileReference(Path.GetFullPath("test_0.res"));
             var linkDll = new FileReference(Path.GetFullPath("link.dll"));
 
-            fileAccess.AddMockupFile(incFile, new StringBufferReadable("DEFINE DUMMY_INC"));
-            fileAccess.AddMockupFile(resFile1, new StringBufferReadable("RES RES RES"));
-            fileAccess.AddMockupFile(resFile2, new StringBufferReadable("RES RES RES"));
-            fileAccess.AddMockupFile(linkDll, new StringBufferReadable("MZE!"));
+            env.AddMockupFile(incFile, "DEFINE DUMMY_INC");
+            env.AddMockupFile(resFile1, "RES RES RES");
+            env.AddMockupFile(resFile2, "RES RES RES");
+            env.AddMockupFile(linkDll, "MZE!");
 
             var testOptions = new OptionSet(env);
 
@@ -225,37 +223,33 @@ namespace PasPasPasTests.Parser {
                 foreach (var subPart in subParts) {
                     var hasFoundInput = false;
                     var path = new FileReference("test_" + fileCounter.ToString(CultureInfo.InvariantCulture) + ".pas");
-                    var input = new StringBufferReadable(subPart);
-                    var buffer = new FileBuffer();
-                    var reader = new StackedFileReader(buffer);
-                    var visitor = new CompilerDirectiveVisitor(testOptions, path, env.Log);
-                    var terminals = new TerminalVisitor();
+                    using (var reader = new StackedFileReader()) {
+                        var visitor = new CompilerDirectiveVisitor(testOptions, path, env.Log);
+                        var terminals = new TerminalVisitor();
+                        reader.AddStringToRead(path, subPart);
+                        var parser = new CompilerDirectiveParser(env, testOptions, reader) {
+                            IncludeInput = reader
+                        };
 
-                    buffer.Add(path, input);
+                        while (reader.CurrentFile != null && !reader.AtEof) {
+                            var result = parser.Parse();
 
-                    reader.AddFileToRead(path);
-                    var parser = new CompilerDirectiveParser(env, testOptions, reader) {
-                        IncludeInput = reader
-                    };
+                            if (!hasFoundInput) {
+                                terminals.ResultBuilder.Clear();
+                                if (result != null)
+                                    result.Accept(terminals.AsVisitor());
 
-                    while (reader.CurrentFile != null && !reader.AtEof) {
-                        var result = parser.Parse();
+                                Assert.AreEqual(subPart, terminals.ResultBuilder.ToString());
+                            }
+                            hasFoundInput = (reader.CurrentFile == null || reader.AtEof) || hasFoundInput;
 
-                        if (!hasFoundInput) {
-                            terminals.ResultBuilder.Clear();
+                            visitor.IncludeInput = reader;
                             if (result != null)
-                                result.Accept(terminals.AsVisitor());
+                                result.Accept(visitor.AsVisitor());
 
-                            Assert.AreEqual(subPart, terminals.ResultBuilder.ToString());
                         }
-                        hasFoundInput = (reader.CurrentFile == null || reader.AtEof) || hasFoundInput;
-
-                        visitor.IncludeInput = reader;
-                        if (result != null)
-                            result.Accept(visitor.AsVisitor());
-
+                        fileCounter++;
                     }
-                    fileCounter++;
                 }
             }
 

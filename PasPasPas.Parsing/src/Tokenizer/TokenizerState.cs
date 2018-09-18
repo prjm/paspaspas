@@ -1,11 +1,11 @@
 ﻿using System;
-using PasPasPas.Infrastructure.Log;
-using PasPasPas.Infrastructure.Files;
-using PasPasPas.Infrastructure.ObjectPooling;
-using PasPasPas.Parsing.Tokenizer.LiteralValues;
-using PasPasPas.Globals.Runtime;
 using System.Text;
+using PasPasPas.Globals.Runtime;
+using PasPasPas.Infrastructure.Files;
+using PasPasPas.Infrastructure.Log;
+using PasPasPas.Infrastructure.ObjectPooling;
 using PasPasPas.Infrastructure.Utils;
+using PasPasPas.Parsing.Tokenizer.LiteralValues;
 
 namespace PasPasPas.Parsing.Tokenizer {
 
@@ -61,7 +61,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <summary>
         ///     get the current position
         /// </summary>
-        public int CurrentPosition
+        public long CurrentPosition
             => input.Position;
 
         /// <summary>
@@ -75,7 +75,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <summary>
         ///     start position
         /// </summary>
-        public int StartPosition { get; set; }
+        public long StartPosition { get; set; }
 
         /// <summary>
         ///     get a pooled string buffer

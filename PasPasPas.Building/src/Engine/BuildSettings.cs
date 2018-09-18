@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using PasPasPas.Infrastructure.Files;
 
 namespace PasPasPas.Building.Engine {
 
@@ -7,11 +6,6 @@ namespace PasPasPas.Building.Engine {
     ///     settings for a single build
     /// </summary>
     public class BuildSettings {
-
-        /// <summary>
-        ///     file access
-        /// </summary>
-        public IFileAccess FileSystemAccess { get; set; }
 
         /// <summary>
         ///     targets to build

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Text;
 using PasPasPas.Api;
 using PasPasPas.Infrastructure.Environment;
@@ -34,7 +35,7 @@ namespace SampleRunner {
             => $"[{data.GetType().ToString()}]";
 
         private static void RunSample(IParserEnvironment environment, StringBuilder result, Action<StringBuilder> action) {
-            var timer = new ExecutionTimer();
+            var timer = new Stopwatch();
             timer.Start();
             action(result);
             timer.Stop();
@@ -60,7 +61,7 @@ namespace SampleRunner {
             }
 
             result.AppendLine(new string('-', 80));
-            result.AppendLine($"{timer.TickCount} ticks required ({timer.Duration.TotalMilliseconds}).");
+            result.AppendLine($"{timer.ElapsedTicks} ticks required ({timer.Elapsed.TotalMilliseconds}).");
             result.AppendLine($"{GC.CollectionCount(0)} collections level 0.");
             result.AppendLine($"{GC.CollectionCount(1)} collections level 1.");
             result.AppendLine($"{GC.CollectionCount(2)} collections level 2.");

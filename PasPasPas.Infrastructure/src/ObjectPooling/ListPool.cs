@@ -58,9 +58,8 @@ namespace PasPasPas.Infrastructure.ObjectPooling {
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public PoolItem<List<T>> GetList<T>() where T : class {
-            return GetPool<T>().Borrow();
-        }
+        public PoolItem<List<T>> GetList<T>() where T : class
+            => GetPool<T>().Borrow();
 
         /// <summary>
         ///     get an immutable array builder

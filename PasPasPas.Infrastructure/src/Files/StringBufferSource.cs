@@ -4,7 +4,7 @@ namespace PasPasPas.Infrastructure.Files {
 
     /// <summary>
     ///     new string buffer
-    /// </summary>
+    /// </get>
     public class StringBufferSource : IBufferSource {
 
         private readonly string bufferContent;
@@ -29,7 +29,6 @@ namespace PasPasPas.Infrastructure.Files {
         /// <param name="offset">start offset</param>
         /// <returns>number of characters</returns>
         public int GetContent(char[] target, long offset) {
-
             var charsToCopy = (int)Math.Max(0, Math.Min(target.Length, Length - offset));
             var remainingChars = Math.Max(0, target.Length - charsToCopy);
 

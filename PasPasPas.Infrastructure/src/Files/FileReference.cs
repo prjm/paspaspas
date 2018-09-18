@@ -6,7 +6,7 @@ namespace PasPasPas.Infrastructure.Files {
     ///     common way to reference files
     /// </summary>
     /// <remarks>immutable</remarks>
-    public class FileReference : IFileReference {
+    public class FileReference {
 
         private readonly int hashcode;
 
@@ -40,7 +40,7 @@ namespace PasPasPas.Infrastructure.Files {
         /// </summary>
         /// <param name="path">path to add</param>
         /// <returns>combined path</returns>
-        public IFileReference Append(IFileReference path)
+        public FileReference Append(FileReference path)
             => new FileReference(System.IO.Path.Combine(Path, path.Path));
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace PasPasPas.Infrastructure.Files {
             => Path;
 
         /// <summary>
-        ///     get the hashcode
+        ///     get the hash code
         /// </summary>
         /// <returns></returns>
         public override int GetHashCode()
@@ -63,7 +63,7 @@ namespace PasPasPas.Infrastructure.Files {
         /// <param name="obj"></param>
         /// <returns></returns>
         public override bool Equals(object obj) {
-            var other = obj as IFileReference;
+            var other = obj as FileReference;
 
             if (other is null)
                 return false;

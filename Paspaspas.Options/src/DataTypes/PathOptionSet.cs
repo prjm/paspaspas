@@ -12,12 +12,12 @@ namespace PasPasPas.Options.DataTypes {
         /// </summary>
         /// <param name="baseOptions">base options</param>
         public PathOptionSet(PathOptionSet baseOptions)
-            => SearchPaths = new DerivedListOption<IFileReference>(baseOptions?.SearchPaths);
+            => SearchPaths = new DerivedListOption<FileReference>(baseOptions?.SearchPaths);
 
         /// <summary>
         ///     search paths
         /// </summary>
-        public DerivedListOption<IFileReference> SearchPaths { get; internal set; }
+        public DerivedListOption<FileReference> SearchPaths { get; internal set; }
 
 
         /// <summary>

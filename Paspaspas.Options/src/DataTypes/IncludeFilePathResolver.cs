@@ -22,7 +22,7 @@ namespace PasPasPas.Options.DataTypes {
         /// <param name="basePath"></param>
         /// <param name="pathToResolve"></param>
         /// <returns></returns>
-        protected override ResolvedFile DoResolvePath(IFileReference basePath, IFileReference pathToResolve)
+        protected override ResolvedFile DoResolvePath(FileReference basePath, FileReference pathToResolve)
             => ResolveFromSearchPath(basePath, pathToResolve);
 
     }
