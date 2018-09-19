@@ -6,7 +6,7 @@ namespace PasPasPas.Infrastructure.Files {
     /// <summary>
     ///     read from a combination of text files
     /// </summary>
-    public class StackedFileReader : IDisposable {
+    public sealed class StackedFileReader : IDisposable {
 
         /// <summary>
         ///     helper class for nested input
@@ -41,7 +41,7 @@ namespace PasPasPas.Infrastructure.Files {
         /// <param name="path"></param>
         /// <param name="source"></param>
         public void AddStringToRead(FileReference path, string source) {
-            if (input == null)
+            if (path == null)
                 throw new ArgumentNullException(nameof(path));
 
             input = new NestedInput() {
@@ -58,6 +58,8 @@ namespace PasPasPas.Infrastructure.Files {
 
             if (input == null)
                 throw new InvalidOperationException("No input file.");
+
+            input.Input.Dispose();
 
             input = input.Parent;
 
@@ -126,36 +128,30 @@ namespace PasPasPas.Infrastructure.Files {
             if (input == null)
                 throw new InvalidOperationException("No input file.");
 
-            return input.Input.NextChar();
+            var value = input.Input.Value;
+            input.Input.NextChar();
+            return value;
         }
 
-        #region IDisposable Support
         private bool disposedValue = false; // To detect redundant calls
 
-        protected virtual void Dispose(bool disposing) {
+        private void Dispose(bool disposing) {
             if (!disposedValue) {
                 if (disposing) {
-                    // TODO: dispose managed state (managed objects).
+                    while (input != null) {
+                        input.Input.Dispose();
+                        input = input.Parent;
+                    }
                 }
-
-                // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
-                // TODO: set large fields to null.
-
                 disposedValue = true;
             }
         }
 
-        // TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
-        // ~StackedFileReader() {
-        //   // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-        //   Dispose(false);
-        // }
-
-        // This code added to correctly implement the disposable pattern.
+        /// <summary>
+        ///     dispose this stacked file reader
+        /// </summary>
         public void Dispose() =>
-            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-            Dispose(true);// TODO: uncomment the following line if the finalizer is overridden above.// GC.SuppressFinalize(this);
+            Dispose(true);
 
-        #endregion
     }
 }

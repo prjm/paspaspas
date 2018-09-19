@@ -16,11 +16,10 @@ namespace PasPasPas.Infrastructure.Files {
     /// <summary>
     ///     variable-sized buffer to read char-based content
     /// </summary>
-    public class Buffer {
+    public sealed class FileBuffer : IDisposable {
 
         private readonly IBufferSource source;
         private long position;
-        private int bufferIndex;
         private BufferData prev;
         private BufferData current;
         private BufferData next;
@@ -35,13 +34,13 @@ namespace PasPasPas.Infrastructure.Files {
         /// </summary>
         /// <param name="bufferSource">buffer source</param>
         /// <param name="bufferSize">buffer size</param>
-        public Buffer(IBufferSource bufferSource, int bufferSize) {
+        public FileBuffer(IBufferSource bufferSource, int bufferSize) {
             source = bufferSource ?? throw new ArgumentNullException(nameof(bufferSource));
 
             if (bufferSize < 1)
                 throw new ArgumentException($"Invalid buffer size ${bufferSize}", nameof(bufferSize));
 
-            bufferIndex = 0;
+            BufferIndex = 0;
             prev = new BufferData(bufferSize);
             current = new BufferData(bufferSize);
             next = new BufferData(bufferSize);
@@ -82,12 +81,12 @@ namespace PasPasPas.Infrastructure.Files {
 
             for (var offset = 0L; offset != delta && position >= 0 && position <= source.Length; offset += step) {
                 position += step;
-                bufferIndex += step;
+                BufferIndex += step;
 
-                if (step > 0 && bufferIndex >= current.Length)
+                if (step > 0 && BufferIndex >= current.Length)
                     MoveToNextPart();
 
-                else if (step < 0 && bufferIndex < 0)
+                else if (step < 0 && BufferIndex < 0)
                     MoveToPreviousPart();
             }
         }
@@ -100,7 +99,7 @@ namespace PasPasPas.Infrastructure.Files {
             prev.Length = source.GetContent(prev.Content, current.Position - current.Content.Length);
             prev.Position = current.Position - prev.Length;
 
-            bufferIndex = current.Length - 1;
+            BufferIndex = current.Length - 1;
             Content = current.Content;
         }
 
@@ -115,7 +114,7 @@ namespace PasPasPas.Infrastructure.Files {
             next.Position = current.Position + current.Length;
             next.Length = source.GetContent(next.Content, next.Position);
 
-            bufferIndex = 0;
+            BufferIndex = 0;
             Content = current.Content;
         }
 
@@ -134,13 +133,29 @@ namespace PasPasPas.Infrastructure.Files {
         /// <summary>
         ///     current buffer index
         /// </summary>
-        public int BufferIndex
-            => bufferIndex;
+        public int BufferIndex { get; private set; }
 
         /// <summary>
         ///     file length
         /// </summary>
         public long Length
             => source.Length;
+
+        private bool disposedValue = false; // To detect redundant calls
+
+        private void Dispose(bool disposing) {
+            if (!disposedValue) {
+                if (disposing) {
+                    source.Dispose();
+                }
+                disposedValue = true;
+            }
+        }
+
+        /// <summary>
+        ///     dispose the buffer and its source
+        /// </summary>
+        public void Dispose()
+            => Dispose(true);
     }
 }

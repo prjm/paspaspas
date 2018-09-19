@@ -8,7 +8,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
     /// </summary>
     public class InterfaceItemSymbol : StandardSyntaxTreeBase {
 
-        /// <summary
+        /// <summary>
         ///     create a new interface item
         /// </summary>
         /// <param name="classMethodSymbol"></param>

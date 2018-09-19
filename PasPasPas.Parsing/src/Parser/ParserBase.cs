@@ -580,7 +580,6 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind2"></param>
         /// <param name="tokenKind3"></param>
         /// <param name="tokenKind4"></param>
-        /// <param name="tokenKind5"></param>
         /// <returns></returns>
         protected Terminal ContinueWith(int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4) {
             var requiresIdentifier =

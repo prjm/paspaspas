@@ -1,13 +1,14 @@
-﻿namespace PasPasPas.Infrastructure.Files {
+﻿using System;
+
+namespace PasPasPas.Infrastructure.Files {
 
     /// <summary>
     ///     offset in a file buffer item
     /// </summary>
-    public sealed class FileBufferItemOffset {
+    public sealed class FileBufferItemOffset : IDisposable {
 
-        private readonly Buffer input;
+        private readonly FileBuffer input;
         private readonly StackedFileReader reader;
-        private long offset;
         private readonly FileReference fileReference;
 
         /// <summary>
@@ -17,9 +18,8 @@
         /// <param name="file"></param>
         /// <param name="owner">owner reader</param>
         public FileBufferItemOffset(StackedFileReader owner, FileReference file, IBufferSource inputFile) {
-            input = new Buffer(inputFile, 1024);
+            input = new FileBuffer(inputFile, 1024);
             reader = owner;
-            offset = -1;
             fileReference = file;
         }
 
@@ -27,15 +27,15 @@
         ///     <c>true</c> if the end of read file is reached (EOF)
         /// </summary>
         public bool AtEof
-            => offset >= input.Length - 1;
+            => input.Position >= input.Length;
 
         /// <summary>
         ///     fetch the next char
         /// </summary>
         public char NextChar() {
-            if (offset >= input.Length)
+            if (input.Position >= input.Length)
                 return '\0';
-            offset++;
+            input.Position++;
             return Value;
         }
 
@@ -43,7 +43,7 @@
         ///     <c>true</c> if the begin of the read file is reached (BOF)
         /// </summary>
         public bool AtBof
-            => offset < 0;
+            => input.Position < 0;
 
         /// <summary>
         ///     current reader value
@@ -55,9 +55,9 @@
         ///     navigate to the previous char
         /// </summary>
         public char PreviousChar() {
-            if (offset < 0)
+            if (input.Position < 0)
                 return '\0';
-            offset--;
+            input.Position--;
             return Value;
         }
 
@@ -71,7 +71,7 @@
         ///     current position
         /// </summary>
         public long Position
-            => offset;
+            => input.Position;
 
         /// <summary>
         ///     look ahead one character
@@ -83,6 +83,23 @@
             input.Position -= number;
             return result;
         }
+
+        private bool disposedValue = false; // To detect redundant calls
+
+        private void Dispose(bool disposing) {
+            if (!disposedValue) {
+                if (disposing) {
+                    input.Dispose();
+                }
+                disposedValue = true;
+            }
+        }
+
+        /// <summary>
+        ///     dispose this stream
+        /// </summary>
+        public void Dispose()
+            => Dispose(true);
 
     }
 }

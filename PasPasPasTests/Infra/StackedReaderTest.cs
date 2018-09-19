@@ -1,8 +1,8 @@
 ﻿using System.IO;
 using System.Text;
-using Xunit;
 using PasPasPas.Api;
 using PasPasPasTests.Common;
+using Xunit;
 using Assert = PasPasPasTests.Common.Assert;
 
 
@@ -37,12 +37,13 @@ namespace PasPasPasTests.Infra {
 
             var path = GenerateTempFile(Content1);
             var readerApi = new ReaderApi(CreateEnvironment());
-            var reader = readerApi.CreateReaderForPath(path);
             var result = new StringBuilder();
 
             try {
-                while (!reader.CurrentFile.AtEof) {
-                    result.Append(reader.CurrentFile.NextChar());
+                using (var reader = readerApi.CreateReaderForPath(path)) {
+                    while (!reader.AtEof) {
+                        result.Append(reader.NextChar());
+                    }
                 }
                 Assert.AreEqual(Content1, result.ToString());
             }
@@ -59,32 +60,32 @@ namespace PasPasPasTests.Infra {
             var path1 = GenerateTempFile(Content1);
             var path2 = GenerateTempFile(Content2);
             var readerApi = new ReaderApi(CreateEnvironment());
-            var reader = readerApi.CreateReaderForPath(path1);
 
             try {
-                while (!reader.AtEof && result.Length < splitIndex) {
-                    result.Append(reader.NextChar());
+                using (var reader = readerApi.CreateReaderForPath(path1)) {
+                    while (!reader.AtEof && result.Length < splitIndex) {
+                        result.Append(reader.NextChar());
+                    }
+                    var len = splitIndex;
+                    readerApi.SwitchToPath(reader, path2);
+                    while (reader.CurrentFile != null && !reader.AtEof) {
+                        result.Append(reader.NextChar());
+                        len++;
+
+                        if (len == (Content2.Length + splitIndex) || len == (Content1.Length + Content2.Length))
+                            Assert.IsTrue(reader.AtEof);
+                        else
+                            Assert.IsFalse(reader.AtEof);
+
+                        if (reader.AtEof)
+                            reader.FinishCurrentFile();
+                    }
+
+                    Assert.AreEqual(//
+                        Content1.Substring(0, splitIndex) + //
+                        Content2 + //
+                        Content1.Substring(5), result.ToString());
                 }
-                var len = splitIndex;
-                readerApi.SwitchToPath(reader, path2);
-                while (reader.CurrentFile != null && !reader.AtEof) {
-                    result.Append(reader.NextChar());
-                    len++;
-
-                    if (len == (Content2.Length + splitIndex) || len == (Content1.Length + Content2.Length))
-                        Assert.IsTrue(reader.AtEof);
-                    else
-                        Assert.IsFalse(reader.AtEof);
-
-                    if (reader.AtEof)
-                        reader.FinishCurrentFile();
-                }
-
-                Assert.AreEqual(//
-                    Content1.Substring(0, splitIndex) + //
-                    Content2 + //
-                    Content1.Substring(5), result.ToString());
-
             }
             finally {
                 File.Delete(path1);

@@ -12,9 +12,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         ///     create a new class helper item symbol
         /// </summary>
         /// <param name="varSymbol"></param>
-        public ClassHelperItemSymbol(Terminal varSymbol) {
-            VarSymbol = varSymbol;
-        }
+        public ClassHelperItemSymbol(Terminal varSymbol)
+            => VarSymbol = varSymbol;
 
         /// <summary>
         ///     create a new class helper item symbol
@@ -44,7 +43,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         ///     create a new class helper symbol
         /// </summary>
         /// <param name="classMethodSymbol"></param>
-        /// <param name=""></param>
         /// <param name="attributes1"></param>
         /// <param name="attributes2"></param>
         /// <param name="classSymbol"></param>

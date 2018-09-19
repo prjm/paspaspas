@@ -1,9 +1,11 @@
-﻿namespace PasPasPas.Infrastructure.Files {
+﻿using System;
+
+namespace PasPasPas.Infrastructure.Files {
 
     /// <summary>
     ///     interface for buffer sources
     /// </summary>
-    public interface IBufferSource {
+    public interface IBufferSource : IDisposable {
 
         /// <summary>
         ///     get chars from the input

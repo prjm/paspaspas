@@ -19,7 +19,7 @@ namespace PasPasPas.Infrastructure.Files {
     /// <summary>
     ///     a buffered utf-8 stream source
     /// </summary>
-    public class Utf8StreamBufferSource : IBufferSource, IDisposable {
+    public sealed class Utf8StreamBufferSource : IBufferSource {
 
         private readonly Stream input;
         private readonly int outputSize;
@@ -152,7 +152,7 @@ namespace PasPasPas.Infrastructure.Files {
             }
         }
 
-        protected virtual void Dispose(bool disposing) {
+        private void Dispose(bool disposing) {
             if (!disposedValue) {
                 if (disposing) {
                     input.Dispose();
@@ -161,10 +161,11 @@ namespace PasPasPas.Infrastructure.Files {
             }
         }
 
-        public void Dispose() {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
+        /// <summary>
+        ///     dispose stream source
+        /// </summary>
+        public void Dispose()
+            => Dispose(true);
 
 
     }

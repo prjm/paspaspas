@@ -3,9 +3,9 @@
 namespace PasPasPas.Infrastructure.Files {
 
     /// <summary>
-    ///     new string buffer
-    /// </get>
-    public class StringBufferSource : IBufferSource {
+    ///     new string source
+    /// </summary>
+    public sealed class StringBufferSource : IBufferSource {
 
         private readonly string bufferContent;
 
@@ -40,5 +40,11 @@ namespace PasPasPas.Infrastructure.Files {
 
             return charsToCopy;
         }
+
+        /// <summary>
+        ///     dispose this buffer source
+        /// </summary>
+        public void Dispose() { }
+
     }
 }
