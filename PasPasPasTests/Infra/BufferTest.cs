@@ -18,15 +18,21 @@ namespace PasPasPasTests.Infra {
                 var data = "1234567890";
                 var bytes = Encoding.UTF8.GetBytes(data);
                 var result = "";
-                using (var source = new Utf8StreamBufferSource(new MemoryStream(bytes), bufferSize, bufferSize)) {
-                    var buffer = new FileBuffer(source, bufferSize);
+
+                using (var stream = new MemoryStream(bytes))
+                using (var source = new Utf8StreamBufferSource(stream, bufferSize, bufferSize))
+                using (var buffer = new FileBuffer(source, bufferSize)) {
+
                     Assert.IsTrue(buffer.IsAtBeginning);
+                    Assert.AreEqual(-1, buffer.Position);
 
                     while (!buffer.IsAtEnd) {
-                        result = result + buffer.Content[buffer.BufferIndex];
                         buffer.Position++;
+                        result = result + buffer.Content[buffer.BufferIndex];
                     }
+
                     Assert.IsTrue(buffer.IsAtEnd);
+                    Assert.AreEqual(data.Length - 1, buffer.Position);
                     Assert.AreEqual(data, result);
                 }
             }
@@ -37,19 +43,25 @@ namespace PasPasPasTests.Infra {
             for (var bufferSize = 4; bufferSize < 20; bufferSize++) {
                 var data = "1234567890";
                 var bytes = Encoding.UTF8.GetBytes(data);
-                using (var source = new Utf8StreamBufferSource(new MemoryStream(bytes), bufferSize, bufferSize)) {
-                    var buffer = new FileBuffer(source, bufferSize);
+                using (var stream = new MemoryStream(bytes))
+                using (var source = new Utf8StreamBufferSource(stream, bufferSize, bufferSize))
+                using (var buffer = new FileBuffer(source, bufferSize)) {
+
                     var result1 = string.Empty;
                     var result2 = string.Empty;
+
                     Assert.IsTrue(buffer.IsAtBeginning);
+                    Assert.AreEqual(-1, buffer.Position);
 
                     while (!buffer.IsAtEnd) {
+                        buffer.Position++;
                         result1 = result1 + buffer.Content[buffer.BufferIndex];
-                        buffer.Position++;
                         buffer.Position--;
-                        result2 = result2 + buffer.Content[buffer.BufferIndex];
                         buffer.Position++;
+                        result2 = result2 + buffer.Content[buffer.BufferIndex];
                     }
+
+                    Assert.AreEqual(data.Length - 1, buffer.Position);
                     Assert.IsTrue(buffer.IsAtEnd);
                     Assert.AreEqual(data, result1);
                     Assert.AreEqual(data, result2);
@@ -62,16 +74,22 @@ namespace PasPasPasTests.Infra {
             for (var bufferSize = 1; bufferSize < 20; bufferSize++) {
                 var data = "1234567890";
                 var result = "";
-                var source = new StringBufferSource(data);
-                var buffer = new FileBuffer(source, bufferSize);
-                Assert.IsTrue(buffer.IsAtBeginning);
 
-                while (!buffer.IsAtEnd) {
-                    result = result + buffer.Content[buffer.BufferIndex];
-                    buffer.Position++;
+                using (var source = new StringBufferSource(data))
+                using (var buffer = new FileBuffer(source, bufferSize)) {
+
+                    Assert.IsTrue(buffer.IsAtBeginning);
+                    Assert.AreEqual(-1, buffer.Position);
+
+                    while (!buffer.IsAtEnd) {
+                        buffer.Position++;
+                        result = result + buffer.Content[buffer.BufferIndex];
+                    }
+
+                    Assert.AreEqual(data.Length - 1, buffer.Position);
+                    Assert.IsTrue(buffer.IsAtEnd);
+                    Assert.AreEqual(data, result);
                 }
-                Assert.IsTrue(buffer.IsAtEnd);
-                Assert.AreEqual(data, result);
             }
         }
 
@@ -79,22 +97,28 @@ namespace PasPasPasTests.Infra {
         public void TestSimpleBufferForwardAndBackwardRead() {
             for (var bufferSize = 1; bufferSize < 20; bufferSize++) {
                 var data = "1234567890";
-                var source = new StringBufferSource(data);
-                var buffer = new FileBuffer(source, bufferSize);
-                var result1 = string.Empty;
-                var result2 = string.Empty;
-                Assert.IsTrue(buffer.IsAtBeginning);
 
-                while (!buffer.IsAtEnd) {
-                    result1 = result1 + buffer.Content[buffer.BufferIndex];
-                    buffer.Position++;
-                    buffer.Position--;
-                    result2 = result2 + buffer.Content[buffer.BufferIndex];
-                    buffer.Position++;
+                using (var source = new StringBufferSource(data))
+                using (var buffer = new FileBuffer(source, bufferSize)) {
+                    var result1 = string.Empty;
+                    var result2 = string.Empty;
+
+                    Assert.IsTrue(buffer.IsAtBeginning);
+                    Assert.AreEqual(-1, buffer.Position);
+
+                    while (!buffer.IsAtEnd) {
+                        buffer.Position++;
+                        result1 = result1 + buffer.Content[buffer.BufferIndex];
+                        buffer.Position--;
+                        buffer.Position++;
+                        result2 = result2 + buffer.Content[buffer.BufferIndex];
+                    }
+
+                    Assert.AreEqual(data.Length - 1, buffer.Position);
+                    Assert.IsTrue(buffer.IsAtEnd);
+                    Assert.AreEqual(data, result1);
+                    Assert.AreEqual(data, result2);
                 }
-                Assert.IsTrue(buffer.IsAtEnd);
-                Assert.AreEqual(data, result1);
-                Assert.AreEqual(data, result2);
             }
         }
 
@@ -106,7 +130,9 @@ namespace PasPasPasTests.Infra {
                         var bytes = Encoding.UTF8.GetBytes(data);
                         var read = new char[data.Length];
                         var chr = new char[inputBufferSize];
-                        using (var source = new Utf8StreamBufferSource(new MemoryStream(bytes), outputBufferSize, 2)) {
+
+                        using (var stream = new MemoryStream(bytes))
+                        using (var source = new Utf8StreamBufferSource(stream, outputBufferSize, 2)) {
                             var idx = 0L;
                             while (idx < source.Length) {
                                 var l = source.GetContent(chr, idx);
@@ -135,20 +161,27 @@ namespace PasPasPasTests.Infra {
             for (var bufferSize = 4; bufferSize < 20; bufferSize++) {
                 foreach (var data in utf8Samples) {
                     var bytes = Encoding.UTF8.GetBytes(data);
-                    using (var source = new Utf8StreamBufferSource(new MemoryStream(bytes), bufferSize, bufferSize)) {
-                        var buffer = new FileBuffer(source, bufferSize);
+
+                    using (var stream = new MemoryStream(bytes))
+                    using (var source = new Utf8StreamBufferSource(stream, bufferSize, bufferSize))
+                    using (var buffer = new FileBuffer(source, bufferSize)) {
+
                         var result1 = string.Empty;
                         var result2 = string.Empty;
+
+                        Assert.AreEqual(-1, buffer.Position);
                         Assert.IsTrue(buffer.IsAtBeginning);
 
                         while (!buffer.IsAtEnd) {
+                            buffer.Position++;
                             result1 = result1 + buffer.Content[buffer.BufferIndex];
-                            buffer.Position++;
                             buffer.Position--;
-                            result2 = result2 + buffer.Content[buffer.BufferIndex];
                             buffer.Position++;
+                            result2 = result2 + buffer.Content[buffer.BufferIndex];
                         }
+
                         Assert.IsTrue(buffer.IsAtEnd);
+                        Assert.AreEqual(data.Length - 1, buffer.Position);
                         Assert.AreEqual(data, result1);
                         Assert.AreEqual(data, result2);
                     }

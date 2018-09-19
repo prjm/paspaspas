@@ -10,15 +10,16 @@ namespace SampleRunner.Scenarios {
             var count = 0L;
             for (var i = 0; i < repeat; i++) {
                 var readerApi = new ReaderApi(environment);
-                var reader = readerApi.CreateReaderForPath(file);
+                using (var reader = readerApi.CreateReaderForPath(file)) {
 
-                while (!reader.AtEof) {
-                    reader.NextChar();
-                    count++;
+                    while (!reader.AtEof) {
+                        reader.NextChar();
+                        count++;
+                    }
                 }
-            }
 
-            b.AppendLine($"{count} characters read.");
+                b.AppendLine($"{count} characters read.");
+            }
         }
     }
 }

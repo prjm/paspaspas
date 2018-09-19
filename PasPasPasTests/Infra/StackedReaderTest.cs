@@ -22,14 +22,15 @@ namespace PasPasPasTests.Infra {
         [Fact]
         public void TestSimpleRead() {
             var readerApi = new ReaderApi(CreateEnvironment());
-            var reader = readerApi.CreateReaderForString("test.pas", Content1);
-            var result = new StringBuilder();
+            using (var reader = readerApi.CreateReaderForString("test.pas", Content1)) {
+                var result = new StringBuilder();
 
-            while (!reader.AtEof) {
-                result.Append(reader.NextChar());
+                while (!reader.AtEof) {
+                    result.Append(reader.NextChar());
+                }
+
+                Assert.AreEqual(Content1, result.ToString());
             }
-
-            Assert.AreEqual(Content1, result.ToString());
         }
 
         [Fact]
@@ -106,24 +107,25 @@ namespace PasPasPasTests.Infra {
             var path1 = GenerateTempFile(Content1);
             var path2 = GenerateTempFile(Content2);
             var readerApi = new ReaderApi(CreateEnvironment());
-            var reader = readerApi.CreateReaderForPath(path1);
+            using (var reader = readerApi.CreateReaderForPath(path1)) {
 
-            while (!reader.AtEof && result.Length < 5) {
-                result.Append(reader.NextChar());
+                while (!reader.AtEof && result.Length < 5) {
+                    result.Append(reader.NextChar());
+                }
+
+                readerApi.SwitchToPath(reader, path2);
+                while (reader.CurrentFile != null && !reader.AtEof) {
+                    result.Append(reader.NextChar());
+
+                    if (reader.AtEof)
+                        reader.FinishCurrentFile();
+                }
+
+                Assert.AreEqual(//
+                    Content1.Substring(0, 5) + //
+                    Content2 + //
+                    Content1.Substring(5), result.ToString());
             }
-
-            readerApi.SwitchToPath(reader, path2);
-            while (reader.CurrentFile != null && !reader.AtEof) {
-                result.Append(reader.NextChar());
-
-                if (reader.AtEof)
-                    reader.FinishCurrentFile();
-            }
-
-            Assert.AreEqual(//
-                Content1.Substring(0, 5) + //
-                Content2 + //
-                Content1.Substring(5), result.ToString());
         }
     }
 }

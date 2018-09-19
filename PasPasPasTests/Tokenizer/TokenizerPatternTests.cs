@@ -1,15 +1,15 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
+using PasPasPas.Api;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Parsing.SyntaxTree;
-using Xunit;
 using PasPasPas.Parsing.Tokenizer.CharClass;
-using PasPasPas.Parsing.Tokenizer.TokenGroups;
-using PasPasPas.Parsing.Tokenizer.Patterns;
-using PasPasPas.Api;
 using PasPasPas.Parsing.Tokenizer.LiteralValues;
+using PasPasPas.Parsing.Tokenizer.Patterns;
+using PasPasPas.Parsing.Tokenizer.TokenGroups;
 using PasPasPasTests.Common;
+using Xunit;
 using Assert = PasPasPasTests.Common.Assert;
 
 namespace PasPasPasTests.Tokenizer {
@@ -105,27 +105,28 @@ namespace PasPasPasTests.Tokenizer {
             var result = new List<Token>();
             var env = CreateEnvironment();
             var api = new TokenizerApi(env);
-            var reader = api.Readers.CreateReaderForString(TestFileName, input);
-            var log = new LogSource(env.Log, LogGuid);
-            var logTarget = new ListLogTarget();
-            env.Log.RegisterTarget(logTarget);
+            using (var reader = api.Readers.CreateReaderForString(TestFileName, input)) {
+                var log = new LogSource(env.Log, LogGuid);
+                var logTarget = new ListLogTarget();
+                env.Log.RegisterTarget(logTarget);
 
-            using (var tokenizer = new PasPasPas.Parsing.Tokenizer.Tokenizer(env, patterns, reader)) {
-                while (reader.CurrentFile != null && !reader.CurrentFile.AtEof) {
-                    tokenizer.FetchNextToken();
-                    result.Add(tokenizer.CurrentToken);
+                using (var tokenizer = new PasPasPas.Parsing.Tokenizer.Tokenizer(env, patterns, reader)) {
+                    while (reader.CurrentFile != null && !reader.CurrentFile.AtEof) {
+                        tokenizer.FetchNextToken();
+                        result.Add(tokenizer.CurrentToken);
+                    }
                 }
-            }
 
-            if (expectedMessage != Guid.Empty) {
-                Assert.AreEqual(1, logTarget.Messages.Count);
-                Assert.AreEqual(expectedMessage, logTarget.Messages[0].MessageID);
-            }
-            else {
-                Assert.AreEqual(0, logTarget.Messages.Count);
-            }
+                if (expectedMessage != Guid.Empty) {
+                    Assert.AreEqual(1, logTarget.Messages.Count);
+                    Assert.AreEqual(expectedMessage, logTarget.Messages[0].MessageID);
+                }
+                else {
+                    Assert.AreEqual(0, logTarget.Messages.Count);
+                }
 
-            return result;
+                return result;
+            }
         }
 
         public Token TestPattern(InputPatterns patterns, string input, params int[] tokenValues)

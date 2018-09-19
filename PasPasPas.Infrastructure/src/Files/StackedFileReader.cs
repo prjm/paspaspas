@@ -128,9 +128,7 @@ namespace PasPasPas.Infrastructure.Files {
             if (input == null)
                 throw new InvalidOperationException("No input file.");
 
-            var value = input.Input.Value;
-            input.Input.NextChar();
-            return value;
+            return input.Input.NextChar();
         }
 
         private bool disposedValue = false; // To detect redundant calls

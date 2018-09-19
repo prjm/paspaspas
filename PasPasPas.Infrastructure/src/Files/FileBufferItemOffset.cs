@@ -27,7 +27,7 @@ namespace PasPasPas.Infrastructure.Files {
         ///     <c>true</c> if the end of read file is reached (EOF)
         /// </summary>
         public bool AtEof
-            => input.Position >= input.Length;
+            => input.Position >= input.Length - 1;
 
         /// <summary>
         ///     fetch the next char

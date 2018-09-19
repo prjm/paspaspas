@@ -1,10 +1,8 @@
-﻿using PasPasPas.Infrastructure.Environment;
-using PasPasPas.Infrastructure.Files;
+﻿using PasPasPas.Infrastructure.Files;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Options.Bundles;
 using PasPasPas.Parsing;
 using PasPasPas.Parsing.Tokenizer;
-using PasPasPas.Parsing.Tokenizer.LiteralValues;
 using PasPasPas.Parsing.Tokenizer.Patterns;
 
 namespace PasPasPas.Api {
@@ -19,7 +17,7 @@ namespace PasPasPas.Api {
         private readonly IParserEnvironment env;
 
         /// <summary>
-        ///     create a new tokenizer ap
+        ///     create a new tokenizer
         /// </summary>
         /// <param name="parserEnvironment">environment</param>
         /// <param name="optionsSet">options (can be <c>null</c>)</param>

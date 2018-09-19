@@ -40,7 +40,8 @@ namespace PasPasPas.Infrastructure.Files {
             if (bufferSize < 1)
                 throw new ArgumentException($"Invalid buffer size ${bufferSize}", nameof(bufferSize));
 
-            BufferIndex = 0;
+            position = -1;
+            BufferIndex = -1;
             prev = new BufferData(bufferSize);
             current = new BufferData(bufferSize);
             next = new BufferData(bufferSize);
@@ -59,12 +60,13 @@ namespace PasPasPas.Infrastructure.Files {
             get => position;
             set {
 
-                if (value < 0)
+                if (value < -1)
                     return;
 
                 if (value > source.Length)
                     return;
 
+                value = Math.Max(-1, Math.Min(source.Length - 1, value));
                 Seek(value - position);
             }
         }
@@ -79,7 +81,7 @@ namespace PasPasPas.Infrastructure.Files {
 
             var step = Math.Sign(delta);
 
-            for (var offset = 0L; offset != delta && position >= 0 && position <= source.Length; offset += step) {
+            for (var offset = 0L; offset != delta && position >= -1 && position <= source.Length - 1; offset += step) {
                 position += step;
                 BufferIndex += step;
 
@@ -122,13 +124,13 @@ namespace PasPasPas.Infrastructure.Files {
         ///     check if the buffer is at the beginning of the input
         /// </summary>
         public bool IsAtBeginning
-            => position <= 0;
+            => position < 0;
 
         /// <summary>
         ///     check if the buffer read the end of input
         /// </summary>
         public bool IsAtEnd
-            => position >= source.Length;
+            => position >= source.Length - 1;
 
         /// <summary>
         ///     current buffer index
