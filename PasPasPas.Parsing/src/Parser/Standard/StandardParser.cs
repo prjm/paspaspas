@@ -203,7 +203,8 @@ namespace PasPasPas.Parsing.Parser.Standard {
         public UsesClauseSymbol ParseUsesClause() {
             var usesSymbol = ContinueWithOrMissing(TokenKind.Uses);
             var usesList = ParseNamespaceNameList();
-            return new UsesClauseSymbol(usesSymbol, usesList);
+            var semicolon = ContinueWithOrMissing(TokenKind.Semicolon);
+            return new UsesClauseSymbol(usesSymbol, usesList, semicolon);
         }
 
         #endregion
@@ -214,11 +215,12 @@ namespace PasPasPas.Parsing.Parser.Standard {
         /// </summary>
         /// <returns></returns>
 
-        [Rule("UsesFileClause", "'uses' NamespaceFileNameList")]
+        [Rule("UsesFileClause", "'uses' NamespaceFileNameList ';'")]
         public UsesFileClauseSymbol ParseUsesFileClause()
             => new UsesFileClauseSymbol(
                 ContinueWithOrMissing(TokenKind.Uses),
-                ParseNamespaceFileNameList());
+                ParseNamespaceFileNameList(),
+                ContinueWithOrMissing(TokenKind.Semicolon));
 
         #endregion
         #region ParseNamespaceFileNameList
@@ -237,8 +239,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
                     item = AddToList(list, ParseNamespaceFileName(true));
                 } while (item != default && item.Comma != default);
 
-                var semicolon = ContinueWithOrMissing(TokenKind.Semicolon);
-                return new NamespaceFileNameListSymbol(GetFixedArray(list), semicolon);
+                return new NamespaceFileNameListSymbol(GetFixedArray(list));
             }
         }
 
@@ -1173,7 +1174,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
         /// </summary>
         /// <returns></returns>
 
-        [Rule("NamespaceNameList", "NamespaceName { ',' NamespaceName } ';' ")]
+        [Rule("NamespaceNameList", "NamespaceName { ',' NamespaceName }")]
         public NamespaceNameListSymbol ParseNamespaceNameList() {
             using (var list = GetList<NamespaceNameSymbol>()) {
                 var item = default(NamespaceNameSymbol);
@@ -1182,8 +1183,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
                     item = AddToList(list, ParseNamespaceName(false, false, true));
                 } while (item != default && item.Comma != default);
 
-                var semicolon = ContinueWithOrMissing(TokenKind.Semicolon);
-                return new NamespaceNameListSymbol(GetFixedArray(list), semicolon);
+                return new NamespaceNameListSymbol(GetFixedArray(list));
             }
         }
 
@@ -4588,7 +4588,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
         public DesignatorStatementSymbol ParseDesignator() {
             var inherited = ContinueWith(TokenKind.Inherited);
             var name = default(TypeNameSymbol);
-            var item = default(SyntaxPartBase);
+            var item = default(DesignatorItemSymbol);
             var hasIdentifier = false;
 
             if (MatchIdentifier(TokenKind.String, TokenKind.ShortString, TokenKind.AnsiString, TokenKind.WideString, TokenKind.String) && LookAhead(1, TokenKind.Dot, TokenKind.AngleBracketsOpen)) {
@@ -4596,9 +4596,9 @@ namespace PasPasPas.Parsing.Parser.Standard {
                 hasIdentifier = name != default;
             }
 
-            using (var list = GetList<SyntaxPartBase>()) {
+            using (var list = GetList<DesignatorItemSymbol>()) {
                 do {
-                    item = AddToList(list, ParseDesignatorItem(hasIdentifier));
+                    item = AddToList(list, ParseDesignatorItem(hasIdentifier, item));
                     var di = item as DesignatorItemSymbol;
                     hasIdentifier = hasIdentifier || (di != default && di.Subitem != default);
                 } while (item != default);
@@ -4639,7 +4639,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
         /// <returns></returns>
 
         [Rule("DesignatorItem", "'^' | '.' Ident [GenericSuffix] | '[' ExpressionList ']' | '(' [ FormattedExpression  { ',' FormattedExpression } ] ')'")]
-        public SyntaxPartBase ParseDesignatorItem(bool hasIdentifier) {
+        public DesignatorItemSymbol ParseDesignatorItem(bool hasIdentifier, DesignatorItemSymbol prevDesignatorItem) {
 
             if (Match(TokenKind.Circumflex))
                 return new DesignatorItemSymbol(ContinueWithOrMissing(TokenKind.Circumflex));
@@ -4675,13 +4675,11 @@ namespace PasPasPas.Parsing.Parser.Standard {
             }
 
             if (Match(TokenKind.OpenParen)) {
-                //var prevDesignatorItem = parent.PartList != null && parent.PartList.Count > 0 ? parent.PartList[parent.PartList.Count - 1] as DesignatorItem : null;
-                var prevDesignatorItem = default(DesignatorItemSymbol);
-                if (!IsDesignator() && ((prevDesignatorItem == null) || (prevDesignatorItem.Subitem == null))) {
-                    ContinueWithOrMissing(TokenKind.OpenParen);
+                if (!IsDesignator() && ((prevDesignatorItem == null) || (prevDesignatorItem.Subitem == null)) && (!LookAhead(1, TokenKind.CloseParen))) {
+                    openParen = ContinueWithOrMissing(TokenKind.OpenParen);
                     var children = ParseConstantExpression(true);
-                    ContinueWithOrMissing(TokenKind.CloseParen);
-                    return children;
+                    closeParen = ContinueWithOrMissing(TokenKind.CloseParen);
+                    return new DesignatorItemSymbol(dot, subitem, openParen, children, closeParen);
                 }
 
                 openParen = ContinueWith(TokenKind.OpenParen);

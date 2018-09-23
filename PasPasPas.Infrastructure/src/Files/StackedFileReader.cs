@@ -118,13 +118,11 @@ namespace PasPasPas.Infrastructure.Files {
             if (source == null)
                 throw new InvalidOperationException("No input file.");
 
+            if (source.Position + number < -1 || source.Position + number >= source.Length)
+                return '\0';
+
             source.Position += number;
-
-            if (source.Position < 0 || source.Position >= source.Length)
-                result = '\0';
-            else
-                result = source.Content[source.BufferIndex];
-
+            result = source.Content[source.BufferIndex];
             source.Position -= number;
             return result;
         }
@@ -144,7 +142,12 @@ namespace PasPasPas.Infrastructure.Files {
                 return '\0';
 
             source.Position = sourcePosition - 1;
-            return source.Content[source.BufferIndex];
+            var bufferIndex = source.BufferIndex;
+
+            if (bufferIndex < 0)
+                return '\0';
+
+            return source.Content[bufferIndex];
         }
 
         /// <summary>

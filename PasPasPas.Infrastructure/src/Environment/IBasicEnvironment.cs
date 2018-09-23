@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using PasPasPas.Infrastructure.Files;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Infrastructure.ObjectPooling;
 
@@ -34,13 +33,6 @@ namespace PasPasPas.Infrastructure.Environment {
         ///     enumerated entries
         /// </summary>
         IEnumerable<object> Entries { get; }
-
-        /// <summary>
-        ///     add a mockup file
-        /// </summary>
-        /// <param name="inputFile"></param>
-        /// <param name="content"></param>
-        void AddMockupFile(FileReference inputFile, string content);
 
     }
 }

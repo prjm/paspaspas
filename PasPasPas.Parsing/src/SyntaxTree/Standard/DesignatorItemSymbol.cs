@@ -52,6 +52,22 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         }
 
         /// <summary>
+        ///     create a new designator item
+        /// </summary>
+        /// <param name="dotSymbol"></param>
+        /// <param name="subitem"></param>
+        /// <param name="openParen"></param>
+        /// <param name="children"></param>
+        /// <param name="closeParen"></param>
+        public DesignatorItemSymbol(Terminal dotSymbol, IdentifierSymbol subitem, Terminal openParen, ConstantExpressionSymbol children, Terminal closeParen) : this(dotSymbol) {
+            DotSymbol = dotSymbol;
+            Subitem = subitem;
+            OpenParen = openParen;
+            ConstantExpression = children;
+            CloseParen = closeParen;
+        }
+
+        /// <summary>
         ///     dereference
         /// </summary>
         public Terminal Dereference { get; }
@@ -108,6 +124,16 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
             AcceptPart(this, Dereference, visitor);
+            AcceptPart(this, DotSymbol, visitor);
+            AcceptPart(this, Subitem, visitor);
+            AcceptPart(this, SubitemGenericType, visitor);
+            AcceptPart(this, OpenBraces, visitor);
+            AcceptPart(this, IndexExpression, visitor);
+            AcceptPart(this, CloseBraces, visitor);
+            AcceptPart(this, OpenParen, visitor);
+            AcceptPart(this, ConstantExpression, visitor);
+            AcceptPart(this, visitor);
+            AcceptPart(this, CloseParen, visitor);
             visitor.EndVisit(this);
         }
 
@@ -123,8 +149,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
                 IndexExpression.GetSymbolLength() +
                 CloseBraces.GetSymbolLength() +
                 OpenParen.GetSymbolLength() +
+                ConstantExpression.GetSymbolLength() +
                 ItemLength +
                 CloseParen.GetSymbolLength();
 
+        /// <summary>
+        ///     constant expression
+        /// </summary>
+        public ConstantExpressionSymbol ConstantExpression { get; private set; }
     }
 }

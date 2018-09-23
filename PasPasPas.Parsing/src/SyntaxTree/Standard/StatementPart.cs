@@ -106,7 +106,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         public CaseStatementSymbol Case { get; }
 
         /// <summary>
-        ///     compunt statement
+        ///     compound statement
         /// </summary>
         public CompoundStatementSymbol CompoundStatement { get; }
 
@@ -161,7 +161,18 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="visitor">visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
-            AcceptParts(this, visitor);
+            AcceptPart(this, Assignment, visitor);
+            AcceptPart(this, Case, visitor);
+            AcceptPart(this, CompoundStatement, visitor);
+            AcceptPart(this, DesignatorPart, visitor);
+            AcceptPart(this, For, visitor);
+            AcceptPart(this, GoTo, visitor);
+            AcceptPart(this, If, visitor);
+            AcceptPart(this, Raise, visitor);
+            AcceptPart(this, Repeat, visitor);
+            AcceptPart(this, Try, visitor);
+            AcceptPart(this, While, visitor);
+            AcceptPart(this, With, visitor);
             visitor.EndVisit(this);
         }
 

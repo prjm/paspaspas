@@ -13,10 +13,16 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// </summary>
         /// <param name="terminal"></param>
         /// <param name="namespaceFileNameList"></param>
-        public UsesFileClauseSymbol(Terminal terminal, NamespaceFileNameListSymbol namespaceFileNameList) {
+        public UsesFileClauseSymbol(Terminal terminal, NamespaceFileNameListSymbol namespaceFileNameList, Terminal semicolon) {
             UsesSymbol = terminal;
             Files = namespaceFileNameList;
+            Semicolon = semicolon;
         }
+
+        /// <summary>
+        ///     semicolon
+        /// </summary>
+        public Terminal Semicolon { get; }
 
         /// <summary>
         ///     Namespace files
@@ -36,6 +42,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
             visitor.StartVisit(this);
             AcceptPart(this, UsesSymbol, visitor);
             AcceptPart(this, Files, visitor);
+            AcceptPart(this, Semicolon, visitor);
             visitor.EndVisit(this);
         }
 
@@ -44,7 +51,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// </summary>
         public override int Length
             => UsesSymbol.GetSymbolLength() +
-                Files.GetSymbolLength();
+                Files.GetSymbolLength() +
+                Semicolon.GetSymbolLength();
 
     }
 }

@@ -22,10 +22,10 @@ namespace PasPasPasTests.Parser {
 
         [TestCase]
         public void TestReintroduce() {
-            var s = RunCstTest(p => p.ParseReintroduceDirective(), "reintroduce");
+            var s = RunCstTest(p => p.ParseReintroduceDirective(), "reintroduce;");
             Assert.IsNotNull(s.Directive);
             Assert.IsNotNull(s.Semicolon);
-            Assert.AreEqual(11, s.Length);
+            Assert.AreEqual(12, s.Length);
         }
 
         [TestCase]
@@ -38,10 +38,15 @@ namespace PasPasPasTests.Parser {
 
         [TestCase]
         public void TestInline() {
-            var s = RunCstTest(p => p.ParseInlineDirective());
+            var s = RunCstTest(p => p.ParseInlineDirective(), "inline ;");
             Assert.IsNotNull(s.Directive);
             Assert.IsNotNull(s.Semicolon);
-            Assert.AreEqual(0, s.Length);
+            Assert.AreEqual(8, s.Length);
+
+            s = RunCstTest(p => p.ParseInlineDirective(), "assembler ;");
+            Assert.IsNotNull(s.Directive);
+            Assert.IsNotNull(s.Semicolon);
+            Assert.AreEqual(11, s.Length);
         }
 
         [TestCase]
@@ -945,13 +950,13 @@ namespace PasPasPasTests.Parser {
 
         [TestCase]
         public void TestDesignatorItem() {
-            var s = RunCstTest(p => p.ParseDesignatorItem(false), "^");
+            var s = RunCstTest(p => p.ParseDesignatorItem(false, default), "^");
             Assert.AreEqual(1, s.Length);
 
-            s = RunCstTest(p => p.ParseDesignatorItem(false), "a[x]");
+            s = RunCstTest(p => p.ParseDesignatorItem(false, default), "a[x]");
             Assert.AreEqual(4, s.Length);
 
-            s = RunCstTest(p => p.ParseDesignatorItem(false), "a<b>[x]");
+            s = RunCstTest(p => p.ParseDesignatorItem(false, default), "a<b>[x]");
             Assert.AreEqual(7, s.Length);
         }
 
@@ -1681,19 +1686,17 @@ namespace PasPasPasTests.Parser {
 
         [TestCase]
         public void TestNamespaceFileNameList() {
-            var s = RunCstTest(p => p.ParseNamespaceFileNameList(), "a,b,c;");
+            var s = RunCstTest(p => p.ParseNamespaceFileNameList(), "a,b,c");
             Assert.IsNotNull(s.Items[0]);
             Assert.IsNotNull(s.Items[1]);
             Assert.IsNotNull(s.Items[2]);
-            Assert.IsNotNull(s.Semicolon);
-            Assert.AreEqual(6, s.Length);
+            Assert.AreEqual(5, s.Length);
 
-            s = RunCstTest(p => p.ParseNamespaceFileNameList(), "a in 'a',b in 'b',c in 'c';");
+            s = RunCstTest(p => p.ParseNamespaceFileNameList(), "a in 'a',b in 'b',c in 'c'");
             Assert.IsNotNull(s.Items[0]);
             Assert.IsNotNull(s.Items[1]);
             Assert.IsNotNull(s.Items[2]);
-            Assert.IsNotNull(s.Semicolon);
-            Assert.AreEqual(27, s.Length);
+            Assert.AreEqual(26, s.Length);
         }
 
         [TestCase]
@@ -2482,11 +2485,12 @@ namespace PasPasPasTests.Parser {
 
         [TestCase]
         public void TestUseClauseSymbol() {
-            var s = RunCstTest(p => p.ParseUsesClause(), "uses a,b");
+            var s = RunCstTest(p => p.ParseUsesClause(), "uses a,b;");
             Assert.IsNotNull(s.UsesSymbol);
             Assert.IsNotNull(s.UsesList.Items[0]);
             Assert.IsNotNull(s.UsesList.Items[1]);
-            Assert.AreEqual(8, s.Length);
+            Assert.IsNotNull(s.Semicolon);
+            Assert.AreEqual(9, s.Length);
         }
 
         [TestCase]

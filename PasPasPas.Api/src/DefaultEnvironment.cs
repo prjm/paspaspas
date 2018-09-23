@@ -2,7 +2,6 @@
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Infrastructure.Environment;
-using PasPasPas.Infrastructure.Files;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Infrastructure.ObjectPooling;
 using PasPasPas.Options.DataTypes;
@@ -122,6 +121,5 @@ namespace PasPasPas.Api {
             }
         }
 
-        public void AddMockupFile(FileReference inputFile, string content) => throw new System.NotImplementedException();
     }
 }

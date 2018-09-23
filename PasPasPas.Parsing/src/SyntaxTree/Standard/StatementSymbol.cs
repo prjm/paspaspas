@@ -25,12 +25,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     label
         /// </summary>
-        public SyntaxPartBase Label { get; }
+        public LabelSymbol Label { get; }
 
         /// <summary>
         ///     statement part
         /// </summary>
-        public SyntaxPartBase Part { get; }
+        public StatementPart Part { get; }
 
         /// <summary>
         ///     accept visitor
@@ -39,7 +39,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
             AcceptPart(this, Label, visitor);
+            AcceptPart(this, ColonSymbol, visitor);
             AcceptPart(this, Part, visitor);
+            AcceptPart(this, Semicolon, visitor);
             visitor.EndVisit(this);
         }
 

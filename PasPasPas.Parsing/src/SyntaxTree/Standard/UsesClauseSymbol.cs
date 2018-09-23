@@ -13,9 +13,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// </summary>
         /// <param name="usesSymbol"></param>
         /// <param name="usesList"></param>
-        public UsesClauseSymbol(Terminal usesSymbol, NamespaceNameListSymbol usesList) {
+        /// <param name="semicolon"></param>
+        public UsesClauseSymbol(Terminal usesSymbol, NamespaceNameListSymbol usesList, Terminal semicolon) {
             UsesSymbol = usesSymbol;
             UsesList = usesList;
+            Semicolon = semicolon;
         }
 
         /// <summary>
@@ -36,6 +38,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
             visitor.StartVisit(this);
             AcceptPart(this, UsesSymbol, visitor);
             AcceptPart(this, UsesList, visitor);
+            AcceptPart(this, Semicolon, visitor);
             visitor.EndVisit(this);
         }
 
@@ -44,7 +47,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// </summary>
         public override int Length
             => UsesSymbol.GetSymbolLength() +
-                UsesList.GetSymbolLength();
+                UsesList.GetSymbolLength() +
+                Semicolon.GetSymbolLength();
 
+        /// <summary>
+        ///     semicolon
+        /// </summary>
+        public Terminal Semicolon { get; }
     }
 }

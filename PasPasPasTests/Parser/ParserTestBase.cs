@@ -203,10 +203,10 @@ namespace PasPasPasTests.Parser {
             var resFile2 = new FileReference(Path.GetFullPath("test_0.res"));
             var linkDll = new FileReference(Path.GetFullPath("link.dll"));
 
-            env.AddMockupFile(incFile, "DEFINE DUMMY_INC");
-            env.AddMockupFile(resFile1, "RES RES RES");
-            env.AddMockupFile(resFile2, "RES RES RES");
-            env.AddMockupFile(linkDll, "MZE!");
+            //env.AddMockupFile(incFile, "DEFINE DUMMY_INC");
+            //env.AddMockupFile(resFile1, "RES RES RES");
+            //env.AddMockupFile(resFile2, "RES RES RES");
+            //env.AddMockupFile(linkDll, "MZE!");
 
             var testOptions = new OptionSet(env);
 
