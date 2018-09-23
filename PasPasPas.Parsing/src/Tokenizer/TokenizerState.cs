@@ -50,7 +50,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         ///     check if the end of the current input file is reached
         /// </summary>
         public bool AtEof
-            => input == null || input.CurrentFile.AtEof;
+            => input == null || input.AtEof;
 
         /// <summary>
         ///     get the current value

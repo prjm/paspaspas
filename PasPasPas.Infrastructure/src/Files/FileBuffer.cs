@@ -63,10 +63,9 @@ namespace PasPasPas.Infrastructure.Files {
                 if (value < -1)
                     return;
 
-                if (value > source.Length)
+                if (value > source.Length - 1)
                     return;
 
-                value = Math.Max(-1, Math.Min(source.Length - 1, value));
                 Seek(value - position);
             }
         }

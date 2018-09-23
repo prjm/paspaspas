@@ -142,7 +142,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
             if (Tokenizer.AtEof)
                 throw new Exception();
 
-            var path = Tokenizer.Input.CurrentFile.File;
+            var path = Tokenizer.Input.CurrentFile;
 
             if (Match(TokenKind.Library))
                 return ParseLibrary(path);

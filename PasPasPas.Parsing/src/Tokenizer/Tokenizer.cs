@@ -1,9 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using PasPasPas.Infrastructure.Files;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Parsing.SyntaxTree;
-using PasPasPas.Infrastructure.Files;
 using PasPasPas.Parsing.Tokenizer.Patterns;
-using System.Collections.Generic;
 
 namespace PasPasPas.Parsing.Tokenizer {
 
@@ -104,8 +104,8 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         private void FinishInput() {
             var file = Input.CurrentFile;
-            if (file != null && file.AtEof) {
-                while (file != null && file.AtEof)
+            if (file != null && Input.AtEof) {
+                while (file != null && Input.AtEof)
                     file = Input.FinishCurrentFile();
             }
         }

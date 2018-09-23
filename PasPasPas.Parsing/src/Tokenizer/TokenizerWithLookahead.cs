@@ -190,7 +190,7 @@ namespace PasPasPas.Parsing.Tokenizer {
                     return;
                 }
 
-                var currentInput = BaseTokenizer.Input.CurrentFile.File;
+                var currentInput = BaseTokenizer.Input.CurrentFile;
                 BaseTokenizer.FetchNextToken();
                 var nextToken = BaseTokenizer.CurrentToken;
 

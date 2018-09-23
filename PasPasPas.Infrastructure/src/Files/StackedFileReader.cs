@@ -12,7 +12,8 @@ namespace PasPasPas.Infrastructure.Files {
         ///     helper class for nested input
         /// </summary>
         private class NestedInput {
-            internal FileBufferItemOffset Input;
+            internal FileReference File;
+            internal FileBuffer Input;
             internal NestedInput Parent;
         }
 
@@ -30,7 +31,8 @@ namespace PasPasPas.Infrastructure.Files {
             var stream = new FileStream(input.Path, FileMode.Open, FileAccess.Read, FileShare.Read);
 
             this.input = new NestedInput() {
-                Input = new FileBufferItemOffset(this, input, new Utf8StreamBufferSource(stream, bufferSize, bufferSize)),
+                File = input,
+                Input = new FileBuffer(new Utf8StreamBufferSource(stream, bufferSize, bufferSize), 2 * bufferSize),
                 Parent = this.input
             };
         }
@@ -45,7 +47,8 @@ namespace PasPasPas.Infrastructure.Files {
                 throw new ArgumentNullException(nameof(path));
 
             input = new NestedInput() {
-                Input = new FileBufferItemOffset(this, path, new StringBufferSource(source)),
+                File = path,
+                Input = new FileBuffer(new StringBufferSource(source), 1024),
                 Parent = input
             };
 
@@ -54,36 +57,39 @@ namespace PasPasPas.Infrastructure.Files {
         /// <summary>
         ///     finish current file
         /// </summary>
-        public FileBufferItemOffset FinishCurrentFile() {
+        public FileReference FinishCurrentFile() {
+            var source = input?.Input;
 
-            if (input == null)
+            if (source == null)
                 throw new InvalidOperationException("No input file.");
 
-            input.Input.Dispose();
-
+            source.Dispose();
+            input.Input = null;
             input = input.Parent;
 
-            if (input == null)
-                return null;
-            else
-                return input.Input;
+            return input?.File;
         }
 
         /// <summary>
         ///     access the current file
         /// </summary>
-        public FileBufferItemOffset CurrentFile
-            => input?.Input;
+        public FileReference CurrentFile
+            => input?.File;
 
         /// <summary>
         ///     get the current character value
         /// </summary>
         public char Value {
             get {
-                if (input != null)
-                    return input.Input.Value;
+                var source = input?.Input;
 
-                throw new InvalidOperationException("No input file.");
+                if (source == null)
+                    throw new InvalidOperationException("No input file.");
+
+                if (source.Position < 0 || source.Position >= source.Length)
+                    return '\0';
+
+                return source.Content[source.BufferIndex];
             }
         }
 
@@ -92,27 +98,53 @@ namespace PasPasPas.Infrastructure.Files {
         /// </summary>
         public bool AtEof {
             get {
-                if (input != null)
-                    return input.Input.AtEof;
+                var source = input?.Input;
 
-                throw new InvalidOperationException("No input file");
+                if (source == null)
+                    throw new InvalidOperationException("No input file.");
+
+                return source.IsAtEnd;
             }
         }
 
         /// <summary>
         ///     look ahead one character
         /// </summary>
-        public char LookAhead(int number)
-            => input.Input.LookAhead(number);
+        ///
+        public char LookAhead(int number) {
+            var source = input?.Input;
+            var result = default(char);
+
+            if (source == null)
+                throw new InvalidOperationException("No input file.");
+
+            source.Position += number;
+
+            if (source.Position < 0 || source.Position >= source.Length)
+                result = '\0';
+            else
+                result = source.Content[source.BufferIndex];
+
+            source.Position -= number;
+            return result;
+        }
 
         /// <summary>
         ///     move to the previous char
         /// </summary>
         public char PreviousChar() {
-            if (input == null)
+            var source = input?.Input;
+
+            if (source == null)
                 throw new InvalidOperationException("No input file.");
 
-            return input.Input.PreviousChar();
+            var sourcePosition = source.Position;
+
+            if (sourcePosition < 0)
+                return '\0';
+
+            source.Position = sourcePosition - 1;
+            return source.Content[source.BufferIndex];
         }
 
         /// <summary>
@@ -122,13 +154,21 @@ namespace PasPasPas.Infrastructure.Files {
             => input != null ? input.Input.Position : -1;
 
         /// <summary>
-        ///     fetch the ext char
+        ///     fetch the next char
         /// </summary>
         public char NextChar() {
-            if (input == null)
+            var source = input?.Input;
+
+            if (source == null)
                 throw new InvalidOperationException("No input file.");
 
-            return input.Input.NextChar();
+            var sourcePosition = source.Position;
+
+            if (sourcePosition >= source.Length)
+                return '\0';
+
+            source.Position = 1 + sourcePosition;
+            return source.Content[source.BufferIndex];
         }
 
         private bool disposedValue = false; // To detect redundant calls

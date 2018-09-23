@@ -111,7 +111,7 @@ namespace PasPasPasTests.Tokenizer {
                 env.Log.RegisterTarget(logTarget);
 
                 using (var tokenizer = new PasPasPas.Parsing.Tokenizer.Tokenizer(env, patterns, reader)) {
-                    while (reader.CurrentFile != null && !reader.CurrentFile.AtEof) {
+                    while (reader.CurrentFile != null && !reader.AtEof) {
                         tokenizer.FetchNextToken();
                         result.Add(tokenizer.CurrentToken);
                     }
