@@ -76,6 +76,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
             AcceptPart(this, LeftTerm, visitor);
             AcceptPart(this, Operand, visitor);
             AcceptPart(this, RightTerm, visitor);
+            AcceptPart(this, Comma, visitor);
             visitor.EndVisit(this);
         }
 

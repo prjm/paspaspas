@@ -40,8 +40,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         ///     create new record helper item
         /// </summary>
         /// <param name="classFieldSymbol"></param>
-        public RecordHelperItemSymbol(ClassFieldSymbol classFieldSymbol)
-            => FieldDeclaration = classFieldSymbol;
+        public RecordHelperItemSymbol(ClassFieldSymbol classFieldSymbol, UserAttributesSymbol attributes1, UserAttributesSymbol attributes2) {
+            FieldDeclaration = classFieldSymbol;
+            Attributes1 = attributes1;
+            Attributes2 = attributes2;
+        }
 
         /// <summary>
         ///     create a new record helper item
@@ -56,9 +59,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// </summary>
         /// <param name="classMethodSymbol"></param>
         /// <param name="classSymbol"></param>
-        public RecordHelperItemSymbol(ClassMethodSymbol classMethodSymbol, Terminal classSymbol) {
+        public RecordHelperItemSymbol(ClassMethodSymbol classMethodSymbol, Terminal classSymbol, UserAttributesSymbol attributes1, UserAttributesSymbol attributes2) {
             ClassSymbol = classSymbol;
             MethodDeclaration = classMethodSymbol;
+            Attributes1 = attributes1;
+            Attributes2 = attributes2;
         }
 
         /// <summary>

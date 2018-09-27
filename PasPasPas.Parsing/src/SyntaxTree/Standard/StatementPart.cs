@@ -161,10 +161,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="visitor">visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
-            AcceptPart(this, Assignment, visitor);
             AcceptPart(this, Case, visitor);
             AcceptPart(this, CompoundStatement, visitor);
             AcceptPart(this, DesignatorPart, visitor);
+            AcceptPart(this, AssignmentSymbol, visitor);
+            AcceptPart(this, Assignment, visitor);
             AcceptPart(this, For, visitor);
             AcceptPart(this, GoTo, visitor);
             AcceptPart(this, If, visitor);

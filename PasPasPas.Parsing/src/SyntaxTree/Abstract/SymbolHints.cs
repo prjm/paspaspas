@@ -1,4 +1,6 @@
-﻿namespace PasPasPas.Parsing.SyntaxTree.Abstract {
+﻿using PasPasPas.Globals.Runtime;
+
+namespace PasPasPas.Parsing.SyntaxTree.Abstract {
 
     /// <summary>
     ///     symbol hints
@@ -8,8 +10,7 @@
         /// <summary>
         ///     deprecated information
         /// </summary>
-        public string DeprecatedInformation { get; set; }
-            = string.Empty;
+        public ITypeReference DeprecatedInformation { get; set; }
 
         /// <summary>
         ///     symbol in library

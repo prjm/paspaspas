@@ -39,13 +39,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     comment for deprecation
         /// </summary>
-        public SyntaxPartBase DeprecatedComment { get; }
+        public QuotedStringSymbol DeprecatedComment { get; }
 
         /// <summary>
         ///     hint for experimental
         /// </summary>
         public bool Experimental
-                        => Symbol.GetSymbolKind() == TokenKind.Experimental;
+            => Symbol.GetSymbolKind() == TokenKind.Experimental;
 
         /// <summary>
         ///     hint for library

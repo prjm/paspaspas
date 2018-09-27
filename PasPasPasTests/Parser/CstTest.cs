@@ -1381,7 +1381,7 @@ namespace PasPasPasTests.Parser {
             s = RunCstTest(p => p.ParseForStatement(), "for a in b do begin a; end");
             Assert.IsNotNull(s.ForKeyword);
             Assert.IsNotNull(s.Variable);
-            Assert.IsNotNull(s.StartExpression);
+            Assert.IsNotNull(s.EndExpression);
             Assert.IsNotNull(s.LoopOperator);
             Assert.IsNotNull(s.DoKeyword);
             Assert.IsNotNull(s.Statement);

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using PasPasPas.Globals.Runtime;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
@@ -441,8 +442,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             declaration.Mode = CurrentDeclarationMode;
             declaration.Hints = ExtractHints(varDeclaration.Hints as HintingInformationListSymbol);
 
-            foreach (var child in varDeclaration.Identifiers.Parts) {
-                if (child is IdentifierSymbol ident) {
+            foreach (var child in varDeclaration.Identifiers.Items) {
+                var ident = child.Identifier;
+
+                if (ident != default) {
                     var name = new VariableName();
                     InitNode(name, child, declaration);
                     name.Name = ExtractSymbolName(ident);
@@ -688,7 +691,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (unit.UsesList == null)
                 return;
 
-            foreach (var part in unit.UsesList.Parts) {
+            foreach (var part in unit.UsesList.Items) {
                 if (!(part is NamespaceNameSymbol name))
                     continue;
 
@@ -713,7 +716,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (unit.Files == null)
                 return;
 
-            foreach (var part in unit.Files.Parts) {
+            foreach (var part in unit.Files.Items) {
                 var name = part as NamespaceFileNameSymbol;
                 if (name == null)
                     continue;
@@ -723,12 +726,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 unitName.Name = ExtractSymbolName(name);
                 unitName.Mode = CurrentUnitMode[CurrentUnit];
 
-                /*
-
-                if (name.QuotedFileName != null && name.QuotedFileName.UnquotedValue is IStringValue fileName)
+                if (name.QuotedFileName != null && name.QuotedFileName.Symbol.Token.ParsedValue is IStringValue fileName)
                     unitName.FileName = fileName.AsUnicodeString;
-
-            */
 
                 CurrentUnit.RequiredUnits.Add(unitName, LogSource);
             }
@@ -747,7 +746,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (requires.RequiresList == null)
                 return;
 
-            foreach (var part in requires.RequiresList.Parts) {
+            foreach (var part in requires.RequiresList.Items) {
                 if (!(part is NamespaceNameSymbol name))
                     continue;
 
@@ -779,7 +778,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (contains.ContainsList == null)
                 return;
 
-            foreach (var part in contains.ContainsList.Parts) {
+            foreach (var part in contains.ContainsList.Items) {
                 if (!(part is NamespaceFileNameSymbol name))
                     continue;
 
@@ -788,12 +787,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 unitName.Name = ExtractSymbolName(name);
                 unitName.Mode = CurrentUnitMode[CurrentUnit];
 
-                /*
-
-                if (name.QuotedFileName != null && name.QuotedFileName.UnquotedValue is IStringValue fileName)
+                if (name.QuotedFileName != null && name.QuotedFileName.Symbol.Token.ParsedValue is IStringValue fileName)
                     unitName.FileName = fileName.AsUnicodeString;
-
-            */
 
                 CurrentUnit.RequiredUnits.Add(unitName, LogSource);
             }
@@ -1316,14 +1311,15 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 result.ClassItem = declItem.ClassItem;
             }
 
-            foreach (var part in field.Names.Parts) {
+            foreach (var part in field.Names.Items) {
 
-                if (part is UserAttributesSymbol attrs) {
+                var attrs = part.Attributes;
+
+                if (attrs != null) {
                     extractedAttributes = ExtractAttributes(attrs, CurrentUnit, extractedAttributes);
-                    continue;
                 }
 
-                var partName = part as IdentifierSymbol;
+                var partName = part.Identifier;
                 if (partName == null)
                     continue;
 
@@ -1922,14 +1918,15 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 extractedAttributes = ExtractAttributes(declItem.Attributes2 as UserAttributesSymbol, CurrentUnit, extractedAttributes);
             }
 
-            foreach (var part in fieldDeclaration.Names.Parts) {
+            foreach (var part in fieldDeclaration.Names.Items) {
 
-                if (part is UserAttributesSymbol attrs) {
+                var attrs = part.Attributes;
+
+                if (attrs != null) {
                     extractedAttributes = ExtractAttributes(attrs, CurrentUnit, extractedAttributes);
-                    continue;
                 }
 
-                var partName = part as IdentifierSymbol;
+                var partName = part.Identifier;
                 if (partName == null)
                     continue;
 
@@ -2631,7 +2628,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <param name="label"></param>
         public void StartVisit(LocalAsmLabelSymbol label) {
             var value = string.Empty;
-            foreach (var token in label.Parts) {
+            foreach (var token in label.Items) {
 
                 if (token is Terminal terminal)
                     value = string.Concat(value, terminal.Value);
@@ -3035,15 +3032,18 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                     if (!string.IsNullOrWhiteSpace(name.Name.Name))
                         result.AddName(name.Name.Name);
                     if (name.GenericDefinition != null) {
-                        foreach (var part in name.GenericDefinition.Parts) {
+                        foreach (var part in name.GenericDefinition.Items) {
 
-                            if (part is IdentifierSymbol idPart) {
+                            var idPart = part.Identifier;
+                            var genPart = part.DefinitionPart;
+
+                            if (idPart != null) {
                                 result.AddGenericPart(SyntaxPartBase.IdentifierValue(idPart));
                                 continue;
                             }
 
-                            if (part is GenericDefinitionPartSymbol genericPart) {
-                                result.AddGenericPart(SyntaxPartBase.IdentifierValue(genericPart.Identifier));
+                            if (genPart != null) {
+                                result.AddGenericPart(SyntaxPartBase.IdentifierValue(genPart.Identifier));
                             }
                         }
                     }
@@ -3054,7 +3054,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         }
 
         private static SymbolName ExtractSymbolName(IdentifierSymbol name) {
-            var result = new SimpleSymbolName(name?.FirstTerminalToken.Value);
+            var result = new SimpleSymbolName(name?.Symbol.Value);
             return result;
         }
 
@@ -3092,9 +3092,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             var result = new GenericTypes();
             InitNode(result, node, parent);
 
-            foreach (var part in genericDefinition.Parts) {
+            foreach (var part in genericDefinition.Items) {
+                var idPart = part.Identifier;
+                var genPart = part.DefinitionPart;
 
-                if (part is IdentifierSymbol idPart) {
+                if (idPart != null) {
                     var generic = new GenericType();
                     InitNode(generic, node, parent);
                     generic.Name = ExtractSymbolName(idPart);
@@ -3103,13 +3105,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                     continue;
                 }
 
-                if (part is GenericDefinitionPartSymbol genericPart) {
+                if (genPart != null) {
                     var generic = new GenericType();
                     InitNode(generic, node, result);
-                    generic.Name = ExtractSymbolName(genericPart.Identifier);
+                    generic.Name = ExtractSymbolName(genPart.Identifier);
                     result.Add(generic, LogSource);
 
-                    foreach (var constraintPart in genericPart.Parts) {
+                    foreach (var constraintPart in genPart.Items) {
                         if (constraintPart is Standard.ConstrainedGenericSymbol constraint) {
                             var cr = new GenericConstraint();
                             InitNode(cr, node, generic);
@@ -3133,10 +3135,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         private static SymbolHints ExtractHints(HintingInformationListSymbol hints) {
             var result = new SymbolHints();
 
-            if (hints == null || hints.PartList == null || hints.PartList.Count < 1)
+            if (hints == null || hints.Items == null || hints.Items.Length < 1)
                 return null;
 
-            foreach (var part in hints.Parts) {
+            foreach (var part in hints.Items) {
                 var hint = part as HintSymbol;
                 if (hint == null)
                     continue;
@@ -3151,7 +3153,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 result = new SymbolHints();
 
             result.SymbolIsDeprecated = result.SymbolIsDeprecated || hint.Deprecated;
-            //result.DeprecatedInformation = (result.DeprecatedInformation ?? string.Empty) + (hint.DeprecatedComment as QuotedString)?.UnquotedValue;
+            result.DeprecatedInformation = hint.DeprecatedComment?.Symbol?.Token.ParsedValue;
             result.SymbolInLibrary = result.SymbolInLibrary || hint.Library;
             result.SymbolIsPlatformSpecific = result.SymbolIsPlatformSpecific || hint.Platform;
             result.SymbolIsExperimental = result.SymbolIsExperimental || hint.Experimental;
@@ -3159,24 +3161,26 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         }
 
         private IList<SymbolAttribute> ExtractAttributes(UserAttributesSymbol attributes, CompilationUnit parentUnit, IList<SymbolAttribute> result = null) {
-            if (attributes == null || attributes.PartList == null || attributes.PartList.Count < 1)
+            if (attributes == null || attributes.Items == null || attributes.Items.Length < 1)
                 return Array.Empty<SymbolAttribute>();
 
             if (result == null)
                 result = new List<SymbolAttribute>();
 
-            foreach (var part in attributes.Parts) {
-                var attribute = part as UserAttributeDefinitionSymbol;
-                var isAssemblyAttribute = false;
+            foreach (var set in attributes.Items) {
+                foreach (var attribute in set.Items) {
 
-                var userAttribute = new SymbolAttribute() {
-                    Name = ExtractSymbolName(attribute.Name)
-                };
-                if (!isAssemblyAttribute) {
-                    result.Add(userAttribute);
+                    var isAssemblyAttribute = false;
+
+                    var userAttribute = new SymbolAttribute() {
+                        Name = ExtractSymbolName(attribute.Name)
+                    };
+                    if (!isAssemblyAttribute) {
+                        result.Add(userAttribute);
+                    }
+                    else
+                        parentUnit.AddAssemblyAttribute(userAttribute);
                 }
-                else
-                    parentUnit.AddAssemblyAttribute(userAttribute);
             }
 
             return result;

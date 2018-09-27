@@ -19,8 +19,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         ///     create a new method symbol
         /// </summary>
         /// <param name="classMethodSymbol"></param>
-        public RecordItemSymbol(ClassMethodSymbol classMethodSymbol)
-            => MethodDeclaration = classMethodSymbol;
+        public RecordItemSymbol(ClassMethodSymbol classMethodSymbol, Terminal classItem) {
+            MethodDeclaration = classMethodSymbol;
+            ClassSymbol = classItem;
+        }
 
         /// <summary>
         ///     create a new record property
@@ -53,8 +55,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         ///     create a new record field item
         /// </summary>
         /// <param name="recordFieldList"></param>
-        public RecordItemSymbol(RecordFieldListSymbol recordFieldList)
-            => Fields = recordFieldList;
+        /// <param name="attributes1"></param>
+        /// <param name="attributes2"></param>
+        public RecordItemSymbol(RecordFieldListSymbol recordFieldList, UserAttributesSymbol attributes1, UserAttributesSymbol attributes2) {
+            Fields = recordFieldList;
+            Attributes1 = attributes1;
+            Attributes2 = attributes2;
+        }
 
         /// <summary>
         ///     create a new record item

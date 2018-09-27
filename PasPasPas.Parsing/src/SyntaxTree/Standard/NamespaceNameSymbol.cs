@@ -14,24 +14,26 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         ///     create a new namespace name
         /// </summary>
         /// <param name="items"></param>
+        /// <param name="comma"></param>
         public NamespaceNameSymbol(ImmutableArray<SyntaxPartBase> items, Terminal comma) : base(items)
             => Comma = comma;
 
         /// <summary>
         ///     unit name
         /// </summary>
-        public string Name => Parts == null || PartList == null || PartList.Count < 1 ? null : IdentifierValue(PartList[PartList.Count - 1]);
+        public string Name
+            => Items == null || Items.Length < 1 ? null : IdentifierValue(Items[Items.Length - 1]);
 
         /// <summary>
         ///     namespace name
         /// </summary>
         public IEnumerable<string> Namespace {
             get {
-                if (Parts == null || PartList == null || PartList.Count < 2)
+                if (Items == null || Items.Length < 2)
                     yield break;
 
-                for (var i = 0; i <= PartList.Count - 2; i++) {
-                    var part = PartList[i];
+                for (var i = 0; i <= Items.Length - 2; i++) {
+                    var part = Items[i];
                     if (!(part is IdentifierSymbol))
                         continue;
                     yield return IdentifierValue(part);

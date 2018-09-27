@@ -235,7 +235,6 @@ namespace PasPasPasTests.Parser {
             ParseString("program test; type x = record helper for x end ; .");
             ParseString("program test; type x = record helper for x function x: x; end ; .");
             ParseString("program test; type x = record helper for x property x : x read x; end ; .");
-            ParseString("program test; [assembly:x.y.z(5)] .");
         }
 
 

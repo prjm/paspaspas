@@ -62,9 +62,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
             AcceptPart(this, StringSymbol, visitor);
-            AcceptPart(OpenParen, StringSymbol, visitor);
-            AcceptPart(CodePageOrStringLength, StringSymbol, visitor);
-            AcceptPart(CloseParen, StringSymbol, visitor);
+            AcceptPart(this, OpenParen, visitor);
+            AcceptPart(this, CodePageOrStringLength, visitor);
+            AcceptPart(this, CloseParen, visitor);
             visitor.EndVisit(this);
         }
 

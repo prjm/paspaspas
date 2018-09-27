@@ -94,10 +94,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
             AcceptPart(this, OpenParen, visitor);
             AcceptPart(this, Parameters, visitor);
             AcceptPart(this, CloseParen, visitor);
-            AcceptPart(this, NameSymbol, visitor);
-            AcceptPart(this, NameParameter, visitor);
             AcceptPart(this, IndexSymbol, visitor);
             AcceptPart(this, IndexParameter, visitor);
+            AcceptPart(this, NameSymbol, visitor);
+            AcceptPart(this, NameParameter, visitor);
             AcceptPart(this, Resident, visitor);
             AcceptPart(this, Comma, visitor);
             visitor.EndVisit(this);

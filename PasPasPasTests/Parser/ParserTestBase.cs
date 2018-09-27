@@ -119,6 +119,7 @@ namespace PasPasPasTests.Parser {
                 var validator = new StructureValidator() { Manager = env.Log };
                 visitor.Project.Accept(validator.AsVisitor());
 
+                Assert.IsNotNull(astVisitor.Result);
                 Assert.AreEqual(expectedResult, astVisitor.Result);
             }
 

@@ -873,7 +873,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
             }
             else {
                 loopOperator = ContinueWithOrMissing(TokenKind.In);
-                startExpression = ParseExpression();
+                endExpression = ParseExpression();
             }
 
             doKeyword = ContinueWithOrMissing(TokenKind.Do);
@@ -2710,7 +2710,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
 
             if (Match(TokenKind.Procedure, TokenKind.Function, TokenKind.Constructor, TokenKind.Destructor, TokenKind.Operator)) {
                 mode = RecordDeclarationMode.Other;
-                return new RecordItemSymbol(ParseMethodDeclaration());
+                return new RecordItemSymbol(ParseMethodDeclaration(), classItem);
             }
 
             if (Match(TokenKind.Property)) {
@@ -2729,7 +2729,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
 
             if (MatchIdentifier() && (!Match(TokenKind.Private, TokenKind.Protected, TokenKind.Public, TokenKind.Published, TokenKind.Automated, TokenKind.Strict))) {
                 if (mode == RecordDeclarationMode.Fields || mode == RecordDeclarationMode.ClassFields) {
-                    return new RecordItemSymbol(ParseRecordFieldList(true));
+                    return new RecordItemSymbol(ParseRecordFieldList(true), attributes1, attributes2);
                 }
 
                 Unexpected();
@@ -2938,7 +2938,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
 
             if (Match(TokenKind.Procedure, TokenKind.Function, TokenKind.Constructor, TokenKind.Destructor)) {
                 mode = RecordDeclarationMode.Other;
-                return new RecordHelperItemSymbol(ParseMethodDeclaration(), classSymbol);
+                return new RecordHelperItemSymbol(ParseMethodDeclaration(), classSymbol, attributes1, attributes2);
             }
 
             if (Match(TokenKind.Property)) {
@@ -2971,7 +2971,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
             if (MatchIdentifier() && (!Match(TokenKind.Private, TokenKind.Protected, TokenKind.Public, TokenKind.Published, TokenKind.Automated, TokenKind.Strict))) {
 
                 if (mode == RecordDeclarationMode.Fields || mode == RecordDeclarationMode.ClassFields) {
-                    return new RecordHelperItemSymbol(ParseClassFieldDeclararation());
+                    return new RecordHelperItemSymbol(ParseClassFieldDeclararation(), attributes1, attributes2);
                 }
 
                 Unexpected();
@@ -4220,7 +4220,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
 
         [Rule("Attributes", "{ '[' AttributeSet | AssemblyAttribue ']' }")]
         public UserAttributesSymbol ParseAttributes() {
-            using (var list = GetList<SyntaxPartBase>()) {
+            using (var list = GetList<UserAttributeSetSymbol>()) {
                 while (Match(TokenKind.OpenBraces)) {
                     AddToList(list, ParseAttributeSet());
                 }

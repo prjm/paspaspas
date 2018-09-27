@@ -1,6 +1,6 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Abstract;
+﻿using System.Linq;
+using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
-using System.Linq;
 using Xunit;
 
 namespace PasPasPasTests.Parser {
@@ -19,7 +19,7 @@ namespace PasPasPasTests.Parser {
             RunAstTest("unit z.x; interface implementation end.", t => u(t)?.UnitName.NamespaceName, "z");
             RunAstTest("unit z.x; interface implementation end.", t => u(t)?.FileType, CompilationUnitType.Unit);
             RunAstTest("unit z.x deprecated; interface implementation end.", t => u(t)?.Hints?.SymbolIsDeprecated, true);
-            RunAstTest("unit z.x deprecated 'X'; interface implementation end.", t => u(t)?.Hints?.DeprecatedInformation, "X");
+            RunAstTest("unit z.x deprecated 'X'; interface implementation end.", t => u(t)?.Hints?.DeprecatedInformation.ToString(), "X");
             RunAstTest("unit z.x library; interface implementation end.", t => u(t)?.Hints?.SymbolInLibrary, true);
             RunAstTest("unit z.x platform; interface implementation end.", t => u(t)?.Hints?.SymbolIsPlatformSpecific, true);
             RunAstTest("unit z.x experimental; interface implementation end.", t => u(t)?.Hints?.SymbolIsExperimental, true);
@@ -43,7 +43,7 @@ namespace PasPasPasTests.Parser {
             RunAstTest("library z.x; uses a; begin end.", t => u(t)?.RequiredUnits["a"]?.Name.CompleteName, "a");
 
             RunAstTest("library z.x deprecated;  begin end.", t => u(t)?.Hints?.SymbolIsDeprecated, true);
-            RunAstTest("library z.x deprecated 'X'; begin end.", t => u(t)?.Hints?.DeprecatedInformation, "X");
+            RunAstTest("library z.x deprecated 'X'; begin end.", t => u(t)?.Hints?.DeprecatedInformation.ToString(), "X");
             RunAstTest("library z.x library; begin end.", t => u(t)?.Hints?.SymbolInLibrary, true);
             RunAstTest("library z.x platform; begin end.", t => u(t)?.Hints?.SymbolIsPlatformSpecific, true);
             RunAstTest("library z.x experimental; begin end.", t => u(t)?.Hints?.SymbolIsExperimental, true);

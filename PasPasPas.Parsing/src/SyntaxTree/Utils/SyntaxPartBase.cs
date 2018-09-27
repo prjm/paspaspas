@@ -36,12 +36,6 @@ namespace PasPasPas.Parsing.SyntaxTree {
         private ISyntaxPartList<ISyntaxPart> parts = null;
 
         /// <summary>
-        ///     get the list of syntax parts
-        /// </summary>
-        public ISyntaxPartList<ISyntaxPart> PartList
-            => parts;
-
-        /// <summary>
         ///     get the last terminal value
         /// </summary>
         public string LastTerminalValue {
@@ -156,8 +150,8 @@ namespace PasPasPas.Parsing.SyntaxTree {
         /// <param name="part"></param>
         /// <returns></returns>
         public static string IdentifierValue(ISyntaxPart part) {
-            if (part is IdentifierSymbol result && result.parts.Count > 0)
-                return TerminalValue(result.parts[0]);
+            if (part is IdentifierSymbol result && result.Symbol != default)
+                return TerminalValue(result.Symbol);
             else
                 return null;
         }

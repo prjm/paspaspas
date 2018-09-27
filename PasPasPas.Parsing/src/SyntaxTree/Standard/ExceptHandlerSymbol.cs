@@ -72,6 +72,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
             AcceptPart(this, On, visitor);
             AcceptPart(this, Name, visitor);
             AcceptPart(this, Colon, visitor);
+            AcceptPart(this, HandlerType, visitor);
+            AcceptPart(this, DoSymbol, visitor);
             AcceptPart(this, Statement, visitor);
             AcceptPart(this, Semicolon, visitor);
             visitor.EndVisit(this);
