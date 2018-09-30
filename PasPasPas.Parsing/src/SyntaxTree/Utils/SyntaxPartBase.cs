@@ -70,23 +70,6 @@ namespace PasPasPas.Parsing.SyntaxTree {
         }
 
         /// <summary>
-        ///     first terminal
-        /// </summary>
-        public Token FirstTerminalToken {
-            get {
-                if (parts == null || parts.Count < 1)
-                    return Token.Empty;
-
-                var terminal = parts[0] as Terminal;
-
-                if (terminal == null)
-                    return Token.Empty;
-
-                return terminal.Token;
-            }
-        }
-
-        /// <summary>
         ///     get the last terminal symbol
         /// </summary>
         public Token LastTerminalToken {

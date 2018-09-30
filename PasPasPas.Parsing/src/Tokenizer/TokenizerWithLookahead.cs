@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Infrastructure.Files;
 using PasPasPas.Infrastructure.Log;
@@ -61,12 +62,6 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         public class TokenSequence {
 
-            private string prefix
-                = string.Empty;
-
-            private string suffix
-                = string.Empty;
-
             /// <summary>
             ///     token value
             /// </summary>
@@ -75,14 +70,12 @@ namespace PasPasPas.Parsing.Tokenizer {
             /// <summary>
             ///     token prefix
             /// </summary>
-            public string Prefix
-                => prefix;
+            public ImmutableArray<Token> Prefix { get; private set; } = default;
 
             /// <summary>
             ///     token suffix (invalid to parser)
             /// </summary>
-            public string Suffix
-                => suffix;
+            public ImmutableArray<Token> Suffix { get; private set; } = default;
 
             /// <summary>
             ///     gets the buffer current prefix of invalid tokens
@@ -90,11 +83,8 @@ namespace PasPasPas.Parsing.Tokenizer {
             /// <param name="tokens"></param>
             /// <param name="environment"></param>
             public void AssignPrefix(Queue<Token> tokens, IParserEnvironment environment) {
-                using (var poolItem = environment.StringBuilderPool.Borrow(out var sb)) {
-                    while (tokens.Count > 0)
-                        sb.Append(tokens.Dequeue().Value);
-                    prefix = environment.StringPool.PoolString(sb);
-                }
+                Prefix = tokens.ToImmutableArray();
+                tokens.Clear();
             }
 
             /// <summary>
@@ -103,19 +93,16 @@ namespace PasPasPas.Parsing.Tokenizer {
             /// <param name="tokens"></param>
             /// <param name="environment"></param>
             public void AssignSuffix(Queue<Token> tokens, IParserEnvironment environment) {
-                using (var poolItem = environment.StringBuilderPool.Borrow(out var sb)) {
-                    while (tokens.Count > 0)
-                        sb.Append(tokens.Dequeue().Value);
-                    suffix = sb.ToString();
-                }
+                Suffix = tokens.ToImmutableArray();
+                tokens.Clear();
             }
 
             /// <summary>
             ///     clear the tokenizer
             /// </summary>
             public void Clear() {
-                prefix = null;
-                suffix = null;
+                Prefix = default;
+                Suffix = default;
                 Value = default;
             }
 

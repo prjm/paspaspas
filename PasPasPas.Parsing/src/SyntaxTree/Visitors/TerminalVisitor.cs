@@ -28,9 +28,16 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// </summary>
         /// <param name="syntaxPart"></param>
         public void StartVisit(Terminal syntaxPart) {
-            ResultBuilder.Append(syntaxPart.Prefix);
+            if (syntaxPart.Prefix != null)
+                foreach (var prefix in syntaxPart.Prefix)
+                    ResultBuilder.Append(prefix.Value);
+
             ResultBuilder.Append(syntaxPart.Token.Value);
-            ResultBuilder.Append(syntaxPart.Suffix);
+
+            if (syntaxPart.Suffix != null)
+                foreach (var suffix in syntaxPart.Suffix)
+                    ResultBuilder.Append(suffix.Value);
+
         }
 
         /// <summary>

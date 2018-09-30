@@ -93,8 +93,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         ///     create a new class field declaration
         /// </summary>
         /// <param name="classFieldSymbol"></param>
-        public ClassDeclarationItemSymbol(ClassFieldSymbol classFieldSymbol)
-            => FieldDeclaration = classFieldSymbol;
+        /// <param name="classItem"></param>
+        public ClassDeclarationItemSymbol(ClassFieldSymbol classFieldSymbol, bool classItem, UserAttributesSymbol attributes1, UserAttributesSymbol attributes2) {
+            FieldDeclaration = classFieldSymbol;
+            ClassFieldItem = classItem;
+            Attributes1 = attributes1;
+            Attributes2 = attributes2;
+        }
 
         /// <summary>
         ///     attributes
@@ -115,7 +120,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         ///     class-wide declaration
         /// </summary>
         public bool ClassItem
-            => ClassSymbol != null;
+            => ClassSymbol != null || ClassFieldItem;
+
+        /// <summary>
+        ///     class field item
+        /// </summary>
+        public bool ClassFieldItem { get; }
 
         /// <summary>
         ///     constant class section

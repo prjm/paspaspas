@@ -10,6 +10,7 @@ using PasPasPas.Parsing.SyntaxTree.Standard;
 using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.Tokenizer;
 using PasPasPas.Parsing.Tokenizer.Patterns;
+using PasPasPas.Parsing.Tokenizer.TokenGroups;
 
 namespace PasPasPas.Parsing.Parser.Standard {
 
@@ -1503,7 +1504,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
             var operand = ContinueWith(TokenKind.Plus, TokenKind.Minus);
 
             if (operand != null) {
-                kind = CurrentToken().Kind;
+                kind = operand.Kind;
                 rightOperand = ParseAssemblyOperand();
             }
 
@@ -1681,6 +1682,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
             using (var list = GetList<SyntaxPartBase>()) {
                 do {
                     wasAt = false;
+
                     if (Match(TokenKind.Integer)) {
                         AddToList(list, RequireInteger());
                     }
@@ -1690,14 +1692,16 @@ namespace PasPasPas.Parsing.Parser.Standard {
                     else if (Match(TokenKind.HexNumber)) {
                         AddToList(list, RequireHexValue());
                     }
-                    else if (Match(TokenKind.At)) {
+                    else if (!Match(TokenKind.At)) {
+                        Unexpected();
+                    }
+
+                    if (Match(TokenKind.At)) {
                         AddToList(list, ContinueWith(TokenKind.At));
                         wasAt = true;
                     }
-                    else {
-                        Unexpected();
-                    }
                 }
+
                 while ((!CurrentTokenIsAfterNewline()) && wasAt);
 
                 return new LocalAsmLabelSymbol(at, GetFixedArray(list));
@@ -3432,7 +3436,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
                 }
 
                 if (mode == ClassDeclarationMode.Fields || mode == ClassDeclarationMode.ClassFields) {
-                    return new ClassDeclarationItemSymbol(ParseClassFieldDeclararation());
+                    return new ClassDeclarationItemSymbol(ParseClassFieldDeclararation(), mode == ClassDeclarationMode.ClassFields, attributes1, attributes2);
                 }
                 else {
                     Unexpected();
@@ -4814,14 +4818,18 @@ namespace PasPasPas.Parsing.Parser.Standard {
         private QuotedStringSymbol RequireDoubleQuotedString()
             => new QuotedStringSymbol(ContinueWithOrMissing(TokenKind.DoubleQuotedString));
 
-        private bool CurrentTokenIsAfterNewline() =>
-            /*
-        foreach (Token invalidToken in CurrentToken().InvalidTokensBefore) {
-        if (invalidToken.Kind == TokenKind.WhiteSpace && PatternContinuation.ContainsNewLineChar(invalidToken.Value))
-        return true;
+        private bool CurrentTokenIsAfterNewline() {
+
+            if (CurrentTokenSequences().Prefix == null)
+                return false;
+
+            foreach (var invalidToken in CurrentTokenSequences().Prefix) {
+                if (invalidToken.Kind == TokenKind.WhiteSpace && PatternContinuation.ContainsNewLineChar(invalidToken.Value))
+                    return true;
+            }
+
+            return false;
         }
-        */
-            false;
 
         /// <summary>
         ///     parse a namespace name
@@ -4851,7 +4859,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
                     AddToList(list, dot);
                 }
 
-                while (name != default && dot != default && MatchIdentifier(true) && (!inDesignator || LookAhead(2, new int[] { TokenKind.Dot }))) {
+                while (name != default && dot != default && MatchIdentifier(true) && (!inDesignator || LookAhead(1, new int[] { TokenKind.Dot }))) {
                     name = RequireIdentifier(true);
                     AddToList(list, name);
 

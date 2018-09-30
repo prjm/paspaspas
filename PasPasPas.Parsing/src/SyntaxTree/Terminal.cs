@@ -1,4 +1,5 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Standard;
+﻿using System.Collections.Immutable;
+using PasPasPas.Parsing.SyntaxTree.Standard;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 using static PasPasPas.Parsing.Tokenizer.TokenizerWithLookahead;
 
@@ -16,8 +17,8 @@ namespace PasPasPas.Parsing.SyntaxTree {
         public Terminal(TokenSequence baseToken) {
             if (baseToken == null) {
                 Token = Token.Empty;
-                Prefix = string.Empty;
-                Suffix = string.Empty;
+                Prefix = default;
+                Suffix = default;
             }
             else {
                 Token = baseToken.Value;
@@ -46,20 +47,31 @@ namespace PasPasPas.Parsing.SyntaxTree {
         /// <summary>
         ///     suffix
         /// </summary>
-        public string Suffix { get; }
+        public ImmutableArray<Token> Suffix { get; }
 
         /// <summary>
         ///     prefix
         /// </summary>
-        public string Prefix { get; }
+        public ImmutableArray<Token> Prefix { get; }
 
         /// <summary>
         ///     symbol length
         /// </summary>
-        public override int Length
-            => (Prefix ?? string.Empty).Length +
-               (Suffix ?? string.Empty).Length +
-               (Token.Value ?? string.Empty).Length;
+        public override int Length {
+            get {
+                var result = 0;
+
+                if (Prefix != null)
+                    foreach (var token in Prefix)
+                        result += (token.Value ?? string.Empty).Length;
+
+                if (Suffix != null)
+                    foreach (var token in Suffix)
+                        result += (token.Value ?? string.Empty).Length;
+
+                return result + (Token.Value ?? string.Empty).Length;
+            }
+        }
 
         /// <summary>
         ///     accept visitor

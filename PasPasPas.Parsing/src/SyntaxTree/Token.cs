@@ -1,7 +1,7 @@
 ﻿using System;
-using PasPasPas.Parsing.Tokenizer;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Infrastructure.Utils;
+using PasPasPas.Parsing.Tokenizer;
 
 namespace PasPasPas.Parsing.SyntaxTree {
 
@@ -82,9 +82,8 @@ namespace PasPasPas.Parsing.SyntaxTree {
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public static bool operator ==(Token left, Token right) {
-            return left.Equals(right);
-        }
+        public static bool operator ==(Token left, Token right)
+            => left.Equals(right);
 
         /// <summary>
         ///     compare two token
@@ -92,9 +91,9 @@ namespace PasPasPas.Parsing.SyntaxTree {
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public static bool operator !=(Token left, Token right) {
-            return !(left == right);
-        }
+        public static bool operator !=(Token left, Token right)
+            => !(left == right);
+
     }
 
 }

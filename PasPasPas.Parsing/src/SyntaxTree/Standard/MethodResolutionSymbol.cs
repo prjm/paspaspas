@@ -27,7 +27,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     kind (procedure/function)
         /// </summary>
-        public int Kind { get; }
+        public int Kind
+            => KindSymbol.GetSymbolKind();
 
         /// <summary>
         ///     resolve identifier

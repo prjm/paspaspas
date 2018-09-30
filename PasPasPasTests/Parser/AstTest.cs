@@ -496,7 +496,7 @@ namespace PasPasPasTests.Parser {
             RunAstTest("unit z.x; interface type x = class public n: integer; end; implementation end.", t => f(t)?.Visibility, MemberVisibility.Public);
             RunAstTest("unit z.x; interface type x = class published n: integer; end; implementation end.", t => f(t)?.Visibility, MemberVisibility.Published);
             RunAstTest("unit z.x; interface type x = class automated n: integer; end; implementation end.", t => f(t)?.Visibility, MemberVisibility.Automated);
-            RunAstTest("unit z.x; interface type x = class [a] n: integer; end; implementation end.", t => f(t)?.Attributes[0]?.Name?.CompleteName, "a");
+            RunAstTest("unit z.x; interface type x = class [a] n: integer; end; implementation end.", t => f(t)?.Attributes?[0]?.Name?.CompleteName, "a");
             RunAstTest("unit z.x; interface type x = class [a] x, [b] n: integer; end; implementation end.", t => f(t)?.Attributes[0]?.Name?.CompleteName, "b");
 
             RunAstTest("unit z.x; interface type x = class n: integer; end; implementation end.", t => f(t)?.ClassItem, false);
@@ -601,7 +601,6 @@ namespace PasPasPasTests.Parser {
 
             RunAstTest("unit z.x; interface type x = class const c = 5; end; implementation end.", t => (c(t) as ConstantDeclaration)?.Mode, DeclarationMode.Const);
             RunAstTest("unit z.x; interface type x = class type c = string; end; implementation end.", t => (c(t) as TypeDeclaration)?.TypeValue?.GetType(), typeof(MetaType));
-
 
             // attributes
 

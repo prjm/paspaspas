@@ -353,6 +353,13 @@ namespace PasPasPas.Parsing.Parser {
             => tokenizer.CurrentToken;
 
         /// <summary>
+        ///     token sequence
+        /// </summary>
+        /// <returns></returns>
+        protected TokenizerWithLookahead.TokenSequence CurrentTokenSequences()
+            => tokenizer.CurrentTokenSequence;
+
+        /// <summary>
         ///     print a parser grammar
         /// </summary>
         /// <param name="type">parser type</param>

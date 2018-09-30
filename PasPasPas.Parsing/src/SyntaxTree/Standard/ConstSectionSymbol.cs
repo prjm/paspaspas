@@ -14,9 +14,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// </summary>
         /// <param name="symbol"></param>
         /// <param name="items"></param>
-        public ConstSectionSymbol(Terminal symbol, ImmutableArray<ConstDeclarationSymbol> items) : base(items) {
-            ConstSymbol = symbol;
-        }
+        public ConstSectionSymbol(Terminal symbol, ImmutableArray<ConstDeclarationSymbol> items) : base(items) => ConstSymbol = symbol;
 
         /// <summary>
         ///     constant symbol
@@ -26,8 +24,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     kind of constant
         /// </summary>
-        public int Kind { get; }
-                = TokenKind.Undefined;
+        public int Kind
+                => ConstSymbol.GetSymbolKind();
 
         /// <summary>
         ///     accept visitor
