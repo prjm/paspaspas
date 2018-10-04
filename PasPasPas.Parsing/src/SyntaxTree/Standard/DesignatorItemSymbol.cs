@@ -43,12 +43,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="openParen"></param>
         /// <param name="immutableArray"></param>
         /// <param name="closeParen"></param>
-        public DesignatorItemSymbol(Terminal dotSymbol, IdentifierSymbol subitem, GenericSuffixSymbol genericSuffix, Terminal openParen, ImmutableArray<ParameterSymbol> immutableArray, Terminal closeParen) : base(immutableArray) {
+        /// <param name="paramList"></param>
+        public DesignatorItemSymbol(Terminal dotSymbol, IdentifierSymbol subitem, GenericSuffixSymbol genericSuffix, Terminal openParen, ImmutableArray<ParameterSymbol> immutableArray, Terminal closeParen, bool paramList) : base(immutableArray) {
             DotSymbol = dotSymbol;
             Subitem = subitem;
             SubitemGenericType = genericSuffix;
             OpenParen = openParen;
             CloseParen = closeParen;
+            ParameterList = paramList;
         }
 
         /// <summary>

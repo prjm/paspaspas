@@ -43,8 +43,18 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// </summary>
         /// <param name="procedureType"></param>
         /// <param name="comma"></param>
-        public TypeSpecificationSymbol(ProcedureTypeSymbol procedureType, Terminal comma) {
+        public TypeSpecificationSymbol(ProcedureTypeDefinitionSymbol procedureType, Terminal comma) {
             ProcedureType = procedureType;
+            Comma = comma;
+        }
+
+        /// <summary>
+        ///     create a new type specification
+        /// </summary>
+        /// <param name="procedureType"></param>
+        /// <param name="comma"></param>
+        public TypeSpecificationSymbol(ProcedureReferenceSymbol procedureType, Terminal comma) {
+            RefProcedureType = procedureType;
             Comma = comma;
         }
 
@@ -66,7 +76,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     procedure type
         /// </summary>
-        public ProcedureTypeSymbol ProcedureType { get; }
+        public ProcedureTypeDefinitionSymbol ProcedureType { get; }
+
+        /// <summary>
+        ///     procedure type
+        /// </summary>
+        public ProcedureReferenceSymbol RefProcedureType { get; }
 
         /// <summary>
         ///     simple type
@@ -96,6 +111,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
             visitor.StartVisit(this);
             AcceptPart(this, PointerType, visitor);
             AcceptPart(this, ProcedureType, visitor);
+            AcceptPart(this, RefProcedureType, visitor);
             AcceptPart(this, SimpleType, visitor);
             AcceptPart(this, StringType, visitor);
             AcceptPart(this, StructuredType, visitor);
@@ -109,6 +125,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         public override int Length =>
             PointerType.GetSymbolLength() +
             ProcedureType.GetSymbolLength() +
+            RefProcedureType.GetSymbolLength() +
             SimpleType.GetSymbolLength() +
             StringType.GetSymbolLength() +
             StructuredType.GetSymbolLength() +

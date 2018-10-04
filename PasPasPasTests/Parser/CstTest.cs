@@ -1916,8 +1916,12 @@ namespace PasPasPasTests.Parser {
 
         [TestCase]
         public void TestProcedureType() {
-            var s = RunCstTest(p => p.ParseProcedureType(), "function (a: integer): [a] string of object");
-            Assert.IsNotNull(s.ProcedureRefType);
+            var s = RunCstTest(p => p.ParseProcedureRefType(), "function (a: integer): [a] string of object");
+            Assert.IsNotNull(s.KindSymbol);
+            Assert.IsNotNull(s.Parameters);
+            Assert.IsNotNull(s.ReturnTypeAttributes);
+            Assert.IsNotNull(s.ReturnType);
+            Assert.IsNotNull(s.Parameters);
             Assert.IsNotNull(s.OfSymbol);
             Assert.IsNotNull(s.ObjectSymbol);
             Assert.AreEqual(43, s.Length);
@@ -2372,8 +2376,12 @@ namespace PasPasPasTests.Parser {
             Assert.IsNotNull(s.ProcedureType);
             Assert.AreEqual(19, s.Length);
 
-            s = RunCstTest(p => p.ParseTypeSpecification(), "reference to procedure");
+            s = RunCstTest(p => p.ParseTypeSpecification(), "procedure");
             Assert.IsNotNull(s.ProcedureType);
+            Assert.AreEqual(9, s.Length);
+
+            s = RunCstTest(p => p.ParseTypeSpecification(), "reference to procedure");
+            Assert.IsNotNull(s.RefProcedureType);
             Assert.AreEqual(22, s.Length);
 
             s = RunCstTest(p => p.ParseTypeSpecification(), "(a,b)");

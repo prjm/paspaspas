@@ -203,12 +203,6 @@ namespace PasPasPasTests.Parser {
             var resFile1 = new FileReference(Path.GetFullPath("res.res"));
             var resFile2 = new FileReference(Path.GetFullPath("test_0.res"));
             var linkDll = new FileReference(Path.GetFullPath("link.dll"));
-
-            //env.AddMockupFile(incFile, "DEFINE DUMMY_INC");
-            //env.AddMockupFile(resFile1, "RES RES RES");
-            //env.AddMockupFile(resFile2, "RES RES RES");
-            //env.AddMockupFile(linkDll, "MZE!");
-
             var testOptions = new OptionSet(env);
 
             var msgs = new ListLogTarget();
@@ -227,6 +221,12 @@ namespace PasPasPasTests.Parser {
                     using (var reader = new StackedFileReader()) {
                         var visitor = new CompilerDirectiveVisitor(testOptions, path, env.Log);
                         var terminals = new TerminalVisitor();
+
+                        reader.AddMockupFile(incFile, "DEFINE DUMMY_INC");
+                        reader.AddMockupFile(resFile1, "RES RES RES");
+                        reader.AddMockupFile(resFile2, "RES RES RES");
+                        reader.AddMockupFile(linkDll, "MZE!");
+
                         reader.AddStringToRead(path, subPart);
                         var parser = new CompilerDirectiveParser(env, testOptions, reader) {
                             IncludeInput = reader

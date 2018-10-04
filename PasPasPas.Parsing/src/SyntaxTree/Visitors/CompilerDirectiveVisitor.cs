@@ -973,13 +973,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
             var resolvedFile = Meta.LinkedFileResolver.ResolvePath(basePath, new FileReference(fileName));
 
-            if (resolvedFile.IsResolved) {
-                var linkedFile = new LinkedFile() {
-                    OriginalFileName = syntaxPart.FileName,
-                    TargetPath = resolvedFile.TargetPath
-                };
-                Meta.AddLinkedFile(linkedFile);
-            }
+            var linkedFile = new LinkedFile() {
+                OriginalFileName = syntaxPart.FileName,
+                TargetPath = resolvedFile.TargetPath,
+                IsResolved = resolvedFile.IsResolved
+            };
+            Meta.AddLinkedFile(linkedFile);
         }
 
 
@@ -1003,14 +1002,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
             var resolvedFile = Meta.ResourceFilePathResolver.ResolvePath(basePath, new FileReference(fileName));
 
-            if (resolvedFile.IsResolved) {
-                var resourceReference = new ResourceReference() {
-                    OriginalFileName = fileName,
-                    TargetPath = resolvedFile.TargetPath,
-                    RcFile = syntaxPart.RcFile
-                };
-                Meta.AddResourceReference(resourceReference);
-            }
+            var resourceReference = new ResourceReference() {
+                OriginalFileName = fileName,
+                TargetPath = resolvedFile.TargetPath,
+                RcFile = syntaxPart.RcFile,
+                IsResolved = resolvedFile.IsResolved
+            };
+            Meta.AddResourceReference(resourceReference);
         }
 
         /// <summary>

@@ -2339,14 +2339,14 @@ namespace PasPasPas.Parsing.Parser.Standard {
             }
 
             if (Match(TokenKind.Function, TokenKind.Procedure)) {
-                var procedureType = ParseProcedureType();
+                var procedureType = ParseProcedureRefType();
                 if (allowComma)
                     comma = ContinueWith(TokenKind.Comma);
                 return new TypeSpecificationSymbol(procedureType, comma);
             }
 
             if (Match(TokenKind.Reference) && LookAhead(1, TokenKind.To)) {
-                var procedureType = ParseProcedureType();
+                var procedureType = ParseProcedureReference();
                 if (allowComma)
                     comma = ContinueWith(TokenKind.Comma);
                 return new TypeSpecificationSymbol(procedureType, comma);
@@ -2439,35 +2439,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
         }
 
         #endregion
-        #region ParseProcedureType
 
-        /// <summary>
-        ///     parse a procedural type
-        /// </summary>
-        /// <returns></returns>
-
-        [Rule("ProcedureType", "(ProcedureRefType [ 'of' 'object' ] ( | ProcedureReference")]
-        public ProcedureTypeSymbol ParseProcedureType() {
-
-            if (Match(TokenKind.Procedure, TokenKind.Function)) {
-                var refType = ParseProcedureRefType(false);
-                var ofSymbol = ContinueWith(TokenKind.Of);
-                var objectSymbol = default(Terminal);
-
-                if (ofSymbol != default)
-                    objectSymbol = ContinueWithOrMissing(TokenKind.Object);
-
-                return new ProcedureTypeSymbol(refType, ofSymbol, objectSymbol);
-            }
-
-            if (Match(TokenKind.Reference))
-                return new ProcedureTypeSymbol(ParseProcedureReference());
-
-            Unexpected();
-            return null;
-        }
-
-        #endregion
         #region  ParseProcedureReference
 
         /// <summary>
@@ -2489,14 +2461,15 @@ namespace PasPasPas.Parsing.Parser.Standard {
         /// <summary>
         ///     parse a procedure reference type
         /// </summary>
-        /// <param name="allowAnonymousMethods"></param>
         /// <returns></returns>
 
         [Rule("ProcedureTypeDefinition", "('function' | 'procedure') [ '(' FormalParameters ')' ] [ ':' TypeSpecification ] [ 'of' 'object']")]
-        public ProcedureTypeDefinitionSymbol ParseProcedureRefType(bool allowAnonymousMethods) {
+        public ProcedureTypeDefinitionSymbol ParseProcedureRefType(bool allowAnonymousMethods = false) {
             var kindSymbol = ContinueWithOrMissing(TokenKind.Function, TokenKind.Procedure);
             var parameters = default(FormalParameterSection);
             var colonSymbol = default(Terminal);
+            var ofSymbol = default(Terminal);
+            var objectSymbol = default(Terminal);
             var attributes = default(UserAttributesSymbol);
             var returnType = default(TypeSpecificationSymbol);
 
@@ -2509,7 +2482,12 @@ namespace PasPasPas.Parsing.Parser.Standard {
                 returnType = ParseTypeSpecification();
             }
 
-            return new ProcedureTypeDefinitionSymbol(kindSymbol, parameters, colonSymbol, attributes, returnType, allowAnonymousMethods);
+            if (Match(TokenKind.Of)) {
+                ofSymbol = ContinueWithOrMissing(TokenKind.Of);
+                objectSymbol = ContinueWithOrMissing(TokenKind.Object);
+            }
+
+            return new ProcedureTypeDefinitionSymbol(kindSymbol, parameters, colonSymbol, attributes, returnType, allowAnonymousMethods, ofSymbol, objectSymbol);
         }
 
         #endregion
@@ -3800,7 +3778,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
             if (allowComma)
                 comma = ContinueWith(TokenKind.Comma);
 
-            return new FormalParameterSymbol(attributes1, parameterKind, attributes2, parameterName, comma);
+            return new FormalParameterSymbol(attributes1, parameterKind, kind, attributes2, parameterName, comma);
         }
 
         /// <summary>
@@ -4679,10 +4657,8 @@ namespace PasPasPas.Parsing.Parser.Standard {
             }
 
             if (Match(TokenKind.OpenParen)) {
-                if (!IsDesignator() && ((prevDesignatorItem == null) || (prevDesignatorItem.Subitem == null)) && (!LookAhead(1, TokenKind.CloseParen))) {
-                    openParen = ContinueWithOrMissing(TokenKind.OpenParen);
+                if (IsDesignator() && ((prevDesignatorItem == null) || (prevDesignatorItem.Subitem == null && prevDesignatorItem.Dereference == null)) && (!LookAhead(1, TokenKind.CloseParen))) {
                     var children = ParseConstantExpression(true);
-                    closeParen = ContinueWithOrMissing(TokenKind.CloseParen);
                     return new DesignatorItemSymbol(dot, subitem, openParen, children, closeParen);
                 }
 
@@ -4696,12 +4672,12 @@ namespace PasPasPas.Parsing.Parser.Standard {
                     }
                     closeParen = ContinueWithOrMissing(TokenKind.CloseParen);
 
-                    return new DesignatorItemSymbol(dot, subitem, genericSuffix, openParen, GetFixedArray(list), closeParen);
+                    return new DesignatorItemSymbol(dot, subitem, genericSuffix, openParen, GetFixedArray(list), closeParen, true);
                 }
             }
 
             if (dot != null || subitem != null || genericSuffix != null)
-                return new DesignatorItemSymbol(dot, subitem, genericSuffix, openParen, ImmutableArray<ParameterSymbol>.Empty, closeParen);
+                return new DesignatorItemSymbol(dot, subitem, genericSuffix, openParen, ImmutableArray<ParameterSymbol>.Empty, closeParen, false);
 
             return default;
         }
@@ -4863,8 +4839,10 @@ namespace PasPasPas.Parsing.Parser.Standard {
                     name = RequireIdentifier(true);
                     AddToList(list, name);
 
-                    dot = ContinueWith(TokenKind.Dot);
-                    AddToList(list, dot);
+                    if (!inDesignator || LookAhead(2, TokenKind.Dot)) {
+                        dot = ContinueWith(TokenKind.Dot);
+                        AddToList(list, dot);
+                    }
                 }
 
                 if (allowComma)

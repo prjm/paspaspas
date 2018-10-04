@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace PasPasPas.Infrastructure.Files {
@@ -7,6 +8,11 @@ namespace PasPasPas.Infrastructure.Files {
     ///     read from a combination of text files
     /// </summary>
     public sealed class StackedFileReader : IDisposable {
+
+        /// <summary>
+        ///     mock-up files
+        /// </summary>
+        private Dictionary<FileReference, string> mockups;
 
         /// <summary>
         ///     helper class for nested input
@@ -26,6 +32,11 @@ namespace PasPasPas.Infrastructure.Files {
         public void AddFileToRead(FileReference input) {
             if (input == null)
                 throw new ArgumentNullException(nameof(input));
+
+            if (mockups != default && mockups.TryGetValue(input, out var data)) {
+                AddStringToRead(input, data);
+                return;
+            }
 
             var bufferSize = 1024;
             var stream = new FileStream(input.Path, FileMode.Open, FileAccess.Read, FileShare.Read);
@@ -194,5 +205,15 @@ namespace PasPasPas.Infrastructure.Files {
         public void Dispose() =>
             Dispose(true);
 
+        /// <summary>
+        ///     add a mock-up file
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="content"></param>
+        public void AddMockupFile(FileReference path, string content) {
+            if (mockups == null)
+                mockups = new Dictionary<FileReference, string>();
+            mockups[path] = content;
+        }
     }
 }

@@ -52,6 +52,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         IStartVisitor<PointerTypeSymbol>,
         IStartVisitor<StringTypeSymbol>,
         IStartVisitor<ProcedureTypeDefinitionSymbol>,
+        IStartVisitor<ProcedureReferenceSymbol>,
         IStartVisitor<FormalParameterDefinitionSymbol>,
         IStartVisitor<FormalParameterSymbol>,
         IStartVisitor<UnitInitializationSymbol>,
@@ -96,7 +97,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         IStartVisitor<ClassHelperDefSymbol>,
         IStartVisitor<ClassHelperItemSymbol>,
         IStartVisitor<ProcedureDeclarationSymbol>,
-        IStartVisitor<Standard.MethodDeclarationSymbol>,
+        IStartVisitor<MethodDeclarationSymbol>,
         IStartVisitor<StatementPart>,
         IStartVisitor<ClosureExpressionSymbol>,
         IStartVisitor<RaiseStatementSymbol>,
@@ -122,7 +123,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         IStartVisitor<DesignatorStatementSymbol>,
         IStartVisitor<DesignatorItemSymbol>,
         IStartVisitor<ParameterSymbol>,
-        IStartVisitor<Standard.FormattedExpressionSymbol>,
+        IStartVisitor<FormattedExpressionSymbol>,
         IStartVisitor<SetSectionSymbol>,
         IStartVisitor<SetSectionPartSymbol>,
         IStartVisitor<AsmFactorSymbol>,
@@ -1085,15 +1086,40 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// </summary>
         /// <param name="proceduralType"></param>
         public void StartVisit(ProcedureTypeDefinitionSymbol proceduralType) {
+
+            if (proceduralType.AllowAnonymousMethods)
+                return;
+
             var typeTarget = LastTypeDeclaration;
             var result = new ProceduralType();
             InitNode(result, proceduralType);
             typeTarget.TypeValue = result;
             result.Kind = TokenKindMapper.MapMethodKind(proceduralType.Kind);
             result.AllowAnonymousMethods = proceduralType.AllowAnonymousMethods;
+            result.MethodDeclaration = (proceduralType.OfSymbol != default) && (proceduralType.ObjectSymbol != default);
 
             if (proceduralType.ReturnTypeAttributes != null)
                 result.ReturnAttributes = ExtractAttributes(proceduralType.ReturnTypeAttributes as UserAttributesSymbol, CurrentUnit);
+        }
+
+        #endregion
+        #region ProcedureReferenceSymbol
+
+        /// <summary>
+        ///     visit a procedure reference type definition
+        /// </summary>
+        /// <param name="proceduralType"></param>
+        public void StartVisit(ProcedureReferenceSymbol proceduralType) {
+            var typeTarget = LastTypeDeclaration;
+            var result = new ProceduralType();
+            InitNode(result, proceduralType);
+            typeTarget.TypeValue = result;
+            result.Kind = TokenKindMapper.MapMethodKind(proceduralType.ProcedureType.Kind);
+            result.AllowAnonymousMethods = true;
+            result.MethodDeclaration = (proceduralType.ProcedureType.OfSymbol != default) && (proceduralType.ProcedureType.ObjectSymbol != default);
+
+            if (proceduralType.ProcedureType.ReturnTypeAttributes != null)
+                result.ReturnAttributes = ExtractAttributes(proceduralType.ProcedureType.ReturnTypeAttributes as UserAttributesSymbol, CurrentUnit);
         }
 
         #endregion
@@ -1125,7 +1151,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             result.Name = ExtractSymbolName(formalParameter.ParameterName);
             result.Attributes = ExtractAttributes(formalParameter.Attributes1 as UserAttributesSymbol, CurrentUnit);
             result.Attributes = ExtractAttributes(formalParameter.Attributes2 as UserAttributesSymbol, CurrentUnit, result.Attributes);
-            result.ParameterKind = TokenKindMapper.ForParameterReferenceKind(formalParameter.ParameterType);
+            result.ParameterKind = TokenKindMapper.ForParameterReferenceKind(formalParameter.Kind);
             typeDefinition.Parameters.Add(result);
             allParams.Add(result, LogSource);
         }
@@ -1746,7 +1772,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #region ExportedProcedureHeading
 
         /// <summary>
-        ///     start visting exported procedure headings
+        ///     start visiting exported procedure headings
         /// </summary>
         /// <param name="procHeading"></param>
         public void StartVisit(ExportedProcedureHeadingSymbol procHeading) {
@@ -2199,7 +2225,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     start visiting a method declaration
         /// </summary>
         /// <param name="method"></param>
-        public void StartVisit(Standard.MethodDeclarationSymbol method) {
+        public void StartVisit(MethodDeclarationSymbol method) {
             var unit = CurrentUnit;
             var name = ExtractSymbolName(method.Heading.Items);
             var result = new MethodImplementation();

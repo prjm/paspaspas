@@ -21,5 +21,6 @@ namespace PasPasPas.Options.DataTypes {
         ///     target path
         /// </summary>
         public FileReference TargetPath { get; set; }
+        public bool IsResolved { get; set; }
     }
 }
