@@ -59,11 +59,7 @@ namespace PasPasPas.Infrastructure.Files {
         public long Position {
             get => position;
             set {
-
-                if (value < -1)
-                    return;
-
-                if (value > source.Length - 1)
+                if (value < -1 || value > source.Length - 1)
                     return;
 
                 Seek(value - position);
@@ -142,7 +138,7 @@ namespace PasPasPas.Infrastructure.Files {
         public long Length
             => source.Length;
 
-        private bool disposedValue = false; // To detect redundant calls
+        private bool disposedValue = false;
 
         private void Dispose(bool disposing) {
             if (!disposedValue) {

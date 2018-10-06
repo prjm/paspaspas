@@ -30,7 +30,7 @@ namespace PasPasPas.Infrastructure.Environment {
         ListPools ListPools { get; }
 
         /// <summary>
-        ///     enumerated entries
+        ///     enumerated entries (used for statistics)
         /// </summary>
         IEnumerable<object> Entries { get; }
 

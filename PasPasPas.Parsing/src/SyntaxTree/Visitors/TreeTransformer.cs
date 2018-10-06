@@ -1470,7 +1470,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
         /// <summary>
         ///     start visiting a class method
-        /// </summar        /// <param name="method"></param>
+        /// </summary>
+        /// <param name="method"></param>
         public void StartVisit(ClassMethodSymbol method) {
             var parent = LastValue as StructuredType;
             var result = new StructureMethod();

@@ -110,9 +110,18 @@ namespace PasPasPas.Infrastructure.Files {
             bufferIndex = current.StartIndex;
         }
 
+        /// <summary>
+        ///     file length
+        /// </summary>
         public long Length
             => length;
 
+        /// <summary>
+        ///     get a number of chars from the input file
+        /// </summary>
+        /// <param name="target"></param>
+        /// <param name="offset"></param>
+        /// <returns></returns>
         public int GetContent(char[] target, long offset) {
             if (offset >= length || offset < 0)
                 return 0;

@@ -92,12 +92,13 @@ namespace PasPasPas.Infrastructure.Files {
         /// </summary>
         public char Value {
             get {
-                var source = input?.Input;
-
-                if (source == null)
+                if (input == null || input.Input == null)
                     throw new InvalidOperationException("No input file.");
 
-                if (source.Position < 0 || source.Position >= source.Length)
+                var source = input.Input;
+                var position = source.Position;
+
+                if (position < 0 || position >= source.Length)
                     return '\0';
 
                 return source.Content[source.BufferIndex];
