@@ -4,6 +4,7 @@ using System.Text;
 using PasPasPas.Api;
 using PasPasPas.Infrastructure.Environment;
 using PasPasPas.Infrastructure.ObjectPooling;
+using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing;
 using PasPasPas.Typings.Common;
 using SampleRunner.Scenarios;
@@ -36,10 +37,11 @@ namespace SampleRunner {
 
         private static void RunSample(IParserEnvironment environment, StringBuilder result, Action<StringBuilder> action) {
             var timer = new Stopwatch();
+            var status = new SystemInfo();
             timer.Start();
             action(result);
             timer.Stop();
-            GC.Collect();
+            status = new SystemInfo(status);
 
             result.AppendLine(new string('.', 80));
 
@@ -62,9 +64,11 @@ namespace SampleRunner {
 
             result.AppendLine(new string('-', 80));
             result.AppendLine($"{timer.ElapsedTicks} ticks required ({timer.Elapsed.TotalMilliseconds}).");
-            result.AppendLine($"{GC.CollectionCount(0)} collections level 0.");
-            result.AppendLine($"{GC.CollectionCount(1)} collections level 1.");
-            result.AppendLine($"{GC.CollectionCount(2)} collections level 2.");
+            result.AppendLine($"{status.WorkingSet} bytes required.");
+            result.AppendLine($"{status.CpuTime} cpu time required.");
+            result.AppendLine($"{status.CollectionCount0} collections level 0.");
+            result.AppendLine($"{status.CollectionCount1} collections level 1.");
+            result.AppendLine($"{status.CollectionCount2} collections level 2.");
         }
 
         private static Action<StringBuilder> PrepareSample(ITypedEnvironment environment, string testPath, SampleMode mode, int repeat) {

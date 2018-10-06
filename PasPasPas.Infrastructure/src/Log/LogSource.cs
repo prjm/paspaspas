@@ -46,7 +46,7 @@ namespace PasPasPas.Infrastructure.Log {
         /// </summary>
         /// <param name="id">message id</param>
         /// <param name="data">message parameters</param>
-        public void Error(Guid id, params object[] data)
+        public void LogError(Guid id, params object[] data)
             => MessageForGuid(MessageSeverity.Error, id, data);
 
         /// <summary>

@@ -150,7 +150,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         /// <param name="errorId">error id</param>
         public void Error(Guid errorId)
-            => log.Error(errorId);
+            => log.LogError(errorId);
 
         /// <summary>
         ///     lookahead for input char

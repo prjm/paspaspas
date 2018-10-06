@@ -274,7 +274,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 ConditionalCompilation.RemoveIfDefCondition();
             }
             else {
-                LogSource.Error(CompilerDirectiveParserErrors.EndIfWithoutIf, syntaxPart);
+                LogSource.LogError(CompilerDirectiveParserErrors.EndIfWithoutIf, syntaxPart);
             }
         }
 
@@ -323,7 +323,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 ConditionalCompilation.AddElseCondition();
             }
             else {
-                LogSource.Error(CompilerDirectiveParserErrors.ElseIfWithoutIf, syntaxPart);
+                LogSource.LogError(CompilerDirectiveParserErrors.ElseIfWithoutIf, syntaxPart);
             }
         }
 
@@ -823,7 +823,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (Meta.Regions.Count > 0)
                 Meta.StopRegion();
             else
-                LogSource.Error(CompilerDirectiveParserErrors.EndRegionWithoutRegion, syntaxPart);
+                LogSource.LogError(CompilerDirectiveParserErrors.EndRegionWithoutRegion, syntaxPart);
         }
 
 

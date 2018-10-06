@@ -12,7 +12,7 @@ namespace PasPasPas.Infrastructure.Files {
         /// <summary>
         ///     mock-up files
         /// </summary>
-        private Dictionary<FileReference, string> mockups;
+        private IDictionary<FileReference, string> mockups;
 
         /// <summary>
         ///     helper class for nested input

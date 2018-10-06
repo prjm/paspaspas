@@ -17,7 +17,7 @@ namespace PasPasPas.Infrastructure.Log {
         /// </summary>
         /// <param name="id"></param>
         /// <param name="data"></param>
-        void Error(Guid id, params object[] data);
+        void LogError(Guid id, params object[] data);
 
         /// <summary>
         ///     process a generated message

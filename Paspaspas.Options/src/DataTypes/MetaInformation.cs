@@ -149,7 +149,7 @@ namespace PasPasPas.Options.DataTypes {
         public void ResetOnNewUnit(LogSource logSource) {
 
             foreach (var region in Regions) {
-                logSource.Error(OptionSet.PendingRegion, region);
+                logSource.LogError(OptionSet.PendingRegion, region);
             }
 
             HeaderStrings.Clear();

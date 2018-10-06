@@ -15,13 +15,13 @@
     /// <summary>
     ///     interface for lookup functions
     /// </summary>
-    /// <typeparam name="Key">key type</typeparam>
-    /// <typeparam name="Value">value tpe</typeparam>
-    public interface ILookupFunction<Key, Value> : ILookupFunction {
+    /// <typeparam name="TKey">key type</typeparam>
+    /// <typeparam name="TValue">value type</typeparam>
+    public interface ILookupFunction<TKey, TValue> : ILookupFunction {
 
         /// <summary>
         ///     access to lookup table
         /// </summary>
-        new LookupTable<Key, Value> Table { get; }
+        new LookupTable<TKey, TValue> Table { get; }
     }
 }

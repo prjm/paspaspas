@@ -22,7 +22,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <param name="logSource"></param>
         protected override void LogDuplicateSymbolError(EnumTypeValue newDuplicate, LogSource logSource) {
             base.LogDuplicateSymbolError(newDuplicate, logSource);
-            logSource.Error(StructuralErrors.RedeclaredEnumName, newDuplicate);
+            logSource.LogError(StructuralErrors.RedeclaredEnumName, newDuplicate);
         }
 
         /// <summary>

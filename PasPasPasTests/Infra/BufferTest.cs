@@ -135,17 +135,17 @@ namespace PasPasPasTests.Infra {
                         using (var source = new Utf8StreamBufferSource(stream, outputBufferSize, 2)) {
                             var idx = 0L;
                             while (idx < source.Length) {
-                                var l = source.GetContent(chr, idx);
+                                var l = source.GetContent(chr, chr.Length, idx);
                                 for (var i = 0; i < l; i++) {
                                     read[idx] = chr[i];
                                     idx++;
                                 };
 
                                 if (idx > 1) {
-                                    source.GetContent(chr, idx - 2);
+                                    source.GetContent(chr, chr.Length, idx - 2);
                                 }
                                 else if (idx > 0) {
-                                    source.GetContent(chr, idx - 1);
+                                    source.GetContent(chr, chr.Length, idx - 1);
                                 }
                             }
                         }

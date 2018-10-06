@@ -15,6 +15,10 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <LangVersion>$(PasPasPasCsLanguageVersion)</LangVersion>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Buffers" Version="4.5.0" />
+  </ItemGroup>
   
   <ItemGroup>
     <ProjectReference Include="..\PasPasPas.Api\PasPasPas.Api.csproj" />

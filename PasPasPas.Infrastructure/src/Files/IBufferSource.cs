@@ -12,8 +12,9 @@ namespace PasPasPas.Infrastructure.Files {
         /// </summary>
         /// <param name="target">target array</param>
         /// <param name="offset">char offset</param>
+        /// <param name="bufferSize">buffer size</param>
         /// <returns>number of chars read</returns>
-        int GetContent(char[] target, long offset);
+        int GetContent(char[] target, int bufferSize, long offset);
 
         /// <summary>
         ///     length in characters

@@ -1,16 +1,39 @@
 ﻿using System;
+using System.Buffers;
 using System.Diagnostics;
 
 namespace PasPasPas.Infrastructure.Files {
 
     [DebuggerDisplay("{Position}|->{Length}:{string.Join(\",\", Content)}")]
-    internal class BufferData {
+    internal sealed class BufferData : IDisposable {
         internal int Length;
         internal long Position;
         internal char[] Content;
 
+        private bool disposedValue = false;
+
         public BufferData(int bufferSize)
-            => Content = new char[bufferSize];
+            => Content = ArrayPool<char>.Shared.Rent(bufferSize);
+
+        /// <summary>
+        ///     dispose this file buffer
+        /// </summary>
+        /// <param name="disposing"></param>
+        private void Dispose(bool disposing) {
+            if (!disposedValue) {
+                if (disposing) {
+                    ArrayPool<char>.Shared.Return(Content, true);
+                    Content = default;
+                }
+                disposedValue = true;
+            }
+        }
+
+        /// <summary>
+        ///     dispose this object
+        /// </summary>
+        public void Dispose() =>
+            Dispose(true);
     }
 
     /// <summary>
@@ -18,7 +41,13 @@ namespace PasPasPas.Infrastructure.Files {
     /// </summary>
     public sealed class FileBuffer : IDisposable {
 
-        private readonly IBufferSource source;
+        private IBufferSource source;
+
+        /// <summary>
+        ///     buffer size
+        /// </summary>
+        public int BufferSize { get; }
+
         private long position;
         private BufferData prev;
         private BufferData current;
@@ -40,15 +69,16 @@ namespace PasPasPas.Infrastructure.Files {
             if (bufferSize < 1)
                 throw new ArgumentException($"Invalid buffer size ${bufferSize}", nameof(bufferSize));
 
+            BufferSize = bufferSize;
             position = -1;
             BufferIndex = -1;
             prev = new BufferData(bufferSize);
             current = new BufferData(bufferSize);
             next = new BufferData(bufferSize);
 
-            current.Length = source.GetContent(current.Content, 0);
+            current.Length = source.GetContent(current.Content, bufferSize, 0);
             next.Position = current.Length;
-            next.Length = source.GetContent(next.Content, next.Position);
+            next.Length = source.GetContent(next.Content, bufferSize, next.Position);
 
             Content = current.Content;
         }
@@ -93,7 +123,7 @@ namespace PasPasPas.Infrastructure.Files {
             next = current;
             current = prev;
             prev = dataToDiscard;
-            prev.Length = source.GetContent(prev.Content, current.Position - current.Content.Length);
+            prev.Length = source.GetContent(prev.Content, BufferSize, current.Position - current.Content.Length);
             prev.Position = current.Position - prev.Length;
 
             BufferIndex = current.Length - 1;
@@ -109,7 +139,7 @@ namespace PasPasPas.Infrastructure.Files {
             current = next;
             next = dataToDiscard;
             next.Position = current.Position + current.Length;
-            next.Length = source.GetContent(next.Content, next.Position);
+            next.Length = source.GetContent(next.Content, BufferSize, next.Position);
 
             BufferIndex = 0;
             Content = current.Content;
@@ -144,6 +174,16 @@ namespace PasPasPas.Infrastructure.Files {
             if (!disposedValue) {
                 if (disposing) {
                     source.Dispose();
+                    source = default;
+
+                    prev.Dispose();
+                    prev = default;
+
+                    current.Dispose();
+                    current = default;
+
+                    next.Dispose();
+                    next = default;
                 }
                 disposedValue = true;
             }

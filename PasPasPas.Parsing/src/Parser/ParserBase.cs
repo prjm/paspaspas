@@ -91,7 +91,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <returns></returns>
         protected void Unexpected() {
             var token = CurrentToken();
-            logSource.Error(UnexpectedToken, token.Kind, token.Value);
+            logSource.LogError(UnexpectedToken, token.Kind, token.Value);
             FetchNextToken();
         }
 
@@ -103,7 +103,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="expectedTokens">expected tokens (or)</param>
         /// <returns></returns>
         protected Terminal ErrorAndSkip(IExtendableSyntaxPart parent, Guid message, int[] expectedTokens) {
-            logSource.Error(message);
+            logSource.LogError(message);
             return CreateByError(parent);
         }
 
@@ -115,7 +115,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="parent">parent syntax tree node</param>
         /// <returns></returns>
         protected void ErrorLastPart(IExtendableSyntaxPart parent, Guid message, params object[] values)
-            => logSource.Error(message, values);
+            => logSource.LogError(message, values);
 
         /// <summary>
         ///     Require a token kind
@@ -1343,7 +1343,7 @@ namespace PasPasPas.Parsing.Parser {
         /// </summary>
         /// <param name="tokenKind"></param>
         protected Terminal ErrorMissingToken(int tokenKind) {
-            logSource.Error(MissingToken, tokenKind);
+            logSource.LogError(MissingToken, tokenKind);
             return null;
         }
 
@@ -1353,7 +1353,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind1"></param>
         /// <param name="tokenKind2"></param>
         protected Terminal ErrorMissingToken(int tokenKind1, int tokenKind2) {
-            logSource.Error(MissingToken, tokenKind1, tokenKind2);
+            logSource.LogError(MissingToken, tokenKind1, tokenKind2);
             return null;
         }
 
@@ -1365,7 +1365,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind2"></param>
         /// <param name="tokenKind3"></param>
         protected Terminal ErrorMissingToken(int tokenKind1, int tokenKind2, int tokenKind3) {
-            logSource.Error(MissingToken, tokenKind1, tokenKind2, tokenKind3);
+            logSource.LogError(MissingToken, tokenKind1, tokenKind2, tokenKind3);
             return null;
         }
 
@@ -1377,7 +1377,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind3"></param>
         /// <param name="tokenKind4"></param>
         protected Terminal ErrorMissingToken(int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4) {
-            logSource.Error(MissingToken, tokenKind1, tokenKind2, tokenKind3, tokenKind4);
+            logSource.LogError(MissingToken, tokenKind1, tokenKind2, tokenKind3, tokenKind4);
             return null;
         }
 
@@ -1390,7 +1390,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind4"></param>
         /// <param name="tokenKind5"></param>
         protected Terminal ErrorMissingToken(int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5) {
-            logSource.Error(MissingToken, tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5);
+            logSource.LogError(MissingToken, tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5);
             return null;
         }
 
@@ -1404,7 +1404,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind5"></param>
         /// <param name="tokenKind6"></param>
         protected Terminal ErrorMissingToken(int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5, int tokenKind6) {
-            logSource.Error(MissingToken, tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5);
+            logSource.LogError(MissingToken, tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5);
             return null;
         }
 
@@ -1416,7 +1416,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind2"></param>
         protected void ContinueWithOrMissing(IExtendableSyntaxPart result, int tokenKind1, int tokenKind2) {
             if (!ContinueWith(result, tokenKind1, tokenKind2)) {
-                logSource.Error(MissingToken, tokenKind1, tokenKind2);
+                logSource.LogError(MissingToken, tokenKind1, tokenKind2);
                 // add missing token / todo
             }
         }
@@ -1492,7 +1492,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind3"></param>
         protected void ContinueWithOrMissing(IExtendableSyntaxPart result, int tokenKind1, int tokenKind2, int tokenKind3) {
             if (!ContinueWith(result, tokenKind1, tokenKind2, tokenKind3)) {
-                logSource.Error(MissingToken, tokenKind1, tokenKind2, tokenKind3);
+                logSource.LogError(MissingToken, tokenKind1, tokenKind2, tokenKind3);
                 // add missing token / todo
             }
         }
@@ -1507,7 +1507,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind4"></param>
         protected void ContinueWithOrMissing(IExtendableSyntaxPart result, int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4) {
             if (!ContinueWith(result, tokenKind1, tokenKind2, tokenKind3, tokenKind4)) {
-                logSource.Error(MissingToken, tokenKind1, tokenKind2, tokenKind3, tokenKind4);
+                logSource.LogError(MissingToken, tokenKind1, tokenKind2, tokenKind3, tokenKind4);
                 // add missing token / todo
             }
         }
@@ -1524,7 +1524,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind5"></param>
         protected void ContinueWithOrMissing(IExtendableSyntaxPart result, int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5) {
             if (!ContinueWith(result, tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5)) {
-                logSource.Error(MissingToken, tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5);
+                logSource.LogError(MissingToken, tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5);
                 // add missing token / todo
             }
         }
@@ -1543,7 +1543,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind6"></param>
         protected void ContinueWithOrMissing(IExtendableSyntaxPart result, int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5, int tokenKind6) {
             if (!ContinueWith(result, tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5, tokenKind6)) {
-                logSource.Error(MissingToken, tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5, tokenKind6);
+                logSource.LogError(MissingToken, tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5, tokenKind6);
                 // add missing token / todo
             }
         }
@@ -1580,7 +1580,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind7"></param>
         protected void ContinueWithOrMissing(IExtendableSyntaxPart result, int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5, int tokenKind6, int tokenKind7) {
             if (!ContinueWith(result, tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5, tokenKind6, tokenKind7)) {
-                logSource.Error(MissingToken, tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5, tokenKind6, tokenKind7);
+                logSource.LogError(MissingToken, tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5, tokenKind6, tokenKind7);
                 // add missing token / todo
             }
         }
@@ -1600,7 +1600,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind8"></param>
         protected void ContinueWithOrMissing(IExtendableSyntaxPart result, int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5, int tokenKind6, int tokenKind7, int tokenKind8) {
             if (!ContinueWith(result, tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5, tokenKind6, tokenKind7, tokenKind8)) {
-                logSource.Error(MissingToken, tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5, tokenKind6, tokenKind7, tokenKind8);
+                logSource.LogError(MissingToken, tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5, tokenKind6, tokenKind7, tokenKind8);
                 // add missing token / todo
             }
         }

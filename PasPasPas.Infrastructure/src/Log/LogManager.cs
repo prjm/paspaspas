@@ -22,11 +22,10 @@ namespace PasPasPas.Infrastructure.Log {
             => targets.Count;
 
         /// <summary>
-        ///     managr caption
+        ///     manager caption
         /// </summary>
         public string Caption
             => "LogManager";
-
 
         /// <summary>
         ///     register target

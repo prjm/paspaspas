@@ -27,10 +27,11 @@ namespace PasPasPas.Infrastructure.Files {
         /// </summary>
         /// <param name="target">target array</param>
         /// <param name="offset">start offset</param>
+        /// <param name="bufferSize">buffer size</param>
         /// <returns>number of characters</returns>
-        public int GetContent(char[] target, long offset) {
-            var charsToCopy = (int)Math.Max(0, Math.Min(target.Length, Length - offset));
-            var remainingChars = Math.Max(0, target.Length - charsToCopy);
+        public int GetContent(char[] target, int bufferSize, long offset) {
+            var charsToCopy = (int)Math.Max(0, Math.Min(bufferSize, Length - offset));
+            var remainingChars = Math.Max(0, bufferSize - charsToCopy);
 
             if (offset < 0 || offset >= Length)
                 return 0;

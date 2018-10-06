@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PasPasPas.Infrastructure.Utils {
 
@@ -35,9 +31,8 @@ namespace PasPasPas.Infrastructure.Utils {
     /// <summary>
     ///     part of a scoped name
     /// </summary>
-    public struct ScopedNamePart : IEquatable<ScopedNamePart> {
+    public readonly struct ScopedNamePart : IEquatable<ScopedNamePart> {
 
-        private readonly string value;
         private readonly ScopedNamePartKind kind;
 
         /// <summary>
@@ -46,7 +41,7 @@ namespace PasPasPas.Infrastructure.Utils {
         /// <param name="partValue">part value</param>
         /// <param name="partKind">kind</param>
         public ScopedNamePart(string partValue, ScopedNamePartKind partKind) {
-            value = partValue;
+            Value = partValue;
             kind = partKind;
         }
 
@@ -56,7 +51,7 @@ namespace PasPasPas.Infrastructure.Utils {
         /// <param name="other">other object to check</param>
         /// <returns><c>true</c> if equal</returns>
         public bool Equals(ScopedNamePart other)
-            => (other.kind == kind) && (string.Equals(other.value, value, StringComparison.OrdinalIgnoreCase));
+            => (other.kind == kind) && (string.Equals(other.Value, Value, StringComparison.OrdinalIgnoreCase));
 
         /// <summary>
         ///     compute a hash code
@@ -65,7 +60,7 @@ namespace PasPasPas.Infrastructure.Utils {
         public override int GetHashCode() {
             var result = 17;
             result = result * 31 + ((int)kind);
-            result = result * 31 + StringComparer.OrdinalIgnoreCase.GetHashCode(value);
+            result = result * 31 + StringComparer.OrdinalIgnoreCase.GetHashCode(Value);
             return result;
         }
 
@@ -76,22 +71,46 @@ namespace PasPasPas.Infrastructure.Utils {
         public override string ToString() {
             switch (kind) {
                 case ScopedNamePartKind.StartItem:
-                    return value;
+                    return Value;
                 case ScopedNamePartKind.SubItem:
-                    return $".{value}";
+                    return $".{Value}";
                 case ScopedNamePartKind.GenericPart:
-                    return $"<{value}>";
+                    return $"<{Value}>";
             }
 
             return string.Empty;
         }
 
         /// <summary>
-        ///     part vale
+        ///     part value
         /// </summary>
-        public string Value
-            => value;
+        public string Value { get; }
 
+        /// <summary>
+        ///     override equals operator
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public static bool operator ==(ScopedNamePart left, ScopedNamePart right)
+            => left.Equals(right);
+
+        /// <summary>
+        ///     operator unequals operator
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public static bool operator !=(ScopedNamePart left, ScopedNamePart right)
+            => !(left == right);
+
+        /// <summary>
+        ///     check for equality
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(object obj)
+            => obj is ScopedNamePart && Equals((ScopedNamePart)obj);
     }
 
     /// <summary>
@@ -167,14 +186,13 @@ namespace PasPasPas.Infrastructure.Utils {
         /// <param name="obj">object to test</param>
         /// <returns></returns>
         public override bool Equals(object obj) {
-            var otherName = obj as ScopedName;
-            if (otherName == null)
+            if (!(obj is ScopedName otherName))
                 return false;
             return Equals(otherName);
         }
 
         /// <summary>
-        ///     get the hashcode for this name
+        ///     get the hash code for this name
         /// </summary>
         /// <returns></returns>
         public override int GetHashCode() {
@@ -197,7 +215,7 @@ namespace PasPasPas.Infrastructure.Utils {
             => Length > 0 ? parts[0].Value : string.Empty;
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>

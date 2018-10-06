@@ -4,14 +4,14 @@ using PasPasPas.Infrastructure.Files;
 namespace PasPasPas.Api {
 
     /// <summary>
-    ///     encapsulation for file reading api
+    ///     encapsulation for file reading
     /// </summary>
     public class ReaderApi {
 
         /// <summary>
         ///     file access
         /// </summary>
-        private readonly IBasicEnvironment staticEnvironment;
+        private readonly IBasicEnvironment systemEnvironment;
 
         /// <summary>
         ///     create a new reader for a virtual file
@@ -27,11 +27,11 @@ namespace PasPasPas.Api {
         }
 
         /// <summary>
-        ///     create a new file reader api
+        ///     create a new file reader
         /// </summary>
         /// <param name="environment">environment</param>
         public ReaderApi(IBasicEnvironment environment)
-            => staticEnvironment = environment;
+            => systemEnvironment = environment;
 
         /// <summary>
         ///     get a reader for a given path

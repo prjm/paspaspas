@@ -95,7 +95,7 @@ namespace PasPasPas.Options.DataTypes {
             }
 
             while (CurrentCondition != null) {
-                logSource.Error(OptionSet.PendingCondition, CurrentCondition);
+                logSource.LogError(OptionSet.PendingCondition, CurrentCondition);
                 CurrentCondition = CurrentCondition.ParentBranch;
             }
 

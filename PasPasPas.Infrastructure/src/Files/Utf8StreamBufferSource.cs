@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Buffers;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
@@ -6,14 +7,31 @@ using System.Text;
 namespace PasPasPas.Infrastructure.Files {
 
     [DebuggerDisplay("{Position}:{StartIndex}-{Length} {string.Join(\", \", Content)}")]
-    internal class StreamData {
+    internal sealed class StreamData : IDisposable {
         internal int StartIndex;
         internal int Length;
         internal long Position;
         internal byte[] Content;
 
         public StreamData(int bufferSize)
-            => Content = new byte[bufferSize];
+            => Content = ArrayPool<byte>.Shared.Rent(bufferSize);
+
+        private bool disposedValue = false;
+        private void Dispose(bool disposing) {
+            if (!disposedValue) {
+                if (disposing) {
+                    ArrayPool<byte>.Shared.Return(Content);
+                    Content = null;
+                }
+                disposedValue = true;
+            }
+        }
+
+        /// <summary>
+        ///     dispose this resource
+        /// </summary>
+        public void Dispose()
+            => Dispose(true);
     }
 
     /// <summary>
@@ -21,7 +39,7 @@ namespace PasPasPas.Infrastructure.Files {
     /// </summary>
     public sealed class Utf8StreamBufferSource : IBufferSource {
 
-        private readonly Stream input;
+        private Stream input;
         private readonly int outputSize;
         private long charPosition;
         private int bufferIndex;
@@ -30,7 +48,6 @@ namespace PasPasPas.Infrastructure.Files {
         private StreamData next;
         private long length;
         private bool disposedValue = false;
-
 
         /// <summary>
         ///     create a new stream buffer source
@@ -121,8 +138,9 @@ namespace PasPasPas.Infrastructure.Files {
         /// </summary>
         /// <param name="target"></param>
         /// <param name="offset"></param>
+        /// <param name="bufferSize">buffer size</param>
         /// <returns></returns>
-        public int GetContent(char[] target, long offset) {
+        public int GetContent(char[] target, int bufferSize, long offset) {
             if (offset >= length || offset < 0)
                 return 0;
 
@@ -165,6 +183,16 @@ namespace PasPasPas.Infrastructure.Files {
             if (!disposedValue) {
                 if (disposing) {
                     input.Dispose();
+                    input = default;
+
+                    prev.Dispose();
+                    prev = default;
+
+                    current.Dispose();
+                    current = default;
+
+                    next.Dispose();
+                    next = default;
                 }
                 disposedValue = true;
             }

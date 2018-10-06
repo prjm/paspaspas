@@ -23,7 +23,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         public void StartVisit(CompilationUnit unit) {
 
             if (!string.Equals(Path.GetFileNameWithoutExtension(unit.FilePath?.Path), unit.SymbolName, StringComparison.OrdinalIgnoreCase)) {
-                Log.Error(StructuralErrors.UnitNameDoesNotMatchFileName, unit.FilePath?.Path, unit.SymbolName);
+                Log.LogError(StructuralErrors.UnitNameDoesNotMatchFileName, unit.FilePath?.Path, unit.SymbolName);
             }
 
         }

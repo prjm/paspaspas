@@ -15,7 +15,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <param name="logSource"></param>
         protected override void LogDuplicateSymbolError(RequiredUnitName newDuplicate, LogSource logSource) {
             base.LogDuplicateSymbolError(newDuplicate, logSource);
-            logSource.Error(StructuralErrors.RedeclaredUnitNameInUsesList, newDuplicate);
+            logSource.LogError(StructuralErrors.RedeclaredUnitNameInUsesList, newDuplicate);
         }
 
         /// <summary>

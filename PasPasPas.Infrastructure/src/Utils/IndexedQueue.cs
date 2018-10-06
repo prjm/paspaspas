@@ -8,7 +8,7 @@ namespace PasPasPas.Infrastructure.Utils {
     ///     enumerator for queues
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    internal class IndexedQueueEnumerator<T> : IEnumerator<T> {
+    internal sealed class IndexedQueueEnumerator<T> : IEnumerator<T> {
 
         private readonly IndexedQueue<T> refQueue;
         private int index = 0;

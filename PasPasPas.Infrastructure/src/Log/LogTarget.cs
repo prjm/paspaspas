@@ -6,30 +6,19 @@ namespace PasPasPas.Infrastructure.Log {
     /// <summary>
     ///     event arguments for a log message event
     /// </summary>
-    public class LogMessageEvent : EventArgs {
-
-        /// <summary>
-        ///     logged message
-        /// </summary>
-        private ILogMessage message;
+    public class LogMessageEventArgs : EventArgs {
 
         /// <summary>
         ///     create a new log message event
         /// </summary>
         /// <param name="message"></param>
-        public LogMessageEvent(ILogMessage message) {
-
-            if (message == null)
-                throw new ArgumentNullException(nameof(message));
-
-            this.message = message;
-        }
+        public LogMessageEventArgs(ILogMessage message)
+            => Message = message ?? throw new ArgumentNullException(nameof(message));
 
         /// <summary>
         ///     log message
         /// </summary>
-        public ILogMessage Message
-            => message;
+        public ILogMessage Message { get; }
     }
 
     /// <summary>
@@ -40,13 +29,13 @@ namespace PasPasPas.Infrastructure.Log {
         /// <summary>
         ///     callback for log messages
         /// </summary>
-        public event EventHandler<LogMessageEvent> ProcessMessage;
+        public event EventHandler<LogMessageEventArgs> ProcessMessage;
 
         /// <summary>
         ///     process a message
         /// </summary>
         /// <param name="message">message to process</param>
-        public virtual void HandleMessage(ILogMessage message) => ProcessMessage?.Invoke(this, new LogMessageEvent(message));
+        public virtual void HandleMessage(ILogMessage message) => ProcessMessage?.Invoke(this, new LogMessageEventArgs(message));
 
         /// <summary>
         ///     log target was registered at manager

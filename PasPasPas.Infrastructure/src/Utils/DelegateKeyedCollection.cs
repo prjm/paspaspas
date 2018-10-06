@@ -27,7 +27,7 @@ namespace PasPasPas.Infrastructure.Utils {
         /// </summary>
         /// <param name="resolver">key resolver</param>
         public DelegateKeyedCollection(KeyForItem<TKey, TItem> resolver) : base()
-            => keyResolver = resolver ?? throw new ArgumentNullException(DelegateNullExceptionMessage);
+            => keyResolver = resolver ?? throw new ArgumentNullException(nameof(resolver), DelegateNullExceptionMessage);
 
         /// <summary>
         ///     create a new keyed collection based on a delegate
@@ -35,7 +35,7 @@ namespace PasPasPas.Infrastructure.Utils {
         /// <param name="resolver">key resolver</param>
         /// <param name="comparer">comparer for keys</param>
         public DelegateKeyedCollection(KeyForItem<TKey, TItem> resolver, IEqualityComparer<TKey> comparer) : base(comparer)
-            => keyResolver = resolver ?? throw new ArgumentNullException(DelegateNullExceptionMessage);
+            => keyResolver = resolver ?? throw new ArgumentNullException(nameof(resolver), DelegateNullExceptionMessage);
 
         /// <summary>
         ///     resolve the key for an item
@@ -55,17 +55,15 @@ namespace PasPasPas.Infrastructure.Utils {
         ///     sort this collection by keys
         /// </summary>
         /// <param name="keyComparer"></param>
-        public void SortByKeys(IComparer<TKey> keyComparer) {
-            Sort((x, y) => keyComparer.Compare(GetKeyForItem(x), GetKeyForItem(y)));
-        }
+        public void SortByKeys(IComparer<TKey> keyComparer)
+            => Sort((x, y) => keyComparer.Compare(GetKeyForItem(x), GetKeyForItem(y)));
 
         /// <summary>
         ///     sort the collection by keys
         /// </summary>
         /// <param name="keyComparison"></param>
-        public void SortByKeys(Comparison<TKey> keyComparison) {
-            Sort((x, y) => keyComparison(GetKeyForItem(x), GetKeyForItem(y)));
-        }
+        public void SortByKeys(Comparison<TKey> keyComparison)
+            => Sort((x, y) => keyComparison(GetKeyForItem(x), GetKeyForItem(y)));
 
 
         /// <summary>
