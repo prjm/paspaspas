@@ -2379,9 +2379,9 @@ namespace PasPasPas.Parsing.Parser.Standard {
                 if (!advancedCheck) {
                     genericPart = ParseGenericSuffix();
                 }
-                else if (LookAheadIdentifier(1, new[] { TokenKind.String, TokenKind.ShortString, TokenKind.WideString, TokenKind.UnicodeString, TokenKind.AnsiString, TokenKind.Pointer }, false)) {
-                    var whereCloseBrackets = HasTokenUntilToken(new[] { TokenKind.AngleBracketsClose }, TokenKind.Identifier, TokenKind.Dot, TokenKind.Comma, TokenKind.AngleBracketsOpen, TokenKind.String, TokenKind.ShortString, TokenKind.WideString, TokenKind.UnicodeString, TokenKind.AnsiString, TokenKind.Pointer);
-                    if (whereCloseBrackets.Item1 && (!LookAheadIdentifier(1 + whereCloseBrackets.Item2, new[] { TokenKind.HexNumber, TokenKind.Integer, TokenKind.Real }, false) || LookAhead(1 + whereCloseBrackets.Item2, TokenKind.Read, TokenKind.Write, TokenKind.ReadOnly, TokenKind.WriteOnly, TokenKind.Add, TokenKind.Remove, TokenKind.DispId))) {
+                else if (LookAheadIdentifier(1, TokenKind.String, TokenKind.ShortString, TokenKind.WideString, TokenKind.UnicodeString, TokenKind.AnsiString, TokenKind.Pointer, false)) {
+                    var whereCloseBrackets = FindCloseBrackets(out var position);
+                    if (whereCloseBrackets && (!LookAheadIdentifier(1 + position, TokenKind.HexNumber, TokenKind.Integer, TokenKind.Real, false) || LookAhead(1 + position, TokenKind.Read, TokenKind.Write, TokenKind.ReadOnly, TokenKind.WriteOnly, TokenKind.Add, TokenKind.Remove, TokenKind.DispId))) {
                         genericPart = ParseGenericSuffix();
                     }
                 }
@@ -4322,7 +4322,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
 
             if (Match(TokenKind.OpenParen)) {
 
-                if (LookAhead(1, TokenKind.CloseParen) || (LookAheadIdentifier(1, Array.Empty<int>(), true) && (LookAhead(2, TokenKind.Colon)))) {
+                if (LookAhead(1, TokenKind.CloseParen) || (LookAheadIdentifier(1, true) && (LookAhead(2, TokenKind.Colon)))) {
                     openParen = ContinueWithOrMissing(TokenKind.OpenParen);
                     var record = default(RecordConstantExpressionSymbol);
                     using (var list = GetList<SyntaxPartBase>()) {
@@ -4421,7 +4421,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
             var leftOperand = ParseSimpleExpression();
             var rightOperand = default(SimpleExpression);
 
-            if (fromConstTypeDeclaration && !HasTokenBeforeToken(TokenKind.EqualsSign, new[] { TokenKind.Semicolon }))
+            if (fromConstTypeDeclaration && !HasTokenBeforeToken(TokenKind.EqualsSign, TokenKind.Semicolon))
                 return new ExpressionSymbol(leftOperand);
 
             var @operator = ContinueWith(TokenKind.LessThen, TokenKind.LessThenEquals, TokenKind.GreaterThen, TokenKind.GreaterThenEquals, TokenKind.NotEquals, TokenKind.EqualsSign, TokenKind.In, TokenKind.Is);
@@ -4642,9 +4642,9 @@ namespace PasPasPas.Parsing.Parser.Standard {
             };
 
             if (Match(TokenKind.AngleBracketsOpen) &&
-                LookAheadIdentifier(1, new[] { TokenKind.String, TokenKind.ShortString, TokenKind.WideString, TokenKind.UnicodeString, TokenKind.AnsiString, TokenKind.Pointer }, false)) {
-                var whereCloseBrackets = HasTokenUntilToken(new[] { TokenKind.AngleBracketsClose }, TokenKind.Identifier, TokenKind.Dot, TokenKind.Comma, TokenKind.AngleBracketsOpen, TokenKind.String, TokenKind.ShortString, TokenKind.WideString, TokenKind.UnicodeString, TokenKind.AnsiString, TokenKind.Pointer);
-                if (whereCloseBrackets.Item1 && (!LookAheadIdentifier(1 + whereCloseBrackets.Item2, new[] { TokenKind.HexNumber, TokenKind.Integer, TokenKind.Real }, false) || LookAhead(1 + whereCloseBrackets.Item2, TokenKind.Read, TokenKind.Write, TokenKind.ReadOnly, TokenKind.WriteOnly, TokenKind.Add, TokenKind.Remove, TokenKind.DispId))) {
+                LookAheadIdentifier(1, TokenKind.String, TokenKind.ShortString, TokenKind.WideString, TokenKind.UnicodeString, TokenKind.AnsiString, TokenKind.Pointer, false)) {
+                var whereCloseBrackets = FindCloseBrackets(out var position);
+                if (whereCloseBrackets && (!LookAheadIdentifier(1 + position, TokenKind.HexNumber, TokenKind.Integer, TokenKind.Real, false) || LookAhead(1 + position, TokenKind.Read, TokenKind.Write, TokenKind.ReadOnly, TokenKind.WriteOnly, TokenKind.Add, TokenKind.Remove, TokenKind.DispId))) {
                     genericSuffix = ParseGenericSuffix();
                 }
             }
@@ -4830,12 +4830,12 @@ namespace PasPasPas.Parsing.Parser.Standard {
 
                 AddToList(list, name);
 
-                if (!inDesignator || LookAhead(2, new int[] { TokenKind.Dot })) {
+                if (!inDesignator || LookAhead(2, TokenKind.Dot)) {
                     dot = ContinueWith(TokenKind.Dot);
                     AddToList(list, dot);
                 }
 
-                while (name != default && dot != default && MatchIdentifier(true) && (!inDesignator || LookAhead(1, new int[] { TokenKind.Dot }))) {
+                while (name != default && dot != default && MatchIdentifier(true) && (!inDesignator || LookAhead(1, TokenKind.Dot))) {
                     name = RequireIdentifier(true);
                     AddToList(list, name);
 
@@ -4876,14 +4876,47 @@ namespace PasPasPas.Parsing.Parser.Standard {
         public static void PrintGrammar(StringBuilder result)
             => PrintGrammar(typeof(StandardParser), result);
 
-        private bool MatchIdentifier(params int[] otherTokens)
-            => LookAheadIdentifier(0, otherTokens, false);
+        private bool MatchIdentifier(int otherToken)
+            => LookAheadIdentifier(0, otherToken, false);
+
+        private bool MatchIdentifier()
+            => LookAheadIdentifier(0, false);
+
+        private bool MatchIdentifier(int otherToken1, int otherToken2)
+            => LookAheadIdentifier(0, otherToken1, otherToken2, false);
+
+        private bool MatchIdentifier(int otherToken1, int otherToken2, int otherToken3, int otherToken4)
+            => LookAheadIdentifier(0, otherToken1, otherToken2, otherToken3, otherToken4, false);
+
+        private bool MatchIdentifier(int otherToken1, int otherToken2, int otherToken3, int otherToken4, int otherToken5)
+            => LookAheadIdentifier(0, otherToken1, otherToken2, otherToken3, otherToken4, otherToken5, false);
+
+        private bool MatchIdentifier(int otherToken1, int otherToken2, int otherToken3, int otherToken4, int otherToken5, int otherToken6, int otherToken7)
+            => LookAheadIdentifier(0, otherToken1, otherToken2, otherToken3, otherToken4, otherToken5, otherToken6, otherToken7, false);
+
+        private bool MatchIdentifier(int otherToken1, int otherToken2, int otherToken3, int otherToken4, int otherToken5, int otherToken6, int otherToken7, int otherToken8, int otherToken9)
+            => LookAheadIdentifier(0, otherToken1, otherToken2, otherToken3, otherToken4, otherToken5, otherToken6, otherToken7, otherToken8, otherToken9, false);
 
         private bool MatchIdentifier(bool allowReservedWords)
-            => LookAheadIdentifier(0, Array.Empty<int>(), allowReservedWords);
+            => LookAheadIdentifier(0, allowReservedWords);
 
-        private bool LookAheadIdentifier(int lookAhead, int[] otherTokens, bool allowReservedWords) {
-            if (LookAhead(lookAhead, otherTokens))
+        private bool LookAheadIdentifier(int lookAhead, bool allowReservedWords) {
+            if (LookAhead(lookAhead, TokenKind.Identifier))
+                return true;
+
+            var token = Tokenizer.LookAhead(lookAhead);
+
+            if (!allowReservedWords && reservedWords.Contains(token.Value.Kind))
+                return false;
+
+            if (string.IsNullOrWhiteSpace(token.Value.Value))
+                return false;
+
+            return Tokenizer.Keywords.ContainsKey(token.Value.Value);
+        }
+
+        private bool LookAheadIdentifier(int lookAhead, int otherToken, bool allowReservedWords) {
+            if (LookAhead(lookAhead, otherToken))
                 return true;
 
             if (LookAhead(lookAhead, TokenKind.Identifier))
@@ -4899,6 +4932,137 @@ namespace PasPasPas.Parsing.Parser.Standard {
 
             return Tokenizer.Keywords.ContainsKey(token.Value.Value);
         }
+
+        private bool LookAheadIdentifier(int lookAhead, int otherToken1, int otherToken2, bool allowReservedWords) {
+            if (LookAhead(lookAhead, otherToken1, otherToken2))
+                return true;
+
+            if (LookAhead(lookAhead, TokenKind.Identifier))
+                return true;
+
+            var token = Tokenizer.LookAhead(lookAhead);
+
+            if (!allowReservedWords && reservedWords.Contains(token.Value.Kind))
+                return false;
+
+            if (string.IsNullOrWhiteSpace(token.Value.Value))
+                return false;
+
+            return Tokenizer.Keywords.ContainsKey(token.Value.Value);
+        }
+
+
+
+        private bool LookAheadIdentifier(int lookAhead, int otherToken1, int otherToken2, int otherToken3, int otherToken4, bool allowReservedWords) {
+            if (LookAhead(lookAhead, otherToken1, otherToken2, otherToken3, otherToken4))
+                return true;
+
+            if (LookAhead(lookAhead, TokenKind.Identifier))
+                return true;
+
+            var token = Tokenizer.LookAhead(lookAhead);
+
+            if (!allowReservedWords && reservedWords.Contains(token.Value.Kind))
+                return false;
+
+            if (string.IsNullOrWhiteSpace(token.Value.Value))
+                return false;
+
+            return Tokenizer.Keywords.ContainsKey(token.Value.Value);
+        }
+
+        private bool LookAheadIdentifier(int lookAhead, int otherToken1, int otherToken2, int otherToken3, int otherToken4, int otherToken5, bool allowReservedWords) {
+            if (LookAhead(lookAhead, otherToken1, otherToken2, otherToken3, otherToken4, otherToken5))
+                return true;
+
+            if (LookAhead(lookAhead, TokenKind.Identifier))
+                return true;
+
+            var token = Tokenizer.LookAhead(lookAhead);
+
+            if (!allowReservedWords && reservedWords.Contains(token.Value.Kind))
+                return false;
+
+            if (string.IsNullOrWhiteSpace(token.Value.Value))
+                return false;
+
+            return Tokenizer.Keywords.ContainsKey(token.Value.Value);
+        }
+
+        private bool LookAheadIdentifier(int lookAhead, int otherToken1, int otherToken2, int otherToken3, int otherToken4, int otherToken5, int otherToken6, bool allowReservedWords) {
+            if (LookAhead(lookAhead, otherToken1, otherToken2, otherToken3, otherToken4, otherToken5, otherToken6))
+                return true;
+
+            if (LookAhead(lookAhead, TokenKind.Identifier))
+                return true;
+
+            var token = Tokenizer.LookAhead(lookAhead);
+
+            if (!allowReservedWords && reservedWords.Contains(token.Value.Kind))
+                return false;
+
+            if (string.IsNullOrWhiteSpace(token.Value.Value))
+                return false;
+
+            return Tokenizer.Keywords.ContainsKey(token.Value.Value);
+        }
+
+        private bool LookAheadIdentifier(int lookAhead, int otherToken1, int otherToken2, int otherToken3, int otherToken4, int otherToken5, int otherToken6, int otherToken7, bool allowReservedWords) {
+            if (LookAhead(lookAhead, otherToken1, otherToken2, otherToken3, otherToken4, otherToken5, otherToken6, otherToken7))
+                return true;
+
+            if (LookAhead(lookAhead, TokenKind.Identifier))
+                return true;
+
+            var token = Tokenizer.LookAhead(lookAhead);
+
+            if (!allowReservedWords && reservedWords.Contains(token.Value.Kind))
+                return false;
+
+            if (string.IsNullOrWhiteSpace(token.Value.Value))
+                return false;
+
+            return Tokenizer.Keywords.ContainsKey(token.Value.Value);
+        }
+
+        private bool LookAheadIdentifier(int lookAhead, int otherToken1, int otherToken2, int otherToken3, int otherToken4, int otherToken5, int otherToken6, int otherToken7, int otherToken8, int otherToken9, bool allowReservedWords) {
+            if (LookAhead(lookAhead, otherToken1, otherToken2, otherToken3, otherToken4, otherToken5, otherToken6, otherToken7, otherToken8, otherToken9))
+                return true;
+
+            if (LookAhead(lookAhead, TokenKind.Identifier))
+                return true;
+
+            var token = Tokenizer.LookAhead(lookAhead);
+
+            if (!allowReservedWords && reservedWords.Contains(token.Value.Kind))
+                return false;
+
+            if (string.IsNullOrWhiteSpace(token.Value.Value))
+                return false;
+
+            return Tokenizer.Keywords.ContainsKey(token.Value.Value);
+        }
+
+
+        private bool LookAheadIdentifier(int lookAhead, int otherToken1, int otherToken2, int otherToken3, bool allowReservedWords) {
+            if (LookAhead(lookAhead, otherToken1, otherToken2, otherToken3))
+                return true;
+
+            if (LookAhead(lookAhead, TokenKind.Identifier))
+                return true;
+
+            var token = Tokenizer.LookAhead(lookAhead);
+
+            if (!allowReservedWords && reservedWords.Contains(token.Value.Kind))
+                return false;
+
+            if (string.IsNullOrWhiteSpace(token.Value.Value))
+                return false;
+
+            return Tokenizer.Keywords.ContainsKey(token.Value.Value);
+        }
+
+
 
 
         #endregion

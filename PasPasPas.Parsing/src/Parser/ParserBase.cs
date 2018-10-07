@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Options.Bundles;
@@ -167,9 +166,137 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="numberOfTokens">number of tokens to look ahead</param>
         /// <param name="tokenKind">token kind to test for</param>
         /// <returns><c>true</c> if the token kind matches</returns>
-        protected virtual bool LookAhead(int numberOfTokens, params int[] tokenKind) {
+        protected bool LookAhead(int numberOfTokens, int tokenKind) {
             var token = tokenizer.LookAhead(numberOfTokens);
             return token.MatchesKind(tokenKind);
+        }
+
+        /// <summary>
+        ///     look ahead a few tokens
+        /// </summary>
+        /// <param name="numberOfTokens">number of tokens to look ahead</param>
+        /// <param name="tokenKind1">first token kind to test for</param>
+        /// <param name="tokenKind2">second token kind to test for</param>
+        /// <param name="tokenKind3">third token kind to test for</param>
+        /// <returns><c>true</c> if the token kind matches</returns>
+        protected bool LookAhead(int numberOfTokens, int tokenKind1, int tokenKind2, int tokenKind3) {
+            var token = tokenizer.LookAhead(numberOfTokens);
+            return token.MatchesKind(tokenKind1, tokenKind2, tokenKind3);
+        }
+
+        /// <summary>
+        ///     look ahead a few tokens
+        /// </summary>
+        /// <param name="numberOfTokens">number of tokens to look ahead</param>
+        /// <param name="tokenKind1">first token kind to test for</param>
+        /// <param name="tokenKind2">second token kind to test for</param>
+        /// <param name="tokenKind3">third token kind to test for</param>
+        /// <returns><c>true</c> if the token kind matches</returns>
+        protected bool LookAhead(int numberOfTokens, int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4) {
+            var token = tokenizer.LookAhead(numberOfTokens);
+            return token.MatchesKind(tokenKind1, tokenKind2, tokenKind3, tokenKind4);
+        }
+
+        /// <summary>
+        ///     look ahead a few tokens
+        /// </summary>
+        /// <param name="numberOfTokens">number of tokens to look ahead</param>
+        /// <param name="tokenKind1">first token kind to test for</param>
+        /// <param name="tokenKind2">second token kind to test for</param>
+        /// <param name="tokenKind3">third token kind to test for</param>
+        /// <param name="tokenKind4">forth token kind to test for</param>
+        /// <param name="tokenKind5">fifth token kind to test for</param>
+        /// <returns><c>true</c> if the token kind matches</returns>
+        protected bool LookAhead(int numberOfTokens, int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5) {
+            var token = tokenizer.LookAhead(numberOfTokens);
+            return token.MatchesKind(tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5);
+        }
+
+        /// <summary>
+        ///     look ahead a few tokens
+        /// </summary>
+        /// <param name="numberOfTokens">number of tokens to look ahead</param>
+        /// <param name="tokenKind1">first token kind to test for</param>
+        /// <param name="tokenKind2">second token kind to test for</param>
+        /// <param name="tokenKind3">third token kind to test for</param>
+        /// <param name="tokenKind4">forth token kind to test for</param>
+        /// <param name="tokenKind5">fifth token kind to test for</param>
+        /// <param name="tokenKind6">sixth token kind to test for</param>
+        /// <returns><c>true</c> if the token kind matches</returns>
+        protected bool LookAhead(int numberOfTokens, int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5, int tokenKind6) {
+            var token = tokenizer.LookAhead(numberOfTokens);
+            return token.MatchesKind(tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5, tokenKind6);
+        }
+
+
+        /// <summary>
+        ///     look ahead a few tokens
+        /// </summary>
+        /// <param name="numberOfTokens">number of tokens to look ahead</param>
+        /// <param name="tokenKind1">first token kind to test for</param>
+        /// <param name="tokenKind2">second token kind to test for</param>
+        /// <param name="tokenKind3">third token kind to test for</param>
+        /// <param name="tokenKind4">forth token kind to test for</param>
+        /// <param name="tokenKind5">fifth token kind to test for</param>
+        /// <param name="tokenKind6">sixth token kind to test for</param>
+        /// <param name="tokenKind7">sevenths token kind to test for</param>
+        /// <returns><c>true</c> if the token kind matches</returns>
+        protected bool LookAhead(int numberOfTokens, int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5, int tokenKind6, int tokenKind7) {
+            var token = tokenizer.LookAhead(numberOfTokens);
+            return token.MatchesKind(tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5, tokenKind6, tokenKind7);
+        }
+
+        /// <summary>
+        ///     look ahead a few tokens
+        /// </summary>
+        /// <param name="numberOfTokens">number of tokens to look ahead</param>
+        /// <param name="tokenKind1">first token kind to test for</param>
+        /// <param name="tokenKind2">second token kind to test for</param>
+        /// <param name="tokenKind3">third token kind to test for</param>
+        /// <param name="tokenKind4">forth token kind to test for</param>
+        /// <param name="tokenKind5">fifth token kind to test for</param>
+        /// <param name="tokenKind6">sixth token kind to test for</param>
+        /// <param name="tokenKind7">sevenths token kind to test for</param>
+        /// <param name="tokenKind8"></param>
+        /// <param name="tokenKind9"></param>
+        /// <returns><c>true</c> if the token kind matches</returns>
+        protected bool LookAhead(int numberOfTokens, int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5, int tokenKind6, int tokenKind7, int tokenKind8, int tokenKind9) {
+            var token = tokenizer.LookAhead(numberOfTokens);
+            return token.MatchesKind(tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5, tokenKind6, tokenKind7, tokenKind8, tokenKind9);
+        }
+
+
+
+        /// <summary>
+        ///     look ahead a few tokens
+        /// </summary>
+        /// <param name="numberOfTokens">number of tokens to look ahead</param>
+        /// <param name="tokenKind1">first token kind to test for</param>
+        /// <param name="tokenKind2">second token kind to test for</param>
+        /// <param name="tokenKind3">third token kind to test for</param>
+        /// <param name="tokenKind4">forth token kind to test for</param>
+        /// <param name="tokenKind5">fifth token kind to test for</param>
+        /// <param name="tokenKind6">sixth token kind to test for</param>
+        /// <param name="tokenKind7">sevenths token kind to test for</param>
+        /// <param name="tokenKind8"></param>
+        /// <param name="tokenKind9"></param>
+        /// <param name="tokenKind10"></param>
+        /// <returns><c>true</c> if the token kind matches</returns>
+        protected bool LookAhead(int numberOfTokens, int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5, int tokenKind6, int tokenKind7, int tokenKind8, int tokenKind9, int tokenKind10) {
+            var token = tokenizer.LookAhead(numberOfTokens);
+            return token.MatchesKind(tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5, tokenKind6, tokenKind7, tokenKind8, tokenKind9, tokenKind10);
+        }
+
+        /// <summary>
+        ///     look ahead a few tokens
+        /// </summary>
+        /// <param name="numberOfTokens">number of tokens to look ahead</param>
+        /// <param name="tokenKind1">first token kind to test for</param>
+        /// <param name="tokenKind2">second token kind to test for</param>
+        /// <returns><c>true</c> if the token kind matches</returns>
+        protected bool LookAhead(int numberOfTokens, int tokenKind1, int tokenKind2) {
+            var token = tokenizer.LookAhead(numberOfTokens);
+            return token.MatchesKind(tokenKind1, tokenKind2);
         }
 
         /// <summary>
@@ -409,10 +536,84 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenToSearch">search token</param>
         /// <param name="tokenToStop">stop token</param>
         /// <returns></returns>
-        protected bool HasTokenBeforeToken(int tokenToSearch, params int[] tokenToStop) {
+        protected bool HasTokenBeforeToken(int tokenToSearch, int tokenToStop) {
             var lookahead = 1;
-            var stopArray = tokenToStop.Concat(new[] { TokenKind.Undefined }).ToArray();
-            while (!LookAhead(lookahead, stopArray)) {
+
+            while (!LookAhead(lookahead, tokenToStop, TokenKind.Undefined)) {
+
+                if (LookAhead(lookahead, tokenToSearch))
+                    return true;
+
+                if (Tokenizer.BaseTokenizer.AtEof)
+                    return false;
+
+                lookahead++;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        ///     test if the searched tokens is located before token to stop
+        /// </summary>
+        /// <param name="tokenToSearch">search token</param>
+        /// <param name="tokenToStop1"></param>
+        /// <param name="tokenToStop2"></param>
+        /// <returns></returns>
+        protected bool HasTokenBeforeToken(int tokenToSearch, int tokenToStop1, int tokenToStop2) {
+            var lookahead = 1;
+
+            while (!LookAhead(lookahead, tokenToStop1, tokenToStop2, TokenKind.Undefined)) {
+
+                if (LookAhead(lookahead, tokenToSearch))
+                    return true;
+
+                if (Tokenizer.BaseTokenizer.AtEof)
+                    return false;
+
+                lookahead++;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        ///     test if the searched tokens is located before token to stop
+        /// </summary>
+        /// <param name="tokenToSearch">search token</param>
+        /// <param name="tokenToStop1"></param>
+        /// <param name="tokenToStop2"></param>
+        /// <param name="tokenToStop3"></param>
+        /// <returns></returns>
+        protected bool HasTokenBeforeToken(int tokenToSearch, int tokenToStop1, int tokenToStop2, int tokenToStop3) {
+            var lookahead = 1;
+
+            while (!LookAhead(lookahead, tokenToStop1, tokenToStop2, tokenToStop3, TokenKind.Undefined)) {
+
+                if (LookAhead(lookahead, tokenToSearch))
+                    return true;
+
+                if (Tokenizer.BaseTokenizer.AtEof)
+                    return false;
+
+                lookahead++;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        ///     test if the searched tokens is located before token to stop
+        /// </summary>
+        /// <param name="tokenToSearch">search token</param>
+        /// <param name="tokenToStop1"></param>
+        /// <param name="tokenToStop2"></param>
+        /// <param name="tokenToStop3"></param>
+        /// <returns></returns>
+        protected bool HasTokenBeforeToken(int tokenToSearch, int tokenToStop1, int tokenToStop2, int tokenToStop3, int tokenToStop4, int tokenToStop5, int tokenToStop6) {
+            var lookahead = 1;
+
+            while (!LookAhead(lookahead, tokenToStop1, tokenToStop2, tokenToStop3, tokenToStop4, tokenToStop5, tokenToStop6, TokenKind.Undefined)) {
 
                 if (LookAhead(lookahead, tokenToSearch))
                     return true;
@@ -429,20 +630,20 @@ namespace PasPasPas.Parsing.Parser {
         /// <summary>
         ///     test if the searched tokens match until a given token is reached
         /// </summary>
-        /// <param name="tokenToStop">search token</param>
-        /// <param name="allowedTokens">stop token</param>
         /// <returns></returns>
-        protected Tuple<bool, int> HasTokenUntilToken(int[] tokenToStop, params int[] allowedTokens) {
+        protected bool FindCloseBrackets(out int position) {
             var lookahead = 1;
-            var stopArray = new[] { TokenKind.Undefined };
 
-            while (!LookAhead(lookahead, tokenToStop) && !LookAhead(lookahead, stopArray)) {
-                if (!LookAhead(lookahead, allowedTokens))
-                    return new Tuple<bool, int>(false, lookahead);
+            while (!LookAhead(lookahead, TokenKind.AngleBracketsClose) && !LookAhead(lookahead, TokenKind.Undefined)) {
+                if (!LookAhead(lookahead, TokenKind.Identifier, TokenKind.Dot, TokenKind.Comma, TokenKind.AngleBracketsOpen, TokenKind.String, TokenKind.ShortString, TokenKind.WideString, TokenKind.UnicodeString, TokenKind.AnsiString, TokenKind.Pointer)) {
+                    position = lookahead;
+                    return false;
+                }
                 lookahead++;
             }
 
-            return new Tuple<bool, int>(true, lookahead);
+            position = lookahead;
+            return true;
         }
 
         /// <summary>

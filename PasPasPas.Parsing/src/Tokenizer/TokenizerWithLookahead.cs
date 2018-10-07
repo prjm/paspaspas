@@ -111,15 +111,66 @@ namespace PasPasPas.Parsing.Tokenizer {
             /// </summary>
             /// <param name="tokenKind"></param>
             /// <returns></returns>
-            public bool MatchesKind(int[] tokenKind) {
+            public bool MatchesKind(int tokenKind)
+                => Value.Kind == tokenKind;
 
-                for (var i = 0; i < tokenKind.Length; i++) {
-                    if (tokenKind[i] == Value.Kind)
-                        return true;
-                }
+            /// <summary>
+            ///     test if one of the selected tokens matches
+            /// </summary>
+            public bool MatchesKind(int tokenKind1, int tokenKind2)
+                => Value.Kind == tokenKind1 || Value.Kind == tokenKind2;
 
-                return false;
-            }
+            /// <summary>
+            ///     test if one of the selected tokens matches
+            /// </summary>
+            public bool MatchesKind(int tokenKind1, int tokenKind2, int tokenKind3)
+                => Value.Kind == tokenKind1 || Value.Kind == tokenKind2 || Value.Kind == tokenKind3;
+
+            /// <summary>
+            ///     test if one of the selected tokens matches
+            /// </summary>
+            public bool MatchesKind(int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4)
+                => Value.Kind == tokenKind1 || Value.Kind == tokenKind2 || Value.Kind == tokenKind3 ||
+                    Value.Kind == tokenKind4;
+
+            /// <summary>
+            ///     test if one of the selected tokens matches
+            /// </summary>
+            public bool MatchesKind(int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5)
+                => Value.Kind == tokenKind1 || Value.Kind == tokenKind2 || Value.Kind == tokenKind3 ||
+                    Value.Kind == tokenKind4 || Value.Kind == tokenKind5;
+
+            /// <summary>
+            ///     test if one of the selected tokens matches
+            /// </summary>
+            public bool MatchesKind(int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5, int tokenKind6)
+                => Value.Kind == tokenKind1 || Value.Kind == tokenKind2 || Value.Kind == tokenKind3 ||
+                    Value.Kind == tokenKind4 || Value.Kind == tokenKind5 || Value.Kind == tokenKind6;
+
+            /// <summary>
+            ///     test if one of the selected tokens matches
+            /// </summary>
+            public bool MatchesKind(int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5, int tokenKind6, int tokenKind7)
+                => Value.Kind == tokenKind1 || Value.Kind == tokenKind2 || Value.Kind == tokenKind3 ||
+                    Value.Kind == tokenKind4 || Value.Kind == tokenKind5 || Value.Kind == tokenKind6 ||
+                    Value.Kind == tokenKind7;
+
+            /// <summary>
+            ///     test if one of the selected tokens matches
+            /// </summary>
+            public bool MatchesKind(int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5, int tokenKind6, int tokenKind7, int tokenKind8, int tokenKind9, int tokenKind10)
+                => Value.Kind == tokenKind1 || Value.Kind == tokenKind2 || Value.Kind == tokenKind3 ||
+                    Value.Kind == tokenKind4 || Value.Kind == tokenKind5 || Value.Kind == tokenKind6 ||
+                    Value.Kind == tokenKind7 || Value.Kind == tokenKind8 || Value.Kind == tokenKind9 || Value.Kind == tokenKind10;
+
+            /// <summary>
+            ///     test if one of the selected tokens matches
+            /// </summary>
+            public bool MatchesKind(int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5, int tokenKind6, int tokenKind7, int tokenKind8, int tokenKind9)
+                => Value.Kind == tokenKind1 || Value.Kind == tokenKind2 || Value.Kind == tokenKind3 ||
+                    Value.Kind == tokenKind4 || Value.Kind == tokenKind5 || Value.Kind == tokenKind6 ||
+                    Value.Kind == tokenKind7 || Value.Kind == tokenKind8 || Value.Kind == tokenKind9;
+
         }
 
         private OptionSet options;
@@ -287,7 +338,7 @@ namespace PasPasPas.Parsing.Tokenizer {
             => BaseTokenizer.Log;
 
         /// <summary>
-        ///     get tokens and look ahader
+        ///     get tokens and look ahead
         /// </summary>
         /// <param name="number">number of tokens to look ahead</param>
         /// <returns>token</returns>
