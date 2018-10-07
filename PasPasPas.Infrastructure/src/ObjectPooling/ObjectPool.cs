@@ -1,5 +1,5 @@
 ﻿using System.Collections;
-using System.Collections.Concurrent;
+using System.Collections.Generic;
 using PasPasPas.Infrastructure.Utils;
 
 namespace PasPasPas.Infrastructure.ObjectPooling {
@@ -33,8 +33,10 @@ namespace PasPasPas.Infrastructure.ObjectPooling {
     /// <typeparam name="TPoolItem">type of the items to pool</typeparam>
     public abstract class ObjectPool<TPoolItem> : ObjectPool where TPoolItem : new() {
 
-        private ConcurrentQueue<PoolItem<TPoolItem>> items
-            = new ConcurrentQueue<PoolItem<TPoolItem>>();
+        private Queue<PoolItem<TPoolItem>> items
+            = new Queue<PoolItem<TPoolItem>>();
+
+        private readonly object lockObject = new object();
 
         /// <summary>
         ///     get the pool items
@@ -47,9 +49,12 @@ namespace PasPasPas.Infrastructure.ObjectPooling {
         /// </summary>
         /// <returns></returns>
         public PoolItem<TPoolItem> Borrow() {
-            if (!items.TryDequeue(out var result))
-                result = new PoolItem<TPoolItem>(new TPoolItem(), this);
-            return result;
+            if (items.Count > 0) {
+                lock (lockObject) {
+                    return items.Dequeue();
+                }
+            }
+            return new PoolItem<TPoolItem>(new TPoolItem(), this);
         }
 
         /// <summary>
@@ -75,11 +80,12 @@ namespace PasPasPas.Infrastructure.ObjectPooling {
         /// <param name="poolItem">item to pool</param>
         public void ReturnToPool(PoolItem<TPoolItem> poolItem) {
             Prepare(poolItem.Item);
-            items.Enqueue(poolItem);
+            lock (lockObject)
+                items.Enqueue(poolItem);
         }
 
         /// <summary>
-        ///
+        ///     debug output
         /// </summary>
         /// <returns></returns>
         public override string ToString()

@@ -12,6 +12,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         ///     create a new unsafe directive
         /// </summary>
         /// <param name="directive"></param>
+        /// <param name="semicolon"></param>
         public UnsafeDirectiveSymbol(Terminal directive, Terminal semicolon) {
             Directive = directive;
             Semicolon = semicolon;

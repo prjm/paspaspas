@@ -20,6 +20,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="colonSymbol"></param>
         /// <param name="typeName"></param>
         /// <param name="indexSymbol"></param>
+        /// <param name="propertyIndex"></param>
         /// <param name="items"></param>
         /// <param name="semicolon"></param>
         /// <param name="defaultSymbol"></param>

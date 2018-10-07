@@ -20,7 +20,7 @@ namespace SampleRunner {
         private static void Main() {
 
             var testPath = @"C:\temp\Testfiles\spring.pas";
-            var mode = SampleMode.ReadFile;
+            var mode = SampleMode.ParseFile;
             var repeat = 1;
             var result = new StringBuilder();
             var environment = new DefaultEnvironment();
@@ -65,7 +65,6 @@ namespace SampleRunner {
             result.AppendLine(new string('-', 80));
             result.AppendLine($"{timer.ElapsedTicks} ticks required ({timer.Elapsed.TotalMilliseconds}).");
             result.AppendLine($"{status.WorkingSet} bytes required.");
-            result.AppendLine($"{status.CpuTime} cpu time required.");
             result.AppendLine($"{status.CollectionCount0} collections level 0.");
             result.AppendLine($"{status.CollectionCount1} collections level 1.");
             result.AppendLine($"{status.CollectionCount2} collections level 2.");
@@ -77,27 +76,27 @@ namespace SampleRunner {
             switch (mode) {
 
                 case SampleMode.ReadFile:
-                    action = (b) => Scenarios.ReadFile.Run(b, environment, testPath, repeat);
+                    action = (b) => ReadFile.Run(b, environment, testPath, repeat);
                     break;
 
                 case SampleMode.TokenizerFile:
-                    action = (b) => Scenarios.TokenizeFile.Run(b, environment, testPath, repeat);
+                    action = (b) => TokenizeFile.Run(b, environment, testPath, repeat);
                     break;
 
                 case SampleMode.BufferedTokenizeFile:
-                    action = (b) => Scenarios.BufferedTokenizeFile.Run(b, environment, testPath, repeat);
+                    action = (b) => BufferedTokenizeFile.Run(b, environment, testPath, repeat);
                     break;
 
                 case SampleMode.ParseFile:
-                    action = (b) => Scenarios.ParseFile.Run(b, environment, testPath, repeat);
+                    action = (b) => ParseFile.Run(b, environment, testPath, repeat);
                     break;
 
                 case SampleMode.CreateAbstractSyntaxTree:
-                    action = (b) => Scenarios.CreateAst.Run(b, environment, testPath, repeat);
+                    action = (b) => CreateAst.Run(b, environment, testPath, repeat);
                     break;
 
                 case SampleMode.TypeAnnotateFile:
-                    action = (b) => Scenarios.TypeAnnotateFile.Run(b, environment, testPath, repeat);
+                    action = (b) => TypeAnnotateFile.Run(b, environment, testPath, repeat);
                     break;
 
                 default:

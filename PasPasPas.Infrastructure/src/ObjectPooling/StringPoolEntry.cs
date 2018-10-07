@@ -23,6 +23,18 @@ namespace PasPasPas.Infrastructure.ObjectPooling {
             return hashCode;
         }
 
+        private static int ComputeFNVHashCode(string text) {
+            var hashCode = FnvOffsetBias;
+            var start = 0;
+            var end = text.Length;
+
+            for (var i = start; i < end; i++) {
+                hashCode = unchecked((hashCode ^ text[i]) * FnvPrime);
+            }
+
+            return hashCode;
+        }
+
         /// <summary>
         ///     create a new string pool entry
         /// </summary>
@@ -81,6 +93,15 @@ namespace PasPasPas.Infrastructure.ObjectPooling {
         /// <param name="value">string buffer</param>
         public void Initialize(StringBuilder value) {
             StringBuffer = value;
+            ComputedHashCode = ComputeFNVHashCode(value);
+        }
+
+        /// <summary>
+        ///     initialize the pool entry
+        /// </summary>
+        /// <param name="value">string buffer</param>
+        public void Initialize(string value) {
+            PoolItem = value;
             ComputedHashCode = ComputeFNVHashCode(value);
         }
 

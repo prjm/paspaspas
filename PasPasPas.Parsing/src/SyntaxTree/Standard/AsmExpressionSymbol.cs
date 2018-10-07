@@ -13,6 +13,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// </summary>
         /// <param name="offsetSymbol"></param>
         /// <param name="offset"></param>
+        /// <param name="typeSymbol"></param>
         public AsmExpressionSymbol(Terminal offsetSymbol, AsmOperandSymbol offset, bool typeSymbol) {
             if (typeSymbol) {
                 TypeSymbol = offsetSymbol;

@@ -228,7 +228,7 @@
         public const int Abstract = 221;
 
         /// <summary>
-        ///     toyken for <c>strict</c>
+        ///     token for <c>strict</c>
         /// </summary>
         public const int Strict = 222;
 
@@ -1171,7 +1171,7 @@
         public const int SetPEOsVersion = 767;
 
         /// <summary>
-        ///     tkoen for <c>$SETPESUBSYSTEMVERSION</c>
+        ///     token for <c>$SETPESUBSYSTEMVERSION</c>
         /// </summary>
         public const int SetPESubsystemVersion = 768;
 
@@ -1297,7 +1297,7 @@
         public const int TypedPointersSwitchLong = 792;
 
         /// <summary>
-        ///     tkoen for <c>$UNDEF</c>
+        ///     token for <c>$UNDEF</c>
         /// </summary>
         public const int Undef = 793;
 

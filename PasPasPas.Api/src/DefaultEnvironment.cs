@@ -55,7 +55,6 @@ namespace PasPasPas.Api {
         ///     tokenizer patterns
         /// </summary>
         public PatternFactory Patterns { get; }
-            = new PatternFactory();
 
         /// <summary>
         ///     log manager
@@ -91,6 +90,7 @@ namespace PasPasPas.Api {
         /// </summary>
         /// <param name="intSize">integer size</param>
         public DefaultEnvironment(NativeIntSize intSize = NativeIntSize.Undefined) {
+            Patterns = new PatternFactory(StringPool);
             TypeRegistry = new RegisteredTypes(StringPool, intSize);
             Runtime = new RuntimeValueFactory(TypeRegistry);
             IntegerParser = new IntegerParser(Runtime, false);

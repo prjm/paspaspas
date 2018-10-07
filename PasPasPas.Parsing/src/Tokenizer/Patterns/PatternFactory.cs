@@ -14,16 +14,29 @@ namespace PasPasPas.Parsing.Tokenizer.Patterns {
     public class PatternFactory : IEnvironmentItem {
 
         /// <summary>
+        ///     create a new pattern factory
+        /// </summary>
+        /// <param name="pool"></param>
+        public PatternFactory(StringPool pool) {
+            StandardPatterns = CreateStandardPatterns();
+            CompilerDirectivePatterns = CreateCompilerDirectivePatterns();
+
+            foreach (var key in CompilerDirectivePatterns.Keywords.Keys)
+                pool.AddString(key);
+
+            foreach (var key in StandardPatterns.Keywords.Keys)
+                pool.AddString(key);
+        }
+
+        /// <summary>
         ///     standard tokenizer patterns
         /// </summary>
         public InputPatterns StandardPatterns { get; }
-            = CreateStandardPatterns();
 
         /// <summary>
-        ///     input patters for compiler diretives
+        ///     input patters for compiler directives
         /// </summary>
         public InputPatterns CompilerDirectivePatterns { get; }
-            = CreateCompilerDirectivePatterns();
 
         /// <summary>
         ///     dummy
@@ -38,7 +51,7 @@ namespace PasPasPas.Parsing.Tokenizer.Patterns {
             => "TokenizerPatternFactory";
 
         private static InputPatterns CreateCompilerDirectivePatterns() {
-            var keywords = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase) {
+            var keywords = new Dictionary<string, int>(130, StringComparer.OrdinalIgnoreCase) {
                 ["A"] = TokenKind.AlignSwitch,
                 ["A1"] = TokenKind.AlignSwitch1,
                 ["A2"] = TokenKind.AlignSwitch2,
@@ -57,6 +70,7 @@ namespace PasPasPas.Parsing.Tokenizer.Patterns {
                 ["IF"] = TokenKind.IfCd,
                 ["ELSEIF"] = TokenKind.ElseIf,
                 ["ELSE"] = TokenKind.ElseCd,
+                ["ELSEIF"] = TokenKind.ElseIf,
                 ["ENDIF"] = TokenKind.EndIf,
                 ["IFEND"] = TokenKind.IfEnd,
                 ["D"] = TokenKind.DebugInfoOrDescriptionSwitch,

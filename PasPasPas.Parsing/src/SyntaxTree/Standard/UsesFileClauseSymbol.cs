@@ -13,6 +13,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// </summary>
         /// <param name="terminal"></param>
         /// <param name="namespaceFileNameList"></param>
+        /// <param name="semicolon"></param>
         public UsesFileClauseSymbol(Terminal terminal, NamespaceFileNameListSymbol namespaceFileNameList, Terminal semicolon) {
             UsesSymbol = terminal;
             Files = namespaceFileNameList;

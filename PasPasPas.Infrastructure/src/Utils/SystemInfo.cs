@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 
 namespace PasPasPas.Infrastructure.Utils {
 
@@ -12,9 +11,7 @@ namespace PasPasPas.Infrastructure.Utils {
         ///     create a new  system info
         /// </summary>
         public SystemInfo() {
-            var me = Process.GetCurrentProcess();
-            WorkingSet = me.WorkingSet64;
-            CpuTime = me.TotalProcessorTime;
+            WorkingSet = GC.GetTotalMemory(false);
             CollectionCount0 = GC.CollectionCount(0);
             CollectionCount1 = GC.CollectionCount(1);
             CollectionCount2 = GC.CollectionCount(2);
@@ -26,7 +23,6 @@ namespace PasPasPas.Infrastructure.Utils {
         /// <param name="olderValue"></param>
         public SystemInfo(SystemInfo olderValue) : this() {
             WorkingSet = WorkingSet - olderValue.WorkingSet;
-            CpuTime = CpuTime - olderValue.CpuTime;
             CollectionCount0 = CollectionCount0 - olderValue.CollectionCount0;
             CollectionCount1 = CollectionCount1 - olderValue.CollectionCount1;
             CollectionCount2 = CollectionCount2 - olderValue.CollectionCount2;
@@ -36,11 +32,6 @@ namespace PasPasPas.Infrastructure.Utils {
         ///     working set (in bytes)
         /// </summary>
         public long WorkingSet { get; }
-
-        /// <summary>
-        ///     cpu time
-        /// </summary>
-        public TimeSpan CpuTime { get; }
 
         /// <summary>
         ///     garbage collection count level 0

@@ -1,4 +1,4 @@
-﻿using System.Collections.Concurrent;
+﻿using System.Collections.Generic;
 using System.Text;
 using PasPasPas.Infrastructure.ObjectPooling;
 
@@ -9,8 +9,10 @@ namespace PasPasPas.Infrastructure.Environment {
     /// </summary>
     public class StringPool : IEnvironmentItem {
 
-        private ConcurrentDictionary<StringPoolEntry, StringPoolEntry> pool
-            = new ConcurrentDictionary<StringPoolEntry, StringPoolEntry>();
+        private IDictionary<StringPoolEntry, StringPoolEntry> pool
+            = new Dictionary<StringPoolEntry, StringPoolEntry>();
+
+        private readonly object lockObject = new object();
 
         private const int MaxStringLength
             = 300;
@@ -26,6 +28,18 @@ namespace PasPasPas.Infrastructure.Environment {
         /// </summary>
         public void Clear()
             => pool.Clear();
+
+        /// <summary>
+        ///     add a string value manually to the pool
+        /// </summary>
+        /// <param name="value">string to add</param>
+        public void AddString(string value) {
+            var newEntry = new StringPoolEntry();
+            newEntry.Initialize(value);
+
+            lock (lockObject)
+                pool[newEntry] = newEntry;
+        }
 
         /// <summary>
         ///     string pool entries
@@ -46,11 +60,16 @@ namespace PasPasPas.Infrastructure.Environment {
             using (var poolItem = Entries.Borrow(out var searchEntry)) {
                 searchEntry.Initialize(value);
 
-                if (pool.TryGetValue(searchEntry, out var data))
-                    return data.PoolItem;
+                lock (lockObject) {
+                    if (pool.TryGetValue(searchEntry, out var data))
+                        return data.PoolItem;
+                }
 
                 var newEntry = new StringPoolEntry(searchEntry);
-                pool[newEntry] = newEntry;
+
+                lock (lockObject)
+                    pool[newEntry] = newEntry;
+
                 return newEntry.PoolItem;
             }
         }

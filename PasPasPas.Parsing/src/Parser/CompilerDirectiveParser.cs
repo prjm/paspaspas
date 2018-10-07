@@ -159,6 +159,7 @@ namespace PasPasPas.Parsing.Parser {
                 TokenKind.IfDef,
                 TokenKind.EndIf,
                 TokenKind.ElseCd,
+                TokenKind.ElseIf,
                 TokenKind.IfCd,
                 TokenKind.ExternalSym,
                 TokenKind.HppEmit,
@@ -188,7 +189,7 @@ namespace PasPasPas.Parsing.Parser {
             IExtendableSyntaxPart parent = new CompilerDirective();
 
             if (Match(TokenKind.IfDef)) {
-                ParseIfDef(parent);
+                return ParseIfDef(parent);
             }
             else if (Match(TokenKind.IfOpt)) {
                 ParseIfOpt(parent);
@@ -200,7 +201,10 @@ namespace PasPasPas.Parsing.Parser {
                 ParseIfEnd(parent);
             }
             else if (Match(TokenKind.ElseCd)) {
-                ParseElse(parent);
+                return ParseElse(parent);
+            }
+            else if (Match(TokenKind.ElseIf)) {
+                return ParseElseIf(parent);
             }
             else if (Match(TokenKind.IfNDef)) {
                 ParseIfNDef(parent);
@@ -744,9 +748,16 @@ namespace PasPasPas.Parsing.Parser {
             }
         }
 
-        private void ParseElse(IExtendableSyntaxPart parent) {
+        private ElseDirective ParseElse(IExtendableSyntaxPart parent) {
             var result = new ElseDirective();
             InitByTerminal(result, parent, TokenKind.ElseCd);
+            return result;
+        }
+
+        private ElseIfDirective ParseElseIf(IExtendableSyntaxPart parent) {
+            var result = new ElseIfDirective();
+            InitByTerminal(result, parent, TokenKind.ElseIf);
+            return result;
         }
 
         private void ParseEndIf(IExtendableSyntaxPart parent) {
@@ -759,7 +770,7 @@ namespace PasPasPas.Parsing.Parser {
             InitByTerminal(result, parent, TokenKind.IfEnd);
         }
 
-        private void ParseIfDef(IExtendableSyntaxPart parent) {
+        private IfDef ParseIfDef(IExtendableSyntaxPart parent) {
             var result = new IfDef();
             InitByTerminal(result, parent, TokenKind.IfDef);
 
@@ -769,6 +780,8 @@ namespace PasPasPas.Parsing.Parser {
             else {
                 ErrorAndSkip(parent, CompilerDirectiveParserErrors.InvalidIfDefDirective, new[] { TokenKind.Identifier });
             }
+
+            return result;
         }
 
         private void ParseUndef(IExtendableSyntaxPart parent) {
@@ -1796,7 +1809,7 @@ namespace PasPasPas.Parsing.Parser {
                 ParseImportedDataSwitch(parent);
             }
             else if (Match(TokenKind.IncludeSwitch)) {
-                ParseIncludeSwitch(parent);
+                return ParseIncludeSwitch(parent);
             }
             else if (Match(TokenKind.LinkOrLocalSymbolSwitch)) {
                 ParseLocalSymbolSwitch(parent);
@@ -2185,29 +2198,33 @@ namespace PasPasPas.Parsing.Parser {
             }
         }
 
-        private void ParseIncludeSwitch(IExtendableSyntaxPart parent) {
+        private SyntaxPartBase ParseIncludeSwitch(IExtendableSyntaxPart parent) {
 
             if (LookAhead(1, TokenKind.Plus)) {
                 var result = new IoChecks();
                 InitByTerminal(result, parent, TokenKind.IncludeSwitch);
                 ContinueWith(result, TokenKind.Plus);
                 result.Mode = IoCallCheck.EnableIoChecks;
+                return result;
             }
             else if (LookAhead(1, TokenKind.Minus)) {
                 var result = new IoChecks();
                 InitByTerminal(result, parent, TokenKind.IncludeSwitch);
                 ContinueWith(result, TokenKind.Minus);
                 result.Mode = IoCallCheck.DisableIoChecks;
+                return result;
             }
             else if (LookAhead(1, TokenKind.Identifier) || LookAhead(1, TokenKind.QuotedString)) {
                 var result = new Include();
                 InitByTerminal(result, parent, TokenKind.IncludeSwitch);
                 ParseIncludeFileName(result);
+                return result;
             }
             else {
                 var result = new IoChecks();
                 InitByTerminal(result, parent, TokenKind.IncludeSwitch);
                 ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidIoChecksDirective, new[] { TokenKind.Plus, TokenKind.Minus });
+                return result;
             }
         }
 
