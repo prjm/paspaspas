@@ -1,4 +1,5 @@
-﻿using System.Collections.Immutable;
+﻿using System;
+using System.Collections.Immutable;
 using PasPasPas.Parsing.SyntaxTree.Standard;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 using static PasPasPas.Parsing.Tokenizer.TokenizerWithLookahead;
@@ -8,7 +9,7 @@ namespace PasPasPas.Parsing.SyntaxTree {
     /// <summary>
     ///     syntax tree terminal
     /// </summary>
-    public class Terminal : StandardSyntaxTreeBase {
+    public class Terminal : StandardSyntaxTreeBase, IEquatable<Terminal> {
 
         /// <summary>
         ///     create a new terminal token
@@ -82,6 +83,72 @@ namespace PasPasPas.Parsing.SyntaxTree {
             AcceptParts(this, visitor);
             visitor.EndVisit(this);
         }
+
+        /// <summary>
+        ///     compare for equality
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public bool Equals(Terminal other) {
+
+            if (!Token.Equals(other.Token))
+                return false;
+
+            if ((other.Prefix == null && Prefix != null) || (other.Prefix != null && Prefix == null))
+                return false;
+
+            if ((other.Suffix == null && Suffix != null) || (other.Suffix != null && Suffix == null))
+                return false;
+
+            if (Prefix != null) {
+                if (other.Prefix.Length != Prefix.Length)
+                    return false;
+                for (var i = 0; i < Prefix.Length; i++)
+                    if (!Prefix[i].Equals(other.Prefix[i]))
+                        return false;
+            }
+
+            if (Suffix != null) {
+                if (other.Suffix.Length != Suffix.Length)
+                    return false;
+                for (var i = 0; i < Suffix.Length; i++)
+                    if (!Suffix[i].Equals(other.Suffix[i]))
+                        return false;
+
+            }
+
+
+
+            return true;
+        }
+
+        /// <summary>
+        ///     cinoare fir equality
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(object obj) {
+            if (obj is Terminal terminal)
+                return Equals(terminal);
+            return false;
+        }
+
+        /// <summary>
+        ///     compute a hash code for this terminal
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode() {
+            var result = 17;
+            result = result * 31 + Token.GetHashCode();
+
+            foreach (var prefix in Prefix)
+                result = result * 31 + prefix.GetHashCode();
+
+            foreach (var suffix in Suffix)
+                result = result * 31 + suffix.GetHashCode();
+
+            return result;
+        }
     }
 
     /// <summary>
@@ -94,7 +161,8 @@ namespace PasPasPas.Parsing.SyntaxTree {
         /// </summary>
         /// <param name="terminal"></param>
         /// <returns></returns>
-        public static int GetSymbolKind(this Terminal terminal) => terminal == null ? TokenKind.Undefined : terminal.Kind;
+        public static int GetSymbolKind(this Terminal terminal)
+            => terminal == null ? TokenKind.Undefined : terminal.Kind;
 
     }
 

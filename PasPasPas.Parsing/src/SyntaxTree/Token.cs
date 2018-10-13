@@ -14,7 +14,7 @@ namespace PasPasPas.Parsing.SyntaxTree {
         ///     empty token
         /// </summary>
         public static readonly Token Empty
-            = new Token();
+            = new Token(TokenKind.Empty, null);
 
         /// <summary>
         ///     Token value

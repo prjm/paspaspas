@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Text;
+using System.IO;
 using PasPasPas.Api;
 using PasPasPas.Infrastructure.Environment;
 using PasPasPas.Infrastructure.ObjectPooling;
@@ -22,20 +22,20 @@ namespace SampleRunner {
             var testPath = @"C:\temp\Testfiles\spring.pas";
             var mode = SampleMode.ParseFile;
             var repeat = 1;
-            var result = new StringBuilder();
+            var result = System.Console.Out;
             var environment = new DefaultEnvironment();
-            Action<StringBuilder> action;
+            var useHistograms = false;
+            var action = PrepareSample(environment, testPath, mode, repeat, useHistograms);
 
-            action = PrepareSample(environment, testPath, mode, repeat);
             RunSample(environment, result, action);
-            Console.WriteLine(result.ToString());
+
             Console.ReadLine();
         }
 
         private static string GetCacheName(object data)
             => $"[{data.GetType().ToString()}]";
 
-        private static void RunSample(IParserEnvironment environment, StringBuilder result, Action<StringBuilder> action) {
+        private static void RunSample(IParserEnvironment environment, TextWriter result, Action<TextWriter> action) {
             var timer = new Stopwatch();
             var status = new SystemInfo();
             timer.Start();
@@ -43,35 +43,40 @@ namespace SampleRunner {
             timer.Stop();
             status = new SystemInfo(status);
 
-            result.AppendLine(new string('.', 80));
+            result.WriteLine(new string('.', 80));
 
             foreach (var entry in environment.Entries) {
                 var name = GetCacheName(entry);
                 if (entry is ILookupFunction fn)
-                    result.AppendLine(name + ": " + fn.Table.Count);
+                    result.WriteLine(name + ": " + fn.Table.Count);
                 else if (entry is ObjectPool pool)
-                    result.AppendLine(name + ": " + pool.Count);
+                    result.WriteLine(name + ": " + pool.Count);
                 else if (entry is IEnvironmentItem sc) {
                     var count = sc.Count;
                     if (count < 0)
-                        result.AppendLine(name);
+                        result.WriteLine(name);
                     else
-                        result.AppendLine(name + ": " + sc.Count);
+                        result.WriteLine(name + ": " + sc.Count);
                 }
                 else
-                    result.AppendLine(name);
+                    result.WriteLine(name);
             }
 
-            result.AppendLine(new string('-', 80));
-            result.AppendLine($"{timer.ElapsedTicks} ticks required ({timer.Elapsed.TotalMilliseconds}).");
-            result.AppendLine($"{status.WorkingSet} bytes required.");
-            result.AppendLine($"{status.CollectionCount0} collections level 0.");
-            result.AppendLine($"{status.CollectionCount1} collections level 1.");
-            result.AppendLine($"{status.CollectionCount2} collections level 2.");
+            result.WriteLine(new string('-', 80));
+            Histograms.Print(result);
+            result.WriteLine(new string('-', 80));
+            result.WriteLine($"{timer.ElapsedTicks} ticks required ({timer.Elapsed.TotalMilliseconds}).");
+            result.WriteLine($"{status.WorkingSet} bytes required.");
+            result.WriteLine($"{status.CollectionCount0} collections level 0.");
+            result.WriteLine($"{status.CollectionCount1} collections level 1.");
+            result.WriteLine($"{status.CollectionCount2} collections level 2.");
         }
 
-        private static Action<StringBuilder> PrepareSample(ITypedEnvironment environment, string testPath, SampleMode mode, int repeat) {
-            Action<StringBuilder> action;
+        private static Action<TextWriter> PrepareSample(ITypedEnvironment environment, string testPath, SampleMode mode, int repeat, bool useHistograms) {
+
+            Histograms.Enable = useHistograms;
+
+            var action = default(Action<TextWriter>);
 
             switch (mode) {
 
@@ -100,7 +105,7 @@ namespace SampleRunner {
                     break;
 
                 default:
-                    action = (b) => b.AppendLine("Unknown mode.");
+                    action = (b) => b.WriteLine("Unknown mode.");
                     break;
 
             }

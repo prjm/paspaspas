@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text;
 using PasPasPas.Infrastructure.ObjectPooling;
+using PasPasPas.Infrastructure.Utils;
 
 namespace PasPasPas.Infrastructure.Environment {
 
@@ -61,11 +62,14 @@ namespace PasPasPas.Infrastructure.Environment {
                 searchEntry.Initialize(value);
 
                 lock (lockObject) {
-                    if (pool.TryGetValue(searchEntry, out var data))
+                    if (pool.TryGetValue(searchEntry, out var data)) {
+                        Histograms.Value("StringPoolValue", data.PoolItem);
                         return data.PoolItem;
+                    }
                 }
 
                 var newEntry = new StringPoolEntry(searchEntry);
+                Histograms.Value("StringPoolHashValue", newEntry.ComputedHashCode);
 
                 lock (lockObject)
                     pool[newEntry] = newEntry;

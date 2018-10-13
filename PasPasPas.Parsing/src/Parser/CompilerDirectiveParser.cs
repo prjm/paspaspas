@@ -881,7 +881,7 @@ namespace PasPasPas.Parsing.Parser {
                 ParseLongBoolEvalSwitch(parent);
             }
             else if (Match(TokenKind.AssertSwitchLong)) {
-                ParseLongAssertSwitch(parent);
+                return ParseLongAssertSwitch();
             }
             else if (Match(TokenKind.DebugInfoSwitchLong)) {
                 ParseLongDebugInfoSwitch(parent);
@@ -1710,19 +1710,22 @@ namespace PasPasPas.Parsing.Parser {
             }
         }
 
-        private void ParseLongAssertSwitch(IExtendableSyntaxPart parent) {
-            var result = new AssertSwitch();
-            InitByTerminal(result, parent, TokenKind.AssertSwitchLong);
+        private AssertSwitch ParseLongAssertSwitch() {
+            var assert = ContinueWithOrMissing(TokenKind.AssertSwitchLong);
+            var mode = ContinueWith(TokenKind.On, TokenKind.Off);
+            var option = AssertionMode.Undefined;
 
-            if (ContinueWith(result, TokenKind.On)) {
-                result.Assertions = AssertionMode.EnableAssertions;
+            if (mode.GetSymbolKind() == TokenKind.On) {
+                option = AssertionMode.EnableAssertions;
             }
-            else if (ContinueWith(result, TokenKind.Off)) {
-                result.Assertions = AssertionMode.DisableAssertions;
+            else if (mode.GetSymbolKind() == TokenKind.Off) {
+                option = AssertionMode.DisableAssertions;
             }
-            else {
-                ErrorAndSkip(parent, CompilerDirectiveParserErrors.InvalidAssertDirective, new[] { TokenKind.On, TokenKind.Off });
+            else if (mode == default) {
+                mode = ErrorAndSkip(null, CompilerDirectiveParserErrors.InvalidAssertDirective, new int[] { TokenKind.On, TokenKind.Off });
             }
+
+            return new AssertSwitch(assert, mode, option);
         }
 
         private void ParseLongBoolEvalSwitch(IExtendableSyntaxPart parent) {
@@ -1793,9 +1796,10 @@ namespace PasPasPas.Parsing.Parser {
             if (Match(TokenKind.BoolEvalSwitch)) {
                 ParseBoolEvalSwitch(parent);
             }
-            else if (Match(TokenKind.AssertSwitch)) {
-                ParseAssertSwitch(parent);
-            }
+
+            if (Match(TokenKind.AssertSwitch))
+                return ParseAssertSwitch();
+
             else if (Match(TokenKind.DebugInfoOrDescriptionSwitch)) {
                 ParseDebugInfoOrDescriptionSwitch(parent);
             }
@@ -2295,19 +2299,22 @@ namespace PasPasPas.Parsing.Parser {
             }
         }
 
-        private void ParseAssertSwitch(IExtendableSyntaxPart parent) {
-            var result = new AssertSwitch();
-            InitByTerminal(result, parent, TokenKind.AssertSwitch);
+        private AssertSwitch ParseAssertSwitch() {
+            var assert = ContinueWithOrMissing(TokenKind.AssertSwitch);
+            var mode = ContinueWith(TokenKind.Plus, TokenKind.Minus);
+            var option = AssertionMode.Undefined;
 
-            if (ContinueWith(result, TokenKind.Plus)) {
-                result.Assertions = AssertionMode.EnableAssertions;
+            if (mode.GetSymbolKind() == TokenKind.Plus) {
+                option = AssertionMode.EnableAssertions;
             }
-            else if (ContinueWith(result, TokenKind.Minus)) {
-                result.Assertions = AssertionMode.DisableAssertions;
+            else if (mode.GetSymbolKind() == TokenKind.Minus) {
+                option = AssertionMode.DisableAssertions;
             }
-            else {
-                ErrorAndSkip(parent, CompilerDirectiveParserErrors.InvalidAssertDirective, new[] { TokenKind.Plus, TokenKind.Minus });
+            else if (mode == default) {
+                mode = ErrorAndSkip(null, CompilerDirectiveParserErrors.InvalidAssertDirective, new int[] { TokenKind.Plus, TokenKind.Minus });
             }
+
+            return new AssertSwitch(assert, mode, option);
         }
 
         private void ParseBoolEvalSwitch(IExtendableSyntaxPart parent) {

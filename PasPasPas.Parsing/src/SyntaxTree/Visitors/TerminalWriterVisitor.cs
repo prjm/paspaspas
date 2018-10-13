@@ -1,11 +1,11 @@
-﻿using System.Text;
+﻿using System.IO;
 
 namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
     /// <summary>
-    ///     visitor for terminal nodes
+    ///     visitor to write terminals to a stream
     /// </summary>
-    public class TerminalVisitor : IStartVisitor<Terminal> {
+    public class TerminalWriterVisitor : IStartVisitor<Terminal> {
 
         private readonly Visitor visitor;
 
@@ -19,8 +19,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     creates a new visitor
         /// </summary>
-        public TerminalVisitor()
-            => visitor = new Visitor(this);
+        public TerminalWriterVisitor(TextWriter result) {
+            visitor = new Visitor(this);
+            ResultBuilder = result;
+        }
 
         /// <summary>
         ///     get terminal string and append it to the result
@@ -29,21 +31,21 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         public void StartVisit(Terminal syntaxPart) {
             if (syntaxPart.Prefix != null)
                 foreach (var prefix in syntaxPart.Prefix)
-                    ResultBuilder.Append(prefix.Value);
+                    ResultBuilder.Write(prefix.Value);
 
-            ResultBuilder.Append(syntaxPart.Token.Value);
+            ResultBuilder.Write(syntaxPart.Token.Value);
 
             if (syntaxPart.Suffix != null)
                 foreach (var suffix in syntaxPart.Suffix)
-                    ResultBuilder.Append(suffix.Value);
+                    ResultBuilder.Write(suffix.Value);
 
         }
 
         /// <summary>
-        ///     result builder
+        ///     output
         /// </summary>
-        public StringBuilder ResultBuilder { get; }
-             = new StringBuilder();
+        public TextWriter ResultBuilder { get; }
+
 
     }
 }

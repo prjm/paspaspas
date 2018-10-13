@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
-using System.Text;
 using PasPasPas.Api;
 using PasPasPas.Parsing;
 
@@ -10,7 +10,7 @@ namespace SampleRunner.Scenarios {
 
     public static class BufferedTokenizeFile {
 
-        public static void Run(StringBuilder b, IParserEnvironment environment, string testPath, int reapeat) {
+        public static void Run(TextWriter b, IParserEnvironment environment, string testPath, int reapeat) {
             var registry = new Dictionary<int, Tuple<ulong, long>>();
 
             for (var i = 0; i < reapeat; i++) {
@@ -33,7 +33,7 @@ namespace SampleRunner.Scenarios {
             }
 
             foreach (var entry in registry.OrderByDescending(t => t.Value.Item2))
-                b.AppendLine($"{entry.Key.ToString(CultureInfo.InvariantCulture)} => {entry.Value.ToString()}");
+                b.WriteLine($"{entry.Key.ToString(CultureInfo.InvariantCulture)} => {entry.Value.ToString()}");
 
         }
     }

@@ -1,5 +1,6 @@
 ﻿using PasPasPas.Globals.Runtime;
 using PasPasPas.Infrastructure.Environment;
+using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.Tokenizer;
 using PasPasPas.Parsing.Tokenizer.LiteralValues;
 using PasPasPas.Parsing.Tokenizer.Patterns;
@@ -46,5 +47,9 @@ namespace PasPasPas.Parsing {
         /// </summary>
         PatternFactory Patterns { get; }
 
+        /// <summary>
+        ///     Terminal pool
+        /// </summary>
+        Terminals TerminalPool { get; }
     }
 }

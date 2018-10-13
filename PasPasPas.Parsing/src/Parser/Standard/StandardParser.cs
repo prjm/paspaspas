@@ -4866,7 +4866,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
             var builder = ListPools.GetImmutableArrayBuilder(list);
             for (var index = 0; index < list.Item.Count; index++)
                 builder.Add(list.Item[index]);
-            return builder.ToImmutable();
+            return builder.MoveToImmutable();
         }
 
         /// <summary>

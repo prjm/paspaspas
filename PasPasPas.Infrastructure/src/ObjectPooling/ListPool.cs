@@ -70,6 +70,16 @@ namespace PasPasPas.Infrastructure.ObjectPooling {
         public static ImmutableArray<T>.Builder GetImmutableArrayBuilder<T>(PoolItem<List<T>> list) where T : class
             => ImmutableArray.CreateBuilder<T>(list.Item.Count);
 
+        /// <summary>
+        ///     get an immutable array builder
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="queue"></param>
+        /// <returns></returns>
+        public static ImmutableArray<T>.Builder GetImmutableArrayBuilder<T>(Queue<T> queue)
+            => ImmutableArray.CreateBuilder<T>(queue.Count);
+
+
     }
 
 }
