@@ -6,11 +6,24 @@ namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
     ///     compiler directive to undefine a symbol
     /// </summary>
     public class UnDefineSymbol : CompilerDirectiveBase {
+        private readonly Terminal symbol;
+        private Terminal conditional;
 
         /// <summary>
-        ///     unddefined symbol name
+        ///     undefine directive
         /// </summary>
-        public string SymbolName { get; set; }
+        /// <param name="symbol"></param>
+        /// <param name="conditional"></param>
+        public UnDefineSymbol(Terminal symbol, Terminal conditional) {
+            this.symbol = symbol;
+            this.conditional = conditional;
+        }
+
+        /// <summary>
+        ///     undefined symbol name
+        /// </summary>
+        public string SymbolName
+            => conditional.Value;
 
         /// <summary>
         ///     accept visitor
@@ -18,7 +31,8 @@ namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
         /// <param name="visitor">node visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
-            AcceptParts(this, visitor);
+            AcceptPart(this, symbol, visitor);
+            AcceptPart(this, conditional, visitor);
             visitor.EndVisit(this);
         }
 

@@ -380,6 +380,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (!CanVisit(syntaxPart))
                 return;
 
+            if (syntaxPart.Identifier.GetSymbolKind() != TokenKind.Identifier)
+                return;
+
             Meta.RegisterExternalSymbol(syntaxPart.IdentifierName, syntaxPart.SymbolName, syntaxPart.UnionName);
         }
 

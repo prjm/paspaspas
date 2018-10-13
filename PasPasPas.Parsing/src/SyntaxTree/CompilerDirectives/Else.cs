@@ -6,6 +6,14 @@ namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
     ///     syntax part for else conditions
     /// </summary>
     public class ElseDirective : CompilerDirectiveBase {
+        private readonly Terminal symbol;
+
+        /// <summary>
+        ///     else directive
+        /// </summary>
+        /// <param name="elseCd"></param>
+        public ElseDirective(Terminal elseCd)
+            => symbol = elseCd;
 
         /// <summary>
         ///     accept visitor
@@ -13,7 +21,7 @@ namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
         /// <param name="visitor">node visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
-            AcceptParts(this, visitor);
+            AcceptPart(this, symbol, visitor);
             visitor.EndVisit(this);
         }
 

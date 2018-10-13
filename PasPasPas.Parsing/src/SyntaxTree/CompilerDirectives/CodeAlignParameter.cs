@@ -7,11 +7,25 @@ namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
     ///     code align parameter
     /// </summary>
     public class CodeAlignParameter : CompilerDirectiveBase {
+        private readonly Terminal directive;
+        private readonly Terminal alignValue;
+
+        /// <summary>
+        ///     create  new code align directive
+        /// </summary>
+        /// <param name="symbol"></param>
+        /// <param name="value"></param>
+        /// <param name="codeAlign"></param>
+        public CodeAlignParameter(Terminal symbol, Terminal value, CodeAlignment codeAlign) {
+            directive = symbol;
+            alignValue = value;
+            CodeAlign = codeAlign;
+        }
 
         /// <summary>
         ///     code align mode
         /// </summary>
-        public CodeAlignment CodeAlign { get; set; }
+        public CodeAlignment CodeAlign { get; }
 
         /// <summary>
         ///     accept visitor
@@ -19,7 +33,8 @@ namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
         /// <param name="visitor">node visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
-            AcceptParts(this, visitor);
+            AcceptPart(this, directive, visitor);
+            AcceptPart(this, alignValue, visitor);
             visitor.EndVisit(this);
         }
     }

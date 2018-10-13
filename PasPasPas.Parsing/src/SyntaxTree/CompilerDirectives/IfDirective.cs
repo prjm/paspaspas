@@ -6,6 +6,14 @@ namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
     ///     <c>$IF</c> directive
     /// </summary>
     public class IfDirective : CompilerDirectiveBase {
+        private readonly Terminal terminal;
+
+        /// <summary>
+        ///     create a new if directive
+        /// </summary>
+        /// <param name="symbol"></param>
+        public IfDirective(Terminal symbol)
+            => terminal = symbol;
 
         /// <summary>
         ///     accept visitor
@@ -13,7 +21,7 @@ namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
         /// <param name="visitor">node visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
-            AcceptParts(this, visitor);
+            AcceptPart(this, terminal, visitor);
             visitor.EndVisit(this);
         }
 

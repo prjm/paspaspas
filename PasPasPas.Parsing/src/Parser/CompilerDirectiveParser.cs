@@ -188,47 +188,46 @@ namespace PasPasPas.Parsing.Parser {
         private ISyntaxPart ParseParameter() {
             IExtendableSyntaxPart parent = new CompilerDirective();
 
-            if (Match(TokenKind.IfDef)) {
-                return ParseIfDef(parent);
-            }
-            else if (Match(TokenKind.IfOpt)) {
-                ParseIfOpt(parent);
-            }
-            else if (Match(TokenKind.EndIf)) {
-                ParseEndIf(parent);
-            }
-            else if (Match(TokenKind.IfEnd)) {
-                ParseIfEnd(parent);
-            }
-            else if (Match(TokenKind.ElseCd)) {
-                return ParseElse(parent);
-            }
-            else if (Match(TokenKind.ElseIf)) {
-                return ParseElseIf(parent);
-            }
-            else if (Match(TokenKind.IfNDef)) {
-                ParseIfNDef(parent);
-            }
-            else if (Match(TokenKind.IfCd)) {
-                ParseIf(parent);
-            }
+            if (Match(TokenKind.IfDef))
+                return ParseIfDef();
+
+            if (Match(TokenKind.IfOpt))
+                return ParseIfOpt();
+
+            if (Match(TokenKind.EndIf))
+                return ParseEndIf();
+
+            if (Match(TokenKind.IfEnd))
+                return ParseIfEnd();
+
+            if (Match(TokenKind.ElseCd))
+                return ParseElse();
+
+            if (Match(TokenKind.ElseIf))
+                return ParseElseIf();
+
+            if (Match(TokenKind.IfNDef))
+                return ParseIfNDef();
+
+            if (Match(TokenKind.IfCd))
+                return ParseIf();
 
             if (Match(TokenKind.Apptype))
                 return ParseApptypeParameter();
 
-            else if (Match(TokenKind.CodeAlign)) {
-                ParseCodeAlignParameter(parent);
-            }
-            else if (Match(TokenKind.Define)) {
-                ParseDefine(parent);
-            }
-            else if (Match(TokenKind.Undef)) {
-                ParseUndef(parent);
-            }
-            else if (Match(TokenKind.ExternalSym)) {
-                ParseExternalSym(parent);
-            }
-            else if (Match(TokenKind.HppEmit)) {
+            if (Match(TokenKind.CodeAlign))
+                return ParseCodeAlignParameter();
+
+            if (Match(TokenKind.Define))
+                return ParseDefine();
+
+            if (Match(TokenKind.Undef))
+                return ParseUndef();
+
+            if (Match(TokenKind.ExternalSym))
+                return ParseExternalSym();
+
+            if (Match(TokenKind.HppEmit)) {
                 ParseHppEmit(parent);
             }
             else if (Match(TokenKind.ImageBase)) {
@@ -277,25 +276,15 @@ namespace PasPasPas.Parsing.Parser {
             return parent;
         }
 
-        private void ParseIfOpt(IExtendableSyntaxPart parent) {
-            var result = new IfOpt();
-            InitByTerminal(result, parent, TokenKind.IfOpt);
+        private IfOpt ParseIfOpt() {
+            var ifOpt = ContinueWithOrMissing(TokenKind.IfOpt);
+            var switchKind = ContinueWithOrMissing(TokenKind.Identifier);
+            var mode = ContinueWith(TokenKind.Plus, TokenKind.Minus);
 
-            if (!ContinueWith(result, TokenKind.Identifier)) {
-                return;
-            }
-
-            result.SwitchKind = result.LastTerminalValue;
-            result.SwitchInfo = Options.GetSwitchInfo(result.LastTerminalValue);
-
-            if (!ContinueWith(result, TokenKind.Plus, TokenKind.Minus)) {
-                return;
-            }
-
-            result.SwitchState = GetSwitchInfo(result.LastTerminalKind);
+            return new IfOpt(ifOpt, switchKind, mode, Options.GetSwitchInfo(switchKind?.Value));
         }
 
-        private static SwitchInfo GetSwitchInfo(int switchState) {
+        public static SwitchInfo GetSwitchInfo(int switchState) {
             if (switchState == TokenKind.Plus)
                 return SwitchInfo.Enabled;
             if (switchState == TokenKind.Minus)
@@ -683,22 +672,18 @@ namespace PasPasPas.Parsing.Parser {
             }
         }
 
-        private void ParseIf(IExtendableSyntaxPart parent) {
-            var result = new IfDirective();
-            InitByTerminal(result, parent, TokenKind.IfCd);
-        }
+        private IfDirective ParseIf()
+            => new IfDirective(ContinueWithOrMissing(TokenKind.IfCd));
 
-        private void ParseIfNDef(IExtendableSyntaxPart parent) {
-            var result = new IfDef();
-            InitByTerminal(result, parent, TokenKind.IfNDef);
-            result.Negate = true;
+        private IfDef ParseIfNDef() {
+            var symbol = ContinueWithOrMissing(TokenKind.IfNDef);
+            var conditional = ContinueWith(TokenKind.Identifier);
 
-            if (ContinueWith(result, TokenKind.Identifier)) {
-                result.SymbolName = result.LastTerminalValue;
+            if (conditional == default) {
+                conditional = ErrorAndSkip(null, CompilerDirectiveParserErrors.InvalidIfNDefDirective, new[] { TokenKind.Identifier });
             }
-            else {
-                ErrorAndSkip(parent, CompilerDirectiveParserErrors.InvalidIfNDefDirective, new[] { TokenKind.Identifier });
-            }
+
+            return new IfDef(symbol, true, conditional);
         }
 
         private void ParseHppEmit(IExtendableSyntaxPart parent) {
@@ -728,114 +713,102 @@ namespace PasPasPas.Parsing.Parser {
             }
         }
 
-        private void ParseExternalSym(IExtendableSyntaxPart parent) {
-            var result = new ExternalSymbolDeclaration();
-            InitByTerminal(result, parent, TokenKind.ExternalSym);
+        private ExternalSymbolDeclaration ParseExternalSym() {
+            var symbol = ContinueWithOrMissing(TokenKind.ExternalSym);
+            var identifier = ContinueWith(TokenKind.Identifier);
+            var symbolName = ContinueWith(TokenKind.QuotedString);
+            var unionName = ContinueWith(TokenKind.QuotedString);
 
-            if (!ContinueWith(result, TokenKind.Identifier)) {
-                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidExternalSymbolDirective, new[] { TokenKind.Identifier });
-                return;
+            if (identifier == default) {
+                identifier = ErrorAndSkip(null, CompilerDirectiveParserErrors.InvalidExternalSymbolDirective, new[] { TokenKind.Identifier });
             }
 
-            result.IdentifierName = result.LastTerminalValue;
-
-            if (ContinueWith(result, TokenKind.QuotedString)) {
-                result.SymbolName = result.LastTerminalValue;
-            }
-
-            if (ContinueWith(result, TokenKind.QuotedString)) {
-                result.UnionName = result.LastTerminalValue;
-            }
+            return new ExternalSymbolDeclaration(symbol, identifier, symbolName, unionName);
         }
 
-        private ElseDirective ParseElse(IExtendableSyntaxPart parent) {
-            var result = new ElseDirective();
-            InitByTerminal(result, parent, TokenKind.ElseCd);
-            return result;
-        }
+        private ElseDirective ParseElse()
+            => new ElseDirective(ContinueWithOrMissing(TokenKind.ElseCd));
 
-        private ElseIfDirective ParseElseIf(IExtendableSyntaxPart parent) {
-            var result = new ElseIfDirective();
-            InitByTerminal(result, parent, TokenKind.ElseIf);
-            return result;
-        }
+        private ElseIfDirective ParseElseIf()
+            => new ElseIfDirective(ContinueWithOrMissing(TokenKind.ElseIf));
 
-        private void ParseEndIf(IExtendableSyntaxPart parent) {
-            var result = new EndIf();
-            InitByTerminal(result, parent, TokenKind.EndIf);
-        }
+        private EndIf ParseEndIf()
+            => new EndIf(ContinueWithOrMissing(TokenKind.EndIf));
 
-        private void ParseIfEnd(IExtendableSyntaxPart parent) {
-            var result = new EndIf();
-            InitByTerminal(result, parent, TokenKind.IfEnd);
-        }
+        private EndIf ParseIfEnd()
+            => new EndIf(ContinueWithOrMissing(TokenKind.EndIf));
 
-        private IfDef ParseIfDef(IExtendableSyntaxPart parent) {
-            var result = new IfDef();
-            InitByTerminal(result, parent, TokenKind.IfDef);
+        private IfDef ParseIfDef() {
+            var ifDef = ContinueWithOrMissing(TokenKind.IfDef);
+            var conditional = ContinueWith(TokenKind.Identifier);
 
-            if (ContinueWith(result, TokenKind.Identifier)) {
-                result.SymbolName = result.LastTerminalValue;
-            }
-            else {
-                ErrorAndSkip(parent, CompilerDirectiveParserErrors.InvalidIfDefDirective, new[] { TokenKind.Identifier });
+            if (conditional == default) {
+                conditional = ErrorAndSkip(null, CompilerDirectiveParserErrors.InvalidIfDefDirective, new[] { TokenKind.Identifier });
             }
 
-            return result;
+            return new IfDef(ifDef, false, conditional);
         }
 
-        private void ParseUndef(IExtendableSyntaxPart parent) {
-            var result = new UnDefineSymbol();
-            InitByTerminal(result, parent, TokenKind.Undef);
+        private UnDefineSymbol ParseUndef() {
+            var symbol = ContinueWith(TokenKind.Undef);
+            var conditional = ContinueWith(TokenKind.Identifier);
 
-            if (ContinueWith(result, TokenKind.Identifier)) {
-                result.SymbolName = result.LastTerminalValue;
+            if (conditional == default) {
+                conditional = ErrorAndSkip(null, CompilerDirectiveParserErrors.InvalidUnDefineDirective, new[] { TokenKind.Identifier });
             }
-            else {
-                ErrorAndSkip(parent, CompilerDirectiveParserErrors.InvalidUnDefineDirective, new[] { TokenKind.Identifier });
-            }
+
+            return new UnDefineSymbol(symbol, conditional);
         }
 
-        private void ParseDefine(IExtendableSyntaxPart parent) {
-            var result = new DefineSymbol();
-            InitByTerminal(result, parent, TokenKind.Define);
+        private DefineSymbol ParseDefine() {
+            var symbol = ContinueWithOrMissing(TokenKind.Define);
+            var name = ContinueWith(TokenKind.Identifier);
 
-            if (ContinueWith(result, TokenKind.Identifier)) {
-                result.SymbolName = result.LastTerminalValue;
-            }
-            else {
-                ErrorAndSkip(parent, CompilerDirectiveParserErrors.InvalidDefineDirective, new[] { TokenKind.Identifier });
-            }
+            if (name == default)
+                name = ErrorAndSkip(null, CompilerDirectiveParserErrors.InvalidDefineDirective, new[] { TokenKind.Identifier });
+
+            return new DefineSymbol(symbol, name);
         }
 
-        private void ParseCodeAlignParameter(IExtendableSyntaxPart parent) {
-            var result = new CodeAlignParameter();
-            InitByTerminal(result, parent, TokenKind.CodeAlign);
+        private CodeAlignParameter ParseCodeAlignParameter() {
+            var symbol = ContinueWithOrMissing(TokenKind.CodeAlign);
+            var value = ContinueWith(TokenKind.Integer);
+            var codeAlign = CodeAlignment.Undefined;
 
-            if (ContinueWith(result, TokenKind.Integer) && int.TryParse(result.LastTerminalValue, out var value)) {
-                switch (value) {
+            if (value != default && value.Token.ParsedValue is IIntegerValue intValue) {
+                switch (intValue.SignedValue) {
+
                     case 1:
-                        result.CodeAlign = CodeAlignment.OneByte;
-                        return;
+                        codeAlign = CodeAlignment.OneByte;
+                        break;
+
                     case 2:
-                        result.CodeAlign = CodeAlignment.TwoByte;
-                        return;
+                        codeAlign = CodeAlignment.TwoByte;
+                        break;
+
                     case 4:
-                        result.CodeAlign = CodeAlignment.FourByte;
-                        return;
+                        codeAlign = CodeAlignment.FourByte;
+                        break;
+
                     case 8:
-                        result.CodeAlign = CodeAlignment.EightByte;
-                        return;
+                        codeAlign = CodeAlignment.EightByte;
+                        break;
+
                     case 16:
-                        result.CodeAlign = CodeAlignment.SixteenByte;
-                        return;
+                        codeAlign = CodeAlignment.SixteenByte;
+                        break;
+
+                    default:
+                        ErrorLastPart(null, CompilerDirectiveParserErrors.InvalidCodeAlignDirective, value);
+                        break;
                 }
 
-                ErrorLastPart(result, CompilerDirectiveParserErrors.InvalidCodeAlignDirective, result.LastTerminalValue);
-                return;
+            }
+            else {
+                value = ErrorAndSkip(null, CompilerDirectiveParserErrors.InvalidCodeAlignDirective, new[] { TokenKind.Integer });
             }
 
-            ErrorAndSkip(parent, CompilerDirectiveParserErrors.InvalidCodeAlignDirective, new[] { TokenKind.Integer });
+            return new CodeAlignParameter(symbol, value, codeAlign);
         }
 
         /// <summary>

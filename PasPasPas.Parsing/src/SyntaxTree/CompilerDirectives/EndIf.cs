@@ -6,6 +6,14 @@ namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
     ///     end of conditional compilation
     /// </summary>
     public class EndIf : CompilerDirectiveBase {
+        private readonly Terminal symbol;
+
+        /// <summary>
+        ///     end if symbol
+        /// </summary>
+        /// <param name="terminal"></param>
+        public EndIf(Terminal terminal)
+            => symbol = terminal;
 
         /// <summary>
         ///     accept visitor
@@ -13,7 +21,7 @@ namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
         /// <param name="visitor">node visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
-            AcceptParts(this, visitor);
+            AcceptPart(this, symbol, visitor);
             visitor.EndVisit(this);
         }
     }

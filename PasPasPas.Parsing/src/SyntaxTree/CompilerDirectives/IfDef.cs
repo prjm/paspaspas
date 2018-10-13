@@ -3,19 +3,42 @@
 namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
 
     /// <summary>
-    ///     conditial compilation directive (ifdef)
+    ///     conditional compilation directive (if-def)
     /// </summary>
     public class IfDef : CompilerDirectiveBase {
 
         /// <summary>
-        ///     inverts the the check for the symbol ("ifndef")
+        ///     create a new ifdef symbol
         /// </summary>
-        public bool Negate { get; set; }
+        /// <param name="symbol"></param>
+        /// <param name="negate"></param>
+        /// <param name="conditional"></param>
+        public IfDef(Terminal symbol, bool negate, Terminal conditional) {
+            Symbol = symbol;
+            Negate = negate;
+            Conditional = conditional;
+        }
+
+        /// <summary>
+        ///     symbol
+        /// </summary>
+        public Terminal Symbol { get; }
+
+        /// <summary>
+        ///     inverts the  check for the symbol ("ifndef")
+        /// </summary>
+        public bool Negate { get; }
+
+        /// <summary>
+        ///     conditional
+        /// </summary>
+        public Terminal Conditional { get; }
 
         /// <summary>
         ///     symbol to check
         /// </summary>
-        public string SymbolName { get; set; }
+        public string SymbolName
+            => Conditional?.Value;
 
         /// <summary>
         ///     accept visitor
@@ -23,7 +46,8 @@ namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
         /// <param name="visitor">node visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
-            AcceptParts(this, visitor);
+            AcceptPart(this, Symbol, visitor);
+            AcceptPart(this, Conditional, visitor);
             visitor.EndVisit(this);
         }
     }
