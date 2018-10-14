@@ -8,19 +8,45 @@ namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
     public class LibInfo : CompilerDirectiveBase {
 
         /// <summary>
+        ///     create a new lib directive
+        /// </summary>
+        /// <param name="symbol"></param>
+        /// <param name="libParam"></param>
+        /// <param name="libPrefix"></param>
+        /// <param name="libSuffix"></param>
+        /// <param name="libVersion"></param>
+        public LibInfo(Terminal symbol, Terminal libParam, string libPrefix, string libSuffix, string libVersion) {
+            Symbol = symbol;
+            LibParam = libParam;
+            LibPrefix = libPrefix;
+            LibSuffix = libSuffix;
+            LibVersion = libVersion;
+        }
+
+        /// <summary>
         ///     prefix
         /// </summary>
-        public string LibPrefix { get; set; }
+        public string LibPrefix { get; }
 
         /// <summary>
         ///     suffix
         /// </summary>
-        public string LibSuffix { get; set; }
+        public string LibSuffix { get; }
 
         /// <summary>
         ///     version
         /// </summary>
-        public string LibVersion { get; set; }
+        public string LibVersion { get; }
+
+        /// <summary>
+        ///     symbol
+        /// </summary>
+        public Terminal Symbol { get; }
+
+        /// <summary>
+        ///     parameter
+        /// </summary>
+        public Terminal LibParam { get; }
 
         /// <summary>
         ///     accept visitor
@@ -28,7 +54,8 @@ namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
         /// <param name="visitor">node visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
-            AcceptParts(this, visitor);
+            AcceptPart(this, Symbol, visitor);
+            AcceptPart(this, LibParam, visitor);
             visitor.EndVisit(this);
         }
 

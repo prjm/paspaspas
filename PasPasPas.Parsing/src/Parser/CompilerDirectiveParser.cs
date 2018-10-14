@@ -227,19 +227,19 @@ namespace PasPasPas.Parsing.Parser {
             if (Match(TokenKind.ExternalSym))
                 return ParseExternalSym();
 
-            if (Match(TokenKind.HppEmit)) {
-                ParseHppEmit(parent);
-            }
-            else if (Match(TokenKind.ImageBase)) {
-                ParseImageBase(parent);
-            }
-            else if (Match(TokenKind.LibPrefix, TokenKind.LibSuffix, TokenKind.LibVersion)) {
-                ParseLibParameter(parent);
-            }
-            else if (Match(TokenKind.Warn)) {
-                ParseWarnParameter(parent);
-            }
-            else if (Match(TokenKind.Rtti)) {
+            if (Match(TokenKind.HppEmit))
+                return ParseHppEmit();
+
+            if (Match(TokenKind.ImageBase))
+                return ParseImageBase();
+
+            if (Match(TokenKind.LibPrefix, TokenKind.LibSuffix, TokenKind.LibVersion))
+                return ParseLibParameter();
+
+            if (Match(TokenKind.Warn))
+                return ParseWarnParameter();
+
+            if (Match(TokenKind.Rtti)) {
                 ParseRttiParameter(parent);
             }
             else if (Match(TokenKind.Region)) {
@@ -581,27 +581,33 @@ namespace PasPasPas.Parsing.Parser {
             return visibility;
         }
 
-        private void ParseWarnParameter(IExtendableSyntaxPart parent) {
-            var result = new WarnSwitch();
-            InitByTerminal(result, parent, TokenKind.Warn);
+        private WarnSwitch ParseWarnParameter() {
+            var symbol = ContinueWithOrMissing(TokenKind.Warn);
+            var id = ContinueWith(TokenKind.Identifier);
+            var warningType = default(string);
+            var warningMode = default(Terminal);
+            var invalid = false;
 
-            if (!ContinueWith(result, TokenKind.Identifier)) {
-                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidWarnDirective, new[] { TokenKind.Identifier });
-                return;
+            if (id == default) {
+                invalid = true;
+                id = ErrorAndSkip(null, CompilerDirectiveParserErrors.InvalidWarnDirective, new[] { TokenKind.Identifier });
+            }
+            else {
+                warningType = id.Token.Value;
             }
 
-            var warningType = result.LastTerminalValue;
-            var warningModes = new[] { TokenKind.On, TokenKind.Off, TokenKind.Error, TokenKind.Default };
+            warningMode = ContinueWith(TokenKind.On, TokenKind.Off, TokenKind.Error, TokenKind.Default);
 
-            if (!ContinueWith(result, TokenKind.On, TokenKind.Off, TokenKind.Error, TokenKind.Default)) {
-                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidWarnDirective, warningModes);
-                return;
+            if (warningMode == default) {
+                if (!invalid)
+                    warningMode = ErrorAndSkip(null, CompilerDirectiveParserErrors.InvalidWarnDirective, new[] { TokenKind.On, TokenKind.Off, TokenKind.Error, TokenKind.Default });
+                invalid = true;
             }
 
-            var warningMode = result.LastTerminalKind;
+            var warningKind = warningMode.GetSymbolKind();
             var parsedMode = WarningMode.Undefined;
 
-            switch (warningMode) {
+            switch (warningKind) {
                 case TokenKind.On:
                     parsedMode = WarningMode.On;
                     break;
@@ -620,56 +626,67 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             if (parsedMode != WarningMode.Undefined && Options.Warnings.HasWarningIdent(warningType)) {
-                result.WarningType = warningType;
-                result.Mode = parsedMode;
+                //..
             }
             else {
-                result.WarningType = null;
-                result.Mode = WarningMode.Undefined;
-                ErrorLastPart(result, CompilerDirectiveParserErrors.InvalidWarnDirective, Array.Empty<object>());
+                warningType = null;
+                parsedMode = WarningMode.Undefined;
+                if (!invalid)
+                    ErrorLastPart(null, CompilerDirectiveParserErrors.InvalidWarnDirective, Array.Empty<object>());
             }
+
+            return new WarnSwitch(symbol, id, warningMode, warningType, parsedMode);
         }
 
-        private void ParseLibParameter(IExtendableSyntaxPart parent) {
-            var result = new LibInfo();
-            InitByTerminal(result, parent, TokenKind.LibPrefix, TokenKind.LibSuffix, TokenKind.LibVersion);
-            var kind = result.LastTerminalKind;
+        private LibInfo ParseLibParameter() {
+            var symbol = ContinueWithOrMissing(TokenKind.LibPrefix, TokenKind.LibSuffix, TokenKind.LibVersion);
+            var kind = symbol.GetSymbolKind();
+            var libParam = ContinueWith(TokenKind.QuotedString);
+            var libInfo = default(string);
+            var libPrefix = default(string);
+            var libSuffix = default(string);
+            var libVersion = default(string);
 
-            if (!ContinueWith(result, TokenKind.QuotedString) || !(result.LastTerminalToken.ParsedValue is IStringValue libInfoValue)) {
-                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidLibDirective, new[] { TokenKind.QuotedString });
-                return;
+            if (libParam == default || !(libParam.Token.ParsedValue is IStringValue libInfoValue)) {
+                libParam = ErrorAndSkip(null, CompilerDirectiveParserErrors.InvalidLibDirective, new[] { TokenKind.QuotedString });
             }
-
-            var libInfo = libInfoValue.AsUnicodeString;
+            else {
+                libInfo = libInfoValue.AsUnicodeString;
+            }
 
             switch (kind) {
                 case TokenKind.LibPrefix:
-                    result.LibPrefix = libInfo;
+                    libPrefix = libInfo;
                     break;
 
                 case TokenKind.LibSuffix:
-                    result.LibSuffix = libInfo;
+                    libSuffix = libInfo;
                     break;
 
                 case TokenKind.LibVersion:
-                    result.LibVersion = libInfo;
+                    libVersion = libInfo;
                     break;
             }
+
+            return new LibInfo(symbol, libParam, libPrefix, libSuffix, libVersion);
         }
 
-        private void ParseImageBase(IExtendableSyntaxPart parent) {
-            var result = new ImageBase();
-            InitByTerminal(result, parent, TokenKind.ImageBase);
+        private ImageBase ParseImageBase() {
+            var symbol = ContinueWithOrMissing(TokenKind.ImageBase);
+            var value = ContinueWith(TokenKind.Integer, TokenKind.HexNumber);
+            var baseValue = 0ul;
 
-            if (ContinueWith(result, TokenKind.Integer) || ContinueWith(result, TokenKind.HexNumber)) {
-                if (result.LastTerminalToken.ParsedValue is IIntegerValue hexValue && !hexValue.IsNegative)
-                    result.BaseValue = hexValue.UnsignedValue;
+            if (value != default) {
+                if (value.Token.ParsedValue is IIntegerValue hexValue && !hexValue.IsNegative)
+                    baseValue = hexValue.UnsignedValue;
                 else
-                    ErrorLastPart(parent, CompilerDirectiveParserErrors.InvalidImageBaseDirective, new[] { TokenKind.Integer, TokenKind.HexNumber });
+                    ErrorLastPart(null, CompilerDirectiveParserErrors.InvalidImageBaseDirective, new[] { TokenKind.Integer, TokenKind.HexNumber });
             }
             else {
-                ErrorAndSkip(parent, CompilerDirectiveParserErrors.InvalidImageBaseDirective, new[] { TokenKind.Integer, TokenKind.HexNumber });
+                value = ErrorAndSkip(null, CompilerDirectiveParserErrors.InvalidImageBaseDirective, new[] { TokenKind.Integer, TokenKind.HexNumber });
             }
+
+            return new ImageBase(symbol, value, baseValue);
         }
 
         private IfDirective ParseIf()
@@ -686,31 +703,32 @@ namespace PasPasPas.Parsing.Parser {
             return new IfDef(symbol, true, conditional);
         }
 
-        private void ParseHppEmit(IExtendableSyntaxPart parent) {
-            var result = new HppEmit();
-            InitByTerminal(result, parent, TokenKind.HppEmit);
-            result.Mode = HppEmitMode.Standard;
+        private HppEmit ParseHppEmit() {
+            var symbol = ContinueWithOrMissing(TokenKind.HppEmit);
+            var mode = HppEmitMode.Standard;
+            var modeSymbol = ContinueWith(TokenKind.End, TokenKind.LinkUnit, TokenKind.OpenNamespace, TokenKind.CloseNamepsace, TokenKind.NoUsingNamespace);
+            var modeValue = default(Terminal);
 
-            if (ContinueWith(result, TokenKind.End))
-                result.Mode = HppEmitMode.AtEnd;
-            else if (ContinueWith(result, TokenKind.LinkUnit))
-                result.Mode = HppEmitMode.LinkUnit;
-            else if (ContinueWith(result, TokenKind.OpenNamespace))
-                result.Mode = HppEmitMode.OpenNamespace;
-            else if (ContinueWith(result, TokenKind.CloseNamepsace))
-                result.Mode = HppEmitMode.CloseNamespace;
-            else if (ContinueWith(result, TokenKind.NoUsingNamespace))
-                result.Mode = HppEmitMode.NoUsingNamespace;
+            if (modeSymbol.GetSymbolKind() == TokenKind.End)
+                mode = HppEmitMode.AtEnd;
+            else if (modeSymbol.GetSymbolKind() == TokenKind.LinkUnit)
+                mode = HppEmitMode.LinkUnit;
+            else if (modeSymbol.GetSymbolKind() == TokenKind.OpenNamespace)
+                mode = HppEmitMode.OpenNamespace;
+            else if (modeSymbol.GetSymbolKind() == TokenKind.CloseNamepsace)
+                mode = HppEmitMode.CloseNamespace;
+            else if (modeSymbol.GetSymbolKind() == TokenKind.NoUsingNamespace)
+                mode = HppEmitMode.NoUsingNamespace;
 
-            if (result.Mode == HppEmitMode.AtEnd || result.Mode == HppEmitMode.Standard) {
-                if (ContinueWith(result, TokenKind.QuotedString)) {
-                    result.EmitValue = result.LastTerminalValue;
-                }
-                else {
-                    result.Mode = HppEmitMode.Undefined;
-                    ErrorAndSkip(parent, CompilerDirectiveParserErrors.InvalidHppEmitDirective, new[] { TokenKind.QuotedString });
+            if (mode == HppEmitMode.AtEnd || mode == HppEmitMode.Standard) {
+                modeValue = ContinueWith(TokenKind.QuotedString);
+                if (modeValue == default) {
+                    mode = HppEmitMode.Undefined;
+                    modeValue = ErrorAndSkip(null, CompilerDirectiveParserErrors.InvalidHppEmitDirective, new[] { TokenKind.QuotedString });
                 }
             }
+
+            return new HppEmit(symbol, modeSymbol, modeValue, mode);
         }
 
         private ExternalSymbolDeclaration ParseExternalSym() {

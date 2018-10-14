@@ -422,7 +422,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
 
         /// <summary>
-        ///     c++ header mit
+        ///     c++ header emit
         /// </summary>
         /// <param name="syntaxPart"></param>
         public void StartVisit(HppEmit syntaxPart) {
