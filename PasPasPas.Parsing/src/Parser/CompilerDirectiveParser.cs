@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Infrastructure.Files;
 using PasPasPas.Infrastructure.Log;
@@ -63,7 +64,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <summary>
         ///     supported switches
         /// </summary>
-        private static HashSet<int> switches
+        private static readonly HashSet<int> switches
             = new HashSet<int>() {
                 TokenKind.AlignSwitch, TokenKind.AlignSwitch1,TokenKind.AlignSwitch2,TokenKind.AlignSwitch4,TokenKind.AlignSwitch8,TokenKind.AlignSwitch16, /* A */
                 TokenKind.BoolEvalSwitch, /* B */
@@ -96,7 +97,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <summary>
         ///     supported long switches
         /// </summary>
-        private static HashSet<int> longSwitches
+        private static readonly HashSet<int> longSwitches
             = new HashSet<int>() {
                 TokenKind.AlignSwitchLong,
                 TokenKind.BoolEvalSwitchLong,
@@ -150,7 +151,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <summary>
         ///     supported parameters and directives
         /// </summary>
-        private static HashSet<int> parameters
+        private static readonly HashSet<int> parameters
             = new HashSet<int>() {
                 TokenKind.Apptype,
                 TokenKind.CodeAlign,
@@ -239,25 +240,25 @@ namespace PasPasPas.Parsing.Parser {
             if (Match(TokenKind.Warn))
                 return ParseWarnParameter();
 
-            if (Match(TokenKind.Rtti)) {
-                ParseRttiParameter(parent);
-            }
-            else if (Match(TokenKind.Region)) {
-                ParseRegion(parent);
-            }
-            else if (Match(TokenKind.EndRegion)) {
-                ParseEndRegion(parent);
-            }
-            else if (Match(TokenKind.SetPEOsVersion)) {
-                ParsePEOsVersion(parent);
-            }
-            else if (Match(TokenKind.SetPESubsystemVersion)) {
-                ParsePESubsystemVersion(parent);
-            }
-            else if (Match(TokenKind.SetPEUserVersion)) {
-                ParsePEUserVersion(parent);
-            }
-            else if (Match(TokenKind.ObjTypeName)) {
+            if (Match(TokenKind.Rtti))
+                return ParseRttiParameter();
+
+            if (Match(TokenKind.Region))
+                return ParseRegion();
+
+            if (Match(TokenKind.EndRegion))
+                return ParseEndRegion();
+
+            if (Match(TokenKind.SetPEOsVersion))
+                return ParsePEOsVersion();
+
+            if (Match(TokenKind.SetPESubsystemVersion))
+                return ParsePESubsystemVersion();
+
+            if (Match(TokenKind.SetPEUserVersion))
+                return ParsePEUserVersion();
+
+            if (Match(TokenKind.ObjTypeName)) {
                 ParseObjTypeNameSwitch(parent);
             }
             else if (Match(TokenKind.NoInclude)) {
@@ -405,180 +406,158 @@ namespace PasPasPas.Parsing.Parser {
             result.UnitName = result.LastTerminalValue;
         }
 
-        private void ParsePEUserVersion(IExtendableSyntaxPart parent) {
-            var result = new ParsedVersion();
-            InitByTerminal(result, parent, TokenKind.SetPEUserVersion);
-            result.Kind = TokenKind.SetPEUserVersion;
-            ParsePEVersion(result);
+        private ParsedVersion ParsePEUserVersion() {
+            var symbol = ContinueWithOrMissing(TokenKind.SetPEUserVersion);
+            return ParsePEVersion(symbol);
         }
 
-        private void ParsePESubsystemVersion(IExtendableSyntaxPart parent) {
-            var result = new ParsedVersion();
-            InitByTerminal(result, parent, TokenKind.SetPESubsystemVersion);
-            result.Kind = TokenKind.SetPESubsystemVersion;
-            ParsePEVersion(result);
+        private ParsedVersion ParsePESubsystemVersion() {
+            var symbol = ContinueWithOrMissing(TokenKind.SetPESubsystemVersion);
+            return ParsePEVersion(symbol);
         }
 
-        private void ParsePEOsVersion(IExtendableSyntaxPart parent) {
-            var result = new ParsedVersion();
-            InitByTerminal(result, parent, TokenKind.SetPEOsVersion);
-            result.Kind = TokenKind.SetPEOsVersion;
-            ParsePEVersion(result);
+        private ParsedVersion ParsePEOsVersion() {
+            var symbol = ContinueWithOrMissing(TokenKind.SetPEOsVersion);
+            return ParsePEVersion(symbol);
         }
 
-        private void ParsePEVersion(ParsedVersion result) {
+        private ParsedVersion ParsePEVersion(Terminal symbol) {
+            var hasError = false;
+            var number = ContinueWith(TokenKind.Real);
 
-            if (!ContinueWith(result, TokenKind.Real)) {
-                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidPEVersionDirective, new[] { TokenKind.Real });
-                return;
+            if (number == default) {
+                hasError = true;
+                number = ErrorAndSkip(number, CompilerDirectiveParserErrors.InvalidPEVersionDirective, new[] { TokenKind.Real });
             }
 
-            var text = result.LastTerminalValue.Split(new[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
+            var text = (number?.Token.Value ?? string.Empty).Split(new[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
 
-            if (text.Length != 2) {
-                ErrorLastPart(result, CompilerDirectiveParserErrors.InvalidPEVersionDirective);
-                return;
+            if (text.Length != 2 && !hasError) {
+                ErrorLastPart(number, CompilerDirectiveParserErrors.InvalidPEVersionDirective);
             }
 
+            var majorVersion = 0;
+            var minorVersion = 0;
 
-            if (!int.TryParse(text[0], out var majorVersion) || !int.TryParse(text[1], out var minorVersion)) {
-                ErrorLastPart(result, CompilerDirectiveParserErrors.InvalidPEVersionDirective);
-                return;
+            if (!hasError && text.Length == 2 && (!int.TryParse(text[0], out majorVersion) || !int.TryParse(text[1], out minorVersion))) {
+                ErrorLastPart(number, CompilerDirectiveParserErrors.InvalidPEVersionDirective);
             }
 
-            result.MajorVersion = majorVersion;
-            result.MinorVersion = minorVersion;
-
+            return new ParsedVersion(symbol, number, majorVersion, minorVersion);
         }
 
-        private void ParseEndRegion(IExtendableSyntaxPart parent) {
-            var result = new EndRegion();
-            InitByTerminal(result, parent, TokenKind.EndRegion);
-        }
+        private EndRegion ParseEndRegion()
+            => new EndRegion(ContinueWithOrMissing(TokenKind.EndRegion));
 
-        private void ParseRegion(IExtendableSyntaxPart parent) {
-            var result = new Region();
-            InitByTerminal(result, parent, TokenKind.Region);
+        private Region ParseRegion() {
+            var symbol = ContinueWithOrMissing(TokenKind.Region);
+            var regionName = ContinueWith(TokenKind.QuotedString);
+            var region = default(string);
 
-            if (!ContinueWith(result, TokenKind.QuotedString) || !(result.LastTerminalToken.ParsedValue is IStringValue regionName)) {
-                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidRegionDirective, new[] { TokenKind.QuotedString });
-                return;
+            if (regionName == default || !(regionName.Token.ParsedValue is IStringValue name)) {
+                regionName = ErrorAndSkip(null, CompilerDirectiveParserErrors.InvalidRegionDirective, new[] { TokenKind.QuotedString });
+            }
+            else {
+                region = name.AsUnicodeString;
             }
 
-            result.RegionName = regionName.AsUnicodeString;
+            return new Region(symbol, regionName, region);
         }
 
         /// <summary>
         ///     parse the rtti parameter
         /// </summary>
-        private void ParseRttiParameter(IExtendableSyntaxPart parent) {
-            var result = new RttiControl();
-            InitByTerminal(result, parent, TokenKind.Rtti);
+        private RttiControl ParseRttiParameter() {
+            var symbol = ContinueWithOrMissing(TokenKind.Rtti);
+            var mode = ContinueWith(TokenKind.Inherit, TokenKind.Explicit);
+            var parsedMode = RttiGenerationMode.Undefined;
 
-            if (ContinueWith(result, TokenKind.Inherit)) {
-                result.Mode = RttiGenerationMode.Inherit;
+            if (mode.GetSymbolKind() == TokenKind.Inherit) {
+                parsedMode = RttiGenerationMode.Inherit;
             }
-            else if (ContinueWith(result, TokenKind.Explicit)) {
-                result.Mode = RttiGenerationMode.Explicit;
+            else if (mode.GetSymbolKind() == TokenKind.Explicit) {
+                parsedMode = RttiGenerationMode.Explicit;
             }
             else {
-                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidRttiDirective, new[] { TokenKind.Inherit, TokenKind.Explicit });
-                return;
+                mode = ErrorAndSkip(null, CompilerDirectiveParserErrors.InvalidRttiDirective, new[] { TokenKind.Inherit, TokenKind.Explicit });
             }
 
             if (!Match(TokenKind.Fields, TokenKind.Methods, TokenKind.Properties))
-                return;
+                return new RttiControl(symbol, mode, parsedMode, ImmutableArray<RttiControlSpecifier>.Empty);
 
-            bool canContinue;
+            var methods = default(RttiControlSpecifier);
+            var properties = default(RttiControlSpecifier);
+            var fields = default(RttiControlSpecifier);
+            var specifier = default(Terminal);
 
-            do {
-                canContinue = false;
-                if (ContinueWith(result, TokenKind.Methods)) {
-                    if (result.Methods != null) {
-                        result.Mode = RttiGenerationMode.Undefined;
-                        ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidRttiDirective, Array.Empty<int>());
-                        return;
+            using (var list = GetList<RttiControlSpecifier>()) {
+                do {
+                    specifier = ContinueWith(TokenKind.Methods, TokenKind.Properties, TokenKind.Fields);
+
+                    if (specifier.GetSymbolKind() == TokenKind.Methods) {
+                        if (methods != null) {
+                            parsedMode = RttiGenerationMode.Undefined;
+                            ErrorAndSkip(null, CompilerDirectiveParserErrors.InvalidRttiDirective, Array.Empty<int>());
+                        }
+                        methods = AddToList(list, ParseRttiVisibility());
                     }
-                    result.Methods = ParseRttiVisibility(result);
-                    canContinue = result.Methods != null;
-                }
-                else if (ContinueWith(result, TokenKind.Properties)) {
-                    if (result.Properties != null) {
-                        result.Mode = RttiGenerationMode.Undefined;
-                        ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidRttiDirective, Array.Empty<int>());
-                        return;
+
+                    if (specifier.GetSymbolKind() == TokenKind.Properties) {
+                        if (properties != default) {
+                            parsedMode = RttiGenerationMode.Undefined;
+                            ErrorAndSkip(null, CompilerDirectiveParserErrors.InvalidRttiDirective, Array.Empty<int>());
+                        }
+                        properties = ParseRttiVisibility();
                     }
-                    result.Properties = ParseRttiVisibility(result);
-                    canContinue = result.Properties != null;
-                }
-                else if (ContinueWith(result, TokenKind.Fields)) {
-                    if (result.Fields != null) {
-                        result.Mode = RttiGenerationMode.Undefined;
-                        ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidRttiDirective, Array.Empty<int>());
-                        return;
+
+                    if (specifier.GetSymbolKind() == TokenKind.Fields) {
+                        if (fields != default) {
+                            parsedMode = RttiGenerationMode.Undefined;
+                            ErrorAndSkip(null, CompilerDirectiveParserErrors.InvalidRttiDirective, Array.Empty<int>());
+                        }
+                        fields = ParseRttiVisibility();
                     }
-                    result.Fields = ParseRttiVisibility(result);
-                    canContinue = result.Fields != null;
-                }
-            } while (canContinue);
+                } while (specifier != default);
+
+                return new RttiControl(symbol, mode, parsedMode, GetFixedArray(list));
+            }
         }
 
-        private RttiForVisibility ParseRttiVisibility(RttiControl result) {
-            if (!ContinueWith(result, TokenKind.OpenParen)) {
-                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidRttiDirective, new[] { TokenKind.OpenBraces });
-                result.Mode = RttiGenerationMode.Undefined;
-                return null;
-            }
+        private RttiControlSpecifier ParseRttiVisibility() {
+            var openParen = ContinueWith(TokenKind.OpenParen);
+            var openBraces = ContinueWith(TokenKind.OpenBraces);
 
-            if (!ContinueWith(result, TokenKind.OpenBraces)) {
-                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidRttiDirective, new[] { TokenKind.OpenBraces });
-                result.Mode = RttiGenerationMode.Undefined;
-                return null;
-            }
+            if (openParen == default)
+                openParen = ErrorAndSkip(null, CompilerDirectiveParserErrors.InvalidRttiDirective, new[] { TokenKind.OpenBraces });
 
-            var visibility = new RttiForVisibility();
+            if (openBraces == default)
+                openBraces = ErrorAndSkip(null, CompilerDirectiveParserErrors.InvalidRttiDirective, new[] { TokenKind.OpenBraces });
 
-            do {
-                if (!ContinueWith(result, TokenKind.VcPrivate, TokenKind.VcProtected, TokenKind.VcPublic, TokenKind.VcPublished)) {
-                    break;
-                }
+            using (var list = GetList<RttiVisibilityItem>()) {
+                var comma = default(Terminal);
 
-                var kind = result.LastTerminalKind;
+                do {
+                    var mode = ContinueWith(TokenKind.VcPrivate, TokenKind.VcProtected, TokenKind.VcPublic, TokenKind.VcPublished);
+                    var kind = mode.GetSymbolKind();
 
-                switch (kind) {
-                    case TokenKind.VcPrivate:
-                        visibility.ForPrivate = true;
+                    if (mode == default)
                         break;
-                    case TokenKind.VcProtected:
-                        visibility.ForProtected = true;
-                        break;
-                    case TokenKind.VcPublic:
-                        visibility.ForPublic = true;
-                        break;
-                    case TokenKind.VcPublished:
-                        visibility.ForPublished = true;
-                        break;
-                    default: {
-                            ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidRttiDirective, Array.Empty<int>());
-                            result.Mode = RttiGenerationMode.Undefined;
-                            return null;
-                        }
-                }
-            } while (ContinueWith(result, TokenKind.Comma));
 
-            if (!ContinueWith(result, TokenKind.CloseBraces)) {
-                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidRttiDirective, new[] { TokenKind.CloseBraces });
-                result.Mode = RttiGenerationMode.Undefined;
-                return null;
+                    comma = ContinueWith(TokenKind.Comma);
+                    list.Item.Add(new RttiVisibilityItem(mode, comma));
+
+                } while (comma != default);
+
+                var closeBraces = ContinueWith(TokenKind.CloseBraces);
+                if (closeBraces == default)
+                    closeBraces = ErrorAndSkip(null, CompilerDirectiveParserErrors.InvalidRttiDirective, new[] { TokenKind.CloseBraces });
+
+                var closeParen = ContinueWith(TokenKind.CloseParen);
+                if (closeParen == default)
+                    closeParen = ErrorAndSkip(null, CompilerDirectiveParserErrors.InvalidRttiDirective, new[] { TokenKind.CloseParen });
+
+                return new RttiControlSpecifier(openParen, openBraces, GetFixedArray(list), closeBraces, closeParen);
             }
-
-            if (!ContinueWith(result, TokenKind.CloseParen)) {
-                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidRttiDirective, new[] { TokenKind.CloseParen });
-                result.Mode = RttiGenerationMode.Undefined;
-                return null;
-            }
-
-            return visibility;
         }
 
         private WarnSwitch ParseWarnParameter() {

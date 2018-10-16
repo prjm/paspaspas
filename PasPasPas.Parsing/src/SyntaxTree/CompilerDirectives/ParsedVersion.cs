@@ -6,21 +6,38 @@ namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
     ///     pe version directive
     /// </summary>
     public class ParsedVersion : CompilerDirectiveBase {
+        private Terminal symbol;
+        private readonly Terminal number;
+
+        /// <summary>
+        ///     parsed pe version
+        /// </summary>
+        /// <param name="symbol"></param>
+        /// <param name="number"></param>
+        /// <param name="majorVersion"></param>
+        /// <param name="minorVersion"></param>
+        public ParsedVersion(Terminal symbol, Terminal number, int majorVersion, int minorVersion) {
+            this.symbol = symbol;
+            this.number = number;
+            MajorVersion = majorVersion;
+            MinorVersion = minorVersion;
+        }
 
         /// <summary>
         ///     version kind
         /// </summary>
-        public int Kind { get; set; }
+        public int Kind
+            => symbol.GetSymbolKind();
 
         /// <summary>
         ///     major version
         /// </summary>
-        public int MajorVersion { get; set; }
+        public int MajorVersion { get; }
 
         /// <summary>
         ///     minor version
         /// </summary>
-        public int MinorVersion { get; set; }
+        public int MinorVersion { get; }
 
         /// <summary>
         ///     accept visitor
@@ -28,7 +45,8 @@ namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
         /// <param name="visitor">node visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
-            AcceptParts(this, visitor);
+            AcceptPart(this, symbol, visitor);
+            AcceptPart(this, number, visitor);
             visitor.EndVisit(this);
         }
 

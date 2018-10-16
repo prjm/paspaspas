@@ -15,7 +15,6 @@
         /// </summary>
         public bool ForProtected { get; set; }
 
-
         /// <summary>
         ///     for public items
         /// </summary>
@@ -80,7 +79,7 @@
         }
 
         /// <summary>
-        ///     
+        ///
         /// </summary>
         /// <returns></returns>
         public override string ToString()

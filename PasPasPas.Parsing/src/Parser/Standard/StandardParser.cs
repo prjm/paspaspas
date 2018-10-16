@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Text;
 using PasPasPas.Infrastructure.Files;
-using PasPasPas.Infrastructure.ObjectPooling;
 using PasPasPas.Options.Bundles;
 using PasPasPas.Parsing.SyntaxTree;
 using PasPasPas.Parsing.SyntaxTree.Standard;
@@ -4853,21 +4852,6 @@ namespace PasPasPas.Parsing.Parser.Standard {
         }
 
 
-        private PoolItem<List<T>> GetList<T>() where T : class
-            => Environment.ListPools.GetList<T>();
-
-        private static Q AddToList<T, Q>(PoolItem<List<T>> list, Q item) where T : class where Q : T {
-            if (item != default)
-                list.Item.Add(item);
-            return item;
-        }
-
-        private static ImmutableArray<T> GetFixedArray<T>(PoolItem<List<T>> list) where T : class {
-            var builder = ListPools.GetImmutableArrayBuilder(list);
-            for (var index = 0; index < list.Item.Count; index++)
-                builder.Add(list.Item[index]);
-            return builder.MoveToImmutable();
-        }
 
         /// <summary>
         ///     print the parser grammar
