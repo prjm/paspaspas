@@ -187,7 +187,6 @@ namespace PasPasPas.Parsing.Parser {
             };
 
         private ISyntaxPart ParseParameter() {
-            IExtendableSyntaxPart parent = new CompilerDirective();
 
             if (Match(TokenKind.IfDef))
                 return ParseIfDef();
@@ -258,23 +257,22 @@ namespace PasPasPas.Parsing.Parser {
             if (Match(TokenKind.SetPEUserVersion))
                 return ParsePEUserVersion();
 
-            if (Match(TokenKind.ObjTypeName)) {
-                ParseObjTypeNameSwitch(parent);
-            }
-            else if (Match(TokenKind.NoInclude)) {
-                ParseNoInclude(parent);
-            }
-            else if (Match(TokenKind.NoDefine)) {
-                ParseNoDefine(parent);
-            }
-            else if (Match(TokenKind.MessageCd)) {
-                ParseMessage(parent);
-            }
-            else if (Match(TokenKind.MinMemStackSizeSwitchLong, TokenKind.MaxMemStackSizeSwitchLong)) {
-                ParseStackSizeSwitch(parent, false);
-            }
+            if (Match(TokenKind.ObjTypeName))
+                return ParseObjTypeNameSwitch();
 
-            return parent;
+            if (Match(TokenKind.NoInclude))
+                return ParseNoInclude();
+
+            if (Match(TokenKind.NoDefine))
+                return ParseNoDefine();
+
+            if (Match(TokenKind.MessageCd))
+                return ParseMessage();
+
+            if (Match(TokenKind.MinMemStackSizeSwitchLong, TokenKind.MaxMemStackSizeSwitchLong))
+                return ParseStackSizeSwitch(false);
+
+            return null;
         }
 
         private IfOpt ParseIfOpt() {
@@ -293,117 +291,136 @@ namespace PasPasPas.Parsing.Parser {
             return SwitchInfo.Undefined;
         }
 
-        private void ParseStackSizeSwitch(IExtendableSyntaxPart parent, bool mSwitch) {
-            var result = new StackMemorySize();
-            InitByTerminal(result, parent, TokenKind.MinMemStackSizeSwitchLong, TokenKind.MaxMemStackSizeSwitchLong, TokenKind.TypeInfoSwitch);
+        private StackMemorySize ParseStackSizeSwitch(bool mSwitch) {
+            var symbol = ContinueWithOrMissing(TokenKind.MinMemStackSizeSwitchLong, TokenKind.MaxMemStackSizeSwitchLong, TokenKind.TypeInfoSwitch);
+            var size1 = default(Terminal);
+            var size2 = default(Terminal);
+            var minStackSize = 0ul;
+            var maxStackSize = 0ul;
+            var comma = default(Terminal);
 
-            if (mSwitch || result.LastTerminalKind == TokenKind.MinMemStackSizeSwitchLong) {
+            if (mSwitch || symbol.GetSymbolKind() == TokenKind.MinMemStackSizeSwitchLong) {
 
-                if (!ContinueWith(result, TokenKind.Integer)) {
-                    ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidStackMemorySizeDirective, new[] { TokenKind.Integer });
-                    return;
+                size1 = ContinueWith(TokenKind.Integer);
+
+                if (size1 == default) {
+                    size1 = ErrorAndSkip(null, CompilerDirectiveParserErrors.InvalidStackMemorySizeDirective, new[] { TokenKind.Integer });
                 }
-
-                if (result.LastTerminalToken.ParsedValue is IIntegerValue intValue && !intValue.IsNegative) {
-                    result.MinStackSize = intValue.UnsignedValue;
+                else if (size1?.Token.ParsedValue is IIntegerValue intValue && !intValue.IsNegative) {
+                    minStackSize = intValue.UnsignedValue;
                 }
                 else {
-                    ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidStackMemorySizeDirective, new[] { TokenKind.Integer });
+                    size1 = ErrorAndSkip(null, CompilerDirectiveParserErrors.InvalidStackMemorySizeDirective, new[] { TokenKind.Integer });
                 }
             }
 
             if (mSwitch)
-                ContinueWith(result, TokenKind.Comma);
+                comma = ContinueWith(TokenKind.Comma);
 
-            if (mSwitch || result.LastTerminalKind == TokenKind.MaxMemStackSizeSwitchLong) {
+            if (mSwitch || symbol.GetSymbolKind() == TokenKind.MaxMemStackSizeSwitchLong) {
 
-                if (!ContinueWith(result, TokenKind.Integer)) {
-                    result.MinStackSize = null;
-                    ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidStackMemorySizeDirective, new[] { TokenKind.Integer });
-                    return;
+                size2 = ContinueWith(TokenKind.Integer);
+
+                if (size2 == default) {
+                    size2 = ErrorAndSkip(null, CompilerDirectiveParserErrors.InvalidStackMemorySizeDirective, new[] { TokenKind.Integer });
                 }
-
-                if (result.LastTerminalToken.ParsedValue is IIntegerValue intValue && !intValue.IsNegative) {
-                    result.MaxStackSize = intValue.UnsignedValue;
+                else if (size2?.Token.ParsedValue is IIntegerValue intValue && !intValue.IsNegative) {
+                    maxStackSize = intValue.UnsignedValue;
                 }
                 else {
-                    ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidStackMemorySizeDirective, new[] { TokenKind.Integer });
+                    size2 = ErrorAndSkip(null, CompilerDirectiveParserErrors.InvalidStackMemorySizeDirective, new[] { TokenKind.Integer });
                 }
             }
+
+            return new StackMemorySize(symbol, size1, comma, size2, minStackSize, maxStackSize);
         }
 
-        private void ParseMessage(IExtendableSyntaxPart parent) {
-            var result = new Message();
-            InitByTerminal(result, parent, TokenKind.MessageCd);
+        private Message ParseMessage() {
+            var symbol = ContinueWithOrMissing(TokenKind.MessageCd);
+            var kind = ContinueWith(TokenKind.Identifier);
+            var message = MessageSeverity.Undefined;
+            var hasError = false;
 
-            if (ContinueWith(result, TokenKind.Identifier)) {
-                var messageType = result.LastTerminalValue;
+            if (kind != default) {
+                var messageType = kind.Token.Value;
 
                 if (string.Equals(messageType, "Hint", StringComparison.OrdinalIgnoreCase)) {
-                    result.MessageType = MessageSeverity.Hint;
+                    message = MessageSeverity.Hint;
                 }
                 else if (string.Equals(messageType, "Warn", StringComparison.OrdinalIgnoreCase)) {
-                    result.MessageType = MessageSeverity.Warning;
+                    message = MessageSeverity.Warning;
                 }
                 else if (string.Equals(messageType, "Error", StringComparison.OrdinalIgnoreCase)) {
-                    result.MessageType = MessageSeverity.Error;
+                    message = MessageSeverity.Error;
                 }
                 else if (string.Equals(messageType, "Fatal", StringComparison.OrdinalIgnoreCase)) {
-                    result.MessageType = MessageSeverity.FatalError;
+                    message = MessageSeverity.FatalError;
                 }
                 else {
-                    ErrorLastPart(result, CompilerDirectiveParserErrors.InvalidMessageDirective);
-                    return;
+                    hasError = true;
+                    ErrorLastPart(null, CompilerDirectiveParserErrors.InvalidMessageDirective);
                 }
             }
             else {
-                result.MessageType = MessageSeverity.Hint;
+                message = MessageSeverity.Hint;
             }
 
-            if (!ContinueWith(result, TokenKind.QuotedString)) {
-                result.MessageType = MessageSeverity.Undefined;
-                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidMessageDirective, new[] { TokenKind.QuotedString });
-                return;
-            }
+            var text = ContinueWith(TokenKind.QuotedString);
 
-            var value = result.LastTerminalToken.ParsedValue;
+            if (text == default) {
+                message = MessageSeverity.Undefined;
 
-            if (value is IStringValue stringValue)
-                result.MessageText = stringValue.AsUnicodeString;
-            else
-                ErrorLastPart(result, CompilerDirectiveParserErrors.InvalidMessageDirective);
-        }
-
-        private void ParseNoDefine(IExtendableSyntaxPart parent) {
-            var result = new NoDefine();
-            InitByTerminal(result, parent, TokenKind.NoDefine);
-
-            if (!ContinueWith(result, TokenKind.Identifier)) {
-                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidNoDefineDirective, new[] { TokenKind.Identifier });
-                return;
-            }
-
-            result.TypeName = result.LastTerminalValue;
-
-            if (ContinueWith(result, TokenKind.QuotedString) && result.LastTerminalToken.ParsedValue is IStringValue typeName) {
-                result.TypeNameInHpp = typeName.AsUnicodeString;
-
-                if (ContinueWith(result, TokenKind.QuotedString) && result.LastTerminalToken.ParsedValue is IStringValue unionName) {
-                    result.TypeNameInUnion = unionName.AsUnicodeString;
+                if (!hasError) {
+                    text = ErrorAndSkip(null, CompilerDirectiveParserErrors.InvalidMessageDirective, new[] { TokenKind.QuotedString });
+                    hasError = true;
                 }
             }
+
+            var messageText = string.Empty;
+            var textValue = text?.Token.ParsedValue ?? default;
+
+            if (textValue is IStringValue stringValue)
+                messageText = stringValue.AsUnicodeString;
+            else if (!hasError)
+                ErrorLastPart(null, CompilerDirectiveParserErrors.InvalidMessageDirective);
+
+            return new Message(symbol, kind, text, message, messageText);
         }
 
-        private void ParseNoInclude(IExtendableSyntaxPart parent) {
-            var result = new NoInclude();
-            InitByTerminal(result, parent, TokenKind.NoInclude);
+        private NoDefine ParseNoDefine() {
+            var symbol = ContinueWithOrMissing(TokenKind.NoDefine);
+            var typeName = ContinueWith(TokenKind.Identifier);
 
-            if (!ContinueWith(result, TokenKind.Identifier)) {
-                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidNoIncludeDirective, new[] { TokenKind.Identifier });
-                return;
+            if (typeName == default) {
+                typeName = ErrorAndSkip(null, CompilerDirectiveParserErrors.InvalidNoDefineDirective, new[] { TokenKind.Identifier });
             }
 
-            result.UnitName = result.LastTerminalValue;
+            var hppTypeName = ContinueWith(TokenKind.QuotedString);
+            var parsedHppTypeName = string.Empty;
+            var unionName = default(Terminal);
+            var parsedUnionName = string.Empty;
+
+            if (hppTypeName != default && hppTypeName.Token.ParsedValue is IStringValue hppTypeNameValue) {
+                parsedHppTypeName = hppTypeNameValue.AsUnicodeString;
+
+                unionName = ContinueWith(TokenKind.QuotedString);
+                if (unionName != default && unionName.Token.ParsedValue is IStringValue unionNameValue) {
+                    parsedUnionName = unionNameValue.AsUnicodeString;
+                }
+            }
+
+            return new NoDefine(symbol, typeName, hppTypeName, unionName, parsedHppTypeName, parsedUnionName);
+        }
+
+        private NoInclude ParseNoInclude() {
+            var symbol = ContinueWithOrMissing(TokenKind.NoInclude);
+            var name = ContinueWith(TokenKind.Identifier);
+
+            if (name == default) {
+                name = ErrorAndSkip(null, CompilerDirectiveParserErrors.InvalidNoIncludeDirective, new[] { TokenKind.Identifier });
+            }
+
+            return new NoInclude(symbol, name);
         }
 
         private ParsedVersion ParsePEUserVersion() {
@@ -990,7 +1007,7 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             else if (Match(TokenKind.TypeInfoSwitchLong)) {
-                ParseLongTypeInfoSwitch(parent);
+                return ParseLongTypeInfoSwitch();
             }
 
             else if (Match(TokenKind.RunOnly)) {
@@ -1170,19 +1187,22 @@ namespace PasPasPas.Parsing.Parser {
             }
         }
 
-        private void ParseLongTypeInfoSwitch(IExtendableSyntaxPart parent) {
-            var result = new PublishedRtti();
-            InitByTerminal(result, parent, TokenKind.TypeInfoSwitchLong);
+        private PublishedRtti ParseLongTypeInfoSwitch() {
+            var symbol = ContinueWithOrMissing(TokenKind.TypeInfoSwitchLong);
+            var mode = ContinueWith(TokenKind.On, TokenKind.Off); ;
+            var parsedMode = RttiForPublishedProperties.Undefined;
 
-            if (ContinueWith(result, TokenKind.On)) {
-                result.Mode = RttiForPublishedProperties.Enable;
+            if (mode.GetSymbolKind() == TokenKind.On) {
+                parsedMode = RttiForPublishedProperties.Enable;
             }
-            else if (ContinueWith(result, TokenKind.Off)) {
-                result.Mode = RttiForPublishedProperties.Disable;
+            else if (mode.GetSymbolKind() == TokenKind.Off) {
+                parsedMode = RttiForPublishedProperties.Disable;
             }
             else {
-                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidPublishedRttiDirective, new[] { TokenKind.On, TokenKind.Off });
+                mode = ErrorAndSkip(null, CompilerDirectiveParserErrors.InvalidPublishedRttiDirective, new[] { TokenKind.On, TokenKind.Off });
             }
+
+            return new PublishedRtti(symbol, mode, parsedMode);
         }
 
         private void ParseScopedEnums(IExtendableSyntaxPart parent) {
@@ -1825,7 +1845,7 @@ namespace PasPasPas.Parsing.Parser {
                 ParseSymbolDefinitionsOnlySwitch(parent);
             }
             else if (Match(TokenKind.TypeInfoSwitch)) {
-                ParseTypeInfoSwitch(parent);
+                return ParseTypeInfoSwitch();
             }
             else if (Match(TokenKind.EnumSizeSwitch, TokenKind.EnumSize1, TokenKind.EnumSize2, TokenKind.EnumSize4)) {
                 ParseEnumSizeSwitch(parent);
@@ -1859,57 +1879,61 @@ namespace PasPasPas.Parsing.Parser {
             }
         }
 
-        private void ParseObjTypeNameSwitch(IExtendableSyntaxPart parent) {
-            var result = new ObjTypeName();
-            InitByTerminal(result, parent, TokenKind.ObjTypeName);
+        private ObjTypeName ParseObjTypeNameSwitch() {
+            var symbol = ContinueWithOrMissing(TokenKind.ObjTypeName);
+            var name = ContinueWith(TokenKind.Identifier);
+            var typeName = name?.Token.Value ?? string.Empty;
 
-            if (!ContinueWith(result, TokenKind.Identifier)) {
-                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidObjTypeDirective, new[] { TokenKind.Identifier });
-                return;
+            if (name == default) {
+                name = ErrorAndSkip(null, CompilerDirectiveParserErrors.InvalidObjTypeDirective, new[] { TokenKind.Identifier });
             }
 
-            result.TypeName = result.LastTerminalValue;
+            var aliasName = ContinueWith(TokenKind.QuotedString);
+            var prefix = string.Empty;
+            var parsedAliasName = string.Empty;
 
-            if (ContinueWith(result, TokenKind.QuotedString) && result.LastTerminalToken.ParsedValue is IStringValue alias) {
-                result.AliasName = alias.AsUnicodeString;
-                if (string.IsNullOrWhiteSpace(result.AliasName)) {
-                    result.AliasName = null;
-                    result.TypeName = null;
-                    ErrorLastPart(result, CompilerDirectiveParserErrors.InvalidObjTypeDirective);
-                    return;
+            if (aliasName != default && aliasName.Token.ParsedValue is IStringValue alias) {
+                parsedAliasName = alias.AsUnicodeString;
+                if (string.IsNullOrWhiteSpace(parsedAliasName)) {
+                    parsedAliasName = null;
+                    typeName = null;
+                    ErrorLastPart(null, CompilerDirectiveParserErrors.InvalidObjTypeDirective);
                 }
-
-
-                var prefix = result.AliasName.Substring(0, 1);
-                if (!string.Equals(prefix, "N", StringComparison.OrdinalIgnoreCase) &&
-                    !string.Equals(prefix, "B", StringComparison.OrdinalIgnoreCase)) {
-                    result.AliasName = null;
-                    result.TypeName = null;
-                    ErrorLastPart(result, CompilerDirectiveParserErrors.InvalidObjTypeDirective);
-                    return;
+                else {
+                    prefix = parsedAliasName.Substring(0, 1);
+                    if (!string.Equals(prefix, "N", StringComparison.OrdinalIgnoreCase) &&
+                        !string.Equals(prefix, "B", StringComparison.OrdinalIgnoreCase)) {
+                        parsedAliasName = null;
+                        typeName = null;
+                        ErrorLastPart(null, CompilerDirectiveParserErrors.InvalidObjTypeDirective);
+                    }
                 }
             }
+
+            return new ObjTypeName(symbol, name, aliasName, typeName, parsedAliasName);
         }
 
-        private void ParseTypeInfoSwitch(IExtendableSyntaxPart parent) {
+        private ISyntaxPart ParseTypeInfoSwitch() {
 
             if (LookAhead(1, TokenKind.Integer)) {
-                ParseStackSizeSwitch(parent, true);
-                return;
+                return ParseStackSizeSwitch(true);
             }
 
-            var result = new PublishedRtti();
-            InitByTerminal(result, parent, TokenKind.TypeInfoSwitch);
+            var symbol = ContinueWithOrMissing(TokenKind.TypeInfoSwitch);
+            var mode = ContinueWith(TokenKind.Plus, TokenKind.Minus);
+            var parsedMode = RttiForPublishedProperties.Undefined;
 
-            if (ContinueWith(result, TokenKind.Plus)) {
-                result.Mode = RttiForPublishedProperties.Enable;
+            if (mode.GetSymbolKind() == TokenKind.Plus) {
+                parsedMode = RttiForPublishedProperties.Enable;
             }
-            else if (ContinueWith(result, TokenKind.Minus)) {
-                result.Mode = RttiForPublishedProperties.Disable;
+            else if (mode.GetSymbolKind() == TokenKind.Minus) {
+                parsedMode = RttiForPublishedProperties.Disable;
             }
             else {
-                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidPublishedRttiDirective, new[] { TokenKind.On, TokenKind.Off });
+                mode = ErrorAndSkip(null, CompilerDirectiveParserErrors.InvalidPublishedRttiDirective, new[] { TokenKind.Plus, TokenKind.Minus });
             }
+
+            return new PublishedRtti(symbol, mode, parsedMode);
         }
 
         private void ParseSymbolDefinitionsOnlySwitch(IExtendableSyntaxPart parent) {

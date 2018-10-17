@@ -4,14 +4,29 @@ using PasPasPas.Parsing.SyntaxTree.Visitors;
 namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
 
     /// <summary>
-    ///     typeinfo directive
+    ///     type info directive
     /// </summary>
     public class PublishedRtti : CompilerDirectiveBase {
+        private readonly Terminal symbol;
+        private readonly Terminal mode;
+        private readonly RttiForPublishedProperties parsedMode;
+
+        /// <summary>
+        ///     create a new type info directive
+        /// </summary>
+        /// <param name="symbol"></param>
+        /// <param name="mode"></param>
+        /// <param name="parsedMode"></param>
+        public PublishedRtti(Terminal symbol, Terminal mode, RttiForPublishedProperties parsedMode) {
+            this.symbol = symbol;
+            this.mode = mode;
+            Mode = parsedMode;
+        }
 
         /// <summary>
         ///     switch mode
         /// </summary>
-        public RttiForPublishedProperties Mode { get; set; }
+        public RttiForPublishedProperties Mode { get; }
 
         /// <summary>
         ///     accept visitor
@@ -19,7 +34,8 @@ namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
         /// <param name="visitor">node visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
-            AcceptParts(this, visitor);
+            AcceptPart(this, symbol, visitor);
+            AcceptPart(this, mode, visitor);
             visitor.EndVisit(this);
         }
 

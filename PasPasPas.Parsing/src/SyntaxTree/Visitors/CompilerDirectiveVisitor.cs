@@ -777,7 +777,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
 
         /// <summary>
-        ///      nocinlude
+        ///      noinclude
         /// </summary>
         /// <param name="syntaxPart"></param>
         public void StartVisit(NoInclude syntaxPart) {
