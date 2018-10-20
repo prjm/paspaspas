@@ -9,9 +9,31 @@ namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
     public class BooleanEvaluationSwitch : CompilerDirectiveBase {
 
         /// <summary>
+        ///     create a new boolean evaluation switch
+        /// </summary>
+        /// <param name="symbol"></param>
+        /// <param name="mode"></param>
+        /// <param name="evalMode"></param>
+        public BooleanEvaluationSwitch(Terminal symbol, Terminal mode, BooleanEvaluation evalMode) {
+            Symbol = symbol;
+            Mode = mode;
+            BoolEval = evalMode;
+        }
+
+        /// <summary>
         ///     boolean evaluation mode
         /// </summary>
-        public BooleanEvaluation BoolEval { get; set; }
+        public BooleanEvaluation BoolEval { get; }
+
+        /// <summary>
+        ///     directive
+        /// </summary>
+        public Terminal Symbol { get; }
+
+        /// <summary>
+        ///     mode
+        /// </summary>
+        public Terminal Mode { get; }
 
         /// <summary>
         ///     accept visitor
@@ -19,7 +41,8 @@ namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
         /// <param name="visitor">node visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
-            AcceptParts(this, visitor);
+            AcceptPart(this, Symbol, visitor);
+            AcceptPart(this, Mode, visitor);
             visitor.EndVisit(this);
         }
     }

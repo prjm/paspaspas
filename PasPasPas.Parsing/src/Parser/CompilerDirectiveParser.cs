@@ -275,20 +275,274 @@ namespace PasPasPas.Parsing.Parser {
             return null;
         }
 
-        private IfOpt ParseIfOpt() {
-            var ifOpt = ContinueWithOrMissing(TokenKind.IfOpt);
-            var switchKind = ContinueWithOrMissing(TokenKind.Identifier);
-            var mode = ContinueWith(TokenKind.Plus, TokenKind.Minus);
+        /// <summary>
+        ///     parse a switch
+        /// </summary>
+        private ISyntaxPart ParseSwitch() {
+            IExtendableSyntaxPart parent = new CompilerDirective();
 
-            return new IfOpt(ifOpt, switchKind, mode, Options.GetSwitchInfo(switchKind?.Value));
+            if (Match(TokenKind.AlignSwitch, TokenKind.AlignSwitch1, TokenKind.AlignSwitch2, TokenKind.AlignSwitch4, TokenKind.AlignSwitch8, TokenKind.AlignSwitch16))
+                return ParseAlignSwitch();
+
+            if (Match(TokenKind.BoolEvalSwitch))
+                return ParseBoolEvalSwitch();
+
+            if (Match(TokenKind.AssertSwitch))
+                return ParseAssertSwitch();
+
+            if (Match(TokenKind.DebugInfoOrDescriptionSwitch))
+                return ParseDebugInfoOrDescriptionSwitch();
+
+            if (Match(TokenKind.ExtensionSwitch)) {
+                ParseExtensionSwitch(parent);
+            }
+            else if (Match(TokenKind.ExtendedSyntaxSwitch)) {
+                ParseExtendedSyntaxSwitch(parent);
+            }
+            else if (Match(TokenKind.ImportedDataSwitch)) {
+                ParseImportedDataSwitch(parent);
+            }
+            else if (Match(TokenKind.IncludeSwitch)) {
+                return ParseIncludeSwitch(parent);
+            }
+            else if (Match(TokenKind.LinkOrLocalSymbolSwitch)) {
+                ParseLocalSymbolSwitch(parent);
+            }
+            else if (Match(TokenKind.LongStringSwitch)) {
+                ParseLongStringSwitch(parent);
+            }
+            else if (Match(TokenKind.OpenStringSwitch)) {
+                ParseOpenStringSwitch(parent);
+            }
+            else if (Match(TokenKind.OptimizationSwitch)) {
+                ParseOptimizationSwitch(parent);
+            }
+            else if (Match(TokenKind.OverflowSwitch)) {
+                ParseOverflowSwitch(parent);
+            }
+            else if (Match(TokenKind.SaveDivideSwitch)) {
+                ParseSaveDivideSwitch(parent);
+            }
+            else if (Match(TokenKind.IncludeRessource)) {
+                ParseIncludeRessource(parent);
+            }
+            else if (Match(TokenKind.StackFramesSwitch)) {
+                ParseStackFramesSwitch(parent);
+            }
+            else if (Match(TokenKind.WritableConstSwitch)) {
+                ParseWritableConstSwitch(parent);
+            }
+            else if (Match(TokenKind.VarStringCheckSwitch)) {
+                ParseVarStringCheckSwitch(parent);
+            }
+            else if (Match(TokenKind.TypedPointersSwitch)) {
+                ParseTypedPointersSwitch(parent);
+            }
+            else if (Match(TokenKind.SymbolDeclarationSwitch)) {
+                ParseSymbolDeclarationSwitch(parent);
+            }
+            else if (Match(TokenKind.SymbolDefinitionsOnlySwitch)) {
+                ParseSymbolDefinitionsOnlySwitch(parent);
+            }
+            else if (Match(TokenKind.TypeInfoSwitch)) {
+                return ParseTypeInfoSwitch();
+            }
+            else if (Match(TokenKind.EnumSizeSwitch, TokenKind.EnumSize1, TokenKind.EnumSize2, TokenKind.EnumSize4)) {
+                ParseEnumSizeSwitch(parent);
+            }
+
+            return parent;
         }
 
-        public static SwitchInfo GetSwitchInfo(int switchState) {
-            if (switchState == TokenKind.Plus)
-                return SwitchInfo.Enabled;
-            if (switchState == TokenKind.Minus)
-                return SwitchInfo.Disabled;
-            return SwitchInfo.Undefined;
+        /// <summary>
+        ///     parse a long switch
+        /// </summary>
+        private ISyntaxPart ParseLongSwitch() {
+            var parent = new CompilerDirective();
+
+            if (Match(TokenKind.AlignSwitchLong))
+                return ParseLongAlignSwitch();
+
+            if (Match(TokenKind.BoolEvalSwitchLong))
+                return ParseLongBoolEvalSwitch();
+
+            if (Match(TokenKind.AssertSwitchLong))
+                return ParseLongAssertSwitch();
+
+            if (Match(TokenKind.DebugInfoSwitchLong))
+                return ParseLongDebugInfoSwitch();
+
+            if (Match(TokenKind.DenyPackageUnit))
+                return ParseDenyPackageUnitSwitch();
+
+            if (Match(TokenKind.DescriptionSwitchLong))
+                return ParseLongDescriptionSwitch();
+
+            if (Match(TokenKind.DesignOnly)) {
+                ParseLongDesignOnlySwitch(parent);
+            }
+
+            else if (Match(TokenKind.ExtensionSwitchLong)) {
+                ParseLongExtensionSwitch(parent);
+            }
+
+            else if (Match(TokenKind.ObjExportAll)) {
+                ParseObjExportAllSwitch(parent);
+            }
+
+            else if (Match(TokenKind.ExtendedCompatibility)) {
+                ParseExtendedCompatibilitySwitch(parent);
+            }
+
+            else if (Match(TokenKind.ExtendedSyntaxSwitchLong)) {
+                ParseLongExtendedSyntaxSwitch(parent);
+            }
+
+            else if (Match(TokenKind.ExcessPrecision)) {
+                ParseLongExcessPrecisionSwitch(parent);
+            }
+
+            else if (Match(TokenKind.HighCharUnicode)) {
+                ParseLongHighCharUnicodeSwitch(parent);
+            }
+
+            else if (Match(TokenKind.Hints)) {
+                ParseLongHintsSwitch(parent);
+            }
+
+            else if (Match(TokenKind.ImplicitBuild)) {
+                ParseLongImplicitBuildSwitch(parent);
+            }
+
+            else if (Match(TokenKind.ImportedDataSwitchLong)) {
+                ParseLongImportedDataSwitch(parent);
+            }
+
+            else if (Match(TokenKind.IncludeSwitchLong)) {
+                ParseLongIncludeSwitch(parent);
+            }
+
+            else if (Match(TokenKind.IoChecks)) {
+                ParseLongIoChecksSwitch(parent);
+            }
+
+            else if (Match(TokenKind.LocalSymbolSwithLong)) {
+                ParseLongLocalSymbolSwitch(parent);
+            }
+
+            else if (Match(TokenKind.LongStringSwitchLong)) {
+                ParseLongLongStringSwitch(parent);
+            }
+
+            else if (Match(TokenKind.OpenStringSwitchLong)) {
+                ParseLongOpenStringSwitch(parent);
+            }
+
+            else if (Match(TokenKind.OptimizationSwitchLong)) {
+                ParseLongOptimizationSwitch(parent);
+            }
+
+            else if (Match(TokenKind.OverflowSwitchLong)) {
+                ParseLongOverflowSwitch(parent);
+            }
+
+            else if (Match(TokenKind.SafeDivideSwitchLong)) {
+                ParseLongSafeDivideSwitch(parent);
+            }
+
+            else if (Match(TokenKind.RangeChecks)) {
+                ParseLongRangeChecksSwitch(parent);
+            }
+
+            else if (Match(TokenKind.StackFramesSwitchLong)) {
+                ParseLongStackFramesSwitch(parent);
+            }
+
+            else if (Match(TokenKind.ZeroBaseStrings)) {
+                ParseZeroBasedStringSwitch(parent);
+            }
+
+            else if (Match(TokenKind.WritableConstSwitchLong)) {
+                ParseLongWritableConstSwitch(parent);
+            }
+
+            else if (Match(TokenKind.WeakLinkRtti)) {
+                ParseWeakLinkRttiSwitch(parent);
+            }
+
+            else if (Match(TokenKind.WeakPackageUnit)) {
+                ParseWeakPackageUnitSwitch(parent);
+            }
+
+            else if (Match(TokenKind.Warnings)) {
+                ParseWarningsSwitch(parent);
+            }
+
+            else if (Match(TokenKind.VarStringCheckSwitchLong)) {
+                ParseLongVarStringCheckSwitch(parent);
+            }
+
+            else if (Match(TokenKind.TypedPointersSwitchLong)) {
+                ParseLongTypedPointersSwitch(parent);
+            }
+
+            else if (Match(TokenKind.DefinitionInfo)) {
+                ParseDefinitionInfoSwitch(parent);
+            }
+
+            else if (Match(TokenKind.ReferenceInfo)) {
+                ParseReferenceInfoSwitch(parent);
+            }
+
+            else if (Match(TokenKind.StrongLinkTypes)) {
+                ParseStrongLinkTypes(parent);
+            }
+
+            else if (Match(TokenKind.ScopedEnums)) {
+                ParseScopedEnums(parent);
+            }
+
+            else if (Match(TokenKind.TypeInfoSwitchLong)) {
+                return ParseLongTypeInfoSwitch();
+            }
+
+            else if (Match(TokenKind.RunOnly)) {
+                ParseRunOnlyParameter(parent);
+            }
+
+            else if (Match(TokenKind.IncludeRessourceLong)) {
+                ParseLongIncludeRessourceSwitch(parent);
+            }
+
+            else if (Match(TokenKind.RealCompatibility)) {
+                ParseRealCompatibilitySwitch(parent);
+            }
+
+            else if (Match(TokenKind.Pointermath)) {
+                ParsePointermathSwitch(parent);
+            }
+
+            else if (Match(TokenKind.OldTypeLayout)) {
+                ParseOldTypeLayoutSwitch(parent);
+            }
+
+            else if (Match(TokenKind.EnumSizeSwitchLong)) {
+                ParseLongEnumSizeSwitch(parent);
+            }
+
+            else if (Match(TokenKind.MethodInfo)) {
+                ParseMethodInfoSwitch(parent);
+            }
+
+            else if (Match(TokenKind.LegacyIfEnd)) {
+                ParseLegacyIfEndSwitch(parent);
+            }
+
+            else if (Match(TokenKind.LinkSwitchLong)) {
+                ParseLongLinkSwitch(parent);
+            }
+
+            return parent;
         }
 
         private StackMemorySize ParseStackSizeSwitch(bool mSwitch) {
@@ -334,6 +588,23 @@ namespace PasPasPas.Parsing.Parser {
 
             return new StackMemorySize(symbol, size1, comma, size2, minStackSize, maxStackSize);
         }
+
+        public static SwitchInfo GetSwitchInfo(int switchState) {
+            if (switchState == TokenKind.Plus)
+                return SwitchInfo.Enabled;
+            if (switchState == TokenKind.Minus)
+                return SwitchInfo.Disabled;
+            return SwitchInfo.Undefined;
+        }
+
+        private IfOpt ParseIfOpt() {
+            var ifOpt = ContinueWithOrMissing(TokenKind.IfOpt);
+            var switchKind = ContinueWithOrMissing(TokenKind.Identifier);
+            var mode = ContinueWith(TokenKind.Plus, TokenKind.Minus);
+
+            return new IfOpt(ifOpt, switchKind, mode, Options.GetSwitchInfo(switchKind?.Value));
+        }
+
 
         private Message ParseMessage() {
             var symbol = ContinueWithOrMissing(TokenKind.MessageCd);
@@ -853,200 +1124,6 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             return new AppTypeParameter(appTypeSymbol, appTypeInfo, appType); ;
-        }
-
-        /// <summary>
-        ///     parse a long switch
-        /// </summary>
-        private ISyntaxPart ParseLongSwitch() {
-            var parent = new CompilerDirective();
-
-            if (Match(TokenKind.AlignSwitchLong))
-                return ParseLongAlignSwitch();
-
-            if (Match(TokenKind.BoolEvalSwitchLong)) {
-                ParseLongBoolEvalSwitch(parent);
-            }
-            else if (Match(TokenKind.AssertSwitchLong)) {
-                return ParseLongAssertSwitch();
-            }
-            else if (Match(TokenKind.DebugInfoSwitchLong)) {
-                ParseLongDebugInfoSwitch(parent);
-            }
-
-            else if (Match(TokenKind.DenyPackageUnit)) {
-                ParseDenyPackageUnitSwitch(parent);
-            }
-
-            else if (Match(TokenKind.DescriptionSwitchLong)) {
-                ParseLongDescriptionSwitch(parent);
-            }
-
-            else if (Match(TokenKind.DesignOnly)) {
-                ParseLongDesignOnlySwitch(parent);
-            }
-
-            else if (Match(TokenKind.ExtensionSwitchLong)) {
-                ParseLongExtensionSwitch(parent);
-            }
-
-            else if (Match(TokenKind.ObjExportAll)) {
-                ParseObjExportAllSwitch(parent);
-            }
-
-            else if (Match(TokenKind.ExtendedCompatibility)) {
-                ParseExtendedCompatibilitySwitch(parent);
-            }
-
-            else if (Match(TokenKind.ExtendedSyntaxSwitchLong)) {
-                ParseLongExtendedSyntaxSwitch(parent);
-            }
-
-            else if (Match(TokenKind.ExcessPrecision)) {
-                ParseLongExcessPrecisionSwitch(parent);
-            }
-
-            else if (Match(TokenKind.HighCharUnicode)) {
-                ParseLongHighCharUnicodeSwitch(parent);
-            }
-
-            else if (Match(TokenKind.Hints)) {
-                ParseLongHintsSwitch(parent);
-            }
-
-            else if (Match(TokenKind.ImplicitBuild)) {
-                ParseLongImplicitBuildSwitch(parent);
-            }
-
-            else if (Match(TokenKind.ImportedDataSwitchLong)) {
-                ParseLongImportedDataSwitch(parent);
-            }
-
-            else if (Match(TokenKind.IncludeSwitchLong)) {
-                ParseLongIncludeSwitch(parent);
-            }
-
-            else if (Match(TokenKind.IoChecks)) {
-                ParseLongIoChecksSwitch(parent);
-            }
-
-            else if (Match(TokenKind.LocalSymbolSwithLong)) {
-                ParseLongLocalSymbolSwitch(parent);
-            }
-
-            else if (Match(TokenKind.LongStringSwitchLong)) {
-                ParseLongLongStringSwitch(parent);
-            }
-
-            else if (Match(TokenKind.OpenStringSwitchLong)) {
-                ParseLongOpenStringSwitch(parent);
-            }
-
-            else if (Match(TokenKind.OptimizationSwitchLong)) {
-                ParseLongOptimizationSwitch(parent);
-            }
-
-            else if (Match(TokenKind.OverflowSwitchLong)) {
-                ParseLongOverflowSwitch(parent);
-            }
-
-            else if (Match(TokenKind.SafeDivideSwitchLong)) {
-                ParseLongSafeDivideSwitch(parent);
-            }
-
-            else if (Match(TokenKind.RangeChecks)) {
-                ParseLongRangeChecksSwitch(parent);
-            }
-
-            else if (Match(TokenKind.StackFramesSwitchLong)) {
-                ParseLongStackFramesSwitch(parent);
-            }
-
-            else if (Match(TokenKind.ZeroBaseStrings)) {
-                ParseZeroBasedStringSwitch(parent);
-            }
-
-            else if (Match(TokenKind.WritableConstSwitchLong)) {
-                ParseLongWritableConstSwitch(parent);
-            }
-
-            else if (Match(TokenKind.WeakLinkRtti)) {
-                ParseWeakLinkRttiSwitch(parent);
-            }
-
-            else if (Match(TokenKind.WeakPackageUnit)) {
-                ParseWeakPackageUnitSwitch(parent);
-            }
-
-            else if (Match(TokenKind.Warnings)) {
-                ParseWarningsSwitch(parent);
-            }
-
-            else if (Match(TokenKind.VarStringCheckSwitchLong)) {
-                ParseLongVarStringCheckSwitch(parent);
-            }
-
-            else if (Match(TokenKind.TypedPointersSwitchLong)) {
-                ParseLongTypedPointersSwitch(parent);
-            }
-
-            else if (Match(TokenKind.DefinitionInfo)) {
-                ParseDefinitionInfoSwitch(parent);
-            }
-
-            else if (Match(TokenKind.ReferenceInfo)) {
-                ParseReferenceInfoSwitch(parent);
-            }
-
-            else if (Match(TokenKind.StrongLinkTypes)) {
-                ParseStrongLinkTypes(parent);
-            }
-
-            else if (Match(TokenKind.ScopedEnums)) {
-                ParseScopedEnums(parent);
-            }
-
-            else if (Match(TokenKind.TypeInfoSwitchLong)) {
-                return ParseLongTypeInfoSwitch();
-            }
-
-            else if (Match(TokenKind.RunOnly)) {
-                ParseRunOnlyParameter(parent);
-            }
-
-            else if (Match(TokenKind.IncludeRessourceLong)) {
-                ParseLongIncludeRessourceSwitch(parent);
-            }
-
-            else if (Match(TokenKind.RealCompatibility)) {
-                ParseRealCompatibilitySwitch(parent);
-            }
-
-            else if (Match(TokenKind.Pointermath)) {
-                ParsePointermathSwitch(parent);
-            }
-
-            else if (Match(TokenKind.OldTypeLayout)) {
-                ParseOldTypeLayoutSwitch(parent);
-            }
-
-            else if (Match(TokenKind.EnumSizeSwitchLong)) {
-                ParseLongEnumSizeSwitch(parent);
-            }
-
-            else if (Match(TokenKind.MethodInfo)) {
-                ParseMethodInfoSwitch(parent);
-            }
-
-            else if (Match(TokenKind.LegacyIfEnd)) {
-                ParseLegacyIfEndSwitch(parent);
-            }
-
-            else if (Match(TokenKind.LinkSwitchLong)) {
-                ParseLongLinkSwitch(parent);
-            }
-
-            return parent;
         }
 
         private void ParseLongLinkSwitch(IExtendableSyntaxPart parent) {
@@ -1659,45 +1736,55 @@ namespace PasPasPas.Parsing.Parser {
             }
         }
 
-        private void ParseLongDescriptionSwitch(IExtendableSyntaxPart parent) {
-            var result = new Description();
-            InitByTerminal(result, parent, TokenKind.DescriptionSwitchLong);
+        private Description ParseLongDescriptionSwitch() {
+            var symbol = ContinueWithOrMissing(TokenKind.DescriptionSwitchLong);
+            var value = ContinueWith(TokenKind.QuotedString);
+            var descriptionValue = default(string);
 
-            if (ContinueWith(result, TokenKind.QuotedString) && result.LastTerminalToken.ParsedValue is IStringValue description) {
-                result.DescriptionValue = description.AsUnicodeString;
+            if (value != default && value.Token.ParsedValue is IStringValue description) {
+                descriptionValue = description.AsUnicodeString;
             }
             else {
-                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidDescriptionDirective, new[] { TokenKind.QuotedString });
+                value = ErrorAndSkip(null, CompilerDirectiveParserErrors.InvalidDescriptionDirective, new[] { TokenKind.QuotedString });
             }
+
+            return new Description(symbol, value, descriptionValue);
         }
 
-        private void ParseDenyPackageUnitSwitch(IExtendableSyntaxPart parent) {
-            var result = new ParseDenyPackageUnit();
-            InitByTerminal(result, parent, TokenKind.DenyPackageUnit);
+        private ParseDenyPackageUnit ParseDenyPackageUnitSwitch() {
+            var symbol = ContinueWithOrMissing(TokenKind.DenyPackageUnit);
+            var mode = ContinueWith(TokenKind.On, TokenKind.Off);
+            var denyUnit = DenyUnitInPackage.Undefined;
 
-            if (ContinueWith(result, TokenKind.On)) {
-                result.DenyUnit = DenyUnitInPackage.DenyUnit;
+            if (mode.GetSymbolKind() == TokenKind.On) {
+                denyUnit = DenyUnitInPackage.DenyUnit;
             }
-            else if (ContinueWith(result, TokenKind.Off)) {
-                result.DenyUnit = DenyUnitInPackage.AllowUnit;
+            else if (mode.GetSymbolKind() == TokenKind.Off) {
+                denyUnit = DenyUnitInPackage.AllowUnit;
             }
             else {
-                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidDenyPackageUnitDirective, new[] { TokenKind.On, TokenKind.Off });
+                mode = ErrorAndSkip(null, CompilerDirectiveParserErrors.InvalidDenyPackageUnitDirective, new[] { TokenKind.On, TokenKind.Off });
             }
+
+            return new ParseDenyPackageUnit(symbol, mode, denyUnit);
         }
 
-        private void ParseLongDebugInfoSwitch(IExtendableSyntaxPart parent) {
-            var result = new DebugInfoSwitch();
-            InitByTerminal(result, parent, TokenKind.DebugInfoSwitchLong);
-            if (ContinueWith(result, TokenKind.On)) {
-                result.DebugInfo = DebugInformation.IncludeDebugInformation;
+        private DebugInfoSwitch ParseLongDebugInfoSwitch() {
+            var symbol = ContinueWithOrMissing(TokenKind.DebugInfoSwitchLong);
+            var mode = ContinueWith(TokenKind.On, TokenKind.Off);
+            var debugInfo = DebugInformation.Undefined;
+
+            if (mode.GetSymbolKind() == TokenKind.On) {
+                debugInfo = DebugInformation.IncludeDebugInformation;
             }
-            else if (ContinueWith(result, TokenKind.Off)) {
-                result.DebugInfo = DebugInformation.NoDebugInfo;
+            else if (mode.GetSymbolKind() == TokenKind.Off) {
+                debugInfo = DebugInformation.NoDebugInfo;
             }
             else {
-                ErrorAndSkip(parent, CompilerDirectiveParserErrors.InvalidDebugInfoDirective, new[] { TokenKind.On, TokenKind.Off });
+                mode = ErrorAndSkip(null, CompilerDirectiveParserErrors.InvalidDebugInfoDirective, new[] { TokenKind.On, TokenKind.Off });
             }
+
+            return new DebugInfoSwitch(symbol, mode, debugInfo);
         }
 
         private AssertSwitch ParseLongAssertSwitch() {
@@ -1718,19 +1805,22 @@ namespace PasPasPas.Parsing.Parser {
             return new AssertSwitch(assert, mode, option);
         }
 
-        private void ParseLongBoolEvalSwitch(IExtendableSyntaxPart parent) {
-            var result = new BooleanEvaluationSwitch();
-            InitByTerminal(result, parent, TokenKind.BoolEvalSwitchLong);
+        private BooleanEvaluationSwitch ParseLongBoolEvalSwitch() {
+            var symbol = ContinueWithOrMissing(TokenKind.BoolEvalSwitchLong);
+            var mode = ContinueWith(TokenKind.On, TokenKind.Off);
+            var evalMode = BooleanEvaluation.Undefined;
 
-            if (ContinueWith(result, TokenKind.On)) {
-                result.BoolEval = BooleanEvaluation.CompleteEvaluation;
+            if (mode.GetSymbolKind() == TokenKind.On) {
+                evalMode = BooleanEvaluation.CompleteEvaluation;
             }
-            else if (ContinueWith(result, TokenKind.Off)) {
-                result.BoolEval = BooleanEvaluation.ShortEvaluation;
+            else if (mode.GetSymbolKind() == TokenKind.Off) {
+                evalMode = BooleanEvaluation.ShortEvaluation;
             }
             else {
-                ErrorAndSkip(parent, CompilerDirectiveParserErrors.InvalidBoolEvalDirective, new[] { TokenKind.On, TokenKind.Off });
+                mode = ErrorAndSkip(null, CompilerDirectiveParserErrors.InvalidBoolEvalDirective, new[] { TokenKind.On, TokenKind.Off });
             }
+
+            return new BooleanEvaluationSwitch(symbol, mode, evalMode);
         }
 
         private AlignSwitch ParseLongAlignSwitch() {
@@ -1772,86 +1862,6 @@ namespace PasPasPas.Parsing.Parser {
 
             alignSwitch = ErrorAndSkip(null, CompilerDirectiveParserErrors.InvalidAlignDirective, new[] { TokenKind.Integer });
             return new AlignSwitch(alignSymbol, alignSwitch, Alignment.Undefined);
-        }
-
-        /// <summary>
-        ///     parse a switch
-        /// </summary>
-        private ISyntaxPart ParseSwitch() {
-            IExtendableSyntaxPart parent = new CompilerDirective();
-
-            if (Match(TokenKind.AlignSwitch, TokenKind.AlignSwitch1, TokenKind.AlignSwitch2, TokenKind.AlignSwitch4, TokenKind.AlignSwitch8, TokenKind.AlignSwitch16))
-                return ParseAlignSwitch();
-
-            if (Match(TokenKind.BoolEvalSwitch)) {
-                ParseBoolEvalSwitch(parent);
-            }
-
-            if (Match(TokenKind.AssertSwitch))
-                return ParseAssertSwitch();
-
-            else if (Match(TokenKind.DebugInfoOrDescriptionSwitch)) {
-                ParseDebugInfoOrDescriptionSwitch(parent);
-            }
-            else if (Match(TokenKind.ExtensionSwitch)) {
-                ParseExtensionSwitch(parent);
-            }
-            else if (Match(TokenKind.ExtendedSyntaxSwitch)) {
-                ParseExtendedSyntaxSwitch(parent);
-            }
-            else if (Match(TokenKind.ImportedDataSwitch)) {
-                ParseImportedDataSwitch(parent);
-            }
-            else if (Match(TokenKind.IncludeSwitch)) {
-                return ParseIncludeSwitch(parent);
-            }
-            else if (Match(TokenKind.LinkOrLocalSymbolSwitch)) {
-                ParseLocalSymbolSwitch(parent);
-            }
-            else if (Match(TokenKind.LongStringSwitch)) {
-                ParseLongStringSwitch(parent);
-            }
-            else if (Match(TokenKind.OpenStringSwitch)) {
-                ParseOpenStringSwitch(parent);
-            }
-            else if (Match(TokenKind.OptimizationSwitch)) {
-                ParseOptimizationSwitch(parent);
-            }
-            else if (Match(TokenKind.OverflowSwitch)) {
-                ParseOverflowSwitch(parent);
-            }
-            else if (Match(TokenKind.SaveDivideSwitch)) {
-                ParseSaveDivideSwitch(parent);
-            }
-            else if (Match(TokenKind.IncludeRessource)) {
-                ParseIncludeRessource(parent);
-            }
-            else if (Match(TokenKind.StackFramesSwitch)) {
-                ParseStackFramesSwitch(parent);
-            }
-            else if (Match(TokenKind.WritableConstSwitch)) {
-                ParseWritableConstSwitch(parent);
-            }
-            else if (Match(TokenKind.VarStringCheckSwitch)) {
-                ParseVarStringCheckSwitch(parent);
-            }
-            else if (Match(TokenKind.TypedPointersSwitch)) {
-                ParseTypedPointersSwitch(parent);
-            }
-            else if (Match(TokenKind.SymbolDeclarationSwitch)) {
-                ParseSymbolDeclarationSwitch(parent);
-            }
-            else if (Match(TokenKind.SymbolDefinitionsOnlySwitch)) {
-                ParseSymbolDefinitionsOnlySwitch(parent);
-            }
-            else if (Match(TokenKind.TypeInfoSwitch)) {
-                return ParseTypeInfoSwitch();
-            }
-            else if (Match(TokenKind.EnumSizeSwitch, TokenKind.EnumSize1, TokenKind.EnumSize2, TokenKind.EnumSize4)) {
-                ParseEnumSizeSwitch(parent);
-            }
-
-            return parent;
         }
 
         private void ParseEnumSizeSwitch(IExtendableSyntaxPart parent) {
@@ -2268,28 +2278,30 @@ namespace PasPasPas.Parsing.Parser {
             }
         }
 
-        private void ParseDebugInfoOrDescriptionSwitch(IExtendableSyntaxPart parent) {
+        private ISyntaxPart ParseDebugInfoOrDescriptionSwitch() {
             if (LookAhead(1, TokenKind.Plus, TokenKind.Minus)) {
-                var result = new DebugInfoSwitch();
-                InitByTerminal(result, parent, TokenKind.DebugInfoOrDescriptionSwitch);
+                var symbol = ContinueWithOrMissing(TokenKind.DebugInfoOrDescriptionSwitch);
+                var mode = ContinueWith(TokenKind.Plus, TokenKind.Minus);
+                var debugInfo = DebugInformation.Undefined;
 
-                if (ContinueWith(result, TokenKind.Plus)) {
-                    result.DebugInfo = DebugInformation.IncludeDebugInformation;
+                if (mode.GetSymbolKind() == TokenKind.Plus) {
+                    debugInfo = DebugInformation.IncludeDebugInformation;
                 }
-                else if (ContinueWith(result, TokenKind.Minus)) {
-                    result.DebugInfo = DebugInformation.NoDebugInfo;
+                else if (mode.GetSymbolKind() == TokenKind.Minus) {
+                    debugInfo = DebugInformation.NoDebugInfo;
                 }
+                return new DebugInfoSwitch(symbol, mode, debugInfo);
             }
             else if (LookAhead(1, TokenKind.QuotedString)) {
-                var result = new Description();
-                InitByTerminal(result, parent, TokenKind.DebugInfoOrDescriptionSwitch);
-                ContinueWith(result, TokenKind.QuotedString);
-                result.DescriptionValue = (result.LastTerminalToken.ParsedValue as IStringValue).AsUnicodeString;
+                var symbol = ContinueWithOrMissing(TokenKind.DebugInfoOrDescriptionSwitch);
+                var value = ContinueWith(TokenKind.QuotedString);
+                var description = (value?.Token.ParsedValue as IStringValue)?.AsUnicodeString;
+                return new Description(symbol, value, description);
             }
             else {
-                var result = new DebugInfoSwitch();
-                InitByTerminal(result, parent, TokenKind.DebugInfoOrDescriptionSwitch);
-                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidDebugInfoDirective, new[] { TokenKind.Plus, TokenKind.Minus, TokenKind.QuotedString });
+                var symbol = ContinueWithOrMissing(TokenKind.DebugInfoOrDescriptionSwitch);
+                var mode = ErrorAndSkip(null, CompilerDirectiveParserErrors.InvalidDebugInfoDirective, new[] { TokenKind.Plus, TokenKind.Minus, TokenKind.QuotedString });
+                return new DebugInfoSwitch(symbol, mode, DebugInformation.Undefined);
             }
         }
 
@@ -2311,19 +2323,22 @@ namespace PasPasPas.Parsing.Parser {
             return new AssertSwitch(assert, mode, option);
         }
 
-        private void ParseBoolEvalSwitch(IExtendableSyntaxPart parent) {
-            var result = new BooleanEvaluationSwitch();
-            InitByTerminal(result, parent, TokenKind.BoolEvalSwitch);
+        private BooleanEvaluationSwitch ParseBoolEvalSwitch() {
+            var symbol = ContinueWithOrMissing(TokenKind.BoolEvalSwitch);
+            var mode = ContinueWith(TokenKind.Plus, TokenKind.Minus);
+            var evalMode = BooleanEvaluation.Undefined;
 
-            if (ContinueWith(result, TokenKind.Plus)) {
-                result.BoolEval = BooleanEvaluation.CompleteEvaluation;
+            if (mode.GetSymbolKind() == TokenKind.Plus) {
+                evalMode = BooleanEvaluation.CompleteEvaluation;
             }
-            else if (ContinueWith(result, TokenKind.Minus)) {
-                result.BoolEval = BooleanEvaluation.ShortEvaluation;
+            else if (mode.GetSymbolKind() == TokenKind.Minus) {
+                evalMode = BooleanEvaluation.ShortEvaluation;
             }
             else {
-                ErrorAndSkip(parent, CompilerDirectiveParserErrors.InvalidBoolEvalDirective, new[] { TokenKind.Plus, TokenKind.Minus });
+                mode = ErrorAndSkip(null, CompilerDirectiveParserErrors.InvalidBoolEvalDirective, new[] { TokenKind.Plus, TokenKind.Minus });
             }
+
+            return new BooleanEvaluationSwitch(symbol, mode, evalMode);
         }
 
         /// <summary>

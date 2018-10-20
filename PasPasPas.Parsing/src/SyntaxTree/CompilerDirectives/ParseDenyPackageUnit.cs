@@ -9,9 +9,31 @@ namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
     public class ParseDenyPackageUnit : CompilerDirectiveBase {
 
         /// <summary>
+        ///     parse a deny package unit directive
+        /// </summary>
+        /// <param name="symbol"></param>
+        /// <param name="mode"></param>
+        /// <param name="denyUnit"></param>
+        public ParseDenyPackageUnit(Terminal symbol, Terminal mode, DenyUnitInPackage denyUnit) {
+            Symbol = symbol;
+            Mode = mode;
+            DenyUnit = denyUnit;
+        }
+
+        /// <summary>
         ///     switch value
         /// </summary>
-        public DenyUnitInPackage DenyUnit { get; set; }
+        public DenyUnitInPackage DenyUnit { get; }
+
+        /// <summary>
+        ///     mode
+        /// </summary>
+        public Terminal Mode { get; }
+
+        /// <summary>
+        ///     symbol
+        /// </summary>
+        public Terminal Symbol { get; }
 
         /// <summary>
         ///     accept visitor
@@ -19,7 +41,8 @@ namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
         /// <param name="visitor">node visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
-            AcceptParts(this, visitor);
+            AcceptPart(this, Symbol, visitor);
+            AcceptPart(this, Mode, visitor);
             visitor.EndVisit(this);
         }
 

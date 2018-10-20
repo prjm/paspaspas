@@ -21,8 +21,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "P3SyntaxTreeViewer", "P3Syn
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PasPasPas.Typings", "PasPasPas.Typings\PasPasPas.Typings.csproj", "{E22933E4-0571-4997-93DD-AAE65FF517F7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3Benchmark", "P3Benchmark\P3Benchmark.csproj", "{EE56DD08-21EB-46D6-A08D-33E06B16EBA1}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PasPasPas.Api", "PasPasPas.Api\PasPasPas.Api.csproj", "{CF92A709-525F-450E-858F-A6AD8EDC16BA}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SampleRunner", "SampleRunner\SampleRunner.csproj", "{F549AE41-5B0F-4F46-B11C-3A9D27F749FB}"
@@ -42,9 +40,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PasPasPas.Globals", "PasPasPas.Global\PasPasPas.Globals.csproj", "{7A2FF93E-975A-4F2B-87B7-49C97FDA316F}"
 EndProject
 Global
-	GlobalSection(Performance) = preSolution
-		HasPerformanceSessions = true
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|x64 = Debug|x64
@@ -108,12 +103,6 @@ Global
 		{E22933E4-0571-4997-93DD-AAE65FF517F7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E22933E4-0571-4997-93DD-AAE65FF517F7}.Release|x64.ActiveCfg = Release|Any CPU
 		{E22933E4-0571-4997-93DD-AAE65FF517F7}.Release|x64.Build.0 = Release|Any CPU
-		{EE56DD08-21EB-46D6-A08D-33E06B16EBA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EE56DD08-21EB-46D6-A08D-33E06B16EBA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EE56DD08-21EB-46D6-A08D-33E06B16EBA1}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{EE56DD08-21EB-46D6-A08D-33E06B16EBA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EE56DD08-21EB-46D6-A08D-33E06B16EBA1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EE56DD08-21EB-46D6-A08D-33E06B16EBA1}.Release|x64.ActiveCfg = Release|Any CPU
 		{CF92A709-525F-450E-858F-A6AD8EDC16BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CF92A709-525F-450E-858F-A6AD8EDC16BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CF92A709-525F-450E-858F-A6AD8EDC16BA}.Debug|x64.ActiveCfg = Debug|Any CPU
@@ -166,7 +155,6 @@ Global
 		{EEB2B9DC-E131-46CF-AAC3-6AB662D67DBE} = {AC53D98C-87A1-42D9-859E-4182316C25AB}
 		{B3649E9A-4BCC-437B-B233-D4C71A175E66} = {F28AC463-2553-4704-AE77-B9A356E953BC}
 		{E22933E4-0571-4997-93DD-AAE65FF517F7} = {AC53D98C-87A1-42D9-859E-4182316C25AB}
-		{EE56DD08-21EB-46D6-A08D-33E06B16EBA1} = {F28AC463-2553-4704-AE77-B9A356E953BC}
 		{CF92A709-525F-450E-858F-A6AD8EDC16BA} = {AC53D98C-87A1-42D9-859E-4182316C25AB}
 		{F549AE41-5B0F-4F46-B11C-3A9D27F749FB} = {F28AC463-2553-4704-AE77-B9A356E953BC}
 		{C863FF01-4A90-4646-BAD2-292406CC6DA0} = {F28AC463-2553-4704-AE77-B9A356E953BC}
@@ -175,6 +163,9 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B2F698BE-CFC6-42C3-B03D-0E3F638C62A0}
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
 	EndGlobalSection
 	GlobalSection(Performance) = preSolution
 		HasPerformanceSessions = true
