@@ -9,9 +9,31 @@ namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
     public class MinEnumSize : CompilerDirectiveBase {
 
         /// <summary>
+        ///     minimum enum size
+        /// </summary>
+        /// <param name="symbol"></param>
+        /// <param name="mode"></param>
+        /// <param name="size"></param>
+        public MinEnumSize(Terminal symbol, Terminal mode, EnumSize size) {
+            Symbol = symbol;
+            Mode = mode;
+            Size = size;
+        }
+
+        /// <summary>
         ///     enum size
         /// </summary>
-        public EnumSize Size { get; set; }
+        public EnumSize Size { get; }
+
+        /// <summary>
+        ///     directive
+        /// </summary>
+        public Terminal Symbol { get; }
+
+        /// <summary>
+        ///     mode
+        /// </summary>
+        public Terminal Mode { get; }
 
         /// <summary>
         ///     accept visitor
@@ -19,7 +41,8 @@ namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
         /// <param name="visitor">node visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
-            AcceptParts(this, visitor);
+            AcceptPart(this, Symbol, visitor);
+            AcceptPart(this, Mode, visitor);
             visitor.EndVisit(this);
         }
 

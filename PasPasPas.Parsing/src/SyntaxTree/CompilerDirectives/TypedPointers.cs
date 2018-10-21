@@ -9,9 +9,31 @@ namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
     public class TypedPointers : CompilerDirectiveBase {
 
         /// <summary>
+        ///     create a new typed pointers directive
+        /// </summary>
+        /// <param name="symbol"></param>
+        /// <param name="mode"></param>
+        /// <param name="parsedMode"></param>
+        public TypedPointers(Terminal symbol, Terminal mode, UsePointersWithTypeChecking parsedMode) {
+            Symbol = symbol;
+            ModeSymbol = mode;
+            Mode = parsedMode;
+        }
+
+        /// <summary>
         ///     switch mode
         /// </summary>
-        public UsePointersWithTypeChecking Mode { get; set; }
+        public UsePointersWithTypeChecking Mode { get; }
+
+        /// <summary>
+        ///     directives
+        /// </summary>
+        public Terminal Symbol { get; }
+
+        /// <summary>
+        ///     mode
+        /// </summary>
+        public Terminal ModeSymbol { get; }
 
         /// <summary>
         ///     accept visitor
@@ -19,10 +41,12 @@ namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
         /// <param name="visitor">visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
-            AcceptParts(this, visitor);
+            AcceptPart(this, Symbol, visitor);
+            AcceptPart(this, ModeSymbol, visitor);
             visitor.EndVisit(this);
         }
 
 
     }
 }
+

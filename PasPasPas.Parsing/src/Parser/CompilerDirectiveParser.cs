@@ -279,7 +279,6 @@ namespace PasPasPas.Parsing.Parser {
         ///     parse a switch
         /// </summary>
         private ISyntaxPart ParseSwitch() {
-            IExtendableSyntaxPart parent = new CompilerDirective();
 
             if (Match(TokenKind.AlignSwitch, TokenKind.AlignSwitch1, TokenKind.AlignSwitch2, TokenKind.AlignSwitch4, TokenKind.AlignSwitch8, TokenKind.AlignSwitch16))
                 return ParseAlignSwitch();
@@ -303,7 +302,7 @@ namespace PasPasPas.Parsing.Parser {
                 return ParseImportedDataSwitch();
 
             if (Match(TokenKind.IncludeSwitch))
-                return ParseIncludeSwitch(parent);
+                return ParseIncludeSwitch();
 
             if (Match(TokenKind.LinkOrLocalSymbolSwitch))
                 return ParseLocalSymbolSwitch();
@@ -314,44 +313,43 @@ namespace PasPasPas.Parsing.Parser {
             if (Match(TokenKind.OpenStringSwitch))
                 return ParseOpenStringSwitch();
 
-            if (Match(TokenKind.OptimizationSwitch)) {
-                ParseOptimizationSwitch(parent);
-            }
-            else if (Match(TokenKind.OverflowSwitch)) {
-                ParseOverflowSwitch(parent);
-            }
-            else if (Match(TokenKind.SaveDivideSwitch)) {
-                ParseSaveDivideSwitch(parent);
-            }
-            else if (Match(TokenKind.IncludeRessource)) {
-                return ParseIncludeRessource();
-            }
-            else if (Match(TokenKind.StackFramesSwitch)) {
-                ParseStackFramesSwitch(parent);
-            }
-            else if (Match(TokenKind.WritableConstSwitch)) {
-                ParseWritableConstSwitch(parent);
-            }
-            else if (Match(TokenKind.VarStringCheckSwitch)) {
-                ParseVarStringCheckSwitch(parent);
-            }
-            else if (Match(TokenKind.TypedPointersSwitch)) {
-                ParseTypedPointersSwitch(parent);
-            }
-            else if (Match(TokenKind.SymbolDeclarationSwitch)) {
-                ParseSymbolDeclarationSwitch(parent);
-            }
-            else if (Match(TokenKind.SymbolDefinitionsOnlySwitch)) {
-                ParseSymbolDefinitionsOnlySwitch(parent);
-            }
-            else if (Match(TokenKind.TypeInfoSwitch)) {
-                return ParseTypeInfoSwitch();
-            }
-            else if (Match(TokenKind.EnumSizeSwitch, TokenKind.EnumSize1, TokenKind.EnumSize2, TokenKind.EnumSize4)) {
-                ParseEnumSizeSwitch(parent);
-            }
+            if (Match(TokenKind.OptimizationSwitch))
+                return ParseOptimizationSwitch();
 
-            return parent;
+            if (Match(TokenKind.OverflowSwitch))
+                return ParseOverflowSwitch();
+
+            if (Match(TokenKind.SaveDivideSwitch))
+                return ParseSaveDivideSwitch();
+
+            if (Match(TokenKind.IncludeRessource))
+                return ParseIncludeRessource();
+
+            if (Match(TokenKind.StackFramesSwitch))
+                return ParseStackFramesSwitch();
+
+            if (Match(TokenKind.WritableConstSwitch))
+                return ParseWritableConstSwitch();
+
+            if (Match(TokenKind.VarStringCheckSwitch))
+                return ParseVarStringCheckSwitch();
+
+            if (Match(TokenKind.TypedPointersSwitch))
+                return ParseTypedPointersSwitch();
+
+            if (Match(TokenKind.SymbolDeclarationSwitch))
+                return ParseSymbolDeclarationSwitch();
+
+            if (Match(TokenKind.SymbolDefinitionsOnlySwitch))
+                return ParseSymbolDefinitionsOnlySwitch();
+
+            if (Match(TokenKind.TypeInfoSwitch))
+                return ParseTypeInfoSwitch();
+
+            if (Match(TokenKind.EnumSizeSwitch, TokenKind.EnumSize1, TokenKind.EnumSize2, TokenKind.EnumSize4))
+                return ParseEnumSizeSwitch();
+
+            return default;
         }
 
         /// <summary>
@@ -421,7 +419,7 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             else if (Match(TokenKind.IoChecks)) {
-                ParseLongIoChecksSwitch(parent);
+                return ParseLongIoChecksSwitch();
             }
 
             else if (Match(TokenKind.LocalSymbolSwithLong)) {
@@ -437,15 +435,15 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             else if (Match(TokenKind.OptimizationSwitchLong)) {
-                ParseLongOptimizationSwitch(parent);
+                return ParseLongOptimizationSwitch();
             }
 
             else if (Match(TokenKind.OverflowSwitchLong)) {
-                ParseLongOverflowSwitch(parent);
+                return ParseLongOverflowSwitch();
             }
 
             else if (Match(TokenKind.SafeDivideSwitchLong)) {
-                ParseLongSafeDivideSwitch(parent);
+                return ParseLongSafeDivideSwitch();
             }
 
             else if (Match(TokenKind.RangeChecks)) {
@@ -453,7 +451,7 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             else if (Match(TokenKind.StackFramesSwitchLong)) {
-                ParseLongStackFramesSwitch(parent);
+                return ParseLongStackFramesSwitch();
             }
 
             else if (Match(TokenKind.ZeroBaseStrings)) {
@@ -461,7 +459,7 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             else if (Match(TokenKind.WritableConstSwitchLong)) {
-                ParseLongWritableConstSwitch(parent);
+                return ParseLongWritableConstSwitch();
             }
 
             else if (Match(TokenKind.WeakLinkRtti)) {
@@ -477,19 +475,19 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             else if (Match(TokenKind.VarStringCheckSwitchLong)) {
-                ParseLongVarStringCheckSwitch(parent);
+                return ParseLongVarStringCheckSwitch();
             }
 
             else if (Match(TokenKind.TypedPointersSwitchLong)) {
-                ParseLongTypedPointersSwitch(parent);
+                return ParseLongTypedPointersSwitch(parent);
             }
 
             else if (Match(TokenKind.DefinitionInfo)) {
-                ParseDefinitionInfoSwitch(parent);
+                return ParseDefinitionInfoSwitch();
             }
 
             else if (Match(TokenKind.ReferenceInfo)) {
-                ParseReferenceInfoSwitch(parent);
+                return ParseReferenceInfoSwitch();
             }
 
             else if (Match(TokenKind.StrongLinkTypes)) {
@@ -525,7 +523,7 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             else if (Match(TokenKind.EnumSizeSwitchLong)) {
-                ParseLongEnumSizeSwitch(parent);
+                return ParseLongEnumSizeSwitch();
             }
 
             else if (Match(TokenKind.MethodInfo)) {
@@ -1157,40 +1155,48 @@ namespace PasPasPas.Parsing.Parser {
             }
         }
 
-        private void ParseLongEnumSizeSwitch(IExtendableSyntaxPart parent) {
-            var result = new MinEnumSize();
-            InitByTerminal(result, parent, TokenKind.EnumSizeSwitchLong);
+        private MinEnumSize ParseLongEnumSizeSwitch() {
+            var symbol = ContinueWithOrMissing(TokenKind.EnumSizeSwitchLong);
+            var sizeSymbol = ContinueWith(TokenKind.Integer);
+            var hasError = false;
 
-            if (!ContinueWith(result, TokenKind.Integer)) {
-                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidMinEnumSizeDirective, new[] { TokenKind.Integer });
-                return;
+            if (sizeSymbol == default) {
+                sizeSymbol = ErrorAndSkip(default, CompilerDirectiveParserErrors.InvalidMinEnumSizeDirective, new[] { TokenKind.Integer });
+                hasError = true;
             }
 
-            ulong size;
+            var size = 0ul;
+            var parsedSize = EnumSize.Undefined;
 
-            if (result.LastTerminalToken.ParsedValue is IIntegerValue intValue && !intValue.IsNegative) {
+            if (sizeSymbol?.Token.ParsedValue is IIntegerValue intValue && !intValue.IsNegative) {
                 size = intValue.UnsignedValue;
             }
-            else {
-                ErrorLastPart(result, CompilerDirectiveParserErrors.InvalidMinEnumSizeDirective);
-                return;
+            else if (!hasError) {
+                ErrorLastPart(default, CompilerDirectiveParserErrors.InvalidMinEnumSizeDirective);
+                hasError = true;
             }
 
             switch (size) {
                 case 1:
-                    result.Size = EnumSize.OneByte;
+                    parsedSize = EnumSize.OneByte;
                     break;
+
                 case 2:
-                    result.Size = EnumSize.TwoByte;
+                    parsedSize = EnumSize.TwoByte;
                     break;
+
                 case 4:
-                    result.Size = EnumSize.FourByte;
+                    parsedSize = EnumSize.FourByte;
                     break;
+
                 default:
-                    result.Size = EnumSize.Undefined;
-                    ErrorLastPart(result, CompilerDirectiveParserErrors.InvalidMinEnumSizeDirective);
+                    parsedSize = EnumSize.Undefined;
+                    if (!hasError)
+                        ErrorLastPart(default, CompilerDirectiveParserErrors.InvalidMinEnumSizeDirective);
                     break;
             }
+
+            return new MinEnumSize(symbol, sizeSymbol, parsedSize);
         }
 
         private void ParseOldTypeLayoutSwitch(IExtendableSyntaxPart parent) {
@@ -1304,64 +1310,76 @@ namespace PasPasPas.Parsing.Parser {
             }
         }
 
-        private void ParseReferenceInfoSwitch(IExtendableSyntaxPart parent) {
-            var result = new SymbolDefinitions();
-            InitByTerminal(result, parent, TokenKind.ReferenceInfo);
+        private SymbolDefinitions ParseReferenceInfoSwitch() {
+            var symbol = ContinueWithOrMissing(TokenKind.ReferenceInfo);
+            var mode = ContinueWith(TokenKind.On, TokenKind.Off);
+            var parsedMode = SymbolReferenceInfo.Undefined;
 
-            if (ContinueWith(result, TokenKind.On)) {
-                result.ReferencesMode = SymbolReferenceInfo.Enable;
+            if (mode.GetSymbolKind() == TokenKind.On) {
+                parsedMode = SymbolReferenceInfo.Enable;
             }
-            else if (ContinueWith(result, TokenKind.Off)) {
-                result.ReferencesMode = SymbolReferenceInfo.Disable;
+            else if (mode.GetSymbolKind() == TokenKind.Off) {
+                parsedMode = SymbolReferenceInfo.Disable;
             }
             else {
-                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidDefinitionInfoDirective, new[] { TokenKind.On, TokenKind.Off });
+                mode = ErrorAndSkip(default, CompilerDirectiveParserErrors.InvalidDefinitionInfoDirective, new[] { TokenKind.On, TokenKind.Off });
             }
+
+            return new SymbolDefinitions(symbol, mode, parsedMode);
         }
 
-        private void ParseDefinitionInfoSwitch(IExtendableSyntaxPart parent) {
-            var result = new SymbolDefinitions();
-            InitByTerminal(result, parent, TokenKind.DefinitionInfo);
+        private SymbolDefinitions ParseDefinitionInfoSwitch() {
+            var symbol = ContinueWithOrMissing(TokenKind.DefinitionInfo);
+            var mode = ContinueWith(TokenKind.On, TokenKind.Off);
+            var parsedMode = SymbolDefinitionInfo.Undefined;
 
-            if (ContinueWith(result, TokenKind.On)) {
-                result.Mode = SymbolDefinitionInfo.Enable;
+            if (mode.GetSymbolKind() == TokenKind.On) {
+                parsedMode = SymbolDefinitionInfo.Enable;
             }
-            else if (ContinueWith(result, TokenKind.Off)) {
-                result.Mode = SymbolDefinitionInfo.Disable;
+            else if (mode.GetSymbolKind() == TokenKind.Off) {
+                parsedMode = SymbolDefinitionInfo.Disable;
             }
             else {
-                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidDefinitionInfoDirective, new[] { TokenKind.On, TokenKind.Off });
+                mode = ErrorAndSkip(default, CompilerDirectiveParserErrors.InvalidDefinitionInfoDirective, new[] { TokenKind.On, TokenKind.Off });
             }
+
+            return new SymbolDefinitions(symbol, mode, SymbolReferenceInfo.Undefined, parsedMode);
         }
 
-        private void ParseLongTypedPointersSwitch(IExtendableSyntaxPart parent) {
-            var result = new TypedPointers();
-            InitByTerminal(result, parent, TokenKind.TypedPointersSwitchLong);
+        private TypedPointers ParseLongTypedPointersSwitch(IExtendableSyntaxPart parent) {
+            var symbol = ContinueWithOrMissing(TokenKind.TypedPointersSwitchLong);
+            var mode = ContinueWith(TokenKind.On, TokenKind.Off);
+            var parsedMode = UsePointersWithTypeChecking.Undefined;
 
-            if (ContinueWith(result, TokenKind.On)) {
-                result.Mode = UsePointersWithTypeChecking.Enable;
+            if (mode.GetSymbolKind() == TokenKind.On) {
+                parsedMode = UsePointersWithTypeChecking.Enable;
             }
-            else if (ContinueWith(result, TokenKind.Off)) {
-                result.Mode = UsePointersWithTypeChecking.Disable;
+            else if (mode.GetSymbolKind() == TokenKind.Off) {
+                parsedMode = UsePointersWithTypeChecking.Disable;
             }
             else {
-                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidTypeCheckedPointersDirective, new[] { TokenKind.On, TokenKind.Off });
+                mode = ErrorAndSkip(default, CompilerDirectiveParserErrors.InvalidTypeCheckedPointersDirective, new[] { TokenKind.On, TokenKind.Off });
             }
+
+            return new TypedPointers(symbol, mode, parsedMode);
         }
 
-        private void ParseLongVarStringCheckSwitch(IExtendableSyntaxPart parent) {
-            var result = new VarStringChecks();
-            InitByTerminal(result, parent, TokenKind.VarStringCheckSwitchLong);
+        private VarStringChecks ParseLongVarStringCheckSwitch() {
+            var symbol = ContinueWithOrMissing(TokenKind.VarStringCheckSwitchLong);
+            var mode = ContinueWith(TokenKind.On, TokenKind.Off);
+            var parsedMode = ShortVarStringCheck.Undefined;
 
-            if (ContinueWith(result, TokenKind.On)) {
-                result.Mode = ShortVarStringCheck.EnableChecks;
+            if (mode.GetSymbolKind() == TokenKind.On) {
+                parsedMode = ShortVarStringCheck.EnableChecks;
             }
-            else if (ContinueWith(result, TokenKind.Off)) {
-                result.Mode = ShortVarStringCheck.DisableChecks;
+            else if (mode.GetSymbolKind() == TokenKind.Off) {
+                parsedMode = ShortVarStringCheck.DisableChecks;
             }
             else {
-                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidStringCheckDirective, new[] { TokenKind.On, TokenKind.Off });
+                mode = ErrorAndSkip(default, CompilerDirectiveParserErrors.InvalidStringCheckDirective, new[] { TokenKind.On, TokenKind.Off });
             }
+
+            return new VarStringChecks(symbol, mode, parsedMode);
         }
 
         private void ParseWarningsSwitch(IExtendableSyntaxPart parent) {
@@ -1409,19 +1427,22 @@ namespace PasPasPas.Parsing.Parser {
             }
         }
 
-        private void ParseLongWritableConstSwitch(IExtendableSyntaxPart parent) {
-            var result = new WritableConsts();
-            InitByTerminal(result, parent, TokenKind.WritableConstSwitchLong);
+        private WritableConsts ParseLongWritableConstSwitch() {
+            var symbol = ContinueWith(TokenKind.WritableConstSwitchLong);
+            var mode = ContinueWith(TokenKind.On, TokenKind.Off);
+            var parsedMode = ConstantValue.Undefined;
 
-            if (ContinueWith(result, TokenKind.On)) {
-                result.Mode = ConstantValue.Writable;
+            if (mode.GetSymbolKind() == TokenKind.On) {
+                parsedMode = ConstantValue.Writable;
             }
-            else if (ContinueWith(result, TokenKind.Off)) {
-                result.Mode = ConstantValue.Constant;
+            else if (mode.GetSymbolKind() == TokenKind.Off) {
+                parsedMode = ConstantValue.Constant;
             }
             else {
-                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidWritableConstantsDirective, new[] { TokenKind.On, TokenKind.Off });
+                mode = ErrorAndSkip(default, CompilerDirectiveParserErrors.InvalidWritableConstantsDirective, new[] { TokenKind.On, TokenKind.Off });
             }
+
+            return new WritableConsts(symbol, mode, parsedMode);
         }
 
         private void ParseZeroBasedStringSwitch(IExtendableSyntaxPart parent) {
@@ -1439,19 +1460,22 @@ namespace PasPasPas.Parsing.Parser {
             }
         }
 
-        private void ParseLongStackFramesSwitch(IExtendableSyntaxPart parent) {
-            var result = new StackFrames();
-            InitByTerminal(result, parent, TokenKind.StackFramesSwitchLong);
+        private StackFrames ParseLongStackFramesSwitch() {
+            var symbol = ContinueWithOrMissing(TokenKind.StackFramesSwitchLong);
+            var mode = ContinueWith(TokenKind.On, TokenKind.Off);
+            var parsedMode = StackFrameGeneration.Undefined;
 
-            if (ContinueWith(result, TokenKind.On)) {
-                result.Mode = StackFrameGeneration.EnableFrames;
+            if (mode.GetSymbolKind() == TokenKind.On) {
+                parsedMode = StackFrameGeneration.EnableFrames;
             }
-            else if (ContinueWith(result, TokenKind.Off)) {
-                result.Mode = StackFrameGeneration.DisableFrames;
+            else if (mode.GetSymbolKind() == TokenKind.Off) {
+                parsedMode = StackFrameGeneration.DisableFrames;
             }
             else {
-                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidStackFramesDirective, new[] { TokenKind.On, TokenKind.Off });
+                mode = ErrorAndSkip(default, CompilerDirectiveParserErrors.InvalidStackFramesDirective, new[] { TokenKind.On, TokenKind.Off });
             }
+
+            return new StackFrames(symbol, mode, parsedMode);
         }
 
         private RangeChecks ParseLongRangeChecksSwitch() {
@@ -1472,49 +1496,58 @@ namespace PasPasPas.Parsing.Parser {
             return new RangeChecks(symbol, mode, parsedMode);
         }
 
-        private void ParseLongSafeDivideSwitch(IExtendableSyntaxPart parent) {
-            var result = new SafeDivide();
-            InitByTerminal(result, parent, TokenKind.SafeDivideSwitchLong);
+        private SafeDivide ParseLongSafeDivideSwitch() {
+            var symbol = ContinueWithOrMissing(TokenKind.SafeDivideSwitchLong);
+            var mode = ContinueWith(TokenKind.On, TokenKind.Off);
+            var parsedMode = FDivSafeDivide.Undefined;
 
-            if (ContinueWith(result, TokenKind.On)) {
-                result.Mode = FDivSafeDivide.EnableSafeDivide;
+            if (mode.GetSymbolKind() == TokenKind.On) {
+                parsedMode = FDivSafeDivide.EnableSafeDivide;
             }
-            else if (ContinueWith(result, TokenKind.Off)) {
-                result.Mode = FDivSafeDivide.DisableSafeDivide;
+            else if (mode.GetSymbolKind() == TokenKind.Off) {
+                parsedMode = FDivSafeDivide.DisableSafeDivide;
             }
             else {
-                ErrorAndSkip(parent, CompilerDirectiveParserErrors.InvalidSafeDivide, new[] { TokenKind.On, TokenKind.Off });
+                mode = ErrorAndSkip(default, CompilerDirectiveParserErrors.InvalidSafeDivide, new[] { TokenKind.On, TokenKind.Off });
             }
+
+            return new SafeDivide(symbol, mode, parsedMode);
         }
 
-        private void ParseLongOverflowSwitch(IExtendableSyntaxPart parent) {
-            var result = new Overflow();
-            InitByTerminal(result, parent, TokenKind.OverflowSwitchLong);
+        private Overflow ParseLongOverflowSwitch() {
+            var symbol = ContinueWithOrMissing(TokenKind.OverflowSwitchLong);
+            var mode = ContinueWith(TokenKind.On, TokenKind.Off);
+            var parsedMode = RuntimeOverflowCheck.Undefined;
 
-            if (ContinueWith(result, TokenKind.On)) {
-                result.Mode = RuntimeOverflowCheck.EnableChecks;
+            if (mode.GetSymbolKind() == TokenKind.On) {
+                parsedMode = RuntimeOverflowCheck.EnableChecks;
             }
-            else if (ContinueWith(result, TokenKind.Off)) {
-                result.Mode = RuntimeOverflowCheck.DisableChecks;
+            else if (mode.GetSymbolKind() == TokenKind.Off) {
+                parsedMode = RuntimeOverflowCheck.DisableChecks;
             }
             else {
-                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidOverflowCheckDirective, new[] { TokenKind.On, TokenKind.Off });
+                mode = ErrorAndSkip(null, CompilerDirectiveParserErrors.InvalidOverflowCheckDirective, new[] { TokenKind.On, TokenKind.Off });
             }
+
+            return new Overflow(symbol, mode, parsedMode);
         }
 
-        private void ParseLongOptimizationSwitch(IExtendableSyntaxPart parent) {
-            var result = new Optimization();
-            InitByTerminal(result, parent, TokenKind.OptimizationSwitchLong);
+        private Optimization ParseLongOptimizationSwitch() {
+            var symbol = ContinueWithOrMissing(TokenKind.OptimizationSwitchLong);
+            var mode = ContinueWith(TokenKind.On, TokenKind.Off);
+            var parsedMode = CompilerOptimization.Undefined;
 
-            if (ContinueWith(result, TokenKind.On)) {
-                result.Mode = CompilerOptimization.EnableOptimization;
+            if (mode.GetSymbolKind() == TokenKind.On) {
+                parsedMode = CompilerOptimization.EnableOptimization;
             }
-            else if (ContinueWith(result, TokenKind.Off)) {
-                result.Mode = CompilerOptimization.DisableOptimization;
+            else if (mode.GetSymbolKind() == TokenKind.Off) {
+                parsedMode = CompilerOptimization.DisableOptimization;
             }
             else {
-                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidOptimizationDirective, new[] { TokenKind.On, TokenKind.Off });
+                mode = ErrorAndSkip(null, CompilerDirectiveParserErrors.InvalidOptimizationDirective, new[] { TokenKind.On, TokenKind.Off });
             }
+
+            return new Optimization(symbol, mode, parsedMode);
         }
 
         private OpenStrings ParseLongOpenStringSwitch() {
@@ -1571,19 +1604,22 @@ namespace PasPasPas.Parsing.Parser {
             return new LocalSymbols(symbol, mode, parsedMode);
         }
 
-        private void ParseLongIoChecksSwitch(IExtendableSyntaxPart parent) {
-            var result = new IoChecks();
-            InitByTerminal(result, parent, TokenKind.IoChecks);
+        private IoChecks ParseLongIoChecksSwitch() {
+            var symbol = ContinueWithOrMissing(TokenKind.IoChecks);
+            var mode = ContinueWith(TokenKind.On, TokenKind.Off);
+            var parsedMode = IoCallCheck.Undefined;
 
-            if (ContinueWith(result, TokenKind.On)) {
-                result.Mode = IoCallCheck.EnableIoChecks;
+            if (mode.GetSymbolKind() == TokenKind.On) {
+                parsedMode = IoCallCheck.EnableIoChecks;
             }
-            else if (ContinueWith(result, TokenKind.Off)) {
-                result.Mode = IoCallCheck.DisableIoChecks;
+            else if (mode.GetSymbolKind() == TokenKind.Off) {
+                parsedMode = IoCallCheck.DisableIoChecks;
             }
             else {
-                ErrorAndSkip(parent, CompilerDirectiveParserErrors.InvalidIoChecksDirective, new[] { TokenKind.On, TokenKind.Off });
+                mode = ErrorAndSkip(default, CompilerDirectiveParserErrors.InvalidIoChecksDirective, new[] { TokenKind.On, TokenKind.Off });
             }
+
+            return new IoChecks(symbol, mode, parsedMode);
         }
 
         private Include ParseLongIncludeSwitch()
@@ -1876,29 +1912,34 @@ namespace PasPasPas.Parsing.Parser {
             return new AlignSwitch(alignSymbol, alignSwitch, Alignment.Undefined);
         }
 
-        private void ParseEnumSizeSwitch(IExtendableSyntaxPart parent) {
-            var result = new MinEnumSize();
-            InitByTerminal(result, parent, TokenKind.EnumSize1, TokenKind.EnumSize2, TokenKind.EnumSize4, TokenKind.EnumSizeSwitch);
-            var kind = result.LastTerminalKind;
+        private MinEnumSize ParseEnumSizeSwitch() {
+            var symbol = ContinueWithOrMissing(TokenKind.EnumSize1, TokenKind.EnumSize2, TokenKind.EnumSize4, TokenKind.EnumSizeSwitch);
+            var kind = symbol?.Token.Kind;
+            var size = EnumSize.Undefined;
+            var mode = default(Terminal);
 
             if (kind == TokenKind.EnumSize1) {
-                result.Size = EnumSize.OneByte;
+                size = EnumSize.OneByte;
             }
             else if (kind == TokenKind.EnumSize2) {
-                result.Size = EnumSize.TwoByte;
+                size = EnumSize.TwoByte;
             }
             else if (kind == TokenKind.EnumSize4) {
-                result.Size = EnumSize.FourByte;
+                size = EnumSize.FourByte;
             }
-            else if (ContinueWith(result, TokenKind.Plus)) {
-                result.Size = EnumSize.FourByte;
+            else if (Match(TokenKind.Plus)) {
+                mode = ContinueWith(TokenKind.Plus);
+                size = EnumSize.FourByte;
             }
-            else if (ContinueWith(result, TokenKind.Minus)) {
-                result.Size = EnumSize.OneByte;
+            else if (Match(TokenKind.Minus)) {
+                mode = ContinueWith(TokenKind.Minus);
+                size = EnumSize.OneByte;
             }
             else {
-                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidMinEnumSizeDirective, new[] { TokenKind.Plus, TokenKind.Minus });
+                mode = ErrorAndSkip(default, CompilerDirectiveParserErrors.InvalidMinEnumSizeDirective, new[] { TokenKind.Plus, TokenKind.Minus });
             }
+
+            return new MinEnumSize(symbol, mode, size);
         }
 
         private ObjTypeName ParseObjTypeNameSwitch() {
@@ -1958,88 +1999,104 @@ namespace PasPasPas.Parsing.Parser {
             return new PublishedRtti(symbol, mode, parsedMode);
         }
 
-        private void ParseSymbolDefinitionsOnlySwitch(IExtendableSyntaxPart parent) {
-            var result = new SymbolDefinitions();
-            InitByTerminal(result, parent, TokenKind.SymbolDefinitionsOnlySwitch);
-            result.ReferencesMode = SymbolReferenceInfo.Disable;
-            result.Mode = SymbolDefinitionInfo.Enable;
+        private SymbolDefinitions ParseSymbolDefinitionsOnlySwitch() {
+            var symbol = ContinueWithOrMissing(TokenKind.SymbolDefinitionsOnlySwitch);
+            var referencesMode = SymbolReferenceInfo.Disable;
+            var mode = SymbolDefinitionInfo.Enable;
+            return new SymbolDefinitions(symbol, referencesMode, mode);
         }
 
-        private void ParseSymbolDeclarationSwitch(IExtendableSyntaxPart parent) {
-            var result = new SymbolDefinitions();
-            InitByTerminal(result, parent, TokenKind.SymbolDeclarationSwitch);
+        private SymbolDefinitions ParseSymbolDeclarationSwitch() {
+            var symbol = ContinueWithOrMissing(TokenKind.SymbolDeclarationSwitch);
+            var mode = ContinueWith(TokenKind.Plus, TokenKind.Minus);
+            var refMode = SymbolReferenceInfo.Undefined;
+            var parsedMode = SymbolDefinitionInfo.Undefined;
 
-            if (ContinueWith(result, TokenKind.Plus)) {
-                result.ReferencesMode = SymbolReferenceInfo.Enable;
-                result.Mode = SymbolDefinitionInfo.Enable;
+            if (mode.GetSymbolKind() == TokenKind.Plus) {
+                refMode = SymbolReferenceInfo.Enable;
+                parsedMode = SymbolDefinitionInfo.Enable;
             }
-            else if (ContinueWith(result, TokenKind.Minus)) {
-                result.ReferencesMode = SymbolReferenceInfo.Disable;
-                result.Mode = SymbolDefinitionInfo.Disable;
+            else if (mode.GetSymbolKind() == TokenKind.Minus) {
+                refMode = SymbolReferenceInfo.Disable;
+                parsedMode = SymbolDefinitionInfo.Disable;
             }
             else {
-                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidDefinitionInfoDirective, new[] { TokenKind.Plus, TokenKind.Minus });
+                mode = ErrorAndSkip(default, CompilerDirectiveParserErrors.InvalidDefinitionInfoDirective, new[] { TokenKind.Plus, TokenKind.Minus });
             }
+
+            return new SymbolDefinitions(symbol, mode, refMode, parsedMode);
         }
 
-        private void ParseTypedPointersSwitch(IExtendableSyntaxPart parent) {
-            var result = new TypedPointers();
-            InitByTerminal(result, parent, TokenKind.TypedPointersSwitch);
+        private TypedPointers ParseTypedPointersSwitch() {
+            var symbol = ContinueWithOrMissing(TokenKind.TypedPointersSwitch);
+            var mode = ContinueWith(TokenKind.Plus, TokenKind.Minus);
+            var parsedMode = UsePointersWithTypeChecking.Undefined;
 
-            if (ContinueWith(result, TokenKind.Plus)) {
-                result.Mode = UsePointersWithTypeChecking.Enable;
+            if (mode.GetSymbolKind() == TokenKind.Plus) {
+                parsedMode = UsePointersWithTypeChecking.Enable;
             }
-            else if (ContinueWith(result, TokenKind.Minus)) {
-                result.Mode = UsePointersWithTypeChecking.Disable;
+            else if (mode.GetSymbolKind() == TokenKind.Minus) {
+                parsedMode = UsePointersWithTypeChecking.Disable;
             }
             else {
-                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidTypeCheckedPointersDirective, new[] { TokenKind.Minus, TokenKind.Platform });
+                mode = ErrorAndSkip(default, CompilerDirectiveParserErrors.InvalidTypeCheckedPointersDirective, new[] { TokenKind.Minus, TokenKind.Platform });
             }
+
+            return new TypedPointers(symbol, mode, parsedMode);
         }
 
-        private void ParseVarStringCheckSwitch(IExtendableSyntaxPart parent) {
-            var result = new VarStringChecks();
-            InitByTerminal(result, parent, TokenKind.VarStringCheckSwitch);
+        private VarStringChecks ParseVarStringCheckSwitch() {
+            var symbol = ContinueWithOrMissing(TokenKind.VarStringCheckSwitch);
+            var mode = ContinueWith(TokenKind.Plus, TokenKind.Minus);
+            var parsedMode = ShortVarStringCheck.Undefined;
 
-            if (ContinueWith(result, TokenKind.Plus)) {
-                result.Mode = ShortVarStringCheck.EnableChecks;
+            if (mode.GetSymbolKind() == TokenKind.Plus) {
+                parsedMode = ShortVarStringCheck.EnableChecks;
             }
-            else if (ContinueWith(result, TokenKind.Minus)) {
-                result.Mode = ShortVarStringCheck.DisableChecks;
+            else if (mode.GetSymbolKind() == TokenKind.Minus) {
+                parsedMode = ShortVarStringCheck.DisableChecks;
             }
             else {
-                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidStringCheckDirective, new[] { TokenKind.Plus, TokenKind.Minus });
+                mode = ErrorAndSkip(default, CompilerDirectiveParserErrors.InvalidStringCheckDirective, new[] { TokenKind.Plus, TokenKind.Minus });
             }
+
+            return new VarStringChecks(symbol, mode, parsedMode);
         }
 
-        private void ParseWritableConstSwitch(IExtendableSyntaxPart parent) {
-            var result = new WritableConsts();
-            InitByTerminal(result, parent, TokenKind.WritableConstSwitch);
+        private WritableConsts ParseWritableConstSwitch() {
+            var symbol = ContinueWithOrMissing(TokenKind.WritableConstSwitch);
+            var mode = ContinueWith(TokenKind.Plus, TokenKind.Minus);
+            var parsedMode = ConstantValue.Undefined;
 
-            if (ContinueWith(result, TokenKind.Plus)) {
-                result.Mode = ConstantValue.Writable;
+            if (mode.GetSymbolKind() == TokenKind.Plus) {
+                parsedMode = ConstantValue.Writable;
             }
-            else if (ContinueWith(result, TokenKind.Minus)) {
-                result.Mode = ConstantValue.Constant;
+            else if (mode.GetSymbolKind() == TokenKind.Minus) {
+                parsedMode = ConstantValue.Constant;
             }
             else {
-                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidWritableConstantsDirective, new[] { TokenKind.Plus, TokenKind.Minus });
+                mode = ErrorAndSkip(default, CompilerDirectiveParserErrors.InvalidWritableConstantsDirective, new[] { TokenKind.Plus, TokenKind.Minus });
             }
+
+            return new WritableConsts(symbol, mode, parsedMode);
         }
 
-        private void ParseStackFramesSwitch(IExtendableSyntaxPart parent) {
-            var result = new StackFrames();
-            InitByTerminal(result, parent, TokenKind.StackFramesSwitch);
+        private StackFrames ParseStackFramesSwitch() {
+            var symbol = ContinueWithOrMissing(TokenKind.StackFramesSwitch);
+            var mode = ContinueWith(TokenKind.Plus, TokenKind.Minus);
+            var parsedMode = StackFrameGeneration.Undefined;
 
-            if (ContinueWith(result, TokenKind.Plus)) {
-                result.Mode = StackFrameGeneration.EnableFrames;
+            if (mode.GetSymbolKind() == TokenKind.Plus) {
+                parsedMode = StackFrameGeneration.EnableFrames;
             }
-            else if (ContinueWith(result, TokenKind.Minus)) {
-                result.Mode = StackFrameGeneration.DisableFrames;
+            else if (mode.GetSymbolKind() == TokenKind.Minus) {
+                parsedMode = StackFrameGeneration.DisableFrames;
             }
             else {
-                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidStackFramesDirective, new[] { TokenKind.Plus, TokenKind.Minus });
+                mode = ErrorAndSkip(default, CompilerDirectiveParserErrors.InvalidStackFramesDirective, new[] { TokenKind.Plus, TokenKind.Minus });
             }
+
+            return new StackFrames(symbol, mode, parsedMode);
         }
 
         private ISyntaxPart ParseIncludeRessource() {
@@ -2129,49 +2186,58 @@ namespace PasPasPas.Parsing.Parser {
             return new Resource(symbol, fileName, rcFile, name, rcFileName);
         }
 
-        private void ParseSaveDivideSwitch(IExtendableSyntaxPart parent) {
-            var result = new SafeDivide();
-            InitByTerminal(result, parent, TokenKind.SaveDivideSwitch);
+        private SafeDivide ParseSaveDivideSwitch() {
+            var symbol = ContinueWithOrMissing(TokenKind.SaveDivideSwitch);
+            var mode = ContinueWith(TokenKind.Plus, TokenKind.Minus);
+            var parsedMode = FDivSafeDivide.Undefined;
 
-            if (ContinueWith(result, TokenKind.Plus)) {
-                result.Mode = FDivSafeDivide.EnableSafeDivide;
+            if (mode.GetSymbolKind() == TokenKind.Plus) {
+                parsedMode = FDivSafeDivide.EnableSafeDivide;
             }
-            else if (ContinueWith(result, TokenKind.Minus)) {
-                result.Mode = FDivSafeDivide.DisableSafeDivide;
+            else if (mode.GetSymbolKind() == TokenKind.Minus) {
+                parsedMode = FDivSafeDivide.DisableSafeDivide;
             }
             else {
-                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidSafeDivide, new[] { TokenKind.Plus, TokenKind.Minus });
+                mode = ErrorAndSkip(default, CompilerDirectiveParserErrors.InvalidSafeDivide, new[] { TokenKind.Plus, TokenKind.Minus });
             }
+
+            return new SafeDivide(symbol, mode, parsedMode);
         }
 
-        private void ParseOverflowSwitch(IExtendableSyntaxPart parent) {
-            var result = new Overflow();
-            InitByTerminal(result, parent, TokenKind.OverflowSwitch);
+        private Overflow ParseOverflowSwitch() {
+            var symbol = ContinueWithOrMissing(TokenKind.OverflowSwitch);
+            var mode = ContinueWith(TokenKind.Plus, TokenKind.Minus);
+            var parsedMode = RuntimeOverflowCheck.Undefined;
 
-            if (ContinueWith(result, TokenKind.Plus)) {
-                result.Mode = RuntimeOverflowCheck.EnableChecks;
+            if (mode.GetSymbolKind() == TokenKind.Plus) {
+                parsedMode = RuntimeOverflowCheck.EnableChecks;
             }
-            else if (ContinueWith(result, TokenKind.Minus)) {
-                result.Mode = RuntimeOverflowCheck.DisableChecks;
+            else if (mode.GetSymbolKind() == TokenKind.Minus) {
+                parsedMode = RuntimeOverflowCheck.DisableChecks;
             }
             else {
-                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidOverflowCheckDirective, new[] { TokenKind.Plus, TokenKind.Minus });
+                mode = ErrorAndSkip(null, CompilerDirectiveParserErrors.InvalidOverflowCheckDirective, new[] { TokenKind.Plus, TokenKind.Minus });
             }
+
+            return new Overflow(symbol, mode, parsedMode);
         }
 
-        private void ParseOptimizationSwitch(IExtendableSyntaxPart parent) {
-            var result = new Optimization();
-            InitByTerminal(result, parent, TokenKind.OptimizationSwitch);
+        private Optimization ParseOptimizationSwitch() {
+            var symbol = ContinueWithOrMissing(TokenKind.OptimizationSwitch);
+            var mode = ContinueWith(TokenKind.Plus, TokenKind.Minus);
+            var parsedMode = CompilerOptimization.Undefined;
 
-            if (ContinueWith(result, TokenKind.Plus)) {
-                result.Mode = CompilerOptimization.EnableOptimization;
+            if (mode.GetSymbolKind() == TokenKind.Plus) {
+                parsedMode = CompilerOptimization.EnableOptimization;
             }
-            else if (ContinueWith(result, TokenKind.Minus)) {
-                result.Mode = CompilerOptimization.DisableOptimization;
+            else if (mode.GetSymbolKind() == TokenKind.Minus) {
+                parsedMode = CompilerOptimization.DisableOptimization;
             }
             else {
-                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidOptimizationDirective, new[] { TokenKind.Plus, TokenKind.Minus });
+                mode = ErrorAndSkip(null, CompilerDirectiveParserErrors.InvalidOptimizationDirective, new[] { TokenKind.Plus, TokenKind.Minus });
             }
+
+            return new Optimization(symbol, mode, parsedMode);
         }
 
         private OpenStrings ParseOpenStringSwitch() {
@@ -2242,32 +2308,30 @@ namespace PasPasPas.Parsing.Parser {
             return new Link(symbol, fileName, name);
         }
 
-        private SyntaxPartBase ParseIncludeSwitch(IExtendableSyntaxPart parent) {
+        private SyntaxPartBase ParseIncludeSwitch() {
+            if (LookAhead(1, TokenKind.Plus, TokenKind.Minus)) {
+                var symbol = ContinueWithOrMissing(TokenKind.IncludeSwitch);
+                var mode = ContinueWith(TokenKind.Plus, TokenKind.Minus);
+                var parsedMode = IoCallCheck.Undefined;
 
-            if (LookAhead(1, TokenKind.Plus)) {
-                var result = new IoChecks();
-                InitByTerminal(result, parent, TokenKind.IncludeSwitch);
-                ContinueWith(result, TokenKind.Plus);
-                result.Mode = IoCallCheck.EnableIoChecks;
-                return result;
+                if (mode.GetSymbolKind() == TokenKind.Plus)
+                    parsedMode = IoCallCheck.EnableIoChecks;
+                else if (mode.GetSymbolKind() == TokenKind.Minus)
+                    parsedMode = IoCallCheck.DisableIoChecks;
+
+                return new IoChecks(symbol, mode, parsedMode);
             }
-            else if (LookAhead(1, TokenKind.Minus)) {
-                var result = new IoChecks();
-                InitByTerminal(result, parent, TokenKind.IncludeSwitch);
-                ContinueWith(result, TokenKind.Minus);
-                result.Mode = IoCallCheck.DisableIoChecks;
-                return result;
-            }
-            else if (LookAhead(1, TokenKind.Identifier) || LookAhead(1, TokenKind.QuotedString)) {
+
+            if (LookAhead(1, TokenKind.Identifier) || LookAhead(1, TokenKind.QuotedString)) {
                 return ParseIncludeFileName(ContinueWith(TokenKind.IncludeSwitch));
             }
-            else {
-                var result = new IoChecks();
-                InitByTerminal(result, parent, TokenKind.IncludeSwitch);
-                ErrorAndSkip(result, CompilerDirectiveParserErrors.InvalidIoChecksDirective, new[] { TokenKind.Plus, TokenKind.Minus });
-                return result;
-            }
+
+            var symbol1 = ContinueWithOrMissing(TokenKind.IncludeSwitch);
+            var mode1 = ErrorAndSkip(default, CompilerDirectiveParserErrors.InvalidIoChecksDirective, new[] { TokenKind.Plus, TokenKind.Minus });
+            return new IoChecks(symbol1, mode1, IoCallCheck.Undefined);
         }
+
+
         private ImportedData ParseImportedDataSwitch() {
             var symbol = ContinueWithOrMissing(TokenKind.ImportedDataSwitch);
             var mode = ContinueWith(TokenKind.Plus, TokenKind.Minus);
