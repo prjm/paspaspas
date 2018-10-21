@@ -38,6 +38,19 @@ namespace P3SyntaxTreeViewer {
                 treeViewItem.Header = terminal.Token.Value;
                 treeViewItem.Background = MainWindow.Black;
                 treeViewItem.Foreground = MainWindow.Green;
+
+                if (terminal.Prefix != default)
+                    foreach (var p in terminal.Prefix)
+                        if (p.Kind != TokenKind.WhiteSpace)
+                            treeViewItem.Items.Add(new Label() { Content = p.Value.ToString(), Background = MainWindow.Grey });
+
+                if (terminal.Suffix != default)
+                    foreach (var p in terminal.Suffix)
+                        if (p.Kind != TokenKind.WhiteSpace)
+                            treeViewItem.Items.Add(new Label() { Content = p.Value.ToString(), Background = MainWindow.Grey });
+
+
+
             }
             else {
                 treeViewItem.Header = cst.GetType().Name;
@@ -176,6 +189,7 @@ namespace P3SyntaxTreeViewer {
         internal static Brush Red = new SolidColorBrush(Colors.Red);
         internal static Brush Black = new SolidColorBrush(Colors.Black);
         internal static Brush Green = new SolidColorBrush(Colors.LightGreen);
+        internal static Brush Grey = new SolidColorBrush(Colors.Gray);
 
         /// <summary>
         ///     parse the source
