@@ -9,11 +9,31 @@ namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
     public class HighCharUnicodeSwitch : CompilerDirectiveBase {
 
         /// <summary>
+        ///     create a new high char unicode switch
+        /// </summary>
+        /// <param name="symbol"></param>
+        /// <param name="mode"></param>
+        /// <param name="parsedMode"></param>
+        public HighCharUnicodeSwitch(Terminal symbol, Terminal mode, HighCharsUnicode parsedMode) {
+            Symbol = symbol;
+            ModeSymbol = mode;
+            Mode = parsedMode;
+        }
+
+        /// <summary>
         ///     switch mode
         /// </summary>
-        public HighCharsUnicode Mode {
-            get; set;
-        }
+        public HighCharsUnicode Mode { get; }
+
+        /// <summary>
+        ///     mode
+        /// </summary>
+        public Terminal ModeSymbol { get; }
+
+        /// <summary>
+        ///     directive
+        /// </summary>
+        public Terminal Symbol { get; }
 
         /// <summary>
         ///     accept visitor
@@ -21,7 +41,8 @@ namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
         /// <param name="visitor">node visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
-            AcceptParts(this, visitor);
+            AcceptPart(this, Symbol, visitor);
+            AcceptPart(this, ModeSymbol, visitor);
             visitor.EndVisit(this);
         }
     }

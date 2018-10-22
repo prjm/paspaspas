@@ -80,7 +80,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         IStartVisitor<ImportedData>,
         IStartVisitor<StackMemorySize>,
         IStartVisitor<WarnSwitch>,
-        IStartVisitor<WeakLinkRtti> {
+        IStartVisitor<WeakLinkRtti>,
+        IStartVisitor<ObjectExport> {
 
         private readonly Visitor visitor;
         private readonly ILogManager log;
@@ -895,6 +896,17 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 return;
 
             CompilerOptions.WeakPackageUnit.Value = syntaxPart.Mode;
+        }
+
+        /// <summary>
+        ///     visit an object export directive
+        /// </summary>
+        /// <param name="element"></param>
+        public void StartVisit(ObjectExport element) {
+            if (!CanVisit(element))
+                return;
+
+            CompilerOptions.ExportCppObjects.Value = element.Mode;
         }
 
         /// <summary>

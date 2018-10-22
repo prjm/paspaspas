@@ -4,14 +4,36 @@ using PasPasPas.Parsing.SyntaxTree.Visitors;
 namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
 
     /// <summary>
-    ///     excess preicision directive
+    ///     excess precision directive
     /// </summary>
     public class ExcessPrecision : CompilerDirectiveBase {
 
         /// <summary>
+        ///     create a new excess precision directive
+        /// </summary>
+        /// <param name="symbol"></param>
+        /// <param name="mode"></param>
+        /// <param name="parsedMode"></param>
+        public ExcessPrecision(Terminal symbol, Terminal mode, ExcessPrecisionForResult parsedMode) {
+            Symbol = symbol;
+            ModeSymbol = mode;
+            Mode = parsedMode;
+        }
+
+        /// <summary>
         ///     switch mode
         /// </summary>
-        public ExcessPrecisionForResult Mode { get; set; }
+        public ExcessPrecisionForResult Mode { get; }
+
+        /// <summary>
+        ///     mode symbol
+        /// </summary>
+        public Terminal ModeSymbol { get; }
+
+        /// <summary>
+        ///     directive
+        /// </summary>
+        public Terminal Symbol { get; }
 
         /// <summary>
         ///     accept visitor
@@ -19,7 +41,8 @@ namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
         /// <param name="visitor">node visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
-            AcceptParts(this, visitor);
+            AcceptPart(this, Symbol, visitor);
+            AcceptPart(this, ModeSymbol, visitor);
             visitor.EndVisit(this);
         }
     }

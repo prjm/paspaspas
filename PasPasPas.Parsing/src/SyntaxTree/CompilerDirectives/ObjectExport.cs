@@ -1,4 +1,5 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Visitors;
+﻿using PasPasPas.Options.DataTypes;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
 
@@ -8,12 +9,40 @@ namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
     public class ObjectExport : CompilerDirectiveBase {
 
         /// <summary>
+        ///     create a new object export directed
+        /// </summary>
+        /// <param name="symbol"></param>
+        /// <param name="mode"></param>
+        /// <param name="parsedMode"></param>
+        public ObjectExport(Terminal symbol, Terminal mode, ExportCppObjects parsedMode) {
+            Symbol = symbol;
+            ModeSymbol = mode;
+            Mode = parsedMode;
+        }
+
+        /// <summary>
+        ///     parsed mode
+        /// </summary>
+        public ExportCppObjects Mode { get; }
+
+        /// <summary>
+        ///     mode symbol
+        /// </summary>
+        public Terminal ModeSymbol { get; }
+
+        /// <summary>
+        ///     mode
+        /// </summary>
+        public Terminal Symbol { get; }
+
+        /// <summary>
         ///     accept visitor
         /// </summary>
         /// <param name="visitor">node visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
-            AcceptParts(this, visitor);
+            AcceptPart(this, Symbol, visitor);
+            AcceptPart(this, ModeSymbol, visitor);
             visitor.EndVisit(this);
         }
 
