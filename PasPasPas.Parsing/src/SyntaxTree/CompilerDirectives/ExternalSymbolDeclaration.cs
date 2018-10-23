@@ -5,7 +5,7 @@ namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
     /// <summary>
     ///     external symbol declaration
     /// </summary>
-    public class ExternalSymbolDeclaration : CompilerDirective {
+    public class ExternalSymbolDeclaration : CompilerDirectiveBase {
         private readonly Terminal symbol;
         private readonly Terminal identifier;
         private readonly Terminal symbolName;

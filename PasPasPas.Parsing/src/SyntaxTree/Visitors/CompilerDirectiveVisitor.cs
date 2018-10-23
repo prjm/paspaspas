@@ -966,11 +966,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (syntaxPart.MessageType == MessageSeverity.Undefined)
                 return;
 
-            LogSource.ProcessMessage(new LogMessage(syntaxPart.MessageType, ParserBase.ParserLogMessage, ParserBase.UserGeneratedMessage, syntaxPart.MessageType, syntaxPart.LastTerminalToken));
+            LogSource.ProcessMessage(new LogMessage(syntaxPart.MessageType, ParserBase.ParserLogMessage, ParserBase.UserGeneratedMessage, syntaxPart.MessageType, syntaxPart.MessageText));
         }
 
         /// <summary>
-        ///     link
+        ///     link-
         /// </summary>
         /// <param name="syntaxPart"></param>
         public void StartVisit(Link syntaxPart) {

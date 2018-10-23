@@ -80,7 +80,6 @@ namespace PasPasPas.Parsing.SyntaxTree {
         /// <param name="visitor">visitor to use</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
-            AcceptParts(this, visitor);
             visitor.EndVisit(this);
         }
 
@@ -141,11 +140,13 @@ namespace PasPasPas.Parsing.SyntaxTree {
             var result = 17;
             result = result * 31 + Token.GetHashCode();
 
-            foreach (var prefix in Prefix)
-                result = result * 31 + prefix.GetHashCode();
+            if (Prefix != default)
+                foreach (var prefix in Prefix)
+                    result = result * 31 + prefix.GetHashCode();
 
-            foreach (var suffix in Suffix)
-                result = result * 31 + suffix.GetHashCode();
+            if (Suffix != default)
+                foreach (var suffix in Suffix)
+                    result = result * 31 + suffix.GetHashCode();
 
             return result;
         }

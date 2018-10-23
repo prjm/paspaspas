@@ -159,6 +159,18 @@ namespace PasPasPas.Infrastructure.Utils {
     }
 
     /// <summary>
+    ///     global histogram keys
+    /// </summary>
+    public static class HistogramKeys {
+
+        /// <summary>
+        ///     syntax nodes histograms
+        /// </summary>
+        public const string SyntaxNodes = "SyntaxNodes";
+
+    }
+
+    /// <summary>
     ///     histograms
     /// </summary>
     public class Histograms {
