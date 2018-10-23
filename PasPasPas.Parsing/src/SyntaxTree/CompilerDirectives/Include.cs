@@ -32,7 +32,7 @@ namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
         /// <summary>
         ///     directive
         /// </summary>
-        public Terminal Symbol { get; set; }
+        public Terminal Symbol { get; }
 
         /// <summary>
         ///     accept visitor
