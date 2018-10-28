@@ -1,10 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 
 namespace PasPasPas.Infrastructure.Utils {
+
+    /// <summary>
+    ///     interface for histogram printers
+    /// </summary>
+    public interface IHistogramPrinter {
+
+        /// <summary>
+        ///     start printing a histogram
+        /// </summary>
+        /// <param name="histogram"></param>
+        void PrintHistogram(Histogram histogram);
+
+        /// <summary>
+        ///     print a histogram value
+        /// </summary>
+        /// <param name="histogram"></param>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        void PrintValue(Histogram histogram, string key, long value);
+    }
 
     /// <summary>
     ///     histogram base class
@@ -12,37 +31,31 @@ namespace PasPasPas.Infrastructure.Utils {
     public abstract class Histogram {
 
         /// <summary>
-        ///     histogram id
-        /// </summary>
-        private readonly string key;
-
-        /// <summary>
         ///     create a new histogram
         /// </summary>
         /// <param name="key"></param>
         public Histogram(string key)
-            => this.key = key;
+            => Key = key;
 
         /// <summary>
         ///     histogram key
         /// </summary>
-        public string Key
-            => key;
+        public string Key { get; }
 
         /// <summary>
         ///     histogram length
         /// </summary>
-        protected abstract int Length { get; }
+        public abstract int Length { get; }
 
         /// <summary>
         ///     minimum
         /// </summary>
-        protected abstract long MinValue { get; }
+        public abstract long MinValue { get; }
 
         /// <summary>
         ///     maximum
         /// </summary>
-        protected abstract long MaxValue { get; }
+        public abstract long MaxValue { get; }
 
         /// <summary>
         ///     data
@@ -53,52 +66,18 @@ namespace PasPasPas.Infrastructure.Utils {
         ///     print this histogram
         /// </summary>
         /// <param name="result"></param>
-        public void Print(TextWriter result) {
+        public void Print(IHistogramPrinter result) {
+            result.PrintHistogram(this);
 
-            if (Length < 1)
-                return;
-
-            var max = MaxValue;
-            var min = MinValue;
-
-            if (max == min)
-                return;
-
-            var unit = 30.0 / (max - min);
-            result.WriteLine(key);
-            result.WriteLine(new string('-', 80));
-            result.WriteLine();
-
-            foreach (var value in Data.OrderBy(t => -t.Value)) {
-
-                if (value.Value < max / 10)
-                    break;
-
-                var offset = (int)(unit * (value.Value - min));
-                var key = value.Key;
-                key = key.Replace('\n', ' ');
-                key = key.Replace('\t', ' ');
-                key = key.Replace('\r', ' ');
-                key = key.Trim();
-
-                if (key.Length < 20) {
-                    result.Write(key);
-                    result.Write(new string(' ', 20 - key.Length));
-                }
-                else {
-                    result.Write(key.Substring(0, 20));
-                }
-
-                result.Write(new string('X', offset));
-                if (offset < 30)
-                    result.Write(new string(' ', 30 - offset));
-                result.Write("    ");
-                result.WriteLine(value.Value);
-            }
-
-            result.WriteLine();
-            result.WriteLine();
+            foreach (var value in Data.OrderBy(t => -t.Value))
+                result.PrintValue(this, value.Key, value.Value);
         }
+
+        /// <summary>
+        ///     data point count
+        /// </summary>
+        public abstract int Count { get; }
+
     }
 
     /// <summary>
@@ -108,6 +87,12 @@ namespace PasPasPas.Infrastructure.Utils {
 
         private readonly IDictionary<T, long> values
             = new Dictionary<T, long>();
+
+        /// <summary>
+        ///     count number of items
+        /// </summary>
+        public override int Count
+            => values.Count;
 
 
         /// <summary>
@@ -119,13 +104,13 @@ namespace PasPasPas.Infrastructure.Utils {
         /// <summary>
         ///     minimum value
         /// </summary>
-        protected override long MinValue
+        public override long MinValue
             => values.Values.Min();
 
         /// <summary>
         ///     maximum value
         /// </summary>
-        protected override long MaxValue
+        public override long MaxValue
             => values.Values.Max();
 
         /// <summary>
@@ -141,7 +126,7 @@ namespace PasPasPas.Infrastructure.Utils {
         /// <summary>
         ///     length
         /// </summary>
-        protected override int Length
+        public override int Length
             => values.Count;
 
         /// <summary>
@@ -164,9 +149,14 @@ namespace PasPasPas.Infrastructure.Utils {
     public static class HistogramKeys {
 
         /// <summary>
-        ///     syntax nodes histograms
+        ///     syntax nodes histogram
         /// </summary>
         public const string SyntaxNodes = "SyntaxNodes";
+
+        /// <summary>
+        ///     syntax list nodes histogram
+        /// </summary>
+        public const string SyntaxLists = "SyntaxLists";
 
     }
 
@@ -179,6 +169,12 @@ namespace PasPasPas.Infrastructure.Utils {
             = new Dictionary<string, Histogram>();
 
         /// <summary>
+        ///     histograms instance
+        /// </summary>
+        public static Histograms Instance
+            => instance.Value;
+
+        /// <summary>
         ///     single instance
         /// </summary>
         private static readonly Lazy<Histograms> instance
@@ -188,6 +184,12 @@ namespace PasPasPas.Infrastructure.Utils {
         ///     enable histograms
         /// </summary>
         public static bool Enable { get; set; }
+
+        /// <summary>
+        ///     sum count
+        /// </summary>
+        public int Count
+            => data.Values.Sum(t => t.Count);
 
         /// <summary>
         ///     register a value
@@ -221,7 +223,7 @@ namespace PasPasPas.Infrastructure.Utils {
         ///     print all histograms
         /// </summary>
         /// <param name="result"></param>
-        public static void Print(TextWriter result) {
+        public static void Print(IHistogramPrinter result) {
             var items = new List<Histogram>(instance.Value.data.Values);
             items.Sort((l, r) => string.Compare(l.Key, r.Key, StringComparison.Ordinal));
 

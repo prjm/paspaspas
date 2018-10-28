@@ -4,6 +4,7 @@ using PasPasPas.Globals.Types;
 using PasPasPas.Infrastructure.Environment;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Infrastructure.ObjectPooling;
+using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Options.DataTypes;
 using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.Tokenizer;
@@ -118,6 +119,7 @@ namespace PasPasPas.Api {
                     ListPools,
                     TypeRegistry,
                     TerminalPool,
+                    Histograms.Instance,
                 };
                 return data;
             }

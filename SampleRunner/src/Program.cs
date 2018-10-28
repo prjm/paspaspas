@@ -27,7 +27,7 @@ namespace SampleRunner {
             var useHistograms = false;
             var action = PrepareSample(environment, testPath, mode, repeat, useHistograms);
 
-            RunSample(environment, result, action);
+            RunSample(environment, result, action, useHistograms);
 
             Console.ReadLine();
         }
@@ -35,9 +35,10 @@ namespace SampleRunner {
         private static string GetCacheName(object data)
             => $"[{data.GetType().ToString()}]";
 
-        private static void RunSample(IParserEnvironment environment, TextWriter result, Action<TextWriter> action) {
+        private static void RunSample(IParserEnvironment environment, TextWriter result, Action<TextWriter> action, bool useHistogram) {
             var timer = new Stopwatch();
             var status = new SystemInfo();
+            var printer = new HtmlHistogramPrinter();
             timer.Start();
             action(result);
             timer.Stop();
@@ -51,6 +52,8 @@ namespace SampleRunner {
                     result.WriteLine(name + ": " + fn.Table.Count);
                 else if (entry is ObjectPool pool)
                     result.WriteLine(name + ": " + pool.Count);
+                else if (entry is Histograms hist)
+                    result.WriteLine(name + ": " + hist.Count);
                 else if (entry is IEnvironmentItem sc) {
                     var count = sc.Count;
                     if (count < 0)
@@ -62,8 +65,11 @@ namespace SampleRunner {
                     result.WriteLine(name);
             }
 
-            result.WriteLine(new string('-', 80));
-            Histograms.Print(result);
+            if (useHistogram) {
+                Histograms.Print(printer);
+                printer.Render(@"C:\TEMP\HIST.HTML");
+            }
+
             result.WriteLine(new string('-', 80));
             result.WriteLine($"{timer.ElapsedTicks} ticks required ({timer.Elapsed.TotalMilliseconds}).");
             result.WriteLine($"{status.WorkingSet} bytes required.");

@@ -4,6 +4,7 @@ using System.Collections.Immutable;
 using System.Text;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Infrastructure.ObjectPooling;
+using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Options.Bundles;
 using PasPasPas.Parsing.SyntaxTree;
 using PasPasPas.Parsing.SyntaxTree.Utils;
@@ -1077,9 +1078,16 @@ namespace PasPasPas.Parsing.Parser {
         }
 
         protected static ImmutableArray<T> GetFixedArray<T>(PoolItem<List<T>> list) where T : class {
+
+            if (list.Item.Count < 1)
+                return ImmutableArray<T>.Empty;
+
             var builder = ListPools.GetImmutableArrayBuilder(list);
             for (var index = 0; index < list.Item.Count; index++)
                 builder.Add(list.Item[index]);
+
+            Histograms.Value(HistogramKeys.SyntaxLists, string.Concat(typeof(T).Name, builder.Count));
+
             return builder.MoveToImmutable();
         }
 
