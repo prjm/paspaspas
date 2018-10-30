@@ -163,7 +163,7 @@ namespace PasPasPas.Typings.Common {
             RegisterSystemType(new TypeAlias(KnownTypeIds.Ucs2CharType, KnownTypeIds.WideCharType), "UCS2Char");
             RegisterSystemType(new TypeAlias(KnownTypeIds.Ucs4CharType, KnownTypeIds.CardinalType), "UCS4Char");
             RegisterSystemType(new TypeAlias(KnownTypeIds.StringType, KnownTypeIds.UnicodeStringType), "String");
-            RegisterSystemType(new TypeAlias(KnownTypeIds.Real, KnownTypeIds.Double), "Real");
+            RegisterSystemType(new TypeAlias(KnownTypeIds.Real, KnownTypeIds.DoubleType), "Real");
             RegisterSystemType(new TypeAlias(KnownTypeIds.PChar, KnownTypeIds.PAnsiChar), "PChar");
             RegisterSystemType(new TypeAlias(KnownTypeIds.PString, KnownTypeIds.PUnicodeString), "PString");
         }
@@ -185,7 +185,7 @@ namespace PasPasPas.Typings.Common {
             RegisterSystemType(new PointerType(KnownTypeIds.PNativeUInt, KnownTypeIds.NativeUInt), "PNativeUInt");
             RegisterSystemType(new PointerType(KnownTypeIds.PNativeInt, KnownTypeIds.NativeInt), "PNativeInt");
             RegisterSystemType(new PointerType(KnownTypeIds.PSingle, KnownTypeIds.SingleType), "PSingle");
-            RegisterSystemType(new PointerType(KnownTypeIds.PDouble, KnownTypeIds.Double), "PDouble");
+            RegisterSystemType(new PointerType(KnownTypeIds.PDouble, KnownTypeIds.DoubleType), "PDouble");
             RegisterSystemType(new PointerType(KnownTypeIds.PExtended, KnownTypeIds.Extended), "PExtended");
             RegisterSystemType(new PointerType(KnownTypeIds.PAnsiChar, KnownTypeIds.AnsiCharType), "PAnsiChar");
             RegisterSystemType(new PointerType(KnownTypeIds.PWideChar, KnownTypeIds.WideCharType), "PWideChar");
@@ -207,7 +207,7 @@ namespace PasPasPas.Typings.Common {
         private void RegisterRealTypes() {
             RegisterSystemType(new RealType(KnownTypeIds.Real48Type), "Real48");
             RegisterSystemType(new RealType(KnownTypeIds.SingleType), "Single");
-            RegisterSystemType(new RealType(KnownTypeIds.Double), "Double");
+            RegisterSystemType(new RealType(KnownTypeIds.DoubleType), "Double");
             RegisterSystemType(new RealType(KnownTypeIds.Extended), "Extended");
             RegisterSystemType(new RealType(KnownTypeIds.Comp), "Comp");
             RegisterSystemType(new RealType(KnownTypeIds.Currency), "Currency");

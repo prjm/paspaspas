@@ -182,14 +182,14 @@ namespace PasPasPasTests.Types {
         public void TestRealTypes() {
             AssertDeclType("Real48", KnownTypeIds.Real48Type);
             AssertDeclType("Single", KnownTypeIds.SingleType);
-            AssertDeclType("Double", KnownTypeIds.Double);
+            AssertDeclType("Double", KnownTypeIds.DoubleType);
             AssertDeclType("Real", KnownTypeIds.Real);
             AssertDeclType("Extended", KnownTypeIds.Extended);
             AssertDeclType("Comp", KnownTypeIds.Comp);
             AssertDeclType("Currency", KnownTypeIds.Currency);
             AssertDeclType("System.Real48", KnownTypeIds.Real48Type);
             AssertDeclType("System.Single", KnownTypeIds.SingleType);
-            AssertDeclType("System.Double", KnownTypeIds.Double);
+            AssertDeclType("System.Double", KnownTypeIds.DoubleType);
             AssertDeclType("System.Real", KnownTypeIds.Real);
             AssertDeclType("System.Extended", KnownTypeIds.Extended);
             AssertDeclType("System.Comp", KnownTypeIds.Comp);

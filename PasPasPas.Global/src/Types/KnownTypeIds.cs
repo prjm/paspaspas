@@ -173,7 +173,7 @@
         /// <summary>
         ///     double precision type
         /// </summary>
-        public const int Double = 30;
+        public const int DoubleType = 30;
 
         /// <summary>
         ///     real type

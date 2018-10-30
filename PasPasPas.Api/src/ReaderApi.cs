@@ -50,7 +50,7 @@ namespace PasPasPas.Api {
         /// </summary>
         /// <param name="reader">reader to switch</param>
         /// <param name="path">path to ope</param>
-        public void SwitchToPath(StackedFileReader reader, string path) {
+        public static void SwitchToPath(StackedFileReader reader, string path) {
             var localPath = new FileReference(path);
             reader.AddFileToRead(localPath);
         }

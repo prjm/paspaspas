@@ -68,7 +68,7 @@ namespace PasPasPasTests.Infra {
                         result.Append(reader.NextChar());
                     }
                     var len = splitIndex;
-                    readerApi.SwitchToPath(reader, path2);
+                    ReaderApi.SwitchToPath(reader, path2);
                     while (reader.CurrentFile != null && !reader.AtEof) {
                         result.Append(reader.NextChar());
                         len++;
@@ -113,7 +113,7 @@ namespace PasPasPasTests.Infra {
                     result.Append(reader.NextChar());
                 }
 
-                readerApi.SwitchToPath(reader, path2);
+                ReaderApi.SwitchToPath(reader, path2);
                 while (reader.CurrentFile != null && !reader.AtEof) {
                     result.Append(reader.NextChar());
 

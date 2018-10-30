@@ -70,7 +70,7 @@ namespace PasPasPas.Typings.Operators {
 
             if (Kind == DefinedOperators.NotOperator)
                 if (operand.IsConstant)
-                    return operations.Not(operand);
+                    return operations.NotOperator(operand);
                 else
                     return operand;
 
@@ -152,7 +152,7 @@ namespace PasPasPas.Typings.Operators {
 
         private ITypeReference EvaluateOrOperator(ITypeReference left, ITypeReference right, ILogicalOperations operations) {
             if (left.IsConstant && right.IsConstant)
-                return operations.Or(left, right);
+                return operations.OrOperator(left, right);
             else if (left.IsConstant && Runtime.Booleans.TrueValue.Equals(left))
                 return Runtime.Booleans.TrueValue;
             else if (left.IsConstant && Runtime.Booleans.FalseValue.Equals(false))

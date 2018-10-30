@@ -213,7 +213,7 @@ namespace PasPasPas.Runtime.Values.IntValues {
         /// </summary>
         /// <param name="number"></param>
         /// <returns></returns>
-        public ITypeReference Not(ITypeReference number) {
+        public ITypeReference NotOperator(ITypeReference number) {
             if (number is IntegerValueBase intNumber)
                 return IntegerValueBase.Not(intNumber);
             else
@@ -234,7 +234,7 @@ namespace PasPasPas.Runtime.Values.IntValues {
         /// <param name="firstOperand">first operand</param>
         /// <param name="secondOperand">second operand</param>
         /// <returns></returns>
-        public ITypeReference Or(ITypeReference firstOperand, ITypeReference secondOperand) {
+        public ITypeReference OrOperator(ITypeReference firstOperand, ITypeReference secondOperand) {
             if (firstOperand is IntegerValueBase firstInt && secondOperand is IntegerValueBase secondInt)
                 return IntegerValueBase.OrAndScale(Overflow, firstInt, secondInt);
             else

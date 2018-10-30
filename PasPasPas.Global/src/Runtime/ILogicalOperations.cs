@@ -19,7 +19,7 @@
         /// <param name="value1"></param>
         /// <param name="value2"></param>
         /// <returns></returns>
-        ITypeReference Or(ITypeReference value1, ITypeReference value2);
+        ITypeReference OrOperator(ITypeReference value1, ITypeReference value2);
 
         /// <summary>
         ///     <c>xor</c> operation
@@ -34,7 +34,7 @@
         /// </summary>
         /// <param name="value">value to invert</param>
         /// <returns>inverted value</returns>
-        ITypeReference Not(ITypeReference value);
+        ITypeReference NotOperator(ITypeReference value);
 
     }
 }

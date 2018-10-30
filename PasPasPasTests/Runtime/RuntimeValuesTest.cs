@@ -216,7 +216,7 @@ namespace PasPasPasTests.Runtime {
         public void TestIntegerNot() {
             string m(ITypeReference v, int typeKind) {
                 var c = new IntegerOperations(new BooleanOperations(), null);
-                var vv1 = c.Not(v);
+                var vv1 = c.NotOperator(v);
                 Assert.AreEqual(typeKind, vv1.TypeId);
                 return vv1.ToString();
             }
@@ -248,7 +248,7 @@ namespace PasPasPasTests.Runtime {
         public void TestIntegerOr() {
             string o(ITypeReference v1, ITypeReference v2) {
                 var c = new IntegerOperations(new BooleanOperations(), null);
-                var vv1 = c.Or(v1, v2);
+                var vv1 = c.OrOperator(v1, v2);
                 return vv1.ToString();
             }
 

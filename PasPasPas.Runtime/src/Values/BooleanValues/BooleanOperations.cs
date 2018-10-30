@@ -122,7 +122,7 @@ namespace PasPasPas.Runtime.Values.BooleanValues {
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public ITypeReference Not(ITypeReference value) {
+        public ITypeReference NotOperator(ITypeReference value) {
             if (value is IBooleanValue boolean)
                 return ToBoolean(BooleanValueBase.Not(boolean));
             else
@@ -148,7 +148,7 @@ namespace PasPasPas.Runtime.Values.BooleanValues {
         /// <param name="value1"></param>
         /// <param name="value2"></param>
         /// <returns></returns>
-        public ITypeReference Or(ITypeReference value1, ITypeReference value2) {
+        public ITypeReference OrOperator(ITypeReference value1, ITypeReference value2) {
             if (value1 is IBooleanValue boolean1 && value2 is IBooleanValue boolean2)
                 return ToBoolean(BooleanValueBase.Or(boolean1, boolean2));
             else
