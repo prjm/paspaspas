@@ -107,7 +107,6 @@ namespace PasPasPas.Options.Bundles {
             CompilerOptions.ResetOnNewUnit();
             ConditionalCompilation.ResetOnNewUnit(logSource);
             Meta.ResetOnNewUnit(logSource);
-            PathOptions.ResetOnNewUnit();
             Warnings.ResetOnNewUnit();
         }
 

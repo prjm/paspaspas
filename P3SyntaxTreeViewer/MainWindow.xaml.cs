@@ -197,7 +197,7 @@ namespace P3SyntaxTreeViewer {
         /// <param name="env"></param>
         /// <param name="code"></param>
         /// <returns></returns>
-        private (ISyntaxPart bst, ProjectRoot ast, Dictionary<int, string> typeNames) Parse(ITypedEnvironment env, string code) {
+        private static (ISyntaxPart bst, ProjectRoot ast, Dictionary<int, string> typeNames) Parse(ITypedEnvironment env, string code) {
             var parserApi = new ParserApi(env);
             using (var parser = parserApi.CreateParserForString("z.x.pas", code)) {
                 var bst = parser.Parse();

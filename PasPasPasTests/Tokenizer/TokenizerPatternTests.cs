@@ -110,7 +110,7 @@ namespace PasPasPasTests.Tokenizer {
                 var logTarget = new ListLogTarget();
                 env.Log.RegisterTarget(logTarget);
 
-                using (var tokenizer = new PasPasPas.Parsing.Tokenizer.Tokenizer(env, patterns, reader)) {
+                using (var tokenizer = new PasPasPas.Parsing.Tokenizer.TokenizerBase(env, patterns, reader)) {
                     while (reader.CurrentFile != null && !reader.AtEof) {
                         tokenizer.FetchNextToken();
                         result.Add(tokenizer.CurrentToken);
@@ -154,7 +154,7 @@ namespace PasPasPasTests.Tokenizer {
         public void TestSimpleInputPatterns() {
             var patterns = new InputPatterns(null);
             TestPattern(patterns, "");
-            TestPattern(patterns, PasPasPas.Parsing.Tokenizer.Tokenizer.UnexpectedCharacter, "x", TokenKind.Invalid);
+            TestPattern(patterns, PasPasPas.Parsing.Tokenizer.TokenizerBase.UnexpectedCharacter, "x", TokenKind.Invalid);
             patterns.AddPattern('a', PatternA);
             patterns.AddPattern('b', PatternB);
             TestPattern(patterns, "a", PatternA);
@@ -174,7 +174,7 @@ namespace PasPasPasTests.Tokenizer {
             TestPattern(patterns, "a{//}a", PatternA, TokenKind.Comment, PatternA);
             TestPattern(patterns, "a{(**)}a", PatternA, TokenKind.Comment, PatternA);
             TestPattern(patterns, "a{{}a", PatternA, TokenKind.Comment, PatternA);
-            TestPattern(patterns, PasPasPas.Parsing.Tokenizer.Tokenizer.UnexpectedEndOfToken, "a{", PatternA, TokenKind.Comment);
+            TestPattern(patterns, PasPasPas.Parsing.Tokenizer.TokenizerBase.UnexpectedEndOfToken, "a{", PatternA, TokenKind.Comment);
         }
 
 
@@ -194,7 +194,7 @@ namespace PasPasPasTests.Tokenizer {
             TestPattern(patterns, "a(*\n***())()()\n*)a", PatternA, TokenKind.Comment, PatternA);
             TestPattern(patterns, "a(*{//}*)a", PatternA, TokenKind.Comment, PatternA);
             TestPattern(patterns, "a(*(**)a", PatternA, TokenKind.Comment, PatternA);
-            TestPattern(patterns, PasPasPas.Parsing.Tokenizer.Tokenizer.UnexpectedEndOfToken, "a(*", PatternA, TokenKind.Comment);
+            TestPattern(patterns, PasPasPas.Parsing.Tokenizer.TokenizerBase.UnexpectedEndOfToken, "a(*", PatternA, TokenKind.Comment);
         }
 
         [Fact]
@@ -205,7 +205,7 @@ namespace PasPasPasTests.Tokenizer {
             TestPattern(patterns, "a{${//}a", PatternA, TokenKind.Preprocessor, PatternA);
             TestPattern(patterns, "a{${}a", PatternA, TokenKind.Preprocessor, PatternA);
             TestPattern(patterns, "{${}a", TokenKind.Preprocessor, PatternA);
-            TestPattern(patterns, PasPasPas.Parsing.Tokenizer.Tokenizer.UnexpectedEndOfToken, "a{$", PatternA, TokenKind.Preprocessor);
+            TestPattern(patterns, PasPasPas.Parsing.Tokenizer.TokenizerBase.UnexpectedEndOfToken, "a{$", PatternA, TokenKind.Preprocessor);
         }
 
 
@@ -216,8 +216,8 @@ namespace PasPasPasTests.Tokenizer {
             patterns.AddPattern(new ControlCharacterClass(), new CharacterClassTokenGroupValue(TokenKind.ControlChar, new ControlCharacterClass()));
             TestPattern(patterns, "");
             TestPattern(patterns, "a\u0000\u0001\u0002\u0003\u0004", PatternA, TokenKind.ControlChar);
-            TestPattern(patterns, PasPasPas.Parsing.Tokenizer.Tokenizer.UnexpectedCharacter, "\r", TokenKind.Invalid);
-            TestPattern(patterns, PasPasPas.Parsing.Tokenizer.Tokenizer.UnexpectedCharacter, "\n", TokenKind.Invalid);
+            TestPattern(patterns, PasPasPas.Parsing.Tokenizer.TokenizerBase.UnexpectedCharacter, "\r", TokenKind.Invalid);
+            TestPattern(patterns, PasPasPas.Parsing.Tokenizer.TokenizerBase.UnexpectedCharacter, "\n", TokenKind.Invalid);
         }
 
         [Fact]
@@ -240,22 +240,22 @@ namespace PasPasPasTests.Tokenizer {
             TestPattern(patterns, "1", TokenKind.Integer);
             TestPattern(patterns, "1234567890", TokenKind.Integer);
             TestPattern(patterns, "000", TokenKind.Integer);
-            TestPattern(patterns, PasPasPas.Parsing.Tokenizer.Tokenizer.UnexpectedCharacter, "３", TokenKind.Invalid);
-            TestPattern(patterns, PasPasPas.Parsing.Tokenizer.Tokenizer.UnexpectedCharacter, "1３", TokenKind.Integer, TokenKind.Invalid);
+            TestPattern(patterns, PasPasPas.Parsing.Tokenizer.TokenizerBase.UnexpectedCharacter, "３", TokenKind.Invalid);
+            TestPattern(patterns, PasPasPas.Parsing.Tokenizer.TokenizerBase.UnexpectedCharacter, "1３", TokenKind.Integer, TokenKind.Invalid);
         }
 
         [Fact]
         public void TestHexNumberTokenValue() {
             var patterns = new InputPatterns(null);
             patterns.AddPattern('a', PatternA);
-            patterns.AddPattern('$', new CharacterClassTokenGroupValue(TokenKind.HexNumber, new DigitCharClass(true), 2, LiteralParserKind.HexNumbers, PasPasPas.Parsing.Tokenizer.Tokenizer.IncompleteHexNumber));
-            TestPattern(patterns, PasPasPas.Parsing.Tokenizer.Tokenizer.IncompleteHexNumber, "$", TokenKind.HexNumber);
+            patterns.AddPattern('$', new CharacterClassTokenGroupValue(TokenKind.HexNumber, new DigitCharClass(true), 2, LiteralParserKind.HexNumbers, PasPasPas.Parsing.Tokenizer.TokenizerBase.IncompleteHexNumber));
+            TestPattern(patterns, PasPasPas.Parsing.Tokenizer.TokenizerBase.IncompleteHexNumber, "$", TokenKind.HexNumber);
             TestPattern(patterns, "$1234567890", TokenKind.HexNumber);
             TestPattern(patterns, "$ABCDEF", TokenKind.HexNumber);
             TestPattern(patterns, "$abcdef", TokenKind.HexNumber);
             TestPattern(patterns, "$000000", TokenKind.HexNumber);
             TestPattern(patterns, "$1234FFFF", TokenKind.HexNumber);
-            TestPattern(patterns, PasPasPas.Parsing.Tokenizer.Tokenizer.UnexpectedCharacter, "$CEFO", TokenKind.HexNumber, TokenKind.Invalid);
+            TestPattern(patterns, PasPasPas.Parsing.Tokenizer.TokenizerBase.UnexpectedCharacter, "$CEFO", TokenKind.HexNumber, TokenKind.Invalid);
             Assert.AreEqual(GetIntegerValue(0x123F), TestPattern(patterns, "$123F", TokenKind.HexNumber).ParsedValue);
         }
 
@@ -280,11 +280,11 @@ namespace PasPasPasTests.Tokenizer {
             TestPattern(patterns, "画像", TokenKind.Identifier);
             TestPattern(patterns, "a b caaa", PatternA, TokenKind.WhiteSpace, PatternB, TokenKind.WhiteSpace, TokenKind.Identifier);
             patterns = CreatePatterns(false);
-            TestPattern(patterns, PasPasPas.Parsing.Tokenizer.Tokenizer.UnexpectedCharacter, "&a", TokenKind.Invalid, PatternA);
-            TestPattern(patterns, PasPasPas.Parsing.Tokenizer.Tokenizer.UnexpectedCharacter, "a9", PatternA, TokenKind.Invalid);
+            TestPattern(patterns, PasPasPas.Parsing.Tokenizer.TokenizerBase.UnexpectedCharacter, "&a", TokenKind.Invalid, PatternA);
+            TestPattern(patterns, PasPasPas.Parsing.Tokenizer.TokenizerBase.UnexpectedCharacter, "a9", PatternA, TokenKind.Invalid);
             patterns = CreatePatterns(false, true);
             TestPattern(patterns, "a9", TokenKind.Identifier);
-            TestPattern(patterns, PasPasPas.Parsing.Tokenizer.Tokenizer.UnexpectedCharacter, "a.a9", PatternA, TokenKind.Invalid, TokenKind.Identifier);
+            TestPattern(patterns, PasPasPas.Parsing.Tokenizer.TokenizerBase.UnexpectedCharacter, "a.a9", PatternA, TokenKind.Invalid, TokenKind.Identifier);
             TestPattern(patterns, "_a_aaA123_33", TokenKind.Identifier);
             patterns = CreatePatterns(false, true, true);
             TestPattern(patterns, "a.9", TokenKind.Identifier);
@@ -316,12 +316,12 @@ namespace PasPasPasTests.Tokenizer {
             TestPattern(patterns, "9.", TokenKind.Integer, TokenKind.Dot);
             TestPattern(patterns, "9.X", TokenKind.Integer, TokenKind.Dot, TokenKind.Identifier);
             TestPattern(patterns, "9.9.", TokenKind.Real, TokenKind.Dot);
-            TestPattern(patterns, PasPasPas.Parsing.Tokenizer.Tokenizer.UnexpectedEndOfToken, "9.9e", TokenKind.Real);
-            TestPattern(patterns, PasPasPas.Parsing.Tokenizer.Tokenizer.UnexpectedEndOfToken, "9.9e+", TokenKind.Real);
-            TestPattern(patterns, PasPasPas.Parsing.Tokenizer.Tokenizer.UnexpectedEndOfToken, "9.9e-", TokenKind.Real);
-            TestPattern(patterns, PasPasPas.Parsing.Tokenizer.Tokenizer.UnexpectedEndOfToken, "9.9e.", TokenKind.Real, TokenKind.Dot);
-            TestPattern(patterns, PasPasPas.Parsing.Tokenizer.Tokenizer.UnexpectedEndOfToken, "9.9e+.", TokenKind.Real, TokenKind.Dot);
-            TestPattern(patterns, PasPasPas.Parsing.Tokenizer.Tokenizer.UnexpectedEndOfToken, "9.9e-.", TokenKind.Real, TokenKind.Dot);
+            TestPattern(patterns, PasPasPas.Parsing.Tokenizer.TokenizerBase.UnexpectedEndOfToken, "9.9e", TokenKind.Real);
+            TestPattern(patterns, PasPasPas.Parsing.Tokenizer.TokenizerBase.UnexpectedEndOfToken, "9.9e+", TokenKind.Real);
+            TestPattern(patterns, PasPasPas.Parsing.Tokenizer.TokenizerBase.UnexpectedEndOfToken, "9.9e-", TokenKind.Real);
+            TestPattern(patterns, PasPasPas.Parsing.Tokenizer.TokenizerBase.UnexpectedEndOfToken, "9.9e.", TokenKind.Real, TokenKind.Dot);
+            TestPattern(patterns, PasPasPas.Parsing.Tokenizer.TokenizerBase.UnexpectedEndOfToken, "9.9e+.", TokenKind.Real, TokenKind.Dot);
+            TestPattern(patterns, PasPasPas.Parsing.Tokenizer.TokenizerBase.UnexpectedEndOfToken, "9.9e-.", TokenKind.Real, TokenKind.Dot);
             TestPattern(patterns, "9999.9999E+3", TokenKind.Real);
             TestPattern(patterns, "9999.9999E-3", TokenKind.Real);
             TestPattern(patterns, "9999.9999E-3.", TokenKind.Real, TokenKind.Dot);
@@ -335,8 +335,8 @@ namespace PasPasPasTests.Tokenizer {
             TestPattern(patterns, "\"aaaaaa\"", TokenKind.DoubleQuotedString);
             TestPattern(patterns, "\"aaa\"\"aaa\"", TokenKind.DoubleQuotedString);
             TestPattern(patterns, "\"aaa\"\"\"\"aaa\"", TokenKind.DoubleQuotedString);
-            TestPattern(patterns, PasPasPas.Parsing.Tokenizer.Tokenizer.IncompleteString, "\"aaaaaa", TokenKind.DoubleQuotedString);
-            TestPattern(patterns, PasPasPas.Parsing.Tokenizer.Tokenizer.IncompleteString, "\"", TokenKind.DoubleQuotedString);
+            TestPattern(patterns, PasPasPas.Parsing.Tokenizer.TokenizerBase.IncompleteString, "\"aaaaaa", TokenKind.DoubleQuotedString);
+            TestPattern(patterns, PasPasPas.Parsing.Tokenizer.TokenizerBase.IncompleteString, "\"", TokenKind.DoubleQuotedString);
         }
 
         [Fact]
@@ -347,8 +347,8 @@ namespace PasPasPasTests.Tokenizer {
             TestPattern(patterns, "'aaaaaa'", TokenKind.QuotedString);
             TestPattern(patterns, "'aaa''aaa'", TokenKind.QuotedString);
             TestPattern(patterns, "'aaa''''aaa'", TokenKind.QuotedString);
-            TestPattern(patterns, PasPasPas.Parsing.Tokenizer.Tokenizer.IncompleteString, "'aaaaaa", TokenKind.QuotedString);
-            TestPattern(patterns, PasPasPas.Parsing.Tokenizer.Tokenizer.IncompleteString, "'", TokenKind.QuotedString);
+            TestPattern(patterns, PasPasPas.Parsing.Tokenizer.TokenizerBase.IncompleteString, "'aaaaaa", TokenKind.QuotedString);
+            TestPattern(patterns, PasPasPas.Parsing.Tokenizer.TokenizerBase.IncompleteString, "'", TokenKind.QuotedString);
             Assert.AreEqual(GetWideCharValue('a'), TestPattern(patterns, "'a'", TokenKind.QuotedString).ParsedValue);
             Assert.AreEqual(GetUnicodeStringValue("a'"), TestPattern(patterns, "'a'''", TokenKind.QuotedString).ParsedValue);
             Assert.AreEqual(GetUnicodeStringValue("a'aa"), TestPattern(patterns, "'a''aa'", TokenKind.QuotedString).ParsedValue);
@@ -367,8 +367,8 @@ namespace PasPasPasTests.Tokenizer {
             TestPattern(patterns, "#09'aaaa'#09", TokenKind.QuotedString);
             TestPattern(patterns, "#$09'aaaa'#09", TokenKind.QuotedString);
             TestPattern(patterns, "#$09'aaaa'#$09", TokenKind.QuotedString);
-            TestPattern(patterns, PasPasPas.Parsing.Tokenizer.Tokenizer.IncompleteString, "#", TokenKind.QuotedString);
-            TestPattern(patterns, PasPasPas.Parsing.Tokenizer.Tokenizer.IncompleteString, "#$", TokenKind.QuotedString);
+            TestPattern(patterns, PasPasPas.Parsing.Tokenizer.TokenizerBase.IncompleteString, "#", TokenKind.QuotedString);
+            TestPattern(patterns, PasPasPas.Parsing.Tokenizer.TokenizerBase.IncompleteString, "#$", TokenKind.QuotedString);
             TestPattern(patterns, "'aaaa'#$09", TokenKind.QuotedString);
         }
 

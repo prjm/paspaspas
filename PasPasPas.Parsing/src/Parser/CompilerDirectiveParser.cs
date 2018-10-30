@@ -22,8 +22,8 @@ namespace PasPasPas.Parsing.Parser {
         private static InputPatterns GetPatternsFromFactory(IParserEnvironment environment)
             => environment.Patterns.CompilerDirectivePatterns;
 
-        private static Tokenizer.Tokenizer CreateTokenizer(IParserEnvironment env, StackedFileReader reader)
-            => new Tokenizer.Tokenizer(env, GetPatternsFromFactory(env), reader);
+        private static Tokenizer.TokenizerBase CreateTokenizer(IParserEnvironment env, StackedFileReader reader)
+            => new Tokenizer.TokenizerBase(env, GetPatternsFromFactory(env), reader);
 
         private static TokenizerWithLookahead CreateTokenizer(IParserEnvironment env, StackedFileReader reader, OptionSet options)
             => new TokenizerWithLookahead(env, options, CreateTokenizer(env, reader), TokenizerMode.CompilerDirective);

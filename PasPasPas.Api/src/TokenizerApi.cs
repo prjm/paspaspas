@@ -53,7 +53,7 @@ namespace PasPasPas.Api {
         /// <param name="fileReader"></param>
         /// <returns></returns>
         private ITokenizer CreateTokenizer(StackedFileReader fileReader)
-            => new Tokenizer(env, CreateStandardPatterns(), fileReader);
+            => new TokenizerBase(env, CreateStandardPatterns(), fileReader);
 
         private InputPatterns CreateStandardPatterns()
             => env.Patterns.StandardPatterns;

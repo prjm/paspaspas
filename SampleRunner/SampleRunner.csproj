@@ -1,30 +1,39 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <Import Project="../Common.targets" />
+    <Import Project="../Common.targets" />
 
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
-    <RuntimeIdentifiers>win-x64;win-x86</RuntimeIdentifiers>
-  </PropertyGroup>
-  
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <LangVersion>$(PasPasPasCsLanguageVersion)</LangVersion>
-  </PropertyGroup>
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>netcoreapp2.1</TargetFramework>
+        <RuntimeIdentifiers>win-x64;win-x86</RuntimeIdentifiers>
+    </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <LangVersion>$(PasPasPasCsLanguageVersion)</LangVersion>
-  </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+        <LangVersion>$(PasPasPasCsLanguageVersion)</LangVersion>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="System.Buffers" Version="4.5.0" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <ProjectReference Include="..\PasPasPas.Api\PasPasPas.Api.csproj" />
-    <ProjectReference Include="..\PasPasPas.Building\PasPasPas.Building.csproj" />
-    <ProjectReference Include="..\PasPasPas.Infrastructure\PasPasPas.Infrastructure.csproj" />
-    <ProjectReference Include="..\Paspaspas.Options\PasPasPas.Options.csproj" />
-    <ProjectReference Include="..\PasPasPas.Parsing\PasPasPas.Parsing.csproj" />
-  </ItemGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+        <LangVersion>$(PasPasPasCsLanguageVersion)</LangVersion>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="ErrorProne.NET" Version="0.1.5898.41180" />
+        <PackageReference Include="ErrorProne.NET.Structs" Version="0.1.1.11">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.6.2">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="System.Buffers" Version="4.5.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\PasPasPas.Api\PasPasPas.Api.csproj" />
+        <ProjectReference Include="..\PasPasPas.Building\PasPasPas.Building.csproj" />
+        <ProjectReference Include="..\PasPasPas.Infrastructure\PasPasPas.Infrastructure.csproj" />
+        <ProjectReference Include="..\Paspaspas.Options\PasPasPas.Options.csproj" />
+        <ProjectReference Include="..\PasPasPas.Parsing\PasPasPas.Parsing.csproj" />
+    </ItemGroup>
 </Project>

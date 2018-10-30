@@ -47,7 +47,7 @@ namespace PasPasPas.Parsing.Tokenizer.Patterns {
         /// <summary>
         ///     caption
         /// </summary>
-        public string Caption
+        public static string Caption
             => "TokenizerPatternFactory";
 
         private static InputPatterns CreateCompilerDirectivePatterns() {
@@ -68,7 +68,6 @@ namespace PasPasPas.Parsing.Tokenizer.Patterns {
                 ["IFDEF"] = TokenKind.IfDef,
                 ["IFNDEF"] = TokenKind.IfNDef,
                 ["IF"] = TokenKind.IfCd,
-                ["ELSEIF"] = TokenKind.ElseIf,
                 ["ELSE"] = TokenKind.ElseCd,
                 ["ELSEIF"] = TokenKind.ElseIf,
                 ["ENDIF"] = TokenKind.EndIf,
@@ -196,7 +195,7 @@ namespace PasPasPas.Parsing.Tokenizer.Patterns {
             result.AddPattern(new WhiteSpaceCharacterClass(), new CharacterClassTokenGroupValue(TokenKind.WhiteSpace, new WhiteSpaceCharacterClass()));
             result.AddPattern(new IdentifierCharacterClass(dots: true), new IdentifierTokenGroupValue(keywords, allowDots: true));
             result.AddPattern(new DigitCharClass(false), new NumberTokenGroupValue() { AllowIdents = true });
-            result.AddPattern('$', new CharacterClassTokenGroupValue(TokenKind.HexNumber, new DigitCharClass(true), 2, LiteralParserKind.HexNumbers, Tokenizer.IncompleteHexNumber));
+            result.AddPattern('$', new CharacterClassTokenGroupValue(TokenKind.HexNumber, new DigitCharClass(true), 2, LiteralParserKind.HexNumbers, TokenizerBase.IncompleteHexNumber));
             result.AddPattern(new ControlCharacterClass(), new CharacterClassTokenGroupValue(TokenKind.ControlChar, new ControlCharacterClass()));
             result.AddPattern('"', new QuotedStringTokenValue(TokenKind.QuotedString, '"'));
             result.AddPattern('\'', new QuotedStringTokenValue(TokenKind.QuotedString, '\''));
@@ -207,48 +206,25 @@ namespace PasPasPas.Parsing.Tokenizer.Patterns {
 
             var keywords = new Dictionary<string, int>(170, StringComparer.OrdinalIgnoreCase) {
                 ["program"] = TokenKind.Program,
-                ["uses"] = TokenKind.Uses,
-                ["in"] = TokenKind.In,
-                ["const"] = TokenKind.Const,
                 ["pointer"] = TokenKind.Pointer,
-                ["array"] = TokenKind.Array,
-                ["of"] = TokenKind.Of,
                 ["type"] = TokenKind.TypeKeyword,
-                ["packed"] = TokenKind.Packed,
                 ["experimental"] = TokenKind.Experimental,
                 ["deprecated"] = TokenKind.Deprecated,
                 ["platform"] = TokenKind.Platform,
-                ["library"] = TokenKind.Library,
-                ["set"] = TokenKind.Set,
-                ["file"] = TokenKind.File,
-                ["class"] = TokenKind.Class,
-                ["begin"] = TokenKind.Begin,
-                ["end"] = TokenKind.End,
                 ["sealed"] = TokenKind.Sealed,
-                ["abstract"] = TokenKind.Abstract,
                 ["strict"] = TokenKind.Strict,
                 ["private"] = TokenKind.Private,
                 ["published"] = TokenKind.Published,
                 ["protected"] = TokenKind.Protected,
                 ["automated"] = TokenKind.Automated,
                 ["public"] = TokenKind.Public,
-                ["constructor"] = TokenKind.Constructor,
-                ["destructor"] = TokenKind.Destructor,
-                ["function"] = TokenKind.Function,
-                ["procedure"] = TokenKind.Procedure,
-                ["record"] = TokenKind.Record,
-                ["var"] = TokenKind.Var,
                 ["out"] = TokenKind.Out,
-                ["resourcestring"] = TokenKind.Resourcestring,
                 ["reintroduce"] = TokenKind.Reintroduce,
                 ["overload"] = TokenKind.Overload,
-                ["message"] = TokenKind.Message,
                 ["static"] = TokenKind.Static,
-                ["dynamic"] = TokenKind.Dynamic,
                 ["override"] = TokenKind.Override,
                 ["virtual"] = TokenKind.Virtual,
                 ["final"] = TokenKind.Final,
-                ["inline"] = TokenKind.Inline,
                 ["assembler"] = TokenKind.Assembler,
                 ["cdecl"] = TokenKind.Cdecl,
                 ["pascal"] = TokenKind.Pascal,
@@ -259,14 +235,14 @@ namespace PasPasPas.Parsing.Tokenizer.Patterns {
                 ["far"] = TokenKind.Far,
                 ["local"] = TokenKind.Local,
                 ["near"] = TokenKind.Near,
-                ["property"] = TokenKind.Property,
                 ["index"] = TokenKind.Index,
                 ["read"] = TokenKind.Read,
-                ["write"] = TokenKind.Write,
                 ["add"] = TokenKind.Add,
                 ["remove"] = TokenKind.Remove,
                 ["readonly"] = TokenKind.ReadOnly,
                 ["writeonly"] = TokenKind.WriteOnly,
+                ["dynamic"] = TokenKind.Dynamic,
+                ["write"] = TokenKind.Write,
                 ["dispid"] = TokenKind.DispId,
                 ["default"] = TokenKind.Default,
                 ["nodefault"] = TokenKind.NoDefault,
@@ -276,30 +252,21 @@ namespace PasPasPas.Parsing.Tokenizer.Patterns {
                 ["requires"] = TokenKind.Requires,
                 ["package"] = TokenKind.Package,
                 ["unit"] = TokenKind.Unit,
-                ["interface"] = TokenKind.Interface,
-                ["implementation"] = TokenKind.Implementation,
-                ["initialization"] = TokenKind.Initialization,
-                ["finalization"] = TokenKind.Finalization,
                 ["asm"] = TokenKind.Asm,
-                ["label"] = TokenKind.Label,
-                ["exports"] = TokenKind.Exports,
                 ["assembly"] = TokenKind.Assembly,
                 ["operator"] = TokenKind.Operator,
                 ["absolute"] = TokenKind.Absolute,
+                ["abstract"] = TokenKind.Abstract,
                 ["name"] = TokenKind.Name,
                 ["resident"] = TokenKind.Resident,
                 ["shortstring"] = TokenKind.ShortString,
-                ["ansistring"] = TokenKind.AnsiString,
                 ["string"] = TokenKind.String,
                 ["widestring"] = TokenKind.WideString,
                 ["unicodestring"] = TokenKind.UnicodeString,
-                ["object"] = TokenKind.Object,
-                ["to"] = TokenKind.To,
                 ["reference"] = TokenKind.Reference,
                 ["helper"] = TokenKind.Helper,
-                ["dispinterface"] = TokenKind.DispInterface,
-                ["for"] = TokenKind.For,
                 ["and"] = TokenKind.And,
+                ["ansistring"] = TokenKind.AnsiString,
                 ["array"] = TokenKind.Array,
                 ["as"] = TokenKind.As,
                 ["begin"] = TokenKind.Begin,
@@ -339,7 +306,6 @@ namespace PasPasPas.Parsing.Tokenizer.Patterns {
                 ["or"] = TokenKind.Or,
                 ["packed"] = TokenKind.Packed,
                 ["procedure"] = TokenKind.Procedure,
-                ["program"] = TokenKind.Program,
                 ["property"] = TokenKind.Property,
                 ["raise"] = TokenKind.Raise,
                 ["record"] = TokenKind.Record,
@@ -350,15 +316,16 @@ namespace PasPasPas.Parsing.Tokenizer.Patterns {
                 ["shr"] = TokenKind.Shr,
                 ["then"] = TokenKind.Then,
                 ["threadvar"] = TokenKind.ThreadVar,
+                ["message"] = TokenKind.Message,
                 ["to"] = TokenKind.To,
                 ["try"] = TokenKind.Try,
-                ["unit"] = TokenKind.Unit,
                 ["until"] = TokenKind.Until,
                 ["uses"] = TokenKind.Uses,
                 ["var"] = TokenKind.Var,
                 ["while"] = TokenKind.While,
                 ["with"] = TokenKind.With,
                 ["xor"] = TokenKind.Xor,
+                ["object"] = TokenKind.Object,
                 ["varargs"] = TokenKind.VarArgs,
                 ["external"] = TokenKind.External,
                 ["forward"] = TokenKind.Forward,
@@ -406,7 +373,7 @@ namespace PasPasPas.Parsing.Tokenizer.Patterns {
             lt.Add('>', TokenKind.NotEquals);
 
             result.AddPattern('{', new SequenceGroupTokenValue(TokenKind.Comment, "}")).Add('$', new SequenceGroupTokenValue(TokenKind.Preprocessor, "}", true));
-            result.AddPattern('$', new CharacterClassTokenGroupValue(TokenKind.HexNumber, new DigitCharClass(true), 2, LiteralParserKind.HexNumbers, Tokenizer.IncompleteHexNumber));
+            result.AddPattern('$', new CharacterClassTokenGroupValue(TokenKind.HexNumber, new DigitCharClass(true), 2, LiteralParserKind.HexNumbers, TokenizerBase.IncompleteHexNumber));
             result.AddPattern(new WhiteSpaceCharacterClass(), new CharacterClassTokenGroupValue(TokenKind.WhiteSpace, new WhiteSpaceCharacterClass()));
             result.AddPattern(new IdentifierCharacterClass(), new IdentifierTokenGroupValue(keywords, allowAmpersand: true));
 

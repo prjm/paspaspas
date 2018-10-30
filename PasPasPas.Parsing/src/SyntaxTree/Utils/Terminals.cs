@@ -108,7 +108,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Utils {
             return false;
         }
 
-        private bool EqualsTokens(TokenizerWithLookahead.TokenSequence other, Terminal terminal) {
+        private static bool EqualsTokens(TokenizerWithLookahead.TokenSequence other, Terminal terminal) {
             if (!terminal.Token.Equals(other.Value))
                 return false;
 
@@ -138,7 +138,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Utils {
             return true;
         }
 
-        private bool EqualsTokens(TokenizerWithLookahead.TokenSequence other, TokenizerWithLookahead.TokenSequence terminal) {
+        private static bool EqualsTokens(TokenizerWithLookahead.TokenSequence other, TokenizerWithLookahead.TokenSequence terminal) {
             if (!terminal.Value.Equals(other.Value))
                 return false;
 

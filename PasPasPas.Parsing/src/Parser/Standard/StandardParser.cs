@@ -22,7 +22,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
             => environment.Patterns.StandardPatterns;
 
         private static TokenizerWithLookahead CreateTokenizer(IParserEnvironment environment, StackedFileReader reader, OptionSet options)
-            => new TokenizerWithLookahead(environment, options, new Tokenizer.Tokenizer(environment, GetPatternsFromFactory(environment), reader), TokenizerMode.Standard);
+            => new TokenizerWithLookahead(environment, options, new Tokenizer.TokenizerBase(environment, GetPatternsFromFactory(environment), reader), TokenizerMode.Standard);
 
         /// <summary>
         ///     creates a new standard parser

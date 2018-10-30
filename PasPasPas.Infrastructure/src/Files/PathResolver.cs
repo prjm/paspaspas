@@ -99,7 +99,7 @@ namespace PasPasPas.Infrastructure.Files {
         /// <param name="currentDirectory">current directory</param>
         /// <param name="pathToResolve">path to resolve</param>
         /// <returns></returns>
-        protected ResolvedFile ResolveInDirectory(FileReference currentDirectory, FileReference pathToResolve) {
+        protected static ResolvedFile ResolveInDirectory(FileReference currentDirectory, FileReference pathToResolve) {
 
             if (currentDirectory == null)
                 throw new ArgumentNullException(nameof(currentDirectory));

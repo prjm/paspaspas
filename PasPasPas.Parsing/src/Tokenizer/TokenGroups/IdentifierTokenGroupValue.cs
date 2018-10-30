@@ -36,7 +36,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
             var ignoreKeywords = allowAmpersands && hasAmpersand;
 
             if (!allowAmpersands && hasAmpersand) {
-                state.Error(Tokenizer.UnexpectedCharacter);
+                state.Error(TokenizerBase.UnexpectedCharacter);
                 return new Token(TokenKind.Invalid, state);
             }
 
@@ -47,7 +47,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
             }
 
             if (hasAmpersand && state.Length < 2)
-                state.Error(Tokenizer.IncompleteIdentifier);
+                state.Error(TokenizerBase.IncompleteIdentifier);
 
             var value = state.GetBufferContent();
 

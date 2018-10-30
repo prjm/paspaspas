@@ -17,7 +17,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         private PoolItem<StringBuilder> bufferHolder;
 
         private StringBuilder buffer;
-        private readonly Tokenizer tokenizer;
+        private readonly TokenizerBase tokenizer;
         private readonly StackedFileReader input;
         private readonly ILogSource log;
 
@@ -28,7 +28,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="currentInput">current input file</param>
         /// <param name="logSource">log source</param>
         /// <param name="parserEnvironment">parser environment</param>
-        public TokenizerState(IParserEnvironment parserEnvironment, Tokenizer parentTokenizer, StackedFileReader currentInput, ILogSource logSource) {
+        public TokenizerState(IParserEnvironment parserEnvironment, TokenizerBase parentTokenizer, StackedFileReader currentInput, ILogSource logSource) {
             tokenizer = parentTokenizer;
             log = logSource;
             input = currentInput;

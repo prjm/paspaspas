@@ -122,7 +122,7 @@ namespace PasPasPas.Parsing.Tokenizer.Patterns {
                 return FetchTokenByGroup(state, tokenGroup);
             }
 
-            state.Error(Tokenizer.UnexpectedCharacter);
+            state.Error(TokenizerBase.UnexpectedCharacter);
             return new Token(TokenKind.Invalid, state);
         }
 

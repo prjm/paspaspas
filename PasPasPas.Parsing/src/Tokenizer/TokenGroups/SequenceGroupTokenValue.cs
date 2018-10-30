@@ -56,7 +56,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
                     found = state.BufferEndsWith(EndSequence);
 
                 if (!found)
-                    state.Error(Tokenizer.UnexpectedEndOfToken);
+                    state.Error(TokenizerBase.UnexpectedEndOfToken);
 
                 if (StoreValue) {
                     builder.Item.Remove(0, 1);

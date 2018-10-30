@@ -8,7 +8,7 @@ namespace PasPasPas.Options.DataTypes {
     public class PathOptionSet {
 
         /// <summary>
-        ///     Create new path tions
+        ///     Create new path options
         /// </summary>
         /// <param name="baseOptions">base options</param>
         public PathOptionSet(PathOptionSet baseOptions)
@@ -21,14 +21,9 @@ namespace PasPasPas.Options.DataTypes {
 
 
         /// <summary>
-        ///     reset on new unitr
-        /// </summary>
-        public void ResetOnNewUnit() {
-        }
-
-        /// <summary>
         ///     clear path options
         /// </summary>
-        public void Clear() => SearchPaths.ResetToDefault();
+        public void Clear()
+            => SearchPaths.ResetToDefault();
     }
 }

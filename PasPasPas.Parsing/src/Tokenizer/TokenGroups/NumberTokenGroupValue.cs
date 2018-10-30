@@ -62,7 +62,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
             if (nextChar == 'E' || nextChar == 'e') {
                 state.NextChar(true);
                 if (state.AtEof) {
-                    state.Error(Tokenizer.UnexpectedEndOfToken);
+                    state.Error(TokenizerBase.UnexpectedEndOfToken);
                 }
                 else {
                     nextChar = state.LookAhead();
@@ -75,11 +75,11 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
                             exp = digitTokenizer.Tokenize(state).ParsedValue.ToString();
                         }
                         else {
-                            state.Error(Tokenizer.UnexpectedEndOfToken);
+                            state.Error(TokenizerBase.UnexpectedEndOfToken);
                         }
                     }
                     else {
-                        state.Error(Tokenizer.UnexpectedEndOfToken);
+                        state.Error(TokenizerBase.UnexpectedEndOfToken);
                     }
                 }
 

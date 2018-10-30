@@ -5,7 +5,7 @@ namespace PasPasPas.Typings.Simple {
     /// <summary>
     ///     helper class to detect types for literal values
     /// </summary>
-    public static class LiteralValues {
+    public static class LiteralValuesHelper {
 
         /// <summary>
         ///     determine the type for a given literal value

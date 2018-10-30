@@ -56,7 +56,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
         ///     error message
         /// </summary>
         private Guid MinLengthMessage { get; }
-            = Tokenizer.UnexpectedEndOfToken;
+            = TokenizerBase.UnexpectedEndOfToken;
 
         private LiteralParserKind ValueParser { get; }
             = LiteralParserKind.Undefined;

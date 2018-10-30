@@ -56,7 +56,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
                 found = state.BufferEndsWith(QuoteChar) && state.Length > 1;
 
                 if (!found)
-                    state.Error(Tokenizer.IncompleteString);
+                    state.Error(TokenizerBase.IncompleteString);
 
                 ITypeReference value;
                 if (resultBuilder.Item.Length == 1)
