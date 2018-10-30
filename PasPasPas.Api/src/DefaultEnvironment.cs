@@ -119,6 +119,7 @@ namespace PasPasPas.Api {
                     ListPools,
                     TypeRegistry,
                     TerminalPool,
+                    IdentifierPool,
                     Histograms.Instance,
                 };
                 return data;
@@ -130,5 +131,12 @@ namespace PasPasPas.Api {
         /// </summary>
         public Terminals TerminalPool { get; }
             = new Terminals();
+
+        /// <summary>
+        ///     identifiers
+        /// </summary>
+        public Identifiers IdentifierPool { get; }
+            = new Identifiers();
+
     }
 }

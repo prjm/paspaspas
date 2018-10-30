@@ -9,6 +9,10 @@ namespace PasPasPas.Parsing.Parser.Standard {
 
         #region ParseSetSection
 
+        /// <summary>
+        ///     parse a set section
+        /// </summary>
+        /// <returns></returns>
         public SetSectionPartSymbol ParseSetSectionPart() {
             var setExpression = ParseExpression();
             var continuation = ContinueWith(TokenKind.Comma, TokenKind.DotDot);

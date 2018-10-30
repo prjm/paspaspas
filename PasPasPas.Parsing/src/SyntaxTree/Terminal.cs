@@ -141,12 +141,12 @@ namespace PasPasPas.Parsing.SyntaxTree {
             result = result * 31 + Token.GetHashCode();
 
             if (Prefix != default)
-                foreach (var prefix in Prefix)
-                    result = result * 31 + prefix.GetHashCode();
+                for (var i = 0; i < Prefix.Length; i++)
+                    result = result * 31 + Prefix[i].GetHashCode();
 
             if (Suffix != default)
-                foreach (var suffix in Suffix)
-                    result = result * 31 + suffix.GetHashCode();
+                for (var i = 0; i < Suffix.Length; i++)
+                    result = result * 31 + Suffix[i].GetHashCode();
 
             return result;
         }

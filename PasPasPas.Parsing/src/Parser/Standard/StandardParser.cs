@@ -4770,7 +4770,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
         public IdentifierSymbol RequireIdentifier(bool allowReserverdWords = false) {
 
             if (Match(TokenKind.Identifier)) {
-                return new IdentifierSymbol(ContinueWithOrMissing(TokenKind.Identifier));
+                return Environment.IdentifierPool.GetIdentifier(ContinueWithOrMissing(TokenKind.Identifier));
             };
 
             var token = CurrentToken();

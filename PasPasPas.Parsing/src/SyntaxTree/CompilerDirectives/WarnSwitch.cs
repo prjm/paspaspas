@@ -28,6 +28,10 @@ namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
         ///     warning mode
         /// </summary>
         public WarningMode Mode { get; }
+
+        /// <summary>
+        ///     mode symbol
+        /// </summary>
         public Terminal ModeSymbol { get; }
 
         /// <summary>

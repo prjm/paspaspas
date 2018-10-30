@@ -13,6 +13,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// </summary>
         /// <param name="attributes1"></param>
         /// <param name="parameterKind"></param>
+        /// <param name="kind"></param>
         /// <param name="attributes2"></param>
         /// <param name="parameterName"></param>
         /// <param name="comma"></param>

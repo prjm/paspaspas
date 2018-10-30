@@ -545,6 +545,11 @@ namespace PasPasPas.Parsing.Parser {
             return new StackMemorySize(symbol, size1, comma, size2, minStackSize, maxStackSize);
         }
 
+        /// <summary>
+        ///     get a switch info
+        /// </summary>
+        /// <param name="switchState"></param>
+        /// <returns></returns>
         public static SwitchInfo GetSwitchInfo(int switchState) {
             if (switchState == TokenKind.Plus)
                 return SwitchInfo.Enabled;

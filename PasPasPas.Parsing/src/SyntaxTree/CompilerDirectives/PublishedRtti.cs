@@ -7,9 +7,6 @@ namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
     ///     type info directive
     /// </summary>
     public class PublishedRtti : CompilerDirectiveBase {
-        private readonly Terminal symbol;
-        private readonly Terminal mode;
-        private readonly RttiForPublishedProperties parsedMode;
 
         /// <summary>
         ///     create a new type info directive
@@ -18,8 +15,8 @@ namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
         /// <param name="mode"></param>
         /// <param name="parsedMode"></param>
         public PublishedRtti(Terminal symbol, Terminal mode, RttiForPublishedProperties parsedMode) {
-            this.symbol = symbol;
-            this.mode = mode;
+            Symbol = symbol;
+            ModeSymbol = mode;
             Mode = parsedMode;
         }
 
@@ -29,13 +26,23 @@ namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
         public RttiForPublishedProperties Mode { get; }
 
         /// <summary>
+        ///     mode symbol
+        /// </summary>
+        public Terminal ModeSymbol { get; }
+
+        /// <summary>
+        ///     directive
+        /// </summary>
+        public Terminal Symbol { get; }
+
+        /// <summary>
         ///     accept visitor
         /// </summary>
         /// <param name="visitor">node visitor</param>
         public override void Accept(IStartEndVisitor visitor) {
             visitor.StartVisit(this);
-            AcceptPart(this, symbol, visitor);
-            AcceptPart(this, mode, visitor);
+            AcceptPart(this, Symbol, visitor);
+            AcceptPart(this, ModeSymbol, visitor);
             visitor.EndVisit(this);
         }
 

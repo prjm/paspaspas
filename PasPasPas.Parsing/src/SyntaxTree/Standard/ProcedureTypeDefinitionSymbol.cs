@@ -45,8 +45,20 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         ///     return types
         /// </summary>
         public TypeSpecificationSymbol ReturnType { get; }
+
+        /// <summary>
+        ///     <c>tue</c> if anonymous methods
+        /// </summary>
         public bool AllowAnonymousMethods { get; }
+
+        /// <summary>
+        ///     of symbol
+        /// </summary>
         public Terminal OfSymbol { get; }
+
+        /// <summary>
+        ///     object symbol
+        /// </summary>
         public Terminal ObjectSymbol { get; }
 
         /// <summary>

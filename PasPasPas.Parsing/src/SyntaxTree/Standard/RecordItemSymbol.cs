@@ -19,6 +19,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         ///     create a new method symbol
         /// </summary>
         /// <param name="classMethodSymbol"></param>
+        /// <param name="classItem"></param>
         public RecordItemSymbol(ClassMethodSymbol classMethodSymbol, Terminal classItem) {
             MethodDeclaration = classMethodSymbol;
             ClassSymbol = classItem;

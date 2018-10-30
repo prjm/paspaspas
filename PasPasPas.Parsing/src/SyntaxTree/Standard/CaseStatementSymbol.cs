@@ -31,6 +31,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="caseExpression"></param>
         /// <param name="ofSymbol"></param>
         /// <param name="items"></param>
+        /// <param name="elseSymbol"></param>
         /// <param name="endSymbol"></param>
         /// <param name="elsePart"></param>
         /// <param name="semicolon"></param>

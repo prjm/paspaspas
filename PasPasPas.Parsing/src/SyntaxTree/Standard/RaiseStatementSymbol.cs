@@ -26,6 +26,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         ///     expression
         /// </summary>
         public ExpressionSymbol RaiseExpression { get; }
+
+        /// <summary>
+        ///     at expression
+        /// </summary>
         public ExpressionSymbol AtExpression { get; }
 
         /// <summary>

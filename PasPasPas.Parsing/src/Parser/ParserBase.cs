@@ -881,7 +881,6 @@ namespace PasPasPas.Parsing.Parser {
         /// <summary>
         ///     add a terminal node marked as invalid
         /// </summary>
-        /// <param name="parent"></param>
         /// <returns></returns>
         protected Terminal CreateByError() {
             var invalid = environment.TerminalPool.GetTerminal(tokenizer.CurrentTokenSequence);
@@ -1068,19 +1067,53 @@ namespace PasPasPas.Parsing.Parser {
             }
         }
 
+        /// <summary>
+        ///     get a list from the list pool
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         protected PoolItem<List<T>> GetList<T>() where T : class
             => Environment.ListPools.GetList<T>();
 
+        /// <summary>
+        ///     add one item to the list
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="Q"></typeparam>
+        /// <param name="list"></param>
+        /// <param name="item"></param>
+        /// <returns></returns>
         protected static Q AddToList<T, Q>(PoolItem<List<T>> list, Q item) where T : class where Q : T {
             if (item != default)
                 list.Item.Add(item);
             return item;
         }
 
+        /// <summary>
+        ///     get a fixed size array
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="list"></param>
+        /// <returns></returns>
         protected static ImmutableArray<T> GetFixedArray<T>(PoolItem<List<T>> list) where T : class {
 
-            if (list.Item.Count < 1)
-                return ImmutableArray<T>.Empty;
+            switch (list.Item.Count) {
+                case 0:
+                    return ImmutableArray<T>.Empty;
+
+                case 1:
+                    return ImmutableArray.Create(list.Item[0]);
+
+                case 2:
+                    return ImmutableArray.Create(list.Item[0], list.Item[1]);
+
+                case 3:
+                    return ImmutableArray.Create(list.Item[0], list.Item[1], list.Item[2]);
+
+                case 4:
+                    return ImmutableArray.Create(list.Item[0], list.Item[1], list.Item[2], list.Item[3]);
+
+            };
 
             var builder = ListPools.GetImmutableArrayBuilder(list);
             for (var index = 0; index < list.Item.Count; index++)

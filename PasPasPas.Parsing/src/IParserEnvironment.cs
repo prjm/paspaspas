@@ -51,5 +51,11 @@ namespace PasPasPas.Parsing {
         ///     Terminal pool
         /// </summary>
         Terminals TerminalPool { get; }
+
+        /// <summary>
+        ///     identifier pool
+        /// </summary>
+        Identifiers IdentifierPool { get; }
+
     }
 }

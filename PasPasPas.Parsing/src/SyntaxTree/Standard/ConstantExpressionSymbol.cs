@@ -27,6 +27,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         ///     create a new constant expression symbol
         /// </summary>
         /// <param name="expression"></param>
+        /// <param name="comma"></param>
         public ConstantExpressionSymbol(ExpressionSymbol expression, Terminal comma) : base(ImmutableArray<SyntaxPartBase>.Empty) {
             Value = expression;
             Comma = comma;

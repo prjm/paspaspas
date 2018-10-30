@@ -24,6 +24,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         ///     generate a new combined generic names
         /// </summary>
         /// <param name="names"></param>
+        /// <param name="comma"></param>
         public TypeNameSymbol(ImmutableArray<GenericNamespaceNameSymbol> names, Terminal comma) : base(names)
             => Comma = comma;
 

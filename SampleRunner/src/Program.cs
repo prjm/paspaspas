@@ -24,7 +24,7 @@ namespace SampleRunner {
             var repeat = 1;
             var result = System.Console.Out;
             var environment = new DefaultEnvironment();
-            var useHistograms = false;
+            var useHistograms = true;
             var action = PrepareSample(environment, testPath, mode, repeat, useHistograms);
 
             RunSample(environment, result, action, useHistograms);

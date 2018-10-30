@@ -3,7 +3,7 @@
 namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
 
     /// <summary>
-    ///     stack mem size directive
+    ///     stack memory size directive
     /// </summary>
     public class StackMemorySize : CompilerDirectiveBase {
         private readonly Terminal symbol;
@@ -11,6 +11,15 @@ namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
         private readonly Terminal comma;
         private readonly Terminal size2;
 
+        /// <summary>
+        ///     create a new stack memory size directive
+        /// </summary>
+        /// <param name="symbol"></param>
+        /// <param name="size1"></param>
+        /// <param name="comma"></param>
+        /// <param name="size2"></param>
+        /// <param name="minStackSize"></param>
+        /// <param name="maxStackSize"></param>
         public StackMemorySize(Terminal symbol, Terminal size1, Terminal comma, Terminal size2, ulong minStackSize, ulong maxStackSize) {
             this.symbol = symbol;
             this.size1 = size1;

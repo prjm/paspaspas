@@ -11,6 +11,13 @@ namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
         private readonly Terminal symbolName;
         private readonly Terminal unionName;
 
+        /// <summary>
+        ///     create a new external symbol declaration
+        /// </summary>
+        /// <param name="symbol"></param>
+        /// <param name="identifier"></param>
+        /// <param name="symbolName"></param>
+        /// <param name="unionName"></param>
         public ExternalSymbolDeclaration(Terminal symbol, Terminal identifier, Terminal symbolName, Terminal unionName) {
             this.symbol = symbol;
             this.identifier = identifier;

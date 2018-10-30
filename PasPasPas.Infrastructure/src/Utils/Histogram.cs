@@ -158,6 +158,16 @@ namespace PasPasPas.Infrastructure.Utils {
         /// </summary>
         public const string SyntaxLists = "SyntaxLists";
 
+        /// <summary>
+        ///     designator items histogram
+        /// </summary>
+        public const string DesignatorItems = "DesignatorItems";
+
+        /// <summary>
+        ///     identifier pool values
+        /// </summary>
+        public const string IdentifierPoolValues = "IdentifierPoolValues";
+
     }
 
     /// <summary>

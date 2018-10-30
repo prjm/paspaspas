@@ -228,7 +228,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Utils {
                 }
 
                 var newEntry = new PooledTerminal(searchEntry);
-                Histograms.Value("StringPoolHashValue", newEntry.ComputedHashValue);
 
                 lock (lockObject)
                     pool[newEntry] = newEntry;

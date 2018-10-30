@@ -94,6 +94,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// </summary>
         /// <param name="classFieldSymbol"></param>
         /// <param name="classItem"></param>
+        /// <param name="attributes1"></param>
+        /// <param name="attributes2"></param>
         public ClassDeclarationItemSymbol(ClassFieldSymbol classFieldSymbol, bool classItem, UserAttributesSymbol attributes1, UserAttributesSymbol attributes2) {
             FieldDeclaration = classFieldSymbol;
             ClassFieldItem = classItem;

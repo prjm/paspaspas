@@ -40,8 +40,20 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         ///     then part
         /// </summary>
         public StatementSymbol ThenPart { get; }
+
+        /// <summary>
+        ///        if symbol
+        /// </summary>
         public Terminal IfSymbol { get; set; }
+
+        /// <summary>
+        ///     then symbol
+        /// </summary>
         public Terminal ThenSymbol { get; set; }
+
+        /// <summary>
+        ///     else symbol
+        /// </summary>
         public Terminal ElseSymbol { get; set; }
 
         /// <summary>

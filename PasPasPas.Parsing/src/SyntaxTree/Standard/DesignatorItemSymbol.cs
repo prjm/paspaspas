@@ -1,4 +1,5 @@
 ﻿using System.Collections.Immutable;
+using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 
@@ -13,8 +14,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         ///     dereference symbol
         /// </summary>
         /// <param name="dereference"></param>
-        public DesignatorItemSymbol(Terminal dereference) : base(ImmutableArray<ParameterSymbol>.Empty)
-            => Dereference = dereference;
+        public DesignatorItemSymbol(Terminal dereference) : base(ImmutableArray<ParameterSymbol>.Empty) {
+            Dereference = dereference;
+            Histograms.Value(HistogramKeys.DesignatorItems, nameof(TokenKind.Circumflex));
+        }
 
         /// <summary>
         ///     index expression
@@ -32,6 +35,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
             OpenBraces = openBraces;
             IndexExpression = indexExpression;
             CloseBraces = closeBraces;
+            Histograms.Value(HistogramKeys.DesignatorItems, "Subitem");
         }
 
         /// <summary>
@@ -51,6 +55,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
             OpenParen = openParen;
             CloseParen = closeParen;
             ParameterList = paramList;
+            Histograms.Value(HistogramKeys.DesignatorItems, "Call" + immutableArray.Length.ToString());
         }
 
         /// <summary>
@@ -67,6 +72,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
             OpenParen = openParen;
             ConstantExpression = children;
             CloseParen = closeParen;
+            Histograms.Value(HistogramKeys.DesignatorItems, "ConstantExpression");
         }
 
         /// <summary>
