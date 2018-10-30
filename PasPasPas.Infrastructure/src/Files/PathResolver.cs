@@ -96,11 +96,10 @@ namespace PasPasPas.Infrastructure.Files {
         /// <summary>
         ///     check if a given path exists in a directory
         /// </summary>
-        /// <param name="pool"></param>
         /// <param name="currentDirectory">current directory</param>
         /// <param name="pathToResolve">path to resolve</param>
         /// <returns></returns>
-        protected ResolvedFile ResolveInDirectory(StringPool pool, FileReference currentDirectory, FileReference pathToResolve) {
+        protected ResolvedFile ResolveInDirectory(FileReference currentDirectory, FileReference pathToResolve) {
 
             if (currentDirectory == null)
                 throw new ArgumentNullException(nameof(currentDirectory));

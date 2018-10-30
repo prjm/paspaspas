@@ -24,7 +24,7 @@ namespace PasPasPas.Infrastructure.Log {
         /// <summary>
         ///     manager caption
         /// </summary>
-        public string Caption
+        public static string Caption
             => "LogManager";
 
         /// <summary>

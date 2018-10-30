@@ -37,13 +37,13 @@ namespace PasPasPas.Options.DataTypes {
                 currentDirectory = null;
             }
 
-            var result = ResolveInDirectory(StringPool, new FileReference(currentDirectory), pathToResolve);
+            var result = ResolveInDirectory(new FileReference(currentDirectory), pathToResolve);
             if (result.IsResolved) {
                 return result;
             }
 
             foreach (var path in optionSet.PathOptions.SearchPaths) {
-                result = ResolveInDirectory(StringPool, path, pathToResolve);
+                result = ResolveInDirectory(path, pathToResolve);
                 if (result.IsResolved) {
                     return result;
                 }
