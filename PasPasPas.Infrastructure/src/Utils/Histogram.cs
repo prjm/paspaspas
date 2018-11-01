@@ -168,6 +168,11 @@ namespace PasPasPas.Infrastructure.Utils {
         /// </summary>
         public const string IdentifierPoolValues = "IdentifierPoolValues";
 
+        /// <summary>
+        ///     string pool values
+        /// </summary>
+        public const string StringPoolValues = "StringPoolValues";
+
     }
 
     /// <summary>

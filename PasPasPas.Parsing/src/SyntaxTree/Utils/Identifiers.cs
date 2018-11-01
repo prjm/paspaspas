@@ -123,8 +123,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Utils {
     /// </summary>
     public class Identifiers : IEnvironmentItem {
 
-        private readonly IDictionary<PooledIdentifier, PooledIdentifier> pool
-            = new Dictionary<PooledIdentifier, PooledIdentifier>();
+        private readonly HashSet<PooledIdentifier> pool
+            = new HashSet<PooledIdentifier>();
 
         private readonly object lockObject = new object();
 
@@ -166,7 +166,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Utils {
                 Histograms.Value(HistogramKeys.IdentifierPoolValues, newEntry.Ident.Value);
 
                 lock (lockObject)
-                    pool[newEntry] = newEntry;
+                    pool.Add(newEntry);
 
                 return newEntry.Ident;
             }

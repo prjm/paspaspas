@@ -1,7 +1,7 @@
 ﻿<Project>
     <PropertyGroup>
-        <PasPasPasTargetFramework>netstandard2.0</PasPasPasTargetFramework>
-        <PasPasPasCsLanguageVersion>7.2</PasPasPasCsLanguageVersion>
+        <PasPasPasTargetFramework>netcoreapp2.1</PasPasPasTargetFramework>
+        <PasPasPasCsLanguageVersion>7.3</PasPasPasCsLanguageVersion>
         <PasPasPasCopyright>Copyright © 2016, 2017, 2018</PasPasPasCopyright>
         <PasPasPasCompany>the pas³ project</PasPasPasCompany>
     </PropertyGroup>

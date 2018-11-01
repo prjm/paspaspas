@@ -13,7 +13,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>P3SyntaxTreeViewer</RootNamespace>
     <AssemblyName>P3SyntaxTreeViewer</AssemblyName>
-    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
@@ -124,32 +124,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PasPasPas.Api\PasPasPas.Api.csproj">
-      <Project>{CF92A709-525F-450E-858F-A6AD8EDC16BA}</Project>
-      <Name>PasPasPas.Api</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PasPasPas.Global\PasPasPas.Globals.csproj">
-      <Project>{7A2FF93E-975A-4F2B-87B7-49C97FDA316F}</Project>
-      <Name>PasPasPas.Globals</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PasPasPas.Infrastructure\PasPasPas.Infrastructure.csproj">
-      <Project>{4cef569a-4ece-42ee-847b-5029958f757c}</Project>
-      <Name>PasPasPas.Infrastructure</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Paspaspas.Options\PasPasPas.Options.csproj">
-      <Project>{677a19c0-b2d4-4153-8dc9-0713c7193ece}</Project>
-      <Name>PasPasPas.Options</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PasPasPas.Parsing\PasPasPas.Parsing.csproj">
-      <Project>{efa1da73-0c34-4bfb-9006-dcffa12218ed}</Project>
-      <Name>PasPasPas.Parsing</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PasPasPas.Typings\PasPasPas.Typings.csproj">
-      <Project>{E22933E4-0571-4997-93DD-AAE65FF517F7}</Project>
-      <Name>PasPasPas.Typings</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Analyzer Include="..\packages\ErrorProne.NET.0.1.5898.41180\analyzers\dotnet\cs\ErrorProne.NET.dll" />
     <Analyzer Include="..\packages\ErrorProne.NET.Structs.0.1.1.11\analyzers\dotnet\cs\ErrorProne.NET.Core.dll" />
     <Analyzer Include="..\packages\ErrorProne.NET.Structs.0.1.1.11\analyzers\dotnet\cs\ErrorProne.Net.StructAnalyzers.dll" />
@@ -162,6 +136,12 @@
     <Analyzer Include="..\packages\Microsoft.NetFramework.Analyzers.2.6.2\analyzers\dotnet\cs\Microsoft.NetFramework.CSharp.Analyzers.dll" />
     <Analyzer Include="..\packages\Text.Analyzers.2.6.2\analyzers\dotnet\cs\Text.Analyzers.dll" />
     <Analyzer Include="..\packages\Text.Analyzers.2.6.2\analyzers\dotnet\cs\Text.CSharp.Analyzers.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PasPasPas.Desktop\PasPasPas.Desktop.csproj">
+      <Project>{1d6a0f73-bdd9-43ef-a932-b9fe2d365d2f}</Project>
+      <Name>PasPasPas.Desktop</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

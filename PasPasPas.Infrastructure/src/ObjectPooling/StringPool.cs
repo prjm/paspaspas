@@ -10,8 +10,8 @@ namespace PasPasPas.Infrastructure.Environment {
     /// </summary>
     public class StringPool : IEnvironmentItem {
 
-        private IDictionary<StringPoolEntry, StringPoolEntry> pool
-            = new Dictionary<StringPoolEntry, StringPoolEntry>();
+        private HashSet<StringPoolEntry> pool
+            = new HashSet<StringPoolEntry>();
 
         private readonly object lockObject = new object();
 
@@ -39,7 +39,7 @@ namespace PasPasPas.Infrastructure.Environment {
             newEntry.Initialize(value);
 
             lock (lockObject)
-                pool[newEntry] = newEntry;
+                pool.Add(newEntry);
         }
 
         /// <summary>
@@ -63,16 +63,15 @@ namespace PasPasPas.Infrastructure.Environment {
 
                 lock (lockObject) {
                     if (pool.TryGetValue(searchEntry, out var data)) {
-                        Histograms.Value("StringPoolValue", data.PoolItem);
+                        Histograms.Value(HistogramKeys.StringPoolValues, data.PoolItem);
                         return data.PoolItem;
                     }
                 }
 
                 var newEntry = new StringPoolEntry(searchEntry);
-                Histograms.Value("StringPoolHashValue", newEntry.ComputedHashCode);
 
                 lock (lockObject)
-                    pool[newEntry] = newEntry;
+                    pool.Add(newEntry);
 
                 return newEntry.PoolItem;
             }

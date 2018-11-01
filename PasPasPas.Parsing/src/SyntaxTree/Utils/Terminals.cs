@@ -188,8 +188,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Utils {
     /// </summary>
     public class Terminals : IEnvironmentItem {
 
-        private readonly IDictionary<PooledTerminal, PooledTerminal> pool
-            = new Dictionary<PooledTerminal, PooledTerminal>();
+        private readonly HashSet<PooledTerminal> pool
+            = new HashSet<PooledTerminal>();
 
         private readonly object lockObject = new object();
 
@@ -230,7 +230,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Utils {
                 var newEntry = new PooledTerminal(searchEntry);
 
                 lock (lockObject)
-                    pool[newEntry] = newEntry;
+                    pool.Add(newEntry);
 
                 return newEntry.Terminal;
             }

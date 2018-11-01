@@ -19,12 +19,12 @@ namespace SampleRunner {
 
         private static void Main() {
 
-            var testPath = @"C:\temp\Testfiles\spring.pas";
+            var testPath = @"C:\temp\Testfiles\Spring.pas";
             var mode = SampleMode.ParseFile;
             var repeat = 1;
             var result = System.Console.Out;
             var environment = new DefaultEnvironment();
-            var useHistograms = true;
+            var useHistograms = false;
             var action = PrepareSample(environment, testPath, mode, repeat, useHistograms);
 
             RunSample(environment, result, action, useHistograms);
