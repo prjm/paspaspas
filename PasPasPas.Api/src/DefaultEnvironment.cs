@@ -120,6 +120,7 @@ namespace PasPasPas.Api {
                     TypeRegistry,
                     TerminalPool,
                     IdentifierPool,
+                    TokenArrays,
                     Histograms.Instance,
                 };
                 return data;
@@ -137,6 +138,12 @@ namespace PasPasPas.Api {
         /// </summary>
         public Identifiers IdentifierPool { get; }
             = new Identifiers();
+
+        /// <summary>
+        ///     token array pool
+        /// </summary>
+        public TokenArrays TokenArrays { get; }
+            = new TokenArrays();
 
     }
 }

@@ -22,7 +22,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         ///     create a new expression
         /// </summary>
         /// <param name="leftOperand"></param>
-        public ExpressionSymbol(SimpleExpression leftOperand)
+        public ExpressionSymbol(ISyntaxPart leftOperand)
             => LeftOperand = leftOperand;
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="operator"></param>
         /// <param name="rightOperand"></param>
         /// <param name="comma"></param>
-        public ExpressionSymbol(SimpleExpression leftOperand, Terminal @operator, SimpleExpression rightOperand, Terminal comma) : this(leftOperand) {
+        public ExpressionSymbol(ISyntaxPart leftOperand, Terminal @operator, ISyntaxPart rightOperand, Terminal comma) : this(leftOperand) {
             Operator = @operator;
             RightOperand = rightOperand;
             Comma = comma;
@@ -52,12 +52,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     simple expression
         /// </summary>
-        public SimpleExpression LeftOperand { get; }
+        public ISyntaxPart LeftOperand { get; }
 
         /// <summary>
         ///     right operand
         /// </summary>
-        public SimpleExpression RightOperand { get; }
+        public ISyntaxPart RightOperand { get; }
 
         /// <summary>
         ///     accept visitor

@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using PasPasPas.Infrastructure.Environment;
 using PasPasPas.Infrastructure.ObjectPooling;
 using PasPasPas.Infrastructure.Utils;
@@ -222,7 +224,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Utils {
 
                 lock (lockObject) {
                     if (pool.TryGetValue(searchEntry, out var data)) {
-                        Histograms.Value("TerminalPoolValue", data.Terminal);
+                        LogHistogram(data);
                         return data.Terminal;
                     }
                 }
@@ -234,9 +236,19 @@ namespace PasPasPas.Parsing.SyntaxTree.Utils {
 
                 return newEntry.Terminal;
             }
-
         }
 
-
+        [Conditional("DEBUG")]
+        private static void LogHistogram(PooledTerminal data) {
+            if (Histograms.Enable) {
+                var value = string.Empty;
+                if (data.Terminal.Prefix != null)
+                    value += string.Join(string.Empty, data.Terminal.Prefix.Select(t => t.Value));
+                value += data.Terminal.Value;
+                if (data.Terminal.Suffix != null)
+                    value += string.Join(string.Empty, data.Terminal.Suffix.Select(t => t.Value));
+                Histograms.Value(HistogramKeys.TerminalPoolValues, value);
+            }
+        }
     }
 }

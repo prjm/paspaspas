@@ -173,6 +173,16 @@ namespace PasPasPas.Infrastructure.Utils {
         /// </summary>
         public const string StringPoolValues = "StringPoolValues";
 
+        /// <summary>
+        ///     terminal pool values
+        /// </summary>
+        public const string TerminalPoolValues = "TerminalPoolValue";
+
+        /// <summary>
+        ///     token array values
+        /// </summary>
+        public const string TokenArrayValues = "TokenArrayValues";
+
     }
 
     /// <summary>

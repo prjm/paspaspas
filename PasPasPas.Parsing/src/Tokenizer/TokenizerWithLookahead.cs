@@ -79,47 +79,13 @@ namespace PasPasPas.Parsing.Tokenizer {
 
             private ImmutableArray<Token> suffix;
 
-            private void BuildArray(Queue<Token> tokens, ref ImmutableArray<Token> target) {
-                switch (tokens.Count) {
-
-                    case 0:
-                        target = ImmutableArray<Token>.Empty;
-                        break;
-
-                    case 1:
-                        target = ImmutableArray.Create(tokens.Dequeue());
-                        break;
-
-                    case 2:
-                        target = ImmutableArray.Create(tokens.Dequeue(), tokens.Dequeue());
-                        break;
-
-                    case 3:
-                        target = ImmutableArray.Create(tokens.Dequeue(), tokens.Dequeue(), tokens.Dequeue());
-                        break;
-
-                    case 4:
-                        target = ImmutableArray.Create(tokens.Dequeue(), tokens.Dequeue(), tokens.Dequeue(), tokens.Dequeue());
-                        break;
-
-                    default:
-                        var builder = ListPools.GetImmutableArrayBuilder(tokens);
-
-                        while (tokens.Count > 0)
-                            builder.Add(tokens.Dequeue());
-
-                        target = builder.MoveToImmutable();
-                        break;
-                };
-            }
-
             /// <summary>
             ///     gets the buffer current prefix of invalid tokens
             /// </summary>
             /// <param name="tokens"></param>
             /// <param name="environment"></param>
             public void AssignPrefix(Queue<Token> tokens, IParserEnvironment environment)
-                => BuildArray(tokens, ref prefix);
+                => prefix = environment.TokenArrays.GetTokenArray(tokens);
 
             /// <summary>
             ///     get the current suffix of invalid tokens
@@ -127,7 +93,7 @@ namespace PasPasPas.Parsing.Tokenizer {
             /// <param name="tokens"></param>
             /// <param name="environment"></param>
             public void AssignSuffix(Queue<Token> tokens, IParserEnvironment environment)
-                => BuildArray(tokens, ref suffix);
+                => suffix = environment.TokenArrays.GetTokenArray(tokens);
 
             /// <summary>
             ///     clear the tokenizer

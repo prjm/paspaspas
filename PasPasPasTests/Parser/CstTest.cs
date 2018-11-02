@@ -2244,7 +2244,7 @@ namespace PasPasPasTests.Parser {
 
         [TestCase]
         public void TestSimpleExpression() {
-            var s = RunCstTest(p => p.ParseSimpleExpression(), "a+b");
+            var s = RunCstTest(p => p.ParseSimpleExpression() as SimpleExpression, "a+b");
             Assert.IsNotNull(s.LeftOperand);
             Assert.IsNotNull(s.Operator);
             Assert.IsNotNull(s.RightOperand);
@@ -2288,7 +2288,7 @@ namespace PasPasPasTests.Parser {
 
         [TestCase]
         public void TestTerm() {
-            var s = RunCstTest(p => p.ParseTerm(), "5*4");
+            var s = RunCstTest(p => p.ParseTerm() as TermSymbol, "5*4");
             Assert.IsNotNull(s.LeftOperand);
             Assert.IsNotNull(s.Operator);
             Assert.IsNotNull(s.RightOperand);

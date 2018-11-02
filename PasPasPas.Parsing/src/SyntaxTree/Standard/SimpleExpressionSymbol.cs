@@ -14,7 +14,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="leftOperand"></param>
         /// <param name="operator"></param>
         /// <param name="rightOperand"></param>
-        public SimpleExpression(TermSymbol leftOperand, Terminal @operator, SimpleExpression rightOperand) {
+        public SimpleExpression(ISyntaxPart leftOperand, Terminal @operator, ISyntaxPart rightOperand) {
             LeftOperand = leftOperand;
             Operator = @operator;
             RightOperand = rightOperand;
@@ -34,12 +34,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     left operand
         /// </summary>
-        public TermSymbol LeftOperand { get; }
+        public ISyntaxPart LeftOperand { get; }
 
         /// <summary>
         ///     right operand
         /// </summary>
-        public SimpleExpression RightOperand { get; }
+        public ISyntaxPart RightOperand { get; }
 
         /// <summary>
         ///     accept visitor

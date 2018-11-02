@@ -4418,7 +4418,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
             }
 
             var leftOperand = ParseSimpleExpression();
-            var rightOperand = default(SimpleExpression);
+            var rightOperand = default(ISyntaxPart);
 
             if (fromConstTypeDeclaration && !HasTokenBeforeToken(TokenKind.EqualsSign, TokenKind.Semicolon))
                 return new ExpressionSymbol(leftOperand);
@@ -4432,25 +4432,6 @@ namespace PasPasPas.Parsing.Parser.Standard {
                 comma = ContinueWith(TokenKind.Comma);
 
             return new ExpressionSymbol(leftOperand, @operator, rightOperand, comma);
-        }
-
-        #endregion
-        #region ParseTerm
-
-        /// <summary>
-        ///     parse a term
-        /// </summary>
-        /// <returns></returns>
-        [Rule("Term", "Factor [ ('*'|'/'|'div'|'mod'|'and'|'shl'|'shr'|'as') Term ]")]
-        public TermSymbol ParseTerm() {
-            var leftOperand = ParseFactor();
-            var @operator = ContinueWith(TokenKind.Times, TokenKind.Slash, TokenKind.Div, TokenKind.Mod, TokenKind.And, TokenKind.Shl, TokenKind.Shr, TokenKind.As);
-            var rightOperand = default(TermSymbol);
-
-            if (@operator != default)
-                rightOperand = ParseTerm();
-
-            return new TermSymbol(leftOperand, @operator, rightOperand);
         }
 
         #endregion

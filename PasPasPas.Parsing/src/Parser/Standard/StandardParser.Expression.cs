@@ -1,6 +1,7 @@
 ﻿using System.Collections.Immutable;
 using PasPasPas.Parsing.SyntaxTree;
 using PasPasPas.Parsing.SyntaxTree.Standard;
+using PasPasPas.Parsing.SyntaxTree.Utils;
 
 namespace PasPasPas.Parsing.Parser.Standard {
 
@@ -53,20 +54,40 @@ namespace PasPasPas.Parsing.Parser.Standard {
         /// <returns></returns>
 
         [Rule("SimpleExpression", "Term { ('+'|'-'|'or'|'xor') SimpleExpression }")]
-        public SimpleExpression ParseSimpleExpression() {
+        public ISyntaxPart ParseSimpleExpression() {
             var leftOperand = ParseTerm();
             var @operator = ContinueWith(TokenKind.Plus, TokenKind.Minus, TokenKind.Or, TokenKind.Xor);
-            var rightOperand = default(SimpleExpression);
 
-            if (@operator != default)
-                rightOperand = ParseSimpleExpression();
+            if (@operator != default) {
+                var rightOperand = ParseSimpleExpression();
+                return new SimpleExpression(leftOperand, @operator, rightOperand);
+            }
 
-            return new SimpleExpression(leftOperand, @operator, rightOperand);
+            return leftOperand;
         }
 
         #endregion
 
+        #region ParseTerm
 
+        /// <summary>
+        ///     parse a term
+        /// </summary>
+        /// <returns></returns>
+        [Rule("Term", "Factor [ ('*'|'/'|'div'|'mod'|'and'|'shl'|'shr'|'as') Term ]")]
+        public ISyntaxPart ParseTerm() {
+            var leftOperand = ParseFactor();
+            var @operator = ContinueWith(TokenKind.Times, TokenKind.Slash, TokenKind.Div, TokenKind.Mod, TokenKind.And, TokenKind.Shl, TokenKind.Shr, TokenKind.As);
+
+            if (@operator != default) {
+                var rightOperand = ParseTerm();
+                return new TermSymbol(leftOperand, @operator, rightOperand);
+            }
+
+            return leftOperand;
+        }
+
+        #endregion
 
     }
 }

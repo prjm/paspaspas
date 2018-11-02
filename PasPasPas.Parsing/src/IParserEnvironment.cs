@@ -57,5 +57,10 @@ namespace PasPasPas.Parsing {
         /// </summary>
         Identifiers IdentifierPool { get; }
 
+        /// <summary>
+        ///     token array pool
+        /// </summary>
+        TokenArrays TokenArrays { get; }
+
     }
 }
