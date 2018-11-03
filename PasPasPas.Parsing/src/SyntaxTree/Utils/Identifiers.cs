@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using PasPasPas.Infrastructure.Environment;
 using PasPasPas.Infrastructure.ObjectPooling;
 using PasPasPas.Infrastructure.Utils;
@@ -157,13 +158,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Utils {
 
                 lock (lockObject) {
                     if (pool.TryGetValue(searchEntry, out var data)) {
-                        Histograms.Value(HistogramKeys.IdentifierPoolValues, data.Ident.Value);
+                        LogHistogram(data);
                         return data.Ident;
                     }
                 }
 
                 var newEntry = new PooledIdentifier(searchEntry);
-                Histograms.Value(HistogramKeys.IdentifierPoolValues, newEntry.Ident.Value);
 
                 lock (lockObject)
                     pool.Add(newEntry);
@@ -173,6 +173,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Utils {
 
         }
 
+        [Conditional("DEBUG")]
+        private static void LogHistogram(PooledIdentifier data) {
+            if (Histograms.Enable)
+                Histograms.Value(HistogramKeys.IdentifierPoolValues, data.Ident.Value);
+        }
 
     }
 

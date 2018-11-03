@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Diagnostics;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Infrastructure.Files;
 using PasPasPas.Infrastructure.Log;
@@ -235,7 +236,7 @@ namespace PasPasPas.Parsing.Tokenizer {
                     entry.Item.Value = nextToken;
                     entry.Item.AssignPrefix(invalidTokens, environment);
                     tokenList.Enqueue(entry);
-                    Histograms.Value("TokenPrefixLength", entry.Item.Prefix.Length);
+                    LogHistogram(entry);
                 }
                 else {
                     if (IsMacroToken(ref nextToken))
@@ -243,6 +244,12 @@ namespace PasPasPas.Parsing.Tokenizer {
                     invalidTokens.Enqueue(nextToken);
                 }
             }
+        }
+
+        [Conditional("DEBUG")]
+        private static void LogHistogram(PoolItem<TokenSequence> entry) {
+            if (Histograms.Enable)
+                Histograms.Value("TokenPrefixLength", entry.Item.Prefix.Length);
         }
 
         /// <summary>

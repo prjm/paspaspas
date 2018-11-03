@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using PasPasPas.Infrastructure.ObjectPooling;
 using PasPasPas.Infrastructure.Utils;
@@ -63,7 +64,7 @@ namespace PasPasPas.Infrastructure.Environment {
 
                 lock (lockObject) {
                     if (pool.TryGetValue(searchEntry, out var data)) {
-                        Histograms.Value(HistogramKeys.StringPoolValues, data.PoolItem);
+                        LogHistogram(data);
                         return data.PoolItem;
                     }
                 }
@@ -77,6 +78,10 @@ namespace PasPasPas.Infrastructure.Environment {
             }
         }
 
-
+        [Conditional("DEBUG")]
+        private static void LogHistogram(StringPoolEntry data) {
+            if (Histograms.Enable)
+                Histograms.Value(HistogramKeys.StringPoolValues, data.PoolItem);
+        }
     }
 }

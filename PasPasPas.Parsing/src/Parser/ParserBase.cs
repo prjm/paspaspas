@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Diagnostics;
 using System.Text;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Infrastructure.ObjectPooling;
@@ -1119,10 +1120,14 @@ namespace PasPasPas.Parsing.Parser {
             for (var index = 0; index < list.Item.Count; index++)
                 builder.Add(list.Item[index]);
 
-            Histograms.Value(HistogramKeys.SyntaxLists, string.Concat(typeof(T).Name, builder.Count));
-
+            LogHistogram(builder);
             return builder.MoveToImmutable();
         }
 
+        [Conditional("DEBUG")]
+        private static void LogHistogram<T>(ImmutableArray<T>.Builder builder) where T : class {
+            if (Histograms.Enable)
+                Histograms.Value(HistogramKeys.SyntaxLists, string.Concat(typeof(T).Name, builder.Count));
+        }
     }
 }

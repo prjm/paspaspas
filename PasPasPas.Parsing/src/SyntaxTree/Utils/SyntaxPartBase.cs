@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree.Standard;
@@ -16,7 +17,13 @@ namespace PasPasPas.Parsing.SyntaxTree {
         ///     create a new syntax part base
         /// </summary>
         protected SyntaxPartBase()
-            => Histograms.Value(HistogramKeys.SyntaxNodes, GetType().Name);
+            => LogHistogram();
+
+        [Conditional("DEBUG")]
+        private void LogHistogram() {
+            if (Histograms.Enable)
+                Histograms.Value(HistogramKeys.SyntaxNodes, GetType().Name);
+        }
 
         /// <summary>
         ///     parent node

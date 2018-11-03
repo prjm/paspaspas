@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
@@ -42,12 +43,12 @@ namespace P3SyntaxTreeViewer {
                 if (terminal.Prefix != default)
                     foreach (var p in terminal.Prefix)
                         if (p.Kind != TokenKind.WhiteSpace)
-                            treeViewItem.Items.Add(new Label() { Content = p.Value.ToString(), Background = MainWindow.Grey });
+                            treeViewItem.Items.Add(new Label() { Content = p.Value.ToString(CultureInfo.CurrentCulture), Background = MainWindow.Grey });
 
                 if (terminal.Suffix != default)
                     foreach (var p in terminal.Suffix)
                         if (p.Kind != TokenKind.WhiteSpace)
-                            treeViewItem.Items.Add(new Label() { Content = p.Value.ToString(), Background = MainWindow.Grey });
+                            treeViewItem.Items.Add(new Label() { Content = p.Value.ToString(CultureInfo.CurrentCulture), Background = MainWindow.Grey });
 
 
 
@@ -165,11 +166,11 @@ namespace P3SyntaxTreeViewer {
 
             foreach (var logentry in messages) {
                 var block = new TextBlock();
-                var key = "m_" + logentry.MessageID.ToString("n");
+                var key = "m_" + logentry.MessageID.ToString("n", CultureInfo.InvariantCulture);
                 var m = key;
-                var r = P3SyntaxTreeViewer.Messages.ResourceManager.GetString(key);
+                var r = P3SyntaxTreeViewer.Messages.ResourceManager.GetString(key, CultureInfo.CurrentCulture);
                 if (r != null)
-                    block.Text = r.ToString();
+                    block.Text = r.ToString(CultureInfo.CurrentCulture);
                 else
                     block.Text = key;
                 var item = new ListBoxItem() {

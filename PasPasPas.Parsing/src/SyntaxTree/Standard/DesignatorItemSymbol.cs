@@ -1,4 +1,5 @@
 ﻿using System.Collections.Immutable;
+using System.Diagnostics;
 using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
@@ -16,7 +17,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="dereference"></param>
         public DesignatorItemSymbol(Terminal dereference) : base(ImmutableArray<ParameterSymbol>.Empty) {
             Dereference = dereference;
-            Histograms.Value(HistogramKeys.DesignatorItems, nameof(TokenKind.Circumflex));
+            LogHistogramDereference();
+        }
+
+        [Conditional("DEBUG")]
+        private static void LogHistogramDereference() {
+            if (Histograms.Enable)
+                Histograms.Value(HistogramKeys.DesignatorItems, nameof(TokenKind.Circumflex));
         }
 
         /// <summary>
@@ -35,7 +42,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
             OpenBraces = openBraces;
             IndexExpression = indexExpression;
             CloseBraces = closeBraces;
-            Histograms.Value(HistogramKeys.DesignatorItems, "Subitem");
+            LogHistogramIndexExpression();
+        }
+
+        [Conditional("DEBUG")]
+        private static void LogHistogramIndexExpression() {
+            if (Histograms.Enable)
+                Histograms.Value(HistogramKeys.DesignatorItems, "Subitem");
         }
 
         /// <summary>
@@ -55,7 +68,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
             OpenParen = openParen;
             CloseParen = closeParen;
             ParameterList = paramList;
-            Histograms.Value(HistogramKeys.DesignatorItems, "Call" + immutableArray.Length.ToString());
+            LogHistogramCall(immutableArray);
+        }
+
+        [Conditional("DEBUG")]
+        private static void LogHistogramCall(ImmutableArray<ParameterSymbol> immutableArray) {
+            if (Histograms.Enable)
+                Histograms.Value(HistogramKeys.DesignatorItems, "Call" + immutableArray.Length.ToString());
         }
 
         /// <summary>
@@ -72,7 +91,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
             OpenParen = openParen;
             ConstantExpression = children;
             CloseParen = closeParen;
-            Histograms.Value(HistogramKeys.DesignatorItems, "ConstantExpression");
+            LogHistogramConstExpr();
+        }
+
+        [Conditional("DEBUG")]
+        private static void LogHistogramConstExpr() {
+            if (Histograms.Enable)
+                Histograms.Value(HistogramKeys.DesignatorItems, "ConstantExpression");
         }
 
         /// <summary>
