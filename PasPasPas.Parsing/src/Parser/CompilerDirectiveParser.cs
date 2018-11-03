@@ -1111,13 +1111,13 @@ namespace PasPasPas.Parsing.Parser {
         private MethodInfo ParseMethodInfoSwitch() {
             var symbol = ContinueWithOrMissing(TokenKind.MethodInfo);
             var mode = ContinueWith(TokenKind.On, TokenKind.Off); ;
-            var parsedMode = MethodInfoRtti.Undefined;
+            var parsedMode = MethodInfoRttiMode.Undefined;
 
             if (mode.GetSymbolKind() == TokenKind.On) {
-                parsedMode = MethodInfoRtti.EnableMethodInfo;
+                parsedMode = MethodInfoRttiMode.EnableMethodInfo;
             }
             else if (mode.GetSymbolKind() == TokenKind.Off) {
-                parsedMode = MethodInfoRtti.DisableMethodInfo;
+                parsedMode = MethodInfoRttiMode.DisableMethodInfo;
             }
             else {
                 mode = ErrorAndSkip(CompilerDirectiveParserErrors.InvalidMethodInfoDirective, new[] { TokenKind.On, TokenKind.Off });
@@ -1590,13 +1590,13 @@ namespace PasPasPas.Parsing.Parser {
         private LocalSymbols ParseLongLocalSymbolSwitch() {
             var symbol = ContinueWithOrMissing(TokenKind.LocalSymbolSwithLong);
             var mode = ContinueWith(TokenKind.On, TokenKind.Off);
-            var parsedMode = LocalDebugSymbols.Undefined;
+            var parsedMode = LocalDebugSymbolMode.Undefined;
 
             if (mode.GetSymbolKind() == TokenKind.On) {
-                parsedMode = LocalDebugSymbols.EnableLocalSymbols;
+                parsedMode = LocalDebugSymbolMode.EnableLocalSymbols;
             }
             else if (mode.GetSymbolKind() == TokenKind.Off) {
-                parsedMode = LocalDebugSymbols.DisableLocalSymbols;
+                parsedMode = LocalDebugSymbolMode.DisableLocalSymbols;
             }
             else {
                 mode = ErrorAndSkip(CompilerDirectiveParserErrors.InvalidLocalSymbolsDirective, new[] { TokenKind.On, TokenKind.Off });
@@ -1755,13 +1755,13 @@ namespace PasPasPas.Parsing.Parser {
         private ObjectExport ParseObjExportAllSwitch() {
             var symbol = ContinueWithOrMissing(TokenKind.ObjExportAll);
             var mode = ContinueWith(TokenKind.On, TokenKind.Off);
-            var parsedMode = ExportCppObjects.Undefined;
+            var parsedMode = ExportCppObjectMode.Undefined;
 
             if (mode.GetSymbolKind() == TokenKind.On) {
-                parsedMode = ExportCppObjects.ExportAll;
+                parsedMode = ExportCppObjectMode.ExportAll;
             }
             else if (mode.GetSymbolKind() == TokenKind.Off) {
-                parsedMode = ExportCppObjects.DoNotExportAll;
+                parsedMode = ExportCppObjectMode.DoNotExportAll;
             }
             else {
                 mode = ErrorAndSkip(CompilerDirectiveParserErrors.InvalidObjectExportDirective, new[] { TokenKind.On, TokenKind.Off });
@@ -2299,13 +2299,13 @@ namespace PasPasPas.Parsing.Parser {
             if (LookAhead(1, TokenKind.Plus, TokenKind.Minus)) {
                 var symbol = ContinueWithOrMissing(TokenKind.LinkOrLocalSymbolSwitch);
                 var mode = ContinueWith(TokenKind.Plus, TokenKind.Minus);
-                var parsedMode = LocalDebugSymbols.Undefined;
+                var parsedMode = LocalDebugSymbolMode.Undefined;
 
                 if (mode.GetSymbolKind() == TokenKind.Plus) {
-                    parsedMode = LocalDebugSymbols.EnableLocalSymbols;
+                    parsedMode = LocalDebugSymbolMode.EnableLocalSymbols;
                 }
                 else if (mode.GetSymbolKind() == TokenKind.Minus) {
-                    parsedMode = LocalDebugSymbols.DisableLocalSymbols;
+                    parsedMode = LocalDebugSymbolMode.DisableLocalSymbols;
                 }
                 return new LocalSymbols(symbol, mode, parsedMode);
             }

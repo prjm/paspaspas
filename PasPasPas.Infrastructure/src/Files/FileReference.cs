@@ -21,7 +21,7 @@ namespace PasPasPas.Infrastructure.Files {
             if (string.IsNullOrWhiteSpace(filePath))
                 throw new ArgumentNullException(nameof(filePath), "Invalid path.");
 
-            hashcode = filePath.ToUpperInvariant().GetHashCode();
+            hashcode = filePath.GetHashCode(StringComparison.InvariantCultureIgnoreCase);
         }
 
         /// <summary>

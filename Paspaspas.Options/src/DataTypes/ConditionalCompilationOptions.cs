@@ -12,7 +12,7 @@ namespace PasPasPas.Options.DataTypes {
         /// <summary>
         ///     list of conditional defines
         /// </summary>
-        public DerivedListOption<ConditionalSymbol> Conditionals { get; }
+        public DerivedListOptionCollection<ConditionalSymbol> Conditionals { get; }
 
         /// <summary>
         ///     active conditional
@@ -45,7 +45,7 @@ namespace PasPasPas.Options.DataTypes {
         /// </summary>
         /// <param name="baseOptions"></param>
         public ConditionalCompilationOptions(ConditionalCompilationOptions baseOptions) {
-            Conditionals = new DerivedListOption<ConditionalSymbol>(baseOptions?.Conditionals);
+            Conditionals = new DerivedListOptionCollection<ConditionalSymbol>(baseOptions?.Conditionals);
             DenyInPackages = new DerivedValueOption<DenyUnitInPackage>(baseOptions?.DenyInPackages);
             DesignOnly = new DerivedValueOption<DesignOnlyUnit>(baseOptions?.DesignOnly);
         }

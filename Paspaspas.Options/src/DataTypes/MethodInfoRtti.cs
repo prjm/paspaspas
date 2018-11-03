@@ -3,7 +3,7 @@
     /// <summary>
     ///     flag to enable method info rtti
     /// </summary>
-    public enum MethodInfoRtti {
+    public enum MethodInfoRttiMode {
 
         /// <summary>
         ///     undefined flag state

@@ -149,7 +149,7 @@ namespace PasPasPas.Options.Bundles {
                 case 'H':
                     return GetSwitchInfo(CompilerOptions.LongStrings, LongStringTypes.EnableLongStrings, LongStringTypes.DisableLongStrings);
                 case 'L':
-                    return GetSwitchInfo(CompilerOptions.LocalSymbols, LocalDebugSymbols.EnableLocalSymbols, LocalDebugSymbols.DisableLocalSymbols);
+                    return GetSwitchInfo(CompilerOptions.LocalSymbols, LocalDebugSymbolMode.EnableLocalSymbols, LocalDebugSymbolMode.DisableLocalSymbols);
                 case 'M':
                     return GetSwitchInfo(CompilerOptions.PublishedRtti, RttiForPublishedProperties.Enable, RttiForPublishedProperties.Disable);
                 case 'O':

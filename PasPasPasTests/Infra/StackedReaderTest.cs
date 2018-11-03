@@ -21,8 +21,7 @@ namespace PasPasPasTests.Infra {
 
         [Fact]
         public void TestSimpleRead() {
-            var readerApi = new ReaderApi(CreateEnvironment());
-            using (var reader = readerApi.CreateReaderForString("test.pas", Content1)) {
+            using (var reader = ReaderApi.CreateReaderForString("test.pas", Content1)) {
                 var result = new StringBuilder();
 
                 while (!reader.AtEof) {

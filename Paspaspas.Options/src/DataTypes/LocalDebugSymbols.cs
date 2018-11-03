@@ -3,7 +3,7 @@
     /// <summary>
     ///     setting for local debug symbols
     /// </summary>
-    public enum LocalDebugSymbols {
+    public enum LocalDebugSymbolMode {
 
         /// <summary>
         ///     setting undefined

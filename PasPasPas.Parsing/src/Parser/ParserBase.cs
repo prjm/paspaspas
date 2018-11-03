@@ -1062,6 +1062,15 @@ namespace PasPasPas.Parsing.Parser {
         ///     dispose tokenizer
         /// </summary>
         public void Dispose() {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        ///     dispose tokenizer
+        /// </summary>
+        /// <param name="disposing"></param>
+        protected virtual void Dispose(bool disposing) {
             if (Tokenizer != null) {
                 tokenizer.Dispose();
                 tokenizer = null;

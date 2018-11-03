@@ -219,11 +219,11 @@ namespace PasPasPasTests.Parser {
         [Fact]
         public void TestObjExportAll() {
             object f(OptionSet o) => o.CompilerOptions.ExportCppObjects.Value;
-            RunCompilerDirective("", ExportCppObjects.Undefined, f);
-            RunCompilerDirective("OBJEXPORTALL ON", ExportCppObjects.ExportAll, f);
-            RunCompilerDirective("OBJEXPORTALL OFF", ExportCppObjects.DoNotExportAll, f);
-            RunCompilerDirective("OBJEXPORTALL KAPUTT", ExportCppObjects.Undefined, f, CompilerDirectiveParserErrors.InvalidObjectExportDirective);
-            RunCompilerDirective("OBJEXPORTALL", ExportCppObjects.Undefined, f, CompilerDirectiveParserErrors.InvalidObjectExportDirective);
+            RunCompilerDirective("", ExportCppObjectMode.Undefined, f);
+            RunCompilerDirective("OBJEXPORTALL ON", ExportCppObjectMode.ExportAll, f);
+            RunCompilerDirective("OBJEXPORTALL OFF", ExportCppObjectMode.DoNotExportAll, f);
+            RunCompilerDirective("OBJEXPORTALL KAPUTT", ExportCppObjectMode.Undefined, f, CompilerDirectiveParserErrors.InvalidObjectExportDirective);
+            RunCompilerDirective("OBJEXPORTALL", ExportCppObjectMode.Undefined, f, CompilerDirectiveParserErrors.InvalidObjectExportDirective);
         }
 
         [Fact]
@@ -375,13 +375,13 @@ namespace PasPasPasTests.Parser {
         [Fact]
         public void TestLocalSymbols() {
             object f(OptionSet o) => o.CompilerOptions.LocalSymbols.Value;
-            RunCompilerDirective("", LocalDebugSymbols.Undefined, f);
-            RunCompilerDirective("L+", LocalDebugSymbols.EnableLocalSymbols, f);
-            RunCompilerDirective("L-", LocalDebugSymbols.DisableLocalSymbols, f);
-            RunCompilerDirective("LOCALSYMBOLS  ON", LocalDebugSymbols.EnableLocalSymbols, f);
-            RunCompilerDirective("LOCALSYMBOLS OFF", LocalDebugSymbols.DisableLocalSymbols, f);
-            RunCompilerDirective("LOCALSYMBOLS KAPUTT", LocalDebugSymbols.Undefined, f, CompilerDirectiveParserErrors.InvalidLocalSymbolsDirective);
-            RunCompilerDirective("LOCALSYMBOLS ", LocalDebugSymbols.Undefined, f, CompilerDirectiveParserErrors.InvalidLocalSymbolsDirective);
+            RunCompilerDirective("", LocalDebugSymbolMode.Undefined, f);
+            RunCompilerDirective("L+", LocalDebugSymbolMode.EnableLocalSymbols, f);
+            RunCompilerDirective("L-", LocalDebugSymbolMode.DisableLocalSymbols, f);
+            RunCompilerDirective("LOCALSYMBOLS  ON", LocalDebugSymbolMode.EnableLocalSymbols, f);
+            RunCompilerDirective("LOCALSYMBOLS OFF", LocalDebugSymbolMode.DisableLocalSymbols, f);
+            RunCompilerDirective("LOCALSYMBOLS KAPUTT", LocalDebugSymbolMode.Undefined, f, CompilerDirectiveParserErrors.InvalidLocalSymbolsDirective);
+            RunCompilerDirective("LOCALSYMBOLS ", LocalDebugSymbolMode.Undefined, f, CompilerDirectiveParserErrors.InvalidLocalSymbolsDirective);
         }
 
         [Fact]
@@ -868,11 +868,11 @@ namespace PasPasPasTests.Parser {
         [Fact]
         public void TestMethodInfo() {
             object f(OptionSet o) => o.CompilerOptions.MethodInfo.Value;
-            RunCompilerDirective("", MethodInfoRtti.Undefined, f);
-            RunCompilerDirective("METHODINFO ON", MethodInfoRtti.EnableMethodInfo, f);
-            RunCompilerDirective("METHODINFO OFF", MethodInfoRtti.DisableMethodInfo, f);
-            RunCompilerDirective("METHODINFO KAPUTT", MethodInfoRtti.Undefined, f, CompilerDirectiveParserErrors.InvalidMethodInfoDirective);
-            RunCompilerDirective("METHODINFO ", MethodInfoRtti.Undefined, f, CompilerDirectiveParserErrors.InvalidMethodInfoDirective);
+            RunCompilerDirective("", MethodInfoRttiMode.Undefined, f);
+            RunCompilerDirective("METHODINFO ON", MethodInfoRttiMode.EnableMethodInfo, f);
+            RunCompilerDirective("METHODINFO OFF", MethodInfoRttiMode.DisableMethodInfo, f);
+            RunCompilerDirective("METHODINFO KAPUTT", MethodInfoRttiMode.Undefined, f, CompilerDirectiveParserErrors.InvalidMethodInfoDirective);
+            RunCompilerDirective("METHODINFO ", MethodInfoRttiMode.Undefined, f, CompilerDirectiveParserErrors.InvalidMethodInfoDirective);
         }
 
         [Fact]

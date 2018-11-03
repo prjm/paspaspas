@@ -14,7 +14,7 @@ namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
         /// <param name="symbol"></param>
         /// <param name="mode"></param>
         /// <param name="parsedMode"></param>
-        public ObjectExport(Terminal symbol, Terminal mode, ExportCppObjects parsedMode) {
+        public ObjectExport(Terminal symbol, Terminal mode, ExportCppObjectMode parsedMode) {
             Symbol = symbol;
             ModeSymbol = mode;
             Mode = parsedMode;
@@ -23,7 +23,7 @@ namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
         /// <summary>
         ///     parsed mode
         /// </summary>
-        public ExportCppObjects Mode { get; }
+        public ExportCppObjectMode Mode { get; }
 
         /// <summary>
         ///     mode symbol

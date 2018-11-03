@@ -14,7 +14,7 @@ namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
         /// <param name="symbol"></param>
         /// <param name="mode"></param>
         /// <param name="parsedMode"></param>
-        public LocalSymbols(Terminal symbol, Terminal mode, LocalDebugSymbols parsedMode) {
+        public LocalSymbols(Terminal symbol, Terminal mode, LocalDebugSymbolMode parsedMode) {
             Symbol = symbol;
             ModeSymbol = mode;
             Mode = parsedMode;
@@ -23,7 +23,7 @@ namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
         /// <summary>
         ///     symbol mode
         /// </summary>
-        public LocalDebugSymbols Mode { get; }
+        public LocalDebugSymbolMode Mode { get; }
 
         /// <summary>
         ///     mode symbol

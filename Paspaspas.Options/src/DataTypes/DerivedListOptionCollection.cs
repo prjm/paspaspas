@@ -7,14 +7,14 @@ namespace PasPasPas.Options.DataTypes {
     ///     option class for derived lists
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class DerivedListOption<T> : DerivedOptionBase, IEnumerable<T> {
+    public class DerivedListOptionCollection<T> : DerivedOptionBase, IEnumerable<T> {
 
 
         /// <summary>
         ///     creates a new derived list
         /// </summary>
         /// <param name="baseOption">base option</param>
-        public DerivedListOption(DerivedListOption<T> baseOption) {
+        public DerivedListOptionCollection(DerivedListOptionCollection<T> baseOption) {
             Parent = baseOption;
             IncludeParentValues = true;
         }
@@ -34,7 +34,7 @@ namespace PasPasPas.Options.DataTypes {
         /// <summary>
         ///     parent liust
         /// </summary>
-        public DerivedListOption<T> Parent { get; }
+        public DerivedListOptionCollection<T> Parent { get; }
 
         /// <summary>
         ///     switch, if <c>true</c> include parent values in enumeration
@@ -52,11 +52,11 @@ namespace PasPasPas.Options.DataTypes {
         /// <returns></returns>
         public IEnumerator<T> GetEnumerator() {
             if (IncludeParentValues && Parent != null) {
-                foreach (T entry in Parent)
+                foreach (var entry in Parent)
                     yield return entry;
             }
 
-            foreach (T entry in OwnValues)
+            foreach (var entry in OwnValues)
                 yield return entry;
         }
 

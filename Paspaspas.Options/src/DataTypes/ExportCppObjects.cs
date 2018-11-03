@@ -3,7 +3,7 @@
     /// <summary>
     ///     export all cpp objects
     /// </summary>
-    public enum ExportCppObjects {
+    public enum ExportCppObjectMode {
 
         /// <summary>
         ///     undefined export status
@@ -11,7 +11,7 @@
         Undefined = 0,
 
         /// <summary>
-        ///     do notr export all
+        ///     do not export all
         /// </summary>
         DoNotExportAll = 1,
 

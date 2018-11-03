@@ -16,7 +16,7 @@
             CodeAlign = new DerivedValueOption<CodeAlignment>(baseOptions?.CodeAlign);
             Assertions = new DerivedValueOption<AssertionMode>(baseOptions?.Assertions);
             DebugInfo = new DerivedValueOption<DebugInformation>(baseOptions?.DebugInfo);
-            ExportCppObjects = new DerivedValueOption<ExportCppObjects>(baseOptions?.ExportCppObjects);
+            ExportCppObjects = new DerivedValueOption<ExportCppObjectMode>(baseOptions?.ExportCppObjects);
             ExtendedCompatibility = new DerivedValueOption<ExtendedCompatibilityMode>(baseOptions?.ExtendedCompatibility);
             UseExtendedSyntax = new DerivedValueOption<ExtendedSyntax>(baseOptions?.UseExtendedSyntax);
             ExcessPrecision = new DerivedValueOption<ExcessPrecisionForResult>(baseOptions?.ExcessPrecision);
@@ -26,7 +26,7 @@
             ImplicitBuild = new DerivedValueOption<ImplicitBuildUnit>(baseOptions?.ImplicitBuild);
             ImportedData = new DerivedValueOption<ImportGlobalUnitData>(baseOptions?.ImportedData);
             IoChecks = new DerivedValueOption<IoCallCheck>(baseOptions?.IoChecks);
-            LocalSymbols = new DerivedValueOption<LocalDebugSymbols>(baseOptions?.LocalSymbols);
+            LocalSymbols = new DerivedValueOption<LocalDebugSymbolMode>(baseOptions?.LocalSymbols);
             LongStrings = new DerivedValueOption<LongStringTypes>(baseOptions?.LongStrings);
             OpenStrings = new DerivedValueOption<OpenStringTypes>(baseOptions?.OpenStrings);
             Optimization = new DerivedValueOption<CompilerOptimization>(baseOptions?.Optimization);
@@ -52,7 +52,7 @@
             PointerMath = new DerivedValueOption<PointerManipulation>(baseOptions?.PointerMath);
             OldTypeLayout = new DerivedValueOption<OldRecordTypes>(baseOptions?.OldTypeLayout);
             MinimumEnumSize = new DerivedValueOption<EnumSize>(baseOptions?.MinimumEnumSize);
-            MethodInfo = new DerivedValueOption<MethodInfoRtti>(baseOptions?.MethodInfo);
+            MethodInfo = new DerivedValueOption<MethodInfoRttiMode>(baseOptions?.MethodInfo);
             MinimumStackMemorySize = new DerivedValueOption<ulong>(baseOptions?.MinimumStackMemorySize);
             MaximumStackMemorySize = new DerivedValueOption<ulong>(baseOptions?.MaximumStackMemorySize);
             LegacyIfEnd = new DerivedValueOption<EndIfMode>(baseOptions?.LegacyIfEnd);
@@ -101,7 +101,7 @@
         /// <summary>
         ///     export all cpp objects
         /// </summary>
-        public DerivedValueOption<ExportCppObjects> ExportCppObjects { get; }
+        public DerivedValueOption<ExportCppObjectMode> ExportCppObjects { get; }
 
         /// <summary>
         ///     exteded compatibility mode
@@ -141,7 +141,7 @@
         /// <summary>
         ///     local symbols flag
         /// </summary>
-        public DerivedValueOption<LocalDebugSymbols> LocalSymbols { get; }
+        public DerivedValueOption<LocalDebugSymbolMode> LocalSymbols { get; }
 
         /// <summary>
         ///     flag for long strings
@@ -271,7 +271,7 @@
         /// <summary>
         ///     enable or disable method info generation
         /// </summary>
-        public DerivedValueOption<MethodInfoRtti> MethodInfo { get; }
+        public DerivedValueOption<MethodInfoRttiMode> MethodInfo { get; }
 
         /// <summary>
         ///     maximum stack memory size

@@ -35,7 +35,7 @@ namespace PasPasPas.Api {
         /// <param name="input">input</param>
         /// <returns></returns>
         public IParser CreateParserForString(string path, string input) {
-            var reader = tokenizerApi.Readers.CreateReaderForString(path, input);
+            var reader = ReaderApi.CreateReaderForString(path, input);
             var parser = new StandardParser(env, parseOptions, reader);
             return parser;
         }

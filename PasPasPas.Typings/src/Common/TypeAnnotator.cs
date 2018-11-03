@@ -30,7 +30,7 @@ namespace PasPasPas.Typings.Common {
         IEndVisitor<SymbolReference>,
         IStartVisitor<CompilationUnit>,
         IEndVisitor<CompilationUnit>,
-        IStartVisitor<EnumType>, IEndVisitor<EnumType>,
+        IStartVisitor<EnumTypeCollection>, IEndVisitor<EnumTypeCollection>,
         IEndVisitor<EnumTypeValue>,
         IEndVisitor<Parsing.SyntaxTree.Abstract.SubrangeType>,
         IEndVisitor<TypeDeclaration>,
@@ -422,7 +422,7 @@ namespace PasPasPas.Typings.Common {
         ///     start visiting an enumeration type
         /// </summary>
         /// <param name="element">enumeration type definition</param>
-        public void StartVisit(EnumType element) {
+        public void StartVisit(EnumTypeCollection element) {
             var typeId = RequireUserTypeId();
             var typeDef = new EnumeratedType(typeId);
             var type = GetTypeByIdOrUndefinedType(RegisterUserDefinedType(typeDef).TypeId);
@@ -447,7 +447,7 @@ namespace PasPasPas.Typings.Common {
         ///     end visiting an enumerated type definition
         /// </summary>
         /// <param name="element"></param>
-        public void EndVisit(EnumType element) {
+        public void EndVisit(EnumTypeCollection element) {
             var typeReference = currentTypeDefintion.Pop();
             var typeDef = TypeRegistry.GetTypeByIdOrUndefinedType(typeReference.TypeId);
 

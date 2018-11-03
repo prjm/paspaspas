@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -55,7 +57,7 @@ namespace SampleRunner {
                 writer.WriteLine("<tr>");
                 writer.WriteLine($"<td><div style=\"width: 200px; height: 40px; overflow: auto\">{value.FormattedKey}</div></td>");
                 writer.WriteLine($"<td><div style=\"background-color: #336699; height: 15px; width: {width}px\"></div></td>");
-                writer.WriteLine($"<td>{value.Value.ToString()}</td>");
+                writer.WriteLine($"<td>{value.Value.ToString(CultureInfo.CurrentCulture)}</td>");
                 writer.WriteLine("</tr>");
             }
 
@@ -73,7 +75,7 @@ namespace SampleRunner {
             => histograms.Add(new HtmlHistogram(histogram, histograms.Count));
 
         public void PrintValue(Histogram histogram, string key, long value) {
-            var item = histograms.First(t => string.Equals(histogram.Key, t.Key));
+            var item = histograms.First(t => string.Equals(histogram.Key, t.Key, StringComparison.OrdinalIgnoreCase));
             item.AddValue(key, value);
         }
 

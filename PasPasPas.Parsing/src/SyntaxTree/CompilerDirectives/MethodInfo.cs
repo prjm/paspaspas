@@ -14,7 +14,7 @@ namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
         /// <param name="symbol"></param>
         /// <param name="mode"></param>
         /// <param name="parsedMode"></param>
-        public MethodInfo(Terminal symbol, Terminal mode, MethodInfoRtti parsedMode) {
+        public MethodInfo(Terminal symbol, Terminal mode, MethodInfoRttiMode parsedMode) {
             Symbol = symbol;
             ModeSymbol = mode;
             Mode = parsedMode;
@@ -23,7 +23,7 @@ namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
         /// <summary>
         ///     switch mode
         /// </summary>
-        public MethodInfoRtti Mode { get; }
+        public MethodInfoRttiMode Mode { get; }
 
         /// <summary>
         ///     mode

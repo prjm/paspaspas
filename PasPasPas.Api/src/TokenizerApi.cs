@@ -65,7 +65,7 @@ namespace PasPasPas.Api {
         /// <param name="content">string to read</param>
         /// <returns></returns>
         public ITokenizer CreateTokenizerForString(string virtualPath, string content) {
-            var fileReader = reader.CreateReaderForString(virtualPath, content);
+            var fileReader = ReaderApi.CreateReaderForString(virtualPath, content);
             return CreateTokenizer(fileReader);
         }
 

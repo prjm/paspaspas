@@ -995,7 +995,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <param name="type"></param>
         public void StartVisit(EnumTypeDefinitionSymbol type) {
             var typeTarget = LastTypeDeclaration;
-            var value = new EnumType();
+            var value = new EnumTypeCollection();
             InitNode(value, type);
             typeTarget.TypeValue = value;
         }
@@ -1008,7 +1008,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// </summary>
         /// <param name="enumValue"></param>
         public void StartVisit(EnumValueSymbol enumValue) {
-            if (LastValue is EnumType enumDeclaration) {
+            if (LastValue is EnumTypeCollection enumDeclaration) {
                 var value = new EnumTypeValue();
                 InitNode(value, enumValue);
                 value.Name = ExtractSymbolName(enumValue.EnumName);
