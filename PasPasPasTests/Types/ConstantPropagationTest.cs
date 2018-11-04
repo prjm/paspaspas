@@ -23,6 +23,18 @@ namespace PasPasPasTests.Types {
         [TestCase]
         public void TestIntegerOperations() {
             AssertExprValue("4 + 5", GetIntegerValue(9));
+            AssertExprValue("4 - 3", GetIntegerValue(1));
+            AssertExprValue("4 - 5", GetIntegerValue(-1));
+
+            AssertExprValue("4 * 5", GetIntegerValue(20));
+            AssertExprValue("20 div 4", GetIntegerValue(5));
+            AssertExprValue("9 mod 4", GetIntegerValue(1));
+        }
+
+        [TestCase]
+        public void TestOrdinalFunctions() {
+            AssertExprValue("Abs(5)", GetIntegerValue(5));
+            AssertExprValue("Abs(0)", GetIntegerValue(0));
         }
 
         [TestCase]
@@ -41,7 +53,6 @@ namespace PasPasPasTests.Types {
             AssertExprValue("false xor true", GetBooleanValue(true));
             AssertExprValue("true xor false", GetBooleanValue(true));
             AssertExprValue("true xor true", GetBooleanValue(false));
-
 
             AssertExprValue("false and a", GetBooleanValue(false), "var a: Boolean");
             AssertExprValue("true or a", GetBooleanValue(true), "var a: Boolean");

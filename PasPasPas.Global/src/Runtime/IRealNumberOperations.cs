@@ -29,5 +29,11 @@ namespace PasPasPas.Globals.Runtime {
         /// <returns>constant value</returns>
         ITypeReference ToExtendedValue(in ExtF80 value);
 
+        /// <summary>
+        ///     absolute value
+        /// </summary>
+        /// <param name="typeReference"></param>
+        /// <returns></returns>
+        ITypeReference Abs(ITypeReference typeReference);
     }
 }

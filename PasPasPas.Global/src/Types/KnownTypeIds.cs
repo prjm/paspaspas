@@ -379,5 +379,11 @@
         ///     untyped pointer
         /// </summary>
         public const int UntypedPointer = 103;
+
+        /// <summary>
+        ///     intrinsic routine
+        /// </summary>
+        public const int IntrinsicRoutine = 104;
+
     }
 }

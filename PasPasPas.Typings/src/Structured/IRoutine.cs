@@ -14,11 +14,6 @@ namespace PasPasPas.Typings.Structured {
         string Name { get; }
 
         /// <summary>
-        ///     <c>true</c> for intrinsic constant methods
-        /// </summary>
-        bool IsConstant { get; }
-
-        /// <summary>
         ///     resolve callable routines for a given signature
         /// </summary>
         /// <param name="callableRoutines">list to collect callable routines</param>

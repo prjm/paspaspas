@@ -17,9 +17,7 @@ namespace PasPasPas.Typings.Routines {
         ///     create a new type specification for the routine <c>high</c>
         /// </summary>
         /// <param name="registry"></param>
-        public High(ITypeRegistry registry) {
-            TypeRegistry = registry;
-        }
+        public High(ITypeRegistry registry) => TypeRegistry = registry;
 
         /// <summary>
         ///     routine name
@@ -67,8 +65,8 @@ namespace PasPasPas.Typings.Routines {
                 var highValue = ConstOps.Integers.ToScaledIntegerValue(ordinalType.HighestElement);
                 var typeId = LiteralValuesHelper.GetTypeFor(highValue);
                 var result = new ParameterGroup();
-                result.AddParameter("AValue").SymbolType = signature[0].TypeId;
-                result.ResultType = typeId;
+                result.AddParameter("AValue").SymbolType = signature[0];
+                result.ResultType = highValue;
                 callableRoutines.Add(result);
             }
         }

@@ -48,7 +48,7 @@ namespace PasPasPas.Typings.Common {
         ///     test if the type kind is a char type
         /// </summary>
         /// <param name="kind">kind</param>
-        /// <returns><c>true</c> if the type is ansi char or wide char</returns>
+        /// <returns><c>true</c> if the type is ANSI char or wide char</returns>
         public static bool IsChar(this CommonTypeKind kind)
             => kind == CommonTypeKind.AnsiCharType || kind == CommonTypeKind.WideCharType;
 

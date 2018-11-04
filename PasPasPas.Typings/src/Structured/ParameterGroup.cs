@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Typings.Structured {
@@ -11,7 +12,7 @@ namespace PasPasPas.Typings.Structured {
         /// <summary>
         ///     result type
         /// </summary>
-        public int ResultType { get; set; }
+        public ITypeReference ResultType { get; set; }
 
         /// <summary>
         ///     routine parameters
@@ -60,7 +61,7 @@ namespace PasPasPas.Typings.Structured {
             for (var i = 0; Parameters != null && i < Parameters.Count; i++) {
                 var parameter = Parameters[i];
                 var sourceType = types.GetTypeByIdOrUndefinedType(signature[i].TypeId);
-                match = match && types.GetTypeByIdOrUndefinedType(parameter.SymbolType).CanBeAssignedFrom(sourceType);
+                match = match && types.GetTypeByIdOrUndefinedType(parameter.SymbolType.TypeId).CanBeAssignedFrom(sourceType);
 
                 if (!match)
                     return false;

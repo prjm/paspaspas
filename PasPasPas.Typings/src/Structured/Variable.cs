@@ -1,4 +1,5 @@
-﻿using PasPasPas.Globals.Types;
+﻿using PasPasPas.Globals.Runtime;
+using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Typings.Structured {
 
@@ -10,7 +11,7 @@ namespace PasPasPas.Typings.Structured {
         /// <summary>
         ///     parameter type
         /// </summary>
-        public int SymbolType { get; set; }
+        public ITypeReference SymbolType { get; set; }
 
         /// <summary>
         ///     parameter name
@@ -18,14 +19,9 @@ namespace PasPasPas.Typings.Structured {
         public string Name { get; set; }
 
         /// <summary>
-        ///     constant function parameter
-        /// </summary>
-        public bool ConstantParam { get; set; }
-
-        /// <summary>
         ///     type id
         /// </summary>
         public int TypeId
-            => SymbolType;
+            => SymbolType != null ? SymbolType.TypeId : KnownTypeIds.ErrorType;
     }
 }

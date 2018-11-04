@@ -71,8 +71,8 @@ namespace PasPasPasTests.Types {
             AssertDeclTypeDef("TObject", hasMethod("Free"));
             AssertDeclTypeDef("TObject", hasMethod("DisposeOf"));
             AssertDeclTypeDef("TObject", hasMethod("CleanupInstance"));
-            AssertDeclTypeDef("TObject", hasMethod("ClassType"));
-            AssertDeclTypeDef("TObject", hasMethod("FieldAddress"));
+            //AssertDeclTypeDef("TObject", hasMethod("ClassType"));
+            //AssertDeclTypeDef("TObject", hasMethod("FieldAddress"));
         }
 
         [Fact]

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
 
@@ -68,7 +69,7 @@ namespace PasPasPas.Typings.Structured {
         ///     add a parameter group
         /// </summary>
         /// <param name="resultType">result type</param>
-        public ParameterGroup AddParameterGroup(int resultType) {
+        public ParameterGroup AddParameterGroup(ITypeReference resultType) {
             var result = new ParameterGroup {
                 ResultType = resultType
             };
@@ -84,7 +85,7 @@ namespace PasPasPas.Typings.Structured {
         /// <param name="resultType">result type</param>
         /// <param name="parameterName">parameter name</param>
         /// <returns></returns>
-        public ParameterGroup AddParameterGroup(string parameterName, int firstParam, int resultType) {
+        public ParameterGroup AddParameterGroup(string parameterName, ITypeReference firstParam, ITypeReference resultType) {
             var result = new ParameterGroup {
                 ResultType = resultType
             };

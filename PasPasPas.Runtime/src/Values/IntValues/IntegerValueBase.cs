@@ -150,9 +150,7 @@ namespace PasPasPas.Runtime.Values.IntValues {
             return ToIntValue(overflow, s);
         }
 
-        internal static ITypeReference Not(IntegerValueBase intNumber) {
-            return intNumber.InvertBits();
-        }
+        internal static ITypeReference Not(IntegerValueBase intNumber) => intNumber.InvertBits();
 
         internal static ITypeReference OrAndScale(ITypeReference overflow, IntegerValueBase firstOperator, IntegerValueBase secondOperator) {
             var s = firstOperator.AsBigInteger | secondOperator.AsBigInteger;
@@ -359,8 +357,7 @@ namespace PasPasPas.Runtime.Values.IntValues {
         /// </summary>
         public abstract ITypeReference InvertBits();
 
-
-        internal static ITypeReference Increment(ITypeReference overflow, IntegerValueBase value)
+        public static ITypeReference Increment(ITypeReference overflow, IntegerValueBase value)
             => ToIntValue(overflow, value.AsBigInteger + BigInteger.One);
 
         /// <summary>
@@ -370,5 +367,17 @@ namespace PasPasPas.Runtime.Values.IntValues {
         /// <returns></returns>
         public bool Equals(IIntegerValue other)
             => other.UnsignedValue == UnsignedValue;
+
+        /// <summary>
+        ///     absolute value
+        /// </summary>
+        /// <param name="overflow"></param>
+        /// <param name="integerValue"></param>
+        /// <returns></returns>
+        public static ITypeReference AbsoluteValue(ITypeReference overflow, IntegerValueBase integerValue) {
+            if (integerValue.IsNegative)
+                return ToIntValue(overflow, BigInteger.Abs(integerValue.AsBigInteger));
+            return integerValue;
+        }
     }
 }

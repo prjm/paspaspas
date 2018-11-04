@@ -102,6 +102,18 @@ namespace PasPasPas.Runtime.Values.FloatValues {
         }
 
         /// <summary>
+        ///     absolute value of a floating point value
+        /// </summary>
+        /// <param name="value">value to negate</param>
+        /// <returns></returns>
+        public ITypeReference Abs(ITypeReference value) {
+            if (value is INumericalValue floatValue)
+                return FloatValueBase.Abs(floatValue);
+            return Invalid;
+        }
+
+
+        /// <summary>
         ///     identity function
         /// </summary>
         /// <param name="value"></param>

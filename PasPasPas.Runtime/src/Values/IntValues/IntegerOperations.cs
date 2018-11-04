@@ -367,7 +367,6 @@ namespace PasPasPas.Runtime.Values.IntValues {
                 return IntegerValueBase.Increment(Overflow, integerValue);
             else
                 return Invalid;
-
         }
 
         /// <summary>
@@ -434,5 +433,16 @@ namespace PasPasPas.Runtime.Values.IntValues {
         public ITypeReference ToIntegerValue(ulong number)
             => new UInt64Value(number);
 
+        /// <summary>
+        ///     absolute value
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public ITypeReference Abs(ITypeReference value) {
+            if (value is IntegerValueBase integerValue)
+                return IntegerValueBase.AbsoluteValue(Overflow, integerValue);
+            else
+                return Invalid;
+        }
     }
 }

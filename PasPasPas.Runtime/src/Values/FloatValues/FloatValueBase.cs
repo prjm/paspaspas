@@ -93,5 +93,17 @@ namespace PasPasPas.Runtime.Values.FloatValues {
         /// <returns>number value</returns>
         public static ITypeReference ToExtendedValue(in ExtF80 number)
             => new ExtendedValue(number);
+
+        /// <summary>
+        ///     absolute value
+        /// </summary>
+        /// <param name="floatValue"></param>
+        /// <returns></returns>
+        public static ITypeReference Abs(INumericalValue floatValue) {
+            if (floatValue.IsNegative)
+                return new ExtendedValue(-floatValue.AsExtended);
+
+            return floatValue;
+        }
     }
 }

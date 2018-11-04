@@ -65,7 +65,7 @@ namespace PasPasPas.Typings.Structured {
             = new List<Routine>();
 
         /// <summary>
-        ///     list of fieds
+        ///     list of fields
         /// </summary>
         public IList<Variable> Fields { get; }
             = new List<Variable>();

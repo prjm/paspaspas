@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Infrastructure.Environment;
@@ -151,9 +150,7 @@ namespace PasPasPas.Typings.Common {
             RegisterHiddenTypes();
         }
 
-        private void RegisterHiddenTypes() {
-            RegisterSystemType(new UnspecifiedType(KnownTypeIds.UnspecifiedType), null);
-        }
+        private void RegisterHiddenTypes() => RegisterSystemType(new UnspecifiedType(KnownTypeIds.UnspecifiedType), null);
 
         /// <summary>
         ///     register type alias
@@ -324,11 +321,11 @@ namespace PasPasPas.Typings.Common {
             def.AddOrExtendMethod("Free", ProcedureKind.Procedure).AddParameterGroup();
             def.AddOrExtendMethod("DisposeOf", ProcedureKind.Procedure).AddParameterGroup();
             def.AddOrExtendMethod("CleanupInstance", ProcedureKind.Procedure).AddParameterGroup();
-            def.AddOrExtendMethod("ClassType", ProcedureKind.Function).AddParameterGroup(KnownTypeIds.TClass);
-            def.AddOrExtendMethod("FieldAddress", ProcedureKind.Function).AddParameterGroup(//
-               "Name",
-                KnownTypeIds.ShortStringType, //
-                KnownTypeIds.GenericPointer)[0].ConstantParam = true;
+            //def.AddOrExtendMethod("ClassType", ProcedureKind.Function).AddParameterGroup(KnownTypeIds.TClass);
+            //def.AddOrExtendMethod("FieldAddress", ProcedureKind.Function).AddParameterGroup(//
+            //   "Name",
+            //    KnownTypeIds.ShortStringType, //
+            //    KnownTypeIds.GenericPointer)[0].ConstantParam = true;
         }
 
         /// <summary>

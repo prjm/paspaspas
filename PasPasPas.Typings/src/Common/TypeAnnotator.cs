@@ -410,7 +410,7 @@ namespace PasPasPas.Typings.Common {
                     }
 
                     if (callableRoutines.Count == 1)
-                        baseTypeValue = GetTypeByIdOrUndefinedType(callableRoutines[0].ResultType);
+                        baseTypeValue = callableRoutines[0].ResultType;
                 }
 
             }
@@ -621,9 +621,9 @@ namespace PasPasPas.Typings.Common {
                 var methodParams = currentMethodParameters.Pop();
 
                 if (element.TypeValue != null && element.TypeValue.TypeInfo != null)
-                    methodParams.ResultType = element.TypeValue.TypeInfo.TypeId;
+                    methodParams.ResultType = element.TypeValue.TypeInfo;
                 else
-                    methodParams.ResultType = KnownTypeIds.ErrorType;
+                    methodParams.ResultType = TypeRegistry.MakeReference(KnownTypeIds.ErrorType);
             }
         }
 
@@ -642,7 +642,7 @@ namespace PasPasPas.Typings.Common {
 
                 foreach (var name in element.Parameters) {
                     var param = parms.AddParameter(name.Name.CompleteName);
-                    param.SymbolType = element.TypeValue.TypeInfo.TypeId;
+                    param.SymbolType = element.TypeValue.TypeInfo;
                 }
             }
         }
@@ -666,7 +666,7 @@ namespace PasPasPas.Typings.Common {
             foreach (var field in element.Fields) {
                 var fieldDef = new Variable() {
                     Name = field.Name.CompleteName,
-                    SymbolType = typeInfo.TypeId
+                    SymbolType = typeInfo
                 };
 
                 if (element.ClassItem)

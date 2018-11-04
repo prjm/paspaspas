@@ -61,6 +61,12 @@
         /// <returns>incremented value</returns>
         ITypeReference Increment(ITypeReference value);
 
+        /// <summary>
+        ///     absolute value of a value
+        /// </summary>
+        /// <param name="value">value to increment</param>
+        /// <returns>incremented value</returns>
+        ITypeReference Abs(ITypeReference value);
 
     }
 }
