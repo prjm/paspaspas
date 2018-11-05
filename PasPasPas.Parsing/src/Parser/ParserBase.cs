@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics;
-using System.Text;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Infrastructure.ObjectPooling;
 using PasPasPas.Infrastructure.Utils;
@@ -488,50 +487,6 @@ namespace PasPasPas.Parsing.Parser {
         /// <returns></returns>
         protected TokenizerWithLookahead.TokenSequence CurrentTokenSequences()
             => tokenizer.CurrentTokenSequence;
-
-        /// <summary>
-        ///     print a parser grammar
-        /// </summary>
-        /// <param name="type">parser type</param>
-        /// <param name="result">result</param>
-        protected static void PrintGrammar(Type type, StringBuilder result) {
-            var rules = GetRules(type);
-
-            foreach (var rule in rules) {
-
-                if (!rule.Incomplete)
-                    continue;
-
-                if (rule.Incomplete) {
-                    result.Append(" X ");
-                }
-                else {
-                    result.Append("   ");
-                }
-                result.Append(rule.RuleName);
-                result.Append(" := ");
-                result.AppendLine(rule.Rule);
-            }
-        }
-
-        /// <summary>
-        ///     get grammar rules
-        /// </summary>
-        /// <returns></returns>
-        private static IList<RuleAttribute> GetRules(Type type) {
-            var result = new List<RuleAttribute>();
-            /*
-            MethodInfo[] methods = type.GetMethods(BindingFlags.NonPublic | BindingFlags.DeclaredOnly | BindingFlags.Instance);
-
-            foreach (MethodInfo method in methods) {
-                RuleAttribute attr = method.GetCustomAttribute<RuleAttribute>(false);
-                if (attr != null) {
-                    result.Add(attr);
-                }
-            }
-            */
-            return result;
-        }
 
         /// <summary>
         ///     test if the searched tokens is located before token to stop

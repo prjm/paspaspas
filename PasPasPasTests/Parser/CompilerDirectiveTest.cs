@@ -387,29 +387,29 @@ namespace PasPasPasTests.Parser {
         [Fact]
         public void TestLongStrings() {
             object f(OptionSet o) => o.CompilerOptions.LongStrings.Value;
-            RunCompilerDirective("", LongStringTypes.Undefined, f);
-            RunCompilerDirective("H+", LongStringTypes.EnableLongStrings, f);
-            RunCompilerDirective("H-", LongStringTypes.DisableLongStrings, f);
-            RunCompilerDirective("H 3", LongStringTypes.Undefined, f, CompilerDirectiveParserErrors.InvalidLongStringSwitchDirective);
-            RunCompilerDirective("H", LongStringTypes.Undefined, f, CompilerDirectiveParserErrors.InvalidLongStringSwitchDirective);
-            RunCompilerDirective("LONGSTRINGS  ON", LongStringTypes.EnableLongStrings, f);
-            RunCompilerDirective("LONGSTRINGS  OFF", LongStringTypes.DisableLongStrings, f);
-            RunCompilerDirective("LONGSTRINGS  KAPUTT", LongStringTypes.Undefined, f, CompilerDirectiveParserErrors.InvalidLongStringSwitchDirective);
-            RunCompilerDirective("LONGSTRINGS  ", LongStringTypes.Undefined, f, CompilerDirectiveParserErrors.InvalidLongStringSwitchDirective);
+            RunCompilerDirective("", LongStringMode.Undefined, f);
+            RunCompilerDirective("H+", LongStringMode.EnableLongStrings, f);
+            RunCompilerDirective("H-", LongStringMode.DisableLongStrings, f);
+            RunCompilerDirective("H 3", LongStringMode.Undefined, f, CompilerDirectiveParserErrors.InvalidLongStringSwitchDirective);
+            RunCompilerDirective("H", LongStringMode.Undefined, f, CompilerDirectiveParserErrors.InvalidLongStringSwitchDirective);
+            RunCompilerDirective("LONGSTRINGS  ON", LongStringMode.EnableLongStrings, f);
+            RunCompilerDirective("LONGSTRINGS  OFF", LongStringMode.DisableLongStrings, f);
+            RunCompilerDirective("LONGSTRINGS  KAPUTT", LongStringMode.Undefined, f, CompilerDirectiveParserErrors.InvalidLongStringSwitchDirective);
+            RunCompilerDirective("LONGSTRINGS  ", LongStringMode.Undefined, f, CompilerDirectiveParserErrors.InvalidLongStringSwitchDirective);
         }
 
         [Fact]
         public void TestOpenStrings() {
             object f(OptionSet o) => o.CompilerOptions.OpenStrings.Value;
-            RunCompilerDirective("", OpenStringTypes.Undefined, f);
-            RunCompilerDirective("P+", OpenStringTypes.EnableOpenStrings, f);
-            RunCompilerDirective("P-", OpenStringTypes.DisableOpenStrings, f);
-            RunCompilerDirective("P 3", OpenStringTypes.Undefined, f, CompilerDirectiveParserErrors.InvalidOpenStringsDirective);
-            RunCompilerDirective("P", OpenStringTypes.Undefined, f, CompilerDirectiveParserErrors.InvalidOpenStringsDirective);
-            RunCompilerDirective("OPENSTRINGS  ON", OpenStringTypes.EnableOpenStrings, f);
-            RunCompilerDirective("OPENSTRINGS  OFF", OpenStringTypes.DisableOpenStrings, f);
-            RunCompilerDirective("OPENSTRINGS  KAPUTT", OpenStringTypes.Undefined, f, CompilerDirectiveParserErrors.InvalidOpenStringsDirective);
-            RunCompilerDirective("OPENSTRINGS  ", OpenStringTypes.Undefined, f, CompilerDirectiveParserErrors.InvalidOpenStringsDirective);
+            RunCompilerDirective("", OpenStringTypeMode.Undefined, f);
+            RunCompilerDirective("P+", OpenStringTypeMode.EnableOpenStrings, f);
+            RunCompilerDirective("P-", OpenStringTypeMode.DisableOpenStrings, f);
+            RunCompilerDirective("P 3", OpenStringTypeMode.Undefined, f, CompilerDirectiveParserErrors.InvalidOpenStringsDirective);
+            RunCompilerDirective("P", OpenStringTypeMode.Undefined, f, CompilerDirectiveParserErrors.InvalidOpenStringsDirective);
+            RunCompilerDirective("OPENSTRINGS  ON", OpenStringTypeMode.EnableOpenStrings, f);
+            RunCompilerDirective("OPENSTRINGS  OFF", OpenStringTypeMode.DisableOpenStrings, f);
+            RunCompilerDirective("OPENSTRINGS  KAPUTT", OpenStringTypeMode.Undefined, f, CompilerDirectiveParserErrors.InvalidOpenStringsDirective);
+            RunCompilerDirective("OPENSTRINGS  ", OpenStringTypeMode.Undefined, f, CompilerDirectiveParserErrors.InvalidOpenStringsDirective);
         }
 
         [Fact]
@@ -457,13 +457,13 @@ namespace PasPasPasTests.Parser {
         [Fact]
         public void TestRangeChecks() {
             object f(OptionSet o) => o.CompilerOptions.RangeChecks.Value;
-            RunCompilerDirective("", RuntimeRangeChecks.Undefined, f);
-            RunCompilerDirective("R+", RuntimeRangeChecks.EnableRangeChecks, f);
-            RunCompilerDirective("R-", RuntimeRangeChecks.DisableRangeChecks, f);
-            RunCompilerDirective("RANGECHECKS ON", RuntimeRangeChecks.EnableRangeChecks, f);
-            RunCompilerDirective("RANGECHECKS OFF", RuntimeRangeChecks.DisableRangeChecks, f);
-            RunCompilerDirective("RANGECHECKS KAPUTT", RuntimeRangeChecks.Undefined, f, CompilerDirectiveParserErrors.InvalidRangeCheckDirective);
-            RunCompilerDirective("RANGECHECKS ", RuntimeRangeChecks.Undefined, f, CompilerDirectiveParserErrors.InvalidRangeCheckDirective);
+            RunCompilerDirective("", RuntimeRangeCheckMode.Undefined, f);
+            RunCompilerDirective("R+", RuntimeRangeCheckMode.EnableRangeChecks, f);
+            RunCompilerDirective("R-", RuntimeRangeCheckMode.DisableRangeChecks, f);
+            RunCompilerDirective("RANGECHECKS ON", RuntimeRangeCheckMode.EnableRangeChecks, f);
+            RunCompilerDirective("RANGECHECKS OFF", RuntimeRangeCheckMode.DisableRangeChecks, f);
+            RunCompilerDirective("RANGECHECKS KAPUTT", RuntimeRangeCheckMode.Undefined, f, CompilerDirectiveParserErrors.InvalidRangeCheckDirective);
+            RunCompilerDirective("RANGECHECKS ", RuntimeRangeCheckMode.Undefined, f, CompilerDirectiveParserErrors.InvalidRangeCheckDirective);
         }
 
         [Fact]
@@ -619,25 +619,25 @@ namespace PasPasPasTests.Parser {
         [Fact]
         public void TestScopedEnums() {
             object f(OptionSet o) => o.CompilerOptions.ScopedEnums.Value;
-            RunCompilerDirective("", RequireScopedEnums.Undefined, f);
-            RunCompilerDirective("SCOPEDENUMS ON", RequireScopedEnums.Enable, f);
-            RunCompilerDirective("SCOPEDENUMS OFF", RequireScopedEnums.Disable, f);
-            RunCompilerDirective("SCOPEDENUMS KAPUTT", RequireScopedEnums.Undefined, f, CompilerDirectiveParserErrors.InvalidScopedEnumsDirective);
-            RunCompilerDirective("SCOPEDENUMS ", RequireScopedEnums.Undefined, f, CompilerDirectiveParserErrors.InvalidScopedEnumsDirective);
+            RunCompilerDirective("", RequireScopedEnumMode.Undefined, f);
+            RunCompilerDirective("SCOPEDENUMS ON", RequireScopedEnumMode.Enable, f);
+            RunCompilerDirective("SCOPEDENUMS OFF", RequireScopedEnumMode.Disable, f);
+            RunCompilerDirective("SCOPEDENUMS KAPUTT", RequireScopedEnumMode.Undefined, f, CompilerDirectiveParserErrors.InvalidScopedEnumsDirective);
+            RunCompilerDirective("SCOPEDENUMS ", RequireScopedEnumMode.Undefined, f, CompilerDirectiveParserErrors.InvalidScopedEnumsDirective);
         }
 
         [Fact]
         public void TestTypeInfo() {
             object f(OptionSet o) => o.CompilerOptions.PublishedRtti.Value;
-            RunCompilerDirective("", RttiForPublishedProperties.Undefined, f);
-            RunCompilerDirective("M+", RttiForPublishedProperties.Enable, f);
-            RunCompilerDirective("M-", RttiForPublishedProperties.Disable, f);
-            RunCompilerDirective("M X", RttiForPublishedProperties.Undefined, f, CompilerDirectiveParserErrors.InvalidPublishedRttiDirective);
-            RunCompilerDirective("M", RttiForPublishedProperties.Undefined, f, CompilerDirectiveParserErrors.InvalidPublishedRttiDirective);
-            RunCompilerDirective("TYPEINFO ON", RttiForPublishedProperties.Enable, f);
-            RunCompilerDirective("TYPEINFO OFF", RttiForPublishedProperties.Disable, f);
-            RunCompilerDirective("TYPEINFO KAPUTT", RttiForPublishedProperties.Undefined, f, CompilerDirectiveParserErrors.InvalidPublishedRttiDirective);
-            RunCompilerDirective("TYPEINFO ", RttiForPublishedProperties.Undefined, f, CompilerDirectiveParserErrors.InvalidPublishedRttiDirective);
+            RunCompilerDirective("", RttiForPublishedPropertieMode.Undefined, f);
+            RunCompilerDirective("M+", RttiForPublishedPropertieMode.Enable, f);
+            RunCompilerDirective("M-", RttiForPublishedPropertieMode.Disable, f);
+            RunCompilerDirective("M X", RttiForPublishedPropertieMode.Undefined, f, CompilerDirectiveParserErrors.InvalidPublishedRttiDirective);
+            RunCompilerDirective("M", RttiForPublishedPropertieMode.Undefined, f, CompilerDirectiveParserErrors.InvalidPublishedRttiDirective);
+            RunCompilerDirective("TYPEINFO ON", RttiForPublishedPropertieMode.Enable, f);
+            RunCompilerDirective("TYPEINFO OFF", RttiForPublishedPropertieMode.Disable, f);
+            RunCompilerDirective("TYPEINFO KAPUTT", RttiForPublishedPropertieMode.Undefined, f, CompilerDirectiveParserErrors.InvalidPublishedRttiDirective);
+            RunCompilerDirective("TYPEINFO ", RttiForPublishedPropertieMode.Undefined, f, CompilerDirectiveParserErrors.InvalidPublishedRttiDirective);
         }
 
         [Fact]
@@ -803,11 +803,11 @@ namespace PasPasPasTests.Parser {
         [Fact]
         public void TestOldTypeLayout() {
             object f(OptionSet o) => o.CompilerOptions.OldTypeLayout.Value;
-            RunCompilerDirective("", OldRecordTypes.Undefined, f);
-            RunCompilerDirective("OLDTYPELAYOUT  ON", OldRecordTypes.EnableOldRecordPacking, f);
-            RunCompilerDirective("OLDTYPELAYOUT  OFF", OldRecordTypes.DisableOldRecordPacking, f);
-            RunCompilerDirective("OLDTYPELAYOUT  KAPUTT", OldRecordTypes.Undefined, f, CompilerDirectiveParserErrors.InvalidOldTypeLayoutDirective);
-            RunCompilerDirective("OLDTYPELAYOUT  ", OldRecordTypes.Undefined, f, CompilerDirectiveParserErrors.InvalidOldTypeLayoutDirective);
+            RunCompilerDirective("", OldRecordTypeMode.Undefined, f);
+            RunCompilerDirective("OLDTYPELAYOUT  ON", OldRecordTypeMode.EnableOldRecordPacking, f);
+            RunCompilerDirective("OLDTYPELAYOUT  OFF", OldRecordTypeMode.DisableOldRecordPacking, f);
+            RunCompilerDirective("OLDTYPELAYOUT  KAPUTT", OldRecordTypeMode.Undefined, f, CompilerDirectiveParserErrors.InvalidOldTypeLayoutDirective);
+            RunCompilerDirective("OLDTYPELAYOUT  ", OldRecordTypeMode.Undefined, f, CompilerDirectiveParserErrors.InvalidOldTypeLayoutDirective);
         }
 
         [Fact]

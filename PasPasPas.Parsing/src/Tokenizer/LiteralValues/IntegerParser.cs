@@ -35,13 +35,13 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
         /// <summary>
         ///     overflowed integer literal
         /// </summary>
-        public static object IntegerOverflowInLiteral
+        public static object IntegerOverflowInLiteral { get; }
             = new object();
 
         /// <summary>
         ///     invalid integer literal
         /// </summary>
-        public static object InvalidIntegerLiteral
+        public static object InvalidIntegerLiteral { get; }
             = new object();
 
         /// <summary>

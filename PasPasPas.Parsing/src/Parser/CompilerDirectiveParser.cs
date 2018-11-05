@@ -1173,13 +1173,13 @@ namespace PasPasPas.Parsing.Parser {
         private OldTypeLayout ParseOldTypeLayoutSwitch() {
             var symbol = ContinueWithOrMissing(TokenKind.OldTypeLayout);
             var mode = ContinueWith(TokenKind.On, TokenKind.Off); ;
-            var parsedMode = OldRecordTypes.Undefined;
+            var parsedMode = OldRecordTypeMode.Undefined;
 
             if (mode.GetSymbolKind() == TokenKind.On) {
-                parsedMode = OldRecordTypes.EnableOldRecordPacking;
+                parsedMode = OldRecordTypeMode.EnableOldRecordPacking;
             }
             else if (mode.GetSymbolKind() == TokenKind.Off) {
-                parsedMode = OldRecordTypes.DisableOldRecordPacking;
+                parsedMode = OldRecordTypeMode.DisableOldRecordPacking;
             }
             else {
                 mode = ErrorAndSkip(CompilerDirectiveParserErrors.InvalidOldTypeLayoutDirective, new[] { TokenKind.On, TokenKind.Off });
@@ -1248,13 +1248,13 @@ namespace PasPasPas.Parsing.Parser {
         private PublishedRtti ParseLongTypeInfoSwitch() {
             var symbol = ContinueWithOrMissing(TokenKind.TypeInfoSwitchLong);
             var mode = ContinueWith(TokenKind.On, TokenKind.Off); ;
-            var parsedMode = RttiForPublishedProperties.Undefined;
+            var parsedMode = RttiForPublishedPropertieMode.Undefined;
 
             if (mode.GetSymbolKind() == TokenKind.On) {
-                parsedMode = RttiForPublishedProperties.Enable;
+                parsedMode = RttiForPublishedPropertieMode.Enable;
             }
             else if (mode.GetSymbolKind() == TokenKind.Off) {
-                parsedMode = RttiForPublishedProperties.Disable;
+                parsedMode = RttiForPublishedPropertieMode.Disable;
             }
             else {
                 mode = ErrorAndSkip(CompilerDirectiveParserErrors.InvalidPublishedRttiDirective, new[] { TokenKind.On, TokenKind.Off });
@@ -1266,13 +1266,13 @@ namespace PasPasPas.Parsing.Parser {
         private ScopedEnums ParseScopedEnums() {
             var symbol = ContinueWithOrMissing(TokenKind.ScopedEnums);
             var mode = ContinueWith(TokenKind.On, TokenKind.Off); ;
-            var parsedMode = RequireScopedEnums.Undefined;
+            var parsedMode = RequireScopedEnumMode.Undefined;
 
             if (mode.GetSymbolKind() == TokenKind.On) {
-                parsedMode = RequireScopedEnums.Enable;
+                parsedMode = RequireScopedEnumMode.Enable;
             }
             else if (mode.GetSymbolKind() == TokenKind.Off) {
-                parsedMode = RequireScopedEnums.Disable;
+                parsedMode = RequireScopedEnumMode.Disable;
             }
             else {
                 mode = ErrorAndSkip(CompilerDirectiveParserErrors.InvalidScopedEnumsDirective, new[] { TokenKind.On, TokenKind.Off });
@@ -1482,13 +1482,13 @@ namespace PasPasPas.Parsing.Parser {
         private RangeChecks ParseLongRangeChecksSwitch() {
             var symbol = ContinueWithOrMissing(TokenKind.RangeChecks);
             var mode = ContinueWith(TokenKind.On, TokenKind.Off);
-            var parsedMode = RuntimeRangeChecks.Undefined;
+            var parsedMode = RuntimeRangeCheckMode.Undefined;
 
             if (mode.GetSymbolKind() == TokenKind.On) {
-                parsedMode = RuntimeRangeChecks.EnableRangeChecks;
+                parsedMode = RuntimeRangeCheckMode.EnableRangeChecks;
             }
             else if (mode.GetSymbolKind() == TokenKind.Off) {
-                parsedMode = RuntimeRangeChecks.DisableRangeChecks;
+                parsedMode = RuntimeRangeCheckMode.DisableRangeChecks;
             }
             else {
                 mode = ErrorAndSkip(CompilerDirectiveParserErrors.InvalidRangeCheckDirective, new[] { TokenKind.On, TokenKind.Off });
@@ -1554,13 +1554,13 @@ namespace PasPasPas.Parsing.Parser {
         private OpenStrings ParseLongOpenStringSwitch() {
             var symbol = ContinueWithOrMissing(TokenKind.OpenStringSwitchLong);
             var mode = ContinueWith(TokenKind.On, TokenKind.Off);
-            var parsedMode = OpenStringTypes.Undefined;
+            var parsedMode = OpenStringTypeMode.Undefined;
 
             if (mode.GetSymbolKind() == TokenKind.On) {
-                parsedMode = OpenStringTypes.EnableOpenStrings;
+                parsedMode = OpenStringTypeMode.EnableOpenStrings;
             }
             else if (mode.GetSymbolKind() == TokenKind.Off) {
-                parsedMode = OpenStringTypes.DisableOpenStrings;
+                parsedMode = OpenStringTypeMode.DisableOpenStrings;
             }
             else {
                 mode = ErrorAndSkip(CompilerDirectiveParserErrors.InvalidOpenStringsDirective, new[] { TokenKind.On, TokenKind.Off });
@@ -1572,13 +1572,13 @@ namespace PasPasPas.Parsing.Parser {
         private LongStrings ParseLongLongStringSwitch() {
             var symbol = ContinueWithOrMissing(TokenKind.LongStringSwitchLong);
             var mode = ContinueWith(TokenKind.On, TokenKind.Off);
-            var parsedMode = LongStringTypes.Undefined;
+            var parsedMode = LongStringMode.Undefined;
 
             if (mode.GetSymbolKind() == TokenKind.On) {
-                parsedMode = LongStringTypes.EnableLongStrings;
+                parsedMode = LongStringMode.EnableLongStrings;
             }
             else if (mode.GetSymbolKind() == TokenKind.Off) {
-                parsedMode = LongStringTypes.DisableLongStrings;
+                parsedMode = LongStringMode.DisableLongStrings;
             }
             else {
                 mode = ErrorAndSkip(CompilerDirectiveParserErrors.InvalidLongStringSwitchDirective, new[] { TokenKind.On, TokenKind.Off });
@@ -2003,13 +2003,13 @@ namespace PasPasPas.Parsing.Parser {
 
             var symbol = ContinueWithOrMissing(TokenKind.TypeInfoSwitch);
             var mode = ContinueWith(TokenKind.Plus, TokenKind.Minus);
-            var parsedMode = RttiForPublishedProperties.Undefined;
+            var parsedMode = RttiForPublishedPropertieMode.Undefined;
 
             if (mode.GetSymbolKind() == TokenKind.Plus) {
-                parsedMode = RttiForPublishedProperties.Enable;
+                parsedMode = RttiForPublishedPropertieMode.Enable;
             }
             else if (mode.GetSymbolKind() == TokenKind.Minus) {
-                parsedMode = RttiForPublishedProperties.Disable;
+                parsedMode = RttiForPublishedPropertieMode.Disable;
             }
             else {
                 mode = ErrorAndSkip(CompilerDirectiveParserErrors.InvalidPublishedRttiDirective, new[] { TokenKind.Plus, TokenKind.Minus });
@@ -2123,13 +2123,13 @@ namespace PasPasPas.Parsing.Parser {
             if (LookAhead(1, TokenKind.Plus, TokenKind.Minus)) {
                 var symbol = ContinueWithOrMissing(TokenKind.IncludeRessource);
                 var mode = ContinueWith(TokenKind.Plus, TokenKind.Minus);
-                var parsedMode = RuntimeRangeChecks.Undefined;
+                var parsedMode = RuntimeRangeCheckMode.Undefined;
 
                 if (mode.GetSymbolKind() == TokenKind.Plus) {
-                    parsedMode = RuntimeRangeChecks.EnableRangeChecks;
+                    parsedMode = RuntimeRangeCheckMode.EnableRangeChecks;
                 }
                 else if (mode.GetSymbolKind() == TokenKind.Minus) {
-                    parsedMode = RuntimeRangeChecks.DisableRangeChecks;
+                    parsedMode = RuntimeRangeCheckMode.DisableRangeChecks;
                 }
 
                 return new RangeChecks(symbol, mode, parsedMode);
@@ -2262,13 +2262,13 @@ namespace PasPasPas.Parsing.Parser {
         private OpenStrings ParseOpenStringSwitch() {
             var symbol = ContinueWithOrMissing(TokenKind.OpenStringSwitch);
             var mode = ContinueWith(TokenKind.Plus, TokenKind.Minus);
-            var parsedMode = OpenStringTypes.Undefined;
+            var parsedMode = OpenStringTypeMode.Undefined;
 
             if (mode.GetSymbolKind() == TokenKind.Plus) {
-                parsedMode = OpenStringTypes.EnableOpenStrings;
+                parsedMode = OpenStringTypeMode.EnableOpenStrings;
             }
             else if (mode.GetSymbolKind() == TokenKind.Minus) {
-                parsedMode = OpenStringTypes.DisableOpenStrings;
+                parsedMode = OpenStringTypeMode.DisableOpenStrings;
             }
             else {
                 mode = ErrorAndSkip(CompilerDirectiveParserErrors.InvalidOpenStringsDirective, new[] { TokenKind.Plus, TokenKind.Minus });
@@ -2280,13 +2280,13 @@ namespace PasPasPas.Parsing.Parser {
         private LongStrings ParseLongStringSwitch() {
             var symbol = ContinueWithOrMissing(TokenKind.LongStringSwitch);
             var mode = ContinueWith(TokenKind.Plus, TokenKind.Minus);
-            var parsedMode = LongStringTypes.Undefined;
+            var parsedMode = LongStringMode.Undefined;
 
             if (mode.GetSymbolKind() == TokenKind.Plus) {
-                parsedMode = LongStringTypes.EnableLongStrings;
+                parsedMode = LongStringMode.EnableLongStrings;
             }
             else if (mode.GetSymbolKind() == TokenKind.Minus) {
-                parsedMode = LongStringTypes.DisableLongStrings;
+                parsedMode = LongStringMode.DisableLongStrings;
             }
             else {
                 mode = ErrorAndSkip(CompilerDirectiveParserErrors.InvalidLongStringSwitchDirective, new[] { TokenKind.Plus, TokenKind.Minus });

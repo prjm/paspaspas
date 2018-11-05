@@ -36,11 +36,10 @@ namespace PasPasPasTests.Infra {
         public void TestSimpleFileRead() {
 
             var path = GenerateTempFile(Content1);
-            var readerApi = new ReaderApi(CreateEnvironment());
             var result = new StringBuilder();
 
             try {
-                using (var reader = readerApi.CreateReaderForPath(path)) {
+                using (var reader = ReaderApi.CreateReaderForPath(path)) {
                     while (!reader.AtEof) {
                         result.Append(reader.NextChar());
                     }
@@ -62,7 +61,7 @@ namespace PasPasPasTests.Infra {
             var readerApi = new ReaderApi(CreateEnvironment());
 
             try {
-                using (var reader = readerApi.CreateReaderForPath(path1)) {
+                using (var reader = ReaderApi.CreateReaderForPath(path1)) {
                     while (!reader.AtEof && result.Length < splitIndex) {
                         result.Append(reader.NextChar());
                     }
@@ -105,8 +104,7 @@ namespace PasPasPasTests.Infra {
             var result = new StringBuilder();
             var path1 = GenerateTempFile(Content1);
             var path2 = GenerateTempFile(Content2);
-            var readerApi = new ReaderApi(CreateEnvironment());
-            using (var reader = readerApi.CreateReaderForPath(path1)) {
+            using (var reader = ReaderApi.CreateReaderForPath(path1)) {
 
                 while (!reader.AtEof && result.Length < 5) {
                     result.Append(reader.NextChar());

@@ -14,7 +14,7 @@ namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
         /// <param name="symbol"></param>
         /// <param name="mode"></param>
         /// <param name="parsedMode"></param>
-        public ScopedEnums(Terminal symbol, Terminal mode, RequireScopedEnums parsedMode) {
+        public ScopedEnums(Terminal symbol, Terminal mode, RequireScopedEnumMode parsedMode) {
             Symbol = symbol;
             ModeSymbol = mode;
             Mode = parsedMode;
@@ -23,7 +23,7 @@ namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
         /// <summary>
         ///     switch mode
         /// </summary>
-        public RequireScopedEnums Mode { get; }
+        public RequireScopedEnumMode Mode { get; }
 
         /// <summary>
         ///     directive

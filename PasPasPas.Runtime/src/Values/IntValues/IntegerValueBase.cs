@@ -357,6 +357,12 @@ namespace PasPasPas.Runtime.Values.IntValues {
         /// </summary>
         public abstract ITypeReference InvertBits();
 
+        /// <summary>
+        ///     increment value
+        /// </summary>
+        /// <param name="overflow"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public static ITypeReference Increment(ITypeReference overflow, IntegerValueBase value)
             => ToIntValue(overflow, value.AsBigInteger + BigInteger.One);
 

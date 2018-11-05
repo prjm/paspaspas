@@ -11,7 +11,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     generic method parameter
         /// </summary>
-        public GenericTypes Generics { get; set; }
+        public GenericTypeCollection Generics { get; set; }
 
         /// <summary>
         ///     parts

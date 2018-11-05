@@ -1,10 +1,9 @@
 ﻿namespace PasPasPas.Options.DataTypes {
 
     /// <summary>
-    ///     flag to required scoped enums
+    ///     flag to required scoped enumerations
     /// </summary>
-    public enum RequireScopedEnums {
-
+    public enum RequireScopedEnumMode {
 
         /// <summary>
         ///     undefined flag state

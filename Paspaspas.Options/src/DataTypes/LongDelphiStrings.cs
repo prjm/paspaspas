@@ -1,9 +1,9 @@
 ﻿namespace PasPasPas.Options.DataTypes {
 
     /// <summary>
-    ///     flag to enable long delphi strings
+    ///     flag to enable long strings
     /// </summary>
-    public enum LongStringTypes {
+    public enum LongStringMode {
 
         /// <summary>
         ///     undefined string status

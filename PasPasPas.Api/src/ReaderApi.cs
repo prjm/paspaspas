@@ -38,7 +38,7 @@ namespace PasPasPas.Api {
         /// </summary>
         /// <param name="path">path to resolve</param>
         /// <returns>file reader</returns>
-        public StackedFileReader CreateReaderForPath(string path) {
+        public static StackedFileReader CreateReaderForPath(string path) {
             var localPath = new FileReference(path);
             var reader = new StackedFileReader();
             reader.AddFileToRead(localPath);

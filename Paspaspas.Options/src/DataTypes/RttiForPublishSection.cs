@@ -1,9 +1,9 @@
 ﻿namespace PasPasPas.Options.DataTypes {
 
     /// <summary>
-    ///     flag to generate rrti for published items
+    ///     flag to generate rtti for published items
     /// </summary>
-    public enum RttiForPublishedProperties {
+    public enum RttiForPublishedPropertieMode {
 
         /// <summary>
         ///     undefined flag state

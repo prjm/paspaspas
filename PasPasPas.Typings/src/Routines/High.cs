@@ -26,12 +26,6 @@ namespace PasPasPas.Typings.Routines {
             => "High";
 
         /// <summary>
-        ///     constant intrinsinc routine
-        /// </summary>
-        public bool IsConstant
-            => true;
-
-        /// <summary>
         ///     type registry
         /// </summary>
         public ITypeRegistry TypeRegistry { get; }

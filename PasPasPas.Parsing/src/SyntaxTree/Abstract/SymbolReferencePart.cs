@@ -17,7 +17,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     generic part
         /// </summary>
-        public GenericTypes GenericType { get; set; }
+        public GenericTypeCollection GenericType { get; set; }
 
         /// <summary>
         ///     symbol name

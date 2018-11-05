@@ -1,9 +1,9 @@
 ﻿namespace PasPasPas.Options.DataTypes {
 
     /// <summary>
-    ///     switch for odl packed record types
+    ///     switch for old packed record types
     /// </summary>
-    public enum OldRecordTypes {
+    public enum OldRecordTypeMode {
 
         /// <summary>
         ///     undefined flag state

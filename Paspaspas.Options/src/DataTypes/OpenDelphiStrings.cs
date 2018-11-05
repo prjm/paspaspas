@@ -1,9 +1,9 @@
 ﻿namespace PasPasPas.Options.DataTypes {
 
     /// <summary>
-    ///     open delphi strings
+    ///     open strings
     /// </summary>
-    public enum OpenStringTypes {
+    public enum OpenStringTypeMode {
 
         /// <summary>
         ///     undefined flag state

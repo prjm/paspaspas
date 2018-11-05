@@ -25,6 +25,11 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         public ITypeRegistry TypeRegistry { get; protected set; }
 
+        /// <summary>
+        ///     resolve a call
+        /// </summary>
+        /// <param name="callableRoutines"></param>
+        /// <param name="signature"></param>
         public abstract void ResolveCall(IList<ParameterGroup> callableRoutines, Signature signature);
     }
 }

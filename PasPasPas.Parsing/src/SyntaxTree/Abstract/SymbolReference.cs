@@ -42,7 +42,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     generic types for symbol reference
         /// </summary>
-        public GenericTypes GenericType { get; set; }
+        public GenericTypeCollection GenericType { get; set; }
 
         /// <summary>
         ///     parts

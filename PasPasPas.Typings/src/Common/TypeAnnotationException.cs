@@ -11,6 +11,7 @@ namespace PasPasPas.Typings.Common {
     [Serializable]
     public class TypeAnnotationException : Exception {
 
+        [NonSerialized]
         private readonly AbstractSyntaxPartBase element;
 
         /// <summary>

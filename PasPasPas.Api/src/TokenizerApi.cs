@@ -33,7 +33,7 @@ namespace PasPasPas.Api {
         /// <param name="path">file path</param>
         /// <returns>tokenizer</returns>
         public ITokenizer CreateTokenizerForPath(string path) {
-            var fileReader = reader.CreateReaderForPath(path);
+            var fileReader = ReaderApi.CreateReaderForPath(path);
             return CreateTokenizer(fileReader);
         }
 

@@ -44,12 +44,6 @@ namespace PasPasPas.Typings.Structured {
         public ITypeRegistry TypeRegistry { get; private set; }
 
         /// <summary>
-        ///     <c>false</c>
-        /// </summary>
-        public bool IsConstant
-            => false;
-
-        /// <summary>
         ///     type id
         /// </summary>
         public int TypeId

@@ -45,7 +45,7 @@ namespace PasPasPas.Api {
         /// <param name="path"></param>
         /// <returns></returns>
         public IParser CreateParserForPath(string path) {
-            var reader = tokenizerApi.Readers.CreateReaderForPath(path);
+            var reader = ReaderApi.CreateReaderForPath(path);
             var parser = new StandardParser(env, parseOptions, reader);
             return parser;
         }

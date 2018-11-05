@@ -27,12 +27,12 @@
             ImportedData = new DerivedValueOption<ImportGlobalUnitData>(baseOptions?.ImportedData);
             IoChecks = new DerivedValueOption<IoCallCheck>(baseOptions?.IoChecks);
             LocalSymbols = new DerivedValueOption<LocalDebugSymbolMode>(baseOptions?.LocalSymbols);
-            LongStrings = new DerivedValueOption<LongStringTypes>(baseOptions?.LongStrings);
-            OpenStrings = new DerivedValueOption<OpenStringTypes>(baseOptions?.OpenStrings);
+            LongStrings = new DerivedValueOption<LongStringMode>(baseOptions?.LongStrings);
+            OpenStrings = new DerivedValueOption<OpenStringTypeMode>(baseOptions?.OpenStrings);
             Optimization = new DerivedValueOption<CompilerOptimization>(baseOptions?.Optimization);
             CheckOverflows = new DerivedValueOption<RuntimeOverflowCheck>(baseOptions?.CheckOverflows);
             SafeDivide = new DerivedValueOption<FDivSafeDivide>(baseOptions?.SafeDivide);
-            RangeChecks = new DerivedValueOption<RuntimeRangeChecks>(baseOptions?.RangeChecks);
+            RangeChecks = new DerivedValueOption<RuntimeRangeCheckMode>(baseOptions?.RangeChecks);
             StackFrames = new DerivedValueOption<StackFrameGeneration>(baseOptions?.StackFrames);
             IndexOfFirstCharInString = new DerivedValueOption<FirstCharIndex>(baseOptions?.IndexOfFirstCharInString);
             WritableConstants = new DerivedValueOption<ConstantValue>(baseOptions?.WritableConstants);
@@ -44,13 +44,13 @@
             SymbolDefinitions = new DerivedValueOption<SymbolDefinitionInfo>(baseOptions?.SymbolDefinitions);
             SymbolReferences = new DerivedValueOption<SymbolReferenceInfo>(baseOptions?.SymbolReferences);
             LinkAllTypes = new DerivedValueOption<StrongTypeLinking>(baseOptions?.LinkAllTypes);
-            ScopedEnums = new DerivedValueOption<RequireScopedEnums>(baseOptions?.ScopedEnums);
-            PublishedRtti = new DerivedValueOption<RttiForPublishedProperties>(baseOptions?.PublishedRtti);
+            ScopedEnums = new DerivedValueOption<RequireScopedEnumMode>(baseOptions?.ScopedEnums);
+            PublishedRtti = new DerivedValueOption<RttiForPublishedPropertieMode>(baseOptions?.PublishedRtti);
             RuntimeOnlyPackage = new DerivedValueOption<RuntimePackageMode>(baseOptions?.RuntimeOnlyPackage);
             Rtti = new RttiOptions(baseOptions?.Rtti);
             RealCompatibility = new DerivedValueOption<Real48>(baseOptions?.RealCompatibility);
             PointerMath = new DerivedValueOption<PointerManipulation>(baseOptions?.PointerMath);
-            OldTypeLayout = new DerivedValueOption<OldRecordTypes>(baseOptions?.OldTypeLayout);
+            OldTypeLayout = new DerivedValueOption<OldRecordTypeMode>(baseOptions?.OldTypeLayout);
             MinimumEnumSize = new DerivedValueOption<EnumSize>(baseOptions?.MinimumEnumSize);
             MethodInfo = new DerivedValueOption<MethodInfoRttiMode>(baseOptions?.MethodInfo);
             MinimumStackMemorySize = new DerivedValueOption<ulong>(baseOptions?.MinimumStackMemorySize);
@@ -146,12 +146,12 @@
         /// <summary>
         ///     flag for long strings
         /// </summary>
-        public DerivedValueOption<LongStringTypes> LongStrings { get; }
+        public DerivedValueOption<LongStringMode> LongStrings { get; }
 
         /// <summary>
         ///     flag for open strings
         /// </summary>
-        public DerivedValueOption<OpenStringTypes> OpenStrings { get; }
+        public DerivedValueOption<OpenStringTypeMode> OpenStrings { get; }
 
         /// <summary>
         ///     flag to enable optimization
@@ -171,7 +171,7 @@
         /// <summary>
         ///     generate runtime range checks
         /// </summary>
-        public DerivedValueOption<RuntimeRangeChecks> RangeChecks { get; }
+        public DerivedValueOption<RuntimeRangeCheckMode> RangeChecks { get; }
 
         /// <summary>
         ///     generate all stack frames
@@ -231,12 +231,12 @@
         /// <summary>
         ///     flag to scoped enums
         /// </summary>
-        public DerivedValueOption<RequireScopedEnums> ScopedEnums { get; }
+        public DerivedValueOption<RequireScopedEnumMode> ScopedEnums { get; }
 
         /// <summary>
         ///     flag to generate rtti for published fields
         /// </summary>
-        public DerivedValueOption<RttiForPublishedProperties> PublishedRtti { get; }
+        public DerivedValueOption<RttiForPublishedPropertieMode> PublishedRtti { get; }
 
         /// <summary>
         ///     swithc to prohibit this package at desing time
@@ -261,7 +261,7 @@
         /// <summary>
         ///     switch for old record types
         /// </summary>
-        public DerivedValueOption<OldRecordTypes> OldTypeLayout { get; }
+        public DerivedValueOption<OldRecordTypeMode> OldTypeLayout { get; }
 
         /// <summary>
         ///     minimum enum size

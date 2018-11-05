@@ -3,7 +3,7 @@
     /// <summary>
     ///     flag to generate runtime range checks
     /// </summary>
-    public enum RuntimeRangeChecks {
+    public enum RuntimeRangeCheckMode {
 
         /// <summary>
         ///     undefined flag state

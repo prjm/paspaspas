@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Text;
 using PasPasPas.Infrastructure.Files;
 using PasPasPas.Options.Bundles;
 using PasPasPas.Parsing.SyntaxTree;
@@ -4831,15 +4830,6 @@ namespace PasPasPas.Parsing.Parser.Standard {
                 return new NamespaceNameSymbol(GetFixedArray(list), comma);
             }
         }
-
-
-
-        /// <summary>
-        ///     print the parser grammar
-        /// </summary>
-        /// <param name="result">Result</param>
-        public static void PrintGrammar(StringBuilder result)
-            => PrintGrammar(typeof(StandardParser), result);
 
         private bool MatchIdentifier(int otherToken)
             => LookAheadIdentifier(0, otherToken, false);

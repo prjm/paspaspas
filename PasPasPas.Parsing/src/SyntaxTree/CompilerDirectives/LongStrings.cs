@@ -14,7 +14,7 @@ namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
         /// <param name="symbol"></param>
         /// <param name="mode"></param>
         /// <param name="parsedMode"></param>
-        public LongStrings(Terminal symbol, Terminal mode, LongStringTypes parsedMode) {
+        public LongStrings(Terminal symbol, Terminal mode, LongStringMode parsedMode) {
             Symbol = symbol;
             ModeSymbol = mode;
             Mode = parsedMode;
@@ -23,7 +23,7 @@ namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
         /// <summary>
         /// string mode
         /// </summary>
-        public LongStringTypes Mode { get; }
+        public LongStringMode Mode { get; }
 
         /// <summary>
         ///     mode

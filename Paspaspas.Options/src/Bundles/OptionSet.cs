@@ -147,19 +147,19 @@ namespace PasPasPas.Options.Bundles {
                 case 'J':
                     return GetSwitchInfo(CompilerOptions.WritableConstants, ConstantValue.Writable, ConstantValue.Constant);
                 case 'H':
-                    return GetSwitchInfo(CompilerOptions.LongStrings, LongStringTypes.EnableLongStrings, LongStringTypes.DisableLongStrings);
+                    return GetSwitchInfo(CompilerOptions.LongStrings, LongStringMode.EnableLongStrings, LongStringMode.DisableLongStrings);
                 case 'L':
                     return GetSwitchInfo(CompilerOptions.LocalSymbols, LocalDebugSymbolMode.EnableLocalSymbols, LocalDebugSymbolMode.DisableLocalSymbols);
                 case 'M':
-                    return GetSwitchInfo(CompilerOptions.PublishedRtti, RttiForPublishedProperties.Enable, RttiForPublishedProperties.Disable);
+                    return GetSwitchInfo(CompilerOptions.PublishedRtti, RttiForPublishedPropertieMode.Enable, RttiForPublishedPropertieMode.Disable);
                 case 'O':
                     return GetSwitchInfo(CompilerOptions.Optimization, CompilerOptimization.EnableOptimization, CompilerOptimization.DisableOptimization);
                 case 'P':
-                    return GetSwitchInfo(CompilerOptions.OpenStrings, OpenStringTypes.EnableOpenStrings, OpenStringTypes.DisableOpenStrings);
+                    return GetSwitchInfo(CompilerOptions.OpenStrings, OpenStringTypeMode.EnableOpenStrings, OpenStringTypeMode.DisableOpenStrings);
                 case 'Q':
                     return GetSwitchInfo(CompilerOptions.CheckOverflows, RuntimeOverflowCheck.EnableChecks, RuntimeOverflowCheck.DisableChecks);
                 case 'R':
-                    return GetSwitchInfo(CompilerOptions.RangeChecks, RuntimeRangeChecks.EnableRangeChecks, RuntimeRangeChecks.DisableRangeChecks);
+                    return GetSwitchInfo(CompilerOptions.RangeChecks, RuntimeRangeCheckMode.EnableRangeChecks, RuntimeRangeCheckMode.DisableRangeChecks);
                 case 'T':
                     return GetSwitchInfo(CompilerOptions.TypedPointers, UsePointersWithTypeChecking.Enable, UsePointersWithTypeChecking.Disable);
                 case 'U':

@@ -14,7 +14,7 @@ namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
         /// <param name="symbol"></param>
         /// <param name="mode"></param>
         /// <param name="parsedMode"></param>
-        public OldTypeLayout(Terminal symbol, Terminal mode, OldRecordTypes parsedMode) {
+        public OldTypeLayout(Terminal symbol, Terminal mode, OldRecordTypeMode parsedMode) {
             Symbol = symbol;
             ModeSymbol = mode;
             Mode = parsedMode;
@@ -23,7 +23,7 @@ namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
         /// <summary>
         ///     switch mode
         /// </summary>
-        public OldRecordTypes Mode { get; }
+        public OldRecordTypeMode Mode { get; }
 
         /// <summary>
         ///     mode

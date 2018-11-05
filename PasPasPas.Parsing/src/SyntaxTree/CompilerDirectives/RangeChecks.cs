@@ -14,7 +14,7 @@ namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
         /// <param name="symbol"></param>
         /// <param name="mode"></param>
         /// <param name="parsedMode"></param>
-        public RangeChecks(Terminal symbol, Terminal mode, RuntimeRangeChecks parsedMode) {
+        public RangeChecks(Terminal symbol, Terminal mode, RuntimeRangeCheckMode parsedMode) {
             Symbol = symbol;
             ModeSymbol = mode;
             Mode = parsedMode;
@@ -23,7 +23,7 @@ namespace PasPasPas.Parsing.SyntaxTree.CompilerDirectives {
         /// <summary>
         ///     range check mode
         /// </summary>
-        public RuntimeRangeChecks Mode { get; }
+        public RuntimeRangeCheckMode Mode { get; }
 
         /// <summary>
         ///     mode symbol

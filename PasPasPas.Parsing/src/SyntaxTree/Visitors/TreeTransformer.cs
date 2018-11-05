@@ -3107,22 +3107,22 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             return result;
         }
 
-        private GenericTypes ExtractGenericDefinition(AbstractSyntaxPartBase parent, GenericSuffixSymbol genericDefinition) {
+        private GenericTypeCollection ExtractGenericDefinition(AbstractSyntaxPartBase parent, GenericSuffixSymbol genericDefinition) {
             if (genericDefinition == null)
                 return null;
 
-            var result = new GenericTypes();
+            var result = new GenericTypeCollection();
             InitNode(result, genericDefinition, parent);
             result.TypeReference = true;
 
             return result;
         }
 
-        private GenericTypes ExtractGenericDefinition(AbstractSyntaxPartBase parent, ISyntaxPart node, GenericDefinitionSymbol genericDefinition) {
+        private GenericTypeCollection ExtractGenericDefinition(AbstractSyntaxPartBase parent, ISyntaxPart node, GenericDefinitionSymbol genericDefinition) {
             if (genericDefinition == null)
                 return null;
 
-            var result = new GenericTypes();
+            var result = new GenericTypeCollection();
             InitNode(result, node, parent);
 
             foreach (var part in genericDefinition.Items) {

@@ -44,7 +44,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     generic typey
         /// </summary>
-        public GenericTypes Generics { get; set; }
+        public GenericTypeCollection Generics { get; set; }
 
         /// <summary>
         ///     declared symbols
