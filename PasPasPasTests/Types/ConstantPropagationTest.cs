@@ -32,10 +32,23 @@ namespace PasPasPasTests.Types {
         }
 
         [TestCase]
-        public void TestOrdinalFunctions() {
+        public void TestAbs() {
             AssertExprValue("Abs(5)", GetIntegerValue(5));
             AssertExprValue("Abs(0)", GetIntegerValue(0));
+            AssertExprValue("Abs(-3)", GetIntegerValue(3));
+
+            AssertExprValue("Abs(5.4)", GetExtendedValue("5.4"));
+            AssertExprValue("Abs(0.0)", GetExtendedValue(0));
+            AssertExprValue("Abs(-3.3)", GetExtendedValue("3.3"));
         }
+
+        [TestCase]
+        public void TestChr() {
+            AssertExprValue("Chr(5)", GetWideCharValue((char)5));
+            AssertExprValue("Chr(0)", GetWideCharValue((char)0));
+            AssertExprValue("Chr(-3)", GetWideCharValue((char)(ushort.MaxValue - 3 + 1)));
+        }
+
 
         [TestCase]
         public void TestBooleanOperations() {

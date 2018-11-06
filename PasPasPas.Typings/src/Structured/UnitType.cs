@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Typings.Common;
+using PasPasPas.Typings.Routines;
 
 namespace PasPasPas.Typings.Structured {
 
@@ -57,8 +58,13 @@ namespace PasPasPas.Typings.Structured {
         /// </summary>
         /// <param name="routine"></param>
         public void AddGlobal(IRoutine routine) {
+
+            if (routine is IntrinsicRoutine r)
+                r.TypeRegistry = TypeRegistry;
+
             globalRoutines.Add(routine);
             symbols.Add(routine.Name, new Reference(ReferenceKind.RefToGlobalRoutine, routine));
         }
+
     }
 }

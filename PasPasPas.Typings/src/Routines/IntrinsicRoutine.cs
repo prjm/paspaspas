@@ -23,7 +23,7 @@ namespace PasPasPas.Typings.Routines {
         /// <summary>
         ///     type registry
         /// </summary>
-        public ITypeRegistry TypeRegistry { get; protected set; }
+        public ITypeRegistry TypeRegistry { get; set; }
 
         /// <summary>
         ///     resolve a call

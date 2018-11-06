@@ -2,6 +2,7 @@
 using System.Numerics;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
+using PasPasPas.Runtime.Values.CharValues;
 using SharpFloat.FloatingPoint;
 
 namespace PasPasPas.Runtime.Values.IntValues {
@@ -384,6 +385,29 @@ namespace PasPasPas.Runtime.Values.IntValues {
             if (integerValue.IsNegative)
                 return ToIntValue(overflow, BigInteger.Abs(integerValue.AsBigInteger));
             return integerValue;
+        }
+
+        /// <summary>
+        ///     <c>chr</c> function
+        /// </summary>
+        /// <param name="integerValue"></param>
+        /// <returns></returns>
+        public static ITypeReference ChrValue(IntegerValueBase integerValue) {
+            var b = integerValue.AsBigInteger;
+            var value = b.ToByteArray();
+            var negative = b < 0;
+            var result = default(ushort);
+
+            if (value.Length == 1 && !negative)
+                result = value[0];
+            else if (value.Length == 1 && negative)
+                result = (ushort)(value[0] | (0xff << 8));
+            else if (value.Length == 2)
+                result = (ushort)(value[0] | ((value[1]) << 8));
+            else if (value.Length >= 2)
+                result = ushort.MaxValue;
+
+            return new WideCharValue((char)result);
         }
     }
 }

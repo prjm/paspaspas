@@ -444,5 +444,17 @@ namespace PasPasPas.Runtime.Values.IntValues {
             else
                 return Invalid;
         }
+
+        /// <summary>
+        ///     <c>chr</c> function
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public ITypeReference Chr(ITypeReference value) {
+            if (value is IntegerValueBase integerValue)
+                return IntegerValueBase.ChrValue(integerValue);
+            else
+                return Invalid;
+        }
     }
 }

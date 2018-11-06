@@ -98,7 +98,8 @@ namespace PasPasPas.Typings.Common {
         ///     register common functions
         /// </summary>
         private void RegisterCommonFunctions() {
-            systemUnit.AddGlobal(new Abs(this));
+            systemUnit.AddGlobal(new Abs());
+            systemUnit.AddGlobal(new Chr());
             systemUnit.AddGlobal(new High(this));
         }
 
