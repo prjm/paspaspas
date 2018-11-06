@@ -4,6 +4,6 @@ mono: none
 dotnet: 2.1.302
 dist: trusty
 script:
- - dotnet restore
  - cd PasPasPasTests
+ - dotnet restore 
  - dotnet test
