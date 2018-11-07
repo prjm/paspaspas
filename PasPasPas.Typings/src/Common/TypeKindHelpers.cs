@@ -53,6 +53,15 @@ namespace PasPasPas.Typings.Common {
             => kind == CommonTypeKind.AnsiCharType || kind == CommonTypeKind.WideCharType;
 
         /// <summary>
+        ///     test if the type kind is a unicde char type
+        /// </summary>
+        /// <param name="kind">kind</param>
+        /// <returns><c>true</c> if the type is ANSI char or wide char</returns>
+        public static bool IsUnicodeChar(this CommonTypeKind kind)
+            => kind == CommonTypeKind.WideCharType;
+
+
+        /// <summary>
         ///     test if the type kind is a string type
         /// </summary>
         /// <param name="kind">kind</param>
@@ -64,12 +73,30 @@ namespace PasPasPas.Typings.Common {
                 kind == CommonTypeKind.WideStringType;
 
         /// <summary>
+        ///     test if the type kind is a string type
+        /// </summary>
+        /// <param name="kind">kind</param>
+        /// <returns><c>true</c> if the type is a string type</returns>
+        public static bool IsUnicodeString(this CommonTypeKind kind)
+            => kind == CommonTypeKind.UnicodeStringType ||
+               kind == CommonTypeKind.WideStringType;
+
+
+        /// <summary>
         ///     test if the type kind is textual
         /// </summary>
         /// <param name="kind">type kind</param>
         /// <returns><c>true</c> if the type kind is a char or string type kind</returns>
         public static bool IsTextual(this CommonTypeKind kind)
             => kind.IsChar() || kind.IsString();
+
+        /// <summary>
+        ///     test if the type kind is unicodetext
+        /// </summary>
+        /// <param name="kind"></param>
+        /// <returns></returns>
+        public static bool IsUnicodeText(this CommonTypeKind kind)
+            => kind.IsUnicodeChar() || kind.IsUnicodeString();
 
         /// <summary>
         ///     test if the type kind is an ordinal type

@@ -49,6 +49,16 @@ namespace PasPasPasTests.Types {
             AssertExprValue("Chr(-3)", GetWideCharValue((char)(ushort.MaxValue - 3 + 1)));
         }
 
+        [TestCase]
+        public void TestConcat() {
+            AssertExprValue("Concat('a')", GetWideCharValue('a'));
+            AssertExprValue("Concat('a', 'b')", GetUnicodeStringValue("ab"));
+            AssertExprValue("Concat('a', '')", GetUnicodeStringValue("a"));
+            AssertExprValue("Concat('', 'b')", GetUnicodeStringValue("b"));
+            AssertExprValue("Concat('', '')", GetUnicodeStringValue(""));
+            AssertExprValue("Concat('a', 'b', 'c')", GetUnicodeStringValue("abc"));
+        }
+
 
         [TestCase]
         public void TestBooleanOperations() {

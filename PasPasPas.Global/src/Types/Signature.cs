@@ -17,6 +17,18 @@ namespace PasPasPas.Globals.Types {
             => data.Length;
 
         /// <summary>
+        ///     test if all input parameters are constant values
+        /// </summary>
+        public bool IsConstant {
+            get {
+                for (var i = 0; i < data.Length; i++)
+                    if (data[i] == null || (!data[i].IsConstant))
+                        return false;
+                return true;
+            }
+        }
+
+        /// <summary>
         ///     create a new unary signature
         /// </summary>
         /// <param name="value"></param>

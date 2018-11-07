@@ -100,6 +100,7 @@ namespace PasPasPas.Typings.Common {
         private void RegisterCommonFunctions() {
             systemUnit.AddGlobal(new Abs());
             systemUnit.AddGlobal(new Chr());
+            systemUnit.AddGlobal(new Concat());
             systemUnit.AddGlobal(new High(this));
         }
 
