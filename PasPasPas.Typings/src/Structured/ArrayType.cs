@@ -61,5 +61,14 @@ namespace PasPasPas.Typings.Structured {
 
             return base.CanBeAssignedFrom(otherType);
         }
+
+        public override string ToString() {
+            var result = string.Empty;
+
+            foreach (var index in IndexTypes) {
+                result += $"[{index}] ";
+            }
+            return $"array {result}of {BaseType}".Trim();
+        }
     }
 }

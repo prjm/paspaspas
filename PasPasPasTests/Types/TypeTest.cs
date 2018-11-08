@@ -25,7 +25,16 @@ namespace PasPasPasTests.Types {
         protected void AssertExprTypeByVar(string commonType, string expression, int typeId, bool resolveSubrange = false, string decls = "") {
             var file = "SimpleExpr";
             var program = $"program {file};{decls} var a,b: {commonType}; begin WriteLn({expression}); end. ";
+            AssertExprType(file, program, typeId, resolveSubrange, null);
+        }
 
+        protected void AssertExprTypeByConst(string expression, int typeId, bool resolveSubrange = false, string typeName = "", string decls = "") {
+            var file = "SimpleExpr";
+            var program = $"program {file};{decls} const a = {expression}; begin WriteLn(a); end. ";
+            AssertExprType(file, program, typeId, resolveSubrange, typeName);
+        }
+
+        protected void AssertExprType(string file, string program, int typeId, bool resolveSubrange, string typeName) {
             SymbolReferencePart searchfunction(object x)
                 => (x is SymbolReferencePart srp) && srp.Kind == SymbolReferencePartKind.CallParameters ? x as SymbolReferencePart : null;
             ;
@@ -36,17 +45,25 @@ namespace PasPasPasTests.Types {
 
             Assert.IsNotNull(firstParam);
             Assert.IsNotNull(firstParam.TypeInfo);
+
             var foundTypeId = default(int);
+            var foundTypeName = "";
 
             if (resolveSubrange && env.TypeRegistry.GetTypeByIdOrUndefinedType(firstParam.TypeInfo.TypeId) is PasPasPas.Typings.Simple.SubrangeType sr) {
                 foundTypeId = sr.BaseType.TypeId;
+                var type = env.TypeRegistry.GetTypeByIdOrUndefinedType(foundTypeId);
+                foundTypeName = type.ToString();
             }
             else {
                 foundTypeId = firstParam.TypeInfo.TypeId;
+                var type = env.TypeRegistry.GetTypeByIdOrUndefinedType(foundTypeId);
+                foundTypeName = type.ToString();
             }
 
-            Assert.AreEqual(typeId, foundTypeId);
-
+            if (!string.IsNullOrEmpty(typeName))
+                Assert.AreEqual(typeName, foundTypeName, StringComparer.OrdinalIgnoreCase);
+            else
+                Assert.AreEqual(typeId, foundTypeId);
         }
 
 

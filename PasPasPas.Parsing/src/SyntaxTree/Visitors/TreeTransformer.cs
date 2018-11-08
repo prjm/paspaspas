@@ -512,7 +512,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #region RecordConstantExpression
 
         /// <summary>
-        ///     start visiting a constant expresion
+        ///     start visiting a constant expression
         /// </summary>
         /// <param name="constExpression"></param>
         public void StartVisit(RecordConstantExpressionSymbol constExpression) {

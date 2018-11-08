@@ -456,5 +456,17 @@ namespace PasPasPas.Runtime.Values.IntValues {
             else
                 return Invalid;
         }
+
+        /// <summary>
+        ///     <c>hi</c> function
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public ITypeReference Hi(ITypeReference value) {
+            if (value is IntegerValueBase integerValue)
+                return IntegerValueBase.HiValue(integerValue);
+            else
+                return Invalid;
+        }
     }
 }

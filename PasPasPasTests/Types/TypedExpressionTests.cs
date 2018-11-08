@@ -598,5 +598,7 @@ namespace PasPasPasTests.Types {
             AssertExprTypeByVar("AnsiString", "a + b", KnownTypeIds.AnsiStringType);
         }
 
+        [TestCase]
+        public void TestConstantArrayTypes() => AssertExprTypeByConst("(1,2)", KnownTypeIds.UnspecifiedType, false, "array of int8");
     }
 }

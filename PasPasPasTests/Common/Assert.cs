@@ -1,7 +1,7 @@
-﻿using A = Xunit.Assert;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using SharpFloat.FloatingPoint;
+using A = Xunit.Assert;
 
 namespace PasPasPasTests.Common {
 
@@ -9,6 +9,9 @@ namespace PasPasPasTests.Common {
 
         public static void AreEqual(object expected, object actual)
             => A.Equal(expected, actual);
+
+        public static void AreEqual(string expected, string actual, StringComparer comp)
+            => A.Equal<string>(expected, actual, comp);
 
         public static void AreEqual(in ExtF80 expected, in ExtF80 actual)
             => A.Equal(expected, actual);

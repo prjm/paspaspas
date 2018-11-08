@@ -39,7 +39,14 @@
         ITypeReference Modulo(ITypeReference dividend, ITypeReference divisor);
 
         /// <summary>
-        ///     <c>chr</c> function
+        ///     <c>hi</c> function: return the upper byte from a 16 bit value
+        /// </summary>
+        /// <param name="typeReference"></param>
+        /// <returns></returns>
+        ITypeReference Hi(ITypeReference typeReference);
+
+        /// <summary>
+        ///     <c>chr</c> function: return a character for a given integer value
         /// </summary>
         /// <param name="typeReference"></param>
         /// <returns></returns>

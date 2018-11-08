@@ -50,6 +50,14 @@ namespace PasPasPasTests.Types {
         }
 
         [TestCase]
+        public void TestHi() {
+            AssertExprValue("Hi($FF)", GetIntegerValue(0x00));
+            AssertExprValue("Hi($FFFF)", GetIntegerValue(0xff));
+            AssertExprValue("Hi($FFFFFF)", GetIntegerValue(0xff));
+        }
+
+
+        [TestCase]
         public void TestConcat() {
             AssertExprValue("Concat('a')", GetWideCharValue('a'));
             AssertExprValue("Concat('a', 'b')", GetUnicodeStringValue("ab"));
