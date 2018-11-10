@@ -5,6 +5,7 @@ using PasPasPas.Runtime.Values.CharValues;
 using PasPasPas.Runtime.Values.FloatValues;
 using PasPasPas.Runtime.Values.IntValues;
 using PasPasPas.Runtime.Values.StringValues;
+using PasPasPas.Runtime.Values.Structured;
 using PasPasPas.Typings.Common;
 using PasPasPas.Typings.Simple;
 
@@ -58,6 +59,12 @@ namespace PasPasPas.Runtime.Values {
         ///     open type operations
         /// </summary>
         public ITypeOperations Types { get; }
+
+        /// <summary>
+        ///     structured type operations
+        /// </summary>
+        public IStructuredTypeOperations Structured { get; }
+            = new StructuredTypeOperations();
 
         /// <summary>
         ///     cast values

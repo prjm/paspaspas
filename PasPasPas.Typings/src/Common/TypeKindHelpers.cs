@@ -73,6 +73,15 @@ namespace PasPasPas.Typings.Common {
                 kind == CommonTypeKind.WideStringType;
 
         /// <summary>
+        ///     test if the type kind is a ANSI string type
+        /// </summary>
+        /// <param name="kind">kind</param>
+        /// <returns><c>true</c> if the type is a string type</returns>
+        public static bool IsAnsiString(this CommonTypeKind kind)
+            => kind == CommonTypeKind.ShortStringType ||
+                kind == CommonTypeKind.LongStringType;
+
+        /// <summary>
         ///     test if the type kind is a string type
         /// </summary>
         /// <param name="kind">kind</param>

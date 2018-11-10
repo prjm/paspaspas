@@ -599,6 +599,10 @@ namespace PasPasPasTests.Types {
         }
 
         [TestCase]
-        public void TestConstantArrayTypes() => AssertExprTypeByConst("(1,2)", KnownTypeIds.UnspecifiedType, false, "array of int8");
+        public void TestConstantArrayTypes() {
+            AssertExprTypeByConst("(1,2)", KnownTypeIds.UnspecifiedType, false, "array of int8");
+            AssertExprTypeByConst("('a','b')", KnownTypeIds.UnspecifiedType, false, "array of WideChar");
+            AssertExprTypeByConst("('aa','b')", KnownTypeIds.UnspecifiedType, false, "array of UnicodeString");
+        }
     }
 }

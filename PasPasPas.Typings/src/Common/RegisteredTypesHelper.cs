@@ -55,6 +55,54 @@ namespace PasPasPas.Typings.Common {
         }
 
         /// <summary>
+        ///     get the smallest text type of two char types
+        /// </summary>
+        /// <param name="registry">type registry</param>
+        /// <param name="typeId1">first type</param>
+        /// <param name="typeId2">second type</param>
+        /// <returns></returns>
+        public static int GetSmallestTextTypeOrNext(this ITypeRegistry registry, int typeId1, int typeId2) {
+            if (KnownTypeIds.ErrorType.In(typeId1, typeId2))
+                return KnownTypeIds.ErrorType;
+
+            var leftType = registry.GetTypeByIdOrUndefinedType(typeId1);
+            var rightType = registry.GetTypeByIdOrUndefinedType(typeId2);
+
+            if (leftType.TypeKind == CommonTypeKind.SubrangeType)
+                leftType = registry.GetTypeByIdOrUndefinedType(registry.GetBaseTypeOfSubrangeType(leftType.TypeId));
+
+            if (rightType.TypeKind == CommonTypeKind.SubrangeType)
+                rightType = registry.GetTypeByIdOrUndefinedType(registry.GetBaseTypeOfSubrangeType(rightType.TypeId));
+
+            if (!leftType.TypeKind.IsTextual())
+                return KnownTypeIds.ErrorType;
+
+            if (!rightType.TypeKind.IsTextual())
+                return KnownTypeIds.ErrorType;
+
+            if (leftType.TypeKind.IsChar() && rightType.TypeKind.IsChar())
+                return GetSmallestCharTypeOrNext(registry, leftType.TypeId, rightType.TypeId);
+
+            if (leftType.TypeKind == CommonTypeKind.UnicodeStringType)
+                return leftType.TypeId;
+
+            if (rightType.TypeKind == CommonTypeKind.UnicodeStringType)
+                return rightType.TypeId;
+
+            if (leftType.TypeKind.IsAnsiString() && rightType.TypeKind.IsAnsiString()) {
+                return KnownTypeIds.ErrorType;
+            }
+
+            if (leftType.TypeKind.IsString())
+                return leftType.TypeId;
+
+            if (rightType.TypeKind.IsString())
+                return rightType.TypeId;
+
+            return KnownTypeIds.UnicodeStringType;
+        }
+
+        /// <summary>
         ///     get the smallest possible boolean type for two types
         /// </summary>
         /// <param name="registry">type registry</param>

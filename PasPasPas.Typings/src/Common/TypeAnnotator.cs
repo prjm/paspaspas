@@ -759,11 +759,13 @@ namespace PasPasPas.Typings.Common {
                 }
 
                 if (baseType == null)
-                    baseType = part.TypeInfo;
+                    baseType = GetTypeByIdOrUndefinedType(part.TypeInfo.TypeId);
                 else if (baseType.TypeKind.IsIntegral() && part.TypeInfo.TypeKind.IsIntegral())
                     baseType = GetTypeByIdOrUndefinedType(GetSmallestIntegralTypeOrNext(baseType.TypeId, part.TypeInfo.TypeId));
+                else if (baseType.TypeKind.IsTextual() && part.TypeInfo.TypeKind.IsTextual())
+                    baseType = GetTypeByIdOrUndefinedType(GetSmallestTextTypeOrNext(baseType.TypeId, part.TypeInfo.TypeId));
                 else if (baseType.TypeKind.IsOrdinal() && baseType.TypeId == part.TypeInfo.TypeId)
-                    baseType = part.TypeInfo;
+                    baseType = GetTypeByIdOrUndefinedType(part.TypeInfo.TypeId);
                 else {
                     baseType = GetErrorTypeReference(part);
                     break;
@@ -772,7 +774,17 @@ namespace PasPasPas.Typings.Common {
                 isConstant = isConstant && part.TypeInfo.IsConstant;
             }
 
-            element.TypeInfo = GetTypeByIdOrUndefinedType(RegisterUserDefinedType(new ArrayType(typeId) { BaseTypeId = baseType.TypeId }).TypeId);
+            if (isConstant) {
+                var registeredType = RegisterUserDefinedType(new ArrayType(typeId) { BaseTypeId = baseType.TypeId }).TypeId;
+                element.TypeInfo = environment.Runtime.Structured.CreateArrayValue(registeredType, baseType.TypeId);
+            }
+            else {
+                element.TypeInfo = GetTypeByIdOrUndefinedType(RegisterUserDefinedType(new ArrayType(typeId) { BaseTypeId = baseType.TypeId }).TypeId);
+            }
         }
+
+        private int GetSmallestTextTypeOrNext(int leftId, int rightId)
+            => environment.TypeRegistry.GetSmallestTextTypeOrNext(leftId, rightId);
+
     }
 }

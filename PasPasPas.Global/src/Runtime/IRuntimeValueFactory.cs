@@ -31,6 +31,11 @@
         ICharOperations Chars { get; }
 
         /// <summary>
+        ///     structured types
+        /// </summary>
+        IStructuredTypeOperations Structured { get; }
+
+        /// <summary>
         ///     type operations
         /// </summary>
         ITypeOperations Types { get; }

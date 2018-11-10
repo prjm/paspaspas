@@ -84,5 +84,6 @@ namespace PasPasPas.Globals.Types {
         /// <param name="targetType"></param>
         /// <returns></returns>
         int Cast(int sourceType, int targetType);
+
     }
 }

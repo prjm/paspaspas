@@ -147,5 +147,11 @@
         ///     hidden / internal type
         /// </summary>
         HiddenType,
+
+        /// <summary>
+        ///     constant array type
+        /// </summary>
+        ConstantArrayType,
+
     }
 }
