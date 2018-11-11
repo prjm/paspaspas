@@ -9,6 +9,10 @@ namespace PasPasPas.Typings.Simple {
     /// </summary>
     public class WideCharType : OrdinalTypeBase, ICharType {
 
+        private readonly object lockObject = new object();
+        private ITypeReference highestElement;
+        private ITypeReference lowestElement;
+
         /// <summary>
         ///     wide char type
         /// </summary>
@@ -23,10 +27,30 @@ namespace PasPasPas.Typings.Simple {
             => CommonTypeKind.WideCharType;
 
         /// <summary>
-        ///     highest element
+        ///     highest element: <c>0xffff</c>
         /// </summary>
-        public ulong HighestElement
-            => ushort.MaxValue;
+        public ITypeReference HighestElement {
+            get {
+                lock (lockObject) {
+                    if (highestElement == default)
+                        highestElement = TypeRegistry.Runtime.Integers.ToIntegerValue(0xffff);
+                    return highestElement;
+                }
+            }
+        }
+
+        /// <summary>
+        ///     lowest element: <c>0</c>
+        /// </summary>
+        public ITypeReference LowestElement {
+            get {
+                lock (lockObject) {
+                    if (lowestElement == default)
+                        lowestElement = TypeRegistry.Runtime.Integers.ToIntegerValue(0);
+                    return lowestElement;
+                }
+            }
+        }
 
         /// <summary>
         ///     bit size

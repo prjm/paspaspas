@@ -10,7 +10,7 @@ namespace PasPasPas.Typings.Simple {
     /// <summary>
     ///     enumerated type
     /// </summary>
-    public class EnumeratedType : OrdinalTypeBase {
+    public class EnumeratedType : OrdinalTypeBase, IOrdinalType {
 
         /// <summary>
         ///     list of possible values
@@ -58,6 +58,15 @@ namespace PasPasPas.Typings.Simple {
             }
         }
 
+        public ITypeReference HighestElement 
+            throw new System.NotImplementedException();
+
+        public ITypeReference LowestElement
+            => throw new System.NotImplementedException();
+
+        public uint BitSize
+            => throw new System.NotImplementedException();
+
         /// <summary>
         ///     define a new enumeration value
         /// </summary>
@@ -102,8 +111,6 @@ namespace PasPasPas.Typings.Simple {
         ///     readable type name
         /// </summary>
         /// <returns></returns>
-        public override string ToString() {
-            return $"Enum {TypeRegistry.GetTypeByIdOrUndefinedType(CommonTypeId)}";
-        }
+        public override string ToString() => $"Enum {TypeRegistry.GetTypeByIdOrUndefinedType(CommonTypeId)}";
     }
 }

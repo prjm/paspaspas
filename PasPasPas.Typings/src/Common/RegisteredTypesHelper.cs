@@ -328,13 +328,16 @@ namespace PasPasPas.Typings.Common {
                     else if (isEnum && lowerBound.TypeId == upperBound.TypeId)
                         baseType = lowerBound.TypeId;
 
-                    var typeDef = types.RegisterType(new Simple.SubrangeType(types.RequireUserTypeId(), baseType));
+                    if (baseType == KnownTypeIds.ErrorType)
+                        return baseType;
+
+                    var typeDef = types.RegisterType(new Simple.SubrangeType(types.RequireUserTypeId(), baseType, lowerBound, upperBound));
                     return typeDef.TypeId;
                 }
 
                 if (lowerBound.TypeId == upperBound.TypeId) {
                     var baseType = types.GetTypeByIdOrUndefinedType(upperBound.TypeId);
-                    var typeDef = types.RegisterType(new Simple.SubrangeType(types.RequireUserTypeId(), baseType.TypeId));
+                    var typeDef = types.RegisterType(new Simple.SubrangeType(types.RequireUserTypeId(), baseType.TypeId, lowerBound, upperBound));
                     return typeDef.TypeId;
                 }
             }

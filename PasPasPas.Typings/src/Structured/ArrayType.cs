@@ -62,6 +62,10 @@ namespace PasPasPas.Typings.Structured {
             return base.CanBeAssignedFrom(otherType);
         }
 
+        /// <summary>
+        ///     convert this type to string
+        /// </summary>
+        /// <returns></returns>
         public override string ToString() {
             var result = string.Empty;
 

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Typings.Common;
 using PasPasPas.Typings.Simple;
@@ -11,52 +10,27 @@ namespace PasPasPas.Typings.Routines {
     /// <summary>
     ///     type specification for the <code>High</code> routine
     /// </summary>
-    public class High : IRoutine {
-
-        /// <summary>
-        ///     create a new type specification for the routine <c>high</c>
-        /// </summary>
-        /// <param name="registry"></param>
-        public High(ITypeRegistry registry) => TypeRegistry = registry;
+    public class High : IntrinsicRoutine {
 
         /// <summary>
         ///     routine name
         /// </summary>
-        public string Name
+        public override string Name
             => "High";
-
-        /// <summary>
-        ///     type registry
-        /// </summary>
-        public ITypeRegistry TypeRegistry { get; }
-
-        /// <summary>
-        ///     integer parser
-        /// </summary>
-        public IRuntimeValueFactory ConstOps { get; }
-
-        /// <summary>
-        ///     type id
-        /// </summary>
-        public int TypeId
-            => 0;
 
         /// <summary>
         ///     try to resolve a call
         /// </summary>
         /// <param name="callableRoutines"></param>
         /// <param name="signature"></param>
-        public void ResolveCall(IList<ParameterGroup> callableRoutines, Signature signature) {
+        public override void ResolveCall(IList<ParameterGroup> callableRoutines, Signature signature) {
             if (signature.Length != 1)
-                return;
-
-            if (ConstOps == null)
                 return;
 
             var param = TypeRegistry.GetTypeByIdOrUndefinedType(signature[0].TypeId);
             if (param.TypeKind.IsOrdinal()) {
                 var ordinalType = param as IOrdinalType;
-                var highValue = ConstOps.Integers.ToScaledIntegerValue(ordinalType.HighestElement);
+                var highValue = ordinalType.HighestElement;
                 var typeId = LiteralValuesHelper.GetTypeFor(highValue);
                 var result = new ParameterGroup();
                 result.AddParameter("AValue").SymbolType = signature[0];
@@ -64,5 +38,6 @@ namespace PasPasPas.Typings.Routines {
                 callableRoutines.Add(result);
             }
         }
+
     }
 }

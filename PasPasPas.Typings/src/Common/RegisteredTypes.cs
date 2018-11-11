@@ -102,7 +102,7 @@ namespace PasPasPas.Typings.Common {
             systemUnit.AddGlobal(new Chr());
             systemUnit.AddGlobal(new Concat());
             systemUnit.AddGlobal(new Hi());
-            systemUnit.AddGlobal(new High(this));
+            systemUnit.AddGlobal(new High());
         }
 
         /// <summary>
@@ -208,7 +208,7 @@ namespace PasPasPas.Typings.Common {
             RegisterSystemType(new RealType(KnownTypeIds.Real48Type), "Real48");
             RegisterSystemType(new RealType(KnownTypeIds.SingleType), "Single");
             RegisterSystemType(new RealType(KnownTypeIds.DoubleType), "Double");
-            RegisterSystemType(new RealType(KnownTypeIds.Extended), "Extended");
+            RegisterSystemType(new ExtendedType(KnownTypeIds.Extended), "Extended");
             RegisterSystemType(new RealType(KnownTypeIds.Comp), "Comp");
             RegisterSystemType(new RealType(KnownTypeIds.Currency), "Currency");
         }

@@ -490,20 +490,26 @@ namespace PasPasPas.Typings.Common {
         /// <param name="element"></param>
         public void EndVisit(Parsing.SyntaxTree.Abstract.SubrangeType element) {
 
-            var left = element.RangeStart?.TypeInfo;
-            var right = element.RangeEnd?.TypeInfo;
+            var leftTypeRef = element.RangeStart?.TypeInfo;
+            var rightTypeRef = element.RangeEnd?.TypeInfo;
+            var left = GetTypeByIdOrUndefinedType(leftTypeRef?.TypeId ?? KnownTypeIds.ErrorType) as IOrdinalType;
+            var right = GetTypeByIdOrUndefinedType(rightTypeRef?.TypeId ?? KnownTypeIds.ErrorType) as IOrdinalType;
 
             if (element.RangeStart == null && element.RangeEnd == null) {
                 element.TypeInfo = GetErrorTypeReference(element);
                 return;
             }
 
-            if (element.RangeEnd == null) {
-                element.TypeInfo = GetTypeByIdOrUndefinedType(RegisterUserDefinedType(new Simple.SubrangeType(RequireUserTypeId(), element.RangeStart.TypeInfo.TypeId)).TypeId);
-                return;
-            }
+            var typeDef = default(ITypeReference);
 
-            element.TypeInfo = GetTypeByIdOrUndefinedType(TypeRegistry.GetTypeForSubrangeType(left, right));
+            if (left == default)
+                typeDef = GetErrorTypeReference(element);
+            else if (element.RangeEnd == null)
+                typeDef = GetTypeByIdOrUndefinedType(RegisterUserDefinedType(new Simple.SubrangeType(RequireUserTypeId(), left.TypeId, left.LowestElement, leftTypeRef)).TypeId);
+            else
+                typeDef = GetTypeByIdOrUndefinedType(TypeRegistry.GetTypeForSubrangeType(leftTypeRef, rightTypeRef));
+
+            element.TypeInfo = typeDef;
         }
 
         /// <summary>
@@ -748,8 +754,10 @@ namespace PasPasPas.Typings.Common {
         /// <param name="element"></param>
         public void EndVisit(ArrayConstant element) {
             var typeId = RequireUserTypeId();
+            var indexTypeId = RequireUserTypeId();
             var isConstant = true;
             var baseType = default(ITypeReference);
+            var count = 0;
 
             foreach (var part in element.Items) {
 
@@ -766,13 +774,23 @@ namespace PasPasPas.Typings.Common {
                     baseType = GetTypeByIdOrUndefinedType(GetSmallestTextTypeOrNext(baseType.TypeId, part.TypeInfo.TypeId));
                 else if (baseType.TypeKind.IsOrdinal() && baseType.TypeId == part.TypeInfo.TypeId)
                     baseType = GetTypeByIdOrUndefinedType(part.TypeInfo.TypeId);
+                else if (baseType.TypeKind == CommonTypeKind.RealType && part.TypeInfo.TypeKind == CommonTypeKind.RealType)
+                    baseType = GetTypeByIdOrUndefinedType(KnownTypeIds.Extended);
                 else {
                     baseType = GetErrorTypeReference(part);
                     break;
                 }
 
+                count++;
                 isConstant = isConstant && part.TypeInfo.IsConstant;
             }
+
+            if (baseType == null)
+                baseType = GetErrorTypeReference(element);
+
+            var ints = TypeRegistry.Runtime.Integers;
+            var indexTypeDef = new Simple.SubrangeType(indexTypeId, KnownTypeIds.IntegerType, ints.Zero, ints.ToScaledIntegerValue(count));
+            var indexType = RegisterUserDefinedType(indexTypeDef);
 
             if (isConstant) {
                 var registeredType = RegisterUserDefinedType(new ArrayType(typeId) { BaseTypeId = baseType.TypeId }).TypeId;

@@ -9,12 +9,15 @@ namespace PasPasPas.Typings.Simple {
     /// </summary>
     public class AnsiCharType : OrdinalTypeBase, ICharType {
 
+        private readonly object lockObject = new object();
+        private ITypeReference highestElement;
+        private ITypeReference lowestElement;
+
         /// <summary>
         ///     create a new char type
         /// </summary>
         /// <param name="withId">type id</param>
-        public AnsiCharType(int withId) : base(withId) {
-        }
+        public AnsiCharType(int withId) : base(withId) { }
 
         /// <summary>
         ///     type kind: ANSI char type
@@ -23,10 +26,30 @@ namespace PasPasPas.Typings.Simple {
             => CommonTypeKind.AnsiCharType;
 
         /// <summary>
-        ///     highest element
+        ///     highest element: <c>0xff</c>
         /// </summary>
-        public ulong HighestElement
-            => byte.MaxValue;
+        public ITypeReference HighestElement {
+            get {
+                lock (lockObject) {
+                    if (highestElement == default)
+                        highestElement = TypeRegistry.Runtime.Integers.ToIntegerValue(0xff);
+                    return highestElement;
+                }
+            }
+        }
+
+        /// <summary>
+        ///     lowest element: <c>0</c>
+        /// </summary>
+        public ITypeReference LowestElement {
+            get {
+                lock (lockObject) {
+                    if (lowestElement == default)
+                        lowestElement = TypeRegistry.Runtime.Integers.ToIntegerValue(0);
+                    return lowestElement;
+                }
+            }
+        }
 
         /// <summary>
         ///     bit size

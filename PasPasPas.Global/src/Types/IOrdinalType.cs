@@ -1,4 +1,6 @@
-﻿namespace PasPasPas.Globals.Types {
+﻿using PasPasPas.Globals.Runtime;
+
+namespace PasPasPas.Globals.Types {
 
     /// <summary>
     ///     interface for ordinal types
@@ -8,6 +10,12 @@
         /// <summary>
         ///     highest element
         /// </summary>
-        ulong HighestElement { get; }
+        ITypeReference HighestElement { get; }
+
+        /// <summary>
+        ///     lowest element
+        /// </summary>
+        ITypeReference LowestElement { get; }
+
     }
 }

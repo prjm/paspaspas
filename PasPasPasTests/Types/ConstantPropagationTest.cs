@@ -56,6 +56,11 @@ namespace PasPasPasTests.Types {
             AssertExprValue("Hi($FFFFFF)", GetIntegerValue(0xff));
         }
 
+        [TestCase]
+        public void TestHigh() {
+            AssertExprValue("High(ta)", GetIntegerValue(2), "type ta = 1..2;");
+            AssertExprValue("High(ta)", GetIntegerValue(-2), "type ta = -4..-2;");
+        }
 
         [TestCase]
         public void TestConcat() {

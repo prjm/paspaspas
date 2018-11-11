@@ -1,4 +1,5 @@
-﻿using PasPasPas.Globals.Runtime;
+﻿using System.Diagnostics;
+using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Typings.Common;
@@ -8,7 +9,7 @@ namespace PasPasPas.Typings.Simple {
     /// <summary>
     ///     subrange type
     /// </summary>
-    public class SubrangeType : TypeBase {
+    public class SubrangeType : TypeBase, IOrdinalType {
 
         private readonly int baseTypeId;
 
@@ -17,8 +18,13 @@ namespace PasPasPas.Typings.Simple {
         /// </summary>
         /// <param name="withId">type id</param>
         /// <param name="baseType">base type</param>
-        public SubrangeType(int withId, int baseType) : base(withId)
-            => baseTypeId = baseType;
+        /// <param name="low"></param>
+        /// <param name="high"></param>
+        public SubrangeType(int withId, int baseType, ITypeReference low, ITypeReference high) : base(withId) {
+            baseTypeId = baseType;
+            LowestElement = low;
+            HighestElement = high;
+        }
 
         /// <summary>
         ///     get the type kind
@@ -48,9 +54,29 @@ namespace PasPasPas.Typings.Simple {
         /// <summary>
         ///     base type
         /// </summary>
-        public ITypeDefinition BaseType
-            => TypeRegistry.GetTypeByIdOrUndefinedType(baseTypeId);
+        public IOrdinalType BaseType {
+            get {
+                var result = TypeRegistry.GetTypeByIdOrUndefinedType(baseTypeId) as IOrdinalType;
+                Debug.Assert(result != default);
+                return result;
+            }
+        }
 
+        /// <summary>
+        ///     highest element
+        /// </summary>
+        public ITypeReference HighestElement { get; }
+
+        /// <summary>
+        ///     lowest element
+        /// </summary>
+        public ITypeReference LowestElement { get; }
+
+        /// <summary>
+        ///     bit size
+        /// </summary>
+        public uint BitSize
+            => BaseType.BitSize;
 
         /// <summary>
         ///     format this subrange type

@@ -9,6 +9,10 @@ namespace PasPasPas.Typings.Simple {
     /// </summary>
     public class Integral64BitType : OrdinalTypeBase, IIntegralType {
 
+        private readonly object lockObject = new object();
+        private ITypeReference highestElement;
+        private ITypeReference lowestElement;
+
         /// <summary>
         ///     create a new int64 type
         /// </summary>
@@ -35,13 +39,36 @@ namespace PasPasPas.Typings.Simple {
             => 64;
 
         /// <summary>
-        ///     get the highest element of this ordinal type
+        ///     highest element: <c>0xff</c>
         /// </summary>
-        public ulong HighestElement {
+        public ITypeReference HighestElement {
             get {
-                if (IsSigned)
-                    return 9223372036854775807;
-                return 18446744073709551615;
+                lock (lockObject) {
+                    if (highestElement == default) {
+                        if (IsSigned)
+                            highestElement = TypeRegistry.Runtime.Integers.ToIntegerValue(9223372036854775807);
+                        else
+                            highestElement = TypeRegistry.Runtime.Integers.ToIntegerValue(18446744073709551615);
+                    }
+                    return highestElement;
+                }
+            }
+        }
+
+        /// <summary>
+        ///     lowest element: <c>0</c>
+        /// </summary>
+        public ITypeReference LowestElement {
+            get {
+                lock (lockObject) {
+                    if (lowestElement == default) {
+                        if (IsSigned)
+                            lowestElement = TypeRegistry.Runtime.Integers.ToIntegerValue(-9223372036854775808);
+                        else
+                            lowestElement = TypeRegistry.Runtime.Integers.Zero;
+                    }
+                    return lowestElement;
+                }
             }
         }
 

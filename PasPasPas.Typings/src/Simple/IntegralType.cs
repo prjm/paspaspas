@@ -1,4 +1,5 @@
-﻿using PasPasPas.Globals.Runtime;
+﻿using System.Diagnostics;
+using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Typings.Common;
 
@@ -11,6 +12,9 @@ namespace PasPasPas.Typings.Simple {
 
         private readonly bool signed;
         private readonly uint bitSize;
+        private readonly object lockObject = new object();
+        private ITypeReference highestElement;
+        private ITypeReference lowestElement;
 
         /// <summary>
         ///     create a new type
@@ -44,23 +48,73 @@ namespace PasPasPas.Typings.Simple {
         /// <summary>
         ///     get the highest element
         /// </summary>
-        public ulong HighestElement {
+        private ITypeReference GenerateHighestElement() {
+            var ints = TypeRegistry.Runtime.Integers;
+
+            if (signed) {
+                if (BitSize == 8)
+                    return ints.ToIntegerValue(127);
+                else if (BitSize == 16)
+                    return ints.ToIntegerValue(32767);
+                else if (BitSize == 32)
+                    return ints.ToIntegerValue(2147483647);
+            }
+
+            if (BitSize == 8)
+                return ints.ToIntegerValue(255);
+            else if (BitSize == 16)
+                return ints.ToIntegerValue(65535);
+            else if (BitSize == 32)
+                return ints.ToIntegerValue(4294967295);
+
+            Debug.Assert(false);
+            return null;
+        }
+
+        /// <summary>
+        ///     get the highest element
+        /// </summary>
+        private ITypeReference GenerateLowestElement() {
+            var ints = TypeRegistry.Runtime.Integers;
+
+            if (!signed)
+                return ints.Zero;
+
+            if (BitSize == 8)
+                return ints.ToIntegerValue(-128);
+
+            else if (BitSize == 16)
+                return ints.ToIntegerValue(-32768);
+
+            else if (BitSize == 32)
+                return ints.ToIntegerValue(-2147483648);
+
+            Debug.Assert(false);
+            return null;
+        }
+
+        /// <summary>
+        ///     highest element
+        /// </summary>
+        public ITypeReference HighestElement {
             get {
-                if (signed) {
-                    if (BitSize == 8)
-                        return 127;
-                    else if (BitSize == 16)
-                        return 32767;
-
-                    return 2147483647;
+                lock (lockObject) {
+                    if (highestElement == default)
+                        highestElement = GenerateHighestElement();
+                    return highestElement;
                 }
-                else {
-                    if (BitSize == 8)
-                        return 255;
-                    else if (BitSize == 16)
-                        return 65535;
+            }
+        }
 
-                    return 4294967295;
+        /// <summary>
+        ///     lowest element
+        /// </summary>
+        public ITypeReference LowestElement {
+            get {
+                lock (lockObject) {
+                    if (lowestElement == default)
+                        lowestElement = GenerateLowestElement();
+                    return lowestElement;
                 }
             }
         }

@@ -603,6 +603,8 @@ namespace PasPasPasTests.Types {
             AssertExprTypeByConst("(1,2)", KnownTypeIds.UnspecifiedType, false, "array of int8");
             AssertExprTypeByConst("('a','b')", KnownTypeIds.UnspecifiedType, false, "array of WideChar");
             AssertExprTypeByConst("('aa','b')", KnownTypeIds.UnspecifiedType, false, "array of UnicodeString");
+            AssertExprTypeByConst("(1.0, 1.4)", KnownTypeIds.UnspecifiedType, false, "array of extended");
+            AssertExprTypeByConst("(a, b)", KnownTypeIds.UnspecifiedType, false, "array of enum Int8", "type ta = (a,b);");
         }
     }
 }

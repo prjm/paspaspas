@@ -7,7 +7,7 @@ namespace PasPasPas.Typings.Simple {
     /// <summary>
     ///     boolean type
     /// </summary>
-    public class BooleanType : OrdinalTypeBase, IFixedSizeType {
+    public class BooleanType : OrdinalTypeBase, IOrdinalType {
 
         /// <summary>
         ///     create a new boolean type
@@ -27,6 +27,18 @@ namespace PasPasPas.Typings.Simple {
         ///     bit size
         /// </summary>
         public uint BitSize { get; }
+
+        /// <summary>
+        ///     true value
+        /// </summary>
+        public ITypeReference HighestElement
+            => TypeRegistry.Runtime.Booleans.TrueValue;
+
+        /// <summary>
+        ///     false value
+        /// </summary>
+        public ITypeReference LowestElement
+            => TypeRegistry.Runtime.Booleans.FalseValue;
 
         /// <summary>
         ///     test for assignment type compatibility
