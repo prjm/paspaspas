@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using PasPasPas.Globals.Runtime;
+﻿using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Typings.Common;
 
@@ -67,8 +66,7 @@ namespace PasPasPas.Typings.Simple {
             else if (BitSize == 32)
                 return ints.ToIntegerValue(4294967295);
 
-            Debug.Assert(false);
-            return null;
+            return ints.Invalid;
         }
 
         /// <summary>
@@ -89,8 +87,7 @@ namespace PasPasPas.Typings.Simple {
             else if (BitSize == 32)
                 return ints.ToIntegerValue(-2147483648);
 
-            Debug.Assert(false);
-            return null;
+            return ints.Invalid;
         }
 
         /// <summary>

@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using PasPasPas.Globals.Runtime;
+﻿using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Typings.Common;
@@ -57,7 +56,6 @@ namespace PasPasPas.Typings.Simple {
         public IOrdinalType BaseType {
             get {
                 var result = TypeRegistry.GetTypeByIdOrUndefinedType(baseTypeId) as IOrdinalType;
-                Debug.Assert(result != default);
                 return result;
             }
         }

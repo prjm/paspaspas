@@ -12,6 +12,8 @@ namespace PasPasPas.Typings.Simple {
     /// </summary>
     public class EnumeratedType : OrdinalTypeBase, IOrdinalType {
 
+        private readonly object lockObject = new object();
+
         /// <summary>
         ///     list of possible values
         /// </summary>
@@ -58,14 +60,72 @@ namespace PasPasPas.Typings.Simple {
             }
         }
 
-        public ITypeReference HighestElement 
-            throw new System.NotImplementedException();
+        private ITypeReference highestElement;
+        private ITypeReference lowestElement;
 
-        public ITypeReference LowestElement
-            => throw new System.NotImplementedException();
+        /// <summary>
+        ///     highest element
+        /// </summary>
+        public ITypeReference HighestElement {
+            get {
+                lock (lockObject) {
+                    if (highestElement != default || values.Count < 1)
+                        return default;
 
-        public uint BitSize
-            => throw new System.NotImplementedException();
+                    highestElement = values[0].Value;
+
+                    for (var i = 1; i < values.Count; i++) {
+                        var result = TypeRegistry.Runtime.Integers.GreaterThen(values[i].Value, highestElement);
+                        if (!(result is IBooleanValue boleanResult))
+                            return default;
+
+                        if (boleanResult.AsBoolean)
+                            highestElement = values[i].Value;
+                    }
+
+                    return highestElement;
+                }
+            }
+        }
+
+        /// <summary>
+        ///     lowest element
+        /// </summary>
+        public ITypeReference LowestElement {
+            get {
+                lock (lockObject) {
+                    if (lowestElement != default || values.Count < 1)
+                        return default;
+
+                    lowestElement = values[0].Value;
+
+                    for (var i = 1; i < values.Count; i++) {
+                        var result = TypeRegistry.Runtime.Integers.LessThen(values[i].Value, lowestElement);
+                        if (!(result is IBooleanValue boleanResult))
+                            return default;
+
+                        if (boleanResult.AsBoolean)
+                            lowestElement = values[i].Value;
+                    }
+
+                    return lowestElement;
+                }
+            }
+        }
+
+        /// <summary>
+        ///     bit size
+        /// </summary>
+        public uint BitSize {
+            get {
+                var type = TypeRegistry.GetTypeByIdOrUndefinedType(TypeRegistry.GetSmallestIntegralTypeOrNext(LowestElement.TypeId, HighestElement.TypeId)) as IIntegralType;
+
+                if (type != default)
+                    return type.BitSize;
+                else
+                    return 0;
+            }
+        }
 
         /// <summary>
         ///     define a new enumeration value
