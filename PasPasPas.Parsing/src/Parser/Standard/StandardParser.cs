@@ -4451,6 +4451,26 @@ namespace PasPasPas.Parsing.Parser.Standard {
             return LookAhead(counter, TokenKind.Dot, TokenKind.Circumflex);
         }
 
+        private bool HasGenericTypeIdent() {
+            var level = 1;
+            var counter = 1;
+
+            while (level > 0 && (!Tokenizer.BaseTokenizer.AtEof)) {
+
+                if (LookAhead(level, TokenKind.End, TokenKind.Semicolon))
+                    break;
+
+                if (LookAhead(counter, TokenKind.AngleBracketsOpen))
+                    level++;
+                else if (LookAhead(counter, TokenKind.AngleBracketsClose))
+                    level--;
+
+                counter = counter + 1;
+            }
+
+            return level < 1;
+        }
+
         /// <summary>
         ///     parse a factor
         /// </summary>
@@ -4553,8 +4573,14 @@ namespace PasPasPas.Parsing.Parser.Standard {
             var hasIdentifier = false;
 
             if (MatchIdentifier(TokenKind.String, TokenKind.ShortString, TokenKind.AnsiString, TokenKind.WideString, TokenKind.String) && LookAhead(1, TokenKind.Dot, TokenKind.AngleBracketsOpen)) {
-                name = ParseTypeName(true);
-                hasIdentifier = name != default;
+                var hasDot = LookAhead(1, TokenKind.Dot);
+                var hasBracketsOpen = LookAhead(1, TokenKind.AngleBracketsOpen);
+                var hasBracketsClose = hasBracketsOpen && HasGenericTypeIdent();
+
+                if (hasDot && (hasBracketsOpen && hasBracketsClose)) {
+                    name = ParseTypeName(true);
+                    hasIdentifier = name != default;
+                }
             }
 
             using (var list = GetList<DesignatorItemSymbol>()) {

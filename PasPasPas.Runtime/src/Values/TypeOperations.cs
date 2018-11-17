@@ -33,7 +33,7 @@ namespace PasPasPas.Runtime.Values {
 
 
         private ITypeReference MakeIndeterminedValue(int typeId)
-            => new IndeterminedRuntimeValue(typeId, TypeRegistry.GetTypeKindOf(typeId));
+            => new IndeterminedRuntimeValue(typeId, TypeRegistry.GetTypeKindOf(typeId)) { TypeRegistry = TypeRegistry };
 
         /// <summary>
         ///     create a new type reference value

@@ -381,6 +381,47 @@ namespace PasPasPas.Typings.Common {
                         else
                             baseTypeValue = GetErrorTypeReference(element);
                     }
+
+                    else if (baseTypeValue.TypeKind == CommonTypeKind.Unit) {
+                        var unit = TypeRegistry.GetTypeByIdOrUndefinedType(baseTypeValue.TypeId) as UnitType;
+
+                        if (unit != default && unit.TryToResolve(part.Name.Name, out var reference)) {
+
+                            if (reference.Kind == ReferenceKind.RefToType) {
+                                baseTypeValue = TypeRegistry.Runtime.Types.MakeReference((reference.Symbol as ITypeDefinition).TypeId);
+                            }
+
+                        }
+                    }
+
+                    else if (baseTypeValue.TypeKind == CommonTypeKind.ClassType) {
+                        var cls = TypeRegistry.GetTypeByIdOrUndefinedType(baseTypeValue.TypeId) as StructuredTypeDeclaration;
+
+                        if (cls != default && cls.TryToResolve(part.Name.Name, out var reference)) {
+
+                            if (reference.Kind == ReferenceKind.RefToField || reference.Kind == ReferenceKind.RefToClassField) {
+                                baseTypeValue = TypeRegistry.Runtime.Types.MakeReference((reference.Symbol as Variable).SymbolType.TypeId);
+                            }
+
+
+                        }
+                    }
+
+                    else if (baseTypeValue.TypeKind == CommonTypeKind.ClassReferenceType) {
+
+                        var cls = TypeRegistry.GetTypeByIdOrUndefinedType(baseTypeValue.TypeId) as MetaStructuredTypeDeclaration;
+
+                        if (cls != default && cls.TryToResolve(part.Name.Name, out var reference)) {
+
+                            if (reference.Kind == ReferenceKind.RefToClassField) {
+                                baseTypeValue = TypeRegistry.Runtime.Types.MakeReference((reference.Symbol as Variable).SymbolType.TypeId);
+                            }
+
+                        }
+
+
+                    }
+
                 }
                 else if (part.Kind == SymbolReferencePartKind.CallParameters && part.Name != null) {
                     var callableRoutines = new List<ParameterGroup>();
@@ -477,14 +518,15 @@ namespace PasPasPas.Typings.Common {
                 return;
             }
 
-            var enumRef = typeDef.DefineEnumValue(environment.Runtime, element.SymbolName, false, null);
+            var itemValue = default(ITypeReference);
+            var enumRef = typeDef.DefineEnumValue(environment.Runtime, element.SymbolName, false, itemValue);
 
             if (enumRef == null) {
                 element.TypeInfo = GetErrorTypeReference(element);
                 return;
             }
 
-            element.TypeInfo = GetTypeByReference(typeDef.TypeId);
+            element.TypeInfo = TypeRegistry.Runtime.MakeEnumValue(typeDef.TypeId, enumRef.Value);
             resolver.AddToScope(element.SymbolName, ReferenceKind.RefToEnumMember, enumRef);
         }
 

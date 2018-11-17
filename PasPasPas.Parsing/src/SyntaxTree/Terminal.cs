@@ -2,7 +2,7 @@
 using System.Collections.Immutable;
 using PasPasPas.Parsing.SyntaxTree.Standard;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
-using static PasPasPas.Parsing.Tokenizer.TokenizerWithLookahead;
+using PasPasPas.Parsing.Tokenizer;
 
 namespace PasPasPas.Parsing.SyntaxTree {
 

@@ -485,7 +485,7 @@ namespace PasPasPas.Parsing.Parser {
         ///     token sequence
         /// </summary>
         /// <returns></returns>
-        protected TokenizerWithLookahead.TokenSequence CurrentTokenSequences()
+        protected TokenSequence CurrentTokenSequences()
             => tokenizer.CurrentTokenSequence;
 
         /// <summary>

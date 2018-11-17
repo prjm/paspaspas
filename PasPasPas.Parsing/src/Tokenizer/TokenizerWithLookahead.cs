@@ -37,13 +37,13 @@ namespace PasPasPas.Parsing.Tokenizer {
     /// <summary>
     ///     pool of token sequences
     /// </summary>
-    public class TokenSequences : ObjectPool<TokenizerWithLookahead.TokenSequence> {
+    public class TokenSequences : ObjectPool<TokenSequence> {
 
         /// <summary>
         ///     prepare a token sequence
         /// </summary>
         /// <param name="entry"></param>
-        protected override void Prepare(TokenizerWithLookahead.TokenSequence entry)
+        protected override void Prepare(TokenSequence entry)
             => entry.Clear();
 
     }

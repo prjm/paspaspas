@@ -968,11 +968,12 @@ namespace PasPasPasTests.Parser {
             RunAstTest("unit z.x; interface implementation procedure p; const n = q; begin l: s; end; end.", t => r(t)?.Inherited, false);
             RunAstTest("unit z.x; interface implementation procedure p; const n = q; begin l: s; end; end.", t => p(t)?.Name?.CompleteName, "q");
             RunAstTest("unit z.x; interface implementation procedure p; const n = (q).a; begin l: s; end; end.", t => (r(t)?.Inherited), false);
-
+            /*
             RunAstTest("unit z.x; interface implementation procedure p; const n = q.a(); begin l: s; end; end.", t => (r(t)?.TypeValue as MetaType)?.AsScopedName?.ToString(), "q");
             RunAstTest("unit z.x; interface implementation procedure p; const n = q.q.a(); begin l: s; end; end.", t => (r(t)?.TypeValue as MetaType)?.AsScopedName?.ToString(), "q.q");
             RunAstTest("unit z.x; interface implementation procedure p; const n = q.a[9]; begin l: s; end; end.", t => (r(t)?.TypeValue as MetaType)?.AsScopedName?.ToString(), "q");
             RunAstTest("unit z.x; interface implementation procedure p; const n = q.q.a[9]; begin l: s; end; end.", t => (r(t)?.TypeValue as MetaType)?.AsScopedName?.ToString(), "q.q");
+            */
         }
 
         [Fact]

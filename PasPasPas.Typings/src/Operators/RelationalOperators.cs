@@ -69,8 +69,14 @@ namespace PasPasPas.Typings.Operators {
         protected override ITypeReference EvaluateBinaryOperator(Signature input) {
             var left = input[0];
             var right = input[1];
-            var operations = Runtime.GetRelationalOperators(left, right);
 
+            if (left is IEnumeratedValue leftEnum)
+                left = leftEnum.Value;
+
+            if (right is IEnumeratedValue rightEnum)
+                right = rightEnum.Value;
+
+            var operations = Runtime.GetRelationalOperators(left, right);
             if (operations == null)
                 return GetErrorTypeReference();
 

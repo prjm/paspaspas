@@ -177,5 +177,13 @@ namespace PasPasPas.Runtime.Values {
             return Types.MakeReference(KnownTypeIds.ErrorType);
         }
 
+        /// <summary>
+        ///     create a new enumerated value
+        /// </summary>
+        /// <param name="typeId"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public ITypeReference MakeEnumValue(int typeId, ITypeReference value)
+            => new EnumeratedValue(typeId, value);
     }
 }

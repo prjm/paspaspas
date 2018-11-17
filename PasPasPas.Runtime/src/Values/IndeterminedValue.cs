@@ -1,4 +1,5 @@
 ﻿using PasPasPas.Globals.Runtime;
+using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Runtime.Values {
 
@@ -39,11 +40,17 @@ namespace PasPasPas.Runtime.Values {
             => typeKind;
 
         /// <summary>
+        ///     type registry
+        /// </summary>
+        public ITypeRegistry TypeRegistry { get; internal set; }
+
+        /// <summary>
         ///     short string for this runtime value
         /// </summary>
         /// <returns></returns>
-        public override string ToString()
-            => "RuntimeValue";
-
+        public override string ToString() {
+            var typeDef = TypeRegistry.GetTypeByIdOrUndefinedType(TypeId);
+            return typeDef.ToString();
+        }
     }
 }

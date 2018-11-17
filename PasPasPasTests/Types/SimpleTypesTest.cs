@@ -1,8 +1,8 @@
-﻿using PasPasPas.Typings.Structured;
-using PasPasPas.Typings.Simple;
-using Xunit;
-using PasPasPas.Globals.Runtime;
+﻿using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
+using PasPasPas.Typings.Simple;
+using PasPasPas.Typings.Structured;
+using Xunit;
 
 namespace PasPasPasTests.Types {
 
@@ -15,6 +15,8 @@ namespace PasPasPasTests.Types {
         public void TestEnumTypes() {
             AssertDeclType("(en1, en2)", typeKind: CommonTypeKind.EnumerationType);
             AssertDeclType("(en1, en2)", (td) => Assert.Equal(2, (td as EnumeratedType).Values.Count));
+            AssertDeclType("(en1, en2)", (td) => Assert.Equal(0, (((td as EnumeratedType).Values[0].Value as IEnumeratedValue)?.Value as IIntegerValue)?.SignedValue));
+            AssertDeclType("(en1, en2)", (td) => Assert.Equal(1, (((td as EnumeratedType).Values[1].Value as IEnumeratedValue)?.Value as IIntegerValue)?.SignedValue));
         }
 
         [Fact]

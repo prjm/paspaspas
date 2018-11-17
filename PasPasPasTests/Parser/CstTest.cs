@@ -968,13 +968,15 @@ namespace PasPasPasTests.Parser {
 
             s = RunCstTest(p => p.ParseDesignator(), "inherited a.a");
             Assert.IsNotNull(s.Inherited);
-            Assert.IsNotNull(s.Name);
+            Assert.IsNotNull(s.Items[0].Subitem);
+            Assert.IsNotNull(s.Items[1].DotSymbol);
+            Assert.IsNotNull(s.Items[1].Subitem);
             Assert.AreEqual(13, s.Length);
 
             s = RunCstTest(p => p.ParseDesignator(), "inherited a<x>.a");
             Assert.IsNotNull(s.Inherited);
-            Assert.IsNotNull(s.Name);
             Assert.IsNotNull(s.Items[0]);
+            Assert.IsNotNull(s.Items[1]);
             Assert.AreEqual(16, s.Length);
         }
 

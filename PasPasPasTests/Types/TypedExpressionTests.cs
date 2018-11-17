@@ -221,6 +221,12 @@ namespace PasPasPasTests.Types {
         }
 
         [TestCase]
+        public void TestEnumRelationalOperators() {
+            AssertExprType("a = b", KnownTypeIds.BooleanType, "type te = (a, b, c)");
+            AssertExprType("a <> b", KnownTypeIds.BooleanType, "type te = (a, b, c)");
+        }
+
+        [TestCase]
         public void TestIntegerRelationalOperators() {
             AssertExprType("1 =  1", KnownTypeIds.BooleanType);
             AssertExprType("1 <> 1", KnownTypeIds.BooleanType);

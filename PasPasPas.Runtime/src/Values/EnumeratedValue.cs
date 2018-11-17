@@ -1,6 +1,5 @@
 ﻿using System;
 using PasPasPas.Globals.Runtime;
-using PasPasPas.Infrastructure.Utils;
 
 namespace PasPasPas.Runtime.Values {
 
@@ -72,7 +71,7 @@ namespace PasPasPas.Runtime.Values {
         /// </summary>
         /// <returns></returns>
         public override string ToString()
-            => StringUtils.Invariant($"Enum{TypeId}${Value}");
+            => Value.ToString();
 
     }
 }

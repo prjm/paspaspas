@@ -286,3 +286,4 @@ build/
 *.etl
 TODO.md
 Documentation/Markdown
+*.binlog

@@ -48,6 +48,12 @@
         /// <returns></returns>
         ITypeReference Cast(ITypeReference value, int typeId);
 
-
+        /// <summary>
+        ///     create a new enum value
+        /// </summary>
+        /// <param name="typeId"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        ITypeReference MakeEnumValue(int typeId, ITypeReference value);
     }
 }

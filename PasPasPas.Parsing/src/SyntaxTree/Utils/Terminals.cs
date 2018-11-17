@@ -26,7 +26,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Utils {
         /// <summary>
         ///     tokens
         /// </summary>
-        public TokenizerWithLookahead.TokenSequence TokenSequence { get; private set; }
+        public TokenSequence TokenSequence { get; private set; }
 
         /// <summary>
         ///     hash value
@@ -47,7 +47,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Utils {
         ///     initialize this terminal
         /// </summary>
         /// <param name="tokens"></param>
-        public void Initialize(TokenizerWithLookahead.TokenSequence tokens) {
+        public void Initialize(TokenSequence tokens) {
             TokenSequence = tokens;
             ComputedHashValue = ComputeHashValue(tokens);
         }
@@ -57,7 +57,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Utils {
         /// </summary>
         /// <param name="tokens"></param>
         /// <returns></returns>
-        private int ComputeHashValue(TokenizerWithLookahead.TokenSequence tokens) {
+        private int ComputeHashValue(TokenSequence tokens) {
             var result = 17;
             result = result * 31 + tokens.Value.GetHashCode();
 
@@ -110,7 +110,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Utils {
             return false;
         }
 
-        private static bool EqualsTokens(TokenizerWithLookahead.TokenSequence other, Terminal terminal) {
+        private static bool EqualsTokens(TokenSequence other, Terminal terminal) {
             if (!terminal.Token.Equals(other.Value))
                 return false;
 
@@ -140,7 +140,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Utils {
             return true;
         }
 
-        private static bool EqualsTokens(TokenizerWithLookahead.TokenSequence other, TokenizerWithLookahead.TokenSequence terminal) {
+        private static bool EqualsTokens(TokenSequence other, TokenSequence terminal) {
             if (!terminal.Value.Equals(other.Value))
                 return false;
 
@@ -218,7 +218,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Utils {
         /// </summary>
         /// <param name="tokens"></param>
         /// <returns></returns>
-        public Terminal GetTerminal(TokenizerWithLookahead.TokenSequence tokens) {
+        public Terminal GetTerminal(TokenSequence tokens) {
             using (var poolItem = Entries.Borrow(out var searchEntry)) {
                 searchEntry.Initialize(tokens);
 

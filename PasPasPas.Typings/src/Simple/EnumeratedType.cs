@@ -134,7 +134,7 @@ namespace PasPasPas.Typings.Simple {
         /// <param name="symbolName">symbol name</param>
         /// <param name="withValue">if <c>true</c> a value definition is used</param>
         /// <param name="enumValue">optional value definition</param>
-        public IRefSymbol DefineEnumValue(IRuntimeValueFactory runtimeValues, string symbolName, bool withValue, ITypeReference enumValue) {
+        public EnumValue DefineEnumValue(IRuntimeValueFactory runtimeValues, string symbolName, bool withValue, ITypeReference enumValue) {
             ITypeReference newValue;
 
             if (withValue)
