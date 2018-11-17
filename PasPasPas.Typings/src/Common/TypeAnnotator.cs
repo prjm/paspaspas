@@ -365,7 +365,7 @@ namespace PasPasPas.Typings.Common {
                 if (part.Kind == SymbolReferencePartKind.SubItem) {
 
                     if (baseTypeValue.TypeId == KnownTypeIds.UnspecifiedType) {
-                        var reference = resolver.ResolveByName(new ScopedName(part.Name.Name));
+                        var reference = resolver.ResolveByName(new ScopedName(part.Name));
 
                         if (reference != null && reference.Symbol != null) {
                             baseTypeValue = GetTypeByReference(reference.Symbol.TypeId);
@@ -385,7 +385,7 @@ namespace PasPasPas.Typings.Common {
                     else if (baseTypeValue.TypeKind == CommonTypeKind.Unit) {
                         var unit = TypeRegistry.GetTypeByIdOrUndefinedType(baseTypeValue.TypeId) as UnitType;
 
-                        if (unit != default && unit.TryToResolve(part.Name.Name, out var reference)) {
+                        if (unit != default && unit.TryToResolve(part.Name, out var reference)) {
 
                             if (reference.Kind == ReferenceKind.RefToType) {
                                 baseTypeValue = TypeRegistry.Runtime.Types.MakeReference((reference.Symbol as ITypeDefinition).TypeId);
@@ -397,7 +397,7 @@ namespace PasPasPas.Typings.Common {
                     else if (baseTypeValue.TypeKind == CommonTypeKind.ClassType) {
                         var cls = TypeRegistry.GetTypeByIdOrUndefinedType(baseTypeValue.TypeId) as StructuredTypeDeclaration;
 
-                        if (cls != default && cls.TryToResolve(part.Name.Name, out var reference)) {
+                        if (cls != default && cls.TryToResolve(part.Name, out var reference)) {
 
                             if (reference.Kind == ReferenceKind.RefToField || reference.Kind == ReferenceKind.RefToClassField) {
                                 baseTypeValue = TypeRegistry.Runtime.Types.MakeReference((reference.Symbol as Variable).SymbolType.TypeId);
@@ -411,7 +411,7 @@ namespace PasPasPas.Typings.Common {
 
                         var cls = TypeRegistry.GetTypeByIdOrUndefinedType(baseTypeValue.TypeId) as MetaStructuredTypeDeclaration;
 
-                        if (cls != default && cls.TryToResolve(part.Name.Name, out var reference)) {
+                        if (cls != default && cls.TryToResolve(part.Name, out var reference)) {
 
                             if (reference.Kind == ReferenceKind.RefToClassField) {
                                 baseTypeValue = TypeRegistry.Runtime.Types.MakeReference((reference.Symbol as Variable).SymbolType.TypeId);
@@ -428,7 +428,7 @@ namespace PasPasPas.Typings.Common {
                     var signature = CreateSignatureFromSymbolPart(part);
 
                     if (baseTypeValue.TypeId == KnownTypeIds.UnspecifiedType) {
-                        var reference = resolver.ResolveByName(new ScopedName(part.Name.CompleteName), signature);
+                        var reference = resolver.ResolveByName(new ScopedName(part.Name), signature);
 
                         if (reference == null) {
                             baseTypeValue = GetErrorTypeReference(element);
@@ -451,7 +451,7 @@ namespace PasPasPas.Typings.Common {
                     }
 
                     else if (baseTypeValue.TypeKind == CommonTypeKind.ClassType && environment.TypeRegistry.GetTypeByIdOrUndefinedType(baseTypeValue.TypeId) is StructuredTypeDeclaration structType) {
-                        structType.ResolveCall(part.Name.CompleteName, callableRoutines, signature);
+                        structType.ResolveCall(part.Name, callableRoutines, signature);
                     }
 
                     if (callableRoutines.Count == 1)

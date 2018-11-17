@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using PasPasPas.Parsing.SyntaxTree.Visitors;
 using PasPasPas.Parsing.SyntaxTree.Utils;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
 
@@ -22,7 +22,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     symbol name
         /// </summary>
-        public SymbolName Name { get; set; }
+        public string Name { get; set; }
 
         /// <summary>
         ///     expressions

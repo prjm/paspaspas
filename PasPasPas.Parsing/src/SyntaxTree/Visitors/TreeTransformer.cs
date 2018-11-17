@@ -2846,7 +2846,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 InitNode(part, designator);
                 parent.AddPart(part);
                 part.Kind = SymbolReferencePartKind.SubItem;
-                part.Name = ExtractSymbolName(designator.Subitem);
+                part.Name = ExtractSymbolName(designator.Subitem)?.CompleteName;
                 part.GenericType = ExtractGenericDefinition(part, designator.SubitemGenericType);
 
                 if (designator.IndexExpression != null)
