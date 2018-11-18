@@ -153,5 +153,10 @@
         /// </summary>
         ConstantArrayType,
 
+        /// <summary>
+        ///     declared type name
+        /// </summary>
+        Type
+
     }
 }

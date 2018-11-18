@@ -60,6 +60,9 @@ namespace PasPasPasTests.Types {
         public void TestHigh() {
             AssertExprValue("High(ta)", GetIntegerValue(2), "type ta = 1..2;");
             AssertExprValue("High(ta)", GetIntegerValue(-2), "type ta = -4..-2;");
+
+            AssertExprValue("High(ShortInt)", GetIntegerValue(127));
+            AssertExprValue("High(Byte)", GetIntegerValue(255));
         }
 
         [TestCase]

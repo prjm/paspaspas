@@ -421,5 +421,14 @@ namespace PasPasPas.Typings.Common {
 
             return KnownTypeIds.ErrorType;
         }
+
+        /// <summary>
+        ///     make a reference to a type
+        /// </summary>
+        /// <param name="typeId"></param>
+        /// <returns></returns>
+        public ITypeReference MakeTypeReference(int typeId)
+            => Runtime.Types.MakeTypeReference(typeId);
+
     }
 }

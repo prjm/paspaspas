@@ -32,5 +32,11 @@ namespace PasPasPas.Globals.Runtime {
         /// <returns>enumerated type value</returns>
         ITypeReference MakeEnumValue(int enumTypeId, ITypeReference value);
 
+        /// <summary>
+        ///     make a type reference
+        /// </summary>
+        /// <param name="typeId"></param>
+        /// <returns></returns>
+        ITypeReference MakeTypeReference(int typeId);
     }
 }

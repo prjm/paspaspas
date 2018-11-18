@@ -548,8 +548,18 @@ namespace PasPasPas.Typings.Common {
             typeDef.Packed = element.PackedType;
 
             foreach (var indexDef in element.IndexItems) {
-                if (indexDef.TypeInfo != null)
-                    typeDef.IndexTypes.Add(indexDef.TypeInfo);
+                var typeInfo = indexDef.TypeInfo;
+
+                if (typeInfo != null) {
+
+                    if (typeInfo.TypeKind == CommonTypeKind.Type)
+                        typeInfo = TypeRegistry.MakeReference((typeInfo as ITypeNameReference).BaseTypeId);
+
+                    if (!typeInfo.TypeKind.IsOrdinal())
+                        typeDef.IndexTypes.Add(GetErrorTypeReference(indexDef));
+                    else
+                        typeDef.IndexTypes.Add(typeInfo);
+                }
                 else
                     typeDef.IndexTypes.Add(GetErrorTypeReference(indexDef));
             }

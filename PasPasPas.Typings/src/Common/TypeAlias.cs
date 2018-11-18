@@ -46,5 +46,13 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         public bool IsNewType
             => isNewType;
+
+        /// <summary>
+        ///     format this type as string
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+            => "$" + BaseType.ToString();
+
     }
 }

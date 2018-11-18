@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Typings.Common;
 using PasPasPas.Typings.Simple;
@@ -27,7 +28,13 @@ namespace PasPasPas.Typings.Routines {
             if (signature.Length != 1)
                 return;
 
-            var param = TypeRegistry.GetTypeByIdOrUndefinedType(signature[0].TypeId);
+            var param = default(ITypeDefinition);
+
+            if (signature[0].TypeKind == CommonTypeKind.Type)
+                param = TypeRegistry.GetTypeByIdOrUndefinedType((signature[0] as ITypeNameReference).BaseTypeId);
+            else
+                param = TypeRegistry.GetTypeByIdOrUndefinedType(signature[0].TypeId);
+
             if (param.TypeKind.IsOrdinal()) {
                 var ordinalType = param as IOrdinalType;
                 var highValue = ordinalType.HighestElement;
@@ -37,6 +44,9 @@ namespace PasPasPas.Typings.Routines {
                 result.ResultType = highValue;
                 callableRoutines.Add(result);
             }
+
+
+
         }
 
     }

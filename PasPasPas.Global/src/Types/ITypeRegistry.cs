@@ -85,5 +85,11 @@ namespace PasPasPas.Globals.Types {
         /// <returns></returns>
         int Cast(int sourceType, int targetType);
 
+        /// <summary>
+        ///     make a reference to a a type
+        /// </summary>
+        /// <param name="typeId"></param>
+        /// <returns></returns>
+        ITypeReference MakeTypeReference(int typeId);
     }
 }

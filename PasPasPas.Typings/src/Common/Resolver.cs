@@ -68,6 +68,9 @@ namespace PasPasPas.Typings.Common {
             if (baseTypeValue == default)
                 return default;
 
+            if (baseTypeValue.TypeKind == CommonTypeKind.Type)
+                baseTypeValue = TypeRegistry.MakeReference((baseTypeValue as ITypeNameReference).BaseTypeId);
+
             if (baseTypeValue.TypeKind == CommonTypeKind.Unit) {
                 var unit = TypeRegistry.GetTypeByIdOrUndefinedType(baseTypeValue.TypeId) as UnitType;
                 if (unit != default && unit.TryToResolve(name, out var reference)) {
@@ -104,6 +107,10 @@ namespace PasPasPas.Typings.Common {
 
             if (reference.Kind == ReferenceKind.RefToEnumMember) {
                 return (reference.Symbol as EnumValue)?.Value;
+            }
+
+            if (reference.Kind == ReferenceKind.RefToType) {
+                return TypeRegistry.MakeTypeReference(reference.Symbol.TypeId);
             }
 
             return TypeRegistry.MakeReference(reference.Symbol.TypeId);

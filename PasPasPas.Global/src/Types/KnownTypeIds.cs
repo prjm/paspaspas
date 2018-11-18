@@ -385,5 +385,10 @@
         /// </summary>
         public const int IntrinsicRoutine = 104;
 
+        /// <summary>
+        ///     type
+        /// </summary>
+        public const int Type = 105;
+
     }
 }

@@ -10,6 +10,7 @@ namespace PasPasPas.Runtime.Values {
     public class TypeOperations : ITypeOperations {
 
         private readonly LookupTable<int, ITypeReference> values;
+        private readonly LookupTable<int, ITypeReference> typeRefs;
 
         /// <summary>
         ///     create a new type operations class
@@ -18,7 +19,11 @@ namespace PasPasPas.Runtime.Values {
         public TypeOperations(ITypeRegistry types) {
             TypeRegistry = types;
             values = new LookupTable<int, ITypeReference>(MakeIndeterminedValue);
+            typeRefs = new LookupTable<int, ITypeReference>(MakeTypeValue);
         }
+
+        private ITypeReference MakeTypeValue(int typeId)
+            => new TypeReference(typeId) { TypeRegistry = TypeRegistry };
 
         /// <summary>
         ///     nil pointer constant
@@ -52,5 +57,12 @@ namespace PasPasPas.Runtime.Values {
         public ITypeReference MakeEnumValue(int enumTypeId, ITypeReference value)
             => new EnumeratedValue(enumTypeId, value);
 
+        /// <summary>
+        ///     make a reference to a type
+        /// </summary>
+        /// <param name="typeId"></param>
+        /// <returns></returns>
+        public ITypeReference MakeTypeReference(int typeId)
+            => typeRefs.GetValue(typeId);
     }
 }
