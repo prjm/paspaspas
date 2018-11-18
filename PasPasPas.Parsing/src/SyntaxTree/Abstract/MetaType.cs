@@ -35,18 +35,18 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         }
 
         /// <summary>
-        ///     creates a new meta typedefinition
+        ///     creates a new meta type definition
         /// </summary>
         public MetaType()
             => Fragments = new SyntaxPartCollection<GenericNameFragment>(this);
 
         /// <summary>
-        ///     name fragements
+        ///     name fragments
         /// </summary>
         public ISyntaxPartList<GenericNameFragment> Fragments { get; }
 
         /// <summary>
-        ///     add a afragment
+        ///     add a a fragment
         /// </summary>
         /// <param name="fragment"></param>
         public void AddFragment(GenericNameFragment fragment)

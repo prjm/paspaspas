@@ -245,7 +245,11 @@ namespace PasPasPas.Typings.Common {
                 return;
             }
 
-            var entry = resolver.ResolveByName(typeName);
+            var entry = default(Reference);
+            for (var i = 0; i < typeName.Length && (i == 0 || entry != default); i++) {
+                entry = resolver.ResolveReferenceByName(entry, typeName[i]);
+            }
+
             int typeId;
 
             if (entry != null && entry.Kind == ReferenceKind.RefToType)
@@ -269,7 +273,7 @@ namespace PasPasPas.Typings.Common {
         public void EndVisit(MetaType element) {
             if (element.Kind == MetaTypeKind.NamedType) {
                 var name = element.AsScopedName;
-                var entry = resolver.ResolveByName(name);
+                var entry = resolver.ResolveByName(default, element.AsScopedName.ToString());
                 int typeId;
 
                 if (entry != null) {
@@ -363,72 +367,14 @@ namespace PasPasPas.Typings.Common {
                     break;
 
                 if (part.Kind == SymbolReferencePartKind.SubItem) {
-
-                    if (baseTypeValue.TypeId == KnownTypeIds.UnspecifiedType) {
-                        var reference = resolver.ResolveByName(new ScopedName(part.Name));
-
-                        if (reference != null && reference.Symbol != null) {
-                            baseTypeValue = GetTypeByReference(reference.Symbol.TypeId);
-
-                            if (reference.Kind == ReferenceKind.RefToConstant)
-                                baseTypeValue = (reference.Symbol as ITypedSyntaxNode)?.TypeInfo;
-
-                            if (reference.Kind == ReferenceKind.RefToEnumMember) {
-                                baseTypeValue = (reference.Symbol as EnumValue)?.Value;
-                            }
-
-                        }
-                        else
-                            baseTypeValue = GetErrorTypeReference(element);
-                    }
-
-                    else if (baseTypeValue.TypeKind == CommonTypeKind.Unit) {
-                        var unit = TypeRegistry.GetTypeByIdOrUndefinedType(baseTypeValue.TypeId) as UnitType;
-
-                        if (unit != default && unit.TryToResolve(part.Name, out var reference)) {
-
-                            if (reference.Kind == ReferenceKind.RefToType) {
-                                baseTypeValue = TypeRegistry.Runtime.Types.MakeReference((reference.Symbol as ITypeDefinition).TypeId);
-                            }
-
-                        }
-                    }
-
-                    else if (baseTypeValue.TypeKind == CommonTypeKind.ClassType) {
-                        var cls = TypeRegistry.GetTypeByIdOrUndefinedType(baseTypeValue.TypeId) as StructuredTypeDeclaration;
-
-                        if (cls != default && cls.TryToResolve(part.Name, out var reference)) {
-
-                            if (reference.Kind == ReferenceKind.RefToField || reference.Kind == ReferenceKind.RefToClassField) {
-                                baseTypeValue = TypeRegistry.Runtime.Types.MakeReference((reference.Symbol as Variable).SymbolType.TypeId);
-                            }
-
-
-                        }
-                    }
-
-                    else if (baseTypeValue.TypeKind == CommonTypeKind.ClassReferenceType) {
-
-                        var cls = TypeRegistry.GetTypeByIdOrUndefinedType(baseTypeValue.TypeId) as MetaStructuredTypeDeclaration;
-
-                        if (cls != default && cls.TryToResolve(part.Name, out var reference)) {
-
-                            if (reference.Kind == ReferenceKind.RefToClassField) {
-                                baseTypeValue = TypeRegistry.Runtime.Types.MakeReference((reference.Symbol as Variable).SymbolType.TypeId);
-                            }
-
-                        }
-
-
-                    }
-
+                    baseTypeValue = resolver.ResolveTypeByName(baseTypeValue, part.Name);
                 }
                 else if (part.Kind == SymbolReferencePartKind.CallParameters && part.Name != null) {
                     var callableRoutines = new List<ParameterGroup>();
                     var signature = CreateSignatureFromSymbolPart(part);
 
                     if (baseTypeValue.TypeId == KnownTypeIds.UnspecifiedType) {
-                        var reference = resolver.ResolveByName(new ScopedName(part.Name), signature);
+                        var reference = resolver.ResolveByName(baseTypeValue, part.Name);
 
                         if (reference == null) {
                             baseTypeValue = GetErrorTypeReference(element);

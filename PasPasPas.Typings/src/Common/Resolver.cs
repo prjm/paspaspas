@@ -1,6 +1,8 @@
 ﻿using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Infrastructure.Utils;
+using PasPasPas.Parsing.SyntaxTree.Types;
+using PasPasPas.Typings.Simple;
 using PasPasPas.Typings.Structured;
 
 namespace PasPasPas.Typings.Common {
@@ -20,84 +22,96 @@ namespace PasPasPas.Typings.Common {
             => scope = currentScope;
 
         /// <summary>
-        ///     resolve a reference by name
+        ///     type registry
         /// </summary>
-        /// <param name="typeName">given name</param>
-        /// <param name="signature">signature</param>
-        /// <returns>resolved reference</returns>
-        public Reference ResolveByName(ScopedName typeName, Signature signature = default) {
-            var scope = this.scope;
+        public ITypeRegistry TypeRegistry
+            => scope.TypeRegistry;
 
-            if (typeName.FirstPart == null)
-                return null;
+        /// <summary>
+        ///     resolve a type a given name
+        /// </summary>
+        /// <param name="baseTypeValue">base type</param>
+        /// <param name="name">type name</param>
+        /// <returns></returns>
+        public ITypeReference ResolveTypeByName(ITypeReference baseTypeValue, string name) {
+            var symbolReference = ResolveByName(baseTypeValue, name);
+            return GetTypeReference(symbolReference);
+        }
 
-            while (scope != null) {
-
-                if (scope.TryToResolve(typeName.FirstPart, out var entry)) {
-                    if (typeName.Length == 1)
-                        return entry;
-
-                    return ResolveNameByEntry(typeName.RemoveFirstPart(), entry);
-                }
-
-                foreach (var scopeEntry in scope.AllEntriesInOrder) {
-                    if (scopeEntry.Value.Kind == ReferenceKind.RefToUnit) {
-                        var importedEntry = ResolveNameByEntry(typeName, scopeEntry.Value);
-                        if (importedEntry != null)
-                            return importedEntry;
-                    }
-
-                }
-
-                scope = scope.Parent;
-            }
-
-            return null;
+        public Reference ResolveReferenceByName(Reference baseTypeValue, string name) {
+            if (baseTypeValue == default)
+                return ResolveByName(default, name);
+            else
+                return ResolveByName(TypeRegistry.MakeReference(baseTypeValue.Symbol.TypeId), name);
         }
 
         /// <summary>
-        ///     resolve a name by entry
+        ///     resolve a symbol by name
         /// </summary>
-        /// <param name="scopedName">name to resolve</param>
-        /// <param name="entry">scope entry</param>
+        /// <param name="baseTypeValue"></param>
+        /// <param name="name"></param>
         /// <returns></returns>
-        private Reference ResolveNameByEntry(ScopedName scopedName, Reference entry) {
-            var type = scope.TypeRegistry.GetTypeByIdOrUndefinedType(entry.Symbol.TypeId);
-            var kind = type.TypeKind;
+        public Reference ResolveByName(ITypeReference baseTypeValue, string name) {
+            if (baseTypeValue == default || baseTypeValue.TypeId == KnownTypeIds.UnspecifiedType) {
+                if (scope.TryToResolve(name, out var reference))
+                    return reference;
 
-            if (kind == CommonTypeKind.Unit && type is UnitType unit)
-                return ResolveNameInUnit(unit, scopedName);
-            else if (kind == CommonTypeKind.ClassType && type is StructuredTypeDeclaration structType)
-                return ResolveNameInStructuredType(structType, scopedName);
-            else if (kind == CommonTypeKind.ClassReferenceType && type is MetaStructuredTypeDeclaration metaType)
-                return ResolveNameInMetaType(metaType, scopedName);
+                foreach (var scopeEntry in scope.AllEntriesInOrder) {
+                    if (scopeEntry.Value.Kind == ReferenceKind.RefToUnit) {
+                        var importedEntry = ResolveByName(TypeRegistry.MakeReference(scopeEntry.Value.Symbol.TypeId), name);
+                        if (importedEntry != null)
+                            return importedEntry;
+                    }
+                }
+            }
 
-            return null;
+            if (baseTypeValue == default)
+                return default;
+
+            if (baseTypeValue.TypeKind == CommonTypeKind.Unit) {
+                var unit = TypeRegistry.GetTypeByIdOrUndefinedType(baseTypeValue.TypeId) as UnitType;
+                if (unit != default && unit.TryToResolve(name, out var reference)) {
+                    return reference;
+                }
+            }
+
+            else if (baseTypeValue.TypeKind == CommonTypeKind.ClassType) {
+                var cls = TypeRegistry.GetTypeByIdOrUndefinedType(baseTypeValue.TypeId) as StructuredTypeDeclaration;
+
+                if (cls != default && cls.TryToResolve(name, out var reference)) {
+                    return reference;
+                }
+            }
+
+            else if (baseTypeValue.TypeKind == CommonTypeKind.ClassReferenceType) {
+                var cls = TypeRegistry.GetTypeByIdOrUndefinedType(baseTypeValue.TypeId) as MetaStructuredTypeDeclaration;
+                if (cls != default && cls.TryToResolve(name, out var reference)) {
+                    return reference;
+                }
+            }
+
+            return default;
+        }
+
+        private ITypeReference GetTypeReference(Reference reference) {
+            if (reference == default || reference.Symbol == default)
+                return TypeRegistry.MakeReference(KnownTypeIds.ErrorType);
+
+            var baseTypeValue = TypeRegistry.GetTypeByIdOrUndefinedType(reference.Symbol.TypeId);
+
+            if (reference.Kind == ReferenceKind.RefToConstant)
+                return (reference.Symbol as ITypedSyntaxNode)?.TypeInfo;
+
+            if (reference.Kind == ReferenceKind.RefToEnumMember) {
+                return (reference.Symbol as EnumValue)?.Value;
+            }
+
+            return TypeRegistry.MakeReference(reference.Symbol.TypeId);
         }
 
         private Reference ResolveNameInMetaType(MetaStructuredTypeDeclaration metaType, ScopedName scopedName) {
 
             if (metaType.TryToResolve(scopedName.FirstPart, out var entry)) {
-                if (scopedName.Length == 1)
-                    return entry;
-            }
-
-            return null;
-        }
-
-        private Reference ResolveNameInStructuredType(StructuredTypeDeclaration structType, ScopedName scopedName) {
-
-            if (structType.TryToResolve(scopedName.FirstPart, out var entry)) {
-                if (scopedName.Length == 1)
-                    return entry;
-            }
-
-            return null;
-        }
-
-        private Reference ResolveNameInUnit(UnitType unit, ScopedName scopedName) {
-
-            if (unit.TryToResolve(scopedName.FirstPart, out var entry)) {
                 if (scopedName.Length == 1)
                     return entry;
             }
@@ -115,7 +129,7 @@ namespace PasPasPas.Typings.Common {
             => scope = scope.Open();
 
         /// <summary>
-        ///     sclope the current scope
+        ///     close the current scope
         /// </summary>
         public void CloseScope()
             => scope = scope.Close();
