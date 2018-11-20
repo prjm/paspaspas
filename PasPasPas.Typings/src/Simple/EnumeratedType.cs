@@ -171,6 +171,7 @@ namespace PasPasPas.Typings.Simple {
         ///     readable type name
         /// </summary>
         /// <returns></returns>
-        public override string ToString() => $"Enum {TypeRegistry.GetTypeByIdOrUndefinedType(CommonTypeId)}";
+        public override string ToString()
+            => $"Enum {TypeRegistry.GetTypeByIdOrUndefinedType(CommonTypeId)}";
     }
 }

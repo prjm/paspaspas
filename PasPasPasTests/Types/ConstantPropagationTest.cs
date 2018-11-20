@@ -61,8 +61,16 @@ namespace PasPasPasTests.Types {
             AssertExprValue("High(ta)", GetIntegerValue(2), "type ta = 1..2;");
             AssertExprValue("High(ta)", GetIntegerValue(-2), "type ta = -4..-2;");
 
-            AssertExprValue("High(ShortInt)", GetIntegerValue(127));
-            AssertExprValue("High(Byte)", GetIntegerValue(255));
+            AssertExprValue("High(ta)", GetIntegerValue(2), "type ta = (aa, bb, cc);");
+
+            AssertExprValue("High(ShortInt)", GetIntegerValue(sbyte.MaxValue));
+            AssertExprValue("High(Byte)", GetIntegerValue(byte.MaxValue));
+            AssertExprValue("High(SmallInt)", GetIntegerValue(short.MaxValue));
+            AssertExprValue("High(Word)", GetIntegerValue(ushort.MaxValue));
+            AssertExprValue("High(Integer)", GetIntegerValue(int.MaxValue));
+            AssertExprValue("High(Cardinal)", GetIntegerValue(uint.MaxValue));
+            AssertExprValue("High(Int64)", GetIntegerValue(long.MaxValue));
+            AssertExprValue("High(UInt64)", GetIntegerValue(ulong.MaxValue));
         }
 
         [TestCase]
