@@ -33,7 +33,7 @@ namespace PasPasPas.Typings.Simple {
             get {
                 lock (lockObject) {
                     if (highestElement == default)
-                        highestElement = TypeRegistry.Runtime.Integers.ToIntegerValue(0xffff);
+                        highestElement = TypeRegistry.Runtime.Chars.ToWideCharValue(char.MaxValue);
                     return highestElement;
                 }
             }
@@ -46,7 +46,7 @@ namespace PasPasPas.Typings.Simple {
             get {
                 lock (lockObject) {
                     if (lowestElement == default)
-                        lowestElement = TypeRegistry.Runtime.Integers.ToIntegerValue(0);
+                        lowestElement = TypeRegistry.Runtime.Chars.ToWideCharValue(char.MinValue);
                     return lowestElement;
                 }
             }

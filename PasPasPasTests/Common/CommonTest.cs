@@ -74,6 +74,14 @@ namespace PasPasPasTests.Common {
         protected static ITypeReference GetWideCharValue(char text)
             => new RuntimeValueFactory(null).Chars.ToWideCharValue(text);
 
+        /// <summary>
+        ///     get the ANSI char value
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
+        protected static ITypeReference GetAnsiCharValue(byte text)
+            => new RuntimeValueFactory(null).Chars.ToAnsiCharValue(text);
+
 
 
         /// <summary>
