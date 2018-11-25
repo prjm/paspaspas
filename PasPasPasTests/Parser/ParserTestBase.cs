@@ -101,7 +101,7 @@ namespace PasPasPasTests.Parser {
 
             foreach (var input in completeInput.Split('§')) {
 
-                tree = RunAstTest(input, env, msgs);
+                tree = RunAstTest(input, env);
                 Assert.AreEqual(string.Empty, errorText);
                 Assert.IsFalse(hasError);
 
@@ -165,7 +165,7 @@ namespace PasPasPasTests.Parser {
             }
         }
 
-        protected ISyntaxPart RunAstTest(string input, ITypedEnvironment env, IList<ILogMessage> messages) {
+        protected ISyntaxPart RunAstTest(string input, ITypedEnvironment env) {
             var testOptions = new OptionSet(env);
             var api = new ParserApi(env, testOptions);
 

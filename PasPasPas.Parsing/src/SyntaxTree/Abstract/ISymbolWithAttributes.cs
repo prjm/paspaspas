@@ -8,9 +8,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     public interface ISymbolWithAttributes {
 
         /// <summary>
-        ///     availiable attributes
+        ///     available attributes
         /// </summary>
-        [System.Obsolete]
+        [System.Obsolete("Replacement required")]
         IEnumerable<SymbolAttribute> Attributes { get; set; }
 
     }

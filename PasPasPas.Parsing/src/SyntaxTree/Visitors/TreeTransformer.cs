@@ -1835,7 +1835,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         private AbstractSyntaxPartBase EndVisitItem(ExportsSectionSymbol exportsSection) {
             CurrentDeclarationMode = DeclarationMode.Unknown;
             return null;
-            ;
         }
 
 

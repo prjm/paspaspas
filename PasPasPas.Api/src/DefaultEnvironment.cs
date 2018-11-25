@@ -94,7 +94,7 @@ namespace PasPasPas.Api {
         public DefaultEnvironment(NativeIntSize intSize = NativeIntSize.Undefined) {
             Patterns = new PatternFactory(StringPool);
             Runtime = new RuntimeValueFactory();
-            TypeRegistry = new RegisteredTypes(Runtime, StringPool, intSize);
+            TypeRegistry = new RegisteredTypes(Runtime, intSize);
             IntegerParser = new IntegerParser(Runtime, false);
             HexNumberParser = new IntegerParser(Runtime, true);
             RealLiteralConverter = new RealLiteralConverter(Runtime);

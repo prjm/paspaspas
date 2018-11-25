@@ -77,16 +77,15 @@ namespace PasPasPas.Typings.Common {
         ///     create a new type registry
         /// </summary>
         /// <param name="intSize">integer size</param>
-        /// <param name="pool">string pool</param>
         /// <param name="runtime">runtime values</param>
-        public RegisteredTypes(IRuntimeValueFactory runtime, StringPool pool, NativeIntSize intSize) {
+        public RegisteredTypes(IRuntimeValueFactory runtime, NativeIntSize intSize) {
             Runtime = runtime;
             systemUnit = new UnitType(KnownTypeIds.SystemUnit);
             RegisterType(systemUnit);
 
             RegisterCommonTypes(runtime, intSize);
             RegisterCommonOperators();
-            RegisterTObject(pool);
+            RegisterTObject();
             RegisterCommonFunctions();
         }
 
@@ -309,8 +308,7 @@ namespace PasPasPas.Typings.Common {
         /// <summary>
         ///     register the global TObject class
         /// </summary>
-        /// <param name="pool"></param>
-        private void RegisterTObject(StringPool pool) {
+        private void RegisterTObject() {
             var def = new StructuredTypeDeclaration(KnownTypeIds.TObject, StructuredTypeKind.Class);
             var meta = new MetaStructuredTypeDeclaration(KnownTypeIds.TClass, KnownTypeIds.TObject);
             RegisterSystemType(def, "TObject");
