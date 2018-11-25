@@ -61,6 +61,12 @@ namespace PasPasPas.Runtime.Values.StringValues {
         }
 
         /// <summary>
+        ///     convert this value to in internal string format
+        /// </summary>
+        public override string InternalTypeFormat
+            => $"'{data}'";
+
+        /// <summary>
         ///     get the content of this string
         /// </summary>
         /// <returns></returns>

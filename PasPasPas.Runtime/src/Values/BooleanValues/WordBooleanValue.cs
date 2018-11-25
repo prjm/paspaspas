@@ -36,7 +36,7 @@ namespace PasPasPas.Runtime.Values.BooleanValues {
         ///     convert this value to string
         /// </summary>
         /// <returns></returns>
-        public override string ToString()
+        public override string InternalTypeFormat
             => StringUtils.Invariant($"{AsBoolean} ({Value})");
     }
 }

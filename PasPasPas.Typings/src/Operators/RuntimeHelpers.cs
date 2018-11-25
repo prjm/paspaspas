@@ -1,4 +1,5 @@
 ﻿using PasPasPas.Globals.Runtime;
+using PasPasPas.Globals.Types;
 using PasPasPas.Typings.Common;
 
 namespace PasPasPas.Typings.Operators {
@@ -8,16 +9,14 @@ namespace PasPasPas.Typings.Operators {
     /// </summary>
     public static class RuntimeHelpers {
 
-        private static ITypeReference GetBaseTypeOfSubrangeType(this IRuntimeValueFactory runtime, int typeId)
-            => runtime.Types.MakeReference(runtime.Types.TypeRegistry.GetBaseTypeOfSubrangeType(typeId));
-
         /// <summary>
         ///     simple helper: get arithmetic operations for an unary operator
         /// </summary>
         /// <param name="runtime">runtime to use</param>
+        /// <param name="types"></param>
         /// <param name="type">type reference</param>
         /// <returns></returns>
-        public static IArithmeticOperations GetArithmeticOperators(this IRuntimeValueFactory runtime, ITypeReference type) {
+        public static IArithmeticOperations GetArithmeticOperators(this IRuntimeValueFactory runtime, ITypeRegistry types, ITypeReference type) {
             var typeKind = type.TypeKind;
 
             if (typeKind.IsIntegral())
@@ -26,8 +25,11 @@ namespace PasPasPas.Typings.Operators {
             if (typeKind == CommonTypeKind.RealType)
                 return runtime.RealNumbers;
 
-            if (typeKind == CommonTypeKind.SubrangeType)
-                return runtime.GetArithmeticOperators(runtime.GetBaseTypeOfSubrangeType(type.TypeId));
+            if (typeKind == CommonTypeKind.SubrangeType) {
+                var baseType = types.GetBaseTypeOfSubrangeType(type.TypeId);
+                var typeRef = runtime.Types.MakeReference(baseType, types.GetTypeKindOf(baseType));
+                return runtime.GetArithmeticOperators(types, typeRef);
+            }
 
             return null;
         }
@@ -38,7 +40,7 @@ namespace PasPasPas.Typings.Operators {
         /// <param name="runtime">runtime to use</param>
         /// <param name="type">operand type</param>
         /// <returns></returns>
-        public static ILogicalOperations GetLogicalOperators(this IRuntimeValueFactory runtime, ITypeReference type) {
+        public static ILogicalOperations GetLogicalOperators(this IRuntimeValueFactory runtime, ITypeRegistry types, ITypeReference type) {
             var typeKind = type.TypeKind;
 
             if (typeKind == CommonTypeKind.BooleanType)
@@ -47,8 +49,11 @@ namespace PasPasPas.Typings.Operators {
             if (typeKind.IsIntegral())
                 return runtime.Integers;
 
-            if (typeKind == CommonTypeKind.SubrangeType)
-                return runtime.GetLogicalOperators(runtime.GetBaseTypeOfSubrangeType(type.TypeId));
+            if (typeKind == CommonTypeKind.SubrangeType) {
+                var baseType = types.GetBaseTypeOfSubrangeType(type.TypeId);
+                var typeRef = runtime.Types.MakeReference(baseType, types.GetTypeKindOf(baseType));
+                return runtime.GetLogicalOperators(types, typeRef);
+            }
 
             return null;
         }
@@ -60,7 +65,7 @@ namespace PasPasPas.Typings.Operators {
         /// <param name="leftType">left operand</param>
         /// <param name="rightType">right operand</param>
         /// <returns></returns>
-        public static IArithmeticOperations GetArithmeticOperators(this IRuntimeValueFactory runtime, ITypeReference leftType, ITypeReference rightType) {
+        public static IArithmeticOperations GetArithmeticOperators(this IRuntimeValueFactory runtime, ITypeRegistry types, ITypeReference leftType, ITypeReference rightType) {
             var left = leftType.TypeKind;
             var right = rightType.TypeKind;
 
@@ -73,11 +78,17 @@ namespace PasPasPas.Typings.Operators {
             if (right.IsNumerical() && left.IsNumerical())
                 return runtime.Integers;
 
-            if (left == CommonTypeKind.SubrangeType)
-                return GetArithmeticOperators(runtime, runtime.GetBaseTypeOfSubrangeType(leftType.TypeId), rightType);
+            if (left == CommonTypeKind.SubrangeType) {
+                var baseType = types.GetBaseTypeOfSubrangeType(leftType.TypeId);
+                var typeRef = runtime.Types.MakeReference(baseType, types.GetTypeKindOf(baseType));
+                return GetArithmeticOperators(runtime, types, typeRef, rightType);
+            }
 
-            if (right == CommonTypeKind.SubrangeType)
-                return GetArithmeticOperators(runtime, leftType, runtime.GetBaseTypeOfSubrangeType(rightType.TypeId));
+            if (right == CommonTypeKind.SubrangeType) {
+                var baseType = types.GetBaseTypeOfSubrangeType(rightType.TypeId);
+                var typeRef = runtime.Types.MakeReference(baseType, types.GetTypeKindOf(baseType));
+                return GetArithmeticOperators(runtime, types, leftType, typeRef);
+            }
 
             return null;
         }
@@ -88,8 +99,9 @@ namespace PasPasPas.Typings.Operators {
         /// <param name="runtime">runtime to use</param>
         /// <param name="leftType">left operand</param>
         /// <param name="rightType">right operand</param>
+        /// <param name="types">type registry</param>
         /// <returns></returns>
-        public static ILogicalOperations GetLogicalOperators(this IRuntimeValueFactory runtime, ITypeReference leftType, ITypeReference rightType) {
+        public static ILogicalOperations GetLogicalOperators(this IRuntimeValueFactory runtime, ITypeRegistry types, ITypeReference leftType, ITypeReference rightType) {
             var left = leftType.TypeKind;
             var right = rightType.TypeKind;
 
@@ -99,12 +111,17 @@ namespace PasPasPas.Typings.Operators {
             if (left.IsIntegral() && right.IsIntegral())
                 return runtime.Integers;
 
-            if (left == CommonTypeKind.SubrangeType)
-                return GetLogicalOperators(runtime, runtime.GetBaseTypeOfSubrangeType(leftType.TypeId), rightType);
+            if (left == CommonTypeKind.SubrangeType) {
+                var baseType = types.GetBaseTypeOfSubrangeType(leftType.TypeId);
+                var typeRef = runtime.Types.MakeReference(baseType, types.GetTypeKindOf(baseType));
+                return GetLogicalOperators(runtime, types, typeRef, rightType);
+            }
 
-            if (right == CommonTypeKind.SubrangeType)
-                return GetLogicalOperators(runtime, leftType, runtime.GetBaseTypeOfSubrangeType(rightType.TypeId));
-
+            if (right == CommonTypeKind.SubrangeType) {
+                var baseType = types.GetBaseTypeOfSubrangeType(rightType.TypeId);
+                var typeRef = runtime.Types.MakeReference(baseType, types.GetTypeKindOf(baseType));
+                return GetLogicalOperators(runtime, types, leftType, typeRef);
+            }
 
             return default;
         }
@@ -113,10 +130,11 @@ namespace PasPasPas.Typings.Operators {
         ///     simple helper: get relational operations for a binary operator
         /// </summary>
         /// <param name="runtime">runtime to use</param>
+        /// <param name="types"></param>
         /// <param name="leftType">left operand</param>
         /// <param name="rightType">right operand</param>
         /// <returns></returns>
-        public static IRelationalOperations GetRelationalOperators(this IRuntimeValueFactory runtime, ITypeReference leftType, ITypeReference rightType) {
+        public static IRelationalOperations GetRelationalOperators(this IRuntimeValueFactory runtime, ITypeRegistry types, ITypeReference leftType, ITypeReference rightType) {
             var left = leftType.TypeKind;
             var right = rightType.TypeKind;
 
@@ -135,11 +153,18 @@ namespace PasPasPas.Typings.Operators {
             if (left.IsTextual() && right.IsTextual())
                 return runtime.Strings;
 
-            if (left == CommonTypeKind.SubrangeType)
-                return GetRelationalOperators(runtime, runtime.GetBaseTypeOfSubrangeType(leftType.TypeId), rightType);
+            if (left == CommonTypeKind.SubrangeType) {
+                var baseType = types.GetBaseTypeOfSubrangeType(leftType.TypeId);
+                var typeRef = runtime.Types.MakeReference(baseType, types.GetTypeKindOf(baseType));
+                return GetRelationalOperators(runtime, types, typeRef, rightType);
+            }
 
-            if (right == CommonTypeKind.SubrangeType)
-                return GetRelationalOperators(runtime, leftType, runtime.GetBaseTypeOfSubrangeType(rightType.TypeId));
+            if (right == CommonTypeKind.SubrangeType) {
+                var baseType = types.GetBaseTypeOfSubrangeType(rightType.TypeId);
+                var typeRef = runtime.Types.MakeReference(baseType, types.GetTypeKindOf(baseType));
+                return GetRelationalOperators(runtime, types, leftType, typeRef);
+            }
+
 
             return default;
         }
@@ -168,10 +193,10 @@ namespace PasPasPas.Typings.Operators {
         /// <returns><c>true</c> if the first operand is greater then the second operand</returns>
         public static bool IsValueGreaterThen(this IRuntimeValueFactory runtime, ITypeReference left, ITypeReference right) {
 
-            if (!left.IsConstant)
+            if (!left.IsConstant())
                 return false;
 
-            if (!right.IsConstant)
+            if (!right.IsConstant())
                 return false;
 
             if (left is IIntegerValue && right is IIntegerValue) {
@@ -220,10 +245,10 @@ namespace PasPasPas.Typings.Operators {
         /// <param name="right">second operand</param>
         /// <returns></returns>
         public static bool AreValuesUnsigned(this IRuntimeValueFactory runtime, ITypeReference left, ITypeReference right) {
-            if (!left.IsConstant)
+            if (!left.IsConstant())
                 return false;
 
-            if (!right.IsConstant)
+            if (!right.IsConstant())
                 return false;
 
             if (!(left is IIntegerValue leftInt))

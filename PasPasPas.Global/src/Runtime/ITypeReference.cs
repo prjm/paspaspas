@@ -14,9 +14,15 @@ namespace PasPasPas.Globals.Runtime {
         int TypeId { get; }
 
         /// <summary>
-        ///     if <c>true</c> this value represents a compile-time constant typed value
+        ///     get an internal representation of this typed reference
         /// </summary>
-        bool IsConstant { get; }
+        /// <returns></returns>
+        string InternalTypeFormat { get; }
+
+        /// <summary>
+        ///     reference kind
+        /// </summary>
+        TypeReferenceKind ReferenceKind { get; }
 
         /// <summary>
         ///     type kind
@@ -24,4 +30,31 @@ namespace PasPasPas.Globals.Runtime {
         CommonTypeKind TypeKind { get; }
 
     }
+
+
+    /// <summary>
+    ///     helper class for type references
+    /// </summary>
+    public static class TypeReferenceHelper {
+
+
+        /// <summary>
+        ///     test if this type reference is a constant value
+        /// </summary>
+        /// <param name="typeReference"></param>
+        /// <returns></returns>
+        public static bool IsConstant(this ITypeReference typeReference)
+            => typeReference.ReferenceKind == TypeReferenceKind.ConstantValue;
+
+
+        /// <summary>
+        ///     test if this type reference denotes a type name
+        /// </summary>
+        /// <param name="typeReference"></param>
+        /// <returns></returns>
+        public static bool IsType(this ITypeReference typeReference)
+            => typeReference.ReferenceKind == TypeReferenceKind.TypeName;
+
+    }
+
 }

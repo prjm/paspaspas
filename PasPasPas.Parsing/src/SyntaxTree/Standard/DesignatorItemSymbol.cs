@@ -35,7 +35,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="openBraces"></param>
         /// <param name="indexExpression"></param>
         /// <param name="closeBraces"></param>
-        public DesignatorItemSymbol(Terminal dotSymbol, IdentifierSymbol subitem, GenericSuffixSymbol genericSuffix, Terminal openBraces, ExpressionList indexExpression, Terminal closeBraces) : base(ImmutableArray<ParameterSymbol>.Empty) {
+        public DesignatorItemSymbol(Terminal dotSymbol, SyntaxPartBase subitem, GenericSuffixSymbol genericSuffix, Terminal openBraces, ExpressionList indexExpression, Terminal closeBraces) : base(ImmutableArray<ParameterSymbol>.Empty) {
             DotSymbol = dotSymbol;
             Subitem = subitem;
             SubitemGenericType = genericSuffix;
@@ -61,7 +61,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="immutableArray"></param>
         /// <param name="closeParen"></param>
         /// <param name="paramList"></param>
-        public DesignatorItemSymbol(Terminal dotSymbol, IdentifierSymbol subitem, GenericSuffixSymbol genericSuffix, Terminal openParen, ImmutableArray<ParameterSymbol> immutableArray, Terminal closeParen, bool paramList) : base(immutableArray) {
+        public DesignatorItemSymbol(Terminal dotSymbol, SyntaxPartBase subitem, GenericSuffixSymbol genericSuffix, Terminal openParen, ImmutableArray<ParameterSymbol> immutableArray, Terminal closeParen, bool paramList) : base(immutableArray) {
             DotSymbol = dotSymbol;
             Subitem = subitem;
             SubitemGenericType = genericSuffix;
@@ -85,7 +85,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <param name="openParen"></param>
         /// <param name="children"></param>
         /// <param name="closeParen"></param>
-        public DesignatorItemSymbol(Terminal dotSymbol, IdentifierSymbol subitem, Terminal openParen, ConstantExpressionSymbol children, Terminal closeParen) : this(dotSymbol) {
+        public DesignatorItemSymbol(Terminal dotSymbol, SyntaxPartBase subitem, Terminal openParen, ConstantExpressionSymbol children, Terminal closeParen) : this(dotSymbol) {
             DotSymbol = dotSymbol;
             Subitem = subitem;
             OpenParen = openParen;
@@ -123,7 +123,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <summary>
         ///     subitem
         /// </summary>
-        public IdentifierSymbol Subitem { get; }
+        public SyntaxPartBase Subitem { get; }
 
         /// <summary>
         ///     generic type of the subitem

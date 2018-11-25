@@ -19,10 +19,15 @@ namespace PasPasPas.Runtime.Values.BooleanValues {
         public abstract bool AsBoolean { get; }
 
         /// <summary>
+        ///     internal type format
+        /// </summary>
+        public abstract string InternalTypeFormat { get; }
+
+        /// <summary>
         ///     always <c>true</c> for boolean constant values
         /// </summary>
-        public bool IsConstant
-            => true;
+        public TypeReferenceKind ReferenceKind
+            => TypeReferenceKind.ConstantValue;
 
         /// <summary>
         ///     type kind
@@ -48,12 +53,6 @@ namespace PasPasPas.Runtime.Values.BooleanValues {
         /// <returns></returns>
         public override int GetHashCode()
             => AsBoolean ? 1 : 0;
-
-        /// <summary>
-        ///     format this number as string
-        /// </summary>
-        /// <returns>number as string</returns>
-        public abstract override string ToString();
 
         internal static bool And(IBooleanValue boolean1, IBooleanValue boolean2)
             => boolean1.AsBoolean && boolean2.AsBoolean;

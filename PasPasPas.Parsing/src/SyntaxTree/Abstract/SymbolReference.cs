@@ -47,7 +47,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     parts
         /// </summary>
-        public SyntaxPartCollection<SymbolReferencePart> SymbolParts { get; }
+        public SyntaxPartCollection<ISyntaxPart> SymbolParts { get; }
 
         /// <summary>
         ///     name parameter
@@ -58,7 +58,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     create a a new symbol reference
         /// </summary>
         public SymbolReference()
-            => SymbolParts = new SyntaxPartCollection<SymbolReferencePart>(this);
+            => SymbolParts = new SyntaxPartCollection<ISyntaxPart>(this);
 
         /// <summary>
         ///     parts
@@ -78,7 +78,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     add a part
         /// </summary>
         /// <param name="part"></param>
-        public void AddPart(SymbolReferencePart part)
+        public void AddPart(ISyntaxPart part)
             => SymbolParts.Add(part);
 
         /// <summary>

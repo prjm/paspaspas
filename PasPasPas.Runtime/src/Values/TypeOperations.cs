@@ -9,21 +9,19 @@ namespace PasPasPas.Runtime.Values {
     /// </summary>
     public class TypeOperations : ITypeOperations {
 
-        private readonly LookupTable<int, ITypeReference> values;
+        private readonly LookupTable<(int, CommonTypeKind), ITypeReference> values;
         private readonly LookupTable<int, ITypeReference> typeRefs;
 
         /// <summary>
         ///     create a new type operations class
         /// </summary>
-        /// <param name="types">resolver for type kinds</param>
-        public TypeOperations(ITypeRegistry types) {
-            TypeRegistry = types;
-            values = new LookupTable<int, ITypeReference>(MakeIndeterminedValue);
+        public TypeOperations() {
+            values = new LookupTable<(int, CommonTypeKind), ITypeReference>(MakeIndeterminedValue);
             typeRefs = new LookupTable<int, ITypeReference>(MakeTypeValue);
         }
 
         private ITypeReference MakeTypeValue(int typeId)
-            => new TypeReference(typeId) { TypeRegistry = TypeRegistry };
+            => new TypeReference(typeId);
 
         /// <summary>
         ///     nil pointer constant
@@ -36,17 +34,25 @@ namespace PasPasPas.Runtime.Values {
         /// </summary>
         public ITypeRegistry TypeRegistry { get; }
 
-
-        private ITypeReference MakeIndeterminedValue(int typeId)
-            => new IndeterminedRuntimeValue(typeId, TypeRegistry.GetTypeKindOf(typeId)) { TypeRegistry = TypeRegistry };
+        private ITypeReference MakeIndeterminedValue((int typeId, CommonTypeKind typeKind) data)
+            => new IndeterminedRuntimeValue(data.typeId, data.typeKind);
 
         /// <summary>
         ///     create a new type reference value
         /// </summary>
         /// <param name="typeId">registered type id</param>
+        /// <param name="typeKind"></param>
         /// <returns>type reference</returns>
-        public ITypeReference MakeReference(int typeId)
-            => values.GetValue(typeId);
+        public ITypeReference MakeReference(int typeId, CommonTypeKind typeKind)
+            => values.GetValue((typeId, typeKind));
+
+        /// <summary>
+        ///     create a new error type reference value
+        /// </summary>
+        /// <returns>type reference</returns>
+        public ITypeReference MakeErrorTypeReference()
+            => values.GetValue((KnownTypeIds.ErrorType, CommonTypeKind.UnknownType));
+
 
         /// <summary>
         ///     create a new enumerated type value

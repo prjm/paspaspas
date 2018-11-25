@@ -64,7 +64,7 @@ namespace PasPasPas.Runtime.Values.FloatValues {
         ///     format this floating point value as string
         /// </summary>
         /// <returns></returns>
-        public override string ToString()
+        public override string InternalTypeFormat
             => value.ToString();
     }
 }

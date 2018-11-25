@@ -76,5 +76,11 @@ namespace PasPasPas.Runtime.Values.IntValues {
         public override CommonTypeKind TypeKind
             => CommonTypeKind.IntegerType;
 
+        /// <summary>
+        ///     convert this value to an internal string format
+        /// </summary>
+        public override string InternalTypeFormat
+            => $"{value}";
+
     }
 }

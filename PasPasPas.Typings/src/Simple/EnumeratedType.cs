@@ -144,7 +144,7 @@ namespace PasPasPas.Typings.Simple {
             else
                 newValue = runtimeValues.Integers.Zero;
 
-            if (!newValue.IsConstant)
+            if (!newValue.IsConstant())
                 return null;
 
             var enumValueDefinition = new EnumValue(symbolName, newValue);

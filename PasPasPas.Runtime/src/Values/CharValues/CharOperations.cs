@@ -15,7 +15,6 @@ namespace PasPasPas.Runtime.Values.CharValues {
         public ITypeReference ToAnsiCharValue(byte character)
             => new AnsiCharValue(character);
 
-
         /// <summary>
         ///     get a constant wide char value
         /// </summary>

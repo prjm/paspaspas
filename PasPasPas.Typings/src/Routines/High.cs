@@ -30,9 +30,7 @@ namespace PasPasPas.Typings.Routines {
 
             var param = default(ITypeDefinition);
 
-            if (signature[0].TypeKind == CommonTypeKind.Type)
-                param = TypeRegistry.GetTypeByIdOrUndefinedType((signature[0] as ITypeNameReference).BaseTypeId);
-            else
+            if (signature[0].IsType() || signature[0].IsConstant())
                 param = TypeRegistry.GetTypeByIdOrUndefinedType(signature[0].TypeId);
 
             if (param.TypeKind.IsOrdinal()) {

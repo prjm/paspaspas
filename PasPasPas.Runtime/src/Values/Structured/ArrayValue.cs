@@ -33,15 +33,21 @@ namespace PasPasPas.Runtime.Values.Structured {
             => typeId;
 
         /// <summary>
-        ///     returns always <c>true</c>
-        /// </summary>
-        public bool IsConstant
-            => true;
-
-        /// <summary>
         ///     type kind
         /// </summary>
         public CommonTypeKind TypeKind
             => CommonTypeKind.ConstantArrayType;
+
+        /// <summary>
+        ///     format this type
+        /// </summary>
+        public string InternalTypeFormat
+            => $"(array)";
+
+        /// <summary>
+        ///     reference kind: constant
+        /// </summary>
+        public TypeReferenceKind ReferenceKind
+            => TypeReferenceKind.ConstantValue;
     }
 }

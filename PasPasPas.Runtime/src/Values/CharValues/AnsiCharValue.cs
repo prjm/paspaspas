@@ -48,7 +48,7 @@ namespace PasPasPas.Runtime.Values.CharValues {
         ///     convert this value to a string value
         /// </summary>
         /// <returns></returns>
-        public override string ToString()
+        public override string InternalTypeFormat
             => StringUtils.Invariant($@"{new string((char)value, 1)}");
     }
 }

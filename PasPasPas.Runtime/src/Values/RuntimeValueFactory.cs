@@ -20,8 +20,8 @@ namespace PasPasPas.Runtime.Values {
         ///     create a new runtime value factory
         /// </summary>
         /// <param name="typeKindResolver">type kind resolver</param>
-        public RuntimeValueFactory(ITypeRegistry typeKindResolver) {
-            Types = new TypeOperations(typeKindResolver);
+        public RuntimeValueFactory() {
+            Types = new TypeOperations();
             Booleans = new BooleanOperations();
             Integers = new IntegerOperations(Booleans, Types);
             RealNumbers = new RealNumberOperations(Booleans);
@@ -69,34 +69,35 @@ namespace PasPasPas.Runtime.Values {
         /// <summary>
         ///     cast values
         /// </summary>
+        /// <param name="types"></param>
         /// <param name="value"></param>
         /// <param name="typeId"></param>
         /// <returns></returns>
-        public ITypeReference Cast(ITypeReference value, int typeId) {
+        public ITypeReference Cast(ITypeRegistry types, ITypeReference value, int typeId) {
             var typeKind = value.TypeKind;
 
             if (typeKind.IsIntegral())
-                return CastInteger(value, typeId);
+                return CastInteger(types, value, typeId);
 
             if (typeKind.IsChar())
-                return CastChar(value, typeId);
+                return CastChar(types, value, typeId);
 
-            return Types.MakeReference(KnownTypeIds.ErrorType);
+            return Types.MakeErrorTypeReference();
         }
 
-        private ITypeReference CastInteger(ITypeReference value, int typeId) {
+        private ITypeReference CastInteger(ITypeRegistry types, ITypeReference value, int typeId) {
 
-            var typeDef = Types.TypeRegistry.GetTypeByIdOrUndefinedType(typeId);
+            var typeDef = types.GetTypeByIdOrUndefinedType(typeId);
             typeDef = TypeBase.ResolveAlias(typeDef);
 
             if (!(value is IIntegerValue integer))
-                return Types.MakeReference(KnownTypeIds.ErrorType);
+                return Types.MakeErrorTypeReference();
 
             if (typeDef is EnumeratedType enumType)
-                return new EnumeratedValue(enumType.TypeId, CastInteger(value, enumType.CommonTypeId));
+                return new EnumeratedValue(enumType.TypeId, CastInteger(types, value, enumType.CommonTypeId));
 
             if (typeDef is SubrangeType subrangeType)
-                return CastInteger(value, subrangeType.BaseType.TypeId);
+                return CastInteger(types, value, subrangeType.BaseType.TypeId);
 
             switch (typeDef.TypeId) {
                 case KnownTypeIds.ShortInt:
@@ -127,22 +128,22 @@ namespace PasPasPas.Runtime.Values {
                     return Booleans.ToWordBool((ushort)integer.UnsignedValue);
             }
 
-            return Types.MakeReference(KnownTypeIds.ErrorType);
+            return Types.MakeErrorTypeReference();
         }
 
-        private ITypeReference CastChar(ITypeReference value, int typeId) {
+        private ITypeReference CastChar(ITypeRegistry types, ITypeReference value, int typeId) {
 
-            var typeDef = Types.TypeRegistry.GetTypeByIdOrUndefinedType(typeId);
+            var typeDef = types.GetTypeByIdOrUndefinedType(typeId);
             typeDef = TypeBase.ResolveAlias(typeDef);
 
             if (!(value is ICharValue charValue))
-                return Types.MakeReference(KnownTypeIds.ErrorType);
+                return Types.MakeErrorTypeReference();
 
             if (typeDef is EnumeratedType enumType)
-                return new EnumeratedValue(enumType.TypeId, CastChar(value, enumType.CommonTypeId));
+                return new EnumeratedValue(enumType.TypeId, CastChar(types, value, enumType.CommonTypeId));
 
             if (typeDef is SubrangeType subrangeType)
-                return CastChar(value, subrangeType.BaseType.TypeId);
+                return CastChar(types, value, subrangeType.BaseType.TypeId);
 
             switch (typeDef.TypeId) {
                 case KnownTypeIds.ShortInt:
@@ -174,7 +175,7 @@ namespace PasPasPas.Runtime.Values {
 
             }
 
-            return Types.MakeReference(KnownTypeIds.ErrorType);
+            return Types.MakeErrorTypeReference();
         }
 
         /// <summary>

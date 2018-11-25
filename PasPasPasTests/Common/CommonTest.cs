@@ -64,7 +64,7 @@ namespace PasPasPasTests.Common {
         /// <param name="text"></param>
         /// <returns></returns>
         protected static ITypeReference GetUnicodeStringValue(string text)
-            => new RuntimeValueFactory(null).Strings.ToUnicodeString(text);
+            => new RuntimeValueFactory().Strings.ToUnicodeString(text);
 
         /// <summary>
         ///     get the Unicode char value
@@ -72,7 +72,7 @@ namespace PasPasPasTests.Common {
         /// <param name="text"></param>
         /// <returns></returns>
         protected static ITypeReference GetWideCharValue(char text)
-            => new RuntimeValueFactory(null).Chars.ToWideCharValue(text);
+            => new RuntimeValueFactory().Chars.ToWideCharValue(text);
 
         /// <summary>
         ///     get the ANSI char value
@@ -80,7 +80,7 @@ namespace PasPasPasTests.Common {
         /// <param name="text"></param>
         /// <returns></returns>
         protected static ITypeReference GetAnsiCharValue(byte text)
-            => new RuntimeValueFactory(null).Chars.ToAnsiCharValue(text);
+            => new RuntimeValueFactory().Chars.ToAnsiCharValue(text);
 
 
 
@@ -133,8 +133,8 @@ namespace PasPasPasTests.Common {
         /// <returns></returns>
         protected static ITypeReference GetBooleanValue(bool value)
             => value ?
-            new RuntimeValueFactory(null).Booleans.TrueValue :
-            new RuntimeValueFactory(null).Booleans.FalseValue;
+            new RuntimeValueFactory().Booleans.TrueValue :
+            new RuntimeValueFactory().Booleans.FalseValue;
 
     }
 }

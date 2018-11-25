@@ -1,4 +1,6 @@
-﻿namespace PasPasPas.Globals.Runtime {
+﻿using PasPasPas.Globals.Types;
+
+namespace PasPasPas.Globals.Runtime {
 
     /// <summary>
     ///     factory to create runtime values and to perform runtime operations
@@ -45,8 +47,9 @@
         /// </summary>
         /// <param name="value">value to cast</param>
         /// <param name="typeId">target type id</param>
+        /// <param name="types"></param>
         /// <returns></returns>
-        ITypeReference Cast(ITypeReference value, int typeId);
+        ITypeReference Cast(ITypeRegistry types, ITypeReference value, int typeId);
 
         /// <summary>
         ///     create a new enum value

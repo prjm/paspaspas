@@ -22,7 +22,7 @@ namespace PasPasPas.Globals.Types {
         public bool IsConstant {
             get {
                 for (var i = 0; i < data.Length; i++)
-                    if (data[i] == null || (!data[i].IsConstant))
+                    if (data[i] == null || (!data[i].IsConstant()))
                         return false;
                 return true;
             }

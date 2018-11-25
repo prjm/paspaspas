@@ -58,16 +58,14 @@ namespace PasPasPasTests.Types {
 
         [TestCase]
         public void TestHigh() {
+
+            // ordinal types
             AssertExprValue("High(ta)", GetIntegerValue(2), "type ta = 1..2;");
             AssertExprValue("High(ta)", GetIntegerValue(-2), "type ta = -4..-2;");
-
             AssertExprValue("High(ta)", GetIntegerValue(2), "type ta = (aa, bb, cc);");
-
             AssertExprValue("High(Boolean)", GetBooleanValue(true));
-
             AssertExprValue("High(AnsiChar)", GetAnsiCharValue(byte.MaxValue));
             AssertExprValue("High(WideChar)", GetWideCharValue(char.MaxValue));
-
             AssertExprValue("High(ShortInt)", GetIntegerValue(sbyte.MaxValue));
             AssertExprValue("High(Byte)", GetIntegerValue(byte.MaxValue));
             AssertExprValue("High(SmallInt)", GetIntegerValue(short.MaxValue));
@@ -76,6 +74,9 @@ namespace PasPasPasTests.Types {
             AssertExprValue("High(Cardinal)", GetIntegerValue(uint.MaxValue));
             AssertExprValue("High(Int64)", GetIntegerValue(long.MaxValue));
             AssertExprValue("High(UInt64)", GetIntegerValue(ulong.MaxValue));
+
+            // short strings
+            //AssertExprValue("High(string[20])", GetIntegerValue(20));
         }
 
         [TestCase]

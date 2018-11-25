@@ -63,13 +63,13 @@ namespace PasPasPas.Typings.Operators {
         /// <returns></returns>
         protected override ITypeReference EvaluateUnaryOperator(Signature input) {
             var operand = input[0];
-            var operations = Runtime.GetLogicalOperators(operand);
+            var operations = Runtime.GetLogicalOperators(TypeRegistry, operand);
 
             if (operations == null)
                 return GetErrorTypeReference();
 
             if (Kind == DefinedOperators.NotOperator)
-                if (operand.IsConstant)
+                if (operand.IsConstant())
                     return operations.NotOperator(operand);
                 else
                     return operand;
@@ -92,7 +92,7 @@ namespace PasPasPas.Typings.Operators {
             if (Kind == DefinedOperators.ShlOperator)
                 return EvaluateShiftOperator(toLeft: true, left, right);
 
-            var operations = Runtime.GetLogicalOperators(left, right);
+            var operations = Runtime.GetLogicalOperators(TypeRegistry, left, right);
 
             if (operations == null)
                 return GetErrorTypeReference();
@@ -110,7 +110,7 @@ namespace PasPasPas.Typings.Operators {
         }
 
         private ITypeReference EvaluateShiftOperator(bool toLeft, ITypeReference left, ITypeReference right) {
-            if (left.IsConstant && right.IsConstant)
+            if (left.IsConstant() && right.IsConstant())
                 if (toLeft)
                     return Runtime.Integers.Shl(left, right);
                 else
@@ -124,14 +124,14 @@ namespace PasPasPas.Typings.Operators {
             if (!(baseType is IIntegralType intType))
                 return GetErrorTypeReference();
 
-            if (right.IsConstant) {
+            if (right.IsConstant()) {
                 if (right is IIntegerValue intValue && intValue.SignedValue >= 0) {
                     if (intValue.SignedValue <= 32 && intType.BitSize < 32)
-                        return Runtime.Types.MakeReference(KnownTypeIds.IntegerType);
+                        return Runtime.Types.MakeReference(KnownTypeIds.IntegerType, CommonTypeKind.IntegerType);
                     if (intValue.SignedValue <= 32 && intType.BitSize == 32)
-                        return Runtime.Types.MakeReference(baseType.TypeId);
+                        return Runtime.Types.MakeReference(baseType.TypeId, baseType.TypeKind);
                     if (intType.BitSize == 64)
-                        return Runtime.Types.MakeReference(baseType.TypeId);
+                        return Runtime.Types.MakeReference(baseType.TypeId, baseType.TypeKind);
 
                 }
                 return GetErrorTypeReference();
@@ -144,29 +144,29 @@ namespace PasPasPas.Typings.Operators {
         }
 
         private ITypeReference EvaluateXorOperator(ITypeReference left, ITypeReference right, ILogicalOperations operations) {
-            if (left.IsConstant && right.IsConstant)
+            if (left.IsConstant() && right.IsConstant())
                 return operations.XorOperator(left, right);
             else
                 return GetSmallestBoolOrIntegralType(left, right, 1);
         }
 
         private ITypeReference EvaluateOrOperator(ITypeReference left, ITypeReference right, ILogicalOperations operations) {
-            if (left.IsConstant && right.IsConstant)
+            if (left.IsConstant() && right.IsConstant())
                 return operations.OrOperator(left, right);
-            else if (left.IsConstant && Runtime.Booleans.TrueValue.Equals(left))
+            else if (left.IsConstant() && Runtime.Booleans.TrueValue.Equals(left))
                 return Runtime.Booleans.TrueValue;
-            else if (left.IsConstant && Runtime.Booleans.FalseValue.Equals(false))
+            else if (left.IsConstant() && Runtime.Booleans.FalseValue.Equals(false))
                 return right;
             else
                 return GetSmallestBoolOrIntegralType(left, right, 1);
         }
 
         private ITypeReference EvaluateAndOperator(ITypeReference left, ITypeReference right, ILogicalOperations operations) {
-            if (left.IsConstant && right.IsConstant)
+            if (left.IsConstant() && right.IsConstant())
                 return operations.AndOperator(left, right);
-            else if (left.IsConstant && Runtime.Booleans.FalseValue.Equals(left))
+            else if (left.IsConstant() && Runtime.Booleans.FalseValue.Equals(left))
                 return Runtime.Booleans.FalseValue;
-            else if (left.IsConstant && Runtime.Booleans.TrueValue.Equals(left))
+            else if (left.IsConstant() && Runtime.Booleans.TrueValue.Equals(left))
                 return right;
             else
                 return GetSmallestBoolOrIntegralType(left, right, 1);

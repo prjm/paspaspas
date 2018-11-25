@@ -1,6 +1,4 @@
-﻿using PasPasPas.Globals.Types;
-
-namespace PasPasPas.Globals.Runtime {
+﻿namespace PasPasPas.Globals.Runtime {
 
     /// <summary>
     ///     value factory for undefined types
@@ -13,16 +11,12 @@ namespace PasPasPas.Globals.Runtime {
         ITypeReference Nil { get; }
 
         /// <summary>
-        ///     type resolver
-        /// </summary>
-        ITypeRegistry TypeRegistry { get; }
-
-        /// <summary>
         ///     produces a reference to a type with indeterminate compile-time value
         /// </summary>
         /// <param name="typeId">type id</param>
         /// <returns>reference to type</returns>
-        ITypeReference MakeReference(int typeId);
+        /// <param name="typeKind">type kind</param>
+        ITypeReference MakeReference(int typeId, CommonTypeKind typeKind);
 
         /// <summary>
         ///     make an enumerated type value
@@ -38,5 +32,11 @@ namespace PasPasPas.Globals.Runtime {
         /// <param name="typeId"></param>
         /// <returns></returns>
         ITypeReference MakeTypeReference(int typeId);
+
+        /// <summary>
+        ///     make a reference to the error type
+        /// </summary>
+        /// <returns></returns>
+        ITypeReference MakeErrorTypeReference();
     }
 }

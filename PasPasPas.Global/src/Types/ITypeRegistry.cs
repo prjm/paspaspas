@@ -55,7 +55,7 @@ namespace PasPasPas.Globals.Types {
         ///     runtime values, used to enable to calculate the results
         ///     of operators on constants
         /// </summary>
-        IRuntimeValueFactory Runtime { get; set; }
+        IRuntimeValueFactory Runtime { get; }
 
         /// <summary>
         ///     generate a new user type id

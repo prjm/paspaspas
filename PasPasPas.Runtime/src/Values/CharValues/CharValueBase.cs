@@ -25,10 +25,22 @@ namespace PasPasPas.Runtime.Values.CharValues {
             => new string(AsWideChar, 1);
 
         /// <summary>
-        ///     <c>true</c> for all constant char values
+        ///     internal type format
         /// </summary>
-        public bool IsConstant
-            => true;
+        public abstract string InternalTypeFormat { get; }
+
+        /// <summary>
+        ///     always <c>true</c> for boolean constant values
+        /// </summary>
+        public TypeReferenceKind ReferenceKind
+            => TypeReferenceKind.ConstantValue;
+
+        /// <summary>
+        ///     format this as value as string
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+            => InternalTypeFormat;
 
         /// <summary>
         ///     type kind
@@ -72,14 +84,6 @@ namespace PasPasPas.Runtime.Values.CharValues {
         /// </summary>
         /// <returns></returns>
         public abstract override int GetHashCode();
-
-        /// <summary>
-        ///     format this number as string
-        /// </summary>
-        /// <returns>number as string</returns>
-        public abstract override string ToString();
-
-
 
     }
 }

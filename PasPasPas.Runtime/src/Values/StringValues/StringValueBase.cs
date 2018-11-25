@@ -28,6 +28,24 @@ namespace PasPasPas.Runtime.Values.StringValues {
         /// </summary>
         public abstract CommonTypeKind TypeKind { get; }
 
+        /// <summary>
+        ///     convert this value to an internal type format
+        /// </summary>
+        public abstract string InternalTypeFormat { get; }
+
+        /// <summary>
+        ///     convert this value to a string
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+            => InternalTypeFormat;
+
+        /// <summary>
+        ///     constant value
+        /// </summary>
+        public TypeReferenceKind ReferenceKind
+            => TypeReferenceKind.ConstantValue;
+
         internal static ITypeReference Concat(IStringValue string1, IStringValue string2)
             => new UnicodeStringValue(string.Concat(string1, string2));
 

@@ -4631,7 +4631,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
             if (Match(TokenKind.Circumflex))
                 return new DesignatorItemSymbol(ContinueWithOrMissing(TokenKind.Circumflex));
 
-            var subitem = default(IdentifierSymbol);
+            var subitem = default(SyntaxPartBase);
             var dot = default(Terminal);
             var genericSuffix = default(GenericSuffixSymbol);
             var openBraces = default(Terminal);
@@ -4643,7 +4643,10 @@ namespace PasPasPas.Parsing.Parser.Standard {
             if (Match(TokenKind.Dot) ||
                 (!hasIdentifier && MatchIdentifier(TokenKind.String, TokenKind.AnsiString, TokenKind.ShortString, TokenKind.WideString, TokenKind.UnicodeString))) {
                 dot = ContinueWith(TokenKind.Dot);
-                subitem = RequireIdentifier(true);
+                if (Match(TokenKind.String, TokenKind.ShortString, TokenKind.AnsiString, TokenKind.UnicodeString, TokenKind.WideString))
+                    subitem = ParseStringType();
+                else
+                    subitem = RequireIdentifier(true);
             };
 
             if (Match(TokenKind.AngleBracketsOpen) &&

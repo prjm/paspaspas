@@ -1,5 +1,4 @@
 ﻿using PasPasPas.Globals.Runtime;
-using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Runtime.Values {
 
@@ -8,49 +7,37 @@ namespace PasPasPas.Runtime.Values {
     /// </summary>
     public class IndeterminedRuntimeValue : ITypeReference {
 
-        private readonly int typeId;
-        private readonly CommonTypeKind typeKind;
-
         /// <summary>
         ///     create a new indetermined runtime value
         /// </summary>
         /// <param name="typeId">type id</param>
         /// <param name="typeKind">type kind</param>
         public IndeterminedRuntimeValue(int typeId, CommonTypeKind typeKind) {
-            this.typeId = typeId;
-            this.typeKind = typeKind;
+            TypeId = typeId;
+            TypeKind = typeKind;
         }
 
         /// <summary>
         ///     type id
         /// </summary>
-        public int TypeId
-            => typeId;
-
-        /// <summary>
-        ///     always <c>false</c> for runtime values
-        /// </summary>
-        public bool IsConstant
-            => false;
+        public int TypeId { get; }
 
         /// <summary>
         ///     fixed type kind
         /// </summary>
-        public CommonTypeKind TypeKind
-            => typeKind;
+        public CommonTypeKind TypeKind { get; }
 
         /// <summary>
-        ///     type registry
+        ///     reference kind
         /// </summary>
-        public ITypeRegistry TypeRegistry { get; internal set; }
+        public TypeReferenceKind ReferenceKind
+            => TypeReferenceKind.DynamicValue;
 
         /// <summary>
         ///     short string for this runtime value
         /// </summary>
         /// <returns></returns>
-        public override string ToString() {
-            var typeDef = TypeRegistry.GetTypeByIdOrUndefinedType(TypeId);
-            return typeDef.ToString();
-        }
+        public string InternalTypeFormat
+            => "*";
     }
 }

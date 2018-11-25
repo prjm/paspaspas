@@ -84,25 +84,6 @@ namespace PasPasPas.Typings.Simple {
     /// <summary>
     ///     string type definition
     /// </summary>
-    public class ShortStringType : StringTypeBase {
-
-        /// <summary>
-        ///     create a new string type
-        /// </summary>
-        /// <param name="withId">type id</param>
-        public ShortStringType(int withId) : base(withId) {
-        }
-
-        /// <summary>
-        ///     unicode string type
-        /// </summary>
-        public override CommonTypeKind TypeKind
-            => CommonTypeKind.ShortStringType;
-    }
-
-    /// <summary>
-    ///     string type definition
-    /// </summary>
     public class AnsiStringType : StringTypeBase {
 
         /// <summary>

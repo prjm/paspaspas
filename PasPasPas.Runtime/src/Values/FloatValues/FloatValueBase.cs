@@ -14,6 +14,12 @@ namespace PasPasPas.Runtime.Values.FloatValues {
         public abstract bool IsNegative { get; }
 
         /// <summary>
+        ///     type reference kind
+        /// </summary>
+        public TypeReferenceKind ReferenceKind
+            => TypeReferenceKind.ConstantValue;
+
+        /// <summary>
         ///     get float value
         /// </summary>
         public abstract ExtF80 AsExtended { get; }
@@ -22,12 +28,6 @@ namespace PasPasPas.Runtime.Values.FloatValues {
         ///     type id
         /// </summary>
         public abstract int TypeId { get; }
-
-        /// <summary>
-        ///     always <c>true</c> for floating-point numbers
-        /// </summary>
-        public bool IsConstant
-            => true;
 
         /// <summary>
         ///     type kind
@@ -51,7 +51,7 @@ namespace PasPasPas.Runtime.Values.FloatValues {
         ///     format this number as string
         /// </summary>
         /// <returns>number as string</returns>
-        public abstract override string ToString();
+        public abstract string InternalTypeFormat { get; }
 
         internal static ITypeReference Multiply(INumericalValue first, INumericalValue second)
             => new ExtendedValue(first.AsExtended * second.AsExtended);

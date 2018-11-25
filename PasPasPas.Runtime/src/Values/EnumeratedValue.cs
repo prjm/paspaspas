@@ -120,7 +120,7 @@ namespace PasPasPas.Runtime.Values {
         ///     convert this type to a short string
         /// </summary>
         /// <returns></returns>
-        public override string ToString()
+        public override string InternalTypeFormat
             => Value.ToString();
 
     }

@@ -69,7 +69,7 @@ namespace PasPasPas.Typings.Common {
                 return default;
 
             if (baseTypeValue.TypeKind == CommonTypeKind.Type)
-                baseTypeValue = TypeRegistry.MakeReference((baseTypeValue as ITypeNameReference).BaseTypeId);
+                baseTypeValue = TypeRegistry.MakeReference(baseTypeValue.TypeId);
 
             if (baseTypeValue.TypeKind == CommonTypeKind.Unit) {
                 var unit = TypeRegistry.GetTypeByIdOrUndefinedType(baseTypeValue.TypeId) as UnitType;

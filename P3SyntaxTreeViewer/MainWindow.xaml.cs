@@ -9,6 +9,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using PasPasPas.Api;
+using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Parsing.SyntaxTree;
@@ -71,7 +72,7 @@ namespace P3SyntaxTreeViewer {
                     treeViewItem.Header += " [" + t.ToString() + "]";
                 }
 
-                if (typeInfo.TypeInfo.IsConstant) {
+                if (typeInfo.TypeInfo.IsConstant()) {
                     treeViewItem.Header += "* " + typeInfo.TypeInfo.ToString();
                 }
 

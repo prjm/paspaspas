@@ -33,7 +33,7 @@ namespace PasPasPas.Runtime.Values.BooleanValues {
         ///     format this boolean as string
         /// </summary>
         /// <returns></returns>
-        public override string ToString()
+        public override string InternalTypeFormat
             => StringUtils.Invariant($"{value}");
     }
 }

@@ -38,6 +38,12 @@ namespace PasPasPas.Runtime.Values {
             => kind;
 
         /// <summary>
+        ///     constant value
+        /// </summary>
+        public TypeReferenceKind ReferenceKind
+            => TypeReferenceKind.ConstantValue;
+
+        /// <summary>
         ///     always <c>true</c> for special kind constants
         /// </summary>
         public bool IsConstant
@@ -70,26 +76,34 @@ namespace PasPasPas.Runtime.Values {
             => 17 + 31 * (int)kind;
 
         /// <summary>
+        ///     convert this value to a string
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+            => InternalTypeFormat;
+
+        /// <summary>
         ///     convert special value to string
         /// </summary>
         /// <returns></returns>
-        public override string ToString() {
-            switch (kind) {
-                case SpecialConstantKind.IntegerOverflow:
-                    return "IO";
-                case SpecialConstantKind.InvalidInteger:
-                    return "II";
-                case SpecialConstantKind.InvalidReal:
-                    return "IR";
-                case SpecialConstantKind.DivisionByZero:
-                    return "DZ";
-                case SpecialConstantKind.InvalidBool:
-                    return "IB";
-                case SpecialConstantKind.Nil:
-                    return "NIL";
-                default:
-                    return StringUtils.Invariant($"{kind}");
-
+        public string InternalTypeFormat {
+            get {
+                switch (kind) {
+                    case SpecialConstantKind.IntegerOverflow:
+                        return "IO";
+                    case SpecialConstantKind.InvalidInteger:
+                        return "II";
+                    case SpecialConstantKind.InvalidReal:
+                        return "IR";
+                    case SpecialConstantKind.DivisionByZero:
+                        return "DZ";
+                    case SpecialConstantKind.InvalidBool:
+                        return "IB";
+                    case SpecialConstantKind.Nil:
+                        return "NIL";
+                    default:
+                        return StringUtils.Invariant($"{kind}");
+                }
             }
         }
     }

@@ -33,9 +33,9 @@ namespace PasPasPas.Typings.Routines {
             var result = new ParameterGroup();
             result.AddParameter("AValue").SymbolType = signature[0];
 
-            if (signature[0].IsConstant && param.TypeKind.IsIntegral())
+            if (signature[0].IsConstant() && param.TypeKind.IsIntegral())
                 result.ResultType = TypeRegistry.Runtime.Integers.Abs(signature[0]);
-            else if (signature[0].IsConstant && param.TypeKind == CommonTypeKind.RealType)
+            else if (signature[0].IsConstant() && param.TypeKind == CommonTypeKind.RealType)
                 result.ResultType = TypeRegistry.Runtime.RealNumbers.Abs(signature[0]);
             else
                 result.ResultType = signature[0];

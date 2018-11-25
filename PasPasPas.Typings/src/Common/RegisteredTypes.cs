@@ -64,7 +64,7 @@ namespace PasPasPas.Typings.Common {
         /// <summary>
         ///     runtime constant values
         /// </summary>
-        public IRuntimeValueFactory Runtime { get; set; }
+        public IRuntimeValueFactory Runtime { get; }
 
         /// <summary>
         ///     register a new type
@@ -84,11 +84,13 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="intSize">integer size</param>
         /// <param name="pool">string pool</param>
-        public RegisteredTypes(StringPool pool, NativeIntSize intSize) {
+        /// <param name="runtime">runtime values</param>
+        public RegisteredTypes(IRuntimeValueFactory runtime, StringPool pool, NativeIntSize intSize) {
+            Runtime = runtime;
             systemUnit = new UnitType(KnownTypeIds.SystemUnit);
             RegisterType(systemUnit);
 
-            RegisterCommonTypes(intSize);
+            RegisterCommonTypes(runtime, intSize);
             RegisterCommonOperators();
             RegisterTObject(pool);
             RegisterCommonFunctions();
@@ -140,12 +142,12 @@ namespace PasPasPas.Typings.Common {
         /// <summary>
         ///     register built-in types
         /// </summary>
-        private void RegisterCommonTypes(NativeIntSize intSize) {
+        private void RegisterCommonTypes(IRuntimeValueFactory runtime, NativeIntSize intSize) {
             RegisterType(new ErrorType(KnownTypeIds.ErrorType));
 
             RegisterIntTypes();
             RegisterBoolTypes();
-            RegisterStringTypes();
+            RegisterStringTypes(runtime);
             RegisterRealTypes();
             RegisterPointerTypes();
             RegisterAliasTypes();
@@ -244,12 +246,12 @@ namespace PasPasPas.Typings.Common {
         /// <summary>
         ///     register string types
         /// </summary>
-        private void RegisterStringTypes() {
+        private void RegisterStringTypes(IRuntimeValueFactory runtime) {
             RegisterSystemType(new AnsiCharType(KnownTypeIds.AnsiCharType), "AnsiChar");
             RegisterSystemType(new WideCharType(KnownTypeIds.WideCharType), "WideChar");
             RegisterSystemType(new AnsiStringType(KnownTypeIds.AnsiStringType), "AnsiString");
             RegisterSystemType(new AnsiStringType(KnownTypeIds.RawByteString), "RawByteString");
-            RegisterSystemType(new ShortStringType(KnownTypeIds.ShortStringType), "ShortString");
+            RegisterSystemType(new ShortStringType(KnownTypeIds.ShortStringType, runtime.Integers.ToIntegerValue(0xff)), "ShortString");
             RegisterSystemType(new UnicodeStringType(KnownTypeIds.UnicodeStringType), "UnicodeString");
             RegisterSystemType(new WideStringType(KnownTypeIds.WideStringType), "WideString");
         }
@@ -345,7 +347,7 @@ namespace PasPasPas.Typings.Common {
         /// <param name="typeId">type id</param>
         /// <returns>type reference</returns>
         public ITypeReference MakeReference(int typeId)
-            => Runtime.Types.MakeReference(typeId);
+            => Runtime.Types.MakeReference(typeId, GetTypeKindOf(typeId));
 
         /// <summary>
         ///     get the base type of a subrange type

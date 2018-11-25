@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Typings.Common;
 using PasPasPas.Typings.Structured;
@@ -32,10 +33,10 @@ namespace PasPasPas.Typings.Routines {
             var result = new ParameterGroup();
             result.AddParameter("AValue").SymbolType = signature[0];
 
-            if (signature[0].IsConstant)
+            if (signature[0].IsConstant())
                 result.ResultType = TypeRegistry.Runtime.Integers.Hi(signature[0]);
             else
-                result.ResultType = TypeRegistry.Runtime.Types.MakeReference(KnownTypeIds.ByteType);
+                result.ResultType = TypeRegistry.Runtime.Types.MakeReference(KnownTypeIds.ByteType, TypeRegistry.GetTypeKind(KnownTypeIds.ByteType));
 
             callableRoutines.Add(result);
 

@@ -38,6 +38,11 @@ namespace PasPasPas.Runtime.Values.IntValues {
         public abstract BigInteger AsBigInteger { get; }
 
         /// <summary>
+        ///     get the internal type format
+        /// </summary>
+        public abstract string InternalTypeFormat { get; }
+
+        /// <summary>
         ///     get the value as extended value
         /// </summary>
         public ExtF80 AsExtended {
@@ -50,21 +55,15 @@ namespace PasPasPas.Runtime.Values.IntValues {
         }
 
         /// <summary>
-        ///     always <c>true</c> for constant integer values
+        ///     type reference kind
         /// </summary>
-        public bool IsConstant
-            => true;
+        public TypeReferenceKind ReferenceKind
+            => TypeReferenceKind.ConstantValue;
 
         /// <summary>
         ///     type kind
         /// </summary>
         public abstract CommonTypeKind TypeKind { get; }
-
-        /// <summary>
-        ///     format this number as string
-        /// </summary>
-        /// <returns>number as string</returns>
-        public abstract override string ToString();
 
         /// <summary>
         ///     check for equality
@@ -188,6 +187,13 @@ namespace PasPasPas.Runtime.Values.IntValues {
             var s = firstInt.AsBigInteger ^ secondInt.AsBigInteger;
             return ToIntValue(overflow, s);
         }
+
+        /// <summary>
+        ///     format this number as string
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+            => InternalTypeFormat;
 
         /// <summary>
         ///     convert a signed byte to a constant value

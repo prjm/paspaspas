@@ -16,9 +16,7 @@ namespace PasPasPas.Typings.Operators {
         ///     register known operators
         /// </summary>
         /// <param name="typeRegistry">type registry</param>
-        public static void RegisterOperators(ITypeRegistry typeRegistry) {
-            Register(typeRegistry, DefinedOperators.ConcatOperator);
-        }
+        public static void RegisterOperators(ITypeRegistry typeRegistry) => Register(typeRegistry, DefinedOperators.ConcatOperator);
 
         /// <summary>
         ///     create a new string operator
@@ -60,7 +58,7 @@ namespace PasPasPas.Typings.Operators {
         }
 
         private ITypeReference EvaluateConcatOperator(ITypeReference left, ITypeReference right, IStringOperations operations) {
-            if (left.IsConstant && right.IsConstant)
+            if (left.IsConstant() && right.IsConstant())
                 return operations.Concat(left, right);
 
             var leftType = TypeRegistry.GetTypeByIdOrUndefinedType(left.TypeId);

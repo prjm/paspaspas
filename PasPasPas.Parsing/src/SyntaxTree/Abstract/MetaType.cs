@@ -19,7 +19,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     subexpression
         /// </summary>
-        /// <remarks>used for string length / string codepage</remarks>
+        /// <remarks>used for string length / string code page</remarks>
         public IExpression Value { get; set; }
 
         /// <summary>

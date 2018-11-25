@@ -102,7 +102,7 @@ namespace PasPasPas.Typings.Common {
             => environment.TypeRegistry.GetTypeByIdOrUndefinedType(KnownTypeIds.ErrorType);
 
         private ITypeReference GetErrorTypeReference(ITypedSyntaxNode node)
-            => environment.Runtime.Types.MakeReference(KnownTypeIds.ErrorType);
+            => environment.Runtime.Types.MakeErrorTypeReference();
 
         private int GetSmallestIntegralTypeOrNext(int leftId, int rightId)
             => environment.TypeRegistry.GetSmallestIntegralTypeOrNext(leftId, rightId);
@@ -297,7 +297,12 @@ namespace PasPasPas.Typings.Common {
 
             else if (element.Kind == MetaTypeKind.ShortString) {
                 var userTypeId = RequireUserTypeId();
-                var userType = RegisterUserDefinedType(new ShortStringType(userTypeId));
+                var length = TypeRegistry.Runtime.Integers.Invalid;
+
+                if (element.Value != default && element.Value.TypeInfo != default && element.Value.TypeInfo.IsConstant())
+                    length = element.Value.TypeInfo;
+
+                var userType = RegisterUserDefinedType(new ShortStringType(userTypeId, length));
                 element.TypeInfo = GetTypeByReference(userTypeId);
             }
 
@@ -363,47 +368,70 @@ namespace PasPasPas.Typings.Common {
 
             foreach (var part in element.SymbolParts) {
 
-                if (baseTypeValue.TypeId == KnownTypeIds.ErrorType)
-                    break;
+                if (part is MetaType metaType) {
 
-                if (part.Kind == SymbolReferencePartKind.SubItem) {
-                    baseTypeValue = resolver.ResolveTypeByName(baseTypeValue, part.Name);
-                }
-                else if (part.Kind == SymbolReferencePartKind.CallParameters && part.Name != null) {
-                    var callableRoutines = new List<ParameterGroup>();
-                    var signature = CreateSignatureFromSymbolPart(part);
+                    if (metaType.Kind == MetaTypeKind.AnsiString)
+                        baseTypeValue = TypeRegistry.MakeTypeReference(KnownTypeIds.AnsiStringType);
 
-                    if (baseTypeValue.TypeId == KnownTypeIds.UnspecifiedType) {
-                        var reference = resolver.ResolveByName(baseTypeValue, part.Name);
+                    if (metaType.Kind == MetaTypeKind.ShortString)
+                        baseTypeValue = TypeRegistry.MakeTypeReference(KnownTypeIds.ShortStringType);
 
-                        if (reference == null) {
-                            baseTypeValue = GetErrorTypeReference(element);
-                        }
-                        else if (reference.Kind == ReferenceKind.RefToGlobalRoutine) {
-                            if (reference.Symbol is IRoutine routine) {
-                                routine.ResolveCall(callableRoutines, signature);
-                            }
-                        }
-                        else if (reference.Kind == ReferenceKind.RefToType && signature.Length == 1) {
-                            if (signature[0].IsConstant) {
-                                baseTypeValue = environment.Runtime.Cast(signature[0], ((ITypeDefinition)reference.Symbol).TypeId);
-                            }
-                            else {
-                                var resultType = environment.TypeRegistry.Cast(signature[0].TypeId, ((ITypeDefinition)reference.Symbol).TypeId);
-                                baseTypeValue = GetTypeByReference(resultType);
-                            }
-                        }
+                    if (metaType.Kind == MetaTypeKind.UnicodeString)
+                        baseTypeValue = TypeRegistry.MakeTypeReference(KnownTypeIds.UnicodeStringType);
 
-                    }
+                    if (metaType.Kind == MetaTypeKind.WideString)
+                        baseTypeValue = TypeRegistry.MakeTypeReference(KnownTypeIds.WideStringType);
 
-                    else if (baseTypeValue.TypeKind == CommonTypeKind.ClassType && environment.TypeRegistry.GetTypeByIdOrUndefinedType(baseTypeValue.TypeId) is StructuredTypeDeclaration structType) {
-                        structType.ResolveCall(part.Name, callableRoutines, signature);
-                    }
+                    if (metaType.Kind == MetaTypeKind.String)
+                        baseTypeValue = TypeRegistry.MakeTypeReference(KnownTypeIds.StringType);
 
-                    if (callableRoutines.Count == 1)
-                        baseTypeValue = callableRoutines[0].ResultType;
+
                 }
 
+                else if (part is SymbolReferencePart symRef) {
+
+                    if (baseTypeValue.TypeId == KnownTypeIds.ErrorType)
+                        break;
+
+                    if (symRef.Kind == SymbolReferencePartKind.SubItem) {
+                        baseTypeValue = resolver.ResolveTypeByName(baseTypeValue, symRef.Name);
+                    }
+                    else if (symRef.Kind == SymbolReferencePartKind.CallParameters && symRef.Name != null) {
+                        var callableRoutines = new List<ParameterGroup>();
+                        var signature = CreateSignatureFromSymbolPart(symRef);
+
+                        if (baseTypeValue.TypeId == KnownTypeIds.UnspecifiedType) {
+                            var reference = resolver.ResolveByName(baseTypeValue, symRef.Name);
+
+                            if (reference == null) {
+                                baseTypeValue = GetErrorTypeReference(element);
+                            }
+                            else if (reference.Kind == ReferenceKind.RefToGlobalRoutine) {
+                                if (reference.Symbol is IRoutine routine) {
+                                    routine.ResolveCall(callableRoutines, signature);
+                                }
+                            }
+                            else if (reference.Kind == ReferenceKind.RefToType && signature.Length == 1) {
+                                if (signature[0].IsConstant()) {
+                                    baseTypeValue = environment.Runtime.Cast(TypeRegistry, signature[0], ((ITypeDefinition)reference.Symbol).TypeId);
+                                }
+                                else {
+                                    var resultType = environment.TypeRegistry.Cast(signature[0].TypeId, ((ITypeDefinition)reference.Symbol).TypeId);
+                                    baseTypeValue = GetTypeByReference(resultType);
+                                }
+                            }
+
+                        }
+
+                        else if (baseTypeValue.TypeKind == CommonTypeKind.ClassType && environment.TypeRegistry.GetTypeByIdOrUndefinedType(baseTypeValue.TypeId) is StructuredTypeDeclaration structType) {
+                            structType.ResolveCall(symRef.Name, callableRoutines, signature);
+                        }
+
+                        if (callableRoutines.Count == 1)
+                            baseTypeValue = callableRoutines[0].ResultType;
+                    }
+
+                }
             }
 
             element.TypeInfo = baseTypeValue;
@@ -445,7 +473,7 @@ namespace PasPasPas.Typings.Common {
             if (typeDef is EnumeratedType enumType) {
                 var typeID = enumType.CommonTypeId;
                 foreach (var enumValue in enumType.Values) {
-                    enumValue.MakeEnumValue(environment.Runtime, typeID, enumType.TypeId);
+                    enumValue.MakeEnumValue(environment.Runtime, TypeRegistry, typeID, enumType.TypeId);
                 }
             }
 
@@ -552,8 +580,8 @@ namespace PasPasPas.Typings.Common {
 
                 if (typeInfo != null) {
 
-                    if (typeInfo.TypeKind == CommonTypeKind.Type)
-                        typeInfo = TypeRegistry.MakeReference((typeInfo as ITypeNameReference).BaseTypeId);
+                    if (typeInfo.IsType())
+                        typeInfo = TypeRegistry.MakeReference(typeInfo.TypeId);
 
                     if (!typeInfo.TypeKind.IsOrdinal())
                         typeDef.IndexTypes.Add(GetErrorTypeReference(indexDef));
@@ -743,7 +771,7 @@ namespace PasPasPas.Typings.Common {
                     break;
                 }
 
-                isConstant = isConstant && part.TypeInfo.IsConstant;
+                isConstant = isConstant && part.TypeInfo.IsConstant();
             }
 
             var typdef = RegisterUserDefinedType(new SetType(typeId, baseType.TypeId));
@@ -784,7 +812,7 @@ namespace PasPasPas.Typings.Common {
                 }
 
                 count++;
-                isConstant = isConstant && part.TypeInfo.IsConstant;
+                isConstant = isConstant && part.TypeInfo.IsConstant();
             }
 
             if (baseType == null)

@@ -301,7 +301,7 @@ namespace PasPasPas.Typings.Common {
             var left = lowerBound.TypeKind;
             var right = upperBound.TypeKind;
 
-            if (!lowerBound.IsConstant || !upperBound.IsConstant)
+            if (!lowerBound.IsConstant() || !upperBound.IsConstant())
                 return KnownTypeIds.ErrorType;
 
             if (left.IsOrdinal() && right.IsOrdinal()) {

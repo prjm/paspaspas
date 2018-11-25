@@ -42,7 +42,7 @@ namespace PasPasPas.Runtime.Values.IntValues {
         ///     format this number
         /// </summary>
         /// <returns></returns>
-        public override string ToString()
+        public override string InternalTypeFormat
             => StringUtils.Invariant($"{value}");
 
         /// <summary>

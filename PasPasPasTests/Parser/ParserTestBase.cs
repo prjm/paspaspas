@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using PasPasPas.Api;
+using PasPasPas.Globals.Runtime;
 using PasPasPas.Infrastructure.Files;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Options.Bundles;
@@ -187,7 +188,7 @@ namespace PasPasPasTests.Parser {
                     if (typeId >= 0)
                         Assert.AreEqual(typeId, decl.Value.TypeInfo.TypeId);
 
-                    return decl.Value.TypeInfo.IsConstant;
+                    return decl.Value.TypeInfo.IsConstant();
                 }
                 return null;
             }
