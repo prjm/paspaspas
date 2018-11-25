@@ -12,12 +12,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     matching expression for record constants
         /// </summary>
-        public ISyntaxPartList<IExpression> Expressions { get; }
+        public ISyntaxPartCollection<IExpression> Expressions { get; }
 
         /// <summary>
         ///     fields
         /// </summary>
-        public ISyntaxPartList<StructureFields> Fields { get; }
+        public ISyntaxPartCollection<StructureFields> Fields { get; }
 
         /// <summary>
         ///     expression values

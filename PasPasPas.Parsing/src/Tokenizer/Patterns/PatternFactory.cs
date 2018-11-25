@@ -206,7 +206,7 @@ namespace PasPasPas.Parsing.Tokenizer.Patterns {
 
             var keywords = new Dictionary<string, int>(170, StringComparer.OrdinalIgnoreCase) {
                 ["program"] = TokenKind.Program,
-                ["pointer"] = TokenKind.Pointer,
+                ["pointer"] = TokenKind.PointerKeyword,
                 ["type"] = TokenKind.TypeKeyword,
                 ["experimental"] = TokenKind.Experimental,
                 ["deprecated"] = TokenKind.Deprecated,
@@ -260,7 +260,7 @@ namespace PasPasPas.Parsing.Tokenizer.Patterns {
                 ["name"] = TokenKind.Name,
                 ["resident"] = TokenKind.Resident,
                 ["shortstring"] = TokenKind.ShortString,
-                ["string"] = TokenKind.String,
+                ["string"] = TokenKind.StringKeyword,
                 ["widestring"] = TokenKind.WideString,
                 ["unicodestring"] = TokenKind.UnicodeString,
                 ["reference"] = TokenKind.Reference,
@@ -325,7 +325,7 @@ namespace PasPasPas.Parsing.Tokenizer.Patterns {
                 ["while"] = TokenKind.While,
                 ["with"] = TokenKind.With,
                 ["xor"] = TokenKind.Xor,
-                ["object"] = TokenKind.Object,
+                ["object"] = TokenKind.ObjectKeyword,
                 ["varargs"] = TokenKind.VarArgs,
                 ["external"] = TokenKind.External,
                 ["forward"] = TokenKind.Forward,

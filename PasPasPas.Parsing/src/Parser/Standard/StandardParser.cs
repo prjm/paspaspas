@@ -70,7 +70,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
             TokenKind.Mod,
             TokenKind.Nil,
             TokenKind.Not,
-            TokenKind.Object,
+            TokenKind.ObjectKeyword,
             TokenKind.Of,
             TokenKind.Or,
             TokenKind.Packed,
@@ -84,7 +84,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
             TokenKind.Set,
             TokenKind.Shl,
             TokenKind.Shr,
-            TokenKind.String,
+            TokenKind.StringKeyword,
             TokenKind.Then,
             TokenKind.ThreadVar,
             TokenKind.To,
@@ -653,7 +653,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
             var colonSymbol = default(Terminal);
             var semicolon = default(Terminal);
 
-            if (MatchIdentifier(TokenKind.Integer, TokenKind.HexNumber) && LookAhead(1, TokenKind.Colon)) {
+            if (MatchIdentifier(TokenKind.IntegralNumber, TokenKind.HexNumber) && LookAhead(1, TokenKind.Colon)) {
                 label = ParseLabel();
                 colonSymbol = ContinueWithOrMissing(TokenKind.Colon);
             }
@@ -1046,7 +1046,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
             if (!(LookAhead(1, TokenKind.Assignment, TokenKind.OpenBraces, TokenKind.OpenParen)) && Match(TokenKind.GoToKeyword, TokenKind.Exit, TokenKind.Break, TokenKind.Continue))
                 return new StatementPart(ParseGoToStatement());
 
-            if (MatchIdentifier(TokenKind.Inherited, TokenKind.Circumflex, TokenKind.OpenParen, TokenKind.At, TokenKind.AnsiString, TokenKind.UnicodeString, TokenKind.String, TokenKind.WideString, TokenKind.ShortString)) {
+            if (MatchIdentifier(TokenKind.Inherited, TokenKind.Circumflex, TokenKind.OpenParen, TokenKind.At, TokenKind.AnsiString, TokenKind.UnicodeString, TokenKind.StringKeyword, TokenKind.WideString, TokenKind.ShortString)) {
                 var designator = ParseDesignator();
                 var assignmentSymbol = ContinueWith(TokenKind.Assignment);
                 var assignmentValue = default(ExpressionSymbol);
@@ -1572,10 +1572,10 @@ namespace PasPasPas.Parsing.Parser.Standard {
             if (MatchIdentifier(true))
                 return new AsmFactorSymbol(RequireIdentifier(true));
 
-            if (Match(TokenKind.Integer))
+            if (Match(TokenKind.IntegralNumber))
                 return new AsmFactorSymbol(RequireInteger());
 
-            if (Match(TokenKind.Real))
+            if (Match(TokenKind.RealNumber))
                 return new AsmFactorSymbol(RequireRealValue());
 
             if (Match(TokenKind.HexNumber))
@@ -1681,7 +1681,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
                 do {
                     wasAt = false;
 
-                    if (Match(TokenKind.Integer)) {
+                    if (Match(TokenKind.IntegralNumber)) {
                         AddToList(list, RequireInteger());
                     }
                     else if (MatchIdentifier(true)) {
@@ -2201,7 +2201,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
             if (MatchIdentifier())
                 return new LabelSymbol(RequireIdentifier(), allowComma ? ContinueWith(TokenKind.Comma) : default);
 
-            if (Match(TokenKind.Integer))
+            if (Match(TokenKind.IntegralNumber))
                 return new LabelSymbol(RequireInteger(), allowComma ? ContinueWith(TokenKind.Comma) : default);
 
             if (Match(TokenKind.HexNumber))
@@ -2315,21 +2315,21 @@ namespace PasPasPas.Parsing.Parser.Standard {
             var comma = default(Terminal);
 
             if (Match(TokenKind.Packed, TokenKind.Array, TokenKind.Set, TokenKind.File, //
-                TokenKind.Class, TokenKind.Interface, TokenKind.Record, TokenKind.Object, TokenKind.DispInterface)) {
+                TokenKind.Class, TokenKind.Interface, TokenKind.Record, TokenKind.ObjectKeyword, TokenKind.DispInterface)) {
                 var structuredType = ParseStructType();
                 if (allowComma)
                     comma = ContinueWith(TokenKind.Comma);
                 return new TypeSpecificationSymbol(structuredType, comma);
             }
 
-            if (Match(TokenKind.Pointer, TokenKind.Circumflex)) {
+            if (Match(TokenKind.PointerKeyword, TokenKind.Circumflex)) {
                 var pointerType = ParsePointerType();
                 if (allowComma)
                     comma = ContinueWith(TokenKind.Comma);
                 return new TypeSpecificationSymbol(pointerType, comma);
             }
 
-            if (Match(TokenKind.String, TokenKind.ShortString, TokenKind.AnsiString, TokenKind.UnicodeString, TokenKind.WideString)) {
+            if (Match(TokenKind.StringKeyword, TokenKind.ShortString, TokenKind.AnsiString, TokenKind.UnicodeString, TokenKind.WideString)) {
                 var stringType = ParseStringType();
                 if (allowComma)
                     comma = ContinueWith(TokenKind.Comma);
@@ -2377,9 +2377,9 @@ namespace PasPasPas.Parsing.Parser.Standard {
                 if (!advancedCheck) {
                     genericPart = ParseGenericSuffix();
                 }
-                else if (LookAheadIdentifier(1, TokenKind.String, TokenKind.ShortString, TokenKind.WideString, TokenKind.UnicodeString, TokenKind.AnsiString, TokenKind.Pointer, false)) {
+                else if (LookAheadIdentifier(1, TokenKind.StringKeyword, TokenKind.ShortString, TokenKind.WideString, TokenKind.UnicodeString, TokenKind.AnsiString, TokenKind.PointerKeyword, false)) {
                     var whereCloseBrackets = FindCloseBrackets(out var position);
-                    if (whereCloseBrackets && (!LookAheadIdentifier(1 + position, TokenKind.HexNumber, TokenKind.Integer, TokenKind.Real, false) || LookAhead(1 + position, TokenKind.Read, TokenKind.Write, TokenKind.ReadOnly, TokenKind.WriteOnly, TokenKind.Add, TokenKind.Remove, TokenKind.DispId))) {
+                    if (whereCloseBrackets && (!LookAheadIdentifier(1 + position, TokenKind.HexNumber, TokenKind.IntegralNumber, TokenKind.RealNumber, false) || LookAhead(1 + position, TokenKind.Read, TokenKind.Write, TokenKind.ReadOnly, TokenKind.WriteOnly, TokenKind.Add, TokenKind.Remove, TokenKind.DispId))) {
                         genericPart = ParseGenericSuffix();
                     }
                 }
@@ -2482,7 +2482,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
 
             if (Match(TokenKind.Of)) {
                 ofSymbol = ContinueWithOrMissing(TokenKind.Of);
-                objectSymbol = ContinueWithOrMissing(TokenKind.Object);
+                objectSymbol = ContinueWithOrMissing(TokenKind.ObjectKeyword);
             }
 
             return new ProcedureTypeDefinitionSymbol(kindSymbol, parameters, colonSymbol, attributes, returnType, allowAnonymousMethods, ofSymbol, objectSymbol);
@@ -2514,8 +2514,8 @@ namespace PasPasPas.Parsing.Parser.Standard {
         [Rule("StringType", "ShortString | WideString | UnicodeString |('string' [ '[' Expression ']'  ]) | ('AnsiString' '(' ConstExpression ')') ")]
         public StringTypeSymbol ParseStringType() {
 
-            if (Match(TokenKind.String)) {
-                var stringSymbol = ContinueWith(TokenKind.String);
+            if (Match(TokenKind.StringKeyword)) {
+                var stringSymbol = ContinueWith(TokenKind.StringKeyword);
                 var openBraces = ContinueWith(TokenKind.OpenBraces);
                 var stringLength = default(ConstantExpressionSymbol);
                 var closeBraces = default(Terminal);
@@ -2572,7 +2572,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
             if (Match(TokenKind.Interface, TokenKind.DispInterface))
                 return new ClassTypeDeclarationSymbol(ParseInterfaceDef());
 
-            if (Match(TokenKind.Object))
+            if (Match(TokenKind.ObjectKeyword))
                 return new ClassTypeDeclarationSymbol(ParseObjectDecl());
 
             if (Match(TokenKind.Record) && LookAhead(1, TokenKind.Helper))
@@ -2971,7 +2971,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
 
         [Rule("ObjectDecl", "'object' ClassParent ObjectItems 'end' ")]
         public ObjectDeclarationSymbol ParseObjectDecl() {
-            var objectSymbol = ContinueWith(TokenKind.Object);
+            var objectSymbol = ContinueWith(TokenKind.ObjectKeyword);
             var classParent = ParseClassParent();
             var items = ParseObjectItems();
             var endSymbol = ContinueWithOrMissing(TokenKind.End);
@@ -4008,7 +4008,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
         /// <returns></returns>
         [Rule("TypeName", "'string' | 'ansistring' | 'shortstring' | 'unicodestring' | 'widestring' | (NamespaceName [ GenericSuffix ]) ")]
         public TypeNameSymbol ParseTypeName(bool inDesignator = false, bool allowComma = false) {
-            var stringType = ContinueWith(TokenKind.String, TokenKind.AnsiString, TokenKind.ShortString, TokenKind.UnicodeString, TokenKind.WideString);
+            var stringType = ContinueWith(TokenKind.StringKeyword, TokenKind.AnsiString, TokenKind.ShortString, TokenKind.UnicodeString, TokenKind.WideString);
 
             if (stringType != default)
                 return new TypeNameSymbol(stringType, allowComma ? ContinueWith(TokenKind.Comma) : default);
@@ -4182,8 +4182,8 @@ namespace PasPasPas.Parsing.Parser.Standard {
         [Rule("PointerType", "( 'pointer' | '^' TypeSpecification )")]
         public PointerTypeSymbol ParsePointerType() {
 
-            if (Match(TokenKind.Pointer))
-                return new PointerTypeSymbol(ContinueWith(TokenKind.Pointer));
+            if (Match(TokenKind.PointerKeyword))
+                return new PointerTypeSymbol(ContinueWith(TokenKind.PointerKeyword));
 
             var circumflex = ContinueWithOrMissing(TokenKind.Circumflex);
             var typeSpecification = ParseTypeSpecification();
@@ -4489,7 +4489,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
             if (unaryOperator != default)
                 return new FactorSymbol(unaryOperator, RequireIdentifier());
 
-            if (Match(TokenKind.Integer)) {
+            if (Match(TokenKind.IntegralNumber)) {
                 var intValue = RequireInteger();
 
                 if (Match(TokenKind.Dot))
@@ -4507,7 +4507,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
                 return new FactorSymbol(hexValue, designator);
             }
 
-            if (Match(TokenKind.Real)) {
+            if (Match(TokenKind.RealNumber)) {
                 var realValue = RequireRealValue();
 
                 if (Match(TokenKind.Dot))
@@ -4540,7 +4540,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
             if (Match(TokenKind.OpenBraces))
                 return new FactorSymbol(ParseSetSection());
 
-            if (MatchIdentifier(TokenKind.Inherited, TokenKind.ShortString, TokenKind.String, TokenKind.WideString, TokenKind.UnicodeString, TokenKind.AnsiString, TokenKind.Dot))
+            if (MatchIdentifier(TokenKind.Inherited, TokenKind.ShortString, TokenKind.StringKeyword, TokenKind.WideString, TokenKind.UnicodeString, TokenKind.AnsiString, TokenKind.Dot))
                 return new FactorSymbol(ParseDesignator());
 
             if (Match(TokenKind.OpenParen) && IsDesignator())
@@ -4572,7 +4572,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
             var item = default(DesignatorItemSymbol);
             var hasIdentifier = false;
 
-            if (MatchIdentifier(TokenKind.String, TokenKind.ShortString, TokenKind.AnsiString, TokenKind.WideString, TokenKind.String) && LookAhead(1, TokenKind.Dot, TokenKind.AngleBracketsOpen)) {
+            if (MatchIdentifier(TokenKind.StringKeyword, TokenKind.ShortString, TokenKind.AnsiString, TokenKind.WideString, TokenKind.StringKeyword) && LookAhead(1, TokenKind.Dot, TokenKind.AngleBracketsOpen)) {
                 var hasDot = LookAhead(1, TokenKind.Dot);
                 var hasBracketsOpen = LookAhead(1, TokenKind.AngleBracketsOpen);
                 var hasBracketsClose = hasBracketsOpen && HasGenericTypeIdent();
@@ -4641,18 +4641,18 @@ namespace PasPasPas.Parsing.Parser.Standard {
             var closeParen = default(Terminal);
 
             if (Match(TokenKind.Dot) ||
-                (!hasIdentifier && MatchIdentifier(TokenKind.String, TokenKind.AnsiString, TokenKind.ShortString, TokenKind.WideString, TokenKind.UnicodeString))) {
+                (!hasIdentifier && MatchIdentifier(TokenKind.StringKeyword, TokenKind.AnsiString, TokenKind.ShortString, TokenKind.WideString, TokenKind.UnicodeString))) {
                 dot = ContinueWith(TokenKind.Dot);
-                if (Match(TokenKind.String, TokenKind.ShortString, TokenKind.AnsiString, TokenKind.UnicodeString, TokenKind.WideString))
+                if (Match(TokenKind.StringKeyword, TokenKind.ShortString, TokenKind.AnsiString, TokenKind.UnicodeString, TokenKind.WideString))
                     subitem = ParseStringType();
                 else
                     subitem = RequireIdentifier(true);
             };
 
             if (Match(TokenKind.AngleBracketsOpen) &&
-                LookAheadIdentifier(1, TokenKind.String, TokenKind.ShortString, TokenKind.WideString, TokenKind.UnicodeString, TokenKind.AnsiString, TokenKind.Pointer, false)) {
+                LookAheadIdentifier(1, TokenKind.StringKeyword, TokenKind.ShortString, TokenKind.WideString, TokenKind.UnicodeString, TokenKind.AnsiString, TokenKind.PointerKeyword, false)) {
                 var whereCloseBrackets = FindCloseBrackets(out var position);
-                if (whereCloseBrackets && (!LookAheadIdentifier(1 + position, TokenKind.HexNumber, TokenKind.Integer, TokenKind.Real, false) || LookAhead(1 + position, TokenKind.Read, TokenKind.Write, TokenKind.ReadOnly, TokenKind.WriteOnly, TokenKind.Add, TokenKind.Remove, TokenKind.DispId))) {
+                if (whereCloseBrackets && (!LookAheadIdentifier(1 + position, TokenKind.HexNumber, TokenKind.IntegralNumber, TokenKind.RealNumber, false) || LookAhead(1 + position, TokenKind.Read, TokenKind.Write, TokenKind.ReadOnly, TokenKind.WriteOnly, TokenKind.Add, TokenKind.Remove, TokenKind.DispId))) {
                     genericSuffix = ParseGenericSuffix();
                 }
             }
@@ -4754,7 +4754,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
         /// </summary>
         /// <returns></returns>
         public StandardInteger RequireInteger()
-            => new StandardInteger(ContinueWithOrMissing(TokenKind.Integer));
+            => new StandardInteger(ContinueWithOrMissing(TokenKind.IntegralNumber));
 
         /// <summary>
         ///     parse a hex number
@@ -4768,7 +4768,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
         /// </summary>
         /// <returns></returns>
         public RealNumberSymbol RequireRealValue()
-            => new RealNumberSymbol(ContinueWithOrMissing(TokenKind.Real));
+            => new RealNumberSymbol(ContinueWithOrMissing(TokenKind.RealNumber));
 
 
         /// <summary>
@@ -4828,7 +4828,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
                 var dot = default(Terminal);
                 var comma = default(Terminal);
 
-                name = ContinueWith(TokenKind.AnsiString, TokenKind.String, TokenKind.WideString, TokenKind.ShortString, TokenKind.UnicodeString);
+                name = ContinueWith(TokenKind.AnsiString, TokenKind.StringKeyword, TokenKind.WideString, TokenKind.ShortString, TokenKind.UnicodeString);
 
                 if (name == default && allowIn && Match(TokenKind.In))
                     name = ContinueWith(TokenKind.In);

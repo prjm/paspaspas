@@ -5,7 +5,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// <summary>
     ///     variant parts
     /// </summary>
-    public class StructureVariant : CombinedSymbolTableBaseCollection<StructureVariantItem, StructureField> {
+    public class StructureVariantCollection : CombinedSymbolTableBaseCollection<StructureVariantItem, StructureField> {
 
         /// <summary>
         ///     accept visitor

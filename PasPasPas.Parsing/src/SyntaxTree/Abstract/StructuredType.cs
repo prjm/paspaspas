@@ -18,17 +18,17 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     list of base types
         /// </summary>
-        public ISyntaxPartList<ITypeSpecification> BaseTypes { get; }
+        public ISyntaxPartCollection<ITypeSpecification> BaseTypes { get; }
 
         /// <summary>
         ///     fields
         /// </summary>
-        public StructureFieldDefinition Fields { get; }
+        public StructureFieldDefinitionCollection Fields { get; }
 
         /// <summary>
         ///     methods
         /// </summary>
-        public StructureMethodDefinition Methods { get; }
+        public StructureMethodDefinitionCollection Methods { get; }
 
         /// <summary>
         ///     method resolutions
@@ -38,23 +38,23 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     properties
         /// </summary>
-        public StructurePropertyDefinition Properties { get; }
+        public StructurePropertyDefinitionCollection Properties { get; }
 
         /// <summary>
         ///     variant parts
         /// </summary>
-        public StructureVariant Variants { get; }
+        public StructureVariantCollection Variants { get; }
 
         /// <summary>
         ///     creates a new structured type
         /// </summary>
         public StructuredType() {
             BaseTypes = new SyntaxPartCollection<ITypeSpecification>(this);
-            Variants = new StructureVariant() { ParentItem = this };
-            Fields = new StructureFieldDefinition() { ParentItem = this };
-            Methods = new StructureMethodDefinition() { ParentItem = this };
+            Variants = new StructureVariantCollection() { ParentItem = this };
+            Fields = new StructureFieldDefinitionCollection() { ParentItem = this };
+            Methods = new StructureMethodDefinitionCollection() { ParentItem = this };
             MethodResolutions = new StructureMethodResolutionDefinition() { ParentItem = this };
-            Properties = new StructurePropertyDefinition() { ParentItem = this };
+            Properties = new StructurePropertyDefinitionCollection() { ParentItem = this };
         }
 
         /// <summary>

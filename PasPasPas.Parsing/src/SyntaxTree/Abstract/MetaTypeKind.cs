@@ -31,14 +31,14 @@
         ShortString = 4,
 
         /// <summary>
-        ///     ansi string
+        ///     ANSI string
         /// </summary>
         AnsiString = 5,
 
         /// <summary>
         ///     string
         /// </summary>
-        String = 6,
+        StringType = 6,
 
         /// <summary>
         ///     named type
@@ -48,7 +48,7 @@
         /// <summary>
         ///     generic pointer type
         /// </summary>
-        Pointer = 8,
+        PointerType = 8,
 
         /// <summary>
         ///     short string (System.ShortString) with length 255

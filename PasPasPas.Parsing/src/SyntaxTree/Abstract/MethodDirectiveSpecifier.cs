@@ -17,7 +17,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     specified constraints
         /// </summary>
-        public ISyntaxPartList<IExpression> Constraints { get; }
+        public ISyntaxPartCollection<IExpression> Constraints { get; }
 
         /// <summary>
         ///     create a new method directive specifier

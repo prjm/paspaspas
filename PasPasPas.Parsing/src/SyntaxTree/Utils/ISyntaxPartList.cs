@@ -6,7 +6,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Utils {
     ///     generic interface for syntax part lists
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public interface ISyntaxPartList<T> :
+    public interface ISyntaxPartCollection<T> :
         ICollection<T>,
         IList<T> where T : class, ISyntaxPart {
 

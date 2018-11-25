@@ -56,7 +56,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Utils {
         /// </summary>
         /// <param name="tokens"></param>
         /// <returns></returns>
-        private int ComputeHashValue(Terminal tokens)
+        private static int ComputeHashValue(Terminal tokens)
             => tokens.GetHashCode();
 
         /// <summary>

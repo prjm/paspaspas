@@ -8,6 +8,6 @@
         /// <summary>
         ///     parameter list by name
         /// </summary>
-        ParameterDefinitions Parameters { get; }
+        ParameterDefinitionCollection Parameters { get; }
     }
 }

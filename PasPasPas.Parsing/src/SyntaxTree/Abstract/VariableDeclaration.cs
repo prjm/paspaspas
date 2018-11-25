@@ -29,7 +29,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     variable names
         /// </summary>
-        public ISyntaxPartList<VariableName> Names { get; }
+        public ISyntaxPartCollection<VariableName> Names { get; }
 
         /// <summary>
         ///     create a new variable declaration

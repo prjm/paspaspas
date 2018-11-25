@@ -159,8 +159,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <returns></returns>
         public static MetaTypeKind ForMetaType(int kind) {
             switch (kind) {
-                case TokenKind.String:
-                    return MetaTypeKind.String;
+                case TokenKind.StringKeyword:
+                    return MetaTypeKind.StringType;
                 case TokenKind.AnsiString:
                     return MetaTypeKind.AnsiString;
                 case TokenKind.ShortString:

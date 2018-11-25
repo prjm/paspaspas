@@ -18,12 +18,6 @@ namespace PasPasPas.Runtime.Values.StringValues {
         public abstract string AsUnicodeString { get; }
 
         /// <summary>
-        ///     always <c>true</c> for string constants
-        /// </summary>
-        public bool IsConstant
-            => true;
-
-        /// <summary>
         ///     type kind
         /// </summary>
         public abstract CommonTypeKind TypeKind { get; }

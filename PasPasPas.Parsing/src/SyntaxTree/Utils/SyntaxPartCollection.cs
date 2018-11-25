@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using PasPasPas.Infrastructure.Utils;
 
 namespace PasPasPas.Parsing.SyntaxTree.Utils {
 
@@ -10,7 +9,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Utils {
     ///     collection of syntax part elemens
     /// </summary>
     /// <typeparam name="T">elemet type</typeparam>
-    public class SyntaxPartCollection<T> : ISyntaxPartList<T> where T : class, ISyntaxPart {
+    public class SyntaxPartCollection<T> : ISyntaxPartCollection<T> where T : class, ISyntaxPart {
 
         private readonly ISyntaxPart parent;
 
@@ -38,7 +37,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Utils {
             false;
 
         /// <summary>
-        ///     acces an item of this collection
+        ///     access an item of this collection
         /// </summary>
         /// <param name="index">item index</param>
         /// <returns></returns>
@@ -46,18 +45,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Utils {
             get {
                 if ((index >= 0) && (index < Count))
                     return internalList[index];
-                else {
-                    throw new IndexOutOfRangeException();
-                };
+                throw new ArgumentOutOfRangeException(nameof(index), $"Index {index} out of range [0..{Count}]");
             }
 
             set {
                 if ((index >= 0) && (index < Count))
                     internalList[index] = value;
-                else {
-                    throw new IndexOutOfRangeException($"Invald index {index}");
-                };
-
+                else
+                    throw new ArgumentOutOfRangeException(nameof(index), $"Index {index} out of range [0..{Count}]");
             }
         }
 

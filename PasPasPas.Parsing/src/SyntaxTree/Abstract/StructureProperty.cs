@@ -22,7 +22,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     parameters (indexed property)
         /// </summary>
-        public ParameterDefinitions Parameters { get; }
+        public ParameterDefinitionCollection Parameters { get; }
 
         /// <summary>
         ///     property visiblity
@@ -65,14 +65,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     property accessors
         /// </summary>
-        public ISyntaxPartList<StructurePropertyAccessor> Accessors { get; }
+        public ISyntaxPartCollection<StructurePropertyAccessor> Accessors { get; }
 
         /// <summary>
         ///     create a new property of a structured type
         /// </summary>
         public StructureProperty() {
             Accessors = new SyntaxPartCollection<StructurePropertyAccessor>(this);
-            Parameters = new ParameterDefinitions() { ParentItem = this };
+            Parameters = new ParameterDefinitionCollection() { ParentItem = this };
         }
 
         /// <summary>

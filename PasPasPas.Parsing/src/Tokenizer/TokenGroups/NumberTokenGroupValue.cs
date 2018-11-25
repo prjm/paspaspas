@@ -12,7 +12,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
     public sealed class NumberTokenGroupValue : PatternContinuation {
 
         private readonly CharacterClassTokenGroupValue digitTokenizer
-            = new CharacterClassTokenGroupValue(TokenKind.Integer, new DigitCharClass(false), 0, LiteralParserKind.IntegerNumbers, Guid.Empty);
+            = new CharacterClassTokenGroupValue(TokenKind.IntegralNumber, new DigitCharClass(false), 0, LiteralParserKind.IntegerNumbers, Guid.Empty);
 
         private readonly IdentifierCharacterClass allIdents
             = new IdentifierCharacterClass(ampersands: true, digits: true, dots: true);
@@ -37,7 +37,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
 
             if (state.AtEof) {
                 var number = state.ParserLiteral(state.GetBufferContent(), LiteralParserKind.IntegerNumbers);
-                return new Token(TokenKind.Integer, state, number);
+                return new Token(TokenKind.IntegralNumber, state, number);
             }
 
             state.Clear();
@@ -93,10 +93,10 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
 
             if (withDot || withExponent) {
                 var literalValue = string.Concat(digits, ".", decimals, "E", minus ? "-" : "+", exp);
-                return new Token(TokenKind.Real, state, state.ConvertRealLiteral(literalValue));
+                return new Token(TokenKind.RealNumber, state, state.ConvertRealLiteral(literalValue));
             }
             else {
-                return new Token(TokenKind.Integer, state, digitValue);
+                return new Token(TokenKind.IntegralNumber, state, digitValue);
             }
         }
 

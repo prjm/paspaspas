@@ -5,7 +5,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// <summary>
     ///     generic type
     /// </summary>
-    public class GenericType : SymbolTableBase<GenericConstraint>, ISymbolTableEntry {
+    public class GenericTypeNameCollection : SymbolTableBaseCollection<GenericConstraint>, ISymbolTableEntry {
 
         /// <summary>
         ///     type name

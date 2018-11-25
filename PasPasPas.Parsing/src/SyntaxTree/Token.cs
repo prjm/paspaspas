@@ -56,7 +56,7 @@ namespace PasPasPas.Parsing.SyntaxTree {
         /// <param name="other"></param>
         /// <returns></returns>
         public bool Equals(Token other)
-            => (Kind == other.Kind) && (string.Equals(Value, other.Value, StringComparison.OrdinalIgnoreCase));
+            => (Kind == other.Kind) && (string.Equals(Value, other.Value, StringComparison.Ordinal));
 
         /// <summary>
         ///     compare tokens
@@ -73,8 +73,11 @@ namespace PasPasPas.Parsing.SyntaxTree {
         ///     compute a hash code
         /// </summary>
         /// <returns></returns>
-        public override int GetHashCode()
-            => 17 + 23 * Kind + 11 * Value.GetHashCode();
+        public override int GetHashCode() {
+            unchecked {
+                return 17 + 23 * Kind + 11 * Value.GetHashCode(StringComparison.Ordinal);
+            }
+        }
 
         /// <summary>
         ///     compare two tokens
@@ -86,7 +89,7 @@ namespace PasPasPas.Parsing.SyntaxTree {
             => left.Equals(right);
 
         /// <summary>
-        ///     compare two token
+        ///     compare two tokens
         /// </summary>
         /// <param name="left"></param>
         /// <param name="right"></param>

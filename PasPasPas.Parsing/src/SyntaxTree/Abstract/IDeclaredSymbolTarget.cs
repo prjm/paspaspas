@@ -8,7 +8,7 @@
         /// <summary>
         ///     get symbols
         /// </summary>
-        DeclaredSymbols Symbols { get; }
+        DeclaredSymbolCollection Symbols { get; }
 
     }
 }

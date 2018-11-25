@@ -8,7 +8,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// <summary>
     ///     a list of declared symbols
     /// </summary>
-    public class DeclaredSymbols : CombinedSymbolTableBaseCollection<DeclaredSymbolGroup, DeclaredSymbol>, IDeclaredSymbolTarget {
+    public class DeclaredSymbolCollection : CombinedSymbolTableBaseCollection<DeclaredSymbolGroup, DeclaredSymbol>, IDeclaredSymbolTarget {
 
         /// <summary>
         ///     log duplicated unit name
@@ -33,7 +33,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     declared symbols
         /// </summary>
-        public DeclaredSymbols Symbols
+        public DeclaredSymbolCollection Symbols
             => this;
 
         /// <summary>

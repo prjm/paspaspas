@@ -10,9 +10,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     visit an element
         /// </summary>
-        /// <typeparam name="VisitorType"></typeparam>
+        /// <typeparam name="TNodeToVisit"></typeparam>
         /// <param name="element">element to visit</param>
-        void StartVisit<VisitorType>(VisitorType element);
+        void StartVisit<TNodeToVisit>(TNodeToVisit element);
 
     }
 
@@ -24,9 +24,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     visit an element
         /// </summary>
-        /// <typeparam name="VisitorType"></typeparam>
+        /// <typeparam name="TNodeToVisit"></typeparam>
         /// <param name="element">element to visit</param>
-        void EndVisit<VisitorType>(VisitorType element);
+        void EndVisit<TNodeToVisit>(TNodeToVisit element);
 
     }
 
@@ -41,8 +41,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
     /// <summary>
     ///     visitor for a concrete type
     /// </summary>
-    /// <typeparam name="VisitorType">Visitor type</typeparam>
-    public interface IStartVisitor<VisitorType> {
+    /// <typeparam name="TNodeToVisit">Visitor type</typeparam>
+    public interface IStartVisitor<TNodeToVisit> {
 
         /// <summary>
         ///     get the concrete visitor
@@ -54,15 +54,15 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     visit an element
         /// </summary>
         /// <param name="element">element to visit</param>
-        void StartVisit(VisitorType element);
+        void StartVisit(TNodeToVisit element);
 
     }
 
     /// <summary>
     ///     visitor for a concrete type
     /// </summary>
-    /// <typeparam name="VisitorType">Visitor type</typeparam>
-    public interface IEndVisitor<VisitorType> {
+    /// <typeparam name="TNodeToVisit">Visitor type</typeparam>
+    public interface IEndVisitor<TNodeToVisit> {
 
         /// <summary>
         ///     get the concrete visitor
@@ -74,29 +74,29 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         ///     visit an element
         /// </summary>
         /// <param name="element">element to visit</param>
-        void EndVisit(VisitorType element);
+        void EndVisit(TNodeToVisit element);
 
     }
 
     /// <summary>
     ///     visit tree node children
     /// </summary>
-    /// <typeparam name="VisitorType"></typeparam>
-    public interface IChildVisitor<VisitorType> {
+    /// <typeparam name="TNodeToVisit"></typeparam>
+    public interface IChildVisitor<TNodeToVisit> {
 
         /// <summary>
         ///     start visiting
         /// </summary>
         /// <param name="element"></param>
         /// <param name="child"></param>
-        void StartVisitChild(VisitorType element, ISyntaxPart child);
+        void StartVisitChild(TNodeToVisit element, ISyntaxPart child);
 
         /// <summary>
         ///     stop visiting
         /// </summary>
         /// <param name="element"></param>
         /// <param name="child"></param>
-        void EndVisitChild(VisitorType element, ISyntaxPart child);
+        void EndVisitChild(TNodeToVisit element, ISyntaxPart child);
 
     }
 
@@ -108,18 +108,18 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting a child
         /// </summary>
-        /// <typeparam name="VisitorType"></typeparam>
+        /// <typeparam name="TNodeToVisit"></typeparam>
         /// <param name="element"></param>
         /// <param name="child"></param>
-        void StartVisitChild<VisitorType>(VisitorType element, ISyntaxPart child);
+        void StartVisitChild<TNodeToVisit>(TNodeToVisit element, ISyntaxPart child);
 
         /// <summary>
         ///     stop visiting a child
         /// </summary>
-        /// <typeparam name="VisitorType"></typeparam>
+        /// <typeparam name="TNodeToVisit"></typeparam>
         /// <param name="element"></param>
         /// <param name="child"></param>
-        void EndVisitChild<VisitorType>(VisitorType element, ISyntaxPart child);
+        void EndVisitChild<TNodeToVisit>(TNodeToVisit element, ISyntaxPart child);
 
 
     }

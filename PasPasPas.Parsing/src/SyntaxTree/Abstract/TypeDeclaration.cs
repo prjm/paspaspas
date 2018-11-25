@@ -49,7 +49,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     declared symbols
         /// </summary>
-        public DeclaredSymbols Symbols {
+        public DeclaredSymbolCollection Symbols {
             get {
                 if (TypeValue is IDeclaredSymbolTarget delegatedValue)
                     return delegatedValue.Symbols;

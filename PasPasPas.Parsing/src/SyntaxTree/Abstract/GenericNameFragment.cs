@@ -17,7 +17,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     symbol type
         /// </summary>
-        public ISyntaxPartList<ITypeSpecification> TypeValues { get; }
+        public ISyntaxPartCollection<ITypeSpecification> TypeValues { get; }
 
         /// <summary>
         ///     create a new generic name fragment

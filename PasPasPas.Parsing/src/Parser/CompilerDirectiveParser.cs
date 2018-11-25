@@ -511,16 +511,16 @@ namespace PasPasPas.Parsing.Parser {
 
             if (mSwitch || symbol.GetSymbolKind() == TokenKind.MinMemStackSizeSwitchLong) {
 
-                size1 = ContinueWith(TokenKind.Integer);
+                size1 = ContinueWith(TokenKind.IntegralNumber);
 
                 if (size1 == default) {
-                    size1 = ErrorAndSkip(CompilerDirectiveParserErrors.InvalidStackMemorySizeDirective, new[] { TokenKind.Integer });
+                    size1 = ErrorAndSkip(CompilerDirectiveParserErrors.InvalidStackMemorySizeDirective, new[] { TokenKind.IntegralNumber });
                 }
                 else if (size1?.Token.ParsedValue is IIntegerValue intValue && !intValue.IsNegative) {
                     minStackSize = intValue.UnsignedValue;
                 }
                 else {
-                    size1 = ErrorAndSkip(CompilerDirectiveParserErrors.InvalidStackMemorySizeDirective, new[] { TokenKind.Integer });
+                    size1 = ErrorAndSkip(CompilerDirectiveParserErrors.InvalidStackMemorySizeDirective, new[] { TokenKind.IntegralNumber });
                 }
             }
 
@@ -529,16 +529,16 @@ namespace PasPasPas.Parsing.Parser {
 
             if (mSwitch || symbol.GetSymbolKind() == TokenKind.MaxMemStackSizeSwitchLong) {
 
-                size2 = ContinueWith(TokenKind.Integer);
+                size2 = ContinueWith(TokenKind.IntegralNumber);
 
                 if (size2 == default) {
-                    size2 = ErrorAndSkip(CompilerDirectiveParserErrors.InvalidStackMemorySizeDirective, new[] { TokenKind.Integer });
+                    size2 = ErrorAndSkip(CompilerDirectiveParserErrors.InvalidStackMemorySizeDirective, new[] { TokenKind.IntegralNumber });
                 }
                 else if (size2?.Token.ParsedValue is IIntegerValue intValue && !intValue.IsNegative) {
                     maxStackSize = intValue.UnsignedValue;
                 }
                 else {
-                    size2 = ErrorAndSkip(CompilerDirectiveParserErrors.InvalidStackMemorySizeDirective, new[] { TokenKind.Integer });
+                    size2 = ErrorAndSkip(CompilerDirectiveParserErrors.InvalidStackMemorySizeDirective, new[] { TokenKind.IntegralNumber });
                 }
             }
 
@@ -672,11 +672,11 @@ namespace PasPasPas.Parsing.Parser {
 
         private ParsedVersion ParsePEVersion(Terminal symbol) {
             var hasError = false;
-            var number = ContinueWith(TokenKind.Real);
+            var number = ContinueWith(TokenKind.RealNumber);
 
             if (number == default) {
                 hasError = true;
-                number = ErrorAndSkip(CompilerDirectiveParserErrors.InvalidPEVersionDirective, new[] { TokenKind.Real });
+                number = ErrorAndSkip(CompilerDirectiveParserErrors.InvalidPEVersionDirective, new[] { TokenKind.RealNumber });
             }
 
             var text = (number?.Token.Value ?? string.Empty).Split(new[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
@@ -901,17 +901,17 @@ namespace PasPasPas.Parsing.Parser {
 
         private ImageBase ParseImageBase() {
             var symbol = ContinueWithOrMissing(TokenKind.ImageBase);
-            var value = ContinueWith(TokenKind.Integer, TokenKind.HexNumber);
+            var value = ContinueWith(TokenKind.IntegralNumber, TokenKind.HexNumber);
             var baseValue = 0ul;
 
             if (value != default) {
                 if (value.Token.ParsedValue is IIntegerValue hexValue && !hexValue.IsNegative)
                     baseValue = hexValue.UnsignedValue;
                 else
-                    ErrorLastPart(CompilerDirectiveParserErrors.InvalidImageBaseDirective, new[] { TokenKind.Integer, TokenKind.HexNumber });
+                    ErrorLastPart(CompilerDirectiveParserErrors.InvalidImageBaseDirective, new[] { TokenKind.IntegralNumber, TokenKind.HexNumber });
             }
             else {
-                value = ErrorAndSkip(CompilerDirectiveParserErrors.InvalidImageBaseDirective, new[] { TokenKind.Integer, TokenKind.HexNumber });
+                value = ErrorAndSkip(CompilerDirectiveParserErrors.InvalidImageBaseDirective, new[] { TokenKind.IntegralNumber, TokenKind.HexNumber });
             }
 
             return new ImageBase(symbol, value, baseValue);
@@ -1018,7 +1018,7 @@ namespace PasPasPas.Parsing.Parser {
 
         private CodeAlignParameter ParseCodeAlignParameter() {
             var symbol = ContinueWithOrMissing(TokenKind.CodeAlign);
-            var value = ContinueWith(TokenKind.Integer);
+            var value = ContinueWith(TokenKind.IntegralNumber);
             var codeAlign = CodeAlignment.Undefined;
 
             if (value != default && value.Token.ParsedValue is IIntegerValue intValue) {
@@ -1051,7 +1051,7 @@ namespace PasPasPas.Parsing.Parser {
 
             }
             else {
-                value = ErrorAndSkip(CompilerDirectiveParserErrors.InvalidCodeAlignDirective, new[] { TokenKind.Integer });
+                value = ErrorAndSkip(CompilerDirectiveParserErrors.InvalidCodeAlignDirective, new[] { TokenKind.IntegralNumber });
             }
 
             return new CodeAlignParameter(symbol, value, codeAlign);
@@ -1128,11 +1128,11 @@ namespace PasPasPas.Parsing.Parser {
 
         private MinEnumSize ParseLongEnumSizeSwitch() {
             var symbol = ContinueWithOrMissing(TokenKind.EnumSizeSwitchLong);
-            var sizeSymbol = ContinueWith(TokenKind.Integer);
+            var sizeSymbol = ContinueWith(TokenKind.IntegralNumber);
             var hasError = false;
 
             if (sizeSymbol == default) {
-                sizeSymbol = ErrorAndSkip(CompilerDirectiveParserErrors.InvalidMinEnumSizeDirective, new[] { TokenKind.Integer });
+                sizeSymbol = ErrorAndSkip(CompilerDirectiveParserErrors.InvalidMinEnumSizeDirective, new[] { TokenKind.IntegralNumber });
                 hasError = true;
             }
 
@@ -1900,7 +1900,7 @@ namespace PasPasPas.Parsing.Parser {
             if (alignSwitch.GetSymbolKind() == TokenKind.Off)
                 return new AlignSwitch(alignSymbol, alignSwitch, Alignment.Unaligned);
 
-            alignSwitch = ContinueWith(TokenKind.Integer);
+            alignSwitch = ContinueWith(TokenKind.IntegralNumber);
 
             if (alignSwitch != default && alignSwitch.Token.ParsedValue is IIntegerValue intValue) {
 
@@ -1927,7 +1927,7 @@ namespace PasPasPas.Parsing.Parser {
                 return new AlignSwitch(alignSymbol, alignSwitch, Alignment.Undefined);
             }
 
-            alignSwitch = ErrorAndSkip(CompilerDirectiveParserErrors.InvalidAlignDirective, new[] { TokenKind.Integer });
+            alignSwitch = ErrorAndSkip(CompilerDirectiveParserErrors.InvalidAlignDirective, new[] { TokenKind.IntegralNumber });
             return new AlignSwitch(alignSymbol, alignSwitch, Alignment.Undefined);
         }
 
@@ -1997,7 +1997,7 @@ namespace PasPasPas.Parsing.Parser {
 
         private ISyntaxPart ParseTypeInfoSwitch() {
 
-            if (LookAhead(1, TokenKind.Integer)) {
+            if (LookAhead(1, TokenKind.IntegralNumber)) {
                 return ParseStackSizeSwitch(true);
             }
 

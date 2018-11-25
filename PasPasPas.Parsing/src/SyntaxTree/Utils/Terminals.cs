@@ -57,17 +57,20 @@ namespace PasPasPas.Parsing.SyntaxTree.Utils {
         /// </summary>
         /// <param name="tokens"></param>
         /// <returns></returns>
-        private int ComputeHashValue(TokenSequence tokens) {
+        private static int ComputeHashValue(TokenSequence tokens) {
             var result = 17;
-            result = result * 31 + tokens.Value.GetHashCode();
 
-            if (tokens.Prefix != default)
-                foreach (var prefix in tokens.Prefix)
-                    result = result * 31 + prefix.GetHashCode();
+            unchecked {
+                result = result * 31 + tokens.Value.GetHashCode();
 
-            if (tokens.Suffix != default)
-                foreach (var suffix in tokens.Suffix)
-                    result = result * 31 + suffix.GetHashCode();
+                if (tokens.Prefix != default)
+                    foreach (var prefix in tokens.Prefix)
+                        result = result * 31 + prefix.GetHashCode();
+
+                if (tokens.Suffix != default)
+                    foreach (var suffix in tokens.Suffix)
+                        result = result * 31 + suffix.GetHashCode();
+            }
 
             return result;
         }

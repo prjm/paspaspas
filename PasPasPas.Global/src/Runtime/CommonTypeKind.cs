@@ -8,155 +8,155 @@
         /// <summary>
         ///     unknown type
         /// </summary>
-        UnknownType,
+        UnknownType = 0,
 
         /// <summary>
-        ///     Integer type
+        ///     integer type (of 8, 16 or 32 bit size)
         /// </summary>
-        IntegerType,
+        IntegerType = 1,
 
         /// <summary>
-        ///     byte char type
+        ///     byte char type (8 bit)
         /// </summary>
-        AnsiCharType,
+        AnsiCharType = 2,
 
         /// <summary>
         ///     enumeration type
         /// </summary>
-        EnumerationType,
+        EnumerationType = 3,
 
         /// <summary>
-        ///     floating point number
+        ///     floating point number type
         /// </summary>
-        RealType,
+        RealType = 4,
 
         /// <summary>
         ///     short string type
         /// </summary>
-        ShortStringType,
+        ShortStringType = 5,
 
         /// <summary>
         ///     set type
         /// </summary>
-        SetType,
+        SetType = 6,
 
         /// <summary>
         ///     class type
         /// </summary>
-        ClassType,
+        ClassType = 7,
 
         /// <summary>
         ///     method type
         /// </summary>
-        MethodType,
+        MethodType = 8,
 
         /// <summary>
         ///     wide char type
         /// </summary>
-        WideCharType,
+        WideCharType = 9,
 
         /// <summary>
         ///     long string type
         /// </summary>
-        LongStringType,
+        LongStringType = 10,
 
         /// <summary>
         ///     wide string type
         /// </summary>
-        WideStringType,
+        WideStringType = 11,
 
         /// <summary>
         ///     variant record type
         /// </summary>
-        VariantType,
+        VariantType = 12,
 
         /// <summary>
         ///     array type
         /// </summary>
-        ArrayType,
+        ArrayType = 13,
 
         /// <summary>
         ///     record type
         /// </summary>
-        RecordType,
+        RecordType = 14,
 
         /// <summary>
         ///     interface type
         /// </summary>
-        InterfaceType,
+        InterfaceType = 15,
 
         /// <summary>
         ///     int64 type
         /// </summary>
-        Int64Type,
+        Int64Type = 16,
 
         /// <summary>
         ///     dynamic array type
         /// </summary>
-        DynamicArrayType,
+        DynamicArrayType = 17,
 
         /// <summary>
         ///     Unicode string type
         /// </summary>
-        UnicodeStringType,
+        UnicodeStringType = 18,
 
         /// <summary>
         ///     class reference type
         /// </summary>
-        ClassReferenceType,
+        ClassReferenceType = 19,
 
         /// <summary>
         ///     pointer type
         /// </summary>
-        PointerType,
+        PointerType = 20,
 
         /// <summary>
         ///     procedural type
         /// </summary>
-        ProcedureType,
+        ProcedureType = 21,
 
         /// <summary>
         ///     boolean type
         /// </summary>
         /// <remarks>GetTypeKind(..) for booleans returns enumeration</remarks>
-        BooleanType,
+        BooleanType = 22,
 
         /// <summary>
         ///     class helper
         /// </summary>
         /// <remarks>GetTypeKind(..) for class helpers return class</remarks>
-        ClassHelperType,
+        ClassHelperType = 23,
 
         /// <summary>
         ///     record helper
         /// </summary>
         /// <remarks>GetTypeKind(..) for class helpers return class</remarks>
-        RecordHelperType,
+        RecordHelperType = 24,
 
         /// <summary>
         ///     unit type
         /// </summary>
-        Unit,
+        Unit = 25,
 
         /// <summary>
         ///     subrange type
         /// </summary>
-        SubrangeType,
+        SubrangeType = 26,
 
         /// <summary>
         ///     hidden / internal type
         /// </summary>
-        HiddenType,
+        HiddenType = 27,
 
         /// <summary>
         ///     constant array type
         /// </summary>
-        ConstantArrayType,
+        ConstantArrayType = 28,
 
         /// <summary>
         ///     declared type name
         /// </summary>
-        Type
+        Type = 29
 
     }
 }

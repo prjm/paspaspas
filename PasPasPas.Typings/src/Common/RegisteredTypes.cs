@@ -50,12 +50,6 @@ namespace PasPasPas.Typings.Common {
             => types.Count;
 
         /// <summary>
-        ///     caption
-        /// </summary>
-        public string Caption
-            => "TypeRegistry";
-
-        /// <summary>
         ///     registered types
         /// </summary>
         public IEnumerable<ITypeDefinition> RegisteredTypeDefinitios

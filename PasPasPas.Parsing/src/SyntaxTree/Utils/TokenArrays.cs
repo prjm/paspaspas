@@ -18,7 +18,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Utils {
         /// </summary>
         public PooledTokenArray() { }
 
-        private ImmutableArray<Token> BuildArray(Queue<Token> tokens) {
+        private static ImmutableArray<Token> BuildArray(Queue<Token> tokens) {
             switch (tokens.Count) {
 
                 case 0:
@@ -81,11 +81,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Utils {
             ComputedHashCode = ComputeHashCode(tokens);
         }
 
-        private int ComputeHashCode(Queue<Token> tokens) {
+        private static int ComputeHashCode(Queue<Token> tokens) {
             var result = 17;
 
-            foreach (var token in tokens)
-                result = result * 31 + token.GetHashCode();
+            unchecked {
+                foreach (var token in tokens)
+                    result = result * 31 + token.GetHashCode();
+            }
 
             return result;
         }

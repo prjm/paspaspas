@@ -12,7 +12,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     ///     base class for symbol tables
     /// </summary>
     /// <typeparam name="T">symbol type</typeparam>
-    public abstract class SymbolTableBase<T> :
+    public abstract class SymbolTableBaseCollection<T> :
         AbstractSyntaxPartBase,
         ISymbolTable<T>,
         IReadOnlyList<T>

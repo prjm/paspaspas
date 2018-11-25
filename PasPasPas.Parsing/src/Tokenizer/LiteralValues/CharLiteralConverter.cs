@@ -33,12 +33,6 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
             => Table.Count;
 
         /// <summary>
-        ///     caption
-        /// </summary>
-        public string Caption
-            => "CharParser";
-
-        /// <summary>
         ///     create a new char literal converter
         /// </summary>
         public CharLiteralConverter()

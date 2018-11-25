@@ -1,5 +1,6 @@
 ﻿using System.Collections.Immutable;
 using System.Diagnostics;
+using System.Globalization;
 using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
@@ -74,7 +75,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         [Conditional("DEBUG")]
         private static void LogHistogramCall(ImmutableArray<ParameterSymbol> immutableArray) {
             if (Histograms.Enable)
-                Histograms.Value(HistogramKeys.DesignatorItems, "Call" + immutableArray.Length.ToString());
+                Histograms.Value(HistogramKeys.DesignatorItems, "Call" + immutableArray.Length.ToString(CultureInfo.InvariantCulture));
         }
 
         /// <summary>

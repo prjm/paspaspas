@@ -5,7 +5,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// <summary>
     ///     method definitions
     /// </summary>
-    public class StructureMethodDefinition : SymbolTableBase<StructureMethod> {
+    public class StructureMethodDefinitionCollection : SymbolTableBaseCollection<StructureMethod> {
 
         /// <summary>
         ///     accept visitor

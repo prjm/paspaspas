@@ -12,7 +12,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     element items
         /// </summary>
-        public ISyntaxPartList<IExpression> Items { get; }
+        public ISyntaxPartCollection<IExpression> Items { get; }
 
         /// <summary>
         ///     Create a new set constant

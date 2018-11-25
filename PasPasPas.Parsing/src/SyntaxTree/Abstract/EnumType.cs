@@ -8,7 +8,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// <summary>
     ///     declaration of a simple value type
     /// </summary>
-    public class EnumTypeCollection : SymbolTableBase<EnumTypeValue>, ITypeSpecification, ITypedSyntaxNode {
+    public class EnumTypeCollection : SymbolTableBaseCollection<EnumTypeValue>, ITypeSpecification, ITypedSyntaxNode {
 
         /// <summary>
         ///     type information

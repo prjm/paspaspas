@@ -44,12 +44,6 @@ namespace PasPasPas.Runtime.Values {
             => TypeReferenceKind.ConstantValue;
 
         /// <summary>
-        ///     always <c>true</c> for special kind constants
-        /// </summary>
-        public bool IsConstant
-            => true;
-
-        /// <summary>
         ///     common type kind
         /// </summary>
         public CommonTypeKind TypeKind

@@ -6,7 +6,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// <summary>
     ///     list of required units
     /// </summary>
-    public class RequiredUnitNameList : SymbolTableBase<RequiredUnitName> {
+    public class RequiredUnitNameListCollection : SymbolTableBaseCollection<RequiredUnitName> {
 
         /// <summary>
         ///     log duplicated unit name

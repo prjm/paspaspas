@@ -157,8 +157,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             result.FileType = CompilationUnitType.Unit;
             result.UnitName = ExtractSymbolName(unit.UnitName);
             result.Hints = ExtractHints(unit.Hints);
-            result.InterfaceSymbols = new DeclaredSymbols() { ParentItem = result };
-            result.ImplementationSymbols = new DeclaredSymbols() { ParentItem = result };
+            result.InterfaceSymbols = new DeclaredSymbolCollection() { ParentItem = result };
+            result.ImplementationSymbols = new DeclaredSymbolCollection() { ParentItem = result };
             result.FilePath = unit.FilePath;
             Project.Add(result, LogSource);
             CurrentUnit = result;
@@ -189,7 +189,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 result.InitializationBlock = new BlockOfAssemblerStatements();
             else
                 result.InitializationBlock = new BlockOfStatements();
-            result.Symbols = new DeclaredSymbols();
+            result.Symbols = new DeclaredSymbolCollection();
             Project.Add(result, LogSource);
             CurrentUnitMode[result] = UnitMode.Library;
             CurrentUnit = result;
@@ -217,7 +217,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             result.FileType = CompilationUnitType.Program;
             result.UnitName = ExtractSymbolName(program.ProgramName);
             result.InitializationBlock = new BlockOfStatements();
-            result.Symbols = new DeclaredSymbols() { ParentItem = result };
+            result.Symbols = new DeclaredSymbolCollection() { ParentItem = result };
             result.FilePath = program.FilePath;
             CurrentUnitMode[result] = UnitMode.Program;
             Project.Add(result, LogSource);
@@ -1046,7 +1046,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (pointer.GenericPointer) {
                 var result = new MetaType();
                 InitNode(result, pointer);
-                result.Kind = MetaTypeKind.Pointer;
+                result.Kind = MetaTypeKind.PointerType;
                 typeTarget.TypeValue = result;
             }
             else {
@@ -1070,7 +1070,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             result.Kind = TokenKindMapper.ForMetaType(stringType.Kind);
             typeTarget.TypeValue = result;
 
-            if (result.Kind == MetaTypeKind.String && stringType.CodePageOrStringLength != null)
+            if (result.Kind == MetaTypeKind.StringType && stringType.CodePageOrStringLength != null)
                 result.Kind = MetaTypeKind.ShortString;
 
             if (result.Kind == MetaTypeKind.ShortString && stringType.CodePageOrStringLength == null)
@@ -1147,7 +1147,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             var typeDefinition = LastValue as ParameterTypeDefinition;
             var result = new ParameterDefinition();
             InitNode(result, formalParameter);
-            var allParams = typeDefinition.ParentItem as ParameterDefinitions;
+            var allParams = typeDefinition.ParentItem as ParameterDefinitionCollection;
             result.Name = ExtractSymbolName(formalParameter.ParameterName);
             result.Attributes = ExtractAttributes(formalParameter.Attributes1 as UserAttributesSymbol, CurrentUnit);
             result.Attributes = ExtractAttributes(formalParameter.Attributes2 as UserAttributesSymbol, CurrentUnit, result.Attributes);
@@ -1914,7 +1914,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <param name="fieldDeclaration"></param>
         public void StartVisit(RecordFieldSymbol fieldDeclaration) {
             StructuredType structType = null;
-            StructureVariant varFields = null;
+            StructureVariantCollection varFields = null;
             IList<StructureFields> fields = null;
 
             if (LastValue is StructureVariantFields) {
@@ -2062,7 +2062,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             var typeTarget = LastTypeDeclaration;
             var result = new StructuredType();
             InitNode(result, objectDeclaration);
-            result.Kind = StructuredTypeKind.Object;
+            result.Kind = StructuredTypeKind.ObjectType;
             typeTarget.TypeValue = result;
             CurrentMemberVisibility[result] = new MemberStatus() {
                 Visibility = MemberVisibility.Public,
@@ -2863,7 +2863,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 parent.AddPart(part);
                 part.Kind = TokenKindMapper.ForMetaType(stringType.Kind);
 
-                if (part.Kind == MetaTypeKind.String && stringType.CodePageOrStringLength != null)
+                if (part.Kind == MetaTypeKind.StringType && stringType.CodePageOrStringLength != null)
                     part.Kind = MetaTypeKind.ShortString;
 
                 if (part.Kind == MetaTypeKind.ShortString && stringType.CodePageOrStringLength == null)
@@ -3145,7 +3145,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 var genPart = part.DefinitionPart;
 
                 if (idPart != null) {
-                    var generic = new GenericType();
+                    var generic = new GenericTypeNameCollection();
                     InitNode(generic, node, parent);
                     generic.Name = ExtractSymbolName(idPart);
                     result.Add(generic, LogSource);
@@ -3154,7 +3154,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 }
 
                 if (genPart != null) {
-                    var generic = new GenericType();
+                    var generic = new GenericTypeNameCollection();
                     InitNode(generic, node, result);
                     generic.Name = ExtractSymbolName(genPart.Identifier);
                     result.Add(generic, LogSource);
@@ -3290,7 +3290,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     project root
         /// </summary>
-        public ProjectRoot Project { get; }
+        public ProjectItemCollection Project { get; }
 
         /// <summary>
         ///     current compilation unit
@@ -3328,7 +3328,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     create a new options set
         /// </summary>
-        public TreeTransformer(IParserEnvironment env, ProjectRoot projectRoot) {
+        public TreeTransformer(IParserEnvironment env, ProjectItemCollection projectRoot) {
             visitor = new ChildVisitor(this);
             environment = env;
             Project = projectRoot;

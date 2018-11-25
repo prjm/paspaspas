@@ -44,7 +44,7 @@ namespace PasPasPasTests.Tokenizer {
         [Fact]
         public void TestRealNumbers() {
             IsReal("123E10", "123E10");
-            IsReal("123.", "123", Tuple.Create(TokenKind.Integer, "123"), Tuple.Create(TokenKind.Dot, "."));
+            IsReal("123.", "123", Tuple.Create(TokenKind.IntegralNumber, "123"), Tuple.Create(TokenKind.Dot, "."));
             IsReal("123.123", "123.123");
             IsReal("123E+10", "123E10");
             IsReal("123E-10", "123E-10");

@@ -50,8 +50,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         /// <returns></returns>
         public MetaTypeKind MapTypeKind() {
             switch (StringType) {
-                case TokenKind.String:
-                    return MetaTypeKind.String;
+                case TokenKind.StringKeyword:
+                    return MetaTypeKind.StringType;
 
                 case TokenKind.AnsiString:
                     return MetaTypeKind.AnsiString;

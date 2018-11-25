@@ -38,7 +38,7 @@ namespace PasPasPas.Typings.Structured {
                     case StructuredTypeKind.DispInterface:
                         return CommonTypeKind.InterfaceType;
 
-                    case StructuredTypeKind.Object:
+                    case StructuredTypeKind.ObjectType:
                         return CommonTypeKind.RecordType;
 
                     case StructuredTypeKind.Record:

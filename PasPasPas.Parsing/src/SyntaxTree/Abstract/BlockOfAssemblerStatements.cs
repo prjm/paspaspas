@@ -12,7 +12,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     assembler statements
         /// </summary>
-        public ISyntaxPartList<AssemblerStatement> Statements { get; }
+        public ISyntaxPartCollection<AssemblerStatement> Statements { get; }
 
         /// <summary>
         ///     create a new block of assembler statements

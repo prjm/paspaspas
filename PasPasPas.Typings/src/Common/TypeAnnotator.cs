@@ -287,7 +287,7 @@ namespace PasPasPas.Typings.Common {
                 element.TypeInfo = environment.TypeRegistry.MakeReference(typeId);
             }
 
-            else if (element.Kind == MetaTypeKind.String) {
+            else if (element.Kind == MetaTypeKind.StringType) {
                 element.TypeInfo = GetTypeByReference(KnownTypeIds.StringType);
             }
 
@@ -319,7 +319,7 @@ namespace PasPasPas.Typings.Common {
                 element.TypeInfo = GetTypeByReference(KnownTypeIds.WideStringType);
             }
 
-            else if (element.Kind == MetaTypeKind.Pointer) {
+            else if (element.Kind == MetaTypeKind.PointerType) {
                 element.TypeInfo = GetTypeByReference(KnownTypeIds.GenericPointer);
             }
 
@@ -382,7 +382,7 @@ namespace PasPasPas.Typings.Common {
                     if (metaType.Kind == MetaTypeKind.WideString)
                         baseTypeValue = TypeRegistry.MakeTypeReference(KnownTypeIds.WideStringType);
 
-                    if (metaType.Kind == MetaTypeKind.String)
+                    if (metaType.Kind == MetaTypeKind.StringType)
                         baseTypeValue = TypeRegistry.MakeTypeReference(KnownTypeIds.StringType);
 
 

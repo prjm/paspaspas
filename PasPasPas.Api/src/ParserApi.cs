@@ -55,8 +55,8 @@ namespace PasPasPas.Api {
         /// </summary>
         /// <param name="bst">basic syntax tree</param>
         /// <returns>abstract syntax tree</returns>
-        public ProjectRoot CreateAbstractSyntraxTree(ISyntaxPart bst) {
-            var root = new ProjectRoot();
+        public ProjectItemCollection CreateAbstractSyntraxTree(ISyntaxPart bst) {
+            var root = new ProjectItemCollection();
             var visitor = new TreeTransformer(env, root);
             bst.Accept(visitor.AsVisitor());
             return root;
@@ -72,7 +72,7 @@ namespace PasPasPas.Api {
         ///     annotate an abstract syntax tree with types
         /// </summary>
         /// <param name="ast">tree to annotate</param>
-        public void AnnotateWithTypes(ProjectRoot ast) {
+        public void AnnotateWithTypes(ProjectItemCollection ast) {
             var typeVisitor = new TypeAnnotator(env);
             ast.Accept(typeVisitor.AsVisitor());
         }

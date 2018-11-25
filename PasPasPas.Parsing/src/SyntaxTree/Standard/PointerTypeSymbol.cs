@@ -27,7 +27,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         ///     true if a generic pointer type is found
         /// </summary>
         public bool GenericPointer
-            => PointerSymbol.GetSymbolKind() == TokenKind.Pointer;
+            => PointerSymbol.GetSymbolKind() == TokenKind.PointerKeyword;
 
         /// <summary>
         ///     type specification for non generic pointers

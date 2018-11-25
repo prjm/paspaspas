@@ -236,12 +236,12 @@ namespace PasPasPasTests.Tokenizer {
         public void TestDigitTokenValue() {
             var patterns = new InputPatterns(null);
             patterns.AddPattern('a', PatternA);
-            patterns.AddPattern(new DigitCharClass(false), new CharacterClassTokenGroupValue(TokenKind.Integer, new DigitCharClass(false)));
-            TestPattern(patterns, "1", TokenKind.Integer);
-            TestPattern(patterns, "1234567890", TokenKind.Integer);
-            TestPattern(patterns, "000", TokenKind.Integer);
+            patterns.AddPattern(new DigitCharClass(false), new CharacterClassTokenGroupValue(TokenKind.IntegralNumber, new DigitCharClass(false)));
+            TestPattern(patterns, "1", TokenKind.IntegralNumber);
+            TestPattern(patterns, "1234567890", TokenKind.IntegralNumber);
+            TestPattern(patterns, "000", TokenKind.IntegralNumber);
             TestPattern(patterns, PasPasPas.Parsing.Tokenizer.TokenizerBase.UnexpectedCharacter, "３", TokenKind.Invalid);
-            TestPattern(patterns, PasPasPas.Parsing.Tokenizer.TokenizerBase.UnexpectedCharacter, "1３", TokenKind.Integer, TokenKind.Invalid);
+            TestPattern(patterns, PasPasPas.Parsing.Tokenizer.TokenizerBase.UnexpectedCharacter, "1３", TokenKind.IntegralNumber, TokenKind.Invalid);
         }
 
         [Fact]
@@ -309,22 +309,22 @@ namespace PasPasPasTests.Tokenizer {
             patterns.AddPattern(new DigitCharClass(false), new NumberTokenGroupValue());
             patterns.AddPattern(new IdentifierCharacterClass(), new IdentifierTokenGroupValue(new Dictionary<string, int>()));
             patterns.AddPattern('.', TokenKind.Dot).Add('.', TokenKind.DotDot);
-            TestPattern(patterns, "9..", TokenKind.Integer, TokenKind.DotDot);
-            TestPattern(patterns, "9", TokenKind.Integer);
-            TestPattern(patterns, "9.9", TokenKind.Real);
-            TestPattern(patterns, "9999.9999", TokenKind.Real);
-            TestPattern(patterns, "9.", TokenKind.Integer, TokenKind.Dot);
-            TestPattern(patterns, "9.X", TokenKind.Integer, TokenKind.Dot, TokenKind.Identifier);
-            TestPattern(patterns, "9.9.", TokenKind.Real, TokenKind.Dot);
-            TestPattern(patterns, PasPasPas.Parsing.Tokenizer.TokenizerBase.UnexpectedEndOfToken, "9.9e", TokenKind.Real);
-            TestPattern(patterns, PasPasPas.Parsing.Tokenizer.TokenizerBase.UnexpectedEndOfToken, "9.9e+", TokenKind.Real);
-            TestPattern(patterns, PasPasPas.Parsing.Tokenizer.TokenizerBase.UnexpectedEndOfToken, "9.9e-", TokenKind.Real);
-            TestPattern(patterns, PasPasPas.Parsing.Tokenizer.TokenizerBase.UnexpectedEndOfToken, "9.9e.", TokenKind.Real, TokenKind.Dot);
-            TestPattern(patterns, PasPasPas.Parsing.Tokenizer.TokenizerBase.UnexpectedEndOfToken, "9.9e+.", TokenKind.Real, TokenKind.Dot);
-            TestPattern(patterns, PasPasPas.Parsing.Tokenizer.TokenizerBase.UnexpectedEndOfToken, "9.9e-.", TokenKind.Real, TokenKind.Dot);
-            TestPattern(patterns, "9999.9999E+3", TokenKind.Real);
-            TestPattern(patterns, "9999.9999E-3", TokenKind.Real);
-            TestPattern(patterns, "9999.9999E-3.", TokenKind.Real, TokenKind.Dot);
+            TestPattern(patterns, "9..", TokenKind.IntegralNumber, TokenKind.DotDot);
+            TestPattern(patterns, "9", TokenKind.IntegralNumber);
+            TestPattern(patterns, "9.9", TokenKind.RealNumber);
+            TestPattern(patterns, "9999.9999", TokenKind.RealNumber);
+            TestPattern(patterns, "9.", TokenKind.IntegralNumber, TokenKind.Dot);
+            TestPattern(patterns, "9.X", TokenKind.IntegralNumber, TokenKind.Dot, TokenKind.Identifier);
+            TestPattern(patterns, "9.9.", TokenKind.RealNumber, TokenKind.Dot);
+            TestPattern(patterns, PasPasPas.Parsing.Tokenizer.TokenizerBase.UnexpectedEndOfToken, "9.9e", TokenKind.RealNumber);
+            TestPattern(patterns, PasPasPas.Parsing.Tokenizer.TokenizerBase.UnexpectedEndOfToken, "9.9e+", TokenKind.RealNumber);
+            TestPattern(patterns, PasPasPas.Parsing.Tokenizer.TokenizerBase.UnexpectedEndOfToken, "9.9e-", TokenKind.RealNumber);
+            TestPattern(patterns, PasPasPas.Parsing.Tokenizer.TokenizerBase.UnexpectedEndOfToken, "9.9e.", TokenKind.RealNumber, TokenKind.Dot);
+            TestPattern(patterns, PasPasPas.Parsing.Tokenizer.TokenizerBase.UnexpectedEndOfToken, "9.9e+.", TokenKind.RealNumber, TokenKind.Dot);
+            TestPattern(patterns, PasPasPas.Parsing.Tokenizer.TokenizerBase.UnexpectedEndOfToken, "9.9e-.", TokenKind.RealNumber, TokenKind.Dot);
+            TestPattern(patterns, "9999.9999E+3", TokenKind.RealNumber);
+            TestPattern(patterns, "9999.9999E-3", TokenKind.RealNumber);
+            TestPattern(patterns, "9999.9999E-3.", TokenKind.RealNumber, TokenKind.Dot);
         }
 
         [Fact]

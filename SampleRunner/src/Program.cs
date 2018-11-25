@@ -87,7 +87,7 @@ namespace SampleRunner {
             switch (mode) {
 
                 case SampleMode.ReadFile:
-                    action = (b) => ReadFile.Run(b, environment, testPath, repeat);
+                    action = (b) => ReadFile.Run(b, testPath, repeat);
                     break;
 
                 case SampleMode.TokenizerFile:

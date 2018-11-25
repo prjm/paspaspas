@@ -1,5 +1,8 @@
 ﻿namespace PasPasPas.Globals.Runtime {
 
+    /// <summary>
+    ///     distinction between different type reference kinds
+    /// </summary>
     public enum TypeReferenceKind {
 
         /// <summary>

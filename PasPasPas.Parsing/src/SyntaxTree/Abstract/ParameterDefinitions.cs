@@ -6,7 +6,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// <summary>
     ///     parameter definitions
     /// </summary>
-    public class ParameterDefinitions : CombinedSymbolTableBaseCollection<ParameterTypeDefinition, ParameterDefinition> {
+    public class ParameterDefinitionCollection : CombinedSymbolTableBaseCollection<ParameterTypeDefinition, ParameterDefinition> {
 
         /// <summary>
         ///     log duplicate parameter

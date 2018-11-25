@@ -22,7 +22,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     directive specifiers
         /// </summary>
-        public ISyntaxPartList<MethodDirectiveSpecifier> Specifiers { get; }
+        public ISyntaxPartCollection<MethodDirectiveSpecifier> Specifiers { get; }
 
         /// <summary>
         ///     create a new method directive

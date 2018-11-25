@@ -27,7 +27,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     expressions
         /// </summary>
-        public ISyntaxPartList<IExpression> Expressions { get; }
+        public ISyntaxPartCollection<IExpression> Expressions { get; }
 
         /// <summary>
         ///     create a new symbol reference part

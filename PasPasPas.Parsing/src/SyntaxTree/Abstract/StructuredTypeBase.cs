@@ -13,7 +13,7 @@
         /// <summary>
         ///     declared symbols
         /// </summary>
-        public DeclaredSymbols Symbols { get; }
-            = new DeclaredSymbols();
+        public DeclaredSymbolCollection Symbols { get; }
+            = new DeclaredSymbolCollection();
     }
 }

@@ -5,7 +5,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// <summary>
     ///     properties
     /// </summary>
-    public class StructurePropertyDefinition : SymbolTableBase<StructureProperty> {
+    public class StructurePropertyDefinitionCollection : SymbolTableBaseCollection<StructureProperty> {
 
         /// <summary>
         ///     accept visitor

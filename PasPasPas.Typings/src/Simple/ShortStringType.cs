@@ -10,6 +10,7 @@ namespace PasPasPas.Typings.Simple {
         ///     create a new string type
         /// </summary>
         /// <param name="withId">type id</param>
+        /// <param name="size">string size</param>
         public ShortStringType(int withId, ITypeReference size) : base(withId)
             => Size = size;
 
@@ -19,8 +20,15 @@ namespace PasPasPas.Typings.Simple {
         public override CommonTypeKind TypeKind
             => CommonTypeKind.ShortStringType;
 
+        /// <summary>
+        ///     string size
+        /// </summary>
         public ITypeReference Size { get; }
 
+        /// <summary>
+        ///     format this type definition as string
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
             => $"ShortString[{Size}]";
 

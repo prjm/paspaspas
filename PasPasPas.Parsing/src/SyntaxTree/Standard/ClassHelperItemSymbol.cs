@@ -49,7 +49,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         public ClassHelperItemSymbol(ClassMethodSymbol classMethodSymbol, UserAttributesSymbol attributes1, UserAttributesSymbol attributes2, Terminal classSymbol) {
             MethodDeclaration = classMethodSymbol;
             Attributes1 = attributes1;
-            Attributes2 = Attributes2;
+            Attributes2 = attributes2;
             ClassSymbol = classSymbol;
         }
 
@@ -63,7 +63,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         public ClassHelperItemSymbol(ClassPropertySymbol classPropertySymbol, UserAttributesSymbol attributes1, UserAttributesSymbol attributes2, Terminal classSymbol) {
             PropertyDeclaration = classPropertySymbol;
             Attributes1 = attributes1;
-            Attributes2 = Attributes2;
+            Attributes2 = attributes2;
             ClassSymbol = classSymbol;
         }
 

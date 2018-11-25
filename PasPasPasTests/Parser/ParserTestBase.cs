@@ -96,7 +96,7 @@ namespace PasPasPasTests.Parser {
                 y.Message.Severity == MessageSeverity.FatalError;
             };
 
-            var project = new ProjectRoot();
+            var project = new ProjectItemCollection();
             ISyntaxPart tree = null;
 
             foreach (var input in completeInput.Split('§')) {

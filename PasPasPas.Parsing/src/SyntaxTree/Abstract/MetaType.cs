@@ -43,7 +43,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     name fragments
         /// </summary>
-        public ISyntaxPartList<GenericNameFragment> Fragments { get; }
+        public ISyntaxPartCollection<GenericNameFragment> Fragments { get; }
 
         /// <summary>
         ///     add a a fragment

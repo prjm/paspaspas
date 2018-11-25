@@ -28,7 +28,7 @@
         /// <summary>
         ///     object type
         /// </summary>
-        Object = 4,
+        ObjectType = 4,
 
         /// <summary>
         ///     interface declaration

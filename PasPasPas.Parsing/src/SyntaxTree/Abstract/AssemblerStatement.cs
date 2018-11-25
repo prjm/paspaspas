@@ -37,7 +37,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     operands
         /// </summary>
-        public ISyntaxPartList<IExpression> Operands { get; }
+        public ISyntaxPartCollection<IExpression> Operands { get; }
 
         /// <summary>
         ///     create a new assembler statement

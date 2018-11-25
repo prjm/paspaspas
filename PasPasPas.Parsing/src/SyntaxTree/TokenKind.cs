@@ -154,7 +154,7 @@
         /// <summary>
         ///     token for <c>pointer</c>
         /// </summary>
-        public const int Pointer = 207;
+        public const int PointerKeyword = 207;
 
         /// <summary>
         ///     token for <c>array</c>
@@ -547,7 +547,7 @@
         /// <summary>
         ///     token for <c>string</c>
         /// </summary>
-        public const int String = 285;
+        public const int StringKeyword = 285;
 
         /// <summary>
         ///     token for <c>widestring</c>
@@ -567,7 +567,7 @@
         /// <summary>
         ///     token for <c>object</c>
         /// </summary>
-        public const int Object = 289;
+        public const int ObjectKeyword = 289;
 
         /// <summary>
         ///     token for <c>to</c>
@@ -812,12 +812,12 @@
         /// <summary>
         ///     token for any integer
         /// </summary>
-        public const int Integer = 501;
+        public const int IntegralNumber = 501;
 
         /// <summary>
         ///     token for any real number
         /// </summary>
-        public const int Real = 502;
+        public const int RealNumber = 502;
 
         /// <summary>
         ///     token for any hex number

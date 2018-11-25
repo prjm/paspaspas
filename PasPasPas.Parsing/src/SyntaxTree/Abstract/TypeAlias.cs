@@ -13,7 +13,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     name fragements
         /// </summary>
-        public ISyntaxPartList<GenericNameFragment> Fragments { get; }
+        public ISyntaxPartCollection<GenericNameFragment> Fragments { get; }
 
         /// <summary>
         ///     create a new type alias

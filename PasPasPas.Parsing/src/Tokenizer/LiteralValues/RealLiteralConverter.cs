@@ -29,12 +29,6 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
             => Table.Count;
 
         /// <summary>
-        ///     caption
-        /// </summary>
-        public string Caption
-            => "RealParser";
-
-        /// <summary>
         ///     create a new real literal converter
         /// </summary>
         public RealLiteralConverter(IRuntimeValueFactory constValues) {

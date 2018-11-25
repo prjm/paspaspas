@@ -38,6 +38,7 @@ namespace PasPasPas.Typings.Operators {
         ///     simple helper: get logical operations for an unary operator
         /// </summary>
         /// <param name="runtime">runtime to use</param>
+        /// <param name="types">type registry</param>
         /// <param name="type">operand type</param>
         /// <returns></returns>
         public static ILogicalOperations GetLogicalOperators(this IRuntimeValueFactory runtime, ITypeRegistry types, ITypeReference type) {
@@ -62,6 +63,7 @@ namespace PasPasPas.Typings.Operators {
         ///     simple helper get arithmetic operation for a binary operator
         /// </summary>
         /// <param name="runtime">runtime to use</param>
+        /// <param name="types"></param>
         /// <param name="leftType">left operand</param>
         /// <param name="rightType">right operand</param>
         /// <returns></returns>

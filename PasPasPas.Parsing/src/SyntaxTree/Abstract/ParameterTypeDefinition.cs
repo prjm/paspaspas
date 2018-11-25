@@ -17,7 +17,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     parameter definitions
         /// </summary>
-        public ISyntaxPartList<ParameterDefinition> Parameters { get; }
+        public ISyntaxPartCollection<ParameterDefinition> Parameters { get; }
 
         /// <summary>
         ///     creates a new set of parameter definitions

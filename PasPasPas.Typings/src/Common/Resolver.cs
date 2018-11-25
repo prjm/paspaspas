@@ -38,6 +38,12 @@ namespace PasPasPas.Typings.Common {
             return GetTypeReference(symbolReference);
         }
 
+        /// <summary>
+        ///     resolve a reference by name
+        /// </summary>
+        /// <param name="baseTypeValue"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public Reference ResolveReferenceByName(Reference baseTypeValue, string name) {
             if (baseTypeValue == default)
                 return ResolveByName(default, name);

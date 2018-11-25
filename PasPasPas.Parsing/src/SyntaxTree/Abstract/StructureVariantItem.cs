@@ -17,7 +17,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     fields
         /// </summary>
-        public ISyntaxPartList<StructureVariantFields> Items { get; }
+        public ISyntaxPartCollection<StructureVariantFields> Items { get; }
 
         /// <summary>
         ///     type target

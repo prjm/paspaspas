@@ -15,7 +15,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
             = new QuotedStringTokenValue(TokenKind.QuotedString, '\'');
 
         private CharacterClassTokenGroupValue digitTokenizer
-            = new CharacterClassTokenGroupValue(TokenKind.Integer, new DigitCharClass(false), 0, LiteralParserKind.IntegerNumbers, Guid.Empty);
+            = new CharacterClassTokenGroupValue(TokenKind.IntegralNumber, new DigitCharClass(false), 0, LiteralParserKind.IntegerNumbers, Guid.Empty);
 
         private CharacterClassTokenGroupValue hexDigits
             = new CharacterClassTokenGroupValue(TokenKind.HexNumber, new DigitCharClass(true), 2, LiteralParserKind.HexNumbers, TokenizerBase.IncompleteHexNumber);
@@ -45,7 +45,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
                             }
                             else {
                                 var controlChar = digitTokenizer.Tokenize(state);
-                                if (controlChar.Kind == TokenKind.Integer && controlChar.ParsedValue is IIntegerValue intValue && !intValue.IsNegative)
+                                if (controlChar.Kind == TokenKind.IntegralNumber && controlChar.ParsedValue is IIntegerValue intValue && !intValue.IsNegative)
                                     resultBuilder.Item.Append(state.ConvertCharLiteral(intValue.UnsignedValue).ToString()[0]);
                                 else
                                     state.Error(TokenizerBase.UnexpectedCharacter);

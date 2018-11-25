@@ -23,8 +23,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     symbols
         /// </summary>
-        public DeclaredSymbols Symbols { get; }
-            = new DeclaredSymbols();
+        public DeclaredSymbolCollection Symbols { get; }
+            = new DeclaredSymbolCollection();
 
         /// <summary>
         ///     method kind
@@ -36,7 +36,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         public MethodImplementation() {
             Directives = new SyntaxPartCollection<MethodDirective>(this);
-            Parameters = new ParameterDefinitions() { ParentItem = this };
+            Parameters = new ParameterDefinitionCollection() { ParentItem = this };
         }
 
         /// <summary>
@@ -65,7 +65,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     directives
         /// </summary>
-        public ISyntaxPartList<MethodDirective> Directives { get; }
+        public ISyntaxPartCollection<MethodDirective> Directives { get; }
 
         /// <summary>
         ///     hints
@@ -75,7 +75,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     parameters
         /// </summary>
-        public ParameterDefinitions Parameters { get; }
+        public ParameterDefinitionCollection Parameters { get; }
 
         /// <summary>
         ///     return type

@@ -12,7 +12,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     list of fields
         /// </summary>
-        public ISyntaxPartList<StructureField> Fields { get; }
+        public ISyntaxPartCollection<StructureField> Fields { get; }
 
         /// <summary>
         ///     create a new set of fields of a structured type

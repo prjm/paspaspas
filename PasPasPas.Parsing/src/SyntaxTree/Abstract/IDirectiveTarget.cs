@@ -10,7 +10,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     directives
         /// </summary>
-        ISyntaxPartList<MethodDirective> Directives { get; }
+        ISyntaxPartCollection<MethodDirective> Directives { get; }
 
         /// <summary>
         ///     hints

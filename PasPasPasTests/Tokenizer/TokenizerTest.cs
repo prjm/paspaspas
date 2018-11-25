@@ -58,17 +58,17 @@ namespace PasPasPasTests.Tokenizer {
             => IsToken(TokenKind.QuotedString, input, input, GetWideCharValue(value));
 
         internal static void IsInteger(string input, ulong value)
-            => IsToken(TokenKind.Integer, input, input, GetIntegerValue(value));
+            => IsToken(TokenKind.IntegralNumber, input, input, GetIntegerValue(value));
 
         internal static void IsInteger(string input, object value)
-            => IsToken(TokenKind.Integer, input, input, value);
+            => IsToken(TokenKind.IntegralNumber, input, input, value);
 
         internal static void IsWhitespace(string input)
             => IsToken(TokenKind.WhiteSpace, input, input);
 
         internal static void IsReal(string input, string value, params Tuple<int, string>[] tokens) {
             Assert.IsTrue(ExtF80.TryParse(value, out var v));
-            IsToken(TokenKind.Real, input, input, GetExtendedValue(v), tokens);
+            IsToken(TokenKind.RealNumber, input, input, GetExtendedValue(v), tokens);
         }
 
         internal static void IsHexNumber(string input, object value)

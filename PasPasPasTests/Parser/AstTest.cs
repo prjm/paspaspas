@@ -103,7 +103,7 @@ namespace PasPasPasTests.Parser {
 
         [Fact]
         public void TestUsesClause() {
-            RequiredUnitNameList u(object t) => (t as CompilationUnit)?.RequiredUnits;
+            RequiredUnitNameListCollection u(object t) => (t as CompilationUnit)?.RequiredUnits;
             RunAstTest("unit z.x; interface uses a; implementation end.", t => u(t)?.Contains("a"), true);
             RunAstTest("unit z.x; interface uses a; implementation end.", t => u(t)?["a"].Mode, UnitMode.Interface);
 
@@ -128,7 +128,7 @@ namespace PasPasPasTests.Parser {
 
         [Fact]
         public void TestUsesFileClause() {
-            RequiredUnitNameList u(object t) => (t as CompilationUnit)?.RequiredUnits;
+            RequiredUnitNameListCollection u(object t) => (t as CompilationUnit)?.RequiredUnits;
             RunAstTest("program z.x; uses a; begin end.", t => u(t)?.Contains("a"), true);
             RunAstTest("program z.x; uses a; begin end.", t => u(t)?["a"].Mode, UnitMode.Program);
             RunAstTest("program z.x; uses a in 'a\\a\\a.pas'; begin end.", t => u(t)?["a"].FileName, "a\\a\\a.pas");
@@ -197,8 +197,8 @@ namespace PasPasPasTests.Parser {
             PointerToType u(object t) => (((t as CompilationUnit)?.InterfaceSymbols["x"]) as TypeDeclaration)?.TypeValue as PointerToType;
             TypeDeclaration v(object t) => ((t as CompilationUnit)?.InterfaceSymbols["x"]) as TypeDeclaration;
 
-            RunAstTest("unit z.x; interface type x = ^Pointer; implementation end.", t => (u(t)?.TypeValue as MetaType)?.Kind, MetaTypeKind.Pointer);
-            RunAstTest("unit z.x; interface type x = Pointer; implementation end.", t => (v(t)?.TypeValue as MetaType)?.Kind, MetaTypeKind.Pointer);
+            RunAstTest("unit z.x; interface type x = ^Pointer; implementation end.", t => (u(t)?.TypeValue as MetaType)?.Kind, MetaTypeKind.PointerType);
+            RunAstTest("unit z.x; interface type x = Pointer; implementation end.", t => (v(t)?.TypeValue as MetaType)?.Kind, MetaTypeKind.PointerType);
         }
 
         [Fact]
@@ -240,7 +240,7 @@ namespace PasPasPasTests.Parser {
         public void TestStringType() {
             MetaType u(object t) => (((t as CompilationUnit)?.InterfaceSymbols["x"]) as TypeDeclaration)?.TypeValue as MetaType;
 
-            RunAstTest("unit z.x; interface type x = string; implementation end.", t => u(t)?.Kind, MetaTypeKind.String);
+            RunAstTest("unit z.x; interface type x = string; implementation end.", t => u(t)?.Kind, MetaTypeKind.StringType);
             RunAstTest("unit z.x; interface type x = string[232]; implementation end.", t => u(t)?.Kind, MetaTypeKind.ShortString);
             RunAstTest("unit z.x; interface type x = ShortString; implementation end.", t => u(t)?.Kind, MetaTypeKind.ShortStringDefault);
             RunAstTest("unit z.x; interface type x = Ansistring; implementation end.", t => u(t)?.Kind, MetaTypeKind.AnsiString);
@@ -280,7 +280,7 @@ namespace PasPasPasTests.Parser {
             RunAstTest("unit z.x; interface type x = procedure(x: string) of object; implementation end.", t => u(t)?.AllowAnonymousMethods, false);
             RunAstTest("unit z.x; interface type x = reference to procedure(x: string); implementation end.", t => u(t)?.AllowAnonymousMethods, true);
             RunAstTest("unit z.x; interface type x = function(x: string): string; implementation end.", t => u(t)?.Kind, ProcedureKind.Function);
-            RunAstTest("unit z.x; interface type x = function(x: string): string; implementation end.", t => (u(t)?.TypeValue as MetaType)?.Kind, MetaTypeKind.String);
+            RunAstTest("unit z.x; interface type x = function(x: string): string; implementation end.", t => (u(t)?.TypeValue as MetaType)?.Kind, MetaTypeKind.StringType);
             RunAstTest("unit z.x; interface type x = function(x: string): [x] string; implementation end.", t => (u(t)?.ReturnAttributes.FirstOrDefault())?.SymbolName, "x");
 
         }
@@ -290,7 +290,7 @@ namespace PasPasPasTests.Parser {
             ParameterTypeDefinition u(object t) => ((((t as CompilationUnit)?.InterfaceSymbols["x"]) as TypeDeclaration)?.TypeValue as ProceduralType)?.Parameters?.Items[0] as ParameterTypeDefinition;
 
             RunAstTest("unit z.x; interface type x = procedure(x: string); implementation end.", t => u(t)?.Parameters[0].Name.CompleteName, "x");
-            RunAstTest("unit z.x; interface type x = procedure(x: string); implementation end.", t => (u(t)?.TypeValue as MetaType)?.Kind, MetaTypeKind.String);
+            RunAstTest("unit z.x; interface type x = procedure(x: string); implementation end.", t => (u(t)?.TypeValue as MetaType)?.Kind, MetaTypeKind.StringType);
             RunAstTest("unit z.x; interface type x = procedure([n] x: string); implementation end.", t => u(t)?.Parameters[0]?.Attributes?.FirstOrDefault()?.SymbolName, "n");
             RunAstTest("unit z.x; interface type x = procedure([n] const [m] x: string); implementation end.", t => u(t)?.Parameters[0]?.Attributes?.Skip(1)?.FirstOrDefault()?.SymbolName, "m");
             RunAstTest("unit z.x; interface type x = procedure([n] x: string); implementation end.", t => u(t)?.Parameters[0]?.ParameterKind, ParameterReferenceKind.Undefined);
@@ -666,7 +666,7 @@ namespace PasPasPasTests.Parser {
         [Fact]
         public void TestObjectType() {
             StructuredType r(object t) => ((t as CompilationUnit)?.InterfaceSymbols["z"] as TypeDeclaration)?.TypeValue as StructuredType;
-            RunAstTest("unit z.x; interface type z = object x: integer; end; implementation end.", t => r(t)?.Kind, StructuredTypeKind.Object);
+            RunAstTest("unit z.x; interface type z = object x: integer; end; implementation end.", t => r(t)?.Kind, StructuredTypeKind.ObjectType);
 
             // fields
             RunAstTest("unit z.x; interface type z = object x: integer; end; implementation end.", t => r(t)?.Fields["x"]?.Name?.CompleteName, "x");
@@ -1063,7 +1063,7 @@ namespace PasPasPasTests.Parser {
             RunAstTest("unit z.x; interface implementation procedure p; const n = procedure(const a: string) begin end; begin end; end.", t => r(t)?.Parameters[0]?.ParameterKind, ParameterReferenceKind.Const);
             RunAstTest("unit z.x; interface implementation procedure p; const n = procedure(const a: string) begin end; begin end; end.", t => r(t)?.Parameters[0]?.Name?.CompleteName, "a");
             RunAstTest("unit z.x; interface implementation procedure p; const n = function(const a: string): Integer begin end; begin end; end.", t => r(t)?.Name.CompleteName, "$1");
-            RunAstTest("unit z.x; interface implementation procedure p; const n = function(const a: string): String begin end; begin end; end.", t => (r(t)?.TypeValue as MetaType)?.Kind, MetaTypeKind.String);
+            RunAstTest("unit z.x; interface implementation procedure p; const n = function(const a: string): String begin end; begin end; end.", t => (r(t)?.TypeValue as MetaType)?.Kind, MetaTypeKind.StringType);
         }
 
         [Fact]

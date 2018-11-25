@@ -12,7 +12,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     contained statements
         /// </summary>
-        public ISyntaxPartList<StatementBase> Statements { get; }
+        public ISyntaxPartCollection<StatementBase> Statements { get; }
 
         /// <summary>
         ///     creates a ew block of statements

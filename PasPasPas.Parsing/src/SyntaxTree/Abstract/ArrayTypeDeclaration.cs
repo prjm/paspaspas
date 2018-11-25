@@ -12,7 +12,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     index items
         /// </summary>
-        public ISyntaxPartList<IExpression> IndexItems { get; }
+        public ISyntaxPartCollection<IExpression> IndexItems { get; }
 
         /// <summary>
         ///     create a new array type declaration

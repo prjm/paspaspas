@@ -32,7 +32,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
             if (Match(TokenKind.File))
                 return new StructTypePart(ParseFileType());
 
-            if (Match(TokenKind.Class, TokenKind.Interface, TokenKind.Record, TokenKind.Object, TokenKind.DispInterface))
+            if (Match(TokenKind.Class, TokenKind.Interface, TokenKind.Record, TokenKind.ObjectKeyword, TokenKind.DispInterface))
                 return new StructTypePart(ParseClassDeclaration());
 
             return null;
@@ -86,7 +86,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
                 }
             }
 
-            if (newType != default || (MatchIdentifier(TokenKind.ShortString, TokenKind.String, TokenKind.WideString, TokenKind.UnicodeString, TokenKind.AnsiString) && (!LookAhead(1, TokenKind.DotDot)))) {
+            if (newType != default || (MatchIdentifier(TokenKind.ShortString, TokenKind.StringKeyword, TokenKind.WideString, TokenKind.UnicodeString, TokenKind.AnsiString) && (!LookAhead(1, TokenKind.DotDot)))) {
                 using (var list = GetList<GenericNamespaceNameSymbol>()) {
                     var item = default(GenericNamespaceNameSymbol);
 

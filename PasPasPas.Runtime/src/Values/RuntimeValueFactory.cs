@@ -19,7 +19,6 @@ namespace PasPasPas.Runtime.Values {
         /// <summary>
         ///     create a new runtime value factory
         /// </summary>
-        /// <param name="typeKindResolver">type kind resolver</param>
         public RuntimeValueFactory() {
             Types = new TypeOperations();
             Booleans = new BooleanOperations();

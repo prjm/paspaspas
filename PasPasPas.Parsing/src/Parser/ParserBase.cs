@@ -104,7 +104,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="expectedTokens">expected tokens (or)</param>
         /// <returns></returns>
         protected Terminal ErrorAndSkip(Guid message, int[] expectedTokens) {
-            logSource.LogError(message);
+            logSource.LogError(message, expectedTokens);
             return CreateByError();
         }
 
@@ -596,7 +596,7 @@ namespace PasPasPas.Parsing.Parser {
             var lookahead = 1;
 
             while (!LookAhead(lookahead, TokenKind.AngleBracketsClose) && !LookAhead(lookahead, TokenKind.Undefined)) {
-                if (!LookAhead(lookahead, TokenKind.Identifier, TokenKind.Dot, TokenKind.Comma, TokenKind.AngleBracketsOpen, TokenKind.String, TokenKind.ShortString, TokenKind.WideString, TokenKind.UnicodeString, TokenKind.AnsiString, TokenKind.Pointer)) {
+                if (!LookAhead(lookahead, TokenKind.Identifier, TokenKind.Dot, TokenKind.Comma, TokenKind.AngleBracketsOpen, TokenKind.StringKeyword, TokenKind.ShortString, TokenKind.WideString, TokenKind.UnicodeString, TokenKind.AnsiString, TokenKind.PointerKeyword)) {
                     position = lookahead;
                     return false;
                 }
@@ -923,7 +923,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind5"></param>
         /// <param name="tokenKind6"></param>
         protected Terminal ErrorMissingToken(int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5, int tokenKind6) {
-            logSource.LogError(MissingToken, tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5);
+            logSource.LogError(MissingToken, tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5, tokenKind6);
             return null;
         }
 
