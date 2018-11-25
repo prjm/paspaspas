@@ -76,7 +76,8 @@ namespace PasPasPasTests.Types {
             AssertExprValue("High(UInt64)", GetIntegerValue(ulong.MaxValue));
 
             // short strings
-            //AssertExprValue("High(string[20])", GetIntegerValue(20));
+            AssertExprValue("High(string[20])", GetIntegerValue(20));
+            AssertExprValue("High(ShortString)", GetIntegerValue(255));
         }
 
         [TestCase]

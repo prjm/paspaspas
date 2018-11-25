@@ -288,11 +288,11 @@ namespace PasPasPas.Typings.Common {
             }
 
             else if (element.Kind == MetaTypeKind.StringType) {
-                element.TypeInfo = GetTypeByReference(KnownTypeIds.StringType);
+                element.TypeInfo = environment.Runtime.Types.MakeTypeReference(KnownTypeIds.StringType);
             }
 
             else if (element.Kind == MetaTypeKind.AnsiString) {
-                element.TypeInfo = GetTypeByReference(KnownTypeIds.AnsiStringType);
+                element.TypeInfo = environment.Runtime.Types.MakeTypeReference(KnownTypeIds.AnsiStringType);
             }
 
             else if (element.Kind == MetaTypeKind.ShortString) {
@@ -303,24 +303,24 @@ namespace PasPasPas.Typings.Common {
                     length = element.Value.TypeInfo;
 
                 var userType = RegisterUserDefinedType(new ShortStringType(userTypeId, length));
-                element.TypeInfo = GetTypeByReference(userTypeId);
+                element.TypeInfo = environment.Runtime.Types.MakeTypeReference(userTypeId);
             }
 
             else if (element.Kind == MetaTypeKind.ShortStringDefault) {
-                element.TypeInfo = GetTypeByReference(KnownTypeIds.ShortStringType);
+                element.TypeInfo = environment.Runtime.Types.MakeTypeReference(KnownTypeIds.ShortStringType);
             }
 
 
             else if (element.Kind == MetaTypeKind.UnicodeString) {
-                element.TypeInfo = GetTypeByReference(KnownTypeIds.UnicodeStringType);
+                element.TypeInfo = environment.Runtime.Types.MakeTypeReference(KnownTypeIds.UnicodeStringType);
             }
 
             else if (element.Kind == MetaTypeKind.WideString) {
-                element.TypeInfo = GetTypeByReference(KnownTypeIds.WideStringType);
+                element.TypeInfo = environment.Runtime.Types.MakeTypeReference(KnownTypeIds.WideStringType);
             }
 
             else if (element.Kind == MetaTypeKind.PointerType) {
-                element.TypeInfo = GetTypeByReference(KnownTypeIds.GenericPointer);
+                element.TypeInfo = environment.Runtime.Types.MakeTypeReference(KnownTypeIds.GenericPointer);
             }
 
         }
@@ -384,7 +384,6 @@ namespace PasPasPas.Typings.Common {
 
                     if (metaType.Kind == MetaTypeKind.StringType)
                         baseTypeValue = TypeRegistry.MakeTypeReference(KnownTypeIds.StringType);
-
 
                 }
 

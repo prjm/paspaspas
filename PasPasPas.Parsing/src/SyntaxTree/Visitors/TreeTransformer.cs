@@ -1065,10 +1065,16 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <param name="stringType"></param>
         public void StartVisit(StringTypeSymbol stringType) {
             var typeTarget = LastTypeDeclaration;
+            var exprTarget = LastExpression;
+
             var result = new MetaType();
             InitNode(result, stringType);
             result.Kind = TokenKindMapper.ForMetaType(stringType.Kind);
-            typeTarget.TypeValue = result;
+
+            if (typeTarget != default)
+                typeTarget.TypeValue = result;
+            else if (exprTarget != default)
+                exprTarget.Value = result;
 
             if (result.Kind == MetaTypeKind.StringType && stringType.CodePageOrStringLength != null)
                 result.Kind = MetaTypeKind.ShortString;
@@ -2282,7 +2288,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         #region ClosureExpression
 
         /// <summary>
-        ///     start visiting a closue expression
+        ///     start visiting a closure expression
         /// </summary>
         /// <param name="closure"></param>
         public void StartVisit(ClosureExpressionSymbol closure) {
@@ -2852,21 +2858,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                     part.Kind = SymbolReferencePartKind.ArrayIndex;
                 else if (designator.ParameterList)
                     part.Kind = SymbolReferencePartKind.CallParameters;
-
-                return;
-            }
-
-            if (designator.Subitem != null && designator.Subitem is StringTypeSymbol stringType) {
-                var part = new MetaType();
-                InitNode(part, designator);
-                parent.AddPart(part);
-                part.Kind = TokenKindMapper.ForMetaType(stringType.Kind);
-
-                if (part.Kind == MetaTypeKind.StringType && stringType.CodePageOrStringLength != null)
-                    part.Kind = MetaTypeKind.ShortString;
-
-                if (part.Kind == MetaTypeKind.ShortString && stringType.CodePageOrStringLength == null)
-                    part.Kind = MetaTypeKind.ShortStringDefault;
 
                 return;
             }

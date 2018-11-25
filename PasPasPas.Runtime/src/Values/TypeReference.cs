@@ -35,7 +35,14 @@ namespace PasPasPas.Runtime.Values {
         ///     get type format
         /// </summary>
         public string InternalTypeFormat
-            => $"reference to named type";
+            => $"ref to {TypeId}";
+
+        /// <summary>
+        ///     format this type as string
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+            => InternalTypeFormat;
 
     }
 }

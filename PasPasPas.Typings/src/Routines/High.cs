@@ -33,6 +33,9 @@ namespace PasPasPas.Typings.Routines {
             if (signature[0].IsType() || signature[0].IsConstant())
                 param = TypeRegistry.GetTypeByIdOrUndefinedType(signature[0].TypeId);
 
+            if (param == default)
+                return;
+
             if (param.TypeKind.IsOrdinal()) {
                 var ordinalType = param as IOrdinalType;
                 var highValue = ordinalType.HighestElement;
@@ -43,7 +46,15 @@ namespace PasPasPas.Typings.Routines {
                 callableRoutines.Add(result);
             }
 
-
+            if (param.TypeKind == CommonTypeKind.ShortStringType) {
+                var stringType = param as ShortStringType;
+                var highValue = stringType.Size;
+                var typeId = LiteralValuesHelper.GetTypeFor(highValue);
+                var result = new ParameterGroup();
+                result.AddParameter("AValue").SymbolType = signature[0];
+                result.ResultType = highValue;
+                callableRoutines.Add(result);
+            }
 
         }
 

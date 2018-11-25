@@ -8,7 +8,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// <summary>
     ///     special type
     /// </summary>
-    public class MetaType : TypeSpecificationBase, IExpressionTarget {
+    public class MetaType : TypeSpecificationBase, IExpression, IExpressionTarget {
 
         /// <summary>
         ///     type kind
