@@ -24,24 +24,17 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="ErrorProne.NET" Version="0.1.5898.41180" />
+        <PackageReference Include="ErrorProne.NET" Version="0.1.5898.41180">
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
         <PackageReference Include="ErrorProne.NET.Structs" Version="0.1.2">
-          <PrivateAssets>all</PrivateAssets>
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
         </PackageReference>
         <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.6.2">
-          <PrivateAssets>all</PrivateAssets>
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
         </PackageReference>
         <PackageReference Include="System.Buffers" Version="4.5.0" />
         <PackageReference Include="System.Collections.Immutable" Version="1.5.0" />
     </ItemGroup>
-
-    <ItemGroup>
-      <Reference Include="System.Collections.Immutable">
-        <HintPath>..\..\..\..\..\..\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.netcore.app\2.0.0\ref\netcoreapp2.0\System.Collections.Immutable.dll</HintPath>
-      </Reference>
-    </ItemGroup>
-
 
 </Project>
