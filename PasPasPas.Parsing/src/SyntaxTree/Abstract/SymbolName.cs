@@ -1,5 +1,5 @@
-﻿using System.Linq;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using PasPasPas.Infrastructure.Utils;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
@@ -15,7 +15,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         public abstract string CompleteName { get; }
 
         /// <summary>
-        ///     simple name 
+        ///     simple name
         /// </summary>
         public virtual string Name
             => CompleteName;
@@ -101,7 +101,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// </summary>
     public class GenericSymbolNamePart : SymbolName {
 
-        private string name;
+        private readonly string name;
 
         private IList<string> parameters;
 
@@ -109,9 +109,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     generate a new name part
         /// </summary>
         /// <param name="namePart"></param>
-        public GenericSymbolNamePart(string namePart) {
-            name = namePart;
-        }
+        public GenericSymbolNamePart(string namePart) => name = namePart;
 
         /// <summary>
         ///     name part

@@ -20,6 +20,11 @@
         /// <returns></returns>
         ITypeReference ToUnicodeString(string text);
 
+        /// <summary>
+        ///     get an empty string
+        /// </summary>
+        /// <returns></returns>
+        ITypeReference GetEmptyString();
     }
 }
 

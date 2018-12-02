@@ -65,6 +65,6 @@ namespace PasPasPas.Runtime.Values.CharValues {
         /// </summary>
         /// <returns></returns>
         public override string InternalTypeFormat
-            => StringUtils.Invariant($"{value}");
+            => StringUtils.Invariant($"'{value}'");
     }
 }

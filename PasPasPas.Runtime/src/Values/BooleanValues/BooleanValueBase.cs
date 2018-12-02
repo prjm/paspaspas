@@ -91,5 +91,12 @@ namespace PasPasPas.Runtime.Values.BooleanValues {
         /// <returns></returns>
         public bool Equals(IBooleanValue other)
             => AsBoolean == other.AsBoolean;
+
+        /// <summary>
+        ///     format this boolean value
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+            => InternalTypeFormat;
     }
 }

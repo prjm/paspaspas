@@ -54,8 +54,10 @@ namespace PasPasPas.Runtime.Values.StringValues {
         public override int GetHashCode() {
             var result = 17;
 
-            for (var i = 0; i < data.Length; i++)
-                result = result * 31 + data[i];
+            unchecked {
+                for (var i = 0; i < data.Length; i++)
+                    result = result * 31 + data[i];
+            }
 
             return result;
         }
@@ -71,6 +73,6 @@ namespace PasPasPas.Runtime.Values.StringValues {
         /// </summary>
         /// <returns></returns>
         public override string ToString()
-            => data;
+            => InternalTypeFormat;
     }
 }

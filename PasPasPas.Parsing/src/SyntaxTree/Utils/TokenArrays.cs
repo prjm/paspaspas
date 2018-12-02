@@ -18,33 +18,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Utils {
         /// </summary>
         public PooledTokenArray() { }
 
-        private static ImmutableArray<Token> BuildArray(Queue<Token> tokens) {
-            switch (tokens.Count) {
-
-                case 0:
-                    return ImmutableArray<Token>.Empty;
-
-                case 1:
-                    return ImmutableArray.Create(tokens.Dequeue());
-
-                case 2:
-                    return ImmutableArray.Create(tokens.Dequeue(), tokens.Dequeue());
-
-                case 3:
-                    return ImmutableArray.Create(tokens.Dequeue(), tokens.Dequeue(), tokens.Dequeue());
-
-                case 4:
-                    return ImmutableArray.Create(tokens.Dequeue(), tokens.Dequeue(), tokens.Dequeue(), tokens.Dequeue());
-
-                default:
-                    var builder = ListPools.GetImmutableArrayBuilder(tokens);
-
-                    while (tokens.Count > 0)
-                        builder.Add(tokens.Dequeue());
-
-                    return builder.MoveToImmutable();
-            };
-        }
+        private static ImmutableArray<Token> BuildArray(Queue<Token> tokens) => ListPools.GetFixedArray<Token>(tokens);
 
         /// <summary>
         ///     create a new pooled token array

@@ -78,6 +78,9 @@ namespace PasPasPasTests.Types {
             // short strings
             AssertExprValue("High(string[20])", GetIntegerValue(20));
             AssertExprValue("High(ShortString)", GetIntegerValue(255));
+
+            // constant arrays
+            AssertExprValue("High(a)", GetIntegerValue(3), "const a: array[0..2] of string = ('a','b','c');");
         }
 
         [TestCase]

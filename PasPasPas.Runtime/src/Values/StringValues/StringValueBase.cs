@@ -41,7 +41,7 @@ namespace PasPasPas.Runtime.Values.StringValues {
             => TypeReferenceKind.ConstantValue;
 
         internal static ITypeReference Concat(IStringValue string1, IStringValue string2)
-            => new UnicodeStringValue(string.Concat(string1, string2));
+            => new UnicodeStringValue(string.Concat(string1.AsUnicodeString, string2.AsUnicodeString));
 
         internal static bool Equal(IStringValue string1, IStringValue string2)
             => string.CompareOrdinal(string1.AsUnicodeString, string2.AsUnicodeString) == 0;

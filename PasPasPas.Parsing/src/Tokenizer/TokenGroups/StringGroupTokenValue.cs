@@ -25,6 +25,8 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
         /// </summary>
         /// <param name="state">current tokenizer state</param>
         public override Token Tokenize(TokenizerState state) {
+            var parsedValue = state.Environment.Runtime.Strings.GetEmptyString();
+
             using (var resultBuilder = state.FetchStringBuilder()) {
                 state.PreviousChar();
                 state.Clear();
@@ -38,15 +40,21 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
                             if (state.LookAhead() == '$') {
                                 state.NextChar(true);
                                 var controlChar = hexDigits.Tokenize(state);
-                                if (controlChar.Kind == TokenKind.HexNumber && controlChar.ParsedValue is IIntegerValue hexValue && !hexValue.IsNegative)
-                                    resultBuilder.Item.Append(state.ConvertCharLiteral(hexValue.UnsignedValue).ToString()[0]);
+                                if (controlChar.Kind == TokenKind.HexNumber && controlChar.ParsedValue is IIntegerValue hexValue && !hexValue.IsNegative) {
+                                    var charValue = state.Environment.Runtime.Chars.ToWideCharValue((char)hexValue.UnsignedValue) as ICharValue;
+                                    parsedValue = state.Environment.Runtime.Strings.Concat(parsedValue, charValue);
+                                    resultBuilder.Item.Append(charValue.AsWideChar);
+                                }
                                 else
                                     state.Error(TokenizerBase.IncompleteString);
                             }
                             else {
                                 var controlChar = digitTokenizer.Tokenize(state);
-                                if (controlChar.Kind == TokenKind.IntegralNumber && controlChar.ParsedValue is IIntegerValue intValue && !intValue.IsNegative)
-                                    resultBuilder.Item.Append(state.ConvertCharLiteral(intValue.UnsignedValue).ToString()[0]);
+                                if (controlChar.Kind == TokenKind.IntegralNumber && controlChar.ParsedValue is IIntegerValue intValue && !intValue.IsNegative) {
+                                    var charValue = state.Environment.Runtime.Chars.ToWideCharValue((char)intValue.UnsignedValue) as ICharValue;
+                                    parsedValue = state.Environment.Runtime.Strings.Concat(parsedValue, charValue);
+                                    resultBuilder.Item.Append(charValue.AsWideChar);
+                                }
                                 else
                                     state.Error(TokenizerBase.UnexpectedCharacter);
                             }
@@ -55,21 +63,14 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
                     else if (state.LookAhead() == '\'') {
                         state.NextChar(true);
                         var qs = quotedString.Tokenize(state);
-                        foreach (var c in qs.ParsedValue.ToString())
-                            resultBuilder.Item.Append(c);
+                        parsedValue = state.RuntimeValues.Strings.Concat(parsedValue, qs.ParsedValue);
                     }
                     else {
                         break;
                     }
                 } while (!state.AtEof);
 
-                ITypeReference data;
-                if (resultBuilder.Item.Length == 1)
-                    data = state.RuntimeValues.Chars.ToWideCharValue(resultBuilder.Item[0]);
-                else
-                    data = state.RuntimeValues.Strings.ToUnicodeString(state.Environment.StringPool.PoolString(resultBuilder.Item));
-
-                return new Token(TokenKind.QuotedString, state, data);
+                return new Token(TokenKind.QuotedString, state, parsedValue);
             }
         }
     }

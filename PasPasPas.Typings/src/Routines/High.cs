@@ -28,10 +28,7 @@ namespace PasPasPas.Typings.Routines {
             if (signature.Length != 1)
                 return;
 
-            var param = default(ITypeDefinition);
-
-            if (signature[0].IsType() || signature[0].IsConstant())
-                param = TypeRegistry.GetTypeByIdOrUndefinedType(signature[0].TypeId);
+            var param = TypeRegistry.GetTypeByIdOrUndefinedType(signature[0].TypeId);
 
             if (param == default)
                 return;
@@ -54,6 +51,21 @@ namespace PasPasPas.Typings.Routines {
                 result.AddParameter("AValue").SymbolType = signature[0];
                 result.ResultType = highValue;
                 callableRoutines.Add(result);
+            }
+
+            if (param.TypeKind == CommonTypeKind.ArrayType) {
+                var arrayType = param as ArrayType;
+                if (arrayType.IndexTypes.Count > 0) {
+                    var indexType = arrayType.IndexTypes[0];
+                    if (TypeRegistry.GetTypeByIdOrUndefinedType(indexType.TypeId) is IOrdinalType ordinalType) {
+                        var highValue = ordinalType.HighestElement;
+                        var typeId = LiteralValuesHelper.GetTypeFor(highValue);
+                        var result = new ParameterGroup();
+                        result.AddParameter("AValue").SymbolType = signature[0];
+                        result.ResultType = highValue;
+                        callableRoutines.Add(result);
+                    }
+                }
             }
 
         }

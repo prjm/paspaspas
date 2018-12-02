@@ -606,11 +606,11 @@ namespace PasPasPasTests.Types {
 
         [TestCase]
         public void TestConstantArrayTypes() {
-            AssertExprTypeByConst("(1,2)", KnownTypeIds.UnspecifiedType, false, "array of int8");
-            AssertExprTypeByConst("('a','b')", KnownTypeIds.UnspecifiedType, false, "array of WideChar");
-            AssertExprTypeByConst("('aa','b')", KnownTypeIds.UnspecifiedType, false, "array of UnicodeString");
-            AssertExprTypeByConst("(1.0, 1.4)", KnownTypeIds.UnspecifiedType, false, "array of extended");
-            AssertExprTypeByConst("(a, b)", KnownTypeIds.UnspecifiedType, false, "array of enum Int8", "type ta = (a,b);");
+            AssertExprTypeByConst("(1,2)", KnownTypeIds.UnspecifiedType, false, "array [ref to 1001] of int8");
+            AssertExprTypeByConst("('a','b')", KnownTypeIds.UnspecifiedType, false, "array [ref to 1001] of WideChar");
+            AssertExprTypeByConst("('aa','b')", KnownTypeIds.UnspecifiedType, false, "array [ref to 1001] of UnicodeString");
+            AssertExprTypeByConst("(1.0, 1.4)", KnownTypeIds.UnspecifiedType, false, "array [ref to 1001] of extended");
+            AssertExprTypeByConst("(a, b)", KnownTypeIds.UnspecifiedType, false, "array [ref to 1002] of enum Int8", "type ta = (a,b);");
         }
     }
 }

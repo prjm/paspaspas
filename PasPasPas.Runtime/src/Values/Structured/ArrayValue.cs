@@ -1,4 +1,5 @@
-﻿using PasPasPas.Globals.Runtime;
+﻿using System.Collections.Immutable;
+using PasPasPas.Globals.Runtime;
 
 namespace PasPasPas.Runtime.Values.Structured {
 
@@ -7,30 +8,31 @@ namespace PasPasPas.Runtime.Values.Structured {
     /// </summary>
     public class ArrayValue : IArrayValue {
 
-        private readonly int typeId;
-        private readonly int baseTypeId;
-
         /// <summary>
         ///     create a new array value
         /// </summary>
         /// <param name="baseTypeId"></param>
         /// <param name="typeId"></param>
-        public ArrayValue(int typeId, int baseTypeId) {
-            this.typeId = typeId;
-            this.baseTypeId = baseTypeId;
+        public ArrayValue(int typeId, int baseTypeId, ImmutableArray<ITypeReference> constantValues) {
+            TypeId = typeId;
+            BaseType = baseTypeId;
+            Values = constantValues;
         }
 
         /// <summary>
         ///     base type
         /// </summary>
-        public int BaseType
-            => baseTypeId;
+        public int BaseType { get; }
+
+        /// <summary>
+        ///     constant values
+        /// </summary>
+        public ImmutableArray<ITypeReference> Values { get; }
 
         /// <summary>
         ///     type id
         /// </summary>
-        public int TypeId
-            => typeId;
+        public int TypeId { get; }
 
         /// <summary>
         ///     type kind
@@ -42,7 +44,14 @@ namespace PasPasPas.Runtime.Values.Structured {
         ///     format this type
         /// </summary>
         public string InternalTypeFormat
-            => $"(array)";
+            => $"[({string.Join(", ", Values)})]";
+
+        /// <summary>
+        ///     format this value as a string
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+            => InternalTypeFormat;
 
         /// <summary>
         ///     reference kind: constant

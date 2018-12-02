@@ -10,6 +10,9 @@ namespace PasPasPas.Runtime.Values.StringValues {
         private readonly ITypeReference invalidString
             = new SpecialValue(SpecialConstantKind.InvalidString);
 
+        private readonly ITypeReference emptyString
+            = new EmptyStringValue();
+
         /// <summary>
         ///     create a new string operations helper
         /// </summary>
@@ -37,10 +40,18 @@ namespace PasPasPas.Runtime.Values.StringValues {
         /// <param name="value2"></param>
         /// <returns></returns>
         public ITypeReference Concat(ITypeReference value1, ITypeReference value2) {
-            if (value1 is IStringValue string1 && value2 is IStringValue string2)
+            if (value1 is IStringValue string1 && value2 is IStringValue string2) {
+
+                if (value2 is EmptyStringValue)
+                    return value1;
+
+                if (value1 is EmptyStringValue)
+                    return value2;
+
                 return StringValueBase.Concat(string1, string2);
-            else
-                return invalidString;
+            }
+
+            return invalidString;
         }
 
         /// <summary>
@@ -121,5 +132,12 @@ namespace PasPasPas.Runtime.Values.StringValues {
             else
                 return invalidString;
         }
+
+        /// <summary>
+        ///     get the empty string value
+        /// </summary>
+        /// <returns></returns>
+        public ITypeReference GetEmptyString()
+            => emptyString;
     }
 }

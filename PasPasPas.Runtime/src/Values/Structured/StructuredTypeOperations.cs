@@ -1,4 +1,5 @@
-﻿using PasPasPas.Globals.Runtime;
+﻿using System.Collections.Immutable;
+using PasPasPas.Globals.Runtime;
 
 namespace PasPasPas.Runtime.Values.Structured {
 
@@ -12,8 +13,9 @@ namespace PasPasPas.Runtime.Values.Structured {
         /// </summary>
         /// <param name="registeredType"></param>
         /// <param name="baseTypeId"></param>
+        /// <param name="constantValues">array values</param>
         /// <returns></returns>
-        public IArrayValue CreateArrayValue(int registeredType, int baseTypeId)
-            => new ArrayValue(registeredType, baseTypeId);
+        public IArrayValue CreateArrayValue(int registeredType, int baseTypeId, ImmutableArray<ITypeReference> constantValues)
+            => new ArrayValue(registeredType, baseTypeId, constantValues);
     }
 }

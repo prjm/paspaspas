@@ -1,4 +1,6 @@
-﻿namespace PasPasPas.Globals.Runtime {
+﻿using System.Collections.Immutable;
+
+namespace PasPasPas.Globals.Runtime {
 
     /// <summary>
     ///     operations for structured types
@@ -10,7 +12,8 @@
         /// </summary>
         /// <param name="registeredType"></param>
         /// <param name="baseTypeId"></param>
+        /// <param name="values">array values</param>
         /// <returns></returns>
-        IArrayValue CreateArrayValue(int registeredType, int baseTypeId);
+        IArrayValue CreateArrayValue(int registeredType, int baseTypeId, ImmutableArray<ITypeReference> values);
     }
 }

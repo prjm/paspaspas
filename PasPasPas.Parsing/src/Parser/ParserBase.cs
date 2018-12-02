@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Diagnostics;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Infrastructure.ObjectPooling;
-using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Options.Bundles;
 using PasPasPas.Parsing.SyntaxTree;
 using PasPasPas.Parsing.SyntaxTree.Utils;
@@ -1060,38 +1058,8 @@ namespace PasPasPas.Parsing.Parser {
         /// <typeparam name="T"></typeparam>
         /// <param name="list"></param>
         /// <returns></returns>
-        protected static ImmutableArray<T> GetFixedArray<T>(PoolItem<List<T>> list) where T : class {
+        protected static ImmutableArray<T> GetFixedArray<T>(PoolItem<List<T>> list) where T : class
+            => ListPools.GetFixedArray(list);
 
-            switch (list.Item.Count) {
-                case 0:
-                    return ImmutableArray<T>.Empty;
-
-                case 1:
-                    return ImmutableArray.Create(list.Item[0]);
-
-                case 2:
-                    return ImmutableArray.Create(list.Item[0], list.Item[1]);
-
-                case 3:
-                    return ImmutableArray.Create(list.Item[0], list.Item[1], list.Item[2]);
-
-                case 4:
-                    return ImmutableArray.Create(list.Item[0], list.Item[1], list.Item[2], list.Item[3]);
-
-            };
-
-            var builder = ListPools.GetImmutableArrayBuilder(list);
-            for (var index = 0; index < list.Item.Count; index++)
-                builder.Add(list.Item[index]);
-
-            LogHistogram(builder);
-            return builder.MoveToImmutable();
-        }
-
-        [Conditional("DEBUG")]
-        private static void LogHistogram<T>(ImmutableArray<T>.Builder builder) where T : class {
-            if (Histograms.Enable)
-                Histograms.Value(HistogramKeys.SyntaxLists, string.Concat(typeof(T).Name, builder.Count));
-        }
     }
 }
