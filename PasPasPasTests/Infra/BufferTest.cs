@@ -12,7 +12,7 @@ namespace PasPasPasTests.Infra {
             "κόσμε",
         };
 
-        [TestCase]
+        [TestMethod]
         public void TestUTf8BufferForwardRead() {
             for (var bufferSize = 4; bufferSize < 20; bufferSize++) {
                 var data = "1234567890";
@@ -38,7 +38,7 @@ namespace PasPasPasTests.Infra {
             }
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestUtf8ForwardAndBackwardRead() {
             for (var bufferSize = 4; bufferSize < 20; bufferSize++) {
                 var data = "1234567890";
@@ -69,7 +69,7 @@ namespace PasPasPasTests.Infra {
             }
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestSimpleBufferForwardRead() {
             for (var bufferSize = 1; bufferSize < 20; bufferSize++) {
                 var data = "1234567890";
@@ -93,7 +93,7 @@ namespace PasPasPasTests.Infra {
             }
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestSimpleBufferForwardAndBackwardRead() {
             for (var bufferSize = 1; bufferSize < 20; bufferSize++) {
                 var data = "1234567890";
@@ -122,7 +122,7 @@ namespace PasPasPasTests.Infra {
             }
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestUtf8StreamSource() {
             for (var inputBufferSize = 2; inputBufferSize < 20; inputBufferSize++) {
                 for (var outputBufferSize = 4; outputBufferSize < 20; outputBufferSize++) {
@@ -156,7 +156,7 @@ namespace PasPasPasTests.Infra {
             }
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestUtf8Samples() {
             for (var bufferSize = 4; bufferSize < 20; bufferSize++) {
                 foreach (var data in utf8Samples) {

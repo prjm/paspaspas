@@ -7,15 +7,12 @@ namespace PasPasPas.Options.DataTypes {
     /// </summary>
     public class ConditionRoot : IConditionRoot {
 
-        private IConditionBranch parent;
-
         /// <summary>
         ///     create a new condition root
         /// </summary>
         /// <param name="parentBranch">parent branch</param>
-        public ConditionRoot(IConditionBranch parentBranch) {
-            parent = parentBranch;
-        }
+        public ConditionRoot(IConditionBranch parentBranch)
+            => Parent = parentBranch;
 
         /// <summary>
         ///     conditions
@@ -26,8 +23,7 @@ namespace PasPasPas.Options.DataTypes {
         /// <summary>
         ///     parent branch
         /// </summary>
-        public IConditionBranch Parent
-             => parent;
+        public IConditionBranch Parent { get; }
 
     }
 }

@@ -28,8 +28,7 @@ namespace PasPasPas.Building.Definition {
         /// </summary>
         /// <param name="settings"></param>
         public void Resolve(IDictionary<string, Setting> settings) {
-            Setting resolvedItem;
-            if (settings.TryGetValue(ReferenceName, out resolvedItem))
+            if (settings.TryGetValue(ReferenceName, out var resolvedItem))
                 ResolvedItem = resolvedItem;
         }
     }

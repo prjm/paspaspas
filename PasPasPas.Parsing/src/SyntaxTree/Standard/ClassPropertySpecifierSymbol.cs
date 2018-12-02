@@ -12,17 +12,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         ///     create a new property specifier
         /// </summary>
         /// <param name="classPropertyReadWriteSymbol"></param>
-        public ClassPropertySpecifierSymbol(ClassPropertyReadWriteSymbol classPropertyReadWriteSymbol) {
-            PropertyReadWrite = classPropertyReadWriteSymbol;
-        }
+        public ClassPropertySpecifierSymbol(ClassPropertyReadWriteSymbol classPropertyReadWriteSymbol)
+            => PropertyReadWrite = classPropertyReadWriteSymbol;
 
         /// <summary>
         ///     create a new property specifier
         /// </summary>
         /// <param name="classPropertyDispInterfaceSymbols"></param>
-        public ClassPropertySpecifierSymbol(ClassPropertyDispInterfaceSymbols classPropertyDispInterfaceSymbols) {
-            PropertyDispInterface = classPropertyDispInterfaceSymbols;
-        }
+        public ClassPropertySpecifierSymbol(ClassPropertyDispInterfaceSymbols classPropertyDispInterfaceSymbols) => PropertyDispInterface = classPropertyDispInterfaceSymbols;
 
         /// <summary>
         ///     create a new class property specifier symbol
@@ -48,9 +45,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         ///     no default symbol
         /// </summary>
         /// <param name="noDefaultSymbol"></param>
-        public ClassPropertySpecifierSymbol(Terminal noDefaultSymbol) {
-            NoDefaultSymbol = noDefaultSymbol;
-        }
+        public ClassPropertySpecifierSymbol(Terminal noDefaultSymbol)
+            => NoDefaultSymbol = noDefaultSymbol;
 
         /// <summary>
         ///     create a new class property specifier symbol

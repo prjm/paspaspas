@@ -9,9 +9,8 @@
         ///     generate a new set of rtti options
         /// </summary>
         /// <param name="baseOptions"></param>
-        public RttiOptions(RttiOptions baseOptions) {
-            BaseOptions = baseOptions;
-        }
+        public RttiOptions(RttiOptions baseOptions)
+            => BaseOptions = baseOptions;
 
         /// <summary>
         ///     generate a new set of rtti options

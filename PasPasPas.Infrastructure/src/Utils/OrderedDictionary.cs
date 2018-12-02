@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace PasPasPas.Infrastructure.Utils {
@@ -54,11 +54,8 @@ namespace PasPasPas.Infrastructure.Utils {
         /// <summary>
         ///     Gets all the values in the ordered dictionary in their proper order.
         /// </summary>
-        public ICollection<TValue> Values {
-            get {
-                return _keyedCollection.Select(x => x.Value).ToList();
-            }
-        }
+        public ICollection<TValue> Values
+            => _keyedCollection.Select(x => x.Value).ToList();
 
         /// <summary>
         /// Gets the key comparer for this dictionary

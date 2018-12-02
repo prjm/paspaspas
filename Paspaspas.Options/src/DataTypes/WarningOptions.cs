@@ -111,7 +111,7 @@ namespace PasPasPas.Options.DataTypes {
         ///     clear options
         /// </summary>
         public void Clear() {
-            foreach (WarningOption option in options.Values)
+            foreach (var option in options.Values)
                 option.ResetToDefault();
         }
 
@@ -119,7 +119,7 @@ namespace PasPasPas.Options.DataTypes {
         ///     reset options on a new unit
         /// </summary>
         public void ResetOnNewUnit() {
-            foreach (WarningOption option in options.Values)
+            foreach (var option in options.Values)
                 option.ResetToDefault();
         }
 
@@ -146,8 +146,7 @@ namespace PasPasPas.Options.DataTypes {
         /// <param name="key">warning key</param>
         /// <returns>warning mode</returns>
         public WarningMode GetModeByKey(WarningKey key) {
-            WarningOption setting;
-            if (!options.TryGetValue(key, out setting))
+            if (!options.TryGetValue(key, out var setting))
                 return WarningMode.Undefined;
             return setting.Mode;
         }
@@ -181,8 +180,7 @@ namespace PasPasPas.Options.DataTypes {
         /// <param name="key">warning key</param>
         /// <param name="mode">warning mode</param>
         public void SetModeByKey(WarningKey key, WarningMode mode) {
-            WarningOption setting;
-            if (options.TryGetValue(key, out setting))
+            if (options.TryGetValue(key, out var setting))
                 setting.Mode = mode;
 
         }

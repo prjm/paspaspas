@@ -15,9 +15,8 @@ namespace PasPasPas.Infrastructure.Utils {
         ///     create a new helper object
         /// </summary>
         /// <param name="dictionary"></param>
-        public DictionaryIndexHelper(IDictionary<TMapType, object> dictionary) {
-            values = dictionary;
-        }
+        public DictionaryIndexHelper(IDictionary<TMapType, object> dictionary)
+            => values = dictionary;
 
         /// <summary>
         ///     get the value from the dictionary
@@ -26,15 +25,12 @@ namespace PasPasPas.Infrastructure.Utils {
         /// <returns></returns>
         public TTargetType this[TMapType index] {
             get {
-                object result;
-                if (values.TryGetValue(index, out result))
+                if (values.TryGetValue(index, out var result))
                     return (TTargetType)result;
                 else
-                    return default(TTargetType);
+                    return default;
             }
-            set {
-                values[index] = value;
-            }
+            set => values[index] = value;
         }
 
         /// <summary>

@@ -27,10 +27,9 @@ namespace PasPasPas.Options.Bundles {
         /// <summary>
         ///     create a new platform entry
         /// </summary>
-        /// <param name="key">platform key</param>        
-        protected Platform(PlatformKey key) {
-            this.key = key;
-        }
+        /// <param name="key">platform key</param>
+        protected Platform(PlatformKey key
+            ) => this.key = key;
 
     }
 }

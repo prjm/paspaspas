@@ -13,7 +13,7 @@ namespace PasPasPasTests.Types {
     /// </summary>
     public class TypeCastingTest : TypeTest {
 
-        [TestCase]
+        [TestMethod]
         public void TestIntegerCastingDirect() {
             AssertExprValue("ShortInt(384)", new ShortIntValue(-128), "", KnownTypeIds.ShortInt);
             AssertExprValue("Byte(384)", new ByteValue(128), "", KnownTypeIds.ByteType);
@@ -40,7 +40,7 @@ namespace PasPasPasTests.Types {
                 new ShortIntValue(1), "type e = -2..2;", KnownTypeIds.ShortInt);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestIntegerCastingIndirect() {
             AssertExprTypeByVar("Integer", "ShortInt(a)", KnownTypeIds.ShortInt);
             AssertExprTypeByVar("Integer", "Byte(a)", KnownTypeIds.ByteType);
@@ -63,7 +63,7 @@ namespace PasPasPasTests.Types {
             AssertExprTypeByVar("Integer", "e(a)", RegisteredTypes.SmallestUserTypeId, false, "type e = -2..2;");
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestCharCastingDirect() {
             AssertExprValue("ShortInt('a')", new ShortIntValue(97), "", KnownTypeIds.ShortInt);
             AssertExprValue("Byte('a')", new ByteValue(97), "", KnownTypeIds.ByteType);
@@ -92,7 +92,7 @@ namespace PasPasPasTests.Types {
 
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestCharCastingIndirectDirect() {
             AssertExprTypeByVar("WideChar", "ShortInt(a)", KnownTypeIds.ShortInt);
             AssertExprTypeByVar("WideChar", "Byte(a)", KnownTypeIds.ByteType);

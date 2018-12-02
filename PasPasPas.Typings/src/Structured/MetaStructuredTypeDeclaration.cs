@@ -11,17 +11,12 @@ namespace PasPasPas.Typings.Structured {
     public class MetaStructuredTypeDeclaration : StructuredTypeBase {
 
         /// <summary>
-        ///     base type id
-        /// </summary>
-        private int baseTypeId;
-
-        /// <summary>
         ///     create a meta type declaration
         /// </summary>
         /// <param name="withId"></param>
         /// <param name="baseType"></param>
         public MetaStructuredTypeDeclaration(int withId, int baseType) : base(withId)
-            => baseTypeId = baseType;
+            => BaseType = baseType;
 
         /// <summary>
         ///     type kind
@@ -32,8 +27,7 @@ namespace PasPasPas.Typings.Structured {
         /// <summary>
         ///     base type id
         /// </summary>
-        public int BaseType
-            => baseTypeId;
+        public int BaseType { get; }
 
         /// <summary>
         ///     list of fieds

@@ -4,7 +4,7 @@ using Xunit;
 namespace PasPasPasTests.Common {
 
     [AttributeUsage(AttributeTargets.Method)]
-    public class TestCaseAttribute : FactAttribute {
+    public class TestMethodAttribute : FactAttribute {
 
     }
 }

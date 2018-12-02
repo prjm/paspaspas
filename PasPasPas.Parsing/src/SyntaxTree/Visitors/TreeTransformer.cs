@@ -718,8 +718,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 return;
 
             foreach (var part in unit.Files.Items) {
-                var name = part as NamespaceFileNameSymbol;
-                if (name == null)
+
+                if (!(part is NamespaceFileNameSymbol name))
                     continue;
 
                 var unitName = new RequiredUnitName();
@@ -1550,9 +1550,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// </summary>
         /// <param name="directive"></param>
         public void StartVisit(DispIdSymbol directive) {
-            var parent = LastValue as IDirectiveTarget;
 
-            if (parent == null)
+            if (!(LastValue is IDirectiveTarget parent))
                 return;
 
             var result = new MethodDirective();
@@ -1871,9 +1870,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// </summary>
         /// <param name="recordDeclarationItem"></param>
         public void StartVisit(RecordItemSymbol recordDeclarationItem) {
-            var parentType = LastValue as StructuredType;
 
-            if (parentType == null)
+            if (!(LastValue is StructuredType parentType))
                 return;
 
             if (recordDeclarationItem.Visibility != TokenKind.Undefined) {
@@ -2046,9 +2044,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// </summary>
         /// <param name="recordDeclarationItem"></param>
         public void StartVisit(RecordHelperItemSymbol recordDeclarationItem) {
-            var parentType = LastValue as StructuredType;
 
-            if (parentType == null)
+            if (!(LastValue is StructuredType parentType))
                 return;
 
             if (recordDeclarationItem.Visibility != TokenKind.Undefined) {
@@ -2094,9 +2091,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// </summary>
         /// <param name="objectItem"></param>
         public void StartVisit(ObjectItem objectItem) {
-            var parentType = LastValue as StructuredType;
 
-            if (parentType == null)
+            if (!(LastValue is StructuredType parentType))
                 return;
 
             if (objectItem.Visibility.GetSymbolKind() != TokenKind.Undefined) {
@@ -2197,9 +2193,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// </summary>
         /// <param name="classHelperItem"></param>
         public void StartVisit(ClassHelperItemSymbol classHelperItem) {
-            var parentType = LastValue as StructuredType;
 
-            if (parentType == null)
+            if (!(LastValue is StructuredType parentType))
                 return;
 
             if (classHelperItem.Visibility != TokenKind.Undefined) {
@@ -2249,8 +2244,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
             if (type != null) {
                 var typeDecl = type as Abstract.TypeDeclaration;
-                var typeStruct = typeDecl.TypeValue as StructuredType;
-                if (typeStruct != null && typeStruct.Methods.Contains(name.Name)) {
+                if (typeDecl.TypeValue is StructuredType typeStruct && typeStruct.Methods.Contains(name.Name)) {
                     var declaration = typeStruct.Methods[name.Name];
                     declaration.Implementation = result;
                 }
@@ -2353,9 +2347,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <param name="tryStatement"></param>
         /// <param name="child"></param>
         public void StartVisitChild(TryStatementSymbol tryStatement, ISyntaxPart child) {
-            var statements = child as StatementList;
 
-            if (statements == null)
+            if (!(child is StatementList statements))
                 return;
 
             var target = LastValue as IStatementTarget;
@@ -2833,9 +2826,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// </summary>
         /// <param name="designator"></param>
         public void StartVisit(DesignatorItemSymbol designator) {
-            var parent = LastValue as SymbolReference;
 
-            if (parent == null)
+            if (!(LastValue is SymbolReference parent))
                 return;
 
             if (designator.Dereference != default) {
@@ -2941,9 +2933,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <param name="part"></param>
         public void StartVisit(SetSectionPartSymbol part) {
             if (part.Continuation.GetSymbolKind() != TokenKind.DotDot) {
-                var arrayExpression = LastExpression as SetExpression;
 
-                if (arrayExpression == null)
+                if (!(LastExpression is SetExpression arrayExpression))
                     return;
 
                 if (arrayExpression.Expressions.LastOrDefault() is BinaryOperator binOp && binOp.RightOperand == null) {
@@ -3177,8 +3168,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 return null;
 
             foreach (var part in hints.Items) {
-                var hint = part as HintSymbol;
-                if (hint == null)
+                if (!(part is HintSymbol hint))
                     continue;
                 ExtractHints(hint, result);
             }

@@ -28,16 +28,14 @@ namespace PasPasPas.Options.DataTypes {
         public string WarningNumber { get; }
 
         /// <summary>
-        ///     check for equeality
+        ///     check for equality
         /// </summary>
         /// <param name="obj">other object</param>
         /// <returns></returns>
         public override bool Equals(object obj) {
-            var other = obj as WarningKey;
-            if (ReferenceEquals(other, null))
-                return false;
-
-            return string.Equals(WarningIdentifier, other.WarningIdentifier, StringComparison.OrdinalIgnoreCase);
+            if (obj is WarningKey other)
+                return string.Equals(WarningIdentifier, other.WarningIdentifier, StringComparison.OrdinalIgnoreCase);
+            return false;
         }
 
         /// <summary>

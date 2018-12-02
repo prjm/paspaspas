@@ -118,9 +118,8 @@ namespace PasPasPas.Runtime.Values.FloatValues {
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public ITypeReference Identity(ITypeReference value) {
-            return value;
-        }
+        public ITypeReference Identity(ITypeReference value)
+            => value;
 
         /// <summary>
         ///     check for equality

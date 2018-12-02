@@ -92,7 +92,7 @@ namespace PasPasPasTests.Infra {
             }
         }
 
-        private string GenerateTempFile(string content) {
+        private static string GenerateTempFile(string content) {
             var result = Path.GetTempFileName();
             File.AppendAllText(result, content);
             return result;

@@ -25,10 +25,10 @@ namespace PasPasPas.Infrastructure.Log {
             if (messageSeverity == MessageSeverity.Undefined)
                 throw new ArgumentOutOfRangeException(nameof(messageSeverity));
 
-            if (groupId == default(Guid))
+            if (groupId == default)
                 throw new ArgumentOutOfRangeException(nameof(groupId));
 
-            if (messageId == default(Guid))
+            if (messageId == default)
                 throw new ArgumentOutOfRangeException(nameof(messageId));
 
             group = groupId;

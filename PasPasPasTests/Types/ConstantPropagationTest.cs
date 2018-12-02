@@ -7,7 +7,7 @@ namespace PasPasPasTests.Types {
     /// </summary>
     public class ConstantPropagationTest : TypeTest {
 
-        [TestCase]
+        [TestMethod]
         public void TestIntegerConstants() {
             AssertExprValue("0", GetIntegerValue(0));
             AssertExprValue("-128", GetIntegerValue((sbyte)-128));
@@ -20,7 +20,7 @@ namespace PasPasPasTests.Types {
             AssertExprValue("-129", GetIntegerValue((short)-129));
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestIntegerOperations() {
             AssertExprValue("4 + 5", GetIntegerValue(9));
             AssertExprValue("4 - 3", GetIntegerValue(1));
@@ -31,7 +31,7 @@ namespace PasPasPasTests.Types {
             AssertExprValue("9 mod 4", GetIntegerValue(1));
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestAbs() {
             AssertExprValue("Abs(5)", GetIntegerValue(5));
             AssertExprValue("Abs(0)", GetIntegerValue(0));
@@ -42,21 +42,21 @@ namespace PasPasPasTests.Types {
             AssertExprValue("Abs(-3.3)", GetExtendedValue("3.3"));
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestChr() {
             AssertExprValue("Chr(5)", GetWideCharValue((char)5));
             AssertExprValue("Chr(0)", GetWideCharValue((char)0));
             AssertExprValue("Chr(-3)", GetWideCharValue((char)(ushort.MaxValue - 3 + 1)));
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestHi() {
             AssertExprValue("Hi($FF)", GetIntegerValue(0x00));
             AssertExprValue("Hi($FFFF)", GetIntegerValue(0xff));
             AssertExprValue("Hi($FFFFFF)", GetIntegerValue(0xff));
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestHigh() {
 
             // ordinal types
@@ -83,7 +83,7 @@ namespace PasPasPasTests.Types {
             AssertExprValue("High(a)", GetIntegerValue(3), "const a: array[0..2] of string = ('a','b','c');");
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestConcat() {
             AssertExprValue("Concat('a')", GetWideCharValue('a'));
             AssertExprValue("Concat('a', 'b')", GetUnicodeStringValue("ab"));
@@ -94,7 +94,7 @@ namespace PasPasPasTests.Types {
         }
 
 
-        [TestCase]
+        [TestMethod]
         public void TestBooleanOperations() {
             AssertExprValue("false and false", GetBooleanValue(false));
             AssertExprValue("false and true", GetBooleanValue(false));

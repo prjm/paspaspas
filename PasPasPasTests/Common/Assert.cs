@@ -11,7 +11,7 @@ namespace PasPasPasTests.Common {
             => A.Equal(expected, actual);
 
         public static void AreEqual(string expected, string actual, StringComparer comp)
-            => A.Equal<string>(expected, actual, comp);
+            => A.Equal(expected, actual, comp);
 
         public static void AreEqual(in ExtF80 expected, in ExtF80 actual)
             => A.Equal(expected, actual);

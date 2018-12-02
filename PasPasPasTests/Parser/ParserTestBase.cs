@@ -24,7 +24,7 @@ namespace PasPasPasTests.Parser {
 
         protected const string CstPath = "z.x.pas";
 
-        protected string CompactWhitespace(string input) {
+        protected static string CompactWhitespace(string input) {
             var result = new StringBuilder();
             var wasWhitespace = false;
 
@@ -193,7 +193,7 @@ namespace PasPasPasTests.Parser {
                 return null;
             }
 
-            RunAstTest<bool?>(statement, search, true, true);
+            RunAstTest(statement, search, true, true);
         }
 
         protected void RunCompilerDirective(string directive, object expected, Func<OptionSet, object> actual, params Guid[] messages) {

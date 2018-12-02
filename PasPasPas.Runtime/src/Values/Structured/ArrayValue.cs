@@ -12,6 +12,7 @@ namespace PasPasPas.Runtime.Values.Structured {
         ///     create a new array value
         /// </summary>
         /// <param name="baseTypeId"></param>
+        /// <param name="constantValues"></param>
         /// <param name="typeId"></param>
         public ArrayValue(int typeId, int baseTypeId, ImmutableArray<ITypeReference> constantValues) {
             TypeId = typeId;

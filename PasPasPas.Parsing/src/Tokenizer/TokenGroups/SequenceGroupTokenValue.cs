@@ -1,5 +1,4 @@
-﻿using System;
-using PasPasPas.Parsing.SyntaxTree;
+﻿using PasPasPas.Parsing.SyntaxTree;
 
 namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
     /// <summary>
@@ -60,7 +59,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
 
                 if (StoreValue) {
                     builder.Item.Remove(0, 1);
-                    for (int i = 0; i < EndSequence.Length - 1 && builder.Item.Length > 0; i++)
+                    for (var i = 0; i < EndSequence.Length - 1 && builder.Item.Length > 0; i++)
                         builder.Item.Remove(builder.Item.Length - 1, 1);
                     var stringValue = state.RuntimeValues.Strings.ToUnicodeString(state.Environment.StringPool.PoolString(builder.Item));
                     return new Token(TokenId, state, stringValue);

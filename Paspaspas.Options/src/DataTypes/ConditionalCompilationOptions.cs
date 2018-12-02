@@ -1,6 +1,6 @@
-﻿using PasPasPas.Infrastructure.Log;
+﻿using System;
+using PasPasPas.Infrastructure.Log;
 using PasPasPas.Options.Bundles;
-using System;
 
 namespace PasPasPas.Options.DataTypes {
 
@@ -56,7 +56,7 @@ namespace PasPasPas.Options.DataTypes {
         /// <param name="symbolName">symbol name</param>
         /// <returns><c>true</c> if the symbol is defined</returns>
         public bool IsSymbolDefined(string symbolName) {
-            foreach (ConditionalSymbol conditional in Conditionals) {
+            foreach (var conditional in Conditionals) {
                 if (string.Equals(conditional.Name, symbolName, StringComparison.OrdinalIgnoreCase) && conditional.IsActive)
                     return true;
             }
@@ -87,7 +87,7 @@ namespace PasPasPas.Options.DataTypes {
             DesignOnly.ResetToDefault();
 
             for (var i = Conditionals.OwnValues.Count - 1; i >= 0; i--) {
-                ConditionalSymbol symbol = Conditionals.OwnValues[i];
+                var symbol = Conditionals.OwnValues[i];
                 if (symbol.IsLocal)
                     Conditionals.OwnValues.RemoveAt(i);
                 else
@@ -112,7 +112,7 @@ namespace PasPasPas.Options.DataTypes {
             if (string.IsNullOrEmpty(symbolName))
                 return;
 
-            foreach (ConditionalSymbol conditional in Conditionals) {
+            foreach (var conditional in Conditionals) {
                 if (string.Equals(conditional.Name, symbolName, StringComparison.OrdinalIgnoreCase)) {
                     conditional.IsActive = isActive;
                     return;
@@ -139,7 +139,7 @@ namespace PasPasPas.Options.DataTypes {
             }
             else if (CurrentCondition != null) {
                 anotherConditionMatches = false;
-                foreach (IConditionBranch condition in CurrentCondition.Parent.Conditions) {
+                foreach (var condition in CurrentCondition.Parent.Conditions) {
                     if (condition.Matches) {
                         anotherConditionMatches = true;
                         break;
@@ -174,7 +174,7 @@ namespace PasPasPas.Options.DataTypes {
 
         /// <summary>
         ///     add a <c>ifndef</c> condition
-        /// </summary>     
+        /// </summary>
         /// <param name="value"></param>
         public void AddIfNDefCondition(string value) {
             if (string.IsNullOrWhiteSpace(value))
@@ -225,7 +225,7 @@ namespace PasPasPas.Options.DataTypes {
         /// </summary>
         private void UpdateSkipState() {
             var doSkip = false;
-            IConditionBranch condition = CurrentCondition;
+            var condition = CurrentCondition;
 
             while (condition != null) {
                 if (!condition.Matches) {

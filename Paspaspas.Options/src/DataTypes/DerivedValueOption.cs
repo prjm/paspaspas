@@ -23,12 +23,11 @@
         ///     creates a derived option
         /// </summary>
         /// <param name="parentOption">parent option</param>
-        public DerivedValueOption(DerivedValueOption<T> parentOption) : base() {
-            Parent = parentOption;
-        }
+        public DerivedValueOption(DerivedValueOption<T> parentOption) : base()
+            => Parent = parentOption;
 
         /// <summary>
-        ///     test if the parent's value is overriden
+        ///     test if the parent's value is overridden
         /// </summary>
         public override bool OverwritesDefaultValue
             => hasValue;
@@ -38,7 +37,7 @@
         /// </summary>
         public override void ResetToDefault() {
             hasValue = false;
-            optionValue = default(T);
+            optionValue = default;
         }
 
         private T optionValue;
@@ -46,20 +45,17 @@
         /// <summary>
         ///     option value
         /// </summary>
-        public T Value
-        {
-            get
-            {
+        public T Value {
+            get {
                 if (hasValue)
                     return optionValue;
 
                 if (Parent != null)
                     return Parent.Value;
 
-                return default(T);
+                return default;
             }
-            set
-            {
+            set {
                 hasValue = true;
                 optionValue = value;
             }

@@ -7,7 +7,7 @@ namespace PasPasPasTests.Parser {
 
     public class CstTest : ParserTestBase {
 
-        [TestCase]
+        [TestMethod]
         public void TestAbstract() {
             var s = RunCstTest(p => p.ParseAbstractDirective(), "abstract ;");
             Assert.IsNotNull(s.Directive);
@@ -20,7 +20,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(7, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestReintroduce() {
             var s = RunCstTest(p => p.ParseReintroduceDirective(), "reintroduce;");
             Assert.IsNotNull(s.Directive);
@@ -28,7 +28,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(12, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestOverload() {
             var s = RunCstTest(p => p.ParseOverloadDirective(), "overload;");
             Assert.IsNotNull(s.Directive);
@@ -36,7 +36,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(9, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestInline() {
             var s = RunCstTest(p => p.ParseInlineDirective(), "inline ;");
             Assert.IsNotNull(s.Directive);
@@ -49,7 +49,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(11, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestBinding() {
             var s = RunCstTest(p => p.ParseBindingDirective(), "message WM_TEXT;");
             Assert.IsNotNull(s.Directive);
@@ -58,7 +58,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(16, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestCallConvention() {
             var s = RunCstTest(p => p.ParseCallConvention(), "cdecl;");
             Assert.IsNotNull(s.Directive);
@@ -66,7 +66,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(6, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestHintDirective() {
             var s = RunCstTest(p => p.ParseHint(false), "library");
             Assert.IsNotNull(s.Symbol);
@@ -78,7 +78,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(14, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestHintList() {
             var s = RunCstTest(p => p.ParseHints(true), "library; deprecated;");
             Assert.IsNotNull(s.Items[0]);
@@ -89,7 +89,7 @@ namespace PasPasPasTests.Parser {
 
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestProgram() {
             var s = RunCstTest(p => p.ParseProgram(new FileReference(CstPath)), "program z.x; uses a in 'a'; begin x; end.");
             Assert.IsNotNull(s.ProgramHead);
@@ -99,7 +99,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(41, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestLibrary() {
             var s = RunCstTest(p => p.ParseLibrary(new FileReference(CstPath)), "library a; uses x in 'x'; begin end.");
             Assert.IsNotNull(s.LibraryHead);
@@ -109,7 +109,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(36, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestLibraryHead() {
             var s = RunCstTest(p => p.ParseLibraryHead(), "library a.b deprecated;");
             Assert.IsNotNull(s.LibrarySymbol);
@@ -119,7 +119,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(23, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestProgramHeader() {
             var s = RunCstTest(p => p.ParseProgramHead(), "program a.b(x,y);");
             Assert.IsNotNull(s.ProgramSymbol);
@@ -129,7 +129,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(17, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestArrayIndex() {
             var s = RunCstTest(p => p.ParseArrayIndex(), "1");
             Assert.IsNotNull(s.StartIndex);
@@ -149,7 +149,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(5, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestArrayType() {
             var s = RunCstTest(p => p.ParseArrayType(), "array of const");
             Assert.IsNotNull(s.Array);
@@ -177,7 +177,7 @@ namespace PasPasPasTests.Parser {
         }
 
 
-        [TestCase]
+        [TestMethod]
         public void TestInterfaceSection() {
             var s = RunCstTest(p => p.ParseUnitInterface(), "interface uses a; type x = class;");
             Assert.IsNotNull(s.InterfaceSymbol);
@@ -186,14 +186,14 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(33, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestInterfaceDeclaration() {
             var s = RunCstTest(p => p.ParseInterfaceDeclaration(), "const a = 5");
             Assert.IsNotNull(s.Items[0]);
             Assert.AreEqual(11, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestInterfaceDefinition() {
             var s = RunCstTest(p => p.ParseInterfaceDef(), "interface(a) ['a'] function a:x; end");
             Assert.IsNotNull(s.InterfaceSymbol);
@@ -204,7 +204,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(36, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestAsmBlock() {
             var s = RunCstTest(p => p.ParseAsmBlock(), "asm end");
             Assert.IsNotNull(s.AsmSymbol);
@@ -224,7 +224,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(16, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestBlock() {
             var s = RunCstTest(p => p.ParseBlock(), "const x = 5");
             Assert.IsNotNull(s.DeclarationSections);
@@ -236,7 +236,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(22, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestAsmFactor() {
             var s = RunCstTest(p => p.ParseAssemblyFactor(), "cs:3");
             Assert.IsNotNull(s.SegmentPrefix);
@@ -281,7 +281,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(3, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestAsmLabel() {
             var s = RunCstTest(p => p.ParseAssemblyLabel(), "a");
             Assert.IsNotNull(s.Label);
@@ -292,21 +292,21 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(2, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestRealNumberSymobl() {
             var s = RunCstTest(p => p.RequireRealValue(), "2.5");
             Assert.IsNotNull(s.Symbol);
             Assert.AreEqual(3, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestAsmOpCodeSymbol() {
             var s = RunCstTest(p => p.ParseAssemblyOpcode() as AsmOpCodeSymbol, "int");
             Assert.IsNotNull(s.OpCode);
             Assert.AreEqual(3, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestAsmPrefixSymbol() {
             var s = RunCstTest(p => p.ParseAssemblyPrefix() as AsmPrefixSymbol, "lock cs");
             Assert.IsNotNull(s.LockPrefix);
@@ -319,7 +319,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(7, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestCaseStatement() {
             var s = RunCstTest(p => p.ParseCaseStatement(), "case a of 1: x; end");
             Assert.IsNotNull(s.CaseSymbol);
@@ -338,7 +338,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(27, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestCaseItem() {
             var s = RunCstTest(p => p.ParseCaseItem(), "5: x;");
             Assert.IsNotNull(s.ColonSymbol);
@@ -347,7 +347,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(5, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestClassDeclaration() {
             var s = RunCstTest(p => p.ParseClassDeclaration(), "class of TAbc");
             Assert.IsNotNull(s.ClassOf);
@@ -378,7 +378,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(26, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestCaseLabel() {
             var s = RunCstTest(p => p.ParseCaseLabel(), "5");
             Assert.IsNotNull(s.StartExpression);
@@ -398,7 +398,7 @@ namespace PasPasPasTests.Parser {
 
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestBlockBody() {
             var s = RunCstTest(p => p.ParseBlockBody() as BlockBodySymbol, "asm end");
             Assert.IsNotNull(s.AssemblerBlock);
@@ -409,7 +409,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(9, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestAsmPseudoOpSymbol() {
             var s = RunCstTest(p => p.ParseAsmPseudoOp(), ".PARAMS 3");
             Assert.IsNotNull(s.DotSymbol);
@@ -431,7 +431,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(8, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestAsmStatement() {
             var s = RunCstTest(p => p.ParseAsmStatement(), "x: lock int 3");
             Assert.IsNotNull(s.Label);
@@ -441,7 +441,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(13, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestAsmTerm() {
             var s = RunCstTest(p => p.ParseAssemblyTerm(), "3 / 3");
             Assert.IsNotNull(s.LeftOperand);
@@ -455,7 +455,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(5, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestAsmOperand() {
             var s = RunCstTest(p => p.ParseAssemblyOperand(), "not x");
             Assert.IsNotNull(s.NotSymbol);
@@ -470,7 +470,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(9, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestAsmExpression() {
             var s = RunCstTest(p => p.ParseAssemblyExpression(), "offset 3");
             Assert.IsNotNull(s.OffsetSymbol);
@@ -498,7 +498,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(5, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestUnit() {
             var s = RunCstTest(p => p.ParseUnit(new FileReference(CstPath)), "unit z.x; interface implementation initialization finalization end.");
             Assert.IsNotNull(s.UnitHead);
@@ -510,13 +510,13 @@ namespace PasPasPasTests.Parser {
         }
 
 
-        [TestCase]
+        [TestMethod]
         public void TestClassDeclarationItems() {
             var s = RunCstTest(p => p.ParseClassDeclartionItems(), "var a,b: integer;");
             Assert.AreEqual(17, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestClassDeclarationItem() {
             var mode = ClassDeclarationMode.Other;
 
@@ -578,7 +578,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(10, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestClassDeclarationSymbol() {
             var s = RunCstTest(p => p.ParseClassDefinition(), "class");
             Assert.IsTrue(s.ForwardDeclaration);
@@ -614,7 +614,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(21, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestClassField() {
             var s = RunCstTest(p => p.ParseClassFieldDeclararation(), "s: string deprecated;");
             Assert.IsNotNull(s.Names);
@@ -625,7 +625,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(21, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestClassHelperDef() {
             var s = RunCstTest(p => p.ParseClassHelper(), "class helper (TQ) for TObject procedure x; end");
             Assert.IsNotNull(s.ClassSymbol);
@@ -639,7 +639,7 @@ namespace PasPasPasTests.Parser {
         }
 
 
-        [TestCase]
+        [TestMethod]
         public void TestClassHelperItem() {
             var mode = ClassDeclarationMode.Other;
 
@@ -701,14 +701,14 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(10, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestClassHelperItems() {
             var s = RunCstTest(p => p.ParseClassHelperItems(), "const x = 5");
             Assert.AreEqual(1, s.Items.Length);
             Assert.AreEqual(11, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestClassMethod() {
             var s = RunCstTest(p => p.ParseMethodDeclaration(), "procedure x;");
             Assert.IsNotNull(s.MethodSymbol);
@@ -738,7 +738,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(33, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestClassOfDeclaration() {
             var s = RunCstTest(p => p.ParseClassOfDeclaration(), "class of tzing");
             Assert.IsNotNull(s.ClassSymbol);
@@ -748,7 +748,7 @@ namespace PasPasPasTests.Parser {
         }
 
 
-        [TestCase]
+        [TestMethod]
         public void TestClassProperty() {
             var s = RunCstTest(p => p.ParsePropertyDeclaration(), "property x [a: string]: string index 4 read q; default;");
             Assert.IsNotNull(s.PropertySymbol);
@@ -766,7 +766,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(55, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestClassPropertySpecifier() {
             var s = RunCstTest(p => p.ParseClassPropertyAccessSpecifier(), "read x");
             Assert.IsNotNull(s.PropertyReadWrite);
@@ -797,7 +797,7 @@ namespace PasPasPasTests.Parser {
         }
 
 
-        [TestCase]
+        [TestMethod]
         public void TestClassPropertyReadWrite() {
             var s = RunCstTest(p => p.ParseClassPropertyReadWrite(), "read x");
             Assert.IsNotNull(s.Modifier);
@@ -821,7 +821,7 @@ namespace PasPasPasTests.Parser {
         }
 
 
-        [TestCase]
+        [TestMethod]
         public void TestClassPropertyDispIntf() {
             var s = RunCstTest(p => p.ParseClassPropertyDispInterface(), "readonly");
             Assert.IsNotNull(s.Modifier);
@@ -836,7 +836,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(8, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestClosureExpression() {
             var s = RunCstTest(p => p.ParseClosureExpression(), "function (p: Integer): Boolean begin end");
             Assert.IsNotNull(s.ProcSymbol);
@@ -847,7 +847,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(40, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestCompoundStatement() {
             var s = RunCstTest(p => p.ParseCompoundStatement(), "asm end");
             Assert.IsNotNull(s.AssemblerBlock);
@@ -861,7 +861,7 @@ namespace PasPasPasTests.Parser {
         }
 
 
-        [TestCase]
+        [TestMethod]
         public void TestConstantExpression() {
             var s = RunCstTest(p => p.ParseConstantExpression(), "5");
             Assert.IsNotNull(s.Value);
@@ -882,7 +882,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(6, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestConstDeclaration() {
             var s = RunCstTest(p => p.ParseConstDeclaration(), "[a,b] a: TA = 5 library;");
             Assert.IsNotNull(s.Attributes);
@@ -896,7 +896,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(24, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestConstSection() {
             var s = RunCstTest(p => p.ParseConstSection(true), "const a = 5;");
             Assert.IsNotNull(s.ConstSymbol);
@@ -904,7 +904,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(12, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestConstrainedGeneric() {
             var s = RunCstTest(p => p.ParseGenericConstraint(true), "constructor, ");
             Assert.IsNotNull(s.ConstraintSymbol);
@@ -917,7 +917,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(13, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestDeclarations() {
             var s = RunCstTest(p => p.ParseDeclarationSections(), "label x;");
             Assert.IsNotNull(s.Items[0]);
@@ -948,7 +948,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(47, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestDesignatorItem() {
             var s = RunCstTest(p => p.ParseDesignatorItem(false, default), "^");
             Assert.AreEqual(1, s.Length);
@@ -960,7 +960,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(7, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestDesignatorStatement() {
             var s = RunCstTest(p => p.ParseDesignator(), "inherited");
             Assert.IsNotNull(s.Inherited);
@@ -980,7 +980,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(16, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestDispId() {
             var s = RunCstTest(p => p.ParseDispIdDirective(true), "dispid 5;");
             Assert.IsNotNull(s.DispId);
@@ -994,7 +994,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(8, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestEnumValue() {
             var s = RunCstTest(p => p.ParseEnumTypeValue(), "a");
             Assert.IsNotNull(s.EnumName);
@@ -1014,7 +1014,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(6, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestEnumTypeDef() {
             var s = RunCstTest(p => p.ParseEnumType(), "(a,b,c)");
             Assert.IsNotNull(s.OpenParen);
@@ -1025,7 +1025,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(7, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestExceptHandler() {
             var s = RunCstTest(p => p.ParseExceptHandler(), "on e: Exception do begin end;");
             Assert.IsNotNull(s.On);
@@ -1038,7 +1038,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(29, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestExportedProcHeading() {
             var s = RunCstTest(p => p.ParseExportedProcedureHeading(), "function a(var x: string): tobject; inline;");
             Assert.IsNotNull(s.ProcSymbol);
@@ -1051,7 +1051,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(43, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestExportItem() {
             var s = RunCstTest(p => p.ParseExportItem(false), "a(var x: string) index 3 name '3'");
             Assert.IsNotNull(s.ExportName);
@@ -1063,7 +1063,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(33, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestExportsSection() {
             var s = RunCstTest(p => p.ParseExportsSection(), "exports a(x: string) name '3', b() name '4' ;");
             Assert.IsNotNull(s.Exports);
@@ -1074,7 +1074,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(45, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestExpression() {
             var s = RunCstTest(p => p.ParseExpression(), "procedure () begin end");
             Assert.IsNotNull(s.ClosureExpression);
@@ -1133,7 +1133,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(6, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestExternalDirective() {
             var s = RunCstTest(p => p.ParseExternalDirective(), "varargs;");
             Assert.IsNotNull(s.Directive);
@@ -1151,7 +1151,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(22, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestExternalDirectiveSpecifier() {
             var s = RunCstTest(p => p.ParseExternalSpecifier(), "name 5");
             Assert.IsNotNull(s.Specifier);
@@ -1175,7 +1175,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(7, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestFactor() {
             var s = RunCstTest(p => p.ParseFactor(), "@x");
             Assert.IsNotNull(s.UnaryOperator);
@@ -1299,7 +1299,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(3, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestFileType() {
             var s = RunCstTest(p => p.ParseFileType(), "file");
             Assert.IsNotNull(s.FileSymbol);
@@ -1312,7 +1312,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(10, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestFormalParameter() {
             var dummy = TokenKind.Undefined - 1;
             var s = RunCstTest(p => p.ParseFormalParameter(true, ref dummy), "[a] const [b] a,");
@@ -1324,7 +1324,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(16, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestFormalParameterDefinition() {
             var s = RunCstTest(p => p.ParseFormalParameterDefinition(true), "a: integer = 5;");
             Assert.IsNotNull(s.Items[0]);
@@ -1336,7 +1336,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(15, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestFormalParameters() {
             var s = RunCstTest(p => p.ParseFormalParameters(), "a: string; b: string; d: integer");
             Assert.IsNotNull(s.Items[0]);
@@ -1345,7 +1345,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(32, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestFormattedExpression() {
             var s = RunCstTest(p => p.ParseFormattedExpression(), "a:2:1");
             Assert.IsNotNull(s.Expression);
@@ -1356,7 +1356,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(5, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestForStatement() {
             var s = RunCstTest(p => p.ParseForStatement(), "for I := 0 to 9 do begin a; end");
             Assert.IsNotNull(s.ForKeyword);
@@ -1390,7 +1390,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(26, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestForwardDirective() {
             var s = RunCstTest(p => p.ParseForwardDirective(), "forward;");
             Assert.IsNotNull(s.Directive);
@@ -1398,7 +1398,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(8, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestParseFunctionDirectives() {
             var s = RunCstTest(p => p.ParseFunctionDirectives(), "overload; inline;");
             Assert.IsNotNull(s.Items[0]);
@@ -1406,7 +1406,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(17, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestParseGenericDefinition() {
             var s = RunCstTest(p => p.ParseGenericDefinition(), "<a>");
             Assert.IsNotNull(s.OpenBrackets);
@@ -1429,7 +1429,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(15, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestGenericDefinitionPart() {
             var s = RunCstTest(p => p.ParseGenericDefinitionPart(), "a: b, c");
             Assert.IsNotNull(s.Identifier);
@@ -1438,7 +1438,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(7, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestGenericNamespaceName() {
             var s = RunCstTest(p => p.ParseGenericNamespaceName(), "a<b>.c");
             Assert.IsNotNull(s.Name);
@@ -1450,7 +1450,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(1, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestGenericTypeIdent() {
             var s = RunCstTest(p => p.ParseGenericTypeIdent(), "a<b>");
             Assert.IsNotNull(s.Identifier);
@@ -1462,7 +1462,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(1, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestGenericSuffix() {
             var s = RunCstTest(p => p.ParseGenericSuffix(), "<a>");
             Assert.IsNotNull(s.OpenBracket);
@@ -1479,7 +1479,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(5, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestGotoStatement() {
             var s = RunCstTest(p => p.ParseGoToStatement(), "goto a");
             Assert.IsNotNull(s.GotoSymbol);
@@ -1506,14 +1506,14 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(7, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestHexNumber() {
             var s = RunCstTest(p => p.RequireHexValue(), "$33");
             Assert.IsNotNull(s.Symbol);
             Assert.AreEqual(3, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestIdentifier() {
             var s = RunCstTest(p => p.RequireIdentifier(), "rr");
             Assert.IsNotNull(s.Symbol);
@@ -1524,7 +1524,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(2, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestIdentList() {
             var s = RunCstTest(p => p.ParseIdentList(true), "a,[a] b");
             Assert.IsNotNull(s.Items[0]);
@@ -1532,7 +1532,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(7, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestParseIfStatement() {
             var s = RunCstTest(p => p.ParseIfStatement(), "if a then b");
             Assert.IsNotNull(s.IfSymbol);
@@ -1551,7 +1551,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(18, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestInterfaceGuid() {
             var s = RunCstTest(p => p.ParseInterfaceGuid(), "['a']");
             Assert.IsNotNull(s.OpenBraces);
@@ -1566,7 +1566,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(3, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestInterfaceItem() {
             var s = RunCstTest(p => p.ParseInterfaceItem(out var x), "function x: string;");
             Assert.IsNotNull(s.Method);
@@ -1577,7 +1577,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(24, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestLabel() {
             var s = RunCstTest(p => p.ParseLabel(), "a");
             Assert.IsNotNull(s.LabelName);
@@ -1592,7 +1592,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(1, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestLocalAsmLabel() {
             var s = RunCstTest(p => p.ParseLocalAsmLabel(), "@a");
             Assert.IsNotNull(s.AtSymbol);
@@ -1616,7 +1616,7 @@ namespace PasPasPasTests.Parser {
 
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestMethodDecl() {
             var s = RunCstTest(p => p.ParseMethodDecl(default, default), "function a.b.c(a: string): string; inline; begin end;");
             Assert.IsNotNull(s.Heading);
@@ -1627,7 +1627,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(53, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestMethodDeclarationName() {
             var s = RunCstTest(p => p.ParseMethodDeclarationName(false), "a.b.c<d>.");
             Assert.IsNotNull(s.Name);
@@ -1636,7 +1636,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(9, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestMethodDeclarationHeading() {
             var s = RunCstTest(p => p.ParseMethodDeclHeading(), "function x(a: string): [a] string");
             Assert.IsNotNull(s.KindSymbol);
@@ -1647,7 +1647,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(33, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestMethodDirectives() {
             var s = RunCstTest(p => p.ParseMethodDirectives(), "overload; reintroduce;");
             Assert.IsNotNull(s.Items[0]);
@@ -1655,7 +1655,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(22, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestMethodResolution() {
             var s = RunCstTest(p => p.ParseMethodResolution(), "function a.c = d;");
             Assert.IsNotNull(s.KindSymbol);
@@ -1666,7 +1666,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(17, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestNamespaceFileName() {
             var s = RunCstTest(p => p.ParseNamespaceFileName(true), "a.b.c");
             Assert.IsNotNull(s.NamespaceName);
@@ -1686,7 +1686,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(13, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestNamespaceFileNameList() {
             var s = RunCstTest(p => p.ParseNamespaceFileNameList(), "a,b,c");
             Assert.IsNotNull(s.Items[0]);
@@ -1701,7 +1701,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(26, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestNamespaceName() {
             var s = RunCstTest(p => p.ParseNamespaceName(), "a.b.c");
             Assert.IsNotNull(s.Items[0]);
@@ -1710,7 +1710,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(5, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestNamespaceNameList() {
             var s = RunCstTest(p => p.ParseNamespaceNameList(), "a.b.c, d");
             Assert.IsNotNull(s.Items[0]);
@@ -1720,7 +1720,7 @@ namespace PasPasPasTests.Parser {
         }
 
 
-        [TestCase]
+        [TestMethod]
         public void TestObjectDeclaration() {
             var s = RunCstTest(p => p.ParseObjectDecl(), "object(a) procedure x; end");
             Assert.IsNotNull(s.ObjectSymbol);
@@ -1730,7 +1730,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(26, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestObjectItem() {
             var mode = ClassDeclarationMode.Other;
 
@@ -1777,14 +1777,14 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(10, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestObjectItems() {
             var s = RunCstTest(p => p.ParseObjectItems(), "procedure x;");
             Assert.IsNotNull(s.Items[0]);
             Assert.AreEqual(12, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestOldCallConvention() {
             var s = RunCstTest(p => p.ParseOldCallConvention(), "far ;");
             Assert.IsNotNull(s.Directive);
@@ -1802,7 +1802,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(7, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestPackageContains() {
             var s = RunCstTest(p => p.ParseContainsClause(), "contains a in 'a';");
             Assert.IsNotNull(s.ContainsSymbol);
@@ -1812,7 +1812,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(18, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestPackageHead() {
             var s = RunCstTest(p => p.ParsePackageHead(), "package a.b.c.d;");
             Assert.IsNotNull(s.PackageSymbol);
@@ -1821,7 +1821,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(16, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestPackageRequires() {
             var s = RunCstTest(p => p.ParseRequiresClause(), "requires a;");
             Assert.IsNotNull(s.RequiresSymbol);
@@ -1831,7 +1831,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(11, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestPackage() {
             var s = RunCstTest(p => p.ParsePackage(new FileReference(CstPath)), "package z.x; requires a; contains b in 'b'; end. ");
             Assert.IsNotNull(s.PackageHead);
@@ -1842,7 +1842,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(49, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestParameter() {
             var s = RunCstTest(p => p.ParseParameter(), "5");
             Assert.IsNotNull(s.Expression);
@@ -1859,7 +1859,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(1, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestParentClass() {
             var s = RunCstTest(p => p.ParseClassParent(), "(a,b,c)");
             Assert.IsNotNull(s.OpenParen);
@@ -1872,7 +1872,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(7, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestPointerType() {
             var s = RunCstTest(p => p.ParsePointerType(), "Pointer");
             Assert.IsNotNull(s.PointerSymbol);
@@ -1884,7 +1884,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(5, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestProcedureDeclarationHeading() {
             var s = RunCstTest(p => p.ParseProcedureDeclarationHeading(), "function a(const a: string): [a] string");
             Assert.IsNotNull(s.KindSymbol);
@@ -1896,7 +1896,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(39, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestProcedureDeclaration() {
             var s = RunCstTest(p => p.ParseProcedureDeclaration(null), "function a(const a: string): [a] string; inline; begin end;");
             Assert.IsNotNull(s.Heading);
@@ -1907,7 +1907,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(59, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestProcedureReference() {
             var s = RunCstTest(p => p.ParseProcedureReference(), "reference to procedure (a: integer)");
             Assert.IsNotNull(s.Reference);
@@ -1916,7 +1916,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(35, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestProcedureType() {
             var s = RunCstTest(p => p.ParseProcedureRefType(), "function (a: integer): [a] string of object");
             Assert.IsNotNull(s.KindSymbol);
@@ -1929,7 +1929,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(43, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestProcedureTypeDefinition() {
             var s = RunCstTest(p => p.ParseProcedureRefType(false), "function (a: integer): [a] string");
             Assert.IsNotNull(s.KindSymbol);
@@ -1941,7 +1941,7 @@ namespace PasPasPasTests.Parser {
         }
 
 
-        [TestCase]
+        [TestMethod]
         public void TestProgramParameters() {
             var s = RunCstTest(p => p.ParseProgramParams(), "(a,b,z)");
             Assert.IsNotNull(s.OpenParen);
@@ -1953,14 +1953,14 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(7, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestQuotedString() {
             var s = RunCstTest(p => p.RequireString(), "'aa'");
             Assert.IsNotNull(s.Symbol);
             Assert.AreEqual(4, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestRaiseStatement() {
             var s = RunCstTest(p => p.ParseRaiseStatement(), "raise a");
             Assert.IsNotNull(s.RaiseSymbol);
@@ -1975,14 +1975,14 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(12, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestRealNumber() {
             var s = RunCstTest(p => p.RequireRealValue(), "3.4443");
             Assert.IsNotNull(s.Symbol);
             Assert.AreEqual(6, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestRecordConstantExpression() {
             var s = RunCstTest(p => p.ParseRecordConstant(true), "a: 5;");
             Assert.IsNotNull(s.Name);
@@ -1992,7 +1992,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(5, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestRecordDeclaration() {
             var s = RunCstTest(p => p.ParseRecordDecl(), "record a: string end");
             Assert.IsNotNull(s.RecordSymbol);
@@ -2012,7 +2012,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(25, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestRecordField() {
             var s = RunCstTest(p => p.ParseRecordField(true), "a, b, c: integer library;");
             Assert.IsNotNull(s.Names);
@@ -2023,7 +2023,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(25, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestRecordFieldList() {
             var s = RunCstTest(p => p.ParseRecordFieldList(true), "a: integer; b: cardinal;");
             Assert.IsNotNull(s.Items[0]);
@@ -2031,7 +2031,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(24, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestRecordHelper() {
             var s = RunCstTest(p => p.ParseRecordHelper(), "record helper for TA public function x(): integer; end");
             Assert.IsNotNull(s.RecordSymbol);
@@ -2043,7 +2043,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(54, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestRecordItem() {
             var m = RecordDeclarationMode.Fields;
             var s = RunCstTest(p => p.ParseRecordItem(ref m), "a: integer;");
@@ -2093,7 +2093,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(28, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestRecordItems() {
             var s = RunCstTest(p => p.ParseRecordItems(), "procedure a; procedure b;");
             Assert.IsNotNull(s.Items[0]);
@@ -2101,7 +2101,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(25, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestRecordHelperItems() {
             var s = RunCstTest(p => p.ParseRecordHelperItems(), "procedure a; procedure b;");
             Assert.IsNotNull(s.Items[0]);
@@ -2109,7 +2109,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(25, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestRecordHelperItem() {
             var m = RecordDeclarationMode.Fields;
             var s = RunCstTest(p => p.ParseRecordHelperItem(ref m), "a: integer;");
@@ -2154,7 +2154,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(19, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestRecordVariant() {
             var s = RunCstTest(p => p.ParseRecordVariant(), "1,7,99: (a: byte; b:byte);");
             Assert.IsNotNull(s.Items[0]);
@@ -2168,7 +2168,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(26, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestRecordVariantSection() {
             var s = RunCstTest(p => p.ParseRecordVariantSection(), "case byte of 1: (a: byte); 2: (a: byte)");
             Assert.IsNotNull(s.CaseSymbol);
@@ -2179,7 +2179,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(39, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestRepeat() {
             var s = RunCstTest(p => p.ParseRepeatStatement(), "repeat a; b; until c > 5");
             Assert.IsNotNull(s.Repeat);
@@ -2189,7 +2189,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(24, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestSetDefinition() {
             var s = RunCstTest(p => p.ParseSetDefinition(), "set of tenum");
             Assert.IsNotNull(s.SetSymbol);
@@ -2198,7 +2198,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(12, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestSetSection() {
             var s = RunCstTest(p => p.ParseSetSection(), "[a,b]");
             Assert.IsNotNull(s.OpenBraces);
@@ -2209,7 +2209,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(5, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestSetSectionPart() {
             var s = RunCstTest(p => p.ParseSetSectionPart(), "a,");
             Assert.IsNotNull(s.SetExpression);
@@ -2222,7 +2222,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(3, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestSimpleType() {
             var s = RunCstTest(p => p.ParseSimpleType(), "(a,b)");
             Assert.IsNotNull(s.EnumType);
@@ -2244,7 +2244,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(4, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestSimpleExpression() {
             var s = RunCstTest(p => p.ParseSimpleExpression() as SimpleExpression, "a+b");
             Assert.IsNotNull(s.LeftOperand);
@@ -2253,14 +2253,14 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(3, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestInteger() {
             var s = RunCstTest(p => p.RequireInteger(), "3364");
             Assert.IsNotNull(s.Value);
             Assert.AreEqual(4, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestStatement() {
             var s = RunCstTest(p => p.ParseStatement(true), "a: x;");
             Assert.IsNotNull(s.Label);
@@ -2270,7 +2270,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(5, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestStringType() {
             var s = RunCstTest(p => p.ParseStringType(), "string[23]");
             Assert.IsNotNull(s.StringSymbol);
@@ -2280,7 +2280,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(10, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestStructType() {
             var s = RunCstTest(p => p.ParseStructType(), "packed record end");
             Assert.IsNotNull(s.PackedSymbol);
@@ -2288,7 +2288,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(17, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestTerm() {
             var s = RunCstTest(p => p.ParseTerm() as TermSymbol, "5*4");
             Assert.IsNotNull(s.LeftOperand);
@@ -2297,7 +2297,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(3, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestTry() {
             var s = RunCstTest(p => p.ParseTryStatement(), "try a; except b; end");
             Assert.IsNotNull(s.TrySymbol);
@@ -2316,7 +2316,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(21, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestExceptHandlers() {
             var s = RunCstTest(p => p.ParseExceptHandlers(), "a;");
             Assert.IsNotNull(s.Statements);
@@ -2330,7 +2330,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(25, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestTypeDeclaration() {
             var s = RunCstTest(p => p.ParseTypeDeclaration(), "[a] ta = record end;");
             Assert.IsNotNull(s.Attributes);
@@ -2341,7 +2341,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(20, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestTypeName() {
             var s = RunCstTest(p => p.ParseTypeName(), "a.b.c");
             Assert.IsNotNull(s.Items[0]);
@@ -2352,7 +2352,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(6, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestTypeSection() {
             var s = RunCstTest(p => p.ParseTypeSection(false), "type a = class end;");
             Assert.IsNotNull(s.TypeKeyword);
@@ -2360,7 +2360,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(19, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestTypeSpecification() {
             var s = RunCstTest(p => p.ParseTypeSpecification(), "array of string");
             Assert.IsNotNull(s.StructuredType);
@@ -2391,7 +2391,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(5, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestUnitBlock() {
             var s = RunCstTest(p => p.ParseUnitBlock(), "end");
             Assert.IsNotNull(s.EndSymbol);
@@ -2406,7 +2406,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(18, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestUnitFinalization() {
             var s = RunCstTest(p => p.ParseUnitFinalization(), "finalization a;");
             Assert.IsNotNull(s.FinalizationSymbol);
@@ -2415,7 +2415,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(15, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestUnitHead() {
             var s = RunCstTest(p => p.ParseUnitHead(), "unit a.b.c library;");
             Assert.IsNotNull(s.Unit);
@@ -2425,7 +2425,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(19, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestUnitImplementation() {
             var s = RunCstTest(p => p.ParseUnitImplementation(), "implementation uses a; type t = class end;");
             Assert.IsNotNull(s.Implementation);
@@ -2434,7 +2434,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(42, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestUnitInitialization() {
             var s = RunCstTest(p => p.ParseUnitInitialization(), "initialization a; finalization b;");
             Assert.IsNotNull(s.InitSymbol);
@@ -2443,7 +2443,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(33, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestUnitInterface() {
             var s = RunCstTest(p => p.ParseUnitInterface(), "interface uses a; type t = class end;");
             Assert.IsNotNull(s.InterfaceSymbol);
@@ -2452,7 +2452,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(37, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestUnsafeDirective() {
             var s = RunCstTest(p => p.ParseUnsafeDirective(), "unsafe;");
             Assert.IsNotNull(s.Directive);
@@ -2460,7 +2460,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(7, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestUserAttribute() {
             var s = RunCstTest(p => p.ParseAttribute(true), "a:b(1,2),");
             Assert.IsNotNull(s.Prefix);
@@ -2473,7 +2473,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(9, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestUserAttributes() {
             var s = RunCstTest(p => p.ParseAttributes(), "[a][b]");
             Assert.IsNotNull(s.Items[0]);
@@ -2482,7 +2482,7 @@ namespace PasPasPasTests.Parser {
         }
 
 
-        [TestCase]
+        [TestMethod]
         public void TestUserAttributeSet() {
             var s = RunCstTest(p => p.ParseAttributeSet(), "[a,b]");
             Assert.IsNotNull(s.OpenBraces);
@@ -2493,7 +2493,7 @@ namespace PasPasPasTests.Parser {
         }
 
 
-        [TestCase]
+        [TestMethod]
         public void TestUseClauseSymbol() {
             var s = RunCstTest(p => p.ParseUsesClause(), "uses a,b;");
             Assert.IsNotNull(s.UsesSymbol);
@@ -2503,7 +2503,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(9, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestUseFileClauseSymbol() {
             var s = RunCstTest(p => p.ParseUsesFileClause(), "uses a in 'a', b in 'b'");
             Assert.IsNotNull(s.UsesSymbol);
@@ -2512,7 +2512,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(23, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestWith() {
             var s = RunCstTest(p => p.ParseWithStatement(), "with a,b do c");
             Assert.IsNotNull(s.Items[0]);
@@ -2520,7 +2520,7 @@ namespace PasPasPasTests.Parser {
             Assert.AreEqual(13, s.Length);
         }
 
-        [TestCase]
+        [TestMethod]
         public void TestWhile() {
             var s = RunCstTest(p => p.ParseWhileStatement(), "while a < b do c");
             Assert.IsNotNull(s.WhileSymbol);

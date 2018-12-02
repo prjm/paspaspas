@@ -40,11 +40,9 @@
         /// <summary>
         ///     warning mode
         /// </summary>
-        public WarningMode Mode
-        {
+        public WarningMode Mode {
 
-            get
-            {
+            get {
                 if (mode == WarningMode.Default) {
                     if (ParentOptions.ParentOptions != null)
                         return ParentOptions.ParentOptions.GetModeByKey(Key);
@@ -55,10 +53,7 @@
                 return mode;
             }
 
-            set
-            {
-                mode = value;
-            }
+            set => mode = value;
         }
 
         /// <summary>

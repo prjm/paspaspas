@@ -18,7 +18,7 @@ namespace PasPasPasTests.Tokenizer {
 
         private const string TestFileName = "test_file_name.pas";
 
-        protected IList<Token> RunTestTokenizer(string input) {
+        protected static IList<Token> RunTestTokenizer(string input) {
             var api = new TokenizerApi(CreateEnvironment());
             var result = new List<Token>();
 

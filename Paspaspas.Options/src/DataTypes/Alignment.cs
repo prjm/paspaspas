@@ -51,7 +51,6 @@ namespace PasPasPas.Options.DataTypes {
         /// <param name="alignment"></param>
         /// <returns></returns>
         public static bool TryParse(string value, out Alignment alignment) {
-            int alignValue;
 
             if (string.Equals(value, "+", StringComparison.Ordinal)) {
                 alignment = Alignment.QuadWord;
@@ -63,7 +62,7 @@ namespace PasPasPas.Options.DataTypes {
                 return true;
             }
 
-            if (int.TryParse(value, out alignValue)) {
+            if (int.TryParse(value, out var alignValue)) {
 
                 switch (alignValue) {
                     case 1:
