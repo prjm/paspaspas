@@ -37,12 +37,6 @@ namespace PasPasPas.Api {
         public IIntegerLiteralParser HexNumberParser { get; }
 
         /// <summary>
-        ///     char literal converter
-        /// </summary>
-        public ICharLiteralConverter CharLiteralConverter { get; }
-            = new CharLiteralConverter();
-
-        /// <summary>
         ///     real literal converter
         /// </summary>
         public IRealConverter RealLiteralConverter { get; }
@@ -108,7 +102,6 @@ namespace PasPasPas.Api {
                 var data = new object[] {
                     IntegerParser,
                     HexNumberParser,
-                    CharLiteralConverter,
                     RealLiteralConverter,
                     StringBuilderPool,
                     StringPool,

@@ -106,7 +106,7 @@ namespace PasPasPas.Runtime.Values {
         /// </summary>
         /// <returns></returns>
         public override int GetHashCode()
-            => 17 + 23 * TypeId + 11 * Value.GetHashCode();
+            => unchecked(17 + 23 * TypeId + 11 * Value.GetHashCode());
 
         /// <summary>
         ///     check for equality

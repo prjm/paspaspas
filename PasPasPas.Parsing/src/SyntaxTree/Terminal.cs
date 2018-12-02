@@ -138,17 +138,19 @@ namespace PasPasPas.Parsing.SyntaxTree {
         /// <returns></returns>
         public override int GetHashCode() {
             var result = 17;
-            result = result * 31 + Token.GetHashCode();
+            unchecked {
+                result = result * 31 + Token.GetHashCode();
 
-            if (Prefix != default)
-                for (var i = 0; i < Prefix.Length; i++)
-                    result = result * 31 + Prefix[i].GetHashCode();
+                if (Prefix != default)
+                    for (var i = 0; i < Prefix.Length; i++)
+                        result = result * 31 + Prefix[i].GetHashCode();
 
-            if (Suffix != default)
-                for (var i = 0; i < Suffix.Length; i++)
-                    result = result * 31 + Suffix[i].GetHashCode();
+                if (Suffix != default)
+                    for (var i = 0; i < Suffix.Length; i++)
+                        result = result * 31 + Suffix[i].GetHashCode();
 
-            return result;
+                return result;
+            }
         }
     }
 

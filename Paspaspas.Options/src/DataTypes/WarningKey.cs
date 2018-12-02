@@ -44,8 +44,10 @@ namespace PasPasPas.Options.DataTypes {
         /// <returns></returns>
         public override int GetHashCode() {
             var result = 17;
-            result = result * 31 + StringComparer.OrdinalIgnoreCase.GetHashCode(WarningIdentifier);
-            return result;
+            unchecked {
+                result = result * 31 + StringComparer.OrdinalIgnoreCase.GetHashCode(WarningIdentifier);
+                return result;
+            }
         }
 
     }

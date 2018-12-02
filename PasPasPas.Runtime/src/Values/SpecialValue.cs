@@ -67,7 +67,7 @@ namespace PasPasPas.Runtime.Values {
         /// </summary>
         /// <returns></returns>
         public override int GetHashCode()
-            => 17 + 31 * (int)kind;
+            => unchecked(17 + 31 * (int)kind);
 
         /// <summary>
         ///     convert this value to a string

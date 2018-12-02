@@ -28,11 +28,6 @@ namespace PasPasPas.Parsing {
         IIntegerLiteralParser HexNumberParser { get; }
 
         /// <summary>
-        ///     char literal converter
-        /// </summary>
-        ICharLiteralConverter CharLiteralConverter { get; }
-
-        /// <summary>
         ///     real literal converter
         /// </summary>
         IRealConverter RealLiteralConverter { get; }

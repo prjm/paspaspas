@@ -12,7 +12,7 @@
             => InternalSymbolName ?? "Undefined_" + GetType().FullName + "_" + GetHashCode();
 
         /// <summary>
-        ///     overridable symbol name
+        ///     override-able symbol name
         /// </summary>
         protected abstract string InternalSymbolName { get; }
 

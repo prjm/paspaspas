@@ -59,9 +59,11 @@ namespace PasPasPas.Infrastructure.Utils {
         /// <returns></returns>
         public override int GetHashCode() {
             var result = 17;
-            result = result * 31 + ((int)kind);
-            result = result * 31 + StringComparer.OrdinalIgnoreCase.GetHashCode(Value);
-            return result;
+            unchecked {
+                result = result * 31 + ((int)kind);
+                result = result * 31 + StringComparer.OrdinalIgnoreCase.GetHashCode(Value);
+                return result;
+            }
         }
 
         /// <summary>
@@ -165,7 +167,7 @@ namespace PasPasPas.Infrastructure.Utils {
 
 
         /// <summary>
-        ///     test for equlity
+        ///     test for equality
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
@@ -197,9 +199,12 @@ namespace PasPasPas.Infrastructure.Utils {
         /// <returns></returns>
         public override int GetHashCode() {
             var result = 17;
-            for (var i = 0; i < parts.Length; i++)
-                result = result * 31 + parts[i].GetHashCode();
-            return result;
+
+            unchecked {
+                for (var i = 0; i < parts.Length; i++)
+                    result = result * 31 + parts[i].GetHashCode();
+                return result;
+            }
         }
 
         /// <summary>

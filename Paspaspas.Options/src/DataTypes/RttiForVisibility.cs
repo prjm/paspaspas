@@ -71,11 +71,13 @@
         /// <returns></returns>
         public override int GetHashCode() {
             var result = 17;
-            result = result * 31 + ForPrivate.GetHashCode();
-            result = result * 31 + ForProtected.GetHashCode();
-            result = result * 31 + ForPublic.GetHashCode();
-            result = result * 31 + ForPublished.GetHashCode();
-            return result;
+            unchecked {
+                result = result * 31 + ForPrivate.GetHashCode();
+                result = result * 31 + ForProtected.GetHashCode();
+                result = result * 31 + ForPublic.GetHashCode();
+                result = result * 31 + ForPublished.GetHashCode();
+                return result;
+            }
         }
 
         /// <summary>

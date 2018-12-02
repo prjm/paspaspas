@@ -65,14 +65,6 @@ namespace PasPasPas.Parsing.Tokenizer {
             => input.Position;
 
         /// <summary>
-        ///     convert a parsed literal to a char literal
-        /// </summary>
-        /// <param name="parsedValue"></param>
-        /// <returns></returns>
-        public object ConvertCharLiteral(object parsedValue)
-            => Environment.CharLiteralConverter.Convert(parsedValue);
-
-        /// <summary>
         ///     start position
         /// </summary>
         public long StartPosition { get; set; }

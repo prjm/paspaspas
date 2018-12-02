@@ -87,9 +87,11 @@ namespace PasPasPas.Globals.Types {
         /// <returns></returns>
         public override int GetHashCode() {
             var result = 17;
-            for (var i = 0; i < data.Length; i++)
-                result = result * 31 + data[i].GetHashCode();
-            return result;
+            unchecked {
+                for (var i = 0; i < data.Length; i++)
+                    result = result * 31 + data[i].GetHashCode();
+                return result;
+            }
         }
 
         /// <summary>

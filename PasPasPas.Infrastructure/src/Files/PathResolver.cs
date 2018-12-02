@@ -39,9 +39,11 @@ namespace PasPasPas.Infrastructure.Files {
         /// <returns></returns>
         public override int GetHashCode() {
             var result = 17;
-            result = result * 31 + BasePath.GetHashCode();
-            result = result * 31 + PathToResolve.GetHashCode();
-            return result;
+            unchecked {
+                result = result * 31 + BasePath.GetHashCode();
+                result = result * 31 + PathToResolve.GetHashCode();
+                return result;
+            }
         }
 
     }
