@@ -37,6 +37,12 @@ namespace PasPasPas.Runtime.Values.IntValues {
             => new ShortIntValue(0);
 
         /// <summary>
+        ///     one / integral value
+        /// </summary>
+        public ITypeReference One
+            => new ShortIntValue(1);
+
+        /// <summary>
         ///     create a new integer operations helper
         /// </summary>
         /// <param name="booleans">boolean operations</param>

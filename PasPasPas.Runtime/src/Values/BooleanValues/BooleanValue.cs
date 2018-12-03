@@ -35,5 +35,11 @@ namespace PasPasPas.Runtime.Values.BooleanValues {
         /// <returns></returns>
         public override string InternalTypeFormat
             => StringUtils.Invariant($"{value}");
+
+        /// <summary>
+        ///     get the integral value of this boolean
+        /// </summary>
+        public override uint AsUint
+            => value ? uint.MaxValue : 0;
     }
 }

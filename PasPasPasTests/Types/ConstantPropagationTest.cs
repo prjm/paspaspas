@@ -75,12 +75,17 @@ namespace PasPasPasTests.Types {
             AssertExprValue("High(Int64)", GetIntegerValue(long.MaxValue));
             AssertExprValue("High(UInt64)", GetIntegerValue(ulong.MaxValue));
 
-            // short strings
+            // short string types
             AssertExprValue("High(string[20])", GetIntegerValue(20));
             AssertExprValue("High(ShortString)", GetIntegerValue(255));
 
             // constant arrays
             AssertExprValue("High(a)", GetIntegerValue(3), "const a: array[0..2] of string = ('a','b','c');");
+            AssertExprValue("High(a)", GetIntegerValue(3), "const a: array['a'..'c'] of string = ('a','b','c');");
+
+            // array types
+            AssertExprValue("High(Ta)", GetIntegerValue(2), "type Ta = array[0..2];");
+            AssertExprValue("High(Ta)", GetWideCharValue('c'), "type Ta = array['a'..'c'];");
         }
 
         [TestMethod]
@@ -93,6 +98,24 @@ namespace PasPasPasTests.Types {
             AssertExprValue("Concat('a', 'b', 'c')", GetUnicodeStringValue("abc"));
         }
 
+        [TestMethod]
+        public void TestSucc() {
+
+            // integers
+            AssertExprValue("Succ(1)", GetIntegerValue(2));
+            AssertExprValue("Succ(-3)", GetIntegerValue(-2));
+
+            // chars
+            AssertExprValue("Succ('a')", GetWideCharValue('b'));
+            AssertExprValue("Succ('b')", GetWideCharValue('c'));
+
+            // booleans
+            AssertExprValue("Succ(true)", GetBooleanValue(false));
+            AssertExprValue("Succ(false)", GetBooleanValue(true));
+
+            // enumerations
+            AssertExprValue("Succ(a)", GetIntegerValue(1), "type Te = (a,b)");
+        }
 
         [TestMethod]
         public void TestBooleanOperations() {

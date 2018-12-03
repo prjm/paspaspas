@@ -38,5 +38,11 @@ namespace PasPasPas.Runtime.Values.BooleanValues {
         /// <returns></returns>
         public override string InternalTypeFormat
             => StringUtils.Invariant($"{AsBoolean} ({Value})");
+
+        /// <summary>
+        ///     get the value of this boolean
+        /// </summary>
+        public override uint AsUint
+            => Value;
     }
 }

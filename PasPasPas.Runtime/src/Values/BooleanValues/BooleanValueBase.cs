@@ -36,6 +36,11 @@ namespace PasPasPas.Runtime.Values.BooleanValues {
             => CommonTypeKind.BooleanType;
 
         /// <summary>
+        ///     format this value as unsigned integer
+        /// </summary>
+        public abstract uint AsUint { get; }
+
+        /// <summary>
         ///     compare to another boolean value
         /// </summary>
         /// <param name="obj"></param>

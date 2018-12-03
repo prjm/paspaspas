@@ -10,5 +10,10 @@
         /// </summary>
         bool AsBoolean { get; }
 
+        /// <summary>
+        ///     get the boolean value as integer
+        /// </summary>
+        uint AsUint { get; }
+
     }
 }

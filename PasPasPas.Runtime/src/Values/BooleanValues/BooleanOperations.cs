@@ -184,5 +184,39 @@ namespace PasPasPas.Runtime.Values.BooleanValues {
         /// <returns></returns>
         public IBooleanValue ToWordBool(ushort value)
             => new WordBooleanValue(value);
+
+        /// <summary>
+        ///     get a word bool value
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public IBooleanValue ToLongBool(uint value)
+            => new LongBooleanValue(value);
+
+
+        /// <summary>
+        ///     get a new boolean value depending on the bit size
+        /// </summary>
+        /// <param name="bitSize"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public ITypeReference ToBoolean(uint bitSize, uint value) {
+            switch (bitSize) {
+                case 1:
+                    return value == 0 ? FalseValue : TrueValue;
+
+                case 8:
+                    return ToByteBool((byte)value);
+
+                case 16:
+                    return ToWordBool((ushort)value);
+
+                case 32:
+                    return ToLongBool(value);
+
+                default:
+                    return Invalid;
+            }
+        }
     }
 }

@@ -4,40 +4,39 @@ using PasPasPas.Infrastructure.Utils;
 namespace PasPasPas.Runtime.Values.BooleanValues {
 
     /// <summary>
-    ///     constant byte boolean (8 bit)
+    ///     long boolean value
     /// </summary>
-    public class ByteBooleanValue : BooleanValueBase {
+    public class LongBooleanValue : BooleanValueBase {
 
         /// <summary>
-        ///     create a new byte boolean
+        ///     create a new long boolean value
         /// </summary>
-        /// <param name="byteBoolValue"></param>
-        public ByteBooleanValue(byte byteBoolValue)
-            => Value = byteBoolValue;
+        /// <param name="value"></param>
+        public LongBooleanValue(uint value)
+            => Value = value;
 
         /// <summary>
-        ///     fixed type id
+        ///     type id
         /// </summary>
         public override int TypeId
-            => KnownTypeIds.ByteBoolType;
+            => KnownTypeIds.LongBoolType;
 
         /// <summary>
-        ///     boolean value
+        ///     convert this value as boolean
         /// </summary>
         public override bool AsBoolean
             => Value != 0;
 
         /// <summary>
-        ///     boolean value
+        ///     format  this value
         /// </summary>
-        public byte Value { get; }
-
-        /// <summary>
-        ///     convert this type to a string
-        /// </summary>
-        /// <returns></returns>
         public override string InternalTypeFormat
             => StringUtils.Invariant($"{AsBoolean} ({Value})");
+
+        /// <summary>
+        ///     value
+        /// </summary>
+        public uint Value { get; }
 
         /// <summary>
         ///     get the value of this boolean

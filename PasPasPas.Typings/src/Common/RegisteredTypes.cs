@@ -98,6 +98,7 @@ namespace PasPasPas.Typings.Common {
             systemUnit.AddGlobal(new Concat());
             systemUnit.AddGlobal(new Hi());
             systemUnit.AddGlobal(new High());
+            systemUnit.AddGlobal(new Succ());
         }
 
         /// <summary>

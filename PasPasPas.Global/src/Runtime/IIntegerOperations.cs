@@ -23,6 +23,11 @@
         ITypeReference Zero { get; }
 
         /// <summary>
+        ///     one value
+        /// </summary>
+        ITypeReference One { get; }
+
+        /// <summary>
         ///     integer division
         /// </summary>
         /// <param name="dividend"></param>
