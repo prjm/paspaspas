@@ -151,9 +151,9 @@ namespace PasPasPas.Infrastructure.ObjectPooling {
         /// <summary>
         ///     prepare a string pool item
         /// </summary>
-        /// <param name="entry"></param>
-        protected override void Prepare(StringPoolEntry entry)
-            => entry.Clear();
+        /// <param name="result"></param>
+        protected override void Prepare(StringPoolEntry result)
+            => result.Clear();
 
     }
 

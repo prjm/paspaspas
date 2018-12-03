@@ -63,14 +63,14 @@ namespace PasPasPas.Typings.Common {
         /// <summary>
         ///     register a new type
         /// </summary>
-        /// <param name="type">type to register</param>
-        public ITypeDefinition RegisterType(ITypeDefinition type) {
-            types.Add(type.TypeId, type);
+        /// <param name="typeDef">type to register</param>
+        public ITypeDefinition RegisterType(ITypeDefinition typeDef) {
+            types.Add(typeDef.TypeId, typeDef);
 
-            if (type is TypeBase baseType)
+            if (typeDef is TypeBase baseType)
                 baseType.TypeRegistry = this;
 
-            return type;
+            return typeDef;
         }
 
         /// <summary>

@@ -38,11 +38,11 @@ namespace PasPasPas.Runtime.Values.FloatValues {
         /// <summary>
         ///     floating point addition
         /// </summary>*
-        /// <param name="value1"></param>
-        /// <param name="value2"></param>
+        /// <param name="augend"></param>
+        /// <param name="addend"></param>
         /// <returns></returns>
-        public ITypeReference Add(ITypeReference value1, ITypeReference value2) {
-            if (value1 is INumericalValue first && value2 is INumericalValue second)
+        public ITypeReference Add(ITypeReference augend, ITypeReference addend) {
+            if (augend is INumericalValue first && addend is INumericalValue second)
                 return FloatValueBase.Add(first, second);
 
             return Invalid;
@@ -51,11 +51,11 @@ namespace PasPasPas.Runtime.Values.FloatValues {
         /// <summary>
         ///     floating point subtraction
         /// </summary>
-        /// <param name="value1"></param>
-        /// <param name="value2"></param>
+        /// <param name="minuend"></param>
+        /// <param name="subtrahend"></param>
         /// <returns></returns>
-        public ITypeReference Subtract(ITypeReference value1, ITypeReference value2) {
-            if (value1 is INumericalValue first && value2 is INumericalValue second)
+        public ITypeReference Subtract(ITypeReference minuend, ITypeReference subtrahend) {
+            if (minuend is INumericalValue first && subtrahend is INumericalValue second)
                 return FloatValueBase.Subtract(first, second);
 
             return Invalid;
@@ -64,11 +64,11 @@ namespace PasPasPas.Runtime.Values.FloatValues {
         /// <summary>
         ///     floating point multiplication
         /// </summary>
-        /// <param name="value1"></param>
-        /// <param name="value2"></param>
+        /// <param name="multiplicand"></param>
+        /// <param name="intMultiplier"></param>
         /// <returns></returns>
-        public ITypeReference Multiply(ITypeReference value1, ITypeReference value2) {
-            if (value1 is INumericalValue first && value2 is INumericalValue second)
+        public ITypeReference Multiply(ITypeReference multiplicand, ITypeReference intMultiplier) {
+            if (multiplicand is INumericalValue first && intMultiplier is INumericalValue second)
                 return FloatValueBase.Multiply(first, second);
 
             return Invalid;
@@ -93,10 +93,10 @@ namespace PasPasPas.Runtime.Values.FloatValues {
         /// <summary>
         ///     negate a floating point value
         /// </summary>
-        /// <param name="value">value to negate</param>
+        /// <param name="number">value to negate</param>
         /// <returns></returns>
-        public ITypeReference Negate(ITypeReference value) {
-            if (value is INumericalValue floatValue)
+        public ITypeReference Negate(ITypeReference number) {
+            if (number is INumericalValue floatValue)
                 return FloatValueBase.Negate(floatValue);
             return Invalid;
         }
@@ -104,10 +104,10 @@ namespace PasPasPas.Runtime.Values.FloatValues {
         /// <summary>
         ///     absolute value of a floating point value
         /// </summary>
-        /// <param name="value">value to negate</param>
+        /// <param name="typeReference">value to negate</param>
         /// <returns></returns>
-        public ITypeReference Abs(ITypeReference value) {
-            if (value is INumericalValue floatValue)
+        public ITypeReference Abs(ITypeReference typeReference) {
+            if (typeReference is INumericalValue floatValue)
                 return FloatValueBase.Abs(floatValue);
             return Invalid;
         }
@@ -116,10 +116,10 @@ namespace PasPasPas.Runtime.Values.FloatValues {
         /// <summary>
         ///     identity function
         /// </summary>
-        /// <param name="value"></param>
+        /// <param name="number"></param>
         /// <returns></returns>
-        public ITypeReference Identity(ITypeReference value)
-            => value;
+        public ITypeReference Identity(ITypeReference number)
+            => number;
 
         /// <summary>
         ///     check for equality

@@ -1,6 +1,6 @@
-﻿using PasPasPas.Parsing.SyntaxTree.Visitors;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPasTests.Parser {
 
@@ -12,10 +12,10 @@ namespace PasPasPasTests.Parser {
         public IStartEndVisitor AsVisitor()
             => this;
 
-        public void EndVisit<TNodeType>(TNodeType node) { }
+        public void EndVisit<TNodeType>(TNodeType element) { }
 
-        public void StartVisit<TNodeType>(TNodeType node) {
-            var data = SearchFunction(node);
+        public void StartVisit<TNodeType>(TNodeType element) {
+            var data = SearchFunction(element);
             if (EqualityComparer<T>.Default.Equals(default, Result))
                 Result = data;
         }

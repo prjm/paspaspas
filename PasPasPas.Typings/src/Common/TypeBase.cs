@@ -15,7 +15,7 @@ namespace PasPasPas.Typings.Common {
         ///     create a new type definition
         /// </summary>
         /// <param name="withId">type id</param>
-        public TypeBase(int withId)
+        protected TypeBase(int withId)
             => typeId = withId;
 
         /// <summary>

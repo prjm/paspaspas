@@ -25,6 +25,8 @@
     <Rule Id="EPS08" Action="Warning" />
   </Rules>
   <Rules AnalyzerId="Microsoft.Analyzers.ManagedCodeAnalysis" RuleNamespace="Microsoft.Rules.Managed">
+    <Rule Id="CA1502" Action="None" />
+    <Rule Id="CA1506" Action="None" />
     <Rule Id="CA1822" Action="None" />
   </Rules>
   <Rules AnalyzerId="Microsoft.CodeQuality.Analyzers" RuleNamespace="Microsoft.CodeQuality.Analyzers">
@@ -61,9 +63,9 @@
     <Rule Id="CA1067" Action="Warning" />
     <Rule Id="CA1068" Action="Warning" />
     <Rule Id="CA1501" Action="Warning" />
-    <Rule Id="CA1502" Action="Warning" />
+    <Rule Id="CA1502" Action="None" />
     <Rule Id="CA1505" Action="Warning" />
-    <Rule Id="CA1506" Action="Warning" />
+    <Rule Id="CA1506" Action="None" />
     <Rule Id="CA1509" Action="Warning" />
     <Rule Id="CA1707" Action="Warning" />
     <Rule Id="CA1708" Action="Warning" />

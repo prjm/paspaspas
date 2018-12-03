@@ -34,7 +34,7 @@ namespace PasPasPas.Infrastructure.Utils {
         ///     create a new histogram
         /// </summary>
         /// <param name="key"></param>
-        public Histogram(string key)
+        protected Histogram(string key)
             => Key = key;
 
         /// <summary>

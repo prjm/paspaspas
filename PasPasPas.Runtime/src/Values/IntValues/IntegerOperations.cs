@@ -217,10 +217,10 @@ namespace PasPasPas.Runtime.Values.IntValues {
         /// <summary>
         ///     invert a number
         /// </summary>
-        /// <param name="number"></param>
+        /// <param name="value"></param>
         /// <returns></returns>
-        public ITypeReference NotOperator(ITypeReference number) {
-            if (number is IntegerValueBase intNumber)
+        public ITypeReference NotOperator(ITypeReference value) {
+            if (value is IntegerValueBase intNumber)
                 return IntegerValueBase.Not(intNumber);
             else
                 return Invalid;
@@ -237,11 +237,11 @@ namespace PasPasPas.Runtime.Values.IntValues {
         /// <summary>
         ///     compute a bitwise or
         /// </summary>
-        /// <param name="firstOperand">first operand</param>
-        /// <param name="secondOperand">second operand</param>
+        /// <param name="value1">first operand</param>
+        /// <param name="value2">second operand</param>
         /// <returns></returns>
-        public ITypeReference OrOperator(ITypeReference firstOperand, ITypeReference secondOperand) {
-            if (firstOperand is IntegerValueBase firstInt && secondOperand is IntegerValueBase secondInt)
+        public ITypeReference OrOperator(ITypeReference value1, ITypeReference value2) {
+            if (value1 is IntegerValueBase firstInt && value2 is IntegerValueBase secondInt)
                 return IntegerValueBase.OrAndScale(Overflow, firstInt, secondInt);
             else
                 return Invalid;
@@ -289,11 +289,11 @@ namespace PasPasPas.Runtime.Values.IntValues {
         /// <summary>
         ///     xor two integers
         /// </summary>
-        /// <param name="firstOperand"></param>
-        /// <param name="secondOperand"></param>
+        /// <param name="value1"></param>
+        /// <param name="value2"></param>
         /// <returns></returns>
-        public ITypeReference XorOperator(ITypeReference firstOperand, ITypeReference secondOperand) {
-            if (firstOperand is IntegerValueBase firstInt && secondOperand is IntegerValueBase secondInt)
+        public ITypeReference XorOperator(ITypeReference value1, ITypeReference value2) {
+            if (value1 is IntegerValueBase firstInt && value2 is IntegerValueBase secondInt)
                 return IntegerValueBase.XorAndScale(Overflow, firstInt, secondInt);
             else
                 return Invalid;
@@ -454,10 +454,10 @@ namespace PasPasPas.Runtime.Values.IntValues {
         /// <summary>
         ///     <c>chr</c> function
         /// </summary>
-        /// <param name="value"></param>
+        /// <param name="typeReference"></param>
         /// <returns></returns>
-        public ITypeReference Chr(ITypeReference value) {
-            if (value is IntegerValueBase integerValue)
+        public ITypeReference Chr(ITypeReference typeReference) {
+            if (typeReference is IntegerValueBase integerValue)
                 return IntegerValueBase.ChrValue(integerValue);
             else
                 return Invalid;
@@ -466,10 +466,10 @@ namespace PasPasPas.Runtime.Values.IntValues {
         /// <summary>
         ///     <c>hi</c> function
         /// </summary>
-        /// <param name="value"></param>
+        /// <param name="typeReference"></param>
         /// <returns></returns>
-        public ITypeReference Hi(ITypeReference value) {
-            if (value is IntegerValueBase integerValue)
+        public ITypeReference Hi(ITypeReference typeReference) {
+            if (typeReference is IntegerValueBase integerValue)
                 return IntegerValueBase.HiValue(integerValue);
             else
                 return Invalid;

@@ -9,7 +9,7 @@
         ///     create a new ordinal type
         /// </summary>
         /// <param name="withId"></param>
-        public OrdinalTypeBase(int withId) : base(withId) {
+        protected OrdinalTypeBase(int withId) : base(withId) {
         }
 
 

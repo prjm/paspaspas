@@ -38,7 +38,7 @@ namespace PasPasPas.Infrastructure.Utils {
         public void Dispose() { }
 
         /// <summary>
-        ///     move to the next itme
+        ///     move to the next item
         /// </summary>
         /// <returns></returns>
         public bool MoveNext() {
@@ -102,7 +102,7 @@ namespace PasPasPas.Infrastructure.Utils {
         }
 
         /// <summary>
-        ///     remove an item of the queueu
+        ///     remove an item of the queue
         /// </summary>
         /// <returns>element to remove</returns>
         public T Dequeue() {
@@ -125,7 +125,7 @@ namespace PasPasPas.Infrastructure.Utils {
         }
 
         /// <summary>
-        ///     get anenumerator
+        ///     get an enumerator
         /// </summary>
         /// <returns></returns>
         public IEnumerator<T> GetEnumerator()

@@ -182,9 +182,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Utils {
         /// <summary>
         ///     prepare a string pool item
         /// </summary>
-        /// <param name="entry"></param>
-        protected override void Prepare(PooledTerminal entry)
-            => entry.Clear();
+        /// <param name="result"></param>
+        protected override void Prepare(PooledTerminal result)
+            => result.Clear();
 
     }
 

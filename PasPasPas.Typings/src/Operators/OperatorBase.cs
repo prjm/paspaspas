@@ -17,7 +17,7 @@ namespace PasPasPas.Typings.Operators {
         /// </summary>
         /// <param name="withKind">operator kind</param>
         /// <param name="withArity">operator arity</param>
-        public OperatorBase(int withKind, int withArity) {
+        protected OperatorBase(int withKind, int withArity) {
             kind = withKind;
             arity = withArity;
         }

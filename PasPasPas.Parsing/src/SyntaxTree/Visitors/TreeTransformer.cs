@@ -150,16 +150,16 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     visit a unit
         /// </summary>
-        /// <param name="unit"></param>
-        public void StartVisit(UnitSymbol unit) {
+        /// <param name="element"></param>
+        public void StartVisit(UnitSymbol element) {
             var result = new CompilationUnit();
-            InitNode(result, unit, Project);
+            InitNode(result, element, Project);
             result.FileType = CompilationUnitType.Unit;
-            result.UnitName = ExtractSymbolName(unit.UnitName);
-            result.Hints = ExtractHints(unit.Hints);
+            result.UnitName = ExtractSymbolName(element.UnitName);
+            result.Hints = ExtractHints(element.Hints);
             result.InterfaceSymbols = new DeclaredSymbolCollection() { ParentItem = result };
             result.ImplementationSymbols = new DeclaredSymbolCollection() { ParentItem = result };
-            result.FilePath = unit.FilePath;
+            result.FilePath = element.FilePath;
             Project.Add(result, LogSource);
             CurrentUnit = result;
         }
@@ -167,8 +167,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     end visiting a compilation unit
         /// </summary>
-        /// <param name="unit"></param>
-        public void EndVisit(UnitSymbol unit)
+        /// <param name="element"></param>
+        public void EndVisit(UnitSymbol element)
             => CurrentUnit = null;
 
         #endregion
@@ -177,15 +177,15 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     visit a library
         /// </summary>
-        /// <param name="library"></param>
-        public void StartVisit(LibrarySymbol library) {
+        /// <param name="element"></param>
+        public void StartVisit(LibrarySymbol element) {
             var result = new CompilationUnit();
-            InitNode(result, library, Project);
+            InitNode(result, element, Project);
             result.FileType = CompilationUnitType.Library;
-            result.UnitName = ExtractSymbolName(library.LibraryName);
-            result.Hints = ExtractHints(library.Hints);
-            result.FilePath = library.FilePath;
-            if ((library.MainBlock.Body as BlockBodySymbol)?.AssemblerBlock != null)
+            result.UnitName = ExtractSymbolName(element.LibraryName);
+            result.Hints = ExtractHints(element.Hints);
+            result.FilePath = element.FilePath;
+            if ((element.MainBlock.Body as BlockBodySymbol)?.AssemblerBlock != null)
                 result.InitializationBlock = new BlockOfAssemblerStatements();
             else
                 result.InitializationBlock = new BlockOfStatements();
@@ -198,8 +198,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     end visiting a library
         /// </summary>
-        /// <param name="library"></param>
-        public void EndVisit(LibrarySymbol library) {
+        /// <param name="element"></param>
+        public void EndVisit(LibrarySymbol element) {
             CurrentUnitMode.Reset(CurrentUnit);
             CurrentUnit = null;
         }
@@ -210,15 +210,15 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     visit a program
         /// </summary>
-        /// <param name="program">program to visit</param>
-        public void StartVisit(ProgramSymbol program) {
+        /// <param name="element">program to visit</param>
+        public void StartVisit(ProgramSymbol element) {
             var result = new CompilationUnit();
-            InitNode(result, program, Project);
+            InitNode(result, element, Project);
             result.FileType = CompilationUnitType.Program;
-            result.UnitName = ExtractSymbolName(program.ProgramName);
+            result.UnitName = ExtractSymbolName(element.ProgramName);
             result.InitializationBlock = new BlockOfStatements();
             result.Symbols = new DeclaredSymbolCollection() { ParentItem = result };
-            result.FilePath = program.FilePath;
+            result.FilePath = element.FilePath;
             CurrentUnitMode[result] = UnitMode.Program;
             Project.Add(result, LogSource);
             CurrentUnit = result;
@@ -227,8 +227,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     finish a program
         /// </summary>
-        /// <param name="program"></param>
-        public void EndVisit(ProgramSymbol program) {
+        /// <param name="element"></param>
+        public void EndVisit(ProgramSymbol element) {
             CurrentUnitMode.Reset(CurrentUnit);
             CurrentUnit = null;
         }
@@ -239,13 +239,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting a package
         /// </summary>
-        /// <param name="package"></param>
-        public void StartVisit(PackageSymbol package) {
+        /// <param name="element"></param>
+        public void StartVisit(PackageSymbol element) {
             var result = new CompilationUnit();
-            InitNode(result, package, Project);
-            result.FilePath = package.FilePath;
+            InitNode(result, element, Project);
+            result.FilePath = element.FilePath;
             result.FileType = CompilationUnitType.Package;
-            result.UnitName = ExtractSymbolName(package.PackageName);
+            result.UnitName = ExtractSymbolName(element.PackageName);
             Project.Add(result, LogSource);
             CurrentUnit = result;
         }
@@ -253,8 +253,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     finish a package
         /// </summary>
-        /// <param name="package"></param>
-        public void EndVisit(PackageSymbol package)
+        /// <param name="element"></param>
+        public void EndVisit(PackageSymbol element)
             => CurrentUnit = null;
 
         #endregion
@@ -263,18 +263,18 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting an unit interface
         /// </summary>
-        /// <param name="unitInterface"></param>
-        public void StartVisit(UnitInterfaceSymbol unitInterface) {
+        /// <param name="element"></param>
+        public void StartVisit(UnitInterfaceSymbol element) {
             CurrentUnitMode[CurrentUnit] = UnitMode.Interface;
             CurrentUnit.Symbols = CurrentUnit.InterfaceSymbols;
-            AddToStack(unitInterface, CurrentUnit.InterfaceSymbols);
+            AddToStack(element, CurrentUnit.InterfaceSymbols);
         }
 
         /// <summary>
         ///     finish an interface
         /// </summary>
-        /// <param name="unitInterface"></param>
-        public void EndVisit(UnitInterfaceSymbol unitInterface) {
+        /// <param name="element"></param>
+        public void EndVisit(UnitInterfaceSymbol element) {
             CurrentUnitMode.Reset(CurrentUnit);
             CurrentUnit.Symbols = null;
         }
@@ -285,18 +285,18 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting an implementation
         /// </summary>
-        /// <param name="unitImplementation"></param>
-        public void StartVisit(UnitImplementationSymbol unitImplementation) {
+        /// <param name="element"></param>
+        public void StartVisit(UnitImplementationSymbol element) {
             CurrentUnitMode[CurrentUnit] = UnitMode.Implementation;
             CurrentUnit.Symbols = CurrentUnit.ImplementationSymbols;
-            AddToStack(unitImplementation, CurrentUnit.ImplementationSymbols);
+            AddToStack(element, CurrentUnit.ImplementationSymbols);
         }
 
         /// <summary>
         ///     finish the implementation part
         /// </summary>
-        /// <param name="unit"></param>
-        public void EndVisit(UnitImplementationSymbol unit) {
+        /// <param name="element"></param>
+        public void EndVisit(UnitImplementationSymbol element) {
             CurrentUnit.Symbols = null;
             CurrentUnitMode.Reset(CurrentUnit);
         }
@@ -308,12 +308,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting a const section
         /// </summary>
-        /// <param name="constSection"></param>
-        public void StartVisit(ConstSectionSymbol constSection) {
-            if (constSection.Kind == TokenKind.Const) {
+        /// <param name="element"></param>
+        public void StartVisit(ConstSectionSymbol element) {
+            if (element.Kind == TokenKind.Const) {
                 CurrentDeclarationMode = DeclarationMode.Const;
             }
-            else if (constSection.Kind == TokenKind.Resourcestring) {
+            else if (element.Kind == TokenKind.Resourcestring) {
                 CurrentDeclarationMode = DeclarationMode.ResourceString;
             }
         }
@@ -321,8 +321,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     finish visiting a constant section
         /// </summary>
-        /// <param name="constSection"></param>
-        public void EndVisit(ConstSectionSymbol constSection)
+        /// <param name="element"></param>
+        public void EndVisit(ConstSectionSymbol element)
             => CurrentDeclarationMode = DeclarationMode.Unknown;
 
         #endregion
@@ -331,15 +331,15 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting a type section
         /// </summary>
-        /// <param name="typeSection"></param>
-        public void StartVisit(TypeSectionSymbol typeSection)
+        /// <param name="element"></param>
+        public void StartVisit(TypeSectionSymbol element)
             => CurrentDeclarationMode = DeclarationMode.Types;
 
         /// <summary>
         ///     finish visiting a type section
         /// </summary>
-        /// <param name="typeSection"></param>
-        public void EndVisit(TypeSectionSymbol typeSection)
+        /// <param name="element"></param>
+        public void EndVisit(TypeSectionSymbol element)
             => CurrentDeclarationMode = DeclarationMode.Unknown;
 
         #endregion
@@ -348,15 +348,15 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting a type declaration
         /// </summary>
-        /// <param name="typeDeclaration"></param>
-        public void StartVisit(Standard.TypeDeclarationSymbol typeDeclaration) {
+        /// <param name="element"></param>
+        public void StartVisit(Standard.TypeDeclarationSymbol element) {
             var symbols = LastValue as IDeclaredSymbolTarget;
             var declaration = new Abstract.TypeDeclaration();
-            InitNode(declaration, typeDeclaration);
-            declaration.Name = ExtractSymbolName(typeDeclaration.TypeId?.Identifier);
-            declaration.Generics = ExtractGenericDefinition(declaration, typeDeclaration, typeDeclaration.TypeId?.GenericDefinition);
-            declaration.Attributes = ExtractAttributes(typeDeclaration.Attributes as UserAttributesSymbol, CurrentUnit);
-            declaration.Hints = ExtractHints(typeDeclaration.Hint as HintingInformationListSymbol);
+            InitNode(declaration, element);
+            declaration.Name = ExtractSymbolName(element.TypeId?.Identifier);
+            declaration.Generics = ExtractGenericDefinition(declaration, element, element.TypeId?.GenericDefinition);
+            declaration.Attributes = ExtractAttributes(element.Attributes as UserAttributesSymbol, CurrentUnit);
+            declaration.Hints = ExtractHints(element.Hint as HintingInformationListSymbol);
             symbols.Symbols.Items.Add(new SingleDeclaredSymbol(declaration));
             symbols.Symbols.Add(declaration, LogSource);
         }
@@ -364,8 +364,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     finish visiting a type declaration
         /// </summary>
-        /// <param name="typeDeclaration"></param>
-        public void EndVisit(Standard.TypeDeclarationSymbol typeDeclaration) {
+        /// <param name="element"></param>
+        public void EndVisit(Standard.TypeDeclarationSymbol element) {
         }
 
         #endregion
@@ -374,15 +374,15 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting a const declaration
         /// </summary>
-        /// <param name="constDeclaration"></param>
-        public void StartVisit(ConstDeclarationSymbol constDeclaration) {
+        /// <param name="element"></param>
+        public void StartVisit(ConstDeclarationSymbol element) {
             var symbols = LastValue as IDeclaredSymbolTarget;
             var declaration = new ConstantDeclaration();
-            InitNode(declaration, constDeclaration);
-            declaration.Name = ExtractSymbolName(constDeclaration.Identifier);
+            InitNode(declaration, element);
+            declaration.Name = ExtractSymbolName(element.Identifier);
             declaration.Mode = CurrentDeclarationMode;
-            declaration.Attributes = ExtractAttributes(constDeclaration.Attributes as UserAttributesSymbol, CurrentUnit);
-            declaration.Hints = ExtractHints(constDeclaration.Hint as HintingInformationListSymbol);
+            declaration.Attributes = ExtractAttributes(element.Attributes as UserAttributesSymbol, CurrentUnit);
+            declaration.Hints = ExtractHints(element.Hint as HintingInformationListSymbol);
             symbols.Symbols.Items.Add(new SingleDeclaredSymbol(declaration));
             symbols.Symbols.Add(declaration, LogSource);
         }
@@ -394,15 +394,15 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     finish visit a label declaration
         /// </summary>
-        /// <param name="lblSection"></param>
-        public void StartVisit(LabelDeclarationSection lblSection)
+        /// <param name="element"></param>
+        public void StartVisit(LabelDeclarationSection element)
             => CurrentDeclarationMode = DeclarationMode.Label;
 
         /// <summary>
         ///     end visiting a label
         /// </summary>
-        /// <param name="lblSection"></param>
-        public void EndVisit(LabelDeclarationSection lblSection)
+        /// <param name="element"></param>
+        public void EndVisit(LabelDeclarationSection element)
             => CurrentDeclarationMode = DeclarationMode.Unknown;
 
         #endregion
@@ -411,11 +411,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting a variable section
         /// </summary>
-        /// <param name="varSection"></param>
-        public void StartVisit(VarSection varSection) {
-            if (varSection.Kind == TokenKind.Var)
+        /// <param name="element"></param>
+        public void StartVisit(VarSection element) {
+            if (element.Kind == TokenKind.Var)
                 CurrentDeclarationMode = DeclarationMode.Var;
-            else if (varSection.Kind == TokenKind.ThreadVar)
+            else if (element.Kind == TokenKind.ThreadVar)
                 CurrentDeclarationMode = DeclarationMode.ThreadVar;
             else
                 CurrentDeclarationMode = DeclarationMode.Unknown;
@@ -424,8 +424,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     end visiting a var section
         /// </summary>
-        /// <param name="varSection"></param>
-        public void EndVisit(VarSection varSection)
+        /// <param name="element"></param>
+        public void EndVisit(VarSection element)
             => CurrentDeclarationMode = DeclarationMode.Unknown;
 
 
@@ -435,15 +435,15 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting a variable declaration
         /// </summary>
-        /// <param name="varDeclaration"></param>
-        public void StartVisit(VarDeclaration varDeclaration) {
+        /// <param name="element"></param>
+        public void StartVisit(VarDeclaration element) {
             var symbols = LastValue as IDeclaredSymbolTarget;
             var declaration = new VariableDeclaration();
-            InitNode(declaration, varDeclaration);
+            InitNode(declaration, element);
             declaration.Mode = CurrentDeclarationMode;
-            declaration.Hints = ExtractHints(varDeclaration.Hints as HintingInformationListSymbol);
+            declaration.Hints = ExtractHints(element.Hints as HintingInformationListSymbol);
 
-            foreach (var child in varDeclaration.Identifiers.Items) {
+            foreach (var child in element.Identifiers.Items) {
                 var ident = child.Identifier;
 
                 if (ident != default) {
@@ -456,7 +456,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 }
             }
 
-            declaration.Attributes = ExtractAttributes(varDeclaration.Attributes as UserAttributesSymbol, CurrentUnit);
+            declaration.Attributes = ExtractAttributes(element.Attributes as UserAttributesSymbol, CurrentUnit);
             symbols.Symbols.Items.Add(declaration);
         }
 
@@ -466,21 +466,21 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting a variable value specification
         /// </summary>
-        /// <param name="varValue"></param>
-        public void StartVisit(VarValueSpecification varValue) {
+        /// <param name="element"></param>
+        public void StartVisit(VarValueSpecification element) {
             var varDeclaration = LastValue as VariableDeclaration;
 
-            if (varValue.ValueSymbol.GetSymbolKind() == TokenKind.Absolute)
+            if (element.ValueSymbol.GetSymbolKind() == TokenKind.Absolute)
                 varDeclaration.ValueKind = VariableValueKind.Absolute;
-            else if (varValue.ValueSymbol.GetSymbolKind() == TokenKind.EqualsSign)
+            else if (element.ValueSymbol.GetSymbolKind() == TokenKind.EqualsSign)
                 varDeclaration.ValueKind = VariableValueKind.InitialValue;
         }
 
         /// <summary>
         ///     end visiting a variable value specification
         /// </summary>
-        /// <param name="varValue"></param>
-        public void EndVisit(VarValueSpecification varValue) {
+        /// <param name="element"></param>
+        public void EndVisit(VarValueSpecification element) {
         }
 
         #endregion
@@ -489,20 +489,20 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting a constant expression
         /// </summary>
-        /// <param name="constExpression"></param>
-        public void StartVisit(ConstantExpressionSymbol constExpression) {
+        /// <param name="element"></param>
+        public void StartVisit(ConstantExpressionSymbol element) {
 
-            if (constExpression.IsArrayConstant) {
+            if (element.IsArrayConstant) {
                 var lastExpression = LastExpression;
                 var result = new ArrayConstant();
-                InitNode(result, constExpression);
+                InitNode(result, element);
                 lastExpression.Value = result;
             }
 
-            if (constExpression.IsRecordConstant) {
+            if (element.IsRecordConstant) {
                 var lastExpression = LastExpression;
                 var result = new RecordConstant();
-                InitNode(result, constExpression);
+                InitNode(result, element);
                 lastExpression.Value = result;
             }
 
@@ -514,13 +514,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting a constant expression
         /// </summary>
-        /// <param name="constExpression"></param>
-        public void StartVisit(RecordConstantExpressionSymbol constExpression) {
+        /// <param name="element"></param>
+        public void StartVisit(RecordConstantExpressionSymbol element) {
             var lastExpression = LastExpression;
             var expression = new RecordConstantItem();
-            InitNode(expression, constExpression);
+            InitNode(expression, element);
             lastExpression.Value = expression;
-            expression.Name = ExtractSymbolName(constExpression.Name);
+            expression.Name = ExtractSymbolName(element.Name);
         }
 
         #endregion
@@ -529,14 +529,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start vistigin a expression
         /// </summary>
-        /// <param name="expression"></param>
-        public void StartVisit(ExpressionSymbol expression) {
-            if (expression.LeftOperand != null && expression.RightOperand != null) {
+        /// <param name="element"></param>
+        public void StartVisit(ExpressionSymbol element) {
+            if (element.LeftOperand != null && element.RightOperand != null) {
                 var lastExpression = LastExpression;
                 var currentExpression = new BinaryOperator();
-                InitNode(currentExpression, expression);
+                InitNode(currentExpression, element);
                 lastExpression.Value = currentExpression;
-                currentExpression.Kind = TokenKindMapper.ForExpression(expression.Kind);
+                currentExpression.Kind = TokenKindMapper.ForExpression(element.Kind);
             }
         }
 
@@ -546,14 +546,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting a simple expression
         /// </summary>
-        /// <param name="simpleExpression"></param>
-        public void StartVisit(SimpleExpression simpleExpression) {
-            if (simpleExpression.LeftOperand != null && simpleExpression.RightOperand != null) {
+        /// <param name="element"></param>
+        public void StartVisit(SimpleExpression element) {
+            if (element.LeftOperand != null && element.RightOperand != null) {
                 var lastExpression = LastExpression;
                 var currentExpression = new BinaryOperator();
-                InitNode(currentExpression, simpleExpression);
+                InitNode(currentExpression, element);
                 lastExpression.Value = currentExpression;
-                currentExpression.Kind = TokenKindMapper.ForExpression(simpleExpression.Kind);
+                currentExpression.Kind = TokenKindMapper.ForExpression(element.Kind);
             }
         }
 
@@ -563,14 +563,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     visit a term
         /// </summary>
-        /// <param name="term"></param>
-        public void StartVisit(TermSymbol term) {
-            if (term.LeftOperand != null && term.RightOperand != null) {
+        /// <param name="element"></param>
+        public void StartVisit(TermSymbol element) {
+            if (element.LeftOperand != null && element.RightOperand != null) {
                 var lastExpression = LastExpression;
                 var currentExpression = new BinaryOperator();
-                InitNode(currentExpression, term);
+                InitNode(currentExpression, element);
                 lastExpression.Value = currentExpression;
-                currentExpression.Kind = TokenKindMapper.ForExpression(term.Kind);
+                currentExpression.Kind = TokenKindMapper.ForExpression(element.Kind);
             }
         }
 
@@ -580,15 +580,15 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting a  a factor
         /// </summary>
-        /// <param name="factor"></param>
-        public void StartVisit(FactorSymbol factor) {
+        /// <param name="element"></param>
+        public void StartVisit(FactorSymbol element) {
 
             // unary operators
-            if (factor.UnaryOperand != default) {
+            if (element.UnaryOperand != default) {
                 var lastExpression = LastExpression;
                 var value = new UnaryOperator();
-                var kind = factor.UnaryOperator.GetSymbolKind();
-                InitNode(value, factor);
+                var kind = element.UnaryOperator.GetSymbolKind();
+                InitNode(value, element);
                 lastExpression.Value = value;
 
                 if (kind == TokenKind.At)
@@ -603,79 +603,79 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             }
 
             // constant values
-            if (factor.IsNil) {
+            if (element.IsNil) {
                 var lastExpression = LastExpression;
                 var value = new ConstantValue();
-                InitNode(value, factor);
+                InitNode(value, element);
                 value.Kind = ConstantValueKind.Nil;
                 lastExpression.Value = value;
                 return;
             }
 
-            if (factor.PointerTo != null) {
+            if (element.PointerTo != null) {
                 var lastExpression = LastExpression;
                 var value = new SymbolReference();
-                InitNode(value, factor);
-                value.Name = ExtractSymbolName(factor.PointerTo);
+                InitNode(value, element);
+                value.Name = ExtractSymbolName(element.PointerTo);
                 value.PointerTo = true;
                 lastExpression.Value = value;
                 return;
             }
 
-            if (factor.IsFalse) {
+            if (element.IsFalse) {
                 var lastExpression = LastExpression;
                 var value = new ConstantValue();
-                InitNode(value, factor);
+                InitNode(value, element);
                 value.Kind = ConstantValueKind.False;
                 lastExpression.Value = value;
                 return;
             }
 
-            if (factor.IsTrue) {
+            if (element.IsTrue) {
                 var lastExpression = LastExpression;
                 var value = new ConstantValue();
-                InitNode(value, factor);
+                InitNode(value, element);
                 value.Kind = ConstantValueKind.True;
                 lastExpression.Value = value;
                 return;
             }
 
-            if (factor.IntValue != null) {
+            if (element.IntValue != null) {
                 var lastExpression = LastExpression;
                 var value = new ConstantValue();
-                InitNode(value, factor);
+                InitNode(value, element);
                 value.Kind = ConstantValueKind.Integer;
-                value.TypeInfo = factor.IntValue.Value.Token.ParsedValue;
+                value.TypeInfo = element.IntValue.Value.Token.ParsedValue;
                 lastExpression.Value = value;
                 return;
             }
 
-            if (factor.RealValue != null) {
+            if (element.RealValue != null) {
                 var lastExpression = LastExpression;
                 var value = new ConstantValue();
-                InitNode(value, factor);
+                InitNode(value, element);
                 value.Kind = ConstantValueKind.RealNumber;
-                value.TypeInfo = factor.RealValue.Symbol.Token.ParsedValue;
+                value.TypeInfo = element.RealValue.Symbol.Token.ParsedValue;
                 lastExpression.Value = value;
                 return;
             }
 
-            if (factor.StringValue != null) {
+            if (element.StringValue != null) {
                 var lastExpression = LastExpression;
                 var value = new ConstantValue {
                     Kind = ConstantValueKind.QuotedString,
-                    TypeInfo = factor.StringValue.Symbol.Token.ParsedValue
+                    TypeInfo = element.StringValue.Symbol.Token.ParsedValue
                 };
                 lastExpression.Value = value;
                 return;
             }
 
-            if (factor.HexValue != null) {
+            if (element.HexValue != null) {
                 var lastExpression = LastExpression;
                 var value = new ConstantValue();
-                InitNode(value, factor);
+                InitNode(value, element);
                 value.Kind = ConstantValueKind.HexNumber;
-                value.TypeInfo = factor.HexValue.Symbol.Token.ParsedValue;
+                value.TypeInfo = element.HexValue.Symbol.Token.ParsedValue;
                 lastExpression.Value = value;
                 return;
             }
@@ -687,12 +687,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     visit a uses clause
         /// </summary>
-        /// <param name="unit"></param>
-        public void StartVisit(UsesClauseSymbol unit) {
-            if (unit.UsesList == null)
+        /// <param name="element"></param>
+        public void StartVisit(UsesClauseSymbol element) {
+            if (element.UsesList == null)
                 return;
 
-            foreach (var part in unit.UsesList.Items) {
+            foreach (var part in element.UsesList.Items) {
                 if (!(part is NamespaceNameSymbol name))
                     continue;
 
@@ -712,12 +712,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting a uses file clause
         /// </summary>
-        /// <param name="unit"></param>
-        public void StartVisit(UsesFileClauseSymbol unit) {
-            if (unit.Files == null)
+        /// <param name="element"></param>
+        public void StartVisit(UsesFileClauseSymbol element) {
+            if (element.Files == null)
                 return;
 
-            foreach (var part in unit.Files.Items) {
+            foreach (var part in element.Files.Items) {
 
                 if (!(part is NamespaceFileNameSymbol name))
                     continue;
@@ -740,14 +740,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     visit a package requires list
         /// </summary>
-        /// <param name="requires"></param>
-        public void StartVisit(PackageRequiresSymbol requires) {
+        /// <param name="element"></param>
+        public void StartVisit(PackageRequiresSymbol element) {
             CurrentUnitMode[CurrentUnit] = UnitMode.Requires;
 
-            if (requires.RequiresList == null)
+            if (element.RequiresList == null)
                 return;
 
-            foreach (var part in requires.RequiresList.Items) {
+            foreach (var part in element.RequiresList.Items) {
                 if (!(part is NamespaceNameSymbol name))
                     continue;
 
@@ -762,8 +762,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     finish visiting a requires section
         /// </summary>
-        /// <param name="requires"></param>
-        public void EndVisit(PackageRequiresSymbol requires)
+        /// <param name="element"></param>
+        public void EndVisit(PackageRequiresSymbol element)
             => CurrentUnitMode[CurrentUnit] = UnitMode.Interface;
 
         #endregion
@@ -772,14 +772,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     visit a package contains list
         /// </summary>
-        /// <param name="contains"></param>
-        public void StartVisit(PackageContainsSymbol contains) {
+        /// <param name="element"></param>
+        public void StartVisit(PackageContainsSymbol element) {
             CurrentUnitMode[CurrentUnit] = UnitMode.Contains;
 
-            if (contains.ContainsList == null)
+            if (element.ContainsList == null)
                 return;
 
-            foreach (var part in contains.ContainsList.Items) {
+            foreach (var part in element.ContainsList.Items) {
                 if (!(part is NamespaceFileNameSymbol name))
                     continue;
 
@@ -798,8 +798,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     finish visiting a package contains clause
         /// </summary>
-        /// <param name="contains"></param>
-        public void EndVisit(PackageContainsSymbol contains)
+        /// <param name="element"></param>
+        public void EndVisit(PackageContainsSymbol element)
             => CurrentUnitMode.Reset(CurrentUnit);
 
         #endregion
@@ -808,9 +808,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     visit a structured type
         /// </summary>
-        /// <param name="structType"></param>
-        public void StartVisit(StructTypeSymbol structType) {
-            if (structType.Packed)
+        /// <param name="element"></param>
+        public void StartVisit(StructTypeSymbol element) {
+            if (element.Packed)
                 CurrentStructTypeMode = StructTypeMode.Packed;
             else
                 CurrentStructTypeMode = StructTypeMode.Unpacked;
@@ -820,8 +820,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     finish visiting a struct type
         /// </summary>
-        /// <param name="structType"></param>
-        public void EndVisit(StructTypeSymbol structType)
+        /// <param name="element"></param>
+        public void EndVisit(StructTypeSymbol element)
             => CurrentStructTypeMode = StructTypeMode.Undefined;
 
         #endregion
@@ -830,17 +830,17 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///    visit an array type declaration
         /// </summary>
-        /// <param name="array"></param>
-        public void StartVisit(ArrayTypeSymbol array) {
+        /// <param name="element"></param>
+        public void StartVisit(ArrayTypeSymbol element) {
             var target = LastTypeDeclaration;
             var value = new ArrayTypeDeclaration();
-            InitNode(value, array);
+            InitNode(value, element);
             value.PackedType = CurrentStructTypeMode == StructTypeMode.Packed;
             target.TypeValue = value;
 
-            if (array.ArrayOfConst) {
+            if (element.ArrayOfConst) {
                 var metaType = new MetaType();
-                InitNode(metaType, array, value);
+                InitNode(metaType, element, value);
                 metaType.Kind = MetaTypeKind.Const;
                 value.TypeValue = metaType;
                 visitor.WorkingStack.Pop();
@@ -853,11 +853,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting a set
         /// </summary>
-        /// <param name="set"></param>
-        public void StartVisit(SetDefinitionSymbol set) {
+        /// <param name="element"></param>
+        public void StartVisit(SetDefinitionSymbol element) {
             var typeTarget = LastTypeDeclaration;
             var value = new SetTypeDeclaration();
-            InitNode(value, set);
+            InitNode(value, element);
             value.PackedType = CurrentStructTypeMode == StructTypeMode.Packed;
             typeTarget.TypeValue = value;
         }
@@ -868,11 +868,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     visit a file type
         /// </summary>
-        /// <param name="fileType"></param>
-        public void StartVisit(FileTypeSymbol fileType) {
+        /// <param name="element"></param>
+        public void StartVisit(FileTypeSymbol element) {
             var typeTarget = LastTypeDeclaration;
             var value = new FileTypeDeclaration();
-            InitNode(value, fileType);
+            InitNode(value, element);
             value.PackedType = CurrentStructTypeMode == StructTypeMode.Packed;
             typeTarget.TypeValue = value;
         }
@@ -883,11 +883,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visit a class of declaration
         /// </summary>
-        /// <param name="classOf"></param>
-        public void StartVisit(ClassOfDeclarationSymbol classOf) {
+        /// <param name="element"></param>
+        public void StartVisit(ClassOfDeclarationSymbol element) {
             var typeTarget = LastTypeDeclaration;
             var value = new ClassOfTypeDeclaration();
-            InitNode(value, classOf);
+            InitNode(value, element);
             value.PackedType = CurrentStructTypeMode == StructTypeMode.Packed;
             typeTarget.TypeValue = value;
         }
@@ -898,24 +898,24 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     visit a type name
         /// </summary>
-        /// <param name="typeName"></param>
-        public void StartVisit(TypeNameSymbol typeName) {
+        /// <param name="element"></param>
+        public void StartVisit(TypeNameSymbol element) {
             var typeTarget = LastTypeDeclaration;
             var value = new MetaType();
-            InitNode(value, typeName);
-            value.Kind = typeName.MapTypeKind();
+            InitNode(value, element);
+            value.Kind = element.MapTypeKind();
             typeTarget.TypeValue = value;
         }
 
         /// <summary>
         ///     start visit a child of a type name
         /// </summary>
-        /// <param name="typeName"></param>
-        /// <param name="part"></param>
-        public void StartVisitChild(TypeNameSymbol typeName, ISyntaxPart part) {
+        /// <param name="element"></param>
+        /// <param name="child"></param>
+        public void StartVisitChild(TypeNameSymbol element, ISyntaxPart child) {
             var value = LastValue as MetaType;
 
-            if (!(part is GenericNamespaceNameSymbol name) || value == null)
+            if (!(child is GenericNamespaceNameSymbol name) || value == null)
                 return;
 
             foreach (var nspace in name.Name.Namespace) {
@@ -938,26 +938,26 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     visit a simple type
         /// </summary>
-        /// <param name="simpleType"></param>
-        public void StartVisit(SimpleTypeSymbol simpleType) {
+        /// <param name="element"></param>
+        public void StartVisit(SimpleTypeSymbol element) {
             var typeTarget = LastTypeDeclaration;
 
-            if (simpleType.SubrangeStart != null) {
+            if (element.SubrangeStart != null) {
                 var subrange = new SubrangeType();
-                InitNode(subrange, simpleType);
+                InitNode(subrange, element);
                 typeTarget.TypeValue = subrange;
                 return;
             }
 
-            if (simpleType.EnumType != null)
+            if (element.EnumType != null)
                 return;
 
             var value = new TypeAlias();
-            InitNode(value, simpleType);
-            value.IsNewType = simpleType.NewType != default;
+            InitNode(value, element);
+            value.IsNewType = element.NewType != default;
 
-            if (simpleType.TypeOf != default)
-                LogSource.Warning(StructuralErrors.UnsupportedTypeOfConstruct, simpleType);
+            if (element.TypeOf != default)
+                LogSource.Warning(StructuralErrors.UnsupportedTypeOfConstruct, element);
 
             typeTarget.TypeValue = value;
         }
@@ -965,12 +965,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visit a child node of a simple type
         /// </summary>
-        /// <param name="simpleType"></param>
-        /// <param name="part"></param>
-        public void StartVisitChild(SimpleTypeSymbol simpleType, ISyntaxPart part) {
+        /// <param name="element"></param>
+        /// <param name="child"></param>
+        public void StartVisitChild(SimpleTypeSymbol element, ISyntaxPart child) {
             var value = LastValue as TypeAlias;
 
-            if (!(part is GenericNamespaceNameSymbol name) || value == null)
+            if (!(child is GenericNamespaceNameSymbol name) || value == null)
                 return;
 
             foreach (var nspace in name.Name.Namespace) {
@@ -992,11 +992,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visit an enum type definition
         /// </summary>
-        /// <param name="type"></param>
-        public void StartVisit(EnumTypeDefinitionSymbol type) {
+        /// <param name="element"></param>
+        public void StartVisit(EnumTypeDefinitionSymbol element) {
             var typeTarget = LastTypeDeclaration;
             var value = new EnumTypeCollection();
-            InitNode(value, type);
+            InitNode(value, element);
             typeTarget.TypeValue = value;
         }
 
@@ -1006,12 +1006,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     visit an enum value
         /// </summary>
-        /// <param name="enumValue"></param>
-        public void StartVisit(EnumValueSymbol enumValue) {
+        /// <param name="element"></param>
+        public void StartVisit(EnumValueSymbol element) {
             if (LastValue is EnumTypeCollection enumDeclaration) {
                 var value = new EnumTypeValue();
-                InitNode(value, enumValue);
-                value.Name = ExtractSymbolName(enumValue.EnumName);
+                InitNode(value, element);
+                value.Name = ExtractSymbolName(element.EnumName);
                 enumDeclaration.Add(value, LogSource);
             }
         }
@@ -1022,12 +1022,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visit an array index
         /// </summary>
-        /// <param name="arrayIndex"></param>
-        public void StartVisit(ArrayIndexSymbol arrayIndex) {
-            if (arrayIndex.EndIndex != null) {
+        /// <param name="element"></param>
+        public void StartVisit(ArrayIndexSymbol element) {
+            if (element.EndIndex != null) {
                 var lastExpression = LastExpression;
                 var binOp = new BinaryOperator();
-                InitNode(binOp, arrayIndex);
+                InitNode(binOp, element);
                 lastExpression.Value = binOp;
                 binOp.Kind = ExpressionKind.RangeOperator;
             }
@@ -1039,19 +1039,19 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     visit a pointer type
         /// </summary>
-        /// <param name="pointer"></param>
-        public void StartVisit(PointerTypeSymbol pointer) {
+        /// <param name="element"></param>
+        public void StartVisit(PointerTypeSymbol element) {
             var typeTarget = LastTypeDeclaration;
 
-            if (pointer.GenericPointer) {
+            if (element.GenericPointer) {
                 var result = new MetaType();
-                InitNode(result, pointer);
+                InitNode(result, element);
                 result.Kind = MetaTypeKind.PointerType;
                 typeTarget.TypeValue = result;
             }
             else {
                 var result = new PointerToType();
-                InitNode(result, pointer);
+                InitNode(result, element);
                 typeTarget.TypeValue = result;
             }
         }
@@ -1062,24 +1062,24 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visit a string type
         /// </summary>
-        /// <param name="stringType"></param>
-        public void StartVisit(StringTypeSymbol stringType) {
+        /// <param name="element"></param>
+        public void StartVisit(StringTypeSymbol element) {
             var typeTarget = LastTypeDeclaration;
             var exprTarget = LastExpression;
 
             var result = new MetaType();
-            InitNode(result, stringType);
-            result.Kind = TokenKindMapper.ForMetaType(stringType.Kind);
+            InitNode(result, element);
+            result.Kind = TokenKindMapper.ForMetaType(element.Kind);
 
             if (typeTarget != default)
                 typeTarget.TypeValue = result;
             else if (exprTarget != default)
                 exprTarget.Value = result;
 
-            if (result.Kind == MetaTypeKind.StringType && stringType.CodePageOrStringLength != null)
+            if (result.Kind == MetaTypeKind.StringType && element.CodePageOrStringLength != null)
                 result.Kind = MetaTypeKind.ShortString;
 
-            if (result.Kind == MetaTypeKind.ShortString && stringType.CodePageOrStringLength == null)
+            if (result.Kind == MetaTypeKind.ShortString && element.CodePageOrStringLength == null)
                 result.Kind = MetaTypeKind.ShortStringDefault;
 
         }
@@ -1090,22 +1090,22 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     visit a procedure type definition
         /// </summary>
-        /// <param name="proceduralType"></param>
-        public void StartVisit(ProcedureTypeDefinitionSymbol proceduralType) {
+        /// <param name="element"></param>
+        public void StartVisit(ProcedureTypeDefinitionSymbol element) {
 
-            if (proceduralType.AllowAnonymousMethods)
+            if (element.AllowAnonymousMethods)
                 return;
 
             var typeTarget = LastTypeDeclaration;
             var result = new ProceduralType();
-            InitNode(result, proceduralType);
+            InitNode(result, element);
             typeTarget.TypeValue = result;
-            result.Kind = TokenKindMapper.MapMethodKind(proceduralType.Kind);
-            result.AllowAnonymousMethods = proceduralType.AllowAnonymousMethods;
-            result.MethodDeclaration = (proceduralType.OfSymbol != default) && (proceduralType.ObjectSymbol != default);
+            result.Kind = TokenKindMapper.MapMethodKind(element.Kind);
+            result.AllowAnonymousMethods = element.AllowAnonymousMethods;
+            result.MethodDeclaration = (element.OfSymbol != default) && (element.ObjectSymbol != default);
 
-            if (proceduralType.ReturnTypeAttributes != null)
-                result.ReturnAttributes = ExtractAttributes(proceduralType.ReturnTypeAttributes as UserAttributesSymbol, CurrentUnit);
+            if (element.ReturnTypeAttributes != null)
+                result.ReturnAttributes = ExtractAttributes(element.ReturnTypeAttributes as UserAttributesSymbol, CurrentUnit);
         }
 
         #endregion
@@ -1114,18 +1114,18 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     visit a procedure reference type definition
         /// </summary>
-        /// <param name="proceduralType"></param>
-        public void StartVisit(ProcedureReferenceSymbol proceduralType) {
+        /// <param name="element"></param>
+        public void StartVisit(ProcedureReferenceSymbol element) {
             var typeTarget = LastTypeDeclaration;
             var result = new ProceduralType();
-            InitNode(result, proceduralType);
+            InitNode(result, element);
             typeTarget.TypeValue = result;
-            result.Kind = TokenKindMapper.MapMethodKind(proceduralType.ProcedureType.Kind);
+            result.Kind = TokenKindMapper.MapMethodKind(element.ProcedureType.Kind);
             result.AllowAnonymousMethods = true;
-            result.MethodDeclaration = (proceduralType.ProcedureType.OfSymbol != default) && (proceduralType.ProcedureType.ObjectSymbol != default);
+            result.MethodDeclaration = (element.ProcedureType.OfSymbol != default) && (element.ProcedureType.ObjectSymbol != default);
 
-            if (proceduralType.ProcedureType.ReturnTypeAttributes != null)
-                result.ReturnAttributes = ExtractAttributes(proceduralType.ProcedureType.ReturnTypeAttributes as UserAttributesSymbol, CurrentUnit);
+            if (element.ProcedureType.ReturnTypeAttributes != null)
+                result.ReturnAttributes = ExtractAttributes(element.ProcedureType.ReturnTypeAttributes as UserAttributesSymbol, CurrentUnit);
         }
 
         #endregion
@@ -1134,11 +1134,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visit a formal parameter declaration
         /// </summary>
-        /// <param name="formalParameter"></param>
-        public void StartVisit(FormalParameterDefinitionSymbol formalParameter) {
+        /// <param name="element"></param>
+        public void StartVisit(FormalParameterDefinitionSymbol element) {
             var paramterTarget = LastValue as IParameterTarget;
             var result = new ParameterTypeDefinition();
-            InitNode(result, formalParameter, paramterTarget.Parameters);
+            InitNode(result, element, paramterTarget.Parameters);
             paramterTarget.Parameters.Items.Add(result);
         }
 
@@ -1148,16 +1148,16 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     visit a formal parameter
         /// </summary>
-        /// <param name="formalParameter"></param>
-        public void StartVisit(FormalParameterSymbol formalParameter) {
+        /// <param name="element"></param>
+        public void StartVisit(FormalParameterSymbol element) {
             var typeDefinition = LastValue as ParameterTypeDefinition;
             var result = new ParameterDefinition();
-            InitNode(result, formalParameter);
+            InitNode(result, element);
             var allParams = typeDefinition.ParentItem as ParameterDefinitionCollection;
-            result.Name = ExtractSymbolName(formalParameter.ParameterName);
-            result.Attributes = ExtractAttributes(formalParameter.Attributes1 as UserAttributesSymbol, CurrentUnit);
-            result.Attributes = ExtractAttributes(formalParameter.Attributes2 as UserAttributesSymbol, CurrentUnit, result.Attributes);
-            result.ParameterKind = TokenKindMapper.ForParameterReferenceKind(formalParameter.Kind);
+            result.Name = ExtractSymbolName(element.ParameterName);
+            result.Attributes = ExtractAttributes(element.Attributes1 as UserAttributesSymbol, CurrentUnit);
+            result.Attributes = ExtractAttributes(element.Attributes2 as UserAttributesSymbol, CurrentUnit, result.Attributes);
+            result.ParameterKind = TokenKindMapper.ForParameterReferenceKind(element.Kind);
             typeDefinition.Parameters.Add(result);
             allParams.Add(result, LogSource);
         }
@@ -1168,10 +1168,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visit an unit initialization block
         /// </summary>
-        /// <param name="unitBlock"></param>
-        public void StartVisit(UnitInitializationSymbol unitBlock) {
+        /// <param name="element"></param>
+        public void StartVisit(UnitInitializationSymbol element) {
             var result = new BlockOfStatements();
-            InitNode(result, unitBlock, CurrentUnit);
+            InitNode(result, element, CurrentUnit);
             CurrentUnit.InitializationBlock = result;
         }
 
@@ -1181,10 +1181,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     visit a finalization section
         /// </summary>
-        /// <param name="unitBlock"></param>
-        public void StartVisit(UnitFinalizationSymbol unitBlock) {
+        /// <param name="element"></param>
+        public void StartVisit(UnitFinalizationSymbol element) {
             var result = new BlockOfStatements();
-            InitNode(result, unitBlock, CurrentUnit);
+            InitNode(result, element, CurrentUnit);
             CurrentUnit.FinalizationBlock = result;
         }
 
@@ -1195,13 +1195,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting a compound statement
         /// </summary>
-        /// <param name="block"></param>
-        public void StartVisit(CompoundStatementSymbol block) {
+        /// <param name="element"></param>
+        public void StartVisit(CompoundStatementSymbol element) {
             var lastValue = LastValue;
 
-            if (block.AssemblerBlock != null) {
+            if (element.AssemblerBlock != null) {
                 var result = new BlockOfAssemblerStatements();
-                InitNode(result, block, lastValue);
+                InitNode(result, element, lastValue);
                 if (lastValue is IStatementTarget statements)
                     statements.Statements.Add(result);
                 else if (lastValue is IBlockTarget blockTarget)
@@ -1210,7 +1210,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             }
             else {
                 var result = new BlockOfStatements();
-                InitNode(result, block, lastValue);
+                InitNode(result, element, lastValue);
                 if (lastValue is IStatementTarget statements)
                     statements.Statements.Add(result);
                 else if (lastValue is IBlockTarget blockTarget)
@@ -1221,8 +1221,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     end visiting a compund statement
         /// </summary>
-        /// <param name="block"></param>
-        public void EndVisit(CompoundStatementSymbol block) {
+        /// <param name="element"></param>
+        public void EndVisit(CompoundStatementSymbol element) {
         }
 
 
@@ -1232,20 +1232,20 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting a label
         /// </summary>
-        /// <param name="label"></param>
-        public void StartVisit(LabelSymbol label) {
+        /// <param name="element"></param>
+        public void StartVisit(LabelSymbol element) {
             SymbolName name = null;
 
-            if (label.LabelName is IdentifierSymbol standardLabel) {
+            if (element.LabelName is IdentifierSymbol standardLabel) {
                 name = ExtractSymbolName(standardLabel);
             }
 
-            var intLabel = (label.LabelName as StandardInteger)?.Value?.Token;
+            var intLabel = (element.LabelName as StandardInteger)?.Value?.Token;
             if (intLabel != null) {
                 name = new SimpleSymbolName(intLabel.Value.ParsedValue.ToString());
             }
 
-            var hexLabel = (label.LabelName as HexNumberSymbol)?.Symbol?.Token;
+            var hexLabel = (element.LabelName as HexNumberSymbol)?.Symbol?.Token;
             if (hexLabel != null) {
                 name = new SimpleSymbolName(hexLabel.Value.ParsedValue.ToString());
             }
@@ -1256,7 +1256,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (CurrentDeclarationMode == DeclarationMode.Label) {
                 var symbols = LastValue as IDeclaredSymbolTarget;
                 var declaration = new ConstantDeclaration();
-                InitNode(declaration, label);
+                InitNode(declaration, element);
                 declaration.Name = name;
                 declaration.Mode = CurrentDeclarationMode;
                 symbols.Symbols.Items.Add(new SingleDeclaredSymbol(declaration));
@@ -1272,8 +1272,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     end visiting a label
         /// </summary>
-        /// <param name="label"></param>
-        public void EndVisit(LabelSymbol label) {
+        /// <param name="element"></param>
+        public void EndVisit(LabelSymbol element) {
         }
 
 
@@ -1283,15 +1283,15 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting a class declaration
         /// </summary>
-        /// <param name="classDeclaration"></param>
-        public void StartVisit(ClassDeclarationSymbol classDeclaration) {
+        /// <param name="element"></param>
+        public void StartVisit(ClassDeclarationSymbol element) {
             var typeTarget = LastTypeDeclaration;
             var result = new StructuredType();
-            InitNode(result, classDeclaration);
+            InitNode(result, element);
             result.Kind = StructuredTypeKind.Class;
-            result.SealedClass = classDeclaration.SealedSymbol != default;
-            result.AbstractClass = classDeclaration.AbstractSymbol != default;
-            result.ForwardDeclaration = classDeclaration.ForwardDeclaration;
+            result.SealedClass = element.SealedSymbol != default;
+            result.AbstractClass = element.AbstractSymbol != default;
+            result.ForwardDeclaration = element.ForwardDeclaration;
             typeTarget.TypeValue = result;
             CurrentMemberVisibility[result] = new MemberStatus() {
                 Visibility = MemberVisibility.Public,
@@ -1303,8 +1303,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     end visiting a class declaration
         /// </summary>
-        /// <param name="classDeclaration"></param>
-        public void EndVisit(ClassDeclarationSymbol classDeclaration) {
+        /// <param name="element"></param>
+        public void EndVisit(ClassDeclarationSymbol element) {
             var parentType = LastValue as StructuredType;
             CurrentMemberVisibility.Reset(parentType);
         }
@@ -1315,19 +1315,19 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting a class declaration item
         /// </summary>
-        /// <param name="classDeclarationItem"></param>
-        public void StartVisit(ClassDeclarationItemSymbol classDeclarationItem) {
+        /// <param name="element"></param>
+        public void StartVisit(ClassDeclarationItemSymbol element) {
 
             if (!(LastValue is StructuredType parentType))
                 return;
 
-            if (classDeclarationItem.Visibility != TokenKind.Undefined) {
-                CurrentMemberVisibility[parentType].Visibility = TokenKindMapper.ForVisibility(classDeclarationItem.Visibility, classDeclarationItem.Strict);
+            if (element.Visibility != TokenKind.Undefined) {
+                CurrentMemberVisibility[parentType].Visibility = TokenKindMapper.ForVisibility(element.Visibility, element.Strict);
             }
 
-            CurrentMemberVisibility[parentType].ClassItem = classDeclarationItem.ClassItem;
-            CurrentMemberVisibility[parentType].Attributes = ExtractAttributes(classDeclarationItem.Attributes1, CurrentUnit);
-            CurrentMemberVisibility[parentType].Attributes = ExtractAttributes(classDeclarationItem.Attributes2, CurrentUnit, CurrentMemberVisibility[parentType].Attributes);
+            CurrentMemberVisibility[parentType].ClassItem = element.ClassItem;
+            CurrentMemberVisibility[parentType].Attributes = ExtractAttributes(element.Attributes1, CurrentUnit);
+            CurrentMemberVisibility[parentType].Attributes = ExtractAttributes(element.Attributes2, CurrentUnit, CurrentMemberVisibility[parentType].Attributes);
         }
 
         #endregion
@@ -1336,18 +1336,18 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting a class field
         /// </summary>
-        /// <param name="field"></param>
-        public void StartVisit(ClassFieldSymbol field) {
+        /// <param name="element"></param>
+        public void StartVisit(ClassFieldSymbol element) {
             var structType = LastValue as StructuredType;
             var result = new StructureFields();
-            InitNode(result, field);
+            InitNode(result, element);
             result.Visibility = CurrentMemberVisibility[structType].Visibility;
             result.ClassItem = CurrentMemberVisibility[structType].ClassItem;
             structType.Fields.Items.Add(result);
 
             var extractedAttributes = CurrentMemberVisibility[structType].Attributes;
 
-            foreach (var part in field.Names.Items) {
+            foreach (var part in element.Names.Items) {
 
                 var attrs = part.Attributes;
 
@@ -1369,7 +1369,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 visitor.WorkingStack.Pop();
             }
 
-            result.Hints = ExtractHints(field.Hint as HintingInformationListSymbol);
+            result.Hints = ExtractHints(element.Hint as HintingInformationListSymbol);
         }
 
         #endregion
@@ -1378,12 +1378,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting a property declaration
         /// </summary>
-        /// <param name="property"></param>
-        public void StartVisit(ClassPropertySymbol property) {
+        /// <param name="element"></param>
+        public void StartVisit(ClassPropertySymbol element) {
             var parent = LastValue as StructuredType;
             var result = new StructureProperty();
-            InitNode(result, property);
-            result.Name = ExtractSymbolName(property.PropertyName);
+            InitNode(result, element);
+            result.Name = ExtractSymbolName(element.PropertyName);
             parent.Properties.Add(result, LogSource);
             result.Visibility = CurrentMemberVisibility[parent].Visibility;
             result.Attributes = CurrentMemberVisibility[parent].Attributes;
@@ -1395,13 +1395,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting a class propertery/read definition
         /// </summary>
-        /// <param name="property"></param>
-        public void StartVisit(ClassPropertyReadWriteSymbol property) {
+        /// <param name="element"></param>
+        public void StartVisit(ClassPropertyReadWriteSymbol element) {
             var parent = LastValue as StructureProperty;
             var result = new StructurePropertyAccessor();
-            InitNode(result, property);
-            result.Kind = TokenKindMapper.ForPropertyAccessor(property.Kind);
-            result.Name = ExtractSymbolName(property.Member);
+            InitNode(result, element);
+            result.Kind = TokenKindMapper.ForPropertyAccessor(element.Kind);
+            result.Name = ExtractSymbolName(element.Member);
             parent.Accessors.Add(result);
 
         }
@@ -1412,19 +1412,19 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting a class property
         /// </summary>
-        /// <param name="property"></param>
-        public void StartVisit(ClassPropertyDispInterfaceSymbols property) {
+        /// <param name="element"></param>
+        public void StartVisit(ClassPropertyDispInterfaceSymbols element) {
             var parent = LastValue as StructureProperty;
             var result = new StructurePropertyAccessor();
-            InitNode(result, property);
+            InitNode(result, element);
 
-            if (property.ReadOnly) {
+            if (element.ReadOnly) {
                 result.Kind = StructurePropertyAccessorKind.ReadOnly;
             }
-            else if (property.WriteOnly) {
+            else if (element.WriteOnly) {
                 result.Kind = StructurePropertyAccessorKind.WriteOnly;
             }
-            else if (property.DispId != null) {
+            else if (element.DispId != null) {
                 result.Kind = StructurePropertyAccessorKind.DispId;
             }
             else {
@@ -1441,30 +1441,30 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting a class property specifier
         /// </summary>
-        /// <param name="property"></param>
-        public void StartVisit(ClassPropertySpecifierSymbol property) {
-            if (property.PropertyReadWrite != null)
+        /// <param name="element"></param>
+        public void StartVisit(ClassPropertySpecifierSymbol element) {
+            if (element.PropertyReadWrite != null)
                 return;
 
-            if (property.PropertyDispInterface != null)
+            if (element.PropertyDispInterface != null)
                 return;
 
             var parent = LastValue as StructureProperty;
             var result = new StructurePropertyAccessor();
-            InitNode(result, property);
+            InitNode(result, element);
 
-            if (property.IsStored) {
+            if (element.IsStored) {
                 result.Kind = StructurePropertyAccessorKind.Stored;
             }
-            else if (property.IsDefault) {
+            else if (element.IsDefault) {
                 result.Kind = StructurePropertyAccessorKind.Default;
             }
-            else if (property.NoDefault) {
+            else if (element.NoDefault) {
                 result.Kind = StructurePropertyAccessorKind.NoDefault;
             }
-            else if (property.ImplementsTypeId != null) {
+            else if (element.ImplementsTypeId != null) {
                 result.Kind = StructurePropertyAccessorKind.Implements;
-                result.Name = ExtractSymbolName(property.ImplementsTypeId as NamespaceNameSymbol);
+                result.Name = ExtractSymbolName(element.ImplementsTypeId as NamespaceNameSymbol);
             }
 
             parent.Accessors.Add(result);
@@ -1477,17 +1477,17 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting a class method
         /// </summary>
-        /// <param name="method"></param>
-        public void StartVisit(ClassMethodSymbol method) {
+        /// <param name="element"></param>
+        public void StartVisit(ClassMethodSymbol element) {
             var parent = LastValue as StructuredType;
             var result = new StructureMethod();
-            InitNode(result, method);
+            InitNode(result, element);
             result.Visibility = CurrentMemberVisibility[parent].Visibility;
             result.ClassItem = CurrentMemberVisibility[parent].ClassItem;
             result.Attributes = CurrentMemberVisibility[parent].Attributes;
-            result.Name = ExtractSymbolName(method.Identifier);
-            result.Kind = TokenKindMapper.MapMethodKind(method.MethodKind);
-            result.Generics = ExtractGenericDefinition(result, method, method.GenericDefinition as GenericDefinitionSymbol);
+            result.Name = ExtractSymbolName(element.Identifier);
+            result.Kind = TokenKindMapper.MapMethodKind(element.MethodKind);
+            result.Generics = ExtractGenericDefinition(result, element, element.GenericDefinition as GenericDefinitionSymbol);
             parent.Methods.Add(result, LogSource);
         }
 
@@ -1497,15 +1497,15 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting a method resolution
         /// </summary>
-        /// <param name="methodResolution"></param>
-        public void StartVisit(MethodResolutionSymbol methodResolution) {
+        /// <param name="element"></param>
+        public void StartVisit(MethodResolutionSymbol element) {
             var parent = LastValue as StructuredType;
             var result = new StructureMethodResolution();
-            InitNode(result, methodResolution);
-            result.Attributes = ExtractAttributes(((ClassDeclarationItemSymbol)methodResolution?.ParentItem)?.Attributes1 as UserAttributesSymbol, CurrentUnit);
-            result.Attributes = ExtractAttributes(((ClassDeclarationItemSymbol)methodResolution?.ParentItem)?.Attributes1 as UserAttributesSymbol, CurrentUnit, result.Attributes);
-            result.Kind = TokenKindMapper.ForMethodResolutionKind(methodResolution.Kind);
-            result.Target = ExtractSymbolName(methodResolution.ResolveIdentifier);
+            InitNode(result, element);
+            result.Attributes = ExtractAttributes(((ClassDeclarationItemSymbol)element?.ParentItem)?.Attributes1 as UserAttributesSymbol, CurrentUnit);
+            result.Attributes = ExtractAttributes(((ClassDeclarationItemSymbol)element?.ParentItem)?.Attributes1 as UserAttributesSymbol, CurrentUnit, result.Attributes);
+            result.Kind = TokenKindMapper.ForMethodResolutionKind(element.Kind);
+            result.Target = ExtractSymbolName(element.ResolveIdentifier);
             parent.MethodResolutions.Add(result);
 
         }
@@ -1516,11 +1516,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     visit a method directive
         /// </summary>
-        /// <param name="directive"></param>
-        public void StartVisit(ReintroduceSymbol directive) {
+        /// <param name="element"></param>
+        public void StartVisit(ReintroduceSymbol element) {
             var parent = LastValue as IDirectiveTarget;
             var result = new MethodDirective();
-            InitNode(result, directive);
+            InitNode(result, element);
             result.Kind = MethodDirectiveKind.Reintroduce;
             parent.Directives.Add(result);
 
@@ -1532,11 +1532,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting an overload directive
         /// </summary>
-        /// <param name="directive"></param>
-        public void StartVisit(OverloadSymbol directive) {
+        /// <param name="element"></param>
+        public void StartVisit(OverloadSymbol element) {
             var parent = LastValue as IDirectiveTarget;
             var result = new MethodDirective();
-            InitNode(result, directive);
+            InitNode(result, element);
             result.Kind = MethodDirectiveKind.Overload;
             parent.Directives.Add(result);
 
@@ -1548,14 +1548,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting a dispid directive
         /// </summary>
-        /// <param name="directive"></param>
-        public void StartVisit(DispIdSymbol directive) {
+        /// <param name="element"></param>
+        public void StartVisit(DispIdSymbol element) {
 
             if (!(LastValue is IDirectiveTarget parent))
                 return;
 
             var result = new MethodDirective();
-            InitNode(result, directive);
+            InitNode(result, element);
             result.Kind = MethodDirectiveKind.DispId;
             parent.Directives.Add(result);
 
@@ -1567,16 +1567,16 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visitng a directive
         /// </summary>
-        /// <param name="directive"></param>
-        public void StartVisit(InlineSymbol directive) {
+        /// <param name="element"></param>
+        public void StartVisit(InlineSymbol element) {
             var parent = LastValue as IDirectiveTarget;
             var result = new MethodDirective();
-            InitNode(result, directive);
+            InitNode(result, element);
 
-            if (directive.Kind == TokenKind.Inline) {
+            if (element.Kind == TokenKind.Inline) {
                 result.Kind = MethodDirectiveKind.Inline;
             }
-            else if (directive.Kind == TokenKind.Assembler) {
+            else if (element.Kind == TokenKind.Assembler) {
                 result.Kind = MethodDirectiveKind.Assembler;
             }
 
@@ -1590,16 +1590,16 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visit an abstract directive
         /// </summary>
-        /// <param name="directive"></param>
-        public void StartVisit(AbstractSymbol directive) {
+        /// <param name="element"></param>
+        public void StartVisit(AbstractSymbol element) {
             var parent = LastValue as IDirectiveTarget;
             var result = new MethodDirective();
-            InitNode(result, directive);
+            InitNode(result, element);
 
-            if (directive.Kind == TokenKind.Abstract) {
+            if (element.Kind == TokenKind.Abstract) {
                 result.Kind = MethodDirectiveKind.Abstract;
             }
-            else if (directive.Kind == TokenKind.Final) {
+            else if (element.Kind == TokenKind.Final) {
                 result.Kind = MethodDirectiveKind.Final;
             }
 
@@ -1613,21 +1613,21 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting a historic directive
         /// </summary>
-        /// <param name="directive"></param>
-        public void StartVisit(OldCallConventionSymbol directive) {
+        /// <param name="element"></param>
+        public void StartVisit(OldCallConventionSymbol element) {
             var parent = LastValue as IDirectiveTarget;
             var result = new MethodDirective();
-            InitNode(result, directive);
+            InitNode(result, element);
 
-            if (directive.Kind == TokenKind.Far) {
+            if (element.Kind == TokenKind.Far) {
                 result.Kind = MethodDirectiveKind.Far;
             }
 
-            else if (directive.Kind == TokenKind.Local) {
+            else if (element.Kind == TokenKind.Local) {
                 result.Kind = MethodDirectiveKind.Local;
             }
 
-            else if (directive.Kind == TokenKind.Near) {
+            else if (element.Kind == TokenKind.Near) {
                 result.Kind = MethodDirectiveKind.Near;
             }
 
@@ -1641,17 +1641,17 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visit an external directive
         /// </summary>
-        /// <param name="directive"></param>
-        public void StartVisit(ExternalDirectiveSymbol directive) {
+        /// <param name="element"></param>
+        public void StartVisit(ExternalDirectiveSymbol element) {
             var parent = LastValue as IDirectiveTarget;
             var result = new MethodDirective();
-            InitNode(result, directive);
+            InitNode(result, element);
 
-            if (directive.Kind == TokenKind.VarArgs) {
+            if (element.Kind == TokenKind.VarArgs) {
                 result.Kind = MethodDirectiveKind.VarArgs;
             }
 
-            else if (directive.Kind == TokenKind.External) {
+            else if (element.Kind == TokenKind.External) {
                 result.Kind = MethodDirectiveKind.External;
             }
 
@@ -1665,12 +1665,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting a external specifier
         /// </summary>
-        /// <param name="directive"></param>
-        public void StartVisit(ExternalSpecifierSymbol directive) {
+        /// <param name="element"></param>
+        public void StartVisit(ExternalSpecifierSymbol element) {
             var parent = LastValue as MethodDirective;
             var result = new MethodDirectiveSpecifier();
-            InitNode(result, directive);
-            result.Kind = TokenKindMapper.ForMethodDirective(directive.Kind);
+            InitNode(result, element);
+            result.Kind = TokenKindMapper.ForMethodDirective(element.Kind);
             parent.Specifiers.Add(result);
 
         }
@@ -1681,28 +1681,28 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visit a calling convention directive
         /// </summary>
-        /// <param name="directive"></param>
-        public void StartVisit(CallConventionSymbol directive) {
+        /// <param name="element"></param>
+        public void StartVisit(CallConventionSymbol element) {
             var parent = LastValue as IDirectiveTarget;
             var result = new MethodDirective();
-            InitNode(result, directive);
+            InitNode(result, element);
 
-            if (directive.Kind == TokenKind.Cdecl) {
+            if (element.Kind == TokenKind.Cdecl) {
                 result.Kind = MethodDirectiveKind.Cdecl;
             }
-            else if (directive.Kind == TokenKind.Pascal) {
+            else if (element.Kind == TokenKind.Pascal) {
                 result.Kind = MethodDirectiveKind.Pascal;
             }
-            else if (directive.Kind == TokenKind.Register) {
+            else if (element.Kind == TokenKind.Register) {
                 result.Kind = MethodDirectiveKind.Register;
             }
-            else if (directive.Kind == TokenKind.Safecall) {
+            else if (element.Kind == TokenKind.Safecall) {
                 result.Kind = MethodDirectiveKind.Safecall;
             }
-            else if (directive.Kind == TokenKind.Stdcall) {
+            else if (element.Kind == TokenKind.Stdcall) {
                 result.Kind = MethodDirectiveKind.StdCall;
             }
-            else if (directive.Kind == TokenKind.Export) {
+            else if (element.Kind == TokenKind.Export) {
                 result.Kind = MethodDirectiveKind.Export;
             }
 
@@ -1716,25 +1716,25 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting a binding directive
         /// </summary>
-        /// <param name="directive"></param>
-        public void StartVisit(BindingSymbol directive) {
+        /// <param name="element"></param>
+        public void StartVisit(BindingSymbol element) {
             var parent = LastValue as IDirectiveTarget;
             var result = new MethodDirective();
-            InitNode(result, directive);
+            InitNode(result, element);
 
-            if (directive.Kind == TokenKind.Static) {
+            if (element.Kind == TokenKind.Static) {
                 result.Kind = MethodDirectiveKind.Static;
             }
-            else if (directive.Kind == TokenKind.Dynamic) {
+            else if (element.Kind == TokenKind.Dynamic) {
                 result.Kind = MethodDirectiveKind.Dynamic;
             }
-            else if (directive.Kind == TokenKind.Virtual) {
+            else if (element.Kind == TokenKind.Virtual) {
                 result.Kind = MethodDirectiveKind.Virtual;
             }
-            else if (directive.Kind == TokenKind.Override) {
+            else if (element.Kind == TokenKind.Override) {
                 result.Kind = MethodDirectiveKind.Override;
             }
-            else if (directive.Kind == TokenKind.Message) {
+            else if (element.Kind == TokenKind.Message) {
                 result.Kind = MethodDirectiveKind.Message;
             }
 
@@ -1748,9 +1748,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting method directives
         /// </summary>
-        /// <param name="parent"></param>
+        /// <param name="element"></param>
         /// <param name="child"></param>
-        public void StartVisitChild(MethodDirectivesSymbol parent, ISyntaxPart child) {
+        public void StartVisitChild(MethodDirectivesSymbol element, ISyntaxPart child) {
             var lastValue = LastValue as IDirectiveTarget;
 
             if (child is HintSymbol hints && lastValue != null) {
@@ -1764,9 +1764,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting a function directive
         /// </summary>
-        /// <param name="parent"></param>
+        /// <param name="element"></param>
         /// <param name="child"></param>
-        public void StartVisitChild(FunctionDirectivesSymbol parent, ISyntaxPart child) {
+        public void StartVisitChild(FunctionDirectivesSymbol element, ISyntaxPart child) {
             var lastValue = LastValue as IDirectiveTarget;
 
             if (child is HintSymbol hints && lastValue != null) {
@@ -1780,15 +1780,15 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting exported procedure headings
         /// </summary>
-        /// <param name="procHeading"></param>
-        public void StartVisit(ExportedProcedureHeadingSymbol procHeading) {
+        /// <param name="element"></param>
+        public void StartVisit(ExportedProcedureHeadingSymbol element) {
             var symbols = LastValue as IDeclaredSymbolTarget;
             var result = new GlobalMethod();
-            InitNode(result, procHeading);
-            result.Name = ExtractSymbolName(procHeading.Name);
-            result.Kind = TokenKindMapper.MapMethodKind(procHeading.Kind);
-            result.Attributes = ExtractAttributes(procHeading.Attributes, CurrentUnit);
-            result.ReturnAttributes = ExtractAttributes(procHeading.ResultAttributes as UserAttributesSymbol, CurrentUnit);
+            InitNode(result, element);
+            result.Name = ExtractSymbolName(element.Name);
+            result.Kind = TokenKindMapper.MapMethodKind(element.Kind);
+            result.Attributes = ExtractAttributes(element.Attributes, CurrentUnit);
+            result.ReturnAttributes = ExtractAttributes(element.ResultAttributes as UserAttributesSymbol, CurrentUnit);
             symbols.Symbols.Items.Add(new SingleDeclaredSymbol(result));
             symbols.Symbols.Add(result, LogSource);
         }
@@ -1799,11 +1799,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting an unsafe directive
         /// </summary>
-        /// <param name="directive"></param>
-        public void StartVisit(UnsafeDirectiveSymbol directive) {
+        /// <param name="element"></param>
+        public void StartVisit(UnsafeDirectiveSymbol element) {
             var parent = LastValue as IDirectiveTarget;
             var result = new MethodDirective();
-            InitNode(result, directive);
+            InitNode(result, element);
             result.Kind = MethodDirectiveKind.Unsafe;
             parent.Directives.Add(result);
 
@@ -1815,11 +1815,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting a forward directive
         /// </summary>
-        /// <param name="directive"></param>
-        public void StartVisit(ForwardDirectiveSymbol directive) {
+        /// <param name="element"></param>
+        public void StartVisit(ForwardDirectiveSymbol element) {
             var parent = LastValue as IDirectiveTarget;
             var result = new MethodDirective();
-            InitNode(result, directive);
+            InitNode(result, element);
             result.Kind = MethodDirectiveKind.Forward;
             parent.Directives.Add(result);
 
@@ -1831,8 +1831,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting an exports section
         /// </summary>
-        /// <param name="exportsSection"></param>
-        public void StartVisit(ExportsSectionSymbol exportsSection) {
+        /// <param name="element"></param>
+        public void StartVisit(ExportsSectionSymbol element) {
             CurrentDeclarationMode = DeclarationMode.Exports;
             ;
         }
@@ -1849,15 +1849,15 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting an export section
         /// </summary>
-        /// <param name="exportsSection"></param>
-        public void StartVisit(ExportItemSymbol exportsSection) {
+        /// <param name="element"></param>
+        public void StartVisit(ExportItemSymbol element) {
             var declarations = LastValue as IDeclaredSymbolTarget;
             var result = new ExportedMethodDeclaration();
-            InitNode(result, exportsSection);
-            result.Name = ExtractSymbolName(exportsSection.ExportName);
-            result.IsResident = exportsSection.Resident.GetSymbolKind() == TokenKind.Resident;
-            result.HasIndex = exportsSection.IndexParameter != null;
-            result.HasName = exportsSection.NameParameter != null;
+            InitNode(result, element);
+            result.Name = ExtractSymbolName(element.ExportName);
+            result.IsResident = element.Resident.GetSymbolKind() == TokenKind.Resident;
+            result.HasIndex = element.IndexParameter != null;
+            result.HasName = element.NameParameter != null;
             declarations.Symbols.Items.Add(new SingleDeclaredSymbol(result));
             declarations.Symbols.Add(result, LogSource);
         }
@@ -1868,14 +1868,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting a record declaration item
         /// </summary>
-        /// <param name="recordDeclarationItem"></param>
-        public void StartVisit(RecordItemSymbol recordDeclarationItem) {
+        /// <param name="element"></param>
+        public void StartVisit(RecordItemSymbol element) {
 
             if (!(LastValue is StructuredType parentType))
                 return;
 
-            if (recordDeclarationItem.Visibility != TokenKind.Undefined) {
-                CurrentMemberVisibility[parentType].Visibility = TokenKindMapper.ForVisibility(recordDeclarationItem.Visibility, recordDeclarationItem.Strict);
+            if (element.Visibility != TokenKind.Undefined) {
+                CurrentMemberVisibility[parentType].Visibility = TokenKindMapper.ForVisibility(element.Visibility, element.Strict);
             };
         }
 
@@ -1885,11 +1885,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting a record declaration
         /// </summary>
-        /// <param name="recordDeclaration"></param>
-        public void StartVisit(RecordDeclarationSymbol recordDeclaration) {
+        /// <param name="element"></param>
+        public void StartVisit(RecordDeclarationSymbol element) {
             var typeTarget = LastTypeDeclaration;
             var result = new StructuredType();
-            InitNode(result, recordDeclaration);
+            InitNode(result, element);
             result.Kind = StructuredTypeKind.Record;
             typeTarget.TypeValue = result;
             CurrentMemberVisibility[result] = new MemberStatus() {
@@ -1914,8 +1914,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting a field declaration
         /// </summary>
-        /// <param name="fieldDeclaration"></param>
-        public void StartVisit(RecordFieldSymbol fieldDeclaration) {
+        /// <param name="element"></param>
+        public void StartVisit(RecordFieldSymbol element) {
             StructuredType structType = null;
             StructureVariantCollection varFields = null;
             IList<StructureFields> fields = null;
@@ -1931,19 +1931,19 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             }
 
             var result = new StructureFields();
-            InitNode(result, fieldDeclaration);
+            InitNode(result, element);
             result.Visibility = CurrentMemberVisibility[structType].Visibility;
 
             if (fields != null)
                 fields.Add(result);
 
             IList<SymbolAttribute> extractedAttributes = null;
-            if (fieldDeclaration.ParentItem is RecordItemSymbol declItem) {
+            if (element.ParentItem is RecordItemSymbol declItem) {
                 extractedAttributes = ExtractAttributes(declItem.Attributes1 as UserAttributesSymbol, CurrentUnit);
                 extractedAttributes = ExtractAttributes(declItem.Attributes2 as UserAttributesSymbol, CurrentUnit, extractedAttributes);
             }
 
-            foreach (var part in fieldDeclaration.Names.Items) {
+            foreach (var part in element.Names.Items) {
 
                 var attrs = part.Attributes;
 
@@ -1971,7 +1971,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
             }
 
-            result.Hints = ExtractHints(fieldDeclaration.Hint as HintingInformationListSymbol);
+            result.Hints = ExtractHints(element.Hint as HintingInformationListSymbol);
 
         }
 
@@ -1982,12 +1982,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting a variant section of a record definition
         /// </summary>
-        /// <param name="variantSection"></param>
-        public void StartVisit(RecordVariantSectionSymbol variantSection) {
+        /// <param name="element"></param>
+        public void StartVisit(RecordVariantSectionSymbol element) {
             var structType = LastValue as StructuredType;
             var result = new StructureVariantItem();
-            InitNode(result, variantSection);
-            result.Name = ExtractSymbolName(variantSection.Name);
+            InitNode(result, element);
+            result.Name = ExtractSymbolName(element.Name);
             structType.Variants.Items.Add(result);
 
         }
@@ -1998,11 +1998,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting a record variant
         /// </summary>
-        /// <param name="variantItem"></param>
-        public void StartVisit(RecordVariantSymbol variantItem) {
+        /// <param name="element"></param>
+        public void StartVisit(RecordVariantSymbol element) {
             var structType = LastValue as StructureVariantItem;
             var result = new StructureVariantFields();
-            InitNode(result, variantItem);
+            InitNode(result, element);
             structType.Items.Add(result);
 
         }
@@ -2013,11 +2013,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting a record helper definition
         /// </summary>
-        /// <param name="recordHelper"></param>
-        public void StartVisit(RecordHelperDefinitionSymbol recordHelper) {
+        /// <param name="element"></param>
+        public void StartVisit(RecordHelperDefinitionSymbol element) {
             var typeTarget = LastTypeDeclaration;
             var result = new StructuredType();
-            InitNode(result, recordHelper);
+            InitNode(result, element);
             result.Kind = StructuredTypeKind.RecordHelper;
             typeTarget.TypeValue = result;
             CurrentMemberVisibility[result] = new MemberStatus() {
@@ -2042,14 +2042,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting a record declaration item
         /// </summary>
-        /// <param name="recordDeclarationItem"></param>
-        public void StartVisit(RecordHelperItemSymbol recordDeclarationItem) {
+        /// <param name="element"></param>
+        public void StartVisit(RecordHelperItemSymbol element) {
 
             if (!(LastValue is StructuredType parentType))
                 return;
 
-            if (recordDeclarationItem.Visibility != TokenKind.Undefined) {
-                CurrentMemberVisibility[parentType].Visibility = TokenKindMapper.ForVisibility(recordDeclarationItem.Visibility, recordDeclarationItem.Strict);
+            if (element.Visibility != TokenKind.Undefined) {
+                CurrentMemberVisibility[parentType].Visibility = TokenKindMapper.ForVisibility(element.Visibility, element.Strict);
             };
         }
 
@@ -2059,11 +2059,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting an object declaration
         /// </summary>
-        /// <param name="objectDeclaration"></param>
-        public void StartVisit(ObjectDeclarationSymbol objectDeclaration) {
+        /// <param name="element"></param>
+        public void StartVisit(ObjectDeclarationSymbol element) {
             var typeTarget = LastTypeDeclaration;
             var result = new StructuredType();
-            InitNode(result, objectDeclaration);
+            InitNode(result, element);
             result.Kind = StructuredTypeKind.ObjectType;
             typeTarget.TypeValue = result;
             CurrentMemberVisibility[result] = new MemberStatus() {
@@ -2089,14 +2089,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting an object item
         /// </summary>
-        /// <param name="objectItem"></param>
-        public void StartVisit(ObjectItem objectItem) {
+        /// <param name="element"></param>
+        public void StartVisit(ObjectItem element) {
 
             if (!(LastValue is StructuredType parentType))
                 return;
 
-            if (objectItem.Visibility.GetSymbolKind() != TokenKind.Undefined) {
-                CurrentMemberVisibility[parentType].Visibility = TokenKindMapper.ForVisibility(objectItem.Visibility.GetSymbolKind(), objectItem.Strict.GetSymbolKind() == TokenKind.Strict);
+            if (element.Visibility.GetSymbolKind() != TokenKind.Undefined) {
+                CurrentMemberVisibility[parentType].Visibility = TokenKindMapper.ForVisibility(element.Visibility.GetSymbolKind(), element.Strict.GetSymbolKind() == TokenKind.Strict);
             };
         }
 
@@ -2106,17 +2106,17 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     end visiting an interface declaration
         /// </summary>
-        /// <param name="interfaceDeclaration"></param>
-        public void StartVisit(InterfaceDefinitionSymbol interfaceDeclaration) {
+        /// <param name="element"></param>
+        public void StartVisit(InterfaceDefinitionSymbol element) {
             var typeTarget = LastTypeDeclaration;
             var result = new StructuredType();
-            InitNode(result, interfaceDeclaration);
-            if (interfaceDeclaration.DisplayInterface)
+            InitNode(result, element);
+            if (element.DisplayInterface)
                 result.Kind = StructuredTypeKind.DispInterface;
             else
                 result.Kind = StructuredTypeKind.Interface;
 
-            result.ForwardDeclaration = interfaceDeclaration.ForwardDeclaration;
+            result.ForwardDeclaration = element.ForwardDeclaration;
             typeTarget.TypeValue = result;
             CurrentMemberVisibility[result] = new MemberStatus() {
                 Visibility = MemberVisibility.Public,
@@ -2140,15 +2140,15 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting an interface guid definiton
         /// </summary>
-        /// <param name="interfaceGuid"></param>
-        public void StartVisit(InterfaceGuidSymbol interfaceGuid) {
+        /// <param name="element"></param>
+        public void StartVisit(InterfaceGuidSymbol element) {
             var structType = LastValue as StructuredType;
 
-            if (interfaceGuid.IdIdentifier != null) {
-                structType.GuidName = ExtractSymbolName(interfaceGuid.IdIdentifier);
+            if (element.IdIdentifier != null) {
+                structType.GuidName = ExtractSymbolName(element.IdIdentifier);
             }
-            else if (interfaceGuid.Id != null) {
-                structType.GuidId = interfaceGuid.Id.Symbol.Token.ParsedValue;
+            else if (element.Id != null) {
+                structType.GuidId = element.Id.Symbol.Token.ParsedValue;
             }
 
 
@@ -2161,11 +2161,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting a class helper definition
         /// </summary>
-        /// <param name="classHelper"></param>
-        public void StartVisit(ClassHelperDefSymbol classHelper) {
+        /// <param name="element"></param>
+        public void StartVisit(ClassHelperDefSymbol element) {
             var typeTarget = LastTypeDeclaration;
             var result = new StructuredType();
-            InitNode(result, classHelper);
+            InitNode(result, element);
             result.Kind = StructuredTypeKind.ClassHelper;
             typeTarget.TypeValue = result;
             CurrentMemberVisibility[result] = new MemberStatus() {
@@ -2191,14 +2191,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting a class helper item
         /// </summary>
-        /// <param name="classHelperItem"></param>
-        public void StartVisit(ClassHelperItemSymbol classHelperItem) {
+        /// <param name="element"></param>
+        public void StartVisit(ClassHelperItemSymbol element) {
 
             if (!(LastValue is StructuredType parentType))
                 return;
 
-            if (classHelperItem.Visibility != TokenKind.Undefined) {
-                CurrentMemberVisibility[parentType].Visibility = TokenKindMapper.ForVisibility(classHelperItem.Visibility, classHelperItem.Strict);
+            if (element.Visibility != TokenKind.Undefined) {
+                CurrentMemberVisibility[parentType].Visibility = TokenKindMapper.ForVisibility(element.Visibility, element.Strict);
             };
         }
 
@@ -2208,13 +2208,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting a procedure declaration
         /// </summary>
-        /// <param name="procedure"></param>
-        public void StartVisit(ProcedureDeclarationSymbol procedure) {
+        /// <param name="element"></param>
+        public void StartVisit(ProcedureDeclarationSymbol element) {
             var symbolTarget = LastValue as IDeclaredSymbolTarget;
             var result = new MethodImplementation();
-            InitNode(result, procedure);
-            result.Name = ExtractSymbolName(procedure.Heading.Name);
-            result.Kind = TokenKindMapper.MapMethodKind(procedure.Heading.Kind);
+            InitNode(result, element);
+            result.Name = ExtractSymbolName(element.Heading.Name);
+            result.Kind = TokenKindMapper.MapMethodKind(element.Heading.Kind);
             symbolTarget.Symbols.Items.Add(new SingleDeclaredSymbol(result));
             symbolTarget.Symbols.Add(result, LogSource);
         }
@@ -2225,13 +2225,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting a method declaration
         /// </summary>
-        /// <param name="method"></param>
-        public void StartVisit(MethodDeclarationSymbol method) {
+        /// <param name="element"></param>
+        public void StartVisit(MethodDeclarationSymbol element) {
             var unit = CurrentUnit;
-            var name = ExtractSymbolName(method.Heading.Items);
+            var name = ExtractSymbolName(element.Heading.Items);
             var result = new MethodImplementation();
-            InitNode(result, method);
-            result.Kind = TokenKindMapper.MapMethodKind(method.Heading.Kind);
+            InitNode(result, element);
+            result.Kind = TokenKindMapper.MapMethodKind(element.Heading.Kind);
             result.Name = name;
 
             var type = default(DeclaredSymbol);
@@ -2257,17 +2257,17 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting a statement part
         /// </summary>
-        /// <param name="part"></param>
-        public void StartVisit(StatementPart part) {
+        /// <param name="element"></param>
+        public void StartVisit(StatementPart element) {
 
-            if (part.DesignatorPart == null && part.Assignment == null)
+            if (element.DesignatorPart == null && element.Assignment == null)
                 return;
 
             var target = LastValue as IStatementTarget;
             var result = new StructuredStatement();
-            InitNode(result, part);
+            InitNode(result, element);
 
-            if (part.Assignment != null) {
+            if (element.Assignment != null) {
                 result.Kind = StructuredStatementKind.Assignment;
             }
             else {
@@ -2284,11 +2284,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting a closure expression
         /// </summary>
-        /// <param name="closure"></param>
-        public void StartVisit(ClosureExpressionSymbol closure) {
+        /// <param name="element"></param>
+        public void StartVisit(ClosureExpressionSymbol element) {
             var expression = LastExpression;
             var result = new MethodImplementation();
-            InitNode(result, closure);
+            InitNode(result, element);
             result.Name = new SimpleSymbolName(CurrentUnit.GenerateSymbolName());
             expression.Value = result;
         }
@@ -2299,20 +2299,20 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting a raise statement
         /// </summary>
-        /// <param name="raise"></param>
-        public void StartVisit(RaiseStatementSymbol raise) {
+        /// <param name="element"></param>
+        public void StartVisit(RaiseStatementSymbol element) {
             var target = LastValue as IStatementTarget;
             var result = new StructuredStatement();
-            InitNode(result, raise);
+            InitNode(result, element);
             target.Statements.Add(result);
 
-            if (raise.RaiseExpression != null && raise.AtExpression == null) {
+            if (element.RaiseExpression != null && element.AtExpression == null) {
                 result.Kind = StructuredStatementKind.Raise;
             }
-            else if (raise.RaiseExpression != null && raise.AtExpression != null) {
+            else if (element.RaiseExpression != null && element.AtExpression != null) {
                 result.Kind = StructuredStatementKind.RaiseAt;
             }
-            else if (raise.RaiseExpression == null && raise.AtExpression != null) {
+            else if (element.RaiseExpression == null && element.AtExpression != null) {
                 result.Kind = StructuredStatementKind.RaiseAtOnly;
             }
 
@@ -2324,17 +2324,17 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting a try statement
         /// </summary>
-        /// <param name="tryStatement"></param>
-        public void StartVisit(TryStatementSymbol tryStatement) {
+        /// <param name="element"></param>
+        public void StartVisit(TryStatementSymbol element) {
             var target = LastValue as IStatementTarget;
             var result = new StructuredStatement();
-            InitNode(result, tryStatement);
+            InitNode(result, element);
             target.Statements.Add(result);
 
-            if (tryStatement.Finally != null) {
+            if (element.Finally != null) {
                 result.Kind = StructuredStatementKind.TryFinally;
             }
-            else if (tryStatement.Handlers != null) {
+            else if (element.Handlers != null) {
                 result.Kind = StructuredStatementKind.TryExcept;
             }
 
@@ -2344,9 +2344,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting a try statement child
         /// </summary>
-        /// <param name="tryStatement"></param>
+        /// <param name="element"></param>
         /// <param name="child"></param>
-        public void StartVisitChild(TryStatementSymbol tryStatement, ISyntaxPart child) {
+        public void StartVisitChild(TryStatementSymbol element, ISyntaxPart child) {
 
             if (!(child is StatementList statements))
                 return;
@@ -2363,11 +2363,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting exception handlers
         /// </summary>
-        /// <param name="exceptHandlers"></param>
-        public void StartVisit(ExceptHandlersSymbol exceptHandlers) {
+        /// <param name="element"></param>
+        public void StartVisit(ExceptHandlersSymbol element) {
             var target = LastValue as IStatementTarget;
             var result = new StructuredStatement();
-            InitNode(result, exceptHandlers);
+            InitNode(result, element);
             result.Kind = StructuredStatementKind.ExceptElse;
             target.Statements.Add(result);
 
@@ -2379,13 +2379,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting an exception handler
         /// </summary>
-        /// <param name="exceptHandler"></param>
-        public void StartVisit(ExceptHandlerSymbol exceptHandler) {
+        /// <param name="element"></param>
+        public void StartVisit(ExceptHandlerSymbol element) {
             var target = LastValue as IStatementTarget;
             var result = new StructuredStatement();
-            InitNode(result, exceptHandler);
+            InitNode(result, element);
             result.Kind = StructuredStatementKind.ExceptOn;
-            result.Name = ExtractSymbolName(exceptHandler.Name);
+            result.Name = ExtractSymbolName(element.Name);
             target.Statements.Add(result);
 
         }
@@ -2396,11 +2396,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting a with statement
         /// </summary>
-        /// <param name="withStatement"></param>
-        public void StartVisit(WithStatementSymbol withStatement) {
+        /// <param name="element"></param>
+        public void StartVisit(WithStatementSymbol element) {
             var target = LastValue as IStatementTarget;
             var result = new StructuredStatement();
-            InitNode(result, withStatement);
+            InitNode(result, element);
             result.Kind = StructuredStatementKind.With;
             target.Statements.Add(result);
 
@@ -2412,13 +2412,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting a for statement
         /// </summary>
-        /// <param name="forStatement"></param>
-        public void StartVisit(ForStatementSymbol forStatement) {
+        /// <param name="element"></param>
+        public void StartVisit(ForStatementSymbol element) {
             var target = LastValue as IStatementTarget;
             var result = new StructuredStatement();
-            InitNode(result, forStatement);
+            InitNode(result, element);
 
-            switch (forStatement.Kind) {
+            switch (element.Kind) {
                 case TokenKind.To:
                     result.Kind = StructuredStatementKind.ForTo;
                     break;
@@ -2430,7 +2430,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                     break;
             }
 
-            result.Name = ExtractSymbolName(forStatement.Variable);
+            result.Name = ExtractSymbolName(element.Variable);
             target.Statements.Add(result);
 
         }
@@ -2441,11 +2441,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start a with statement
         /// </summary>
-        /// <param name="withStatement"></param>
-        public void StartVisit(WhileStatementSymbol withStatement) {
+        /// <param name="element"></param>
+        public void StartVisit(WhileStatementSymbol element) {
             var target = LastValue as IStatementTarget;
             var result = new StructuredStatement();
-            InitNode(result, withStatement);
+            InitNode(result, element);
             result.Kind = StructuredStatementKind.While;
             target.Statements.Add(result);
 
@@ -2457,11 +2457,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting a repeat statement
         /// </summary>
-        /// <param name="repeateStatement"></param>
-        public void StartVisit(RepeatStatement repeateStatement) {
+        /// <param name="element"></param>
+        public void StartVisit(RepeatStatement element) {
             var target = LastValue as IStatementTarget;
             var result = new StructuredStatement();
-            InitNode(result, repeateStatement);
+            InitNode(result, element);
             result.Kind = StructuredStatementKind.Repeat;
             target.Statements.Add(result);
 
@@ -2473,11 +2473,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting a case statement
         /// </summary>
-        /// <param name="caseStatement"></param>
-        public void StartVisit(CaseStatementSymbol caseStatement) {
+        /// <param name="element"></param>
+        public void StartVisit(CaseStatementSymbol element) {
             var target = LastValue as IStatementTarget;
             var result = new StructuredStatement();
-            InitNode(result, caseStatement);
+            InitNode(result, element);
             result.Kind = StructuredStatementKind.Case;
             target.Statements.Add(result);
 
@@ -2486,11 +2486,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting a case statement child
         /// </summary>
-        /// <param name="caseStatement"></param>
+        /// <param name="element"></param>
         /// <param name="child"></param>
-        public void StartVisitChild(CaseStatementSymbol caseStatement, ISyntaxPart child) {
+        public void StartVisitChild(CaseStatementSymbol element, ISyntaxPart child) {
 
-            if (caseStatement.Else != child)
+            if (element.Else != child)
                 return;
 
             var target = LastValue as IStatementTarget;
@@ -2506,11 +2506,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting a case item
         /// </summary>
-        /// <param name="caseItem"></param>
-        public void StartVisit(CaseItemSymbol caseItem) {
+        /// <param name="element"></param>
+        public void StartVisit(CaseItemSymbol element) {
             var target = LastValue as IStatementTarget;
             var result = new StructuredStatement();
-            InitNode(result, caseItem);
+            InitNode(result, element);
             result.Kind = StructuredStatementKind.CaseItem;
             target.Statements.Add(result);
 
@@ -2522,12 +2522,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting a case label
         /// </summary>
-        /// <param name="caseLabel"></param>
-        public void StartVisit(CaseLabelSymbol caseLabel) {
-            if (caseLabel.EndExpression != null) {
+        /// <param name="element"></param>
+        public void StartVisit(CaseLabelSymbol element) {
+            if (element.EndExpression != null) {
                 var lastExpression = LastExpression;
                 var binOp = new BinaryOperator();
-                InitNode(binOp, caseLabel);
+                InitNode(binOp, element);
                 lastExpression.Value = binOp;
                 binOp.Kind = ExpressionKind.RangeOperator;
             }
@@ -2539,11 +2539,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting an if statement
         /// </summary>
-        /// <param name="ifStatement"></param>
-        public void StartVisit(IfStatementSymbol ifStatement) {
+        /// <param name="element"></param>
+        public void StartVisit(IfStatementSymbol element) {
             var target = LastValue as IStatementTarget;
             var result = new StructuredStatement();
-            InitNode(result, ifStatement);
+            InitNode(result, element);
             result.Kind = StructuredStatementKind.IfThen;
             target.Statements.Add(result);
 
@@ -2552,11 +2552,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting an if statement child
         /// </summary>
-        /// <param name="ifStatement"></param>
+        /// <param name="element"></param>
         /// <param name="child"></param>
-        public void StartVisitChild(IfStatementSymbol ifStatement, ISyntaxPart child) {
+        public void StartVisitChild(IfStatementSymbol element, ISyntaxPart child) {
 
-            if (ifStatement.ElsePart != child)
+            if (element.ElsePart != child)
                 return;
 
             var target = LastValue as IStatementTarget;
@@ -2572,19 +2572,19 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting a gotot statement
         /// </summary>
-        /// <param name="gotoStatement"></param>
-        public void StartVisit(GoToStatementSymbol gotoStatement) {
+        /// <param name="element"></param>
+        public void StartVisit(GoToStatementSymbol element) {
             var target = LastValue as IStatementTarget;
             var result = new StructuredStatement();
-            InitNode(result, gotoStatement);
+            InitNode(result, element);
 
-            if (gotoStatement.Break)
+            if (element.Break)
                 result.Kind = StructuredStatementKind.Break;
-            else if (gotoStatement.Continue)
+            else if (element.Continue)
                 result.Kind = StructuredStatementKind.Continue;
-            else if (gotoStatement.GoToLabel != null)
+            else if (element.GoToLabel != null)
                 result.Kind = StructuredStatementKind.GoToLabel;
-            else if (gotoStatement.Exit)
+            else if (element.Exit)
                 result.Kind = StructuredStatementKind.Exit;
 
             target.Statements.Add(result);
@@ -2597,11 +2597,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting an assembler block
         /// </summary>
-        /// <param name="block"></param>
-        public void StartVisit(AsmBlockSymbol block) {
+        /// <param name="element"></param>
+        public void StartVisit(AsmBlockSymbol element) {
             var blockTarget = LastValue as IBlockTarget;
             var result = new BlockOfAssemblerStatements();
-            InitNode(result, block);
+            InitNode(result, element);
             if (blockTarget is IStatementTarget statementTarget)
                 statementTarget.Statements.Add(result);
             else if (blockTarget != null)
@@ -2615,35 +2615,35 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting an pseudo operator
         /// </summary>
-        /// <param name="op"></param>
-        public void StartVisit(AsmPseudoOpSymbol op) {
+        /// <param name="element"></param>
+        public void StartVisit(AsmPseudoOpSymbol element) {
             var statementTarget = LastValue as BlockOfAssemblerStatements;
             var result = new AssemblerStatement();
-            InitNode(result, op);
+            InitNode(result, element);
 
-            if (op.Mode == AsmPrefixSymbolKind.ParamsOperation) {
+            if (element.Mode == AsmPrefixSymbolKind.ParamsOperation) {
                 result.Kind = AssemblerStatementKind.ParamsOperation;
                 var operand = new ConstantValue();
-                InitNode(operand, op.NumberOfParams);
+                InitNode(operand, element.NumberOfParams);
                 operand.Kind = ConstantValueKind.Integer;
-                operand.TypeInfo = op.NumberOfParams.Value.Token.ParsedValue;
+                operand.TypeInfo = element.NumberOfParams.Value.Token.ParsedValue;
                 result.Operands.Add(operand);
             }
-            else if (op.Mode == AsmPrefixSymbolKind.PushEnvOperation) {
+            else if (element.Mode == AsmPrefixSymbolKind.PushEnvOperation) {
                 result.Kind = AssemblerStatementKind.PushEnvOperation;
                 var operand = new SymbolReference();
-                InitNode(operand, op.Register);
-                operand.Name = ExtractSymbolName(op.Register as IdentifierSymbol);
+                InitNode(operand, element.Register);
+                operand.Name = ExtractSymbolName(element.Register as IdentifierSymbol);
                 result.Operands.Add(operand);
             }
-            else if (op.Mode == AsmPrefixSymbolKind.SaveEnvOperation) {
+            else if (element.Mode == AsmPrefixSymbolKind.SaveEnvOperation) {
                 result.Kind = AssemblerStatementKind.SaveEnvOperation;
                 var operand = new SymbolReference();
-                InitNode(operand, op.Register);
-                operand.Name = ExtractSymbolName(op.Register as IdentifierSymbol);
+                InitNode(operand, element.Register);
+                operand.Name = ExtractSymbolName(element.Register as IdentifierSymbol);
                 result.Operands.Add(operand);
             }
-            else if (op.Mode == AsmPrefixSymbolKind.NoFrame) {
+            else if (element.Mode == AsmPrefixSymbolKind.NoFrame) {
                 result.Kind = AssemblerStatementKind.NoFrameOperation;
             }
 
@@ -2657,10 +2657,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting an assembly label
         /// </summary>
-        /// <param name="label"></param>
-        public void StartVisit(LocalAsmLabelSymbol label) {
-            var value = label.AtSymbol.Value;
-            foreach (var token in label.Items) {
+        /// <param name="element"></param>
+        public void StartVisit(LocalAsmLabelSymbol element) {
+            var value = element.AtSymbol.Value;
+            foreach (var token in element.Items) {
 
                 if (token is Terminal terminal)
                     value = string.Concat(value, terminal.Value);
@@ -2683,15 +2683,15 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting an assembler statement
         /// </summary>
-        /// <param name="statement"></param>
-        public void StartVisit(AsmStatementSymbol statement) {
+        /// <param name="element"></param>
+        public void StartVisit(AsmStatementSymbol element) {
             var parent = LastValue as BlockOfAssemblerStatements;
             var result = new AssemblerStatement();
-            InitNode(result, statement);
+            InitNode(result, element);
             parent.Statements.Add(result);
-            result.OpCode = ExtractSymbolName((statement.OpCode as AsmOpCodeSymbol)?.OpCode);
-            result.SegmentPrefix = ExtractSymbolName((statement.Prefix as AsmPrefixSymbol)?.SegmentPrefix as IdentifierSymbol);
-            result.LockPrefix = ExtractSymbolName((statement.Prefix as AsmPrefixSymbol)?.LockPrefix);
+            result.OpCode = ExtractSymbolName((element.OpCode as AsmOpCodeSymbol)?.OpCode);
+            result.SegmentPrefix = ExtractSymbolName((element.Prefix as AsmPrefixSymbol)?.SegmentPrefix as IdentifierSymbol);
+            result.LockPrefix = ExtractSymbolName((element.Prefix as AsmPrefixSymbol)?.LockPrefix);
 
 
         }
@@ -2702,21 +2702,21 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting an assembly operand
         /// </summary>
-        /// <param name="statement"></param>
-        public void StartVisit(AsmOperandSymbol statement) {
+        /// <param name="element"></param>
+        public void StartVisit(AsmOperandSymbol element) {
 
-            if (statement.LeftTerm != null && statement.RightTerm != null) {
+            if (element.LeftTerm != null && element.RightTerm != null) {
                 var lastExpression = LastExpression;
                 var currentExpression = new BinaryOperator();
-                InitNode(currentExpression, statement);
+                InitNode(currentExpression, element);
                 lastExpression.Value = currentExpression;
-                currentExpression.Kind = TokenKindMapper.ForExpression(statement.Kind);
+                currentExpression.Kind = TokenKindMapper.ForExpression(element.Kind);
             }
 
-            if (statement.NotExpression != null) {
+            if (element.NotExpression != null) {
                 var lastExpression = LastExpression;
                 var currentExpression = new UnaryOperator();
-                InitNode(currentExpression, statement);
+                InitNode(currentExpression, element);
                 lastExpression.Value = currentExpression;
                 currentExpression.Kind = ExpressionKind.Not;
             }
@@ -2730,40 +2730,40 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting an assembler expression
         /// </summary>
-        /// <param name="statement"></param>
-        public void StartVisit(AsmExpressionSymbol statement) {
+        /// <param name="element"></param>
+        public void StartVisit(AsmExpressionSymbol element) {
 
-            if (statement.Offset != null) {
+            if (element.Offset != null) {
                 var lastExpression = LastExpression;
                 var currentExpression = new UnaryOperator();
-                InitNode(currentExpression, statement);
+                InitNode(currentExpression, element);
                 lastExpression.Value = currentExpression;
                 currentExpression.Kind = ExpressionKind.AsmOffset;
             }
 
-            if (statement.BytePtrKind != null) {
+            if (element.BytePtrKind != null) {
                 var lastExpression = LastExpression;
                 var currentExpression = new UnaryOperator();
-                InitNode(currentExpression, statement);
+                InitNode(currentExpression, element);
                 lastExpression.Value = currentExpression;
-                currentExpression.Kind = TokenKindMapper.ForAsmBytePointerKind(ExtractSymbolName(statement.BytePtrKind as IdentifierSymbol)?.CompleteName);
+                currentExpression.Kind = TokenKindMapper.ForAsmBytePointerKind(ExtractSymbolName(element.BytePtrKind as IdentifierSymbol)?.CompleteName);
             }
 
-            if (statement.TypeExpression != null) {
+            if (element.TypeExpression != null) {
                 var lastExpression = LastExpression;
                 var currentExpression = new UnaryOperator();
-                InitNode(currentExpression, statement);
+                InitNode(currentExpression, element);
                 lastExpression.Value = currentExpression;
                 currentExpression.Kind = ExpressionKind.AsmType;
                 return;
             }
 
-            if (statement.RightOperand != null) {
+            if (element.RightOperand != null) {
                 var lastExpression = LastExpression;
                 var currentExpression = new BinaryOperator();
-                InitNode(currentExpression, statement);
+                InitNode(currentExpression, element);
                 lastExpression.Value = currentExpression;
-                currentExpression.Kind = TokenKindMapper.ForExpression(statement.BinaryOperatorKind);
+                currentExpression.Kind = TokenKindMapper.ForExpression(element.BinaryOperatorKind);
                 return;
             }
 
@@ -2776,21 +2776,21 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting an assembler term
         /// </summary>
-        /// <param name="statement"></param>
-        public void StartVisit(AsmTermSymbol statement) {
+        /// <param name="element"></param>
+        public void StartVisit(AsmTermSymbol element) {
 
-            if (statement.Kind != TokenKind.Undefined) {
+            if (element.Kind != TokenKind.Undefined) {
                 var lastExpression = LastExpression;
                 var currentExpression = new BinaryOperator();
-                InitNode(currentExpression, statement);
+                InitNode(currentExpression, element);
                 lastExpression.Value = currentExpression;
-                currentExpression.Kind = TokenKindMapper.ForExpression(statement.Kind);
+                currentExpression.Kind = TokenKindMapper.ForExpression(element.Kind);
             }
 
-            if (statement.Subtype != null) {
+            if (element.Subtype != null) {
                 var lastExpression = LastExpression;
                 var currentExpression = new BinaryOperator();
-                InitNode(currentExpression, statement);
+                InitNode(currentExpression, element);
                 lastExpression.Value = currentExpression;
                 currentExpression.Kind = ExpressionKind.Dot;
             }
@@ -2802,16 +2802,16 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting a designator statmenet
         /// </summary>
-        /// <param name="designator"></param>
-        public void StartVisit(DesignatorStatementSymbol designator) {
+        /// <param name="element"></param>
+        public void StartVisit(DesignatorStatementSymbol element) {
             var lastExpression = LastExpression;
 
             if (lastExpression == null)
                 return;
 
             var result = new SymbolReference();
-            InitNode(result, designator);
-            if (designator.Inherited != default)
+            InitNode(result, element);
+            if (element.Inherited != default)
                 result.Inherited = true;
 
             lastExpression.Value = result;
@@ -2824,47 +2824,47 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting a designator item
         /// </summary>
-        /// <param name="designator"></param>
-        public void StartVisit(DesignatorItemSymbol designator) {
+        /// <param name="element"></param>
+        public void StartVisit(DesignatorItemSymbol element) {
 
             if (!(LastValue is SymbolReference parent))
                 return;
 
-            if (designator.Dereference != default) {
+            if (element.Dereference != default) {
                 var part = new SymbolReferencePart();
-                InitNode(part, designator);
+                InitNode(part, element);
                 parent.AddPart(part);
                 part.Kind = SymbolReferencePartKind.Dereference;
                 return;
             }
 
-            if (designator.Subitem != null && designator.Subitem is IdentifierSymbol ident) {
+            if (element.Subitem != null && element.Subitem is IdentifierSymbol ident) {
                 var part = new SymbolReferencePart();
-                InitNode(part, designator);
+                InitNode(part, element);
                 parent.AddPart(part);
                 part.Kind = SymbolReferencePartKind.SubItem;
                 part.Name = ExtractSymbolName(ident)?.CompleteName;
-                part.GenericType = ExtractGenericDefinition(part, designator.SubitemGenericType);
+                part.GenericType = ExtractGenericDefinition(part, element.SubitemGenericType);
 
-                if (designator.IndexExpression != null)
+                if (element.IndexExpression != null)
                     part.Kind = SymbolReferencePartKind.ArrayIndex;
-                else if (designator.ParameterList)
+                else if (element.ParameterList)
                     part.Kind = SymbolReferencePartKind.CallParameters;
 
                 return;
             }
 
-            if (designator.IndexExpression != null) {
+            if (element.IndexExpression != null) {
                 var part = new SymbolReferencePart();
-                InitNode(part, designator);
+                InitNode(part, element);
                 parent.AddPart(part);
                 part.Kind = SymbolReferencePartKind.ArrayIndex;
                 return;
             }
 
-            if (designator.ParameterList) {
+            if (element.ParameterList) {
                 var part = new SymbolReferencePart();
-                InitNode(part, designator);
+                InitNode(part, element);
                 parent.AddPart(part);
                 part.Kind = SymbolReferencePartKind.CallParameters;
                 return;
@@ -2877,16 +2877,16 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting a parameter definition
         /// </summary>
-        /// <param name="param"></param>
-        public void StartVisit(ParameterSymbol param) {
-            if (param.ParameterName == null)
+        /// <param name="element"></param>
+        public void StartVisit(ParameterSymbol element) {
+            if (element.ParameterName == null)
                 return;
 
             var lastExpression = LastExpression;
             var result = new SymbolReference();
-            InitNode(result, param);
+            InitNode(result, element);
             result.NamedParameter = true;
-            result.Name = ExtractSymbolName(param.ParameterName);
+            result.Name = ExtractSymbolName(element.ParameterName);
             lastExpression.Value = result;
 
         }
@@ -2897,14 +2897,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting an formatted expression
         /// </summary>
-        /// <param name="expr"></param>
-        public void StartVisit(Standard.FormattedExpressionSymbol expr) {
-            if (expr.Width == null && expr.Decimals == null)
+        /// <param name="element"></param>
+        public void StartVisit(Standard.FormattedExpressionSymbol element) {
+            if (element.Width == null && element.Decimals == null)
                 return;
 
             var lastExpression = LastExpression;
             var result = new Abstract.FormattedExpression();
-            InitNode(result, expr);
+            InitNode(result, element);
             lastExpression.Value = result;
 
         }
@@ -2915,11 +2915,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting a set expression
         /// </summary>
-        /// <param name="expr"></param>
-        public void StartVisit(SetSectionSymbol expr) {
+        /// <param name="element"></param>
+        public void StartVisit(SetSectionSymbol element) {
             var lastExpression = LastExpression;
             var result = new SetExpression();
-            InitNode(result, expr);
+            InitNode(result, element);
             lastExpression.Value = result;
         }
 
@@ -2930,15 +2930,15 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting a set section
         /// </summary>
-        /// <param name="part"></param>
-        public void StartVisit(SetSectionPartSymbol part) {
-            if (part.Continuation.GetSymbolKind() != TokenKind.DotDot) {
+        /// <param name="element"></param>
+        public void StartVisit(SetSectionPartSymbol element) {
+            if (element.Continuation.GetSymbolKind() != TokenKind.DotDot) {
 
                 if (!(LastExpression is SetExpression arrayExpression))
                     return;
 
                 if (arrayExpression.Expressions.LastOrDefault() is BinaryOperator binOp && binOp.RightOperand == null) {
-                    visitor.WorkingStack.Push(new WorkingStackEntry(part, binOp));
+                    visitor.WorkingStack.Push(new WorkingStackEntry(element, binOp));
                 }
 
                 return;
@@ -2946,7 +2946,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
             var lastExpression = LastExpression;
             var result = new BinaryOperator();
-            InitNode(result, part);
+            InitNode(result, element);
             result.Kind = ExpressionKind.RangeOperator;
             lastExpression.Value = result;
         }
@@ -2957,73 +2957,73 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     start visiting an asm factor
         /// </summary>
-        /// <param name="factor"></param>
-        public void StartVisit(AsmFactorSymbol factor) {
+        /// <param name="element"></param>
+        public void StartVisit(AsmFactorSymbol element) {
             var expression = LastExpression;
 
-            if (factor.Number != null) {
+            if (element.Number != null) {
                 var value = new ConstantValue();
-                InitNode(value, factor);
+                InitNode(value, element);
                 value.Kind = ConstantValueKind.Integer;
                 expression.Value = value;
                 return;
             }
 
-            if (factor.RealNumber != null) {
+            if (element.RealNumber != null) {
                 var value = new ConstantValue();
-                InitNode(value, factor);
+                InitNode(value, element);
                 value.Kind = ConstantValueKind.RealNumber;
                 expression.Value = value;
                 return;
             }
 
-            if (factor.HexNumber != null) {
+            if (element.HexNumber != null) {
                 var value = new ConstantValue();
-                InitNode(value, factor);
+                InitNode(value, element);
                 value.Kind = ConstantValueKind.HexNumber;
                 expression.Value = value;
                 return;
             }
 
-            if (factor.QuotedString != null) {
+            if (element.QuotedString != null) {
                 var value = new ConstantValue();
-                InitNode(value, factor);
+                InitNode(value, element);
                 value.Kind = ConstantValueKind.QuotedString;
                 expression.Value = value;
                 return;
             }
 
-            if (factor.Identifier != null) {
+            if (element.Identifier != null) {
                 var value = new SymbolReference();
-                InitNode(value, factor);
-                value.Name = ExtractSymbolName(factor.Identifier as IdentifierSymbol);
+                InitNode(value, element);
+                value.Name = ExtractSymbolName(element.Identifier as IdentifierSymbol);
                 expression.Value = value;
                 return;
             }
 
-            if (factor.SegmentPrefix != null) {
+            if (element.SegmentPrefix != null) {
                 var currentExpression = new BinaryOperator();
-                InitNode(currentExpression, factor);
+                InitNode(currentExpression, element);
                 expression.Value = currentExpression;
                 currentExpression.Kind = ExpressionKind.AsmSegmentPrefix;
                 var reference = new SymbolReference();
-                InitNode(reference, factor.SegmentPrefix, currentExpression);
-                reference.Name = ExtractSymbolName(factor.SegmentPrefix as IdentifierSymbol);
+                InitNode(reference, element.SegmentPrefix, currentExpression);
+                reference.Name = ExtractSymbolName(element.SegmentPrefix as IdentifierSymbol);
                 currentExpression.LeftOperand = reference;
                 return;
             }
 
-            if (factor.MemorySubexpression != null) {
+            if (element.MemorySubexpression != null) {
                 var currentExpression = new UnaryOperator();
-                InitNode(currentExpression, factor);
+                InitNode(currentExpression, element);
                 expression.Value = currentExpression;
                 currentExpression.Kind = ExpressionKind.AsmMemorySubexpression;
                 return;
             }
 
-            if (factor.Label != null) {
+            if (element.Label != null) {
                 var reference = new SymbolReference();
-                InitNode(reference, factor);
+                InitNode(reference, element);
                 expression.Value = reference;
                 return;
             }

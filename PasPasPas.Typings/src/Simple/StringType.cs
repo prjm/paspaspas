@@ -13,7 +13,7 @@ namespace PasPasPas.Typings.Simple {
         ///     create a new string type declaration
         /// </summary>
         /// <param name="withId"></param>
-        public StringTypeBase(int withId) : base(withId) {
+        protected StringTypeBase(int withId) : base(withId) {
         }
 
         /// <summary>

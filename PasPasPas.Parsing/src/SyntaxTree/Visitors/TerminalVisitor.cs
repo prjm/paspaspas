@@ -25,16 +25,16 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     get terminal string and append it to the result
         /// </summary>
-        /// <param name="syntaxPart"></param>
-        public void StartVisit(Terminal syntaxPart) {
-            if (syntaxPart.Prefix != null)
-                foreach (var prefix in syntaxPart.Prefix)
+        /// <param name="element"></param>
+        public void StartVisit(Terminal element) {
+            if (element.Prefix != null)
+                foreach (var prefix in element.Prefix)
                     ResultBuilder.Append(prefix.Value);
 
-            ResultBuilder.Append(syntaxPart.Token.Value);
+            ResultBuilder.Append(element.Token.Value);
 
-            if (syntaxPart.Suffix != null)
-                foreach (var suffix in syntaxPart.Suffix)
+            if (element.Suffix != null)
+                foreach (var suffix in element.Suffix)
                     ResultBuilder.Append(suffix.Value);
 
         }

@@ -19,11 +19,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <summary>
         ///     visit a compilation unit
         /// </summary>
-        /// <param name="unit">unit to visit</param>
-        public void StartVisit(CompilationUnit unit) {
+        /// <param name="element">unit to visit</param>
+        public void StartVisit(CompilationUnit element) {
 
-            if (!string.Equals(Path.GetFileNameWithoutExtension(unit.FilePath?.Path), unit.SymbolName, StringComparison.OrdinalIgnoreCase)) {
-                Log.LogError(StructuralErrors.UnitNameDoesNotMatchFileName, unit.FilePath?.Path, unit.SymbolName);
+            if (!string.Equals(Path.GetFileNameWithoutExtension(element.FilePath?.Path), element.SymbolName, StringComparison.OrdinalIgnoreCase)) {
+                Log.LogError(StructuralErrors.UnitNameDoesNotMatchFileName, element.FilePath?.Path, element.SymbolName);
             }
 
         }

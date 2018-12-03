@@ -13,9 +13,9 @@ namespace PasPasPas.Runtime.Values.Structured {
         /// </summary>
         /// <param name="registeredType"></param>
         /// <param name="baseTypeId"></param>
-        /// <param name="constantValues">array values</param>
+        /// <param name="values">array values</param>
         /// <returns></returns>
-        public IArrayValue CreateArrayValue(int registeredType, int baseTypeId, ImmutableArray<ITypeReference> constantValues)
-            => new ArrayValue(registeredType, baseTypeId, constantValues);
+        public IArrayValue CreateArrayValue(int registeredType, int baseTypeId, ImmutableArray<ITypeReference> values)
+            => new ArrayValue(registeredType, baseTypeId, values);
     }
 }

@@ -93,15 +93,15 @@ namespace PasPasPas.Typings.Structured {
         /// <summary>
         ///     find a matching parameter group
         /// </summary>
-        /// <param name="callables">list of callable routines</param>
+        /// <param name="callableRoutines">list of callable routines</param>
         /// <param name="signature">used signature</param>
-        public void ResolveCall(IList<ParameterGroup> callables, Signature signature) {
+        public void ResolveCall(IList<ParameterGroup> callableRoutines, Signature signature) {
             foreach (var paramGroup in Parameters) {
 
                 if (!paramGroup.Matches(TypeRegistry, signature))
                     continue;
 
-                callables.Add(paramGroup);
+                callableRoutines.Add(paramGroup);
             }
         }
     }

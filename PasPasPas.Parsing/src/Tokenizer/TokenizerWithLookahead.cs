@@ -42,9 +42,9 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <summary>
         ///     prepare a token sequence
         /// </summary>
-        /// <param name="entry"></param>
-        protected override void Prepare(TokenSequence entry)
-            => entry.Clear();
+        /// <param name="result"></param>
+        protected override void Prepare(TokenSequence result)
+            => result.Clear();
 
     }
 
