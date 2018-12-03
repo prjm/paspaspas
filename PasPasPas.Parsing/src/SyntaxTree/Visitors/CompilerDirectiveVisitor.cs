@@ -163,7 +163,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (!CanVisit(syntaxPart))
                 return;
 
-            CompilerOptions.Align.Value = syntaxPart.AlignValue;
+            CompilerOptions.CodeGeneration.Align.Value = syntaxPart.AlignValue;
         }
 
 
@@ -175,7 +175,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (!CanVisit(syntaxPart))
                 return;
 
-            CompilerOptions.ApplicationType.Value = syntaxPart.ApplicationType;
+            CompilerOptions.LinkOptions.ApplicationType.Value = syntaxPart.ApplicationType;
         }
 
         /// <summary>
@@ -186,7 +186,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (!CanVisit(syntaxPart))
                 return;
 
-            CompilerOptions.Assertions.Value = syntaxPart.Assertions;
+            CompilerOptions.DebugOptions.Assertions.Value = syntaxPart.Assertions;
         }
 
         /// <summary>
@@ -197,7 +197,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (!CanVisit(syntaxPart))
                 return;
 
-            CompilerOptions.BoolEval.Value = syntaxPart.BoolEval;
+            CompilerOptions.Syntax.BoolEval.Value = syntaxPart.BoolEval;
         }
 
         /// <summary>
@@ -208,7 +208,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (!CanVisit(syntaxPart))
                 return;
 
-            CompilerOptions.CodeAlign.Value = syntaxPart.CodeAlign;
+            CompilerOptions.CodeGeneration.CodeAlign.Value = syntaxPart.CodeAlign;
         }
 
         /// <summary>
@@ -219,7 +219,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (!CanVisit(syntaxPart))
                 return;
 
-            CompilerOptions.DebugInfo.Value = syntaxPart.DebugInfo;
+            CompilerOptions.DebugOptions.DebugInfo.Value = syntaxPart.DebugInfo;
         }
 
         /// <summary>
@@ -355,7 +355,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (!CanVisit(syntaxPart))
                 return;
 
-            CompilerOptions.ExtendedCompatibility.Value = syntaxPart.Mode;
+            CompilerOptions.AdditionalOptions.ExtendedCompatibility.Value = syntaxPart.Mode;
         }
 
         /// <summary>
@@ -366,7 +366,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (!CanVisit(syntaxPart))
                 return;
 
-            CompilerOptions.UseExtendedSyntax.Value = syntaxPart.Mode;
+            CompilerOptions.Syntax.UseExtendedSyntax.Value = syntaxPart.Mode;
         }
 
         /// <summary>
@@ -392,7 +392,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (!CanVisit(syntaxPart))
                 return;
 
-            CompilerOptions.ExcessPrecision.Value = syntaxPart.Mode;
+            CompilerOptions.AdditionalOptions.ExcessPrecision.Value = syntaxPart.Mode;
         }
 
         /// <summary>
@@ -403,7 +403,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (!CanVisit(syntaxPart))
                 return;
 
-            CompilerOptions.HighCharUnicode.Value = syntaxPart.Mode;
+            CompilerOptions.AdditionalOptions.HighCharUnicode.Value = syntaxPart.Mode;
         }
 
         /// <summary>
@@ -414,7 +414,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (!CanVisit(syntaxPart))
                 return;
 
-            CompilerOptions.Hints.Value = syntaxPart.Mode;
+            CompilerOptions.HintsAndWarnings.Hints.Value = syntaxPart.Mode;
         }
 
 
@@ -441,7 +441,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (!CanVisit(syntaxPart))
                 return;
 
-            CompilerOptions.ImageBase.Value = syntaxPart.BaseValue;
+            CompilerOptions.LinkOptions.ImageBase.Value = syntaxPart.BaseValue;
         }
 
         /// <summary>
@@ -452,7 +452,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (!CanVisit(syntaxPart))
                 return;
 
-            CompilerOptions.ImplicitBuild.Value = syntaxPart.Mode;
+            CompilerOptions.AdditionalOptions.ImplicitBuild.Value = syntaxPart.Mode;
         }
 
         /// <summary>
@@ -463,7 +463,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (!CanVisit(syntaxPart))
                 return;
 
-            CompilerOptions.IoChecks.Value = syntaxPart.Mode;
+            CompilerOptions.RuntimeChecks.IoChecks.Value = syntaxPart.Mode;
         }
 
         /// <summary>
@@ -474,7 +474,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (!CanVisit(syntaxPart))
                 return;
 
-            CompilerOptions.LocalSymbols.Value = syntaxPart.Mode;
+            CompilerOptions.DebugOptions.LocalSymbols.Value = syntaxPart.Mode;
         }
 
 
@@ -486,7 +486,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (!CanVisit(syntaxPart))
                 return;
 
-            CompilerOptions.LongStrings.Value = syntaxPart.Mode;
+            CompilerOptions.Syntax.LongStrings.Value = syntaxPart.Mode;
         }
 
         /// <summary>
@@ -497,7 +497,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (!CanVisit(syntaxPart))
                 return;
 
-            CompilerOptions.OpenStrings.Value = syntaxPart.Mode;
+            CompilerOptions.Syntax.OpenStrings.Value = syntaxPart.Mode;
         }
 
 
@@ -509,7 +509,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (!CanVisit(syntaxPart))
                 return;
 
-            CompilerOptions.Optimization.Value = syntaxPart.Mode;
+            CompilerOptions.CodeGeneration.Optimization.Value = syntaxPart.Mode;
         }
 
 
@@ -521,7 +521,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (!CanVisit(syntaxPart))
                 return;
 
-            CompilerOptions.CheckOverflows.Value = syntaxPart.Mode;
+            CompilerOptions.RuntimeChecks.CheckOverflows.Value = syntaxPart.Mode;
         }
 
         /// <summary>
@@ -532,7 +532,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (!CanVisit(syntaxPart))
                 return;
 
-            CompilerOptions.SafeDivide.Value = syntaxPart.Mode;
+            CompilerOptions.CodeGeneration.SafeDivide.Value = syntaxPart.Mode;
         }
 
         /// <summary>
@@ -543,7 +543,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (!CanVisit(syntaxPart))
                 return;
 
-            CompilerOptions.RangeChecks.Value = syntaxPart.Mode;
+            CompilerOptions.RuntimeChecks.RangeChecks.Value = syntaxPart.Mode;
         }
 
         /// <summary>
@@ -554,7 +554,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (!CanVisit(syntaxPart))
                 return;
 
-            CompilerOptions.StackFrames.Value = syntaxPart.Mode;
+            CompilerOptions.CodeGeneration.StackFrames.Value = syntaxPart.Mode;
         }
 
         /// <summary>
@@ -565,18 +565,18 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (!CanVisit(syntaxPart))
                 return;
 
-            CompilerOptions.IndexOfFirstCharInString.Value = syntaxPart.Mode;
+            CompilerOptions.Syntax.IndexOfFirstCharInString.Value = syntaxPart.Mode;
         }
 
         /// <summary>
-        ///     writable consts
+        ///     writable constants
         /// </summary>
         /// <param name="syntaxPart"></param>
         public void StartVisit(WritableConsts syntaxPart) {
             if (!CanVisit(syntaxPart))
                 return;
 
-            CompilerOptions.WritableConstants.Value = syntaxPart.Mode;
+            CompilerOptions.Syntax.WritableConstants.Value = syntaxPart.Mode;
         }
 
         /// <summary>
@@ -587,7 +587,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (!CanVisit(syntaxPart))
                 return;
 
-            CompilerOptions.WeakLinkRtti.Value = syntaxPart.Mode;
+            CompilerOptions.LinkOptions.WeakLinkRtti.Value = syntaxPart.Mode;
         }
 
         /// <summary>
@@ -598,7 +598,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (!CanVisit(syntaxPart))
                 return;
 
-            CompilerOptions.Warnings.Value = syntaxPart.Mode;
+            CompilerOptions.HintsAndWarnings.Warnings.Value = syntaxPart.Mode;
         }
 
         /// <summary>
@@ -623,22 +623,22 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (!CanVisit(syntaxPart))
                 return;
 
-            CompilerOptions.VarStringChecks.Value = syntaxPart.Mode;
+            CompilerOptions.Syntax.VarStringChecks.Value = syntaxPart.Mode;
         }
 
         /// <summary>
-        ///     type chedk pointers
+        ///     type checked pointers
         /// </summary>
         /// <param name="syntaxPart"></param>
         public void StartVisit(TypedPointers syntaxPart) {
             if (!CanVisit(syntaxPart))
                 return;
 
-            CompilerOptions.TypedPointers.Value = syntaxPart.Mode;
+            CompilerOptions.Syntax.TypedPointers.Value = syntaxPart.Mode;
         }
 
         /// <summary>
-        ///     type chedk pointers
+        ///     symbol definitions pointers
         /// </summary>
         /// <param name="syntaxPart"></param>
         public void StartVisit(SymbolDefinitions syntaxPart) {
@@ -647,10 +647,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
 
             if (syntaxPart.Mode != SymbolDefinitionInfo.Undefined)
-                CompilerOptions.SymbolDefinitions.Value = syntaxPart.Mode;
+                CompilerOptions.DebugOptions.SymbolDefinitions.Value = syntaxPart.Mode;
 
             if (syntaxPart.ReferencesMode != SymbolReferenceInfo.Undefined)
-                CompilerOptions.SymbolReferences.Value = syntaxPart.ReferencesMode;
+                CompilerOptions.DebugOptions.SymbolReferences.Value = syntaxPart.ReferencesMode;
         }
 
 
@@ -662,19 +662,19 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (!CanVisit(syntaxPart))
                 return;
 
-            CompilerOptions.LinkAllTypes.Value = syntaxPart.Mode;
+            CompilerOptions.LinkOptions.LinkAllTypes.Value = syntaxPart.Mode;
         }
 
 
         /// <summary>
-        ///     scoped enums directive
+        ///     scoped enumerations directive
         /// </summary>
         /// <param name="syntaxPart"></param>
         public void StartVisit(ScopedEnums syntaxPart) {
             if (!CanVisit(syntaxPart))
                 return;
 
-            CompilerOptions.ScopedEnums.Value = syntaxPart.Mode;
+            CompilerOptions.Syntax.ScopedEnums.Value = syntaxPart.Mode;
         }
 
         /// <summary>
@@ -685,7 +685,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (!CanVisit(syntaxPart))
                 return;
 
-            CompilerOptions.PublishedRtti.Value = syntaxPart.Mode;
+            CompilerOptions.CodeGeneration.PublishedRtti.Value = syntaxPart.Mode;
         }
 
         /// <summary>
@@ -696,7 +696,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (!CanVisit(syntaxPart))
                 return;
 
-            CompilerOptions.RuntimeOnlyPackage.Value = syntaxPart.Mode;
+            CompilerOptions.LinkOptions.RuntimeOnlyPackage.Value = syntaxPart.Mode;
         }
 
 
@@ -708,7 +708,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (!CanVisit(syntaxPart))
                 return;
 
-            CompilerOptions.LegacyIfEnd.Value = syntaxPart.Mode;
+            CompilerOptions.AdditionalOptions.LegacyIfEnd.Value = syntaxPart.Mode;
         }
 
         /// <summary>
@@ -719,7 +719,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (!CanVisit(syntaxPart))
                 return;
 
-            CompilerOptions.RealCompatibility.Value = syntaxPart.Mode;
+            CompilerOptions.AdditionalOptions.RealCompatibility.Value = syntaxPart.Mode;
         }
 
 
@@ -732,7 +732,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (!CanVisit(syntaxPart))
                 return;
 
-            CompilerOptions.PointerMath.Value = syntaxPart.Mode;
+            CompilerOptions.Syntax.PointerMath.Value = syntaxPart.Mode;
         }
 
         /// <summary>
@@ -743,7 +743,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (!CanVisit(syntaxPart))
                 return;
 
-            CompilerOptions.OldTypeLayout.Value = syntaxPart.Mode;
+            CompilerOptions.AdditionalOptions.OldTypeLayout.Value = syntaxPart.Mode;
         }
 
         /// <summary>
@@ -794,7 +794,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (!CanVisit(syntaxPart))
                 return;
 
-            CompilerOptions.MinimumEnumSize.Value = syntaxPart.Size;
+            CompilerOptions.CodeGeneration.MinimumEnumSize.Value = syntaxPart.Size;
         }
 
 
@@ -835,7 +835,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (!CanVisit(syntaxPart))
                 return;
 
-            CompilerOptions.MethodInfo.Value = syntaxPart.Mode;
+            CompilerOptions.CodeGeneration.MethodInfo.Value = syntaxPart.Mode;
         }
 
         /// <summary>
@@ -891,7 +891,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (!CanVisit(syntaxPart))
                 return;
 
-            CompilerOptions.WeakPackageUnit.Value = syntaxPart.Mode;
+            CompilerOptions.LinkOptions.WeakPackageUnit.Value = syntaxPart.Mode;
         }
 
         /// <summary>
@@ -902,7 +902,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (!CanVisit(element))
                 return;
 
-            CompilerOptions.ExportCppObjects.Value = element.Mode;
+            CompilerOptions.LinkOptions.ExportCppObjects.Value = element.Mode;
         }
 
         /// <summary>
@@ -913,8 +913,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (!CanVisit(syntaxPart))
                 return;
 
-            CompilerOptions.Rtti.Mode = syntaxPart.Mode;
-            CompilerOptions.Rtti.AssignVisibility(syntaxPart.Properties, syntaxPart.Methods, syntaxPart.Fields);
+            CompilerOptions.CodeGeneration.Rtti.Mode = syntaxPart.Mode;
+            CompilerOptions.CodeGeneration.Rtti.AssignVisibility(syntaxPart.Properties, syntaxPart.Methods, syntaxPart.Fields);
         }
 
 
@@ -937,7 +937,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (!CanVisit(syntaxPart))
                 return;
 
-            CompilerOptions.ImportedData.Value = syntaxPart.Mode;
+            CompilerOptions.DebugOptions.ImportedData.Value = syntaxPart.Mode;
         }
 
         /// <summary>
@@ -949,9 +949,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 return;
 
             if (syntaxPart.MinStackSize != null)
-                CompilerOptions.MinimumStackMemorySize.Value = syntaxPart.MinStackSize.Value;
+                CompilerOptions.LinkOptions.MinimumStackMemorySize.Value = syntaxPart.MinStackSize.Value;
             if (syntaxPart.MaxStackSize != null)
-                CompilerOptions.MaximumStackMemorySize.Value = syntaxPart.MaxStackSize.Value;
+                CompilerOptions.LinkOptions.MaximumStackMemorySize.Value = syntaxPart.MaxStackSize.Value;
         }
 
         /// <summary>

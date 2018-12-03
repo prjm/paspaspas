@@ -1,7 +1,7 @@
 ﻿namespace PasPasPas.Options.DataTypes {
 
     /// <summary>
-    ///     exteded compatibility mode
+    ///     extended compatibility mode
     /// </summary>
     public enum ExtendedCompatibilityMode {
 

@@ -133,47 +133,47 @@ namespace PasPasPas.Options.Bundles {
 
             switch (toggle) {
                 case 'A':
-                    return GetSwitchInfo(CompilerOptions.Align, Alignment.QuadWord, Alignment.Unaligned);
+                    return GetSwitchInfo(CompilerOptions.CodeGeneration.Align, Alignment.QuadWord, Alignment.Unaligned);
                 case 'B':
-                    return GetSwitchInfo(CompilerOptions.BoolEval, BooleanEvaluation.CompleteEvaluation, BooleanEvaluation.ShortEvaluation);
+                    return GetSwitchInfo(CompilerOptions.Syntax.BoolEval, BooleanEvaluation.CompleteEvaluation, BooleanEvaluation.ShortEvaluation);
                 case 'C':
-                    return GetSwitchInfo(CompilerOptions.Assertions, AssertionMode.EnableAssertions, AssertionMode.DisableAssertions);
+                    return GetSwitchInfo(CompilerOptions.DebugOptions.Assertions, AssertionMode.EnableAssertions, AssertionMode.DisableAssertions);
                 case 'D':
-                    return GetSwitchInfo(CompilerOptions.DebugInfo, DebugInformation.IncludeDebugInformation, DebugInformation.NoDebugInfo);
+                    return GetSwitchInfo(CompilerOptions.DebugOptions.DebugInfo, DebugInformation.IncludeDebugInformation, DebugInformation.NoDebugInfo);
                 case 'G':
-                    return GetSwitchInfo(CompilerOptions.ImportedData, ImportGlobalUnitData.DoImport, ImportGlobalUnitData.NoImport);
+                    return GetSwitchInfo(CompilerOptions.DebugOptions.ImportedData, ImportGlobalUnitData.DoImport, ImportGlobalUnitData.NoImport);
                 case 'I':
-                    return GetSwitchInfo(CompilerOptions.IoChecks, IoCallCheck.EnableIoChecks, IoCallCheck.DisableIoChecks);
+                    return GetSwitchInfo(CompilerOptions.RuntimeChecks.IoChecks, IoCallCheck.EnableIoChecks, IoCallCheck.DisableIoChecks);
                 case 'J':
-                    return GetSwitchInfo(CompilerOptions.WritableConstants, ConstantValue.Writable, ConstantValue.Constant);
+                    return GetSwitchInfo(CompilerOptions.Syntax.WritableConstants, ConstantValue.Writable, ConstantValue.Constant);
                 case 'H':
-                    return GetSwitchInfo(CompilerOptions.LongStrings, LongStringMode.EnableLongStrings, LongStringMode.DisableLongStrings);
+                    return GetSwitchInfo(CompilerOptions.Syntax.LongStrings, LongStringMode.EnableLongStrings, LongStringMode.DisableLongStrings);
                 case 'L':
-                    return GetSwitchInfo(CompilerOptions.LocalSymbols, LocalDebugSymbolMode.EnableLocalSymbols, LocalDebugSymbolMode.DisableLocalSymbols);
+                    return GetSwitchInfo(CompilerOptions.DebugOptions.LocalSymbols, LocalDebugSymbolMode.EnableLocalSymbols, LocalDebugSymbolMode.DisableLocalSymbols);
                 case 'M':
-                    return GetSwitchInfo(CompilerOptions.PublishedRtti, RttiForPublishedPropertieMode.Enable, RttiForPublishedPropertieMode.Disable);
+                    return GetSwitchInfo(CompilerOptions.CodeGeneration.PublishedRtti, RttiForPublishedPropertieMode.Enable, RttiForPublishedPropertieMode.Disable);
                 case 'O':
-                    return GetSwitchInfo(CompilerOptions.Optimization, CompilerOptimization.EnableOptimization, CompilerOptimization.DisableOptimization);
+                    return GetSwitchInfo(CompilerOptions.CodeGeneration.Optimization, CompilerOptimization.EnableOptimization, CompilerOptimization.DisableOptimization);
                 case 'P':
-                    return GetSwitchInfo(CompilerOptions.OpenStrings, OpenStringTypeMode.EnableOpenStrings, OpenStringTypeMode.DisableOpenStrings);
+                    return GetSwitchInfo(CompilerOptions.Syntax.OpenStrings, OpenStringTypeMode.EnableOpenStrings, OpenStringTypeMode.DisableOpenStrings);
                 case 'Q':
-                    return GetSwitchInfo(CompilerOptions.CheckOverflows, RuntimeOverflowCheck.EnableChecks, RuntimeOverflowCheck.DisableChecks);
+                    return GetSwitchInfo(CompilerOptions.RuntimeChecks.CheckOverflows, RuntimeOverflowCheck.EnableChecks, RuntimeOverflowCheck.DisableChecks);
                 case 'R':
-                    return GetSwitchInfo(CompilerOptions.RangeChecks, RuntimeRangeCheckMode.EnableRangeChecks, RuntimeRangeCheckMode.DisableRangeChecks);
+                    return GetSwitchInfo(CompilerOptions.RuntimeChecks.RangeChecks, RuntimeRangeCheckMode.EnableRangeChecks, RuntimeRangeCheckMode.DisableRangeChecks);
                 case 'T':
-                    return GetSwitchInfo(CompilerOptions.TypedPointers, UsePointersWithTypeChecking.Enable, UsePointersWithTypeChecking.Disable);
+                    return GetSwitchInfo(CompilerOptions.Syntax.TypedPointers, UsePointersWithTypeChecking.Enable, UsePointersWithTypeChecking.Disable);
                 case 'U':
-                    return GetSwitchInfo(CompilerOptions.SafeDivide, FDivSafeDivide.EnableSafeDivide, FDivSafeDivide.DisableSafeDivide);
+                    return GetSwitchInfo(CompilerOptions.CodeGeneration.SafeDivide, FDivSafeDivide.EnableSafeDivide, FDivSafeDivide.DisableSafeDivide);
                 case 'V':
-                    return GetSwitchInfo(CompilerOptions.VarStringChecks, ShortVarStringCheck.EnableChecks, ShortVarStringCheck.DisableChecks);
+                    return GetSwitchInfo(CompilerOptions.Syntax.VarStringChecks, ShortVarStringCheck.EnableChecks, ShortVarStringCheck.DisableChecks);
                 case 'W':
-                    return GetSwitchInfo(CompilerOptions.StackFrames, StackFrameGeneration.EnableFrames, StackFrameGeneration.DisableFrames);
+                    return GetSwitchInfo(CompilerOptions.CodeGeneration.StackFrames, StackFrameGeneration.EnableFrames, StackFrameGeneration.DisableFrames);
                 case 'X':
-                    return GetSwitchInfo(CompilerOptions.UseExtendedSyntax, ExtendedSyntax.UseExtendedSyntax, ExtendedSyntax.NoExtendedSyntax);
+                    return GetSwitchInfo(CompilerOptions.Syntax.UseExtendedSyntax, ExtendedSyntax.UseExtendedSyntax, ExtendedSyntax.NoExtendedSyntax);
                 case 'Y':
-                    return GetSwitchInfo(CompilerOptions.SymbolReferences, SymbolReferenceInfo.Enable, SymbolReferenceInfo.Disable);
+                    return GetSwitchInfo(CompilerOptions.DebugOptions.SymbolReferences, SymbolReferenceInfo.Enable, SymbolReferenceInfo.Disable);
                 case 'Z':
-                    return GetSwitchInfo(CompilerOptions.MinimumEnumSize, EnumSize.FourByte, EnumSize.OneByte);
+                    return GetSwitchInfo(CompilerOptions.CodeGeneration.MinimumEnumSize, EnumSize.FourByte, EnumSize.OneByte);
 
                 default:
                     return SwitchInfo.Undefined;
