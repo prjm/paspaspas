@@ -1,5 +1,6 @@
 ﻿using PasPasPas.Api;
 using PasPasPas.Globals.Runtime;
+using PasPasPas.Infrastructure.ObjectPooling;
 using PasPasPas.Options.DataTypes;
 using PasPasPas.Runtime.Values;
 using PasPasPas.Runtime.Values.FloatValues;
@@ -17,6 +18,12 @@ namespace PasPasPasTests.Common {
         /// <returns></returns>
         protected static ITypedEnvironment CreateEnvironment(NativeIntSize intSize = NativeIntSize.Undefined)
             => new DefaultEnvironment(intSize);
+
+        /// <summary>
+        ///     create a temp runtime
+        /// </summary>
+        protected static RuntimeValueFactory MakeRuntime()
+            => new RuntimeValueFactory(new ListPools());
 
         /// <summary>
         ///     convert a value
@@ -59,12 +66,21 @@ namespace PasPasPasTests.Common {
             => IntegerValueBase.ToScaledIntegerValue(number);
 
         /// <summary>
+        ///     get a subrange value
+        /// </summary>
+        /// <param name="typeId"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        protected static ITypeReference GetSubrangeValue(int typeId, ITypeReference value)
+            => new SubrangeValue(typeId, value);
+
+        /// <summary>
         ///     get the Unicode string value
         /// </summary>
         /// <param name="text"></param>
         /// <returns></returns>
         protected static ITypeReference GetUnicodeStringValue(string text)
-            => new RuntimeValueFactory().Strings.ToUnicodeString(text);
+            => MakeRuntime().Strings.ToUnicodeString(text);
 
         /// <summary>
         ///     get the Unicode char value
@@ -72,7 +88,7 @@ namespace PasPasPasTests.Common {
         /// <param name="text"></param>
         /// <returns></returns>
         protected static ITypeReference GetWideCharValue(char text)
-            => new RuntimeValueFactory().Chars.ToWideCharValue(text);
+            => MakeRuntime().Chars.ToWideCharValue(text);
 
         /// <summary>
         ///     get the ANSI char value
@@ -80,7 +96,7 @@ namespace PasPasPasTests.Common {
         /// <param name="text"></param>
         /// <returns></returns>
         protected static ITypeReference GetAnsiCharValue(byte text)
-            => new RuntimeValueFactory().Chars.ToAnsiCharValue(text);
+            => MakeRuntime().Chars.ToAnsiCharValue(text);
 
 
 
@@ -133,8 +149,8 @@ namespace PasPasPasTests.Common {
         /// <returns></returns>
         protected static ITypeReference GetBooleanValue(bool value)
             => value ?
-            new RuntimeValueFactory().Booleans.TrueValue :
-            new RuntimeValueFactory().Booleans.FalseValue;
+                MakeRuntime().Booleans.TrueValue :
+                MakeRuntime().Booleans.FalseValue;
 
     }
 }

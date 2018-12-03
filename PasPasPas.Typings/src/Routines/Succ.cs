@@ -20,7 +20,8 @@ namespace PasPasPas.Typings.Routines {
         private ITypeReference ExecuteCall(ITypeReference value) {
 
             var typeKind = value.TypeKind;
-            var type = TypeRegistry.GetTypeByIdOrUndefinedType(value.TypeId) as IOrdinalType;
+            var type = TypeRegistry.GetTypeByIdOrUndefinedType(value.TypeId);
+            var ordinalType = TypeBase.ResolveAlias(type) as IOrdinalType;
 
             if (typeKind.IsIntegral())
                 return TypeRegistry.Runtime.Integers.Add(value, TypeRegistry.Runtime.Integers.One);
@@ -32,10 +33,13 @@ namespace PasPasPas.Typings.Routines {
                 return TypeRegistry.Runtime.Chars.ToWideCharValue((char)(0xffff & (1u + wideCharValue.AsWideChar)));
 
             else if (typeKind == CommonTypeKind.BooleanType && value is IBooleanValue boolValue)
-                return TypeRegistry.Runtime.Booleans.Booleans.ToBoolean(type.BitSize, (1u + boolValue.AsUint));
+                return TypeRegistry.Runtime.Booleans.Booleans.ToBoolean(ordinalType.BitSize, (1u + boolValue.AsUint));
 
             else if (typeKind == CommonTypeKind.EnumerationType && value is IEnumeratedValue enumValue)
                 return TypeRegistry.Runtime.Types.MakeEnumValue(value.TypeId, ExecuteCall(enumValue.Value));
+
+            else if (typeKind == CommonTypeKind.SubrangeType && value is ISubrangeValue subrangeValue)
+                return TypeRegistry.Runtime.Types.MakeSubrangeValue(value.TypeId, ExecuteCall(subrangeValue.Value));
 
             return TypeRegistry.Runtime.Types.MakeErrorTypeReference();
         }

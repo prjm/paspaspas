@@ -53,7 +53,15 @@ namespace PasPasPas.Typings.Common {
             => kind == CommonTypeKind.AnsiCharType || kind == CommonTypeKind.WideCharType;
 
         /// <summary>
-        ///     test if the type kind is a unicde char type
+        ///     test if the type kind is an array type
+        /// </summary>
+        /// <param name="kind"></param>
+        /// <returns></returns>
+        public static bool IsArray(this CommonTypeKind kind)
+            => kind == CommonTypeKind.ArrayType || kind == CommonTypeKind.ConstantArrayType || kind == CommonTypeKind.DynamicArrayType;
+
+        /// <summary>
+        ///     test if the type kind is a unicode char type
         /// </summary>
         /// <param name="kind">kind</param>
         /// <returns><c>true</c> if the type is ANSI char or wide char</returns>

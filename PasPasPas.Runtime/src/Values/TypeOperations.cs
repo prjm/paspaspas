@@ -70,5 +70,15 @@ namespace PasPasPas.Runtime.Values {
         /// <returns></returns>
         public ITypeReference MakeTypeReference(int typeId)
             => typeRefs.GetValue(typeId);
+
+        /// <summary>
+        ///     make a new subrange value
+        /// </summary>
+        /// <param name="typeId"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public ITypeReference MakeSubrangeValue(int typeId, ITypeReference value)
+            => new SubrangeValue(typeId, value);
+
     }
 }

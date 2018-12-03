@@ -30,14 +30,14 @@ namespace PasPasPasTests.Types {
 
             AssertExprValue("Boolean(384)", new BooleanValue(true), "", KnownTypeIds.BooleanType);
             AssertExprValue("ByteBool(384)", new ByteBooleanValue(unchecked((byte)384)), "", KnownTypeIds.ByteBoolType);
-            AssertExprValue("WordBool(384)", new WordBooleanValue(unchecked((ushort)384)), "", KnownTypeIds.WordBoolType);
+            AssertExprValue("WordBool(384)", new WordBooleanValue(unchecked(384)), "", KnownTypeIds.WordBoolType);
 
             AssertExprValue("e(384)",
                 new EnumeratedValue(RegisteredTypes.SmallestUserTypeId, new ShortIntValue(unchecked((sbyte)384))),
                 "type e = (e1, e2);", RegisteredTypes.SmallestUserTypeId);
 
             AssertExprValue("e(257)",
-                new ShortIntValue(1), "type e = -2..2;", KnownTypeIds.ShortInt);
+                GetSubrangeValue(1000, new ShortIntValue(1)), "type e = -2..2;", 1000);
         }
 
         [TestMethod]
@@ -87,7 +87,7 @@ namespace PasPasPasTests.Types {
                 "type e = (e1, e2);", RegisteredTypes.SmallestUserTypeId);
 
             AssertExprValue("e('a')",
-                new ShortIntValue(97), "type e = -2..2;", KnownTypeIds.ShortInt);
+                GetSubrangeValue(1000, new ShortIntValue(97)), "type e = -2..2;", 1000);
 
 
         }

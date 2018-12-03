@@ -87,7 +87,7 @@ namespace PasPasPas.Api {
         /// <param name="intSize">integer size</param>
         public DefaultEnvironment(NativeIntSize intSize = NativeIntSize.Undefined) {
             Patterns = new PatternFactory(StringPool);
-            Runtime = new RuntimeValueFactory();
+            Runtime = new RuntimeValueFactory(ListPools);
             TypeRegistry = new RegisteredTypes(Runtime, intSize);
             IntegerParser = new IntegerParser(Runtime, false);
             HexNumberParser = new IntegerParser(Runtime, true);

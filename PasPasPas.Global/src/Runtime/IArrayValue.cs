@@ -1,4 +1,6 @@
-﻿namespace PasPasPas.Globals.Runtime {
+﻿using System.Collections.Immutable;
+
+namespace PasPasPas.Globals.Runtime {
 
     /// <summary>
     ///     interface for array types
@@ -10,5 +12,10 @@
         /// </summary>
         int BaseType { get; }
 
+
+        /// <summary>
+        ///     constant values
+        /// </summary>
+        ImmutableArray<ITypeReference> Values { get; }
     }
 }

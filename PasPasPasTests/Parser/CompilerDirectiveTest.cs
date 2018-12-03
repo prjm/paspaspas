@@ -295,7 +295,7 @@ namespace PasPasPasTests.Parser {
         [Fact]
         public void TestHppEmit() {
             object c(OptionSet o) => o.Meta.HeaderStrings.Count;
-            object f(OptionSet o) => o.Meta.HeaderStrings.Any(t => string.Equals(t.Value, "'dummy'", StringComparison.InvariantCulture));
+            object f(OptionSet o) => o.Meta.HeaderStrings.Any(t => string.Equals(t.Value, "'dummy'", StringComparison.OrdinalIgnoreCase));
             Func<OptionSet, object> g(HppEmitMode x) => (OptionSet o) => o.Meta.HeaderStrings.Any(t => t.Mode == x);
             RunCompilerDirective("", 0, c);
             RunCompilerDirective("HPPEMIT 'dummy'", true, f);

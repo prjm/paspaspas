@@ -80,8 +80,8 @@ namespace PasPasPasTests.Types {
             AssertExprValue("High(ShortString)", GetIntegerValue(255));
 
             // constant arrays
-            AssertExprValue("High(a)", GetIntegerValue(3), "const a: array[0..2] of string = ('a','b','c');");
-            AssertExprValue("High(a)", GetIntegerValue(3), "const a: array['a'..'c'] of string = ('a','b','c');");
+            AssertExprValue("High(a)", GetIntegerValue(2), "const a: array[0..2] of string = ('a','b','c');");
+            AssertExprValue("High(a)", GetWideCharValue('c'), "const a: array['a'..'c'] of string = ('a','b','c');");
 
             // array types
             AssertExprValue("High(Ta)", GetIntegerValue(2), "type Ta = array[0..2];");
@@ -114,7 +114,10 @@ namespace PasPasPasTests.Types {
             AssertExprValue("Succ(false)", GetBooleanValue(true));
 
             // enumerations
-            AssertExprValue("Succ(a)", GetIntegerValue(1), "type Te = (a,b)");
+            AssertExprValue("Succ(a)", GetIntegerValue(1), "type Te = (a,b);");
+
+            // subrange types
+            AssertExprValue("Succ(a)", GetSubrangeValue(1000, GetIntegerValue(-1)), "type Te = -3..3; const a: Te = -2;");
         }
 
         [TestMethod]

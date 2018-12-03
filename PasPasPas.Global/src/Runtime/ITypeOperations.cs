@@ -38,5 +38,13 @@
         /// </summary>
         /// <returns></returns>
         ITypeReference MakeErrorTypeReference();
+
+        /// <summary>
+        ///     create a new subrange value from a simple value
+        /// </summary>
+        /// <param name="typeId">subrange type id</param>
+        /// <param name="typeReference">wrapped value</param>
+        /// <returns></returns>
+        ITypeReference MakeSubrangeValue(int typeId, ITypeReference typeReference);
     }
 }

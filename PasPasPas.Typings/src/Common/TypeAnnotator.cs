@@ -734,11 +734,21 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="element">item to visit</param>
         public void EndVisit(ConstantDeclaration element) {
+            var declaredType = default(ITypeReference);
+            var inferredType = default(ITypeReference);
+
             if (element.TypeValue is ITypedSyntaxNode typeRef && typeRef.TypeInfo != null && typeRef.TypeInfo.TypeId != KnownTypeIds.ErrorType)
-                element.TypeInfo = typeRef.TypeInfo;
+                declaredType = typeRef.TypeInfo;
 
             if (element.Value is ITypedSyntaxNode autType && autType.TypeInfo != null && autType.TypeInfo.TypeId != KnownTypeIds.ErrorType)
-                element.TypeInfo = autType.TypeInfo;
+                inferredType = autType.TypeInfo;
+
+            if (inferredType == default)
+                element.TypeInfo = GetErrorTypeReference(element);
+            else if (declaredType == default)
+                element.TypeInfo = inferredType;
+            else
+                element.TypeInfo = TypeRegistry.Runtime.Cast(TypeRegistry, inferredType, declaredType.TypeId);
 
             resolver.AddToScope(element.SymbolName, ReferenceKind.RefToConstant, element);
         }
