@@ -1,15 +1,12 @@
-﻿using System.Collections.Generic;
-using PasPasPas.Globals.Runtime;
-using PasPasPas.Globals.Types;
+﻿using PasPasPas.Globals.Runtime;
 using PasPasPas.Typings.Common;
-using PasPasPas.Typings.Structured;
 
 namespace PasPasPas.Typings.Routines {
 
     /// <summary>
     ///     type specification for the <code>Abs</code> routine
     /// </summary>
-    public class Abs : IntrinsicRoutine {
+    public class Abs : IntrinsicRoutine, IUnaryRoutine {
 
         /// <summary>
         ///     routine name
@@ -18,30 +15,51 @@ namespace PasPasPas.Typings.Routines {
             => "Abs";
 
         /// <summary>
-        ///     try to resolve a call
+        ///     check parameter type kind
         /// </summary>
-        /// <param name="callableRoutines"></param>
-        /// <param name="signature"></param>
-        public override void ResolveCall(IList<ParameterGroup> callableRoutines, Signature signature) {
-            if (signature.Length != 1)
-                return;
+        /// <param name="parameter"></param>
+        /// <returns></returns>
+        public bool CheckParameter(ITypeReference parameter) {
+            if (parameter.TypeKind.IsNumerical())
+                return true;
 
-            var param = TypeRegistry.GetTypeByIdOrUndefinedType(signature[0].TypeId);
-            if (!param.TypeKind.IsNumerical())
-                return;
+            if (parameter.TypeKind == CommonTypeKind.SubrangeType && parameter is ISubrangeValue value)
+                return CheckParameter(value.Value);
 
-            var result = new ParameterGroup();
-            result.AddParameter("AValue").SymbolType = signature[0];
-
-            if (signature[0].IsConstant() && param.TypeKind.IsIntegral())
-                result.ResultType = TypeRegistry.Runtime.Integers.Abs(signature[0]);
-            else if (signature[0].IsConstant() && param.TypeKind == CommonTypeKind.RealType)
-                result.ResultType = TypeRegistry.Runtime.RealNumbers.Abs(signature[0]);
-            else
-                result.ResultType = signature[0];
-
-            callableRoutines.Add(result);
+            return false;
         }
 
+        /// <summary>
+        ///     check if this routine is constant
+        /// </summary>
+        public bool IsConstant
+            => true;
+
+        /// <summary>
+        ///     resolve a call
+        /// </summary>
+        /// <param name="parameter"></param>
+        /// <returns></returns>
+        public ITypeReference ResolveCall(ITypeReference parameter)
+            => parameter;
+
+        /// <summary>
+        ///     resolve a call
+        /// </summary>
+        /// <param name="parameter"></param>
+        /// <returns></returns>
+        public ITypeReference ExecuteCall(ITypeReference parameter) {
+
+            if (parameter.TypeKind.IsIntegral())
+                return Integers.Abs(parameter);
+
+            if (parameter.TypeKind == CommonTypeKind.RealType)
+                return RealNumbers.Abs(parameter);
+
+            if (parameter.TypeKind == CommonTypeKind.SubrangeType && parameter is ISubrangeValue value)
+                return MakeSubrangeValue(parameter.TypeId, ExecuteCall(value.Value));
+
+            return RuntimeException();
+        }
     }
 }

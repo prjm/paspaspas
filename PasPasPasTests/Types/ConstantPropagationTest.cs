@@ -40,6 +40,8 @@ namespace PasPasPasTests.Types {
             AssertExprValue("Abs(5.4)", GetExtendedValue("5.4"));
             AssertExprValue("Abs(0.0)", GetExtendedValue(0));
             AssertExprValue("Abs(-3.3)", GetExtendedValue("3.3"));
+
+            AssertExprValue("Abs(a)", GetSubrangeValue(1000, GetIntegerValue(3)), "type Ta = 1..9; const a: Ta = 3;");
         }
 
         [TestMethod]
