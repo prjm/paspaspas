@@ -103,6 +103,23 @@ namespace PasPasPas.Globals.Runtime {
             => typeReference.TypeKind == CommonTypeKind.ShortStringType;
 
         /// <summary>
+        ///     test if this is a in string value
+        /// </summary>
+        /// <param name="typeReference"></param>
+        /// <returns></returns>
+        public static bool IsString(this ITypeReference typeReference)
+            => typeReference.TypeKind.IsString();
+
+        /// <summary>
+        ///     test if this is a in char value
+        /// </summary>
+        /// <param name="typeReference"></param>
+        /// <returns></returns>
+        public static bool IsChar(this ITypeReference typeReference)
+            => typeReference.TypeKind.IsChar();
+
+
+        /// <summary>
         ///     test if this value is a subrange value
         /// </summary>
         /// <param name="typeReference"></param>
@@ -117,6 +134,40 @@ namespace PasPasPas.Globals.Runtime {
             value = default;
             return false;
         }
+
+        /// <summary>
+        ///     test if this value is a string value
+        /// </summary>
+        /// <param name="typeReference"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static bool IsStringValue(this ITypeReference typeReference, out IStringValue value) {
+            value = typeReference as IStringValue;
+
+            if (typeReference.TypeKind.IsString() && value != default)
+                return true;
+
+            value = default;
+            return false;
+        }
+
+        /// <summary>
+        ///     test if this value is a char value
+        /// </summary>
+        /// <param name="typeReference"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static bool IsCharValue(this ITypeReference typeReference, out ICharValue value) {
+            value = typeReference as ICharValue;
+
+            if (typeReference.TypeKind.IsChar() && value != default)
+                return true;
+
+            value = default;
+            return false;
+        }
+
+
     }
 
 }

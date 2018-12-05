@@ -1,10 +1,11 @@
-﻿using Xunit;
+﻿
+using PasPasPasTests.Common;
 
 namespace PasPasPasTests.Parser {
 
     public class TestDeclarations : ParserTestBase {
 
-        [Fact]
+        [TestMethod]
         public void TestConstants() {
             ParseString("program test; const x = (); .");
             ParseString("program test; const x = 5; .");
@@ -27,7 +28,7 @@ namespace PasPasPasTests.Parser {
             ParseString("program test; const x = 5 deprecated experimental platform library; .");
         }
 
-        [Fact]
+        [TestMethod]
         public void TestOtherDeclarations() {
             ParseString("program test; function x; deprecated; platform; .");
             ParseString("program test; function x; assembler; .");
@@ -47,7 +48,7 @@ namespace PasPasPasTests.Parser {
             ParseString("program test; exports x(a : Pointer) index 4 name 4 resident ; .");
         }
 
-        [Fact]
+        [TestMethod]
         public void TestTypeDeclarations() {
             ParseString("program test; var x : x = ((x:01;x:99;x:'x';x:(x,0,0,0,0,0,0))); .");
             ParseString("program test; type x = packed record x : array[0..(High(integer) div 4) - 4] of integer; end; .");
@@ -77,7 +78,7 @@ namespace PasPasPasTests.Parser {
             ParseString("program test; const x : unicodestring = 5; .");
         }
 
-        [Fact]
+        [TestMethod]
         public void TestClassTypeDefinitions() {
             ParseString("unit test; interface implementation procedure x ; external 5 name '5' delayed; end .");
             ParseString("unit test; interface implementation function x<x, x>.x(): x; begin end ; end .");
@@ -101,7 +102,7 @@ namespace PasPasPasTests.Parser {
             ParseString("unit test; interface implementation procedure x ; external 5 name 5 index 5; begin end ; end .");
         }
 
-        [Fact]
+        [TestMethod]
         public void TestClassTypeDeclarations() {
             ParseString("program test; type x = interface(IUnknown) [X_ID] procedure test; end; .");
             ParseString("program test; type x = record helper for x const x=x; end; .");

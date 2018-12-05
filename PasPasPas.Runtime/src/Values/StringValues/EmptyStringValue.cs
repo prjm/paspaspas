@@ -31,5 +31,11 @@ namespace PasPasPas.Runtime.Values.StringValues {
         /// </summary>
         public override string InternalTypeFormat
             => "''";
+
+        /// <summary>
+        ///     number of chars
+        /// </summary>
+        public override int NumberOfCharElements
+            => 0;
     }
 }

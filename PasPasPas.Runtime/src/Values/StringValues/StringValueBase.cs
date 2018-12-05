@@ -40,6 +40,11 @@ namespace PasPasPas.Runtime.Values.StringValues {
         public TypeReferenceKind ReferenceKind
             => TypeReferenceKind.ConstantValue;
 
+        /// <summary>
+        ///     number of characters
+        /// </summary>
+        public abstract int NumberOfCharElements { get; }
+
         internal static ITypeReference Concat(IStringValue string1, IStringValue string2)
             => new UnicodeStringValue(string.Concat(string1.AsUnicodeString, string2.AsUnicodeString));
 

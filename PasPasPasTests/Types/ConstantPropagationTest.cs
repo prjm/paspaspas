@@ -95,6 +95,13 @@ namespace PasPasPasTests.Types {
         }
 
         [TestMethod]
+        public void TestLength() {
+            AssertExprValue("Length('')", GetIntegerValue(0));
+            AssertExprValue("Length('a')", GetIntegerValue(1));
+            AssertExprValue("Length('aaa')", GetIntegerValue(3));
+        }
+
+        [TestMethod]
         public void TestConcat() {
             AssertExprValue("Concat('a')", GetWideCharValue('a'));
             AssertExprValue("Concat('a', 'b')", GetUnicodeStringValue("ab"));

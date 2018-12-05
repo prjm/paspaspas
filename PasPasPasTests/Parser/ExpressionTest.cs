@@ -1,18 +1,18 @@
-﻿using Xunit;
+﻿using PasPasPasTests.Common;
 
 namespace PasPasPasTests.Parser {
 
 
     public class ExpressionTest : ParserTestBase {
 
-        [Fact]
+        [TestMethod]
         public void TestClosureExpressions() {
             ParseString("program test; const x = procedure begin end ; .");
             ParseString("program test; const x = function : integer begin end ; .");
             ParseString("program test; const x = function (const x : string ): integer begin end ; .");
         }
 
-        [Fact]
+        [TestMethod]
         public void TestSimpleExpressions() {
             ParseString("program test; const x = a.b.c^.d[q].d(asd:d, asd:d:d, ad:d); .");
             ParseString("program test; const x : array[0..1+1] of x = (); .");
@@ -44,7 +44,7 @@ namespace PasPasPasTests.Parser {
             ParseString("program test; const x = x is TObject; .");
         }
 
-        [Fact]
+        [TestMethod]
         public void TestSimpleTerms() {
             ParseString("program test; const x = 5 + 3 * 4; .");
             ParseString("program test; const x = 5 + 3 / 4; .");
@@ -56,7 +56,7 @@ namespace PasPasPasTests.Parser {
             ParseString("program test; const x = 5 + 3 as 4; .");
         }
 
-        [Fact]
+        [TestMethod]
         public void TestSimpleFactors() {
             ParseString("program test; const x = 5 + 3 * @4; .");
             ParseString("program test; const x = 5 + 3 * not 4; .");
@@ -72,7 +72,7 @@ namespace PasPasPasTests.Parser {
             ParseString("program test; const x = 5 + 3 * 'x'; .");
         }
 
-        [Fact]
+        [TestMethod]
         public void TestConstValues() {
             TestConstant("10");
             TestConstant("10.1");

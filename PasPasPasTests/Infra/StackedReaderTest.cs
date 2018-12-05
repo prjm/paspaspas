@@ -2,8 +2,6 @@
 using System.Text;
 using PasPasPas.Api;
 using PasPasPasTests.Common;
-using Xunit;
-using Assert = PasPasPasTests.Common.Assert;
 
 
 namespace PasPasPasTests.Infra {
@@ -19,7 +17,7 @@ namespace PasPasPasTests.Infra {
         private static string Content2
             => "ZZZ$44345845784875DSDFDDFDS";
 
-        [Fact]
+        [TestMethod]
         public void TestSimpleRead() {
             using (var reader = ReaderApi.CreateReaderForString("test.pas", Content1)) {
                 var result = new StringBuilder();
@@ -32,7 +30,7 @@ namespace PasPasPasTests.Infra {
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void TestSimpleFileRead() {
 
             var path = GenerateTempFile(Content1);
@@ -51,7 +49,7 @@ namespace PasPasPasTests.Infra {
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void TestStackedRead() {
 
             var splitIndex = 5;
@@ -98,7 +96,7 @@ namespace PasPasPasTests.Infra {
             return result;
         }
 
-        [Fact]
+        [TestMethod]
         public void TestNestedRead() {
 
             var result = new StringBuilder();

@@ -1,10 +1,10 @@
-﻿using Xunit;
+﻿using PasPasPasTests.Common;
 
 namespace PasPasPasTests.Parser {
 
     public class ProgramTest : ParserTestBase {
 
-        [Fact]
+        [TestMethod]
         public void TestPrograms() {
             ParseString("program test; .");
             ParseString("program test(a, c); .");

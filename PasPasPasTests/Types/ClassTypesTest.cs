@@ -1,19 +1,19 @@
 ﻿using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Typings.Structured;
-using Xunit;
+using PasPasPasTests.Common;
 
 namespace PasPasPasTests.Types {
 
     public class ClassTypesTest : TypeTest {
 
-        [Fact]
+        [TestMethod]
         public void TestBasics() {
             AssertDeclTypeDef("class end", typeKind: CommonTypeKind.ClassType);
             AssertDeclTypeDef<StructuredTypeDeclaration>("class end", (d) => d.BaseClass?.TypeId == KnownTypeIds.TObject);
         }
 
-        [Fact]
+        [TestMethod]
         public void TestMethodDeclaration() {
             AssertDeclTypeDef<StructuredTypeDeclaration>("class procedure x(); end", (d) => d.Methods[0].Parameters[0].Parameters == null);
             AssertDeclTypeDef<StructuredTypeDeclaration>("class function x(): String; end", (d) => d.Methods[0].Parameters[0].ResultType?.TypeId == KnownTypeIds.StringType);
@@ -22,7 +22,7 @@ namespace PasPasPasTests.Types {
             AssertDeclTypeDef("class function x(): integer; end", "x.x()", typeKind: CommonTypeKind.IntegerType);
         }
 
-        [Fact]
+        [TestMethod]
         public void TestFieldDeclaration() {
             AssertDeclTypeDef("class x: integer; end", "x.x", typeKind: CommonTypeKind.IntegerType);
             AssertDeclTypeDef("class k, l, x: integer; end", "x.x", typeKind: CommonTypeKind.IntegerType);

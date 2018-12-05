@@ -9,8 +9,6 @@ using PasPasPas.Parsing.Tokenizer.LiteralValues;
 using PasPasPas.Parsing.Tokenizer.Patterns;
 using PasPasPas.Parsing.Tokenizer.TokenGroups;
 using PasPasPasTests.Common;
-using Xunit;
-using Assert = PasPasPasTests.Common.Assert;
 
 namespace PasPasPasTests.Tokenizer {
 
@@ -35,14 +33,14 @@ namespace PasPasPasTests.Tokenizer {
         }
 
 
-        [Fact]
+        [TestMethod]
         public void SimpleTests() {
             Assert.AreEqual(0, RunTestTokenizer(string.Empty).Count);
             Assert.AreEqual(1, RunTestTokenizer(" \n\n  ").Count);
             //Assert.AreEqual(3, RunTestTokenizer(" \n\n  ")[0].EndPosition.Line);
         }
 
-        [Fact]
+        [TestMethod]
         public void TestSimpleCharClass() {
             var cc = new SingleCharClass('x');
             Assert.IsTrue(cc.Matches('x'));
@@ -50,7 +48,7 @@ namespace PasPasPasTests.Tokenizer {
             Assert.IsFalse(cc.Matches('\0'));
         }
 
-        [Fact]
+        [TestMethod]
         public void TestControlCharClass() {
             var cc = new ControlCharacterClass();
             Assert.IsTrue(cc.Matches('\a'));
@@ -58,7 +56,7 @@ namespace PasPasPasTests.Tokenizer {
             Assert.IsFalse(cc.Matches('\n'));
         }
 
-        [Fact]
+        [TestMethod]
         public void TestNumberCharClass() {
             var cc = new DigitCharClass(false);
             Assert.IsTrue(cc.Matches('0'));
@@ -74,7 +72,7 @@ namespace PasPasPasTests.Tokenizer {
             Assert.IsFalse(cc.Matches(' '));
         }
 
-        [Fact]
+        [TestMethod]
         public void TestIdentifierCharClass() {
             var cc = new IdentifierCharacterClass();
             Assert.IsTrue(cc.Matches('x'));
@@ -150,7 +148,7 @@ namespace PasPasPasTests.Tokenizer {
             return Token.Empty;
         }
 
-        [Fact]
+        [TestMethod]
         public void TestSimpleInputPatterns() {
             var patterns = new InputPatterns(null);
             TestPattern(patterns, "");
@@ -162,7 +160,7 @@ namespace PasPasPasTests.Tokenizer {
             TestPattern(patterns, "b", PatternB);
         }
 
-        [Fact]
+        [TestMethod]
         public void TestCurlyBraceCommentTokenValue() {
             var patterns = new InputPatterns(null);
             patterns.AddPattern('a', PatternA);
@@ -178,7 +176,7 @@ namespace PasPasPasTests.Tokenizer {
         }
 
 
-        [Fact]
+        [TestMethod]
         public void TestAlternativeCurlyBraceCommentTokenValue() {
             var patterns = new InputPatterns(null);
             patterns.AddPattern('a', PatternA);
@@ -197,7 +195,7 @@ namespace PasPasPasTests.Tokenizer {
             TestPattern(patterns, PasPasPas.Parsing.Tokenizer.TokenizerBase.UnexpectedEndOfToken, "a(*", PatternA, TokenKind.Comment);
         }
 
-        [Fact]
+        [TestMethod]
         public void TestPreprocessorTokenVaue() {
             var patterns = new InputPatterns(null);
             patterns.AddPattern('a', PatternA);
@@ -209,7 +207,7 @@ namespace PasPasPasTests.Tokenizer {
         }
 
 
-        [Fact]
+        [TestMethod]
         public void TestControlCharTokenValue() {
             var patterns = new InputPatterns(null);
             patterns.AddPattern('a', PatternA);
@@ -220,7 +218,7 @@ namespace PasPasPasTests.Tokenizer {
             TestPattern(patterns, PasPasPas.Parsing.Tokenizer.TokenizerBase.UnexpectedCharacter, "\n", TokenKind.Invalid);
         }
 
-        [Fact]
+        [TestMethod]
         public void TestWhitespaceCharTokenValue() {
             var patterns = new InputPatterns(null);
             patterns.AddPattern('a', PatternA);
@@ -232,7 +230,7 @@ namespace PasPasPasTests.Tokenizer {
             TestPattern(patterns, "aa\na", PatternA, PatternA, TokenKind.WhiteSpace, PatternA);
         }
 
-        [Fact]
+        [TestMethod]
         public void TestDigitTokenValue() {
             var patterns = new InputPatterns(null);
             patterns.AddPattern('a', PatternA);
@@ -244,7 +242,7 @@ namespace PasPasPasTests.Tokenizer {
             TestPattern(patterns, PasPasPas.Parsing.Tokenizer.TokenizerBase.UnexpectedCharacter, "1３", TokenKind.IntegralNumber, TokenKind.Invalid);
         }
 
-        [Fact]
+        [TestMethod]
         public void TestHexNumberTokenValue() {
             var patterns = new InputPatterns(null);
             patterns.AddPattern('a', PatternA);
@@ -271,7 +269,7 @@ namespace PasPasPasTests.Tokenizer {
             return patterns;
         }
 
-        [Fact]
+        [TestMethod]
         public void TestIdentifierTokenValue() {
             var patterns = CreatePatterns();
             TestPattern(patterns, "a", PatternA);
@@ -290,7 +288,7 @@ namespace PasPasPasTests.Tokenizer {
             TestPattern(patterns, "a.9", TokenKind.Identifier);
         }
 
-        [Fact]
+        [TestMethod]
         public void TestEndOfLineCommentTokenValue() {
             var patterns = new InputPatterns(null);
             patterns.AddPattern('/', TokenKind.Slash).Add('/', new EndOfLineCommentTokenGroupValue());
@@ -303,7 +301,7 @@ namespace PasPasPasTests.Tokenizer {
             TestPattern(patterns, "/ // / /\n /", TokenKind.Slash, TokenKind.WhiteSpace, TokenKind.Comment, TokenKind.WhiteSpace, TokenKind.Slash);
         }
 
-        [Fact]
+        [TestMethod]
         public void TestNumberTokenValue() {
             var patterns = new InputPatterns(null);
             patterns.AddPattern(new DigitCharClass(false), new NumberTokenGroupValue());
@@ -327,7 +325,7 @@ namespace PasPasPasTests.Tokenizer {
             TestPattern(patterns, "9999.9999E-3.", TokenKind.RealNumber, TokenKind.Dot);
         }
 
-        [Fact]
+        [TestMethod]
         public void TestDoubleQuotedStringTokenValue() {
             var patterns = new InputPatterns(null);
             patterns.AddPattern('.', TokenKind.Dot);
@@ -339,7 +337,7 @@ namespace PasPasPasTests.Tokenizer {
             TestPattern(patterns, PasPasPas.Parsing.Tokenizer.TokenizerBase.IncompleteString, "\"", TokenKind.DoubleQuotedString);
         }
 
-        [Fact]
+        [TestMethod]
         public void TestQuotedStringTokenValue() {
             var patterns = new InputPatterns(null);
             patterns.AddPattern('.', TokenKind.Dot);
@@ -354,7 +352,7 @@ namespace PasPasPasTests.Tokenizer {
             Assert.AreEqual(GetUnicodeStringValue("a'aa"), TestPattern(patterns, "'a''aa'", TokenKind.QuotedString).ParsedValue);
         }
 
-        [Fact]
+        [TestMethod]
         public void TestStringGroupTokenValue() {
             var patterns = new InputPatterns(null);
             patterns.AddPattern('.', TokenKind.Dot);

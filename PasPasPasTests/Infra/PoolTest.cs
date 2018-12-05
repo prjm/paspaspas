@@ -1,8 +1,5 @@
-﻿using System.Text;
-using PasPasPas.Infrastructure.Environment;
-using PasPasPas.Infrastructure.ObjectPooling;
-using Xunit;
-using Assert = PasPasPasTests.Common.Assert;
+﻿using PasPasPas.Infrastructure.ObjectPooling;
+using PasPasPasTests.Common;
 
 namespace PasPasPasTests.Infra {
 
@@ -11,7 +8,7 @@ namespace PasPasPasTests.Infra {
     /// </summary>
     public class PoolTest {
 
-        [Fact]
+        [TestMethod]
         public void TestStringBuilderBool() {
             var pool = new StringBuilderPool();
             var teststring = "test123test";

@@ -10,5 +10,9 @@
         /// </summary>
         string AsUnicodeString { get; }
 
+        /// <summary>
+        ///     string length (measured in characters of the underlying char type)
+        /// </summary>
+        int NumberOfCharElements { get; }
     }
 }

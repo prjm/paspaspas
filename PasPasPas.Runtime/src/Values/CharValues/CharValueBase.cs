@@ -48,6 +48,12 @@ namespace PasPasPas.Runtime.Values.CharValues {
         public abstract CommonTypeKind TypeKind { get; }
 
         /// <summary>
+        ///     length (in characters)
+        /// </summary>
+        public int NumberOfCharElements
+            => 1;
+
+        /// <summary>
         ///     test for equality
         /// </summary>
         /// <param name="obj"></param>

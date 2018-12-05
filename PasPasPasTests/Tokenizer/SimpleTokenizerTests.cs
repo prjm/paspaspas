@@ -1,15 +1,14 @@
-﻿using PasPasPas.Parsing.SyntaxTree;
-using Xunit;
-using System;
-using Assert = PasPasPasTests.Common.Assert;
-using PasPasPas.Runtime.Values.IntValues;
+﻿using System;
+using PasPasPas.Parsing.SyntaxTree;
 using PasPasPas.Runtime.Values.BooleanValues;
+using PasPasPas.Runtime.Values.IntValues;
+using PasPasPasTests.Common;
 
 namespace PasPasPasTests.Tokenizer {
 
     public class SimpleTokenizerTests : TokenizerTest {
 
-        [Fact]
+        [TestMethod]
         public void TestIdentifiers() {
             IsIdentifier("abcd");
             IsIdentifier("ABCD");
@@ -21,7 +20,7 @@ namespace PasPasPasTests.Tokenizer {
             IsIdentifier("asd994");
         }
 
-        [Fact]
+        [TestMethod]
         public void TestIntegers() {
             IsInteger("2", 2);
             IsInteger("123", 123);
@@ -34,14 +33,14 @@ namespace PasPasPasTests.Tokenizer {
             IsInteger("108446744073709551615", new IntegerOperations(new BooleanOperations(), null).Overflow);
         }
 
-        [Fact]
+        [TestMethod]
         public void TestWhitespace() {
             IsWhitespace(" ");
             IsWhitespace(" " + System.Environment.NewLine);
             IsWhitespace("  ");
         }
 
-        [Fact]
+        [TestMethod]
         public void TestRealNumbers() {
             IsReal("123E10", "123E10");
             IsReal("123.", "123", Tuple.Create(TokenKind.IntegralNumber, "123"), Tuple.Create(TokenKind.Dot, "."));
@@ -52,7 +51,7 @@ namespace PasPasPasTests.Tokenizer {
             IsReal("123.123E+10", "123.123E+10");
         }
 
-        [Fact]
+        [TestMethod]
         public void TestIsPreprocessorCommand() {
             IsPreprocessor("{$}", "");
             IsPreprocessor("{$ }", " ");
@@ -60,14 +59,14 @@ namespace PasPasPasTests.Tokenizer {
             IsPreprocessor("(*$HPPEMIT '}'*)", "HPPEMIT '}'");
         }
 
-        [Fact]
+        [TestMethod]
         public void TestComment() {
             IsComment("// dsfssdf ");
             IsComment("{ dsfssdf }");
             IsComment("(* HPPEMIT '}'*)");
         }
 
-        [Fact]
+        [TestMethod]
         public void TestControlChars() {
             IsControlChar("\u0000");
             IsControlChar("\u0001");
@@ -97,7 +96,7 @@ namespace PasPasPasTests.Tokenizer {
             IsControlChar("\u001F");
         }
 
-        [Fact]
+        [TestMethod]
         public void TestSimpleTokens() {
             IsToken(TokenKind.Comma, ",");
             IsToken(TokenKind.Dot, ".");
@@ -130,14 +129,14 @@ namespace PasPasPasTests.Tokenizer {
             IsToken(TokenKind.DoubleQuotedString, "\"\"", "\"\"", GetUnicodeStringValue(string.Empty));
         }
 
-        [Fact]
+        [TestMethod]
         public void TestHexNumbers() {
             IsHexNumber("$333F", GetIntegerValue((short)0x333F));
             IsHexNumber("$000000", GetIntegerValue((sbyte)0));
             IsHexNumber("$FFFFFFFFFFFFFFFF", GetIntegerValue(0xFFFFFFFFFFFFFFFF));
         }
 
-        [Fact]
+        [TestMethod]
         public void TestQuotedString() {
             IsQuotedString("''", string.Empty);
             IsQuotedString("'sdfddfsd'", "sdfddfsd");
@@ -149,7 +148,7 @@ namespace PasPasPasTests.Tokenizer {
             IsQuotedString("'ddd'#$58D'xxx'", "ddd֍xxx");
         }
 
-        [Fact]
+        [TestMethod]
         public void TestMessages() {
             TokenizerMessageIsGenerated(PasPasPas.Parsing.Tokenizer.TokenizerBase.IncompleteHexNumber, "$");
             TokenizerMessageIsGenerated(PasPasPas.Parsing.Tokenizer.TokenizerBase.IncompleteIdentifier, "&");

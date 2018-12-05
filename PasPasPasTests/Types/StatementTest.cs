@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿
+using PasPasPasTests.Common;
 
 namespace PasPasPasTests.Types {
 
@@ -7,7 +8,7 @@ namespace PasPasPasTests.Types {
     /// </summary>
     public class StatementTypeTest : TypeTest {
 
-        [Fact]
+        [TestMethod]
         public void TestTypeIdentity() {
             AssertAssignmentCompat("Integer", "System.Integer");
             AssertAssignmentCompat("System.Integer", "Integer");

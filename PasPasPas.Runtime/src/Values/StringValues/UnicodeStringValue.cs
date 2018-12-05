@@ -69,6 +69,12 @@ namespace PasPasPas.Runtime.Values.StringValues {
             => $"'{data}'";
 
         /// <summary>
+        ///     number of characters
+        /// </summary>
+        public override int NumberOfCharElements
+            => data.Length;
+
+        /// <summary>
         ///     get the content of this string
         /// </summary>
         /// <returns></returns>

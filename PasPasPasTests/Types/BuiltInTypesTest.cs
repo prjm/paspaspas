@@ -3,7 +3,7 @@ using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Options.DataTypes;
 using PasPasPas.Typings.Structured;
-using Xunit;
+using PasPasPasTests.Common;
 
 namespace PasPasPasTests.Types {
 
@@ -12,7 +12,7 @@ namespace PasPasPasTests.Types {
     /// </summary>
     public class BuiltInTypesTest : TypeTest {
 
-        [Fact]
+        [TestMethod]
         public void TestIntTypes() {
             AssertDeclType("System.Byte", KnownTypeIds.ByteType);
             AssertDeclType("System.Word", KnownTypeIds.WordType);
@@ -33,7 +33,7 @@ namespace PasPasPasTests.Types {
             AssertDeclType("Int64", KnownTypeIds.Int64Type);
         }
 
-        [Fact]
+        [TestMethod]
         public void TestCharTypes() {
             AssertDeclType("System.Char", KnownTypeIds.CharType);
             AssertDeclType("System.AnsiChar", KnownTypeIds.AnsiCharType);
@@ -48,7 +48,7 @@ namespace PasPasPasTests.Types {
             AssertDeclType("UCS4Char", KnownTypeIds.Ucs4CharType);
         }
 
-        [Fact]
+        [TestMethod]
         public void TestBooleanTypes() {
             AssertDeclType("Boolean", KnownTypeIds.BooleanType);
             AssertDeclType("ByteBool", KnownTypeIds.ByteBoolType);
@@ -61,7 +61,7 @@ namespace PasPasPasTests.Types {
             AssertDeclType("System.LongBool", KnownTypeIds.LongBoolType);
         }
 
-        [Fact]
+        [TestMethod]
         public void TestTObjectType() {
             Func<StructuredTypeDeclaration, bool> hasMethod(string q) => (t => t?.HasMethod(q) ?? false);
 
@@ -75,7 +75,7 @@ namespace PasPasPasTests.Types {
             //AssertDeclTypeDef("TObject", hasMethod("FieldAddress"));
         }
 
-        [Fact]
+        [TestMethod]
         public void TestPointerTypes() {
             AssertDeclType("Pointer", KnownTypeIds.GenericPointer);
             AssertDeclType("PByte", KnownTypeIds.PByte);
@@ -131,7 +131,7 @@ namespace PasPasPasTests.Types {
             AssertDeclType("System.PCurrency", KnownTypeIds.PCurrency);
         }
 
-        [Fact]
+        [TestMethod]
         public void TestNativeIntTypes() {
             AssertDeclType("System.NativeInt", KnownTypeIds.NativeInt, NativeIntSize.All32bit, 32);
             AssertDeclType("System.NativeUInt", KnownTypeIds.NativeUInt, NativeIntSize.All32bit, 32);
@@ -161,7 +161,7 @@ namespace PasPasPasTests.Types {
             AssertDeclType("LongWord", KnownTypeIds.LongWord, NativeIntSize.Windows64bit, 32);
         }
 
-        [Fact]
+        [TestMethod]
         public void TestStringTypes() {
             AssertDeclType("String", KnownTypeIds.StringType);
             AssertDeclType("String[324]", typeKind: CommonTypeKind.ShortStringType);
@@ -178,7 +178,7 @@ namespace PasPasPasTests.Types {
             AssertDeclType("System.RawByteString", KnownTypeIds.RawByteString);
         }
 
-        [Fact]
+        [TestMethod]
         public void TestRealTypes() {
             AssertDeclType("Real48", KnownTypeIds.Real48Type);
             AssertDeclType("Single", KnownTypeIds.SingleType);
