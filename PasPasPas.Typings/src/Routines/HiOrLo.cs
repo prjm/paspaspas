@@ -4,21 +4,57 @@ using PasPasPas.Globals.Types;
 namespace PasPasPas.Typings.Routines {
 
     /// <summary>
+    ///     mode
+    /// </summary>
+    public enum HiLoMode {
+
+        /// <summary>
+        ///     hi
+        /// </summary>
+        Hi = 0,
+
+
+        /// <summary>
+        ///     lo
+        /// </summary>
+        Lo = 1
+
+    }
+
+    /// <summary>
     ///     <c>hi</c> function
     /// </summary>
-    public class Hi : IntrinsicRoutine, IUnaryRoutine {
+    public class HiOrLo : IntrinsicRoutine, IUnaryRoutine {
+
+        /// <summary>
+        ///     create a new hi or lo function
+        /// </summary>
+        /// <param name="mode"></param>
+        public HiOrLo(HiLoMode mode)
+            => Mode = mode;
+
+        /// <summary>
+        ///     hi or low
+        /// </summary>
+        private bool Lo
+            => Mode == HiLoMode.Lo;
 
         /// <summary>
         ///     name of the function
         /// </summary>
         public override string Name
-            => "Hi";
+            => Lo ? "Lo" : "Hi";
 
         /// <summary>
         ///     constant routine
         /// </summary>
         public bool IsConstant
             => true;
+
+        /// <summary>
+        ///     mode
+        /// </summary>
+        public HiLoMode Mode { get; }
 
         /// <summary>
         ///     check parameter types
@@ -43,7 +79,10 @@ namespace PasPasPas.Typings.Routines {
         public ITypeReference ExecuteCall(ITypeReference parameter) {
 
             if (parameter.IsIntegral())
-                return Integers.Hi(parameter);
+                if (Lo)
+                    return Integers.Lo(parameter);
+                else
+                    return Integers.Hi(parameter);
 
             if (parameter.IsSubrangeValue(out var value))
                 return ExecuteCall(value.Value);

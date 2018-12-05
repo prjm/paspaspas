@@ -2,23 +2,53 @@
 
 namespace PasPasPas.Typings.Routines {
 
+    /// <summary>
+    ///     high or low function mode
+    /// </summary>
+    public enum HighOrLowMode {
+
+        /// <summary>
+        ///     high
+        /// </summary>
+        High = 1,
+
+        /// <summary>
+        ///     low
+        /// </summary>
+        Low = 2
+
+    }
 
     /// <summary>
     ///     type specification for the <code>High</code> routine
     /// </summary>
-    public class High : IntrinsicRoutine, IUnaryRoutine {
+    public class HighOrLow : IntrinsicRoutine, IUnaryRoutine {
+
+        /// <summary>
+        ///     create a new high or low function
+        /// </summary>
+        /// <param name="mode"></param>
+        public HighOrLow(HighOrLowMode mode) => Mode = mode;
+
+        private bool Low
+            => Mode == HighOrLowMode.Low;
 
         /// <summary>
         ///     routine name
         /// </summary>
         public override string Name
-            => "High";
+            => Low ? "Low" : "High";
 
         /// <summary>
         ///     constant routine
         /// </summary>
         public bool IsConstant
             => true;
+
+        /// <summary>
+        ///     mode
+        /// </summary>
+        public HighOrLowMode Mode { get; }
 
         /// <summary>
         ///     check parameter types
@@ -52,15 +82,15 @@ namespace PasPasPas.Typings.Routines {
         public ITypeReference ExecuteCall(ITypeReference parameter) {
 
             if (IsOrdinalType(parameter.TypeId, out var ordinalType))
-                return ordinalType.HighestElement;
+                return Low ? ordinalType.LowestElement : ordinalType.HighestElement;
 
             if (IsShortStringType(parameter.TypeId, out var shortStringType))
-                return shortStringType.Size;
+                return Low ? Integers.ToScaledIntegerValue(1) : shortStringType.Size;
 
             if (IsArrayType(parameter.TypeId, out var arrayType) &&  //
                 arrayType.IndexTypes.Length > 0 & //
                 IsOrdinalType(arrayType.IndexTypes[0], out var ordinalIndexType))
-                return ordinalIndexType.HighestElement;
+                return Low ? ordinalIndexType.LowestElement : ordinalIndexType.HighestElement;
 
             return RuntimeException();
         }

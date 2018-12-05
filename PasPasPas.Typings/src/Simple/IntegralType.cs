@@ -52,19 +52,19 @@ namespace PasPasPas.Typings.Simple {
 
             if (signed) {
                 if (BitSize == 8)
-                    return ints.ToIntegerValue(127);
+                    return ints.ToScaledIntegerValue(127);
                 else if (BitSize == 16)
-                    return ints.ToIntegerValue(32767);
+                    return ints.ToScaledIntegerValue(32767);
                 else if (BitSize == 32)
-                    return ints.ToIntegerValue(2147483647);
+                    return ints.ToScaledIntegerValue(2147483647);
             }
 
             if (BitSize == 8)
-                return ints.ToIntegerValue(255);
+                return ints.ToScaledIntegerValue(255);
             else if (BitSize == 16)
-                return ints.ToIntegerValue(65535);
+                return ints.ToScaledIntegerValue(65535);
             else if (BitSize == 32)
-                return ints.ToIntegerValue(4294967295);
+                return ints.ToScaledIntegerValue(4294967295);
 
             return ints.Invalid;
         }
@@ -79,13 +79,13 @@ namespace PasPasPas.Typings.Simple {
                 return ints.Zero;
 
             if (BitSize == 8)
-                return ints.ToIntegerValue(-128);
+                return ints.ToScaledIntegerValue(-128);
 
             else if (BitSize == 16)
-                return ints.ToIntegerValue(-32768);
+                return ints.ToScaledIntegerValue(-32768);
 
             else if (BitSize == 32)
-                return ints.ToIntegerValue(-2147483648);
+                return ints.ToScaledIntegerValue(-2147483648);
 
             return ints.Invalid;
         }

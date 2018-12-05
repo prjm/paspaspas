@@ -96,9 +96,11 @@ namespace PasPasPas.Typings.Common {
             systemUnit.AddGlobal(new Abs());
             systemUnit.AddGlobal(new Chr());
             systemUnit.AddGlobal(new Concat());
-            systemUnit.AddGlobal(new Hi());
-            systemUnit.AddGlobal(new High());
+            systemUnit.AddGlobal(new HiOrLo(HiLoMode.Hi));
+            systemUnit.AddGlobal(new HighOrLow(HighOrLowMode.High));
             systemUnit.AddGlobal(new Length());
+            systemUnit.AddGlobal(new HiOrLo(HiLoMode.Lo));
+            systemUnit.AddGlobal(new HighOrLow(HighOrLowMode.Low));
             systemUnit.AddGlobal(new Succ());
         }
 

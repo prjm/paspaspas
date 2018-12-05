@@ -474,5 +474,18 @@ namespace PasPasPas.Runtime.Values.IntValues {
             else
                 return Invalid;
         }
+
+
+        /// <summary>
+        ///     <c>lo</c> function
+        /// </summary>
+        /// <param name="typeReference"></param>
+        /// <returns></returns>
+        public ITypeReference Lo(ITypeReference typeReference) {
+            if (typeReference is IntegerValueBase integerValue)
+                return IntegerValueBase.LoValue(integerValue);
+            else
+                return Invalid;
+        }
     }
 }

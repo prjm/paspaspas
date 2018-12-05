@@ -12,7 +12,6 @@ namespace PasPasPas.Globals.Runtime {
         /// </summary>
         int BaseType { get; }
 
-
         /// <summary>
         ///     constant values
         /// </summary>

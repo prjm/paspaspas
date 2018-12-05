@@ -99,7 +99,52 @@ namespace PasPasPasTests.Types {
             AssertExprValue("Length('')", GetIntegerValue(0));
             AssertExprValue("Length('a')", GetIntegerValue(1));
             AssertExprValue("Length('aaa')", GetIntegerValue(3));
+
+            AssertExprValue("Length(a)", GetIntegerValue(3), "const a = (1,2,3);");
         }
+
+        [TestMethod]
+        public void TestLo() {
+            AssertExprValue("Lo($FF)", GetIntegerValue(0xff));
+            AssertExprValue("Lo($FF00)", GetIntegerValue(0x00));
+            AssertExprValue("Lo($FFFF0F)", GetIntegerValue(0x0f));
+
+            AssertExprValue("Lo(a)", GetIntegerValue(0x0f), "type ta = 3..$FFFF; const a: ta = $F00F;");
+        }
+
+        [TestMethod]
+        public void TestLow() {
+
+            // ordinal types
+            AssertExprValue("Low(ta)", GetIntegerValue(1), "type ta = 1..2;");
+            AssertExprValue("Low(ta)", GetIntegerValue(-4), "type ta = -4..-2;");
+            AssertExprValue("Low(ta)", GetIntegerValue(0), "type ta = (aa, bb, cc);");
+            AssertExprValue("Low(Boolean)", GetBooleanValue(false));
+            AssertExprValue("Low(AnsiChar)", GetAnsiCharValue(byte.MinValue));
+            AssertExprValue("Low(WideChar)", GetWideCharValue(char.MinValue));
+            AssertExprValue("Low(ShortInt)", GetIntegerValue(sbyte.MinValue));
+            AssertExprValue("Low(Byte)", GetIntegerValue(byte.MinValue));
+            AssertExprValue("Low(SmallInt)", GetIntegerValue(short.MinValue));
+            AssertExprValue("Low(Word)", GetIntegerValue(ushort.MinValue));
+            AssertExprValue("Low(Integer)", GetIntegerValue(int.MinValue));
+            AssertExprValue("Low(Cardinal)", GetIntegerValue(uint.MinValue));
+            AssertExprValue("Low(Int64)", GetIntegerValue(long.MinValue));
+            AssertExprValue("Low(UInt64)", GetIntegerValue(ulong.MinValue));
+
+            // short string types
+            AssertExprValue("Low(string[20])", GetIntegerValue(1));
+            AssertExprValue("Low(ShortString)", GetIntegerValue(1));
+
+            // constant arrays
+            AssertExprValue("Low(a)", GetIntegerValue(0), "const a: array[0..2] of string = ('a','b','c');");
+            AssertExprValue("Low(a)", GetWideCharValue('a'), "const a: array['a'..'c'] of string = ('a','b','c');");
+
+            // array types
+            AssertExprValue("Low(Ta)", GetIntegerValue(0), "type Ta = array[0..2];");
+            AssertExprValue("Low(Ta)", GetWideCharValue('a'), "type Ta = array['a'..'c'];");
+        }
+
+
 
         [TestMethod]
         public void TestConcat() {

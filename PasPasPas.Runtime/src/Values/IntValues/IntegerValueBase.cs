@@ -431,5 +431,21 @@ namespace PasPasPas.Runtime.Values.IntValues {
             return new ByteValue(value[1]);
 
         }
+
+
+        /// <summary>
+        ///     hi value
+        /// </summary>
+        /// <param name="integerValue"></param>
+        /// <returns></returns>
+        public static ITypeReference LoValue(IntegerValueBase integerValue) {
+            var b = integerValue.AsBigInteger;
+            var value = b.ToByteArray();
+
+            if (value.Length < 1)
+                return new ByteValue(0);
+
+            return new ByteValue(value[0]);
+        }
     }
 }

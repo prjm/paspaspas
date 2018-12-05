@@ -58,6 +58,13 @@
         ITypeReference Chr(ITypeReference typeReference);
 
         /// <summary>
+        ///     <c>ki</c> function
+        /// </summary>
+        /// <param name="typeReference"></param>
+        /// <returns></returns>
+        ITypeReference Lo(ITypeReference typeReference);
+
+        /// <summary>
         ///     shift left
         /// </summary>
         /// <param name="firstOperand"></param>

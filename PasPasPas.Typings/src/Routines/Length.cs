@@ -33,6 +33,9 @@ namespace PasPasPas.Typings.Routines {
             if (parameter.IsChar())
                 return true;
 
+            if (parameter.IsArray())
+                return true;
+
             return false;
         }
 
@@ -49,7 +52,8 @@ namespace PasPasPas.Typings.Routines {
             if (parameter.IsChar())
                 return Integers.ToScaledIntegerValue(1);
 
-            var x = $"{3}";
+            if (parameter.IsArrayValue(out var arrayValue))
+                return Integers.ToScaledIntegerValue(arrayValue.Values.Length);
 
             return RuntimeException();
         }
