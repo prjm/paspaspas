@@ -1,15 +1,13 @@
-﻿using System.Collections.Generic;
-using PasPasPas.Globals.Runtime;
+﻿using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Typings.Common;
-using PasPasPas.Typings.Structured;
 
 namespace PasPasPas.Typings.Routines {
 
     /// <summary>
     ///     type specification for the <c>chr</c> routine
     /// </summary>
-    public class Chr : IntrinsicRoutine {
+    public class Chr : IntrinsicRoutine, IUnaryRoutine {
 
         /// <summary>
         ///     routine name
@@ -18,29 +16,48 @@ namespace PasPasPas.Typings.Routines {
             => "Chr";
 
         /// <summary>
-        ///     resolve call
+        ///     constant routine
         /// </summary>
-        /// <param name="callableRoutines"></param>
-        /// <param name="signature"></param>
-        public override void ResolveCall(IList<ParameterGroup> callableRoutines, Signature signature) {
+        public bool IsConstant
+            => true;
 
-            if (signature.Length != 1)
-                return;
+        /// <summary>
+        ///     check if the parameter matches
+        /// </summary>
+        /// <param name="parameter"></param>
+        /// <returns></returns>
+        public bool CheckParameter(ITypeReference parameter) {
+            if (parameter.TypeKind.IsIntegral())
+                return true;
 
-            var param = TypeRegistry.GetTypeByIdOrUndefinedType(signature[0].TypeId);
-            if (!param.TypeKind.IsIntegral())
-                return;
+            if (parameter.TypeKind == CommonTypeKind.SubrangeType && parameter is ISubrangeValue value)
+                return CheckParameter(value.Value);
 
-            var result = new ParameterGroup();
-            result.AddParameter("AValue").SymbolType = signature[0];
-
-            if (signature[0].IsConstant())
-                result.ResultType = TypeRegistry.Runtime.Integers.Chr(signature[0]);
-            else
-                result.ResultType = TypeRegistry.Runtime.Types.MakeReference(KnownTypeIds.CharType, TypeRegistry.GetTypeKindOf(KnownTypeIds.CharType));
-
-            callableRoutines.Add(result);
+            return false;
         }
 
+        /// <summary>
+        ///     execute call
+        /// </summary>
+        /// <param name="parameter"></param>
+        /// <returns></returns>
+        public ITypeReference ExecuteCall(ITypeReference parameter) {
+
+            if (parameter.TypeKind.IsIntegral())
+                return TypeRegistry.Runtime.Integers.Chr(parameter);
+
+            if (parameter.TypeKind == CommonTypeKind.SubrangeType && parameter is ISubrangeValue value)
+                return MakeSubrangeValue(parameter.TypeId, ExecuteCall(value.Value));
+
+            return RuntimeException();
+        }
+
+        /// <summary>
+        ///     resolve a call
+        /// </summary>
+        /// <param name="parameter"></param>
+        /// <returns></returns>
+        public ITypeReference ResolveCall(ITypeReference parameter)
+            => TypeRegistry.Runtime.Types.MakeReference(KnownTypeIds.CharType, TypeRegistry.GetTypeKindOf(KnownTypeIds.CharType));
     }
 }

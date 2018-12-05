@@ -49,6 +49,8 @@ namespace PasPasPasTests.Types {
             AssertExprValue("Chr(5)", GetWideCharValue((char)5));
             AssertExprValue("Chr(0)", GetWideCharValue((char)0));
             AssertExprValue("Chr(-3)", GetWideCharValue((char)(ushort.MaxValue - 3 + 1)));
+
+            AssertExprValue("Chr(a)", GetSubrangeValue(1000, GetWideCharValue((char)5)), "type ta = 2..9; const a: ta = 5; ");
         }
 
         [TestMethod]
