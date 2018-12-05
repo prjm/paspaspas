@@ -41,7 +41,7 @@ namespace PasPasPasTests.Types {
                     return default;
 
                 var registry = array.TypeRegistry;
-                return registry.GetTypeByIdOrUndefinedType(array.IndexTypes[0].TypeId);
+                return registry.GetTypeByIdOrUndefinedType(array.IndexTypes[0]);
             }
 
             CommonTypeKind GetIndexTypeKind(ArrayType array) {

@@ -1,14 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.Immutable;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
-using PasPasPas.Typings.Common;
 
 namespace PasPasPas.Typings.Structured {
 
     /// <summary>
     ///     array type definition
     /// </summary>
-    public class ArrayType : StructuredTypeBase {
+    public class ArrayType : StructuredTypeBase, IArrayType {
 
         /// <summary>
         ///     create a new array type
@@ -20,8 +19,7 @@ namespace PasPasPas.Typings.Structured {
         /// <summary>
         ///     array index types
         /// </summary>
-        public IList<ITypeReference> IndexTypes { get; }
-            = new List<ITypeReference>();
+        public ImmutableArray<int> IndexTypes { get; set; }
 
         /// <summary>
         ///     type kind

@@ -1,11 +1,12 @@
 ﻿using PasPasPas.Globals.Runtime;
+using PasPasPas.Typings.Structured;
 
 namespace PasPasPas.Typings.Routines {
 
     /// <summary>
     ///     unary intrinsic routine
     /// </summary>
-    public interface IUnaryRoutine {
+    public interface IUnaryRoutine : IRoutine {
 
         /// <summary>
         ///     resolve a call

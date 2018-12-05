@@ -16,7 +16,7 @@
         /// <param name="typeId">type id</param>
         /// <returns>reference to type</returns>
         /// <param name="typeKind">type kind</param>
-        ITypeReference MakeReference(int typeId, CommonTypeKind typeKind);
+        ITypeReference MakeTypeInstanceReference(int typeId, CommonTypeKind typeKind);
 
         /// <summary>
         ///     make an enumerated type value

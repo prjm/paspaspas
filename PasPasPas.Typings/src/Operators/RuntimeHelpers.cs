@@ -27,7 +27,7 @@ namespace PasPasPas.Typings.Operators {
 
             if (typeKind == CommonTypeKind.SubrangeType) {
                 var baseType = types.GetBaseTypeOfSubrangeType(type.TypeId);
-                var typeRef = runtime.Types.MakeReference(baseType, types.GetTypeKindOf(baseType));
+                var typeRef = runtime.Types.MakeTypeInstanceReference(baseType, types.GetTypeKindOf(baseType));
                 return runtime.GetArithmeticOperators(types, typeRef);
             }
 
@@ -52,7 +52,7 @@ namespace PasPasPas.Typings.Operators {
 
             if (typeKind == CommonTypeKind.SubrangeType) {
                 var baseType = types.GetBaseTypeOfSubrangeType(type.TypeId);
-                var typeRef = runtime.Types.MakeReference(baseType, types.GetTypeKindOf(baseType));
+                var typeRef = runtime.Types.MakeTypeInstanceReference(baseType, types.GetTypeKindOf(baseType));
                 return runtime.GetLogicalOperators(types, typeRef);
             }
 
@@ -82,13 +82,13 @@ namespace PasPasPas.Typings.Operators {
 
             if (left == CommonTypeKind.SubrangeType) {
                 var baseType = types.GetBaseTypeOfSubrangeType(leftType.TypeId);
-                var typeRef = runtime.Types.MakeReference(baseType, types.GetTypeKindOf(baseType));
+                var typeRef = runtime.Types.MakeTypeInstanceReference(baseType, types.GetTypeKindOf(baseType));
                 return GetArithmeticOperators(runtime, types, typeRef, rightType);
             }
 
             if (right == CommonTypeKind.SubrangeType) {
                 var baseType = types.GetBaseTypeOfSubrangeType(rightType.TypeId);
-                var typeRef = runtime.Types.MakeReference(baseType, types.GetTypeKindOf(baseType));
+                var typeRef = runtime.Types.MakeTypeInstanceReference(baseType, types.GetTypeKindOf(baseType));
                 return GetArithmeticOperators(runtime, types, leftType, typeRef);
             }
 
@@ -115,13 +115,13 @@ namespace PasPasPas.Typings.Operators {
 
             if (left == CommonTypeKind.SubrangeType) {
                 var baseType = types.GetBaseTypeOfSubrangeType(leftType.TypeId);
-                var typeRef = runtime.Types.MakeReference(baseType, types.GetTypeKindOf(baseType));
+                var typeRef = runtime.Types.MakeTypeInstanceReference(baseType, types.GetTypeKindOf(baseType));
                 return GetLogicalOperators(runtime, types, typeRef, rightType);
             }
 
             if (right == CommonTypeKind.SubrangeType) {
                 var baseType = types.GetBaseTypeOfSubrangeType(rightType.TypeId);
-                var typeRef = runtime.Types.MakeReference(baseType, types.GetTypeKindOf(baseType));
+                var typeRef = runtime.Types.MakeTypeInstanceReference(baseType, types.GetTypeKindOf(baseType));
                 return GetLogicalOperators(runtime, types, leftType, typeRef);
             }
 
@@ -157,13 +157,13 @@ namespace PasPasPas.Typings.Operators {
 
             if (left == CommonTypeKind.SubrangeType) {
                 var baseType = types.GetBaseTypeOfSubrangeType(leftType.TypeId);
-                var typeRef = runtime.Types.MakeReference(baseType, types.GetTypeKindOf(baseType));
+                var typeRef = runtime.Types.MakeTypeInstanceReference(baseType, types.GetTypeKindOf(baseType));
                 return GetRelationalOperators(runtime, types, typeRef, rightType);
             }
 
             if (right == CommonTypeKind.SubrangeType) {
                 var baseType = types.GetBaseTypeOfSubrangeType(rightType.TypeId);
-                var typeRef = runtime.Types.MakeReference(baseType, types.GetTypeKindOf(baseType));
+                var typeRef = runtime.Types.MakeTypeInstanceReference(baseType, types.GetTypeKindOf(baseType));
                 return GetRelationalOperators(runtime, types, leftType, typeRef);
             }
 

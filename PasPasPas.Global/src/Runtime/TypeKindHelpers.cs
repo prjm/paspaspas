@@ -1,6 +1,4 @@
-﻿using PasPasPas.Globals.Runtime;
-
-namespace PasPasPas.Typings.Common {
+﻿namespace PasPasPas.Globals.Runtime {
 
     /// <summary>
     ///     helpers for type kind
@@ -114,6 +112,30 @@ namespace PasPasPas.Typings.Common {
         /// <returns></returns>
         public static bool IsUnicodeText(this CommonTypeKind kind)
             => kind.IsUnicodeChar() || kind.IsUnicodeString();
+
+        /// <summary>
+        ///     test if this type kind is a short string
+        /// </summary>
+        /// <param name="kind"></param>
+        /// <returns></returns>
+        public static bool IsShortString(this CommonTypeKind kind)
+            => kind == CommonTypeKind.ShortStringType;
+
+        /// <summary>
+        ///     test if this type kind is a subrange type
+        /// </summary>
+        /// <param name="kind"></param>
+        /// <returns></returns>
+        public static bool IsSubrange(this CommonTypeKind kind)
+            => kind == CommonTypeKind.SubrangeType;
+
+        /// <summary>
+        ///     check if this type kind is a type reference
+        /// </summary>
+        /// <param name="kind"></param>
+        /// <returns></returns>
+        public static bool IsType(this CommonTypeKind kind)
+            => kind == CommonTypeKind.Type;
 
         /// <summary>
         ///     test if the type kind is an ordinal type

@@ -1,10 +1,11 @@
 ﻿using PasPasPas.Globals.Runtime;
+using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Typings.Simple {
     /// <summary>
     ///     string type definition
     /// </summary>
-    public class ShortStringType : StringTypeBase {
+    public class ShortStringType : StringTypeBase, IShortStringType {
 
         /// <summary>
         ///     create a new string type

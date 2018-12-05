@@ -340,7 +340,7 @@ namespace PasPasPas.Typings.Common {
         /// <param name="typeId">type id</param>
         /// <returns>type reference</returns>
         public ITypeReference MakeReference(int typeId)
-            => Runtime.Types.MakeReference(typeId, GetTypeKindOf(typeId));
+            => Runtime.Types.MakeTypeInstanceReference(typeId, GetTypeKindOf(typeId));
 
         /// <summary>
         ///     get the base type of a subrange type

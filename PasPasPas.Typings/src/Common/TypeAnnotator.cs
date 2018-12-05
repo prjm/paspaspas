@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.Immutable;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Infrastructure.ObjectPooling;
@@ -578,17 +579,21 @@ namespace PasPasPas.Typings.Common {
 
             typeDef.Packed = element.PackedType;
 
-            foreach (var indexDef in element.IndexItems) {
-                var typeInfo = indexDef.TypeInfo;
+            using (var list = environment.ListPools.GetList<int>()) {
+                foreach (var indexDef in element.IndexItems) {
+                    var typeInfo = indexDef.TypeInfo;
 
-                if (typeInfo != null) {
-                    if (!typeInfo.IsType())
-                        typeDef.IndexTypes.Add(GetErrorTypeReference(indexDef));
+                    if (typeInfo != null) {
+                        if (!typeInfo.IsType())
+                            list.Item.Add(KnownTypeIds.ErrorType);
+                        else
+                            list.Item.Add(typeInfo.TypeId);
+                    }
                     else
-                        typeDef.IndexTypes.Add(typeInfo);
+                        list.Item.Add(KnownTypeIds.ErrorType);
                 }
-                else
-                    typeDef.IndexTypes.Add(GetErrorTypeReference(indexDef));
+
+                typeDef.IndexTypes = ListPools.GetFixedArray(list);
             }
 
             RegisterUserDefinedType(typeDef);
@@ -837,7 +842,7 @@ namespace PasPasPas.Typings.Common {
 
                 if (isConstant) {
                     var arrayType = new ArrayType(typeId) { BaseTypeId = baseType.TypeId };
-                    arrayType.IndexTypes.Add(GetTypeReferenceById(indexType.TypeId));
+                    arrayType.IndexTypes = ImmutableArray.Create(indexType.TypeId);
                     var registeredType = RegisterUserDefinedType(arrayType).TypeId;
                     element.TypeInfo = environment.Runtime.Structured.CreateArrayValue(registeredType, baseType.TypeId, ListPools.GetFixedArray(constantValues));
                 }

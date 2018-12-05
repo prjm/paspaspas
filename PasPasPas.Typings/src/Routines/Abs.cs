@@ -1,5 +1,4 @@
 ﻿using PasPasPas.Globals.Runtime;
-using PasPasPas.Typings.Common;
 
 namespace PasPasPas.Typings.Routines {
 
@@ -20,10 +19,10 @@ namespace PasPasPas.Typings.Routines {
         /// <param name="parameter"></param>
         /// <returns></returns>
         public bool CheckParameter(ITypeReference parameter) {
-            if (parameter.TypeKind.IsNumerical())
+            if (parameter.IsNumerical())
                 return true;
 
-            if (parameter.TypeKind == CommonTypeKind.SubrangeType && parameter is ISubrangeValue value)
+            if (parameter.IsSubrangeValue(out var value))
                 return CheckParameter(value.Value);
 
             return false;

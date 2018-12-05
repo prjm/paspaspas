@@ -1,9 +1,4 @@
-﻿using System.Collections.Generic;
-using PasPasPas.Globals.Runtime;
-using PasPasPas.Globals.Types;
-using PasPasPas.Typings.Common;
-using PasPasPas.Typings.Simple;
-using PasPasPas.Typings.Structured;
+﻿using PasPasPas.Globals.Runtime;
 
 namespace PasPasPas.Typings.Routines {
 
@@ -11,7 +6,7 @@ namespace PasPasPas.Typings.Routines {
     /// <summary>
     ///     type specification for the <code>High</code> routine
     /// </summary>
-    public class High : IntrinsicRoutine {
+    public class High : IntrinsicRoutine, IUnaryRoutine {
 
         /// <summary>
         ///     routine name
@@ -20,55 +15,62 @@ namespace PasPasPas.Typings.Routines {
             => "High";
 
         /// <summary>
-        ///     try to resolve a call
+        ///     constant routine
         /// </summary>
-        /// <param name="callableRoutines"></param>
-        /// <param name="signature"></param>
-        public override void ResolveCall(IList<ParameterGroup> callableRoutines, Signature signature) {
-            if (signature.Length != 1)
-                return;
+        public bool IsConstant
+            => true;
 
-            var param = TypeRegistry.GetTypeByIdOrUndefinedType(signature[0].TypeId);
+        /// <summary>
+        ///     check parameter types
+        /// </summary>
+        /// <param name="parameter"></param>
+        /// <returns></returns>
+        public bool CheckParameter(ITypeReference parameter) {
 
-            if (param == default)
-                return;
+            var typeKind = parameter.TypeKind;
 
-            if (param.TypeKind.IsOrdinal()) {
-                var ordinalType = param as IOrdinalType;
-                var highValue = ordinalType.HighestElement;
-                var typeId = LiteralValuesHelper.GetTypeFor(highValue);
-                var result = new ParameterGroup();
-                result.AddParameter("AValue").SymbolType = signature[0];
-                result.ResultType = highValue;
-                callableRoutines.Add(result);
-            }
+            if (typeKind.IsType())
+                typeKind = TypeRegistry.GetTypeKindOf(parameter.TypeId);
 
-            if (param.TypeKind == CommonTypeKind.ShortStringType) {
-                var stringType = param as ShortStringType;
-                var highValue = stringType.Size;
-                var typeId = LiteralValuesHelper.GetTypeFor(highValue);
-                var result = new ParameterGroup();
-                result.AddParameter("AValue").SymbolType = signature[0];
-                result.ResultType = highValue;
-                callableRoutines.Add(result);
-            }
+            if (typeKind.IsOrdinal())
+                return true;
 
-            if (param.TypeKind == CommonTypeKind.ArrayType) {
-                var arrayType = param as ArrayType;
-                if (arrayType.IndexTypes.Count > 0) {
-                    var indexType = arrayType.IndexTypes[0];
-                    if (TypeRegistry.GetTypeByIdOrUndefinedType(indexType.TypeId) is IOrdinalType ordinalType) {
-                        var highValue = ordinalType.HighestElement;
-                        var typeId = LiteralValuesHelper.GetTypeFor(highValue);
-                        var result = new ParameterGroup();
-                        result.AddParameter("AValue").SymbolType = signature[0];
-                        result.ResultType = highValue;
-                        callableRoutines.Add(result);
-                    }
-                }
-            }
+            if (typeKind.IsShortString())
+                return true;
 
+            if (typeKind.IsArray())
+                return true;
+
+            return false;
         }
 
+        /// <summary>
+        ///     execute a call
+        /// </summary>
+        /// <param name="parameter"></param>
+        /// <returns></returns>
+        public ITypeReference ExecuteCall(ITypeReference parameter) {
+
+            if (IsOrdinalType(parameter.TypeId, out var ordinalType))
+                return ordinalType.HighestElement;
+
+            if (IsShortStringType(parameter.TypeId, out var shortStringType))
+                return shortStringType.Size;
+
+            if (IsArrayType(parameter.TypeId, out var arrayType) &&  //
+                arrayType.IndexTypes.Length > 0 & //
+                IsOrdinalType(arrayType.IndexTypes[0], out var ordinalIndexType))
+                return ordinalIndexType.HighestElement;
+
+            return RuntimeException();
+        }
+
+        /// <summary>
+        ///     resolve a call
+        /// </summary>
+        /// <param name="parameter"></param>
+        /// <returns></returns>
+        public ITypeReference ResolveCall(ITypeReference parameter)
+            => ExecuteCall(parameter);
     }
 }

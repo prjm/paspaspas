@@ -127,11 +127,11 @@ namespace PasPasPas.Typings.Operators {
             if (right.IsConstant()) {
                 if (right is IIntegerValue intValue && intValue.SignedValue >= 0) {
                     if (intValue.SignedValue <= 32 && intType.BitSize < 32)
-                        return Runtime.Types.MakeReference(KnownTypeIds.IntegerType, CommonTypeKind.IntegerType);
+                        return Runtime.Types.MakeTypeInstanceReference(KnownTypeIds.IntegerType, CommonTypeKind.IntegerType);
                     if (intValue.SignedValue <= 32 && intType.BitSize == 32)
-                        return Runtime.Types.MakeReference(baseType.TypeId, baseType.TypeKind);
+                        return Runtime.Types.MakeTypeInstanceReference(baseType.TypeId, baseType.TypeKind);
                     if (intType.BitSize == 64)
-                        return Runtime.Types.MakeReference(baseType.TypeId, baseType.TypeKind);
+                        return Runtime.Types.MakeTypeInstanceReference(baseType.TypeId, baseType.TypeKind);
 
                 }
                 return GetErrorTypeReference();

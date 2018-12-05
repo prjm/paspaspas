@@ -1,6 +1,5 @@
 ﻿using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
-using PasPasPas.Typings.Common;
 
 namespace PasPasPas.Typings.Routines {
 
@@ -27,10 +26,10 @@ namespace PasPasPas.Typings.Routines {
         /// <param name="parameter"></param>
         /// <returns></returns>
         public bool CheckParameter(ITypeReference parameter) {
-            if (parameter.TypeKind.IsIntegral())
+            if (parameter.IsIntegral())
                 return true;
 
-            if (parameter.TypeKind == CommonTypeKind.SubrangeType && parameter is ISubrangeValue value)
+            if (parameter.IsSubrangeValue(out var value))
                 return CheckParameter(value.Value);
 
             return false;
@@ -43,11 +42,11 @@ namespace PasPasPas.Typings.Routines {
         /// <returns></returns>
         public ITypeReference ExecuteCall(ITypeReference parameter) {
 
-            if (parameter.TypeKind.IsIntegral())
+            if (parameter.IsIntegral())
                 return TypeRegistry.Runtime.Integers.Chr(parameter);
 
-            if (parameter.TypeKind == CommonTypeKind.SubrangeType && parameter is ISubrangeValue value)
-                return MakeSubrangeValue(parameter.TypeId, ExecuteCall(value.Value));
+            if (parameter.IsSubrangeValue(out var value))
+                return ExecuteCall(value.Value);
 
             return RuntimeException();
         }
@@ -58,6 +57,6 @@ namespace PasPasPas.Typings.Routines {
         /// <param name="parameter"></param>
         /// <returns></returns>
         public ITypeReference ResolveCall(ITypeReference parameter)
-            => TypeRegistry.Runtime.Types.MakeReference(KnownTypeIds.CharType, TypeRegistry.GetTypeKindOf(KnownTypeIds.CharType));
+            => MakeTypeInstanceReference(KnownTypeIds.CharType);
     }
 }

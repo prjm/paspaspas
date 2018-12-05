@@ -46,7 +46,7 @@ namespace PasPasPas.Infrastructure.ObjectPooling {
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public ListPool<T> GetPool<T>() where T : class {
+        public ListPool<T> GetPool<T>() {
             if (pools.TryGetValue(typeof(T), out var value))
                 return value as ListPool<T>;
 
@@ -60,7 +60,7 @@ namespace PasPasPas.Infrastructure.ObjectPooling {
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public PoolItem<List<T>> GetList<T>() where T : class
+        public PoolItem<List<T>> GetList<T>()
             => GetPool<T>().Borrow();
 
         /// <summary>

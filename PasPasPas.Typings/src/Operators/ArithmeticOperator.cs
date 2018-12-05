@@ -103,10 +103,10 @@ namespace PasPasPas.Typings.Operators {
             var baseType = TypeRegistry.GetTypeByIdOrUndefinedType(TypeRegistry.GetBaseTypeOfSubrangeType(operand.TypeId)) as IIntegralType;
 
             if (baseType != null && baseType.BitSize < 32)
-                return Runtime.Types.MakeReference(KnownTypeIds.IntegerType, CommonTypeKind.IntegerType);
+                return Runtime.Types.MakeTypeInstanceReference(KnownTypeIds.IntegerType, CommonTypeKind.IntegerType);
 
             if (baseType != null)
-                return Runtime.Types.MakeReference(baseType.TypeId, TypeRegistry.GetTypeKindOf(baseType.TypeId));
+                return Runtime.Types.MakeTypeInstanceReference(baseType.TypeId, TypeRegistry.GetTypeKindOf(baseType.TypeId));
 
             return GetErrorTypeReference();
         }

@@ -43,7 +43,7 @@ namespace PasPasPas.Runtime.Values {
         /// <param name="typeId">registered type id</param>
         /// <param name="typeKind"></param>
         /// <returns>type reference</returns>
-        public ITypeReference MakeReference(int typeId, CommonTypeKind typeKind)
+        public ITypeReference MakeTypeInstanceReference(int typeId, CommonTypeKind typeKind)
             => values.GetValue((typeId, typeKind));
 
         /// <summary>

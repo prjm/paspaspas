@@ -54,6 +54,61 @@ namespace PasPasPas.Typings.Routines {
             => Runtime?.Types?.MakeSubrangeValue(typeId, value);
 
         /// <summary>
+        ///     make a type instance reference
+        /// </summary>
+        /// <param name="typeId"></param>
+        /// <returns></returns>
+        public ITypeReference MakeTypeInstanceReference(int typeId)
+            => Runtime?.Types?.MakeTypeInstanceReference(typeId, TypeRegistry.GetTypeKindOf(typeId));
+
+        /// <summary>
+        ///     retrieve an ordinal type
+        /// </summary>
+        /// <param name="typeId"></param>
+        /// <param name="ordinalType"></param>
+        /// <returns></returns>
+        public bool IsOrdinalType(int typeId, out IOrdinalType ordinalType) {
+            ordinalType = TypeRegistry.GetTypeByIdOrUndefinedType(typeId) as IOrdinalType;
+
+            if (ordinalType != default && ordinalType.TypeKind.IsOrdinal())
+                return true;
+
+            ordinalType = default;
+            return false;
+        }
+
+        /// <summary>
+        ///     test if the given type is a short string type
+        /// </summary>
+        /// <param name="typeId"></param>
+        /// <param name="shortStringType"></param>
+        /// <returns></returns>
+        public bool IsShortStringType(int typeId, out IShortStringType shortStringType) {
+            shortStringType = TypeRegistry.GetTypeByIdOrUndefinedType(typeId) as IShortStringType;
+
+            if (shortStringType != default && shortStringType.TypeKind == CommonTypeKind.ShortStringType)
+                return true;
+
+            shortStringType = default;
+            return false;
+        }
+
+        ///     test if the given type is a short string type
+        /// </summary>
+        /// <param name="typeId"></param>
+        /// <param name="arrayType"></param>
+        /// <returns></returns>
+        public bool IsArrayType(int typeId, out IArrayType arrayType) {
+            arrayType = TypeRegistry.GetTypeByIdOrUndefinedType(typeId) as IArrayType;
+
+            if (arrayType != default && arrayType.TypeKind.IsArray())
+                return true;
+
+            arrayType = default;
+            return false;
+        }
+
+        /// <summary>
         ///     resolve a call
         /// </summary>
         /// <param name="callableRoutines"></param>

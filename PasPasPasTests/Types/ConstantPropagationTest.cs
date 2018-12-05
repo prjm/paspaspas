@@ -50,7 +50,7 @@ namespace PasPasPasTests.Types {
             AssertExprValue("Chr(0)", GetWideCharValue((char)0));
             AssertExprValue("Chr(-3)", GetWideCharValue((char)(ushort.MaxValue - 3 + 1)));
 
-            AssertExprValue("Chr(a)", GetSubrangeValue(1000, GetWideCharValue((char)5)), "type ta = 2..9; const a: ta = 5; ");
+            AssertExprValue("Chr(a)", GetWideCharValue((char)5), "type ta = 2..9; const a: ta = 5; ");
         }
 
         [TestMethod]
@@ -58,6 +58,8 @@ namespace PasPasPasTests.Types {
             AssertExprValue("Hi($FF)", GetIntegerValue(0x00));
             AssertExprValue("Hi($FFFF)", GetIntegerValue(0xff));
             AssertExprValue("Hi($FFFFFF)", GetIntegerValue(0xff));
+
+            AssertExprValue("Hi(a)", GetIntegerValue(0xf0), "type ta = 3..$FFFF; const a: ta = $F0FF;");
         }
 
         [TestMethod]

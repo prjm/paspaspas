@@ -1,15 +1,12 @@
-﻿using System.Collections.Generic;
-using PasPasPas.Globals.Runtime;
+﻿using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
-using PasPasPas.Typings.Common;
-using PasPasPas.Typings.Structured;
 
 namespace PasPasPas.Typings.Routines {
 
     /// <summary>
     ///     <c>hi</c> function
     /// </summary>
-    public class Hi : IntrinsicRoutine {
+    public class Hi : IntrinsicRoutine, IUnaryRoutine {
 
         /// <summary>
         ///     name of the function
@@ -18,27 +15,48 @@ namespace PasPasPas.Typings.Routines {
             => "Hi";
 
         /// <summary>
+        ///     constant routine
+        /// </summary>
+        public bool IsConstant
+            => true;
+
+        /// <summary>
+        ///     check parameter types
+        /// </summary>
+        /// <param name="parameter"></param>
+        /// <returns></returns>
+        public bool CheckParameter(ITypeReference parameter) {
+            if (parameter.IsIntegral())
+                return true;
+
+            if (parameter.IsSubrangeValue(out var value))
+                return CheckParameter(value.Value);
+
+            return false;
+        }
+
+        /// <summary>
+        ///     execute a call
+        /// </summary>
+        /// <param name="parameter"></param>
+        /// <returns></returns>
+        public ITypeReference ExecuteCall(ITypeReference parameter) {
+
+            if (parameter.IsIntegral())
+                return Integers.Hi(parameter);
+
+            if (parameter.IsSubrangeValue(out var value))
+                return ExecuteCall(value.Value);
+
+            return RuntimeException();
+        }
+
+        /// <summary>
         ///     resolve a call
         /// </summary>
-        /// <param name="callableRoutines"></param>
-        /// <param name="signature"></param>
-        public override void ResolveCall(IList<ParameterGroup> callableRoutines, Signature signature) {
-            if (signature.Length != 1)
-                return;
-
-            var param = TypeRegistry.GetTypeByIdOrUndefinedType(signature[0].TypeId);
-            if (!param.TypeKind.IsIntegral())
-                return;
-
-            var result = new ParameterGroup();
-            result.AddParameter("AValue").SymbolType = signature[0];
-
-            if (signature[0].IsConstant())
-                result.ResultType = TypeRegistry.Runtime.Integers.Hi(signature[0]);
-            else
-                result.ResultType = TypeRegistry.Runtime.Types.MakeReference(KnownTypeIds.ByteType, TypeRegistry.GetTypeKind(KnownTypeIds.ByteType));
-
-            callableRoutines.Add(result);
-        }
+        /// <param name="parameter"></param>
+        /// <returns></returns>
+        public ITypeReference ResolveCall(ITypeReference parameter)
+            => MakeTypeInstanceReference(KnownTypeIds.ByteType);
     }
 }

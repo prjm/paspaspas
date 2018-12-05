@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
+using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
-using PasPasPas.Typings.Common;
 using PasPasPas.Typings.Structured;
 
 namespace PasPasPas.Typings.Routines {
