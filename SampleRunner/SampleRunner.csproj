@@ -4,7 +4,7 @@
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-        <TargetFramework>netcoreapp2.1</TargetFramework>
+        <TargetFramework>netcoreapp2.2</TargetFramework>
         <RuntimeIdentifiers>win-x64;win-x86</RuntimeIdentifiers>
     </PropertyGroup>
 
@@ -17,16 +17,17 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="ErrorProne.NET" Version="0.1.5898.41180" />
+        <PackageReference Include="ErrorProne.NET" Version="0.1.5898.41180" >
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
         <PackageReference Include="ErrorProne.NET.Structs" Version="0.1.2">
             <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
         </PackageReference>
         <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.6.2">
             <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
         </PackageReference>
         <PackageReference Include="System.Buffers" Version="4.5.0" />
+        <PackageReference Include="System.Collections.Immutable" Version="1.5.0" />
     </ItemGroup>
 
     <ItemGroup>
