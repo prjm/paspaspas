@@ -29,8 +29,8 @@ namespace PasPasPas.Typings.Routines {
             if (parameter.IsIntegral())
                 return true;
 
-            if (parameter.IsSubrangeValue(out var value))
-                return CheckParameter(value.Value);
+            if (IsSubrangeType(parameter.TypeId, out var subrangeType))
+                return subrangeType.BaseType.TypeKind.IsIntegral();
 
             return false;
         }

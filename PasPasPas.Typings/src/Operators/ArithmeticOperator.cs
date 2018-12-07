@@ -89,7 +89,7 @@ namespace PasPasPas.Typings.Operators {
             return GetErrorTypeReference();
         }
 
-        private ITypeReference EvaluateUnaryOperand(bool negate, ITypeReference operand, IArithmeticOperations operations) {
+        private static ITypeReference EvaluateUnaryOperand(bool negate, ITypeReference operand, IArithmeticOperations operations) {
             if (operand.IsConstant()) {
                 if (negate)
                     return operations.Negate(operand);
