@@ -346,17 +346,6 @@ namespace PasPasPas.Typings.Common {
             => Runtime.Types.MakeTypeInstanceReference(typeId, GetTypeKindOf(typeId));
 
         /// <summary>
-        ///     get the base type of a subrange type
-        /// </summary>
-        /// <param name="typeId"></param>
-        /// <returns></returns>
-        public int GetBaseTypeOfSubrangeType(int typeId) {
-            if (types.TryGetValue(typeId, out var typeDef) && typeDef is Simple.SubrangeType subrange)
-                return subrange.BaseType.TypeId;
-            return KnownTypeIds.ErrorType;
-        }
-
-        /// <summary>
         ///     cast one type to another type
         /// </summary>
         /// <param name="sourceType">source type</param>

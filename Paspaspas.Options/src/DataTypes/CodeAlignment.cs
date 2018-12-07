@@ -24,19 +24,17 @@
         /// <summary>
         ///     $CODEALIGN 4
         /// </summary>
-        FourByte = 4,
-
+        FourByte = 3,
 
         /// <summary>
         ///     $CODEALIGN 8
         /// </summary>
-        EightByte = 8,
-
+        EightByte = 4,
 
         /// <summary>
         ///     $CODEALIGN 16
         /// </summary>
-        SixteenByte = 16
+        SixteenByte = 5
 
     }
 }

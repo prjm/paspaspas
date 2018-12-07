@@ -123,12 +123,11 @@ namespace PasPasPas.Typings.Operators {
         /// <returns>type reference</returns>
         protected ITypeReference GetSmallestBoolOrIntegralType(ITypeReference left, ITypeReference right, int minBitSize) {
 
-            if (left.TypeKind == CommonTypeKind.SubrangeType)
-                return GetSmallestBoolOrIntegralType(TypeRegistry.MakeReference(TypeRegistry.GetBaseTypeOfSubrangeType(left.TypeId)), right, minBitSize);
+            if (TypeRegistry.IsSubrangeType(left.TypeId, out var subrangeType1))
+                return GetSmallestBoolOrIntegralType(TypeRegistry.MakeReference(subrangeType1.BaseType.TypeId), right, minBitSize);
 
-            if (right.TypeKind == CommonTypeKind.SubrangeType)
-                return GetSmallestBoolOrIntegralType(left, TypeRegistry.MakeReference(TypeRegistry.GetBaseTypeOfSubrangeType(right.TypeId)), minBitSize);
-
+            if (TypeRegistry.IsSubrangeType(right.TypeId, out var subrangeType2))
+                return GetSmallestBoolOrIntegralType(left, TypeRegistry.MakeReference(subrangeType2.BaseType.TypeId), minBitSize);
 
             if (left.TypeKind == CommonTypeKind.BooleanType && right.TypeKind == CommonTypeKind.BooleanType)
                 return TypeRegistry.MakeReference(TypeRegistry.GetSmallestBooleanTypeOrNext(left.TypeId, right.TypeId, minBitSize));

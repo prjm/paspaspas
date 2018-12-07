@@ -1,6 +1,7 @@
 ﻿using System;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
+using PasPasPas.Typings.Common;
 
 namespace PasPasPas.Typings.Operators {
 
@@ -118,8 +119,8 @@ namespace PasPasPas.Typings.Operators {
 
             var baseType = TypeRegistry.GetTypeByIdOrUndefinedType(left.TypeId);
 
-            if (baseType.TypeKind == CommonTypeKind.SubrangeType)
-                baseType = TypeRegistry.GetTypeByIdOrUndefinedType(TypeRegistry.GetBaseTypeOfSubrangeType(baseType.TypeId));
+            if (TypeRegistry.IsSubrangeType(left.TypeId, out var subrangeType))
+                baseType = subrangeType.BaseType;
 
             if (!(baseType is IIntegralType intType))
                 return GetErrorTypeReference();

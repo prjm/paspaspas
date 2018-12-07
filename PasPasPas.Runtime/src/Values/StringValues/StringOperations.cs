@@ -137,7 +137,6 @@ namespace PasPasPas.Runtime.Values.StringValues {
         ///     get the empty string value
         /// </summary>
         /// <returns></returns>
-        public ITypeReference GetEmptyString()
-            => emptyString;
+        public ITypeReference EmptyString => emptyString;
     }
 }

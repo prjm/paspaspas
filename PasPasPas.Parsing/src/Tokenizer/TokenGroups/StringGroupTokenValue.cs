@@ -25,7 +25,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
         /// </summary>
         /// <param name="state">current tokenizer state</param>
         public override Token Tokenize(TokenizerState state) {
-            var parsedValue = state.Environment.Runtime.Strings.GetEmptyString();
+            var parsedValue = state.Environment.Runtime.Strings.EmptyString;
 
             using (var resultBuilder = state.FetchStringBuilder()) {
                 state.PreviousChar();

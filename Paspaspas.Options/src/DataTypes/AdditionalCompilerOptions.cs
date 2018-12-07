@@ -4,6 +4,11 @@
     ///     additional compiler options
     /// </summary>
     public class AdditionalCompilerOptions {
+
+        /// <summary>
+        ///     create new additional compiler options
+        /// </summary>
+        /// <param name="baseOptions"></param>
         public AdditionalCompilerOptions(AdditionalCompilerOptions baseOptions) {
             LegacyIfEnd = new DerivedValueOption<EndIfMode>(baseOptions?.LegacyIfEnd);
             ExtendedCompatibility = new DerivedValueOption<ExtendedCompatibilityMode>(baseOptions?.ExtendedCompatibility);

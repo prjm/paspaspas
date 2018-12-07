@@ -24,7 +24,7 @@
         ///     get an empty string
         /// </summary>
         /// <returns></returns>
-        ITypeReference GetEmptyString();
+        ITypeReference EmptyString { get; }
     }
 }
 

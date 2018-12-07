@@ -27,12 +27,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     return type attributes
         /// </summary>
-        public IList<SymbolAttribute> ReturnAttributes { get; set; }
+        public IList<SymbolAttributeItem> ReturnAttributes { get; set; }
 
         /// <summary>
         ///     user attributes
         /// </summary>
-        public IList<SymbolAttribute> Attributes { get; set; }
+        public IList<SymbolAttributeItem> Attributes { get; set; }
 
         /// <summary>
         ///     overloaded methods

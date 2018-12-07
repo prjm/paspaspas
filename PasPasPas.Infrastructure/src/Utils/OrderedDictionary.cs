@@ -17,7 +17,7 @@ namespace PasPasPas.Infrastructure.Utils {
     ///     structured data.
     /// </remarks>
     [DebuggerDisplay("Count = {Count}")]
-    public class OrderedDictionary<TKey, TValue> : IOrderedDictionary<TKey, TValue> {
+    public sealed class OrderedDictionary<TKey, TValue> : IOrderedDictionary<TKey, TValue> {
 
         private DelegateKeyedCollection<TKey, KeyValuePair<TKey, TValue>> _keyedCollection;
 

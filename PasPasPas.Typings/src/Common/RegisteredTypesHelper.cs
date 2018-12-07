@@ -21,6 +21,23 @@ namespace PasPasPas.Typings.Common {
             => registry.GetTypeByIdOrUndefinedType(typeId).TypeKind;
 
         /// <summary>
+        ///     test if the given type is a subrange type
+        /// </summary>
+        /// <param name="typeId"></param>
+        /// <param name="subrangeType"></param>
+        /// <param name="typeRegistry"></param>
+        /// <returns></returns>
+        public static bool IsSubrangeType(this ITypeRegistry typeRegistry, int typeId, out ISubrangeType subrangeType) {
+            subrangeType = typeRegistry.GetTypeByIdOrUndefinedType(typeId) as ISubrangeType;
+
+            if (subrangeType != default && subrangeType.TypeKind == CommonTypeKind.SubrangeType)
+                return true;
+
+            subrangeType = default;
+            return false;
+        }
+
+        /// <summary>
         ///     get the smallest matching type of two char types
         /// </summary>
         /// <param name="registry">type registry</param>
@@ -34,11 +51,11 @@ namespace PasPasPas.Typings.Common {
             var leftType = registry.GetTypeByIdOrUndefinedType(typeId1);
             var rightType = registry.GetTypeByIdOrUndefinedType(typeId2);
 
-            if (leftType.TypeKind == CommonTypeKind.SubrangeType)
-                leftType = registry.GetTypeByIdOrUndefinedType(registry.GetBaseTypeOfSubrangeType(leftType.TypeId));
+            if (registry.IsSubrangeType(typeId1, out var subrangeType1))
+                leftType = subrangeType1.BaseType;
 
-            if (rightType.TypeKind == CommonTypeKind.SubrangeType)
-                rightType = registry.GetTypeByIdOrUndefinedType(registry.GetBaseTypeOfSubrangeType(rightType.TypeId));
+            if (registry.IsSubrangeType(typeId2, out var subrangeType2))
+                rightType = subrangeType2.BaseType;
 
             if ((!leftType.TypeKind.IsChar()) || (!rightType.TypeKind.IsChar()))
                 return KnownTypeIds.ErrorType;
@@ -68,11 +85,11 @@ namespace PasPasPas.Typings.Common {
             var leftType = registry.GetTypeByIdOrUndefinedType(typeId1);
             var rightType = registry.GetTypeByIdOrUndefinedType(typeId2);
 
-            if (leftType.TypeKind == CommonTypeKind.SubrangeType)
-                leftType = registry.GetTypeByIdOrUndefinedType(registry.GetBaseTypeOfSubrangeType(leftType.TypeId));
+            if (registry.IsSubrangeType(typeId1, out var subrangeType1))
+                leftType = subrangeType1.BaseType;
 
-            if (rightType.TypeKind == CommonTypeKind.SubrangeType)
-                rightType = registry.GetTypeByIdOrUndefinedType(registry.GetBaseTypeOfSubrangeType(rightType.TypeId));
+            if (registry.IsSubrangeType(typeId2, out var subrangeType2))
+                rightType = subrangeType2.BaseType;
 
             if (!leftType.TypeKind.IsTextual())
                 return KnownTypeIds.ErrorType;
@@ -117,11 +134,11 @@ namespace PasPasPas.Typings.Common {
             var leftType = registry.GetTypeByIdOrUndefinedType(typeId1);
             var rightType = registry.GetTypeByIdOrUndefinedType(typeId2);
 
-            if (leftType.TypeKind == CommonTypeKind.SubrangeType)
-                leftType = registry.GetTypeByIdOrUndefinedType(registry.GetBaseTypeOfSubrangeType(leftType.TypeId));
+            if (registry.IsSubrangeType(typeId1, out var subrangeType1))
+                leftType = subrangeType1.BaseType;
 
-            if (rightType.TypeKind == CommonTypeKind.SubrangeType)
-                rightType = registry.GetTypeByIdOrUndefinedType(registry.GetBaseTypeOfSubrangeType(rightType.TypeId));
+            if (registry.IsSubrangeType(typeId2, out var subrangeType2))
+                rightType = subrangeType2.BaseType;
 
             if (!CommonTypeKind.BooleanType.All(leftType.TypeKind, rightType.TypeKind))
                 return KnownTypeIds.ErrorType;
@@ -165,11 +182,11 @@ namespace PasPasPas.Typings.Common {
             var leftType = registry.GetTypeByIdOrUndefinedType(typeId1);
             var rightType = registry.GetTypeByIdOrUndefinedType(typeId2);
 
-            if (leftType.TypeKind == CommonTypeKind.SubrangeType)
-                leftType = registry.GetTypeByIdOrUndefinedType(registry.GetBaseTypeOfSubrangeType(leftType.TypeId));
+            if (registry.IsSubrangeType(typeId1, out var subrangeType1))
+                leftType = subrangeType1.BaseType;
 
-            if (rightType.TypeKind == CommonTypeKind.SubrangeType)
-                rightType = registry.GetTypeByIdOrUndefinedType(registry.GetBaseTypeOfSubrangeType(rightType.TypeId));
+            if (registry.IsSubrangeType(typeId2, out var subrangeType2))
+                rightType = subrangeType2.BaseType;
 
             var right = rightType as IIntegralType;
 
@@ -279,11 +296,12 @@ namespace PasPasPas.Typings.Common {
                 if (leftType.IsNumerical() && rightType.IsNumerical())
                     return DefinedOperators.PlusOperator;
 
-                if (leftType == CommonTypeKind.SubrangeType)
-                    return typeRegistry.GetOperatorId(kind, typeRegistry.MakeReference(typeRegistry.GetBaseTypeOfSubrangeType(left.TypeId)), right);
+                if (typeRegistry.IsSubrangeType(left.TypeId, out var subrangeType1))
+                    return typeRegistry.GetOperatorId(kind, typeRegistry.MakeReference(subrangeType1.BaseType.TypeId), right);
 
-                if (rightType == CommonTypeKind.SubrangeType)
-                    return typeRegistry.GetOperatorId(kind, left, typeRegistry.MakeReference(typeRegistry.GetBaseTypeOfSubrangeType(right.TypeId)));
+                if (typeRegistry.IsSubrangeType(right.TypeId, out var subrangeType2))
+                    return typeRegistry.GetOperatorId(kind, left, typeRegistry.MakeReference(subrangeType2.BaseType.TypeId));
+
 
             }
 

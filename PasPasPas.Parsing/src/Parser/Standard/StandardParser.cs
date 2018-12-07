@@ -139,7 +139,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
         public ISyntaxPart ParseFile() {
 
             if (Tokenizer.AtEof)
-                throw new Exception();
+                throw new InvalidOperationException("No input.");
 
             var path = Tokenizer.Input.CurrentFile;
 

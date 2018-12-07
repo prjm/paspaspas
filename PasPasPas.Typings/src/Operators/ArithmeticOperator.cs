@@ -97,18 +97,7 @@ namespace PasPasPas.Typings.Operators {
                     return operand;
             }
 
-            if (TypeRegistry.GetTypeKindOf(operand.TypeId) != CommonTypeKind.SubrangeType)
-                return operand;
-
-            var baseType = TypeRegistry.GetTypeByIdOrUndefinedType(TypeRegistry.GetBaseTypeOfSubrangeType(operand.TypeId)) as IIntegralType;
-
-            if (baseType != null && baseType.BitSize < 32)
-                return Runtime.Types.MakeTypeInstanceReference(KnownTypeIds.IntegerType, CommonTypeKind.IntegerType);
-
-            if (baseType != null)
-                return Runtime.Types.MakeTypeInstanceReference(baseType.TypeId, TypeRegistry.GetTypeKindOf(baseType.TypeId));
-
-            return GetErrorTypeReference();
+            return operand;
         }
 
         /// <summary>

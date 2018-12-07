@@ -3,7 +3,7 @@
     /// <summary>
     ///     attribute
     /// </summary>
-    public class SymbolAttribute {
+    public class SymbolAttributeItem {
 
         /// <summary>
         ///     attribute name

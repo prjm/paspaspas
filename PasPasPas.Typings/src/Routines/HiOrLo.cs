@@ -1,4 +1,5 @@
-﻿using PasPasPas.Globals.Runtime;
+﻿using System;
+using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Typings.Routines {
@@ -9,15 +10,20 @@ namespace PasPasPas.Typings.Routines {
     public enum HiLoMode {
 
         /// <summary>
+        ///     undefined mode
+        /// </summary>
+        Undefined = 0,
+
+        /// <summary>
         ///     hi
         /// </summary>
-        Hi = 0,
+        Hi = 1,
 
 
         /// <summary>
         ///     lo
         /// </summary>
-        Lo = 1
+        Lo = 2
 
     }
 
@@ -30,8 +36,12 @@ namespace PasPasPas.Typings.Routines {
         ///     create a new hi or lo function
         /// </summary>
         /// <param name="mode"></param>
-        public HiOrLo(HiLoMode mode)
-            => Mode = mode;
+        public HiOrLo(HiLoMode mode) {
+            if (mode == HiLoMode.Undefined)
+                throw new ArgumentOutOfRangeException(nameof(mode));
+
+            Mode = mode;
+        }
 
         /// <summary>
         ///     hi or low

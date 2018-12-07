@@ -875,7 +875,7 @@ namespace PasPasPasTests.Parser {
             RunAstTest("unit z.x; interface implementation procedure p; asm mov  1.OFFSET 5, 1 end; end.", t => (r(t)?.Operands[0] as BinaryOperator)?.Kind, ExpressionKind.Dot);
             RunAstTest("unit z.x; interface implementation procedure p; asm mov  CS:5, 1 end; end.", t => (r(t)?.Operands[0] as BinaryOperator)?.Kind, ExpressionKind.AsmSegmentPrefix);
 
-            RunAstTest("unit z.x; interface implementation procedure p; asm mov  1, 1 end; end.", t => (r(t)?.Operands[0] as ConstantValue)?.Kind, ConstantValueKind.Integer);
+            RunAstTest("unit z.x; interface implementation procedure p; asm mov  1, 1 end; end.", t => (r(t)?.Operands[0] as ConstantValue)?.Kind, ConstantValueKind.IntegralNumber);
             RunAstTest("unit z.x; interface implementation procedure p; asm mov  1.1, 1 end; end.", t => (r(t)?.Operands[0] as ConstantValue)?.Kind, ConstantValueKind.RealNumber);
             RunAstTest("unit z.x; interface implementation procedure p; asm mov  $FF, 1 end; end.", t => (r(t)?.Operands[0] as ConstantValue)?.Kind, ConstantValueKind.HexNumber);
             RunAstTest("unit z.x; interface implementation procedure p; asm mov  'a', 1 end; end.", t => (r(t)?.Operands[0] as ConstantValue)?.Kind, ConstantValueKind.QuotedString);
@@ -953,7 +953,7 @@ namespace PasPasPasTests.Parser {
             RunAstTest("unit z.x; interface implementation procedure p; const n = nil; begin l: s; end; end.", t => (r(t) as ConstantValue)?.Kind, ConstantValueKind.Nil);
             RunAstTest("unit z.x; interface implementation procedure p; const n = false; begin l: s; end; end.", t => (r(t) as ConstantValue)?.Kind, ConstantValueKind.False);
             RunAstTest("unit z.x; interface implementation procedure p; const n = true; begin l: s; end; end.", t => (r(t) as ConstantValue)?.Kind, ConstantValueKind.True);
-            RunAstTest("unit z.x; interface implementation procedure p; const n = 5; begin l: s; end; end.", t => (r(t) as ConstantValue)?.Kind, ConstantValueKind.Integer);
+            RunAstTest("unit z.x; interface implementation procedure p; const n = 5; begin l: s; end; end.", t => (r(t) as ConstantValue)?.Kind, ConstantValueKind.IntegralNumber);
             RunAstTest("unit z.x; interface implementation procedure p; const n = 5.55; begin l: s; end; end.", t => (r(t) as ConstantValue)?.Kind, ConstantValueKind.RealNumber);
             RunAstTest("unit z.x; interface implementation procedure p; const n = 'a'; begin l: s; end; end.", t => (r(t) as ConstantValue)?.Kind, ConstantValueKind.QuotedString);
             RunAstTest("unit z.x; interface implementation procedure p; const n = $FFFF; begin l: s; end; end.", t => (r(t) as ConstantValue)?.Kind, ConstantValueKind.HexNumber);

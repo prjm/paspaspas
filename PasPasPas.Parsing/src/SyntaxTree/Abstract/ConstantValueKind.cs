@@ -28,7 +28,7 @@
         /// <summary>
         ///     integer value
         /// </summary>
-        Integer,
+        IntegralNumber,
 
         /// <summary>
         ///     real value

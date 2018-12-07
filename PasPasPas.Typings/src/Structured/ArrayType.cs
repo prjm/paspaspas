@@ -13,13 +13,13 @@ namespace PasPasPas.Typings.Structured {
         ///     create a new array type
         /// </summary>
         /// <param name="withId"></param>
-        public ArrayType(int withId) : base(withId) {
-        }
+        /// <param name="indexTypes">index types</param>
+        public ArrayType(int withId, ImmutableArray<int> indexTypes) : base(withId) => IndexTypes = indexTypes;
 
         /// <summary>
         ///     array index types
         /// </summary>
-        public ImmutableArray<int> IndexTypes { get; set; }
+        public ImmutableArray<int> IndexTypes { get; }
 
         /// <summary>
         ///     type kind

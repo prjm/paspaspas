@@ -12,7 +12,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     assigned attributes
         /// </summary>
-        public IList<SymbolAttribute> Attributes { get; set; }
+        public IList<SymbolAttributeItem> Attributes { get; set; }
 
         /// <summary>
         ///     property name

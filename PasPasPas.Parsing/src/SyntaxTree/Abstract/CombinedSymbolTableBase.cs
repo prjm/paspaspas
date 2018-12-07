@@ -19,7 +19,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     creates a new combined symbol table
         /// </summary>
-        public CombinedSymbolTableBaseCollection()
+        protected CombinedSymbolTableBaseCollection()
             => Items = new SyntaxPartCollection<TItems>(this);
 
     }

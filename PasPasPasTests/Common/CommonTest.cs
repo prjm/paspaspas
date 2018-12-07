@@ -66,6 +66,15 @@ namespace PasPasPasTests.Common {
             => IntegerValueBase.ToScaledIntegerValue(number);
 
         /// <summary>
+        ///     make a unkown value
+        /// </summary>
+        /// <param name="typeId"></param>
+        /// <param name="typeKind"></param>
+        /// <returns></returns>
+        protected static ITypeReference GetUnkownValue(int typeId, CommonTypeKind typeKind)
+            => MakeRuntime().Types.MakeTypeInstanceReference(typeId, typeKind);
+
+        /// <summary>
         ///     get a subrange value
         /// </summary>
         /// <param name="typeId"></param>

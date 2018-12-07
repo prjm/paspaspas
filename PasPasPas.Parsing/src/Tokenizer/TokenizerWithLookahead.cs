@@ -77,8 +77,8 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <summary>
         ///     list of tokens
         /// </summary>
-        private IndexedQueue<PoolItem<TokenSequence>> tokenList
-            = new IndexedQueue<PoolItem<TokenSequence>>();
+        private QueueWithIndexCollection<PoolItem<TokenSequence>> tokenList
+            = new QueueWithIndexCollection<PoolItem<TokenSequence>>();
 
         /// <summary>
         ///     list of invalid tokens (e.g. whitespace)

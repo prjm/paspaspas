@@ -1,4 +1,6 @@
-﻿using PasPasPasTests.Common;
+﻿using PasPasPas.Globals.Runtime;
+using PasPasPas.Globals.Types;
+using PasPasPasTests.Common;
 
 namespace PasPasPasTests.Types {
 
@@ -36,6 +38,14 @@ namespace PasPasPasTests.Types {
             AssertExprValue("Abs(5)", GetIntegerValue(5));
             AssertExprValue("Abs(0)", GetIntegerValue(0));
             AssertExprValue("Abs(-3)", GetIntegerValue(3));
+            AssertExprValue("Abs(a)", GetSubrangeValue(1000, GetIntegerValue(5)), "type Ta=-4..8; const a: Ta = 5;");
+            AssertExprValue("Abs(a)", GetSubrangeValue(1000, GetIntegerValue(0)), "type Ta=-4..8; const a: Ta = 0;");
+            AssertExprValue("Abs(a)", GetSubrangeValue(1000, GetIntegerValue(3)), "type Ta=-4..8; const a: Ta = -3;");
+            AssertExprValue("Abs(a)", GetUnkownValue(KnownTypeIds.IntegerType, CommonTypeKind.IntegerType), "var a: integer;", isConstant: false);
+            AssertExprValue("Abs(-a)", GetUnkownValue(1000, CommonTypeKind.SubrangeType), "type Ta = -4..4; var a: Ta;", isConstant: false);
+            AssertExprValue("Abs(a)", GetUnkownValue(1000, CommonTypeKind.SubrangeType), "type Ta = -4..4; var a: Ta;", isConstant: false);
+            AssertExprValue("Abs(-a)", GetUnkownValue(1000, CommonTypeKind.SubrangeType), "type Ta = -4..4; var a: Ta;", isConstant: false);
+
 
             AssertExprValue("Abs(5.4)", GetExtendedValue("5.4"));
             AssertExprValue("Abs(0.0)", GetExtendedValue(0));

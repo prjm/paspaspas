@@ -10,14 +10,14 @@ namespace PasPasPas.Infrastructure.Utils {
     /// <typeparam name="T"></typeparam>
     internal sealed class IndexedQueueEnumerator<T> : IEnumerator<T> {
 
-        private readonly IndexedQueue<T> refQueue;
+        private readonly QueueWithIndexCollection<T> refQueue;
         private int index = 0;
 
         /// <summary>
         ///     create a new enumerator
         /// </summary>
         /// <param name="queue"></param>
-        public IndexedQueueEnumerator(IndexedQueue<T> queue)
+        public IndexedQueueEnumerator(QueueWithIndexCollection<T> queue)
             => refQueue = queue;
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace PasPasPas.Infrastructure.Utils {
     ///     indexed queue
     /// </summary>
     /// <typeparam name="T">queue type</typeparam>
-    public class IndexedQueue<T> : IEnumerable<T> {
+    public class QueueWithIndexCollection<T> : IEnumerable<T> {
 
         private T[] array;
         private int start;
@@ -68,13 +68,13 @@ namespace PasPasPas.Infrastructure.Utils {
         /// <summary>
         ///     create a new queue
         /// </summary>
-        public IndexedQueue() : this(4) { }
+        public QueueWithIndexCollection() : this(4) { }
 
         /// <summary>
         ///     create a new queue
         /// </summary>
         /// <param name="initialBufferSize"></param>
-        public IndexedQueue(int initialBufferSize) {
+        public QueueWithIndexCollection(int initialBufferSize) {
 
             if (initialBufferSize < 0)
                 throw new ArgumentOutOfRangeException(nameof(initialBufferSize));

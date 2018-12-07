@@ -93,7 +93,24 @@ namespace PasPasPas.Typings.Routines {
             return false;
         }
 
-        ///     test if the given type is a short string type
+        /// <summary>
+        ///     test if the given type is a subrange type
+        /// </summary>
+        /// <param name="typeId"></param>
+        /// <param name="subrangeType"></param>
+        /// <returns></returns>
+        public bool IsSubrangeType(int typeId, out ISubrangeType subrangeType) {
+            subrangeType = TypeRegistry.GetTypeByIdOrUndefinedType(typeId) as ISubrangeType;
+
+            if (subrangeType != default && subrangeType.TypeKind == CommonTypeKind.SubrangeType)
+                return true;
+
+            subrangeType = default;
+            return false;
+        }
+
+        /// <summary>
+        ///     test if the given type is a array type
         /// </summary>
         /// <param name="typeId"></param>
         /// <param name="arrayType"></param>
@@ -116,6 +133,9 @@ namespace PasPasPas.Typings.Routines {
         public virtual void ResolveCall(IList<ParameterGroup> callableRoutines, Signature signature) {
             if (this is IUnaryRoutine unaryRoutine)
                 ResolveCall(unaryRoutine, callableRoutines, signature);
+
+            if (this is IVariadicRoutine variadicRoutine)
+                ResolveCall(variadicRoutine, callableRoutines, signature);
         }
 
         private static void ResolveCall(IUnaryRoutine unaryRoutine, IList<ParameterGroup> callableRoutines, Signature signature) {
@@ -135,6 +155,26 @@ namespace PasPasPas.Typings.Routines {
                 result.ResultType = unaryRoutine.ExecuteCall(parameter);
             else
                 result.ResultType = unaryRoutine.ResolveCall(parameter);
+        }
+
+
+        private static void ResolveCall(IVariadicRoutine variadicRoutine, IList<ParameterGroup> callableRoutines, Signature signature) {
+            if (signature.Length != 1)
+                return;
+
+            if (!variadicRoutine.CheckParameter(signature))
+                return;
+
+            var result = new ParameterGroup();
+
+            for (var i = 0; i < signature.Length; i++)
+                result.AddParameter($"AValue{signature}").SymbolType = signature[0];
+            callableRoutines.Add(result);
+
+            if (variadicRoutine.IsConstant && signature.IsConstant)
+                result.ResultType = variadicRoutine.ExecuteCall(signature);
+            else
+                result.ResultType = variadicRoutine.ResolveCall(signature);
         }
 
 

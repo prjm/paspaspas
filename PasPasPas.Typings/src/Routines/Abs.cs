@@ -22,8 +22,8 @@ namespace PasPasPas.Typings.Routines {
             if (parameter.IsNumerical())
                 return true;
 
-            if (parameter.IsSubrangeValue(out var value))
-                return CheckParameter(value.Value);
+            if (IsSubrangeType(parameter.TypeId, out var value))
+                return value.BaseType.TypeKind.IsNumerical();
 
             return false;
         }
@@ -40,7 +40,7 @@ namespace PasPasPas.Typings.Routines {
         /// <param name="parameter"></param>
         /// <returns></returns>
         public ITypeReference ResolveCall(ITypeReference parameter)
-            => parameter;
+            => MakeTypeInstanceReference(parameter.TypeId);
 
         /// <summary>
         ///     resolve a call
@@ -49,13 +49,13 @@ namespace PasPasPas.Typings.Routines {
         /// <returns></returns>
         public ITypeReference ExecuteCall(ITypeReference parameter) {
 
-            if (parameter.TypeKind.IsIntegral())
+            if (parameter.IsIntegral())
                 return Integers.Abs(parameter);
 
-            if (parameter.TypeKind == CommonTypeKind.RealType)
+            if (parameter.IsReal())
                 return RealNumbers.Abs(parameter);
 
-            if (parameter.TypeKind == CommonTypeKind.SubrangeType && parameter is ISubrangeValue value)
+            if (parameter.IsSubrangeValue(out var value))
                 return MakeSubrangeValue(parameter.TypeId, ExecuteCall(value.Value));
 
             return RuntimeException();

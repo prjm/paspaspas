@@ -572,12 +572,10 @@ namespace PasPasPas.Typings.Common {
         /// <param name="element"></param>
         public void EndVisit(ArrayTypeDeclaration element) {
             var typeId = RequireUserTypeId();
-            var typeDef = new ArrayType(typeId);
+            var baseTypeId = KnownTypeIds.ErrorType;
 
             if (element.TypeValue != null && element.TypeValue.TypeInfo != null)
-                typeDef.BaseTypeId = element.TypeValue.TypeInfo.TypeId;
-
-            typeDef.Packed = element.PackedType;
+                baseTypeId = element.TypeValue.TypeInfo.TypeId;
 
             using (var list = environment.ListPools.GetList<int>()) {
                 foreach (var indexDef in element.IndexItems) {
@@ -593,11 +591,14 @@ namespace PasPasPas.Typings.Common {
                         list.Item.Add(KnownTypeIds.ErrorType);
                 }
 
-                typeDef.IndexTypes = ListPools.GetFixedArray(list);
-            }
+                var typeDef = new ArrayType(typeId, ListPools.GetFixedArray(list)) {
+                    Packed = element.PackedType,
+                    BaseTypeId = baseTypeId
+                };
 
-            RegisterUserDefinedType(typeDef);
-            element.TypeInfo = GetInstanceTypeById(typeDef.TypeInfo.TypeId);
+                RegisterUserDefinedType(typeDef);
+                element.TypeInfo = GetInstanceTypeById(typeDef.TypeInfo.TypeId);
+            }
         }
 
         /// <summary>
@@ -839,15 +840,14 @@ namespace PasPasPas.Typings.Common {
                 var ints = TypeRegistry.Runtime.Integers;
                 var indexTypeDef = new Simple.SubrangeType(indexTypeId, KnownTypeIds.IntegerType, ints.Zero, ints.ToScaledIntegerValue(count));
                 var indexType = RegisterUserDefinedType(indexTypeDef);
+                var arrayType = new ArrayType(typeId, ImmutableArray.Create(indexType.TypeId)) { BaseTypeId = baseType.TypeId };
+                var registeredType = RegisterUserDefinedType(arrayType).TypeId;
 
                 if (isConstant) {
-                    var arrayType = new ArrayType(typeId) { BaseTypeId = baseType.TypeId };
-                    arrayType.IndexTypes = ImmutableArray.Create(indexType.TypeId);
-                    var registeredType = RegisterUserDefinedType(arrayType).TypeId;
                     element.TypeInfo = environment.Runtime.Structured.CreateArrayValue(registeredType, baseType.TypeId, ListPools.GetFixedArray(constantValues));
                 }
                 else {
-                    element.TypeInfo = GetInstanceTypeById(RegisterUserDefinedType(new ArrayType(typeId) { BaseTypeId = baseType.TypeId }).TypeId);
+                    element.TypeInfo = GetInstanceTypeById(registeredType);
                 }
             }
         }

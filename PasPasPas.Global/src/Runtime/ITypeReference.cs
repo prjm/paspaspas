@@ -71,6 +71,15 @@ namespace PasPasPas.Globals.Runtime {
             => typeReference.TypeKind.IsIntegral();
 
         /// <summary>
+        ///     test if this is a in real value
+        /// </summary>
+        /// <param name="typeReference"></param>
+        /// <returns></returns>
+        public static bool IsReal(this ITypeReference typeReference)
+            => typeReference.TypeKind == CommonTypeKind.RealType;
+
+
+        /// <summary>
         ///     test if this is a in ordinal value
         /// </summary>
         /// <param name="typeReference"></param>

@@ -644,7 +644,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 var lastExpression = LastExpression;
                 var value = new ConstantValue();
                 InitNode(value, element);
-                value.Kind = ConstantValueKind.Integer;
+                value.Kind = ConstantValueKind.IntegralNumber;
                 value.TypeInfo = element.IntValue.Value.Token.ParsedValue;
                 lastExpression.Value = value;
                 return;
@@ -1937,7 +1937,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (fields != null)
                 fields.Add(result);
 
-            IList<SymbolAttribute> extractedAttributes = null;
+            IList<SymbolAttributeItem> extractedAttributes = null;
             if (element.ParentItem is RecordItemSymbol declItem) {
                 extractedAttributes = ExtractAttributes(declItem.Attributes1 as UserAttributesSymbol, CurrentUnit);
                 extractedAttributes = ExtractAttributes(declItem.Attributes2 as UserAttributesSymbol, CurrentUnit, extractedAttributes);
@@ -2625,7 +2625,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 result.Kind = AssemblerStatementKind.ParamsOperation;
                 var operand = new ConstantValue();
                 InitNode(operand, element.NumberOfParams);
-                operand.Kind = ConstantValueKind.Integer;
+                operand.Kind = ConstantValueKind.IntegralNumber;
                 operand.TypeInfo = element.NumberOfParams.Value.Token.ParsedValue;
                 result.Operands.Add(operand);
             }
@@ -2964,7 +2964,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             if (element.Number != null) {
                 var value = new ConstantValue();
                 InitNode(value, element);
-                value.Kind = ConstantValueKind.Integer;
+                value.Kind = ConstantValueKind.IntegralNumber;
                 expression.Value = value;
                 return;
             }
@@ -3188,19 +3188,19 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             return result;
         }
 
-        private IList<SymbolAttribute> ExtractAttributes(UserAttributesSymbol attributes, CompilationUnit parentUnit, IList<SymbolAttribute> result = null) {
+        private IList<SymbolAttributeItem> ExtractAttributes(UserAttributesSymbol attributes, CompilationUnit parentUnit, IList<SymbolAttributeItem> result = null) {
             if (attributes == null || attributes.Items == null || attributes.Items.Length < 1)
-                return result ?? Array.Empty<SymbolAttribute>();
+                return result ?? Array.Empty<SymbolAttributeItem>();
 
             if (result == null)
-                result = new List<SymbolAttribute>();
+                result = new List<SymbolAttributeItem>();
 
             foreach (var set in attributes.Items) {
                 foreach (var attribute in set.Items) {
 
                     var isAssemblyAttribute = false;
 
-                    var userAttribute = new SymbolAttribute() {
+                    var userAttribute = new SymbolAttributeItem() {
                         Name = ExtractSymbolName(attribute.Name)
                     };
                     if (!isAssemblyAttribute) {

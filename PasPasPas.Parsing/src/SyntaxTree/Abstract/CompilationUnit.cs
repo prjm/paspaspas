@@ -106,14 +106,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     list of assembly attributes
         /// </summary>
-        private IList<SymbolAttribute> AssemblyAttributes { get; }
-            = new List<SymbolAttribute>();
+        private IList<SymbolAttributeItem> AssemblyAttributes { get; }
+            = new List<SymbolAttributeItem>();
 
         /// <summary>
         ///     add an assembly attribute
         /// </summary>
         /// <param name="assemblyAttribute"></param>
-        public void AddAssemblyAttribute(SymbolAttribute assemblyAttribute)
+        public void AddAssemblyAttribute(SymbolAttributeItem assemblyAttribute)
             => AssemblyAttributes.Add(assemblyAttribute);
 
         private int symbolNames = 0;

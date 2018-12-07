@@ -1,4 +1,5 @@
-﻿using PasPasPas.Globals.Runtime;
+﻿using System;
+using PasPasPas.Globals.Runtime;
 
 namespace PasPasPas.Typings.Routines {
 
@@ -6,6 +7,11 @@ namespace PasPasPas.Typings.Routines {
     ///     high or low function mode
     /// </summary>
     public enum HighOrLowMode {
+
+        /// <summary>
+        ///     undefined mode
+        /// </summary>
+        Undefined = 0,
 
         /// <summary>
         ///     high
@@ -28,7 +34,12 @@ namespace PasPasPas.Typings.Routines {
         ///     create a new high or low function
         /// </summary>
         /// <param name="mode"></param>
-        public HighOrLow(HighOrLowMode mode) => Mode = mode;
+        public HighOrLow(HighOrLowMode mode) {
+            if (mode == HighOrLowMode.Undefined)
+                throw new ArgumentOutOfRangeException(nameof(mode));
+
+            Mode = mode;
+        }
 
         private bool Low
             => Mode == HighOrLowMode.Low;

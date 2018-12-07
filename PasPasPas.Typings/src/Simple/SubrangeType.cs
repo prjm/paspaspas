@@ -8,9 +8,7 @@ namespace PasPasPas.Typings.Simple {
     /// <summary>
     ///     subrange type
     /// </summary>
-    public class SubrangeType : TypeBase, IOrdinalType {
-
-        private readonly int baseTypeId;
+    public class SubrangeType : TypeBase, ISubrangeType {
 
         /// <summary>
         ///     create a new subrange type
@@ -20,7 +18,7 @@ namespace PasPasPas.Typings.Simple {
         /// <param name="low"></param>
         /// <param name="high"></param>
         public SubrangeType(int withId, int baseType, ITypeReference low, ITypeReference high) : base(withId) {
-            baseTypeId = baseType;
+            BaseTypeId = baseType;
             LowestElement = low;
             HighestElement = high;
         }
@@ -51,11 +49,16 @@ namespace PasPasPas.Typings.Simple {
         }
 
         /// <summary>
+        ///     base type id
+        /// </summary>
+        public int BaseTypeId { get; }
+
+        /// <summary>
         ///     base type
         /// </summary>
         public IOrdinalType BaseType {
             get {
-                var result = TypeRegistry.GetTypeByIdOrUndefinedType(baseTypeId) as IOrdinalType;
+                var result = TypeRegistry.GetTypeByIdOrUndefinedType(BaseTypeId) as IOrdinalType;
                 return result;
             }
         }

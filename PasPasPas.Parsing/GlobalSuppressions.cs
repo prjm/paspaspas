@@ -13,3 +13,10 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA1801:Review unused parameters", Justification = "<Pending>", Scope = "member", Target = "~M:PasPasPas.Parsing.SyntaxTree.Visitors.TreeTransformer.EndVisit(PasPasPas.Parsing.SyntaxTree.Standard.RecordDeclarationSymbol)")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA1801:Review unused parameters", Justification = "<Pending>", Scope = "member", Target = "~M:PasPasPas.Parsing.SyntaxTree.Visitors.TreeTransformer.EndVisit(PasPasPas.Parsing.SyntaxTree.Standard.RecordHelperDefinitionSymbol)")]
 
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Maintainability", "CA1506:Avoid excessive class coupling", Justification = "<Pending>", Scope = "type", Target = "~T:PasPasPas.Parsing.Parser.CompilerDirectiveParser")]
+
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Maintainability", "CA1506:Avoid excessive class coupling", Justification = "<Pending>", Scope = "type", Target = "~T:PasPasPas.Parsing.SyntaxTree.Visitors.CompilerDirectiveVisitor")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Maintainability", "CA1502:Avoid excessive complexity", Justification = "<Pending>", Scope = "member", Target = "~M:PasPasPas.Parsing.Parser.CompilerDirectiveParser.ParseLongSwitch~PasPasPas.Parsing.SyntaxTree.Utils.ISyntaxPart")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Maintainability", "CA1502:Avoid excessive complexity", Justification = "<Pending>", Scope = "member", Target = "~M:PasPasPas.Parsing.Parser.CompilerDirectiveParser.ParseParameter~PasPasPas.Parsing.SyntaxTree.Utils.ISyntaxPart")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Maintainability", "CA1506:Avoid excessive class coupling", Justification = "<Pending>", Scope = "type", Target = "~T:PasPasPas.Parsing.SyntaxTree.Visitors.TreeTransformer")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Maintainability", "CA1506:Avoid excessive class coupling", Justification = "<Pending>", Scope = "type", Target = "~T:PasPasPas.Parsing.Parser.Standard.StandardParser")]
