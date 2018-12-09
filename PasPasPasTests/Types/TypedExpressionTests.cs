@@ -375,8 +375,8 @@ namespace PasPasPasTests.Types {
             };
 
             // subrange types
-            AssertExprTypeByVar("-1..1", "+ a", 1000);
-            AssertExprTypeByVar("-1..1", "- a", 1000);
+            AssertExprTypeByVar("-1..1", "+ a", RegisteredTypes.SmallestUserTypeId);
+            AssertExprTypeByVar("-1..1", "- a", RegisteredTypes.SmallestUserTypeId);
 
             AssertExprTypeByVar("Byte", "+ a", KnownTypeIds.ByteType);
             AssertExprTypeByVar("Word", "+ a", KnownTypeIds.WordType);

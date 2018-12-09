@@ -37,7 +37,7 @@ namespace PasPasPasTests.Types {
                 "type e = (e1, e2);", RegisteredTypes.SmallestUserTypeId);
 
             AssertExprValue("e(257)",
-                GetSubrangeValue(1000, new ShortIntValue(1)), "type e = -2..2;", 1000);
+                GetSubrangeValue(RegisteredTypes.SmallestUserTypeId, new ShortIntValue(1)), "type e = -2..2;", 1000);
         }
 
         [TestMethod]
@@ -87,7 +87,7 @@ namespace PasPasPasTests.Types {
                 "type e = (e1, e2);", RegisteredTypes.SmallestUserTypeId);
 
             AssertExprValue("e('a')",
-                GetSubrangeValue(1000, new ShortIntValue(97)), "type e = -2..2;", 1000);
+                GetSubrangeValue(RegisteredTypes.SmallestUserTypeId, new ShortIntValue(97)), "type e = -2..2;", 1000);
 
 
         }
