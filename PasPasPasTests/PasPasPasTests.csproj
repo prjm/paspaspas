@@ -10,7 +10,7 @@
         <Company>$(PasPasPasCompany)</Company>
         <Copyright>$(PasPasPasCopyright)</Copyright>
         <Product>PasPasPasTests</Product>
-        <CodeAnalysisRuleSet>../PasPasPas.Testing.Ruleset</CodeAnalysisRuleSet>
+        <CodeAnalysisRuleSet>../PasPasPas.Testing.ruleset</CodeAnalysisRuleSet>
         <LangVersion>$(PasPasPasCsLanguageVersion)</LangVersion>
     </PropertyGroup>
 
