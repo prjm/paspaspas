@@ -2,8 +2,8 @@ language: csharp
 solution: paspaspas.sln
 mono: none
 dotnet: 2.2.100
-dist: trusty
+dist: xenial
 script:
  - cd PasPasPasTests
- - dotnet restore 
+ - dotnet restore
  - dotnet test
