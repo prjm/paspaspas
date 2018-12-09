@@ -112,12 +112,28 @@ namespace PasPasPas.Globals.Runtime {
             => typeReference.TypeKind == CommonTypeKind.ShortStringType;
 
         /// <summary>
-        ///     test if this is a in string value
+        ///     test if this is a string value
         /// </summary>
         /// <param name="typeReference"></param>
         /// <returns></returns>
         public static bool IsString(this ITypeReference typeReference)
             => typeReference.TypeKind.IsString();
+
+        /// <summary>
+        ///     test if this is a text value
+        /// </summary>
+        /// <param name="typeReference"></param>
+        /// <returns></returns>
+        public static bool IsTextual(this ITypeReference typeReference)
+            => typeReference.TypeKind.IsTextual();
+
+        /// <summary>
+        ///     test if this is a unicode text value
+        /// </summary>
+        /// <param name="typeReference"></param>
+        /// <returns></returns>
+        public static bool IsUnicodeText(this ITypeReference typeReference)
+            => typeReference.TypeKind.IsUnicodeText();
 
         /// <summary>
         ///     test if this is a in char value

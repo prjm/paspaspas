@@ -39,6 +39,12 @@ namespace PasPasPas.Typings.Routines {
             => TypeRegistry?.Runtime?.Integers;
 
         /// <summary>
+        ///     strings
+        /// </summary>
+        public IStringOperations Strings
+            => TypeRegistry.Runtime.Strings;
+
+        /// <summary>
         ///     real number values
         /// </summary>
         public IRealNumberOperations RealNumbers
@@ -159,8 +165,6 @@ namespace PasPasPas.Typings.Routines {
 
 
         private static void ResolveCall(IVariadicRoutine variadicRoutine, IList<ParameterGroup> callableRoutines, Signature signature) {
-            if (signature.Length != 1)
-                return;
 
             if (!variadicRoutine.CheckParameter(signature))
                 return;

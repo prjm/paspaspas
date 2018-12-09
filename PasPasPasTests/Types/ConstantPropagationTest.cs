@@ -71,6 +71,7 @@ namespace PasPasPasTests.Types {
             AssertExprValue("Hi($FFFFFF)", GetIntegerValue(0xff));
 
             AssertExprValue("Hi(a)", GetIntegerValue(0xf0), "type ta = 3..$FFFF; const a: ta = $F0FF;");
+            AssertExprValue("Hi(a)", GetUnkownValue(KnownTypeIds.ByteType, CommonTypeKind.IntegerType), "type ta = 3..$FFFF; var a: ta;", isConstant: false);
         }
 
         [TestMethod]
@@ -112,6 +113,8 @@ namespace PasPasPasTests.Types {
             AssertExprValue("Length('aaa')", GetIntegerValue(3));
 
             AssertExprValue("Length(a)", GetIntegerValue(3), "const a = (1,2,3);");
+            AssertExprValue("Length(a)", GetIntegerValue(1), "type Ta = 'a'..'c'; const a: Ta = 'a';");
+            AssertExprValue("Length(a)", GetUnkownValue(KnownTypeIds.IntegerType, CommonTypeKind.IntegerType), "type Ta = 'a'..'c'; var a: Ta;", isConstant: false);
         }
 
         [TestMethod]
@@ -165,6 +168,11 @@ namespace PasPasPasTests.Types {
             AssertExprValue("Concat('', 'b')", GetUnicodeStringValue("b"));
             AssertExprValue("Concat('', '')", GetUnicodeStringValue(""));
             AssertExprValue("Concat('a', 'b', 'c')", GetUnicodeStringValue("abc"));
+            AssertExprValue("Concat(a, a, a)", GetUnicodeStringValue("aaa"), "type Ta = 'a'..'b'; const a: Ta = 'a';");
+            AssertExprValue("Concat(a)", GetWideCharValue('a'), "type Ta = 'a'..'b'; const a: Ta = 'a';");
+
+            AssertExprValue("Concat(a, a, a)", GetUnkownValue(KnownTypeIds.UnicodeStringType, CommonTypeKind.UnicodeStringType), "type Ta = 'a'..'b'; var a: Ta;", isConstant: false);
+            AssertExprValue("Concat(a)", GetUnkownValue(KnownTypeIds.WideCharType, CommonTypeKind.WideCharType), "type Ta = 'a'..'b'; var a: Ta;", isConstant: false);
         }
 
         [TestMethod]

@@ -27,13 +27,19 @@ namespace PasPasPas.Typings.Routines {
         /// <returns></returns>
         public bool CheckParameter(ITypeReference parameter) {
 
-            if (parameter.IsString())
+            var typeKind = parameter.TypeKind;
+
+            if (IsSubrangeType(parameter.TypeId, out var subrangeType))
+                typeKind = subrangeType.BaseType.TypeKind;
+
+
+            if (typeKind.IsString())
                 return true;
 
-            if (parameter.IsChar())
+            if (typeKind.IsChar())
                 return true;
 
-            if (parameter.IsArray())
+            if (typeKind.IsArray())
                 return true;
 
             return false;
@@ -54,6 +60,9 @@ namespace PasPasPas.Typings.Routines {
 
             if (parameter.IsArrayValue(out var arrayValue))
                 return Integers.ToScaledIntegerValue(arrayValue.Values.Length);
+
+            if (parameter.IsSubrangeValue(out var subrangeValue))
+                return ExecuteCall(subrangeValue.Value);
 
             return RuntimeException();
         }
