@@ -17,7 +17,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="ErrorProne.NET" Version="0.1.5898.41180" >
+        <PackageReference Include="ErrorProne.NET" Version="0.1.5898.41180">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
         <PackageReference Include="ErrorProne.NET.Structs" Version="0.1.2">
@@ -26,6 +26,7 @@
         <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.6.2">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
+        <PackageReference Include="SharpFloatLibrary" Version="1.0.2" />
         <PackageReference Include="System.Buffers" Version="4.5.0" />
         <PackageReference Include="System.Collections.Immutable" Version="1.5.0" />
     </ItemGroup>

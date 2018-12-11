@@ -209,6 +209,22 @@ namespace PasPasPas.Globals.Runtime {
             return false;
         }
 
+        /// <summary>
+        ///     test if this value is an integral value
+        /// </summary>
+        /// <param name="typeReference"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static bool IsIntegralValue(this ITypeReference typeReference, out IIntegerValue value) {
+            value = typeReference as IIntegerValue;
+
+            if (typeReference.TypeKind.IsIntegral() && value != default)
+                return true;
+
+            value = default;
+            return false;
+        }
+
 
     }
 

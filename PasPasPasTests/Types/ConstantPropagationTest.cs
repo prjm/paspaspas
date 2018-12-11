@@ -158,7 +158,13 @@ namespace PasPasPasTests.Types {
             AssertExprValue("Low(Ta)", GetWideCharValue('a'), "type Ta = array['a'..'c'];");
         }
 
-
+        [TestMethod]
+        public void TestMulDiv64() {
+            AssertExprValue("MulDivInt64(10, 4, 2)", GetIntegerValue(20));
+            AssertExprValue("MulDivInt64(-10, 4, 2)", GetIntegerValue(-20));
+            AssertExprValue("MulDivInt64(a, 4, 2)", GetUnkownValue(KnownTypeIds.Int64Type, CommonTypeKind.Int64Type), "var a: byte;", isConstant: false);
+            AssertExprValue("MulDivInt64(a, 4, 2)", GetUnkownValue(KnownTypeIds.Int64Type, CommonTypeKind.Int64Type), "type Ta = 3..8; var a: Ta;", isConstant: false);
+        }
 
         [TestMethod]
         public void TestConcat() {
