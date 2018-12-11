@@ -39,6 +39,12 @@ namespace PasPasPas.Typings.Routines {
             => TypeRegistry?.Runtime?.Integers;
 
         /// <summary>
+        ///     integer values
+        /// </summary>
+        public IBooleanOperations Booleans
+            => TypeRegistry?.Runtime?.Booleans;
+
+        /// <summary>
         ///     strings
         /// </summary>
         public IStringOperations Strings

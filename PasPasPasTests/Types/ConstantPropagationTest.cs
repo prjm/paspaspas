@@ -159,6 +159,14 @@ namespace PasPasPasTests.Types {
         }
 
         [TestMethod]
+        public void TestOdd() {
+            AssertExprValue("Odd(-3)", GetBooleanValue(true));
+            AssertExprValue("Odd(4)", GetBooleanValue(false));
+            AssertExprValue("Odd(a)", GetUnkownValue(KnownTypeIds.BooleanType, CommonTypeKind.BooleanType), "var a: ShortInt;", isConstant: false);
+            AssertExprValue("Odd(a)", GetUnkownValue(KnownTypeIds.BooleanType, CommonTypeKind.BooleanType), "type Ta = -3..3; var a: Ta;", isConstant: false);
+        }
+
+        [TestMethod]
         public void TestMulDiv64() {
             AssertExprValue("MulDivInt64(10, 4, 2)", GetIntegerValue(20));
             AssertExprValue("MulDivInt64(-10, 4, 2)", GetIntegerValue(-20));

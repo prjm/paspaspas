@@ -103,6 +103,7 @@ namespace PasPasPas.Typings.Common {
             systemUnit.AddGlobal(new HighOrLow(HighOrLowMode.Low));
             systemUnit.AddGlobal(new MulDivInt64());
             systemUnit.AddGlobal(new Succ());
+            systemUnit.AddGlobal(new Odd());
         }
 
         /// <summary>
