@@ -104,6 +104,7 @@ namespace PasPasPas.Typings.Common {
             systemUnit.AddGlobal(new MulDivInt64());
             systemUnit.AddGlobal(new Succ());
             systemUnit.AddGlobal(new Odd());
+            systemUnit.AddGlobal(new Ord());
         }
 
         /// <summary>

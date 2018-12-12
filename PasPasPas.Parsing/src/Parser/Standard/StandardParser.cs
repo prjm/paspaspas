@@ -100,6 +100,36 @@ namespace PasPasPas.Parsing.Parser.Standard {
             };
 
         #endregion
+        #region Symbol tokens
+
+        private static readonly HashSet<int> symbolTokens
+            = new HashSet<int>() {
+            TokenKind.Comma ,
+            TokenKind.Dot ,
+            TokenKind.OpenParen ,
+            TokenKind.CloseParen ,
+            TokenKind.Semicolon ,
+            TokenKind.EqualsSign ,
+            TokenKind.OpenBraces ,
+            TokenKind.CloseBraces ,
+            TokenKind.Colon ,
+            TokenKind.Circumflex ,
+            TokenKind.DotDot ,
+            TokenKind.Plus ,
+            TokenKind.Minus ,
+            TokenKind.Times ,
+            TokenKind.Slash ,
+            TokenKind.At ,
+            TokenKind.LessThen ,
+            TokenKind.LessThenEquals ,
+            TokenKind.GreaterThen ,
+            TokenKind.GreaterThenEquals ,
+            TokenKind.NotEquals ,
+            TokenKind.Assignment
+            };
+
+        #endregion
+
         #region assembler symbols
 
         private HashSet<string> lockPrefixes =
@@ -2426,6 +2456,9 @@ namespace PasPasPas.Parsing.Parser.Standard {
         [Rule("EnumTypeValue", "Identifier [ '=' Expression ]")]
         public EnumValueSymbol ParseEnumTypeValue() {
             var enumName = RequireIdentifier();
+            if (enumName == default)
+                return default;
+
             var equals = ContinueWith(TokenKind.EqualsSign);
             var value = default(ExpressionSymbol);
 
@@ -4784,7 +4817,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
 
             var token = CurrentToken();
 
-            if (allowReserverdWords || !reservedWords.Contains(token.Kind)) {
+            if ((allowReserverdWords || !reservedWords.Contains(token.Kind)) && (!symbolTokens.Contains(token.Kind))) {
                 return new IdentifierSymbol(ContinueWithOrMissing(token.Kind));
             }
 

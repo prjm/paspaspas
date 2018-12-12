@@ -59,6 +59,14 @@ namespace PasPasPas.Runtime.Values.IntValues {
             => ToScaledIntegerValue(~value);
 
         /// <summary>
+        ///     get the ordinal value
+        /// </summary>
+        /// <param name="types"></param>
+        /// <returns></returns>
+        public override ITypeReference GetOrdinalValue(ITypeRegistry types)
+            => ToScaledIntegerValue(value);
+
+        /// <summary>
         ///     check if this number is negative
         /// </summary>
         public override bool IsNegative

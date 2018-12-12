@@ -70,6 +70,14 @@ namespace PasPasPas.Runtime.Values.IntValues {
             => value;
 
         /// <summary>
+        ///     get the ordinal value
+        /// </summary>
+        /// <param name="types"></param>
+        /// <returns></returns>
+        public override ITypeReference GetOrdinalValue(ITypeRegistry types)
+            => ToScaledIntegerValue(value);
+
+        /// <summary>
         ///     invert bits
         /// </summary>
         /// <returns></returns>

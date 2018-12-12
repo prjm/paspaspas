@@ -447,5 +447,12 @@ namespace PasPasPas.Runtime.Values.IntValues {
 
             return new ByteValue(value[0]);
         }
+
+        /// <summary>
+        ///     get the ordinal value of this value
+        /// </summary>
+        /// <param name="types"></param>
+        /// <returns></returns>
+        public abstract ITypeReference GetOrdinalValue(ITypeRegistry types);
     }
 }

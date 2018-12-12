@@ -167,6 +167,14 @@ namespace PasPasPasTests.Types {
         }
 
         [TestMethod]
+        public void TestOrd() {
+            AssertExprValue("Ord(-3)", GetIntegerValue(-3));
+            AssertExprValue("Ord(3)", GetIntegerValue(3));
+            AssertExprValue("Ord(xa)", GetIntegerValue(2), "type Ta = (xc,xb,xa);");
+            AssertExprValue("Ord(a)", GetIntegerValue(2), "type Ta = (xc,xb,xa); const a = xa;");
+        }
+
+        [TestMethod]
         public void TestMulDiv64() {
             AssertExprValue("MulDivInt64(10, 4, 2)", GetIntegerValue(20));
             AssertExprValue("MulDivInt64(-10, 4, 2)", GetIntegerValue(-20));

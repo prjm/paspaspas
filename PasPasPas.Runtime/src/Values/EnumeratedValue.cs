@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Numerics;
 using PasPasPas.Globals.Runtime;
+using PasPasPas.Globals.Types;
 using PasPasPas.Runtime.Values.IntValues;
 
 namespace PasPasPas.Runtime.Values {
@@ -115,6 +116,18 @@ namespace PasPasPas.Runtime.Values {
         /// <returns></returns>
         public bool Equals(IEnumeratedValue other)
             => (other.TypeId == TypeId) && (Value.Equals(other.Value));
+
+        /// <summary>
+        ///     get the ordinal value
+        /// </summary>
+        /// <param name="types"></param>
+        /// <returns></returns>
+        public override ITypeReference GetOrdinalValue(ITypeRegistry types) {
+            if (Value is IOrdinalValue value)
+                return value.GetOrdinalValue(types);
+
+            return types.Runtime.Integers.Invalid;
+        }
 
         /// <summary>
         ///     convert this type to a short string

@@ -3,7 +3,7 @@
     /// <summary>
     ///     integer value
     /// </summary>
-    public interface IIntegerValue : INumericalValue {
+    public interface IIntegerValue : INumericalValue, IOrdinalValue {
 
         /// <summary>
         ///     signed value

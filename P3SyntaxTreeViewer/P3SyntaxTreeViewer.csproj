@@ -44,8 +44,8 @@
     <LangVersion>7.1</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="SharpFloat, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SharpFloatLibrary.1.0.1\lib\netstandard2.0\SharpFloat.dll</HintPath>
+    <Reference Include="SharpFloat, Version=1.0.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpFloatLibrary.1.0.2\lib\netstandard2.0\SharpFloat.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
@@ -125,9 +125,9 @@
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\ErrorProne.NET.0.1.5898.41180\analyzers\dotnet\cs\ErrorProne.NET.dll" />
-    <Analyzer Include="..\packages\ErrorProne.NET.Structs.0.1.1.11\analyzers\dotnet\cs\ErrorProne.NET.Core.dll" />
-    <Analyzer Include="..\packages\ErrorProne.NET.Structs.0.1.1.11\analyzers\dotnet\cs\ErrorProne.Net.StructAnalyzers.dll" />
-    <Analyzer Include="..\packages\ErrorProne.NET.Structs.0.1.1.11\analyzers\dotnet\cs\RuntimeContracts.dll" />
+    <Analyzer Include="..\packages\ErrorProne.NET.Structs.0.1.2\analyzers\dotnet\cs\ErrorProne.NET.Core.dll" />
+    <Analyzer Include="..\packages\ErrorProne.NET.Structs.0.1.2\analyzers\dotnet\cs\ErrorProne.Net.StructAnalyzers.dll" />
+    <Analyzer Include="..\packages\ErrorProne.NET.Structs.0.1.2\analyzers\dotnet\cs\RuntimeContracts.dll" />
     <Analyzer Include="..\packages\Microsoft.CodeQuality.Analyzers.2.6.2\analyzers\dotnet\cs\Microsoft.CodeQuality.Analyzers.dll" />
     <Analyzer Include="..\packages\Microsoft.CodeQuality.Analyzers.2.6.2\analyzers\dotnet\cs\Microsoft.CodeQuality.CSharp.Analyzers.dll" />
     <Analyzer Include="..\packages\Microsoft.NetCore.Analyzers.2.6.2\analyzers\dotnet\cs\Microsoft.NetCore.Analyzers.dll" />
