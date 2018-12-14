@@ -41,6 +41,12 @@ namespace PasPasPas.Typings.Simple {
             => TypeRegistry.Runtime.Booleans.FalseValue;
 
         /// <summary>
+        ///     unsigned data type
+        /// </summary>
+        public bool IsSigned
+            => false;
+
+        /// <summary>
         ///     test for assignment type compatibility
         /// </summary>
         /// <param name="otherType">other type to check</param>

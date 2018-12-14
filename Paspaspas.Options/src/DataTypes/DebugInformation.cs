@@ -16,7 +16,7 @@
         IncludeDebugInformation,
 
         /// <summary>
-        ///     do not generate debug infp
+        ///     do not generate debug info
         /// </summary>
         NoDebugInfo,
     }

@@ -59,6 +59,12 @@ namespace PasPasPas.Typings.Simple {
             => 16;
 
         /// <summary>
+        ///     unsigned data types
+        /// </summary>
+        public bool IsSigned
+            => false;
+
+        /// <summary>
         ///     test for assignment type compatibility
         /// </summary>
         /// <param name="otherType">other type to check</param>

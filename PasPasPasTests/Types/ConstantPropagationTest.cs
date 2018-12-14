@@ -172,6 +172,9 @@ namespace PasPasPasTests.Types {
             AssertExprValue("Ord(3)", GetIntegerValue(3));
             AssertExprValue("Ord(xa)", GetIntegerValue(2), "type Ta = (xc,xb,xa);");
             AssertExprValue("Ord(a)", GetIntegerValue(2), "type Ta = (xc,xb,xa); const a = xa;");
+
+            AssertExprValue("Ord(q)", GetUnkownValue(KnownTypeIds.ShortInt, CommonTypeKind.IntegerType), "var q: ShortInt;", isConstant: false);
+            AssertExprValue("Ord(q)", GetUnkownValue(KnownTypeIds.ShortInt, CommonTypeKind.IntegerType), "type Ta = (xc,xb,xa); var q: Ta;", isConstant: false);
         }
 
         [TestMethod]

@@ -1,4 +1,5 @@
 ﻿using PasPasPas.Globals.Runtime;
+using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Typings.Routines {
 
@@ -39,6 +40,38 @@ namespace PasPasPas.Typings.Routines {
             return value.GetOrdinalValue(TypeRegistry);
         }
 
-        public ITypeReference ResolveCall(ITypeReference parameter) => throw new System.NotImplementedException();
+        /// <summary>
+        ///     resolve a call
+        /// </summary>
+        /// <param name="parameter"></param>
+        /// <returns></returns>
+        public ITypeReference ResolveCall(ITypeReference parameter) {
+            if (!IsOrdinalType(parameter.TypeId, out var ordinalType))
+                return Runtime.Types.MakeErrorTypeReference();
+
+            int GetTypeId() {
+                var bitSize = ordinalType.BitSize;
+                var signed = ordinalType.IsSigned;
+                switch (bitSize) {
+
+                    case 8:
+                        return signed ? KnownTypeIds.ShortInt : KnownTypeIds.ByteType;
+
+                    case 16:
+                        return signed ? KnownTypeIds.SmallInt : KnownTypeIds.WordType;
+
+                    case 32:
+                        return signed ? KnownTypeIds.IntegerType : KnownTypeIds.CardinalType;
+
+                    case 64:
+                        return signed ? KnownTypeIds.Int64Type : KnownTypeIds.Uint64Type;
+
+                    default:
+                        return KnownTypeIds.ErrorType;
+                }
+            };
+
+            return MakeTypeInstanceReference(GetTypeId());
+        }
     }
 }

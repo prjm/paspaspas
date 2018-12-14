@@ -80,6 +80,12 @@ namespace PasPasPas.Typings.Simple {
             => BaseType.BitSize;
 
         /// <summary>
+        ///     test if this type is signed
+        /// </summary>
+        public bool IsSigned
+            => BaseType.IsSigned;
+
+        /// <summary>
         ///     format this subrange type
         /// </summary>
         /// <returns></returns>

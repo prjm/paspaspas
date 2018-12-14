@@ -3,7 +3,6 @@ using System.Linq;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Typings.Common;
-using PasPasPas.Typings.Operators;
 
 namespace PasPasPas.Typings.Simple {
 
@@ -11,8 +10,6 @@ namespace PasPasPas.Typings.Simple {
     ///     enumerated type
     /// </summary>
     public class EnumeratedType : OrdinalTypeBase, IOrdinalType {
-
-        private readonly object lockObject = new object();
 
         /// <summary>
         ///     list of possible values
@@ -40,51 +37,25 @@ namespace PasPasPas.Typings.Simple {
             => values;
 
         /// <summary>
-        ///     get the required type id for this enumerated type
-        /// </summary>
-        public int CommonTypeId {
-            get {
-                var result = KnownTypeIds.ShortInt;
-                var unsigned = true;
-
-                foreach (var value in Values) {
-
-                    if (value.Value is IEnumeratedValue enumValue)
-                        return enumValue.Value.TypeId;
-
-                    unsigned = unsigned && TypeRegistry.Runtime.AreValuesUnsigned(value.Value, value.Value);
-                    result = TypeRegistry.GetSmallestIntegralTypeOrNext(result, value.Value.TypeId, 8, unsigned);
-                }
-
-                return result;
-            }
-        }
-
-        private ITypeReference highestElement;
-        private ITypeReference lowestElement;
-
-        /// <summary>
         ///     highest element
         /// </summary>
         public ITypeReference HighestElement {
             get {
-                lock (lockObject) {
-                    if (highestElement != default || values.Count < 1)
+                if (values.Count < 1)
+                    return default;
+
+                var highestElement = values[0].Value;
+
+                for (var i = 1; i < values.Count; i++) {
+                    var result = TypeRegistry.Runtime.Integers.GreaterThen(values[i].Value, highestElement);
+                    if (!(result is IBooleanValue boleanResult))
                         return default;
 
-                    highestElement = values[0].Value;
-
-                    for (var i = 1; i < values.Count; i++) {
-                        var result = TypeRegistry.Runtime.Integers.GreaterThen(values[i].Value, highestElement);
-                        if (!(result is IBooleanValue boleanResult))
-                            return default;
-
-                        if (boleanResult.AsBoolean)
-                            highestElement = values[i].Value;
-                    }
-
-                    return highestElement;
+                    if (boleanResult.AsBoolean)
+                        highestElement = values[i].Value;
                 }
+
+                return highestElement;
             }
         }
 
@@ -93,23 +64,21 @@ namespace PasPasPas.Typings.Simple {
         /// </summary>
         public ITypeReference LowestElement {
             get {
-                lock (lockObject) {
-                    if (lowestElement != default || values.Count < 1)
+                if (values.Count < 1)
+                    return default;
+
+                var lowestElement = values[0].Value;
+
+                for (var i = 1; i < values.Count; i++) {
+                    var result = TypeRegistry.Runtime.Integers.LessThen(values[i].Value, lowestElement);
+                    if (!(result is IBooleanValue boleanResult))
                         return default;
 
-                    lowestElement = values[0].Value;
-
-                    for (var i = 1; i < values.Count; i++) {
-                        var result = TypeRegistry.Runtime.Integers.LessThen(values[i].Value, lowestElement);
-                        if (!(result is IBooleanValue boleanResult))
-                            return default;
-
-                        if (boleanResult.AsBoolean)
-                            lowestElement = values[i].Value;
-                    }
-
-                    return lowestElement;
+                    if (boleanResult.AsBoolean)
+                        lowestElement = values[i].Value;
                 }
+
+                return lowestElement;
             }
         }
 
@@ -118,12 +87,51 @@ namespace PasPasPas.Typings.Simple {
         /// </summary>
         public uint BitSize {
             get {
-                var type = TypeRegistry.GetTypeByIdOrUndefinedType(TypeRegistry.GetSmallestIntegralTypeOrNext(LowestElement.TypeId, HighestElement.TypeId)) as IIntegralType;
+                var type = TypeRegistry.GetTypeByIdOrUndefinedType(CommonTypeId) as IOrdinalType;
 
                 if (type != default)
                     return type.BitSize;
                 else
-                    return 0;
+                    return default;
+            }
+        }
+
+        /// <summary>
+        ///     test if this type is signed
+        /// </summary>
+        public bool IsSigned {
+            get {
+                var type = TypeRegistry.GetTypeByIdOrUndefinedType(CommonTypeId) as IOrdinalType;
+
+                if (type != default)
+                    return type.IsSigned;
+                else
+                    return default;
+            }
+        }
+
+        /// <summary>
+        ///     base type id
+        /// </summary>
+        public int CommonTypeId {
+            get {
+                var lowestElement = LowestElement;
+                var lowerBaseType = KnownTypeIds.ErrorType;
+                var highestElement = HighestElement;
+                var higherBaseType = KnownTypeIds.ErrorType;
+
+
+                if (lowestElement is IEnumeratedValue lowestEnumValue)
+                    lowerBaseType = lowestEnumValue.Value.TypeId;
+                else if (lowestElement != default)
+                    lowerBaseType = lowestElement.TypeId;
+
+                if (highestElement is IEnumeratedValue highestEnumValue)
+                    higherBaseType = highestEnumValue.Value.TypeId;
+                else if (highestElement != default)
+                    higherBaseType = highestElement.TypeId;
+
+                return TypeRegistry.GetSmallestIntegralTypeOrNext(lowerBaseType, higherBaseType);
             }
         }
 

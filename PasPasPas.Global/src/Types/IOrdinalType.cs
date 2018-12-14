@@ -17,5 +17,10 @@ namespace PasPasPas.Globals.Types {
         /// </summary>
         ITypeReference LowestElement { get; }
 
+        /// <summary>
+        ///     test if this is a signed ordinal type
+        /// </summary>
+        bool IsSigned { get; }
+
     }
 }
