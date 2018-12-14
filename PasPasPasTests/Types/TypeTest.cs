@@ -95,10 +95,14 @@ namespace PasPasPasTests.Types {
         protected void AssertExprValue(string expression, ITypeReference value, string decls = "", int typeId = KnownTypeIds.UnspecifiedType, bool isConstant = true) {
             var file = "SimpleExpr";
             var program = $"program {file};{decls} begin Writeln({expression}); end. ";
-            SymbolReferencePart searchfunction(object x) => x as SymbolReferencePart;
-            IExpression firstParam = null;
 
-            firstParam = EvaluateExpressionType(file, program, searchfunction, NativeIntSize.Undefined, out var env) as IExpression;
+            SymbolReferencePart searchfunction(object x) {
+                if ((x is SymbolReferencePart part) && string.Equals(part.Name, "writeln", StringComparison.OrdinalIgnoreCase))
+                    return part;
+                return default;
+            };
+
+            var firstParam = EvaluateExpressionType(file, program, searchfunction, NativeIntSize.Undefined, out var env) as IExpression;
 
             Assert.IsNotNull(firstParam);
             Assert.IsNotNull(firstParam.TypeInfo);
