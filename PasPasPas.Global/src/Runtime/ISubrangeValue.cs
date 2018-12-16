@@ -3,7 +3,7 @@
     /// <summary>
     ///     subrange value
     /// </summary>
-    public interface ISubrangeValue : ITypeReference {
+    public interface ISubrangeValue : ITypeReference, IOrdinalValue {
 
         /// <summary>
         ///     wrapped value

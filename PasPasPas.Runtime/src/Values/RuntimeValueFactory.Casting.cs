@@ -37,8 +37,26 @@ namespace PasPasPas.Runtime.Values {
             if (typeKind.IsArray())
                 return CastArray(types, value, typeId);
 
+            if (typeKind == CommonTypeKind.EnumerationType)
+                return CastEnum(types, value, typeId);
+
+            if (typeKind.IsSubrange() && types.GetTypeByIdOrUndefinedType(typeId) is ISubrangeType subrangeType)
+                return Cast(types, value, subrangeType.BaseTypeId);
+
             if (typeKind == CommonTypeKind.BooleanType)
                 return CastBoolean(types, value, typeId);
+
+            return Types.MakeErrorTypeReference();
+        }
+
+        private ITypeReference CastEnum(ITypeRegistry types, ITypeReference value, int typeId) {
+            var typeDef = types.GetTypeByIdOrUndefinedType(typeId);
+            typeDef = TypeBase.ResolveAlias(typeDef);
+
+            if (typeDef is SubrangeType subrangeType) {
+                var castedValue = Cast(types, value, subrangeType.BaseType.TypeId);
+                return MakeSubrangeValue(typeDef.TypeId, castedValue);
+            }
 
             return Types.MakeErrorTypeReference();
         }
@@ -156,6 +174,11 @@ namespace PasPasPas.Runtime.Values {
         /// <returns></returns>
         private ITypeReference CastBoolean(ITypeRegistry types, ITypeReference value, int typeId) {
             var type = TypeBase.ResolveAlias(types.GetTypeByIdOrUndefinedType(typeId));
+
+            if (type is ISubrangeType subrangeType) {
+                var castedValue = CastBoolean(types, value, subrangeType.BaseType.TypeId);
+                return MakeSubrangeValue(type.TypeId, castedValue);
+            }
 
             if (value.IsBooleanValue(out var boolValue) && type is IBooleanType booleanType) {
                 switch (booleanType.BitSize) {

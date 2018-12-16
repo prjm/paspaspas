@@ -182,6 +182,10 @@ namespace PasPasPasTests.Types {
             AssertExprValue("Ord(WordBool(false))", GetIntegerValue(0));
             AssertExprValue("Ord(LongBool(true))", GetIntegerValue(0xffffffff));
             AssertExprValue("Ord(LongBool(false))", GetIntegerValue(0));
+            AssertExprValue("Ord(a)", GetIntegerValue(-3), "type Ta = -5..5; const a: Ta = -3;");
+            AssertExprValue("Ord(a)", GetIntegerValue(1), "type Ta = false..true; const a: Ta = true;");
+            AssertExprValue("Ord(a)", GetIntegerValue(116), "type Ta = 's'..'z'; const a: Ta = 't';");
+            AssertExprValue("Ord(a)", GetIntegerValue(1), "type Ta = (xa, xb, cx); Tb = xa..xb; const a: Tb = xb;");
 
             AssertExprValue("Ord(a)", GetUnkownValue(KnownTypeIds.WordType, CommonTypeKind.IntegerType), "var a: WideChar;", isConstant: false);
             AssertExprValue("Ord(a)", GetUnkownValue(KnownTypeIds.ByteType, CommonTypeKind.IntegerType), "var a: AnsiChar;", isConstant: false);

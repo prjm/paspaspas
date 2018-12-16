@@ -1,5 +1,6 @@
 ﻿using System;
 using PasPasPas.Globals.Runtime;
+using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Runtime.Values {
 
@@ -80,6 +81,17 @@ namespace PasPasPas.Runtime.Values {
                 result = result + 31 * Value.GetHashCode();
                 return result;
             }
+        }
+
+        /// <summary>
+        ///     get the ordinal value
+        /// </summary>
+        /// <param name="types"></param>
+        /// <returns></returns>
+        public ITypeReference GetOrdinalValue(ITypeRegistry types) {
+            if (Value is IOrdinalValue ordinal)
+                return ordinal.GetOrdinalValue(types);
+            return types.Runtime.Types.MakeErrorTypeReference();
         }
     }
 }
