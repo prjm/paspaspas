@@ -1,5 +1,6 @@
 ﻿using System;
 using PasPasPas.Globals.Runtime;
+using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Runtime.Values.CharValues {
 
@@ -91,5 +92,11 @@ namespace PasPasPas.Runtime.Values.CharValues {
         /// <returns></returns>
         public abstract override int GetHashCode();
 
+        /// <summary>
+        ///     get the ordinal value of a char
+        /// </summary>
+        /// <param name="types"></param>
+        /// <returns></returns>
+        public abstract ITypeReference GetOrdinalValue(ITypeRegistry types);
     }
 }

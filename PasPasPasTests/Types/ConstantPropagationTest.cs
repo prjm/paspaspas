@@ -172,8 +172,22 @@ namespace PasPasPasTests.Types {
             AssertExprValue("Ord(3)", GetIntegerValue(3));
             AssertExprValue("Ord(xa)", GetIntegerValue(2), "type Ta = (xc,xb,xa);");
             AssertExprValue("Ord(a)", GetIntegerValue(2), "type Ta = (xc,xb,xa); const a = xa;");
+            AssertExprValue("Ord('a')", GetIntegerValue(97));
+            AssertExprValue("Ord('▒')", GetIntegerValue(9618));
+            AssertExprValue("Ord(true)", GetIntegerValue(1));
+            AssertExprValue("Ord(false)", GetIntegerValue(0));
+            AssertExprValue("Ord(ByteBool(true))", GetIntegerValue(0xff));
+            AssertExprValue("Ord(ByteBool(false))", GetIntegerValue(0));
+            AssertExprValue("Ord(WordBool(true))", GetIntegerValue(0xffff));
+            AssertExprValue("Ord(WordBool(false))", GetIntegerValue(0));
+            AssertExprValue("Ord(LongBool(true))", GetIntegerValue(0xffffffff));
+            AssertExprValue("Ord(LongBool(false))", GetIntegerValue(0));
+
+            AssertExprValue("Ord(a)", GetUnkownValue(KnownTypeIds.WordType, CommonTypeKind.IntegerType), "var a: WideChar;", isConstant: false);
+            AssertExprValue("Ord(a)", GetUnkownValue(KnownTypeIds.ByteType, CommonTypeKind.IntegerType), "var a: AnsiChar;", isConstant: false);
 
             AssertExprValue("Ord(q)", GetUnkownValue(KnownTypeIds.ShortInt, CommonTypeKind.IntegerType), "var q: ShortInt;", isConstant: false);
+            AssertExprValue("Ord(q)", GetUnkownValue(KnownTypeIds.ByteType, CommonTypeKind.IntegerType), "var q: Boolean;", isConstant: false);
             AssertExprValue("Ord(q)", GetUnkownValue(KnownTypeIds.ShortInt, CommonTypeKind.IntegerType), "type Ta = (xc,xb,xa); var q: Ta;", isConstant: false);
         }
 

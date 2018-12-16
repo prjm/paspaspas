@@ -209,6 +209,21 @@ namespace PasPasPas.Globals.Runtime {
             return false;
         }
 
+        /// <summary>
+        ///     boolean value
+        /// </summary>
+        /// <param name="typeReference"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static bool IsBooleanValue(this ITypeReference typeReference, out IBooleanValue value) {
+            value = typeReference as IBooleanValue;
+
+            if (typeReference.TypeKind == CommonTypeKind.BooleanType && value != default)
+                return true;
+
+            value = default;
+            return false;
+        }
 
         /// <summary>
         ///     test if this value is a char value

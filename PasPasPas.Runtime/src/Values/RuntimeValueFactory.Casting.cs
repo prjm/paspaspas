@@ -37,6 +37,9 @@ namespace PasPasPas.Runtime.Values {
             if (typeKind.IsArray())
                 return CastArray(types, value, typeId);
 
+            if (typeKind == CommonTypeKind.BooleanType)
+                return CastBoolean(types, value, typeId);
+
             return Types.MakeErrorTypeReference();
         }
 
@@ -139,6 +142,32 @@ namespace PasPasPas.Runtime.Values {
                 case KnownTypeIds.WordBoolType:
                     return Booleans.ToWordBool(charValue.AsWideChar);
 
+            }
+
+            return Types.MakeErrorTypeReference();
+        }
+
+        /// <summary>
+        ///     cast a boolean value
+        /// </summary>
+        /// <param name="types"></param>
+        /// <param name="value"></param>
+        /// <param name="typeId"></param>
+        /// <returns></returns>
+        private ITypeReference CastBoolean(ITypeRegistry types, ITypeReference value, int typeId) {
+            var type = TypeBase.ResolveAlias(types.GetTypeByIdOrUndefinedType(typeId));
+
+            if (value.IsBooleanValue(out var boolValue) && type is IBooleanType booleanType) {
+                switch (booleanType.BitSize) {
+                    case 1:
+                        return boolValue.AsBoolean ? Booleans.TrueValue : Booleans.FalseValue;
+                    case 8:
+                        return Booleans.ToByteBool((byte)boolValue.AsUint);
+                    case 16:
+                        return Booleans.ToWordBool((ushort)boolValue.AsUint);
+                    case 32:
+                        return Booleans.ToLongBool(boolValue.AsUint);
+                }
             }
 
             return Types.MakeErrorTypeReference();

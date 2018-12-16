@@ -52,23 +52,20 @@ namespace PasPasPas.Typings.Routines {
             int GetTypeId() {
                 var bitSize = ordinalType.BitSize;
                 var signed = ordinalType.IsSigned;
-                switch (bitSize) {
 
-                    case 8:
-                        return signed ? KnownTypeIds.ShortInt : KnownTypeIds.ByteType;
+                if (bitSize > 0 && bitSize <= 8)
+                    return signed ? KnownTypeIds.ShortInt : KnownTypeIds.ByteType;
 
-                    case 16:
-                        return signed ? KnownTypeIds.SmallInt : KnownTypeIds.WordType;
+                if (bitSize > 8 && bitSize <= 16)
+                    return signed ? KnownTypeIds.SmallInt : KnownTypeIds.WordType;
 
-                    case 32:
-                        return signed ? KnownTypeIds.IntegerType : KnownTypeIds.CardinalType;
+                if (bitSize > 16 && bitSize <= 32)
+                    return signed ? KnownTypeIds.IntegerType : KnownTypeIds.CardinalType;
 
-                    case 64:
-                        return signed ? KnownTypeIds.Int64Type : KnownTypeIds.Uint64Type;
+                if (bitSize > 32 && bitSize <= 64)
+                    return signed ? KnownTypeIds.Int64Type : KnownTypeIds.Uint64Type;
 
-                    default:
-                        return KnownTypeIds.ErrorType;
-                }
+                return KnownTypeIds.ErrorType;
             };
 
             return MakeTypeInstanceReference(GetTypeId());

@@ -61,6 +61,14 @@ namespace PasPasPas.Runtime.Values.CharValues {
             => value.GetHashCode();
 
         /// <summary>
+        ///     ordinal value
+        /// </summary>
+        /// <param name="types"></param>
+        /// <returns></returns>
+        public override ITypeReference GetOrdinalValue(ITypeRegistry types)
+            => types.Runtime.Integers.ToScaledIntegerValue(value);
+
+        /// <summary>
         ///     convert this value to a string
         /// </summary>
         /// <returns></returns>

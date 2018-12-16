@@ -363,6 +363,8 @@ namespace PasPasPas.Typings.Common {
             if (sourceTypeKind.IsChar())
                 return CastCharTo(sourceType, targetType);
 
+            if (sourceTypeKind == CommonTypeKind.BooleanType)
+                return CastBooleanTo(sourceType, targetType);
 
             return KnownTypeIds.ErrorType;
         }
@@ -383,6 +385,15 @@ namespace PasPasPas.Typings.Common {
                 return targetType;
 
             if (targetTypeKind == CommonTypeKind.SubrangeType)
+                return targetType;
+
+            return KnownTypeIds.ErrorType;
+        }
+
+        private int CastBooleanTo(int sourceType, int targetType) {
+            var targetTypeKind = GetTypeKindOf(targetType);
+
+            if (targetTypeKind == CommonTypeKind.BooleanType)
                 return targetType;
 
             return KnownTypeIds.ErrorType;

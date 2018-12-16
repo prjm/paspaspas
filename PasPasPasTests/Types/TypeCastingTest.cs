@@ -93,6 +93,26 @@ namespace PasPasPasTests.Types {
         }
 
         [TestMethod]
+        public void TestBooleanCastingDirect() {
+            AssertExprValue(" Boolean(true)", new BooleanValue(true), "", KnownTypeIds.BooleanType);
+            AssertExprValue("ByteBool(true)", new ByteBooleanValue(0xff), "", KnownTypeIds.ByteBoolType);
+            AssertExprValue("WordBool(true)", new WordBooleanValue(0xffff), "", KnownTypeIds.WordBoolType);
+            AssertExprValue("LongBool(true)", new LongBooleanValue(0xffff_ffff), "", KnownTypeIds.LongBoolType);
+            AssertExprValue(" Boolean(false)", new BooleanValue(false), "", KnownTypeIds.BooleanType);
+            AssertExprValue("ByteBool(false)", new ByteBooleanValue(0x0), "", KnownTypeIds.ByteBoolType);
+            AssertExprValue("WordBool(false)", new WordBooleanValue(0x0), "", KnownTypeIds.WordBoolType);
+            AssertExprValue("LongBool(false)", new LongBooleanValue(0x0), "", KnownTypeIds.LongBoolType);
+        }
+
+        [TestMethod]
+        public void TestBooleanCastingIndirect() {
+            AssertExprTypeByVar("Boolean", "Boolean(a)", KnownTypeIds.BooleanType);
+            AssertExprTypeByVar("Boolean", "ByteBool(a)", KnownTypeIds.ByteBoolType);
+            AssertExprTypeByVar("Boolean", "WordBool(a)", KnownTypeIds.WordBoolType);
+            AssertExprTypeByVar("Boolean", "LongBool(a)", KnownTypeIds.LongBoolType);
+        }
+
+        [TestMethod]
         public void TestCharCastingIndirectDirect() {
             AssertExprTypeByVar("WideChar", "ShortInt(a)", KnownTypeIds.ShortInt);
             AssertExprTypeByVar("WideChar", "Byte(a)", KnownTypeIds.ByteType);

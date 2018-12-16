@@ -7,7 +7,7 @@ namespace PasPasPas.Typings.Simple {
     /// <summary>
     ///     boolean type
     /// </summary>
-    public class BooleanType : OrdinalTypeBase, IOrdinalType {
+    public class BooleanType : OrdinalTypeBase, IBooleanType {
 
         /// <summary>
         ///     create a new boolean type

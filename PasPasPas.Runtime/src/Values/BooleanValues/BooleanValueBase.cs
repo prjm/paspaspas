@@ -1,12 +1,13 @@
 ﻿using System;
 using PasPasPas.Globals.Runtime;
+using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Runtime.Values.BooleanValues {
 
     /// <summary>
     ///     base class for boolean values
     /// </summary>
-    public abstract class BooleanValueBase : IBooleanValue, IEquatable<IBooleanValue> {
+    public abstract class BooleanValueBase : IBooleanValue, IOrdinalValue, IEquatable<IBooleanValue> {
 
         /// <summary>
         ///     get the type id
@@ -103,5 +104,12 @@ namespace PasPasPas.Runtime.Values.BooleanValues {
         /// <returns></returns>
         public override string ToString()
             => InternalTypeFormat;
+
+        /// <summary>
+        ///     ordinal value
+        /// </summary>
+        /// <param name="types"></param>
+        /// <returns></returns>
+        public abstract ITypeReference GetOrdinalValue(ITypeRegistry types);
     }
 }

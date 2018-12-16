@@ -1,4 +1,5 @@
-﻿using PasPasPas.Globals.Types;
+﻿using PasPasPas.Globals.Runtime;
+using PasPasPas.Globals.Types;
 using PasPasPas.Infrastructure.Utils;
 
 namespace PasPasPas.Runtime.Values.BooleanValues {
@@ -43,5 +44,13 @@ namespace PasPasPas.Runtime.Values.BooleanValues {
         /// </summary>
         public override uint AsUint
             => Value;
+
+        /// <summary>
+        ///     ordinal value
+        /// </summary>
+        /// <param name="types"></param>
+        /// <returns></returns>
+        public override ITypeReference GetOrdinalValue(ITypeRegistry types)
+            => types.Runtime.Integers.ToScaledIntegerValue(Value);
     }
 }
