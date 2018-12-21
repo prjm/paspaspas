@@ -24,7 +24,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="SharpFloatLibrary" Version="1.0.2" />
+        <PackageReference Include="SharpFloatLibrary" Version="1.0.3" />
         <PackageReference Include="ErrorProne.NET" Version="0.1.5898.41180">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>

@@ -105,6 +105,7 @@ namespace PasPasPas.Typings.Common {
             systemUnit.AddGlobal(new Succ());
             systemUnit.AddGlobal(new Odd());
             systemUnit.AddGlobal(new Ord());
+            systemUnit.AddGlobal(new Pi());
         }
 
         /// <summary>

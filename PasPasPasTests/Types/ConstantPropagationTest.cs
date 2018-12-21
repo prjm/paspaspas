@@ -2,6 +2,7 @@
 using PasPasPas.Globals.Types;
 using PasPasPas.Typings.Common;
 using PasPasPasTests.Common;
+using SharpFloat.FloatingPoint;
 
 namespace PasPasPasTests.Types {
 
@@ -202,6 +203,10 @@ namespace PasPasPasTests.Types {
             AssertExprValue("MulDivInt64(a, 4, 2)", GetUnkownValue(KnownTypeIds.Int64Type, CommonTypeKind.Int64Type), "var a: byte;", isConstant: false);
             AssertExprValue("MulDivInt64(a, 4, 2)", GetUnkownValue(KnownTypeIds.Int64Type, CommonTypeKind.Int64Type), "type Ta = 3..8; var a: Ta;", isConstant: false);
         }
+
+        [TestMethod]
+        public void TestPi()
+            => AssertExprValue("Pi()", GetExtendedValue(ExtF80.Pi));
 
         [TestMethod]
         public void TestConcat() {
