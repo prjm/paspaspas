@@ -15,13 +15,13 @@ namespace PasPasPas.Typings.Routines {
         Undefined = 0,
 
         /// <summary>
-        ///     hi
+        ///     <pre>hi</pre>
         /// </summary>
         Hi = 1,
 
 
         /// <summary>
-        ///     lo
+        ///     <pre>lo</pre>
         /// </summary>
         Lo = 2
 

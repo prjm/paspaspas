@@ -226,6 +226,22 @@ namespace PasPasPas.Globals.Runtime {
         }
 
         /// <summary>
+        ///     boolean value
+        /// </summary>
+        /// <param name="typeReference"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static bool IsEnumValue(this ITypeReference typeReference, out IEnumeratedValue value) {
+            value = typeReference as IEnumeratedValue;
+
+            if (typeReference.TypeKind == CommonTypeKind.EnumerationType && value != default)
+                return true;
+
+            value = default;
+            return false;
+        }
+
+        /// <summary>
         ///     test if this value is a char value
         /// </summary>
         /// <param name="typeReference"></param>
@@ -242,6 +258,39 @@ namespace PasPasPas.Globals.Runtime {
         }
 
         /// <summary>
+        ///     test if this value is a char value
+        /// </summary>
+        /// <param name="typeReference"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static bool IsAnsiCharValue(this ITypeReference typeReference, out ICharValue value) {
+            value = typeReference as ICharValue;
+
+            if (typeReference.TypeKind == CommonTypeKind.AnsiCharType && value != default)
+                return true;
+
+            value = default;
+            return false;
+        }
+
+        /// <summary>
+        ///     test if this value is a char value
+        /// </summary>
+        /// <param name="typeReference"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static bool IsWideCharValue(this ITypeReference typeReference, out ICharValue value) {
+            value = typeReference as ICharValue;
+
+            if (typeReference.TypeKind == CommonTypeKind.WideCharType && value != default)
+                return true;
+
+            value = default;
+            return false;
+        }
+
+
+        /// <summary>
         ///     test if this value is an integral value
         /// </summary>
         /// <param name="typeReference"></param>
@@ -256,7 +305,6 @@ namespace PasPasPas.Globals.Runtime {
             value = default;
             return false;
         }
-
 
     }
 

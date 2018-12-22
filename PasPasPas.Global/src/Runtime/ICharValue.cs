@@ -10,5 +10,9 @@
         /// </summary>
         char AsWideChar { get; }
 
+        /// <summary>
+        ///     get the ANSI char value
+        /// </summary>
+        byte AsAnsiChar { get; }
     }
 }

@@ -30,19 +30,31 @@ namespace PasPasPas.Typings.Routines {
         ///     runtime
         /// </summary>
         public IRuntimeValueFactory Runtime
-            => TypeRegistry?.Runtime;
+            => TypeRegistry.Runtime;
 
         /// <summary>
         ///     integer values
         /// </summary>
         public IIntegerOperations Integers
-            => TypeRegistry?.Runtime?.Integers;
+            => TypeRegistry.Runtime.Integers;
+
+        /// <summary>
+        ///     chars
+        /// </summary>
+        public ICharOperations Chars
+            => TypeRegistry.Runtime.Chars;
 
         /// <summary>
         ///     integer values
         /// </summary>
         public IBooleanOperations Booleans
-            => TypeRegistry?.Runtime?.Booleans;
+            => TypeRegistry.Runtime.Booleans;
+
+        /// <summary>
+        ///     types
+        /// </summary>
+        public ITypeOperations Types
+            => TypeRegistry.Runtime.Types;
 
         /// <summary>
         ///     strings
@@ -54,7 +66,7 @@ namespace PasPasPas.Typings.Routines {
         ///     real number values
         /// </summary>
         public IRealNumberOperations RealNumbers
-            => TypeRegistry?.Runtime?.RealNumbers;
+            => TypeRegistry.Runtime.RealNumbers;
 
         /// <summary>
         ///     make a subrange value

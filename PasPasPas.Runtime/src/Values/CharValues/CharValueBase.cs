@@ -55,6 +55,12 @@ namespace PasPasPas.Runtime.Values.CharValues {
             => 1;
 
         /// <summary>
+        ///     ANSI char value
+        /// </summary>
+        public byte AsAnsiChar
+            => unchecked((byte)AsWideChar);
+
+        /// <summary>
         ///     test for equality
         /// </summary>
         /// <param name="obj"></param>

@@ -102,10 +102,11 @@ namespace PasPasPas.Typings.Common {
             systemUnit.AddGlobal(new HiOrLo(HiLoMode.Lo));
             systemUnit.AddGlobal(new HighOrLow(HighOrLowMode.Low));
             systemUnit.AddGlobal(new MulDivInt64());
-            systemUnit.AddGlobal(new Succ());
             systemUnit.AddGlobal(new Odd());
             systemUnit.AddGlobal(new Ord());
             systemUnit.AddGlobal(new Pi());
+            systemUnit.AddGlobal(new PredOrSucc(PredSuccMode.Pred));
+            systemUnit.AddGlobal(new PredOrSucc(PredSuccMode.Succ));
         }
 
         /// <summary>

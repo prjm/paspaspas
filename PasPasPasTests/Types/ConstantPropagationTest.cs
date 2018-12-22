@@ -224,6 +224,29 @@ namespace PasPasPasTests.Types {
         }
 
         [TestMethod]
+        public void TestPred() {
+
+            // integers
+            AssertExprValue("Pred(1)", GetIntegerValue(0));
+            AssertExprValue("Pred(-3)", GetIntegerValue(-4));
+
+            // chars
+            AssertExprValue("Pred('b')", GetWideCharValue('a'));
+            AssertExprValue("Pred('c')", GetWideCharValue('b'));
+
+            // booleans
+            AssertExprValue("Pred(true)", GetBooleanValue(false));
+            AssertExprValue("Pred(false)", GetBooleanValue(true));
+
+            // enumerations
+            AssertExprValue("Pred(b)", GetIntegerValue(0), "type Te = (a,b);");
+
+            // subrange types
+            AssertExprValue("Pred(a)", GetSubrangeValue(RegisteredTypes.SmallestUserTypeId, GetIntegerValue(-3)), "type Te = -3..3; const a: Te = -2;");
+        }
+
+
+        [TestMethod]
         public void TestSucc() {
 
             // integers
