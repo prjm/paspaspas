@@ -12,13 +12,21 @@ namespace PasPasPas.Runtime.Values.FloatValues {
         ///     create a new real number operations helper
         /// </summary>
         /// <param name="booleans">boolean operations</param>
-        public RealNumberOperations(IBooleanOperations booleans)
-            => Booleans = booleans;
+        /// <param name="ints"></param>
+        public RealNumberOperations(IBooleanOperations booleans, IIntegerOperations ints) {
+            Booleans = booleans;
+            Ints = ints;
+        }
 
         /// <summary>
         ///     boolean operations
         /// </summary>
         public IBooleanOperations Booleans { get; }
+
+        /// <summary>
+        ///     integers
+        /// </summary>
+        public IIntegerOperations Ints { get; }
 
         /// <summary>
         ///     get a constant real value
@@ -34,6 +42,12 @@ namespace PasPasPas.Runtime.Values.FloatValues {
         /// </summary>
         public ITypeReference Invalid { get; }
             = new SpecialValue(SpecialConstantKind.InvalidReal);
+
+        /// <summary>
+        ///     rounding mode
+        /// </summary>
+        public RealNumberRoundingMode RoundingMode { get; set; }
+            = RealNumberRoundingMode.ToNearest;
 
         /// <summary>
         ///     floating point addition
@@ -199,5 +213,49 @@ namespace PasPasPas.Runtime.Values.FloatValues {
                 return Invalid;
         }
 
+        /// <summary>
+        ///     round a floating point value
+        /// </summary>
+        /// <param name="realValue"></param>
+        /// <returns></returns>
+        public ITypeReference Round(ITypeReference realValue) {
+            if (realValue.IsIntegralValue(out var intValue))
+                return intValue;
+
+            if (!realValue.IsRealValue(out var value))
+                return Invalid;
+
+            var originalValue = value.AsExtended;
+            var roundedValue = default(ExtF80);
+
+            switch (RoundingMode) {
+
+                case RealNumberRoundingMode.Up:
+                    roundedValue = originalValue.RoundToInt(SharpFloat.Globals.RoundingMode.Maximum, true);
+                    break;
+
+                case RealNumberRoundingMode.Down:
+                    roundedValue = originalValue.RoundToInt(SharpFloat.Globals.RoundingMode.Minimum, true);
+                    break;
+
+                case RealNumberRoundingMode.ToNearest:
+                    roundedValue = originalValue.RoundToInt(SharpFloat.Globals.RoundingMode.NearEven, true);
+                    break;
+
+                case RealNumberRoundingMode.Truncate:
+                    var mode = originalValue.IsNegative ? SharpFloat.Globals.RoundingMode.Maximum : SharpFloat.Globals.RoundingMode.Minimum;
+                    roundedValue = originalValue.RoundToInt(mode, true);
+                    break;
+
+                default:
+                    return Invalid;
+
+            }
+
+            if (roundedValue >= long.MinValue && roundedValue <= long.MaxValue)
+                return Ints.ToScaledIntegerValue((long)roundedValue);
+
+            return Invalid;
+        }
     }
 }

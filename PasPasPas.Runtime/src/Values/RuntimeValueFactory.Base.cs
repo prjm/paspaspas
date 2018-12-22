@@ -21,7 +21,7 @@ namespace PasPasPas.Runtime.Values {
             Chars = new CharOperations();
             Structured = new StructuredTypeOperations();
             Integers = new IntegerOperations(Booleans, Types);
-            RealNumbers = new RealNumberOperations(Booleans);
+            RealNumbers = new RealNumberOperations(Booleans, Integers);
             Strings = new StringOperations(Booleans);
         }
 

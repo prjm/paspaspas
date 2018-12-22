@@ -107,6 +107,7 @@ namespace PasPasPas.Typings.Common {
             systemUnit.AddGlobal(new Pi());
             systemUnit.AddGlobal(new PredOrSucc(PredSuccMode.Pred));
             systemUnit.AddGlobal(new PtrRoutine());
+            systemUnit.AddGlobal(new Round());
             systemUnit.AddGlobal(new PredOrSucc(PredSuccMode.Succ));
         }
 

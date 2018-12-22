@@ -9,6 +9,11 @@ namespace PasPasPas.Globals.Runtime {
         IArithmeticOperations, IRelationalOperations {
 
         /// <summary>
+        ///     rounding mode
+        /// </summary>
+        RealNumberRoundingMode RoundingMode { get; set; }
+
+        /// <summary>
         ///     invalid real number
         /// </summary>
         ITypeReference Invalid { get; }
@@ -20,7 +25,6 @@ namespace PasPasPas.Globals.Runtime {
         /// <param name="divisor"></param>
         /// <returns></returns>
         ITypeReference Divide(ITypeReference dividend, ITypeReference divisor);
-
 
         /// <summary>
         ///     convert a double to the appropriate runtime constant
@@ -35,5 +39,12 @@ namespace PasPasPas.Globals.Runtime {
         /// <param name="typeReference"></param>
         /// <returns></returns>
         ITypeReference Abs(ITypeReference typeReference);
+
+        /// <summary>
+        ///     round a real number
+        /// </summary>
+        /// <param name="realValue"></param>
+        /// <returns></returns>
+        ITypeReference Round(ITypeReference realValue);
     }
 }

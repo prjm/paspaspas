@@ -289,7 +289,6 @@ namespace PasPasPas.Globals.Runtime {
             return false;
         }
 
-
         /// <summary>
         ///     test if this value is an integral value
         /// </summary>
@@ -305,6 +304,23 @@ namespace PasPasPas.Globals.Runtime {
             value = default;
             return false;
         }
+
+        /// <summary>
+        ///     test if this value is an integral value
+        /// </summary>
+        /// <param name="typeReference"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static bool IsRealValue(this ITypeReference typeReference, out IRealNumberValue value) {
+            value = typeReference as IRealNumberValue;
+
+            if (typeReference.TypeKind == CommonTypeKind.RealType && value != default)
+                return true;
+
+            value = default;
+            return false;
+        }
+
 
     }
 

@@ -249,6 +249,27 @@ namespace PasPasPasTests.Types {
         public void TestPtr()
             => AssertExprValue("Ptr(4)", GetPointerValue(GetIntegerValue(4)));
 
+        [TestMethod]
+        public void TestRound() {
+            AssertExprValue("Round(2.5)", GetIntegerValue(2));
+            AssertExprValue("Round(3.5)", GetIntegerValue(4));
+            AssertExprValue("Round(-2.5)", GetIntegerValue(-2));
+            AssertExprValue("Round(-3.5)", GetIntegerValue(-4));
+            AssertExprValue("Round(2)", GetIntegerValue(2));
+            AssertExprValue("Round(3)", GetIntegerValue(3));
+            AssertExprValue("Round(-2)", GetIntegerValue(-2));
+            AssertExprValue("Round(-3)", GetIntegerValue(-3));
+            AssertExprValue("Round(2.33)", GetIntegerValue(2));
+            AssertExprValue("Round(3.33)", GetIntegerValue(3));
+            AssertExprValue("Round(-2.33)", GetIntegerValue(-2));
+            AssertExprValue("Round(-3.33)", GetIntegerValue(-3));
+            AssertExprValue("Round(2.77)", GetIntegerValue(3));
+            AssertExprValue("Round(3.77)", GetIntegerValue(4));
+            AssertExprValue("Round(-2.77)", GetIntegerValue(-3));
+            AssertExprValue("Round(-3.77)", GetIntegerValue(-4));
+
+            AssertExprValue("Round(Pi()", GetIntegerValue(3));
+        }
 
         [TestMethod]
         public void TestSucc() {
