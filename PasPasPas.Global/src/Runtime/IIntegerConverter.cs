@@ -1,4 +1,6 @@
-﻿namespace PasPasPas.Globals.Runtime {
+﻿using PasPasPas.Globals.Types;
+
+namespace PasPasPas.Globals.Runtime {
 
     /// <summary>
     ///     integer converter
@@ -111,13 +113,19 @@
         ITypeReference ToIntegerValue(long number);
 
         /// <summary>
-        ///     get the fixed value type for a give number
+        ///     get the fixed value type for a given number
         /// </summary>
         /// <param name="number"></param>
         /// <returns></returns>
         ITypeReference ToIntegerValue(ulong number);
 
-
+        /// <summary>
+        ///     get a native integer value for a given number
+        /// </summary>
+        /// <param name="number"></param>
+        /// <param name="typeRegistry"></param>
+        /// <returns></returns>
+        ITypeReference ToNativeInt(ITypeReference number, ITypeRegistry typeRegistry);
 
     }
 }

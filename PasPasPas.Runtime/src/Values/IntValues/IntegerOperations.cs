@@ -487,5 +487,34 @@ namespace PasPasPas.Runtime.Values.IntValues {
             else
                 return Invalid;
         }
+
+        /// <summary>
+        ///     convert a number to a native int value
+        /// </summary>
+        /// <param name="number"></param>
+        /// <param name="typeRegistry"></param>
+        /// <returns></returns>
+        public ITypeReference ToNativeInt(ITypeReference number, ITypeRegistry typeRegistry) {
+            var nativeType = typeRegistry.GetTypeByIdOrUndefinedType(KnownTypeIds.NativeInt) as IAliasedType;
+
+            if (nativeType == default)
+                return Invalid;
+
+            var intType = typeRegistry.GetTypeByIdOrUndefinedType(nativeType.BaseTypeId) as IOrdinalType;
+
+            if (intType == default)
+                return Invalid;
+
+            if (!number.IsIntegralValue(out var integerValue))
+                return Invalid;
+
+            if (intType.BitSize == 32)
+                return ToIntegerValue((int)integerValue.SignedValue);
+
+            if (intType.BitSize == 64)
+                return ToIntegerValue(integerValue.SignedValue);
+
+            return Invalid;
+        }
     }
 }

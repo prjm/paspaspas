@@ -6,7 +6,7 @@ namespace PasPasPas.Typings.Common {
     /// <summary>
     ///     type alias
     /// </summary>
-    public class TypeAlias : TypeBase {
+    public class TypeAlias : TypeBase, IAliasedType {
 
         /// <summary>
         ///     basic type id
@@ -46,6 +46,12 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         public bool IsNewType
             => isNewType;
+
+        /// <summary>
+        ///     get the base type id
+        /// </summary>
+        public int BaseTypeId
+            => baseId;
 
         /// <summary>
         ///     format this type as string

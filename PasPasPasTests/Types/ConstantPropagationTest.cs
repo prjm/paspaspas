@@ -245,6 +245,10 @@ namespace PasPasPasTests.Types {
             AssertExprValue("Pred(a)", GetSubrangeValue(RegisteredTypes.SmallestUserTypeId, GetIntegerValue(-3)), "type Te = -3..3; const a: Te = -2;");
         }
 
+        [TestMethod]
+        public void TestPtr()
+            => AssertExprValue("Ptr(4)", GetPointerValue(GetIntegerValue(4)));
+
 
         [TestMethod]
         public void TestSucc() {

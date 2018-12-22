@@ -11,7 +11,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     public class TypeAlias : TypeSpecificationBase {
 
         /// <summary>
-        ///     name fragements
+        ///     name fragments
         /// </summary>
         public ISyntaxPartCollection<GenericNameFragment> Fragments { get; }
 

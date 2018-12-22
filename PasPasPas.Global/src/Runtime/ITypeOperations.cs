@@ -27,6 +27,14 @@
         ITypeReference MakeEnumValue(int enumTypeId, ITypeReference value);
 
         /// <summary>
+        ///     make a pointer value
+        /// </summary>
+        /// <param name="baseType"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        ITypeReference MakePointerValue(int baseType, ITypeReference value);
+
+        /// <summary>
         ///     make a type reference
         /// </summary>
         /// <param name="typeId"></param>

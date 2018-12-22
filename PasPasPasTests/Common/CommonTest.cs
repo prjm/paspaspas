@@ -1,5 +1,6 @@
 ﻿using PasPasPas.Api;
 using PasPasPas.Globals.Runtime;
+using PasPasPas.Globals.Types;
 using PasPasPas.Infrastructure.ObjectPooling;
 using PasPasPas.Options.DataTypes;
 using PasPasPas.Runtime.Values;
@@ -82,6 +83,14 @@ namespace PasPasPasTests.Common {
         /// <returns></returns>
         protected static ITypeReference GetSubrangeValue(int typeId, ITypeReference value)
             => new SubrangeValue(typeId, value);
+
+        /// <summary>
+        ///     make a new pointer value
+        /// </summary>
+        /// <param name="address"></param>
+        /// <returns></returns>
+        protected static ITypeReference GetPointerValue(ITypeReference address)
+            => MakeRuntime().Types.MakePointerValue(KnownTypeIds.UntypedPointer, address);
 
         /// <summary>
         ///     get the Unicode string value
