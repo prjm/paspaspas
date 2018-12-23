@@ -105,5 +105,13 @@ namespace PasPasPas.Runtime.Values.FloatValues {
 
             return floatValue;
         }
+
+        /// <summary>
+        ///     format value as string
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+            => InternalTypeFormat;
+
     }
 }

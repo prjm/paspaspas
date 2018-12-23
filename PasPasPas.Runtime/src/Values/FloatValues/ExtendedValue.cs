@@ -1,4 +1,5 @@
-﻿using PasPasPas.Globals.Runtime;
+﻿using System.Text;
+using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using SharpFloat.FloatingPoint;
 
@@ -64,7 +65,12 @@ namespace PasPasPas.Runtime.Values.FloatValues {
         ///     format this floating point value as string
         /// </summary>
         /// <returns></returns>
-        public override string InternalTypeFormat
-            => value.ToString();
+        public override string InternalTypeFormat {
+            get {
+                var builder = new StringBuilder();
+                var _ = ExtF80.PrintFloat80(builder, value, PrintFloatFormat.PositionalFormat, 20);
+                return builder.ToString();
+            }
+        }
     }
 }
