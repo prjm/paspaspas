@@ -110,6 +110,7 @@ namespace PasPasPas.Typings.Common {
             systemUnit.AddGlobal(new Round());
             systemUnit.AddGlobal(new PredOrSucc(PredSuccMode.Succ));
             systemUnit.AddGlobal(new SizeOf());
+            systemUnit.AddGlobal(new Sqr());
         }
 
         /// <summary>

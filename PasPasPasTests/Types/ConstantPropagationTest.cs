@@ -374,5 +374,12 @@ namespace PasPasPasTests.Types {
             AssertExprValue("SizeOf(Pointer)", GetIntegerValue(4));
         }
 
+        [TestMethod]
+        public void TestSqr() {
+            AssertExprValue("Sqr(2)", GetIntegerValue(4));
+            AssertExprValue("Sqr(3)", GetIntegerValue(9));
+            AssertExprValue("Sqr(2.25)", GetExtendedValue(5.0625));
+        }
+
     }
 }
