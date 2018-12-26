@@ -136,6 +136,12 @@ namespace PasPasPas.Typings.Simple {
         }
 
         /// <summary>
+        ///     type size in bytes
+        /// </summary>
+        public override uint TypeSizeInBytes
+            => TypeRegistry.GetTypeByIdOrUndefinedType(CommonTypeId).TypeSizeInBytes;
+
+        /// <summary>
         ///     define a new enumeration value
         /// </summary>
         /// <param name="runtimeValues">runtime values</param>

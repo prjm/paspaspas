@@ -73,6 +73,12 @@ namespace PasPasPas.Typings.Simple {
         }
 
         /// <summary>
+        ///     type size
+        /// </summary>
+        public override uint TypeSizeInBytes
+            => 8;
+
+        /// <summary>
         ///     test for assignment type compatibility
         /// </summary>
         /// <param name="otherType">other type to check</param>

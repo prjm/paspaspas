@@ -7,14 +7,14 @@ namespace PasPasPas.Typings.Structured {
     /// <summary>
     ///     array type definition
     /// </summary>
-    public class ArrayType : StructuredTypeBase, IArrayType {
+    public abstract class ArrayType : StructuredTypeBase, IArrayType {
 
         /// <summary>
         ///     create a new array type
         /// </summary>
         /// <param name="withId"></param>
         /// <param name="indexTypes">index types</param>
-        public ArrayType(int withId, ImmutableArray<int> indexTypes) : base(withId) => IndexTypes = indexTypes;
+        protected ArrayType(int withId, ImmutableArray<int> indexTypes) : base(withId) => IndexTypes = indexTypes;
 
         /// <summary>
         ///     array index types

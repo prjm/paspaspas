@@ -54,6 +54,12 @@ namespace PasPasPas.Typings.Common {
             => baseId;
 
         /// <summary>
+        ///     type size in bytes
+        /// </summary>
+        public override uint TypeSizeInBytes
+            => BaseType.TypeSizeInBytes;
+
+        /// <summary>
         ///     format this type as string
         /// </summary>
         /// <returns></returns>

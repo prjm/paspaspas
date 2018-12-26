@@ -4,7 +4,7 @@ using PasPasPas.Typings.Common;
 namespace PasPasPas.Typings.Simple {
 
     /// <summary>
-    ///     invalud / error type
+    ///     invalid / error type
     /// </summary>
     public class ErrorType : TypeBase {
 
@@ -20,5 +20,10 @@ namespace PasPasPas.Typings.Simple {
         public override CommonTypeKind TypeKind
             => CommonTypeKind.UnknownType;
 
+        /// <summary>
+        ///     invalid size
+        /// </summary>
+        public override uint TypeSizeInBytes
+            => 0;
     }
 }

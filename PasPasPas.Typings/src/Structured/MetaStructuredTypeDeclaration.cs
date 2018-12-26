@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using PasPasPas.Globals.Runtime;
+using PasPasPas.Globals.Types;
 using PasPasPas.Typings.Common;
 
 namespace PasPasPas.Typings.Structured {
@@ -30,10 +31,16 @@ namespace PasPasPas.Typings.Structured {
         public int BaseType { get; }
 
         /// <summary>
-        ///     list of fieds
+        ///     list of fields
         /// </summary>
         public IList<Variable> Fields { get; }
             = new List<Variable>();
+
+        /// <summary>
+        ///     type size in bytes
+        /// </summary>
+        public override uint TypeSizeInBytes
+            => TypeRegistry.GetTypeByIdOrUndefinedType(KnownTypeIds.NativeInt).TypeSizeInBytes;
 
         /// <summary>
         ///     add a field definition

@@ -54,6 +54,12 @@ namespace PasPasPas.Typings.Simple {
             => CommonTypeKind.UnicodeStringType;
 
         /// <summary>
+        ///     type size in bytes
+        /// </summary>
+        public override uint TypeSizeInBytes
+            => TypeRegistry.GetTypeByIdOrUndefinedType(KnownTypeIds.NativeInt).TypeSizeInBytes;
+
+        /// <summary>
         ///     format this type as string
         /// </summary>
         /// <returns></returns>
@@ -79,6 +85,13 @@ namespace PasPasPas.Typings.Simple {
         /// </summary>
         public override CommonTypeKind TypeKind
             => CommonTypeKind.WideStringType;
+
+        /// <summary>
+        ///     type size in bytes
+        /// </summary>
+        public override uint TypeSizeInBytes
+            => TypeRegistry.GetTypeByIdOrUndefinedType(KnownTypeIds.NativeInt).TypeSizeInBytes;
+
     }
 
     /// <summary>
@@ -98,6 +111,12 @@ namespace PasPasPas.Typings.Simple {
         /// </summary>
         public override CommonTypeKind TypeKind
             => CommonTypeKind.ShortStringType;
+
+        /// <summary>
+        ///     type size in bytes
+        /// </summary>
+        public override uint TypeSizeInBytes
+            => TypeRegistry.GetTypeByIdOrUndefinedType(KnownTypeIds.NativeInt).TypeSizeInBytes;
     }
 
 

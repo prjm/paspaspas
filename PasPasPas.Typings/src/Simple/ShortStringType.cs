@@ -27,6 +27,18 @@ namespace PasPasPas.Typings.Simple {
         public ITypeReference Size { get; }
 
         /// <summary>
+        ///     type size in bytes
+        /// </summary>
+        public override uint TypeSizeInBytes {
+            get {
+                if (Size.IsIntegralValue(out var integerValue))
+                    return 1u + (uint)integerValue.UnsignedValue;
+
+                return 0;
+            }
+        }
+
+        /// <summary>
         ///     format this type definition as string
         /// </summary>
         /// <returns></returns>

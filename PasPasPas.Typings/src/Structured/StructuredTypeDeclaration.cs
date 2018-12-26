@@ -76,6 +76,32 @@ namespace PasPasPas.Typings.Structured {
         public MetaStructuredTypeDeclaration MetaType { get; set; }
 
         /// <summary>
+        /// 
+        /// </summary>
+        public override uint TypeSizeInBytes {
+            get {
+                switch (typeKind) {
+
+                    case StructuredTypeKind.Class:
+                    case StructuredTypeKind.ClassHelper:
+                    case StructuredTypeKind.RecordHelper:
+                    case StructuredTypeKind.DispInterface:
+                    case StructuredTypeKind.Interface:
+                        return TypeRegistry.GetTypeByIdOrUndefinedType(KnownTypeIds.NativeInt).TypeSizeInBytes;
+
+                    case StructuredTypeKind.Record:
+                    case StructuredTypeKind.ObjectType:
+                        return 0; //... currently not supported
+
+
+
+                    default:
+                        return 0;
+                }
+            }
+        }
+
+        /// <summary>
         ///     add a method definition
         /// </summary>
         /// <param name="completeName">method name</param>

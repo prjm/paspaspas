@@ -18,6 +18,11 @@ namespace PasPasPas.Globals.Types {
         ITypeRegistry TypeRegistry { get; }
 
         /// <summary>
+        ///     type size in bytes
+        /// </summary>
+        uint TypeSizeInBytes { get; }
+
+        /// <summary>
         ///     check if this type can be assigned from another type
         /// </summary>
         /// <param name="otherType">type which will be assigned to this type</param>

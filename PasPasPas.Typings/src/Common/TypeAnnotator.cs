@@ -591,13 +591,24 @@ namespace PasPasPas.Typings.Common {
                         list.Item.Add(KnownTypeIds.ErrorType);
                 }
 
-                var typeDef = new ArrayType(typeId, ListPools.GetFixedArray(list)) {
-                    Packed = element.PackedType,
-                    BaseTypeId = baseTypeId
-                };
+                var typeDef = default(ITypeDefinition);
+
+                if (list.Item.Count < 1)
+
+                    typeDef = new DynamicArrayType(typeId) {
+                        Packed = element.PackedType,
+                        BaseTypeId = baseTypeId
+                    };
+
+                else
+
+                    typeDef = new StaticArrayType(typeId, ListPools.GetFixedArray(list)) {
+                        Packed = element.PackedType,
+                        BaseTypeId = baseTypeId
+                    };
 
                 RegisterUserDefinedType(typeDef);
-                element.TypeInfo = GetInstanceTypeById(typeDef.TypeInfo.TypeId);
+                element.TypeInfo = GetInstanceTypeById(typeDef.TypeId);
             }
         }
 
@@ -840,7 +851,7 @@ namespace PasPasPas.Typings.Common {
                 var ints = TypeRegistry.Runtime.Integers;
                 var indexTypeDef = new Simple.SubrangeType(indexTypeId, KnownTypeIds.IntegerType, ints.Zero, ints.ToScaledIntegerValue(count));
                 var indexType = RegisterUserDefinedType(indexTypeDef);
-                var arrayType = new ArrayType(typeId, ImmutableArray.Create(indexType.TypeId)) { BaseTypeId = baseType.TypeId };
+                var arrayType = new StaticArrayType(typeId, ImmutableArray.Create(indexType.TypeId)) { BaseTypeId = baseType.TypeId };
                 var registeredType = RegisterUserDefinedType(arrayType).TypeId;
 
                 if (isConstant) {

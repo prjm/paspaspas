@@ -9,20 +9,18 @@ namespace PasPasPas.Typings.Common {
     /// </summary>
     public abstract class TypeBase : ITypeDefinition {
 
-        private readonly int typeId;
-
         /// <summary>
         ///     create a new type definition
         /// </summary>
         /// <param name="withId">type id</param>
         protected TypeBase(int withId)
-            => typeId = withId;
+            => TypeId = withId;
 
         /// <summary>
         ///     get the type id
         /// </summary>
         public ITypeReference TypeInfo
-            => TypeRegistry.MakeReference(typeId);
+            => TypeRegistry.MakeReference(TypeId);
 
         /// <summary>
         ///     get the type kind
@@ -37,8 +35,12 @@ namespace PasPasPas.Typings.Common {
         /// <summary>
         ///     registered type id
         /// </summary>
-        public int TypeId
-            => typeId;
+        public int TypeId { get; }
+
+        /// <summary>
+        ///     type size in bytes
+        /// </summary>
+        public abstract uint TypeSizeInBytes { get; }
 
         private static bool CanBeAssignedFromAlias(TypeAlias alias) {
 

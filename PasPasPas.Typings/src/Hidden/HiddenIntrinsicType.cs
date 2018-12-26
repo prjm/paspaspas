@@ -20,5 +20,11 @@ namespace PasPasPas.Typings.Hidden {
         /// </summary>
         public override CommonTypeKind TypeKind
             => CommonTypeKind.HiddenType;
+
+        /// <summary>
+        ///     type size
+        /// </summary>
+        public override uint TypeSizeInBytes
+            => 0;
     }
 }

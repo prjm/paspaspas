@@ -385,5 +385,35 @@
         /// </summary>
         public const int IntrinsicRoutine = 104;
 
+        /// <summary>
+        ///     uint8
+        /// </summary>
+        public const int UInt8 = 105;
+
+        /// <summary>
+        ///     int8
+        /// </summary>
+        public const int Int8 = 106;
+
+        /// <summary>
+        ///     uint16
+        /// </summary>
+        public const int UInt16 = 107;
+
+        /// <summary>
+        ///     int16
+        /// </summary>
+        public const int Int16 = 108;
+
+        /// <summary>
+        ///     uint32
+        /// </summary>
+        public const int UInt32 = 109;
+
+        /// <summary>
+        ///     int32
+        /// </summary>
+        public const int Int32 = 110;
+
     }
 }

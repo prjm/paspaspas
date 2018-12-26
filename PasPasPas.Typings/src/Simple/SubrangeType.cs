@@ -86,6 +86,12 @@ namespace PasPasPas.Typings.Simple {
             => BaseType.IsSigned;
 
         /// <summary>
+        ///     type size
+        /// </summary>
+        public override uint TypeSizeInBytes
+            => BaseType.TypeSizeInBytes;
+
+        /// <summary>
         ///     format this subrange type
         /// </summary>
         /// <returns></returns>

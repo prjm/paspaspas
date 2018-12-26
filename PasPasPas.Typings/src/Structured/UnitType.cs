@@ -37,6 +37,12 @@ namespace PasPasPas.Typings.Structured {
             => CommonTypeKind.Unit;
 
         /// <summary>
+        ///     untyped
+        /// </summary>
+        public override uint TypeSizeInBytes
+            => 0;
+
+        /// <summary>
         ///     register a symbol
         /// </summary>
         /// <param name="symbolName">symbol name</param>

@@ -13,14 +13,26 @@ namespace PasPasPas.Typings.Simple {
         ///     real type
         /// </summary>
         /// <param name="withId">type id</param>
-        public RealType(int withId) : base(withId) {
-        }
+        /// <param name="withBitSize"></param>
+        public RealType(int withId, uint withBitSize) : base(withId)
+            => BitSize = withBitSize;
 
         /// <summary>
         ///     common type kind
         /// </summary>
         public override CommonTypeKind TypeKind
             => CommonTypeKind.RealType;
+
+        /// <summary>
+        ///     bitsize
+        /// </summary>
+        public uint BitSize { get; }
+
+        /// <summary>
+        ///     type size in bytes
+        /// </summary>
+        public override uint TypeSizeInBytes
+            => (BitSize - 1) / 8u + 1u;
 
         /// <summary>
         ///     test for assignment type compatibility

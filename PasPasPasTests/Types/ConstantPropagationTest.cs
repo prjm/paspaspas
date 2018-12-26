@@ -314,5 +314,65 @@ namespace PasPasPasTests.Types {
             AssertExprValue("true or a", GetBooleanValue(true), "var a: Boolean");
         }
 
+        [TestMethod]
+        public void TestSizeOf() {
+            AssertExprValue("SizeOf(AnsiChar)", GetIntegerValue(1));
+            AssertExprValue("SizeOf(AnsiString)", GetIntegerValue(4));
+            AssertExprValue("SizeOf(AnsiChar(a))", GetIntegerValue(1), "var a: AnsiChar;");
+
+            AssertExprValue("SizeOf(Char)", GetIntegerValue(2));
+            AssertExprValue("SizeOf(WideChar)", GetIntegerValue(2));
+
+            AssertExprValue("SizeOf(Ta)", GetIntegerValue(1), "type Ta = (xa,xb,xc); ");
+
+            AssertExprValue("SizeOf(Boolean)", GetIntegerValue(1));
+            AssertExprValue("SizeOf(ByteBool)", GetIntegerValue(1));
+            AssertExprValue("SizeOf(WordBool)", GetIntegerValue(2));
+            AssertExprValue("SizeOf(LongBool)", GetIntegerValue(4));
+
+            AssertExprValue("SizeOf(Byte)", GetIntegerValue(1));
+            AssertExprValue("SizeOf(Uint8)", GetIntegerValue(1));
+            AssertExprValue("SizeOf(ShortInt)", GetIntegerValue(1));
+            AssertExprValue("SizeOf(int8)", GetIntegerValue(1));
+
+            AssertExprValue("SizeOf(Word)", GetIntegerValue(2));
+            AssertExprValue("SizeOf(Uint16)", GetIntegerValue(2));
+            AssertExprValue("SizeOf(SmallInt)", GetIntegerValue(2));
+            AssertExprValue("SizeOf(Int16)", GetIntegerValue(2));
+
+            AssertExprValue("SizeOf(FixedUint)", GetIntegerValue(4));
+            AssertExprValue("SizeOf(Cardinal)", GetIntegerValue(4));
+            AssertExprValue("SizeOf(UInt32)", GetIntegerValue(4));
+            AssertExprValue("SizeOf(LongWord)", GetIntegerValue(4));
+            AssertExprValue("SizeOf(NativeUInt)", GetIntegerValue(4));
+            AssertExprValue("SizeOf(Fixedint)", GetIntegerValue(4));
+            AssertExprValue("SizeOf(Integer)", GetIntegerValue(4));
+            AssertExprValue("SizeOf(Int32)", GetIntegerValue(4));
+            AssertExprValue("SizeOf(LongInt)", GetIntegerValue(4));
+            AssertExprValue("SizeOf(NativeInt)", GetIntegerValue(4));
+
+            AssertExprValue("SizeOf(Int64)", GetIntegerValue(8));
+            AssertExprValue("SizeOf(UInt64)", GetIntegerValue(8));
+
+            AssertExprValue("SizeOf(Ta)", GetIntegerValue(1), "type Ta = -3..3;");
+            AssertExprValue("SizeOf(Ta)", GetIntegerValue(1), "type Ta = 3..180;");
+            AssertExprValue("SizeOf(Ta)", GetIntegerValue(2), "type Ta = -180..3;");
+            AssertExprValue("SizeOf(Ta)", GetIntegerValue(2), "type Ta = 3..380;");
+            AssertExprValue("SizeOf(Ta)", GetIntegerValue(4), "type Ta = -33555..3;");
+            AssertExprValue("SizeOf(Ta)", GetIntegerValue(4), "type Ta = 3..4294967295;");
+            AssertExprValue("SizeOf(Ta)", GetIntegerValue(8), "type Ta = -4294967295..3;");
+            AssertExprValue("SizeOf(Ta)", GetIntegerValue(8), "type Ta = 3..18446744073709551614;");
+
+            AssertExprValue("SizeOf(Real48)", GetIntegerValue(6));
+            AssertExprValue("SizeOf(Single)", GetIntegerValue(4));
+            AssertExprValue("SizeOf(Real)", GetIntegerValue(8));
+            AssertExprValue("SizeOf(Double)", GetIntegerValue(8));
+            AssertExprValue("SizeOf(Extended)", GetIntegerValue(10));
+            AssertExprValue("SizeOf(Comp)", GetIntegerValue(8));
+            AssertExprValue("SizeOf(Currency)", GetIntegerValue(8));
+
+            AssertExprValue("SizeOf(Pointer)", GetIntegerValue(4));
+        }
+
     }
 }

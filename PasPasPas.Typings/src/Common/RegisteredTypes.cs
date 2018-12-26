@@ -109,6 +109,7 @@ namespace PasPasPas.Typings.Common {
             systemUnit.AddGlobal(new PtrRoutine());
             systemUnit.AddGlobal(new Round());
             systemUnit.AddGlobal(new PredOrSucc(PredSuccMode.Succ));
+            systemUnit.AddGlobal(new SizeOf());
         }
 
         /// <summary>
@@ -211,12 +212,12 @@ namespace PasPasPas.Typings.Common {
         ///     register real types
         /// </summary>
         private void RegisterRealTypes() {
-            RegisterSystemType(new RealType(KnownTypeIds.Real48Type), "Real48");
-            RegisterSystemType(new RealType(KnownTypeIds.SingleType), "Single");
-            RegisterSystemType(new RealType(KnownTypeIds.DoubleType), "Double");
+            RegisterSystemType(new RealType(KnownTypeIds.Real48Type, 48), "Real48");
+            RegisterSystemType(new RealType(KnownTypeIds.SingleType, 32), "Single");
+            RegisterSystemType(new RealType(KnownTypeIds.DoubleType, 64), "Double");
             RegisterSystemType(new ExtendedType(KnownTypeIds.Extended), "Extended");
-            RegisterSystemType(new RealType(KnownTypeIds.Comp), "Comp");
-            RegisterSystemType(new RealType(KnownTypeIds.Currency), "Currency");
+            RegisterSystemType(new RealType(KnownTypeIds.Comp, 64), "Comp");
+            RegisterSystemType(new RealType(KnownTypeIds.Currency, 64), "Currency");
         }
 
         /// <summary>
@@ -282,6 +283,14 @@ namespace PasPasPas.Typings.Common {
             RegisterSystemType(new IntegralType(KnownTypeIds.IntegerType, true, 32), "Integer");
             RegisterSystemType(new Integral64BitType(KnownTypeIds.Uint64Type, false), "UInt64");
             RegisterSystemType(new Integral64BitType(KnownTypeIds.Int64Type, true), "Int64");
+
+            RegisterSystemType(new TypeAlias(KnownTypeIds.UInt8, KnownTypeIds.ByteType), "UInt8");
+            RegisterSystemType(new TypeAlias(KnownTypeIds.Int8, KnownTypeIds.ShortInt), "Int8");
+            RegisterSystemType(new TypeAlias(KnownTypeIds.UInt16, KnownTypeIds.WordType), "UInt16");
+            RegisterSystemType(new TypeAlias(KnownTypeIds.Int16, KnownTypeIds.SmallInt), "Int16");
+            RegisterSystemType(new TypeAlias(KnownTypeIds.UInt32, KnownTypeIds.CardinalType), "UInt32");
+            RegisterSystemType(new TypeAlias(KnownTypeIds.Int32, KnownTypeIds.IntegerType), "Int32");
+
         }
 
         /// <summary>

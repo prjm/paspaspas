@@ -1,4 +1,5 @@
 ﻿using PasPasPas.Globals.Runtime;
+using PasPasPas.Globals.Types;
 using PasPasPas.Typings.Common;
 
 namespace PasPasPas.Typings.Simple {
@@ -23,6 +24,12 @@ namespace PasPasPas.Typings.Simple {
         /// </summary>
         public override CommonTypeKind TypeKind
             => CommonTypeKind.PointerType;
+
+        /// <summary>
+        ///     type size
+        /// </summary>
+        public override uint TypeSizeInBytes
+            => TypeRegistry.GetTypeByIdOrUndefinedType(KnownTypeIds.NativeInt).TypeSizeInBytes;
 
     }
 }

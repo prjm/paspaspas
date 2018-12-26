@@ -9,7 +9,7 @@
         ///     create a new extended type
         /// </summary>
         /// <param name="withId"></param>
-        public ExtendedType(int withId) : base(withId) { }
+        public ExtendedType(int withId) : base(withId, 80) { }
 
         /// <summary>
         ///     type name
