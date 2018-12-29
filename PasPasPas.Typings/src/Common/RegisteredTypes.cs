@@ -112,6 +112,7 @@ namespace PasPasPas.Typings.Common {
             systemUnit.AddGlobal(new SizeOf());
             systemUnit.AddGlobal(new Sqr());
             systemUnit.AddGlobal(new Swap());
+            systemUnit.AddGlobal(new Trunc());
         }
 
         /// <summary>

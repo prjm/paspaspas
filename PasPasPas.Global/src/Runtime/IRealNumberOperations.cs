@@ -46,5 +46,12 @@ namespace PasPasPas.Globals.Runtime {
         /// <param name="realValue"></param>
         /// <returns></returns>
         ITypeReference Round(ITypeReference realValue);
+
+        /// <summary>
+        ///     truncate a real number
+        /// </summary>
+        /// <param name="realNumberValue"></param>
+        /// <returns></returns>
+        ITypeReference Trunc(IRealNumberValue realNumberValue);
     }
 }

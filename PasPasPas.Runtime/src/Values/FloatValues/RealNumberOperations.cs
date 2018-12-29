@@ -257,5 +257,27 @@ namespace PasPasPas.Runtime.Values.FloatValues {
 
             return Invalid;
         }
+
+        /// <summary>
+        ///     truncate a real number
+        /// </summary>
+        /// <param name="realNumberValue"></param>
+        /// <returns></returns>
+        public ITypeReference Trunc(IRealNumberValue realNumberValue) {
+            if (realNumberValue.IsIntegralValue(out var intValue))
+                return intValue;
+
+            if (!realNumberValue.IsRealValue(out var value))
+                return Invalid;
+
+            var originalValue = value.AsExtended;
+            var mode = originalValue.IsNegative ? SharpFloat.Globals.RoundingMode.Maximum : SharpFloat.Globals.RoundingMode.Minimum;
+            var roundedValue = originalValue.RoundToInt(mode, true);
+
+            if (roundedValue >= long.MinValue && roundedValue <= long.MaxValue)
+                return Ints.ToScaledIntegerValue((long)roundedValue);
+
+            return Invalid;
+        }
     }
 }

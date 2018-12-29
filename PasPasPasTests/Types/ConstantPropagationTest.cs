@@ -388,5 +388,16 @@ namespace PasPasPasTests.Types {
             AssertExprValue("Swap($aaff00)", GetIntegerValue(0xaa00ff));
         }
 
+        [TestMethod]
+        public void TestTrunc() {
+            AssertExprValue("Trunc(0.0)", GetIntegerValue(0));
+            AssertExprValue("Trunc(1.0)", GetIntegerValue(1));
+            AssertExprValue("Trunc(-1.0)", GetIntegerValue(-1));
+            AssertExprValue("Trunc(1.9998)", GetIntegerValue(1));
+            AssertExprValue("Trunc(-1.9998)", GetIntegerValue(-1));
+            AssertExprValue("Trunc(1)", GetIntegerValue(1));
+            AssertExprValue("Trunc(-1)", GetIntegerValue(-1));
+        }
+
     }
 }
