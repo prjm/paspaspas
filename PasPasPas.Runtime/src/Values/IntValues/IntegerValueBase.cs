@@ -432,7 +432,6 @@ namespace PasPasPas.Runtime.Values.IntValues {
 
         }
 
-
         /// <summary>
         ///     hi value
         /// </summary>
@@ -454,5 +453,35 @@ namespace PasPasPas.Runtime.Values.IntValues {
         /// <param name="types"></param>
         /// <returns></returns>
         public abstract ITypeReference GetOrdinalValue(ITypeRegistry types);
+
+        /// <summary>
+        ///     swap routine
+        /// </summary>
+        /// <param name="overflow"></param>
+        /// <param name="integerValue"></param>
+        /// <param name="types"></param>
+        /// <param name="invalid"></param>
+        /// <returns></returns>
+        public static ITypeReference Swap(ITypeReference overflow, ITypeReference invalid, ITypeRegistry types, IntegerValueBase integerValue) {
+            var b = integerValue.AsBigInteger;
+            var value = b.ToByteArray();
+            var typeDef = types.GetTypeByIdOrUndefinedType(integerValue.TypeId);
+
+            if (!(typeDef is IIntegralType integralType))
+                return invalid;
+
+            if (typeDef.TypeSizeInBytes < 2)
+                return new ShortIntValue(0);
+
+            if (value.Length < 2)
+                return new ShortIntValue(0);
+
+            var s = value[0];
+            value[0] = value[1];
+            value[1] = s;
+            b = new BigInteger(value);
+            return ToIntValue(overflow, b);
+
+        }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace PasPasPas.Globals.Runtime {
+﻿using PasPasPas.Globals.Types;
+
+namespace PasPasPas.Globals.Runtime {
 
     /// <summary>
     ///     integer calculator
@@ -42,6 +44,14 @@
         /// <param name="divisor"></param>
         /// <returns></returns>
         ITypeReference Modulo(ITypeReference dividend, ITypeReference divisor);
+
+        /// <summary>
+        ///     swap high and low bit
+        /// </summary>
+        /// <param name="parameter"></param>
+        /// <param name="types">type registry</param>
+        /// <returns></returns>
+        ITypeReference Swap(ITypeReference parameter, ITypeRegistry types);
 
         /// <summary>
         ///     <c>hi</c> function: return the upper byte from a 16 bit value

@@ -381,5 +381,12 @@ namespace PasPasPasTests.Types {
             AssertExprValue("Sqr(2.25)", GetExtendedValue(5.0625));
         }
 
+        [TestMethod]
+        public void TestSwap() {
+            AssertExprValue("Swap($ff)", GetIntegerValue(0x00));
+            AssertExprValue("Swap($ff00)", GetIntegerValue(0xff));
+            AssertExprValue("Swap($aaff00)", GetIntegerValue(0xaa00ff));
+        }
+
     }
 }

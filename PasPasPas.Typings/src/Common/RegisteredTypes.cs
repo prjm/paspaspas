@@ -111,6 +111,7 @@ namespace PasPasPas.Typings.Common {
             systemUnit.AddGlobal(new PredOrSucc(PredSuccMode.Succ));
             systemUnit.AddGlobal(new SizeOf());
             systemUnit.AddGlobal(new Sqr());
+            systemUnit.AddGlobal(new Swap());
         }
 
         /// <summary>

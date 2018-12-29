@@ -489,6 +489,19 @@ namespace PasPasPas.Runtime.Values.IntValues {
         }
 
         /// <summary>
+        ///     swap high and low byte
+        /// </summary>
+        /// <param name="parameter"></param>
+        /// <param name="types"></param>
+        /// <returns></returns>
+        public ITypeReference Swap(ITypeReference parameter, ITypeRegistry types) {
+            if (parameter is IntegerValueBase integerValue)
+                return IntegerValueBase.Swap(Overflow, Invalid, types, integerValue);
+            else
+                return Invalid;
+        }
+
+        /// <summary>
         ///     convert a number to a native int value
         /// </summary>
         /// <param name="number"></param>
@@ -516,5 +529,7 @@ namespace PasPasPas.Runtime.Values.IntValues {
 
             return Invalid;
         }
+
+
     }
 }
