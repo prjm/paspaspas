@@ -1,0 +1,119 @@
+﻿using System.Collections.Generic;
+using System.IO;
+using PasPasPas.Api;
+using PasPasPas.Globals.Runtime;
+using PasPasPas.Parsing.SyntaxTree.Abstract;
+using PasPasPas.Parsing.SyntaxTree.Standard;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
+using PasPasPas.Typings.Common;
+
+namespace SampleRunner.Scenarios {
+
+    /// <summary>
+    ///     helper visitor to find constants
+    /// </summary>
+    internal class ConstantVisitor : IStartVisitor<ConstDeclarationSymbol> {
+
+        private readonly IStartEndVisitor visitor;
+
+        internal ConstantVisitor()
+            => visitor = new Visitor(this);
+
+        /// <summary>
+        ///     get non-generic visitor
+        /// </summary>
+        /// <returns></returns>
+        public IStartEndVisitor AsVisitor()
+            => visitor;
+
+        public void StartVisit(ConstDeclarationSymbol element) {
+            var terminalVisitor = new TerminalVisitor();
+            element.Accept(terminalVisitor.AsVisitor());
+            var line = terminalVisitor.ResultBuilder.ToString();
+            line = line.Replace('\n', ' ');
+            line = line.Replace('\r', ' ');
+            line = line.Replace('\t', ' ');
+            line = line.Trim();
+
+            if (!string.IsNullOrWhiteSpace(line))
+                Items.Add(line);
+        }
+
+        /// <summary>
+        ///     items
+        /// </summary>
+        public List<string> Items { get; } = new List<string>();
+    }
+
+    internal class ConstantDeclarationVisitor : IStartVisitor<ConstantDeclaration> {
+
+        internal ConstantDeclarationVisitor() => visitor = new Visitor(this);
+
+        private readonly IStartEndVisitor visitor;
+
+        internal string Value { get; private set; }
+
+        public IStartEndVisitor AsVisitor()
+            => visitor;
+
+        public void StartVisit(ConstantDeclaration element) {
+            if (Value == default)
+                if (element.TypeInfo?.ReferenceKind == TypeReferenceKind.DynamicValue)
+                    Value = element.TypeInfo?.ToString();
+        }
+    }
+
+    /// <summary>
+    ///     find constant values
+    /// </summary>
+    public static class ConstantValueFinder {
+
+        /// <summary>
+        ///     run scenarios
+        /// </summary>
+        /// <param name="b"></param>
+        /// <param name="environment"></param>
+        /// <param name="testPath"></param>
+        /// <param name="reapeat"></param>
+        public static void Run(TextWriter b, ITypedEnvironment environment, string testPath, int reapeat) {
+            var hasName = false;
+
+            for (var i = 0; i < reapeat; i++) {
+                var parserApi = new ParserApi(environment);
+                using (var parser = parserApi.CreateParserForPath(testPath)) {
+                    var result = parser.Parse();
+                    var visitor = new ConstantVisitor();
+                    result.Accept(visitor.AsVisitor());
+
+                    foreach (var item in visitor.Items) {
+                        var filePath = Path.GetFullPath(testPath);
+                        var path = Path.Combine(Path.GetDirectoryName(filePath), "dummy.dpr");
+                        var dummyProgram = $"program dummy; const {item} begin end.";
+
+                        using (var parser2 = parserApi.CreateParserForString(path, dummyProgram)) {
+                            var result2 = parser2.Parse();
+                            var project = parserApi.CreateAbstractSyntraxTree(result2);
+                            parserApi.AnnotateWithTypes(project);
+                            var visitor2 = new ConstantDeclarationVisitor();
+                            project.Accept(visitor2.AsVisitor());
+
+                            if (string.IsNullOrWhiteSpace(visitor2.Value))
+                                continue;
+
+                            if (!hasName) {
+                                b.WriteLine(Path.GetFileName(testPath));
+                                hasName = true;
+                            }
+
+                            b.WriteLine(item);
+                            b.Write("\t\t = ");
+                            b.WriteLine(visitor2.Value);
+                        }
+                    }
+                }
+            }
+
+        }
+
+    }
+}

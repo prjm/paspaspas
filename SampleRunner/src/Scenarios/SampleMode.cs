@@ -39,5 +39,11 @@
         ///     parse a file, create an abstract syntax tree, add type annotations
         /// </summary>
         TypeAnnotateFile,
+
+        /// <summary>
+        ///     find constant values
+        /// </summary>
+        FindConstants,
+
     }
 }

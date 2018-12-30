@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using PasPasPas.Api;
 using PasPasPas.Infrastructure.Environment;
 using PasPasPas.Infrastructure.ObjectPooling;
@@ -19,8 +21,9 @@ namespace SampleRunner {
 
         private static void Main() {
 
-            var testPath = @"C:\temp\Testfiles\Spring.pas";
-            var mode = SampleMode.ParseFile;
+            //var testPath = @"C:\temp\Testfiles\Spring.pas";
+            var testPath = @"C:\temp\Testfiles\all";
+            var mode = SampleMode.FindConstants;
             var repeat = 1;
             var result = System.Console.Out;
             var environment = new DefaultEnvironment();
@@ -83,40 +86,71 @@ namespace SampleRunner {
             Histograms.Enable = useHistograms;
 
             var action = default(Action<TextWriter>);
+            var actions = new List<Action<TextWriter>>();
+            var files = new List<string>();
 
-            switch (mode) {
-
-                case SampleMode.ReadFile:
-                    action = (b) => ReadFile.Run(b, testPath, repeat);
-                    break;
-
-                case SampleMode.TokenizerFile:
-                    action = (b) => TokenizeFile.Run(b, environment, testPath, repeat);
-                    break;
-
-                case SampleMode.BufferedTokenizeFile:
-                    action = (b) => BufferedTokenizeFile.Run(b, environment, testPath, repeat);
-                    break;
-
-                case SampleMode.ParseFile:
-                    action = (b) => ParseFile.Run(b, environment, testPath, repeat);
-                    break;
-
-                case SampleMode.CreateAbstractSyntaxTree:
-                    action = (b) => CreateAst.Run(b, environment, testPath, repeat);
-                    break;
-
-                case SampleMode.TypeAnnotateFile:
-                    action = (b) => TypeAnnotateFile.Run(b, environment, testPath, repeat);
-                    break;
-
-                default:
-                    action = (b) => b.WriteLine("Unknown mode.");
-                    break;
-
+            if (Directory.Exists(testPath)) {
+                foreach (var file in Directory.GetFiles(testPath, "*.pas").OrderBy(t => Path.GetFileName(t)))
+                    if (File.Exists(file))
+                        files.Add(file);
             }
+            else if (File.Exists(testPath)) {
+                files.Add(testPath);
+            }
+            else throw new FileNotFoundException("File or path not found.", testPath);
 
-            return action;
+            foreach (var file in files.Take(500)) {
+
+                switch (mode) {
+
+                    case SampleMode.ReadFile:
+                        action = (b) => ReadFile.Run(b, file, repeat);
+                        break;
+
+                    case SampleMode.TokenizerFile:
+                        action = (b) => TokenizeFile.Run(b, environment, file, repeat);
+                        break;
+
+                    case SampleMode.BufferedTokenizeFile:
+                        action = (b) => BufferedTokenizeFile.Run(b, environment, file, repeat);
+                        break;
+
+                    case SampleMode.ParseFile:
+                        action = (b) => ParseFile.Run(b, environment, file, repeat);
+                        break;
+
+                    case SampleMode.CreateAbstractSyntaxTree:
+                        action = (b) => CreateAst.Run(b, environment, file, repeat);
+                        break;
+
+                    case SampleMode.TypeAnnotateFile:
+                        action = (b) => TypeAnnotateFile.Run(b, environment, file, repeat);
+                        break;
+
+                    case SampleMode.FindConstants:
+                        action = (b) => ConstantValueFinder.Run(b, environment, file, repeat);
+                        break;
+
+                    default:
+                        action = (b) => b.WriteLine("Unknown mode.");
+                        break;
+
+                }
+
+                actions.Add(action);
+
+            };
+
+            return (tw) => {
+                foreach (var a in actions) {
+                    try {
+                        a(tw);
+                    }
+                    catch (Exception e) {
+                        tw.WriteLine(e);
+                    }
+                }
+            };
         }
     }
 }
