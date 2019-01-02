@@ -2562,15 +2562,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
 
             if (Match(TokenKind.AnsiString)) {
                 var stringSymbol = ContinueWith(TokenKind.AnsiString);
-                var openParen = ContinueWith(TokenKind.OpenParen);
-                var codePage = default(ConstantExpressionSymbol);
-                var closeParen = default(Terminal);
-
-                if (openParen != default) {
-                    codePage = ParseConstantExpression();
-                    closeParen = ContinueWithOrMissing(TokenKind.CloseParen);
-                }
-                return new StringTypeSymbol(stringSymbol, openParen, codePage, closeParen);
+                return new StringTypeSymbol(stringSymbol);
             }
 
             if (Match(TokenKind.ShortString, TokenKind.WideString, TokenKind.UnicodeString)) {

@@ -583,6 +583,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// <param name="element"></param>
         public void StartVisit(FactorSymbol element) {
 
+            if (LastExpression == default)
+                return;
+
+
             // unary operators
             if (element.UnaryOperand != default) {
                 var lastExpression = LastExpression;
@@ -1067,6 +1071,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             var typeTarget = LastTypeDeclaration;
             var exprTarget = LastExpression;
 
+            if (exprTarget is SymbolReferencePart srp && srp.Kind == SymbolReferencePartKind.StringCast)
+                return;
+
             var result = new MetaType();
             InitNode(result, element);
             result.Kind = TokenKindMapper.ForMetaType(element.Kind);
@@ -1076,10 +1083,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             else if (exprTarget != default)
                 exprTarget.Value = result;
 
-            if (result.Kind == MetaTypeKind.StringType && element.CodePageOrStringLength != null)
+            if (result.Kind == MetaTypeKind.StringType && element.StringLength != null)
                 result.Kind = MetaTypeKind.ShortString;
 
-            if (result.Kind == MetaTypeKind.ShortString && element.CodePageOrStringLength == null)
+            if (result.Kind == MetaTypeKind.ShortString && element.StringLength == null)
                 result.Kind = MetaTypeKind.ShortStringDefault;
 
         }
@@ -2838,18 +2845,31 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 return;
             }
 
-            if (element.Subitem != null && element.Subitem is IdentifierSymbol ident) {
+            if (element.Subitem != default) {
                 var part = new SymbolReferencePart();
+                var ident = element.Subitem as IdentifierSymbol;
+                var strType = element.Subitem as StringTypeSymbol;
+
                 InitNode(part, element);
                 parent.AddPart(part);
                 part.Kind = SymbolReferencePartKind.SubItem;
-                part.Name = ExtractSymbolName(ident)?.CompleteName;
+
+                if (ident != default)
+                    part.Name = ExtractSymbolName(ident)?.CompleteName;
+
+                if (strType != default)
+                    part.Name = strType.StringSymbol.Token.Value;
+
                 part.GenericType = ExtractGenericDefinition(part, element.SubitemGenericType);
 
-                if (element.IndexExpression != null)
+                if (element.IndexExpression != default && strType == default)
                     part.Kind = SymbolReferencePartKind.ArrayIndex;
-                else if (element.ParameterList)
+                else if (element.ParameterList && strType == default)
                     part.Kind = SymbolReferencePartKind.CallParameters;
+                else if (element.ParameterList && strType != default)
+                    part.Kind = SymbolReferencePartKind.StringCast;
+                else if (strType != default)
+                    part.Kind = SymbolReferencePartKind.StringType;
 
                 return;
             }

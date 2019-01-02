@@ -2275,7 +2275,7 @@ namespace PasPasPasTests.Parser {
             var s = RunCstTest(p => p.ParseStringType(), "string[23]");
             Assert.IsNotNull(s.StringSymbol);
             Assert.IsNotNull(s.OpenParen);
-            Assert.IsNotNull(s.CodePageOrStringLength);
+            Assert.IsNotNull(s.StringLength);
             Assert.IsNotNull(s.CloseParen);
             Assert.AreEqual(10, s.Length);
         }

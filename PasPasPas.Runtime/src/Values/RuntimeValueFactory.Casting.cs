@@ -34,6 +34,9 @@ namespace PasPasPas.Runtime.Values {
             if (typeKind.IsChar())
                 return CastChar(types, value, typeId);
 
+            if (typeKind.IsString())
+                return CastString(types, value, typeId);
+
             if (typeKind.IsArray())
                 return CastArray(types, value, typeId);
 
@@ -109,6 +112,41 @@ namespace PasPasPas.Runtime.Values {
             return Types.MakeErrorTypeReference();
         }
 
+        private ITypeReference CastString(ITypeRegistry types, ITypeReference value, int typeId) {
+            var typeDef = types.GetTypeByIdOrUndefinedType(typeId);
+            typeDef = TypeBase.ResolveAlias(typeDef);
+
+            if (!value.IsConstant()) {
+                // TODO: add some type checking here
+                if (value.IsType())
+                    return types.MakeTypeReference(typeId);
+                return types.MakeReference(typeId);
+            }
+
+            if (value is IStringValue stringValue) {
+
+                if (typeDef is IStringType stringType) {
+
+                    if (typeDef.TypeKind == CommonTypeKind.ShortStringType)
+                        return Strings.ToShortString(stringValue.AsUnicodeString);
+
+                    if (typeDef.TypeKind == CommonTypeKind.LongStringType)
+                        return Strings.ToShortString(stringValue.AsUnicodeString);
+
+                    if (typeDef.TypeKind == CommonTypeKind.UnicodeStringType)
+                        return Strings.ToUnicodeString(stringValue.AsUnicodeString);
+
+                }
+            }
+
+            if (value is ICharValue charValue) {
+
+            }
+
+            return Types.MakeErrorTypeReference();
+        }
+
+
         private ITypeReference CastChar(ITypeRegistry types, ITypeReference value, int typeId) {
 
             var typeDef = types.GetTypeByIdOrUndefinedType(typeId);
@@ -130,6 +168,20 @@ namespace PasPasPas.Runtime.Values {
             if (typeDef is SubrangeType subrangeType) {
                 var castedValue = CastChar(types, value, subrangeType.BaseType.TypeId);
                 return MakeSubrangeValue(typeDef.TypeId, castedValue);
+            }
+
+            if (typeDef is IStringType stringType) {
+
+
+                if (typeDef.TypeKind == CommonTypeKind.ShortStringType)
+                    return Strings.ToShortString(charValue.AsUnicodeString);
+
+                if (typeDef.TypeKind == CommonTypeKind.LongStringType)
+                    return Strings.ToAnsiString(charValue.AsUnicodeString);
+
+                if (typeDef.TypeKind == CommonTypeKind.UnicodeStringType)
+                    return Strings.ToUnicodeString(charValue.AsUnicodeString);
+
             }
 
             switch (typeDef.TypeId) {

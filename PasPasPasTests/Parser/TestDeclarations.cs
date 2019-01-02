@@ -72,7 +72,6 @@ namespace PasPasPasTests.Parser {
             ParseString("program test; const x : string = 5; .");
             ParseString("program test; const x : string[5] = 5; .");
             ParseString("program test; const x : ansistring = 5; .");
-            ParseString("program test; const x : ansistring(222) = 5; .");
             ParseString("program test; const x : shortstring = 5; .");
             ParseString("program test; const x : widestring = 5; .");
             ParseString("program test; const x : unicodestring = 5; .");

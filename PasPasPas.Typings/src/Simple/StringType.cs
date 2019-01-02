@@ -7,7 +7,7 @@ namespace PasPasPas.Typings.Simple {
     /// <summary>
     ///     base class for string types
     /// </summary>
-    public abstract class StringTypeBase : TypeBase {
+    public abstract class StringTypeBase : TypeBase, IStringType {
 
         /// <summary>
         ///     create a new string type declaration
@@ -110,7 +110,7 @@ namespace PasPasPas.Typings.Simple {
         ///     unicode string type
         /// </summary>
         public override CommonTypeKind TypeKind
-            => CommonTypeKind.ShortStringType;
+            => CommonTypeKind.LongStringType;
 
         /// <summary>
         ///     type size in bytes

@@ -56,8 +56,14 @@ namespace PasPasPas.Typings.Structured {
         /// <param name="symbolName">symbol to resolve</param>
         /// <param name="entry">resolved symbol</param>
         /// <returns><c>true</c> if the symbol was resolved</returns>
-        public bool TryToResolve(string symbolName, out Reference entry)
-            => symbols.TryGetValue(symbolName, out entry);
+        public bool TryToResolve(string symbolName, out Reference entry) {
+            if (string.IsNullOrWhiteSpace(symbolName)) {
+                entry = default;
+                return false;
+            }
+
+            return symbols.TryGetValue(symbolName, out entry);
+        }
 
         /// <summary>
         ///     add a global routine

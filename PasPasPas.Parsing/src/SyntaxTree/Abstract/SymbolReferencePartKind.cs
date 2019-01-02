@@ -29,5 +29,15 @@
         ///     parameters for a function call
         /// </summary>
         CallParameters = 4,
+
+        /// <summary>
+        ///     string cast
+        /// </summary>
+        StringCast = 5,
+
+        /// <summary>
+        ///     string type reference
+        /// </summary>
+        StringType = 6,
     }
 }

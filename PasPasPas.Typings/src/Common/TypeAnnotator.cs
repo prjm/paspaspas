@@ -400,7 +400,10 @@ namespace PasPasPas.Typings.Common {
                     if (symRef.Kind == SymbolReferencePartKind.SubItem) {
                         baseTypeValue = resolver.ResolveTypeByName(baseTypeValue, symRef.Name);
                     }
-                    else if (symRef.Kind == SymbolReferencePartKind.CallParameters && symRef.Name != null) {
+                    else if (symRef.Kind == SymbolReferencePartKind.StringType) {
+                        baseTypeValue = symRef.Value.TypeInfo;
+                    }
+                    else if ((symRef.Kind == SymbolReferencePartKind.CallParameters || symRef.Kind == SymbolReferencePartKind.StringCast) && symRef.Name != null) {
                         var callableRoutines = new List<ParameterGroup>();
                         var signature = CreateSignatureFromSymbolPart(symRef);
 

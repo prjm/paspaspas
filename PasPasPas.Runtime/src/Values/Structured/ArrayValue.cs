@@ -1,4 +1,6 @@
-﻿using System.Collections.Immutable;
+﻿using System;
+using System.Collections.Immutable;
+using System.Linq;
 using PasPasPas.Globals.Runtime;
 
 namespace PasPasPas.Runtime.Values.Structured {
@@ -6,7 +8,7 @@ namespace PasPasPas.Runtime.Values.Structured {
     /// <summary>
     ///     constant array value
     /// </summary>
-    public class ArrayValue : IArrayValue {
+    public class ArrayValue : IEquatable<IArrayValue>, IArrayValue {
 
         /// <summary>
         ///     create a new array value
@@ -53,6 +55,36 @@ namespace PasPasPas.Runtime.Values.Structured {
         /// <returns></returns>
         public override string ToString()
             => InternalTypeFormat;
+
+        /// <summary>
+        ///     compare to another array value
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public bool Equals(IArrayValue other)
+            => other.BaseType == BaseType && Enumerable.SequenceEqual(Values, other.Values);
+
+        /// <summary>
+        ///     check for equality
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(object obj)
+            => obj is IArrayValue array ? Equals(array) : false;
+
+        /// <summary>
+        ///     compute a hash code
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode() {
+            unchecked {
+                var result = 17;
+                result = result * 31 + BaseType;
+                foreach (var item in Values)
+                    result = result * 31 + item.GetHashCode();
+                return result;
+            }
+        }
 
         /// <summary>
         ///     reference kind: constant

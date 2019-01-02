@@ -264,7 +264,7 @@ namespace PasPasPas.Infrastructure.Utils {
         /// Sets the value associated with the specified key.
         /// </summary>
         /// <param name="key">The key associated with the value to set.</param>
-        /// <param name="value">The the value to set.</param>
+        /// <param name="value">The value to set.</param>
         public void SetValue(TKey key, TValue value) {
             var kvp = new KeyValuePair<TKey, TValue>(key, value);
             var idx = IndexOf(key);
@@ -288,6 +288,12 @@ namespace PasPasPas.Infrastructure.Utils {
         /// <returns>True if the value was found.  False otherwise.</returns>
         /// <remarks></remarks>
         public bool TryGetValue(TKey key, out TValue value) {
+
+            if (key == null) {
+                value = default;
+                return false;
+            }
+
             if (_keyedCollection.Contains(key)) {
                 value = _keyedCollection[key].Value;
                 return true;

@@ -1,11 +1,12 @@
-﻿using PasPasPas.Globals.Runtime;
+﻿using System;
+using PasPasPas.Globals.Runtime;
 
 namespace PasPasPas.Runtime.Values.StringValues {
 
     /// <summary>
     ///     base class for strings
     /// </summary>
-    public abstract class StringValueBase : IStringValue {
+    public abstract class StringValueBase : IStringValue, IEquatable<IStringValue> {
 
         /// <summary>
         ///     get the type id
@@ -65,5 +66,34 @@ namespace PasPasPas.Runtime.Values.StringValues {
 
         internal static bool NotEquals(IStringValue string1, IStringValue string2)
             => string.CompareOrdinal(string1.AsUnicodeString, string2.AsUnicodeString) != 0;
+
+        /// <summary>
+        ///     check for equality
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public bool Equals(IStringValue other)
+            => Equal(this, other);
+
+
+        /// <summary>
+        ///     check for equality
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(object obj)
+            => obj is IStringValue other ? Equals(other) : false;
+
+        /// <summary>
+        ///     compute a hash code
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+#if DESKTOP
+            => AsUnicodeString.GetHashCode();
+#else
+            => AsUnicodeString.GetHashCode(StringComparison.Ordinal);
+#endif
+
     }
 }

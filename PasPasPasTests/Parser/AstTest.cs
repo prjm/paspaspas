@@ -241,6 +241,7 @@ namespace PasPasPasTests.Parser {
         [TestMethod]
         public void TestStringType() {
             MetaType u(object t) => (((t as CompilationUnit)?.InterfaceSymbols["x"]) as TypeDeclaration)?.TypeValue as MetaType;
+            TypeAlias v(object t) => (((t as CompilationUnit)?.InterfaceSymbols["x"]) as TypeDeclaration)?.TypeValue as TypeAlias;
 
             RunAstTest("unit z.x; interface type x = string; implementation end.", t => u(t)?.Kind, MetaTypeKind.StringType);
             RunAstTest("unit z.x; interface type x = string[232]; implementation end.", t => u(t)?.Kind, MetaTypeKind.ShortString);
@@ -250,7 +251,7 @@ namespace PasPasPasTests.Parser {
             RunAstTest("unit z.x; interface type x = wideString; implementation end.", t => u(t)?.Kind, MetaTypeKind.WideString);
 
             RunAstTest("unit z.x; interface type x = string[nil]; implementation end.", t => (u(t)?.Value as ConstantValue)?.Kind, ConstantValueKind.Nil);
-            RunAstTest("unit z.x; interface type x = ansistring(nil); implementation end.", t => (u(t)?.Value as ConstantValue)?.Kind, ConstantValueKind.Nil);
+            RunAstTest("unit z.x; interface type x = type ansistring(nil); implementation end.", t => (v(t)?.Value as ConstantValue)?.Kind, ConstantValueKind.Nil);
         }
 
         [TestMethod]

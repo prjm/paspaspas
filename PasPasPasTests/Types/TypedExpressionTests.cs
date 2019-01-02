@@ -611,6 +611,7 @@ namespace PasPasPasTests.Types {
             AssertExprTypeByConst("('aa','b')", KnownTypeIds.UnspecifiedType, false, "array [1001] of UnicodeString");
             AssertExprTypeByConst("(1.0, 1.4)", KnownTypeIds.UnspecifiedType, false, "array [1001] of extended");
             AssertExprTypeByConst("(a, b)", KnownTypeIds.UnspecifiedType, false, "array [1002] of enum Int8", "type ta = (a,b);");
+            AssertExprValue("a", GetArrayValue(KnownTypeIds.StringType, GetUnicodeStringValue("11"), GetUnicodeStringValue("2")), "const a: array [0 .. 1] of String = ('11', '2');");
         }
     }
 }

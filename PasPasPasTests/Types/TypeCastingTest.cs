@@ -64,6 +64,12 @@ namespace PasPasPasTests.Types {
         }
 
         [TestMethod]
+        public void TestStringCastingDirect() {
+            AssertExprValue("ShortString('a')", GetShortStringValue("a"), "", KnownTypeIds.ShortStringType);
+            AssertExprValue("AnsiString('a')", GetAnsiStringValue("a"), "", KnownTypeIds.AnsiStringType);
+        }
+
+        [TestMethod]
         public void TestCharCastingDirect() {
             AssertExprValue("ShortInt('a')", new ShortIntValue(97), "", KnownTypeIds.ShortInt);
             AssertExprValue("Byte('a')", new ByteValue(97), "", KnownTypeIds.ByteType);

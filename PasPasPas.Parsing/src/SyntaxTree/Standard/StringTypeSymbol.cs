@@ -25,14 +25,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         public StringTypeSymbol(Terminal stringSymbol, Terminal openParen, ConstantExpressionSymbol codePage, Terminal closeParen) {
             StringSymbol = stringSymbol;
             OpenParen = openParen;
-            CodePageOrStringLength = codePage;
+            StringLength = codePage;
             CloseParen = closeParen;
         }
 
         /// <summary>
         ///     code page
         /// </summary>
-        public ConstantExpressionSymbol CodePageOrStringLength { get; }
+        public ConstantExpressionSymbol StringLength { get; }
 
         /// <summary>
         ///     kind of the string
@@ -63,7 +63,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
             visitor.StartVisit(this);
             AcceptPart(this, StringSymbol, visitor);
             AcceptPart(this, OpenParen, visitor);
-            AcceptPart(this, CodePageOrStringLength, visitor);
+            AcceptPart(this, StringLength, visitor);
             AcceptPart(this, CloseParen, visitor);
             visitor.EndVisit(this);
         }
@@ -74,7 +74,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         public override int Length
             => StringSymbol.GetSymbolLength() +
                OpenParen.GetSymbolLength() +
-               CodePageOrStringLength.GetSymbolLength() +
+               StringLength.GetSymbolLength() +
                CloseParen.GetSymbolLength();
 
 

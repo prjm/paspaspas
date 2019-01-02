@@ -1,4 +1,5 @@
-﻿using PasPasPas.Api;
+﻿using System.Collections.Immutable;
+using PasPasPas.Api;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Infrastructure.ObjectPooling;
@@ -8,6 +9,7 @@ using PasPasPas.Runtime.Values.FloatValues;
 using PasPasPas.Runtime.Values.IntValues;
 using PasPasPas.Typings.Common;
 using SharpFloat.FloatingPoint;
+
 
 namespace PasPasPasTests.Common {
 
@@ -99,6 +101,25 @@ namespace PasPasPasTests.Common {
         /// <returns></returns>
         protected static ITypeReference GetUnicodeStringValue(string text)
             => MakeRuntime().Strings.ToUnicodeString(text);
+
+        protected static ITypeReference GetArrayValue(int baseTypeId, params ITypeReference[] values)
+            => MakeRuntime().Structured.CreateArrayValue(9999, baseTypeId, values.ToImmutableArray());
+
+        /// <summary>
+        ///     get the ANSI string value
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
+        protected static ITypeReference GetAnsiStringValue(string text)
+            => MakeRuntime().Strings.ToAnsiString(text);
+
+        /// <summary>
+        ///     get the short string value
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
+        protected static ITypeReference GetShortStringValue(string text)
+            => MakeRuntime().Strings.ToShortString(text);
 
         /// <summary>
         ///     get the Unicode char value

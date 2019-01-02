@@ -28,6 +28,24 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         }
 
         /// <summary>
+        ///     create a new simple type
+        /// </summary>
+        /// <param name="newType"></param>
+        /// <param name="typeOf"></param>
+        /// <param name="items"></param>
+        /// <param name="closeParen"></param>
+        /// <param name="codePage"></param>
+        /// <param name="openParen"></param>
+        public SimpleTypeSymbol(Terminal newType, Terminal typeOf, ImmutableArray<GenericNamespaceNameSymbol> items, Terminal openParen, ConstantExpressionSymbol codePage, Terminal closeParen) : base(items) {
+            NewType = newType;
+            TypeOf = typeOf;
+            OpenParen = openParen;
+            CodePage = codePage;
+            CloseParen = closeParen;
+        }
+
+
+        /// <summary>
         ///     create a new simple type*
         /// </summary>
         /// <param name="newType"></param>
@@ -69,6 +87,21 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
         public Terminal TypeOf { get; }
 
         /// <summary>
+        ///     open paren
+        /// </summary>
+        public Terminal OpenParen { get; }
+
+        /// <summary>
+        ///     code page
+        /// </summary>
+        public ConstantExpressionSymbol CodePage { get; }
+
+        /// <summary>
+        ///     clode paren
+        /// </summary>
+        public Terminal CloseParen { get; }
+
+        /// <summary>
         ///     dots
         /// </summary>
         public Terminal DotDot { get; }
@@ -86,6 +119,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
             AcceptPart(this, SubrangeStart, visitor);
             AcceptPart(this, DotDot, visitor);
             AcceptPart(this, SubrangeEnd, visitor);
+            AcceptPart(this, OpenParen, visitor);
+            AcceptPart(this, CodePage, visitor);
+            AcceptPart(this, CloseParen, visitor);
             visitor.EndVisit(this);
         }
 
@@ -99,7 +135,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Standard {
             ItemLength +
             SubrangeStart.GetSymbolLength() +
             DotDot.GetSymbolLength() +
-            SubrangeEnd.GetSymbolLength();
+            SubrangeEnd.GetSymbolLength() +
+            OpenParen.GetSymbolLength() +
+            CodePage.GetSymbolLength() +
+            CloseParen.GetSymbolLength();
 
     }
 }

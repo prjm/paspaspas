@@ -14,5 +14,10 @@
         ///     get the ANSI char value
         /// </summary>
         byte AsAnsiChar { get; }
+
+        /// <summary>
+        ///     string value
+        /// </summary>
+        string AsUnicodeString { get; }
     }
 }

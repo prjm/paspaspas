@@ -8,7 +8,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// <summary>
     ///     type alias
     /// </summary>
-    public class TypeAlias : TypeSpecificationBase {
+    public class TypeAlias : TypeSpecificationBase, IExpressionTarget {
 
         /// <summary>
         ///     name fragments
@@ -22,7 +22,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
             => Fragments = new SyntaxPartCollection<GenericNameFragment>(this);
 
         /// <summary>
-        ///     add a afragment
+        ///     add a a fragment
         /// </summary>
         /// <param name="fragment"></param>
         public void AddFragment(GenericNameFragment fragment)
@@ -54,6 +54,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
                 return new ScopedName(parts);
             }
         }
+
+        /// <summary>
+        ///     expression value
+        /// </summary>
+        public IExpression Value { get; set; }
 
         /// <summary>
         ///     accept visitor

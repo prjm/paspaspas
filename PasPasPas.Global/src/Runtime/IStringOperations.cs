@@ -21,6 +21,20 @@
         ITypeReference ToUnicodeString(string text);
 
         /// <summary>
+        ///     convert a string to a runtime value object
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
+        ITypeReference ToAnsiString(string text);
+
+        /// <summary>
+        ///     convert a string to a runtime value object
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
+        ITypeReference ToShortString(string text);
+
+        /// <summary>
         ///     get an empty string
         /// </summary>
         /// <returns></returns>

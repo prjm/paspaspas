@@ -3,15 +3,12 @@
 namespace PasPasPas.Runtime.Values.StringValues {
 
     /// <summary>
-    ///     string calculator
+    ///     string operations
     /// </summary>
     public class StringOperations : IStringOperations {
 
         private readonly ITypeReference invalidString
             = new SpecialValue(SpecialConstantKind.InvalidString);
-
-        private readonly ITypeReference emptyString
-            = new EmptyStringValue();
 
         /// <summary>
         ///     create a new string operations helper
@@ -134,9 +131,26 @@ namespace PasPasPas.Runtime.Values.StringValues {
         }
 
         /// <summary>
+        ///     get an ANSI string value
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
+        public ITypeReference ToAnsiString(string text)
+            => new AnsiStringValue(text);
+
+        /// <summary>
+        ///     get the short string value
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
+        public ITypeReference ToShortString(string text)
+            => new ShortStringValue(text);
+
+        /// <summary>
         ///     get the empty string value
         /// </summary>
         /// <returns></returns>
-        public ITypeReference EmptyString => emptyString;
+        public ITypeReference EmptyString { get; }
+            = new EmptyStringValue();
     }
 }

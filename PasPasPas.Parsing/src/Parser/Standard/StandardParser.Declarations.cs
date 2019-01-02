@@ -89,12 +89,25 @@ namespace PasPasPas.Parsing.Parser.Standard {
             if (newType != default || (MatchIdentifier(TokenKind.ShortString, TokenKind.StringKeyword, TokenKind.WideString, TokenKind.UnicodeString, TokenKind.AnsiString) && (!LookAhead(1, TokenKind.DotDot)))) {
                 using (var list = GetList<GenericNamespaceNameSymbol>()) {
                     var item = default(GenericNamespaceNameSymbol);
+                    var openParen = default(Terminal);
+                    var closeParen = default(Terminal);
+                    var codePage = default(ConstantExpressionSymbol);
 
-                    do {
-                        item = AddToList(list, ParseGenericNamespaceName(false, false, true));
-                    } while (item != default && item.Dot != default);
+                    if (newType != default && Match(TokenKind.AnsiString)) {
+                        AddToList(list, ParseGenericNamespaceName(false, false, false));
+                        openParen = ContinueWith(TokenKind.OpenParen);
+                        if (openParen != default) {
+                            codePage = ParseConstantExpression(false, false, false);
+                            closeParen = ContinueWith(TokenKind.CloseParen);
+                        }
+                    }
+                    else {
+                        do {
+                            item = AddToList(list, ParseGenericNamespaceName(false, false, true));
+                        } while (item != default && item.Dot != default);
+                    }
 
-                    return new SimpleTypeSymbol(newType, typeOf, GetFixedArray(list));
+                    return new SimpleTypeSymbol(newType, typeOf, GetFixedArray(list), openParen, codePage, closeParen);
                 }
             }
 
