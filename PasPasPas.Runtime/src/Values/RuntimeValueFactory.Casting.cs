@@ -102,11 +102,11 @@ namespace PasPasPas.Runtime.Values {
                 case KnownTypeIds.AnsiCharType:
                     return Chars.ToAnsiCharValue((byte)integer.UnsignedValue);
                 case KnownTypeIds.BooleanType:
-                    return Booleans.ToBoolean(integer.UnsignedValue != 0);
+                    return Booleans.ToBoolean(integer.UnsignedValue != 0, KnownTypeIds.BooleanType);
                 case KnownTypeIds.ByteBoolType:
-                    return Booleans.ToByteBool((byte)integer.UnsignedValue);
+                    return Booleans.ToByteBool((byte)integer.UnsignedValue, KnownTypeIds.ByteBoolType);
                 case KnownTypeIds.WordBoolType:
-                    return Booleans.ToWordBool((ushort)integer.UnsignedValue);
+                    return Booleans.ToWordBool((ushort)integer.UnsignedValue, KnownTypeIds.WordBoolType);
             }
 
             return Types.MakeErrorTypeReference();
@@ -206,11 +206,11 @@ namespace PasPasPas.Runtime.Values {
                 case KnownTypeIds.AnsiCharType:
                     return Chars.ToAnsiCharValue((byte)charValue.AsWideChar);
                 case KnownTypeIds.BooleanType:
-                    return Booleans.ToBoolean(charValue.AsWideChar != 0);
+                    return Booleans.ToBoolean(charValue.AsWideChar != 0, KnownTypeIds.BooleanType);
                 case KnownTypeIds.ByteBoolType:
-                    return Booleans.ToByteBool((byte)charValue.AsWideChar);
+                    return Booleans.ToByteBool((byte)charValue.AsWideChar, KnownTypeIds.ByteBoolType);
                 case KnownTypeIds.WordBoolType:
-                    return Booleans.ToWordBool(charValue.AsWideChar);
+                    return Booleans.ToWordBool(charValue.AsWideChar, KnownTypeIds.WordBoolType);
 
             }
 
@@ -237,11 +237,11 @@ namespace PasPasPas.Runtime.Values {
                     case 1:
                         return boolValue.AsBoolean ? Booleans.TrueValue : Booleans.FalseValue;
                     case 8:
-                        return Booleans.ToByteBool((byte)boolValue.AsUint);
+                        return Booleans.ToByteBool((byte)boolValue.AsUint, KnownTypeIds.ByteBoolType);
                     case 16:
-                        return Booleans.ToWordBool((ushort)boolValue.AsUint);
+                        return Booleans.ToWordBool((ushort)boolValue.AsUint, KnownTypeIds.WordBoolType);
                     case 32:
-                        return Booleans.ToLongBool(boolValue.AsUint);
+                        return Booleans.ToLongBool(boolValue.AsUint, KnownTypeIds.LongBoolType);
                 }
             }
 

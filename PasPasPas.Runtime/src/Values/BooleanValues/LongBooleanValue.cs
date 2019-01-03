@@ -13,14 +13,16 @@ namespace PasPasPas.Runtime.Values.BooleanValues {
         ///     create a new long boolean value
         /// </summary>
         /// <param name="value"></param>
-        public LongBooleanValue(uint value)
-            => Value = value;
+        /// <param name="typeId"></param>
+        public LongBooleanValue(uint value, int typeId) {
+            Value = value;
+            TypeId = typeId;
+        }
 
         /// <summary>
         ///     type id
         /// </summary>
-        public override int TypeId
-            => KnownTypeIds.LongBoolType;
+        public override int TypeId { get; }
 
         /// <summary>
         ///     convert this value as boolean

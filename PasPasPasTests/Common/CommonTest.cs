@@ -180,7 +180,6 @@ namespace PasPasPasTests.Common {
         protected static ITypeReference GetExtendedValue(string number)
             => FloatValueBase.ToExtendedValue(ExtF80.TryParse(number, out var d) ? d : ExtF80.Zero);
 
-
         /// <summary>
         ///     get a boolean value
         /// </summary>
@@ -191,5 +190,13 @@ namespace PasPasPasTests.Common {
                 MakeRuntime().Booleans.TrueValue :
                 MakeRuntime().Booleans.FalseValue;
 
+        protected static ITypeReference GetByteBooleanValue(byte value)
+            => MakeRuntime().Booleans.ToByteBool(value, KnownTypeIds.ByteBoolType);
+
+        protected static ITypeReference GetLongBooleanValue(uint value)
+            => MakeRuntime().Booleans.ToLongBool(value, KnownTypeIds.LongBoolType);
+
+        protected static ITypeReference GetWordBooleanValue(ushort value)
+            => MakeRuntime().Booleans.ToWordBool(value, KnownTypeIds.WordBoolType);
     }
 }

@@ -1,6 +1,5 @@
 ﻿using PasPasPas.Globals.Types;
 using PasPasPas.Runtime.Values;
-using PasPasPas.Runtime.Values.BooleanValues;
 using PasPasPas.Runtime.Values.CharValues;
 using PasPasPas.Runtime.Values.IntValues;
 using PasPasPas.Typings.Common;
@@ -28,9 +27,9 @@ namespace PasPasPasTests.Types {
             AssertExprValue("Char(384)", new WideCharValue((char)384), "", KnownTypeIds.WideCharType);
             AssertExprValue("AnsiChar(384)", new AnsiCharValue(unchecked((byte)384)), "", KnownTypeIds.AnsiCharType);
 
-            AssertExprValue("Boolean(384)", new BooleanValue(true), "", KnownTypeIds.BooleanType);
-            AssertExprValue("ByteBool(384)", new ByteBooleanValue(unchecked((byte)384)), "", KnownTypeIds.ByteBoolType);
-            AssertExprValue("WordBool(384)", new WordBooleanValue(unchecked(384)), "", KnownTypeIds.WordBoolType);
+            AssertExprValue("Boolean(384)", GetBooleanValue(true), "", KnownTypeIds.BooleanType);
+            AssertExprValue("ByteBool(384)", GetByteBooleanValue(unchecked((byte)384)), "", KnownTypeIds.ByteBoolType);
+            AssertExprValue("WordBool(384)", GetWordBooleanValue(unchecked(384)), "", KnownTypeIds.WordBoolType);
 
             AssertExprValue("e(384)",
                 new EnumeratedValue(RegisteredTypes.SmallestUserTypeId, new ShortIntValue(unchecked((sbyte)384))),
@@ -84,9 +83,9 @@ namespace PasPasPasTests.Types {
             AssertExprValue("Char('a')", new WideCharValue('a'), "", KnownTypeIds.WideCharType);
             AssertExprValue("AnsiChar('a')", new AnsiCharValue(unchecked((byte)'a')), "", KnownTypeIds.AnsiCharType);
 
-            AssertExprValue("Boolean('a')", new BooleanValue(true), "", KnownTypeIds.BooleanType);
-            AssertExprValue("ByteBool('a')", new ByteBooleanValue(unchecked((byte)384)), "", KnownTypeIds.ByteBoolType);
-            AssertExprValue("WordBool('a')", new WordBooleanValue(unchecked(384)), "", KnownTypeIds.WordBoolType);
+            AssertExprValue("Boolean('a')", GetBooleanValue(true), "", KnownTypeIds.BooleanType);
+            AssertExprValue("ByteBool('a')", GetByteBooleanValue(unchecked((byte)384)), "", KnownTypeIds.ByteBoolType);
+            AssertExprValue("WordBool('a')", GetWordBooleanValue(unchecked(384)), "", KnownTypeIds.WordBoolType);
 
             AssertExprValue("e('a')",
                 new EnumeratedValue(RegisteredTypes.SmallestUserTypeId, new ShortIntValue(unchecked(97))),
@@ -100,14 +99,14 @@ namespace PasPasPasTests.Types {
 
         [TestMethod]
         public void TestBooleanCastingDirect() {
-            AssertExprValue(" Boolean(true)", new BooleanValue(true), "", KnownTypeIds.BooleanType);
-            AssertExprValue("ByteBool(true)", new ByteBooleanValue(0xff), "", KnownTypeIds.ByteBoolType);
-            AssertExprValue("WordBool(true)", new WordBooleanValue(0xffff), "", KnownTypeIds.WordBoolType);
-            AssertExprValue("LongBool(true)", new LongBooleanValue(0xffff_ffff), "", KnownTypeIds.LongBoolType);
-            AssertExprValue(" Boolean(false)", new BooleanValue(false), "", KnownTypeIds.BooleanType);
-            AssertExprValue("ByteBool(false)", new ByteBooleanValue(0x0), "", KnownTypeIds.ByteBoolType);
-            AssertExprValue("WordBool(false)", new WordBooleanValue(0x0), "", KnownTypeIds.WordBoolType);
-            AssertExprValue("LongBool(false)", new LongBooleanValue(0x0), "", KnownTypeIds.LongBoolType);
+            AssertExprValue(" Boolean(true)", GetBooleanValue(true), "", KnownTypeIds.BooleanType);
+            AssertExprValue("ByteBool(true)", GetByteBooleanValue(0xff), "", KnownTypeIds.ByteBoolType);
+            AssertExprValue("WordBool(true)", GetWordBooleanValue(0xffff), "", KnownTypeIds.WordBoolType);
+            AssertExprValue("LongBool(true)", GetLongBooleanValue(0xffff_ffff), "", KnownTypeIds.LongBoolType);
+            AssertExprValue(" Boolean(false)", GetBooleanValue(false), "", KnownTypeIds.BooleanType);
+            AssertExprValue("ByteBool(false)", GetByteBooleanValue(0x0), "", KnownTypeIds.ByteBoolType);
+            AssertExprValue("WordBool(false)", GetWordBooleanValue(0x0), "", KnownTypeIds.WordBoolType);
+            AssertExprValue("LongBool(false)", GetLongBooleanValue(0x0), "", KnownTypeIds.LongBoolType);
         }
 
         [TestMethod]

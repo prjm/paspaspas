@@ -25,8 +25,9 @@
         ///     convert a boolean constant value to a value object
         /// </summary>
         /// <param name="value">boolean value</param>
+        /// <param name="typeId">type id</param>
         /// <returns><c>TrueValue</c> or <c>FalseValue</c></returns>
-        IBooleanValue ToBoolean(bool value);
+        IBooleanValue ToBoolean(bool value, int typeId);
 
         /// <summary>
         ///     convert a boolean constant value to a value object
@@ -40,20 +41,23 @@
         ///     convert a byte constant value to a byte bool object
         /// </summary>
         /// <param name="value">byte value</param>
-        IBooleanValue ToByteBool(byte value);
+        /// <param name="typeId">type Id</param>
+        IBooleanValue ToByteBool(byte value, int typeId);
 
         /// <summary>
         ///     convert a word constant value to a word bool object
         /// </summary>
         /// <param name="value">word bool value</param>
-        IBooleanValue ToWordBool(ushort value);
+        /// <param name="typeId">type id</param>
+        IBooleanValue ToWordBool(ushort value, int typeId);
 
         /// <summary>
         ///     convert a int constant value to a long bool object
         /// </summary>
-        /// <param name="value"></param>
+        /// <param name="value">long bool value</param>
+        /// <param name="typeId">type id</param>
         /// <returns>long bool value</returns>
-        IBooleanValue ToLongBool(uint value);
+        IBooleanValue ToLongBool(uint value, int typeId);
 
     }
 }

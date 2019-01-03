@@ -13,14 +13,16 @@ namespace PasPasPas.Runtime.Values.BooleanValues {
         ///     create a new word bool
         /// </summary>
         /// <param name="wordBoolValue"></param>
-        public WordBooleanValue(ushort wordBoolValue)
-            => Value = wordBoolValue;
+        /// <param name="typeId">type id</param>
+        public WordBooleanValue(ushort wordBoolValue, int typeId) {
+            Value = wordBoolValue;
+            TypeId = typeId;
+        }
 
         /// <summary>
-        ///     fixed type id
+        ///     type id
         /// </summary>
-        public override int TypeId
-            => KnownTypeIds.WordBoolType;
+        public override int TypeId { get; }
 
         /// <summary>
         ///     boolean value

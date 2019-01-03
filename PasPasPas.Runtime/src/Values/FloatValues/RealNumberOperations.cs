@@ -1,4 +1,5 @@
 ﻿using PasPasPas.Globals.Runtime;
+using PasPasPas.Globals.Types;
 using SharpFloat.FloatingPoint;
 
 namespace PasPasPas.Runtime.Values.FloatValues {
@@ -143,7 +144,7 @@ namespace PasPasPas.Runtime.Values.FloatValues {
         /// <returns></returns>
         public ITypeReference Equal(ITypeReference left, ITypeReference right) {
             if (left is INumericalValue floatLeft && right is INumericalValue floatRight)
-                return Booleans.ToBoolean(FloatValueBase.Equal(floatLeft, floatRight));
+                return Booleans.ToBoolean(FloatValueBase.Equal(floatLeft, floatRight), KnownTypeIds.BooleanType);
             else
                 return Invalid;
         }
@@ -156,7 +157,7 @@ namespace PasPasPas.Runtime.Values.FloatValues {
         /// <returns></returns>
         public ITypeReference NotEquals(ITypeReference left, ITypeReference right) {
             if (left is INumericalValue floatLeft && right is INumericalValue floatRight)
-                return Booleans.ToBoolean(FloatValueBase.NotEqual(floatLeft, floatRight));
+                return Booleans.ToBoolean(FloatValueBase.NotEqual(floatLeft, floatRight), KnownTypeIds.BooleanType);
             else
                 return Invalid;
         }
@@ -169,7 +170,7 @@ namespace PasPasPas.Runtime.Values.FloatValues {
         /// <returns></returns>
         public ITypeReference LessThen(ITypeReference left, ITypeReference right) {
             if (left is INumericalValue floatLeft && right is INumericalValue floatRight)
-                return Booleans.ToBoolean(FloatValueBase.LessThen(floatLeft, floatRight));
+                return Booleans.ToBoolean(FloatValueBase.LessThen(floatLeft, floatRight), KnownTypeIds.BooleanType);
             else
                 return Invalid;
         }
@@ -182,7 +183,7 @@ namespace PasPasPas.Runtime.Values.FloatValues {
         /// <returns></returns>
         public ITypeReference GreaterThenEqual(ITypeReference left, ITypeReference right) {
             if (left is INumericalValue floatLeft && right is INumericalValue floatRight)
-                return Booleans.ToBoolean(FloatValueBase.GreaterThenEqual(floatLeft, floatRight));
+                return Booleans.ToBoolean(FloatValueBase.GreaterThenEqual(floatLeft, floatRight), KnownTypeIds.BooleanType);
             else
                 return Invalid;
         }
@@ -195,7 +196,7 @@ namespace PasPasPas.Runtime.Values.FloatValues {
         /// <returns></returns>
         public ITypeReference GreaterThen(ITypeReference left, ITypeReference right) {
             if (left is INumericalValue floatLeft && right is INumericalValue floatRight)
-                return Booleans.ToBoolean(FloatValueBase.GreaterThen(floatLeft, floatRight));
+                return Booleans.ToBoolean(FloatValueBase.GreaterThen(floatLeft, floatRight), KnownTypeIds.BooleanType);
             else
                 return Invalid;
         }
@@ -208,7 +209,7 @@ namespace PasPasPas.Runtime.Values.FloatValues {
         /// <returns></returns>
         public ITypeReference LessThenOrEqual(ITypeReference left, ITypeReference right) {
             if (left is INumericalValue floatLeft && right is INumericalValue floatRight)
-                return Booleans.ToBoolean(FloatValueBase.LessThenOrEqual(floatLeft, floatRight));
+                return Booleans.ToBoolean(FloatValueBase.LessThenOrEqual(floatLeft, floatRight), KnownTypeIds.BooleanType);
             else
                 return Invalid;
         }
