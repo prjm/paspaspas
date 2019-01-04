@@ -145,7 +145,8 @@ namespace PasPasPas.Parsing.Parser {
                 TokenKind.EnumSizeSwitchLong,
                 TokenKind.MethodInfo,
                 TokenKind.LegacyIfEnd,
-                TokenKind.LinkSwitchLong
+                TokenKind.LinkSwitchLong,
+                TokenKind.VarPropSetter,
             };
 
         /// <summary>
@@ -497,6 +498,9 @@ namespace PasPasPas.Parsing.Parser {
 
             if (Match(TokenKind.LinkSwitchLong))
                 return ParseLongLinkSwitch();
+
+            if (Match(TokenKind.VarPropSetter))
+                return ParseVarPropSetter();
 
             return default;
         }
@@ -1106,6 +1110,24 @@ namespace PasPasPas.Parsing.Parser {
             }
 
             return new LegacyIfEnd(symbol, mode, parsedMode);
+        }
+
+        private VarPropSetter ParseVarPropSetter() {
+            var symbol = ContinueWithOrMissing(TokenKind.VarPropSetter);
+            var mode = ContinueWith(TokenKind.On, TokenKind.Off); ;
+            var parsedMode = VarPropSetterMode.Undefined;
+
+            if (mode.GetSymbolKind() == TokenKind.On) {
+                parsedMode = VarPropSetterMode.On;
+            }
+            else if (mode.GetSymbolKind() == TokenKind.Off) {
+                parsedMode = VarPropSetterMode.Off;
+            }
+            else {
+                mode = ErrorAndSkip(CompilerDirectiveParserErrors.InvalidVarPropSetterDirective, new[] { TokenKind.Off, TokenKind.On });
+            }
+
+            return new VarPropSetter(symbol, mode, parsedMode);
         }
 
         private MethodInfo ParseMethodInfoSwitch() {

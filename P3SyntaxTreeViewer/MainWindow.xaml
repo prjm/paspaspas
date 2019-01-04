@@ -8,7 +8,7 @@
         Title="P3SyntaxTreeViewer" Height="450" Width="700" WindowStartupLocation="CenterScreen">
     <DockPanel LastChildFill="True">
 
-        <ListBox DockPanel.Dock="Bottom" Name="Messages" Height="100">
+        <ListBox DockPanel.Dock="Bottom" Name="Messages" Height="100" MouseDoubleClick="Messages_MouseDoubleClick">
 
         </ListBox>
 

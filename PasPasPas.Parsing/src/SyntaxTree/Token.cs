@@ -32,6 +32,12 @@ namespace PasPasPas.Parsing.SyntaxTree {
         public ITypeReference ParsedValue { get; }
 
         /// <summary>
+        ///     token length
+        /// </summary>
+        public int Length
+            => Value.Length;
+
+        /// <summary>
         ///     create a new token
         /// </summary>
         /// <param name="tokenId">token id</param>

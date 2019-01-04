@@ -81,7 +81,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         IStartVisitor<StackMemorySize>,
         IStartVisitor<WarnSwitch>,
         IStartVisitor<WeakLinkRtti>,
-        IStartVisitor<ObjectExport> {
+        IStartVisitor<ObjectExport>,
+        IStartVisitor<VarPropSetter> {
 
         private readonly Visitor visitor;
         private readonly ILogManager log;
@@ -966,7 +967,19 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         }
 
         /// <summary>
-        ///     link-
+        ///      var prop setter
+        /// </summary>
+        /// <param name="element"></param>
+        public void StartVisit(VarPropSetter element) {
+            if (!CanVisit(element))
+                return;
+
+            CompilerOptions.Syntax.VarPropSetter.Value = element.Mode;
+        }
+
+
+        /// <summary>
+        ///     link
         /// </summary>
         /// <param name="element"></param>
         public void StartVisit(Link element) {

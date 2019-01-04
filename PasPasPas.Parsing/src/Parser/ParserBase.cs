@@ -11,6 +11,32 @@ using PasPasPas.Parsing.Tokenizer;
 namespace PasPasPas.Parsing.Parser {
 
     /// <summary>
+    ///     missing token details
+    /// </summary>
+    public class MissingTokenInfo {
+
+        /// <summary>
+        ///     create a new missing token inf
+        /// </summary>
+        /// <param name="position"></param>
+        /// <param name="tokenKinds"></param>
+        public MissingTokenInfo(int position, params int[] tokenKinds) {
+            Position = position;
+            TokenKinds = tokenKinds;
+        }
+
+        /// <summary>
+        ///     position offset
+        /// </summary>
+        public int Position { get; }
+
+        /// <summary>
+        ///     token kinds
+        /// </summary>
+        public int[] TokenKinds { get; }
+    }
+
+    /// <summary>
     ///     base class for parsers
     /// </summary>
     public abstract class ParserBase : IParser {
@@ -860,7 +886,9 @@ namespace PasPasPas.Parsing.Parser {
         /// </summary>
         /// <param name="tokenKind"></param>
         protected Terminal ErrorMissingToken(int tokenKind) {
-            logSource.LogError(MissingToken, tokenKind);
+            var position = tokenizer.CurrentTokenSequence.Position;
+            var data = new MissingTokenInfo(position, tokenKind);
+            logSource.LogError(MissingToken, data);
             return null;
         }
 
@@ -870,7 +898,9 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind1"></param>
         /// <param name="tokenKind2"></param>
         protected Terminal ErrorMissingToken(int tokenKind1, int tokenKind2) {
-            logSource.LogError(MissingToken, tokenKind1, tokenKind2);
+            var position = tokenizer.CurrentTokenSequence.Position;
+            var data = new MissingTokenInfo(position, tokenKind1, tokenKind2);
+            logSource.LogError(MissingToken, data);
             return null;
         }
 
@@ -882,7 +912,9 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind2"></param>
         /// <param name="tokenKind3"></param>
         protected Terminal ErrorMissingToken(int tokenKind1, int tokenKind2, int tokenKind3) {
-            logSource.LogError(MissingToken, tokenKind1, tokenKind2, tokenKind3);
+            var position = tokenizer.CurrentTokenSequence.Position;
+            var data = new MissingTokenInfo(position, tokenKind1, tokenKind2, tokenKind3);
+            logSource.LogError(MissingToken, data);
             return null;
         }
 
@@ -894,7 +926,9 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind3"></param>
         /// <param name="tokenKind4"></param>
         protected Terminal ErrorMissingToken(int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4) {
-            logSource.LogError(MissingToken, tokenKind1, tokenKind2, tokenKind3, tokenKind4);
+            var position = tokenizer.CurrentTokenSequence.Position;
+            var data = new MissingTokenInfo(position, tokenKind1, tokenKind2, tokenKind3, tokenKind4);
+            logSource.LogError(MissingToken, data);
             return null;
         }
 
@@ -907,7 +941,9 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind4"></param>
         /// <param name="tokenKind5"></param>
         protected Terminal ErrorMissingToken(int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5) {
-            logSource.LogError(MissingToken, tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5);
+            var position = tokenizer.CurrentTokenSequence.Position;
+            var data = new MissingTokenInfo(position, tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5);
+            logSource.LogError(MissingToken, data);
             return null;
         }
 
@@ -921,7 +957,9 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKind5"></param>
         /// <param name="tokenKind6"></param>
         protected Terminal ErrorMissingToken(int tokenKind1, int tokenKind2, int tokenKind3, int tokenKind4, int tokenKind5, int tokenKind6) {
-            logSource.LogError(MissingToken, tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5, tokenKind6);
+            var position = tokenizer.CurrentTokenSequence.Position;
+            var data = new MissingTokenInfo(position, tokenKind1, tokenKind2, tokenKind3, tokenKind4, tokenKind5, tokenKind6);
+            logSource.LogError(MissingToken, data);
             return null;
         }
 

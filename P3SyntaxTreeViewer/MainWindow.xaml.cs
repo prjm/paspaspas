@@ -12,6 +12,7 @@ using PasPasPas.Api;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Infrastructure.Log;
+using PasPasPas.Parsing.Parser;
 using PasPasPas.Parsing.SyntaxTree;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Parsing.SyntaxTree.Utils;
@@ -178,8 +179,10 @@ namespace P3SyntaxTreeViewer {
                     block.Text = r.ToString(CultureInfo.CurrentCulture);
                 else
                     block.Text = key;
+
                 var item = new ListBoxItem() {
-                    Content = block
+                    Content = block,
+                    Tag = logentry
                 };
                 Messages.Items.Add(item);
             }
@@ -220,6 +223,28 @@ namespace P3SyntaxTreeViewer {
 
         private void Code_TextChanged(object sender, TextChangedEventArgs e)
             => UpdateTrees();
+
+        private void Messages_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e) {
+            var selected = Messages.SelectedItem as ListBoxItem;
+
+            if (selected == default)
+                return;
+
+            var info = selected.Tag as LogMessage;
+
+            if (info == default || info.Data.Count < 1)
+                return;
+
+            var info1 = info.Data[0] as MissingTokenInfo;
+
+            if (info == default)
+                return;
+
+            if (info1.Position >= 0 && info1.Position < Code.Text.Length) {
+                Code.CaretIndex = info1.Position;
+                Code.Focus();
+            }
+        }
     }
 
 }

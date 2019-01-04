@@ -279,7 +279,7 @@ namespace PasPasPas.Parsing.Parser {
 
         /// <summary>
         ///     invalid writeable constants directive
-        /// </summary>  
+        /// </summary>
         public static readonly Guid InvalidWritableConstantsDirective
             = new Guid(new byte[] { 0x7c, 0xbd, 0x56, 0x8c, 0x76, 0xaf, 0x60, 0x42, 0x9a, 0x35, 0xee, 0x1f, 0x4a, 0x48, 0x9, 0xb0 });
         /* {8c56bd7c-af76-4260-9a35-ee1f4a4809b0} */
@@ -315,7 +315,7 @@ namespace PasPasPas.Parsing.Parser {
         /* {6f59be2f-1917-44b3-92f4-676a459643b3} */
 
 
-        /// <summary>        
+        /// <summary>
         ///     invalid type checked pointer directive
         /// </summary>
         public static readonly Guid InvalidTypeCheckedPointersDirective
@@ -369,6 +369,13 @@ namespace PasPasPas.Parsing.Parser {
             = new Guid(new byte[] { 0x65, 0x66, 0x24, 0xec, 0x76, 0x15, 0x6, 0x45, 0xaf, 0x39, 0xe0, 0xf8, 0xe5, 0x87, 0x95, 0x17 });
         /* {ec246665-1576-4506-af39-e0f8e5879517} */
 
+
+        /// <summary>
+        ///     invalid legacy var prop setter directive
+        /// </summary>
+        public static readonly Guid InvalidVarPropSetterDirective
+            = new Guid(new byte[] { 0x77, 0x1c, 0x53, 0x2, 0xd8, 0x2, 0x63, 0x4a, 0xb9, 0x8f, 0x3a, 0xbb, 0x9c, 0x3a, 0x87, 0xf3 });
+        /* {02531c77-02d8-4a63-b98f-3abb9c3a87f3} */
 
         /// <summary>
         ///     invalid real48 mode

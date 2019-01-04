@@ -20,6 +20,7 @@
             IndexOfFirstCharInString = new DerivedValueOption<FirstCharIndex>(baseOptions?.IndexOfFirstCharInString);
             ScopedEnums = new DerivedValueOption<RequireScopedEnumMode>(baseOptions?.ScopedEnums);
             PointerMath = new DerivedValueOption<PointerManipulation>(baseOptions?.PointerMath);
+            VarPropSetter = new DerivedValueOption<VarPropSetterMode>(baseOptions?.VarPropSetter);
         }
 
         /// <summary>
@@ -73,6 +74,11 @@
         public DerivedValueOption<PointerManipulation> PointerMath { get; }
 
         /// <summary>
+        ///     var prop setter mode
+        /// </summary>
+        public DerivedValueOption<VarPropSetterMode> VarPropSetter { get; }
+
+        /// <summary>
         ///     clear options
         /// </summary>
         public void Clear() {
@@ -86,6 +92,7 @@
             IndexOfFirstCharInString.ResetToDefault();
             ScopedEnums.ResetToDefault();
             PointerMath.ResetToDefault();
+            VarPropSetter.ResetToDefault();
         }
 
         /// <summary>
@@ -100,6 +107,7 @@
             IndexOfFirstCharInString.ResetToDefault();
             ScopedEnums.ResetToDefault();
             PointerMath.ResetToDefault();
+            VarPropSetter.ResetToDefault();
         }
     }
 }

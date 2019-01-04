@@ -96,6 +96,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         public void FetchNextToken() {
             CurrentToken = characterClasses.FetchNextToken(state);
+            Position += CurrentToken.Length;
             FinishInput();
         }
 
@@ -138,5 +139,10 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         ILogManager ITokenizer.Log =>
             Log.Manager;
+
+        /// <summary>
+        ///     current position
+        /// </summary>
+        public int Position { get; private set; }
     }
 }

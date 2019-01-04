@@ -102,6 +102,7 @@ namespace PasPasPas.Parsing.Tokenizer.Patterns {
                 ["LIBSUFFIX"] = TokenKind.LibSuffix,
                 ["LIBVERSION"] = TokenKind.LibVersion,
                 ["LEGACYIFEND"] = TokenKind.LegacyIfEnd,
+                ["VARPROPSETTER"] = TokenKind.VarPropSetter,
                 ["L"] = TokenKind.LinkOrLocalSymbolSwitch,
                 ["LINK"] = TokenKind.LinkSwitchLong,
                 ["LOCALSYMBOLS"] = TokenKind.LocalSymbolSwithLong,

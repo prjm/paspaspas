@@ -41,5 +41,9 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         ILogManager Log { get; }
 
+        /// <summary>
+        ///     position
+        /// </summary>
+        int Position { get; }
     }
 }

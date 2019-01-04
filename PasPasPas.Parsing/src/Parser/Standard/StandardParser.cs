@@ -661,7 +661,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
                 var statement = default(StatementSymbol);
                 do {
                     statement = AddToList(list, ParseStatement(true));
-                } while (statement.Semicolon != default);
+                } while (statement != default && statement.Semicolon != default);
 
                 return new StatementList(GetFixedArray(list));
             }
@@ -689,11 +689,6 @@ namespace PasPasPas.Parsing.Parser.Standard {
             }
 
             var part = ParseStatementPart();
-
-            if (label != null && part == null) {
-                Unexpected();
-                return null;
-            }
 
             if (allowSemicolon)
                 semicolon = ContinueWith(TokenKind.Semicolon);

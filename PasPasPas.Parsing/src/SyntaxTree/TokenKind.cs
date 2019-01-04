@@ -1492,6 +1492,11 @@
         public const int Delayed = 830;
 
         /// <summary>
+        ///     token for <c>VARPROPSETTER</c>
+        /// </summary>
+        public const int VarPropSetter = 831;
+
+        /// <summary>
         ///     invalid tokens
         /// </summary>
         public const int Invalid = 999;

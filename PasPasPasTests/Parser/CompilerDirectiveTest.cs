@@ -876,6 +876,16 @@ namespace PasPasPasTests.Parser {
         }
 
         [TestMethod]
+        public void TestVarPropSetter() {
+            object f(OptionSet o) => o.CompilerOptions.Syntax.VarPropSetter.Value;
+            RunCompilerDirective("", VarPropSetterMode.Undefined, f);
+            RunCompilerDirective("VARPROPSETTER ON", VarPropSetterMode.On, f);
+            RunCompilerDirective("VARPROPSETTER OFF", VarPropSetterMode.Off, f);
+            RunCompilerDirective("VARPROPSETTER KAPUTT", VarPropSetterMode.Undefined, f, CompilerDirectiveParserErrors.InvalidVarPropSetterDirective);
+            RunCompilerDirective("VARPROPSETTER ", VarPropSetterMode.Undefined, f, CompilerDirectiveParserErrors.InvalidVarPropSetterDirective);
+        }
+
+        [TestMethod]
         public void TestLibMeta() {
             object f(OptionSet o) => o.Meta.LibPrefix.Value;
             object g(OptionSet o) => o.Meta.LibSuffix.Value;

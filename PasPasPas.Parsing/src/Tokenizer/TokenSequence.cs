@@ -10,6 +10,11 @@ namespace PasPasPas.Parsing.Tokenizer {
     public class TokenSequence {
 
         /// <summary>
+        ///     position
+        /// </summary>
+        public int Position { get; set; }
+
+        /// <summary>
         ///     token value
         /// </summary>
         public Token Value { get; set; }
@@ -17,18 +22,12 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <summary>
         ///     token prefix
         /// </summary>
-        public ImmutableArray<Token> Prefix
-            => prefix;
-
-        private ImmutableArray<Token> prefix;
+        public ImmutableArray<Token> Prefix { get; private set; }
 
         /// <summary>
         ///     token suffix (invalid to parser)
         /// </summary>
-        public ImmutableArray<Token> Suffix
-            => suffix;
-
-        private ImmutableArray<Token> suffix;
+        public ImmutableArray<Token> Suffix { get; private set; }
 
         /// <summary>
         ///     gets the buffer current prefix of invalid tokens
@@ -36,7 +35,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="tokens"></param>
         /// <param name="environment"></param>
         public void AssignPrefix(Queue<Token> tokens, IParserEnvironment environment)
-            => prefix = environment.TokenArrays.GetTokenArray(tokens);
+            => Prefix = environment.TokenArrays.GetTokenArray(tokens);
 
         /// <summary>
         ///     get the current suffix of invalid tokens
@@ -44,15 +43,16 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <param name="tokens"></param>
         /// <param name="environment"></param>
         public void AssignSuffix(Queue<Token> tokens, IParserEnvironment environment)
-            => suffix = environment.TokenArrays.GetTokenArray(tokens);
+            => Suffix = environment.TokenArrays.GetTokenArray(tokens);
 
         /// <summary>
         ///     clear the tokenizer
         /// </summary>
         public void Clear() {
-            prefix = default;
-            suffix = default;
+            Prefix = default;
+            Suffix = default;
             Value = default;
+            Position = default;
         }
 
         /// <summary>

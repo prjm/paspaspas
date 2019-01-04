@@ -109,11 +109,13 @@ namespace PasPasPas.Parsing.Tokenizer {
                 }
 
                 var currentInput = BaseTokenizer.Input.CurrentFile;
+                var position = BaseTokenizer.Position;
                 BaseTokenizer.FetchNextToken();
                 var nextToken = BaseTokenizer.CurrentToken;
 
                 if (IsValidToken(ref nextToken)) {
                     var entry = environment.TokenSequencePool.Borrow();
+                    entry.Item.Position = position;
                     entry.Item.Value = nextToken;
                     entry.Item.AssignPrefix(invalidTokens, environment);
                     tokenList.Enqueue(entry);
@@ -223,6 +225,12 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// </summary>
         public ILogManager Log
             => BaseTokenizer.Log;
+
+        /// <summary>
+        ///     position (not applicable)
+        /// </summary>
+        public int Position
+            => -1;
 
         /// <summary>
         ///     get tokens and look ahead
