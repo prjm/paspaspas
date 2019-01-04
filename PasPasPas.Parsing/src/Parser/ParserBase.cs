@@ -22,7 +22,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="tokenKinds"></param>
         public MissingTokenInfo(int position, params int[] tokenKinds) {
             Position = position;
-            TokenKinds = tokenKinds;
+            TokenKinds = tokenKinds.ToImmutableArray();
         }
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <summary>
         ///     token kinds
         /// </summary>
-        public int[] TokenKinds { get; }
+        public ImmutableArray<int> TokenKinds { get; }
     }
 
     /// <summary>

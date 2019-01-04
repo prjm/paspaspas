@@ -90,10 +90,12 @@ namespace SampleRunner.Scenarios {
                         var path = Path.Combine(Path.GetDirectoryName(filePath), "dummy.dpr");
                         var dummyProgram = $"program dummy; const {item} begin end.";
 
-                        using (var parser2 = parserApi.CreateParserForString(path, dummyProgram)) {
+                        var parserApi2 = new ParserApi(environment);
+                        using (var parser2 = parserApi2.CreateParserForString(path, dummyProgram)) {
+
                             var result2 = parser2.Parse();
-                            var project = parserApi.CreateAbstractSyntraxTree(result2);
-                            parserApi.AnnotateWithTypes(project);
+                            var project = parserApi2.CreateAbstractSyntraxTree(result2);
+                            parserApi2.AnnotateWithTypes(project);
                             var visitor2 = new ConstantDeclarationVisitor();
                             project.Accept(visitor2.AsVisitor());
 
