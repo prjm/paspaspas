@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Text;
+using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Infrastructure.Files;
 using PasPasPas.Infrastructure.Log;
-using PasPasPas.Infrastructure.ObjectPooling;
 using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.Tokenizer.LiteralValues;
 
@@ -14,7 +14,7 @@ namespace PasPasPas.Parsing.Tokenizer {
     /// </summary>
     public sealed class TokenizerState : IDisposable {
 
-        private PoolItem<StringBuilder> bufferHolder;
+        private IPoolItem<StringBuilder> bufferHolder;
 
         private StringBuilder buffer;
         private readonly TokenizerBase tokenizer;
@@ -73,7 +73,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         ///     get a pooled string buffer
         /// </summary>
         /// <returns>an item of the string builder pool</returns>
-        public PoolItem<StringBuilder> FetchStringBuilder()
+        public IPoolItem<StringBuilder> FetchStringBuilder()
             => Environment.StringBuilderPool.Borrow();
 
         /// <summary>

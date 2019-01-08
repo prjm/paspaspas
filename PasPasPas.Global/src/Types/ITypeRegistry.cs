@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Runtime;
 
 namespace PasPasPas.Globals.Types {
@@ -84,5 +85,10 @@ namespace PasPasPas.Globals.Types {
         /// <param name="typeId"></param>
         /// <returns></returns>
         ITypeReference MakeTypeReference(int typeId);
+
+        /// <summary>
+        ///     list pools
+        /// </summary>
+        IListPools ListPools { get; }
     }
 }

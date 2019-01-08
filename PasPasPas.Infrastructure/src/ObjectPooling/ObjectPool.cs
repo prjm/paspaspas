@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using PasPasPas.Globals.Environment;
 using PasPasPas.Infrastructure.Utils;
 
 namespace PasPasPas.Infrastructure.ObjectPooling {
@@ -48,7 +49,7 @@ namespace PasPasPas.Infrastructure.ObjectPooling {
         ///     get one item from the pool
         /// </summary>
         /// <returns></returns>
-        public PoolItem<TPoolItem> Borrow() {
+        public IPoolItem<TPoolItem> Borrow() {
             if (items.Count > 0) {
                 lock (lockObject) {
                     return items.Dequeue();
@@ -62,7 +63,7 @@ namespace PasPasPas.Infrastructure.ObjectPooling {
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        public PoolItem<TPoolItem> Borrow(out TPoolItem data) {
+        public IPoolItem<TPoolItem> Borrow(out TPoolItem data) {
             var result = Borrow();
             data = result.Item;
             return result;

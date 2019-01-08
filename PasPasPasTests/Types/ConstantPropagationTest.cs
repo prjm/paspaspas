@@ -399,5 +399,10 @@ namespace PasPasPasTests.Types {
             AssertExprValue("Trunc(-1)", GetIntegerValue(-1));
         }
 
+        [TestMethod]
+        public void TestRecordConstants() {
+            AssertExprValue("a", GetRecordValue(RegisteredTypes.SmallestUserTypeId, GetIntegerValue(1), GetWideCharValue('2')), "const a = (a: 1; b: '2');");
+            AssertExprValue("a", GetRecordValue(RegisteredTypes.SmallestUserTypeId, GetExtendedValue(1.0), GetUnicodeStringValue("22")), "const a = (a: 1.0; b: '22');");
+        }
     }
 }

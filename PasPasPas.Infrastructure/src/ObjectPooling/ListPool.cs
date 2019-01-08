@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics;
+using PasPasPas.Globals.Environment;
 using PasPasPas.Infrastructure.Environment;
 using PasPasPas.Infrastructure.Utils;
 
@@ -24,7 +25,7 @@ namespace PasPasPas.Infrastructure.ObjectPooling {
     /// <summary>
     ///     manages list pools
     /// </summary>
-    public class ListPools : IEnvironmentItem {
+    public class ListPools : IListPools, IEnvironmentItem {
 
         private Dictionary<Type, object> pools
             = new Dictionary<Type, object>();
@@ -60,7 +61,7 @@ namespace PasPasPas.Infrastructure.ObjectPooling {
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public PoolItem<List<T>> GetList<T>()
+        public IPoolItem<List<T>> GetList<T>()
             => GetPool<T>().Borrow();
 
         /// <summary>
@@ -69,7 +70,7 @@ namespace PasPasPas.Infrastructure.ObjectPooling {
         /// <typeparam name="T"></typeparam>
         /// <param name="list"></param>
         /// <returns></returns>
-        public static ImmutableArray<T>.Builder GetImmutableArrayBuilder<T>(PoolItem<List<T>> list)
+        public static ImmutableArray<T>.Builder GetImmutableArrayBuilder<T>(IPoolItem<List<T>> list)
             => ImmutableArray.CreateBuilder<T>(list.Item.Count);
 
         /// <summary>
@@ -87,7 +88,7 @@ namespace PasPasPas.Infrastructure.ObjectPooling {
         /// <typeparam name="T"></typeparam>
         /// <param name="list"></param>
         /// <returns></returns>
-        public static ImmutableArray<T> GetFixedArray<T>(PoolItem<List<T>> list) {
+        public ImmutableArray<T> GetFixedArray<T>(IPoolItem<List<T>> list) {
 
             switch (list.Item.Count) {
                 case 0:

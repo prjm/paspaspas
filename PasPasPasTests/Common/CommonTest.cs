@@ -198,5 +198,8 @@ namespace PasPasPasTests.Common {
 
         protected static ITypeReference GetWordBooleanValue(ushort value)
             => MakeRuntime().Booleans.ToWordBool(value, KnownTypeIds.WordBoolType);
+
+        protected static ITypeReference GetRecordValue(int typeId, params ITypeReference[] values)
+            => MakeRuntime().Structured.CreateRecordValue(typeId, values.ToImmutableArray());
     }
 }

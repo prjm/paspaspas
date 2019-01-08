@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Infrastructure.Environment;
@@ -73,7 +74,7 @@ namespace PasPasPas.Api {
         /// <summary>
         ///     list pools
         /// </summary>
-        public ListPools ListPools { get; }
+        public IListPools ListPools { get; }
             = new ListPools();
 
         /// <summary>
@@ -88,7 +89,7 @@ namespace PasPasPas.Api {
         public DefaultEnvironment(NativeIntSize intSize = NativeIntSize.Undefined) {
             Patterns = new PatternFactory(StringPool);
             Runtime = new RuntimeValueFactory(ListPools);
-            TypeRegistry = new RegisteredTypes(Runtime, intSize);
+            TypeRegistry = new RegisteredTypes(Runtime, ListPools, intSize);
             IntegerParser = new IntegerParser(Runtime, false);
             HexNumberParser = new IntegerParser(Runtime, true);
             RealLiteralConverter = new RealLiteralConverter(Runtime);

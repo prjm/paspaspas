@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using PasPasPas.Globals.Environment;
 using PasPasPas.Infrastructure.Log;
-using PasPasPas.Infrastructure.ObjectPooling;
 using PasPasPas.Options.Bundles;
 using PasPasPas.Parsing.SyntaxTree;
 using PasPasPas.Parsing.SyntaxTree.Utils;
@@ -1073,7 +1073,7 @@ namespace PasPasPas.Parsing.Parser {
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        protected PoolItem<List<T>> GetList<T>() where T : class
+        protected IPoolItem<List<T>> GetList<T>() where T : class
             => Environment.ListPools.GetList<T>();
 
         /// <summary>
@@ -1084,7 +1084,7 @@ namespace PasPasPas.Parsing.Parser {
         /// <param name="list"></param>
         /// <param name="item"></param>
         /// <returns></returns>
-        protected static Q AddToList<T, Q>(PoolItem<List<T>> list, Q item) where T : class where Q : T {
+        protected static Q AddToList<T, Q>(IPoolItem<List<T>> list, Q item) where T : class where Q : T {
             if (item != default)
                 list.Item.Add(item);
             return item;
@@ -1096,8 +1096,8 @@ namespace PasPasPas.Parsing.Parser {
         /// <typeparam name="T"></typeparam>
         /// <param name="list"></param>
         /// <returns></returns>
-        protected static ImmutableArray<T> GetFixedArray<T>(PoolItem<List<T>> list) where T : class
-            => ListPools.GetFixedArray(list);
+        protected ImmutableArray<T> GetFixedArray<T>(IPoolItem<List<T>> list) where T : class
+            => Environment.ListPools.GetFixedArray(list);
 
     }
 }

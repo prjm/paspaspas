@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Infrastructure.Environment;
@@ -61,6 +62,11 @@ namespace PasPasPas.Typings.Common {
         public IRuntimeValueFactory Runtime { get; }
 
         /// <summary>
+        ///     list pools
+        /// </summary>
+        public IListPools ListPools { get; }
+
+        /// <summary>
         ///     register a new type
         /// </summary>
         /// <param name="typeDef">type to register</param>
@@ -78,8 +84,10 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="intSize">integer size</param>
         /// <param name="runtime">runtime values</param>
-        public RegisteredTypes(IRuntimeValueFactory runtime, NativeIntSize intSize) {
+        /// <param name="listPools">list pools</param>
+        public RegisteredTypes(IRuntimeValueFactory runtime, IListPools listPools, NativeIntSize intSize) {
             Runtime = runtime;
+            ListPools = listPools;
             systemUnit = new UnitType(KnownTypeIds.SystemUnit);
             RegisterType(systemUnit);
 

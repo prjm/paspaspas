@@ -1,4 +1,6 @@
-﻿using PasPasPas.Globals.Runtime;
+﻿using System.Collections.Generic;
+using PasPasPas.Globals.Environment;
+using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Infrastructure.Utils;
 
@@ -116,5 +118,14 @@ namespace PasPasPas.Typings.Common {
 
             return false;
         }
+
+
+        /// <summary>
+        ///     helper function: get a list item
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        protected IPoolItem<List<T>> GetList<T>()
+            => TypeRegistry.ListPools.GetList<T>();
     }
 }

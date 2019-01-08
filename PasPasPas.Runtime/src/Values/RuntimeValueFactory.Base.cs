@@ -1,5 +1,5 @@
-﻿using PasPasPas.Globals.Runtime;
-using PasPasPas.Infrastructure.ObjectPooling;
+﻿using PasPasPas.Globals.Environment;
+using PasPasPas.Globals.Runtime;
 using PasPasPas.Runtime.Values.BooleanValues;
 using PasPasPas.Runtime.Values.CharValues;
 using PasPasPas.Runtime.Values.FloatValues;
@@ -14,7 +14,7 @@ namespace PasPasPas.Runtime.Values {
         /// <summary>
         ///     create a new runtime value factory
         /// </summary>
-        public RuntimeValueFactory(ListPools listPools) {
+        public RuntimeValueFactory(IListPools listPools) {
             ListPools = listPools;
             Types = new TypeOperations();
             Booleans = new BooleanOperations();
@@ -63,6 +63,6 @@ namespace PasPasPas.Runtime.Values {
         /// <summary>
         ///     list pools
         /// </summary>
-        public ListPools ListPools { get; }
+        public IListPools ListPools { get; }
     }
 }

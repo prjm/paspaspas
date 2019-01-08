@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using PasPasPas.Globals.Environment;
 using PasPasPas.Infrastructure.Log;
 using PasPasPas.Infrastructure.ObjectPooling;
 
@@ -27,7 +28,7 @@ namespace PasPasPas.Infrastructure.Environment {
         /// <summary>
         ///     list pools
         /// </summary>
-        ListPools ListPools { get; }
+        IListPools ListPools { get; }
 
         /// <summary>
         ///     enumerated entries (used for statistics)

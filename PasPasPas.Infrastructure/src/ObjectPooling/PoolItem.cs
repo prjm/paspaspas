@@ -1,11 +1,11 @@
-﻿using System;
+﻿using PasPasPas.Globals.Environment;
 
 namespace PasPasPas.Infrastructure.ObjectPooling {
 
     /// <summary>
     ///     storage for a pooled object
     /// </summary>
-    public sealed class PoolItem<T> : IDisposable where T : new() {
+    public sealed class PoolItem<T> : IPoolItem<T> where T : new() {
 
         private readonly ObjectPool<T> pool;
 

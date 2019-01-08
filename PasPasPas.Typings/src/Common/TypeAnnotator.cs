@@ -2,7 +2,6 @@
 using System.Collections.Immutable;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
-using PasPasPas.Infrastructure.ObjectPooling;
 using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Parsing.SyntaxTree.Types;
@@ -45,11 +44,13 @@ namespace PasPasPas.Typings.Common {
         IEndVisitor<StructureFields>,
         IEndVisitor<StructuredStatement>,
         IEndVisitor<SetExpression>,
-        IEndVisitor<ArrayConstant> {
+        IEndVisitor<ArrayConstant>,
+        IStartVisitor<RecordConstant>, IEndVisitor<RecordConstant>,
+        IEndVisitor<RecordConstantItem> {
 
         private readonly IStartEndVisitor visitor;
         private readonly ITypedEnvironment environment;
-        private readonly Stack<ITypeReference> currentTypeDefintion;
+        private readonly Stack<ITypeReference> currentTypeDefinition;
         private readonly Stack<Routine> currentMethodDefinition;
         private readonly Stack<ParameterGroup> currentMethodParameters;
         private readonly Resolver resolver;
@@ -74,7 +75,7 @@ namespace PasPasPas.Typings.Common {
             visitor = new Visitor(this);
             environment = env;
             resolver = new Resolver(new Scope(env.TypeRegistry));
-            currentTypeDefintion = new Stack<ITypeReference>();
+            currentTypeDefinition = new Stack<ITypeReference>();
             currentMethodDefinition = new Stack<Routine>();
             currentMethodParameters = new Stack<ParameterGroup>();
         }
@@ -452,7 +453,43 @@ namespace PasPasPas.Typings.Common {
             var typeId = RequireUserTypeId();
             var typeDef = new EnumeratedType(typeId);
             var type = GetInstanceTypeById(RegisterUserDefinedType(typeDef).TypeId);
-            currentTypeDefintion.Push(type);
+            currentTypeDefinition.Push(type);
+        }
+
+        /// <summary>
+        ///     create a record constant
+        /// </summary>
+        /// <param name="element"></param>
+        public void StartVisit(RecordConstant element) {
+            var typeId = RequireUserTypeId();
+            var typeDef = new StructuredTypeDeclaration(typeId, StructuredTypeKind.Record);
+            var type = GetInstanceTypeById(RegisterUserDefinedType(typeDef).TypeId);
+            currentTypeDefinition.Push(type);
+        }
+
+        /// <summary>
+        ///     create a record constant
+        /// </summary>
+        /// <param name="element"></param>
+        public void EndVisit(RecordConstant element) {
+            var typeReference = currentTypeDefinition.Pop();
+            var typeDef = TypeRegistry.GetTypeByIdOrUndefinedType(typeReference.TypeId);
+            var type = GetTypeByIdOrUndefinedType(typeDef.TypeId) as StructuredTypeDeclaration;
+
+            if (type.IsConstant)
+                element.TypeInfo = type.MakeConstant();
+            else
+                element.TypeInfo = GetErrorTypeReference(element);
+        }
+
+        /// <summary>
+        ///     add a field in a record constants
+        /// </summary>
+        /// <param name="element"></param>
+        public void EndVisit(RecordConstantItem element) {
+            var typeReference = currentTypeDefinition.Peek();
+            var type = GetTypeByIdOrUndefinedType(typeReference.TypeId) as StructuredTypeDeclaration;
+            type.Fields.Add(new Variable() { Name = element.Name.CompleteName, SymbolType = element.Value.TypeInfo });
         }
 
         /// <summary>
@@ -474,7 +511,7 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="element"></param>
         public void EndVisit(EnumTypeCollection element) {
-            var typeReference = currentTypeDefintion.Pop();
+            var typeReference = currentTypeDefinition.Pop();
             var typeDef = TypeRegistry.GetTypeByIdOrUndefinedType(typeReference.TypeId);
 
             if (typeDef is EnumeratedType enumType) {
@@ -492,7 +529,7 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="element"></param>
         public void EndVisit(EnumTypeValue element) {
-            var value = currentTypeDefintion.Peek();
+            var value = currentTypeDefinition.Peek();
             var typeDef = value != null ? environment.TypeRegistry.GetTypeByIdOrUndefinedType(value.TypeId) as EnumeratedType : null;
             if (typeDef == null) {
                 element.TypeInfo = GetErrorTypeReference(element);
@@ -605,7 +642,7 @@ namespace PasPasPas.Typings.Common {
 
                 else
 
-                    typeDef = new StaticArrayType(typeId, ListPools.GetFixedArray(list)) {
+                    typeDef = new StaticArrayType(typeId, TypeRegistry.ListPools.GetFixedArray(list)) {
                         Packed = element.PackedType,
                         BaseTypeId = baseTypeId
                     };
@@ -629,7 +666,7 @@ namespace PasPasPas.Typings.Common {
             typeDef.BaseClass = GetInstanceTypeById(KnownTypeIds.TObject);
             typeDef.MetaType = metaType;
 
-            currentTypeDefintion.Push(GetInstanceTypeById(typeDef.TypeInfo.TypeId));
+            currentTypeDefinition.Push(GetInstanceTypeById(typeDef.TypeInfo.TypeId));
         }
 
         /// <summary>
@@ -637,7 +674,7 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="element"></param>
         public void EndVisit(StructuredType element) {
-            var value = currentTypeDefintion.Pop();
+            var value = currentTypeDefinition.Pop();
             var typeDef = value != null ? environment.TypeRegistry.GetTypeByIdOrUndefinedType(value.TypeId) as StructuredTypeDeclaration : null;
             element.TypeInfo = GetInstanceTypeById(typeDef.MetaType.TypeInfo.TypeId);
         }
@@ -647,13 +684,13 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="element"></param>
         public void StartVisit(MethodDeclaration element) {
-            if (currentTypeDefintion.Count < 1)
+            if (currentTypeDefinition.Count < 1)
                 return;
 
             if (element.Name == null)
                 return;
 
-            var v = currentTypeDefintion.Peek();
+            var v = currentTypeDefinition.Peek();
             var typeDef = v != null ? environment.TypeRegistry.GetTypeByIdOrUndefinedType(v.TypeId) as StructuredTypeDeclaration : null;
             var method = typeDef.AddOrExtendMethod(element.Name.CompleteName, element.Kind);
             currentMethodDefinition.Push(method);
@@ -667,10 +704,10 @@ namespace PasPasPas.Typings.Common {
         public void EndVisit(MethodDeclaration element) {
             if (element.Kind == ProcedureKind.Function) {
 
-                if (currentTypeDefintion.Count < 1)
+                if (currentTypeDefinition.Count < 1)
                     return;
 
-                var v = currentTypeDefintion.Peek();
+                var v = currentTypeDefinition.Peek();
                 var typeDef = v != null ? environment.TypeRegistry.GetTypeByIdOrUndefinedType(v.TypeId) as StructuredTypeDeclaration : null;
                 var method = currentMethodDefinition.Pop();
                 var methodParams = currentMethodParameters.Pop();
@@ -689,10 +726,10 @@ namespace PasPasPas.Typings.Common {
         public void EndVisit(ParameterTypeDefinition element) {
             if (element.TypeValue != null && element.TypeValue.TypeInfo != null) {
 
-                if (currentTypeDefintion.Count < 1)
+                if (currentTypeDefinition.Count < 1)
                     return;
 
-                var typeDef = currentTypeDefintion.Peek() as StructuredTypeDeclaration;
+                var typeDef = currentTypeDefinition.Peek() as StructuredTypeDeclaration;
                 var parms = currentMethodParameters.Peek();
 
                 foreach (var name in element.Parameters) {
@@ -715,7 +752,7 @@ namespace PasPasPas.Typings.Common {
                 typeInfo = GetErrorTypeReference(default);
             }
 
-            var v = currentTypeDefintion.Peek();
+            var v = currentTypeDefinition.Peek();
             var typeDef = v != null ? environment.TypeRegistry.GetTypeByIdOrUndefinedType(v.TypeId) as StructuredTypeDeclaration : null;
 
             foreach (var field in element.Fields) {
@@ -858,7 +895,7 @@ namespace PasPasPas.Typings.Common {
                 var registeredType = RegisterUserDefinedType(arrayType).TypeId;
 
                 if (isConstant) {
-                    element.TypeInfo = environment.Runtime.Structured.CreateArrayValue(registeredType, baseType.TypeId, ListPools.GetFixedArray(constantValues));
+                    element.TypeInfo = environment.Runtime.Structured.CreateArrayValue(registeredType, baseType.TypeId, TypeRegistry.ListPools.GetFixedArray(constantValues));
                 }
                 else {
                     element.TypeInfo = GetInstanceTypeById(registeredType);

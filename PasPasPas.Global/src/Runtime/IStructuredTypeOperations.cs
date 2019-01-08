@@ -15,5 +15,14 @@ namespace PasPasPas.Globals.Runtime {
         /// <param name="values">array values</param>
         /// <returns></returns>
         IArrayValue CreateArrayValue(int registeredType, int baseTypeId, ImmutableArray<ITypeReference> values);
+
+        /// <summary>
+        ///     create a record value
+        /// </summary>
+        /// <param name="typeId"></param>
+        /// <param name="values"></param>
+        /// <returns></returns>
+        ITypeReference CreateRecordValue(int typeId, ImmutableArray<ITypeReference> values);
+
     }
 }

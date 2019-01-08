@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
@@ -76,7 +77,7 @@ namespace PasPasPas.Typings.Structured {
         public MetaStructuredTypeDeclaration MetaType { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public override uint TypeSizeInBytes {
             get {
@@ -181,6 +182,37 @@ namespace PasPasPas.Typings.Structured {
 
             if (BaseClass != null && BaseClass is StructuredTypeDeclaration baseType)
                 baseType.ResolveCall(symbolName, callables, signature);
+        }
+
+        /// <summary>
+        ///     check if this is a constant record value
+        /// </summary>
+        public bool IsConstant {
+            get {
+                if (typeKind != StructuredTypeKind.Record)
+                    return false;
+
+                foreach (var field in Fields)
+                    if (!field.SymbolType.IsConstant())
+                        return false;
+
+                return true;
+            }
+        }
+
+        /// <summary>
+        ///     create a constant record value from this type declaration
+        /// </summary>
+        /// <returns></returns>
+        public ITypeReference MakeConstant() {
+            using (var list = GetList<ITypeReference>()) {
+                foreach (var value in Fields) {
+                    list.Add(value.SymbolType);
+                    value.SymbolType = TypeRegistry.Runtime.Types.MakeTypeInstanceReference(value.SymbolType.TypeId, value.SymbolType.TypeKind);
+                }
+
+                return TypeRegistry.Runtime.Structured.CreateRecordValue(TypeId, TypeRegistry.ListPools.GetFixedArray(list));
+            }
         }
     }
 }

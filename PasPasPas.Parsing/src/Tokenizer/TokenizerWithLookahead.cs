@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Infrastructure.Files;
 using PasPasPas.Infrastructure.Log;
@@ -77,8 +78,8 @@ namespace PasPasPas.Parsing.Tokenizer {
         /// <summary>
         ///     list of tokens
         /// </summary>
-        private QueueWithIndexCollection<PoolItem<TokenSequence>> tokenList
-            = new QueueWithIndexCollection<PoolItem<TokenSequence>>();
+        private QueueWithIndexCollection<IPoolItem<TokenSequence>> tokenList
+            = new QueueWithIndexCollection<IPoolItem<TokenSequence>>();
 
         /// <summary>
         ///     list of invalid tokens (e.g. whitespace)
@@ -130,7 +131,7 @@ namespace PasPasPas.Parsing.Tokenizer {
         }
 
         [Conditional("DEBUG")]
-        private static void LogHistogram(PoolItem<TokenSequence> entry) {
+        private static void LogHistogram(IPoolItem<TokenSequence> entry) {
             if (Histograms.Enable)
                 Histograms.Value("TokenPrefixLength", entry.Item.Prefix.Length);
         }
