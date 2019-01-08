@@ -1,6 +1,5 @@
 ﻿using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
-using PasPasPas.Infrastructure.ObjectPooling;
 using PasPasPas.Runtime.Values.Structured;
 using PasPasPas.Typings.Common;
 using PasPasPas.Typings.Simple;
@@ -27,6 +26,9 @@ namespace PasPasPas.Runtime.Values {
                 typeKind = types.GetTypeByIdOrUndefinedType(value.TypeId).TypeKind;
             else
                 typeKind = value.TypeKind;
+
+            if (!value.IsConstant())
+                return Types.MakeTypeInstanceReference(types.Cast(value.TypeId, typeId), types.GetTypeKindOf(typeId));
 
             if (typeKind.IsIntegral())
                 return CastInteger(types, value, typeId);
