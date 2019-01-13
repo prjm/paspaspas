@@ -30,7 +30,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     attributes of the constants
         /// </summary>
-        public IEnumerable<SymbolAttributeItem> Attributes { get; set; }
+        public List<SymbolAttributeItem> Attributes { get; }
+            = new List<SymbolAttributeItem>();
 
         /// <summary>
         ///     enumerate all children

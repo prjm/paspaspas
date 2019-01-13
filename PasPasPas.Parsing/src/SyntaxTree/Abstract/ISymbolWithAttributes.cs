@@ -11,7 +11,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     available attributes
         /// </summary>
         [System.Obsolete("Replacement required")]
-        IEnumerable<SymbolAttributeItem> Attributes { get; set; }
+        List<SymbolAttributeItem> Attributes { get; }
 
     }
 }

@@ -39,11 +39,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     add an overloaded methods
         /// </summary>
         /// <param name="entry"></param>
-        public void AddOverload(MethodDeclaration entry) {
-            if (Overloads == null)
-                Overloads = new List<MethodDeclaration>();
-            Overloads.Add(entry);
-        }
+        public void AddOverload(MethodDeclaration entry)
+            => Overloads.Add(entry);
 
         /// <summary>
         ///     visibility mode

@@ -21,7 +21,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     attributes
         /// </summary>
-        public IList<SymbolAttributeItem> Attributes { get; set; }
+        public List<SymbolAttributeItem> Attributes { get; }
+            = new List<SymbolAttributeItem>();
 
         /// <summary>
         ///     symbol name
@@ -47,7 +48,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
             => (ParentItem as StructureFields)?.Hints;
 
         /// <summary>
-        ///     type vlaue
+        ///     type value
         /// </summary>
         public ITypeSpecification TypeValue
             => (ParentItem as StructureFields)?.TypeValue;

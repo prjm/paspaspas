@@ -20,7 +20,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     user attributes
         /// </summary>
-        public IList<SymbolAttributeItem> Attributes { get; set; }
+        public IList<SymbolAttributeItem> Attributes { get; }
+            = new List<SymbolAttributeItem>();
 
     }
 }
