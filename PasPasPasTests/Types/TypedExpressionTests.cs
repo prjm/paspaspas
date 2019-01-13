@@ -483,6 +483,12 @@ namespace PasPasPasTests.Types {
         }
 
         [TestMethod]
+        public void TestPointerOperator() {
+            AssertExprValue("@a", GetPointerValue(GetUnkownValue(KnownTypeIds.IntegerType, PasPasPas.Globals.Runtime.CommonTypeKind.IntegerType)), "var a: integer;", isConstant: false);
+            AssertExprValue("@a", GetPointerValue(GetIntegerValue(4)), "const a = 4;");
+        }
+
+        [TestMethod]
         public void TestShiftOperators() {
             AssertExprTypeByVar("Byte", "a shl 33", KnownTypeIds.ErrorType);
             AssertExprTypeByVar("Word", "a shl 33", KnownTypeIds.ErrorType);
