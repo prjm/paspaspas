@@ -1,4 +1,5 @@
 ﻿using PasPasPas.Globals.Runtime;
+using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Runtime.Values {
 
@@ -18,5 +19,13 @@ namespace PasPasPas.Runtime.Values {
         /// <returns></returns>
         public ITypeReference MakeEnumValue(int typeId, ITypeReference value)
             => new EnumeratedValue(typeId, value);
+
+        /// <summary>
+        ///     make a pointer value
+        /// </summary>
+        /// <param name="baseValue"></param>
+        /// <returns></returns>
+        public ITypeReference MakePointerValue(ITypeReference baseValue)
+            => new PointerValue(KnownTypeIds.GenericPointer, baseValue);
     }
 }

@@ -28,6 +28,13 @@ namespace PasPasPas.Globals.Runtime {
         IStringOperations Strings { get; }
 
         /// <summary>
+        ///     make a pointer value
+        /// </summary>
+        /// <param name="baseValue"></param>
+        /// <returns></returns>
+        ITypeReference MakePointerValue(ITypeReference baseValue);
+
+        /// <summary>
         ///     provides operations on characters
         /// </summary>
         ICharOperations Chars { get; }

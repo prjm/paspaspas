@@ -131,6 +131,7 @@ namespace PasPasPas.Typings.Common {
             ArithmeticOperator.RegisterOperators(this);
             RelationalOperators.RegisterOperators(this);
             StringOperators.RegisterOperators(this);
+            OtherOperators.RegisterOperators(this);
         }
 
         /// <summary>
@@ -372,6 +373,13 @@ namespace PasPasPas.Typings.Common {
         public ITypeReference MakeReference(int typeId)
             => Runtime.Types.MakeTypeInstanceReference(typeId, GetTypeKindOf(typeId));
 
+        private int ResolveAlias(int typeId) {
+            var typeDef = GetTypeByIdOrUndefinedType(typeId);
+            if (typeDef is TypeAlias alias)
+                return ResolveAlias(alias.BaseTypeId);
+            return typeId;
+        }
+
         /// <summary>
         ///     cast one type to another type
         /// </summary>
@@ -379,6 +387,11 @@ namespace PasPasPas.Typings.Common {
         /// <param name="targetType">target type</param>
         /// <returns></returns>
         public int Cast(int sourceType, int targetType) {
+            sourceType = ResolveAlias(sourceType);
+
+            if (sourceType == ResolveAlias(targetType))
+                return targetType;
+
             var sourceTypeKind = GetTypeKindOf(sourceType);
 
             if (sourceTypeKind.IsIntegral())
@@ -432,7 +445,7 @@ namespace PasPasPas.Typings.Common {
             if (targetTypeKind.IsChar())
                 return targetType;
 
-            if (targetTypeKind.IsChar())
+            if (targetTypeKind.IsString())
                 return targetType;
 
             if (targetTypeKind == CommonTypeKind.BooleanType)

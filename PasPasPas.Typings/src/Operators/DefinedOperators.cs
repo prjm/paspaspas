@@ -115,5 +115,10 @@
         /// </summary>
         public const int ConcatOperator = 30;
 
+        /// <summary>
+        ///     address-of operator
+        /// </summary>
+        public const int AtOperator = 31;
+
     }
 }

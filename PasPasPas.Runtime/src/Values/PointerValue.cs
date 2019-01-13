@@ -45,7 +45,7 @@ namespace PasPasPas.Runtime.Values {
         ///     reference kind
         /// </summary>
         public TypeReferenceKind ReferenceKind
-            => TypeReferenceKind.ConstantValue;
+            => Value.ReferenceKind;
 
         /// <summary>
         ///     pointer type

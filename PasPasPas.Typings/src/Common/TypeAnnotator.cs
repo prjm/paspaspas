@@ -199,6 +199,11 @@ namespace PasPasPas.Typings.Common {
                 return;
             }
 
+            if (element.Kind == ExpressionKind.AddressOf) {
+                element.TypeInfo = GetTypeOfOperator(DefinedOperators.AtOperator, GetTypeDefinition(operand));
+                return;
+            }
+
             element.TypeInfo = GetErrorTypeReference(element);
         }
 
@@ -212,7 +217,7 @@ namespace PasPasPas.Typings.Common {
             if (operand == null)
                 return GetErrorTypeReference(null);
 
-            var unaryOperator = environment.TypeRegistry.GetOperator(operatorKind);
+            var unaryOperator = TypeRegistry.GetOperator(operatorKind);
 
             if (unaryOperator == null)
                 return GetErrorTypeReference(null);
