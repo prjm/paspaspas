@@ -1,5 +1,6 @@
 ﻿using System;
 using PasPasPas.Globals.Runtime;
+using PasPasPas.Globals.Types;
 using PasPasPas.Parsing.SyntaxTree;
 using PasPasPas.Parsing.Tokenizer.CharClass;
 using PasPasPas.Parsing.Tokenizer.LiteralValues;
@@ -41,7 +42,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
                                 state.NextChar(true);
                                 var controlChar = hexDigits.Tokenize(state);
                                 if (controlChar.Kind == TokenKind.HexNumber && controlChar.ParsedValue is IIntegerValue hexValue && !hexValue.IsNegative) {
-                                    var charValue = state.Environment.Runtime.Chars.ToWideCharValue((char)hexValue.UnsignedValue) as ICharValue;
+                                    var charValue = state.Environment.Runtime.Chars.ToWideCharValue(KnownTypeIds.WideCharType, (char)hexValue.UnsignedValue) as ICharValue;
                                     parsedValue = state.Environment.Runtime.Strings.Concat(parsedValue, charValue);
                                     resultBuilder.Item.Append(charValue.AsWideChar);
                                 }
@@ -51,7 +52,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
                             else {
                                 var controlChar = digitTokenizer.Tokenize(state);
                                 if (controlChar.Kind == TokenKind.IntegralNumber && controlChar.ParsedValue is IIntegerValue intValue && !intValue.IsNegative) {
-                                    var charValue = state.Environment.Runtime.Chars.ToWideCharValue((char)intValue.UnsignedValue) as ICharValue;
+                                    var charValue = state.Environment.Runtime.Chars.ToWideCharValue(KnownTypeIds.WideCharType, (char)intValue.UnsignedValue) as ICharValue;
                                     parsedValue = state.Environment.Runtime.Strings.Concat(parsedValue, charValue);
                                     resultBuilder.Item.Append(charValue.AsWideChar);
                                 }

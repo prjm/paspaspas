@@ -1,4 +1,5 @@
 ﻿using PasPasPas.Globals.Runtime;
+using PasPasPas.Globals.Types;
 using PasPasPas.Parsing.SyntaxTree;
 
 namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
@@ -60,7 +61,7 @@ namespace PasPasPas.Parsing.Tokenizer.TokenGroups {
 
                 ITypeReference value;
                 if (resultBuilder.Item.Length == 1)
-                    value = state.RuntimeValues.Chars.ToWideCharValue(resultBuilder.Item[0]);
+                    value = state.RuntimeValues.Chars.ToWideCharValue(KnownTypeIds.WideCharType, resultBuilder.Item[0]);
                 else
                     value = state.RuntimeValues.Strings.ToUnicodeString(state.Environment.StringPool.PoolString(resultBuilder.Item));
 

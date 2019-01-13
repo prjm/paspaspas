@@ -10,26 +10,26 @@ namespace PasPasPas.Runtime.Values.CharValues {
     /// </summary>
     public class WideCharValue : CharValueBase, IEquatable<WideCharValue> {
 
-        private readonly char value;
-
         /// <summary>
         ///     create a new wide char value
         /// </summary>
         /// <param name="character"></param>
-        public WideCharValue(char character)
-            => value = character;
+        /// <param name="typeId">type id</param>
+        public WideCharValue(int typeId, char character) {
+            TypeId = typeId;
+            Value = character;
+        }
 
         /// <summary>
         ///     type id
         /// </summary>
-        public override int TypeId
-            => KnownTypeIds.WideCharType;
+        public override int TypeId { get; }
 
         /// <summary>
         ///     char value
         /// </summary>
         public override char AsWideChar
-            => value;
+            => Value;
 
         /// <summary>
         ///     type kind
@@ -43,7 +43,7 @@ namespace PasPasPas.Runtime.Values.CharValues {
         /// <param name="obj"></param>
         /// <returns></returns>
         public override bool Equals(object obj)
-            => obj is WideCharValue charValue && charValue.value == value;
+            => obj is WideCharValue charValue && charValue.Value == Value;
 
         /// <summary>
         ///     check for equality
@@ -51,14 +51,14 @@ namespace PasPasPas.Runtime.Values.CharValues {
         /// <param name="other"></param>
         /// <returns></returns>
         public bool Equals(WideCharValue other)
-            => value == other.value;
+            => Value == other.Value;
 
         /// <summary>
         ///     compute a hash code
         /// </summary>
         /// <returns></returns>
         public override int GetHashCode()
-            => value.GetHashCode();
+            => Value.GetHashCode();
 
         /// <summary>
         ///     ordinal value
@@ -66,13 +66,18 @@ namespace PasPasPas.Runtime.Values.CharValues {
         /// <param name="types"></param>
         /// <returns></returns>
         public override ITypeReference GetOrdinalValue(ITypeRegistry types)
-            => types.Runtime.Integers.ToScaledIntegerValue(value);
+            => types.Runtime.Integers.ToScaledIntegerValue(Value);
 
         /// <summary>
         ///     convert this value to a string
         /// </summary>
         /// <returns></returns>
         public override string InternalTypeFormat
-            => StringUtils.Invariant($"'{value}'");
+            => StringUtils.Invariant($"'{Value}'");
+
+        /// <summary>
+        ///     char value
+        /// </summary>
+        public char Value { get; }
     }
 }

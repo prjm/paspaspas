@@ -100,9 +100,9 @@ namespace PasPasPas.Runtime.Values {
                 case KnownTypeIds.Uint64Type:
                     return Integers.ToIntegerValue(integer.UnsignedValue);
                 case KnownTypeIds.WideCharType:
-                    return Chars.ToWideCharValue((char)integer.UnsignedValue);
+                    return Chars.ToWideCharValue(typeId, (char)integer.UnsignedValue);
                 case KnownTypeIds.AnsiCharType:
-                    return Chars.ToAnsiCharValue((byte)integer.UnsignedValue);
+                    return Chars.ToAnsiCharValue(typeId, (byte)integer.UnsignedValue);
                 case KnownTypeIds.BooleanType:
                     return Booleans.ToBoolean(integer.UnsignedValue != 0, KnownTypeIds.BooleanType);
                 case KnownTypeIds.ByteBoolType:
@@ -204,9 +204,9 @@ namespace PasPasPas.Runtime.Values {
                 case KnownTypeIds.Uint64Type:
                     return Integers.ToIntegerValue((ulong)charValue.AsWideChar);
                 case KnownTypeIds.WideCharType:
-                    return Chars.ToWideCharValue(charValue.AsWideChar);
+                    return Chars.ToWideCharValue(typeId, charValue.AsWideChar);
                 case KnownTypeIds.AnsiCharType:
-                    return Chars.ToAnsiCharValue((byte)charValue.AsWideChar);
+                    return Chars.ToAnsiCharValue(typeId, (byte)charValue.AsWideChar);
                 case KnownTypeIds.BooleanType:
                     return Booleans.ToBoolean(charValue.AsWideChar != 0, KnownTypeIds.BooleanType);
                 case KnownTypeIds.ByteBoolType:

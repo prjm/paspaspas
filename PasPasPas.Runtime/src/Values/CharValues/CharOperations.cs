@@ -11,17 +11,19 @@ namespace PasPasPas.Runtime.Values.CharValues {
         ///     get a constant ANSI char value
         /// </summary>
         /// <param name="character"></param>
+        /// <param name="typeId">type id</param>
         /// <returns></returns>
-        public ITypeReference ToAnsiCharValue(byte character)
-            => new AnsiCharValue(character);
+        public ITypeReference ToAnsiCharValue(int typeId, byte character)
+            => new AnsiCharValue(typeId, character);
 
         /// <summary>
         ///     get a constant wide char value
         /// </summary>
         /// <param name="character"></param>
+        /// <param name="typeId">type id</param>
         /// <returns></returns>
-        public ITypeReference ToWideCharValue(char character)
-            => new WideCharValue(character);
+        public ITypeReference ToWideCharValue(int typeId, char character)
+            => new WideCharValue(typeId, character);
 
     }
 }

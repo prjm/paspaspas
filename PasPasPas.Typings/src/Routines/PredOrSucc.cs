@@ -95,10 +95,10 @@ namespace PasPasPas.Typings.Routines {
                     return Integers.Subtract(intValue, Integers.One);
 
                 if (parameter.IsAnsiCharValue(out var charValue))
-                    return Chars.ToAnsiCharValue(unchecked((byte)(charValue.AsAnsiChar - 1)));
+                    return Chars.ToAnsiCharValue(parameter.TypeId, unchecked((byte)(charValue.AsAnsiChar - 1)));
 
                 if (parameter.IsWideCharValue(out charValue))
-                    return Chars.ToWideCharValue(unchecked((char)(charValue.AsWideChar - 1)));
+                    return Chars.ToWideCharValue(parameter.TypeId, unchecked((char)(charValue.AsWideChar - 1)));
 
                 if (parameter.IsBooleanValue(out var boolValue)) {
                     var mask = 1u << ((int)ordinalType.BitSize - 1);
@@ -116,10 +116,10 @@ namespace PasPasPas.Typings.Routines {
                     return Integers.Add(intValue, Integers.One);
 
                 if (parameter.IsAnsiCharValue(out var charValue))
-                    return Chars.ToAnsiCharValue(unchecked((byte)(1 + charValue.AsAnsiChar)));
+                    return Chars.ToAnsiCharValue(parameter.TypeId, unchecked((byte)(1 + charValue.AsAnsiChar)));
 
                 if (parameter.IsWideCharValue(out charValue))
-                    return Chars.ToWideCharValue(unchecked((char)(1 + charValue.AsWideChar)));
+                    return Chars.ToWideCharValue(parameter.TypeId, unchecked((char)(1 + charValue.AsWideChar)));
 
                 if (parameter.IsBooleanValue(out var boolValue)) {
                     var mask = 1u << ((int)ordinalType.BitSize - 1);

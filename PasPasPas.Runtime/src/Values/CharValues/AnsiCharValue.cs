@@ -9,27 +9,27 @@ namespace PasPasPas.Runtime.Values.CharValues {
     /// </summary>
     public class AnsiCharValue : CharValueBase {
 
-        private readonly byte value;
-
         /// <summary>
         ///     crate a new char value
         /// </summary>
         /// <param name="charValue"></param>
-        public AnsiCharValue(byte charValue)
-            => value = charValue;
+        /// <param name="typeId">type id</param>
+        public AnsiCharValue(int typeId, byte charValue) {
+            TypeId = typeId;
+            Value = charValue;
+        }
 
         /// <summary>
         ///     type id
         /// </summary>
         /// <see cref="KnownTypeIds.AnsiCharType"/>
-        public override int TypeId
-            => KnownTypeIds.AnsiCharType;
+        public override int TypeId { get; }
 
         /// <summary>
         ///     convert this value to a a wide char
         /// </summary>
         public override char AsWideChar
-            => (char)value;
+            => (char)Value;
 
         /// <summary>
         ///     fixed type kind <see cref="CommonTypeKind.AnsiCharType"/>
@@ -42,7 +42,7 @@ namespace PasPasPas.Runtime.Values.CharValues {
         /// </summary>
         /// <returns></returns>
         public override int GetHashCode()
-            => value;
+            => Value;
 
         /// <summary>
         ///     ordinal value
@@ -50,13 +50,18 @@ namespace PasPasPas.Runtime.Values.CharValues {
         /// <param name="types"></param>
         /// <returns></returns>
         public override ITypeReference GetOrdinalValue(ITypeRegistry types)
-            => types.Runtime.Integers.ToScaledIntegerValue(value);
+            => types.Runtime.Integers.ToScaledIntegerValue(Value);
 
         /// <summary>
         ///     convert this value to a string value
         /// </summary>
         /// <returns></returns>
         public override string InternalTypeFormat
-            => StringUtils.Invariant($@"{new string((char)value, 1)}");
+            => StringUtils.Invariant($@"{new string((char)Value, 1)}");
+
+        /// <summary>
+        ///     char value
+        /// </summary>
+        public byte Value { get; }
     }
 }

@@ -413,7 +413,7 @@ namespace PasPasPas.Runtime.Values.IntValues {
             else if (value.Length >= 2)
                 result = ushort.MaxValue;
 
-            return new WideCharValue((char)result);
+            return new WideCharValue(KnownTypeIds.WideCharType, (char)result);
         }
 
         /// <summary>

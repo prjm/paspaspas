@@ -127,7 +127,7 @@ namespace PasPasPasTests.Common {
         /// <param name="text"></param>
         /// <returns></returns>
         protected static ITypeReference GetWideCharValue(char text)
-            => MakeRuntime().Chars.ToWideCharValue(text);
+            => MakeRuntime().Chars.ToWideCharValue(KnownTypeIds.WideCharType, text);
 
         /// <summary>
         ///     get the ANSI char value
@@ -135,7 +135,7 @@ namespace PasPasPasTests.Common {
         /// <param name="text"></param>
         /// <returns></returns>
         protected static ITypeReference GetAnsiCharValue(byte text)
-            => MakeRuntime().Chars.ToAnsiCharValue(text);
+            => MakeRuntime().Chars.ToAnsiCharValue(KnownTypeIds.AnsiCharType, text);
 
 
 

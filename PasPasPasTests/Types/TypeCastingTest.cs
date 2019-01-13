@@ -1,6 +1,5 @@
 ﻿using PasPasPas.Globals.Types;
 using PasPasPas.Runtime.Values;
-using PasPasPas.Runtime.Values.CharValues;
 using PasPasPas.Runtime.Values.IntValues;
 using PasPasPas.Typings.Common;
 using PasPasPasTests.Common;
@@ -23,9 +22,9 @@ namespace PasPasPasTests.Types {
             AssertExprValue("Int64(384)", new Int64Value(384), "", KnownTypeIds.Int64Type);
             AssertExprValue("UInt64(384)", new UInt64Value(384), "", KnownTypeIds.Uint64Type);
 
-            AssertExprValue("WideChar(384)", new WideCharValue((char)384), "", KnownTypeIds.WideCharType);
-            AssertExprValue("Char(384)", new WideCharValue((char)384), "", KnownTypeIds.WideCharType);
-            AssertExprValue("AnsiChar(384)", new AnsiCharValue(unchecked((byte)384)), "", KnownTypeIds.AnsiCharType);
+            AssertExprValue("WideChar(384)", GetWideCharValue((char)384), "", KnownTypeIds.WideCharType);
+            AssertExprValue("Char(384)", GetWideCharValue((char)384), "", KnownTypeIds.CharType);
+            AssertExprValue("AnsiChar(384)", GetAnsiCharValue(unchecked((byte)384)), "", KnownTypeIds.AnsiCharType);
 
             AssertExprValue("Boolean(384)", GetBooleanValue(true), "", KnownTypeIds.BooleanType);
             AssertExprValue("ByteBool(384)", GetByteBooleanValue(unchecked((byte)384)), "", KnownTypeIds.ByteBoolType);
@@ -79,9 +78,9 @@ namespace PasPasPasTests.Types {
             AssertExprValue("Int64('a')", new Int64Value(97), "", KnownTypeIds.Int64Type);
             AssertExprValue("UInt64('a')", new UInt64Value(97), "", KnownTypeIds.Uint64Type);
 
-            AssertExprValue("WideChar('a')", new WideCharValue('a'), "", KnownTypeIds.WideCharType);
-            AssertExprValue("Char('a')", new WideCharValue('a'), "", KnownTypeIds.WideCharType);
-            AssertExprValue("AnsiChar('a')", new AnsiCharValue(unchecked((byte)'a')), "", KnownTypeIds.AnsiCharType);
+            AssertExprValue("WideChar('a')", GetWideCharValue('a'), "", KnownTypeIds.WideCharType);
+            AssertExprValue("Char('a')", GetWideCharValue('a'), "", KnownTypeIds.CharType);
+            AssertExprValue("AnsiChar('a')", GetAnsiCharValue(unchecked((byte)'a')), "", KnownTypeIds.AnsiCharType);
 
             AssertExprValue("Boolean('a')", GetBooleanValue(true), "", KnownTypeIds.BooleanType);
             AssertExprValue("ByteBool('a')", GetByteBooleanValue(unchecked((byte)384)), "", KnownTypeIds.ByteBoolType);
