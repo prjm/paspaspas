@@ -24,5 +24,12 @@ namespace PasPasPas.Globals.Runtime {
         /// <returns></returns>
         ITypeReference CreateRecordValue(int typeId, ImmutableArray<ITypeReference> values);
 
+        /// <summary>
+        ///     create a set value
+        /// </summary>
+        /// <param name="typeId"></param>
+        /// <param name="values"></param>
+        /// <returns></returns>
+        ITypeReference CreateSetValue(int typeId, ImmutableArray<ITypeReference> values);
     }
 }

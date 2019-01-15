@@ -824,29 +824,40 @@ namespace PasPasPas.Typings.Common {
             var isConstant = true;
             var baseType = default(ITypeReference);
 
-            foreach (var part in element.Expressions) {
+            using (var values = environment.ListPools.GetList<ITypeReference>()) {
 
-                if (part.TypeInfo == null) {
-                    baseType = GetErrorTypeReference(part);
-                    break;
+                foreach (var part in element.Expressions) {
+
+                    if (part.TypeInfo == null) {
+                        baseType = GetErrorTypeReference(part);
+                        break;
+                    }
+
+                    if (baseType == null)
+                        baseType = part.TypeInfo;
+                    else if (baseType.TypeKind.IsIntegral() && part.TypeInfo.TypeKind.IsIntegral())
+                        baseType = GetInstanceTypeById(GetSmallestIntegralTypeOrNext(baseType.TypeId, part.TypeInfo.TypeId));
+                    else if (baseType.TypeKind.IsOrdinal() && baseType.TypeId == part.TypeInfo.TypeId)
+                        baseType = part.TypeInfo;
+                    else {
+                        baseType = GetErrorTypeReference(part);
+                        break;
+                    }
+
+                    isConstant = isConstant && part.TypeInfo.IsConstant();
+
+                    if (isConstant)
+                        values.Item.Add(part.TypeInfo);
                 }
 
-                if (baseType == null)
-                    baseType = part.TypeInfo;
-                else if (baseType.TypeKind.IsIntegral() && part.TypeInfo.TypeKind.IsIntegral())
-                    baseType = GetInstanceTypeById(GetSmallestIntegralTypeOrNext(baseType.TypeId, part.TypeInfo.TypeId));
-                else if (baseType.TypeKind.IsOrdinal() && baseType.TypeId == part.TypeInfo.TypeId)
-                    baseType = part.TypeInfo;
-                else {
-                    baseType = GetErrorTypeReference(part);
-                    break;
-                }
+                var typdef = RegisterUserDefinedType(new SetType(typeId, baseType.TypeId));
 
-                isConstant = isConstant && part.TypeInfo.IsConstant();
+                if (isConstant)
+                    element.TypeInfo = TypeRegistry.Runtime.Structured.CreateSetValue(typdef.TypeId, environment.ListPools.GetFixedArray(values));
+                else
+                    element.TypeInfo = GetInstanceTypeById(typdef.TypeId);
+
             }
-
-            var typdef = RegisterUserDefinedType(new SetType(typeId, baseType.TypeId));
-            element.TypeInfo = GetInstanceTypeById(typdef.TypeId);
         }
 
         /// <summary>

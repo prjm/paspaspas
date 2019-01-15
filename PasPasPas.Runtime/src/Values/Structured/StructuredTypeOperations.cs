@@ -26,5 +26,14 @@ namespace PasPasPas.Runtime.Values.Structured {
         /// <returns></returns>
         public ITypeReference CreateRecordValue(int typeId, ImmutableArray<ITypeReference> values)
             => new RecordValue(typeId, values);
+
+        /// <summary>
+        ///     create a new set value
+        /// </summary>
+        /// <param name="typeId"></param>
+        /// <param name="values"></param>
+        /// <returns></returns>
+        public ITypeReference CreateSetValue(int typeId, ImmutableArray<ITypeReference> values)
+            => new SetValue(typeId, values);
     }
 }

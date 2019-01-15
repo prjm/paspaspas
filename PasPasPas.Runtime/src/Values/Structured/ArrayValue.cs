@@ -47,7 +47,7 @@ namespace PasPasPas.Runtime.Values.Structured {
         ///     format this type
         /// </summary>
         public string InternalTypeFormat
-            => $"[({string.Join(", ", Values)})]";
+            => $"array [({string.Join(", ", Values)})]";
 
         /// <summary>
         ///     format this value as a string
