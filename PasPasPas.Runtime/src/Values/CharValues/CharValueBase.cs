@@ -20,6 +20,13 @@ namespace PasPasPas.Runtime.Values.CharValues {
         public abstract char AsWideChar { get; }
 
         /// <summary>
+        ///     get a char at
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        public abstract ITypeReference CharAt(int index);
+
+        /// <summary>
         ///     convert this char to a string
         /// </summary>
         public string AsUnicodeString

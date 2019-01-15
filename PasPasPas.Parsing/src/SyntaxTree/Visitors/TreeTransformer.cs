@@ -1371,7 +1371,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 fieldName.Attributes.AddRange(extractedAttributes);
                 structType.Fields.Add(fieldName, LogSource);
                 result.Fields.Add(fieldName);
-                extractedAttributes = null;
+                extractedAttributes = new List<SymbolAttributeItem>();
                 visitor.WorkingStack.Pop();
             }
 

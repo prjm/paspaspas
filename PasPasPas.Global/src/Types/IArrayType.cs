@@ -12,5 +12,10 @@ namespace PasPasPas.Globals.Types {
         /// </summary>
         ImmutableArray<int> IndexTypes { get; }
 
+        /// <summary>
+        ///     base type id
+        /// </summary>
+        int BaseTypeId { get; }
+
     }
 }

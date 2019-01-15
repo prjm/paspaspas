@@ -139,6 +139,20 @@ namespace PasPasPas.Runtime.Values {
                         return Strings.ToUnicodeString(stringValue.AsUnicodeString);
 
                 }
+
+                if (typeDef is IArrayType arrayType && types.GetTypeByIdOrUndefinedType(arrayType.BaseTypeId).TypeKind.IsChar()) {
+
+                    using (var values = ListPools.GetList<ITypeReference>()) {
+
+                        for (var index = 0; index < stringValue.NumberOfCharElements; index++)
+                            values.Item.Add(Cast(types, stringValue.CharAt(index), arrayType.BaseTypeId));
+
+                        return Structured.CreateArrayValue(typeDef.TypeId, arrayType.BaseTypeId, ListPools.GetFixedArray(values));
+
+                    }
+
+                }
+
             }
 
             if (value is ICharValue charValue) {
@@ -260,22 +274,28 @@ namespace PasPasPas.Runtime.Values {
         private ITypeReference CastArray(ITypeRegistry types, ITypeReference value, int typeId) {
             var type = TypeBase.ResolveAlias(types.GetTypeByIdOrUndefinedType(typeId));
 
-            if (value.IsConstant() && type is ArrayType arrayType) {
-                var array = value as IArrayValue;
-                var newBaseType = Cast(types, types.MakeTypeReference(array.BaseType), arrayType.BaseTypeId);
+            if (!value.IsConstant())
+                return Types.MakeErrorTypeReference();
 
-                if (newBaseType.TypeId == KnownTypeIds.ErrorType)
-                    return Types.MakeErrorTypeReference();
+            if (type is ArrayType arrayType) {
 
-                using (var values = ListPools.GetList<ITypeReference>()) {
+                if (value is IArrayValue array) {
+                    var newBaseType = Cast(types, types.MakeTypeReference(array.BaseType), arrayType.BaseTypeId);
 
-                    foreach (var itemValue in array.Values) {
-                        values.Item.Add(Cast(types, itemValue, array.BaseType));
+                    if (newBaseType.TypeId == KnownTypeIds.ErrorType)
+                        return Types.MakeErrorTypeReference();
+
+                    using (var values = ListPools.GetList<ITypeReference>()) {
+
+                        foreach (var itemValue in array.Values) {
+                            values.Item.Add(Cast(types, itemValue, array.BaseType));
+                        }
+
+                        var castedValue = new ArrayValue(arrayType.TypeId, arrayType.BaseTypeId, ListPools.GetFixedArray(values));
+                        return castedValue;
                     }
-
-                    var castedValue = new ArrayValue(arrayType.TypeId, arrayType.BaseTypeId, ListPools.GetFixedArray(values));
-                    return castedValue;
                 }
+
             }
 
             return Types.MakeErrorTypeReference();

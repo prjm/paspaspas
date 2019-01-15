@@ -14,5 +14,12 @@
         ///     string length (measured in characters of the underlying char type)
         /// </summary>
         int NumberOfCharElements { get; }
+
+        /// <summary>
+        ///     char value at a given index
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        ITypeReference CharAt(int index);
     }
 }

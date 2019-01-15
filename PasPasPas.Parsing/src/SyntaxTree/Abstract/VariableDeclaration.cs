@@ -51,9 +51,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         }
 
         /// <summary>
-        ///     attribuetes
+        ///     attributes
         /// </summary>
-        public IList<SymbolAttributeItem> Attributes { get; internal set; }
+        public List<SymbolAttributeItem> Attributes { get; }
+            = new List<SymbolAttributeItem>();
 
         /// <summary>
         ///     value kind

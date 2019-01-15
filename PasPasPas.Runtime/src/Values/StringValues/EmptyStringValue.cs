@@ -37,5 +37,13 @@ namespace PasPasPas.Runtime.Values.StringValues {
         /// </summary>
         public override int NumberOfCharElements
             => 0;
+
+        /// <summary>
+        ///     char at index
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        public override ITypeReference CharAt(int index)
+            => new SpecialValue(SpecialConstantKind.InvalidChar);
     }
 }

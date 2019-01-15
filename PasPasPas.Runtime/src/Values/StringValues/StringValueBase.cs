@@ -85,6 +85,13 @@ namespace PasPasPas.Runtime.Values.StringValues {
             => obj is IStringValue other ? Equals(other) : false;
 
         /// <summary>
+        ///     get a char at a given index
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        public abstract ITypeReference CharAt(int index);
+
+        /// <summary>
         ///     compute a hash code
         /// </summary>
         /// <returns></returns>

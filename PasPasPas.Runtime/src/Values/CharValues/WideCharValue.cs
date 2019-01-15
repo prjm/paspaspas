@@ -69,6 +69,18 @@ namespace PasPasPas.Runtime.Values.CharValues {
             => types.Runtime.Integers.ToScaledIntegerValue(Value);
 
         /// <summary>
+        ///     char value
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        public override ITypeReference CharAt(int index) {
+            if (index < 0 || index >= 1)
+                return new SpecialValue(SpecialConstantKind.InvalidChar);
+
+            return this;
+        }
+
+        /// <summary>
         ///     convert this value to a string
         /// </summary>
         /// <returns></returns>

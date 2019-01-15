@@ -144,5 +144,11 @@ namespace PasPasPasTests.Types {
 
         }
 
+        [TestMethod]
+        public void TestArrayCasting() {
+            AssertExprValue("a", GetArrayValue(KnownTypeIds.StringType, GetWideCharValue('a'), GetWideCharValue('a')), "const a: array[0..1] of string = ('a', 'a');");
+            AssertExprValue("a", GetArrayValue(KnownTypeIds.AnsiCharType, GetAnsiCharValue((byte)'a'), GetAnsiCharValue((byte)'a')), "const a: array[0..1] of ansichar = 'aa';");
+        }
+
     }
 }

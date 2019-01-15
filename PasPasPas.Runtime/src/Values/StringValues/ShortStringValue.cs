@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
+using PasPasPas.Runtime.Values.CharValues;
 
 namespace PasPasPas.Runtime.Values.StringValues {
 
@@ -48,6 +49,18 @@ namespace PasPasPas.Runtime.Values.StringValues {
         /// <returns></returns>
         public override string ToString()
             => InternalTypeFormat;
+
+        /// <summary>
+        ///     char value at
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        public override ITypeReference CharAt(int index) {
+            if (index < 0 || index >= data.Length)
+                return new SpecialValue(SpecialConstantKind.InvalidChar);
+
+            return new AnsiCharValue(KnownTypeIds.AnsiCharType, unchecked((byte)data[index]));
+        }
 
         /// <summary>
         ///     convert this value to in internal string format

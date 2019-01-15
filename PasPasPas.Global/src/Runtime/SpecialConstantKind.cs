@@ -43,6 +43,11 @@
         /// <summary>
         ///     nil pointer
         /// </summary>
-        Nil = 9
+        Nil = 9,
+
+        /// <summary>
+        ///     invalid char
+        /// </summary>
+        InvalidChar = 10
     }
 }
