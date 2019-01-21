@@ -183,6 +183,11 @@ namespace PasPasPas.Infrastructure.Utils {
         /// </summary>
         public const string TokenArrayValues = "TokenArrayValues";
 
+        /// <summary>
+        ///     runtime values
+        /// </summary>
+        public const string RuntimeValues = "RuntimeValues";
+
     }
 
     /// <summary>

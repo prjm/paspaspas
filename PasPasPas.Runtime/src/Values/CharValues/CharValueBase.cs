@@ -7,12 +7,13 @@ namespace PasPasPas.Runtime.Values.CharValues {
     /// <summary>
     ///     base class for char values
     /// </summary>
-    public abstract class CharValueBase : ICharValue, IStringValue, IEquatable<ICharValue>, IEquatable<IStringValue> {
+    public abstract class CharValueBase : RuntimeValueBase, ICharValue, IStringValue, IEquatable<ICharValue>, IEquatable<IStringValue> {
 
         /// <summary>
-        ///     get the type id
+        ///     create a new char value
         /// </summary>
-        public abstract int TypeId { get; }
+        /// <param name="typeId"></param>
+        protected CharValueBase(int typeId) : base(typeId) { }
 
         /// <summary>
         ///     get the boolean value
@@ -32,16 +33,6 @@ namespace PasPasPas.Runtime.Values.CharValues {
         public string AsUnicodeString
             => new string(AsWideChar, 1);
 
-        /// <summary>
-        ///     internal type format
-        /// </summary>
-        public abstract string InternalTypeFormat { get; }
-
-        /// <summary>
-        ///     always <c>true</c> for boolean constant values
-        /// </summary>
-        public TypeReferenceKind ReferenceKind
-            => TypeReferenceKind.ConstantValue;
 
         /// <summary>
         ///     format this as value as string
@@ -49,11 +40,6 @@ namespace PasPasPas.Runtime.Values.CharValues {
         /// <returns></returns>
         public override string ToString()
             => InternalTypeFormat;
-
-        /// <summary>
-        ///     type kind
-        /// </summary>
-        public abstract CommonTypeKind TypeKind { get; }
 
         /// <summary>
         ///     length (in characters)

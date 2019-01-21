@@ -7,12 +7,13 @@ namespace PasPasPas.Runtime.Values.BooleanValues {
     /// <summary>
     ///     base class for boolean values
     /// </summary>
-    public abstract class BooleanValueBase : IBooleanValue, IOrdinalValue, IEquatable<IBooleanValue> {
+    public abstract class BooleanValueBase : RuntimeValueBase, IBooleanValue, IOrdinalValue, IEquatable<IBooleanValue> {
 
         /// <summary>
-        ///     get the type id
+        ///     create a new boolean value
         /// </summary>
-        public abstract int TypeId { get; }
+        /// <param name="typeId"></param>
+        protected BooleanValueBase(int typeId) : base(typeId) { }
 
         /// <summary>
         ///     get the boolean value
@@ -20,20 +21,9 @@ namespace PasPasPas.Runtime.Values.BooleanValues {
         public abstract bool AsBoolean { get; }
 
         /// <summary>
-        ///     internal type format
-        /// </summary>
-        public abstract string InternalTypeFormat { get; }
-
-        /// <summary>
-        ///     always <c>true</c> for boolean constant values
-        /// </summary>
-        public TypeReferenceKind ReferenceKind
-            => TypeReferenceKind.ConstantValue;
-
-        /// <summary>
         ///     type kind
         /// </summary>
-        public CommonTypeKind TypeKind
+        public override CommonTypeKind TypeKind
             => CommonTypeKind.BooleanType;
 
         /// <summary>
@@ -97,13 +87,6 @@ namespace PasPasPas.Runtime.Values.BooleanValues {
         /// <returns></returns>
         public bool Equals(IBooleanValue other)
             => AsBoolean == other.AsBoolean;
-
-        /// <summary>
-        ///     format this boolean value
-        /// </summary>
-        /// <returns></returns>
-        public override string ToString()
-            => InternalTypeFormat;
 
         /// <summary>
         ///     ordinal value

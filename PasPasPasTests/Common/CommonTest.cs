@@ -201,5 +201,9 @@ namespace PasPasPasTests.Common {
 
         protected static ITypeReference GetRecordValue(int typeId, params ITypeReference[] values)
             => MakeRuntime().Structured.CreateRecordValue(typeId, values.ToImmutableArray());
+
+        protected static ITypeReference GetSetValue(int typeId, params ITypeReference[] values)
+            => MakeRuntime().Structured.CreateSetValue(typeId, values.ToImmutableArray());
+
     }
 }

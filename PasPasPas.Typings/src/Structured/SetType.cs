@@ -7,9 +7,7 @@ namespace PasPasPas.Typings.Structured {
     /// <summary>
     ///     set type declaration
     /// </summary>
-    public class SetType : StructuredTypeBase {
-
-        private readonly int baseTypeId;
+    public class SetType : StructuredTypeBase, ISetType {
 
         /// <summary>
         ///     define a new set type
@@ -17,7 +15,7 @@ namespace PasPasPas.Typings.Structured {
         /// <param name="withId">type id</param>
         /// <param name="baseType">base type</param>
         public SetType(int withId, int baseType) : base(withId)
-            => baseTypeId = baseType;
+            => BaseTypeId = baseType;
 
         /// <summary>
         ///     set type kind
@@ -29,7 +27,7 @@ namespace PasPasPas.Typings.Structured {
         ///     base type
         /// </summary>
         public ITypeDefinition BaseType
-            => TypeRegistry.GetTypeByIdOrUndefinedType(baseTypeId);
+            => TypeRegistry.GetTypeByIdOrUndefinedType(BaseTypeId);
 
         /// <summary>
         ///     type size in bytes
@@ -50,6 +48,11 @@ namespace PasPasPas.Typings.Structured {
                 return System.Math.Max(0, (uint)size1.SignedValue);
             }
         }
+
+        /// <summary>
+        ///     base type id
+        /// </summary>
+        public int BaseTypeId { get; }
 
         /// <summary>
         ///     check if this type can be assigned from another type

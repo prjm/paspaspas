@@ -15,15 +15,8 @@ namespace PasPasPas.Runtime.Values.CharValues {
         /// </summary>
         /// <param name="character"></param>
         /// <param name="typeId">type id</param>
-        public WideCharValue(int typeId, char character) {
-            TypeId = typeId;
-            Value = character;
-        }
-
-        /// <summary>
-        ///     type id
-        /// </summary>
-        public override int TypeId { get; }
+        public WideCharValue(int typeId, char character) : base(typeId)
+            => Value = character;
 
         /// <summary>
         ///     char value

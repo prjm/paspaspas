@@ -1,4 +1,5 @@
-﻿using PasPasPas.Globals.Runtime;
+﻿using PasPasPas.Globals.Environment;
+using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Runtime.Values.Structured;
 using PasPasPas.Typings.Common;
@@ -50,6 +51,32 @@ namespace PasPasPas.Runtime.Values {
 
             if (typeKind == CommonTypeKind.BooleanType)
                 return CastBoolean(types, value, typeId);
+
+            if (typeKind == CommonTypeKind.SetType)
+                return CastSet(types, value, typeId);
+
+            return Types.MakeErrorTypeReference();
+        }
+
+        private ITypeReference CastSet(ITypeRegistry types, ITypeReference value, int typeId) {
+            var typeDef = types.GetTypeByIdOrUndefinedType(typeId);
+            typeDef = TypeBase.ResolveAlias(typeDef);
+
+            if (typeDef is ISetType setType && value is SetValue setValue) {
+
+                using (var list = ListPools.GetList<ITypeReference>()) {
+                    foreach (var sourceValue in setValue.Values) {
+                        var targetValue = Cast(types, sourceValue, setType.BaseTypeId);
+
+                        if (targetValue.TypeId != setType.BaseTypeId)
+                            return Types.MakeErrorTypeReference();
+
+                        list.Add(targetValue);
+                    }
+
+                    return new SetValue(setType.TypeId, ListPools.GetFixedArray(list));
+                }
+            }
 
             return Types.MakeErrorTypeReference();
         }

@@ -14,15 +14,8 @@ namespace PasPasPas.Runtime.Values.BooleanValues {
         /// </summary>
         /// <param name="byteBoolValue">boolean value</param>
         /// <param name="typeId">type id</param>
-        public ByteBooleanValue(byte byteBoolValue, int typeId) {
-            Value = byteBoolValue;
-            TypeId = typeId;
-        }
-
-        /// <summary>
-        ///     fixed type id
-        /// </summary>
-        public override int TypeId { get; }
+        public ByteBooleanValue(byte byteBoolValue, int typeId) : base(typeId)
+            => Value = byteBoolValue;
 
         /// <summary>
         ///     boolean value

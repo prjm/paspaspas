@@ -14,16 +14,8 @@ namespace PasPasPas.Runtime.Values.CharValues {
         /// </summary>
         /// <param name="charValue"></param>
         /// <param name="typeId">type id</param>
-        public AnsiCharValue(int typeId, byte charValue) {
-            TypeId = typeId;
-            Value = charValue;
-        }
-
-        /// <summary>
-        ///     type id
-        /// </summary>
-        /// <see cref="KnownTypeIds.AnsiCharType"/>
-        public override int TypeId { get; }
+        public AnsiCharValue(int typeId, byte charValue) : base(typeId)
+            => Value = charValue;
 
         /// <summary>
         ///     convert this value to a a wide char

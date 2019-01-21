@@ -49,7 +49,7 @@ namespace PasPasPas.Runtime.Values.Structured {
         /// <param name="other"></param>
         /// <returns></returns>
         public bool Equals(RecordValue other)
-            => TypeId == other.TypeId && Enumerable.SequenceEqual(Values, other.Values);
+            => other != default && TypeId == other.TypeId && Enumerable.SequenceEqual(Values, other.Values);
 
         /// <summary>
         ///     constant value

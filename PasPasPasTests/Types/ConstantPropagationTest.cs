@@ -404,5 +404,12 @@ namespace PasPasPasTests.Types {
             AssertExprValue("a", GetRecordValue(RegisteredTypes.SmallestUserTypeId, GetIntegerValue(1), GetWideCharValue('2')), "const a = (a: 1; b: '2');");
             AssertExprValue("a", GetRecordValue(RegisteredTypes.SmallestUserTypeId, GetExtendedValue(1.0), GetUnicodeStringValue("22")), "const a = (a: 1.0; b: '22');");
         }
+
+        [TestMethod]
+        public void TestSetConstants() {
+            var v1 = GetSubrangeValue(RegisteredTypes.SmallestUserTypeId, GetIntegerValue(1));
+            var v2 = GetSubrangeValue(RegisteredTypes.SmallestUserTypeId, GetIntegerValue(3));
+            AssertExprValue("b", GetSetValue(RegisteredTypes.SmallestUserTypeId + 1, v1, v2), "type Ta = 1..5; Tb = set of Ta; const b : Tb = [1,3];");
+        }
     }
 }

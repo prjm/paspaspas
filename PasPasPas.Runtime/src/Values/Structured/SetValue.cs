@@ -1,4 +1,6 @@
-﻿using System.Collections.Immutable;
+﻿using System;
+using System.Collections.Immutable;
+using System.Linq;
 using PasPasPas.Globals.Runtime;
 
 namespace PasPasPas.Runtime.Values.Structured {
@@ -6,22 +8,15 @@ namespace PasPasPas.Runtime.Values.Structured {
     /// <summary>
     ///     set values
     /// </summary>
-    public class SetValue : ITypeReference {
+    public class SetValue : RuntimeValueBase, IEquatable<SetValue> {
 
         /// <summary>
         ///     create a new set value
         /// </summary>
         /// <param name="typeId"></param>
         /// <param name="values"></param>
-        public SetValue(int typeId, ImmutableArray<ITypeReference> values) {
-            TypeId = typeId;
-            Values = values;
-        }
-
-        /// <summary>
-        ///     type id
-        /// </summary>
-        public int TypeId { get; }
+        public SetValue(int typeId, ImmutableArray<ITypeReference> values) : base(typeId)
+            => Values = values;
 
         /// <summary>
         ///     set values
@@ -31,26 +26,50 @@ namespace PasPasPas.Runtime.Values.Structured {
         /// <summary>
         ///     internal type format
         /// </summary>
-        public string InternalTypeFormat
+        public override string InternalTypeFormat
             => $"set [({string.Join(", ", Values)})]";
-
-        /// <summary>
-        ///     internal type format
-        /// </summary>
-        /// <returns></returns>
-        public override string ToString()
-            => InternalTypeFormat;
-
-        /// <summary>
-        ///     type reference kind
-        /// </summary>
-        public TypeReferenceKind ReferenceKind
-            => TypeReferenceKind.ConstantValue;
 
         /// <summary>
         ///     type kind
         /// </summary>
-        public CommonTypeKind TypeKind
+        public override CommonTypeKind TypeKind
             => CommonTypeKind.SetType;
+
+        /// <summary>
+        ///     compare to another set value
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public bool Equals(SetValue other)
+            => //
+            other != default &&
+            other.TypeId == TypeId &&
+            Values.ToHashSet().SetEquals(other.Values);
+
+        /// <summary>
+        ///     compare for equality
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(object obj)
+            => Equals(obj as SetValue);
+
+        /// <summary>
+        ///     compute a hash code
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode() {
+            var result = 17;
+
+            unchecked {
+
+                result = result * 31 + TypeId;
+
+                foreach (var value in Values)
+                    result = result * 31 + value.GetHashCode();
+
+                return result;
+            }
+        }
     }
 }
