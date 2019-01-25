@@ -30,8 +30,9 @@ namespace PasPasPas.Globals.Runtime {
         ///     convert a double to the appropriate runtime constant
         /// </summary>
         /// <param name="value">parsed value</param>
+        /// <param name="typeId">type id</param>
         /// <returns>constant value</returns>
-        ITypeReference ToExtendedValue(in ExtF80 value);
+        ITypeReference ToExtendedValue(int typeId, in ExtF80 value);
 
         /// <summary>
         ///     absolute value

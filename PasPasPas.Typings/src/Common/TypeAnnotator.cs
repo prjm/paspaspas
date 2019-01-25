@@ -7,6 +7,7 @@ using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 using PasPasPas.Typings.Operators;
+using PasPasPas.Typings.Routines;
 using PasPasPas.Typings.Simple;
 using PasPasPas.Typings.Structured;
 
@@ -823,14 +824,38 @@ namespace PasPasPas.Typings.Common {
             var typeId = RequireUserTypeId();
             var isConstant = true;
             var baseType = default(ITypeReference);
+            var hasError = false;
 
             using (var values = environment.ListPools.GetList<ITypeReference>()) {
 
                 foreach (var part in element.Expressions) {
 
                     if (part.TypeInfo == null) {
-                        baseType = GetErrorTypeReference(part);
+                        hasError = true;
                         break;
+                    }
+
+                    if (part is BinaryOperator binaryOperator && binaryOperator.Kind == ExpressionKind.RangeOperator) {
+
+                        if (!(GetTypeByIdOrUndefinedType(part.TypeInfo.TypeId) is ISubrangeType subrangeType)) {
+                            hasError = true;
+                            break;
+                        }
+
+                        baseType = GetInstanceTypeById(subrangeType.BaseTypeId);
+
+                        var lowerBound = subrangeType.LowestElement;
+                        var upperBound = subrangeType.HighestElement;
+
+                        while (!lowerBound.Equals(upperBound)) {
+                            values.Item.Add(lowerBound);
+                            lowerBound = PredOrSucc.StaticExecuteCall(TypeRegistry, lowerBound, false);
+                        }
+
+                        if (lowerBound.Equals(upperBound))
+                            values.Item.Add(lowerBound);
+
+                        continue;
                     }
 
                     if (baseType == null)
@@ -840,7 +865,7 @@ namespace PasPasPas.Typings.Common {
                     else if (baseType.TypeKind.IsOrdinal() && baseType.TypeId == part.TypeInfo.TypeId)
                         baseType = part.TypeInfo;
                     else {
-                        baseType = GetErrorTypeReference(part);
+                        hasError = true;
                         break;
                     }
 
@@ -848,6 +873,11 @@ namespace PasPasPas.Typings.Common {
 
                     if (isConstant)
                         values.Item.Add(part.TypeInfo);
+                }
+
+                if (hasError) {
+                    element.TypeInfo = GetErrorTypeReference(element);
+                    return;
                 }
 
                 var typdef = RegisterUserDefinedType(new SetType(typeId, baseType.TypeId));

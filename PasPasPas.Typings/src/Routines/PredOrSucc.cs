@@ -83,55 +83,66 @@ namespace PasPasPas.Typings.Routines {
         /// </summary>
         /// <param name="parameter"></param>
         /// <returns></returns>
-        public ITypeReference ExecuteCall(ITypeReference parameter) {
-            var ordinalType = TypeRegistry.GetTypeByIdOrUndefinedType(parameter.TypeId) as IOrdinalType;
+        public ITypeReference ExecuteCall(ITypeReference parameter)
+            => StaticExecuteCall(TypeRegistry, parameter, Pred);
+
+        /// <summary>
+        ///     execute the call
+        /// </summary>
+        /// <param name="parameter"></param>
+        /// <param name="pred"></param>
+        /// <param name="types"></param>
+        /// <returns></returns>
+        public static ITypeReference StaticExecuteCall(ITypeRegistry types, ITypeReference parameter, bool pred) {
+
+            var ordinalType = types.GetTypeByIdOrUndefinedType(parameter.TypeId) as IOrdinalType;
 
             if (parameter.IsSubrangeValue(out var subrangeValue))
-                return Types.MakeSubrangeValue(parameter.TypeId, ExecuteCall(subrangeValue.Value));
+                return types.Runtime.Types.MakeSubrangeValue(parameter.TypeId, PredOrSucc.StaticExecuteCall(types, subrangeValue.Value, pred));
 
-            if (Pred) {
+            if (pred) {
 
                 if (parameter.IsIntegralValue(out var intValue))
-                    return Integers.Subtract(intValue, Integers.One);
+                    return types.Runtime.Integers.Subtract(intValue, types.Runtime.Integers.One);
 
                 if (parameter.IsAnsiCharValue(out var charValue))
-                    return Chars.ToAnsiCharValue(parameter.TypeId, unchecked((byte)(charValue.AsAnsiChar - 1)));
+                    return types.Runtime.Chars.ToAnsiCharValue(parameter.TypeId, unchecked((byte)(charValue.AsAnsiChar - 1)));
 
                 if (parameter.IsWideCharValue(out charValue))
-                    return Chars.ToWideCharValue(parameter.TypeId, unchecked((char)(charValue.AsWideChar - 1)));
+                    return types.Runtime.Chars.ToWideCharValue(parameter.TypeId, unchecked((char)(charValue.AsWideChar - 1)));
 
                 if (parameter.IsBooleanValue(out var boolValue)) {
                     var mask = 1u << ((int)ordinalType.BitSize - 1);
-                    return Booleans.ToBoolean(ordinalType.BitSize, (boolValue.AsUint - 1u) & mask);
+                    return types.Runtime.Booleans.ToBoolean(ordinalType.BitSize, (boolValue.AsUint - 1u) & mask);
                 }
 
                 if (parameter.IsEnumValue(out var enumValue))
-                    return Types.MakeEnumValue(enumValue.TypeId, ExecuteCall(enumValue.Value));
+                    return types.Runtime.Types.MakeEnumValue(enumValue.TypeId, StaticExecuteCall(types, enumValue.Value, pred));
 
             }
 
-            if (Succ) {
+            if (!pred) {
 
                 if (parameter.IsIntegralValue(out var intValue))
-                    return Integers.Add(intValue, Integers.One);
+                    return types.Runtime.Integers.Add(intValue, types.Runtime.Integers.One);
 
                 if (parameter.IsAnsiCharValue(out var charValue))
-                    return Chars.ToAnsiCharValue(parameter.TypeId, unchecked((byte)(1 + charValue.AsAnsiChar)));
+                    return types.Runtime.Chars.ToAnsiCharValue(parameter.TypeId, unchecked((byte)(1 + charValue.AsAnsiChar)));
 
                 if (parameter.IsWideCharValue(out charValue))
-                    return Chars.ToWideCharValue(parameter.TypeId, unchecked((char)(1 + charValue.AsWideChar)));
+                    return types.Runtime.Chars.ToWideCharValue(parameter.TypeId, unchecked((char)(1 + charValue.AsWideChar)));
 
                 if (parameter.IsBooleanValue(out var boolValue)) {
                     var mask = 1u << ((int)ordinalType.BitSize - 1);
-                    return Booleans.ToBoolean(ordinalType.BitSize, (1u + boolValue.AsUint) & mask);
+                    return types.Runtime.Booleans.ToBoolean(ordinalType.BitSize, (1u + boolValue.AsUint) & mask);
                 }
 
                 if (parameter.IsEnumValue(out var enumValue))
-                    return Types.MakeEnumValue(enumValue.TypeId, ExecuteCall(enumValue.Value));
+                    return types.Runtime.Types.MakeEnumValue(enumValue.TypeId, StaticExecuteCall(types, enumValue.Value, pred));
 
             }
 
-            return RuntimeException();
+            return types.Runtime.Types.MakeErrorTypeReference();
         }
 
         /// <summary>

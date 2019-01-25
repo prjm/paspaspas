@@ -1,4 +1,5 @@
 ﻿using PasPasPas.Globals.Runtime;
+using PasPasPas.Globals.Types;
 using PasPasPas.Infrastructure.Environment;
 using SharpFloat.FloatingPoint;
 
@@ -43,7 +44,7 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
         /// <returns></returns>
         public ITypeReference ConvertLiterals(string value) {
             if (ExtF80.TryParse(value, out var realValue))
-                return constantsValues.RealNumbers.ToExtendedValue(realValue);
+                return constantsValues.RealNumbers.ToExtendedValue(KnownTypeIds.Extended, realValue);
             return constantsValues.RealNumbers.Invalid;
         }
 

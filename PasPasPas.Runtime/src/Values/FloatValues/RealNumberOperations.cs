@@ -33,9 +33,10 @@ namespace PasPasPas.Runtime.Values.FloatValues {
         ///     get a constant real value
         /// </summary>
         /// <param name="value"></param>
+        /// <param name="typeId">type id</param>
         /// <returns></returns>
-        public ITypeReference ToExtendedValue(in ExtF80 value)
-            => new ExtendedValue(value);
+        public ITypeReference ToExtendedValue(int typeId, in ExtF80 value)
+            => new ExtendedValue(typeId, value);
 
 
         /// <summary>

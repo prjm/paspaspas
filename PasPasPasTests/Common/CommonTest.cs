@@ -5,7 +5,6 @@ using PasPasPas.Globals.Types;
 using PasPasPas.Infrastructure.ObjectPooling;
 using PasPasPas.Options.DataTypes;
 using PasPasPas.Runtime.Values;
-using PasPasPas.Runtime.Values.FloatValues;
 using PasPasPas.Runtime.Values.IntValues;
 using PasPasPas.Typings.Common;
 using SharpFloat.FloatingPoint;
@@ -170,7 +169,7 @@ namespace PasPasPasTests.Common {
         /// <param name="number">number</param>
         /// <returns>number value</returns>
         protected static ITypeReference GetExtendedValue(in ExtF80 number)
-            => FloatValueBase.ToExtendedValue(number);
+            => MakeRuntime().RealNumbers.ToExtendedValue(KnownTypeIds.Extended, number);
 
         /// <summary>
         ///     get extended value
@@ -178,7 +177,7 @@ namespace PasPasPasTests.Common {
         /// <param name="number">number</param>
         /// <returns>number value</returns>
         protected static ITypeReference GetExtendedValue(string number)
-            => FloatValueBase.ToExtendedValue(ExtF80.TryParse(number, out var d) ? d : ExtF80.Zero);
+            => MakeRuntime().RealNumbers.ToExtendedValue(KnownTypeIds.Extended, ExtF80.TryParse(number, out var d) ? d : ExtF80.Zero);
 
         /// <summary>
         ///     get a boolean value

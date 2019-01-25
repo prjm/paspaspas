@@ -408,8 +408,10 @@ namespace PasPasPasTests.Types {
         [TestMethod]
         public void TestSetConstants() {
             var v1 = GetSubrangeValue(RegisteredTypes.SmallestUserTypeId, GetIntegerValue(1));
-            var v2 = GetSubrangeValue(RegisteredTypes.SmallestUserTypeId, GetIntegerValue(3));
-            AssertExprValue("b", GetSetValue(RegisteredTypes.SmallestUserTypeId + 1, v1, v2), "type Ta = 1..5; Tb = set of Ta; const b : Tb = [1,3];");
+            var v2 = GetSubrangeValue(RegisteredTypes.SmallestUserTypeId, GetIntegerValue(2));
+            var v3 = GetSubrangeValue(RegisteredTypes.SmallestUserTypeId, GetIntegerValue(3));
+            AssertExprValue("b", GetSetValue(RegisteredTypes.SmallestUserTypeId + 1, v1, v3), "type Ta = 1..5; Tb = set of Ta; const b : Tb = [1,3];");
+            AssertExprValue("b", GetSetValue(RegisteredTypes.SmallestUserTypeId + 1, v1, v2, v3), "type Ta = 1..3; Tb = set of Ta; const b : Tb = [Low(Ta)..High(Ta)];");
         }
     }
 }

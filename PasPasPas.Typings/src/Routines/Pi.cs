@@ -22,7 +22,7 @@ namespace PasPasPas.Typings.Routines {
             => "Pi";
 
         /// <summary>
-        ///     check 
+        ///     check
         /// </summary>
         /// <param name="signature"></param>
         /// <returns></returns>
@@ -35,7 +35,7 @@ namespace PasPasPas.Typings.Routines {
         /// <param name="signature"></param>
         /// <returns></returns>
         public ITypeReference ExecuteCall(Signature signature)
-            => Runtime.RealNumbers.ToExtendedValue(ExtF80.Pi);
+            => Runtime.RealNumbers.ToExtendedValue(KnownTypeIds.Extended, ExtF80.Pi);
 
         /// <summary>
         ///     resolve a call

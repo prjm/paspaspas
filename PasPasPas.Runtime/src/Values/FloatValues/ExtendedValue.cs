@@ -1,6 +1,5 @@
 ﻿using System.Text;
 using PasPasPas.Globals.Runtime;
-using PasPasPas.Globals.Types;
 using SharpFloat.FloatingPoint;
 
 namespace PasPasPas.Runtime.Values.FloatValues {
@@ -15,8 +14,9 @@ namespace PasPasPas.Runtime.Values.FloatValues {
         /// <summary>
         ///     create a new extend value
         /// </summary>
+        /// <param name="typeId"></param>
         /// <param name="extended"></param>
-        public ExtendedValue(in ExtF80 extended)
+        public ExtendedValue(int typeId, in ExtF80 extended) : base(typeId)
             => value = extended;
 
         /// <summary>
@@ -30,12 +30,6 @@ namespace PasPasPas.Runtime.Values.FloatValues {
         /// </summary>
         public override ExtF80 AsExtended
             => value;
-
-        /// <summary>
-        ///     type id: extended
-        /// </summary>
-        public override int TypeId
-            => KnownTypeIds.Extended;
 
         /// <summary>
         ///     common type kind: real type
