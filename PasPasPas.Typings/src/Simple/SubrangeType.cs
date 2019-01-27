@@ -1,4 +1,5 @@
-﻿using PasPasPas.Globals.Runtime;
+﻿using System.Numerics;
+using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Typings.Common;
@@ -90,6 +91,49 @@ namespace PasPasPas.Typings.Simple {
         /// </summary>
         public override uint TypeSizeInBytes
             => BaseType.TypeSizeInBytes;
+
+        /// <summary>
+        ///     test if this type definition is valid
+        /// </summary>
+        public bool IsValid {
+            get {
+                if (LowestElement == default || HighestElement == default)
+                    return false;
+
+                if (!LowestElement.IsOrdinalValue(out _))
+                    return false;
+
+                if (!HighestElement.IsOrdinalValue(out _))
+                    return false;
+
+
+                return true;
+            }
+        }
+
+        /// <summary>
+        ///     compute cardinality
+        /// </summary>
+        public BigInteger Cardinality {
+            get {
+                if (!LowestElement.IsOrdinalValue(out var lowerValue))
+                    return BigInteger.Zero;
+
+                if (!HighestElement.IsOrdinalValue(out var highValue))
+                    return BigInteger.Zero;
+
+                var low = lowerValue.GetOrdinalValue(TypeRegistry);
+                var high = highValue.GetOrdinalValue(TypeRegistry);
+
+                if (!low.IsIntegralValue(out var l))
+                    return BigInteger.Zero;
+
+                if (!high.IsIntegralValue(out var h))
+                    return BigInteger.Zero;
+
+                return BigInteger.Add(BigInteger.One, BigInteger.Subtract(h.AsBigInteger, l.AsBigInteger));
+            }
+        }
 
         /// <summary>
         ///     format this subrange type

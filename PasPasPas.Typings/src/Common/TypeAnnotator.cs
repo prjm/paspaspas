@@ -847,6 +847,21 @@ namespace PasPasPas.Typings.Common {
                         var lowerBound = subrangeType.LowestElement;
                         var upperBound = subrangeType.HighestElement;
 
+                        if (!subrangeType.IsValid) {
+                            hasError = true;
+                            break;
+                        }
+
+                        var cardinality = subrangeType.Cardinality;
+
+                        if (cardinality < 1)
+                            continue;
+
+                        if (cardinality > 255) {
+                            hasError = true;
+                            break;
+                        }
+
                         while (!lowerBound.Equals(upperBound)) {
                             values.Item.Add(lowerBound);
                             lowerBound = PredOrSucc.StaticExecuteCall(TypeRegistry, lowerBound, false);

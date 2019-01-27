@@ -412,6 +412,8 @@ namespace PasPasPasTests.Types {
             var v3 = GetSubrangeValue(RegisteredTypes.SmallestUserTypeId, GetIntegerValue(3));
             AssertExprValue("b", GetSetValue(RegisteredTypes.SmallestUserTypeId + 1, v1, v3), "type Ta = 1..5; Tb = set of Ta; const b : Tb = [1,3];");
             AssertExprValue("b", GetSetValue(RegisteredTypes.SmallestUserTypeId + 1, v1, v2, v3), "type Ta = 1..3; Tb = set of Ta; const b : Tb = [Low(Ta)..High(Ta)];");
+            AssertExprValue("b", GetUnkownValue(KnownTypeIds.ErrorType, CommonTypeKind.UnknownType), "type Ta = 1..3333; Tb = set of Ta; const b : Tb = [Low(Ta)..High(Ta)];", isConstant: false);
+            AssertExprValue("b", GetUnkownValue(KnownTypeIds.ErrorType, CommonTypeKind.UnknownType), "type Ta = 1..3; Tb = set of Ta; const b : Tb = [High(Ta)..Low(Ta)];", isConstant: false);
         }
     }
 }

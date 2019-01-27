@@ -1,4 +1,6 @@
-﻿namespace PasPasPas.Globals.Types {
+﻿using System.Numerics;
+
+namespace PasPasPas.Globals.Types {
 
     /// <summary>
     ///     interface for subrange types
@@ -15,5 +17,14 @@
         /// </summary>
         IOrdinalType BaseType { get; }
 
+        /// <summary>
+        ///     test the validity of this subrange type
+        /// </summary>
+        bool IsValid { get; }
+
+        /// <summary>
+        ///     cardinality
+        /// </summary>
+        BigInteger Cardinality { get; }
     }
 }
