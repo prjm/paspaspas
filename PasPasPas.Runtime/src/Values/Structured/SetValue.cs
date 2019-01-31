@@ -16,18 +16,18 @@ namespace PasPasPas.Runtime.Values.Structured {
         /// <param name="typeId"></param>
         /// <param name="values"></param>
         public SetValue(int typeId, ImmutableArray<ITypeReference> values) : base(typeId)
-            => Values = values;
+            => Values = values.ToImmutableHashSet();
 
         /// <summary>
         ///     set values
         /// </summary>
-        public ImmutableArray<ITypeReference> Values { get; }
+        public IImmutableSet<ITypeReference> Values { get; }
 
         /// <summary>
         ///     internal type format
         /// </summary>
         public override string InternalTypeFormat
-            => $"set [({string.Join(", ", Values)})]";
+            => $"set of {TypeId} [({string.Join(", ", Values)})]";
 
         /// <summary>
         ///     type kind

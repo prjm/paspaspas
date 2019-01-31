@@ -1,4 +1,5 @@
 ﻿using System;
+using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Typings.Common;
 using PasPasPasTests.Common;
@@ -624,8 +625,35 @@ namespace PasPasPasTests.Types {
         public void TestSetOperators() {
             var i1 = GetIntegerValue(1);
             var i2 = GetIntegerValue(2);
-            AssertExprValue("a + b", GetSetValue(RegisteredTypes.SmallestUserTypeId, i1, i2), "type Ta = set of integer; const a: Ta = [1]; b: Ta = [2];");
+            var c1 = GetWideCharValue('1');
+            var c2 = GetWideCharValue('2');
+            var b1 = GetBooleanValue(true);
+            var b2 = GetBooleanValue(false);
+
+            AssertExprValue("a + b", GetSetValue(KnownTypeIds.IntegerType, i1, i2), "type Ta = set of integer; const a: Ta = [1]; b: Ta = [2];");
+            AssertExprValue("a + b", GetSetValue(KnownTypeIds.IntegerType, i1, i2), "type Ta = set of integer; const a: Ta = [1,2]; b: Ta = [2];");
+            AssertExprValue("a + b", GetSetValue(KnownTypeIds.IntegerType, i1, i2), "type Ta = set of integer; const a: Ta = [1]; b: Ta = [1,2];");
+            AssertExprValue("a + b", GetSetValue(KnownTypeIds.IntegerType, i1, i2), "type Ta = set of integer; const a: Ta = [1,2]; b: Ta = [1,2];");
+
+            AssertExprValue("a + b", GetSetValue(KnownTypeIds.WideCharType, c1, c2), "type Ta = set of char; const a: Ta = ['1']; b: Ta = ['2'];");
+            AssertExprValue("a + b", GetSetValue(KnownTypeIds.WideCharType, c1, c2), "type Ta = set of char; const a: Ta = ['1','2']; b: Ta = ['2'];");
+            AssertExprValue("a + b", GetSetValue(KnownTypeIds.WideCharType, c1, c2), "type Ta = set of char; const a: Ta = ['1']; b: Ta = ['1','2'];");
+            AssertExprValue("a + b", GetSetValue(KnownTypeIds.WideCharType, c1, c2), "type Ta = set of char; const a: Ta = ['1','2']; b: Ta = ['1','2'];");
+
+            AssertExprValue("a + b", GetSetValue(KnownTypeIds.BooleanType, b1, b2), "type Ta = set of boolean; const a: Ta = [true]; b: Ta = [false];");
+            AssertExprValue("a + b", GetSetValue(KnownTypeIds.BooleanType, b1, b2), "type Ta = set of boolean; const a: Ta = [true,false]; b: Ta = [false];");
+            AssertExprValue("a + b", GetSetValue(KnownTypeIds.BooleanType, b1, b2), "type Ta = set of boolean; const a: Ta = [true]; b: Ta = [true,false];");
+            AssertExprValue("a + b", GetSetValue(KnownTypeIds.BooleanType, b1, b2), "type Ta = set of boolean; const a: Ta = [true,false]; b: Ta = [true,false];");
+
         }
+
+        [TestMethod]
+        public void TestSetOperatorsIndirect() {
+            AssertExprValue("a + b", GetUnkownValue(RegisteredTypes.SmallestUserTypeId, CommonTypeKind.SetType), "type Ta = set of integer; var a, b: Ta;", isConstant: false);
+            AssertExprValue("a + b", GetUnkownValue(RegisteredTypes.SmallestUserTypeId, CommonTypeKind.SetType), "type Ta = set of char; var a, b: Ta;", isConstant: false);
+            AssertExprValue("a + b", GetUnkownValue(RegisteredTypes.SmallestUserTypeId, CommonTypeKind.SetType), "type Ta = set of boolean; var a, b: Ta;", isConstant: false);
+        }
+
 
     }
 }

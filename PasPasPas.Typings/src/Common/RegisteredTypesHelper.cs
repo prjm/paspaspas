@@ -386,9 +386,13 @@ namespace PasPasPas.Typings.Common {
         /// <param name="types"></param>
         /// <returns></returns>
         public static ITypeReference GetMatchingSetType(this ITypeRegistry types, ITypeReference left, ITypeReference right) {
-            var baseType = types.GetMatchingSetBaseType(left, right);
+            var baseType = types.GetMatchingSetBaseType(left, right, out var newType);
             if (baseType == KnownTypeIds.ErrorType)
                 return types.Runtime.Types.MakeErrorTypeReference();
+
+            if (!newType) {
+                return types.MakeReference(left.TypeId);
+            }
 
             var typeId = types.RequireUserTypeId();
             var setType = new SetType(typeId, baseType);
@@ -402,8 +406,11 @@ namespace PasPasPas.Typings.Common {
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <param name="typeRegistry"></param>
+        /// <param name="requireNewType"></param>
         /// <returns></returns>
-        public static int GetMatchingSetBaseType(this ITypeRegistry typeRegistry, ITypeReference left, ITypeReference right) {
+        public static int GetMatchingSetBaseType(this ITypeRegistry typeRegistry, ITypeReference left, ITypeReference right, out bool requireNewType) {
+            requireNewType = false;
+
             if (!(typeRegistry.GetTypeByIdOrUndefinedType(left.TypeId) is ISetType leftType))
                 return KnownTypeIds.ErrorType;
 
@@ -428,14 +435,22 @@ namespace PasPasPas.Typings.Common {
             if (leftBaseType.TypeId == rightBaseType.TypeId)
                 return leftBaseType.TypeId;
 
-            if (leftBaseType is IIntegralType && rightBaseType is IIntegralType)
-                return typeRegistry.GetSmallestIntegralTypeOrNext(leftBaseType.TypeId, rightBaseType.TypeId);
+            if (leftBaseType is IIntegralType && rightBaseType is IIntegralType) {
+                var result = typeRegistry.GetSmallestIntegralTypeOrNext(leftBaseType.TypeId, rightBaseType.TypeId);
+                requireNewType = result != leftBaseType.TypeId || result != rightBaseType.TypeId;
+                return result;
+            }
 
-            if (leftBaseType is ICharType && rightBaseType is ICharType)
-                return typeRegistry.GetSmallestCharTypeOrNext(leftBaseType.TypeId, rightBaseType.TypeId);
-
-            if (leftBaseType is IBooleanType && rightBaseType is IBooleanType)
-                return typeRegistry.GetSmallestBooleanTypeOrNext(leftBaseType.TypeId, rightBaseType.TypeId);
+            if (leftBaseType is ICharType && rightBaseType is ICharType) {
+                var result = typeRegistry.GetSmallestCharTypeOrNext(leftBaseType.TypeId, rightBaseType.TypeId);
+                requireNewType = result != leftBaseType.TypeId || result != rightBaseType.TypeId;
+                return result;
+            }
+            if (leftBaseType is IBooleanType && rightBaseType is IBooleanType) {
+                var result = typeRegistry.GetSmallestBooleanTypeOrNext(leftBaseType.TypeId, rightBaseType.TypeId);
+                requireNewType = result != leftBaseType.TypeId || result != rightBaseType.TypeId;
+                return result;
+            }
 
             return KnownTypeIds.ErrorType;
         }
