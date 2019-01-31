@@ -1,4 +1,5 @@
 ﻿using System.Collections.Immutable;
+using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Globals.Runtime {
 
@@ -31,5 +32,24 @@ namespace PasPasPas.Globals.Runtime {
         /// <param name="values"></param>
         /// <returns></returns>
         ITypeReference CreateSetValue(int typeId, ImmutableArray<ITypeReference> values);
+
+        /// <summary>
+        ///     compute a set union
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <param name="types"></param>
+        /// <returns></returns>
+        ITypeReference SetUnion(ITypeRegistry types, ITypeReference left, ITypeReference right);
+
+        /// <summary>
+        ///     compute a set difference
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <param name="types"></param>
+        /// <returns></returns>
+        ITypeReference SetDifference(ITypeRegistry types, ITypeReference left, ITypeReference right);
+
     }
 }

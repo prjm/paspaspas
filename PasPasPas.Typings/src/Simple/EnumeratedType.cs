@@ -9,7 +9,7 @@ namespace PasPasPas.Typings.Simple {
     /// <summary>
     ///     enumerated type
     /// </summary>
-    public class EnumeratedType : OrdinalTypeBase, IOrdinalType {
+    public class EnumeratedType : OrdinalTypeBase, IEnumeratedType {
 
         /// <summary>
         ///     list of possible values

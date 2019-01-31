@@ -619,5 +619,13 @@ namespace PasPasPasTests.Types {
             AssertExprTypeByConst("(a, b)", KnownTypeIds.UnspecifiedType, false, "array [1002] of enum Int8", "type ta = (a,b);");
             AssertExprValue("a", GetArrayValue(KnownTypeIds.StringType, GetUnicodeStringValue("11"), GetUnicodeStringValue("2")), "const a: array [0 .. 1] of String = ('11', '2');");
         }
+
+        [TestMethod]
+        public void TestSetOperators() {
+            var i1 = GetIntegerValue(1);
+            var i2 = GetIntegerValue(2);
+            AssertExprValue("a + b", GetSetValue(RegisteredTypes.SmallestUserTypeId, i1, i2), "type Ta = set of integer; const a: Ta = [1]; b: Ta = [2];");
+        }
+
     }
 }

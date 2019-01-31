@@ -59,6 +59,15 @@
             => kind == CommonTypeKind.ArrayType || kind == CommonTypeKind.ConstantArrayType || kind == CommonTypeKind.DynamicArrayType;
 
         /// <summary>
+        ///     test if the type kind is a set type
+        /// </summary>
+        /// <param name="kind"></param>
+        /// <returns></returns>
+        public static bool IsSet(this CommonTypeKind kind)
+            => kind == CommonTypeKind.SetType;
+
+
+        /// <summary>
         ///     test if the type kind is a unicode char type
         /// </summary>
         /// <param name="kind">kind</param>

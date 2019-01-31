@@ -3,6 +3,7 @@ using PasPasPas.Globals.Types;
 using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Typings.Operators;
+using PasPasPas.Typings.Structured;
 
 namespace PasPasPas.Typings.Common {
 
@@ -36,6 +37,18 @@ namespace PasPasPas.Typings.Common {
             subrangeType = default;
             return false;
         }
+
+        /// <summary>
+        ///     resolve a type alias
+        /// </summary>
+        /// <param name="typeRegistry"></param>
+        /// <param name="typeId"></param>
+        /// <returns></returns>
+        public static ITypeDefinition ResolveAlias(this ITypeRegistry typeRegistry, int typeId) {
+            var typeDef = typeRegistry.GetTypeByIdOrUndefinedType(typeId);
+            return TypeBase.ResolveAlias(typeDef);
+        }
+
 
         /// <summary>
         ///     get the smallest matching type of two char types
@@ -302,6 +315,8 @@ namespace PasPasPas.Typings.Common {
                 if (typeRegistry.IsSubrangeType(right.TypeId, out var subrangeType2))
                     return typeRegistry.GetOperatorId(kind, left, typeRegistry.MakeReference(subrangeType2.BaseType.TypeId));
 
+                if (leftType.IsSet() && rightType.IsSet())
+                    return DefinedOperators.SetAddOperator;
 
             }
 
@@ -362,5 +377,68 @@ namespace PasPasPas.Typings.Common {
 
             return KnownTypeIds.ErrorType;
         }
+
+        /// <summary>
+        ///     generate a new set type definition
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <param name="types"></param>
+        /// <returns></returns>
+        public static ITypeReference GetMatchingSetType(this ITypeRegistry types, ITypeReference left, ITypeReference right) {
+            var baseType = types.GetMatchingSetBaseType(left, right);
+            if (baseType == KnownTypeIds.ErrorType)
+                return types.Runtime.Types.MakeErrorTypeReference();
+
+            var typeId = types.RequireUserTypeId();
+            var setType = new SetType(typeId, baseType);
+            types.RegisterType(setType);
+            return types.MakeReference(typeId);
+        }
+
+        /// <summary>
+        ///     find a matching set base type
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <param name="typeRegistry"></param>
+        /// <returns></returns>
+        public static int GetMatchingSetBaseType(this ITypeRegistry typeRegistry, ITypeReference left, ITypeReference right) {
+            if (!(typeRegistry.GetTypeByIdOrUndefinedType(left.TypeId) is ISetType leftType))
+                return KnownTypeIds.ErrorType;
+
+            if (!(typeRegistry.GetTypeByIdOrUndefinedType(right.TypeId) is ISetType rightType))
+                return KnownTypeIds.ErrorType;
+
+            if (!(typeRegistry.ResolveAlias(leftType.BaseTypeId) is IOrdinalType leftBaseType))
+                return KnownTypeIds.ErrorType;
+
+            if (!(typeRegistry.ResolveAlias(rightType.BaseTypeId) is IOrdinalType rightBaseType))
+                return KnownTypeIds.ErrorType;
+
+            if (leftBaseType.TypeId == rightBaseType.TypeId)
+                return leftBaseType.TypeId;
+
+            if (leftBaseType is ISubrangeType lsrt && typeRegistry.ResolveAlias(lsrt.BaseTypeId) is IOrdinalType lsrtb)
+                leftBaseType = lsrtb;
+
+            if (rightBaseType is ISubrangeType rsrt && typeRegistry.ResolveAlias(rsrt.BaseTypeId) is IOrdinalType rsrtb)
+                leftBaseType = rsrtb;
+
+            if (leftBaseType.TypeId == rightBaseType.TypeId)
+                return leftBaseType.TypeId;
+
+            if (leftBaseType is IIntegralType && rightBaseType is IIntegralType)
+                return typeRegistry.GetSmallestIntegralTypeOrNext(leftBaseType.TypeId, rightBaseType.TypeId);
+
+            if (leftBaseType is ICharType && rightBaseType is ICharType)
+                return typeRegistry.GetSmallestCharTypeOrNext(leftBaseType.TypeId, rightBaseType.TypeId);
+
+            if (leftBaseType is IBooleanType && rightBaseType is IBooleanType)
+                return typeRegistry.GetSmallestBooleanTypeOrNext(leftBaseType.TypeId, rightBaseType.TypeId);
+
+            return KnownTypeIds.ErrorType;
+        }
+
     }
 }

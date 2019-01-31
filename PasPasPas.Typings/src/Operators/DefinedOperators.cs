@@ -120,5 +120,15 @@
         /// </summary>
         public const int AtOperator = 31;
 
+        /// <summary>
+        ///     set addition operator
+        /// </summary>
+        public const int SetAddOperator = 32;
+
+        /// <summary>
+        ///     set difference operator
+        /// </summary>
+        public const int SetDifferenceOperator = 33;
+
     }
 }

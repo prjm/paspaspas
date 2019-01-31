@@ -35,7 +35,7 @@ namespace PasPasPas.Typings.Operators {
     /// <summary>
     ///     other operators
     /// </summary>
-    public static class OtherOperators {
+    public static class OtherOperator {
 
         /// <summary>
         ///     register operator

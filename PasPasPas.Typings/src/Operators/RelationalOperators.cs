@@ -7,7 +7,7 @@ namespace PasPasPas.Typings.Operators {
     /// <summary>
     ///     relational operators
     /// </summary>
-    public class RelationalOperators : OperatorBase {
+    public class RelationalOperator : OperatorBase {
 
         /// <summary>
         ///     helper function: register an relational operator
@@ -15,7 +15,7 @@ namespace PasPasPas.Typings.Operators {
         /// <param name="registry">type registry</param>
         /// <param name="kind">operator kind to register</param>
         private static void Register(ITypeRegistry registry, int kind)
-            => registry.RegisterOperator(new RelationalOperators(kind, 2));
+            => registry.RegisterOperator(new RelationalOperator(kind, 2));
 
         /// <summary>
         ///     register relational operators
@@ -35,7 +35,7 @@ namespace PasPasPas.Typings.Operators {
         /// </summary>
         /// <param name="withKind">operator kind</param>
         /// <param name="withArity">operator arity</param>
-        public RelationalOperators(int withKind, int withArity)
+        public RelationalOperator(int withKind, int withArity)
             : base(withKind, withArity) { }
 
         /// <summary>

@@ -156,6 +156,7 @@ namespace PasPasPas.Typings.Operators {
                 return GetSmallestRealOrIntegralType(left, right, 32);
         }
 
+
         private ITypeReference EvaluateRealDivOperator(ITypeReference left, ITypeReference right) {
             if (left.IsConstant() && right.IsConstant())
                 return Runtime.RealNumbers.Divide(left, right);

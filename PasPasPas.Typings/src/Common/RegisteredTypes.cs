@@ -129,9 +129,10 @@ namespace PasPasPas.Typings.Common {
         private void RegisterCommonOperators() {
             LogicalOperator.RegisterOperators(this);
             ArithmeticOperator.RegisterOperators(this);
-            RelationalOperators.RegisterOperators(this);
-            StringOperators.RegisterOperators(this);
-            OtherOperators.RegisterOperators(this);
+            RelationalOperator.RegisterOperators(this);
+            StringOperator.RegisterOperators(this);
+            SetOperator.RegisterOperators(this);
+            OtherOperator.RegisterOperators(this);
         }
 
         /// <summary>

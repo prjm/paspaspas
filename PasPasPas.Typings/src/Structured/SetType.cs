@@ -67,5 +67,13 @@ namespace PasPasPas.Typings.Structured {
 
             return base.CanBeAssignedFrom(otherType);
         }
+
+        /// <summary>
+        ///     format this type as string
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+            => $"set of {BaseType}";
+
     }
 }

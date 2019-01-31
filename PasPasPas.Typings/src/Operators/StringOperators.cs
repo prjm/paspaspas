@@ -7,10 +7,10 @@ namespace PasPasPas.Typings.Operators {
     /// <summary>
     ///     string operators
     /// </summary>
-    public class StringOperators : OperatorBase {
+    public class StringOperator : OperatorBase {
 
         private static void Register(ITypeRegistry registry, int kind)
-            => registry.RegisterOperator(new StringOperators(kind, 2));
+            => registry.RegisterOperator(new StringOperator(kind, 2));
 
         /// <summary>
         ///     register known operators
@@ -23,7 +23,7 @@ namespace PasPasPas.Typings.Operators {
         /// </summary>
         /// <param name="withKind">operator kind</param>
         /// <param name="arity">operator arity</param>
-        public StringOperators(int withKind, int arity) : base(withKind, arity) { }
+        public StringOperator(int withKind, int arity) : base(withKind, arity) { }
 
         /// <summary>
         ///     get the operator name
