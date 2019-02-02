@@ -51,5 +51,13 @@ namespace PasPasPas.Globals.Runtime {
         /// <returns></returns>
         ITypeReference SetDifference(ITypeRegistry types, ITypeReference left, ITypeReference right);
 
+        /// <summary>
+        ///     compute a set intersection
+        /// </summary>
+        /// <param name="typeRegistry"></param>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        ITypeReference SetIntersection(ITypeRegistry typeRegistry, ITypeReference left, ITypeReference right);
     }
 }

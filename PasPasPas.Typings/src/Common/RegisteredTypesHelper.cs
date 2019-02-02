@@ -49,7 +49,6 @@ namespace PasPasPas.Typings.Common {
             return TypeBase.ResolveAlias(typeDef);
         }
 
-
         /// <summary>
         ///     get the smallest matching type of two char types
         /// </summary>
@@ -260,6 +259,12 @@ namespace PasPasPas.Typings.Common {
             if (leftType == CommonTypeKind.UnknownType || rightType == CommonTypeKind.UnknownType)
                 return DefinedOperators.Undefined;
 
+            if (typeRegistry.IsSubrangeType(left.TypeId, out var subrangeType1))
+                return typeRegistry.GetOperatorId(kind, typeRegistry.MakeReference(subrangeType1.BaseType.TypeId), right);
+
+            if (typeRegistry.IsSubrangeType(right.TypeId, out var subrangeType2))
+                return typeRegistry.GetOperatorId(kind, left, typeRegistry.MakeReference(subrangeType2.BaseType.TypeId));
+
             switch (kind) {
                 case ExpressionKind.LessThen:
                     return DefinedOperators.LessThen;
@@ -277,8 +282,6 @@ namespace PasPasPas.Typings.Common {
                     return DefinedOperators.XorOperator;
                 case ExpressionKind.Or:
                     return DefinedOperators.OrOperator;
-                case ExpressionKind.Minus:
-                    return DefinedOperators.MinusOperator;
                 case ExpressionKind.Shr:
                     return DefinedOperators.ShrOperator;
                 case ExpressionKind.Shl:
@@ -289,8 +292,6 @@ namespace PasPasPas.Typings.Common {
                     return DefinedOperators.ModOperator;
                 case ExpressionKind.Slash:
                     return DefinedOperators.SlashOperator;
-                case ExpressionKind.Times:
-                    return DefinedOperators.TimesOperator;
                 case ExpressionKind.Div:
                     return DefinedOperators.DivOperator;
                 case ExpressionKind.Not:
@@ -309,14 +310,28 @@ namespace PasPasPas.Typings.Common {
                 if (leftType.IsNumerical() && rightType.IsNumerical())
                     return DefinedOperators.PlusOperator;
 
-                if (typeRegistry.IsSubrangeType(left.TypeId, out var subrangeType1))
-                    return typeRegistry.GetOperatorId(kind, typeRegistry.MakeReference(subrangeType1.BaseType.TypeId), right);
-
-                if (typeRegistry.IsSubrangeType(right.TypeId, out var subrangeType2))
-                    return typeRegistry.GetOperatorId(kind, left, typeRegistry.MakeReference(subrangeType2.BaseType.TypeId));
-
                 if (leftType.IsSet() && rightType.IsSet())
                     return DefinedOperators.SetAddOperator;
+
+            }
+
+            if (kind == ExpressionKind.Minus) {
+
+                if (leftType.IsNumerical() && rightType.IsNumerical())
+                    return DefinedOperators.MinusOperator;
+
+                if (leftType.IsSet() && rightType.IsSet())
+                    return DefinedOperators.SetDifferenceOperator;
+
+            }
+
+            if (kind == ExpressionKind.Times) {
+
+                if (leftType.IsNumerical() && rightType.IsNumerical())
+                    return DefinedOperators.TimesOperator;
+
+                if (leftType.IsSet() && rightType.IsSet())
+                    return DefinedOperators.SetIntersectOperator;
 
             }
 

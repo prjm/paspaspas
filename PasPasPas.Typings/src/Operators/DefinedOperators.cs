@@ -130,5 +130,10 @@
         /// </summary>
         public const int SetDifferenceOperator = 33;
 
+        /// <summary>
+        ///     set intersect operator
+        /// </summary>
+        public const int SetIntersectOperator = 34;
+
     }
 }

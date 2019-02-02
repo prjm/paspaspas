@@ -58,7 +58,70 @@ namespace PasPasPas.Runtime.Values.Structured {
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public ITypeReference SetDifference(ITypeRegistry types, ITypeReference left, ITypeReference right) => throw new System.NotImplementedException();
+        public ITypeReference SetDifference(ITypeRegistry types, ITypeReference left, ITypeReference right) {
+            if (!(left is SetValue leftSet))
+                return types.Runtime.Types.MakeErrorTypeReference();
+
+            if (!(right is SetValue rightSet))
+                return types.Runtime.Types.MakeErrorTypeReference();
+
+            if (!(types.ResolveAlias(left.TypeId) is ISetType leftType))
+                return types.Runtime.Types.MakeErrorTypeReference();
+
+            if (!(types.ResolveAlias(right.TypeId) is ISetType rightType))
+                return types.Runtime.Types.MakeErrorTypeReference();
+
+            using (var list = ListPools.GetList<ITypeReference>()) {
+
+                foreach (var value in leftSet.Values)
+                    if (!rightSet.Values.Contains(types.Runtime.Cast(types, value, rightType.BaseTypeId)))
+                        list.Add(value);
+
+                return new SetValue(leftType.TypeId, ListPools.GetFixedArray(list));
+            }
+        }
+
+        /// <summary>
+        ///     compute a set intersection
+        /// </summary>
+        /// <param name="typeRegistry"></param>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public ITypeReference SetIntersection(ITypeRegistry typeRegistry, ITypeReference left, ITypeReference right) {
+            if (!(left is SetValue leftSet))
+                return typeRegistry.Runtime.Types.MakeErrorTypeReference();
+
+            if (!(right is SetValue rightSet))
+                return typeRegistry.Runtime.Types.MakeErrorTypeReference();
+
+            var baseType = typeRegistry.GetMatchingSetBaseType(left, right, out var newType);
+
+            if (baseType == KnownTypeIds.ErrorType)
+                return typeRegistry.Runtime.Types.MakeErrorTypeReference();
+
+            var typeId = default(int);
+            if (newType) {
+                typeId = typeRegistry.RequireUserTypeId();
+                typeRegistry.RegisterType(new SetType(typeId, baseType));
+            }
+            else
+                typeId = left.TypeId;
+
+            using (var list = ListPools.GetList<ITypeReference>()) {
+
+                foreach (var value in leftSet.Values)
+                    if (rightSet.Values.Contains(value))
+                        list.Add(typeRegistry.Runtime.Cast(typeRegistry, value, baseType));
+
+                foreach (var value in rightSet.Values)
+                    if (leftSet.Values.Contains(value))
+                        list.Add(typeRegistry.Runtime.Cast(typeRegistry, value, baseType));
+
+                return new SetValue(typeId, ListPools.GetFixedArray(list));
+            }
+
+        }
 
         /// <summary>
         ///     compute a set union
@@ -95,7 +158,7 @@ namespace PasPasPas.Runtime.Values.Structured {
                 foreach (var value in rightSet.Values)
                     list.Add(types.Runtime.Cast(types, value, baseType));
 
-                return new SetValue(baseType, ListPools.GetFixedArray(list));
+                return new SetValue(typeId, ListPools.GetFixedArray(list));
             }
         }
     }

@@ -26,6 +26,7 @@ namespace PasPasPas.Typings.Operators {
         public static void RegisterOperators(ITypeRegistry registry) {
             Register(registry, DefinedOperators.SetAddOperator);
             Register(registry, DefinedOperators.SetDifferenceOperator);
+            Register(registry, DefinedOperators.SetIntersectOperator);
         }
 
         /// <summary>
@@ -45,6 +46,8 @@ namespace PasPasPas.Typings.Operators {
                         return "+";
                     case DefinedOperators.SetDifferenceOperator:
                         return "-";
+                    case DefinedOperators.SetIntersectOperator:
+                        return "*";
                 }
                 throw new InvalidOperationException();
             }
@@ -65,6 +68,9 @@ namespace PasPasPas.Typings.Operators {
             if (Kind == DefinedOperators.SetDifferenceOperator)
                 return EvaluateSetDiffOperator(left, right);
 
+            if (Kind == DefinedOperators.SetIntersectOperator)
+                return EvaluateSetIntersectOperator(left, right);
+
             return GetErrorTypeReference();
         }
 
@@ -78,6 +84,13 @@ namespace PasPasPas.Typings.Operators {
         private ITypeReference EvaluateSetAddOperator(ITypeReference left, ITypeReference right) {
             if (left.IsConstant() && right.IsConstant())
                 return Runtime.Structured.SetUnion(TypeRegistry, left, right);
+            else
+                return TypeRegistry.GetMatchingSetType(left, right);
+        }
+
+        private ITypeReference EvaluateSetIntersectOperator(ITypeReference left, ITypeReference right) {
+            if (left.IsConstant() && right.IsConstant())
+                return Runtime.Structured.SetIntersection(TypeRegistry, left, right);
             else
                 return TypeRegistry.GetMatchingSetType(left, right);
         }
