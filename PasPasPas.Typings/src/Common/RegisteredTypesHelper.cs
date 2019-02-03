@@ -300,6 +300,8 @@ namespace PasPasPas.Typings.Common {
                     return DefinedOperators.UnaryMinus;
                 case ExpressionKind.UnaryPlus:
                     return DefinedOperators.UnaryPlus;
+                case ExpressionKind.In:
+                    return DefinedOperators.InSetOperator;
             };
 
             if (kind == ExpressionKind.Plus) {

@@ -757,6 +757,25 @@ namespace PasPasPasTests.Types {
             AssertExprValue("a <= b", GetBooleanValue(false), "type Ta = set of boolean; const a: Ta = [true,false]; b: Ta = [false];");
         }
 
+        [TestMethod]
+        public void TestSetInOperator() {
+            AssertExprValue("a in b", GetBooleanValue(false), "type Ta = set of boolean; const a = true; b: Ta = [false];");
+            AssertExprValue("a in b", GetBooleanValue(true), "type Ta = set of boolean; const a = true; b: Ta = [true];");
+            AssertExprValue("a in b", GetBooleanValue(true), "type Ta = set of boolean; const a = true; b: Ta = [false,true];");
+            AssertExprValue("a in b", GetBooleanValue(false), "type Ta = set of boolean; const a = true; b: Ta = [];");
+
+            AssertExprValue("a in b", GetBooleanValue(false), "type Ta = set of word; const a = 1; b: Ta = [2];");
+            AssertExprValue("a in b", GetBooleanValue(true), "type Ta = set of word; const a = 1; b: Ta = [1];");
+            AssertExprValue("a in b", GetBooleanValue(true), "type Ta = set of word; const a = 1; b: Ta = [1,2];");
+            AssertExprValue("a in b", GetBooleanValue(false), "type Ta = set of word; const a = 1; b: Ta = [];");
+
+            AssertExprValue("a in b", GetBooleanValue(false), "type Ta = set of char; const a = '1'; b: Ta = ['2'];");
+            AssertExprValue("a in b", GetBooleanValue(true), "type Ta = set of char; const a = '1'; b: Ta = ['1'];");
+            AssertExprValue("a in b", GetBooleanValue(true), "type Ta = set of char; const a = '1'; b: Ta = ['1','2'];");
+            AssertExprValue("a in b", GetBooleanValue(false), "type Ta = set of char; const a = '1'; b: Ta = [];");
+
+        }
+
 
         [TestMethod]
         public void TestSetOperatorsIndirect() {

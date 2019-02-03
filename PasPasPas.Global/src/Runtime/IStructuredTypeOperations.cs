@@ -64,5 +64,14 @@ namespace PasPasPas.Globals.Runtime {
         /// <param name="right"></param>
         /// <returns></returns>
         ITypeReference SetIntersection(ITypeRegistry typeRegistry, ITypeReference left, ITypeReference right);
+
+        /// <summary>
+        ///     test if an element is contained in a set
+        /// </summary>
+        /// <param name="typeRegistry"></param>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        ITypeReference InSet(ITypeRegistry typeRegistry, ITypeReference left, ITypeReference right);
     }
 }

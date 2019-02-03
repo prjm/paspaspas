@@ -135,5 +135,10 @@
         /// </summary>
         public const int SetIntersectOperator = 34;
 
+        /// <summary>
+        ///     in operator
+        /// </summary>
+        public const int InSetOperator = 35;
+
     }
 }

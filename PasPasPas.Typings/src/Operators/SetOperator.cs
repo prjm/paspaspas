@@ -27,6 +27,7 @@ namespace PasPasPas.Typings.Operators {
             Register(registry, DefinedOperators.SetAddOperator);
             Register(registry, DefinedOperators.SetDifferenceOperator);
             Register(registry, DefinedOperators.SetIntersectOperator);
+            Register(registry, DefinedOperators.InSetOperator);
         }
 
         /// <summary>
@@ -48,6 +49,8 @@ namespace PasPasPas.Typings.Operators {
                         return "-";
                     case DefinedOperators.SetIntersectOperator:
                         return "*";
+                    case DefinedOperators.InSetOperator:
+                        return "in";
                 }
                 throw new InvalidOperationException();
             }
@@ -70,6 +73,39 @@ namespace PasPasPas.Typings.Operators {
 
             if (Kind == DefinedOperators.SetIntersectOperator)
                 return EvaluateSetIntersectOperator(left, right);
+
+            if (Kind == DefinedOperators.InSetOperator)
+                return EvaluateInSetOperator(left, right);
+
+            return GetErrorTypeReference();
+        }
+
+        private ITypeReference EvaluateInSetOperator(ITypeReference left, ITypeReference right) {
+
+            if (!(TypeRegistry.ResolveAlias(right.TypeId) is ISetType setType))
+                return GetErrorTypeReference();
+
+            if (!(TypeRegistry.ResolveAlias(left.TypeId) is IOrdinalType ordinalType))
+                return GetErrorTypeReference();
+
+            if (left is ISubrangeType subrangeType)
+                if (TypeRegistry.ResolveAlias(subrangeType.BaseTypeId) is IOrdinalType subRangeBase)
+                    ordinalType = subrangeType;
+                else
+                    return GetErrorTypeReference();
+
+            var setBaseType = TypeRegistry.ResolveAlias(setType.BaseTypeId);
+
+            if ((ordinalType.TypeKind.IsChar() && setBaseType.TypeKind.IsChar()) ||
+                (ordinalType.TypeKind == CommonTypeKind.BooleanType && setBaseType.TypeKind == CommonTypeKind.BooleanType) ||
+                (ordinalType.TypeKind.IsNumerical() && setBaseType.TypeKind.IsNumerical()) ||
+                (ordinalType.TypeKind == CommonTypeKind.EnumerationType && setBaseType.TypeId == ordinalType.TypeId)) {
+
+                if (left.IsConstant() && right.IsConstant())
+                    return Runtime.Structured.InSet(TypeRegistry, left, right);
+
+                return TypeRegistry.MakeReference(KnownTypeIds.BooleanType);
+            }
 
             return GetErrorTypeReference();
         }

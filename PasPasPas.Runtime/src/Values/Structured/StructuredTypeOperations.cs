@@ -109,6 +109,31 @@ namespace PasPasPas.Runtime.Values.Structured {
         }
 
         /// <summary>
+        ///     test if an item is included in a set
+        /// </summary>
+        /// <param name="typeRegistry"></param>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public ITypeReference InSet(ITypeRegistry typeRegistry, ITypeReference left, ITypeReference right) {
+            if (!(right is SetValue rightSet))
+                return InvalidSet;
+
+            if (!(typeRegistry.ResolveAlias(right.TypeId) is ISetType setType))
+                return InvalidSet;
+
+            if (!left.IsOrdinalValue(out var ordinalValue))
+                return InvalidSet;
+
+            var castValue = typeRegistry.Runtime.Cast(typeRegistry, ordinalValue, setType.BaseTypeId);
+
+            if (rightSet.Values.Contains(castValue))
+                return typeRegistry.Runtime.Booleans.TrueValue;
+
+            return typeRegistry.Runtime.Booleans.FalseValue;
+        }
+
+        /// <summary>
         ///     unsupported operation
         /// </summary>
         /// <param name="left"></param>

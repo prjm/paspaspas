@@ -5,7 +5,7 @@ namespace PasPasPas.Globals.Runtime {
     /// <summary>
     ///     interface for ordinal values
     /// </summary>
-    public interface IOrdinalValue {
+    public interface IOrdinalValue : ITypeReference {
 
         /// <summary>
         ///     get the ordinal value of a given value
