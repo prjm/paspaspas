@@ -19,7 +19,7 @@ namespace PasPasPas.Runtime.Values {
             Types = new TypeOperations();
             Booleans = new BooleanOperations();
             Chars = new CharOperations();
-            Structured = new StructuredTypeOperations(ListPools);
+            Structured = new StructuredTypeOperations(ListPools, Booleans);
             Integers = new IntegerOperations(Booleans, Types);
             RealNumbers = new RealNumberOperations(Booleans, Integers);
             Strings = new StringOperations(Booleans);

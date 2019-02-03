@@ -88,12 +88,21 @@ namespace PasPasPas.Globals.Runtime {
             => typeReference.TypeKind.IsOrdinal();
 
         /// <summary>
-        ///     test if this is a in array value
+        ///     test if this is an array value
         /// </summary>
         /// <param name="typeReference"></param>
         /// <returns></returns>
         public static bool IsArray(this ITypeReference typeReference)
             => typeReference.TypeKind.IsArray();
+
+        /// <summary>
+        ///     test if this is a set value
+        /// </summary>
+        /// <param name="typeReference"></param>
+        /// <returns></returns>
+        public static bool IsSet(this ITypeReference typeReference)
+            => typeReference.TypeKind.IsSet();
+
 
         /// <summary>
         ///     subrange values

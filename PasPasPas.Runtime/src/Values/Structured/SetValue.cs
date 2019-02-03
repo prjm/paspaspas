@@ -36,6 +36,12 @@ namespace PasPasPas.Runtime.Values.Structured {
             => CommonTypeKind.SetType;
 
         /// <summary>
+        ///     test if the set is empty
+        /// </summary>
+        public bool IsEmpty
+            => Values.Count == 0;
+
+        /// <summary>
         ///     compare to another set value
         /// </summary>
         /// <param name="other"></param>
@@ -70,6 +76,41 @@ namespace PasPasPas.Runtime.Values.Structured {
 
                 return result;
             }
+        }
+
+        /// <summary>
+        ///     compare for equal values
+        /// </summary>
+        /// <param name="leftSet"></param>
+        /// <param name="rightSet"></param>
+        /// <returns></returns>
+        internal static bool Equal(SetValue leftSet, SetValue rightSet) {
+            foreach (var value in leftSet.Values)
+                if (!rightSet.Values.Contains(value))
+                    return false;
+
+            foreach (var value in rightSet.Values)
+                if (!leftSet.Values.Contains(value))
+                    return false;
+
+            return true;
+        }
+
+        internal static bool IsSuperset(SetValue leftSet, SetValue rightSet) {
+            foreach (var value in rightSet.Values)
+                if (!leftSet.Values.Contains(value))
+                    return false;
+
+            return true;
+
+        }
+
+        internal static bool IsSubset(SetValue leftSet, SetValue rightSet) {
+            foreach (var value in leftSet.Values)
+                if (!rightSet.Values.Contains(value))
+                    return false;
+
+            return true;
         }
     }
 }

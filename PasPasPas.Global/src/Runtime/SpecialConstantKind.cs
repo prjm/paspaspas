@@ -48,6 +48,11 @@
         /// <summary>
         ///     invalid char
         /// </summary>
-        InvalidChar = 10
+        InvalidChar = 10,
+
+        /// <summary>
+        ///     invalid set
+        /// </summary>
+        InvalidSet = 11
     }
 }

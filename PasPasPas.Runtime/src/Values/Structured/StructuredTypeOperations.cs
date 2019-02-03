@@ -16,12 +16,33 @@ namespace PasPasPas.Runtime.Values.Structured {
         ///     create new structured type operations
         /// </summary>
         /// <param name="listPools"></param>
-        public StructuredTypeOperations(IListPools listPools) => ListPools = listPools;
+        /// <param name="booleans"></param>
+        public StructuredTypeOperations(IListPools listPools, IBooleanOperations booleans) {
+            ListPools = listPools;
+            Booleans = booleans;
+        }
 
         /// <summary>
         ///     shared list pools
         /// </summary>
         public IListPools ListPools { get; }
+
+        /// <summary>
+        ///     invalid set
+        /// </summary>
+        public ITypeReference InvalidSet { get; }
+            = new SpecialValue(SpecialConstantKind.InvalidSet);
+
+        /// <summary>
+        ///     empty set
+        /// </summary>
+        public ITypeReference EmptySet { get; }
+            = new SetValue(KnownTypeIds.GenericPointer, ImmutableArray<ITypeReference>.Empty);
+
+        /// <summary>
+        ///     boolean operations
+        /// </summary>
+        public IBooleanOperations Booleans { get; }
 
         /// <summary>
         ///     create a new array value
@@ -51,6 +72,78 @@ namespace PasPasPas.Runtime.Values.Structured {
         public ITypeReference CreateSetValue(int typeId, ImmutableArray<ITypeReference> values)
             => new SetValue(typeId, values);
 
+
+        /// <summary>
+        ///     compare for equality
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public ITypeReference Equal(ITypeReference left, ITypeReference right) {
+            if (left is SetValue leftSet && right is SetValue rightSet)
+                return Booleans.ToBoolean(SetValue.Equal(leftSet, rightSet), KnownTypeIds.BooleanType);
+            else
+                return InvalidSet;
+        }
+
+        /// <summary>
+        ///     unsupported operation
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public ITypeReference GreaterThen(ITypeReference left, ITypeReference right)
+            => InvalidSet;
+
+        /// <summary>
+        ///     check if a set is a superset of another set
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public ITypeReference GreaterThenEqual(ITypeReference left, ITypeReference right) {
+            if (left is SetValue leftSet && right is SetValue rightSet)
+                return Booleans.ToBoolean(SetValue.IsSuperset(leftSet, rightSet), KnownTypeIds.BooleanType);
+            else
+                return InvalidSet;
+        }
+
+        /// <summary>
+        ///     unsupported operation
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public ITypeReference LessThen(ITypeReference left, ITypeReference right)
+            => InvalidSet;
+
+        /// <summary>
+        ///     check if one set is a subset of another
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public ITypeReference LessThenOrEqual(ITypeReference left, ITypeReference right) {
+            if (left is SetValue leftSet && right is SetValue rightSet) {
+                return Booleans.ToBoolean(SetValue.IsSubset(leftSet, rightSet), KnownTypeIds.BooleanType);
+            }
+            else
+                return InvalidSet;
+        }
+
+        /// <summary>
+        ///     compare for inequality
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public ITypeReference NotEquals(ITypeReference left, ITypeReference right) {
+            if (left is SetValue leftSet && right is SetValue rightSet)
+                return Booleans.ToBoolean(!SetValue.Equal(leftSet, rightSet), KnownTypeIds.BooleanType);
+            else
+                return InvalidSet;
+        }
+
         /// <summary>
         ///     compute a set difference
         /// </summary>
@@ -64,6 +157,9 @@ namespace PasPasPas.Runtime.Values.Structured {
 
             if (!(right is SetValue rightSet))
                 return types.Runtime.Types.MakeErrorTypeReference();
+
+            if (leftSet.IsEmpty || rightSet.IsEmpty)
+                return left;
 
             if (!(types.ResolveAlias(left.TypeId) is ISetType leftType))
                 return types.Runtime.Types.MakeErrorTypeReference();
@@ -94,6 +190,9 @@ namespace PasPasPas.Runtime.Values.Structured {
 
             if (!(right is SetValue rightSet))
                 return typeRegistry.Runtime.Types.MakeErrorTypeReference();
+
+            if (leftSet.IsEmpty || rightSet.IsEmpty)
+                return EmptySet;
 
             var baseType = typeRegistry.GetMatchingSetBaseType(left, right, out var newType);
 
@@ -136,6 +235,12 @@ namespace PasPasPas.Runtime.Values.Structured {
 
             if (!(right is SetValue rightSet))
                 return types.Runtime.Types.MakeErrorTypeReference();
+
+            if (leftSet.IsEmpty)
+                return right;
+
+            if (rightSet.IsEmpty)
+                return left;
 
             var baseType = types.GetMatchingSetBaseType(left, right, out var newType);
 

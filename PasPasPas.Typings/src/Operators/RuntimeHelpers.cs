@@ -167,6 +167,8 @@ namespace PasPasPas.Typings.Operators {
                 return GetRelationalOperators(runtime, types, leftType, typeRef);
             }
 
+            if (right.IsSet() && left.IsSet())
+                return runtime.Structured;
 
             return default;
         }

@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
   <Class Name="PasPasPas.Runtime.Values.RuntimeValueBase" Collapsed="true">
-    <Position X="10.75" Y="0.5" Width="1.5" />
+    <Position X="13" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAABAAAAAAEAIAgAAAAAAIAAAAgAAAAAAAAAAA=</HashCode>
       <FileName>C:\Users\Bastian Turcs\source\repos\paspaspas\PasPasPas.Runtime\src\Values\RuntimeValueBase.cs</FileName>
@@ -9,7 +9,7 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="PasPasPas.Runtime.Values.BooleanValues.BooleanValueBase" Collapsed="true">
-    <Position X="6.25" Y="1.75" Width="1.5" />
+    <Position X="4" Y="1.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>IgACCAAAAAgAAAAAwAAAAAIAACIAgIAgAAAAAAQABAA=</HashCode>
       <FileName>C:\Users\Bastian Turcs\source\repos\paspaspas\PasPasPas.Runtime\src\Values\BooleanValues\BooleanValueBase.cs</FileName>
@@ -17,7 +17,7 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="PasPasPas.Runtime.Values.CharValues.CharValueBase" Collapsed="true">
-    <Position X="13" Y="1.75" Width="1.5" />
+    <Position X="19.75" Y="1.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAABBAAAAAQAAAEgAAAAAIAAAAEAIAAAAABAAAAAAA=</HashCode>
       <FileName>C:\Users\Bastian Turcs\source\repos\paspaspas\PasPasPas.Runtime\src\Values\CharValues\CharValueBase.cs</FileName>
@@ -25,7 +25,7 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="PasPasPas.Runtime.Values.FloatValues.FloatValueBase" Collapsed="true">
-    <Position X="16.5" Y="1.75" Width="1.5" />
+    <Position X="23.25" Y="1.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AjIDAAAAAQgAAAAEgAADAAAAAAAAAIAAAAAEAAQABAA=</HashCode>
       <FileName>C:\Users\Bastian Turcs\source\repos\paspaspas\PasPasPas.Runtime\src\Values\FloatValues\FloatValueBase.cs</FileName>
@@ -33,50 +33,50 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="PasPasPas.Runtime.Values.Structured.SetValue" Collapsed="true">
-    <Position X="18.75" Y="1.75" Width="1.5" />
+    <Position X="25.5" Y="1.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAgIAAAAAAAAIAAIAAAAAgAAAAAAA=</HashCode>
+      <HashCode>AABAAQAAAAAAAAAQgIAAAAAAAAIAAIAAAAAgAAAAAAA=</HashCode>
       <FileName>C:\Users\Bastian Turcs\source\repos\paspaspas\PasPasPas.Runtime\src\Values\Structured\SetValue.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="PasPasPas.Runtime.Values.BooleanValues.BooleanValue" Collapsed="true">
-    <Position X="3" Y="3.25" Width="1.5" />
+    <Position X="0.75" Y="3.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAACAAAAAAAAAAAQIAAAAIAAAAAAAAAAAAgAAAAAAA=</HashCode>
       <FileName>C:\Users\Bastian Turcs\source\repos\paspaspas\PasPasPas.Runtime\src\Values\BooleanValues\BooleanValue.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="PasPasPas.Runtime.Values.BooleanValues.ByteBooleanValue" Collapsed="true">
-    <Position X="5.25" Y="3.25" Width="1.5" />
+    <Position X="3" Y="3.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAACAAAAAAAAAAAQIAAAAIAAAAAAAAAAAAgAAAAAAA=</HashCode>
       <FileName>C:\Users\Bastian Turcs\source\repos\paspaspas\PasPasPas.Runtime\src\Values\BooleanValues\ByteBooleanValue.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="PasPasPas.Runtime.Values.BooleanValues.LongBooleanValue" Collapsed="true">
-    <Position X="7.5" Y="3.25" Width="1.5" />
+    <Position X="5.25" Y="3.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAACAAAAAAAAAAAQIAAAAIAAAAAAAAAAAAgAAAAAAA=</HashCode>
       <FileName>C:\Users\Bastian Turcs\source\repos\paspaspas\PasPasPas.Runtime\src\Values\BooleanValues\LongBooleanValue.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="PasPasPas.Runtime.Values.BooleanValues.WordBooleanValue" Collapsed="true">
-    <Position X="9.75" Y="3.25" Width="1.5" />
+    <Position X="7.5" Y="3.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAACAAAAAAAAAAAQIAAAAIAAAAAAAAAAAAgAAAAAAA=</HashCode>
       <FileName>C:\Users\Bastian Turcs\source\repos\paspaspas\PasPasPas.Runtime\src\Values\BooleanValues\WordBooleanValue.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="PasPasPas.Runtime.Values.CharValues.AnsiCharValue" Collapsed="true">
-    <Position X="12" Y="3.25" Width="1.5" />
+    <Position X="18.75" Y="3.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAIAAAAIAAAIEAIAAAAAhAAAAAAA=</HashCode>
       <FileName>C:\Users\Bastian Turcs\source\repos\paspaspas\PasPasPas.Runtime\src\Values\CharValues\AnsiCharValue.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="PasPasPas.Runtime.Values.CharValues.WideCharValue" Collapsed="true">
-    <Position X="14.25" Y="3.25" Width="1.5" />
+    <Position X="21" Y="3.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAgIAAAAIAAAIEAIAAAAAhAAAAAAA=</HashCode>
       <FileName>C:\Users\Bastian Turcs\source\repos\paspaspas\PasPasPas.Runtime\src\Values\CharValues\WideCharValue.cs</FileName>
@@ -84,11 +84,50 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="PasPasPas.Runtime.Values.FloatValues.ExtendedValue" Collapsed="true">
-    <Position X="16.5" Y="3.25" Width="1.5" />
+    <Position X="23.25" Y="3.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>ABABAAAAAAAAAAAAgIAAAAAAAAIAAKAAAAAAAAAAAAA=</HashCode>
       <FileName>C:\Users\Bastian Turcs\source\repos\paspaspas\PasPasPas.Runtime\src\Values\FloatValues\ExtendedValue.cs</FileName>
     </TypeIdentifier>
+  </Class>
+  <Class Name="PasPasPas.Runtime.Values.StringValues.StringValueBase" Collapsed="true">
+    <Position X="13" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EgACBAAAAAgQAAAEgAAAAAAAAAAAAIAAAAABAAQABAA=</HashCode>
+      <FileName>C:\Users\Bastian Turcs\source\repos\paspaspas\PasPasPas.Runtime\src\Values\StringValues\StringValueBase.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="PasPasPas.Runtime.Values.StringValues.AnsiStringValue" Collapsed="true">
+    <Position X="9.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAAAAAQAAAEAIAAAAAAAAIAAAAAAAARAAAAAAA=</HashCode>
+      <FileName>C:\Users\Bastian Turcs\source\repos\paspaspas\PasPasPas.Runtime\src\Values\StringValues\AnsiStringValue.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="PasPasPas.Runtime.Values.StringValues.EmptyStringValue" Collapsed="true">
+    <Position X="12" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAAAAAQAAAAAIAAAAAAAAIAAAAAAAABAAAAAAA=</HashCode>
+      <FileName>C:\Users\Bastian Turcs\source\repos\paspaspas\PasPasPas.Runtime\src\Values\StringValues\EmptyStringValue.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PasPasPas.Runtime.Values.StringValues.ShortStringValue" Collapsed="true">
+    <Position X="14.25" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAAAAAQAAAEAIAAAAAAAAIAAAAAAAARAAAAAAA=</HashCode>
+      <FileName>C:\Users\Bastian Turcs\source\repos\paspaspas\PasPasPas.Runtime\src\Values\StringValues\ShortStringValue.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="PasPasPas.Runtime.Values.StringValues.UnicodeStringValue" Collapsed="true">
+    <Position X="16.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAAAAAQAAAEgIAAAAAAAAIAAIAAAAARAAAAAAA=</HashCode>
+      <FileName>C:\Users\Bastian Turcs\source\repos\paspaspas\PasPasPas.Runtime\src\Values\StringValues\UnicodeStringValue.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
   </Class>
   <Font Name="Segoe UI" Size="9" />
 </ClassDiagram>

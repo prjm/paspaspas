@@ -16,7 +16,8 @@ namespace PasPasPas.Runtime.Values.StringValues {
         ///     create a new ANSI string value
         /// </summary>
         /// <param name="text"></param>
-        public AnsiStringValue(string text) {
+        /// <param name="typeId">type id</param>
+        public AnsiStringValue(int typeId, string text) : base(typeId) {
             var buffer = new StringBuilder(text.Length);
             for (var i = 0; i < text.Length; i++) {
                 var c = text[i];
@@ -24,12 +25,6 @@ namespace PasPasPas.Runtime.Values.StringValues {
             }
             data = buffer.ToString();
         }
-
-        /// <summary>
-        ///     type id
-        /// </summary>
-        public override int TypeId
-            => KnownTypeIds.AnsiStringType;
 
         /// <summary>
         ///     string data

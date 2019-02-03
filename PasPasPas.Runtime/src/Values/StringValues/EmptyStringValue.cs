@@ -1,5 +1,4 @@
 ﻿using PasPasPas.Globals.Runtime;
-using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Runtime.Values.StringValues {
 
@@ -9,10 +8,10 @@ namespace PasPasPas.Runtime.Values.StringValues {
     public class EmptyStringValue : StringValueBase {
 
         /// <summary>
-        ///     short string
+        ///     create a new empty string value
         /// </summary>
-        public override int TypeId
-            => KnownTypeIds.ShortStringType;
+        /// <param name="typeId"></param>
+        public EmptyStringValue(int typeId) : base(typeId) { }
 
         /// <summary>
         ///     get the empty string

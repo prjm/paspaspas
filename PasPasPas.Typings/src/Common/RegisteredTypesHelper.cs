@@ -416,6 +416,18 @@ namespace PasPasPas.Typings.Common {
         }
 
         /// <summary>
+        ///     check if the sets have a compatible base type
+        /// </summary>
+        /// <param name="typeRegistry"></param>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public static bool HaveSetsCommonBaseType(this ITypeRegistry typeRegistry, ITypeReference left, ITypeReference right) {
+            var baseType = typeRegistry.GetMatchingSetBaseType(left, right, out var _);
+            return baseType != KnownTypeIds.ErrorType;
+        }
+
+        /// <summary>
         ///     find a matching set base type
         /// </summary>
         /// <param name="left"></param>

@@ -6,7 +6,12 @@ namespace PasPasPas.Globals.Runtime {
     /// <summary>
     ///     operations for structured types
     /// </summary>
-    public interface IStructuredTypeOperations {
+    public interface IStructuredTypeOperations : IRelationalOperations {
+
+        /// <summary>
+        ///     empty set
+        /// </summary>
+        ITypeReference EmptySet { get; }
 
         /// <summary>
         ///     create an array value

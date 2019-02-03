@@ -24,7 +24,7 @@ namespace PasPasPas.Runtime.Values.StringValues {
         /// <param name="text"></param>
         /// <returns></returns>
         public ITypeReference ToUnicodeString(string text)
-            => new UnicodeStringValue(text);
+            => new UnicodeStringValue(KnownTypeIds.UnicodeStringType, text);
 
         /// <summary>
         ///     boolean operations
@@ -137,7 +137,7 @@ namespace PasPasPas.Runtime.Values.StringValues {
         /// <param name="text"></param>
         /// <returns></returns>
         public ITypeReference ToAnsiString(string text)
-            => new AnsiStringValue(text);
+            => new AnsiStringValue(KnownTypeIds.AnsiStringType, text);
 
         /// <summary>
         ///     get the short string value
@@ -145,13 +145,13 @@ namespace PasPasPas.Runtime.Values.StringValues {
         /// <param name="text"></param>
         /// <returns></returns>
         public ITypeReference ToShortString(string text)
-            => new ShortStringValue(text);
+            => new ShortStringValue(KnownTypeIds.ShortStringType, text);
 
         /// <summary>
         ///     get the empty string value
         /// </summary>
         /// <returns></returns>
         public ITypeReference EmptyString { get; }
-            = new EmptyStringValue();
+            = new EmptyStringValue(KnownTypeIds.UnicodeStringType);
     }
 }

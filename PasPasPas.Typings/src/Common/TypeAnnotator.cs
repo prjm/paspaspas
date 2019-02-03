@@ -821,7 +821,6 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="element"></param>
         public void EndVisit(SetExpression element) {
-            var typeId = RequireUserTypeId();
             var isConstant = true;
             var baseType = default(ITypeReference);
             var hasError = false;
@@ -895,6 +894,12 @@ namespace PasPasPas.Typings.Common {
                     return;
                 }
 
+                if (baseType == default) {
+                    element.TypeInfo = TypeRegistry.Runtime.Structured.EmptySet;
+                    return;
+                }
+
+                var typeId = RequireUserTypeId();
                 var typdef = RegisterUserDefinedType(new SetType(typeId, baseType.TypeId));
 
                 if (isConstant)

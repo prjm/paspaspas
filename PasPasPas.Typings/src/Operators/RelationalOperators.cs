@@ -1,6 +1,7 @@
 ﻿using System;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
+using PasPasPas.Typings.Common;
 
 namespace PasPasPas.Typings.Operators {
 
@@ -102,6 +103,9 @@ namespace PasPasPas.Typings.Operators {
         }
 
         private ITypeReference EvaluteGreaterThenOrEqualOperator(ITypeReference left, ITypeReference right, IRelationalOperations operations) {
+            if (left.IsSet() && right.IsSet() && !(TypeRegistry.HaveSetsCommonBaseType(left, right)))
+                return TypeRegistry.MakeReference(KnownTypeIds.ErrorType);
+
             if (left.IsConstant() && right.IsConstant())
                 return operations.GreaterThenEqual(left, right);
             else
@@ -109,6 +113,9 @@ namespace PasPasPas.Typings.Operators {
         }
 
         private ITypeReference EvaluateLessThenOrEqualOperator(ITypeReference left, ITypeReference right, IRelationalOperations operations) {
+            if (left.IsSet() && right.IsSet() && !(TypeRegistry.HaveSetsCommonBaseType(left, right)))
+                return TypeRegistry.MakeReference(KnownTypeIds.ErrorType);
+
             if (left.IsConstant() && right.IsConstant())
                 return operations.LessThenOrEqual(left, right);
             else
@@ -130,6 +137,9 @@ namespace PasPasPas.Typings.Operators {
         }
 
         private ITypeReference EvaluateNotEqualsOperator(ITypeReference left, ITypeReference right, IRelationalOperations operations) {
+            if (left.IsSet() && right.IsSet() && !(TypeRegistry.HaveSetsCommonBaseType(left, right)))
+                return TypeRegistry.MakeReference(KnownTypeIds.ErrorType);
+
             if (left.IsConstant() && right.IsConstant())
                 return operations.NotEquals(left, right);
             else
@@ -137,6 +147,9 @@ namespace PasPasPas.Typings.Operators {
         }
 
         private ITypeReference EvaluateEqualsOperator(ITypeReference left, ITypeReference right, IRelationalOperations operations) {
+            if (left.IsSet() && right.IsSet() && !(TypeRegistry.HaveSetsCommonBaseType(left, right)))
+                return TypeRegistry.MakeReference(KnownTypeIds.ErrorType);
+
             if (left.IsConstant() && right.IsConstant())
                 return operations.Equal(left, right);
             else

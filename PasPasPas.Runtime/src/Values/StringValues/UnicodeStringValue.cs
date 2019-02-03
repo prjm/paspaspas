@@ -16,14 +16,9 @@ namespace PasPasPas.Runtime.Values.StringValues {
         ///     get the Unicode string value
         /// </summary>
         /// <param name="text"></param>
-        public UnicodeStringValue(string text)
+        /// <param name="typeId">type id</param>
+        public UnicodeStringValue(int typeId, string text) : base(typeId)
             => data = text;
-
-        /// <summary>
-        ///     get the type id
-        /// </summary>
-        public override int TypeId
-            => KnownTypeIds.UnicodeStringType;
 
         /// <summary>
         ///     get the string values
