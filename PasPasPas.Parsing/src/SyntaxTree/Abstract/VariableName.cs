@@ -12,11 +12,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     get the type id for this variable
         /// </summary>
-        public ITypeReference TypeInfo =>
-                    //if (ParentItem is VariableDeclaration varDeclaration && varDeclaration.TypeInfo != null)
-                    //return varDeclaration.TypeInfo;
-                    //else
-                    null;
+        public ITypeReference TypeInfo { get; set; }
 
         /// <summary>
         ///     type id

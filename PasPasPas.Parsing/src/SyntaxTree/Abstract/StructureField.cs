@@ -19,9 +19,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         public SymbolName Name { get; set; }
 
-        /// <summary>
-        ///     visibility
-        /// </summary>
+        // <summary>
+        //     visibility
+        // </summary>
         //        public MemberVisibility Visibility
         //          => (ParentItem as StructureFields).Visibility;
 

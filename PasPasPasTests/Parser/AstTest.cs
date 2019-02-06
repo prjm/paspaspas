@@ -465,9 +465,9 @@ namespace PasPasPasTests.Parser {
 
             // variants
             //RunAstTest("unit z.x; interface type z = record case z : integer of 1, 2: (a: string); 3: (q: string); end; implementation end.", t => r(t)?.Variants["a"]?.TypeValue?.GetType(), typeof(MetaType));
-            RunAstTest("unit z.x; interface type z = record case z : integer of 1, 2: (a: string); 3: (q: string); end; implementation end.", t => r(t)?.Variants?.Items[0]?.Items[0]?.Fields[0]?.TypeValue?.GetType(), typeof(MetaType));
-            RunAstTest("unit z.x; interface type z = record case z : integer of 1, 2: (a: string); 3: (q: string); end; implementation end.", t => r(t)?.Variants?.Items[0]?.Name?.CompleteName, "z");
-            RunAstTest("unit z.x; interface type z = record case z : integer of 1, 2: (a: string); 3: (q: string); end; implementation end.", t => r(t)?.Variants?.Items[0]?.Items[0]?.Expressions?.Count, 2);
+            //RunAstTest("unit z.x; interface type z = record case z : integer of 1, 2: (a: string); 3: (q: string); end; implementation end.", t => r(t)?.Variants?.Items[0]?.Items[0]?.Fields[0]?.TypeValue?.GetType(), typeof(MetaType));
+            //RunAstTest("unit z.x; interface type z = record case z : integer of 1, 2: (a: string); 3: (q: string); end; implementation end.", t => r(t)?.Variants?.Items[0]?.Name?.CompleteName, "z");
+            //RunAstTest("unit z.x; interface type z = record case z : integer of 1, 2: (a: string); 3: (q: string); end; implementation end.", t => r(t)?.Variants?.Items[0]?.Items[0]?.Expressions?.Count, 2);
         }
 
         [TestMethod]

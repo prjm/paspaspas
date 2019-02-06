@@ -241,8 +241,10 @@ namespace PasPasPas.Typings.Common {
             if (t is MetaStructuredTypeDeclaration metaType)
                 element.TypeInfo = GetInstanceTypeById(metaType.BaseType);
 
-            foreach (var vardef in element.Names)
+            foreach (var vardef in element.Names) {
+                vardef.TypeInfo = element.TypeInfo;
                 resolver.AddToScope(vardef.Name.CompleteName, ReferenceKind.RefToVariable, vardef);
+            }
         }
 
         /// <summary>
