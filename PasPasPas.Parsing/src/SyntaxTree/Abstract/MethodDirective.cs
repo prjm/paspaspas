@@ -28,7 +28,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     create a new method directive
         /// </summary>
         public MethodDirective()
-            => Specifiers = new SyntaxPartCollection<MethodDirectiveSpecifier>(this);
+            => Specifiers = new SyntaxPartCollection<MethodDirectiveSpecifier>();
 
         /// <summary>
         ///     enumerate parts

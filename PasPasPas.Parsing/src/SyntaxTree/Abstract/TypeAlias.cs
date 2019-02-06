@@ -19,7 +19,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     create a new type alias
         /// </summary>
         public TypeAlias()
-            => Fragments = new SyntaxPartCollection<GenericNameFragment>(this);
+            => Fragments = new SyntaxPartCollection<GenericNameFragment>();
 
         /// <summary>
         ///     add a a fragment

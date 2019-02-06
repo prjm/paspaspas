@@ -43,7 +43,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     create a new assembler statement
         /// </summary>
         public AssemblerStatement()
-            => Operands = new SyntaxPartCollection<IExpression>(this);
+            => Operands = new SyntaxPartCollection<IExpression>();
 
         /// <summary>
         ///     operands

@@ -18,7 +18,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     create a new set of fields of a structured type
         /// </summary>
         public StructureFields()
-            => Fields = new SyntaxPartCollection<StructureField>(this);
+            => Fields = new SyntaxPartCollection<StructureField>();
 
         /// <summary>
         ///     enumerate all parts

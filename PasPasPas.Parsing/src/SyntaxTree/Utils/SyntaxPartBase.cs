@@ -26,11 +26,6 @@ namespace PasPasPas.Parsing.SyntaxTree {
         }
 
         /// <summary>
-        ///     parent node
-        /// </summary>
-        public ISyntaxPart ParentItem { get; set; }
-
-        /// <summary>
         ///     syntax parts
         /// </summary>
         public IEnumerable<ISyntaxPart> Parts

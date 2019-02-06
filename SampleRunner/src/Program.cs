@@ -99,7 +99,7 @@ namespace SampleRunner {
             }
             else throw new FileNotFoundException("File or path not found.", testPath);
 
-            foreach (var file in files.Take(500)) {
+            foreach (var file in files.Skip(500).Take(500)) {
 
                 switch (mode) {
 

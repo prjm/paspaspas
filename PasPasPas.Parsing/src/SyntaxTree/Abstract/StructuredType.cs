@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using PasPasPas.Parsing.SyntaxTree.Visitors;
 using PasPasPas.Parsing.SyntaxTree.Utils;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
 
@@ -49,12 +49,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     creates a new structured type
         /// </summary>
         public StructuredType() {
-            BaseTypes = new SyntaxPartCollection<ITypeSpecification>(this);
-            Variants = new StructureVariantCollection() { ParentItem = this };
-            Fields = new StructureFieldDefinitionCollection() { ParentItem = this };
-            Methods = new StructureMethodDefinitionCollection() { ParentItem = this };
-            MethodResolutions = new StructureMethodResolutionDefinition() { ParentItem = this };
-            Properties = new StructurePropertyDefinitionCollection() { ParentItem = this };
+            BaseTypes = new SyntaxPartCollection<ITypeSpecification>();
+            Variants = new StructureVariantCollection();
+            Fields = new StructureFieldDefinitionCollection();
+            Methods = new StructureMethodDefinitionCollection();
+            MethodResolutions = new StructureMethodResolutionDefinition();
+            Properties = new StructurePropertyDefinitionCollection();
         }
 
         /// <summary>

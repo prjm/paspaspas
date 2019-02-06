@@ -18,7 +18,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     create a new block of assembler statements
         /// </summary>
         public BlockOfAssemblerStatements()
-            => Statements = new SyntaxPartCollection<AssemblerStatement>(this);
+            => Statements = new SyntaxPartCollection<AssemblerStatement>();
 
         /// <summary>
         ///     parts

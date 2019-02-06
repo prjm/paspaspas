@@ -38,7 +38,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     creates a new meta type definition
         /// </summary>
         public MetaType()
-            => Fragments = new SyntaxPartCollection<GenericNameFragment>(this);
+            => Fragments = new SyntaxPartCollection<GenericNameFragment>();
 
         /// <summary>
         ///     name fragments

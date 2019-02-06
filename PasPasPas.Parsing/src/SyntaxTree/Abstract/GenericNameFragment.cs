@@ -23,7 +23,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     create a new generic name fragment
         /// </summary>
         public GenericNameFragment()
-            => TypeValues = new SyntaxPartCollection<ITypeSpecification>(this);
+            => TypeValues = new SyntaxPartCollection<ITypeSpecification>();
 
         /// <summary>
         ///     children

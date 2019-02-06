@@ -46,8 +46,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     creates a new method declaration
         /// </summary>
         public MethodDeclaration() {
-            Directives = new SyntaxPartCollection<MethodDirective>(this);
-            Parameters = new ParameterDefinitionCollection() { ParentItem = this };
+            Directives = new SyntaxPartCollection<MethodDirective>();
+            Parameters = new ParameterDefinitionCollection();
         }
 
         /// <summary>

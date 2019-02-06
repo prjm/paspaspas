@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
-using PasPasPas.Parsing.SyntaxTree.Visitors;
+﻿using System;
+using System.Collections.Generic;
 using PasPasPas.Parsing.SyntaxTree.Utils;
-using PasPasPas.Infrastructure.Utils;
-using System;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
 
@@ -12,21 +11,16 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     public abstract class AbstractSyntaxPartBase : ISyntaxPart {
 
         /// <summary>
-        ///     parent node
+        ///     symbol length
         /// </summary>
-        public ISyntaxPart ParentItem { get; set; }
+        public int Length
+            => 0;
 
         /// <summary>
         ///     child parts
         /// </summary>
         public virtual IEnumerable<ISyntaxPart> Parts
             => Array.Empty<ISyntaxPart>();
-
-        /// <summary>
-        ///     symbol length
-        /// </summary>
-        public int Length
-            => 0;
 
         /// <summary>
         ///     accept visitors

@@ -26,7 +26,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     create a new formatted expression
         /// </summary>
         public FormattedExpression()
-            => Expressions = new SyntaxPartCollection<IExpression>(this);
+            => Expressions = new SyntaxPartCollection<IExpression>();
 
         /// <summary>
         ///     parts

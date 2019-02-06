@@ -31,8 +31,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     create a new set of structure variant fields
         /// </summary>
         public StructureVariantFields() {
-            Expressions = new SyntaxPartCollection<IExpression>(this);
-            Fields = new SyntaxPartCollection<StructureFields>(this);
+            Expressions = new SyntaxPartCollection<IExpression>();
+            Fields = new SyntaxPartCollection<StructureFields>();
         }
 
         /// <summary>

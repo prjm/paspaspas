@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using PasPasPas.Parsing.SyntaxTree.Visitors;
 using PasPasPas.Parsing.SyntaxTree.Utils;
+using PasPasPas.Parsing.SyntaxTree.Visitors;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
 
@@ -31,7 +31,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     create a new structured statement
         /// </summary>
         public StructuredStatement() {
-            Expressions = new SyntaxPartCollection<IExpression>(this);
+            Expressions = new SyntaxPartCollection<IExpression>();
             Statements = new BlockOfStatements();
         }
 

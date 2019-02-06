@@ -9,16 +9,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     public class StructureField : SymbolTableEntryBase {
 
         /// <summary>
-        ///     class item
-        /// </summary>
-        public bool ClassItem {
-            get {
-                var parent = ParentItem as StructureFields;
-                return parent?.ClassItem ?? false;
-            }
-        }
-
-        /// <summary>
         ///     attributes
         /// </summary>
         public List<SymbolAttributeItem> Attributes { get; }
@@ -32,26 +22,14 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     visibility
         /// </summary>
-        public MemberVisibility Visibility
-            => (ParentItem as StructureFields).Visibility;
+        //        public MemberVisibility Visibility
+        //          => (ParentItem as StructureFields).Visibility;
 
         /// <summary>
         ///     symbol name
         /// </summary>
         protected override string InternalSymbolName
             => Name?.CompleteName;
-
-        /// <summary>
-        ///     hints
-        /// </summary>
-        public SymbolHints Hints
-            => (ParentItem as StructureFields)?.Hints;
-
-        /// <summary>
-        ///     type value
-        /// </summary>
-        public ITypeSpecification TypeValue
-            => (ParentItem as StructureFields)?.TypeValue;
 
         /// <summary>
         ///     accept visitor

@@ -23,7 +23,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     creates a new set of parameter definitions
         /// </summary>
         public ParameterTypeDefinition()
-            => Parameters = new SyntaxPartCollection<ParameterDefinition>(this);
+            => Parameters = new SyntaxPartCollection<ParameterDefinition>();
 
         /// <summary>
         ///     enumerate all parts

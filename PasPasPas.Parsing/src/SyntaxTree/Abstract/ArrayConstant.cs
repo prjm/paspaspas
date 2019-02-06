@@ -18,7 +18,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     Create a new set constant
         /// </summary>
         public ArrayConstant()
-            => Items = new SyntaxPartCollection<IExpression>(this);
+            => Items = new SyntaxPartCollection<IExpression>();
 
         /// <summary>
         ///     constant array items

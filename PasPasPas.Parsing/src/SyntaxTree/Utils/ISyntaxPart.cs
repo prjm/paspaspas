@@ -14,11 +14,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Utils {
         IEnumerable<ISyntaxPart> Parts { get; }
 
         /// <summary>
-        ///     parent syntax tree node
-        /// </summary>
-        ISyntaxPart ParentItem { get; set; }
-
-        /// <summary>
         ///     length (number of characters) of a syntax item
         /// </summary>
         int Length { get; }

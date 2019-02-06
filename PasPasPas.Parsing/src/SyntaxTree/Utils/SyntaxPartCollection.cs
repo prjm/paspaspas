@@ -6,19 +6,11 @@ using System.Linq;
 namespace PasPasPas.Parsing.SyntaxTree.Utils {
 
     /// <summary>
-    ///     collection of syntax part elemens
+    ///     collection of syntax part elements
     /// </summary>
-    /// <typeparam name="T">elemet type</typeparam>
+    /// <typeparam name="T">element type</typeparam>
     public class SyntaxPartCollection<T> : ISyntaxPartCollection<T> where T : class, ISyntaxPart {
 
-        private readonly ISyntaxPart parent;
-
-        /// <summary>
-        ///     create a new syntax part collection
-        /// </summary>
-        /// <param name="parentItem">parent item</param>
-        public SyntaxPartCollection(ISyntaxPart parentItem)
-            => parent = parentItem;
 
         private IList<T> internalList
             = null;
@@ -30,9 +22,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Utils {
             internalList == null ? 0 : internalList.Count;
 
         /// <summary>
-        ///     check if the collection is readonly
+        ///     check if the collection is read only
         /// </summary>
-        /// <remarks>returns aleways <c>false</c></remarks>
+        /// <remarks>returns always <c>false</c></remarks>
         public bool IsReadOnly =>
             false;
 
@@ -65,8 +57,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Utils {
             if (item == default(T))
                 throw new ArgumentNullException(nameof(item));
 
-            item.ParentItem = parent;
-
             if (internalList == null)
                 internalList = new List<T>();
 
@@ -79,10 +69,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Utils {
         public void Clear() {
             if (internalList == null)
                 return;
-
-            for (var index = 0; index < internalList.Count; index++) {
-                internalList[index].ParentItem = null;
-            }
 
             internalList.Clear();
         }
@@ -120,7 +106,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Utils {
 
             if (index >= 0) {
                 var itemToRemove = internalList[index];
-                itemToRemove.ParentItem = null;
                 internalList.RemoveAt(index);
                 return true;
             }

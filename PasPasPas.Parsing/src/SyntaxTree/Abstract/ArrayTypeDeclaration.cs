@@ -18,7 +18,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     create a new array type declaration
         /// </summary>
         public ArrayTypeDeclaration()
-            => IndexItems = new SyntaxPartCollection<IExpression>(this);
+            => IndexItems = new SyntaxPartCollection<IExpression>();
 
         /// <summary>
         ///     constant array items

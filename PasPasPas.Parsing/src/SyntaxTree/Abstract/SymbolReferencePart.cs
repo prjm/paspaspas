@@ -33,7 +33,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     create a new symbol reference part
         /// </summary>
         public SymbolReferencePart()
-            => Expressions = new SyntaxPartCollection<IExpression>(this);
+            => Expressions = new SyntaxPartCollection<IExpression>();
 
         /// <summary>
         ///     expression value

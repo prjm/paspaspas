@@ -18,7 +18,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     creates a ew block of statements
         /// </summary>
         public BlockOfStatements()
-            => Statements = new SyntaxPartCollection<StatementBase>(this);
+            => Statements = new SyntaxPartCollection<StatementBase>();
 
         /// <summary>
         ///     add a statement

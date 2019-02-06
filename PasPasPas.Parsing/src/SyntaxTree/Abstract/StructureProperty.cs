@@ -72,8 +72,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     create a new property of a structured type
         /// </summary>
         public StructureProperty() {
-            Accessors = new SyntaxPartCollection<StructurePropertyAccessor>(this);
-            Parameters = new ParameterDefinitionCollection() { ParentItem = this };
+            Accessors = new SyntaxPartCollection<StructurePropertyAccessor>();
+            Parameters = new ParameterDefinitionCollection();
         }
 
         /// <summary>

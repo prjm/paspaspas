@@ -32,7 +32,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     create a new record constant
         /// </summary>
         public RecordConstant()
-            => Items = new SyntaxPartCollection<IExpression>(this);
+            => Items = new SyntaxPartCollection<IExpression>();
 
         /// <summary>
         ///     accept visitor

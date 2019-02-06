@@ -35,7 +35,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     create a new variable declaration
         /// </summary>
         public VariableDeclaration()
-            => Names = new SyntaxPartCollection<VariableName>(this);
+            => Names = new SyntaxPartCollection<VariableName>();
 
         /// <summary>
         ///     enumerate part

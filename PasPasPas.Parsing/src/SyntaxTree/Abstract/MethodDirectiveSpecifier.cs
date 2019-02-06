@@ -23,7 +23,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     create a new method directive specifier
         /// </summary>
         public MethodDirectiveSpecifier()
-            => Constraints = new SyntaxPartCollection<IExpression>(this);
+            => Constraints = new SyntaxPartCollection<IExpression>();
 
         /// <summary>
         ///     values

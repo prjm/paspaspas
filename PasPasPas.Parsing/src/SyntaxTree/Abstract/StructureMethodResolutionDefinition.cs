@@ -17,7 +17,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     create a new method resolution definition of a structured type
         /// </summary>
         public StructureMethodResolutionDefinition()
-            => Resolutions = new SyntaxPartCollection<StructureMethodResolution>(this);
+            => Resolutions = new SyntaxPartCollection<StructureMethodResolution>();
 
         /// <summary>
         ///     add a method resolution

@@ -28,7 +28,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     create a new variant item of a structure
         /// </summary>
         public StructureVariantItem() =>
-            Items = new SyntaxPartCollection<StructureVariantFields>(this);
+            Items = new SyntaxPartCollection<StructureVariantFields>();
 
         /// <summary>
         ///     parts
