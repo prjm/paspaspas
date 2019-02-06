@@ -84,7 +84,7 @@ namespace PasPasPas.Infrastructure.Files {
             data.Position = offset;
             data.Length = input.Read(data.Content, index, data.Content.Length - index);
 
-            while (data.Length >= 0 && data.Length > outputSize * 2)
+            while (data.Length >= 0 && data.Length > outputSize)
                 data.Length--;
 
             index = data.Length - 1;

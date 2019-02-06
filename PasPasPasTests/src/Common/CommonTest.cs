@@ -12,6 +12,9 @@ using SharpFloat.FloatingPoint;
 
 namespace PasPasPasTests.Common {
 
+    /// <summary>
+    ///     common base class for test cases
+    /// </summary>
     public class CommonTest {
 
         /// <summary>
@@ -68,7 +71,7 @@ namespace PasPasPasTests.Common {
             => IntegerValueBase.ToScaledIntegerValue(number);
 
         /// <summary>
-        ///     make a unkown value
+        ///     make a unknown value
         /// </summary>
         /// <param name="typeId"></param>
         /// <param name="typeKind"></param>
@@ -94,13 +97,19 @@ namespace PasPasPasTests.Common {
             => MakeRuntime().Types.MakePointerValue(KnownTypeIds.UntypedPointer, address);
 
         /// <summary>
-        ///     get the Unicode string value
+        ///     get an unicode string value
         /// </summary>
         /// <param name="text"></param>
         /// <returns></returns>
         protected static ITypeReference GetUnicodeStringValue(string text)
             => MakeRuntime().Strings.ToUnicodeString(text);
 
+        /// <summary>
+        ///     get an array value
+        /// </summary>
+        /// <param name="baseTypeId"></param>
+        /// <param name="values"></param>
+        /// <returns></returns>
         protected static ITypeReference GetArrayValue(int baseTypeId, params ITypeReference[] values)
             => MakeRuntime().Structured.CreateArrayValue(9999, baseTypeId, values.ToImmutableArray());
 
@@ -189,18 +198,45 @@ namespace PasPasPasTests.Common {
                 MakeRuntime().Booleans.TrueValue :
                 MakeRuntime().Booleans.FalseValue;
 
+        /// <summary>
+        ///     get a byte sized boolean value
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         protected static ITypeReference GetByteBooleanValue(byte value)
             => MakeRuntime().Booleans.ToByteBool(value, KnownTypeIds.ByteBoolType);
 
+        /// <summary>
+        ///     get a long boolean value
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         protected static ITypeReference GetLongBooleanValue(uint value)
             => MakeRuntime().Booleans.ToLongBool(value, KnownTypeIds.LongBoolType);
 
+        /// <summary>
+        ///     get a word sized boolean value
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         protected static ITypeReference GetWordBooleanValue(ushort value)
             => MakeRuntime().Booleans.ToWordBool(value, KnownTypeIds.WordBoolType);
 
+        /// <summary>
+        ///     get a constant record value
+        /// </summary>
+        /// <param name="typeId"></param>
+        /// <param name="values"></param>
+        /// <returns></returns>
         protected static ITypeReference GetRecordValue(int typeId, params ITypeReference[] values)
             => MakeRuntime().Structured.CreateRecordValue(typeId, values.ToImmutableArray());
 
+        /// <summary>
+        ///     get a set value
+        /// </summary>
+        /// <param name="typeId"></param>
+        /// <param name="values"></param>
+        /// <returns></returns>
         protected static ITypeReference GetSetValue(int typeId, params ITypeReference[] values)
             => MakeRuntime().Structured.CreateSetValue(typeId, values.ToImmutableArray());
 

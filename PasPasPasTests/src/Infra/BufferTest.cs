@@ -8,7 +8,7 @@ namespace PasPasPasTests.Infra {
     public class BufferTest {
 
         private readonly string[] utf8Samples = new string[] {
-            //"1234567890",
+            "1234567890",
             "κόσμε",
         };
 
@@ -124,15 +124,15 @@ namespace PasPasPasTests.Infra {
 
         [TestMethod]
         public void TestUtf8StreamSource() {
-            for (var inputBufferSize = 2; inputBufferSize < 20; inputBufferSize++) {
-                for (var outputBufferSize = 4; outputBufferSize < 20; outputBufferSize++) {
+            for (var inputBufferSize = 5; inputBufferSize < 20; inputBufferSize++) {
+                for (var outputBufferSize = 2; outputBufferSize < 20; outputBufferSize++) {
                     foreach (var data in utf8Samples) {
                         var bytes = Encoding.UTF8.GetBytes(data);
                         var read = new char[data.Length];
                         var chr = new char[inputBufferSize];
 
                         using (var stream = new MemoryStream(bytes))
-                        using (var source = new Utf8StreamBufferSource(stream, outputBufferSize, 2)) {
+                        using (var source = new Utf8StreamBufferSource(stream, inputBufferSize, outputBufferSize)) {
                             var idx = 0L;
                             while (idx < source.Length) {
                                 var l = source.GetContent(chr, chr.Length, idx);
