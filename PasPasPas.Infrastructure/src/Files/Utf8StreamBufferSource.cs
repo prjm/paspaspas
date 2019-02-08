@@ -84,26 +84,28 @@ namespace PasPasPas.Infrastructure.Files {
             data.Position = offset;
             data.Length = input.Read(data.Content, index, data.Content.Length - index);
 
-            while (data.Length >= 0 && data.Length > outputSize)
-                data.Length--;
-
-            index = data.Length - 1;
-            while (index >= 0 && (data.Content[index] & 0xC0) == 0x80)
-                index--;
-
-            if (index >= 0 && (data.Content[index] & 0xF0) == 0xF0 && index + 4 > data.Length)
-                data.Length = index;
-            else if (index >= 0 && (data.Content[index] & 0xE0) == 0xE0 && index + 3 > data.Length)
-                data.Length = index;
-            else if (index >= 0 && (data.Content[index] & 0xC0) == 0xC0 && index + 2 > data.Length)
-                data.Length = index;
-
+            var count = 0;
             index = 0;
             while ((data.Content[index] & 0xC0) == 0x80 && index <= data.Length)
                 index++;
-
             data.StartIndex += index;
-            data.Length -= index;
+
+            while (count < outputSize && index < data.Length) {
+
+                count++;
+
+                if (data.Content[index] < 0xC0)
+                    index++;
+                else if (data.Content[index] < 0xE0)
+                    index += 2;
+                else if (data.Content[index] < 0xF0)
+                    index += 3;
+                else
+                    index += 4;
+
+                if (index < data.Length)
+                    data.Length = index;
+            }
         }
 
         private void MoveToPreviousPart() {

@@ -124,8 +124,8 @@ namespace PasPasPasTests.Infra {
 
         [TestMethod]
         public void TestUtf8StreamSource() {
-            for (var inputBufferSize = 5; inputBufferSize < 20; inputBufferSize++) {
-                for (var outputBufferSize = 2; outputBufferSize < 20; outputBufferSize++) {
+            for (var inputBufferSize = 4; inputBufferSize < 20; inputBufferSize++) {
+                for (var outputBufferSize = 4; outputBufferSize < 20; outputBufferSize++) {
                     foreach (var data in utf8Samples) {
                         var bytes = Encoding.UTF8.GetBytes(data);
                         var read = new char[data.Length];
