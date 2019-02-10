@@ -171,7 +171,7 @@ namespace PasPasPas.Parsing.Tokenizer.LiteralValues {
             for (var i = 0; i < input.Length; i++) {
                 var value = GetValueOfChar(input[input.Length - 1 - i], allowHex);
 
-                if (i > 19 || (allowHex && i > 16)) {
+                if (i > 19 || (allowHex && i >= 16)) {
                     return constants.Integers.Overflow;
                 }
 

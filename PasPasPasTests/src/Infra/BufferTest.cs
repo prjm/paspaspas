@@ -129,7 +129,7 @@ namespace PasPasPasTests.Infra {
                     foreach (var data in utf8Samples) {
                         var bytes = Encoding.UTF8.GetBytes(data);
                         var read = new char[data.Length];
-                        var chr = new char[inputBufferSize];
+                        var chr = new char[outputBufferSize];
 
                         using (var stream = new MemoryStream(bytes))
                         using (var source = new Utf8StreamBufferSource(stream, inputBufferSize, outputBufferSize)) {

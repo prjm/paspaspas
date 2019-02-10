@@ -21,9 +21,9 @@ namespace SampleRunner {
 
         private static void Main() {
 
-            //var testPath = @"C:\temp\Testfiles\Spring.pas";
-            var testPath = @"C:\temp\Testfiles\all";
-            var mode = SampleMode.FindConstants;
+            var testPath = @"C:\temp\Testfiles\Spring.pas";
+            //var testPath = @"C:\temp\Testfiles\all";
+            var mode = SampleMode.ReadFile;
             var repeat = 1;
             var result = System.Console.Out;
             var environment = new DefaultEnvironment();
@@ -99,7 +99,7 @@ namespace SampleRunner {
             }
             else throw new FileNotFoundException("File or path not found.", testPath);
 
-            foreach (var file in files.Skip(500).Take(500)) {
+            foreach (var file in files.Take(500)) {
 
                 switch (mode) {
 

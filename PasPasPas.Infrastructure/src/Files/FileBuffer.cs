@@ -88,11 +88,10 @@ namespace PasPasPas.Infrastructure.Files {
         /// </summary>
         public long Position {
             get => position;
-            set {
-                if (value < -1 || value > source.Length - 1)
-                    return;
 
-                Seek(value - position);
+            set {
+                if (value >= -1 && value <= source.Length - 1)
+                    Seek(value - position);
             }
         }
 

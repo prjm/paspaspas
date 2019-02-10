@@ -43,6 +43,7 @@ namespace PasPasPas.Infrastructure.Files {
         private readonly int outputSize;
         private long charPosition;
         private int bufferIndex;
+        private readonly long inputLength;
         private StreamData prev;
         private StreamData current;
         private StreamData next;
@@ -57,6 +58,7 @@ namespace PasPasPas.Infrastructure.Files {
         /// <param name="outputBufferSize"></param>
         public Utf8StreamBufferSource(Stream inputStream, int inputBufferSize, int outputBufferSize) {
             input = inputStream ?? throw new System.ArgumentNullException(nameof(inputStream));
+            inputLength = input.Length;
             outputSize = outputBufferSize;
             var size = inputBufferSize - (inputBufferSize % 4);
 
@@ -90,7 +92,7 @@ namespace PasPasPas.Infrastructure.Files {
                 index++;
             data.StartIndex += index;
 
-            while (count < outputSize && index < data.Length) {
+            while (count < outputSize && index < data.Content.Length && (index + offset) < inputLength) {
 
                 count++;
 
@@ -103,8 +105,8 @@ namespace PasPasPas.Infrastructure.Files {
                 else
                     index += 4;
 
-                if (index < data.Length)
-                    data.Length = index;
+                if (index < data.Content.Length)
+                    data.Length = index - data.StartIndex;
             }
         }
 
@@ -160,7 +162,7 @@ namespace PasPasPas.Infrastructure.Files {
 
             while (charPosition != offset) {
 
-                if (bufferIndex + 1 >= current.Length && current.Position + current.Length >= input.Length) {
+                if (bufferIndex + 1 >= current.Length && current.Position + current.Length >= inputLength) {
                     length = charPosition + 1;
                     break;
                 }
