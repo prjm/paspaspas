@@ -21,7 +21,7 @@ namespace SampleRunner {
 
         private static void Main() {
 
-            var testPath = @"C:\temp\Testfiles\Spring.pas";
+            var testPath = @"C:\temp\Testfiles\2.pas";
             //var testPath = @"C:\temp\Testfiles\all";
             var mode = SampleMode.ReadFile;
             var repeat = 1;

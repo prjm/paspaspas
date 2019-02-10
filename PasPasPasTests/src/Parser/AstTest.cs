@@ -318,10 +318,9 @@ namespace PasPasPasTests.Parser {
             RunAstTest("unit z.x; interface implementation initialization begin end end.", t => u(t)?.Statements[0]?.GetType(), typeof(BlockOfStatements));
         }
 
-        /*
         [TestMethod]
         public void TestVarDeclaration() {
-            VariableDeclaration f(object t) => ((t as CompilationUnit)?.ImplementationSymbols["x"]?.ParentItem as VariableDeclaration);
+            VariableDeclaration f(object t) => (((t as CompilationUnit)?.ImplementationSymbols["x"] as VariableName)?.Declaration);
 
             RunAstTest("unit z.x; interface implementation var x: string; end.", t => f(t)?.Names[0]?.Name.CompleteName, "x");
             RunAstTest("unit z.x; interface implementation var x: string; end.", t => f(t)?.Mode, DeclarationMode.Var);
@@ -333,44 +332,43 @@ namespace PasPasPasTests.Parser {
             RunAstTest("unit z.x; interface implementation var x: string = nil; end.", t => f(t)?.Value?.GetType(), typeof(ConstantValue));
             RunAstTest("unit z.x; interface implementation var x: string absolute 5; end.", t => f(t)?.ValueKind, VariableValueKind.Absolute);
         }
-        */
 
         [TestMethod]
         public void TestExportedProcedureHeading() {
             GlobalMethod f(object t) => ((t as CompilationUnit)?.InterfaceSymbols["e"] as GlobalMethod);
 
-            RunAstTest("unit z.x; interface type procedure e(); implementation end.", t => f(t)?.Name?.CompleteName, "e");
-            RunAstTest("unit z.x; interface type procedure e(); implementation end.", t => f(t)?.Kind, ProcedureKind.Procedure);
-            RunAstTest("unit z.x; interface type function e(): string; implementation end.", t => f(t)?.Name?.CompleteName, "e");
-            RunAstTest("unit z.x; interface type function e(): string; implementation end.", t => f(t)?.Kind, ProcedureKind.Function);
-            //BOGUS: RunAstTest("unit z.x; interface type [a] procedure e(); implementation end.", t => f(t)?.Attributes[0]?.Name?.CompleteName, "a");
+            RunAstTest("unit z.x; interface procedure e(); implementation end.", t => f(t)?.Name?.CompleteName, "e");
+            RunAstTest("unit z.x; interface procedure e(); implementation end.", t => f(t)?.Kind, ProcedureKind.Procedure);
+            RunAstTest("unit z.x; interface function e(): string; implementation end.", t => f(t)?.Name?.CompleteName, "e");
+            RunAstTest("unit z.x; interface function e(): string; implementation end.", t => f(t)?.Kind, ProcedureKind.Function);
+            RunAstTest("unit z.x; interface [a] procedure e(); implementation end.", t => f(t)?.Attributes[0]?.Name?.CompleteName, "a");
 
-            RunAstTest("unit z.x; interface type function e(): string; implementation end.", t => f(t)?.TypeValue?.GetType(), typeof(MetaType));
-            RunAstTest("unit z.x; interface type procedure e(e: string); implementation end.", t => f(t)?.Parameters["e"]?.Name?.CompleteName, "e");
-            //RunAstTest("unit z.x; interface type procedure e(e: string); implementation end.", t => (f(t)?.Parameters["e"]?.ParentItem as ParameterTypeDefinition)?.TypeValue?.GetType(), typeof(MetaType));
+            RunAstTest("unit z.x; interface function e(): string; implementation end.", t => f(t)?.TypeValue?.GetType(), typeof(MetaType));
+            RunAstTest("unit z.x; interface procedure e(e: string); implementation end.", t => f(t)?.Parameters["e"]?.Name?.CompleteName, "e");
+            RunAstTest("unit z.x; interface procedure e(e: string); implementation end.", t => (f(t)?.Parameters["e"]?.ParameterType)?.TypeValue?.GetType(), typeof(MetaType));
 
-            RunAstTest("unit z.x; interface type procedure e(e: string); overload; implementation end.", t => f(t)?.Directives[0]?.Kind, MethodDirectiveKind.Overload);
-            RunAstTest("unit z.x; interface type procedure e(e: string); inline; implementation end.", t => f(t)?.Directives[0]?.Kind, MethodDirectiveKind.Inline);
-            RunAstTest("unit z.x; interface type procedure e(e: string); assembler; implementation end.", t => f(t)?.Directives[0]?.Kind, MethodDirectiveKind.Assembler);
-            RunAstTest("unit z.x; interface type procedure e(e: string); cdecl; implementation end.", t => f(t)?.Directives[0]?.Kind, MethodDirectiveKind.Cdecl);
-            RunAstTest("unit z.x; interface type procedure e(e: string); pascal; implementation end.", t => f(t)?.Directives[0]?.Kind, MethodDirectiveKind.Pascal);
-            RunAstTest("unit z.x; interface type procedure e(e: string); register; implementation end.", t => f(t)?.Directives[0]?.Kind, MethodDirectiveKind.Register);
-            RunAstTest("unit z.x; interface type procedure e(e: string); safecall; implementation end.", t => f(t)?.Directives[0]?.Kind, MethodDirectiveKind.Safecall);
-            RunAstTest("unit z.x; interface type procedure e(e: string); stdcall; implementation end.", t => f(t)?.Directives[0]?.Kind, MethodDirectiveKind.StdCall);
-            RunAstTest("unit z.x; interface type procedure e(e: string); export; implementation end.", t => f(t)?.Directives[0]?.Kind, MethodDirectiveKind.Export);
-            RunAstTest("unit z.x; interface type procedure e(e: string); far; implementation end.", t => f(t)?.Directives[0]?.Kind, MethodDirectiveKind.Far);
-            RunAstTest("unit z.x; interface type procedure e(e: string); near; implementation end.", t => f(t)?.Directives[0]?.Kind, MethodDirectiveKind.Near);
-            RunAstTest("unit z.x; interface type procedure e(e: string); local; implementation end.", t => f(t)?.Directives[0]?.Kind, MethodDirectiveKind.Local);
-            RunAstTest("unit z.x; interface type procedure e(e: string); deprecated; implementation end.", t => f(t)?.Hints?.SymbolIsDeprecated, true);
-            RunAstTest("unit z.x; interface type procedure e(e: string); experimental; implementation end.", t => f(t)?.Hints?.SymbolIsExperimental, true);
-            RunAstTest("unit z.x; interface type procedure e(e: string); varargs; implementation end.", t => f(t)?.Directives[0]?.Kind, MethodDirectiveKind.VarArgs);
-            RunAstTest("unit z.x; interface type procedure e(e: string); external 'e'; implementation end.", t => f(t)?.Directives[0]?.Kind, MethodDirectiveKind.External);
-            RunAstTest("unit z.x; interface type procedure e(e: string); external 'e' name 'e'; implementation end.", t => f(t)?.Directives[0]?.Specifiers[0]?.Kind, MethodDirectiveSpecifierKind.Name);
-            RunAstTest("unit z.x; interface type procedure e(e: string); external 'e' index 'e'; implementation end.", t => f(t)?.Directives[0]?.Specifiers[0]?.Kind, MethodDirectiveSpecifierKind.Index);
-            RunAstTest("unit z.x; interface type procedure e(e: string); external 'e' delayed; implementation end.", t => f(t)?.Directives[0]?.Specifiers[0]?.Kind, MethodDirectiveSpecifierKind.Delayed);
-            RunAstTest("unit z.x; interface type procedure e(e: string); external 'e' dependency 'a', 'b'; implementation end.", t => f(t)?.Directives[0]?.Specifiers[0]?.Kind, MethodDirectiveSpecifierKind.Dependency);
-            RunAstTest("unit z.x; interface type procedure e(e: string); forward; implementation end.", t => f(t)?.Directives[0]?.Kind, MethodDirectiveKind.Forward);
-            RunAstTest("unit z.x; interface type procedure e(e: string); unsafe; implementation end.", t => f(t)?.Directives[0]?.Kind, MethodDirectiveKind.Unsafe);
+            RunAstTest("unit z.x; interface procedure e(e: string); overload; implementation end.", t => f(t)?.Directives[0]?.Kind, MethodDirectiveKind.Overload);
+            RunAstTest("unit z.x; interface procedure e(e: string); inline; implementation end.", t => f(t)?.Directives[0]?.Kind, MethodDirectiveKind.Inline);
+            RunAstTest("unit z.x; interface procedure e(e: string); assembler; implementation end.", t => f(t)?.Directives[0]?.Kind, MethodDirectiveKind.Assembler);
+            RunAstTest("unit z.x; interface procedure e(e: string); cdecl; implementation end.", t => f(t)?.Directives[0]?.Kind, MethodDirectiveKind.Cdecl);
+            RunAstTest("unit z.x; interface procedure e(e: string); pascal; implementation end.", t => f(t)?.Directives[0]?.Kind, MethodDirectiveKind.Pascal);
+            RunAstTest("unit z.x; interface procedure e(e: string); register; implementation end.", t => f(t)?.Directives[0]?.Kind, MethodDirectiveKind.Register);
+            RunAstTest("unit z.x; interface procedure e(e: string); safecall; implementation end.", t => f(t)?.Directives[0]?.Kind, MethodDirectiveKind.Safecall);
+            RunAstTest("unit z.x; interface procedure e(e: string); stdcall; implementation end.", t => f(t)?.Directives[0]?.Kind, MethodDirectiveKind.StdCall);
+            RunAstTest("unit z.x; interface procedure e(e: string); export; implementation end.", t => f(t)?.Directives[0]?.Kind, MethodDirectiveKind.Export);
+            RunAstTest("unit z.x; interface procedure e(e: string); far; implementation end.", t => f(t)?.Directives[0]?.Kind, MethodDirectiveKind.Far);
+            RunAstTest("unit z.x; interface procedure e(e: string); near; implementation end.", t => f(t)?.Directives[0]?.Kind, MethodDirectiveKind.Near);
+            RunAstTest("unit z.x; interface procedure e(e: string); local; implementation end.", t => f(t)?.Directives[0]?.Kind, MethodDirectiveKind.Local);
+            RunAstTest("unit z.x; interface procedure e(e: string); deprecated; implementation end.", t => f(t)?.Hints?.SymbolIsDeprecated, true);
+            RunAstTest("unit z.x; interface procedure e(e: string); experimental; implementation end.", t => f(t)?.Hints?.SymbolIsExperimental, true);
+            RunAstTest("unit z.x; interface procedure e(e: string); varargs; implementation end.", t => f(t)?.Directives[0]?.Kind, MethodDirectiveKind.VarArgs);
+            RunAstTest("unit z.x; interface procedure e(e: string); external 'e'; implementation end.", t => f(t)?.Directives[0]?.Kind, MethodDirectiveKind.External);
+            RunAstTest("unit z.x; interface procedure e(e: string); external 'e' name 'e'; implementation end.", t => f(t)?.Directives[0]?.Specifiers[0]?.Kind, MethodDirectiveSpecifierKind.Name);
+            RunAstTest("unit z.x; interface procedure e(e: string); external 'e' index 'e'; implementation end.", t => f(t)?.Directives[0]?.Specifiers[0]?.Kind, MethodDirectiveSpecifierKind.Index);
+            RunAstTest("unit z.x; interface procedure e(e: string); external 'e' delayed; implementation end.", t => f(t)?.Directives[0]?.Specifiers[0]?.Kind, MethodDirectiveSpecifierKind.Delayed);
+            RunAstTest("unit z.x; interface procedure e(e: string); external 'e' dependency 'a', 'b'; implementation end.", t => f(t)?.Directives[0]?.Specifiers[0]?.Kind, MethodDirectiveSpecifierKind.Dependency);
+            RunAstTest("unit z.x; interface procedure e(e: string); forward; implementation end.", t => f(t)?.Directives[0]?.Kind, MethodDirectiveKind.Forward);
+            RunAstTest("unit z.x; interface procedure e(e: string); unsafe; implementation end.", t => f(t)?.Directives[0]?.Kind, MethodDirectiveKind.Unsafe);
         }
 
         [TestMethod]

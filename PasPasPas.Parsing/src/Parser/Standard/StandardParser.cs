@@ -325,6 +325,9 @@ namespace PasPasPas.Parsing.Parser.Standard {
         [Rule("InterfaceDeclarationItem", "ConstSection | TypeSection | VarSection | ExportsSection | AssemblyAttribute | ExportedProcedureHeading")]
         private SyntaxPartBase ParseInterfaceDeclarationItem() {
 
+            if (Match(TokenKind.OpenBraces) && LookAhead(1, TokenKind.Assembly))
+                return ParseAttributes();
+
             if (Match(TokenKind.Const) || Match(TokenKind.Resourcestring))
                 return ParseConstSection(false);
 
@@ -337,13 +340,10 @@ namespace PasPasPas.Parsing.Parser.Standard {
             if (Match(TokenKind.Exports))
                 return ParseExportsSection();
 
-            if (Match(TokenKind.OpenBraces) && LookAhead(1, TokenKind.Assembly))
-                return ParseAttributes();
-
-            if (Match(TokenKind.Procedure, TokenKind.Function))
+            if (Match(TokenKind.Procedure, TokenKind.Function) || Match(TokenKind.OpenBraces))
                 return ParseExportedProcedureHeading();
 
-            return null;
+            return default;
         }
 
         #endregion
@@ -377,7 +377,17 @@ namespace PasPasPas.Parsing.Parser.Standard {
 
         [Rule("ExportedProcedureHeading", "")]
         public ExportedProcedureHeadingSymbol ParseExportedProcedureHeading() {
+
+            var attributes = default(UserAttributesSymbol);
+            if (Match(TokenKind.OpenBraces))
+                attributes = ParseAttributes();
+
             var procSymbol = ContinueWith(TokenKind.Function, TokenKind.Procedure);
+            if (procSymbol == default) {
+                ErrorMissingToken(TokenKind.Function, TokenKind.Procedure);
+                return default;
+            }
+
             var name = RequireIdentifier();
             var parameters = default(FormalParameterSection);
             var colonSymbol = default(Terminal);
@@ -399,7 +409,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
             semicolon = ContinueWithOrMissing(TokenKind.Semicolon);
             directives = ParseFunctionDirectives();
 
-            return new ExportedProcedureHeadingSymbol(procSymbol, name, parameters, colonSymbol, resultAttributes, resultType, semicolon, directives);
+            return new ExportedProcedureHeadingSymbol(attributes, procSymbol, name, parameters, colonSymbol, resultAttributes, resultType, semicolon, directives);
         }
 
         #endregion
@@ -839,8 +849,12 @@ namespace PasPasPas.Parsing.Parser.Standard {
         [Rule("ExceptHandler", "'on' Identifier ':' NamespaceName 'do' Statement ';'")]
         public ExceptHandlerSymbol ParseExceptHandler() {
             var on = ContinueWithOrMissing(TokenKind.On);
-            var name = RequireIdentifier();
-            var colon = ContinueWithOrMissing(TokenKind.Colon);
+            var name = default(IdentifierSymbol);
+            var colon = default(Terminal);
+            if (LookAhead(1, TokenKind.Colon)) {
+                name = RequireIdentifier();
+                colon = ContinueWithOrMissing(TokenKind.Colon);
+            }
             var type = ParseTypeName();
             var doSymbol = ContinueWithOrMissing(TokenKind.Do);
             var statement = ParseStatement();
@@ -2648,7 +2662,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
             using (var list = GetList<RecordItemSymbol>()) {
                 var mode = RecordDeclarationMode.Fields;
 
-                while ((!Match(TokenKind.End)) && (mode != RecordDeclarationMode.Undefined)) {
+                while ((!Match(TokenKind.End)) && (mode != RecordDeclarationMode.Undefined) && !Tokenizer.AtEof) {
                     AddToList(list, ParseRecordItem(ref mode));
 
                     if (mode == RecordDeclarationMode.Undefined && list.Item.Count > 0) {
@@ -2768,7 +2782,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
                     else
                         item = AddToList(list, ParseRecordVariant());
 
-                } while (item != default && item.Semicolon != default);
+                } while (item != default && item.Semicolon != default && !Tokenizer.AtEof);
 
                 return new RecordVariantSectionSymbol(caseSymbol, variantName, colonSymbol, typeDeclaration, ofSymbol, GetFixedArray(list));
             }
@@ -2882,7 +2896,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
             using (var list = GetList<RecordHelperItemSymbol>()) {
                 var mode = RecordDeclarationMode.Fields;
 
-                while ((!Match(TokenKind.End, TokenKind.Undefined)) && (mode != RecordDeclarationMode.Undefined)) {
+                while ((!Match(TokenKind.End, TokenKind.Undefined)) && (mode != RecordDeclarationMode.Undefined) && !Tokenizer.AtEof) {
                     AddToList(list, ParseRecordHelperItem(ref mode));
                     if (mode == RecordDeclarationMode.Undefined) {
                         Unexpected();
@@ -3012,7 +3026,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
                 var mode = ClassDeclarationMode.Fields;
                 var item = default(ObjectItem);
 
-                while ((!Match(TokenKind.End)) && (mode != ClassDeclarationMode.Undefined)) {
+                while ((!Match(TokenKind.End)) && (mode != ClassDeclarationMode.Undefined) && !Tokenizer.AtEof) {
                     item = AddToList(list, ParseObjectItem(ref mode));
                     if (mode == ClassDeclarationMode.Undefined) {
                         Unexpected();
@@ -3343,7 +3357,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
 
             var mode = ClassDeclarationMode.Fields;
             using (var list = GetList<ClassDeclarationItemSymbol>()) {
-                while ((!Match(TokenKind.End)) && (mode != ClassDeclarationMode.Undefined)) {
+                while ((!Match(TokenKind.End)) && (mode != ClassDeclarationMode.Undefined) && !Tokenizer.AtEof) {
 
                     AddToList(list, ParseClassDeclarationItem(ref mode));
 

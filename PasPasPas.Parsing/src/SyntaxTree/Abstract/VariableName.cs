@@ -21,6 +21,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
             => TypeInfo != null ? TypeInfo.TypeId : KnownTypeIds.ErrorType;
 
         /// <summary>
+        ///     parent declaration
+        /// </summary>
+        public VariableDeclaration Declaration { get; set; }
+
+        /// <summary>
         ///     accept visitor
         /// </summary>
         /// <param name="visitor">node visitor</param>

@@ -16,7 +16,7 @@ namespace PasPasPas.Infrastructure.Files {
             => Content = ArrayPool<char>.Shared.Rent(bufferSize);
 
         /// <summary>
-        ///     dispose this file buffer
+        ///     dispose this file buffer and return the array to the pool
         /// </summary>
         /// <param name="disposing"></param>
         private void Dispose(bool disposing) {

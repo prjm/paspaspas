@@ -25,6 +25,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         public ParameterReferenceKind ParameterKind { get; set; }
 
         /// <summary>
+        ///     parameter type
+        /// </summary>
+        public ParameterTypeDefinition ParameterType { get; set; }
+
+        /// <summary>
         ///     symbol name
         /// </summary>
         protected override string InternalSymbolName

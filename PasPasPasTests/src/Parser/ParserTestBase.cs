@@ -135,7 +135,7 @@ namespace PasPasPasTests.Parser {
             return tree;
         }
 
-        protected T RunCstTest<T>(Func<StandardParser, T> tester, string tokens = "") {
+        protected T RunCstTest<T>(Func<StandardParser, T> tester, string tokens = "", params Guid[] errorMessages) {
             var env = CreateEnvironment();
             var msgs = new List<ILogMessage>();
             var log = new LogTarget();
@@ -161,6 +161,15 @@ namespace PasPasPasTests.Parser {
                 Assert.IsNotNull(standard);
                 var value = tester(standard);
                 Assert.IsNotNull(value);
+
+                if (errorMessages.Length < 1) {
+                    Assert.AreEqual(string.Empty, errorText);
+                    Assert.IsFalse(hasError);
+                }
+                Assert.AreEqual(errorMessages.Length, msgs.Count);
+                foreach (var guid in errorMessages)
+                    Assert.IsTrue(msgs.Where(t => t.MessageID == guid).Any());
+
                 return value;
             }
         }

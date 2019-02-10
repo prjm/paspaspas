@@ -450,6 +450,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                     var name = new VariableName();
                     InitNode(name, child);
                     name.Name = ExtractSymbolName(ident);
+                    name.Declaration = declaration;
                     declaration.Names.Add(name);
                     symbols.Symbols.Add(name, LogSource);
                     visitor.WorkingStack.Pop();
@@ -1143,11 +1144,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         /// </summary>
         /// <param name="element"></param>
         public void StartVisit(FormalParameterDefinitionSymbol element) {
-            var paramterTarget = LastValue as IParameterTarget;
+            var parameterTarget = LastValue as IParameterTarget;
             var result = new ParameterTypeDefinition();
             InitNode(result, element);
-            paramterTarget.Parameters.Items.Add(result);
-            CurrentParameterList[result] = paramterTarget;
+            parameterTarget.Parameters.Items.Add(result);
+            CurrentParameterList[result] = parameterTarget;
         }
 
         /// <summary>
@@ -1172,6 +1173,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             InitNode(result, element);
             var allParams = CurrentParameterList[typeDefinition];
             result.Name = ExtractSymbolName(element.ParameterName);
+            result.ParameterType = typeDefinition;
             ExtractAttributes(element.Attributes1 as UserAttributesSymbol, CurrentUnit, result.Attributes);
             ExtractAttributes(element.Attributes2 as UserAttributesSymbol, CurrentUnit, result.Attributes);
             result.ParameterKind = TokenKindMapper.ForParameterReferenceKind(element.Kind);
