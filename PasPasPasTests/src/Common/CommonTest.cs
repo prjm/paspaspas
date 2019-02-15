@@ -107,11 +107,12 @@ namespace PasPasPasTests.Common {
         /// <summary>
         ///     get an array value
         /// </summary>
+        /// <param name="typeId">base type id</param>
         /// <param name="baseTypeId"></param>
         /// <param name="values"></param>
         /// <returns></returns>
-        protected static ITypeReference GetArrayValue(int baseTypeId, params ITypeReference[] values)
-            => MakeRuntime().Structured.CreateArrayValue(9999, baseTypeId, values.ToImmutableArray());
+        protected static ITypeReference GetArrayValue(int typeId, int baseTypeId, params ITypeReference[] values)
+            => MakeRuntime().Structured.CreateArrayValue(typeId, baseTypeId, values.ToImmutableArray());
 
         /// <summary>
         ///     get the ANSI string value

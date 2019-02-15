@@ -34,7 +34,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
             set => Items.Add(value);
         }
 
-
         /// <summary>
         ///     accept visitor
         /// </summary>

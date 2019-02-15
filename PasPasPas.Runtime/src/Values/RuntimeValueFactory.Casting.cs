@@ -43,7 +43,7 @@ namespace PasPasPas.Runtime.Values {
             if (typeKind.IsArray())
                 return CastArray(types, value, typeId);
 
-            if (typeKind == CommonTypeKind.EnumerationType)
+            if (typeKind.IsEnum())
                 return CastEnum(types, value, typeId);
 
             if (typeKind.IsSubrange() && types.GetTypeByIdOrUndefinedType(typeId) is ISubrangeType subrangeType)
@@ -54,6 +54,9 @@ namespace PasPasPas.Runtime.Values {
 
             if (typeKind == CommonTypeKind.SetType)
                 return CastSet(types, value, typeId);
+
+            if (typeKind == CommonTypeKind.RecordType)
+                return CastRecord(types, value, typeId);
 
             return Types.MakeErrorTypeReference();
         }
@@ -315,10 +318,10 @@ namespace PasPasPas.Runtime.Values {
                     using (var values = ListPools.GetList<ITypeReference>()) {
 
                         foreach (var itemValue in array.Values) {
-                            values.Item.Add(Cast(types, itemValue, array.BaseType));
+                            values.Item.Add(Cast(types, itemValue, newBaseType.TypeId));
                         }
 
-                        var castedValue = new ArrayValue(arrayType.TypeId, arrayType.BaseTypeId, ListPools.GetFixedArray(values));
+                        var castedValue = new ArrayValue(typeId, newBaseType.TypeId, ListPools.GetFixedArray(values));
                         return castedValue;
                     }
                 }
@@ -327,5 +330,22 @@ namespace PasPasPas.Runtime.Values {
 
             return Types.MakeErrorTypeReference();
         }
+
+        private ITypeReference CastRecord(ITypeRegistry types, ITypeReference value, int typeId) {
+            var typeDef = types.GetTypeByIdOrUndefinedType(typeId);
+            typeDef = TypeBase.ResolveAlias(typeDef);
+
+            if (!(typeDef is StructuredTypeDeclaration structType) || !types.AreRecordTypesCompatible(value.TypeId, typeId) || !(value is RecordValue record))
+                return types.Runtime.Types.MakeErrorTypeReference();
+
+            using (var list = ListPools.GetList<ITypeReference>()) {
+
+                for (var i = 0; i < record.Values.Length; i++)
+                    list.Add(Cast(types, record.Values[i], structType.Fields[i].TypeId));
+
+                return types.Runtime.Structured.CreateRecordValue(typeId, ListPools.GetFixedArray(list));
+            }
+        }
+
     }
 }

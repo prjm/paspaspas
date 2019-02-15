@@ -1,5 +1,6 @@
 ﻿using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
+using PasPasPas.Typings.Common;
 using PasPasPas.Typings.Simple;
 using PasPasPas.Typings.Structured;
 using PasPasPasTests.Common;
@@ -59,7 +60,7 @@ namespace PasPasPasTests.Types {
 
         [TestMethod]
         public void TestConstantArrays()
-            => AssertExprValue("a", GetArrayValue(KnownTypeIds.CardinalType, GetIntegerValue(0x7E3), GetIntegerValue(0x81B), GetIntegerValue(0x819), GetIntegerValue(0x81A)), "const a: array [0..3] of Cardinal = ($000007E3, $0000081B, $00000819, $0000081A);");
+            => AssertExprValue("a", GetArrayValue(RegisteredTypes.SmallestUserTypeId, KnownTypeIds.CardinalType, GetIntegerValue(0x7E3), GetIntegerValue(0x81B), GetIntegerValue(0x819), GetIntegerValue(0x81A)), "const a: array [0..3] of Cardinal = ($000007E3, $0000081B, $00000819, $0000081A);");
 
 
     }

@@ -415,5 +415,14 @@ namespace PasPasPasTests.Types {
             AssertExprValue("b", GetUnkownValue(KnownTypeIds.ErrorType, CommonTypeKind.UnknownType), "type Ta = 1..3333; Tb = set of Ta; const b : Tb = [Low(Ta)..High(Ta)];", isConstant: false);
             AssertExprValue("b", GetUnkownValue(KnownTypeIds.ErrorType, CommonTypeKind.UnknownType), "type Ta = 1..3; Tb = set of Ta; const b : Tb = [High(Ta)..Low(Ta)];", isConstant: false);
         }
+
+        [TestMethod]
+        public void TestArrayConstants() {
+            var r1 = GetRecordValue(RegisteredTypes.SmallestUserTypeId, GetUnicodeStringValue("a"), GetIntegerValue(2));
+            var r2 = GetRecordValue(RegisteredTypes.SmallestUserTypeId, GetUnicodeStringValue("b"), GetIntegerValue(4));
+            var v = GetArrayValue(RegisteredTypes.SmallestUserTypeId, RegisteredTypes.SmallestUserTypeId, r1, r2);
+            AssertExprValue("c", v, "type Ta = record a: string; b: integer; end; const c: array[0..1] of Ta = ((a: 'a';b:2),(a: 'b';b: 4));");
+        }
+
     }
 }

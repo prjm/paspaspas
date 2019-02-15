@@ -404,6 +404,9 @@ namespace PasPasPas.Typings.Common {
             if (sourceTypeKind == CommonTypeKind.BooleanType)
                 return CastBooleanTo(sourceType, targetType);
 
+            if (sourceTypeKind == CommonTypeKind.RecordType)
+                return CastRecordTo(sourceType, targetType);
+
             return KnownTypeIds.ErrorType;
         }
 
@@ -423,6 +426,13 @@ namespace PasPasPas.Typings.Common {
                 return targetType;
 
             if (targetTypeKind == CommonTypeKind.SubrangeType)
+                return targetType;
+
+            return KnownTypeIds.ErrorType;
+        }
+
+        private int CastRecordTo(int sourceType, int targetType) {
+            if (this.AreRecordTypesCompatible(sourceType, targetType))
                 return targetType;
 
             return KnownTypeIds.ErrorType;

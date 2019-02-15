@@ -71,6 +71,15 @@ namespace PasPasPas.Globals.Runtime {
             => typeReference.TypeKind.IsIntegral();
 
         /// <summary>
+        ///     test if this is a in integral value
+        /// </summary>
+        /// <param name="typeReference"></param>
+        /// <returns></returns>
+        public static bool IsBoolean(this ITypeReference typeReference)
+            => typeReference.TypeKind == CommonTypeKind.BooleanType;
+
+
+        /// <summary>
         ///     test if this is a in real value
         /// </summary>
         /// <param name="typeReference"></param>

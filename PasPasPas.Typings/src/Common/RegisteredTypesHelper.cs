@@ -132,6 +132,41 @@ namespace PasPasPas.Typings.Common {
         }
 
         /// <summary>
+        ///     test if two record types are compatible
+        /// </summary>
+        /// <param name="registry"></param>
+        /// <param name="typeId1"></param>
+        /// <param name="typeId2"></param>
+        /// <returns></returns>
+        public static bool AreRecordTypesCompatible(this ITypeRegistry registry, int typeId1, int typeId2) {
+            var leftType = registry.ResolveAlias(typeId1);
+            var rightType = registry.ResolveAlias(typeId2);
+
+            if (!(leftType is StructuredTypeDeclaration leftStruct) || leftType.TypeKind != CommonTypeKind.RecordType)
+                return false;
+
+            if (!(rightType is StructuredTypeDeclaration rightStruct) || rightType.TypeKind != CommonTypeKind.RecordType)
+                return false;
+
+            if (leftStruct.Fields.Count != rightStruct.Fields.Count)
+                return false;
+
+            for (var i = 0; i < leftStruct.Fields.Count; i++) {
+                var leftField = leftStruct.Fields[i].SymbolType;
+                var rightField = rightStruct.Fields[i].SymbolType;
+
+                var leftTypeDef = registry.GetTypeByIdOrUndefinedType(leftField.TypeId);
+                var rightTypeDef = registry.GetTypeByIdOrUndefinedType(rightField.TypeId);
+
+                if (!rightTypeDef.CanBeAssignedFrom(leftTypeDef))
+                    return false;
+
+            }
+
+            return true;
+        }
+
+        /// <summary>
         ///     get the smallest possible boolean type for two types
         /// </summary>
         /// <param name="registry">type registry</param>

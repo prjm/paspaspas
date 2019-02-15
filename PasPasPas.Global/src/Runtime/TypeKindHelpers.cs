@@ -59,6 +59,15 @@
             => kind == CommonTypeKind.ArrayType || kind == CommonTypeKind.ConstantArrayType || kind == CommonTypeKind.DynamicArrayType;
 
         /// <summary>
+        ///     test if the type kind is an array type
+        /// </summary>
+        /// <param name="kind"></param>
+        /// <returns></returns>
+        public static bool IsEnum(this CommonTypeKind kind)
+            => kind == CommonTypeKind.EnumerationType;
+
+
+        /// <summary>
         ///     test if the type kind is a set type
         /// </summary>
         /// <param name="kind"></param>

@@ -622,8 +622,13 @@ namespace PasPasPas.Typings.Common {
             var typeId = RequireUserTypeId();
             var baseTypeId = KnownTypeIds.ErrorType;
 
-            if (element.TypeValue != null && element.TypeValue.TypeInfo != null)
+            if (element.TypeValue != null && element.TypeValue.TypeInfo != null) {
                 baseTypeId = element.TypeValue.TypeInfo.TypeId;
+
+                var baseTypeDef = TypeRegistry.GetTypeByIdOrUndefinedType(baseTypeId);
+                if (baseTypeDef is MetaStructuredTypeDeclaration metaType)
+                    baseTypeId = metaType.BaseType;
+            }
 
             using (var list = environment.ListPools.GetList<int>()) {
                 foreach (var indexDef in element.IndexItems) {
@@ -927,7 +932,7 @@ namespace PasPasPas.Typings.Common {
 
                 foreach (var part in element.Items) {
 
-                    if (part.TypeInfo == null) {
+                    if (part.TypeInfo == null || !part.TypeInfo.IsConstant()) {
                         baseType = GetErrorTypeReference(part);
                         break;
                     }
@@ -942,6 +947,8 @@ namespace PasPasPas.Typings.Common {
                         baseType = GetInstanceTypeById(part.TypeInfo.TypeId);
                     else if (baseType.TypeKind == CommonTypeKind.RealType && part.TypeInfo.TypeKind == CommonTypeKind.RealType)
                         baseType = GetInstanceTypeById(KnownTypeIds.Extended);
+                    else if (baseType.TypeKind == CommonTypeKind.RecordType && AreRecordTypesCompatible(baseType.TypeId, part.TypeInfo.TypeId))
+                        baseType = GetInstanceTypeById(part.TypeInfo.TypeId);
                     else {
                         baseType = GetErrorTypeReference(part);
                         break;
@@ -970,6 +977,9 @@ namespace PasPasPas.Typings.Common {
                 }
             }
         }
+
+        private bool AreRecordTypesCompatible(int leftId, int rightId)
+            => environment.TypeRegistry.AreRecordTypesCompatible(leftId, rightId);
 
         private int GetSmallestTextTypeOrNext(int leftId, int rightId)
             => environment.TypeRegistry.GetSmallestTextTypeOrNext(leftId, rightId);
