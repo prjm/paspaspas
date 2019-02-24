@@ -5,6 +5,7 @@ using PasPasPas.Globals.Types;
 using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Parsing.SyntaxTree.Types;
+using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 using PasPasPas.Typings.Operators;
 using PasPasPas.Typings.Routines;
@@ -27,6 +28,7 @@ namespace PasPasPas.Typings.Common {
         IEndVisitor<BinaryOperator>,
         IEndVisitor<VariableDeclaration>,
         IEndVisitor<ConstantDeclaration>,
+        IChildVisitor<ConstantDeclaration>,
         IEndVisitor<Parsing.SyntaxTree.Abstract.TypeAlias>,
         IEndVisitor<MetaType>,
         IEndVisitor<SymbolReference>,
@@ -73,7 +75,7 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="env">typed environment</param>
         public TypeAnnotator(ITypedEnvironment env) {
-            visitor = new Visitor(this);
+            visitor = new ChildVisitor(this);
             environment = env;
             resolver = new Resolver(new Scope(env.TypeRegistry));
             currentTypeDefinition = new Stack<ITypeReference>();
@@ -824,97 +826,156 @@ namespace PasPasPas.Typings.Common {
         }
 
         /// <summary>
+        ///     start vising a child of a constant expression
+        /// </summary>
+        /// <param name="element"></param>
+        /// <param name="child"></param>
+        public void StartVisitChild(ConstantDeclaration element, ISyntaxPart child) {
+
+            if (!(child is SetExpression set))
+                return;
+
+            var requiresArrayType = TypeRegistry.GetTypeByIdOrUndefinedType(element.TypeValue?.TypeInfo?.TypeId ?? KnownTypeIds.ErrorType).TypeKind.IsArray();
+            set.RequiresArray = requiresArrayType;
+        }
+
+        /// <summary>
+        ///     end visiting a constant
+        /// </summary>
+        /// <param name="element"></param>
+        /// <param name="child"></param>
+        public void EndVisitChild(ConstantDeclaration element, ISyntaxPart child) { }
+
+        /// <summary>
         ///     visit a set expression
         /// </summary>
         /// <param name="element"></param>
         public void EndVisit(SetExpression element) {
-            var isConstant = true;
-            var baseType = default(ITypeReference);
-            var hasError = false;
+
+            if (element.Expressions.Count < 1) {
+                element.TypeInfo = TypeRegistry.Runtime.Structured.EmptySet;
+                return;
+            }
 
             using (var values = environment.ListPools.GetList<ITypeReference>()) {
 
-                foreach (var part in element.Expressions) {
-
-                    if (part.TypeInfo == null) {
-                        hasError = true;
-                        break;
-                    }
-
-                    if (part is BinaryOperator binaryOperator && binaryOperator.Kind == ExpressionKind.RangeOperator) {
-
-                        if (!(GetTypeByIdOrUndefinedType(part.TypeInfo.TypeId) is ISubrangeType subrangeType)) {
-                            hasError = true;
-                            break;
-                        }
-
-                        baseType = GetInstanceTypeById(subrangeType.BaseTypeId);
-
-                        var lowerBound = subrangeType.LowestElement;
-                        var upperBound = subrangeType.HighestElement;
-
-                        if (!subrangeType.IsValid) {
-                            hasError = true;
-                            break;
-                        }
-
-                        var cardinality = subrangeType.Cardinality;
-
-                        if (cardinality < 1)
-                            continue;
-
-                        if (cardinality > 255) {
-                            hasError = true;
-                            break;
-                        }
-
-                        while (!lowerBound.Equals(upperBound)) {
-                            values.Item.Add(lowerBound);
-                            lowerBound = PredOrSucc.StaticExecuteCall(TypeRegistry, lowerBound, false);
-                        }
-
-                        if (lowerBound.Equals(upperBound))
-                            values.Item.Add(lowerBound);
-
-                        continue;
-                    }
-
-                    if (baseType == null)
-                        baseType = part.TypeInfo;
-                    else if (baseType.TypeKind.IsIntegral() && part.TypeInfo.TypeKind.IsIntegral())
-                        baseType = GetInstanceTypeById(GetSmallestIntegralTypeOrNext(baseType.TypeId, part.TypeInfo.TypeId));
-                    else if (baseType.TypeKind.IsOrdinal() && baseType.TypeId == part.TypeInfo.TypeId)
-                        baseType = part.TypeInfo;
-                    else {
-                        hasError = true;
-                        break;
-                    }
-
-                    isConstant = isConstant && part.TypeInfo.IsConstant();
-
-                    if (isConstant)
-                        values.Item.Add(part.TypeInfo);
-                }
-
-                if (hasError) {
-                    element.TypeInfo = GetErrorTypeReference(element);
-                    return;
-                }
+                var baseType = GetBaseTypeForArrayConstant(element.Expressions, out var isConstant, values.Item, element, element.RequiresArray);
 
                 if (baseType == default) {
                     element.TypeInfo = TypeRegistry.Runtime.Structured.EmptySet;
                     return;
                 }
 
+                if (baseType.TypeId == KnownTypeIds.ErrorType) {
+                    element.TypeInfo = GetErrorTypeReference(element);
+                    return;
+                }
+
                 var typeId = RequireUserTypeId();
-                var typdef = RegisterUserDefinedType(new SetType(typeId, baseType.TypeId));
+                var typdef = default(ITypeDefinition);
 
-                if (isConstant)
-                    element.TypeInfo = TypeRegistry.Runtime.Structured.CreateSetValue(typdef.TypeId, environment.ListPools.GetFixedArray(values));
+                if (!element.RequiresArray)
+                    typdef = RegisterUserDefinedType(new SetType(typeId, baseType.TypeId));
+                else if (isConstant)
+                    typdef = RegisterUserDefinedType(new StaticArrayType(typeId, ImmutableArray.Create(KnownTypeIds.IntegerType)));
                 else
-                    element.TypeInfo = GetInstanceTypeById(typdef.TypeId);
+                    typdef = RegisterUserDefinedType(new DynamicArrayType(typeId));
 
+                if (!element.RequiresArray) {
+                    if (isConstant)
+                        element.TypeInfo = TypeRegistry.Runtime.Structured.CreateSetValue(typdef.TypeId, environment.ListPools.GetFixedArray(values));
+                    else
+                        element.TypeInfo = GetInstanceTypeById(typdef.TypeId);
+                }
+                else {
+                    if (isConstant)
+                        element.TypeInfo = TypeRegistry.Runtime.Structured.CreateArrayValue(typdef.TypeId, baseType.TypeId, environment.ListPools.GetFixedArray(values));
+                    else
+                        element.TypeInfo = GetInstanceTypeById(typdef.TypeId);
+                }
             }
+        }
+
+        private bool ExpandRangeOperator(ITypedSyntaxNode part, bool requiresArray, List<ITypeReference> values, out int baseTypeId) {
+            if (!(GetTypeByIdOrUndefinedType(part.TypeInfo.TypeId) is ISubrangeType subrangeType) || requiresArray) {
+                baseTypeId = KnownTypeIds.ErrorType;
+                return false;
+            }
+
+            baseTypeId = subrangeType.BaseTypeId;
+            var baseType = GetInstanceTypeById(baseTypeId);
+            var lowerBound = subrangeType.LowestElement;
+            var upperBound = subrangeType.HighestElement;
+
+            if (!subrangeType.IsValid) {
+                baseTypeId = KnownTypeIds.ErrorType;
+                return false;
+            }
+
+            var cardinality = subrangeType.Cardinality;
+
+            if (cardinality < 1)
+                return true;
+
+            if (cardinality > 255) {
+                baseTypeId = KnownTypeIds.ErrorType;
+                return false;
+            }
+
+            while (!lowerBound.Equals(upperBound)) {
+                values.Add(lowerBound);
+                lowerBound = PredOrSucc.StaticExecuteCall(TypeRegistry, lowerBound, false);
+            }
+
+            if (lowerBound.Equals(upperBound))
+                values.Add(lowerBound);
+
+            return true;
+        }
+
+        private ITypeReference GetBaseTypeForArrayConstant(IEnumerable<IExpression> items, out bool isConstant, List<ITypeReference> values, ITypedSyntaxNode element, bool requiresArray) {
+            var baseType = default(ITypeReference);
+            isConstant = true;
+
+            foreach (var part in items) {
+
+                if (part is BinaryOperator binaryOperator && binaryOperator.Kind == ExpressionKind.RangeOperator) {
+                    if (!ExpandRangeOperator(part, requiresArray, values, out var setBaseType) || (baseType != default && baseType.TypeId != setBaseType))
+                        return GetErrorTypeReference(part);
+                    baseType = TypeRegistry.MakeReference(setBaseType);
+                    continue;
+                }
+
+                if (part.TypeInfo == null || !part.TypeInfo.IsConstant()) {
+                    values.Clear();
+                    return GetErrorTypeReference(part);
+                }
+
+                if (baseType == null)
+                    baseType = GetInstanceTypeById(part.TypeInfo.TypeId);
+                else if (baseType.TypeKind.IsIntegral() && part.TypeInfo.TypeKind.IsIntegral())
+                    baseType = GetInstanceTypeById(GetSmallestIntegralTypeOrNext(baseType.TypeId, part.TypeInfo.TypeId));
+                else if (baseType.TypeKind.IsTextual() && part.TypeInfo.TypeKind.IsTextual())
+                    baseType = GetInstanceTypeById(GetSmallestTextTypeOrNext(baseType.TypeId, part.TypeInfo.TypeId));
+                else if (baseType.TypeKind.IsOrdinal() && baseType.TypeId == part.TypeInfo.TypeId)
+                    baseType = GetInstanceTypeById(part.TypeInfo.TypeId);
+                else if (baseType.TypeKind == CommonTypeKind.RealType && part.TypeInfo.TypeKind == CommonTypeKind.RealType)
+                    baseType = GetInstanceTypeById(KnownTypeIds.Extended);
+                else if (baseType.TypeKind == CommonTypeKind.RecordType && AreRecordTypesCompatible(baseType.TypeId, part.TypeInfo.TypeId))
+                    baseType = GetInstanceTypeById(part.TypeInfo.TypeId);
+                else {
+                    baseType = GetErrorTypeReference(part);
+                    break;
+                }
+
+                isConstant = isConstant && part.TypeInfo.IsConstant();
+                values.Add(part.TypeInfo);
+            }
+
+            if (baseType == null)
+                baseType = GetErrorTypeReference(element);
+
+            return baseType;
         }
 
         /// <summary>
@@ -924,47 +985,11 @@ namespace PasPasPas.Typings.Common {
         public void EndVisit(ArrayConstant element) {
             var typeId = RequireUserTypeId();
             var indexTypeId = RequireUserTypeId();
-            var isConstant = true;
-            var baseType = default(ITypeReference);
-            var count = 0;
             using (var constantValues = environment.ListPools.GetList<ITypeReference>()) {
 
-
-                foreach (var part in element.Items) {
-
-                    if (part.TypeInfo == null || !part.TypeInfo.IsConstant()) {
-                        baseType = GetErrorTypeReference(part);
-                        break;
-                    }
-
-                    if (baseType == null)
-                        baseType = GetInstanceTypeById(part.TypeInfo.TypeId);
-                    else if (baseType.TypeKind.IsIntegral() && part.TypeInfo.TypeKind.IsIntegral())
-                        baseType = GetInstanceTypeById(GetSmallestIntegralTypeOrNext(baseType.TypeId, part.TypeInfo.TypeId));
-                    else if (baseType.TypeKind.IsTextual() && part.TypeInfo.TypeKind.IsTextual())
-                        baseType = GetInstanceTypeById(GetSmallestTextTypeOrNext(baseType.TypeId, part.TypeInfo.TypeId));
-                    else if (baseType.TypeKind.IsOrdinal() && baseType.TypeId == part.TypeInfo.TypeId)
-                        baseType = GetInstanceTypeById(part.TypeInfo.TypeId);
-                    else if (baseType.TypeKind == CommonTypeKind.RealType && part.TypeInfo.TypeKind == CommonTypeKind.RealType)
-                        baseType = GetInstanceTypeById(KnownTypeIds.Extended);
-                    else if (baseType.TypeKind == CommonTypeKind.RecordType && AreRecordTypesCompatible(baseType.TypeId, part.TypeInfo.TypeId))
-                        baseType = GetInstanceTypeById(part.TypeInfo.TypeId);
-                    else {
-                        baseType = GetErrorTypeReference(part);
-                        break;
-                    }
-
-                    count++;
-                    isConstant = isConstant && part.TypeInfo.IsConstant();
-                    if (isConstant)
-                        constantValues.Item.Add(part.TypeInfo);
-                }
-
-                if (baseType == null)
-                    baseType = GetErrorTypeReference(element);
-
+                var baseType = GetBaseTypeForArrayConstant(element.Items, out var isConstant, constantValues.Item, element, true);
                 var ints = TypeRegistry.Runtime.Integers;
-                var indexTypeDef = new Simple.SubrangeType(indexTypeId, KnownTypeIds.IntegerType, ints.Zero, ints.ToScaledIntegerValue(count));
+                var indexTypeDef = new Simple.SubrangeType(indexTypeId, KnownTypeIds.IntegerType, ints.Zero, ints.ToScaledIntegerValue(constantValues.Item.Count));
                 var indexType = RegisterUserDefinedType(indexTypeDef);
                 var arrayType = new StaticArrayType(typeId, ImmutableArray.Create(indexType.TypeId)) { BaseTypeId = baseType.TypeId };
                 var registeredType = RegisterUserDefinedType(arrayType).TypeId;

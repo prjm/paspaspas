@@ -418,10 +418,22 @@ namespace PasPasPasTests.Types {
 
         [TestMethod]
         public void TestArrayConstants() {
+
+
             var r1 = GetRecordValue(RegisteredTypes.SmallestUserTypeId, GetUnicodeStringValue("a"), GetIntegerValue(2));
             var r2 = GetRecordValue(RegisteredTypes.SmallestUserTypeId, GetUnicodeStringValue("b"), GetIntegerValue(4));
             var v = GetArrayValue(RegisteredTypes.SmallestUserTypeId, RegisteredTypes.SmallestUserTypeId, r1, r2);
+            var e = GetUnkownValue(KnownTypeIds.ErrorType, CommonTypeKind.UnknownType);
+            var a = GetArrayValue(RegisteredTypes.SmallestUserTypeId, KnownTypeIds.StringType, GetUnicodeStringValue("aa"), GetUnicodeStringValue("b"), GetUnicodeStringValue("cc"));
+
+            AssertExprValue("c", a, "const c: array of string = ['aa','b','cc']");
+
             AssertExprValue("c", v, "type Ta = record a: string; b: integer; end; const c: array[0..1] of Ta = ((a: 'a';b:2),(a: 'b';b: 4));");
+            AssertExprValue("c", e, "type Ta = record a: string; b: integer; end; const c: array[0..1] of Ta = ((a: 2;b:'b'),(a: 'b';b: 4));", isConstant: false);
+            AssertExprValue("c", e, "type Ta = record a: integer; b: string; end; const c: array[0..1] of Ta = ((a: 'a';b:2),(a: 'b';b: 4));", isConstant: false);
+
+            v = GetArrayValue(RegisteredTypes.SmallestUserTypeId + 1, KnownTypeIds.StringType, GetUnicodeStringValue("a"), GetUnicodeStringValue("b"));
+            AssertExprValue("c", v, "type Ta = (a1, a2); const c: array[Ta] of string = ('a','b'); ");
         }
 
     }

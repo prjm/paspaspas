@@ -40,6 +40,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         }
 
         /// <summary>
+        ///     <c>true</c> if this set expression is used to create an modern-style array
+        /// </summary>
+        public bool RequiresArray { get; set; }
+
+        /// <summary>
         ///     accept visitor
         /// </summary>
         /// <param name="visitor">visitor to accept</param>
