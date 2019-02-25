@@ -414,6 +414,8 @@ namespace PasPasPasTests.Types {
             AssertExprValue("b", GetSetValue(RegisteredTypes.SmallestUserTypeId + 1, v1, v2, v3), "type Ta = 1..3; Tb = set of Ta; const b : Tb = [Low(Ta)..High(Ta)];");
             AssertExprValue("b", GetUnkownValue(KnownTypeIds.ErrorType, CommonTypeKind.UnknownType), "type Ta = 1..3333; Tb = set of Ta; const b : Tb = [Low(Ta)..High(Ta)];", isConstant: false);
             AssertExprValue("b", GetUnkownValue(KnownTypeIds.ErrorType, CommonTypeKind.UnknownType), "type Ta = 1..3; Tb = set of Ta; const b : Tb = [High(Ta)..Low(Ta)];", isConstant: false);
+            AssertExprValue("b", GetUnkownValue(KnownTypeIds.ErrorType, CommonTypeKind.UnknownType), "type Tb = set of string; const b : Tb = [High(Ta)..Low(Ta)];", isConstant: false);
+            AssertExprValue("b", GetUnkownValue(KnownTypeIds.ErrorType, CommonTypeKind.UnknownType), "const b = ['aa','b'];", isConstant: false);
         }
 
         [TestMethod]
@@ -427,7 +429,7 @@ namespace PasPasPasTests.Types {
             var a = GetArrayValue(RegisteredTypes.SmallestUserTypeId, KnownTypeIds.StringType, GetUnicodeStringValue("aa"), GetUnicodeStringValue("b"), GetUnicodeStringValue("cc"));
 
             AssertExprValue("c", a, "const c: array of string = ['aa','b','cc']");
-
+            AssertExprValue("c", a, "const c: array of string = ['aa','b']+['cc']");
             AssertExprValue("c", v, "type Ta = record a: string; b: integer; end; const c: array[0..1] of Ta = ((a: 'a';b:2),(a: 'b';b: 4));");
             AssertExprValue("c", e, "type Ta = record a: string; b: integer; end; const c: array[0..1] of Ta = ((a: 2;b:'b'),(a: 'b';b: 4));", isConstant: false);
             AssertExprValue("c", e, "type Ta = record a: integer; b: string; end; const c: array[0..1] of Ta = ((a: 'a';b:2),(a: 'b';b: 4));", isConstant: false);

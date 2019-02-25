@@ -25,7 +25,7 @@ namespace PasPasPas.Typings.Common {
 
         IEndVisitor<ConstantValue>,
         IEndVisitor<UnaryOperator>,
-        IEndVisitor<BinaryOperator>,
+        IStartVisitor<BinaryOperator>, IEndVisitor<BinaryOperator>,
         IEndVisitor<VariableDeclaration>,
         IEndVisitor<ConstantDeclaration>,
         IChildVisitor<ConstantDeclaration>,
@@ -146,6 +146,18 @@ namespace PasPasPas.Typings.Common {
             }
 
             element.TypeInfo = GetErrorTypeReference(element);
+        }
+
+        /// <summary>
+        ///     annotate types for binary operators
+        /// </summary>
+        /// <param name="element">operator to annotate</param>
+        public void StartVisit(BinaryOperator element) {
+            if (element.LeftOperand is IRequiresArrayExpression e1)
+                e1.RequiresArray = element.RequiresArray;
+
+            if (element.RightOperand is IRequiresArrayExpression e2)
+                e2.RequiresArray = element.RequiresArray;
         }
 
         /// <summary>
@@ -832,11 +844,10 @@ namespace PasPasPas.Typings.Common {
         /// <param name="child"></param>
         public void StartVisitChild(ConstantDeclaration element, ISyntaxPart child) {
 
-            if (!(child is SetExpression set))
-                return;
-
-            var requiresArrayType = TypeRegistry.GetTypeByIdOrUndefinedType(element.TypeValue?.TypeInfo?.TypeId ?? KnownTypeIds.ErrorType).TypeKind.IsArray();
-            set.RequiresArray = requiresArrayType;
+            if (child is IRequiresArrayExpression set) {
+                var requiresArrayType = TypeRegistry.GetTypeByIdOrUndefinedType(element.TypeValue?.TypeInfo?.TypeId ?? KnownTypeIds.ErrorType).TypeKind.IsArray();
+                set.RequiresArray = requiresArrayType;
+            }
         }
 
         /// <summary>
@@ -877,7 +888,7 @@ namespace PasPasPas.Typings.Common {
                 if (!element.RequiresArray)
                     typdef = RegisterUserDefinedType(new SetType(typeId, baseType.TypeId));
                 else if (isConstant)
-                    typdef = RegisterUserDefinedType(new StaticArrayType(typeId, ImmutableArray.Create(KnownTypeIds.IntegerType)));
+                    typdef = RegisterUserDefinedType(new StaticArrayType(typeId, ImmutableArray.Create(KnownTypeIds.IntegerType)) { BaseTypeId = baseType.TypeId });
                 else
                     typdef = RegisterUserDefinedType(new DynamicArrayType(typeId));
 
@@ -940,7 +951,9 @@ namespace PasPasPas.Typings.Common {
             foreach (var part in items) {
 
                 if (part is BinaryOperator binaryOperator && binaryOperator.Kind == ExpressionKind.RangeOperator) {
-                    if (!ExpandRangeOperator(part, requiresArray, values, out var setBaseType) || (baseType != default && baseType.TypeId != setBaseType))
+                    if (requiresArray ||
+                        !ExpandRangeOperator(part, requiresArray, values, out var setBaseType) ||
+                        (baseType != default && baseType.TypeId != setBaseType))
                         return GetErrorTypeReference(part);
                     baseType = TypeRegistry.MakeReference(setBaseType);
                     continue;
@@ -951,21 +964,15 @@ namespace PasPasPas.Typings.Common {
                     return GetErrorTypeReference(part);
                 }
 
-                if (baseType == null)
-                    baseType = GetInstanceTypeById(part.TypeInfo.TypeId);
-                else if (baseType.TypeKind.IsIntegral() && part.TypeInfo.TypeKind.IsIntegral())
-                    baseType = GetInstanceTypeById(GetSmallestIntegralTypeOrNext(baseType.TypeId, part.TypeInfo.TypeId));
-                else if (baseType.TypeKind.IsTextual() && part.TypeInfo.TypeKind.IsTextual())
-                    baseType = GetInstanceTypeById(GetSmallestTextTypeOrNext(baseType.TypeId, part.TypeInfo.TypeId));
-                else if (baseType.TypeKind.IsOrdinal() && baseType.TypeId == part.TypeInfo.TypeId)
-                    baseType = GetInstanceTypeById(part.TypeInfo.TypeId);
-                else if (baseType.TypeKind == CommonTypeKind.RealType && part.TypeInfo.TypeKind == CommonTypeKind.RealType)
-                    baseType = GetInstanceTypeById(KnownTypeIds.Extended);
-                else if (baseType.TypeKind == CommonTypeKind.RecordType && AreRecordTypesCompatible(baseType.TypeId, part.TypeInfo.TypeId))
-                    baseType = GetInstanceTypeById(part.TypeInfo.TypeId);
-                else {
-                    baseType = GetErrorTypeReference(part);
+                baseType = TypeRegistry.GetBaseTypeForArrayOrSet(baseType, part.TypeInfo);
+
+                if (baseType.TypeId == KnownTypeIds.ErrorType) {
                     break;
+                }
+
+                if (!requiresArray && !baseType.IsOrdinal()) {
+                    values.Clear();
+                    return GetErrorTypeReference(part);
                 }
 
                 isConstant = isConstant && part.TypeInfo.IsConstant();

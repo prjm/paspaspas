@@ -8,7 +8,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// <summary>
     ///     comparison expression
     /// </summary>
-    public class BinaryOperator : ExpressionBase, IExpressionTarget {
+    public class BinaryOperator : ExpressionBase, IExpressionTarget, IRequiresArrayExpression {
 
         /// <summary>
         ///     expression kind
@@ -52,6 +52,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
                     throw new InvalidProgramException();
             }
         }
+
+        /// <summary>
+        ///     <c>true</c> if an array operator is required
+        /// </summary>
+        public bool RequiresArray { get; set; }
 
         /// <summary>
         ///     accept visitor

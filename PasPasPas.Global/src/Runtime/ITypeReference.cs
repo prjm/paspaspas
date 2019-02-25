@@ -195,23 +195,6 @@ namespace PasPasPas.Globals.Runtime {
         }
 
         /// <summary>
-        ///     test if this value is a string value
-        /// </summary>
-        /// <param name="typeReference"></param>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        public static bool IsOrdinalValue(this ITypeReference typeReference, out IOrdinalValue value) {
-            value = typeReference as IOrdinalValue;
-
-            if (typeReference.TypeKind.IsOrdinal() && value != default)
-                return true;
-
-            value = default;
-            return false;
-        }
-
-
-        /// <summary>
         ///     test if this value is an array value
         /// </summary>
         /// <param name="typeReference"></param>
@@ -221,6 +204,23 @@ namespace PasPasPas.Globals.Runtime {
             value = typeReference as IArrayValue;
 
             if (typeReference.TypeKind.IsArray() && value != default)
+                return true;
+
+            value = default;
+            return false;
+        }
+
+
+        /// <summary>
+        ///     test if this value is a string value
+        /// </summary>
+        /// <param name="typeReference"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static bool IsOrdinalValue(this ITypeReference typeReference, out IOrdinalValue value) {
+            value = typeReference as IOrdinalValue;
+
+            if (typeReference.TypeKind.IsOrdinal() && value != default)
                 return true;
 
             value = default;

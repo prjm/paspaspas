@@ -7,7 +7,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// <summary>
     ///     set expression
     /// </summary>
-    public class SetExpression : ExpressionBase, IExpression, IExpressionTarget {
+    public class SetExpression : ExpressionBase, IExpression, IExpressionTarget, IRequiresArrayExpression {
 
         /// <summary>
         ///     subexpressions

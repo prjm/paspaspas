@@ -140,5 +140,10 @@
         /// </summary>
         public const int InSetOperator = 35;
 
+        /// <summary>
+        ///     concatenate array operator
+        /// </summary>
+        public const int ConcatArrayOperator = 36;
+
     }
 }

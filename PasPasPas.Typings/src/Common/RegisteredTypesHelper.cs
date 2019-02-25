@@ -350,6 +350,9 @@ namespace PasPasPas.Typings.Common {
                 if (leftType.IsSet() && rightType.IsSet())
                     return DefinedOperators.SetAddOperator;
 
+                if (leftType.IsArray() && rightType.IsArray())
+                    return DefinedOperators.ConcatArrayOperator;
+
             }
 
             if (kind == ExpressionKind.Minus) {
@@ -374,6 +377,8 @@ namespace PasPasPas.Typings.Common {
 
             return DefinedOperators.Undefined;
         }
+
+
 
         /// <summary>
         ///     determine the resulting type for a subrange type
@@ -428,6 +433,32 @@ namespace PasPasPas.Typings.Common {
             }
 
             return KnownTypeIds.ErrorType;
+        }
+
+        /// <summary>
+        ///     determine a base type for an array or set type
+        /// </summary>
+        /// <param name="types"></param>
+        /// <param name="baseType"></param>
+        /// <param name="elementType"></param>
+        /// <returns></returns>
+        public static ITypeReference GetBaseTypeForArrayOrSet(this ITypeRegistry types, ITypeReference baseType, ITypeReference elementType) {
+            if (elementType == default)
+                baseType = types.Runtime.Types.MakeErrorTypeReference();
+            else if (baseType == default)
+                baseType = types.MakeReference(elementType.TypeId);
+            else if (baseType.TypeKind.IsIntegral() && elementType.TypeKind.IsIntegral())
+                baseType = types.MakeReference(types.GetSmallestIntegralTypeOrNext(baseType.TypeId, elementType.TypeId));
+            else if (baseType.TypeKind.IsTextual() && elementType.TypeKind.IsTextual())
+                baseType = types.MakeReference(types.GetSmallestTextTypeOrNext(baseType.TypeId, elementType.TypeId));
+            else if (baseType.TypeKind.IsOrdinal() && baseType.TypeId == elementType.TypeId)
+                baseType = types.MakeReference(elementType.TypeId);
+            else if (baseType.TypeKind == CommonTypeKind.RealType && elementType.TypeKind == CommonTypeKind.RealType)
+                baseType = types.MakeReference(KnownTypeIds.Extended);
+            else if (baseType.TypeKind == CommonTypeKind.RecordType && types.AreRecordTypesCompatible(baseType.TypeId, elementType.TypeId))
+                baseType = types.MakeReference(elementType.TypeId);
+
+            return baseType;
         }
 
         /// <summary>
