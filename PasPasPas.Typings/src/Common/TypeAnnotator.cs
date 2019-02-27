@@ -49,7 +49,8 @@ namespace PasPasPas.Typings.Common {
         IEndVisitor<SetExpression>,
         IEndVisitor<ArrayConstant>,
         IStartVisitor<RecordConstant>, IEndVisitor<RecordConstant>,
-        IEndVisitor<RecordConstantItem> {
+        IEndVisitor<RecordConstantItem>,
+        IEndVisitor<ClassOfTypeDeclaration> {
 
         private readonly IStartEndVisitor visitor;
         private readonly ITypedEnvironment environment;
@@ -303,6 +304,12 @@ namespace PasPasPas.Typings.Common {
                 var name = element.AsScopedName;
                 var entry = resolver.ResolveByName(default, element.AsScopedName.ToString());
                 int typeId;
+
+                if (entry.Kind == ReferenceKind.RefToType) {
+                    typeId = entry.Symbol.TypeId;
+                    element.TypeInfo = environment.TypeRegistry.MakeTypeReference(typeId);
+                    return;
+                }
 
                 if (entry != null) {
                     typeId = entry.Symbol.TypeId;
@@ -703,7 +710,7 @@ namespace PasPasPas.Typings.Common {
         public void EndVisit(StructuredType element) {
             var value = currentTypeDefinition.Pop();
             var typeDef = value != null ? environment.TypeRegistry.GetTypeByIdOrUndefinedType(value.TypeId) as StructuredTypeDeclaration : null;
-            element.TypeInfo = GetInstanceTypeById(typeDef.MetaType.TypeInfo.TypeId);
+            element.TypeInfo = GetTypeReferenceById(typeDef.MetaType.TypeInfo.TypeId);
         }
 
         /// <summary>
@@ -1008,6 +1015,29 @@ namespace PasPasPas.Typings.Common {
                     element.TypeInfo = GetInstanceTypeById(registeredType);
                 }
             }
+        }
+
+        /// <summary>
+        ///     visit an class of declaration
+        /// </summary>
+        /// <param name="element"></param>
+        public void EndVisit(ClassOfTypeDeclaration element) {
+            if (element.TypeValue?.TypeInfo == default) {
+                element.TypeInfo = GetErrorTypeReference(element);
+                return;
+            }
+
+            var baseType = TypeRegistry.GetTypeByIdOrUndefinedType(element.TypeValue.TypeInfo.TypeId);
+
+            if (!(baseType is MetaStructuredTypeDeclaration)) {
+                element.TypeInfo = GetErrorTypeReference(element);
+                return;
+            }
+
+            var newType = RequireUserTypeId();
+            var alias = new TypeAlias(newType, element.TypeValue.TypeInfo.TypeId, false);
+            TypeRegistry.RegisterType(alias);
+            element.TypeInfo = GetInstanceTypeById(newType);
         }
 
         private bool AreRecordTypesCompatible(int leftId, int rightId)

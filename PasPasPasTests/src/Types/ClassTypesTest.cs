@@ -29,5 +29,11 @@ namespace PasPasPasTests.Types {
             AssertDeclTypeDef("class class var x: integer; end", "t.x", typeKind: CommonTypeKind.IntegerType);
         }
 
+        [TestMethod]
+        public void TestClassOf() {
+            AssertDeclTypeDef("class end; y = class of t", "y", typeKind: CommonTypeKind.MetaClassType);
+            AssertDeclTypeDef("class end; y = class of t; z = class of y", "z", KnownTypeIds.ErrorType);
+        }
+
     }
 }

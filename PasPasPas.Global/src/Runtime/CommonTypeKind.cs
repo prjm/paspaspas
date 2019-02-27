@@ -103,7 +103,7 @@
         /// <summary>
         ///     class reference type
         /// </summary>
-        ClassReferenceType = 19,
+        MetaClassType = 19,
 
         /// <summary>
         ///     pointer type
@@ -156,7 +156,7 @@
         /// <summary>
         ///     declared type name
         /// </summary>
-        Type = 29
+        Type = 29,
 
     }
 }

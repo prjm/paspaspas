@@ -23,7 +23,7 @@ namespace PasPasPas.Typings.Structured {
         ///     type kind
         /// </summary>
         public override CommonTypeKind TypeKind
-            => CommonTypeKind.ClassReferenceType;
+            => CommonTypeKind.MetaClassType;
 
         /// <summary>
         ///     base type id
@@ -65,5 +65,13 @@ namespace PasPasPas.Typings.Structured {
             entry = null;
             return false;
         }
+
+        /// <summary>
+        ///     format this type as string
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+            => $"class of {BaseType}";
+
     }
 }

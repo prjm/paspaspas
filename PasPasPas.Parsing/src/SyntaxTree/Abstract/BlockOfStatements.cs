@@ -15,7 +15,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         public ISyntaxPartCollection<StatementBase> Statements { get; }
 
         /// <summary>
-        ///     creates a ew block of statements
+        ///     creates a new block of statements
         /// </summary>
         public BlockOfStatements()
             => Statements = new SyntaxPartCollection<StatementBase>();
@@ -24,7 +24,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     add a statement
         /// </summary>
         /// <param name="part">statement part to add</param>
-        public void Add(StatementBase part) => Statements.Add(part);
+        public void Add(StatementBase part)
+            => Statements.Add(part);
 
         /// <summary>
         ///     statement parts

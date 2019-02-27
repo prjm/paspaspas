@@ -6,7 +6,7 @@ using PasPasPas.Parsing.SyntaxTree.Visitors;
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
 
     /// <summary>
-    ///     comparison expression
+    ///     binary operator
     /// </summary>
     public class BinaryOperator : ExpressionBase, IExpressionTarget, IRequiresArrayExpression {
 

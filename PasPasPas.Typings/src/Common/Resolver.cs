@@ -92,7 +92,7 @@ namespace PasPasPas.Typings.Common {
                 }
             }
 
-            else if (baseTypeValue.TypeKind == CommonTypeKind.ClassReferenceType) {
+            else if (baseTypeValue.TypeKind == CommonTypeKind.MetaClassType) {
                 var cls = TypeRegistry.GetTypeByIdOrUndefinedType(baseTypeValue.TypeId) as MetaStructuredTypeDeclaration;
                 if (cls != default && cls.TryToResolve(name, out var reference)) {
                     return reference;

@@ -5,7 +5,7 @@ using PasPasPas.Parsing.SyntaxTree.Visitors;
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
 
     /// <summary>
-    ///     class of declaratation
+    ///     class of declaration
     /// </summary>
     public class ClassOfTypeDeclaration : StructuredTypeBase, ITypeTarget {
 
