@@ -7,3 +7,5 @@ script:
  - cd PasPasPasTests
  - dotnet restore
  - dotnet test
+ after_success:
+  - codecov
