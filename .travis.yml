@@ -1,13 +1,12 @@
 language: csharp
 solution: paspaspas.sln
 mono: none
-dotnet: 2.2.101
+dotnet: 2.2.104
 dist: xenial
 script:
  - cd PasPasPasTests
  - dotnet restore
- - dotnet test
-before_install:
-  - pip install --user codecov
-after_success:
- - codecov
+ - dotnet build -c Release
+ - dotnet test -c Release --no-build /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
+after_script:
+ - bash <(curl -s https://codecov.io/bash)
