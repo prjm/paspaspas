@@ -7,5 +7,7 @@ script:
  - cd PasPasPasTests
  - dotnet restore
  - dotnet test
- after_success:
-  - codecov
+before_install:
+  - pip install --user codecov
+after_success:
+ - codecov
