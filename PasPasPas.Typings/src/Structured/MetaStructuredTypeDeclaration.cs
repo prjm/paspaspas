@@ -9,7 +9,7 @@ namespace PasPasPas.Typings.Structured {
     /// <summary>
     ///     class of / meta class declaration
     /// </summary>
-    public class MetaStructuredTypeDeclaration : StructuredTypeBase {
+    public class MetaStructuredTypeDeclaration : StructuredTypeBase, IMetaStructuredType {
 
         /// <summary>
         ///     create a meta type declaration

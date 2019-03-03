@@ -67,6 +67,11 @@ namespace PasPasPas.Typings.Common {
         public IListPools ListPools { get; }
 
         /// <summary>
+        ///     type creator
+        /// </summary>
+        public ITypeCreator TypeCreator { get; }
+
+        /// <summary>
         ///     register a new type
         /// </summary>
         /// <param name="typeDef">type to register</param>
@@ -88,6 +93,7 @@ namespace PasPasPas.Typings.Common {
         public RegisteredTypes(IRuntimeValueFactory runtime, IListPools listPools, NativeIntSize intSize) {
             Runtime = runtime;
             ListPools = listPools;
+            TypeCreator = new CommonTypeCreator(this);
             systemUnit = new UnitType(KnownTypeIds.SystemUnit);
             RegisterType(systemUnit);
 
@@ -171,9 +177,11 @@ namespace PasPasPas.Typings.Common {
             RegisterAliasTypes();
             RegisterNativeIntTypes(intSize);
             RegisterHiddenTypes();
+            RegisterSystemType(new GenericArrayType(KnownTypeIds.GenericArrayType), "TArray");
         }
 
-        private void RegisterHiddenTypes() => RegisterSystemType(new UnspecifiedType(KnownTypeIds.UnspecifiedType), null);
+        private void RegisterHiddenTypes()
+            => RegisterSystemType(new UnspecifiedType(KnownTypeIds.UnspecifiedType), null);
 
         /// <summary>
         ///     register type alias
@@ -346,7 +354,7 @@ namespace PasPasPas.Typings.Common {
             var meta = new MetaStructuredTypeDeclaration(KnownTypeIds.TClass, KnownTypeIds.TObject);
             RegisterSystemType(def, "TObject");
             RegisterSystemType(meta, "TClass");
-            def.MetaType = meta;
+            def.MetaType = Runtime.Types.MakeTypeInstanceReference(meta.TypeId, CommonTypeKind.MetaClassType);
             def.AddOrExtendMethod("Create", ProcedureKind.Constructor).AddParameterGroup();
             def.AddOrExtendMethod("Free", ProcedureKind.Procedure).AddParameterGroup();
             def.AddOrExtendMethod("DisposeOf", ProcedureKind.Procedure).AddParameterGroup();

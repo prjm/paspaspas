@@ -1,7 +1,7 @@
-﻿namespace PasPasPas.Parsing.SyntaxTree.Abstract {
+﻿namespace PasPasPas.Globals.Types {
 
     /// <summary>
-    ///     kind of structured type
+    ///     kind of structured types
     /// </summary>
     public enum StructuredTypeKind {
 

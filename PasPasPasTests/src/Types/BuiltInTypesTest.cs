@@ -196,5 +196,13 @@ namespace PasPasPasTests.Types {
             AssertDeclType("System.Currency", KnownTypeIds.Currency);
         }
 
+        /*
+        [TestMethod]
+        public void TestArrayTypes() {
+            AssertDeclType("TArray<Integer>", RegisteredTypes.SmallestUserTypeId, typeKind: CommonTypeKind.DynamicArrayType);
+            AssertDeclType("TArray<String>", KnownTypeIds.Real48Type);
+        }
+        */
+
     }
 }

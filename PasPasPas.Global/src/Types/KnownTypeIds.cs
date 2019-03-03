@@ -415,5 +415,10 @@
         /// </summary>
         public const int Int32 = 110;
 
+        /// <summary>
+        ///     generic array type
+        /// </summary>
+        public const int GenericArrayType = 111;
+
     }
 }

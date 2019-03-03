@@ -1,5 +1,4 @@
-﻿using System.Collections.Immutable;
-using PasPasPas.Globals.Runtime;
+﻿using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Typings.Structured {
@@ -13,13 +12,14 @@ namespace PasPasPas.Typings.Structured {
         ///     create a new array type
         /// </summary>
         /// <param name="withId"></param>
-        /// <param name="indexTypes">index types</param>
-        protected ArrayType(int withId, ImmutableArray<int> indexTypes) : base(withId) => IndexTypes = indexTypes;
+        /// <param name="indexType">index types</param>
+        protected ArrayType(int withId, int indexType) : base(withId)
+            => IndexType = indexType;
 
         /// <summary>
         ///     array index types
         /// </summary>
-        public ImmutableArray<int> IndexTypes { get; }
+        public int IndexType { get; }
 
         /// <summary>
         ///     type kind
@@ -65,11 +65,7 @@ namespace PasPasPas.Typings.Structured {
         /// </summary>
         /// <returns></returns>
         public override string ToString() {
-            var result = string.Empty;
-
-            foreach (var index in IndexTypes) {
-                result += $"[{index}] ";
-            }
+            var result = $"[{IndexType}] ";
             return $"array {result}of {BaseType}".Trim();
         }
     }

@@ -421,13 +421,13 @@ namespace PasPasPas.Typings.Common {
                     if (baseType == KnownTypeIds.ErrorType)
                         return baseType;
 
-                    var typeDef = types.RegisterType(new Simple.SubrangeType(types.RequireUserTypeId(), baseType, lowerBound, upperBound));
+                    var typeDef = types.TypeCreator.CreateSubrangeType(baseType, lowerBound, upperBound);
                     return typeDef.TypeId;
                 }
 
                 if (lowerBound.TypeId == upperBound.TypeId) {
                     var baseType = types.GetTypeByIdOrUndefinedType(upperBound.TypeId);
-                    var typeDef = types.RegisterType(new Simple.SubrangeType(types.RequireUserTypeId(), baseType.TypeId, lowerBound, upperBound));
+                    var typeDef = types.TypeCreator.CreateSubrangeType(baseType.TypeId, lowerBound, upperBound);
                     return typeDef.TypeId;
                 }
             }
@@ -477,10 +477,8 @@ namespace PasPasPas.Typings.Common {
                 return types.MakeReference(left.TypeId);
             }
 
-            var typeId = types.RequireUserTypeId();
-            var setType = new SetType(typeId, baseType);
-            types.RegisterType(setType);
-            return types.MakeReference(typeId);
+            var type = types.TypeCreator.CreateSetType(baseType);
+            return types.MakeReference(type.TypeId);
         }
 
         /// <summary>
@@ -549,6 +547,14 @@ namespace PasPasPas.Typings.Common {
 
             return KnownTypeIds.ErrorType;
         }
+
+        /// <summary>
+        ///     get the size of a generic pointer
+        /// </summary>
+        /// <param name="typeRegistry"></param>
+        /// <returns></returns>
+        public static uint GetPointerSize(this ITypeRegistry typeRegistry)
+            => typeRegistry.GetTypeByIdOrUndefinedType(KnownTypeIds.GenericPointer).TypeSizeInBytes;
 
     }
 }

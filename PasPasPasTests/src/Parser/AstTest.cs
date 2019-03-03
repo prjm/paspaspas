@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using PasPasPas.Globals.Types;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 using PasPasPasTests.Common;

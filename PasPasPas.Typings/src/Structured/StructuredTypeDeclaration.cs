@@ -11,7 +11,7 @@ namespace PasPasPas.Typings.Structured {
     /// <summary>
     ///     structured type declaration
     /// </summary>
-    public class StructuredTypeDeclaration : StructuredTypeBase {
+    public class StructuredTypeDeclaration : StructuredTypeBase, IStructuredType {
 
         private readonly StructuredTypeKind typeKind;
 
@@ -74,7 +74,7 @@ namespace PasPasPas.Typings.Structured {
         /// <summary>
         ///     meta type
         /// </summary>
-        public MetaStructuredTypeDeclaration MetaType { get; set; }
+        public ITypeReference MetaType { get; set; }
 
         /// <summary>
         ///

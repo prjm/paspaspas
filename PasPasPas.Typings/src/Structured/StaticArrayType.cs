@@ -1,5 +1,4 @@
-﻿using System.Collections.Immutable;
-using PasPasPas.Globals.Runtime;
+﻿using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 
 namespace PasPasPas.Typings.Structured {
@@ -13,8 +12,8 @@ namespace PasPasPas.Typings.Structured {
         ///     create a new static array type
         /// </summary>
         /// <param name="withId"></param>
-        /// <param name="indexTypes"></param>
-        public StaticArrayType(int withId, ImmutableArray<int> indexTypes) : base(withId, indexTypes) {
+        /// <param name="indexType"></param>
+        public StaticArrayType(int withId, int indexType) : base(withId, indexType) {
         }
 
         /// <summary>
@@ -22,41 +21,19 @@ namespace PasPasPas.Typings.Structured {
         /// </summary>
         public override uint TypeSizeInBytes {
             get {
-                var result = 0u;
+                var index = TypeRegistry.GetTypeByIdOrUndefinedType(IndexType) as IOrdinalType;
 
-                foreach (var indexType in IndexTypes) {
+                var lowerBound = index.LowestElement as IOrdinalValue;
+                var upperBound = index.HighestElement as IOrdinalValue;
 
-                    var index = TypeRegistry.GetTypeByIdOrUndefinedType(indexType) as IOrdinalType;
+                if (lowerBound == default || upperBound == default)
+                    return 0;
 
-                    if (index == default)
-                        continue;
-
-                    var lowerBound = index.LowestElement as IOrdinalValue;
-                    var upperBound = index.HighestElement as IOrdinalValue;
-
-                    if (lowerBound == default || upperBound == default)
-                        continue;
-
-                    var l = lowerBound.GetOrdinalValue(TypeRegistry);
-                    var h = upperBound.GetOrdinalValue(TypeRegistry);
-                    var size = TypeRegistry.Runtime.Integers.Subtract(h, l);
-
-                    if (!size.IsIntegralValue(out var value))
-                        continue;
-
-                    if (value.SignedValue < 0)
-                        continue;
-
-                    var dimensionSize = (uint)(BaseType.TypeSizeInBytes * value.SignedValue);
-
-                    if (result == 0u)
-                        result = dimensionSize;
-                    else
-                        result *= dimensionSize;
-
-                }
-
-                return result;
+                var l = lowerBound.GetOrdinalValue(TypeRegistry);
+                var h = upperBound.GetOrdinalValue(TypeRegistry);
+                var size = TypeRegistry.Runtime.Integers.Subtract(h, l);
+                var value = size as IIntegerValue;
+                return (uint)(BaseType.TypeSizeInBytes * value.SignedValue);
             }
         }
     }

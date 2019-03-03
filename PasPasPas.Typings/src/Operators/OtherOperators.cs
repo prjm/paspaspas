@@ -1,8 +1,6 @@
-﻿using System.Collections.Immutable;
-using PasPasPas.Globals.Runtime;
+﻿using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Typings.Common;
-using PasPasPas.Typings.Structured;
 
 namespace PasPasPas.Typings.Operators {
 
@@ -70,9 +68,7 @@ namespace PasPasPas.Typings.Operators {
                 return baseType;
 
             if (!input.IsConstant) {
-                var typeId = TypeRegistry.RequireUserTypeId();
-                var arrayType = new DynamicArrayType(typeId) { BaseTypeId = typeId };
-                TypeRegistry.RegisterType(arrayType);
+                var arrayType = TypeRegistry.TypeCreator.CreateDynamicArrayType(baseType.TypeId, false);
                 return TypeRegistry.MakeReference(arrayType.TypeId);
             }
 
@@ -81,9 +77,9 @@ namespace PasPasPas.Typings.Operators {
             using (var list = TypeRegistry.ListPools.GetList<ITypeReference>()) {
                 list.Item.AddRange(leftValue.Values);
                 list.Item.AddRange(rightValue.Values);
-                var typeId = TypeRegistry.RequireUserTypeId();
-                var arrayType = new StaticArrayType(typeId, ImmutableArray.Create(KnownTypeIds.IntegerType));
-                return TypeRegistry.Runtime.Structured.CreateArrayValue(typeId, baseType.TypeId, TypeRegistry.ListPools.GetFixedArray(list));
+                var indexType = TypeRegistry.TypeCreator.CreateSubrangeType(KnownTypeIds.IntegerType, TypeRegistry.Runtime.Integers.Zero, TypeRegistry.Runtime.Integers.ToScaledIntegerValue(list.Item.Count - 1));
+                var arrayType = TypeRegistry.TypeCreator.CreateStaticArrayType(baseType.TypeId, indexType.TypeId, false);
+                return TypeRegistry.Runtime.Structured.CreateArrayValue(arrayType.TypeId, baseType.TypeId, TypeRegistry.ListPools.GetFixedArray(list));
             }
         }
     }

@@ -1,7 +1,7 @@
 ﻿namespace PasPasPas.Typings.Hidden {
 
     /// <summary>
-    ///     unspecifed type (placeholder)
+    ///     unspecified type (placeholder)
     /// </summary>
     public class UnspecifiedType : HiddenIntrinsicType {
 

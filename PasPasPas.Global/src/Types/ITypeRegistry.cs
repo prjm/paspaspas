@@ -47,22 +47,10 @@ namespace PasPasPas.Globals.Types {
         void RegisterOperator(IOperator newOperator);
 
         /// <summary>
-        ///     register a new type
-        /// </summary>
-        /// <param name="typeDef"></param>
-        ITypeDefinition RegisterType(ITypeDefinition typeDef);
-
-        /// <summary>
         ///     runtime values, used to enable to calculate the results
         ///     of operators on constants
         /// </summary>
         IRuntimeValueFactory Runtime { get; }
-
-        /// <summary>
-        ///     generate a new user type id
-        /// </summary>
-        /// <returns></returns>
-        int RequireUserTypeId();
 
         /// <summary>
         ///     get the type kind of a type id
@@ -90,5 +78,12 @@ namespace PasPasPas.Globals.Types {
         ///     list pools
         /// </summary>
         IListPools ListPools { get; }
+
+
+        /// <summary>
+        ///     type factory
+        /// </summary>
+        ITypeCreator TypeCreator { get; }
+
     }
 }

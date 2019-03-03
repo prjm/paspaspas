@@ -3,7 +3,6 @@ using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Typings.Common;
-using PasPasPas.Typings.Structured;
 
 namespace PasPasPas.Runtime.Values.Structured {
 
@@ -226,8 +225,7 @@ namespace PasPasPas.Runtime.Values.Structured {
 
             var typeId = default(int);
             if (newType) {
-                typeId = typeRegistry.RequireUserTypeId();
-                typeRegistry.RegisterType(new SetType(typeId, baseType));
+                typeId = typeRegistry.TypeCreator.CreateSetType(baseType).TypeId;
             }
             else
                 typeId = left.TypeId;
@@ -273,10 +271,8 @@ namespace PasPasPas.Runtime.Values.Structured {
                 return types.Runtime.Types.MakeErrorTypeReference();
 
             var typeId = default(int);
-            if (newType) {
-                typeId = types.RequireUserTypeId();
-                types.RegisterType(new SetType(typeId, baseType));
-            }
+            if (newType)
+                typeId = types.TypeCreator.CreateSetType(baseType).TypeId;
             else
                 typeId = left.TypeId;
 

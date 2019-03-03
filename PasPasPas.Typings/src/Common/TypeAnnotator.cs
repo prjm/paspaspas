@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Collections.Immutable;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Infrastructure.Utils;
@@ -287,9 +286,7 @@ namespace PasPasPas.Typings.Common {
                 typeId = KnownTypeIds.ErrorType;
 
             if (element.IsNewType) {
-                var newTypeId = RequireUserTypeId();
-                RegisterUserDefinedType(new TypeAlias(newTypeId, typeId, true));
-                typeId = newTypeId;
+                typeId = TypeCreator.CreateTypeAlias(typeId, true).TypeId;
             }
 
             element.TypeInfo = GetInstanceTypeById(typeId);
@@ -331,14 +328,13 @@ namespace PasPasPas.Typings.Common {
             }
 
             else if (element.Kind == MetaTypeKind.ShortString) {
-                var userTypeId = RequireUserTypeId();
                 var length = TypeRegistry.Runtime.Integers.Invalid;
 
                 if (element.Value != default && element.Value.TypeInfo != default && element.Value.TypeInfo.IsConstant())
                     length = element.Value.TypeInfo;
 
-                var userType = RegisterUserDefinedType(new ShortStringType(userTypeId, length));
-                element.TypeInfo = environment.Runtime.Types.MakeTypeReference(userTypeId);
+                var userType = TypeCreator.CreateShortStringType(length);
+                element.TypeInfo = environment.Runtime.Types.MakeTypeReference(userType.TypeId);
             }
 
             else if (element.Kind == MetaTypeKind.ShortStringDefault) {
@@ -479,9 +475,8 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="element">enumeration type definition</param>
         public void StartVisit(EnumTypeCollection element) {
-            var typeId = RequireUserTypeId();
-            var typeDef = new EnumeratedType(typeId);
-            var type = GetInstanceTypeById(RegisterUserDefinedType(typeDef).TypeId);
+            var typeDef = TypeCreator.CreateEnumType();
+            var type = GetInstanceTypeById(typeDef.TypeId);
             currentTypeDefinition.Push(type);
         }
 
@@ -490,9 +485,8 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="element"></param>
         public void StartVisit(RecordConstant element) {
-            var typeId = RequireUserTypeId();
-            var typeDef = new StructuredTypeDeclaration(typeId, StructuredTypeKind.Record);
-            var type = GetInstanceTypeById(RegisterUserDefinedType(typeDef).TypeId);
+            var typeDef = TypeCreator.CreateStructuredType(StructuredTypeKind.Record);
+            var type = GetInstanceTypeById(typeDef.TypeId);
             currentTypeDefinition.Push(type);
         }
 
@@ -520,20 +514,6 @@ namespace PasPasPas.Typings.Common {
             var type = GetTypeByIdOrUndefinedType(typeReference.TypeId) as StructuredTypeDeclaration;
             type.Fields.Add(new Variable() { Name = element.Name.CompleteName, SymbolType = element.Value.TypeInfo });
         }
-
-        /// <summary>
-        ///     register a new type definition
-        /// </summary>
-        /// <param name="typeDef"></param>
-        private ITypeDefinition RegisterUserDefinedType(ITypeDefinition typeDef)
-            => environment.TypeRegistry.RegisterType(typeDef);
-
-        /// <summary>
-        ///     require a new type id for a user defined type
-        /// </summary>
-        /// <returns></returns>
-        private int RequireUserTypeId()
-            => environment.TypeRegistry.RequireUserTypeId();
 
         /// <summary>
         ///     end visiting an enumerated type definition
@@ -598,7 +578,7 @@ namespace PasPasPas.Typings.Common {
             if (left == default)
                 typeDef = GetErrorTypeReference(element);
             else if (element.RangeEnd == null)
-                typeDef = GetInstanceTypeById(RegisterUserDefinedType(new Simple.SubrangeType(RequireUserTypeId(), left.TypeId, left.LowestElement, leftTypeRef)).TypeId);
+                typeDef = GetInstanceTypeById(TypeCreator.CreateSubrangeType(left.TypeId, left.LowestElement, leftTypeRef).TypeId);
             else
                 typeDef = GetInstanceTypeById(TypeRegistry.GetTypeForSubrangeType(leftTypeRef, rightTypeRef));
 
@@ -625,10 +605,8 @@ namespace PasPasPas.Typings.Common {
         public void EndVisit(SetTypeDeclaration element) {
 
             if (element.TypeValue is ITypedSyntaxNode declaredEnum && declaredEnum.TypeInfo != null && declaredEnum.TypeInfo.TypeKind.IsOrdinal()) {
-                var typeId = RequireUserTypeId();
-                var setType = new SetType(typeId, declaredEnum.TypeInfo.TypeId);
-                RegisterUserDefinedType(setType);
-                element.TypeInfo = GetInstanceTypeById(typeId);
+                var setType = TypeCreator.CreateSetType(declaredEnum.TypeInfo.TypeId);
+                element.TypeInfo = GetInstanceTypeById(setType.TypeId);
                 return;
             }
 
@@ -640,7 +618,6 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="element"></param>
         public void EndVisit(ArrayTypeDeclaration element) {
-            var typeId = RequireUserTypeId();
             var baseTypeId = KnownTypeIds.ErrorType;
 
             if (element.TypeValue != null && element.TypeValue.TypeInfo != null) {
@@ -667,21 +644,21 @@ namespace PasPasPas.Typings.Common {
 
                 var typeDef = default(ITypeDefinition);
 
-                if (list.Item.Count < 1)
+                if (list.Item.Count < 1) {
 
-                    typeDef = new DynamicArrayType(typeId) {
-                        Packed = element.PackedType,
-                        BaseTypeId = baseTypeId
-                    };
+                    typeDef = TypeCreator.CreateDynamicArrayType(baseTypeId, element.PackedType);
 
-                else
+                }
+                else {
 
-                    typeDef = new StaticArrayType(typeId, TypeRegistry.ListPools.GetFixedArray(list)) {
-                        Packed = element.PackedType,
-                        BaseTypeId = baseTypeId
-                    };
+                    for (var i = list.Item.Count - 1; i >= 0; i--) {
 
-                RegisterUserDefinedType(typeDef);
+                        typeDef = TypeCreator.CreateStaticArrayType(baseTypeId, list.Item[i], element.PackedType);
+                        baseTypeId = typeDef.TypeId;
+
+                    }
+                }
+
                 element.TypeInfo = GetInstanceTypeById(typeDef.TypeId);
             }
         }
@@ -691,16 +668,12 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="element"></param>
         public void StartVisit(StructuredType element) {
-            var typeId = RequireUserTypeId();
-            var metaTypeId = RequireUserTypeId();
-            var typeDef = new StructuredTypeDeclaration(typeId, element.Kind);
-            var metaType = new MetaStructuredTypeDeclaration(metaTypeId, typeId);
-            RegisterUserDefinedType(typeDef);
-            RegisterUserDefinedType(metaType);
+            var typeDef = TypeCreator.CreateStructuredType(element.Kind);
+            var metaType = TypeCreator.CreateMetaType(typeDef.TypeId);
             typeDef.BaseClass = GetInstanceTypeById(KnownTypeIds.TObject);
-            typeDef.MetaType = metaType;
+            typeDef.MetaType = GetInstanceTypeById(metaType.TypeId);
 
-            currentTypeDefinition.Push(GetInstanceTypeById(typeDef.TypeInfo.TypeId));
+            currentTypeDefinition.Push(GetInstanceTypeById(typeDef.TypeId));
         }
 
         /// <summary>
@@ -710,7 +683,7 @@ namespace PasPasPas.Typings.Common {
         public void EndVisit(StructuredType element) {
             var value = currentTypeDefinition.Pop();
             var typeDef = value != null ? environment.TypeRegistry.GetTypeByIdOrUndefinedType(value.TypeId) as StructuredTypeDeclaration : null;
-            element.TypeInfo = GetTypeReferenceById(typeDef.MetaType.TypeInfo.TypeId);
+            element.TypeInfo = GetTypeReferenceById(typeDef.MetaType.TypeId);
         }
 
         /// <summary>
@@ -795,8 +768,10 @@ namespace PasPasPas.Typings.Common {
                     SymbolType = typeInfo
                 };
 
-                if (element.ClassItem)
-                    typeDef.MetaType.AddField(fieldDef);
+                if (element.ClassItem) {
+                    var metaType = TypeRegistry.GetTypeByIdOrUndefinedType(typeDef.MetaType.TypeId) as MetaStructuredTypeDeclaration;
+                    metaType.AddField(fieldDef);
+                }
                 else
                     typeDef.AddField(fieldDef);
             }
@@ -889,15 +864,16 @@ namespace PasPasPas.Typings.Common {
                     return;
                 }
 
-                var typeId = RequireUserTypeId();
                 var typdef = default(ITypeDefinition);
 
                 if (!element.RequiresArray)
-                    typdef = RegisterUserDefinedType(new SetType(typeId, baseType.TypeId));
-                else if (isConstant)
-                    typdef = RegisterUserDefinedType(new StaticArrayType(typeId, ImmutableArray.Create(KnownTypeIds.IntegerType)) { BaseTypeId = baseType.TypeId });
+                    typdef = TypeCreator.CreateSetType(baseType.TypeId);
+                else if (isConstant) {
+                    var indexType = TypeCreator.CreateSubrangeType(KnownTypeIds.IntegerType, TypeRegistry.Runtime.Integers.Zero, TypeRegistry.Runtime.Integers.ToScaledIntegerValue(values.Item.Count - 1));
+                    typdef = TypeCreator.CreateStaticArrayType(baseType.TypeId, indexType.TypeId, false);
+                }
                 else
-                    typdef = RegisterUserDefinedType(new DynamicArrayType(typeId));
+                    typdef = TypeCreator.CreateDynamicArrayType(baseType.TypeId, false);
 
                 if (!element.RequiresArray) {
                     if (isConstant)
@@ -997,22 +973,18 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="element"></param>
         public void EndVisit(ArrayConstant element) {
-            var typeId = RequireUserTypeId();
-            var indexTypeId = RequireUserTypeId();
             using (var constantValues = environment.ListPools.GetList<ITypeReference>()) {
 
                 var baseType = GetBaseTypeForArrayConstant(element.Items, out var isConstant, constantValues.Item, element, true);
                 var ints = TypeRegistry.Runtime.Integers;
-                var indexTypeDef = new Simple.SubrangeType(indexTypeId, KnownTypeIds.IntegerType, ints.Zero, ints.ToScaledIntegerValue(constantValues.Item.Count));
-                var indexType = RegisterUserDefinedType(indexTypeDef);
-                var arrayType = new StaticArrayType(typeId, ImmutableArray.Create(indexType.TypeId)) { BaseTypeId = baseType.TypeId };
-                var registeredType = RegisterUserDefinedType(arrayType).TypeId;
+                var indexTypeDef = TypeCreator.CreateSubrangeType(KnownTypeIds.IntegerType, ints.Zero, ints.ToScaledIntegerValue(constantValues.Item.Count));
+                var arrayType = TypeCreator.CreateStaticArrayType(baseType.TypeId, indexTypeDef.TypeId, false);
 
                 if (isConstant) {
-                    element.TypeInfo = environment.Runtime.Structured.CreateArrayValue(registeredType, baseType.TypeId, TypeRegistry.ListPools.GetFixedArray(constantValues));
+                    element.TypeInfo = environment.Runtime.Structured.CreateArrayValue(arrayType.TypeId, baseType.TypeId, TypeRegistry.ListPools.GetFixedArray(constantValues));
                 }
                 else {
-                    element.TypeInfo = GetInstanceTypeById(registeredType);
+                    element.TypeInfo = GetInstanceTypeById(arrayType.TypeId);
                 }
             }
         }
@@ -1034,10 +1006,8 @@ namespace PasPasPas.Typings.Common {
                 return;
             }
 
-            var newType = RequireUserTypeId();
-            var alias = new TypeAlias(newType, element.TypeValue.TypeInfo.TypeId, false);
-            TypeRegistry.RegisterType(alias);
-            element.TypeInfo = GetInstanceTypeById(newType);
+            var alias = TypeCreator.CreateTypeAlias(element.TypeValue.TypeInfo.TypeId, false);
+            element.TypeInfo = GetInstanceTypeById(alias.TypeId);
         }
 
         private bool AreRecordTypesCompatible(int leftId, int rightId)
@@ -1045,6 +1015,9 @@ namespace PasPasPas.Typings.Common {
 
         private int GetSmallestTextTypeOrNext(int leftId, int rightId)
             => environment.TypeRegistry.GetSmallestTextTypeOrNext(leftId, rightId);
+
+        private ITypeCreator TypeCreator
+            => TypeRegistry.TypeCreator;
 
     }
 }
