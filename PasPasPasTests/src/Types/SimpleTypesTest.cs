@@ -42,7 +42,7 @@ namespace PasPasPasTests.Types {
                     return default;
 
                 var registry = array.TypeRegistry;
-                return registry.GetTypeByIdOrUndefinedType(array.IndexType);
+                return registry.GetTypeByIdOrUndefinedType(array.IndexTypeId);
             }
 
             CommonTypeKind GetIndexTypeKind(ArrayType array) {
@@ -50,7 +50,7 @@ namespace PasPasPasTests.Types {
                 return t != null ? t.TypeKind : CommonTypeKind.UnknownType;
             };
 
-            AssertDeclType("array [1..4] of Integer", typeKind: CommonTypeKind.ArrayType);
+            AssertDeclType("array [1..4] of Integer", typeKind: CommonTypeKind.StaticArrayType);
             AssertDeclType("array [1..4] of Integer", (td) => Assert.AreEqual(CommonTypeKind.IntegerType, (td as ArrayType)?.BaseType?.TypeKind));
             AssertDeclType("array [1..4] of Integer", (td) => Assert.AreEqual(CommonTypeKind.IntegerType, (GetIndexType(td as ArrayType) as SubrangeType)?.BaseType?.TypeKind));
             AssertDeclType("array [false..true] of Integer", (td) => Assert.AreEqual(CommonTypeKind.BooleanType, (GetIndexType(td as ArrayType) as SubrangeType)?.BaseType.TypeKind));

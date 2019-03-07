@@ -8,7 +8,7 @@
         /// <summary>
         ///     index types
         /// </summary>
-        int IndexType { get; }
+        int IndexTypeId { get; }
 
         /// <summary>
         ///     base type id

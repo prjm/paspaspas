@@ -35,9 +35,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         /// <param name="entry"></param>
         /// <param name="logSource"></param>
+        /// <param name="numberOfTypeParameters">number of generic type parameters</param>
         /// <returns></returns>
-        public bool Add(T entry, LogSource logSource) {
+        public bool Add(T entry, LogSource logSource, int numberOfTypeParameters = 0) {
             var name = entry.SymbolName;
+
+            if (numberOfTypeParameters > 0)
+                name = string.Concat(name, AbstractSyntaxPartBase.GenericSeparator, numberOfTypeParameters);
 
             if (symbols == null)
                 symbols = CreateSymbols();

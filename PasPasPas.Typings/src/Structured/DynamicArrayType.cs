@@ -1,4 +1,5 @@
-﻿using PasPasPas.Globals.Types;
+﻿using PasPasPas.Globals.Runtime;
+using PasPasPas.Globals.Types;
 using PasPasPas.Typings.Common;
 
 namespace PasPasPas.Typings.Structured {
@@ -20,5 +21,13 @@ namespace PasPasPas.Typings.Structured {
         /// </summary>
         public override uint TypeSizeInBytes
             => TypeRegistry.GetPointerSize();
+
+
+        /// <summary>
+        ///     type kind
+        /// </summary>
+        public override CommonTypeKind TypeKind
+            => CommonTypeKind.DynamicArrayType;
+
     }
 }

@@ -751,8 +751,10 @@ namespace PasPasPasTests.Parser {
         [TestMethod]
         public void TestMethodImplementation() {
             StructuredType r(object t) => ((t as CompilationUnit)?.InterfaceSymbols["Tx"] as TypeDeclaration)?.TypeValue as StructuredType;
+            StructuredType rg(object t) => ((t as CompilationUnit)?.InterfaceSymbols["Tx`1"] as TypeDeclaration)?.TypeValue as StructuredType;
             StructuredType n(object t) => (r(t)?.Symbols["Tz"] as TypeDeclaration)?.TypeValue as StructuredType;
             MethodImplementation i(object t) => r(t)?.Methods["m"]?.Implementation;
+            MethodImplementation ig(object t) => rg(t)?.Methods["m"]?.Implementation;
             MethodImplementation j(object t) => n(t)?.Methods["m"]?.Implementation;
 
             StructuredType r1(object t) => ((t as CompilationUnit)?.ImplementationSymbols["Tx"] as TypeDeclaration)?.TypeValue as StructuredType;
@@ -788,7 +790,7 @@ namespace PasPasPasTests.Parser {
             RunAstTest("unit z.x; interface type Tx = class procedure m(); end; implementation procedure Tx.m; experimental; begin end; end.", t => i(t)?.Hints?.SymbolIsExperimental, true);
 
             RunAstTest("unit z.x; interface type Tx = class procedure m<T>(); end; implementation procedure Tx.m<T>; begin end; end.", t => (i(t)?.Name as GenericSymbolName)?.NamePart?.Parameters[0], "T");
-            RunAstTest("unit z.x; interface type Tx<Q> = class procedure m<T>(); end; implementation procedure Tx<Q>.m<T>; begin end; end.", t => (i(t)?.Name as GenericSymbolName)?.NamespaceParts.FirstOrDefault()?.Parameters[0], "Q");
+            RunAstTest("unit z.x; interface type Tx<Q> = class procedure m<T>(); end; implementation procedure Tx<Q>.m<T>; begin end; end.", t => (ig(t)?.Name as GenericSymbolName)?.NamespaceParts.FirstOrDefault()?.Parameters[0], "Q");
 
             //RunAstTest("unit z.x; interface type Tx = class procedure m(const a: string); end; implementation procedure Tx.m; begin end; end.", t => i(t)?., "Tx");
         }

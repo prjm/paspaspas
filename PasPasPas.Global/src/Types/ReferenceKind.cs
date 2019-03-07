@@ -1,4 +1,4 @@
-﻿namespace PasPasPas.Typings.Common {
+﻿namespace PasPasPas.Globals.Types {
 
     /// <summary>
     ///     symbol reference
@@ -54,5 +54,10 @@
         ///     reference to global routine
         /// </summary>
         RefToGlobalRoutine = 9,
+
+        /// <summary>
+        ///     reference to a bound generic type
+        /// </summary>
+        RefToBoundGeneric = 10,
     }
 }

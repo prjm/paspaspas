@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using PasPasPas.Globals.Runtime;
+using PasPasPas.Globals.Types;
+using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Typings.Common;
 using PasPasPas.Typings.Routines;
 
@@ -47,8 +49,13 @@ namespace PasPasPas.Typings.Structured {
         /// </summary>
         /// <param name="symbolName">symbol name</param>
         /// <param name="entry">defined entry</param>
-        public void RegisterSymbol(string symbolName, Reference entry)
-            => symbols.Add(symbolName, entry);
+        /// <param name="numberOfTypeParameters">number of generic type parameters</param>
+        public void RegisterSymbol(string symbolName, Reference entry, int numberOfTypeParameters = 0) {
+            if (numberOfTypeParameters < 1)
+                symbols.Add(symbolName, entry);
+            else
+                symbols.Add(string.Concat(symbolName, AbstractSyntaxPartBase.GenericSeparator, numberOfTypeParameters), entry);
+        }
 
         /// <summary>
         ///     resolve a symbol in this unit

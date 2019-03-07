@@ -1,6 +1,7 @@
 ﻿using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Infrastructure.Utils;
+using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Typings.Simple;
 using PasPasPas.Typings.Structured;
@@ -32,9 +33,10 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="baseTypeValue">base type</param>
         /// <param name="name">type name</param>
+        /// <param name="numberOfTypeArguments">number of generic type arguments</param>
         /// <returns></returns>
-        public ITypeReference ResolveTypeByName(ITypeReference baseTypeValue, string name) {
-            var symbolReference = ResolveByName(baseTypeValue, name);
+        public ITypeReference ResolveTypeByName(ITypeReference baseTypeValue, string name, int numberOfTypeArguments = 0) {
+            var symbolReference = ResolveByName(baseTypeValue, name, numberOfTypeArguments);
             return GetTypeReference(symbolReference);
         }
 
@@ -43,12 +45,13 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="baseTypeValue"></param>
         /// <param name="name"></param>
+        /// <param name="numberOfTypeArguments">number of generic type arguments</param>
         /// <returns></returns>
-        public Reference ResolveReferenceByName(Reference baseTypeValue, string name) {
+        public Reference ResolveReferenceByName(Reference baseTypeValue, string name, int numberOfTypeArguments = 0) {
             if (baseTypeValue == default)
-                return ResolveByName(default, name);
+                return ResolveByName(default, name, numberOfTypeArguments);
             else
-                return ResolveByName(TypeRegistry.MakeReference(baseTypeValue.Symbol.TypeId), name);
+                return ResolveByName(TypeRegistry.MakeReference(baseTypeValue.Symbol.TypeId), name, numberOfTypeArguments);
         }
 
         /// <summary>
@@ -56,15 +59,20 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="baseTypeValue"></param>
         /// <param name="name"></param>
+        /// <param name="numberOfTypeArguments">number of generic type arguments</param>
         /// <returns></returns>
-        public Reference ResolveByName(ITypeReference baseTypeValue, string name) {
+        public Reference ResolveByName(ITypeReference baseTypeValue, string name, int numberOfTypeArguments) {
+
+            if (numberOfTypeArguments > 0)
+                name = string.Concat(name, AbstractSyntaxPartBase.GenericSeparator, numberOfTypeArguments);
+
             if (baseTypeValue == default || baseTypeValue.TypeId == KnownTypeIds.UnspecifiedType) {
                 if (scope.TryToResolve(name, out var reference))
                     return reference;
 
                 foreach (var scopeEntry in scope.AllEntriesInOrder) {
                     if (scopeEntry.Value.Kind == ReferenceKind.RefToUnit) {
-                        var importedEntry = ResolveByName(TypeRegistry.MakeReference(scopeEntry.Value.Symbol.TypeId), name);
+                        var importedEntry = ResolveByName(TypeRegistry.MakeReference(scopeEntry.Value.Symbol.TypeId), name, 0);
                         if (importedEntry != null)
                             return importedEntry;
                     }
@@ -153,7 +161,12 @@ namespace PasPasPas.Typings.Common {
         /// <param name="symbolName">name of the symbol</param>
         /// <param name="kind">scope kind</param>
         /// <param name="symbol">referenced symbol</param>
-        public void AddToScope(string symbolName, ReferenceKind kind, IRefSymbol symbol)
-            => scope.AddEntry(symbolName, new Reference(kind, symbol));
+        /// <param name="numberOfTypeParameters">number of type parameters</param>
+        public void AddToScope(string symbolName, ReferenceKind kind, IRefSymbol symbol, int numberOfTypeParameters = 0) {
+            if (numberOfTypeParameters == 0)
+                scope.AddEntry(symbolName, new Reference(kind, symbol));
+            else
+                scope.AddEntry(string.Concat(symbolName, AbstractSyntaxPartBase.GenericSeparator, numberOfTypeParameters), new Reference(kind, symbol));
+        }
     }
 }

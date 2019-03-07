@@ -359,7 +359,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             ExtractAttributes(element.Attributes as UserAttributesSymbol, CurrentUnit, declaration.Attributes);
             declaration.Hints = ExtractHints(element.Hint as HintingInformationListSymbol);
             symbols.Symbols.Items.Add(new SingleDeclaredSymbol(declaration));
-            symbols.Symbols.Add(declaration, LogSource);
+            symbols.Symbols.Add(declaration, LogSource, declaration.Generics?.Count ?? 0);
         }
 
         /// <summary>

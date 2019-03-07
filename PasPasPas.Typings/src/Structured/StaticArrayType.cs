@@ -17,11 +17,17 @@ namespace PasPasPas.Typings.Structured {
         }
 
         /// <summary>
+        ///     type kind
+        /// </summary>
+        public override CommonTypeKind TypeKind
+            => CommonTypeKind.StaticArrayType;
+
+        /// <summary>
         ///     type size in bytes
         /// </summary>
         public override uint TypeSizeInBytes {
             get {
-                var index = TypeRegistry.GetTypeByIdOrUndefinedType(IndexType) as IOrdinalType;
+                var index = TypeRegistry.GetTypeByIdOrUndefinedType(IndexTypeId) as IOrdinalType;
 
                 var lowerBound = index.LowestElement as IOrdinalValue;
                 var upperBound = index.HighestElement as IOrdinalValue;

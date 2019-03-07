@@ -613,11 +613,11 @@ namespace PasPasPasTests.Types {
 
         [TestMethod]
         public void TestConstantArrayTypes() {
-            AssertExprTypeByConst("(1,2)", KnownTypeIds.UnspecifiedType, false, "array [1000] of int8");
-            AssertExprTypeByConst("('a','b')", KnownTypeIds.UnspecifiedType, false, "array [1000] of WideChar");
-            AssertExprTypeByConst("('aa','b')", KnownTypeIds.UnspecifiedType, false, "array [1000] of UnicodeString");
-            AssertExprTypeByConst("(1.0, 1.4)", KnownTypeIds.UnspecifiedType, false, "array [1000] of extended");
-            AssertExprTypeByConst("(a, b)", KnownTypeIds.UnspecifiedType, false, "array [1001] of enum Int8", "type ta = (a,b);");
+            AssertExprTypeByConst("(1,2)", KnownTypeIds.UnspecifiedType, false, "array [Subrange Int32] of int8");
+            AssertExprTypeByConst("('a','b')", KnownTypeIds.UnspecifiedType, false, "array [Subrange Int32] of WideChar");
+            AssertExprTypeByConst("('aa','b')", KnownTypeIds.UnspecifiedType, false, "array [Subrange Int32] of UnicodeString");
+            AssertExprTypeByConst("(1.0, 1.4)", KnownTypeIds.UnspecifiedType, false, "array [Subrange Int32] of extended");
+            AssertExprTypeByConst("(a, b)", KnownTypeIds.UnspecifiedType, false, "array [Subrange Int32] of enum Int8", "type ta = (a,b);");
             AssertExprValue("a", GetArrayValue(RegisteredTypes.SmallestUserTypeId, KnownTypeIds.StringType, GetUnicodeStringValue("11"), GetUnicodeStringValue("2")), "const a: array [0 .. 1] of String = ('11', '2');");
         }
 

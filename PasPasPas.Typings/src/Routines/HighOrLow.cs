@@ -99,7 +99,7 @@ namespace PasPasPas.Typings.Routines {
                 return Low ? Integers.ToScaledIntegerValue(1) : shortStringType.Size;
 
             if (IsArrayType(parameter.TypeId, out var arrayType) &&  //
-                IsOrdinalType(arrayType.IndexType, out var ordinalIndexType))
+                IsOrdinalType(arrayType.IndexTypeId, out var ordinalIndexType))
                 return Low ? ordinalIndexType.LowestElement : ordinalIndexType.HighestElement;
 
             return RuntimeException();

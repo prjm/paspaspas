@@ -1,4 +1,5 @@
 ﻿using System.Collections.Immutable;
+using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Typings.Common;
 
@@ -29,10 +30,22 @@ namespace PasPasPas.Typings.Structured {
             => 1;
 
         /// <summary>
+        ///     type kind
+        /// </summary>
+        public override CommonTypeKind TypeKind
+            => CommonTypeKind.UnknownType;
+
+        /// <summary>
         ///     bind to a generic type
         /// </summary>
         /// <param name="typeIds"></param>
         /// <returns></returns>
-        public int Bind(ImmutableArray<int> typeIds) => throw new System.NotImplementedException();
+        public Reference Bind(ImmutableArray<int> typeIds) {
+            if (typeIds.Length != 1)
+                return default;
+
+            var arrayType = TypeRegistry.TypeCreator.CreateDynamicArrayType(typeIds[0], false);
+            return new Reference(ReferenceKind.RefToBoundGeneric, arrayType);
+        }
     }
 }

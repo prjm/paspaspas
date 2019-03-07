@@ -56,7 +56,7 @@
         /// <param name="kind"></param>
         /// <returns></returns>
         public static bool IsArray(this CommonTypeKind kind)
-            => kind == CommonTypeKind.ArrayType || kind == CommonTypeKind.ConstantArrayType || kind == CommonTypeKind.DynamicArrayType;
+            => kind == CommonTypeKind.StaticArrayType || kind == CommonTypeKind.ConstantArrayType || kind == CommonTypeKind.DynamicArrayType;
 
         /// <summary>
         ///     test if the type kind is an array type

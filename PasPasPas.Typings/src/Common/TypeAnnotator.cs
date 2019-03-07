@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
-using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
 using PasPasPas.Parsing.SyntaxTree.Types;
 using PasPasPas.Parsing.SyntaxTree.Utils;
@@ -266,24 +265,50 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="element"></param>
         public void EndVisit(Parsing.SyntaxTree.Abstract.TypeAlias element) {
-            var typeName = element.AsScopedName;
 
-            if (typeName == default(ScopedName)) {
+            if (element.Fragments == default || element.Fragments.Count < 1) {
                 element.TypeInfo = GetErrorTypeReference(element);
                 return;
             }
 
             var entry = default(Reference);
-            for (var i = 0; i < typeName.Length && (i == 0 || entry != default); i++) {
-                entry = resolver.ResolveReferenceByName(entry, typeName[i]);
+            for (var i = 0; i < element.Fragments.Count && (i == 0 || entry != default); i++) {
+                var fragment = element.Fragments[i];
+
+                if (fragment.TypeValues.Count < 1) {
+                    entry = resolver.ResolveReferenceByName(entry, fragment.Name);
+                    continue;
+                }
+
+                using (var list = environment.ListPools.GetList<int>()) {
+                    foreach (var typeValue in fragment.TypeValues) {
+                        if (typeValue.TypeInfo == default || typeValue.TypeInfo.TypeId == KnownTypeIds.ErrorType) {
+                            element.TypeInfo = GetErrorTypeReference(element);
+                            return;
+                        }
+
+                        list.Item.Add(typeValue.TypeInfo.TypeId);
+                    }
+
+                    entry = resolver.ResolveReferenceByName(entry, fragment.Name, fragment.TypeValues.Count);
+
+                    if (entry != default) {
+                        var genericType = GetTypeByIdOrUndefinedType(entry.Symbol.TypeId) as IGenericType;
+                        entry = genericType.Bind(environment.ListPools.GetFixedArray(list));
+                    }
+                    else
+                        entry = default;
+                }
             }
 
-            int typeId;
+            var typeId = default(int);
 
-            if (entry != null && entry.Kind == ReferenceKind.RefToType)
+            if (entry != default && (entry.Kind == ReferenceKind.RefToType || entry.Kind == ReferenceKind.RefToBoundGeneric))
                 typeId = entry.Symbol.TypeId;
             else
                 typeId = KnownTypeIds.ErrorType;
+
+            var type = GetTypeByIdOrUndefinedType(typeId);
 
             if (element.IsNewType) {
                 typeId = TypeCreator.CreateTypeAlias(typeId, true).TypeId;
@@ -299,7 +324,7 @@ namespace PasPasPas.Typings.Common {
         public void EndVisit(MetaType element) {
             if (element.Kind == MetaTypeKind.NamedType) {
                 var name = element.AsScopedName;
-                var entry = resolver.ResolveByName(default, element.AsScopedName.ToString());
+                var entry = resolver.ResolveByName(default, element.AsScopedName.ToString(), 0);
                 int typeId;
 
                 if (entry.Kind == ReferenceKind.RefToType) {
@@ -434,7 +459,7 @@ namespace PasPasPas.Typings.Common {
                         var signature = CreateSignatureFromSymbolPart(symRef);
 
                         if (baseTypeValue.TypeId == KnownTypeIds.UnspecifiedType) {
-                            var reference = resolver.ResolveByName(baseTypeValue, symRef.Name);
+                            var reference = resolver.ResolveByName(baseTypeValue, symRef.Name, 0);
 
                             if (reference == null) {
                                 baseTypeValue = GetErrorTypeReference(element);
@@ -594,7 +619,7 @@ namespace PasPasPas.Typings.Common {
             if (element.TypeValue is ITypedSyntaxNode declaredType && declaredType.TypeInfo != null) {
                 element.TypeInfo = element.TypeValue.TypeInfo;
                 if (element.Name.CompleteName != default)
-                    resolver.AddToScope(element.Name.CompleteName, ReferenceKind.RefToType, TypeRegistry.GetTypeByIdOrUndefinedType(element.TypeInfo.TypeId));
+                    resolver.AddToScope(element.Name.CompleteName, ReferenceKind.RefToType, TypeRegistry.GetTypeByIdOrUndefinedType(element.TypeInfo.TypeId), element.Generics?.Count ?? 0);
             }
         }
 

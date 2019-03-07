@@ -1,6 +1,4 @@
-﻿using PasPasPas.Globals.Types;
-
-namespace PasPasPas.Typings.Common {
+﻿namespace PasPasPas.Globals.Types {
 
     /// <summary>
     ///     reference to symbol

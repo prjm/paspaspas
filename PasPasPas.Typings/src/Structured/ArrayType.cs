@@ -14,18 +14,18 @@ namespace PasPasPas.Typings.Structured {
         /// <param name="withId"></param>
         /// <param name="indexType">index types</param>
         protected ArrayType(int withId, int indexType) : base(withId)
-            => IndexType = indexType;
+            => IndexTypeId = indexType;
 
         /// <summary>
         ///     array index types
         /// </summary>
-        public int IndexType { get; }
+        public int IndexTypeId { get; }
 
         /// <summary>
-        ///     type kind
+        ///     index type
         /// </summary>
-        public override CommonTypeKind TypeKind
-            => CommonTypeKind.ArrayType;
+        public ITypeDefinition IndexType
+            => TypeRegistry.GetTypeByIdOrUndefinedType(IndexTypeId);
 
         /// <summary>
         ///     base type id
@@ -52,7 +52,7 @@ namespace PasPasPas.Typings.Structured {
         /// <returns></returns>
         public override bool CanBeAssignedFrom(ITypeDefinition otherType) {
 
-            if (otherType.TypeKind == CommonTypeKind.ArrayType && otherType is ArrayType array) {
+            if (otherType.TypeKind == CommonTypeKind.StaticArrayType && otherType is ArrayType array) {
                 var isPackedString = (BaseType.TypeKind.IsChar() && array.BaseType.TypeKind.IsChar()) && (Packed && array.Packed);
                 return isPackedString;
             }

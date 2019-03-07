@@ -6,7 +6,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// <summary>
     ///     symbol table
     /// </summary>
-    /// <typeparam name="T">symbol type, identifiert by names</typeparam>
+    /// <typeparam name="T">symbol type, identified by names</typeparam>
     public interface ISymbolTable<T> : ISyntaxPart where T : ISymbolTableEntry {
 
         /// <summary>
@@ -14,8 +14,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         /// <param name="entry">entry to add</param>
         /// <param name="logSource">log source</param>
+        /// <param name="numberOfTypeParameters">number of generic type paremeters</param>
         /// <returns><c>true</c> if added</returns>
-        bool Add(T entry, LogSource logSource);
+        bool Add(T entry, LogSource logSource, int numberOfTypeParameters = 0);
 
         /// <summary>
         ///     try to remove the symbol

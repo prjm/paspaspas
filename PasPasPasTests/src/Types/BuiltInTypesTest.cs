@@ -2,6 +2,7 @@
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Options.DataTypes;
+using PasPasPas.Typings.Common;
 using PasPasPas.Typings.Structured;
 using PasPasPasTests.Common;
 
@@ -196,13 +197,11 @@ namespace PasPasPasTests.Types {
             AssertDeclType("System.Currency", KnownTypeIds.Currency);
         }
 
-        /*
         [TestMethod]
         public void TestArrayTypes() {
             AssertDeclType("TArray<Integer>", RegisteredTypes.SmallestUserTypeId, typeKind: CommonTypeKind.DynamicArrayType);
-            AssertDeclType("TArray<String>", KnownTypeIds.Real48Type);
+            AssertDeclType("TArray<String>", RegisteredTypes.SmallestUserTypeId, typeKind: CommonTypeKind.DynamicArrayType);
         }
-        */
 
     }
 }

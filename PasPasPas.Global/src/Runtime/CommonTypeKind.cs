@@ -73,7 +73,7 @@
         /// <summary>
         ///     array type
         /// </summary>
-        ArrayType = 13,
+        StaticArrayType = 13,
 
         /// <summary>
         ///     record type

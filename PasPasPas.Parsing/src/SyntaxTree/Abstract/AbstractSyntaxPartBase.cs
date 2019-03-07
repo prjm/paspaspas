@@ -17,6 +17,11 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
             => 0;
 
         /// <summary>
+        ///     generic type name separator
+        /// </summary>
+        public const string GenericSeparator = "`";
+
+        /// <summary>
         ///     child parts
         /// </summary>
         public virtual IEnumerable<ISyntaxPart> Parts

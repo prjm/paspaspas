@@ -50,10 +50,15 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
                 if (symbols == null)
                     return null;
 
-                if (!symbols.Contains(part.Name))
+                var partName = part.Name;
+
+                if (part.Parameters != default && part.Parameters.Count > 0)
+                    partName = string.Concat(partName, AbstractSyntaxPartBase.GenericSeparator, part.Parameters.Count);
+
+                if (!symbols.Contains(partName))
                     return null;
 
-                symbol = symbols[part.Name];
+                symbol = symbols[partName];
 
                 if (symbol == null)
                     return null;

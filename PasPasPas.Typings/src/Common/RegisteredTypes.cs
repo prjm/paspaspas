@@ -157,10 +157,11 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         /// <param name="typeDef">type definition</param>
         /// <param name="typeName">type name</param>
-        private void RegisterSystemType(ITypeDefinition typeDef, string typeName) {
+        /// <param name="numberOfTypeParameters">number of generic type parameters</param>
+        private void RegisterSystemType(ITypeDefinition typeDef, string typeName, int numberOfTypeParameters = 0) {
             RegisterType(typeDef);
             if (!string.IsNullOrWhiteSpace(typeName))
-                systemUnit.RegisterSymbol(typeName, new Reference(ReferenceKind.RefToType, typeDef));
+                systemUnit.RegisterSymbol(typeName, new Reference(ReferenceKind.RefToType, typeDef), numberOfTypeParameters);
         }
 
         /// <summary>
@@ -177,7 +178,7 @@ namespace PasPasPas.Typings.Common {
             RegisterAliasTypes();
             RegisterNativeIntTypes(intSize);
             RegisterHiddenTypes();
-            RegisterSystemType(new GenericArrayType(KnownTypeIds.GenericArrayType), "TArray");
+            RegisterSystemType(new GenericArrayType(KnownTypeIds.GenericArrayType), "TArray", 1);
         }
 
         private void RegisterHiddenTypes()
