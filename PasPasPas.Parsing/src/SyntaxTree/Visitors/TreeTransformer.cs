@@ -2230,6 +2230,19 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             result.Kind = TokenKindMapper.MapMethodKind(element.Heading.Kind);
             symbolTarget.Symbols.Items.Add(new SingleDeclaredSymbol(result));
             symbolTarget.Symbols.Add(result, LogSource);
+
+
+            if (result.Kind == ProcedureKind.Function) {
+                var declaration = new VariableDeclaration();
+                var functionResult = new FunctionResult() {
+                    Name = new SimpleSymbolName("Result"),
+                    Declaration = declaration,
+                    Method = result
+                };
+                declaration.Names.Add(functionResult);
+                result.Symbols.Add(functionResult, LogSource);
+                result.Symbols.Items.Add(declaration);
+            }
         }
 
         #endregion

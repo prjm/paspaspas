@@ -42,5 +42,15 @@ namespace PasPasPas.Typings.Structured {
                 return (uint)(BaseType.TypeSizeInBytes * value.SignedValue);
             }
         }
+
+        /// <summary>
+        ///     convert this type to string
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString() {
+            var result = $"[{IndexType}] ";
+            return $"static array {result}of {BaseType}".Trim();
+        }
+
     }
 }

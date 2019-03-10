@@ -47,6 +47,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
                 foreach (var parameter in Parameters.Items)
                     yield return parameter;
 
+                if (TypeValue != default)
+                    yield return TypeValue;
+
                 foreach (var directive in Directives)
                     yield return directive;
 

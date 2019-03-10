@@ -47,6 +47,7 @@ namespace PasPasPas.Typings.Common {
         IEndVisitor<SetExpression>,
         IEndVisitor<ArrayConstant>,
         IStartVisitor<RecordConstant>, IEndVisitor<RecordConstant>,
+        IStartVisitor<MethodImplementation>, IEndVisitor<MethodImplementation>,
         IEndVisitor<RecordConstantItem>,
         IEndVisitor<ClassOfTypeDeclaration> {
 
@@ -255,8 +256,18 @@ namespace PasPasPas.Typings.Common {
                 element.TypeInfo = GetInstanceTypeById(metaType.BaseType);
 
             foreach (var vardef in element.Names) {
-                vardef.TypeInfo = element.TypeInfo;
+
                 resolver.AddToScope(vardef.Name.CompleteName, ReferenceKind.RefToVariable, vardef);
+
+                if (vardef is FunctionResult fn) {
+                    if (fn.Method.TypeValue != default)
+                        vardef.TypeInfo = GetInstanceTypeById(fn.Method.TypeValue.TypeInfo.TypeId);
+                    else
+                        vardef.TypeInfo = GetErrorTypeReference(element);
+                    continue;
+                }
+
+                vardef.TypeInfo = element.TypeInfo;
             }
         }
 
@@ -1035,8 +1046,22 @@ namespace PasPasPas.Typings.Common {
             element.TypeInfo = GetInstanceTypeById(alias.TypeId);
         }
 
+        /// <summary>
+        ///     start visiting a method implementation
+        /// </summary>
+        /// <param name="element"></param>
+        public void StartVisit(MethodImplementation element)
+            => resolver.OpenScope();
+
+        /// <summary>
+        ///     end visiting a method implementation
+        /// </summary>
+        /// <param name="element"></param>
+        public void EndVisit(MethodImplementation element)
+                => resolver.CloseScope();
+
         private bool AreRecordTypesCompatible(int leftId, int rightId)
-            => environment.TypeRegistry.AreRecordTypesCompatible(leftId, rightId);
+        => environment.TypeRegistry.AreRecordTypesCompatible(leftId, rightId);
 
         private int GetSmallestTextTypeOrNext(int leftId, int rightId)
             => environment.TypeRegistry.GetSmallestTextTypeOrNext(leftId, rightId);

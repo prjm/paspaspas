@@ -29,5 +29,15 @@ namespace PasPasPas.Typings.Structured {
         public override CommonTypeKind TypeKind
             => CommonTypeKind.DynamicArrayType;
 
+        /// <summary>
+        ///     convert this type to string
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString() {
+            var result = $"[{IndexType}] ";
+            return $"dynamic array {result}of {BaseType}".Trim();
+        }
+
+
     }
 }
