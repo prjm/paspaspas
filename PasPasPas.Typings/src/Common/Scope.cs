@@ -61,8 +61,16 @@ namespace PasPasPas.Typings.Common {
         /// <summary>
         ///     list of entries
         /// </summary>
-        public IEnumerable<KeyValuePair<string, Reference>> AllEntriesInOrder
-            => entries;
+        public IEnumerable<KeyValuePair<string, Reference>> AllEntriesInOrder {
+            get {
+                var scope = this;
+                while (scope != default) {
+                    foreach (var entry in scope.entries)
+                        yield return entry;
+                    scope = scope.Parent;
+                }
+            }
+        }
 
         /// <summary>
         ///     open a new child scope

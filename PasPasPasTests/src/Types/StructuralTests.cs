@@ -8,17 +8,23 @@ namespace PasPasPasTests.Types {
     /// </summary>
     public class StructuralTests : TypeTest {
 
-        private void AssertExprTypeInProc(string proc, string expression, string typeName = "", string decls = "", int typeId = KnownTypeIds.ErrorType) {
+        private void AssertExprTypeInProc(string proc, string expression, string typeName = "", string decls = "", int typeId = KnownTypeIds.ErrorType, string proc2 = "") {
             var file = "SimpleExpr";
-            var program = $"program {file};{decls} {proc} begin writeln({expression}); end; begin end. ";
+            var program = $"program {file};{decls} {proc} begin writeln({expression}); end; {proc2} begin end. ";
             AssertExprType(file, program, typeId, false, typeName);
 
         }
 
         [TestMethod]
         public void TestResultDef() {
-            AssertExprTypeInProc("function a: string;", "Result", typeId: KnownTypeIds.StringType);
+            AssertExprTypeInProc("function a: Integer;", "a", typeId: KnownTypeIds.IntegerType);
+            AssertExprTypeInProc("type x = class function a: string; end; function x.a: string;", "Result", typeId: KnownTypeIds.StringType);
             AssertExprTypeInProc("function a: string;", "4", typeId: KnownTypeIds.ShortInt);
+            AssertExprTypeInProc("function a: string;", "Result", typeId: KnownTypeIds.StringType);
+            AssertExprTypeInProc("function a: string;", "a", typeId: KnownTypeIds.StringType);
+            AssertExprTypeInProc("function a: Integer; function b: string; ", "Result", "", "", KnownTypeIds.StringType, " begin end; ");
+            AssertExprTypeInProc("function a: Integer; function b: string; ", "b", "", "", KnownTypeIds.StringType, " begin end; ");
+            AssertExprTypeInProc("function a: Integer; function b: string; ", "a", "", "", KnownTypeIds.IntegerType, " begin end; ");
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using PasPasPas.Globals.Runtime;
+﻿using System;
+using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Infrastructure.Utils;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
@@ -76,6 +77,9 @@ namespace PasPasPas.Typings.Common {
                         if (importedEntry != null)
                             return importedEntry;
                     }
+
+                    if (string.Equals(scopeEntry.Key, name, StringComparison.OrdinalIgnoreCase))
+                        return scopeEntry.Value;
                 }
             }
 

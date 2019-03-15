@@ -97,7 +97,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         }
 
         /// <summary>
-        ///     declared symbols (wraps to intf. symbols and impl. symbols for units)
+        ///     declared symbols (wraps to interface symbols and implementation symbols for units)
         /// </summary>
         public DeclaredSymbolCollection Symbols { get; set; }
 

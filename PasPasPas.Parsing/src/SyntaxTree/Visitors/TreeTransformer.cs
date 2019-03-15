@@ -2231,7 +2231,10 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             symbolTarget.Symbols.Items.Add(new SingleDeclaredSymbol(result));
             symbolTarget.Symbols.Add(result, LogSource);
 
+            DefineResultVariables(result);
+        }
 
+        private void DefineResultVariables(MethodImplementation result) {
             if (result.Kind == ProcedureKind.Function) {
                 var declaration = new VariableDeclaration();
                 var functionResult = new FunctionResult() {
@@ -2239,7 +2242,13 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                     Declaration = declaration,
                     Method = result
                 };
+                var functionName = new FunctionResult() {
+                    Name = new SimpleSymbolName(result.Name.Name),
+                    Declaration = declaration,
+                    Method = result
+                };
                 declaration.Names.Add(functionResult);
+                declaration.Names.Add(functionName);
                 result.Symbols.Add(functionResult, LogSource);
                 result.Symbols.Items.Add(declaration);
             }
@@ -2262,19 +2271,24 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
 
             var type = default(DeclaredSymbol);
 
-            if (unit.InterfaceSymbols != null)
+            if (unit.InterfaceSymbols != default)
                 type = unit.InterfaceSymbols.Find(name.NamespaceParts);
 
-            if (type == null)
+            if (type == default && unit.ImplementationSymbols != default)
                 type = unit.ImplementationSymbols.Find(name.NamespaceParts);
 
-            if (type != null) {
+            if (type == default && unit.Symbols != default)
+                type = unit.Symbols.Find(name.NamespaceParts);
+
+            if (type != default) {
                 var typeDecl = type as Abstract.TypeDeclaration;
                 if (typeDecl.TypeValue is StructuredType typeStruct && typeStruct.Methods.Contains(name.Name)) {
                     var declaration = typeStruct.Methods[name.Name];
                     declaration.Implementation = result;
                 }
             }
+
+            DefineResultVariables(result);
         }
 
         #endregion
