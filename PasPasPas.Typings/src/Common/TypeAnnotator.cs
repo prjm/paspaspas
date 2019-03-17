@@ -255,6 +255,8 @@ namespace PasPasPas.Typings.Common {
             if (t is MetaStructuredTypeDeclaration metaType)
                 element.TypeInfo = GetInstanceTypeById(metaType.BaseType);
 
+            var fromResult = true;
+
             foreach (var vardef in element.Names) {
 
                 resolver.AddToScope(vardef.Name.CompleteName, ReferenceKind.RefToVariable, vardef);
@@ -267,7 +269,12 @@ namespace PasPasPas.Typings.Common {
                     continue;
                 }
 
+                fromResult = false;
                 vardef.TypeInfo = element.TypeInfo;
+            }
+
+            if (fromResult && element.Names.Count > 0 && element.Names[0].TypeInfo != default) {
+                element.TypeInfo = element.Names[0].TypeInfo;
             }
         }
 
@@ -1050,8 +1057,21 @@ namespace PasPasPas.Typings.Common {
         ///     start visiting a method implementation
         /// </summary>
         /// <param name="element"></param>
-        public void StartVisit(MethodImplementation element)
-            => resolver.OpenScope();
+        public void StartVisit(MethodImplementation element) {
+            resolver.OpenScope();
+
+            if (element.Parameters != default && (!element.DefaultParameters)) {
+                foreach (var parameter in element.Parameters) {
+                    resolver.AddToScope(parameter.Name.Name, ReferenceKind.RefToParameter, parameter);
+                }
+            }
+
+            if (element.DefaultParameters && element.Declaration != default && element.Declaration.Parameters != default) {
+                foreach (var parameter in element.Declaration.Parameters) {
+                    resolver.AddToScope(parameter.Name.Name, ReferenceKind.RefToParameter, parameter);
+                }
+            }
+        }
 
         /// <summary>
         ///     end visiting a method implementation

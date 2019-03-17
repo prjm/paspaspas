@@ -2268,6 +2268,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             InitNode(result, element);
             result.Kind = TokenKindMapper.MapMethodKind(element.Heading.Kind);
             result.Name = name;
+            result.DefaultParameters = element.Heading.Parameters == default;
 
             var type = default(DeclaredSymbol);
 
@@ -2285,6 +2286,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
                 if (typeDecl.TypeValue is StructuredType typeStruct && typeStruct.Methods.Contains(name.Name)) {
                     var declaration = typeStruct.Methods[name.Name];
                     declaration.Implementation = result;
+                    result.Declaration = declaration;
                 }
             }
 

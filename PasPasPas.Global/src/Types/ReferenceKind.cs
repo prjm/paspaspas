@@ -59,5 +59,10 @@
         ///     reference to a bound generic type
         /// </summary>
         RefToBoundGeneric = 10,
+
+        /// <summary>
+        ///     reference to a parameter
+        /// </summary>
+        RefToParameter = 11,
     }
 }

@@ -26,5 +26,17 @@ namespace PasPasPasTests.Types {
             AssertExprTypeInProc("function a: Integer; function b: string; ", "b", "", "", KnownTypeIds.StringType, " begin end; ");
             AssertExprTypeInProc("function a: Integer; function b: string; ", "a", "", "", KnownTypeIds.IntegerType, " begin end; ");
         }
+
+        [TestMethod]
+        public void TestMethodParams() {
+            AssertExprTypeInProc("procedure b(a: Integer);", "a", typeId: KnownTypeIds.IntegerType);
+            AssertExprTypeInProc("procedure b(a, c: Integer);", "a", typeId: KnownTypeIds.IntegerType);
+            AssertExprTypeInProc("procedure b(a, c: Integer);", "c", typeId: KnownTypeIds.IntegerType);
+            AssertExprTypeInProc("function b(a: Integer): string;", "a", typeId: KnownTypeIds.IntegerType);
+            AssertExprTypeInProc("type x = class function a(b: Integer): string; end; function x.a(b: Integer): string;", "b", typeId: KnownTypeIds.IntegerType);
+            AssertExprTypeInProc("type x = class procedure a(b: Integer); end; procedure x.a;", "b", typeId: KnownTypeIds.IntegerType);
+            AssertExprTypeInProc("type x = class function a(b: Integer): string; end; function x.a;", "b", typeId: KnownTypeIds.IntegerType);
+        }
+
     }
 }

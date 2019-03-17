@@ -91,6 +91,17 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         public ITypeReference LiteralValue { get; set; }
 
         /// <summary>
+        ///     if <c>true</c> then no parameters were declared for this
+        ///     implementation
+        /// </summary>
+        public bool DefaultParameters { get; set; }
+
+        /// <summary>
+        ///     previous declaration
+        /// </summary>
+        public StructureMethod Declaration { get; set; }
+
+        /// <summary>
         ///     accept visitor
         /// </summary>
         /// <param name="visitor">node visitor</param>
