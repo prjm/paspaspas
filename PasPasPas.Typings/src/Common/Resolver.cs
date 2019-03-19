@@ -72,6 +72,13 @@ namespace PasPasPas.Typings.Common {
                     return reference;
 
                 foreach (var scopeEntry in scope.AllEntriesInOrder) {
+
+                    if (scopeEntry.Value.Kind == ReferenceKind.RefToSelf) {
+                        var importedEntry = ResolveByName(TypeRegistry.MakeReference(scopeEntry.Value.Symbol.TypeId), name, 0);
+                        if (importedEntry != null)
+                            return importedEntry;
+                    }
+
                     if (scopeEntry.Value.Kind == ReferenceKind.RefToUnit) {
                         var importedEntry = ResolveByName(TypeRegistry.MakeReference(scopeEntry.Value.Symbol.TypeId), name, 0);
                         if (importedEntry != null)

@@ -69,5 +69,10 @@
         ///     reference to self pointer
         /// </summary>
         RefToSelf = 12,
+
+        /// <summary>
+        ///     reference to meta class field
+        /// </summary>
+        RefToMetaClassField = 13,
     }
 }

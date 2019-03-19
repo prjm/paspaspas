@@ -4,7 +4,6 @@ using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
 using PasPasPas.Parsing.SyntaxTree.Abstract;
-using PasPasPas.Typings.Common;
 
 namespace PasPasPas.Typings.Structured {
 
@@ -158,6 +157,15 @@ namespace PasPasPas.Typings.Structured {
                     entry = new Reference(ReferenceKind.RefToMethod, method);
                     return true;
                 }
+
+            var metaType = TypeRegistry.GetTypeByIdOrUndefinedType(MetaType.TypeId) as MetaStructuredTypeDeclaration;
+            if (metaType != default) {
+                foreach (var classVar in metaType.Fields)
+                    if (string.Equals(classVar.Name, symbolName, StringComparison.OrdinalIgnoreCase)) {
+                        entry = new Reference(ReferenceKind.RefToMetaClassField, classVar);
+                        return true;
+                    }
+            }
 
             if (BaseClass != null && BaseClass is StructuredTypeDeclaration baseType)
                 return baseType.TryToResolve(symbolName, out entry);

@@ -43,6 +43,13 @@ namespace PasPasPasTests.Types {
         public void TestSelfPointer() {
             AssertExprTypeInProc("type x = class var z: string; procedure b; end; procedure x.b;", "Self", typeId: RegisteredTypes.SmallestUserTypeId);
             AssertExprTypeInProc("type x = class var z: string; procedure b; end; procedure x.b;", "Self.z", typeId: KnownTypeIds.StringType);
+            AssertExprTypeInProc("type x = class var z: string; procedure b; end; procedure x.b;", "z", typeId: KnownTypeIds.StringType);
+            AssertExprTypeInProc("type x = class class var z: string; procedure b; end; procedure x.b;", "Self.z", typeId: KnownTypeIds.StringType);
+            AssertExprTypeInProc("type x = class class var z: string; procedure b; end; procedure x.b;", "z", typeId: KnownTypeIds.StringType);
+            AssertExprTypeInProc("type x = class var z: string; class procedure b; end; class procedure x.b;", "Self.z", typeId: KnownTypeIds.ErrorType);
+            AssertExprTypeInProc("type x = class var z: string; class procedure b; end; class procedure x.b;", "z", typeId: KnownTypeIds.ErrorType);
+            AssertExprTypeInProc("type x = class class var z: string; class procedure b; end; class procedure x.b;", "Self.z", typeId: KnownTypeIds.StringType);
+            AssertExprTypeInProc("type x = class class var z: string; class procedure b; end; class procedure x.b;", "z", typeId: KnownTypeIds.StringType);
         }
 
     }

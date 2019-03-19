@@ -1080,8 +1080,12 @@ namespace PasPasPas.Typings.Common {
                 if (metaTypeDef != default)
                     baseTypeDef = GetTypeByIdOrUndefinedType(metaTypeDef.BaseType) as IStructuredType;
 
-                if (metaTypeDef != default)
+
+                if (baseTypeDef != default && !element.Declaration.ClassItem)
                     resolver.AddToScope("Self", ReferenceKind.RefToSelf, baseTypeDef);
+
+                if (metaTypeDef != default && element.Declaration.ClassItem)
+                    resolver.AddToScope("Self", ReferenceKind.RefToSelf, metaTypeDef);
             }
 
         }
