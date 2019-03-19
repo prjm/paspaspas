@@ -715,6 +715,7 @@ namespace PasPasPas.Typings.Common {
             var metaType = TypeCreator.CreateMetaType(typeDef.TypeId);
             typeDef.BaseClass = GetInstanceTypeById(KnownTypeIds.TObject);
             typeDef.MetaType = GetInstanceTypeById(metaType.TypeId);
+            element.AssignTypeId(metaType.TypeId);
 
             currentTypeDefinition.Push(GetInstanceTypeById(typeDef.TypeId));
         }
@@ -1066,11 +1067,23 @@ namespace PasPasPas.Typings.Common {
                 }
             }
 
-            if (element.DefaultParameters && element.Declaration != default && element.Declaration.Parameters != default) {
+            if (element.DefaultParameters && element.Declaration?.Parameters != default) {
                 foreach (var parameter in element.Declaration.Parameters) {
                     resolver.AddToScope(parameter.Name.Name, ReferenceKind.RefToParameter, parameter);
                 }
             }
+
+            if (element.Declaration?.DefiningType != default) {
+                var metaTypeDef = GetTypeByIdOrUndefinedType(element.Declaration.DefiningType.TypeId) as IMetaStructuredType;
+                var baseTypeDef = default(IStructuredType);
+
+                if (metaTypeDef != default)
+                    baseTypeDef = GetTypeByIdOrUndefinedType(metaTypeDef.BaseType) as IStructuredType;
+
+                if (metaTypeDef != default)
+                    resolver.AddToScope("Self", ReferenceKind.RefToSelf, baseTypeDef);
+            }
+
         }
 
         /// <summary>

@@ -64,5 +64,10 @@
         ///     reference to a parameter
         /// </summary>
         RefToParameter = 11,
+
+        /// <summary>
+        ///     reference to self pointer
+        /// </summary>
+        RefToSelf = 12,
     }
 }

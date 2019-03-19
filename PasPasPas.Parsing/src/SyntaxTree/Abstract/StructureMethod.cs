@@ -52,5 +52,9 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         public MethodImplementation Implementation { get; set; }
 
+        /// <summary>
+        ///     defining type
+        /// </summary>
+        public StructuredType DefiningType { get; internal set; }
     }
 }

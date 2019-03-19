@@ -1507,6 +1507,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             result.Name = ExtractSymbolName(element.Identifier);
             result.Kind = TokenKindMapper.MapMethodKind(element.MethodKind);
             result.Generics = ExtractGenericDefinition(element, element.GenericDefinition as GenericDefinitionSymbol);
+            result.DefiningType = parent;
             parent.Methods.Add(result, LogSource);
         }
 

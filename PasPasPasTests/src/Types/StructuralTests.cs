@@ -1,4 +1,5 @@
 ﻿using PasPasPas.Globals.Types;
+using PasPasPas.Typings.Common;
 using PasPasPasTests.Common;
 
 namespace PasPasPasTests.Types {
@@ -36,6 +37,12 @@ namespace PasPasPasTests.Types {
             AssertExprTypeInProc("type x = class function a(b: Integer): string; end; function x.a(b: Integer): string;", "b", typeId: KnownTypeIds.IntegerType);
             AssertExprTypeInProc("type x = class procedure a(b: Integer); end; procedure x.a;", "b", typeId: KnownTypeIds.IntegerType);
             AssertExprTypeInProc("type x = class function a(b: Integer): string; end; function x.a;", "b", typeId: KnownTypeIds.IntegerType);
+        }
+
+        [TestMethod]
+        public void TestSelfPointer() {
+            AssertExprTypeInProc("type x = class var z: string; procedure b; end; procedure x.b;", "Self", typeId: RegisteredTypes.SmallestUserTypeId);
+            AssertExprTypeInProc("type x = class var z: string; procedure b; end; procedure x.b;", "Self.z", typeId: KnownTypeIds.StringType);
         }
 
     }

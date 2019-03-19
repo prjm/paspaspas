@@ -8,7 +8,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// <summary>
     ///     structured type definition
     /// </summary>
-    public class StructuredType : StructuredTypeBase, ITypeTarget {
+    public class StructuredType : StructuredTypeBase, ITypeTarget, IRefSymbol {
 
         /// <summary>
         ///     type kind
@@ -113,6 +113,15 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// </summary>
         public SymbolName GuidName { get; set; }
 
+
+        private int metaTypeId = KnownTypeIds.ErrorType;
+
+        /// <summary>
+        ///     type id for references
+        /// </summary>
+        public int TypeId
+            => metaTypeId;
+
         /// <summary>
         ///     accept visitor
         /// </summary>
@@ -122,5 +131,12 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
             AcceptParts(this, visitor);
             visitor.EndVisit(this);
         }
+
+        /// <summary>
+        ///     assign a type id
+        /// </summary>
+        /// <param name="typeId"></param>
+        public void AssignTypeId(int typeId)
+            => metaTypeId = typeId;
     }
 }

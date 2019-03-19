@@ -5,5 +5,10 @@
     /// </summary>
     public interface IMetaStructuredType : ITypeDefinition {
 
+        /// <summary>
+        ///     base type id
+        /// </summary>
+        int BaseType { get; }
+
     }
 }
