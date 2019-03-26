@@ -56,6 +56,7 @@ namespace PasPasPas.Typings.Common {
         private readonly Stack<ITypeReference> currentTypeDefinition;
         private readonly Stack<Routine> currentMethodDefinition;
         private readonly Stack<ParameterGroup> currentMethodParameters;
+        private readonly Stack<MethodImplementation> currentMethodImplementation;
         private readonly Resolver resolver;
 
         /// <summary>
@@ -81,6 +82,7 @@ namespace PasPasPas.Typings.Common {
             currentTypeDefinition = new Stack<ITypeReference>();
             currentMethodDefinition = new Stack<Routine>();
             currentMethodParameters = new Stack<ParameterGroup>();
+            currentMethodImplementation = new Stack<MethodImplementation>();
         }
 
         private ITypeReference GetTypeDefinition(ITypedSyntaxNode expression) {
@@ -440,6 +442,36 @@ namespace PasPasPas.Typings.Common {
             if (element.TypeValue is ITypedSyntaxNode typeRef)
                 baseTypeValue = typeRef.TypeInfo;
 
+            if (element.Inherited) {
+
+                foreach (var impl in currentMethodImplementation) {
+                    if (impl.Declaration == default)
+                        continue;
+
+                    var classMethod = impl.Declaration.ClassItem;
+                    var signature = impl.Declaration.CreateSignature(TypeRegistry.Runtime);
+                    var callableRoutines = new List<ParameterGroup>();
+
+                    var tdef = (GetTypeByIdOrUndefinedType(impl.Declaration.DefiningType.TypeId) as MetaStructuredTypeDeclaration);
+                    var bdef = (GetTypeByIdOrUndefinedType(tdef.BaseType) as StructuredTypeDeclaration);
+                    var idef = (GetTypeByIdOrUndefinedType(bdef.BaseClass.TypeId) as MetaStructuredTypeDeclaration);
+
+                    if (classMethod) {
+                        //tdef.ResolveCall(impl.Name.Name, callableRoutines, signature);
+                    }
+                    else {
+                        var s = (GetTypeByIdOrUndefinedType(idef.BaseType) as StructuredTypeDeclaration);
+                        s.ResolveCall(impl.Name.Name, callableRoutines, signature);
+                    }
+
+                    if (callableRoutines.Count == 1)
+                        baseTypeValue = callableRoutines[0].ResultType;
+
+                    break;
+                }
+
+            }
+
             foreach (var part in element.SymbolParts) {
 
                 if (part is MetaType metaType) {
@@ -727,6 +759,11 @@ namespace PasPasPas.Typings.Common {
         public void EndVisit(StructuredType element) {
             var value = currentTypeDefinition.Pop();
             var typeDef = value != null ? environment.TypeRegistry.GetTypeByIdOrUndefinedType(value.TypeId) as StructuredTypeDeclaration : null;
+
+            foreach (var baseType in element.BaseTypes) {
+                typeDef.BaseClass = GetTypeReferenceById(baseType.TypeInfo.TypeId);
+            }
+
             element.TypeInfo = GetTypeReferenceById(typeDef.MetaType.TypeId);
         }
 
@@ -1060,6 +1097,7 @@ namespace PasPasPas.Typings.Common {
         /// <param name="element"></param>
         public void StartVisit(MethodImplementation element) {
             resolver.OpenScope();
+            currentMethodImplementation.Push(element);
 
             if (element.Parameters != default && (!element.DefaultParameters)) {
                 foreach (var parameter in element.Parameters) {
@@ -1080,7 +1118,6 @@ namespace PasPasPas.Typings.Common {
                 if (metaTypeDef != default)
                     baseTypeDef = GetTypeByIdOrUndefinedType(metaTypeDef.BaseType) as IStructuredType;
 
-
                 if (baseTypeDef != default && !element.Declaration.ClassItem)
                     resolver.AddToScope("Self", ReferenceKind.RefToSelf, baseTypeDef);
 
@@ -1094,8 +1131,10 @@ namespace PasPasPas.Typings.Common {
         ///     end visiting a method implementation
         /// </summary>
         /// <param name="element"></param>
-        public void EndVisit(MethodImplementation element)
-                => resolver.CloseScope();
+        public void EndVisit(MethodImplementation element) {
+            resolver.CloseScope();
+            currentMethodImplementation.Pop();
+        }
 
         private bool AreRecordTypesCompatible(int leftId, int rightId)
         => environment.TypeRegistry.AreRecordTypesCompatible(leftId, rightId);

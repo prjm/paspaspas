@@ -179,5 +179,6 @@ namespace PasPasPas.Typings.Common {
             else
                 scope.AddEntry(string.Concat(symbolName, AbstractSyntaxPartBase.GenericSeparator, numberOfTypeParameters), new Reference(kind, symbol));
         }
+
     }
 }

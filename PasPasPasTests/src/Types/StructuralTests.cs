@@ -13,8 +13,43 @@ namespace PasPasPasTests.Types {
             var file = "SimpleExpr";
             var program = $"program {file};{decls} {proc} begin writeln({expression}); end; {proc2} begin end. ";
             AssertExprType(file, program, typeId, false, typeName);
-
         }
+
+        private enum AccessModifierTestMode {
+            InType, InDerivedType, InExternalType
+        }
+
+        private void AssertTypeForAccessModifier(string modifier, string decl, string expression, AccessModifierTestMode mode, int typeId) {
+            var file = "SimpleExpr";
+            var decl0 = string.Empty;
+            var decl1 = string.Empty;
+            var decl2 = string.Empty;
+
+            switch (mode) {
+                case AccessModifierTestMode.InType: {
+                        decl1 = "function x: Integer;";
+                        decl2 = "function ta.x: Integer; begin ";
+                        break;
+                    }
+
+                case AccessModifierTestMode.InDerivedType: {
+                        decl1 = "function x: Integer; virtual; end; tb = class(ta) function x: Integer; override;";
+                        decl2 = "function ta.x: integer; begin Result := 5; end; function tb.x: Integer; begin ";
+                        break;
+                    }
+
+                case AccessModifierTestMode.InExternalType: {
+                        decl2 = "procedure x; var a: ta; begin a.";
+                        break;
+                    }
+
+            }
+
+            var decls = $"type ta = class {modifier} {decl} {decl1} end; {decl2} writeln({expression}); end; ";
+            var program = $"program {file}; {decls} begin end. ";
+            AssertExprType(file, program, typeId, false, string.Empty);
+        }
+
 
         [TestMethod]
         public void TestResultDef() {
@@ -50,6 +85,30 @@ namespace PasPasPasTests.Types {
             AssertExprTypeInProc("type x = class var z: string; class procedure b; end; class procedure x.b;", "z", typeId: KnownTypeIds.ErrorType);
             AssertExprTypeInProc("type x = class class var z: string; class procedure b; end; class procedure x.b;", "Self.z", typeId: KnownTypeIds.StringType);
             AssertExprTypeInProc("type x = class class var z: string; class procedure b; end; class procedure x.b;", "z", typeId: KnownTypeIds.StringType);
+        }
+
+        [TestMethod]
+        public void TestVisibilityPrivate() {
+            var i = AccessModifierTestMode.InType;
+            var o = AccessModifierTestMode.InDerivedType;
+            var u = AccessModifierTestMode.InExternalType;
+            AssertTypeForAccessModifier("private", "f: integer", "f", i, KnownTypeIds.IntegerType);
+            AssertTypeForAccessModifier("private", "f: integer", "f", o, KnownTypeIds.ErrorType);
+            AssertTypeForAccessModifier("private", "f: integer", "f", u, KnownTypeIds.ErrorType);
+        }
+
+        [TestMethod]
+        public void TestInherited() {
+            var o = AccessModifierTestMode.InDerivedType;
+            AssertTypeForAccessModifier(string.Empty, "function f: integer;", "inherited", o, KnownTypeIds.IntegerType);
+        }
+
+        [TestMethod]
+        public void TestVisibilityProtected() {
+            var i = AccessModifierTestMode.InType;
+            AssertTypeForAccessModifier("protected", "f: integer", "f", i, KnownTypeIds.IntegerType);
+            //AssertTypeForAccessModifier("protected", "f: integer", "f", o, KnownTypeIds.IntegerType);
+            //AssertTypeForAccessModifier("protected", "f: integer", "f", u, KnownTypeIds.ErrorType);
         }
 
     }

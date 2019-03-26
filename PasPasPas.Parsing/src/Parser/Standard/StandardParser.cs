@@ -1322,7 +1322,7 @@ namespace PasPasPas.Parsing.Parser.Standard {
             var openParen = ContinueWith(TokenKind.OpenParen);
 
             if (openParen == default)
-                return null;
+                return default;
 
             using (var list = GetList<ProgramParameterSymbol>()) {
                 if (MatchIdentifier()) {

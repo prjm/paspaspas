@@ -13,3 +13,4 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Maintainability", "CA1506:Avoid excessive class coupling", Justification = "<Pending>", Scope = "type", Target = "~T:PasPasPas.Typings.Common.TypeAnnotator")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA1801:Review unused parameters", Justification = "<Pending>", Scope = "member", Target = "~M:PasPasPas.Typings.Common.RegisteredTypes.CastBooleanTo(System.Int32,System.Int32)~System.Int32")]
 
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Maintainability", "CA1502:Avoid excessive complexity", Justification = "<Pending>", Scope = "member", Target = "~M:PasPasPas.Typings.Common.TypeAnnotator.EndVisit(PasPasPas.Parsing.SyntaxTree.Abstract.SymbolReference)")]

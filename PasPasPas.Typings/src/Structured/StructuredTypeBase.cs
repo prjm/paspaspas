@@ -13,5 +13,6 @@ namespace PasPasPas.Typings.Structured {
         /// <param name="withId"></param>
         protected StructuredTypeBase(int withId) : base(withId) {
         }
+
     }
 }

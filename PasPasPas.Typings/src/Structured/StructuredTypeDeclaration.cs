@@ -222,5 +222,30 @@ namespace PasPasPas.Typings.Structured {
                 return TypeRegistry.Runtime.Structured.CreateRecordValue(TypeId, TypeRegistry.ListPools.GetFixedArray(list));
             }
         }
+
+        /// <summary>
+        ///     format this type as string
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString() {
+            switch (typeKind) {
+                case StructuredTypeKind.Class:
+                    return $"class {TypeId}";
+                case StructuredTypeKind.ClassHelper:
+                    return $"class helper {TypeId}";
+                case StructuredTypeKind.DispInterface:
+                    return $"disp interface {TypeId}";
+                case StructuredTypeKind.Interface:
+                    return $"interface {TypeId}";
+                case StructuredTypeKind.ObjectType:
+                    return $"object {TypeId}";
+                case StructuredTypeKind.Record:
+                    return $"record {TypeId}";
+                case StructuredTypeKind.RecordHelper:
+                    return $"record helper {TypeId}";
+            }
+
+            return base.ToString();
+        }
     }
 }

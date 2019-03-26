@@ -16,5 +16,7 @@ namespace PasPasPas.Globals.Types {
         ///     meta class
         /// </summary>
         ITypeReference MetaType { get; set; }
+
+
     }
 }

@@ -18,7 +18,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         }
 
         /// <summary>
-        ///     merge overoaded methos
+        ///     merge overloaded methods
         /// </summary>
         protected override bool HasDuplicateReplacement
             => true;

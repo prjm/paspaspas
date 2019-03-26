@@ -2265,6 +2265,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
         public void StartVisit(MethodDeclarationSymbol element) {
             var unit = CurrentUnit;
             var name = ExtractSymbolName(element.Heading.Items);
+            var symbolTarget = LastValue as IDeclaredSymbolTarget;
             var result = new MethodImplementation();
             InitNode(result, element);
             result.Kind = TokenKindMapper.MapMethodKind(element.Heading.Kind);
@@ -2292,6 +2293,8 @@ namespace PasPasPas.Parsing.SyntaxTree.Visitors {
             }
 
             DefineResultVariables(result);
+            symbolTarget.Symbols.Items.Add(new SingleDeclaredSymbol(result));
+            symbolTarget.Symbols.Add(result, LogSource);
         }
 
         #endregion

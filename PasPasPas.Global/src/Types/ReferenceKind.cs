@@ -74,5 +74,10 @@
         ///     reference to meta class field
         /// </summary>
         RefToMetaClassField = 13,
+
+        /// <summary>
+        ///     reference to inherited
+        /// </summary>
+        RefToInherited = 14,
     }
 }

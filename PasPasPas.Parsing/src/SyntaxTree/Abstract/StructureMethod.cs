@@ -25,8 +25,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
                         yield return genericType;
                 foreach (var directive in Directives)
                     yield return directive;
-                if (Implementation != null)
-                    yield return Implementation;
             }
         }
 
@@ -56,5 +54,6 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     defining type
         /// </summary>
         public StructuredType DefiningType { get; internal set; }
+
     }
 }
