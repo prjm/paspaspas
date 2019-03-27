@@ -457,7 +457,7 @@ namespace PasPasPas.Typings.Common {
                     var idef = (GetTypeByIdOrUndefinedType(bdef.BaseClass.TypeId) as MetaStructuredTypeDeclaration);
 
                     if (classMethod) {
-                        //tdef.ResolveCall(impl.Name.Name, callableRoutines, signature);
+                        idef.ResolveCall(impl.Name.Name, callableRoutines, signature);
                     }
                     else {
                         var s = (GetTypeByIdOrUndefinedType(idef.BaseType) as StructuredTypeDeclaration);
@@ -779,8 +779,19 @@ namespace PasPasPas.Typings.Common {
                 return;
 
             var v = currentTypeDefinition.Peek();
+            var classMethod = element is StructureMethod m ? m.ClassItem : false;
             var typeDef = v != null ? environment.TypeRegistry.GetTypeByIdOrUndefinedType(v.TypeId) as StructuredTypeDeclaration : null;
-            var method = typeDef.AddOrExtendMethod(element.Name.CompleteName, element.Kind);
+            var method = default(Routine);
+
+            if (classMethod) {
+                var mm = GetTypeByIdOrUndefinedType(typeDef.MetaType.TypeId) as MetaStructuredTypeDeclaration;
+                method = mm.AddOrExtendMethod(element.Name.CompleteName, element.Kind);
+            }
+
+            else {
+                method = typeDef.AddOrExtendMethod(element.Name.CompleteName, element.Kind);
+            }
+
             currentMethodDefinition.Push(method);
             currentMethodParameters.Push(method.AddParameterGroup());
         }

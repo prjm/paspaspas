@@ -19,27 +19,28 @@ namespace PasPasPasTests.Types {
             InType, InDerivedType, InExternalType
         }
 
-        private void AssertTypeForAccessModifier(string modifier, string decl, string expression, AccessModifierTestMode mode, int typeId) {
+        private void AssertTypeForAccessModifier(string modifier, string decl, string expression, AccessModifierTestMode mode, int typeId, bool classFunction = false) {
             var file = "SimpleExpr";
             var decl0 = string.Empty;
             var decl1 = string.Empty;
             var decl2 = string.Empty;
+            var cf = classFunction ? " class " : string.Empty;
 
             switch (mode) {
                 case AccessModifierTestMode.InType: {
-                        decl1 = "function x: Integer;";
-                        decl2 = "function ta.x: Integer; begin ";
+                        decl1 = cf + "function x: Integer;";
+                        decl2 = cf + "function ta.x: Integer; begin ";
                         break;
                     }
 
                 case AccessModifierTestMode.InDerivedType: {
-                        decl1 = "function x: Integer; virtual; end; tb = class(ta) function x: Integer; override;";
-                        decl2 = "function ta.x: integer; begin Result := 5; end; function tb.x: Integer; begin ";
+                        decl1 = cf + "function x: Integer; virtual; end; tb = class(ta) " + cf + " function x: Integer; override;";
+                        decl2 = cf + "function ta.x: integer; begin Result := 5; end; " + cf + " function tb.x: Integer; begin ";
                         break;
                     }
 
                 case AccessModifierTestMode.InExternalType: {
-                        decl2 = "procedure x; var a: ta; begin a.";
+                        decl2 = " procedure x; var a: ta; begin a.";
                         break;
                     }
 
@@ -101,6 +102,7 @@ namespace PasPasPasTests.Types {
         public void TestInherited() {
             var o = AccessModifierTestMode.InDerivedType;
             AssertTypeForAccessModifier(string.Empty, "function f: integer;", "inherited", o, KnownTypeIds.IntegerType);
+            AssertTypeForAccessModifier(string.Empty, "function f: integer;", "inherited", o, KnownTypeIds.IntegerType, true);
         }
 
         [TestMethod]

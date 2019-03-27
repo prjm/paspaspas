@@ -9,7 +9,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
     /// <summary>
     ///     a basic method declaration
     /// </summary>
-    public class MethodDeclaration : DeclaredSymbol, IParameterTarget, ITypeTarget, IDirectiveTarget {
+    public abstract class MethodDeclaration : DeclaredSymbol, IParameterTarget, ITypeTarget, IDirectiveTarget {
 
         /// <summary>
         ///     procedure kind
@@ -47,7 +47,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         /// <summary>
         ///     creates a new method declaration
         /// </summary>
-        public MethodDeclaration() {
+        protected MethodDeclaration() {
             Directives = new SyntaxPartCollection<MethodDirective>();
             Parameters = new ParameterDefinitionCollection();
         }

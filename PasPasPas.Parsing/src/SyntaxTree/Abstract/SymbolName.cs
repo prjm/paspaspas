@@ -171,7 +171,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         ///     complete name
         /// </summary>
         public override string CompleteName
-            => string.Join(".", NamespaceParts);
+            => string.Join(".", parts);
 
         /// <summary>
         ///     symbol name

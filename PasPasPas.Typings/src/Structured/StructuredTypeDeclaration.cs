@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
-using PasPasPas.Parsing.SyntaxTree.Abstract;
 
 namespace PasPasPas.Typings.Structured {
 
@@ -59,12 +58,6 @@ namespace PasPasPas.Typings.Structured {
         public ITypeReference BaseClass { get; set; }
 
         /// <summary>
-        ///     list of routines
-        /// </summary>
-        public IList<Routine> Methods { get; }
-            = new List<Routine>();
-
-        /// <summary>
         ///     list of fields
         /// </summary>
         public IList<Variable> Fields { get; }
@@ -99,24 +92,6 @@ namespace PasPasPas.Typings.Structured {
                         return 0;
                 }
             }
-        }
-
-        /// <summary>
-        ///     add a method definition
-        /// </summary>
-        /// <param name="completeName">method name</param>
-        /// <param name="kind">method kind</param>
-        public Routine AddOrExtendMethod(string completeName, ProcedureKind kind) {
-            foreach (var method in Methods)
-                if (string.Equals(method.Name, completeName, StringComparison.OrdinalIgnoreCase))
-                    return method;
-
-            if (TypeRegistry == null)
-                throw new InvalidOperationException();
-
-            var newMethod = new Routine(TypeRegistry, completeName, kind);
-            Methods.Add(newMethod);
-            return newMethod;
         }
 
         /// <summary>
@@ -175,18 +150,13 @@ namespace PasPasPas.Typings.Structured {
         }
 
         /// <summary>
-        ///     resolve a method
+        ///     resolve a call
         /// </summary>
+        /// <param name="symbolName"></param>
+        /// <param name="callables"></param>
         /// <param name="signature"></param>
-        /// <param name="symbolName">method name</param>
-        /// <param name="callables">callable methods</param>
-        /// <returns></returns>
-        public void ResolveCall(string symbolName, IList<ParameterGroup> callables, Signature signature) {
-
-            foreach (var method in Methods)
-                if (string.Equals(method.Name, symbolName, StringComparison.OrdinalIgnoreCase))
-                    method.ResolveCall(callables, signature);
-
+        public override void ResolveCall(string symbolName, IList<ParameterGroup> callables, Signature signature) {
+            base.ResolveCall(symbolName, callables, signature);
 
             if (BaseClass != null && BaseClass is StructuredTypeDeclaration baseType)
                 baseType.ResolveCall(symbolName, callables, signature);
