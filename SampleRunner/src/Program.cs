@@ -21,9 +21,9 @@ namespace SampleRunner {
 
         private static void Main() {
 
-            var testPath = @"C:\temp\Testfiles\2.pas";
+            var testPath = @"C:\temp\Testfiles\Spring.pas";
             //var testPath = @"C:\temp\Testfiles\all";
-            var mode = SampleMode.ReadFile;
+            var mode = SampleMode.TypeAnnotateFile;
             var repeat = 1;
             var result = System.Console.Out;
             var environment = new DefaultEnvironment();
@@ -148,6 +148,7 @@ namespace SampleRunner {
                     }
                     catch (Exception e) {
                         tw.WriteLine(e);
+                        throw;
                     }
                 }
             };

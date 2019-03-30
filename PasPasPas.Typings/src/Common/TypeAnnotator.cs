@@ -314,7 +314,8 @@ namespace PasPasPas.Typings.Common {
 
                     if (entry != default) {
                         var genericType = GetTypeByIdOrUndefinedType(entry.Symbol.TypeId) as IGenericType;
-                        entry = genericType.Bind(environment.ListPools.GetFixedArray(list));
+                        if (genericType != default)
+                            entry = genericType.Bind(environment.ListPools.GetFixedArray(list));
                     }
                     else
                         entry = default;
@@ -347,13 +348,13 @@ namespace PasPasPas.Typings.Common {
                 var entry = resolver.ResolveByName(default, element.AsScopedName.ToString(), 0);
                 int typeId;
 
-                if (entry.Kind == ReferenceKind.RefToType) {
+                if (entry != default && entry.Kind == ReferenceKind.RefToType) {
                     typeId = entry.Symbol.TypeId;
                     element.TypeInfo = environment.TypeRegistry.MakeTypeReference(typeId);
                     return;
                 }
 
-                if (entry != null) {
+                if (entry != default) {
                     typeId = entry.Symbol.TypeId;
                     element.IsConstant = entry.Kind == ReferenceKind.RefToConstant;
                 }
@@ -455,6 +456,9 @@ namespace PasPasPas.Typings.Common {
                     var tdef = (GetTypeByIdOrUndefinedType(impl.Declaration.DefiningType.TypeId) as MetaStructuredTypeDeclaration);
                     var bdef = (GetTypeByIdOrUndefinedType(tdef.BaseType) as StructuredTypeDeclaration);
                     var idef = (GetTypeByIdOrUndefinedType(bdef.BaseClass.TypeId) as MetaStructuredTypeDeclaration);
+
+                    if (idef == default)
+                        continue;
 
                     if (classMethod) {
                         idef.ResolveCall(impl.Name.Name, callableRoutines, signature);
@@ -745,7 +749,7 @@ namespace PasPasPas.Typings.Common {
         public void StartVisit(StructuredType element) {
             var typeDef = TypeCreator.CreateStructuredType(element.Kind);
             var metaType = TypeCreator.CreateMetaType(typeDef.TypeId);
-            typeDef.BaseClass = GetInstanceTypeById(KnownTypeIds.TObject);
+            typeDef.BaseClass = GetInstanceTypeById(KnownTypeIds.TClass);
             typeDef.MetaType = GetInstanceTypeById(metaType.TypeId);
             element.AssignTypeId(metaType.TypeId);
 

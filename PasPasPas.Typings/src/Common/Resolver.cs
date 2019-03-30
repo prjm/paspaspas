@@ -73,20 +73,20 @@ namespace PasPasPas.Typings.Common {
 
                 foreach (var scopeEntry in scope.AllEntriesInOrder) {
 
+                    if (string.Equals(scopeEntry.Key, name, StringComparison.OrdinalIgnoreCase))
+                        return scopeEntry.Value;
+
                     if (scopeEntry.Value.Kind == ReferenceKind.RefToSelf) {
                         var importedEntry = ResolveByName(TypeRegistry.MakeReference(scopeEntry.Value.Symbol.TypeId), name, 0);
-                        if (importedEntry != null)
+                        if (importedEntry != default)
                             return importedEntry;
                     }
 
                     if (scopeEntry.Value.Kind == ReferenceKind.RefToUnit) {
                         var importedEntry = ResolveByName(TypeRegistry.MakeReference(scopeEntry.Value.Symbol.TypeId), name, 0);
-                        if (importedEntry != null)
+                        if (importedEntry != default)
                             return importedEntry;
                     }
-
-                    if (string.Equals(scopeEntry.Key, name, StringComparison.OrdinalIgnoreCase))
-                        return scopeEntry.Value;
                 }
             }
 
@@ -106,8 +106,17 @@ namespace PasPasPas.Typings.Common {
             else if (baseTypeValue.TypeKind == CommonTypeKind.ClassType) {
                 var cls = TypeRegistry.GetTypeByIdOrUndefinedType(baseTypeValue.TypeId) as StructuredTypeDeclaration;
 
-                if (cls != default && cls.TryToResolve(name, out var reference)) {
+                if (cls != default && cls.TryToResolve(name, out var reference))
                     return reference;
+
+                while (cls != default && cls.BaseClass != default) {
+                    var metaBaseClass = TypeRegistry.GetTypeByIdOrUndefinedType(cls.BaseClass.TypeId) as MetaStructuredTypeDeclaration;
+                    var baseClass = TypeRegistry.GetTypeByIdOrUndefinedType(metaBaseClass.BaseType) as StructuredTypeDeclaration;
+
+                    if (baseClass != default && baseClass.TryToResolve(name, out var reference1))
+                        return reference1;
+
+                    cls = baseClass;
                 }
             }
 

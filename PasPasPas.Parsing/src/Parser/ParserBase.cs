@@ -1079,12 +1079,12 @@ namespace PasPasPas.Parsing.Parser {
         /// <summary>
         ///     add one item to the list
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <typeparam name="Q"></typeparam>
+        /// <typeparam name="TList"></typeparam>
+        /// <typeparam name="TItem"></typeparam>
         /// <param name="list"></param>
         /// <param name="item"></param>
         /// <returns></returns>
-        protected static Q AddToList<T, Q>(IPoolItem<List<T>> list, Q item) where T : class where Q : T {
+        protected static TItem AddToList<TList, TItem>(IPoolItem<List<TList>> list, TItem item) where TList : class where TItem : TList {
             if (item != default)
                 list.Item.Add(item);
             return item;

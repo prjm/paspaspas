@@ -93,9 +93,9 @@ namespace PasPasPasTests.Types {
             var i = AccessModifierTestMode.InType;
             var o = AccessModifierTestMode.InDerivedType;
             var u = AccessModifierTestMode.InExternalType;
-            AssertTypeForAccessModifier("private", "f: integer", "f", i, KnownTypeIds.IntegerType);
-            AssertTypeForAccessModifier("private", "f: integer", "f", o, KnownTypeIds.ErrorType);
-            AssertTypeForAccessModifier("private", "f: integer", "f", u, KnownTypeIds.ErrorType);
+            AssertTypeForAccessModifier("private", "f: integer;", "f", i, KnownTypeIds.IntegerType);
+            AssertTypeForAccessModifier("private", "f: integer;", "f", o, KnownTypeIds.IntegerType);
+            AssertTypeForAccessModifier("private", "f: integer;", "f", u, KnownTypeIds.ErrorType);
         }
 
         [TestMethod]
@@ -108,8 +108,9 @@ namespace PasPasPasTests.Types {
         [TestMethod]
         public void TestVisibilityProtected() {
             var i = AccessModifierTestMode.InType;
-            AssertTypeForAccessModifier("protected", "f: integer", "f", i, KnownTypeIds.IntegerType);
-            //AssertTypeForAccessModifier("protected", "f: integer", "f", o, KnownTypeIds.IntegerType);
+            var o = AccessModifierTestMode.InDerivedType;
+            AssertTypeForAccessModifier("protected", "f: integer;", "f", o, KnownTypeIds.IntegerType);
+            AssertTypeForAccessModifier("protected", "f: integer;", "f", i, KnownTypeIds.IntegerType);
             //AssertTypeForAccessModifier("protected", "f: integer", "f", u, KnownTypeIds.ErrorType);
         }
 

@@ -52,8 +52,6 @@ namespace P3SyntaxTreeViewer {
                         if (p.Kind != TokenKind.WhiteSpace)
                             treeViewItem.Items.Add(new Label() { Content = p.Value.ToString(CultureInfo.CurrentCulture), Background = MainWindow.Grey });
 
-
-
             }
             else {
                 treeViewItem.Header = cst.GetType().Name;

@@ -76,7 +76,7 @@ namespace PasPasPas.Building.Tasks {
                     catch (Exception exception) {
                         result.AppendLine("<<XXXX>> Exception!");
                         result.Append(exception.ToString());
-                        return result;
+                        throw;
                     }
 
 #if DEBUG

@@ -10,7 +10,7 @@ namespace PasPasPasTests.Types {
         [TestMethod]
         public void TestBasics() {
             AssertDeclTypeDef("class end", typeKind: CommonTypeKind.ClassType);
-            AssertDeclTypeDef<StructuredTypeDeclaration>("class end", (d) => d.BaseClass?.TypeId == KnownTypeIds.TObject);
+            AssertDeclTypeDef<StructuredTypeDeclaration>("class end", (d) => d.BaseClass?.TypeId == KnownTypeIds.TClass);
         }
 
         [TestMethod]
