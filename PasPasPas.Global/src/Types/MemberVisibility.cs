@@ -1,4 +1,4 @@
-﻿namespace PasPasPas.Parsing.SyntaxTree.Abstract {
+﻿namespace PasPasPas.Globals.Types {
 
     /// <summary>
     ///     structural type member visibility

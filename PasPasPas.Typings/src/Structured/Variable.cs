@@ -23,5 +23,11 @@ namespace PasPasPas.Typings.Structured {
         /// </summary>
         public int TypeId
             => SymbolType != null ? SymbolType.TypeId : KnownTypeIds.ErrorType;
+
+        /// <summary>
+        ///     member visibility
+        /// </summary>
+        public MemberVisibility Visibility { get; set; }
+            = MemberVisibility.Public;
     }
 }

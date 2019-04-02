@@ -345,7 +345,7 @@ namespace PasPasPas.Typings.Common {
         public void EndVisit(MetaType element) {
             if (element.Kind == MetaTypeKind.NamedType) {
                 var name = element.AsScopedName;
-                var entry = resolver.ResolveByName(default, element.AsScopedName.ToString(), 0);
+                var entry = resolver.ResolveByName(default, element.AsScopedName.ToString(), 0, ResolverFlags.None);
                 int typeId;
 
                 if (entry != default && entry.Kind == ReferenceKind.RefToType) {
@@ -503,7 +503,15 @@ namespace PasPasPas.Typings.Common {
                         break;
 
                     if (symRef.Kind == SymbolReferencePartKind.SubItem) {
-                        baseTypeValue = resolver.ResolveTypeByName(baseTypeValue, symRef.Name);
+                        var flags = ResolverFlags.None;
+                        var classType = TypeRegistry.GetTypeByIdOrUndefinedType(baseTypeValue.TypeId) as StructuredTypeDeclaration;
+                        var self = resolver.ResolveTypeByName(default, "Self");
+                        var selfType = TypeRegistry.GetTypeByIdOrUndefinedType(self.TypeId) as StructuredTypeDeclaration;
+
+                        if (classType != default && (selfType == default || selfType.TypeId != classType.TypeId))
+                            flags = flags | ResolverFlags.SkipPrivate;
+
+                        baseTypeValue = resolver.ResolveTypeByName(baseTypeValue, symRef.Name, 0, flags);
                     }
                     else if (symRef.Kind == SymbolReferencePartKind.StringType) {
                         baseTypeValue = symRef.Value.TypeInfo;
@@ -513,7 +521,7 @@ namespace PasPasPas.Typings.Common {
                         var signature = CreateSignatureFromSymbolPart(symRef);
 
                         if (baseTypeValue.TypeId == KnownTypeIds.UnspecifiedType) {
-                            var reference = resolver.ResolveByName(baseTypeValue, symRef.Name, 0);
+                            var reference = resolver.ResolveByName(baseTypeValue, symRef.Name, 0, ResolverFlags.None);
 
                             if (reference == null) {
                                 baseTypeValue = GetErrorTypeReference(element);
@@ -861,7 +869,8 @@ namespace PasPasPas.Typings.Common {
             foreach (var field in element.Fields) {
                 var fieldDef = new Variable() {
                     Name = field.Name.CompleteName,
-                    SymbolType = typeInfo
+                    SymbolType = typeInfo,
+                    Visibility = element.Visibility
                 };
 
                 if (element.ClassItem) {

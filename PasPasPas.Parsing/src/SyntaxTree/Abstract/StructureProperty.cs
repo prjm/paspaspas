@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using PasPasPas.Globals.Types;
 using PasPasPas.Parsing.SyntaxTree.Utils;
 using PasPasPas.Parsing.SyntaxTree.Visitors;
 
@@ -26,7 +27,7 @@ namespace PasPasPas.Parsing.SyntaxTree.Abstract {
         public ParameterDefinitionCollection Parameters { get; }
 
         /// <summary>
-        ///     property visiblity
+        ///     property visibility
         /// </summary>
         public MemberVisibility Visibility { get; set; }
 

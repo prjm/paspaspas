@@ -35,9 +35,10 @@ namespace PasPasPas.Typings.Common {
         /// <param name="baseTypeValue">base type</param>
         /// <param name="name">type name</param>
         /// <param name="numberOfTypeArguments">number of generic type arguments</param>
+        /// <param name="flags">flags</param>
         /// <returns></returns>
-        public ITypeReference ResolveTypeByName(ITypeReference baseTypeValue, string name, int numberOfTypeArguments = 0) {
-            var symbolReference = ResolveByName(baseTypeValue, name, numberOfTypeArguments);
+        public ITypeReference ResolveTypeByName(ITypeReference baseTypeValue, string name, int numberOfTypeArguments = 0, ResolverFlags flags = ResolverFlags.None) {
+            var symbolReference = ResolveByName(baseTypeValue, name, numberOfTypeArguments, flags);
             return GetTypeReference(symbolReference);
         }
 
@@ -50,9 +51,9 @@ namespace PasPasPas.Typings.Common {
         /// <returns></returns>
         public Reference ResolveReferenceByName(Reference baseTypeValue, string name, int numberOfTypeArguments = 0) {
             if (baseTypeValue == default)
-                return ResolveByName(default, name, numberOfTypeArguments);
+                return ResolveByName(default, name, numberOfTypeArguments, ResolverFlags.None);
             else
-                return ResolveByName(TypeRegistry.MakeReference(baseTypeValue.Symbol.TypeId), name, numberOfTypeArguments);
+                return ResolveByName(TypeRegistry.MakeReference(baseTypeValue.Symbol.TypeId), name, numberOfTypeArguments, ResolverFlags.None);
         }
 
         /// <summary>
@@ -61,8 +62,9 @@ namespace PasPasPas.Typings.Common {
         /// <param name="baseTypeValue"></param>
         /// <param name="name"></param>
         /// <param name="numberOfTypeArguments">number of generic type arguments</param>
+        /// <param name="flags">flags</param>
         /// <returns></returns>
-        public Reference ResolveByName(ITypeReference baseTypeValue, string name, int numberOfTypeArguments) {
+        public Reference ResolveByName(ITypeReference baseTypeValue, string name, int numberOfTypeArguments, ResolverFlags flags) {
 
             if (numberOfTypeArguments > 0)
                 name = string.Concat(name, AbstractSyntaxPartBase.GenericSeparator, numberOfTypeArguments);
@@ -77,13 +79,13 @@ namespace PasPasPas.Typings.Common {
                         return scopeEntry.Value;
 
                     if (scopeEntry.Value.Kind == ReferenceKind.RefToSelf) {
-                        var importedEntry = ResolveByName(TypeRegistry.MakeReference(scopeEntry.Value.Symbol.TypeId), name, 0);
+                        var importedEntry = ResolveByName(TypeRegistry.MakeReference(scopeEntry.Value.Symbol.TypeId), name, 0, flags);
                         if (importedEntry != default)
                             return importedEntry;
                     }
 
                     if (scopeEntry.Value.Kind == ReferenceKind.RefToUnit) {
-                        var importedEntry = ResolveByName(TypeRegistry.MakeReference(scopeEntry.Value.Symbol.TypeId), name, 0);
+                        var importedEntry = ResolveByName(TypeRegistry.MakeReference(scopeEntry.Value.Symbol.TypeId), name, 0, flags | ResolverFlags.FromAnotherUnit);
                         if (importedEntry != default)
                             return importedEntry;
                     }
@@ -106,14 +108,14 @@ namespace PasPasPas.Typings.Common {
             else if (baseTypeValue.TypeKind == CommonTypeKind.ClassType) {
                 var cls = TypeRegistry.GetTypeByIdOrUndefinedType(baseTypeValue.TypeId) as StructuredTypeDeclaration;
 
-                if (cls != default && cls.TryToResolve(name, out var reference))
+                if (cls != default && cls.TryToResolve(name, out var reference, flags))
                     return reference;
 
                 while (cls != default && cls.BaseClass != default) {
                     var metaBaseClass = TypeRegistry.GetTypeByIdOrUndefinedType(cls.BaseClass.TypeId) as MetaStructuredTypeDeclaration;
                     var baseClass = TypeRegistry.GetTypeByIdOrUndefinedType(metaBaseClass.BaseType) as StructuredTypeDeclaration;
 
-                    if (baseClass != default && baseClass.TryToResolve(name, out var reference1))
+                    if (baseClass != default && baseClass.TryToResolve(name, out var reference1, ResolverFlags.SkipPrivate))
                         return reference1;
 
                     cls = baseClass;

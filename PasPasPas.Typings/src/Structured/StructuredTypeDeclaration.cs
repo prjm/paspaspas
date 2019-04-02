@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using PasPasPas.Globals.Environment;
 using PasPasPas.Globals.Runtime;
 using PasPasPas.Globals.Types;
+using PasPasPas.Typings.Common;
 
 namespace PasPasPas.Typings.Structured {
 
@@ -118,14 +119,23 @@ namespace PasPasPas.Typings.Structured {
         /// </summary>
         /// <param name="symbolName"></param>
         /// <param name="entry"></param>
+        /// <param name="flags">flags</param>
         /// <returns></returns>
-        public bool TryToResolve(string symbolName, out Reference entry) {
+        public bool TryToResolve(string symbolName, out Reference entry, ResolverFlags flags) {
 
-            foreach (var field in Fields)
+            foreach (var field in Fields) {
+
+                if (field.Visibility == MemberVisibility.StrictPrivate && flags.MustSkipPrivate())
+                    continue;
+
+                if (field.Visibility == MemberVisibility.Private && flags.MustSkipPrivate() && flags.IsResolvingFromAnotherUnit())
+                    continue;
+
                 if (string.Equals(field.Name, symbolName, StringComparison.OrdinalIgnoreCase)) {
                     entry = new Reference(ReferenceKind.RefToField, field);
                     return true;
                 }
+            }
 
             foreach (var method in Methods)
                 if (string.Equals(method.Name, symbolName, StringComparison.OrdinalIgnoreCase)) {
@@ -143,7 +153,7 @@ namespace PasPasPas.Typings.Structured {
             }
 
             if (BaseClass != null && BaseClass is StructuredTypeDeclaration baseType)
-                return baseType.TryToResolve(symbolName, out entry);
+                return baseType.TryToResolve(symbolName, out entry, flags | ResolverFlags.SkipPrivate);
 
             entry = null;
             return false;

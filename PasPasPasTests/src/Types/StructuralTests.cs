@@ -40,7 +40,8 @@ namespace PasPasPasTests.Types {
                     }
 
                 case AccessModifierTestMode.InExternalType: {
-                        decl2 = " procedure x; var a: ta; begin a.";
+                        decl2 = " procedure x; var a: ta; begin ";
+                        expression = "a." + expression;
                         break;
                     }
 
@@ -93,9 +94,14 @@ namespace PasPasPasTests.Types {
             var i = AccessModifierTestMode.InType;
             var o = AccessModifierTestMode.InDerivedType;
             var u = AccessModifierTestMode.InExternalType;
+
             AssertTypeForAccessModifier("private", "f: integer;", "f", i, KnownTypeIds.IntegerType);
             AssertTypeForAccessModifier("private", "f: integer;", "f", o, KnownTypeIds.IntegerType);
-            AssertTypeForAccessModifier("private", "f: integer;", "f", u, KnownTypeIds.ErrorType);
+            AssertTypeForAccessModifier("private", "f: integer;", "f", u, KnownTypeIds.IntegerType);
+
+            AssertTypeForAccessModifier("strict private", "f: integer;", "f", i, KnownTypeIds.IntegerType);
+            AssertTypeForAccessModifier("strict private", "f: integer;", "f", o, KnownTypeIds.ErrorType);
+            AssertTypeForAccessModifier("strict private", "f: integer;", "f", u, KnownTypeIds.ErrorType);
         }
 
         [TestMethod]

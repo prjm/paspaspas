@@ -1,4 +1,5 @@
 ﻿using System;
+using PasPasPas.Globals.Types;
 using PasPasPas.Parsing.SyntaxTree.Standard;
 
 namespace PasPasPas.Parsing.SyntaxTree.Abstract {
