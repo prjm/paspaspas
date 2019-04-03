@@ -22,10 +22,10 @@ namespace PasPasPas.Infrastructure.Utils {
         /// </summary>
         /// <param name="olderValue"></param>
         public SystemInfo(SystemInfo olderValue) : this() {
-            WorkingSet = WorkingSet - olderValue.WorkingSet;
-            CollectionCount0 = CollectionCount0 - olderValue.CollectionCount0;
-            CollectionCount1 = CollectionCount1 - olderValue.CollectionCount1;
-            CollectionCount2 = CollectionCount2 - olderValue.CollectionCount2;
+            WorkingSet -= olderValue.WorkingSet;
+            CollectionCount0 -= olderValue.CollectionCount0;
+            CollectionCount1 -= olderValue.CollectionCount1;
+            CollectionCount2 -= olderValue.CollectionCount2;
         }
 
         /// <summary>

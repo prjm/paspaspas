@@ -60,7 +60,7 @@ namespace PasPasPas.Infrastructure.Files {
             input = inputStream ?? throw new System.ArgumentNullException(nameof(inputStream));
             inputLength = input.Length;
             outputSize = outputBufferSize;
-            var size = inputBufferSize - (inputBufferSize % 4);
+            var size = inputBufferSize - inputBufferSize % 4;
 
             if (size < 4)
                 throw new ArgumentOutOfRangeException(nameof(inputBufferSize), inputBufferSize, $"Invalid input buffer size {inputBufferSize}");
@@ -92,7 +92,7 @@ namespace PasPasPas.Infrastructure.Files {
                 index++;
             data.StartIndex += index;
 
-            while (count < outputSize && index < data.Content.Length && (index + offset) < inputLength) {
+            while (count < outputSize && index < data.Content.Length && index + offset < inputLength) {
 
                 count++;
 

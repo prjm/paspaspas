@@ -509,7 +509,10 @@ namespace PasPasPas.Typings.Common {
                         var selfType = TypeRegistry.GetTypeByIdOrUndefinedType(self.TypeId) as StructuredTypeDeclaration;
 
                         if (classType != default && (selfType == default || selfType.TypeId != classType.TypeId))
-                            flags = flags | ResolverFlags.SkipPrivate;
+                            flags |= ResolverFlags.SkipPrivate;
+
+                        if (classType != default && (selfType == default || selfType != default && !selfType.InheritsFrom(classType.TypeId)))
+                            flags |= ResolverFlags.SkipProtected;
 
                         baseTypeValue = resolver.ResolveTypeByName(baseTypeValue, symRef.Name, 0, flags);
                     }

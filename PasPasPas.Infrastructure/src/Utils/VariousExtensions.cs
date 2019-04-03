@@ -68,7 +68,7 @@ namespace PasPasPas.Infrastructure.Utils {
         /// <param name="t2">second item</param>
         /// <returns></returns>
         public static bool In(this int value, int t1, int t2)
-            => (value == t1 || value == t2);
+            => value == t1 || value == t2;
 
 
         /// <summary>
@@ -77,10 +77,10 @@ namespace PasPasPas.Infrastructure.Utils {
         /// <param name="value">value to compare</param>
         /// <param name="t1">first item</param>
         /// <param name="t2">second item</param>
-        /// <param name="t3">thirs item</param>
+        /// <param name="t3">third item</param>
         /// <returns></returns>
         public static bool In(this int value, int t1, int t2, int t3)
-            => (value == t1 || value == t2 || value == t3);
+            => value == t1 || value == t2 || value == t3;
 
 
     }
@@ -91,7 +91,7 @@ namespace PasPasPas.Infrastructure.Utils {
     public static class VariousExtensions {
 
         /// <summary>
-        ///     drop last elementsof an list                               
+        ///     drop last elementsof an list
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="source"></param>
@@ -105,7 +105,7 @@ namespace PasPasPas.Infrastructure.Utils {
 
 
         /// <summary>
-        ///     drop last elements of an list                               
+        ///     drop last elements of an list
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="source"></param>

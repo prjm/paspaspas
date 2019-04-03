@@ -138,7 +138,7 @@ namespace PasPasPas.Options.DataTypes {
         /// <summary>
         ///     options
         /// </summary>
-        private IDictionary<WarningKey, WarningOption> options;
+        private readonly IDictionary<WarningKey, WarningOption> options;
 
         /// <summary>
         ///     get the warning mode by key

@@ -131,6 +131,13 @@ namespace PasPasPas.Typings.Structured {
                 if (field.Visibility == MemberVisibility.Private && flags.MustSkipPrivate() && flags.IsResolvingFromAnotherUnit())
                     continue;
 
+                if (field.Visibility == MemberVisibility.StrictProtected && flags.MustSkipProtected())
+                    continue;
+
+                if (field.Visibility == MemberVisibility.Protected && flags.MustSkipProtected() && flags.IsResolvingFromAnotherUnit())
+                    continue;
+
+
                 if (string.Equals(field.Name, symbolName, StringComparison.OrdinalIgnoreCase)) {
                     entry = new Reference(ReferenceKind.RefToField, field);
                     return true;
@@ -226,6 +233,24 @@ namespace PasPasPas.Typings.Structured {
             }
 
             return base.ToString();
+        }
+
+        /// <summary>
+        ///     check if this type inherits from another type
+        /// </summary>
+        /// <param name="typeId"></param>
+        /// <returns></returns>
+        public bool InheritsFrom(int typeId) {
+            var baseClass = this;
+
+            while (baseClass != default) {
+                if (baseClass.TypeId == typeId)
+                    return true;
+
+                baseClass = TypeRegistry.GetTypeByIdOrUndefinedType(BaseClass.TypeId) as StructuredTypeDeclaration;
+            }
+
+            return false;
         }
     }
 }

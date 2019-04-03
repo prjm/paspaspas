@@ -115,9 +115,15 @@ namespace PasPasPasTests.Types {
         public void TestVisibilityProtected() {
             var i = AccessModifierTestMode.InType;
             var o = AccessModifierTestMode.InDerivedType;
+            var u = AccessModifierTestMode.InExternalType;
+
             AssertTypeForAccessModifier("protected", "f: integer;", "f", o, KnownTypeIds.IntegerType);
             AssertTypeForAccessModifier("protected", "f: integer;", "f", i, KnownTypeIds.IntegerType);
-            //AssertTypeForAccessModifier("protected", "f: integer", "f", u, KnownTypeIds.ErrorType);
+            AssertTypeForAccessModifier("protected", "f: integer", "f", u, KnownTypeIds.IntegerType);
+
+            AssertTypeForAccessModifier("strict protected", "f: integer;", "f", o, KnownTypeIds.IntegerType);
+            AssertTypeForAccessModifier("strict protected", "f: integer;", "f", i, KnownTypeIds.IntegerType);
+            AssertTypeForAccessModifier("strict protected", "f: integer", "f", u, KnownTypeIds.ErrorType);
         }
 
     }

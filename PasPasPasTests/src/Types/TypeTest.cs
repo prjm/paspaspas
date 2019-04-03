@@ -36,8 +36,7 @@ namespace PasPasPasTests.Types {
 
         protected void AssertExprType(string file, string program, int typeId, bool resolveSubrange, string typeName) {
             SymbolReferencePart searchfunction(object x)
-                => (x is SymbolReferencePart srp) && srp.Kind == SymbolReferencePartKind.CallParameters ? x as SymbolReferencePart : null;
-            ;
+                => x is SymbolReferencePart srp && srp.Kind == SymbolReferencePartKind.CallParameters ? x as SymbolReferencePart : null;
 
             IExpression firstParam = null;
 
@@ -205,7 +204,7 @@ namespace PasPasPasTests.Types {
                 Assert.IsNotNull(l);
                 Assert.IsNotNull(r);
                 var canBeAssigned = l.CanBeAssignedFrom(r);
-                return (compat && canBeAssigned) || (!compat && !canBeAssigned);
+                return compat && canBeAssigned || !compat && !canBeAssigned;
             }
 
             AssertTestForAssignment(assignTo, assignFrom, test, predeclaration);

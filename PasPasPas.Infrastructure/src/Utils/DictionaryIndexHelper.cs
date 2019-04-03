@@ -3,13 +3,13 @@
 namespace PasPasPas.Infrastructure.Utils {
 
     /// <summary>
-    ///     index helper for dicionaries
+    ///     index helper for dictionaries
     /// </summary>
     /// <typeparam name="TMapType"></typeparam>
     /// <typeparam name="TTargetType"></typeparam>
     public class DictionaryIndexHelper<TMapType, TTargetType> {
 
-        private IDictionary<TMapType, object> values;
+        private readonly IDictionary<TMapType, object> values;
 
         /// <summary>
         ///     create a new helper object

@@ -53,7 +53,7 @@ namespace PasPasPas.Infrastructure.Files {
     /// </summary>
     public abstract class PathResolver {
 
-        private IDictionary<ResolvedPathKey, ResolvedFile> resolvedPaths
+        private readonly IDictionary<ResolvedPathKey, ResolvedFile> resolvedPaths
             = new Dictionary<ResolvedPathKey, ResolvedFile>();
 
         /// <summary>

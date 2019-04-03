@@ -11,7 +11,7 @@ namespace PasPasPas.Infrastructure.Environment {
     /// </summary>
     public class StringPool : IEnvironmentItem {
 
-        private HashSet<StringPoolEntry> pool
+        private readonly HashSet<StringPoolEntry> pool
             = new HashSet<StringPoolEntry>();
 
         private readonly object lockObject = new object();

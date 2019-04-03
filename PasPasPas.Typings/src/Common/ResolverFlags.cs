@@ -23,6 +23,11 @@ namespace PasPasPas.Typings.Common {
         /// </summary>
         FromAnotherUnit = 2,
 
+        /// <summary>
+        ///     skip protected members
+        /// </summary>
+        SkipProtected = 4,
+
     }
 
     /// <summary>
@@ -31,12 +36,21 @@ namespace PasPasPas.Typings.Common {
     public static class ResolverFlagsHelper {
 
         /// <summary>
-        ///     check if private flags have to be skipped
+        ///     check if private members have to be skipped
         /// </summary>
         /// <param name="flags"></param>
         /// <returns></returns>
         public static bool MustSkipPrivate(this ResolverFlags flags)
             => (flags & ResolverFlags.SkipPrivate) == ResolverFlags.SkipPrivate;
+
+        /// <summary>
+        ///     check if protected members have to be skipped
+        /// </summary>
+        /// <param name="flags"></param>
+        /// <returns></returns>
+        public static bool MustSkipProtected(this ResolverFlags flags)
+            => (flags & ResolverFlags.SkipProtected) == ResolverFlags.SkipProtected;
+
 
         /// <summary>
         ///     check if resolving from another unit

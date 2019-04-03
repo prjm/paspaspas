@@ -27,7 +27,7 @@ namespace PasPasPas.Infrastructure.ObjectPooling {
     /// </summary>
     public class ListPools : IListPools, IEnvironmentItem {
 
-        private Dictionary<Type, object> pools
+        private readonly Dictionary<Type, object> pools
             = new Dictionary<Type, object>();
 
         /// <summary>

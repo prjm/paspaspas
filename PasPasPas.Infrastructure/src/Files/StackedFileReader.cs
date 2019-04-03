@@ -125,7 +125,6 @@ namespace PasPasPas.Infrastructure.Files {
         ///
         public char LookAhead(int number) {
             var source = input?.Input;
-            var result = default(char);
 
             if (source == null)
                 throw new InvalidOperationException("No input file.");
@@ -134,7 +133,7 @@ namespace PasPasPas.Infrastructure.Files {
                 return '\0';
 
             source.Position += number;
-            result = source.Content[source.BufferIndex];
+            var result = source.Content[source.BufferIndex];
             source.Position -= number;
             return result;
         }

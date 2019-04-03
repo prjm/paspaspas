@@ -34,7 +34,7 @@ namespace PasPasPas.Infrastructure.ObjectPooling {
     /// <typeparam name="TPoolItem">type of the items to pool</typeparam>
     public abstract class ObjectPool<TPoolItem> : ObjectPool where TPoolItem : new() {
 
-        private Queue<PoolItem<TPoolItem>> items
+        private readonly Queue<PoolItem<TPoolItem>> items
             = new Queue<PoolItem<TPoolItem>>();
 
         private readonly object lockObject = new object();

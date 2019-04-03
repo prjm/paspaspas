@@ -29,10 +29,10 @@ namespace PasPasPas.Options.DataTypes {
         ///     test if the default is override    
         /// </summary>
         public override bool OverwritesDefaultValue
-            => OwnValues.Count > 0 || (!IncludeParentValues);
+            => OwnValues.Count > 0 || !IncludeParentValues;
 
         /// <summary>
-        ///     parent liust
+        ///     parent list
         /// </summary>
         public DerivedListOptionCollection<T> Parent { get; }
 

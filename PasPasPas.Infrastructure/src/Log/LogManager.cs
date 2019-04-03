@@ -12,7 +12,7 @@ namespace PasPasPas.Infrastructure.Log {
         /// <summary>
         ///     log targets
         /// </summary>
-        private IList<ILogTarget> targets
+        private readonly IList<ILogTarget> targets
             = new List<ILogTarget>();
 
         /// <summary>

@@ -51,7 +51,7 @@ namespace PasPasPas.Infrastructure.Utils {
         /// <param name="other">other object to check</param>
         /// <returns><c>true</c> if equal</returns>
         public bool Equals(ScopedNamePart other)
-            => (other.kind == kind) && (string.Equals(other.Value, Value, StringComparison.OrdinalIgnoreCase));
+            => other.kind == kind && string.Equals(other.Value, Value, StringComparison.OrdinalIgnoreCase);
 
         /// <summary>
         ///     compute a hash code
@@ -60,7 +60,7 @@ namespace PasPasPas.Infrastructure.Utils {
         public override int GetHashCode() {
             var result = 17;
             unchecked {
-                result = result * 31 + ((int)kind);
+                result = result * 31 + (int)kind;
                 result = result * 31 + StringComparer.OrdinalIgnoreCase.GetHashCode(Value);
                 return result;
             }

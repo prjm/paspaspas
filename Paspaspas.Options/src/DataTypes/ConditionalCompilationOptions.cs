@@ -247,7 +247,7 @@ namespace PasPasPas.Options.DataTypes {
         /// <param name="switchInfo"></param>
         public void AddIfOptCondition(string switchKind, SwitchInfo requiredInfo, SwitchInfo switchInfo) {
             AddNewCondition(new IfOptCondition() {
-                Matches = (requiredInfo != SwitchInfo.Undefined) && (requiredInfo == switchInfo),
+                Matches = requiredInfo != SwitchInfo.Undefined && requiredInfo == switchInfo,
                 SwitchName = switchKind,
                 RequiredCondition = requiredInfo
             });
